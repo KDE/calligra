@@ -19,6 +19,9 @@
 
 #include <qprinter.h>
 
+#include <kglobal.h>
+#include <kstddirs.h>
+
 #include <opAutoLoader.h>
 
 #include <koFactory.h>
@@ -36,6 +39,9 @@ typedef OPAutoLoader<KformEditorFactory> KformEditorAutoLoader;
 KformEditorApp::KformEditorApp( int& argc, char** argv ) 
   : KoApplication( argc, argv, "kformeditor" )
 {
+  KGlobal::dirs()->addResourceType( "toolbar",
+                                   KStandardDirs::kde_default( "data" ) +
+                                   "katabase/toolbar/");
 }
 
 KoMainWindow* KformEditorApp::createNewShell()

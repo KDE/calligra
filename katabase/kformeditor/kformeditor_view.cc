@@ -208,23 +208,23 @@ bool KformEditorView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fac
   m_vToolBarEdit->setFullWidth( false );
 
   tooltip = Q2C( i18n( "Undo" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "undo.xpm" ) );
+  pix = OPICON( "undo.xpm" ) ;
   m_idToolBarEdit_Undo = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editUndo", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Redo" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "redo.xpm" ) );
+  pix = OPICON( "redo.xpm" );
   m_idToolBarEdit_Redo = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editRedo", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Cut" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "editcut.xpm" ) );
+  pix = OPICON( "editcut.xpm" );
   m_idToolBarEdit_Cut = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCut", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Copy" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "editcopy.xpm" ) );
+  pix = OPICON( "editcopy.xpm" );
   m_idToolBarEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCopy", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Past" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "editpaste.xpm" ) );
+  pix = OPICON( "editpaste.xpm" );
   m_idToolBarEdit_Paste = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editPaste", true, tooltip, -1 );
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
@@ -234,23 +234,23 @@ bool KformEditorView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fac
   m_vToolBarInsert->setFullWidth( false );
 
   tooltip = Q2C( i18n( "Insert button" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "button.xpm" );
   m_idToolBarInsert_Button = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertButton", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Insert label" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "label.xpm" );
   m_idToolBarInsert_Label = m_vToolBarInsert->insertButton2( pix, 2, SIGNAL( clicked() ), this, "insertLabel", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Insert lineedit" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "lineedit.xpm" );
   m_idToolBarInsert_LineEdit = m_vToolBarInsert->insertButton2( pix, 3, SIGNAL( clicked() ), this, "insertLineEdit", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Insert listbox" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "listbox.xpm" );
   m_idToolBarInsert_ListBox = m_vToolBarInsert->insertButton2( pix, 4, SIGNAL( clicked() ), this, "insertListBox", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Insert checkbox" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "checkbox.xpm" );
   m_idToolBarInsert_CheckBox = m_vToolBarInsert->insertButton2( pix, 5, SIGNAL( clicked() ), this, "insertCheckBox", true, tooltip, -1 );
 
   m_vToolBarInsert->enable( OpenPartsUI::Show );
@@ -260,47 +260,47 @@ bool KformEditorView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fac
   m_vToolBarAlignment->setFullWidth( false );
 
   tooltip = Q2C( i18n( "Fit view to form" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_idToolBarAlignment_Center = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentFitViewToForm", true, tooltip, -1 );
 
   m_vToolBarAlignment->insertSeparator( -1 );
 
   tooltip = Q2C( i18n( "Center widgets" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_idToolBarAlignment_Center = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentCenter", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets left" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_idToolBarAlignment_Left = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentLeft", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets horizontal center" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_idToolBarAlignment_HorizontalCenter = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentHorizontalCenter", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets right" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_idToolBarAlignment_Right = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentRight", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets top" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_idToolBarAlignment_Top = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentTop", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets vertical center" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_idToolBarAlignment_VerticalCenter = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentVerticalCenter", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets bottom" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_idToolBarAlignment_Bottom = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentBottom", true, tooltip, -1 );
 
   m_vToolBarAlignment->insertSeparator( -1 );
 
   tooltip = Q2C( i18n( "Horizontal balance" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_idToolBarAlignment_Bottom = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentBottom", true, tooltip, -1 );
 
 tooltip = Q2C( i18n( "Vertical balance" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_idToolBarAlignment_Bottom = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentBottom", true, tooltip, -1 );
 
   m_vToolBarAlignment->enable( OpenPartsUI::Show );
@@ -326,25 +326,25 @@ bool KformEditorView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
 
   text = Q2C( i18n( "&Undo" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "undo.xpm" ) );
+  pix = OPICON( "undo.xpm" );
   m_vMenuEdit->insertItem6( pix, text, this, "editUndo", CTRL + Key_U, -1, -1 ); 
 
   text = Q2C( i18n( "&Redo" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "redo.xpm" ) );
+  pix = OPICON( "redo.xpm" );
   m_vMenuEdit->insertItem6( pix, text, this, "editRedo", CTRL + Key_R, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
   text = Q2C( i18n( "&Cut" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "editcut.xpm" ) );
+  pix = OPICON( "editcut.xpm" );
   m_vMenuEdit->insertItem6( pix, text, this, "editCut", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "C&opy" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "editcopy.xpm" ) );
+  pix = OPICON( "editcopy.xpm" );
   m_vMenuEdit->insertItem6(  pix, text, this, "editCopy", CTRL + Key_C, -1, -1 );
 
   text = Q2C( i18n( "&Paste" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "editpaste.xpm" ) );
+  pix = OPICON( "editpaste.xpm" );
   m_vMenuEdit->insertItem6(  pix, text, this, "editPaste", CTRL + Key_V, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
@@ -364,74 +364,76 @@ bool KformEditorView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   _menubar->insertMenu( text, m_vMenuInsert, -1, -1 );
 
   text = Q2C( i18n( "&Button" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "button.xpm" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertButton", 0, -1, -1 );
 
   text = Q2C( i18n( "&Checkbox" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "checkbox.xpm" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertCheckBox", 0, -1, -1 );
 
   text = Q2C( i18n( "&Label" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "label.xpm" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertLabel", 0, -1, -1 );
 
   text = Q2C( i18n( "Line&edit" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "lineedit.xpm" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertLineEdit", 0, -1, -1 );
 
   text = Q2C( i18n( "List&box" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "listbox.xpm" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertListBox", 0, -1, -1 );
 
+  // TODO: make own CORBA func for "insert subform"
+
   text = Q2C( i18n( "&Subform" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertListBox", 0, -1, -1 );
 
   text = Q2C( i18n( "&Alignment" ) );
   _menubar->insertMenu( text, m_vMenuAlignment, -1, -1 );
 
   text = Q2C( i18n( "&Fit view to form" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentFitViewToForm", CTRL + Key_X, -1, -1 );
 
   m_vMenuAlignment->insertSeparator( -1 );
 
   text = Q2C( i18n( "&Center widgets" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentCenter", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Left" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentLeft", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Horizontal center" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentHorizontalCenter", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Right" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentRight", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Top" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentTop", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Vertical center" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentVerticalCenter", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Bottom" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentBottom", CTRL + Key_X, -1, -1 );
 
   m_vMenuAlignment->insertSeparator( -1 );
 
   text = Q2C( i18n( "&Horizontal balance" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentBottom", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Vertical balance" ) );
-  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  pix = OPICON( "unknown.xpm" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentBottom", CTRL + Key_X, -1, -1 );
 
   return true;
