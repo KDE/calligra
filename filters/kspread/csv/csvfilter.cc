@@ -60,14 +60,18 @@ const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
     // is there a config info or do we have to use a dialog box?
     if(config!=QString::null) {
         kDebugInfo(30003, "CSVFilter::CSVFilter(): config found");
-        csv_delimiter=';';  // just now!
+        kDebugInfo(30003, config);
+        csv_delimiter=QChar(config[0]);
     }
     else {
         switch (QMessageBox::information( 0L, i18n( "Information needed" ),
                                   i18n( "What is the separator used in this file ?" ),
                                   i18n( "Comma" ), i18n( "Semicolon" ) )) {
-            case 1 : csv_delimiter = ';'; break;
-            default : csv_delimiter = ','; // "Comma" chosen or Escape typed
+            case 1:
+                csv_delimiter = ';';
+                break;
+            default:
+                csv_delimiter = ','; // "Comma" chosen or Escape typed
         }
     }
 

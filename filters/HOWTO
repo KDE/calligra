@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -                                                                             -
--   Filter API HOWTO   -   last changed on 991218                             -
+-   Filter API HOWTO   -   last changed on 000130                             -
 -                                                                             -
 -------------------------------------------------------------------------------
 
@@ -8,6 +8,9 @@ The filter-API is very simple, so there is no "real" documentation. Please have
 a look at koffice/filters/kword/ascii/asciiimport* if you want to write an
 import filter, at koffice/filters/kword/ascii/asciiexport* if you want to write
 an export filter. (and s/import/export below :)
+For information on filter configuration dialogs (dialogs embedded in the new
+K File Dialog) see koffice/filters/kspread/csv/csvfilterdia* and
+koffice/filters/kspread/csv/kspread_csv_dia.desktop
 
 Basically you have to...
 ... create a "factory" class for your filter. This factory is needed to load
@@ -16,7 +19,7 @@ Basically you have to...
     and asciiimport_factory.h (i.e. all the "ASCII", "Ascii", and "ascii"
     stuff has to be replaced by "YOURFILTER", "YourFilter", and "yourfilter" :)
 ... derive your "main-filter-class" from KoFilter. Look at asciiimport.cc and
-    asciiimport.h how this is done. Don't forget that you have to include _or_ 
+    asciiimport.h how this is done. Don't forget that you have to include _or_
     link the moc file. Otherwise the filter won't work! (the classname is
     needed during "incarnation" - all this info is stored in those nifty
     little moc files :) ).
@@ -24,17 +27,28 @@ Basically you have to...
     the export filter in koffice/filters/kword/html/). Remember: This is a
     "normal" library - so do whatever you can do with libraries :)
 ... adjust the *.desktop file. (Note: You'll have to rename the file!) In the
-    file you'll have to change the "Name", "Comment", "Export", 
+    file you'll have to change the "Name", "Comment", "Export",
     "ExportDescription", "Import", "ImportDescription", "X-KDE-Library", and
     probably the "Icon" and "MiniIcon" fields.
 ... adapt the Makefile.am by renaming/adding files to meet your needs.
 ... execute make -f Makefile.cvs in the top dir (koffice/) and ./configure the
     whole stuff again. If it compiles you've won :) . Install and test it...
 
+To create an (optional) dialog for your filter you have to...
+... create a factory for the filter dialog (see
+    koffice/filters/kspread/csv/csvfilterdia_factory.* for further information)
+... derive the dialog from 'KoFilterDialog' and implement the pure virtual
+    method state(). This method returns a QString which is passes to the filter
+    during "incarnation." The format of this QString is up to you as you are
+    the one who has to decode it again :)
+... adjust the contents of the kspread_csv_dia.desktop file and rename it to
+    meet your needs.
+... Change some lines in the Makefile.am (once again, see
+    koffice/filters/kspread/csv/Makefile.am)
+
 If you encounter any problems feel free to ask me! To check your sources into
 CVS just send me the (compressed) files. If you want to change your sources in
 CVS, please send me the diffs against the current snapshot.
-To get a CVS account you'll have to ask David Faure or Stephan Kulow...but I
-have to say that they are quite thrifty (and IMHO this is good!).
+To get a CVS account you'll have to ask David Faure or Stephan Kulow.
 
 Werner, <wtrobin@carinthia.com>

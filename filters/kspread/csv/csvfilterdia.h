@@ -22,9 +22,14 @@
 
 #ifndef USE_QFD
 
-#include <koFilterDialog.h>
 #include <qwidget.h>
 #include <qlabel.h>
+#include <qlayout.h>
+#include <qradiobutton.h>
+#include <qvbuttongroup.h>
+
+#include <klocale.h>
+#include <koFilterDialog.h>
 
 class CSVFilterDia : public KoFilterDialog {
 
@@ -34,7 +39,11 @@ public:
     CSVFilterDia(QWidget *parent=0L, QString name=QString::null);
     virtual ~CSVFilterDia() {}
 
-    virtual const QString state() { return "Hallo"; }
+    virtual const QString state();
+
+private:
+    QVButtonGroup *box;
+    QRadioButton *r1, *r2;
 };
 #endif
 #endif // CSVFILTERDIA_H

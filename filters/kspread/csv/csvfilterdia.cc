@@ -24,9 +24,30 @@
 CSVFilterDia::CSVFilterDia(QWidget *parent, QString name) :
                            KoFilterDialog(parent, name) {
 
-    QString tmp("Hallo CVS");
-    QLabel *l=new QLabel(tmp, this, "l1");
-    l->setMinimumSize(l->sizeHint());
-    l->move(10,5);
+    QBoxLayout *ml=new QVBoxLayout(this, 10);
+    ml->addStretch(5);
+    box=new QVButtonGroup(i18n("CSV Delimiter"),this);
+    ml->addWidget(box, 3);
+    QBoxLayout *bl=new QVBoxLayout(box, 5);
+    r1=new QRadioButton(i18n("; (Germany)"), box);
+    bl->addStretch(5);
+    bl->addWidget(r1, 3);
+    bl->addStretch(5);
+    r2=new QRadioButton(i18n(", (USA)"), box);
+    bl->addWidget(r2, 3);
+    bl->addStretch(5);
+    box->setExclusive(true);
+    box->setButton(0);
+    bl->activate();
+    ml->addStretch(5);
+    ml->activate();
+}
+
+const QString CSVFilterDia::state() {
+
+    if(r1==box->selected())
+        return QString(QChar(';'));
+    else
+        return QString(QChar(','));
 }
 #endif
