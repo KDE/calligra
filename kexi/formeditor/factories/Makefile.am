@@ -1,7 +1,7 @@
 INCLUDES = -I$(top_srcdir)/kexi/formeditor $(all_includes)
 kde_module_LTLIBRARIES = containers.la
 containers_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) -module
-containers_la_SOURCES =  containerfactory.h containerfactory.cpp
+containers_la_SOURCES =  containerfactory.cpp
 containers_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformeditor.la
 
 servicesdir=$(kde_servicesdir)/kformeditor
