@@ -37,14 +37,14 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
 
     combo2->insertItem( i18n( "Days"));
     combo2->insertItem( i18n( "Days (2 digits)"));
-    combo2->insertItem( i18n( "Abbrevated day name"));
+    combo2->insertItem( i18n( "Abbreviated day name"));
     combo2->insertItem( i18n( "Long day name"));
     combo2->insertItem( i18n( "Month" ) );
     combo2->insertItem( i18n( "Month (2 digit)" ) );
-    combo2->insertItem( i18n( "Abbrevated month name" ) );
+    combo2->insertItem( i18n( "Abbreviated month name" ) );
     combo2->insertItem( i18n( "Long month name" ) );
-    combo2->insertItem( i18n( "The year as two digit" ) );
-    combo2->insertItem( i18n( "The year as four digit" ) );
+    combo2->insertItem( i18n( "The year as two digits" ) );
+    combo2->insertItem( i18n( "The year as four digits" ) );
     combo2->setCurrentItem( 0 );
 
     ComboBox3->insertStringList(listDateFormat);
@@ -89,7 +89,7 @@ void DateFormatWidget::comboActivated()
         combo1->lineEdit()->insert("d");
     else if(string==i18n( "Days (2 digits)"))
         combo1->lineEdit()->insert("dd");
-    else if(string==i18n( "Abbrevated day name"))
+    else if(string==i18n( "Abbreviated day name"))
         combo1->lineEdit()->insert("ddd");
     else if(string==i18n( "Long day name"))
         combo1->lineEdit()->insert("dddd");
@@ -97,13 +97,13 @@ void DateFormatWidget::comboActivated()
         combo1->lineEdit()->insert("M");
     else if(string==i18n( "Month (2 digit)" ) )
         combo1->lineEdit()->insert("MM");
-    else if(string==i18n( "Abbrevated month name" ) )
+    else if(string==i18n( "Abbreviated month name" ) )
         combo1->lineEdit()->insert("MMM");
     else if(string==i18n( "Long month name" ) )
         combo1->lineEdit()->insert("MMMM");
-    else if(string==i18n( "The year as two digit" ) )
+    else if(string==i18n( "The year as two digits" ) )
         combo1->lineEdit()->insert("yy");
-    else if(string==i18n( "The year as four digit" ) )
+    else if(string==i18n( "The year as four digits" ) )
         combo1->lineEdit()->insert("yyyy");
     updateLabel();
     combo1->setFocus();
