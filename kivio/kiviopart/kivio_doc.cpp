@@ -38,6 +38,7 @@
 #include "kivio_stencil_spawner_set.h"
 #include "kivioglobal.h"
 #include "kivio_config.h"
+#include "polylineconnectorspawner.h"
 
 #include "stencilbarbutton.h"
 
@@ -131,10 +132,14 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   QStringList list = instance()->dirs()->findAllResources("data",instance()->instanceName()+"/autoloadStencils/*",true,false);
   QStringList::ConstIterator pIt = list.begin();
   QStringList::ConstIterator pEnd = list.end();
+
   for (; pIt != pEnd; ++pIt )
   {
     m_pInternalSet->loadFile(*pIt);
   }
+
+  // Add the polyline connector spawner to the internal stencil set.
+  addInternalStencilSpawner(new Kivio::PolyLineConnectorSpawner(internalSpawnerSet()));
 
   initConfig();
 

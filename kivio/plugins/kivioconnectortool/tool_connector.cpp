@@ -70,8 +70,6 @@ ConnectorTool::ConnectorTool( KivioView* parent ) : Kivio::MouseTool(parent, "Co
 
   m_pConnectorCursor1 = new QCursor(BarIcon("kivio_connector_cursor1",KivioFactory::global()),2,2);
   m_pConnectorCursor2 = new QCursor(BarIcon("kivio_connector_cursor2",KivioFactory::global()),2,2);
-  
-  parent->doc()->addInternalStencilSpawner(new Kivio::PolyLineConnectorSpawner(parent->doc()->internalSpawnerSet()));
 }
 
 ConnectorTool::~ConnectorTool()

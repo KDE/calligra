@@ -86,7 +86,7 @@ namespace Kivio {
             addPoint(p);
           }
           
-          pointsNode.nextSibling();
+          pointsNode = pointsNode.nextSibling();
         }
       }
 
