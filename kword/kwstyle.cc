@@ -24,7 +24,7 @@
 KWStyle::KWStyle( const QString & name )
 {
     m_name = name;
-    m_followingStyle = 0L;
+    m_followingStyle = this;
     m_format.setColor( Qt::black ); // ### why ? what about other color schemes ?
     // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
     m_paragLayout.style = this;
@@ -45,7 +45,7 @@ KWStyle::KWStyle( QDomElement & styleElem, const QFont & defaultFont )
         kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 
     // m_followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
-    m_followingStyle = 0L;
+    m_followingStyle = this;
 
     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
     if ( !formatElem.isNull() )

@@ -133,8 +133,6 @@ void KWStyleManager::setupWidget()
         m_stylesList->insertItem( styles.at( i )->name() );
         m_origStyles.append(styles.at(i));
         m_changedStyles.append(styles.at(i));
-
-kdDebug() << " style " << i << ": " << styles.at(i)->name() << " (" << styles.at(i) << ") with following: " << styles.at(i)->followingStyle()->name() << " (" << styles.at(i)->followingStyle() << ")" << endl;
     }
 
     frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
@@ -268,10 +266,6 @@ void KWStyleManager::save() {
         for ( ; it.current() ; ++it )
             it.current()->save();
         m_currentStyle->setName( m_nameString->text() );
-kdDebug() << "following style1: " << m_styleCombo->currentText() << endl;
-kdDebug() << "following style2: " << getStyleByName(m_styleCombo->currentText()) << endl;
-kdDebug() << "following style3: " << m_changedStyles.at(getStyleByName(m_styleCombo->currentText())) << endl;
-kdDebug() << "following style4: " << m_changedStyles.at(getStyleByName(m_styleCombo->currentText()))->name() << endl;
         m_currentStyle->setFollowingStyle(m_changedStyles.at(getStyleByName(m_styleCombo->currentText())));
     }
     preview->repaint(true);
