@@ -6,7 +6,7 @@
    Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
    Copyright 2003 Reinhart Geiser <geiseri@kde.org>
-   Copyright 2003 Meni Livne <livne@kde.org>
+   Copyright 2003-2004 Meni Livne <livne@kde.org>
    Copyright 2003 Peter Simonsson <psn@linux.se>
    Copyright 1999-2002 David Faure <faure@kde.org>
    Copyright 2000-2002 Werner Trobin <trobin@kde.org>
@@ -2327,7 +2327,10 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
   }
   
   if ( m_pTable->layoutDirection()==KSpreadSheet::RightToLeft && view && view->canvasWidget() )
-    left = view->canvasWidget()->width() - coordinate.x() - width;
+  {
+    double dwidth = view->doc()->unzoomItX(view->canvasWidget()->width()); 
+    left = dwidth - coordinate.x() - width;
+  }
 
   const KoRect cellRect( left, coordinate.y(), width, height );
   bool selected = false;
