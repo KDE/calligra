@@ -757,12 +757,12 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
 {
     if ( ( KoOrientation )_orientation != layout.orientation ) {
 
-        layout.ptWidth = KoUnit::ptToUnit( epgWidth->value(), m_unit );
-        layout.ptHeight = KoUnit::ptToUnit( epgHeight->value(), m_unit );
-        layout.ptLeft = KoUnit::ptToUnit( ebrLeft->value(), m_unit );
-        layout.ptRight = KoUnit::ptToUnit( ebrRight->value(), m_unit );
-        layout.ptTop = KoUnit::ptToUnit( ebrTop->value(), m_unit );
-        layout.ptBottom = KoUnit::ptToUnit( ebrBottom->value(), m_unit );
+        layout.ptWidth = KoUnit::ptFromUnit( epgWidth->value(), m_unit );
+        layout.ptHeight = KoUnit::ptFromUnit( epgHeight->value(), m_unit );
+        layout.ptLeft = KoUnit::ptFromUnit( ebrLeft->value(), m_unit );
+        layout.ptRight = KoUnit::ptFromUnit( ebrRight->value(), m_unit );
+        layout.ptTop = KoUnit::ptFromUnit( ebrTop->value(), m_unit );
+        layout.ptBottom = KoUnit::ptFromUnit( ebrBottom->value(), m_unit );
 
         qSwap( layout.ptWidth, layout.ptHeight );
 
