@@ -41,7 +41,7 @@
 #include <ooutils.h>
 
 typedef KGenericFactory<OoImpressImport, KoFilter> OoImpressImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libooimpressimport, OoImpressImportFactory( "ooimpressimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libooimpressimport, OoImpressImportFactory( "ooimpressimport" ) )
 
 
 OoImpressImport::OoImpressImport( KoFilter *, const char *, const QStringList & )

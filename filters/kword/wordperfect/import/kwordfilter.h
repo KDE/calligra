@@ -39,7 +39,7 @@ class KWordFilter: public Parser
 };
 
 
-};
+}
 
 
 #endif
