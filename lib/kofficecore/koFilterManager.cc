@@ -18,7 +18,9 @@
 */
 
 #include <koFilterManager.h>
+#ifndef USE_QFD
 #include <koFilterManager.moc>
+#endif
 
 KoFilterManager* KoFilterManager::s_pSelf = 0;
 
@@ -120,6 +122,7 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
     return ret;
 }
 
+#ifndef USE_QFD
 const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                  const Direction &direction,
                                  const char *_format,
@@ -142,10 +145,10 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     if ( _native_pattern && _native_name )
     {
-#ifndef USE_QFD
+//#ifndef USE_QFD
         filters += _native_pattern;
         filters += "|";
-#endif
+//#endif
         filters += _native_name;
         filters += " (";
         filters += _native_pattern;
@@ -172,10 +175,10 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                 s = patterns[j];
                 if ( !filters.isEmpty() )
                     filters += "\n";
-#ifndef USE_QFD
+//#ifndef USE_QFD
                 filters += s;
                 filters += "|";
-#endif
+//#endif
                 if ( direction == Import )
                     filters += vec[i].importDescription;
                 else
@@ -189,9 +192,9 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
         {
             if ( !filters.isEmpty() )
                 filters += "\n";
-#ifndef USE_QFD
+//#ifndef USE_QFD
             filters += "*.*|";
-#endif
+//#endif
             if ( direction == Import )
                 filters += vec[i].importDescription;
             else
@@ -203,9 +206,9 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
     {
         if ( !filters.isEmpty() )
             filters += "\n";
-#ifndef USE_QFD
+//#ifndef USE_QFD
         filters += "*.*|";
-#endif
+//#endif
         filters += i18n( "All files (*.*)" );
     }
 
@@ -273,6 +276,7 @@ void KoFilterManager::cleanUp() {
         if(tmp!=ps->widget(0)) {
             KoFilterDialog *dia=dynamic_cast<KoFilterDialog*>(tmp);
             kdebug(KDEBUG_INFO, 31000, dia->status());
+            // Save the status and pass is on to the filter...
         }
     }
 }
@@ -287,6 +291,7 @@ long KoFilterManager::findWidget(const QString &ext) const {
     else
         return 0;  // default Widget
 }
+#endif
 
 const QString KoFilterManager::import( const QString & _url, const char *_native_format )
 {
@@ -408,7 +413,7 @@ const bool KoFilterManager::export_() {
     return true;
 }
 
-
+#ifndef USE_QFD
 //////////////////////////////////////////////////////////////////////////////
 // PreviewStack
 
@@ -444,3 +449,4 @@ void PreviewStack::showPreview(const KURL &url) {
 
     kdebug(KDEBUG_INFO, 31000, "ende --------- showPreview");
 }
+#endif

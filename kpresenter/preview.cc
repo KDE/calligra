@@ -24,10 +24,10 @@
 #include <qfileinfo.h>
 #include <qscrollview.h>
 
-#ifndef USE_QFD
-/*
+//#ifndef USE_QFD
+/**
  * A preview handler for the KFilePreviewDialag that shows
- * a WMF object.
+ * a WMF object
 
 bool wmfPreviewHandler( const KFileInfo* fInfo, const QString fileName, QString&, QPixmap& pixmap )
 {
@@ -74,7 +74,7 @@ bool pixmapPreviewHandler( const KFileInfo* fInfo, const QString fileName, QStri
     }
     return false;
 }*/
-#endif
+//#endif
 
 class PixmapView : public QScrollView
 {
@@ -129,17 +129,18 @@ Preview::Preview( QWidget *parent )
     pixmap = new PixmapView( this );
 }
 
-void Preview::showPreview( const KURL &u )
+
+void Preview::showPreview( const QUrl &u )
 {
     if ( u.isLocalFile() ) {
-	QString path = u.url();
-	    QFileInfo fi( path );
-	    if ( fi.extension().lower() == "wmf" )
-		pixmap->setClipart( path );
-	    else {
-		QPixmap pix( path );
-		pixmap->setPixmap( pix );
-	    }
+	QString path = u.toString();
+        QFileInfo fi( path );
+	if ( fi.extension().lower() == "wmf" )
+	    pixmap->setClipart( path );
+	else {
+	    QPixmap pix( path );
+	    pixmap->setPixmap( pix );
+	}
     } else {
 	pixmap->setPixmap( QPixmap() );
     }

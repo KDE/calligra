@@ -18,8 +18,8 @@
 */
 
 #include <csvfilterdia.h>
+#ifndef USE_QFD
 #include <csvfilterdia.moc>
-
 
 CSVFilterDia::CSVFilterDia(QWidget *parent, QString name) :
                            KoFilterDialog(parent, name) {
@@ -28,3 +28,4 @@ CSVFilterDia::CSVFilterDia(QWidget *parent, QString name) :
     QLabel *l=new QLabel(tmp, this, "l1");
     l->setMinimumSize(l->sizeHint());
 }
+#endif

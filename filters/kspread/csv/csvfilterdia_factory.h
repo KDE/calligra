@@ -20,6 +20,8 @@
 #ifndef CSVFILTERDIA_FACTORY_H
 #define CSVFILTERDIA_FACTORY_H
 
+#ifndef USE_QFD
+
 #include <klibloader.h>
 
 class KInstance;
@@ -38,4 +40,5 @@ public:
 private:
     static KInstance* s_global;
 };
+#endif
 #endif

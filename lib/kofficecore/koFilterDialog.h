@@ -1,6 +1,8 @@
 #ifndef __koffice_filter_dialog_h__
 #define __koffice_filter_dialog_h__
 
+#ifndef USE_QFD
+
 #include <qwidget.h>
 #include <qdom.h>
 
@@ -27,4 +29,5 @@ public:
 protected:
     QDomDocument *m_status;
 };
+#endif
 #endif

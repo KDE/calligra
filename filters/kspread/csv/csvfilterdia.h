@@ -20,6 +20,8 @@
 #ifndef CSVFILTERDIA_H
 #define CSVFILTERDIA_H
 
+#ifndef USE_QFD
+
 #include <koFilterDialog.h>
 #include <qwidget.h>
 #include <qlabel.h>
@@ -34,4 +36,5 @@ public:
 
     virtual const QString status() { return "Hallo"; }
 };
+#endif
 #endif // CSVFILTERDIA_H

@@ -32,12 +32,16 @@
 #include <qmime.h>
 #include <qmessagebox.h>
 #include <qfileinfo.h>
+#ifdef USE_QFD
 #include <qfiledialog.h>
+#endif
 
 #include <kaboutdialog.h>
 #include <kaction.h>
 #include <kapp.h>
+#ifndef USE_QFD
 #include <kfiledialog.h>
+#endif
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -146,34 +150,40 @@ bool KoMainWindow::saveDocument( bool saveas )
     KURL url = pDoc->url();
     QCString _native_format ( KOAPP->nativeFormatMimeType() );
     QCString outputMimeType ( _native_format );
+
+#ifndef USE_QFD
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
+#endif
 
     if ( !url.hasPath() || saveas )
     {
-	//QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
-	//							    _native_format, nativeFormatPattern(),
-    //                                                                nativeFormatName(), TRUE );
-    KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Export,
-                                           _native_format, nativeFormatPattern(),
-                                           nativeFormatName(), true);
+#ifdef USE_QFD        
+        QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
+								    _native_format, nativeFormatPattern(),
+                                                                    nativeFormatName(), TRUE );
+#else
+        KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Export,
+                                              _native_format, nativeFormatPattern(),
+                                              nativeFormatName(), true);
+#endif
 	QString file;
 
-    kdebug(KDEBUG_INFO, 31000, "koMainWindow, nach prepareDialog, vor exec");
+        //kdebug(KDEBUG_INFO, 31000, "koMainWindow, nach prepareDialog, vor exec");
 
 	bool bOk = true;
 	do {
 #ifdef USE_QFD
 	    file = QFileDialog::getSaveFileName( QString::null, filter );
 #else
-        if(dialog->exec()==QDialog::Accepted)
-            file=dialog->selectedFile();
-        else
-            return false;
+            if(dialog->exec()==QDialog::Accepted)
+                file=dialog->selectedFile();
+            else
+                return false;
 
-        kdebug(KDEBUG_INFO, 31000, "koMainWindow, nach exec");
+            kdebug(KDEBUG_INFO, 31000, "koMainWindow, nach exec");
 
-        KoFilterManager::self()->cleanUp();
-        delete dialog;
+            KoFilterManager::self()->cleanUp();
+            delete dialog;
 #endif
 	    if ( file.isNull() )
 		return false;
@@ -300,13 +310,16 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-    //QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-	//							KOAPP->nativeFormatMimeType(), nativeFormatPattern(),
-	//							nativeFormatName(), TRUE );
+#ifdef USE_QFD
+    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+								KOAPP->nativeFormatMimeType(), nativeFormatPattern(),
+								nativeFormatName(), TRUE );
+#else
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
                                            KOAPP->nativeFormatMimeType(), nativeFormatPattern(),
                                            nativeFormatName(), true);
+#endif
 
     KURL file;
 #ifdef USE_QFD

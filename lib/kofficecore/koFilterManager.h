@@ -28,11 +28,15 @@
 #include <qwidget.h>
 #include <qlabel.h>
 
+#ifndef USE_QFD
 #include <kfiledialog.h>
+#endif
 #include <kurl.h>
 #include <koQueryTypes.h>
 #include <koFilter.h>
+#ifndef USE_QFD
 #include <koFilterDialog.h>
+#endif
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -41,9 +45,9 @@
 #include <assert.h>
 #include <unistd.h>
 
-
+#ifndef USE_QFD
 class PreviewStack;
-
+#endif
 /**
  *  This class manages all filters for a KOffice application.
  *
@@ -82,6 +86,7 @@ public:
                               const char *_native_name,
                               const bool allfiles ) const;
 
+#ifndef USE_QFD
     /**
      * Prepares the KFileDialog. This means it adds the available
      * filters and dialogs.
@@ -116,10 +121,10 @@ public:
      */
     void cleanUp();
 
-
     // Get the ID of the QWidget in the Stack which matches this
     // extension. (internal)
     long findWidget(const QString &ext) const;
+#endif
 
     /**
      * Import a file by applying a filter
@@ -155,11 +160,13 @@ private:
     QString exportFile;
     QString native_format;
     bool prepare;
+#ifndef USE_QFD
     PreviewStack *ps;
     mutable QMap<QString, long> dialogMap;
+#endif
 };
 
-
+#ifndef USE_QFD
 class PreviewStack : public QWidgetStack {
 
     Q_OBJECT
@@ -175,3 +182,4 @@ private:
     const KoFilterManager * const mgr;
 };
 #endif
+#endif  // __koffice_filter_manager_h__

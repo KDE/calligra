@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef USE_QFD
+
 #include "csvfilterdia_factory.h"
 #include "csvfilterdia_factory.moc"
 #include "csvfilterdia.h"
@@ -60,3 +62,4 @@ KInstance* CSVFilterDiaFactory::global()
 {
     return s_global;
 }
+#endif

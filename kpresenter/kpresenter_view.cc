@@ -444,18 +444,21 @@ void KPresenterView::insertPicture()
     page->deSelectAllObj();
 
     QString file;
-//#ifdef USE_QFD
+#ifdef USE_QFD
+    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    fd.setPreviewMode( FALSE, TRUE );
+    fd.setContentsPreviewWidget( new Preview( &fd ) );
+    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    if ( fd.exec() == QDialog::Accepted )
+	file = fd.selectedFile();
+#else
     KFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
-/*#else
-   file  = KFilePreviewDialog::getOpenFileName( QString::null,
-						KImageIO::pattern(KImageIO::Reading),
-						0 );
-#endif*/
+        file = fd.selectedFile();
+#endif
 
     QCursor c = page->cursor();
     page->setCursor( waitCursor );
@@ -469,16 +472,21 @@ void KPresenterView::insertClipart()
     page->setToolEditMode( TEM_MOUSE );
     page->deSelectAllObj();
     QString file;
-//#ifdef USE_QFD
+#ifdef USE_QFD
+    QFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
+    fd.setPreviewMode( FALSE, TRUE );
+    fd.setContentsPreviewWidget( new Preview( &fd ) );
+    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    if ( fd.exec() == QDialog::Accepted )
+	file = fd.selectedFile();
+#else
     KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
-/*#else
-    file = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
-#endif*/
+#endif
 
     if ( !file.isEmpty() )
 	m_pKPresenterDoc->insertClipart( file.data(), xOffset, yOffset );
@@ -2514,18 +2522,21 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
     QFileInfo fileInfo( filename );
 
     QString file;
-//#ifdef USE_QFD
-    KFileDialog fd( filename, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+#ifdef USE_QFD
+    QFileDialog fd( filename, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    fd.setPreviewMode( FALSE, TRUE );
+    fd.setContentsPreviewWidget( new Preview( &fd ) );
+    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    if ( fd.exec() == QDialog::Accepted )
+	file = fd.selectedFile();
+#else
+     KFileDialog fd( filename, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
-/*#else
-   file  = KFilePreviewDialog::getOpenFileName( fileInfo.dirPath(),
-						KImageIO::pattern(KImageIO::Reading),
-						0 );
-#endif*/
+	file = fd.selectedFile();  
+#endif
 
     if ( !file.isEmpty() ) m_pKPresenterDoc->changePicture( file, xOffset, yOffset );
 }
@@ -2536,16 +2547,21 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
     QFileInfo fileInfo( filename );
     QString file;
 
-//#ifdef USE_QFD
-    KFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
+#ifdef USE_QFD
+    QFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
+    fd.setPreviewMode( FALSE, TRUE );
+    fd.setContentsPreviewWidget( new Preview( &fd ) );
+    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    if ( fd.exec() == QDialog::Accepted )
+	file = fd.selectedFile();
+#else
+     KFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
-/*#else
-    file = KFilePreviewDialog::getOpenFileName( fileInfo.dirPath(), i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
-#endif*/
+#endif
 
     if ( !file.isEmpty() )
 	m_pKPresenterDoc->changeClipart( file, xOffset, yOffset );

@@ -20,11 +20,10 @@
 #ifndef preview_h
 #define preview_h
 
-#include <kfiledialog.h>
+#include <qfiledialog.h>
 #include <qvbox.h>
 
 #include <qstring.h>
-#include <kurl.h>
 
 class KFileInfo;
 
@@ -44,11 +43,10 @@ public:
     Preview( QWidget *parent );
 
 public slots:
-    void showPreview( const KURL &u );
+     void showPreview( const QUrl &u ); 
 
 private:
     PixmapView *pixmap;
 
 };
-
 #endif

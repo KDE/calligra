@@ -130,17 +130,17 @@ Preview::Preview( QWidget *parent )
     pixmap = new PixmapView( this );
 }
 
-void Preview::showPreview( const KURL &u )
+void Preview::showPreview( const QUrl &u )
 {
     if ( u.isLocalFile() ) {
-	QString path = u.url();
-	    QFileInfo fi( path );
-	    if ( fi.extension().lower() == "wmf" )
-		pixmap->setClipart( path );
-	    else {
-		QPixmap pix( path );
-		pixmap->setPixmap( pix );
-	    }
+	QString path = u.toString();
+	QFileInfo fi( path );
+	if ( fi.extension().lower() == "wmf" )
+	    pixmap->setClipart( path );
+	else {
+	    QPixmap pix( path );
+	    pixmap->setPixmap( pix );
+	}
     } else {
 	pixmap->setPixmap( QPixmap() );
     }
