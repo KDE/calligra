@@ -31,7 +31,7 @@
 #include <qpicture.h>
 #include <qpainter.h>
 #include <qcombo.h>
-#include <qspinbox.h>
+#include <qslider.h>
 
 #include <qsize.h>
 #include <kcolorbtn.h>
@@ -143,23 +143,26 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     connect( unbalanced, SIGNAL( clicked() ),
 	     this, SLOT( unbalancedChanged() ) );
     
-    xfactor = new QSpinBox( -200, 200, 10, grp1 );
-    xfactor->resize( cType->width() / 2 - 5, xfactor->sizeHint().height() );
-    xfactor->move( 10, unbalanced->y() + unbalanced->height() + 10 );
-    connect( xfactor, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( xFactorChanged( int ) ) );
-    
-    yfactor = new QSpinBox( -200, 200, 10, grp1 );
-    yfactor->resize( cType->width() / 2 - 5, yfactor->sizeHint().height() );
-    yfactor->move( xfactor->x() + xfactor->width() + 10 , 
-		   unbalanced->y() + unbalanced->height() + 10 );
+    yfactor = new QSlider( -200, 200, 2, 100, QSlider::Vertical, grp1 );
+    yfactor->resize( yfactor->sizeHint().width(), 
+		     cType->width() - yfactor->sizeHint().width() );
+    yfactor->move( cType->width() - yfactor->sizeHint().width(), 
+		   unbalanced->y() + unbalanced->height() + 20 );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( yFactorChanged( int ) ) );
-    
-    colorPreview = new QLabel( grp1 );
-    colorPreview->resize( cType->width(), cType->width() );
-    colorPreview->move( 10, xfactor->y() + xfactor->height()+20 );
 
+    colorPreview = new QLabel( grp1 );
+    colorPreview->resize( cType->width() - yfactor->width(), 
+			  cType->width() - yfactor->width()  );
+    colorPreview->move( 10, unbalanced->y() + unbalanced->height()+20 );
+
+    xfactor = new QSlider( -200, 200, 2, 100, QSlider::Horizontal, grp1 ); 
+
+    xfactor->resize( colorPreview->width(), xfactor->sizeHint().height() );
+    xfactor->move( 10, colorPreview->y() + colorPreview->height() );
+    connect( xfactor, SIGNAL( valueChanged( int ) ),
+	     this, SLOT( xFactorChanged( int ) ) );
+  
     cType->setCurrentItem( bcType );
 
     color1Choose->resize( cType->width(), color1Choose->height() );
@@ -317,6 +320,15 @@ BackView BackDia::getBackView()
     if ( vZoom->isChecked() ) return BV_ZOOM;
     return BV_TILED;
 }
+
+/*==================== unbalanced toggled ========================*/
+void BackDia::unbalancedChanged()
+{ 
+  selectCType( bcType );
+  xfactor->setEnabled(unbalanced->isChecked());
+  yfactor->setEnabled(unbalanced->isChecked());
+}
+
 
 /*==================== select color type =========================*/
 void BackDia::selectCType( int i )

@@ -20,7 +20,6 @@
 #include <qcolor.h>
 #include <qstring.h>
 #include <qradiobutton.h>
-#include <qspinbox.h>
 
 #include "qwmf.h"
 #include "global.h"
@@ -41,7 +40,7 @@ class QComboBox;
 class QPushButton;
 class KColorButton;
 class QButtonGroup;
-class QSpinBox;
+class QSlider;
 
 /******************************************************************/
 /* class ClipPreview						  */
@@ -78,7 +77,6 @@ private:
 /******************************************************************/
 /* class BackDia						  */
 /******************************************************************/
-
 class BackDia : public QDialog
 {
     Q_OBJECT
@@ -117,7 +115,7 @@ private:
     QPushButton *picChoose, *clipChoose;
     QButtonGroup *buttGrp, *buttGrp2, *buttGrp3;
     KColorButton *color1Choose, *color2Choose;
-    QSpinBox *xfactor, *yfactor;
+    QSlider *xfactor, *yfactor;
     
     // values
     QString chosenPic;
@@ -134,7 +132,7 @@ private slots:
     void openPic( const QString & );
     void openClip( const QString & );
     void colChanged( const QColor& ) { selectCType( bcType ); }
-    void unbalancedChanged() { selectCType( bcType ); }
+    void unbalancedChanged() ; 
     void xFactorChanged( int ) { selectCType( bcType ); }
     void yFactorChanged( int ) { selectCType( bcType ); }
     

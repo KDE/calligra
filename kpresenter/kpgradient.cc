@@ -64,13 +64,13 @@ void KPGradient::paint()
 	break;
     case BCT_GHORZ: {
 	if ( !unbalanced )
-	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient );
+	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::HorizontalGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient, xFactor, yFactor ); 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::HorizontalGradient, xFactor, yFactor ); 
     } break;
     case BCT_GVERT: {
 	if ( !unbalanced )
-	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::HorizontalGradient );
+	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient );
 	else
 	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient, xFactor, yFactor ); 
     } break;
