@@ -330,6 +330,8 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
         QString tmp( i18n("The expression %1 is not valid") );
         tmp = tmp.arg( node->getStringLiteral() );
         context.setException( new KSException( "InvalidTableExpression", tmp ) );
+        delete d;
+        delete extra;
         return;
       }
       depends.append( d );
@@ -348,6 +350,8 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
         QString tmp( i18n("The expression %1 is not valid") );
         tmp = tmp.arg( node->getStringLiteral() );
         context.setException( new KSException( "InvalidTableExpression", tmp ) );
+        delete d;
+        delete extra;
         return;
       }
       depends.append( d );
