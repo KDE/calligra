@@ -80,8 +80,7 @@ int Conversion::fillPatternStyle( int ipat )
 {
     // See $QTDIR/doc/html/qbrush.html#setStyle
     switch( ipat )  {
-    case 0: // Automatic (?!?)
-        return Qt::NoBrush;
+    case 0: // Automatic (Apparently it means Solid from background color instead of foreground)
     case 1: // Solid
         return Qt::SolidPattern;
     case 2: // 5%

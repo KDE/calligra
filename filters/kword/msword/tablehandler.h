@@ -21,6 +21,7 @@
 #define TABLEHANDLER_H
 
 #include <functor.h>
+#include <word97_generated.h> // for TAP
 #include <handlers.h>
 #include <qstring.h>
 #include <qvaluelist.h>
@@ -38,13 +39,18 @@ class KoRect;
 namespace KWord
 {
     typedef const wvWare::TableRowFunctor* TableRowFunctorPtr;
+    typedef wvWare::SharedPtr<const wvWare::Word97::TAP> TAPptr;
 
+    // Data for a given row table. This struct is used by the Table struct.
     struct Row
     {
-        Row() : functorPtr( 0L )  {} // QValueList wants that one
-        Row( TableRowFunctorPtr ptr ) : functorPtr(ptr) {}
+        Row() : functorPtr( 0L ), tap( 0L )  {} // QValueList wants that one
+        Row( TableRowFunctorPtr ptr, TAPptr _tap ) : functorPtr(ptr), tap(_tap) {}
         ~Row() {}
+
+        // Each row has: a functor to call to parse it and a TAP (table row properties)
         TableRowFunctorPtr functorPtr;
+        TAPptr tap;
     };
 
     // Data for a given table, stored between the 'tableRowFound' callback

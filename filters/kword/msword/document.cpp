@@ -366,15 +366,22 @@ QDomElement Document::createInitialFrame( QDomElement& parentFramesetElem, doubl
 
 void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 {
+    // Frame borders
     Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
     Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
     Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
     Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
-    //kdDebug() << "generateFrameBorder: " << " icoFore=" << shd.icoFore << " icoBack=" << shd.icoBack << " ipat=" << shd.ipat << endl;
-    if ( shd.icoFore != 0 )
+
+    // Frame background brush (color and fill style)
+    if ( shd.icoFore != 0 || shd.icoBack != 0 )
     {
-        // icoFore is used for the background color. Go figure :)
-        Conversion::setColorAttributes( frameElementOut, shd.icoFore, "bk", true );
+        // If ipat = 0 (solid fill), icoBack is the background color.
+        // But otherwise, icoFore is the one we need to set as bkColor
+        // (and icoBack is usually white; it's the other colour of the pattern,
+        // something that we can't set in Qt apparently).
+        int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
+        //kdDebug() << "generateFrameBorder: " << " icoFore=" << shd.icoFore << " icoBack=" << shd.icoBack << " ipat=" << shd.ipat << " -> bkColor=" << bkColor << endl;
+        Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
         // Fill style
         frameElementOut.setAttribute( "bkStyle", Conversion::fillPatternStyle( shd.ipat ) );
     }

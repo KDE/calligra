@@ -167,7 +167,7 @@ void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor, wv
     for (int i = 0; i <= tap->itcMac; i++)
         m_currentTable->cacheCellEdge( tap->rgdxaCenter[ i ] );
 
-    KWord::Row row( new wvWare::TableRowFunctor( functor ) );
+    KWord::Row row( new wvWare::TableRowFunctor( functor ), tap );
     m_currentTable->rows.append( row );
 }
 

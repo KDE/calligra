@@ -88,6 +88,9 @@ void KWordTableHandler::tableCellStart()
     // Get table cell descriptor
     const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
 
+    int left = m_tap->rgdxaCenter[ m_column ]; // in DXAs
+    int right = m_tap->rgdxaCenter[ m_column+1 ]; // in DXAs
+
     // Check for merged cells
     // ## We can ignore that one. Our cell-edge magic is much more flexible.
 #if 0
@@ -97,26 +100,47 @@ void KWordTableHandler::tableCellStart()
         // This cell is the first one of a series of merged cells ->
         // we want to find out its size.
         int i = m_column + 1;
-        while ( i < nbCells && m_tap->rgtc[ i ].fMerged ) {
+        while ( i < nbCells && m_tap->rgtc[ i ].fMerged && !m_tap->rgtc[i].fFirstMerged ) {
             ++colSize;
             ++i;
         }
     }
 #endif
+    int rowSpan = 1;
     if ( tc.fVertRestart )
     {
-        kdDebug() << "fVertRestart is set!" << endl;
-        // ####### TODO
+        //kdDebug() << "fVertRestart is set!" << endl;
+        // This cell is the first one of a series of vertically merged cells ->
+        // we want to find out its size.
+        QValueList<KWord::Row>::Iterator it = m_currentTable->rows.at( m_row + 1 );
+        for( ; it != m_currentTable->rows.end(); ++it )  {
+            // Find cell right below us in row (*it), if any
+            KWord::TAPptr tapBelow = (*it).tap;
+            const wvWare::Word97::TC* tcBelow = 0L;
+            for ( int c = 0; !tcBelow && c < tapBelow->itcMac ; ++c )
+            {
+                 if ( QABS( tapBelow->rgdxaCenter[ c ] - left ) <= 3
+                      && QABS( tapBelow->rgdxaCenter[ c + 1 ] - right ) <= 3 ) {
+                     tcBelow = &tapBelow->rgtc[ c ];
+                     //kdDebug() << "found cell below, at (Word) column " << c << " fVertMerge:" << tcBelow->fVertMerge << endl;
+                 }
+            }
+            if ( tcBelow && tcBelow->fVertMerge && !tcBelow->fVertRestart )
+                ++rowSpan;
+            else
+                break;
+        }
+        //kdDebug() << "rowSpan=" << rowSpan << endl;
     }
 
-    KoRect cellRect( m_tap->rgdxaCenter[ m_column ] / 20.0, // left
+    KoRect cellRect( left / 20.0, // left
                      m_currentY, // top
-                     ( m_tap->rgdxaCenter[ m_column+1 ] - m_tap->rgdxaCenter[ m_column ] ) / 20.0, // width
+                     ( right - left ) / 20.0, // width
                      rowHeight() ); // height
 
     // Check how many cells that mean, according to our cell edge array
-    int leftCellNumber = m_currentTable->columnNumber( m_tap->rgdxaCenter[ m_column ] );
-    int rightCellNumber = m_currentTable->columnNumber( m_tap->rgdxaCenter[ m_column+1 ] );
+    int leftCellNumber = m_currentTable->columnNumber( left );
+    int rightCellNumber = m_currentTable->columnNumber( right );
 
     // In cases where not all columns are present, ensure that the last
     // column spans the remainder of the table.
@@ -128,7 +152,7 @@ void KWordTableHandler::tableCellStart()
 
     kdDebug() << " tableCellStart row=" << m_row << " column=" << m_column << " colSpan=" << colSpan << " (from " << leftCellNumber << " to " << rightCellNumber << ") cellRect=" << cellRect << endl;
 
-    emit sigTableCellStart( m_row, leftCellNumber, 1 /*TODO rowSpan*/, colSpan, cellRect, m_currentTable->name, tc, m_tap->rgshd[ m_column ] );
+    emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, tc, m_tap->rgshd[ m_column ] );
 }
 
 void KWordTableHandler::tableCellEnd()
