@@ -36,7 +36,10 @@ typedef enum {
     kahtNone=0,
     kahtArrowLine,
     kahtArrowTriangleSolid,
-    kahtArrowTriangleConcaveSolid,
+    kahtArrowTriangleHollow,
+    kahtDoubleTriangleSolid,
+    kahtDoubleTriangleHollow
+/*    kahtArrowTriangleConcaveSolid,
     kahtForwardSlash,                   //   -----/
     kahtBackSlash,
     kahtPipe,                           //   -----|
@@ -64,7 +67,7 @@ typedef enum {
     kaht2PipeCircleSolid,                //   ------||o
     kaht3PipeCircleSolid,                //   -----|||o
     kahtDiamondCircleSolid,              //   -----<>o
-    kahtDoubleTriangleSolid              //   -----|>|>
+    kahtDoubleTriangleSolid              //   -----|>|>*/
 } KivioArrowHeadType;
 
 
@@ -99,7 +102,8 @@ class KivioArrowHead
 
 
     void paintArrowLine( KivioArrowHeadData * );
-    void paintArrowTriangleSolid( KivioArrowHeadData * );
+    void paintArrowTriangle( KivioArrowHeadData *, bool );
+    void paintDoubleTriangle( KivioArrowHeadData *, bool );
 
   public:
     KivioArrowHead();

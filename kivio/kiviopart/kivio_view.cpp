@@ -1318,7 +1318,8 @@ void KivioView::slotSetStartArrow( int i )
         if (pStencil->startAHType()!=i)
         {
             pStencil->setStartAHType(i);
-            KivioChangeBeginEndArrowCommand *cmd=new KivioChangeBeginEndArrowCommand( i18n("Change Arrow"), m_pActivePage, pStencil,  pStencil->startAHType(),  i, true);
+            KivioChangeBeginEndArrowCommand *cmd=new KivioChangeBeginEndArrowCommand( i18n("Change Arrow"),
+              m_pActivePage, pStencil,  pStencil->startAHType(),  i, true);
             pStencil->setStartAHType(i);
 
             macro->addCommand( cmd );
@@ -1345,7 +1346,8 @@ void KivioView::slotSetEndArrow( int i )
     {
         if (pStencil->endAHType()!=i)
         {
-            KivioChangeBeginEndArrowCommand *cmd=new KivioChangeBeginEndArrowCommand( i18n("Change Arrow"), m_pActivePage, pStencil, pStencil->endAHType(),  i, false);
+            KivioChangeBeginEndArrowCommand *cmd=new KivioChangeBeginEndArrowCommand( i18n("Change Arrow"),
+              m_pActivePage, pStencil, pStencil->endAHType(),  i, false);
             pStencil->setEndAHType(i);
 
             macro->addCommand( cmd );

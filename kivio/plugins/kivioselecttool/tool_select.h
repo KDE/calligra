@@ -49,26 +49,29 @@ enum {
 };
 
 class SelectTool : public Tool
-{ Q_OBJECT
-public:
-  SelectTool( KivioView* view );
-  ~SelectTool();
+{
+  Q_OBJECT
+  public:
+    SelectTool( KivioView* view );
+    ~SelectTool();
 
-  virtual void processEvent( QEvent* );
-  virtual void activate();
-  virtual void deactivate();
-  virtual void configure();
+    virtual void processEvent( QEvent* );
+    virtual void activate();
+    virtual void deactivate();
+    virtual void configure();
 
-  void select(const QRect&);
+    void select(const QRect&);
 
-signals:
-  void operationDone();
+  signals:
+    void operationDone();
 
-protected:
+  protected slots:
+    void editText();
+
+  protected:
     void mousePress(const QPoint&);
     void mouseMove(const QPoint&);
     void mouseRelease(const QPoint&);
-
     void leftDoubleClick(const QPoint&);
 
     bool startResizing(const QPoint&);
@@ -97,13 +100,13 @@ protected:
 
     // Select Tool Mode
     enum {
-        stmNone,
-        stmDrawRubber,
-        stmDragging,
-        stmCustomDragging,
-        stmResizing
+      stmNone,
+      stmDrawRubber,
+      stmDragging,
+      stmCustomDragging,
+      stmResizing
     };
-private:
+  private:
     // Flag to indicate that we are drawing a rubber band
     int m_mode;
     KivioStencil *m_pResizingStencil;

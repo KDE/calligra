@@ -581,7 +581,7 @@ void KivioScreenPainter::drawPolygon( QPtrList<KivioPoint> *pList )
             break;
 
         case KivioFillStyle::kcsGradient:
-	   kdDebug() << "drawPolygon() - Gradient not supported yet" << endl;
+            kdDebug() << "drawPolygon() - Gradient not supported yet" << endl;
             return;
 
         case KivioFillStyle::kcsNone:
@@ -589,7 +589,7 @@ void KivioScreenPainter::drawPolygon( QPtrList<KivioPoint> *pList )
             return;
 
         default:
-           kdDebug() << "drawPolygon() - unknown color style" << endl;
+            kdDebug() << "drawPolygon() - unknown color style" << endl;
             return;
     }
 
@@ -696,7 +696,7 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 || !pPoint4 )
             {
-	       kdDebug() << "drawClosedPath() - incorrect # of bezier points" << endl;
+                kdDebug() << "drawClosedPath() - incorrect # of bezier points" << endl;
                 return;
             }
 
@@ -704,22 +704,22 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
                 pPoint3->pointType() != KivioPoint::kptBezier ||
                 pPoint4->pointType() != KivioPoint::kptBezier )
             {
-	       kdDebug() << "drawClosedPath() - bezier curves must have 4 points" << endl;
+                kdDebug() << "drawClosedPath() - bezier curves must have 4 points" << endl;
                 return;
             }
 
             controlPoints.setPoint( 0, pPoint->x(), pPoint->y() );
-			controlPoints.setPoint( 1, pPoint2->x(), pPoint2->y() );
-			controlPoints.setPoint( 2, pPoint3->x(), pPoint3->y() );
-			controlPoints.setPoint( 3, pPoint4->x(), pPoint4->y() );
+            controlPoints.setPoint( 1, pPoint2->x(), pPoint2->y() );
+            controlPoints.setPoint( 2, pPoint3->x(), pPoint3->y() );
+            controlPoints.setPoint( 3, pPoint4->x(), pPoint4->y() );
 
-			tmpPoints = controlPoints.cubicBezier();
+            tmpPoints = controlPoints.cubicBezier();
 
-			for( int j=0; j<int(tmpPoints.size()); j++ )
-			{
-			    bPoints.putPoints( pointIndex, 1, tmpPoints.point(j).x(), tmpPoints.point(j).y() );
-			    pointIndex++;
-			}
+            for( int j=0; j<int(tmpPoints.size()); j++ )
+            {
+                bPoints.putPoints( pointIndex, 1, tmpPoints.point(j).x(), tmpPoints.point(j).y() );
+                pointIndex++;
+            }
         } // end pointtype==bezier
         else if( pPoint->pointType() == KivioPoint::kptArc )
         {
@@ -728,13 +728,13 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 )
             {
-	       kdDebug() << "drawClosedPath() - incorrect # of arc points" << endl;
+                kdDebug() << "drawClosedPath() - incorrect # of arc points" << endl;
                 return;
             }
             if( pPoint2->pointType() != KivioPoint::kptArc ||
                 pPoint3->pointType() != KivioPoint::kptArc )
             {
-	       kdDebug() << "drawClosedPath() - Arc points must come in triplets" << endl;
+                kdDebug() << "drawClosedPath() - Arc points must come in triplets" << endl;
                 return;
             }
 
@@ -749,7 +749,7 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
         } // end pointtype==arc
         else
         {
-	   kdDebug() << "drawClosedPath() - Unknown point type discovered. WOOO!!!" << endl;
+          kdDebug() << "drawClosedPath() - Unknown point type discovered. WOOO!!!" << endl;
         }
 
         pPoint = pPointList->next();
@@ -770,21 +770,21 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
             // Setup the line style
             m_pPainter->setPen(m_pLineStyle->pen(1.0f));
 
-			// Setup the fill color
-			brush.setColor( m_pFillStyle->color() );
-			brush.setStyle( QBrush::SolidPattern );
-			m_pPainter->setBrush( brush );
+            // Setup the fill color
+            brush.setColor( m_pFillStyle->color() );
+            brush.setStyle( QBrush::SolidPattern );
+            m_pPainter->setBrush( brush );
 
-			// draw the bitch
-			m_pPainter->drawPolygon( bPoints, true );
+            // draw the bitch
+            m_pPainter->drawPolygon( bPoints, true );
             break;
 
         case KivioFillStyle::kcsGradient:
-	   kdDebug() << "drawClosedPath() - Gradient unsupported" << endl;
+            kdDebug() << "drawClosedPath() - Gradient unsupported" << endl;
             break;
 
         default:
-	   kdDebug() << "drawClosedPath() - Unknown colors style" << endl;
+            kdDebug() << "drawClosedPath() - Unknown colors style" << endl;
             break;
     }
 }

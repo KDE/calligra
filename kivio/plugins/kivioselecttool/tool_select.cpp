@@ -960,20 +960,31 @@ void SelectTool::endResizing(const QPoint&)
 void SelectTool::buildPopupMenu()
 {
   // Add existing actions
-  m_pMenu->insert( new KAction( i18n("Cut"), "editcut", 0, m_pView, SLOT(cutStencil()), actionCollection(), "cutStencil" ) );
-  m_pMenu->insert( new KAction( i18n("Copy"), "editcopy", 0, m_pView, SLOT(copyStencil()), actionCollection(), "copyStencil" ) );
-  m_pMenu->insert( new KAction( i18n("Paste"), "editpaste", 0, m_pView, SLOT(pasteStencil()), actionCollection(), "pasteStencil" ) );
+  m_pMenu->insert( new KAction( i18n("Edit Stencil Text..."), "kivio_text", CTRL+Key_T,
+    this, SLOT(editText()), actionCollection(), "text" ));
 
   m_pMenu->popupMenu()->insertSeparator();
 
-  m_pMenu->insert( new KAction( i18n("Group Selected Stencils"), "group_stencils", 0, m_pView, SLOT(groupStencils()), actionCollection(), "groupStencils" ) );
-  m_pMenu->insert( new KAction( i18n("Ungroup Selected Stencils"), "ungroup_stencils", 0, m_pView, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" ) );
+  m_pMenu->insert( new KAction( i18n("Cut"), "editcut", 0, m_pView, SLOT(cutStencil()),
+    actionCollection(), "cutStencil" ) );
+  m_pMenu->insert( new KAction( i18n("Copy"), "editcopy", 0, m_pView, SLOT(copyStencil()),
+    actionCollection(), "copyStencil" ) );
+  m_pMenu->insert( new KAction( i18n("Paste"), "editpaste", 0, m_pView, SLOT(pasteStencil()),
+    actionCollection(), "pasteStencil" ) );
 
   m_pMenu->popupMenu()->insertSeparator();
 
-  m_pMenu->insert( new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, m_pView, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" ) );
-  m_pMenu->insert( new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, m_pView, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" ) );
+  m_pMenu->insert( new KAction( i18n("Group Selected Stencils"), "group_stencils", 0,
+    m_pView, SLOT(groupStencils()), actionCollection(), "groupStencils" ) );
+  m_pMenu->insert( new KAction( i18n("Ungroup Selected Stencils"), "ungroup_stencils", 0,
+    m_pView, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" ) );
 
+  m_pMenu->popupMenu()->insertSeparator();
+
+  m_pMenu->insert( new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, m_pView,
+    SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" ) );
+  m_pMenu->insert( new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, m_pView,
+    SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" ) );
 }
 
 
@@ -995,21 +1006,27 @@ void SelectTool::showPopupMenu( const QPoint &pos )
  */
 void SelectTool::leftDoubleClick( const QPoint &/*p*/ )
 {
-    if( m_pView->activePage()->selectedStencils()->count() <= 0 )
-        return;
+  if( m_pView->activePage()->selectedStencils()->count() <= 0 )
+    return;
 
-    // Locate the text tool.  If not found, bail with an error
-    Tool *t = controller()->findTool("Text");
-    if( !t )
-    {
-       kdDebug() << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
-        return;
-    }
-
-    // Select the text tool (which makes the text dialog pop up)
-    controller()->selectTool(t);
-
-    // Reselect this tool so we are back in selection mode
-    controller()->selectTool(this);
+  editText();
 }
+
+void SelectTool::editText()
+{
+  // Locate the text tool.  If not found, bail with an error
+  Tool *t = controller()->findTool("Text");
+  if( !t )
+  {
+    kdDebug() << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
+      return;
+  }
+
+  // Select the text tool (which makes the text dialog pop up)
+  controller()->selectTool(t);
+
+  // Reselect this tool so we are back in selection mode
+  controller()->selectTool(this);
+}
+
 #include "tool_select.moc"

@@ -12,9 +12,13 @@
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
 	<Dimensions w="72.0" h="36.0"/>
+	<KivioConnectorTarget x="36.0" y="0.0"/>
+	<KivioConnectorTarget x="36.0" y="36.0"/>
+	<KivioConnectorTarget x="0.0" y="18.0"/>
+	<KivioConnectorTarget x="72.0" y="18.0"/>
 	<KivioShape type="ClosedPath" name="Terminator">
 		<KivioPoint x="36.0" y="36.0"/>
-		
+
 		<KivioPoint x="18.0" y="36.0" type="bezier"/>
 		<KivioPoint x="12.0" y="36.0" type="bezier"/>
 		<KivioPoint x="0.0" y="24.0" type="bezier"/>

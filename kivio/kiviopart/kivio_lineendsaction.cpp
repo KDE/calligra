@@ -45,7 +45,7 @@ void LineEndsAction::initComboBox(TKComboBox* combo)
   int tw = combo->fontMetrics().width(" 99:");
 
   QBitmap mask;
-  QPixmap pixAll(lineedns);
+  QPixmap pixAll(lineends);
   if (!m_rightends) {
     QPixmap tpix(pixAll.width(),pixAll.height());
     QPainter tp(&tpix);
@@ -55,7 +55,7 @@ void LineEndsAction::initComboBox(TKComboBox* combo)
     pixAll = tpix;
   }
 
-  QPixmap pix(pixAll.width()+tw+3,17);
+  QPixmap pix(pixAll.width() + tw + 3, 17);
   QPainter p(&pix,combo);
 
   // insert item "0: None"
@@ -66,7 +66,7 @@ void LineEndsAction::initComboBox(TKComboBox* combo)
   pix.setMask(mask);
   combo->insertItem(pix,cindex++);
 
-  for (int y=0; y<pixAll.height(); y+= 17 ) {
+  for (int y = 0; y < pixAll.height(); y += 17 ) {
     pix.fill(white);
     p.drawText(0,0,tw,pix.height(),AlignRight|AlignVCenter,QString("%1:").arg(cindex));
     p.drawPixmap(tw+3,0,pixAll,0,y,pix.width(),pix.height());

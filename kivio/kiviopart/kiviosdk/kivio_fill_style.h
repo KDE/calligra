@@ -48,30 +48,30 @@ protected:
     QColor m_color;                     // The color to use when solid filling
     QBrush::BrushStyle m_brushStyle;    // The brush pattern to use when solid filling (maybe gradient too?)
     KivioGradient *m_pGradient;         // The gradient to use when filling gradient style
-    
+
 public:
     KivioFillStyle();
     KivioFillStyle( const KivioFillStyle & );
     virtual ~KivioFillStyle();
-    
-    
+
+
     void copyInto( KivioFillStyle *pTarget ) const;
-    
+
     bool loadXML( const QDomElement & );
     QDomElement saveXML( QDomDocument & );
-    
-    
+
+
     inline KivioColorStyle colorStyle() const { return m_colorStyle; }
     inline void setKivioColorStyle( KivioColorStyle k ) { m_colorStyle=k; }
-    
-    
+
+
     inline QColor color() const { return m_color; }
     inline void setColor( QColor c ) { m_color=c; }
-    
-    
+
+
     inline QBrush::BrushStyle brushStyle() const { return m_brushStyle; }
     inline void setBrushStyle( QBrush::BrushStyle b ) { m_brushStyle=b; }
-    
+
     inline KivioGradient *gradient() const { return m_pGradient; }
 };
 
