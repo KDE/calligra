@@ -33,12 +33,12 @@ class KWEFBaseWorker
         KWEFBaseWorker(void) {}
         virtual ~KWEFBaseWorker(void) {}
     public: // leader/worker functions
-        bool doOpenFile(const QString& filenameOut, const QString& to);
-        bool doCloseFile(void); // Close file in normal conditions
-        bool doAbortFile(void); // Close file after errors
-        bool doOpenDocument(void);
-        bool doCloseDocument(void);
-        bool doFullParagraph(QString& paraText, ValueListFormatData& paraFormatDataList);
+        virtual bool doOpenFile(const QString& filenameOut, const QString& to);
+        virtual bool doCloseFile(void); // Close file in normal conditions
+        virtual bool doAbortFile(void); // Close file after errors
+        virtual bool doOpenDocument(void);
+        virtual bool doCloseDocument(void);
+        virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
 };
 
 #endif /* KWEF_BASEWORKER_H */
