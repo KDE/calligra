@@ -539,7 +539,7 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
     // We do not stop if the following calls fail.
     loadAndParse("styles.xml", m_stylesDoc);
     loadAndParse("meta.xml", m_meta);
-    loadAndParse("settings.xml", m_settings);
+    // not used yet: loadAndParse("settings.xml", m_settings);
 
     emit sigProgress( 10 );
 
