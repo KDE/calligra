@@ -199,7 +199,7 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     if ( m_doc->isReadWrite() )
     {
         connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
-                 actionEditCut, SLOT(/*setEnabled(bool)*/slotChangeCutState(bool )) );
+                 this, SLOT(/*setEnabled(bool)*/slotChangeCutState(bool )) );
     }
     else
     {
