@@ -32,55 +32,56 @@
 #include "vellipsetool.h"
 
 
-VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
+VEllipseTool::VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent, const char *name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
 	m_width = new KDoubleNumInput( 0, this );
-	m_width->setSuffix(m_part->getUnitName());
+	m_width->setSuffix( m_part->getUnitName() );
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
 	m_height = new KDoubleNumInput( 0, this );
-	m_height->setSuffix(m_part->getUnitName());
+	m_height->setSuffix( m_part->getUnitName() );
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );
 }
 
 double
-VEllipseOptionsWidget::width() const
+VEllipseTool::VEllipseOptionsWidget::width() const
 {
-	return KoUnit::ptFromUnit(m_width->value(),m_part->getUnit()) ;
+	return KoUnit::ptFromUnit( m_width->value(), m_part->getUnit() );
 }
 
 double
-VEllipseOptionsWidget::height() const
+VEllipseTool::VEllipseOptionsWidget::height() const
 {
-	return KoUnit::ptFromUnit(m_height->value(),m_part->getUnit()) ;
+	return KoUnit::ptFromUnit( m_height->value(), m_part->getUnit() );
 }
 
 void
-VEllipseOptionsWidget::setWidth( double value )
+VEllipseTool::VEllipseOptionsWidget::setWidth( double value )
 {
-	m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
+	m_width->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void
-VEllipseOptionsWidget::setHeight( double value )
+VEllipseTool::VEllipseOptionsWidget::setHeight( double value )
 {
 	m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
-void VEllipseOptionsWidget::refreshUnit ()
+void
+VEllipseTool::VEllipseOptionsWidget::refreshUnit ()
 {
-	m_width->setSuffix(m_part->getUnitName());
-	m_height->setSuffix(m_part->getUnitName());
+	m_width->setSuffix( m_part->getUnitName() );
+	m_height->setSuffix( m_part->getUnitName() );
 }
 
 VEllipseTool::VEllipseTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Ellipse" ) )
 {
 	// create config dialog:
-	m_optionsWidget = new VEllipseOptionsWidget(view->part());
+	m_optionsWidget = new VEllipseOptionsWidget( view->part() );
 }
 
 VEllipseTool::~VEllipseTool()
@@ -88,7 +89,8 @@ VEllipseTool::~VEllipseTool()
 	delete( m_optionsWidget );
 }
 
-void VEllipseTool::refreshUnit()
+void
+VEllipseTool::refreshUnit()
 {
     m_optionsWidget->refreshUnit();
 }
@@ -114,4 +116,3 @@ VEllipseTool::shape( bool interactive ) const
 				m_d2 );
 }
 
-#include "vellipsetool.moc"

@@ -30,40 +30,39 @@ class KarbonPart;
 class QLabel;
 class QWidget;
 
-class VEllipseOptionsWidget : public QGroupBox
-{
-	Q_OBJECT
-
-public:
-	VEllipseOptionsWidget( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
-
-	double width() const;
-	double height() const;
-	void setWidth( double value );
-	void setHeight( double value );
-	void refreshUnit ();
-private:
-	KDoubleNumInput* m_width;
-	KDoubleNumInput* m_height;
-	KarbonPart* m_part;
-	QLabel* m_heightLabel;
-	QLabel* m_widthLabel;
-};
-
 class VEllipseTool : public VShapeTool
 {
 public:
-	VEllipseTool( KarbonView* view );
+	VEllipseTool( KarbonView *view );
 	virtual ~VEllipseTool();
 
 	virtual QString name() { return i18n( "Ellipse tool" ); }
-	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual QWidget *optionsWidget() { return m_optionsWidget; }
 	
-	virtual VComposite* shape( bool interactive = false ) const;
+	virtual VComposite *shape( bool interactive = false ) const;
     void refreshUnit();
 
 private:
-	VEllipseOptionsWidget* m_optionsWidget;
+	class VEllipseOptionsWidget : public QGroupBox
+	{
+	public:
+		VEllipseOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );
+
+		double width() const;
+		double height() const;
+		void setWidth( double value );
+		void setHeight( double value );
+		void refreshUnit();
+
+	private:
+		KDoubleNumInput		*m_width;
+		KDoubleNumInput		*m_height;
+		KarbonPart			*m_part;
+		QLabel				*m_heightLabel;
+		QLabel				*m_widthLabel;
+	};
+
+	VEllipseOptionsWidget *m_optionsWidget;
 };
 
 #endif

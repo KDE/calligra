@@ -28,7 +28,7 @@
 #include "vpolygon.h"
 #include "vpolygontool.h"
 
-VPolygonOptionsWidget::VPolygonOptionsWidget( QWidget* parent, const char* name )
+VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name )
 {
 	new QLabel( i18n( "Radius:" ), this );
@@ -41,25 +41,25 @@ VPolygonOptionsWidget::VPolygonOptionsWidget( QWidget* parent, const char* name 
 }
 
 double
-VPolygonOptionsWidget::radius() const
+VPolygonTool::VPolygonOptionsWidget::radius() const
 {
 	return m_radius->value();
 }
 
 uint
-VPolygonOptionsWidget::edges() const
+VPolygonTool::VPolygonOptionsWidget::edges() const
 {
 	return m_edges->value();
 }
 
 void
-VPolygonOptionsWidget::setRadius( double value )
+VPolygonTool::VPolygonOptionsWidget::setRadius( double value )
 {
 	m_radius->setValue( value );
 }
 
 void
-VPolygonOptionsWidget::setEdges( uint value )
+VPolygonTool::VPolygonOptionsWidget::setEdges( uint value )
 {
 	m_edges->setValue( value );
 }
@@ -100,4 +100,3 @@ VPolygonTool::shape( bool interactive ) const
 				m_d2 );
 }
 
-#include "vpolygontool.moc"

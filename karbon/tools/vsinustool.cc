@@ -134,4 +134,3 @@ VSinusTool::shape( bool interactive ) const
 				m_optionsWidget->periods() );
 }
 
-#include "vsinustool.moc"

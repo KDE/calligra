@@ -24,39 +24,37 @@
 
 #include "vshapetool.h"
 
-
 class KDoubleNumInput;
 class KIntSpinBox;
 
-class VPolygonOptionsWidget : public QGroupBox
-{
-	Q_OBJECT
-
-public:
-	VPolygonOptionsWidget( QWidget* parent = 0L, const char* name = 0L );
-
-	double radius() const;
-	uint edges() const;
-	void setRadius( double value );
-	void setEdges( uint value );
-
-private:
-	KDoubleNumInput* m_radius;
-	KIntSpinBox* m_edges;
-};
 
 class VPolygonTool : public VShapeTool
 {
 public:
-	VPolygonTool( KarbonView* view );
+	VPolygonTool( KarbonView *view );
 	virtual ~VPolygonTool();
 
 	virtual QString name() { return i18n( "Polygon tool" ); }
-	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual QWidget *optionsWidget() { return m_optionsWidget; }
 	
-	virtual VComposite* shape( bool interactive = false ) const;
+	virtual VComposite *shape( bool interactive = false ) const;
 
 private:
+	class VPolygonOptionsWidget : public QGroupBox
+	{
+	public:
+		VPolygonOptionsWidget( QWidget *parent = 0L, const char *name = 0L );
+
+		double radius() const;
+		uint edges() const;
+		void setRadius( double value );
+		void setEdges( uint value );
+
+	private:
+		KDoubleNumInput	*m_radius;
+		KIntSpinBox		*m_edges;
+	};
+
 	VPolygonOptionsWidget* m_optionsWidget;
 };
 
