@@ -46,7 +46,7 @@ KPTProject::KPTProject(KPTNode *parent)
     m_startTime = KPTDateTime::currentDateTime();
     m_endTime = m_startTime;
 
-    m_standardWorktime = 0;
+    m_standardWorktime = new KPTStandardWorktime();
     
     m_calendars.setAutoDelete(true);
 
