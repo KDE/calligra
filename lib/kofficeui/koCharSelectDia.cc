@@ -72,9 +72,10 @@ bool KoCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont 
     bool res = false;
 
     KoCharSelectDia *dlg = new KoCharSelectDia( 0L, "Select Character", _chr, _font, _enableFont );
-
+    dlg->setFocus();
     if ( dlg->exec() == Accepted )
     {
+
         _font = dlg->font();
         _chr = dlg->chr();
         res = true;
