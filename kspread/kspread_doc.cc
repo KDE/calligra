@@ -599,6 +599,12 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     manifestWriter->endElement();
 
     //todo add manifest line for style.xml
+#if 0
+    manifestWriter->startElement( "manifest:file-entry" );
+    manifestWriter->addAttribute( "manifest:media-type", "text/xml" );
+    manifestWriter->addAttribute( "manifest:full-path", "style.xml" );
+    manifestWriter->endElement();
+#endif
 
     setModified( false );
 
