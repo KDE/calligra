@@ -922,8 +922,8 @@ void KSpreadView::showColumn()
 {
     if ( !m_pTable )
         return;
-    KSpreadShowColRow *dlg=new KSpreadShowColRow( this,"showCol",KSpreadShowColRow::Column);
-    dlg->show();
+    KSpreadShowColRow dlg( this,"showCol",KSpreadShowColRow::Column);
+    dlg.show();
 
 }
 
@@ -955,8 +955,8 @@ void KSpreadView::showRow()
 {
     if ( !m_pTable )
         return;
-    KSpreadShowColRow *dlg=new KSpreadShowColRow( this,"showRow",KSpreadShowColRow::Row);
-    dlg->show();
+    KSpreadShowColRow dlg( this,"showRow",KSpreadShowColRow::Row);
+    dlg.show();
 
 }
 
@@ -1030,8 +1030,8 @@ void KSpreadView::insertMathExpr()
 {
     if ( m_pTable == 0L )
         return;
-    KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor" );
-    dlg->show();
+    KSpreadDlgFormula dlg( this, "Formula Editor" );
+    dlg.show();
     // #### Is the dialog deleted when it's closed ? (David)
     // Torben thinks that not.
 }
@@ -1047,8 +1047,8 @@ void KSpreadView::formulaSelection( const QString &_math )
         return;
     }
 
-    KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor",_math );
-    dlg->show();
+    KSpreadDlgFormula dlg( this, "Formula Editor",_math );
+    dlg.show();
 }
 
 void KSpreadView::fontSizeSelected( int _size )
@@ -1411,8 +1411,8 @@ void KSpreadView::showTable()
 {
     if ( !m_pTable )
         return;
-    KSpreadshow* dlg = new KSpreadshow( this, "Table show");
-    dlg->show();
+    KSpreadshow dlg( this, "Table show");
+    dlg.show();
 }
 
 void KSpreadView::copySelection()
@@ -1488,8 +1488,8 @@ void KSpreadView::changeAngle()
 {
   if ( !m_pTable )
         return;
-  KSpreadAngle* dlg = new KSpreadAngle( this, "Angle" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-  if(dlg->exec())
+  KSpreadAngle dlg( this, "Angle" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  if(dlg.exec())
         {
         QRect r( activeTable()-> selectionRect() );
         if( r.right() != 0x7FFF && r.bottom() != 0x7FFF )
@@ -1541,8 +1541,8 @@ void KSpreadView::consolidate()
     {
         m_pCanvas->deleteEditor( true ); // save changes
     }
-    KSpreadConsolidate* dlg = new KSpreadConsolidate( this, "Consolidate" );
-    dlg->show();
+    KSpreadConsolidate dlg( this, "Consolidate" );
+    dlg.show();
 }
 
 void KSpreadView::sortList()
@@ -1612,8 +1612,8 @@ void KSpreadView::conditional()
            {
                 rect.setCoords(  m_pCanvas->markerColumn(), m_pCanvas->markerRow(),m_pCanvas->markerColumn(), m_pCanvas->markerRow());
            }
-         KSpreadconditional *dlg=new KSpreadconditional(this,"conditional",rect);
-         dlg->show();
+         KSpreadconditional dlg(this,"conditional",rect);
+         dlg.show();
          }
 
 }
@@ -1633,8 +1633,8 @@ void KSpreadView::validity()
            {
                 rect.setCoords(  m_pCanvas->markerColumn(), m_pCanvas->markerRow(),m_pCanvas->markerColumn(), m_pCanvas->markerRow());
            }
-         KSpreadDlgValidity *dlg=new KSpreadDlgValidity( this,"validity",rect);
-         dlg->show();
+         KSpreadDlgValidity dlg( this,"validity",rect);
+         dlg.show();
          }
 }
 
@@ -1799,8 +1799,8 @@ void KSpreadView::preference()
 {
   if ( !m_pTable )
        return;
-  KSpreadpreference* dlg = new KSpreadpreference( this, "Preference");
-  if(dlg->exec())
+  KSpreadpreference dlg( this, "Preference");
+  if(dlg.exec())
         m_pTable->refreshPreference();
 }
 
@@ -1809,8 +1809,8 @@ void KSpreadView::addModifyComment()
   if ( !m_pTable )
        return;
 
-  KSpreadComment* dlg = new  KSpreadComment( this, "comment",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-  if(dlg->exec())
+  KSpreadComment dlg( this, "comment",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  if(dlg.exec())
         updateEditWidget();
 }
 
@@ -2231,13 +2231,10 @@ void KSpreadView::slotListChoosePopupMenu( )
      if ( selection.left() <= col && selection.right() >= col
 	  &&!c->isObscuringForced()&& !(col==m_pCanvas->markerColumn()&& c->row()==m_pCanvas->markerRow()))
        {
-	 if(!c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
-         && !c->isTime() &&!c->isDate()
-	    && c->content() != KSpreadCell::VisualFormula
-	    && c->text()!=tmp)
+	 if(c->isText() && c->text()!=tmp)
 	   {
 	     if(itemList.findIndex(c->text())==-1)
-	       itemList.append(c->text());
+                 itemList.append(c->text());
 	   }
 
        }
@@ -2525,14 +2522,14 @@ void KSpreadView::slotInsertCellCopy()
 
 void KSpreadView::setAreaName()
 {
-    KSpreadarea* dlg = new KSpreadarea( this, "Area Name",QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow()) );
-    dlg->show();
+    KSpreadarea dlg( this, "Area Name",QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow()) );
+    dlg.show();
 }
 
 void KSpreadView::showAreaName()
 {
-    KSpreadreference* dlg = new KSpreadreference( this, "Show area" );
-    dlg->show();
+    KSpreadreference dlg( this, "Show area" );
+    dlg.show();
 }
 
 void KSpreadView::resizeRow()
@@ -2542,8 +2539,8 @@ void KSpreadView::resizeRow()
         KMessageBox::error( this, i18n("Area too large!"));
     else
         {
-        KSpreadresize2* dlg = new KSpreadresize2( this, "Resize row", KSpreadresize2::resize_row );
-        dlg->show();
+        KSpreadresize2 dlg( this, "Resize row", KSpreadresize2::resize_row );
+        dlg.show();
         }
 }
 
@@ -2554,8 +2551,8 @@ void KSpreadView::resizeColumn()
         KMessageBox::error( this, i18n("Area too large!"));
     else
         {
-        KSpreadresize2* dlg = new KSpreadresize2( this, "Resize column", KSpreadresize2::resize_column );
-        dlg->show();
+        KSpreadresize2 dlg( this, "Resize column", KSpreadresize2::resize_column );
+        dlg.show();
         }
 }
 
@@ -2802,7 +2799,7 @@ void KSpreadView::setText( const QString& _text )
 
   m_pTable->setText( m_pCanvas->markerRow(), m_pCanvas->markerColumn(), _text );
   KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-  if(!cell->isValue() && !cell->isFormular() &&!cell->isBool() && !cell->isDate() && !cell->isTime())
+  if(cell->isText())
         {
         if(_text.at(0)<'0' || _text.at(0)>'9')
                 m_pDoc->addStringCompletion(_text);

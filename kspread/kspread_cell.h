@@ -248,6 +248,9 @@ public:
      * @return TRUE if there is no content.
      */
     bool isEmpty() const;
+
+
+    bool isText() const;
     /**
      * @return TRUE if the cell should be printed in a print out.
      *         That si the case if it has any content, border, backgroundcolor,

@@ -340,6 +340,13 @@ bool KSpreadCell::isEmpty() const
   return FALSE;
 }
 
+bool KSpreadCell::isText() const
+{
+   return (!isFormular() && !isValue() && !valueString().isEmpty()
+         && !isTime() &&!isDate()
+           && content() != KSpreadCell::VisualFormula) ;
+}
+
 bool KSpreadCell::isObscuringForced()
 {
     if ( !m_pObscuringCell )
