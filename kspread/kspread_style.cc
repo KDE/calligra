@@ -371,6 +371,26 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
         kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+
+        QDomElement * style = oasisStyles.styles()[styleStack.attributeNS( KoXmlNS::draw, "style-name" )];
+        kdDebug()<<" style :"<<style<<endl;
+        KoStyleStack drawStyleStack;
+        drawStyleStack.push( *style );
+        drawStyleStack.setTypeProperties( "graphic" );
+        if ( drawStyleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
+        {
+            const QString fill = drawStyleStack.attributeNS( KoXmlNS::draw, "fill" );
+            kdDebug()<<" load object gradient fill type :"<<fill<<endl;
+
+            if ( fill == "solid" || fill == "hatch" )
+            {
+                kdDebug()<<" Style ******************************************************\n";
+                m_backGroundBrush=KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles );
+                m_featuresSet |= SBackgroundBrush;
+            }
+            else
+                kdDebug()<<" fill style not supported into kspread : "<<fill<<endl;
+        }
     }
 
 #if 0

@@ -503,7 +503,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
 
     if ( hasProperty( PBackgroundBrush, true ) || hasNoFallBackProperties( PBackgroundBrush ) || force )
     {
-        QString tmp = KSpreadStyle::saveOasisBackgroundStyle( mainStyle, backGroundBrushColor( _col, _row ) );
+        QString tmp = KSpreadStyle::saveOasisBackgroundStyle( mainStyle, backGroundBrush( _col, _row ) );
         if ( !tmp.isEmpty() )
             currentCellStyle.addProperty("draw:style-name", tmp );
     }
@@ -1337,7 +1337,29 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
         kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+
+        QDomElement * style = oasisStyles.styles()[styleStack.attributeNS( KoXmlNS::draw, "style-name" )];
+        kdDebug()<<" style :"<<style<<endl;
+        KoStyleStack drawStyleStack;
+        drawStyleStack.push( *style );
+        drawStyleStack.setTypeProperties( "graphic" );
+        if ( drawStyleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
+        {
+            const QString fill = drawStyleStack.attributeNS( KoXmlNS::draw, "fill" );
+            kdDebug()<<" load object gradient fill type :"<<fill<<endl;
+
+            if ( fill == "solid" || fill == "hatch" )
+            {
+                kdDebug()<<" Style ******************************************************\n";
+                QBrush brush=KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles );
+                setBackGroundBrushColor( brush.color() );
+                setBackGroundBrushStyle( brush.style() );
+            }
+            else
+                kdDebug()<<" fill style not supported into kspread : "<<fill<<endl;
+        }
     }
+
     return true;
 }
 

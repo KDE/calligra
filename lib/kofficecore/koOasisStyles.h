@@ -91,7 +91,7 @@ public:
     static void saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush );
     static QString saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrush &brush );
 
-    static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  KoOasisStyles & oasisStyles );
+    static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOasisStyles & oasisStyles );
 
 protected:
     /// Add styles to styles map

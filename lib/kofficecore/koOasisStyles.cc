@@ -1282,7 +1282,7 @@ QString KoOasisStyles::saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrus
     return mainStyles.lookup( hatchStyle, "hatch" );
 }
 
-QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill, KoOasisStyles & oasisStyles )
+QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill, const KoOasisStyles & oasisStyles )
 {
     QBrush tmpBrush;
     if ( fill == "solid" )
