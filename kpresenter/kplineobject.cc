@@ -242,14 +242,14 @@ void KPLineObject::flip(bool horizontal )
     {
         if ( lineType == LT_LU_RD )
             lineType = LT_LD_RU;
-        else
+        else if ( lineType == LT_LD_RU )
             lineType = LT_LU_RD;
     }
     else
     {
         if ( lineType == LT_LU_RD )
             lineType = LT_LD_RU;
-        else
+        else if ( lineType == LT_LD_RU )
             lineType = LT_LU_RD;
 
         LineEnd tmp = lineBegin;
