@@ -48,6 +48,7 @@ KPPresDurationDia::KPPresDurationDia( QWidget *parent, const char *name,
 
     setupSlideList( page );
     topLayout->addWidget( slides );
+    slides->setSelected( slides->firstChild(), true );
 
     label = new QLabel( i18n( "Presentation Duration: " ) + _durationString, page );
     label->setAlignment( AlignVCenter );

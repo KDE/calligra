@@ -900,14 +900,13 @@ void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisi
         cursorVisible, cursor, false /*m_doc->viewFormattingChars()*/ );
     parag->setChanged( wasChanged );      // Maybe we have more changes to draw!
 
-    //XIM Position
+    // XIM Position
     QPoint ximPoint = vPoint;
     QFont f = parag->at( cursor->index() )->format()->font();
     int line;
     parag->lineStartOfChar( cursor->index(), 0, &line );
-    m_doc->getKPresenterView()->getCanvas()->setXimPosition( ximPoint.x(), ximPoint.y(),
-                                                           0, cursorHeight - parag->lineSpacing( line ),
-                                                           &f );
+    canvas->setXimPosition( ximPoint.x() + origPix.x(), ximPoint.y() + origPix.y(),
+                            0, cursorHeight - parag->lineSpacing( line ), &f );
 }
 
 KPrTextDocument * KPTextObject::textDocument() const

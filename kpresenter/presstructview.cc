@@ -202,6 +202,7 @@ KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
     topLayout->addWidget(hsplit);
     setupSlideList();
     setupPagePreview();
+    slides->setSelected( slides->firstChild(), true );
 
     setMinimumSize( 600, 400 );
     connect(this,SIGNAL(closeClicked()),this,SLOT(slotCloseDialog()));

@@ -1815,16 +1815,16 @@ void KPresenterView::penChosen()
     if ( !m_canvas->currentTextObjectView() )
     {
 	bool fill = true;
-        KMacroCommand *macro= new KMacroCommand(i18n( "Change Brush" ));
+        KMacroCommand *macro= new KMacroCommand(i18n( "Change Pen Color" ));
         bool createMacro=false;
         KCommand *cmd=0L;
-        cmd=m_canvas->activePage()->setBrushColor( c, fill );
+        cmd=m_canvas->activePage()->setPenColor( c, fill );
         if(cmd)
         {
             macro->addCommand(cmd);
             createMacro=true;
         }
-        cmd=stickyPage()->setBrushColor( c, fill );
+        cmd=stickyPage()->setPenColor( c, fill );
         if(cmd)
         {
             macro->addCommand(cmd);
@@ -1855,7 +1855,7 @@ void KPresenterView::brushChosen()
     if ( !edit )
     {
 	bool fill = true;
-        KMacroCommand *macro= new KMacroCommand(i18n( "Change Brush" ));
+        KMacroCommand *macro= new KMacroCommand(i18n( "Change Brush Color" ));
         bool createMacro=false;
         KCommand *cmd=0L;
         cmd=m_canvas->activePage()->setBrushColor( c, fill );

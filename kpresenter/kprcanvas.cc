@@ -242,7 +242,11 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             bufPainter.fillRect( crect, black );
 
         drawBackground( &bufPainter, crect );
-        drawObjects( &bufPainter, crect, true/*cursor*/, true/*selected objs*/, true /*specific effects*/ );
+
+        bool drawSelection = true;
+        if ( !editMode )
+            drawSelection = false; // case of screen presentation mode
+        drawObjects( &bufPainter, crect, true/*cursor*/, drawSelection/*selected objs*/, true /*specific effects*/ );
 
         bufPainter.end();
 
@@ -1454,17 +1458,21 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                 m_view->autoScreenPresStopTimer();
 	    slotGotoPage(); break;
         case Key_Home:  // go to first page
-            gotoPage( 1 );
-            if ( !spManualSwitch() ) {
-                m_view->setCurrentTimer( 1 );
-                setNextPageTimer( true );
+            if ( slideListIterator != slideList.begin() ) {
+                gotoPage( 1 );
+                if ( !spManualSwitch() ) {
+                    m_view->setCurrentTimer( 1 );
+                    setNextPageTimer( true );
+                }
             }
             break;
         case Key_End:  // go to last page
-            gotoPage( slideList.count() );
-            if ( !spManualSwitch() ) {
-                m_view->setCurrentTimer( 1 );
-                setNextPageTimer( true );
+            if ( slideListIterator != slideList.begin() ) {
+                gotoPage( slideList.count() );
+                if ( !spManualSwitch() ) {
+                    m_view->setCurrentTimer( 1 );
+                    setNextPageTimer( true );
+                }
             }
             break;
 	default: break;

@@ -518,7 +518,8 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
 
     _painter->setRasterOp( Qt::NotROP );
 
-    if ( getType() == OT_TEXT && dynamic_cast<KPTextObject*>( this )->getDrawEditRect() )
+    if ( getType() == OT_TEXT && dynamic_cast<KPTextObject*>( this )->getDrawEditRect()
+        && dynamic_cast<KPTextObject*>( this )->getPen().style() == Qt::NoPen )
     {
         _painter->save();
 
