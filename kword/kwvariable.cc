@@ -340,7 +340,7 @@ void KWFootNoteVariable::setNumDisplay( int val )
 
 QString KWFootNoteVariable::fieldCode()
 {
-    return (noteType()==FootNote) ?i18n("FootNote"):i18n("EndNote");
+    return (noteType()==FootNote) ?i18n("Footnote"):i18n("Endnote");
 }
 
 void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int _offset ) // TODO s/const int/int/
