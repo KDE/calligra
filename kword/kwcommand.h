@@ -344,4 +344,20 @@ protected:
 };
 
 
+/**
+ * Command created when you create a table
+ */
+class KWCreateTableCommand : public KCommand
+{
+public:
+    KWCreateTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table) ;
+    ~KWCreateTableCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWDocument *m_pDoc;
+    KWTableFrameSet *m_pTable;
+};
+
 #endif

@@ -993,8 +993,9 @@ void KWCanvas::mrCreateTable()
         }
         else {
             KWTableFrameSet * table = createTable();
-            // Done at the end so that finalize is called
-            doc->addFrameSet( table );
+            KWCreateTableCommand *cmd=new KWCreateTableCommand(i18n("Create table"),doc, table );
+            doc->addCommand(cmd);
+            cmd->execute();
             // ## TODO undo/redo support. KWCreateFrameCommand won't do it, we need a new command.
             // Only here, not in createTable() (anchored tables are handled differently)
             emit docStructChanged(Tables);

@@ -798,3 +798,33 @@ void KWDeleteTableCommand::unexecute()
     m_pDoc->layout();
     m_pDoc->repaintAllViews();
 }
+
+
+KWCreateTableCommand::KWCreateTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table ):
+    KCommand(name),
+    m_pDoc(_doc),
+    m_pTable(_table)
+{
+}
+
+void KWCreateTableCommand::execute()
+{
+    m_pDoc->deSelectAllFrames();
+    m_pDoc->deleteFrameSetEditTable( m_pTable );
+    m_pDoc->addFrameSet(m_pTable);
+    m_pDoc->refreshDocStructure(FT_TABLE);
+    m_pDoc->updateAllFrames();
+    m_pDoc->layout();
+    m_pDoc->repaintAllViews();
+}
+
+void KWCreateTableCommand::unexecute()
+{
+    ASSERT(m_pTable);
+    m_pDoc->delFrameSet(m_pTable,false);
+    m_pDoc->refreshDocStructure(FT_TABLE);
+    m_pDoc->deleteFrameSetEditTable( m_pTable );
+    m_pDoc->updateAllFrames();
+    m_pDoc->layout();
+    m_pDoc->repaintAllViews();
+}
