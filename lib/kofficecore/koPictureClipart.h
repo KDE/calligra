@@ -109,7 +109,6 @@ protected:
 protected:
     QPicture m_clipart; ///< The clipart as QPicture
     QByteArray m_rawData; ///< Copy of the loaded image file
-    QSize m_size; // ### TODO: can it be removed?
 };
 
 #endif /* __koPictureClipart_h__ */
