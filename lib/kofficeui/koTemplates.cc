@@ -44,9 +44,8 @@ const QPixmap &KoTemplate::loadPicture() {
 
     if(m_cached)
         return m_pixmap;
-    // This code is shamelessly borrowed from KIconCanvas::slotLoadFiles
-    QImage img;
-    img.load(m_picture);
+    // ### TODO: use the class KoPicture instead of QImage to support non-image pictures
+    QImage img( m_picture );
     if (img.isNull()) {
         kdWarning() << "Couldn't find icon " << m_picture << endl;
         m_pixmap=QPixmap();
