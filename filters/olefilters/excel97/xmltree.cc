@@ -1756,6 +1756,7 @@ bool XMLTree::_mulrk(Q_UINT32 size, QDataStream &body)
       int year, month, day;
       getDate((int) value, year, month, day);
       s.sprintf("%d/%d/%d", year, month, day);
+      break;
     case 164:
       s = "'0" + QString::number((int) value);
       break;
