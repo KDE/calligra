@@ -1,10 +1,12 @@
-Done:
-application/vnd.oasis.openoffice.text for text documents
-application/vnd.oasis.openoffice.spreadsheet for spreadsheet documents
-application/vnd.oasis.openoffice.presentation for presentation documents
-
-TODO:
-application/vnd.oasis.openoffice.drawing for drawing documents   *.ood
-application/vnd.oasis.openoffice.chart for chart documents       *.ooc
-application/vnd.oasis.openoffice.image for image documents       ?
-application/vnd.oasis.openoffice.formula for formula documents   *.oof
+DONE: application/x-vnd.oasis.openoffice.text / oot
+TODO: application/x-vnd.oasis.openoffice.text-template / ott
+DONE: application/x-vnd.oasis.openoffice.spreadsheet / oos
+TODO: application/x-vnd.oasis.openoffice.spreadsheet-template / ots
+DONE: application/x-vnd.oasis.openoffice.drawing / ood
+TODO: application/x-vnd.oasis.openoffice.drawing-template / otd
+DONE: application/x-vnd.oasis.openoffice.presentation / oop
+TODO: application/x-vnd.oasis.openoffice.presentation-template / otp
+TODO: application/x-vnd.oasis.openoffice.chart / ooc
+TODO: application/x-vnd.oasis.openoffice.chart-template / otc
+TODO: application/x-vnd.oasis.openoffice.formula / oof
+TODO: application/x-vnd.oasis.openoffice.formula-template / otf
