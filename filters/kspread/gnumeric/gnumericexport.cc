@@ -467,7 +467,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
                 break;
             }            
             
-            if (currency.getCurrencyCode(c.type) == "")
+            if (currency.getCurrencyCode(c.type).isEmpty())
                 stringFormat = "0.00";
             else if (currency.getCurrencyCode(c.type) == "$")
                 stringFormat = "$0.00";

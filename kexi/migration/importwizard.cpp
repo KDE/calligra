@@ -192,7 +192,7 @@ bool importWizard::checkUserInput()
         problem = true;
         finishtxt = i18n("Source type was not PostgreSQL Database.");
     }
-    if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text() == ""))
+    if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text().isEmpty()))
     {
         problem = true;
         finishtxt = finishtxt + i18n("\nNo new database name was entered.");

@@ -266,7 +266,7 @@ void TextZone::convert(QString& text, int unicode, const char* escape)
 
 	expression = QString("\\x") + value.setNum(unicode, 16);
 
-	if(QString(escape) != "")
+	if( !QString(escape).isEmpty() )
 	{
 		/*1. translate special characters with a space after. */
 		text = text.replace( QRegExp( expression), QString(escape));

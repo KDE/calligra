@@ -83,7 +83,7 @@ bool Format::hasRightBorder() const
 void Format::analyse(const QDomNode balise)
 {
 	/* <format brushstyle="5" brushcolor="#a70bc3" bgcolor="#ffffff" alignY="2" align="4" > */
-	if(getAttr(balise, "brushstyle") != "")
+	if( !getAttr(balise, "brushstyle").isEmpty() )
 	{
 		_isValidFormat = true;
 		setBrushStyle(getAttr(balise, "brushstyle").toInt());

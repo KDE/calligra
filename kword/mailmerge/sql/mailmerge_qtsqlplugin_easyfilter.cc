@@ -66,7 +66,7 @@ void KWQTSqlEasyFilter::slotValueChanged ( int row, int col )
 	switch (row)
 	{
 		case 0:	
-			if (m_table->item(row,col)->text()!="")
+			if ( !m_table->item(row,col)->text().isEmpty() )
 			{
 				if (col==m_table->numCols()-1)
 				{

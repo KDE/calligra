@@ -203,7 +203,7 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 		Config::instance()->indent();
 	}
 	QString dir = "";
-	if(Config::instance()->getPicturesDir() != "" &&
+	if( !Config::instance()->getPicturesDir().isEmpty() &&
 			Config::instance()->getPicturesDir() != NULL &&
 			FileHeader::instance()->hasGraphics())
 	{

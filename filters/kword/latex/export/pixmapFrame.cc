@@ -162,7 +162,7 @@ void PixmapFrame::convert()
 		  Copy image file in the same directory than the tex file.
 		*/
 		QString dir = "";
-		if(Config::instance()->getPicturesDir() == "" || 
+		if( Config::instance()->getPicturesDir().isEmpty() || 
 				Config::instance()->getPicturesDir() == NULL)
 		{
 			dir = getFilename();

@@ -213,7 +213,7 @@ void KSpreadLatexExportDiaImpl::accept()
 	/* The default language is the first language in the list */
 	if(langUsedList->item(0) != NULL)
 		config->setDefaultLanguage(langUsedList->item(0)->text());
-	if(langUsedList->currentText() != "")
+	if( !(langUsedList->currentText().isEmpty()) )
 	{
 		kdDebug() << "default lang. : " << langUsedList->currentText() << endl;
 		config->setDefaultLanguage(langUsedList->currentText());
