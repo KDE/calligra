@@ -48,6 +48,10 @@ public:
 	virtual void changeValue( double ) = 0;
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT ) = 0;
 
+	void setValueInUnit( double value, KoUnit::Unit unit )
+	{
+		changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value, unit ), m_unit ) );
+	}
 protected:
 	friend class KoUnitDoubleValidator;
 	unsigned int m_precision;

@@ -74,13 +74,13 @@ VUnitDoubleSpinBox::setValidator( const QValidator *v )
 void
 VUnitDoubleSpinBox::changeValue( double val )
 {
-	setValue( val );
+	KDoubleSpinBox::setValue( val );
 }
 
 void
 VUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
-	setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_unit ), unit ) );
+	KDoubleSpinBox::setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_unit ), unit ) );
 	m_unit = unit;
 	setSuffix( KoUnit::unitName( unit ) );
 }
