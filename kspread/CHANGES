@@ -580,3 +580,9 @@ lo22-action-deletecell) made by jp.martin <jpmartin@iroise.com> thanks
 -----------------------------------------------------
 -Now in "special paste" you can put just comment
 -Add new icon "special paste" made by jp.martin <jpmartin@iroise.com> thanks
+
+2000-05-31 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Change some icon name because the people who improved and
+moved icons in kdelibs or toolbar/hicolor etc... changed name
+(for exemple bold -> text_bold)

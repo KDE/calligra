@@ -198,14 +198,14 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // Handler for moving and resizing embedded parts
     (void)new ContainerHandler( this, m_pCanvas );
 
-    m_bold = new KToggleAction( i18n("Bold"), ("bold"), CTRL + Key_B, actionCollection(), "bold");
+    m_bold = new KToggleAction( i18n("Bold"), "text_bold", CTRL + Key_B, actionCollection(), "bold");
     connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
-    m_italic = new KToggleAction( i18n("Italic"), ("italic"), CTRL + Key_I, actionCollection(), "italic");
+    m_italic = new KToggleAction( i18n("Italic"), "text_italic", CTRL + Key_I, actionCollection(), "italic");
     connect( m_italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
-    m_underline = new KToggleAction( i18n("Underline"), ("underline"), CTRL + Key_U, actionCollection(), "underline");
+    m_underline = new KToggleAction( i18n("Underline"), "text_under", CTRL + Key_U, actionCollection(), "underline");
     connect( m_underline, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
 
-    m_strikeOut = new KToggleAction( i18n("Strike out"), ("strike_out"), 0, actionCollection(), "strikeout");
+    m_strikeOut = new KToggleAction( i18n("Strike out"), "strike_out", 0, actionCollection(), "strikeout");
     connect( m_strikeOut, SIGNAL( toggled( bool ) ), this, SLOT( strikeOut( bool ) ) );
 
     m_percent = new KToggleAction( i18n("Percent format"), "percent", 0, actionCollection(), "percent");
@@ -299,7 +299,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 				  actionCollection(), "deleteColumn" );
     m_deleteRow = new KAction( i18n("Delete Row"), "rowout", 0, this, SLOT( deleteRow() ),
 			       actionCollection(), "deleteRow" );
-    m_insertColumn = new KAction( i18n("Insert Column"), "colin", 0, this, SLOT( insertColumn() ),
+    m_insertColumn = new KAction( i18n("Insert Column"), "colin" , 0, this, SLOT( insertColumn() ),
 				  actionCollection(), "insertColumn" );
     m_insertRow = new KAction( i18n("Insert Row"), "rowin", 0, this, SLOT( insertRow() ),
 			       actionCollection(), "insertRow" );
@@ -365,13 +365,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_bgColor = new KColorAction( i18n("Background color"), KColorAction::BackgroundColor, 0, this, SLOT( changeBackgroundColor() ),
 			       actionCollection(), "backgroundColor" );
     m_function = new KAction( i18n("Function"), "funct", 0, this, SLOT( funct() ), actionCollection(), "function" );
-    m_borderLeft = new KAction( i18n("Border left"), "borderleft", 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
-    m_borderRight = new KAction( i18n("Border Right"), "borderright", 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
-    m_borderTop = new KAction( i18n("Border Top"), "bordertop", 0, this, SLOT( borderTop() ), actionCollection(), "borderTop" );
-    m_borderBottom = new KAction( i18n("Border Bottom"), "borderbottom", 0, this, SLOT( borderBottom() ), actionCollection(), "borderBottom" );
-    m_borderAll = new KAction( i18n("All borders"), "borderall", 0, this, SLOT( borderAll() ), actionCollection(), "borderAll" );
-    m_borderRemove = new KAction( i18n("Remove Borders"), "borderremove", 0, this, SLOT( borderRemove() ), actionCollection(), "borderRemove" );
-    m_borderOutline = new KAction( i18n("Border Outline"), ("borderoutline"), 0, this, SLOT( borderOutline() ), actionCollection(), "borderOutline" );
+    m_borderLeft = new KAction( i18n("Border left"), "border_left", 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
+    m_borderRight = new KAction( i18n("Border Right"), "border_right", 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
+    m_borderTop = new KAction( i18n("Border Top"), "border_top", 0, this, SLOT( borderTop() ), actionCollection(), "borderTop" );
+    m_borderBottom = new KAction( i18n("Border Bottom"), "border_bottom", 0, this, SLOT( borderBottom() ), actionCollection(), "borderBottom" );
+    m_borderAll = new KAction( i18n("All borders"), "border_all", 0, this, SLOT( borderAll() ), actionCollection(), "borderAll" );
+    m_borderRemove = new KAction( i18n("Remove Borders"), "border_remove", 0, this, SLOT( borderRemove() ), actionCollection(), "borderRemove" );
+    m_borderOutline = new KAction( i18n("Border Outline"), ("border_outline"), 0, this, SLOT( borderOutline() ), actionCollection(), "borderOutline" );
     m_borderColor = new KColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
 			       actionCollection(), "borderColor" );
     m_tableFormat = new KAction( i18n("Table Style..."), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
