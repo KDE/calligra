@@ -148,7 +148,6 @@ void KSpreadinsert::refresh(Type_mode insertOrRemove)
 KSpreadTable *m_pTable;
 m_pTable=m_pView->activeTable();
 KSpreadTable *tbl;
-int pos;
 
   for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
 	    tbl->recalc(true);

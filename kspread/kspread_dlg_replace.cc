@@ -107,10 +107,6 @@ else
 	}
 }
 
-void KSpreadreplace::keyPressEvent ( QKeyEvent* _ev )
-{
-//todo  press tab => active other QlineEdit
-}
 
 void KSpreadreplace::slotClose()
 {

@@ -43,7 +43,6 @@ public slots:
 
 protected:
 
-  virtual void keyPressEvent ( QKeyEvent* _ev );
   KSpreadView* m_pView;
   
   QLineEdit* l_find;

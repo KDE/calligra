@@ -173,3 +173,28 @@ now text offset is recalcing.
 Summary 1999-11-12 ->1999-11-18
 Torben weis had installed : oszilloscope
 and fixes a lot of bug.
+
+1999-11-20 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can select a area when you click and press CTRL
+-Now "Show page border" works
+	=> togglePageBorders was bad written in connect function
+
+-for testing oszilloscope :
+Write in Table : For example put values between 1 and 5 in the cell C1.
+and in cell C5 : "=sin(C1)"
+
+In oszilloscope :
+Cell X : Table1!C1
+From : 1
+to :2
+ResultX : Table!C5
+=>CALC
+
+you can write in table in cell C6 "=cos(C1)"
+In oszilloscope ResultY: Table1!C6
+Then putting C6 in resultY gives you a circle plot on the ozsilloscope.
+=>CALC
+
+you can move cursors =>measure
+It's a very good function.

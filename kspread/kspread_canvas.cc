@@ -859,15 +859,39 @@ void KSpreadCanvas::chooseMouseReleaseEvent( QMouseEvent* )
 void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
 {
     mousePressed = TRUE;
-	
+
     KSpreadTable *table = activeTable();
     if ( !table )
 	return;
+    QRect selection(table->chooseRect());
 
     int ypos, xpos;
     int row = table->topRow( _ev->pos().y(), ypos, this );
     int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
+    if ((selection.right() != 0x7fff && selection.bottom() != 0x7fff)&& ( _ev->state() & ControlButton ))
+  	{
+  	if( (col!=m_iMouseStartColumn)||(row!=m_iMouseStartRow))
+  		{
+  		if( selection.left()!=0&&selection.right()!=0
+  			&&selection.top()!=0&&selection.bottom()!=0)
+  			{
+  			if ( col < m_iMouseStartColumn )
+				col = m_iMouseStartColumn;
+  			if ( row < m_iMouseStartRow )
+    				row = m_iMouseStartRow;
+
+  			if ( row == selection.bottom() && col == selection.right() )
+    				return;
+    			}
+  		selection.setLeft(m_iMouseStartColumn);
+  		selection.setRight( col );
+  		selection.setTop(m_iMouseStartRow);
+  		selection.setBottom( row );
+  		table->setChooseRect( selection );
+                return;
+      		}
+    }
     setChooseMarkerColumn( col );
     setChooseMarkerRow( row );	
     KSpreadCell *cell = table->cellAt( chooseMarkerColumn(), chooseMarkerRow() );
@@ -880,7 +904,7 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
 	cell = table->cellAt( chooseMarkerColumn(), chooseMarkerRow() );
     }
 
-    QRect selection;
+
     selection.setCoords( chooseMarkerColumn(), chooseMarkerRow(),
 			 chooseMarkerColumn() + cell->extraXCells(),
 			 chooseMarkerRow() + cell->extraYCells() );
