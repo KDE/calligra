@@ -6,6 +6,7 @@
 
 #include "kspread_table.h"
 #include "kspread_util.h"
+#include "kspread_doc.h"
 
 #include <kapplication.h>
 #include <dcopclient.h>
@@ -392,4 +393,10 @@ bool KSpreadTableIface::firstLetterUpper() const
 void KSpreadTableIface::copyAsText()
 {
     m_table->copyAsText(m_table->markerRect().topLeft ());
+}
+
+void KSpreadTableIface::setShowPageBorders( bool b )
+{
+    m_table->setShowPageBorders( b );
+    m_table->doc()->updateBorderButton();
 }

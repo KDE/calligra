@@ -82,6 +82,7 @@ k_dcop:
     virtual bool hideZero() const;
     virtual bool firstLetterUpper() const;
     virtual void copyAsText();
+    virtual void setShowPageBorders( bool b );
 
 
 private:

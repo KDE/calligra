@@ -1000,5 +1000,14 @@ bool KSpreadDoc::delayCalculation()
 {
    return m_bDelayCalculation;
 }
+
+void KSpreadDoc::updateBorderButton()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+      static_cast<KSpreadView *>( it.current() )->updateBorderButton();
+}
+
+
 #include "kspread_doc.moc"
 

@@ -105,17 +105,17 @@ class KSpreadSpell : public KSpell
   // override check(...)
   // mostly copied from kdelibs/kspell/kspell.cpp
   // the dialog gets created but it gets only shown if something
-  // is misspelled. Otherwise for every cell the dialog would pop up 
+  // is misspelled. Otherwise for every cell the dialog would pop up
   // and disappear
   bool check( const QString &_buffer, bool _usedialog = true )
   {
     QString qs;
-    
+
     usedialog=_usedialog;
     setUpDialog ();
     //set the dialog signal handler
     dialog3slot = SLOT (check3 ());
-    
+
     kdDebug(750) << "KS: check" << endl;
     origbuffer = _buffer;
     if ( ( totalpos = origbuffer.length() ) == 0 )
@@ -123,7 +123,7 @@ class KSpreadSpell : public KSpell
       emit done(origbuffer);
       return FALSE;
     }
-    
+
     // Torben: I corrected the \n\n problem directly in the
     //         origbuffer since I got errors otherwise
     if ( origbuffer.right(2) != "\n\n" )
@@ -136,28 +136,28 @@ class KSpreadSpell : public KSpell
       else
 	origbuffer += '\n';
     }
-    
+
     newbuffer = origbuffer;
-    
+
     // KProcIO calls check2 when read from ispell
     connect(proc, SIGNAL (readReady(KProcIO *)), this, SLOT (check2(KProcIO *)));
 
     proc->fputs ("!");
-    
+
     //lastpos is a position in newbuffer (it has offset in it)
     offset = lastlastline = lastpos = lastline = 0;
-    
+
     emitProgress ();
-    
+
     // send first buffer line
     int i = origbuffer.find('\n', 0) + 1;
     qs = origbuffer.mid (0, i);
     cleanFputs(qs, FALSE);
-    
+
     lastline = i; //the character position, not a line number
-    
+
     ksdlg->hide();
-    
+
     return TRUE;
   }
 
@@ -178,9 +178,9 @@ class KSpreadSpell : public KSpell
             || e == 2) // replace
         {
           dlgresult =- 1;
-          
+
           // for multibyte encoding posinline needs correction
-          if (ksconfig->encoding() == KS_E_UTF8) 
+          if (ksconfig->encoding() == KS_E_UTF8)
           {
             // convert line to UTF-8, cut at pos, convert back to UCS-2
             // and get string length
@@ -203,13 +203,13 @@ class KSpreadSpell : public KSpell
           else  //MISTAKE
           {
             cwword = word;
-            if ( usedialog ) 
+            if ( usedialog )
             {
               // show the word in the dialog
               ksdlg->show();
               dialog (word, sugg, SLOT (check3()));
-            } 
-            else 
+            }
+            else
             {
               // No dialog, just emit misspelling and continue
               emit misspelling (word, sugg, lastpos);
@@ -219,25 +219,25 @@ class KSpreadSpell : public KSpell
             return;
           }
         }
-        
+
       }
-      
+
       emitProgress (); //maybe
-      
+
     } while (tempe > 0);
-    
+
     proc->ackRead();
-    
-    
+
+
     if (tempe == -1) //we were called, but no data seems to be ready...
       return;
-    
+
     //If there is more to check, then send another line to ISpell.
     if ((unsigned int)lastline < origbuffer.length())
     {
       int i;
       QString qs;
-      
+
       lastpos = (lastlastline = lastline) + offset; //do we really want this?
       i = origbuffer.find('\n', lastline)+1;
       qs = origbuffer.mid (lastline, i-lastline);
@@ -529,9 +529,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_cellLayout = new KAction( i18n("Cell Format..."),"cell_layout", CTRL + ALT + Key_F, this, SLOT( layoutDlg() ),
                                actionCollection(), "cellLayout" );
     m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
-    m_spellChecking = KStdAction::spelling( this, SLOT( extraSpelling() ), 
+    m_spellChecking = KStdAction::spelling( this, SLOT( extraSpelling() ),
                                             actionCollection(), "spelling" );
-    
+
     QStringList lst;
     lst.append( "sum");
     lst.append( "cos");
@@ -773,18 +773,18 @@ void KSpreadView::RecalcWorkSheet()
 
 void KSpreadView::extraSpelling()
 {
-  if (m_spell.kspell) 
+  if (m_spell.kspell)
     return; // Already in progress
-  
+
   if (m_pTable == 0L)
     return;
-  
+
   //  m_spell.macroCmdSpellCheck = 0L;
   m_spell.firstSpellTable    = m_pTable;
   m_spell.currentSpellTable  = m_spell.firstSpellTable;
-  
+
   QRect selection = m_pTable->selectionRect();
-  
+
   // if nothing is selected, check every cell
   if (selection.left() == 0)
   {
@@ -815,26 +815,26 @@ void KSpreadView::extraSpelling()
 
 void KSpreadView::startKSpell()
 {
-  m_spell.kspell = new KSpreadSpell( this, i18n( "Spell Checking" ), this, 
-                                     SLOT( spellCheckerReady() ), 
+  m_spell.kspell = new KSpreadSpell( this, i18n( "Spell Checking" ), this,
+                                     SLOT( spellCheckerReady() ),
                                      m_pDoc->getKSpellConfig() );
 
   m_spell.kspell->setIgnoreUpperWords(m_pDoc->dontCheckUpperWord());
   m_spell.kspell->setIgnoreTitleCase(m_pDoc->dontCheckTitleCase());
-  
+
   QObject::connect( m_spell.kspell, SIGNAL( death() ),
                     this, SLOT( spellCheckerFinished() ) );
-  QObject::connect( m_spell.kspell, SIGNAL( misspelling( const QString &, 
-                                                         const QStringList &, 
+  QObject::connect( m_spell.kspell, SIGNAL( misspelling( const QString &,
+                                                         const QStringList &,
                                                          unsigned int) ),
-                    this, SLOT( spellCheckerMisspelling( const QString &, 
-                                                         const QStringList &, 
+                    this, SLOT( spellCheckerMisspelling( const QString &,
+                                                         const QStringList &,
                                                          unsigned int) ) );
-  QObject::connect( m_spell.kspell, SIGNAL( corrected( const QString &, 
-                                                       const QString &, 
+  QObject::connect( m_spell.kspell, SIGNAL( corrected( const QString &,
+                                                       const QString &,
                                                        unsigned int) ),
-                    this, SLOT( spellCheckerCorrected( const QString &, 
-                                                       const QString &, 
+                    this, SLOT( spellCheckerCorrected( const QString &,
+                                                       const QString &,
                                                        unsigned int ) ) );
   QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
                     this, SLOT( spellCheckerDone( const QString & ) ) );
@@ -848,7 +848,7 @@ void KSpreadView::spellCheckerReady()
 
   // go on to the next cell
   if (!m_spell.spellCheckSelection)
-  { 
+  {
     // if nothing is selected we have to check every cell
     // we use a different way to make it faster
     while ( m_spell.currentCell )
@@ -871,7 +871,7 @@ void KSpreadView::spellCheckerReady()
 
     return;
   }
-  
+
   // if something is selected:
 
   ++m_spell.spellCurrCellX;
@@ -886,7 +886,7 @@ void KSpreadView::spellCheckerReady()
 
   for ( y = m_spell.spellCurrCellY; y <= m_spell.spellEndCellY; ++y )
   {
-    for ( x = m_spell.spellCurrCellX; x <= m_spell.spellEndCellX; ++x ) 
+    for ( x = m_spell.spellCurrCellX; x <= m_spell.spellEndCellX; ++x )
     {
       KSpreadCell * cell = m_spell.currentSpellTable->cellAt(x, y, true);
 
@@ -932,7 +932,7 @@ void KSpreadView::spellCleanup()
   m_spell.firstSpellTable   = 0L;
   m_spell.currentSpellTable = 0L;
   m_spell.currentCell       = 0L;
-    
+
   // not supported yet
   //    if(m_spell.macroCmdSpellCheck)
   //      m_pDoc->addCommand(m_spell.macroCmdSpellCheck);
@@ -988,7 +988,7 @@ bool KSpreadView::spellSwitchToOtherTable()
 }
 
 
-void KSpreadView::spellCheckerMisspelling( const QString &, 
+void KSpreadView::spellCheckerMisspelling( const QString &,
                                            const QStringList &,
                                            unsigned int )
 {
@@ -1003,11 +1003,11 @@ void KSpreadView::spellCheckerMisspelling( const QString &,
 }
 
 
-void KSpreadView::spellCheckerCorrected( const QString & old, const QString & corr, 
+void KSpreadView::spellCheckerCorrected( const QString & old, const QString & corr,
                                          unsigned int pos )
 {
   KSpreadCell * cell;
-  
+
   if (m_spell.spellCheckSelection)
   {
     cell = m_spell.currentSpellTable->cellAt(m_spell.spellCurrCellX,
@@ -1021,15 +1021,15 @@ void KSpreadView::spellCheckerCorrected( const QString & old, const QString & co
   }
 
   Q_ASSERT( cell );
-  if ( !cell ) 
+  if ( !cell )
     return;
 
   QString content( cell->text() );
 
-  KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, 
-                                                     content, 
-                                                     m_spell.spellCurrCellX, 
-                                                     m_spell.spellCurrCellY, 
+  KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable,
+                                                     content,
+                                                     m_spell.spellCurrCellX,
+                                                     m_spell.spellCurrCellY,
                                                      cell->formatType());
   m_pDoc->undoBuffer()->appendUndo( undo );
 
@@ -1072,7 +1072,7 @@ void KSpreadView::spellCheckerDone( const QString & )
         m_spell.currentCell = m_spell.currentCell->nextCell();
 
         startKSpell();
-        
+
         return;
       }
     }
@@ -1132,7 +1132,7 @@ void KSpreadView::initialPosition()
     m_pCanvas->gotoLocation( col, row );
 
     //init toggle button
-    m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
+    updateBorderButton();
     m_tableFormat->setEnabled(false);
     m_mergeCell->setEnabled(false);
     m_insertChartFrame->setEnabled(false);
@@ -1837,7 +1837,7 @@ void KSpreadView::addTable( KSpreadTable *_t )
     QObject::connect( _t, SIGNAL( sig_polygonInvalidated( const QPointArray& ) ),
                       this, SLOT( repaintPolygon( const QPointArray& ) ) );
     if(m_bLoading)
-        m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
+        updateBorderButton();
 }
 
 void KSpreadView::slotTableRemoved( KSpreadTable *_t )
@@ -1945,7 +1945,7 @@ void KSpreadView::changeTable( const QString& _name )
     m_pHorzScrollBar->setValue(t->getScrollPosX());
     m_pVertScrollBar->setValue(t->getScrollPosY());
     //refresh toggle button
-    m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
+    updateBorderButton();
 }
 
 void KSpreadView::slotScrollToFirstTable()
@@ -2896,7 +2896,7 @@ void KSpreadView::slotListChoosePopupMenu( )
 void KSpreadView::slotItemSelected( int id)
 {
   QString tmp=m_popupListChoose->text(id);
-  KSpreadCell *cell = m_pTable->nonDefaultCell( m_pCanvas->markerColumn(), 
+  KSpreadCell *cell = m_pTable->nonDefaultCell( m_pCanvas->markerColumn(),
 						m_pCanvas->markerRow(), true );
 
   if(tmp==cell->text())
@@ -3885,6 +3885,11 @@ void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
     if(!koDocument()->isReadWrite() )
         return;
      static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
+}
+
+void KSpreadView::updateBorderButton()
+{
+    m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
 }
 
 #include "kspread_view.moc"

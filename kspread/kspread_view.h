@@ -177,6 +177,9 @@ public:
 
     void changeNbOfRecentFiles(int _nb);
     void openPopupMenuMenuPage( const QPoint & _point );
+
+    void updateBorderButton();
+
 public slots:
     void initialPosition();
     /**
@@ -405,7 +408,7 @@ protected:
     void activateFormulaEditor();
 
     virtual void updateReadWrite( bool readwrite );
-    
+
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
 private:
@@ -536,7 +539,7 @@ private:
     KAction* m_spellChecking;
 
     KAction* m_insertChartFrame;
-    
+
     KToggleAction* m_menuCalcMin;
     KToggleAction* m_menuCalcMax;
     KToggleAction* m_menuCalcAverage;
@@ -546,7 +549,7 @@ private:
     KoPartSelectAction *m_insertPart;
 
     // Spell-checking
-    struct 
+    struct
     {
       KSpreadSpell *   kspell;
       KSpreadTable *  firstSpellTable;

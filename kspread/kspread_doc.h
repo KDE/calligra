@@ -354,6 +354,9 @@ public:
 
   bool delayCalculation();
 
+
+    void updateBorderButton();
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".

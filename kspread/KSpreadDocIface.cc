@@ -225,3 +225,4 @@ void KSpreadDocIface::setFooterRight(const QString & text)
     doc->setHeadFootLine( headLeft(),headMid(), headRight(),
                           footLeft(), footMid(),text );
 }
+
