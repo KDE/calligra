@@ -139,6 +139,12 @@
 #include <kaccelgen.h>
 #include "kprimportstyledia.h"
 #include <kurldrag.h>
+#include <config.h>
+
+#if HAVE_LIBASPELL
+#include <koSpell.h>
+#endif
+
 #define DEBUG
 
 static const char * const pageup_xpm[] = {
