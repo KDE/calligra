@@ -79,29 +79,6 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	return KoFilter::OK; // was successfull
 }
 
-/*void
-SvgImport::parseGObject( VObject *object, const QDomElement &e )
-{
-	if( !e.attribute( "fillcolor" ).isEmpty() )
-	{
-		VFill fill;
-		QColor c;
-		c.setNamedColor( e.attribute( "fillcolor" ) );
-		VColor color( c );
-		fill.setColor( color );
-		object->setFill( fill );
-	}
-	if( !e.attribute( "strokecolor" ).isEmpty() )
-	{
-		VStroke stroke;
-		QColor c;
-		c.setNamedColor( e.attribute( "strokecolor" ) );
-		VColor color( c );
-		stroke.setColor( color );
-		object->setStroke( stroke );
-	}
-}*/
-
 void
 SvgImport::convert()
 {

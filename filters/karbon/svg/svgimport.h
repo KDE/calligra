@@ -23,7 +23,6 @@
 #include <koFilter.h>
 #include <qdom.h>
 #include <qptrstack.h>
-#include <core/vfill.h>
 #include <core/vpath.h>
 #include <core/vdocument.h>
 
