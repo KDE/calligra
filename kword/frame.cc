@@ -860,3 +860,9 @@ void KWPartFrameSet::deactivate()
   view->hide();
   view->view()->mainWindow()->setActivePart(parentID);
 }
+
+/*================================================================*/
+void KWPartFrameSet::update()
+{
+  child->setGeometry(QRect(frames.at(0)->x(),frames.at(0)->y(),frames.at(0)->width(),frames.at(0)->height()));
+}

@@ -40,10 +40,12 @@
 /******************************************************************/
 
 /*================================================================*/
-KWordChild::KWordChild( KWordDocument *_wdoc, const KRect& _rect, KOffice::Document_ptr _doc )
+KWordChild::KWordChild(KWordDocument *_wdoc,const KRect& _rect,KOffice::Document_ptr _doc,int diffx,int diffy)
   : KoDocumentChild(_rect,_doc)
 {
   m_pKWordDoc = _wdoc;
+  m_rDoc = KOffice::Document::_duplicate(_doc);
+  setGeometry(KRect(_rect.left() + diffx,_rect.top() + diffy,_rect.width(),_rect.height()));
 }
 
 /*================================================================*/
@@ -405,7 +407,13 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	{
 	  KWordChild *ch = new KWordChild(this);
 	  ch->load(parser,lst);
+	  QRect r = ch->geometry();
 	  insertChild(ch);
+	  KWPartFrameSet *frameset = new KWPartFrameSet(this,ch);
+	  KWFrame *frame = new KWFrame(r.x(),r.y(),r.width(),r.height());
+	  frameset->addFrame(frame);
+	  addFrameSet(frameset);
+	  emit sig_insertObject(ch,frameset);
 	}
       else if (name == "PAPER")
 	{
@@ -640,7 +648,8 @@ bool KWordDocument::save( ostream &out, const char* /* _format */ )
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
       frameSet = getFrameSet(i);
-      frameSet->save(out);
+      if (frameSet->getFrameType() != FT_PART)
+	frameSet->save(out);
     }
 
   out << etag << "</FRAMESETS>" << endl;
@@ -741,28 +750,37 @@ OpenParts::View_ptr KWordDocument::createView()
 }
 
 /*================================================================*/
-void KWordDocument::insertObject(const KRect& _rect,const char *_server_name)
+void KWordDocument::insertObject(const KRect& _rect,const char *_server_name,int diffx,int diffy)
 {
   KOffice::Document_var doc = imr_createDocByServerName(_server_name);
-  if (CORBA::is_nil(doc)) return;
-
+  if (CORBA::is_nil(doc))
+    return;
+  
   if (!doc->init())
     {
       QMessageBox::critical((QWidget*)0L,i18n("KWord Error"),i18n("Could not init"),i18n("OK"));
       return;
     }
 
-  KWordChild* ch = new KWordChild(this,_rect,doc);
+  KWordChild* ch = new KWordChild(this,_rect,doc,diffx,diffy);
 
   insertChild(ch);
+  m_bModified = true;
+
+  KWPartFrameSet *frameset = new KWPartFrameSet(this,ch);
+  KWFrame *frame = new KWFrame(_rect.x() + diffx,_rect.y() + diffy,_rect.width(),_rect.height());
+  frameset->addFrame(frame);
+  addFrameSet(frameset);
+
+  emit sig_insertObject(ch,frameset);
+
+  //updateAllViews(0L);
 }
 
 /*================================================================*/
 void KWordDocument::insertChild(KWordChild *_child)
 {
   m_lstChildren.append(_child);
-  
-  emit sig_insertObject(_child);
 }
 
 /*================================================================*/
@@ -1872,6 +1890,22 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 
 		painter->drawImage(frame->x(),frame->y() - i * getPTPaperHeight(),*picFS->getImage());
 	      } break;
+	    case FT_PART:
+	      {
+		minus++;
+
+		KWPartFrameSet *partFS = dynamic_cast<KWPartFrameSet*>(getFrameSet(j));
+		KWFrame *frame = partFS->getFrame(0);
+
+		QPicture *pic = partFS->getPicture(); 
+	    
+		painter->save();
+		KRect r = painter->viewport();
+		painter->setViewport(frame->x(),frame->y() - i * getPTPaperHeight(),r.width(),r.height());
+		painter->drawPicture(*pic);
+		painter->setViewport(r);
+		painter->restore();
+	      } break;
 	    case FT_TEXT:
 	      {
 		bool bend = false;
@@ -1981,4 +2015,16 @@ void KWordDocument::setStyleChanged(QString _name)
 bool KWordDocument::isStyleChanged(QString _name)
 {
   return (changedStyles.find(_name) != -1);
+}
+
+/*================================================================*/
+void KWordDocument::hideAllFrames()
+{
+  KWordView *viewPtr = 0L;
+
+  if (!m_lstViews.isEmpty())
+    {
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	viewPtr->hideAllFrames();
+    }
 }

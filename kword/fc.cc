@@ -561,6 +561,12 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 			      if (ptPos + (ptTextLen - (ptPos - ptStartPos)) < tabPos)
 				ptPos = tabPos - (ptTextLen - (ptPos - ptStartPos));
  			    } break;
+			  case T_CENTER:
+			    {
+			      //if (!_checkTabs) break;
+			      if (ptPos + (ptTextLen - (ptPos - ptStartPos)) / 2 < tabPos)
+				ptPos = tabPos - (ptTextLen - (ptPos - ptStartPos)) / 2;
+ 			    } break;
 			  default: break;
 			  }
 		      }
@@ -710,6 +716,12 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 			  //if (!_checkTabs) break;
 			  if (ptPos + (ptTextLen - (ptPos - ptStartPos)) < tabPos)
 			    ptPos = tabPos - (ptTextLen - (ptPos - ptStartPos));
+			} break;
+		      case T_CENTER:
+			{
+			  //if (!_checkTabs) break;
+			  if (ptPos + (ptTextLen - (ptPos - ptStartPos)) / 2 < tabPos)
+			    ptPos = tabPos - (ptTextLen - (ptPos - ptStartPos)) / 2;
 			} break;
 		      default: break;
 		      }
@@ -984,6 +996,12 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 			      if (!_checkTabs) break;
 			      if (ptPos + (_ptTextLen - (ptPos - ptStartPos)) < tabPos)
 				ptPos = tabPos - (_ptTextLen - (ptPos - ptStartPos));
+			    } break;
+			  case T_CENTER:
+			    {
+			      if (!_checkTabs) break;
+			      if (ptPos + (_ptTextLen - (ptPos - ptStartPos)) / 2 < tabPos)
+				ptPos = tabPos - (_ptTextLen - (ptPos - ptStartPos)) / 2;
 			    } break;
 			  default: break;
 			  }

@@ -271,6 +271,8 @@ public:
 
   KWordChild *getChild() { return child; }
 
+  virtual void update();
+
 protected:
   KWordFrame *view;
   KWordChild *child;

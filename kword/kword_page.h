@@ -35,6 +35,7 @@
 #include <qcursor.h>
 
 #include <koRuler.h>
+#include <koPartSelectDia.h>
 
 #include <X11/Xlib.h>
 #include <kapp.h>
@@ -162,6 +163,8 @@ public:
   void setPixmapFilename(QString f)
     { pixmap_name = f; }
   
+  void setPartEntry(KoPartEntry *e) { partEntry = e; }
+  
 public slots:
   void newLeftIndent(int _left); 
   void newFirstIndent(int _first);
@@ -273,6 +276,9 @@ protected:
 
   bool redrawAllWhileScrolling,doRaster;
   QString pixmap_name;
+
+  KoPartEntry *partEntry;
+  int editNum;
 
 };
 

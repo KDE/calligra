@@ -64,7 +64,7 @@ class QPrinter;
 class KWordChild : public KoDocumentChild
 {
 public:
-  KWordChild( KWordDocument *_wdoc,const KRect& _rect,KOffice::Document_ptr _doc);
+  KWordChild( KWordDocument *_wdoc,const KRect& _rect,KOffice::Document_ptr _doc,int diffx,int diffy);
   KWordChild( KWordDocument *_wdoc);
   ~KWordChild();
   
@@ -145,7 +145,7 @@ public:
   virtual void addView(KWordView *_view);
   virtual void removeView(KWordView *_view);
 
-  virtual void insertObject(const KRect& _rect,const char *_part_name);
+  virtual void insertObject(const KRect& _rect,const char *_part_name,int diffx,int diffy);
   virtual void changeChildGeometry(KWordChild *_child,const KRect&);
   
   virtual QListIterator<KWordChild> childIterator();
@@ -263,6 +263,7 @@ public:
   void updateAllCursors();
   void drawAllBorders(QPainter *_painter = 0);
   void recalcWholeText();
+  void hideAllFrames();
 
   int getPages() { return pages; }
 
@@ -334,7 +335,7 @@ public:
 
 signals:
   void sig_imageModified();
-  void sig_insertObject(KWordChild *_child);
+  void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
   void sig_updateChildGeometry(KWordChild *_child);
   void sig_removeObject(KWordChild *_child);
 

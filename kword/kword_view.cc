@@ -91,8 +91,8 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
 
   m_pKWordDoc = _doc;
 
-  QObject::connect(m_pKWordDoc,SIGNAL(sig_insertObject(KWordChild*)),
-		   this,SLOT(slotInsertObject(KWordChild*)));
+  QObject::connect(m_pKWordDoc,SIGNAL(sig_insertObject(KWordChild*,KWPartFrameSet*)),
+		   this,SLOT(slotInsertObject(KWordChild*,KWPartFrameSet*)));
   QObject::connect(m_pKWordDoc,SIGNAL(sig_updateChildGeometry(KWordChild*)),
 		   this,SLOT(slotUpdateChildGeometry(KWordChild*)));
 
@@ -139,6 +139,14 @@ void KWordView::init()
   format = m_pKWordDoc->getDefaultParagLayout()->getFormat();
   if (gui)
     gui->getPaperWidget()->formatChanged(format);
+
+  KWFrameSet *frameset;
+  for (unsigned int i = 0;i < m_pKWordDoc->getNumFrameSets();i++)
+    {
+      frameset = m_pKWordDoc->getFrameSet(i);
+      if (frameset->getFrameType() == FT_PART)
+	slotInsertObject(dynamic_cast<KWPartFrameSet*>(frameset)->getChild(),dynamic_cast<KWPartFrameSet*>(frameset));
+    }
 }
 
 /*================================================================*/
@@ -147,6 +155,32 @@ KWordView::~KWordView()
   cerr << "KWordView::~KWordView()" << endl;
   cleanUp();
   cerr << "...KWordView::~KWordView()" << endl;
+}
+
+/*================================================================*/
+void KWordView::setFramesToParts()
+{
+  KWordFrame *frame = 0L;
+  for (unsigned int i = 0;i < m_lstFrames.count();i++)
+    {
+      frame = m_lstFrames.at(i);
+      frame->hide();
+      frame->view()->setMainWindow(mainWindow());
+      frame->getPartObject()->setView(frame);
+      frame->getPartObject()->setMainWindow(mainWindow());
+      frame->getPartObject()->setParentID(id());
+    }
+}
+
+/*================================================================*/
+void KWordView::hideAllFrames()
+{
+  KWordFrame *frame = 0L;
+  for (unsigned int i = 0;i < m_lstFrames.count();i++)
+    {
+      frame = m_lstFrames.at(i);
+      frame->hide();
+    }
 }
 
 /*================================================================*/
@@ -787,18 +821,37 @@ void KWordView::toolsClipart()
 void KWordView::toolsTable()
 {
   gui->getPaperWidget()->mmTable();
+
+  QStrList mimes,repos;
+  mimes.append("application/x-kspread");
+  repos.append("IDL:KSpread/DocumentFactory:1.0");
+
+  KoPartEntry *pe = new KoPartEntry("KSpread","kspread.bin --server","shared","",mimes,repos);
+  gui->getPaperWidget()->setPartEntry(pe);
 }
 
 /*===============================================================*/
 void KWordView::toolsFormula()
 {
   gui->getPaperWidget()->mmFormula();
+
+  QStrList mimes,repos;
+  mimes.append("application/x-kformula");
+  repos.append("IDL:KFormula/DocumentFactory:1.0");
+
+  KoPartEntry *pe = new KoPartEntry("KFormula","kformula.bin --server","shared","",mimes,repos);
+  gui->getPaperWidget()->setPartEntry(pe);
 }
 
 /*===============================================================*/
 void KWordView::toolsPart()
 {
+  gui->getPaperWidget()->mmEdit();
+  KoPartEntry* pe = KoPartSelectDia::selectPart();
+  if (!pe) return;
+  
   gui->getPaperWidget()->mmPart();
+  gui->getPaperWidget()->setPartEntry(pe);
 }
 
 /*===============================================================*/
@@ -1716,31 +1769,41 @@ void KWordView::setParagBorderValues()
 }
 
 /*================================================================*/
-void KWordView::slotInsertObject(KWordChild *_child)
+void KWordView::slotInsertObject(KWordChild *_child,KWPartFrameSet *_kwpf)
 { 
-  OpenParts::View_var v = _child->createView( m_vKoMainWindow );
-  if (CORBA::is_nil( v ) )
+  OpenParts::View_var v;
+
+  try
+  { 
+    v = _child->createView(m_vKoMainWindow);
+  }
+  catch (OpenParts::Document::MultipleViewsNotSupported &_ex)
+  {
+    // HACK
+    printf("void KWordView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n");
+    printf("Could not create view\n");
+    exit(1);
+  }
+  
+  if (CORBA::is_nil(v))
   {
     printf("void KWordView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n");
     printf("return value is 0L\n");
     exit(1);
   }
 
+  KWordFrame *p = new KWordFrame(this,_child);
+  p->setGeometry(_child->geometry());
+  m_lstFrames.append(p);
+
   KOffice::View_var kv = KOffice::View::_narrow( v );
   kv->setMode( KOffice::View::ChildMode );
   assert( !CORBA::is_nil( kv ) );
-
-  KWordFrame *p = new KWordFrame( this, _child );
   p->attachView( kv );
-  p->setGeometry( _child->geometry() );
-  
-  QObject::connect(p,SIGNAL(sig_geometryEnd( KoFrame* ) ),
-		   this,SLOT(slotGeometryEnd( KoFrame* ) ) );
-  QObject::connect(p,SIGNAL(sig_moveEnd( KoFrame* ) ),
-		   this,SLOT(slotMoveEnd( KoFrame* ) ) );  
 
-  m_lstFrames.append( p );
-  p->show();
+  p->hide();
+  _kwpf->setView(p);
+  p->setPartObject(_kwpf);
 } 
 
 /*================================================================*/

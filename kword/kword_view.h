@@ -51,6 +51,7 @@ class KWPaintWindow;
 #include "stylist.h"
 
 #include <koPageLayoutDia.h>
+#include <koPartSelectDia.h>
 
 class KWPartFrameSet;
 
@@ -181,8 +182,11 @@ public:
   bool getViewFormattingChars() { return _viewFormattingChars; }
   bool getViewFrameBorders() { return _viewFrameBorders; }
 
+  void setFramesToParts();
+  void hideAllFrames();
+
 public slots:
-  void slotInsertObject(KWordChild *_child);
+  void slotInsertObject(KWordChild *_child,KWPartFrameSet *_kwpf);
   void slotUpdateChildGeometry(KWordChild *_child);
   void slotGeometryEnd( KoFrame*);
   void slotMoveEnd( KoFrame*);
