@@ -32,6 +32,7 @@
 #include <Painter.h>
 
 #include <stdio.h>
+#include <string.h>
 
 #define MARKER_WIDTH 11
 #define MARKER_HEIGHT 6
@@ -233,7 +234,7 @@ void Ruler::paintEvent (QPaintEvent *e) {
 
 void Ruler::drawRuler () {
   QPainter p;
-  int start, pos;
+  int start, pos, step;
   bool s1, s2, s3;
   
   if (! buffer)
@@ -250,12 +251,18 @@ void Ruler::drawRuler () {
     s1 = cvtInchToPt(10.0) * zoom > 3.0;
     s2 = cvtInchToPt(50.0) * zoom > 3.0;
     s3 = cvtInchToPt(100.0) * zoom > 3.0;
+    step = 30 / (100.0 * zoom);
+    if(step == 0)
+     step = 1;
     start = (int)(firstVisible / zoom);
     break;
   case UnitInch:
     s1 = cvtInchToPt(0.1) * zoom > 3.0;
     s2 = cvtInchToPt(0.5) * zoom > 3.0;
     s3 = cvtInchToPt(1.0) * zoom > 3.0;
+    step = 24 / (cvtInchToPt(1.0) * zoom);
+    if(step == 0)
+     step = 1;
     start = 10*(int)(cvtPtToInch(firstVisible) / zoom);
     break;
   case UnitCentimeter:
@@ -263,24 +270,36 @@ void Ruler::drawRuler () {
     s1 = cvtMmToPt(1.0) * zoom > 3.0;
     s2 = cvtMmToPt(5.0) * zoom > 3.0;
     s3 = cvtMmToPt(10.0) * zoom > 3.0;
+    step = 30 / (cvtMmToPt(10.0) * zoom);
+    if(step == 0)
+     step = 1;
     start = (int)(cvtPtToMm(firstVisible) / zoom);
     break;
   case UnitPica:
     s1 = cvtPicaToPt(1.0) * zoom > 3.0;
     s2 = cvtPicaToPt(5.0) * zoom > 3.0;
     s3 = cvtPicaToPt(10.0) * zoom > 3.0;
+    step = 30 / (cvtPicaToPt(10.0) * zoom);
+    if(step == 0)
+     step = 1;
     start = (int)(cvtPtToPica(firstVisible) / zoom);
     break;
   case UnitDidot:
     s1 = cvtDidotToPt(10.0) * zoom > 3.0;
     s2 = cvtDidotToPt(50.0) * zoom > 3.0;
     s3 = cvtDidotToPt(100.0) * zoom > 3.0;
+    step = 30 / (cvtDidotToPt(100.0) * zoom);
+    if(step == 0)
+     step = 1;
     start = (int)(cvtPtToDidot(firstVisible) / zoom);
     break;
   case UnitCicero:
     s1 = cvtCiceroToPt(1.0) * zoom > 3.0;
     s2 = cvtCiceroToPt(5.0) * zoom > 3.0;
     s3 = cvtCiceroToPt(10.0) * zoom > 3.0;
+    step = 30 / (cvtCiceroToPt(10.0) * zoom);
+    if(step == 0)
+     step = 1;
     start = (int)(cvtPtToCicero(firstVisible) / zoom);
     break;
   }
@@ -297,8 +316,8 @@ void Ruler::drawRuler () {
            p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
 	  if( s1 && start % 10 == 0 )
 	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % 100 == 0 )
-           drawNum (p, pos, 10, start, true);
+	  if( start % (step * 100) == 0 )
+           drawNum (p, pos, 8, start, true);
 	  start++;
 	 }while(pos < buffer->width());
         break;
@@ -313,8 +332,8 @@ void Ruler::drawRuler () {
            p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
 	  if( s1 )
 	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % 10 == 0 )
-           drawNum (p, pos, 10, start, true);
+	  if( start % (step * 10) == 0 )
+           drawNum (p, pos, 8, start, true);
 	  start++;
 	 }while(pos < buffer->width());
         break;
@@ -329,8 +348,8 @@ void Ruler::drawRuler () {
            p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
 	  if( s1 )
 	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % 10 == 0 )
-           drawNum (p, pos, 10, start/10, true);
+	  if( start % (step * 10) == 0 )
+           drawNum (p, pos, 8, start/10, true);
 	  start++;
 	 }while(pos < buffer->width());
         break;
@@ -345,8 +364,8 @@ void Ruler::drawRuler () {
            p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
 	  if( s1 && start % 10 == 0 )
 	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % 100 == 0 )
-           drawNum (p, pos, 10, start, true);
+	  if( start % (step * 100) == 0 )
+           drawNum (p, pos, 8, start, true);
 	  start++;
 	 }while(pos < buffer->width());
         break;
@@ -361,8 +380,8 @@ void Ruler::drawRuler () {
            p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
 	  if( s1 )
 	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % 10 == 0 )
-           drawNum (p, pos, 10, start, true);
+	  if( start % (step * 10) == 0 )
+           drawNum (p, pos, 8, start, true);
 	  start++;
 	 }while(pos < buffer->width());
         break;
@@ -377,8 +396,8 @@ void Ruler::drawRuler () {
            p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
 	  if( s1 )
 	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % 10 == 0 )
-           drawNum (p, pos, 10, start, true);
+	  if( start % (step * 10) == 0 )
+           drawNum (p, pos, 8, start, true);
 	  start++;
 	 }while(pos < buffer->width());
         break;
@@ -393,8 +412,8 @@ void Ruler::drawRuler () {
            p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
 	  if( s1 )
 	   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-	  if( start % 10 == 0 )
-           drawNum (p, pos, 10, start/10, true);
+	  if( start % (step * 10) == 0 )
+           drawNum (p, pos, 8, start/10, true);
 	  start++;
 	 }while(pos < buffer->width());
         break;
@@ -415,7 +434,7 @@ void Ruler::drawRuler () {
 	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
 	  if( s1 && start % 10 == 0 )
 	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % 100 == 0 )
+	  if( start % (step * 100) == 0 )
            drawNum (p, 2, pos, start, false);
 	  start++;
          }while(pos < buffer->height());
@@ -431,7 +450,7 @@ void Ruler::drawRuler () {
 	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
 	  if( s1 && start % 10 == 0 )
 	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % 100 == 0 )
+	  if( start % (step * 100) == 0 )
            drawNum (p, 2, pos, start, false);
 	  start++;
          }while(pos < buffer->height());
@@ -447,7 +466,7 @@ void Ruler::drawRuler () {
 	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
 	  if( s1 )
 	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % 10 == 0 )
+	  if( start % (step * 10) == 0 )
            drawNum (p, 2, pos, start, false);
 	  start++;
          }while(pos < buffer->height());
@@ -463,7 +482,7 @@ void Ruler::drawRuler () {
 	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
 	  if( s1 )
 	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % 10 == 0 )
+	  if( start % (step * 10) == 0 )
            drawNum (p, 2, pos, start/10, false);
 	  start++;
          }while(pos < buffer->height());
@@ -479,7 +498,7 @@ void Ruler::drawRuler () {
 	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
 	  if( s1 )
 	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % 10 == 0 )
+	  if( start % (step * 10) == 0 )
            drawNum (p, 2, pos, start, false);
 	  start++;
 	 }while(pos < buffer->height());
@@ -495,7 +514,7 @@ void Ruler::drawRuler () {
 	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
 	  if( s1 )
 	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % 10 == 0 )
+	  if( start % (step * 10) == 0 )
            drawNum (p, 2, pos, start, false);
 	  start++;
          }while(pos < buffer->height());
@@ -510,7 +529,7 @@ void Ruler::drawRuler () {
 	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
 	  if( s1 )
 	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % 10 == 0 )
+	  if( start % (step * 10) == 0 )
            drawNum (p, 2, pos, start/10, false);
 	  start++;
          }while(pos < buffer->height ());
@@ -582,20 +601,16 @@ void Ruler::drawNum (QPainter &p, int x, int y, int a, bool orient)
  {
   char buf[10];
   sprintf(buf, "%d", (a>=0)? a : -a );
+  int l = strlen(buf);
   if( orient )
-   {
-    p.drawText( x-20,y-10, 40 ,10, Qt::AlignHCenter|Qt::AlignBottom, buf);
-    return;
-   }
-  if( orient )
-   x -= 5;
-//  else
-//   y -= 4;
+   x -= 3*l;
+  else
+   y -= 2*l - 3;
   for(char *ch = buf; *ch; ch++)
    {
     p.drawText ( x, y, ch, 1);
     if( orient )
-      x += 5;
+      x += 6;
     else
       y += 7;
    }
