@@ -83,6 +83,7 @@ KWParagLayout::~KWParagLayout()
     document->paragLayoutList.setAutoDelete( true );
     document->paragLayoutList.removeRef( this );
     document->paragLayoutList.setAutoDelete( false );
+    tabList.setAutoDelete( true ); 
 }
 
 /*================================================================*/

@@ -345,31 +345,31 @@ public:
 
     void updateTableHeaders( QList<KWGroupManager> &grpMgrs );
 
-    QIntDict<KWVariableFormat> &getVarFormats() { return varFormats; }
+    QIntDict<KWVariableFormat> &getVarFormats() const { return varFormats; }
 
     long int getPageNum( int bottom );
 
-    KWFootNoteManager &getFootNoteManager() { return footNoteManager; }
+    KWFootNoteManager &getFootNoteManager() const { return footNoteManager; }
     void setNoteType( KWFootNoteManager::NoteType nt ) { footNoteManager.setNoteType( nt ); }
-    KWFootNoteManager::NoteType getNoteType() { return footNoteManager.getNoteType(); }
+    KWFootNoteManager::NoteType getNoteType() const { return footNoteManager.getNoteType(); }
 
-    KWAutoFormat &getAutoFormat() { return autoFormat; }
+    KWAutoFormat &getAutoFormat() const { return autoFormat; }
 
     void setPageLayoutChanged( bool c ) { pglChanged = c; }
 
-    bool getPageLayoutChanged() { return pglChanged; }
+    bool getPageLayoutChanged() const { return pglChanged; }
 
     void addImageRequest( const QString &filename, KWCharImage *img );
     void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
 
     void registerVariable( KWVariable *var );
     void unregisterVariable( KWVariable *var );
-    QList<KWVariable> *getVariables() {
+    QList<KWVariable> *getVariables() const {
         return &variables;
     }
 
     void setVariableValue( const QString &name, const QString &value );
-    QString getVariableValue( const QString &name );
+    QString getVariableValue( const QString &name ) const;
 
     KWSerialLetterDataBase *getSerialLetterDataBase() const;
     int getSerialLetterRecord() const;

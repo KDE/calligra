@@ -69,13 +69,15 @@
 /*================================================================*/
 KWordChild::KWordChild( KWordDocument *_wdoc, const QRect& _rect, KoDocument *_doc, int diffx, int diffy )
     : KoDocumentChild( _wdoc, _doc, QRect( _rect.left() + diffx, _rect.top() + diffy, _rect.width(), _rect.height() ) )
-{
+{       
+  varFormats.setAutoDelete(true);
 }
 
 /*================================================================*/
 KWordChild::KWordChild( KWordDocument *_wdoc )
     : KoDocumentChild( _wdoc )
 {
+  varFormats.setAutoDelete(true); 
 }
 
 /*================================================================*/
@@ -867,6 +869,7 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
     lay->setFormat( f );
 
     if ( TRUE /*no variable formats were loaded*/) {
+        varFormats.clear();
         varFormats.insert( VT_DATE_FIX, new KWVariableDateFormat() );
         varFormats.insert( VT_DATE_VAR, new KWVariableDateFormat() );
         varFormats.insert( VT_TIME_FIX, new KWVariableTimeFormat() );
