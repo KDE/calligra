@@ -405,9 +405,9 @@ void KWView::setupActions()
                                             actionCollection(), "insert_expression" );
     loadexpressionActions( actionInsertExpression);
 
-    actionEditPersonnalExpr=new KAction( i18n( "Edit personnal expression..." ), 0,
+    actionEditPersonnalExpr=new KAction( i18n( "Edit personal expressions..." ), 0,
                                          this, SLOT( editPersonalExpr() ),
-                                     actionCollection(), "personnal_expr" );
+                                     actionCollection(), "personal_expr" );
 
     actionChangeCase=new KAction( i18n( "Change case..." ), 0,
                                      this, SLOT( changeCaseOfText() ),
@@ -2281,7 +2281,7 @@ void KWView::changeCaseOfText()
 
 void KWView::editPersonalExpr()
 {
-   KWEditPersonnalExpression *personalDia=new KWEditPersonnalExpression( this,"personnal" );
+   KWEditPersonnalExpression *personalDia=new KWEditPersonnalExpression( this );
    if(personalDia->exec())
        m_doc->refreshMenuExpression();
    delete personalDia;
