@@ -83,7 +83,7 @@ KDE Control Center.</para>
 </varlistentry>
 
 <varlistentry>
-<term>Preformmated date strings</term>
+<term>Preformatted date strings</term>
 <listitem><para>&kword; comes with 12 predefined date strings. These predefined strings will
 be all that are needed in most circumstances. Simply select the predefined string in the upper
 drop down box.  A preview of the date format will appear below the <guilabel>Custom</guilabel>
@@ -203,7 +203,7 @@ KDE Control Center.</para>
 </varlistentry>
 
 <varlistentry>
-<term>Preformmated time strings</term>
+<term>Preformatted time strings</term>
 <listitem><para>&kword; comes with 5 predefined date strings. These predefined strings will
 be all that are needed in most circumstances. Simply select the predefined string in the upper
 drop down box.  A preview of the time format will appear below the <guilabel>Custom</guilabel>

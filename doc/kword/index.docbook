@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&kword;">
-  <!ENTITY % addindex "INCLUDE">
+  <!ENTITY % addindex "IGNORE">
   <!ENTITY fundamentals SYSTEM "fundimentals.docbook">
   <!ENTITY tutorial SYSTEM "tutorial.docbook">
   <!ENTITY basics SYSTEM "basics.docbook">
@@ -73,7 +73,7 @@
 &koffice; suite of utilities.
 </para>
 <para>
-This manual describes KWord 1.2.
+This manual describes KWord 1.3.
 </para>
 </abstract>
 

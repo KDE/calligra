@@ -383,8 +383,10 @@ same as selecting <guilabel>Lower Frame</guilabel> from the menubar.</para></tip
 <para>A page break is a special formatting character.  It is
 invisible on the final printed output.</para>
 
-<para>The purpose of a page break, is to force all the text that
-follows it into the next frame in the frameset.</para>
+<para> <!-- Although this looks to be wrong or poorly phrased, it is
+in fact accurate, and is precisely what the insertion of a page break
+does in KWord --> The purpose of a page break, is to force all the
+text that follows it into the next frame in the frameset.</para>
 
 <para>If we have the following sentence:  <quote>We have nothing to
 fear but fear itself</quote></para>
