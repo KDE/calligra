@@ -42,7 +42,7 @@
 OptionDialog::OptionDialog (GDocument *adoc,QWidget* parent, const char* name) :
     KDialogBase(KDialogBase::TreeList, i18n("Option"),
                 Ok|Apply|Cancel, Ok,
-                parent, name, true),doc(adoc)
+                parent, name, true),doc(adoc),modified(false)
 {
   QStringList list;
   createGeneralWidget(addPage(i18n("General")));
@@ -153,9 +153,15 @@ void OptionDialog::createBGWidget(QWidget* parent)
   QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
   QLabel* clabel = new QLabel(i18n("Background Color"), parent);
   bgbutton = new KColorButton(parent);
+  connect (bgbutton, SIGNAL(changed (const QColor&)), this, SLOT(colorChanged(const QColor&)));
   bgbutton->setColor(doc->activePage()->bgColor());
   layout->addWidget(clabel);
   layout->addWidget(bgbutton);
+}
+
+void OptionDialog::colorChanged(const QColor&)
+{
+  modified = true;
 }
 
 /*Grid*/
@@ -312,6 +318,7 @@ void OptionDialog::addHorizLine()
   buf+=" ";
   buf+=unitToString (unit);
   horizList->insertItem (buf);
+  modified = true;
 }
 
 void OptionDialog::updateHorizLine()
@@ -342,6 +349,7 @@ void OptionDialog::deleteHorizLine()
   {
     horizLines.remove(horizLines.at(idx));
     horizList->removeItem(idx);
+    modified = true;
   }
 }
 
@@ -354,6 +362,7 @@ void OptionDialog::addVertLine()
   buf+=" ";
   buf+=unitToString (unit);
   vertList->insertItem (buf);
+  modified = true;
 }
 
 void OptionDialog::updateVertLine()
@@ -384,6 +393,7 @@ void OptionDialog::deleteVertLine()
   {
     vertLines.remove(vertLines.at(idx));
     vertList->removeItem (idx);
+    modified = true;
   }
 }
 
@@ -414,8 +424,12 @@ void OptionDialog::slotApply()
   /*Helplines*/
   doc->setHorizHelplines(horizLines);
   doc->setVertHelplines(vertLines);
-    
-  doc->emitChanged();
+  
+  if(modified)
+  {
+    doc->setModified();
+    doc->emitChanged();
+  }
 }
 
 void OptionDialog::slotOk()

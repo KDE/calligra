@@ -101,6 +101,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me, GDocument *doc, 
       dragHorizHelpline = -1;
       canvas->setCursor(Qt::arrowCursor);
       ctype = C_Arrow;
+      doc->setModified();
       return;
    }
    else if (dragVertHelpline != -1)
@@ -109,6 +110,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me, GDocument *doc, 
       dragVertHelpline = -1;
       canvas->setCursor(Qt::arrowCursor);
       ctype = C_Arrow;
+      doc->setModified();
       return;
   }
 

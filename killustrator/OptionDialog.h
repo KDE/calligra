@@ -28,6 +28,7 @@
 #include <kdialogbase.h>
 
 class QComboBox;
+class QColor;
 class KColorButton;
 class QCheckBox;
 class UnitBox;
@@ -55,6 +56,8 @@ protected slots:
   void slotApply();
   void slotOk();
    
+  void colorChanged(const QColor&);
+  
   void addHorizLine ();
   void updateHorizLine ();
   void deleteHorizLine ();
@@ -67,6 +70,7 @@ protected slots:
 
 private:
   GDocument *doc;
+  bool modified;
  
   /*General*/
   QComboBox* unit;

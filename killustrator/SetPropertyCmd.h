@@ -40,6 +40,7 @@ public:
                   const GText::TextInfo& tinfo);
 
   void execute ();
+  void unexecute ();
 
 private:
   GObject::OutlineInfo outline;

@@ -24,6 +24,7 @@
 
 #include <SetPropertyCmd.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 SetPropertyCmd::SetPropertyCmd (GDocument* doc,
                                 const GObject::OutlineInfo& oinfo,
@@ -33,6 +34,8 @@ SetPropertyCmd::SetPropertyCmd (GDocument* doc,
   outline = oinfo;
   fill = finfo;
   tprops.mask = 0;
+  kdDebug() << "COLOR=" << fill.color.name() << endl;
+  kdDebug() << "MASK=" << fill.mask << endl;
 }
 
 SetPropertyCmd::SetPropertyCmd (GObject* obj,
@@ -58,6 +61,7 @@ SetPropertyCmd::SetPropertyCmd (GDocument* doc,
 
 void SetPropertyCmd::execute ()
 {
+  kdDebug() << "execute" << endl;
   // save the states
   ObjectManipCmd::execute ();
 
@@ -73,3 +77,8 @@ void SetPropertyCmd::execute ()
   }
 }
 
+void SetPropertyCmd::unexecute ()
+{
+  kdDebug() << "unexecute" << endl;
+  ObjectManipCmd::unexecute();
+}

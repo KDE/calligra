@@ -1,19 +1,25 @@
-TODO before 0.8 final (KOffice 1.1)
-* SVG Import/Export filters...................................
-* New layers dialog (tree...).................................
-* New options dialog..........................................
-* Tabbar some fixes...........................................
-* More redrawing speed (complex rewriting canvas?)............
-* Canvas color................................................done
-* Printing fixes..............................................
-+++ Bug fixing and cleaning code
+TODO before 1.1
+* SVG Import/Export filters fixes (Rob Buis)
+* Printing fixes(pages, color)
+* Bug fixing and cleaning code
+  * test undo/redo and fix bugs
+    * changing color and undo...
+  * test for for setting modified flag at document
+    * creating helpline from ruler
+    * changing grid settings
+  * nodes deleting (crash)
 
-TODO before 1.0 final
+
+
+TODO before 1.2
 * CMX Import/Export filter
 * AI Import/Export filters
+* KCommand for undo/redo
 * New color support
 * Transparency support
+* More redrawing speed
+* New layers dialog (tree...)
 ...
 
 Last update:
-6.06.2001
+30.06.2001

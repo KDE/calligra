@@ -49,19 +49,22 @@ SetTextCmd::SetTextCmd (GDocument* doc, GText* obj, GOState* ostate)
   text = obj->getText ();
 }
 
-SetTextCmd::~SetTextCmd () {
+SetTextCmd::~SetTextCmd ()
+{
   object->unref ();
   state->unref ();
 }
 
-void SetTextCmd::execute () {
+void SetTextCmd::execute ()
+{
   if (state)
     state->unref ();
   state = object->saveState ();
   object->setText (text);
 }
 
-void SetTextCmd::unexecute () {
+void SetTextCmd::unexecute ()
+{
   object->restoreState (state);
 }
 

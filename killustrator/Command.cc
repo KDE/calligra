@@ -25,6 +25,7 @@
 #include <Command.h>
 #include <GDocument.h>
 #include "GPage.h"
+#include <kdebug.h>
 
 ObjectManipCmd::ObjectManipCmd (GDocument* doc, const QString& name) :
   Command(name)
@@ -35,7 +36,11 @@ ObjectManipCmd::ObjectManipCmd (GDocument* doc, const QString& name) :
   QListIterator<GObject> it(doc->activePage()->getSelection());
   for (unsigned int i = 0; it.current(); ++it, ++i) {
     (*it)->ref ();
+    kdDebug() << "1)MASK=" << (*it)->getFillInfo().mask << endl;
+    kdDebug() << "1)COLOR=" << (*it)->getFillInfo().color.name() << endl;
     objects.insert (i, (*it));
+    kdDebug() << "2)MASK=" << objects[i]->getFillInfo().mask << endl;
+    kdDebug() << "2)COLOR=" << objects[i]->getFillInfo().color.name() << endl;
     states.insert (i, 0L);
   }
   document = doc;
