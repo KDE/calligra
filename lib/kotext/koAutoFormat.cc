@@ -268,7 +268,7 @@ void KoAutoFormat::saveConfig()
     QTextStream ts(&f);
     doc.save(ts, 2);
     f.close();
-
+    autoFormatIsActive();
     config.sync();
 }
 
