@@ -106,6 +106,7 @@ void OLEFilter::convert(const QString &dirname) {
 
     QList<OLENode> list=docfile->parseCurrentDir();
     OLENode *node;
+    bool onlyDirs=true;
 
     for(node=list.first(); node!=0; node=list.next()) {
         if(node->type==1) {         // it is a dir!
@@ -113,7 +114,46 @@ void OLEFilter::convert(const QString &dirname) {
             convert(node->name);
             docfile->leaveDir();
         }
+        else {
+            onlyDirs=false;
+        }
     }
     kdebug(KDEBUG_INFO, 31000, (const char*)dirname);
-    // more to come...
+
+    if(!onlyDirs) {
+        FilterBase *myFilter=0L;
+        node=list.first();
+
+        do {
+            if(node->name=="WordDocument" || node->name=="1Table" ||
+               node->name=="0Table" || node->name=="ObjectPool") {
+                // Word
+                kdebug(KDEBUG_INFO, 31000, "WinWord");
+                myFilter=new FilterBase();
+            }
+            else if(node->name=="Workbook") {
+                // Excel
+                kdebug(KDEBUG_INFO, 31000, "Excel");
+                myFilter=new FilterBase();
+            }
+            else if(node->name=="PowerPoint Document") {
+                // PowerPoint
+                kdebug(KDEBUG_INFO, 31000, "Power Point");
+                myFilter=new FilterBase();
+            }
+            else if(node->name=="Equation Native") {
+                // MS Equation
+                kdebug(KDEBUG_INFO, 31000, "Formel");
+                myFilter=new FilterBase();
+            }
+            node=list.next();
+        } while(myFilter==0L && node!=0);
+
+        if(myFilter==0L) {
+            // unknown
+            kdebug(KDEBUG_INFO, 31000, "keine Ahnung");
+        }
+
+        delete myFilter;
+    }
 }

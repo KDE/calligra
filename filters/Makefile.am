@@ -6,7 +6,7 @@ LDADD = ./winword97/libwinword97.la $(LIB_KOFFICECORE)
 
 ####### Files
 
-SUBDIRS = winword97
+SUBDIRS = excel97 powerpoint97 winword97
 
 bin_PROGRAMS = ole_filter
 

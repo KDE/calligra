@@ -56,8 +56,8 @@ KLaola::~KLaola() {
 
     QList<OLETree> *tmpList;
     OLETree *node;
-    for(tmpList=treeList.first();tmpList!=0;tmpList=treeList.next()) {
-        for(node=tmpList->first();node!=0;node=tmpList->next()) {
+    for(tmpList=treeList.first(); tmpList!=0; tmpList=treeList.next()) {
+        for(node=tmpList->first(); node!=0; node=tmpList->next()) {
             delete node;
             node=0L;
         }
@@ -66,7 +66,7 @@ KLaola::~KLaola() {
     }
 
     OLEInfo *info;
-    for(info=ppsList.first();info!=0;info=ppsList.next()) {
+    for(info=ppsList.first(); info!=0; info=ppsList.next()) {
         delete info;
         info=0L;
     }
@@ -101,7 +101,7 @@ const QList<OLENode> KLaola::parseCurrentDir() {
     bool found;
 
     if(ok) {
-        for(i=0, tmpList=treeList.first();i<path.size();++i) {
+        for(i=0, tmpList=treeList.first(); i<path.size(); ++i) {
             tree=tmpList->first();
             found=false;
 
@@ -120,7 +120,7 @@ const QList<OLENode> KLaola::parseCurrentDir() {
         }
     }
     if(ok) {
-        for(tree=tmpList->first();tree!=0;tree=tmpList->next()) {
+        for(tree=tmpList->first(); tree!=0; tree=tmpList->next()) {
             node=new OLENode;
 
             info=ppsList.at(tree->handle);
@@ -221,7 +221,7 @@ const QArray<long> KLaola::find(const QString &name) {
     int i=0;
 
     if(ok) {
-        for(OLEInfo *p=ppsList.first();p!=0;p=ppsList.next()) {
+        for(OLEInfo *p=ppsList.first(); p!=0; p=ppsList.next()) {
             if(p->name==name) {
                 ret.resize(i+1);
                 ret[i]=p->handle;
@@ -244,7 +244,7 @@ void KLaola::testIt() {
     if(ok) {
         dir=parseRootDir();
 
-        for(node=dir.first();node!=0;node=dir.next()) {
+        for(node=dir.first(); node!=0; node=dir.next()) {
             info=streamInfo(node->handle);
 
             foo.setNum(info.handle);
@@ -279,7 +279,7 @@ bool KLaola::parseHeader() {
     bbd_list=new unsigned long[num_of_bbd_blocks];
 
     unsigned int i, j;
-    for(i=0, j=0;i<num_of_bbd_blocks;++i, j=j+4)
+    for(i=0, j=0; i<num_of_bbd_blocks; ++i, j=j+4)
         bbd_list[i]=read32(0x4c+j);
 
     return true;
@@ -289,7 +289,7 @@ void KLaola::readBigBlockDepot() {
 
     bigBlockDepot=new unsigned char[0x200*num_of_bbd_blocks];
     
-    for(unsigned int i=0;i<num_of_bbd_blocks;++i) 
+    for(unsigned int i=0; i<num_of_bbd_blocks; ++i)
         memcpy(&bigBlockDepot[i*0x200], &data[(bbd_list[i]+1)*0x200], 0x200);
 }
 
@@ -307,7 +307,7 @@ void KLaola::readRootList() {
     long handle=0;
 
     while(pos!=-2 && pos>=0 && pos<=static_cast<long>(maxblock)) {
-        for(int i=0;i<4;++i, ++handle)
+        for(int i=0; i<4; ++i, ++handle)
             readPPSEntry((pos+1)*0x200+0x80*i, handle);
 
         pos=nextBigBlock(pos);
@@ -331,7 +331,7 @@ void KLaola::readPPSEntry(long pos, long handle) {
 
     if(info->nameSize!=0) {      // PPS Entry seems to be OK
 
-        for(int i=0;i<(info->nameSize/2)-1;++i)
+        for(int i=0; i<(info->nameSize/2)-1; ++i)
             info->name+=data[pos+2*i];
 
         info->type=data[pos+0x42];
