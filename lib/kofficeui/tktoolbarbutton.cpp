@@ -211,6 +211,11 @@ void TKToolBarButton::setDefaultIcon( const QString &icon )
   setDefaultPixmap( BarIcon(icon, iconSize, KIcon::DefaultState, d->m_instance) );
 }
 
+QPixmap TKToolBarButton::getActivePixmap() const
+{
+  return activePixmap;
+}
+
 void TKToolBarButton::setPixmap( const QPixmap &pixmap )
 {
   setPixmap( pixmap, true );

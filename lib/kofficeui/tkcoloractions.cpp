@@ -113,9 +113,8 @@ void TKSelectColorAction::updatePixmap(TKToolBarButton* b)
 {
   if (!b)
     return;
-
-  QPixmap* pix = (QPixmap*)b->pixmap();
-  QPainter p(pix);
+  QPixmap pix =b->getActivePixmap();
+  QPainter p(&pix);
   switch (m_type) {
     case TextColor:
       p.fillRect(QRect(0,12,16,5), m_pCurrentColor);
@@ -132,7 +131,7 @@ void TKSelectColorAction::updatePixmap(TKToolBarButton* b)
       break;
   }
   p.end();
-  b->setPixmap(*pix);
+  b->setPixmap(pix);
 }
 
 void TKSelectColorAction::setCurrentColor( const QColor& color )

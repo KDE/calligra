@@ -177,6 +177,8 @@ public:
    */
   void setDelayedPopup(QPopupMenu *p, bool toggle = false);
 
+  QPixmap getActivePixmap() const;
+
 signals:
   void buttonClicked();
   void buttonPressed();
