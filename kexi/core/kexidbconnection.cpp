@@ -284,7 +284,7 @@ KexiDBConnection::flush(KoStore *store)
 		store->open("/db-index");
 		store->write(rawIndex);
 		store->close();
-		kdDebug() << "added data: " << index << endl;
+		//kdDebug() << "added data: " << index << endl;
 	}
 }
 //
