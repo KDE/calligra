@@ -85,7 +85,7 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
 
 QString KPPointObject::saveOasisStrokeElement( KoGenStyles& mainStyles ) const
 {
-    KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
+    KoGenStyle styleobjectauto( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
     saveOasisMarkerElement( mainStyles, styleobjectauto );
     saveOasisObjectProtectStyle( styleobjectauto );
     KPShadowObject::saveOasisStrokeElement( mainStyles, styleobjectauto );

@@ -66,7 +66,7 @@ DCOPObject* KPLineObject::dcopObject()
 
 QString KPLineObject::saveOasisStrokeElement( KoGenStyles& mainStyles ) const
 {
-    KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
+    KoGenStyle styleobjectauto( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
     saveOasisMarkerElement( mainStyles, styleobjectauto );
     KPShadowObject::saveOasisStrokeElement( mainStyles, styleobjectauto );
     saveOasisShadowElement( styleobjectauto );
