@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KWord MS Word Import Filter
+X-KDE-Export=application/x-kword
+X-KDE-Import=application/msword
+X-KDE-Weight=1
+X-KDE-Library=libmswordimport
+ServiceTypes=KOfficeFilter

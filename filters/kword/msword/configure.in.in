@@ -1,0 +1,30 @@
+KDE_FIND_PATH(wv2-config, WV2_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
+  AC_MSG_WARN([Could not find libwv2 anywhere, check http://www.sourceforge.net/projects/wvware/])
+])
+
+if test -n "$WV2_CONFIG"; then
+  vers=`$WV2_CONFIG --version 2>/dev/null | sed -e 's/libwv2 //' | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$vers" && test "$vers" -ge 2
+  then
+     LIBWV2_LIBS="`$WV2_CONFIG --libs`"
+     LIBWV2_RPATH=
+     for args in $LIBWV2_LIBS; do
+	  case $args in
+	    -L*)
+  	       LIBWV2_RPATH="$LIBWV2_RPATH $args"
+ 	       ;;
+          esac
+     done
+     LIBWV2_RPATH=`echo $LIBWV2_RPATH | sed -e "s/-L/-R/g"`
+     LIBWV2_CFLAGS="`$WV2_CONFIG --cflags`"
+
+     AC_DEFINE_UNQUOTED(HAVE_WV2, 1, [Defines if your system has the wv2 library])
+  else
+     AC_MSG_WARN([You need at least libwv2 0.0.2])
+  fi
+fi
+
+
+AC_SUBST(LIBWV2_LIBS)
+AC_SUBST(LIBWV2_CFLAGS)
+AC_SUBST(LIBWV2_RPATH)
