@@ -5730,7 +5730,6 @@ void KPresenterView::viewHelpLines()
 
 void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
 {
-    kdDebug()<<" drawTmpHelpLine( const QPoint & pos, bool _horizontal) :"<<_horizontal<<endl;
     QPoint newPos( pos.x() -16 , pos.y()-16);
     m_canvas->tmpDrawMoveHelpLine( newPos,  _horizontal );
 }

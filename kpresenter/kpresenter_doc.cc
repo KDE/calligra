@@ -2736,8 +2736,8 @@ void KPresenterDoc::changeBackGroundSpellCheckTextObject(KPTextObject *obj)
 
 void KPresenterDoc::setShowHelplines(bool b)
 {
-    //todo update canvas
     m_bShowHelplines = b;
+    setModified( true );
 }
 
 void KPresenterDoc::horizHelplines(const QValueList<double> &lines)
