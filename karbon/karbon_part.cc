@@ -54,7 +54,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_toolController->init();
 	setInstance( KarbonFactory::instance(), false );
 	m_bShowStatusBar = true;
-	m_maxRecentFiles = VGlobal::maxRecentFiles;
 	dcop = 0L;
 
 	m_commandHistory = new VCommandHistory( this );
@@ -311,7 +310,7 @@ KarbonPart::initConfig()
 	{
 		config->setGroup( "Interface" );
 		setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
-		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", VGlobal::maxRecentFiles );
+		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
 		setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
 		setBackupFile( config->readNumEntry( "BackupFile", true ) );
 	}

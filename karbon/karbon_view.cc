@@ -407,7 +407,8 @@ KarbonView::editPaste()
 		VObjectListIterator itr( grp.objects() );
 		for( ; itr.current() ; ++itr )
 		{
-			VTranslateCmd cmd( 0L, VGlobal::copyOffset, VGlobal::copyOffset );
+			double copyOffset = m_part->instance()->config()->readNumEntry( "CopyOffset", 10 );
+			VTranslateCmd cmd( 0L, copyOffset, -copyOffset );
 			VObject *obj = itr.current()->clone();
 			cmd.visit( *obj );
 			selection.append( obj );

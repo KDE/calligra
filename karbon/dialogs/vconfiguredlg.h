@@ -51,6 +51,9 @@ private:
 	int m_oldRecentFiles;
 
 	QCheckBox* m_showStatusBar;
+
+	KIntNumInput* m_copyOffset;
+	int m_oldCopyOffset;
 };
 
 

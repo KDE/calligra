@@ -104,6 +104,7 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 	m_config = KarbonFactory::instance()->config();
 
 	m_oldRecentFiles = 10;
+	m_oldCopyOffset = 10;
 	bool oldShowStatusBar = true;
 
 	QVGroupBox* tmpQGroupBox = new QVGroupBox( i18n( "Interface" ), box );
@@ -117,6 +118,9 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 
 		oldShowStatusBar = m_config->readBoolEntry(
 							   "ShowStatusBar" , true );
+
+		m_oldCopyOffset = m_config->readNumEntry(
+							   "CopyOffset", m_oldCopyOffset );
 	}
 
 	m_showStatusBar = new QCheckBox( i18n( "Show status bar" ), tmpQGroupBox );
@@ -125,6 +129,10 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 	m_recentFiles = new KIntNumInput( m_oldRecentFiles, tmpQGroupBox );
 	m_recentFiles->setRange( 1, 20, 1 );
 	m_recentFiles->setLabel( i18n( "Number of recent file:" ) );
+
+	m_copyOffset = new KIntNumInput( m_oldCopyOffset, tmpQGroupBox );
+	m_copyOffset->setRange( 1, 50, 1 );
+	m_copyOffset->setLabel( i18n( "Copy offset:" ) );
 }
 
 void VConfigInterfacePage::apply()
@@ -135,7 +143,6 @@ void VConfigInterfacePage::apply()
 
 	m_config->setGroup( "Interface" );
 
-
 	int recent = m_recentFiles->value();
 
 	if( recent != m_oldRecentFiles )
@@ -145,6 +152,13 @@ void VConfigInterfacePage::apply()
 		m_oldRecentFiles = recent;
 	}
 
+	int copyOffset = m_copyOffset->value();
+
+	if( copyOffset != m_oldCopyOffset )
+	{
+		m_config->writeEntry( "CopyOffset", copyOffset );
+		m_oldCopyOffset = copyOffset;
+	}
 
 	bool refreshGUI = false;
 
