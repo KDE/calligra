@@ -301,7 +301,9 @@ void Msod::drawShape(
         (data.grfPersistent.fields.fBackground ? " background" : "") <<
         (data.grfPersistent.fields.fHaveSpt ? " spt" : "") <<
         " operands: " << bytes << endl;
-    if (data.grfPersistent.fields.fDeleted || !m_isRequiredDrawing)
+    if (data.grfPersistent.fields.fDeleted)
+        return;
+    if ((!m_isRequiredDrawing) && (m_requestedShapeId != data.spid))
         return;
 
     // An active shape! Let's draw it...
@@ -322,13 +324,10 @@ void Msod::drawShape(
 
             topLeft = normalisePoint(operands);
             size = normaliseSize(operands);
+
             QRect rect(topLeft, size);
             QPointArray points(4);
 
-                kdDebug(s_area) << "left " << topLeft.x()<< endl;
-                kdDebug(s_area) << "top " << topLeft.y()<< endl;
-                kdDebug(s_area) << "width " << size.width()<< endl;
-                kdDebug(s_area) << "height " << size.height()<< endl;
             points.setPoint(0, topLeft);
             points.setPoint(1, rect.topRight());
             points.setPoint(2, rect.bottomRight());
@@ -342,13 +341,11 @@ void Msod::drawShape(
             QPoint lineTo;
 
             lineTo = normalisePoint(operands);
+
             QPointArray points(2);
+
             points.setPoint(0, lineFrom);
             points.setPoint(1, lineTo);
-                kdDebug(s_area) << "from x " << lineFrom.x()<< endl;
-                kdDebug(s_area) << "from y " << lineFrom.y()<< endl;
-                kdDebug(s_area) << "from x " << lineTo.x()<< endl;
-                kdDebug(s_area) << "from y " << lineTo.y()<< endl;
             gotPolyline(m_dc, points);
         }
         break;
@@ -773,6 +770,7 @@ void Msod::opClientanchor(Header &, U32 bytes, QDataStream &operands)
     } data;
 
     operands >> data.unknown;
+    kdDebug(s_area) << "client anchor: " << data.unknown << endl;
     skip(bytes - sizeof(data), operands);
 }
 
@@ -784,6 +782,7 @@ void Msod::opClientdata(Header &, U32 bytes, QDataStream &operands)
     } data;
 
     operands >> data.unknown;
+    kdDebug(s_area) << "client data: " << data.unknown << endl;
     skip(bytes - sizeof(data), operands);
 }
 
@@ -800,7 +799,14 @@ void Msod::opClienttextbox(
     U32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
+    struct
+    {
+        U32 unknown;
+    } data;
+
+    operands >> data.unknown;
+    kdDebug(s_area) << "client textbox: 0x" << QString::number(data.unknown,16) << endl;
+    skip(bytes - sizeof(data), operands);
 }
 
 void Msod::opClsid(
@@ -952,6 +958,7 @@ void Msod::opSpcontainer(Header &, U32 bytes, QDataStream &operands)
     // Having gathered all the information for this shape, we can now draw it.
 
     QByteArray  a;
+
     a.setRawData(m_shape.data, m_shape.length);
     QDataStream s(a, IO_ReadOnly);
     s.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
@@ -1153,6 +1160,7 @@ void Msod::Options::walk(U32 bytes, QDataStream &operands)
             break;
         case 128:
             m_lTxid = op.value;
+    kdDebug(s_area) << "textbox: 0x" << QString::number(op.value,16) << endl;
             break;
         case 260:
             if (op.opcode.fields.fBid)
@@ -1202,19 +1210,15 @@ void Msod::Options::walk(U32 bytes, QDataStream &operands)
             break;
         case 320:
             m_geoLeft = op.value;
-            kdWarning(s_area) << "left: " <<    op.value << endl;
             break;
         case 321:
             m_geoTop = op.value;
-            kdWarning(s_area) << "top: " <<    op.value << endl;
             break;
         case 322:
             m_geoRight = op.value;
-            kdWarning(s_area) << "right: " <<    op.value << endl;
             break;
         case 323:
             m_geoBottom = op.value;
-            kdWarning(s_area) << "bottom: " <<    op.value << endl;
             break;
         case 324:
             m_shapePath = op.value;
