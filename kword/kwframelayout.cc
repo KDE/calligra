@@ -260,6 +260,8 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         // and on any end-notes-only page, i.e. after the last page of main text
         if ( pageNum >= m_lastMainFramePage && m_doc->hasEndNotes() ) {
             bool pageHasMainText = ( pageNum == m_lastMainFramePage );
+            if ( pageHasMainText )
+                lastMainFrame->setDrawFootNoteLine( true );
             double textBottom = pageHasMainText ? lastMainFrameBottom : top;
             // Leave some space on top of the endnotes, for the horizontal line
             double endNoteTop = textBottom + m_doc->ptFootnoteBodySpacing();
