@@ -21,7 +21,6 @@
 #define __kspread_dlg_preference__
 
 #include <kdialogbase.h>
-#include <kcolorbutton.h>
 
 class KSpreadView;
 class KSpreadTable;
@@ -32,7 +31,7 @@ class KSpellConfig;
 class QCheckBox;
 class QComboBox;
 class QPushButton;
-
+class KColorButton;
 
 class preference : public QObject
 {

@@ -164,8 +164,8 @@ public:
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite );
 
-    QTime toTime(QDomElement &element) ;
-    QDate toDate(QDomElement &element);
+    QTime toTime(const QDomElement &element) ;
+    QDate toDate(const QDomElement &element);
 
     /**
      * Copyies the layout from the cell at the position (_column|_row).
@@ -651,9 +651,8 @@ public:
     	}
     void removeValidity()
     	{
-    	if(m_Validity!=0)
-    		delete m_Validity;
-    	m_Validity=0;
+            delete m_Validity;
+            m_Validity=0;
     	}
 
      /**
@@ -1012,7 +1011,7 @@ private:
 
 
   /* helper functions to the load/save routines */
-  bool loadCellData(QDomElement text, Operation op);
+  bool loadCellData(const QDomElement &text, Operation op);
   bool saveCellResult( QDomDocument& doc, QDomElement& result,
                        QString defaultStr );
 

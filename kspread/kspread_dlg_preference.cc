@@ -35,6 +35,8 @@
 #include <kspell.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
+#include <kcolorbutton.h>
+
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,

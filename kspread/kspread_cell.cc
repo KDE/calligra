@@ -4286,7 +4286,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     return true;
 }
 
-bool KSpreadCell::loadCellData(QDomElement text, Operation op )
+bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
 {
   QString t = text.text();
   t = t.stripWhiteSpace();
@@ -4445,7 +4445,7 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
 }
 
 
-QTime KSpreadCell::toTime(QDomElement &element)
+QTime KSpreadCell::toTime(const QDomElement &element)
 {
     QString t = element.text();
     t = t.stripWhiteSpace();
@@ -4462,7 +4462,7 @@ QTime KSpreadCell::toTime(QDomElement &element)
     return valueTime();
 }
 
-QDate KSpreadCell::toDate(QDomElement &element)
+QDate KSpreadCell::toDate(const QDomElement &element)
 {
     QString t = element.text();
     int pos;
