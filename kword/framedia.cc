@@ -925,7 +925,8 @@ bool KWFrameDia::applyChanges()
             QListIterator<KWFrameSet> fit = doc->framesetsIterator();
             for ( ; fit.current() ; ++fit )
                 if ( fit.current()->getName() == name &&
-                     fs /*which is 0L when creating*/ != fit.current() )
+                     fs /*which is 0L when creating*/ != fit.current() &&
+                     !fit.current()->isDeleted() ) // Allow to reuse a deleted frameset's name
                 {
                     if ( createFrameset )
                         KMessageBox::sorry( this,
