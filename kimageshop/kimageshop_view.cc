@@ -571,12 +571,12 @@ int KImageShopView::docHeight()
 
 int KImageShopView::xPaintOffset()
 {
-  return (viewWidth() > docWidth()) ? static_cast<int>((viewWidth() -  docWidth())/2) : 0;
+  return 0;// (viewWidth() > docWidth()) ? static_cast<int>((viewWidth() -  docWidth())/2) : 0;
 }
 
 int KImageShopView::yPaintOffset()
 {
-  return (viewHeight() > docHeight()) ? static_cast<int>((viewHeight() - docHeight())/2) : 0;
+  return 0;//(viewHeight() > docHeight()) ? static_cast<int>((viewHeight() - docHeight())/2) : 0;
 }
 
 void KImageShopView::resizeEvent(QResizeEvent*)
