@@ -46,7 +46,7 @@ class Driver;
 class ConnectionPrivate;
 class RowEditBuffer;
 
-/*! This class represents database connection established with given database source.
+/*! This class represents a database connection established with given database source.
 */
 class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 {
@@ -63,11 +63,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return parameters that were used to create this connection. */
 		ConnectionData* data() { return m_data; }
 
-		/*! return the driver used for this connection. */
+		/*! \return the driver used for this connection. */
 		Driver* driver() const { return m_driver; }
 
-		/*! Connects to driver with given parameters. 
-		 \return true if successfull. */
+		/*! 
+		\brief Connects to driver with given parameters. 
+		\return true if successfull. */
 		bool connect();
 
 		/*! \return true, if connection is properly established. */
@@ -78,8 +79,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 with useDatabase(). */
 		bool isDatabaseUsed();
 		
-		/*! Disconnects from driver with given parameters. 
-		 Database (if used) is closed, and any active transactions 
+		/*! \brief Disconnects from driver with given parameters. 
+		 The database (if used) is closed, and any active transactions 
 		 (if supported) are rolled back, so commit these before disconnecting,
 		 if you'd like to save your changes. */
 		bool disconnect();
@@ -91,33 +92,36 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return true if database \a dbName exists.
 		 If \a ignoreErrors is true, error flag of connection 
 		  won't be modified for any errors (it will quietly return),
-		  else (ignoreErrors == false) we can check why db does 
+		  else (ignoreErrors == false) we can check why the database does 
 		  not exist using error(), errorNum() and/or errorMsg(). */
 		bool databaseExists( const QString &dbName, bool ignoreErrors = true );
 
 		/*! Creates new database with name \a dbName, using this connection.
 		 If database with \a dbName already exists, or other error occured,
 		 false is returned. 
-		 For file-based drivers, \a dbName should be equal to filename
-		 (the same as specified for ConnectionData).
+		 For file-based drivers, \a dbName should be equal to the database
+		 filename (the same as specified for ConnectionData).
 		 \sa useDatabase() */
 		bool createDatabase( const QString &dbName );
 
-		/*! Opens existing database \a dbName using this connection.
+		/*! 
+		\brief Opens an existing database specified by \a dbName.
 		 For file-based drivers, \a dbName should be equal to filename
 		 (the same as specified for ConnectionData). */
 		bool useDatabase( const QString &dbName );
 
-		/*! Closes currently used database for this connection.
+		/*! 
+		\brief Closes currently used database for this connection.
 		 Any active transactions (if supported) are rolled back,
 		 so commit these before closing, if you'd like to save your changes. */
 		bool closeDatabase();
 
-		/*! \return name of currently used database for this connection or empty string
+		/*! \brief Get the name of the current database
+		\return name of currently used database for this connection or empty string
 			if there is no used database */
 		QString currentDatabase() { return m_usedDatabase; }
 
-		/*! Drops database with name \a dbName, using this connection.
+		/*! \brief Drops database with name \a dbName.
 		 if dbName is not specified, currently used database name is used
 		 (it is closed before dropping).
 		*/
@@ -162,9 +166,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 successfully, otherwise null transaction. 
 		 For drivers that allow single transaction per connection
 		 (Driver::features() && SingleTransactions) this method can be called one time,
-		 and then this single transaction will be default ( setDefaultTransaction() will be called).
-		 For drivers that allow multiple transactions per connection, no default transaction is set
-		 automatically in beginTransaction() method, you could do this by hand.
+		 and then this single transaction will be default ( setDefaultTransaction() will 
+		 be called).
+		 For drivers that allow multiple transactions per connection, no default transaction is
+		 set automatically in beginTransaction() method, you could do this by hand.
 		 \sa setDefaultTransaction(), defaultTransaction().
 		*/
 		Transaction beginTransaction();

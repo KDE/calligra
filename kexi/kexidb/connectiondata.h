@@ -26,57 +26,96 @@
 
 namespace KexiDB {
 
-//! internal
+/** @internal **/
 class ConnectionDataBase
 {
 	public:
 		ConnectionDataBase() : id(-1), port(0) {}
 
-		/*! Name is optional for identyfying given connection
-			by name eg. for users. */
+		/*! 
+		\brief The name of the connection
+		
+		Name is optional for identyfying given connection
+		by name eg. for users. 
+		*/
 		QString connName;
 
-		/*! Optional id used for identyfiyng any single data in a set (ConnectionData::ConstList).
-		 This is set automatically when needed. By default: -1. */
+		/*!
+		\brief Used for identifying a single piece of data in a set
+		
+		Optional ID used for identifying a single piece data in a set.
+		ConnectionData::ConstList for example) This is set automatically
+		when needed. By default: -1.
+		 */
 		int id;
 
-		/*! Name (unique, not i18n'd) of driver that is used (o should be used) to 
-		 create a connection.
-		 If you pass this ConnectionData object to KexiDB::Driver::createConnection() 
-		 to create connection, \a driverName member will be updated with a valid KexiDB
-		 driver name.
-		 In other situations \a driverName member may be used to store information what 
-		 driver should be used to perform connection, before we get an appropriate 
-		 driver object from DriverManager.
+		/*! 
+		\brief the name of the driver that should be used to create a connection
+		
+		Name (unique, not i18n'd) of driver that is used (or should be used) to 
+		create a connection. If you pass this ConnectionData object to
+		KexiDB::Driver::createConnection() to create connection, the @a driverName member
+		will be updated with a valid KexiDB driver name.
+		In other situations the @a driverName member may be used to store information what 
+		driver should be used to perform connection, before we get an appropriate 
+		driver object from DriverManager.
 		*/
 		QString driverName;
 
-		/*! Host name used for remote connection. Can be empty
-			if connection is not remote, then \a hostName can be described 
-			to the user as "localhost". */
+		/*! 
+		\brief Host name used for the remote connection.
+		 
+		Can be empty if the connection is not remote. If it is empty "localhost" is used.
+		*/
 		QString hostName;
 
-		/*! Port used for remote connection. Default is 0, what means we use don't
-			change database engine's default port. */
+		/*!
+		\brief Port used for the remote connection. 
+		
+		The default is 0, what means we use don't change the database engine's default port.
+		*/
 		unsigned short int port;
 
-		/*! Name of local (named) socket file, for local connections only. */
+		/*! 
+		\brief Name of local (named) socket file. 
+		
+		For local connections only.
+		*/
 		QString localSocketFileName;
 		
-		/*! Password used for connection. Can be empty. */
+		/*!
+		\brief Password used for the connection.
+		 
+		Can be empty. */
 		QString password;
 
-		/*! Username used for connection. Can be empty. */
+		/*!
+		\brief Username used for the connection.
+		
+		Can be empty. */
 		QString userName;
 
 	protected:
-		/*! For file-based database engines like SQLite, \a fileName is used
-			instead hostName and port */
+		/*!
+		\brief The filename for file-based databases
+		 
+		For file-based database engines like SQLite, \a fileName is used
+		instead hostName and port
+		*/
 		QString m_fileName;
 
-		/*! Absolute path to the database file (or empty if database is not file-based) */
+		/*!
+		\brief Absolute path to the database file
+		  
+		Will be empty if database is not file-based
+		*/
 		QString m_dbPath;
-		/*! Filename of the database file (or empty if database is not file-based) */
+		
+		/*!
+		\brief  Filename of the database file 
+		
+		Will be empty if database is not file-based
+		*/
 		QString m_dbFileName;
 };
 
@@ -93,19 +132,42 @@ class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
 		
 		~ConnectionData();
 
+		/*!
+		\brief Set the filename used by the connection
+		
+		For file-based database engines, like SQLite, you should use this 
+		function to set the file name of the database to use. \a fn should be an
+		absolute path to the file
+		*/
 		void setFileName( const QString& fn );
 
-		/*! For file-based database engines like SQLite, \a fileName is used
-			instead hostName and port. This method returns filename with a path. */
+		/*! 
+		\brief Get the filename used by the connection
+		
+		For file-based database engines like SQLite, \a fileName is used
+		instead hostName and port. 
+		@return An absolute path to the database file being used
+		*/
 		QString fileName() const { return m_fileName; }
 
-		/*! \return file path (for file-based engines) but without a file name */
+		/*!
+		\brief The directory the database file is in
+		
+		\return file path (for file-based engines) but without a file name
+		*/
 		QString dbPath() const { return m_dbPath; }
 		
-		/*! \return file name (for file-based engines) but without a full path */
+		/*! 
+		\brief The file name (without path) of the database file
+		
+		\return The file name (for file-based engines) but without a full path
+		*/
 		QString dbFileName() const { return m_dbFileName; }
 
-			/*! \return a user-friendly string like:
+		/*!
+		 \brief  A user-friendly string for the server
+		 
+		 \return a user-friendly string like:
 		 - "myhost.org:12345" if a host and port is specified;
 		 - "localhost:12345" of only port is specified; 
 		 - "user@myhost.org:12345" if also user is specified
