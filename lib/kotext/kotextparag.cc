@@ -1866,7 +1866,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     bool outline = m_layout.style && m_layout.style->isOutline();
 
     KoParagCounter* paragCounter = const_cast<KoTextParag *>( this )->counter(); // should be const!
-    if ( paragCounter )
+    if ( paragCounter && !outline ) // normal list
     {
         writer.startElement( "text:numbered-paragraph" );
         writer.addAttribute( "text:level", (int)paragCounter->depth() + 1 );
@@ -1878,18 +1878,31 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
         QString autoListStyleName = mainStyles.lookup( listStyle, "L", true );
         writer.addAttribute( "text:style-name", autoListStyleName );
-    }
-    writer.startElement( outline ? "text:h" : "text:p", false /*no indent inside this tag*/ );
-    if ( outline && paragCounter ) {
-        writer.addAttribute( "text:outline-level", (int)m_layout.counter->depth() + 1 );
-    }
-    writer.addAttribute( "text:style-name", autoParagStyleName );
 
-    if ( paragCounter ) {
         // This is to help export filters
         writer.startElement( "text:number" );
         writer.addTextNode( m_layout.counter->text( this ) );
         writer.endElement();
+    }
+    else if ( outline ) // heading
+    {
+        writer.startElement( "text:h", false /*no indent inside this tag*/ );
+        if ( paragCounter )
+        {
+            writer.addAttribute( "text:outline-level", (int)m_layout.counter->depth() + 1 );
+            writer.addAttribute( "text:style-name", autoParagStyleName );
+
+            // This is to help export filters
+            writer.startElement( "text:number" );
+            writer.addTextNode( m_layout.counter->text( this ) );
+            writer.endElement();
+        }
+    }
+
+    if ( !outline )
+    {
+        writer.startElement( "text:p", false /*no indent inside this tag*/ );
+        writer.addAttribute( "text:style-name", autoParagStyleName );
     }
 
     QString text = string()->toString();
@@ -1950,8 +1963,8 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     }
 
     writer.endElement(); // text:p or text:h
-    if ( paragCounter )
-        writer.endElement(); // text:numbered-paragraph
+    if ( paragCounter && !outline )
+        writer.endElement(); // text:numbered-paragraph (englobing a text:p)
 }
 
 void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
