@@ -26,6 +26,7 @@
 #include <koVariable.h>
 #include <kcommand.h>
 
+
 KoTextViewIface::KoTextViewIface( KoTextView *_textview )
     : DCOPObject( /*TODO name*/ )
 {
@@ -611,52 +612,12 @@ void KoTextViewIface::removeComment()
 
 QString KoTextViewIface::underlineLineStyle() const
 {
-    QString strLineType;
-    switch ( m_textView->underlineLineStyle() )
-    {
-    case KoTextFormat::U_SOLID:
-        strLineType ="solid";
-        break;
-    case KoTextFormat::U_DASH:
-        strLineType ="dash";
-        break;
-    case KoTextFormat::U_DOT:
-        strLineType ="dot";
-        break;
-    case KoTextFormat::U_DASH_DOT:
-        strLineType="dashdot";
-        break;
-    case KoTextFormat::U_DASH_DOT_DOT:
-        strLineType="dashdotdot";
-        break;
-    }
-    return strLineType;
-
+    return KoTextFormat::underlineStyleToString( m_textView->underlineLineStyle() );
 }
 
 QString KoTextViewIface::strikeOutLineStyle()const
 {
-    QString strLineType;
-    switch ( m_textView->strikeOutLineStyle() )
-    {
-    case KoTextFormat::S_SOLID:
-        strLineType ="solid";
-        break;
-    case KoTextFormat::S_DASH:
-        strLineType ="dash";
-        break;
-    case KoTextFormat::S_DOT:
-        strLineType ="dot";
-        break;
-    case KoTextFormat::S_DASH_DOT:
-        strLineType="dashdot";
-        break;
-    case KoTextFormat::S_DASH_DOT_DOT:
-        strLineType="dashdotdot";
-        break;
-    }
-    return strLineType;
-
+    return KoTextFormat::strikeOutStyleToString( m_textView->strikeOutLineStyle() );
 }
 
 void KoTextViewIface::addBookmarks(const QString &url)
@@ -688,4 +649,9 @@ void KoTextViewIface::setWordByWord( bool _b )
 void KoTextViewIface::copyTextOfComment()
 {
     m_textView->copyTextOfComment();
+}
+
+QString KoTextViewIface::fontAttibute()const
+{
+    return KoTextFormat::attributeFontToString( m_textView->fontAttribute() );
 }

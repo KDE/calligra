@@ -163,6 +163,7 @@ k_dcop:
     void copyLink();
     void removeLink();
     void copyTextOfComment();
+    QString fontAttibute()const;
 private:
     KoTextView *m_textView;
 protected:
