@@ -1,0 +1,22 @@
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=application/x-vnd.kde.kexi
+Comment=Kexi Project File
+Comment[bg]=Kexi Файл на проект
+Comment[da]=Kexi projektfil
+Comment[es]=Archivo de proyecto de kexi
+Comment[et]=Kexi projekti fail
+Comment[fr]=Fichier de projet Kexi
+Comment[hu]=Kexi projektfájl
+Comment[pt]=Projecto do Kexi
+Comment[pt_BR]=Arquivo de Projeto do Kexi
+Comment[sk]=Projekt Kexi
+Comment[sv]=Kexi projektfil
+Icon=kexi
+Type=MimeType
+Patterns=*.kexi;
+X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.kexi
+

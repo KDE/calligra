@@ -1,4 +1,5 @@
-application_DATA = x-magicpoint.desktop vnd.sun.xml.impress.desktop vnd.sun.xml.writer.desktop
+application_DATA = x-magicpoint.desktop vnd.sun.xml.impress.desktop vnd.sun.xml.writer.desktop \
+x-vnd.kde.kexi.desktop
 
 applicationdir = $(kde_mimedir)/application
 
