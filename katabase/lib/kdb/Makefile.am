@@ -1,3 +1,0 @@
-
-SUBDIRS = kdbcore kdbpgsql
-
