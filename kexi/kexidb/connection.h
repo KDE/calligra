@@ -142,7 +142,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! Creates new transaction handle and starts new transaction.
 		 \return KexiDB::Transaction object if transaction has been started 
-		 successfully, otherwise NULL. For drivers that allow single transaction per connection
+		 successfully, otherwise null transaction. 
+		 For drivers that allow single transaction per connection
 		 (Driver::features() && SingleTransactions) this method can be called one time,
 		 and then this single transaction will be default ( setDefaultTransaction() will be called).
 		 For drivers that allow multiple transactions per connection, no default transaction is set
@@ -157,30 +158,37 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Commits transaction \a trans.
 		 If there is not \a trans argument passed, and there is default transaction 
 		 (obtained from defaultTransaction()) defined, this one will be commited.
-		 If default is not present, or any error occured, false is returned.
+		 If default is not present, false is returned (when ignore_inactive is 
+		 false, the default), or true is returned (when ignore_inactive is true).
 		 
 		 On successfull commit, \a trans object will be destroyed.
 		 If this was default transaction, there is no default transaction for now.
 		*/
-		bool commitTransaction( Transaction trans = Transaction() );
+		bool commitTransaction( Transaction trans = Transaction::null,
+			bool ignore_inactive = false );
 		
 		/*! Rollbacks transaction \a trans.
 		 If there is not \a trans argument passed, and there is default transaction 
 		 (obtained from defaultTransaction()) defined, this one will be rolled back.
-		 If default is not present, or any error occured, false is returned.
+		 If default is not present, false is returned (when ignore_inactive is 
+		 false, the default), or true is returned (when ignore_inactive is true).
+		 
+		 or any error occured, false is returned.
 			
 		 On successfull rollback, \a trans object will be destroyed.
 		 If this was default transaction, there is no default transaction for now.
 		*/
-		bool rollbackTransaction( Transaction trans = Transaction() );
+		bool rollbackTransaction( Transaction trans = Transaction::null,
+			bool ignore_inactive = false );
 		
 		/*! \return handle for default transaction for this connection
-		 or NULL if there is no such a transaction defined. 
+		 or null transaction if there is no such a transaction defined. 
 		 If transactions are supported: Any operation on database (e.g. inserts)
 		 that is started without specifing transaction context, will be performed
 		 in the context of this transaction.
 		 
-		 Returned NULL doesn't mean that there is no transactions started at all.
+		 Returned null transaction doesn't mean that there is no transactions 
+		 started at all.
 		 Default transaction can be defined automatically for some drivers --
 		 see beginTransaction(). 
 		 \sa KexiDB::Driver::transactionsSupported()
@@ -191,7 +199,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 on data in opened database for this connection. */
 		void setDefaultTransaction(const Transaction& trans);
 		
-		/*! Returns set of handles of currently active transactions.
+		/*! \return set of handles of currently active transactions.
 		 Note that in multithreading environment some of these 
 		 transactions can be already inactive after calling this method.
 		 Use Transaction::active() to check that. Inactive transaction 
@@ -285,6 +293,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		//PROTOTYPE:
 		bool insertRecord(KexiDB::TableSchema &tableSchema, const QVariant& c1, const QVariant& c2);
+
+		/*! Creates table defined by \a tableSchema.
+		 Schema information is also added into kexi system tables, for later reuse. */
+		bool createTable( const KexiDB::TableSchema& tableSchema );
 
 	protected:
 		/*! Used by Driver */
@@ -395,7 +407,32 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \sa drv_beginTransaction(), autoCommit(), setAutoCommit()
 		*/
 		virtual bool drv_setAutoCommit(bool on);
-//		virtual bool drv_duringTransaction();
+
+		/*! Internal, for handling autocommited transactions:
+		 begins transaction is one is supported.
+		 If driver only supports single transaction,
+		 and there is already transaction started, it is commited before
+		 starting a new one. \return true if new transaction started
+		 successfully or no transactions are supported at all by the driver
+		 or if autocommit option is turned off.
+		 Newly created transaction (or null on error)
+		 is passed to \a trans parameter.
+		*/
+		bool beginAutoCommitTransaction(Transaction& trans);
+		
+		/*! Internal, for handling autocommited transactions:
+		 Commits transaction prevoiusly started with beginAutoCommitTransaction().
+		 \return true on success or when no transactions are supported 
+		 at all by the driver.
+		*/
+		bool commitAutoCommitTransaction(const Transaction& trans);
+		
+		/*! Internal, for handling autocommited transactions:
+		 Rollbacks transaction prevoiusly started with beginAutoCommitTransaction().
+		 \return true on success or when no transactions are supported 
+		 at all by the driver.
+		*/
+		bool rollbackAutoCommitTransaction(const Transaction& trans);
 
 		/*! Creates cursor data and initializes cursor 
 			using \a statement for later data retrieval. */
@@ -437,7 +474,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 	friend class KexiDB::Driver;
 	friend class KexiDB::Cursor;
 
-	private:
 		ConnectionPrivate *d;
 };
 

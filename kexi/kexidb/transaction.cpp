@@ -58,6 +58,8 @@ class Transaction::Private
 };*/
 //---------------------------------------------------
 
+const Transaction Transaction::null;
+
 Transaction::Transaction()
 	: QObject(0,"kexidb_transaction")
 	, m_data(0)
@@ -108,6 +110,11 @@ Connection* Transaction::connection() const
 bool Transaction::active() const
 {
 	return m_data && m_data->m_active;
+}
+
+bool Transaction::isNull() const
+{
+	return m_data!=NULL;
 }
 
 //---------------------------------------------------

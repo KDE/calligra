@@ -36,6 +36,8 @@ class Connection;
 class ConnectionData;
 class ConnectionInternal;
 class DriverManager;
+class DriverBehaviour;
+class DriverPrivate;
 
 /*! This class is a prototype of the database driver.
  Driver allows create new connections and groups these as a parent.
@@ -180,9 +182,9 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 	friend class Connection;
 	friend class DriverManagerInternal;
 
-        private:
-                class Private;
-                Private *d;
+		DriverBehaviour *beh;
+		
+		DriverPrivate *d; //unused
 };
 
 } //namespace KexiDB

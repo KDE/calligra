@@ -22,6 +22,7 @@
 #include <kexidb/error.h>
 #include <kexidb/connectiondata.h>
 #include <kexidb/driver.h>
+#include <kexidb/driver_p.h>
 #include <kexidb/schemadata.h>
 #include <kexidb/tableschema.h>
 #include <kexidb/transaction.h>
@@ -306,6 +307,22 @@ bool Connection::createDatabase( const QString &dbName )
 	if (!drv_createTable( t_querydata ))
 		createDatabase_ERROR;
 
+	KexiDB::TableSchema t_queryfields("kexi__queryfields");
+	t_queryfields.addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("f_order", Field::Integer ) )
+	.addField( new Field("f_id", Field::Integer ) )
+	.addField( new Field("f_tab_asterisk", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("f_alltab_asterisk", Field::Boolean) );
+	if (!drv_createTable( t_queryfields ))
+		createDatabase_ERROR;
+
+	KexiDB::TableSchema t_querytables("kexi__querytables");
+	t_querytables.addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("t_order", Field::Integer, 0, Field::Unsigned) );
+	if (!drv_createTable( t_querytables ))
+		createDatabase_ERROR;
+
 	KexiDB::TableSchema t_db("kexi__db");
 	t_db.addField( new Field("db_property", Field::Text, Field::NoConstraints, Field::NoOptions, 32 ) )
 	.addField( new Field("db_value", Field::LongText ) );
@@ -313,9 +330,6 @@ bool Connection::createDatabase( const QString &dbName )
 		createDatabase_ERROR;
 
 	//insert KexiDB version info:
-	//property="kexidb_major_ver", value=<major_version>
-	//property="kexidb_minor_ver", value=<minor_version>
-	//TODO(js)
 	if (   !insertRecord(t_db, "kexidb_major_ver", KexiDB::majorVersion())
 		|| !insertRecord(t_db, "kexidb_minor_ver", KexiDB::minorVersion()))
 		createDatabase_ERROR;
@@ -516,7 +530,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			sql += ", ";
 		QString v = field->m_name + " ";
 		if (field->isUnsigned())
-			v += "UNSIGNED ";
+			v += (m_driver->beh->UNSIGNED_TYPE_KEYWORD + " ");
 		v += m_driver->m_typeNames[field->m_type];
 		if (field->m_length>0)
 			v += QString("(%1)").arg(field->m_length);
@@ -555,11 +569,59 @@ QString Connection::queryStatement( const KexiDB::QuerySchema& querySchema )
 	return QString::null;
 }
 
+bool Connection::createTable( const KexiDB::TableSchema& tableSchema )
+{
+	Transaction trans;
+	if (!beginAutoCommitTransaction(trans))
+		return false;
+	
+	if (drv_createTable(tableSchema)) {
+		//TODO: add schema to kexi__* tables
+	
+		return commitAutoCommitTransaction(trans);
+	}
+	rollbackAutoCommitTransaction(trans);
+	return false;
+}
+
 bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
 {
 	QString sql = createTableStatement(tableSchema);
 	KexiDBDbg<<"******** "<<sql<<endl;
 	return drv_executeSQL(sql);
+}
+
+bool Connection::beginAutoCommitTransaction(Transaction &trans)
+{
+	if (!m_autoCommit)
+		return true;
+		
+	// commit current transaction (if present) for drivers 
+	// that allow single transaction per connection
+	if ((m_driver->m_features & Driver::SingleTransactions)
+		 && !commitTransaction(d->m_default_trans, true)) 
+	{
+		return false;
+	}
+	else if (!(m_driver->m_features & Driver::MultipleTransactions)) {
+		return true; //no trans. supported at all - just return
+	}
+	trans=beginTransaction();
+	return !error();
+}
+
+bool Connection::commitAutoCommitTransaction(const Transaction& trans)
+{
+	if (trans.isNull() || !m_driver->transactionsSupported())
+		return true;
+	return commitTransaction(trans, true);
+}
+
+bool Connection::rollbackAutoCommitTransaction(const Transaction& trans)
+{
+	if (trans.isNull() || !m_driver->transactionsSupported())
+		return true;
+	return rollbackTransaction(trans);
 }
 
 #define SET_ERR_TRANS_NOT_SUPP \
@@ -573,16 +635,16 @@ bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
 Transaction Connection::beginTransaction()
 {
 	if (!checkConnected())
-		return Transaction();
+		return Transaction::null;
 	Transaction trans;
 	if (m_driver->m_features & Driver::SingleTransactions) {
 		if (d->m_default_trans.active()) {
 			setError(ERR_TRANSACTION_ACTIVE, i18n("Transaction already started.") );
-			return Transaction();
+			return Transaction::null;
 		}
 		if (!(trans.m_data = drv_beginTransaction())) {
 			SET_BEGIN_TR_ERROR;
-			return Transaction();
+			return Transaction::null;
 		}
 		d->m_default_trans = trans;
 		d->m_transactions.append(trans);
@@ -591,30 +653,34 @@ Transaction Connection::beginTransaction()
 	else if (m_driver->m_features & Driver::MultipleTransactions) {
 		if (!(trans.m_data = drv_beginTransaction())) {
 			SET_BEGIN_TR_ERROR;
-			return Transaction();
+			return Transaction::null;
 		}
 		d->m_transactions.append(trans);
 		return trans;
 	}
 	
 	SET_ERR_TRANS_NOT_SUPP;
-	return Transaction();
+	return Transaction::null;
 }
 
-bool Connection::commitTransaction(const Transaction trans)
+bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive)
 {
 	if (!checkConnected())
 		return false;
-	if (!m_driver->transactionsSupported())
+	if (!m_driver->transactionsSupported()) {
 		SET_ERR_TRANS_NOT_SUPP;
+		return false;
+	}
 	Transaction t = trans;
 	if (!t.active()) { //try default tr.
 		if (!d->m_default_trans.active()) {
+			if (ignore_inactive)
+				return true;
 			setError(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
 			return false;
 		}
 		t = d->m_default_trans;
-		d->m_default_trans = Transaction(); //now: no default tr.
+		d->m_default_trans = Transaction::null; //now: no default tr.
 	}
 	bool ret = drv_commitTransaction(t.m_data);
 	d->m_transactions.remove(t);
@@ -623,20 +689,24 @@ bool Connection::commitTransaction(const Transaction trans)
 	return ret;
 }
 
-bool Connection::rollbackTransaction(const Transaction trans)
+bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inactive)
 {
 	if (!checkConnected())
 		return false;
-	if (!m_driver->transactionsSupported())
+	if (!m_driver->transactionsSupported()) {
 		SET_ERR_TRANS_NOT_SUPP;
+		return false;
+	}
 	Transaction t = trans;
 	if (!t.active()) { //try default tr.
-		if (d->m_default_trans.active()) {
+		if (!d->m_default_trans.active()) {
+			if (ignore_inactive)
+				return true;
 			setError(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
 			return false;
 		}
 		t = d->m_default_trans;
-		d->m_default_trans = Transaction(); //now: no default tr.
+		d->m_default_trans = Transaction::null; //now: no default tr.
 	}
 	bool ret = drv_rollbackTransaction(t.m_data);
 	d->m_transactions.remove(t);
@@ -704,12 +774,7 @@ bool Connection::drv_rollbackTransaction(TransactionData *)
 	return drv_executeSQL( "ROLLBACK" );
 }
 
-/*bool Connection::drv_duringTransaction()
-{
-	return m_transaction;
-}*/
-
-bool Connection::drv_setAutoCommit(bool on)
+bool Connection::drv_setAutoCommit(bool /*on*/)
 {
 	return true;
 }

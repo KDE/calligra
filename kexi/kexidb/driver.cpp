@@ -18,6 +18,7 @@
 */
 
 #include <kexidb/driver.h>
+#include <kexidb/driver_p.h>
 #include "error.h"
 #include "drivermanager.h"
 #include "connection.h"
@@ -37,12 +38,20 @@ using namespace KexiDB;
 QValueVector<QString> dflt_typeNames;
 
 
+DriverBehaviour::DriverBehaviour()
+	: UNSIGNED_TYPE_KEYWORD("UNSIGNED")
+{
+}
+
+
 Driver::Driver( QObject *parent, const char *name, const QStringList & )
 	: QObject( parent, name )
 	, Object()
 	, m_isFileDriver(false)
 	, m_isDBOpenedAfterCreate(false)
 	, m_features(NoFeatures)
+	, beh( new DriverBehaviour() )
+	, d(0) //because unsused
 {
 	m_connections.setAutoDelete(true);
 	//reasonable size
@@ -55,6 +64,7 @@ Driver::~Driver()
 	KexiDBDbg << "Driver::~Driver()" << endl;
 //	Connection *conn;
 	m_connections.clear();
+	delete beh;
 /*	for ( conn = m_connections.first(); conn ; conn = m_connections.next() ) {
 		conn->disconnect();
 		conn->m_driver = 0; //don't let the connection touch our driver now

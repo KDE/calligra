@@ -52,7 +52,7 @@ class KEXI_DB_EXPORT TransactionData
 class KEXI_DB_EXPORT Transaction : public QObject
 {
 	public:
-		/*! Constructs uninitialised transaction.
+		/*! Constructs uninitialised (null) transaction.
 		 Only in Conenction code it can be initialised */
 		Transaction();
 		
@@ -68,8 +68,14 @@ class KEXI_DB_EXPORT Transaction : public QObject
 		Connection* connection() const;
 		
 		/*! \return true if transaction is avtive (ie. started)
-		 Returns false also if transaction is uninitialised. */
+		 Returns false also if transaction is uninitialised (null). */
 		bool active() const;
+		
+		/*! \return true is transaction is uinitialised (null). */
+		bool isNull() const;
+		
+		/*! shortcut that offers uinitialised (null) transaction */
+		static const Transaction null;
 	
 	protected:
 		
