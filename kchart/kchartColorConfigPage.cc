@@ -211,8 +211,6 @@ void KChartColorConfigPage::activeColorButton()
 
 void KChartColorConfigPage::initDataColorList()
 {
-    if ( index == 0 ) //Fix crash when we didn't create data
-        return;
     QStringList lst;
     for(uint i = 0; i < m_data->rows(); i++)
     {
@@ -224,12 +222,21 @@ void KChartColorConfigPage::initDataColorList()
         }
     }
     _dataColorLB->setCurrentItem(0);
-    _dataColorCB->setColor( extColor[index]);
+
+	 //Fix crash when we didn't create data
+	if ( m_data->rows() == 0 )
+		_dataColorCB->setEnabled(false);
+	else
+    	_dataColorCB->setColor( extColor[index]);
 }
 
 
 void KChartColorConfigPage::apply()
 {
+	//Nothing to save
+	if ( m_data->rows() == 0 )
+		return;
+
     extColor[index] = _dataColorCB->color();
     for(uint i =0;i<m_data->rows();i++)
         if(i<m_params->maxDataColor())
