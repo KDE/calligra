@@ -120,15 +120,17 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
             QTextString *s = parag->string();
             for ( int i = index - 1; i >= 0; --i )
             {
-                if ( s->at( i ).c.isSpace() )
+                QChar ch = s->at( i ).c;
+                if ( ch.isSpace() || ch.isPunct() )
                     break;
-                lastWord.prepend( s->at( i ).c );
+                lastWord.prepend( ch );
             }
             kdDebug() << "KWAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
             if ( !doAutoCorrect( textEditCursor, parag, index, lastWord ) )
             {
-                doUpperCase( textEditCursor, parag, index, lastWord );
-                doSpellCheck( textEditCursor, parag, index, lastWord );
+                if ( m_convertUpperUpper || m_convertUpperCase )
+                    doUpperCase( textEditCursor, parag, index, lastWord );
+                // todo doSpellCheck( textEditCursor, parag, index, lastWord );
             }
         }
     }
@@ -192,75 +194,89 @@ void KWAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag
                               i18n("Typographic quote") );
 }
 
-void KWAutoFormat::doUpperCase( QTextCursor *,KWTextParag */*parag*/, int /*index*/, const QString & /*word*/ )
+void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
+                                int index, const QString & word )
 {
-#if 0
-    bool converted = false;
-    if ( m_convertUpperCase ) {
-	if ( lastWasDotSpace &&
-	     !isMark( parag->string()->data()[ fc->getTextPos() ].c ) &&
-	     parag->string()->data()[ fc->getTextPos() ].c != QChar( ' ' ) &&
-	     isLower( parag->string()->data()[ fc->getTextPos() ].c ) ) {
-	    if ( parag->string()->data()[ fc->getTextPos() ].autoformat )
-		delete parag->string()->data()[ fc->getTextPos() ].autoformat;
+    KWTextDocument * textdoc = parag->textDocument();
+    unsigned int length = word.length();
+    int start = index - length;
+    QTextCursor backCursor( parag->document() );
+    backCursor.setParag( parag );
+    backCursor.setIndex( start );
 
-	    AutoformatInfo *info = new AutoformatInfo;
-	    info->c = QChar( parag->string()->data()[ fc->getTextPos() ].c );
-	    info->type = AT_UpperCase;
+    // backCursor now points at the first char of the word
+    QChar firstChar = backCursor.parag()->at( backCursor.index() )->c;
+    bool bNeedMove = false;
 
-	    parag->string()->data()[ fc->getTextPos() ].autoformat = info;
-
-	    parag->string()->data()[ fc->getTextPos() ].c
-		= parag->string()->data()[ fc->getTextPos() ].c.upper();
-	    converted = true;
-	}
-    } else if ( parag->string()->data()[ fc->getTextPos() ].autoformat &&
-		parag->string()->data()[ fc->getTextPos() ].autoformat->type == AT_UpperCase ) {
-	parag->string()->data()[ fc->getTextPos() ].c
-	    = QChar( parag->string()->data()[ fc->getTextPos() ].autoformat->c );
-	delete parag->string()->data()[ fc->getTextPos() ].autoformat;
-	parag->string()->data()[ fc->getTextPos() ].autoformat = 0L;
-    }
-
-    if ( m_convertUpperUpper ) {
-	if ( !lastWasDotSpace && lastWasUpper &&
-	     isUpper( parag->string()->data()[ fc->getTextPos() ].c ) )
+    if ( m_convertUpperCase && isLower( firstChar ) )
+    {
+        bool beginningOfSentence = true; // true if beginning of text
+        // Go back over any space/tab/CR
+        while ( backCursor.index() > 0 || backCursor.parag()->prev() )
         {
-	    if ( parag->string()->data()[ fc->getTextPos() ].autoformat )
-		delete parag->string()->data()[ fc->getTextPos() ].autoformat;
+            beginningOfSentence = false; // we could go back -> false unless we'll find '.'
+            backCursor.gotoLeft();
+            if ( !backCursor.parag()->at( backCursor.index() )->c.isSpace() )
+                break;
+        }
+        // We are now at the first non-space char before the word
+        if ( !beginningOfSentence )
+            beginningOfSentence = isMark( backCursor.parag()->at( backCursor.index() )->c );
 
-	    AutoformatInfo *info = new AutoformatInfo;
-	    info->c = QChar( parag->string()->data()[ fc->getTextPos() ].c );
-	    info->type = AT_UpperUpper;
+        if ( beginningOfSentence )
+        {
+            QTextCursor cursor( parag->document() );
+            cursor.setParag( parag );
+            cursor.setIndex( start );
+            textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
+            cursor.setIndex( start + 1 );
+            textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
 
-	    parag->string()->data()[ fc->getTextPos() ].autoformat = info;
-
-	    parag->string()->data()[ fc->getTextPos() ].c
-		= parag->string()->data()[ fc->getTextPos() ].c.lower();
-	    converted = true;
-	}
-    } else if ( parag->string()->data()[ fc->getTextPos() ].autoformat &&
-	      parag->string()->data()[ fc->getTextPos() ].autoformat->type
-		== AT_UpperUpper ) {
-	parag->string()->data()[ fc->getTextPos() ].c
-	    = QChar( parag->string()->data()[ fc->getTextPos() ].autoformat->c );
-	delete parag->string()->data()[ fc->getTextPos() ].autoformat;
-	parag->string()->data()[ fc->getTextPos() ].autoformat = 0L;
+            KWTextFrameSet * textfs = textdoc->textFrameSet();
+            textfs->replaceSelection( textEditCursor, QString( firstChar.upper() ),
+                                      KWTextFrameSet::HighlightSelection,
+                                      i18n("Autocorrect (capitalize first letter)") );
+            bNeedMove = true;
+        }
     }
+    else if ( m_convertUpperUpper && isUpper( firstChar ) && length > 2 )
+    {
+        backCursor.setIndex( backCursor.index() + 1 );
+        QChar secondChar = backCursor.parag()->at( backCursor.index() )->c;
+        if ( isUpper( secondChar ) )
+        {
+            // Check next letter - we still want to be able to write fully uppercase words...
+            backCursor.setIndex( backCursor.index() + 1 );
+            QChar thirdChar = backCursor.parag()->at( backCursor.index() )->c;
+            if ( isLower( thirdChar ) )
+            {
+                // Ok, convert
+                QTextCursor cursor( parag->document() );
+                cursor.setParag( parag );
+                cursor.setIndex( start + 1 ); // After all the first letter's fine, so only change the second letter
+                textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
+                cursor.setIndex( start + 2 );
+                textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
 
-    if ( convertUpperUpper || convertUpperCase ) {
-	if ( isMark( parag->string()->data()[ fc->getTextPos() ].c ) )
-	    lastWasDotSpace = true;
-	else if ( !isMark( parag->string()->data()[ fc->getTextPos() ].c ) &&
-		  parag->string()->data()[ fc->getTextPos() ].c != QChar( ' ' ) )
-	    lastWasDotSpace = false;
+                QString replacement = word[1].lower();
+                KWTextFrameSet * textfs = textdoc->textFrameSet();
+                textfs->replaceSelection( textEditCursor, replacement,
+                                          KWTextFrameSet::HighlightSelection,
+                                          i18n("Autocorrect uppercase-uppercase") ); // hard to describe....
+                bNeedMove = true;
+            }
+        }
     }
-
-    if ( convertUpperUpper ) {
-	lastWasUpper = isUpper( parag->string()->data()[ fc->getTextPos() ].c );
+    if ( bNeedMove )
+    {
+        // Back to where we were
+        KWTextFrameSet * textfs = textdoc->textFrameSet();
+        textfs->emitHideCursor();
+        textEditCursor->setParag( parag );
+        textEditCursor->setIndex( index );
+        textEditCursor->gotoRight(); // not the same thing as index+1, in case of CR
+        textfs->emitShowCursor();
     }
-    return converted;
-#endif
 }
 
 void KWAutoFormat::doSpellCheck( QTextCursor *,KWTextParag */*parag*/, int /*index*/, const QString & /*word*/ )
@@ -300,24 +316,14 @@ void KWAutoFormat::configUpperUpper( bool _uu )
 
 bool KWAutoFormat::isUpper( const QChar &c )
 {
-    QChar c2( c );
-    c2 = c2.lower();
-
-    if ( c2 != c )
-	return true;
-    else
-	return false;
+    return c.lower() != c;
 }
 
 bool KWAutoFormat::isLower( const QChar &c )
 {
-    QChar c2( c );
-    c2 = c2.upper();
-
-    if ( c2 != c )
-	return true;
-    else
-	return false;
+    // Note that this is not the same as !isUpper !
+    // For instance '1' is not lower nor upper,
+    return c.upper() != c;
 }
 
 bool KWAutoFormat::isMark( const QChar &c )
