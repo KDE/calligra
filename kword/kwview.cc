@@ -2716,21 +2716,28 @@ void KWView::updateButtons()
 
 void KWView::frameSelectedChanged()
 {
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
     int nbFrame=doc->getSelectedFrames().count();
-    actionTableJoinCells->setEnabled( table && (nbFrame>1));
-    actionTableSplitCellsVerticaly->setEnabled( table && (nbFrame==1) );
-    actionTableSplitCellsHorizontaly->setEnabled( table && (nbFrame==1) );
     actionFormatFrameSet->setEnabled( !currentTextEdit() && (nbFrame>=1));
     actionEditDelFrame->setEnabled( !currentTextEdit() && (nbFrame==1));
+
     actionBackgroundColor->setEnabled( nbFrame >= 1 );
 
-    actionTableInsertRow->setEnabled( table && nbFrame>0);
-    actionTableInsertCol->setEnabled( table  && nbFrame>0);
-    actionTableDelRow->setEnabled( table && nbFrame>0 );
-    actionTableDelCol->setEnabled( table && nbFrame>0 );
-    actionTableDelete->setEnabled( table && nbFrame>0 );
-    actionTableUngroup->setEnabled( table && nbFrame>0 );
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    actionTableJoinCells->setEnabled( table && (nbFrame>1));
+
+    bool state=(table && nbFrame==1);
+
+    actionTableSplitCellsVerticaly->setEnabled( state );
+    actionTableSplitCellsHorizontaly->setEnabled( state );
+
+    state=(table && nbFrame>0);
+
+    actionTableInsertRow->setEnabled( state);
+    actionTableInsertCol->setEnabled( state);
+    actionTableDelRow->setEnabled( state );
+    actionTableDelCol->setEnabled( state );
+    actionTableDelete->setEnabled( state );
+    actionTableUngroup->setEnabled( state );
 }
 
 void KWView::docStructChanged(TypeStructDocItem _type)
