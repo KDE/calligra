@@ -1180,7 +1180,7 @@ Examples of whitespace characters are spaces, tabs, and carrage returns.</para><
 <title>Spell Checking</title>
 <indexterm><primary>spelling</primary><secondary>check spelling of document</secondary></indexterm>
 <para>&kword; can compare each word in your document to several commonly available dictionaries.  It will offer you 
-the opportunity to change any words it believes are mispelled.</para>
+the opportunity to change any words it believes are misspelled.</para>
 <note><para>By default, if any text in the document is selected, 
 &kword; only checks the spelling of currently selected text.</para>  
 <para>If you want to check the spelling of a 
@@ -1304,7 +1304,7 @@ For more details, please see the section entitled
 
 <sect2 id="auto-spell-check">
 <title>Automatically mark misspelled words</title>
-<indexterm><primary>spelling</primary><secondary>automatically mark mispelled words</secondary></indexterm>
+<indexterm><primary>spelling</primary><secondary>automatically mark misspelled words</secondary></indexterm>
 
 <para>&kword; can check the spelling of your document as you edit it.  It will underline in red any word which 
 it can not find in the dictionary.  This behavior can be turned on and off by the user.  See the section 
