@@ -187,7 +187,7 @@ KarbonView::registerTool( VTool *tool )
 	if( !shell() ) return;
 	if( !m_toolbox )
 	{
-		m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "toolbox" );
+		m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "Tools" );
 		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 	}
 	m_toolbox->registerTool( tool );
@@ -197,10 +197,10 @@ KarbonView::registerTool( VTool *tool )
 QWidget *
 KarbonView::createContainer( QWidget *parent, int index, const QDomElement &element, int &id )
 {
-	if( element.attribute( "name" ) == "toolbox" )
+	if( element.attribute( "name" ) == "Tools" )
 	{
 		if( !m_toolbox )
-			m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "toolbox" );
+			m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "Tools" );
 		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 
 		if( shell() )
