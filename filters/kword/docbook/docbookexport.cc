@@ -663,6 +663,7 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
 #if 0
     kdError (30507) << "doFullDocument () - End" << outputText << endl;
 #endif
+    return true;
 }
 
 
