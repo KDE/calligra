@@ -40,9 +40,6 @@ noinst_HEADERS =  graphiteglobal.h \
 kdelnk_DATA = graphite.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-graphite.desktop
-kdemimedir = $(kde_mimedir)/application
-
 rc_DATA = graphite.rc
 rcdir = $(kde_datadir)/graphite
 
