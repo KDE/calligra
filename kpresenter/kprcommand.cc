@@ -523,10 +523,20 @@ void GroupObjCmd::execute()
     {
         it.current()->setOrigPointInGroup( it.current()->getOrig() );
         it.current()->setOrigSizeInGroup( it.current()->getSize() );
-	it.current()->setSelected( false );
-        m_page->takeObject(it.current());
-	it.current()->removeFromObjList();
-        r |= it.current()->getBoundingRect(doc->zoomHandler());
+
+        it.current()->setSelected( false );
+        m_page->takeObject(it.current() );
+        it.current()->removeFromObjList();
+        r |= it.current()->getBoundingRect( doc->zoomHandler() );
+
+        if ( it.current()->getType() == OT_GROUP ) {
+            KPGroupObject *_groupObj = static_cast<KPGroupObject*>( it.current() );
+            QPtrListIterator<KPObject> it2( _groupObj->objectList() );
+            for ( ; it2.current(); ++it2 ) {
+                it2.current()->setOrigPointInGroup( it2.current()->getOrig() );
+                it2.current()->setOrigSizeInGroup( it2.current()->getSize() );
+            }
+        }
     }
 
     grpObj->setUpdateObjects( false );
@@ -550,12 +560,12 @@ void GroupObjCmd::unexecute()
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-	m_page->appendObject( it.current() );
-	it.current()->addToObjList();
-	it.current()->setSelected( true );
+        m_page->appendObject( it.current() );
+        it.current()->addToObjList();
+        it.current()->setSelected( true );
     }
 
-    m_page->takeObject(grpObj);
+    m_page->takeObject( grpObj );
     grpObj->removeFromObjList();
 
     doc->repaint( false );
@@ -598,9 +608,9 @@ void UnGroupObjCmd::execute()
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-	m_page->appendObject( it.current() );
-	it.current()->addToObjList();
-	it.current()->setSelected( true );
+        m_page->appendObject( it.current() );
+        it.current()->addToObjList();
+        it.current()->setSelected( true );
     }
 
     m_page->takeObject(grpObj);
@@ -617,13 +627,27 @@ void UnGroupObjCmd::unexecute()
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-	it.current()->setSelected( false );
-	m_page->takeObject(it.current());
-	it.current()->removeFromObjList();
-        r |= it.current()->getBoundingRect(doc->zoomHandler());
+        it.current()->setOrigPointInGroup( it.current()->getOrig() );
+        it.current()->setOrigSizeInGroup( it.current()->getSize() );
+
+        it.current()->setSelected( false );
+        m_page->takeObject( it.current() );
+        it.current()->removeFromObjList();
+        r |= it.current()->getBoundingRect( doc->zoomHandler() );
+
+        if ( it.current()->getType() == OT_GROUP ) {
+            KPGroupObject *_groupObj = static_cast<KPGroupObject*>( it.current() );
+            QPtrListIterator<KPObject> it2( _groupObj->objectList() );
+            for ( ; it2.current(); ++it2 ) {
+                it2.current()->setOrigPointInGroup( it2.current()->getOrig() );
+                it2.current()->setOrigSizeInGroup( it2.current()->getSize() );
+            }
+        }
     }
 
     grpObj->setUpdateObjects( false );
+    grpObj->setOrigPointInGroup( r.topLeft() );
+    grpObj->setOrigSizeInGroup( r.size() );
     grpObj->setOrig( r.x(), r.y() );
     grpObj->setSize( r.width(), r.height() );
     m_page->appendObject( grpObj );

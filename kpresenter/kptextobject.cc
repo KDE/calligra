@@ -269,9 +269,9 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     _painter->save();
     QPen pen2(pen);
     pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
-    QRect clip=QRect(_zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX( ow - 2 * pw),_zoomHandler->zoomItY( oh - 2 * pw));
+    //QRect clip=QRect(_zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX( ow - 2 * pw),_zoomHandler->zoomItY( oh - 2 * pw));
     //kdDebug() << "KPTextObject::paint cliprect:" << DEBUGRECT(_zoomHandler->zoomRect( getBoundingRect( _zoomHandler ) )) << endl;
-    setupClipRegion( _painter, clip );
+    //setupClipRegion( _painter, clip );
     //for debug
     //_painter->fillRect( clip, Qt::blue );
     _painter->setPen( pen2 );
@@ -292,7 +292,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                                       _zoomHandler->zoomItX( ow - 2 * pw ),
                                       _zoomHandler->zoomItY( oh - 2 * pw ) );
             }
-    }
+        }
         /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
         // (so that the border gets drawn OUTSIDE of the object area)
         _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX( ow - 2 * pw),

@@ -87,8 +87,8 @@ void KPGroupObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
 
-    double fx = (double)ext.width() / (double)origSizeInGroup.width();
-    double fy = (double)ext.height() / (double)origSizeInGroup.height();
+    double fx = ext.width() / origSizeInGroup.width();
+    double fy = ext.height() / origSizeInGroup.height();
 
     updateSizes( fx, fy );
 }
@@ -139,8 +139,8 @@ void KPGroupObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
 
-    double fx = (double)ext.width() / (double)origSizeInGroup.width();
-    double fy = (double)ext.height() / (double)origSizeInGroup.height();
+    double fx = ext.width() / origSizeInGroup.width();
+    double fy = ext.height() / origSizeInGroup.height();
 
     updateSizes( fx, fy );
 }
@@ -293,12 +293,8 @@ void KPGroupObject::updateSizes( double fx, double fy )
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-        //kdDebug() << "Group X: " << origTopLeftPointInGroup.x() << "   Group Y: " << origTopLeftPointInGroup.y() << endl;
-        //kdDebug() << "Object X: " << it.current()->getOrigPointInGroup().x() << "   Object Y: " << it.current()->getOrigPointInGroup().y() << endl;
         double _x = ( it.current()->getOrigPointInGroup().x() - origTopLeftPointInGroup.x() ) * fx;
         double _y = ( it.current()->getOrigPointInGroup().y() - origTopLeftPointInGroup.y() ) * fy;
-
-        //kdDebug() << "X: " << _x << "   Y: " << _y << endl;
 
         KoRect origObjectRect = KoRect( KoPoint( it.current()->getOrigPointInGroup().x(),
                                                  it.current()->getOrigPointInGroup().y() ),
