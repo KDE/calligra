@@ -273,8 +273,8 @@ KWFindReplace::KWFindReplace( KWCanvas * canvas, KWReplaceDia * dialog )
 {
     connect( m_replace, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
              this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
-    connect( m_replace, SIGNAL( replace( const QString &, int , int, const QRect & ) ),
-             this, SLOT( replace( const QString &, int , int, const QRect & ) ) );
+    connect( m_replace, SIGNAL( replace( const QString &, int , int, int, const QRect & ) ),
+             this, SLOT( replace( const QString &, int , int,int, const QRect & ) ) );
     m_currentFrameSet = 0L;
 }
 
@@ -417,11 +417,11 @@ void KWFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 }
 
 void KWFindReplace::replace( const QString &, int matchingIndex,
-                             int matchingLength, const QRect &/*expose*/ )
+                             int matchingLength ,int matchedLength,  const QRect &/*expose*/ )
 {
     int index = m_offset + matchingIndex;
     // highlight might not have happened (if 'prompt on replace' is off)
-    m_currentFrameSet->highlightPortion( m_currentParag, index, matchingLength, m_canvas );
+    m_currentFrameSet->highlightPortion( m_currentParag, index, matchedLength, m_canvas );
     QTextDocument * textdoc = m_currentFrameSet->textDocument();
     QTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );

@@ -384,15 +384,17 @@ void KWView::setupActions()
     addVariableActions( VT_FIELD, KWFieldVariable::actionTexts(), actionInsertVariable, i18n("&Property") );
     addVariableActions( VT_DATE, KWDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
     addVariableActions( VT_TIME, KWTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
+
+    actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
+                                            actionCollection(), "insert_custom" );
+     actionInsertVariable->insert(actionInsertCustom);
+     refreshCustomMenu();
+
     addVariableActions( VT_PGNUM, KWPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
     /*
     addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
     */
 
-     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
-                                            actionCollection(), "insert_custom" );
-     actionInsertVariable->insert(actionInsertCustom);
-     refreshCustomMenu();
     /*
 
     TODO for the moment serail letter doesn't work.

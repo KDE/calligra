@@ -169,7 +169,7 @@ protected:
 
 protected slots:
     void highlight( const QString &text, int matchingIndex, int matchingLength, const QRect & );
-    void replace( const QString &text, int replacementIndex, int replacedLength, const QRect & );
+    void replace( const QString &text, int replacementIndex, int replacedLength,int searchLength, const QRect & );
 
 private:
     // Only one of those two will be set
