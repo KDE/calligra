@@ -1,4 +1,3 @@
--	move vobject::accept() -> vshape?
 -	move vobject::draw() -> vshape?
 -	mirror coordinate-system so origin is bottom-left
 -	replace VObject::isInside() with a polygonizevisitor in vselectool (lenny)
