@@ -22,6 +22,7 @@
 #include "kptcalendar.h"
 #include "kptcalendarpanel.h"
 #include "kptmap.h"
+#include "intervaledit.h"
 
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
@@ -43,21 +44,6 @@
 #include <qmap.h>
 
 #include <kdebug.h>
-
-class IntervalItem : public QListViewItem
-{
-public:
-    IntervalItem(QListView * parent, QTime start, QTime end)
-    : QListViewItem(parent, QString("%1  -  %2").arg(start.toString(), end.toString())),
-      m_start(start),
-      m_end(end)
-    {}
-    QPair<QTime, QTime> interval() { return QPair<QTime, QTime>(m_start, m_end); }
-    
-private:
-    QTime m_start;
-    QTime m_end;
-};
 
 KPTCalendarEdit::KPTCalendarEdit (QWidget *parent, const char *name)
     : KPTCalendarEditBase(parent),
@@ -113,7 +99,7 @@ void KPTCalendarEdit::slotClearClicked() {
 void KPTCalendarEdit::slotAddIntervalClicked() {
     //kdDebug()<<k_funcinfo<<endl;
     intervalList->insertItem(new IntervalItem(intervalList, startTime->time(), endTime->time()));
-    bApply->setEnabled(true);    
+    bApply->setEnabled(true);
 }
 
 //NOTE: enum KPTMap::State must match combobox state!
@@ -137,12 +123,12 @@ void KPTCalendarEdit::slotApplyClicked() {
             }
         }
     }
-        
+
     KPTWeekMap weeks = calendarPanel->selectedWeeks();
     for(KPTWeekMap::iterator it = weeks.begin(); it != weeks.end(); ++it) {
         m_calendar->setWeek(it, state->currentItem());//NOTE!!
     }
-    
+
     KPTIntMap weekdays = calendarPanel->selectedWeekdays();
     for(KPTIntMap::iterator it = weekdays.begin(); it != weekdays.end(); ++it) {
         //kdDebug()<<k_funcinfo<<"weekday="<<it.key()<<endl;
@@ -156,7 +142,7 @@ void KPTCalendarEdit::slotApplyClicked() {
             }
         }
     }
-    
+
     calendarPanel->markSelected(state->currentItem()); //NOTE!!
     emit applyClicked();
     slotCheckAllFieldsFilled();

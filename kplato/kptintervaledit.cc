@@ -18,6 +18,7 @@
 */
 
 #include "kptintervaledit.h"
+#include "intervalitem.h"
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -29,21 +30,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-
-class IntervalItem : public QListViewItem
-{
-public:
-    IntervalItem(QListView * parent, QTime start, QTime end)
-    : QListViewItem(parent, QString("%1  -  %2").arg(start.toString(), end.toString())),
-      m_start(start),
-      m_end(end)
-    {}
-    QPair<QTime, QTime> interval() { return QPair<QTime, QTime>(m_start, m_end); }
-    
-private:
-    QTime m_start;
-    QTime m_end;
-};
 
 KPTIntervalEdit::KPTIntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Edit interval"), Ok|Cancel, Ok, parent, name, true, true)
@@ -63,15 +49,15 @@ QPtrList<QPair<QTime, QTime> > KPTIntervalEdit::intervals() const {
 }
 
 
-KPTIntervalEditImpl::KPTIntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent) 
+KPTIntervalEditImpl::KPTIntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent)
     : KPTIntervalEditBase(parent) {
-    
+
     intervalList->setSortColumn(0);
     QPtrListIterator<QPair<QTime, QTime> > it = intervals;
     for (; it.current(); ++it) {
         new IntervalItem(intervalList, it.current()->first, it.current()->second);
     }
-    
+
     connect(bClear, SIGNAL(clicked()), SLOT(slotClearClicked()));
     connect(bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
     connect(intervalList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(slotIntervalSelectionChanged(QListViewItem*)));
