@@ -165,13 +165,21 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // ## Looks wrong to me. The translation can't depend on the crect.... (DF)
     QPoint topLeft( zh->zoomItX(containingFrame->x()), cnpoint.y() );
 #endif
-    QPoint topLeft = fs->currentViewMode()->normalToView( zh->zoomPoint( containingFrame->topLeft() ) );
+    // Find the topleft of the _paragraph_, that's how the painter is set up
+    KoPoint topLeftParagPt;
+    if ( ! fs->internalToDocument( QPoint( 0, paragy ), topLeftParagPt ) )
+    {
+        kdDebug() << "KWAnchor::paint can't convert topleft of paragraph to doc coords\n";
+        return;
+    }
+
+    QPoint topLeftParag = fs->currentViewMode()->normalToView( zh->zoomPoint( topLeftParagPt ) );
 
     // Finally, make the painter go back to view coord system
     // (this is exactly the opposite of the code in KWFrameSet::drawContents)
     // (It does translate(view - internal), so we do translate(internal - view) - e.g. with (0,0) for internal)
     p->save();
-    p->translate( -topLeft.x(), -topLeft.y() );
+    p->translate( -topLeftParag.x(), -topLeftParag.y() );
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw translating by " << -topLeft.x() << "," << -topLeft.y() << endl;
 #endif
