@@ -1255,7 +1255,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     }
     kdDebug(30520) << "Table width: " << tableWidth << endl;
 
-    // An inlined table, is an "as-char" text-box (Note: there is no explicit anchor!)
+    // An inlined table, is an "as-char" text-box
     *m_streamOut << "<draw:text-box"; // ### TODO: style name
     *m_streamOut << " draw:name=\"" << escapeOOText( translatedFrameName ) << "\" text:anchor-type=\"as-char\"";
     *m_streamOut << " svg:width=\"" << tableWidth << "pt\""; // ### TODO: any supplement to the width?
