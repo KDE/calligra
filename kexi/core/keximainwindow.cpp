@@ -377,8 +377,14 @@ void KexiMainWindow::invalidateProjectWideActions()
 	//VIEW MENU
 
 	d->action_view_data_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::DataViewMode) );
+	if (!d->action_view_data_mode->isEnabled())
+		d->action_view_data_mode->setChecked(false);
 	d->action_view_design_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::DesignViewMode) );
+	if (!d->action_view_design_mode->isEnabled())
+		d->action_view_design_mode->setChecked(false);
 	d->action_view_text_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::TextViewMode) );
+	if (!d->action_view_text_mode->isEnabled())
+		d->action_view_text_mode->setChecked(false);
 
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper->setEnabled(d->prj);
