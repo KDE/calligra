@@ -355,7 +355,7 @@ public:
 
     virtual QPicture *getPicture();
 
-    virtual void activate( QWidget *_widget, int diffx, int diffy, int diffxx );
+    virtual void activate( QWidget *_widget );
     virtual void deactivate();
 
     KWordChild *getChild() { return child; }
@@ -394,7 +394,7 @@ public:
 
     virtual QPicture *getPicture();
 
-    virtual void activate( QWidget *_widget, int diffx, int diffy, int diffxx );
+    virtual void activate( QWidget *_widget );
     virtual void deactivate();
 
     virtual void update();

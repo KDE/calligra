@@ -1466,10 +1466,8 @@ QPicture *KWPartFrameSet::getPicture()
 }
 
 /*================================================================*/
-void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffxx )
+void KWPartFrameSet::activate( QWidget *_widget )
 {
-//     child->setGeometry( QRect( frames.at( 0 )->x() - diffxx - diffx, frames.at( 0 )->y() - diffy,
-// 			       frames.at( 0 )->width(), frames.at( 0 )->height() ) );
     update();
     KWordView *view = (KWordView*)_widget;
     KoDocument* part = child->document();
@@ -1478,8 +1476,6 @@ void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffx
     kdDebug() << "Child activated. part="<<part<<" child="<<child<<endl;
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart(  part, view );
-    view->child( part )->frame()->move( frames.at( 0 )->x() - diffx - diffxx,
-					frames.at( 0 )->y() - diffy );
 }
 
 /*================================================================*/
@@ -1720,7 +1716,7 @@ KWFormat *KWFormulaFrameSet::getFormat()
 }
 
 /*================================================================*/
-void KWFormulaFrameSet::activate( QWidget *_widget, int /*diffx*/, int /*diffy*/, int /*diffxx*/ )
+void KWFormulaFrameSet::activate( QWidget *_widget )
 {
     if ( formulaEdit->parent() != ( (QScrollView*)_widget )->viewport() )
 	formulaEdit->reparent( ( (QScrollView*)_widget )->viewport(), 0, QPoint( 0, 0 ), FALSE );

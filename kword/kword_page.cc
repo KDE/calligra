@@ -271,9 +271,9 @@ void KWPage::vmmEdit( int mx, int my )
 
     // only if we are in the _same_ frameset as before!!
     if ( frameset != -1 && frameset == static_cast<int>( fc->getFrameSet() ) - 1 &&
-	 doc->getFrameSet( frameset )->getFrameType() == FT_TEXT ) 
+	 doc->getFrameSet( frameset )->getFrameType() == FT_TEXT )
     {
-	doSelect(mx, my);    
+	doSelect(mx, my);
 	if ( scrollTimer.isActive() )
 	    return;
 
@@ -693,8 +693,7 @@ bool KWPage::vmpEdit( int mx, int my )
     if ( frameset != -1 && doc->getFrameSet( frameset )->getFrameType() == FT_FORMULA ) {
 	gui->getView()->showFormulaToolbar( TRUE );
 	KWFormulaFrameSet *fs = dynamic_cast<KWFormulaFrameSet*>( doc->getFrameSet( frameset ) );
-	fs->activate( this, contentsX(), contentsY(), gui->getVertRuler()->width()
-		      + gui->getDocStruct()->width() );
+	fs->activate( this );
 	editNum = frameset;
 	KWFormat *f = fs->getFormat();
 	fc->apply( *f );
@@ -706,8 +705,7 @@ bool KWPage::vmpEdit( int mx, int my )
     }
     if ( frameset != -1 && doc->getFrameSet( frameset )->getFrameType() == FT_PART ) {
 	KWPartFrameSet *fs = dynamic_cast<KWPartFrameSet*>( doc->getFrameSet( frameset ) );
-	fs->activate( gui->getView(), contentsX(), contentsY(), gui->getVertRuler()->width()
-		      + gui->getDocStruct()->width() );
+	fs->activate( gui->getView() );
 	editNum = frameset;
 	return TRUE;
     }
@@ -1204,7 +1202,7 @@ void KWPage::viewportMouseReleaseEvent( QMouseEvent *e )
 /*================================================================*/
 void KWPage::vmdEdit( int mx, int my )
 {
-    if ( doc->has_selection() ) 
+    if ( doc->has_selection() )
     {
         QPainter _painter;
         _painter.begin( viewport() );
@@ -1215,7 +1213,7 @@ void KWPage::vmdEdit( int mx, int my )
 
     int frameset = doc->getFrameSet( mx, my );
 
-    if ( (frameset != -1) && 
+    if ( (frameset != -1) &&
          (doc->getFrameSet( frameset )->getFrameType() == FT_TEXT) ) {
         showCursor(false);
 
@@ -1260,14 +1258,12 @@ void KWPage::vmdEditFrame( int mx, int my )
     int frameset = doc->getFrameSet( mx, my );
     if ( doc->getFrameSet( frameset )->getFrameType() == FT_PART ) {
 	KWPartFrameSet *fs = dynamic_cast<KWPartFrameSet*>( doc->getFrameSet( frameset ) );
-	fs->activate( gui->getView(), contentsX(), contentsY(), gui->getVertRuler()->width()
-		      + gui->getDocStruct()->width() );
+	fs->activate( gui->getView() );
 	editNum = frameset;
     } else if ( doc->getFrameSet( frameset )->getFrameType() == FT_FORMULA ) {
 	gui->getView()->showFormulaToolbar( TRUE );
 	KWFormulaFrameSet *fs = dynamic_cast<KWFormulaFrameSet*>( doc->getFrameSet( frameset ) );
-	fs->activate( this, contentsX(), contentsY(), gui->getVertRuler()->width()
-		      + gui->getDocStruct()->width() );
+	fs->activate( this );
 	editNum = frameset;
 	KWFormat *f = fs->getFormat();
 	fc->apply( *f );
@@ -1433,7 +1429,7 @@ void KWPage::editDeleteFrame()
     }
 
     if ( !frame || !fs ) {
-	KMessageBox::sorry( this, i18n( "You have not selected a frame.\n" 
+	KMessageBox::sorry( this, i18n( "You have not selected a frame.\n"
 	                                "You need to select a frame first in order to delete it."),
 				  i18n( "Delete Frame" ) );
 	return;
@@ -1448,9 +1444,9 @@ void KWPage::editDeleteFrame()
 	if ( doc->getProcessingType() == KWordDocument::WP && doc->getFrameSetNum( fs ) == 0 )
 	    return;
 	int result;
-	result = KMessageBox::warningContinueCancel(this, 
+	result = KMessageBox::warningContinueCancel(this,
 			i18n( "You are about to delete the last Frame of the\n"
-			      "Frameset '%1'.\n" 
+			      "Frameset '%1'.\n"
 			      "Doing so will delete this Frameset and all the\n"
 			      "text contained in it as well!\n\n"
 			      "Are you sure you want to do that?").arg(fs->getName()),
@@ -1550,7 +1546,7 @@ void KWPage::editReconnectFrame()
     }
 
     if ( !frame || !fs ) {
-	KMessageBox::sorry( this, i18n( "You have not selected a frame.\n" 
+	KMessageBox::sorry( this, i18n( "You have not selected a frame.\n"
 	                                "You need to select a frame first in order to reconnect it."),
 				  i18n( "Reconnect Frame" ) );
 	return;
@@ -1563,9 +1559,9 @@ void KWPage::editReconnectFrame()
 	if ( doc->getProcessingType() == KWordDocument::WP && doc->getFrameSetNum( fs ) == 0 )
 	    return;
 	int result;
-	result = KMessageBox::warningContinueCancel(this, 
+	result = KMessageBox::warningContinueCancel(this,
 			i18n( "You are about to reconnect the last Frame of the\n"
-			      "Frameset '%1'.\n" 
+			      "Frameset '%1'.\n"
 			      "Doing so will delete the Frameset and all the\n"
 			      "text contained in it!\n\n"
 			      "Are you sure you want to do that?").arg(fs->getName()),
@@ -2014,7 +2010,7 @@ void KWPage::finishPainting( QPaintEvent *e, QPainter &painter )
 				      frameSet->getFrame( _fc.getFrame() - 1 )->
 				      getRightIndent( _fc.getPTY(),
 						      _fc.getLineHeight() ),
-				      _fc.getLineHeight() ) ) ) 
+				      _fc.getLineHeight() ) ) )
     {
 	if ( !e->rect().contains( QRect( _x + frameSet->getFrame( _fc.getFrame() - 1 )->
 					 getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ),
@@ -2024,7 +2020,7 @@ void KWPage::finishPainting( QPaintEvent *e, QPainter &painter )
 					 - frameSet->getFrame( _fc.getFrame() - 1 )->
 					 getRightIndent( _fc.getPTY(), _fc.getLineHeight() ),
 					 _fc.getLineHeight() ) ) )
-        {					 
+        {					
 	    painter.setClipping( FALSE );
 	}
     }
@@ -2332,16 +2328,16 @@ bool KWPage::kContinueSelection( QKeyEvent *e )
 	 ( e->key() == Key_Left || e->key() == Key_Right ||
 	   e->key() == Key_Up || e->key() == Key_Down  ||
 	   e->key() == Key_End || e->key() == Key_Home ) )
-    {	   
+    {	
 	continueSelection = TRUE;
     }
-    else if ( doc->has_selection() && *doc->getSelStart() != *doc->getSelEnd() ) 
+    else if ( doc->has_selection() && *doc->getSelStart() != *doc->getSelEnd() )
     {
 	doc->setSelection( FALSE );
 	doc->drawSelection( painter, contentsX(), contentsY() );
 	painter.end();
 	if ( e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return ||
-	     e->key() == Key_Enter || e->ascii() >= 32 ) 
+	     e->key() == Key_Enter || e->ascii() >= 32 )
 	{
 	    doc->deleteSelectedText( fc );
 	    recalcCursor();
@@ -4761,7 +4757,7 @@ void KWPage::showCursor( bool visible )
       return;
 
    cursorIsVisible = !cursorIsVisible;
-  
+
    QPainter p;
    p.begin( viewport() );
    doc->drawMarker( *fc, &p, contentsX(), contentsY() );
