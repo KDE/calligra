@@ -1955,7 +1955,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                              int _tx, int _ty,
                              int _col, int _row,
                              ColumnLayout *cl, RowLayout *rl,
-                             QRect *_prect, bool override_obscured )
+                             QRect *_prect, bool override_obscured, bool drawCursor )
 {
     // If this cell is obscured then draw the obscuring one instead.
     if ( m_pObscuringCell && !override_obscured )
@@ -2006,7 +2006,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                                                                     m_pObscuringCell->row() ) );
 
     // Dont draw any selection when printing.
-    if ( _painter.device()->isExtDev() )
+    if ( _painter.device()->isExtDev() || !drawCursor)
         selected = FALSE;
 
     QColorGroup defaultColorGroup = QApplication::palette().active();
@@ -2519,7 +2519,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     }
 
  drawmarker:
-    if ( _painter.device()->isExtDev() )
+    if ( _painter.device()->isExtDev() || !drawCursor)
       return;
     //
     // Draw the marker

@@ -861,12 +861,12 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transp
     KSpreadTable* table = m_pMap->firstTable();
     if ( !table )
         return;
-
+    kdDebug()<<"paintContent-------------------------------------\n";
     // ### TODO support zooming
-    paintContent( painter, rect, transparent, table );
+    paintContent( painter, rect, transparent, table,false );
 }
 
-void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadTable* table )
+void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadTable* table, bool drawCursor )
 {
     if ( isLoading() )
         return;
@@ -898,7 +898,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
             ColumnLayout *col_lay = table->columnLayout( x );
 
             KSpreadCell *cell = table->cellAt( x, y );
-            cell->paintCell( rect, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
+            cell->paintCell( rect, painter, xpos, ypos, x, y, col_lay, row_lay, &r,false, drawCursor );
 
             xpos += col_lay->width();
         }

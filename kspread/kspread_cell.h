@@ -203,7 +203,7 @@ public:
      */
     void paintCell( const QRect& _rect, QPainter &_painter, int _tx, int _ty,
                     int _col, int _row, ColumnLayout *cl, RowLayout *rl,
-                    QRect *_prect = 0L, bool override_obscured = false );
+                    QRect *_prect = 0L, bool override_obscured = false, bool drawCursor=true );
 
     /**
      * A convenience function

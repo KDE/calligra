@@ -260,7 +260,7 @@ public:
   const QPen& defaultGridPen() { return m_defaultGridPen; }
 
   virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
-  void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table );
+  void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table, bool drawCursor=true );
 
   virtual DCOPObject* dcopObject();
 
