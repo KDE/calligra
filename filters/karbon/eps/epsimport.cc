@@ -25,6 +25,7 @@
 #include <koFilter.h>
 #include <koFilterChain.h>
 #include <krun.h>
+#include <kprocess.h>
 
 #include <kdebug.h>
 
