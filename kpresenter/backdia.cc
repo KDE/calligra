@@ -126,8 +126,8 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     cType = new QComboBox( false, colorTab );
     cType->insertItem( i18n( "Plain" ) );
-    cType->insertItem( i18n( "Horizontal Gradient" ) );
     cType->insertItem( i18n( "Vertical Gradient" ) );
+    cType->insertItem( i18n( "Horizontal Gradient" ) );
     cType->insertItem( i18n( "Diagonal Gradient 1" ) );
     cType->insertItem( i18n( "Diagonal Gradient 2" ) );
     cType->insertItem( i18n( "Circle Gradient" ) );
