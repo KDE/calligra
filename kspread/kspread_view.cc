@@ -62,6 +62,7 @@
 #include "kspread_sheetprint.h"
 #include "kspread_map.h"
 #include "kspread_dlg_scripts.h"
+#include "kspread_dlg_changes.h"
 #include "kspread_dlg_csv.h"
 #include "kspread_dlg_cons.h"
 #include "kspread_dlg_database.h"
@@ -4246,6 +4247,9 @@ void KSpreadView::acceptRejectChanges()
 {
   if ( !m_recordChanges->isChecked() )
     return;
+
+  KSpreadAcceptDlg dlg( this, m_pTable->map()->changes() );
+  dlg.exec();
 }
 
 void KSpreadView::commentChanges()

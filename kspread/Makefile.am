@@ -23,7 +23,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_sheet.cc \
 	kspread_dlg_cons.cc kspread_util.cc kspread_functions_database.cc \
         kspread_dlg_database.cc kspread_dlg_goalseek.cc \
-	kspread_editors.cc kspreadsubtotal.ui \
+	kspread_editors.cc kspreadsubtotal.ui kspread_dlg_changes.cc \
 	kspread_dlg_reference.cc kspread_dlg_subtotal.cc \
 	kspread_dlg_comment.cc kspread_dlg_angle.cc kspread_dlg_goto.cc\
 	kspread_dlg_area.cc kspread_dlg_resize2.cc kspread_dlg_preference.cc\
@@ -74,8 +74,8 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h kspread_functions_helper.h \
 	kspread_dlg_scripts.h kspread_sheet.h kspread_cell.h \
 	kspread_dlg_cons.h kspread_cluster.h kspread_value.h \
 	kspread_util.h kspread_canvas.h kspread_dlg_subtotal.h \
-	kspread_dlg_reference.h kspread_locale.h \
-	kspread_editors.h  kspread_dlg_formula.h \
+	kspread_dlg_reference.h kspread_locale.h kspread_changes.h \
+	kspread_editors.h  kspread_dlg_formula.h kspread_dlg_changes.h \
 	kspread_dlg_reference.h kspread_dlg_area.h kspread_dlg_resize2.h\
 	kspread_dlg_special.h kspread_dlg_goto.h \
 	kspread_dlg_sort.h kspread_dlg_anchor.h kspread_dlg_series.h \

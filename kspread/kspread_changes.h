@@ -141,6 +141,8 @@ class KSpreadChanges : public QObject
     QPtrList<ChangeRecord> m_dependancies;
   };
 
+  friend class KSpreadAcceptDlg;
+
   QPtrList<ChangeRecord> m_dependancyList;
   QPtrList<ChangeRecord> m_changeRecords;
   QPtrList<AuthorInfo>   m_authors;
