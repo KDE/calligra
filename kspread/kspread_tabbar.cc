@@ -210,7 +210,7 @@ void TabBarPrivate::moveTab( int tab, int target )
 
 // creates a new tabbar
 TabBar::TabBar( KSpreadView *view, const char* name )
-    : QWidget( view, name )
+    : QWidget( view, name, Qt::WResizeNoErase | Qt::WRepaintNoErase )
 {
     d = new TabBarPrivate;
     d->view = view;
