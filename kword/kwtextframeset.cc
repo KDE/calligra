@@ -52,6 +52,8 @@
 #include <kotextobject.h>
 #include <kocommand.h>
 #include <kotextformatter.h>
+#include <krun.h>
+#include <kmessagebox.h>
 
 #include <kdebug.h>
 #include <assert.h>
@@ -2306,6 +2308,7 @@ void KWTextFrameSet::printRTDebug( int info )
 }
 #endif
 
+
 ///////////////////////////////////////////////////////////////////////////////
 
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
@@ -2994,13 +2997,17 @@ QPtrList<KAction> KWTextFrameSetEdit::dataToolActionList()
 {
     m_singleWord = false;
     m_wordUnderCursor = QString::null;
+    m_refLink= QString::null;
     KWDocument * doc = frameSet()->kWordDocument();
     QString text;
     if ( textObject()->hasSelection() )
     {
         text = textObject()->selectedText();
         if ( text.find(' ') == -1 && text.find('\t') == -1 && text.find(KoTextObject::customItemChar()) == -1 )
+        {
             m_singleWord = true;
+            textObject()->textSelectedIsAnLink(m_refLink);
+        }
     }
     else // No selection -> get word under cursor
     {
@@ -3008,6 +3015,7 @@ QPtrList<KAction> KWTextFrameSetEdit::dataToolActionList()
         text = textObject()->selectedText();
         if(text.find(KoTextObject::customItemChar()) == -1)
         {
+             kdDebug()<<"bool KWTextFrameSet::textSelectedIsAnLink() :"<< textObject()->textSelectedIsAnLink(m_refLink)<<endl;
             textDocument()->removeSelection( QTextDocument::Standard );
             m_singleWord = true;
             m_wordUnderCursor = text;
@@ -3015,6 +3023,7 @@ QPtrList<KAction> KWTextFrameSetEdit::dataToolActionList()
         else
         {
             text = "";
+            m_refLink=QString::null;
         }
     }
 
@@ -3119,14 +3128,35 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
 {
     // Removed previous stuff
     view->unplugActionList( "datatools" );
+    view->unplugActionList( "datatools_link" );
     m_actionList.clear();
     m_actionList = dataToolActionList();
     kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << m_actionList.count() << " actions" << endl;
-    view->plugActionList( "datatools", m_actionList );
-    QPopupMenu * popup = view->popupMenu("text_popup");
-    Q_ASSERT(popup);
-    if (popup)
-        popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+    if(m_refLink.isNull())
+    {
+        view->plugActionList( "datatools", m_actionList );
+        QPopupMenu * popup = view->popupMenu("text_popup");
+        Q_ASSERT(popup);
+        if (popup)
+            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+    }
+    else
+    {
+        view->plugActionList( "datatools_link", m_actionList );
+        QPopupMenu * popup = view->popupMenu("text_popup_link");
+        Q_ASSERT(popup);
+        if (popup)
+            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+    }
+}
+
+void KWTextFrameSetEdit::openLink()
+{
+    if(m_refLink.find("http://")!=-1 || m_refLink.find("mailto:")!=-1
+       || m_refLink.find("ftp://")!=-1 || m_refLink.find("file:")!=-1)
+        (void) new KRun(m_refLink  );
+    else
+        KMessageBox::sorry(0L,i18n("%1 is not a valid link.").arg(m_refLink));//TODO FIX english
 }
 
 #include "kwtextframeset.moc"

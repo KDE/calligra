@@ -291,6 +291,8 @@ public slots:
 
     void inlineFrame();
 
+    void openLink();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
@@ -433,6 +435,8 @@ private:
     KAction *actionChangeClipart;
     KAction *actionConfigureHeaderFooter;
     KToggleAction *actionInlineFrame;
+
+    KAction *actionOpenLink;
 
     KCharSelectDia *m_specialCharDlg;
     KWGUI *m_gui;

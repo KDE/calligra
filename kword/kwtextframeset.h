@@ -304,6 +304,7 @@ public:
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
     QPtrList<KAction> dataToolActionList();
+    void openLink();
 
 public slots:
     // Reimplemented from KWFrameSet and connected to KoTextView's signals
@@ -330,6 +331,7 @@ private:
 
     KoParagLayout m_paragLayout;
     QString m_wordUnderCursor;
+    QString m_refLink;
     bool m_singleWord;
 };
 

@@ -650,6 +650,10 @@ void KWView::setupActions()
     actionInlineFrame = new KToggleAction( i18n( "Inline Frame" ), 0,
                                             this, SLOT( inlineFrame() ),
                                             actionCollection(), "inline_frame" );
+    actionOpenLink = new KAction( i18n( "Open link" ), 0,
+                                     this, SLOT( openLink() ),
+                                     actionCollection(), "open_link" );
+
 }
 
 
@@ -3665,6 +3669,13 @@ void KWView::inlineFrame()
     }
 }
 
+
+void KWView::openLink()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->openLink();
+}
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */
