@@ -273,8 +273,8 @@ void Canvas::mouseMoveEvent (QMouseEvent* e)
 void Canvas::propagateMouseEvent (QMouseEvent *e) {
   // transform position of the mouse pointer according to current
   // zoom factor
-  QPoint new_pos (qRound (e->x() - mXOffset),
-                  qRound (e->y() - mYOffset));
+  QPoint new_pos (qRound (float(e->x() - mXOffset) / zoomFactor),
+                  qRound (float(e->y() - mYOffset) / zoomFactor));
   QMouseEvent new_ev (e->type (), new_pos, e->button (), e->state ());
   
   emit mousePositionChanged (new_ev.x(), new_ev.y());
@@ -401,7 +401,7 @@ void Canvas::updateRegion (const Rect& reg)
   // compute the clipping region
   QWMatrix m;
   
-  QRect clip = m.map (QRect (int (r.left () + mXOffset), int (r.top () + mYOffset),
+  QRect clip = m.map (QRect (int (r.left ()*zoomFactor + mXOffset), int (r.top ()*zoomFactor + mYOffset),
                              int (r.width ()), int (r.height ())));
    
   kdDebug(0) << "("<< clip.left() << "," << clip.top() << ")-(" << clip.right() << "," << r.bottom() << ")" << endl;

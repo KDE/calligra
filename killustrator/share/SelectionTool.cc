@@ -112,8 +112,8 @@ void SelectionTool::processButtonReleaseForHelpline (QMouseEvent *,
 
 void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,
   GDocument *, Canvas* canvas) {
-  float xpos = me->x() / canvas->getZoomFactor();
-  float ypos = me->y() / canvas->getZoomFactor();
+  float xpos = me->x();
+  float ypos = me->y();
   dragHorizHelpline = canvas->indexOfHorizHelpline (ypos);
   if (dragHorizHelpline != -1) {
     if (ctype != C_Vert) {
@@ -133,8 +133,8 @@ void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,
 
 void SelectionTool::processMouseMoveForHelpline (QMouseEvent *me,
   GDocument *, Canvas* canvas) {
-  float xpos = me->x() / canvas->getZoomFactor();
-  float ypos = me->y() / canvas->getZoomFactor();
+  float xpos = me->x();
+  float ypos = me->y();
 
   if (dragHorizHelpline != -1) {
     canvas->updateHorizHelpline (dragHorizHelpline, ypos);
@@ -337,8 +337,8 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
    * S_Rubberband
    */
   else if (state == S_Rubberband) {
-    selPoint[1].x (me->x () / canvas->getZoomFactor());
-    selPoint[1].y (me->y () / canvas->getZoomFactor());
+    selPoint[1].x (me->x ());
+    selPoint[1].y (me->y ());
     canvas->repaint ();
     QPainter painter;
     painter.save ();
@@ -481,8 +481,8 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
   int hmask;
   GObject *obj = 0L;
 
-  float xpos = me->x() / canvas->getZoomFactor();
-  float ypos = me->y() / canvas->getZoomFactor();
+  float xpos = me->x();
+  float ypos = me->y();
   //  canvas->snapPositionToGrid (xpos, ypos);
 
   firstpos.x (xpos);
@@ -498,7 +498,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
    * S_Init
    */
   if (state == S_Init) {
-    obj = doc->findContainingObject (me->x () / canvas->getZoomFactor(), me->y () / canvas->getZoomFactor());
+    obj = doc->findContainingObject (me->x (), me->y ());
     if (obj) {
       // an object will be selected
       state = S_Pick;
@@ -512,8 +512,8 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
       // no object
       state = S_Rubberband;
       doc->unselectAllObjects ();
-      selPoint[0].x(me->x () / canvas->getZoomFactor()); selPoint[0].y(me->y () / canvas->getZoomFactor());
-      selPoint[1].x(me->x () / canvas->getZoomFactor()); selPoint[1].y(me->y () / canvas->getZoomFactor());
+      selPoint[0].x(me->x ()); selPoint[0].y(me->y ());
+      selPoint[1].x(me->x ()); selPoint[1].y(me->y ());
     }
   }
   /************
