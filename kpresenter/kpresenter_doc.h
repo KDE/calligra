@@ -141,7 +141,7 @@ public:
   virtual bool loadChildren(OPParts::MimeMultipartDict_ptr _dict);
 
   // ------ IDL ------
-  virtual CORBA::Boolean init() {insertNewTemplate(0,0); return true;}
+  virtual CORBA::Boolean init() {return insertNewTemplate(0,0);}
 
   // create a view
   virtual OPParts::View_ptr createView();
@@ -184,7 +184,7 @@ public:
 
   // insert a page
   unsigned int insertNewPage(int,int,bool _restore=true); 
-  unsigned int insertNewTemplate(int,int,bool clean=false);
+  bool insertNewTemplate(int,int,bool clean=false);
 
   // get number of pages nad objects
   unsigned int getPageNums() {return _backgroundList.count();}

@@ -42,6 +42,11 @@ const QString BackColorTypeName[] = {"Plain","Horizontal Gradient","Vertical Gra
 const QString PageEffectName[] = {"No effect","Close horizontal","Close vertical","Close from all directions",
 				  "Open horizontal","Open vertical","Open from all directions","Interlocking horizontal 1",
 				  "Interlocking horizontal 2","Interlocking vertical 1","Interlocking vertical 2"};
+const QString ShadowDirectionName[] = {"","Left/Up","Up","Right/Up","Right","Right/Bottom","Bottom","Left/Bottom","Left"};
+const QString EffectName[] = {"No Effect","Come from right","Come from left","Come from top","Come from bottom","Come from right/top",
+			      "Come from right/bottom","Come from left/top","Come from left/bottom","Wipe from left","Wipe from right",
+			      "Wipe from top","Wipe from bottom"};
+const QString Effect2Name[] = {"No Effect","Paragraph after paragraph"};
 
 /******************************************************************/
 /* Class: PresStructViewer                                        */
@@ -71,6 +76,7 @@ protected:
   void closeEvent(QCloseEvent *e);
   void setupTreeView();
   void fillWithPageInfo(KPBackGround *_page,int _num);
+  void fillWithObjInfo(KPObject *_obj,int _num);
 
   KNewPanner *panner;
   KTreeList *treelist;

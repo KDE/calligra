@@ -759,19 +759,27 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy,bool _re
 }
 
 /*==================== insert a new page with template ===========*/
-unsigned int KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool clean=false)
+bool KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool clean=false)
 {
   QString templateDir = KApplication::kde_datadir();
 
   QString file = KFilePreviewDialog::getOpenFileName(templateDir + "/kpresenter/templates/plain.kpt","*.kpt|KPresenter templates",0);
   _clean = clean;
   objStartY = getPageSize(_backgroundList.count() - 1,0,0).y() + getPageSize(_backgroundList.count() - 1,0,0).height();
+
   if (!file.isEmpty()) load_template(file);
+  else 
+    {
+      objStartY = 0;
+      _clean = true;
+      return false;
+    }
+
   objStartY = 0;
   _clean = true;
 
   m_bModified = true;
-  return 0;
+  return true;
 }
 
 /*==================== set background color ======================*/

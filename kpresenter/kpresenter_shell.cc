@@ -119,11 +119,7 @@ void KPresenterShell_impl::fileNew()
   kp_doc = new KPresenterDocument_impl;
   m_rDoc = OPParts::Document::_duplicate(kp_doc);
   
-  if (!m_rDoc->init())
-    {
-      QMessageBox::critical(this,i18n("KPresenter Error"),i18n("Could not init"),i18n("OK"));
-      return;
-    }
+  if (!m_rDoc->init()) return;
   
   if (filename) delete filename;
   if (format) delete format;

@@ -266,6 +266,13 @@ void Page::mousePressEvent(QMouseEvent *e)
 		  modType = MT_NONE;
 		}
 	    }
+	  else
+	    {
+	      QPoint pnt = QCursor::pos();
+	      pageMenu->popup(pnt);
+	      mousePressed = false;
+	      modType = MT_NONE;
+	    }
 	}
     }
   else
@@ -929,6 +936,14 @@ void Page::setupMenus()
   presMenu->setItemChecked(PM_SM,true);
   presMenu->setItemChecked(PM_DM,false);
   presMenu->setMouseTracking(true);
+
+  // create right button page menu
+  pageMenu = new QPopupMenu();
+  CHECK_PTR(pageMenu);
+  pageMenu->insertItem(i18n("Pa&ge Layout..."),this,SLOT(pageLayout()));
+  pageMenu->insertItem(i18n("Page &Background..."),this,SLOT(pageBackground()));
+  pageMenu->insertItem(i18n("&Open presentation structure viewer..."),this,SLOT(presStructView()));
+  pageMenu->setMouseTracking(true);
 }
 
 /*======================== clipboard cut =========================*/

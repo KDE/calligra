@@ -171,6 +171,7 @@ protected:
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
   QPopupMenu *alignMenu1,*alignMenu2,*alignMenu3,*alignMenu4;
+  QPopupMenu *pageMenu;
   bool mousePressed;              
   ModifyType modType;                    
   unsigned int oldMx,oldMy;                
@@ -212,6 +213,12 @@ private slots:
     {view->extraAlignObjCenterVidl();}
   void alignObjBottom()
     {view->extraAlignObjBottomidl();}
+  void pageLayout()
+    {view->extraLayout();}
+  void pageBackground()
+    {view->extraBackground();}
+  void presStructView()
+    {view->screenPresStructView();}
  
 signals:
 

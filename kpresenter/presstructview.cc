@@ -65,6 +65,12 @@ void PresStructViewer::itemSelected(int _index)
   // must be an object
   else
     {
+      ItemInfo *info = 0;
+      for (unsigned int i = 0;i < objList.count();i++)
+	{
+	  info = objList.at(i);
+	  if (info->item == item) fillWithObjInfo(doc->objectList()->at(info->num),info->num);
+	}
     }
 }
 
@@ -110,7 +116,7 @@ void PresStructViewer::setupTreeView()
   for (unsigned int i = 0;i < doc->objectList()->count();i++)
     {
       kpobject = doc->objectList()->at(i);
-      obj_name.sprintf("%s (%d)",i18n(ObjName[static_cast<int>(kpobject->getType())]),i);
+      obj_name.sprintf("%s (%d)",i18n(ObjName[static_cast<int>(kpobject->getType())]),i + 1);
       item = new KTreeListItem(obj_name.data(),new QPixmap(pixdir + "/kpresenter/toolbar/dot.xpm"));
       pgnum = doc->getPageOfObj(i,0,0);
       if (pgnum != -1)
@@ -167,5 +173,56 @@ void PresStructViewer::fillWithPageInfo(KPBackGround *_page,int _num)
 
   list->appendItem(i18n("Effect for changing to next page")); 
   list->changeItemPart(i18n(PageEffectName[static_cast<int>(_page->getPageEffect())]),
+		       list->count() - 1,1);
+}
+
+/*================================================================*/
+void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
+{
+  QString str;
+
+  list->setNumRows(0);
+  str.sprintf("%d",_num + 1);
+  list->appendItem(i18n("Number")); 
+  list->changeItemPart(str,list->count() - 1,1);
+
+  list->appendItem(i18n("Type"));
+  list->changeItemPart(i18n(ObjName[static_cast<int>(_obj->getType())]),
+		       list->count() - 1,1);
+
+  str.sprintf("%d",_obj->getOrig().x());
+  list->appendItem(i18n("X-Coordinate"));
+  list->changeItemPart(str,list->count() - 1,1);
+
+  str.sprintf("%d",_obj->getOrig().y());
+  list->appendItem(i18n("Y-Coordinate"));
+  list->changeItemPart(str,list->count() - 1,1);
+
+  str.sprintf("%d",_obj->getSize().width());
+  list->appendItem(i18n("Width"));
+  list->changeItemPart(str,list->count() - 1,1);
+
+  str.sprintf("%d",_obj->getSize().height());
+  list->appendItem(i18n("Height"));
+  list->changeItemPart(str,list->count() - 1,1);
+
+  str.sprintf("%g",_obj->getAngle);
+  list->appendItem(i18n("Angle"));
+  list->changeItemPart(str,list->count() - 1,1);
+
+  str.sprintf("%d",_obj->getShadowDistance());
+  list->appendItem(i18n("Shadow Distance"));
+  list->changeItemPart(str,list->count() - 1,1);
+
+  list->appendItem(i18n("Shadow Direction"));
+  list->changeItemPart(i18n(ShadowDirectionName[static_cast<int>(_obj->getShadowDirection())]),
+		       list->count() - 1,1);
+
+  list->appendItem(i18n("Effect"));
+  list->changeItemPart(i18n(EffectName[static_cast<int>(_obj->getEffect())]),
+		       list->count() - 1,1);
+
+  list->appendItem(i18n("Objectspecific Effect"));
+  list->changeItemPart(i18n(Effect2Name[static_cast<int>(_obj->getEffect2())]),
 		       list->count() - 1,1);
 }
