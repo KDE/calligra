@@ -156,18 +156,6 @@ void KWImportStyleDia::loadFile()
     delete store;
 }
 
-KWStyle *KWImportStyleDia::findStyle( const QString & _name)
-{
-    QPtrListIterator<KoStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->name() == _name ) {
-            return styleIt.current();
-        }
-    }
-    return 0L;
-}
-
 KWImportFrameTableStyleDia::KWImportFrameTableStyleDia( KWDocument *_doc, const QStringList &_list, StyleType _type, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
@@ -176,7 +164,7 @@ KWImportFrameTableStyleDia::KWImportFrameTableStyleDia( KWDocument *_doc, const 
     m_typeStyle = _type;
     m_list =_list;
     QVBox *page = makeVBoxMainWidget();
-    QLabel *lab = new QLabel(i18n("Select Style to import:"), page);
+    new QLabel(i18n("Select Style to import:"), page);
     m_listStyleName = new QListBox( page );
     m_listStyleName->setSelectionMode( QListBox::Multi );
     loadFile();

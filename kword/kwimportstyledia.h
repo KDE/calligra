@@ -39,7 +39,6 @@ public:
     ~KWImportStyleDia();
 
 protected:
-    KWStyle *findStyle( const QString & _name);
     virtual void loadFile();
 
 private:
