@@ -1,18 +1,16 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
-  <!ENTITY kappname "&killustrator;">
+  <!ENTITY kappname "&kontour;;">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
-  
-  
 ]>
 
 <book lang="&language;">
 <bookinfo>
-<title>The KIllustrator Handbook</title>
+<title>The &kontour; Handbook</title>
 <mediaobject>
 <imageobject><imagedata fileref="logo.png"/></imageobject>
-<textobject><phrase>KIllustrator logo</phrase></textobject>
+<textobject><phrase>&kontour; logo</phrase></textobject>
 </mediaobject>
 <author>
 <firstname>Hagen</firstname>
@@ -24,32 +22,32 @@
 <date>1999-11-08</date>
 <releaseinfo>0.07.01</releaseinfo>
 <abstract>
-<para>This Handbook describes KIllustrator Version 0.7.1 by Kai-Uwe Sattler.</para>
+<para>This Handbook describes &kontour; Version 0.7.1 by Kai-Uwe Sattler.</para>
 </abstract>
 <keywordset>
 <keyword>KDE</keyword>
-<keyword>KIllustrator</keyword>
+<keyword>Kontour</keyword>
 </keywordset>
 </bookinfo>
 
 <chapter id="introduction">
 <title>Introduction</title>
 
-<para>The goal of the KIllustrator project is to create a freely available vector-based drawing program with an interface comprable to that of Corel Draw&reg; or with Adobe Illustrator&reg;. </para>
+<para>The goal of the &kontour; project is to create a freely available vector-based drawing program with an interface comprable to that of Corel Draw&reg; or with Adobe Illustrator&reg;. </para>
 
 <sect1 id="about-the-author">
 <title>About the author</title>
 
-<para>The author of KIllustrator is Kai-Uwe Sattler. </para>
+<para>The author of &kontour; is Kai-Uwe Sattler. </para>
 </sect1>
 
-<sect1 id="history-of-killustrator">
-<title>History of KIllustrator</title>
+<sect1 id="history-of-kontour">
+<title>History of &kontour;</title>
 
-<para>From the official <ulink url="http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator.html">KIllustrator home page</ulink>:</para>
+<para>From the official &kontour; home page:</para>
 
-<para>" I have started this project because I am tired of switching to Windows in order to design illustrations for papers or slides with a modern drawing tool.
-Now, for the Linux operating system and of course for other Unixes the Qt toolkit and the KDE project provide a perfect foundation for this kind of application. " </para>
+<para>"I have started this project because I am tired of switching to Windows in order to design illustrations for papers or slides with a modern drawing tool.
+Now, for the Linux operating system and of course for other Unixes the Qt toolkit and the KDE project provide a perfect foundation for this kind of application." </para>
 
 <para>Revision history: </para>
 
@@ -106,7 +104,7 @@ Now, for the Linux operating system and of course for other Unixes the Qt toolki
 <sect1 id="about-the-handbook">
 <title>About the handbook</title>
 
-<para>This handbook refers mainly to the "stand-alone version" of KIllustrator. Special information regarding the KIllustrator component of the KOffice package is not considered. However, the information presented here applies in many respects to the KOffice component also. </para>
+<para>This handbook refers mainly to the "stand-alone version" of &kontour;. Special information regarding the &kontour; component of the KOffice package is not considered. However, the information presented here applies in many respects to the KOffice component also. </para>
 
 <para>This documentation is a translation of the original German text by Hagen Höpfner.</para>
 
@@ -121,18 +119,17 @@ Now, for the Linux operating system and of course for other Unixes the Qt toolki
 <chapter id="installation">
 <title>Installation</title>
 
-<sect1 id="how-to-obtain-killustrator">
-<title>How to obtain KIllustrator</title>
+<sect1 id="how-to-obtain-kontour">
+<title>How to obtain &kontour;</title>
 
-<para>The most current version of KIllustrator is in the CVS repository at the
-<ulink url="http://www.kde.org">KDE Internet site</ulink> .
-Official releases are recommended for non-developers which are available from the <ulink url="http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator">KIllustrator home page</ulink>; binary packages for the Linux distributions S.u.S.E., Red Hat, and Debian are also available. </para>
+<para>The most current version of &kontour; is in the CVS repository at the
+<ulink url="http://www.kde.org">KDE Internet site</ulink>.</para>
 </sect1>
 
 <sect1 id="system-requirements">
 <title>System Requirements</title>
 
-<para>KIllustrator is still strongly in the development phase, and often utilises the latest package versons. The required software packages themselves require some set of minimum hardware which is not repeated here.</para>
+<para>&kontour; is still strongly in the development phase, and often utilises the latest package versons. The required software packages themselves require some set of minimum hardware which is not repeated here.</para>
 
 <para>For installation the prerequisite packages are: </para>
 
@@ -153,13 +150,13 @@ Official releases are recommended for non-developers which are available from th
 <sect1 id="compilation-and-installation">
 <title>Compilation and Installation</title>
 
-<para>To compile the source code for KIllustrator, proceeds as follows: </para>
+<para>To compile the source code for &kontour;, proceeds as follows: </para>
 
 <para><orderedlist><listitem>
-<para>Unpack the tar archives <literal>tar xfvz killustrator.tar.gz</literal></para>
+<para>Unpack the tar archives <literal>tar xfvz &kontour;.tar.gz</literal></para>
 </listitem>
 <listitem>
-<para>Change to the source code directory <literal>cd killustrator</literal></para>
+<para>Change to the source code directory <literal>cd &kontour;</literal></para>
 </listitem>
 <listitem>
 <para>Check for required packages and create the Makefiles <literal>./configure</literal></para>
@@ -170,7 +167,7 @@ Official releases are recommended for non-developers which are available from th
 </orderedlist>
 </para>
 
-<para>If the installing user has ROOT privileges, installing KIllustrator into the KDE directory tree is done by <literal>make install</literal>.</para>
+<para>If the installing user has ROOT privileges, installing &kontour; into the KDE directory tree is done by <literal>make install</literal>.</para>
 
 <para>The following platforms were successfully tested:</para>
 
@@ -202,14 +199,14 @@ Official releases are recommended for non-developers which are available from th
 <sect1 id="installation-of-binary-packages">
 <title>Installation of binary packages</title>
 
-<para>The installation of precompiled packages under Linux depends on the package format used. KIllustrator is available in rpm and deb package formats. For a successful installation be sure to select the package for your system. First, some definitions: </para>
+<para>The installation of precompiled packages under Linux depends on the package format used. &kontour; is available in rpm and deb package formats. For a successful installation be sure to select the package for your system. First, some definitions: </para>
 
 <para><itemizedlist>
 <listitem>
-<para><literal>FILENAME</literal> = name of the package file (e.g.: <literal>killustrator&lowbar;0.6.5-1&lowbar;i386.deb</literal>)</para>
+<para><literal>FILENAME</literal> = name of the package file (e.g.: <literal>&kontour;&lowbar;0.6.5-1&lowbar;i386.deb</literal>)</para>
 </listitem>
 <listitem>
-<para><literal>PACKAGENAME</literal> = the created package name (usually  <literal>killustrator</literal>)</para>
+<para><literal>PACKAGENAME</literal> = the created package name (usually  <literal>&kontour;</literal>)</para>
 </listitem>
 </itemizedlist>
 </para>
@@ -237,7 +234,7 @@ FILENAME</literal>.The package may be deleted later using the command <literal>r
 <sect1 id="some-general-remarks-">
 <title>Some general remarks </title>
 
-<para>The operation of KIllustrator is intuitive and easy to learn. It is very similar to other graphical programs. KIllustrator uses <link linkend="shortcut">key bindings</link> which are <ulink url="http://www.kde.org/standards.html">KDE standards</ulink>.</para>
+<para>The operation of &kontour; is intuitive and easy to learn. It is very similar to other graphical programs. &kontour; uses <link linkend="shortcut">key bindings</link> which are <ulink url="http://www.kde.org/standards.html">KDE standards</ulink>.</para>
 
 <para>Additionally pressing the CTRL key while moving the mouse constrains the movement to one in one direction or in equal amounts in both directions. For example, pressing the CTRL key while drawing a rectangle, draws a square.</para>
 
@@ -335,7 +332,7 @@ In order to draw a freehand line, one proceeds as follows:</para>
 <sect2 id="be">
 <title>Bezier curve tool</title>
 
-<para><mediaobject><imageobject><imagedata fileref="bezier.png" format="PNG"/></imageobject></mediaobject> Drawing Bezier curves is often a problem, however KIllustrator makes it easy. Proceed as follows: 
+<para><mediaobject><imageobject><imagedata fileref="bezier.png" format="PNG"/></imageobject></mediaobject> Drawing Bezier curves is often a problem, however &kontour; makes it easy. Proceed as follows: 
 <orderedlist><listitem>
 <para>left-click on the canvas at the point of origin of the Bezier curve  </para>
 </listitem>
@@ -426,7 +423,7 @@ If a circle is to be drawn instead of an ellipse, hold the CTRL key down while d
 <sect2 id="text-tool">
 <title>Text tool</title>
 
-<para><mediaobject><imageobject><imagedata fileref="text.png" format="PNG"/></imageobject></mediaobject> This tool adds text to your KIllustrator drawing. The steps are are follows: 
+<para><mediaobject><imageobject><imagedata fileref="text.png" format="PNG"/></imageobject></mediaobject> This tool adds text to your &kontour; drawing. The steps are are follows: 
 <orderedlist><listitem>
 <para> left-click on the canvas where the text is to begin </para>
 </listitem>
@@ -442,7 +439,7 @@ The input is continued until a new tool is selected, or a new point on the canva
 <sect1 id="transformation-of-2d-primitives">
 <title>Transformation of 2D-Primitives</title>
 
-<para>KIllustrator offers tools that allow the easy modification of drawn primitives, such as scaling, rotating, and shifting tools. This section describes how to perform these transformations. </para>
+<para>&kontour; offers tools that allow the easy modification of drawn primitives, such as scaling, rotating, and shifting tools. This section describes how to perform these transformations. </para>
 
 <sect2 id="rotation">
 <title>Rotation</title>
@@ -563,7 +560,7 @@ NOTE: Remember to choose a color by clicking the colored buttons in the dialog e
 <sect1 id="positioning-objects">
 <title>Positioning objects</title>
 
-<para>KIllustrator offers many ways to assist in the positioning of objects.  </para>
+<para>&kontour; offers many ways to assist in the positioning of objects.  </para>
 
 <sect2 id="grid">
 <title>Grid</title>
@@ -690,7 +687,7 @@ A grouped object can be separated into it's constituent objects by selecting the
 <mediaobject><imageobject><imagedata fileref="save_dialog.png" format="PNG"/></imageobject></mediaobject>
 
 <para>If the file already has a name, it will be used unless you select the menu item "Save As".
-You should ALWAYS use the file extension <literal>.kil</literal>. This is the only way to ensure that KIllustrator doesn't run into problems when it tries to find the file again.</para>
+You should ALWAYS use the file extension <literal>.kil</literal>. This is the only way to ensure that &kontour; doesn't run into problems when it tries to find the file again.</para>
 </sect2>
 
 <sect2 id="loading-files">
@@ -706,10 +703,10 @@ You should ALWAYS use the file extension <literal>.kil</literal>. This is the on
 <sect2 id="importing-and-exporting-files">
 <title>Importing and Exporting Files</title>
 
-<para>Regrettably, perhaps, one measure of a program's worth seems to be how many other programs' formats it supports. This does, however, afford a degree of flexibility to a piece of software; such import and export filters are necessary. KIllustrator can import a number of file formats:
+<para>Regrettably, perhaps, one measure of a program's worth seems to be how many other programs' formats it supports. This does, however, afford a degree of flexibility to a piece of software; such import and export filters are necessary. &kontour; can import a number of file formats:
 <itemizedlist>
 <listitem>
-<para>KIllustrator Drawings (.kil)</para>
+<para>&kontour; Drawings (.kil)</para>
 </listitem>
 <listitem>
 <para>XFig Drawings (.fig)</para>
@@ -734,7 +731,7 @@ You should ALWAYS use the file extension <literal>.kil</literal>. This is the on
 </listitem>
 </itemizedlist>
 
-KIllustrator can export files in the following formats:
+&kontour; can export files in the following formats:
 <itemizedlist>
 <listitem>
 <para>GIF Images (.gif)</para>
@@ -754,11 +751,11 @@ KIllustrator can export files in the following formats:
 <sect3 id="importing">
 <title>Importing</title>
 
-<para>Importing objects into a KIllustrator drawing doesn't work quite the same for all formats,
+<para>Importing objects into a &kontour; drawing doesn't work quite the same for all formats,
 unfortunately. You will find most of the import filters in the "Edit" menu under "Insert".
 The submenu item "Clipart" lets you insert <literal>.wmf</literal> files.The filters for
 pixel-oriented images are under the submenu item "Bitmap". To import XFig drawings
-or another KIllustrator drawing, you have to use the "Import" item from the "File" menu.
+or another &kontour; drawing, you have to use the "Import" item from the "File" menu.
 Dialogs are similar to those for opening files.</para>
 </sect3>
 
@@ -782,7 +779,7 @@ Dialogs are similar to those for opening files.</para>
 <sect1 id="undo--redo">
 <title>Undo / Redo</title>
 
-<para>Previous operations in the drawing can be undone easily by using "Undo" from the "Edit" menu. If the undone step is then wanted again in the drawing this can be achieved by using "Redo". KIllustrator remembers all steps made to a drawing from when it was started. One should consider, however, that Undo and Redo steps work on operations in the order in which they were performed on the drawing.</para>
+<para>Previous operations in the drawing can be undone easily by using "Undo" from the "Edit" menu. If the undone step is then wanted again in the drawing this can be achieved by using "Redo". &kontour; remembers all steps made to a drawing from when it was started. One should consider, however, that Undo and Redo steps work on operations in the order in which they were performed on the drawing.</para>
 </sect1>
 
 <sect1 id="zoom-tool">
@@ -822,7 +819,7 @@ Dialogs are similar to those for opening files.</para>
 <sect1 id="handling-colours">
 <title>Handling colors</title>
 
-<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="PNG"/></imageobject></mediaobject> The colour handling process in KIllustrator is very simple. Generally, a left-click on a colour in the colour palette changes the fill colour of the selected object(s); a right-click changes the outline colour (or the text colour) of the selected object(s). If the desired colour is not in the colour palette, then proceed as follows: </para>
+<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="PNG"/></imageobject></mediaobject> The colour handling process in &kontour; is very simple. Generally, a left-click on a colour in the colour palette changes the fill colour of the selected object(s); a right-click changes the outline colour (or the text colour) of the selected object(s). If the desired colour is not in the colour palette, then proceed as follows: </para>
 
 <para><orderedlist><listitem>
 <para>select the object whose colour is to be changed.</para>
@@ -884,7 +881,7 @@ Alternatively HSV and RGB values can be entered directly into the dialog by clic
 <sect2 id="default-drawing-parameters">
 <title>Default drawing parameters</title>
 
-<para>Default drawing parameters such as fill colour, line thickness and style can be set by changing parameters with no object selected. These parameters will be saved and used next time KIllustrator is started. </para>
+<para>Default drawing parameters such as fill colour, line thickness and style can be set by changing parameters with no object selected. These parameters will be saved and used next time &kontour; is started. </para>
 </sect2>
 </sect1>
 </chapter>
@@ -896,7 +893,7 @@ Alternatively HSV and RGB values can be entered directly into the dialog by clic
 <varlistentry>
 <term>Question:</term>
 <listitem>
-<para>How can I use EPS files, which were exported from KIllustrator, in LATEX?</para>
+<para>How can I use EPS files, which were exported from &kontour;, in LATEX?</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -909,20 +906,20 @@ Alternatively HSV and RGB values can be entered directly into the dialog by clic
 <varlistentry>
 <term>Question:</term>
 <listitem>
-<para>How can I import ASCII text into a KIllustrator document?</para>
+<para>How can I import ASCII text into a &kontour; document?</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term>Answer:</term>
 <listitem>
-<para>The importing of text is performed by copying/pasting. Copy the text from (as an example) a text editor. In KIllustrator select Paste from the File menu, and position the text as desired.</para>
+<para>The importing of text is performed by copying/pasting. Copy the text from (as an example) a text editor. In &kontour; select Paste from the File menu, and position the text as desired.</para>
 <para></para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term>Question:</term>
 <listitem>
-<para>I can't find the KIllustrator package in my SuSE distro!</para>
+<para>I can't find the &kontour; package in my SuSE distro!</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -954,7 +951,7 @@ CTRL-G 		Group selected objects
 CTRL-N 		Create a new drawing 
 CTRL-O 		Open a new drawing 
 CTRL-P 		Print 
-CTRL-Q 		Quit KIllustrator
+CTRL-Q 		Quit &kontour;
 CTRL-S 		Save current drawing
 CTRL-U 		Ungroup selected objects 
 CTRL-V 		Paste copied object from clipboard 
@@ -972,12 +969,6 @@ SHIFT-PageUp	Move selected object(s) to the front
 
 <sect1 id="to-do">
 <title>TO DO</title>
-
-<sect2 id="killustrator">
-<title>KIllustrator</title>
-
-<para>A current bug-list of the current version and a list of wishes for future KIllustrator versions can be found at <ulink url="http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator-bw.html">this page</ulink>. </para>
-</sect2>
 
 <sect2 id="handbook">
 <title>Handbook</title>
@@ -1006,7 +997,7 @@ Suggestions and errors concerning this handbook in general should be directed to
 <chapter id="copyright">
 <title>Copyright</title>
 
-<para><screen>KIllustrator is Copyright 1998-99 Kai-Uwe Sattler, kus@iti.cs.uni-magdeburg.de
+<para><screen>&kontour; is Copyright 1998-99 Kai-Uwe Sattler, kus@iti.cs.uni-magdeburg.de
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
