@@ -1078,7 +1078,7 @@ void KWFrameSet::updateFrames()
     }
 
 
-    
+
     if ( isFloating() )
     {
         //kdDebug() << "KWFrameSet::updateFrames " << getName() << " is floating" << endl;
@@ -1259,7 +1259,9 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
             //// TODO KWFrame * settingsFrame = ( f->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
             KWFrame * settingsFrame = f;
             doubleBufPainter->translate( -myFrameRect.x(), -myFrameRect.y() );
-            f->frameSet()->drawFrameBorder( painter, f, settingsFrame, theCRect, m_currentDrawnCanvas->viewMode(), m_currentDrawnCanvas );
+            /// m_currentDrawnCanvas can be 0L when saving!
+            /// TODO: pass viewmode as param if we really need it. Or better, use translated painter in drawFrameBorder
+            //f->frameSet()->drawFrameBorder( painter, f, settingsFrame, theCRect, m_currentDrawnCanvas->viewMode(), m_currentDrawnCanvas );
             f->frameSet()->drawMargins( f, painter, theCRect, cg, m_currentDrawnCanvas->viewMode() );
             doubleBufPainter->translate( frameRect.x(), frameRect.y() );
             f->frameSet()->drawFrameContents( f, doubleBufPainter, theCRect, cg, 0 );
