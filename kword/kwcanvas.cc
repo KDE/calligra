@@ -2165,7 +2165,16 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 else // normal key processing
                     if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )
                 {
-                    m_currentFrameSetEdit->keyPressEvent( keyev );
+                    KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit );
+                    if ( edit )
+                    {
+                        if ( !edit->textFrameSet()->textObject()->protectContent() )
+                            m_currentFrameSetEdit->keyPressEvent( keyev );
+                        else
+                            KMessageBox::information(this, i18n("Read-only content cannot be changed. No modifications will be accepted"));
+                    }
+                    else
+                            m_currentFrameSetEdit->keyPressEvent( keyev );
                     return TRUE;
                 }
 

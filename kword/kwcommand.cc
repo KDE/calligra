@@ -18,6 +18,7 @@
 */
 
 #include "kwdoc.h"
+#include "kwtextframeset.h"
 #include "kwview.h"
 #include "kwcommand.h"
 #include "kwtableframeset.h"
@@ -706,6 +707,7 @@ void KWFrameSetPropertyCommand::setValue( const QString &value )
             if(frameSet)
                 frameSet->setKeepAspectRatio( false );
         }
+        break;
     }
     m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
@@ -1302,3 +1304,23 @@ void KWHideShowFooter::unexecute()
     m_doc->setFooterVisible( !newValue );
     m_doc->updateFooterButton();
 }
+
+
+KWProtectContentCommand::KWProtectContentCommand( const QString &name, KWTextFrameSet*frameset, bool _protect):
+    KNamedCommand(name),
+    m_pFrameSet(frameset),
+    m_bProtect(_protect)
+{
+}
+
+
+void KWProtectContentCommand::execute()
+{
+    m_pFrameSet->textObject()->setProtectContent(m_bProtect);
+}
+
+void KWProtectContentCommand::unexecute()
+{
+    m_pFrameSet->textObject()->setProtectContent(!m_bProtect);
+}
+

@@ -532,4 +532,19 @@ class KWHideShowFooter : public KNamedCommand
 };
 
 
+class KWProtectContentCommand : public KNamedCommand
+{
+public:
+    KWProtectContentCommand( const QString &name, KWTextFrameSet*frameset,bool protect );
+    ~KWProtectContentCommand() {}
+
+    void execute();
+    void unexecute();
+
+protected:
+    KWTextFrameSet* m_pFrameSet;
+    bool m_bProtect;
+};
+
+
 #endif

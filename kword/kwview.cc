@@ -3435,8 +3435,13 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
 {
     QPtrList<KoTextFormatInterface> lst;
     if (currentTextEdit())
-        // simply return the current textEdit :
-        lst.append( currentTextEdit() );
+    {
+        if ( !currentTextEdit()->textObject()->protectContent())
+        {
+            // simply return the current textEdit :
+            lst.append( currentTextEdit() );
+        }
+    }
     else
     {   // it might be that a frame (or several frames) are selected
         // in that case, list the text framesets behind them
@@ -3446,7 +3451,7 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
         {
             if ( it.current()->frameSet()->type() == FT_TEXT ) {
                 KWTextFrameSet* fs = static_cast<KWTextFrameSet *>( it.current()->frameSet() );
-                if ( !lst.contains( fs ) )
+                if ( !lst.contains( fs )&& !fs->protectContent() )
                     lst.append( fs );
             }
         }

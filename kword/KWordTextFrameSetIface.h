@@ -73,7 +73,8 @@ k_dcop:
     bool textStrikeOut()const;
     bool textSubScript() const;
     bool textSuperScript() const;
-
+    void setProtectContent ( bool _protect );
+    bool isProtectContent() const;
 
 private:
     KWTextFrameSet *m_frametext;

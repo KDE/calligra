@@ -226,3 +226,14 @@ void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType)
         kdDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
     delete cmd;
 }
+
+void KWordTextFrameSetIface::setProtectContent ( bool _protect )
+{
+    m_frametext->textObject()->setProtectContent( _protect );
+}
+
+bool KWordTextFrameSetIface::isProtectContent() const
+{
+    return m_frametext->textObject()->protectContent();
+}
+

@@ -74,6 +74,9 @@ public:
     KoTextDocument *textDocument() const;
     KWTextDocument *kwTextDocument() const;
 
+    void setProtectContent ( bool _protect ) { textObject()->setProtectContent(_protect);}
+    bool protectContent() const { return textObject()->protectContent();}
+
     void clearUndoRedoInfo();
 
     /** Convert the @p dPoint in the normal coordinate system (and in pt)

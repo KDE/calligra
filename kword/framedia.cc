@@ -463,9 +463,19 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     cbAllFrames = new QCheckBox (i18n("Changes will be applied to all frames in frameset"),tab1);
     cbAllFrames->setChecked(frame!=0L);
     grid1->addMultiCellWidget(cbAllFrames,++row,row+1, 0, 1);
+    cbProtectContent = new QCheckBox( i18n("Protect Content"), tab1);
+
+    grid1->addMultiCellWidget(cbProtectContent,++row,row+1, 0, 1);
     if( frameType != FT_TEXT || frame!=0 && frame->frameSet()==0) {
         cbAllFrames->setChecked(false);
         cbAllFrames->hide();
+        cbProtectContent->setChecked( false );
+        cbProtectContent->hide();
+    }
+    else if ( frameType == FT_TEXT && frame!=0 && frame->frameSet() )
+    {
+        KWTextFrameSet *tmp = static_cast<KWTextFrameSet *>(frame->frameSet() );
+        cbProtectContent->setChecked( tmp->textObject()->protectContent());
     }
 
     for(int i=0;i < row;i++)
@@ -1362,6 +1372,19 @@ bool KWFrameDia::applyChanges()
                         f->frameSet()->setFrameBehavior(fb);
                     else
                         f->setFrameBehavior(fb);
+            }
+            if ( frame && frame->frameSet())
+            {
+                KWTextFrameSet * frm=static_cast<KWTextFrameSet *>( frame->frameSet() );
+                if(frm->textObject()->protectContent()!=cbProtectContent->isChecked())
+                {
+                    if(!macroCmd)
+                        macroCmd = new KMacroCommand( i18n("Protect Content") );
+                    KWProtectContentCommand * cmd = new KWProtectContentCommand( i18n("Protect Content"), frm,cbProtectContent->isChecked() );
+                    cmd->execute();
+                    macroCmd->addCommand(cmd);
+                }
+
             }
         }
 
