@@ -1020,9 +1020,13 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
             m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj , manifestWriter);
         }
     }
+    QString styleMasterNamePage;
     if ( !_duplicatePage )
+    {
         m_masterPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj,partIndexObj, manifestWriter );
+        styleMasterNamePage = m_masterPage->saveOasisPageStyle( store, savingContext.mainStyles() );
 
+    }
     if ( saveOnlyPage == -1 ) //don't save setting when we save on page
     {
         saveOasisHeaderFooter( stickyTmpWriter , savingContext );
@@ -1062,7 +1066,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     //todo fixme????
     tmpStickyFile->close();
-    saveOasisDocumentStyles( store, mainStyles, tmpStickyFile );
+    saveOasisDocumentStyles( store, mainStyles, tmpStickyFile, styleMasterNamePage);
     stickyTmpFile.close();
 
     if ( !store->close() ) // done with styles.xml
@@ -1400,7 +1404,7 @@ void KPresenterDoc::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTm
     //<presentation:show presentation:name="New Custom Slide Show" presentation:pages="page1,page1,page1,page1,page1"/>
 }
 
-void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* tmpStyckyFile ) const
+void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* tmpStyckyFile, const QString &_styleMasterPageName ) const
 {
     QString pageLayoutName;
     KoStoreDevice stylesDev( store );
@@ -1478,6 +1482,11 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     stylesWriter->startElement( "style:master-page" );
     stylesWriter->addAttribute( "style:name", "Standard" );
     stylesWriter->addAttribute( "style:page-layout-name", pageLayoutName );
+    kdDebug()<<" styleMasterNamePage :"<<_styleMasterPageName<<endl;
+    if ( !_styleMasterPageName.isEmpty() )
+        stylesWriter->addAttribute( "draw:style-name", _styleMasterPageName );
+
+
     //save sticky object
     stylesWriter->addCompleteElement( tmpStyckyFile );
     stylesWriter->endElement();

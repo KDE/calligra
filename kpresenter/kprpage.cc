@@ -495,7 +495,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     xmlWriter.addAttribute( "draw:name", namePage ); //we must store a name
     xmlWriter.addAttribute( "draw:id", posPage );
     xmlWriter.addAttribute( "draw:master-page-name", "Standard"); //by default name of page is Standard
-    QString styleName = saveOasisPageStyle( store, context.mainStyles() );
+    QString styleName = useMasterBackground() ? m_masterPage->saveOasisPageStyle( store, context.mainStyles() ): saveOasisPageStyle( store, context.mainStyles() );
     kdDebug()<<" styleName :"<<styleName<<endl;
     if ( !styleName.isEmpty() )
         xmlWriter.addAttribute( "draw:style-name", styleName );
