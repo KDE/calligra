@@ -30,19 +30,18 @@
 
 namespace KexiDB {
 
-/*! KexiDB::Field provides information about single database field.
-*/
-
 class TableSchema;
 class FieldList;
 class Expression;
 
-class FieldTypeNames : public QValueVector<QString>
+class KEXI_DB_EXPORT FieldTypeNames : public QValueVector<QString>
 {
 	public:
 		FieldTypeNames();
 };
 
+/*! KexiDB::Field provides information about single database field.
+*/
 class KEXI_DB_EXPORT Field
 {
 	public:
