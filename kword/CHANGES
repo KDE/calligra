@@ -268,6 +268,9 @@ Crashes:
 Changes after KWord-1.2
 =======================
 - Spellchecker can spell check only a selection
-- Shadow is a character properties.
+- Shadow is a character property
+- Paragraph numbering: simple lists are not restarted by simple text in between
+- Paragraph numbering: new option "restart numbering at this paragraph"
+- Paragraph numbering: setting a depth doesn't imply "chapter numbering" anymore
 - Add "copy link"
 - Add "Add to bookmark"
