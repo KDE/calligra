@@ -1,6 +1,6 @@
 ?package(kspread):\
 	needs=x11\
-	section=Apps/Editors\
+	section=Apps/Math\
 	hints="KDE,Spreadsheets"\
 	title="KSpread"\
 	command=kspread

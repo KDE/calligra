@@ -3,6 +3,7 @@ koffice (2.1-cvs20010211-1) unstable; urgency=low
   * New upstream version
   * Upping standards version
   * Applying debconf i18n patch (Closes: #84263)
+  * Changing section for kspread (Closes: #85892)
  
  -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 11 Feb 2001 06:00:00 -0700
 
