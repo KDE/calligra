@@ -377,6 +377,7 @@ public:
     void setFootNoteVariable( KWFootNoteVariable* var ) { m_footNoteVar = var; }
     KWFootNoteVariable* footNoteVariable() const { return m_footNoteVar; }
 
+    void createInitialFrame( int pageNum );
 private:
     KWFootNoteVariable* m_footNoteVar;
 };

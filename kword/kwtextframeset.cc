@@ -2871,12 +2871,10 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType,KWFootNoteVariable::N
      KWFootNoteFrameSet *fs = new KWFootNoteFrameSet( doc, i18n( "Footnotes" ) );
      fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
 
-     int pageNum = m_currentFrame->pageNum();
      // Place the frame on the correct page, but the exact coordinates
      // will be determined by recalcFrames (KWFrameLayout)
-     KWFrame *frame = new KWFrame(fs, 0, pageNum * doc->ptPaperHeight() + 1, 20, 20 );
-     frame->setFrameBehavior(KWFrame::AutoExtendFrame);
-     fs->addFrame( frame );
+     int pageNum = m_currentFrame->pageNum();
+     fs->createInitialFrame( pageNum );
 
      doc->addFrameSet( fs );
 
@@ -3095,5 +3093,11 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     }
 }
 
+void KWFootNoteFrameSet::createInitialFrame( int pageNum )
+{
+     KWFrame *frame = new KWFrame(this, 0, pageNum * m_doc->ptPaperHeight() + 1, 20, 20 );
+     frame->setFrameBehavior(KWFrame::AutoExtendFrame);
+     addFrame( frame );
+}
 
 #include "kwtextframeset.moc"

@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <qdom.h>
+#include <qtimer.h>
 
 KWVariableSettings::KWVariableSettings() : KoVariableSettings()
 {
@@ -223,6 +224,9 @@ void KWFootNoteVariable::move( int x, int y )
     Q_ASSERT( m_frameset );
     if (!m_frameset )
         return;
+    Q_ASSERT( !m_frameset->isDeleted() );
+    if ( m_frameset->isDeleted() )
+        return;
 
     // Find out the position of the footnote variable in document coordinates.
     int paragy = paragraph()->rect().y();
@@ -251,19 +255,35 @@ void KWFootNoteVariable::move( int x, int y )
 
 void KWFootNoteVariable::setDeleted( bool del )
 {
+    kdDebug() << "KWFootNoteVariable::setDeleted " << del << endl;
     if ( del )
     {
         Q_ASSERT( m_frameset );
         if ( m_frameset ) {
-            m_frameset->deleteAllFrames();
             m_frameset->setVisible( false );
         }
     }
     else
     {
         Q_ASSERT( m_frameset );
-        if ( m_frameset )
+        if ( m_frameset ) {
+            kdDebug() << "Making frameset " << m_frameset << " visible" << endl;
             m_frameset->setVisible( true );
+            Q_ASSERT( m_frameset->isVisible() );
+        }
     }
-    m_doc->recalcFrames(); // hmm, maybe compress such requests and do only once?
+
+    // hmm, maybe compress all the stuff below and do only once
+    // (e.g. when deleting multiple footnotes)?
+    // (but we can't really delay it with a sst, the formatMore after undo/redo
+    // needs this to be done already, I think). Bah.
+
+    // Re-number footnote variables
+    KWTextFrameSet * textfs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
+    textfs->renumberFootNotes();
+
+    m_doc->recalcFrames();
+
+    // Does this compress? Probably not.
+    QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
 }
