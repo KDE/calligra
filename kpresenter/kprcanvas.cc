@@ -2393,7 +2393,7 @@ bool KPrCanvas::isOneObjectSelected()
 }
 
 /*================================================================*/
-void KPrCanvas::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*/ )
+void KPrCanvas::drawPageInPix2( QPixmap &_pix, int pgnum, float /*_zoom*/ )
 {
     //kdDebug(33001) << "Page::drawPageInPix2" << endl;
     currPresPage = pgnum + 1;
@@ -2403,7 +2403,7 @@ void KPrCanvas::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_
     QPainter p;
     p.begin( &_pix );
 
-    QPtrListIterator<KPObject> oIt( getObjectList() );
+    QPtrListIterator<KPObject> oIt( m_view->kPresenterDoc()->pageList().at(pgnum)->objectList() );
     for (; oIt.current(); ++oIt )
         oIt.current()->drawSelection( false );
 
