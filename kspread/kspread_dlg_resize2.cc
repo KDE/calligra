@@ -18,11 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qcheckbox.h>
 #include <qlayout.h>
 
-#include <kbuttonbox.h>
-#include <kdebug.h>
 #include <knuminput.h>
 
 #include <koUnit.h>
