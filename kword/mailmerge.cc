@@ -368,6 +368,8 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
     row2->setSpacing( KDialog::spacingHint() );
     preview=new QPushButton(i18n("Print Preview..."),row2);
     document=new QPushButton(i18n("Create New Document"),row2);
+    document->hide();
+    (void) new QWidget(row2);
     layout->addStretch();
 
     enableDisableEdit();

@@ -317,12 +317,13 @@ void KWClassicMailMergeEditorList::displayRecord( int i )
 KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSerialDataSource *db_ )
     : KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
 {
-    QWidget *page = plainPage();
+    back = plainPage();
 
-    back = new QVBox( page );
-    back->setSpacing( 5 );
-    back->setMargin( 5 );
-
+    QVBoxLayout *l = new QVBoxLayout( back );
+    l->setAutoAdd(true);
+    l->setSpacing( 5 );
+    l->setMargin( 5 );
+    
     QHBox *toolbar = new QHBox( back );
 
     first = new QToolButton( toolbar );
@@ -402,8 +403,8 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
 
 void KWClassicMailMergeEditor::resizeEvent( QResizeEvent *e )
 {
-    QDialog::resizeEvent( e );
-    back->resize( size() );
+    KDialogBase::resizeEvent( e );
+//    back->resize( size() );
 }
 
 void KWClassicMailMergeEditor::changeRecord( int i )

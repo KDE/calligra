@@ -153,7 +153,7 @@ protected:
 
     QSpinBox *records;
     KWClassicMailMergeEditorList *dbList;
-    QVBox *back;
+    QWidget *back;
     KWClassicSerialDataSource *db;
 
     QToolButton *first;
