@@ -168,7 +168,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
   int value;
   KoPageLayout layout;
 
-  ifstream fin( file.latin1() );
+  ifstream fin( file.local8Bit() );
   if (! fin)
     return false;
 
@@ -180,7 +180,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
 
   fin.getline (buf, 255);
   if (::strncmp (buf, "#FIG 3", 6)) {
-    cerr << "ERROR: no xfig file or wrong header" << endl;
+    kdDebug() << "ERROR: no xfig file or wrong header" << endl;
     return false;
   }
 
@@ -191,7 +191,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
       version = 310;
   }
   else {
-    cerr << "ERROR: unsupported xfig version" << endl;
+    kdDebug() << "ERROR: unsupported xfig version" << endl;
     return false;
   }
 
@@ -206,7 +206,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
   else if (::strcmp (buf, "Portrait") == 0)
       layout.orientation = PG_PORTRAIT;
   else
-      cerr << "ERROR: invalid orientation" << endl;
+      kdDebug() << "ERROR: invalid orientation" << endl;
 
   // justification (don't know how to handle this)
   fin.getline (buf, 255);
@@ -218,7 +218,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
   else if (::strcmp (buf, "Inches") == 0)
       layout.unit = PG_INCH;
   else
-      cerr << "ERROR: invalid units" << endl;
+      kdDebug() << "ERROR: invalid units" << endl;
 
   if (version >= 320) {
       // paper size (don't know how to handle this)
@@ -287,7 +287,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
       break;
     default:
       // should not occur
-      cerr << "unknown object type: " << tag << endl;
+      kdDebug() << "unknown object type: " << tag << endl;
       break;
     }
   }
