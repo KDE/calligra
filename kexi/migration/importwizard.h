@@ -15,6 +15,7 @@
 #include <kwizard.h>
 
 class KexiConnSelectorWidget;
+class KexiProjectSelectorWidget;
 class QHBox;
 class KComboBox;
 class KListView;
@@ -29,23 +30,24 @@ class importWizard : public KWizard
 {
 Q_OBJECT
 private:
-    QHBox *intro, *srcType, *src, *dstType, *dst, *finish;
+    QHBox *intro, *srcType, *srcconn, *srcdb, *dstType, *dst, *finish;
     KComboBox *srcTypeCombo, *dstTypeCombo;
-    KListView* srcList;
-    KexiConnSelectorWidget *dstList;
+    KexiConnSelectorWidget *srcConn, *dstConn;
     KLineEdit *dstNewDBName;
+    KexiProjectSelectorWidget *srcdbname;
     
     void setupintro();
     void setupsrcType();
-    void setupsrc();
+    void setupsrcconn();
+    void setupsrcdb();
     void setupdstType();
     void setupdst();
     void setupfinish();
-    void doImport();
     void createBlankPages();
 private slots:
     void populateSrcDBList(const QString& driverName);
     void nextClicked(const QString &);
+    void doImport();
 public:
     importWizard(QWidget *parent = 0, const char *name = 0);
 

@@ -5,7 +5,7 @@ bin_PROGRAMS = keximigratetest
 noinst_PROGRAMS = keximigratetest 
 
 noinst_HEADERS = keximigrate.h pqxxmigrate.h pg_type.h txtmigrate.h \
-		importwizard.h keximiniconnlist.h
+	importwizard.h
 
 INCLUDES = -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi $(all_includes) \
 	-I$(PG_INCDIR) -I$(PQXX_INCDIR)
@@ -15,7 +15,7 @@ SUBDIRS = .
 METASOURCES = AUTO
 
 keximigratetest_SOURCES = keximigratetest.cpp keximigrate.cpp pqxxmigrate.cpp \
-		importwizard.cpp keximiniconnlist.cpp
+	importwizard.cpp
 keximigratetest_LDADD = $(top_builddir)/kexi/main/libkeximain.la \
 	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/libkexidb.la \
 	-lpqxx

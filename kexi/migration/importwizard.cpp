@@ -23,6 +23,7 @@
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
 #include <main/startup/KexiConnSelector.h>
+#include <main/startup/KexiProjectSelector.h>
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -39,11 +40,13 @@ importWizard::importWizard(QWidget *parent, const char *name)
     createBlankPages();
     setupintro();
     setupsrcType();
-    setupsrc();
+    setupsrcconn();
+    setupsrcdb();
     setupdstType();
     setupdst();
     setupfinish();
     connect(this, SIGNAL(selected(const QString &)), this, SLOT(nextClicked(const QString &)));
+    connect(this, SIGNAL(accept()), this, SLOT(doImport()));
 }
 
 //===========================================================
@@ -77,16 +80,31 @@ void importWizard::setupsrcType()
 
 //===========================================================
 //
-void importWizard::setupsrc()
+void importWizard::setupsrcconn()
 {
     
-    QLabel *lblSource = new QLabel(src);
+    QLabel *lblSource = new QLabel(srcconn);
     lblSource->setText("Here you can choose the location\n"
                        "to import data from");
 
-    QVBox *srcControls = new QVBox(src);
+    QVBox *srcconnControls = new QVBox(srcconn);
 
-    srcList = new KListView(srcControls);
+    srcConn = new KexiConnSelectorWidget(Kexi::connset(), srcconnControls, "ConnSelector");
+    
+    srcConn->hideHelpers();
+    
+}
+
+//===========================================================
+//
+void importWizard::setupsrcdb()
+{
+    
+    QLabel *lblSourceDb = new QLabel(srcdb);
+    lblSourceDb->setText("Here you can choose the actual\n"
+                       "database to import data from");
+
+    QVBox *srcdbControls = new QVBox(srcdb);
     
 }
 
@@ -118,9 +136,9 @@ void importWizard::setupdst()
 
     QVBox *dstControls = new QVBox(dst);
 
-    dstList = new KexiConnSelectorWidget(Kexi::connset(), dstControls, "ConnSelector");
+    dstConn = new KexiConnSelectorWidget(Kexi::connset(), dstControls, "ConnSelector");
     
-    dstList->hideHelpers();
+    dstConn->hideHelpers();
     
     dstNewDBName = new KLineEdit(dstControls);
     dstNewDBName->setText("Enter new database name here");
@@ -165,7 +183,7 @@ void importWizard::doImport()
     }
 
     //Create connections to the kexi database
-    /*kexi_conn = driver->createConnection(*(dstList->selectedConnection()));*/
+    kexi_conn = driver->createConnection(*(dstConn->selectedConnectionData()));
 
     import = new pqxxMigrate(&conn_data_from, "from_db", kexi_conn, false);
     if (import->performImport())
@@ -194,10 +212,13 @@ void importWizard::nextClicked(const QString & p)
     {    
         kdDebug() << "Current page is source type" << endl;
     }
-    else if (currentPage() == src)
+    else if (currentPage() == srcconn)
     {    
-        kdDebug() << "Current page is source" << endl;
-     
+        kdDebug() << "Current page is source connection" << endl;
+    }
+    else if (currentPage() == srcdb)
+    {    
+        kdDebug() << "Current page is source database" << endl;
     }
     else if (currentPage() == dstType)
     {    
@@ -209,14 +230,15 @@ void importWizard::nextClicked(const QString & p)
         dst->hide();
         if (dstTypeCombo->currentText() == "PostgreSQL")
         {
-            dstList->showAdvancedConn();
+            dstConn->showAdvancedConn();
         }
         dst->show();
     }
     else if (currentPage() == finish)
     {    
         kdDebug() << "Current page is finished" << endl;
-        
+        //TODO Add checks that all data is entered
+        setFinishEnabled(finish, true);
     }
 }
 
@@ -224,15 +246,17 @@ void importWizard::createBlankPages()
 {
 intro = new QHBox(this);
 srcType = new QHBox(this);
-src = new QHBox(this);
+srcconn = new QHBox(this);
+srcdb = new QHBox(this);
 dstType = new QHBox(this);
 dst = new QHBox(this);
 finish = new QHBox(this);
 this->addPage(intro, "Introduction");
-this->addPage(srcType, "Source Data Type");
-this->addPage(src, "Source Data");
-this->addPage(dstType, "Destination Data Type"); 
-this->addPage(dst, "Destination Data");
+this->addPage(srcType, "Source Database Type");
+this->addPage(srcconn, "Source Connection");
+this->addPage(srcdb, "Source Database");
+this->addPage(dstType, "Destination Database Type"); 
+this->addPage(dst, "Destination Database");
 this->addPage(finish, "Finished");
 }
 };
