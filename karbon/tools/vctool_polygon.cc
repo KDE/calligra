@@ -3,14 +3,14 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
-
 #include "karbon_view.h"
-#include "vccmd_polygon.h"	// command
-#include "vpolygondlg.h"	// dialog
 #include "vctool_polygon.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
 #include "vpath.h"
+#include "vpolygoncmd.h"	// command
+#include "vpolygondlg.h"	// dialog
+
 
 VCToolPolygon* VCToolPolygon::s_instance = 0L;
 
@@ -46,8 +46,8 @@ VCToolPolygon::drawTemporaryObject(
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	
-	VCCmdPolygon* cmd =
-		new VCCmdPolygon( part(),
+	VPolygonCmd* cmd =
+		new VPolygonCmd( part(),
 			p.x(), p.y(),
 			d1,
 			m_dialog->edges(),
@@ -68,7 +68,7 @@ VCToolPolygon::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VCCmdPolygon( part(),
+				new VPolygonCmd( part(),
 					x, y,
 					m_dialog->radius(),
 					m_dialog->edges() );
@@ -77,7 +77,7 @@ VCToolPolygon::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VCCmdPolygon( part(),
+			new VPolygonCmd( part(),
 				x, y,
 				d1,
 				m_dialog->edges(),

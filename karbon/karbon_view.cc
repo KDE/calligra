@@ -35,13 +35,13 @@
 #include "vmtool_shear.h"
 
 // commands:
-//#include "vccmd_text.h"
-#include "vmcmd_delete.h"
-#include "vmcmd_fill.h"
-#include "vmcmd_group.h"
-#include "vmcmd_insertknots.h"
-#include "vmcmd_polygonize.h"
-#include "vmcmd_stroke.h"
+//#include "vtextcmd.h"
+#include "vdeletecmd.h"
+#include "vfillcmd.h"
+#include "vgroupcmd.h"
+#include "vinsertknotscmd.h"
+#include "vpolygonizecmd.h"
+#include "vstrokecmd.h"
 
 // dialogs:
 #include "vcolordlg.h"
@@ -209,7 +209,7 @@ KarbonView::editDeselectAll()
 void
 KarbonView::editDeleteSelection()
 {
-	m_part->addCommand( new VMCmdDelete( m_part ), true );
+	m_part->addCommand( new VDeleteCmd( m_part ), true );
 
 	selectTool();
 }
@@ -257,7 +257,7 @@ KarbonView::selectionMoveToBottom()
 void
 KarbonView::groupSelection()
 {
-	m_part->addCommand( new VMCmdGroup( m_part ), true );
+	m_part->addCommand( new VGroupCmd( m_part ), true );
 }
 
 void
@@ -390,7 +390,7 @@ KarbonView::textTool()
 	f.setItalic( m_setFontItalic->isChecked() );
 
 	// TODO : find a way to edit the text, no predefined strings
-	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ), true );*/
+	m_part->addCommand( new VTextCmd( m_part, f, "KARBON" ), true );*/
 }
 
 void
@@ -462,7 +462,7 @@ KarbonView::pathInsertKnots()
 	VInsertKnotsDlg* dialog = new VInsertKnotsDlg();
 
 	if( dialog->exec() )
-		m_part->addCommand( new VMCmdInsertKnots(
+		m_part->addCommand( new VInsertKnotsCmd(
 			m_part, m_part->selection(), dialog->knots() ), true );
 
 	delete( dialog );
@@ -475,7 +475,7 @@ KarbonView::pathPolygonize()
 	dialog->setFlatness( 5.0 );
 
 	if( dialog->exec() )
-		m_part->addCommand( new VMCmdPolygonize(
+		m_part->addCommand( new VPolygonizeCmd(
 			m_part, m_part->selection(), dialog->flatness() ), true );
 
 	delete( dialog );
@@ -538,7 +538,7 @@ KarbonView::slotStrokeColorChanged( const QColor &c )
 	color.setValues( &r, &g, &b, 0L );
 	m_part->setDefaultStrokeColor( color );
 
-	m_part->addCommand( new VMCmdStroke( m_part, color ), true );
+	m_part->addCommand( new VStrokeCmd( m_part, color ), true );
 }
 
 void
@@ -551,7 +551,7 @@ KarbonView::slotFillColorChanged( const QColor &c )
 	color.setValues( &r, &g, &b, 0L );
 	m_part->setDefaultFillColor( color );
 
-	m_part->addCommand( new VMCmdFill( m_part, color ), true );
+	m_part->addCommand( new VFillCmd( m_part, color ), true );
 }
 
 void

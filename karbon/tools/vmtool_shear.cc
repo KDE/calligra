@@ -3,19 +3,20 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
+#include <math.h>
+
+#include <qcursor.h>
+
 #include <koRect.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vmtool_shear.h"
 #include "vmtool_handle.h"
-#include "vmcmd_transform.h"
+#include "vmtool_shear.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
+#include "vtransformcmd.h"
 
-#include <math.h>
-
-#include <qcursor.h>
 
 VMToolShear* VMToolShear::s_instance = 0L;
 
@@ -167,7 +168,7 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 		KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 
 		part()->addCommand(
-			new VMCmdShear(
+			new VShearCmd(
 				part(),
 				part()->selection(), fp * (1.0 / view->zoom() ), m_s1, m_s2 ),
 			true );

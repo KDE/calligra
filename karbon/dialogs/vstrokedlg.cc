@@ -2,19 +2,19 @@
    Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
-#include "karbon_part.h"
-#include "vmcmd_stroke.h"
-#include "vcolor.h"
 
-#include <klocale.h>
-
-#include <qlayout.h>
-#include <kcolordialog.h>
-#include <qlabel.h>
-#include <knuminput.h>
 #include <qgroupbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+
+#include <kcolordialog.h>
+#include <klocale.h>
+#include <knuminput.h>
 #include <kselect.h>
 
+#include "karbon_part.h"
+#include "vcolor.h"
+#include "vstrokecmd.h"
 #include "vstrokedlg.h"
 
 #include <kdebug.h>
@@ -170,7 +170,7 @@ void VStrokeDlg::slotApplyButtonPressed()
 	color.setOpacity( op );
 
 	if( m_part )
-		m_part->addCommand( new VMCmdStroke( m_part, color ), true );
+		m_part->addCommand( new VStrokeCmd( m_part, color ), true );
 }
 
 void VStrokeDlg::slotUpdate(QColor *color)

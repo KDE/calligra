@@ -18,3 +18,4 @@ VCommandHistory::redo()
 	KCommandHistory::redo();
 	m_part->repaintAllViews();
 }
+

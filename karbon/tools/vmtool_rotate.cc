@@ -3,23 +3,24 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
+#include <math.h>
+
+#include <qcursor.h>
+
 #include <koRect.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "vglobal.h"
-#include "vmtool_rotate.h"
 #include "vmtool_handle.h"
-#include "vmcmd_transform.h"
+#include "vmtool_rotate.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
 #include "vpath.h"
-
-#include <math.h>
-
-#include <qcursor.h>
+#include "vtransformcmd.h"
 
 #include <kdebug.h>
+
 
 VMToolRotate* VMToolRotate::s_instance = 0L;
 
@@ -166,7 +167,7 @@ VMToolRotate::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		part()->addCommand(
-			new VMCmdRotate(
+			new VRotateCmd(
 				part(),
 				part()->selection(), m_sp * (1.0 / view->zoom() ), m_angle / VGlobal::pi_180 ),
 			true );

@@ -3,20 +3,20 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
-#include <koRect.h>
-#include <koPoint.h>
-
-#include "karbon_part.h"
-#include "karbon_view.h"
-#include "vmtool_scale.h"
-#include "vmtool_handle.h"
-#include "vmcmd_transform.h"
+#include <math.h>
 
 #include <qcursor.h>
 
-#include <math.h>
+#include <koPoint.h>
+#include <koRect.h>
+
+#include "karbon_part.h"
+#include "karbon_view.h"
+#include "vmtool_handle.h"
+#include "vmtool_scale.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
+#include "vtransformcmd.h"
 
 VMToolScale* VMToolScale::s_instance = 0L;
 
@@ -188,7 +188,7 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		part()->addCommand(
-			new VMCmdScale(
+			new VScaleCmd(
 				part(),
 				part()->selection(), m_sp * ( 1.0 / view->zoom() ), m_s1, m_s2 ),
 			true );

@@ -3,14 +3,14 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
-
 #include "karbon_view.h"
-#include "vccmd_ellipse.h"	// command
-#include "vellipsedlg.h"	// dialog
 #include "vctool_ellipse.h"
+#include "vellipsecmd.h"	// command
+#include "vellipsedlg.h"	// dialog
+#include "vpainter.h"
+#include "vpainterfactory.h"
 #include "vpath.h"
+
 
 VCToolEllipse* VCToolEllipse::s_instance = 0L;
 
@@ -46,8 +46,8 @@ VCToolEllipse::drawTemporaryObject(
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 
-	VCCmdEllipse* cmd =
-		new VCCmdEllipse( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
+	VEllipseCmd* cmd =
+		new VEllipseCmd( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 
 	VObject* path = cmd->createPath();
 	path->setState( state_edit );
@@ -64,7 +64,7 @@ VCToolEllipse::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VCCmdEllipse( part(),
+				new VEllipseCmd( part(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height() );
@@ -73,7 +73,7 @@ VCToolEllipse::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VCCmdEllipse( part(),
+			new VEllipseCmd( part(),
 				x, y,
 				x + d1,
 				y + d2 );

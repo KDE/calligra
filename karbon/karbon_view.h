@@ -7,30 +7,29 @@
 #define __KARBON_VIEW__
 
 #include <koView.h>
+#include <ksharedptr.h>
 
 #include "vcanvas.h"
 
-#include <ksharedptr.h>
-
-class QPaintEvent;
-class QLabel;
-
+class DCOPObject;
 class KAction;
-class KSelectAction;
-class KToggleAction;
+class KarbonPart;
 class KFontAction;
 class KFontSizeAction;
+class VPainterFactory;
+class KSelectAction;
 class KSelectColorAction;
-
-class KarbonPart;
+class KToggleAction;
+class QPaintEvent;
+class QLabel;
 class VTool;
 class VToolContainer;
-class VPainterFactory;
-class DCOPObject;
+
 
 class KarbonView : public KoView
 {
 	Q_OBJECT
+
 public:
 	KarbonView( KarbonPart* part, QWidget* parent = 0, const char* name = 0 );
 	virtual ~KarbonView();

@@ -3,14 +3,14 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
-
 #include "karbon_view.h"
-#include "vccmd_sinus.h"	// command
-#include "vsinusdlg.h"	// dialog
 #include "vctool_sinus.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
 #include "vpath.h"
+#include "vsinuscmd.h"	// command
+#include "vsinusdlg.h"	// dialog
+
 
 VCToolSinus* VCToolSinus::s_instance = 0L;
 
@@ -47,8 +47,8 @@ VCToolSinus::drawTemporaryObject(
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	
-	VCCmdSinus* cmd =
-		new VCCmdSinus( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,
+	VSinusCmd* cmd =
+		new VSinusCmd( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,
 			m_dialog->periods() );
 
 	VObject* path = cmd->createPath();
@@ -66,7 +66,7 @@ VCToolSinus::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VCCmdSinus( part(),
+				new VSinusCmd( part(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height(),
@@ -76,7 +76,7 @@ VCToolSinus::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VCCmdSinus( part(),
+			new VSinusCmd( part(),
 				x, y,
 				x + d1,
 				y + d2,

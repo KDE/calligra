@@ -2,23 +2,24 @@
    Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
-#include "karbon_part.h"
-#include "vmcmd_fill.h"
-#include "vcolor.h"
 
-#include <klocale.h>
-
+#include <qgroupbox.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
+
 #include <kcolordialog.h>
-#include <qlabel.h>
+#include <klocale.h>
 #include <knuminput.h>
-#include <qgroupbox.h>
 #include <kselect.h>
 
+#include "karbon_part.h"
+#include "vcolor.h"
+#include "vfillcmd.h"
 #include "vfilldlg.h"
 
 #include <kdebug.h>
+
 
 VFillDlg::VFillDlg( KarbonPart *part )
 	: KDialogBase ( 0L, 0, true, i18n( "Uniform Color" ),
@@ -171,7 +172,7 @@ void VFillDlg::slotApplyButtonPressed()
 	color.setOpacity( op );
 
 	if( m_part )
-		m_part->addCommand( new VMCmdFill( m_part, color ), true );
+		m_part->addCommand( new VFillCmd( m_part, color ), true );
 }
 
 void VFillDlg::slotUpdate(QColor *color)

@@ -15,7 +15,10 @@ class VCommand : public KNamedCommand
 {
 public:
 	VCommand( KarbonPart* part, const QString& name )
-		: KNamedCommand( name ), m_part( part ) { assert( part ); }
+		: KNamedCommand( name ), m_part( part )
+	{
+		assert( part );
+	}
 	virtual ~VCommand() {}
 
 	virtual void execute() = 0;
@@ -25,11 +28,15 @@ protected:
 	KarbonPart* m_part;
 };
 
+
 class VCommandHistory : public KCommandHistory
 {
 public:
 	VCommandHistory( KarbonPart* part )
-		: KCommandHistory( part->actionCollection(), false ), m_part( part ) {}
+		: KCommandHistory( part->actionCollection(), false ),
+			m_part( part )
+	{
+	}
 
 	virtual void undo();
 	virtual void redo();
@@ -39,3 +46,4 @@ protected:
 };
 
 #endif
+

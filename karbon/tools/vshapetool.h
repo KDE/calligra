@@ -6,12 +6,15 @@
 #ifndef __VSHAPETOOL_H__
 #define __VSHAPETOOL_H__
 
-#include "vtool.h"
+#include <koPoint.h>
+
 #include "vglobal.h"
+#include "vtool.h"
 
 class QEvent;
 
 class KarbonPart;
+class KarbonView;
 
 class VShapeTool : public VTool
 {
@@ -107,3 +110,4 @@ VShapeTool::recalcCoords()
 }
 
 #endif
+

@@ -3,14 +3,14 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
-
 #include "karbon_view.h"
-#include "vccmd_roundrect.h"	// command
-#include "vroundrectdlg.h"	// dialog
 #include "vctool_roundrect.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
 #include "vpath.h"
+#include "vroundrectcmd.h"	// command
+#include "vroundrectdlg.h"	// dialog
+
 
 VCToolRoundRect* VCToolRoundRect::s_instance = 0L;
 
@@ -47,8 +47,8 @@ VCToolRoundRect::drawTemporaryObject(
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	
-	VCCmdRoundRect* cmd =
-		new VCCmdRoundRect( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,
+	VRoundRectCmd* cmd =
+		new VRoundRectCmd( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,
 			m_dialog->round() );
 
 	VObject* path = cmd->createPath();
@@ -66,7 +66,7 @@ VCToolRoundRect::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VCCmdRoundRect( part(),
+				new VRoundRectCmd( part(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height(),
@@ -76,7 +76,7 @@ VCToolRoundRect::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VCCmdRoundRect( part(),
+			new VRoundRectCmd( part(),
 				x, y,
 				x + d1,
 				y + d2,

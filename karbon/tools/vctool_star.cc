@@ -3,14 +3,14 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
-
 #include "karbon_view.h"
-#include "vccmd_star.h"	// command
-#include "vstardlg.h"	// dialog
 #include "vctool_star.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
 #include "vpath.h"
+#include "vstarcmd.h"	// command
+#include "vstardlg.h"	// dialog
+
 
 VCToolStar* VCToolStar::s_instance = 0L;
 
@@ -47,8 +47,8 @@ VCToolStar::drawTemporaryObject(
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	
-	VCCmdStar* cmd =
-		new VCCmdStar( part(),
+	VStarCmd* cmd =
+		new VStarCmd( part(),
 			p.x(), p.y(),
 			d1,
 			m_dialog->innerR() * d1 / m_dialog->outerR(),
@@ -70,7 +70,7 @@ VCToolStar::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VCCmdStar( part(),
+				new VStarCmd( part(),
 					x, y,
 					m_dialog->outerR(),
 					m_dialog->innerR(),
@@ -80,7 +80,7 @@ VCToolStar::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VCCmdStar( part(),
+			new VStarCmd( part(),
 				x, y,
 				d1,
 				m_dialog->innerR() * d1 / m_dialog->outerR(),

@@ -3,14 +3,14 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
-
 #include "karbon_view.h"
-#include "vccmd_rectangle.h"	// command
-#include "vrectangledlg.h"	// dialog
 #include "vctool_rectangle.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
 #include "vpath.h"
+#include "vrectanglecmd.h"	// command
+#include "vrectangledlg.h"	// dialog
+
 
 VCToolRectangle* VCToolRectangle::s_instance = 0L;
 
@@ -46,8 +46,8 @@ VCToolRectangle::drawTemporaryObject(
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	
-	VCCmdRectangle* cmd =
-		new VCCmdRectangle( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
+	VRectangleCmd* cmd =
+		new VRectangleCmd( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 
 	VObject* path = cmd->createPath();
 	path->setState( state_edit );
@@ -64,7 +64,7 @@ VCToolRectangle::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VCCmdRectangle( part(),
+				new VRectangleCmd( part(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height() );
@@ -73,7 +73,7 @@ VCToolRectangle::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VCCmdRectangle( part(),
+			new VRectangleCmd( part(),
 				x, y,
 				x + d1,
 				y + d2 );

@@ -3,15 +3,15 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
 #include <koRect.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vmtool_select.h"
 #include "vmtool_handle.h"
-#include "vmcmd_transform.h"
+#include "vmtool_select.h"
+#include "vpainterfactory.h"
+#include "vpainter.h"
+#include "vtransformcmd.h"
 
 #include <kdebug.h>
 
@@ -131,7 +131,7 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 		{
 			m_state = normal;
 			part()->addCommand(
-				new VMCmdTranslate(
+				new VTranslateCmd(
 					part(),
 					part()->selection(),
 					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view->zoom() ) ),

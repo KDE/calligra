@@ -3,14 +3,14 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpainterfactory.h"
-#include "vpainter.h"
-
 #include "karbon_view.h"
-#include "vccmd_spiral.h"	// command
-#include "vspiraldlg.h"	// dialog
 #include "vctool_spiral.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
 #include "vpath.h"
+#include "vspiralcmd.h"	// command
+#include "vspiraldlg.h"	// dialog
+
 
 VCToolSpiral* VCToolSpiral::s_instance = 0L;
 
@@ -48,8 +48,8 @@ VCToolSpiral::drawTemporaryObject(
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	
-	VCCmdSpiral* cmd =
-		new VCCmdSpiral( part(),
+	VSpiralCmd* cmd =
+		new VSpiralCmd( part(),
 			p.x(), p.y(),
 			d1,
 			m_dialog->segments(),
@@ -72,7 +72,7 @@ VCToolSpiral::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VCCmdSpiral( part(),
+				new VSpiralCmd( part(),
 					x, y,
 					m_dialog->radius(),
 					m_dialog->segments(),
@@ -84,7 +84,7 @@ VCToolSpiral::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VCCmdSpiral( part(),
+			new VSpiralCmd( part(),
 				x, y,
 				d1,
 				m_dialog->segments(),

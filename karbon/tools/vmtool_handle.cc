@@ -4,6 +4,7 @@
 */
 
 #include <qpainter.h>
+
 #include <koRect.h>
 
 #include "karbon_part.h"
@@ -13,6 +14,7 @@
 #include <kdebug.h>
 
 #define HANDLE_SIZE 3
+
 
 VMToolHandle* VMToolHandle::s_instance = 0L;
 
