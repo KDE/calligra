@@ -26,7 +26,8 @@ DESCRIPTION
 #ifndef MSWORDGENERATED_H
 #define MSWORDGENERATED_H
 
-class MsWordGenerated {
+class MsWordGenerated
+{
 public:
     typedef char S8;
     typedef unsigned char U8;
@@ -45,19 +46,19 @@ public:
     {
 
         // minutes (0-59)
-        S16 mint:6;
+        U16 mint:6;
 
         // hours (0-23)
-        S16 hr:5;
+        U16 hr:5;
 
         // days of month (1-31)
-        S16 dom:5;
+        U16 dom:5;
 
         // months (1-12)
-        S16 mon:4;
+        U16 mon:4;
 
         // years (1900-2411)-1900
-        S16 yr:9;
+        U16 yr:9;
 
         // weekday 
         //     Sunday=0 
@@ -67,7 +68,7 @@ public:
         //     Thursday=4 
         //     Friday=5 
         //     Saturday=6
-        S16 wdy:3;
+        U16 wdy:3;
     } __attribute__ ((packed)) DTTM;
     static unsigned read(const U8 *in, DTTM *out, unsigned count=1);
 
@@ -76,10 +77,10 @@ public:
     {
 
         // foreground color (see chp.ico)
-        S16 icoFore:5;
+        U16 icoFore:5;
 
         // background color (see chp.ico)
-        S16 icoBack:5;
+        U16 icoBack:5;
 
         // shading pattern (see ipat table below) 
         //     0 Automatic 
@@ -136,7 +137,7 @@ public:
         //     60 95 Percent 
         //     61 97.5 Percent 
         //     62 97 Percent
-        S16 ipat:6;
+        U16 ipat:6;
     } __attribute__ ((packed)) SHD;
     static unsigned read(const U8 *in, SHD *out, unsigned count=1);
 
@@ -145,31 +146,31 @@ public:
     {
 
         // true if we're kerning punctuation
-        S16 fKerningPunct:1;
+        U16 fKerningPunct:1;
 
         // Kinsoku method of justification: 
         //     0 = always expand 
         //     1 = compress punctuation 
         //     2 = compress punctuation and kana.
-        S16 iJustification:2;
+        U16 iJustification:2;
 
         // Level of Kinsoku: 
         //     0 = Level 1 
         //     1 = Level 2 
         //     2 = Custom
-        S16 iLevelOfKinsoku:2;
+        U16 iLevelOfKinsoku:2;
 
         // 2-page-on-1 feature is turned on.
-        S16 f2on1:1;
+        U16 f2on1:1;
 
         // reserved
-        S16 unused0_6:10;
+        U16 unused0_6:10;
 
         // length of rgxchFPunct
-        S16 cchFollowingPunct;
+        U16 cchFollowingPunct;
 
         // length of rgxchLPunct
-        S16 cchLeadingPunct;
+        U16 cchLeadingPunct;
 
         // array of characters that should never appear at the start of a line
         U16 rgxchFPunct[101];
@@ -184,13 +185,13 @@ public:
     {
 
         // set to 0 for variant 1
-        S16 fComplex:1;
+        U16 fComplex:1;
 
         // index to entry into rgsprmPrm
-        S16 isprm:7;
+        U16 isprm:7;
 
         // sprm's operand
-        S16 val:8;
+        U16 val:8;
     } __attribute__ ((packed)) PRM;
     static unsigned read(const U8 *in, PRM *out, unsigned count=1);
 
@@ -204,13 +205,13 @@ public:
         U16 xstUsrInitl[10];
 
         // index into GrpXstAtnOwners
-        S16 ibst;
+        U16 ibst;
 
         // unused
-        S16 ak:2;
+        U16 ak:2;
 
         // unused
-        S16 unused22_2:14;
+        U16 unused22_2:14;
 
         // unused
         U16 grfbmc;
@@ -218,7 +219,7 @@ public:
         // when not -1, this tag identifies the annotation bookmark that 
         // locates the range of CPs in the main document which this 
         // annotation references.
-        S32 lTagBkmk;
+        U32 lTagBkmk;
     } __attribute__ ((packed)) ATRD;
     static unsigned read(const U8 *in, ATRD *out, unsigned count=1);
 
@@ -311,7 +312,7 @@ public:
         U8 ico:5;
 
         // font code of autonumber
-        S16 ftc;
+        U16 ftc;
 
         // font half point size (or 0=auto)
         U16 hps;
@@ -431,7 +432,7 @@ public:
         U8 ico:5;
 
         // font code of autonumber
-        S16 ftc;
+        U16 ftc;
 
         // font half point size (or 0=auto)
         U16 hps;
@@ -452,7 +453,7 @@ public:
     {
 
         // AutoSummary level
-        S32 lLevel;
+        U32 lLevel;
     } __attribute__ ((packed)) ASUMY;
     static unsigned read(const U8 *in, ASUMY *out, unsigned count=1);
 
@@ -461,33 +462,33 @@ public:
     {
 
         // true iff the ASUMYI is valid
-        S16 fValid:1;
+        U16 fValid:1;
 
         // true iff AutoSummary View is active
-        S16 fView:1;
+        U16 fView:1;
 
         // Display method for AutoSummary View: 
         //     0 = Emphasize in current doc 
         //     1 = Reduce doc to summary 
         //     2 = Insert into doc 
         //     3 = Show in new document
-        S16 iViewBy:2;
+        U16 iViewBy:2;
 
         // true if we should update File Properties summary information after 
         // the next summarization
-        S16 fUpdateProps:1;
+        U16 fUpdateProps:1;
 
         // reserved
-        S16 unused0_5:11;
+        U16 unused0_5:11;
 
         // Dialog summary level
-        S16 wDlgLevel;
+        U16 wDlgLevel;
 
         // upper bound for lLevel for sentences in this document
-        S32 lHighestLevel;
+        U32 lHighestLevel;
 
         // show document sentences at or below this level
-        S32 lCurrentLevel;
+        U32 lCurrentLevel;
     } __attribute__ ((packed)) ASUMYI;
     static unsigned read(const U8 *in, ASUMYI *out, unsigned count=1);
 
@@ -506,14 +507,14 @@ public:
 
         // except in textbox BKD, index to <b>PGD</b> in <b>plfpgd</b> that 
         // describes the page this break is on.
-        S16 ipgd;
+        U16 ipgd;
 
         // in textbox BKD,
-        S16 itxbxs;
+        U16 itxbxs;
 
         // number of cp's considered for this break; note that the CP's 
         // described by cpDepend in this break reside in the next BKD
-        S16 dcpDepend;
+        U16 dcpDepend;
 
         // 
         U16 icol:8;
@@ -543,7 +544,7 @@ public:
 
         // index to <b>BKL</b> entry in <b>plcfbkl</b> that describes the 
         // ending position of this bookmark in the <b>CP</b> stream.
-        S16 ibkl;
+        U16 ibkl;
 
         // when bkf.fCol is 1, this is the index to the first column of a 
         // table column bookmark.
@@ -572,7 +573,7 @@ public:
         // the bkl.ibkf is negative, add on the number of bookmarks recorded 
         // in the hplcbkf to the bkl.ibkf to calculate the index to the BKF 
         // that corresponds to this entry.
-        S16 ibkf;
+        U16 ibkf;
     } __attribute__ ((packed)) BKL;
     static unsigned read(const U8 *in, BKL *out, unsigned count=1);
 
@@ -581,7 +582,7 @@ public:
     {
 
         // width of a single line in 1/8 pt, max of 32 pt.
-        S16 dptLineWidth:8;
+        U16 dptLineWidth:8;
 
         // border type code: 
         //     0 none 
@@ -610,24 +611,24 @@ public:
         //     24 emboss 3D 
         //     25 engrave 3D 
         //     codes 64 - 230 represent border art types and are used only for page borders.
-        S16 brcType:8;
+        U16 brcType:8;
 
         // color code (see chp.ico)
-        S16 ico:8;
+        U16 ico:8;
 
         // width of space to maintain between border and text within border. 
         // Must be 0 when BRC is a substructure of TC. Stored in points.
-        S16 dptSpace:5;
+        U16 dptSpace:5;
 
         // when 1, border is drawn with shadow. Must be 0 when BRC is a 
         // substructure of the TC
-        S16 fShadow:1;
+        U16 fShadow:1;
 
         // 
-        S16 fFrame:1;
+        U16 fFrame:1;
 
         // reserved
-        S16 unused2_15:1;
+        U16 unused2_15:1;
     } __attribute__ ((packed)) BRC;
     static unsigned read(const U8 *in, BRC *out, unsigned count=1);
 
@@ -636,24 +637,24 @@ public:
     {
 
         // width of second line of border in pixels
-        S16 dxpLine2Width:3;
+        U16 dxpLine2Width:3;
 
         // distance to maintain between both lines of border in pixels
-        S16 dxpSpaceBetween:3;
+        U16 dxpSpaceBetween:3;
 
         // width of first border line in pixels
-        S16 dxpLine1Width:3;
+        U16 dxpLine1Width:3;
 
         // width of space to maintain between border and text within border. 
         // Must be 0 when BRC is a substructure of the TC.
-        S16 dxpSpace:5;
+        U16 dxpSpace:5;
 
         // when 1, border is drawn with shadow. Must be 0 when BRC10 is a 
         // substructure of the TC.
-        S16 fShadow:1;
+        U16 fShadow:1;
 
         // reserved
-        S16 fSpare:1;
+        U16 fSpare:1;
     } __attribute__ ((packed)) BRC10;
     static unsigned read(const U8 *in, BRC10 *out, unsigned count=1);
 
@@ -662,60 +663,60 @@ public:
     {
 
         // text is bold when 1 , and not bold when 0.
-        S8 fBold:1;
+        U8 fBold:1;
 
         // italic when 1, not italic when 0
-        S8 FItalic:1;
+        U8 FItalic:1;
 
         // when 1, text has been deleted and will be displayed with 
         // strikethrough when revision marked text is to be displayed
-        S8 fRMarkDel:1;
+        U8 fRMarkDel:1;
 
         // outlined when 1, not outlined when 0
-        S8 fOutline:1;
+        U8 fOutline:1;
 
         // used internally by Word
-        S8 fFldVanish:1;
+        U8 fFldVanish:1;
 
         // displayed with small caps when 1, no small caps when 0
-        S8 fSmallCaps:1;
+        U8 fSmallCaps:1;
 
         // displayed with caps when 1, no caps when 0
-        S8 fCaps:1;
+        U8 fCaps:1;
 
         // when 1, text has "hidden" format, and is not displayed unless 
         // fPagHidden is set in the DOP
-        S8 fVanish:1;
+        U8 fVanish:1;
 
         // when 1, text is newly typed since the last time revision marks 
         // have been accepted and will be displayed with an underline when 
         // revision marked text is to be displayed
-        S8 fRMark:1;
+        U8 fRMark:1;
 
         // character is a Word special character when 1, not a special 
         // character when 0
-        S8 fSpec:1;
+        U8 fSpec:1;
 
         // displayed with strikethrough when 1, no strikethrough when 0
-        S8 fStrike:1;
+        U8 fStrike:1;
 
         // embedded object when 1, not an embedded object when 0
-        S8 fObj:1;
+        U8 fObj:1;
 
         // character is drawn with a shadow when 1; drawn without shadow when 
         // 0
-        S8 fShadow:1;
+        U8 fShadow:1;
 
         // character is displayed in lower case when 1. No case 
         // transformation is performed when 0. This field may be set to 1 
         // only when chp.fSmallCaps is 1.
-        S8 fLowerCase:1;
+        U8 fLowerCase:1;
 
         // when 1, chp.fcPic points to an FFDATA, the data structure binary 
         // data used by Word to describe a form field. The bit chp.fData may 
         // only be 1 when chp.fSpec is also 1 and the special character in 
         // the document stream that has this property is a chPicture (0x01).
-        S8 fData:1;
+        U8 fData:1;
 
         // when 1, chp.lTagObj specifies a particular object in the object 
         // stream that specifies the particular OLE object in the stream that 
@@ -723,50 +724,50 @@ public:
         // tagged with the fOle2 is encountered. The bit chp.fOle2 may only 
         // be 1 when chp.fSpec is also 1 and the special character in the 
         // document stream that has this property is a chPicture (0x01).
-        S8 fOle2:1;
+        U8 fOle2:1;
 
         // text is embossed when 1 and not embossed when 0
-        S16 fEmboss:1;
+        U16 fEmboss:1;
 
         // text is engraved when 1 and not engraved when 0
-        S16 fImprint:1;
+        U16 fImprint:1;
 
         // displayed with double strikethrough when 1, no double 
         // strikethrough when 0
-        S16 fDStrike:1;
+        U16 fDStrike:1;
 
         // 
-        S16 fUsePgsuSettings:1;
+        U16 fUsePgsuSettings:1;
 
         // Reserved
-        S16 unused2_4:12;
+        U16 unused2_4:12;
 
         // Reserved
-        S32 unused4;
+        U32 unused4;
 
         // no longer stored
-        S16 ftc;
+        U16 ftc;
 
         // (rgftc[0]) font for ASCII text
-        S16 ftcAscii;
+        U16 ftcAscii;
 
         // (rgftc[1]) font for Far East text
-        S16 ftcFE;
+        U16 ftcFE;
 
         // (rgftc[2]) font for non-Far East text
-        S16 ftcOther;
+        U16 ftcOther;
 
         // font size in half points
         U16 hps;
 
         // space following each character in the run expressed in twip units.
-        S32 dxaSpace;
+        U32 dxaSpace;
 
         // superscript/subscript indices 
         //     0 means no super/subscripting 
         //     1 means text in run is superscripted 
         //     2 means text in run is subscripted
-        S8 iss:3;
+        U8 iss:3;
 
         // underline code: 
         //     0 none 
@@ -781,10 +782,10 @@ public:
         //     9 dot dash 
         //     10 dot dot dash 
         //     11 wave
-        S8 kul:4;
+        U8 kul:4;
 
         // used by Word internally, not stored in file
-        S8 fSpecSymbol:1;
+        U8 fSpecSymbol:1;
 
         // color of text: 
         //     0 Auto 
@@ -804,20 +805,20 @@ public:
         //     14 DkYellow 
         //     15 DkGray 
         //     16 LtGray
-        S8 ico:5;
+        U8 ico:5;
 
         // reserved
-        S8 unused23_5:1;
+        U8 unused23_5:1;
 
         // used by Word internally, not stored in file
-        S8 fSysVanish:1;
+        U8 fSysVanish:1;
 
         // reserved
-        S8 hpsPos:1;
+        U8 hpsPos:1;
 
         // super/subscript position in half points; positive means text is 
         // raised; negative means text is lowered.
-        S16 hpScript;
+        U16 hpScript;
 
         // LID language identification code (no longer stored here, see rglid 
         // below): 
@@ -911,11 +912,11 @@ public:
 
         // index to author IDs stored in hsttbfRMark. used when text in run 
         // was newly typed when revision marking was enabled
-        S16 ibstRMark;
+        U16 ibstRMark;
 
         // index to author IDs stored in hsttbfRMark. used when text in run 
         // was deleted when revision marking was enabled
-        S16 ibstRMarkDel;
+        U16 ibstRMarkDel;
 
         // Date/time at which this run of text was entered/modified by the 
         // author. (Only recorded when revision marking is on.)
@@ -926,7 +927,7 @@ public:
         DTTM dttmRMarkDel;
 
         // 
-        S16 unused52;
+        U16 unused52;
 
         // index to character style descriptor in the stylesheet that tags 
         // this run of text When istd is istdNormalChar (10 decimal), 
@@ -941,7 +942,7 @@ public:
         // code of the symbol font that will be used to display the symbol 
         // character recorded in chp.xchSym. chp.ftcSym is an index into the 
         // rgffn structure.
-        S16 ftcSym;
+        U16 ftcSym;
 
         // when chp.fSpec is 1 and the character recorded for the run in the 
         // document stream is chSymbol (0x28), the character stored 
@@ -951,11 +952,11 @@ public:
 
         // an index to strings displayed as reasons for actions taken by 
         // Word's AutoFormat code
-        S16 idslRMReason;
+        U16 idslRMReason;
 
         // an index to strings displayed as reasons for actions taken by 
         // Word's AutoFormat code
-        S16 idslReasonDel;
+        U16 idslReasonDel;
 
         // hyphenation rule 
         //     0 No hyphenation 
@@ -978,26 +979,26 @@ public:
         U16 hpsKern;
 
         // highlight color (see chp.ico)
-        S16 icoHighlight:5;
+        U16 icoHighlight:5;
 
         // when 1, characters are highlighted with color specified by 
         // chp.icoHighlight.
-        S16 fHighlight:1;
+        U16 fHighlight:1;
 
         // 
-        S16 kcd:3;
+        U16 kcd:3;
 
         // used internally by Word
-        S16 fNavHighlight:1;
+        U16 fNavHighlight:1;
 
         // 
-        S16 fChsDiff:1;
+        U16 fChsDiff:1;
 
         // 
-        S16 fMacChs:1;
+        U16 fMacChs:1;
 
         // 
-        S16 fFtcAsciSym:1;
+        U16 fFtcAsciSym:1;
 
 
         // when 1, properties have been changed with revision marking on
@@ -1005,7 +1006,7 @@ public:
 
         // index to author IDs stored in hsttbfRMark. used when properties 
         // have been changed when revision marking was enabled
-        S16 ibstPropRMark;
+        U16 ibstPropRMark;
 
         // Date/time at which properties of this were changed for this run of 
         // text by the author. (Only recorded when revision marking is on.)
@@ -1031,7 +1032,7 @@ public:
         U16 unused83;
 
         // reserved
-        S16 unused85;
+        U16 unused85;
 
         // reserved
         U32 unused87;
@@ -1039,11 +1040,11 @@ public:
         // (Only valid for ListNum fields). When 1, the number for a ListNum 
         // field is being tracked in xstDispFldRMark -- if that number is 
         // different from the current value, the number has changed.
-        S8 fDispFldRMark;
+        U8 fDispFldRMark;
 
         // Index to author IDs stored in hsttbfRMark. used when ListNum field 
         // numbering has been changed when revision marking was enabled
-        S16 ibstDispFldRMark;
+        U16 ibstDispFldRMark;
 
         // The date for the ListNum field number change
         U32 dttmDispFldRMark;
@@ -1079,13 +1080,13 @@ public:
     {
 
         // 0
-        S8 fdct:3;
+        U8 fdct:3;
 
         // 0
-        S8 unused0_3:5;
+        U8 unused0_3:5;
 
         // 
-        S16 unused1;
+        U16 unused1;
     } __attribute__ ((packed)) DCS;
     static unsigned read(const U8 *in, DCS *out, unsigned count=1);
 
@@ -1094,33 +1095,33 @@ public:
     {
 
         // x-coordinate of the upper left-hand corner of the grid
-        S16 xaGrid;
+        U16 xaGrid;
 
         // y-coordinate of the upper left-hand corner of the grid
-        S16 yaGrid;
+        U16 yaGrid;
 
         // width of each grid square
-        S16 dxaGrid;
+        U16 dxaGrid;
 
         // height of each grid square
-        S16 dyaGrid;
+        U16 dyaGrid;
 
         // the number of grid squares (in the y direction) between each 
         // gridline drawn on the screen. 0 means don't display any gridlines 
         // in the y direction.
-        S16 dyGridDisplay:7;
+        U16 dyGridDisplay:7;
 
         // suppress display of gridlines
-        S16 fTurnItOff:1;
+        U16 fTurnItOff:1;
 
         // the number of grid squares (in the x direction) between each 
         // gridline drawn on the screen. 0 means don't display any gridlines 
         // in the y direction.
-        S16 dxGridDisplay:7;
+        U16 dxGridDisplay:7;
 
         // if true, the grid will start at the left and top margins and 
         // ignore xaGrid and yaGrid.
-        S16 fFollowMargins:1;
+        U16 fFollowMargins:1;
     } __attribute__ ((packed)) DOGRID;
     static unsigned read(const U8 *in, DOGRID *out, unsigned count=1);
 
@@ -1130,178 +1131,178 @@ public:
 
         // 1 when facing pages should be printed. 
         //     Default 0.
-        S16 fFacingPages:1;
+        U16 fFacingPages:1;
 
         // 1 when widow control is in effect. 0 when widow control disabled. 
         //     Default 1.
-        S16 fWidowControl:1;
+        U16 fWidowControl:1;
 
         // 1 when doc is a main doc for Print Merge Helper, 0 when not; 
         // default=0
-        S16 fPMHMainDoc:1;
+        U16 fPMHMainDoc:1;
 
         // Default line suppression storage; 0= form letter line suppression; 
         // 1= no line suppression; default=0. No longer used.
-        S16 grfSuppression:2;
+        U16 grfSuppression:2;
 
         // footnote position code&nbsp; 
         //     &nbsp; <p>0 print as endnotes 
         //     1 print at bottom of page 
         //     2 print immediately beneath text 
         //     Default 1.
-        S16 fpc:2;
+        U16 fpc:2;
 
         // unused. Default 0.
-        S16 unused0_7:1;
+        U16 unused0_7:1;
 
         // No longer used. Default 0.
-        S16 grpfIhdt:8;
+        U16 grpfIhdt:8;
 
         // restart index for footnotes&nbsp; 
         //     &nbsp; <p>0 don't restart note numbering 
         //     1 restart for each section 
         //     2 restart for each page 
         //     Default 0.
-        S16 rncFtn:2;
+        U16 rncFtn:2;
 
         // initial footnote number for document. Default 1.
-        S16 nFtn:14;
+        U16 nFtn:14;
 
         // when 1, indicates that information in the hplcpad should be 
         // refreshed since outline has been dirtied
-        S8 fOutlineDirtySave:1;
+        U8 fOutlineDirtySave:1;
 
         // reserved
-        S8 unused4_1:7;
+        U8 unused4_1:7;
 
         // when 1, Word believes all pictures recorded in the document were 
         // created on a Macintosh
-        S8 fOnlyMacPics:1;
+        U8 fOnlyMacPics:1;
 
         // when 1, Word believes all pictures recorded in the document were 
         // created in Windows
-        S8 fOnlyWinPics:1;
+        U8 fOnlyWinPics:1;
 
         // when 1, document was created as a print merge labels document
-        S8 fLabelDoc:1;
+        U8 fLabelDoc:1;
 
         // when 1, Word is allowed to hyphenate words that are capitalized. 
         // When 0, capitalized may not be hyphenated
-        S8 fHyphCapitals:1;
+        U8 fHyphCapitals:1;
 
         // when 1, Word will hyphenate newly typed text as a background task
-        S8 fAutoHyphen:1;
+        U8 fAutoHyphen:1;
 
         // 
-        S8 fFormNoFields:1;
+        U8 fFormNoFields:1;
 
         // when 1, Word will merge styles from its template
-        S8 fLinkStyles:1;
+        U8 fLinkStyles:1;
 
         // when 1, Word will mark revisions as the document is edited
-        S8 fRevMarking:1;
+        U8 fRevMarking:1;
 
         // always make backup when document saved when 1.
-        S8 fBackup:1;
+        U8 fBackup:1;
 
         // when 1, the results of the last Word Count execution (as recorded 
         // in several DOP fields) are still exactly correct.
-        S8 fExactCWords:1;
+        U8 fExactCWords:1;
 
         // when 1, hidden document contents are displayed.
-        S8 fPagHidden:1;
+        U8 fPagHidden:1;
 
         // when 1, field results are displayed, when 0 field codes are 
         // displayed.
-        S8 fPagResults:1;
+        U8 fPagResults:1;
 
         // when 1, annotations are locked for editing
-        S8 fLockAtn:1;
+        U8 fLockAtn:1;
 
         // swap margins on left/right pages when 1.
-        S8 fMirrorMargins:1;
+        U8 fMirrorMargins:1;
 
         // reserved
-        S8 unused6_6;
+        U8 unused6_6;
 
         // when 1, use TrueType fonts by default (flag obeyed only when doc 
         // was created by WinWord 2.x)
-        S8 fDfltTrueType:1;
+        U8 fDfltTrueType:1;
 
         // when 1, file created with SUPPRESSTOPSPACING=YES in win.ini. (flag 
         // obeyed only when doc was created by WinWord 2.x).
-        S8 fPagSuppressTopSpacing:1;
+        U8 fPagSuppressTopSpacing:1;
 
         // when 1, document is protected from edit operations
-        S8 fProtEnabled:1;
+        U8 fProtEnabled:1;
 
         // when 1, restrict selections to occur only within form fields
-        S8 fDispFormFldSel:1;
+        U8 fDispFormFldSel:1;
 
         // when 1, show revision markings on screen
-        S8 fRMView:1;
+        U8 fRMView:1;
 
         // when 1, print revision marks when document is printed
-        S8 fRMPrint:1;
+        U8 fRMPrint:1;
 
         // reserved
-        S8 unused7_5;
+        U8 unused7_5;
 
         // when 1, the current revision marking state is locked
-        S8 fLockRev:1;
+        U8 fLockRev:1;
 
         // when 1, document contains embedded TrueType fonts
-        S8 fEmbedFonts:1;
+        U8 fEmbedFonts:1;
 
         // compatibility option: when 1, don't add automatic tab stops for 
         // hanging indent
-        S16 copts_fNoTabForInd:1;
+        U16 copts_fNoTabForInd:1;
 
         // compatibility option: when 1, don't add extra space for raised or 
         // lowered characters
-        S16 copts_fNoSpaceRaiseLower:1;
+        U16 copts_fNoSpaceRaiseLower:1;
 
         // compatibility option: when 1, suppress the paragraph Space Before 
         // and Space After options after a page break
-        S16 copts_fSuppressSpbfAfterPageBreak:1;
+        U16 copts_fSuppressSpbfAfterPageBreak:1;
 
         // compatibility option: when 1, wrap trailing spaces at the end of a 
         // line to the next line
-        S16 copts_fWrapTrailSpaces:1;
+        U16 copts_fWrapTrailSpaces:1;
 
         // compatibility option: when 1, print colors as black on non-color 
         // printers
-        S16 copts_fMapPrintTextColor:1;
+        U16 copts_fMapPrintTextColor:1;
 
         // compatibility option: when 1, don't balance columns for Continuous 
         // Section starts
-        S16 copts_fNoColumnBalance:1;
+        U16 copts_fNoColumnBalance:1;
 
         // 
-        S16 copts_fConvMailMergeEsc:1;
+        U16 copts_fConvMailMergeEsc:1;
 
         // compatibility option: when 1, suppress extra line spacing at top 
         // of page
-        S16 copts_fSupressTopSpacing:1;
+        U16 copts_fSupressTopSpacing:1;
 
         // compatibility option: when 1, combine table borders like Word 5.x 
         // for the Macintosh
-        S16 copts_fOrigWordTableRules:1;
+        U16 copts_fOrigWordTableRules:1;
 
         // compatibility option: when 1, don't blank area between metafile 
         // pictures
-        S16 copts_fTransparentMetafiles:1;
+        U16 copts_fTransparentMetafiles:1;
 
         // compatibility option: when 1, show hard page or column breaks in 
         // frames
-        S16 copts_fShowBreaksInFrames:1;
+        U16 copts_fShowBreaksInFrames:1;
 
         // compatibility option: when 1, swap left and right pages on odd 
         // facing pages
-        S16 copts_fSwapBordersFacingPgs:1;
+        U16 copts_fSwapBordersFacingPgs:1;
 
         // reserved
-        S16 unused8_12:4;
+        U16 unused8_12:4;
 
         // default tab width. Default 720 twips.
         U16 dxaTab;
@@ -1331,33 +1332,33 @@ public:
         U16 nRevision;
 
         // time document was last edited
-        S32 tmEdited;
+        U32 tmEdited;
 
         // count of words tallied by last Word Count execution
-        S32 cWords;
+        U32 cWords;
 
         // count of characters tallied by last Word Count execution
-        S32 cCh;
+        U32 cCh;
 
         // count of pages tallied by last Word Count execution
         U16 cPg;
 
         // count of paragraphs tallied by last Word Count execution
-        S32 cParas;
+        U32 cParas;
 
         // restart endnote number code&nbsp; 
         //     0 don't restart endnote numbering 
         //     1 restart for each section 
         //     2 restart for each page
-        S16 rncEdn:2;
+        U16 rncEdn:2;
 
         // beginning endnote number
-        S16 nEdn:14;
+        U16 nEdn:14;
 
         // endnote position code&nbsp; 
         //     0 display endnotes at end of section 
         //     3 display endnotes at end of document
-        S16 epc:2;
+        U16 epc:2;
 
         // number format code for auto footnotes&nbsp; 
         //     0 Arabic 
@@ -1365,7 +1366,7 @@ public:
         //     2 Lower case Roman 
         //     3 Upper case Letter 
         //     4 Lower case Letter
-        S16 nfcFtnRef:4;
+        U16 nfcFtnRef:4;
 
         // number format code for auto endnotes&nbsp; 
         //     0 Arabic 
@@ -1373,70 +1374,70 @@ public:
         //     2 Lower case Roman 
         //     3 Upper case Letter 
         //     4 Lower case Letter
-        S16 nfcEdnRef:4;
+        U16 nfcEdnRef:4;
 
         // only print data inside of form fields
-        S16 fPrintFormData:1;
+        U16 fPrintFormData:1;
 
         // only save document data that is inside of a form field.
-        S16 fSaveFormData:1;
+        U16 fSaveFormData:1;
 
         // shade form fields
-        S16 fShadeFormData:1;
+        U16 fShadeFormData:1;
 
         // reserved
-        S16 unused54_13:2;
+        U16 unused54_13:2;
 
         // when 1, include footnotes and endnotes in word count
-        S16 fWCFtnEdn:1;
+        U16 fWCFtnEdn:1;
 
         // count of lines tallied by last Word Count operation
-        S32 cLines;
+        U32 cLines;
 
         // count of words in footnotes and endnotes tallied by last Word 
         // Count operation
-        S32 cWordsFtnEnd;
+        U32 cWordsFtnEnd;
 
         // count of characters in footnotes and endnotes tallied by last Word 
         // Count operation
-        S32 cChFtnEdn;
+        U32 cChFtnEdn;
 
         // count of pages in footnotes and endnotes tallied by last Word 
         // Count operation
-        S16 cPgFtnEdn;
+        U16 cPgFtnEdn;
 
         // count of paragraphs in footnotes and endnotes tallied by last Word 
         // Count operation
-        S32 cParasFtnEdn;
+        U32 cParasFtnEdn;
 
         // count of paragraphs in footnotes and endnotes tallied by last Word 
         // Count operation
-        S32 cLinesFtnEdn;
+        U32 cLinesFtnEdn;
 
         // document protection password key, only valid if dop.fProtEnabled, 
         // dop.fLockAtn or dop.fLockRev are 1.
-        S32 lKeyProtDoc;
+        U32 lKeyProtDoc;
 
         // document view kind&nbsp; 
         //     0 Normal view 
         //     1 Outline view 
         //     2 Page View
-        S16 wvkSaved:3;
+        U16 wvkSaved:3;
 
         // zoom percentage
-        S16 wScaleSaved:9;
+        U16 wScaleSaved:9;
 
         // zoom type&nbsp; 
         //     0 None 
         //     1 Full page 
         //     2 Page width
-        S16 zkSaved:2;
+        U16 zkSaved:2;
 
         // This is a vertical document (Word 6/95 only)
-        S16 fRotateFontW6:1;
+        U16 fRotateFontW6:1;
 
         // Gutter position for this doc: 0 => side; 1 => top
-        S16 iGutterPos:1;
+        U16 iGutterPos:1;
     } __attribute__ ((packed)) DOP;
     static unsigned read(const U8 *in, DOP *out, unsigned count=1);
 
@@ -1510,7 +1511,7 @@ public:
     {
         // Autoformat Document Type: 0 for normal. 1 for letter, and 2 for 
         // email.
-        S16 adt;
+        U16 adt;
 
         // see DOPTYPOGRAPHY
         DOPTYPOGRAPHY doptypography;
@@ -1519,93 +1520,93 @@ public:
         DOGRID dogrid;
 
         // Always set to zero when writing files
-        S16 reserved:1;
+        U16 reserved:1;
 
         // Which outline levels are showing in outline view (0 => heading 1 
         // only, 4 => headings 1 through 5, 9 => all levels showing)
-        S16 lvl:4;
+        U16 lvl:4;
 
         // Doc has been completely grammar checked
-        S16 fGramAllDone:1;
+        U16 fGramAllDone:1;
 
         // No grammer errors exist in doc
-        S16 fGramAllClean:1;
+        U16 fGramAllClean:1;
 
         // if you are doing font embedding, you should only embed the 
         // characters in the font that are used in the document
-        S16 fSubsetFonts:1;
+        U16 fSubsetFonts:1;
 
         // Hide the version created for autoversion
-        S16 fHideLastVersion:1;
+        U16 fHideLastVersion:1;
 
         // This file is based upon an HTML file
-        S16 fHtmlDoc:1;
+        U16 fHtmlDoc:1;
 
         // Always set to zero when writing files
-        S16 unused410_11:1;
+        U16 unused410_11:1;
 
         // Snap table and page borders to page border
-        S16 fSnapBorder:1;
+        U16 fSnapBorder:1;
 
         // Place header inside page border
-        S16 fIncludeHeader:1;
+        U16 fIncludeHeader:1;
 
         // Place footer inside page border
-        S16 fIncludeFooter:1;
+        U16 fIncludeFooter:1;
 
         // Are we in online view
-        S16 fForcePageSizePag:1;
+        U16 fForcePageSizePag:1;
 
         // Are we auto-promoting fonts to >= hpsZoonFontPag?
-        S16 fMinFontSizePag:1;
+        U16 fMinFontSizePag:1;
 
         // versioning is turned on
-        S16 fHaveVersions:1;
+        U16 fHaveVersions:1;
 
         // autoversioning is enabled
-        S16 fAutoVersion:1;
+        U16 fAutoVersion:1;
 
         // Always set to zero when writing files
-        S16 unused412_2:14;
+        U16 unused412_2:14;
 
         // Autosummary info
         ASUMYI asumyi;
 
         // Count of characters with spaces
-        S32 cChWS;
+        U32 cChWS;
 
         // Count of characters with spaces in footnotes and endnotes
-        S32 cChWSFtnEdn;
+        U32 cChWSFtnEdn;
 
         // 
-        S32 grfDocEvents;
+        U32 grfDocEvents;
 
         // Have we prompted for virus protection on this doc?
-        S32 fVirusPrompted:1;
+        U32 fVirusPrompted:1;
 
         // If prompted, load safely for this doc?
-        S32 fVirusLoadSafe:1;
+        U32 fVirusLoadSafe:1;
 
         // Random session key to sign above bits for a Word session.
-        S32 KeyVirusSession30:30;
+        U32 KeyVirusSession30:30;
 
         // Spare
         U8 Spare[30];
 
         // Always set to zero when writing files
-        S32 unused472;
+        U32 unused472;
 
         // Always set to zero when writing files
-        S32 unused476;
+        U32 unused476;
 
         // Count of double byte characters
-        S32 cDBC;
+        U32 cDBC;
 
         // Count od double byte characters in footnotes and endnotes
-        S32 cDBCFtnEdn;
+        U32 cDBCFtnEdn;
 
         // Always set to zero when writing files
-        S32 unused488;
+        U32 unused488;
 
         // number format code for auto footnote references&nbsp; 
         //     0 Arabic 
@@ -1613,20 +1614,20 @@ public:
         //     2 Lower case Roman 
         //     3 Upper case Letter 
         //     4 Lower case Letter
-        S16 nfcFtnRef;
+        U16 nfcFtnRef;
 
         // number format code for auto endnote references&nbsp; 
         //     0 Arabic&nbsp; <div CLASS="tt">1 Upper case Roman</div>  <p>
         //     2 Lower case Roman 
         //     3 Upper case Letter 
         //     4 Lower case Letter
-        S16 nfcEdnRef;
+        U16 nfcEdnRef;
 
         // minimum font size if fMinFontSizePag is true
-        S16 hpsZoonFontPag;
+        U16 hpsZoonFontPag;
 
         // height of the window in online view during last repag
-        S16 dywDispPag;
+        U16 dywDispPag;
     } __attribute__ ((packed)) DOP105;
     static unsigned read(const U8 *in, DOP105 *out, unsigned count=1);
 
@@ -1638,13 +1639,13 @@ public:
         //     19 field begin mark 
         //     20 field separator mark 
         //     21 field end mark
-        S8 ch:5;
+        U8 ch:5;
 
         // reserved
-        S8 unused0_5:3;
+        U8 unused0_5:3;
 
 
-        // fld.ch == 19 (field begin mark) -> S8 field type (see flt table 
+        // fld.ch == 19 (field begin mark) -> U8 field type (see flt table 
         // below). <p>fld.ch == 21 (field end mark) -> 
         //     fDiffer:1 - ignored for saved file 
         //     fZombieEmbed:1 - 1 when result still believes this field is an EMBED or LINK field. 
@@ -1654,7 +1655,7 @@ public:
         //     fPrivateResult:1 - 1 whenever the result of the field is never to be shown. 
         //     fNested:1 - 1 when field is nested within another field. 
         //     fHasSep:1 - 1 when field has a field separator.
-        S8 flt;
+        U8 flt;
     } __attribute__ ((packed)) FLD;
     static unsigned read(const U8 *in, FLD *out, unsigned count=1);
 
@@ -1665,7 +1666,7 @@ public:
         // Shape Identifier. Used in conjunction with the office art data 
         // (found via <b>fcDggInfo</b> in the <b>FIB</b>) to find the actual 
         // data for this shape.
-        S32 spid;
+        U32 spid;
 
         // xa left of rectangle enclosing shape relative to the origin of the 
         // shape
@@ -1730,7 +1731,7 @@ public:
         U16 fAnchorLock:1;
 
         // count of textboxes in shape (undo doc only)
-        S32 cTxbx;
+        U32 cTxbx;
     } __attribute__ ((packed)) FSPA;
     static unsigned read(const U8 *in, FSPA *out, unsigned count=1);
 
@@ -1757,7 +1758,7 @@ public:
 //        U8 unused1_7:1;
 //
 //        // base weight of font
-//        S16 wWeight;
+//        U16 wWeight;
 //
 //        // character set identifier
 //        U8 chs;
@@ -1798,7 +1799,7 @@ public:
         U16 lid;
 
         // 
-        S16 pnNext;
+        U16 pnNext;
 
         // Set if this document is a template
         U16 fDot:1;
@@ -1890,157 +1891,157 @@ public:
         // files</b> a <b>CP</b> can be transformed into an <b>FC</b> by the 
         // following transformation: 
         //     fc = cp + fib.fcMin.
-        S32 fcMin;
+        U32 fcMin;
 
         // file offset of last character of text in document text stream + 1
-        S32 fcMac;
+        U32 fcMac;
 
         // Count of fields in the array of "shorts"
         U16 csw;
 
         // [Beginning of the array of shorts, rgls] 
         //     Unique number Identifying the File's creator 0x6A62 is the creator ID for Word and is reserved. Other creators should choose a different value.
-        S16 wMagicCreated;
+        U16 wMagicCreated;
 
         // identifies the File's last modifier
-        S16 wMagicRevised;
+        U16 wMagicRevised;
 
         // private data
-        S16 wMagicCreatedPrivate;
+        U16 wMagicCreatedPrivate;
 
         // private data
-        S16 wMagicRevisedPrivate;
+        U16 wMagicRevisedPrivate;
 
         // not used
-        S16 pnFbpChpFirst_W6;
+        U16 pnFbpChpFirst_W6;
 
         // not used
-        S16 pnChpFirst_W6;
+        U16 pnChpFirst_W6;
 
         // not used
-        S16 cpnBteChp_W6;
+        U16 cpnBteChp_W6;
 
         // not used
-        S16 pnFbpPapFirst_W6;
+        U16 pnFbpPapFirst_W6;
 
         // not used
-        S16 pnPapFirst_W6;
+        U16 pnPapFirst_W6;
 
         // not used
-        S16 cpnBtePap_W6;
+        U16 cpnBtePap_W6;
 
         // not used
-        S16 pnFbpLvcFirst_W6;
+        U16 pnFbpLvcFirst_W6;
 
         // not used
-        S16 pnLvcFirst_W6;
+        U16 pnLvcFirst_W6;
 
         // not used
-        S16 cpnBteLvc_W6;
+        U16 cpnBteLvc_W6;
 
         // Language id if document was written by Far East version of Word 
         // (i.e. FIB.fFarEast is on)
-        S16 lidFE;
+        U16 lidFE;
 
         // Number of fields in the array of longs
         U16 clw;
 
         // [Beginning of the array of longs, rglw] 
         //     file offset of last byte written to file + 1.
-        S32 cbMac;
+        U32 cbMac;
 
         // contains the build date of the creator. 10695 indicates the 
         // creator program was compiled on Jan 6, 1995
-        S32 lProductCreated;
+        U32 lProductCreated;
 
         // contains the build date of the File's last modifier
-        S32 lProductRevised;
+        U32 lProductRevised;
 
         // length of main document text stream
-        S32 ccpText;
+        U32 ccpText;
 
         // length of footnote subdocument text stream
-        S32 ccpFtn;
+        U32 ccpFtn;
 
         // length of header subdocument text stream
-        S32 ccpHdd;
+        U32 ccpHdd;
 
         // length of macro subdocument text stream, which should now always 
         // be 0.
-        S32 ccpMcr;
+        U32 ccpMcr;
 
         // length of annotation subdocument text stream
-        S32 ccpAtn;
+        U32 ccpAtn;
 
         // length of endnote subdocument text stream
-        S32 ccpEdn;
+        U32 ccpEdn;
 
         // length of textbox subdocument text stream
-        S32 ccpTxbx;
+        U32 ccpTxbx;
 
         // length of header textbox subdocument text stream.
-        S32 ccpHdrTxbx;
+        U32 ccpHdrTxbx;
 
         // when there was insufficient memory for Word to expand the plcfbte 
         // at save time, the plcfbte is written to the file in a linked list 
         // of 512-byte pieces starting with this pn
-        S32 pnFbpChpFirst;
+        U32 pnFbpChpFirst;
 
         // the page number of the lowest numbered page in the document that 
         // records CHPX FKP information
-        S32 pnChpFirst;
+        U32 pnChpFirst;
 
         // count of CHPX FKPs recorded in file. In non-complex files if the 
         // number of entries in the plcfbteChpx is less than this, the 
         // plcfbteChpx is incomplete.
-        S32 cpnBteChp;
+        U32 cpnBteChp;
 
         // when there was insufficient memory for Word to expand the plcfbte 
         // at save time, the plcfbte is written to the file in a linked list 
         // of 512-byte pieces starting with this pn
-        S32 pnFbpPapFirst;
+        U32 pnFbpPapFirst;
 
         // the page number of the lowest numbered page in the document that 
         // records PAPX FKP information
-        S32 pnPapFirst;
+        U32 pnPapFirst;
 
         // count of PAPX FKPs recorded in file. In non-complex files if the 
         // number of entries in the plcfbtePapx is less than this, the 
         // plcfbtePapx is incomplete.
-        S32 cpnBtePap;
+        U32 cpnBtePap;
 
         // when there was insufficient memory for Word to expand the plcfbte 
         // at save time, the plcfbte is written to the file in a linked list 
         // of 512-byte pieces starting with this pn
-        S32 pnFbpLvcFirst;
+        U32 pnFbpLvcFirst;
 
         // the page number of the lowest numbered page in the document that 
         // records LVC FKP information
-        S32 pnLvcFirst;
+        U32 pnLvcFirst;
 
         // count of LVC FKPs recorded in file. In non-complex files if the 
         // number of entries in the plcfbtePapx is less than this, the 
         // plcfbtePapx is incomplete.
-        S32 cpnBteLvc;
+        U32 cpnBteLvc;
 
         // 
-        S32 fcIslandFirst;
+        U32 fcIslandFirst;
 
         // 
-        S32 fcIslandLim;
+        U32 fcIslandLim;
 
         // Number of fields in the array of FC/LCB pairs.
         U16 cfclcb;
 
         // [Beginning of array of FC/LCB pairs, rgfclcb] 
         //     file offset of original allocation for STSH in table stream. During fast save Word will attempt to reuse this allocation if STSH is small enough to fit.
-        S32 fcStshfOrig;
+        U32 fcStshfOrig;
 
         // count of bytes of original STSH allocation
         U32 lcbStshfOrig;
 
         // offset of STSH in table stream.
-        S32 fcStshf;
+        U32 fcStshf;
 
         // count of bytes of current STSH allocation
         U32 lcbStshf;
@@ -2048,7 +2049,7 @@ public:
         // offset in table stream of footnote reference PLCF of FRD 
         // structures. CPs in PLC are relative to main document text stream 
         // and give location of footnote references.
-        S32 fcPlcffndRef;
+        U32 fcPlcffndRef;
 
         // count of bytes of footnote reference PLC== 0 if no footnotes 
         // defined in document.
@@ -2060,7 +2061,7 @@ public:
         // in plcffndRef. No structure is stored in this plc. There will just 
         // be <b>n+1</b> <b>FC</b> entries in this PLC when there are 
         // <b>n</b> footnotes
-        S32 fcPlcffndTxt;
+        U32 fcPlcffndTxt;
 
         // count of bytes of footnote text PLC. == 0 if no footnotes defined 
         // in document
@@ -2069,7 +2070,7 @@ public:
         // offset in table stream of annotation reference ATRD PLC. The CPs 
         // recorded in this PLC give the offset of annotation references in 
         // the main document.
-        S32 fcPlcfandRef;
+        U32 fcPlcfandRef;
 
         // count of bytes of annotation reference PLC.
         U32 lcbPlcfandRef;
@@ -2080,20 +2081,20 @@ public:
         // plcfandRef. There is a 1 to 1 correspondence between entries 
         // recorded in the plcfandTxt and the plcfandRef. No structure is 
         // stored in this PLC.
-        S32 fcPlcfandTxt;
+        U32 fcPlcfandTxt;
 
         // count of bytes of the annotation text PLC
         U32 lcbPlcfandTxt;
 
         // offset in table stream of section descriptor SED PLC. CPs in PLC 
         // are relative to main document.
-        S32 fcPlcfsed;
+        U32 fcPlcfsed;
 
         // count of bytes of section descriptor PLC.
         U32 lcbPlcfsed;
 
         // no longer used
-        S32 fcPlcpad;
+        U32 fcPlcpad;
 
         // no longer used
         U32 lcbPlcpad;
@@ -2102,7 +2103,7 @@ public:
         // are relative to main document text stream. Only written for files 
         // in <b>complex</b> format. Should not be written by third party 
         // creators of Word files.
-        S32 fcPlcfphe;
+        U32 fcPlcfphe;
 
         // count of bytes of paragraph height PLC. ==0 when file is 
         // <b>non-complex</b>.
@@ -2111,7 +2112,7 @@ public:
         // offset in table stream of glossary string table. This table 
         // consists of Pascal style strings (strings stored prefixed with a 
         // length byte) concatenated one after another.
-        S32 fcSttbfglsy;
+        U32 fcSttbfglsy;
 
         // count of bytes of glossary string table. == 0 for non-glossary 
         // documents.!=0 for glossary documents.
@@ -2122,7 +2123,7 @@ public:
         // in 1-1 correspondence with entries of sttbfglsy. No structure is 
         // stored in this PLC. There will be <b>n+1</b> <b>FC</b> entries in 
         // this PLC when there are <b>n</b> glossary entries.
-        S32 fcPlcfglsy;
+        U32 fcPlcfglsy;
 
         // count of bytes of glossary PLC.== 0 for non-glossary documents.!=0 
         // for glossary documents.
@@ -2133,7 +2134,7 @@ public:
         // in the header subdocument. No structure is stored in this PLC. 
         // There will be <b>n+1FC</b> entries in this PLC when there are 
         // <b>n</b> headers stored for the document.
-        S32 fcPlcfhdd;
+        U32 fcPlcfhdd;
 
         // count of bytes of header PLC. 
         //     == 0 if document contains no headers
@@ -2142,7 +2143,7 @@ public:
         // offset in table stream of character property bin table.PLC. FCs in 
         // PLC are file offsets in the main stream. Describes text of main 
         // document and all subdocuments.
-        S32 fcPlcfbteChpx;
+        U32 fcPlcfbteChpx;
 
         // count of bytes of character property bin table PLC.
         U32 lcbPlcfbteChpx;
@@ -2150,14 +2151,14 @@ public:
         // offset in table stream of paragraph property bin table.PLC. FCs in 
         // PLC are file offsets in the main stream. Describes text of main 
         // document and all subdocuments.
-        S32 fcPlcfbtePapx;
+        U32 fcPlcfbtePapx;
 
         // count of bytes of paragraph property bin table PLC
         U32 lcbPlcfbtePapx;
 
         // offset in table stream of PLC reserved for private use. The 
         // <b>SEA</b> is 6 bytes long.
-        S32 fcPlcfsea;
+        U32 fcPlcfsea;
 
         // count of bytes of private use PLC.
         U32 lcbPlcfsea;
@@ -2167,7 +2168,7 @@ public:
         // <b>n</b>th entry in the STTBF describes the font that will be 
         // displayed when the chp.ftc for text is equal to <b>n.</b> See the 
         // FFN file structure definition.
-        S32 fcSttbfffn;
+        U32 fcSttbfffn;
 
         // count of bytes in sttbfffn.
         U32 lcbSttbfffn;
@@ -2177,41 +2178,41 @@ public:
         // CP of field separator character inside a field and the ending CP 
         // of the field. A field may be nested within another field. 20 
         // levels of field nesting are allowed.
-        S32 fcPlcffldMom;
+        U32 fcPlcffldMom;
 
         // count of bytes in plcffldMom
         U32 lcbPlcffldMom;
 
         // offset in table stream to the FLD PLC of field positions in the 
         // header subdocument.
-        S32 fcPlcffldHdr;
+        U32 fcPlcffldHdr;
 
         // count of bytes in plcffldHdr
         U32 lcbPlcffldHdr;
 
         // offset in table stream to the FLD PLC of field positions in the 
         // footnote subdocument.
-        S32 fcPlcffldFtn;
+        U32 fcPlcffldFtn;
 
         // count of bytes in plcffldFtn
         U32 lcbPlcffldFtn;
 
         // offset in table stream to the FLD PLC of field positions in the 
         // annotation subdocument.
-        S32 fcPlcffldAtn;
+        U32 fcPlcffldAtn;
 
         // count of bytes in plcffldAtn
         U32 lcbPlcffldAtn;
 
         // no longer used
-        S32 fcPlcffldMcr;
+        U32 fcPlcffldMcr;
 
         // no longer used
         U32 lcbPlcffldMcr;
 
         // offset in table stream of the STTBF that records bookmark names in 
         // the main document
-        S32 fcSttbfbkmk;
+        U32 fcSttbfbkmk;
 
         // 
         U32 lcbSttbfbkmk;
@@ -2219,7 +2220,7 @@ public:
         // offset in table stream of the PLCF that records the beginning CP 
         // offsets of bookmarks in the main document. See BKF structure 
         // definition
-        S32 fcPlcfbkf;
+        U32 fcPlcfbkf;
 
         // 
         U32 lcbPlcfbkf;
@@ -2227,46 +2228,46 @@ public:
         // offset in table stream of the PLCF that records the ending CP 
         // offsets of bookmarks recorded in the main document. No structure 
         // is stored in this PLCF.
-        S32 fcPlcfbkl;
+        U32 fcPlcfbkl;
 
         // 
         U32 lcbPlcfbkl;
 
         // offset in table stream of the macro commands. These commands are 
         // private and undocumented.
-        S32 fcCmds;
+        U32 fcCmds;
 
         // undocument size of undocument structure not documented above
         U32 lcbCmds;
 
         // no longer used
-        S32 fcPlcmcr;
+        U32 fcPlcmcr;
 
         // 
         U32 lcbPlcmcr;
 
         // no longer used
-        S32 fcSttbfmcr;
+        U32 fcSttbfmcr;
 
         // 
         U32 lcbSttbfmcr;
 
         // offset in table stream of the printer driver information (names of 
         // drivers, port, etc.)
-        S32 fcPrDrvr;
+        U32 fcPrDrvr;
 
         // count of bytes of the printer driver information (names of 
         // drivers, port, etc.)
         U32 lcbPrDrvr;
 
         // offset in table stream of the print environment in portrait mode.
-        S32 fcPrEnvPort;
+        U32 fcPrEnvPort;
 
         // count of bytes of the print environment in portrait mode.
         U32 lcbPrEnvPort;
 
         // offset in table stream of the print environment in landscape mode.
-        S32 fcPrEnvLand;
+        U32 fcPrEnvLand;
 
         // count of bytes of the print environment in landscape mode.
         U32 lcbPrEnvLand;
@@ -2274,14 +2275,14 @@ public:
         // offset in table stream of <b>W</b>indow <b>S</b>ave <b>S</b>tate 
         // data structure. <b>WSS</b> contains dimensions of document's main 
         // text window and the last selection made by Word user.
-        S32 fcWss;
+        U32 fcWss;
 
         // count of bytes of WSS. ==0 if unable to store the window state. 
         // Should not be written by third party creators of Word files.
         U32 lcbWss;
 
         // offset in table stream of document property data structure.
-        S32 fcDop;
+        U32 fcDop;
 
         // count of bytes of document properties.
         U32 lcbDop;
@@ -2290,7 +2291,7 @@ public:
         // in this table specify document summary info and the paths to 
         // special documents related to this document. See documentation of 
         // the STTBFASSOC.
-        S32 fcSttbfAssoc;
+        U32 fcSttbfAssoc;
 
         // 
         U32 lcbSttbfAssoc;
@@ -2299,14 +2300,14 @@ public:
         // <b>complex</b> files. Consists of an encoding of all of the 
         // <b>prm</b>s quoted by the document followed by the <b>plcpcd</b> 
         // (piece table) for the document.
-        S32 fcClx;
+        U32 fcClx;
 
         // count of bytes of complex file information == 0 if file is 
         // <b>non-complex</b>.
         U32 lcbClx;
 
         // not used
-        S32 fcPlcfpgdFtn;
+        U32 fcPlcfpgdFtn;
 
         // 
         U32 lcbPlcfpgdFtn;
@@ -2314,55 +2315,55 @@ public:
         // offset in table stream of the name of the original file. 
         // fcAutosaveSource and cbAutosaveSource should both be 0 if autosave 
         // is off.
-        S32 fcAutosaveSource;
+        U32 fcAutosaveSource;
 
         // count of bytes of the name of the original file.
         U32 lcbAutosaveSource;
 
         // offset in table stream of group of strings recording the names of 
         // the owners of annotations stored in the document
-        S32 fcGrpXstAtnOwners;
+        U32 fcGrpXstAtnOwners;
 
         // count of bytes of the group of strings
         U32 lcbGrpXstAtnOwners;
 
         // offset in table stream of the sttbf that records names of 
         // bookmarks for the annotation subdocument
-        S32 fcSttbfAtnbkmk;
+        U32 fcSttbfAtnbkmk;
 
         // length in bytes of the sttbf that records names of bookmarks for 
         // the annotation subdocument
         U32 lcbSttbfAtnbkmk;
 
         // no longer used
-        S32 fcPlcdoaMom;
+        U32 fcPlcdoaMom;
 
         // 
         U32 lcbPlcdoaMom;
 
         // no longer used
-        S32 fcPlcdoaHdr;
+        U32 fcPlcdoaHdr;
 
         // 
         U32 lcbPlcdoaHdr;
 
         // offset in table stream of the <b>FSPA</b> PLC for main document. 
         // == 0 if document has no office art objects.
-        S32 fcPlcspaMom;
+        U32 fcPlcspaMom;
 
         // length in bytes of the <b>FSPA</b> PLC of the main document.
         U32 lcbPlcspaMom;
 
         // offset in table stream of the <b>FSPA</b> PLC for header document. 
         // == 0 if document has no office art objects.
-        S32 fcPlcspaHdr;
+        U32 fcPlcspaHdr;
 
         // length in bytes of the <b>FSPA</b> PLC of the header document.
         U32 lcbPlcspaHdr;
 
         // offset in table stream of BKF (bookmark first) PLC of the 
         // annotation subdocument
-        S32 fcPlcfAtnbkf;
+        U32 fcPlcfAtnbkf;
 
         // length in bytes of BKF (bookmark first) PLC of the annotation 
         // subdocument
@@ -2370,7 +2371,7 @@ public:
 
         // offset in table stream of BKL (bookmark last) PLC of the 
         // annotation subdocument
-        S32 fcPlcfAtnbkl;
+        U32 fcPlcfAtnbkl;
 
         // length in bytes of PLC marking the CP limits of the annotation 
         // bookmarks. No structure is stored in this PLC.
@@ -2378,7 +2379,7 @@ public:
 
         // offset in table stream of PMS (Print Merge State) information 
         // block. This contains the current state of a print merge operation
-        S32 fcPms;
+        U32 fcPms;
 
         // length in bytes of PMS. ==0 if no current print merge state. 
         // Should not be written by third party creators of Word files.
@@ -2386,7 +2387,7 @@ public:
 
         // offset in table stream of form field Sttbf which contains strings 
         // used in form field dropdown controls
-        S32 fcFormFldSttbs;
+        U32 fcFormFldSttbs;
 
         // length in bytes of form field Sttbf
         U32 lcbFormFldSttbs;
@@ -2394,7 +2395,7 @@ public:
         // offset in table stream of endnote reference PLCF of FRD 
         // structures. CPs in PLCF are relative to main document text stream 
         // and give location of endnote references.
-        S32 fcPlcfendRef;
+        U32 fcPlcfendRef;
 
         // 
         U32 lcbPlcfendRef;
@@ -2402,20 +2403,20 @@ public:
         // offset in table stream of PlcfendRef which points to endnote text 
         // in the endnote document stream which corresponds with the 
         // plcfendRef. No structure is stored in this PLC.
-        S32 fcPlcfendTxt;
+        U32 fcPlcfendTxt;
 
         // 
         U32 lcbPlcfendTxt;
 
         // offset in table stream to FLD PLCF of field positions in the 
         // endnote subdoc
-        S32 fcPlcffldEdn;
+        U32 fcPlcffldEdn;
 
         // 
         U32 lcbPlcffldEdn;
 
         // not used
-        S32 fcPlcfpgdEdn;
+        U32 fcPlcfpgdEdn;
 
         // 
         U32 lcbPlcfpgdEdn;
@@ -2423,21 +2424,21 @@ public:
         // offset in table stream of the office art object table data. The 
         // format of office art object table data is found in a separate 
         // document.
-        S32 fcDggInfo;
+        U32 fcDggInfo;
 
         // length in bytes of the office art object table data
         U32 lcbDggInfo;
 
         // offset in table stream to STTBF that records the author 
         // abbreviations for authors who have made revisions in the document.
-        S32 fcSttbfRMark;
+        U32 fcSttbfRMark;
 
         // 
         U32 lcbSttbfRMark;
 
         // offset in table stream to STTBF that records caption titles used 
         // in the document.
-        S32 fcSttbCaption;
+        U32 fcSttbCaption;
 
         // 
         U32 lcbSttbCaption;
@@ -2445,21 +2446,21 @@ public:
         // offset in table stream to the STTBF that records the object names 
         // and indices into the caption STTBF for objects which get auto 
         // captions.
-        S32 fcSttbAutoCaption;
+        U32 fcSttbAutoCaption;
 
         // 
         U32 lcbSttbAutoCaption;
 
         // offset in table stream to WKB PLCF that describes the boundaries 
         // of contributing documents in a master document
-        S32 fcPlcfwkb;
+        U32 fcPlcfwkb;
 
         // 
         U32 lcbPlcfwkb;
 
         // offset in table stream of PLCF (of SPLS structures) that records 
         // spell check state
-        S32 fcPlcfspl;
+        U32 fcPlcfspl;
 
         // 
         U32 lcbPlcfspl;
@@ -2467,14 +2468,14 @@ public:
         // offset in table stream of PLCF that records the beginning CP in 
         // the text box subdoc of the text of individual text box entries. No 
         // structure is stored in this PLCF
-        S32 fcPlcftxbxTxt;
+        U32 fcPlcftxbxTxt;
 
         // 
         U32 lcbPlcftxbxTxt;
 
         // offset in table stream of the FLD PLCF that records field 
         // boundaries recorded in the textbox subdoc.
-        S32 fcPlcffldTxbx;
+        U32 fcPlcffldTxbx;
 
         // 
         U32 lcbPlcffldTxbx;
@@ -2482,74 +2483,74 @@ public:
         // offset in table stream of PLCF that records the beginning CP in 
         // the header text box subdoc of the text of individual header text 
         // box entries. No structure is stored in this PLC.
-        S32 fcPlcfhdrtxbxTxt;
+        U32 fcPlcfhdrtxbxTxt;
 
         // 
         U32 lcbPlcfhdrtxbxTxt;
 
         // offset in table stream of the FLD PLCF that records field 
         // boundaries recorded in the header textbox subdoc.
-        S32 fcPlcffldHdrTxbx;
+        U32 fcPlcffldHdrTxbx;
 
         // 
         U32 lcbPlcffldHdrTxbx;
 
         // Macro User storage
-        S32 fcStwUser;
+        U32 fcStwUser;
 
         // 
         U32 lcbStwUser;
 
         // offset in table stream of embedded true type font data.
-        S32 fcSttbttmbd;
+        U32 fcSttbttmbd;
 
         // 
         U32 cbSttbttmbd;
 
         // 
-        S32 fcUnused;
+        U32 fcUnused;
 
         // 
         U32 lcbUnused;
 
         // (FCPGD, beginning of array of fcPgd / fcBkd pairs rgpgdbkd). 
         //     offset in table stream of the PLF that records the page descriptors for the main text of the doc.
-        S32 fcPgdMother;
+        U32 fcPgdMother;
 
         // 
         U32 lcbPgdMother;
 
         // offset in table stream of the PLCF that records the break 
         // descriptors for the main text of the doc.
-        S32 fcBkdMother;
+        U32 fcBkdMother;
 
         // 
         U32 lcbBkdMother;
 
         // offset in table stream of the PLF that records the page 
         // descriptors for the footnote text of the doc.
-        S32 fcPgdFtn;
+        U32 fcPgdFtn;
 
         // 
         U32 lcbPgdFtn;
 
         // offset in table stream of the PLCF that records the break 
         // descriptors for the footnote text of the doc.
-        S32 fcBkdFtn;
+        U32 fcBkdFtn;
 
         // 
         U32 lcbBkdFtn;
 
         // offset in table stream of the PLF that records the page 
         // descriptors for the endnote text of the doc.
-        S32 fcPgdEdn;
+        U32 fcPgdEdn;
 
         // 
         U32 lcbPgdEdn;
 
         // offset in table stream of the PLCF that records the break 
         // descriptors for the endnote text of the doc.
-        S32 fcBkdEdn;
+        U32 fcBkdEdn;
 
         // 
         U32 lcbBkdEdn;
@@ -2558,108 +2559,108 @@ public:
         // This is only used in a small number of the international versions 
         // of word. This field is no longer written to the file for nFib >= 
         // 167.
-        S32 fcSttbfIntlFld;
+        U32 fcSttbfIntlFld;
 
         // Always 0 for nFib >= 167.
         U32 lcbSttbfIntlFld;
 
         // offset in table stream of a mailer routing slip.
-        S32 fcRouteSlip;
+        U32 fcRouteSlip;
 
         // 
         U32 lcbRouteSlip;
 
         // offset in table stream of STTBF recording the names of the users 
         // who have saved this document alternating with the save locations.
-        S32 fcSttbSavedBy;
+        U32 fcSttbSavedBy;
 
         // 
         U32 lcbSttbSavedBy;
 
         // offset in table stream of STTBF recording filenames of documents 
         // which are referenced by this document.
-        S32 fcSttbFnm;
+        U32 fcSttbFnm;
 
         // 
         U32 lcbSttbFnm;
 
         // offset in the table stream of list format information.
-        S32 fcPlcfLst;
+        U32 fcPlcfLst;
 
         // 
         U32 lcbPlcfLst;
 
         // offset in the table stream of list format override information.
-        S32 fcPlfLfo;
+        U32 fcPlfLfo;
 
         // 
         U32 lcbPlfLfo;
 
         // offset in the table stream of the textbox break table (a PLCF of 
         // BKDs) for the main document
-        S32 fcPlcftxbxBkd;
+        U32 fcPlcftxbxBkd;
 
         // 
         U32 lcbPlcftxbxBkd;
 
         // offset in the table stream of the textbox break table (a PLCF of 
         // BKDs) for the header subdocument
-        S32 fcPlcftxbxHdrBkd;
+        U32 fcPlcftxbxHdrBkd;
 
         // 
         U32 lcbPlcftxbxHdrBkd;
 
         // offset in main stream of undocumented undo / versioning data
-        S32 fcDocUndo;
+        U32 fcDocUndo;
 
         // 
         U32 lcbDocUndo;
 
         // offset in main stream of undocumented undo / versioning data
-        S32 fcRgbuse;
+        U32 fcRgbuse;
 
         // 
         U32 lcbRgbuse;
 
         // offset in main stream of undocumented undo / versioning data
-        S32 fcUsp;
+        U32 fcUsp;
 
         // 
         U32 lcbUsp;
 
         // offset in table stream of undocumented undo / versioning data
-        S32 fcUskf;
+        U32 fcUskf;
 
         // 
         U32 lcbUskf;
 
         // offset in table stream of undocumented undo / versioning data
-        S32 fcPlcupcRgbuse;
+        U32 fcPlcupcRgbuse;
 
         // 
         U32 lcbPlcupcRgbuse;
 
         // offset in table stream of undocumented undo / versioning data
-        S32 fcPlcupcUsp;
+        U32 fcPlcupcUsp;
 
         // 
         U32 lcbPlcupcUsp;
 
         // offset in table stream of string table of style names for glossary 
         // entries
-        S32 fcSttbGlsyStyle;
+        U32 fcSttbGlsyStyle;
 
         // 
         U32 lcbSttbGlsyStyle;
 
         // offset in table stream of undocumented grammar options PL
-        S32 fcPlgosl;
+        U32 fcPlgosl;
 
         // 
         U32 lcbPlgosl;
 
         // offset in table stream of undocumented ocx data
-        S32 fcPlcocx;
+        U32 fcPlcocx;
 
         // 
         U32 lcbPlcocx;
@@ -2667,7 +2668,7 @@ public:
         // offset in table stream of character property bin table.PLC. FCs in 
         // PLC are file offsets. Describes text of main document and all 
         // subdocuments.
-        S32 fcPlcfbteLvc;
+        U32 fcPlcfbteLvc;
 
         // 
         U32 lcbPlcfbteLvc;
@@ -2679,32 +2680,32 @@ public:
         U32 dwHighDateTime;
 
         // offset in table stream of LVC PLCF
-        S32 fcPlcflvc;
+        U32 fcPlcflvc;
 
         // size of LVC PLCF, ==0 for <b>non-complex</b> files
         U32 lcbPlcflvc;
 
         // offset in table stream of autosummary ASUMY PLCF.
-        S32 fcPlcasumy;
+        U32 fcPlcasumy;
 
         // 
         U32 lcbPlcasumy;
 
         // offset in table stream of PLCF (of SPLS structures) which records 
         // grammar check state
-        S32 fcPlcfgram;
+        U32 fcPlcfgram;
 
         // 
         U32 lcbPlcfgram;
 
         // offset in table stream of list names string table
-        S32 fcSttbListNames;
+        U32 fcSttbListNames;
 
         // 
         U32 lcbSttbListNames;
 
         // offset in table stream of undocumented undo / versioning data
-        S32 fcSttbfUssr;
+        U32 fcSttbfUssr;
 
         // 
         U32 lcbSttbfUssr;
@@ -2716,7 +2717,7 @@ public:
     {
 
         // File position where data begins.
-        S32 fc;
+        U32 fc;
 
         // Size of data. Ignore fc if lcb is zero.
         U32 lcb;
@@ -2729,7 +2730,7 @@ public:
 
         // if > 0, the note is an automatically numbered note, otherwise it 
         // has a custom mark
-        S16 nAuto;
+        U16 nAuto;
     } __attribute__ ((packed)) FRD;
     static unsigned read(const U8 *in, FRD *out, unsigned count=1);
 
@@ -2800,10 +2801,10 @@ public:
     {
 
         // start at value for this list level
-        S32 iStartAt;
+        U32 iStartAt;
 
         // number format code (see anld.nfc for a list of options)
-        S8 nfc;
+        U8 nfc;
 
         // alignment (left, right, or centered) of the paragraph number.
         U8 jc:2;
@@ -2842,20 +2843,20 @@ public:
         U8 ixchFollow;
 
         // Word 6 compatibility option: equivalent to anld.dxaSpace (see ANLD)
-        S32 dxaSpace;
+        U32 dxaSpace;
 
         // Word 6 compatibility optino: equivalent to anld.dxaIndent (see 
         // ANLD)
-        S32 dxaIndent;
+        U32 dxaIndent;
 
         // length, in bytes, of the LVL's grpprlChpx
-        S8 cbGrpprlChpx;
+        U8 cbGrpprlChpx;
 
         // length, in bytes, of the LVL's grpprlPapx
-        S8 cbGrpprlPapx;
+        U8 cbGrpprlPapx;
 
         // reserved
-        S16 reserved;
+        U16 reserved;
     } __attribute__ ((packed)) LVLF;
     static unsigned read(const U8 *in, LVLF *out, unsigned count=1);
 
@@ -2865,12 +2866,12 @@ public:
 
         // see description of sprmPDyaLine for description of the meaning of 
         // dyaLine
-        S16 dyaLine;
+        U16 dyaLine;
 
         // see description of sprmPDyaLine in the Sprm Definitions section 
         // for description of the meaning of dyaLine and fMultLinespace 
         // fields.
-        S16 fMultLinespace;
+        U16 fMultLinespace;
     } __attribute__ ((packed)) LSPD;
     static unsigned read(const U8 *in, LSPD *out, unsigned count=1);
 
@@ -2879,14 +2880,14 @@ public:
     {
 
         // Unique List ID
-        S32 lsid;
+        U32 lsid;
 
         // Unique template code
-        S32 tplc;
+        U32 tplc;
 
         // Array of shorts containing the istd's linked to each level of the 
         // list, or istdNil (4095) if no style is linked.
-        S16 rgistd[9];
+        U16 rgistd[9];
 
         // true if this is a simple (one-level) list; false if this is a 
         // multilevel (nine-level) list.
@@ -2909,13 +2910,13 @@ public:
     {
 
         // List ID of corresponding LSTF (see LSTF)
-        S32 lsid;
+        U32 lsid;
 
         // reserved
-        S32 unused4;
+        U32 unused4;
 
         // reserved
-        S32 unused8;
+        U32 unused8;
 
         // count of levels whose format is overridden (see LFOLVL)
         U8 clfolvl;
@@ -2931,7 +2932,7 @@ public:
 
         // start-at value if fFormatting == false and fStartAt == true. (if 
         // fFormatting == true, the start-at is stored in the LVL)
-        S32 iStartAt;
+        U32 iStartAt;
 
         // the level to be overridden
         U8 ilvl:4;
@@ -2989,7 +2990,7 @@ public:
 
         // index to author IDs stored in hsttbfRMark for the paragraph number 
         // change
-        S16 ibstNumRM;
+        U16 ibstNumRM;
 
         // Date of the paragraph number change
         DTTM dttmNumRM;
@@ -3003,10 +3004,10 @@ public:
         U8 rgnfc[9];
 
         // 
-        S16 unused26;
+        U16 unused26;
 
         // Numerical value for each level place holder in NUMRM.xst.
-        S32 PNBR[9];
+        U32 PNBR[9];
 
         // The text string for the paragraph number, containing level place 
         // holders
@@ -3019,45 +3020,45 @@ public:
     {
 
         // 1 only when footnote is continued from previous page
-        S16 fContinue:1;
+        U16 fContinue:1;
 
         // 1 when page is dirty (i.e. pagination cannot be trusted)
-        S16 fUnk:1;
+        U16 fUnk:1;
 
         // 1 when right hand side page
-        S16 fRight:1;
+        U16 fRight:1;
 
         // 1 when page number must be reset to 1.
-        S16 fPgnRestart:1;
+        U16 fPgnRestart:1;
 
         // 1 when section break forced page to be empty.
-        S16 fEmptyPage:1;
+        U16 fEmptyPage:1;
 
         // 1 when page contains nothing but footnotes
-        S16 fAllFtn:1;
+        U16 fAllFtn:1;
 
         // unused
-        S16 unused0_6:1;
+        U16 unused0_6:1;
 
         // table breaks have been calculated for this page.
-        S16 fTableBreaks:1;
+        U16 fTableBreaks:1;
 
         // used temporarily while word is running.
-        S16 fMarked:1;
+        U16 fMarked:1;
 
         // column breaks have been calculated for this page.
-        S16 fColumnBreaks:1;
+        U16 fColumnBreaks:1;
 
         // page had a table header at the end
-        S16 fTableHeader:1;
+        U16 fTableHeader:1;
 
         // page has never been valid since created, must recalculate the 
         // bounds of this page. If this is the last page, this PGD may really 
         // represent many pages.
-        S16 fNewPage:1;
+        U16 fNewPage:1;
 
         // section break code
-        S16 bkc:4;
+        U16 bkc:4;
 
         // line number of first line, -1 if no line numbering
         U16 lnn;
@@ -3066,7 +3067,7 @@ public:
         U16 pgn;
 
         // 
-        S32 dym;
+        U32 dym;
     } __attribute__ ((packed)) PGD;
     static unsigned read(const U8 *in, PGD *out, unsigned count=1);
 
@@ -3075,34 +3076,34 @@ public:
     {
 
         // reserved
-        S16 fSpare:1;
+        U16 fSpare:1;
 
         // PHE entry is invalid when == 1
-        S16 fUnk:1;
+        U16 fUnk:1;
 
         // when 1, total height of paragraph is known but lines in paragraph 
         // have different heights.
-        S16 fDiffLines:1;
+        U16 fDiffLines:1;
 
         // reserved
-        S16 unused0_3:5;
+        U16 unused0_3:5;
 
         // when fDiffLines is 0 is number of lines in paragraph
-        S16 clMac:8;
+        U16 clMac:8;
 
         // reserved
-        S16 unused2;
+        U16 unused2;
 
         // width of lines in paragraph
-        S32 dxaCol;
+        U32 dxaCol;
 
         // when fDiffLines is 0, is height of every line in paragraph in 
         // pixels
-        S32 dymLine;
+        U32 dymLine;
 
         // when fDiffLines is 1, is the total height in pixels of the 
         // paragraph
-        S32 dymHeight;
+        U32 dymHeight;
     } __attribute__ ((packed)) PHE;
     static unsigned read(const U8 *in, PHE *out, unsigned count=1);
 
@@ -3131,27 +3132,27 @@ public:
         U8 fPageBreakBefore;
 
         // 
-        S16 fBrLnAbove:1;
+        U8 fBrLnAbove:1;
 
         // 
-        S16 fBrLnBelow:1;
+        U8 fBrLnBelow:1;
 
         // reserved
-        S16 fUnused:2;
+        U8 fUnused:2;
 
         // vertical position code. Specifies coordinate frame to use when 
         // paragraphs are absolutely positioned. 
         //     0 vertical position coordinates are relative to margin 
         //     1 coordinates are relative to page 
         //     2 coordinates are relative to text. This means: relative to where the next non-APO text would have been placed if this APO did not exist.
-        S16 pcVert:2;
+        U8 pcVert:2;
 
         // horizontal position code. Specifies coordinate frame to use when 
         // paragraphs are absolutely positioned. 
         //     0 horiz. position coordinates are relative to column. 
         //     1 coordinates are relative to margin 
         //     2 coordinates are relative to page
-        S16 pcHorz:2;
+        U8 pcHorz:2;
 
         // /* the brcp and brcl fields have been superseded by the newly 
         // defined brcLeft, brcTop, etc. fields. They remain in the PAP for 
@@ -3181,7 +3182,7 @@ public:
 
         // when non-zero, (1-based) index into the pllfo identifying the list 
         // to which the paragraph belongs
-        S16 ilfo;
+        U16 ilfo;
 
         // no longer used
         U8 nLvlAnm;
@@ -3199,13 +3200,13 @@ public:
         U8 fWidowControl;
 
         // indent from right margin (signed).
-        S32 dxaRight;
+        U32 dxaRight;
 
         // indent from left margin (signed)
-        S32 dxaLeft;
+        U32 dxaLeft;
 
         // first line indent; signed number relative to dxaLeft
-        S32 dxaLeft1;
+        U32 dxaLeft1;
 
         // line spacing descriptor
         LSPD lspd;
@@ -3257,28 +3258,28 @@ public:
         U16 wAlignFont;
 
         // 
-        S16 fVertical:1;
+        U16 fVertical:1;
 
         // 
-        S16 fBackward:1;
+        U16 fBackward:1;
 
         // 
-        S16 fRotateFont:1;
+        U16 fRotateFont:1;
 
 
 
         // when 1, paragraph is contained in a table row
-        S8 fInTable;
+        U8 fInTable;
 
         // when 1, paragraph consists only of the row mark special character 
         // and marks the end of a table row.
-        S8 fTtp;
+        U8 fTtp;
 
         // Wrap Code for absolute objects
-        S8 wr;
+        U8 wr;
 
         // when 1, paragraph may not be edited
-        S8 fLocked;
+        U8 fLocked;
 
         // TAP used internally by Word
         U32 ptap;
@@ -3291,7 +3292,7 @@ public:
         //     -8 paragraph adjusted right within reference frame 
         //     -12 paragraph placed immediately inside of reference frame 
         //     -16 paragraph placed immediately outside of reference frame
-        S32 dxaAbs;
+        U32 dxaAbs;
 
         // when positive, is the vertical distance from the reference frame 
         // specified by pap.pcVert. 0 means paragraph's y-position is 
@@ -3299,11 +3300,11 @@ public:
         //     -4 paragraph is placed at top of reference frame 
         //     -8 paragraph is centered vertically within reference frame 
         //     -12 paragraph is placed at bottom of reference frame.
-        S32 dyaAbs;
+        U32 dyaAbs;
 
         // when not == 0, paragraph is constrained to be dxaWidth wide, 
         // independent of current margin or column settings.
-        S32 dxaWidth;
+        U32 dxaWidth;
 
         // specification for border above paragraph
         BRC brcTop;
@@ -3330,17 +3331,17 @@ public:
 
         // horizontal distance to be maintained between an absolutely 
         // positioned paragraph and any non-absolute positioned text
-        S32 dxaFromText;
+        U32 dxaFromText;
 
         // vertical distance to be maintained between an absolutely 
         // positioned paragraph and any non-absolute positioned text
-        S32 dyaFromText;
+        U32 dyaFromText;
 
         // height of abs obj; 0 == Auto
-        S16 dyaHeight:15;
+        U16 dyaHeight:15;
 
         // 0 = Exact, 1 = At Least
-        S16 fMinHeight:1;
+        U16 fMinHeight:1;
 
         // shading
         SHD shd;
@@ -3349,20 +3350,20 @@ public:
         DCS dcs;
 
         // 
-        S8 lvl;
+        U8 lvl;
 
         // 
-        S8 fNumRMIns;
+        U8 fNumRMIns;
 
         // autonumber list descriptor (see ANLD definition)
         ANLD anld;
 
         // when 1, properties have been changed with revision marking on
-        S16 fPropRMark;
+        U16 fPropRMark;
 
         // index to author IDs stored in hsttbfRMark. used when properties 
         // have been changed when revision marking was enabled
-        S16 ibstPropRMark;
+        U16 ibstPropRMark;
 
         // Date/time at which properties of this were changed for this run of 
         // text by the author. (Only recorded when revision marking is on.)
@@ -3373,13 +3374,13 @@ public:
 
         // number of tabs stops defined for paragraph. Must be >= 0 and &lt;= 
         // 64.
-        S16 itbdMac;
+        U16 itbdMac;
 
         // array of positions of itbdMac tab stops. itbdMax == 64
-        S16 rgdxaTab[64];
+        U16 rgdxaTab[64];
 
         // array of itbdMac tab descriptors
-        S8 rgtbd[64];
+        U8 rgtbd[64];
     } __attribute__ ((packed)) PAP;
     static unsigned read(const U8 *in, PAP *out, unsigned count=1);
 
@@ -3391,18 +3392,18 @@ public:
 //        // is a count of bytes when a PAPX is stored in a STSH. Count of 
 //        // bytes is used because only paragraph sprms are stored in a STSH 
 //        // PAPX.
-//        S8 cb;
+//        U8 cb;
 //
 //        // count of words for this byte and the following data in PAPX. The 
 //        // first byte of a PAPX is a count of words when PAPX is stored in an 
 //        // FKP. If this value is 0, it is a 'pad' byte and the count is 
 //        // stored in the following byte, Count of words is used because PAPX 
 //        // in an FKP can contain paragraph <b>and</b> table sprms.
-//        S8 cw;
+//        U8 cw;
 //
 //        // if previous byte is 0, this is the count of words of following 
 //        // data in PAPX (not including this and previous 'pad' byte)
-//        S8 (cw);
+//        U8 (cw);
 //
 //        // index to style descriptor of the style from which the paragraph 
 //        // inherits its paragraph and character properties
@@ -3428,22 +3429,22 @@ public:
         // filename of a TIFF file. In the case of a Macintosh PICT picture, 
         // this includes the size of the PIC, the standard "x" metafile, and 
         // the Macintosh PICT data. See Appendix B for more information.
-        S32 lcb;
+        U32 lcb;
 
         // number of bytes in the PIC (to allow for future expansion).
         U16 cbHeader;
 
         // 
-        S16 mfp_mm;
+        U16 mfp_mm;
 
         // 
-        S16 mfp_xExt;
+        U16 mfp_xExt;
 
         // 
-        S16 mfp_yExt;
+        U16 mfp_yExt;
 
         // 
-        S16 mfp_hMF;
+        U16 mfp_hMF;
     } __attribute__ ((packed)) PICF;
     static unsigned read(const U8 *in, PICF *out, unsigned count=1);
 
@@ -3452,19 +3453,19 @@ public:
     {
 
         // when 1, means that piece contains no end of paragraph marks.
-        S16 fNoParaLast:1;
+        U16 fNoParaLast:1;
 
         // used internally by Word
-        S16 fPaphNil:1;
+        U16 fPaphNil:1;
 
         // used internally by Word
-        S16 fCopied:1;
+        U16 fCopied:1;
 
         // 
-        S16 unused0_3:5;
+        U16 unused0_3:5;
 
         // used internally by Word
-        S16 fn:8;
+        U16 fn:8;
 
         // file offset of beginning of piece. The size of the <b>ith</b> 
         // piece can be determined by subtracting rgcp[<b>i</b>] of the 
@@ -3499,10 +3500,10 @@ public:
     {
 
         // set to 1 for variant 2
-        S16 fComplex:1;
+        U16 fComplex:1;
 
         // index to a <b>grpprl</b> stored in <b>CLX</b> portion of file.
-        S16 igrpprl:15;
+        U16 igrpprl:15;
     } __attribute__ ((packed)) PRM2;
     static unsigned read(const U8 *in, PRM2 *out, unsigned count=1);
 
@@ -3511,35 +3512,35 @@ public:
     {
 
         // when 1, document has been routed to at least one recipient.
-        S16 fRouted;
+        U16 fRouted;
 
         // when 1, document should be routed to the originator after it has 
         // been routed to all recipients.
-        S16 fReturnOrig;
+        U16 fReturnOrig;
 
         // when 1, a status message is sent to the originator each time the 
         // document is forwarded to a recipient on the routing list.
-        S16 fTrackStatus;
+        U16 fTrackStatus;
 
         // unused( should be 0)
-        S16 fDirty;
+        U16 fDirty;
 
         // document protection while routing 
         //     0 recipients can make changes to the document and all changes are untracked. 
         //     1 recipients can add annotations and make changes to the document. Any changes are tracked by revision marks, and revision marking cannot be turned off. 
         //     2 recipients can only add annotations to the document. 
         //     3 recipients can enter information only in form fields.
-        S16 nProtect;
+        U16 nProtect;
 
         // index of the current recipient.
-        S16 iStage;
+        U16 iStage;
 
         // when 0, document is routed to each recipient in turn. when 1, 
         // document is routed to all recipients simultaneously.
-        S16 delOption;
+        U16 delOption;
 
         // count of recipients.
-        S16 cRecip;
+        U16 cRecip;
     } __attribute__ ((packed)) RS;
     static unsigned read(const U8 *in, RS *out, unsigned count=1);
 
@@ -3548,10 +3549,10 @@ public:
     {
 
         // count of bytes of private system data
-        S16 cb;
+        U16 cb;
 
         // count of bytes in recipient string (including null terminator).
-        S16 cbSzRecip;
+        U16 cbSzRecip;
     } __attribute__ ((packed)) RR;
     static unsigned read(const U8 *in, RR *out, unsigned count=1);
 
@@ -3560,7 +3561,7 @@ public:
     {
 
         // used internally by Word
-        S16 fn;
+        U16 fn;
 
         // file offset in main stream to beginning of SEPX stored for 
         // section. If sed.fcSepx == 0xFFFFFFFF, the section properties for 
@@ -3568,7 +3569,7 @@ public:
         U32 fcSepx;
 
         // used internally by Word
-        S16 fnMpr;
+        U16 fnMpr;
 
         // points to offset in FC space of main stream where the Macintosh 
         // Print Record for a document created on a Mac will be stored
@@ -3593,7 +3594,7 @@ public:
 
         // only for Mac compatibility, used only during open, when 1, 
         // sep.dxaPgn and sep.dyaPgn are valid page number locations
-        S8 fAutoPgn;
+        U8 fAutoPgn;
 
         // page number format code: 
         //     0 Arabic 
@@ -3621,37 +3622,37 @@ public:
         //     0 Per page 
         //     1 Restart 
         //     2 Continue
-        S8 lnc;
+        U8 lnc;
 
         // specification of which headers and footers are included in this 
         // section. See explanation in Headers and Footers topic. No longer 
         // used.
-        S8 grpfIhdt;
+        U8 grpfIhdt;
 
         // if 0, no line numbering, otherwise this is the line number modulus 
         // (e.g. if nLnnMod is 5, line numbers appear on line 5, 10, etc.)
         U16 nLnnMod;
 
         // distance of
-        S32 dxaLnn;
+        U32 dxaLnn;
 
         // when fAutoPgn ==1, gives the x position of auto page number on 
         // page in twips (for Mac compatibility only)
-        S16 dxaPgn;
+        U16 dxaPgn;
 
         // when fAutoPgn ==1, gives the y position of auto page number on 
         // page in twips (for Mac compatibility only)
-        S16 dyaPgn;
+        U16 dyaPgn;
 
         // when ==1, draw vertical lines between columns
-        S8 fLBetween;
+        U8 fLBetween;
 
         // vertical justification code 
         //     0 top justified 
         //     1 centered 
         //     2 fully justified vertically 
         //     3 bottom justified
-        S8 vjc;
+        U8 vjc;
 
         // bin number supplied from windows printer driver indicating which 
         // bin the first page of section will be printed.
@@ -3677,27 +3678,27 @@ public:
         BRC brcRight;
 
         // when 1, properties have been changed with revision marking on
-        S16 fPropRMark;
+        U16 fPropRMark;
 
         // index to author IDs stored in hsttbfRMark. used when properties 
         // have been changed when revision marking was enabled
-        S16 ibstPropRMark;
+        U16 ibstPropRMark;
 
         // Date/time at which properties of this were changed for this run of 
         // text by the author. (Only recorded when revision marking is on.)
         DTTM dttmPropRMark;
 
         // 
-        S32 dxtCharSpace;
+        U32 dxtCharSpace;
 
         // 
-        S32 dyaLinePitch;
+        U32 dyaLinePitch;
 
         // 
         U16 clm;
 
         // reserved
-        S16 unused62;
+        U16 unused62;
 
         // orientation of pages in that section. set to 0 when portrait, 1 
         // when landscape
@@ -3710,33 +3711,33 @@ public:
         U16 pgnStart;
 
         // beginning line number for section
-        S16 lnnMin;
+        U16 lnnMin;
 
         // 
         U16 wTextFlow;
 
         // reserved
-        S16 unused72;
+        U16 unused72;
 
         // page border properties
-        S16 pgbProp;
+        U16 pgbProp;
 
         // page border applies to: 
         //     0 all pages in this section 
         //     1 first page in this section 
         //     2 all pages in this section but first 
         //     3 whole document (all sections)
-        S16 pgbApplyTo:3;
+        U16 pgbApplyTo:3;
 
         // page border depth: 
         //     0 in front 
         //     1 in back
-        S16 pgbPageDepth:2;
+        U16 pgbPageDepth:2;
 
         // page border offset from: 
         //     0 offset from text 
         //     1 offset from edge of page
-        S16 pgbOffsetFrom:3;
+        U16 pgbOffsetFrom:3;
 
 
         // default value is 12240 twipswidth of page
@@ -3758,10 +3759,10 @@ public:
         U32 dxaRight;
 
         // default value is 1440 twipstop margin
-        S32 dyaTop;
+        U32 dyaTop;
 
         // default value is 1440 twipsbottom margin
-        S32 dyaBottom;
+        U32 dyaBottom;
 
         // default value is 0 twips gutter width
         U32 dzaGutter;
@@ -3773,22 +3774,22 @@ public:
         U32 dyaHdrBottom;
 
         // number of columns in section - 1.
-        S16 ccolM1;
+        U16 ccolM1;
 
         // when == 1, columns are evenly spaced. Default value is 1.
-        S8 fEvenlySpaced;
+        U8 fEvenlySpaced;
 
         // reserved
-        S8 unused123;
+        U8 unused123;
 
         // distance that will be maintained between columns
-        S32 dxaColumns;
+        U32 dxaColumns;
 
         // array of 89 longs that determine bounds of irregular width columns
-        S32 rgdxaColumnWidthSpacing[89];
+        U32 rgdxaColumnWidthSpacing[89];
 
         // used internally by Word
-        S32 dxaColumnWidth;
+        U32 dxaColumnWidth;
 
         // 
         U8 dmOrientFirst;
@@ -3797,7 +3798,7 @@ public:
         U8 fLayout;
 
         // reserved
-        S16 unused490;
+        U16 unused490;
 
         // multilevel autonumbering list data (see OLST definition)
         OLST olstAnm;
@@ -3817,6 +3818,92 @@ public:
 //    } __attribute__ ((packed)) SEPX;
 //    static unsigned read(const U8 *in, SEPX *out, unsigned count=1);
 
+    // STyleSHeet Information (STSHI)
+    typedef struct STSHI
+    {
+
+        // Count of styles in stylesheet
+        U16 cstd;
+
+        // Length of STD Base as stored in a file
+        U16 cbSTDBaseInFile;
+
+        // Are built-in stylenames stored?
+        U16 fStdStylenamesWritten:1;
+
+        // Spare flags
+        U16 unused4_2:15;
+
+        // Max sti known when this file was written
+        U16 stiMaxWhenSaved;
+
+        // How many fixed-index istds are there?
+        U16 istdMaxFixedWhenSaved;
+
+        // Current version of built-in stylenames
+        U16 nVerBuiltInNamesWhenSaved;
+
+        // ftc used by StandardChpStsh for this document
+        U16 rgftcStandardChpStsh[3];
+    } __attribute__ ((packed)) STSHI;
+    static unsigned read(const U8 *in, STSHI *out, unsigned count=1);
+
+    // STyle Definition (STD)
+//    typedef struct STD
+//    {
+//
+//        // invariant style identifier
+//        U16 sti:12;
+//
+//        // spare field for any temporary use, always reset back to zero!
+//        U16 fScratch:1;
+//
+//        // PHEs of all text with this style are wrong
+//        U16 fInvalHeight:1;
+//
+//        // UPEs have been generated
+//        U16 fHasUpe:1;
+//
+//        // std has been mass-copied; if unused at save time, style should be 
+//        // deleted
+//        U16 fMassCopy:1;
+//
+//        // style type code
+//        U16 sgc:4;
+//
+//        // base style
+//        U16 istdBase:12;
+//
+//        // # of UPXs (and UPEs)
+//        U16 cupx:4;
+//
+//        // next style
+//        U16 istdNext:12;
+//
+//        // offset to end of upx's, start of upe's
+//        U16 bchUpe;
+//
+//        // auto redefine style when appropriate
+//        U16 fAutoRedef:1;
+//
+//        // hidden from UI?
+//        U16 fHidden:1;
+//
+//        // unused bits
+//        U16 unused8_3:14;
+//
+//        // sub-names are separated by chDelimStyle
+//        XCHAR xstzName[2];
+//
+//        // 
+//        U8 grupx[];
+//
+//        // the UPEs are not stored on the file; they are a cache of the 
+//        // based-on chain
+//        U8 grupe[];
+//    } __attribute__ ((packed)) STD;
+//    static unsigned read(const U8 *in, STD *out, unsigned count=1);
+
     // Tab Descriptor (TBD)
     typedef struct TBD
     {
@@ -3827,7 +3914,7 @@ public:
         //     2 right tab 
         //     3 decimal tab 
         //     4 bar
-        S8 jc:3;
+        U8 jc:3;
 
         // tab leader code 
         //     0 no leader 
@@ -3835,10 +3922,10 @@ public:
         //     2 hyphenated leader 
         //     3 single line leader 
         //     4 heavy line leader
-        S8 tlc:3;
+        U8 tlc:3;
 
         // reserved
-        S8 unused0_6:2;
+        U8 unused0_6:2;
     } __attribute__ ((packed)) TBD;
     static unsigned read(const U8 *in, TBD *out, unsigned count=1);
 
@@ -3851,20 +3938,20 @@ public:
         // merged cells are consolidated and the text within the cells is 
         // interpreted as belonging to one text stream for purposes of 
         // calculating line breaks.
-        S16 fFirstMerged:1;
+        U16 fFirstMerged:1;
 
         // set to 1 when cell has been merged with preceding cell.
-        S16 fMerged:1;
+        U16 fMerged:1;
 
         // set to 1 when cell has vertical text flow
-        S16 fVertical:1;
+        U16 fVertical:1;
 
         // for a vertical table cell, text flow is bottom to top when 1 and 
         // is bottom to top when 0.
-        S16 fBackward:1;
+        U16 fBackward:1;
 
         // set to 1 when cell has rotated characters (i.e. uses @font)
-        S16 fRotateFont:1;
+        U16 fRotateFont:1;
 
         // set to 1 when cell is vertically merged with the cell(s) above 
         // and/or below. When cells are vertically merged, the display area 
@@ -3875,14 +3962,14 @@ public:
         // Cells can only be merged vertically if their left and right 
         // boundaries are (nearly) identical (i.e. if corresponding entries 
         // in rgdxaCenter of the table rows differ by at most 3).
-        S16 fVertMerge:1;
+        U16 fVertMerge:1;
 
         // set to 1 when the cell is the first of a set of vertically merged 
         // cells. The contents of a cell with fVertStart set to 1 are 
         // displayed in the consolidated area belonging to the entire set of 
         // vertically merged cells. Vertically merged cells with fVertRestart 
         // set to 0 must be empty.
-        S16 fVertRestart:1;
+        U16 fVertRestart:1;
 
         // specifies the alignment of the cell contents relative to text flow 
         // (e.g. in a cell with bottom to top text flow and bottom vertical 
@@ -3891,10 +3978,10 @@ public:
         //     0 top 
         //     1 center 
         //     2 bottom
-        S16 vertAlign:2;
+        U16 vertAlign:2;
 
         // reserved
-        S16 fUnused:7;
+        U16 fUnused:7;
 
         // reserved
         U16 wUnused;
@@ -3960,38 +4047,38 @@ public:
         //     37 Professional 
         //     38 Subtle1 
         //     39 Subtle2
-        S16 itl;
+        U16 itl;
 
         // when ==1, use the border properties from the selected table look
-        S16 fBorders:1;
+        U16 fBorders:1;
 
         // when ==1, use the shading properties from the selected table look
-        S16 fShading:1;
+        U16 fShading:1;
 
         // when ==1, use the font from the selected table look
-        S16 fFont:1;
+        U16 fFont:1;
 
         // when ==1, use the color from the selected table look
-        S16 fColor:1;
+        U16 fColor:1;
 
         // when ==1, do best fit from the selected table look
-        S16 fBestFit:1;
+        U16 fBestFit:1;
 
         // when ==1, apply properties from the selected table look to the 
         // header rows in the table
-        S16 fHdrRows:1;
+        U16 fHdrRows:1;
 
         // when ==1, apply properties from the selected table look to the 
         // last row in the table
-        S16 fLastRow:1;
+        U16 fLastRow:1;
 
         // when ==1, apply properties from the selected table look to the 
         // header columns of the table
-        S16 fHdrCols:1;
+        U16 fHdrCols:1;
 
         // when ==1, apply properties from the selected table look to the 
         // last column of the table
-        S16 fLastCol:1;
+        U16 fLastCol:1;
     } __attribute__ ((packed)) TLP;
     static unsigned read(const U8 *in, TLP *out, unsigned count=1);
 
@@ -4004,12 +4091,12 @@ public:
         //     0 left justify 
         //     1 center 
         //     2 right justify
-        S16 jc;
+        U16 jc;
 
         // measures half of the white space that will be maintained between 
         // text in adjacent columns of a table row. A dxaGapHalf width of 
         // white space will be maintained on both sides of a column boundary.
-        S32 dxaGapHalf;
+        U32 dxaGapHalf;
 
         // when greater than 0. guarantees that the height of the table will 
         // be at least dyaRowHeight high. When less than 0, guarantees that 
@@ -4024,7 +4111,7 @@ public:
         // the row does not contain the last cell in any vertical cell merge, 
         // then the row is given height equal to that of the end of cell mark 
         // in the first cell.
-        S32 dyaRowHeight;
+        U32 dyaRowHeight;
 
         // when 1, table row may not be split across page bounds
         U8 fCantSplit;
@@ -4036,43 +4123,43 @@ public:
         TLP tlp;
 
         // reserved for future use
-        S32 lwHTMLProps;
+        U32 lwHTMLProps;
 
         // used internally by Word
-        S16 fCaFull:1;
+        U16 fCaFull:1;
 
         // used internally by Word
-        S16 fFirstRow:1;
+        U16 fFirstRow:1;
 
         // used internally by Word
-        S16 fLastRow:1;
+        U16 fLastRow:1;
 
         // used internally by Word
-        S16 fOutline:1;
+        U16 fOutline:1;
 
         // reserved
-        S16 unused20_12:12;
+        U16 unused20_12:12;
 
         // count of cells defined for this row. ItcMac must be >= 0 and less 
         // than or equal to 64.
-        S16 itcMac;
+        U16 itcMac;
 
         // used internally by Word
-        S32 dxaAdjust;
+        U32 dxaAdjust;
 
         // used internally by Word
-        S32 dxaScale;
+        U32 dxaScale;
 
         // used internally by Word
-        S32 dxsInch;
+        U32 dxsInch;
 
         // rgdxaCenter[0] is the left boundary of cell 0 measured relative to 
         // margin.. rgdxaCenter[tap.itcMac - 1] is left boundary of last 
         // cell. rgdxaCenter[tap.itcMac] is right boundary of last cell.
-        S16 rgdxaCenter[65];
+        U16 rgdxaCenter[65];
 
         // used internally by Word
-        S16 rgdxaCenterPrint[65];
+        U16 rgdxaCenterPrint[65];
 
         // array of table cell descriptors
         TC rgtc[64];
@@ -4091,26 +4178,26 @@ public:
 
         // when not fReusable, counts the number of textboxes in this story 
         // chain
-        S32 cTxbx;
+        U32 cTxbx;
 
         // when fReusable, the index of the next in the linked list of 
         // reusable FTXBXSs
-        S32 iNextReuse;
+        U32 iNextReuse;
 
         // if fReusable, counts the number of reusable FTXBXSs follow this 
         // one in the linked list
-        S32 cReusable;
+        U32 cReusable;
 
         // this FTXBXS is not currently in use
-        S16 fReusable;
+        U16 fReusable;
 
 
         // Shape Identifier (see FSPA) for first Office Shape in textbox 
         // chain.
-        S32 lid;
+        U32 lid;
 
         // 
-        S32 txidUndo;
+        U32 txidUndo;
     } __attribute__ ((packed)) FTXBXS;
     static unsigned read(const U8 *in, FTXBXS *out, unsigned count=1);
 
@@ -4119,22 +4206,22 @@ public:
     {
 
         // 
-        S16 fn;
+        U16 fn;
 
         // 
         U16 grfwkb;
 
         // 
-        S16 lvl;
+        U16 lvl;
 
         // 
-        S16 fnpt:4;
+        U16 fnpt:4;
 
         // 
-        S16 fnpd:12;
+        U16 fnpd:12;
 
         // unused
-        S32 doc;
+        U32 doc;
     } __attribute__ ((packed)) WKB;
     static unsigned read(const U8 *in, WKB *out, unsigned count=1);
 };

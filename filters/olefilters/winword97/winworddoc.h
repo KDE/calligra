@@ -72,15 +72,11 @@ private:
 
     void FIBInfo();
 
-    void convertSimple();
-    void convertComplex();
-
     void locateATRD();
     void locateBKF();
     void locateBKL();
 
     const bool checkBinTables();
-    void browseDop();
     void readCommentStuff();
 
     bool m_success, m_ready;
@@ -89,7 +85,7 @@ private:
 
     // Stylesheet
     StyleSheet *m_styleSheet;
-    void gotText(const QString &data);
+    void gotParagraph(const QString &text);
     // ATRD
     unsigned long m_atrdBase, m_atrdCount;
     // BKF
@@ -102,10 +98,6 @@ private:
     // Since there is no way to fill m_part incrementally with XML content,
     // we will fill m_body instead.
 
-//    QString m_body;
-
+    QString m_body;
 };
 #endif // WINWORDDOC_H
-
-
-

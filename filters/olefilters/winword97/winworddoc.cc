@@ -19,32 +19,30 @@
 
 #include <winworddoc.h>
 
-// TBD: move to .h file and then recompile...
-static QString m_body;
-
-WinWordDoc::WinWordDoc(QDomDocument &part, const myFile &mainStream,
-                       const myFile &table0Stream, const myFile &table1Stream,
-                       const myFile &dataStream) :
-	MsWord(mainStream.data, table0Stream.data, table1Stream.data, dataStream.data),
-	m_part(part), m_main(mainStream), m_data(dataStream) {
-
+WinWordDoc::WinWordDoc(
+    QDomDocument &part,
+    const myFile &mainStream,
+    const myFile &table0Stream,
+    const myFile &table1Stream,
+    const myFile &dataStream) : 
+	MsWord(
+            mainStream.data,
+            table0Stream.data,
+            table1Stream.data,
+            dataStream.data),
+	m_part(part), m_main(mainStream), m_data(dataStream)
+{
     m_success=true;
     m_ready=false;
     m_styleSheet=0L;
     m_atrdCount=0;
     m_bkfCount=0;
     m_bklCount=0;
-    
-    kDebugInfo(30003, "XXXXXXXXXXXXXXXXXXXXXXXXX");
-    kDebugInfo(30003, (const char*)QString::number((int)m_fib.fWhichTblStm));
-    kDebugInfo(30003, (const char*)QString::number((int)m_fib.nFib)); 
 
-    if(m_fib.fWhichTblStm==0 && m_fib.nFib>104)
+    if(m_fib.fWhichTblStm==0)
         m_table=table0Stream;
-    else if(m_fib.fWhichTblStm!=0 && m_fib.nFib>104)
-        m_table=table1Stream;
     else
-	m_table=mainStream;
+        m_table=table1Stream;
 
     //m_styleSheet=new StyleSheet(m_table, &m_fib);
     m_body = QString("");
@@ -84,14 +82,12 @@ WinWordDoc::~WinWordDoc() {
     }
 
     m_assocStrings.extraData.clear();
-    // TBD; delete m_body;
 }
 
 const bool WinWordDoc::convert() {
 
     if(!m_success || m_ready)
         return false;
-    browseDop();                  // DOP==Document Properties
 //    if(!checkBinTables())         // are the bin tables ok (==not compressed)
 //        return false;
     locateATRD();
@@ -102,17 +98,18 @@ const bool WinWordDoc::convert() {
 
     // FFN, FRD - TODO(?)
 
-    getText();
+    getParagraphs();
+    getStyles();
 
     m_success=true;
 
     return m_success;
 }
 
-void WinWordDoc::gotText(const QString &data)
+void WinWordDoc::gotParagraph(const QString &text)
 {
     m_body.append("<PARAGRAPH><TEXT>");
-    m_body.append(data);
+    m_body.append(text);
     m_body.append("</TEXT></PARAGRAPH>\n");
 }
 
@@ -300,7 +297,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
                 sttbf.stringList.append(str);
                 kDebugInfo(31000, str);
                 base+=j;
-
+                
                 if(sttbf.extraDataLen!=0) {
                     kDebugInfo(31000, "WinWordDoc::sttbf(): extra data");
                     unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
@@ -358,14 +355,6 @@ void WinWordDoc::FIBInfo() {
     kDebugInfo(31000, "--------------------------");
 }
 
-void WinWordDoc::convertSimple() {
-    m_success=false;
-}
-
-void WinWordDoc::convertComplex() {
-    m_success=false;
-}
-
 void WinWordDoc::locateATRD() {
 
     if(m_fib.lcbPlcfandRef!=0) {
@@ -401,10 +390,6 @@ const bool WinWordDoc::checkBinTables() {
         m_success=false;
     }
     return notCompressed;
-}
-
-void WinWordDoc::browseDop() {
-    // TODO
 }
 
 void WinWordDoc::readCommentStuff() {
