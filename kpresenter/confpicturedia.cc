@@ -292,7 +292,7 @@ void PicturePreview::setMirrorType (PictureMirrorType _t)
     }
 }
 
-void PicturePreview::setPicturePixmap(QPixmap _pixmap)
+void PicturePreview::setPicturePixmap(const QPixmap &_pixmap)
 {
     origPixmap = _pixmap;
     repaint();

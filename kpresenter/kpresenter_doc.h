@@ -193,7 +193,7 @@ public:
     void deSelectObj(KPObject *obj);
     void updateHeaderFooterButton();
 
-    KoPictureCollection *getPictureCollection() { return &m_pictureCollection; }
+    KoPictureCollection *getPictureCollection(){ return &m_pictureCollection; }
     KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
 
     KoAutoFormat * getAutoFormat()const { return m_autoFormat; }
@@ -275,7 +275,7 @@ public:
 
     int maxRecentFiles() const { return m_maxRecentFiles; }
 
-    KoVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
+    KoVariableFormatCollection *variableFormatCollection()const { return m_varFormatCollection; }
 
     void recalcVariables( int type );
 

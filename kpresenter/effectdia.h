@@ -36,6 +36,7 @@ class KPObject;
 class KIntNumInput;
 class KURLRequester;
 class KPresenterSoundPlayer;
+class QSpinBox;
 
 /******************************************************************/
 /* class EffectDia                                                */

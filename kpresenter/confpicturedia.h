@@ -48,7 +48,7 @@ public:
 
     void setDepth( int depth);
     void setMirrorType (PictureMirrorType _t);
-    void setPicturePixmap(QPixmap _pixmap);
+    void setPicturePixmap(const QPixmap &_pixmap);
 
 public slots:
     void slotNormalPicture();

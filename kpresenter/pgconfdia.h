@@ -24,7 +24,6 @@
 #include <qmap.h>
 
 #include <global.h>
-#include <knuminput.h>
 class QButtonGroup;
 class QLabel;
 class QPushButton;

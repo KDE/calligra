@@ -20,6 +20,7 @@
 #include <pgconfdia.h>
 #include <kpresenter_doc.h>
 #include <kpresenter_sound_player.h>
+#include <knuminput.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
