@@ -4,18 +4,7 @@ This is an XML document type definition (DTD) for the KWord document format.
 Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from KWord's
 author Reginald Stadlbauer <reggie@kde.org>.
 
-Kword DTD version 2 has been created by Thomas Zander, but only small adjustments from
-the original version ware made.
-
-
-About the version
------------------
-
-Current dtd version is 2, look at the kword-version?.dtd file for the old 
-(obsolete) fileformat.
-Kword will read all file-formats but this is considered the most complete format,
-we heighly encourage you to use this format.
-
+Please report all bugs to Kalle and Reginald at the above addresses.
 
 KWord overview
 --------------
@@ -62,6 +51,10 @@ don't put a </?xml...> at the end of the file!).
 
         Attributes:
 
+            author:         The document's author.
+
+            email:          The document's author's email address.
+
             editor:         The program this file was written with.
 
             mime:           The MIME type (must always have the value
@@ -77,6 +70,8 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT DOC
     (PAPER, ATTRIBUTES, FRAMESETS, STYLES)>
 <!ATTLIST DOC
+    author CDATA #IMPLIED
+    email CDATA #IMPLIED
     editor CDATA #IMPLIED
     mime CDATA "application/x-kword"
     syntaxVersion CDATA #REQUIRED
@@ -151,13 +146,13 @@ don't put a </?xml...> at the end of the file!).
 
         Attributes:
 
-            mmleft:           left margin in mm.
+            left:           left margin in pixels.
 
-            mmright:          right margin in mm.
+            right:          right margin in pixels.
 
-            mmtop:            top margin in mm.
+            top:            top margin in pixels.
 
-            mmbottom:         bottom margin in mm.
+            bottom:         bottom margin in pixels.
 -->
 <!ELEMENT PAPERBORDERS
     EMPTY>
@@ -184,7 +179,6 @@ don't put a </?xml...> at the end of the file!).
                             1...the document has footers
 
             unit:           Basic unit for positioning, ruler,...
-                            This has no influence on the units in this document, only on what the user sees.
                                 mm...
                                 pt...
                                 inch...
@@ -225,8 +219,7 @@ don't put a </?xml...> at the end of the file!).
                             7...footnote
 
             removable:      Whether the header-frame is removable or not:
-                            Used in tables where header cells on new pages are 
-                            auto created with this set to 1.
+
                                 0...no
                                 1...yes
 
@@ -250,7 +243,6 @@ don't put a </?xml...> at the end of the file!).
             col:            Ditto for columns.
 
             rows:           Size of this cell in rows (only for tables).
-                            can be 1 or greater.
 
             cols:           Ditto for columns.
 
@@ -358,18 +350,6 @@ don't put a </?xml...> at the end of the file!).
     pos CDATA #REQUIRED
     len CDATA #IMPLIED>
 
-<!--
-        A style is a global setting that is used for all paragraphs which use that
-        style. As the markup is stored in one place (the style) changing the markup
-        throughout the document is simply a task of changing one or two styles.
-        Highly recommended for structured documents.
--->
-<!ELEMENT STYLES
-    (STYLE*)>
-<!ELEMENT STYLE
-    (NAME|FOLLOWING|FLOW|INDENTS|COUNTER|LINESPACING|LEFTBORDER|
-        RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT)*>
-
 <!--    An anchor describes an object which is anchored.
 
         Attributes:
@@ -382,7 +362,6 @@ don't put a </?xml...> at the end of the file!).
                                 particular instance of the type of object
                                 being anchored.
 -->
-
 <!ELEMENT ANCHOR
     EMPTY>
 <!ATTLIST ANCHOR
@@ -394,139 +373,65 @@ don't put a </?xml...> at the end of the file!).
     red CDATA #REQUIRED
     green CDATA #REQUIRED
     blue CDATA #REQUIRED>
-
-<!--
-        name is the family name. Dont include fontsizes or bold, that is put in another tag
--->
 <!ELEMENT FONT
     EMPTY>
 <!ATTLIST FONT
     name CDATA #REQUIRED>
-
-<!-- SIZE
-        When size is used in a format the size is in points.
--->
 <!ELEMENT SIZE
     EMPTY>
 <!ATTLIST SIZE
     value CDATA #REQUIRED>
-
-<!-- WEIGHT
-        Wheight of a font is it's Boldness. Look at the QFont weight description for presice
-        numbers. Use normal=50, bord=75;
--->
 <!ELEMENT WEIGHT
     EMPTY>
 <!ATTLIST WEIGHT
     value CDATA #REQUIRED>
-<!-- ITALIC
-        Value is either 0 or 1 with 1=true and 0=false
--->
 <!ELEMENT ITALIC
     EMPTY>
 <!ATTLIST ITALIC
     value CDATA #REQUIRED>
-
-<!-- UNDERLINE
-        Value is either 0 or 1 with 1=true and 0=false
--->
 <!ELEMENT UNDERLINE
     EMPTY>
 <!ATTLIST UNDERLINE
     value CDATA #REQUIRED>
-
-<!-- VERTALIGN
-            Super/sub script.
-            0 = Normal
-            1 = Subscript 
-            2 = Superscript
--->
 <!ELEMENT VERTALIGN
     EMPTY>
 <!ATTLIST VERTALIGN
     value CDATA #REQUIRED>
 <!ELEMENT LAYOUT
-    (FLOW|INDENTS|LINESPACING|LEFTBORDER|COUNTER
-        RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT|TABULATOR|COUNTERSTART)*>
-
-<!-- COUNTERSTART
-        Initialises this paragraph to a specific counter start.
--->
-<!ELEMENT COUNTERSTART
-    EMPTY>
-<!ATTLIST COUNTERSTART
-    value CDATA #REQUIRED>
-
+    (NAME|FOLLOWING|FLOW|OFFSETS|INDENTS|COUNTER|LINESPACING|LEFTBORDER|
+        RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT|TABULATOR)*>
 <!ELEMENT NAME
     EMPTY>
 <!ATTLIST NAME
     value CDATA #REQUIRED>
-
-<!-- FOLLOWING 
-        The FOLLOWING tag is a styles tag. You can only embed it in a style.
+<!ELEMENT FOLLOWING
+    EMPTY>
+<!ATTLIST FOLLOWING
+    name CDATA #REQUIRED>
+    <!-- 
+        The following tag is a styles tag. You can only embed it in a style.
         With this tag you can tell kword to switch to the style 'name' after
         enter was pressed and the current style was used.
         Example: Style H1 has the <following name="body"> tag. When the user is
         finished typing the header tag and presses enter kword switches to the 
         style 'body'
         the style-name given should be available.
--->
-<!ELEMENT FOLLOWING
-    EMPTY>
-<!ATTLIST FOLLOWING
-    name CDATA #REQUIRED>
+    -->
 
-<!-- FLOW
-        Align is a style tag.
-        value is one of: 'left', 'right', 'center', 'justify'
--->
 <!ELEMENT FLOW
     EMPTY>
 <!ATTLIST FLOW
-    align CDATA #REQUIRED>
-        
-<!-- INDENTS
-        First is the indent (mm) from the left border (of the frame) of the first line of a paragraph
-        left is the indent that is used for the other lines in a paragraph.
--->
+    value CDATA #REQUIRED>
+<!ELEMENT OFFSETS
+    EMPTY>
+<!ATTLIST OFFSETS
+    head CDATA #REQUIRED
+    foot CDATA #REQUIRED>
 <!ELEMENT INDENTS
     EMPTY>
 <!ATTLIST INDENTS
     first CDATA #REQUIRED
     left CDATA #REQUIRED>
-
-<!-- 
-        A paragraph and a style can have counter data.
-        The document will do the counting of the paragraphs that use this.
-        When used on a paragraph (versus a style) only start can be specified.
-
-
-        type:   0 = None
-                1 = Numeral
-                2 = Alphabetical
-                3 = Alphabetical uppercase
-                4 = Roman numbering
-                5 = Roman numbering uppercase
-                6 = bullet
-
-        depth   The level of the numbering. 
-                Depth of 0 means the major numbering. (1, 2, 3...)
-                Depth of 1 is 1.1, 1.2, 1.3 etc.
-
-        bullet  The character (in UTF-8) that is 'the bullet' for an unnummered list
-        start   The first used number in the numbering.
-        numberingtype
-                List or chapter numbering.
-                List numbering starts at <start> everytime another list is used (everytime a 
-                non numbering paragraph has been used)
-                Chapter numbering is used throughout the whole document. (in future throughout books)
-        lefttext
-                The text that is printed left of the first numeral
-        righttext
-                The text that is printed right of the last numeral
-        bulletfont
-                The font the bullet can be found in. (use "symbol" if in doubt)
--->
 <!ELEMENT COUNTER
     EMPTY>
 <!ATTLIST COUNTER
@@ -538,25 +443,10 @@ don't put a </?xml...> at the end of the file!).
     lefttext CDATA #IMPLIED
     righttext CDATA #IMPLIED
     bulletfont CDATA #REQUIRED>
-
-<!-- 
-        value in points 
--->
 <!ELEMENT LINESPACING
     EMPTY>
 <!ATTLIST LINESPACING
     value CDATA #REQUIRED>
-
-<!--
-        The borders can be used on a frame and on a paragraph.
-        the border has a color, displayed in the RGB value. 
-        The width is in points.
-        Style   0 = solid
-                1 = dashes
-                2 = dots
-                3 = dash - dot patterns
-                4 = dash dot dot patterns
--->
 <!ELEMENT LEFTBORDER
     EMPTY>
 <!ATTLIST LEFTBORDER
@@ -595,4 +485,9 @@ don't put a </?xml...> at the end of the file!).
     mmpos CDATA #REQUIRED
     ptpos CDATA #REQUIRED
     type CDATA #REQUIRED>
+<!ELEMENT STYLES
+    (STYLE*)>
+<!ELEMENT STYLE
+    (NAME|FOLLOWING|FLOW|OFFSETS|INDENTS|COUNTER|LINESPACING|LEFTBORDER|
+        RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT)*>
 
