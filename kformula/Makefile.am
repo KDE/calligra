@@ -49,8 +49,7 @@ install-exec-local:
 kformula.h: kformula.idl
 	@echo $(IDL) --query-server-for-narrow $(IDL_INCLUDES) kformula.idl ;\
 	rm -f kformula.h kformula.cc ;\
-	$(IDL) --query-server-for-narrow $(IDL_INCLUDES) kformula.idl ;\
-	sed -e "s,^#include \".*/\(.*\)\",#include <\1>," kformula.h > kformula.h.new && mv kformula.h.new kformula.h
+	$(IDL) --relative-paths --query-server-for-narrow $(IDL_INCLUDES) kformula.idl ;\
 
 messages:
 	$(XGETTEXT) -C -ki18n -kklocale -x $(includedir)/kde.pot -x $(includedir)/corba.pot *.cc && mv messages.po ../po/kformula.pot

@@ -38,11 +38,10 @@ messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kimage.pot
 
 img.h: img.idl
-	@echo $(IDL) --query-server-for-narrow -I$(idldir) img.idl ;\
+	@echo $(IDL) --relative-paths --query-server-for-narrow -I$(idldir) img.idl ;\
 	rm -f img.h ;\
 	olddir=$(idldir) ;\
-	$(IDL) --query-server-for-narrow -I$(idldir) img.idl ;\
-	sed -e "s,#include \"$$olddir/,#include <,;s,.h\",.h>," img.h > img.h.new && mv img.h.new img.h
+	$(IDL) --relative-paths --query-server-for-narrow -I$(idldir) img.idl ;\
 
 img.cc: img.h
 img_view.h: img.h
