@@ -122,49 +122,8 @@ bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 
 void KPPointObject::loadOasisMarker( KoOasisContext & context )
 {
-    //FIXME me ! it's not good we doesn't use style :(
-    KoStyleStack &styleStack = context.styleStack();
-    if ( styleStack.hasAttribute( "draw:marker-start" ) )
-    {
-        QString type = styleStack.attribute( "draw:marker-start", QString::null,"graphic" );
-        kdDebug()<<" type : arrow start :"<<type<<endl;
-        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
-             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
-            lineBegin =  L_ARROW;
-        else if ( type == "Square" )
-            lineBegin =  L_SQUARE;
-        else if ( type == "Circle" || type == "Square 45" )
-            lineBegin = L_CIRCLE;
-        else if ( type == "Line Arrow" )
-            lineBegin = L_LINE_ARROW;
-        else if ( type == "Dimension Lines" )
-            lineBegin = L_DIMENSION_LINE;
-        else if ( type == "Double Arrow" )
-            lineBegin = L_DOUBLE_LINE_ARROW;
-        else
-            kdDebug()<<" begin line unknown :"<<type<<endl;
-    }
-    if ( styleStack.hasAttribute( "draw:marker-end", QString::null,"graphic" ) )
-    {
-        QString type = styleStack.attribute( "draw:marker-end" );
-        kdDebug()<<" type : arrow end :"<<type<<endl;
-        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
-             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
-            lineEnd =  L_ARROW;
-        else if ( type == "Square" )
-            lineEnd =  L_SQUARE;
-        else if ( type == "Circle" || type == "Square 45" )
-            lineEnd = L_CIRCLE;
-        else if ( type == "Line Arrow" )
-            lineEnd = L_LINE_ARROW;
-        else if ( type == "Dimension Lines" )
-            lineEnd = L_DIMENSION_LINE;
-        else if ( type == "Double Arrow" )
-            lineEnd = L_DOUBLE_LINE_ARROW;
-        else
-            kdDebug()<<"end line unknown :"<<type<<endl;
-        //todo ADD L_DOUBLE_ARROW;
-    }
+    loadOasisMarkerElement( context, "draw:marker-start", lineBegin );
+    loadOasisMarkerElement( context, "draw:marker-end", lineBegin );
 }
 
 void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  QDomElement *animation )

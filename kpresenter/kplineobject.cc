@@ -135,45 +135,12 @@ void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & contex
          lineType=LT_LU_RD;
     else
         lineType=LT_LD_RU;
+
     QString attr = (x1 < x2) ?  "draw:marker-start" : "draw:marker-end";
-    KoStyleStack &styleStack = context.styleStack();
-    if ( styleStack.hasAttribute( attr, QString::null,"graphic" ) )
-    {
-        QString type = styleStack.attribute( attr );
-        kdDebug()<<"type arrow start :"<<type<<endl;
-        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
-             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
-            lineBegin =  L_ARROW;
-        else if ( type == "Square" )
-            lineBegin =  L_SQUARE;
-        else if ( type == "Circle" || type == "Square 45" )
-            lineBegin = L_CIRCLE;
-        else if ( type == "Line Arrow" )
-            lineBegin = L_LINE_ARROW;
-        else if ( type == "Dimension Lines" )
-            lineBegin = L_DIMENSION_LINE;
-        else if ( type == "Double Arrow" )
-            lineBegin = L_DOUBLE_LINE_ARROW;
-    }
+    loadOasisMarkerElement( context, attr, lineBegin );
+
     attr = (x1 < x2) ?  "draw:marker-end" : "draw:marker-start";
-    if ( styleStack.hasAttribute( attr ) )
-    {
-        QString type = styleStack.attribute( attr, QString::null,"graphic" );
-        kdDebug()<<"type arrow end :"<<type<<endl;
-        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
-             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
-            lineEnd =  L_ARROW;
-        else if ( type == "Square" )
-            lineEnd =  L_SQUARE;
-        else if ( type == "Circle" || type == "Square 45" )
-            lineEnd = L_CIRCLE;
-        else if ( type == "Line Arrow" )
-            lineEnd = L_LINE_ARROW;
-        else if ( type == "Dimension Lines" )
-            lineEnd = L_DIMENSION_LINE;
-        else if ( type == "Double Arrow" )
-            lineEnd = L_DOUBLE_LINE_ARROW;
-    }
+    loadOasisMarkerElement( context, attr, lineEnd );
 }
 
 double KPLineObject::load(const QDomElement &element)

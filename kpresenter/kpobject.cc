@@ -114,6 +114,30 @@ void KPStartEndLine::load( const QDomElement &element )
     }
 }
 
+void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element )
+{
+    KoStyleStack &styleStack = context.styleStack();
+    if ( styleStack.hasAttribute( attr ) )
+    {
+        QString type = styleStack.attribute( attr, QString::null,"graphic" );
+        kdDebug()<<" type : arrow start :"<<type<<endl;
+        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
+             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
+            _element =  L_ARROW;
+        else if ( type == "Square" )
+            _element =  L_SQUARE;
+        else if ( type == "Circle" || type == "Square 45" )
+            _element = L_CIRCLE;
+        else if ( type == "Line Arrow" )
+            _element = L_LINE_ARROW;
+        else if ( type == "Dimension Lines" )
+            _element = L_DIMENSION_LINE;
+        else if ( type == "Double Arrow" )
+            _element = L_DOUBLE_LINE_ARROW;
+        else
+            kdDebug()<<" begin line unknown :"<<type<<endl;
+    }
+}
 
 void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto )
 {
@@ -121,17 +145,17 @@ void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyl
     //FIXME
     if ( lineBegin != L_NORMAL )
     {
-        styleobjectauto.addProperty( "draw:marker-start", saveOasisMarkerStyle( mainStyles,true ) );
+        styleobjectauto.addProperty( "draw:marker-start", saveOasisMarkerStyle( mainStyles, lineBegin ) );
         //mainStyles.addAttributePt( "draw:marker-start-width", ???? );
     }
     if ( lineEnd != L_NORMAL )
     {
-        styleobjectauto.addProperty( "draw:marker-end", saveOasisMarkerStyle( mainStyles,false ) );
+        styleobjectauto.addProperty( "draw:marker-end", saveOasisMarkerStyle( mainStyles, lineEnd ) );
         //mainStyles.addAttributePt( "draw:marker-end-width", ???? );
     }
 }
 
-QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, bool _start )
+QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, LineEnd &_element )
 {
     KoGenStyle marker( KPresenterDoc::STYLE_MARKER /*, "graphic"*/ /*no name*/ );
     //FIXME !!!!
