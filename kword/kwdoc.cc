@@ -476,8 +476,10 @@ void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
         fit.current()->zoom( forPrint );
 #endif
 
-    layout();
+    // First recalc all frames (including the kotextdocument width)
     updateAllFrames();
+    // Then relayout the text inside the frames
+    layout();
     if ( updateViews )
     {
         emit newContentsSize();
@@ -3048,6 +3050,8 @@ QPixmap KWDocument::generatePreview( const QSize& size )
     // Sometimes (due to the different resolution?) the layout creates a new page
     // while saving the preview. If this happens, we don't want to repaint the real views
     // (due to KWCanvas::slotNewContentsSize)
+    // ##### One day when we have real doc/view separation in kotextparag, we shouldn't mess with
+    // the real view's resolution, we should instead create a fake view for the preview itself.
     for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
         viewPtr->getGUI()->canvasWidget()->setUpdatesEnabled( false );
     }
