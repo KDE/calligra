@@ -532,6 +532,9 @@ void KSpreadTable::setText( int _row, int _column, const QString& _text, bool up
 
     // The cell will force a display refresh itself, so we dont have to care here.
     cell->setCellText( _text, updateDepends );
+    //refresh anchor
+    if(_text.at(0)=='!')
+      emit sig_updateView( this, QRect(_column,_row,_column,_row) );
 }
 
 void KSpreadTable::setLayoutDirtyFlag()
