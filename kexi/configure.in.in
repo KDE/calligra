@@ -1,0 +1,4 @@
+
+# commentout this to compile Kexi 
+
+DO_NOT_COMPILE="$DO_NOT_COMPILE kexi"
