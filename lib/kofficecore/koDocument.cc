@@ -323,8 +323,6 @@ KoDocumentChild *KoDocument::child( KoDocument *doc )
 
 void KoDocument::setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states )
 {
-  return;
-  
   if ( d->m_views.find( view ) == -1 )
     return;
 
@@ -344,8 +342,6 @@ QMap<QString,QByteArray> KoDocument::viewContainerStates( KoView *view )
 {
   QMap<QString,QByteArray> res;
 
-  return res;
-  
   if ( d->m_views.find( view ) == -1 )
     return res;
 
@@ -355,6 +351,10 @@ QMap<QString,QByteArray> KoDocument::viewContainerStates( KoView *view )
     return res;
 
   res = d->m_viewContainerStates[ viewIdx ];
+  
+  // make this entry empty. otherwise we get a segfault in QMap ;-(
+  d->m_viewContainerStates[ viewIdx ] = QMap<QString,QByteArray>();
+  
   return res;
 }
 
