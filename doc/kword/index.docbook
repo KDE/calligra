@@ -91,6 +91,11 @@
 
 <!-- **************************************************************************************************** -->   
 <chapter ID="todo"><title>Current status of this manual</title>
+<warning><para>This manual is out of date in many areas.  Over the past two months, KOffice has continued to evolve into the start of a powerful office suite.  During that time, however, my time has been short for updating the documentation for KWord because of the tremendous need to document all of the new and updated applications in KDE 2.0.  Because of this, the KWord documentation has fallen behind.</para>
+<para>KWord has not changed drastically in how it operates, but you may find that many of the details of the interface have changed.  This will be corrected ASAP.</para>
+<para>If any of you out there are interested in helping the KDE documentation team, please feel free to send me a message at <email>mmcbride@ematic.com</email></para>
+<para>Sincerely Mike</para>
+</warning>
 <Sect1 id="todo1"><title>Whats done and what needs to be done</title>
 <sect2 id="done"><title>What is done</title>
 <para>Sections 1-4 have been reviewed, snapshots updated, icons correct, etc.  These sections are up to date</para>
@@ -2687,7 +2692,45 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <sect1 id="Filters"><title>Import/Export Filters</title><para></para>
 <sect2 id="FilterAscii"><title>Ascii Filter</title><para></para></sect2> 
 <sect2 id="FilterHTML"><title>HTML Filter</title><para></para></sect2> 
-<sect2 id="FilterWord97"><title>Microsoft Word 97 Filter</title><para></para></sect2>    
+<sect2 id="FilterWord97"><title>Microsoft Word 97 Filter</title>
+<para>
+This filter is in an early stage of development. Currently, the filter will 
+do a reasonable job on simple text-centric documents and a very poor job 
+where extensive formatting is used. The rest of this section describes what 
+the filter currently can, and cannot do, in detail.</para>
+<itemizedlist><listitem><para>
+The filter can import documents written by various versions Word 97, and 
+StarOffice documents saved in Word97 format. There is also limited Word 95 
+compatibility.</para></listitem>
+
+<listitem><para>The filter will translate full-saved documents. Fast-saved documents will 
+be translated with no distinction made between old and current text - this 
+can produce confusing results!</para>
+<tip><para>To prevent this, open your document with Microsoft Word
+and use "Save As..." to save it as a different file.  Immediatly close the document to prevent another "Fast Save".</para></tip>
+</listitem>
+
+<listitem><para>The filter will preserve headings and number them correctly.</para></listitem>
+
+<listitem><para>The filter will preserve lists, including multi-level lists and numbered 
+lists. If a list is split into multiple sections, numbering is currently 
+restarted at each set of entries.</para></listitem>
+
+<listitem><para>The filter will preserve tables. The filter cannot currently position 
+tables correctly, but will insert text markers indicating where the table 
+should be positioned. The tables are currently implemented as fixed frames; 
+floating table frame support is under development.</para></listitem>
+
+<listitem><para>All other text is imported as body text.</para><note><para> Note: this includes the text of 
+headers, footers and so on.</para></note></listitem>
+
+<listitem><para>The formatting of text (e.g. bold face, italics, etc) is not currently 
+preserved.</para></listitem>
+
+<listitem><para>Embedded pictures, variables and document information are not converted 
+at present.</para></listitem>
+</itemizedlist>
+</sect2>    
 </sect1>
 <sect1 id="kwordrc"><title>kword.rc:</title><para></para></sect1>
 <sect1 id="Keys"><title>Key Bindings Summary</title><para>
