@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'textdialog.ui'
 **
-** Created: Sun Jul 16 20:35:26 2000
+** Created: Mon Jul 17 02:41:53 2000
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -31,22 +31,22 @@ public:
 
     QGroupBox* GroupBox1;
     QLabel* TextLabel1;
-    KColorButton* colorBullet1;
-    KColorButton* colorBullet2;
-    QLabel* TextLabel1_2;
-    KColorButton* colorBullet3;
-    QLabel* TextLabel1_3;
-    QLabel* TextLabel1_4;
-    KColorButton* colorBullet4;
     QComboBox* comboBullet1;
+    KColorButton* colorBullet1;
+    QLabel* TextLabel1_2;
     QComboBox* comboBullet2;
-    QComboBox* comboBullet4;
+    KColorButton* colorBullet2;
+    QLabel* TextLabel1_3;
     QComboBox* comboBullet3;
+    KColorButton* colorBullet3;
+    QLabel* TextLabel1_4;
+    QComboBox* comboBullet4;
+    KColorButton* colorBullet4;
     QGroupBox* GroupBox2;
     QLabel* TextLabel1_5;
+    QLabel* TextLabel2;
     QComboBox* comboEnumType;
     KColorButton* enumColor;
-    QLabel* TextLabel2;
     QGroupBox* GroupBox3;
     QLabel* TextLabel1_6;
     QSpinBox* spinLineSpacing;
@@ -59,10 +59,18 @@ public:
 
 protected:
     QHBoxLayout* hbox;
+    QHBoxLayout* hbox_2;
+    QHBoxLayout* hbox_3;
+    QHBoxLayout* hbox_4;
+    QHBoxLayout* hbox_5;
+    QHBoxLayout* hbox_6;
+    QHBoxLayout* hbox_7;
     QVBoxLayout* vbox;
-    QGridLayout* grid;
-    QGridLayout* grid_2;
-    QGridLayout* grid_3;
+    QVBoxLayout* vbox_2;
+    QVBoxLayout* vbox_3;
+    QVBoxLayout* vbox_4;
+    QVBoxLayout* vbox_5;
+    QVBoxLayout* vbox_6;
 };
 
 #endif // TEXTDIALOG_H

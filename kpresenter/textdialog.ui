@@ -12,8 +12,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>469</width>
-            <height>296</height>
+            <width>477</width>
+            <height>305</height>
         </rect>
     </property>
     <property>
@@ -24,7 +24,7 @@
         <name>sizeGripEnabled</name>
         <bool>true</bool>
     </property>
-    <grid>
+    <vbox>
         <property>
             <name>margin</name>
             <number>11</number>
@@ -33,404 +33,540 @@
             <name>spacing</name>
             <number>6</number>
         </property>
-        <widget row="0"  column="0" >
-            <class>QGroupBox</class>
+        <widget>
+            <class>QLayoutWidget</class>
             <property>
                 <name>name</name>
-                <cstring>GroupBox1</cstring>
+                <cstring>Layout7</cstring>
             </property>
-            <property>
-                <name>title</name>
-                <string>&amp;Bullet Lists</string>
-            </property>
-            <grid>
+            <hbox>
                 <property>
                     <name>margin</name>
-                    <number>11</number>
-                </property>
-                <property>
-                    <name>spacing</name>
-                    <number>6</number>
-                </property>
-                <widget row="0"  column="0" >
-                    <class>QLabel</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>TextLabel1</cstring>
-                    </property>
-                    <property>
-                        <name>text</name>
-                        <string>&amp;1. Level:</string>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring>comboBullet1</cstring>
-                    </property>
-                </widget>
-                <widget row="0"  column="2" >
-                    <class>KColorButton</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>colorBullet1</cstring>
-                    </property>
-                </widget>
-                <widget row="1"  column="2" >
-                    <class>KColorButton</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>colorBullet2</cstring>
-                    </property>
-                </widget>
-                <widget row="1"  column="0" >
-                    <class>QLabel</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>TextLabel1_2</cstring>
-                    </property>
-                    <property>
-                        <name>text</name>
-                        <string>&amp;2. Level:</string>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring>comboBullet2</cstring>
-                    </property>
-                </widget>
-                <widget row="2"  column="2" >
-                    <class>KColorButton</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>colorBullet3</cstring>
-                    </property>
-                </widget>
-                <widget row="2"  column="0" >
-                    <class>QLabel</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>TextLabel1_3</cstring>
-                    </property>
-                    <property>
-                        <name>text</name>
-                        <string>&amp;3. Level:</string>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring>comboBullet3</cstring>
-                    </property>
-                </widget>
-                <widget row="3"  column="0" >
-                    <class>QLabel</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>TextLabel1_4</cstring>
-                    </property>
-                    <property>
-                        <name>text</name>
-                        <string>4&amp;. Level:</string>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring>comboBullet4</cstring>
-                    </property>
-                </widget>
-                <widget row="3"  column="2" >
-                    <class>KColorButton</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>colorBullet4</cstring>
-                    </property>
-                </widget>
-                <widget row="0"  column="1" >
-                    <class>QComboBox</class>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Filled Circle</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Filled Square</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Outlined Circle</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Outlined Square</string>
-                        </property>
-                    </item>
-                    <property>
-                        <name>name</name>
-                        <cstring>comboBullet1</cstring>
-                    </property>
-                </widget>
-                <widget row="1"  column="1" >
-                    <class>QComboBox</class>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Filled Circle</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Filled Square</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Outlined Circle</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Outlined Square</string>
-                        </property>
-                    </item>
-                    <property>
-                        <name>name</name>
-                        <cstring>comboBullet2</cstring>
-                    </property>
-                </widget>
-                <widget row="3"  column="1" >
-                    <class>QComboBox</class>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Filled Circle</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Filled Square</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Outlined Circle</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Outlined Square</string>
-                        </property>
-                    </item>
-                    <property>
-                        <name>name</name>
-                        <cstring>comboBullet4</cstring>
-                    </property>
-                </widget>
-                <widget row="2"  column="1" >
-                    <class>QComboBox</class>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Filled Circle</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Filled Square</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Outlined Circle</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Outlined Square</string>
-                        </property>
-                    </item>
-                    <property>
-                        <name>name</name>
-                        <cstring>comboBullet3</cstring>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget row="1"  column="0" >
-            <class>QGroupBox</class>
-            <property>
-                <name>name</name>
-                <cstring>GroupBox2</cstring>
-            </property>
-            <property>
-                <name>title</name>
-                <string>&amp;Enumerated lists</string>
-            </property>
-            <grid>
-                <property>
-                    <name>margin</name>
-                    <number>11</number>
-                </property>
-                <property>
-                    <name>spacing</name>
-                    <number>6</number>
-                </property>
-                <widget row="0"  column="0" >
-                    <class>QLabel</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>TextLabel1_5</cstring>
-                    </property>
-                    <property>
-                        <name>text</name>
-                        <string>&amp;Type:</string>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring>comboEnumType</cstring>
-                    </property>
-                </widget>
-                <widget row="0"  column="1" >
-                    <class>QComboBox</class>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Numbers</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property>
-                            <name>text</name>
-                            <string>Characters</string>
-                        </property>
-                    </item>
-                    <property>
-                        <name>name</name>
-                        <cstring>comboEnumType</cstring>
-                    </property>
-                </widget>
-                <widget row="1"  column="1" >
-                    <class>KColorButton</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>enumColor</cstring>
-                    </property>
-                </widget>
-                <widget row="1"  column="0" >
-                    <class>QLabel</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>TextLabel2</cstring>
-                    </property>
-                    <property>
-                        <name>text</name>
-                        <string>&amp;Color</string>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring>enumColor</cstring>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget row="0"  column="1"  rowspan="2"  colspan="1" >
-            <class>QGroupBox</class>
-            <property>
-                <name>name</name>
-                <cstring>GroupBox3</cstring>
-            </property>
-            <property>
-                <name>title</name>
-                <string>&amp;Spacing</string>
-            </property>
-            <vbox>
-                <property>
-                    <name>margin</name>
-                    <number>11</number>
+                    <number>0</number>
                 </property>
                 <property>
                     <name>spacing</name>
                     <number>6</number>
                 </property>
                 <widget>
-                    <class>QLabel</class>
+                    <class>QLayoutWidget</class>
                     <property>
                         <name>name</name>
-                        <cstring>TextLabel1_6</cstring>
+                        <cstring>Layout6</cstring>
                     </property>
-                    <property>
-                        <name>text</name>
-                        <string>&amp;Lines-Spacing:</string>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring>spinLineSpacing</cstring>
-                    </property>
+                    <vbox>
+                        <property>
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property>
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QGroupBox</class>
+                            <property>
+                                <name>name</name>
+                                <cstring>GroupBox1</cstring>
+                            </property>
+                            <property>
+                                <name>title</name>
+                                <string>&amp;Bullet Lists</string>
+                            </property>
+                            <vbox>
+                                <property>
+                                    <name>margin</name>
+                                    <number>11</number>
+                                </property>
+                                <property>
+                                    <name>spacing</name>
+                                    <number>6</number>
+                                </property>
+                                <widget>
+                                    <class>QLayoutWidget</class>
+                                    <property>
+                                        <name>name</name>
+                                        <cstring>Layout11</cstring>
+                                    </property>
+                                    <hbox>
+                                        <property>
+                                            <name>margin</name>
+                                            <number>0</number>
+                                        </property>
+                                        <property>
+                                            <name>spacing</name>
+                                            <number>6</number>
+                                        </property>
+                                        <widget>
+                                            <class>QLabel</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>TextLabel1</cstring>
+                                            </property>
+                                            <property>
+                                                <name>text</name>
+                                                <string>&amp;1. Level:</string>
+                                            </property>
+                                            <property>
+                                                <name>buddy</name>
+                                                <cstring>comboBullet1</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>QComboBox</class>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Filled Circle</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Filled Square</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Outlined Circle</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Outlined Square</string>
+                                                </property>
+                                            </item>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>comboBullet1</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>KColorButton</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>colorBullet1</cstring>
+                                            </property>
+                                        </widget>
+                                    </hbox>
+                                </widget>
+                                <widget>
+                                    <class>QLayoutWidget</class>
+                                    <property>
+                                        <name>name</name>
+                                        <cstring>Layout3</cstring>
+                                    </property>
+                                    <hbox>
+                                        <property>
+                                            <name>margin</name>
+                                            <number>0</number>
+                                        </property>
+                                        <property>
+                                            <name>spacing</name>
+                                            <number>6</number>
+                                        </property>
+                                        <widget>
+                                            <class>QLabel</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>TextLabel1_2</cstring>
+                                            </property>
+                                            <property>
+                                                <name>text</name>
+                                                <string>&amp;2. Level:</string>
+                                            </property>
+                                            <property>
+                                                <name>buddy</name>
+                                                <cstring>comboBullet2</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>QComboBox</class>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Filled Circle</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Filled Square</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Outlined Circle</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Outlined Square</string>
+                                                </property>
+                                            </item>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>comboBullet2</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>KColorButton</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>colorBullet2</cstring>
+                                            </property>
+                                        </widget>
+                                    </hbox>
+                                </widget>
+                                <widget>
+                                    <class>QLayoutWidget</class>
+                                    <property>
+                                        <name>name</name>
+                                        <cstring>Layout4</cstring>
+                                    </property>
+                                    <hbox>
+                                        <property>
+                                            <name>margin</name>
+                                            <number>0</number>
+                                        </property>
+                                        <property>
+                                            <name>spacing</name>
+                                            <number>6</number>
+                                        </property>
+                                        <widget>
+                                            <class>QLabel</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>TextLabel1_3</cstring>
+                                            </property>
+                                            <property>
+                                                <name>text</name>
+                                                <string>&amp;3. Level:</string>
+                                            </property>
+                                            <property>
+                                                <name>buddy</name>
+                                                <cstring>comboBullet3</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>QComboBox</class>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Filled Circle</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Filled Square</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Outlined Circle</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Outlined Square</string>
+                                                </property>
+                                            </item>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>comboBullet3</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>KColorButton</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>colorBullet3</cstring>
+                                            </property>
+                                        </widget>
+                                    </hbox>
+                                </widget>
+                                <widget>
+                                    <class>QLayoutWidget</class>
+                                    <property>
+                                        <name>name</name>
+                                        <cstring>Layout5</cstring>
+                                    </property>
+                                    <hbox>
+                                        <property>
+                                            <name>margin</name>
+                                            <number>0</number>
+                                        </property>
+                                        <property>
+                                            <name>spacing</name>
+                                            <number>6</number>
+                                        </property>
+                                        <widget>
+                                            <class>QLabel</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>TextLabel1_4</cstring>
+                                            </property>
+                                            <property>
+                                                <name>text</name>
+                                                <string>4&amp;. Level:</string>
+                                            </property>
+                                            <property>
+                                                <name>buddy</name>
+                                                <cstring>comboBullet4</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>QComboBox</class>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Filled Circle</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Filled Square</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Outlined Circle</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Outlined Square</string>
+                                                </property>
+                                            </item>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>comboBullet4</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>KColorButton</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>colorBullet4</cstring>
+                                            </property>
+                                        </widget>
+                                    </hbox>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget>
+                            <class>QGroupBox</class>
+                            <property>
+                                <name>name</name>
+                                <cstring>GroupBox2</cstring>
+                            </property>
+                            <property>
+                                <name>title</name>
+                                <string>&amp;Enumerated lists</string>
+                            </property>
+                            <hbox>
+                                <property>
+                                    <name>margin</name>
+                                    <number>11</number>
+                                </property>
+                                <property>
+                                    <name>spacing</name>
+                                    <number>6</number>
+                                </property>
+                                <widget>
+                                    <class>QLayoutWidget</class>
+                                    <property>
+                                        <name>name</name>
+                                        <cstring>Layout9</cstring>
+                                    </property>
+                                    <vbox>
+                                        <property>
+                                            <name>margin</name>
+                                            <number>0</number>
+                                        </property>
+                                        <property>
+                                            <name>spacing</name>
+                                            <number>6</number>
+                                        </property>
+                                        <widget>
+                                            <class>QLabel</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>TextLabel1_5</cstring>
+                                            </property>
+                                            <property>
+                                                <name>text</name>
+                                                <string>&amp;Type:</string>
+                                            </property>
+                                            <property>
+                                                <name>buddy</name>
+                                                <cstring>comboEnumType</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>QLabel</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>TextLabel2</cstring>
+                                            </property>
+                                            <property>
+                                                <name>text</name>
+                                                <string>&amp;Color</string>
+                                            </property>
+                                            <property>
+                                                <name>buddy</name>
+                                                <cstring>enumColor</cstring>
+                                            </property>
+                                        </widget>
+                                    </vbox>
+                                </widget>
+                                <widget>
+                                    <class>QLayoutWidget</class>
+                                    <property>
+                                        <name>name</name>
+                                        <cstring>Layout10</cstring>
+                                    </property>
+                                    <vbox>
+                                        <property>
+                                            <name>margin</name>
+                                            <number>0</number>
+                                        </property>
+                                        <property>
+                                            <name>spacing</name>
+                                            <number>6</number>
+                                        </property>
+                                        <widget>
+                                            <class>QComboBox</class>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Numbers</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property>
+                                                    <name>text</name>
+                                                    <string>Characters</string>
+                                                </property>
+                                            </item>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>comboEnumType</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>KColorButton</class>
+                                            <property>
+                                                <name>name</name>
+                                                <cstring>enumColor</cstring>
+                                            </property>
+                                        </widget>
+                                    </vbox>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
                 </widget>
                 <widget>
-                    <class>QSpinBox</class>
+                    <class>QGroupBox</class>
                     <property>
                         <name>name</name>
-                        <cstring>spinLineSpacing</cstring>
+                        <cstring>GroupBox3</cstring>
                     </property>
+                    <property>
+                        <name>title</name>
+                        <string>&amp;Spacing</string>
+                    </property>
+                    <vbox>
+                        <property>
+                            <name>margin</name>
+                            <number>11</number>
+                        </property>
+                        <property>
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLabel</class>
+                            <property>
+                                <name>name</name>
+                                <cstring>TextLabel1_6</cstring>
+                            </property>
+                            <property>
+                                <name>text</name>
+                                <string>&amp;Lines-Spacing:</string>
+                            </property>
+                            <property>
+                                <name>buddy</name>
+                                <cstring>spinLineSpacing</cstring>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QSpinBox</class>
+                            <property>
+                                <name>name</name>
+                                <cstring>spinLineSpacing</cstring>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QLabel</class>
+                            <property>
+                                <name>name</name>
+                                <cstring>TextLabel1_6_2</cstring>
+                            </property>
+                            <property>
+                                <name>text</name>
+                                <string>&amp;Paragraph-Spacing:</string>
+                            </property>
+                            <property>
+                                <name>buddy</name>
+                                <cstring>spinParagSpacing</cstring>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QSpinBox</class>
+                            <property>
+                                <name>name</name>
+                                <cstring>spinParagSpacing</cstring>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QLabel</class>
+                            <property>
+                                <name>name</name>
+                                <cstring>TextLabel1_6_2_2</cstring>
+                            </property>
+                            <property>
+                                <name>text</name>
+                                <string>&amp;Margin</string>
+                            </property>
+                            <property>
+                                <name>buddy</name>
+                                <cstring>spinMargin</cstring>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QSpinBox</class>
+                            <property>
+                                <name>name</name>
+                                <cstring>spinMargin</cstring>
+                            </property>
+                        </widget>
+                    </vbox>
                 </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>TextLabel1_6_2</cstring>
-                    </property>
-                    <property>
-                        <name>text</name>
-                        <string>&amp;Paragraph-Spacing:</string>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring>spinParagSpacing</cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QSpinBox</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>spinParagSpacing</cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>TextLabel1_6_2_2</cstring>
-                    </property>
-                    <property>
-                        <name>text</name>
-                        <string>&amp;Margin</string>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring>spinMargin</cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QSpinBox</class>
-                    <property>
-                        <name>name</name>
-                        <cstring>spinMargin</cstring>
-                    </property>
-                </widget>
-            </vbox>
+            </hbox>
         </widget>
-        <widget row="2"  column="0"  rowspan="1"  colspan="2" >
+        <widget>
             <class>QLayoutWidget</class>
             <property>
                 <name>name</name>
@@ -455,7 +591,7 @@
                         <rect>
                             <x>1</x>
                             <y>5</y>
-                            <width>273</width>
+                            <width>281</width>
                             <height>20</height>
                         </rect>
                     </property>
@@ -496,7 +632,7 @@
                 </widget>
             </hbox>
         </widget>
-    </grid>
+    </vbox>
 </widget>
 <customwidgets>
     <customwidget>

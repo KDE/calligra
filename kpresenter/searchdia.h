@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'searchdia.ui'
 **
-** Created: Mon Jul 17 00:09:48 2000
+** Created: Mon Jul 17 02:37:07 2000
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -27,17 +27,18 @@ public:
     SearchDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~SearchDialog();
 
-    QCheckBox* back;
+    QLabel* TextLabel1;
     QLineEdit* lineEdit;
+    QCheckBox* cs;
+    QCheckBox* back;
+    QCheckBox* wo;
     QPushButton* buttonFind;
     QPushButton* PushButton1;
-    QCheckBox* cs;
-    QCheckBox* wo;
-    QLabel* TextLabel1;
 
 protected:
     QHBoxLayout* hbox;
-    QGridLayout* grid;
+    QHBoxLayout* hbox_2;
+    QVBoxLayout* vbox;
 };
 
 #endif // SEARCHDIALOG_H
