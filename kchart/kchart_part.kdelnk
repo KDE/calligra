@@ -10,6 +10,7 @@ Exec=kchart.bin --server
 Comment=Kalles Charter
 Comment[ca]=Els gràfics de Kalle
 Comment[da]=Kalles graf
+Comment[de]=Kalles Chart
 Comment[es]=El Renderizador de Tablas de Kalle
 Comment[fi]=Kallen kuvaajaohjelma
 Comment[no]=Kalles graf
