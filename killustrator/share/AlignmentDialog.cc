@@ -134,7 +134,11 @@ QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
 				BUTTON_WIDTH, BUTTON_HEIGHT);
 
   group->setExclusive (true);
+#if NEWKDE
+  layout->addMultiCellWidget (group, 0, 1, 0, 0, 0);
+#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
   layout->addMultiCellWidget (group, 0, 1, 0, 0, AlignCenter);
+#endif
 
   group = new QButtonGroup (w, "Horizontally");
   group->setTitle (i18n ("Horizontally"));
@@ -158,7 +162,11 @@ QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
                            30, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   group->setExclusive (true);
+#if NEWKDE
+  layout->addMultiCellWidget (group, 0, 0, 1, 2, 0);
+#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
   layout->addMultiCellWidget (group, 0, 0, 1, 2, AlignCenter);
+#endif
 
   box = new QGroupBox (w);
   gbutton = new QCheckBox (box);
@@ -171,7 +179,11 @@ QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
   cbutton->setFixedSize (cbutton->sizeHint ());
   cbutton->move (15, 45);
 
+#if NEWKDE
+  layout->addMultiCellWidget (box, 1, 1, 1, 2, 0);
+#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
   layout->addMultiCellWidget (box, 1, 1, 1, 2, AlignCenter);
+#endif
 
   layout->activate ();
   w->adjustSize ();
@@ -220,6 +232,11 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
 
   group->setExclusive (true);
   layout->addMultiCellWidget (group, 0, 1, 0, 0, AlignCenter);
+#if NEWKDE
+  layout->addMultiCellWidget (group, 0, 1, 0, 0, 0);
+#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
+  layout->addMultiCellWidget (group, 0, 1, 0, 0, AlignCenter);
+#endif
 
   group = new QButtonGroup (w, "Horizontally");
   group->setTitle (i18n ("Horizontally"));
@@ -249,7 +266,11 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
                            30, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   group->setExclusive (true);
+#if NEWKDE
+  layout->addMultiCellWidget (group, 0, 0, 1, 2, 0);
+#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
   layout->addMultiCellWidget (group, 0, 0, 1, 2, AlignCenter);
+#endif
 
   group = new QButtonGroup (w);
   group->setTitle (i18n ("Distribute at"));
@@ -264,6 +285,11 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
   pbutton->move (15, 45);
 
   layout->addMultiCellWidget (group, 1, 1, 1, 2, AlignCenter);
+#if NEWKDE
+  layout->addMultiCellWidget (group, 1, 1, 1, 2, 0);
+#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
+  layout->addMultiCellWidget (group, 1, 1, 1, 2, AlignCenter);
+#endif
 
   layout->activate ();
   w->adjustSize ();

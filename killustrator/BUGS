@@ -1,5 +1,7 @@
 Bug-List
 ========
+KOFFICE VERSION DOES NOT WORK (DUE TO CHANGE TO CANOSSA!)
+Note: the koffice related bugs, listed below, do not any longer apply.
 
 See also: http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator-bw.html
 ------------------------------------
@@ -7,10 +9,20 @@ Bugs from above bug page:
 * Incomplete WMF support
 * Exported EPS files doesn't work well with TeX
   (Qt bug?, see http-page)
+  Possibly fixed in "EPSExport.cc        1999/10/19 07:03:38     1.14"
 * RGB errors in XFig import filter
 * Aligning to grid is not quite right under resize. Draw a small box ~100x100 pt
   and resize it to fit an A4 page. 
 ------------------------------------
+
+* Transform dialog/proportional doesn't work reliable: the value isn't updated
+  always (sometimes Return works) -- maybe check in return sensitivity again.
+  (if the numbers are entered and Return is pressed, which triggers the OK
+  button, the changes are discarded -- see e.g. setup grid.)
+
+* When using apply in the transformation dialog, the status line is not updated
+  When an object is moved using the mouse, the data in the non-model
+  transformation dialogue is not updated.
 
 * Keyword/Comment support (see GDocument and DocumentInfo) doesn't really work.
   readFromXml
@@ -22,31 +34,13 @@ Bugs from above bug page:
   anything between  </head> and </doc>.
   Solution: Don't save these files and don't crash, when loading them!
 
-* KO: View: Grid and Helpline are initialy unchecked, despite their status
-  Align to Grid/Helpline isn't checkable (visual problem)
-
-* statusbar for the Koffice version
-
 * Available menu commands and toolbar arrangement differ between
   the standardalone version and the koffice version.
-  - Extras|Options is not available in the koffice version
-  - The toolbar with filenew and copy is in fact two toolbars in the koffice
-    version (maybe put it in one line as in KWord)
   - Recent files don't appear in ko, whereas no icons are shown in the s-alone
   - Page dialog:
-    - draw area right: ok in KO, some line draw and orientation change gliches
-    - Unit menu: KO: greyed out, SO: enabled
-  - Arrange menu: KO misses convert to curve
-  - Effects menu missing in KO
-  - KO: Help: contents and about killustrator are missing
+    Initially no mini-page is drawn.
   - Toolbar: KO contains redo, undo and delete buttons, which are not present
     in SO; zoom combobox is editable in KO.
-
-* Align/Distribute is empty (might be a local problem of mine, burnus@gmx.de)
-  KO+SO
-
-* In the koffice version the properties dialogue doesn't seem to work
-  (it doesn't appear)
 
 * Disableing of the ruler doesn't work (everything is painted in the colour of
   the ruler background) (This is Qt cvs post 2.0.2, pre 2.1.x; KO+SO)
@@ -62,14 +56,6 @@ Bugs from above bug page:
 * Order of objects when using Arrange/Align/Distribute
 
 * Unavailable menu items should be greyed out
-
-* Translation (not moving)
-  Objectname Rectangle and Square are no translatable (at least they are not in
-  de.po)
-
-* When alternating the page orientation (menu Layout|Page),
-  after the first Landscape <-> Portait change the displayed
-  minipage is not updated (the change is internally done correct)
 
 * UnitBox
   - When changing the units the pt value shouldn't be affected
@@ -96,3 +82,15 @@ Bugs from above bug page:
   Need to implement the slot in canvas and the connection in
   standardalone/* and koffice/*.
   Draging  Helplines doesn't work either.
+
+* Align to Helplines doesn't seem to work, if align to grids is unchecked
+  Align is to dominative! (test: wide grid + auxline  approx. in the middle)
+
+* Helplines should be drawn atop of everything, else they can be too easily
+  hidden (later we might go corels way and put them to a Layer)
+
+* Strings: The XML-Reader uses strings, whereas QStrings are used elsewhere.
+  This might lead to unicode problems. (Comment, keywords, typed-in text)
+
+* Gradient: Linear (horizontal) with angle doesn't yet work
+  (some hooks in Properties*.*)
