@@ -1112,12 +1112,24 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     // Start a marking action ?
     if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )
     {
-	if(m_strAnchor.find("http://")!=-1 || m_strAnchor.find("mailto:")!=-1
-	   || m_strAnchor.find("ftp://")!=-1 || m_strAnchor.find("file:")!=-1)
-	    (void) new KRun( m_strAnchor );
-	else
-	    gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
-        return;
+	    bool isLink = (m_strAnchor.find("http://") == 0 || m_strAnchor.find("mailto:") == 0
+		   || m_strAnchor.find("ftp://") == 0 || m_strAnchor.find("file:") == 0 );
+	    bool isLocalLink = (m_strAnchor.find("file:") == 0);
+		if( isLink ) {
+			QString question = i18n("Do you want to open this link to '%1'?\n").arg(m_strAnchor);
+			if( isLocalLink ) {
+			  question += i18n("Note that opening a link to a local file may "
+					  "compromise your system's security!");
+			}
+			// this will also start local programs, so adding a "don't warn again"
+			// checkbox will probably be too dangerous
+			int choice = KMessageBox::warningYesNo(this, question, i18n("Open Link?"));
+			if( choice == KMessageBox::Yes ) {
+			  (void) new KRun( m_strAnchor );
+			}
+		} else {
+			gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
+		}
     }
     else if ( _ev->button() == LeftButton )
     {
