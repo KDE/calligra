@@ -34,7 +34,8 @@ class KSpellConfig;
 class KConfig;
 class QComboBox;
 class KIntNumInput;
-
+class KCommand;
+class KWDocument;
 class ConfigureSpellPage : public QObject
 {
     Q_OBJECT
@@ -77,7 +78,7 @@ class ConfigureMiscPage : public QObject
     Q_OBJECT
 public:
     ConfigureMiscPage( KWView *_view, QVBox *box, char *name = 0 );
-    void apply();
+    KCommand* apply();
     void slotDefault();
 private:
     KWView* m_pView;
@@ -95,7 +96,7 @@ class ConfigureDefaultDocPage : public QObject
 public:
     ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name = 0 );
     ~ConfigureDefaultDocPage();
-    void apply();
+    KCommand* apply();
     void slotDefault();
 public slots:
     void selectNewDefaultFont();
@@ -132,6 +133,7 @@ private:
     ConfigureMiscPage *m_miscPage;
     ConfigureDefaultDocPage *m_defaultDocPage;
     KFormula::ConfigurePage *m_formulaPage;
+    KWDocument *m_doc;
 };
 
 

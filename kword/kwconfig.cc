@@ -82,7 +82,7 @@ KWConfig::KWConfig( KWView* parent )
   QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc Settings"),
                               loadIcon("misc") );
   m_miscPage=new ConfigureMiscPage(parent, page3);
-
+  m_doc = parent->kWordDocument();
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 }
 
@@ -102,11 +102,29 @@ void KWConfig::openPage(int flags)
 
 void KWConfig::slotApply()
 {
+    KMacroCommand *macro = new KMacroCommand( i18n("Change config"));
+    bool createMacro = false;
     m_spellPage->apply();
     m_interfacePage->apply();
-    m_miscPage->apply();
-    m_defaultDocPage->apply();
+    KCommand * cmd = m_miscPage->apply();
+    if ( cmd )
+    {
+        macro->addCommand(cmd);
+        createMacro = true;
+    }
+
+    cmd=m_defaultDocPage->apply();
+    if ( cmd )
+    {
+        macro->addCommand( cmd );
+        createMacro = true;
+    }
     m_formulaPage->apply();
+    if (createMacro )
+        m_doc->addCommand( macro );
+    else
+        delete macro;
+
 }
 
 void KWConfig::slotDefault()
@@ -464,7 +482,7 @@ ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
     delete font;
 }
 
-void ConfigureMiscPage::apply()
+KCommand *ConfigureMiscPage::apply()
 {
     config->setGroup( "Misc" );
     if(m_oldUnit!=m_unit->currentItem())
@@ -529,9 +547,7 @@ void ConfigureMiscPage::apply()
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
-    if(macroCmd)
-        doc->addCommand(macroCmd);
-
+    return macroCmd;
 }
 
 void ConfigureMiscPage::slotDefault()
@@ -634,7 +650,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
 }
 
-void ConfigureDefaultDocPage::apply()
+KCommand *ConfigureDefaultDocPage::apply()
 {
     config->setGroup( "Document defaults" );
     KWDocument * doc = m_pView->kWordDocument();
@@ -671,10 +687,10 @@ void ConfigureDefaultDocPage::apply()
 
         KWChangeTabStopValueCommand *cmd = new KWChangeTabStopValueCommand( i18n("Change Tab Stop Value"), m_oldTabStopWidth, newTabStop, doc);
         cmd->execute();
-        doc->addCommand( cmd );
+        macroCmd->addCommand(cmd);
         m_oldTabStopWidth = newTabStop;
     }
-
+    return macroCmd;
 }
 
 void ConfigureDefaultDocPage::slotDefault()
