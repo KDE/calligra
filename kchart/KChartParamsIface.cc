@@ -447,3 +447,13 @@ void KChartParamsIface::setRingStart( int degrees )
 {
     params->setRingStart( degrees );
 }
+
+
+void KChartParamsIface::setThreeDShadowColors( bool shadow )
+{
+    params->setThreeDShadowColors(shadow);
+}
+bool KChartParamsIface::threeDShadowColors()
+{
+    return params->threeDShadowColors();
+}

@@ -141,6 +141,9 @@ k_dcop:
     virtual uint outlineDataLineWidth() const;
     virtual void setOutlineDataLineWidth( uint width );
 
+    virtual void setThreeDShadowColors( bool shadow );
+    virtual bool threeDShadowColors();
+
 private:
     KChartParams *params;
 
