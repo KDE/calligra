@@ -37,6 +37,7 @@
 
 #include <kcursor.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kparts/partmanager.h>
 #include <kdebug.h>
 #include <kdebugclasses.h>
@@ -1963,6 +1964,8 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
              this, SLOT( slotFormulaChanged( double, double ) ) );
     connect( formula, SIGNAL( formulaChanged( int, int ) ),
              this, SLOT( slotFormulaChanged( int, int ) ) );
+    connect( formula, SIGNAL( errorMsg( const QString& ) ),
+             this, SLOT( slotErrorMessage( const QString& ) ) );
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Formula %1" ) );
     else
@@ -2090,6 +2093,11 @@ void KWFormulaFrameSet::slotFormulaChanged( double width, double height )
     m_changed = true;
 }
 
+void KWFormulaFrameSet::slotErrorMessage( const QString& msg )
+{
+    KMessageBox::error( /*m_widget*/ 0, msg );
+}
+
 QDomElement KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
@@ -2119,6 +2127,10 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
             formula = m_doc->getFormulaDocument()->createFormula();
             connect(formula, SIGNAL(formulaChanged(double, double)),
                     this, SLOT(slotFormulaChanged(double, double)));
+            connect( formula, SIGNAL( formulaChanged( int, int ) ),
+                     this, SLOT( slotFormulaChanged( int, int ) ) );
+            connect( formula, SIGNAL( errorMsg( const QString& ) ),
+                     this, SLOT( slotErrorMessage( const QString& ) ) );
         }
         if ( !formula->load( formulaElem.firstChild().toElement() ) ) {
             kdError(32001) << "Error loading formula" << endl;
@@ -2133,6 +2145,14 @@ void KWFormulaFrameSet::zoom( bool forPrint )
 {
     if ( !frames.isEmpty() ) {
         KWFrameSet::zoom( forPrint );
+    }
+}
+
+void KWFormulaFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
+{
+    KWFrameSet::moveFloatingFrame( frameNum, position );
+    if ( !frames.isEmpty() ) {
+        formula->setDocumentPosition( position.x(), position.y()+formula->baseline() );
     }
 }
 
@@ -2191,6 +2211,7 @@ KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
     m_canvas->gui()->getView()->showFormulaToolbar(false);
     delete formulaView;
     formulaView = 0;
+    formulaFrameSet()->getFormula()->startEvaluation();
     formulaFrameSet()->setChanged();
     m_canvas->repaintChanged( formulaFrameSet(), true );
     delete dcop;
@@ -2238,8 +2259,11 @@ void KWFormulaFrameSetEdit::focusInEvent()
 
 void KWFormulaFrameSetEdit::focusOutEvent()
 {
-    //kdDebug(32001) << "KWFormulaFrameSetEdit::focusOutEvent" << endl;
-    formulaView->focusOutEvent(0);
+    //kdDebug(32001) << "KWFormulaFrameSetEdit::focusOutEvent" <<
+    //endl;
+    if ( formulaView != 0 ) {
+        formulaView->focusOutEvent(0);
+    }
 }
 
 void KWFormulaFrameSetEdit::copy()

@@ -925,6 +925,7 @@ public:
 
     void setChanged() { m_changed = true; }
 
+    virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
     virtual int floatingFrameBaseline( int /*frameNum*/ );
 
     virtual void setAnchorFormat( KoTextFormat* format, int /*frameNum*/ );
@@ -935,6 +936,7 @@ protected slots:
 
     void slotFormulaChanged( int width, int height );
     void slotFormulaChanged( double width, double height );
+    void slotErrorMessage( const QString& msg );
 
 private:
     KFormula::Container* formula;
