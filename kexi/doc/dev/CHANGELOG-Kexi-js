@@ -307,6 +307,9 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 
 === 2004 LT TODO ===
 
+2004-08-05
+Core
+- generateIconSetWithStar() not used, static icons added insted (icon cache was confused)
 
 2004-08-04
 MySQL Driver

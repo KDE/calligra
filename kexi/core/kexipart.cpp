@@ -60,7 +60,7 @@ void Part::createGUIClients(KexiMainWindow *win)
 		m_guiClient = new GUIClient(m_mainWin, this, false);
 
 		const QString newobj_icon = info()->createItemIcon();
-		Kexi::generateIconSetWithStar(info()->itemIcon(), newobj_icon);
+//static now!		Kexi::generateIconSetWithStar(info()->itemIcon(), newobj_icon);
 
 		//default actions for part's gui client:
 		KAction *act = new KAction(m_names["instance"]+"...", newobj_icon, 0, this, 
