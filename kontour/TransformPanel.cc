@@ -141,7 +141,9 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mTab->setTabToolTip(mShear, i18n("Shear"));
 
   setWidget(mTransformPanel);
-  setCaption(i18n("Transform"));
+  setCloseMode(QDockWindow::Always);
+  setOpaqueMoving(true);
+  setCaption(i18n("Transformation"));
 
   mTRelative = false;
   mRRelative = false;

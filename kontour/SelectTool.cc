@@ -812,13 +812,17 @@ void SelectTool::rotate(GPage *page, double xf, double yf, double xp, double yp,
 {
   KoPoint rc = page->handle().rotCenter();
   double angle;
-  angle = atan2(rc.y() - yp, rc.x() - xp);
-  angle -= atan2(rc.y() - yf, rc.x() - xf);
+  angle = atan2(yp - rc.y(), xp - rc.x());
+  if(xp - rc.x() < 0.0)
+    angle += Kontour::pi;
+  angle -= atan2(yf - rc.y(), xf - rc.x());
+  if(xf - rc.x() < 0.0)
+    angle += Kontour::pi;
 
   angle *= 180.0 / Kontour::pi;
   if(angle < -180.0)
     angle += 360.0;
-  if(angle>180.0)
+  if(angle > 180.0)
     angle -= 360.0;
 
   if(permanent)

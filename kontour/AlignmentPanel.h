@@ -29,6 +29,10 @@
 #include <qdockwindow.h>
 
 class KontourView;
+class QTabWidget;
+class QPushButton;
+class QCheckBox;
+class QRadioButton;
 
 class AlignmentPanel : public QDockWindow
 {
@@ -38,7 +42,16 @@ public:
 
 private:
   KontourView        *mView;
-  QWidget            *mAlignmentPanel;
+  QTabWidget         *mTab;
+
+  QPushButton        *halignButton[3];
+  QPushButton        *valignButton[3];
+  QPushButton        *hdistButton[4];
+  QPushButton        *vdistButton[4];
+  QCheckBox          *gbutton;
+  QCheckBox          *cbutton;
+  QRadioButton       *sbutton;
+  QRadioButton       *pbutton;
 };
 
 #endif

@@ -176,6 +176,8 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mTab->insertTab(mOutlineStyle, i18n("Style"));
 
   setWidget(mTab);
+  setCloseMode(QDockWindow::Always);
+  setOpaqueMoving(true);
   setCaption(i18n("Outline"));
   slotUpdate();
 }
@@ -379,7 +381,10 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mTab->insertTab(mBitmapPanel, i18n("Bitmap"));
 
   setWidget(mTab);
+  setCloseMode(QDockWindow::Always);
+  setOpaqueMoving(true);
   setCaption(i18n("Painting"));
+  slotUpdate();
 }
 
 void PaintPanel::slotUpdate(bool pages)

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -23,34 +24,36 @@
 */
 
 #include "AlignCmd.h"
-#include "GDocument.h"
-#include "GPage.h"
 
 #include <klocale.h>
 
-AlignCmd::AlignCmd (GDocument* doc, HorizAlignment halign,
-                    VertAlignment valign, bool centerToPage,
-                    bool snapToGrid) : ObjectManipCmd (doc, i18n("Align")) {
+#include "GDocument.h"
+#include "GPage.h"
+
+AlignCmd::AlignCmd(GDocument *aGDoc, HorizAlignment halign, VertAlignment valign, bool centerToPage, bool snapToGrid):
+TransformationCmd(aGDoc, i18n("Align"))
+{
   horizAlign = halign;
   vertAlign = valign;
   center = centerToPage;
   snap = snapToGrid;
 }
 
-void AlignCmd::execute () {
-  GObject* alignObject; // the object for aligning the others
+void AlignCmd::execute()
+{
+/*  GObject* alignObject; // the object for aligning the others
   Rect alignBox;
-  float dx, dy;
+  double dx, dy;
   unsigned int i;
 
-  unsigned int nobjs = document->activePage()->selectionCount ();
+  unsigned int nobjs = document()->activePage()->selectionCount();
 
   if (nobjs == 0)
     return;
 
-  ObjectManipCmd::execute ();
-  document->activePage()->setAutoUpdate (false);
-  if (nobjs > 1) {
+  TransformationCmd::execute();
+  if(nobjs > 1)
+  {
     // alignment is possible only for two or more objects
     QPtrListIterator<GObject> it(document->activePage()->getSelection());
     alignObject = document->activePage()->getSelection().last();
@@ -117,6 +120,5 @@ void AlignCmd::execute () {
                       pcenter.y () - bcenter.y ());
     for (QPtrListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it)
         (*it)->transform (matrix, true);
-  }
-  document->activePage()->setAutoUpdate (true);
+  }*/
 }

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -23,23 +24,23 @@
 */
 
 #include "DistributeCmd.h"
-#include "GDocument.h"
-#include "GPage.h"
 
 #include <klocale.h>
 
-DistributeCmd::DistributeCmd (GDocument* doc, HorizDistribution hdistrib,
-                              VertDistribution vdistrib,
-                              DistributionMode dmode) :
-   ObjectManipCmd (doc, i18n("Distribute"))
+#include "GDocument.h"
+#include "GPage.h"
+
+DistributeCmd::DistributeCmd(GDocument *aGDoc, HorizDistribution hdistrib, VertDistribution vdistrib, DistributionMode dmode):
+TransformationCmd(aGDoc, i18n("Distribute"))
 {
   hDistrib = hdistrib;
   vDistrib = vdistrib;
   mode = dmode;
 }
 
-void DistributeCmd::execute () {
-  Rect box;
+void DistributeCmd::execute()
+{
+/*  Rect box;
   float xoff = 0, yoff = 0, xpos = 0, ypos = 0;
   GObject *firstObj, *lastObj;
 
@@ -182,6 +183,5 @@ void DistributeCmd::execute () {
     default:
       break;
     }
-  }
+  }*/
 }
-

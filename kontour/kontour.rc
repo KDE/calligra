@@ -28,9 +28,6 @@
   <Action name="showRuler"/>
   <Action name="showGrid"/>
   <Action name="showHelplines"/>
-  <Separator/>
-  <Action name="showPaintPanel"/>
-  <Action name="showOutlinePanel"/>
  </Menu>
  <Menu name="insert"><text>&amp;Insert</text>
  </Menu>
@@ -54,6 +51,11 @@
    <Action name="deleteStyle"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
+   <Action name="showLayerPanel"/>
+   <Action name="showOutlinePanel"/>
+   <Action name="showPaintPanel"/>
+   <Action name="showTransformationPanel"/>
+   <Separator/>
    <Action name="options" group="settings_configure"/>
  </Menu>
 </MenuBar>

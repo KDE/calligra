@@ -68,6 +68,7 @@
 #include "LayerPanel.h"
 #include "StylePanel.h"
 #include "TransformPanel.h"
+#include "AlignmentPanel.h"
 #include "CopyCmd.h"
 #include "CutCmd.h"
 #include "PasteCmd.h"
@@ -120,6 +121,8 @@ KontourView::~KontourView()
   // Delete dockers when not in dock area
   if(mTransformPanel && !mTransformPanel->area())
     delete mTransformPanel;
+  if(mAlignmentPanel && !mAlignmentPanel->area())
+    delete mAlignmentPanel;
   if(mPaintPanel && !mPaintPanel->area())
     delete mPaintPanel;
   if(mOutlinePanel && !mOutlinePanel->area())
@@ -192,12 +195,6 @@ void KontourView::setupActions()
   m_showHelplines = new KToggleAction(i18n("Show &Helplines"), 0, actionCollection(), "showHelplines");
   connect(m_showHelplines, SIGNAL(toggled(bool)), this, SLOT(slotShowHelplines(bool)));
 
-  m_showPaintPanel = new KToggleAction(i18n("Show &Paint Panel"), 0, actionCollection(), "showPaintPanel");
-  connect(m_showPaintPanel, SIGNAL(toggled(bool)), this, SLOT(slotShowPaintPanel(bool)));
-
-  m_showOutlinePanel = new KToggleAction(i18n("Show &Outline Panel"), 0, actionCollection(), "showOutlinePanel");
-  connect(m_showOutlinePanel, SIGNAL(toggled(bool)), this, SLOT(slotShowOutlinePanel(bool)));
-
   // Layout menu
   m_snapToGrid = new KToggleAction(i18n("&Align To Grid"), "snap_to_grid", 0, actionCollection(), "alignToGrid");
   connect(m_snapToGrid, SIGNAL(toggled(bool)), this, SLOT(slotAlignToGrid(bool)));
@@ -225,6 +222,18 @@ void KontourView::setupActions()
   m_deleteStyle = new KAction(i18n("&Delete style"), 0, this, SLOT(slotDeleteStyle()), actionCollection(), "deleteStyle");
 
   // Settings menu
+  m_showLayerPanel = new KToggleAction(i18n("Show &Layer Panel"), 0, actionCollection(), "showLayerPanel");
+  connect(m_showLayerPanel, SIGNAL(toggled(bool)), this, SLOT(slotShowLayerPanel(bool)));
+
+  m_showOutlinePanel = new KToggleAction(i18n("Show &Outline Panel"), 0, actionCollection(), "showOutlinePanel");
+  connect(m_showOutlinePanel, SIGNAL(toggled(bool)), this, SLOT(slotShowOutlinePanel(bool)));
+
+  m_showPaintPanel = new KToggleAction(i18n("Show &Paint Panel"), 0, actionCollection(), "showPaintPanel");
+  connect(m_showPaintPanel, SIGNAL(toggled(bool)), this, SLOT(slotShowPaintPanel(bool)));
+
+  m_showTransformationPanel = new KToggleAction(i18n("Show &Transformation Panel"), 0, actionCollection(), "showTransformationPanel");
+  connect(m_showTransformationPanel, SIGNAL(toggled(bool)), this, SLOT(slotShowTransformationPanel(bool)));
+
   m_options = KStdAction::preferences(this, SLOT(slotOptions()), actionCollection(), "options");
 }
 
@@ -352,27 +361,35 @@ void KontourView::setupPanels()
   mOutlinePanel = 0L;
   mPaintPanel = 0L;
   mTransformPanel = 0L;
+  mAlignmentPanel = 0L;
 
   if(!mDoc->isReadWrite())
     return;
 
-  /* Layer panel */
+  // Layer panel
   mLayerPanel = new LayerPanel(activeDocument(), this);
   connect(activeDocument(), SIGNAL(updateLayerView()), mLayerPanel, SLOT(updatePanel()));
+  connect(mLayerPanel, SIGNAL(visibilityChanged(bool)), m_showLayerPanel, SLOT(setChecked(bool)));
   mRightDock->moveDockWindow(mLayerPanel);
 
-  /* Outline properties panel */
+  // Outline properties panel
   mOutlinePanel = new OutlinePanel(this, this);
-  mOutlinePanel->slotUpdate();
+  connect(mOutlinePanel, SIGNAL(visibilityChanged(bool)), m_showOutlinePanel, SLOT(setChecked(bool)));
   mRightDock->moveDockWindow(mOutlinePanel);
 
-  /* Paint properties panel */
+  // Paint properties panel
   mPaintPanel = new PaintPanel(this, this);
+  connect(mPaintPanel, SIGNAL(visibilityChanged(bool)), m_showPaintPanel, SLOT(setChecked(bool)));
   mRightDock->moveDockWindow(mPaintPanel);
 
-  /* Transform panel */
-  mTransformPanel = new TransformPanel(this);
+  // Transform panel
+  mTransformPanel = new TransformPanel(this, this);
+  connect(mTransformPanel, SIGNAL(visibilityChanged(bool)), m_showTransformationPanel, SLOT(setChecked(bool)));
   mRightDock->moveDockWindow(mTransformPanel);
+
+  // Alignment panel
+  mAlignmentPanel = new AlignmentPanel(this, this);
+  mRightDock->moveDockWindow(mAlignmentPanel);
 }
 
 void KontourView::setupTools()
@@ -434,15 +451,6 @@ void KontourView::readConfig()
 
   mWorkSpaceColor = lightGray;
 //  UnitBox::setDefaultMeasurementUnit(defaultUnit);
-
-
-  /*config->setGroup("Panels");
-   bool b=config->readBoolEntry("Enabled",true);
-   if (!b)
-      mLayerDockBase->makeVisible(b);
-   else
-   if (b)
-      createLayerPanel(false);*/
 }
 
 void KontourView::readConfigAfter()
@@ -455,15 +463,11 @@ void KontourView::readConfigAfter()
   s << config->readNumEntry("RightSide", 200);
   mSplitView->setSizes(s);
 
-  if(mLayerPanel)
-  {
-    config->setGroup("Panels");
-    int w;
-    int h;
-    w = config->readNumEntry("LayerPanelWidth", 210);
-    h = config->readNumEntry("LayerPanelHeight", 140);
-    mLayerPanel->resize(w, h);
-  }
+  config->setGroup("Panels");
+  slotShowLayerPanel(config->readBoolEntry("LayerPanel", false));
+  slotShowOutlinePanel(config->readBoolEntry("OutlinePanel", false));
+  slotShowPaintPanel(config->readBoolEntry("PaintPanel", false));
+  slotShowTransformationPanel(config->readBoolEntry("TransformationPanel", false));
 }
 
 void KontourView::writeConfig()
@@ -502,12 +506,10 @@ void KontourView::writeConfig()
   config->writeEntry("RightSide", s[1]);
 
   config->setGroup("Panels");
-  config->writeEntry("LayerPanelWidth", mLayerPanel->width());
-  config->writeEntry("LayerPanelHeight", mLayerPanel->height());
-
-/* config->setGroup("Panels");
-   config->writeEntry("Enabled",m_showLayers->isChecked());
-   config->sync();*/
+  config->writeEntry("LayerPanel", m_showLayerPanel->isChecked());
+  config->writeEntry("OutlinePanel", m_showOutlinePanel->isChecked());
+  config->writeEntry("PaintPanel", m_showPaintPanel->isChecked());
+  config->writeEntry("TransformationPanel", m_showTransformationPanel->isChecked());
 }
 
 void KontourView::workSpaceColor(QColor c)
@@ -806,21 +808,6 @@ void KontourView::slotShowHelplines(bool b)
   }
 }
 
-void KontourView::slotShowPaintPanel(bool b)
-{
-  if(!mPaintPanel)
-    return;
-  b ? mPaintPanel->dock() : mPaintPanel->undock();
-}
-
-void KontourView::slotShowOutlinePanel(bool b)
-{
-  if(!mOutlinePanel)
-    return;
-  b ? mOutlinePanel->dock() : mOutlinePanel->undock();
-  mOutlinePanel->clearFocus();
-}
-
 void KontourView::slotAlignToGrid(bool b)
 {
   activeDocument()->snapToGrid(b);
@@ -891,6 +878,38 @@ void KontourView::slotAddStyle()
 void KontourView::slotDeleteStyle()
 {
 
+}
+
+void KontourView::slotShowLayerPanel(bool b)
+{
+  if(b)
+    mLayerPanel->show();
+  else
+    mLayerPanel->hide();
+}
+
+void KontourView::slotShowOutlinePanel(bool b)
+{
+  if(b)
+    mOutlinePanel->show();
+  else
+    mOutlinePanel->hide();
+}
+
+void KontourView::slotShowPaintPanel(bool b)
+{
+  if(b)
+    mPaintPanel->show();
+  else
+    mPaintPanel->hide();
+}
+
+void KontourView::slotShowTransformationPanel(bool b)
+{
+  if(b)
+    mTransformPanel->show();
+  else
+    mTransformPanel->hide();
 }
 
 void KontourView::slotOptions()

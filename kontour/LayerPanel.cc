@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -159,7 +159,7 @@ void LayerView::slotDoubleClicked(QListViewItem *item)
   titem->select();
 }
 
-/* LayerPanel */
+// LayerPanel
 
 LayerPanel::LayerPanel(GDocument *aGDoc, QWidget *parent, const char *name):
 QDockWindow(QDockWindow::InDock, parent, name)
@@ -198,8 +198,14 @@ QDockWindow(QDockWindow::InDock, parent, name)
   connect(mDeleteButton, SIGNAL(clicked()), SLOT(deletePressed()));
 
   setWidget(mLayerPanel);
+  setCloseMode(QDockWindow::Always);
+  setOpaqueMoving(true);
   setCaption(i18n("Layers"));
   stateOfButton();
+}
+
+LayerPanel::~LayerPanel()
+{
 }
 
 void LayerPanel::updatePanel()

@@ -134,13 +134,11 @@ public slots:
   void slotViewZoom(const QString &);
   void slotOutline();
   void slotNormal();
-  void slotShowRuler(bool);
-  void slotShowGrid(bool);
-  void slotShowHelplines(bool);
-  void slotShowPaintPanel(bool);
-  void slotShowOutlinePanel(bool);
-  void slotAlignToGrid(bool);
-  void slotAlignToHelplines(bool);
+  void slotShowRuler(bool b);
+  void slotShowGrid(bool b);
+  void slotShowHelplines(bool b);
+  void slotAlignToGrid(bool b);
+  void slotAlignToHelplines(bool b);
   void slotToFront();
   void slotToBack();
   void slotForwardOne();
@@ -151,6 +149,10 @@ public slots:
   void slotStyles(const QString &s);
   void slotAddStyle();
   void slotDeleteStyle();
+  void slotShowLayerPanel(bool b);
+  void slotShowOutlinePanel(bool b);
+  void slotShowPaintPanel(bool b);
+  void slotShowTransformationPanel(bool b);
   void slotOptions();
 
 private:
@@ -210,8 +212,6 @@ private:
   KToggleAction       *m_showRuler;
   KToggleAction       *m_showGrid;
   KToggleAction       *m_showHelplines;
-  KToggleAction       *m_showPaintPanel;
-  KToggleAction       *m_showOutlinePanel;
 
   KToggleAction       *m_snapToGrid;
   KToggleAction       *m_alignToHelplines;
@@ -228,6 +228,10 @@ private:
   KAction             *m_addStyle;
   KAction             *m_deleteStyle;
 
+  KToggleAction       *m_showLayerPanel;
+  KToggleAction       *m_showOutlinePanel;
+  KToggleAction       *m_showPaintPanel;
+  KToggleAction       *m_showTransformationPanel;
   KAction             *m_options;
 
   // Tools

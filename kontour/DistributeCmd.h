@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,31 +23,30 @@
 
 */
 
-#ifndef DistributeCmd_h_
-#define DistributeCmd_h_
+#ifndef __DistributeCmd_h__
+#define __DistributeCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
-class GDocument;
-
-enum HorizDistribution {
-  HDistrib_None, HDistrib_Left, HDistrib_Center,
-  HDistrib_Distance, HDistrib_Right
+enum HorizDistribution
+{
+  HDistrib_None, HDistrib_Left, HDistrib_Center, HDistrib_Distance, HDistrib_Right
 };
 
-enum VertDistribution {
-  VDistrib_None, VDistrib_Top, VDistrib_Center,
-  VDistrib_Distance, VDistrib_Bottom
+enum VertDistribution
+{
+  VDistrib_None, VDistrib_Top, VDistrib_Center, VDistrib_Distance, VDistrib_Bottom
 };
 
-enum DistributionMode {
+enum DistributionMode
+{
   DMode_AtSelection, DMode_AtPage
 };
 
-class DistributeCmd : public ObjectManipCmd {
+class DistributeCmd : public TransformationCmd
+{
 public:
-  DistributeCmd (GDocument* doc, HorizDistribution hdistrib,
-                 VertDistribution vdistrib, DistributionMode dmode);
+  DistributeCmd(GDocument *aGDoc, HorizDistribution hdistrib, VertDistribution vdistrib, DistributionMode dmode);
 
   void execute ();
 

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,30 +23,33 @@
 
 */
 
-#ifndef AlignCmd_h_
-#define AlignCmd_h_
+#ifndef __AlignCmd_h__
+#define __AlignCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
-enum HorizAlignment {
+enum HorizAlignment
+{
   HAlign_None, HAlign_Left, HAlign_Center, HAlign_Right
 };
 
-enum VertAlignment {
+enum VertAlignment
+{
   VAlign_None, VAlign_Top, VAlign_Center, VAlign_Bottom
 };
 
-class AlignCmd : public ObjectManipCmd {
+class AlignCmd : public TransformationCmd
+{
 public:
-  AlignCmd (GDocument* doc, HorizAlignment halign, VertAlignment valign,
-            bool centerToPage = false, bool snapToGrid = false);
+  AlignCmd(GDocument *aGDoc, HorizAlignment halign, VertAlignment valign, bool centerToPage = false, bool snapToGrid = false);
 
   void execute ();
 
 private:
   HorizAlignment horizAlign;
   VertAlignment vertAlign;
-  bool center, snap;
+  bool center;
+  bool snap;
 };
 
 #endif
