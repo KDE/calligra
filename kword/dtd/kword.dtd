@@ -1153,7 +1153,7 @@ don't put a </?xml...> at the end of the file!).
     year  CDATA #REQUIRED
     fix   CDATA #REQUIRED
     correct CDATA #IMPLIED
-    subtype CDATA #REQUIED
+    subtype CDATA #REQUIRED
     hour   CDATA #IMPLIED
     minute CDATA #IMPLIED
     second CDATA #IMPLIED>
