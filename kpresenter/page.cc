@@ -159,6 +159,32 @@ bool Page::eventFilter( QObject *o, QEvent *e )
             m_currentTextObjectView->keyPressEvent( keyev );
             return true;
         }
+        else if(keyev->state()==ControlButton )
+        {
+            QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+            QPtrListIterator<KoTextFormatInterface> it( lst );
+            if(!lst.isEmpty())
+            {
+                KoTextFormat *format=lst.first()->currentFormat();
+                if(!format)
+                    return false;
+                if(keyev->key()==Key_I)
+                {
+                    setTextItalic(!format->font().italic());
+                    return true;
+                }
+                else if(keyev->key()==Key_U)
+                {
+                    setTextUnderline(!format->font().underline());
+                    return true;
+                }
+                else if(keyev->key()==Key_B)
+                {
+                    setTextBold( !format->font().bold() );
+                    return true;
+                }
+            }
+        }
     }
     case QEvent::FocusIn:
         if ( m_currentTextObjectView )
