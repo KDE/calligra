@@ -1133,15 +1133,19 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
 }
 
 /*====================== start screenpresentation ================*/
-void Page::startScreenPresentation()
+void Page::startScreenPresentation(bool zoom)
 {
   unsigned int i,pgNum;
 
-  float _presFaktW = (float)width() / (float)getPageSize(1).width() > 0.0 ? 
-    (float)width() / (float)getPageSize(0).width() : 1.0;
-  float _presFaktH = (float)height() / (float)getPageSize(1).height() > 0.0 ? 
-    (float)height() / (float)getPageSize(1).height() : 1.0;
-  _presFakt = min(_presFaktW,_presFaktH);
+  if (zoom)
+    {
+      float _presFaktW = (float)width() / (float)getPageSize(1).width() > 0.0 ? 
+	(float)width() / (float)getPageSize(0).width() : 1.0;
+      float _presFaktH = (float)height() / (float)getPageSize(1).height() > 0.0 ? 
+	(float)height() / (float)getPageSize(1).height() : 1.0;
+      _presFakt = min(_presFaktW,_presFaktH);
+    }
+  else _presFakt = 1.0;
 
   for (i = 0;i < pageList()->count();i++)
     {

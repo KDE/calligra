@@ -85,7 +85,7 @@ public:
   static void _drawBackColor(QColor c1,QColor c2,BCType bct,QPainter* p,QSize s)
     {Page *pg = new Page(0,"",0); pg->drawBackColor(c1,c2,bct,p,s); delete pg;}
 
-  void startScreenPresentation();
+  void startScreenPresentation(bool);
   void stopScreenPresentation();
   bool pNext(bool);
   bool pPrev(bool);

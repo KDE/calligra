@@ -158,6 +158,8 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
 KPresenterDocument_impl::~KPresenterDocument_impl()
 {
   sdeb("KPresenterDocument_impl::~KPresenterDocument_impl()\n");
+  _objList.clear();
+  _pageList.clear();
   cleanUp();
   edeb("...KPresenterDocument_impl::~KPresenterDocument_impl() %i\n",_refcnt());
 }

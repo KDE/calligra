@@ -411,24 +411,35 @@ void KPresenterView_impl::screenAssignEffect()
 /*========================== screen start =======================*/
 void KPresenterView_impl::screenStart()
 {
+  bool fullScreen = true; //m_rToolBarScreen->isButtonOn(m_idButtonScreen_Full);
+
   if (page && !presStarted) 
     {
       page->deSelectAllObj();
-      page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
       presStarted = true;
+      if (fullScreen)
+	{
+	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 
-      float _presFaktW = (float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() > 1.0 ? 
-	(float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() : 1.0;
-      float _presFaktH = (float)page->height() / (float)KPresenterDoc()->getPageSize(1,0,0).height() > 1.0 ? 
-	(float)page->height() / (float)KPresenterDoc()->getPageSize(1,0,0).height() : 1.0;
-      float _presFakt = min(_presFaktW,_presFaktH);
-      page->setPresFakt(_presFakt);
-      zoomParts(_presFakt);
-
+	  float _presFaktW = (float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() > 1.0 ? 
+	    (float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() : 1.0;
+	  float _presFaktH = (float)page->height() / (float)KPresenterDoc()->getPageSize(1,0,0).height() > 1.0 ? 
+	    (float)page->height() / (float)KPresenterDoc()->getPageSize(1,0,0).height() : 1.0;
+	  float _presFakt = min(_presFaktW,_presFaktH);
+	  page->setPresFakt(_presFakt);
+	  zoomParts(_presFakt);
+	}
+      else
+	{
+	  float _presFakt = 1.0;
+	  page->setPresFakt(_presFakt);
+	}
+	  
       _xOffset = xOffset;
       _yOffset = yOffset;
       xOffset = 10;
       yOffset = 10;
+
       if (page->width() > KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).width())
  	xOffset -= (page->width() - KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).width()) / 2;
       if (page->height() > KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height())
@@ -441,15 +452,24 @@ void KPresenterView_impl::screenStart()
       oldSize = widget()->size();
       widget()->resize(page->size());
       setSize(page->size().width(),page->size().height());
-      page->startScreenPresentation();
+      page->startScreenPresentation(fullScreen);
 
-      page->recreate((QWidget*)0L,WStyle_Customize | WStyle_NoBorder | WType_Popup,QPoint(0,0),true);
-      page->topLevelWidget()->move(0,0);
-      page->topLevelWidget()->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
-      page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
-      page->topLevelWidget()->setBackgroundColor(black);
-      page->setFocusPolicy(QWidget::StrongFocus);
-      page->setFocus();
+      if (fullScreen)
+	{
+	  page->recreate((QWidget*)0L,WStyle_Customize | WStyle_NoBorder | WType_Popup,QPoint(0,0),true);
+	  page->topLevelWidget()->move(0,0);
+	  page->topLevelWidget()->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
+	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
+	  page->topLevelWidget()->setBackgroundColor(black);
+	  page->setFocusPolicy(QWidget::StrongFocus);
+	  page->setFocus();
+	}
+      else
+	{
+	  page->setBackgroundColor(black);
+	  page->setFocusPolicy(QWidget::StrongFocus);
+	  page->setFocus();
+	}
     }
 }
 
@@ -458,9 +478,12 @@ void KPresenterView_impl::screenStop()
 {
   if (presStarted)
     {
-      page->close(false);
-      page->recreate((QWidget*)this,0,QPoint(0,0),true);
-      zoomBackParts();
+      if (true) //m_rToolBarScreen->isButtonOn(m_idButtonScreen_Full))
+	{
+	  page->close(false);
+	  page->recreate((QWidget*)this,0,QPoint(0,0),true);
+	  zoomBackParts();
+	}
       xOffset = _xOffset;
       yOffset = _yOffset;
       page->stopScreenPresentation();
@@ -1610,13 +1633,6 @@ void KPresenterView_impl::setupMenu()
 						   this,CORBA::string_dup("screenSkip"));
       m_rMenuBar->insertSeparator(m_idMenuScreen);
       tmp = kapp->kde_datadir().copy();
-      tmp += "/kpresenter/toolbar/screen.xpm";
-      pix = loadPixmap(tmp);
-      m_idMenuScreen_FullScreen = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-							  CORBA::string_dup(i18n("Full sc&reen")),m_idMenuScreen,
-							  this,CORBA::string_dup("screenFullScreen"));
-      m_rMenuBar->insertSeparator(m_idMenuScreen);
-      tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/pen.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Pen = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
@@ -2034,6 +2050,8 @@ void KPresenterView_impl::setupScreenToolbar()
       m_idButtonScreen_Full = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),
 							     CORBA::string_dup(i18n("Full Screen")),
 							     this,CORBA::string_dup("screenFullScreen"));
+      m_rToolBarScreen->setToggle(m_idButtonScreen_Full,true);
+      m_rToolBarScreen->setButton(m_idButtonScreen_Full,true);
 
       // pen
       tmp = kapp->kde_datadir().copy();
