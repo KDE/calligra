@@ -656,13 +656,15 @@ void KWStyleEditor::changeTabulators()
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_TABS, doc );
     paragDia->setCaption( i18n( "Tabulators" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
+    paragDia->setTabList(&style->paragLayout().m_tabList);
     paragDia->show();
 }
 
 /*================================================================*/
 void KWStyleEditor::paragDiaOk()
 {
-
+    QList<KoTabulator> tmp;
+    QListIterator<KoTabulator> it( tmp );
    switch ( paragDia->getFlags() ) {
    case KWParagDia::PD_SPACING: {
      style->paragLayout().margins[QStyleSheetItem::MarginTop]=paragDia->spaceBeforeParag() ;
@@ -683,6 +685,17 @@ void KWStyleEditor::paragDiaOk()
    } break;
    case KWParagDia::PD_NUMBERING:
      style->paragLayout().counter= paragDia->counter() ;
+     break;
+   case KWParagDia::PD_TABS:
+       it=*paragDia->tabListTabulator();
+       for ( it.toFirst(); it.current(); ++it ) {
+           KoTabulator *t = new KoTabulator;
+           t->type = it.current()->type;
+           t->mmPos = it.current()->mmPos;
+           t->inchPos = it.current()->inchPos;
+           t->ptPos = it.current()->ptPos;
+           style->paragLayout().m_tabList.append( t );
+       }
      break;
    default: break;
    }
