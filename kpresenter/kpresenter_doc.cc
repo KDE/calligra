@@ -1240,8 +1240,12 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
             if ( _store->open( u ) ) {
                 KoStoreDevice dev(_store );
                 QImageIO io( &dev, 0 );
-                io.read( );
-                img = io.image();
+                if(!io.read())
+                    // okay - has to be a funky - old xpm in a very old kpr file...
+                    // Don't ask me why this is needed...
+                    img=QImage(_store->read(_store->size()));
+                else
+                    img = io.image();
 
                 _store->close();
             } else {

@@ -1,17 +1,31 @@
 # converts a KPresenter document from the old format to the new one (v2)
 # due to the new text object
+
+use Time::Local;
+
 open(INPUT, "<$ARGV[0]") || die "Cannot open $ARGV[0]";
 open(OUTPUT, ">$ARGV[1]") || die "Cannot create $ARGV[1]";
 $objType="";
 $insideParag=0;
 $insideObj=0;
+$insidePixmaps=0;  # are we inside the <PIXMAPS> tags?
 $currentText="";
 $currentTextType=0;
 while (<INPUT>)
 {
   if (/<DOC/)
     {
+      # store the url because this is a prart of the "path" for the images
+      $url=$1 if(m/url=\"(.*?)\"/);
       s/>$/ syntaxVersion=\"2\">/;
+    }
+  elsif (/<PIXMAPS>/)
+    {
+      $insidePixmaps=1;
+    }
+  elsif (/<\/PIXMAPS>/)
+    {
+      $insidePixmaps=0;
     }
   elsif (/<TEXTOBJ/)
     {
@@ -115,6 +129,38 @@ while (<INPUT>)
 	    }
 	}
       $_=$toprint;
+    }
+  elsif ($insidePixmaps)
+    {
+      if(/\s+name=\"/)
+        {
+          # Aha - this file is not version 2 but was created as "proper" tgz storage... medieval times :)
+          print "Found a name attribute, no need to create one.\n";
+        }
+      elsif (/<KEY(.*)\/>/)
+        {
+          # Okay - plain old kpresenter magic...
+          $key=$1;
+          # Note: The .*? is needed because it would be too greedy otherwise
+          $filename=$1 if($key =~ /filename=\"(.*?)\"/);
+          # Get the values - really straightforward
+          $year=$1 if($key =~ /year=\"(\d+)\"/);
+          $month=$1 if($key =~ /month=\"(\d+)\"/);
+          $day=$1 if($key =~ /day=\"(\d+)\"/);
+          $hour=$1 if($key =~ /hour=\"(\d+)\"/);
+          $minute=$1 if($key =~ /minute=\"(\d+)\"/);
+          $second=$1 if($key =~ /second=\"(\d+)\"/);
+          # In Perl the month is <0...11>!!!
+          $timestamp=timegm($second, $minute, $hour, $day, $month-1, $year);
+          # Unfortunately we even have to mess with that string...
+          $timestring=scalar gmtime($timestamp);
+          # There are still some spaces too much when day<10
+          $timestring =~ s/  / /;
+          # Okay. Now let's cat the whole caboodle...
+          $nameattrib=$url . $filename . "_" . $timestring;
+          # ...and put it in place.
+          s/\/>/ name=\"$nameattrib\" \/>/;
+        }
     }
 
   print OUTPUT $_;
