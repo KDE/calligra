@@ -19,7 +19,7 @@
 */
 
 #include <qprinter.h>
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <qhbox.h>
 
 #include "koshell_shell.h"
