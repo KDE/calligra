@@ -1,6 +1,6 @@
 
-TODO-List:
-----------
+TODO-List (for KWord-0.8):
+--------------------------
 
 Bugs; in order or importance:
 
@@ -12,9 +12,6 @@ Bugs; in order or importance:
   (we have a problem with reference counts in the creation of a new image)
 - reconnect dumps sometimes.
 - Anchor is not redrawn if page scrolls
-- Type 1 line. Press enter after first character, 
-  press backspace, press enter again. Press backspace again. 
-  Rest of text is gone until you press enter gain.
 - numbering type list should only be reset when a non-numbering paragraph has been displayed.
   We now reset the numbering everytime the style is changes.
 
@@ -24,40 +21,28 @@ Missing or incomplete stuff:
  - Add SheetSide config in framedia 
  - implement copy of 'copy-frames' in appendPage method
 - split (table) cells needs to be implementated
-- Tab in the parag layout dialog for configuration of tabulators (adding/deleting/modifying them)
+- Tab in the parag layout dialog for configuration of tabulators (adding/deleting/modifying them) (done?)
 - Preview widget for numbering
 - Preview widget for style templates editor
 - Tabulators don't work correctly in "Blocksatz"
 - Toolbars in the settings menu are not updated if they are not shown/reshown
-- The borders dialog doesnt work (settings are not used)
+- The borders dialog doesn't work (settings are not used) (fixed?)
 - runAroundGap does nothing
 
 cleanup:
 --------
 - isAHeader is a global function; move to frameset class.
 - isAFooter is a global function; move to frameset class.
-- load and save functions in frame and frameset are mixed up. Should move them to right position
-  to save code duplication.
 - All enums should belong to a class, making it safe for namespace clashes. Class::Enum-value 
   should be used everywhere
-- A large portion of (at least page.cc) kword uses integets to store framesets and frames, using
-  doc->getFrame(int) to retrieve the pointer.
-  I would suggest using pointers there, and only storing the frame, since the frameset can be 
-  retrieved with frame->getFrameSet();
 - groupmanager variable active is used to 'Deactivate' a groupmanager. Deleting would be a better option ;)
 - Border has to be moved to the frame. 
 
-The whole images thing needs to be rethought:
------------------------------------------
 Included files (pictures/parts/formula's)
------------------------------------------
-- Pictures should never be rescaled if that means that there is image loss at printing time
 - It should be possible to keep files external. Kword should also notice a changed file
   (preferably at runtime) and reload it.
 
-- In kword we have an image object. 
-- we also have a imageCollection object.
-
+... many more things due to the QRT rewrite ...
 
 Proposal
 --------
@@ -167,26 +152,12 @@ KWord from a development POV can be devided in a number of 'layers'.
 
 ----------------- Milestones
 
-Replace all the text/paragraph/strings stuff with the QT QRichTextObject stuff.
-
-Page class needs some work; its main function is 2-fold:
- - input from user
- - it is the widget to draw on screen (so we need updating stuff in there)
-
-find out if the redraw stuff works, and document it.
-
-Fix a lot of non-OO stuff.
-
 All classes and methods should have proper documentation, in the proper format.
 
 Complete re-layout of the GUI with all future features as hooks implemented. These features will
 mostly be discussed in this file.
  - tables menu items should be accessible from the edit and the frameedit cursor modes.
  - Have an insert and a modify menu where all elements are represented.
-
-Make complete undo-redo stuff work.
-
-Create a much nicer status bar.
 
 Tables should get a title (with positioning posibility) This will basicly be a new frame placed on top
 or at bottom of table.
@@ -197,7 +168,7 @@ Sideheads (for text)
 
 Split frames needs to be implemented.
 
-Styles have to be saved external.
+Styles have to be saved external (do they??).
 
 Books (collection of documents) should be implemented
 
@@ -214,4 +185,5 @@ Add "TopOfFrame"-TopOfPage" etc to styles.
 
 Thanx to: Reginald Stadlbauer <reggie@kde.org>
 Author: Thomas Zander <zander@earthling.net>
+New maintainer: David Faure <david@mandrakesoft.com>
 
