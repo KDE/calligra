@@ -69,7 +69,12 @@ BasicElement* SequenceElement::goToPos(FormulaCursor* cursor, bool& handled,
             if (e != 0) {
                 if (!handled) {
                     handled = true;
-                    cursor->setTo(this, children.find(e));
+                    if ((point.x() - myPos.x()) < (e->getX() + e->getWidth()/2)) {
+                        cursor->setTo(this, children.find(e));
+                    }
+                    else {
+                        cursor->setTo(this, children.find(e)+1);
+                    }
                 }
                 return e;
             }
