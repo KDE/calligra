@@ -116,6 +116,7 @@ void KoStyleManager::addTab( KoStyleManagerTab * tab )
 {
     m_tabsList.append( tab );
     m_tabs->insertTab( tab, tab->tabName() );
+    tab->layout()->activate();
 }
 
 void KoStyleManager::setupWidget(const QPtrList<KoStyle> & styleList)
@@ -604,6 +605,13 @@ void KoStyleManager::renameStyle(const QString &theText) {
 
 /////////////
 
+KoStyleParagTab::KoStyleParagTab( QWidget * parent )
+    : KoStyleManagerTab( parent )
+{
+    ( new QVBoxLayout( this ) )->setAutoAdd( true );
+    m_widget = 0L;
+}
+
 void KoStyleParagTab::update()
 {
      m_widget->display( m_style->paragLayout() );
@@ -628,6 +636,7 @@ void KoStyleParagTab::resizeEvent( QResizeEvent *e )
 KoStyleFontTab::KoStyleFontTab( QWidget * parent )
     : KoStyleManagerTab( parent )
 {
+    ( new QVBoxLayout( this ) )->setAutoAdd( true );
     m_chooser = new KoFontChooser( this, 0, true, KFontChooser::SmoothScalableFonts);
     m_zoomHandler = new KoZoomHandler;
 }
