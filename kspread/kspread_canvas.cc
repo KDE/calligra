@@ -818,6 +818,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
     // m_pView->doc()->setModified( TRUE );
     selection.setCoords( 0, 0, 0, 0 );
     table->setSelection( selection, this );
+    m_pView->updateEditWidget();
   }
   // The user started the drag in the middle of a cell ?
   else if ( m_eMouseAction == Mark )
