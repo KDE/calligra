@@ -50,7 +50,7 @@ KWQTSQLSerialDataSourceBase::KWQTSQLSerialDataSourceBase(KInstance *inst,QObject
 
 KWQTSQLSerialDataSourceBase::~KWQTSQLSerialDataSourceBase()
 {
-	QSqlDatabase::removeDatabase("KWQTSQLPOWER");
+	QSqlDatabase::removeDatabase(QString("KWQTSQLPOWER")+parent()->name());
 }
 
 
@@ -71,8 +71,8 @@ bool KWQTSQLSerialDataSourceBase::showConfigDialog(QWidget *par,int action)
 bool  KWQTSQLSerialDataSourceBase::openDatabase()
 {
 	QCString pwd;
-	QSqlDatabase::removeDatabase("KWQTSQLPOWER");
-        database=QSqlDatabase::addDatabase(driver,"KWQTSQLPOWER");
+	QSqlDatabase::removeDatabase(QString("KWQTSQLPOWER")+parent()->name());
+        database=QSqlDatabase::addDatabase(driver,QString("KWQTSQLPOWER")+parent()->name());
         if (database)
         {
                 if (database->lastError().type()!=QSqlError::None)
