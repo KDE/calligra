@@ -97,7 +97,14 @@ GObject* GGroup::copy () {
 }
 
 void GGroup::calcBoundingBox () {
+  if (members.empty ())
+    return;
+
   list<GObject*>::iterator it = members.begin ();
+  for (; it != members.end (); it++)
+      (*it)->calcBoundingBox ();
+
+  it = members.begin ();
   Rect r = members.front ()->boundingBox ();
   for (it++; it != members.end (); it++) {
     r = r.unite ((*it)->boundingBox ());
@@ -110,6 +117,7 @@ void GGroup::calcBoundingBox () {
   p[3] = Coord (r.left (), r.bottom ()).transform (tmpMatrix);
 
   Rect mr (p[0].x (), p[0].y (), 0, 0);
+
   for (int i = 1; i < 4; i++) {
     mr.left (QMIN(p[i].x (), mr.left ()));
     mr.top (QMIN(p[i].y (), mr.top ()));
@@ -156,4 +164,14 @@ void GGroup::writeToXml (XmlWriter& xml) {
 	(*i)->writeToXml (xml);
 
   xml.endTag ();
+}
+
+void GGroup::printInfo () {
+    cout << ">>>>>>>>>>>>>>>>>>>>>\n";
+    cout << className () << " bbox = [" << boundingBox () << "]" << endl;
+    list<GObject*>::iterator i = members.begin ();
+    for (; i != members.end (); i++) {
+	(*i)->printInfo ();
+    }
+    cout << "<<<<<<<<<<<<<<<<<<<<<\n";
 }

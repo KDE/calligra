@@ -36,6 +36,7 @@
 #include <string>
 #include <iostream.h>
 #include <fstream.h>
+#include <strstream.h>
 
 #ifdef __FreeBSD__
 #include <float.h>
@@ -402,6 +403,8 @@ void GDocument::deleteSelectedObjects () {
     while (obj != NULL) {
       if (obj->isSelected ()) {
 	disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+	disconnect (obj, SIGNAL(changed(const Rect&)), 
+		 this, SLOT(objectChanged (const Rect&)));
 	obj->unref ();
 	objects.remove ();
 	obj = objects.current ();
@@ -414,6 +417,8 @@ void GDocument::deleteSelectedObjects () {
 	 i != selection.end (); i++) {
       GObject* obj = *i;
       disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+      disconnect (obj, SIGNAL(changed(const Rect&)), 
+		  this, SLOT(objectChanged (const Rect&)));
       obj->getLayer ()->deleteObject (obj);
     }
 #endif
@@ -438,6 +443,8 @@ void GDocument::deleteObject (GObject* obj) {
     objects.removeRef (obj);
     last = 0L;
     disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+    disconnect (obj, SIGNAL(changed(const Rect&)), 
+		this, SLOT(objectChanged (const Rect&)));
     obj->unref ();
     if (selected) {
       selBoxIsValid = false;
@@ -454,6 +461,8 @@ void GDocument::deleteObject (GObject* obj) {
       selection.remove (obj);
     last = 0L;
     disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+    disconnect (obj, SIGNAL(changed(const Rect&)), 
+		this, SLOT(objectChanged (const Rect&)));
     layer->deleteObject (obj);
     if (selected) {
       selBoxIsValid = false;
@@ -778,6 +787,8 @@ bool GDocument::readFromXml (const char* fname) {
     else if (elem.isEndTag ()) {
       finished = true;
       if (elem.tag () == "group") {
+	  // group object is finished -> recalculate bbox
+	groups.top ()->calcBoundingBox ();
 	groups.pop ();
       }
     }
@@ -868,10 +879,12 @@ bool GDocument::readFromXml (const char* fname) {
 	group->setLayer (active_layer);
 	//	group->ref ();
 
-	if (!groups.empty ())
+	if (!groups.empty ()) {
 	  groups.top ()->addObject (group);
-	else
+	}
+	else {
 	  insertObject (group);
+	}
 	groups.push (group);
       }
       else if (elem.tag () == "point") {
@@ -936,6 +949,8 @@ void GDocument::insertObjectAtIndex (GObject* obj, unsigned int idx) {
     layer = active_layer;
   layer->insertObjectAtIndex (obj, idx);
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+  connect (obj, SIGNAL(changed(const Rect&)), 
+	   this, SLOT(objectChanged (const Rect&)));
 #endif
   setModified ();
   emit changed ();
@@ -1195,3 +1210,20 @@ void GDocument::deleteLayer (GLayer *layer) {
   emit changed ();
 }
 
+void GDocument::printInfo (QString& s) {
+    ostrstream os;
+    int n = 0;
+
+    os << i18n ("Layers") << ": " << layers.size () << '\n';
+
+    for (vector<GLayer*>::iterator li = layers.begin (); 
+	 li != layers.end (); li++) {
+	GLayer* layer = *li;
+	list<GObject*>& contents = layer->objects ();
+	n += contents.size ();
+    }
+    
+    os << i18n ("Objects") << ": " << n << "\n    " << flush;
+    s += os.str ();
+}
+  

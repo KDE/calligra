@@ -355,3 +355,7 @@ void GObject::writePropertiesToXml (XmlWriter& xml) {
   xml.addAttribute ("fillstyle", (int) fillInfo.style);
 }
 
+void GObject::printInfo () {
+    cout << className () << " bbox = [" << boundingBox () << "]" << endl;
+}
+

@@ -148,6 +148,8 @@ public:
   static const char* getPSFont (const QFont& qfont);
   static bool writePSProlog (ostream& os);
 
+  void printInfo (QString& s);
+  
 protected:
   void updateHandle ();
   
@@ -155,7 +157,7 @@ public slots:
   void objectChanged ();
   void objectChanged (const Rect& r);
   void layerChanged ();
-  
+
 signals:
   void changed ();
   void changed (const Rect& r);

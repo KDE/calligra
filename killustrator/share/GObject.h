@@ -313,14 +313,15 @@ public:
   virtual bool findNearestPoint (const Coord& p, float max_dist, 
 				 float& dist, int& pidx) { return false; }
 
+  virtual void printInfo ();
+  virtual void calcBoundingBox () = 0;
+
 signals:
   void changed ();
   void changed (const Rect& r);
   void propertiesChanged (GObject::Property p, int mask);
   
 protected:
-  virtual void calcBoundingBox () = 0;
-
   void updateBoundingBox (const Rect& r);
   void updateBoundingBox (const Coord& p1, const Coord& p2);
 

@@ -22,52 +22,20 @@
 
 */
 
-#ifndef GGroup_h_
-#define GGroup_h_
+#ifndef DocumentInfo_h_
+#define DocumentInfo_h_
 
-#include <qobject.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
+#include <qdialog.h>
 
-#include <list>
+#include "GDocument.h"
 
-#include "Coord.h"
-#include "GObject.h"
-
-class GGroup : public GObject {
+class DocumentInfo : public QDialog {
   Q_OBJECT
+protected:
+  DocumentInfo (GDocument* doc, QWidget* parent = 0L, const char* name = 0L);
+
 public:
-  GGroup ();
-  GGroup (const list<XmlAttribute>& attribs);
-  GGroup (const GGroup& obj);
-  ~GGroup ();
-
-  void addObject (GObject* obj);
-
-  virtual void draw (Painter& p, bool withBasePoints = false);
-  virtual bool contains (const Coord& p);
-
-  virtual const char* typeName ();
-
-  virtual GObject* copy ();
-
-  virtual void writeToPS (ostream& os);
-  virtual void writeToXml (XmlWriter&);
-
-  const list<GObject*>& getMembers() { return members; }
-
-  void calcBoundingBox ();
-
-  void printInfo ();
-   
-protected slots:
-  void propagateProperties (GObject::Property prop, int mask);
-
-private:
-  list<GObject*> members;
+  static void showInfo (GDocument* doc);
 };
 
 #endif
-
