@@ -702,10 +702,19 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         }
         else if ( tagName == "text:a" )
         {
-            // ### TODO: for now, it is only a <text-span> whitout formatting
             m_styleStack.setMark( StyleStack::SpanMark );
-            parseSpanOrSimilar( doc, ts, kwordParagraph, kwordFormats, paragraphText, pos);
+            // The problem is that KWord's hyperlink text is not inside the normal text, but for OOWriter it is nearly a <text:span>
+            // So we have to fake.
+            QDomElement fakeParagraph, fakeFormats;
+            uint fakePos=0;
+            QString text;
+            parseSpanOrSimilar( doc, ts, fakeParagraph, fakeFormats, text, fakePos);
             m_styleStack.popToMark( StyleStack::SpanMark  );
+            textData = '#'; // hyperlink placeholder
+            QDomElement linkElement (doc.createElement("LINK"));
+            linkElement.setAttribute("hrefName",ts.attribute("xlink:href"));
+            linkElement.setAttribute("linkName",text);
+            appendKWordVariable(doc, kwordFormats, ts, pos, "STRING", 9, text, linkElement);
         }
         else if (tagName == "text:date")
         {
@@ -716,7 +725,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             dateElement.setAttribute("month",1);
             dateElement.setAttribute("day",1);
             dateElement.setAttribute("fix",0);  // Has OOWriter fixed dates?
-            appendKWordVariable(doc, kwordFormats, ts, pos, "DATE0Locale", 0, dateElement);
+            appendKWordVariable(doc, kwordFormats, ts, pos, "DATE0Locale", 0, "-", dateElement);
         }
         else if (tagName == "text:time")
         {
@@ -727,7 +736,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             timeElement.setAttribute("minute",0);
             timeElement.setAttribute("second",0);
             timeElement.setAttribute("fix",0); // Has OOWriter fixed times?
-            appendKWordVariable(doc, kwordFormats, ts, pos, "TIMELocale", 2, timeElement);
+            appendKWordVariable(doc, kwordFormats, ts, pos, "TIMELocale", 2, "-", timeElement);
         }
         else if ( tagName == "text:page-number" )
         {
@@ -735,7 +744,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             QDomElement pgnumElement ( doc.createElement("PGNUM") );
             pgnumElement.setAttribute("subtype",0);
             pgnumElement.setAttribute("value",1);
-            appendKWordVariable(doc, kwordFormats, ts, pos, "NUMBER", 4, pgnumElement);
+            appendKWordVariable(doc, kwordFormats, ts, pos, "NUMBER", 4, "1", pgnumElement);
         }
         else if ( tagName == "text:file-name" )
         {
@@ -743,7 +752,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             QDomElement fieldElement ( doc.createElement("FIELD") );
             fieldElement.setAttribute("subtype",0);
             fieldElement.setAttribute("value","?");
-            appendKWordVariable(doc, kwordFormats, ts, pos, "STRING", 8, fieldElement);
+            appendKWordVariable(doc, kwordFormats, ts, pos, "STRING", 8, "?", fieldElement);
         }
         else if ( tagName == "text:author-name"
                  || tagName == "text:author-initials")
@@ -1239,14 +1248,14 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
 }
 
 void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
-    const QString& key, int type, QDomElement& child)
+    const QString& key, int type, const QString& text, QDomElement& child)
 {
     QDomElement variableElement ( doc.createElement("VARIABLE") );
     
     QDomElement typeElement ( doc.createElement("TYPE") );
     typeElement.setAttribute("key",key);
     typeElement.setAttribute("type",type);
-    typeElement.setAttribute("text","-"); // Just a dummy, KWord will do the work
+    typeElement.setAttribute("text",text);
     variableElement.appendChild(typeElement); //Append to <VARIABLE>
 
     variableElement.appendChild(child); //Append to <VARIABLE>

@@ -59,7 +59,7 @@ private:
     void addStyles( const QDomElement* style );
     void appendPicture(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos);
     void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
-        const QString& key, int type, QDomElement& child);
+        const QString& key, int type, const QString& text, QDomElement& child);
 
     
     QDomDocument    m_content;
