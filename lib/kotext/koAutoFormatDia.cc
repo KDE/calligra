@@ -395,11 +395,17 @@ void KoAutoFormatDia::setupTab2()
 
     pbDoubleQuote1 = new QPushButton( tab2 );
     pbDoubleQuote1->setFixedSize( pbDoubleQuote1->sizeHint() );
-    hbox->addWidget( pbDoubleQuote1 );
 
     pbDoubleQuote2 = new QPushButton( tab2 );
     pbDoubleQuote2->setFixedSize( pbDoubleQuote2->sizeHint() );
-    hbox->addWidget( pbDoubleQuote2 );
+
+    if (QApplication::reverseLayout()) {
+        hbox->addWidget( pbDoubleQuote2 );
+        hbox->addWidget( pbDoubleQuote1 );
+    } else {
+        hbox->addWidget( pbDoubleQuote1 );
+        hbox->addWidget( pbDoubleQuote2 );
+    }
 
     hbox->addSpacing( 20 );
 
@@ -430,11 +436,17 @@ void KoAutoFormatDia::setupTab2()
 
     pbSimpleQuote1 = new QPushButton( tab2 );
     pbSimpleQuote1->setFixedSize( pbSimpleQuote1->sizeHint() );
-    hbox->addWidget( pbSimpleQuote1 );
 
     pbSimpleQuote2 = new QPushButton( tab2 );
     pbSimpleQuote2->setFixedSize( pbSimpleQuote2->sizeHint() );
-    hbox->addWidget( pbSimpleQuote2 );
+
+    if (QApplication::reverseLayout()) {
+        hbox->addWidget( pbSimpleQuote2 );
+        hbox->addWidget( pbSimpleQuote1 );
+    } else {
+        hbox->addWidget( pbSimpleQuote1 );
+        hbox->addWidget( pbSimpleQuote2 );
+    }
 
     hbox->addSpacing( 20 );
 
