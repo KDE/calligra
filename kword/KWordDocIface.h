@@ -63,7 +63,7 @@ k_dcop:
 
     virtual int nbPagePerRow();
     virtual void setNbPagePerRow(int _nb);
-    virtual int defaultColumnSpacing();
+    virtual double defaultColumnSpacing();
     virtual void setDefaultColumnSpacing(int _val);
     virtual int maxRecentFiles();
 

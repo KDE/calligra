@@ -153,7 +153,7 @@ void KWordDocIface::setNbPagePerRow(int _nb)
     doc->setNbPagePerRow(_nb);
 }
 
-int KWordDocIface::defaultColumnSpacing()
+double KWordDocIface::defaultColumnSpacing()
 {
     return doc->defaultColumnSpacing();
 }
