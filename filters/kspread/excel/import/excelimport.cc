@@ -248,6 +248,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     QDomElement table;
     table = mainDocument.createElement( "table" );
     table.setAttribute( "name", string( sheet->name() ).string() );
+    table.setAttribute( "hide", sheet->visible() ? 0 : 1 );
     map.appendChild( table );
 
     // FIXME the real active sheet
