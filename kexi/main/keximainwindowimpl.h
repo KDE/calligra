@@ -23,6 +23,7 @@
 
 #include <kmessagebox.h>
 #include "core/keximainwindow.h"
+#include "core/kexiguimsghandler.h"
 
 class KexiProjectData;
 class KexiActionProxy;
@@ -40,7 +41,7 @@ namespace KexiPart {
 /**
  * @short Kexi's main window implementation
  */
-class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
+class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUIMessageHandler
 {
 	Q_OBJECT
 
@@ -65,7 +66,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 //		void startup(KexiProjectData* pdata);
 		/*! Performs startup actions. \return false if application should exit immediately 
 		 with an error status. */
-		bool startup();
+		tristate startup();
 
 		/*! \return true if this window is in the Final Mode. */
 		bool inFinalMode() const;
@@ -100,8 +101,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/*! Closes dialog \a dlg. If dialog's data (see KexiDialoBase::dirty()) is unsaved,
 		 used will be asked if saving should be perforemed.
 		 \return true on successull closing or false on closing error.
-		 If closing was cancelled by user, true is returned and cancelled is true. */
-		bool closeDialog(KexiDialogBase *dlg, bool &cancelled, bool layoutTaskBar = true);
+		 If closing was cancelled by user, cancelled is returned. */
+		tristate closeDialog(KexiDialogBase *dlg, bool layoutTaskBar = true);
 
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
@@ -115,11 +116,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/*! Saves dialog's \a dlg data. It dialog's data is never saved,
 		 User is asked for name and caption, before saving.
 		 \return true on successul closing or false on saving error.
-		 If saving was cancelled by user, true is returned and cancelled is true.
+		 If saving was cancelled by user, cancelled is returned.
 		 \a messageWhenAskingForName is a i18n'ed text that will be visible
 		 within name/caption dialog (see KexiNameDialog), which is popped 
 		 up for never saved objects. */
-		virtual bool saveObject( KexiDialogBase *dlg, bool &cancelled,
+		virtual tristate saveObject( KexiDialogBase *dlg, 
 			const QString& messageWhenAskingForName = QString::null );
 
 	protected:
@@ -177,15 +178,16 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/*! Closes current project, \return true on success.
 		 Application state (e.g. actions) is updated. 
 		 \return true on success. 
-		 If closing was cancelled by user, true is returned and cancelled is true. */
-		bool closeProject(bool &cancelled);
-		
+		 If closing was cancelled by user, cancelled is returned. */
+		tristate closeProject();
+
 		/*! Shows dialog for creating new blank project,
 		 ans creates one. Dialog is not shown if option for automatic creation 
-		 is checked.
-		 \return true if database was created, false on error or when cancel pressed
-		*/
-		bool createBlankProject();
+		 is checked or Kexi::startupHandler().projectData() was provided from command line.
+		 \a cancelled is set to true if creation has been cancelled (e.g. user answered 
+		 no when asked for database overwriting, etc.
+		 \return true if database was created, false on error or when cancel was pressed */
+		tristate createBlankProject();
 
 		void setWindowMenu(QPopupMenu *menu);
 
@@ -233,15 +235,6 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		void slotLastChildFrmClosed();
 		void slotChildViewIsDetachedNow(QWidget*);
 
-		//! Shows an error message signaled by project's objects, connections, etc.
-		void showErrorMessage(const QString&,KexiDB::Object *obj);
-		void showErrorMessage(const QString&,const QString&,KexiDB::Object *obj);
-		void showErrorMessage(const QString &title, const QString &details = QString::null);
-		void showErrorMessage(Kexi::ObjectStatus *status);
-		void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
-		void showSorryMessage(const QString &title, const QString &details = QString::null);
-		void showMessage(KMessageBox::DialogType dlgType, const QString &title, const QString &details);
-
 		//! internal - creates and initializes kexi project
 		void createKexiProject(KexiProjectData* new_data);
 
@@ -255,9 +248,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		bool newObject( KexiPart::Info *info );
 
 		/*! Removes object pointed by \a item from current project. 
-		 Asks for confirmation. \return true on success. 
-		 if \a dontAsk is true. */
-		bool removeObject( KexiPart::Item *item, bool dontAsk = true );
+		 Asks for confirmation. \return true on success
+		 or cancelled if removing was cancelled (only possible if \a dontAsk is false). */
+		tristate removeObject( KexiPart::Item *item, bool dontAsk = true );
 
 		/*! Renames object pointed by \a item to a new name \a _newName.
 		 Sets \a success to false on failure. Used as a slot connected 
@@ -267,7 +260,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/*! Reaction for object rename (signalled by KexiProject).
 		 If this item has opened dialog, it's caption is updated, 
 		 and also optionally application's caption. */
-		void slotObjectRenamed(const KexiPart::Item &item);
+		virtual void slotObjectRenamed(const KexiPart::Item &item);
 
 		void invalidateSharedActions();
 		void invalidateSharedActionsLater();
@@ -315,6 +308,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 
 	private:
 
+		class MessageHandler;
 		class Private;
 		Private *d;
 

@@ -48,10 +48,10 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 	protected:
 		KexiQueryPart::TempData * tempData() const;
 
-		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
-		virtual bool afterSwitchFrom(int mode, bool &cancelled);
+		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
+		virtual tristate afterSwitchFrom(int mode);
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		virtual bool storeData(bool &cancel);
+		virtual tristate storeData();
 
 		void setStatusOk();
 		void setStatusError(const QString& msg);

@@ -18,8 +18,10 @@
 */
 
 #include "KexiStartup.h"
+#include "kexiproject.h"
 #include "kexiprojectdata.h"
 #include "kexiprojectset.h"
+#include "kexiguimsghandler.h"
 
 #include <kexidb/driver.h>
 #include <kexidb/drivermanager.h>
@@ -57,14 +59,9 @@ class KexiStartupHandlerPrivate
 {
 	public:
 		KexiStartupHandlerPrivate()
-		 : projectData(0)
-		 , action(KexiStartupData::DoNothing)
 		{
 		}
-		KexiProjectData *projectData;
-		KexiStartupData::Action action;
-		bool forcedFinalMode : 1;
-		bool forcedDesignMode : 1;
+		int dummy;
 };
 
 //---------------------------------
@@ -92,10 +89,11 @@ KexiStartupHandler::~KexiStartupHandler()
 	delete d;
 }
 
-void KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name)
+bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name)
 {
 	QCStringList list = args->getOptionList(action_name);
 	QCStringList::const_iterator it;
+	bool atLeastOneFound = false;
 	for ( it = list.begin(); it!=list.end(); ++it) {
 		QString type_name, obj_name, item=*it;
 		int idx;
@@ -136,46 +134,126 @@ void KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &
 		//ok, now add info for this object
 		projectData()->autoopenObjects.append( info );
 //		projectData->autoopenObjects.append( QPair<QString,QString>(type_name, obj_name) );
+		atLeastOneFound = true;
 	}
+	return atLeastOneFound;
 }
 
 bool KexiStartupHandler::init()
 {
+	m_action = DoNothing;
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
 	if (!args)
 		return true;
 
+	KexiDB::ConnectionData cdata;
+	cdata.driverName = args->getOption("dbdriver");
+	if (cdata.driverName.isEmpty())
+		cdata.driverName = "SQLite";
+	const bool fileDriverSelected = cdata.driverName.lower()=="sqlite";
+	bool projectFileExists = false;
+
 	m_forcedFinalMode = args->isSet("final-mode");
 	m_forcedDesignMode = args->isSet("design-mode");
-	
-	if (m_forcedFinalMode && m_forcedDesignMode) {
-		KMessageBox::sorry( 0, i18n("You have set both \"final-mode\" and \"design-mode\" startup options."
-		"Cannot start Kexi application this way."));
+	m_createDB = args->isSet("createdb");
+	m_dropDB = args->isSet("dropdb");
+	const bool openExisting = !m_createDB && !m_dropDB;
+	const QString couldnotMsg = i18n("\nCould not start Kexi application this way.");
+	if (m_createDB && m_dropDB) {
+		KMessageBox::sorry( 0, i18n("You have used both \"createdb\" and \"dropdb\" startup options.")+couldnotMsg);
 		return false;
 	};
-	
+
+	if (m_createDB || m_dropDB) {
+		if (args->count()<1) {
+			KMessageBox::sorry( 0, i18n("No project name specified.") );
+			return false;
+		}
+		m_action = Exit;
+	}
+
 	kdDebug() << "ARGC==" << args->count() << endl;
 	for (int i=0;i<args->count();i++) {
 		kdDebug() << "ARG" <<i<< "= " << args->arg(i) <<endl;
 	}
 
-	//database files
-	if (args->count()==1) {
-		QString fname;
-		fname = args->arg(0);
-		m_projectData = KexiStartupHandler::detectProjectData( fname, 0 );
+	if (m_forcedFinalMode && m_forcedDesignMode) {
+		KMessageBox::sorry( 0, i18n("You have used both \"final-mode\" and \"design-mode\" startup options.")+couldnotMsg);
+		return false;
+	}
+
+	//database filenames, shortcut filenames or db names on a server
+	if (args->count()>=1) {
+		QString fname = args->arg(0);
+		if (fileDriverSelected) {
+			cdata.setFileName( fname );
+			QFileInfo finfo(cdata.dbFileName());
+			projectFileExists = finfo.exists();
+
+			if (m_dropDB && !projectFileExists) {
+				KMessageBox::sorry(0, i18n(
+					"Could not remove project. The file \"%1\" does not exist.").arg(cdata.dbFileName()));
+				return 0;
+			}
+		}
+
+		if (m_createDB)
+			m_projectData = new KexiProjectData(cdata, fname);
+		else
+			m_projectData = KexiStartupHandler::detectProjectData( cdata, fname, 0 );
+
 		if (!m_projectData)
 			return false;
 	}
-	else if (args->count()>1) {
+	if (args->count()>1) {
 		//TODO: KRun another Kexi instances
 	}
 
 	//---autoopen objects:
-	getAutoopenObjects(args, "open");
-	getAutoopenObjects(args, "design");
-	getAutoopenObjects(args, "edittext");
-	getAutoopenObjects(args, "new");
+	const bool atLeastOneAOOFound = getAutoopenObjects(args, "open")
+		|| getAutoopenObjects(args, "design")
+		|| getAutoopenObjects(args, "edittext")
+		|| getAutoopenObjects(args, "new");
+
+	if (atLeastOneAOOFound && !openExisting) {
+		KMessageBox::information( 0, 
+			i18n("You have specified a few database objects to be opened automatically, using startup options.\n"
+				"These options will be ignored because it is not available while creating or dropping projects."));
+		projectData()->autoopenObjects.clear();
+	}
+
+	if (m_createDB) {
+/*		if (fileDriverSelected) {
+			QFileInfo finfo(cdata.dbFileName());
+			if (finfo.exists()) {
+				if (KMessageBox::Yes != KMessageBox::warningYesNo(0, i18n(
+					"The project file \"%1\" already exists.\n"
+					"Do you want to replace it with a new, blank one?")
+					.arg(cdata.dbFileName())))
+				{
+					return 0;
+				}
+			}
+		}*/
+		bool cancelled;
+		KexiGUIMessageHandler gui;
+		KexiProject *prj = KexiProject::createBlankProject(cancelled, projectData(), &gui);
+		bool ok = prj!=0;
+		if (ok) {
+			KMessageBox::information( 0, i18n("Project \"%1\" created successfully.")
+				.arg( projectData()->databaseName() ));
+		}
+		delete prj;
+		return ok;
+	}
+	else if (m_dropDB) {
+		KexiGUIMessageHandler gui;
+		tristate res = KexiProject::dropProject(projectData(), &gui, false/*ask*/);
+		if (res)
+			KMessageBox::information( 0, i18n("Project \"%1\" dropped successfully.")
+				.arg( projectData()->databaseName() ));
+		return res!=false;
+	}
 
 	//------
 
@@ -185,8 +263,7 @@ bool KexiStartupHandler::init()
 		return;
 	}*/
 
-	kdDebug() << "KexiMainWindowImpl::startup()..." << endl;
-	if (!m_projectData) {
+	if (!projectData()) {
 //		importantInfo(true);
 //<TEMP>
 		//some connection data
@@ -241,7 +318,8 @@ bool KexiStartupHandler::init()
 			if (!selFile.isEmpty()) {
 				//file-based project
 				kdDebug() << "Project File: " << selFile << endl;
-				m_projectData = KexiStartupHandler::detectProjectData( selFile, 0 );
+				cdata.setFileName( selFile );
+				m_projectData = KexiStartupHandler::detectProjectData( cdata, selFile, 0 );
 			}
 			else if (dlg.selectedExistingConnection()) {
 				kdDebug() << "Existing connection: " << dlg.selectedExistingConnection()->serverInfoString() << endl;
@@ -265,47 +343,51 @@ bool KexiStartupHandler::init()
 			return true;
 	}
 	
-	if (m_projectData) {
+	if (m_projectData && openExisting) {
 		m_action = OpenProject;
 	}
-//	openProject(projectData);
-
 	//show if wasn't show yet
 //	importantInfo(true);
 	
 	return true;
 }
 
-KexiProjectData* KexiStartupHandler::detectProjectData( const QString &fname, QWidget *parent)
+KexiProjectData* KexiStartupHandler::detectProjectData( 
+	KexiDB::ConnectionData& cdata, const QString &dbname, QWidget *parent )
 {
 	KexiProjectData *projectData = 0;
-	QFileInfo finfo(fname);
-	if (fname.isEmpty() || !finfo.isReadable()) {
-		KMessageBox::sorry(parent, i18n("<qt>The file \"%1\" does not exist.").arg(fname));
-		return 0;
+	
+	if (!cdata.dbFileName().isEmpty()) {
+		QFileInfo finfo(cdata.dbFileName());
+		if (dbname.isEmpty() || !finfo.isReadable()) {
+			KMessageBox::sorry(parent, i18n(
+				"Could not load project. The file \"%1\" does not exist.").arg(cdata.dbFileName()));
+			return 0;
+		}
+		if (!finfo.isWritable()) {
+			//TODO: if file is ro: change project mode
+		}
+		KMimeType::Ptr ptr = KMimeType::findByFileContent(cdata.dbFileName());
+		QString mimename = ptr.data()->name();
+		kdDebug() << "KexiStartupHandler::detectProjectData(): found mime is: " << ptr.data()->name() << endl;
+		if (mimename=="application/x-kexiproject-shortcut") {
+			return 0;//TODO: get information for xml shortcut file
+		}
+		// "application/x-kexiproject-sqlite", etc
+		cdata.driverName = Kexi::driverManager().lookupByMime(mimename).latin1();
+		kdDebug() << "KexiStartupHandler::detectProjectData(): driver name: " << cdata.driverName << endl;
+		if (cdata.driverName.isEmpty()) {
+			KMessageBox::detailedSorry(parent, 
+				i18n( "The file \"%1\" is not recognized as being supported by Kexi.").arg(cdata.dbFileName()),
+				i18n("Database driver for this file type not found.\nDetected MIME type: %1").arg(mimename));
+			return 0;
+		}
 	}
-	if (!finfo.isWritable()) {
-		//TODO: if file is ro: change project mode
+	else {
+		//TODO: now server is null, user is null and pwd is null
 	}
-	KMimeType::Ptr ptr = KMimeType::findByFileContent(fname);
-	QString mimename = ptr.data()->name();
-	kdDebug() << "KexiStartupHandler::detectProjectData(): found mime is: " << ptr.data()->name() << endl;
-	if (mimename=="application/x-kexiproject-shortcut") {
-		return 0;//TODO: get information for xml shortcut file
-	}
-	// "application/x-kexiproject-sqlite", etc
-	QString drivername = Kexi::driverManager().lookupByMime(mimename);
-	kdDebug() << "KexiStartupHandler::detectProjectData(): driver name: " << drivername << endl;
-	if(drivername.isEmpty()) {
-		KMessageBox::detailedSorry(parent, i18n( "The file \"%1\" is not recognized as being supported by Kexi.").arg(fname),
-		i18n("<qt>Database driver for this file type not found. <p>Detected MIME type: %1").arg(mimename));
-		return 0;
-	}
-	KexiDB::ConnectionData cdata;
-	cdata.driverName = drivername;
-	cdata.setFileName( fname );
-	projectData = new KexiProjectData(cdata,fname,fname);
-	kdDebug() << "KexiStartupHandler::detectProjectData(): file is a living database of engine " << drivername << endl;
+	projectData = new KexiProjectData(cdata, dbname);
+	kdDebug() << "KexiStartupHandler::detectProjectData(): this name is a database of engine " << cdata.driverName << endl;
 	return projectData;
 }
 

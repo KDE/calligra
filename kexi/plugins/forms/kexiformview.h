@@ -87,12 +87,12 @@ class KexiFormView : public KexiViewBase
 		void setRedoEnabled(bool enabled);
 
 	protected:
-		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
-		virtual bool afterSwitchFrom(int mode, bool &cancelled);
+		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
+		virtual tristate afterSwitchFrom(int mode);
 		virtual KexiPropertyBuffer* propertyBuffer() { return m_buffer; }
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		virtual bool storeData(bool &cancel);
+		virtual tristate storeData();
 
 		KexiFormPart::TempData* tempData() const {
 			return static_cast<KexiFormPart::TempData*>(parentDialog()->tempData()); }

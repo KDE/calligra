@@ -19,33 +19,66 @@ Boston, MA 02111-1307, USA.
 
 #include "mysqlcursor.h"
 #include "mysqlconnection.h"
+#include "mysqlconnection_p.h"
 #include <kexidb/error.h>
 #include <klocale.h>
 #include <kdebug.h>
 
+#ifdef Q_WS_WIN
+# include <config-win.h>
+#endif
+#include <mysql.h>
+#define BOOL bool
+
 using namespace KexiDB;
+
+class KexiDB::MySqlCursorData : public MySqlConnectionInternal
+{
+	public:
+		MySqlCursorData()
+		: MySqlConnectionInternal()
+		, mysqlres(0)
+		, mysqlrow(0)
+		, lengths(0)
+		, numRows(0)
+		{
+		}
+		~MySqlCursorData()
+		{
+		}
+
+		MYSQL_RES *mysqlres;
+		MYSQL_ROW mysqlrow;
+		unsigned long *lengths;
+		unsigned long numRows;
+};
+
 
 MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
 	: Cursor(conn,statement,cursor_options)
-	, m_res(0)
-	, m_row(0)
-	, m_lengths(0)
-	, m_numRows(0)
+	, d( new MySqlCursorData() )
+//	, m_res(0)
+//	, m_row(0)
+//	, m_lengths(0)
+//	, m_numRows(0)
 {
 	m_options |= Buffered;
-	my_conn = static_cast<MySqlConnection*>(conn)->m_mysql;
+//	my_conn = static_cast<MySqlConnection*>(conn)->m_mysql;
+	d->mysql = static_cast<MySqlConnection*>(conn)->d->mysql;
 	KexiDBDrvDbg << "MySqlCursor: constructor for query statement" << endl;
 }
 
 MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options )
 	: Cursor( conn, query, options )
-	, m_res(0)
-	, m_row(0)
-	, m_lengths(0)
-	, m_numRows(0)
+	, d( new MySqlCursorData() )
+//	, m_res(0)
+//	, m_row(0)
+//	, m_lengths(0)
+//	, m_numRows(0)
 {
 	m_options |= Buffered;
-	my_conn = static_cast<MySqlConnection*>(conn)->m_mysql;	
+//	my_conn = static_cast<MySqlConnection*>(conn)->m_mysql;	
+	d->mysql = static_cast<MySqlConnection*>(conn)->d->mysql;
 	KexiDBDrvDbg << "MySqlCursor: constructor for query statement" << endl;
 }
 
@@ -55,40 +88,40 @@ MySqlCursor::~MySqlCursor() {
 
 bool MySqlCursor::drv_open(const QString& statement) {
 	KexiDBDrvDbg << "MySqlCursor::drv_open:" << statement << endl;
-	if (!my_conn) {
+/*js	if (!my_conn) {
 		//should never happen, but who knows
 		setError(ERR_NO_CONNECTION,i18n("No connection for cursor open operation specified"));
 		return false;
-	}
+	}*/
 	// This can't be right?  mysql_real_query takes a length in order that
 	// queries can have binary data - but strlen does not allow binary data.
-	if(mysql_real_query(my_conn, statement.utf8(), strlen(statement.utf8())) == 0) {
-		if(mysql_errno(my_conn) == 0) {
-			m_res= mysql_store_result(my_conn);
-			m_fieldCount=mysql_num_fields(m_res);
-			m_numRows=mysql_num_rows(m_res);
+	if(mysql_real_query(d->mysql, statement.utf8(), strlen(statement.utf8())) == 0) {
+		if(mysql_errno(d->mysql) == 0) {
+			d->mysqlres= mysql_store_result(d->mysql);
+			m_fieldCount=mysql_num_fields(d->mysqlres);
+			d->numRows=mysql_num_rows(d->mysqlres);
 			m_at=0;
 			
 			m_opened=true;
-			m_records_in_buf = m_numRows;
+			m_records_in_buf = d->numRows;
 			m_buffering_completed = true;
 			m_afterLast=false;
 			return true;
 			}
 	}
 	
-	setError(ERR_DB_SPECIFIC,QString::fromUtf8(mysql_error(my_conn)));
+	setError(ERR_DB_SPECIFIC,QString::fromUtf8(mysql_error(d->mysql)));
 	return false;
 }
 
 bool MySqlCursor::drv_close() {
-	mysql_free_result(m_res);
-	m_res=0;
-	m_row=0;
+	mysql_free_result(d->mysqlres);
+	d->mysqlres=0;
+	d->mysqlrow=0;
 //js: done in superclass:	m_numFields=0;
-	m_lengths=0;
+	d->lengths=0;
 	m_opened=false;
-	m_numRows=0;
+	d->numRows=0;
 	return true;
 }
 
@@ -98,11 +131,11 @@ bool MySqlCursor::drv_close() {
 
 void MySqlCursor::drv_getNextRecord() {
 	KexiDBDrvDbg << "MySqlCursor::drv_getNextRecord" << endl;
-	if (at() < m_numRows && at() >=0) {
-		m_lengths=mysql_fetch_lengths(m_res);
+	if (at() < d->numRows && at() >=0) {
+		d->lengths=mysql_fetch_lengths(d->mysqlres);
 		m_result=FetchOK;
 	}
-	else if (at() >= m_numRows) {
+	else if (at() >= d->numRows) {
 		m_result = FetchEnd;
 	}
 	else {
@@ -110,13 +143,13 @@ void MySqlCursor::drv_getNextRecord() {
 	}
 }
 
-// This isn't going to work right now as it uses m_row
+// This isn't going to work right now as it uses d->mysqlrow
 QVariant MySqlCursor::value(uint pos) {
-	if (!m_row) return QVariant();
+	if (!d->mysqlrow) return QVariant();
 	if (pos>=m_fieldCount) return QVariant();
-	if (m_row[pos]==0) return QVariant();
+	if (d->mysqlrow[pos]==0) return QVariant();
 	//js TODO: encode for type using m_fieldsExpanded like in SQLiteCursor::value()
-	return QVariant(QString::fromUtf8((const char*)m_row[pos]));
+	return QVariant(QString::fromUtf8((const char*)d->mysqlrow[pos]));
 }
 
 
@@ -125,16 +158,13 @@ QVariant MySqlCursor::value(uint pos) {
  */
 void MySqlCursor::storeCurrentRow(RowData &data) const {
 	KexiDBDrvDbg << "MySqlCursor::storeCurrentRow: Position is " << (long)m_at<< endl;
-	if (m_numRows<=0)
+	if (d->numRows<=0)
 		return;
 
 	data.reserve(m_fieldCount);
 	for( uint i=0; i<m_fieldCount; i++) {
-		data[i] = QVariant(m_row[i]);
+		data[i] = QVariant(d->mysqlrow[i]);
 	}
-}
-
-void MySqlCursor::drv_clearServerResult() {
 }
 
 void MySqlCursor::drv_appendCurrentRecordToBuffer() {
@@ -142,29 +172,52 @@ void MySqlCursor::drv_appendCurrentRecordToBuffer() {
 
 
 void MySqlCursor::drv_bufferMovePointerNext() {
-	m_row=mysql_fetch_row(m_res);
-	m_lengths=mysql_fetch_lengths(m_res);
+	d->mysqlrow=mysql_fetch_row(d->mysqlres);
+	d->lengths=mysql_fetch_lengths(d->mysqlres);
 }
 
 void MySqlCursor::drv_bufferMovePointerPrev() {
-	MYSQL_ROW_OFFSET ro=mysql_row_tell(m_res);
-	mysql_data_seek(m_res,m_at-1);
-	m_row=mysql_fetch_row(m_res);
-	m_lengths=mysql_fetch_lengths(m_res);
+	MYSQL_ROW_OFFSET ro=mysql_row_tell(d->mysqlres);
+	mysql_data_seek(d->mysqlres,m_at-1);
+	d->mysqlrow=mysql_fetch_row(d->mysqlres);
+	d->lengths=mysql_fetch_lengths(d->mysqlres);
 }
 
 
 void MySqlCursor::drv_bufferMovePointerTo(Q_LLONG to) {
-	MYSQL_ROW_OFFSET ro=mysql_row_tell(m_res);
-	mysql_data_seek(m_res,to);
-	m_row=mysql_fetch_row(m_res);
-	m_lengths=mysql_fetch_lengths(m_res);
+	MYSQL_ROW_OFFSET ro=mysql_row_tell(d->mysqlres);
+	mysql_data_seek(d->mysqlres, to);
+	d->mysqlrow=mysql_fetch_row(d->mysqlres);
+	d->lengths=mysql_fetch_lengths(d->mysqlres);
 }
 
 
 const char** MySqlCursor::rowData() const {
 	//! @todo
 	return 0;
+}
+
+
+int MySqlCursor::serverResult()
+{
+	return d->res;
+}
+
+QString MySqlCursor::serverResultName()
+{
+	return QString::null;
+}
+
+void MySqlCursor::drv_clearServerResult()
+{
+	if (!d)
+		return;
+	d->res = 0;
+}
+
+QString MySqlCursor::serverErrorMsg()
+{
+	return d->errmsg;
 }
 
 

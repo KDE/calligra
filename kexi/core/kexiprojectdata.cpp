@@ -55,6 +55,8 @@ public:
 //---------------------------------------
 
 KexiProjectData::KexiProjectData()
+ : QObject(0, "KexiProjectData"), KexiDB::SchemaData()
+ , d( new KexiProjectDataPrivate(KexiDB::ConnectionData()) )
 {
 }
 
@@ -78,7 +80,7 @@ KexiProjectData::KexiProjectData( KexiProjectData& pdata )
 
 KexiProjectData::~KexiProjectData()
 {
- 	delete d;
+	delete d;
 }
 
 KexiDB::ConnectionData* KexiProjectData::connectionData()

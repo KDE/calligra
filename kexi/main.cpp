@@ -36,13 +36,27 @@
 #include "main/keximainwindowimpl.h"
 #include "main/kexiaboutdata.h"
 #include "main/startup/KexiStartup.h"
+#include "tristate.h"
 
 #include <qfileinfo.h>
 
 static KCmdLineOptions options[] =
 {
+  { ":", I18N_NOOP("Options related to entire projects:"), 0 },
+  { "createdb", I18N_NOOP(
+	"Create a new, blank project using specified\n"
+	"database driver and database name.\n"
+	"You will be asked for confirmation\n"
+	"if overwriting is needed."), 0 },
+  { "dropdb", I18N_NOOP(
+	"Drop (remove) a project using specified\n"
+	"database driver and database name.\n"
+	"You will be asked for confirmation."), 0 },
+
+  { ":", I18N_NOOP("Options related to opening objects\n"
+	"within a project:"), 0 },
   { "open [<object_type>:]<object_name>", I18N_NOOP(
-	"Open object of type <object_type>\n"
+	"\nOpen object of type <object_type>\n"
 	"and name <object_name> from specified project\n"
 	"on application start.\n"
 	"<object_type>: is optional, if omitted - table\n"
@@ -54,10 +68,10 @@ static KCmdLineOptions options[] =
 	"Examples: --open MyTable,\n"
 	" --open query:\"My very big query\""), 0 },
   { "design [<object_type>:]<object_name>", I18N_NOOP(
-	"Like --open, but the object will\n"
+	"\nLike --open, but the object will\n"
 	"be opened in Design Mode, if one is available"), 0 },
   { "edittext [<object_type>:]<object_name>", I18N_NOOP(
-	"Like --open, but the object will\n"
+	"\nLike --open, but the object will\n"
 	"be opened in Text Mode, if one is available"), 0 },
   { "new <object_type>", I18N_NOOP(
 	"Start new object design of type <object_type>"), 0 },
@@ -67,8 +81,18 @@ static KCmdLineOptions options[] =
   { "design-mode", I18N_NOOP(
 	"Start project in the Design Mode, regardless \n"
 	"of the project settings"), 0 },
-  { "+[file]", I18N_NOOP(
-	"Database project file (or shortcut file) to open"), 0 },
+
+  { ":", I18N_NOOP("Options related to database servers:"), 0 },
+  { "drv", 0, 0 },
+  { "dbdriver <name>", I18N_NOOP(
+	"Database driver to be used.\n"
+	"Ignored if shortcut filename\n"
+	"is provided.\n"), "SQLite" },
+
+  { "+[database-name]", I18N_NOOP(
+	"Database project filename\n"
+	"or shortcut filename\n"
+	"or database name on a server to open"), 0 },
   // INSERT YOUR COMMANDLINE OPTIONS HERE
   KCmdLineLastOption
 };
@@ -90,13 +114,18 @@ extern "C" int kdemain(int argc, char *argv[])
 	
 	kdDebug() << "startupActions OK" <<endl;
 
+	/* Exit requested, e.g. after database removing. */
+	if (Kexi::startupHandler().action() == KexiStartupData::Exit)
+		return 0;
+
 	KexiMainWindowImpl *win = new KexiMainWindowImpl();
+
+	if (true != win->startup())
+		return 1;
+
 	app.setMainWidget(win);
 	win->show();
 	app.processEvents();//allow refresh our app
-
-	if (!win->startup())
-		return 1;
 
 	return app.exec();
 }

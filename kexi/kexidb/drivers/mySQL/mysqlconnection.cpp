@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
-Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-Daniel Molkentin <molkentin@kde.org>
-Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+                      Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Joseph Wenninger<jowenn@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -34,16 +35,42 @@ Boston, MA 02111-1307, USA.
 
 #include "mysqldriver.h"
 #include "mysqlconnection.h"
+#include "mysqlconnection_p.h"
 #include "mysqlcursor.h"
 #include <kexidb/error.h>
+
 using namespace KexiDB;
+
+
+MySqlConnectionInternal::MySqlConnectionInternal()
+	: mysql(0)
+	, res(0)
+	, temp_st(0x10000) //
+{
+}
+
+MySqlConnectionInternal::~MySqlConnectionInternal()
+{
+	if (mysql) {
+		mysql_close(mysql);
+		mysql = 0;
+	}
+}
+
+void MySqlConnectionInternal::storeResult()
+{
+	res = mysql_errno(mysql);
+	errmsg = mysql_error(mysql);
+}
+
+
+//--------------------------------------------------------------------------
 
 MySqlConnection::MySqlConnection( Driver *driver, ConnectionData &conn_data )
 	:Connection(driver,conn_data)
-	,m_mysql(0) {
-
+	,d(new MySqlConnectionInternal())
+{
 }
-
 
 MySqlConnection::~MySqlConnection() {
 	destroy();
@@ -51,7 +78,7 @@ MySqlConnection::~MySqlConnection() {
 
 bool MySqlConnection::drv_connect()
 {
-	if (!(m_mysql = mysql_init(m_mysql)))
+	if (!(d->mysql = mysql_init(d->mysql)))
 		return false;
 
 	KexiDBDrvDbg << "MySqlConnection::connect()" << endl;
@@ -77,21 +104,22 @@ bool MySqlConnection::drv_connect()
 			socket=m_data->localSocketFileName;
 	}
 
-	mysql_real_connect(m_mysql, m_data->hostName.local8Bit(), 
+	mysql_real_connect(d->mysql, m_data->hostName.local8Bit(), 
 		m_data->userName.local8Bit(), m_data->password.local8Bit(), 0,
 		m_data->port, socket.local8Bit(), 0);
-	if(mysql_errno(m_mysql) == 0)
+	if(mysql_errno(d->mysql) == 0)
 		return true;
-	
-	QString err = mysql_error(m_mysql); //store error msg, if any - can be destroyed after disconenct()
+
+	d->storeResult(); //store error msg, if any - can be destroyed after disconenct()
 	drv_disconnect();
-	setError(ERR_DB_SPECIFIC,err);
+//	setError(ERR_DB_SPECIFIC,err);
 	return false;
 }
 
 bool MySqlConnection::drv_disconnect()
 {
-	m_mysql = 0;
+	mysql_close(d->mysql);
+	d->mysql = 0;
 	KexiDBDrvDbg << "MySqlConnection::disconnect()" << endl;
 	return true;
 }
@@ -118,7 +146,7 @@ bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
 	list.clear();
 	MYSQL_RES *res;
 
-	if((res=mysql_list_dbs(m_mysql,0)) != 0) {
+	if((res=mysql_list_dbs(d->mysql,0)) != 0) {
 		MYSQL_ROW  row;
 		while ( (row = mysql_fetch_row(res))!=0) {
 			list<<QString(row[0]);
@@ -127,7 +155,8 @@ bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
 		return true;
 	}
 
-	setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
+	d->storeResult();
+//	setError(ERR_DB_SPECIFIC,mysql_error(d->mysql));
 	return false;
 }
 
@@ -136,6 +165,7 @@ bool MySqlConnection::drv_createDatabase( const QString &dbName) {
 	// mysql_create_db deprecated, use SQL here. 
 	if (drv_executeSQL("CREATE DATABASE " + (dbName)))
 		return true;
+	d->storeResult();
 	return false;
 }
 
@@ -166,12 +196,13 @@ bool MySqlConnection::drv_executeSQL( const QString& statement ) {
 	KexiDBDrvDbg << "MySqlConnection::drv_executeSQL: " << statement << endl;
 	QCString queryStr=statement.utf8();
 	const char *query=queryStr;
-	if(mysql_real_query(m_mysql, query, strlen(query)) == 0)
+	if(mysql_real_query(d->mysql, query, strlen(query)) == 0)
 	{
 		return true;
 	}
 
-	setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
+	d->storeResult();
+//	setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
 	return false;
 }
 
@@ -180,7 +211,29 @@ Q_ULLONG MySqlConnection::drv_lastInsertRowID()
 #ifndef Q_WS_WIN
 #warning TODO
 #endif
-	return (Q_ULLONG)mysql_insert_id(m_mysql);
+	return (Q_ULLONG)mysql_insert_id(d->mysql);
+}
+
+int MySqlConnection::serverResult()
+{
+	return d->res;
+}
+
+QString MySqlConnection::serverResultName()
+{
+	return QString::null;
+}
+
+void MySqlConnection::drv_clearServerResult()
+{
+	if (!d)
+		return;
+	d->res = 0;
+}
+
+QString MySqlConnection::serverErrorMsg()
+{
+	return d->errmsg;
 }
 
 
@@ -194,8 +247,7 @@ Q_ULLONG MySqlConnection::drv_lastInsertRowID()
 
 
 
-
-#if 0
+#if 0 //old code
 MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &) : KexiDB(parent, name)
 {
 	KexiDBDrvDbg << "MySqlDB::MySqlDB()" << endl;

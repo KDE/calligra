@@ -42,6 +42,7 @@ class SQLiteConnectionInternal
 
 		QCString temp_st;
 };
-};
+
+}
 
 #endif

@@ -74,11 +74,8 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteConnection : public Connection
 		virtual Q_ULLONG drv_lastInsertRowID();
 
 		virtual int serverResult();
-		
 		virtual QString serverResultName();
-
 		virtual QString serverErrorMsg();
-
 		virtual void drv_clearServerResult();
 
 		SQLiteConnectionInternal* d;

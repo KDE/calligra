@@ -38,7 +38,7 @@ class KexiQueryView : public KexiDataTable
 		~KexiQueryView();
 
 	protected:
-		virtual bool afterSwitchFrom(int mode, bool &cancelled);
+		virtual tristate afterSwitchFrom(int mode);
 
 		bool executeQuery(KexiDB::QuerySchema *query);
 

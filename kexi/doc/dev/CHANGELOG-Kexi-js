@@ -278,6 +278,12 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 === Startup TODO ===
 - reuse KexiNameWidget in KexiNewProjectWizard!
 
+=== CLI TODO ===
+- add --user (-u), --port, --host (-h), 
+      --password <password-file> CL options
+- add kexicmd as a symlink to kexi binary, for totally non-gui usage
+
+
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
 HOT TODO:
@@ -313,6 +319,29 @@ KexiDB Drivers
 -....
 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
+
+
+2004-10-04
+
+2004-10-01..02
+Kexi Startup
+- server-based (mysql, postgresql) projects are now available from command line 
+  (usable since gui is not yet ready): 
+  --createdb, --dropdb, --dbdriver command line options added
+- db creation and dropping from command line works without starting entire gui
+  see http://www.kexi-project.org/wiki/wikiview/index.php?CommandLineOptions
+Core
+- KexiMessageHandler introduced: receives messages e.g. from KexiProject
+- KexiGUIMessageHandler added
+KexiDB
+- improved error handling
+MySQL Driver
+- MySqlConnectionInternal added (like for SQLite)
+General
+- KMessageBox::warning**() used instead of question**() for dangerous messages.
+- 'tristate' helper class introduced. This reduces a need for adding 
+   bool& cancelled parameters.
+- tristate class used where possible instead of 'bool& cancel' params
 
 2004-09-29
 2004-09-30

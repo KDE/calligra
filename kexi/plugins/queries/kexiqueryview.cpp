@@ -54,8 +54,8 @@ bool KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 	return true;
 }
 
-bool
-KexiQueryView::afterSwitchFrom(int mode, bool & /*cancelled*/)
+tristate
+KexiQueryView::afterSwitchFrom(int mode)
 {
 	if (mode==Kexi::NoViewMode) {
 		KexiDB::QuerySchema *querySchema = static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());

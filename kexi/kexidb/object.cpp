@@ -43,7 +43,7 @@ void Object::setError( int code, const QString &msg )
 	KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " << m_previousServerResultName2 <<endl;
 
 	m_errno=code;
-	if (m_errno==ERR_OTHER && msg.isNull())
+	if (m_errno==ERR_OTHER && msg.isEmpty())
 		m_errMsg = i18n("Unspecified error encountered");
 	else
 		m_errMsg = msg;

@@ -33,7 +33,7 @@ class KexiProjectDataPrivate;
  - project name
  - database name
  - connection data
- - data+time of last opening
+ - date and time of last opening
 */
 class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaData
 {

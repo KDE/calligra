@@ -379,8 +379,8 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	return true;
 }
 
-bool
-KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
+tristate
+KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 {
 	kdDebug() << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode << endl;
 	if (mode==Kexi::DesignViewMode) {
@@ -389,9 +389,8 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 	}
 	else if (mode==Kexi::DataViewMode) {
 		if (!dirty() && parentDialog()->neverSaved()) {
-			cancelled=true;
 			KMessageBox::information(this, msgCannotSwitch_EmptyDesign());
-			return true;
+			return cancelled;
 		}
 		if (dirty() || !tempData()->query) {
 			//remember current design in a temporary structure
@@ -399,9 +398,8 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 			QString errMsg;
 			//build schema; problems are not allowed
 			if (!buildSchema(&errMsg)) {
-				cancelled=true;
 				KMessageBox::information(this, errMsg);
-				return false;
+				return cancelled;
 			}
 		}
 		//TODO
@@ -423,8 +421,8 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 	return false;
 }
 
-bool
-KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool & /*cancelled*/)
+tristate
+KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 {
 	if (mode==Kexi::NoViewMode || (mode==Kexi::DataViewMode && !tempData()->query)) {
 		//this is not a SWITCH but fresh opening in this view mode
@@ -485,16 +483,16 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &
 	return query;
 }
 
-bool KexiQueryDesignerGuiEditor::storeData(bool &cancel)
+tristate KexiQueryDesignerGuiEditor::storeData()
 {
-	bool ok = KexiViewBase::storeData(cancel);
-	if (cancel)
-		return true;
-	if (ok) {
+	tristate res = KexiViewBase::storeData();
+	if (~res)
+		return res;
+	if (res) {
 		buildSchema();
-		ok = storeLayout();
+		res = storeLayout();
 	}
-	return ok;
+	return res;
 }
 
 void KexiQueryDesignerGuiEditor::showTablesAndConnectionsForQuery(KexiDB::QuerySchema *query)

@@ -191,8 +191,8 @@ void KexiQueryDesignerSQLView::setStatusText(const QString& text)
 	}
 }
 
-bool
-KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
+tristate
+KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 {
 //TODO
 	dontStore = true;
@@ -220,8 +220,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontSt
 						+"</p><p>"+i18n("Do you want to cancel any changes made to this SQL text?")+"</p>"
 						+"</p><p>"+i18n("Answering \"No\" allows you to make corrections.")+"</p>")==KMessageBox::No)
 					{
-						cancelled = true;
-						return false;
+						return cancelled;
 					}
 					else {
 						//do not change original query
@@ -258,8 +257,8 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontSt
 	return true;
 }
 
-bool
-KexiQueryDesignerSQLView::afterSwitchFrom(int mode, bool &cancelled)
+tristate
+KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 {
 	kdDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
 //	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
@@ -449,15 +448,15 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &ca
 	return query;
 }
 
-bool KexiQueryDesignerSQLView::storeData(bool &cancel)
+tristate KexiQueryDesignerSQLView::storeData()
 {
-	bool ok = KexiViewBase::storeData(cancel);
-	if (cancel)
-		return true;
-	if (ok) {
+	tristate res = KexiViewBase::storeData();
+	if (~res)
+		return res;
+	if (res) {
 		bool queryOK = slotCheckQuery();
 		if (queryOK) {
-			ok = storeDataBlock( d->editor->text(), "sql" );
+			res = storeDataBlock( d->editor->text(), "sql" );
 		}
 		else {
 #if 0
@@ -465,15 +464,15 @@ bool KexiQueryDesignerSQLView::storeData(bool &cancel)
 			//TODO: allow saving invalid queries
 			//TODO: just ask this question:
 #else
-			ok = false;
+			res = false;
 #endif
 		}
 	}
-	if (ok) {
+	if (res) {
 		QString empty_xml;
-		ok = storeDataBlock( empty_xml, "query_layout" ); //clear
+		res = storeDataBlock( empty_xml, "query_layout" ); //clear
 	}
-	return ok;
+	return res;
 }
 
 

@@ -25,11 +25,11 @@
 #include <qintdict.h>
 #include <qguardedptr.h>
 
+#include <kexidb/object.h>
 #include "kexiprojectdata.h"
 #include "kexipartitem.h"
 #include "kexi.h"
-
-#include <kexidb/object.h>
+#include "tristate.h"
 
 namespace KexiDB
 {
@@ -47,6 +47,7 @@ namespace KexiPart
 
 class KexiMainWindow;
 class KexiDialogBase;
+class KexiMessageHandler;
 
 /**
  * This class represents a project's controller. It also contains connection data,
@@ -58,7 +59,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 
 	public:
 		/*! Constructor 1. Creates a new object using \a pdata, which will be owned. */
-		KexiProject(KexiProjectData* pdata);
+		KexiProject(KexiProjectData* pdata, KexiMessageHandler* handler = 0);
 //		/*! Constructor 1. Creates a new object using \a pdata, which will be owned. */
 //		KexiProject(KexiDB::ConnectionData *cdata);
 		~KexiProject();
@@ -66,8 +67,10 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		//! Opens existing project using project data.
 		bool open();
 
-		//! Creates new, empty project using project data.
-		bool create();
+		/*! Creates new, empty project using project data.
+		 Warning: If database exist, it is silently overwritten!
+		*/
+		tristate create(bool forceOverwrite = false);
 		
 		/*! Opens project using created connection
 		 \return true on success, otherwise false and appropriate error is set. */
@@ -153,8 +156,20 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 
 		KexiDB::Parser* sqlParser();
 
-		/*! \return true if project is started in final mode */
+		/*! \return true if the project is started in final mode */
 		bool final() { return m_final; }
+
+		/*! Shows dialog for creating new blank project,
+		 ans creates one. Dialog is not shown if option for automatic creation 
+		 is checked or Kexi::startupHandler().projectData() was provided from command line.
+		 \a cancelled is set to true if creation has been cancelled (e.g. user answered 
+		 no when asked for database overwriting, etc.
+		 \return true if database was created, false on error or when cancel was pressed */
+		static KexiProject* createBlankProject(bool &cancelled, KexiProjectData* data, KexiMessageHandler* handler = 0);
+
+		/*! Drops project described by \a data. \return true on success. 
+		 Use with care: Any KexiProject objects allocated for this project will become invalid! */
+		static tristate dropProject(KexiProjectData* data, KexiMessageHandler* handler, bool dontAsk = false);
 
 	protected:
 //		bool			openConnection(KexiProjectConnectionData *connection);
@@ -199,12 +214,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		/** instance pointed by \a item is renamed */
 		void itemRenamed(const KexiPart::Item &item);
 
-	private:
-		friend class KexiMainWindowImpl;
-	//		KexiDB::DriverManager		*m_drvManager;
-		KexiDB::Connection		*m_connection;
+	protected:
+		QGuardedPtr<KexiDB::Connection> m_connection;
 		QGuardedPtr<KexiProjectData> m_data;
-//		KexiDB::ConnectionData *m_conn_data_to_use; //!< 
 		
 		QString m_error_title;
 
@@ -216,12 +228,18 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		                              //!< temporary identifiers for unstored items
 
 		KexiDB::Parser* m_sqlParser;
+		KexiMessageHandler *m_msgHandler;
 		bool m_final;
-//		KexiProjectConnectionData	*m_connData;
-//js		KexiPart::Manager		*m_partManager;
-//		QString				m_error;
+
+		class ErrorTitle;
+		friend class ErrorTitle;
+		friend class KexiMainWindowImpl;
 };
 
+
+/* Creates a new kexi project object and connects signals from it 
+ to \a handler (if \a handler is provided). */
+//KexiProject* createKexiProject(KexiProjectData* data, KexiMessageHandler* handler = 0);
 
 #endif
 

@@ -23,13 +23,9 @@ Boston, MA 02111-1307, USA.
 #include <kexidb/cursor.h>
 #include <kexidb/connection.h>
 
-#ifdef Q_WS_WIN
-# include <config-win.h>
-#endif
-#include <mysql.h>
-#define BOOL bool
-
 namespace KexiDB {
+
+class MySqlCursorData;
 
 class KEXIDB_MYSQL_DRIVER_EXPORT MySqlCursor: public Cursor {
 public:
@@ -52,15 +48,19 @@ public:
 	virtual void storeCurrentRow(RowData &data) const;
 //        virtual bool save(RowData& data, RowEditBuffer& buf);
 
+	virtual int serverResult();
+	virtual QString serverResultName();
+	virtual QString serverErrorMsg();
 
-private:
+protected:
 	QVariant pValue(uint pos) const;
-	MYSQL_RES *m_res;	
-	MYSQL_ROW m_row;
-	MYSQL *my_conn;
-	unsigned long *m_lengths;
+//	MYSQL_RES *m_res;	
+//	MYSQL_ROW m_row;
+//	MYSQL *my_conn;
+//	unsigned long *m_lengths;
 //js: int m_numFields;
-	unsigned long m_numRows;
+//	unsigned long m_numRows;
+	MySqlCursorData *d;
 };
 
 }

@@ -31,8 +31,8 @@ class KEXICORE_EXPORT KexiStartupData
 			DoNothing = 0,
 			CreateBlankProject = 1,
 			UseTemplate = 2,
-			OpenProject = 3
-			
+			OpenProject = 3,
+			Exit = 4
 		};
 		
 		KexiStartupData();
@@ -58,6 +58,8 @@ class KEXICORE_EXPORT KexiStartupData
 		Action m_action;
 		bool m_forcedFinalMode : 1;
 		bool m_forcedDesignMode : 1;
+		bool m_createDB : 1;
+		bool m_dropDB : 1;
 };
 
 #endif

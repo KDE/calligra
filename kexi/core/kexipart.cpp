@@ -211,13 +211,14 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 		}
 	}
 
-	bool cancelled;
+//	bool cancelled;
 	bool switchingFailed = false;
-	if (!dlg->switchToViewMode( viewMode, cancelled )) {
+	tristate res = dlg->switchToViewMode( viewMode );
+	if (!res) {
 		//js TODO ERROR???
 		switchingFailed = true;
 	}
-	if (cancelled)
+	if (~res)
 		switchingFailed = true;
 
 	if (switchingFailed) {

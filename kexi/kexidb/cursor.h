@@ -185,21 +185,21 @@ class KEXI_DB_EXPORT Cursor: public Object
 		 for testing. 
 		 Note for driver developers: Return here the value you usually store as result 
 		 of most lower-level operations. By default this method returns 0. */
-		virtual int serverResult() const { return 0; }
+		virtual int serverResult() { return 0; }
 		
 		/*! \return (not i18n'd) name of last executed operation's result at the server side.
 		 Sometimes engines have predefined its result names that can be used e.g. 
 		 to refer a documentation. SQLite is one of such engines. 
 		 Note for driver developers: Leave the default implementation (null 
 		 string is returned ) if your engine has no such capability. */
-		virtual QString serverResultName() const { return QString::null; }
+		virtual QString serverResultName() { return QString::null; }
 
 		/*! \return (not i18n'd) description text (message) of last operation's error/result.
 		 In most cases engines do return such a messages, any user can then use this
 		 to refer a documentation.
 		 Note for driver developers: Leave the default implementation (null 
 		 string is returned ) if your engine has no such capability. */
-		virtual QString serverErrorMsg() const { return QString::null; }
+		virtual QString serverErrorMsg() { return QString::null; }
 	
 		/*! \return Debug information. */
 		QString debugString() const;

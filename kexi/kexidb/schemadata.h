@@ -42,6 +42,8 @@ class KEXI_DB_EXPORT SchemaData
 		int type() const { return m_type; }
 		int id() const { return m_id; }
 		QString name() const { return m_name; }
+		/*! The same as name(). Added to avoid conflict with QObject::name() */
+		QString objectName() const { return m_name; }
 		void setName(const QString& n) { m_name=n; }
 		QString caption() const { return m_caption; }
 		void setCaption(const QString& c) { m_caption=c; }

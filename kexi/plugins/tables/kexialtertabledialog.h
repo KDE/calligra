@@ -61,8 +61,8 @@ class KexiAlterTableDialog : public KexiDataTable
 		 \return newly created property buffer. */
 		KexiPropertyBuffer * createPropertyBuffer( int row, KexiDB::Field *field, bool newOne = false );
 
-		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
-		virtual bool afterSwitchFrom(int mode, bool &cancelled);
+		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
+		virtual tristate afterSwitchFrom(int mode);
 
 		/*! \return property buffer associated with currently selected row (i.e. field)
 		 or 0 if current row is empty. */
@@ -74,9 +74,9 @@ class KexiAlterTableDialog : public KexiDataTable
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
 		/*! Reimplemented from KexiViewBase, because table storage is more complex. */
-		virtual bool storeData(bool &cancel);
+		virtual tristate storeData();
 
-		bool buildSchema(KexiDB::TableSchema &schema, bool &cancel);
+		tristate buildSchema(KexiDB::TableSchema &schema);
 
 		QString messageForSavingChanges(bool &emptyTable);
 

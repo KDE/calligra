@@ -73,11 +73,11 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void initTableRows(); //!< Called to have all rows empty.
 		void addRow(const QString &tbl, const QString &field);
 //		void			restore();
-		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
-		virtual bool afterSwitchFrom(int mode, bool &cancelled);
+		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
+		virtual tristate afterSwitchFrom(int mode);
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		virtual bool storeData(bool &cancel);
+		virtual tristate storeData();
 
 		/*! Updates data in columns depending on tables that are currently inserted.
 		 Tabular Data in combo box popups is updated as well. */

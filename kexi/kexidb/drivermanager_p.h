@@ -41,18 +41,9 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 
 		static DriverManagerInternal *self();
 
-		/*! returns list of available drivers names. That drivers can be loaded
-			by first use of driver() method. */
-//		const QStringList driverNames();
-
-		/*! \return info. about driver (service info) */
-//		KService::Ptr serviceInfo(const QString &name);
-
-		//! Returns a map structure of the services. Not necessary for everyday use.
-//		const ServicesMap& services() { return m_services; }
-
-		/*! increments the refcount for the manager*/
+		/*! increments the refcount for the manager */
 		void incRefCount();
+
 		/*! decrements the refcount for the manager
 			if the refcount reaches a value less than 1 the manager is freed */
 		void decRefCount();

@@ -47,11 +47,9 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 
 //		virtual bool save(RowData& data, RowEditBuffer& buf);
 
-		virtual int serverResult() const;
-		
-		virtual QString serverResultName() const;
-
-		virtual QString serverErrorMsg() const;
+		virtual int serverResult();
+		virtual QString serverResultName();
+		virtual QString serverErrorMsg();
 
 	protected:
 		/*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */

@@ -23,6 +23,7 @@
 
 #include "kexisharedactionhost.h"
 #include "kexi.h"
+#include "tristate.h"
 
 #include <kmdimainfrm.h>
 
@@ -77,12 +78,16 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		/*! Saves dialog's \a dlg data. It dialog's data is never saved,
 		 User is asked for name and caption, before saving.
 		 \return true on successul closing or false on saving error.
-		 If saving was cancelled by user, true is returned and cancelled is true.
+		 If saving was cancelled by user, cancelled is returned.
 		 \a messageWhenAskingForName is a i18n'ed text that will be visible
 		 within name/caption dialog (see KexiNameDialog), which is popped 
 		 up for never saved objects. */
-		virtual bool saveObject( KexiDialogBase *dlg, bool &cancelled,
+		virtual tristate saveObject( KexiDialogBase *dlg,
 			const QString& messageWhenAskingForName = QString::null ) = 0;
+	
+
+	protected slots:
+		virtual void slotObjectRenamed(const KexiPart::Item &item) = 0;
 
 };
 

@@ -318,8 +318,8 @@ KexiFormView::managerPropertyChanged(KexiPropertyBuffer *b)
 	propertyBufferSwitched();
 }
 
-bool
-KexiFormView::beforeSwitchTo(int mode, bool &, bool &dontStore)
+tristate
+KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 {
 	// we don't store on db, but in our TempData
 	dontStore = true;
@@ -329,8 +329,8 @@ KexiFormView::beforeSwitchTo(int mode, bool &, bool &dontStore)
 	return true;
 }
 
-bool
-KexiFormView::afterSwitchFrom(int mode, bool &)
+tristate
+KexiFormView::afterSwitchFrom(int mode)
 {
 	if((mode == Kexi::DesignViewMode) && m_preview) //aka !preview
 	{
@@ -359,17 +359,25 @@ KexiFormView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
 	kdDebug() << "KexiDBForm::storeNewData(): new id:" << s->id() << endl;
 
-	storeData(cancel);
+	if (!s || cancel) {
+		delete s;
+		return 0;
+	}
+	if (true!=storeData()) {
+		delete s;
+		return 0;
+	}
 	return s;
 }
 
-bool
-KexiFormView::storeData(bool &)
+tristate
+KexiFormView::storeData()
 {
 	kdDebug(44000) << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 	QString data;
 	KFormDesigner::FormIO::saveFormToString(tempData()->form, data);
-	storeDataBlock(data);
+	if (!storeDataBlock(data))
+		return false;
 	tempData()->tempForm = QString();
 
 	return true;

@@ -34,20 +34,19 @@ KexiAlterTable_DataView::~KexiAlterTable_DataView()
 {
 }
 
-bool KexiAlterTable_DataView::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
+tristate KexiAlterTable_DataView::beforeSwitchTo(int mode, bool &dontStore)
 {
 	if (mode != Kexi::DataViewMode) {
 		//accept editing before switching
 		if (!m_view->acceptRowEdit()) {
-			cancelled = true;
-			return false;
+			return cancelled;
 		}
 	}
 
 	return true;
 }
 
-bool KexiAlterTable_DataView::afterSwitchFrom(int mode, bool &cancelled)
+tristate KexiAlterTable_DataView::afterSwitchFrom(int mode)
 {
 	if (tempData()->tableSchemaChangedInPreviousView) {
 		KexiDB::Cursor *c = mainWin()->project()->dbConnection()->prepareQuery(*tempData()->table);

@@ -98,14 +98,14 @@ SQLiteCursor::SQLiteCursor(Connection* conn, const QString& statement, uint opti
 	: Cursor( conn, statement, options )
 	, d( new SQLiteCursorData() )
 {
-	d->data = ((SQLiteConnection*)conn)->d->data;
+	d->data = static_cast<SQLiteConnection*>(conn)->d->data;
 }
 
 SQLiteCursor::SQLiteCursor(Connection* conn, QuerySchema& query, uint options )
 	: Cursor( conn, query, options )
 	, d( new SQLiteCursorData() )
 {
-	d->data = ((SQLiteConnection*)conn)->d->data;
+	d->data = static_cast<SQLiteConnection*>(conn)->d->data;
 }
 
 SQLiteCursor::~SQLiteCursor()
@@ -464,17 +464,17 @@ bool SQLiteCursor::storeStringValue(uint i, QString &str)
 	return true;
 }*/
 
-int SQLiteCursor::serverResult() const
+int SQLiteCursor::serverResult()
 {
 	return d->res;
 }
 
-QString SQLiteCursor::serverResultName() const
+QString SQLiteCursor::serverResultName()
 {
 	return QString::fromLatin1( sqlite_error_string(d->res) );
 }
 
-QString SQLiteCursor::serverErrorMsg() const
+QString SQLiteCursor::serverErrorMsg()
 {
 	return d->errmsg;
 }

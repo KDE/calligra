@@ -136,9 +136,9 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 \a viewMode is one of Kexi::ViewMode enum elements. 
 		 \return true for successfull switching
 		 True is returned also if user has cancelled switching 
-		 (rarely, but for any reason) - \a cancelled is set to true.
+		 (rarely, but for any reason) - cancelled is returned.
 		 */
-		bool switchToViewMode( int newViewMode, bool &cancelled );
+		tristate switchToViewMode( int newViewMode );
 
 		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 
@@ -197,8 +197,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 Tells this dialog to save changes of the existing object
 		 to the backend.
 		 \sa storeNewData()
-		 \return true on success. */
-		bool storeData(bool &cancel);
+		 \return true on success, false on failure and cancelled when storing has been cancelled. */
+		tristate storeData();
 
 		/*! Internal. Called by KexiMainWindowImpl::saveObject().
 		 Tells this dialog to create and store data of the new object
@@ -207,8 +207,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 so it is created automatically, using information obtained 
 		 form part item. On success, part item's ID is updated to new value,
 		 and m_schemaData is set. \sa schemaData().
-		 \return true on success. */
-		bool storeNewData(bool &cancel);
+		 \return true on success, false on failure and cancelled when storing has been cancelled. */
+		tristate storeNewData();
 
 	signals:
 		void updateContextHelp();

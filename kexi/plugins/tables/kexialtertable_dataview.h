@@ -42,8 +42,8 @@ class KexiAlterTable_DataView : public KexiDataTable
 //		//! called whenever data should be reloaded (on switching to this view mode)
 //		void initData();
 
-		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
-		virtual bool afterSwitchFrom(int mode, bool &cancelled);
+		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
+		virtual tristate afterSwitchFrom(int mode);
 
 };
 

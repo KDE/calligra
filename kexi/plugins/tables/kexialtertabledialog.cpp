@@ -392,7 +392,7 @@ QString KexiAlterTableDialog::messageForSavingChanges(bool &emptyTable)
 	+ ( emptyTable ? QString::null : QString("\n\n") + i18n("Note: This table is already filled with data which will be removed.") );
 }
 
-bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
+tristate KexiAlterTableDialog::beforeSwitchTo(int mode, bool &dontStore)
 {
 	if (!m_view->acceptRowEdit())
 		return false;
@@ -401,12 +401,12 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontS
 		return true;
 	}
 	else */
+	tristate res = true;
 	if (mode==Kexi::DataViewMode) {
 		if (!dirty() && parentDialog()->neverSaved()) {
-			cancelled=true;
 			KMessageBox::information(this, i18n("Cannot switch to data view, because table design is empty.\n"
 				"First, please create your design.") );
-			return true;
+			return cancelled;
 		}
 //<temporary>
 		else if (dirty() && !parentDialog()->neverSaved()) {
@@ -414,10 +414,11 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontS
 
 			KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 			bool emptyTable;
-			cancelled = (KMessageBox::No == KMessageBox::questionYesNo(this, 
+			if (KMessageBox::No == KMessageBox::questionYesNo(this, 
 				i18n("Saving changes for existing table design is now required.")
-				+"\n"+messageForSavingChanges(emptyTable)));
-			dontStore = cancelled;
+				+"\n"+messageForSavingChanges(emptyTable)))
+				res = cancelled;
+			dontStore = ~res;
 			if (!dontStore)
 				d->dontAskOnStoreData = true;
 //			if (dontStore)
@@ -425,16 +426,15 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontS
 		}
 //</temporary>
 		//todo
-		return true;
+		return res;
 	}
 	else if (mode==Kexi::TextViewMode) {
 		//todo
 	}
-	return true;
+	return res;
 }
 
-bool
-KexiAlterTableDialog::afterSwitchFrom(int mode, bool &cancelled)
+tristate KexiAlterTableDialog::afterSwitchFrom(int mode)
 {
 	if (mode==Kexi::NoViewMode || mode==Kexi::DataViewMode) {
 		initData();
@@ -644,34 +644,31 @@ void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item,
 	//TODO
 }
 
-bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel)
+tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 {
-	if (!m_view->acceptRowEdit()) {
-		cancel = true;
-		return false;
-	}
-	bool ok = true;
+	if (!m_view->acceptRowEdit())
+		return cancelled;
+
+	tristate res = true;
 	//check for pkey; automatically add a pkey if user wanted
 	if (!d->primaryKeyExists) {
-		const int res = KMessageBox::questionYesNoCancel(this, i18n("<p>There is not <b>primary key</b> defined.</p>"
+		const int questionRes = KMessageBox::questionYesNoCancel(this, i18n("<p>There is not <b>primary key</b> defined.</p>"
 			"<p>Although a primary key is not required, it is needed for creating relations between database tables. "
 			"Do you want to add primary key automatically now?</p>"
 			"<p>If you want to add a primary key by hand, press \"Cancel\" to cancel saving table design.</p>"),
 			QString::null, KGuiItem(i18n("&Add a primary key"), "key"), KStdGuiItem::no(), 
 				"autogeneratePrimaryKeysOnTableDesignSaving");
-		if (res==KMessageBox::Cancel) {
-			cancel = true;
-			return false;
+		if (questionRes==KMessageBox::Cancel) {
+			return cancelled;
 		}
-		else if (res==KMessageBox::Yes) {
+		else if (questionRes==KMessageBox::Yes) {
 			m_view->insertEmptyRow(0);
 			m_view->setCursor(0, COLUMN_ID_NAME);
 			//name and type
 			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_NAME, QVariant("id"));
 			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_TYPE, QVariant(KexiDB::Field::IntegerGroup-1/*counting from 0*/));
 			if (!m_view->data()->saveRowChanges(*m_view->selectedItem(), true)) {
-				cancel = true;
-				return false;
+				return cancelled;
 			}
 			slotTogglePrimaryKey();
 		}
@@ -692,8 +689,7 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 				m_view->setCursor(i, COLUMN_ID_NAME);
 				m_view->startEditCurrentCell();
 				KMessageBox::information(this, i18n("You should enter field name.") );
-				cancel = true;
-				ok = false;
+				res = cancelled;
 				break;
 			}
 			if (names[name]) {
@@ -702,20 +698,18 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 			names.insert( name, &dummy ); //remember
 		}
 	}
-	if (ok && no_fields) {//no fields added
+	if (res && no_fields) {//no fields added
 		KMessageBox::information(this, i18n("You have added no fields.\nEvery table should have at least one field.") );
-		cancel = true;
-		ok = false;
+		res = cancelled;
 	}
-	if (ok && b && i<(int)d->buffers->size()) {//found a duplicate
+	if (res && b && i<(int)d->buffers->size()) {//found a duplicate
 		m_view->setCursor(i, COLUMN_ID_NAME);
 		m_view->startEditCurrentCell();
 		KMessageBox::information(this, i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. Correct name of the field.")
 			.arg((*b)["name"].value().toString()) );
-		cancel = true;
-		ok = false;
+		res = cancelled;
 	}
-	if (ok) {
+	if (res) {
 		//for every field, create KexiDB::Field definition
 		for (i=0;i<(int)d->buffers->size();i++) {
 			KexiPropertyBuffer *b = d->buffers->at(i);
@@ -765,7 +759,7 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 			schema.addField(f);
 		}
 	}
-	return ok;
+	return res;
 }
 
 KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
@@ -779,60 +773,65 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 	tempData()->table->setCaption( sdata.caption() );
 	tempData()->table->setDescription( sdata.description() );
 
-	bool ok = buildSchema(*tempData()->table, cancel) && !cancel;
-
+	tristate res = buildSchema(*tempData()->table);
+	cancel = ~res;
+		
 	//FINALLY: create table:
-	if (ok) {
+	if (res) {
 		//todo
 		KexiDB::Connection *conn = mainWin()->project()->dbConnection();
-		ok = conn->createTable(tempData()->table);
-		if (!ok)
+		res = conn->createTable(tempData()->table);
+		if (res!=true)
 			parentDialog()->setStatus(conn, "");
 	}
 
-	if (ok) {
+	if (res) {
 		//we've current schema
 		tempData()->tableSchemaChangedInPreviousView = true;
 	}
-	if (!ok) {
+	else {
 		delete tempData()->table;
 		tempData()->table = 0;
 	}
 	return tempData()->table;
 }
 
-bool KexiAlterTableDialog::storeData(bool &cancel)
+tristate KexiAlterTableDialog::storeData()
 {
 	if (!tempData()->table || !m_dialog->schemaData())
 		return 0;
 
+	tristate res = true;
 	if (!d->dontAskOnStoreData) {
 		bool emptyTable;
 		const QString msg = messageForSavingChanges(emptyTable);
-		if (!emptyTable)
-			cancel = (KMessageBox::No == KMessageBox::questionYesNo(this, msg));
+		if (!emptyTable) {
+			if (KMessageBox::No == KMessageBox::questionYesNo(this, msg))
+				res = cancelled;
+		}
 	}
 	d->dontAskOnStoreData = false; //one-time use
-	if (cancel)
-		return false;
+	if (~res)
+		return res;
 //		KMessageBox::information(this, i18n("Saving changes for existing table design is not yet supported."));
 //		cancel = true;
 
 	KexiDB::TableSchema *newTable = new KexiDB::TableSchema(); 
 	//copy schema data
 	static_cast<KexiDB::SchemaData&>(*newTable) = static_cast<KexiDB::SchemaData&>(*tempData()->table);
-	bool ok = buildSchema(*newTable, cancel) && !cancel;
+	res = buildSchema(*newTable);
+//	bool ok = buildSchema(*newTable, cancel) && !cancel;
 
 	kdDebug() << "KexiAlterTableDialog::storeData() : BUILD SCHEMA:" << endl;
 	newTable->debug();
 
-	if (ok) {
+	if (res) {
 		KexiDB::Connection *conn = mainWin()->project()->dbConnection();
-		ok = conn->alterTable(*tempData()->table, *newTable);
-		if (!ok)
+		res = conn->alterTable(*tempData()->table, *newTable);
+		if (!res)
 			parentDialog()->setStatus(conn, "");
 	}
-	if (ok) {
+	if (res) {
 		//change current schema
 		tempData()->table = newTable;
 		tempData()->tableSchemaChangedInPreviousView = true;
@@ -840,7 +839,7 @@ bool KexiAlterTableDialog::storeData(bool &cancel)
 	else {
 		delete newTable;
 	}
-	return ok;
+	return res;
 }
 
 KexiTablePart::TempData* KexiAlterTableDialog::tempData() const

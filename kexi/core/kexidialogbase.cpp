@@ -261,10 +261,9 @@ KexiPart::GUIClient* KexiDialogBase::commonGUIClient() const
 	return m_part->instanceGuiClient(0);
 }
 
-bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
+tristate KexiDialogBase::switchToViewMode( int newViewMode )
 {
 	kdDebug() << "KexiDialogBase::switchToViewMode()" << endl;
-	cancelled = false;
 	bool dontStore = false;
 	KexiViewBase *view = selectedView();
 
@@ -274,16 +273,13 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 		return false;
 
 	if (view) {
-		bool success = view->beforeSwitchTo(newViewMode, cancelled, dontStore);
-		if (cancelled)
-			return true;
-		if (!success)
-			return false;
+		tristate res = view->beforeSwitchTo(newViewMode, dontStore);
+		if (~res || !res)
+			return res;
 		if (!dontStore && view->dirty()) {
-			if (!m_parentWindow->saveObject(this, cancelled, i18n("Design has been changed. You must save it before switching to other view.")))
-				return false;
-			if (cancelled)
-				return true;
+			res = m_parentWindow->saveObject(this, i18n("Design has been changed. You must save it before switching to other view."));
+			if (~res || !res)
+				return res;
 //			KMessageBox::questionYesNo(0, i18n("Design has been changed. You must save it before switching to other view."))
 //				==KMessageBox::No
 		}
@@ -307,7 +303,8 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 		m_creatingViewsMode = -1;
 		addView(newView, newViewMode);
 	}
-	if (!newView->beforeSwitchTo(newViewMode, cancelled, dontStore)) {
+	tristate res = newView->beforeSwitchTo(newViewMode, dontStore);
+	if (!res) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< m_currentViewMode << " restored." << endl;
 		return false;
@@ -317,16 +314,17 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 	m_newlySelectedView = newView;
 	if (prevViewMode==Kexi::NoViewMode)
 		m_newlySelectedView->setDirty(false);
-	if (!newView->afterSwitchFrom(prevViewMode, cancelled)) {
+	res = newView->afterSwitchFrom(prevViewMode);
+	if (!res) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< prevViewMode << " restored." << endl; 
 		m_currentViewMode = prevViewMode;
 		return false;
 	}
 	m_newlySelectedView = 0;
-	if (cancelled) {
+	if (~res) {
 		m_currentViewMode = prevViewMode;
-		return true;
+		return cancelled;
 	}
 	if (view)
 		takeActionProxyChild( view ); //take current proxy child
@@ -424,9 +422,8 @@ bool KexiDialogBase::neverSaved() const
 	return m_item ? m_item->neverSaved() : true;
 }
 
-bool KexiDialogBase::storeNewData(bool &cancel)
+tristate KexiDialogBase::storeNewData()
 {
-	cancel = false;
 	if (!neverSaved())
 		return false;
 	KexiViewBase *v = selectedView();
@@ -440,9 +437,10 @@ bool KexiDialogBase::storeNewData(bool &cancel)
 	sdata.setCaption( m_item->caption() );
 	sdata.setDescription( m_item->description() );
 
+	bool cancel = false;
 	m_schemaData = v->storeNewData(sdata, cancel);
 	if (cancel)
-		return true;
+		return cancelled;
 	if (!m_schemaData) {
 		setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's definition failed."),""); 
 		return false;
@@ -457,20 +455,19 @@ bool KexiDialogBase::storeNewData(bool &cancel)
 	return true;
 }
 
-bool KexiDialogBase::storeData(bool &cancel)
+tristate KexiDialogBase::storeData()
 {
-	cancel = false;
 	if (neverSaved())
 		return false;
 	KexiViewBase *v = selectedView();
 	if (!v)
 		return false;
-	const bool r = v->storeData(cancel);
-	if (cancel)
-		return true;
-	if (!r) {
+	const tristate res = v->storeData();
+	if (~res)
+		return res;
+	if (!res) {
 		setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's data failed."),""); 
-		return false;
+		return res;
 	}
 	/* Sets 'dirty' flag on every dialog's view. */
 	setDirty(false);

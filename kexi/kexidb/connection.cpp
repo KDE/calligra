@@ -1,4 +1,4 @@
-	/* This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
@@ -165,7 +165,11 @@ bool Connection::connect()
 		return false;
 	}
 
-	m_is_connected = drv_connect();
+	if (!(m_is_connected = drv_connect())) {
+		setError(m_driver->isFileDriver() ?
+			i18n("Could not open \"%1\" project file.").arg(m_data->fileName())
+			: i18n("Could not connect to \"%1\" database server.").arg(m_data->serverInfoString()) );
+	}
 	return m_is_connected;
 }
 
@@ -449,7 +453,7 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 		return true; //already used
 
 	if (!d->m_skip_databaseExists_check_in_useDatabase) {
-	 	if (!databaseExists(my_dbName))
+		if (!databaseExists(my_dbName, false /*don't ignore errors*/))
 			return false; //database must exist
 	}
 
@@ -459,6 +463,7 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 	m_usedDatabase = "";
 	
 	if (!drv_useDatabase( my_dbName )) {
+		setError( i18n("Opening database \"%1\" failed").arg( my_dbName ) );
 		return false;
 	}
 	

@@ -128,21 +128,19 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 By default does nothing. Reimplement this if you need to do something 
 		 before switching to this view.
 		 \return true if you accept or false if a error occupied and view shouldn't change
-		 Set \a cancelled to true and return true it there is no error but switching should 
-		 be just cancelled (probably after showing some info messages).
+		 If there is no error but switching should be just cancelled 
+		 (probably after showing some info messages), you need to return cancelled.
 		 Set \a dontStore to true (it's false by default) if you want to avoid data storing
-		 by storeData() or storeNewData().
-		 */
-		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
+		 by storeData() or storeNewData(). */
+		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
 
 		/*! called by KexiDialogBase::switchToViewMode() right after dialog is switched to new mode
 		 By default does nothing. Reimplement this if you need to do something 
 		 after switching to this view.
 		 \return true if you accept or false if a error occupied and view shouldn't change
-		 Set \a cancelled to true and return true it there is no error but switching should 
-		 be just cancelled (probably after showing some info messages).
-		*/
-		virtual bool afterSwitchFrom(int mode, bool &cancelled);
+		 If there is no error but switching should be just cancelled 
+		 (probably after showing some info messages), you need to return cancelled. */
+		virtual tristate afterSwitchFrom(int mode);
 
 		virtual void closeEvent( QCloseEvent * e );
 
@@ -189,7 +187,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		   using Connection::storeObjectSchemaData().
 		 Reimpelment this for your needs. Should return true on success. 
 		 \sa storeNewData() */
-		virtual bool storeData(bool &cancel);
+		virtual tristate storeData();
 
 		/*! Stores (potentially large) string data \a dataString, block (e.g. xml form's representation),
 		 at the database backend. Block will be stored in "kexi__objectdata" table pointed by

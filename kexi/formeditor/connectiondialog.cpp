@@ -402,7 +402,7 @@ ConnectionDialog::removeItem()
 	if(m_table->currentRow() == -1 || m_table->currentRow()>=m_table->rows())
 		return;
 
-	int confirm = KMessageBox::questionYesNo(parentWidget(),
+	int confirm = KMessageBox::warningYesNo(parentWidget(),
 		QString("<qt>")+i18n("Do you want to delete this connection ?")+"</qt>", QString::null, KGuiItem(i18n("&Delete connection")),
 		 KStdGuiItem::no(), "dontAskBeforeDeleteConnection"/*config entry*/);
 	if(confirm == KMessageBox::No)

@@ -180,8 +180,8 @@ class KexiMainWindowImpl::Private
 		//! before displaying other stuff
 		bool showImportantInfoOnStartup : 1;
 
-		//! Used sometimes to block showErrorMessage()
-		bool disableErrorMessages : 1;
+//		//! Used sometimes to block showErrorMessage()
+//		bool disableErrorMessages : 1;
 
 		//! Indicates if project is started in --final mode
 		bool final : 1;
@@ -210,7 +210,7 @@ class KexiMainWindowImpl::Private
 		insideCloseDialog=false;
 		createMenu=0;
 		showImportantInfoOnStartup=true;
-		disableErrorMessages=false;
+//		disableErrorMessages=false;
 //		last_checked_mode=0;
 		propEditorDockSeparatorPos=-1;
 	}
@@ -249,6 +249,7 @@ class KexiMainWindowImpl::Private
 
 KexiMainWindowImpl::KexiMainWindowImpl()
  : KexiMainWindow()
+ , KexiGUIMessageHandler(this)
  , d(new KexiMainWindowImpl::Private() )
 {
 	KexiProjectData *pdata = Kexi::startupHandler().projectData();
@@ -339,9 +340,8 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 
 KexiMainWindowImpl::~KexiMainWindowImpl()
 {
-	bool cancelled;
 	d->forceDialogClosing=true;
-	closeProject(cancelled);
+	closeProject();
 	delete d;
 }
 
@@ -652,13 +652,13 @@ void KexiMainWindowImpl::invalidateViewModeActions()
 	}
 }
 
-bool KexiMainWindowImpl::startup()
+tristate KexiMainWindowImpl::startup()
 {
 	switch (Kexi::startupHandler().action()) {
-	case KexiStartupHandler::CreateBlankProject:
-		createBlankProject();
-		break;
+//	case KexiStartupHandler::CreateBlankProject:
+//		return createBlankProject();
 	case KexiStartupHandler::UseTemplate:
+		return cancelled;
 		//TODO
 		break;
 	case KexiStartupHandler::OpenProject:
@@ -700,7 +700,8 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 	Kexi::recentProjects().addProjectData( projectData );
 	invalidateActions();
 
-	d->disableErrorMessages = true;
+//	d->disableErrorMessages = true;
+	enableMessages( false );
 
 	QString not_found_msg;
 	//ok, now open "autoopen: objects
@@ -750,7 +751,8 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 			continue;
 		}
 	}
-	d->disableErrorMessages = false;
+	enableMessages( true );
+//	d->disableErrorMessages = false;
 
 	if (!not_found_msg.isEmpty())
 		showErrorMessage(i18n("You have requested selected objects to be opened automatically on startup. Several objects cannot be opened."),
@@ -770,19 +772,16 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 	return true;
 }
 
-bool KexiMainWindowImpl::closeProject(bool &cancelled)
+tristate KexiMainWindowImpl::closeProject()
 {
-	cancelled=false;
 	if (!d->prj)
 		return true;
 
 	//close each window, optionally asking if user wants to close (if data changed)
 	while (!d->curDialog.isNull()) {
-		if (!closeDialog( d->curDialog, cancelled )) {
-			return false;
-		}
-		if (cancelled)
-			return true;
+		tristate res = closeDialog( d->curDialog );
+		if (!res || ~res)
+			return res;
 	}
 
 	if(d->nav)
@@ -1075,15 +1074,15 @@ bool
 KexiMainWindowImpl::queryClose()
 {
 //	storeSettings();
-	bool cancelled;
-	if (!closeProject(cancelled)) {
+	const tristate res = closeProject();
+	if (~res) {
 		//todo: error message
 		return true;
 	}
-	if (!cancelled)
+	if (! ~res)
 		storeSettings();
 
-	return !cancelled;
+	return ! ~res;
 }
 
 bool
@@ -1486,23 +1485,25 @@ KexiMainWindowImpl::slotProjectNew()
 void
 KexiMainWindowImpl::createKexiProject(KexiProjectData* new_data)
 {
-	d->prj = new KexiProject( new_data );
-	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
-	connect(d->prj, SIGNAL(error(const QString&,const QString&)), this, SLOT(showErrorMessage(const QString&,const QString&)));
+	d->prj = new KexiProject( new_data, this );
+//	d->prj = ::createKexiProject(new_data);
+//provided by KexiMessageHandler	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
+//provided by KexiMessageHandler	connect(d->prj, SIGNAL(error(const QString&,const QString&)), this, SLOT(showErrorMessage(const QString&,const QString&)));
 	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&)));
 
 	if (d->nav)
 		connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
 }
 
-bool
+tristate
 KexiMainWindowImpl::createBlankProject()
 {
 	KexiNewProjectWizard wiz(Kexi::connset(), 0, "KexiNewProjectWizard", true);
 	if (wiz.exec() != QDialog::Accepted)
-		return false;
+		return cancelled;
 
-	KexiProjectData *new_data = 0;
+	KexiProjectData *new_data;
+
 	if (wiz.projectConnectionData()) {
 		//server-based project
 		KexiDB::ConnectionData *cdata = wiz.projectConnectionData();
@@ -1518,12 +1519,78 @@ KexiMainWindowImpl::createBlankProject()
 		new_data = new KexiProjectData( cdata, wiz.projectDBName(), wiz.projectCaption() );
 	}
 	else
-		return false;
+		return cancelled;
 
 	createKexiProject( new_data );
-//	d->prj = new KexiProject( new_data );
-//	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
-	if (!d->prj->create()) {
+
+	bool ok = d->prj->create(true /*overwrite*/ );
+	if (!ok) {
+		delete d->prj;
+		d->prj = 0;
+		return false;
+	}
+	kdDebug() << "KexiMainWindowImpl::slotProjectNew(): new project created --- " << endl;
+	initNavigator();
+	Kexi::recentProjects().addProjectData( new_data ); 
+
+	invalidateActions();
+	updateAppCaption();
+	return true;
+}
+
+/* moved to kexiproject
+tristate
+KexiMainWindowImpl::createBlankProject()
+{
+	KexiProjectData *new_data = Kexi::startupHandler().projectData(); // true, if project data was provided from command line
+	const bool dataAlreadyProvided = new_data;
+
+	if (!new_data) {// project not provided, ask using the wizard
+		KexiNewProjectWizard wiz(Kexi::connset(), 0, "KexiNewProjectWizard", true);
+		if (wiz.exec() != QDialog::Accepted)
+			return cancelled;
+
+		if (wiz.projectConnectionData()) {
+			//server-based project
+			KexiDB::ConnectionData *cdata = wiz.projectConnectionData();
+			kdDebug() << "DBNAME: " << wiz.projectDBName() << " SERVER: " << cdata->serverInfoString() << endl;
+			new_data = new KexiProjectData( *cdata, wiz.projectDBName(), wiz.projectCaption() );
+		}
+		else if (!wiz.projectDBName().isEmpty()) {
+			//file-based project
+			KexiDB::ConnectionData cdata;
+			cdata.connName = wiz.projectCaption();
+			cdata.driverName = "sqlite";
+			cdata.setFileName( wiz.projectDBName() );
+			new_data = new KexiProjectData( cdata, wiz.projectDBName(), wiz.projectCaption() );
+		}
+		else
+			return cancelled;
+	}
+	createKexiProject( new_data );
+
+//todo: move this method outside keximainwindowimpl, so the window wont be visible if not needed
+
+	bool ok = true;
+	if (dataAlreadyProvided) {
+		tristate res = d->prj->create(false);
+		if (~res) {
+			if (KMessageBox::Yes != KMessageBox::warningYesNo(qApp->desktop(), i18n(
+				"The project \"%1\" already exists.\n"
+				"Do you want to replace it with a new, blank one?")
+				.arg(new_data->name()))) ///connectionData().dbFileName())))
+//todo add serverInfoString() for server-based prj
+			{
+				return cancelled;
+			}
+		}
+		ok = res;
+	}
+	if (ok) {
+		tristate res = d->prj->create(true);
+		ok = res;
+	}
+	if (!ok) {
 		delete d->prj;
 		d->prj = 0;
 		return false;
@@ -1535,7 +1602,7 @@ KexiMainWindowImpl::createBlankProject()
 	invalidateActions();
 	updateAppCaption();
 	return true;
-}
+}*/
 
 void
 KexiMainWindowImpl::slotProjectOpen()
@@ -1563,7 +1630,9 @@ KexiMainWindowImpl::slotProjectOpen()
 		if (!selFile.isEmpty()) {
 			//file-based project
 			kdDebug() << "Project File: " << selFile << endl;
-			projectData = KexiStartupHandler::detectProjectData( selFile, this );
+			KexiDB::ConnectionData cdata;
+			cdata.setFileName( selFile );
+			projectData = KexiStartupHandler::detectProjectData( cdata, selFile, this );
 		}
 	}
 
@@ -1614,8 +1683,7 @@ KexiMainWindowImpl::slotProjectSave()
 {
 	if (!d->curDialog)
 		return;
-	bool cancelled;
-	saveObject( d->curDialog, cancelled );
+	saveObject( d->curDialog );
 	updateAppCaption();
 	invalidateActions();
 }
@@ -1637,8 +1705,7 @@ KexiMainWindowImpl::slotProjectProperties()
 void
 KexiMainWindowImpl::slotProjectClose()
 {
-	bool cancelled;
-	closeProject(cancelled);
+	closeProject();
 }
 
 void KexiMainWindowImpl::slotProjectRelations()
@@ -1667,9 +1734,7 @@ void KexiMainWindowImpl::slotImportServer()
 void
 KexiMainWindowImpl::slotQuit()
 {
-	bool cancelled;
-	closeProject(cancelled);
-	if (cancelled)
+	if (~ closeProject())
 		return;
 	close();
 }
@@ -1721,14 +1786,15 @@ bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 		d->toggleLastCheckedMode();
 		return false;
 	}
-	bool cancelled;
-	if (!d->curDialog->switchToViewMode( viewMode, cancelled )) {
+//	bool cancelled;
+	tristate res = d->curDialog->switchToViewMode( viewMode );
+	if (!res) {
 		showErrorMessage(i18n("Switching to other view failed (%1).").arg(Kexi::nameForViewMode(viewMode)),
 			d->curDialog);
 		d->toggleLastCheckedMode();
 		return false;
 	}
-	if (cancelled) {
+	if (~res) {
 		d->toggleLastCheckedMode();
 		return false;
 	}
@@ -1760,6 +1826,7 @@ void KexiMainWindowImpl::slotViewTextMode()
 	switchToViewMode(Kexi::TextViewMode);
 }
 
+/*
 void
 KexiMainWindowImpl::showSorryMessage(const QString &title, const QString &details)
 {
@@ -1853,26 +1920,22 @@ KexiMainWindowImpl::showErrorMessage(const QString &message, Kexi::ObjectStatus 
 	}
 	status->clearStatus();
 }
+*/
 
 void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 {
-	bool cancelled;
-	closeDialog(static_cast<KexiDialogBase *>(pWnd), cancelled, layoutTaskBar);
+	closeDialog(static_cast<KexiDialogBase *>(pWnd), layoutTaskBar);
 }
 
-bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
-	const QString& messageWhenAskingForName )
+tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& messageWhenAskingForName )
 {
-	cancelled=false;
 	if (!dlg->neverSaved()) {
 		//data was saved in the past -just save again
-		const bool r = dlg->storeData(cancelled);
-		if (cancelled)
-			return true;
-		if (!r)
+		const tristate res = dlg->storeData();
+		if (!res)
 			showErrorMessage(i18n("Saving \"%1\" object failed.").arg(dlg->partItem()->name()),
 				d->curDialog);
-		return r;
+		return res;
 	}
 
 	//data was never saved in the past -we need to create a new object at the backend
@@ -1892,10 +1955,8 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 	d->nameDialog->setDialogIcon( DesktopIcon( dlg->itemIcon(), KIcon::SizeMedium ) );
 	bool found;
 	do {
-		if (d->nameDialog->exec()!=QDialog::Accepted) {
-			cancelled=true;
-			return true;
-		}
+		if (d->nameDialog->exec()!=QDialog::Accepted)
+			return cancelled;
 		//check if that name already exists
 		KexiDB::SchemaData tmp_sdata;
 		found = project()->dbConnection()->loadObjectSchemaData(
@@ -1914,11 +1975,10 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 	dlg->partItem()->setName( d->nameDialog->widget()->nameText() );
 	dlg->partItem()->setCaption( d->nameDialog->widget()->captionText() );
 
-	const bool r = dlg->storeNewData(cancelled);
-	if (cancelled)
-		return true;
-
-	if (!r) {
+	const tristate res = dlg->storeNewData();
+	if (~res)
+		return cancelled;
+	if (!res) {
 		showErrorMessage(i18n("Saving new \"%1\" object failed.").arg(dlg->partItem()->name()),
 			d->curDialog);
 		return false;
@@ -1932,9 +1992,8 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 	return true;
 }
 
-bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool layoutTaskBar)
+tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
 {
-	cancelled = false;
 	if (!dlg)
 		return true;
 	if (d->insideCloseDialog)
@@ -1948,28 +2007,24 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 	bool remove_on_closing = dlg->partItem() ? dlg->partItem()->neverSaved() : false;
 	if (dlg->dirty() && !d->forceDialogClosing) {
 		//dialog's data is dirty:
-		const int res = KMessageBox::warningYesNoCancel( this,
+		const int quertionRes = KMessageBox::questionYesNoCancel( this,
 			i18n( "<p>The object has been modified: %1 \"%2\".</p><p>Do you want to save it?</p>" )
 			.arg(dlg->part()->instanceName()).arg(dlg->partItem()->name()),
 			QString::null,
 			KStdGuiItem::save(),
 			KStdGuiItem::discard());
-		if (res==KMessageBox::Cancel) {
-			cancelled=true;
+		if (quertionRes==KMessageBox::Cancel) {
 			d->insideCloseDialog = false;
-			return true;
+			return cancelled;
 		}
-		if (res==KMessageBox::Yes) {
+		if (quertionRes==KMessageBox::Yes) {
 			//save it
 //			if (!dlg->storeData())
-			if (!saveObject( dlg, cancelled )) {
+			tristate res = saveObject( dlg );
+			if (!res || ~res) {
 //js:TODO show error info; (retry/ignore/cancel)
 				d->insideCloseDialog = false;
-				return false;
-			}
-			if (cancelled) {
-				d->insideCloseDialog = false;
-				return true;
+				return res;
 			}
 			remove_on_closing = false;
 		}
@@ -2349,7 +2404,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 	return openObject(it, Kexi::DesignViewMode);
 }
 
-bool KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
+tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 {
 	if (!d->prj || !item)
 		return false;
@@ -2358,11 +2413,11 @@ bool KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 	if (!part)
 		return false;
 
-	if (dontAsk) {
-		if (KMessageBox::questionYesNo(this, "<p>"+i18n("Do you want to remove:")
+	if (!dontAsk) {
+		if (KMessageBox::No == KMessageBox::warningYesNo(this, "<p>"+i18n("Do you want to remove:")
 			+"</p><p>"+part->instanceName()+" \""+ item->name() + "\"?</p>",
-			0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeletePartItem"/*config entry*/)==KMessageBox::No)
-			return true;//cancelled
+			0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeletePartItem"/*config entry*/))
+			return cancelled;
 	}
 
 	KexiDialogBase *dlg = d->dialogs[item->identifier()];
@@ -2370,21 +2425,17 @@ bool KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 //		if (!dlg->tryClose(true))
 		const bool tmp = d->forceDialogClosing;
 		/*const bool remove_on_closing = */dlg->partItem()->neverSaved();
-		bool cancelled;
 		d->forceDialogClosing = true;
-		if (!closeDialog(dlg, cancelled)) {
-			d->forceDialogClosing = tmp; //restore
-			return false;
-		}
+		const tristate res = closeDialog(dlg);
 		d->forceDialogClosing = tmp; //restore
-		if (cancelled)
-			return true;
+		if (!res || ~res) {
+			return res;
+		}
 //		if (remove_on_closing) //already removed
 	//		return true;
 //		if (!dlg->close(true))
 //			return true; //ok - close cancelled
 	}
-
 
 	if (!d->prj->removeObject(this, *item)) {
 		//TODO(js) some msg
@@ -2636,6 +2687,7 @@ KexiMainWindowImpl::initUserActions()
 	a1->setMethod(KexiUserAction::OpenObject, args);
 */
 }
+
 
 #include "keximainwindowimpl.moc"
 

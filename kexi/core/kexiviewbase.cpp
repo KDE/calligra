@@ -61,12 +61,12 @@ KexiPart::Part* KexiViewBase::part() const
 	return m_dialog ? m_dialog->part() : 0;
 }
 
-bool KexiViewBase::beforeSwitchTo(int /* mode */, bool & /*cancelled*/, bool & /*dontStore*/)
+tristate KexiViewBase::beforeSwitchTo(int /* mode */, bool & /*dontStore*/)
 {
 	return true;
 }
 
-bool KexiViewBase::afterSwitchFrom(int /* mode */, bool & /*cancelled*/)
+tristate KexiViewBase::afterSwitchFrom(int /* mode */)
 {
 	return true;
 }
@@ -155,7 +155,7 @@ KexiDB::SchemaData* KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata, 
 	return new_schema;
 }
 
-bool KexiViewBase::storeData(bool & /*cancel*/)
+tristate KexiViewBase::storeData()
 {
 	if (!m_dialog || !m_dialog->schemaData())
 		return false;

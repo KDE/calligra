@@ -278,7 +278,7 @@ KFormDesignerPart::saveAs()
 bool
 KFormDesignerPart::closeForm(Form *form)
 {
-	int res = KMessageBox::warningYesNoCancel( m_workspace->topLevelWidget(),
+	int res = KMessageBox::questionYesNoCancel( m_workspace->topLevelWidget(),
 		i18n( "The form \"%1\" has been modified.\n"
 		"Do you want to save your changes or discard them?" ).arg( form->objectTree()->name() ),
 		i18n( "Close Form" ), KStdGuiItem::save(), KStdGuiItem::discard() );

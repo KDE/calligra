@@ -39,6 +39,8 @@ KexiStartupData::KexiStartupData()
 	, m_action(KexiStartupData::DoNothing)
 	, m_forcedFinalMode(false)
 	, m_forcedDesignMode(false)
+	, m_createDB(false)
+	, m_dropDB(false)
 {
 }
 

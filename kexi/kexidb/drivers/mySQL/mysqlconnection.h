@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
-Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Joseph Wenninger<jowenn@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -29,13 +30,12 @@ Boston, MA 02111-1307, USA.
 
 //#define BOOL bool
 
-typedef struct st_mysql MYSQL;
-
-class MySqlRecordSet;
-class MySqlResult;
-
+//class MySqlRecordSet;
+//class MySqlResult;
 
 namespace KexiDB {
+
+class MySqlConnectionInternal;
 
 /*!
  * Should override kexiDB/kexiDB
@@ -70,10 +70,15 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlConnection : public Connection
 		virtual bool drv_executeSQL( const QString& statement );
 		virtual Q_ULLONG drv_lastInsertRowID();
 
-	private:
+		virtual int serverResult();
+		virtual QString serverResultName();
+		virtual QString serverErrorMsg();
+		virtual void drv_clearServerResult();
+
+		MySqlConnectionInternal* d;
+
 		friend class MySqlDriver;
 		friend class MySqlCursor;
-		MYSQL		*m_mysql;
 };
 
 }

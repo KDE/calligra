@@ -44,9 +44,14 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 
 		virtual bool init();
 		
-		/*! Detects filename by mime type and returns project data, if it can be detected,
-			otherwise - NULL. \a parent is passed as parent for potential error message boxes. */
-		static KexiProjectData* detectProjectData( const QString &fname, QWidget *parent = 0 );
+		/*! Used for opening existing projects. 
+		 Detects project file type by mime type and returns project data, if it can be detected,
+		 otherwise - NULL. \a parent is passed as parent for potential error message boxes.
+		 Also uses \a cdata connection data for server-based projects.
+		 cdata.driverName is adjusted, if a file-based project has been detected.
+		*/
+		static KexiProjectData* detectProjectData( 
+			KexiDB::ConnectionData& cdata, const QString &dbname, QWidget *parent);
 
 		/*! Allows user to select a project with KexiProjectSelectorDialog.
 			\return selected project's data or NULL if dialog was cancelled.
@@ -54,7 +59,7 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, QWidget *parent = 0);
 
 	protected:
-		void getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name);
+		bool getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name);
 
 		KexiStartupHandlerPrivate *d;
 };
