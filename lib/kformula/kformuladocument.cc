@@ -315,7 +315,7 @@ void Document::activate(Container* f)
 void Document::setEnabled( bool enabled )
 {
     //kdDebug() << "Document::setEnabled " << enabled << endl;
-
+    getAddNegThinSpaceAction()->setEnabled( enabled );
     getMakeGreekAction()->setEnabled( enabled );
     getAddGenericUpperAction()->setEnabled( enabled );
     getAddGenericLowerAction()->setEnabled( enabled );
@@ -342,6 +342,12 @@ void Document::setEnabled( bool enabled )
     getAddLowerLeftAction()->setEnabled( enabled );
     getAddUpperRightAction()->setEnabled( enabled );
     getAddLowerRightAction()->setEnabled( enabled );
+    getAppendColumnAction()->setEnabled( enabled );
+    getInsertColumnAction()->setEnabled( enabled );
+    getRemoveColumnAction()->setEnabled( enabled );
+    getAppendRowAction()->setEnabled( enabled );
+    getInsertRowAction()->setEnabled( enabled );
+    getRemoveRowAction()->setEnabled( enabled );
 
     if ( enabled ) {
         getAddGenericUpperAction()->setShortcut( KShortcut( CTRL + Key_U ) );
