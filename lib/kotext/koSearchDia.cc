@@ -29,7 +29,7 @@
 #include <kotextobject.h>
 #include <kcommand.h>
 #include <kotextview.h>
-
+#include <kfontcombo.h>
 KoSearchContext::KoSearchContext()
 {
     m_family = "times";
@@ -603,14 +603,8 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
 
     m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment" ), page );
 
-    m_familyItem = new QComboBox( true, page );
-    m_familyItem->insertStringList( m_ctx->m_family );
-    for ( int j = 0; j < m_familyItem->count(); j++ )
-        if ( m_familyItem->text( j ) == m_ctx->m_family )
-        {
-            m_familyItem->setCurrentItem( j );
-            break;
-        }
+    m_familyItem = new KFontCombo(page);
+    m_familyItem->setCurrentFont(m_ctx->m_family);
 
     m_sizeItem = new QSpinBox( 4, 100, 1, page );
     m_sizeItem->setValue( m_ctx->m_size );

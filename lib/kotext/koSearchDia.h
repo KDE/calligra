@@ -42,6 +42,7 @@ class KCommand;
 class KoTextDocument;
 class KoTextFind;
 class KoTextReplace;
+class KFontCombo;
 //
 // This class represents the KWord-specific search extension items, and also the
 // corresponding replace items.
@@ -254,7 +255,7 @@ private:
     QCheckBox *m_checkVertAlign;
     QCheckBox *m_checkStrikeOut;
     QCheckBox *m_checkDoubleLine;
-    QComboBox *m_familyItem;
+    KFontCombo *m_familyItem;
     QSpinBox *m_sizeItem;
     KColorButton *m_colorItem;
     KColorButton *m_bgColorItem;
