@@ -76,7 +76,7 @@ KexiRelationView::KexiRelationView(QWidget *parent, KexiDB::Connection *conn, co
 #if 0
 	m_removeSelectedTableQueryAction = new KAction(i18n("&Hide Selected Table/Query"), "editdelete", "",
 		this, SLOT(removeSelectedTableQuery()), parent->actionCollection(), "relationsview_removeSelectedTableQuery");
-	m_removeSelectedConnectionAction = new KAction(i18n("&Remove Selected Relation"), "button_cancel", "",
+	m_removeSelectedConnectionAction = new KAction(i18n("&Remove Selected Relationship"), "button_cancel", "",
 		this, SLOT(removeSelectedConnection()), parent->actionCollection(), "relationsview_removeSelectedConnection");
 	m_openSelectedTableQueryAction = new KAction(i18n("&Open Selected Table/Query"), "", "",
 		this, SLOT(openSelectedTableQuery()), 0/*parent->actionCollection()*/, "relationsview_openSelectedTableQuery");

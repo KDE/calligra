@@ -466,7 +466,7 @@
 		KexiDB::TableSchema *s = parser->db()->tableSchema(table);
 		if(!s)
 		{
-			KexiDB::ParserError err(i18n("Field List Error"), i18n("Table '%1' doesn't exist").arg(table), ctoken, current);
+			KexiDB::ParserError err(i18n("Field List Error"), i18n("Table '%1' does not exist").arg(table), ctoken, current);
 			parser->setError(err);
 			yyerror("field list error");
 		}
@@ -717,7 +717,7 @@ USER_DEFINED_NAME
 			KexiDB::Field *f = item->table()->field(item->name());
 			if(!f)
 			{
-				KexiDB::ParserError err(i18n("FIeld List Error Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
+				KexiDB::ParserError err(i18n("Field List Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
 				parser->setError(err);
 				yyerror("field list error");
 			}	

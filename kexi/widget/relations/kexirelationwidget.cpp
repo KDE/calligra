@@ -71,7 +71,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	m_tableQueryPopup = new KPopupMenu(this, "m_popup");
 	m_tableQueryPopup->insertTitle(i18n("Table"));
 	m_connectionPopup = new KPopupMenu(this, "m_connectionPopup");
-	m_connectionPopup->insertTitle(i18n("Relation"));
+	m_connectionPopup->insertTitle(i18n("Relationship"));
 	m_areaPopup = new KPopupMenu(this, "m_areaPopup");
 	
 	m_openSelectedTableAction = new KAction(i18n("&Open Table"), SmallIcon("fileopen"), KShortcut(),
@@ -102,8 +102,8 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 #if 0
 	if(!embedd)
 	{
-		setContextHelp(i18n("Relations"), i18n("To create a relation simply drag the source field onto the targetfield. "
-			"An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relation."));
+		setContextHelp(i18n("Relations"), i18n("To create a relationship simply drag the source field onto the target field. "
+			"An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relationship."));
 	}
 #endif
 //	else
