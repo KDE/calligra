@@ -9,13 +9,17 @@
 #
 # Open the presentation in kpresenter, then launch this script
 #
-actionname=`dcop kpresenter qt objects | grep screen_start$ | grep KAction`
-dcop kpresenter "$actionname" activate
+appname=`dcop | grep ^kpresenter`
+#echo $appname
+
+viewname=`dcop $appname | grep ^View`
+#echo $viewname
+
+dcop $appname $viewname screenStart
 
 sleep 5;
 
-actionname=`dcop kpresenter qt objects | grep screen_next$ | grep KAction`
 while true; do
  sleep 10;
- dcop kpresenter "$actionname" activate
+ dcop $appname $viewname screenNext
 done
