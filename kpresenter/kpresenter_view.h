@@ -290,6 +290,9 @@ public slots:
     void newRightIndent( double _rightIndent);
     void slotUpdateRuler();
 
+    void slotHRulerDoubleClicked( double ptpos );
+    void slotHRulerDoubleClicked();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -492,6 +495,7 @@ protected:
                              KActionMenu * parentMenu, const QString & menuText );
 
     void updateRuler();
+    void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 private:
 // ********** variables **********
 

@@ -3321,8 +3321,12 @@ void KPresenterView::setupRulers()
 		      this, SLOT( unitChanged( QString ) ) );
     QObject::connect( h_ruler, SIGNAL( newPageLayout( KoPageLayout ) ),
 		      this, SLOT( newPageLayout( KoPageLayout ) ) );
-    QObject::connect( h_ruler, SIGNAL(doubleClicked()  ),
-		      this, SLOT( openPageLayoutDia() ) );
+
+    connect( h_ruler, SIGNAL( doubleClicked() ), this,
+             SLOT( slotHRulerDoubleClicked() ) );
+    connect( h_ruler, SIGNAL( doubleClicked(double) ), this,
+             SLOT( slotHRulerDoubleClicked(double) ) );
+
     QObject::connect( v_ruler, SIGNAL( unitChanged( QString ) ),
 		      this, SLOT( unitChanged( QString ) ) );
     QObject::connect( v_ruler, SIGNAL( newPageLayout( KoPageLayout ) ),
@@ -4040,6 +4044,11 @@ void KPresenterView::showCounter( KoParagCounter &c )
 
 void KPresenterView::formatParagraph()
 {
+    showParagraphDialog();
+}
+
+void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
+{
     KPTextView *edit=page->currentTextObjectView();
     if (edit)
     {
@@ -4053,7 +4062,6 @@ void KPresenterView::formatParagraph()
         // Initialize the dialog from the current paragraph's settings
         KoParagLayout lay = static_cast<KoTextParag *>(edit->cursor()->parag())->paragLayout();
         paragDia->setParagLayout( lay );
-#if 0
         // Set initial page and initial tabpos if necessary
         if ( initialPage != -1 )
         {
@@ -4061,7 +4069,7 @@ void KPresenterView::formatParagraph()
             if ( initialPage == KoParagDia::PD_TABS )
                 paragDia->tabulatorsWidget()->setCurrentTab( initialTabPos );
         }
-#endif
+
         if(!paragDia->exec())
             return;
         KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph settings" ) );
@@ -4394,5 +4402,18 @@ void KPresenterView::slotUpdateRuler()
         updateRuler();
 }
 
+
+void KPresenterView::slotHRulerDoubleClicked( double ptpos )
+{
+    showParagraphDialog( KoParagDia::PD_TABS, ptpos );
+}
+
+void KPresenterView::slotHRulerDoubleClicked()
+{
+    if ( getHRuler()->flags() & KoRuler::F_TABS )
+        formatParagraph();
+    else
+        openPageLayoutDia();
+}
 
 #include <kpresenter_view.moc>
