@@ -194,7 +194,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     {
       if ( (*it).m_strValue != "application/x-kimage" )
       {
-	cerr << "Unknown mime type " << (*it).m_strValue;
+	cerr << "Unknown mime type " << (*it).m_strValue << endl;
 	return false;
       }
     }
@@ -225,7 +225,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	  orientation = (*it).m_strValue.c_str();
 	}
 	else
-	  cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'";
+	  cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
       }
 
       // PAPERBORDERS, HEAD, FOOT
@@ -256,7 +256,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	      bottom = atof( (*it).m_strValue.c_str() );
 	    }
 	    else
-	      cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'";
+	      cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
 	  }
 	}
       	else if ( name == "HEAD" )
@@ -278,7 +278,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	      hr = (*it).m_strValue.c_str();
 	    }
 	    else
-	      cerr << "Unknown attrib 'HEAD:" << (*it).m_strName << "'";
+	      cerr << "Unknown attrib 'HEAD:" << (*it).m_strName << "'" << endl;
 	  }
 	}
       	else if ( name == "FOOT" )
@@ -300,11 +300,11 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	      fr = (*it).m_strValue.c_str();
 	    }
 	    else
-	      cerr << "Unknown attrib 'FOOT:" << (*it).m_strName << "'";
+	      cerr << "Unknown attrib 'FOOT:" << (*it).m_strName << "'" << endl;
 	  }
 	}
 	else
-	  cerr << "Unknown tag '" << tag << "' in PAPER";
+	  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
 	
 	if ( !parser.close( tag ) )
         {
@@ -314,7 +314,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
       }
     }
     else
-      cerr << "Unknown tag '" << tag << "' in DOC";
+      cerr << "Unknown tag '" << tag << "' in DOC" << endl;
 
     if ( !parser.close( tag ) )
     {

@@ -28,13 +28,26 @@ module KImage
 {
 	interface View : KOffice::View
 	{
-		slot void fitToView();
-		slot void fitWithProportions();
-		slot void originalSize();
+		// Slots für Menus
+
+		// Edit
 		slot void editImage();
 		slot void importImage();
 		slot void exportImage();
 		slot void pageLayout();
+
+		// View
+
+		// Zoom
+		slot void fitToView();
+		slot void fitWithProportions();
+		slot void originalSize();
+
+		// Transform
+
+		// Filter
+
+		// Plug-Ins
 	};
 
 	interface Document : KOffice::Document, KOffice::Print
