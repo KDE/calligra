@@ -95,7 +95,7 @@ bool OLEFilter::filter(
         return false;
     }
 
-    store=new KoStore(fileOut, KoStore::Write);
+    store=new KoStore(fileOut, KoStore::Write, to.latin1());
     if(store->bad()) {
         kdError(s_area) << "OLEFilter::filter(): Unable to open output file! " << fileOut << endl;
         delete [] olefile.data;
@@ -111,6 +111,7 @@ bool OLEFilter::filter(
 
     // Recursively convert the file
     convert(prefixOut, "root");
+    kdDebug(s_area) << "OLEFilter::filter(): created " << fileOut << endl;
     delete store;
     store=0L;
     return success;
@@ -167,6 +168,7 @@ void OLEFilter::slotSavePart(
     //storageId = QFile::encodeName(id);
     storageId = (id);
 }
+
 void OLEFilter::slotSaveDocumentInformation(
     const QString &fullName,
     const QString &title,
@@ -370,7 +372,6 @@ unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
                     data=docfile->stream(tmp.at(0));
 
                 mimeType = "application/x-kword";
-                kdDebug(s_area) << "converting \"" << nodeNames.join(",") << "\" into " << mimeType << endl;
                 myFilter=new WordFilter(main, table0, table1, data);
             }
             else if(node->name()=="Workbook" || node->name()=="Book") {
@@ -381,7 +382,6 @@ unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
 
                 workbook=docfile->stream(node->handle());
                 mimeType = "application/x-kspread";
-                kdDebug(s_area) << "converting \"" << nodeNames.join(",") << "\" into " << mimeType << endl;
                 myFilter=new ExcelFilter(workbook);
             }
 /*
@@ -449,7 +449,6 @@ file.close();
                     documentSummary=docfile->stream(tmp.at(0));
 
                 mimeType = "application/x-kpresenter";
-                kdDebug(s_area) << "converting \"" << nodeNames.join(",") << "\" into " << mimeType << endl;
                 myFilter=new PowerPointFilter(main, currentUser);
             }
             else
