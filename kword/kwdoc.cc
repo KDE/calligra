@@ -2832,7 +2832,6 @@ void KWDocument::deleteFrame( KWFrame * frame )
     }
     if ( fs->isFloating() )
     {
-        frame->setSelected( false );
         KWAnchor * anchor = fs->findAnchor( 0 );
         addCommand( fs->anchorFrameset()->deleteAnchoredFrame( anchor ) );
     }

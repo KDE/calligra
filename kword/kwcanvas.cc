@@ -579,6 +579,10 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
 {
     // This one is called by KWResizeHandle
     KWFrame *frame = m_doc->getFirstSelectedFrame();
+    if (!frame) { // can't happen, but never say never
+        kdWarning(32001) << "KWCanvas::mmEditFrameResize: no frame selected!" << endl;
+        return;
+    }
     //kdDebug() << "KWCanvas::mmEditFrameResize top,bottom,left,right: "
     //          << top << "," << bottom << "," << left << "," << right << endl;
 

@@ -80,8 +80,6 @@ KWFrame::~KWFrame()
     //kdDebug() << "KWFrame::~KWFrame " << this << endl;
     if (selected)
         removeResizeHandles();
-    /*if(anchor())
-        anchor()->setDeleted(true);*/
 }
 
 int KWFrame::pageNum() const
@@ -155,7 +153,6 @@ void KWFrame::copySettings(KWFrame *frm)
     setFrameBehaviour(frm->getFrameBehaviour());
     setNewFrameBehaviour(frm->getNewFrameBehaviour());
     setSheetSide(frm->getSheetSide());
-    //setPageNum(frm->pageNum());
     setLeftBorder(frm->leftBorder());
     setRightBorder(frm->rightBorder());
     setTopBorder(frm->topBorder());
@@ -165,6 +162,7 @@ void KWFrame::copySettings(KWFrame *frm)
     setBTop(frm->getBTop());
     setBBottom(frm->getBBottom());
     setCopy(frm->isCopy());
+    selected = false; // don't copy this attribute
     /*if(frm->anchor())
         setAnchor(frm->anchor());*/
 }
@@ -465,7 +463,11 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 
     frm->setFrameSet(0L);
     if ( !remove )
+    {
         frames.take( _num );
+        if (frm->isSelected()) // get rid of the resize handles
+            frm->setSelected(false);
+    }
     else
         frames.remove( _num );
 
