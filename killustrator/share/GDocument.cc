@@ -86,8 +86,11 @@ GDocument::~GDocument () {
 
 void GDocument::setAutoUpdate (bool flag) { 
   autoUpdate = flag; 
-  if (autoUpdate)
+  if (autoUpdate) {
+    selBoxIsValid = false;
+    updateHandle ();
     emit changed ();
+  }
 }
 
 void GDocument::initialize () {

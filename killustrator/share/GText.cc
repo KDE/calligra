@@ -37,10 +37,14 @@ float seg_length (const Coord& c1, const Coord& c2) {
   float dy = c2.y () - c1.y ();
   return sqrt (dx * dx + dy * dy);
 }
+
 float seg_angle (const Coord& c1, const Coord& c2) {
   float dx = c2.x () - c1.x (); 
   float dy = c2.y () - c1.y ();
-  return atan (dy / dx) * RAD_FACTOR;
+  if (dx != 0)
+    return atan (dy / dx) * RAD_FACTOR;
+  else
+    return 0.0;
 }
 
 GText::TextInfo GText::defaultTextInfo; 

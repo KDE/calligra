@@ -294,6 +294,8 @@ void KIllustrator::setupMainView () {
   connect(&cmdHistory, SIGNAL(changed(bool, bool)), 
 	  SLOT(setUndoStatus(bool, bool)));
 
+  setFocusPolicy (QWidget::StrongFocus);
+  setFocusProxy (canvas);
 }
 
 void KIllustrator::initToolBars () {
@@ -1172,8 +1174,11 @@ void KIllustrator::about (int id) {
 }
 
 void KIllustrator::zoomFactorSlot (int idx) {
-  if (canvas)
+  if (canvas) {
     canvas->setZoomFactor (zFactors[idx]);
+    // set focus to the canvas 
+    canvas->setFocus ();
+  }
 }
 
 void KIllustrator::updateZoomFactor (float zFactor) {

@@ -325,7 +325,7 @@ void Canvas::updateRegion (const Rect& reg) {
   if (pendingRedraws > 0) {
     regionForUpdate = regionForUpdate.unite (r);
     pendingRedraws--;
-    if (pendingRedraws > 0)
+    if (pendingRedraws > 0) 
       // not the last redraw call
       return;
     else
