@@ -100,9 +100,16 @@ class KoGenStyle
 {
 public:
     /// Create an automatic style. Its name will be set by KoGenStyles::lookup()
-    KoGenStyle() {}
-    /// Create an automatic style that inherits from another one.
-    KoGenStyle( const QString& parentName ) : m_parentName( parentName ) {}
+    /// @param this is a hook for the application to categorize styles
+    /// E.g. one could use an enum here, with values for automatic styles,
+    /// user styles, page layout, master-page, etc. Ignored when writing out the style.
+    ///
+    /// @param parentName If set, name of the parent style from which this one inherits.
+    KoGenStyle( int type = 0, const QString& parentName = QString::null )
+        : m_type( type ), m_parentName( parentName ) {}
+
+    /// Return the type of this style, as set in the constructor
+    int type() const { return m_type; }
 
     /// Return the name of style's parent, if set
     QString parentName() const { return m_parentName; }
@@ -130,6 +137,7 @@ public:
     /// Solutions with only a hash value (not representative of the whole data)
     /// require us to write a hashtable by hand....
     bool operator<( const KoGenStyle &other ) const {
+        if ( m_type != other.m_type ) return m_type < other.m_type;
         if ( m_parentName != other.m_parentName ) return m_parentName < other.m_parentName;
         if ( m_properties.count() != other.m_properties.count() ) return m_properties.count() < other.m_properties.count();
         if ( m_attributes.count() != other.m_attributes.count() ) return m_attributes.count() < other.m_attributes.count();
@@ -155,6 +163,7 @@ public:
 
     /// Not needed for QMap, but can still be useful
     bool operator==( const KoGenStyle &other ) const {
+        if ( m_type != other.m_type ) return false;
         if ( m_parentName != other.m_parentName ) return false;
         if ( m_properties.count() != other.m_properties.count() ) return false;
         if ( m_attributes.count() != other.m_attributes.count() ) return false;
@@ -176,6 +185,7 @@ public:
 
     // Note that the copy constructor and assignment operator are allowed.
 private:
+    int m_type;
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     QMap<QString, QString> m_properties;
