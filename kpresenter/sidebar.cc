@@ -375,7 +375,7 @@ void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
         it = it->nextItem();
     } while ( it );
     if ( ! sticky )
-        kdWarning() << "Item for page " << pagenr << " not found" << endl;
+        kdWarning(33001) << "Item for page " << pagenr << " not found" << endl;
 }
 
 // add a thumb item without recreating all thumbs
@@ -569,7 +569,7 @@ void OutlineSlideItem::update()
     QPtrList<KPObject> list(m_page->objectList());
     for ( int j = m_page->objNums() - 1; j >= 0; --j ) {
         KPObject* object = list.at( j );
-        OutlineObjectItem *item = new OutlineObjectItem( this, object, j+1, false );
+        OutlineObjectItem *item = new OutlineObjectItem( this, object, j+1, object->isSticky() );
         item->setDragEnabled( false );
         if ( object->isSelected() )
             ooi = item;
@@ -589,7 +589,7 @@ void OutlineSlideItem::update()
             header = object;
         else if( doc->hasFooter() && doc->isFooter( object ) )
             footer = object;
-        else if( ! doc->isHeader( object ) && ! doc->isFooter( object ) ) {
+        else if( !doc->isHeader( object ) && !doc->isFooter( object ) ) {
             OutlineObjectItem *item = new OutlineObjectItem( this, object, 0, true );
             if ( object->isSelected() )
                 ooi = item;

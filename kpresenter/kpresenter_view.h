@@ -591,7 +591,7 @@ public:
     void changeVerticalAlignmentStatus(VerticalAlignmentType _type );
 
     void closeTextObject();
-    void deSelectAllObject();
+    void deSelectAllObjects();
 
     void insertDirectCursor(bool b);
     void updateDirectCursorButton();

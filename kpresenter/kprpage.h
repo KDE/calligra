@@ -50,8 +50,6 @@ class KPPartObject;
 class KPrPage
 {
 public:
-
-    // constructor - destructor
     KPrPage(KPresenterDoc *_doc);
     virtual ~KPrPage();
 
@@ -77,10 +75,7 @@ public:
     void insertObject(KPObject *_obj,int pos);
     void completeLoading( bool _clean, int lastObj );
 
-
-
     KoRect getPageRect() const;
-
     QRect getZoomPageRect()const;
 
     void setObjectList( QPtrList<KPObject> _list ) {

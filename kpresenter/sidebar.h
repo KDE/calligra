@@ -76,8 +76,6 @@ private:
     int offsetY;
 };
 
-
-
 class Outline: public KListView
 {
     Q_OBJECT

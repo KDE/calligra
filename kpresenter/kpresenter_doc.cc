@@ -2221,7 +2221,7 @@ void KPresenterDoc::movePageTo( int oldPos, int newPos )
     emit sig_updateMenuBar();
 }
 
-QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theFile )
+QString KPresenterDoc::templateFileName( bool chooseTemplate, const QString &theFile )
 {
     QString fileName;
     if ( !chooseTemplate ) {
@@ -2232,7 +2232,8 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
     } else {
         QString _template;
         if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
-                                           "", QString::null, QString::null, KoTemplateChooseDia::OnlyTemplates,
+                                           "", QString::null, QString::null,
+                                           KoTemplateChooseDia::OnlyTemplates,
                                            "kpresenter_template") == KoTemplateChooseDia::Cancel )
             return QString::null;
         QFileInfo fileInfo( _template );
@@ -2255,7 +2256,7 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
 {
     kdDebug(33001) << "KPresenterDoc::insertNewPage " << _page << endl;
 
-    QString fileName=templateFileName(chooseTemplate, theFile );
+    QString fileName=templateFileName(chooseTemplate, theFile);
     if(fileName.isEmpty())
         return -1;
 
@@ -2275,7 +2276,7 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
 
     objStartY = 0;
 
-    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(cmdName ,_page, newpage, this );
+    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(cmdName, _page, newpage, this);
     cmd->execute();
     addCommand(cmd);
 
@@ -3365,7 +3366,7 @@ void KPresenterDoc::removeView( KoView *_view )
     KoDocument::removeView( _view );
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->deSelectAllObject();
+        static_cast<KPresenterView*>(it.current())->deSelectAllObjects();
 }
 
 void KPresenterDoc::updateStyleListOrder( const QStringList &list )

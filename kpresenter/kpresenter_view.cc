@@ -193,8 +193,6 @@ static const char * const pagedown_xpm[] = {
     "##############"
 };
 
-/*****************************************************************/
-/* class KPresenterFrame                     */
 KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const char *_name )
     : KoView( _doc, _parent, _name )
 {
@@ -435,9 +433,9 @@ KPresenterView::~KPresenterView()
 
 void KPresenterView::setupPrinter( KPrinter &prt )
 {
-    m_canvas->deSelectAllObj();
-    m_pKPresenterDoc->recalcVariables(  VT_TIME );
-    m_pKPresenterDoc->recalcVariables(  VT_DATE );
+    deSelectAllObjects();
+    m_pKPresenterDoc->recalcVariables( VT_TIME );
+    m_pKPresenterDoc->recalcVariables( VT_DATE );
     prt.setMinMax( 1, m_pKPresenterDoc->getPageNums() );
     prt.setFromTo( 1, m_pKPresenterDoc->getPageNums() );
     prt.setOption( "kde-range", m_pKPresenterDoc->selectedForPrinting() );
@@ -459,13 +457,13 @@ void KPresenterView::unZoomDocument(int &dpiX,int &dpiY)
     bool doZoom=false;
     dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
     dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
-    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( 100, dpiX, dpiY );
+    zoomHandler()->setZoomAndResolution( 100, dpiX, dpiY );
     m_pKPresenterDoc->newZoomAndResolution( false, true /* for printing*/ );
 }
 
 void KPresenterView::zoomDocument(int zoom)
 {
-    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     m_pKPresenterDoc->newZoomAndResolution( false, false );
     updateRuler();
 }
@@ -476,7 +474,7 @@ void KPresenterView::print( KPrinter &prt )
     float top_margin = 0.0;
     int dpiX=0;
     int dpiY=0;
-    int oldZoom = m_pKPresenterDoc->zoomHandler()->zoom();
+    int oldZoom = zoomHandler()->zoom();
     bool displayFieldCode = m_pKPresenterDoc->getVariableCollection()->variableSetting()->displayFieldCode();
     if ( displayFieldCode )
     {
@@ -506,14 +504,14 @@ void KPresenterView::print( KPrinter &prt )
     if ( displayFieldCode )
     {
         m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFieldCode(true);
-        m_pKPresenterDoc->recalcVariables(  VT_ALL );
+        m_pKPresenterDoc->recalcVariables( VT_ALL );
     }
 
 
     m_canvas->repaint();
     kdDebug(33001) << "KPresenterView::print zoom&res reset" << endl;
     m_pKPresenterDoc->getVariableCollection()->variableSetting()->setLastPrint(QDate::currentDate());
-    m_pKPresenterDoc->recalcVariables(  VT_DATE );
+    m_pKPresenterDoc->recalcVariables( VT_DATE );
 }
 
 void KPresenterView::editCut()
@@ -542,7 +540,7 @@ void KPresenterView::editPaste()
 {
     if ( !m_canvas->currentTextObjectView() ) {
         m_canvas->setToolEditMode( TEM_MOUSE );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         QMimeSource *data = QApplication::clipboard()->data();
         if ( data->provides( "text/uri-list" ) )
         {
@@ -590,7 +588,7 @@ void KPresenterView::editDeSelectAll()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( !edit ) {
         m_canvas->setToolEditMode( TEM_MOUSE );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
     }
     else
         edit->selectAll(false);
@@ -654,13 +652,13 @@ void KPresenterView::insertPage()
 void KPresenterView::insertPicture()
 {
     m_canvas->setToolEditMode( INS_PICTURE );
-    m_canvas->deSelectAllObj();
+    deSelectAllObjects();
 
     QStringList mimetypes;
     mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( /*QString::null*/m_pKPresenterDoc->picturePath(), QString::null, 0, 0, true );
+    KFileDialog fd( m_pKPresenterDoc->picturePath(), QString::null, 0, 0, true );
     fd.setCaption( i18n( "Insert Picture" ) );
     fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
@@ -688,7 +686,7 @@ void KPresenterView::insertPicture()
 void KPresenterView::insertPicture(const QString &file)
 {
     m_canvas->setToolEditMode( INS_PICTURE );
-    m_canvas->deSelectAllObj();
+    deSelectAllObjects();
 
     if ( !file.isEmpty() )
         m_canvas->activePage()->setInsPictureFile( file );
@@ -748,7 +746,7 @@ void KPresenterView::toolsMouse()
         m_canvas->setToolEditMode( TEM_MOUSE, false );
     else
         actionToolsMouse->setChecked(true);
-    //m_canvas->deSelectAllObj();
+    //deSelectAllObjects();
 }
 
 void KPresenterView::toolsRotate()
@@ -794,7 +792,7 @@ void KPresenterView::toolsLine()
     if ( actionToolsLine->isChecked() )
     {
         m_canvas->setToolEditMode( INS_LINE, false );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_currentLineTool = LtLine;
         actionToolsLinePopup->setIcon("line");
     }
@@ -825,7 +823,7 @@ void KPresenterView::toolsRectangle()
 {
     if ( actionToolsRectangle->isChecked() )
     {
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_canvas->setToolEditMode( INS_RECT, false );
         m_currentShapeTool = StRectangle;
         actionToolsShapePopup->setIcon("rectangle");
@@ -838,7 +836,7 @@ void KPresenterView::toolsCircleOrEllipse()
 {
     if ( actionToolsCircleOrEllipse->isChecked() )
     {
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_canvas->setToolEditMode( INS_ELLIPSE, false );
         m_currentShapeTool = StCircle;
         actionToolsShapePopup->setIcon("circle");
@@ -851,7 +849,7 @@ void KPresenterView::toolsPie()
 {
     if ( actionToolsPie->isChecked() )
     {
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_canvas->setToolEditMode( INS_PIE, false );
         m_currentShapeTool = StPie;
         actionToolsShapePopup->setIcon("pie");
@@ -864,7 +862,7 @@ void KPresenterView::toolsDiagramm()
 {
     if ( actionToolsDiagramm->isChecked() )
     {
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_canvas->setToolEditMode( INS_DIAGRAMM, false );
 
         KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
@@ -884,7 +882,7 @@ void KPresenterView::toolsTable()
 {
     if ( actionToolsTable->isChecked() )
     {
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_canvas->setToolEditMode( INS_TABLE, false );
 
         KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kspread" );
@@ -904,7 +902,7 @@ void KPresenterView::toolsFormula()
 {
     if ( actionToolsFormula->isChecked() )
     {
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_canvas->setToolEditMode( INS_FORMULA, false );
 
         KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kformula" );
@@ -924,7 +922,7 @@ void KPresenterView::toolsText()
 {
     if ( actionToolsText->isChecked() )
     {
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_canvas->setToolEditMode( INS_TEXT, false );
     }
     else
@@ -935,7 +933,7 @@ void KPresenterView::toolsAutoform()
 {
     if ( actionToolsAutoform->isChecked() )
     {
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_canvas->setToolEditMode( TEM_MOUSE, false );
         if ( afChoose ) {
             delete afChoose;
@@ -976,7 +974,7 @@ void KPresenterView::toolsFreehand()
 {
     if ( actionToolsFreehand->isChecked() ) {
         m_canvas->setToolEditMode( INS_FREEHAND, false );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_currentLineTool = LtFreehand;
         actionToolsLinePopup->setIcon("freehand");
     }
@@ -988,7 +986,7 @@ void KPresenterView::toolsPolyline()
 {
     if ( actionToolsPolyline->isChecked() ) {
         m_canvas->setToolEditMode( INS_POLYLINE, false );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_currentLineTool = LtPolyline;
         actionToolsLinePopup->setIcon("polyline");
     }
@@ -1000,7 +998,7 @@ void KPresenterView::toolsQuadricBezierCurve()
 {
     if ( actionToolsQuadricBezierCurve->isChecked() ) {
         m_canvas->setToolEditMode( INS_QUADRICBEZIERCURVE, false );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_currentLineTool = LtQuadricBezier;
         actionToolsLinePopup->setIcon("quadricbeziercurve");
     }
@@ -1012,7 +1010,7 @@ void KPresenterView::toolsCubicBezierCurve()
 {
     if ( actionToolsCubicBezierCurve->isChecked() ) {
         m_canvas->setToolEditMode( INS_CUBICBEZIERCURVE, false );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_currentLineTool = LtCubicBezier;
         actionToolsLinePopup->setIcon("cubicbeziercurve");
     }
@@ -1024,7 +1022,7 @@ void KPresenterView::toolsConvexOrConcavePolygon()
 {
     if ( actionToolsConvexOrConcavePolygon->isChecked() ) {
         m_canvas->setToolEditMode( INS_POLYGON, false );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_currentShapeTool = StPolygon;
         actionToolsShapePopup->setIcon("polygon");
     }
@@ -1055,7 +1053,7 @@ void KPresenterView::toolsClosedFreehand()
 {
     if ( actionToolsClosedFreehand->isChecked() ) {
         m_canvas->setToolEditMode( INS_CLOSED_FREEHAND, false );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_currentClosedLineTool = CltFreehand;
         actionToolsClosedLinePopup->setIcon("closed_freehand");
     }
@@ -1067,7 +1065,7 @@ void KPresenterView::toolsClosedPolyline()
 {
     if ( actionToolsClosedPolyline->isChecked() ) {
         m_canvas->setToolEditMode( INS_CLOSED_POLYLINE, false );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_currentClosedLineTool = CltPolyline;
         actionToolsClosedLinePopup->setIcon("closed_polyline");
     }
@@ -1079,7 +1077,7 @@ void KPresenterView::toolsClosedQuadricBezierCurve()
 {
     if ( actionToolsClosedQuadricBezierCurve->isChecked() ) {
         m_canvas->setToolEditMode( INS_CLOSED_QUADRICBEZIERCURVE, false );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_currentClosedLineTool = CltQuadricBezier;
         actionToolsClosedLinePopup->setIcon("closed_quadricbeziercurve");
     }
@@ -1091,7 +1089,7 @@ void KPresenterView::toolsClosedCubicBezierCurve()
 {
     if ( actionToolsClosedCubicBezierCurve->isChecked() ) {
         m_canvas->setToolEditMode( INS_CLOSED_CUBICBEZIERCURVE, false );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         m_currentClosedLineTool = CltCubicBezier;
         actionToolsClosedLinePopup->setIcon("closed_cubicbeziercurve");
     }
@@ -1405,7 +1403,7 @@ void KPresenterView::screenPresStructView()
     presStructView = 0;
 
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->deSelectAllObj();
+    deSelectAllObjects();
 
     presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
     presStructView->setCaption( i18n( "Presentation Structure Viewer" ) );
@@ -1474,7 +1472,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
             }
         }
 
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         presStarted = true;
 #if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
@@ -3424,7 +3422,7 @@ void KPresenterView::afChooseOk( const QString & c )
                                fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf",
                                KPresenterFactory::global() );
 
-    m_canvas->deSelectAllObj();
+    deSelectAllObjects();
     m_canvas->setToolEditMode( INS_AUTOFORM );
     m_canvas->setAutoForm( fileName );
 }
@@ -4344,7 +4342,7 @@ void KPresenterView::skipToPage( int num )
     refreshPageButton();
     //(Laurent) deselect object when we change page.
     //otherwise you can change object properties on other page
-    m_canvas->deSelectAllObj();
+    deSelectAllObjects();
     m_pKPresenterDoc->repaint( FALSE );
 
     m_pKPresenterDoc->displayActivePage( page );
@@ -4367,13 +4365,11 @@ void KPresenterView::updatePageParameter()
         cornersValue = page->getCornersValue(cornersValue);
         sharpnessValue = page->getSharpnessValue(sharpnessValue);
 
-        //QPixmap tmpPix;
         mirrorType = page->getPictureMirrorType(mirrorType);
         depth = page->getPictureDepth(depth);
         swapRGB = page->getPictureSwapRGB(swapRGB);
         grayscal = page->getPictureGrayscal(grayscal);
         bright = page->getPictureBright(bright);
-        //tmpPix = page->getPicturePixmap(); //### wtf?
 
         lineBegin=page->getLineEnd( lineBegin );
         lineEnd=page->getLineBegin( lineEnd );
@@ -4409,7 +4405,7 @@ void KPresenterView::restartPresStructView()
     delete presStructView;
     presStructView = 0;
 
-    m_canvas->deSelectAllObj();
+    deSelectAllObjects();
 
     presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
     presStructView->setCaption( i18n( "KPresenter - Presentation Structure Viewer" ) );
@@ -4627,12 +4623,9 @@ void KPresenterView::removeSideBarItem( int pos )
 void KPresenterView::updatePageInfo()
 {
     if (m_sbPageLabel)
-    {
-        //m_currentPage = QMIN( m_currentPage, m_doc->getPages()-1 );
-        m_sbPageLabel->setText( QString(" ")+i18n("Slide %1/%2").arg(getCurrPgNum()).arg(m_pKPresenterDoc->getPageNums())+' ' );
-
-    }
-    //slotUpdateRuler();
+        m_sbPageLabel->setText( QString(" ") +
+                                i18n("Slide %1/%2").arg(getCurrPgNum()).arg(m_pKPresenterDoc->getPageNums())+
+                                QString(" ") );
 }
 
 void KPresenterView::updateObjectStatusBarItem()
@@ -4659,7 +4652,7 @@ void KPresenterView::updateObjectStatusBarItem()
                 );
         }
         else
-            m_sbObjectLabel->setText( i18n( "%1 objects selected" ).arg( nbSelected ) );
+            m_sbObjectLabel->setText( i18n("%1 object selected", "%1 objects selected", nbSelected) );
     }
     else if ( sb && m_sbObjectLabel ) {
         removeStatusBarItem( m_sbObjectLabel );
@@ -4985,7 +4978,6 @@ void KPresenterView::extraAutoFormat()
     KoAutoFormatDia dia( this, 0, m_pKPresenterDoc->getAutoFormat() );
     dia.exec();
     m_pKPresenterDoc->startBackgroundSpellCheck(); // will do so if enabled
-
 }
 
 void KPresenterView::extraSpelling()
@@ -6092,7 +6084,7 @@ void KPresenterView::setZoomRect( const QRect & rect, bool drawRubber )
 
 void KPresenterView::setZoom( int zoom, bool updateViews )
 {
-    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(),
+    zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(),
                                                            QPaintDevice::x11AppDpiY());
     m_pKPresenterDoc->newZoomAndResolution(updateViews,false);
     m_pKPresenterDoc->updateZoomRuler();
@@ -6171,7 +6163,6 @@ QString KPresenterView::presentationDurationDataFormatChange( int _time )
     QTime time( 0, 0, 0 );
     return KGlobal::locale()->formatTime( time.addMSecs( _time ), true );
 }
-
 
 KPrPage * KPresenterView::stickyPage() const
 {
@@ -6428,7 +6419,7 @@ void KPresenterView::viewHelpLines()
     bool state=actionViewShowHelpLine->isChecked();
     m_pKPresenterDoc->setShowHelplines( state );
     m_pKPresenterDoc->updateHelpLineButton();
-    m_canvas->deSelectAllObj();
+    deSelectAllObjects();
     refreshRuler( state );
     m_pKPresenterDoc->repaint(false);
 }
@@ -6616,9 +6607,7 @@ void KPresenterView::removeComment()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
-    {
         edit->removeComment();
-    }
 }
 
 void KPresenterView::configureCompletion()
@@ -6882,7 +6871,7 @@ void KPresenterView::duplicateObj()
         double moveY = dlg->moveY();
         m_canvas->copyObjs();
         m_canvas->setToolEditMode( TEM_MOUSE );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
         QMimeSource *data = QApplication::clipboard()->data();
         QCString clip_str = KoStoreDrag::mimeType("application/x-kpresenter");
         if ( data->provides( clip_str ) )
@@ -7056,7 +7045,7 @@ void KPresenterView::changeVerticalAlignmentStatus(VerticalAlignmentType _type )
         actionAlignVerticalCenter->setChecked( true );
         break;
     case KP_TOP:
-        actionAlignVerticalTop->setChecked( true);
+        actionAlignVerticalTop->setChecked( true );
         break;
     case KP_BOTTOM:
         actionAlignVerticalBottom->setChecked( true );
@@ -7152,7 +7141,7 @@ void KPresenterView::testAndCloseAllTextObjectProtectedContent()
     if ( edit && edit->kpTextObject()->isProtectContent())
     {
         m_canvas->setToolEditMode( TEM_MOUSE );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
     }
 
 }
@@ -7203,11 +7192,11 @@ void KPresenterView::closeTextObject()
     if ( edit)
     {
         m_canvas->setToolEditMode( TEM_MOUSE );
-        m_canvas->deSelectAllObj();
+        deSelectAllObjects();
     }
 }
 
-void KPresenterView::deSelectAllObject()
+void KPresenterView::deSelectAllObjects()
 {
     m_canvas->deSelectAllObj();
 }

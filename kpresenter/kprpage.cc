@@ -3156,7 +3156,6 @@ KCommand *KPrPage::stickyObj(bool _sticky, KPrPage * currentPage)
     return stickyCmd;
 }
 
-
 KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
 {
     ShadowCmd *shadowCmd=0L;
