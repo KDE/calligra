@@ -1366,6 +1366,7 @@ KWTextFrameSet::~KWTextFrameSet()
     textDocument()->takeFlow();
     //kdDebug(32001) << "KWTextFrameSet::~KWTextFrameSet" << endl;
     m_doc = 0L;
+    delete m_textobj;
 }
 
 // This struct is used for sorting frames.
