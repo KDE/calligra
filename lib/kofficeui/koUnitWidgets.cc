@@ -48,6 +48,12 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_INCH ), m_base->m_unit );
 		else if( s.endsWith( "pt" ) )
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_PT ), m_base->m_unit );
+		else if( s.endsWith( "dd" ) )
+			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_DD ), m_base->m_unit );
+		else if( s.endsWith( "cc" ) )
+			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_CC ), m_base->m_unit );
+		else if( s.endsWith( "pi" ) )
+			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_PI ), m_base->m_unit );
 		else if(
 			s.at( pos - 2 ).isDigit() &&
 			(
