@@ -5317,8 +5317,6 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         if( !comment.isEmpty() )
             setComment( comment );
     }
-
-
     return true;
 }
 
@@ -5329,6 +5327,28 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
     d->extra()->validity = new KSpreadValidity;
     if ( element.hasAttribute( "table:condition" ) )
         kdDebug()<<" element.attribute( table:condition ) "<<element.attribute( "table:condition" )<<endl;
+    if ( element.hasAttribute( "table:allow-empty-cell" ) )
+    {
+        //todo implement it into kspread
+    }
+    if ( element.hasAttribute( "table:base-cell-address" ) )
+    {
+        //todo what is it ?
+    }
+
+    //help is not implemented into kspread
+    QDomElement help = element.namedItem( "table:help-message" ).toElement();
+    if ( !help.isNull() )
+    {
+        if ( help.hasAttribute( "table:title" ) )
+            kdDebug()<<"help.attribute( table:title ) :"<<help.attribute( "table:title" )<<endl;
+        if ( help.hasAttribute( "table:display" ) )
+            kdDebug()<<"help.attribute( table:display ) :"<<help.attribute( "table:display" )<<endl;
+        QDomElement attrText = help.namedItem( "text:p" ).toElement();
+        if ( !attrText.isNull() )
+            kdDebug()<<"help text :"<<attrText.text()<<endl;
+    }
+
     QDomElement error = element.namedItem( "table:error-message" ).toElement();
     if ( !error.isNull() )
     {
@@ -5347,6 +5367,12 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
                 kdDebug()<<"validation : message type unknown  :"<<str<<endl;
         }
 
+        if ( error.hasAttribute( "table:display" ) )
+        {
+            kdDebug()<<" display message :"<<error.attribute( "table:display" )<<endl;
+            //todo implement it into kspread
+            //d->extra()->validity->m_displayMessage = (error.attribute( "table:display" )=="true");
+        }
         QDomElement attrText = error.namedItem( "text:p" ).toElement();
         if ( !attrText.isNull() )
             d->extra()->validity->message = attrText.text();
