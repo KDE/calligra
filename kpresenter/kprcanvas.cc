@@ -397,7 +397,7 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
 
 
 void KPrCanvas::drawObjects( QPainter *painter, const QPtrList<KPObject> &objects, SelectionMode selectionMode,
-                             bool contour, KPTextView * textView ) const
+                             bool contour, KPTextView * textView, int pageNum ) const
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current(); ++it )
@@ -409,7 +409,7 @@ void KPrCanvas::drawObjects( QPainter *painter, const QPtrList<KPObject> &object
                   || it.current()->isProtect() ) )
             selMode = SM_PROTECT;
 
-        it.current()->draw( painter, m_view->zoomHandler(), selMode, (it.current()->isSelected()) && contour );
+        it.current()->draw( painter, m_view->zoomHandler(), pageNum, selMode, (it.current()->isSelected()) && contour );
 
         it.current()->setSubPresStep( 0 );
         it.current()->doSpecificEffects( false );
@@ -449,12 +449,12 @@ void KPrCanvas::drawObjectsPres( QPainter *painter, const QPtrList<KPObject> &_o
             objects.append( it.current() );
         }
     }
-    drawObjects( painter, objects, SM_NONE, false, NULL );
+    drawObjects( painter, objects, SM_NONE, false, NULL, step.m_pageNumber );
 }
 
 
 void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects,
-                                 SelectionMode selectionMode ) const
+                                 SelectionMode selectionMode, int pageNum ) const
 {
     QPtrList<KPObject> objects;
 
@@ -475,7 +475,7 @@ void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const QP
             objects.append( it.current() );
         }
     }
-    drawObjects( painter, objects, selectionMode, drawContour, textView );
+    drawObjects( painter, objects, selectionMode, drawContour, textView, pageNum );
 }
 
 
@@ -484,10 +484,11 @@ void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
 {
     KoRect rect = m_view->zoomHandler()->unzoomRect(_rect);
 
+    int pageNum = m_view->kPresenterDoc()->pageList().findRef( page );
     //objects in current page
-    drawObjectsEdit( painter, rect, page->objectList(), selectionMode );
+    drawObjectsEdit( painter, rect, page->objectList(), selectionMode, pageNum );
     //draw sticky object
-    drawObjectsEdit( painter, rect, stickyPage()->objectList(), selectionMode );
+    drawObjectsEdit( painter, rect, stickyPage()->objectList(), selectionMode, pageNum );
 }
 
 
@@ -581,13 +582,13 @@ void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2) const
 
 // This one is used to generate the pixmaps for the HTML presentation,
 // for the pres-structure-dialog, for the sidebar previews, for template icons.
-void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj ) const
+void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj, int pageNum ) const
 {
     QPtrListIterator<KPObject> it( obj );
     for ( ; it.current(); ++it ) {
         if ( objectIsAHeaderFooterHidden( it.current() ) )
             continue;
-        it.current()->draw( painter, m_view->zoomHandler(), SM_NONE, false );
+        it.current()->draw( painter, m_view->zoomHandler(), pageNum, SM_NONE, false );
     }
 }
 
@@ -3495,14 +3496,14 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
         }
     }
 
-    drawAllObjectsInPage( &p, _list );
+    drawAllObjectsInPage( &p, _list, pgnum );
 
     //draw sticky object
     //the numbers for the sticky page have to be recalculated
     KPrPage* saveActivePage = m_activePage;
     doc->displayActivePage( doc->pageList().at( pgnum ) );
     setActivePage( doc->pageList().at( pgnum ) );
-    drawAllObjectsInPage( &p, stickyPage()->objectList() );
+    drawAllObjectsInPage( &p, stickyPage()->objectList(), pgnum );
     setActivePage( saveActivePage );
 
     editMode = _editMode;
@@ -3596,7 +3597,8 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
     }
 
     //TODO add global presentation speed
-    m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, allObjects, m_view, 1 );
+    //tz m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, allObjects, m_view, 1 );
+    m_effectHandler = new EffectHandler( m_step, goingBack, this, &screen_orig, allObjects, m_view, 1 );
     if ( m_effectHandler->doEffect() )
     {
         delete m_effectHandler;
@@ -4903,10 +4905,11 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     KoSize objSize = kpobject->getSize();
     KoRect objRect=kpobject->getBoundingRect();
     KoRect pageRect=m_activePage->getPageRect();
+    int pageNum = m_view->kPresenterDoc()->pageList().findRef( m_activePage );
     QPainter p;
     p.begin( this );
     kpobject->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
-    kpobject->draw( &p, m_view->zoomHandler(), SM_MOVERESIZE,
+    kpobject->draw( &p, m_view->zoomHandler(), pageNum, SM_MOVERESIZE,
                     (kpobject->isSelected()) && drawContour);
     switch ( _modType ) {
     case MT_RESIZE_LU: {
@@ -5007,7 +5010,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     } break;
     default: break;
     }
-    kpobject->draw( &p, m_view->zoomHandler(), SM_MOVERESIZE,
+    kpobject->draw( &p, m_view->zoomHandler(), pageNum, SM_MOVERESIZE,
                     (kpobject->isSelected()) && drawContour );
     kpobject->moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
     p.end();

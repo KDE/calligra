@@ -78,7 +78,7 @@ public:
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
 
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                       SelectionMode selectionMode, bool drawContour = FALSE );
+                       int /* page */, SelectionMode selectionMode, bool drawContour = FALSE );
 
     QPixmap getOriginalPixmap();
     PictureMirrorType getPictureMirrorType() const { return mirrorType; }

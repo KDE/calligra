@@ -366,6 +366,16 @@ void KPTextObject::shadowCompatibility()
 }
 
 
+void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
+                          int page, bool drawingShadow, bool drawContour )
+{
+    // Never draw shadow (in text objects, it's a character property, not an object property)
+    KPrPage *p = m_doc->pageList().at( page );
+    recalcPageNum( p ); 
+    if ( drawingShadow ) return;
+    paint( _painter, _zoomHandler, false, 0L, true, drawContour );
+}
+
 // Standard paint method for KP2DObjects.
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                           bool drawingShadow, bool drawContour )

@@ -217,7 +217,7 @@ public:
 
     // the main drawing method.
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                       SelectionMode selectionMode, bool drawContour = FALSE );
+                       int /*pageNum*/, SelectionMode selectionMode, bool drawContour = FALSE );
 
     virtual bool contains( const KoPoint &_point ) const;
     virtual bool intersects( const KoRect & _rect ) const;
@@ -379,7 +379,7 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                       SelectionMode selectionMode, bool drawContour = FALSE );
+                       int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
     virtual void saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto ) const;
     QString saveOasisStrokeStyle( KoGenStyles& mainStyles ) const;
 
@@ -402,6 +402,11 @@ protected:
      *
      * This method isn't pure virtual because some objects implement draw() directly.
      */
+    virtual void paint( QPainter* painter, KoZoomHandler* zoomHandler,
+                        int page, bool drawingShadow, bool drawContour =  FALSE ) 
+    {
+      paint( painter, zoomHandler, drawingShadow, drawContour );
+    }
     virtual void paint( QPainter* /*painter*/, KoZoomHandler* /*zoomHandler*/,
                         bool /*drawingShadow*/, bool /*drawContour*/ =  FALSE ) {}
     QPen pen;

@@ -39,6 +39,7 @@
 #include "global.h"
 #include <koRect.h>
 #include <kotextformat.h>
+#include "presstep.h"
 
 class KURL;
 class KoTextFormatInterface;
@@ -434,36 +435,6 @@ signals:
     void sigMouseWheelEvent( QWheelEvent * );
 
 protected:
-
-    /**
-     * Class for keeping a presentation step
-     * m_pageNumber the current page number 0 based
-     * m_step       the current effect step 0 based
-     * m_subStep    the current sub step 0 based for text animation
-     * m_animate    true if the current step should be animated
-     * m_animateSub true if the current sub step should be animated
-     */
-    class PresStep
-    {
-    public:
-        PresStep()
-        : m_pageNumber( 0 ), m_step( 0 ), m_subStep( 0 ),
-          m_animate( false ), m_animateSub( false )
-        {};
-        PresStep( unsigned int pageNumber, unsigned int step, unsigned int subStep,
-                  bool animate = false, bool animateSub = false )
-        : m_pageNumber( pageNumber ), m_step( step ), m_subStep( subStep ),
-          m_animate( animate ), m_animateSub( animateSub )
-        {};
-
-        int m_pageNumber;
-        int m_step;
-        int m_subStep;
-        bool m_animate;
-        bool m_animateSub;
-    };
-
-
     struct PicCache
     {
         QPicture pic;
@@ -486,7 +457,7 @@ protected:
     /**
      * Draw obj to painter.
      */
-    void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj ) const;
+    void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj, int pageNum ) const;
 
     /**
      * Draw _objects shown at step to painter.
@@ -499,7 +470,8 @@ protected:
      * Only rect is painted.
      * This method is used for edit mode.
      */
-    void drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects, SelectionMode selectionMode ) const;
+    void drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects, 
+                          SelectionMode selectionMode, int page ) const;
 
     /**
      * Draw _objects to painter.
@@ -509,7 +481,7 @@ protected:
      * This method is used by drawObjectsPres and drawObjectsEdit.
      */
     void drawObjects( QPainter *painter, const QPtrList<KPObject> &objects, SelectionMode selectionMode,
-                      bool contour, KPTextView * textView ) const;
+                      bool contour, KPTextView * textView, int pageNum ) const;
 
     /**
      * Draw _objects of page to painter.

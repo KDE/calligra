@@ -285,13 +285,13 @@ double KPGroupObject::load( const QDomElement &element, KPresenterDoc *doc)
 }
 
 void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler,
-                          SelectionMode selectionMode, bool drawContour )
+                          int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
-        it.current()->draw( _painter, _zoomhandler, selectionMode, drawContour );
+        it.current()->draw( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
 
-    KPObject::draw( _painter, _zoomhandler, selectionMode, drawContour );
+    KPObject::draw( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
 }
 
 void KPGroupObject::updateSizes( double fx, double fy )

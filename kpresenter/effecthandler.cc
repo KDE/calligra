@@ -32,9 +32,9 @@
 #include <qpaintdevice.h>
 
 
-EffectHandler::EffectHandler( int step, int subStep, bool back, QPaintDevice *dst, QPixmap *src,
+EffectHandler::EffectHandler( PresStep step, bool back, QPaintDevice *dst, QPixmap *src,
                               const QPtrList<KPObject> &objects, KPresenterView *view, int _presSpeed )
-: m_effectStep(0), m_step(step), m_subStep(subStep), m_back(back), m_dst(dst),
+: m_effectStep(0), m_step(step), m_back(back), m_dst(dst),
   m_paint(*src), m_objects(objects), m_view(view), m_soundEffect(QString::null),
   m_objectTimer(0)
 {
@@ -44,8 +44,8 @@ EffectHandler::EffectHandler( int step, int subStep, bool back, QPaintDevice *ds
     for ( ; it.current(); ++it )
     {
         KPObject *object = it.current();
-        if ( object->getAppearStep() == m_step
-          && ( m_subStep == 0
+        if ( object->getAppearStep() == m_step.m_step
+          && ( m_step.m_subStep == 0
             || ( object->getType() == OT_TEXT
               && object->getEffect2() == EF2T_PARA ) ) )
         {
@@ -60,7 +60,7 @@ EffectHandler::EffectHandler( int step, int subStep, bool back, QPaintDevice *ds
                 m_objectTimer = object->getAppearTimer();
             }
         }
-        else if ( object->getDisappear() && object->getDisappearStep() == m_step )
+        else if ( object->getDisappear() && object->getDisappearStep() == m_step.m_step )
         {
             m_disappearEffectObjects.append( object );
             if ( object->getDisappearSoundEffect() )
@@ -961,15 +961,15 @@ void EffectHandler::drawObject( KPObject *object, int x, int y, QPixmap *screen,
 
     p.translate( x, y );
 
-    if ( object->getAppearStep() == m_step && ! m_back )
+    if ( object->getAppearStep() == m_step.m_step && ! m_back )
     {
-        object->setSubPresStep( m_subStep );
+        object->setSubPresStep( m_step.m_subStep );
         object->doSpecificEffects( true );
     }
 
-    object->draw( &p, m_view->zoomHandler(), SM_NONE, false );
+    object->draw( &p, m_view->zoomHandler(), m_step.m_pageNumber, SM_NONE, false );
 
-    if ( object->getAppearStep() == m_step && ! m_back )
+    if ( object->getAppearStep() == m_step.m_step && ! m_back )
     {
         object->setSubPresStep( 0 );
         object->doSpecificEffects( false );
@@ -982,18 +982,18 @@ void EffectHandler::drawObject( KPObject *object, int x, int y, QPixmap *screen,
     KPObject *obj;
     while ( ( obj = m_objects.next() ) != 0 )
     {
-        if ( ( obj->getAppearStep() < m_step
-            || obj->getAppearStep() == m_step && !m_appearEffectObjects.containsRef( obj ) )
-            && ( ( obj->getDisappear() && obj->getDisappearStep() > m_step ) || ! obj->getDisappear() )
+        if ( ( obj->getAppearStep() < m_step.m_step
+            || obj->getAppearStep() == m_step.m_step && !m_appearEffectObjects.containsRef( obj ) )
+            && ( ( obj->getDisappear() && obj->getDisappearStep() > m_step.m_step ) || ! obj->getDisappear() )
             && m_view->zoomHandler()->zoomRect( obj->getRealRect()).intersects(*m_repaintRects.getLast()) )
         {
-            if ( obj->getAppearStep() == m_step && ! m_back )
+            if ( obj->getAppearStep() == m_step.m_step && ! m_back )
             {
-                obj->setSubPresStep( m_subStep );
+                obj->setSubPresStep( m_step.m_subStep );
                 obj->doSpecificEffects( true );
             }
-            obj->draw( &p, m_view->zoomHandler(), SM_NONE, false );
-            if ( obj->getAppearStep() == m_step && ! m_back )
+            obj->draw( &p, m_view->zoomHandler(), m_step.m_pageNumber, SM_NONE, false );
+            if ( obj->getAppearStep() == m_step.m_step && ! m_back )
             {
                 obj->setSubPresStep( 0 );
                 obj->doSpecificEffects( false );

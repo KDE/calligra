@@ -579,7 +579,7 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 }
 
 void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                           SelectionMode selectionMode, bool drawContour )
+                           int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     if ( image.isNull() ) return;
 
@@ -691,7 +691,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomHandler, selectionMode, drawContour );
+    KPObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
 }
 
 QPixmap KPPixmapObject::getOriginalPixmap()

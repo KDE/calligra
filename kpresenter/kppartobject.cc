@@ -91,9 +91,8 @@ void KPPartObject::loadOasis(const QDomElement &element, KoOasisContext&context,
         objectName = element.attribute("draw:name");
 }
 
-
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
-                         SelectionMode selectionMode, bool drawContour )
+                         int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     updateChildGeometry();
     double ow = ext.width();
@@ -146,7 +145,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
     paint( _painter, _zoomhandler, selectionMode, drawContour );
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomhandler, selectionMode, drawContour );
+    KPObject::draw( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
 }
 
 void KPPartObject::slot_changed( KoChild *_koChild )

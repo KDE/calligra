@@ -85,6 +85,8 @@ public:
     virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto ) const;
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
+                        int page, bool drawingShadow, bool drawContour );
+    virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour );
     void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, KoTextCursor* cursor,
                 bool resetChanged, bool drawContour );

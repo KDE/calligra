@@ -927,7 +927,11 @@ double KPObject::load(const QDomElement &element) {
         if(e.hasAttribute(attrEffect2))
             effect2=static_cast<Effect2>(e.attribute(attrEffect2).toInt());
         if(e.hasAttribute("speed"))
+        {
             m_appearSpeed=static_cast<EffectSpeed>(e.attribute("speed").toInt());
+            // this is a safty net as we had once speeds up to ten
+            m_appearSpeed = m_appearSpeed > ES_FAST ? ES_FAST : m_appearSpeed;
+        }
     }
     else {
         effect=EF_NONE;
@@ -956,7 +960,11 @@ double KPObject::load(const QDomElement &element) {
         if(e.hasAttribute(attrNum))
             disappearStep=e.attribute(attrNum).toInt();
         if(e.hasAttribute("speed"))
+        {
             m_disappearSpeed=static_cast<EffectSpeed>(e.attribute("speed").toInt());
+            // this is a safty net as we had once speeds up to ten
+            m_disappearSpeed = m_appearSpeed > ES_FAST ? ES_FAST : m_appearSpeed;
+        }
     }
     else {
         effect3=EF3_NONE;
@@ -1477,7 +1485,7 @@ QColor KPObject::retrieveColor(const QDomElement &element, const QString &cattr,
 }
 
 void KPObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                     SelectionMode selectionMode, bool drawContour )
+                     int /*pageNum*/, SelectionMode selectionMode, bool drawContour )
 {
     if ( selectionMode != SM_NONE && !drawContour )
         paintSelection( _painter, _zoomHandler, selectionMode );
@@ -1719,7 +1727,7 @@ double KPShadowObject::load(const QDomElement &element)
 }
 
 void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                           SelectionMode selectionMode, bool drawContour )
+                           int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     double ox = orig.x();
     double oy = orig.y();
@@ -1741,13 +1749,13 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
             getShadowCoords( sx, sy );
 
             _painter->translate( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ) );
-            paint( _painter, _zoomHandler, true, drawContour );
+            paint( _painter, _zoomHandler, pageNum, true, drawContour );
         }
         else
         {
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
             rotateObjectWithShadow(_painter, _zoomHandler);
-            paint( _painter, _zoomHandler, true, drawContour );
+            paint( _painter, _zoomHandler, pageNum, true, drawContour );
         }
 
         pen = tmpPen;
@@ -1759,11 +1767,11 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     if ( angle != 0 )
         rotateObject(_painter,_zoomHandler);
-    paint( _painter, _zoomHandler, false, drawContour );
+    paint( _painter, _zoomHandler, pageNum, false, drawContour );
 
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomHandler, selectionMode, drawContour );
+    KPObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
 }
 
 QPen KPShadowObject::defaultPen() const

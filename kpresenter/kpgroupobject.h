@@ -73,7 +73,7 @@ public:
     virtual bool saveOasis(KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj) const;
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
-                       SelectionMode selectionMode, bool drawContour = FALSE );
+                       int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
 
     void addObjects( KPObject * obj );
 

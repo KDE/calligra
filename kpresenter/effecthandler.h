@@ -26,6 +26,7 @@
 #include <qstring.h>
 
 #include "global.h"
+#include "presstep.h"
 
 class QPaintDevice;
 class KPObject;
@@ -44,7 +45,7 @@ public:
    * objects all objects of the page
    * view    pointer to the active KPresenterView
    */
-  EffectHandler( int step, int subStep, bool back, QPaintDevice *dst, QPixmap *src, const QPtrList<KPObject> &objects, KPresenterView *view, int _presSpeed );
+  EffectHandler( PresStep step, bool back, QPaintDevice *dst, QPixmap *src, const QPtrList<KPObject> &objects, KPresenterView *view, int _presSpeed );
 
   /**
    * Delete the EffectHandler.
@@ -263,12 +264,7 @@ protected:
   /**
    * The effect step which should be animated.
    */
-  int m_step;
-
-  /**
-   * The effect sub step which should be animated.
-   */
-  int m_subStep;
+  PresStep m_step;
 
   /**
    * True when the effect step was reached by going backwards
