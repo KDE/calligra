@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,29 +23,24 @@
 
 */
 
-#ifndef CreateTextCmd_h_
-#define CreateTextCmd_h_
+#ifndef __CreateTextCmd_h__
+#define __CreateTextCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
-class GDocument;
 class GText;
 
-class CreateTextCmd : public Command {
+class CreateTextCmd : public Command
+{
 public:
-  CreateTextCmd (GDocument* doc, GText* obj);
-  CreateTextCmd (GDocument* doc, const Coord& p, const QString &str);
+  CreateTextCmd(GDocument *aGDoc, GText *text);
+  ~CreateTextCmd();
 
-  ~CreateTextCmd ();
-
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
-  GDocument* document;
-  GText* object;
-  Coord origin;
-  QString text;
+  GText *object;
 };
 
 #endif

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -21,33 +22,25 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
-/*
-#ifndef CreatePolygonCmd_h_
-#define CreatePolygonCmd_h_
 
-#include <Command.h>
+#ifndef __CreatePolygonCmd_h__
+#define __CreatePolygonCmd_h__
 
-class GDocument;
+#include "Command.h"
+
 class GPolygon;
 
-class CreatePolygonCmd : public Command {
+class CreatePolygonCmd : public Command
+{
 public:
-  CreatePolygonCmd (GDocument* doc, GPolygon* obj);
-  CreatePolygonCmd (GDocument* doc, const Coord& p0, const Coord& p1,
-                    int num, int sval = 0, bool concaveFlag = false);
+  CreatePolygonCmd(GDocument *aGDoc, GPolygon *polygon);
+  ~CreatePolygonCmd();
 
-  ~CreatePolygonCmd ();
-
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
-  GDocument* document;
-  GPolygon* object;
-  Coord spos, epos;
-  int nCorners;
-  int sharpness;
-  bool isConcave;
-};*/
+  GPolygon *object;
+};
 
 #endif

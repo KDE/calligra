@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,48 +23,34 @@
 
 */
 
-#include <CreateTextCmd.h>
+#include "CreateTextCmd.h"
 
 #include <klocale.h>
 
-#include <GDocument.h>
-#include <GText.h>
+#include "GDocument.h"
 #include "GPage.h"
+#include "GText.h"
 
-CreateTextCmd::CreateTextCmd (GDocument* doc, GText* obj) :
-  Command(i18n("Create Text"))
+CreateTextCmd::CreateTextCmd(GDocument *aGDoc, GText *text):
+Command(aGDoc, i18n("Insert Text"))
 {
-  document = doc;
-  object = obj;
-  object->ref ();
+  object = text;
+  object->ref();
 }
 
-CreateTextCmd::CreateTextCmd (GDocument* doc, const Coord& p,
-                              const QString &str) :
-  Command(i18n("Create Text"))
+CreateTextCmd::~CreateTextCmd()
 {
-  document = doc;
-  origin = p;
-  text = str;
+  if(object)
+    object->unref();
 }
 
-CreateTextCmd::~CreateTextCmd () {
-  if (object)
-    object->unref ();
+void CreateTextCmd::execute()
+{
+  document()->activePage()->insertObject(object);
+  document()->emitChanged(object->boundingBox(), true);
 }
 
-void CreateTextCmd::execute () {
-  if (object == 0L) {
-    // create new text object
-    object = new GText (document);
-    object->setOrigin (origin);
-    object->setText (text);
-    //    object->ref ();
-  }
-  document->activePage()->insertObject (object);
+void CreateTextCmd::unexecute()
+{
+  document()->activePage()->deleteObject(object);
 }
-
-void CreateTextCmd::unexecute () {
-  document->activePage()->deleteObject (object);
-}
-

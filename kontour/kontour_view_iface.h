@@ -1,24 +1,29 @@
-/* This file is part of the KDE project
-   Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+/* -*- C++ -*-
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+  $Id$
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+  This file is part of Kontour.
+  Copyright (C) 2002 Laurent Montel (lmontel@mandrakesoft.com)
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Library General Public License as
+  published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef KONTOUR_VIEW_IFACE_H
-#define KONTOUR_VIEW_IFACE_H
+#ifndef __kontour_view_iface_h__
+#define __kontour_view_iface_h__
 
 #include <KoViewIface.h>
 
@@ -26,11 +31,11 @@
 
 class KontourView;
 
-class KOntourViewIface : public KoViewIface
+class KontourViewIface : public KoViewIface
 {
-    K_DCOP
+  K_DCOP
 public:
-    KOntourViewIface( KontourView *view_ );
+  KontourViewIface(KontourView *aView);
 k_dcop:
   void slotCopy();
   void slotPaste();
@@ -42,28 +47,26 @@ k_dcop:
   void slotZoomOut();
   void slotOutline();
   void slotNormal();
-  void slotShowRuler(bool);
-  void slotShowGrid(bool);
-  void slotShowHelplines(bool);
-  void slotShowPaintPanel(bool);
-  void slotShowOutlinePanel(bool);
-  void slotAlignToGrid(bool);
-  void slotAlignToHelplines(bool);
+  void slotShowRuler(bool b);
+  void slotShowGrid(bool b);
+  void slotShowHelplines(bool b);
+  void slotShowPaintPanel(bool b);
+  void slotShowOutlinePanel(bool b);
+  void slotAlignToGrid(bool b);
+  void slotAlignToHelplines(bool b);
   void slotToFront();
   void slotToBack();
   void slotForwardOne();
   void slotBackOne();
   void slotGroup();
   void slotUngroup();
+  void slotConvertToPath();
   void slotAddStyle();
   void slotDeleteStyle();
-  void slotDistribute();
-  void slotConvertToPath();
-  void slotBlend();
   void slotOptions();
 
 private:
-    KontourView *m_view;
+  KontourView *mView;
 };
 
 #endif

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -21,53 +22,35 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
-/*
-#include <CreatePolygonCmd.h>
+
+#include "CreatePolygonCmd.h"
 
 #include <klocale.h>
 
-#include <GDocument.h>
-#include <GPolygon.h>
+#include "GDocument.h"
 #include "GPage.h"
+#include "GPolygon.h"
 
-CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, GPolygon* obj)
-  : Command(i18n("Create Polygon"))
+CreatePolygonCmd::CreatePolygonCmd(GDocument *aGDoc, GPolygon *polygon):
+Command(aGDoc, i18n("Create Polygon"))
 {
-  document = doc;
-  object = obj;
-  object->ref ();
+  object = polygon;
+  object->ref();
 }
 
-CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, const Coord& p0,
-                                    const Coord& p1, int num, int sval,
-                                    bool concaveFlag)
-  : Command(i18n("Create Polygon"))
+CreatePolygonCmd::~CreatePolygonCmd()
 {
-  document = doc;
-  object = 0L;
-  spos = p0;
-  epos = p1;
-  nCorners = num;
-  sharpness = sval;
-  isConcave = concaveFlag;
+  if(object)
+    object->unref();
 }
 
-CreatePolygonCmd::~CreatePolygonCmd () {
-  if (object)
-    object->unref ();
+void CreatePolygonCmd::execute()
+{
+  document()->activePage()->insertObject(object);
+  document()->emitChanged(object->boundingBox(), true);
 }
 
-void CreatePolygonCmd::execute () {
-  if (object == 0L) {
-    // create polygon
-    object = new GPolygon (document, GPolygon::PK_Polygon);
-    object->setSymmetricPolygon (spos, epos, nCorners, isConcave, sharpness);
-    //    object->ref ();
-  }
-  document->activePage()->insertObject (object);
+void CreatePolygonCmd::unexecute()
+{
+  document()->activePage()->deleteObject(object);
 }
-
-void CreatePolygonCmd::unexecute () {
-  document->activePage()->deleteObject (object);
-}
-*/

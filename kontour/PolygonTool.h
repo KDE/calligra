@@ -26,7 +26,7 @@
 #ifndef __PolygonTool_h__
 #define __PolygonTool_h__
 
-#include <Tool.h>
+#include "Tool.h"
 
 class GPolygon;
 

@@ -104,35 +104,6 @@ void OvalTool::processEvent(QEvent *e)
       p.setPen(blue);
       p.drawEllipse(r);
     }
-/*      if (rect == 0L)
-         return;
-
-      QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-      canvas->snapPositionToGrid (xpos, ypos);
-      rect->setEndPoint (Coord (xpos, ypos));
-      bool flag = me->state () & Qt::ControlButton;
-
-      Rect r = rect->boundingBox ();
-      MeasurementUnit unit =
-         PStateManager::instance ()->defaultMeasurementUnit ();
-      QString u = unitToString (unit);
-      float xval, yval, wval, hval;
-      xval = cvtPtToUnit (unit, r.x ());
-      yval = cvtPtToUnit (unit, r.y ());
-      wval = cvtPtToUnit (unit, r.width ());
-      hval = cvtPtToUnit (unit, r.height ());
-
-      msgbuf=flag ? i18n("Create Square") : i18n("Create Rectangle");
-      msgbuf+=" ["+QString::number(xval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(yval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(wval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(hval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString("]");
-      m_toolController->emitModeSelected (m_id,msgbuf);*/
   }
   else if(e->type() == QEvent::MouseButtonRelease)
   {

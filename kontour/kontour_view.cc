@@ -81,7 +81,7 @@ KoView(doc, parent, name)
 {
   mDoc = doc;
  
-  m_dcop = 0;
+  mDCOP = 0;
   dcopObject(); // build it
 
   objMenu = 0;
@@ -124,15 +124,14 @@ KontourView::~KontourView()
     delete mOutlinePanel;
   if(mLayerPanel && !mLayerPanel->area())
     delete mLayerPanel;
-  delete m_dcop;
+  delete mDCOP;
 }
 
-DCOPObject* KontourView::dcopObject()
+DCOPObject *KontourView::dcopObject()
 {
-    if ( !m_dcop )
-	m_dcop = new KOntourViewIface( this );
-
-    return m_dcop;
+  if(!mDCOP )
+    mDCOP = new KontourViewIface(this);
+  return mDCOP;
 }
 
 
@@ -214,6 +213,8 @@ void KontourView::setupActions()
   m_group = new KAction(i18n("&Group"), "group", 0, this, SLOT(slotGroup()), actionCollection(), "group");
   m_ungroup = new KAction(i18n("&Ungroup"), "ungroup", 0, this, SLOT(slotUngroup()), actionCollection(), "ungroup");
 
+  m_convertToPath = new KAction(i18n("&Convert to Path"), 0, this, SLOT(slotConvertToPath()), actionCollection(), "convertToPath");
+
   // Style menu
   m_styles = new KSelectAction(i18n("&Styles"), 0, actionCollection(), "styles");
   connect(m_styles, SIGNAL(activated(const QString &)),this, SLOT(slotStyles(const QString &)));
@@ -221,12 +222,7 @@ void KontourView::setupActions()
   m_addStyle = new KAction(i18n("&Add style"), 0, this, SLOT(slotAddStyle()), actionCollection(), "addStyle");
   m_deleteStyle = new KAction(i18n("&Delete style"), 0, this, SLOT(slotDeleteStyle()), actionCollection(), "deleteStyle");
 
-  // Modify menu
-  m_distribute = new KAction( i18n("&Align/Distribute..."), 0, this, SLOT(slotDistribute()), actionCollection(), "distribute");
-  m_convertToPath = new KAction(i18n("&Convert to Path"), 0, this, SLOT(slotConvertToPath()), actionCollection(), "convertToPath");
-
-  /* Settings menu */
-
+  // Settings menu
   m_options = KStdAction::preferences(this, SLOT(slotOptions()), actionCollection(), "options");
 }
 
@@ -864,6 +860,12 @@ void KontourView::slotUngroup()
 //  mDoc->history()->addCommand(cmd);
 }
 
+void KontourView::slotConvertToPath()
+{
+  if(!activeDocument()->activePage()->selectionIsEmpty())
+    mDoc->history()->addCommand(new ToPathCmd(activeDocument()));
+}
+
 void KontourView::slotStyles(const QString &s)
 {
   activeDocument()->styles()->style(m_styles->currentText());
@@ -881,21 +883,6 @@ void KontourView::slotAddStyle()
 void KontourView::slotDeleteStyle()
 {
 
-}
-
-void KontourView::slotDistribute()
-{
-//    AlignmentDialog::alignSelection (m_pDoc->gdoc(), &cmdHistory);
-}
-
-void KontourView::slotConvertToPath()
-{
-  if(!activeDocument()->activePage()->selectionIsEmpty())
-    mDoc->history()->addCommand(new ToPathCmd(activeDocument()));
-}
-
-void KontourView::slotBlend()
-{
 }
 
 void KontourView::slotOptions()

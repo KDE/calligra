@@ -1,182 +1,170 @@
-/* This file is part of the KDE project
-   Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+/* -*- C++ -*-
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+  $Id$
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+  This file is part of Kontour.
+  Copyright (C) 2002 Laurent Montel (lmontel@mandrakesoft.com)
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Library General Public License as
+  published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
 #include "kontour_view_iface.h"
 
-#include "kontour_view.h"
-
 #include <dcopclient.h>
 
-KOntourViewIface::KOntourViewIface( KontourView *view_ )
-    : KoViewIface( view_ )
+#include "kontour_view.h"
+
+KontourViewIface::KontourViewIface(KontourView *aView):
+KoViewIface(aView)
 {
-    m_view = view_;
+  mView = aView;
 }
 
-void KOntourViewIface::slotCopy()
+void KontourViewIface::slotCopy()
 {
-  m_view->slotCopy();
+  mView->slotCopy();
 }
 
-void KOntourViewIface::slotPaste()
+void KontourViewIface::slotPaste()
 {
-  m_view->slotPaste();
+  mView->slotPaste();
 }
 
-void KOntourViewIface::slotCut()
+void KontourViewIface::slotCut()
 {
-  m_view->slotCut();
+  mView->slotCut();
 }
 
-void KOntourViewIface::slotDuplicate()
+void KontourViewIface::slotDuplicate()
 {
-  m_view->slotDuplicate();
+  mView->slotDuplicate();
 }
 
-void KOntourViewIface::slotDelete()
+void KontourViewIface::slotDelete()
 {
-  m_view->slotDelete();
+  mView->slotDelete();
 }
 
-void KOntourViewIface::slotSelectAll()
+void KontourViewIface::slotSelectAll()
 {
-  m_view->slotSelectAll();
+  mView->slotSelectAll();
 }
 
-void KOntourViewIface::slotZoomIn()
+void KontourViewIface::slotZoomIn()
 {
-  m_view->slotZoomIn();
+  mView->slotZoomIn();
 }
 
-void KOntourViewIface::slotZoomOut()
+void KontourViewIface::slotZoomOut()
 {
-  m_view->slotZoomOut();
+  mView->slotZoomOut();
 }
 
-void KOntourViewIface::slotOutline()
+void KontourViewIface::slotOutline()
 {
-  m_view->slotOutline();
+  mView->slotOutline();
 }
 
-void KOntourViewIface::slotNormal()
+void KontourViewIface::slotNormal()
 {
-  m_view->slotNormal();
+  mView->slotNormal();
 }
 
-void KOntourViewIface::slotShowRuler(bool b)
+void KontourViewIface::slotShowRuler(bool b)
 {
-  m_view->slotCopy();
+  mView->slotCopy();
 }
 
-void KOntourViewIface::slotShowGrid(bool b)
+void KontourViewIface::slotShowGrid(bool b)
 {
-  m_view->slotShowGrid(b);
+  mView->slotShowGrid(b);
 }
 
-void KOntourViewIface::slotShowHelplines(bool b)
+void KontourViewIface::slotShowHelplines(bool b)
 {
-  m_view->slotShowHelplines(b);
+  mView->slotShowHelplines(b);
 }
 
-void KOntourViewIface::slotShowPaintPanel(bool b)
+void KontourViewIface::slotShowPaintPanel(bool b)
 {
-  m_view->slotShowPaintPanel(b);
+  mView->slotShowPaintPanel(b);
 }
 
-void KOntourViewIface::slotShowOutlinePanel(bool b)
+void KontourViewIface::slotShowOutlinePanel(bool b)
 {
-  m_view->slotShowOutlinePanel(b);
+  mView->slotShowOutlinePanel(b);
 }
 
-void KOntourViewIface::slotAlignToGrid(bool b)
+void KontourViewIface::slotAlignToGrid(bool b)
 {
-  m_view->slotAlignToGrid(b);
+  mView->slotAlignToGrid(b);
 }
 
-void KOntourViewIface::slotAlignToHelplines(bool b)
+void KontourViewIface::slotAlignToHelplines(bool b)
 {
-  m_view->slotAlignToHelplines(b);
+  mView->slotAlignToHelplines(b);
 }
 
-void KOntourViewIface::slotToFront()
+void KontourViewIface::slotToFront()
 {
-  m_view->slotToFront();
+  mView->slotToFront();
 }
 
-void KOntourViewIface::slotToBack()
+void KontourViewIface::slotToBack()
 {
-  m_view->slotToBack();
+  mView->slotToBack();
 }
 
-void KOntourViewIface::slotForwardOne()
+void KontourViewIface::slotForwardOne()
 {
-  m_view->slotForwardOne();
+  mView->slotForwardOne();
 }
 
-void KOntourViewIface::slotBackOne()
+void KontourViewIface::slotBackOne()
 {
-  m_view->slotBackOne();
+  mView->slotBackOne();
 }
 
-void KOntourViewIface::slotGroup()
+void KontourViewIface::slotGroup()
 {
-  m_view->slotGroup();
+  mView->slotGroup();
 }
 
-void KOntourViewIface::slotUngroup()
+void KontourViewIface::slotUngroup()
 {
-  m_view->slotUngroup();
+  mView->slotUngroup();
 }
 
-void KOntourViewIface::slotAddStyle()
+void KontourViewIface::slotConvertToPath()
 {
-  m_view->slotAddStyle();
+  mView->slotConvertToPath();
 }
 
-void KOntourViewIface::slotDeleteStyle()
+void KontourViewIface::slotAddStyle()
 {
-  m_view->slotDeleteStyle();
+  mView->slotAddStyle();
 }
 
-void KOntourViewIface::slotDistribute()
+void KontourViewIface::slotDeleteStyle()
 {
-  m_view->slotDistribute();
+  mView->slotDeleteStyle();
 }
 
-void KOntourViewIface::slotConvertToPath()
+void KontourViewIface::slotOptions()
 {
-  m_view->slotConvertToPath();
+  mView->slotOptions();
 }
-
-void KOntourViewIface::slotBlend()
-{
-  m_view->slotBlend();
-}
-
-void KOntourViewIface::slotOptions()
-{
-  m_view->slotOptions();
-}
-
-
-
-
-
-
-

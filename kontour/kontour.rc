@@ -45,17 +45,13 @@
    <Separator/>
    <Action name="group"/>
    <Action name="ungroup"/>
+   <Separator/>
+   <Action name="convertToPath"/>
  </Menu>
  <Menu name="style"><text>&amp;Style</text>
    <Action name="styles"/>
    <Action name="addStyle"/>
    <Action name="deleteStyle"/>
- </Menu>
- <Menu name="modify"><text>&amp;Modify</text>
-   <Action name="distribute"/>
-   <Action name="convertToPath"/>
- </Menu>
- <Menu name="effects"><text>Effe&amp;cts</text>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
    <Action name="options" group="settings_configure"/>

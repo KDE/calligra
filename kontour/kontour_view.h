@@ -145,12 +145,10 @@ public slots:
   void slotBackOne();
   void slotGroup();
   void slotUngroup();
+  void slotConvertToPath();
   void slotStyles(const QString &s);
   void slotAddStyle();
   void slotDeleteStyle();
-  void slotDistribute();
-  void slotConvertToPath();
-  void slotBlend();
   void slotOptions();
 
 private:
@@ -221,12 +219,11 @@ private:
   KAction             *m_backOne;
   KAction             *m_group;
   KAction             *m_ungroup;
+  KAction             *m_convertToPath;
 
   KSelectAction       *m_styles;
   KAction             *m_addStyle;
   KAction             *m_deleteStyle;
-
-  KAction             *m_convertToPath;
 
   KAction             *m_options;
 
@@ -245,9 +242,8 @@ private:
   bool mShowRulers;
   QWidget *mParent;
   bool mShowGUI;
-  KAction *m_distribute;
 
-  DCOPObject *m_dcop;
+  DCOPObject *mDCOP;
 };
 
 #endif
