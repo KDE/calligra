@@ -4,3 +4,7 @@ Kivio 1.2beta1 -> 1.2 beta 2
 - Add undo/redo feature (undo/redo insert/remove page, insert/remove stencil
 change page name etc.... )
 
+Kivio 1.2beta2 -> 1.2RC1
+------------------------
+- Fix change font size.
+
