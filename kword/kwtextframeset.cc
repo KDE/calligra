@@ -787,8 +787,10 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
 
                 // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
                 breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
-                if ( breaked )
-                    break;
+
+                // Some people write a single paragraph over 3 frames! So we have to keep looking...
+                //if ( breaked )
+                //    break;
 
                 if ( hardFrameBreak && yp > totalHeight && yp < bottom && !parag->isMovedDown() )
                 {
@@ -2119,6 +2121,7 @@ void KWTextFrameSet::copyCharFormatting( QTextStringChar * ch, int index /*in te
 // Based on QTextView::readFormats - with all code duplication moved to copyCharFormatting
 void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, bool copyParagLayouts, bool moveCustomItems )
 {
+    //kdDebug() << "KWTextFrameSet::readFormats moveCustomItems=" << moveCustomItems << endl;
     c2.restoreState();
     c1.restoreState();
     if ( c1.parag() == c2.parag() ) {
