@@ -491,7 +491,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             {
                 // See if we clicked on a frame's border
                 KWFrame * frame = m_doc->frameByBorder( normalPoint );
-                if ( frame )
+                if ( frame || e->state() & ControlButton )
                 {
                     KWFrame *frame = m_doc->getFirstSelectedFrame();
                     // if a header/footer etc. Dont show the popup.
