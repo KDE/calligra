@@ -121,6 +121,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 	m_moving = 0;
 	m_move = false;
+	m_inlineEditing = false;
 	m_tree = 0;
 	m_form = 0;
 	m_layout = 0;
@@ -394,7 +395,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(s == m_container && !m_toplevel && (mev->state() != ControlButton) && !m_form->manager()->draggingConnection()) // draw the selection rect
 			{
-				if(mev->state() == RightButton)
+				if((mev->state() == RightButton) || m_inlineEditing)
 					return true;
 				int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
 				int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
@@ -484,6 +485,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			QWidget *w = static_cast<QWidget*>(s);
 			if(!w)
 				return false;
+			m_inlineEditing = true;
 			m_form->manager()->lib()->startEditing(w->className(), w, this);
 			return true;
 		}

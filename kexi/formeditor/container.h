@@ -143,6 +143,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		void            setLayoutSpacing(int spacing) { m_spacing = spacing;}
 		void            setLayoutMargin(int margin) { m_margin = margin;}
 
+		void            stopInlineEditing() { m_inlineEditing = false; }
+
 	public slots:
 		//! \return The watched widget.
 		QWidget		*widget() { return m_container; }
@@ -208,6 +210,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		ObjectTreeItem	*m_tree;
 
 		QGuardedPtr<Form> m_form;
+		bool		m_inlineEditing;
 
 		friend class InsertWidgetCommand;
 		friend class PasteWidgetCommand;

@@ -191,6 +191,8 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 void
 WidgetFactory::resetEditor()
 {
+	m_container->stopInlineEditing();
+
 	if(m_widget)
 	{
 		ObjectTreeItem *tree = m_container->form()->objectTree()->lookup(m_widget->name());
