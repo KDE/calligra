@@ -48,7 +48,7 @@ kdemime_DATA = x-kword.desktop
 kdemimedir = $(kde_mimedir)/application
 
 rcdir = $(kde_datadir)/kword
-rc_DATA = kword.rc kword_shell.rc
+rc_DATA = kword.rc
 
 SUBDIRS = . toolbar templates dtd pics
 

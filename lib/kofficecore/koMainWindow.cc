@@ -142,8 +142,6 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     doc->setSelectable( false );
     d->m_rootView = doc->createView( this );
     d->m_rootView->setPartManager( d->m_manager );
-#warning TEMPORARY!
-    //    doc->setReadWrite( false );
 
     setView( d->m_rootView );
     d->m_rootView->show();
