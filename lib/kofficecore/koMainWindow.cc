@@ -488,9 +488,7 @@ void KoMainWindow::slotDocumentInfo()
 
 void KoMainWindow::slotFileClose()
 {
-    // Close without asking if more than one view
-    if ( ( rootDocument() && rootDocument()->viewCount() > 1 )
-         || queryClose() )
+    if ( queryClose() )
     {
         setRootDocument( 0L );
 	close();
@@ -557,7 +555,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 {
   kdDebug(30003) <<  "KoMainWindow::slotActivePartChanged( Part * newPart) newPart = " <<
     newPart << endl;
-  kdDebug(30003) <<  "active part is " << d->m_activePart << endl;
+  kdDebug(30003) <<  "current active part is " << d->m_activePart << endl;
 
   if ( d->m_activePart && d->m_activePart == newPart )
   {
@@ -595,6 +593,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   {
     d->m_activeView = (KoView *)d->m_manager->activeWidget();
     d->m_activePart = newPart;
+    kdDebug(30003) <<  "new active part is " << d->m_activePart << endl;
 
     factory->addClient( (KXMLGUIClient *)d->m_activeView );
 
