@@ -138,7 +138,11 @@ void
 KontourImport::convert()
 {	
 	QDomElement docElem = inpdoc.documentElement();    	
-	QDomElement lay = docElem.namedItem( "page" ).namedItem( "layer" ).toElement();
+	QDomElement lay;
+	if( docElem.attribute( "version" ).toInt() == 2 )
+		lay = docElem.namedItem( "layer" ).toElement();
+	else
+		lay = docElem.namedItem( "page" ).namedItem( "layer" ).toElement();
 	
 	QDomElement b = lay.firstChild().toElement();
 	for( ; !b.isNull(); b = b.nextSibling().toElement() )
