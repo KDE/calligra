@@ -591,41 +591,47 @@ bool GDocument::insertFromXml (const QDomDocument &document, list<GObject*>& new
     return parseBody (doc, newObjs, true);
 }
 
-bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& newObjs, bool markNew) {
+bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& /*newObjs*/, bool /*markNew*/) {
 
     GObject* obj = 0L;
     QDict<GObject> refDict;
 
-    kdDebug() << "parseBody() <---------------------------" << endl;
-    QDomElement layerelem = element.firstChild().toElement();
-    for( ; !layerelem.isNull(); layerelem = element.nextSibling().toElement() ) {
-	if (layerelem.tagName() != "layer")
-	    continue;
-	active_layer = addLayer ();
-	active_layer->setName (layerelem.attribute("id"));
-	int flags = layerelem.attribute("flags").toInt();
-	active_layer->setVisible (flags & LAYER_VISIBLE);
-	active_layer->setPrintable (flags & LAYER_EDITABLE);
-	active_layer->setEditable (flags & LAYER_PRINTABLE);
+    QDomNode n = element.firstChild();
+    while(!n.isNull()) {
+	QDomElement layerelem=n.toElement();
+	kdDebug() << "layerelem " << layerelem.tagName() << endl;
+	if (layerelem.tagName() == "layer") {
+	    kdDebug() << "layer element" << endl;
+	    active_layer = addLayer ();
+	    active_layer->setName (layerelem.attribute("id"));
+	    int flags = layerelem.attribute("flags").toInt();
+	    active_layer->setVisible (flags & LAYER_VISIBLE);
+	    active_layer->setPrintable (flags & LAYER_EDITABLE);
+	    active_layer->setEditable (flags & LAYER_PRINTABLE);
 
-	QDomElement child=layerelem.firstChild().toElement();
-	for( ; !child.isNull(); child=layerelem.nextSibling().toElement()) {
-	    obj=KIllustrator::objectFactory(child);
-	    if(!obj) {
-		GObject *proto = GObject::lookupPrototype (child.tagName());
-		if (proto != 0L) {
-		    obj = proto->clone (child);
+	    QDomNode cn=layerelem.firstChild();
+	    while(!cn.isNull()) {
+		QDomElement child=cn.toElement();
+		kdDebug() << "child: " << child.tagName() << endl;
+		obj=KIllustrator::objectFactory(child);
+		if(!obj) {
+		    GObject *proto = GObject::lookupPrototype (child.tagName());
+		    if (proto != 0L) {
+			obj = proto->clone (child);
+		    }
+		    else
+			kdDebug() << "invalid object type: " << child.tagName() << endl;
 		}
-		else
-		    kdDebug() << "invalid object type: " << child.tagName() << endl;
+		if (child.tagName() == "group")
+		    ((GGroup*)obj)->setLayer (active_layer);
+		refDict.insert(obj->getId(), obj);
+		insertObject(obj);
+		cn=cn.nextSibling();
 	    }
-
-	    if (child.tagName() == "group")
-		((GGroup*)obj)->setLayer (active_layer);
-	    refDict.insert(obj->getId(), obj);
-	    insertObject(obj);
 	}
+	n=n.nextSibling();
     }
+    kdDebug() << "ready!" << endl;
 
     // update object connections
     vector<GLayer*>::iterator i = layers.begin ();
@@ -650,18 +656,14 @@ bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& newO
 
 bool GDocument::readFromXml (const  QDomDocument &document) {
 
-    kdDebug() << "readFromXml() <-----------------------" << endl;
-    kdDebug() << document.doctype().name() << endl;
     if ( document.doctype().name() != "killustrator" )
 	return false;
 
     QDomElement killustrator = document.documentElement();
 
-    kdDebug() << "here we go..." << endl;
     if ( killustrator.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
 	return false;
 
-    kdDebug() << "still here..." << endl;
     comment=killustrator.attribute("comment");
     keywords=killustrator.attribute("keywords");
 
@@ -718,7 +720,6 @@ bool GDocument::readFromXml (const  QDomDocument &document) {
 	    vHelplines.push_back(l.attribute("pos").toFloat());
     }
 
-    kdDebug() << "fooooooooooooooooooooooooooobaaaaaaaaaaaaaaaaaaar" << endl;
     // update page layout
     setPageLayout (pLayout);
 

@@ -30,7 +30,7 @@
 #include <qdom.h>
 
 #include <klocale.h>
-//#include <kapp.h>
+#include <kdebug.h>
 
 GPolyline::GPolyline () {
   connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
@@ -44,6 +44,7 @@ GPolyline::GPolyline () {
 
 GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
 
+    kdDebug() << "GPolyline() - element: " << element.tagName() << endl;
     connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
 	     SLOT(updateProperties (GObject::Property, int)));
     points.setAutoDelete (true);
@@ -61,14 +62,18 @@ GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("
     Coord point;
     int i=0;
     for( ; !p.isNull(); p = p.nextSibling().toElement() ) {
+	kdDebug() << "point???" << endl;
 	if(p.tagName()=="point") {
+	    kdDebug() << "yeah :)" << endl;
 	    point.x(p.attribute("x").toFloat());
 	    point.y(p.attribute("y").toFloat());
+	    kdDebug() << "x " << point.x() << " y " << point.y() << endl;
 	    addPoint(i, point);
 	    ++i;
 	}
     }
     calcBoundingBox ();
+    kdDebug() << "see ya" << endl;
 }
 
 GPolyline::GPolyline (const GPolyline& obj) : GObject (obj) {
@@ -348,8 +353,8 @@ void GPolyline::updateProperties (GObject::Property prop, int /*mask*/) {
 QDomElement GPolyline::writeToXml (QDomDocument &document) {
 
     QDomElement polyline=document.createElement("polyline");
-    polyline.setAttribute ("arrow1", outlineInfo.startArrowId);
-    polyline.setAttribute ("arrow2", outlineInfo.endArrowId);
+    polyline.setAttribute ("arrow1", QString::number(outlineInfo.startArrowId));
+    polyline.setAttribute ("arrow2", QString::number(outlineInfo.endArrowId));
 
     for (QListIterator<Coord> it (points); it.current (); ++it) {
 	QDomElement point=document.createElement("point");

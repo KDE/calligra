@@ -483,9 +483,12 @@ QDomElement GText::writeToXml (QDomDocument &document) {
     element.appendChild(font);
 
     int i = 0;
+    // temporary solution to make it work before we get rid of the STL
+    QString t;
     for (vector<QString>::iterator it = text.begin (); it != text.end ();
 	 it++, i++)
-	element.appendChild(document.createTextNode(*it));
+	t+=(*it) + '\n';
+    element.appendChild(document.createCDATASection(t));
     element.appendChild(GObject::writeToXml(document));
     return element;
 }

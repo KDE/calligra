@@ -69,9 +69,7 @@ KIllustratorDocument::~KIllustratorDocument()
 
 bool KIllustratorDocument::loadXML (QIODevice *, const QDomDocument &doc)
 {
-  cout << "load KIllu from stream !!!!!!!!!" << endl;
   if ( m_gdocument->readFromXml (doc)) {
-      kdDebug() << "loadXML <---------------------------" << endl;
     // now look for part objects in order to create the child list
     vector<GLayer*>& layers = (vector<GLayer*>&) m_gdocument->getLayers();
     vector<GLayer*>::iterator i = layers.begin ();

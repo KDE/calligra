@@ -98,6 +98,7 @@ GObject::GObject () {
 
 GObject::GObject (const QDomElement &element) {
 
+    kdDebug() << "entering GObject() - element: " << element.tagName() << endl;
     layer = 0L;
     inWork = false;
     wrapper = 0L;
@@ -106,6 +107,8 @@ GObject::GObject (const QDomElement &element) {
     fillInfo.mask = 0;
     id = (const char*)element.attribute("id");
     refid = (const char*)element.attribute("ref");
+    kdDebug() << "id: " << id << endl;
+    kdDebug() << "refId: " << refid << endl;
 
     outlineInfo.color = QColor(element.attribute("strokecolor"));
     outlineInfo.mask |= OutlineInfo::Color;
@@ -137,6 +140,7 @@ GObject::GObject (const QDomElement &element) {
     tMatrix=KIllustrator::toMatrix(element.namedItem("matrix").toElement());
     iMatrix = tMatrix.invert ();
     tmpMatrix = tMatrix;
+    kdDebug() << "leaving GObject()" << endl;
 }
 
 GObject::GObject (const GObject& obj) : QObject()

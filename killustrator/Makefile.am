@@ -13,4 +13,3 @@ EXTRA_DIST = README kil.dtd killustrator.lsm $(myown_dist)
 
 messages:
 	$(XGETTEXT) -kI18N -kSI18N */*.cc -o $(podir)/killustrator.pot
-

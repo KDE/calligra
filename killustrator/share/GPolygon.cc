@@ -460,9 +460,7 @@ QDomElement GPolygon::writeToXml (QDomDocument &document) {
     element.setAttribute ("width", nr.width ());
     element.setAttribute ("height", nr.height ());
     element.setAttribute ("rounding", (Roundness > 0.1 ? Roundness : 0.0));
-
-    if (kind == PK_Polygon)
-	element.appendChild(GPolyline::writeToXml(document));
+    element.appendChild(GPolyline::writeToXml(document));
     return element;
 }
 

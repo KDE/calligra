@@ -1,2 +1,0 @@
-# Needs to be ported to QDom
-DO_NOT_COMPILE="$DO_NOT_COMPILE killustrator"
