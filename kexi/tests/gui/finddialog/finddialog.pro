@@ -1,6 +1,6 @@
 TEMPLATE	= app
 
-include( $(QKW)/kwcommon.pro )
+include( $(KEXI)/common.pro )
 
 CONFIG		+= qt warn_on release
 DEPENDPATH	= ../../include

@@ -8,7 +8,7 @@ QMAKE_CXXFLAGS += $(KEXI_OPTIONS)
 
 # test specific:
  LIBS += \
-	$$QKWLIB/kexidb$$KEXILIB_SUFFIX
+	$$KDELIBDESTDIR/kexidb$$KEXILIB_SUFFIX
 
 #allow to select target independently from debug information
  CONFIG += console
