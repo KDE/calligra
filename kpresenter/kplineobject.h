@@ -28,7 +28,7 @@ class QPainter;
 class DCOPObject;
 class KoXmlWriter;
 
-class KPLineObject : public KPShadowObject
+class KPLineObject : public KPShadowObject, public KPStartEndLine
 {
 public:
     KPLineObject();
@@ -72,15 +72,10 @@ public:
 
 protected:
     QString saveOasisStrokeElement( KoGenStyles& mainStyles );
-    void saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto );
-    QString saveOasisMarkerStyle( KoGenStyles &mainStyles );
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour = FALSE );
-
-    LineEnd lineBegin, lineEnd;
     LineType lineType;
-
 };
 
 #endif

@@ -75,6 +75,33 @@ const QString &KPObject::attrXFactor=KGlobal::staticQString("xfactor");
 const QString &KPObject::attrYFactor=KGlobal::staticQString("yfactor");
 const QString &KPObject::attrStyle=KGlobal::staticQString("style");
 
+KPStartEndLine::KPStartEndLine( LineEnd _start, LineEnd _end )
+    : lineBegin( _start ), lineEnd( _end )
+{
+}
+
+void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto )
+{
+    //TODO
+    //FIXME
+    if ( lineBegin != L_NORMAL )
+    {
+        styleobjectauto.addAttribute( "draw:marker-start", saveOasisMarkerStyle( mainStyles ) );
+        //mainStyles.addAttributePt( "draw:marker-start-width", ???? );
+    }
+    if ( lineEnd != L_NORMAL )
+    {
+        styleobjectauto.addAttribute( "draw:marker-end", saveOasisMarkerStyle( mainStyles ) );
+        //mainStyles.addAttributePt( "draw:marker-end-width", ???? );
+    }
+}
+
+QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles )
+{
+    //todo
+    return "";
+}
+
 KPObject::KPObject()
     : orig(), ext(), shadowColor( Qt::gray ), sticky( FALSE )
 {

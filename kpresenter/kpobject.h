@@ -450,4 +450,14 @@ protected:
     KPGradient *gradient;
 };
 
+class KPStartEndLine
+{
+public:
+    KPStartEndLine( LineEnd _start, LineEnd _end );
+    void saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto );
+    QString saveOasisMarkerStyle( KoGenStyles &mainStyles );
+protected:
+    LineEnd lineBegin, lineEnd;
+};
+
 #endif

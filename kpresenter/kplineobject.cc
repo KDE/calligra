@@ -37,19 +37,15 @@
 using namespace std;
 
 KPLineObject::KPLineObject()
-    : KPShadowObject()
+    : KPShadowObject(), KPStartEndLine( L_NORMAL, L_NORMAL )
 {
-    lineBegin = L_NORMAL;
-    lineEnd = L_NORMAL;
     lineType = LT_HORZ;
 }
 
 KPLineObject::KPLineObject( const QPen &_pen, LineEnd _lineBegin,
                             LineEnd _lineEnd, LineType _lineType )
-    : KPShadowObject( _pen )
+    : KPShadowObject( _pen ), KPStartEndLine( _lineBegin, _lineEnd )
 {
-    lineBegin = _lineBegin;
-    lineEnd = _lineEnd;
     lineType = _lineType;
 }
 
@@ -66,37 +62,13 @@ DCOPObject* KPLineObject::dcopObject()
 }
 
 
-//necessary to duplicate it from kppointobject.
-// a line object is not a kppointobject
 QString KPLineObject::saveOasisStrokeElement( KoGenStyles& mainStyles )
 {
     KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
+    saveOasisMarkerElement( mainStyles,  styleobjectauto );
     KPShadowObject::saveOasisStrokeElement( mainStyles, styleobjectauto );
     return mainStyles.lookup( styleobjectauto, "gr" );
 }
-
-void KPLineObject::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto )
-{
-    //TODO
-    //FIXME
-    if ( lineBegin != L_NORMAL )
-    {
-        styleobjectauto.addAttribute( "draw:marker-start", saveOasisMarkerStyle( mainStyles ) );
-        //mainStyles.addAttributePt( "draw:marker-start-width", ???? );
-    }
-    if ( lineEnd != L_NORMAL )
-    {
-        styleobjectauto.addAttribute( "draw:marker-end", saveOasisMarkerStyle( mainStyles ) );
-        //mainStyles.addAttributePt( "draw:marker-end-width", ???? );
-    }
-}
-
-QString KPLineObject::saveOasisMarkerStyle( KoGenStyles &mainStyles )
-{
-    //todo
-    return "";
-}
-
 
 bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
 {
