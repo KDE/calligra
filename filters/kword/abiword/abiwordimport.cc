@@ -139,6 +139,9 @@ public:
 	textBgRed=0;
         textBgGreen=0;
         textBgBlue=0;
+        leftMargin=0;
+	rightMargin=0;   
+	textIndent=0;
     }
     ~StackItem()
     {
@@ -162,6 +165,9 @@ public:
     int         textBgGreen;
     int         textBgBlue;
     int         textPosition; //Normal (0), subscript(1), superscript (2)
+    double      leftMargin;
+    double      rightMargin;
+    double      textIndent;
 };
 
 class StackItemStack : public QPtrStack<StackItem>
@@ -205,6 +211,53 @@ private:
     QDomDocument mainDocument;
     QDomElement mainFramesetElement;     // The main <FRAMESET> where the body text will be under.
 };
+
+
+// <pagesize>
+
+static inline double CentimetresToPoints(const double d)
+{
+    return d * 72.0 / 2.54;
+}
+
+static inline double MillimetresToPoints(const double d)
+{
+    return d * 72.0 / 25.4;
+}
+
+static inline double InchesToPoints(const double d)
+{
+    return d * 72.0;
+}
+
+static inline double IndentPos( QString _str)
+{
+  double d=0;
+  int pos=0;
+  if ((pos=_str.contains("cm")))
+    {
+      _str=_str.left (_str.length()-pos  );
+      d=_str.toDouble();
+      d=CentimetresToPoints(d);
+    }
+  else if ((pos=_str.contains("in")))
+    {
+      _str=_str.left (_str.length()-pos  );
+      d=_str.toDouble();
+      d=InchesToPoints(d);
+   }
+  else if ((pos=_str.contains("mm")))
+    {
+      _str=_str.left (_str.length()-pos  );
+      d=_str.toDouble();
+      d=MillimetresToPoints(d);
+    }
+  else
+    {
+      kdWarning(30506) << "unknown indent pos: " << _str << endl;
+    }
+  return d;
+}
 
 void PopulateProperties(StackItem* stackItem,
                         const QXmlAttributes& attributes,
@@ -310,6 +363,23 @@ void PopulateProperties(StackItem* stackItem,
         // TODO: transform the font-family in a font we have on the system on which KWord runs.
         stackItem->fontName=strFontFamily;
     }
+
+    QString strLeftMargin=abiPropsMap["margin-left"].getValue();
+    if(!strLeftMargin.isEmpty())
+      {
+	stackItem->leftMargin=IndentPos(strLeftMargin );
+      }
+
+    QString strRightMargin=abiPropsMap["margin-right"].getValue();
+    if(!strRightMargin.isEmpty())
+      {
+	stackItem->rightMargin=IndentPos(strRightMargin );
+      }
+    QString strTextIndent=abiPropsMap["text-indent"].getValue();
+    if(!strTextIndent.isEmpty())
+      {
+	stackItem->textIndent=IndentPos(strTextIndent);
+      }
 }
 
 // Element <c>
@@ -417,6 +487,7 @@ bool charactersElementC (StackItem* stackItem, QDomDocument& mainDocument, const
         fontElementOut.setAttribute("blue",stackItem->textBgBlue);
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
+
 	return true;
 }
 
@@ -479,6 +550,19 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
         element.setAttribute("align","left");
     }
     layoutElement.appendChild(element);
+
+    if (stackItem->leftMargin || stackItem->rightMargin ||stackItem->textIndent )
+    {
+         element=mainDocument.createElement("INDENTS");
+	 if(stackItem->leftMargin)
+	   element.setAttribute("left",stackItem->leftMargin);
+	 if(stackItem->rightMargin)
+	   element.setAttribute("right",stackItem->rightMargin);
+	 if(stackItem->textIndent)
+	   element.setAttribute("first",stackItem->textIndent);
+	 layoutElement.appendChild(element);
+    }
+
 
     QDomElement formatElementOut=mainDocument.createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
@@ -648,22 +732,7 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     return true;
 }
 
-// <pagesize>
 
-static inline double CentimetresToPoints(const double d)
-{
-    return d * 72.0 / 2.54;
-}
-
-static inline double MillimetresToPoints(const double d)
-{
-    return d * 72.0 / 25.4;
-}
-
-static inline double InchesToPoints(const double d)
-{
-    return d * 72.0;
-}
 
 static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttributes& attributes)
 {
