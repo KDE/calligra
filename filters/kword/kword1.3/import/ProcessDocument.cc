@@ -425,12 +425,27 @@ static void ProcessFootnoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader 
     }
 }
 
+static void ProcessNoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+{
+    VariableData *variable = (VariableData *) tagData;
+
+    QString note;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList
+        << AttrProcessing ( "note", note )
+        ;
+    ProcessAttributes (myNode, attrProcessingList);
+
+    // set it even if note is empty
+    variable->setGenericData( "note", note );
+}
+
 static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader* leader)
 {
     VariableData *variable = (VariableData *) tagData;
 
     QValueList<TagProcessing> tagProcessingList;
-    // "TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK|NOTE"
     tagProcessingList
         << TagProcessing ( "TYPE",          ProcessTypeTag,         variable )
         << TagProcessing ( "PGNUM",         ProcessPgNumTag,        variable )
@@ -440,6 +455,7 @@ static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader*
         << TagProcessing ( "SERIALLETTER",  NULL,                   NULL     )
         << TagProcessing ( "FIELD",         ProcessFieldTag,        variable )
         << TagProcessing ( "LINK",          ProcessLinkTag,         variable )
+        << TagProcessing ( "NOTE",          ProcessNoteTag,         variable )
         << TagProcessing ( "FOOTNOTE",      ProcessFootnoteTag,     variable )
         ;
     ProcessSubtags (myNode, tagProcessingList, leader);

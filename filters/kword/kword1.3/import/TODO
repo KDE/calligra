@@ -20,7 +20,6 @@ wave (RTF import problem?)
 Paragraph direction
 Paragraph bullets/counters
 Text boxes (framesets)
-Annotations (aka "note")
 Anchors
 Mail merge
 "Sections" (e.g. table of contents)
@@ -36,6 +35,9 @@ Document settings
 Attachement #4318 of bug #16430 (tables...)
 Underline?
 ...
+
+=== KWord syntax variants ===
+Files where the supposed children of <VARIABLE> are directly children of <FORMAT id="4">
 
 === Low Priority ===
 <SERIALL>, <SAMPLE>, <DB>

@@ -140,6 +140,16 @@ QValueList<ParaData>* VariableData::getFootnotePara(void) const
     return footnotePara;
 }
 
+void VariableData::setGenericData( const QString& key, const QString& data )
+{
+    propertyMap[ key ] = data ;
+}
+
+QString VariableData::getGenericData( const QString& key ) const
+{
+    return propertyMap[ key ];
+}
+
 void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormatDataList)
 {
     ValueListFormatData::Iterator  paraFormatDataIt;

@@ -761,7 +761,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
     key += ',';
 
-    // It seems that OOWriter 1.1 does has problems with word-by-word (OO Issue #11873, #25187)
+    // It seems that OOWriter 1.1 does have problems with word-by-word (OO Issue #11873, #25187)
     // It is supposed to be fixed in development versions of OO
     if (force || ( formatOrigin.underlineWord != formatData.underlineWord )
         || (formatOrigin.strikeoutWord != formatData.strikeoutWord ) )
@@ -1152,6 +1152,13 @@ void OOWriterWorker::processVariable ( const QString&,
             << "\" xlink:type=\"simple\">"
             << escapeOOText(formatData.variable.getLinkName())
             << "</text:a>";
+    }
+    else if ( 10 == formatData.variable.m_type )
+    {   // Note (OOWriter: annotation)
+        // KWord 1.3's annotations are anonymous and undated, however the OO specification tell that author and date are mandatory.
+        *m_streamOut << "<office:annotation office:create-date=\"1970-01-01\" office:author=\"KWord 1.3\">\n"; // ### TODO: make better?
+        *m_streamOut << "<text:p>" << escapeOOSpan( formatData.variable.getGenericData( "note" ) ) << "</text:p>\n"
+            << "</office:annotation>";
     }
     else if (11==formatData.variable.m_type)
     {

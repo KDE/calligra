@@ -255,6 +255,10 @@ public:
     bool getFootnoteType( void ) const;
     /// Paragrapgh of the footnote
     QValueList<ParaData>* getFootnotePara(void) const;
+    /// Set generic variable data
+    void setGenericData( const QString& key, const QString& data );
+    /// Get generic variable data
+    QString getGenericData( const QString& key ) const;
 
     /// Key (extended type) of variable
     QString m_key;
