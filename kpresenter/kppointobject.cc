@@ -371,7 +371,7 @@ void KPPointObject::updatePoints( double _fx, double _fy )
 }
 
 
-KoPointArray KPPointObject::getDrawingPoints()
+KoPointArray KPPointObject::getDrawingPoints() const
 {
   return points;
 }

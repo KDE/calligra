@@ -54,7 +54,7 @@ public:
 
 protected:
     virtual void updatePoints( double _fx, double _fy );
-    virtual KoPointArray getDrawingPoints();
+    virtual KoPointArray getDrawingPoints() const;
 
     KoPointArray getCubicBezierPointsFrom( const KoPointArray &_pointArray );
 

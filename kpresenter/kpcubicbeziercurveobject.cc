@@ -220,7 +220,7 @@ bool KPCubicBezierCurveObject::isClosed()const
 }
 
 
-KoPointArray KPCubicBezierCurveObject::getDrawingPoints()
+KoPointArray KPCubicBezierCurveObject::getDrawingPoints() const
 {
   return allPoints;
 }

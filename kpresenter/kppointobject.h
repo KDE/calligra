@@ -60,7 +60,7 @@ protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour = FALSE );
     virtual void updatePoints( double _fx, double _fy );
-    virtual KoPointArray getDrawingPoints();
+    virtual KoPointArray getDrawingPoints() const;
 
     KoPointArray points;
     LineEnd lineBegin, lineEnd;

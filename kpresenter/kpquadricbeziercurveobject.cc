@@ -218,7 +218,7 @@ bool KPQuadricBezierCurveObject::isClosed()const
 }
 
 
-KoPointArray KPQuadricBezierCurveObject::getDrawingPoints()
+KoPointArray KPQuadricBezierCurveObject::getDrawingPoints() const
 {
   return allPoints;
 }
