@@ -41,7 +41,9 @@ bool kspreadfunc_averagea( KSContext& context );
 bool kspreadfunc_avedev( KSContext& context );
 bool kspreadfunc_median( KSContext& context );
 bool kspreadfunc_variance( KSContext& context );
+bool kspreadfunc_variancep( KSContext& context );
 bool kspreadfunc_stddev( KSContext& context );
+bool kspreadfunc_stddevp( KSContext& context );
 bool kspreadfunc_combin( KSContext& context );
 bool kspreadfunc_bino( KSContext& context );
 bool kspreadfunc_bino_inv( KSContext& context );
@@ -79,7 +81,10 @@ void KSpreadRegisterStatisticalFunctions()
   repo->registerFunction( "AVEDEV", kspreadfunc_avedev );
   repo->registerFunction( "MEDIAN", kspreadfunc_median );
   repo->registerFunction( "VARIANCE", kspreadfunc_variance );
-  repo->registerFunction( "STDDEV", kspreadfunc_stddev );
+  repo->registerFunction( "VAR", kspreadfunc_variance );
+  repo->registerFunction( "VARP", kspreadfunc_variancep );
+  repo->registerFunction( "STDEV", kspreadfunc_stddev );
+  repo->registerFunction( "STDEVP", kspreadfunc_stddevp );
   repo->registerFunction( "COMBIN", kspreadfunc_combin );
   repo->registerFunction( "PERMUT", kspreadfunc_arrang );
   repo->registerFunction( "BINO", kspreadfunc_bino );
@@ -298,6 +303,29 @@ bool kspreadfunc_variance( KSContext& context )
     result = 0.0;
     bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera );
     if(b)
+      context.setValue( new KSValue(result / (double)(number - 1) ) );
+  }
+
+  return b;
+}
+
+// Function: varp
+bool kspreadfunc_variancep( KSContext& context )
+{
+  double result = 0.0;
+  double avera = 0.0;
+  int number = 0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
+
+  if ( number == 0 )
+      return false;
+
+  if ( b )
+  {
+    avera = result / (double)number;
+    result = 0.0;
+    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera );
+    if(b)
       context.setValue( new KSValue(result / (double)number ) );
   }
 
@@ -344,6 +372,29 @@ bool kspreadfunc_stddev( KSContext& context )
     bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result,avera );
     if(b)
       context.setValue( new KSValue(sqrt(result/((double)(number - 1)) )) );
+  }
+
+  return b;
+}
+
+// Function: stddevp
+bool kspreadfunc_stddevp( KSContext& context )
+{
+  double result = 0.0;
+  double avera = 0.0;
+  int number=0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number );
+
+  if ( number == 0 )
+      return false;
+
+  if ( b )
+  {
+    avera = result / number;
+    result = 0.0;
+    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera );
+    if ( b )
+      context.setValue( new KSValue( sqrt(result / number) ) );
   }
 
   return b;
