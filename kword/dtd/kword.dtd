@@ -78,7 +78,7 @@ don't put a </?xml...> at the end of the file!).
                             KWord can read all previous versions, but always saves in the latest.
 -->
 <!ELEMENT DOC
-    (PAPER, ATTRIBUTES, FRAMESETS, STYLES, PIXMAPS, (EMBEDDED*))>
+    (PAPER, ATTRIBUTES,VARIABLESETTINGS, FRAMESETS, STYLES, PIXMAPS, (EMBEDDED*))>
 <!ATTLIST DOC
     editor CDATA #IMPLIED
     mime CDATA "application/x-kword"
@@ -204,6 +204,16 @@ don't put a </?xml...> at the end of the file!).
     unit CDATA #IMPLIED
     hasTOC CDATA #IMPLIED>
 
+
+<!--    Contains general attributes variables. Has no children.
+
+        Attributes:
+            number_offset:     define variable offset.
+-->
+<!ELEMENT VARIABLESETTINGS
+    EMPTY>
+<!ATTLIST VARIABLESETTINGS
+    processing CDATA #REQUIRED>
 
 <!--    Container that has a number of FRAMESET children.
 -->
