@@ -1067,7 +1067,7 @@ QString KoMailMergeVariable::value() const
     return QString();//m_doc->getMailMergeDataBase()->getValue( m_name );
 }
 
-QString KoMailMergeVariable::text(bool realValue)
+QString KoMailMergeVariable::text(bool /*realValue*/)
 {
     // ## should use a format maybe
     QString v = value();
