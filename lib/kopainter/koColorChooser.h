@@ -26,6 +26,7 @@
 
 class KoFrameButton;
 class QGridLayout;
+class QTabWidget;
 class RGBWidget;
 class HSVWidget;
 class CMYKWidget;
@@ -37,6 +38,7 @@ class QLabel;
 class QSpinBox;
 class KHSSelector;
 class KColorPatch;
+class ColorWidget;
 
 class KoColorChooser : public QWidget
 {
@@ -47,11 +49,6 @@ public:
   const KoColor &color() const {return mColor; }
 
 public slots:
-  void slotShowRGB();
-  void slotShowHSV();
-  void slotShowCMYK();
-  void slotShowLAB();
-  void slotShowGrey();
   void slotChangeColor(const KoColor &c);
   void slotChangeColor(const QColor &c);
 
@@ -61,9 +58,14 @@ signals:
 protected slots:
   void slotChangeXY(int h, int s);
 
-private:
-  KoColor           mColor;
+private slots:
+  void childColorChanged(const KoColor& c);
+  void slotCurrentChanged(QWidget *current);
 
+private:
+  ColorWidget *m_current;
+  KoColor           mColor;
+  QTabWidget *m_tab;
   QGridLayout      *mGrid;
   KoFrameButton    *btnRGB;
   KoFrameButton    *btnHSV;
@@ -72,21 +74,37 @@ private:
   KoFrameButton    *btnGrey;
   RGBWidget        *mRGBWidget;
   HSVWidget        *mHSVWidget;
-  CMYKWidget       *mCMYKWidget;
+  QWidget       *mCMYKWidget;
   LABWidget        *mLABWidget;
   GreyWidget       *mGreyWidget;
   KHSSelector      *mColorSelector;
-  KColorPatch      *mColorPatch;
 };
 
-class RGBWidget : public QWidget
+class ColorWidget : public QWidget {
+	Q_OBJECT
+
+public:
+	ColorWidget(QWidget *parent = 0);
+	virtual ~ColorWidget();
+
+public slots:
+	virtual void slotChangeColor(const KoColor& c);
+	virtual void slotChangeColor(const QColor& c);
+	virtual void slotRefreshColor();
+
+protected:
+	KoColor mColor;
+};
+
+class RGBWidget : public ColorWidget
 {
   Q_OBJECT
 public:
-  RGBWidget(KoColorChooser *aCC, QWidget *parent = 0L);
+  RGBWidget(QWidget *parent = 0L);
+  virtual ~RGBWidget() {}
 
 public slots:
-  void slotChangeColor();
+  virtual void slotRefreshColor();
 
 protected slots:
   void slotRSliderChanged(int r);
@@ -97,11 +115,12 @@ protected slots:
   void slotGInChanged(int g);
   void slotBInChanged(int b);
 
+  void slotPatchChanged(const QColor& clr);
+
 signals:
   void colorChanged(const KoColor &c);
 
 private:
-  KoColorChooser *mCC;
   KoColorSlider *mRSlider;
   KoColorSlider *mGSlider;
   KoColorSlider *mBSlider;
@@ -111,16 +130,18 @@ private:
   QSpinBox *mRIn;
   QSpinBox *mGIn;
   QSpinBox *mBIn;
+  KColorPatch *mColorPatch;
 };
 
-class HSVWidget : public QWidget
+class HSVWidget : public ColorWidget
 {
   Q_OBJECT
 public:
-  HSVWidget(KoColorChooser *aCC, QWidget *parent = 0L);
+  HSVWidget(QWidget *parent = 0L);
+  virtual ~HSVWidget() {}
 
 public slots:
-  void slotChangeColor();
+  virtual void slotRefreshColor();
 
 protected slots:
   void slotHSliderChanged(int h);
@@ -131,11 +152,12 @@ protected slots:
   void slotSInChanged(int s);
   void slotVInChanged(int v);
 
+  void slotPatchChanged(const QColor& clr);
+
 signals:
   void colorChanged(const KoColor &c);
 
 private:
-  KoColorChooser   *mCC;
   KoColorSlider    *mHSlider;
   KoColorSlider    *mSSlider;
   KoColorSlider    *mVSlider;
@@ -145,29 +167,73 @@ private:
   QSpinBox         *mHIn;
   QSpinBox         *mSIn;
   QSpinBox         *mVIn;
+  KColorPatch *mColorPatch;
+  KoColor mColor;
 };
 
-class GreyWidget : public QWidget
+class GreyWidget : public ColorWidget
 {
   Q_OBJECT
 public:
-  GreyWidget(KoColorChooser *aCC, QWidget *parent = 0L);
+  GreyWidget(QWidget *parent = 0L);
+  virtual ~GreyWidget() {}
 
 public slots:
-  void slotChangeColor();
+  virtual void slotRefreshColor();
 
 protected slots:
   void slotVSliderChanged(int v);
   void slotVInChanged(int v);
+  void slotPatchChanged(const QColor& clr);
 
 signals:
   void colorChanged(const KoColor &c);
 
 protected:
-  KoColorChooser *mCC;
   KoColorSlider *mVSlider;
   QLabel      *mVLabel;
   QSpinBox    *mVIn;
+  KColorPatch *mColorPatch;
+  KoColor mColor;
+};
+
+class LABWidget : public ColorWidget
+{
+  Q_OBJECT
+public:
+  LABWidget(QWidget *parent = 0L);
+  virtual ~LABWidget() {}
+
+public slots:
+  virtual void slotRefreshColor();
+
+protected slots:
+  void slotLSliderChanged(int l);
+  void slotASliderChanged(int a);
+  void slotBSliderChanged(int b);
+
+  void slotLInChanged(int l);
+  void slotAInChanged(int a);
+  void slotBInChanged(int b);
+
+  void slotPatchChanged(const QColor& clr);
+
+signals:
+  void colorChanged(const KoColor &c);
+
+private:
+  KoColorSlider *mLSlider;
+  KoColorSlider *mASlider;
+  KoColorSlider *mBSlider;
+  QLabel *mLLabel;
+  QLabel *mALabel;
+  QLabel *mBLabel;
+  QSpinBox *mLIn;
+  QSpinBox *mAIn;
+  QSpinBox *mBIn;
+  KColorPatch *mColorPatch;
+  KoColor mColor;
 };
 
 #endif
+
