@@ -498,11 +498,11 @@ void KoAutoFormatDia::slotfind( const QString & )
         m_replace->setText(it.data().replace().latin1());
 	pbAdd->setText(i18n("Modify"));
         m_pListView->setCurrentItem(m_pListView->findItem(m_find->text(),0));
+
     } else {
         m_replace->setText("");
 	pbAdd->setText(i18n("Add"));
         m_pListView->setCurrentItem(0L);
-
     }
     slotfind2("");
 }
@@ -511,7 +511,8 @@ void KoAutoFormatDia::slotfind( const QString & )
 void KoAutoFormatDia::slotfind2( const QString & )
 {
     bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
-    pbRemove->setEnabled(state && m_pListView->currentItem ());
+    QMap< QString, KoAutoFormatEntry >::Iterator it = m_autoFormat.findFormatEntry(m_find->text());
+    pbRemove->setEnabled(state && !(it == m_autoFormat.lastAutoFormatEntry() ));
     pbAdd->setEnabled(state);
 }
 
