@@ -1,3 +1,3 @@
-toolbardir = $(kde_datadir)/kchart/toolbar
-toolbar_DATA = bars.png areas.png lines.png cakes.png options.png
+kcharticondir = $(kde_datadir)/kchart/icons
+kcharticon_ICON = AUTO
 

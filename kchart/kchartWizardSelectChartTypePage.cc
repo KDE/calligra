@@ -2,7 +2,7 @@
 
 #include "kchartWizardSelectChartTypePage.h"
 #include "kchart_view.h"
-//#include "kchartparams.h"
+#include "kchart_factory.h"
 
 #include <qbuttongroup.h>
 #include <qframe.h>
@@ -28,7 +28,7 @@ void kchartWizardSelectChartTypePage::addButton(QString name,
   pushbutton->resize( buttonframe->contentsRect().width(),
 		      buttonframe->contentsRect().height() );
   _typeBG->insert( pushbutton, type );
-  pushbutton->setPixmap( BarIcon( icon_name ) );
+  pushbutton->setPixmap( BarIcon( icon_name, KChartFactory::global() ) );
 
   QLabel* label = new QLabel( i18n( name ), this );
   label->setGeometry( 10+pos1*xstep,
