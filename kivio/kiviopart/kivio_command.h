@@ -51,6 +51,16 @@ protected:
     KivioPage * m_page;
 };
 
+class KivioShowPageCommand : public KivioHidePageCommand
+{
+public:
+    KivioShowPageCommand( const QString &_name, KivioPage *_page );
+    ~KivioShowPageCommand() {}
+
+    void execute() { KivioHidePageCommand::unexecute(); }
+    void unexecute() { KivioHidePageCommand::execute(); }
+};
+
 
 #endif
 

@@ -63,3 +63,9 @@ void KivioHidePageCommand::unexecute()
 {
     m_page->setHidePage( false );
 }
+
+KivioShowPageCommand::KivioShowPageCommand( const QString &_name, KivioPage *_page)
+    : KivioHidePageCommand( _name, _page)
+{
+}
+

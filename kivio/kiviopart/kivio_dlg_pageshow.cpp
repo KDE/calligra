@@ -21,7 +21,9 @@
 #include "kivio_canvas.h"
 #include "kivio_tabbar.h"
 #include "kivio_page.h"
-
+#include "kivio_command.h"
+#include "kivio_doc.h"
+#include "kivio_map.h"
 #include <kapplication.h>
 #include <klocale.h>
 #include <qstringlist.h>
@@ -80,6 +82,12 @@ void KivioPageShow::slotOk()
   if (list->currentItem()!=-1) {
     text=list->text(list->currentItem());
     m_pView->tabBar()->showPage(text);
+    KivioPage * page = m_pView->doc()->map()->findPage( text );
+    if ( page )
+    {
+        KivioShowPageCommand * cmd = new KivioShowPageCommand( i18n("Show Page"),  page);
+        m_pView->doc()->addCommand( cmd);
+    }
   }
   accept();
 }
