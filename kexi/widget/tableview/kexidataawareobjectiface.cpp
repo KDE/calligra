@@ -37,6 +37,7 @@
 KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 {
 	m_data = 0;
+	m_itemIterator = 0;
 	m_readOnly = -1; //don't know
 	m_insertingEnabled = -1; //don't know
 	m_isSortingEnabled = true;
@@ -65,6 +66,7 @@ KexiDataAwareObjectInterface::~KexiDataAwareObjectInterface()
 {
 	delete m_insertItem;
 	delete m_rowEditBuffer;
+	delete m_itemIterator;
 }
 
 void KexiDataAwareObjectInterface::clearVariables()
@@ -83,16 +85,20 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 	const bool theSameData = m_data && m_data==data;
 	if (m_owner && m_data && m_data!=data/*don't destroy if it's the same*/) {
 		kexidbg << "KexiDataAwareObjectInterface::setData(): destroying old data (owned)" << endl;
+		delete m_itemIterator;
 		delete m_data; //destroy old data
 		m_data = 0;
+		m_itemIterator = 0;
 	}
 	m_owner = owner;
 	if(!data) {
 		m_data = new KexiTableViewData();
+		m_itemIterator = m_data->createIterator();
 		m_owner = true;
 	}
 	else {
 		m_data = data;
+		m_itemIterator = m_data->createIterator();
 		m_owner = owner;
 		kdDebug(44021) << "KexiDataAwareObjectInterface::setData(): using shared data" << endl;
 		//add columns
@@ -197,7 +203,8 @@ void KexiDataAwareObjectInterface::initDataContents()
 		int curRow = -1, curCol = -1;
 		if (m_data->columnsCount()>0) {
 			if (rows()>0) {
-				m_currentItem = m_data->first();
+				m_itemIterator->toFirst();
+				m_currentItem = **m_itemIterator; //m_data->first();
 				curRow = 0;
 				curCol = 0;
 			}
@@ -269,7 +276,8 @@ bool KexiDataAwareObjectInterface::sort()
 
 	//locate current record
 	if (!m_currentItem) {
-		m_currentItem = m_data->first();
+		m_itemIterator->toFirst();
+		m_currentItem = **m_itemIterator; //m_data->first();
 		m_curRow = 0;
 		if (!m_currentItem)
 			return true;
@@ -562,8 +570,8 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 
 		updateCell( oldRow, oldCol );
 
-		//quite clever: ensure the cell is visible:
-		ensureCellVisible(m_curRow, m_curCol);
+//		//quite clever: ensure the cell is visible:
+//		ensureCellVisible(m_curRow, m_curCol);
 
 //		QPoint pcenter = QRect( columnPos(d->curCol), rowPos(d->curRow), columnWidth(d->curCol), rh).center();
 //		ensureVisible(pcenter.x(), pcenter.y(), columnWidth(d->curCol)/2, rh/2);
@@ -574,16 +582,36 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 		updateCell( m_curRow, m_curCol );
 		if (m_curCol != oldCol || m_curRow != oldRow ) //ensure this is also refreshed
 			updateCell( oldRow, m_curCol );
-		if (isInsertingEnabled() && m_curRow == rows()) {
-			kdDebug(44021) << "NOW insert item is current" << endl;
-			m_currentItem = m_insertItem;
+		//update row
+		if (m_curRow != oldRow) {
+			if (isInsertingEnabled() && m_curRow == rows()) {
+				kdDebug(44021) << "NOW insert item is current" << endl;
+				m_currentItem = m_insertItem;
+			}
+			else {
+				kdDebug(44021) << QString("NOW item at %1 (%2) is current")
+					.arg(m_curRow).arg((ulong)itemAt(m_curRow)) << endl;
+	//NOT EFFECTIVE!!!!!!!!!!!
+				//set item iterator
+				if (isInsertingEnabled() && m_currentItem == m_insertItem && m_curRow == (rows()-1)) {
+					//moving from 'insert item' to last item
+					m_itemIterator->toLast();
+				}
+				else if (m_currentItem != m_insertItem && oldRow>=0 && (oldRow+1)==m_curRow) //just move next
+					++(*m_itemIterator);
+				else if (m_currentItem != m_insertItem && oldRow>=0 && (oldRow-1)==m_curRow) //just move back
+					--(*m_itemIterator);
+				else { //move at:
+					m_itemIterator->toFirst();
+					(*m_itemIterator)+=m_curRow;
+				}
+				m_currentItem = **m_itemIterator;
+					//itemAt(m_curRow);
+			}
 		}
-		else {
-			kdDebug(44021) << QString("NOW item at %1 (%2) is current")
-				.arg(m_curRow).arg((ulong)itemAt(m_curRow)) << endl;
-//NOT EFFECTIVE!!!!!!!!!!!
-			m_currentItem = itemAt(m_curRow);
-		}
+
+		//quite clever: ensure the cell is visible:
+		ensureCellVisible(m_curRow, m_curCol);
 
 		/*emit*/ itemSelected(m_currentItem);
 		/*emit*/ cellSelected(m_curCol, m_curRow);
@@ -659,7 +687,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 		updateRow(m_curRow);
 
 		kdDebug() << "EDIT ROW ACCEPTED:" << endl;
-		/*debug*/itemAt(m_curRow);
+//		/*debug*/itemAt(m_curRow);
 
 		if (inserting) {
 //			emit rowInserted(d->pCurrentItem);
@@ -1314,5 +1342,6 @@ void KexiDataAwareObjectInterface::boolToggled()
 void KexiDataAwareObjectInterface::slotDataDestroying()
 {
 	m_data = 0;
+	m_itemIterator = 0;
 }
 

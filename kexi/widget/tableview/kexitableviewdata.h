@@ -365,6 +365,7 @@ public:
 	inline void append( const KexiTableItem* item ) { KexiTableViewDataBase::append(item); }
 	inline void prepend( const KexiTableItem* item ) { KexiTableViewDataBase::prepend(item); }
 	inline Iterator iterator() { return Iterator(*this); }
+	inline Iterator* createIterator() { return new Iterator(*this); }
 
 signals:
 	void destroying();

@@ -533,6 +533,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		//! current data item
 		KexiTableItem *m_currentItem;
 
+		//! data item's iterator
+		KexiTableViewData::Iterator *m_itemIterator;
+
 		//! item data for inserting
 		KexiTableItem *m_insertItem;
 
