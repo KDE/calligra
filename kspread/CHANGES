@@ -138,3 +138,8 @@ reference.
 -Bug fix
 -Now you can create border directly
 -Start insert and remove cell (=>move cell at right or bottom)
+
+1999-10-09  -Montel laurent<montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can insert and remove cell (=>move cell at right or bottom etc..)
+-Refresh dependence when you insert and remove cell

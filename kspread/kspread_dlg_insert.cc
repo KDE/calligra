@@ -30,12 +30,14 @@
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
 
-KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint &_marker)
+KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint &_marker,mode _mode)
 	: QDialog( 0L, name )
 {
   m_pView = parent;
   marker=_marker;
-  setCaption( i18n("Insert cell") );
+  insRem=_mode;
+
+
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
@@ -44,10 +46,25 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint
   grp->setRadioButtonExclusive( TRUE );
   grp->layout();
   lay1->addWidget(grp);
-  rb1 = new QRadioButton( i18n("Move towards right"), grp );
-  rb2 = new QRadioButton( i18n("Move towards bottom"), grp );
-  rb3 = new QRadioButton( i18n("Insert row"), grp );
-  rb4 = new QRadioButton( i18n("Insert column"), grp );
+  if( insRem==insert)
+  	{
+  	rb1 = new QRadioButton( i18n("Move towards right"), grp );
+  	rb2 = new QRadioButton( i18n("Move towards bottom"), grp );
+ 	rb3 = new QRadioButton( i18n("Insert row"), grp );
+  	rb4 = new QRadioButton( i18n("Insert column"), grp );
+  	setCaption( i18n("Insert cell") );
+  	}
+  else if(insRem==remove)
+  	{
+  	rb1 = new QRadioButton( i18n("Move towards left"), grp );
+  	rb2 = new QRadioButton( i18n("Move towards top"), grp );
+ 	rb3 = new QRadioButton( i18n("Remove row"), grp );
+  	rb4 = new QRadioButton( i18n("Remove column"), grp );
+  	setCaption( i18n("Remove cell") );
+  	}
+  else
+  	cout <<"Error in kspread_dlg_insert\n";
+
   rb1->setChecked(true);
 
 
@@ -59,8 +76,6 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint
   bb->layout();
   lay1->addWidget( bb );
 
-
-
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 }
@@ -70,19 +85,55 @@ void KSpreadinsert::slotOk()
 {
 if(rb1->isChecked())
 	{
-	m_pView->activeTable()->insertRightCell(marker.x());
+	if(insRem==insert)
+		{
+		m_pView->activeTable()->insertRightCell(marker);
+		rafresh(insertCellColumn);
+		}
+	else if(insRem==remove)
+		{
+		m_pView->activeTable()->removeLeftCell(marker);
+		rafresh(removeCellColumn);
+		}
 	}
 else if(rb2->isChecked())
 	{
-	m_pView->activeTable()->insertBottomCell(marker.y());
+	if(insRem==insert)
+		{
+		m_pView->activeTable()->insertBottomCell(marker);
+		rafresh(insertCellRow);
+		}
+	else if(insRem==remove)
+		{
+		m_pView->activeTable()->removeTopCell(marker);
+		rafresh(removeCellRow);
+		}
 	}
 else if(rb3->isChecked())
 	{
-	m_pView->activeTable()->insertRow(marker.y());
+	if(insRem==insert)
+		{
+		m_pView->activeTable()->insertRow(marker.y());
+		rafresh(inserRow);
+		}
+	else if(insRem==remove)
+		{
+		m_pView->activeTable()->deleteRow( marker.y());
+		rafresh(removeRow);
+		}
 	}
 else if(rb4->isChecked())
 	{
-	m_pView->activeTable()->insertColumn(marker.x());
+	if(insRem==insert)
+		{
+		m_pView->activeTable()->insertColumn(marker.x());
+		rafresh(insertColumn);
+		}
+	else if(insRem==remove)
+		{
+		m_pView->activeTable()->deleteColumn( marker.x());
+		rafresh(removeColumn);
+		}
 	}
 else
 	{
@@ -91,6 +142,64 @@ else
 accept();
 }
 
+void KSpreadinsert::rafresh(type_mode insertOrRemove)
+{
+KSpreadTable *m_pTable;
+m_pTable=m_pView->activeTable();
+KSpreadTable *tbl;
+int pos;
+
+  for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
+	    tbl->recalc(true);
+  QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+  if(insertOrRemove==insertColumn)
+  	{
+  	for( ; it.current(); ++it )
+  		it.current()->changeRef(marker.x(),KSpreadTable::columnInsert, m_pTable->name());
+        }
+  else if(insertOrRemove==inserRow)
+  	{
+  	for( ; it.current(); ++it )
+  		it.current()->changeRef(marker.y(),KSpreadTable::rowInsert, m_pTable->name());
+        }
+  else if(insertOrRemove==removeRow)
+  	{
+  	for( ; it.current(); ++it )
+  		it.current()->changeRef(marker.y(),KSpreadTable::rowRemove, m_pTable->name());
+        }
+   else if(insertOrRemove==removeColumn)
+  	{
+  	for( ; it.current(); ++it )
+  		it.current()->changeRef(marker.x(),KSpreadTable::columnRemove, m_pTable->name());
+        }
+   else if(insertOrRemove==insertCellColumn)
+  	{
+  	for( ; it.current(); ++it )
+  		it.current()->changeref2(marker,KSpreadTable::columnInsert, m_pTable->name());
+        }
+   else if(insertOrRemove==insertCellRow)
+  	{
+  	for( ; it.current(); ++it )
+  		it.current()->changeref2(marker,KSpreadTable::rowInsert, m_pTable->name());
+        }
+  else if(insertOrRemove==removeCellColumn)
+  	{
+  	for( ; it.current(); ++it )
+  		it.current()->changeref2(marker,KSpreadTable::columnRemove, m_pTable->name());
+        }
+  else if(insertOrRemove==removeCellRow)
+  	{
+  	for( ; it.current(); ++it )
+  		it.current()->changeref2(marker,KSpreadTable::rowRemove, m_pTable->name());
+        }
+
+
+  KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y()  );
+  if ( cell->text() != 0L )
+	 m_pView->editWidget()->setText( cell->text() );
+  else
+	 m_pView->editWidget()->setText( "" );
+}
 
 void KSpreadinsert::slotClose()
 {

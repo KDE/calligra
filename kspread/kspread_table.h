@@ -375,7 +375,7 @@ public:
 
     void changetab(QString old_name,QString new_name);
     void changeRef(int pos,changeref ref,QString name);
-
+    void changeref2(const QPoint &pos,changeref ref,QString name);
     void paste( const QPoint &_marker,Special_paste=ALL,Operation=Any );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace );
@@ -399,8 +399,10 @@ public:
     void borderall( const QPoint &_marker,QColor _color );
     void borderremove( const QPoint &_marker );
 
-    void insertRightCell( unsigned long int _column );
-    void insertBottomCell(unsigned long int _row);
+    void insertRightCell(const QPoint &_marker );
+    void insertBottomCell(const QPoint &_marker);
+    void removeLeftCell(const QPoint &_marker);
+    void removeTopCell(const QPoint &_marker);
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */
