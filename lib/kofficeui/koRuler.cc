@@ -405,7 +405,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
             drawLine(d->oldMx, -1);
     } else if ( d->action == A_TAB ) {
         if ( d->canvas && d->currTab!=d->tabList.end()) {
-            drawLine( qRound( zoomIt((*d->currTab).ptPos) ) + frameStart, -1);
+            drawLine( qRound( zoomIt((*d->currTab).ptPos) ) + frameStart - diffx, -1);
         }
     } else if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 ) {
         int left = frameStart - diffx;
@@ -489,7 +489,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
         emit newFirstIndent( i_first );
     } else if ( d->action == A_TAB ) {
         if ( d->canvas && !fakeMovement ) {
-            drawLine( qRound( zoomIt((*d->currTab).ptPos) ) + frameStart, -1);
+            drawLine( qRound( zoomIt((*d->currTab).ptPos) ) + frameStart - diffx, -1);
         }
         if ( (e->y() < -50 || e->y() > height() + 50) && d->currTab!=d->tabList.end() )
             d->tabList.remove(d->currTab);
@@ -652,11 +652,11 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             QPainter p( d->canvas );
                             p.setRasterOp( Qt::NotROP );
                             double pt = zoomIt((*d->currTab).ptPos);
-                            int pt_fr = qRound(pt) + frameStart;
+                            int pt_fr = qRound(pt) + frameStart - diffx;
                             p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
-                            (*d->currTab).ptPos = unZoomIt(static_cast<double>(mx) - frameStart );
+                            (*d->currTab).ptPos = unZoomIt(static_cast<double>(mx) - frameStart + diffx );
                             pt = zoomIt( (*d->currTab).ptPos );
-                            pt_fr = qRound(pt) + frameStart;
+                            pt_fr = qRound(pt) + frameStart - diffx;
                             p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
                             p.end();
                             d->oldMx = mx;
