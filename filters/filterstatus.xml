@@ -247,6 +247,7 @@
             <filter id="kspread_dbase">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/dbase"/>
                 <title xml:lang="en_us">dBase</title>
+                <note xml:lang="en_us">dBase 3 only</note>
                 <stat import="twostars" export="none"/>
             </filter>
             <filter id="kspread_excel">
