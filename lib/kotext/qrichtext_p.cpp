@@ -432,11 +432,11 @@ QString KoTextString::toString( const QMemArray<KoTextStringChar> &data )
     QChar *uc = (QChar *)s.unicode();
     while ( l-- ) {
 	*uc = c->c;
+#if 0
 	// ### workaround so that non-breaking whitespaces are drawn
 	// properly, actually this should be fixed in QFont somewhere
 	if ( *uc == (char)0xa0 )
 	    *uc = 0x20;
-#if 0
 	// ### workaround so that \n are not drawn, actually this should be
 	// fixed in QFont somewhere (under Windows you get ugly boxes
 	// otherwise)
@@ -459,11 +459,11 @@ QString KoTextString::toReverseString() const
     QChar *uc = (QChar *)s.unicode();
     while ( l-- ) {
 	*uc = c->c;
+#if 0
 	// ### workaround so that non-breaking whitespaces are drawn
 	// properly, actually this should be fixed in QFont somewhere
 	if ( *uc == (char)0xa0 )
 	    *uc = 0x20;
-#if 0
 	// ### workaround so that \n are not drawn, actually this should be
 	// fixed in QFont somewhere (under Windows you get ugly boxes
 	// otherwise)
