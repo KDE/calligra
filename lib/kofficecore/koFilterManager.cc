@@ -139,20 +139,20 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
         {
             if ( !ret.isEmpty() )
                 ret += "\n";
-            ret += "*.*|";
+            ret += "*|";
             if ( direction == Import )
                 ret += vec[i].importDescription;
             else
                 ret += vec[i].exportDescription;
-            ret += " (*.*)";
+            ret += " (*)";
         }
     }
     if( allfiles )
     {
         if ( !ret.isEmpty() )
             ret += "\n";
-        ret += "*.*|";
-        ret += i18n( "All files (*.*)" );
+        ret += "*|";
+        ret += i18n( "All files (*)" );
     }
     return ret;
 }
