@@ -5,7 +5,7 @@ INCLUDES = -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = libkudesignercore.la kudesigner.la
-libkudesignercore_la_SOURCES = canvbox.cpp 	creportitem.cpp 	ccalcfield.cpp 	cspecialfield.cpp 	mycanvas.cpp 	cfield.cpp 	cv.cpp 	clabel.cpp 	cline.cpp 	property.cpp 	propertyeditor.cpp 	propertywidgets.cpp 	kudesigner_view.cpp 	kudesigner_factory.cpp 	kudesigner_doc.cpp 	plugin.cpp kudesigner_command.cpp canvsection.cpp canvband.cpp canvkutemplate.cpp canvreportheader.cpp canvreportfooter.cpp canvpageheader.cpp canvpagefooter.cpp canvdetail.cpp canvdetailheader.cpp canvdetailfooter.cpp
+libkudesignercore_la_SOURCES = canvbox.cpp creportitem.cpp ccalcfield.cpp cspecialfield.cpp mycanvas.cpp cfield.cpp cv.cpp clabel.cpp cline.cpp property.cpp propertyeditor.cpp propertywidgets.cpp kudesigner_view.cpp kudesigner_factory.cpp kudesigner_doc.cpp plugin.cpp kudesigner_command.cpp canvsection.cpp canvband.cpp canvkutemplate.cpp canvreportheader.cpp canvreportfooter.cpp canvpageheader.cpp canvpagefooter.cpp canvdetail.cpp canvdetailheader.cpp canvdetailfooter.cpp canvdefs.cpp
 libkudesignercore_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -avoid-version
 libkudesignercore_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
 

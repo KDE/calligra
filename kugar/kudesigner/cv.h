@@ -32,6 +32,7 @@ class QCanvasItemList;
 class CanvasBox;
 class KuDesignerPlugin;
 class MyCanvas;
+class KudesignerView;
 
 class SelectionRect: public QCanvasRectangle{
 public:
@@ -44,22 +45,29 @@ public:
 class ReportCanvas: public QCanvasView{
     Q_OBJECT
 public:
-    ReportCanvas(QCanvas * canvas, QWidget * parent = 0, const char * name = 0, WFlags f = 0);
+    ReportCanvas(QCanvas * canvas, KudesignerView * parent, const char * name = 0, WFlags f = 0);
 
-    CanvasReportItem *itemToInsert;
+    int itemToInsert;
 
     enum RequestType {RequestNone = 0, RequestProps, RequestDelete};
-    
+
     void setRequest(RequestType r);
     void clearRequest();
     bool requested();
+
+    void unselectAll();
+    void selectAll();
+    void selectItem(CanvasBox *it, bool addToSelection = true);
+    void unselectItem(CanvasBox *it);
+    void finishSelection();
+
     void setPlugin(KuDesignerPlugin *plugin);
 protected:
     void contentsMousePressEvent(QMouseEvent*);
     void contentsMouseReleaseEvent(QMouseEvent*);
     void contentsMouseMoveEvent(QMouseEvent*);
     void contentsMouseDoubleClickEvent( QMouseEvent * );
-  
+
     void contentsDragEnterEvent ( QDragEnterEvent * );
     void contentsDragMoveEvent ( QDragMoveEvent * );
 //    void contentsDragLeaveEvent ( QDragLeaveEvent * );
@@ -73,12 +81,6 @@ protected:
     void deleteItem(QCanvasItemList &l);
     void selectItemFromList(QCanvasItemList &l);
 
-    void unselectAll();
-    void selectAll();
-    void selectItem(CanvasBox *it, bool addToSelection = true);
-    void unselectItem(CanvasBox *it);
-    void finishSelection();
-    
 private:
     CanvasReportItem *moving;
     QPoint moving_start;
@@ -90,6 +92,7 @@ private:
     CanvasBox *resizing;
     bool selectionStarted;
     KuDesignerPlugin *m_plugin;
+    KudesignerView *m_view;
 
     SelectionRect *selectionRect;
 

@@ -42,6 +42,9 @@
 #include "canvband.h"
 #include "property.h"
 #include "plugin.h"
+#include "kudesigner_view.h"
+#include "kudesigner_command.h"
+
 
 void SelectionRect::draw(QPainter & painter)
 {
@@ -82,8 +85,8 @@ void SelectionRect::draw(QPainter & painter)
 
 
 
-ReportCanvas::ReportCanvas(QCanvas * canvas, QWidget * parent, const char * name, WFlags f):
-	QCanvasView(canvas, parent, name, f),m_plugin(0)
+ReportCanvas::ReportCanvas(QCanvas * canvas, KudesignerView * parent, const char * name, WFlags f):
+    QCanvasView(canvas, parent, name, f),m_plugin(0),m_view(parent)
 {
     m_canvas=(MyCanvas*)canvas;
     itemToInsert = 0;
@@ -157,7 +160,7 @@ void ReportCanvas::selectItemFromList(QCanvasItemList &l)
                     unselectAll();
                     selectItem(b, false);
                     canvas()->update();
-                }    
+                }
                 return;
             }
         }
@@ -169,26 +172,16 @@ void ReportCanvas::selectItemFromList(QCanvasItemList &l)
 
 void ReportCanvas::placeItem(QCanvasItemList &l, QMouseEvent *e)
 {
-    bool used = false;
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
     {
         if ( ((*it)->rtti() > 1800) && (((*it)->rtti() < 2000)) )
         {
-            itemToInsert->setX(e->x());
-            itemToInsert->setY(e->y());
-            itemToInsert->setSection((CanvasBand *)(*it));
-            itemToInsert->updateGeomProps();
+            m_view->m_doc->addCommand(new AddReportItemCommand(m_view->m_doc, this,
+                e->x(), e->y(), (CanvasBand *)(*it)) );
 
-            selectItem(itemToInsert, false);
-
-            itemToInsert->show();
-            ((CanvasBand *)(*it))->items.append(itemToInsert);
-            used = true;
-            emit modificationPerformed();
+//            emit modificationPerformed();
         }
     }
-    if (!used)
-        delete itemToInsert;
     itemToInsert = 0;
     emit selectedActionProcessed();
 }
@@ -743,7 +736,7 @@ void ReportCanvas::keyPressEvent( QKeyEvent *e )
     
     if ( m_canvas->selected.count() == 1 ) {
         CanvasReportItem *item = static_cast<CanvasReportItem *>( m_canvas->selected.first() );
-        
+
         switch ( e->key() ) {
             case Qt::Key_Delete:
                 qDebug("Deleting selection");

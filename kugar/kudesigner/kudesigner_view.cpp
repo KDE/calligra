@@ -37,6 +37,7 @@
 
 #include <cv.h>
 
+#include "canvdefs.h"
 #include "cfield.h"
 #include "ccalcfield.h"
 #include "clabel.h"
@@ -66,7 +67,7 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
 
     initActions();
 
-    rc = new ReportCanvas((QCanvas *)(part->canvas()), (QWidget*)this);
+    rc = new ReportCanvas((QCanvas *)(part->canvas()), this);
     if (part->plugin())
     {
        rc->setAcceptDrops(part->plugin()->acceptsDrops());
@@ -166,52 +167,28 @@ void KudesignerView::resizeEvent(QResizeEvent* /*_ev*/)
 void KudesignerView::slotAddReportHeader(){
     if (!(((KudesignerDoc *)(koDocument())))->canvas()->templ->reportHeader)
     {
-        CanvasReportHeader *rh = new CanvasReportHeader(((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            0, ((KudesignerDoc *)(koDocument()))->canvas()->templ->width() - ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
-            ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            50, ((KudesignerDoc *)(koDocument()))->canvas());
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->reportHeader = rh;
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->arrangeSections();
-        ((KudesignerDoc *)(koDocument()))->setModified(true);
+        m_doc->addCommand( new AddReportHeaderCommand(m_doc) );
     }
 }
 
 void KudesignerView::slotAddReportFooter(){
-    if (!((KudesignerDoc *)(koDocument()))->canvas()->templ->reportFooter)
+    if (!m_doc->canvas()->templ->reportFooter)
     {
-        CanvasReportFooter *rf = new CanvasReportFooter(((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            0, ((KudesignerDoc *)(koDocument()))->canvas()->templ->width() - ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
-            ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            50, ((KudesignerDoc *)(koDocument()))->canvas());
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->reportFooter = rf;
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->arrangeSections();
-        ((KudesignerDoc *)(koDocument()))->setModified(true);
+        m_doc->addCommand( new AddReportFooterCommand(m_doc) );
     }
 }
 
 void KudesignerView::slotAddPageHeader(){
-    if (!((KudesignerDoc *)(koDocument()))->canvas()->templ->pageHeader)
+    if (!m_doc->canvas()->templ->pageHeader)
     {
-        CanvasPageHeader *ph = new CanvasPageHeader(((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            0, ((KudesignerDoc *)(koDocument()))->canvas()->templ->width() - ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
-            ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            50, ((KudesignerDoc *)(koDocument()))->canvas());
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->pageHeader = ph;
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->arrangeSections();
-        ((KudesignerDoc *)(koDocument()))->setModified(true);
+        m_doc->addCommand( new AddPageHeaderCommand(m_doc) );
     }
 }
 
 void KudesignerView::slotAddPageFooter(){
-    if (!((KudesignerDoc *)(koDocument()))->canvas()->templ->pageFooter)
+    if (!m_doc->canvas()->templ->pageFooter)
     {
-        CanvasPageFooter *pf = new CanvasPageFooter(((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            0, ((KudesignerDoc *)(koDocument()))->canvas()->templ->width() - ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
-            ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            50, ((KudesignerDoc *)(koDocument()))->canvas());
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->pageFooter = pf;
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->arrangeSections();
-        ((KudesignerDoc *)(koDocument()))->setModified(true);
+        m_doc->addCommand( new AddPageFooterCommand(m_doc) );
     }
 }
 
@@ -220,16 +197,9 @@ void KudesignerView::slotAddDetailHeader(){
     unsigned int level = QInputDialog::getInteger(i18n("Add Detail Header"), i18n("Enter detail level:"),
         0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
-    if (((KudesignerDoc *)(koDocument()))->canvas()->templ->detailsCount >= level)
+    if (m_doc->canvas()->templ->detailsCount >= level)
     {
-        CanvasDetailHeader *dh = new CanvasDetailHeader(((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            0, ((KudesignerDoc *)(koDocument()))->canvas()->templ->width() - ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
-            ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            50, ((KudesignerDoc *)(koDocument()))->canvas());
-        dh->props["Level"]->setValue(QString("%1").arg(level));
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->details[level].first.first = dh;
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->arrangeSections();
-        ((KudesignerDoc *)(koDocument()))->setModified(true);
+        m_doc->addCommand( new AddDetailHeaderCommand(level, m_doc) );
     }
 }
 
@@ -238,18 +208,10 @@ void KudesignerView::slotAddDetail(){
     unsigned int level = QInputDialog::getInteger(i18n("Add Detail"), i18n("Enter detail level:"),
         0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
-    if ( ((level == 0) && (((KudesignerDoc *)(koDocument()))->canvas()->templ->detailsCount == 0))
-        || (((KudesignerDoc *)(koDocument()))->canvas()->templ->detailsCount == level))
+    if ( ((level == 0) && (m_doc->canvas()->templ->detailsCount == 0))
+        || (m_doc->canvas()->templ->detailsCount == level))
     {
-        CanvasDetail *d = new CanvasDetail(((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            0, ((KudesignerDoc *)(koDocument()))->canvas()->templ->width() - ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
-            ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            50, ((KudesignerDoc *)(koDocument()))->canvas());
-        d->props["Level"]->setValue(QString("%1").arg(level));
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->details[level].second = d;
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->arrangeSections();
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->detailsCount++;
-        ((KudesignerDoc *)(koDocument()))->setModified(true);
+        m_doc->addCommand( new AddDetailCommand(level, m_doc) );
     }
 }
 
@@ -258,80 +220,55 @@ void KudesignerView::slotAddDetailFooter(){
     unsigned int level = QInputDialog::getInteger(i18n("Add Detail Footer"), i18n("Enter detail level:"),
         0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
-    
+
     if (m_doc->canvas()->templ->detailsCount >= level)
     {
-/*        CanvasDetailFooter *df = new CanvasDetailFooter(((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            0, ((KudesignerDoc *)(koDocument()))->canvas()->templ->width() - ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
-            ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
-            50, ((KudesignerDoc *)(koDocument()))->canvas());
-        df->props["Level"]->setValue(QString("%1").arg(level));
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->details[level].first.second = df;
-        ((KudesignerDoc *)(koDocument()))->canvas()->templ->arrangeSections();
-*/
-
-        m_doc->addCommand( new AddDetailFooterCommand(level, i18n("Insert Detail Footer Section"), m_doc) );
+        m_doc->addCommand( new AddDetailFooterCommand(level, m_doc) );
     }
 }
 
 void KudesignerView::slotAddItemNothing(){
-    if (((KudesignerDoc *)(koDocument()))->canvas())
+    if (m_doc->canvas())
     {
         if (rc->itemToInsert)
         {
-            delete rc->itemToInsert;
             rc->itemToInsert = 0;
         }
     }
 }
 
 void KudesignerView::slotAddItemLabel(){
-    if (((KudesignerDoc *)(koDocument()))->canvas())
+    if (m_doc->canvas())
     {
-        if (rc->itemToInsert)
-            delete rc->itemToInsert;
-        CanvasLabel *l = new CanvasLabel(0, 0, 50, 20, ((KudesignerDoc *)(koDocument()))->canvas());
-        rc->itemToInsert = l;
+        rc->itemToInsert = KuDesignerRttiCanvasLabel;
     }
 }
 
 void KudesignerView::slotAddItemField(){
-    if (((KudesignerDoc *)(koDocument()))->canvas())
+    if (m_doc->canvas())
     {
-        if (rc->itemToInsert)
-            delete rc->itemToInsert;
-	    CanvasField *l = new CanvasField(0, 0, 50, 20, ((KudesignerDoc *)(koDocument()))->canvas());
-    	rc->itemToInsert = l;
+        rc->itemToInsert = KuDesignerRttiCanvasField;
     }
 }
 
 void KudesignerView::slotAddItemSpecial(){
-    if (((KudesignerDoc *)(koDocument()))->canvas())
+    if (m_doc->canvas())
     {
-        if (rc->itemToInsert)
-            delete rc->itemToInsert;
-	    CanvasSpecialField *l = new CanvasSpecialField(0, 0, 50, 20, ((KudesignerDoc *)(koDocument()))->canvas());
-    	rc->itemToInsert = l;
+        rc->itemToInsert = KuDesignerRttiCanvasSpecial;
     }
 }
 
 void KudesignerView::slotAddItemCalculated(){
-    if (((KudesignerDoc *)(koDocument()))->canvas())
+    if (m_doc->canvas())
     {
-        if (rc->itemToInsert)
-            delete rc->itemToInsert;
-	    CanvasCalculatedField *l = new CanvasCalculatedField(0, 0, 50, 20, ((KudesignerDoc *)(koDocument()))->canvas());
-    	rc->itemToInsert = l;
+        rc->itemToInsert = KuDesignerRttiCanvasCalculated;
     }
 }
 
 void KudesignerView::slotAddItemLine(){
-    if (((KudesignerDoc *)(koDocument()))->canvas())
+    if (m_doc->canvas())
     {
-        if (rc->itemToInsert)
-            delete rc->itemToInsert;
-	    CanvasLine *l = new CanvasLine(0, 0, 50, 20, ((KudesignerDoc *)(koDocument()))->canvas());
-    	rc->itemToInsert = l;
+        rc->itemToInsert = KuDesignerRttiCanvasLine;
     }
 }
 

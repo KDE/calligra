@@ -27,9 +27,16 @@ enum KuDesignerCanvasRtti { KuDesignerRttiCanvasBox = 1700, KuDesignerRttiCanvas
     KuDesignerRttiTextBox=2000, KuDesignerRttiCanvasReportItem, KuDesignerRttiCanvasLabel, KuDesignerRttiCanvasField,
     KuDesignerRttiCanvasSpecial, KuDesignerRttiCanvasCalculated, KuDesignerRttiCanvasLine};
 
+namespace KuDesigner{
+    QString insertItemActionName(int rtti);
+}
+
 /**
     Holder size for report items. TODO: configurable
 */
-const int HolderSize = 6;    
-    
+const int HolderSize = 6;
+
+const int defaultItemWidth = 50;
+const int defaultItemHeight = 20;
+
 #endif

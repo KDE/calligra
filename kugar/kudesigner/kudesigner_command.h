@@ -16,6 +16,9 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#ifndef KUDESIGNER_COMMAND_H
+#define KUDESIGNER_COMMAND_H
+
 
 /*    void slotAddDetailFooter();
     void slotAddDetail();
@@ -33,16 +36,118 @@
 
 class KudesignerDoc;
 class CanvasDetailFooter;
-    
+class CanvasDetail;
+class CanvasDetailHeader;
+class CanvasPageFooter;
+class CanvasPageHeader;
+class CanvasReportFooter;
+class CanvasReportHeader;
+class CanvasBand;
+class CanvasReportItem;
+class ReportCanvas;
+
 class AddDetailFooterCommand: public KNamedCommand{
 public:
-    AddDetailFooterCommand(int level, QString name, KudesignerDoc *doc);
-    
+    AddDetailFooterCommand(int level, KudesignerDoc *doc);
+
     virtual void execute();
     virtual void unexecute();
-    
+
 private:
     int m_level;
     KudesignerDoc *m_doc;
     CanvasDetailFooter *m_section;
 };
+
+class AddDetailCommand: public KNamedCommand{
+public:
+    AddDetailCommand(int level, KudesignerDoc *doc);
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    int m_level;
+    KudesignerDoc *m_doc;
+    CanvasDetail *m_section;
+};
+
+class AddDetailHeaderCommand: public KNamedCommand{
+public:
+    AddDetailHeaderCommand(int level, KudesignerDoc *doc);
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    int m_level;
+    KudesignerDoc *m_doc;
+    CanvasDetailHeader *m_section;
+};
+
+class AddPageFooterCommand: public KNamedCommand{
+public:
+    AddPageFooterCommand(KudesignerDoc *doc);
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    KudesignerDoc *m_doc;
+    CanvasPageFooter *m_section;
+};
+
+class AddPageHeaderCommand: public KNamedCommand{
+public:
+    AddPageHeaderCommand(KudesignerDoc *doc);
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    KudesignerDoc *m_doc;
+    CanvasPageHeader *m_section;
+};
+
+class AddReportFooterCommand: public KNamedCommand{
+public:
+    AddReportFooterCommand(KudesignerDoc *doc);
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    KudesignerDoc *m_doc;
+    CanvasReportFooter *m_section;
+};
+
+class AddReportHeaderCommand: public KNamedCommand{
+public:
+    AddReportHeaderCommand(KudesignerDoc *doc);
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    KudesignerDoc *m_doc;
+    CanvasReportHeader *m_section;
+};
+
+class AddReportItemCommand: public KNamedCommand{
+public:
+    AddReportItemCommand(KudesignerDoc *doc, ReportCanvas *rc, int x, int y, CanvasBand *section);
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    int m_rtti;
+    KudesignerDoc *m_doc;
+    ReportCanvas *m_rc;
+    int m_x;
+    int m_y;
+    CanvasReportItem *m_item;
+    CanvasBand *m_section;
+};
+
+#endif

@@ -36,6 +36,7 @@ class PropertyEditor;
 class KudesignerView : public KoView
 {
     Q_OBJECT
+    friend class ReportCanvas;
 public:
     KudesignerView( KudesignerDoc* part, QWidget* parent = 0, const char* name = 0 );
     virtual ~KudesignerView();
