@@ -738,13 +738,21 @@ static void ProcessParagraphDataStyle ( QString &paraText, QValueList<FormatData
             }
             outputText+="; ";
 
-            outputText+="font-size: ";
             // Give the font size relatively (be kind with people with impered vision)
             // TODO: option to give absolute font sizes
             int size=(*paraFormatDataIt).fontSize;
             // 12pt is considered the normal size // TODO: relative to layout!
             if (size>0)
             {
+                // TODO: decide if we use absolute or relative font sizes
+#if 1
+                //For now we use absolute font sizes
+                outputText+="font-size: ";
+                outputText+=QString::number(size,10);
+                outputText+="pt; ";
+#else
+                // Algorithm is not good enough!
+                outputText+="font-size: ";
                 size /= 4;
                 size -= 3;
                 if (!size)
@@ -779,12 +787,9 @@ static void ProcessParagraphDataStyle ( QString &paraText, QValueList<FormatData
                 {// Should not happen!
                     outputText+="medium";
                 }
+                outputText+="; ";
+#endif
             }
-            else
-            {// No font size set, so assume medium font size.
-                    outputText+="medium";
-            }
-            outputText+="; ";
 
             // Give colour
             outputText+="color: #";
