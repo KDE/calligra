@@ -359,23 +359,29 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
     textobj.setAttribute(attrBulletColor2, textSettings.bulletColor[1].name());
     textobj.setAttribute(attrBulletColor3, textSettings.bulletColor[2].name());
     textobj.setAttribute(attrBulletColor4, textSettings.bulletColor[3].name());
+#endif
+    Qt3::QTextParag *parag = textDocument()->firstParag();
     // ### fix this loop (Werner)
     while ( parag ) {
         QDomElement paragraph=doc.createElement(tagP);
+#if 0
         paragraph.setAttribute(attrAlign, parag->alignment());
         paragraph.setAttribute(attrType, (int)parag->type());
         paragraph.setAttribute(attrDepth, parag->listDepth());
         KTextEditFormat *lastFormat = 0;
+#endif
+        KoTextFormat *lastFormat = 0;
         QString tmpText, tmpFamily, tmpColor;
         int tmpPointSize=10;
         unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false;
         for ( int i = 0; i < parag->length(); ++i ) {
-            KTextEditString::Char *c = parag->at( i );
-            if ( !lastFormat || c->format->key() != lastFormat->key() ) {
+            //KTextEditString::Char *c = parag->at( i );
+            QTextStringChar &c = parag->string()->at(i);
+            if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
                 if ( lastFormat )
                     paragraph.appendChild(saveHelper(tmpText, tmpFamily, tmpColor, tmpPointSize,
-                                                     tmpBold, tmpItalic, tmpUnderline, doc));
-                lastFormat = c->format;
+                                                     tmpBold, tmpItalic, tmpUnderline,tmpStrikeOut, doc));
+                lastFormat = static_cast<KoTextFormat*> (c.format());
                 tmpText="";
                 tmpFamily=lastFormat->font().family();
                 tmpPointSize=lastFormat->font().pointSize();
@@ -385,16 +391,16 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
                 tmpStrikeOut=static_cast<unsigned int>(lastFormat->font().strikeOut());
                 tmpColor=lastFormat->color().name();
             }
-            tmpText+=c->c;
+            tmpText+=c.c;
         }
         if ( lastFormat ) {
             paragraph.appendChild(saveHelper(tmpText, tmpFamily, tmpColor, tmpPointSize,
-                                             tmpBold, tmpItalic, tmpUnderline, ,tmpStrikeOut,doc));
+                                             tmpBold, tmpItalic, tmpUnderline, tmpStrikeOut,doc));
         }
         textobj.appendChild(paragraph);
         parag = parag->next();
     }
-#endif
+//#endif
     return textobj;
 }
 
