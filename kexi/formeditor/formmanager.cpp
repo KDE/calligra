@@ -32,7 +32,7 @@
 #include <kmessagebox.h>
 
 #include <kdeversion.h>
-#if KDE_IS_VERSION(3,1,9)
+#if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
 # include <kactioncollection.h>
 #endif
 
