@@ -20,7 +20,7 @@
 #ifndef PGCONFDIA_H
 #define PGCONFDIA_H
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qmap.h>
 
 #include <global.h>
@@ -42,7 +42,7 @@ class KPresenterSoundPlayer;
 /* class PgConfDia                                                */
 /******************************************************************/
 
-class PgConfDia : public QDialog
+class PgConfDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -70,7 +70,6 @@ protected:
     QCheckBox *infinitLoop, *manualSwitch;
     QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
     QLabel *label1, *label2, *label3, *lTimer;
-    QPushButton *cancelBut, *okBut;
     QComboBox *effectCombo;
     QVBoxLayout *back;
     QListView *lSlides;

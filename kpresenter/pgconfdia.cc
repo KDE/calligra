@@ -52,15 +52,15 @@
 PgConfDia::PgConfDia( QWidget* parent, const char* name,
                       bool infLoop, bool swMan, int pgNum, PageEffect pageEffect,
                       PresSpeed presSpeed, int pageTimer, bool soundEffect, QString fileName )
-    : QDialog( parent, name, true )
+    : KDialogBase( parent, name, true, "",Ok|Cancel )
 {
     soundPlayer = 0;
 
-    QVBoxLayout *back = new QVBoxLayout( this, 4 );
-    back->setMargin( 10 );
-    back->setSpacing( 10 );
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *back = new QVBoxLayout( page, 0, spacingHint() );
 
-    general = new QButtonGroup( 1, Qt::Horizontal, i18n( "General" ), this, "general" );
+    general = new QButtonGroup( 1, Qt::Horizontal, i18n( "General" ), page, "general" );
     general->setFrameStyle( QFrame::Box | QFrame::Sunken );
 
     infinitLoop = new QCheckBox( i18n( "&Infinite Loop" ), general );
@@ -77,7 +77,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     back->addWidget(general);
 
 
-    QGroupBox *grp = new QGroupBox( i18n( "Page Configuration" ), this );
+    QGroupBox *grp = new QGroupBox( i18n( "Page Configuration" ), page );
     back->addWidget( grp );
     QGridLayout *grid = new QGridLayout( grp, 4, 4, 15 );
 
@@ -185,21 +185,10 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     connect( slides, SIGNAL( clicked( int ) ),
              this, SLOT( presSlidesChanged( int ) ) );
 
-    KButtonBox *bb = new KButtonBox( this );
 
-    bb->addStretch();
-    okBut = bb->addButton( i18n( "OK" ) );
-    okBut->setDefault( true );
-    cancelBut = bb->addButton( i18n( "Cancel" ) );
-    bb->layout();
+    connect( this, SIGNAL( okClicked() ), this, SLOT( confDiaOk() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 
-    bb->setMaximumHeight( okBut->sizeHint().height() + 5 );
-
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( confDiaOk() ) );
-    connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
-
-    back->addWidget(bb);
 
     soundEffectChanged();
 
