@@ -189,7 +189,7 @@ public:
 	}
 
 	/**
-	 * Returns true if the knot is selected. This is a convenience function.
+	 * Selects/deselects the knot of this segment.
 	 */
 	void selectKnot( bool select = true )
 	{
@@ -198,8 +198,8 @@ public:
 
 
 	/**
-	 * Returns index of the node at point p. Returns 0 of none
-	 * matches.
+	 * Returns index of the node at point p. Returns 0 if no
+	 * segment point matches point p.
 	 */
 	// TODO: Move this function into "userland"
 	uint nodeNear( const KoPoint& p,
