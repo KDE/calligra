@@ -417,7 +417,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             QPixmap *pix = 0;
             QColorGroup cg = QApplication::palette().active();
             QBrush bgBrush( settings->getBackgroundColor() );
-            bgBrush.setColor( Qt::blue /*KWDocument::resolveBgColor( bgBrush.color(), p )*/ );
+            bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
             cg.setBrush( QColorGroup::Base, bgBrush );
 
             textdoc->drawParag( p, cursor->parag(), iPoint.x() - 5, iPoint.y(), 10, h,
