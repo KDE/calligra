@@ -39,6 +39,7 @@
 #include <kimageio.h>
 #include <kstddirs.h>
 #include <kdebug.h>
+#include <kio/netaccess.h>
 
 #include <stdlib.h>
 
@@ -249,13 +250,10 @@ void KoTemplateCreateDia::slotOk() {
         return;
     }
 
-    // gereate the command to copy the template file
-    QString command="cp ";
-    command+=m_file;
-    command+=" ";
-    command+=templateDir;
-    command+=file;
-    system(command.local8Bit());
+    // copy the template file
+    KURL dest;
+    dest.setPath(templateDir+file);
+    KIO::NetAccess::copy(m_file, dest);
 
     // if there's a .directory file, we copy this one, too
     bool ready=false;
@@ -265,11 +263,7 @@ void KoTemplateCreateDia::slotOk() {
             QString file=(*it)+".directory";
             QFileInfo info(file);
             if(info.exists()) {
-                command="cp ";
-                command+=file;
-                command+=" ";
-                command+=dir;
-                system(command.local8Bit());
+                KIO::NetAccess::copy(file, dir);
                 ready=true;
             }
         }
