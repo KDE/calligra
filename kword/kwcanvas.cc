@@ -77,6 +77,9 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
              this, SLOT( resizeContents( int, int ) ) );
     resizeContents( doc->paperWidth(), doc->paperHeight() * doc->getPages() );
 
+    connect( doc, SIGNAL( repaintChanged( KWFrameSet * ) ),
+             this, SLOT( repaintChanged( KWFrameSet * ) ) );
+
     // Add an action for debugging
     (void) new KAction( "Print richtext debug info" , 0,
                         this, SLOT( printRTDebug() ),
@@ -92,7 +95,7 @@ KWCanvas::~KWCanvas()
 
 void KWCanvas::repaintChanged( KWFrameSet * fs )
 {
-    //kdDebug() << "KWCanvas::repaintChanged " << fs << endl;
+    kdDebug() << "KWCanvas::repaintChanged " << fs << endl;
     QPainter p( viewport() );
     p.translate( -contentsX(), -contentsY() );
     p.setBrushOrigin( -contentsX(), -contentsY() );

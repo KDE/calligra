@@ -420,7 +420,7 @@ public:
      * @returns the document for the formulas
      */
     KFormulaDocument* getFormulaDocument();
-    
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
@@ -428,6 +428,7 @@ signals:
     void sig_removeObject( KWChild *_child );
     void sig_newContentsSize( int width, int height );
     void pageNumChanged();
+    void repaintChanged( KWFrameSet * frameset );
 
 protected slots:
     void slotDocumentRestored();

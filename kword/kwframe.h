@@ -397,6 +397,13 @@ public:
     QString getName() const { return name; }
     void setName( const QString &_name ) { name = _name; }
 
+signals:
+
+    // Emitted when something has changed in this frameset,
+    // so that all views repaint it. KWDocument connects to it,
+    // and KWCanvas connects to KWDocument.
+    void repaintChanged( KWFrameSet * frameset );
+
 protected:
 
     // Determine the clipping rectangle for drawing the contents of @p frame with @p painter
@@ -541,10 +548,6 @@ public:
 
     KFormulaContainer* getFormula() const { return formula; }
 
-signals:
-
-    void repaintChanged();
-    
 protected slots:
 
     void slotFormulaChanged(int width, int height);
@@ -590,10 +593,6 @@ public:
     virtual void paste();
     virtual void selectAll();
 
-protected slots:
-
-    void repaintChanged();
-    
 private:
     KFormulaView* formulaView;
 };

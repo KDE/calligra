@@ -337,6 +337,9 @@ KWFrameSet::KWFrameSet( KWDocument *_doc )
     : frames(), removeableHeader( false ), visible( true )
 {
     doc = _doc;
+    // Forward our "repaintChanged" signals to the document.
+    connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
+             doc, SIGNAL( repaintChanged( KWFrameSet * ) ) );
     frames.setAutoDelete( true );
     frameInfo = FI_BODY;
     current = 0;
@@ -1163,8 +1166,11 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
         iter.current()->setWidth(width);
         iter.current()->setHeight(height);
     }
+    // You probably have only one frame anyway, so .first() is ok,
+    // and you should take the zoom into account.... Does kformula support zooming ?
+
     updateFrames();
-    emit repaintChanged();
+    emit repaintChanged( this );
 }
 
 /*================================================================*/
@@ -1175,7 +1181,11 @@ void KWFormulaFrameSet::updateFrames()
         return;
 
     // This is buggy. Who knows how to fix?
-    formula->moveTo(frames.at(0)->x(), frames.at(0)->y());
+    //formula->moveTo(frames.at(0)->x(), frames.at(0)->y());
+    // I do :)
+    formula->moveTo( kWordDocument()->zoomItX( frames.at(0)->x() ),
+                     kWordDocument()->zoomItY( frames.at(0)->y() ) );
+
 #if 0
     if ( pic )
         delete pic;
@@ -1252,7 +1262,6 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
         : KWFrameSetEdit(fs, canvas)
 {
     kdDebug(32001) << "KWFormulaFrameSetEdit::KWFormulaFrameSetEdit" << endl;
-    connect(fs, SIGNAL(repaintChanged()), this, SLOT(repaintChanged()));
     formulaView = new KFormulaView(fs->getFormula(), canvas->viewport());
 
     focusInEvent();
@@ -1265,11 +1274,6 @@ KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
     focusOutEvent();
     delete formulaView;
     formulaFrameSet()->deactivate();
-}
-
-void KWFormulaFrameSetEdit::repaintChanged()
-{
-    m_canvas->repaintChanged(frameSet());
 }
 
 /**

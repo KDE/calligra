@@ -114,6 +114,8 @@ public:
     void clearUndoRedoInfo();
     void pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
     void pasteText( QTextCursor * cursor, const QString & text, QTextFormat * currentFormat, bool removeSelected );
+    void selectAll( bool select );
+    void selectionChanged() { emit repaintChanged( this ); }
 
     /** Set format changes on selection or current cursor */
     void setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags, bool zoomFont = false );
@@ -157,8 +159,6 @@ signals:
     void updateUI();
     // Same thing, when the current format (of the edit object) was changed
     void showCurrentFormat();
-    // Emitted when, well, what was changed should be repainted by the views
-    void repaintChanged();
     // The views should make sure the cursor is visible
     void ensureCursorVisible();
 
@@ -310,7 +310,7 @@ public slots:
 
 protected:
     void placeCursor( const QPoint &pos /* in internal coordinates */ );
-    void selectAll( bool select );
+    void selectAll( bool select ) { textFrameSet()->selectAll( select ); }
     KWDrag * newDrag( QWidget * parent ) const;
 
 private slots:
