@@ -36,63 +36,76 @@
 QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
 {
     // Reference: section 4.1.3 of the CSS2 recommendation
-    // NOTE: when we need to escape, we choose the numerical CSS escape as it is encoding neutral.
-    // But be careful, we cannot have spaces in identifiers, even after CSS escapes
-    // Therefore we must take care that the character after the CSS escape is not part of it.
+    // (When we need to escape, we choose the numerical CSS escape as it is encoding neutral.)
+    // However most HTML user agents supports this section only in a restrictive way, so we cannot use an escape
+    // to allow a character if it would not be allow unescaped (for example a space.)
+
+    // NOTE: we do not guarantee anymore that the style name is unique! (### FIXME)
 
     QString strReturn;
     bool lastEscaped=false; // Was the last character escaped?
 
     for (uint i=0; i<strText.length(); i++)
     {
-        const QChar ch(strText[i]);
+        const QChar qch(strText.at(i));
+        const ushort ch=qch.unicode();
 
         if (lastEscaped
             && (((ch>='a') && (ch<='f'))
             || ((ch>='A') && (ch<='F'))
             || ((ch>='0') && (ch<='9')) ))
         {
-             // The previous characters was escaped and the current character could be an hexadecimal digit
+             // The previous character was escaped and the current character could be an hexadecimal digit
              // Therefore we need to escape it too.
             strReturn+='\\'; // start escape
-            strReturn+=QString::number(ch.unicode(),16);
+            strReturn+=QString::number(ch,16);
             lastEscaped=true;
         }
         else if (((ch>='a') && (ch<='z'))
             || ((ch>='A') && (ch<='Z')))
         {
-            strReturn+=ch;
+            strReturn+=qch;
             lastEscaped=false;
         }
         else if (((ch>='0') && (ch<='9'))
-            || (ch=='-') || (ch=='_')) // The underscore is allowed in the CSS2 errata
+            || (ch=='-') || (ch=='_')) // The underscore is allowed by the CSS2 errata
         {
             if (!i)
             {
-                // A digit or a hyphen is not allowed as first character of an identifier
-                //  therefore we must escape it
-                strReturn+='\\'; // start escape
-                strReturn+=QString::number(ch.unicode(),16);
-                lastEscaped=true;
+                // A digit, a dash or a hyphen are not allowed as first character of an identifier.
+                // Therefore we need to put something valid before this character.
+                strReturn+="kWoRd_"; // The curious spelling is for allowing a HTML import to identfy it and to remove it.
             }
-            else
-            {
-                strReturn+=ch;
-                lastEscaped=false;
-            }
+            strReturn+=qch;
+            lastEscaped=false;
         }
-        else if ((ch>=QChar(161)) && (getCodec()->canEncode(ch)))
+        else if ((ch<=' ') || (ch>=128 && ch<=160)) // space (breaking or not) and control characters
+        {
+            // CSS2 would allow to escape them but no HTML user agent supports this
+            strReturn+='_'; // This makes the identifier (style name) potentially non-unique
+            lastEscaped=false;
+        }
+        else if ((ch>=161) && (getCodec()->canEncode(qch)))
         {
             // Any Unicode character greater or egual to 161 is allowed too, even at start.
             // Except if the encoding cannot write the character
-            strReturn+=ch;
+            strReturn+=qch;
             lastEscaped=false;
         }
-        else
+        else if (ch>=161)
         {
+            // ### TODO: verify if HTML user agents really support it
             // We have a non-acceptable character, so escape it!
             strReturn+='\\'; // start escape
-            strReturn+=QString::number(ch.unicode(),16);
+            strReturn+=QString::number(ch,16);
+            lastEscaped=true;
+        }
+        else // if ch >= 33 && ch <=127 but without alphanumerics
+        {
+            // ### FIXME: CSS2 does not allow these character unescaped, so probably it breaks some HTML user agents
+            // We have a non-acceptable character, so escape it!
+            strReturn+='\\'; // start escape
+            strReturn+=QString::number(ch,16);
             lastEscaped=true;
         }
     }
