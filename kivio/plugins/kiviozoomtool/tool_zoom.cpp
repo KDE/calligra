@@ -21,7 +21,6 @@
 #include "kivio_page.h"
 #include "kivio_canvas.h"
 #include "kivio_factory.h"
-#include "toolbarseparator.h"
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -40,7 +39,6 @@ ZoomTool::ZoomTool(KivioView* view)
   setSortNum(1);
   m_pToolBar = 0L;
 
-  new ToolBarSeparator(actionCollection(),"---");
   m_z1 = new KRadioAction( i18n("Zoom"), "kivio_zoom", Key_F2, actionCollection(), "zoom" );
   m_z2 = new KRadioAction( i18n("Hand"), "kivio_zoom_hand", Key_F3, actionCollection(), "zoomHand" );
   m_z1->setExclusiveGroup("zoomAction");

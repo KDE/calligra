@@ -77,7 +77,6 @@
 #include "kivio_grid_data.h"
 #include "kivio_config.h"
 
-#include "toolbarseparator.h"
 #include "tkcoloractions.h"
 #include "kivio_lineendsaction.h"
 #include "tkfloatspinboxaction.h"
@@ -323,8 +322,6 @@ void KivioView::createProtectionDock()
 
 void KivioView::setupActions()
 {
-  (void) new ToolBarSeparator(actionCollection(),"---");
-
   m_unitAct = new TKUnitsAction(actionCollection(),"units");
   connect( m_unitAct, SIGNAL(activated(int)), m_pDoc, SLOT(setUnits(int)) );
   connect( m_pDoc, SIGNAL(unitsChanged(int)), m_unitAct, SLOT(setCurrentItem(int)) );

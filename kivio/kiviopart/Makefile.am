@@ -38,7 +38,6 @@ libkiviopart_la_SOURCES = \
 		kivio_config.cpp\
 		kivio_spawner_drag.cpp\
 		kivio_intra_stencil_data.cpp\
-		toolbarseparator.cpp\
 		kivio_stackbar.cpp\
 		stencilbarbutton.cpp\
 		stencilbardockmanager.cpp\

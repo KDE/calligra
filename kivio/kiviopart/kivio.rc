@@ -60,10 +60,10 @@
 </ToolBar>
 <ToolBar name="ViewToolBar" fullWidth="false"><text>View</text>
   <Action name="viewZoom"/>
-  <Action name="---"/>
+  <Separator lineSeparator="true" />
   <Action name="showPageBorders"/>
   <Action name="showPageMargins"/>
-  <Action name="---"/>
+  <Separator lineSeparator="true" />
   <Action name="showRulers"/>
   <Action name="showGrid"/>
   <Action name="units"/>
@@ -72,17 +72,17 @@
   <Action name="cutStencil"/>
   <Action name="copyStencil"/>
   <Action name="pasteStencil"/>
-  <Action name="---"/>
+  <Separator lineSeparator="true" />
   <Action name="groupStencils"/>
   <Action name="ungroupStencils"/>
-  <Action name="---"/>
+  <Separator lineSeparator="true" />
   <Action name="sendStencilToBack"/>
   <Action name="bringStencilToFront"/>
 </ToolBar>
 <ToolBar name="ColorBar" fullWidth="false"><text>Colors</text>
   <Action name="setFGColor"/>
   <Action name="setBGColor"/>
-  <Action name="---"/>
+  <Separator lineSeparator="true" />
   <Action name="setLineWidth"/>
 </ToolBar>
 <ToolBar name="ArrowBar" fullWidth="false"><text>Arrows</text>
@@ -97,13 +97,13 @@
 <ToolBar name="TextBar" fullWidth="false"><text>Format</text>
   <Action name="setFontFamily"/>
   <Action name="setFontSize"/>
-  <Action name="---"/>
+  <Separator lineSeparator="true" />
   <Action name="setTextColor"/>
-  <Action name="---"/>
+  <Separator lineSeparator="true" />
   <Action name="setFontBold"/>
   <Action name="setFontItalics"/>
   <Action name="setFontUnderline"/>
-  <Action name="---"/>
+  <Separator lineSeparator="true" />
   <Action name="setHTextAlignment"/>
   <Action name="setVTextAlignment"/>
 </ToolBar>
