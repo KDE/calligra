@@ -5,7 +5,7 @@ if ! kde-config ; then
 fi
 
 instance=kword
-applnks=`kde-config --path apps`
+applnks=`kde-config --path apps`:`kde-config --path xdgdata-apps`
 found=0
 
 function checkname()
@@ -34,8 +34,11 @@ function checkname()
 
 IFS=:
 for dir in $applnks; do
-  f="$dir/Office/$instance.desktop"
-  checkname $f
+  if test -n "$dir"; then
+    echo Looking under applnk dir: $dir
+    f="$dir/Office/$instance.desktop"
+    checkname $f
+  fi
 done
 
 if [ $found = 0 ]; then
@@ -44,10 +47,12 @@ if [ $found = 0 ]; then
   echo
 
   for dir in $applnks; do
-    echo Looking under applnk dir: $dir
-    for f in `find $dir -name $instance.desktop`; do
-      checkname $f
-    done
+    if test -n "$dir"; then
+      echo Looking under applnk dir: $dir
+      for f in `find $dir -name $instance.desktop`; do
+        checkname $f
+      done
+    fi
   done
 fi
 
