@@ -1132,6 +1132,14 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
         Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
         pageLayoutName = (*it).name;
     }
+
+    styles = mainStyles.styles( STYLE_PRESENTATIONSTICKYOBJECT );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        //TODO fix me graphic-properties ???
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
+    }
+
     stylesWriter.endElement(); // office:automatic-styles
 
     //code from kword

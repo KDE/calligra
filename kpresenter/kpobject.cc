@@ -1762,7 +1762,11 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
 QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
 {
     saveOasisPosObject( xmlWriter,indexObj );
-    KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
+    KoGenStyle styleobjectauto;
+    if ( sticky )
+        styleobjectauto = KoGenStyle( KPresenterDoc::STYLE_PRESENTATIONSTICKYOBJECT, "presentation" );
+    else
+        styleobjectauto = KoGenStyle( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
     switch ( fillType )
     {
     case FT_BRUSH:
@@ -1796,7 +1800,10 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
     saveOasisMarginElement( styleobjectauto );
     saveOasisShadowElement( styleobjectauto );
 
-    return mainStyles.lookup( styleobjectauto, "gr" );
+    if ( sticky )
+        return mainStyles.lookup( styleobjectauto, "pr" );
+    else
+        return mainStyles.lookup( styleobjectauto, "gr" );
 }
 
 QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles )
