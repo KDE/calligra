@@ -78,8 +78,7 @@ KoPicture KoPictureCollection::downloadPicture(const KURL& url)
     KoPicture pic;
     kdDebug(30003) << "Trying to download picture from file " << url.prettyURL() << endl;
 
-    // ### FIXME: key is not set!  
-    if (pic.download(url))
+    if (pic.setKeyAndDownloadPicture(url))
         insertPicture(pic.getKey(), pic);
     else
         kdWarning(30003) << "Could not download KoPicture from " << url.prettyURL() << endl;
