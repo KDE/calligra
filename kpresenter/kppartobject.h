@@ -38,7 +38,7 @@ public:
     KPPartObject( KPresenterChild *_child );
     virtual ~KPPartObject()
     {}
-    
+
     virtual void save( ostream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
 
@@ -48,11 +48,11 @@ public:
     { brush = _brush; }
     virtual void setFillType( FillType _fillType );
     virtual void setGColor1( QColor _gColor1 )
-    { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; redrawPix = true; }
+    { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }
     virtual void setGColor2( QColor _gColor2 )
-    { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; redrawPix = true; }
+    { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
     virtual void setGType( BCType _gType )
-    { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; redrawPix = true; }
+    { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
 
     virtual ObjType getType()
     { return OT_PART; }
@@ -102,8 +102,6 @@ protected:
     FillType fillType;
 
     KPGradient *gradient;
-    QPixmap pix;
-    bool redrawPix;
     bool _enableDrawing;
 
     KPresenterFrame *view;

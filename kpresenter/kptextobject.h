@@ -20,10 +20,6 @@
 #include "ktextobject.h"
 #include "kpgradient.h"
 
-#include <qpixmap.h>
-
-class KPGradient;
-
 /******************************************************************/
 /* Class: KPTextObject                                            */
 /******************************************************************/
@@ -34,7 +30,7 @@ public:
     KPTextObject();
     virtual ~KPTextObject()
     {}
-    
+
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
 
@@ -44,11 +40,11 @@ public:
     { brush = _brush; }
     virtual void setFillType( FillType _fillType );
     virtual void setGColor1( QColor _gColor1 )
-    { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; redrawPix = true; }
+    { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }
     virtual void setGColor2( QColor _gColor2 )
-    { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; redrawPix = true; }
+    { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
     virtual void setGType( BCType _gType )
-    { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; redrawPix = true; }
+    { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
     virtual void setDrawEditRect( bool b )
     { drawEditRect = b; }
     virtual void setDrawEmpty( bool b )
@@ -103,8 +99,6 @@ protected:
     FillType fillType;
 
     KPGradient *gradient;
-    QPixmap pix;
-    bool redrawPix;
     bool drawEditRect, drawEmpty;
 
 };

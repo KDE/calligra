@@ -35,7 +35,6 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
     gradient = 0;
     fillType = FT_BRUSH;
     gType = BCT_GHORZ;
-    redrawPix = false;
     pen = QPen( Qt::black, 1, Qt::NoPen );
     gColor1 = Qt::red;
     gColor2 = Qt::green;
@@ -58,13 +57,28 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oh = ext.height();
     KRect r;
 
+    int penw = pen.width();
+    
     _painter->save();
 
     r = _painter->viewport();
     _painter->setViewport( ox, oy, r.width(), r.height() );
 
     if ( angle == 0 )
+    {
+        _painter->setPen( Qt::NoPen );
+        _painter->setBrush( brush );
+        if ( fillType == FT_BRUSH || !gradient )
+            _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+        else
+            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+
+        _painter->setPen( pen );
+        _painter->setBrush( Qt::NoBrush );
+        _painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
+
         paint( _painter );
+    }
     else
     {
         KRect br = KRect( 0, 0, ow, oh );
@@ -82,6 +96,19 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
         m = m2 * mtx * m;
 
         _painter->setWorldMatrix( m );
+
+        _painter->setPen( Qt::NoPen );
+        _painter->setBrush( brush );
+
+        if ( fillType == FT_BRUSH || !gradient )
+            _painter->drawRect(penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+        else
+            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+
+        _painter->setPen( pen );
+        _painter->setBrush( Qt::NoBrush );
+        _painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
+
         paint( _painter );
     }
 
@@ -104,39 +131,7 @@ void KPPartObject::paint( QPainter *_painter )
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
-    int pw = pen.width();
-
-    if ( pic && !pic->isNull() )
-    {
-        if ( fillType == FT_BRUSH || !gradient )
-        {
-            _painter->drawRect( pw, pw, ext.width() - 2 * pw, ext.height() - 2 * pw );
-            _painter->drawPicture( *pic );
-        }
-        else
-        {
-            int ow = ext.width();
-            int oh = ext.height();
-    
-            if ( angle == 0 )
-                _painter->drawPixmap( pw, pw, *gradient->getGradient(), 0, 0, ow - 2 * pw, oh - 2 * pw );
-            else
-            {
-                QPixmap pix( ow - 2 * pw, oh - 2 * pw );
-                QPainter p;
-                p.begin( &pix );
-                p.drawPixmap( 0, 0, *gradient->getGradient() );
-                p.end();
-    
-                _painter->drawPixmap( pw, pw, pix );
-            }
-    
-            _painter->setPen( pen );
-            _painter->setBrush( Qt::NoBrush );
-            _painter->drawRect( pw, pw, ow - 2 * pw, oh - 2 * pw );
-            _painter->drawPicture( *pic );
-        }
-    }
+    _painter->drawPicture( *pic );
 }
 
 /*================================================================*/
@@ -166,11 +161,7 @@ void KPPartObject::setSize( int _width, int _height )
     if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
-    {
         gradient->setSize( getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
 
     getNewPic = true;
 }
@@ -186,11 +177,7 @@ void KPPartObject::resizeBy( int _dx, int _dy )
     if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
-    {
         gradient->setSize( getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
 
     getNewPic = true;
 }
@@ -220,11 +207,7 @@ void KPPartObject::setFillType( FillType _fillType )
         gradient = 0;
     }
     if ( fillType == FT_GRADIENT && !gradient )
-    {
         gradient = new KPGradient( gColor1, gColor2, gType, getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
 }
 
 /*================================================================*/
@@ -255,7 +238,7 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // effects
         if ( name == "EFFECTS" )
         {

@@ -35,7 +35,6 @@ KPTextObject::KPTextObject()
     gradient = 0;
     fillType = FT_BRUSH;
     gType = BCT_GHORZ;
-    redrawPix = false;
     pen = QPen( Qt::black, 1, Qt::NoPen );
     gColor1 = Qt::red;
     gColor2 = Qt::green;
@@ -51,11 +50,7 @@ void KPTextObject::setSize( int _width, int _height )
     ktextobject.resize( ext );
 
     if ( fillType == FT_GRADIENT && gradient )
-    {
         gradient->setSize( getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
 }
 
 /*======================= set size ===============================*/
@@ -66,11 +61,7 @@ void KPTextObject::resizeBy( int _dx, int _dy )
     ktextobject.resize( ext );
 
     if ( fillType == FT_GRADIENT && gradient )
-    {
         gradient->setSize( getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
 }
 
 /*================================================================*/
@@ -84,11 +75,7 @@ void KPTextObject::setFillType( FillType _fillType )
         gradient = 0;
     }
     if ( fillType == FT_GRADIENT && !gradient )
-    {
         gradient = new KPGradient( gColor1, gColor2, gType, getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
 }
 
 /*========================= save =================================*/
@@ -125,7 +112,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // orig
         if ( name == "ORIG" )
         {
@@ -353,41 +340,13 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
-    int pw = pen.width();
-
-    _painter->save();
-    _painter->setViewport( ox, oy, r.width(), r.height() );
-    if ( ownClipping )
-        _painter->setClipRect( _x, _y, _w, _h );
-    if ( fillType == FT_BRUSH || !gradient )
-        _painter->drawRect( pw, pw, ext.width() - 2 * pw, ext.height() - 2 * pw );
-    else
-    {
-        if ( angle == 0 )
-            _painter->drawPixmap( pw, pw, *gradient->getGradient(), 0, 0, ow - 2 * pw, oh - 2 * pw );
-        else
-        {
-            QPixmap pix( ow - 2 * pw, oh - 2 * pw );
-            QPainter p;
-            p.begin( &pix );
-            p.drawPixmap( 0, 0, *gradient->getGradient() );
-            p.end();
-    
-            _painter->drawPixmap( pw, pw, pix );
-        }
-
-        _painter->setPen( pen );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( pw, pw, ow - 2 * pw, oh - 2 * pw );
-    }
-    _painter->setViewport( r );
-    _painter->restore();
+    int penw = pen.width();
 
     if ( shadowDistance > 0 )
     {
         _painter->save();
         ktextobject.enableDrawAllInOneColor( shadowColor );
-        
+
         if ( angle == 0 )
         {
             int sx = ox;
@@ -395,7 +354,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
 
             _painter->setViewport( sx, sy, r.width(), r.height() );
-            
+
             if ( specEffects )
             {
                 switch ( effect2 )
@@ -415,7 +374,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         else
         {
             _painter->setViewport( ox, oy, r.width(), r.height() );
-    
+
             KRect br = KRect( 0, 0, ow, oh );
             int pw = br.width();
             int ph = br.height();
@@ -424,20 +383,20 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int xPos = -rr.x();
             br.moveTopLeft( KPoint( -br.width() / 2, -br.height() / 2 ) );
             rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
-            
+
             QWMatrix m, mtx;
             mtx.rotate( angle );
             m.translate( pw / 2, ph / 2 );
             m = mtx * m;
-            
+
             _painter->setWorldMatrix( m );
 
             int sx = 0;
             int sy = 0;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
-    
+
             _painter->translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
-            
+
             if ( specEffects )
             {
                 switch ( effect2 )
@@ -461,6 +420,17 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     if ( angle == 0 )
     {
+        _painter->setPen( Qt::NoPen );
+        _painter->setBrush( brush );
+        if ( fillType == FT_BRUSH || !gradient )
+            _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+        else
+            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+
+        _painter->setPen( pen );
+        _painter->setBrush( Qt::NoBrush );
+        _painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
+
         if ( specEffects )
         {
             switch ( effect2 )
@@ -492,6 +462,19 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         m = mtx * m;
 
         _painter->setWorldMatrix( m );
+        
+        _painter->setPen( Qt::NoPen );
+        _painter->setBrush( brush );
+
+        if ( fillType == FT_BRUSH || !gradient )
+            _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+        else
+            _painter->drawPixmap( rr.left() + xPos + penw, rr.top() + yPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+
+        _painter->setPen( pen );
+        _painter->setBrush( Qt::NoBrush );
+        _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ow - 2 * penw, oh - 2 * penw );
+
         _painter->translate( rr.left() + xPos, rr.top() + yPos );
 
         if ( specEffects )
@@ -603,7 +586,7 @@ void KPTextObject::saveKTextObject( ostream& out )
                 if ( txtObj->type() == TxtObj::SEPARATOR ) lastWasSpace = true;
                 else lastWasSpace = false;
                 font = txtObj->font();
-    
+
                 out << otag << "<OBJ>" << endl;
                 out << indent << "<TYPE value=\"" << static_cast<int>( txtObj->type() ) << "\"/>" << endl;
                 out << indent << "<FONT family=\"" << font.family().ascii() << "\" pointSize=\""
@@ -757,14 +740,14 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
             while ( parser.open( 0L, tag ) )
             {
                 KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
                 // line
                 if ( name == "LINE" )
                 {
                     while ( parser.open( 0L, tag ) )
                     {
                         KOMLParser::parseTag( tag.c_str(), name, lst );
-        
+
                         // object
                         if ( name == "OBJ" )
                         {
@@ -773,7 +756,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
                             while ( parser.open( 0L, tag ) )
                             {
                                 KOMLParser::parseTag( tag.c_str(), name, lst );
-            
+
                                 // type
                                 if ( name == "TYPE" )
                                 {
@@ -842,7 +825,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
                                 {
                                     QString tmp2;
                                     string tmp;
-                
+
                                     KOMLParser::parseTag( tag.c_str(), name, lst );
                                     vector<KOMLAttrib>::const_iterator it = lst.begin();
                                     for( ; it != lst.end(); it++ )
@@ -864,10 +847,10 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
                                     tmp2 = QString::fromUtf8( tmp2.ascii() );
                                     objPtr->append( tmp2 );
                                 }
-                
+
                                 else
                                     cerr << "Unknown tag '" << tag << "' in OBJ" << endl;
-            
+
                                 if ( !parser.close( tag ) )
                                 {
                                     cerr << "ERR: Closing Child" << endl;
@@ -877,10 +860,10 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
                             }
                             txtParagraph->append( objPtr );
                         }
-        
+
                         else
                             cerr << "Unknown tag '" << tag << "' in LINE" << endl;
-        
+
                         if ( !parser.close( tag ) )
                         {
                             cerr << "ERR: Closing Child" << endl;
@@ -891,7 +874,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 
                 else
                     cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;
-    
+
                 if ( !parser.close( tag ) )
                 {
                     cerr << "ERR: Closing Child" << endl;
@@ -900,7 +883,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
             }
             txtParagraph->setDepth( txtParagraph->getDepth() );
         }
-    
+
         else
             cerr << "Unknown tag '" << tag << "' in TEXTOBJ" << endl;
 
