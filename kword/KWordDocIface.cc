@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Laurent MONTEL <lmontel@mandrakesoft.com>
+   Copyright (C) 2001, 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -567,4 +567,14 @@ void KWordDocIface::setDisplayComment( bool b)
 {
     doc->getVariableCollection()->variableSetting()->setDisplayComment( b );
     doc->recalcVariables(VT_NOTE);
+}
+
+bool KWordDocIface::configAutoSuperScript() const
+{
+    return doc->getAutoFormat()->getConfigAutoSuperScript();
+}
+
+void KWordDocIface::setConfigAutoSuperScript( bool b)
+{
+    doc->getAutoFormat()->configAutoSuperScript( b );
 }

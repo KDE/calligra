@@ -164,6 +164,9 @@ k_dcop:
     bool displayComment()const;
     void setDisplayComment( bool b);
 
+    bool configAutoSuperScript() const;
+    void setConfigAutoSuperScript( bool b);
+
     //init/save config
     virtual void initConfig();
     virtual void saveConfig();
