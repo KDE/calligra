@@ -1776,6 +1776,7 @@ void KSpreadView::initialPosition()
 
     //init toggle button
     updateBorderButton();
+    updateShowTableMenu();
     m_tableFormat->setEnabled(false);
     m_mergeCell->setEnabled(false);
     m_insertChartFrame->setEnabled(false);
@@ -2720,10 +2721,13 @@ void KSpreadView::slotTableRenamed( KSpreadTable* table, const QString& old_name
 void KSpreadView::slotTableHidden( KSpreadTable* table )
 {
     m_pTabBar->hideTable( table->tableName() );
+    updateShowTableMenu();
 }
+
 void KSpreadView::slotTableShown( KSpreadTable* table )
 {
     m_pTabBar->displayTable( table->tableName() );
+    updateShowTableMenu();
 }
 
 void KSpreadView::changeTable( const QString& _name )
@@ -4900,6 +4904,11 @@ void KSpreadView::insertTable( KSpreadTable* table )
 QColor KSpreadView::borderColor() const
 {
   return m_borderColor->color();
+}
+
+void KSpreadView::updateShowTableMenu()
+{
+    m_showTable->setEnabled(m_pTabBar->listhide().count()>0);
 }
 
 #include "kspread_view.moc"

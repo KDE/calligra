@@ -189,6 +189,7 @@ public:
   KSpreadSelection* selectionInfo()const { return m_selectionInfo; }
   QRect selection() const { return selectionInfo()->selection(); }
   QPoint marker() const { return selectionInfo()->marker(); }
+    void updateShowTableMenu();
 public slots:
     void initialPosition();
     /**
