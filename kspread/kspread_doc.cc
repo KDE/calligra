@@ -167,10 +167,31 @@ bool KSpreadDoc::initDoc()
         m_pMap->addTable( t );
         }
     resetURL();
+
+    initConfig();
+
     return true;
     }
     else
         return false;
+}
+
+
+void KSpreadDoc::initConfig()
+{
+    KSpellConfig ksconfig;
+    KConfig *config = KSpreadFactory::global()->config();
+    if( config->hasGroup("KSpell kspread" ) )
+    {
+        config->setGroup( "KSpell kspread" );
+        ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
+        ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+        ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+        ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
+        ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+        ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
+        setKSpellConfig(ksconfig);
+    }
 }
 
 KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
@@ -363,7 +384,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       m_bLoading = false;
       return false;
     }
-
+  initConfig();
   return true;
 }
 

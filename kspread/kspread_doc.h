@@ -358,7 +358,7 @@ public:
 
   void insertChild( KoDocumentChild *child ) { KoDocument::insertChild( child ); }
 
-
+  void initConfig();
 
 public slots:
   /**

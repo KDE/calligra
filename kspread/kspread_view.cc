@@ -528,19 +528,6 @@ void KSpreadView::initConfig()
       }
   }
 
- // Why not do this in KSpreadDoc ? (DF)
- KSpellConfig ksconfig;
- if( config->hasGroup("KSpell kspread" ) )
- {
-   config->setGroup( "KSpell kspread" );
-   ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
-   ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
-   ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-   ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
-   ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
-   ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
-   m_pDoc->setKSpellConfig(ksconfig);
- }
  initCalcMenu();
  resultOfCalc();
 }
