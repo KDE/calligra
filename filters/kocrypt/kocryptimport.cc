@@ -133,7 +133,6 @@ QFile outf(fileOut);
     SHA1 sha1;
     char thekey[512];
 
-    // FIXME: make a better hash here.
     strncpy(thekey, pass.latin1(), 56);
     thekey[56] = 0;
  
@@ -256,14 +255,14 @@ QFile outf(fileOut);
     // Empty out this remaining block that we read in
     if (remaining > 0) {
       if (remaining > fsize) {
-        if (sha1.process(&(p[blocksize-remaining]), fsize) != fsize)
+        if (sha1.process(&(p[blocksize-remaining]), fsize) != (int)fsize)
            SHA_ERROR();
         rc = outf.writeBlock(&(p[blocksize-remaining]), fsize);
         WRITE_ERROR_CHECK((int)fsize);
         remaining -= fsize;
         fsize = 0;
       } else {
-        if (sha1.process(&(p[blocksize-remaining]), remaining) != remaining)
+        if (sha1.process(&(p[blocksize-remaining]), remaining) != (int)remaining)
            SHA_ERROR();
         rc = outf.writeBlock(&(p[blocksize-remaining]), remaining);
         WRITE_ERROR_CHECK((int)remaining);
@@ -288,7 +287,7 @@ QFile outf(fileOut);
          remaining = 0;
          continue;
       } else {
-         if (sha1.process(p, fsize) != fsize)
+         if (sha1.process(p, fsize) != (int)fsize)
             SHA_ERROR();
          rc = outf.writeBlock(p, fsize);
          WRITE_ERROR_CHECK((int)fsize);

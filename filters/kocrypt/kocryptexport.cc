@@ -132,14 +132,19 @@ int rc;
     CipherBlockChain cbc(&cipher);
     SHA1 sha1;
 
-    char thekey[512];
+    char thekey[100];   // we store 56 bytes at most currently. Keep updated!
 
-    // FIXME: obtain the password and ensure that we can use it.
-    //               we can copy the key-check routine from the blowfish code
-    //               We can re-prompt here if we like
     strncpy(thekey, pass.latin1(), 56);
     thekey[56] = 0;
 
+    if (!KeyUtil::blowfishIsUsable(thekey, strlen(thekey)*8)) {
+        // FIXME: Report
+    }
+
+    if (KeyUtil::strengthCheck(thekey, strlen(thekey)*8) < 25) {
+        // FIXME: Report, make "25" configurable
+    }
+    
     // this propagates to the cipher
     if (!cbc.setKey((void *)thekey, strlen(thekey)*8)) {
        QApplication::setOverrideCursor(Qt::arrowCursor);

@@ -38,7 +38,8 @@ class BlockCipher {
      virtual bool setKey(void *key, int bitlength) = 0;
      
      /*
-      *  Get the required key length. 
+      *  Get the required (or if it's variable, then the maximum)  key 
+      *  length for this cipher in bits. 
       */
      virtual int getKeyLen() = 0;
      
