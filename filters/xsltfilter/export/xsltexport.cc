@@ -29,7 +29,7 @@
 //#include <kwfactory.h>
 
 typedef KGenericFactory<XSLTExport, KoFilter> XSLTExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "kwordxsltfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "xsltexportfilter" ) );
 
 
 XSLTExport::XSLTExport(KoFilter *, const char *, const QStringList&) :

@@ -18,7 +18,7 @@ noinst_HEADERS = xsltexport.h xsltexportdia.h xsltproc.h
 check_PROGRAMS = xsltfilter
 xsltfilter_SOURCES = xsltfilter.c
 xsltfilter_LDADD = $(LIBXSLT_LIBS) $(LIBXML_LIBS)
-xsltfilter_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+xsltfilter_LDFLAGS = $(KDE_RPATH) $(LIBXML_RPATH) $(LIBXSLT_RPATH) $(all_libraries)
 
 
 METASOURCES = AUTO
@@ -28,4 +28,4 @@ service_DATA = xslt_export.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/xsltfilter.pot
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/xsltexportfilter.pot
