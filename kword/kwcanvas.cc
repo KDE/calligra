@@ -1127,7 +1127,21 @@ void KWCanvas::mrCreateText()
 void KWCanvas::mrCreatePixmap()
 {
     //kdDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
-    m_insRect = m_insRect.normalize();
+    // Make sure its completely on page.
+    if(m_insRect.right() > m_doc->ptPaperWidth()) {
+        double width=m_insRect.width();
+        m_insRect.setLeft(m_doc->ptPaperWidth() - width);
+        m_insRect.setRight(m_doc->ptPaperWidth());
+    }
+    int page = m_insRect.top() / m_doc->ptPaperHeight() +1;
+    kdDebug() << "page: " << page << endl;
+
+    if(m_insRect.bottom() > m_doc->ptPaperHeight() * page) {
+        double height=m_insRect.height();
+        m_insRect.setTop(m_doc->ptPaperHeight() * page - height);
+        m_insRect.setBottom(m_doc->ptPaperHeight() * page);
+    }
+
     if ( m_insRect.width() > 0 /*m_doc->gridX()*/ && m_insRect.height() > 0 /*m_doc->gridY()*/ && !m_pictureFilename.isEmpty() )
     {
         KWFrameSet * fs = 0L;
@@ -1240,6 +1254,14 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
 
         QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
         KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+
+        if(m_insRect.bottom()==0 && m_insRect.right()==0) {
+            // if the user did not drag, just click; make a 200x150 square for him.
+            m_insRect.setLeft(QMIN(m_insRect.left(), m_doc->ptPaperWidth() - 200));
+            m_insRect.setTop(QMIN(m_insRect.top(), m_doc->ptPaperHeight() - 150));
+            m_insRect.setBottom(m_insRect.top()+150);
+            m_insRect.setRight(m_insRect.left()+200);
+        }
         switch ( m_mouseMode ) {
             case MM_EDIT:
                 if ( m_currentFrameSetEdit )
