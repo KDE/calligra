@@ -28,6 +28,9 @@
 
 KexiDataAwareView::KexiDataAwareView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
+ , m_internalView(0)
+ , m_actionClient(0)
+ , m_dataAwareObject(0)
 {
 }
 
