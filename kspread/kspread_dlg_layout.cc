@@ -191,6 +191,8 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     bMultiRow = obj->multiRow();
 
     textRotation = obj->getAngle();
+    formatNumber = obj->getFormatNumber();
+
     RowLayout *rl;
     ColumnLayout *cl;
     widthSize=0;
@@ -236,6 +238,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     bStrike=TRUE;
     bUnderline=TRUE;
     bTextRotation=TRUE;
+    bFormatNumber=TRUE;
     if( left==right)
         oneCol=TRUE;
     else
@@ -294,6 +297,8 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		bBgColor = FALSE;
             if( textRotation !=obj->getAngle())
                 bTextRotation = FALSE;
+            if( formatNumber !=obj->getFormatNumber())
+                bFormatNumber = FALSE;
 	    if ( eStyle != obj->style() )
 		eStyle = KSpreadCell::ST_Undef;
 
@@ -595,6 +600,44 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 	format->setCurrentItem( 4 );
     layout->addWidget(box);
 
+    //box = new QGroupBox( this, "Box");
+    QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
+    grid = new QGridLayout(grp,5,1,15,7);
+    grp->setRadioButtonExclusive( TRUE );
+    number=new QRadioButton(i18n("Number"),grp);
+    grid->addWidget(number,0,0);
+
+    percent=new QRadioButton(i18n("Percent"),grp);
+    grid->addWidget(percent,1,0);
+
+    money=new QRadioButton(i18n("Money"),grp);
+    grid->addWidget(money,2,0);
+
+    date=new QRadioButton(i18n("Date"),grp);
+    grid->addWidget(date,3,0);
+
+    scientific=new QRadioButton(i18n("Scientific"),grp);
+    grid->addWidget(scientific,4,0);
+    layout->addWidget(grp);
+
+    if(!dlg->bFormatNumber)
+          number->setEnabled(true);
+    else
+        {
+        if(dlg->formatNumber==KSpreadCell::Number)
+                number->setChecked(true);
+        else if(dlg->formatNumber==KSpreadCell::Percentage)
+                percent->setChecked(true);
+        else if(dlg->formatNumber==KSpreadCell::Money)
+                money->setChecked(true);
+        else if(dlg->formatNumber==KSpreadCell::Scientific)
+                scientific->setChecked(true);
+        else if(dlg->formatNumber==KSpreadCell::Date)
+                date->setChecked(true);
+
+        }
+    date->setEnabled(false);
+
     this->resize( 400, 400 );
 }
 
@@ -638,6 +681,22 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
 	_obj->setFloatColor( KSpreadCell::NegRed );
 	break;
     }
+    _obj->setFaktor(1.0);
+    if(number->isChecked())
+        _obj->setFormatNumber(KSpreadCell::Number);
+    else if(percent->isChecked())
+        {
+        _obj->setFormatNumber(KSpreadCell::Percentage);
+        _obj->setFaktor(100.0);
+        }
+    else if(date->isChecked())
+        _obj->setFormatNumber(KSpreadCell::Date);
+    else if(money->isChecked())
+        _obj->setFormatNumber(KSpreadCell::Money);
+    else if(scientific->isChecked())
+        _obj->setFormatNumber(KSpreadCell::Scientific);
+    _obj->setPrecision( 0 );
+
 }
 
 

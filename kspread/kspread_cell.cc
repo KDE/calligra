@@ -106,6 +106,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_numberOfCond=-1;
   m_nbLines=0;
   m_rotateAngle=0;
+  m_eFormatNumber=KSpreadCell::Number;
 }
 
 void KSpreadCell::copyLayout( int _column, int _row )
@@ -177,6 +178,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
     }
     setComment(o->getComment());
     setAngle(o->getAngle());
+    setFormatNumber(o->getFormatNumber());
 }
 
 void KSpreadCell::copyAll( KSpreadCell *cell )
@@ -243,6 +245,7 @@ void KSpreadCell::defaultStyle()
   m_strComment="";
   m_bVerticalText=false;
   m_rotateAngle=0;
+  m_eFormatNumber=KSpreadCell::Number;
 }
 
 void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
@@ -835,12 +838,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     if ( floatFormat() == KSpreadCell::AlwaysUnsigned && v < 0.0)
       v *= -1.0;
 
-    // if precision is -1, ask for a huge number of decimals, we'll remove
-    // the zeros later. Is 8 ok ?
-    int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
-    QString localizedNumber = KGlobal::locale()->formatNumber(v, p);
     //kdDebug(36001) << "LOCALIZED NUMBER is " << localizedNumber.local8Bit() << endl;
-
+    QString localizedNumber=createFormat(v);
 
 
     // Remove trailing zeros and the decimal point if necessary
@@ -868,9 +867,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     if ( prefix() != 0L )
       m_strOutText += prefix();
     m_strOutText += localizedNumber;
+
     if ( postfix() != 0L )
       m_strOutText += postfix();
-
 
     verifyCondition();
     if ( floatColor() == KSpreadCell::NegRed && v < 0.0 && !m_pTable->getShowFormular())
@@ -1132,6 +1131,52 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   m_bLayoutDirtyFlag = FALSE;
 }
 
+QString KSpreadCell::createFormat(double value)
+{
+// if precision is -1, ask for a huge number of decimals, we'll remove
+// the zeros later. Is 8 ok ?
+int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
+QString localizedNumber= KGlobal::locale()->formatNumber(value, p);
+/*QString res = QString::number(value, 'G', p);
+cout <<"text :"<<res.ascii()<<endl;*/
+int pos=0;
+switch( m_eFormatNumber)
+        {
+        case Number :
+                localizedNumber = KGlobal::locale()->formatNumber(value, p);
+                /*if(floatFormat() == KSpreadCell::AlwaysSigned && value>=0)
+                        {
+                        if(KGlobal::locale()->positiveSign().isNull())
+                                localizedNumber='+'+localizedNumber;
+                        }*/
+                break;
+        case Percentage :
+                localizedNumber = KGlobal::locale()->formatNumber(value, p)+ " %";
+                break;
+        case Money :
+                localizedNumber = KGlobal::locale()->formatMoney(value,KGlobal::locale()->currencySymbol(),p );
+                /*if(floatFormat() == KSpreadCell::AlwaysSigned && value>=0)
+                        {
+                        if(KGlobal::locale()->positiveSign().isNull())
+                                localizedNumber='+'+localizedNumber;
+                        }*/
+                break;
+        case Scientific:
+                localizedNumber= QString::number(value, 'E', p);
+                if((pos=localizedNumber.find('.'))!=-1)
+                        localizedNumber=localizedNumber.replace(pos,1,decimal_point);
+
+                break;
+        case Date :
+                //nothing here.
+                break;
+        default :
+                kdDebug(36001)<<"Error in m_eFormatNumber\n";
+                break;
+        }
+//kdDebug(36001)<<"localizedNumber : "<<localizedNumber.ascii()<<endl;
+return localizedNumber;
+}
 
 void KSpreadCell::verifyCondition()
 {
@@ -3082,6 +3127,8 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   format.setAttribute( "floatcolor", (int)floatColor() );
   format.setAttribute( "faktor", m_dFaktor );
 
+  format.setAttribute( "format",(int) getFormatNumber() );
+
   if(m_rotateAngle!=0)
       format.setAttribute( "angle",m_rotateAngle);
   if ( m_textFont != m_pTable->defaultCell()->textFont() )
@@ -3327,6 +3374,13 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    m_dFaktor = f.attribute("faktor").toDouble( &ok );
 	    if ( !ok ) return false;
 	}
+
+        if ( f.hasAttribute( "format" ) )
+        {
+	    m_eFormatNumber=(formatNumber)f.attribute("format").toInt( &ok );
+	    if ( !ok ) return false;
+	}
+
         if ( f.hasAttribute( "brushcolor" ) )
 	    setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
 

@@ -199,7 +199,11 @@ protected:
     QLineEdit* precision;
     QLineEdit* prefix;
     QComboBox *format;
-
+    QRadioButton *number;
+    QRadioButton *percent;
+    QRadioButton *date;
+    QRadioButton *money;
+    QRadioButton *scientific;
     CellLayoutDlg *dlg;
 };
 
@@ -509,6 +513,9 @@ public:
     static QPixmap* undefinedPixmap;
     int textRotation;
     bool bTextRotation;
+
+    KSpreadCell::formatNumber formatNumber;
+    bool bFormatNumber;
 public slots:
     void slotApply();
 

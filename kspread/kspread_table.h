@@ -448,8 +448,6 @@ public:
 
     void setShowColumnNumber(bool _showColumnNumber) {m_bShowColumnNumber=_showColumnNumber;}
 
-    // ########### Nameing error
-    QString Currency(){return currency;}
 
     /**
      * Change name of reference when the user inserts or removes a column,
@@ -770,8 +768,6 @@ protected:
 
     static int s_id;
     static QIntDict<KSpreadTable>* s_mapTables;
-
-    static QString currency;
 
     bool m_bShowGrid;
     bool m_bShowFormular;

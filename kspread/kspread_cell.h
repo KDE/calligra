@@ -116,6 +116,7 @@ class KSpreadCell : public KSpreadLayout
 public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
+    enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,Date=35, Time=50 };
 
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
     /**
@@ -601,7 +602,7 @@ public:
     		m_firstCondition=new KSpreadConditional;
     	return  m_firstCondition;
     	}
-    	
+
     KSpreadConditional * getSecondCondition(int newStruct=-1)
     	{
     	if((m_secondCondition==0)&&(newStruct==-1))
@@ -621,7 +622,7 @@ public:
     		delete m_thirdCondition;
     	m_thirdCondition=0;
     	}
-    	
+
     void removeSecondCondition()
     	{
     	if(m_secondCondition!=0)
@@ -640,6 +641,12 @@ public:
     void setAngle(int _angle) {m_rotateAngle=_angle;}
 
     int getAngle(){return m_rotateAngle;}
+
+
+    void setFormatNumber(formatNumber _format){m_eFormatNumber=_format;}
+    formatNumber getFormatNumber(){return  m_eFormatNumber;}
+
+    QString createFormat(double value);
 
     /**
      * Used for comparing cells (when sorting)
@@ -916,6 +923,8 @@ protected:
     * default is null
     */
     int m_rotateAngle;
+
+    formatNumber m_eFormatNumber;
 };
 
 #endif

@@ -178,7 +178,6 @@ void ChartBinding::cellChanged( KSpreadCell* )
 
 int KSpreadTable::s_id = 0L;
 QIntDict<KSpreadTable>* KSpreadTable::s_mapTables;
-QString KSpreadTable::currency = 0L;
 
 KSpreadTable* KSpreadTable::find( int _id )
 {
@@ -233,8 +232,6 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_bShowFormular=false;
   m_bLcMode=false;
   m_bShowColumnNumber=false;
-  //init currency
-  currency = KGlobal::locale()->currencySymbol();
   // Get a unique name so that we can offer scripting
   if ( !_name )
   {
@@ -1503,7 +1500,7 @@ void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, QColor bd_Col
 		
 		
 	    }
-	
+
 	emit sig_updateView( this, r );
     }
 }
@@ -1567,22 +1564,19 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
 	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  /*if(it.current()->faktor()==100.0 && it.current()->postfix()=="%")
-	  	*/
 	  if(!b)
 	  	{
 	  	it.current()->setFaktor( 1.0 );
 	  	it.current()->setPrecision( 0 );
-	  	it.current()->setPostfix( "" );
-	  	it.current()->setPrefix( "" );
+                it.current()->setFormatNumber(KSpreadCell::Number);
 	  	}
 	  else
 		{
 		it.current()->setFaktor( 100.0 );
 	  	it.current()->setPrecision( 0 );
-	  	it.current()->setPostfix( "%" );
-	  	it.current()->setPrefix( "" );
+                it.current()->setFormatNumber(KSpreadCell::Percentage);
 	  	}
+
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -1601,21 +1595,17 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  /*if(it.current()->faktor()==100.0 && it.current()->postfix()=="%")
-	  	*/
 	  if(!b)
 	  	{
 	  	it.current()->setFaktor( 1.0 );
 	  	it.current()->setPrecision( 0 );
-	  	it.current()->setPostfix( "" );
-	  	it.current()->setPrefix( "" );
+                it.current()->setFormatNumber(KSpreadCell::Number);
 	  	}
 	  else
 		{
 		it.current()->setFaktor( 100.0 );
 	  	it.current()->setPrecision( 0 );
-	  	it.current()->setPostfix( "%" );
-	  	it.current()->setPrefix( "" );
+                it.current()->setFormatNumber(KSpreadCell::Percentage);
 	  	}
 	  it.current()->clearDisplayDirtyFlag();
 	}
@@ -1636,12 +1626,12 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
 	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
 	    m_pDoc->undoBuffer()->appendUndo( undo );
 	}
-	
+
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
-	    {		
+	    {
 		KSpreadCell *cell = cellAt( x, y );
-		
+
 		if ( cell == m_pDefaultCell )
 		{
 		    cell = new KSpreadCell( this, x, y );
@@ -1650,26 +1640,22 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
 		}
 
 		cell->setDisplayDirtyFlag();
-		/*if(cell->faktor()==100.0 && cell->postfix()=="%" )
-			*/
+
 		if(!b )
 			{
 			cell->setFaktor( 1.0 );
 			cell->setPrecision( 0 );
-			cell->setPostfix( "" );
-			cell->setPrefix( "" );
-			}
+                        cell->setFormatNumber(KSpreadCell::Number);
+                        }
 		else
 			{
 			cell->setFaktor( 100.0 );
 			cell->setPrecision( 0 );
-			cell->setPostfix( "%" );
-			cell->setPrefix( "" );
+                        cell->setFormatNumber(KSpreadCell::Percentage);
 			}
 		cell->clearDisplayDirtyFlag();
-		
 	    }
-	
+
 	emit sig_updateView( this, r );
     }
 }
@@ -2383,7 +2369,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,QColor _color )
 	    int key = y + ( x * 0x10000 );
 	    m_dctCells.insert( key, cell );
 	}
-	
+
   	cell->setRightBorderStyle( SolidLine );
    	cell->setRightBorderColor( _color );
     	cell->setRightBorderWidth( 2 );
@@ -2863,7 +2849,7 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
 	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
 	    m_pDoc->undoBuffer()->appendUndo( undo );
 	}
-	
+
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
 	    {		
@@ -2978,13 +2964,7 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
 {
     m_pDoc->setModified( true );
-    if(!currency)
-    	{
-    	currency = KGlobal::locale()->currencySymbol();
-	kdDebug(36001) << "Money:" << currency << endl;
-    	}
     bool selected = ( m_rctSelection.left() != 0 );
-    QString tmp=" "+currency;
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
@@ -2996,22 +2976,18 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
 	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	{
 	  it.current()->setDisplayDirtyFlag();
-
-	  //if(it.current()->postfix()==tmp)
-	  if(!b)
-	  	{
-	  	it.current()->setPostfix( "");
-	  	it.current()->setPrefix( "" );
-	  	it.current()->setPrecision( 0 );
-	  	}
-	  else
-	  	{
-	  	it.current()->setPostfix( " "+currency);
-	  	//it.current()->setPostfix( " DM" );
-	  	it.current()->setFaktor( 1.0 );
-	  	it.current()->setPrefix( "" );
-	  	it.current()->setPrecision( 2 );
-	  	}
+          if(b)
+                {
+                it.current()->setFormatNumber(KSpreadCell::Money);
+                it.current()->setFaktor( 1.0 );
+                it.current()->setPrecision( KGlobal::locale()->fracDigits() );
+                }
+          else
+                {
+                it.current()->setFormatNumber(KSpreadCell::Number);
+                it.current()->setFaktor( 1.0 );
+                it.current()->setPrecision( 0 );
+                }
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -3030,22 +3006,19 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  //if(it.current()->postfix()==tmp)
-	  if(!b)
-	  	{
-	  	it.current()->setPostfix( "");
-	  	it.current()->setPrefix( "" );
-	  	it.current()->setPrecision( 0 );
-	  	}
-	  else
-	  	{
-	  	it.current()->setPostfix(" "+currency);
-	  	it.current()->setFaktor( 1.0 );
-	  	//it.current()->setPostfix( " DM" );
-	  	it.current()->setPrefix( "" );
-	  	it.current()->setPrecision( 2 );
-	  	}
-	  it.current()->clearDisplayDirtyFlag();
+          if(b)
+                {
+                it.current()->setFormatNumber(KSpreadCell::Money);
+                it.current()->setFaktor( 1.0 );
+                it.current()->setPrecision( KGlobal::locale()->fracDigits() );
+                }
+          else
+                {
+                it.current()->setFormatNumber(KSpreadCell::Number);
+                it.current()->setFaktor( 1.0 );
+                it.current()->setPrecision( 0 );
+                }
+          it.current()->clearDisplayDirtyFlag();
 	}
       }
 
@@ -3064,10 +3037,10 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
 	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
 	    m_pDoc->undoBuffer()->appendUndo( undo );
 	}
-	
+
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
-	    {		
+	    {
 		KSpreadCell *cell = cellAt( x, y );
 
 		if ( cell == m_pDefaultCell )
@@ -3078,22 +3051,19 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
 		}
 
 		cell->setDisplayDirtyFlag();
-		//cell->setPostfix( " DM" );
-		//if(cell->postfix()==tmp)
-		if(!b)
-	  		{
-	  		cell->setPostfix( "");
-	  		cell->setPrefix( "" );
-	  		cell->setPrecision( 0 );
-	  		}
-	 	else
-	 		{
-			cell->setPostfix( " "+currency);
-			cell->setFaktor( 1.0 );
-			cell->setPrefix( "" );
-			cell->setPrecision( 2 );
-			}
-		cell->clearDisplayDirtyFlag();
+                if(b)
+                        {
+                        cell->setFormatNumber(KSpreadCell::Money);
+                        cell->setFaktor( 1.0 );
+                        cell->setPrecision( KGlobal::locale()->fracDigits() );
+                        }
+                else
+                        {
+                        cell->setFormatNumber(KSpreadCell::Number);
+                        cell->setFaktor( 1.0 );
+                        cell->setPrecision( 0 );
+                        }
+                cell->clearDisplayDirtyFlag();
 	    	}
 
 	emit sig_updateView( this, r );

@@ -689,3 +689,14 @@ and not at cell A1
 ----------------------------------------------------
 -Now you can select with the mouse an area from bottom to top, from top
 to bottom, from right to left and from left to right. Now it works.
+
+2000-06-28-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Add new format :scientific format
+Becareful, now format doesn't used prefix and postfix.
+All format is creating into text : example for money :
+12.5 => $ 12.5 but doesn't used prefix and postfix, so now currency symbol
+is at the good place.
+It's the same think for percent.
+
+For the moment Date format doesn't work (sorry david).

@@ -729,13 +729,18 @@ void KSpreadView::updateEditWidget()
     m_verticalText->setChecked( cell->verticalText() );
 
     m_multiRow->setChecked( cell->multiRow() );
-    if( cell->faktor()==100.0 && cell->postfix()=="%")
+    /*if( cell->faktor()==100.0 && cell->postfix()=="%")
     	m_percent->setChecked( TRUE );
     else
     	m_percent->setChecked( FALSE );
+    */
+    if(cell->getFormatNumber()==KSpreadCell::Percentage)
+        m_percent->setChecked( TRUE );
+    else
+    	m_percent->setChecked( FALSE );
 
-    if( cell->postfix()==(" "+activeTable()->Currency()))
-    	m_money->setChecked( TRUE );
+    if(cell->getFormatNumber()==KSpreadCell::Money)
+        m_money->setChecked( TRUE );
     else
     	m_money->setChecked( FALSE );
 
