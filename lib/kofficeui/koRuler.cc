@@ -782,10 +782,4 @@ void KoRuler::setTabList(QList<KoTabulator>* _tabList)
   repaint(false); 
 }
 
-
-
-
-
-
-
-
+#include "koRuler.moc"

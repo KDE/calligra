@@ -143,3 +143,5 @@ void KoTabChooser::setupMenu()
   mDecPoint =  rb_menu->insertItem(i18n("Tabulator &Decimal Point"),this,SLOT(rbDecPoint()));
   rb_menu->setCheckable(false);
 }
+
+#include "koTabChooser.moc"

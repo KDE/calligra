@@ -179,3 +179,5 @@ void KoTemplateChooseDia::chosen()
 	}
     }
 }
+
+#include "koTemplateChooseDia.moc"

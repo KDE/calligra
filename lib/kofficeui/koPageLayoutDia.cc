@@ -1172,3 +1172,5 @@ void KoPageLayoutDia::nSpaceChanged(int _val)
   cl.columnSpacing = _val;
   updatePreview(layout);
 }
+
+#include "koPageLayoutDia.moc"

@@ -105,11 +105,4 @@ KoPartSelectDia::~KoPartSelectDia()
 {
 }
 
-
-
-
-
-
-
-
-
+#include "koPartSelectDia.moc"

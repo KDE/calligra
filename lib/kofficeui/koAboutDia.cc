@@ -148,3 +148,5 @@ void KoAboutDia::about(KoApplication koapp,QString version)
 				"Please report bugs at http://buglist.kde.org.\n"));
     }
 }
+
+#include "koAboutDia.moc"
