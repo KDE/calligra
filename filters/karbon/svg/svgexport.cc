@@ -74,7 +74,6 @@ SvgExport::convert( const QCString& from, const QCString& to )
 	fileOut.close();
 
 	delete m_stream;
-	delete storeIn;
 
 	return KoFilter::OK;
 }

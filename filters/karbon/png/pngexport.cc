@@ -77,8 +77,6 @@ PngExport::convert( const QCString& from, const QCString& to )
 	// save png
 	image.save( m_chain->outputFile(), "PNG" );
 
-	delete storeIn;
-
 	return KoFilter::OK;
 }
 
