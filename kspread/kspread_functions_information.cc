@@ -85,8 +85,17 @@ bool kspreadfunc_isblank( KSContext& context )
 
   bool result = false;
 
-  if ( KSUtil::checkType( context, args[0], KSValue::Empty, true ) ) 
+  if ( KSUtil::checkType( context, args[0], KSValue::Empty, false ) ) 
     result = true;
+
+  // the following part is needed becase empty cell returns 0.0 instead
+  // of KSValue::Empty. this is due to bug in many function implementation
+  // until someone can fix this, leave it as it is (ariya, 16.05.2002)
+  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) ) 
+    result = args[0]->doubleValue() == 0.0;
+
+  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) ) 
+    result = args[0]->stringValue().isEmpty();
 
   context.setValue( new KSValue( result ) );
   return true;
@@ -104,39 +113,6 @@ bool kspreadfunc_islogic( KSContext& context )
   context.setValue( new KSValue(logic));
   return true;
 }
-
-// Function: ISEMPTY
-// FIXME will be obsoleted by ISBLANK
-bool kspreadfunc_isempty( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ISEMPTY", true ) )
-    return false;
-
-  if ( KSUtil::checkType( context, args[0], KSValue::Empty, true ) ) {
-    context.setValue( new KSValue(true) );
-    return true;
-  }
-
-  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) ) {
-    KScript::Double d = args[0]->doubleValue();
-    bool logic = (d==0);
-    context.setValue( new KSValue(logic) );
-    return true;
-  }
-
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) ) {
-    QString s = args[0]->stringValue();
-    bool logic = s.isEmpty() || s.stripWhiteSpace().isEmpty();
-    context.setValue( new KSValue(logic) );
-    return true;
-  }
-  
-  context.setValue( new KSValue(false) );
-  return true;
-}
-	
 
 // Function: ISTEXT
 bool kspreadfunc_istext( KSContext& context )

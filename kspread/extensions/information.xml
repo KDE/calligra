@@ -18,21 +18,6 @@
     </Function>
 
     <Function>
-      <Name>ISBLANK</Name>
-      <Type>Boolean</Type>
-      <Parameter>
-	<Comment>Value</Comment>
-	<Type>Any</Type>
-      </Parameter>
-      <Help>
-	<Text>The ISBLANK() function returns True if the parameter is empty. Otherwise it returns False.</Text>
-	<Syntax>ISBLANK(value)</Syntax>
-	<Example>ISBLANK(A1) returns True if A1 is empty</Example>
-	<Example>ISBLANK(A1) returns False if A1 holds a value</Example>
-      </Help>
-    </Function>
-
-    <Function>
       <Name>ISLOGIC</Name>
       <Type>Boolean</Type>
       <Parameter>
@@ -48,17 +33,17 @@
     </Function>
 
     <Function>
-      <Name>ISEMPTY</Name>
+      <Name>ISBLANK</Name>
       <Type>Boolean</Type>
       <Parameter>
 	<Comment>Any value</Comment>
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The ISEMPTY() function returns True if the parameter is empty. Otherwise it returns False.</Text>
-	<Syntax>ISEMPTY(x)</Syntax>
-	<Example>ISEMPTY(A1) returns True if A1 is empty</Example>
-	<Example>ISEMPTY(A1) returns False if A1 holds a value</Example>
+	<Text>The ISBLANK() function returns True if the parameter is empty. Otherwise it returns False.</Text>
+	<Syntax>ISBLANK(x)</Syntax>
+	<Example>ISBLANK(A1) returns True if A1 is empty</Example>
+	<Example>ISBLANK(A1) returns False if A1 holds a value</Example>
       </Help>
     </Function>
 
