@@ -30,7 +30,7 @@ public:
     ~KIllustratorShell();
 
     QString nativeFormatPattern() const { return "*.kil"; }
-    QString nativeFormatName() const { return "killustrator"; }
+    QString nativeFormatName() const;
 
  public slots:
     void slotFilePrint();

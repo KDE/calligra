@@ -22,7 +22,7 @@
 #include "KIllustrator_view.h"
 #include "KIllustrator_factory.h"
 
-#include <kstddirs.h>
+#include <klocale.h>
 
 KIllustratorShell::KIllustratorShell( const char* name )
     : KoMainWindow( KIllustratorFactory::global(), name )
@@ -32,6 +32,11 @@ KIllustratorShell::KIllustratorShell( const char* name )
 
 KIllustratorShell::~KIllustratorShell()
 {
+}
+
+QString KIllustratorShell::nativeFormatName() const
+{
+  return i18n("KIllustrator");
 }
 
 KoDocument* KIllustratorShell::createDoc()
