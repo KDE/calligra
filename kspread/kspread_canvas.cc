@@ -1674,7 +1674,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     {
       processArrowKey( _ev );
     }
-    break;;
+    break;
   case Key_Escape:
     processEscapeKey( _ev );
     break;
@@ -2344,39 +2344,41 @@ void KSpreadCanvas::updateChooseRect(QPoint newMarker, QPoint newAnchor)
 
   /* the rest of this function updates the text showing the choose rect */
 
-  // ##### Torben: Clean up here!
-  QString name_cell;
-
-  if( m_chooseStartTable != table )
+  if (newMarker.x() != 0 && newMarker.y() != 0)
+    /* don't update the text if we are removing the marker */
   {
-    if ( m_chooseMarker != m_chooseAnchor )
-      name_cell = util_cellName( table, newChooseRect.left(), newChooseRect.top() );
+    QString name_cell;
+
+    if( m_chooseStartTable != table )
+    {
+      if ( m_chooseMarker != m_chooseAnchor )
+        name_cell = util_cellName( table, newChooseRect.left(), newChooseRect.top() );
+      else
+        name_cell = util_rangeName( table, newChooseRect );
+    }
     else
-      name_cell = util_rangeName( table, newChooseRect );
+    {
+      if ( m_chooseMarker != m_chooseAnchor )
+        name_cell = util_cellName( newChooseRect.left(), newChooseRect.top() );
+      else
+        name_cell = util_rangeName( newChooseRect );
+    }
+
+    int old = length_namecell;
+    length_namecell= name_cell.length();
+    length_text = m_pEditor->text().length();
+    //kdDebug(36001) << "updateChooseMarker2 len=" << length_namecell << endl;
+
+    QString text = m_pEditor->text();
+    QString res = text.left( m_pEditor->cursorPosition() - old ) + name_cell + text.right( text.length() - m_pEditor->cursorPosition() );
+    int pos = m_pEditor->cursorPosition() - old;
+
+    ((KSpreadTextEditor*)m_pEditor)->blockCheckChoose( TRUE );
+    m_pEditor->setText( res );
+    ((KSpreadTextEditor*)m_pEditor)->blockCheckChoose( FALSE );
+    m_pEditor->setCursorPosition( pos + length_namecell );
+    //kdDebug(36001) << "old=" << old << " len=" << length_namecell << " pos=" << pos << endl;
   }
-  else
-  {
-    if ( m_chooseMarker != m_chooseAnchor )
-      name_cell = util_cellName( newChooseRect.left(), newChooseRect.top() );
-    else
-      name_cell = util_rangeName( newChooseRect );
-  }
-
-  int old = length_namecell;
-  length_namecell= name_cell.length();
-  length_text = m_pEditor->text().length();
-  //kdDebug(36001) << "updateChooseMarker2 len=" << length_namecell << endl;
-
-  QString text = m_pEditor->text();
-  QString res = text.left( m_pEditor->cursorPosition() - old ) + name_cell + text.right( text.length() - m_pEditor->cursorPosition() );
-  int pos = m_pEditor->cursorPosition() - old;
-
-  ((KSpreadTextEditor*)m_pEditor)->blockCheckChoose( TRUE );
-  m_pEditor->setText( res );
-  ((KSpreadTextEditor*)m_pEditor)->blockCheckChoose( FALSE );
-  m_pEditor->setCursorPosition( pos + length_namecell );
-  //kdDebug(36001) << "old=" << old << " len=" << length_namecell << " pos=" << pos << endl;
-
 }
 
 //---------------------------------------------
