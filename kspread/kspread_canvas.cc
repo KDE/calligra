@@ -1076,6 +1076,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 {
+  kdDebug() << "Mouse pressed" << endl;
     if ( _ev->button() == LeftButton )
         m_bMousePressed = true;
 
@@ -1946,10 +1947,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      return;
 		  if ( m_bChoose && chooseMarkerColumn() == 1 )
 		      return;
+                  int col = table->getFirstCellRow(markerRow())->column();
+                  if ( col == markerColumn() )
+                    col = 1;
 		  if ( m_bChoose )
-		      chooseGotoLocation( 1, markerRow(), 0, make_select );
+		      chooseGotoLocation( col, markerRow(), 0, make_select );
 		  else
-		      gotoLocation( 1, markerRow(), 0, make_select,false,true );
+		      gotoLocation( col, markerRow(), 0, make_select,false,true );
 	      }
 	  return;
 
