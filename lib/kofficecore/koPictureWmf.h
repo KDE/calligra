@@ -29,6 +29,7 @@ class QSize;
 // TODO: fix documentation
 
 /**
+ * @internal
  * KoPictureWmf is a container class
  */
 class KoPictureWmf : public KoPictureBase

@@ -29,6 +29,7 @@ class QSize;
 // TODO: fix documentation
 
 /**
+ * @internal
  * KoPictureClipart is a container class
  */
 class KoPictureClipart : public KoPictureBase

@@ -27,6 +27,7 @@ class KoPictureImagePrivate;
 // TODO: fix documentation
 
 /**
+ * @internal
  * KoPictureImage is a container class for a QImage-based picture
  */
 class KoPictureImage : public KoPictureBase

@@ -29,6 +29,7 @@ class KoPictureEpsPrivate;
 // TODO: fix documentation
 
 /**
+ * @internal
  * KoPictureImage is a container class for a EPS picture
  */
 class KoPictureEps : public KoPictureBase
