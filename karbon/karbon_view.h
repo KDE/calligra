@@ -29,7 +29,7 @@
 #include <ksharedptr.h>
 #include <kxmlguibuilder.h>
 #include <koUnit.h>
-#include "vcanvas.h"
+#include <koPoint.h>
 
 class DCOPObject;
 class QDockArea;
@@ -60,6 +60,7 @@ class VStroke;
 class VStrokeDocker;
 class VStrokeFillPreview;
 class VTransformDocker;
+class VCanvas;
 
 class VTool;
 class VToolFactory;
@@ -82,7 +83,7 @@ public:
 	bool mouseEvent( QMouseEvent* event, const KoPoint & );
 	bool keyEvent( QEvent* event );
 
-	virtual QWidget* canvas() { return m_canvas; }
+	virtual QWidget* canvas() const;
 
 	VCanvas* canvasWidget() const { return m_canvas; }
 

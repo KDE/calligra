@@ -26,6 +26,7 @@
 #include "karbon_view.h"
 #include "vcomposite.h"
 #include "vglobal.h"
+#include "vcanvas.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vshapecmd.h"

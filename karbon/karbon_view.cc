@@ -80,6 +80,7 @@
 #include "vqpainter.h"
 #include "vstrokefillpreview.h"
 #include "vstatebutton.h"
+#include "vcanvas.h"
 #include <kdeversion.h>
 
 // Only for debugging.
@@ -257,6 +258,12 @@ KarbonView::dcopObject()
 void
 KarbonView::updateReadWrite( bool /*rw*/ )
 {}
+
+QWidget*
+KarbonView::canvas() const
+{
+	return m_canvas;
+}
 
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )

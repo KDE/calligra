@@ -29,6 +29,7 @@
 #include <karbon_part.h>
 #include <karbon_view.h>
 #include <core/vglobal.h>
+#include <core/vcanvas.h>
 #include "vrotatetool.h"
 #include <render/vpainter.h>
 #include <render/vpainterfactory.h>

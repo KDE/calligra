@@ -33,6 +33,7 @@
 #include <vselection.h>
 #include "vsheartool.h"
 #include <commands/vtransformcmd.h>
+#include <core/vcanvas.h>
 
 VShearTool::VShearTool( KarbonView* view, const char* name ) : VTool( view, name )
 {

@@ -35,6 +35,7 @@
 #include <render/vpainter.h>
 #include <render/vpainterfactory.h>
 #include <core/vselection.h>
+#include <core/vcanvas.h>
 #include "vselecttool.h"
 #include <commands/vtransformcmd.h>
 

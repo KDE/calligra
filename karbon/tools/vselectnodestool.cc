@@ -35,6 +35,7 @@
 #include <commands/vtransformcmd.h>
 #include <visitors/vdrawselection.h>
 #include <core/vselection.h>
+#include <core/vcanvas.h>
 #include "vselectnodestool.h"
 #include <vtransformnodes.h>
 #include <commands/vdeletenodescmd.h>

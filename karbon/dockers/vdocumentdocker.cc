@@ -44,6 +44,7 @@
 #include "vlayercmd.h"
 #include "vselection.h"
 #include "vstroke.h"
+#include "vcanvas.h"
 #include "vdocumentdocker.h"
 
 static long g_lastKey = 0;
