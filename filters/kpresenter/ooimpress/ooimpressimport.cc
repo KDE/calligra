@@ -41,6 +41,7 @@ K_EXPORT_COMPONENT_FACTORY( libooimpressimport, OoImpressImportFactory( "ooimpre
 
 OoImpressImport::OoImpressImport( KoFilter *, const char *, const QStringList & )
     : KoFilter(),
+      m_numPicture( 1 ),
       m_styles( 23, true )
 {
     m_styles.setAutoDelete( true );
@@ -630,9 +631,10 @@ void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElemen
     inputFile.open( IO_ReadOnly );
 
     QString url = object.attribute( "xlink:href" ).remove( '#' );
-    QString fileName = url.mid( url.find( '/' ) + 1 );
-
     KArchiveFile* file = (KArchiveFile*) inputFile.directory()->entry( url );
+
+    QString extension = url.mid( url.find( '.' ) );
+    QString fileName = QString( "picture%1" ).arg( m_numPicture++ ) + extension;
     KoStoreDevice* out = m_chain->storageFile( "pictures/" + fileName, KoStore::Write );
     if ( out )
     {

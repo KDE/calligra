@@ -134,6 +134,7 @@ private:
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& list );
     KoFilter::ConversionStatus openFile();
 
+    int m_numPicture;
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
