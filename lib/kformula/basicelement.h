@@ -23,7 +23,7 @@
 
 // Qt Include
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 // KDE Include
@@ -234,13 +234,13 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, QList<BasicElement>&, Direction) {}
+    virtual void insert(FormulaCursor*, QPtrList<BasicElement>&, Direction) {}
 
     /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
      */
-    virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction) {}
+    virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction) {}
 
     /**
      * Moves the cursor to a normal place where new elements

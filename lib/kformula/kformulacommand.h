@@ -21,7 +21,7 @@
 #ifndef KFORMULACOMMAND_H
 #define KFORMULACOMMAND_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <kcommand.h>
 
@@ -175,7 +175,7 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    QList<BasicElement> addList;
+    QPtrList<BasicElement> addList;
 };
 
 
@@ -202,7 +202,7 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    QList<BasicElement> removedList;
+    QPtrList<BasicElement> removedList;
 
     Direction dir;
 };
@@ -260,7 +260,7 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    QList<BasicElement> removedList;
+    QPtrList<BasicElement> removedList;
 
     /**
      * The element we might have extracted.
