@@ -2210,7 +2210,7 @@ bool KPrCanvas::pNext( bool )
     // No more slides. Redisplay last one, then
     kdDebug(33001) << "Page::pNext last slide -> again" << endl;
     emit stopPres();
-    presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage);
+    presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1);
     currPresStep = *presStepList.begin();
     doObjEffects();
     return false;
@@ -4143,6 +4143,7 @@ void KPrCanvas::slotGotoPage()
     setCursor( blankCursor );
     int pg = currPresPage;
     pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), slideList, pg, this );
+    kdDebug() << "KPrCanvas::slotGotoPage "<<pg << endl;
     gotoPage( pg );
 
     if ( !spManualSwitch() ) {
@@ -4157,7 +4158,7 @@ void KPrCanvas::gotoPage( int pg )
     if ( pg != static_cast<int>( currPresPage ) ) {
         currPresPage = pg;
         kdDebug(33001) << "Page::gotoPage currPresPage=" << currPresPage << endl;
-        slideListIterator = slideList.find( currPresPage-1 );
+        slideListIterator = slideList.find( currPresPage );
         kdDebug() << "KPrCanvas::gotoPage after find iterator:" << endl;
         editMode = false;
         drawMode = false;
@@ -4167,38 +4168,12 @@ void KPrCanvas::gotoPage( int pg )
         //change active page
         m_activePage=m_view->kPresenterDoc()->pageList().at(currPresPage-1);
 
-        //int yo = m_view->kPresenterDoc()->getPageRect( 0, 0, 0, presFakt(), false ).height() * ( pg - 1 );
-        // ## shouldn't this center the slide if it's smaller ? (see KPresenterView::startScreenPresentation)
-        //view->setDiffY( yo );
-        //kdDebug(33001) << "Page::gotoPage :   setDiffY " << yo << endl;
 
         resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
         repaint( false );
         setFocus();
         m_view->refreshPageButton();
     }
-    //FIXME
-#if 0
-    if ( pg != static_cast<int>( currPresPage ) ) {
-        currPresPage = pg;
-        //kdDebug(33001) << "Page::gotoPage currPresPage=" << currPresPage << endl;
-        slideListIterator = slideList.find( currPresPage );
-        editMode = false;
-        drawMode = false;
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage);
-        currPresStep = *presStepList.begin();
-        subPresStep = 0;
-
-        //int yo = m_view->kPresenterDoc()->getPageRect( 0, 0, 0, presFakt(), false ).height() * ( pg - 1 );
-        // ## shouldn't this center the slide if it's smaller ? (see KPresenterView::startScreenPresentation)
-        //m_view->setDiffY( yo );
-        //kdDebug(33001) << "Page::gotoPage :   setDiffY " << yo << endl;
-        resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
-        repaint( false );
-        setFocus();
-        m_view->refreshPageButton();
-    }
-#endif
 }
 
 /*================================================================*/
