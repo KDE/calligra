@@ -153,7 +153,7 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
 	//  a) FINISH_START: child column > parent column
 	//  b) FINISH_FINISH: child column >= parent column
 	//  c) START_START: child column >= parent column
-	//  d) Child row can be < = > than parent row
+	//  d) Child row can be >= than parent row
 
 	wgap = 20;
 	hgap = 10;
@@ -196,12 +196,12 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
 	setPen(Qt::black);
 	setZ(45);
 
-#ifndef NDEBUG
+/*#ifndef NDEBUG
 	kdDebug()<<" Relation from parent: "<<m_rel->parent()->name()<<" to child: "<<m_rel->child()->name()<<endl;
 	QPointArray pa = poly;
     for (int i = 0; i < pa.size(); ++i)
         kdDebug()<<"            pa["<<i<<"]="<<pa[i].x()<<","<<pa[i].y()<<endl;
-#endif
+#endif*/
 }
 
 KPTRelationCanvasItem::~KPTRelationCanvasItem()
@@ -222,7 +222,7 @@ void KPTRelationCanvasItem::setFinishStartPoints()
     
 	if ( parentRow == childRow )
 	{
-	    if (parentCol == childCol - 1)
+	    if (parentCol == childCol - 1 || rowFree(parentRow, parentCol+1, childCol-1))
 		{
         	a.putPoints(1, 1, childPoint.x(), childPoint.y());
 		}
@@ -296,7 +296,7 @@ void KPTRelationCanvasItem::setFinishStartPoints()
 
 void KPTRelationCanvasItem::setFinishFinishPoints()
 {
-   //kdDebug()<<k_funcinfo<<endl;
+    kdDebug()<<k_funcinfo<<endl;
 	QPoint parentPoint = m_rel->parent()->pertItem()->exitPoint(FINISH_FINISH);
 	QPoint childPoint = m_rel->child()->pertItem()->entryPoint(FINISH_FINISH);
 	
@@ -309,27 +309,27 @@ void KPTRelationCanvasItem::setFinishFinishPoints()
 	    if (parentCol == childCol)
 		{
 		    a.putPoints(1, 5, 
-			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
-			        parentPoint.x()+(wgap/2), parentPoint.y()-3, 
-		            parentPoint.x()+wgap/2, childPoint.y()+3,
-    	            parentPoint.x()+(wgap/2)-3, childPoint.y(),
+			        childPoint.x()+(wgap/2)-3, parentPoint.y(),
+			        childPoint.x()+(wgap/2), parentPoint.y()-3, 
+		            childPoint.x()+wgap/2, childPoint.y()+3,
+    	            childPoint.x()+(wgap/2)-3, childPoint.y(),
     	            childPoint.x(), childPoint.y());
 		}
-		else if (parentCol < childCol)  // go around below
+		else if (parentCol < childCol)
 		{
-    	    a.putPoints(1, 9, 
-			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),                // stop short
-			        parentPoint.x()+(wgap/2), parentPoint.y()+3,                // right/down
+			a.putPoints(1, 9, 
+					parentPoint.x()+(wgap/2)-3, parentPoint.y(),                // stop short
+					parentPoint.x()+(wgap/2), parentPoint.y()+3,                // right/down
 					parentPoint.x()+(wgap/2), parentBottom+(hgap/2)-3,  // stop short
-    	            parentPoint.x()+(wgap/2)+3, parentBottom+(hgap/2),  // right/down
-    	            childPoint.x()+(wgap/2)-3, parentBottom+(hgap/2),      // stop short
-    	            childPoint.x()+(wgap/2), parentBottom+(hgap/2)-3,      // right/up
-    	            childPoint.x()+(wgap/2), childPoint.y()+3,                      // stop short
-    	            childPoint.x()+(wgap/2)-3, childPoint.y(),                      // left/up
-    	            childPoint.x(), childPoint.y());
+					parentPoint.x()+(wgap/2)+3, parentBottom+(hgap/2),  // right/down
+					childPoint.x()+(wgap/2)-3, parentBottom+(hgap/2),      // stop short
+					childPoint.x()+(wgap/2), parentBottom+(hgap/2)-3,      // right/up
+					childPoint.x()+(wgap/2), childPoint.y()+3,                      // stop short
+					childPoint.x()+(wgap/2)-3, childPoint.y(),                      // left/up
+					childPoint.x(), childPoint.y());
 		}
 	} 
-	else 
+	else // parentRow < choldRow
 	{
 	    if (parentCol == childCol)
 		{
@@ -342,16 +342,24 @@ void KPTRelationCanvasItem::setFinishFinishPoints()
 		}
 		else if (parentCol < childCol)
 		{
-	        a.putPoints(1, 9, 
-			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
-			        parentPoint.x()+(wgap/2), parentPoint.y()+3,
-					parentPoint.x()+wgap/2, childTop-(hgap/2)-3,
-					parentPoint.x()+(wgap/2)+3, childTop-(hgap/2),
-	                childPoint.x()+(wgap/2)-3, childTop-(hgap/2),
-	                childPoint.x()+(wgap/2), childTop-(hgap/2)+3,
-	                childPoint.x()+(wgap/2), childPoint.y()-3,
-	                childPoint.x()+(wgap/2)-3, childPoint.y(),
-	                childPoint.x(), childPoint.y());
+		    if (rowFree(parentRow, parentCol+1, childCol))
+				a.putPoints(1, 5,
+						childPoint.x()+(wgap/2)-3, parentPoint.y(),
+						childPoint.x()+(wgap/2), parentPoint.y()+3,
+						childPoint.x()+(wgap/2), childPoint.y()-3,
+						childPoint.x()+(wgap/2)-3, childPoint.y(),
+						childPoint.x(), childPoint.y());			
+			else
+				a.putPoints(1, 9, 
+						parentPoint.x()+(wgap/2)-3, parentPoint.y(),
+						parentPoint.x()+(wgap/2), parentPoint.y()+3,
+						parentPoint.x()+wgap/2, childTop-(hgap/2)-3,
+						parentPoint.x()+(wgap/2)+3, childTop-(hgap/2),
+						childPoint.x()+(wgap/2)-3, childTop-(hgap/2),
+						childPoint.x()+(wgap/2), childTop-(hgap/2)+3,
+						childPoint.x()+(wgap/2), childPoint.y()-3,
+						childPoint.x()+(wgap/2)-3, childPoint.y(),
+						childPoint.x(), childPoint.y());
         }
 		else 
 		{
@@ -416,22 +424,23 @@ void KPTRelationCanvasItem::setStartStartPoints()
 		}
 		else // go below myself
 		{
-		    a.putPoints(3, 4, 
-			    parentPoint.x()-(wgap/2), parentBottom+hgap/2-3,
-		        parentPoint.x()-(wgap/2)+3, parentBottom+hgap/2,
-                childPoint.x()-(wgap/2)-3, parentBottom+hgap/2);
-				
             if (parentRow == childRow) // go up
 			{
-				a.putPoints(6, 3, 
-				    childPoint.x()-(wgap/2), a[5].y()-3,
+				a.putPoints(3, 6, 
+					parentPoint.x()-(wgap/2), parentBottom+hgap/2-3,
+					parentPoint.x()-(wgap/2)+3, parentBottom+hgap/2,
+					childPoint.x()-(wgap/2)-3, parentBottom+hgap/2,
+				    childPoint.x()-(wgap/2), parentBottom+hgap/2-3,
 				    childPoint.x()-(wgap/2), childPoint.y()+3,
 				    childPoint.x()-(wgap/2)+3, childPoint.y());
 			}
 			else // go down
 			{
-				a.putPoints(6, 3,
-				    childPoint.x()-(wgap/2), a[5].y()+3,
+				a.putPoints(3, 6,
+					parentPoint.x()-(wgap/2), childTop-(hgap/2)-3,
+					parentPoint.x()-(wgap/2)+3, childTop-hgap/2,
+					childPoint.x()-(wgap/2)-3, childTop-hgap/2,
+				    childPoint.x()-(wgap/2), childTop-(hgap/2)+3,
 				    childPoint.x()-(wgap/2), childPoint.y()-3,
 				    childPoint.x()-(wgap/2)+3, childPoint.y());
 			}			
@@ -478,6 +487,29 @@ QPointArray KPTRelationCanvasItem::areaPoints () const
 	kdDebug()<<"      "<<pa[0].x()<<","<<pa[0].y()<<"      "<<pa[1].x()<<","<<pa[1].y()<<endl;
 	kdDebug()<<"      "<<pa[2].x()<<","<<pa[2].y()<<"      "<<pa[3].x()<<","<<pa[3].y()<<endl;*/
     return pa;
+}
+
+bool KPTRelationCanvasItem::rowFree(int row, int startCol, int endCol)
+{
+    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it) 
+    {
+        if ( (*it)->rtti() == KPTPertCanvasItem::RTTI )
+		{
+		    KPTPertCanvasItem *item = (KPTPertCanvasItem *)(*it);
+            if ( item->row() == row )
+			{
+			    int col = item->column();
+                if (col >= startCol && col <= endCol)
+				{
+        			//kdDebug()<<k_funcinfo<<"Hit on row,col="<<row<<","<<col<<endl;
+                    return false;
+				}
+			}
+		}
+	}
+	return true;
 }
 
 #ifndef NDEBUG

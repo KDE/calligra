@@ -81,6 +81,8 @@ public:
 	void setStartStartPoints();
 	QPointArray areaPoints() const;
 	
+	bool rowFree(int row, int startCol, int endCol);
+	
 protected:
     void drawShape(QPainter &p);
 
