@@ -1687,7 +1687,18 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
                 if (e.hasAttribute("ValueType"))
                 {
-                  // TODO: what is this for?
+                  // TODO: Defined type of cell
+                    //<xsd:enumeration value="10"/> <!-- empty     -->
+                    //<xsd:enumeration value="20"/> <!-- boolean   -->
+                    //<xsd:enumeration value="30"/> <!-- integer   -->
+                    //<xsd:enumeration value="40"/> <!-- float     -->
+                    //<xsd:enumeration value="50"/> <!-- error     -->
+                    //<xsd:enumeration value="60"/> <!-- string    -->
+                    //<xsd:enumeration value="70"/> <!-- cellrange -->
+                    //<xsd:enumeration value="80"/> <!-- array     -->
+                    //kspread_cell->setValue( date );
+                    //kspread_cell->setFormatType( type );
+
                 }
 
                 if (e.hasAttribute( "ValueFormat" ))
