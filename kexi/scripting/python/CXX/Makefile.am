@@ -15,7 +15,7 @@ libkrosspythoncxx_la_METASOURCES = AUTO
 
 SUBDIRS = .
 
-INCLUDES = $(PYTHON_INCLUDE) $(all_includes)
+INCLUDES = -I$(top_srcdir)/kexi $(PYTHON_INCLUDE) $(all_includes)
 
 KDE_CXXFLAGS += $(USE_EXCEPTIONS)
 
