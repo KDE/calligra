@@ -830,7 +830,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The sqrt() function returns the non-negative square root of x. if x is negative, then "nan" is returned</Text>
+	<Text>The sqrt() function returns the non-negative square root of x. If x is negative, then "nan" is returned</Text>
 	<Syntax>sqrt( x )</Syntax>
 	<Example>sqrt(9) equals 3</Example>
 	<Example>sqrt(-9) equals "nan"</Example>
