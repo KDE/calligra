@@ -3456,6 +3456,7 @@ void KPresenterView::objectSelectedChanged()
         }
     }
     actionScreenAssignEffect->setEnabled(state&&!headerfooterselected);
+    actionEditDelete->setEnabled(state&&!headerfooterselected);
     actionExtraPenBrush->setEnabled(state && !headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
     actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedClipartObj()
@@ -3473,7 +3474,7 @@ void KPresenterView::objectSelectedChanged()
     actionExtraAlignObjTop->setEnabled(state && !headerfooterselected && canMove);
     actionExtraAlignObjCenterV->setEnabled(state &&  !headerfooterselected && canMove);
     actionExtraAlignObjBottom->setEnabled(state &&  !headerfooterselected && canMove );
-    actionEditDelete->setEnabled(state);
+    //actionEditDelete->setEnabled(state);
     int nbobj=m_canvas->numberOfObjectSelected();
     actionDuplicateObj->setEnabled(state && (nbobj>=1));
 
