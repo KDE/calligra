@@ -23,38 +23,42 @@
 #ifndef KWEF_KWORDLEADER_H
 #define KWEF_KWORDLEADER_H
 
+#include <KWEFBaseWorker.h>
+
 class KWEFKWordLeader
 {
     public:
-        KWEFKWordLeader(void) : m_worker(0 /*NULL*/) {}
-        KWEFKWordLeader(KWEFBaseWorker* newWorker) : m_worker(newWorker) {}
+        KWEFKWordLeader(void) : m_worker (0 /*NULL*/) {}
+        KWEFKWordLeader(KWEFBaseWorker* newWorker) : m_worker (newWorker) {}
         virtual ~KWEFKWordLeader(void) {}
+
     public:
-        void setWorker(KWEFBaseWorker* newWorker);
-        KWEFBaseWorker*  getWorker(void) const;
-        bool filter(const QString& filenameIn, const QString& filenameOut,
-            const QString& from, const QString& to, const QString& param);
+        void setWorker ( KWEFBaseWorker *newWorker );
+        KWEFBaseWorker *getWorker(void) const;
+        bool filter ( const QString& filenameIn, const QString& filenameOut,
+                      const QString& from, const QString& to, const QString& param );
+
     public: // public leader/worker functions (DO NOT use in your own code!)
-        bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
-        bool doOpenTextFrameSet(void);
-        bool doCloseTextFrameSet(void);
-        bool doFullPaperFormat(const int format, const double width, const double height, const int orientation);
-        bool doOpenHead(void);
-        bool doCloseHead(void);
-        bool doOpenBody(void);
-        bool doCloseBody(void);
-        bool doOpenStyles(void);
-        bool doCloseStyles(void);
-        bool doFullDefineStyle(LayoutData& layout);
+        bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
+        bool doFullDocument (const QValueList<ParaData> &, QString &, QString &);
+        bool doOpenTextFrameSet (void);
+        bool doCloseTextFrameSet (void);
+        bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
+        bool doOpenHead (void);
+        bool doCloseHead (void);
+        bool doOpenBody (void);
+        bool doCloseBody (void);
+        bool doOpenStyles (void);
+        bool doCloseStyles (void);
+        bool doFullDefineStyle (LayoutData& layout);
     protected: // leader/worker functions
-        bool doOpenFile(const QString& filenameOut, const QString& to);
-        bool doCloseFile(void);
-        bool doAbortFile(void);
-        bool doOpenDocument(void);
-        bool doCloseDocument(void);
-        bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
+        bool doOpenFile (const QString& filenameOut, const QString& to);
+        bool doCloseFile (void);
+        bool doAbortFile (void);
+        bool doOpenDocument (void);
+        bool doCloseDocument (void);
     private:
-        KWEFBaseWorker* m_worker;
+        KWEFBaseWorker *m_worker;
 };
 
 #endif /* KWEF_KWORDLEADER_H */

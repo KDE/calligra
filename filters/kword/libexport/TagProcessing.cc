@@ -3,6 +3,8 @@
 /*
    This file is part of the KDE project
    Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (c) 2001 IABG mbH. All rights reserved.
+                      Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,7 +29,7 @@
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
     Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
-                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+                       Contact: Wolf-Michael Bolle <Bolle@GMX.de>
 
    The old file was licensed under the terms of the GNU Library General Public
    License version 2.
@@ -76,7 +78,7 @@ void ProcessSubtags ( QDomNode                   parentNode,
                     }
                     else
                     {
-//                      kdError () << "<para>ignoring " << childNode.nodeName ()
+//                      kdError (30503) << "<para>ignoring " << childNode.nodeName ()
 //                                      << " tag in " << parentNode.nodeName () << "!</para>" << endl;
                     }
                 }

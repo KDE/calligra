@@ -3,6 +3,8 @@
 /*
    This file is part of the KDE project
    Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (c) 2001 IABG mbH. All rights reserved.
+                      Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,7 +29,7 @@
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
     Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
-                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+                       Contact: Wolf-Michael Bolle <Wolf-Michael.Bolle@GMX.de>
 
    The old file was licensed under the terms of the GNU Library General Public
    License version 2.
@@ -47,177 +49,456 @@
 #include "KWEFBaseWorker.h"
 #include "KWEFKWordLeader.h"
 
-static void ProcessParagraphTag ( QDomNode      myNode,
-                           void          *,
-                           QString       &outputText,
-                           KWEFKWordLeader *exportFilter )
+
+static FrameAnchor *findAnchor ( QString              &name,
+                                 QValueList<ParaData> &paraList )
 {
-    AllowNoAttributes (myNode);
+    QValueList<ParaData>::Iterator paraIt;
 
-    QString paraText;
-    ValueListFormatData paraFormatDataList;
-    LayoutData layout;
+    for ( paraIt = paraList.begin (); paraIt != paraList.end (); paraIt++ )
+    {
+        ValueListFormatData::Iterator formattingIt;
 
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,    (void *) &paraText           ) );
-    tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag, (void *) &paraFormatDataList ) );
-    tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,  (void *) &layout         ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+        for ( formattingIt = (*paraIt).formattingList.begin ();
+              formattingIt != (*paraIt).formattingList.end ();
+              formattingIt++ )
+        {
+            if ( (*formattingIt).id               == 6    &&
+                 (*formattingIt).frameAnchor.name == name    )
+            {
+                return &(*formattingIt).frameAnchor;
+            }
+        }
+    }
 
-    KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
-
-    CreateMissingFormatData(paraText, paraFormatDataList);
-    leader->doFullParagraph(paraText, layout, paraFormatDataList);
-
+    return NULL;
 }
 
-static void ProcessFramesetTag ( QDomNode      myNode,
-                          void          *,
-                          QString       &outputText,
-                          KWEFKWordLeader *exportFilter )
+
+static void ProcessParagraphTag ( QDomNode         myNode,
+                                  void            *tagData,
+                                  QString         &outputText,
+                                  KWEFKWordLeader *exportFilter )
 {
-    int frameType=-1;
-    int frameInfo=-1;
+#if 0
+    kdError (30508) << "ProcessParagraphTag () - Begin" << endl;
+#endif
+
+    QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
+
+    AllowNoAttributes (myNode);
+
+    ParaData paraData;
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "TEXT",    ProcessTextTag,    (void *) &paraData.text           )
+                      << TagProcessing ( "FORMATS", ProcessFormatsTag, (void *) &paraData.formattingList )
+                      << TagProcessing ( "LAYOUT",  ProcessLayoutTag,  (void *) &paraData.layout         );
+    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+
+    CreateMissingFormatData (paraData.text, paraData.formattingList);
+
+
+    if ( paraData.formattingList.count () == 0 && paraData.text.length () )
+    {
+        if ( paraData.layout.formatData.id == 1 )
+        {
+            paraData.formattingList << paraData.layout.formatData;
+        }
+        else
+        {
+            kdError (30508) << "No useful FORMAT tag found for text in PARAGRAPH" << endl;
+        }
+    }
+
+
+    *paraList << paraData;
+
+#if 0
+    kdError (30508) << "ProcessParagraphTag () - End " << paraText << endl;
+#endif
+}
+
+
+static void ProcessImageKeyTag ( QDomNode         myNode,
+                                 void            *tagData,
+                                 QString         &,
+                                 KWEFKWordLeader *exportFilter )
+{
+    QString *key = (QString *) tagData;   // the name where the picture came from used as the identifier
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "frameType", "int", (void*) &frameType ) );
-    attrProcessingList.append ( AttrProcessing ( "frameInfo", "int", (void*) &frameInfo) );
-    attrProcessingList.append ( AttrProcessing ( "removable", "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "visible",   "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "name",      "", NULL ) );
+    attrProcessingList << AttrProcessing ( "year",     NULL,      NULL         )
+                       << AttrProcessing ( "month",    NULL,      NULL         )
+                       << AttrProcessing ( "day",      NULL,      NULL         )
+                       << AttrProcessing ( "hour",     NULL,      NULL         )
+                       << AttrProcessing ( "minute",   NULL,      NULL         )
+                       << AttrProcessing ( "second",   NULL,      NULL         )
+                       << AttrProcessing ( "msec",     NULL,      NULL         )
+                       << AttrProcessing ( "filename", "QString", (void *) key );
     ProcessAttributes (myNode, attrProcessingList);
 
-    if ((1==frameType) && (0==frameInfo))
-    {   //Main text
-        KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
-        leader->doOpenTextFrameSet();
-        QValueList<TagProcessing> tagProcessingList;
-        tagProcessingList.append ( TagProcessing ( "FRAME",     NULL,                NULL ) );
-        tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
-        ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
-        leader->doCloseTextFrameSet();
-    }
-    //TODO: Treat the other types of frames (frameType)
+    AllowNoSubtags (myNode);
 }
 
-static void ProcessFramesetsTag ( QDomNode      myNode,
-                           void          *,
-                           QString       &outputText,
-                           KWEFKWordLeader *exportFilter )
+
+static void ProcessImageTag ( QDomNode         myNode,
+                              void            *tagData,
+                              QString         &outputText,
+                              KWEFKWordLeader *exportFilter )
+{
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "KEY", ProcessImageKeyTag, tagData );
+    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+}
+
+
+static void ProcessFramesetTag ( QDomNode        myNode,
+                                void            *tagData,
+                                QString         &outputText,
+                                KWEFKWordLeader *exportFilter )
+{
+#if 0
+    kdError (30508) << "ProcessFramesetTag () - Begin" << endl;
+#endif
+
+    QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
+
+    int     frameType = -1;
+    int     frameInfo = -1;
+    int     col       = -1;
+    int     row       = -1;
+    int     cols      = -1;
+    int     rows      = -1;
+    QString name;
+    QString grpMgr;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "frameType", "int",     (void *) &frameType )
+                       << AttrProcessing ( "frameInfo", "int",     (void *) &frameInfo )
+                       << AttrProcessing ( "removable", "",        NULL                )
+                       << AttrProcessing ( "visible",   "",        NULL                )
+                       << AttrProcessing ( "col",       "int",     (void *) &col       )
+                       << AttrProcessing ( "row",       "int",     (void *) &row       )
+                       << AttrProcessing ( "cols",      "int",     (void *) &cols      )
+                       << AttrProcessing ( "rows",      "int",     (void *) &rows      )
+                       << AttrProcessing ( "grpMgr",    "QString", (void *) &grpMgr    )
+                       << AttrProcessing ( "name",      "QString", (void *) &name      );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    switch ( frameType )
+    {
+        case 1:
+            if ( grpMgr.length () == 0 )
+            {
+                QValueList<TagProcessing> tagProcessingList;
+                tagProcessingList << TagProcessing ( "FRAME",     NULL,                NULL              )
+                                  << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) paraList );
+                ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+            }
+            else
+            {
+                if ( col != -1 && row != -1 )
+                {
+                    if ( cols == 1 && rows == 1 )
+                    {
+#if 0
+                        kdError (30508) << "DEBUG - FRAMESET: table " << name << " col, row = "
+                                        << col << ", " << row << endl;
+#endif
+
+                        FrameAnchor *frameAnchor = findAnchor (grpMgr, *paraList);
+
+                        if ( frameAnchor )
+                        {
+                            frameAnchor->type = 6;
+
+                            QValueList<ParaData> cellParaList;
+
+                            QValueList<TagProcessing> tagProcessingList;
+                            tagProcessingList << TagProcessing ( "FRAME",     NULL,                NULL                   )
+                                              << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &cellParaList );
+                            ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+
+                            frameAnchor->table.addCell (col, row, cellParaList);
+                        }
+                        else
+                        {
+                            kdError (30508) << "ProcessFramesetTag (): Couldn't find anchor " << name << endl;
+                        }
+                    }
+                    else
+                    {
+                        kdError (30508) << "Unexpected value for one of, or all FRAMESET attribute cols, rows: "
+                                        << cols << ", " << rows << "!" << endl;
+                        AllowNoSubtags (myNode);
+                    }
+                }
+                else
+                {
+                    kdError (30508) << "Unset value for one of, or all FRAMESET attributes col, row: "
+                                    << col << ", " << row << "!" << endl;
+                    AllowNoSubtags (myNode);
+                }
+            }
+            break;
+
+        case 2:
+            {
+#if 0
+            kdError (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
+#endif
+
+            FrameAnchor *frameAnchor = findAnchor (name, *paraList);
+
+            if ( frameAnchor )
+            {
+                frameAnchor->type = 2;
+
+                QValueList<TagProcessing> tagProcessingList;
+                tagProcessingList << TagProcessing ( "FRAME", NULL,            NULL                                  )
+                                  << TagProcessing ( "IMAGE", ProcessImageTag, (void *) &frameAnchor->picture.key );
+                ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+
+#if 0
+                kdError (30508) << "DEBUG: FRAMESET IMAGE KEY filename of picture is " << frameAnchor->picture.key << endl;
+#endif
+
+                frameAnchor->name = frameAnchor->picture.key;
+            }
+            else
+            {
+                kdError (30508) << "ProcessFramesetTag (): Couldn't find anchor " << name << endl;
+            }
+
+            }
+            break;
+
+        default:
+            kdError (30508) << "Unexpected frametype " << frameType << "!" << endl;
+    }
+
+#if 0
+    kdError (30508) << "ProcessFramesetTag () - End" << endl;
+#endif
+}
+
+
+static void ProcessFramesetsTag ( QDomNode        myNode,
+                                  void            *tagData,
+                                  QString         &outputText,
+                                  KWEFKWordLeader *exportFilter )
 {
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "FRAMESET", ProcessFramesetTag, NULL ) );
+    tagProcessingList << TagProcessing ( "FRAMESET", ProcessFramesetTag, tagData );
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
-static void ProcessStyleTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader* exportFilter )
-{
-    kdDebug() << "Entering ProcessStyleTag" << endl;
 
+static void ProcessStyleTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader *exportFilter )
+{
     AllowNoAttributes (myNode);
 
     LayoutData layout;
 
-    ProcessLayoutTag(myNode, &layout, outputText, exportFilter);
+    ProcessLayoutTag (myNode, &layout, outputText, exportFilter);
 
-    KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
-    leader->doFullDefineStyle(layout);
-
-    kdDebug() << "Exiting ProcessStyleTag" << endl;
+    exportFilter->doFullDefineStyle (layout);
 }
-static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader* exportFilter )
+
+
+static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader *exportFilter )
 {
     AllowNoAttributes (myNode);
 
-    KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
-    leader->doOpenStyles();
+    exportFilter->doOpenStyles ();
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+    tagProcessingList << TagProcessing ( "STYLE", ProcessStyleTag, NULL );
+    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
     
-    leader->doCloseStyles();
+    exportFilter->doCloseStyles ();
 }
 
-static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText, KWEFKWordLeader* exportFilter)
+
+static void ProcessPaperTag (QDomNode myNode, void *, QString &, KWEFKWordLeader *exportFilter)
 {
 
-    int format=-1;
-    int orientation=-1;
-    double width=-1.0;
-    double height=-1.0;
+    int format      = -1;
+    int orientation = -1;
+    double width    = -1.0;
+    double height   = -1.0;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "format",          "int", (void*) &format ) );
-    attrProcessingList.append ( AttrProcessing ( "width",           "double", (void*) &width ) );
-    attrProcessingList.append ( AttrProcessing ( "height",          "double", (void*) &height ) );
-    attrProcessingList.append ( AttrProcessing ( "orientation",     "int", (void*) &orientation ) );
-    attrProcessingList.append ( AttrProcessing ( "columns",         "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "columnspacing",   "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "hType",           "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "fType",           "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "spHeadBody",      "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "spFootBody",      "", NULL ) );
+    attrProcessingList << AttrProcessing ( "format",          "int",    (void *) &format      )
+                       << AttrProcessing ( "width",           "double", (void *) &width       )
+                       << AttrProcessing ( "height",          "double", (void *) &height      )
+                       << AttrProcessing ( "orientation",     "int",    (void *) &orientation )
+                       << AttrProcessing ( "columns",         "",       NULL                  )
+                       << AttrProcessing ( "columnspacing",   "",       NULL                  )
+                       << AttrProcessing ( "hType",           "",       NULL                  )
+                       << AttrProcessing ( "fType",           "",       NULL                  )
+                       << AttrProcessing ( "spHeadBody",      "",       NULL                  )
+                       << AttrProcessing ( "spFootBody",      "",       NULL                  );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode);
 
-    KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
-    leader->doFullPaperFormat(format, width, height, orientation);
+    exportFilter->doFullPaperFormat (format, width, height, orientation);
 }
 
-static void ProcessDocTag ( QDomNode       myNode,
-                     void           *,
-                     QString        &outputText,
-                     KWEFKWordLeader  *exportFilter )
+
+static void ProcessPixmapsKeyTag ( QDomNode         myNode,
+                                   void            *tagData,
+                                   QString         &,
+                                   KWEFKWordLeader *exportFilter )
 {
+    QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
+
+    QString   fileName;   // the name where the picture came from used as the identifier
+    QString   name;       // the location where the picture is stored withing the kwd file
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "editor",        "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "mime",          "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "syntaxVersion", "", NULL ) );
+    attrProcessingList << AttrProcessing ( "hour",     NULL,      NULL               )
+                       << AttrProcessing ( "msec",     NULL,      NULL               )
+                       << AttrProcessing ( "day",      NULL,      NULL               )
+                       << AttrProcessing ( "minute",   NULL,      NULL               )
+                       << AttrProcessing ( "second",   NULL,      NULL               )
+                       << AttrProcessing ( "month",    NULL,      NULL               )
+                       << AttrProcessing ( "year",     NULL,      NULL               )
+                       << AttrProcessing ( "filename", "QString", (void *) &fileName )
+                       << AttrProcessing ( "name",     "QString", (void *) &name     );
+    ProcessAttributes (myNode, attrProcessingList);
+
+
+    FrameAnchor *frameAnchor = findAnchor (fileName, *paraList);
+
+    if ( frameAnchor )
+    {
+#if 0
+        kdError (30508) << "DEBUG: ProcessPixmapsKeyTag (): koStore for picture "
+                        << fileName << " is " << name << endl;
+#endif
+
+        frameAnchor->picture.koStoreName = name;
+    }
+    else
+    {
+        kdError (30508) << "Could find anchor for picture " << fileName << "!" << endl;
+    }
+
+
+    AllowNoSubtags (myNode);
+}
+
+
+static void ProcessPixmapsTag ( QDomNode         myNode,
+                                void            *tagData,
+                                QString         &outputText,
+                                KWEFKWordLeader *exportFilter )
+{
+    AllowNoAttributes (myNode);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "KEY", ProcessPixmapsKeyTag, tagData );
+    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+}
+
+
+struct FilterData
+{
+    QString storeFileName;
+    QString exportFileName;
+};
+
+
+static void FreeCellParaLists ( QValueList<ParaData> &paraList )
+{
+    QValueList<ParaData>::Iterator paraIt;
+
+    for ( paraIt = paraList.begin (); paraIt != paraList.end (); paraIt++ )
+    {
+        ValueListFormatData::Iterator formattingIt;
+
+        for ( formattingIt = (*paraIt).formattingList.begin ();
+              formattingIt != (*paraIt).formattingList.end ();
+              formattingIt++ )
+        {
+            if ( (*formattingIt).id == 6 && (*formattingIt).frameAnchor.type == 6 )
+            {
+                QValueList<TableCell>::Iterator cellIt;
+
+                for ( cellIt = (*formattingIt).frameAnchor.table.cellList.begin ();
+                      cellIt != (*formattingIt).frameAnchor.table.cellList.end ();
+                      cellIt++ )
+                {
+                    FreeCellParaLists ( *(*cellIt).paraList );   // recursion is great
+                    delete (*cellIt).paraList;
+                }
+            }
+        }
+    }
+}
+
+
+static void ProcessDocTag ( QDomNode         myNode,
+                            void             *tagData,
+                            QString          &outputText,
+                            KWEFKWordLeader  *exportFilter )
+{
+#if 0
+    kdError (30508) << "ProcessDocTag () - Begin" << endl;
+#endif
+
+    FilterData *filterData = (FilterData *) tagData;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "editor",        "", NULL )
+                       << AttrProcessing ( "mime",          "", NULL )
+                       << AttrProcessing ( "syntaxVersion", "", NULL );
     ProcessAttributes (myNode, attrProcessingList);
     // TODO: verify syntax version and perhaps mime
 
-    QValueList<TagProcessing> tagProcessingList;
+    QValueList<ParaData> paraList;
 
-    KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
-    leader->doOpenHead();
-
-    // At first, process <PAPER>, even if mostly the output will need to be delayed.
-    tagProcessingList.append ( TagProcessing ( "PAPER",       ProcessPaperTag,     NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
-
-    tagProcessingList.clear();
-    tagProcessingList.append ( TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
-
-    leader->doCloseHead();
-    leader->doOpenBody();
-
-    tagProcessingList.clear();
     // TODO: do all those tags still exist in KWord 1.2?
-    tagProcessingList.append ( TagProcessing ( "PAPER",       NULL,                NULL ) ); // already done
-    tagProcessingList.append ( TagProcessing ( "ATTRIBUTES",  NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "FOOTNOTEMGR", NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "STYLES",      NULL,                NULL ) ); // already done
-    tagProcessingList.append ( TagProcessing ( "PIXMAPS",     NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "SERIALL",     NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "FRAMESETS",   ProcessFramesetsTag, NULL ) );
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "PAPER",       ProcessPaperTag,        NULL               )
+                      << TagProcessing ( "ATTRIBUTES",  NULL,                   NULL               )
+                      << TagProcessing ( "FOOTNOTEMGR", NULL,                   NULL               )
+                      << TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL               )
+                      << TagProcessing ( "SERIALL",     NULL,                   NULL               )
+                      << TagProcessing ( "CLIPARTS",    NULL,                   NULL               )
+                      << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      (void *) &paraList )
+                      << TagProcessing ( "FRAMESETS",   ProcessFramesetsTag,    (void *) &paraList );
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
-    leader->doCloseBody();
+
+    exportFilter->doFullDocument (paraList, filterData->storeFileName, filterData->exportFileName);
+
+    FreeCellParaLists (paraList);
+
+#if 0
+    kdError (30508) << "ProcessDocTag () - End" << endl;
+#endif
 }
 
-void KWEFKWordLeader::setWorker(KWEFBaseWorker* newWorker)
+
+void KWEFKWordLeader::setWorker ( KWEFBaseWorker *newWorker )
 {
-    m_worker=newWorker;
+    m_worker = newWorker;
 }
 
-KWEFBaseWorker*  KWEFKWordLeader::getWorker(void) const
+
+KWEFBaseWorker *KWEFKWordLeader::getWorker(void) const
 {
     return m_worker;
 }
+
 
 // Short simple definition for methods with void parameter
 #define DO_VOID_DEFINITION(string) \
@@ -228,155 +509,193 @@ KWEFBaseWorker*  KWEFKWordLeader::getWorker(void) const
         return false; \
     }
 
-bool KWEFKWordLeader::doOpenFile(const QString& filenameOut, const QString& to)
+
+bool KWEFKWordLeader::doOpenFile ( const QString &filenameOut, const QString &to )
 {
-    if (m_worker)
-        return m_worker->doOpenFile(filenameOut,to);
+    if ( m_worker )
+        return m_worker->doOpenFile (filenameOut, to);
+
     // As it would be the first method to be called, warn if worker is NULL
-    kdError() << "No Worker! (in KWEFKWordLeader::doOpenFile)" << endl;
+    kdError (30508) << "No Worker! (in KWEFKWordLeader::doOpenFile)" << endl;
+
     return false;
 }
 
-DO_VOID_DEFINITION(doCloseFile)
-DO_VOID_DEFINITION(doAbortFile)
-DO_VOID_DEFINITION(doOpenDocument)
-DO_VOID_DEFINITION(doCloseDocument)
-DO_VOID_DEFINITION(doOpenStyles)
-DO_VOID_DEFINITION(doCloseStyles)
 
-bool KWEFKWordLeader::doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList)
+DO_VOID_DEFINITION (doCloseFile)
+DO_VOID_DEFINITION (doAbortFile)
+DO_VOID_DEFINITION (doOpenDocument)
+DO_VOID_DEFINITION (doCloseDocument)
+DO_VOID_DEFINITION (doOpenStyles)
+DO_VOID_DEFINITION (doCloseStyles)
+DO_VOID_DEFINITION (doOpenTextFrameSet)
+DO_VOID_DEFINITION (doCloseTextFrameSet)
+
+
+bool KWEFKWordLeader::doFullDocumentInfo (const KWEFDocumentInfo &docInfo)
 {
-    if (m_worker)
-        return m_worker->doFullParagraph(paraText, layout, paraFormatDataList);
+    if ( m_worker )
+        return m_worker->doFullDocumentInfo (docInfo);
+
     return false;
 }
 
-DO_VOID_DEFINITION(doOpenTextFrameSet)
-DO_VOID_DEFINITION(doCloseTextFrameSet)
 
-bool KWEFKWordLeader::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
+bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData> &paraList,
+                                      QString                    &storeFileName,
+                                      QString                    &exportFileName )
 {
-    if (m_worker)
-        return m_worker->doFullDocumentInfo(docInfo);
+    if ( m_worker )
+        return m_worker->doFullDocument (paraList, storeFileName, exportFileName);
+
     return false;
 }
 
-DO_VOID_DEFINITION(doOpenHead)
-DO_VOID_DEFINITION(doCloseHead)
-DO_VOID_DEFINITION(doOpenBody)
-DO_VOID_DEFINITION(doCloseBody)
 
-bool KWEFKWordLeader::doFullPaperFormat(const int format, const double width, const double height, const int orientation)
+DO_VOID_DEFINITION (doOpenHead)
+DO_VOID_DEFINITION (doCloseHead)
+DO_VOID_DEFINITION (doOpenBody)
+DO_VOID_DEFINITION (doCloseBody)
+
+
+bool KWEFKWordLeader::doFullPaperFormat ( const int format, const double width, const double height, const int orientation )
 {
-    if (m_worker)
-        return m_worker->doFullPaperFormat(format, width, height, orientation);
+    if ( m_worker )
+        return m_worker->doFullPaperFormat (format, width, height, orientation);
+
     return false;
 }
 
-bool KWEFKWordLeader::doFullDefineStyle(LayoutData& layout)
+
+bool KWEFKWordLeader::doFullDefineStyle ( LayoutData &layout )
 {
-    if (m_worker)
-        return m_worker->doFullDefineStyle(layout);
+    if ( m_worker )
+        return m_worker->doFullDefineStyle (layout);
+
     return false;
 }
 
 
-bool KWEFKWordLeader::filter(const QString& filenameIn, const QString& filenameOut,
-    const QString& from, const QString& to, const QString&)
+static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
+                               void            (*processor) (QDomNode, void *, QString &, KWEFKWordLeader *),
+                               FilterData       &filterData,
+                               KWEFKWordLeader  *exportFilter )
+{
+    QString stringBufIn = QString::fromUtf8 ( (const char *) byteArrayIn, byteArrayIn.size () );
+
+    QDomDocument qDomDocumentIn;
+
+    if ( !qDomDocumentIn.setContent (stringBufIn) )
+    {
+        kdError (30508) << "ProcessStoreFile (): Parsing Error!" << endl;
+
+        return false;
+    }
+
+#if 0
+    kdError (30508) << "DOM document type "
+                    << qDomDocumentIn.doctype ().name () << "." << endl;
+#endif
+
+    QDomNode docNode = qDomDocumentIn.documentElement ();
+
+    QString stringBufOut; // Dummy!  TODO: should be removed
+    processor (docNode, &filterData, stringBufOut, exportFilter);
+
+    return true;
+}
+
+
+bool KWEFKWordLeader::filter ( const QString &filenameIn,
+                               const QString &filenameOut,
+                               const QString &from,
+                               const QString &to,
+                               const QString &             )
 {
     if ( from != "application/x-kword" )
     {
         return false;
     }
 
-    KoStore koStoreIn (filenameIn, KoStore::Read);
 
-    if (!doOpenFile(filenameOut,to))
+    if ( !doOpenFile (filenameOut,to) )
     {
-        kdError() << "Worker could not open export file! Aborting!" << endl;
+        kdError (30508) << "Worker could not open export file! Aborting!" << endl;
         return false;
     }
 
+
+    if ( !doOpenDocument () )
+    {
+        kdError (30508) << "Worker could not open document! Aborting!" << endl;
+        doAbortFile ();
+        return false;
+    }
+
+
+    FilterData filterData;
+    filterData.storeFileName = filenameIn;
+    filterData.exportFileName = filenameOut;
+
+
+    KoStore koStoreIn (filenameIn, KoStore::Read);
+    QByteArray byteArrayIn;
+
+
+    doOpenHead ();
+
     if ( koStoreIn.open ( "documentinfo.xml" ) )
     {
-        QByteArray infoArrayIn = koStoreIn.read ( koStoreIn.size () );
+        byteArrayIn = koStoreIn.read ( koStoreIn.size () );
         koStoreIn.close ();
 
-        QDomDocument qDomDocumentInfo;
-        qDomDocumentInfo.setContent (infoArrayIn);
-
-        QDomNode docNode = qDomDocumentInfo.documentElement ();
-        KWEFDocumentInfo docInfo;
-        QString strDummy;
-        ProcessDocumentInfoTag (docNode, &docInfo, strDummy, this);
-        doFullDocumentInfo(docInfo);
+        ProcessStoreFile (byteArrayIn, ProcessDocumentInfoTag, filterData, this);
     }
     else
     {
         // Note: we do not worry too much if we cannot open the document info!
-        kdWarning() << "Unable to open documentinfo.xml sub-file!" << endl;
+        kdWarning () << "Unable to open documentinfo.xml sub-file!" << endl;
     }
 
-    QByteArray byteArrayIn;
+    doCloseHead ();
+
+
+    doOpenBody ();
 
     if ( koStoreIn.open ( "root" ) )
     {
         byteArrayIn = koStoreIn.read ( koStoreIn.size () );
         koStoreIn.close ();
+
+        ProcessStoreFile (byteArrayIn, ProcessDocTag, filterData, this);
     }
     else
     {
         // We were not able to open maindoc.xml
         // But perhaps we have an untarred, uncompressed file
         //  (it might happen with koconverter)
-        QFile file(filenameIn);
-        if (file.open(IO_ReadOnly))
+        QFile file (filenameIn);
+        if (file.open (IO_ReadOnly))
         {
-            byteArrayIn = file.readAll();
+            byteArrayIn = file.readAll ();
             file.close ();
+
+            ProcessStoreFile (byteArrayIn, ProcessDocTag, filterData, this);
         }
         else
         {
-            kdError() << "Unable to open input file!" << endl;
-            doAbortFile();
+            kdError (30508) << "Unable to open input file!" << endl;
+            doAbortFile ();
             return false;
         }
     }
 
-    QDomDocument qDomDocumentIn;
+    doCloseBody ();
 
-    if (!qDomDocumentIn.setContent (byteArrayIn))
-    {
-        kdError() << "Parsing error! Aborting!" << endl;
-        doAbortFile();
-        return false;
-    }
 
-    if (!doOpenDocument())
-    {
-        kdError() << "Worker could not open document! Aborting!" << endl;
-        doAbortFile();
-        return false;
-    }
+    doCloseDocument ();
 
-    QDomNode docNode = qDomDocumentIn.documentElement ();
-
-    QString stringBufOut; // Dummy!
-
-    ProcessDocTag (docNode, NULL, stringBufOut, this);
-
-    if (!doCloseDocument())
-    {
-        kdError() << "Worker could not close document! Aborting!" << endl;
-        doAbortFile();
-        return false;
-    }
-
-    if (!doCloseFile())
-    {
-        kdError() << "Worker could not close export file! Aborting!" << endl;
-        return false;
-    }
+    doCloseFile ();
 
     return true;
 }

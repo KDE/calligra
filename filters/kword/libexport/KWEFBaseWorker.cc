@@ -46,14 +46,13 @@ bool KWEFBaseWorker::doAbortFile(void)
         return false;\
     }
 
-DO_FALSE_DEFINITION(doOpenFile(const QString& , const QString& ))
-DO_FALSE_DEFINITION(doCloseFile(void))
-DO_FALSE_DEFINITION(doOpenDocument(void))
-DO_FALSE_DEFINITION(doCloseDocument(void))
-DO_FALSE_DEFINITION(doFullParagraph(QString&, LayoutData&, ValueListFormatData&))
+DO_FALSE_DEFINITION (doOpenFile (const QString& , const QString& ))
+DO_FALSE_DEFINITION (doCloseFile (void))
+DO_FALSE_DEFINITION (doOpenDocument (void))
+DO_FALSE_DEFINITION (doCloseDocument (void))
 
 //
-// Thirdly, define all methods returning false
+// Thirdly, define all methods returning true
 //
 
 #define DO_TRUE_DEFINITION(string) \
@@ -62,14 +61,15 @@ DO_FALSE_DEFINITION(doFullParagraph(QString&, LayoutData&, ValueListFormatData&)
         return true;\
     }
 
-DO_TRUE_DEFINITION(doOpenTextFrameSet(void))
-DO_TRUE_DEFINITION(doCloseTextFrameSet(void))
-DO_TRUE_DEFINITION(doFullDocumentInfo(const KWEFDocumentInfo& docInfo))
-DO_TRUE_DEFINITION(doFullPaperFormat(const int format, const double width, const double height, const int orientation))
-DO_TRUE_DEFINITION(doOpenHead(void))
-DO_TRUE_DEFINITION(doCloseHead(void))
-DO_TRUE_DEFINITION(doOpenBody(void))
-DO_TRUE_DEFINITION(doCloseBody(void))
-DO_TRUE_DEFINITION(doOpenStyles(void))
-DO_TRUE_DEFINITION(doCloseStyles(void))
-DO_TRUE_DEFINITION(doFullDefineStyle(LayoutData& layout))
+DO_TRUE_DEFINITION (doOpenTextFrameSet (void))
+DO_TRUE_DEFINITION (doCloseTextFrameSet (void))
+DO_TRUE_DEFINITION (doFullDocumentInfo (const KWEFDocumentInfo& docInfo))
+DO_TRUE_DEFINITION (doFullDocument (const QValueList<ParaData> &, QString &, QString &))
+DO_TRUE_DEFINITION (doFullPaperFormat (const int format, const double width, const double height, const int orientation))
+DO_TRUE_DEFINITION (doOpenHead (void))
+DO_TRUE_DEFINITION (doCloseHead (void))
+DO_TRUE_DEFINITION (doOpenBody (void))
+DO_TRUE_DEFINITION (doCloseBody (void))
+DO_TRUE_DEFINITION (doOpenStyles (void))
+DO_TRUE_DEFINITION (doCloseStyles (void))
+DO_TRUE_DEFINITION (doFullDefineStyle (LayoutData& layout))

@@ -3,6 +3,8 @@
 /*
    This file is part of the KDE project
    Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (c) 2001 IABG mbH. All rights reserved.
+                      Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +22,17 @@
    Boston, MA 02111-1307, USA.
 */
 
+/*
+   The classes in this file are based on a class in the old files:
+    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/koffice/filters/kword/docbookexpert/docbookexport.cc
+
+   The old file was copyrighted by
+    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
+                       Contact: Wolf-Michael Bolle <Wolf-Michael.Bolle@GMX.de>
+*/
+
 #ifndef EXPORTFILTERSSTRUCTURES_H
 #define EXPORTFILTERSSTRUCTURES_H
 
@@ -28,59 +41,133 @@
 #include <qcolor.h>
 #include <qdom.h>
 
+
 // FormatData is a container for data retreived from the FORMAT tag
 // and its subtags to be used in the PARAGRAPH tag.
 
-class FormatData
-/*
-   This class is based on a class in the old files:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
-    /home/kde/koffice/filters/kword/docbook/docbookexport.cc
-
-   The old file was copyrighted by
-    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
-                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
-*/
+class TextFormatting
 {
     public:
-        FormatData ()
-        { init(); }
-        FormatData ( int p,
-                     int l  ) : pos (p), len (l)
-        { init(); }
+        TextFormatting () {}
+
+        TextFormatting ( QString f,
+                         bool    i,
+                         bool    u,
+                         bool    s,
+                         int     w,
+                         int     sz,
+                         QColor  fg,
+                         QColor  bg,
+                         int     v,
+                         QString ln,
+                         QString lh,
+                         bool    m   ) : fontName (f), italic (i), underline (u), strikeout (s),
+                                         weight (w), fontSize (sz), fgColor (fg), bgColor (bg),
+                                         verticalAlignment (v), linkName (ln), linkReference (lh),
+                                         missing (m) {}
 
         QString fontName;
-        
-        QString linkName; // Name of link (attribute "linkName" of <LINK>)
-        QString linkReference; // Reference of link (attribute "hrefName" of <LINK>)
 
-        int  pos; // Start of text to which this format applies
-        int  len; // Len of text to which this format applies
+        bool    italic;
+        bool    underline;
+        bool    strikeout;
 
-        int  weight;
-        int  fontSize;
-        QColor colour;
-        QColor textbackgroundColour;
-        int  verticalAlignment;
+        int     weight;
+        int     fontSize;
+        QColor  fgColor;
+        QColor  bgColor;
+        int     verticalAlignment;
 
-        bool italic;
-        bool underline;
-        bool strikeout;
+        QString linkName;        // Name of link (attribute "linkName" of <LINK>)
+        QString linkReference;   // Reference of link (attribute "hrefName" of <LINK>)
 
-        bool missing; // true if the FormatData does not correspond to a real <FORMAT> element
-    private:
-        void init()
-        {
-            weight=0;
-            fontSize=-1;
-            verticalAlignment=0;
-            italic=false;
-            underline=false;
-            strikeout=false;
-            missing=false;
-        }
+        bool    missing;   // true if the FormatData does not correspond to a real <FORMAT> element
 };
+
+
+class ParaData;
+
+class TableCell
+{
+   public:
+      TableCell () {}
+
+      TableCell ( int                   c,
+                  int                   r,
+                  QValueList<ParaData> *p  ) : col (c), row (r), paraList (p) {}
+
+      ~TableCell ();
+
+      int                   col;
+      int                   row;
+      QValueList<ParaData> *paraList;
+};
+
+
+class Table
+{
+   public:
+      Table () : cols (0) {}
+
+      void addCell ( int                   c,
+                     int                   r,
+                     QValueList<ParaData> &p  );
+
+      int                   cols;
+      QValueList<TableCell> cellList;
+};
+
+
+class Picture
+{
+    public:
+        Picture () {}
+
+        QString key;           // IMAGE/PIXMAPS KEY filename - where the picture came from
+        QString koStoreName;   // PIXMAPS KEY name           - filename within kwd archive
+};
+
+
+class FrameAnchor
+{
+   public:
+      FrameAnchor () {}
+
+      FrameAnchor ( QString n  ) : name (n), type (-1) {}
+
+      QString name;
+      int     type;
+
+      Picture picture;
+      Table   table;
+};
+
+
+class FormatData
+{
+    public:
+        FormatData () : id (-1), pos (-1), len (-1) {}
+
+        FormatData ( int i,
+                     int p,
+                     int l  ) : id (i), pos (p), len (l) {}
+
+        FormatData ( int                   p,
+                     int                   l,
+                     const TextFormatting &t  ) : id (1), pos (p), len (l), text (t) {}
+
+        FormatData ( int                   p,
+                     int                   l,
+                     const FrameAnchor    &t  ) : id (6), pos (p), len (l), frameAnchor (t) {}
+
+        int            id;
+        int            pos;   // Start of text to which this format applies
+        int            len;
+
+        TextFormatting text;
+        FrameAnchor    frameAnchor;
+};
+
 
 class ValueListFormatData : public QValueList<FormatData>
 {
@@ -88,6 +175,7 @@ public:
     ValueListFormatData (void) { }
     virtual ~ValueListFormatData (void) { }
 };
+
 
 // Counter structure, for LayoutData
 class CounterData
@@ -99,18 +187,26 @@ public:
 
     enum Numbering
     {
-        NUM_LIST = 0,       // Numbered as a list item.
-        NUM_CHAPTER = 1,    // Numbered as a heading.
-        NUM_NONE = 2        // No counter.
+        NUM_LIST    = 0,   // Numbered as a list item
+        NUM_CHAPTER = 1,   // Numbered as a heading
+        NUM_NONE    = 2,   // No counter (-1 would be nicer)
     };
+
     enum Style
     {
-        STYLE_NONE = 0,
-        STYLE_NUM = 1, STYLE_ALPHAB_L = 2, STYLE_ALPHAB_U = 3,
-        STYLE_ROM_NUM_L = 4, STYLE_ROM_NUM_U = 5, STYLE_CUSTOMBULLET = 6,
-        STYLE_CUSTOM = 7, STYLE_CIRCLEBULLET = 8, STYLE_SQUAREBULLET = 9,
-        STYLE_DISCBULLET = 10
+        STYLE_NONE         = 0,
+        STYLE_NUM          = 1,
+        STYLE_ALPHAB_L     = 2,
+        STYLE_ALPHAB_U     = 3,
+        STYLE_ROM_NUM_L    = 4,
+        STYLE_ROM_NUM_U    = 5,
+        STYLE_CUSTOMBULLET = 6,
+        STYLE_CUSTOM       = 7,
+        STYLE_CIRCLEBULLET = 8,
+        STYLE_SQUAREBULLET = 9,
+        STYLE_DISCBULLET   = 10
     };
+
     Numbering numbering;
     Style style;
     /*unsigned*/ int depth;
@@ -123,6 +219,7 @@ public:
     //QString custom;
 };
 
+
 // Paragraph layout
 class LayoutData
 {
@@ -131,18 +228,27 @@ public:
         lineSpacingType(10), lineSpacing(0.0), pageBreakBefore(false), pageBreakAfter(false)
         { }
 
-    QString styleName;
-    QString alignment;
+    QString     styleName;
+    QString     alignment;
     CounterData counter;
-    FormatData formatData;
-    double indentFirst, indentLeft, indentRight, marginBottom, marginTop;
+    FormatData  formatData;
+    double      indentFirst, indentLeft, indentRight, marginBottom, marginTop;
 
-    int lineSpacingType; // 0=custom, 10=one line, 15=one and half lines, 20= 2 lines
-    double lineSpacing; // Space between lines in pt, if lineSpacingType==0
+    int         lineSpacingType; // 0=custom, 10=one line, 15=one and half lines, 20= 2 lines
+    double      lineSpacing; // Space between lines in pt, if lineSpacingType==0
 
     bool pageBreakBefore, pageBreakAfter;
     QString tabulator;
 };
+
+
+struct ParaData
+{
+    QString                    text;
+    ValueListFormatData        formattingList;
+    LayoutData                 layout;
+};
+
 
 class KWEFDocumentInfo
 {
@@ -166,9 +272,8 @@ public:
 };
 
 
-
 // Helper functions
 
-void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList);
+void CreateMissingFormatData ( QString &paraText, ValueListFormatData &paraFormatDataList );
 
 #endif /* EXPORTFILTERSSTRUCTURES_H */

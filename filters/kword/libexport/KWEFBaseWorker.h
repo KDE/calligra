@@ -33,24 +33,24 @@ class KWEFBaseWorker
         KWEFBaseWorker(void) {}
         virtual ~KWEFBaseWorker(void) {}
     public: // leader/worker functions
-        virtual bool doOpenFile(const QString& filenameOut, const QString& to);
-        virtual bool doCloseFile(void); // Close file in normal conditions
-        virtual bool doAbortFile(void); // Close file after errors
-        virtual bool doOpenDocument(void); // Like HTML's <html>
-        virtual bool doCloseDocument(void); // Like HTML's </html>
-        virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
-        virtual bool doOpenTextFrameSet(void); // Like AbiWord's <section>
-        virtual bool doCloseTextFrameSet(void); // Like AbiWord's </section>
-        virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
-        virtual bool doFullPaperFormat(const int format,
+        virtual bool doOpenFile (const QString& filenameOut, const QString& to);
+        virtual bool doCloseFile (void); // Close file in normal conditions
+        virtual bool doAbortFile (void); // Close file after errors
+        virtual bool doOpenDocument (void); // Like HTML's <html>
+        virtual bool doCloseDocument (void); // Like HTML's </html>
+        virtual bool doOpenTextFrameSet (void); // Like AbiWord's <section>
+        virtual bool doCloseTextFrameSet (void); // Like AbiWord's </section>
+        virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
+        virtual bool doFullDocument (const QValueList<ParaData> &, QString &, QString &);
+        virtual bool doFullPaperFormat (const int format,
             const double width, const double height, const int orientation); // Like AbiWord's <papersize>
-        virtual bool doOpenHead(void); // Like HTML's <HEAD>
-        virtual bool doCloseHead(void); // Like HTML's </HEAD>
-        virtual bool doOpenBody(void); // Like HTML's <BODY>
-        virtual bool doCloseBody(void); // Like HTML's </BODY>
-        virtual bool doOpenStyles(void); // Like HTML's <style>
-        virtual bool doCloseStyles(void); // Like HTML's </style>
-        virtual bool doFullDefineStyle(LayoutData& layout); // Defines a single style
+        virtual bool doOpenHead (void); // Like HTML's <HEAD>
+        virtual bool doCloseHead (void); // Like HTML's </HEAD>
+        virtual bool doOpenBody (void); // Like HTML's <BODY>
+        virtual bool doCloseBody (void); // Like HTML's </BODY>
+        virtual bool doOpenStyles (void); // Like HTML's <style>
+        virtual bool doCloseStyles (void); // Like HTML's </style>
+        virtual bool doFullDefineStyle (LayoutData& layout); // Defines a single style
 };
 
 #endif /* KWEF_BASEWORKER_H */
