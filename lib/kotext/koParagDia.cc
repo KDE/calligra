@@ -51,6 +51,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     gStyle = new QGroupBox( i18n( "Style" ), this, "styleLayout" );
     vbox->addWidget( gStyle);
     QGridLayout * grid = new QGridLayout(gStyle, 12, 5, KDialog::marginHint(), KDialog::spacingHint());
+    grid->addRowSpacing(0, fontMetrics().height()/2);
 
     makeCounterRepresenterList( stylesList, onlyStyleTypeLetter );
 
