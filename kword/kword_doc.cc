@@ -48,6 +48,7 @@
 #include <unistd.h>
 #include <math.h>
 
+#include <koFilterManager.h>
 #include <koTemplateChooseDia.h>
 #include <kstddirs.h>
 
@@ -142,8 +143,13 @@ CORBA::Boolean KWordDocument::initDoc()
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
 
     QString _template;
+    
+    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+                                                                "application/x-kword",
+								"*.kwd", "KWord",
+								false );
 
-    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate( "kword_template", _template, TRUE, FALSE );
+    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate( "kword_template", _template, TRUE, FALSE, filter, "application/x-kword" );
     if ( ret == KoTemplateChooseDia::Template ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
