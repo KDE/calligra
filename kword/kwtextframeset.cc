@@ -1528,7 +1528,6 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
     setLastFormattedParag( parag );
     emit hideCursor();
     bool doUpdateCurrentFormat = true;
-
     switch ( action ) {
     case ActionDelete: {
         checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
@@ -3606,11 +3605,14 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
             textFrameSet()->removeSelectedText( cursor );
             break;
         }
-
         if ( !cursor->parag()->prev() &&
              cursor->atParagStart() )
+        {
+            KWTextParag * parag = static_cast<KWTextParag *>(cursor->parag());
+            if ( parag->counter() && parag->counter()->style() != KoParagCounter::STYLE_NONE)
+                textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionBackspace );
             break;
-
+        }
         if ( e->state() & ControlButton )
         {
             // Delete a word
