@@ -1405,7 +1405,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     setModified( false );
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
-    recalcVariables( VT_PGNUM );
     return true;
 }
 
