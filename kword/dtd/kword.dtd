@@ -457,6 +457,8 @@ don't put a </?xml...> at the end of the file!).
 <!-- LAYOUT
         A layout holds all the attributes related to a paragraph,
         other than its text and formatting.
+        Each of the child elements can be present only once, except
+        TABULATOR which can be repeated.
 -->
 <!ELEMENT LAYOUT
     (NAME|FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
