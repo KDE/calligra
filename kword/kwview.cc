@@ -3072,7 +3072,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
         m_paragDlg = new KoParagDia( this, "",
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                      KoParagDia::PD_BORDERS |
-                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS | KoParagDia::PD_SHADOW, m_doc->getUnit(),edit->textFrameSet()->frame(0)->width() ,(!edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager()));
+                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS | KoParagDia::PD_SHADOW, m_doc->getUnit(),edit->textFrameSet()->frame(0)->width() ,(!edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager()), edit->frameSet()->isFootEndNote());
         m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
