@@ -44,12 +44,12 @@ public:
     KisBrushChooser( QWidget *parent, const char *name = 0 );
     ~KisBrushChooser();
 
-    const KisBrush  *currentBrush()	const;
-    void  setCurrentBrush( const KisBrush * );
+    KisBrush  *currentBrush();
+    void  setCurrentBrush( KisBrush * );
 
 protected:
     void initGUI();
-    IconChooser 	*chooser;
+    IconChooser	*chooser;
 
 private:
     QHBox 	*frame;
@@ -62,7 +62,7 @@ private slots:
     void slotSetBrushSpacing( int );
 
 signals:
-    void selected( const KisBrush * );
+    void selected(KisBrush * );
 
 };
 

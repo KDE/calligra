@@ -24,12 +24,13 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qcheckbox.h>
 
 #include <klocale.h>
 
 #include "opts_fill_dlg.h"
 
-FillOptionsDialog::FillOptionsDialog( int _opacity,
+FillOptionsDialog::FillOptionsDialog( int _opacity, bool _pattern,
     int _redtolerance, int _bluetolerance, int _greentolerance,
     QWidget *parent, const char *name )
     : KDialog( parent, name, true )
@@ -37,7 +38,7 @@ FillOptionsDialog::FillOptionsDialog( int _opacity,
     setCaption( i18n("Fill Options") );
 
     QVBoxLayout* layout = new QVBoxLayout( this, 4 );
-    QGridLayout* grid = new QGridLayout( layout, 2, 4);
+    QGridLayout* grid = new QGridLayout( layout, 2, 5);
 
     mpOpacity = new QSpinBox( 0, 255, 16, this );
     mpOpacity->setValue( _opacity );
@@ -55,6 +56,10 @@ FillOptionsDialog::FillOptionsDialog( int _opacity,
     mpToleranceBlue->setValue( _bluetolerance );
     QLabel* blabel = new QLabel( mpToleranceBlue, i18n("Blue Tolerance"), this );
 
+    mpUsePattern = new QCheckBox( this );
+    mpUsePattern->setChecked( _pattern );
+    QLabel* plabel = new QLabel( mpUsePattern, i18n("Use Current Pattern"), this );
+
     grid->addWidget( olabel, 0, 0 );
     grid->addWidget( mpOpacity, 0, 1 );
 
@@ -66,6 +71,9 @@ FillOptionsDialog::FillOptionsDialog( int _opacity,
 
     grid->addWidget( blabel, 3, 0 );
     grid->addWidget( mpToleranceBlue, 3, 1 );
+
+    grid->addWidget( plabel, 4, 0 );
+    grid->addWidget( mpUsePattern, 4, 1 );
 
     QHBoxLayout* buttons = new QHBoxLayout( layout, 3 );
     buttons->addStretch( 3 );

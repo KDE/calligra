@@ -23,6 +23,7 @@
 
 #include <qspinbox.h>
 #include <qlineedit.h>
+#include <qcheckbox.h>
 
 #include <kdialog.h>
 
@@ -32,17 +33,18 @@ class PenOptionsDialog : public KDialog
 
 public:
 
-  PenOptionsDialog( int _threshold=128, int _opacity=255,
-    QWidget *parent = 0, const char *name = 0 );
+    PenOptionsDialog( int _threshold = 128, int _opacity = 255, 
+        bool _pattern = false, QWidget *parent = 0, const char *name = 0 );
 
-  int threshold() { return mThreshold->value(); };
-  int opacity()   { return mOpacity->value(); };
-
+    int threshold() { return mThreshold->value(); };
+    int opacity()   { return mOpacity->value(); };
+    int pattern()   { return mPattern->isChecked(); };
+    
 private:
 
-  QSpinBox  *mThreshold;
-  QSpinBox  *mOpacity;
-
+    QSpinBox  *mThreshold;
+    QSpinBox  *mOpacity;
+    QCheckBox *mPattern;
 };
 
 #endif // __penoptionsdialog.h__

@@ -141,9 +141,9 @@ class ControlFrame : public QFrame
     void slotSetFGColor(const KisColor&);
     void slotSetBGColor(const KisColor&);
 
-    void slotSetKrayon(const KisKrayon&);
-    void slotSetBrush(const KisBrush&);
-    void slotSetPattern(const KisPattern&);
+    void slotSetKrayon(KisKrayon&);
+    void slotSetBrush(KisBrush&);
+    void slotSetPattern(KisPattern&);
 
  signals:
     void fgColorChanged(const KisColor&);
@@ -206,9 +206,9 @@ class KisSideBar : public KFloatingDialog
     void slotSetFGColor(const KisColor&);
     void slotSetBGColor(const KisColor&);
 
-    void slotSetKrayon(const KisKrayon&);
-    void slotSetBrush(const KisBrush&);
-    void slotSetPattern(const KisPattern&);
+    void slotSetKrayon(KisKrayon&);
+    void slotSetBrush(KisBrush&);
+    void slotSetPattern(KisPattern&);
   
     void slotActivateTab(const QString& tab) { m_pDockFrame->slotActivateTab(tab); }
     void slotHideChooserFrame();

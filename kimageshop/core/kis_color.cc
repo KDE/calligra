@@ -102,6 +102,52 @@ KisColor::KisColor(int a, int b, int c, cSpace m)
 	}
 }
 
+
+KisColor::KisColor(uint color, cSpace m)
+{
+    int a, b, c;
+
+    a = (int)((color & 0xff0000) >> 16);
+    b = (int)((color & 0x00ff00) >>  8);    
+    c = (int) (color & 0xff);
+    
+    switch (m)
+	{
+	case cs_RGB:
+
+	  m_R = a;
+	  m_G = b;
+	  m_B = c;
+	  m_native = cs_RGB;
+	  rgbChanged();
+	  break;
+	
+    case cs_HSV:
+
+	  m_H = a;
+	  m_S = b;
+	  m_V = c;
+	  m_native = cs_HSV;
+	  hsvChanged();
+	  break;
+	
+    case cs_Lab:
+	  m_L = a;
+	  m_a = b;
+	  m_b = c;
+	  m_native = cs_Lab;
+	  labChanged();
+	  break;
+	
+    default:
+	  m_R = m_G = m_B = 0;
+	  m_native = cs_RGB;
+	  rgbChanged();
+	  
+	}
+}
+
+
 KisColor::KisColor(int c, int m, int y, int k)
 {
   m_C = c;

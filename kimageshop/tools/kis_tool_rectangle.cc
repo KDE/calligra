@@ -37,6 +37,7 @@ RectangleTool::RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
     lineThickness = 4;
     lineOpacity = 255;
     fillSolid = false;
+    usePattern = false;
 }
 
 RectangleTool::~RectangleTool()
@@ -117,17 +118,22 @@ void RectangleTool::drawRectangle( const QPoint& start, const QPoint& end )
 void RectangleTool::optionsDialog()
 {
     LineOptionsDialog *pOptsDialog 
-        = new LineOptionsDialog(fillSolid, lineThickness, lineOpacity);
+        = new LineOptionsDialog(fillSolid, usePattern,
+            lineThickness, lineOpacity);
+            
     pOptsDialog->exec();
+
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
     lineThickness = pOptsDialog->thickness();
     lineOpacity   = pOptsDialog->opacity();
     fillSolid     = pOptsDialog->solid();
-        
+    usePattern    = pOptsDialog->usePattern();
+    
     KisPainter *p = m_pView->kisPainter();
     p->setLineThickness(lineThickness);
     p->setLineOpacity(lineOpacity);
     p->setFilledRectangle(fillSolid);
+    p->setPatternFill(usePattern);    
 }

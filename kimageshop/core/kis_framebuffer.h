@@ -28,6 +28,7 @@
 #include "kis_doc.h"
  
 class KisSelection;
+class KisPattern;
 
 class KisFrameBuffer : public QObject 
 {
@@ -61,7 +62,10 @@ public:
     
     bool QImageToLayer(QImage *qimg, QRect & src, QRect & dest);
     bool layerToQImage(QImage *qimg, QRect & src, QRect & dest);
-         
+    
+    void setPattern(KisPattern *pattern);
+    void setPatternToPixel(KisLayer *lay, int x, int y, uint value);
+    
 protected:
 
     QImage srcImage;
@@ -76,6 +80,9 @@ private:
     KisDoc *pDoc;
     KisLayer *pScratchLayer;
     KisSelection *pSelection;
+    KisPattern *pPenPattern;
+    
+    bool mPatternPaint;
 };
 
 #endif

@@ -43,8 +43,8 @@ public:
   KisPatternChooser( QWidget *parent, const char *name = 0 );
   ~KisPatternChooser();
 
-  const KisPattern  *currentPattern()	const;
-  void 	setCurrentPattern( const KisPattern * );
+  KisPattern  *currentPattern();
+  void 	setCurrentPattern( KisPattern * );
 
 protected:
   void 		initGUI();
@@ -62,7 +62,7 @@ private slots:
   void 		slotSetPatternSpacing( int );
 
 signals:
-  void 		selected( const KisPattern * );
+  void 		selected( KisPattern * );
 
 };
 

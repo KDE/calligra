@@ -28,24 +28,34 @@ class KisColor
 {
  public:
 
-  KisColor();
-  KisColor(int a, int b, int c,  cSpace m = cs_RGB);
-  KisColor(int c, int m, int y,  int k);
-  KisColor(const QColor&);
+    KisColor();
+    
+    // color as 3 ints and a color space def.
+    // covers RGB, HSV, LAB
+    KisColor(int a, int b, int c,  cSpace m = cs_RGB);
+    
+    // color as a uint and a  color space def.
+    // covers RGB, HSV, LAB
+    // This is for conversion from 32 bit scanline offsets
+    KisColor(uint color, cSpace m = cs_RGB);
+    
+    KisColor(int c, int m, int y,  int k);
 
-  void setRGB (int R, int G, int B);
-  void setHSV (int H, int S, int V);
-  void setLAB (int L, int a, int b);
-  void setCMYK (int C, int M, int Y, int K);
-  void setColor(const QColor&);
+    KisColor(const QColor&);
 
-  void rgb (int *R, int *G, int *B) const;
-  void hsv (int *H, int *S, int *V) const;
-  void lab (int *L, int *a, int *b) const;
-  void cmyk (int *C, int *M, int *Y, int *K) const;
-  QColor color() const;
+    void setRGB (int R, int G, int B);
+    void setHSV (int H, int S, int V);
+    void setLAB (int L, int a, int b);
+    void setCMYK (int C, int M, int Y, int K);
+    void setColor(const QColor&);
 
-  cSpace native() const { return m_native; }
+    void rgb (int *R, int *G, int *B) const;
+    void hsv (int *H, int *S, int *V) const;
+    void lab (int *L, int *a, int *b) const;
+    void cmyk (int *C, int *M, int *Y, int *K) const;
+    QColor color() const;
+
+    cSpace native() const { return m_native; }
 
   int R() const;
   int G() const;

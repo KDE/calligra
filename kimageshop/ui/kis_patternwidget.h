@@ -33,7 +33,7 @@ class KisPatternWidget : public QFrame
   KisPatternWidget( QWidget* parent = 0, const char* name = 0 );
 
  public slots:
-  void slotSetPattern( const KisPattern& );
+  void slotSetPattern( KisPattern& );
 
  signals:
   void clicked();
@@ -43,7 +43,7 @@ class KisPatternWidget : public QFrame
   virtual void mousePressEvent ( QMouseEvent * );
 
  private:
-  const KisPattern *m_pPattern; 
+    KisPattern *m_pPattern; 
 };
 
 #endif

@@ -822,7 +822,7 @@ bool KisDoc::saveAsQtImage( QString file, bool wholeImage)
     channel isn't used. 
 */
 
-bool KisDoc::QtImageToLayer(QImage *qimg, KisView *pView)
+bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
 {
     KisImage *img = current();
     if(!img) return false;    
@@ -877,7 +877,9 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView *pView)
         for (int x = sx; x <= ex; x++)
 	    {
             uint *p = (uint *)qimg->scanLine(y) + x;
-
+            
+            //QRgb *p = (QRgb *)qimg->scanLine(y) + x;
+            
             if(layerGrayScale)
             {
                 /* only if qimage is gray scale - in which case all 

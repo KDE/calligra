@@ -34,7 +34,7 @@
 
 //#define TEST_OPT_BRUSH
 
-BrushTool::BrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
+BrushTool::BrushTool(KisDoc *doc, KisView *view, KisBrush *_brush)
   : KisTool(doc, view)
 {
     m_dragging = false;
@@ -45,7 +45,7 @@ BrushTool::BrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
 BrushTool::~BrushTool() {}
 
 
-void BrushTool::setBrush(const KisBrush *_brush)
+void BrushTool::setBrush(KisBrush *_brush)
 {
     m_pBrush = _brush;
     

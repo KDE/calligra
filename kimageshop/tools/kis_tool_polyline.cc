@@ -36,7 +36,8 @@ PolyLineTool::PolyLineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
 {
     lineThickness = 4;
     lineOpacity = 255;
-    
+    usePattern = false;
+        
     mStart  = QPoint(-1, -1);
     mFinish = QPoint(-1, -1);     
 }
@@ -143,16 +144,21 @@ void PolyLineTool::drawLine( const QPoint& start, const QPoint& end )
 void PolyLineTool::optionsDialog()
 {
     LineOptionsDialog *pOptsDialog 
-        = new LineOptionsDialog(lineThickness, lineOpacity);
+        = new LineOptionsDialog(false, usePattern,
+            lineThickness, lineOpacity);
+            
     pOptsDialog->exec();
+    
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
     lineThickness = pOptsDialog->thickness();
     lineOpacity   = pOptsDialog->opacity();
+    usePattern    = pOptsDialog->usePattern();
     
     KisPainter *p = m_pView->kisPainter();
     p->setLineThickness(lineThickness);
     p->setLineOpacity(lineOpacity);
+    p->setPatternFill(usePattern);    
 }
 

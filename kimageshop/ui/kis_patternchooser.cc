@@ -70,7 +70,7 @@ KisPatternChooser::KisPatternChooser( QWidget *parent, const char *name )
   
     initGUI();
 
-    const KisPattern *pattern = currentPattern();
+    KisPattern *pattern = currentPattern();
   
     if ( pattern )
         slSpacing->setValue(pattern->spacing());
@@ -88,7 +88,7 @@ KisPatternChooser::~KisPatternChooser()
 
 
 // set the active pattern in the chooser - does NOT emit selected() (should it?)
-void KisPatternChooser::setCurrentPattern( const KisPattern *pattern )
+void KisPatternChooser::setCurrentPattern( KisPattern *pattern )
 {
     chooser->setCurrentItem( (IconItem *) pattern );
     slSpacing->setValue( pattern->spacing() );
@@ -96,9 +96,9 @@ void KisPatternChooser::setCurrentPattern( const KisPattern *pattern )
 
 
 // return the active pattern
-const KisPattern * KisPatternChooser::currentPattern() const
+KisPattern * KisPatternChooser::currentPattern() 
 {
-    return (const KisPattern *) chooser->currentItem();
+    return (KisPattern *) chooser->currentItem();
 }
 
 
@@ -120,7 +120,7 @@ void KisPatternChooser::initGUI()
 // set the slider to the correct position
 void KisPatternChooser::slotItemSelected( IconItem *item )
 {
-    const KisPattern *pattern = (KisPattern *) item;
+    KisPattern *pattern = (KisPattern *) item;
     slSpacing->setValue( pattern->spacing());
     emit selected( pattern );
 }

@@ -33,7 +33,7 @@ class KisBrushWidget : public QFrame
   KisBrushWidget( QWidget* parent = 0, const char* name = 0 );
 
  public slots:
-  void slotSetBrush( const KisBrush& );
+  void slotSetBrush( KisBrush& );
 
  signals:
   void clicked();
@@ -43,7 +43,7 @@ class KisBrushWidget : public QFrame
   virtual void mousePressEvent ( QMouseEvent * );
 
  private:
-  const KisBrush *m_pBrush; 
+  KisBrush *m_pBrush; 
 };
 
 #endif

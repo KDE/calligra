@@ -37,7 +37,7 @@ KisPatternWidget::KisPatternWidget( QWidget* parent, const char* name )
         m_pPattern = new KisPattern(0);    
 }
 
-void KisPatternWidget::slotSetPattern( const KisPattern& b)
+void KisPatternWidget::slotSetPattern( KisPattern& b)
 {
     m_pPattern = &b;
     repaint();

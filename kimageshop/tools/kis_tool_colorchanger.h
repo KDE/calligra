@@ -57,7 +57,8 @@ class ColorChangerTool : public KisTool
 
     int fillOpacity;
     bool layerAlpha;
-    
+    bool usePattern;
+        
     int toleranceRed;
     int toleranceGreen;    
     int toleranceBlue;

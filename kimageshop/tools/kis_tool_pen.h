@@ -27,17 +27,18 @@
 #include "kis_tool.h"
 
 class KisBrush;
+class KisFrameBuffer;
 
 class PenTool : public KisTool
 {
  public:
 
-    PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, const KisBrush *_brush);
+    PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisBrush *_brush);
     ~PenTool();
   
     QString toolName() { return QString("BrushTool"); }
 
-    void setBrush(const KisBrush *_brush);
+    void setBrush(KisBrush *_brush);
     bool paint(QPoint pos);
 
  public slots:
@@ -52,14 +53,17 @@ class PenTool : public KisTool
 
     int penColorThreshold;
     int penOpacity;
+    bool penPattern;
     
     QPoint 	        m_dragStart;
     bool   	        m_dragging;
     float           m_dragdist;
-    const KisBrush  *m_pBrush;
+    
+    KisBrush        *m_pBrush;
     KisView         *m_pView;
     KisCanvas       *m_pCanvas;
-
+    KisFrameBuffer  *fb;
+    
     QPen pen;
     int  penW;
     QPixmap *buffer;

@@ -73,9 +73,10 @@ class FillTool : public KisTool
     int sGreen;
     int sBlue;
 
-    int fillOpacity;
+    int  fillOpacity;
     bool layerAlpha;
-    
+    bool usePattern;
+        
     int toleranceRed;
     int toleranceGreen;    
     int toleranceBlue;

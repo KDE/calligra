@@ -24,32 +24,41 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qcheckbox.h>
+
 #include <klocale.h>
 
 #include "opts_pen_dlg.h"
 
 PenOptionsDialog::PenOptionsDialog( int _threshold, int _opacity, 
-    QWidget *parent, const char *name )
+    bool _pattern, QWidget *parent, const char *name )
     : KDialog( parent, name, true )
 {
     setCaption( i18n("Current Tool Options") );
 
     QVBoxLayout* layout = new QVBoxLayout( this, 3 );
-    QGridLayout* grid =   new QGridLayout( layout, 2, 2);
+    QGridLayout* grid =   new QGridLayout( layout, 2, 3);
 
     mThreshold = new QSpinBox( 0, 255, 16, this );
     mThreshold->setValue( _threshold );
-    QLabel* tlabel = new QLabel( mThreshold, i18n("T&hreshold"), this );
+    QLabel* tlabel = new QLabel( mThreshold, i18n("Threshold"), this );
 
     grid->addWidget( tlabel, 0, 0 );
     grid->addWidget( mThreshold, 0, 1 );
 
     mOpacity = new QSpinBox( 0, 255, 16, this );
     mOpacity->setValue( _opacity );
-    QLabel* olabel = new QLabel( mOpacity, i18n("&Opacity"), this );
+    QLabel* olabel = new QLabel( mOpacity, i18n("Opacity"), this );
 
     grid->addWidget( olabel, 1, 0 );
     grid->addWidget( mOpacity, 1, 1 );
+
+    mPattern = new QCheckBox( this );
+    mPattern->setChecked( _pattern );
+    QLabel* plabel = new QLabel( mPattern, i18n("Paint with Pattern"), this );
+
+    grid->addWidget( plabel, 2, 0 );
+    grid->addWidget( mPattern, 2, 1 );
 
     /*  these three choice buttons are the same for all options dlgs */
 

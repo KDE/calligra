@@ -26,11 +26,12 @@
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_vec.h"
+#include "kis_framebuffer.h"
 #include "kis_cursor.h"
 #include "kis_tool_pen.h"
 #include "opts_pen_dlg.h"
 
-PenTool::PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, const KisBrush *_brush)
+PenTool::PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisBrush *_brush)
   : KisTool(doc, view)
 {
     m_dragging = false;
@@ -39,6 +40,7 @@ PenTool::PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, const KisBrush *
 
     penColorThreshold = 128;
     penOpacity        = 255;
+    penPattern        = false;
     
     setBrush(_brush);
 }
@@ -49,7 +51,7 @@ PenTool::~PenTool()
 }
 
 
-void PenTool::setBrush(const KisBrush *_brush)
+void PenTool::setBrush(KisBrush *_brush)
 {
     m_pBrush = _brush;
     
@@ -89,9 +91,9 @@ void PenTool::mousePress(QMouseEvent *e)
     if( !img->getCurrentLayer()->visible() )
         return;
 
-    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	    return;
-
+    if(!m_pDoc->frameBuffer())        
+        return;
+        
     m_dragging = true;
 
     QPoint pos = e->pos();
@@ -111,7 +113,8 @@ bool PenTool::paint(QPoint pos)
 {  
     KisImage * img = m_pDoc->current();
     KisLayer *lay = img->getCurrentLayer();
-
+    KisFrameBuffer *fb = m_pDoc->frameBuffer();
+    
     int startx = (pos - m_pBrush->hotSpot()).x();
     int starty = (pos - m_pBrush->hotSpot()).y();
 
@@ -152,10 +155,19 @@ bool PenTool::paint(QPoint pos)
 		    r   = red;   
             g   = green; 
             b   = blue;  
-           
-	        lay->setPixel(0, startx + x, starty + y, r);
-	        lay->setPixel(1, startx + x, starty + y, g);
-	        lay->setPixel(2, startx + x, starty + y, b);
+         
+            // use foreround color  
+            if(!penPattern)
+            {
+	            lay->setPixel(0, startx + x, starty + y, r);
+	            lay->setPixel(1, startx + x, starty + y, g);
+	            lay->setPixel(2, startx + x, starty + y, b);
+            }
+            // map pattern to pen pixel
+            else
+            {
+	            fb->setPatternToPixel(lay, startx + x, starty + y, 0);
+            }
                        	  
             if (alpha)
 	        {
@@ -241,12 +253,12 @@ void PenTool::mouseRelease(QMouseEvent *e)
 void PenTool::optionsDialog()
 {
     PenOptionsDialog *pOptsDialog 
-        = new PenOptionsDialog(penColorThreshold, penOpacity);
+        = new PenOptionsDialog(penColorThreshold, penOpacity, penPattern);
     pOptsDialog->exec();
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
     penColorThreshold = pOptsDialog->threshold();
     penOpacity        = pOptsDialog->opacity();
-   
+    penPattern        = pOptsDialog->pattern();   
 }

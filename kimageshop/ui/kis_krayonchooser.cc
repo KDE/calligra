@@ -83,7 +83,7 @@ KisKrayonChooser::KisKrayonChooser( QWidget *parent, const char *name )
   
     initGUI();
 
-    const KisKrayon * krayon = currentKrayon();
+    KisKrayon * krayon = currentKrayon();
   
     if ( krayon )
         slSpacing->setValue( /* pattern->spacing()*/ 5 );
@@ -101,17 +101,17 @@ KisKrayonChooser::~KisKrayonChooser()
 
 
 // set the active pattern in the chooser - does NOT emit selected() (should it?)
-void KisKrayonChooser::setCurrentKrayon( const KisKrayon *krayon )
+void KisKrayonChooser::setCurrentKrayon( KisKrayon *krayon )
 {
     chooser->setCurrentItem( (IconItem *) krayon );
     slSpacing->setValue( /* pattern->spacing() */ 5 );
 }
 
 
-// return the active pattern
-const KisKrayon * KisKrayonChooser::currentKrayon() const
+// return the active krayon
+KisKrayon * KisKrayonChooser::currentKrayon()
 {
-    return (const KisKrayon *) chooser->currentItem();
+    return (KisKrayon *) chooser->currentItem();
 }
 
 
@@ -133,7 +133,7 @@ void KisKrayonChooser::initGUI()
 // set the slider to the correct position
 void KisKrayonChooser::slotItemSelected( IconItem *item )
 {
-    const KisKrayon *krayon = (KisKrayon *) item;
+    KisKrayon *krayon = (KisKrayon *) item;
     slSpacing->setValue( /* pattern->spacing() */ 5 );
     emit selected( krayon );
 }
@@ -147,9 +147,3 @@ void KisKrayonChooser::slotSetKrayonSpacing( int /* spacing */ )
 }
 
 // #include "kis_krayonchooser.moc"
-
-
-
-
-
-

@@ -31,8 +31,7 @@
 #include "kis_pattern.h"
 #include "kis_tool_stamp.h"
 
-StampTool::StampTool(KisDoc *doc, KisView *view, KisCanvas *canvas, 
-    const KisPattern *pattern)
+StampTool::StampTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisPattern *pattern)
   : KisTool(doc, view)
 {
     m_dragging = false;
@@ -46,9 +45,9 @@ StampTool::StampTool(KisDoc *doc, KisView *view, KisCanvas *canvas,
 StampTool::~StampTool() {}
 
 
-void StampTool::setPattern(const KisPattern *pattern)
+void StampTool::setPattern(KisPattern *pattern)
 {
-    m_pPattern = const_cast<KisPattern*>(pattern);    
+    m_pPattern = pattern;    
     
     /* Use this to establish pattern size and the
     "hot spot" in center of image. This will be the

@@ -33,24 +33,24 @@ class LineOptionsDialog : public KDialog
 
 public:
 
-    LineOptionsDialog( bool _solid = false, 
+    LineOptionsDialog( bool _solid = false,  bool _pattern = false,
         int _thickness = 1, int _opacity = 255,
         QWidget *parent = 0, const char *name = 0 );
 
-    int thickness() { return m_thickness->value(); };
-    int opacity() { return m_opacity->value(); };
-    bool solid() { return m_solid->isChecked(); };
-    bool pattern() { return m_pattern->isChecked(); };
-    bool gradient() { return m_gradient->isChecked(); };
+    int  thickness()    { return mpThickness->value(); };
+    int  opacity()      { return mpOpacity->value(); };
+    bool solid()        { return mpSolid->isChecked(); };
+    bool usePattern()   { return mpUsePattern->isChecked(); };
+    bool gradient()     { return mpUseGradient->isChecked(); };
     
 private:
 
-    QSpinBox  *m_thickness;
-    QSpinBox  *m_opacity;
+    QSpinBox  *mpThickness;
+    QSpinBox  *mpOpacity;
     
-    QCheckBox *m_solid;
-    QCheckBox *m_pattern;
-    QCheckBox *m_gradient;
+    QCheckBox *mpSolid;
+    QCheckBox *mpUsePattern;
+    QCheckBox *mpUseGradient;
 };
 
 #endif // __lineoptionsdialog.h__

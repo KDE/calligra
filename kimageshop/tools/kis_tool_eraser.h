@@ -30,24 +30,24 @@ class KisBrush;
 class EraserTool : public KisTool
 {
  public:
-  EraserTool(KisDoc *doc, KisView *view, const KisBrush *_brush);
-  ~EraserTool();
+    EraserTool(KisDoc *doc, KisView *view, KisBrush *_brush);
+    ~EraserTool();
   
-  QString toolName() { return QString("EraserTool"); }
+    QString toolName() { return QString("EraserTool"); }
 
-  void setBrush(const KisBrush *_brush);
-  bool paint(QPoint pos);
+    void setBrush(KisBrush *_brush);
+    bool paint(QPoint pos);
 
  public slots:
-  virtual void mousePress(QMouseEvent*); 
-  virtual void mouseMove(QMouseEvent*);
-  virtual void mouseRelease(QMouseEvent*);
+    virtual void mousePress(QMouseEvent*); 
+    virtual void mouseMove(QMouseEvent*);
+    virtual void mouseRelease(QMouseEvent*);
 
  protected:
-  QPoint 	m_dragStart;
-  bool   	m_dragging;
-  const KisBrush  	*m_pBrush;
-  float         m_dragdist;
+    QPoint  m_dragStart;
+    bool    m_dragging;
+    float   m_dragdist;
+    KisBrush *m_pBrush;  
 };
 
 #endif

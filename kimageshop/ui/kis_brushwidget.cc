@@ -32,7 +32,7 @@ KisBrushWidget::KisBrushWidget( QWidget* parent, const char* name )
     setFrameStyle( Panel | Sunken );
 }
 
-void KisBrushWidget::slotSetBrush( const KisBrush& b)
+void KisBrushWidget::slotSetBrush( KisBrush& b)
 {
     m_pBrush = &b;
     repaint();

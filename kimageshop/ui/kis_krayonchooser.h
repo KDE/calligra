@@ -40,16 +40,15 @@ class KisKrayonChooser : public QWidget
   Q_OBJECT
 
 public:
-  KisKrayonChooser( QWidget *parent, const char *name = 0 );
-  ~KisKrayonChooser();
+    KisKrayonChooser( QWidget *parent, const char *name = 0 );
+    ~KisKrayonChooser();
 
-  const KisKrayon  *currentKrayon()	const;
-  void 	setCurrentKrayon( const KisKrayon * );
+    KisKrayon  *currentKrayon();
+    void 	setCurrentKrayon( KisKrayon * );
 
 protected:
-  void 		initGUI();
-
-  IconChooser 	*chooser;
+    void initGUI();
+    IconChooser 	*chooser;
 
 private:
     QHBox 	*frame;
@@ -58,11 +57,11 @@ private:
     IntegerWidget *slSpacing;
 
 private slots:
-  void 		slotItemSelected( IconItem * );
-  void 		slotSetKrayonSpacing( int );
+    void    slotItemSelected( IconItem * );
+    void    slotSetKrayonSpacing( int );
 
 signals:
-  void 		selected( const KisKrayon * );
+    void    selected( KisKrayon * );
 
 };
 

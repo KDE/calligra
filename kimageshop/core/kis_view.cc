@@ -254,8 +254,8 @@ void KisView::setupSideBar()
     m_pKrayonChooser = new KisKrayonChooser(this);
     m_pKrayon = m_pKrayonChooser->currentKrayon();
     QObject::connect(m_pKrayonChooser, 
-        SIGNAL(selected(const KisKrayon *)),
-        this, SLOT(slotSetKrayon(const KisKrayon*)));
+        SIGNAL(selected(KisKrayon *)),
+        this, SLOT(slotSetKrayon(KisKrayon*)));
 
     m_pKrayonChooser->setCaption(i18n("Krayons"));
     m_pSideBar->plug(m_pKrayonChooser);
@@ -264,8 +264,8 @@ void KisView::setupSideBar()
     m_pBrushChooser = new KisBrushChooser(m_pSideBar->dockFrame());
     m_pBrush = m_pBrushChooser->currentBrush();
     QObject::connect(m_pBrushChooser, 
-        SIGNAL(selected(const KisBrush *)),
-        this, SLOT(slotSetBrush(const KisBrush*)));
+        SIGNAL(selected(KisBrush *)),
+        this, SLOT(slotSetBrush(KisBrush*)));
 
     m_pBrushChooser->setCaption(i18n("Brushes"));
     m_pSideBar->plug(m_pBrushChooser);
@@ -274,8 +274,8 @@ void KisView::setupSideBar()
     m_pPatternChooser = new KisPatternChooser(this);
     m_pPattern = m_pPatternChooser->currentPattern();
     QObject::connect(m_pPatternChooser, 
-        SIGNAL(selected(const KisPattern *)),
-        this, SLOT(slotSetPattern(const KisPattern*)));
+        SIGNAL(selected(KisPattern *)),
+        this, SLOT(slotSetPattern(KisPattern*)));
 
     m_pPatternChooser->setCaption(i18n("Patterns"));
     m_pSideBar->plug(m_pPatternChooser);
@@ -285,8 +285,8 @@ void KisView::setupSideBar()
     /*
     m_pGradient = m_pGradientChooser->currentGradient();
     QObject::connect(m_pGradientChooser, 
-        SIGNAL(selected(const KisGradient *)), 
-        this, SLOT(slotSetGradient(const KisGradient*)));
+        SIGNAL(selected(KisGradient *)), 
+        this, SLOT(slotSetGradient(KisGradient*)));
     */        
     m_pGradientChooser->setCaption("Gradients");
     m_pSideBar->plug(m_pGradientChooser);
@@ -296,8 +296,8 @@ void KisView::setupSideBar()
     /*
     m_pImage = m_pImageFileChooser->currentImageFile();
     QObject::connect(m_pImageFileChooser, 
-        SIGNAL(selected(const KisImageFile *)),
-        this, SLOT(slotSetImageFile(const KisImageFile*)));
+        SIGNAL(selected(KisImageFile *)),
+        this, SLOT(slotSetImageFile(KisImageFile*)));
     */   
     m_pImageChooser->setCaption("Images");
     m_pSideBar->plug(m_pImageChooser);
@@ -307,8 +307,8 @@ void KisView::setupSideBar()
     /*
     m_pPalette = m_pPaletteChooser->currentPattern();
     QObject::connect(m_pPaletteChooser, 
-        SIGNAL(selected(const KisPalette *)),
-        this, SLOT(slotSetPalette(const KisPalette *)));
+        SIGNAL(selected(KisPalette *)),
+        this, SLOT(slotSetPalette(KisPalette *)));
     */
     m_pPaletteChooser->setCaption("Palettes");
     m_pSideBar->plug(m_pPaletteChooser);
@@ -1882,9 +1882,11 @@ void KisView::redo()
 */
 void KisView::copy()
 {
+    // set local clip
     if(!m_pDoc->setClipImage())
         kdDebug() << "m_pDoc->setClipImage() failed" << endl;
-        
+
+    // copy local clip to global clipboard        
     if(m_pDoc->getClipImage())
     {
         kdDebug() << "got m_pDoc->getClipImage()" << endl;
@@ -1904,12 +1906,27 @@ void KisView::copy()
 */
 void KisView::cut()
 {
+    // set local clip
     if(!m_pDoc->setClipImage())
         kdDebug() << "m_pDoc->setClipImage() failed" << endl;
         
+    // copy local clip to global clipboard
     if(m_pDoc->getClipImage())
+    {
         kapp->clipboard()->setImage(*(m_pDoc->getClipImage()));    
         
+        kdDebug() << "got m_pDoc->getClipImage()" << endl;
+        QImage cImage = *m_pDoc->getClipImage();
+        kapp->clipboard()->setImage(cImage); 
+        {
+            if(kapp->clipboard()->image().isNull())
+                kdDebug() << "clip image is null" << endl; 
+            else
+               kdDebug() << "clip image is NOT null" << endl; 
+        }
+    }
+
+    // erase selection in place
     if(!m_pDoc->getSelection()->erase())
         kdDebug() << "m_pDoc->m_Selection.erase() failed" << endl;
 
@@ -1925,6 +1942,7 @@ void KisView::cut()
 */
 void KisView::removeSelection()
 {
+    // remove selection in place
     if(!m_pDoc->getSelection()->erase())
         kdDebug() << "m_pDoc->m_Selection.erase() failed" << endl;
 
@@ -1944,12 +1962,14 @@ void KisView::removeSelection()
 */
 void KisView::paste()
 {
+    // get local clip from global clipboard
     if(m_pDoc->getClipImage())
     {
         m_pPasteTool->setClip();
         activateTool(m_pPasteTool);
         slotUpdateImage();
-    }    
+    }
+    // empty clipboard    
     else
     {
         KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", FALSE); 
@@ -2004,6 +2024,7 @@ void KisView::crop()
 
     // copy the image into the layer - this should now
     // be handled by the framebuffer object, not the doc
+
     if(!m_pDoc->QtImageToLayer(&cImage, this))
     {
         kdDebug(0) << "crop: can't load image into layer." << endl;        
@@ -2172,12 +2193,14 @@ void KisView::zoom_in( int x, int y )
     zoom( x, y, zf);
 }
 
+
 void KisView::zoom_out( int x, int y )
 {
     float zf = zoomFactor();
     zf /= 2;
     zoom( x, y, zf);
 }
+
 
 void KisView::zoom_in()
 {
@@ -2286,7 +2309,6 @@ void KisView::updateToolbarButtons()
     Properties dialog for the current layer. 
     Only for changing name and opacity so far.
 */
-
 void KisView::layer_properties()
 {
     KisImage * img = m_pDoc->current();
@@ -2650,6 +2672,7 @@ void KisView::insert_layer_image(bool newImage)
     }
 }
 
+
 /*
     save_layer_image - export the current image after merging
     layers or just export the current layer -  like the above
@@ -2832,7 +2855,6 @@ void KisView::merge_linked_layers()
 /*------------------------------------
   Preferences and configuration slots
 ---------------------------------------*/
-
 void KisView::showMenubar()
 {
 }
@@ -2911,11 +2933,11 @@ int KisView::docWidth()
     else return 0;
 }
 
+
 /*
     docHeight - simply returns the width of the document which is
     exactly the same as the width of the current image
 */
-
 int KisView::docHeight()
 {
     if (m_pDoc->current()) return m_pDoc->current()->height();
@@ -2973,7 +2995,7 @@ void KisView::setZoomFactor( float zf )
 }
 
 
-void KisView::slotSetBrush(const KisBrush* b)
+void KisView::slotSetBrush(KisBrush* b)
 {
     m_pBrush = b;
     
@@ -2990,24 +3012,22 @@ void KisView::slotSetBrush(const KisBrush* b)
 }
 
 
-void KisView::slotSetKrayon(const KisKrayon* k)
+void KisView::slotSetKrayon(KisKrayon* k)
 {
     m_pKrayon = k;
     m_pSideBar->slotSetKrayon(*k);
 }
 
 
-void KisView::slotSetPattern(const KisPattern* p)
+void KisView::slotSetPattern(KisPattern* p)
 {
+    // set current pattern for this view
     m_pPattern = p;
     
-    /* setPattern should actually be a part of the tool
-    base class so all tools can use it */
-    
-    if (m_pStampTool)
-        m_pStampTool->setPattern(p);
-
-    m_pSideBar->slotSetPattern(*p);
+    /* set pattern for other things that use patterns */
+    if(m_pStampTool) m_pStampTool->setPattern(p);
+    if(m_pSideBar) m_pSideBar->slotSetPattern(*p);
+    if(m_pDoc->frameBuffer()) m_pDoc->frameBuffer()->setPattern(p);
 }
 
 
@@ -3015,7 +3035,6 @@ void KisView::slotSetPattern(const KisPattern* p)
     The new foreground color should show up in the color selector 
     via signal sent to colorselector
 */
-
 void KisView::slotSetFGColor(const KisColor& c)
 {
     m_fg = c;
@@ -3026,7 +3045,6 @@ void KisView::slotSetFGColor(const KisColor& c)
     The new background color should show up in the color selector 
     via signal sent to colorselector
 */
-
 void KisView::slotSetBGColor(const KisColor& c)
 {
     m_bg = c;

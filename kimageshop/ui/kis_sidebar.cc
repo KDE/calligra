@@ -160,17 +160,17 @@ void KisSideBar::slotControlBGColorSelected(const KisColor& c)
   emit bgColorChanged( c );
 }
 
-void KisSideBar::slotSetKrayon( const KisKrayon& k )
+void KisSideBar::slotSetKrayon(KisKrayon& k )
 {
     m_pControlFrame->slotSetKrayon(k);
 }
 
-void KisSideBar::slotSetBrush( const KisBrush& b )
+void KisSideBar::slotSetBrush( KisBrush& b )
 {
     m_pControlFrame->slotSetBrush(b);
 }
 
-void KisSideBar::slotSetPattern( const KisPattern& b )
+void KisSideBar::slotSetPattern( KisPattern& b )
 {
     m_pControlFrame->slotSetPattern(b);
 }
@@ -278,17 +278,17 @@ void ControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
 	    emit activeColorChanged(ac_Background);
 }
 
-void ControlFrame::slotSetKrayon(const KisKrayon& k)
+void ControlFrame::slotSetKrayon(KisKrayon& k)
 {
     m_pKrayonWidget->slotSetKrayon(k);
 }
 
-void ControlFrame::slotSetBrush(const KisBrush& b)
+void ControlFrame::slotSetBrush(KisBrush& b)
 {
     m_pBrushWidget->slotSetBrush(b);
 }
 
-void ControlFrame::slotSetPattern(const KisPattern& b)
+void ControlFrame::slotSetPattern(KisPattern& b)
 {
     m_pPatternWidget->slotSetPattern(b); 
 }

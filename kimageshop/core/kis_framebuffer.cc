@@ -52,6 +52,7 @@
 #include "kis_vec.h"
 #include "kis_util.h"
 #include "kis_selection.h"
+#include "kis_pattern.h"
 #include "kis_framebuffer.h"
 
 
@@ -59,6 +60,8 @@ KisFrameBuffer::KisFrameBuffer(KisDoc *doc)
 {
     pDoc = doc;
     pScratchLayer = 0;
+    
+    mPatternPaint = false;
 }
 
 
@@ -510,6 +513,7 @@ bool KisFrameBuffer::changeColors(uint oldColor, uint newColor,
         return false;
   
     clipRect = clipRect.intersect(lay->layerExtents());
+    bool imageAlpha = (img->colorMode() == cm_RGBA);
 
     int oldRed   = qRed(oldColor);
     int oldGreen = qGreen(oldColor);
@@ -518,7 +522,8 @@ bool KisFrameBuffer::changeColors(uint oldColor, uint newColor,
     int newRed   = qRed(newColor);
     int newGreen = qGreen(newColor);
     int newBlue  = qBlue(newColor);
-
+    int newAlpha = qAlpha(newColor);
+    
     int sx = clipRect.left();
     int sy = clipRect.top(); 
     int ex = clipRect.right();
@@ -532,14 +537,73 @@ bool KisFrameBuffer::changeColors(uint oldColor, uint newColor,
             && (oldGreen == lay->pixel(1, x, y))
             && (oldBlue  == lay->pixel(2, x, y)))
             {
-	            lay->setPixel(0, x, y, newRed);
-	            lay->setPixel(1, x, y, newGreen);
-	            lay->setPixel(2, x, y, newBlue);
+                if(mPatternPaint)
+                {
+                    setPatternToPixel(lay, x, y, 0);
+                }
+                else
+                {
+	                lay->setPixel(0, x, y, newRed);
+	                lay->setPixel(1, x, y, newGreen);
+	                lay->setPixel(2, x, y, newBlue);
+                }
+                
+                if(imageAlpha) lay->setPixel(3, x, y, newAlpha);
             }    
 	    } 
     }
 
     return true;
+}
+
+/*
+    setPenPattern - public method of setting the pen pattern
+    externally.  This will almost always be the same as the
+    view's current pattern, but it can be set to any pattern.
+    Normally this is called when the view sets a new current
+    pattern - kis_view.cc.
+    
+*/
+
+void KisFrameBuffer::setPattern(KisPattern *pattern)
+{
+    pPenPattern = pattern;
+    mPatternPaint = true;
+}
+
+
+/*
+    setPatternToPixel - map a pixel in an imaginary tile of
+    patterns to a pixel in the given layer and set the layer
+    pixel value to the tile pixel value.
+    
+    This is used for drawing, or filling a selection or region,
+    with a pattern.  Note:  value is the color of the pixel in the
+    layer for blending with a pattern - later.
+*/
+
+void KisFrameBuffer::setPatternToPixel(KisLayer *lay, 
+    int x, int y, uint /*value*/)
+{
+    if(!pPenPattern) 
+        return;
+        
+    if(pPenPattern->width() == 0 || pPenPattern->height() == 0)
+        return;
+
+    int xTiles = lay->imageExtents().width() / pPenPattern->width();
+    int yTiles = lay->imageExtents().height() / pPenPattern->height();
+    
+    // pixel value in pattern image scanline at x offset to right
+    uint *p = (uint *)
+        pPenPattern->image()->scanLine(y / (yTiles * pPenPattern->height()) 
+            +  y % pPenPattern->height()) 
+            + (x / (xTiles * pPenPattern->width())) 
+            + (x % pPenPattern->width());
+    
+    lay->setPixel(0, x, y, qRed(*p));
+    lay->setPixel(1, x, y, qGreen(*p));
+    lay->setPixel(2, x, y, qBlue(*p));    
 }
 
 #include "kis_framebuffer.moc"

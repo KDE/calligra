@@ -22,6 +22,7 @@
 #include "kis_tool_fill.h"
 #include "kis_doc.h"
 #include "kis_view.h"
+#include "kis_framebuffer.h"
 #include "kis_cursor.h"
 #include "opts_fill_dlg.h"
 
@@ -32,7 +33,8 @@ FillTool::FillTool(KisDoc *doc, KisView *view)
     m_Cursor = KisCursor::pickerCursor();
     
     fillOpacity = 255;
-
+    usePattern  = false;
+    
     toleranceRed = 0;
     toleranceGreen = 0;
     toleranceBlue = 0;
@@ -61,12 +63,24 @@ int FillTool::is_old_pixel_value(struct fillinfo *info, int x, int y)
 
 void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 {
-    fLayer->setPixel(0, x, y, info->r);
-    fLayer->setPixel(1, x, y, info->g);   
-    fLayer->setPixel(2, x, y, info->b);
+    // fill with color
+    if(!usePattern)
+    {
+        fLayer->setPixel(0, x, y, info->r);
+        fLayer->setPixel(1, x, y, info->g);   
+        fLayer->setPixel(2, x, y, info->b);
+    }
+    // fill with pattern
+    else
+    {
+        m_pDoc->frameBuffer()->setPatternToPixel(fLayer, x, y, 0);
+    }
     
+    // alpha adjustment with either fill method
     if(layerAlpha)
-        fLayer->setPixel(3, x, y, fillOpacity);   
+    {
+        fLayer->setPixel(3, x, y, fillOpacity);
+    }    
 }
 
 
@@ -244,15 +258,18 @@ void FillTool::mousePress(QMouseEvent *e)
 
 void FillTool::optionsDialog()
 {
-    FillOptionsDialog *pOptsDialog = new FillOptionsDialog(fillOpacity, 
-       toleranceRed, toleranceGreen, toleranceBlue);
+    FillOptionsDialog *pOptsDialog 
+        = new FillOptionsDialog(fillOpacity, usePattern,
+            toleranceRed, toleranceGreen, toleranceBlue);
+            
     pOptsDialog->exec();
+
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
-    fillOpacity = pOptsDialog->opacity();
-    
-    toleranceRed = pOptsDialog->ToleranceRed();
-    toleranceGreen = pOptsDialog->ToleranceGreen();    
-    toleranceBlue = pOptsDialog->ToleranceBlue();    
+    fillOpacity     = pOptsDialog->opacity();
+    usePattern      = pOptsDialog->usePattern();
+    toleranceRed    = pOptsDialog->ToleranceRed();
+    toleranceGreen  = pOptsDialog->ToleranceGreen();    
+    toleranceBlue   = pOptsDialog->ToleranceBlue();    
 }

@@ -53,6 +53,7 @@ KisPainter::KisPainter(KisDoc *doc, KisView *view)
     lineThickness = 1;
     lineOpacity = 255;
     
+    patternFill = false;    
     filledEllipse = false;
     filledRectangle = false;
         
@@ -114,7 +115,6 @@ bool KisPainter::toLayer(QRect paintRect)
 	    return false;
     }
 
-    /* if dealing with 1 or 8 bit images, convert to 16 bit */
     if(qimg->depth() < 16)
     {
         kdDebug() << "Warning: kisPainter image depth < 16" << endl;
@@ -133,30 +133,6 @@ bool KisPainter::toLayer(QRect paintRect)
         return false;
   
     clipRect = clipRect.intersect(lay->imageExtents());
-
-#if 0
-    kdDebug(0) << "clipRect.intersect(lay->imageExtents()" << " left " << clipRect.left() 
-    << " top " << clipRect.top() << " width " << clipRect.width() 
-    << " height " << clipRect.height() << endl;
-
-    if (!clipRect.intersects(lay->layerExtents()))
-        return false;
-  
-    clipRect = clipRect.intersect(lay->layerExtents());
-
-    kdDebug(0) << "clipRect.intersect(lay->layerExtents()" << " left " << clipRect.left() 
-    << " top " << clipRect.top() << " width " << clipRect.width() 
-    << " height " << clipRect.height() << endl;
-
-    if(!clipRect.intersects(img->imageExtents()))
-        return false;
-        
-    clipRect = clipRect.intersect(img->imageExtents());
-
-    kdDebug(0) << "clipRect.intersect(img->imageExtents()" << " left " << clipRect.left() 
-    << " top " << clipRect.top() << " width " << clipRect.width() 
-    << " height " << clipRect.height() << endl;
-#endif
     
     int sx = clipRect.left();
     int sy = clipRect.top();
@@ -172,10 +148,14 @@ bool KisPainter::toLayer(QRect paintRect)
     int fgGreen   = pView->fgColor().G();
     int fgBlue    = pView->fgColor().B();
 
+    // prepare framebuffer for painting with pattern
+    if(patternFill) 
+    {
+        pDoc->frameBuffer()->setPattern(pView->currentPattern());
+    }
+    
     for (int y = sy; y <= ey; y++)
     {
-        //if(y >= qimg->height() + sy) break; 
-         
         for (int x = sx; x <= ex; x++)
 	    {
             // destination binary values by channel
@@ -194,9 +174,20 @@ bool KisPainter::toLayer(QRect paintRect)
             // ignore the white background filler, 
             // only change black pixels            
             if(QColor(*p) != Qt::black) continue;
-                         
-            // set layer pixel to be same as image
-            if(!colorBlending)
+
+            /* NOTE: Currently these different painting modes are
+            mutually exclusive but when the krayon blend settings
+            are hooked in there will be a variety of blending methods
+            which can be combined to meet the user's exact specs.
+            This will be handled by the KisFrameBuffer class */
+            
+            // paint with pattern
+            if(patternFill)
+            {
+                pDoc->frameBuffer()->setPatternToPixel(lay, x, y, 0);
+            }                         
+            // set layer pixel to foreground color
+            else if(!colorBlending)
             {
 	            lay->setPixel(0, x,  y, fgRed);
 	            lay->setPixel(1, x,  y, fgGreen);
@@ -212,7 +203,8 @@ bool KisPainter::toLayer(QRect paintRect)
                     (fgGreen*opacity + g*invopacity)/255);                        
                 lay->setPixel(2, x, y, 
                     (fgBlue*opacity + b*invopacity)/255);                        
-            }            
+            }  
+                      
             /* average source and destination alpha values 
             for semi-transparent effect with other layers */                    
             if(alpha && averageAlpha)

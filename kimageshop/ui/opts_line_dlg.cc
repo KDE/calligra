@@ -30,35 +30,42 @@
 
 #include "opts_line_dlg.h"
 
-LineOptionsDialog::LineOptionsDialog( bool _solid,
+LineOptionsDialog::LineOptionsDialog( bool _solid, bool _pattern,
     int _thickness, int _opacity, QWidget *parent, const char *name )
     : KDialog( parent, name, true )
 {
     setCaption( i18n("Current Tool Options") );
 
     QVBoxLayout* layout = new QVBoxLayout( this, 4 );
-    QGridLayout* grid = new QGridLayout( layout, 2, 3);
+    QGridLayout* grid = new QGridLayout( layout, 2, 4);
 
-    m_thickness = new QSpinBox( 1, 16, 1, this );
-    m_thickness->setValue( _thickness );
-    QLabel* tlabel = new QLabel( m_thickness, i18n("T&hickness"), this );
+    mpThickness = new QSpinBox( 1, 16, 1, this );
+    mpThickness->setValue( _thickness );
+    QLabel* tlabel = new QLabel( mpThickness, i18n("T&hickness"), this );
 
     grid->addWidget( tlabel, 0, 0 );
-    grid->addWidget( m_thickness, 0, 1 );
+    grid->addWidget( mpThickness, 0, 1 );
 
-    m_opacity = new QSpinBox( 0, 255, 32, this );
-    m_opacity->setValue( _opacity );
-    QLabel* olabel = new QLabel( m_opacity, i18n("&Opacity"), this );
+    mpOpacity = new QSpinBox( 0, 255, 32, this );
+    mpOpacity->setValue( _opacity );
+    QLabel* olabel = new QLabel( mpOpacity, i18n("&Opacity"), this );
 
     grid->addWidget( olabel, 1, 0 );
-    grid->addWidget( m_opacity, 1, 1 );
+    grid->addWidget( mpOpacity, 1, 1 );
 
-    m_solid = new QCheckBox( this );
-    m_solid->setChecked( _solid );
-    QLabel* slabel = new QLabel( m_solid, i18n("Fill Solid"), this );
+    mpSolid = new QCheckBox( this );
+    mpSolid->setChecked( _solid );
+    QLabel* slabel = new QLabel( mpSolid, i18n("Fill Interior Regions"), this );
 
     grid->addWidget( slabel, 2, 0 );
-    grid->addWidget( m_solid, 2, 1 );
+    grid->addWidget( mpSolid, 2, 1 );
+
+    mpUsePattern = new QCheckBox( this );
+    mpUsePattern->setChecked( _pattern );
+    QLabel* plabel = new QLabel( mpUsePattern, i18n("Use Current Pattern"), this );
+
+    grid->addWidget( plabel, 3, 0 );
+    grid->addWidget( mpUsePattern, 3, 1 );
 
     QHBoxLayout* buttons = new QHBoxLayout( layout, 3 );
     buttons->addStretch( 3 );

@@ -95,7 +95,9 @@ class KisView : public KoView
 
     KisCanvas*  kisCanvas() { return m_pCanvas; }
     KisPainter* kisPainter() { return m_pPainter; }
-    
+    KisPattern *currentPattern() { return m_pPattern; }
+    KisBrush *currentBrush() { return m_pBrush; }
+
     void updateCanvas(QRect & ur);
     void showScrollBars();
     void layerScale(bool smooth);
@@ -118,9 +120,9 @@ class KisView : public KoView
     void slotDocUpdated();
     void slotDocUpdated(const QRect&);
 
-    void slotSetKrayon(const KisKrayon *);
-    void slotSetBrush(const KisBrush *);
-    void slotSetPattern(const KisPattern *);
+    void slotSetKrayon(KisKrayon *);
+    void slotSetBrush(KisBrush *);
+    void slotSetPattern(KisPattern *);
     void slotSetFGColor(const KisColor&);
     void slotSetBGColor(const KisColor&);
     void slotSetPaintOffset();
@@ -338,10 +340,10 @@ class KisView : public KoView
     FillTool            *m_pFillTool;
     StampTool           *m_pStampTool;
     
-    const KisKrayon     *m_pKrayon;   // current krayon for this view   
-    const KisBrush      *m_pBrush;    // current brush for this view
-    const KisPattern    *m_pPattern;  // current for this view pattern
-    const KisImage      *m_pImage;    // current image for this view
+    KisKrayon     *m_pKrayon;   // current krayon for this view   
+    KisBrush      *m_pBrush;    // current brush for this view
+    KisPattern    *m_pPattern;  // current for this view pattern
+    KisImage      *m_pImage;    // current image for this view
 
     // sidebar dock widgets
     KisKrayonChooser     *m_pKrayonChooser;    

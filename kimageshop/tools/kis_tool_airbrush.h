@@ -33,11 +33,11 @@ class AirBrushTool : public KisTool
     Q_OBJECT
     
 public:
-    AirBrushTool(KisDoc *doc, KisView *view, const KisBrush *brush);
+    AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush);
     ~AirBrushTool();
   
     QString toolName() { return QString("AirBrushTool"); }
-    void setBrush(const KisBrush *_brush);
+    void setBrush(KisBrush *_brush);
     bool paint(QPoint pos, bool timeout);
       
 public slots:
@@ -47,7 +47,7 @@ public slots:
     void timeoutPaint();  
 
 protected:
-    const KisBrush *m_pBrush;
+    KisBrush *m_pBrush;
     QArray <int> brushArray; // array of points in brush
     int nPoints;  // number of points marked in array
     

@@ -51,10 +51,13 @@ protected:
 
     int         lineThickness;
     int         lineOpacity;
-        
+    bool        usePattern;
+            
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
+
     bool        m_dragging;
+
     KisCanvas   *pCanvas;
 };
 

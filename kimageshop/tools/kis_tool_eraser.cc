@@ -29,7 +29,7 @@
 #include "kis_util.h"
 
 
-EraserTool::EraserTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
+EraserTool::EraserTool(KisDoc *doc, KisView *view, KisBrush *_brush)
   : KisTool(doc, view)
 {
     m_dragging = false;
@@ -39,7 +39,7 @@ EraserTool::EraserTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
 
 EraserTool::~EraserTool() {}
 
-void EraserTool::setBrush(const KisBrush *_brush)
+void EraserTool::setBrush(KisBrush *_brush)
 {
     m_pBrush = _brush;
     

@@ -69,7 +69,7 @@ KisBrushChooser::KisBrushChooser( QWidget *parent, const char *name )
   
     initGUI();
 
-    const KisBrush *brush = currentBrush();
+    KisBrush *brush = currentBrush();
     if ( brush ) slSpacing->setValue( brush->spacing() );
 }
 
@@ -99,7 +99,7 @@ KisBrushChooser::~KisBrushChooser()
 
 
 // set the active brush in the chooser - does NOT emit selected() (should it?)
-void KisBrushChooser::setCurrentBrush( const KisBrush *brush )
+void KisBrushChooser::setCurrentBrush( KisBrush *brush )
 {
     chooser->setCurrentItem( (IconItem *) brush );
     slSpacing->setValue( brush->spacing() );
@@ -107,16 +107,16 @@ void KisBrushChooser::setCurrentBrush( const KisBrush *brush )
 
 
 // return the active brush
-const KisBrush * KisBrushChooser::currentBrush() const
+KisBrush * KisBrushChooser::currentBrush() 
 {
-    return (const KisBrush *) chooser->currentItem();
+    return (KisBrush *) chooser->currentItem();
 }
 
 // called when an item is selected in the chooser
 // set the slider to the correct position
 void KisBrushChooser::slotItemSelected( IconItem *item )
 {
-    const KisBrush *brush = (KisBrush *) item;
+    KisBrush *brush = (KisBrush *) item;
     slSpacing->setValue( brush->spacing() );
     emit selected( brush );
 }

@@ -33,8 +33,8 @@ class KisPattern;
 class StampTool : public KisTool
 {
  public:
-    StampTool(KisDoc *doc, KisView *view, 
-        KisCanvas *canvas, const KisPattern *pattern);
+    StampTool(KisDoc *doc, KisView *view, KisCanvas *canvas, 
+    KisPattern *pattern);
     ~StampTool();
   
     QString toolName() { return QString("Stamp Tool"); }
@@ -43,7 +43,7 @@ class StampTool : public KisTool
     bool stampMonochrome(QPoint pos);
     bool stampColor(QPoint pos);
     bool stampToCanvas(QPoint pos);
-    void setPattern(const KisPattern *pattern);
+    void setPattern(KisPattern *pattern);
 
  public slots:
  

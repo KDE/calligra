@@ -33,7 +33,8 @@ ColorChangerTool::ColorChangerTool(KisDoc *doc, KisView *view)
     m_Cursor = KisCursor::pickerCursor();
     
     fillOpacity = 255;
-
+    usePattern  = false;
+    
     toleranceRed = 0;
     toleranceGreen = 0;
     toleranceBlue = 0;
@@ -67,7 +68,6 @@ bool ColorChangerTool::changeColors(int startX, int startY)
     sBlue   = lay->pixel(2, startx, starty);
 
     // new color values from color selector 
-
     nRed     = m_pView->fgColor().R();
     nGreen   = m_pView->fgColor().G();
     nBlue    = m_pView->fgColor().B();
@@ -82,8 +82,13 @@ bool ColorChangerTool::changeColors(int startX, int startY)
     kdDebug() << "ur.left() " << ur.left() 
               << "ur.top() "  << ur.top() << endl;
 
-    if(!m_pDoc->frameBuffer()->changeColors(qRgba(sRed, sGreen, sBlue, 255), 
-        qRgba(nRed, nGreen, nBlue, 255), ur))
+    // prepare painter for painting with pattern
+    if(usePattern)
+        m_pDoc->frameBuffer()->setPattern(m_pView->currentPattern());
+        
+    // this does the painting
+    if(!m_pDoc->frameBuffer()->changeColors(qRgba(sRed, sGreen, sBlue, fillOpacity), 
+        qRgba(nRed, nGreen, nBlue, fillOpacity), ur))
     {     
         kdDebug() << "error changing colors" << endl;
         return false;    
@@ -126,15 +131,18 @@ void ColorChangerTool::mousePress(QMouseEvent *e)
 
 void ColorChangerTool::optionsDialog()
 {
-    FillOptionsDialog *pOptsDialog = new FillOptionsDialog(fillOpacity, 
-       toleranceRed, toleranceGreen, toleranceBlue);
+    FillOptionsDialog *pOptsDialog 
+        = new FillOptionsDialog(fillOpacity, usePattern,
+            toleranceRed, toleranceGreen, toleranceBlue);
+    
     pOptsDialog->exec();
+    
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
-    fillOpacity = pOptsDialog->opacity();
-    
-    toleranceRed = pOptsDialog->ToleranceRed();
-    toleranceGreen = pOptsDialog->ToleranceGreen();    
-    toleranceBlue = pOptsDialog->ToleranceBlue();    
+    fillOpacity     = pOptsDialog->opacity();
+    usePattern      = pOptsDialog->usePattern();
+    toleranceRed    = pOptsDialog->ToleranceRed();
+    toleranceGreen  = pOptsDialog->ToleranceGreen();    
+    toleranceBlue   = pOptsDialog->ToleranceBlue();    
 }
