@@ -32,7 +32,7 @@ KivioPageName::KivioPageName( KivioView* _parent, const char* _name, QString& _p
 : QDialog( _parent, _name, true )
 {
    m_pView = _parent;
-
+   m_PageName=_pageName;
    setCaption( i18n("Change Page Name") );
 
    QLabel* tmpQLabel;
@@ -75,6 +75,7 @@ void KivioPageName::slotOk()
       {
          QApplication::beep();
          KMessageBox::information( this, i18n("A page with this name already exists."), i18n("Change page name") );
+         m_pPageName->setText(m_PageName);
          return;
       }
    }
