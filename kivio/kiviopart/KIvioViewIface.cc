@@ -174,3 +174,33 @@ void KIvioViewIface::toggleProtectionPanel(bool b)
 {
     view->toggleProtectionPanel(b);
 }
+
+void KIvioViewIface::groupStencils()
+{
+    view->groupStencils();
+}
+
+void KIvioViewIface::ungroupStencils()
+{
+    view->ungroupStencils();
+}
+
+void KIvioViewIface::selectAllStencils()
+{
+    view->selectAllStencils();
+}
+
+void KIvioViewIface::unselectAllStencils()
+{
+    view->unselectAllStencils();
+}
+
+int KIvioViewIface::lineWidth()
+{
+    return view->lineWidth();
+}
+
+void KIvioViewIface::alignStencilsDlg()
+{
+    view->alignStencilsDlg();
+}

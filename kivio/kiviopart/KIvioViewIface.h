@@ -68,6 +68,16 @@ k_dcop:
     virtual void toggleBirdEyePanel(bool);
     virtual void toggleProtectionPanel(bool);
 
+    virtual void alignStencilsDlg();
+
+    virtual void groupStencils();
+    virtual void ungroupStencils();
+
+    virtual void selectAllStencils();
+    virtual void unselectAllStencils();
+
+    virtual int lineWidth();
+
 private:
     KivioView *view;
 
