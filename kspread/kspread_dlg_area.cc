@@ -40,6 +40,8 @@ KSpreadarea::KSpreadarea( KSpreadView * parent, const char * name, const QPoint 
   QVBoxLayout * lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
   m_areaName = new QLineEdit(page);
+  m_areaName->setMinimumWidth( m_areaName->sizeHint().width() * 3 );
+
   lay1->addWidget( m_areaName );
   m_areaName->setFocus();
   connect ( m_areaName, SIGNAL(textChanged ( const QString & )), this, SLOT(slotAreaNamechanged( const QString &)));
