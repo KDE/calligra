@@ -1950,6 +1950,11 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
       QPoint obscuringCellRef( obscuringCell->column(), obscuringCell->row() );
       double x = m_pTable->dblColumnPos( obscuringCell->column() );
       double y = m_pTable->dblRowPos( obscuringCell->row() );
+      if (view != NULL)
+      {
+        x -= view->canvasWidget()->xOffset();
+        y -= view->canvasWidget()->yOffset();
+      }
       KoPoint corner = KoPoint( x, y );
       painter.save();
 

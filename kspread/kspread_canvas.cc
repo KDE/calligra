@@ -2974,7 +2974,7 @@ void KSpreadCanvas::paintUpdates()
     for ( y = range.top(); y <= range.bottom(); y++ )
     {
 
-//      if ( activeTable()->cellIsPaintDirty( QPoint( x, y ) ) )
+      if ( activeTable()->cellIsPaintDirty( QPoint( x, y ) ) )
       {
         cell = activeTable()->cellAt( x, y );
         cell->calc();

@@ -785,7 +785,7 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   {
     cellRegion = cellRegions[i];
 
-//    PaintRegion(painter, unzoomedViewRect, view, cellRegion, table);
+    PaintRegion(painter, unzoomedViewRect, view, cellRegion, table);
   }
 
   if ((view != NULL) && drawCursor && !(painter.device()->isExtDev()))
