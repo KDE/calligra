@@ -522,8 +522,8 @@ public:
     KAction* insertCellCopy;
     KAction* undo;
     KAction* redo;
-    KAction* findAction;
-    KAction* replaceAction;
+    KAction* find;
+    KAction* replace;
 
     // navigation
     KAction* gotoCell;
@@ -938,6 +938,51 @@ void ViewPrivate::initActions()
      0, view, SLOT( tableFormat() ), ac, "tableFormat" );
   actions->tableFormat->setToolTip(i18n("Set the worksheet formatting."));
 
+  // -- editing actions --
+
+  actions->copy = KStdAction::copy( view, SLOT( copySelection() ), ac, "copy" );
+  actions->copy->setToolTip(i18n("Copy the cell object to the clipboard."));
+
+  actions->paste = KStdAction::paste( view, SLOT( paste() ), ac, "paste" );
+  actions->paste->setToolTip(i18n("Paste the contents of the clipboard at the cursor."));
+
+  actions->cut = KStdAction::cut( view, SLOT( cutSelection() ), ac, "cut" );
+  actions->cut->setToolTip(i18n("Move the cell object to the clipboard."));
+
+  actions->specialPaste = new KAction( i18n("Special Paste..."), "special_paste",
+      0, view, SLOT( specialPaste() ), ac, "specialPaste" );
+  actions->specialPaste->setToolTip(i18n("Paste the contents of the clipboard with special options."));
+
+  actions->insertCellCopy = new KAction( i18n("Paste with Insertion"), "insertcellcopy",
+      0, view, SLOT( slotInsertCellCopy() ), ac, "insertCellCopy" );
+  actions->insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet."));
+
+  actions->undo = KStdAction::undo( view, SLOT( undo() ), ac, "undo" );
+  actions->undo->setEnabled( FALSE );
+  actions->undo->setToolTip(i18n("Undo the previous action."));
+
+  actions->redo = KStdAction::redo( view, SLOT( redo() ), ac, "redo" );
+  actions->redo->setEnabled( FALSE );
+  actions->redo->setToolTip(i18n("Redo the action that has been undone."));
+
+  actions->find = KStdAction::find( view, SLOT(find()), ac );
+  /*actions->findNext =*/ KStdAction::findNext( view, SLOT( findNext() ), ac );
+  /*actions->findPrevious =*/ KStdAction::findPrev( view, SLOT( findPrevious() ), ac );
+
+  actions->replace = KStdAction::replace( view, SLOT(replace()), ac );
+
+  actions->fillRight = new KAction( i18n( "&Right" ), 0,
+      0, view, SLOT( fillRight() ), ac, "fillRight" );
+
+  actions->fillLeft = new KAction( i18n( "&Left" ), 0,
+      0, view, SLOT( fillLeft() ), ac, "fillLeft" );
+
+  actions->fillDown = new KAction( i18n( "&Down" ), 0,
+      0, view, SLOT( fillDown() ), ac, "fillDown" );
+
+  actions->fillUp = new KAction( i18n( "&Up" ), 0,
+      0, view, SLOT( fillUp() ), ac, "fillUp" );
+
   // -- misc actions --
 
   actions->spellChecking = KStdAction::spelling( view, SLOT( extraSpelling() ),
@@ -1194,7 +1239,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     d->initActions();
     initializeInsertActions();
-    initializeEditActions();
     initializeAreaOperationActions();
     initializeGlobalOperationActions();
 
@@ -1304,56 +1348,6 @@ void KSpreadView::initializeInsertActions()
                                       actionCollection(), "insertFromClipboard");
   d->actions->insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection."));
 
-}
-
-void KSpreadView::initializeEditActions()
-{
-  d->actions->copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(),
-                             "copy" );
-  d->actions->copy->setToolTip(i18n("Copy the cell object to the clipboard."));
-
-  d->actions->paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(),
-                               "paste" );
-  d->actions->paste->setToolTip(i18n("Paste the contents of the clipboard at the cursor."));
-
-  d->actions->cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(),
-                           "cut" );
-  d->actions->cut->setToolTip(i18n("Move the cell object to the clipboard."));
-
-  d->actions->specialPaste = new KAction( i18n("Special Paste..."), "special_paste",0,
-                                this, SLOT( specialPaste() ), actionCollection(),
-                                "specialPaste" );
-  d->actions->specialPaste->setToolTip
-    (i18n("Paste the contents of the clipboard with special options."));
-
-  d->actions->insertCellCopy = new KAction( i18n("Paste with Insertion"),
-                                  "insertcellcopy", 0, this,
-                                  SLOT( slotInsertCellCopy() ),
-                                  actionCollection(), "insertCellCopy" );
-  d->actions->insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet."));
-
-  d->actions->undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
-  d->actions->undo->setEnabled( FALSE );
-  d->actions->undo->setToolTip(i18n("Undo the previous action."));
-
-  d->actions->redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
-  d->actions->redo->setEnabled( FALSE );
-  d->actions->redo->setToolTip(i18n("Redo the action that has been undone."));
-
-  d->actions->findAction = KStdAction::find(this, SLOT(find()), actionCollection());
-  /*d->actions->findNext =*/ KStdAction::findNext( this, SLOT( findNext() ), actionCollection() );
-  /*d->actions->findPrevious =*/ KStdAction::findPrev( this, SLOT( findPrevious() ), actionCollection() );
-
-  d->actions->replaceAction = KStdAction::replace(this, SLOT(replace()), actionCollection());
-
-  d->actions->fillRight = new KAction( i18n( "&Right" ), 0, 0, this,
-                             SLOT( fillRight() ), actionCollection(), "fillRight" );
-  d->actions->fillLeft = new KAction( i18n( "&Left" ), 0, 0, this,
-                             SLOT( fillLeft() ), actionCollection(), "fillLeft" );
-  d->actions->fillDown = new KAction( i18n( "&Down" ), 0, 0, this,
-                             SLOT( fillDown() ), actionCollection(), "fillDown" );
-  d->actions->fillUp = new KAction( i18n( "&Up" ), 0, 0, this,
-                             SLOT( fillUp() ), actionCollection(), "fillUp" );
 }
 
 void KSpreadView::initializeAreaOperationActions()
@@ -2380,8 +2374,8 @@ void KSpreadView::updateReadWrite( bool readwrite )
   d->actions->gotoCell->setEnabled( true );
   d->actions->viewZoom->setEnabled( true );
   d->actions->showPageBorders->setEnabled( true );
-  d->actions->findAction->setEnabled( true);
-  d->actions->replaceAction->setEnabled( readwrite );
+  d->actions->find->setEnabled( true);
+  d->actions->replace->setEnabled( readwrite );
   if ( !d->doc->isReadWrite())
       d->actions->copy->setEnabled( true );
   //  d->actions->newView->setEnabled( true );
@@ -4467,7 +4461,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
 
 void KSpreadView::adjustActions( bool mode )
 {
-  d->actions->replaceAction->setEnabled( mode );
+  d->actions->replace->setEnabled( mode );
   d->actions->insertSeries->setEnabled( mode );
   d->actions->insertLink->setEnabled( mode );
   d->actions->insertSpecialChar->setEnabled( mode );

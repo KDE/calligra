@@ -544,7 +544,6 @@ private:
 
   /* helper functions */
   void initializeInsertActions();
-  void initializeEditActions();
   void initializeAreaOperationActions();
   void initializeGlobalOperationActions();
   void adjustMapActions( bool mode );
