@@ -58,6 +58,7 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
+#include <kio/netaccess.h>
 
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
@@ -2276,11 +2277,17 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
         if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
                                            "", QString::null, QString::null, KoTemplateChooseDia::OnlyTemplates,
                                            "kpresenter_template") == KoTemplateChooseDia::Cancel )
-            return QString("");
+            return QString::null;
         QFileInfo fileInfo( _template );
         fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
-        QString cmd = "cp " + KProcess::quote(fileName) + " " + KProcess::quote(locateLocal( "appdata", "default.kpr" ));
-        system( QFile::encodeName(cmd) );
+        
+        KURL src( fileName );
+        KURL dest( locateLocal( "appdata", "default.kpr" ) );
+        kdDebug() << "Copying template  (in KPresenterDoc::templateFileName)" << endl
+            << "  from: " << src.prettyURL() << endl
+            << "  to: " << dest.prettyURL() << endl;
+        KIO::NetAccess::del( dest ); // copy does *not* delete, so have to do it explicitely!
+        KIO::NetAccess::copy( src, dest );
     }
     return fileName;
 }
