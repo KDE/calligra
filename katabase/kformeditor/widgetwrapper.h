@@ -24,6 +24,8 @@
 
 class WidgetWrapper : public QWidget
 {
+  Q_OBJECT
+
 public:
 
   WidgetWrapper();
@@ -35,8 +37,20 @@ public:
   virtual void resizeEvent( QResizeEvent* _event );
   virtual void paintEvent( QPaintEvent* _event );
 
+  void select( bool _selected = TRUE );
+  bool selected();
+
+signals:
+
+  void clicked( WidgetWrapper* _widget );
+
+public slots:
+
+  void slotUnselect();
+
 private:
 
+  bool m_selected;
   QWidget* m_widget;
 };
 

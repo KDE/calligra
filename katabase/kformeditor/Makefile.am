@@ -29,7 +29,8 @@ METASOURCES = \
  kformeditor_main.moc \
  kformeditor_shell.moc \
  kformeditor_doc.moc \
- kformeditor_view.moc
+ kformeditor_view.moc \
+ widgetwrapper.moc
 
 idl_DATA = kformeditor.idl
 

@@ -31,6 +31,7 @@ WidgetWrapper::WidgetWrapper()
 
 WidgetWrapper::WidgetWrapper( QWidget* _widget, WFlags f )
   : m_widget( _widget )
+  , m_selected ( FALSE )
 {
   _widget->reparent( this, f, QPoint( 0, 0 ), TRUE );
 
@@ -44,9 +45,31 @@ WidgetWrapper::~WidgetWrapper()
 {
 }
 
+void WidgetWrapper::select( bool _selected )
+{
+  if( _selected )
+    cerr << "WidgetWrapper::select" << endl;
+
+  m_selected = _selected;
+
+  QWidget::update();
+}
+
+bool WidgetWrapper::selected()
+{
+  return m_selected;
+}
+
+void WidgetWrapper::slotUnselect()
+{
+  select( FALSE );
+}
+
 void WidgetWrapper::mousePressEvent( QMouseEvent* _event )
 {
   cerr << "WidgetWrapper::mousePressEvent()" << endl;
+
+  emit clicked( this );
 }
 
 void WidgetWrapper::resizeEvent( QResizeEvent* _event )
@@ -55,17 +78,38 @@ void WidgetWrapper::resizeEvent( QResizeEvent* _event )
 
 void WidgetWrapper::paintEvent( QPaintEvent* _event )
 {
-  QPainter p;
+  if( m_selected )
+  {
+    QPainter p;
 
-  p.begin( this );
+    p.begin( this );
 
-  p.drawRect( 2, 2, width() - 3, height() - 3 );
+    // paint the rectangle
+    p.drawRect( 2, 2, width() - 3, height() - 3 );
 
-  p.fillRect( 0, 0, 5, 5, QBrush( SolidPattern ) );
-  p.fillRect( width() - 5, 0, width(), 5, QBrush( SolidPattern ) );
-  p.fillRect( 0, height() - 5, 5, height(), QBrush( SolidPattern ) );
-  p.fillRect( width() - 5, height() - 5, width(), height(), QBrush( SolidPattern ) );
+    // paint the edge points
+    p.fillRect( 0, 0, 5, 5, QBrush( SolidPattern ) );
+    p.fillRect( width() - 5, 0, 5, 5, QBrush( SolidPattern ) );
+    p.fillRect( 0, height() - 5, 5, 5, QBrush( SolidPattern ) );
+    p.fillRect( width() - 5, height() - 5, 5, 5, QBrush( SolidPattern ) );
 
-  p.end();
+    // paint the middle points on the horizontal line
+    if( width() > 27 )
+    {
+      p.fillRect( width() / 2 - 2, 0, 5, 5, QBrush( SolidPattern ) );
+      p.fillRect( width() / 2 - 2, height() - 5, 5, 5, QBrush( SolidPattern ) );
+    }
+
+    // paint the middle points on the vertical line
+    if( height() > 27 )
+    {
+      p.fillRect( 0, height() / 2 - 2, 5, 5, QBrush( SolidPattern ) );
+      p.fillRect( width() - 5, height() / 2 - 2, 5, 5, QBrush( SolidPattern ) );
+    }
+
+    p.end();
+  }
 }
+
+#include "widgetwrapper.moc"
 

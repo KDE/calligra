@@ -28,6 +28,7 @@
 #include "kformeditor.h"
 
 class KformEditorDoc;
+class WidgetWrapper;
 
 class KformEditorView : public QScrollView,
                         virtual public KoViewIf,
@@ -53,9 +54,13 @@ public:
   void insertCheckBox();
   void orientationCenter();
 
+signals:
+  void unselectAll();
+
 public slots:
 
   void slotUpdateView();
+  void slotWidgetSelected( WidgetWrapper* _widget );
 
 protected:
 
@@ -66,6 +71,7 @@ protected:
   virtual void newView();
   virtual void helpUsing();
   void resizeEvent( QResizeEvent* _event );
+  void mouseMoveEvent( QMouseEvent* _event );
 
 private:
 

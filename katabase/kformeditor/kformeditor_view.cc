@@ -77,6 +77,11 @@ KformEditorView::KformEditorView( QWidget* _parent, const char* _name, KformEdit
     {
       QScrollView::addChild( obj );
       QScrollView::moveChild( obj, (*it)->posx(), (*it)->posy() );
+
+      QObject::connect( obj,  SIGNAL( clicked( WidgetWrapper* ) ),
+                        this, SLOT( slotWidgetSelected( WidgetWrapper* ) ) );
+      QObject::connect( this, SIGNAL( unselectAll() ),
+                        obj,  SLOT( slotUnselect() ) );
     }
   }
 
@@ -286,6 +291,14 @@ void KformEditorView::resizeEvent( QResizeEvent* )
   slotUpdateView();
 }
 
+void KformEditorView::mouseMoveEvent( QMouseEvent* _event )
+{
+  //if( _event->button() != QMouseEvent::NoButton )
+  {
+    cerr << "KformEditorView::mouseMoveEvent: moving" << endl;
+  }
+}
+
 void KformEditorView::slotUpdateView()
 {
   if( !m_pDoc->isEmpty() )
@@ -295,6 +308,16 @@ void KformEditorView::slotUpdateView()
   }
 
   QScrollView::update();
+}
+
+void KformEditorView::slotWidgetSelected( WidgetWrapper* _widget )
+{
+  cerr << "KformEditorView::slotWidgetSelected()" << endl;
+
+  emit unselectAll();
+  _widget->select( TRUE );
+
+  slotUpdateView();
 }
 
 /*
