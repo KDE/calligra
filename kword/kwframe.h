@@ -335,7 +335,7 @@ public:
      * and with "true" for the last one, so that it resets the flag.
      */
     virtual void drawContents( QPainter * painter, const QRect & crect,
-                               QColorGroup & cg, bool onlyChanged, bool resetChanged ) = 0L;
+                               QColorGroup & cg, bool onlyChanged, bool resetChanged ) = 0;
 
     /**
      * Called when our frames change, or when another frameset's frames change.
