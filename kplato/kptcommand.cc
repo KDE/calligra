@@ -128,6 +128,22 @@ KPTTaskAddCmd::KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, 
       m_node(node),
       m_after(after),
       m_added(false) {
+      
+    // set some reasonable defaults for normally calculated values
+    if (after && after->getParent() && after->getParent() != project) {
+        node->setStartTime(after->getParent()->startTime());
+        node->setEndTime(node->startTime() + node->duration());
+    } else {
+        if (project->constraint() == KPTNode::MustFinishOn) {
+            node->setEndTime(project->endTime());
+            node->setStartTime(node->endTime() - node->duration());
+        } else {
+            node->setStartTime(project->startTime());
+            node->setEndTime(node->startTime() + node->duration());
+        }
+    }
+    node->setEarliestStart(node->startTime());
+    node->setLatestFinish(node->endTime());
 }
 KPTTaskAddCmd::~KPTTaskAddCmd() {
     if (!m_added)
@@ -154,6 +170,12 @@ KPTSubtaskAddCmd::KPTSubtaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *
       m_node(node),
       m_parent(parent),
       m_added(false) {
+
+    // set some reasonable defaults for normally calculated values
+    node->setStartTime(parent->startTime());
+    node->setEndTime(node->startTime() + node->duration());
+    node->setEarliestStart(node->startTime());
+    node->setLatestFinish(node->endTime());
 }
 KPTSubtaskAddCmd::~KPTSubtaskAddCmd() {
     if (!m_added)

@@ -134,12 +134,6 @@ void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
     }
     m_nodes.insert(index,node);
     node->setParent(this);
-    if (node->m_notScheduled) {
-        // set some sensible start values
-        node->setStartTime(m_startTime);
-        node->setEndTime(m_endTime);
-        node->m_duration = m_duration;
-    }
 }
 
 void KPTNode::addChildNode( KPTNode *node, KPTNode *after) {
@@ -154,12 +148,6 @@ void KPTNode::addChildNode( KPTNode *node, KPTNode *after) {
     }
     m_nodes.insert(index+1, node);
     node->setParent(this);
-    if (node->m_notScheduled) {
-        // set some sensible start values
-        node->setStartTime(m_startTime);
-        node->setEndTime(m_endTime);
-        node->m_duration = m_duration;
-    }
 }
 
 int KPTNode::findChildNode( KPTNode* node )

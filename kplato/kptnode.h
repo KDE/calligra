@@ -229,10 +229,20 @@ public:
       */
     KPTDateTime getEarliestStart() const { return earliestStart; }
     /**
+      * setEarliestStart() sets earliest time this node can start
+      * @see earliestStart
+      */
+    void setEarliestStart(const KPTDateTime &dt) { earliestStart = dt; }
+    /**
       * getLatestFinish() returns latest time this node can finish
       * @see latestFinish
       */
     KPTDateTime getLatestFinish() const { return latestFinish; }
+    /**
+      * setLatestFinish() sets latest time this node can finish
+      * @see latestFinish
+      */
+    void setLatestFinish(const KPTDateTime &dt) { latestFinish = dt; }
 
     QString &name() { return m_name; }
     QString &leader() { return m_leader; }
