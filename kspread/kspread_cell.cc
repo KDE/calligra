@@ -4435,7 +4435,6 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
                         kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
                     if ( formatType() == Percentage )
                     {
-                        m_dValue /= 100.0;
                         setFactor(100.0); // should have been already done by loadLayout
                         m_strText += '%';
                     }
