@@ -374,15 +374,15 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
     if ( !_canvas )
       return;
 
-    QPopupMenu *popup = new QPopupMenu;
+    QPopupMenu *popup = new QPopupMenu(_canvas);
     SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-    QObject::connect( popup, SIGNAL( activated( int ) ),
-                      s, SLOT( slotItemSelected( int ) ) );
+    
     int id = 0;
     QStringList::ConstIterator it = s->m_lstItems.begin();
     for( ; it != s->m_lstItems.end(); ++it )
         popup->insertItem( *it, id++ );
-
+    QObject::connect( popup, SIGNAL( activated( int ) ),
+                      s, SLOT( slotItemSelected( int ) ) );
     RowLayout *rl = m_pTable->rowLayout( row() );
     int tx = m_pTable->columnPos( column(), _canvas );
     int ty = m_pTable->rowPos( row(), _canvas );
@@ -394,7 +394,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
     QPoint p( tx, ty );
     QPoint p2 = _canvas->mapToGlobal( p );
     popup->popup( p2 );
-    delete popup;
+    //delete popup;
     return;
   }
 
