@@ -340,7 +340,7 @@ void KWordShell::slotFileNew()
 void KWordShell::slotFileOpen()
 {
   m_pDoc->enableEmbeddedParts(false);
-  
+
   QString filter = KoFilterManager::self()->fileSelectorList(KoFilterManager::Import,
 							     "application/x-kword",
 							     "*.kwd","KWord",
@@ -350,7 +350,7 @@ void KWordShell::slotFileOpen()
   if (file.isNull())
     return;
 
-  file = KoFilterManager::self()->import(file,"application/x-kword");
+  //file = KoFilterManager::self()->import(file,"application/x-kword");
   if (file.isNull())
     return;
 
