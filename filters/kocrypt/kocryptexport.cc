@@ -44,7 +44,7 @@ bool KoCryptExport::filter(const QString  &filenameIn,
                            const QString  &filenameOut,
                            const QString  &from,
                            const QString  &to,
-                           const QString  &         )
+                           const QString  &config      )
 {
 int ftype = -1;
 QFile inf(filenameIn);

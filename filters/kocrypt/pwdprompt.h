@@ -17,35 +17,41 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KOCRYPTIMPORT_H
-#define KOCRYPTIMPORT_H
+#ifndef PWDDLG_H
+#define PWDDLG_H
 
-#include <qstring.h>
-#include <qfile.h>
-#include <qobject.h>
+#include <kdialog.h>
+class QString;
+class KLineEdit;
+class QLabel;
+class QPushButton;
+class PasswordPrompt;
 
-#include <koFilter.h>
-#include <koStore.h>
 
+class PasswordPrompt : public KDialog {
+  Q_OBJECT
 
-class KoCryptImport : public KoFilter {
+ public:
+   PasswordPrompt(QWidget *parent = 0L, const char *name = 0L);
+   virtual ~PasswordPrompt();
 
-    Q_OBJECT
+   QString& getPassword();
 
-public:
-    KoCryptImport(KoFilter *parent, const char *name);
-    KoCryptImport();
-    virtual ~KoCryptImport() {}
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
-                        const QString &config=QString::null);
+ signals:
+   void setPassword(QString);
 
-public slots:
-    void setPassword(QString p);
+ private slots:
+   void doOk(const QString&);
+   void ok();
+   void cancel();
 
-private:
-    QString pass;
+ private:
+   KLineEdit *_pwd;
+   QLabel    *_prompt;
+   QPushButton *_ok, *_cancel;
+   QString    _password;
 };
+
 
 #endif
 

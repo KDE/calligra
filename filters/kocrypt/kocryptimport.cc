@@ -27,7 +27,48 @@
 #include <qtextstream.h>
 #include <kocryptimport.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <qapplication.h>
 
+#include "pwdprompt.h"
+
+
+
+#define READ_ERROR_CHECK(XX)  do {                                         \
+      if (rc != XX) {                                                      \
+        QApplication::setOverrideCursor(Qt::arrowCursor);                  \
+        KMessageBox::error(NULL,                                           \
+              i18n("The password is invalid or the file is corrupted."),   \
+              i18n("Encrypted Document Import"));                          \
+         QApplication::restoreOverrideCursor();                            \
+         return false;                                                     \
+      }                                                                    \
+      } while(0)
+
+
+#define WRITE_ERROR_CHECK(XX)  do {       \
+      if (rc != XX) {                     \
+         QApplication::setOverrideCursor(Qt::arrowCursor);                  \
+         KMessageBox::error(NULL,         \
+              i18n("Disk write error - out of space?"),   \
+              i18n("Encrypted Document Import"));         \
+         QApplication::restoreOverrideCursor();                            \
+         return false;                                    \
+      }                                                   \
+      } while(0)
+
+
+#define CRYPT_ERROR_CHECK()  do {         \
+      if (rc != blocksize) {              \
+         QApplication::setOverrideCursor(Qt::arrowCursor);                 \
+         KMessageBox::error(NULL,         \
+              i18n("There was an internal error while decrypting the file."), \
+              i18n("Encrypted Document Import"));                          \
+         QApplication::restoreOverrideCursor();                            \
+         return false;                                                     \
+      }                                                                    \
+      } while(0)
 
 
 KoCryptImport::KoCryptImport(KoFilter *parent, const char *name) :
@@ -37,11 +78,12 @@ KoCryptImport::KoCryptImport(KoFilter *parent, const char *name) :
 
 bool KoCryptImport::filter(const QString &fileIn, const QString &fileOut,
                            const QString& from, const QString& to,
-                           const QString &) {
+                           const QString& ) {
 int ftype = -1;
 int blocksize = 64;
 QFile inf(fileIn);
 QFile outf(fileOut);
+int rc;
 
     if (to == "application/x-kword" && from == "application/x-kword-crypt")
     {
@@ -54,13 +96,31 @@ QFile outf(fileOut);
         return false;
     }
 
-    // FIXME: obtain the password
+    //kdDebug() << "Crypto Filter Parameters: " << config << endl;
+
+    PasswordPrompt *pp = new PasswordPrompt;
+    connect(pp, SIGNAL(setPassword(QString)), this, SLOT(setPassword(QString)));
+    int dlgrc = pp->exec();
+    delete pp;
+    if (dlgrc == QDialog::Rejected) return false;
 
     BlockCipher *cipher = new BlowFish;
     BlockCipher *cbc = new CipherBlockChain(cipher);
-    char *thekey = "a test key";
+    char thekey[512];
+
+    // FIXME: make a better hash here.
+    strncpy(thekey, pass.latin1(), 56);
+    thekey[56] = 0;
  
-    cbc->setKey((void *)thekey, 80);   // this propagates to the cipher
+    // propagates to the cipher
+    if (!cbc->setKey((void *)thekey, pass.length()*8)) {
+       QApplication::setOverrideCursor(Qt::arrowCursor);
+       KMessageBox::error(NULL, 
+                  i18n("There was an internal error preparing the passphrase."),
+                  i18n("Encrypted Document Import"));
+       QApplication::restoreOverrideCursor();
+       return false;
+    }
  
     if (cbc->blockSize() > 0) blocksize = cbc->blockSize();
 
@@ -73,9 +133,15 @@ QFile outf(fileOut);
     char p[8192];
 
     // check the header
-    inf.readBlock(p, 9);
+    rc = inf.readBlock(p, 9);
+    READ_ERROR_CHECK(9);
     if (p[0] != FID_FIRST || p[1] != FID_SECOND || p[2] != FID_THIRD ||
         p[3] != ftype) {
+       QApplication::setOverrideCursor(Qt::arrowCursor);
+       KMessageBox::error(NULL, 
+                  i18n("This is the wrong document type or the document is corrupt."),
+                  i18n("Encrypted Document Import"));
+       QApplication::restoreOverrideCursor();
       return false;   // wrong file type!
     }
 
@@ -84,6 +150,11 @@ QFile outf(fileOut);
      *   able to read older file formats.
      */
     if (p[4] != FID_FVER) {
+       QApplication::setOverrideCursor(Qt::arrowCursor);
+       KMessageBox::error(NULL, 
+                  i18n("I don't understand this version of the file format."),
+                  i18n("Encrypted Document Import"));
+       QApplication::restoreOverrideCursor();
       return false;   // right now there is only one fileversion to understand!
     }
 
@@ -92,32 +163,37 @@ QFile outf(fileOut);
      *   algorithms into account if we're more recent.
      */
     if (p[5] != 0 || p[6] != 0 || p[7] != 0 || p[8] != 0) {
+       QApplication::setOverrideCursor(Qt::arrowCursor);
+       KMessageBox::error(NULL, 
+                  i18n("I don't understand this version of the file format."),
+                  i18n("Encrypted Document Import"));
+       QApplication::restoreOverrideCursor();
       return false;   // we only know one crypto algorithm too.
     }
 
-kdDebug() << "++++++++++++ Checkpoint 1" << endl;
     /*
      *   Decrypt it.  don't forget to toss the extra data at the beginning and
      *   end of the file!
      */
- // FIXME: check io errors from reads and writes throughout the file
- //         ALSO crypto return codes!!
-    inf.readBlock(p, blocksize);
-    cbc->decrypt(p, blocksize);
+    rc = inf.readBlock(p, blocksize);
+    READ_ERROR_CHECK(blocksize);
+    rc = cbc->decrypt(p, blocksize);
+    CRYPT_ERROR_CHECK();
 
     unsigned int previous_rand = ((unsigned char)p[0] + ((unsigned char)p[1] << 8)) % 5120;
     unsigned int fsize;
 
     // We skip the rest of this block since previous_rand%5120 has to be >=
     // blocksize.
-kdDebug() << "             previous_rand = " << previous_rand << endl;
+    //kdDebug() << "             previous_rand = " << previous_rand << endl;
     previous_rand -= (blocksize-2);
-kdDebug() << "++++++++++++ Checkpoint 2" << endl;
 
     unsigned int remaining = 0;
     while (previous_rand > 0) {
-      inf.readBlock(p, blocksize); 
-      cbc->decrypt(p, blocksize);
+      rc = inf.readBlock(p, blocksize); 
+      READ_ERROR_CHECK(blocksize);
+      rc = cbc->decrypt(p, blocksize);
+      CRYPT_ERROR_CHECK();
       if (previous_rand >= (unsigned int)blocksize) {
          previous_rand -= blocksize;
          continue;
@@ -126,57 +202,67 @@ kdDebug() << "++++++++++++ Checkpoint 2" << endl;
          previous_rand = 0;
       }
     }
-kdDebug() << "++++++++++++ Checkpoint 3" << endl;
 
     // read in the file size
     fsize = 0;
     for (int i = 0; i < 4; i++) {
        if (remaining == 0) {
-          inf.readBlock(p, blocksize);
-          cbc->decrypt(p, blocksize);
+          rc = inf.readBlock(p, blocksize);
+          READ_ERROR_CHECK(blocksize);
+          rc = cbc->decrypt(p, blocksize);
+          CRYPT_ERROR_CHECK();
           remaining = blocksize;
        }
        fsize += (unsigned char)p[blocksize-remaining] << i*8;
        remaining--;
     }
 
-kdDebug() << "             fsize = " << fsize << endl;
-kdDebug() << "++++++++++++ Checkpoint 4" << endl;
+    //kdDebug() << "             fsize = " << fsize << endl;
     // Empty out this remaining block that we read in
     if (remaining > 0) {
       if (remaining > fsize) {
-        outf.writeBlock(&(p[blocksize-remaining]), fsize);
+        rc = outf.writeBlock(&(p[blocksize-remaining]), fsize);
+        WRITE_ERROR_CHECK((int)fsize);
         remaining -= fsize;
         fsize = 0;
       } else {
-        outf.writeBlock(&(p[blocksize-remaining]), remaining);
+        rc = outf.writeBlock(&(p[blocksize-remaining]), remaining);
+        WRITE_ERROR_CHECK((int)remaining);
         fsize -= remaining;
         remaining = 0;
       }
     }
 
-kdDebug() << "++++++++++++ Checkpoint 5" << endl;
     // read in the rest of the file and decode
     while (fsize > 0) {
-      inf.readBlock(p, blocksize);
-      cbc->decrypt(p, blocksize);
+      rc = inf.readBlock(p, blocksize);
+      READ_ERROR_CHECK(blocksize);
+      rc = cbc->decrypt(p, blocksize);
+      CRYPT_ERROR_CHECK();
+
       if (fsize >= (unsigned int)blocksize) {
          fsize -= blocksize;
-         outf.writeBlock(p, blocksize);
+         rc = outf.writeBlock(p, blocksize);
+         WRITE_ERROR_CHECK(blocksize);
          continue;
       } else {
          // Hash will eventually be verified here
-         outf.writeBlock(p, fsize);
+         rc = outf.writeBlock(p, fsize);
+         WRITE_ERROR_CHECK((int)fsize);
          fsize = 0;
       }
     }
 
-kdDebug() << "++++++++++++ Checkpoint 6" << endl;
     // FIXME: check the filesize and the hash to make sure it was successful
 
     return true;
 }
 
+
+
+void KoCryptImport::setPassword(QString p) {
+  pass = p;
+}
 
 
 #include "kocryptimport.moc"
