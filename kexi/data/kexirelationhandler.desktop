@@ -4,6 +4,17 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Relationships
+GenericName[bg]=Релации
+GenericName[cy]=Perthnasau
+GenericName[es]=Relaciones
+GenericName[et]=Sõltuvused
+GenericName[fr]=Relations
+GenericName[pt]=Relações
+GenericName[pt_BR]=Relacionamentos
+GenericName[ru]=Взаимосвязи
+GenericName[sv]=Förhållanden
+GenericName[ta]=உறவுமுறைகள்
+GenericName[tr]=İlişkiler
 Name=Relationships
 Name[bg]=Релации
 Name[ca]=Relacions
