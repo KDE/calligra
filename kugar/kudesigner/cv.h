@@ -65,7 +65,8 @@ protected:
     void selectAll();
     void selectItem(CanvasBox *it, bool addToSelection = true);
     void unselectItem(CanvasBox *it);
-
+    void finishSelection();
+    
 private:
     CanvasReportItem *moving;
     QPoint moving_start;
@@ -77,6 +78,9 @@ private:
     RequestType request;
 
     QPtrList<CanvasBox> selected;
+
+//    std::map<QString, PropPtr > selProps;
+
 signals: // Signals
   /** Emitted when user clicks on the canvas, so a button
 or a menu item assosiated with the selected item should

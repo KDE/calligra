@@ -171,13 +171,23 @@ void ReportCanvas::selectItemFromList(QCanvasItemList &l)
             CanvasBox *b = (CanvasBox*)(*it);
             if (!selected.containsRef(b))
             {
+                unselectAll();
                 selectItem(b, false);
                 canvas()->update();
 //                qWarning("selected item set");
 //                selected->drawHolders();
                 return;
             }
-            if (selected.containsRef(b)) return;
+            if (selected.containsRef(b))
+            {
+                if (selected.count() > 1)
+                {
+                    unselectAll();
+                    selectItem(b, false);
+                    canvas()->update();
+                }    
+                return;
+            }
         }
     }
     unselectAll();
@@ -277,9 +287,6 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
     resizing = 0;
     selectionStarted = 0;
 
-    // ????
-    //unselectAll();
-    canvas()->update();
 
 
 /*    CanvasBox *b;
@@ -294,6 +301,7 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
             if (itemToInsert)
             {
 //                qWarning("placing item");
+                unselectAll();
                 placeItem(l, e);
             }
             else
@@ -320,9 +328,10 @@ void ReportCanvas::contentsMouseReleaseEvent(QMouseEvent* e)
 
     switch (e->button())
     {
-/*        case LeftButton:
-            selectItem(l);
-            break;*/
+        case LeftButton:
+            if (selectionStarted)
+                finishSelection();
+            break;
         case MidButton:
             deleteItem(l);
             break;
@@ -430,17 +439,17 @@ void ReportCanvas::setRequest(RequestType r)
 {
     switch (r)
     {
-	case RequestProps:
-	    QApplication::restoreOverrideCursor();
-	    QApplication::setOverrideCursor(Qt::PointingHandCursor);
-	    break;
-	case RequestDelete:
-	    QApplication::restoreOverrideCursor();
-	    QApplication::setOverrideCursor(Qt::ForbiddenCursor);
-	    break;
-	case RequestNone:
-	    QApplication::restoreOverrideCursor();
-	    break;
+        case RequestProps:
+            QApplication::restoreOverrideCursor();
+            QApplication::setOverrideCursor(Qt::PointingHandCursor);
+            break;
+        case RequestDelete:
+            QApplication::restoreOverrideCursor();
+            QApplication::setOverrideCursor(Qt::ForbiddenCursor);
+            break;
+        case RequestNone:
+            QApplication::restoreOverrideCursor();
+            break;
     }
     request = r;
 }
@@ -451,13 +460,13 @@ void ReportCanvas::clearRequest()
     request = RequestNone;
     emit selectedEditActionProcessed();
 }
-	
+
 bool ReportCanvas::requested()
 {
     if (request == RequestNone)
-	return false;
+        return false;
     else
-	return true;
+        return true;
 }
 
 void ReportCanvas::unselectAll()
@@ -465,7 +474,13 @@ void ReportCanvas::unselectAll()
     CanvasBox *b;
 
     for (b = selected.first(); b; b = selected.next())
-        unselectItem(b);
+    {
+        b->setSelected(false);
+        canvas()->setChanged(b->rect());
+    }
+
+    selected.clear();
+    canvas()->update();
 }
 
 void ReportCanvas::selectAll()
@@ -480,22 +495,14 @@ void ReportCanvas::selectAll()
 }
 
 void ReportCanvas::selectItem(CanvasBox *it, bool addToSelection)
-{
-    
+{  
     if (!addToSelection)
         unselectAll();
     selected.append(it);
     it->setSelected(true);
 
-/*    std::map<QString, PropPtr > selProps;
-    std::map<QString, QString> m;
-    m["Text1"] = "1";
-    m["Text2"] = "2";
-    m["Text3"] = "3";
-    selProps["Text"] = *(new PropPtr(new DescriptionProperty("Text", m, "some descr", "2")));
-  */
-
-    emit selectionMade(&(it->props));
+    if (!selectionStarted)
+        finishSelection();
 }
 
 void ReportCanvas::unselectItem(CanvasBox *it)
@@ -503,7 +510,6 @@ void ReportCanvas::unselectItem(CanvasBox *it)
     selected.remove(it);
     it->setSelected(false);
 }
-
 
 void ReportCanvas::updateProperty(QString name, QString value)
 {
@@ -514,7 +520,69 @@ void ReportCanvas::updateProperty(QString name, QString value)
         b->hide();
         b->show();
     }
-//    canvas()->update();
+}
+
+void ReportCanvas::finishSelection()
+{
+    selectionStarted = false;
+
+    if (!selected.isEmpty())
+        if (selected.count() > 1)
+        {
+            // handling multiple selection !!!! AD: BUGS & CRUSHES HERE
+/*            std::map<QString, PropPtr > *curr = &(selected.first()->props);
+
+    for (CanvasBox *b = selected.first(); b; b = selected.next())
+    {
+        qWarning("item with rtti = %d is selected", b->rtti());
+    }
+
+
+            qWarning("props obtained");
+            CanvasBox *b = selected.first();
+            b = selected.next();
+//            for (; b; b = selected.next())
+            while (b)
+            {
+                qWarning("  iteration: b->rtti() = %d", b->rtti());
+                std::map<QString, PropPtr > selProps;
+                std::insert_iterator< std::map<QString, PropPtr > > it(selProps, selProps.begin());
+                qWarning("  insert iterator created");
+                std::set_intersection(curr->begin(), curr->end(), b->props.begin(), b->props.end(), it);
+                qWarning("  intersection done");
+
+                *curr = selProps;
+                qWarning("  curr changed");
+
+            qWarning("Multiple selection property list:");
+            for (std::map<QString, PropPtr>::const_iterator i = curr->begin(); i != curr->end(); ++i )
+            {
+                qWarning("   %s = %s", i->first.latin1(), i->second->value().latin1());
+            }
+                
+
+                b = selected.next();
+                qWarning("  next selected");
+            }
+
+            qWarning("Multiple selection property list:");
+            for (std::map<QString, PropPtr>::const_iterator i = curr->begin(); i != curr->end(); ++i )
+            {
+                qWarning("   %s = %s", i->first.latin1(), i->second->value().latin1());
+            }
+                        
+            emit selectionMade(curr);
+            qWarning("curr emitted");                                  */
+        }
+        else
+            emit selectionMade(&(selected.first()->props));
+
+    CanvasBox *b;
+    for (b = selected.first(); b; b = selected.next())
+    {
+        qWarning("item with rtti = %d is selected", b->rtti());
+    }
+
 }
 
 #include "cv.moc"

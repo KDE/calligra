@@ -143,7 +143,7 @@ CanvasKugarTemplate::~CanvasKugarTemplate()
 
 void CanvasKugarTemplate::draw(QPainter &painter)
 {
-    painter.setPen(QPen(QColor(0, 0, 0), 0, Qt::DashLine));
+    painter.setPen(QPen(QColor(160, 160, 160), 0, Qt::SolidLine));
     QPoint p1((int)(x()+props["LeftMargin"]->value().toInt()),
         (int)(y()+props["TopMargin"]->value().toInt()));
     QPoint p2((int)(x()+props["LeftMargin"]->value().toInt()),

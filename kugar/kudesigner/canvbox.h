@@ -35,7 +35,7 @@ class CanvasPageFooter;
 class CanvasBox: public QCanvasRectangle{
 public:
     CanvasBox(int x, int y, int width, int height, QCanvas * canvas):
-	    QCanvasRectangle(x, y, width, height, canvas)
+        QCanvasRectangle(x, y, width, height, canvas)
     {
         setSelected(false);
     }
