@@ -21,6 +21,7 @@
 #define KFORMDESIGNEREXTRAWIDGET_H
 
 #include <qptrlist.h>
+#include <qtoolbutton.h>
 
 #include <ktextedit.h>
 #include <kdialogbase.h>
@@ -28,7 +29,6 @@
 class QListView;
 class QListViewItem;
 class KListViewItem;
-class QToolButton;
 class KListView;
 class KListBox;
 class KToolBar;

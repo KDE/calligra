@@ -18,7 +18,6 @@
 */
 
 #include <qlayout.h>
-#include <qtoolbutton.h>
 #include <qcursor.h>
 #include <qcheckbox.h>
 #include <qgroupbox.h>
