@@ -336,9 +336,9 @@ KWFrameSet::KWFrameSet( KWDocument *_doc )
     : frames(), removeableHeader( false ), visible( true )
 {
     doc = _doc;
-    // Forward our "repaintChanged" signals to the document.
+    // Send our "repaintChanged" signals to the document.
     connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
-             doc, SIGNAL( repaintChanged( KWFrameSet * ) ) );
+             doc, SLOT( slotRepaintChanged( KWFrameSet * ) ) );
     frames.setAutoDelete( true );
     frameInfo = FI_BODY;
     current = 0;
@@ -1254,7 +1254,7 @@ void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
         m_canvas->ensureVisible( x, y );
     }
     formulaFrameSet()->setChanged();
-    m_canvas->repaintChanged( formulaFrameSet() );
+    m_canvas->repaintChanged( formulaFrameSet(), true );
 }
 
 

@@ -64,6 +64,13 @@ public:
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
     void repaintAll( bool erase = false );
+    /**
+     * Only repaint the frameset @p fs.
+     * @p resetChanged should only be true for the last view
+     * (see KWFrameSet::drawContents)
+     */
+    void repaintChanged( KWFrameSet * fs, bool resetChanged );
+
     void print( QPainter *painter, KPrinter *printer );
     bool eventFilter( QObject *o, QEvent *e );
     bool focusNextPrevChild( bool );
@@ -136,10 +143,6 @@ public:
 
 public slots:
     void printRTDebug();
-    /**
-     * Only repaint the frameset @p fs
-     */
-    void repaintChanged( KWFrameSet * fs );
 
 protected:
     /** Set format changes on selection on current cursor */
@@ -154,8 +157,9 @@ protected:
      * @param onlyFrameset if 0L, repaint everything, otherwise repaint only what has changed inside this frameset.
      * @param painter
      * @param cx, cy, cw, ch the area to be repainted, in contents coordinates
+     * @param resetChanged whether the changed flag should be reset to false while redrawing
      */
-    void drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch );
+    void drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch, bool resetChanged = false );
     /**
      * Draw the borders of the frames
      * @param onlyFrameset if 0L, all frames of all frameset, otherwise only those of this particular frameset.

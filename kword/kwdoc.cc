@@ -2893,4 +2893,13 @@ KFormulaDocument* KWDocument::getFormulaDocument()
 }
 
 
+void KWDocument::slotRepaintChanged( KWFrameSet * frameset )
+{
+    // This has to be a loop instead of a signal, so that we can
+    // send "true" for the last view (see KWFrameSet::drawContents)
+    QListIterator<KWView> it( m_lstViews );
+    for ( ; it.current() ; ++it )
+        it.current()->getGUI()->canvasWidget()->repaintChanged( frameset, it.atLast() );
+}
+
 #include "kwdoc.moc"

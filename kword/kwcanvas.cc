@@ -78,9 +78,6 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
              this, SLOT( resizeContents( int, int ) ) );
     resizeContents( doc->paperWidth(), doc->paperHeight() * doc->getPages() );
 
-    connect( doc, SIGNAL( repaintChanged( KWFrameSet * ) ),
-             this, SLOT( repaintChanged( KWFrameSet * ) ) );
-
     // Add an action for debugging
     (void) new KAction( "Print richtext debug info" , 0,
                         this, SLOT( printRTDebug() ),
@@ -94,13 +91,13 @@ KWCanvas::~KWCanvas()
     selectAllFrames( false ); // destroy resize handles properly (they are our children at the Qt level!)
 }
 
-void KWCanvas::repaintChanged( KWFrameSet * fs )
+void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
 {
     //kdDebug(32002) << "KWCanvas::repaintChanged this=" << this << " fs=" << fs << endl;
     QPainter p( viewport() );
     p.translate( -contentsX(), -contentsY() );
     p.setBrushOrigin( -contentsX(), -contentsY() );
-    drawDocument( fs, &p, contentsX(), contentsY(), visibleWidth(), visibleHeight() );
+    drawDocument( fs, &p, contentsX(), contentsY(), visibleWidth(), visibleHeight(), fs && resetChanged );
 }
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
@@ -163,7 +160,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
     drawDocument( 0L, painter, cx, cy, cw, ch );
 }
 
-void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch )
+void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch, bool resetChanged )
 {
     //kdDebug() << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << endl;
     bool focus = hasFocus() || viewport()->hasFocus();
@@ -171,7 +168,6 @@ void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int c
         focus = false;
 
     bool onlyChanged = (onlyFrameset != 0L);
-    bool resetChanged = onlyChanged && ( m_gui->getView() == doc->getAllViews().last() ); // Only reset "changed" for the last view
 
     QRect crect( cx, cy, cw, ch );
     if ( !onlyFrameset )      // no need for borders if we're only repainting the text

@@ -1568,7 +1568,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, 
     if ( !removeSelected ) {
         textdoc->setSelectionStart( QTextDocument::Standard, &oldCursor );
         textdoc->setSelectionEnd( QTextDocument::Standard, cursor );
-        repaintChanged( this );
+        emit repaintChanged( this );
     }
 }
 
@@ -1786,7 +1786,7 @@ KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
     kdDebug(32001) << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
     textDocument()->removeSelection( QTextDocument::Standard );
-    m_canvas->repaintChanged( textFrameSet() );
+    m_canvas->repaintChanged( textFrameSet(), true );
     hideCursor();
     delete cursor;
 }

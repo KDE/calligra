@@ -427,7 +427,9 @@ signals:
     void sig_removeObject( KWChild *_child );
     void sig_newContentsSize( int width, int height );
     void pageNumChanged();
-    void repaintChanged( KWFrameSet * frameset );
+
+public slots:
+    void slotRepaintChanged( KWFrameSet * frameset );
 
 protected slots:
     void slotDocumentRestored();
