@@ -28,6 +28,7 @@
 #include <qregexp.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qtextbrowser.h>
 #include <qwidget.h>
 #include <qvbox.h>
 
@@ -41,6 +42,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
+#include <krun.h>
+#include <kurl.h>
 
 class Thesaurus : public KDataTool
 {
@@ -49,27 +52,30 @@ class Thesaurus : public KDataTool
 public:
     Thesaurus(QObject* parent, const char* name, const QStringList &);
     ~Thesaurus();
-    virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype);
+    virtual bool run( const QString& command, void* data, 
+        const QString& datatype, const QString& mimetype);
 
 protected slots:
-    bool slotFindTerm();
-    bool slotFindTerm(int index);
-    bool slotFindTerm(const QString &term);
+    void slotFindTerm();
+    void slotFindTerm(const QString &term);
     void thesaurusExited(KProcess *proc);
     void receivedStdout(KProcess *proc, char *result, int len);
     void receivedStderr(KProcess *proc, char *result, int len);
+
 protected:
-    bool findTerm(const QString &term);
-    KProcess *thesaurusproc;
-    QString procresult_stdout;
-    QString procresult_stderr;
-    QString indent;
-    QVBox *layout;
-    KHistoryCombo *edit;
-    QListBox *listbox;
-    QComboBox *combobox;
-    KDialogBase *dialog;
-    void* data_access;
+    enum Mode {grep, other};
+    void findTerm(const QString &term);
+    QString formatLine(QString l);
+
+    KProcess *m_thesaurusproc;
+    QString m_procresult_stdout;
+    QString m_procresult_stderr;
+    QVBox *m_layout;
+    KHistoryCombo *m_edit;
+    QTextBrowser *m_resultbox;
+    QComboBox *m_combobox;
+    KDialogBase *m_dialog;
+    Mode m_mode;
 };
 
 #endif
