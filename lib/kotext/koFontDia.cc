@@ -179,13 +179,26 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
                       bool _subscript, bool _superscript, const QColor & color,
                       const QColor & backGroundColor ,bool _withSubSuperScript )
     : KDialogBase( parent, name, true,
-                   i18n("Select Font"), Ok|Cancel, Ok )
+                   i18n("Select Font"), Ok|Cancel|User1, Ok ),
+      m_font(_font),
+      m_subscript( _subscript ),
+      m_superscript(_superscript ),
+      m_color( color),
+      m_backGroundColor( backGroundColor)
 {
+    setButtonText( KDialogBase::User1, i18n("Reset") );
+
     m_chooser = new KoFontChooser( this, "kofontchooser", _withSubSuperScript );
     setMainWidget( m_chooser );
-    m_chooser->setFont( _font, _subscript, _superscript );
-    m_chooser->setColor( color );
-    m_chooser->setBackGroundColor(backGroundColor);
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
+    slotReset();
+}
+
+void KoFontDia::slotReset()
+{
+    m_chooser->setFont( m_font, m_subscript, m_superscript );
+    m_chooser->setColor( m_color );
+    m_chooser->setBackGroundColor(m_backGroundColor);
 }
 
 #include "koFontDia.moc"

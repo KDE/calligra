@@ -33,7 +33,7 @@ public:
      * @param fontListCriteria should contain all the restrictions for font selection as OR-ed values
      *        @see KFontChooser::FontListCriteria for the individual values
      */
-    KoFontChooser( QWidget * parent, const char* name = 0L, 
+    KoFontChooser( QWidget * parent, const char* name = 0L,
             bool _withSubSuperScript = true,
             uint fontListCriteria=0);
     virtual ~KoFontChooser() {}
@@ -86,8 +86,16 @@ public:
     QColor backGroundColor() const {return m_chooser->backGroundColor();}
     int changedFlags() const { return m_chooser->changedFlags(); }
 
+protected slots:
+    void slotReset();
+
 private:
     KoFontChooser * m_chooser;
+    QFont m_font;
+    bool m_subscript;
+    bool m_superscript;
+    QColor m_color;
+    QColor m_backGroundColor;
 };
 
 #endif
