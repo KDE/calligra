@@ -69,6 +69,13 @@ VDocumentPreview::~VDocumentPreview()
 	delete m_docpixmap;
 } // VDocumentPreview::~VDocumentPreview
 
+void
+VDocumentPreview::reset()
+{
+	delete m_docpixmap;
+	m_docpixmap = 0L;
+}
+
 bool
 VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 {
@@ -128,8 +135,9 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 		}
 	}
 
-	QWidget::eventFilter( object, event );
+	return QWidget::eventFilter( object, event );
 }
+
 
 void VDocumentPreview::paintEvent( QPaintEvent* )
 {
@@ -220,12 +228,14 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 	layout->setColStretch( 1, 0 );
 	layout->setColStretch( 2, 2 );
 	//layout->addWidget(
-	
+
 	m_width->setAlignment( AlignRight );
 	m_height->setAlignment( AlignRight );
 	m_layers->setAlignment( AlignRight );
 	m_format->setAlignment( AlignRight );
-	
+
+	connect( view->part()->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( slotCommandAdded( VCommand* ) ) );
+
 	updateDocumentInfo();
 } // VDocumentTab::VDocumentTab
 
@@ -239,6 +249,13 @@ void VDocumentTab::updateDocumentInfo()
 	m_height->setText( KoUnit::userValue( m_view->part()->document().height(), m_view->part()->unit() ) + m_view->part()->unitName() );
 	m_layers->setText( QString::number( m_view->part()->document().layers().count() ) );
 } // VDocumentTab::updateDocumentInfo
+
+void
+VDocumentTab::slotCommandAdded( VCommand * )
+{
+	m_documentPreview->reset();
+	m_documentPreview->update();
+}
 
 /*************************************************************************
  *  Layers tab                                                           *

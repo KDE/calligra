@@ -47,6 +47,8 @@ class VDocumentPreview : public QWidget
 		VDocumentPreview( KarbonView* view, QWidget* parent = 0 );
 		~VDocumentPreview();
 
+		void reset();
+
 	protected:
 		void paintEvent( QPaintEvent* e );
 		virtual bool eventFilter( QObject* object, QEvent* event );
@@ -70,6 +72,7 @@ class VDocumentTab : public QWidget
 
 	public slots:
 		void updateDocumentInfo();
+		void slotCommandAdded( VCommand* command );
 
 	private:
 		VDocumentPreview* m_documentPreview;
