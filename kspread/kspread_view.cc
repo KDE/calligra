@@ -400,11 +400,14 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                              actionCollection(), "sortDec" );
     m_sortInc = new KAction( i18n("Sort increasing"), "sort_incr", 0, this, SLOT( sortInc() ),
                              actionCollection(), "sortInc" );
-    m_textColor = new TKSelectColorAction( i18n("Text color"), TKSelectColorAction::TextColor, actionCollection(), "textColor" );
+    m_textColor = new TKSelectColorAction( i18n("Text color"), TKSelectColorAction::TextColor, actionCollection(), "textColor",true );
     connect( m_textColor, SIGNAL(activated()), SLOT(changeTextColor()) );
+    m_textColor->setDefaultColor(QColor());
 
-    m_bgColor = new TKSelectColorAction( i18n("Background color"),TKSelectColorAction::FillColor, actionCollection(), "backgroundColor" );
+
+    m_bgColor = new TKSelectColorAction( i18n("Background color"),TKSelectColorAction::FillColor, actionCollection(), "backgroundColor",true );
     connect(m_bgColor,SIGNAL(activated()),SLOT(changeBackgroundColor()));
+    m_bgColor->setDefaultColor(QColor());
 
     m_borderLeft = new KAction( i18n("Border left"), "border_left", 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
     m_borderRight = new KAction( i18n("Border Right"), "border_right", 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
