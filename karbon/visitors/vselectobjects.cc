@@ -35,15 +35,26 @@ VSelectObjects::visitVComposite( VComposite& composite )
 	bool selected = false;
 
 
-	// Check if any of the rectangle corners is inside the composite.
-	// This should be the first test since it covers most intersection cases.
-	if(
-		composite.pointIsInside( m_rect.topLeft() ) ||
-		composite.pointIsInside( m_rect.topRight() ) ||
-		composite.pointIsInside( m_rect.bottomRight() ) ||
-		composite.pointIsInside( m_rect.bottomLeft() ) )
+	// Check if composite is completely inside the selection rectangle.
+	// This test should be the first test since it's the less expensive one.
+	if( m_rect.contains( composite.boundingBox() ) )
 	{
 		selected = true;
+	}
+
+	// Check if any of the rectangle corners is inside the composite.
+	// This test should be done before the intersect test since it covers many
+	// intersection cases.
+	if( !selected )
+	{
+		if(
+			composite.pointIsInside( m_rect.topLeft() ) ||
+			composite.pointIsInside( m_rect.topRight() ) ||
+			composite.pointIsInside( m_rect.bottomRight() ) ||
+			composite.pointIsInside( m_rect.bottomLeft() ) )
+		{
+			selected = true;
+		}
 	}
 
 	// Check if selection rectangle intersects the composite.
@@ -85,15 +96,6 @@ VSelectObjects::visitVComposite( VComposite& composite )
 					}
 				}
 			}
-		}
-	}
-
-	// Check if composite is completely inside the selection rectangle.
-	if( !selected )
-	{
-		if( m_rect.contains( composite.boundingBox() ) )
-		{
-			selected = true;
 		}
 	}
 

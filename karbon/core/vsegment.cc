@@ -77,16 +77,34 @@ VSegment::setDegree( unsigned short deg )
 	if( degree() == deg )
 		return;
 
-	KoPoint oldknot = knot();
-	// Delete old node data.
-	delete[]( m_nodes );
+
+	// Remember old nodes.
+	VNodeData* oldNodes = m_nodes;
 
 	// Allocate new node data.
 	m_nodes = new VNodeData[ deg ];
 
+
+	// Copy old node data (from the knot "backwards".
+	unsigned short offset = QMAX( 0, deg - m_degree );
+
+	for( unsigned short i = offset; i < deg; ++i )
+	{
+		m_nodes[ i ].m_vector = oldNodes[ i - offset ].m_vector;
+	}
+
+	// Fill with "zeros" if necessary.
+	for( unsigned short i = 0; i < offset; ++i )
+	{
+		m_nodes[ i ].m_vector = KoPoint( 0.0, 0.0 );
+	}
+
+
+	// Set new degree.
 	m_degree = deg;
 
-	setKnot( oldknot );
+	// Delete old nodes.
+	delete[]( oldNodes );
 }
 
 void
@@ -277,7 +295,7 @@ VSegment::length( double t ) const
 	}
 
 
-	/* The idea for this algortihm is by Jens Gravesen <gravesen@mat.dth.dk>.
+	/* This algortihm is by Jens Gravesen <gravesen AT mat DOT dth DOT dk>.
 	 * We calculate the chord length "chord"=|P0P3| and the length of the control point
 	 * polygon "poly"=|P0P1|+|P1P2|+|P2P3|. The approximation for the bezier length is
 	 * 0.5 * poly + 0.5 * chord. "poly - chord" is a measure for the error.

@@ -122,18 +122,18 @@ VFlattenCmd::visitVPath( VPath& path )
 {
 	path.first();
 
-	// ommit "begin" segment:
+	// Ommit first segment.
 	while( path.next() )
 	{
 		while( !path.current()->isFlat( m_flatness )  )
 		{
-			// split at midpoint:
+			// Split at midpoint.
 			path.insert(
 				path.current()->splitAt( 0.5 ) );
 		}
 
-		// convert to line:
-		path.current()->setType( VSegment::line );
+		// Convert to line.
+		path.current()->setDegree( 1 );
 
 		if( !success() )
 			setSuccess();

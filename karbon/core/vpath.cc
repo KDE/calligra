@@ -135,7 +135,7 @@ VPath::VPath( VObject* parent )
 	m_currentIndex = -1;
 	m_iteratorList = 0L;
 
-	// Add an initial "begin" segment.
+	// Add an initial segment.
 	append( new VSegment( 1 ) );
 }
 
@@ -168,12 +168,17 @@ VPath::VPath( const VSegment& segment )
 	m_currentIndex = -1;
 	m_iteratorList = 0L;
 
-	// Add an initial "begin" segment.
-	append( new VSegment( 1 ) );
-
+	// The segment is not a "begin" segment.
 	if( segment.prev() )
-		moveTo( segment.prev()->knot() );
+	{
+		// Add an initial segment.
+		append( new VSegment( 1 ) );
 
+		// Move the "begin" segment to the new segment's previous knot.
+		moveTo( segment.prev()->knot() );
+	}
+
+	// Append a copy of the segment.
 	append( segment.clone() );
 }
 
@@ -192,8 +197,8 @@ VPath::currentPoint() const
 bool
 VPath::moveTo( const KoPoint& p )
 {
-	// Move "begin" when path is still empty.
-	if( getLast()->type() == VSegment::begin )
+	// Move "begin" segment if path is still empty.
+	if( isEmpty() )
 	{
 		getLast()->setKnot( p );
 		return true;
@@ -210,7 +215,7 @@ VPath::lineTo( const KoPoint& p )
 
 	VSegment* s = new VSegment( 1 );
 
-	s->setType( VSegment::line );
+	s->setDegree( 1 );
 	s->setKnot( p );
 
 	append( s );
@@ -227,8 +232,7 @@ VPath::curveTo(
 
 	VSegment* s = new VSegment();
 
-	s->setType( VSegment::curve );
-
+	s->setDegree( 3 );
 	s->setPoint( 0, p1 );
 	s->setPoint( 1, p2 );
 	s->setPoint( 2, p3 );
@@ -247,8 +251,7 @@ VPath::curve1To( const KoPoint& p2, const KoPoint& p3 )
 
 	VSegment* s = new VSegment();
 
-	s->setType( VSegment::curve );
-
+	s->setDegree( 3 );
 	s->setPoint( 0, s->prev()->knot() );
 	s->setPoint( 1, p2 );
 	s->setPoint( 2, p3 );
@@ -267,8 +270,7 @@ VPath::curve2To( const KoPoint& p1, const KoPoint& p3 )
 
 	VSegment* s = new VSegment();
 
-	s->setType( VSegment::curve );
-
+	s->setDegree( 3 );
 	s->setPoint( 0, p1 );
 	s->setPoint( 1, p3 );
 	s->setPoint( 2, p3 );
@@ -307,11 +309,11 @@ VPath::arcTo(
 
 
 	// We need to calculate the tangent points. Therefore calculate tangents
-	// T10=P1P0 and T12=P1P2 first:
+	// T10=P1P0 and T12=P1P2 first.
 	KoPoint t10 = currentPoint() - p1;
 	KoPoint t12 = p2 - p1;
 
-	// Calculate distance squares:
+	// Calculate distance squares.
 	double dsqT10 = t10 * t10;
 	double dsqT12 = t12 * t12;
 
@@ -325,26 +327,30 @@ VPath::arcTo(
 		- t10.x() * t12.x()
 		+ t10.y() * t12.y();
 
-	if( 1.0 + denom == 1.0 ) 	// points are co-linear
-		lineTo( p1 );	// just add a line to first point
+	// The points are colinear.
+	if( 1.0 + denom == 1.0 )
+	{
+		// Just add a line.
+		lineTo( p1 );
+	}
 	else
 	{
-		// |P1B0| = |P1B3| = r * tan(a/2):
+		// |P1B0| = |P1B3| = r * tan(a/2).
 		double dP1B0 = fabs( r * num / denom );
 
-		// B0 = P1 + |P1B0| * T10/|T10|:
+		// B0 = P1 + |P1B0| * T10/|T10|.
 		KoPoint b0 = p1 + t10 * ( dP1B0 / sqrt( dsqT10 ) );
 
-		// If B0 deviates from current point P0, add a line to it:
+		// If B0 deviates from current point P0, add a line to it.
 		if( !b0.isNear( currentPoint(), VGlobal::isNearRange ) )
 			lineTo( b0 );
 
-		// B3 = P1 + |P1B3| * T12/|T12|:
+		// B3 = P1 + |P1B3| * T12/|T12|.
 		KoPoint b3 = p1 + t12 * ( dP1B0 / sqrt( dsqT12 ) );
 
 
 		// The two bezier-control points are located on the tangents at a fraction
-		// of the distance[tangent points<->tangent intersection].
+		// of the distance[ tangent points <-> tangent intersection ].
 		const KoPoint d = p1 - b0;
 
 		double distsq = d * d;
@@ -353,15 +359,21 @@ VPath::arcTo(
 
 		double fract;
 
-		if( distsq >= rsq * VGlobal::veryBigNumber )	// r is very small
-			fract = 0.0; // dist==r==0
+		// r is very small.
+		if( distsq >= rsq * VGlobal::veryBigNumber )
+		{
+			// Assume dist = r = 0.
+			fract = 0.0;
+		}
 		else
+		{
 			fract = ( 4.0 / 3.0 ) / ( 1.0 + sqrt( 1.0 + distsq / rsq ) );
+		}
 
 		KoPoint b1 = b0 + ( p1 - b0 ) * fract;
 		KoPoint b2 = b3 + ( p1 - b3 ) * fract;
 
-		// Finally add the bezier-segment:
+		// Finally add the bezier-segment.
 		curveTo( b1, b2, b3 );
 	}
 
@@ -372,28 +384,28 @@ void
 VPath::close()
 {
 	// In the case the list is 100% empty (which should actually never happen),
-	// append a "begin" first, to avoid a crash:
+	// append a "begin" first, to avoid a crash.
 	if( count() == 0 )
 		append( new VSegment( 1 ) );
 
-	// Move end-segment if we are already closed:
+	// Move last segment if we are already closed.
 	if( isClosed() )
 	{
 		getLast()->setKnot( getFirst()->knot() );
 	}
-	// Append a line, if necessary:
+	// Append a line, if necessary.
 	else
 	{
 		if(
 			getLast()->knot().isNear(
 				getFirst()->knot(), VGlobal::isNearRange ) )
 		{
-			// Move last knot:
+			// Move last knot.
 			getLast()->setKnot( getFirst()->knot() );
 		}
 		else
 		{
-			// Add a line:
+			// Add a line.
 			lineTo( getFirst()->knot() );
 		}
 
@@ -414,8 +426,14 @@ VPath::pointIsInside( const KoPoint& p ) const
 	}
 
 
-	int windingNumber = 0;
+	// First check if the point is inside the knot polygon (beziers are treated
+	// as lines).
 
+	/* The algorithm is taken from "Fast Winding Number Inclusion of a Point
+	 * in a Polygon" by Dan Sunday, geometryalgorithms.com.
+	 */
+
+	int windingNumber = 0;
 
 	// Ommit first segment.
 	VSegment* segment = getFirst()->next();
@@ -452,6 +470,9 @@ VPath::pointIsInside( const KoPoint& p ) const
 		segment = segment->next();
 	}
 
+	// If point is not inside the knot polygon, check if point is between
+	// the knot polygon and the bezier curves.
+// TODO
 
 	return static_cast<bool>( windingNumber );
 }
@@ -487,10 +508,11 @@ VPath::intersects( const VSegment& s ) const
 bool
 VPath::counterClockwise() const
 {
-	// This algorithm is taken from the FAQ of comp.graphics.algorithms:
-	// "Find the lowest vertex (or, if there is more than one vertex with the
-	// same lowest coordinate, the rightmost of those vertices) and then take
-	// the cross product of the edges fore and aft of it."
+	/* This algorithm is taken from the FAQ of comp.graphics.algorithms:
+	 * "Find the lowest vertex (or, if there is more than one vertex with the
+	 * same lowest coordinate, the rightmost of those vertices) and then take
+	 * the cross product of the edges fore and aft of it."
+	 */
 
 	if(
 		!isClosed()
@@ -600,8 +622,8 @@ VPath::clone() const
 void
 VPath::saveSvgPath( QString &d ) const
 {
-	// save segments:
-	VSegment* segment = m_first;
+	// Save segments.
+	VSegment* segment = getFirst();
 
 	while( segment )
 	{
@@ -626,10 +648,12 @@ VPath::saveSvgPath( QString &d ) const
 		d += "Z";
 }
 
+// TODO: remove this backward compatibility function after koffice 1.3.x
 void
 VPath::load( const QDomElement& element )
 {
-	clear();	// we already might have a "begin".
+	// We might have a "begin" segment.
+	clear();
 
 	QDomNodeList list = element.childNodes();
 
@@ -970,7 +994,7 @@ VSegment*
 VPathIterator::current() const
 {
 	// If m_current points to a deleted segment, find the next not
-	// deleted segment:
+	// deleted segment.
 	if(
 		m_current &&
 		m_current->state() == VSegment::deleted )

@@ -70,10 +70,9 @@ public:
 
 
 	/**
-	 * Returns true if point p is located inside this path.
+	 * Returns true if point p is located inside the path.
 	 * The winding number test is used.
 	 */
-	// TODO: currently treats beziers as lines.
 	bool pointIsInside( const KoPoint& p ) const;
 
 	/**
@@ -109,6 +108,7 @@ public:
 	virtual void save( QDomElement& ) const
 		{}	// VPaths cant be saved.
 
+	// TODO: remove this backward compatibility function after koffice 1.3.x
 	virtual void load( const QDomElement& element );
 
 	void saveSvgPath( QString & ) const;

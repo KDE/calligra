@@ -108,7 +108,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	// Skip "begin".
 	path.next();
 
-	/* This algorithm is worked out by <kudling@kde.org> to produce similar results as
+	/* This algorithm is worked out by <kudling AT kde DOT org> to produce similar results as
 	 * the "round corners" algorithms found in other applications. Neither code nor
 	 * algorithms from any 3rd party is used though.
 	 *
@@ -228,10 +228,10 @@ VRoundCornersCmd::visitVPath( VPath& path )
 
 	// Convert flat beziers to lines.
 	if( path.current()->isFlat() )
-		path.current()->setType( VSegment::line );
+		path.current()->setDegree( 1 );
 
 	if( path.getLast()->isFlat() )
-		path.getLast()->setType( VSegment::line );
+		path.getLast()->setDegree( 1 );
 
 	if(
 		path.isClosed() &&
@@ -273,10 +273,10 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	{
 		// Convert flat beziers to lines.
 		if( path.current()->isFlat() )
-			path.current()->setType( VSegment::line );
+			path.current()->setDegree( 1 );
 
 		if( path.current()->next()->isFlat() )
-			path.current()->next()->setType( VSegment::line );
+			path.current()->next()->setDegree( 1 );
 
 
 		// Don't touch smooth joins.
@@ -343,10 +343,10 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	{
 		// Convert flat beziers to lines.
 		if( path.current()->isFlat() )
-			path.current()->setType( VSegment::line );
+			path.current()->setDegree( 1 );
 
 		if( path.getFirst()->next()->isFlat() )
-			path.getFirst()->next()->setType( VSegment::line );
+			path.getFirst()->next()->setDegree( 1 );
 
 		// Don't touch smooth joins.
 		if( !path.current()->isSmooth( *path.getFirst()->next() ) )

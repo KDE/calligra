@@ -139,9 +139,10 @@ public:
 
 
 	/**
-	 * Returns true if point p is located inside this composite.
+	 * Returns true if point p is located inside the composite.
 	 */
 	bool pointIsInside( const KoPoint& p ) const;
+
 
 	/**
 	 * Returns true if the segment intersects this composite.

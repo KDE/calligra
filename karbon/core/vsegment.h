@@ -82,7 +82,7 @@ public:
 	~VSegment();
 
 	/**
-	 * Returns the segment's degree, which is identical to the number of node data.
+	 * Returns the segment's degree, which is identical to the number of nodes.
 	 * For cubic beziers it is "three" and "one" for lines.
 	 */
 	unsigned short degree() const
@@ -91,8 +91,8 @@ public:
 	}
 
 	/**
-	 * Sets the segment's degree and thus resizes the array of node data. All old node data
-	 * are lost. You will have to backup them on your own.
+	 * Sets the segment's degree and thus resizes the array of node data.
+	 * The node data is copied from the old knot "backwards".
 	 */
 	void setDegree( unsigned short deg );
 
@@ -100,17 +100,11 @@ public:
 	/**
 	 * Returns the segment type ("begin", "line" or "curve").
 	 */
+	// TODO: this is a backward compatibilty function. It should go someday
+	// together with VSegmentType.
 	VSegmentType type() const
 	{
 		return !prev() ? begin : ( degree() == 1 ? line : curve);
-	}
-
-	/**
-	 * Sets the segment type.
-	 */
-	void setType( VSegmentType type )
-	{
-		setDegree( type == curve ? 3 : 1 );
 	}
 
 
