@@ -23,6 +23,7 @@
 
 #include <qstring.h>
 #include "kqiodevicegzip.h"
+#include <stdio.h>
 
 KQIODeviceGZip::KQIODeviceGZip(const QString& filename)
 {
