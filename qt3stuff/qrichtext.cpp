@@ -60,6 +60,7 @@
 //#define PARSER_DEBUG
 //#define DEBUG_COLLECTION
 //#define DEBUG_TABLE_RENDERING
+//#define DEBUG_FORMATTER
 
 using namespace Qt3;
 
@@ -3453,7 +3454,9 @@ void QTextParag::format( int start, bool doMove )
     if ( invalid == -1 )
 	return;
 
-    //qDebug("QTextParag::format id=%d invalid, formatting", paragId());
+#ifdef DEBUG_FORMATTER
+    qDebug("QTextParag::format id=%d invalid, formatting", paragId());
+#endif
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     r.setWidth( documentWidth() );
     if ( p )
@@ -4727,6 +4730,9 @@ bool QTextFormatter::isBreakable( QTextString *string, int pos ) const
 
 void QTextFormatter::insertLineStart( QTextParag *parag, int index, QTextParagLineStart *ls )
 {
+#ifdef DEBUG_FORMATTER
+    qDebug( "QTextParagLineStart::insertLineStart parag %d  index %d", parag->paragId(), index );
+#endif
     if ( index > 0 ) { // we can assume that only first line starts are insrted multiple times
 	parag->lineStartList().insert( index, ls );
 	return;
@@ -4888,7 +4894,6 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int len = parag->length();
 
     int initialHeight = h + c->height(); // remember what adjustLMargin was called with
-    //qDebug( "QTextFormatterBreakWords::format initialHeight = %d", initialHeight );
     if ( doc )
 	x = doc->flow()->adjustLMargin( y + parag->rect().y(), h + c->height(), x, 4 );
     int initialLMargin = x;	      // and remember the resulting adjustement we got
@@ -4898,6 +4903,9 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int rm = parag->rightMargin();
     int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), rm, 4 ) : 0;
     int w = dw - initialRMargin;
+#ifdef DEBUG_FORMATTER
+    qDebug( "QTextFormatterBreakWords::format initialHeight=%d initialLMargin=%d initialRMargin=%d w=%d", initialHeight, initialLMargin, initialRMargin, w );
+#endif
     bool fullWidth = TRUE;
     int marg = left + initialRMargin;
     int minw = 0;
@@ -4906,7 +4914,9 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int linenr = 0;
 
     int i = start;
-    //qDebug( "Initial QTextParagLineStart at y=%d", y );
+#ifdef DEBUG_FORMATTER
+    qDebug( "Initial QTextParagLineStart at y=%d", y );
+#endif
     QTextParagLineStart *lineStart = new QTextParagLineStart( y, 0, 0 );
     insertLineStart( parag, 0, lineStart );
     int lastBreak = -1;
@@ -4987,7 +4997,9 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		tminw = marg;
 	    continue;
 	}
-	//qDebug("c='%c' i=%d/%d x=%d ww=%d w=%d (test is x+ww>w) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,w,lastBreak,isBreakable(string,i));
+#ifdef DEBUG_FORMATTER
+	qDebug("c='%c' i=%d/%d x=%d ww=%d w=%d (test is x+ww>w) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,w,lastBreak,isBreakable(string,i));
+#endif
 	// Wrapping at end of line
 	if ( wrapEnabled
 	     // Allow '  ' but not more
@@ -4998,7 +5010,9 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
 	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
 	       parag->isNewLinesAllowed() && lastChr == '\n' ) {
-	    //qDebug( "BREAKING" );
+#ifdef DEBUG_FORMATTER
+	    qDebug( "BREAKING" );
+#endif
 	    if ( wrapAtColumn() != -1 )
 		minw = QMAX( minw, x + ww );
 	    // No breakable char found -> break at current char
@@ -5014,6 +5028,9 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		QTextParagLineStart *lineStart2 = formatLine( parag, string, lineStart, firstChar, c-1, align, w - x );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
+#ifdef DEBUG_FORMATTER
+                qDebug( "new line created, linenr now %d", linenr );
+#endif
 
 		lineStart = lineStart2;
 		tmph = c->height();
@@ -5050,7 +5067,9 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
 		lineStart = lineStart2;
-		//qDebug("Breaking at a breakable char (%d). linenr=%d y=%d",i,linenr,y);
+#ifdef DEBUG_FORMATTER
+		qDebug("Breaking at a breakable char (%d). linenr=%d y=%d",i,linenr,y);
+#endif
 		c = &string->at( i + 1 );
 		tmph = c->height();
 		h = tmph;
@@ -5101,10 +5120,14 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		int newLMargin = doc->flow()->adjustLMargin( y + parag->rect().y(), h, lm, 4 );
 		int newRMargin = doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4 );
 		initialHeight = h;
-		//qDebug("new height: %d => newLMargin=%d newRMargin=%d", h, newLMargin, newRMargin);
+#ifdef DEBUG_FORMATTER
+		qDebug("new height: %d => newLMargin=%d newRMargin=%d", h, newLMargin, newRMargin);
+#endif
 		if ( newLMargin != initialLMargin || newRMargin != initialRMargin )
 		{
-		    //qDebug("formatting again");
+#ifdef DEBUG_FORMATTER
+		    qDebug("formatting again");
+#endif
 		    i = (firstChar - &string->at(0));
 		    x = newLMargin;
 		    w = dw - newRMargin;
@@ -5119,7 +5142,9 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		    curLeft = x;
 		    lastBreak = -1;
 		    col = 0;
-		    //qDebug("Restarting with i=%d x=%d y=%d h=%d initialHeight=%d initialLMargin=%d initialRMargin=%d y=%d",i,x,y,h,initialHeight,initialLMargin,initialRMargin,y);
+#ifdef DEBUG_FORMATTER
+		    qDebug("Restarting with i=%d x=%d y=%d h=%d initialHeight=%d initialLMargin=%d initialRMargin=%d y=%d",i,x,y,h,initialHeight,initialLMargin,initialRMargin,y);
+#endif
 		    if ( c->c.unicode() >= 32 || c->isCustom() )
 			ww = string->width( i );
 		    else if ( parag->isNewLinesAllowed() && firstChar->c == '\t' ) {
@@ -5158,7 +5183,10 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 
     // Finish formatting the last line
     if ( lineStart ) {
-	//qDebug( "Last Line.... Combining %d/%d with %d/%d", lineStart->baseLine, h, tmpBaseLine, tmph );
+#ifdef DEBUG_FORMATTER
+	qDebug( "Last Line.... linenr=%d", linenr );
+#endif
+        //qDebug( "Combining %d/%d with %d/%d", lineStart->baseLine, h, tmpBaseLine, tmph );
 	// (combine lineStart and tmpBaseLine/tmph)
 	int belowBaseLine = QMAX( h - lineStart->baseLine, tmph - tmpBaseLine );
 	lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
@@ -5187,8 +5215,6 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     }*/
     //qDebug( "Adding h(%d) and bottomMargin(%d) to y(%d) => %d", h, m, y, y+h+m );
     y += h + m;
-    //if ( doc && doc->addMargins() )
-    //    y -= parag->topMargin(); // Was already in y's initial value
 
     if ( !wrapEnabled )
 	minw = QMAX( minw, c->x + ww ); // #### Lars: Fix this for BiDi, please
