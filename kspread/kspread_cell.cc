@@ -43,6 +43,7 @@
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
 #include "kspread_util.h"
+#include "ksploadinginfo.h"
 
 #include <kspread_value.h>
 
@@ -5130,9 +5131,14 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             setValue( text );
 	}
     }
+    bool isFormula = false;
     if ( element.hasAttribute( "table:formula" ) )
     {
         kdDebug()<<" formula :"<<element.attribute( "table:formula" )<<endl;
+        isFormula = true;
+        QString formula;
+        convertFormula( formula, element.attribute( "table:formula" ) );
+        setCellText( formula );
     }
     if( element.hasAttribute( "table:value-type" ) )
     {
@@ -5153,7 +5159,9 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         {
             bool ok = false;
             double value = element.attribute( "table:value" ).toDouble( &ok );
-            if( ok ) setValue( value );
+            if ( !isFormula )
+                if( ok )
+                    setValue( value );
         }
 
         // currency value
@@ -5163,7 +5171,8 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             double value = element.attribute( "table:value" ).toDouble( &ok );
             if( ok )
             {
-                setValue( value );
+                if ( !isFormula )
+                    setValue( value );
                 setCurrency( 1, element.attribute( "table:currency" ) );
                 setFormatType( KSpreadFormat::Money );
             }
@@ -5174,7 +5183,8 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             double value = element.attribute( "table:value" ).toDouble( &ok );
             if( ok )
             {
-                setValue( value );
+                if ( !isFormula )
+                    setValue( value );
                 setFormatType( KSpreadFormat::Percentage );
             }
         }
@@ -6155,5 +6165,136 @@ bool KSpreadCell::testFlag( CellFlags flag ) const
 }
 
 
+void KSpreadCell::checkForNamedAreas( QString & formula ) const
+{
+  int l = formula.length();
+  int i = 0;
+  QString word;
+  int start = 0;
+  while ( i < l )
+  {
+    if ( formula[i].isLetterOrNumber() )
+    {
+      word += formula[i];
+      ++i;
+      continue;
+    }
+    if ( !word.isEmpty() )
+    {
+      if ( table()->doc()->loadingInfo()->findWordInAreaList(word) )
+      {
+        formula = formula.replace( start, word.length(), "'" + word + "'" );
+        l = formula.length();
+        ++i;
+        kdDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
+      }
+    }
+
+    ++i;
+    word = "";
+    start = i;
+  }
+  if ( !word.isEmpty() )
+  {
+    if ( table()->doc()->loadingInfo()->findWordInAreaList(word) )
+    {
+      formula = formula.replace( start, word.length(), "'" + word + "'" );
+      l = formula.length();
+      ++i;
+      kdDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
+    }
+  }
+}
+
+void KSpreadCell::convertFormula( QString & text, const QString & f ) const
+{
+  kdDebug() << "Parsing formula: " << f << endl;
+
+  QString formula;
+  QString parameter;
+
+  int l = f.length();
+  int p = 0;
+
+  while ( p < l )
+  {
+    if ( f[p] == '(' )
+    {
+      break;
+    }
+    else if ( f[p] == '[' )
+      break;
+
+    formula += f[p];
+    ++p;
+  }
+
+  if ( parameter.isEmpty() )
+  {
+    checkForNamedAreas( formula );
+  }
+
+  kdDebug() << "Formula: " << formula << ", Parameter: " << parameter << ", P: " << p << endl;
 
 
+  // replace formula names here
+  if ( formula == "=MULTIPLE.OPERATIONS" )
+    formula = "=MULTIPLEOPERATIONS";
+
+  QString par;
+  bool isPar   = false;
+  bool inQuote = false;
+
+  while ( p < l )
+  {
+    if ( f[p] == '"' )
+    {
+      inQuote = !inQuote;
+      parameter += '"';
+    }
+    else if ( f[p] == '[' )
+    {
+      if ( !inQuote )
+        isPar = true;
+      else
+        parameter += '[';
+    }
+    else if ( f[p] == ']' )
+    {
+      if ( inQuote )
+      {
+        parameter += ']';
+        continue;
+      }
+
+      isPar = false;
+      parameter +=  KSpreadSheet::translateOpenCalcPoint( par );
+      par = "";
+    }
+    else if ( isPar )
+    {
+      par += f[p];
+    }
+    else if ( f[p] == '=' ) // TODO: check if StarCalc has a '==' sometimes
+    {
+      if ( inQuote )
+        parameter += '=';
+      else
+        parameter += "==";
+    }
+    else if ( f[p] == ')' )
+    {
+      if ( !inQuote )
+        parameter += ")";
+    }
+    else
+      parameter += f[p];
+
+    ++p;
+    if ( p == l )
+      checkForNamedAreas( parameter );
+  }
+
+  text = formula + parameter;
+  kdDebug() << "New formula: " << text << endl;
+}

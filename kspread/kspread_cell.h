@@ -102,7 +102,7 @@ public:
      * Returns the worksheet which owns this cell.
      */
     KSpreadSheet* sheet() const;
-    
+
     /**
      * Returns true if this is a default cell (with row and column equal to zero).
      * Normally, cell constructed within a sheet can't be a default cell.
@@ -118,60 +118,60 @@ public:
      * Returns the cell's column. This could be 0 if the cell is the default cell.
      */
     int column() const;
-    
+
     /**
      * Returns the cell's row. This could be 0 if the cell is the default cell.
      */
     int row() const;
 
     /**
-     * Returns the name of the cell. For example, the cell in first column and 
+     * Returns the name of the cell. For example, the cell in first column and
      * first row is "A1".
      */
     QString name() const;
-    
+
     /**
-     * Returns the full name of the cell, i.e. including the worksheet name. 
+     * Returns the full name of the cell, i.e. including the worksheet name.
      * Example: "Sheet1!A1"
      */
     QString fullName() const;
-    
+
     /**
      * Returns the column name of the cell.
      */
     QString columnName() const;
-    
+
     /**
      * Given the cell position, this static function returns the name of the cell.
      * Example: name(5,4) will return "E4".
      */
     static QString name( int col, int row );
-    
+
     /**
-     * Given the sheet and cell position, this static function returns the full name 
+     * Given the sheet and cell position, this static function returns the full name
      * of the cell, i.e. with the name of the sheet.
      */
     static QString fullName( const KSpreadSheet *s, int col, int row );
-    
+
     /**
      * Given the column number, this static function returns the corresponding
      * column name, i.e. the first column is "A", the second is "B", and so on.
      */
     static QString columnName( int column );
-    
+
     /**
      * Tells what is the content of the cell: text, formula or rich text.
      * Set by @ref setDisplayText().
      */
     Content content() const;
-    
+
     /**
      * Returns true if this cell holds a formula.
      */
     bool isFormula() const;
-    
+
     /**
-     * Return the text the user entered. This could be a value (e.g. "14.03") 
+     * Return the text the user entered. This could be a value (e.g. "14.03")
      * or a formula (e.g. "=SUM(A1:A10)")
      */
     QString text() const;
@@ -179,7 +179,7 @@ public:
     QString strOutText() const;
 
     /**
-     * Returns the value that this cell holds. It could be from the user 
+     * Returns the value that this cell holds. It could be from the user
      * (i.e. when s/he enters a value) or a result of formula.
      */
     const KSpreadValue value() const;
@@ -602,7 +602,7 @@ public:
      * @return the amount of obscured cells in the vertical direction
      */
     int extraYCells() const;
-    
+
     double extraWidth() const;
     double extraHeight() const;
 
@@ -665,9 +665,9 @@ public:
     void setConditionList(const QValueList<KSpreadConditional> &newList);
 
     KSpreadValidity * getValidity( int newStruct = -1 );
-    
+
     void removeValidity();
-    
+
     /**
      * return true if value is good
      * else show a messagebox
@@ -903,6 +903,10 @@ private:
    * will not good => recalc offset
    */
   void offsetAlign( int _col, int _row );
+
+    void checkForNamedAreas( QString & formula ) const;
+    void convertFormula( QString & text, const QString & f ) const;
+
 };
 
 #endif  // KSPREAD_CELL
