@@ -30,7 +30,7 @@ class KoVariable;
 class KoPgNumVariable;
 class KoTextFormat;
 
-class KPrVariableCollection : public KoVariableCollection 
+class KPrVariableCollection : public KoVariableCollection
 {
  public:
     KPrVariableCollection();
@@ -46,6 +46,7 @@ public:
     KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc );
 
     virtual void recalc();
+    virtual void setVariableSubType( short int type);
  private:
     KPresenterDoc *m_doc;
 };

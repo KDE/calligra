@@ -1895,6 +1895,7 @@ void KPrChangeTitlePageNameCommand::execute()
     m_page->insertManualTitle(newPageName);
     int pos=m_doc->pageList().findRef(m_page);
     m_doc->updateSideBarItem(pos);
+    m_doc->recalcVariables( VT_PGNUM );
 }
 
 void KPrChangeTitlePageNameCommand::unexecute()
@@ -1902,6 +1903,7 @@ void KPrChangeTitlePageNameCommand::unexecute()
     m_page->insertManualTitle(oldPageName);
     int pos=m_doc->pageList().findRef(m_page);
     m_doc->updateSideBarItem(pos);
+    m_doc->recalcVariables( VT_PGNUM );
 }
 
 KPrChangeCustomVariableValue::KPrChangeCustomVariableValue( const QString &name, KPresenterDoc *_doc,const QString & _oldValue, const QString & _newValue,KoCustomVariable *var):

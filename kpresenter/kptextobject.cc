@@ -863,12 +863,20 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc, KPrPage *page )
     for ( ; cit.current() ; ++cit )
     {
         KPrPgNumVariable * var = dynamic_cast<KPrPgNumVariable *>( cit.current() );
-        if ( var && !var->isDeleted() && var->subtype() == KPrPgNumVariable::VST_PGNUM_CURRENT )
+        if ( var && !var->isDeleted()  )
         {
-            var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage()-1);
-            var->resize();
-            var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
-            var->paragraph()->setChanged( true );
+
+           if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_CURRENT )
+           {
+               var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage()-1);
+           }
+           else if ( var->subtype() == KPrPgNumVariable::VST_CURRENT_SECTION )
+           {
+               var->setSectionTitle( page->pageTitle("") );
+           }
+           var->resize();
+           var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
+           var->paragraph()->setChanged( true );
         }
     }
 }

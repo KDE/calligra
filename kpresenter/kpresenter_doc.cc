@@ -2392,6 +2392,7 @@ void KPresenterDoc::setKSpellConfig(KSpellConfig _kspell)
 
 void KPresenterDoc::recalcVariables( int type )
 {
+    recalcPageNum();
     m_varColl->recalcVariables(type);
     slotRepaintVariable();
 }

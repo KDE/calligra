@@ -36,7 +36,9 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
     KoVariable *var=0L;
     if(type ==VT_PGNUM)
     {
-        var = new KPrPgNumVariable( textdoc,subtype, coll->format( "NUMBER" ),this,m_doc  );
+        if ( !varFormat )
+            varFormat = (subtype == KoPgNumVariable::VST_CURRENT_SECTION) ? coll->format("STRING") : coll->format("NUMBER");
+        var = new KPrPgNumVariable( textdoc,subtype, varFormat,this,m_doc  );
     }
     else
         var = KoVariableCollection::createVariable( type, subtype,  coll,varFormat, textdoc,doc);
@@ -64,3 +66,8 @@ void KPrPgNumVariable::recalc()
     resize();
 }
 
+void KPrPgNumVariable::setVariableSubType( short int type)
+{
+    m_subtype=type;
+    setVariableFormat((m_subtype == KPrPgNumVariable::VST_CURRENT_SECTION) ? m_doc->variableFormatCollection()->format("STRING") : m_doc->variableFormatCollection()->format("NUMBER"));
+}
