@@ -197,7 +197,8 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
 
     _painter->setPen( pen2 );
     pwOrig = pen2.width();
-    _painter->setBrush( brush );
+    if ( !drawContour )
+        _painter->setBrush( brush );
 
     QPointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),_zoomHandler->zoomItY( ext.height() ) );
     QPtrList<ATFInterpreter::AttribList> atrLs = atfInterp.getAttribList();
