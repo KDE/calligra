@@ -20,7 +20,7 @@
 #include <klaola.h>
 
 KLaola::KLaola(const myFile &file) {
-    
+
     smallBlockDepot=0L;
     bigBlockDepot=0L;
     smallBlockFile=0L;
@@ -28,7 +28,7 @@ KLaola::KLaola(const myFile &file) {
     ok=true;
 
     if( (file.length % 0x200) != 0 ) {
-        kdebug(KDEBUG_ERROR, 31000, "KLaola::KLaola(): Invalid file size!");
+        kDebugError(31000, "KLaola::KLaola(): Invalid file size!");
         ok=false;
     }
     if(ok) {
@@ -57,7 +57,7 @@ KLaola::~KLaola() {
     smallBlockFile=0L;
     delete [] bbd_list;
     bbd_list=0L;
-    
+
     QList<OLETree> *tmpList;
     OLETree *node;
     for(tmpList=treeList.first(); tmpList!=0; tmpList=treeList.next()) {
@@ -106,14 +106,14 @@ const QList<OLENode> KLaola::parseCurrentDir() {
             found=false;
             do {
                 if(tree==0) {
-                    kdebug(KDEBUG_ERROR, 31000, "KLaola::parseCurrentDir(): path seems to be corrupted!");
+                    kDebugError(31000, "KLaola::parseCurrentDir(): path seems to be corrupted!");
                     ok=false;
                 }
                 else if(tree->handle==path[i] && tree->subtree!=-1)
                     found=true;
                 else
                     tree=tmpList->next();
-            } while(!found);
+            } while(!found && ok);
             tmpList=treeList.at(tree->subtree);
         }
     }
@@ -124,6 +124,12 @@ const QList<OLENode> KLaola::parseCurrentDir() {
             node->handle=info->handle;
             node->name=info->name;
             node->type=info->type;
+            if(info->dir==-1 && info->type==1) {  // this is a strange situation :)
+                node->deadDir=true;
+                kDebugWarning(31000, "KLaola::parseCurrentDir(): ######## dead dir ahead ########");
+            }
+            else
+                node->deadDir=false;
             nodeList.append(node);
         }
     }
@@ -139,7 +145,7 @@ const bool KLaola::enterDir(const long &handle) {
         dir=parseCurrentDir();
         node=dir.first();
         while(node!=0) {
-            if(node->handle==handle && node->type==1) {
+            if(node->handle==handle && node->type==1 && !node->deadDir) {
                 path.resize(path.size()+1);
                 path[path.size()-1]=node->handle;
                 return true;
@@ -246,7 +252,7 @@ void KLaola::testIt() {
     OLEInfo info;
     QString foo;
 
-    kdebug(KDEBUG_INFO, 31000, "KLaola::testIt() - start -----------");
+    kDebugInfo(31000, "KLaola::testIt() - start -----------");
 
     if(ok) {
         dir=parseRootDir();
@@ -259,17 +265,16 @@ void KLaola::testIt() {
             foo+=QString::number(info.sb);
             foo+="   ";
             foo+=QString::number(info.size);
-            kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(foo));
+            kDebugInfo(31000, static_cast<const char*>(foo));
         }
     }
-    kdebug(KDEBUG_INFO, 31000, "KLaola::testIt() - end -----------");
+    kDebugInfo(31000, "KLaola::testIt() - end -----------");
 }
 
 const bool KLaola::parseHeader() {
 
     if(qstrncmp((const char*)data,"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1",8 )!=0) {
-        kdebug(KDEBUG_ERROR, 31000, 
-               "KLaola::parseHeader(): Invalid file format (unexpected id in header)!");
+        kDebugError(31000, "KLaola::parseHeader(): Invalid file format (unexpected id in header)!");
         return false;
     }
 
@@ -295,7 +300,7 @@ void KLaola::readSmallBlockDepot() {
     smallBlockDepot=const_cast<unsigned char*>(readBBStream(sbd_startblock));
 }
 
-void KLaola::readSmallBlockFile() {    
+void KLaola::readSmallBlockFile() {
     smallBlockFile=const_cast<unsigned char*>(readBBStream( read32( (root_startblock+1)*0x200 + 0x74), true));
 }
 
@@ -324,19 +329,32 @@ void KLaola::readPPSEntry(const long &pos, const long &handle) {
 
     info->handle=handle;
     info->nameSize=read16(pos+0x40);
-    if(info->nameSize!=0) {      // PPS Entry seems to be OK
+    if(info->nameSize!=0) {      // PPS Entry seems to be valid
         for(int i=0; i<(info->nameSize/2)-1; ++i)
             info->name+=data[pos+2*i];
+        // kDebugInfo(31000, "PPS Entry %d #####################", pos);
+        // kDebugInfo(31000, info->name);
         info->type=data[pos+0x42];
+        // kDebugInfo(31000, QString::number((long)info->type));
         info->prev=static_cast<long>(read32(pos+0x44));
+        // kDebugInfo(31000, QString::number((long)info->prev));
         info->next=static_cast<long>(read32(pos+0x48));
+        // kDebugInfo(31000, QString::number((long)info->next));
         info->dir=static_cast<long>(read32(pos+0x4C));
+        // kDebugInfo(31000, QString::number((long)info->dir));
         info->ts1s=static_cast<long>(read32(pos+0x64));
+        // kDebugInfo(31000, QString::number((long)info->ts1s));
         info->ts1d=static_cast<long>(read32(pos+0x68));
+        // kDebugInfo(31000, QString::number((long)info->ts1d));
         info->ts2s=static_cast<long>(read32(pos+0x6C));
+        // kDebugInfo(31000, QString::number((long)info->ts2s));
         info->ts2d=static_cast<long>(read32(pos+0x70));
+        // kDebugInfo(31000, QString::number((long)info->ts2d));
         info->sb=static_cast<long>(read32(pos+0x74));
+        // kDebugInfo(31000, QString::number((long)info->sb));
         info->size=static_cast<long>(read32(pos+0x78));
+        // kDebugInfo(31000, QString::number((long)info->size));
+        // kDebugInfo(31000, "##################################");
         ppsList.append(info);
     }
 }
@@ -350,18 +368,30 @@ void KLaola::createTree(const long &handle, const short &index) {
     node->handle=handle;
     node->subtree=-1;
 
-    if(info->prev!=-1)
+    // QString nix="### entering create tree: handle=";
+    // nix+=QString::number(handle);
+    // nix+=" index=";
+    // nix+=QString::number(index);
+    // kDebugInfo(31000, nix);
+
+    if(info->prev!=-1) {
+        // kDebugInfo(31000, "create tree: prev");
         createTree(info->prev, index);
+    }
     if(info->dir!=-1) {
         tmpList=new QList<OLETree>;
         treeList.append(tmpList);
         node->subtree=treeList.at();
+        // kDebugInfo(31000, "create tree: dir");
         createTree(info->dir, node->subtree);
     }
     tmpList=treeList.at(index);
+    // kDebugInfo(31000, "create tree: APPEND %d", handle);
     tmpList->append(node);
-    if(info->next!=-1)
+    if(info->next!=-1) {
+        // kDebugInfo(31000, "create tree: next");
         createTree(info->next, index);
+    }
 }
 
 const unsigned char *KLaola::readBBStream(const long &start, const bool setmaxSblock) {

@@ -54,6 +54,7 @@ struct OLENode {
     long handle;
     QString name;
     char type;       // 1=Dir, 2=File/Stream, 5=Root Entry
+    bool deadDir;    // true, if the dir is a "dead end"
 };
 
 

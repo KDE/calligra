@@ -53,7 +53,7 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-        kdebug(KDEBUG_ERROR, 31000, "OLEFilter::filter(): Unable to open input file!");
+        kDebugError(31000, "OLEFilter::filter(): Unable to open input file!");
         in.close();
         return false;
     }
@@ -67,7 +67,7 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     docfile=new KLaola(olefile);
     if(!docfile->isOk()) {
-        kdebug(KDEBUG_ERROR, 31000, "OLEFilter::filter(): Unable to read input file correctly!");
+        kDebugError(31000, "OLEFilter::filter(): Unable to read input file correctly!");
         delete [] olefile.data;
         olefile.data=0L;
         return false;
@@ -75,7 +75,7 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     store=new KoTarStore(fileOut, KoStore::Write);
     if(store->bad()) {
-        kdebug(KDEBUG_ERROR, 31000, "OLEFilter::filter(): Unable to open output file!");
+        kDebugError(31000, "OLEFilter::filter(): Unable to open output file!");
         delete [] olefile.data;
         olefile.data=0L;
         delete store;
@@ -152,18 +152,20 @@ void OLEFilter::convert(const QString &dirname) {
 
     // Search for the directories
     for(node=list.first(); node!=0; node=list.next()) {
-        if(node->type==1) {         // It is a dir!
+        if(node->type==1) {   // It's a dir!
             if(!resized) {
                 ++index;
                 storePath.resize(index+1);
                 storePath[index]=0;
                 resized=true;
             }
-            else
-                ++storePath[index];
-            docfile->enterDir(node->handle);
-            convert(node->name);  // Go one level deeper <----------
-            docfile->leaveDir();
+            else {
+                if(docfile->enterDir(node->handle)) {
+                    ++storePath[index];
+                    convert(node->name);  // Go one level deeper <----------
+                    docfile->leaveDir();
+                }
+            }
         }
         else {
             onlyDirs=false;   // To prevent useless looping in the
@@ -186,7 +188,7 @@ void OLEFilter::convert(const QString &dirname) {
                 QArray<long> tmp;
 
                 // WinWord
-                // kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): WinWord");
+                // kDebugInfo(31000, "OLEFilter::convert(): WinWord");
 
                 main.data=0L;
                 table0.data=0L;
@@ -214,7 +216,7 @@ void OLEFilter::convert(const QString &dirname) {
             }
             else if(node->name=="Workbook") {
                 // Excel
-                // kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Excel");
+                // kDebugInfo(31000, "OLEFilter::convert(): Excel");
 
                 myFile workbook;
                 workbook.data=0L;
@@ -225,7 +227,7 @@ void OLEFilter::convert(const QString &dirname) {
             }
             else if(node->name=="PowerPoint Document") {
                 // PowerPoint
-                // kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Power Point");
+                // kDebugInfo(31000, "OLEFilter::convert(): Power Point");
                 myFilter=new PowerPointFilter();
                 // connect SIGNALs&SLOTs
                 connectCommon(&myFilter);
@@ -236,7 +238,7 @@ void OLEFilter::convert(const QString &dirname) {
 
         if(myFilter==0L) {
             // unknown type
-            kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): superunknown -> black hole sun ;)");
+            kDebugInfo(31000, "OLEFilter::convert(): superunknown -> black hole sun ;)");
             myFilter=new FilterBase();
             // connect SIGNALs&SLOTs
             connectCommon(&myFilter);
@@ -256,7 +258,7 @@ void OLEFilter::convert(const QString &dirname) {
         slotPart(dirname, &tmp);
         if(!store->open(tmp, "")) {
             success=false;
-            kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Could not open KoTarStore!");
+            kDebugError(31000, "OLEFilter::convert(): Could not open KoTarStore!");
             return;
         }
         // Write it to the gzipped tar file
