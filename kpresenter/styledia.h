@@ -217,6 +217,9 @@ public:
     bool isSticky()const;
     bool stickyNoChange()const;
 
+    void setObjectName( QString &name );
+    QString getObjectName()const;
+
     bool isOneObject()const {return oneObject;}
 
     void setProtected( PropValue p );
@@ -263,6 +266,7 @@ private:
     KoRect oldRect;
     QCheckBox *sticky, *protect, *keepRatio, *protectContent;
     QCheckBox *synchronize;
+    QLineEdit *objectName;
     KDoubleNumInput *m_lineTop, *m_lineLeft, *m_lineWidth, *m_lineHeight;
     KDoubleNumInput *sml, *smt, *smb, *smr;
 
@@ -279,6 +283,7 @@ private:
     bool lockUpdate, stickyObj, oneObject;
     bool allTextObj;
     PropValue oldSticky;
+    QString oldObjectName;
     bool oldProtectContent;
     PropValue oldProtect;
     PropValue oldKeepRatio;

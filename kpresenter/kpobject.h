@@ -113,6 +113,11 @@ public:
     virtual void setDisappearSoundEffectFileName( const QString &_d_fileName )
         { d_fileName = _d_fileName; }
 
+    virtual void setObjectName( const QString &_objectName )
+        { objectName = _objectName; }
+    virtual QString getObjectName() const
+        { return objectName; } 
+    
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
@@ -259,6 +264,7 @@ protected:
     Effect3 effect3;
     int appearTimer, disappearTimer;
     QString a_fileName, d_fileName;
+    QString objectName;
     int presNum, disappearNum;
 
     bool disappear:1;

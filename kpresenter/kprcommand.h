@@ -939,6 +939,19 @@ protected:
     KPrPage*m_page;
 };
 
+class KPrNameObjectCommand : public KNamedCommand
+{
+public:
+    KPrNameObjectCommand( const QString &_name, const QString &_objectName, KPObject *_obj, KPresenterDoc *_doc );
+    ~KPrNameObjectCommand();
+    void execute();
+    void unexecute();
+protected:
+    QString oldObjectName, newObjectName;
+    KPObject *object;
+    KPresenterDoc *doc;
+};
+
 class KPrHideShowHeaderFooter : public KNamedCommand
 {
 public:

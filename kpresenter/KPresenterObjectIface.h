@@ -70,6 +70,8 @@ k_dcop:
     void setAppearSoundEffectFileName( const QString & _a_fileName );
     void setDisappearSoundEffectFileName( const QString &_d_fileName );
 
+    void setObjectName( const QString &_objectName );
+
     void setPresNum( int _presNum );
 
     void setDisappear( bool b );

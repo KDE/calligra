@@ -2365,6 +2365,30 @@ void KPrStickyObjCommand::unstickObj(KPObject *_obj)
     _obj->setSticky(false);
 }
 
+KPrNameObjectCommand::KPrNameObjectCommand( const QString &_name, const QString &_objectName, 
+                                            KPObject *_obj, KPresenterDoc *_doc ):
+    KNamedCommand( _name ),
+    newObjectName( _objectName ),
+    object( _obj ),
+    doc( _doc )
+{
+    oldObjectName = object->getObjectName();
+}
+
+KPrNameObjectCommand::~KPrNameObjectCommand()
+{
+}
+
+void KPrNameObjectCommand::execute()
+{
+    object->setObjectName( newObjectName );
+}
+
+void KPrNameObjectCommand::unexecute()
+{
+    object->setObjectName( oldObjectName );
+}
+
 KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc,
                                                   bool _newValue, KPTextObject *_textObject):
     KNamedCommand(name),

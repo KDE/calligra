@@ -87,6 +87,7 @@ KPObject::KPObject()
     disappearSoundEffect = false;
     a_fileName = QString::null;
     d_fileName = QString::null;
+    objectName = QString::null;
     angle = 0.0;
     shadowDirection = SD_RIGHT_BOTTOM;
     shadowDistance = 0;
@@ -163,6 +164,11 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
         elem=doc.createElement("DISAPPEARSOUNDEFFECT");
         elem.setAttribute("disappearSoundEffect", static_cast<int>(disappearSoundEffect));
         elem.setAttribute("disappearSoundFileName", d_fileName);
+        fragment.appendChild(elem);
+    }
+    if( !objectName.isEmpty() ) {
+        elem=doc.createElement("OBJECTNAME");
+        elem.setAttribute("objectName", objectName);
         fragment.appendChild(elem);
     }
     if(protect) {
@@ -286,6 +292,14 @@ double KPObject::load(const QDomElement &element) {
     else {
         disappearSoundEffect = false;
         d_fileName = QString::null;
+    }
+    e=element.namedItem("OBJECTNAME").toElement();
+    if(!e.isNull()) {
+        if(e.hasAttribute("objectName"))
+            objectName = e.attribute("objectName");
+    }
+    else {
+        objectName = QString::null;
     }
     e=element.namedItem("PROTECT").toElement();
     if (!e.isNull())

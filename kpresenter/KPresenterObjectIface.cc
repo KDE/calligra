@@ -154,6 +154,11 @@ void KPresenterObjectIface::setDisappearSoundEffectFileName( const QString &_d_f
     obj->setDisappearSoundEffectFileName(_d_fileName);
 }
 
+void KPresenterObjectIface::setObjectName( const QString &_objectName )
+{
+    obj->setObjectName(_objectName);
+}
+
 void KPresenterObjectIface::setPresNum( int _presNum )
 {
     obj->setPresNum(_presNum);

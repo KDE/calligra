@@ -1103,19 +1103,23 @@ void KPresenterView::extraPenBrush()
 
     bool canHaveStickyObj = true;
     bool state = (m_canvas->numberOfObjectSelected()==1);
+    QString objectName( QString::null );
     if(state)
     {
         KPObject *obj=m_canvas->getSelectedObj();
         //disable this action when we select a header/footer
+        objectName = obj->getObjectName();
         if (obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
             canHaveStickyObj = false;
     }
     bool txtObj = (m_canvas->selectedTextObjs().count()> 0 );
     styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc, canHaveStickyObj, state,txtObj && state );
 
-    if ( state )
+    if ( state ) {
         styleDia->setSize( m_canvas->getSelectedObj()->getRect());
-
+        styleDia->setObjectName( objectName );
+    }
+        
     int nbStickyObjSelected= m_pKPresenterDoc->stickyPage()->numSelected();
     int nbActivePageObjSelected = m_canvas->activePage()->numSelected();
     if ( nbActivePageObjSelected >0 && nbStickyObjSelected>0)
@@ -3506,6 +3510,13 @@ void KPresenterView::styleOk()
                              m_canvas->getSelectedObj(), m_pKPresenterDoc );
         cmd->execute();
         macro->addCommand(cmd);
+
+        QString objectName = styleDia->getObjectName();
+        cmd = new KPrNameObjectCommand( i18n("Name Object"), objectName, 
+                                        m_canvas->getSelectedObj(), m_pKPresenterDoc );
+        cmd->execute();
+        macro->addCommand(cmd);
+
         if ( styleDia->isAllTextObject() )
         {
             bool state = styleDia->isProtectContent();

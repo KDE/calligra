@@ -888,6 +888,7 @@ void StyleDia::slotReset()
     if (stickyObj)
         setSticky( oldSticky );
 
+    setObjectName( oldObjectName );
     setProtected( oldProtect );
     setKeepRatio( oldKeepRatio );
     setSize( oldRect);
@@ -939,6 +940,13 @@ void StyleDia::setupTabGeneral()
 {
     PageConfigGeneral *w = new PageConfigGeneral( this );
     sticky = w->checkboxSticky;
+    objectName = w->objectName;
+    
+    if ( ! oneObject ) {
+        w->label->setEnabled( false );
+        w->objectName->setEnabled( false );
+    }
+    
     addTab( w, i18n( "&General" ) );
 }
 
@@ -1263,6 +1271,17 @@ bool StyleDia::isSticky() const
     if( stickyObj )
         return sticky->isChecked();
     return false;
+}
+
+void StyleDia::setObjectName( QString &name )
+{
+    oldObjectName = name;
+    objectName->setText( oldObjectName );
+}
+
+QString StyleDia::getObjectName( ) const
+{
+    return objectName->text();
 }
 
 void StyleDia::setProtected( PropValue p )
