@@ -343,9 +343,10 @@
                 <stat import="planned" export="none"/>
             </filter>
             <filter id="karbon_msod">
+                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/karbon/msod"/>
                 <title xml:lang="en_us">MSOD</title>
                 <note xml:lang="en_us">Microsoft Office Drawing</note>
-                <stat import="planned" export="none"/>
+                <stat import="onestar" export="none"/>
             </filter>
             <filter id="karbon_xfig">
                 <title xml:lang="en_us">Xfig</title>
