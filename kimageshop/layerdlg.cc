@@ -22,7 +22,6 @@
 #include <qpushbutton.h>
 
 #include <klocale.h>
-#include <kglobal.h>
 #include <kiconloader.h>
 
 #include "layerdlg.h"
@@ -41,30 +40,30 @@ LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , W
   QHBoxLayout *buttonlayout = new QHBoxLayout( layout );
  
   QPushButton* pbAddLayer = new QPushButton( this, "addlayer" );
-  pbAddLayer->setPixmap( ICON( "newlayer.xpm" ) );
+  pbAddLayer->setPixmap( BarIcon( "newlayer.xpm" ) );
   buttonlayout->addWidget( pbAddLayer );
  
   QPushButton* pbRemoveLayer = new QPushButton( this, "removelayer" );
-  pbRemoveLayer->setPixmap( ICON( "deletelayer.xpm" ) );
+  pbRemoveLayer->setPixmap( BarIcon( "deletelayer.xpm" ) );
   buttonlayout->addWidget( pbRemoveLayer );
 
 /* 
   QPushButton* pbAddMask = new QPushButton( this, "addmask" );
-  pbAddMask->setPixmap( ICON( "newlayer.xpm" ) );
+  pbAddMask->setPixmap( BarIcon( "newlayer.xpm" ) );
   buttonlayout->addWidget( pbAddMask );
  
   QPushButton* pbRemoveMask = new QPushButton( this, "removemask" );
-  pbRemoveMask->setPixmap( ICON( "removelayer.xpm" ) );
+  pbRemoveMask->setPixmap( BarIcon( "removelayer.xpm" ) );
   buttonlayout->addWidget( pbRemoveMask );
 */
  
   QPushButton* pbUp = new QPushButton( this, "up" );
-  pbUp->setPixmap( ICON( "raiselayer.xpm" ) );
+  pbUp->setPixmap( BarIcon( "raiselayer.xpm" ) );
   buttonlayout->addWidget( pbUp );
   connect( pbUp, SIGNAL( clicked() ), layerview, SLOT( slotUpperLayer() ) );
 
   QPushButton* pbDown = new QPushButton( this, "down" );
-  pbDown->setPixmap( ICON( "lowerlayer.xpm" ) );
+  pbDown->setPixmap( BarIcon( "lowerlayer.xpm" ) );
   buttonlayout->addWidget( pbDown );
   connect( pbDown, SIGNAL( clicked() ), layerview, SLOT( slotLowerLayer() ) );
 
@@ -83,20 +82,20 @@ ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name
   QHBoxLayout *buttonlayout = new QHBoxLayout( layout );
  
   QPushButton* pbAddLayer = new QPushButton( this, "addchannel" );
-  pbAddLayer->setPixmap( ICON( "newlayer.xpm" ) );
+  pbAddLayer->setPixmap( BarIcon( "newlayer.xpm" ) );
   buttonlayout->addWidget( pbAddLayer );
  
   QPushButton* pbRemoveLayer = new QPushButton( this, "removechannel" );
-  pbRemoveLayer->setPixmap( ICON( "deletelayer.xpm" ) );
+  pbRemoveLayer->setPixmap( BarIcon( "deletelayer.xpm" ) );
   buttonlayout->addWidget( pbRemoveLayer );
  
   QPushButton* pbUp = new QPushButton( this, "raise" );
-  pbUp->setPixmap( ICON( "raiselayer.xpm" ) );
+  pbUp->setPixmap( BarIcon( "raiselayer.xpm" ) );
   buttonlayout->addWidget( pbUp );
   connect( pbUp, SIGNAL( clicked() ), channelview, SLOT( slotRaiseChannel() ) );
  
   QPushButton* pbDown = new QPushButton( this, "lower" );
-  pbDown->setPixmap( ICON( "lowerlayer.xpm" ) );
+  pbDown->setPixmap( BarIcon( "lowerlayer.xpm" ) );
   buttonlayout->addWidget( pbDown );
   connect( pbDown, SIGNAL( clicked() ), channelview, SLOT( slotLowerChannel() ) );
 }
