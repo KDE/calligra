@@ -71,10 +71,7 @@ void KSpreadPatternSelect::paintEvent( QPaintEvent *_ev )
 
     if ( !undefined )
     {
-        pen.setColor( penColor );
-        pen.setStyle( penStyle );
-        pen.setWidth( penWidth );
-
+        pen=QPen( penColor,penWidth,penStyle);
         painter.begin( this );
         painter.setPen( pen );
         painter.drawLine( 6, height()/2, width() - 6,height()/2  );
@@ -2298,10 +2295,7 @@ void KSpreadBorder::paintEvent( QPaintEvent *_ev )
   QPen pen;
   QPainter painter;
   painter.begin( this );
-
-  pen.setColor( colorGroup().midlight() );
-  pen.setStyle( SolidLine );
-  pen.setWidth( 2 );
+  pen=QPen( colorGroup().midlight(),2,SolidLine);
   painter.setPen( pen );
 
   painter.drawLine( OFFSETX-5, OFFSETY, OFFSETX , OFFSETY );
@@ -2808,9 +2802,7 @@ QPixmap CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
     QPixmap pixmap( style->width(), 14 );
     QPainter painter;
     QPen pen;
-    pen.setColor( colorGroup().text() );
-    pen.setStyle( _style );
-    pen.setWidth( 1 );
+    pen=QPen( colorGroup().text(),1,_style);
     painter.begin( &pixmap );
     painter.fillRect( 0, 0, style->width(), 14, colorGroup().background() );
     painter.setPen( pen );
@@ -2829,34 +2821,28 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
 
     if( horizontal->isChanged())
         {
+        QPen tmpPen( horizontal->getColor(),horizontal->getPenWidth(),horizontal->getPenStyle());
         for ( int x = _left; x <= _right; x++ )
                 {
                 for ( int y = _top+1; y <= _bottom; y++ )
                         {
                         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, y );
                         if(!obj->isObscuringForced())
-                                {
-                                obj->setTopBorderColor( horizontal->getColor() );
-                                obj->setTopBorderStyle( horizontal->getPenStyle() );
-                                obj->setTopBorderWidth( horizontal->getPenWidth() );
-                                }
+                                obj->setTopBorderPen(tmpPen);
                         }
                 }
          }
 
     if( vertical->isChanged())
     {
+    QPen tmpPen( vertical->getColor(),vertical->getPenWidth(),vertical->getPenStyle());
     for ( int x = _left+1; x <= _right; x++ )
         {
         for ( int y = _top; y <= _bottom; y++ )
                 {
                 KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
                  if(!obj->isObscuringForced())
-                        {
-                        obj->setLeftBorderColor( vertical->getColor() );
-                        obj->setLeftBorderStyle( vertical->getPenStyle() );
-                        obj->setLeftBorderWidth( vertical->getPenWidth() );
-                        }
+                        obj->setLeftBorderPen( tmpPen );
                 }
         }
     }
@@ -2864,83 +2850,68 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
 
  if ( left->isChanged() )
     {
+    QPen tmpPen( left->getColor(),left->getPenWidth(),left->getPenStyle());
     for ( int y = _top; y <= _bottom; y++ )
         {
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _left,y );
          if(!obj->isObscuringForced())
-                {
-                obj->setLeftBorderColor( left->getColor() );
-                obj->setLeftBorderStyle( left->getPenStyle() );
-                obj->setLeftBorderWidth( left->getPenWidth() );
-                }
+                obj->setLeftBorderPen( tmpPen );
         }
     }
 
  if ( right->isChanged() )
     {
     bool once=false;
+    QPen tmpPen( right->getColor(),right->getPenWidth(),right->getPenStyle());
     for ( int y = _top; y <= _bottom; y++ )
         {
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _right,y );
          if(!obj->isObscuringForced())
-                {
-                obj->setRightBorderColor( right->getColor() );
-                obj->setRightBorderStyle( right->getPenStyle() );
-                obj->setRightBorderWidth( right->getPenWidth() );
-                }
+                obj->setRightBorderPen(tmpPen);
          else if(obj->isObscuringForced() && !once )
                 {
                 once=true;
                 int moveX=obj->obscuringCellsColumn();
                 int moveY=obj->obscuringCellsRow();
                 obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
-                obj->setRightBorderColor( right->getColor() );
-                obj->setRightBorderStyle( right->getPenStyle() );
-                obj->setRightBorderWidth( right->getPenWidth() );
+                obj->setRightBorderPen(tmpPen);
                 }
         }
     }
 
  if ( top->isChanged() )
     {
+    QPen tmpPen( top->getColor(),top->getPenWidth(),top->getPenStyle());
     for ( int x = _left; x <= _right; x++ )
         {
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_top );
          if(!obj->isObscuringForced())
-                {
-                obj->setTopBorderColor( top->getColor() );
-                obj->setTopBorderStyle( top->getPenStyle() );
-                obj->setTopBorderWidth( top->getPenWidth() );
-                }
+                obj->setTopBorderPen( tmpPen );
         }
     }
 
  if ( bottom->isChanged() )
     {
     bool once = false;
+    QPen tmpPen( bottom->getColor(),bottom->getPenWidth(),bottom->getPenStyle());
     for ( int x = _left; x <= _right; x++ )
         {
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_bottom );
-
          if(!obj->isObscuringForced())
-                {
-                obj->setBottomBorderColor( bottom->getColor() );
-                obj->setBottomBorderStyle( bottom->getPenStyle() );
-                obj->setBottomBorderWidth( bottom->getPenWidth() );
-                }
+                obj->setBottomBorderPen( tmpPen );
          else if(obj->isObscuringForced() && !once )
                 {
                 once = true;
                 int moveX=obj->obscuringCellsColumn();
                 int moveY=obj->obscuringCellsRow();
                 obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
-                obj->setBottomBorderColor( bottom->getColor() );
-                obj->setBottomBorderStyle( bottom->getPenStyle() );
-                obj->setBottomBorderWidth( bottom->getPenWidth() );
+                obj->setBottomBorderPen( tmpPen );
                 }
         }
     }
 
+ QPen tmpPenFall( fallDiagonal->getColor(),fallDiagonal->getPenWidth(),fallDiagonal->getPenStyle());
+ QPen tmpPenGoUp( goUpDiagonal->getColor(),goUpDiagonal->getPenWidth(),goUpDiagonal->getPenStyle());
  for ( int x = _left; x <= _right; x++ )
         {
         for ( int y = _top; y <= _bottom; y++ )
@@ -2949,17 +2920,9 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 if(!obj->isObscuringForced())
                         {
                         if ( fallDiagonal->isChanged() )
-                                {
-                                obj->setFallDiagonalColor( fallDiagonal->getColor() );
-                                obj->setFallDiagonalStyle( fallDiagonal->getPenStyle() );
-                                obj->setFallDiagonalWidth( fallDiagonal->getPenWidth() );
-                                }
+                                obj->setFallDiagonalPen( tmpPenFall );
                         if ( goUpDiagonal->isChanged() )
-                                {
-                                obj->setGoUpDiagonalColor( goUpDiagonal->getColor() );
-                                obj->setGoUpDiagonalStyle( goUpDiagonal->getPenStyle() );
-                                obj->setGoUpDiagonalWidth( goUpDiagonal->getPenWidth() );
-                                }
+                                obj->setGoUpDiagonalPen( tmpPenGoUp );
                         }
                 }
         }
@@ -3110,45 +3073,32 @@ void CellLayoutPageBorder::draw()
 
   if((bottom->getPenStyle())!=Qt::NoPen)
     {
-      pen.setColor( bottom->getColor() );
-      pen.setStyle( bottom->getPenStyle() );
-      pen.setWidth( bottom->getPenWidth() );
-
+      pen=QPen( bottom->getColor(), bottom->getPenWidth(),bottom->getPenStyle());
       painter.setPen( pen );
       painter.drawLine( OFFSETX, area->height()-OFFSETY, area->width()-OFFSETX , area->height()-OFFSETY );
     }
   if((top->getPenStyle())!=Qt::NoPen)
     {
-
-      pen.setColor( top->getColor() );
-      pen.setStyle( top->getPenStyle() );
-      pen.setWidth( top->getPenWidth() );
+      pen=QPen( top->getColor(), top->getPenWidth(),top->getPenStyle());
       painter.setPen( pen );
       painter.drawLine( OFFSETX, OFFSETY, area->width() -OFFSETX, OFFSETY );
     }
  if((left->getPenStyle())!=Qt::NoPen)
     {
-
-      pen.setColor( left->getColor() );
-      pen.setStyle( left->getPenStyle() );
-      pen.setWidth( left->getPenWidth() );
+      pen=QPen( left->getColor(), left->getPenWidth(),left->getPenStyle());
       painter.setPen( pen );
       painter.drawLine( OFFSETX, OFFSETY, OFFSETX , area->height()-OFFSETY );
     }
  if((right->getPenStyle())!=Qt::NoPen)
     {
-      pen.setColor( right->getColor() );
-      pen.setStyle( right->getPenStyle() );
-      pen.setWidth( right->getPenWidth() );
+      pen=QPen( right->getColor(), right->getPenWidth(),right->getPenStyle());
       painter.setPen( pen );
       painter.drawLine( area->width()-OFFSETX, OFFSETY, area->width()-OFFSETX, area->height()-OFFSETY );
 
     }
  if((fallDiagonal->getPenStyle())!=Qt::NoPen)
     {
-      pen.setColor( fallDiagonal->getColor() );
-      pen.setStyle( fallDiagonal->getPenStyle() );
-      pen.setWidth( fallDiagonal->getPenWidth() );
+      pen=QPen( fallDiagonal->getColor(), fallDiagonal->getPenWidth(),fallDiagonal->getPenStyle());
       painter.setPen( pen );
       painter.drawLine( OFFSETX, OFFSETY, area->width()-OFFSETX, area->height()-OFFSETY );
       if(dlg->oneCol==false&& dlg->oneRow==false)
@@ -3159,10 +3109,7 @@ void CellLayoutPageBorder::draw()
     }
  if((goUpDiagonal->getPenStyle())!=Qt::NoPen)
     {
-
-      pen.setColor( goUpDiagonal->getColor() );
-      pen.setStyle( goUpDiagonal->getPenStyle() );
-      pen.setWidth( goUpDiagonal->getPenWidth() );
+      pen=QPen( goUpDiagonal->getColor(), goUpDiagonal->getPenWidth(),goUpDiagonal->getPenStyle());
       painter.setPen( pen );
       painter.drawLine( OFFSETX, area->height()-OFFSETY , area->width()-OFFSETX , OFFSETY );
       if(dlg->oneCol==false&& dlg->oneRow==false)
@@ -3174,17 +3121,13 @@ void CellLayoutPageBorder::draw()
     }
  if((vertical->getPenStyle())!=Qt::NoPen)
     {
-      pen.setColor( vertical->getColor() );
-      pen.setStyle( vertical->getPenStyle() );
-      pen.setWidth( vertical->getPenWidth() );
+      pen=QPen( vertical->getColor(), vertical->getPenWidth(),vertical->getPenStyle());
       painter.setPen( pen );
       painter.drawLine( area->width()/2, 5 , area->width()/2 , area->height()-5 );
     }
   if((horizontal->getPenStyle())!=Qt::NoPen)
     {
-      pen.setColor( horizontal->getColor() );
-      pen.setStyle( horizontal->getPenStyle() );
-      pen.setWidth( horizontal->getPenWidth() );
+      pen=QPen( horizontal->getColor(), horizontal->getPenWidth(),horizontal->getPenStyle());
       painter.setPen( pen );
       painter.drawLine( OFFSETX,area->height()/2,area->width()-OFFSETX, area->height()/2 );
     }
@@ -3339,9 +3282,7 @@ void KSpreadBrushSelect::paintEvent( QPaintEvent *_ev )
     QFrame::paintEvent( _ev );
 
     QPainter painter;
-    QBrush brush;
-    brush.setStyle(brushStyle);
-    brush.setColor(brushColor);
+    QBrush brush(brushColor,brushStyle);
     painter.begin( this );
     painter.setPen( Qt::NoPen );
     painter.setBrush( brush);
@@ -3715,10 +3656,7 @@ void CellLayoutPagePattern::apply( RowLayout */*_row*/ )
 void CellLayoutPagePattern::apply( KSpreadCell *_obj )
 {
   if(selectedBrush!=0L)
-        {
-         _obj->setBackGroundBrushColor(selectedBrush->getBrushColor() );
-         _obj->setBackGroundBrushStyle(selectedBrush->getBrushStyle() );
-        }
+        _obj->setBackGroundBrush(QBrush( selectedBrush->getBrushColor(),selectedBrush->getBrushStyle()));
   if( b_notAnyColor)
         _obj->setBgColor( QColor() );
   else if ( !bBgColorUndefined )

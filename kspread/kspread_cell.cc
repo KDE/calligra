@@ -124,26 +124,14 @@ void KSpreadCell::copyLayout( int _column, int _row )
     setTextFont( o->textFont( _column, _row ) );
     setTextColor( o->textColor( _column, _row ) );
     setBgColor( o->bgColor( _column, _row) );
-    setLeftBorderWidth( o->leftBorderWidth( _column, _row ) );
-    setLeftBorderStyle( o->leftBorderStyle( _column, _row ) );
-    setLeftBorderColor( o->leftBorderColor( _column, _row ) );
-    setTopBorderWidth( o->topBorderWidth( _column, _row ) );
-    setTopBorderStyle( o->topBorderStyle( _column, _row ) );
-    setTopBorderColor( o->topBorderColor( _column, _row ) );
-    setBottomBorderWidth( o->bottomBorderWidth( _column, _row ) );
-    setBottomBorderStyle( o->bottomBorderStyle( _column, _row ) );
-    setBottomBorderColor( o->bottomBorderColor( _column, _row ) );
-    setRightBorderWidth( o->rightBorderWidth( _column, _row ) );
-    setRightBorderStyle( o->rightBorderStyle( _column, _row ) );
-    setRightBorderColor( o->rightBorderColor( _column, _row ) );
-    setFallDiagonalWidth( o->fallDiagonalWidth( _column, _row ) );
-    setFallDiagonalStyle( o->fallDiagonalStyle( _column, _row ) );
-    setFallDiagonalColor( o->fallDiagonalColor( _column, _row ) );
-    setGoUpDiagonalWidth( o->goUpDiagonalWidth( _column, _row ) );
-    setGoUpDiagonalStyle( o->goUpDiagonalStyle( _column, _row ) );
-    setGoUpDiagonalColor( o->goUpDiagonalColor( _column, _row ) );
-    setBackGroundBrushColor(o->backGroundBrushColor( _column, _row) );
-    setBackGroundBrushStyle(o->backGroundBrushStyle( _column, _row) );
+    setLeftBorderPen(o->leftBorderPen( _column, _row ));
+    setTopBorderPen(o->topBorderPen( _column, _row ));
+    setBottomBorderPen(o->bottomBorderPen( _column, _row ));
+    setRightBorderPen(o->rightBorderPen( _column, _row ));
+    setFallDiagonalPen(o->fallDiagonalPen( _column, _row ));
+    setGoUpDiagonalPen(o->goUpDiagonalPen( _column, _row ));
+    setBackGroundBrush(o->backGroundBrush( _column, _row));
+
     setPrecision( o->precision( _column, _row ) );
     setPrefix( o->prefix( _column, _row ) );
     setPostfix( o->postfix( _column, _row ) );
@@ -211,6 +199,7 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
 void KSpreadCell::defaultStyle()
 {
   QPen pen( Qt::black,1,Qt::NoPen); // TODO set to QColor() and change painting to use default colors
+  QBrush brush( Qt::red,Qt::NoBrush);
   setBottomBorderPen(pen);
   setRightBorderPen(pen);
   setLeftBorderPen(pen);
@@ -219,8 +208,7 @@ void KSpreadCell::defaultStyle()
   setGoUpDiagonalPen(pen);
   setAlign( KSpreadCell::Undefined );
   setAlignY( KSpreadCell::Middle );
-  setBackGroundBrushColor(Qt::red);
-  setBackGroundBrushStyle(Qt::NoBrush);
+  setBackGroundBrush(brush);
   setTextColor( QColor() );
   setBgColor( QColor() );
   setFaktor( 1.0);
@@ -2833,9 +2821,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     QRect larger;
     larger.setCoords( marker.left() - 1, marker.top() - 1, marker.right() + 1, marker.bottom() + 1 );
 
-    QPen pen;
-    pen.setColor( Qt::black );
-    pen.setWidth( 3 );
+    QPen pen(Qt::black,3);
     _painter.setPen( pen );
 
     // The marker is exactly this cell ?
@@ -3197,7 +3183,7 @@ const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
 {
     if ( m_pObscuringCell )
     {
-        // Ask the obscuring cell for a rigth border
+        // Ask the obscuring cell for a right border
         if ( m_pObscuringCell->hasProperty( PBackgroundBrush ) )
             return m_pObscuringCell->backGroundBrush( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
@@ -3211,7 +3197,7 @@ const QColor& KSpreadCell::bgColor( int _col, int _row ) const
 {
     if ( m_pObscuringCell )
     {
-        // Ask the obscuring cell for a rigth border
+        // Ask the obscuring cell for a right border
         if ( m_pObscuringCell->hasProperty( PBackgroundColor ) )
             return m_pObscuringCell->bgColor( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
