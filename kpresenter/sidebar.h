@@ -52,24 +52,18 @@ signals: // all page numbers 0-based
 
 public slots:
     void rebuildItems();
-
+    void renamePageTitle();	
 private slots:
     void itemClicked( QListViewItem *i );
     void rightButtonPressed( QListViewItem *i, const QPoint &pnt, int c );
     void movedItems( QListViewItem *i, QListViewItem *firstAfter, QListViewItem *newAfter );
     void doMoveItems();
-    void pageDefaultTemplate();
-    void duplicateCopy();
-    void pageDelete();
-    void pageInsert();
-    void renamePageTitle();
 
 private:
     int delPageId;
     KPresenterDoc *doc;
     KPresenterView *view;
     QListViewItem *movedItem, *movedAfter;
-    QPopupMenu *pageMenu;
 };
 
 #endif

@@ -2086,7 +2086,9 @@ void KPresenterView::setupActions()
     actionChangeClipart =new KAction( i18n( "&Change Clipart..." ), "clipart", 0,
 				       this, SLOT( extraChangeClip() ),
 				       actionCollection(), "change_clipart" );
-
+    actionRenamePage=new KAction(i18n( "&Rename Page" ),0,this,
+                     SLOT( renamePageTitle() ),
+                     actionCollection(), "rename_page" );
 }
 
 
@@ -3114,6 +3116,21 @@ void KPresenterView::openPopupMenuClipObject(const QPoint & _point)
     if(!koDocument()->isReadWrite() )
         return;
     ((QPopupMenu*)factory()->container("clipmenu_popup",this))->popup(_point);
+}
+
+
+void KPresenterView::openPopupMenuSideBar(const QPoint & _point)
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    ((QPopupMenu*)factory()->container("sidebarmenu_popup",this))->popup(_point);
+
+}
+
+void KPresenterView::renamePageTitle()
+{
+    if(sidebar)
+        sidebar->renamePageTitle();
 }
 
 #include <kpresenter_view.moc>

@@ -211,6 +211,9 @@ public slots:
 
     void objectSelectedChanged();
 
+    void extraChangeClip();
+    void renamePageTitle();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -305,7 +308,6 @@ public:
 
     void refreshPageButton();
 
-    void extraChangeClip();
 
     void openPopupMenuMenuPage( const QPoint & _point );
     void openPopupMenuTextObject( const QPoint & _point );
@@ -314,7 +316,8 @@ public:
     void openPopupMenuGraphMenu(const QPoint & _point );
     void openPopupMenuPieObject( const QPoint & _point );
     void openPopupMenuClipObject(const QPoint & _point);
-
+    void openPopupMenuSideBar(const QPoint & _point);
+    
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -544,6 +547,8 @@ protected:
     KAction *actionExtendObjectHeight;
     KAction *actionObjectProperties;
     KAction *actionChangeClipart;
+
+    KAction *actionRenamePage;
 
     DCOPObject *dcop;
 

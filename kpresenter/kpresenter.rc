@@ -390,4 +390,11 @@
    <Action name="extra_alignbottom"/>
   </Menu>
 </Menu>
+<Menu name="sidebarmenu_popup">
+  <Action name="insert_page"/>
+  <Action name="extra_defaulttemplate"/>
+  <Action name="edit_duplicatepage"/>
+  <Action name="edit_delpage"/>
+  <Action name="rename_page"/>
+</Menu>
 </kpartgui>

@@ -1314,10 +1314,6 @@ void Page::setupMenus()
     alignMenu2->setMouseTracking( true );
     alignMenu2->setCheckable( false );
 
-
-
-
-
     // pic-resize menu
     picResizeMenu = new QPopupMenu();
     picResizeMenu->insertItem( i18n( "640x480" ), this, SLOT( picViewOrig640x480() ) );

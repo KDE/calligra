@@ -62,14 +62,6 @@ SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     setDropVisualizer( TRUE );
     setDragEnabled( TRUE );
 
-    pageMenu = new QPopupMenu();
-    CHECK_PTR( pageMenu );
-    pageMenu->insertItem( i18n( "&Insert Page..." ), this, SLOT( pageInsert() ) );
-    pageMenu->insertItem( i18n( "&Use current slide as default template" ), this, SLOT( pageDefaultTemplate() ) );
-    pageMenu->insertItem( KPBarIcon( "newslide" ), i18n( "&Duplicate Page" ), this, SLOT( duplicateCopy() ) );
-    delPageId = pageMenu->insertItem( KPBarIcon( "delslide" ), i18n( "D&elete Page..." ), this, SLOT( pageDelete() ) );
-    pageMenu->insertItem( i18n( "&Rename Page" ), this, SLOT( renamePageTitle() ) );
-    pageMenu->setMouseTracking( true );
 }
 
 void SideBar::rebuildItems()
@@ -171,33 +163,11 @@ void SideBar::doMoveItems()
     emit movePage( num, numNow );
 }
 
-void SideBar::pageInsert()
-{
-    view->insertPage();
-}
-
-void SideBar::duplicateCopy()
-{
-    view->editDuplicatePage();
-}
-
-void SideBar::pageDelete()
-{
-    view->editDelPage();
-}
-
-void SideBar::pageDefaultTemplate()
-{
-    view->extraDefaultTemplate();
-}
-
 void SideBar::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
 {
     if ( !selectedItem() || !doc->isReadWrite())
         return;
-
-    pageMenu->setItemEnabled( delPageId, doc->getPageNums() > 1 );
-    pageMenu->popup( pnt );
+    view->openPopupMenuSideBar(pnt);
 }
 
 void SideBar::renamePageTitle()
