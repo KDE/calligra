@@ -22,8 +22,6 @@
 #define KPTTASKDIALOG_H
 
 #include <kdialogbase.h>
-#include "kptresource.h"
-#include <qtable.h>
 
 class KPTDuration;
 
@@ -41,11 +39,11 @@ class QTable;
 class QDateTime;
 
 //TODO ui files are not in the KPlato namespace!!
-class KPTTaskGeneralPanelBase;
 
 namespace KPlato
 {
 
+class KPTTaskGeneralPanel;
 class KPTRequestResourcesPanel;
 class KPTPart;
 class KPTTask;
@@ -62,13 +60,7 @@ protected slots:
     void slotOk();
 
 private:
-    KPTTask &m_task;
-    KLineEdit *m_name;
-    KLineEdit *m_leader;
-    KTextEdit *m_description;
-    KLineEdit *m_id;
-    
-    KPTTaskGeneralPanelBase *m_generalTab;
+    KPTTaskGeneralPanel *m_generalTab;
     KPTRequestResourcesPanel *m_resourcesTab;
 
 };

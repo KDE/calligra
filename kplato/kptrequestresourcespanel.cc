@@ -243,9 +243,10 @@ KCommand *KPTRequestResourcesPanel::buildCommand(KPTPart *part) {
     return cmd;
 }
 
-void KPTRequestResourcesPanel::slotOk() {
+bool KPTRequestResourcesPanel::ok() {
     if (selectedGroup)
         selectedGroup->update();
+    return true;
 }
 
 void KPTRequestResourcesPanel::sendChanged() {

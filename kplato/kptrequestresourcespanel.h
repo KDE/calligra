@@ -93,9 +93,8 @@ public:
 
     KCommand *buildCommand(KPTPart *part);
     
-public slots:
-	void slotOk();
-
+    bool ok();
+    
 private slots:
     void sendChanged();
 
