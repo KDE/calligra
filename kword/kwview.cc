@@ -2677,6 +2677,8 @@ void KWView::frameSelectedChanged()
     actionTableJoinCells->setEnabled( table && (nbFrame>1));
     actionTableSplitCells->setEnabled( table && (nbFrame==1) );
     actionFormatFrameSet->setEnabled( !currentTextEdit() && (nbFrame>=1));
+    actionEditReconnectFrame->setEnabled(false);
+    actionEditDelFrame->setEnabled(!currentTextEdit() && (nbFrame==1));
 }
 
 void KWView::docStructChanged(TypeStructDocItem _type)
