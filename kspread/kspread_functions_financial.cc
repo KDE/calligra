@@ -792,8 +792,6 @@ bool kspreadfunc_nper( KSContext& context )
   double d2 = pv * rate + pmt * ( 1.0 + rate * type );
 
   double res = d / d2;
-  double tmp = (pmt * (1.0 + rate * type) - fv * rate) /
-	  (pv * rate + pmt * (1.0 + rate * type));
 
   if ( res <= 0.0 )
     return false;

@@ -103,7 +103,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_dcop = 0;
   m_pMap = 0L;
   m_bLoading = false;
-  m_numOperations = 0;
+  m_numOperations = 1; // don't start repainting before the GUI is done...
 
   m_defaultGridPen.setColor( lightGray );
   m_defaultGridPen.setWidth( 1 );
@@ -143,6 +143,8 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
 bool KSpreadDoc::initDoc()
 {
+  ElapsedTime et( "      initDoc        " );
+
     QString f;
     KoTemplateChooseDia::ReturnType ret;
 
@@ -777,6 +779,7 @@ void KSpreadDoc::enableRedo( bool _b )
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
                                bool transparent, double zoomX, double zoomY )
 {
+  ElapsedTime et( "KSpreadDoc::paintContent1" );
     //kdDebug(36001) << "KSpreadDoc::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
     int oldZoom = m_zoom;
     setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
@@ -810,6 +813,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
 {
     if ( isLoading() )
         return;
+    ElapsedTime et( "KSpreadDoc::paintContent2" );
 
     // if ( !transparent )
     // painter.eraseRect( rect );
@@ -838,6 +842,8 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
 
 void KSpreadDoc::paintUpdates()
 {
+  ElapsedTime et( "KSpreadDoc::paintUpdates" );
+
   QPtrListIterator<KoView> it( views() );
   KSpreadView* view = NULL;
   KSpreadSheet* table = NULL;
@@ -1352,6 +1358,7 @@ void KSpreadDoc::emitBeginOperation(void)
 
 void KSpreadDoc::emitEndOperation()
 {
+  ElapsedTime et( "*KSpreadDoc::emitEndOperation*" );
    KSpreadSheet *t = NULL;
    CellBinding* b = NULL;
    m_numOperations--;
@@ -1362,17 +1369,21 @@ void KSpreadDoc::emitEndOperation()
      m_bDelayCalculation = false;
      for ( t = m_pMap->firstTable(); t != NULL; t = m_pMap->nextTable() )
      {
+       ElapsedTime etm( "Updating table..." );
        t->update();
 
+       ElapsedTime etm2( "Sub: Updating cellbindings..." );
        for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
        {
          b->cellChanged(NULL);
        }
      }
-
    }
 
-   KoDocument::emitEndOperation();
+   {
+     ElapsedTime et2( "*KoDocument::emitEndOperation*" );
+     KoDocument::emitEndOperation();
+   }
    QApplication::restoreOverrideCursor();
 
    if (m_numOperations == 0)

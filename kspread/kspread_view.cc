@@ -80,6 +80,7 @@
 #include "kspread_dlg_layout.h"
 #include "kspread_dlg_show.h"
 #include "kspread_dlg_insert.h"
+#include "kspread_global.h"
 #include "kspread_handler.h"
 #include "kspread_events.h"
 #include "kspread_editors.h"
@@ -284,9 +285,11 @@ class KSpreadSpell : public KSpell
   }
 };
 
-KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc ) :
-  KoView( doc, _parent, _name )
+KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc ) 
+  : KoView( doc, _parent, _name )
 {
+  ElapsedTime et( "KSpreadView constructor" );
+
     m_popupMenuFirstToolId = 0;
     kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
     setInstance( KSpreadFactory::global() );
@@ -435,6 +438,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     {
         tbl = m_pDoc->displayTable();
     }
+
     if ( !tbl )
         tbl = m_pDoc->map()->initialActiveTable();
     if (tbl)
@@ -6302,6 +6306,7 @@ int KSpreadView::canvasYOffset() const
 
 void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
+  ElapsedTime et( "***guiActivateEvent***" );
     m_pDoc->emitBeginOperation(false);
 
     if ( ev->activated() )
@@ -6321,6 +6326,7 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
     m_pDoc->emitEndOperation();
     KoView::guiActivateEvent( ev );
+    m_pDoc->decreaseNumOperation(); //from now on: paint...
 }
 
 void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )

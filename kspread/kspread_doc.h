@@ -409,6 +409,9 @@ public:
     void setDisplayTable(KSpreadSheet *_Table );
     KSpreadSheet * displayTable()const;
 
+  void increaseNumOperation() { ++m_numOperations; }
+  void decreaseNumOperation() { --m_numOperations; }
+
 public slots:
 
   //void newView(); obsloete (Werner)

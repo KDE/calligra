@@ -975,12 +975,12 @@ private:
     KSParseNode* m_pCode;
 
 
-    KSpreadConditions conditions;
+    KSpreadConditions* m_conditions;
 
     /**
      * if true: "Shrink to fit" for cell values
      */
-    bool m_bShrinkToSize;
+    // bool m_bShrinkToSize;
 
     /**
     * Store the number of line when you used multirow
@@ -993,10 +993,6 @@ private:
     KSpreadCell* m_nextCell;
     KSpreadCell* m_previousCell;
 
-    /**
-     * A pointer to the decimal separator
-     */
-    static QChar decimal_point;
     // static const char* s_dataTypeToString[];
 
     /* helper functions to the paintCell(...) function */

@@ -350,6 +350,7 @@ public:
     virtual int getAngle(int col, int row) const;
 
     virtual QString comment(int col, int row) const;
+    virtual QString * commentP( int col, int row ) const;
 
     virtual double getIndent(int col, int row) const;
 
@@ -415,7 +416,7 @@ protected:
      /**
      * Stores a comment string.
      */
-    QString m_strComment;
+    QString * m_strComment;
 
 private:
     void setProperty( Properties p );

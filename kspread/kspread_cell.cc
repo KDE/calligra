@@ -42,7 +42,16 @@
 
 #include <kdebug.h>
 
-QChar KSpreadCell::decimal_point = '\0';
+/**
+ * A pointer to the decimal separator
+ */
+
+namespace KSpreadCell_LNS
+{
+  QChar decimal_point = '\0';
+}
+
+using namespace KSpreadCell_LNS;
 
 /*****************************************************************************
  *
@@ -70,8 +79,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
     m_value( KSpreadValue::empty() ),
     m_pQML( 0 ),
     m_pCode( 0 ),
-    conditions( this ),
-    m_bShrinkToSize( false ),
+    m_conditions( 0 ),
     m_nbLines( 0 ),
     m_Validity( 0 ),
     m_nextCell( 0 ),
@@ -105,8 +113,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
     m_value( KSpreadValue::empty() ),
     m_pQML( 0 ),
     m_pCode( 0 ),
-    conditions( this ),
-    m_bShrinkToSize( false ),
+    m_conditions( 0 ),
     m_nbLines( 0 ),
     m_Validity( 0 ),
     m_nextCell( 0 ),
@@ -193,7 +200,9 @@ void KSpreadCell::copyFormat( int _column, int _row )
       setCurrency( c );
 
     QValueList<KSpreadConditional> conditionList = cell->conditionList();
-    conditions.setConditionList( conditionList );
+    delete m_conditions;
+    m_conditions = new KSpreadConditions( this );
+    m_conditions->setConditionList( conditionList );
 
     setComment( cell->comment( _column, _row ) );
 }
@@ -231,8 +240,11 @@ void KSpreadCell::defaultStyle()
 {
   defaultStyleFormat();
 
-  QValueList<KSpreadConditional> emptyList;
-  conditions.setConditionList( emptyList );
+  if ( m_conditions )
+  {
+    QValueList<KSpreadConditional> emptyList;
+    m_conditions->setConditionList( emptyList );
+  }
 
   delete m_Validity;
   m_Validity = 0L;
@@ -1585,12 +1597,12 @@ void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
     KSpreadConditional condition;
 
     QFont tmpFont;
-    if ( conditions.currentCondition( condition ) 
+    if ( m_conditions && m_conditions->currentCondition( condition ) 
          && !(m_pTable->getShowFormula() 
               && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
     {
         if ( condition.fontcond )
-            tmpFont = *condition.fontcond;
+            tmpFont = *(condition.fontcond);
         else
             tmpFont = condition.style->font();
     }
@@ -2409,11 +2421,11 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
 
   // Point the little corner if there is a comment attached
   // to this cell.
-  if( !comment( cellRef.x(), cellRef.y() ).isEmpty() &&
-      cellRect.width() > 10.0 &&
-      cellRect.height() > 10.0 &&
-      ( table()->print()->printCommentIndicator() ||
-        ( !painter.device()->isExtDev() && doc->getShowCommentIndicator() ) ) )
+  if ( commentP( cellRef.x(), cellRef.y() )
+       && cellRect.width() > 10.0
+       && cellRect.height() > 10.0 
+       && ( table()->print()->printCommentIndicator()
+            || ( !painter.device()->isExtDev() && doc->getShowCommentIndicator() ) ) )
   {
     QColor penColor = Qt::red;
     //If background has high red part, switch to blue
@@ -2536,7 +2548,7 @@ void KSpreadCell::paintText( QPainter& painter,
 
   KSpreadConditional condition;
   //Check for red font color for negativ values
-  if( !conditions.currentCondition( condition ) )
+  if ( !m_conditions || !m_conditions->currentCondition( condition ) )
   {
     if ( m_value.isNumber() 
          && !( m_pTable->getShowFormula() 
@@ -4369,11 +4381,12 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         format.setAttribute( "style", (int) m_style );
 
 
-    QDomElement conditionElement = conditions.saveConditions(doc);
-
-    if ( !conditionElement.isNull() )
+    if ( m_conditions )
     {
-      cell.appendChild( conditionElement );
+      QDomElement conditionElement = m_conditions->saveConditions( doc );
+      
+      if ( !conditionElement.isNull() )
+        cell.appendChild( conditionElement );
     }
 
     if ( m_Validity != 0 )
@@ -4430,10 +4443,10 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         cell.appendChild( validity );
     }
 
-    if ( !m_strComment.isEmpty() )
+    if ( m_strComment )
     {
         QDomElement comment = doc.createElement( "comment" );
-        comment.appendChild( doc.createCDATASection( m_strComment ) );
+        comment.appendChild( doc.createCDATASection( *m_strComment ) );
         cell.appendChild( comment );
     }
 
@@ -4615,7 +4628,9 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
     QDomElement conditionsElement = cell.namedItem( "condition" ).toElement();
     if ( !conditionsElement.isNull())
     {
-      conditions.loadConditions( conditionsElement );
+      delete m_conditions;
+      m_conditions = new KSpreadConditions( this );
+      m_conditions->loadConditions( conditionsElement );
     }
 
     QDomElement validity = cell.namedItem( "validity" ).toElement();
@@ -5327,12 +5342,20 @@ void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isD
 
 QValueList<KSpreadConditional> KSpreadCell::conditionList() const
 {
-  return conditions.conditionList();
+  if ( !m_conditions )
+  {
+    QValueList<KSpreadConditional> emptyList;
+    return emptyList;
+  }
+
+  return m_conditions->conditionList();
 }
 
 void KSpreadCell::setConditionList( const QValueList<KSpreadConditional> & newList )
 {
-  conditions.setConditionList( newList );
+  delete m_conditions;
+  m_conditions = new KSpreadConditions( this );
+  m_conditions->setConditionList( newList );
 }
 
 bool KSpreadCell::hasError() const

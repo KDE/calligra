@@ -60,7 +60,8 @@ using namespace format_LNS;
 
 KSpreadFormat::KSpreadFormat( KSpreadSheet * _table, KSpreadStyle * _style )
   : m_pTable( _table ),
-    m_pStyle( _style )
+    m_pStyle( _style ),
+    m_strComment( 0 )
 {
   m_mask = 0;
   m_flagsMask = 0;
@@ -79,7 +80,7 @@ void KSpreadFormat::defaultStyleFormat()
   if ( m_pTable )
     m_pStyle = m_pTable->doc()->styleManager()->defaultStyle();
 
-  setComment( "" ); 
+  delete m_strComment;
 }
 
 
@@ -113,7 +114,12 @@ void KSpreadFormat::copy( const KSpreadFormat & _l )
   m_mask        = _l.m_mask;
   m_flagsMask   = _l.m_flagsMask;
   m_bNoFallBack = _l.m_bNoFallBack;
-  m_strComment  = _l.m_strComment;
+
+  if ( _l.m_strComment )
+  {
+    delete m_strComment;
+    m_strComment  = new QString( *_l.m_strComment );
+  }
 }
 
 void KSpreadFormat::setKSpreadStyle( KSpreadStyle * style )
@@ -1312,7 +1318,8 @@ void KSpreadFormat::setComment( const QString & _comment )
   }
 
   // not part of the style
-  m_strComment = _comment;
+  delete m_strComment;
+  m_strComment = new QString( _comment );
   formatChanged();
 }
 
@@ -1866,8 +1873,23 @@ QString KSpreadFormat::comment( int col, int row ) const
     if ( l )
       return l->comment( col, row );
   }
+
+  if ( !m_strComment )
+    return QString::null;
   
   // not part of the style
+  return *m_strComment;
+}
+
+QString * KSpreadFormat::commentP( int col, int row ) const
+{
+  if ( !hasProperty( PComment ) && !hasNoFallBackProperties(  PComment ))
+  {
+    const KSpreadFormat* l = fallbackFormat( col, row );
+    if ( l )
+      return l->commentP( col, row );
+  }
+
   return m_strComment;
 }
 

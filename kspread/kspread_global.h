@@ -20,14 +20,21 @@ class ElapsedTime
     : m_name( name )
   {
     m_time.start();  
+    kdDebug() << "*** (" << name << ")... Starting measuring... " << endl;
   }
   
   ~ElapsedTime()
   {
+    uint milliSec = m_time.elapsed();
+    uint min = (uint) ( milliSec / ( 1000 * 60 ) );
+    milliSec -= ( min * 60 * 1000 );
+    uint sec = (uint) ( milliSec / 1000 );
+    milliSec -= sec * 1000;
+    
     if ( m_name.isNull() )
-      kdDebug() << "Elapsed time (in milliseconds): " << m_time.elapsed() << endl;
+      kdDebug() << "*** Elapsed time: " << min << " min, " << sec << " sec, " << milliSec << " msec" << endl;
     else      
-      kdDebug() << "(" << m_name << ") Elapsed time (in milliseconds): " << m_time.elapsed() << endl;
+      kdDebug() << "*** (" << m_name << ") Elapsed time " << min << " min, " << sec << " sec, " << milliSec << " msec" << endl;
   }
 
  private:

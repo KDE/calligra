@@ -5,6 +5,7 @@
 #include "kspread_undo.h"
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
+#include "kspread_global.h"
 
 #include <kmessagebox.h>
 #include <kcursor.h>
@@ -490,6 +491,7 @@ bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
                                   bool extendSelection)
 {
+  ElapsedTime et( "KSpreadCanvas::gotoLocation" );
   kdDebug() << "GotoLocation: " << location.x() << ", " << location.x() << endl;
 
   if ( table && (table != activeTable() ))
@@ -534,6 +536,7 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
 
 void KSpreadCanvas::scrollToCell(QPoint location)
 {
+  ElapsedTime et( "KSpreadCanvas::scrollToCell" );
   KSpreadSheet* table = activeTable();
   if (table == NULL)
     return;
@@ -1316,6 +1319,8 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   if ( !table )
     return;
 
+  ElapsedTime et( "KSpreadCanvas::paintEvent" );
+
   double dwidth = doc()->unzoomItX( width() );
   KoRect rect = doc()->unzoomRect( _ev->rect() & QWidget::rect() );
   rect.moveBy( xOffset(), yOffset() );
@@ -1536,6 +1541,7 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
 
 void KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 {
+  ElapsedTime et( "moveDirection" );
   QPoint destination;
   QPoint cursor;
 
@@ -1631,6 +1637,7 @@ void KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelecti
   }
 
   gotoLocation(destination, activeTable(), extendSelection);
+  ElapsedTime et1( "updateEditWidget" );
   m_pView->updateEditWidget();
 }
 
@@ -1679,6 +1686,7 @@ void KSpreadCanvas::processEnterKey(QKeyEvent* event)
 
 void KSpreadCanvas::processArrowKey( QKeyEvent *event)
 {
+  ElapsedTime et( "KSpreadCanvas::processArrowKey" );
   /* NOTE:  hitting the tab key also calls this function.  Don't forget
      to account for it
   */
@@ -1711,7 +1719,7 @@ void KSpreadCanvas::processArrowKey( QKeyEvent *event)
     Q_ASSERT(false);
     break;
   }
-
+  
   moveDirection(direction, makingSelection);
 }
 
@@ -2131,6 +2139,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     QWidget::keyPressEvent( _ev );
     return;
   }
+  ElapsedTime et( "KSpreadCanvas::keyPressEvent" );
 
   // Always accept so that events are not
   // passed to the parent.
