@@ -25,7 +25,6 @@
 
 #include "vvisitor.h"
 
-
 class VSelectNodes : public VVisitor
 {
 public:
@@ -51,5 +50,18 @@ private:
 	KoRect m_rect;
 };
 
+class VTestNodes : public VVisitor
+{
+public:
+	VTestNodes( const KoRect& rect ) : m_rect( rect ) {}
+
+	virtual void visitVPath( VPath& path );
+	virtual void visitVLayer( VLayer& layer );
+
+private:
+	KoRect m_rect;
+};
+
 #endif
+
 

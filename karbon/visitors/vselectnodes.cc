@@ -24,7 +24,6 @@
 #include "vlayer.h"
 #include "vdocument.h"
 
-
 void
 VSelectNodes::visitVPath( VPath& path )
 {
@@ -45,9 +44,13 @@ VSelectNodes::visitVPath( VPath& path )
 		}
 		else
 		{
+			if( m_exclusive )
+			{
+				for( int i = 0; i < path.current()->degree(); i++ )
+					path.current()->selectPoint( i, false );
+			}
+
 			if( path.current()->type() == VSegment::curve )
-//				path.current()->ctrlPointFixing() != VSegment::first &&
-//				m_rect.contains( path.current()->point( 0 ) ) )
 			{
 				// select first control point, when previous knot is selected:
 				if(
@@ -56,8 +59,6 @@ VSelectNodes::visitVPath( VPath& path )
 				{
 					path.current()->selectPoint( 0, true );
 				}
-				else
-					path.current()->selectPoint( 0, false );
 			}
 
 //			if( path.current()->type() == VSegment::curve 
@@ -82,11 +83,6 @@ VSelectNodes::visitVPath( VPath& path )
 
 				setSuccess();
 			}
-			else if( m_exclusive )
-			{
-				for( int i = 0; i < path.current()->degree(); i++ )
-					path.current()->selectPoint( i, !m_select );
-			}
 		}
 		path.next();
 	}
@@ -107,3 +103,36 @@ VSelectNodes::visitVLayer( VLayer& layer )
 			itr.current()->accept( *this );
 	}
 }
+
+void
+VTestNodes::visitVPath( VPath& path )
+{
+	path.first();
+
+	while( path.current() )
+	{
+		for( int i = 0; i < path.current()->degree(); i++ )
+			if( m_rect.contains( path.current()->point( i ) ) &&
+				path.current()->pointIsSelected( i ) )
+					setSuccess();
+
+		path.next();
+	}
+}
+
+void
+VTestNodes::visitVLayer( VLayer& layer )
+{
+	VDocument* doc = (VDocument*)layer.parent();
+	if ( ( layer.state() != VObject::deleted ) &&
+	     ( ( doc->selectionMode() == VDocument::AllLayers ) ||
+	       ( doc->selectionMode() == VDocument::VisibleLayers && ( layer.state() == VObject::normal || layer.state() == VObject::normal_locked ) ) ||
+	       ( doc->selectionMode() == VDocument::SelectedLayers && layer.selected() ) ||
+	       ( doc->selectionMode() == VDocument::ActiveLayer && doc->activeLayer() == &layer ) ) )
+	{
+		VObjectListIterator itr( layer.objects() );
+		for( ; itr.current(); ++itr )
+			itr.current()->accept( *this );
+	}
+}
+

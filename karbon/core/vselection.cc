@@ -252,7 +252,7 @@ VSelection::handleNode( const KoPoint &point ) const
 bool
 VSelection::pathNode( const KoRect& rect )
 {
-	VSelectNodes op( rect, true, false );
+	VTestNodes op( rect );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
