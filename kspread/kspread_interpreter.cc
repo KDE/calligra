@@ -2625,6 +2625,73 @@ static bool kspreadfunc_imsub( KSContext& context )
 }
 
 
+static bool kspreadfunc_improduct_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_improduct_helper( context, (*it)->listValue(), result ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
+      {
+      double imag,real,imag1,real1;
+      bool ok;
+      if(!result.isEmpty())
+        {
+        imag=imag_complexe(result, ok);
+        real=real_complexe(result,  ok);
+        imag1=imag_complexe((*it)->stringValue(), ok);
+        real1=real_complexe((*it)->stringValue(), ok);
+        result=kspreadfunc_create_complex(real*real1+(imag*imag1)*-1,real*imag1+real1*imag);
+        }
+      else
+        {
+        imag1=imag_complexe((*it)->stringValue(), ok);
+        real1=real_complexe((*it)->stringValue(), ok);
+        result=kspreadfunc_create_complex(real1,imag1);
+        }
+      }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      {
+      double imag,real,imag1,real1;
+      bool ok;
+      imag=imag_complexe(result, ok);
+      real=real_complexe(result,  ok);
+      imag1=0;
+      real1=(*it)->doubleValue();
+      if(!result.isEmpty())
+        result=kspreadfunc_create_complex(real*real1+(imag*imag1)*-1,real*imag1+real1*imag);
+      else
+        result=kspreadfunc_create_complex(real1,imag1);
+      }
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_improduct( KSContext& context )
+{
+  QString result ;
+  bool b = kspreadfunc_improduct_helper( context, context.value()->listValue(), result );
+  bool ok;
+  QString tmp;
+  double val=result.toDouble(&ok);
+  if(ok&&b)
+        context.setValue( new KSValue( val ) );
+  else if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+
 static bool kspreadfunc_polr( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -2908,6 +2975,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "IMREAL", new KSValue( new KSBuiltinFunction( module,"IMREAL",kspreadfunc_complex_real) ) );
   module->addObject( "IMSUM", new KSValue( new KSBuiltinFunction( module, "IMSUM", kspreadfunc_imsum ) ) );
   module->addObject( "IMSUB", new KSValue( new KSBuiltinFunction( module, "IMSUB", kspreadfunc_imsub ) ) );
+  module->addObject( "IMPRODUCT", new KSValue( new KSBuiltinFunction( module, "IMPRODUCT", kspreadfunc_improduct ) ) );
   return module;
 }
 

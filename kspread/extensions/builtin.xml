@@ -1350,6 +1350,38 @@
 	<Example>IMSUB(1.2;"1i") returns "1.2-i"</Example>
       </Help>
     </Function>
+
+    <Function>
+      <Name>IMPRODUCT</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMPRODUCT() returns the product of several complex number of form x+yi.</Text>
+	<Syntax>IMPRODUCT( values; value; ... )</Syntax>
+	<Example>IMPRODUCT(1.2;"3.4+5i") returns "4.08+6i"</Example>
+	<Example>IMPRODUCT(1.2;"1i") returns "+1.2i"</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Logic</GroupName>
