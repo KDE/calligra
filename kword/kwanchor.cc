@@ -40,11 +40,10 @@ KWAnchor::~KWAnchor()
 
 void KWAnchor::move( int x, int y )
 {
-    kdDebug() << "KWAnchor::move " << x << "," << y << endl;
+    kdDebug() << this << " KWAnchor::move " << x << "," << y << endl;
     int paragy = paragraph()->rect().y();
     xpos = x;
     ypos = y;
-    KWDocument * doc = m_frameset->kWordDocument();
     KWTextFrameSet * fs = textDocument()->textFrameSet();
     QPoint nPoint;
     if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )

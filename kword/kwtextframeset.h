@@ -260,6 +260,7 @@ protected:
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd );
     bool checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
     const QList<KWFrame> & framesInPage( int pageNum ) const;
+    void frameResized( KWFrame *theFrame );
 
 private:
     /**
