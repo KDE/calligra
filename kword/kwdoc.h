@@ -293,6 +293,7 @@ public:
 
     void appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage = TRUE*/ );
     void removePage( int num );
+    void afterRemovePages();
 
     ProcessingType processingType() { return m_processingType;  }
 

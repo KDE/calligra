@@ -2468,8 +2468,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
     emit newContentsSize();
 
     if ( isHeaderVisible() || isFooterVisible() )
-        recalcFrames();  // Get headers and footers on the new page
-    // setModified(TRUE); This is called by formatMore, possibly on loading -> don't set modified
+        recalcFrames( thisPageNum );  // Get headers and footers on the new page
 
     recalcVariables( VT_PGNUM );
     emit pageNumChanged();
@@ -2527,7 +2526,12 @@ void KWDocument::removePage( int num )
 #ifdef DEBUG_PAGES
     kdDebug(32002) << "KWDocument::removePage -- -> " << m_pages << endl;
 #endif
+    // Emitting this one for each page being removed helps giving the user some feedback
     emit pageNumChanged();
+}
+
+void KWDocument::afterRemovePages()
+{
     recalcVariables( VT_PGNUM );
     recalcFrames();
     emit newContentsSize();

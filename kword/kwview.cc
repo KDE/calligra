@@ -876,7 +876,7 @@ void KWView::setupActions()
     connect( actionTableStyle, SIGNAL( activated( int ) ),
              this, SLOT( tableStyleSelected( int ) ) );
     updateTableStyleList();
-    
+
     // ---------------------- Tools menu
 
 
@@ -1246,7 +1246,15 @@ void KWView::updatePageInfo()
         // To avoid bugs, apply max page number in case a page was removed.
         m_currentPage = QMIN( m_currentPage, m_doc->getPages()-1 );
 
-        m_sbPageLabel->setText( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->getPages())+' ' );
+        QString oldText = m_sbPageLabel->text();
+        QString newText = QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->getPages())+' ';
+        if ( newText != oldText )
+        {
+            m_sbPageLabel->setText( newText );
+            // Need to repaint immediately. Otherwise when deleting 100 pages
+            // at once, there's no feedback.
+            m_sbPageLabel->repaint();
+        }
     }
     slotUpdateRuler();
 }
@@ -3689,7 +3697,7 @@ void KWView::frameStyleSelected( int index )
     {
         KWFrame * single = m_gui->canvasWidget()->currentFrameSetEdit()->currentFrame();
         if ( single ) {
-            
+
             KCommand *cmd = new KWFrameStyleCommand( i18n("Apply framestyle to frame"), single, m_doc->frameStyleCollection()->frameStyleAt( index ) );
             if (cmd) {
                 m_doc->addCommand( cmd );
@@ -3704,9 +3712,9 @@ void KWView::frameStyleSelected( int index )
             return; // nope, no frames are selected.
         // yes, indeed frames are selected.
         QPtrListIterator<KWFrame> it( selectedFrames );
-        
+
         KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply framestyle to frame") : i18n("Apply framestyle to frames"));
-        
+
         for ( ; it.current() ; ++it )
         {
             KWFrame *curFrame = it.current();
@@ -3768,11 +3776,11 @@ void KWView::tableStyleSelected( int index )
         QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
         if (selectedFrames.count() <= 0)
             return; // nope, no frames are selected.
-        
+
         QPtrListIterator<KWFrame> it( selectedFrames );
-        
+
         KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply tablestyle to frame") : i18n("Apply tablestyle to frames"));
-        
+
         for ( ; ( ( it.current() ) && ( it.current()->frameSet()->type() == FT_TEXT ) ); ++it )
         {
             KWFrame *curFrame = it.current();

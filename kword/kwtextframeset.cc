@@ -1833,6 +1833,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         kdDebug(32002) << "slotAfterFormatting too much space (" << bottom << ", " << availHeight << ") , trying to remove last frame" << endl;
 #endif
         int lastPage = m_doc->getPages() - 1;
+        bool removed = false;
         // Last frame is empty -> try removing last page, and more if necessary
         while ( lastPage > 0 && m_doc->canRemovePage( lastPage ) )
         {
@@ -1842,8 +1843,12 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 kdWarning() << "Didn't manage to remove page " << lastPage << " (still having " << m_doc->getPages() << " pages ). Aborting" << endl;
                 break;
             }
+            removed = true;
             lastPage = m_doc->getPages()-1;
         }
+        // Do all the recalc in one go. Speeds up deleting many pages.
+        if ( removed )
+            m_doc->afterRemovePages();
     }
     // Handle the case where the last frame is in AutoExtendFrame mode
     // and there is less text than space
