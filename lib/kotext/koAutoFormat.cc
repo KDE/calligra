@@ -405,6 +405,7 @@ void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
     {
         backCursor.setIndex( backCursor.index() + 1 );
         QChar secondChar = backCursor.parag()->at( backCursor.index() )->c;
+        //kdDebug()<<" secondChar :"<<secondChar<<endl;
         if ( isUpper( secondChar ) )
         {
             // Check next letter - we still want to be able to write fully uppercase words...
@@ -421,6 +422,8 @@ void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
                 textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
 
                 QString replacement = word[1].lower();
+                txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, replacement,KoTextObject::HighlightSelection,i18n("Autocorrect (Convert two Upper Case letters to one Upper Case and one Lower Case letter.)") ));
+
                 bNeedMove = true;
             }
         }
