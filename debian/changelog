@@ -1,3 +1,9 @@
+koffice (1:1.1.1-4) unstable; urgency=low
+
+  * And rebuilt with libpng2 (closes: Bug#128584, Bug#129866).
+
+ -- Ben Burton <benb@acm.org>  Sun, 20 Jan 2002 21:03:28 +1100
+
 koffice (1:1.1.1-3) unstable; urgency=low
 
   * Added patches for hppa (closes: Bug#126554).
