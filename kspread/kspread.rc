@@ -122,7 +122,7 @@
  <Action name="menu_average"/>
  <Action name="menu_count"/>
 </Menu>
-<ToolBar fullWidth="false" name="editAndColumnAndSortAndPartToolBar"><text>Edit</text>
+<ToolBar fullWidth="true" name="editAndColumnAndSortAndPartToolBar"><text>Edit</text>
  <Action name="undo"/>
  <Action name="redo"/>
  <Separator/>
@@ -142,12 +142,12 @@
  <Action name="insertPart"/>
  <Action name="transform"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="mathToolBar"><text>Math</text>
+<ToolBar fullWidth="true" name="mathToolBar"><text>Math</text>
  <Action name="autoSum"/>
  <Action name="insertMathExpr"/>
  <Action name="formulaSelection"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="fontPropertyToolBar"><text>Format</text>
+<ToolBar fullWidth="true" name="fontPropertyToolBar"><text>Format</text>
  <Action name="selectFont"/>
  <Action name="selectFontSize"/>
  <Separator/>
@@ -173,7 +173,7 @@
  <Action name="decreaseindent"/>
  <Action name="increaseindent"/>
 </ToolBar>
-<ToolBar fullWidth="false" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
+<ToolBar fullWidth="true" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
  <Action name="borderLeft"/>
  <Action name="borderTop"/>
  <Action name="borderRight"/>
