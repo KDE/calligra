@@ -18,6 +18,7 @@
 */
 
 #include <qstring.h>
+#include <kofficemacros.h>
 class QDomElement;
 class KoXmlWriter;
 class KoGenStyle;
@@ -32,7 +33,7 @@ class KoOasisContext;
  * This is the structure associated with a paragraph (KoTextParag),
  * to define the bullet or numbering of the paragraph.
  */
-class KoParagCounter
+class KDE_EXPORT KoParagCounter
 {
 public:
     KoParagCounter();

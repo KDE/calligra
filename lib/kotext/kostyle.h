@@ -44,7 +44,7 @@ struct KoStyleChangeDef {
 };
 typedef QMap<KoParagStyle *, KoStyleChangeDef> KoStyleChangeDefMap;
 
-class KoStyleCollection
+class KDE_EXPORT KoStyleCollection
 {
 public:
     KoStyleCollection();
@@ -124,7 +124,7 @@ private:
  * A KoCharStyle is a set of formatting attributes (font, color, etc.)
  * to be applied to a run of text.
  */
-class KoCharStyle
+class KDE_EXPORT KoCharStyle
 {
 public:
     /** Create a blank style (with default attributes) */
@@ -166,7 +166,7 @@ protected:
  * A paragraph style is a combination of a character style
  * and paragraph-layout attributes, all grouped under a name.
  */
-class KoParagStyle : public KoCharStyle
+class KDE_EXPORT KoParagStyle : public KoCharStyle
 {
 public:
     /** Create a blank style (with default attributes) */

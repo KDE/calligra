@@ -28,6 +28,7 @@
 #include <qfont.h>
 #include <qstring.h>
 #include <qdict.h>
+#include <kofficemacros.h>
 
 class KoGenStyle;
 class QFontMetrics;
@@ -47,7 +48,7 @@ class KoOasisContext;
  * is a temporary format (out of collection) and a KoTextFormat* is a format
  * from the collection.
  */
-class KoTextFormat
+class KDE_EXPORT KoTextFormat
 {
     friend class KoTextFormatCollection; // it sets 'collection'
     //friend class KoTextDocument;

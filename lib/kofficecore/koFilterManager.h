@@ -41,7 +41,7 @@ class KoDocument;
  *  @author Torben Weis <weis@kde.org>
  *  @author Werner Trobin <trobin@kde.org>
  */
-class KoFilterManager : public QObject
+class KDE_EXPORT KoFilterManager : public QObject
 {
     Q_OBJECT
 public:

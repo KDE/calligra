@@ -46,7 +46,7 @@ class KoStyleManagerPrivate;
 /******************************************************************/
 /* Class: KoStyleManager                                          */
 /******************************************************************/
-class KoStyleManager : public KDialogBase
+class KDE_EXPORT KoStyleManager : public KDialogBase
 {
     Q_OBJECT
 
@@ -112,7 +112,7 @@ protected:
     QString generateUniqueName();
 };
 
-class KoStyleManagerTab : public QWidget {
+class KDE_EXPORT KoStyleManagerTab : public QWidget {
     Q_OBJECT
 public:
     KoStyleManagerTab(QWidget *parent) : QWidget(parent) {};
@@ -131,7 +131,7 @@ protected:
 
 // A tab to edit parts of the parag-layout of the style
 // Acts as a wrapper around KoParagLayoutWidget [which doesn't know about styles].
-class KoStyleParagTab : public KoStyleManagerTab
+class KDE_EXPORT KoStyleParagTab : public KoStyleManagerTab
 {
     Q_OBJECT
 public:
@@ -150,7 +150,7 @@ private:
 };
 
 // The "font" tab. Maybe we should put the text color at the bottom ?
-class KoStyleFontTab : public KoStyleManagerTab
+class KDE_EXPORT KoStyleFontTab : public KoStyleManagerTab
 {
     Q_OBJECT
 public:

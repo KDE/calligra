@@ -34,7 +34,7 @@ class KoDocument;
 class KoTextParag;
 class KoTextIterator;
 
-class KoBgSpellCheck : public QObject
+class KDE_EXPORT KoBgSpellCheck : public QObject
 {
     Q_OBJECT
 public:

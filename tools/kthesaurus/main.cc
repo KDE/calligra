@@ -32,7 +32,7 @@ static KCmdLineOptions options[] =
 	KCmdLineLastOption
 };
 
-extern "C" int kdemain(int argc, char **argv)
+extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
 
 	KAboutData aboutData("kthesaurus", I18N_NOOP("KThesaurus"), "1.0",

@@ -30,7 +30,7 @@
 static const char* description=I18N_NOOP("KOffice Workspace");
 static const char* version=VERSION;
 
-extern "C" int kdemain( int argc, char **argv )
+extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
   KAboutData * aboutData = new KAboutData( "koshell", I18N_NOOP("KOffice Workspace"),
      version, description, KAboutData::License_GPL,

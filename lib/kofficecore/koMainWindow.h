@@ -47,7 +47,7 @@ namespace KParts
  *
  * @note This class does NOT need to be subclassed in your application.
  */
-class KoMainWindow : public KParts::MainWindow
+class KDE_EXPORT KoMainWindow : public KParts::MainWindow
 {
     Q_OBJECT
 public:
