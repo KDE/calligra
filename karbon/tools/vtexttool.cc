@@ -62,6 +62,7 @@ static void traceShape( VKoPainter* p, int x, int y, int w, int h )
 ShadowPreview::ShadowPreview( ShadowWidget* parent )
 		: QWidget( parent ), m_parent( parent )
 {
+	setBackgroundMode( Qt::NoBackground );
 	setMinimumSize( 60, 60 );
 
 	connect( this, SIGNAL( changed( int, int, bool ) ), m_parent, SLOT( setShadowValues( int, int, bool ) ) );
