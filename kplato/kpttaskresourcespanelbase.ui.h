@@ -11,4 +11,14 @@ void KPTTaskResourcesPanelBase::init()
 {
     effort = new KPTDurationWidget( groupBox1, "effort" );
     layout1->addWidget( effort, 0, 1 );
+
+    // Reset the tab order now that we have added a widget.
+    setFocusProxy(effort);
+    effort->setFocusPolicy(QWidget::StrongFocus);
+    QWidget::setTabOrder(effort, optimisticValue);
+    QWidget::setTabOrder(optimisticValue, effortType);
+    QWidget::setTabOrder(effortType, risk);
+    QWidget::setTabOrder(risk, pessimisticValue);
+    QWidget::setTabOrder(pessimisticValue, groupList);
+    QWidget::setTabOrder(groupList, resourceTable);
 }
