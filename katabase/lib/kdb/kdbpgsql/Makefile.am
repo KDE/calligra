@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) $(PGSQLINC)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) $(PGSQLINC) -I../kdbcore
 LDFLAGS = $(all_libraries) $(MICO_LDFLAGS) $(PGSQLLIB) $(KATABASE_LIBS) -version-info 1:0:0
 # libkatabasecore_la_LIBADD = ../../../lib/kofficeui/libkofficeui.la
 

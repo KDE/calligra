@@ -8,18 +8,18 @@ PGSQLDataSource::PGSQLDataSource()
   
   KDB::PROPINFO infoHost;
   
-  infoHost.wstrName = CORBA::wstring_dup( L"init/host" );
-  infoHost.wstrDescr = CORBA::wstring_dup( L"The hostname of the data store server" );
-  infoHost.strType = CORBA::string_dup( "string" );
+  infoHost.wstrName = "init/host";
+  infoHost.wstrDescr = "The hostname of the data store server";
+  infoHost.strType = "string";
   infoHost.mode = KDB::READWRITE;
   
   m_infos.insert( "init/host", infoHost );
   
   KDB::PROPINFO infoDB;
   
-  infoDB.wstrName = CORBA::wstring_dup( L"init/database" );
-  infoDB.wstrDescr = CORBA::wstring_dup( L"The database being accessed" );
-  infoDB.strType = CORBA::string_dup( "string" );
+  infoDB.wstrName = "init/database";
+  infoDB.wstrDescr = "The database being accessed";
+  infoDB.strType = "string";
   infoDB.mode = KDB::READWRITE;
   
   m_infos.insert( "init/database", infoDB );
@@ -39,8 +39,8 @@ void PGSQLDataSource::Initialize()
   KDB::PROP_var varHostProp = new KDB::PROP;
   KDB::PROP_var varDBProp = new KDB::PROP;
   
-  varHostProp->wstrName = CORBA::wstring_dup( L"init/host" );
-  varDBProp->wstrName = CORBA::wstring_dup( L"init/database" );
+  varHostProp->wstrName = "init/host";
+  varDBProp->wstrName = "init/database";
   
   GetProperty( varHostProp );
   GetProperty( varDBProp );
@@ -50,7 +50,7 @@ void PGSQLDataSource::Initialize()
     // the host property was not set
     
     KDB::PropertyMissing exc;
-    exc.wstrName = CORBA::wstring_dup( L"init/host" );
+    exc.wstrName = "init/host";
     
     mico_throw( exc );
     
@@ -61,7 +61,7 @@ void PGSQLDataSource::Initialize()
     // the database property was not set
     
     KDB::PropertyMissing exc;
-    exc.wstrName = CORBA::wstring_dup( L"init/database" );
+    exc.wstrName = "init/database";
     
     mico_throw( exc );
     
@@ -69,8 +69,8 @@ void PGSQLDataSource::Initialize()
   
   // now we set those properties readonly
   
-  QString qstrHost = WString2QString( L"init/host" );
-  QString qstrDB = WString2QString( L"init/database" );
+  QString qstrHost = "init/host";
+  QString qstrDB = "init/database";
   
   SetPropertyMode( qstrHost, KDB::READ );
   SetPropertyMode( qstrDB, KDB::READ );
@@ -83,8 +83,8 @@ void PGSQLDataSource::UnInitialize()
 {
   // now we set those properties back to normal
   
-  QString qstrHost = WString2QString( L"init/host" );
-  QString qstrDB = WString2QString( L"init/database" );
+  QString qstrHost = "init/host";
+  QString qstrDB = "init/database";
   
   SetPropertyMode( qstrHost, KDB::READWRITE );
   SetPropertyMode( qstrDB, KDB::READWRITE );
