@@ -54,3 +54,5 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Now we can save picture from file to disk
 - Add Closed Line Object (freehand, polyline, quadric bezier curve, cubic bezier curve)
 - Add New Cursor for rotate tool and freehand tool
+- Merged actions for lines, shapes and arrangement of objects into
+  an appropriate drop-down menu
