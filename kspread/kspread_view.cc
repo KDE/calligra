@@ -3583,14 +3583,35 @@ void KSpreadView::slotListChoosePopupMenu( )
  m_popupListChoose = new QPopupMenu();
  int id = 0;
  QRect selection( m_pTable->selectionRect() );
- if(selection.left()==0)
+ if ( selection.left() == 0 ) 
    selection.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
 		       m_pCanvas->markerColumn(),m_pCanvas->markerRow());
  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
  QString tmp=cell->text();
  QStringList itemList;
- KSpreadCell* c = m_pTable->firstCell();
- for( ;c; c = c->nextCell() )
+
+ for ( int col = selection.left(); col <= selection.right(); ++col )
+ {
+   KSpreadCell * c = m_pTable->getFirstCellColumn( col );
+   while ( c )
+   {
+     if ( !c->isObscuringForced()
+          && !( col == m_pCanvas->markerColumn() 
+                && c->row() == m_pCanvas->markerRow()) )
+     {
+       if ( c->isString() && c->text() != tmp && !c->text().isEmpty() )
+       {
+         if ( itemList.findIndex( c->text() ) == -1 )
+           itemList.append(c->text());
+       }
+     }
+     
+     c = m_pTable->getNextCellDown( col, c->row() );
+   }
+ }
+
+ /* TODO: remove this later:
+    for( ;c; c = c->nextCell() )
    {
      int col = c->column();
      if ( selection.left() <= col && selection.right() >= col
@@ -3603,7 +3624,9 @@ void KSpreadView::slotListChoosePopupMenu( )
 	   }
 
        }
-   }
+    }
+ */
+
  for ( QStringList::Iterator it = itemList.begin(); it != itemList.end();++it )
    m_popupListChoose->insertItem( (*it), id++ );
 
@@ -4289,168 +4312,174 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
 
 void KSpreadView::resultOfCalc()
 {
-    double result=0.0;
-    int nbCell=0;
-    QRect n = activeTable()->selectionRect();
+    KSpreadTable * table = activeTable();
+    double result = 0.0;
+    int nbCell = 0;
+    QRect n = table->selectionRect();
     QRect tmpRect(n);
-    if(n.left()==0)
+    if (n.left() == 0)
         tmpRect.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),
                            m_pCanvas->markerColumn(), m_pCanvas->markerRow());
-    MethodOfCalc tmpMethod=m_pDoc->getTypeOfCalc() ;
+    MethodOfCalc tmpMethod = m_pDoc->getTypeOfCalc() ;
     if ( tmpMethod != NoneCalc )
     {
-        if( activeTable()->isColumnSelected() )
+        if ( table->isColumnSelected() )
         {
-            KSpreadCell* c = activeTable()->firstCell();
-            for( ;c; c = c->nextCell() )
+          for ( int col = tmpRect.left(); col <= tmpRect.right(); ++col )
+          {
+            KSpreadCell * c = table->getFirstCellColumn( col );
+            while ( c )
             {
-                int col = c->column();
-                if ( tmpRect.left() <= col && tmpRect.right() >= col
-                     &&!c->isObscuringForced())
+              if ( !c->isObscuringForced() )
+              {
+                if ( c->isNumeric() )
                 {
-                    if(c->isNumeric())
-                    {
-                        double val=c->valueDouble();
-                        switch(tmpMethod)
-                        {
-                        case SumOfNumber:
-                            result+=val;
-                            break;
-                        case Average:
-                            result+=val;
-                            break;
-                        case Min:
-                            if(result!=0)
-                                result=QMIN(val,result);
-                            else
-                                result=val;
-                            break;
-                        case Max:
-                            if(result!=0)
-                                result=QMAX(val,result);
-                            else
-                                result=val;
-                            break;
-                        case Count:
-                        case NoneCalc:
-                            break;
-                        default:
-                            break;
-                        }
-                        nbCell++;
-                    }
+                  double val = c->valueDouble();
+                  switch(tmpMethod)
+                  {
+                   case SumOfNumber:
+                    result += val;
+                    break;
+                   case Average:
+                    result += val;
+                    break;
+                   case Min:
+                    if (result != 0)
+                      result = QMIN(val, result);
+                    else
+                      result = val;
+                    break;
+                   case Max:
+                    if (result != 0)
+                      result = QMAX(val, result);
+                    else
+                      result = val;
+                    break;
+                   case Count:
+                   case NoneCalc:
+                    break;
+                   default:
+                    break;
+                  }
+                  ++nbCell;
                 }
+              }
+              c = table->getNextCellDown( col, c->row() );
             }
+          }
         }
-        else if( activeTable()->isRowSelected() )
+        else if ( table->isRowSelected() )
         {
-            KSpreadCell* c = activeTable()->firstCell();
-            for( ; c; c = c->nextCell() )
+          for ( int row = tmpRect.top(); row <= tmpRect.bottom(); ++row )
+          {
+            KSpreadCell * c = table->getFirstCellRow( row );
+            while ( c )
             {
-                int row = c->row();
-                if ( tmpRect.top() <= row && tmpRect.bottom() >= row
-                     &&!c->isObscuringForced())
+              if ( !c->isObscuringForced() && c->isNumeric() )
+              {
+                double val = c->valueDouble();
+                switch(tmpMethod )
                 {
-                    if(c->isNumeric())
-                    {
-                        double val=c->valueDouble();
-                        switch(tmpMethod )
-                        {
-                        case SumOfNumber:
-                            result+=val;
-                            break;
-                        case Average:
-                            result+=val;
-                            break;
-                        case Min:
-                            if(result!=0)
-                                result=QMIN(val,result);
-                            else
-                                result=val;
-                            break;
-                        case Max:
-                            if(result!=0)
-                                result=QMAX(val,result);
-                            else
-                                result=val;
-                            break;
-                        case Count:
-                        case NoneCalc:
-                            break;
-                        default:
-                            break;
-                        }
-                        nbCell++;
-                    }
+                 case SumOfNumber:
+                  result += val;
+                  break;
+                 case Average:
+                  result += val;
+                  break;
+                 case Min:
+                  if (result != 0)
+                    result = QMIN(val, result);
+                  else
+                    result = val;
+                  break;
+                 case Max:
+                  if (result != 0)
+                    result = QMAX(val, result);
+                  else
+                    result = val;
+                  break;
+                 case Count:
+                 case NoneCalc:
+                  break;
+                 default:
+                  break;
                 }
+                ++nbCell;
+              }
+              c = table->getNextCellRight( c->column(), row );
             }
+          }
         }
         else
         {
-            for (int i=tmpRect.left();i<=tmpRect.right();i++)
-                for(int j=tmpRect.top();j<=tmpRect.bottom();j++)
+          int right  = tmpRect.right();
+          int bottom = tmpRect.bottom();
+          KSpreadCell * cell;
+
+          for ( int i = tmpRect.left(); i <= right; ++i )
+            for(int j = tmpRect.top(); j <= bottom; ++j )
+            {
+              cell = activeTable()->cellAt( i, j );
+              if ( !cell->isDefault() && cell->isNumeric() )
+              {
+                double val = cell->valueDouble();
+                switch(tmpMethod )
                 {
-                    KSpreadCell *cell = activeTable()->cellAt( i, j );
-                    if(!cell->isDefault() && cell->isNumeric())
-                    {
-                        double val= cell->valueDouble();
-                        switch(tmpMethod )
-                        {
-                        case SumOfNumber:
-                            result+=val;
-                            break;
-                        case Average:
-                            result+=val;
-                            break;
-                        case Min:
-                            if(result!=0)
-                                result=QMIN(val,result);
-                            else
-                                result=val;
-                            break;
-                        case Max:
-                            if(result!=0)
-                                result=QMAX(val,result);
-                            else
-                                result=val;
-                            break;
-                        case Count:
-                        case NoneCalc:
-                            break;
-                        default:
-                            break;
-                        }
-                        nbCell++;
-                    }
+                 case SumOfNumber:
+                  result += val;
+                  break;
+                 case Average:
+                  result += val;
+                  break;
+                 case Min:
+                  if (result != 0)
+                    result = QMIN(val, result);
+                  else
+                    result = val;
+                  break;
+                 case Max:
+                  if (result != 0)
+                    result = QMAX(val,result);
+                  else
+                    result = val;
+                  break;
+                 case Count:
+                 case NoneCalc:
+                  break;
+                 default:
+                  break;
                 }
+                ++nbCell;
+              }
+            }
         }
     }
     QString tmp;
     switch(tmpMethod )
     {
     case SumOfNumber:
-        tmp=i18n(" Sum: %1").arg(result);
+        tmp = i18n(" Sum: %1").arg(result);
         break;
     case Average:
-        result=result/nbCell;
-        tmp=i18n("Average: %1").arg(result);
+        result = result/nbCell;
+        tmp = i18n("Average: %1").arg(result);
         break;
     case Min:
-        tmp=i18n("Min: %1").arg(result);
+        tmp = i18n("Min: %1").arg(result);
         break;
     case Max:
-        tmp=i18n("Max: %1").arg(result);
+        tmp = i18n("Max: %1").arg(result);
         break;
     case Count:
-        tmp=i18n("Count: %1").arg(nbCell);
+        tmp = i18n("Count: %1").arg(nbCell);
         break;
     case NoneCalc:
-        tmp="";
+        tmp = "";
         break;
     }
 
     if ( m_sbCalcLabel )
-        m_sbCalcLabel->setText(QString(" ")+tmp+' ');
+        m_sbCalcLabel->setText(QString(" ") + tmp + ' ');
 }
 
 void KSpreadView::statusBarClicked(int _id)

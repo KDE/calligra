@@ -2401,6 +2401,15 @@ void KSpreadCanvas::convertToDate( KSpreadCell * cell )
 
 bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
 {
+  if (!(_ev->state() & ControlButton ))
+    return false;
+
+  int key = _ev->key();
+  if ( key != Key_Exclam && key != Key_At && key != Key_Ampersand 
+       && key != Key_Dollar && key != Key_Percent && key != Key_AsciiCircum
+       && key != Key_NumberSign )
+    return false;
+
   KSpreadCell  * cell = 0L;
   KSpreadTable * table = activeTable();
   QRect rect = table->selectionRect();
