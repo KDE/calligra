@@ -155,8 +155,8 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
     grid3->activate();
 
     connect(font,SIGNAL(clicked()),this,SLOT(changeFont()));
-    connect( grid, SIGNAL( toggled( bool ) ),
-             this, SLOT( changeState( bool ) ) );
+    /*connect( grid, SIGNAL( toggled( bool ) ),
+      this, SLOT( changeState( bool ) ) );*/
     /*connect( xaxis, SIGNAL( toggled( bool ) ),
       this, SLOT( changeXaxisState( bool ) ) );*/
 }
