@@ -303,6 +303,9 @@ void KPTResource::clearAppointments() {
 
 void KPTResource::makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) {
     //kdDebug()<<k_funcinfo<<task->name()<<": "<<start.toString()<<" dur "<<duration.toString()<<endl;
+    if (!m_calendar)
+        return; // hmmm, what todo?
+        
     //TODO: units and moderated by availability, and standard non-working days
     KPTDateTime time = start;
     KPTDateTime end = start+duration;
