@@ -335,6 +335,18 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
+=== Mimetypes/icons TODO ===
+- remove x-vnd.kexi.desktop in kdelibs
+- copy mimetypes and magic def. to kdelibs (keep it within Kexi for compat.)
+- remake kexi mime type svg icons
+- copy kexi mime icons to kdelibs, remove old one
+
+
+2004-10-15
+- small speedup for Kexi global objects on startup
+- fixes for KexiStartupFileDialog 
+- tests/newapi is compield by default. Other tests disabled.
+
 2004-10-14
 Kexi
 - more debug areas added

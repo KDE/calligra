@@ -258,7 +258,14 @@ bool KexiStartupHandler::init(int argc, char **argv)
 		QString srv = cdata.serverInfoString(false);
 		if (srv.isEmpty() || srv.lower()=="localhost")
 			srv = i18n("local database server");
-		msg += ("</p><p>"+i18n("Database server: %1.").arg(srv)+"</p>");
+		msg += ("</p><p>"+i18n("Database server: %1").arg(srv)+"</p>");
+		
+		QString usr;
+		if (cdata.userName.isEmpty())
+			usr = i18n("unspecified user", "(unspecified)");
+		else
+			usr = cdata.userName;
+		msg += ("<p>"+i18n("User name: %1").arg(usr)+"</p>");
 
 		QCString pwd;
 		if (QDialog::Accepted == KPasswordDialog::getPassword(pwd, msg)) {
