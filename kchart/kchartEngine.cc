@@ -4,6 +4,7 @@
 #include "enginedraw.h"
 
 #include "kchartparams.h"
+#include "kchartEngine.h"
 
 #include <qfont.h>
 #include <qcolor.h>
@@ -14,3 +15,196 @@
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
 
+
+
+int kchartEngine::init() {
+  // initializations
+  yscl = 0.0;
+  vyscl = 0.0;
+  xscl = 0.0;
+  vhighest = -MAXFLOAT;
+  vlowest  = MAXFLOAT;
+  highest  = -MAXFLOAT;
+  lowest   = MAXFLOAT;
+  ylbl_interval  = 0.0;
+  num_lf_xlbls   = 0;
+  xdepth_3Dtotal = 0;
+  ydepth_3Dtotal = 0;
+  xdepth_3D      = 0;	       
+  ydepth_3D      = 0;	 
+  hlf_barwdth	   = 0;		
+  hlf_hlccapwdth = 0;	
+  annote_len     = 0;
+  annote_hgt     = 0;
+  setno = 0;
+  hasxlabels = false;
+  
+
+
+  // For now, we are assuming that the data is in columns with no labels at all
+  // Ergo, num_sets is the number of rows
+  num_sets = data->rows();
+
+  // No data sets left -> bail out
+  if( num_sets < 1 ) {
+    debug( "No data" );
+    return -1;
+  }
+  num_hlc_sets = params->has_hlc_sets() ? num_sets : 0;
+
+  // And num_points is the number of columns
+  num_points = data->cols();
+
+  /* idiot checks */
+  if( imagewidth <= 0 || imageheight <=0 || !p  )
+    return -1;
+  if( num_points <= 0 ) {
+    debug( "No Data Available" );
+    return -1;
+  }
+  return 1; 
+}
+
+
+int kchartEngine::minmaxValues( 
+		  int num_points,
+		  int num_sets,
+		  float *uvol,
+		  float &highest, 
+		  float &lowest,
+		  float &vhighest,
+		  float &vlowest) {
+    if( params->stack_type == KCHARTSTACKTYPE_SUM )	// need to walk sideways
+      for(int j=0; j<num_points; ++j ) {
+	float set_sum = 0.0;
+	for(int i=0; i<num_sets; ++i ) {
+	  debug( "vor dem crash" );
+	  if( CELLEXISTS( i, j ) ) {
+	    debug( "nach dem crash" );
+	    set_sum += CELLVALUE( i, j );
+	    highest = MAX( highest, set_sum );
+	    lowest  = MIN( lowest,  set_sum );
+	  }
+	}
+      } else if( params->stack_type == KCHARTSTACKTYPE_LAYER ) // need to walk sideways
+	for(int j=0; j<num_points; ++j ) {
+	  float neg_set_sum = 0.0, pos_set_sum = 0.0;
+	  for(int i=0; i<num_sets; ++i )
+	    if( CELLEXISTS( i, j ) )
+	      if( CELLVALUE( i, j ) < 0.0 )
+		neg_set_sum += CELLVALUE( i, j );
+	      else
+		pos_set_sum += CELLVALUE( i, j );
+	  lowest  = MIN( lowest,  MIN(neg_set_sum,pos_set_sum) );
+	  highest = MAX( highest, MAX(neg_set_sum,pos_set_sum) );
+} else
+	  for(int i=0; i<num_sets; ++i )
+	    for(int j=0; j<num_points; ++j ) {
+	      debug( "Vor dem crash" );
+	      if( CELLEXISTS( i, j ) ) {
+		debug( "nach dem crash" );
+		highest = MAX( CELLVALUE( i, j ), highest );
+		lowest  = MIN( CELLVALUE( i, j ), lowest );
+	      }
+	    }
+    
+    debug( "done computation highest and lowest value" );
+
+    if( params->scatter )
+      for(int i=0; i<params->num_scatter_pts; ++i ) {
+	highest = MAX( ((params->scatter)+i)->val, highest );
+	lowest  = MIN( ((params->scatter)+i)->val, lowest  );
+      }
+    if( params->do_vol() ) { // for now only one combo set allowed
+      // vhighest = 1.0;
+      // vlowest  = 0.0;
+      for(int j=0; j<num_points; ++j )
+	if( uvol[j] != GDC_NOVALUE ) {
+	  vhighest = MAX( uvol[j], vhighest );
+	  vlowest  = MIN( uvol[j], vlowest );
+	}
+      if( vhighest == -MAXFLOAT )			// no values
+	vhighest = 1.0;						// for scaling, need a range
+      else if( vhighest < 0.0 )
+	vhighest = 0.0;
+      if( vlowest > 0.0 || vlowest == MAXFLOAT )
+	vlowest = 0.0;						// vol should always start at 0
+    }
+    
+    debug( "done vlowest computation" );
+
+    if( lowest == MAXFLOAT )
+      lowest = 0.0;
+    if( highest == -MAXFLOAT )
+      highest = 1.0;							// need a range
+    if( params->type == KCHARTTYPE_AREA  ||					// bars and area should always start at 0
+	params->type == KCHARTTYPE_BAR   ||
+	params->type == KCHARTTYPE_3DBAR ||
+	params->type == KCHARTTYPE_3DAREA )
+      if( highest < 0.0 )
+	highest = 0.0;
+      else if( lowest > 0.0 )						// negs should be drawn from 0
+	lowest = 0.0;
+    
+    if( params->requested_ymin != -MAXDOUBLE && params->requested_ymin < lowest )
+      lowest = params->requested_ymin;
+    if( params->requested_ymax != -MAXDOUBLE && params->requested_ymax > highest )
+      highest = params->requested_ymax;
+
+    qDebug( "done requested_* computation" );
+}
+
+
+
+/* ---------- scatter points  over all other plots ---------- */
+/* scatters, by their very nature, don't lend themselves to standard array of points */
+/* also, this affords the opportunity to include scatter points onto any type of chart */
+/* drawing of the scatter point should be an exposed function, so the user can */
+/*  use it to draw a legend, and/or add their own */
+void kchartEngine::drawScatter() {
+  QColor scatter_clr[params->num_scatter_pts];
+  QPointArray ct( 3 );
+  
+  for(int i=0; i<params->num_scatter_pts; ++i ) {
+    int		hlf_scatterwdth = (int)( (float)(PX(2)-PX(1))
+					 * (((float)(((params->scatter)+i)->width)/100.0)/2.0) );
+    int	scat_x = PX( ((params->scatter)+i)->point + (params->do_bar()?1:0) ),
+      scat_y = PY( ((params->scatter)+i)->val );
+    
+    if( ((params->scatter)+i)->point >= num_points ||				// invalid point
+	((params->scatter)+i)->point <  0 )
+      continue;
+    scatter_clr[i] = ((params->scatter)+i)->color;
+    
+    switch( ((params->scatter)+i)->ind ) {
+    case KCHARTSCATTER_TRIANGLE_UP:
+      ct.setPoint( 0, scat_x, scat_y );
+      ct.setPoint( 1, scat_x - hlf_scatterwdth, scat_y + hlf_scatterwdth );
+      ct.setPoint( 2, scat_x + hlf_scatterwdth, scat_y + hlf_scatterwdth );
+      if( !params->do_bar() )
+	if( ((params->scatter)+i)->point == 0 )
+	  ct.setPoint( 1, scat_x, ct.point( 1 ).y() );
+	else
+	  if( ((params->scatter)+i)->point == num_points-1 )
+	    ct.setPoint( 2, scat_x, ct.point( 2 ).y() );
+      p->setBrush( QBrush( scatter_clr[i] ) );
+      p->setPen( scatter_clr[i] );
+      p->drawPolygon( ct );
+      break;
+    case KCHARTSCATTER_TRIANGLE_DOWN:
+      ct.setPoint( 0, scat_x, scat_y );
+      ct.setPoint( 1, scat_x - hlf_scatterwdth, scat_y - hlf_scatterwdth );
+      ct.setPoint( 2, scat_x + hlf_scatterwdth, scat_y - hlf_scatterwdth );
+      if( !params->do_bar() )
+	if( ((params->scatter)+i)->point == 0 )
+	  ct.setPoint( 1, scat_x, ct.point( 1 ).y() );
+	else
+	  if( ((params->scatter)+i)->point == num_points-1 )
+	    ct.setPoint( 2, scat_x, ct.point( 2 ).y() );
+      p->setBrush( QBrush( scatter_clr[i] ) );
+      p->setPen( scatter_clr[i] );
+      p->drawPolygon( ct );
+      break;
+    }
+  }
+}

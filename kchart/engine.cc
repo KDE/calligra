@@ -42,8 +42,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
 	   KChartParameters* params, // the parameters of the chart
 	   const KChartData& data
 	   )
-{
-  // temporary stuff for initializing the engine
+{  // temporary stuff for initializing the engine
   keng.params = params;
   keng.data = &data;
   keng.p = p;
@@ -52,284 +51,12 @@ int out_graph( short imagewidth,         // no check for an output device that's
   return keng.out_graph();
 }
 
-int kchartEngine::doLabels() {
-  // Finally, the x labels are taken from the first row
-  QArray<QString> xlbl( data->cols() );
-#ifdef NOXLABELSFORNOW
-  debug( "Creating xlbl with %d entries", data->cols() );
-  for( int labels = 0; labels < data->cols(); labels++ ) {
-    debug( "Retrieving value at position %d", labels );
-    const KChartValue& cellval = data->cell( 0, labels );
-    debug( "type of field %d in row 0 is %s", labels, QVariant::typeToName( cellval.value.type() ).latin1() );
-    if( !cellval.exists ) {
-      debug( "No value for x label in col %d", labels );
-      continue;
-    }
-    if( cellval.value.type() != QVariant::String ) {
-      debug( "Value for x label in col %d is not a string", labels );
-      continue;
-    }
-    
-    debug( "Setting label %d to %s", labels, cellval.value.stringValue().latin1() );
-    //		QString l = cellval.value.stringValue();
-    xlbl.at( labels ) = cellval.value.stringValue();
-    debug( "Done setting label" );
-    hasxlabels = true;
-  }
-#endif  
-  debug( "labels read" );
-};
 
 
 
-int kchartEngine::minmaxValues( 
-		  int num_points,
-		  int num_sets,
-		  float *uvol,
-		  float &highest, 
-		  float &lowest,
-		  float &vhighest,
-		  float &vlowest) {
-    if( params->stack_type == KCHARTSTACKTYPE_SUM )	// need to walk sideways
-      for(int j=0; j<num_points; ++j ) {
-	float set_sum = 0.0;
-	for(int i=0; i<num_sets; ++i ) {
-	  debug( "vor dem crash" );
-	  if( CELLEXISTS( i, j ) ) {
-	    debug( "nach dem crash" );
-	    set_sum += CELLVALUE( i, j );
-	    highest = MAX( highest, set_sum );
-	    lowest  = MIN( lowest,  set_sum );
-	  }
-	}
-      } else if( params->stack_type == KCHARTSTACKTYPE_LAYER ) // need to walk sideways
-	for(int j=0; j<num_points; ++j ) {
-	  float neg_set_sum = 0.0, pos_set_sum = 0.0;
-	  for(int i=0; i<num_sets; ++i )
-	    if( CELLEXISTS( i, j ) )
-	      if( CELLVALUE( i, j ) < 0.0 )
-		neg_set_sum += CELLVALUE( i, j );
-	      else
-		pos_set_sum += CELLVALUE( i, j );
-	  lowest  = MIN( lowest,  MIN(neg_set_sum,pos_set_sum) );
-	  highest = MAX( highest, MAX(neg_set_sum,pos_set_sum) );
-} else
-	  for(int i=0; i<num_sets; ++i )
-	    for(int j=0; j<num_points; ++j ) {
-	      debug( "Vor dem crash" );
-	      if( CELLEXISTS( i, j ) ) {
-		debug( "nach dem crash" );
-		highest = MAX( CELLVALUE( i, j ), highest );
-		lowest  = MIN( CELLVALUE( i, j ), lowest );
-	      }
-	    }
-    
-    debug( "done computation highest and lowest value" );
-
-    if( params->scatter )
-      for(int i=0; i<params->num_scatter_pts; ++i ) {
-	highest = MAX( ((params->scatter)+i)->val, highest );
-	lowest  = MIN( ((params->scatter)+i)->val, lowest  );
-      }
-    if( params->do_vol() ) { // for now only one combo set allowed
-      // vhighest = 1.0;
-      // vlowest  = 0.0;
-      for(int j=0; j<num_points; ++j )
-	if( uvol[j] != GDC_NOVALUE ) {
-	  vhighest = MAX( uvol[j], vhighest );
-	  vlowest  = MIN( uvol[j], vlowest );
-	}
-      if( vhighest == -MAXFLOAT )			// no values
-	vhighest = 1.0;						// for scaling, need a range
-      else if( vhighest < 0.0 )
-	vhighest = 0.0;
-      if( vlowest > 0.0 || vlowest == MAXFLOAT )
-	vlowest = 0.0;						// vol should always start at 0
-    }
-    
-    debug( "done vlowest computation" );
-
-    if( lowest == MAXFLOAT )
-      lowest = 0.0;
-    if( highest == -MAXFLOAT )
-      highest = 1.0;							// need a range
-    if( params->type == KCHARTTYPE_AREA  ||					// bars and area should always start at 0
-	params->type == KCHARTTYPE_BAR   ||
-	params->type == KCHARTTYPE_3DBAR ||
-	params->type == KCHARTTYPE_3DAREA )
-      if( highest < 0.0 )
-	highest = 0.0;
-      else if( lowest > 0.0 )						// negs should be drawn from 0
-	lowest = 0.0;
-    
-    if( params->requested_ymin != -MAXDOUBLE && params->requested_ymin < lowest )
-      lowest = params->requested_ymin;
-    if( params->requested_ymax != -MAXDOUBLE && params->requested_ymax > highest )
-      highest = params->requested_ymax;
-
-    qDebug( "done requested_* computation" );
-}
-
-void kchartEngine::titleText() {
-    if( !params->title.isEmpty() ) {
-		int	tlen;
-		QColor	titlecolor = params->TitleColor;
-	
-		cnt_nl( params->title.latin1(), &tlen );
-		p->setFont( params->titleFont() );
-		p->setPen( titlecolor );
-		// PENDING(kalle) Check whether this really does line breaks
-		QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0,
-																	 MAXINT,
-																	 MAXINT,
-																	 Qt::AlignCenter,
-																	 params->title );
-		p->drawText( imagewidth/2 - tlen*params->titleFontWidth()/2, // x
-					 0, // y
-					 br.width(), br.height(),
-					 Qt::AlignCenter, params->title );
-    }
-
-    qDebug( "done with the title text" );
-
-    if( !params->xtitle.isEmpty() ) {
-		QColor	titlecolor = params->XTitleColor == Qt::black ?
-			PlotColor: params->XTitleColor;
-		p->setPen( titlecolor );
-		p->setFont( params->titleFont() );
-		p->drawText( imagewidth/2 - params->xtitle.length()*params->xTitleFontWidth()/2,
-					 imageheight-params->xTitleFontHeight()-1, params->xtitle );
-    }
-}
-
-void kchartEngine::drawBorder() {
-  if( params->border ) {
-    int	x1, y1, x2, y2;
-    
-    x1 = PX(0);
-    y1 = PY(highest);
-    x2 = PX(num_points-1+(params->do_bar()?2:0));
-    y2 = PY(lowest);
-    p->setPen( LineColor );
-    p->drawLine( x1, PY(lowest), x1, y1 );
-    
-    setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
-    p->setPen( LineColor );
-    p->drawLine( x1, y1, PX(0), PY(highest) );
-    // if( !params->grid || do_vol || params->thumbnail )					// grid leaves right side Y open
-    {
-      p->setPen( LineColor );
-      p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
-      p->drawLine( PX(num_points-1+(params->do_bar()?2:0)), PY(lowest),
-		   PX(num_points-1+(params->do_bar()?2:0)), PY(highest) );
-    }
-    setno = 0;
-  }
-}
-
-int kchartEngine::init() {
-  // initializations
-  yscl = 0.0;
-  vyscl = 0.0;
-  xscl = 0.0;
-  vhighest = -MAXFLOAT;
-  vlowest  = MAXFLOAT;
-  highest  = -MAXFLOAT;
-  lowest   = MAXFLOAT;
-  ylbl_interval  = 0.0;
-  num_lf_xlbls   = 0;
-  xdepth_3Dtotal = 0;
-  ydepth_3Dtotal = 0;
-  xdepth_3D      = 0;	       
-  ydepth_3D      = 0;	 
-  hlf_barwdth	   = 0;		
-  hlf_hlccapwdth = 0;	
-  annote_len     = 0;
-  annote_hgt     = 0;
-  setno = 0;
-  hasxlabels = false;
-  
 
 
-  // For now, we are assuming that the data is in columns with no labels at all
-  // Ergo, num_sets is the number of rows
-  num_sets = data->rows();
 
-  // No data sets left -> bail out
-  if( num_sets < 1 ) {
-    debug( "No data" );
-    return -1;
-  }
-  num_hlc_sets = params->has_hlc_sets() ? num_sets : 0;
-
-  // And num_points is the number of columns
-  num_points = data->cols();
-
-  /* idiot checks */
-  if( imagewidth <= 0 || imageheight <=0 || !p  )
-    return -1;
-  if( num_points <= 0 ) {
-    debug( "No Data Available" );
-    return -1;
-  }
-  return 1; 
-}
-
-void kchartEngine::drawAnnotation() {
-      if( params->annotation ) {	/* front half of annotation line */
-	int x1 = PX(params->annotation->point+(params->do_bar()?1:0)),
-	  y1 = PY(highest);
-	int		x2;
-	// front line
-	p->setPen( AnnoteColor );
-	p->drawLine( x1, PY(lowest)+1, x1, y1 );
-	if( params->threeD() ) { // on back plane
-	  setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
-			x2 = PX(params->annotation->point+(params->do_bar()?1:0));
-			// prspective line
-			p->setPen( AnnoteColor );
-			p->drawLine( x1, y1, x2, PY(highest) );
-		} else { // for 3D done with back line
-			x2 = PX(params->annotation->point+(params->do_bar()?1:0));
-			p->setPen( AnnoteColor );
-			p->drawLine( x1, y1, x1, y1-2 );
-		}
-		/* line-to and note */
-		if( *(params->annotation->note) ) {  // any note?
-			if( params->annotation->point >= (num_points/2) ) {		/* note to the left */
-				p->setPen( AnnoteColor );
-				p->drawLine( x2,              PY(highest)-2,
-							 x2-annote_hgt/2, PY(highest)-2-annote_hgt/2 );
-				// PENDING(kalle) Check whether this really does line breaks
-				p->setFont( params->titleFont() );
-				QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0, MAXINT,
-																					  MAXINT,
-																					  Qt::AlignRight,
-																					  params->title );
-				p->drawText(   x2-annote_hgt/2-1-annote_len - 1,
-							   PY(highest)-annote_hgt+1,
-							   br.width(), br.height(),
-							   Qt::AlignRight, params->annotation->note );
-			} else { /* note to right */
-				p->setPen( AnnoteColor );
-				p->drawLine( x2, PY(highest)-2,
-							 x2+annote_hgt/2, PY(highest)-2-annote_hgt/2 );
-				// PENDING(kalle) Check whether this really does line breaks
-				p->setFont( params->annotationFont() );
-				QRect br = QFontMetrics( params->annotationFont() ).boundingRect( 0, 0,
-																						   MAXINT,
-																						   MAXINT,
-																						   Qt::AlignLeft,
-																						   params->title );
-				p->drawText( x2+annote_hgt/2+1 + 1,
-							 PY(highest)-annote_hgt+1,
-							 br.width(), br.height(),
-							 Qt::AlignLeft, params->annotation->note );
-			}
-		}
-		setno = 0;
-    }
-}
 
 
 int kchartEngine::compute_yintervals() {
@@ -582,7 +309,7 @@ int kchartEngine::out_graph() {
     }
     // scaled, sized, ready
 
-	qDebug( "scaled, sized, ready" );
+    qDebug( "scaled, sized, ready" );
 
     BGColor = params->BGColor;
     LineColor = params->LineColor;
@@ -601,6 +328,7 @@ int kchartEngine::out_graph() {
     if( params->annotation )
 		AnnoteColor = params->annotation->color;
     qDebug("before bgimage");
+
 
     /* attempt to import optional background image */
     // PENDING(kalle) Put back in
@@ -1450,124 +1178,19 @@ int kchartEngine::out_graph() {
     }
     setno = 0;
 
-    /* ---------- scatter points  over all other plots ---------- */
-    /* scatters, by their very nature, don't lend themselves to standard array of points */
-    /* also, this affords the opportunity to include scatter points onto any type of chart */
-    /* drawing of the scatter point should be an exposed function, so the user can */
-    /*  use it to draw a legend, and/or add their own */
     if( params->scatter ) {
-		QColor		scatter_clr[params->num_scatter_pts];
-		QPointArray ct( 3 );
-	
-		for( i=0; i<params->num_scatter_pts; ++i ) {
-			int		hlf_scatterwdth = (int)( (float)(PX(2)-PX(1))
-											 * (((float)(((params->scatter)+i)->width)/100.0)/2.0) );
-			int	scat_x = PX( ((params->scatter)+i)->point + (params->do_bar()?1:0) ),
-				scat_y = PY( ((params->scatter)+i)->val );
-	
-			if( ((params->scatter)+i)->point >= num_points ||				// invalid point
-				((params->scatter)+i)->point <  0 )
-				continue;
-			scatter_clr[i] = ((params->scatter)+i)->color;
-	
-			switch( ((params->scatter)+i)->ind ) {
-			case KCHARTSCATTER_TRIANGLE_UP:
-				ct.setPoint( 0, scat_x, scat_y );
-				ct.setPoint( 1, scat_x - hlf_scatterwdth, scat_y + hlf_scatterwdth );
-				ct.setPoint( 2, scat_x + hlf_scatterwdth, scat_y + hlf_scatterwdth );
-				if( !params->do_bar() )
-					if( ((params->scatter)+i)->point == 0 )
-						ct.setPoint( 1, scat_x, ct.point( 1 ).y() );
-					else
-						if( ((params->scatter)+i)->point == num_points-1 )
-							ct.setPoint( 2, scat_x, ct.point( 2 ).y() );
-				p->setBrush( QBrush( scatter_clr[i] ) );
-				p->setPen( scatter_clr[i] );
-				p->drawPolygon( ct );
-				break;
-			case KCHARTSCATTER_TRIANGLE_DOWN:
-				ct.setPoint( 0, scat_x, scat_y );
-				ct.setPoint( 1, scat_x - hlf_scatterwdth, scat_y - hlf_scatterwdth );
-				ct.setPoint( 2, scat_x + hlf_scatterwdth, scat_y - hlf_scatterwdth );
-				if( !params->do_bar() )
-					if( ((params->scatter)+i)->point == 0 )
-						ct.setPoint( 1, scat_x, ct.point( 1 ).y() );
-					else
-						if( ((params->scatter)+i)->point == num_points-1 )
-							ct.setPoint( 2, scat_x, ct.point( 2 ).y() );
-				p->setBrush( QBrush( scatter_clr[i] ) );
-				p->setPen( scatter_clr[i] );
-				p->drawPolygon( ct );
-				break;
-			}
-		}
+      drawScatter();
     }
 
 
+
+
     // overlay with a value and an arrow (e.g., total daily change)
-#ifdef THUMB_VALS
-    /* put thmbl and thumbval over vol and plot lines */
-    if( thumbnail ) {
-		int     n, d, w;
-		char	thmbl[32];
-		char	*price_to_str( float, int*, int*, int* );
-		char	nmrtr[3+1], dmntr[3+1], whole[8];
-	
-		char	*dbg = price_to_str( ABS(thumbval),&n,&d,&w );
-		sprintf( nmrtr, "%d", n );
-		sprintf( dmntr, "%d", d );
-		sprintf( whole, "%d", w );
-	
-		p->setPen( ThumbLblColor );
-		p->setFont( gdFontSmall );
-		p->drawText( graphwidth/2-strlen(thumblabel)*SFONTWDTH/2,
-					 1,
-					 thumblabel );
-		if( w || n ) {
-			int		chgcolor  = thumbval>0.0? ThumbUColor: ThumbDColor;
-			int		thmbvalwidth = SFONTWDTH +	// up/down arrow
-				(w?strlen(whole)*SFONTWDTH: 0) +	// whole
-				(n?strlen(nmrtr)*TFONTWDTH	  +	// numerator
-				 SFONTWDTH					  +	// /
-				 strlen(dmntr)*TFONTWDTH:		// denominator
-				 0);							// no frac part
-	
-			smallarrow( p, graphwidth/2-thmbvalwidth/2, SFONTHGT, thumbval>0.0, chgcolor );
-			if( w ) {
-				p->setFont( gdFontSmall );
-				p->setPen( chgcolor );
-				p->drawText( (graphwidth/2-thmbvalwidth/2)+SFONTWDTH,
-							 SFONTHGT+2,
-							 whole );
-			}
-			if( n ) {
-				p->setFont( gdFontTiny );
-				p->setPen( chgcolor );
-				p->drawText( (graphwidth/2-thmbvalwidth/2)   +	// start
-							 SFONTWDTH					   +	// arrow
-							 (w? strlen(whole)*SFONTWDTH: 0) +	// whole
-							 2,
-							 SFONTHGT+2-2,
-							 nmrtr );
-				p->setFont( gdFontSmall );
-				p->drawText( (graphwidth/2-thmbvalwidth/2)  +		// start
-							 SFONTWDTH					  +		// arrow
-							 (w? strlen(whole)*SFONTWDTH: 0) +	// whole
-							 strlen(nmrtr)*TFONTWDTH,				// numerator
-							 SFONTHGT+2,
-							 '/' );
-				p->setFont( gdFontTiny );
-				p->drawText( (graphwidth/2-thmbvalwidth/2)  +		// start
-							 SFONTWDTH					  +		// arrow
-							 (w? strlen(whole)*SFONTWDTH: 0) +		// whole
-							 strlen(nmrtr)*TFONTWDTH		  +		// numerator
-							 SFONTWDTH - 3,						// /
-							 SFONTHGT+2+4,
-							 dmntr );
-			}
-		}
-    }		// thumblabel, thumbval
-#endif
+    
+    if( params->thumbnail ) {
+      drawThumbnails();
+    }
+    
 
     /* box it off */
     /*  after plotting so the outline covers any plot lines */

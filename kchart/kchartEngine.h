@@ -19,6 +19,8 @@ public:
   void titleText();
   void drawBorder();
   void drawAnnotation();
+  void drawThumbnails();
+  void drawScatter();
 
   inline bool CELLEXISTS( int row, int col ) {
     return  data->cell(row,col).exists;
