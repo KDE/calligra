@@ -106,8 +106,13 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     d->currTab = d->tabList.end();
 
     d->removeTab = d->tabList.end();
-    frameStart = qRound( zoomIt(layout.ptLeft) );
-    d->frameEnd = qRound( zoomIt(layout.ptWidth - layout.ptRight) );
+    if ( orientation == Qt::Horizontal ) {
+        frameStart = qRound( zoomIt(layout.ptLeft) );
+        d->frameEnd = qRound( zoomIt(layout.ptWidth - layout.ptRight) );
+    } else {
+        frameStart = qRound( zoomIt(layout.ptTop) );
+        d->frameEnd = qRound( zoomIt(layout.ptHeight - layout.ptBottom) );
+    }
     m_bFrameStartSet = false;
 
     setupMenu();
@@ -213,7 +218,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     p.setPen( Qt::white );
     p.drawLine( totalw - diffx, 1, totalw - diffx, height() - 1 );
 
-    // Draw starting bar (at 0) - can we see it ?
+    // Draw starting bar (at 0)
     p.setPen( Qt::black );
     p.drawLine( -diffx, 1, -diffx, height() - 1 );
     p.setPen( Qt::white );
@@ -288,22 +293,22 @@ void KoRuler::drawVertical( QPainter *_painter )
 
     double dist;
     int j = 0;
-    double ph = zoomIt(layout.ptHeight);
-    int i_ph=qRound(ph);
+    int totalh = qRound( zoomIt(layout.ptHeight) );
     QString str;
     QFont font = QFont( "helvetica", 8 );  // Hardcode the size? (Werner)
     QFontMetrics fm( font );
 
     p.setBrush( Qt::white );
-    QRect r;
 
+    // Draw white rect
+    QRect r;
     if ( !d->whileMovingBorderTop )
-        r.setTop( -diffy + qRound(zoomIt(layout.ptTop)) );
+        r.setTop( -diffy + frameStart );
     else
         r.setTop( d->oldMy );
     r.setLeft( 0 );
     if ( !d->whileMovingBorderBottom )
-        r.setBottom( -diffy + i_ph - qRound(zoomIt(layout.ptBottom)) );
+        r.setHeight(d->frameEnd-frameStart);
     else
         r.setBottom( d->oldMy );
     r.setRight( width() );
@@ -311,6 +316,7 @@ void KoRuler::drawVertical( QPainter *_painter )
     p.drawRect( r );
     p.setFont( font );
 
+    // Draw the numbers
     if ( unit == "inch" )
         dist = INCH_TO_POINT ( m_zoom );
     else if ( unit == "pt" )
@@ -318,7 +324,7 @@ void KoRuler::drawVertical( QPainter *_painter )
     else
         dist = MM_TO_POINT ( 10.0 * m_zoom );
 
-    for ( double i = 0.0;i <= ph;i += dist ) {
+    for ( double i = 0.0;i <= (double)totalh;i += dist ) {
         str=QString::number(j++);
         if ( unit == "pt" && j!=1 )
             str+="00";
@@ -327,25 +333,30 @@ void KoRuler::drawVertical( QPainter *_painter )
                     width(), fm.height(), AlignLeft | AlignTop, str );
     }
 
-    for ( double i = dist * 0.5;i <= ph;i += dist ) {
+    // Draw the medium-sized lines
+    for ( double i = dist * 0.5;i <= (double)totalh;i += dist ) {
         int ii=qRound(i);
         p.drawLine( 5, ii - diffy, width() - 5, ii - diffy );
     }
 
-    for ( double i = dist * 0.25;i <= ph;i += dist *0.5 ) {
+    // Draw the small lines
+    for ( double i = dist * 0.25;i <=(double)totalh;i += dist *0.5 ) {
         int ii=qRound(i);
         p.drawLine( 7, ii - diffy, width() - 7, ii - diffy );
     }
 
-    p.drawLine( 1, i_ph - diffy + 1, width() - 1, i_ph - diffy + 1 );
+    // Draw ending bar (at page height)
+    p.drawLine( 1, totalh - diffy + 1, width() - 1, totalh - diffy + 1 );
     p.setPen( Qt::white );
-    p.drawLine( 1, i_ph - diffy, width() - 1, i_ph - diffy );
+    p.drawLine( 1, totalh - diffy, width() - 1, totalh - diffy );
 
+    // Draw starting bar (at 0)
     p.setPen( Qt::black );
     p.drawLine( 1, -diffy, width() - 1, -diffy );
     p.setPen( Qt::white );
     p.drawLine( 1, -diffy - 1, width() - 1, -diffy - 1 );
 
+    // Show the mouse position
     if ( d->action == A_NONE && showMPos ) {
         p.setPen( Qt::black );
         p.drawLine( 1, mposY, width() - 1, mposY );
