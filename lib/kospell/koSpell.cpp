@@ -237,10 +237,27 @@ bool KOSpell::initConfig()
     return true;
 }
 
-void KOSpell::hide() { ksdlg->hide(); }
+void KOSpell::hide()
+{
+    if ( ksdlg )
+        ksdlg->hide();
+}
 
-int KOSpell::heightDlg() const { return ksdlg->height(); }
-int KOSpell::widthDlg() const { return ksdlg->width(); }
+int KOSpell::heightDlg() const
+{
+    if ( ksdlg )
+        return ksdlg->height();
+    else
+        return -1;
+}
+
+int KOSpell::widthDlg() const
+{
+    if ( ksdlg )
+        return ksdlg->width();
+    else
+        return -1;
+}
 
 void
 KOSpell::setUpDialog ()
@@ -442,6 +459,9 @@ bool KOSpell::check( const QString &_buffer, bool _usedialog )
 
 void KOSpell::checkNextWord()
 {
+    if ( !ksdlg)
+        return;
+
     if ( !ksdlg->previousWord() )
         nextWord();
     else
@@ -450,6 +470,8 @@ void KOSpell::checkNextWord()
 
 void KOSpell::dialog(const QString & word, QStringList & sugg )
 {
+    if ( !ksdlg )
+        return;
     dlgorigword=word;
 
     connect (ksdlg, SIGNAL (command (int)), this, SLOT (dialog2(int)));
@@ -464,6 +486,8 @@ void KOSpell::dialog(const QString & word, QStringList & sugg )
 
 void KOSpell::dialog2 (int result)
 {
+    if ( !ksdlg )
+        return;
     QString qs;
     disconnect (ksdlg, SIGNAL (command (int)), this, SLOT (dialog2(int)));
     dlgresult=result;
@@ -536,6 +560,8 @@ void KOSpell::dialog2 (int result)
 
 void KOSpell::spellCheckReplaceWord( const QString & _word)
 {
+    if ( !ksdlg )
+        return;
     connect (ksdlg, SIGNAL (command (int)), this, SLOT (dialog2(int)));
     QStringList lst;
     lst=resultCheckWord( _word );
@@ -577,6 +603,8 @@ void KOSpell::emitDeath()
 
 void KOSpell::moveDlg (int x, int y)
 {
+    if ( !ksdlg )
+        return;
   QPoint pt (x,y), pt2;
   pt2=parent->mapToGlobal (pt);
   ksdlg->move (pt2.x(),pt2.y());

@@ -80,7 +80,15 @@ public:
     KOSpell(QWidget *parent, const QString &caption,KOSpellConfig *kcs=0,
              bool modal = FALSE, bool _autocorrect =FALSE );
 
+    /*
+     * Create a simple kospell class without dialogbox
+     * we can just use resultCheckWord function to get list
+     * of result
+     */
     KOSpell( KOSpellConfig *_ksc );
+
+    QStringList resultCheckWord( const QString &_word );
+
 
      /**
      * Returns the status of KSpell.
@@ -440,7 +448,6 @@ protected:
     void previousWord();
 
     void spellCheckReplaceWord( const QString & _word);
-    QStringList resultCheckWord( const QString &_word );
 
     bool initConfig();
     void changeSpellLanguage( int index );
