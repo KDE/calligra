@@ -123,9 +123,9 @@ void KDiagrammDoc::removeView( KDiagrammView* _view )
   m_lstViews.removeRef( _view );
 }
 
-KDiagrammView* KDiagrammDoc::createDiagrammView()
+KDiagrammView* KDiagrammDoc::createDiagrammView(QWidget *_parent)
 {
-  KDiagrammView *p = new KDiagrammView( 0L, 0L, this );
+  KDiagrammView *p = new KDiagrammView( _parent, 0L, this );
   //p->QWidget::show();
   m_lstViews.append( p );
 

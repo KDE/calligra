@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kdiagramm_doc_h__
 #define __kdiagramm_doc_h__
@@ -67,48 +67,48 @@ public:
   // C++
   // virtual bool loadChildren( KOStore::Store_ptr _store ) { return m_pMap->loadChildren( _store ); }
   virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store );
-  
+
   virtual void cleanUp();
 
   virtual void removeView( KDiagrammView* _view );
 
   // C++
-  virtual KDiagrammView* createDiagrammView();
+  virtual KDiagrammView* createDiagrammView(QWidget *_parent = 0);
 
   // IDL
   virtual CORBA::Boolean init();
-  
+
   /**
    * Wrapper for @ref #createDiagrammView
    */
   virtual OpenParts::View_ptr createView();
-  
+
   virtual void viewList( OpenParts::Document::ViewList*& _list );
-  
+
   virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
-  
+
   virtual CORBA::Boolean isModified() { return m_bModified; }
-  
+
   virtual bool hasToWriteMultipart() { return false; }
 
   virtual KOffice::MainWindow_ptr createMainWindow();
 
   // C++
   virtual int viewCount();
-  
+
   // C++
   virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
   virtual bool isEmpty() { return m_bEmpty; }
 
   // C++
   table_t& data() { return m_table; }
-  
+
   // C++
   virtual void editData();
 
   // C++
   void configChart();
-  
+
   // IDL
   virtual void showWizard();
   virtual void fill( const Chart::Range& range, const Chart::Matrix& matrix );
@@ -124,15 +124,15 @@ public:
   /**
    * @return the printable width of the paper in millimeters.
    */
-  float printableWidth() { return m_paperWidth - m_leftBorder - m_rightBorder; }  
+  float printableWidth() { return m_paperWidth - m_leftBorder - m_rightBorder; }
   /**
    * @return the printable height of the paper in millimeters.
    */
   float printableHeight() { return m_paperHeight - m_topBorder - m_bottomBorder; }
-  
+
   float paperHeight() { return m_paperHeight; }
   float paperWidth() { return m_paperWidth; }
-  
+
   /**
    * @return the left border in millimeters
    */
@@ -149,7 +149,7 @@ public:
    * @return the bottom border in millimeters
    */
   float bottomBorder() { return m_bottomBorder; }
-  
+
   /**
    * @return the orientation of the paper.
    */
@@ -158,13 +158,13 @@ public:
    * @return the paper format.
    */
   KoFormat paperFormat() { return m_paperFormat; }
-  
+
   /**
    * Changes the paper layout and repaints the currently displayed KSpreadTable.
    */
   void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
 		       KoFormat _paper, KoOrientation orientation );
-  
+
   void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
 			const char *_footl, const char *_footm, const char *_footr );
 
@@ -192,16 +192,16 @@ public:
 
   KoDiagramm::dia_type diaType() { return m_type; }
   void setDiaType( KoDiagramm::dia_type _type );
-  
+
   void calcPaperSize();
-  
+
 signals:
   // Document signals
   void sig_updateView();
-  
+
 protected:
   virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
-  
+
   table_t m_table;
   bool m_bEmpty;
   KoDiagramm::dia_type m_type;
@@ -218,7 +218,7 @@ protected:
    * Tells about the currently seleced paper size.
    */
   KoFormat m_paperFormat;
-  
+
   /**
    * The paper width in millimeters. Dont change this value, it is calculated by
    * @ref #calcPaperSize from the value @ref #m_paperFormat.
@@ -228,7 +228,7 @@ protected:
    * The paper height in millimeters. Dont change this value, it is calculated by
    * @ref #calcPaperSize from the value @ref #m_paperFormat.
    */
-  float m_paperHeight;    
+  float m_paperHeight;
   /**
    * The left border in millimeters.
    */
@@ -245,7 +245,7 @@ protected:
    * The right border in millimeters.
    */
   float m_bottomBorder;
-  
+
   QString m_headLeft;
   QString m_headRight;
   QString m_headMid;
