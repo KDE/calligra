@@ -42,7 +42,7 @@ KColor ColorPicker::pick(int x, int y)
   uchar g = *ptr++;
   uchar r = *ptr++;
   
-  return KColor((int)r, (int)g, (int)b, KColor::RGB);
+  return KColor((int)r, (int)g, (int)b, RGB);
 }
 
 void ColorPicker::mousePress(QMouseEvent *e)
