@@ -806,7 +806,7 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
     {
         props += "text-indent: ";
         props += QString::number(layout.indentFirst);
-        props += "; ";
+        props += "pt; ";
     }
 
     if ((layout.marginBottom>=0.0)
