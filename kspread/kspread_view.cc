@@ -1265,26 +1265,20 @@ void KSpreadView::italic( bool b )
 
 void KSpreadView::sortInc()
 {
-  QRect r( activeTable()-> selectionRect() );
-  if ( r.left() == 0 || r.top() == 0 ||
-       r.right() == 0 || r.bottom() == 0 )
-  {
-    KMessageBox::error( this, i18n("You must select multiple cells.") );
-  }
-  else if( r.right() ==0x7FFF)
-  {
-    KMessageBox::error( this, i18n("Area too large!") );
-  }
-  else if(r.bottom()==0x7FFF)
-  {
-    KMessageBox::error( this, i18n("Area too large!") );
-  }
-  else
-  {
-    activeTable()->sortByColumn( r.left());
-  }
+    QRect r( activeTable()-> selectionRect() );
+    if ( r.left() == 0 || r.top() == 0 ||
+	 r.right() == 0 || r.bottom() == 0 )
+    {
+	KMessageBox::error( this, i18n("You must select multiple cells.") );
+	return;
+    }
+ 
+    // Entire row(s) selected ?
+    if( r.right() == 0x7FFF )
+	activeTable()->sortByRow( r.top() );
+    else
+	activeTable()->sortByColumn( r.left());
 }
-
 
 void KSpreadView::sortDec()
 {
@@ -1293,20 +1287,14 @@ void KSpreadView::sortDec()
 	 r.right() == 0 || r.bottom() == 0 )
     {
   	KMessageBox::error( this, i18n("You must select multiple cells.") );
+	return;
     }
-    else if( r.right() ==0x7FFF)
-    {
-	KMessageBox::error( this, i18n("Area too large!") );
-    }
-    else if(r.bottom()==0x7FFF)
-    {
-	KMessageBox::error( this, i18n("Area too large!") );
-    }
+    
+    // Entire row(s) selected ?
+    if( r.right() ==0x7FFF)
+	activeTable()->sortByRow( r.top(),KSpreadTable::Decrease);
     else
-    {
 	activeTable()->sortByColumn( r.left(),KSpreadTable::Decrease);
-    }	
-
 }
 
 void KSpreadView::reloadScripts()
