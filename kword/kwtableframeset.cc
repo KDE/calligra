@@ -1473,12 +1473,14 @@ void KWTableFrameSetEdit::setCurrentCell( int mx, int my )
     int x = static_cast<int>( mx / doc->zoomedResolutionX() );
     int y = static_cast<int>( my / doc->zoomedResolutionY() );
     KWFrameSet *fs = tableFrameSet()->getCellByPos( x, y );
-    if ( fs )
+    if ( fs && ( !m_currentCell || fs != m_currentCell->frameSet() ) )
         setCurrentCell( fs );
 }
 
 void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs )
 {
+    if ( m_currentCell )
+        m_currentCell->terminate();
     delete m_currentCell;
     m_currentCell =  fs->createFrameSetEdit( m_canvas );
     m_currentFrame = fs->getFrame( 0 );
