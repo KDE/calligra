@@ -15,6 +15,7 @@
 #include "vctool_ellipse.h"
 #include "vctool_rectangle.h"
 #include "vctool_roundrect.h"
+#include "vctool_sinus.h"
 
 #include <kdebug.h>
 
@@ -84,16 +85,51 @@ KarbonView::ellipseTool()
 }
 
 void
+KarbonView::polygonTool()
+{
+//	s_currentTool = VCToolPolygon::instance( m_part );
+	m_canvas->viewport()->setCursor( CrossCursor );
+}
+
+void
 KarbonView::rectangleTool()
 {
 	s_currentTool = VCToolRectangle::instance( m_part );
-	m_canvas->viewport()->setCursor( crossCursor );
+	m_canvas->viewport()->setCursor( CrossCursor );
 }
 
 void
 KarbonView::roundRectTool()
 {
 	s_currentTool = VCToolRoundRect::instance( m_part );
+	m_canvas->viewport()->setCursor( CrossCursor );
+}
+
+void
+KarbonView::selectTool()
+{
+	//s_currentTool = VCToolSelect::instance( m_part );
+	m_canvas->viewport()->setCursor( ArrowCursor );
+}
+
+void
+KarbonView::sinusTool()
+{
+	s_currentTool = VCToolSinus::instance( m_part );
+	m_canvas->viewport()->setCursor( CrossCursor );
+}
+
+void
+KarbonView::spiralTool()
+{
+//	s_currentTool = VCToolSpiral::instance( m_part );
+	m_canvas->viewport()->setCursor( CrossCursor );
+}
+
+void
+KarbonView::starTool()
+{
+//	s_currentTool = VCToolStar::instance( m_part );
 	m_canvas->viewport()->setCursor( crossCursor );
 }
 
@@ -110,29 +146,31 @@ KarbonView::initActions()
   	KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(),
 		"edit_selectall" );
 
-	// object
-	new KAction( i18n("&Ellipse"), "ellipse", 0, this, SLOT( ellipseTool() ),
-		actionCollection(), "insert_ellipse" );
-	new KAction( i18n("&Polygon"), "polygon", 0,
-		actionCollection(), "insert_polygon" );
-
-	// submenu rectangles:
-	KActionMenu* rects =
-		new KActionMenu( i18n("&Rectangle"), "rectangle", actionCollection(),
-			"insert_rectangles" );
-	rects->insert(
-		new KAction( i18n("&Rectangle"), "rectangle", 0,
-			this, SLOT( rectangleTool() ), actionCollection(), "insert_rectangle" ) );
-	rects->insert(
-		new KAction( i18n("&Round Rectangle"), "roundrect", 0,
-			this, SLOT( roundRectTool() ), actionCollection(), "insert_roundrect" ) );
-
-	new KAction( i18n("S&inus"), "sinus", 0, actionCollection(),
-		"insert_sinus" );
-	new KAction( i18n("&Spiral"), "spiral", 0, actionCollection(),
-		"insert_spiral" );
-	new KAction( i18n("S&tar"), "star", 0, actionCollection(),
-		"insert_star" );
+	// tools:
+	new KAction(
+		i18n("&Ellipse"), "ellipse", 0, this, SLOT( ellipseTool() ),
+		actionCollection(), "tool_ellipse" );
+	new KAction(
+		i18n("&Polygon"), "polygon", 0, this, SLOT( polygonTool() ),
+		actionCollection(), "tool_polygon" );
+	new KAction(
+		i18n("&Rectangle"), "rectangle", 0, this, SLOT( rectangleTool() ),
+		actionCollection(), "tool_rectangle" );
+	new KAction(
+		i18n("&Round Rectangle"), "roundrect", 0, this, SLOT( roundRectTool() ),
+		actionCollection(), "tool_roundrect" );
+	new KAction(
+		i18n("S&inus"), "sinus", 0, this, SLOT( sinusTool() ),
+		actionCollection(), "tool_sinus" );
+	new KAction(
+		i18n("&Select"), "select", 0, this, SLOT( selectTool() ),
+		actionCollection(), "tool_select" );
+	new KAction(
+		i18n("S&piral"), "spiral", 0, this, SLOT( spiralTool() ),
+		actionCollection(), "tool_spiral" );
+	new KAction(
+		i18n("S&tar"), "star", 0, this, SLOT( starTool() ),
+		actionCollection(), "tool_star" );
 
 	// view
 	m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, actionCollection(),

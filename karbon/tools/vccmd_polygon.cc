@@ -31,21 +31,7 @@ VCCmdPolygon::execute()
 		m_object->setDeleted( false );
 	else
 	{
-		m_object = new VPath();
-		// we start at 90 degrees:
-		m_object->moveTo( 0.0, m_radius );
-		for ( int i = 0; i < m_edges; ++i )
-		{
-			m_object->lineTo(
-				m_radius * cos( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ),
-				m_radius * sin( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ) );
-		}
-		m_object->close();
-
-		// translate path to center:
-		VAffineMap aff_map;
-		aff_map.translate( m_centerX, m_centerY );
-		m_object->transform( aff_map );
+		m_object = createPath();
 
 		// add path:
 		m_part->insertObject( m_object );
@@ -57,4 +43,27 @@ VCCmdPolygon::unexecute()
 {
 	if ( m_object )
 		m_object->setDeleted();
+}
+
+VPath*
+VCCmdPolygon::createPath()
+{
+	VPath* path = new VPath();
+
+	// we start at 90 degrees:
+	path->moveTo( 0.0, m_radius );
+	for ( int i = 0; i < m_edges; ++i )
+	{
+		path->lineTo(
+			m_radius * cos( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ),
+			m_radius * sin( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ) );
+	}
+	path->close();
+
+	// translate path to center:
+	VAffineMap aff_map;
+	aff_map.translate( m_centerX, m_centerY );
+	path->transform( aff_map );
+
+	return path;
 }

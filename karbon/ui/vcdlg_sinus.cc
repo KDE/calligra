@@ -9,18 +9,19 @@
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
+#include <qspinbox.h>
 #include <qstring.h>
 #include <qwidget.h>
 
 #include <klocale.h>
 
-#include "vcdlg_roundrect.h"
+#include "vcdlg_sinus.h"
 
-VCDlgRoundRect::VCDlgRoundRect()
-	: KDialog( 0L, i18n( "Round Rectangle" ), true, Qt::WStyle_Customize |
+VCDlgSinus::VCDlgSinus()
+	: KDialog( 0L, i18n( "Sinus" ), true, Qt::WStyle_Customize |
 	  Qt::WStyle_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Round Rectangle" ) );
+	setCaption( i18n( "Sinus" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
@@ -33,8 +34,9 @@ VCDlgRoundRect::VCDlgRoundRect()
 	m_width = new QLineEdit( 0, group );
 	new QLabel( i18n( "Height:" ), group );
 	m_height = new QLineEdit( 0, group );
-	new QLabel( i18n( "Edge Radius:" ), group );
-	m_round = new QLineEdit( 0, group );
+	new QLabel( i18n( "Periods:" ), group );
+	m_periods = new QSpinBox( group );
+	m_periods->setMinValue( 1 );
 
 	outerbox->addSpacing( 2 );
 
@@ -61,25 +63,25 @@ VCDlgRoundRect::VCDlgRoundRect()
 }
 
 double
-VCDlgRoundRect::valueWidth() const
+VCDlgSinus::valueWidth() const
 {
 	return m_width->text().toDouble();
 }
 
 double
-VCDlgRoundRect::valueHeight() const
+VCDlgSinus::valueHeight() const
 {
 	return m_height->text().toDouble();
 }
 
-double
-VCDlgRoundRect::valueRound() const
+uint
+VCDlgSinus::valuePeriods() const
 {
-	return m_round->text().toDouble();
+	return m_periods->value();
 }
 
 void
-VCDlgRoundRect::setValueWidth( const double value )
+VCDlgSinus::setValueWidth( const double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
@@ -87,7 +89,7 @@ VCDlgRoundRect::setValueWidth( const double value )
 }
 
 void
-VCDlgRoundRect::setValueHeight( const double value )
+VCDlgSinus::setValueHeight( const double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
@@ -95,11 +97,9 @@ VCDlgRoundRect::setValueHeight( const double value )
 }
 
 void
-VCDlgRoundRect::setValueRound( const double value )
+VCDlgSinus::setValuePeriods( const uint value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_round->setText( s );
+	m_periods->setValue( value );
 }
 
-#include "vcdlg_roundrect.moc"
+#include "vcdlg_sinus.moc"

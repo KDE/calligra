@@ -1,7 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
 <kpartgui name="Karbon" version="1">
 <MenuBar>
-	<Menu name="edit"><text>&amp;Edit</text>
+	<Menu name="edit">
+		<text>&amp;Edit</text>
 		<Action name="edit_undo"/>
 		<Action name="edit_redo"/>
 		<Separator/>
@@ -10,19 +11,12 @@
 		<Action name="edit_paste"/>
 		<Action name="edit_selectall"/>
 	</Menu>
-	<Menu name="object"><text>&amp;Object</text>
+	<Menu name="object">
+		<text>&amp;Modify</text>
 		<Separator/>
-		<Menu name="insert"><text>&amp;Insert</text>
-			<Action name="insert_ellipse"/>
-			<Action name="insert_polygon"/>
-			<Action name="insert_rectangle"/>
-			<Action name="insert_roundrect"/>
-			<Action name="insert_sinus"/>
-			<Action name="insert_spiral"/>
-			<Action name="insert_star"/>
-		</Menu>
 	</Menu>
-	<Menu name="view"><text>&amp;View</text>
+	<Menu name="view">
+		<text>&amp;View</text>
 		<Action name="view_newview"/>
 		<ActionList name="view_closeallviews"/>
 		<Separator/>
@@ -32,15 +26,19 @@
 		<Action name="view_zoom"/>
 	</Menu>
 	</MenuBar>
-	<ToolBar name="zoom_toolbar" fullWidth="false"><Text>Zoom</Text>
+	<ToolBar name="zoom_toolbar" fullWidth="false">
+		<Text>Zoom</Text>
 		<Action name="view_zoom"/>
 	</ToolBar>
-	<ToolBar name="insert_toolbar" position="left"><Text>Insert</Text>
-		<Action name="insert_ellipse"/>
-		<Action name="insert_polygon"/>
-		<Action name="insert_rectangles"/>
-		<Action name="insert_sinus"/>
-		<Action name="insert_spiral"/>
-		<Action name="insert_star"/>
+	<ToolBar name="tool_toolbar" position="left">
+		<Text>Tool</Text>
+		<Action name="tool_select"/>
+		<Action name="tool_ellipse"/>
+		<Action name="tool_polygon"/>
+		<Action name="tool_rectangle"/>
+		<Action name="tool_roundrect"/>
+		<Action name="tool_sinus"/>
+		<Action name="tool_spiral"/>
+		<Action name="tool_star"/>
 	</ToolBar>
 </kpartgui>

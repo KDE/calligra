@@ -5,6 +5,7 @@
 #ifndef __VCTOOLELLIPSE_H__
 #define __VCTOOLELLIPSE_H__
 
+#include <qpixmap.h>
 #include <qpoint.h>
 
 #include "karbon_view.h"
@@ -47,6 +48,7 @@ private:
 	// painting coordinates:
 	QPoint m_tl;
 	QPoint m_br;
+	QPoint m_center;
 };
 
 inline void
@@ -77,6 +79,7 @@ VCToolEllipse::recalcCoords()
 		m_tl.setY( qRound( m_fp.y() + height*0.5 ) );
 		m_br.setX( qRound( m_fp.x() + width*0.5 ) );
 		m_br.setY( qRound( m_fp.y() - height*0.5 ) );
+		m_center = m_fp;
 	}
 	else
 	{
@@ -84,12 +87,35 @@ VCToolEllipse::recalcCoords()
 		m_tl.setY( m_fp.y() );
 		m_br.setX( m_fp.x() + width );
 		m_br.setY( m_fp.y() - height );
+		m_center.setX( m_fp.x() + qRound( width * 0.5 ) );
+		m_center.setY( m_fp.y() - qRound( height * 0.5 ) );
 	}
 }
 
 inline void
 VCToolEllipse::drawTemporaryObject( KarbonView* view )
 {
+/*	QPixmap pixmap;
+	QPainter painter(&pixmap);
+
+	painter.setPen( Qt::black );
+
+	painter.drawEllipse(
+		m_tl.x(), m_tl.y(),
+		m_br.x() - m_tl.x(), m_br.y() - m_tl.y() );
+
+	painter.drawLine(
+		m_center.x() - 2, m_center.y() - 2,
+		m_center.x() + 2, m_center.y() + 2 );
+	painter.drawLine(
+		m_center.x() - 2, m_center.y() + 2,
+		m_center.x() + 2, m_center.y() - 2 );
+
+	bitBlt(
+		view->canvasWidget()->viewport(), 0, 0,
+		&pixmap, 0, 0, -1, -1,
+		Qt::NotROP ); */
+
 	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setPen( Qt::black );
 	painter.setRasterOp( Qt::NotROP );
@@ -97,6 +123,22 @@ VCToolEllipse::drawTemporaryObject( KarbonView* view )
 	painter.drawEllipse(
 		m_tl.x(), m_tl.y(),
 		m_br.x() - m_tl.x(), m_br.y() - m_tl.y() );
+
+	// paint little center cross (lines must not cross due to ROP):
+	if (
+		( QABS( m_br.x() - m_tl.x() ) > 4 ) &&
+		( QABS( m_tl.y() - m_br.y() ) > 4 ) )
+	{
+		painter.drawLine(
+			m_center.x() - 2, m_center.y() - 2,
+			m_center.x() + 2, m_center.y() + 2 );
+		painter.drawLine(
+			m_center.x() - 2, m_center.y() + 2,
+			m_center.x() - 1, m_center.y() + 1 );
+		painter.drawLine(
+			m_center.x() + 1, m_center.y() - 1,
+			m_center.x() + 2, m_center.y() - 2 );
+	}
 }
 
 #endif

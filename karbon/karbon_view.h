@@ -41,10 +41,15 @@ protected slots:
 	void editPaste();
 	void editSelectAll();
 
-	// tools:
+	// shape-tools:
 	void ellipseTool();
+	void polygonTool();
 	void rectangleTool();
 	void roundRectTool();
+	void selectTool();
+	void sinusTool();
+	void spiralTool();
+	void starTool();
 
 protected:
 	virtual void updateReadWrite( bool rw );

@@ -21,6 +21,9 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
+	// for complex shapes. needed to draw while creation (creation tool):
+	VPath* createPath();
+
 private:
 	VPath* m_object;
 	double m_centerX;
