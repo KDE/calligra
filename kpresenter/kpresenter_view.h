@@ -77,6 +77,7 @@ class Page;
 #include "ksearchdialogs.h"
 #include "shadowdia.h"
 #include "presstructview.h"
+#include "setbackcmd.h"
 
 #include <X11/Xlib.h>
 #include <signal.h>

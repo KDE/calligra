@@ -1274,37 +1274,20 @@ void KPresenterView_impl::slotMoveEnd(PartFrame_impl* _frame)
 /*=========== take changes for backgr dialog =====================*/
 void KPresenterView_impl::backOk(bool takeGlobal)
 {
-  unsigned int i = 0;
-
-  if (!takeGlobal)
-    {
-      m_pKPresenterDoc->setBackColor(getCurrPgNum() - 1,backDia->getBackColor1(),
-				     backDia->getBackColor2(),
-				     backDia->getBackColorType());
-      m_pKPresenterDoc->setBackType(getCurrPgNum() - 1,backDia->getBackType());
-      m_pKPresenterDoc->setBackView(getCurrPgNum() - 1,backDia->getBackView());
-      m_pKPresenterDoc->setBackPixFilename(getCurrPgNum() - 1,backDia->getBackPixFilename());
-      m_pKPresenterDoc->setBackClipFilename(getCurrPgNum() - 1,backDia->getBackClipFilename());
-      m_pKPresenterDoc->restoreBackground(getCurrPgNum() - 1);
-    }
-  else
-    {
-      for (i = 0;i < m_pKPresenterDoc->getPageNums();i++)
-	{
-	  m_pKPresenterDoc->setBackColor(i,backDia->getBackColor1(),
-					 backDia->getBackColor2(),
-					 backDia->getBackColorType());
-	  m_pKPresenterDoc->setBackView(i,backDia->getBackView());
-	  m_pKPresenterDoc->setBackType(i,backDia->getBackType());
-	  m_pKPresenterDoc->setBackPixFilename(i,backDia->getBackPixFilename());
-	  m_pKPresenterDoc->setBackClipFilename(i,backDia->getBackClipFilename());
-	}
-
-      for (i = 0;i < m_pKPresenterDoc->getPageNums();i++)
-	m_pKPresenterDoc->restoreBackground(i);
-    }
-
-  KPresenterDoc()->repaint(true);
+  SetBackCmd *setBackCmd = new SetBackCmd(i18n("Set Background"),backDia->getBackColor1(),
+					  backDia->getBackColor2(),backDia->getBackColorType(),
+					  backDia->getBackPixFilename(),backDia->getBackClipFilename(),
+					  backDia->getBackView(),backDia->getBackType(),
+					  m_pKPresenterDoc->getBackColor1(getCurrPgNum() - 1),
+					  m_pKPresenterDoc->getBackColor2(getCurrPgNum() - 1),
+					  m_pKPresenterDoc->getBackColorType(getCurrPgNum() - 1),
+					  m_pKPresenterDoc->getBackPixFilename(getCurrPgNum() - 1),
+					  m_pKPresenterDoc->getBackClipFilename(getCurrPgNum() - 1),
+					  m_pKPresenterDoc->getBackView(getCurrPgNum() - 1),
+					  m_pKPresenterDoc->getBackType(getCurrPgNum() - 1),
+					  takeGlobal,getCurrPgNum(),m_pKPresenterDoc);
+  setBackCmd->execute();
+  m_pKPresenterDoc->commands()->addCommand(setBackCmd);
 }
 
 /*================== autoform chosen =============================*/

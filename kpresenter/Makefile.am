@@ -26,7 +26,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kpbackground.cc kppixmap.cc kpclipart.cc kpgradient.cc\
 	kppixmapcollection.cc kpgradientcollection.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
-	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc \
+	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	commandhistory.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
@@ -43,7 +43,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpbackground.h kppixmap.h kpclipart.h kpgradient.h \
 		kppixmapcollection.h kpgradientcollection.h \
 		command.h movecmd.h resizecmd.h insertcmd.h deletecmd.h \
-		setoptionscmd.h chgclipcmd.h chgpixcmd.h \
+		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \
 		commandhistory.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
@@ -59,7 +59,7 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpbackground.moc kppixmap.moc kpclipart.moc kpgradient.moc\
 		kppixmapcollection.moc kpgradientcollection.moc \
 		command.moc movecmd.moc resizecmd.moc insertcmd.moc deletecmd.moc \
-		setoptionscmd.moc chgclipcmd.moc chgpixcmd.moc \
+		setoptionscmd.moc chgclipcmd.moc chgpixcmd.moc setbackcmd.moc \
 		commandhistory.moc
 
 idl_DATA =	kpresenter.idl
@@ -134,4 +134,5 @@ deletecmd.cc: deletecmd.moc
 setoptionscmd.cc: setoptionscmd.moc
 chgclipcmd.cc: chgclipcmd.moc
 chgpixcmd.cc: chgpixcmd.moc
+setbackcmd.cc: setbackcmd.moc
 commandhistory.cc: commandhistory.moc
