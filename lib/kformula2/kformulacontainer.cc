@@ -340,6 +340,16 @@ void KFormulaContainer::removeSelection(FormulaCursor* cursor,
     cursor->normalize();
 }
 
+void KFormulaContainer::replaceElementWithMainChild(FormulaCursor* cursor,
+                                                    BasicElement::Direction direction)
+{
+    if (!cursor->isSelection()) {
+        BasicElement* element = cursor->removeEnclosingElement(direction);
+        delete element;
+        cursor->setSelection(false);
+    }
+}
+
 
 void KFormulaContainer::undo()
 {

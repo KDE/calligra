@@ -21,6 +21,7 @@
 #include <iostream>
 #include <qpainter.h>
 
+#include "basicelement.h"
 #include "formulacursor.h"
 #include "kformulacontainer.h"
 #include "kformulawidget.h"
@@ -174,6 +175,12 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
                     break;
                 case Qt::Key_L:
                     document->addGenericLowerIndex(cursor);
+                    break;
+                case Qt::Key_D:
+                    document->replaceElementWithMainChild(cursor, BasicElement::afterCursor);
+                    break;
+                case Qt::Key_R:
+                    document->replaceElementWithMainChild(cursor, BasicElement::beforeCursor);
                     break;
                 default:
                     //cerr << "Key: " << event->key() << endl;

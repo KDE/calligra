@@ -33,6 +33,8 @@ public:
 
     NumberElement(QChar ch, BasicElement* parent = 0);
 
+    virtual QDomElement getElementDom(QDomDocument *doc);
+
 protected:
 
     virtual QFont getFont(ContextStyle& context);

@@ -32,3 +32,10 @@ QFont NumberElement::getFont(ContextStyle& context)
 {
     return context.getDefaultSymbolFont();
 }
+
+QDomElement NumberElement::getElementDom(QDomDocument *doc)
+{
+    QDomElement de = doc->createElement("NUMBER");
+    de.appendChild(TextElement::getElementDom(doc));
+    return de;
+}

@@ -132,6 +132,7 @@ public slots:
     void addGenericUpperIndex(FormulaCursor* cursor);
     
     void removeSelection(FormulaCursor* cursor, BasicElement::Direction);
+    void replaceElementWithMainChild(FormulaCursor* cursor, BasicElement::Direction);
 
     /**
      * Undo and move the undone command to the redo stack

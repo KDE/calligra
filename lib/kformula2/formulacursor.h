@@ -155,6 +155,14 @@ public:
      */
     BasicElement* replaceByMainChildContent(BasicElement::Direction = BasicElement::beforeCursor);
 
+    /**
+     * Trys to find the element we are the main child of and replace
+     * it with our content.
+     *
+     * This is simply another form of replaceByMainChildContent. You
+     * use this one if the cursor is normalized and inside the main child.
+     */
+    BasicElement* removeEnclosingElement(BasicElement::Direction = BasicElement::beforeCursor);
 
     /**
      * Returns wether the element the cursor points to should be replaced.

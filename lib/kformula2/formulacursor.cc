@@ -331,6 +331,26 @@ BasicElement* FormulaCursor::replaceByMainChildContent(BasicElement::Direction d
 
 
 /**
+ * Trys to find the element we are the main child of and replace
+ * it with our content.
+ *
+ * This is simply another form of replaceByMainChildContent. You
+ * use this one if the cursor is normalized and inside the main child.
+ */
+BasicElement* FormulaCursor::removeEnclosingElement(BasicElement::Direction direction)
+{
+    BasicElement* parent = getElement()->getParent();
+    if (parent != 0) {
+        if (getElement() == parent->getMainChild()) {
+            parent->selectChild(this, getElement());
+            return replaceByMainChildContent(direction);
+        }
+    }
+    return 0;
+}
+
+
+/**
  * Returns wether the element the cursor points to should be replaced.
  * Elements are senseless as soon as they only contain a main child.
  */
