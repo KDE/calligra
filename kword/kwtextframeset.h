@@ -417,7 +417,7 @@ class KWFootNoteFrameSet : public KWTextFrameSet
 public:
     /** constructor */
     KWFootNoteFrameSet( KWDocument *doc, const QString & name )
-        : KWTextFrameSet( doc, name ) {}
+        : KWTextFrameSet( doc, name ), m_footNoteVar( 0L ) {}
 
     virtual KWordFrameSetIface* dcopObject();
 
