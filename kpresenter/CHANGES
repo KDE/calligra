@@ -134,3 +134,8 @@ Reggie, 2.5.1999:
 -----------------
 - Some fixes
 - Finished implementation of HTML slideshow creation
+
+Reggie, 3.5.1999:
+-----------------
+- Added PNG to filters when opening KFileDialog for opening a pic
+- Fixes in pixmap loading

@@ -476,18 +476,21 @@ void KPresenterView::insertPicture()
   QString file = KFilePreviewDialog::getOpenFileName(QString::null,
 						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
 							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
-							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw *.png *.PNG|All pictures\n"
+							  "*.png *.PNG|PNG-Pictures\n"
 							  "*.gif *.GIF|GIF-Pictures\n"
 							  "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
 							  "*.bmp *.BMP|Windows Bitmaps\n"
 							  "*.xbm *.XBM|XWindow Pitmaps\n"
 							  "*.xpm *.XPM|Pixmaps\n"
 							  "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
-							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),
-						     0L);
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
 
+  QCursor c = page->cursor();
+  page->setCursor(waitCursor);
   if (!file.isEmpty()) m_pKPresenterDoc->insertPicture(file.data(),xOffset,yOffset);
-
+  page->setCursor(c);
+  
 //   QEvent ev(Event_Leave);
 //   QMouseEvent mev(Event_MouseButtonRelease,
 // 		  QCursor::pos(),LeftButton,LeftButton);
@@ -2701,15 +2704,15 @@ void KPresenterView::changePicture(unsigned int,const QString & filename)
   QString file = KFilePreviewDialog::getOpenFileName(QString::null,
 						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
 							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
-							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw *.png *.PNG|All pictures\n"
+							  "*.png *.PNG|PNG-Pictures\n"
 							  "*.gif *.GIF|GIF-Pictures\n"
 							  "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
 							  "*.bmp *.BMP|Windows Bitmaps\n"
 							  "*.xbm *.XBM|XWindow Pitmaps\n"
 							  "*.xpm *.XPM|Pixmaps\n"
 							  "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
-							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),
-						     0L);
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
 
   if (!file.isEmpty()) m_pKPresenterDoc->changePicture(file,xOffset,yOffset);
 }

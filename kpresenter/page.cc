@@ -3180,8 +3180,11 @@ void Page::dropEvent(QDropEvent *e)
       filename += ".xpm";
 
       pix.save(filename,"XPM");
+      QCursor c = cursor();
+      setCursor(waitCursor);
       view->kPresenterDoc()->insertPicture(filename,e->pos().x(),e->pos().y());
-
+      setCursor(c);
+      
       QString cmd = "rm -f ";
       cmd += filename;
       system(cmd.ascii());
@@ -3231,8 +3234,11 @@ void Page::dropEvent(QDropEvent *e)
 	      QString mimetype = res->mimeType();
 	      if (mimetype.contains("image"))
 		{
+		  QCursor c = cursor();
+		  setCursor(waitCursor);
 		  view->kPresenterDoc()->insertPicture(filename,e->pos().x(),e->pos().y());
-      		  continue;
+      		  setCursor(c);
+		  continue;
 		}	
 	
 	    }

@@ -16,6 +16,10 @@
 #include "kppixmap.h"
 #include "kppixmap.moc"
 
+#include <qcstring.h>
+#include <qbuffer.h>
+#include <qimage.h>
+
 /******************************************************************/
 /* Class: KPPixmap                                                */
 /******************************************************************/
@@ -26,13 +30,13 @@ KPPixmap::KPPixmap(QString _filename,KSize _size)
 {
   QFileInfo fileInfo(filename);
 	
-  if (fileInfo.extension().lower() != "xpm")
-    {
-      pixmap.save("/tmp/kpresenter_tmp.xpm","XPM");
-      data = load_pixmap_native_format("/tmp/kpresenter_tmp.xpm");
-    }
-  else
-    data = load_pixmap_native_format(filename);
+  QCString str;
+  QBuffer buf(str);
+  buf.open(IO_WriteOnly);
+  QImageIO io(&buf,"XPM");
+  io.setImage(pixmap.convertToImage());
+  io.write();
+  data = string_to_native_string(str.data());
 
   if (_size != pixmap.size() && _size != orig_size && pixmap.width() != 0 && pixmap.height() != 0)
     {
@@ -87,10 +91,10 @@ void KPPixmap::addRef()
 
 /*====================== remove reference =======================*/
 bool KPPixmap::removeRef()
-{ 
+{
 #ifdef SHOW_INFO
-  debug("Refs of '%s': %d",filename.data(),--refCount); 
-  return refCount == 0; 
+  debug("Refs of '%s': %d",filename.data(),--refCount);
+  return refCount == 0;
 #else
   return (--refCount == 0);
 #endif
@@ -101,17 +105,17 @@ QPixmap KPPixmap::native_string_to_pixmap(const char *_pixmap)
 {
   if (_pixmap == 0L || _pixmap[0] == 0)
     return QPixmap();
-  
+
   char* pos = const_cast<char*>(&_pixmap[0]);
-  
+
   while (*pos)
     {
       if (*pos == 1)
 	*pos = '\"';
-      
+
       pos++;
     }
-  
+
     QPixmap ret;
     if (!_pixmap)
       return ret;
@@ -128,9 +132,9 @@ QString KPPixmap::load_pixmap_native_format(const char *_file)
       warning(" Could not open pixmap file '%s\n",_file);
       return QString();
     }
-  
+
   char buffer[2048];
-  
+
   QString str( "" );
   while(!feof(f))
     {
@@ -143,16 +147,16 @@ QString KPPixmap::load_pixmap_native_format(const char *_file)
 	    {
 	      if (*c == '\"')
 		*c = 1;
-	      
+	
 	      c++;
 	    }
-	  
+	
 	  str += buffer;
 	}
     }
-  
+
   fclose(f);
-  
+
   return str;
 }
 
@@ -161,14 +165,14 @@ QString KPPixmap::string_to_native_string(const char *_pixmap)
 {
   if (_pixmap == 0L || _pixmap[0] == 0)
     return QString();
-  
+
   char* pos = const_cast<char*>(&_pixmap[0]);
-  
+
   while (*pos)
     {
       if (*pos == '\"')
 	*pos = 1;
-      
+
       pos++;
     }
 

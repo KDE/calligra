@@ -43,7 +43,6 @@ KPPixmapObject::KPPixmapObject(KPPixmapCollection *_pixmapCollection,QString _fi
   pixmapCollection = _pixmapCollection;
   pixmap = 0;
   ext = orig_size;
-  setFileName(_filename);
   brush = NoBrush;
   gradient = 0;
   fillType = FT_BRUSH;
@@ -52,6 +51,7 @@ KPPixmapObject::KPPixmapObject(KPPixmapCollection *_pixmapCollection,QString _fi
   pen = QPen(black,1,NoPen);
   gColor1 = red;
   gColor2 = green;
+  setFileName(_filename);
 }
 
 /*======================= set size ===============================*/
