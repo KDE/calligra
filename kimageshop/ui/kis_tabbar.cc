@@ -29,12 +29,13 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <knotifyclient.h>
+#include <klineeditdlg.h>
 
 #include <kis_view.h>
 #include <kis_doc.h>
 
 #include "kis_tabbar.h"
-#include "kis_dlg_rename.h"
 
 KisTabBar::KisTabBar( KisView *_view, KisDoc *_doc )
   : QWidget ( (QWidget*)_view )
@@ -350,37 +351,39 @@ void KisTabBar::renameTab()
         i++;
     }
 
-    KisDlgRename dlg(imgName, this, "rename_dlg", true);
-    dlg.resize(300, 60);
-    dlg.setCaption(i18n("Rename image"));
-    
-    if (dlg.exec())
+    bool ok;
+    QString activeName = imgName;
+    QString newName = KLineEditDlg::getText( i18n("Image Name"), activeName, &ok, this );
+
+    // Have a different name ?
+    if ( ok ) // User pushed an OK button.
     {
-      QString newName = dlg.name();
-      // Have a different name ?
-      if ( newName != imgName )
+        if ( (newName.stripWhiteSpace()).isEmpty() ) // Image name is empty.
         {
-	  // Is the name already used
-	  bool exist=false;
-	  for ( it = tabsList.begin(); it != tabsList.end(); ++it ) 
-	    {
-	      if (*it == newName)
-	        exist=true;
-	    }
-	  if(exist)
-	    {
-                KMessageBox::error( this, i18n("This name is already used."));
-                // Recursion
-                renameTab();
-                return;
-            }
-	  else
-	    {
-	      QString newName = dlg.name();
-	      m_pDoc->renameImage(imgName, newName);
-	    }
-	}
-    }    
+            KNotifyClient::beep();
+            KMessageBox::information( this, i18n("Image name cannot be empty."), i18n("Change image name") );
+            // Recursion
+            renameTab();
+            return;
+        }
+        else if ( newName != activeName ) // Image name changed.
+        {
+             for ( QStringList::Iterator it = tabsList.begin(); it != tabsList.end(); ++it )
+             {
+                 // Is the name already used
+                 if ( (*it) == newName )
+                 {
+                     KNotifyClient::beep();
+                     KMessageBox::information( this, i18n("This name is already used."), i18n("Change image name") );
+                     // Recursion
+                     renameTab();
+                     return;
+                 }
+             }
+             m_pDoc->renameImage(imgName, newName);
+             m_pDoc->setModified( true );
+        }
+    }
 }
 
 void KisTabBar::mousePressEvent( QMouseEvent* _ev )

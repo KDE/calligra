@@ -6,7 +6,7 @@ libkisui_la_SOURCES = kis_dlg_preferences.cc \
     colorframe.cc colorslider.cc \
     iconchooser.cc integerwidget.cc blendchooser.cc \
     kis_dlg_gradient.cc  \
-    kis_dlg_new.cc kis_dlg_rename.cc  kis_dlg_new_layer.cc \
+    kis_dlg_new.cc  kis_dlg_new_layer.cc \
     kfloatingdialog.cc kfloatingtabdialog.cc \
     kis_tabbar.cc  kis_canvas.cc \
     kis_sidebar.cc kis_framebutton.cc \
