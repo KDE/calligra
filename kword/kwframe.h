@@ -83,6 +83,7 @@ public:
     void setSelected( bool _selected );
     bool isSelected() { return selected; }
 
+#if 0
     /* Run around stuff */
     /** add an intersection to the list of intersections of this frame.
     * A frame can intersect another frame, since we don't want to print
@@ -105,8 +106,6 @@ public:
 
     unsigned int getNextFreeYPos( unsigned int _y, unsigned int _h );
 
-    QCursor getMouseCursor( int mx, int my, bool table );
-
     /** Calculate the left indent we have to make for a free spot to render in.
     * The test will be limited to a square (mostly one line) inside the frame. The
     * y provides the offset, the h the height of the line.
@@ -122,6 +121,10 @@ public:
     * @param h height. The height in which we will test.
     */
     int getRightIndent( int y, int h );
+
+#endif
+
+    QCursor getMouseCursor( int mx, int my, bool table );
 
     KWUnit getRunAroundGap() { return runAroundGap; }
     void setRunAroundGap( KWUnit gap ) { runAroundGap = gap; }
@@ -233,11 +236,12 @@ private:
 class KWFrameSetEdit
 {
 public:
-    KWFrameSetEdit( KWFrameSet * fs, KWCanvas * canvas ) : m_fs(fs), m_canvas(canvas) {}
+    KWFrameSetEdit( KWFrameSet * fs, KWCanvas * canvas );
     virtual ~KWFrameSetEdit() {}
 
     KWFrameSet * frameSet() const { return m_fs; }
     KWCanvas * canvas() const { return m_canvas; }
+    KWFrame * currentFrame() const { return m_currentFrame; }
 
     /**
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
@@ -266,6 +270,11 @@ public:
 protected:
     KWFrameSet * m_fs;
     KWCanvas * m_canvas;
+    /**
+     * The Frameset-Edit implementation is responsible for updating that one
+     * (to the frame where the current "cursor" is)
+     */
+    KWFrame * m_currentFrame;
 };
 
 /**

@@ -98,7 +98,6 @@ public:
 
     void showStyle( const QString & styleName );
     void showRulerIndent( KWUnit _leftMargin, KWUnit _firstLine );
-    void showPageNum( int pgnum );
 
 //    virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 
@@ -274,6 +273,7 @@ public slots:
     void clipboardDataChanged();
     void tabListChanged( QList<KoTabulator>* );
 
+    void updatePageInfo();
 
     void slotSpecialChar(QChar c);
 

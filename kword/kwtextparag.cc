@@ -485,7 +485,7 @@ int Counter::width( const KWTextParag *paragraph )
 KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
     : QTextParag( d, pr, nx, updateIds )
 {
-    //qDebug("KWTextParag::KWTextParag %p", this);
+    kdDebug() << "KWTextParag::KWTextParag " << this << endl;
     m_item = 0L;
     m_leftBorder.ptWidth = 0;
     m_rightBorder.ptWidth = 0;
@@ -892,7 +892,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
         if ( newFormat != curFormat )
         {
             // Format changed.
-            if ( startPos > 0 && curFormat) { // Save former format
+            if ( startPos > -1 && curFormat) { // Save former format
                 QDomElement formatElem = saveFormat( doc, curFormat, paragFormat(), startPos, index-startPos );
                 if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
                     formatsElem.appendChild( formatElem );
@@ -970,11 +970,8 @@ QTextFormat KWTextParag::loadFormat( QDomElement &formatElem, QTextFormat * refF
     return format;
 }
 
-void KWTextParag::load( QDomElement &attributes )
+void KWTextParag::loadLayout( QDomElement & attributes )
 {
-    QString value;
-    QDomElement element;
-
     QDomElement layout = attributes.namedItem( "LAYOUT" ).toElement();
     if ( !layout.isNull() )
     {
@@ -990,9 +987,14 @@ void KWTextParag::load( QDomElement &attributes )
             setFormat( defaultFormat );
         }
     }
+}
+
+void KWTextParag::load( QDomElement &attributes )
+{
+    loadLayout( attributes );
 
     // Set the text after setting the paragraph format - so that the format applies
-    element = attributes.namedItem( "TEXT" ).toElement();
+    QDomElement element = attributes.namedItem( "TEXT" ).toElement();
     if ( !element.isNull() )
     {
         append( element.text() );
@@ -1000,9 +1002,18 @@ void KWTextParag::load( QDomElement &attributes )
         setFormat( 0, string()->length(), paragFormat(), TRUE );
     }
 
+    loadFormatting( attributes );
+
+    setChanged( true );
+    invalidate( 0 );
+}
+
+void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
+{
     QDomElement formatsElem = attributes.namedItem( "FORMATS" ).toElement();
     if ( !formatsElem.isNull() )
     {
+        QTextFormatCollection *fc = formatCollection();
         QDomNodeList listFormats = formatsElem.elementsByTagName( "FORMAT" );
         for (unsigned int item = 0; item < listFormats.count(); item++)
         {
@@ -1013,9 +1024,23 @@ void KWTextParag::load( QDomElement &attributes )
             if ( id != 1 )
                 kdWarning() << "KWTextParag::loadFormat id=" << id << " should be 1" << endl;
 
-            int pos = formatElem.attribute( "pos" ).toInt();
+            int index = formatElem.attribute( "pos" ).toInt() + offset;
             int len = formatElem.attribute( "len" ).toInt();
-            setFormat( pos, len, &f );
+
+            /* ARGL, finally I don't need this
+            QTextFormat * format = fc->format( &f );
+            if ( index < 0 )
+                index = 0;
+            if ( index > str->length() - 1 )
+                index = str->length() - 1;
+            if ( index + len > str->length() )
+                len = str->length() - 1 - index;
+
+            kdDebug() << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len " << endl;
+            for ( int i = 0; i < len; ++i )
+                str->setFormat( i + index, format, true );
+            */
+            setFormat( index, len, &f );
         }
     }
 }

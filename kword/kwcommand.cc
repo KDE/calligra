@@ -274,6 +274,94 @@ QTextCursor * KWParagFormatCommand::unexecute( QTextCursor *c )
     return c;
 }
 
+KWPasteCommand::KWPasteCommand( QTextDocument *d, int parag, int idx,
+                                const QCString & data )
+    : QTextCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data )
+{
+}
+
+QTextCursor * KWPasteCommand::execute( QTextCursor *c )
+{
+    QTextParag *firstParag = doc->paragAt( m_parag );
+    if ( !firstParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    cursor.setParag( firstParag );
+    cursor.setIndex( m_idx );
+    QDomDocument domDoc;
+    domDoc.setContent( m_data );
+    QDomElement elem = domDoc.documentElement();
+    // We iterate twice over the list of paragraphs.
+    // First time to gather the text,
+    // second time to apply the character & paragraph formatting
+    QString text;
+
+    QDomNodeList listParagraphs = elem.elementsByTagName ( "PARAGRAPH" );
+    for (unsigned int item = 0; item < listParagraphs.count(); item++)
+    {
+        QDomElement paragElem = listParagraphs.item( item ).toElement();
+        QString s = paragElem.namedItem( "TEXT" ).toElement().text();
+        if ( !text.isEmpty() )
+            text += '\n';
+        text += s;
+    }
+
+    cursor.insert( text, true );
+
+    KWTextParag * parag = static_cast<KWTextParag *>(firstParag);
+    for (unsigned int item = 0; item < listParagraphs.count(); item++)
+    {
+        QDomElement paragElem = listParagraphs.item( item ).toElement();
+        if ( item == 0 ) // First line: apply offset to formatting, don't apply parag layout
+        {
+            parag->loadFormatting( paragElem, m_idx );
+        }
+        else
+        {
+            parag->loadLayout( paragElem );
+            // Apply default format
+            parag->setFormat( 0, parag->string()->length(), parag->paragFormat(), TRUE );
+            parag->loadFormatting( paragElem );
+        }
+        parag->format();
+        parag->setChanged( TRUE );
+        parag = static_cast<KWTextParag *>(parag->next());
+    }
+    // Move to the end
+    c->setParag( firstParag );
+    c->setIndex( m_idx );
+    for ( int i = 0; i < (int)text.length(); ++i )
+        c->gotoRight();
+    m_lastParag = c->parag()->paragId();
+    m_lastIndex = c->index();
+    return c;
+}
+
+QTextCursor * KWPasteCommand::unexecute( QTextCursor *c )
+{
+    QTextParag *firstParag = doc->paragAt( m_parag );
+    if ( !firstParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    cursor.setParag( firstParag );
+    cursor.setIndex( m_idx );
+    doc->setSelectionStart( QTextDocument::Temp, &cursor );
+
+    QTextParag *lastParag = doc->paragAt( m_lastParag );
+    if ( !lastParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_lastParag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    cursor.setParag( lastParag );
+    cursor.setIndex( m_lastIndex );
+    doc->setSelectionEnd( QTextDocument::Temp, &cursor );
+    doc->removeSelectedText( QTextDocument::Temp, c /* sets c to the correct position */ );
+    return c;
+}
+
+////////////////////////// Frame commands ////////////////////////////////
 
 KWFrameBorderCommand::KWFrameBorderCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_listFrameIndex, QList<FrameBorderTypeStruct> &_frameTypeBorder,const Border & _newBorder):
     KCommand(name),

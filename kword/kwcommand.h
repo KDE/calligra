@@ -27,24 +27,6 @@ class QTextCommand;
 class KWTextFrameSet;
 class KWDocument;
 
-struct FrameIndex {
-    unsigned int m_iFrameIndex;	
-    unsigned int m_iFrameSetIndex;
-};
-
-struct FrameResizeStruct {
-    QRect sizeOfBegin;
-    QRect sizeOfEnd;
-};
-
-enum FrameBorderType { FBLeft=0, FBRight=1, FBTop=2, FBBottom=3};
-
-struct FrameBorderTypeStruct {
-    FrameBorderType m_EFrameType;
-    Border m_OldBorder;
-};
-
-
 /**
  * Wraps a QTextCommand into a KCommand, for the UI
  * In fact the QTextCommand isn't even known from here.
@@ -148,6 +130,41 @@ protected:
 };
 
 /**
+ * Command created when pasting formatted text
+ */
+class KWPasteCommand : public QTextCommand
+{
+public:
+    KWPasteCommand( QTextDocument *d, int parag, int idx,
+                    const QCString & data );
+    ~KWPasteCommand() {}
+    QTextCursor *execute( QTextCursor *c );
+    QTextCursor *unexecute( QTextCursor *c );
+protected:
+    int m_parag;
+    int m_idx;
+    QCString m_data;
+    // filled in by execute(), for unexecute()
+    int m_lastParag;
+    int m_lastIndex;
+};
+
+////////////////////////// Frame commands ////////////////////////////////
+
+// Identifies a frame
+struct FrameIndex {
+    unsigned int m_iFrameSetIndex;
+    unsigned int m_iFrameIndex;
+};
+
+enum FrameBorderType { FBLeft=0, FBRight=1, FBTop=2, FBBottom=3};
+
+struct FrameBorderTypeStruct {
+    FrameBorderType m_EFrameType;
+    Border m_OldBorder;
+};
+
+/**
  * Command created when changing frame border
  */
 class KWFrameBorderCommand : public KCommand
@@ -167,7 +184,7 @@ protected:
 };
 
 /**
- * Command created when changing backgroundcolor
+ * Command created when changing background color of one or more frames
  */
 class KWFrameBackGroundColorCommand : public KCommand
 {
@@ -185,15 +202,20 @@ protected:
     KWDocument *m_pDoc;
 };
 
+struct FrameResizeStruct {
+    QRect sizeOfBegin;
+    QRect sizeOfEnd;
+};
+
 /**
- * Command created when you resize a frame
+ * Command created when a frame is resized
  */
 class KWFrameResizeCommand : public KCommand
 {
 public:
     KWFrameResizeCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex,FrameResizeStruct _frameResize ) ;
     ~KWFrameResizeCommand() {}
-    
+
     void execute();
     void unexecute();
 
@@ -204,14 +226,14 @@ protected:
 };
 
 /**
- * Command created when you move a frame
+ * Command created when one or more frames are moved
  */
 class KWFrameMoveCommand : public KCommand
 {
 public:
     KWFrameMoveCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_frameIndex,QList<FrameResizeStruct>&_frameMove ) ;
     ~KWFrameMoveCommand() {}
-    
+
     void execute();
     void unexecute();
     QList<FrameResizeStruct> getListFrameMoved() {return m_frameMove;}

@@ -185,8 +185,8 @@ public:
      */
     KWStyle* styleAt( int i ) { return m_styleList.at(i); }
 
-    int getPages() const { return pages; }
-    //void setPages( int _pages ) { pages = _pages;  }
+    int getPages() const { return m_pages; }
+    //void setPages( int _pages ) { m_pages = _pages;  }
 
     KWImageCollection *imageCollection() { return &m_imageCollection; }
 
@@ -375,6 +375,7 @@ signals:
     void sig_updateChildGeometry( KWChild *_child ); // unused
     void sig_removeObject( KWChild *_child );
     void sig_newContentsSize( int width, int height );
+    void pageNumChanged();
 
 protected slots:
     void slotDocumentRestored();
@@ -415,7 +416,7 @@ private:
     // Cached value for findStyle()
     KWStyle *m_lastStyle;
 
-    int pages;
+    int m_pages;
 
     ProcessingType m_processingType;
     int m_gridX, m_gridY;

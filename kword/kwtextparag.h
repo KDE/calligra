@@ -230,6 +230,12 @@ public:
     void save( QDomElement &parentElem, int from = 0, int to = -1 );
     void load( QDomElement &attributes );
 
+    // Load and apply <FORMAT> tags (used by KWTextParag::load and by KWPasteCommand)
+    void loadFormatting( QDomElement &attributes, int offset = 0 );
+
+    // Load and apply paragraph layout
+    void loadLayout( QDomElement & attributes );
+
     const QList<KoTabulator> *tabList() const { return &m_tabList; }
     void setTabList( const QList<KoTabulator> *tabList );
     //bool hasSpecialTabs() const { return m_specialTabs; }

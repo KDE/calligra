@@ -103,6 +103,7 @@ KWFrame::~KWFrame()
         removeResizeHandles();
 }
 
+#if 0
 /*================================================================*/
 void KWFrame::addIntersect( QRect &_r )
 {
@@ -198,6 +199,7 @@ QRegion KWFrame::getEmptyRegion( bool useCached )
 
     return emptyRegion;
 }
+#endif
 
 /*================================================================*/
 QCursor KWFrame::getMouseCursor( int mx, int my, bool table )
@@ -726,7 +728,7 @@ void KWFrameSet::load( QDomElement &attributes )
         frame->setFrameBehaviour( autoCreateNewValue );
         frame->setSheetSide( sheetSide );
         frame->setNewFrameBehaviour( newFrameBehaviour);
-        addFrame( frame ); // this will call updateFrames, and will update m_availableHeight
+        frames.append( frame );
         doc->progressItemLoaded();
     }
 }
@@ -787,6 +789,10 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     } else return QRegion();
 }
 
+KWFrameSetEdit::KWFrameSetEdit( KWFrameSet * fs, KWCanvas * canvas )
+     : m_fs(fs), m_canvas(canvas), m_currentFrame( fs->getFrame(0) )
+{
+}
 
 /******************************************************************/
 /* Class: KWPictureFrameSet                                       */

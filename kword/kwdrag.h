@@ -37,7 +37,8 @@ public:
     void setKWord( const QCString &_kword ) { kword = _kword; }
     //void setHTML( const QString &_html );
 
-    QByteArray encodedData( const char *mime ) const;
+    virtual QByteArray encodedData( const char *mime ) const;
+    virtual const char* format( int i ) const;
 
     static bool canDecode( QMimeSource* e );
     static bool decode( QMimeSource* e, QString& s );

@@ -130,7 +130,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
                       this, SLOT( insertPicture( const QString & ) ) );
     QObject::connect( doc, SIGNAL( sig_updateChildGeometry( KWChild* ) ),
                       this, SLOT( slotUpdateChildGeometry( KWChild* ) ) );
-
+    QObject::connect( doc, SIGNAL( pageNumChanged() ),
+                      this, SLOT( updatePageInfo() ) );
 
     KFontChooser::getFontList(fontList, false); // Shouldn't this be in the doc, or not at all ?
     setKeyCompression( TRUE );
@@ -630,10 +631,14 @@ void KWView::showFormulaToolbar( bool show )
     tb->hide();
 }
 
-void KWView::showPageNum( int pgnum )
+void KWView::updatePageInfo()
 {
-    if ( statusBar() )
-        statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(pgnum).arg(doc->getPages())+' ', statusPage );
+    KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+    if ( statusBar() && edit )
+    {
+        int pgNum = edit->currentFrame()->getPageNum() + 1;
+        statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(pgNum).arg(doc->getPages())+' ', statusPage );
+    }
 }
 
 /*================================================================*/
@@ -2545,7 +2550,6 @@ void KWView::newPageLayout( KoPageLayout _layout )
     KoColumns cl;
     KoKWHeaderFooter hf;
     doc->getPageLayout( pgLayout, cl, hf );
-    doc->setModified(true);
 
     doc->setPageLayout( _layout, cl, hf );
     gui->getHorzRuler()->setPageLayout( _layout );

@@ -20,6 +20,7 @@
 #include "kwdrag.h"
 #include "kwdrag.moc"
 #include "defs.h"
+#include <kdebug.h>
 
 /******************************************************************/
 /* Class: KWDrag                                               */
@@ -41,6 +42,7 @@ void KWDrag::setPlain( const QString &_plain )
 /*================================================================*/
 QByteArray KWDrag::encodedData( const char *mime ) const
 {
+    kdDebug() << "KWDrag::encodedData " << mime << endl;
     /*if ( strcmp(mime, "text/html") == 0 )
     {
         KWDrag *non_const_this = const_cast<KWDrag *>(this);
@@ -66,6 +68,16 @@ bool KWDrag::canDecode( QMimeSource* e )
     if ( e->provides( MIME_TYPE ) )
        return true;
     return QTextDrag::canDecode(e);
+}
+
+/*================================================================*/
+const char* KWDrag::format( int i ) const
+{
+    if ( i < 4 ) // HACK, but how to do otherwise ??
+        return QTextDrag::format(i);
+    else if ( i == 4 )
+        return MIME_TYPE;
+    else return 0;
 }
 
 /*================================================================*/
