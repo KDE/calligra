@@ -61,6 +61,8 @@ class KexiTablePart : public KexiProjectHandler, public KexiDataProvider
 
 		KexiTableFilterManager *filters() { return m_filters; }
 
+		virtual KexiDataProvider	*provider() { return this; }
+
 	private:
 		QStringList m_tableNames;
 		KexiTableFilterManager *m_filters;

@@ -70,7 +70,7 @@ class CqlRecord : public KexiDBRecordSet
 
 		int		insert();
 
-		void		gotoRecord(unsigned int record);
+		void		gotoRecord(unsigned long record);
 
 		unsigned int	fieldCount();
 

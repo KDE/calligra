@@ -38,7 +38,7 @@
 class KexiProjectHandlerItem;
 class KexiProjectHandlerProxy;
 class KexiEventHandler;
-
+class KexiDataProvider;
 
 /*!
  *  this is a baseclass for project parts like:
@@ -84,6 +84,7 @@ class KexiProjectHandler : public QObject
 		static QString handlerNameFromGlobalIdentifier(const QString &globalIdentifier);
 		QString globalIdentifier(const QString &localIdentifier);
 
+		virtual KexiDataProvider	*provider() { return 0; }
 	signals:
 		void itemListChanged(KexiProjectHandler*);
 

@@ -90,7 +90,7 @@ class MySqlRecord : public KexiDBRecordSet, public MySqlResult
 		MySqlRecord *operator++();
 		MySqlRecord *operator--();
 
-		void gotoRecord(unsigned int record);
+		void gotoRecord(unsigned long record);
 
 		unsigned int fieldCount();
 

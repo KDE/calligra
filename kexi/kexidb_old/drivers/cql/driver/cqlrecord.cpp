@@ -166,7 +166,7 @@ CqlRecord::insert()
 }
 
 void
-CqlRecord::gotoRecord(unsigned int record)
+CqlRecord::gotoRecord(unsigned long record)
 {
 }
 

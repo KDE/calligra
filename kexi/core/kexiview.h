@@ -53,7 +53,7 @@ class KexiView : public KoView
    Q_OBJECT
 
 public:
-	enum KexiWindowMode {MultipleWindowMode=0,SingleWindowMode=1,MDIWindowMode=2};
+	enum KexiWindowMode {MultipleWindowMode=0,SingleWindowMode=1,MDIWindowMode=2,EmbeddedMode=3};
 
 	KexiView(KexiWindowMode winmode, KexiProject* part,QWidget *parent=0, const char *name=0);
 	~KexiView();

@@ -42,6 +42,7 @@
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"
 #include "kexiworkspaceMDI.h"
+#include "kexiworkspaceSDI.h"
 #include "kexiprojectproperties.h"
 #include "KexiViewIface.h"
 #include "kexidbconnection.h"
@@ -55,15 +56,22 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, co
 	initActions();
 	dcop = 0;
 	m_browser = 0;
+	m_help = 0;
+	m_lastForm = NULL;
 	dcopObject(); // build it
 //	createGUI("kexiui.rc",false);
 	setXMLFile("kexiui.rc");
 
-	initMainDock();
-//	setAutoSaveSettings();
-
-	m_lastForm = NULL;
-	QTimer::singleShot(0,this,SLOT(finalizeInit()));
+	if(winmode != EmbeddedMode)
+	{
+		initMainDock();
+		QTimer::singleShot(0,this,SLOT(finalizeInit()));
+	}
+	else
+	{
+		(new QVBoxLayout (this))->setAutoAdd(true);
+		m_workspace = new KexiWorkspaceSDI(this, 0, this);
+	}
 }
 
 DCOPObject* KexiView::dcopObject()

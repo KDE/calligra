@@ -152,7 +152,7 @@ class KexiDBRecordSet : public QObject
 		 *  directly changes to the nth record
 		 *  returns 0 if the record "record" doesn't exists
 		 */
-		virtual void gotoRecord(unsigned int record) = 0;
+		virtual void gotoRecord(unsigned long record) = 0;
 
 		/*!
 		 *  returns the number of avaible fields

@@ -344,9 +344,10 @@ MySqlRecord::deleteRecord(uint record)
 }
 
 void
-MySqlRecord::gotoRecord(unsigned int)
+MySqlRecord::gotoRecord(unsigned long r)
 {
-	return;
+	MySqlResult::gotoRecord(r);
+//	return;
 }
 
 unsigned int

@@ -43,6 +43,7 @@ class MySqlResult
 
 		bool		next();
 		bool		prev();
+		bool		gotoRecord(unsigned long r);
 
 		unsigned int	numFields();
 		unsigned int	numRows();

@@ -103,6 +103,23 @@ MySqlResult::prev()
 	return true;
 }
 
+bool
+MySqlResult::gotoRecord(unsigned long r)
+{
+	mysql_data_seek(m_result, r);
+	m_row = mysql_fetch_row(m_result);
+	m_lengths = mysql_fetch_lengths(m_result);
+
+	if(!m_row)
+	{
+		kdDebug() << "MySqlResult::gotoRecord(): jump faild!" << endl;
+		return false;
+	}
+
+	m_currentRecord = r;
+	return true;
+}
+
 QVariant
 MySqlResult::value(unsigned int field)
 {

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Till Busch <till@bux.at>
-   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -18,45 +17,36 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIKWMAILMERGEBASE_H
-#define KEXIKWMAILMERGEBASE_H
+#ifndef KEXIKWMMCONFIGDLG_H
+#define KEXIKWMMCONFIGDLG_H
 
+#include <qdialog.h>
 #include "kword/mailmerge_interface.h"
-#include "kexiDB/kexidbrecordset.h"
 
+class KexiDataSourceComboBox;
 class KexiKWMMConnection;
+class KexiView;
 
-class KexiKWMailMergeBase : public KWMailMergeDataSource
+class KexiKWMMConfigDlg : public QDialog
 {
 	Q_OBJECT
-	K_DCOP
 
 	public:
-		KexiKWMailMergeBase(KInstance *instance, QObject *parent);
-		~KexiKWMailMergeBase();
+		KexiKWMMConfigDlg(QWidget *parent, KexiKWMMConnection *conn);
+		~KexiKWMMConfigDlg();
 
-		virtual bool	showConfigDialog(QWidget *parent, int action);
+		QString	mime() const;
+		QString id() const;
 
-		virtual void	save(QDomDocument &, QDomElement &) { ; }
-		virtual void	load(QDomElement &) { ;}
+		DbRecord fields();
 
-		virtual void	refresh(bool);
-
-		virtual QString	getValue(const QString &, int) const;
-		virtual int	getNumRecords() const;
-
-		bool	initDB(bool count);
-
-	k_dcop:
-		bool	openDatabase();
+	protected slots:
+		void	slotSourceChanged(int);
 
 	private:
+		KexiDataSourceComboBox	*m_dataSource;
 		KexiKWMMConnection	*m_connection;
-		QString			m_mime;
-		QString			m_id;
-		KexiDBRecordSet		*m_records;
-
-		int			m_no;
+		KexiView		*m_view;
 };
 
 #endif

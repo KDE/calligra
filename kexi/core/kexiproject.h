@@ -110,6 +110,9 @@ public:
 
 	KexiProjectHandler *handlerForMime(const QString&);
 	ProviderList providers(const QString &interfaceName);
+	virtual bool completeLoading( KoStore* store );
+
+
 signals:
 	void dbAvaible();
 	void saving(KoStore *);
@@ -118,7 +121,7 @@ signals:
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 	virtual bool completeSaving( KoStore* store );
-	virtual bool completeLoading( KoStore* store );
+//	virtual bool completeLoading( KoStore* store );
 	void setCurrentDB(){} ;
 	bool saveProject();
 	bool saveProjectAs(const QString&);

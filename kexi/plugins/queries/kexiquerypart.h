@@ -52,6 +52,9 @@ class KexiQueryPart : public KexiProjectHandler, KexiDataProvider
 		virtual QStringList datasetNames(QWidget*);
 		virtual KexiDBRecordSet *records(QWidget*,const QString& identifier,Parameters params);
 		virtual QStringList fields(QWidget*,const QString& identifier);
+
+		virtual KexiDataProvider	*provider() { return this; }
+
 	protected:
 		friend class KexiQueryPartProxy;
 
