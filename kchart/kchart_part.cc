@@ -67,13 +67,36 @@ bool KChartPart::initDoc()
 
     // Initialize the parameter set for this chart document
 	// PENDING(kalle,torben) Where to delete this?
-	_params = new KChartParameters;
-	
-	// PENDING(lotzi) This is where to start the wizard and fill the
-	// params struct with the data the users enters there.
-	
-	return TRUE;
+    _params = new KChartParameters;
+    initRandomData();
+    // PENDING(lotzi) This is where to start the wizard and fill the
+    // params struct with the data the users enters there.
+    
+    return TRUE;
 }
+
+void KChartPart::initRandomData() {
+     // fill cells
+    int col,row;
+
+    // initialize some data, if there is none
+    if (currentData.rows() == 0) {
+      cerr << "Initialize with some data!!!\n";
+      currentData.expand(4,4);
+      for (row = 0;row < 4;row++)
+	for (col = 0;col < 4;col++) {
+	  //	  _widget->fillCell(row,col,row+col);
+	  KChartValue t; 
+	  t.exists= true;
+	  t.value.setValue((double)row+col);
+	  // cerr << "Set cell for " << row << "," << col << "\n";
+	  currentData.setCell(row,col,t);
+	}
+    }
+   
+}
+
+
 
 QCString KChartPart::mimeType() const
 {
@@ -147,6 +170,12 @@ void KChartPart::saveConfig( KConfig *conf ) {
 
 /**
  * $Log$
+ * Revision 1.2  1999/10/25 04:52:52  boloni
+ * -ok, the gray rectangle which Reggie got was due to the fact that the
+ * rc files were hardcoded so it worked only from the kchart dir.
+ * -changed to the "locate" style and now it has menus if started from other dirs, too.
+ * -and btw the kchart.rc was not installed anyhow
+ *
  * Revision 1.1  1999/10/20 10:07:32  kulow
  * sync with canossa
  *

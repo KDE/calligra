@@ -51,6 +51,7 @@ signals:
 
 protected:
     virtual QString configFile() const;
+    void initRandomData();
 
 private:
     KChartData currentData;

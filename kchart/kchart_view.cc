@@ -8,12 +8,13 @@
 #include "kchart_global.h"
 #include "kchart_part.h"
 #include "kchartWizard.h"
+#include "kchartDataEditor.h"
 
 #include <qpainter.h>
 #include <kaction.h>
 #include <kglobal.h>
 
-#include "sheetdlg.h"
+//#include "sheetdlg.h"
 
 QFont *theKChartTinyFont = NULL; 
 QFont *theKChartSmallFont = NULL; 
@@ -61,6 +62,16 @@ void KChartView::paintEvent( QPaintEvent* ev )
 
 void KChartView::edit()
 {
+  kchartDataEditor ed;
+  KChartData *dat = (( (KChartPart*)part())->data());
+  ed.setData(dat);
+  if (ed.exec() != QDialog::Accepted) {
+    return;
+  }
+  ed.getData(dat);
+  
+
+  /*
     qDebug("EDIT called");
     QDialog *_dlg = new QDialog(0,"SheetDlg",true);
     SheetDlg *_widget = new SheetDlg(_dlg,"SheetWidget");
@@ -70,30 +81,11 @@ void KChartView::edit()
     _dlg->setMaximumSize(_dlg->size());
     _dlg->setMinimumSize(_dlg->size());
     
-    // fill cells
-    int col,row;
-    KChartData *dat = ((KChartPart*)part())->data();
-
-    // initialize some data, if there is none
-    if (dat->rows() == 0) {
-      cerr << "Initialize with some data!!!\n";
-      dat->expand(4,4);
-      for (row = 0;row < 4;row++)
-	for (col = 0;col < 4;col++) {
-	  //	  _widget->fillCell(row,col,row+col);
-	  KChartValue t; 
-	  t.exists= true;
-	  t.value.setValue((double)row+col);
-	  cerr << "Set cell for " << row << "," << col << "\n";
-	  dat->setCell(row,col,t);
-	}
-      //      _dlg->exec();
-    }
-
+    // maybe the call for initRandomData here
     cerr << "Now display \n";
-
-    for (row = 0;row != dat->rows();row++)
-      for (col = 0; col !=dat->cols(); col++) {
+    KChartData *dat = (( (KChartPart*)part())->data());
+    for (int row = 0;row != dat->rows();row++)
+      for (int col = 0; col !=dat->cols(); col++) {
 	cerr << "Set dialog cell for " << row << "," << col << "\n";
 	KChartValue t = dat->cell(row,col);
 	// fill it in from the part
@@ -112,18 +104,16 @@ void KChartView::edit()
       }
     cerr << "Here comes the dialog!\n";
     // OK pressed
-
+  
     if (_dlg->exec() != QDialog::Accepted) {
       return;
     }
     //KChartData *m_pData = new KChartData(_widget->rows());
-    /*
       for (col = 0;col < _widget->cols();col++) {
       m_pData->setXValue( col, (const char*)_widget->getX(col));
       }
-    */
-    for (row = 0;row < _widget->rows();row++) {
-      for (col = 0;col < _widget->cols();col++) {
+    for (int row = 0;row < _widget->rows();row++) {
+      for (int col = 0;col < _widget->cols();col++) {
 	// m_pData->setYValue( row, col, _widget->getCell(row,col) );
 	KChartValue t; 
 	double val =  _widget->getCell(row,col);
@@ -134,7 +124,6 @@ void KChartView::edit()
 	//   maxY = _widget->getCell(row,col) > maxY ? _widget->getCell(row,col) : maxY;
       }
     }
-    /*
       maxY++;
       
       m_pDoc->setChartData(m_pData);
@@ -144,8 +133,8 @@ void KChartView::edit()
     */ 
       
   // delete dialog
-  delete _widget; _widget = 0;
-  delete _dlg; _dlg = 0;
+    //  delete _widget; _widget = 0;
+    //delete _dlg; _dlg = 0;
 }
 
 void KChartView::wizard()

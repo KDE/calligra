@@ -35,6 +35,7 @@ libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
         kchartWizardSelectDataPage.cc \
         kchartWizardSetupAxesPage.cc \
         kchartWizardSetupDataPage.cc \
+	kchartDataEditor.cc \
 	parser.cc \
 	sheet.cc \
 	sheetdlg.cc \
@@ -56,6 +57,7 @@ noinst_HEADERS =  kchart_global.h \
 	        kchartWizardSelectDataPage.h \
 		kchartWizardSetupAxesPage.h \
 	        kchartWizardSetupDataPage.h \
+		kchartDataEditor.h \
 		parser.h \
 		sheet.h \
 		sheetdlg.h \
@@ -70,6 +72,7 @@ libkchart_la_METASOURCES = kchart_shell.moc kchart_part.moc \
 		kchartWizardSelectChartTypePage.moc\
 		kchartWizardSetupAxesPage.moc \
 	        kchartWizardSetupDataPage.moc \
+		kchartDataEditor.moc \
 		sheet.moc \
 		sheetdlg.moc \
 		table.moc
