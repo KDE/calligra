@@ -177,8 +177,8 @@ void KexiKugarHandler::saveXML(QDomDocument& domDoc)
     for(KexiProjectHandler::ItemIterator it(*(items()));it.current();++it)
     {
 		QDomElement itemElement=domDoc.createElement("report");
-		itemElement.setAttribute("name",(*it)->name());
-		itemElement.setAttribute("id",(*it)->shortIdentifier());
+		itemElement.setAttribute("name",(*it)->title());
+		itemElement.setAttribute("id",(*it)->identifier());
 		reports.appendChild(itemElement);
     }
 }

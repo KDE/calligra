@@ -56,9 +56,9 @@ bool KexiKugarDesignerWrapper::initFailed() {
 }
 
 void KexiKugarDesignerWrapper::getPath(QString &path) {
-	KexiKugarHandler *kkh=dynamic_cast<KexiKugarHandler*>(m_item->projectPart());
+	KexiKugarHandler *kkh=dynamic_cast<KexiKugarHandler*>(m_item->handler());
 	QString tempPath=kkh->tempPath();
-	if (!tempPath.isEmpty()) tempPath=tempPath+m_item->shortIdentifier()+"/";
+	if (!tempPath.isEmpty()) tempPath=tempPath+m_item->identifier()+"/";
 	path=tempPath;
 }
 

@@ -182,9 +182,9 @@ KuKexi::KuKexi(QObject *parent, const char* name, const QStringList& args):KuDes
 	m_kudesigner=static_cast<KudesignerDoc*>(parent->qt_cast("KudesignerDoc"));
 //	m_dialog=((KexiDialogBase*)parent->parent());
 //	m_kexi=(KexiProject*)m_dialog->kexiProject();
-//	m_kexi=(KexiProject*)(((KexiProjectHandlerItem*)parent->parent())->projectPart()->kexiProject());
+//	m_kexi=(KexiProject*)(((KexiProjectHandlerItem*)parent->parent())->handler()->kexiProject());
 	KexiProjectHandlerItem *it=static_cast<KexiProjectHandlerItem*>(parent->parent()->qt_cast("KexiProjectHandlerItem"));
-	m_kexi=(KexiProject*)(it->projectPart()->kexiProject());
+	m_kexi=(KexiProject*)(it->handler()->kexiProject());
 	updateSourceList();
 	connect(this,SIGNAL(getStorageFile(QString &)),parent->parent(),SLOT(pluginStorageFile(QString &)));
 }

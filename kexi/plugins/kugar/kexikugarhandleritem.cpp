@@ -40,7 +40,7 @@ KexiKugarHandlerItem::KexiKugarHandlerItem(KexiProjectHandler *handler, const QS
 {
 	m_storedDataSets.resize(51);
 	m_storedDataSets.setAutoDelete(true);
-	QString tmpPath=parent->tempPath();
+	QString tmpPath=dynamic_cast<KexiKugarHandler*>(handler)->tempPath();
 	if (!tmpPath.isEmpty()) {
 		m_tempPath=tmpPath+fullIdentifier();
 		kdDebug()<<"KexiKugarHandlerItem::creating directory: "<<m_tempPath<<endl;
@@ -58,20 +58,20 @@ KexiKugarHandlerItem::KexiKugarHandlerItem(KexiProjectHandler *handler, const QS
 				kdDebug()<<"FAILED"<<endl;
 			}
 
-			parent->kexiProject()->addFileReference(FileReference("reports",
+			handler->kexiProject()->addFileReference(FileReference("reports",
 				"/"+fullIdentifier()+"/template.kut", "/reports/"+fullIdentifier()+"/template.kut"));
-			parent->kexiProject()->addFileReference(FileReference("reports",
-				"/"+fullIdentifier()+"/template.kukexi", "/reports/"+FullIdentifier()+"/template.kukexi"));
+			handler->kexiProject()->addFileReference(FileReference("reports",
+				"/"+fullIdentifier()+"/template.kukexi", "/reports/"+fullIdentifier()+"/template.kukexi"));
 		}
 	}
 }
 
 KexiKugarHandlerItem::~KexiKugarHandlerItem() {
-	if (!projectPart()) return;
-	if (!(projectPart()->kexiProject())) return;
-	projectPart()->kexiProject()->removeFileReference(FileReference("reports",
+	if (!handler()) return;
+	if (!(handler()->kexiProject())) return;
+	handler()->kexiProject()->removeFileReference(FileReference("reports",
 		"/"+identifier()+"/template.kut", "/reports/"+identifier()+"/template.kut"));
-	projectPart()->kexiProject()->removeFileReference(FileReference("reports",
+	handler()->kexiProject()->removeFileReference(FileReference("reports",
 		"/"+identifier()+"/template.kukexi", "/reports/"+identifier()+"/template.kukexi"));
 }
 
@@ -184,7 +184,7 @@ QString KexiKugarHandlerItem::generateDataFile() {
 		if (providerName.isEmpty()) break;
 		kdDebug()<<"provider plugin name has been decoded: "<<providerName<<endl;
 
-		KexiDataProvider *prov=KEXIDATAPROVIDER((projectPart()->kexiProject()->handlerForMime(providerName)));
+		KexiDataProvider *prov=KEXIDATAPROVIDER((handler()->kexiProject()->handlerForMime(providerName)));
 		if (!prov) break;;
 		kdDebug()<<"Provider found"<<endl;
 
