@@ -250,7 +250,7 @@ KWAutoFormat::KWAutoFormat( KWDocument *_doc )
 
 /*================================================================*/
 void KWAutoFormat::startAutoFormat( KWTextParag */*parag*/,
-                                                   QTextFormat *fc )
+                                    QTextFormat */*fc*/ )
 {
     if ( !enabled )
 	return;
@@ -329,15 +329,15 @@ void KWAutoFormat::doSpellCheck( KWTextParag *parag, QTextFormat *fc )
 }
 
 /*================================================================*/
-void KWAutoFormat::endAutoFormat( KWTextParag * /*parag*/, QTextFormat *fc )
+void KWAutoFormat::endAutoFormat( KWTextParag * /*parag*/, QTextFormat */*fc*/ )
 {
     if ( !enabled )
 	return;
 
     /*    if ( tmpBuffer )
 	delete tmpBuffer;
-    tmpBuffer = 0;
-    spBuffer = QString::null;*/
+        tmpBuffer = 0;*/
+    spBuffer = QString::null;
 }
 
 /*================================================================*/

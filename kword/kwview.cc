@@ -1279,8 +1279,8 @@ void KWView::insertSpecialChar()
     if ( KCharSelectDia::selectChar( f, c, false ) )
         {
              KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (edit->textFrameSet()) ;
-             QTextFormat *f = (dynamic_cast<KWTextParag*> (tmpParag->textDocument()->lastParag()))->paragFormat();
-            edit->textFrameSet()->insert( edit->getCursor(), f, c );
+             QTextFormat *format = (dynamic_cast<KWTextParag*> (tmpParag->textDocument()->lastParag()))->paragFormat();
+            edit->textFrameSet()->insert( edit->getCursor(), format, c );
         }
 }
 
@@ -2498,12 +2498,9 @@ void KWView::paragDiaOk()
     if(paragDia->isBulletChanged())
         edit->setCounter( paragDia->counter() );
 
-    //todo
     if(paragDia->listTabulatorChanged())
-    {
-        //gui->getHorzRuler()->setTabList( paragDia->tabListTabulator());
         edit->setTabList(paragDia->tabListTabulator());
-    }
+
 
     if(paragDia->isLineSpacingChanged())
         edit->setLineSpacing( paragDia->lineSpacing() );

@@ -1435,7 +1435,7 @@ void KWParagDia::setCounter( Counter _counter )
     m_counter = _counter;
 
     gNumbering->setButton( m_counter.m_numbering );
-
+    numTypeChanged(m_counter.m_numbering  );
     gStyle->setButton( m_counter.m_style );
 
     eCustomNum->setText( m_counter.m_custom );
