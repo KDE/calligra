@@ -108,12 +108,12 @@ void KPPresStructObjectItem::setPage( KPBackGround *p, int pgnum )
 }
 
 /*================================================================*/
-void KPPresStructObjectItem::setObject( KPObject *o, int num )
+void KPPresStructObjectItem::setObject( KPObject *o, int num,const QString &_objName )
 {
   object = o;
   if ( object && parent() ) {
-    QString type = object->getTypeString() + " (%1)";
-    setText(0, type.arg( num + 1 ));
+    QString type = _objName.isEmpty() ? (object->getTypeString() + " (%1)").arg( num + 1 ):_objName;
+    setText(0, type);
     switch ( object->getType() ) {
     case OT_PICTURE:
       setPixmap( 0, KPBarIcon( "frame_image" ) );
@@ -240,18 +240,23 @@ void KPPresStructView::setupSlideList()
         QPtrListIterator<KPObject> it( doc->stickyPage()->objectList() );
         for ( ; it.current() ; ++it )
         {
+            QString name;
             if(doc->isHeaderFooter(it.current()))
             {
                 if(it.current()==doc->header()&&!doc->hasHeader())
                     continue;
+                if( it.current()==doc->header()&&doc->hasHeader())
+                    name=i18n("Header");
                 if(it.current()==doc->footer()&&!doc->hasFooter())
                     continue;
+                if( it.current()==doc->footer()&&doc->hasFooter())
+                    name=i18n("Footer");
             }
-                KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
-                item_->setPage( page->background(), i );
-                item_->setObject( it.current(), offset );
-                item_->setNum(offset);
-                offset++;
+            KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
+            item_->setPage( page->background(), i );
+            item_->setObject( it.current(), offset,name );
+            item_->setNum(offset);
+            offset++;
         }
     }
 }

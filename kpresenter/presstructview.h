@@ -68,7 +68,8 @@ public:
     KPPresStructObjectItem( KListViewItem *parent );
 
     void setPage( KPBackGround *p, int pgnum );
-    void setObject( KPObject *o, int num );
+    //now we can add specific text for example header/footer
+    void setObject( KPObject *o, int num, const QString &name=QString::null );
     void setNum(int _num) {num = _num;};
     int getNum() {return num;};
     KPBackGround *getPage();
