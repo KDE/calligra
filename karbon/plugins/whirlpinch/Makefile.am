@@ -1,0 +1,13 @@
+INCLUDES = -I$(top_srcdir)/karbon  -I$(top_srcdir)/karbon/core $(all_includes)
+
+kde_module_LTLIBRARIES = karbon_whirlpinchplugin.la
+
+karbon_whirlpinchplugin_la_SOURCES = whirlpinchplugin.cc
+karbon_whirlpinchplugin_la_LIBADD = ../../libkarbonpart.la $(LIB_KPARTS)
+karbon_whirlpinchplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+
+datadir   = $(kde_datadir)/karbon/kpartplugins
+data_DATA = whirlpinchplugin.rc
+
+METASOURCES = AUTO
+
