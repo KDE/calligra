@@ -50,13 +50,13 @@ public slots:
 	void showInsertRow(bool show);
 	void setColor(const QColor &color);
 
-	void addLabel();
-	void removeLabel();
+	void addLabel(bool upd=true);
+	void removeLabel(bool upd=true);
 
 	/*! Adds \num labels */
-	void addLabels(int num);
+	void addLabels(int num, bool upd=true);
 
-	void clear();
+	void clear(bool upd=true);
 	int rows() const;
 
 protected:

@@ -30,6 +30,8 @@
 #include "kexitableview.h"
 #include "kexitableheader.h"
 
+#include <qevent.h>
+
 class KexiTableItem;
 class KexiTableRM;
 class KexiTableEdit;
@@ -77,7 +79,7 @@ class KexiTableViewPrivate
 
 	QTimer			*scrollTimer;
 	KexiTableItem	*pInsertItem;
-
+	
 	QStringList		dropFilters;
 
 	KexiTableView::ScrollDirection scrollDirection;
@@ -90,6 +92,17 @@ class KexiTableViewPrivate
 
 	/*! true if currently selected row is edited */
 	bool rowEditing : 1;
+	
+	/*! true if currently selected, new row is edited;
+	  implies: rowEditing==true. */
+	bool newRowEditing : 1;
+
+	/*! true if currently double click action was is performed 
+	(so accept/cancel editor shoudn't be executed) */
+	bool contentsMousePressEvent_dblClick : 1;
+
+	//! 'sorting by column' availability flag for widget
+	bool isSortingEnabled : 1;
 	
 	/*! 1 if table view is readOnly, 0 if not; 
 	 otherwise the 'readOnly' flag from table views' internal data structure

@@ -35,6 +35,8 @@
 #include <qvariant.h>
 #include <qptrlist.h>
 
+#include <kdebug.h>
+
 #include "kexitablerm.h"
 #include "kexitableviewdata.h"
 
@@ -97,10 +99,16 @@ public:
 //		int width=100, bool autoinc=false);
 
 	QString columnCaption(int colNum) const;
-	void setSorting(int col, bool ascending=true);
+	
+	bool isSortingEnabled() const;
+	/*! \return sorted column number or -1 if no column is sorted */
+	int sortedColumn();
+	/*! \return true if ascending order for sorting. This not implies that 
+	 any sorting has been performed. */
+	bool sortingAscending() const;
 
 	QVariant::Type columnType(int col) const;
-	QVariant columnDefault(int col) const;
+	QVariant columnDefaultValue(int col) const;
 	bool columnEditable(int col) const;
 	inline KexiTableItem *itemAt(int row) const;
 	
@@ -145,7 +153,6 @@ public:
 	int		rows() const;
 	int		cols() const;
 
-
 	QRect		cellGeometry(int row, int col) const;
 	int		columnWidth(int col) const;
 	int		rowHeight() const;
@@ -154,11 +161,12 @@ public:
 	int		columnAt(int pos) const;
 	int		rowAt(int pos, bool ignoreEnd=false) const;
 
+	/*! \return true if currently selected row is edited. */
+	bool rowEditing() const;
+
 	void		updateCell(int row, int col);
 //	void		updateRow(int row);
-	int			sorting();
-	void		remove(int row);
-	void		remove(KexiTableItem *item, bool moveCursor=true);
+//	void		remove(int row);
 
 	// properties
 	bool		backgroundAltering() const;
@@ -184,7 +192,7 @@ public:
 
 	void		addDropFilter(const QString &filter);
 
-	void		inserted();
+//	void		inserted();
 
 	void		emitSelected();
 
@@ -275,8 +283,7 @@ protected:
 		int colfirst, int collast, int maxwc,
 		const QColor& baseCol, const QColor& altCol);
 
-	/*! \return true if currently selected row is edited. */
-	bool rowEditing() const;
+	void remove(KexiTableItem *item, bool moveCursor=true);
 
 protected slots:
 	void			columnWidthChanged( int col, int os, int ns );
@@ -284,6 +291,7 @@ protected slots:
 	virtual void	acceptEditor();
 	virtual void	boolToggled();
 	void			slotUpdate();
+	void sortColumnInternal(int col);
 
 	/*! Accepts row editing. All changes made to the editing 
 	 row duing this current session will be accepted. */
@@ -295,16 +303,32 @@ protected slots:
 	void			slotAutoScroll();
 
 public slots:
-	void sortColumn(int col);
-	void			sort();
+	//! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
+	//! this will dont work if sorting is disabled with setSortingEnabled()
+	void setSorting(int col, bool ascending=true);
+	/*! Enables or disables sorting for this table view
+		This method is different that setSorting() because it prevents both user
+		and programmer from sorting by clicking a column's header or calling setSorting().
+		By default sorting is enabled for table view.
+	*/
+	void setSortingEnabled(bool set);
+	//! Sorts all rows by column selected with setSorting()
+	void sort();
 	void			setCursor(int row, int col = -1);
 	void			selectRow(int row);
-	void			selectNext();
-	void			selectPrev();
-	void			gotoNext();
+	void			selectNextRow();
+	void			selectPrevRow();
+	void			selectFirstRow();
+	void			selectLastRow();
+//	void			gotoNext();
 //js	int			findString(const QString &string);
-	virtual void		removeRecord();
-	virtual void		addRecord();
+	
+	/*! Removes currently selected record; does nothing if no record 
+	 is currently selected. If record is in edit mode, editing 
+	 is cancelled before removing.  */
+	void removeCurrentRecord();
+	
+//	virtual void		addRecord();
 
 signals:
 	void			itemSelected(KexiTableItem *);
@@ -330,6 +354,8 @@ protected:
 
 inline KexiTableItem *KexiTableView::itemAt(int row) const
 {
+	if (!m_data->at(row))
+		kdDebug() << "KexiTableView::itemAt(" << row << "): NO ITEM!!" << endl;
 	return m_data->at(row);
 }
 /*

@@ -91,30 +91,34 @@ KexiTableRM::~KexiTableRM()
 {
 }
 
-void KexiTableRM::addLabel()
+void KexiTableRM::addLabel(bool upd)
 {
 	m_rows++;
-	update();
+	if (upd)
+		update();
 }
 
-void KexiTableRM::removeLabel()
+void KexiTableRM::removeLabel(bool upd)
 {
 	if (m_rows > 0) {
 		m_rows--;
-		update();
+		if (upd)
+			update();
 	}
 }
 
-void KexiTableRM::addLabels(int num)
+void KexiTableRM::addLabels(int num, bool upd)
 {
 	m_rows += num;
-	update();
+	if (upd)
+		update();
 }
 
-void KexiTableRM::clear()
+void KexiTableRM::clear(bool upd)
 {
 	m_rows=0;
-	update();
+	if (upd)
+		update();
 }
 
 int KexiTableRM::rows() const
@@ -164,7 +168,8 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 /*		int half = m_rowHeight / 2;
 		points.setPoints(3, 2, pos + 2, width() - 5, pos + half, 2, pos + (2 * half) - 2);*/
 	}
-	if (m_showInsertRow && m_editRow < last) {
+	if (m_showInsertRow && m_editRow < last
+		&& last == (m_rows-1+(m_showInsertRow?1:0)) ) {
 		//show plus sign
 		int pos = ((m_rowHeight*last)-m_offset)+(m_rowHeight-m_plusImg.height())/2;
 		p.drawImage((width()-m_plusImg.width())/2-1, pos, m_plusImg);

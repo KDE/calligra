@@ -37,6 +37,9 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	disableDrawContents = false;
 	readOnly = -1; //don't know
 	insertingEnabled = -1; //don't know
+	
+	contentsMousePressEvent_dblClick = false;
+	isSortingEnabled = true;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()
@@ -54,6 +57,7 @@ void KexiTableViewPrivate::clearVariables() {
 	pCurrentItem=0;
 	pInsertItem = 0;
 	rowEditing = false;
+	newRowEditing = false;
 //	sortedColumn = -1;
 //	sortOrder = true;
 //	recordIndicator = false;
