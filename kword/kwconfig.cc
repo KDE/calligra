@@ -51,7 +51,6 @@
 #include <kmessagebox.h>
 #include <klistview.h>
 #include <kstandarddirs.h>
-#include <kdeversion.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kurlrequesterdlg.h>
@@ -985,11 +984,7 @@ void ConfigurePathPage::apply()
         {
             m_pView->kWordDocument()->setPersonalExpressionPath(lst);
             config->setGroup( "Kword Path" );
-#if KDE_IS_VERSION(3,1,3)
             config->writePathEntry( "expression path", lst);
-#else
-            config->writeEntry( "expression path", lst);
-#endif
         }
     }
 #if 0 // KWORD_HORIZONTAL_LINE
@@ -1013,11 +1008,7 @@ void ConfigurePathPage::apply()
         {
             config->setGroup( "Kword Path" );
             m_pView->kWordDocument()->setPicturePath( res );
-#if KDE_IS_VERSION(3,1,3)
             config->writePathEntry( "picture path",res );
-#else
-            config->writeEntry( "picture path",res );
-#endif
         }
     }
     item = m_pPathView->findItem(i18n("Backup Path"), 0);
@@ -1028,11 +1019,7 @@ void ConfigurePathPage::apply()
         {
             config->setGroup( "Kword Path" );
             m_pView->kWordDocument()->setBackupPath( res );
-#if KDE_IS_VERSION(3,1,3)
             config->writePathEntry( "backup path",res );
-#else
-            config->writeEntry( "backup path",res );
-#endif
         }
     }
 
