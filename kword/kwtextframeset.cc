@@ -46,6 +46,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
 {
     //kdDebug() << "KWTextFrameSet::KWTextFrameSet " << this << endl;
     m_availableHeight = -1;
+    m_origFontSizes.setAutoDelete(true);
     textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection( _doc ) );
     textdoc->setFormatter( new QTextFormatterBreakWords );
     textdoc->setFlow( this );
