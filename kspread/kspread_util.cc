@@ -149,7 +149,7 @@ util_fractionFormat(double value, KSpreadCell::FormatType fmtType)
 
 
 QString
-util_timeFormat(KLocale * locale, QTime m_Time,
+util_timeFormat(KLocale * locale, const QTime &m_Time,
 		KSpreadCell::FormatType fmtType)
 {
     if (fmtType == KSpreadCell::Time)
@@ -194,7 +194,7 @@ util_timeFormat(KLocale * locale, QTime m_Time,
 
 
 QString
-util_dateFormat(KLocale * locale, QDate m_Date,
+util_dateFormat(KLocale * locale, const QDate &m_Date,
 		KSpreadCell::FormatType fmtType)
 {
     QString tmp;
@@ -584,12 +584,12 @@ double util_fact( double val, double end )
     return (val*util_fact((double)(val-1),end));
 }
 
-bool util_isColumnSelected(QRect selection)
+bool util_isColumnSelected(const QRect &selection)
 {
   return ( (selection.top() == 1) && (selection.bottom() == KS_rowMax) );
 }
 
-bool util_isRowSelected(QRect selection)
+bool util_isRowSelected(const QRect &selection)
 {
   return ( (selection.left() == 1) && (selection.right() == KS_colMax) );
 }

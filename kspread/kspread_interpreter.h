@@ -22,12 +22,12 @@ public:
   KSParseNode* parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDependency>& );
   bool evaluate( KSContext& context, KSParseNode*, KSpreadTable* );
 
-  KSNamespace* globalNamespace() { return m_global; }
+  KSNamespace* globalNamespace()const  { return m_global; }
 
   virtual bool processExtension( KSContext& context, KSParseNode* node );
 
-  KSpreadDoc* document() { return m_doc; }
-  KSpreadTable* table() { return m_table; }
+  KSpreadDoc* document()const { return m_doc; }
+  KSpreadTable* table()const { return m_table; }
 
 private:
   KSpreadDoc* m_doc;

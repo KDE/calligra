@@ -265,7 +265,7 @@ public:
     void setAutoDelete( bool );
     bool autoDelete() const;
 
-    ColumnLayout* first() { return m_first; }
+    ColumnLayout* first()const { return m_first; }
 
 private:
     ColumnLayout*** m_cluster;
@@ -293,7 +293,7 @@ public:
     void setAutoDelete( bool );
     bool autoDelete() const;
 
-    RowLayout* first() { return m_first; }
+    RowLayout* first()const { return m_first; }
 
 private:
     RowLayout*** m_cluster;

@@ -220,8 +220,7 @@ void KSpreadConditions::LoadConditions(const QDomElement &element)
     }
     else
     {
-      kdDebug(36001) << "Error loading condition " << conditionElement.nodeName()
-		<< endl;
+      kdDebug(36001) << "Error loading condition " << conditionElement.nodeName()<< endl;
     }
   }
 }

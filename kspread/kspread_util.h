@@ -124,14 +124,14 @@ int util_decodeColumnLabelText( const QString &_col );
 */
 QString util_encodeColumnLabelText( int column );
 
-QString util_dateFormat( KLocale* locale, QDate _date, KSpreadCell::FormatType fmtType);
+QString util_dateFormat( KLocale* locale, const QDate &_date, KSpreadCell::FormatType fmtType);
 
-QString util_timeFormat( KLocale* locale, QTime _time, KSpreadCell::FormatType fmtType);
+QString util_timeFormat( KLocale* locale, const QTime &_time, KSpreadCell::FormatType fmtType);
 
 QString util_fractionFormat( double value , KSpreadCell::FormatType fmtType);
 
 double util_fact( double val, double end );
 
-bool util_isColumnSelected(QRect selection);
-bool util_isRowSelected(QRect selection);
+bool util_isColumnSelected(const QRect &selection);
+bool util_isRowSelected(const QRect &selection);
 #endif

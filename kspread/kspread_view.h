@@ -295,16 +295,16 @@ public slots:
     void decreaseFontSize();
     void setSelectionFontSize(int size);
 
-    void setSelectionTextColor(QColor txtColor);
-    void setSelectionBackgroundColor(QColor bgColor);
-    void setSelectionBorderColor(QColor bdColor);
+    void setSelectionTextColor(const QColor &txtColor);
+    void setSelectionBackgroundColor(const QColor &bgColor);
+    void setSelectionBorderColor(const QColor &bdColor);
 
-    void setSelectionLeftBorderColor(QColor color);
-    void setSelectionRightBorderColor(QColor color);
-    void setSelectionTopBorderColor(QColor color);
-    void setSelectionBottomBorderColor(QColor color);
-    void setSelectionAllBorderColor(QColor color);
-    void setSelectionOutlineBorderColor(QColor color);
+    void setSelectionLeftBorderColor(const QColor &color);
+    void setSelectionRightBorderColor(const QColor &color);
+    void setSelectionTopBorderColor(const QColor &color);
+    void setSelectionBottomBorderColor(const QColor &color);
+    void setSelectionAllBorderColor(const QColor &color);
+    void setSelectionOutlineBorderColor(const QColor &color);
 
     void upper();
     void lower();

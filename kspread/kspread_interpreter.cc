@@ -178,12 +178,12 @@ bool kspreadfunc_char( KSContext& context );
 bool kspreadfunc_clean( KSContext& context );
 bool kspreadfunc_code( KSContext& context );
 bool kspreadfunc_compare( KSContext& context );
-bool kspreadfunc_concatenate( KSContext& context ); 
-bool kspreadfunc_dollar( KSContext& context ); 
+bool kspreadfunc_concatenate( KSContext& context );
+bool kspreadfunc_dollar( KSContext& context );
 bool kspreadfunc_exact( KSContext& context );
 bool kspreadfunc_find( KSContext& context );
-bool kspreadfunc_fixed( KSContext& context ); 
-bool kspreadfunc_join( KSContext& context );  
+bool kspreadfunc_fixed( KSContext& context );
+bool kspreadfunc_join( KSContext& context );
 bool kspreadfunc_left( KSContext& context );
 bool kspreadfunc_len( KSContext& context );
 bool kspreadfunc_lower( KSContext& context );
@@ -193,12 +193,12 @@ bool kspreadfunc_replace( KSContext& context );
 bool kspreadfunc_rept( KSContext& context );
 bool kspreadfunc_rot( KSContext& context );
 bool kspreadfunc_right( KSContext& context );
-bool kspreadfunc_search( KSContext& context ); 
+bool kspreadfunc_search( KSContext& context );
 bool kspreadfunc_sleek( KSContext& context );
-bool kspreadfunc_substitute( KSContext& context ); 
-bool kspreadfunc_t( KSContext& context ); 
-bool kspreadfunc_text( KSContext& context ); 
-bool kspreadfunc_toggle( KSContext& context ); 
+bool kspreadfunc_substitute( KSContext& context );
+bool kspreadfunc_t( KSContext& context );
+bool kspreadfunc_text( KSContext& context );
+bool kspreadfunc_toggle( KSContext& context );
 bool kspreadfunc_trim(KSContext& context );
 bool kspreadfunc_upper( KSContext& context );
 bool kspreadfunc_value( KSContext& context );
@@ -296,7 +296,7 @@ private:
 class KSParseNodeExtraRange : public KSParseNodeExtra
 {
 public:
-  KSParseNodeExtraRange( const QString& s, KSpreadMap* m, KSpreadTable* t ) 
+  KSParseNodeExtraRange( const QString& s, KSpreadMap* m, KSpreadTable* t )
     : m_range( s, m, t ) { }
 
   KSpreadRange* range() { return &m_range; }
@@ -823,7 +823,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       return false;
     }
 
-    if ( r->range.left() == r->range.right() 
+    if ( r->range.left() == r->range.right()
          && r->range.top() == r->range.bottom() )
     {
       KSpreadCell * cell = r->table->cellAt( r->range.x(), r->range.y() );
@@ -836,7 +836,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
         context.setException( new KSException( "ErrorInCell", tmp ) );
         return false;
       }
-      
+
       if ( cell->isDefault())
         context.setValue( new KSValue(  /*KSValue::Empty*/ 0.0 ) );
       else if(cell->isObscured() && cell->isObscuringForced())

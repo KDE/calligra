@@ -24,9 +24,7 @@
 #include <qframe.h>
 #include <kdialogbase.h>
 
-#include <klineedit.h>
 #include <kcompletion.h>
-#include <qlayout.h>
 
 class QTextBrowser;
 class QTabWidget;
@@ -39,6 +37,7 @@ class QLabel;
 class QListBox;
 class QComboBox;
 class QPushButton;
+class KLineEdit;
 
 #include "kspread_functions.h"
 
@@ -76,7 +75,7 @@ private slots:
     void slotSelected( const QString& function );
     /**
      * Called if the user clicked on one of the "related function"
-     * This will switch the active function and show help page 
+     * This will switch the active function and show help page
      * of the function as well.
      */
     void slotShowFunction( const QString& function );
@@ -119,7 +118,7 @@ public:
      */
     bool eventFilter( QObject* obj, QEvent* ev );
 protected:
-       virtual void closeEvent ( QCloseEvent * ); 
+       virtual void closeEvent ( QCloseEvent * );
 private:
     KSpreadView* m_pView;
 
@@ -134,7 +133,7 @@ private:
 
     KLineEdit *searchFunct;
     KCompletion listFunct;
-    
+
     QLabel* label1;
     QLabel* label2;
     QLabel* label3;
@@ -165,7 +164,7 @@ private:
      * A lock for @ref #slotChangeText.
      */
     bool refresh_result;
-    
+
     KSpreadFunctionRepository m_repo;
     KSpreadFunctionDescription* m_desc;
 };

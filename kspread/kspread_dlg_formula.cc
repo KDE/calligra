@@ -35,6 +35,8 @@
 #include <qlistbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <klineedit.h>
+#include <qlayout.h>
 
 KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName)
     : KDialogBase( parent, name,false,i18n("Function"), Ok|Cancel )

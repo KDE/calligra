@@ -28,6 +28,7 @@
 #include <qcursor.h>
 #include <qpaintdevicemetrics.h>
 #include <qregexp.h>
+#include <qlayout.h>
 
 #include <kprocio.h>
 #include <kspell.h>
@@ -1993,9 +1994,9 @@ void KSpreadView::changeTextColor()
   }
 }
 
-void KSpreadView::setSelectionTextColor(QColor txtColor)
+void KSpreadView::setSelectionTextColor(const QColor &txtColor)
 {
-  if (m_pTable != NULL)
+  if (m_pTable != 0L)
   {
     m_pTable->setSelectionTextColor( selectionInfo(), txtColor );
   }
@@ -2009,9 +2010,9 @@ void KSpreadView::changeBackgroundColor()
   }
 }
 
-void KSpreadView::setSelectionBackgroundColor(QColor bgColor)
+void KSpreadView::setSelectionBackgroundColor(const QColor &bgColor)
 {
-  if (m_pTable != NULL)
+  if (m_pTable != 0L)
   {
     m_pTable->setSelectionbgColor( selectionInfo(), bgColor );
   }
@@ -2025,9 +2026,9 @@ void KSpreadView::changeBorderColor()
   }
 }
 
-void KSpreadView::setSelectionBorderColor(QColor bdColor)
+void KSpreadView::setSelectionBorderColor(const QColor &bdColor)
 {
-  if (m_pTable != NULL)
+  if (m_pTable != 0L)
   {
     m_pTable->setSelectionBorderColor( selectionInfo(), bdColor );
   }
@@ -2480,9 +2481,9 @@ void KSpreadView::borderBottom()
       m_pTable->borderBottom( m_selectionInfo, m_borderColor->color());
 }
 
-void KSpreadView::setSelectionBottomBorderColor(QColor color)
+void KSpreadView::setSelectionBottomBorderColor(const QColor &color)
 {
-  if (m_pTable != NULL)
+  if (m_pTable != 0L)
   {
     m_pTable->borderBottom( selectionInfo(), color );
   }
@@ -2494,9 +2495,9 @@ void KSpreadView::borderRight()
       m_pTable->borderRight( m_selectionInfo, m_borderColor->color());
 }
 
-void KSpreadView::setSelectionRightBorderColor(QColor color)
+void KSpreadView::setSelectionRightBorderColor(const QColor &color)
 {
-  if (m_pTable != NULL)
+  if (m_pTable != 0L)
   {
     m_pTable->borderRight( selectionInfo(), color );
   }
@@ -2508,9 +2509,9 @@ void KSpreadView::borderLeft()
       m_pTable->borderLeft( m_selectionInfo, m_borderColor->color() );
 }
 
-void KSpreadView::setSelectionLeftBorderColor(QColor color)
+void KSpreadView::setSelectionLeftBorderColor(const QColor &color)
 {
-  if (m_pTable != NULL)
+  if (m_pTable != 0L)
   {
     m_pTable->borderLeft( selectionInfo(), color );
   }
@@ -2522,9 +2523,9 @@ void KSpreadView::borderTop()
       m_pTable->borderTop( m_selectionInfo, m_borderColor->color() );
 }
 
-void KSpreadView::setSelectionTopBorderColor(QColor color)
+void KSpreadView::setSelectionTopBorderColor(const QColor &color)
 {
-  if (m_pTable != NULL)
+  if (m_pTable != 0L)
   {
     m_pTable->borderTop(selectionInfo(), color);
   }
@@ -2536,9 +2537,9 @@ void KSpreadView::borderOutline()
       m_pTable->borderOutline( m_selectionInfo, m_borderColor->color());
 }
 
-void KSpreadView::setSelectionOutlineBorderColor(QColor color)
+void KSpreadView::setSelectionOutlineBorderColor(const QColor &color)
 {
-  if (m_pTable != NULL)
+  if (m_pTable != 0L)
   {
     m_pTable->borderOutline(selectionInfo(), color);
   }
@@ -2550,9 +2551,9 @@ void KSpreadView::borderAll()
       m_pTable->borderAll( m_selectionInfo, m_borderColor->color() );
 }
 
-void KSpreadView::setSelectionAllBorderColor(QColor color)
+void KSpreadView::setSelectionAllBorderColor(const QColor &color)
 {
-  if (m_pTable != NULL)
+  if (m_pTable != 0L)
   {
     m_pTable->borderAll( selectionInfo(), color );
   }
