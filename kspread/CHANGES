@@ -116,3 +116,7 @@ now text is change to refere to new name.
 -Now when you insert column (row) or remove column (row) and there are cell
 which refere others cells so if these cells are moving so I modifie
 reference.
+
+1999-09-30  -Montel laurent<montell@club-internet.fr>
+-----------------------------------------------------
+-Now when you insert or remove column (or row) all is recalcing.

@@ -374,7 +374,7 @@ public:
     QString setRichTextFond(QString text,Type_font font);
 
     void changetab(QString old_name,QString new_name);
-    void changeRef(int pos,changeref ref);
+    void changeRef(int pos,changeref ref,QString name);
 
     void paste( const QPoint &_marker,Special_paste=ALL,Operation=Any );
 

@@ -731,7 +731,7 @@ void KSpreadTable::changetab(QString old_name,QString new_name)
       	}
 }
 
-void KSpreadTable::changeRef(int pos,changeref ref)
+void KSpreadTable::changeRef(int pos,changeref ref,QString tabname)
 {
 QIntDictIterator<KSpreadCell> it( m_dctCells );
  for ( ; it.current(); ++it )
@@ -746,13 +746,28 @@ QIntDictIterator<KSpreadCell> it( m_dctCells );
 
     bool fix1 = FALSE;
     bool fix2 = FALSE;
-
+    bool good_name=true;
     while ( *p != 0 )
     {
 	if ( *p != '$' && !isalpha( *p ) )
 	{
 	    buf[0] = *p++;
 	    erg += buf;
+	    good_name=true;
+	    if(erg.right(1)=="!")
+	    	{
+	    	int pos=erg.findRev(name());
+	    	if(pos!=-1)
+	    		{
+	    		int pos2=erg.length()-name().length()-1;
+	    		if( erg.find(name(),pos2)!=-1)
+					good_name=true;
+			else
+					good_name=false;
+			}
+		else
+			good_name=false;
+	    	}
 	    fix1 = fix2 = FALSE;
 	}
 	else
@@ -773,7 +788,6 @@ QIntDictIterator<KSpreadCell> it( m_dctCells );
 		    buf[ 0 ] = *p;
 		    tmp += buf;
 		    *p2++ = *p++;
-		    //cout <<"Temp : "<<tmp.ascii()<<endl;
 		}
 		*p2 = 0;
 		if ( *p == '$' )
@@ -786,15 +800,14 @@ QIntDictIterator<KSpreadCell> it( m_dctCells );
 		{
 		    const char *p3 = p;
 		    int row = atoi( p );
-		    //cout <<"Row : "<<row<<endl;
 		    while ( *p != 0 && isdigit( *p ) ) p++;
 		    // Is it a table
 		    if ( *p == '!' )
 		    {
-			erg += tmp;
+		    	erg += tmp;
 			fix1 = fix2 = FALSE;
 			p = p3;
-			//cout <<"tmp :"<<erg.ascii()<<"P = "<<p<<endl;		
+			
 		     }
 		    else // It must be a cell identifier
 		    {
@@ -811,14 +824,14 @@ QIntDictIterator<KSpreadCell> it( m_dctCells );
 			else
 				{
 				
-				if(ref==columnInsert)
+				if(ref==columnInsert && good_name==true)
 					{
 					if(col >=pos)
 						erg+=util_columnLabel(col+1);
 					else
 					 	erg+=util_columnLabel(col);
 					}
-				else if(ref==columnRemove)
+				else if(ref==columnRemove && good_name==true)
 					{
 					if(col >pos)
 						erg+=util_columnLabel(col-1);
@@ -842,14 +855,14 @@ QIntDictIterator<KSpreadCell> it( m_dctCells );
 			    	}
 			else
 			    {
-			    if(ref==rowInsert)
+			    if(ref==rowInsert && good_name==true)
 			    	{
 			    	if(row >=pos)
 			    		sprintf( buffer, "%i", (row+1)  );
 			    	else
 			    		sprintf( buffer, "%i", row  );
 				}
-			    else if(ref==rowRemove)
+			    else if(ref==rowRemove && good_name==true)
 			    	{
 			    	if(row >pos)
 			    		sprintf( buffer, "%i", (row-1)  );
@@ -862,7 +875,7 @@ QIntDictIterator<KSpreadCell> it( m_dctCells );
 			    	}
 			    }
 			
-			erg += buffer;		
+			erg += buffer;
 		    }
 			}
 		}
