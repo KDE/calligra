@@ -167,7 +167,9 @@ void SideBar::removeItem( int pos )
 
 void SideBar::updateItem( int pos, bool sticky )
 {
-    _outline->updateItem( pos );
+    //sticky page pos = -1
+    if ( pos >= 0)
+        _outline->updateItem( pos );
     _thb->updateItem( pos, sticky );
 }
 
@@ -264,12 +266,12 @@ kdDebug(33001) << "visible page = " << it->text().toInt() << endl;
             it->setPixmap( getSlideThumb( it->text().toInt() - 1 ) );
             dynamic_cast<ThumbItem *>(it)->setUptodate( true );
         }
-          
+
         if ( it == findLastVisibleItem( vRect ) )
             break;
         it = it->nextItem();
     }
-    
+
     offsetX = 0;
     offsetY = 0;
 }
@@ -291,10 +293,10 @@ void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
         if ( sticky ) {
             if ( it == findFirstVisibleItem( vRect ) ) {
                 //bool cont = true;
-                do 
+                do
                 {
                     it->setPixmap(getSlideThumb( pagecnt ));
-                    dynamic_cast<ThumbItem *>(it)->setUptodate( true );
+                    static_cast<ThumbItem *>(it)->setUptodate( true );
                     if ( it == findLastVisibleItem( vRect ) )
                         break;
                     pagecnt++;
@@ -302,7 +304,7 @@ void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
                 } while ( true );
             }
             else {
-                dynamic_cast<ThumbItem *>(it)->setUptodate( false );
+                static_cast<ThumbItem *>(it)->setUptodate( false );
             }
             pagecnt++;
         }
@@ -310,7 +312,7 @@ void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
             if ( it->text().toInt() == pagenr + 1 )
             {
                 it->setPixmap(getSlideThumb( pagenr ));
-                dynamic_cast<ThumbItem *>(it)->setUptodate( true );
+                static_cast<ThumbItem *>(it)->setUptodate( true );
                 return;
             }
         }
@@ -456,7 +458,7 @@ void ThumbBar::itemClicked(QIconViewItem *i)
   emit showPage( i->index() );
 }
 
-void ThumbBar::slotContentsMoving(int x, int y) 
+void ThumbBar::slotContentsMoving(int x, int y)
 {
     offsetX = x;
     offsetY = y;
