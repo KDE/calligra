@@ -62,7 +62,6 @@
 #include "kivio_map.h"
 #include "kivio_page.h"
 #include "kivio_doc.h"
-#include "kivio_shell.h"
 #include "kivio_canvas.h"
 #include "kivio_stencil_spawner.h"
 #include "kivio_tabbar.h"
@@ -1239,13 +1238,6 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner )
     m_pDoc->updateView(m_pActivePage);
 }
 
-void KivioView::newView()
-{
-  KivioDoc* thisDocument = m_pDoc;
-  KivioShell* shell = new KivioShell(thisDocument->instance());
-  shell->setRootDocument(thisDocument);
-  shell->show();
-}
 /*
 void KivioView::gridSetup()
 {

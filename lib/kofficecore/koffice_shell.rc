@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KOfficeShell" version="5">
+<kpartgui name="KOfficeShell" version="6">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -26,13 +26,13 @@
  </Menu>
  <Menu name="help" noMerge="1"><text>&amp;Help</text>
   <Merge />
-  <Action name="contents"/>
-  <Action name="whats_this"/>
+  <Action name="help_contents"/>
+  <Action name="help_whats_this"/>
   <Separator/>
-  <Action name="report_bug"/>
+  <Action name="help_report_bug"/>
   <Separator/>
-  <Action name="about_app"/>
-  <Action name="about_kde"/>
+  <Action name="help_about_app"/>
+  <Action name="help_about_kde"/>
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar" fullWidth="false" noMerge="1"><Text>File</Text>

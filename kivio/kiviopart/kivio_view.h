@@ -176,9 +176,6 @@ public slots:
   void alignStencilsDlg();
   void optionsDialog();
 
-public slots:
-  virtual void newView();
-
 protected slots:
   void slotAddPage( KivioPage *_page );
   void slotPageRenamed( KivioPage* page, const QString& old_name );

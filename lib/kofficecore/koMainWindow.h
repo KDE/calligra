@@ -166,12 +166,7 @@ public slots:
     virtual void slotToolbarToggled( bool toggle );
 
     /**
-     *  Shows an about dialog for the app.
-     */
-    virtual void slotHelpAbout();
-
-    /**
-     * View splitting stuff (testing :)
+     * View splitting stuff
      */
     virtual void slotSplitView();
     virtual void slotRemoveView();

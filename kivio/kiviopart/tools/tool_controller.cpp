@@ -19,11 +19,11 @@
 #include "tool_controller.h"
 #include "tool.h"
 #include "kivio_view.h"
-#include "kivio_shell.h"
 #include "kivio_canvas.h"
 #include "kivio_page.h"
 
 #include <ktoolbarbutton.h>
+#include <ktoolbar.h>
 #include <kxmlguiclient.h>
 
 ToolSelectAction::ToolSelectAction( QObject* parent, const char* name )

@@ -23,7 +23,6 @@
 #include "tkunits.h"
 #include "kivio_doc.h"
 #include "kivio_page.h"
-#include "kivio_shell.h"
 #include "kivio_map.h"
 #include "kivio_view.h"
 #include "kivio_factory.h"

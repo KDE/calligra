@@ -19,7 +19,7 @@ INCLUDES = -I$(srcdir)/ui\
 	-I$(srcdir)/tklib\
 	-I$(srcdir)/tools\
 	$(KOFFICE_INCLUDES)\
-        -I$(top_srcdir)/lib/kformula\
+	-I$(top_srcdir)/lib/kformula\
 	$(all_includes)
 
 libkiviopart_la_METASOURCES = AUTO
@@ -28,7 +28,6 @@ libkiviopart_la_SOURCES = \
 		kivio_canvas.cpp\
 		kivio_doc.cpp\
 		kivio_factory.cpp\
-		kivio_shell.cpp\
 		kivio_tabbar.cpp\
 		kivio_view.cpp\
 		kivio_map.cpp\
@@ -66,8 +65,6 @@ EXTRA_DIST = \
 		kivio_doc.h\
 		kivio_factory.cpp\
 		kivio_factory.h\
-		kivio_shell.cpp\
-		kivio_shell.h\
 		kivio_tabbar.cpp\
 		kivio_tabbar.h\
 		kivio_view.cpp\
@@ -147,10 +144,10 @@ kivio_la_LIBADD = libkiviopart.la
 
 libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries)
 
-bin_PROGRAMS = kiviopart
-kiviopart_SOURCES = dummy.cpp
-kiviopart_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kiviopart_LDADD = kivio.la
+bin_PROGRAMS = kivio
+kivio_SOURCES = dummy.cpp
+kivio_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kivio_LDADD = kivio.la
 
 dummy.cpp:
 	echo > dummy.cpp

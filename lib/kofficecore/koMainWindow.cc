@@ -37,10 +37,8 @@
 #include <qsplitter.h>
 #include <qprinter.h>
 
-#include <kaboutdialog.h>
 #include <kstdaction.h>
 #include <kaction.h>
-#include <khelpmenu.h>
 #include <kapp.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -168,8 +166,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_manager->setAllowNestedParts( true );
     d->m_manager->setIgnoreScrollBars( true );
 
-   setHelpMenuEnabled(false); // we have our own
-
     connect( d->m_manager, SIGNAL( activePartChanged( KParts::Part * ) ),
              this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
 
@@ -196,13 +192,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
     KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection(), "configuretoolbars" );
-
-    KHelpMenu * m_helpMenu = new KHelpMenu( this );
-    KStdAction::helpContents( m_helpMenu, SLOT( appHelpActivated() ), actionCollection(), "contents" );
-    KStdAction::whatsThis( m_helpMenu, SLOT( contextHelpActivated() ), actionCollection(), "whats_this" );
-    KStdAction::aboutApp( this, SLOT( slotHelpAbout() ), actionCollection(), "about_app" );
-    KStdAction::aboutKDE( m_helpMenu, SLOT( aboutKDE() ), actionCollection(), "about_kde" );
-    KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "report_bug" );
 
     d->m_paDocInfo->setEnabled( false );
     d->m_paSaveAs->setEnabled( false );
@@ -698,18 +687,6 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
   }
   else
     kdWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->name() << " not found!" << endl;
-}
-
-void KoMainWindow::slotHelpAbout()
-{
-    KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtProduct | KAboutDialog::AbtTitle | KAboutDialog::AbtImageOnly,
-                                          kapp->caption(),
-                                          KDialogBase::Ok, KDialogBase::Ok, this, 0, true );
-    dia->setTitle( kapp->caption() );
-    dia->setProduct( "", "1.0", i18n("the KOffice Team"), "1998-2000" );
-    dia->setImage( locate( "data", "koffice/pics/koffice-logo.png" ) );
-    dia->exec();
-    delete dia;
 }
 
 void KoMainWindow::slotSplitView() {
