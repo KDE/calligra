@@ -141,6 +141,20 @@ static void ProcessUnderlineTag (QDomNode myNode, void* , QString& abiprops)
     }
 }
 
+static void ProcessStrikeOutTag (QDomNode myNode, void* , QString& abiprops)
+{
+    int value=0;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("value", "int", (void *)&value) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    if (value)
+    {
+        abiprops+="text-decoration:line-through; "; // Note: Trailing space is important!
+    }
+}
+
 static void ProcessWeightTag (QDomNode myNode, void* , QString& abiprops)
 {
     int weight=50;
@@ -301,6 +315,7 @@ static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &)
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "ITALIC",    ProcessItalicTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "UNDERLINE", ProcessUnderlineTag, NULL ) );
+	tagProcessingList.append ( TagProcessing ( "STRIKEOUT", ProcessStrikeOutTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "WEIGHT",    ProcessWeightTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "SIZE",      ProcessSizeTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "FONT",      ProcessFontTag, NULL ) );

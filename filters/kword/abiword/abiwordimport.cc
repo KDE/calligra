@@ -123,6 +123,7 @@ public:
         italic=false;
         bold=false;
         underline=false;
+        strikeout=false;
         red=0;
         green=0;
         blue=0;
@@ -140,6 +141,7 @@ public:
     bool        italic;
     bool        bold;
     bool        underline;
+    bool        strikeout;
     int         red;
     int         green;
     int         blue;
@@ -215,8 +217,8 @@ bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttr
 
         stackItem->italic=(strFontStyle=="italic");
         stackItem->bold=(strWeight=="bold");
-        // underline is the only font-decoration available in KWord
-        stackItem->underline=(strDecoration=="underline"); // Underline is the only text decoration that KWord can do!
+        stackItem->underline=(strDecoration=="underline");
+        stackItem->strikeout=(strDecoration=="line-through");
         if (strTextPosition=="subscript")
         {
             stackItem->textPosition=1;
@@ -317,9 +319,16 @@ bool charactersElementC (StackItem* stackItem, const QString & ch)
 
     if (stackItem->underline)
     {
-        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("UNDERLINE");
-        fontElementOut.setAttribute("value",1);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        QDomElement elementOut=nodeOut.ownerDocument().createElement("UNDERLINE");
+        elementOut.setAttribute("value",1);
+        formatElementOut.appendChild(elementOut); //Append to <FORMAT>
+    }
+
+    if (stackItem->strikeout)
+    {
+        QDomElement elementOut=nodeOut.ownerDocument().createElement("STRIKEOUT");
+        elementOut.setAttribute("value",1);
+        formatElementOut.appendChild(elementOut); //Append to <FORMAT>
     }
 
     if (stackItem->textPosition)
@@ -397,8 +406,8 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     stackItem->pos=0; // No text characters yet
     stackItem->italic=(strFontStyle=="italic");
     stackItem->bold=(strWeight=="bold");
-    // underline is the only font-decoration available in KWord
-    stackItem->underline=(strDecoration=="underline"); // Underline is the only text decoration that KWord can do!
+    stackItem->underline=(strDecoration=="underline");
+	stackItem->strikeout=(strDecoration=="line-through");
     if (strTextPosition=="subscript")
     {
         stackItem->textPosition=1;
@@ -450,7 +459,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
         stackItem->fontName="times";
     }
 
-	// Now we populate the layout
+    // Now we populate the layout
     QDomElement layoutElement=nodeOut.ownerDocument().createElement("LAYOUT");
     paragraphElementOut.appendChild(layoutElement);
 
@@ -503,39 +512,46 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
 
     if (stackItem->italic)
     {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("ITALIC");
-        fontElementOut.setAttribute("value",1);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=formatElementOut.ownerDocument().createElement("ITALIC");
+        element.setAttribute("value",1);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     if (stackItem->bold)
     {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("WEIGHT");
-        fontElementOut.setAttribute("value",75);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=formatElementOut.ownerDocument().createElement("WEIGHT");
+        element.setAttribute("value",75);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     if (stackItem->underline)
     {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("UNDERLINE");
-        fontElementOut.setAttribute("value",1);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=formatElementOut.ownerDocument().createElement("UNDERLINE");
+        element.setAttribute("value",1);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
+    }
+
+    if (stackItem->strikeout)
+    {
+        element=formatElementOut.ownerDocument().createElement("STRIKEOUT");
+        element.setAttribute("value",1);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     if (stackItem->textPosition)
     {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("VERTALIGN");
-        fontElementOut.setAttribute("value",stackItem->textPosition);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=formatElementOut.ownerDocument().createElement("VERTALIGN");
+        element.setAttribute("value",stackItem->textPosition);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     if (stackItem->red || stackItem->green || stackItem->blue)
     {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("COLOR");
-        fontElementOut.setAttribute("red",stackItem->red);
-        fontElementOut.setAttribute("green",stackItem->green);
-        fontElementOut.setAttribute("blue",stackItem->blue);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=formatElementOut.ownerDocument().createElement("COLOR");
+        element.setAttribute("red",stackItem->red);
+        element.setAttribute("green",stackItem->green);
+        element.setAttribute("blue",stackItem->blue);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     return true;
