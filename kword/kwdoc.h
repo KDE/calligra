@@ -145,6 +145,7 @@ public:
 
     KWFrameSet *getFrameSet( unsigned int _num )
     { return frames.at( _num ); }
+    KWFrameSet * getFrameSetByName( const QString & name );
     KWFrameSet * getFrameSet( double mx, double my );
     unsigned int getNumFrameSets()
     { return frames.count(); }
@@ -283,7 +284,7 @@ public:
     // For KWPictureFrameSet
     void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
     // For KWTextParag
-    void addAnchorRequest( int fsnum, const KWAnchorPosition &anchorPos );
+    void addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos );
 
     /**
      * Find or create a format for this type of variable
@@ -519,7 +520,7 @@ private:
 
     QMap<QString, KWTextImage *> m_imageRequests;
     QMap<QString, KWPictureFrameSet *> m_imageRequests2;
-    QMap<int, KWAnchorPosition> m_anchorRequests;
+    QMap<QString, KWAnchorPosition> m_anchorRequests;
 
     QMap<int, KWVariableFormat*> m_mapVariableFormats;
     QList<KWVariable> variables;

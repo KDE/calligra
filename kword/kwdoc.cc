@@ -1444,11 +1444,11 @@ bool KWDocument::completeLoading( KoStore *_store )
 
     processImageRequests();
 
-    QMapIterator<int, KWAnchorPosition> itanch = m_anchorRequests.begin();
+    QMapIterator<QString, KWAnchorPosition> itanch = m_anchorRequests.begin();
     for ( ; itanch != m_anchorRequests.end(); ++itanch )
     {
         //kdDebug(32001) << "KWDocument::completeLoading anchoring frameset " << itanch.key() << endl;
-        KWFrameSet * fs = getFrameSet( itanch.key() );
+        KWFrameSet * fs = getFrameSetByName( itanch.key() );
         ASSERT( fs );
         if ( fs )
             fs->setAnchored( itanch.data(), true );
@@ -2046,7 +2046,16 @@ void KWDocument::removePage( int num )
     recalcFrames();
 }
 
-/*================================================================*/
+KWFrameSet * KWDocument::getFrameSetByName( const QString & name )
+{
+    // Note: this isn't recursive, so it won't find table cells.
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        if ( fit.current()->getName() == name )
+            return fit.current();
+    return 0L;
+}
+
 KWFrameSet * KWDocument::getFrameSet( double mx, double my )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2283,9 +2292,9 @@ void KWDocument::addImageRequest( const QString &filename, KWPictureFrameSet *fs
     m_imageRequests2.insert( filename, fs );
 }
 
-void KWDocument::addAnchorRequest( int fsnum, const KWAnchorPosition &anchorPos )
+void KWDocument::addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos )
 {
-    m_anchorRequests.insert( fsnum, anchorPos );
+    m_anchorRequests.insert( framesetName, anchorPos );
 }
 
 KWVariableFormat * KWDocument::variableFormat( int type )

@@ -460,6 +460,12 @@ void KWFrameSet::setAnchored( KWAnchorPosition & pos, bool placeHolderExists /* 
     updateAnchors( placeHolderExists );
 }
 
+void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
+{
+    m_anchorPos.textfs = textfs;
+    findFirstAnchor();
+}
+
 void KWFrameSet::setFixed()
 {
     if ( isFloating() )

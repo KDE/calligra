@@ -817,17 +817,14 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                     QDomElement anchorElem = formatElem.namedItem( "ANCHOR" ).toElement();
                     if ( !anchorElem.isNull() ) {
                         QString type = anchorElem.attribute( "type" );
-                        if ( type == "grpMgr" ) // old syntax
-                            // TODO, set table floating
-                            kdWarning() << "floating tables not implemented yet" << endl;
-                        else if ( type == "frameset" )
+                        if ( type == "grpMgr" /* old syntax */ || type == "frameset" )
                         {
-                            int num = anchorElem.attribute( "instance" ).toInt();
+                            QString framesetName = anchorElem.attribute( "instance" );
                             KWAnchorPosition pos;
                             pos.textfs = textDocument()->textFrameSet();
                             pos.parag = this;
                             pos.index = index;
-                            doc->addAnchorRequest( num, pos );
+                            doc->addAnchorRequest( framesetName, pos );
                         }
                         else
                             kdWarning() << "Anchor type not supported: " << type << endl;

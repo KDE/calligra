@@ -414,8 +414,8 @@ public:
     /** Make this frameset floating, with the anchor at @p parag,@p index in the text frameset @p textfs */
     void setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index ); // convenience method
     void setAnchored( KWAnchorPosition & pos, bool placeHolderExists = false );
-    /** Note that this frameset has been made floating, store anchor position */
-    void findFirstAnchor();
+    /** Note that this frameset has been made floating already, and store anchor position */
+    void setAnchored( KWTextFrameSet* textfs );
     /** Make this frameset fixed, i.e. not anchored */
     void setFixed();
     /** Return true if this frameset is floating, false if it's fixed */
@@ -483,6 +483,7 @@ protected:
 
     virtual void deleteAnchors();
     virtual void updateAnchors( bool placeHolderExists = false );
+    void findFirstAnchor();
 
     KWDocument *m_doc;            // Document
     QList<KWFrame> frames;        // Our frames

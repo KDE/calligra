@@ -3101,8 +3101,7 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
     textFrameSet()->insert( cursor, m_currentFormat, placeHolders,
                             false, false, commandName,
                             customItemsMap );
-    // Grab anchor position and store it
-    fs->findFirstAnchor();
+    fs->setAnchored( textFrameSet() );
 }
 
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )
