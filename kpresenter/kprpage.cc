@@ -2079,8 +2079,22 @@ QString KPrPage::pageTitle( const QString &_title ) const
             objs.append( static_cast<KPTextObject*>( it.current() ) );
     }
 
+    QString title;
+    if ( _title.isNull() )
+    {
+        // MASTERPAGE
+        if ( m_masterPage )
+            title = i18n( "Slide %1" ).arg( m_doc->pageList().findRef( this ) + 1 ); 
+        else 
+            title = i18n( "Master Slide" );
+    }
+    else
+    {
+        title = _title;
+    }
+    
     if ( objs.isEmpty() )
-        return QString( _title );
+        return title;
 
     // Find object most on top
     KPTextObject *tmp = objs.first();
@@ -2091,13 +2105,13 @@ QString KPrPage::pageTitle( const QString &_title ) const
 
     // this can't happen, but you never know :- )
     if ( !textobject )
-        return QString( _title );
+        return QString( title );
 
     QString txt;
     if ( textobject->textDocument()->firstParag() )
         txt = textobject->textDocument()->firstParag()->toString();
     if ( txt.stripWhiteSpace().isEmpty() || txt=="\n" )
-        return _title;
+        return title;
     return txt;
 }
 

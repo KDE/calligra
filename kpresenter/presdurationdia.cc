@@ -73,7 +73,7 @@ void KPPresDurationDia::setupSlideList( QWidget *_page )
             item->setPixmap( 0, KPBarIcon( "newslide" ) );
             item->setText( 0, QString( "%1" ).arg( i + 1 ) );
             item->setText( 1, *m_durationListString.at( i ) );
-            item->setText( 2, doc->pageList().at( i )->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ) );
+            item->setText( 2, doc->pageList().at( i )->pageTitle() );
         }
     }
 }

@@ -244,7 +244,7 @@ QRect ThumbBar::tip(const QPoint &pos, QString &title)
         return QRect(0, 0, -1, -1);
 
     int pagenr =  item->index();
-    title = doc->pageList().at(pagenr)->pageTitle(i18n("Slide %1").arg(pagenr + 1));
+    title = doc->pageList().at(pagenr)->pageTitle();
 
     QRect r = item->pixmapRect(FALSE);
     r = QRect(contentsToViewport(QPoint(r.x(), r.y())), QSize(r.width(), r.height()));
@@ -558,7 +558,7 @@ void OutlineSlideItem::update()
 {
     if( !m_page ) return;
     int index = m_page->kPresenterDoc()->pageList().findRef( m_page );
-    QString title = m_page->pageTitle( i18n( "Slide %1" ).arg( index + 1 ) );
+    QString title = m_page->pageTitle();
     if ( !m_page->kPresenterDoc()->isSlideSelected( index ) )
         title = i18n( "(%1)" ).arg( title );
     setText( 0, title );

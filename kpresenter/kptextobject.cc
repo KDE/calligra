@@ -1272,7 +1272,7 @@ void KPTextObject::recalcPageNum( KPrPage *page )
                 var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage()-1);
                 break;
             case KPrPgNumVariable::VST_CURRENT_SECTION:
-                var->setSectionTitle( page->pageTitle("") );
+                var->setSectionTitle( page->pageTitle() );
                 break;
             case KPrPgNumVariable::VST_PGNUM_PREVIOUS:
                 var->setPgNum( QMAX( pgnum -1 , 0) +

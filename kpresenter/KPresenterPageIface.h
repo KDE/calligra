@@ -46,7 +46,7 @@ k_dcop:
 
     virtual QString manualTitle()const;
     virtual void insertManualTitle(const QString & title);
-    virtual QString pageTitle( const QString &_title ) const;
+    virtual QString pageTitle( const QString &_title = QString() ) const;
 
     virtual void setNoteText( const QString &_text );
     virtual QString noteText( )const;

@@ -153,7 +153,7 @@ void PgConfDia::setupPageSlides()
     {
         KPrPage *page=m_doc->pageList().at( i );
         QCheckListItem* item = new QCheckListItem( slides,
-                                                   page->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ),
+                                                   page->pageTitle(),
                                                    QCheckListItem::CheckBox );
         item->setOn( page->isSlideSelected() );
     }

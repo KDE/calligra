@@ -66,7 +66,7 @@ public:
 
     QString manualTitle()const;
     void insertManualTitle(const QString & title);
-    QString pageTitle( const QString &_title ) const;
+    QString pageTitle( const QString &_title = QString() ) const;
 
     void setNoteText( const QString &_text );
     QString noteText( )const;
