@@ -124,8 +124,6 @@ SvgImport::convert()
 	m_document.setHeight( height );
 
 	// undo y-mirroring
-	//gc->matrix.scale( 1, -1 );
-	//gc->matrix.translate( 0, -m_document.height() );
 	if( !docElem.attribute( "viewBox" ).isEmpty() )
 	{
 		// allow for viewbox def with ',' or whitespace
@@ -138,6 +136,11 @@ SvgImport::convert()
 	m_gc.push( gc );
 	parseGroup( 0L, docElem );
 
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( 0, -m_document.height() );
+	VTransformCmd trafo( 0L, mat );
+	trafo.visit( m_document );
 	outdoc = m_document.saveXML();
 }
 
