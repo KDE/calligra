@@ -14,7 +14,7 @@
 
     <!-- Defintion of a KOffice version
         id: unique identifier of the version
-        kofficepath: path of the status directory on www,koffice.org
+        kofficepath: path of the status directory on www.koffice.org
         stable: is this version stable or not?
         webcvscheckout: URL for a WebCVS checkout
         cvstag: name of the version's CVS tag (cannot be a branch)
@@ -299,7 +299,6 @@
             <filter id="kpresenter_kword">
                 <webcvs importsuffix="" exportsuffix="#export" path="koffice/filters/kpresenter/kword"/>
                 <title xml:lang="en_us">KWord</title>
-                <note xml:lang="en_us">Text export only</note>
                 <stat import="none" export="fivestars"/>
             </filter>
         </application>
@@ -317,12 +316,12 @@
             <filter id="karbon_eps">
                 <title xml:lang="en_us">EPS</title>
                 <note xml:lang="en_us">Encapsulated PostScript</note>
-                <stat import="onestar" export="none"/>
+                <stat import="onestar" export="onestar"/>
             </filter>
             <filter id="karbon_svg">
                 <title xml:lang="en_us">SVG</title>
                 <note xml:lang="en_us">Scaleable Vector Graphics (W3C)</note>
-                <stat import="none" export="onestar"/>
+                <stat import="onestar" export="onestar"/>
             </filter>
             <filter id="karbon_wmf">
                 <title xml:lang="en_us">WMF</title>
