@@ -7,6 +7,9 @@ KOfficeCore:
 - Fixed parsing of number+unit, due to change in Qt 3.3. Fixes problems
   when opening OOWriter documents in particular.
 
+KOfficeUI:
+- Fix overwriting of templates
+
 KoText:
 - Date variables for printing-date, last-modified, and creation-date were
   not loaded correctly.
