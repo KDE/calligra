@@ -22,8 +22,10 @@
 
 #include <koFilter.h>
 #include <qdom.h>
+#include <qmap.h>
 #include <qptrstack.h>
 #include <core/vdocument.h>
+#include <core/vgradient.h>
 
 class VGroup;
 class VComposite;
@@ -55,15 +57,19 @@ protected:
 	void parsePath( VComposite *, const QDomElement & );
 	void parseGroup( VGroup *, const QDomElement & );
 	void parseStyle( VObject *, const QDomElement & );
+	void parseGradient( const QDomElement & );
+	VColor parseColor( const QString & );
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();
-	const char *getCoord( const char *, double & );
-	VColor parseColor( const QString & );
 
 private:
-	VDocument m_document;
-	QPtrStack<GraphicsContext> m_gc;
+	const char *getCoord( const char *, double & );
+
+private:
+	VDocument					m_document;
+	QPtrStack<GraphicsContext>	m_gc;
+	QMap<QString, VGradient>	m_gradients;
 };
 
 #endif

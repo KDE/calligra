@@ -44,7 +44,6 @@ SvgImport::SvgImport(KoFilter *, const char *, const QStringList&) :
 
 SvgImport::~SvgImport()
 {
-
 }
 
 KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCString& to)
@@ -96,7 +95,6 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	}
 
 	// Do the conversion!
-
 	convert();
 
 	KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
@@ -166,6 +164,11 @@ SvgImport::parseColor( const QString &s )
 		color.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
 	}
 	return color;
+}
+
+void
+SvgImport::parseGradient( const QDomElement & )
+{
 }
 
 void
