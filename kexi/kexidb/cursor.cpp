@@ -122,8 +122,11 @@ bool Cursor::open()
 	m_validRecord = false;
 	
 //	if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
-	if (m_conn->driver()->beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY)
+	if (m_conn->driver()->beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY) {
+		KexiDBDbg << "READ AHEAD:" << endl;
 		m_readAhead = getNextRecord(); //true if any record in this query
+		KexiDBDbg << "READ AHEAD = " << m_readAhead << endl;
+	}
 	m_at = 0; //we are still before 1st rec
 	return !error();
 }
@@ -166,7 +169,6 @@ bool Cursor::moveFirst()
 			if (m_records_in_buf>0) {
 				//set state as we would before first:
 				m_at_buffer = false;
-//js				m_at = -1;
 				m_at = 0;
 				//..and move to next, ie. 1st record
 //				m_afterLast = m_afterLast = !getNextRecord();
@@ -314,12 +316,15 @@ bool Cursor::getNextRecord()
 	m_result = -1; //by default: invalid result of row fetching
 
 	if ((m_options & Buffered)) {//this cursor is buffered:
-		if (m_at < (m_records_in_buf-1)) {//we have next record already buffered:
+		KexiDBDbg << "m_at < m_records_in_buf :: " << (long)m_at << " < " << m_records_in_buf << endl;
+		if (m_at < m_records_in_buf) {//we have next record already buffered:
+///		if (m_at < (m_records_in_buf-1)) {//we have next record already buffered:
 			if (m_at_buffer) {//we already have got a pointer to buffer
 				drv_bufferMovePointerNext(); //just move to next record in the buffer
 			} else {//we have no pointer
 				//compute a place in the buffer that contain next record's data
-				drv_bufferMovePointerTo(m_at+1);
+				drv_bufferMovePointerTo(m_at-1+1);
+//				drv_bufferMovePointerTo(m_at+1);
 				m_at_buffer = true; //now current record is stored in the buffer
 			}
 		}

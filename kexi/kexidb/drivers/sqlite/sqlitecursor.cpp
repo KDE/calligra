@@ -47,6 +47,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 //			, res(SQLITE_OK)
 			, curr_coldata(0)
 			, curr_colname(0)
+			, cols_pointers_mem_size(0)
 //			, rec_stored(false)
 /* MOVED TO Cursor:
 			, cols_pointers_mem_size(0)
@@ -86,6 +87,9 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 /*		int prev_cols;
 		const char **prev_coldata;
 		const char **prev_colname;*/
+		
+		uint cols_pointers_mem_size; //! size of record's array of pointers to values
+		QPtrVector<const char*> records;//! buffer data
 };
 
 
@@ -128,7 +132,7 @@ bool SQLiteCursor::drv_open(const QString& statement)
 //	m_beforeFirst = true;
 
 	if (isBuffered()) {
-		m_records.resize(128); //TODO: manage size dynamically
+		d->records.resize(128); //TODO: manage size dynamically
 	}
 
 	return true;
@@ -168,27 +172,31 @@ void SQLiteCursor::drv_getNextRecord()
 		m_result = FetchEnd;
 	else
 		m_result = FetchError;
-			
+	
 	//debug
 	if (m_result == FetchOK && d->curr_coldata) {
 		for (int i=0;i<m_fieldCount;i++) {
 			KexiDBDrvDbg<<"col."<< i<<": "<< d->curr_colname[i]<<" "<< d->curr_colname[m_fieldCount+i]
 			<< " = " << (d->curr_coldata[i] ? QString::fromLocal8Bit(d->curr_coldata[i]) : "(NULL)") <<endl;
 		}
+//		KexiDBDrvDbg << "SQLiteCursor::drv_getNextRecord(): "<<m_fieldCount<<" col(s) fetched"<<endl;
 	}
 }
 
 void SQLiteCursor::drv_appendCurrentRecordToBuffer()
 {
-	if (!m_cols_pointers_mem_size)
-		m_cols_pointers_mem_size = m_fieldCount * sizeof(char*);
-	const char **record = (const char**)malloc(m_cols_pointers_mem_size);
+//	KexiDBDrvDbg << "SQLiteCursor::drv_appendCurrentRecordToBuffer():" <<endl;
+	if (!d->cols_pointers_mem_size)
+		d->cols_pointers_mem_size = m_fieldCount * sizeof(char*);
+	const char **record = (const char**)malloc(d->cols_pointers_mem_size);
 	const char **src_col = d->curr_coldata;
 	const char **dest_col = record;
 	for (int i=0; i<m_fieldCount; i++,src_col++,dest_col++) {
+//		KexiDBDrvDbg << i <<": '" << *src_col << "'" <<endl;
 		*dest_col = strdup(*src_col);
 	}
-	m_records.insert(m_records_in_buf,record);
+	d->records.insert(m_records_in_buf,record);
+//	KexiDBDrvDbg << "SQLiteCursor::drv_appendCurrentRecordToBuffer() ok." <<endl;
 }
 
 void SQLiteCursor::drv_bufferMovePointerNext()
@@ -205,7 +213,7 @@ void SQLiteCursor::drv_bufferMovePointerPrev()
 //and move internal buffer pointer to that place
 void SQLiteCursor::drv_bufferMovePointerTo(Q_LLONG at)
 {
-	d->curr_coldata = m_records.at(at);
+	d->curr_coldata = d->records.at(at);
 }
 
 
@@ -325,25 +333,25 @@ bool SQLiteCursor::drv_getPrevRecord()
 
 void SQLiteCursor::drv_clearBuffer()
 {
-	if (!m_cols_pointers_mem_size)
-		return;
-	const uint records_in_buf = m_records_in_buf;
-	const char ***r_ptr = m_records.data();
-	for (uint i=0; i<records_in_buf; i++, r_ptr++) {
-//		const char **record = m_records.at(i);
-		const char **field_data = *r_ptr;
-//		for (int col=0; col<d->curr_cols; col++, field_data++) {
-		for (int col=0; col<m_fieldCount; col++, field_data++) {
-			free((void*)*field_data); //free field memory
+	if (d->cols_pointers_mem_size>0) {
+		const uint records_in_buf = m_records_in_buf;
+		const char ***r_ptr = d->records.data();
+		for (uint i=0; i<records_in_buf; i++, r_ptr++) {
+	//		const char **record = m_records.at(i);
+			const char **field_data = *r_ptr;
+	//		for (int col=0; col<d->curr_cols; col++, field_data++) {
+			for (int col=0; col<m_fieldCount; col++, field_data++) {
+				free((void*)*field_data); //free field memory
+			}
+			free(*r_ptr); //free pointers to fields array
 		}
-		free(*r_ptr); //free pointers to fields array
 	}
 //	d->curr_cols=0;
 //	m_fieldCount=0;
 	m_records_in_buf=0;
-	m_cols_pointers_mem_size=0;
+	d->cols_pointers_mem_size=0;
 //	m_at_buffer=false;
-	m_records.clear();
+	d->records.clear();
 }
 
 /*
