@@ -507,6 +507,7 @@ private slots:
 private:
     // variables
     QPopupMenu *presMenu;
+    bool showingLastSlide;
     bool mousePressed;
     bool drawContour;
     double startAngle;

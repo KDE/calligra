@@ -148,3 +148,4 @@ Changes after KPresenter 1.2
 - Transition effect dialog (with preview)
 - Better loading of background pictures (especially for remote files.)
 - Web presentation: better HTML generation, usability improvement of the wizard
+- Display a "End of presentation"-slide at end of presentation

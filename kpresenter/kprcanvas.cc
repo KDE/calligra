@@ -103,6 +103,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     m_keyPressEvent = false;
     m_drawSymetricObject = false;
     if ( parent ) {
+        showingLastSlide = false;
         mousePressed = false;
         drawContour = false;
         modType = MT_NONE;
@@ -3271,12 +3272,37 @@ bool KPrCanvas::pNext( bool )
         return true;
     }
 
-    // No more slides. Redisplay last one, then
-    kdDebug(33001) << "Page::pNext last slide -> again" << endl;
-    emit stopPres();
-    presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1);
-    currPresStep = *presStepList.begin();
-    doObjEffects();
+    kdDebug(33001) << "Page::pNext last slide -> End of presentation" << endl;
+
+    // When we are in manual mode or in automatic mode with no infinite loop
+    // we display the 'End of presentation' slide.
+    if ( ( spManualSwitch() || !spInfiniteLoop() ) && !showingLastSlide )
+    {
+        m_view->setPresentationDuration( currPresPage - 1 );
+
+        QPixmap lastSlide( QApplication::desktop()->width(), QApplication::desktop()->height() );
+        QFont font( m_view->kPresenterDoc()->defaultFont().family() );
+        QPainter p( &lastSlide );
+
+        p.setFont( font );
+        p.setPen( white );
+        p.fillRect( p.viewport(), black );
+        p.drawText( 50, 50, i18n( "End of presentation. Click to exit." ) );
+        bitBlt( this, 0, 0, &lastSlide, 0, 0, lastSlide.width(), lastSlide.height() );
+        showingLastSlide = true;
+        emit stopPres(); // no automatic mode for last slide
+    }
+    else if ( showingLastSlide ) // after last slide stop presentation
+    {
+        showingLastSlide = false;
+        m_view->screenStop();
+    }
+    else
+    {
+        m_view->setPresentationDuration( currPresPage - 1 );
+        emit stopPres(); // tells automatic mode to restart
+    }
+
     return false;
 }
 

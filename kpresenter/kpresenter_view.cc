@@ -1640,8 +1640,8 @@ void KPresenterView::screenStop()
         }
 
 
-        if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() )
-            setPresentationDuration( m_canvas->presPage() - 1 );
+//         if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() )
+//             setPresentationDuration( m_canvas->presPage() - 1 );
 
         m_canvas->stopScreenPresentation();
         presStarted = false;
@@ -4213,10 +4213,8 @@ void KPresenterView::doAutomaticScreenPres()
         setCurrentTimer( 1 );
         m_canvas->setNextPageTimer( true );
     }
-    else if ( !continuePres ) {
-        screenStop();
+    else if ( !continuePres )
         return;
-    }
     else
         screenNext();
 }
