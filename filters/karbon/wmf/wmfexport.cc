@@ -24,7 +24,7 @@
 #include <koFilterChain.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
-#include <core/vdocument.h>
+#include "vdocument.h"
 #include "vcolor.h"
 #include "vcomposite.h"
 #include "vdashpattern.h"
@@ -35,6 +35,7 @@
 #include "vfill.h"
 #include "vstroke.h"
 #include "vtext.h"
+#include "vflattencmd.h"
 
 #include "wmfexport.h"
 #include "kowmfwrite.h"
@@ -229,8 +230,11 @@ void WmfExport::visitVText( VText& text ) {
 // this code is duplicated from flattenPathPlugin.cc
 // TODO: remove WmfExport::flattenPath() if a similar code is recheable
 void WmfExport::flattenPath( VPath& path, double flatness ) {
+	VFlattenCmd cmd( 0L, INCH_TO_POINT(0.3 / (double)mDpi) );
+	cmd.visit( path );
+	return;
     // Ommit first segment.    
-    path.first();
+    /*path.first();
     while( path.next() ) {
             while( !path.current()->isFlat( flatness )  ) {
                 // Split at midpoint.
@@ -243,7 +247,7 @@ void WmfExport::flattenPath( VPath& path, double flatness ) {
             path.current()->setPoint( 1, path.current()->knot() );
         }
         // disabled path.current()->setDegree( 1 );
-    }
+    }*/
 }
 
 
