@@ -179,7 +179,7 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
 
     connect(groupList, SIGNAL(selectionChanged(QListViewItem*)),  SLOT(groupChanged(QListViewItem*)));
     connect(resourceTable, SIGNAL(valueChanged(int, int)), SLOT(resourceChanged(int, int)));
-    connect(numUnits, SIGNAL(valueChanged(int)), SLOT(unitsChanged(int)));
+//    connect(numUnits, SIGNAL(valueChanged(int)), SLOT(unitsChanged(int)));
 
 
     connect(effort, SIGNAL(valueChanged()), SLOT(sendChanged()));
@@ -201,10 +201,10 @@ void KPTRequestResourcesPanel::groupChanged(QListViewItem *item) {
     }
     selectedGroup = grp;
 
-    m_blockChanged = true;
+/*    m_blockChanged = true;
     numUnits->setMaxValue(grp->m_group->units());
     numUnits->setValue(grp->m_units);
-    m_blockChanged = false;
+    m_blockChanged = false;*/
     grp->insert(resourceTable);
 }
 
