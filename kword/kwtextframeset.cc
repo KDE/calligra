@@ -2043,6 +2043,26 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     }
 }
 
+
+double KWTextFrameSet::footNoteSize( KWFrame *theFrame )
+{
+    double tmp =0.0;
+    int page = theFrame->pageNum();
+    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        if((fit.current()->isFootNote() || fit.current()->isEndNote()) &&
+           fit.current()->isVisible())
+        {
+            KWFrame * frm=fit.current()->frame( 0 );
+            if(frm->pageNum()==page )
+                tmp += frm->innerHeight();
+        }
+    }
+    return tmp;
+}
+
+
 double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 {
     double tmp =m_doc->ptPaperHeight()-m_doc->ptBottomBorder()-m_doc->ptTopBorder()-40;//default min 40 for page size
@@ -2058,7 +2078,10 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
             {
                 KWFrame * frm=fit.current()->frame( 0 );
                 if(frm->pageNum()==page )
-                    return (tmp-frm->innerHeight());
+                {
+
+                    return (tmp-frm->innerHeight()-footNoteSize( frm ));
+                }
             }
         }
     }

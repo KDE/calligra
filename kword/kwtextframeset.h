@@ -291,6 +291,7 @@ protected:
     void fixParagWidth( KWTextParag* parag );
     void frameResized( KWFrame *theFrame, bool invalidateLayout );
     double footerHeaderSizeMax( KWFrame *theFrame );
+    double footNoteSize( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
 private:
     /** The contained text object */
