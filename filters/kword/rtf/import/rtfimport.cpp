@@ -135,10 +135,10 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"datafield",	skipGroup,		0L, 0 ), // Binary data in variables are not supported
 	MEMBER(	"@rtf",		"deff",		setNumericProperty,	defaultFont, 0 ),
 	MEMBER(	"@rtf",		"deftab",	setNumericProperty,	defaultTab, 0 ),
-	MEMBER(	"@pict",	"dibitmap",	setEnumProperty,	picture.type, RTFPicture::BMP ),
+	PROP(	"@pict",	"dibitmap",	setPictureType,	        0L, RTFPicture::BMP ),
 	MEMBER(	0L,		"dn",		setNumericProperty,	state.format.baseline, 6 ),
 	PROP(	0L,		"emdash",	insertSymbol,		0L, 0x2014 ),
-	MEMBER(	"@pict",	"emfblip",	setEnumProperty,	picture.type, RTFPicture::EMF ),
+	PROP(	"@pict",	"emfblip",	setPictureType,	        0L, RTFPicture::EMF ),
 	PROP(	0L,		"emspace",	insertSymbol,		0L, 0x2003 ),
 	PROP(	0L,		"endash",	insertSymbol,		0L, 0x2013 ),
 	PROP(	0L,		"enspace",	insertSymbol,		0L, 0x2002 ),
@@ -163,7 +163,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"headery",	setNumericProperty,	state.section.headerMargin, 0 ),
 	MEMBER(	0L,		"i",		setToggleProperty,	state.format.italic, 0 ),
 	MEMBER(	0L,		"intbl",	setFlagProperty,	state.layout.inTable, true ),
-	MEMBER(	"@pict",	"jpegblip",	setEnumProperty,	picture.type, RTFPicture::JPEG ),
+	PROP(	"@pict",	"jpegblip",	setPictureType,	        0L, RTFPicture::JPEG ),
 	MEMBER(	0L,		"keep",		setFlagProperty,	state.layout.keep, true ),
 	MEMBER(	0L,		"keepn",	setFlagProperty,	state.layout.keepNext, true ),
 	MEMBER(	"@rtf",		"landscape",	setFlagProperty,	landscape, true ),
@@ -173,7 +173,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"lquote",	insertSymbol,		0L, 0x2018 ),
 	PROP(	0L,		"ltrmark",	insertSymbol,		0L, 0x200e ),
 	PROP(	0L,		"mac",	setMacCodepage,		0L, 0 ),
-	MEMBER(	"@pict",	"macpict",	setEnumProperty,	picture.type, RTFPicture::MacPict ),
+	PROP(	"@pict",	"macpict",	setPictureType,	        0L, RTFPicture::MacPict ),
 	MEMBER(	"@rtf",		"margb",	setNumericProperty,	bottomMargin, 0 ),
 	MEMBER(	"@rtf",		"margl",	setNumericProperty,	leftMargin, 0 ),
 	MEMBER(	"@rtf",		"margr",	setNumericProperty,	rightMargin, 0 ),
@@ -200,8 +200,8 @@ static RTFProperty propertyTable[] =
 	MEMBER(	"@pict",	"picw",		setNumericProperty,	picture.width, 0 ),
 	MEMBER(	"@pict",	"picwgoal",	setNumericProperty,	picture.desiredWidth, 0 ),
 	PROP(	0L,		"plain",	setPlainFormatting,	0L, 0 ),
-	MEMBER(	"@pict",	"pmmetafile",	setEnumProperty,	picture.type, RTFPicture::WMF ),
-	MEMBER(	"@pict",	"pngblip",	setEnumProperty,	picture.type, RTFPicture::PNG ),
+	PROP(	"@pict",	"pmmetafile",	setPictureType,	        0L, RTFPicture::WMF ),
+	PROP(	"@pict",	"pngblip",	setPictureType,	        0L, RTFPicture::PNG ),
 	MEMBER(	0L,		"qc",		setEnumProperty,	state.layout.alignment, RTFLayout::Centered ),
 	MEMBER(	0L,		"qj",		setEnumProperty,	state.layout.alignment, RTFLayout::Justified ),
 	MEMBER(	0L,		"ql",		setEnumProperty,	state.layout.alignment, RTFLayout::Left ),
@@ -259,8 +259,9 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"ululdbwave",	setUnderlineProperty,	0L, RTFFormat::UnderlineWave ),
 	MEMBER(	0L,		"up",		setUpProperty,		state.format.baseline, 6 ),
 	MEMBER(	0L,		"v",		setToggleProperty,	state.format.hidden, 0 ),
-	MEMBER(	"@pict",	"wbitmap",	setEnumProperty,	picture.type, RTFPicture::BMP ),
-	MEMBER(	"@pict",	"wmetafile",	setEnumProperty,	picture.type, RTFPicture::EMF ),
+        // ### TODO: \wbitmap: a Windows Device-Dependant Bitmap is not a BMP
+	PROP(	"@pict",	"wbitmap",	setPictureType,	        0L, RTFPicture::BMP ),
+	PROP(	"@pict",	"wmetafile",	setPictureType,	        0L, RTFPicture::EMF ),
 	PROP(	0L,		"zwj",		insertSymbol,		0L, 0x200d ),
 	PROP(	0L,		"zwnj",		insertSymbol,		0L, 0x200c )
 };
@@ -919,6 +920,10 @@ void RTFImport::setEnumProperty( RTFProperty *property )
     *((int *)(((char *)this) + property->offset)) = property->value;
 }
 
+void RTFImport::setPictureType( RTFProperty* property )
+{
+    picture.type = RTFPicture::PictureType( property->value );
+}
 
 void RTFImport::setSimpleUnderlineProperty( RTFProperty* )
 {

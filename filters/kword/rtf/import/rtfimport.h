@@ -265,6 +265,11 @@ public:
     void setNumericProperty( RTFProperty *property );
     void setEnumProperty( RTFProperty *property );
     /**
+     * Set the picture type
+     * (BMP, PNG...)
+     */
+    void setPictureType( RTFProperty* property );
+    /**
      * Sets the enumaration value for \\ul-type keywords
      * \\ul switches on simple underline
      * \\ul0 switches off all underlines
