@@ -48,7 +48,6 @@ class VGradientTool;
 class VInsertKnotsDlg;
 class VPainterFactory;
 class VPolygonTool;
-class VObjectDlg;
 class VRectangleTool;
 class VRotateTool;
 class VRoundCornersDlg;
@@ -160,7 +159,6 @@ protected slots:
 	void viewModeChanged();
 	void zoomChanged();
 	void viewColorManager();
-	void viewSelectionProperties();
 	void refreshView();
 
 	//toolbox dialogs - slots
@@ -229,7 +227,6 @@ private:
 	// dialogs:
 	VInsertKnotsDlg* m_insertKnotsDlg;
 	VFlattenDlg* m_flattenDlg;
-	VObjectDlg* m_objectDlg;
 	VRoundCornersDlg* m_roundCornersDlg;
 	VWhirlPinchDlg* m_whirlPinchDlg;
 	VTransformDlg* m_TransformDlg;

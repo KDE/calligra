@@ -68,7 +68,6 @@
 #include "vfilldlg.h"
 #include "vflattendlg.h"
 #include "vinsertknotsdlg.h"
-#include "vobjectdlg.h"
 #include "vroundcornersdlg.h"
 #include "vstrokedlg.h"
 #include "vtransformdlg.h"
@@ -186,8 +185,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 		connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
 	}
 
-	m_objectDlg = new VObjectDlg( m_part, this );
-	m_objectDlg->disable(); //disabled @ startup because none of the objects are selected
 	m_TransformDlg = new VTransformDlg( m_part, this );
 
 	setNumberOfRecentFiles( m_part->maxRecentFiles() );
@@ -219,7 +216,6 @@ KarbonView::~KarbonView()
 	delete( m_roundCornersDlg );
 	delete( m_whirlPinchDlg );
 	delete( m_ColorManager );
-	delete( m_objectDlg );
 	delete( m_TransformDlg );
 
 	// tools:
@@ -854,16 +850,6 @@ KarbonView::viewColorManager()
 }
 
 void
-KarbonView::viewSelectionProperties()
-{
-	if( m_objectDlg->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_objectDlg, DockBottom );
-		m_objectDlg->show();
-	}
-}
-
-void
 KarbonView::refreshView()
 {
 	m_canvas->repaintAll();
@@ -1001,9 +987,6 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
-	new KAction(
-		i18n( "&Selection Properties" ), "objdlg", 0, this,
-		SLOT( viewSelectionProperties() ), actionCollection(), "view_selection_properties" );
 
 	new KAction(
 		i18n( "&Refresh" ), 0, QKeySequence("Ctrl+W"), this,
@@ -1104,8 +1087,6 @@ KarbonView::selectionChanged()
 		part()->document().selection()->setFill( *( part()->document().selection()->objects().getFirst()->fill() ) );
 		m_setLineWidth->setEnabled( true );
 		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
-		m_objectDlg->enable();
-		m_objectDlg->update( m_part );
 		if( m_ColorManager->isStrokeDocker() )
 		{
 			VColor *c = new VColor ( m_part->document().selection()->objects().getFirst()->stroke()->color() );
@@ -1122,8 +1103,6 @@ KarbonView::selectionChanged()
 		m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
 									 *( part()->document().selection()->fill() ) );
 		m_setLineWidth->setEnabled( false );
-		m_objectDlg->reset();
-		m_objectDlg->disable();
 		m_groupObjects->setEnabled( false );
 		m_ungroupObjects->setEnabled( false );
 	}
