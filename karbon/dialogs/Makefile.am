@@ -14,7 +14,6 @@ noinst_HEADERS = \
 	vstrokedlg.h 
 
 libkarbondialogs_la_SOURCES = \
-	dummy.cc \
 	vconfiguredlg.cc \
 	vfilldlg.cc \
 	vcolortab.cc \
@@ -22,10 +21,4 @@ libkarbondialogs_la_SOURCES = \
 
 libkarbondialogs_la_METASOURCES = \
 	AUTO
-
-DISTCLEANFILES = \
-	dummy.cc
-
-dummy.cc:
-	echo > dummy.cc
 
