@@ -37,11 +37,10 @@ KSpreadCellEditor::~KSpreadCellEditor()
 KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent, const char* _name )
   : KSpreadCellEditor( _cell, _parent, _name )
 {
-  //m_pEdit = new QLineEdit( this );
   m_pEdit = new KLineEdit( this );
   m_pEdit->installEventFilter( this );
   m_pEdit->setFrame( FALSE );
-  m_pEdit->setCompletionMode(/*KGlobalSettings::CompletionAuto*/(KGlobalSettings::Completion)canvas()->view()->doc()->completionMode()  );
+  m_pEdit->setCompletionMode((KGlobalSettings::Completion)canvas()->view()->doc()->completionMode()  );
   m_pEdit->setCompletionObject( &canvas()->view()->doc()->completion(),true );
   setFocusProxy( m_pEdit );
   setFontPropagation( AllChildren );
@@ -96,7 +95,8 @@ void KSpreadTextEditor::checkChoose()
       if ( ( r == '*' || r == '|' || r == '&' || r == '-' ||
              r == '+' || r == '/' || r == '!' || r == '(' ||
              r == '^' || r == ',' || r == '%' || r == '[' ||
-             r == '{' || r == '~' || r == '=' || r==';' ) )
+             r == '{' || r == '~' || r == '=' || r == ';' || 
+	     r == '>' || r == '<') )
       {
           kdDebug(36001) << "Start CHOOSE" << endl;
           canvas()->startChoose();
