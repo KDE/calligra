@@ -308,8 +308,6 @@ RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
 
 /**
  * Convert document from RTF to KWord format.
- * @param fileIn the name of the input (RTF) file
- * @param fileOut the name of the output (KWord) file
  * @param from the mimetype for RTF
  * @param to the mimetype for KWord
  * @return true if the document was successfully converted

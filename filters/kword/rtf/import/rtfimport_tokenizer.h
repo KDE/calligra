@@ -24,16 +24,28 @@ public:
 
     RTFTokenizer();
 
+    /**
+     * Open tokenizer from file.
+     * @param in the input file
+     */
     void open( QFile *in );
+    /**
+     * Reads the next token.
+     */
     void next();
 
     // token data
-    char *text;		// plain text or control word/symbol
+
+    /// plain text or control word/symbol
+    char *text;
     TokenType type;
-    int value;		// numeric parameter
-    bool hasParam;	// token has a (numeric) parameter
+    /// numeric parameter
+    int value;
+    /// token has a (numeric) parameter
+    bool hasParam;
 
 public:
+    /// Binary data (of \bin keyword)
     QByteArray binaryData;
 
     // tokenizer (private) data

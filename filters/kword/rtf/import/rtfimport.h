@@ -32,17 +32,19 @@ class DomNode;
 class RTFImport;
 
 
-// RTF property (control word table entry)
+/// RTF property (control word table entry)
 struct RTFProperty
 {
     const char *onlyValidIn;
     const char *name;
     void (RTFImport::*cwproc)( struct RTFProperty * = 0L );
-    int offset;		// offset of formatting property
-    int value;		// default value
+    /// offset of formatting property
+    int offset;
+    /// default value
+    int value;
 };
 
-// RTF field description
+/// RTF field description
 struct RTFField
 {
     const char *id;
@@ -51,7 +53,7 @@ struct RTFField
     const char *value;
 };
 
-// RTF destination
+/// RTF destination
 struct RTFDestination
 {
     const char *group;
@@ -60,7 +62,7 @@ struct RTFDestination
     void *target;
 };
 
-// Paragraph border
+/// Paragraph border
 struct RTFBorder
 {
     enum BorderStyle { Solid, Dashes, Dots, DashDot, DashDotDot, None = 16 };
@@ -71,7 +73,7 @@ struct RTFBorder
     int space;
 };
 
-// Tabulator
+/// Tabulator
 struct RTFTab
 {
     enum TabType { Left, Centered, FlushRight, Decimal };
@@ -82,7 +84,7 @@ struct RTFTab
     int position;
 };
 
-// Font table entry
+/// Font table entry
 struct RTFFont
 {
     QString name;
@@ -91,7 +93,7 @@ struct RTFFont
     int number;
 };
 
-// RTF embedded picture
+/// RTF embedded picture
 struct RTFPicture
 {
     enum PictureType { BMP, WMF, MacPict, EMF, PNG, JPEG };
@@ -104,10 +106,11 @@ struct RTFPicture
     int scalex, scaley;
     int nibble;
     bool scaled;
-    QString identifier; // \blipuid
+    /// \blipuid
+    QString identifier;
 };
 
-// Paragraph-formatting properties
+/// Paragraph-formatting properties
 struct RTFLayout
 {
     enum Alignment { Left, Right, Justified, Centered };
@@ -125,7 +128,7 @@ struct RTFLayout
     bool pageBB, pageBA;
 };
 
-// Character-formatting properties
+/// Character-formatting properties
 struct RTFFormat
 {
     enum VertAlign { Normal = 0, SubScript, SuperScript };
@@ -140,7 +143,7 @@ struct RTFFormat
     bool bold, italic, strike, striked, hidden, caps, smallCaps;
 };
 
-// Style sheet entry
+/// Style sheet entry
 struct RTFStyle
 {
     QString name;
@@ -149,7 +152,7 @@ struct RTFStyle
     int next;
 };
 
-// Section-formatting properties
+/// Section-formatting properties
 struct RTFSectionLayout
 {
     int headerMargin;
@@ -157,7 +160,7 @@ struct RTFSectionLayout
     bool titlePage;
 };
 
-// Table cell definition
+/// Table cell definition
 struct RTFTableCell
 {
     RTFBorder borders[4];
@@ -165,7 +168,7 @@ struct RTFTableCell
     int x;
 };
 
-// Table-formatting properties
+/// Table-formatting properties
 struct RTFTableRow
 {
     QValueList<RTFTableCell> cells;
@@ -175,7 +178,7 @@ struct RTFTableRow
     int left;
 };
 
-// KWord format
+/// KWord format
 struct KWFormat
 {
     RTFFormat fmt;
@@ -183,19 +186,22 @@ struct KWFormat
     uint id, pos, len;
 };
 
-// RTF rich text state (text and tables)
+/// RTF rich text state (text and tables)
 struct RTFTextState
 {
-    DomNode node;	// paragraphs
-    DomNode cell;	// table cell(s)
-    DomNode text;	// plain text (for paragraph or table cell)
+    /// paragraphs
+    DomNode node;
+    /// table cell(s)
+    DomNode cell;
+    /// plain text (for paragraph or table cell)
+    DomNode text;
     QValueList<KWFormat> formats;
     QStringList frameSets;
     QValueList<RTFTableRow> rows;
     uint table, length;
 };
 
-// RTF group state (formatting properties)
+/// RTF group state (formatting properties)
 struct RTFGroupState
 {
     RTFTableRow tableRow;
@@ -203,8 +209,10 @@ struct RTFGroupState
     RTFFormat format;
     RTFLayout layout;
     RTFSectionLayout section;
-    bool brace0;	// '}' will close the current destination
-    bool ignoreGroup; // Should the group be ignored?
+    /// '}' will close the current destination
+    bool brace0;
+    /// Should the group be ignored?
+    bool ignoreGroup;
 };
 
 
@@ -215,6 +223,12 @@ class RTFImport : public KoFilter
 public:
     RTFImport( KoFilter *parent, const char *name, const QStringList& );
 
+    /**
+     * Convert document from RTF to KWord format.
+     * @param from the mimetype for RTF
+     * @param to the mimetype for KWord
+     * @return true if the document was successfully converted
+     */
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
     void ignoreKeyword( RTFProperty * );
