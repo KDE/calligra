@@ -247,7 +247,7 @@ kdDebug() << str << endl;
        else bullet = "176";    // symbol for a bullet list
        str += bullet;
 
-       str+= "\" start=\"1\" numberingtype=\"0\" lefttext=\"\" righttext=\".\" bulletfont=\"times\" customdef=\"\" />\n";
+       str+= "\" start=\"1\" numberingtype=\"0\" lefttext=\"\" righttext=\". \" bulletfont=\"times\" customdef=\"\" />\n";
        }
 
     str += "<FORMAT>\n";
