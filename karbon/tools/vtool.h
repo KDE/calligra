@@ -98,7 +98,7 @@ public:
 	bool keyEvent( QEvent* event );
 
 protected:
-	bool isDragging()
+	bool isDragging() const
 	{
 		return m_isDragging;
 	}
