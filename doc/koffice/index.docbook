@@ -1,0 +1,397 @@
+<!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
+ <!ENTITY KOffice   "<application>KOffice</application>">
+ <!ENTITY KWord   "<application>KWord</application>">
+ <!ENTITY KSpread   "<application>KSpread</application>">
+ <!ENTITY % addindex "IGNORE">
+ <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
+]>
+<!-- kdoctemplate v0.8 October 1 1999 -->
+<book id="koffice" lang="en">
+<bookinfo>
+<title>KOffice</title>
+<subtitle>A General Introduction</subtitle>
+<authorgroup><author><firstname>Jost</firstname><surname>Schenck</surname>
+<!-- Finalize this -->
+<!-- <email>jost@schenck.de</email> --> 
+</author></authorgroup> 
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KOffice</keyword>
+</keywordset>
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (DD/MM/YYYY) and of the version
+(Major.minor.lesser), it could be used by automation scripts -->
+
+<date>27/01/2000</date>
+<releaseinfo>0.1.0</releaseinfo>
+
+<revhistory>
+<revision>
+<revnumber>0.1.0</revnumber>
+<date>27/01/2000</date>
+<authorinitials>JS</authorinitials>
+<revremark>First made available to the CVS</revremark>
+</revision>
+</revhistory>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&KOffice; is an integrated office suite for the KDE (K Desktop Environment).
+</para>
+</abstract>
+
+</bookinfo>
+<chapter ID="TODO"><title>Still to be done on this manual</title>
+
+<para>This is a list (a rather long list) of things which still need work in this manual:</para>
+<itemizedlist>
+<listitem><para>Write this list.</para></listitem>
+<listitem><para>about everything</para></listitem>
+</itemizedlist>
+<para>If anyone wants to help: tell me.</para>
+<para>Thanks</para>
+<para>Jost <email>jost@schenck.de</email> </para>
+
+</chapter>
+
+<chapter ID="Introduction"><title>Introduction</title>
+
+<sect1 id="introintro">
+<title>Introduction</title>
+<para>The &KOffice; is an integrated office suite for the KDE (K Desktop Environment), currently consisting of
+the following programs:</para>
+<simplelist type=vert columns=1>
+<member>KWord (word processor)</member>
+<member>KSpread (spreadsheet)</> 
+<member>KPresenter (presentation creator)</>
+<member>KIllustrator (a vector drawing program)</>
+<member>KImageShop (a bitmap image editor; very early stage)</>
+<member>Katabase (database; very early stage)</>
+<!-- IS KFORMULA DEAD? --> 
+<member>KFormula (formula editor)</>
+<member>KChart (for charts/graphs)</>
+<member>and KImage (an image viewer).  </>
+</simplelist>
+<para>Based on the KParts component model KOffice offers a lot of interoperability between all 
+its components. For example, you can embed every KOffice component in another component (e.g. a
+KSpread table into your KWord document). This way complex compound documents can be created. 
+A plug-in mechanism makes it possible to easily extend functionality (there are already a macro 
+recorder and a calculator doing this that may serve as examples).</para>
+<para>This manual only covers general aspects of &KOffice; that are common to most or all of its 
+applications. If you want deeper knowledge about the different programs, have a look at the
+other manuals. FIXME LINK!</para>
+</sect1>
+
+
+<sect1 id="WhoReads"><title>What parts of this guide should I read?</title>
+<para>
+</para>
+</sect1>
+</chapter> 
+
+<chapter id="Installation">
+<title>Installation</title>
+<sect1 id="Requirements"><title>System Requirements</title><para>In order to install and use the KOffice you must have:  </para>
+<itemizedlist>
+<listitem><para>A functioning Unix system (or similar, like Linux, BSD) with the X windowing system configured.</para></listitem>
+<listitem><para>Qt 2.1 libraries. See <ulink url="ftp://ftp.troll.no/">ftp://ftp.troll.no/</ulink></para></listitem>
+<listitem><para>The K Desktop Environment 2.0 (KDE 2.0).  KOffice can not be compiled with earlier versions of KDE. Information on obtaining and installing KDE 2.0 can be found at: <ulink url="http://www.kde.org">http://www.kde.org.</ulink></para></listitem>
+<listitem><para>Permission to install software on your computer. If you are on a stand alone system, this will not be a problem.  If, however, you are using a networked computer, check with your administrator.</para></listitem>
+</itemizedlist>
+<para>Please note that while you need the KDE 2.0 libraries on your system, using KOffice together with other desktop environments (like KDE 1.1, UDE or GNOME) is perfectly possible.</para>
+<para>If you plan on <link linkend="FromSource">compiling KOffice from source code</link> you will also need:
+<itemizedlist>
+<listitem><para>Automake 1.4 or newer.  This can be downloaded from: <ulink url="ftp://ftp.gnu.org/pub/gnu/automake/">ftp://ftp.gnu.org/pub/gnu/automake/</ulink></para></listitem>
+<listitem><para>Autoconf 2.13 or later.  This can be downloaded from: <ulink url="ftp://ftp.gnu.org/pub/gnu/autoconf/">ftp://ftp.gnu.org/pub/gnu/autoconf/</ulink></para></listitem>
+<listitem><para>a C++ compiler which supports exceptions (preferably egcs 1.1.x). This can be downloaded from <ulink url="http://egcs.cygnus.com/">http://egcs.cygnus.com/</ulink></para></listitem>
+<listitem><para>Troll Tech's QT 2.1 development packages.  These can be downloaded from <ulink url="ftp://ftp.troll.no/">ftp://ftp.troll.no/</ulink></para></listitem>
+</itemizedlist></para>
+<para>Once your system meets these requirements, you then need to decide wether you want to install from the source code, or premade compiled packages.</para>
+<para>If you want to obtain the most current binary version of KOffice, you can find more information at <link linkend="GettingBinaries">Getting Binary Packages</link>.  </para>
+<para>If pre-compiled binaries are not available for your system, you can download the source code and compile it yourself.  Instructions on where to obtain the current source code and what to do with the source code once you have it, can be found under <link linkend="GettingSource">Getting the source code</link>.</para> 
+<note><para>Please see the <ulink url="http://koffice.kde.org">KOffice homepage</ulink> for further details.
+There you can always find the most up-to-date information on both source and binary distributions!</para></note>
+</sect1>
+<sect1 id="GettingBinaries"><title>Getting Binary Packages</title><para>You can download the most current binaries from: </para>
+<para><ulink url="http://koffice.kde.org/">http://koffice.kde.org/</ulink></para>
+<para>or from one of many mirror sites.  The current list of mirror sites can be found at:</para>
+<para><ulink url="http://www.kde.org/mirrors.html">http://www.kde.org/mirrors.html</ulink></para>
+<note><para>It is important that you find a binary package that is compatible with your system.  If you are unable to find it here, you may be able to obtain a pre-compiled binary from the website of your distribution.</para></Note>
+
+
+</sect1>
+<sect1 id="FromBinaries"><title>From Binary Packages</title><para>To install &KOffice; from precompiled binaries, you should:
+<orderedlist numeration="arabic">
+<listitem><para>Ensure your computer has all the required software (excluding KOffice of course), is installed.  You can find the system requirements under <link linkend="Requirements">System Requirements</link>.</para></listitem>
+<listitem><para>Download the KOffice binary into a temporary directory.</para></listitem>
+<listitem><para>If the file is a .rpm (Red Hat Package Management Package), KOffice can be installed with:
+<screen><prompt>$</prompt> <command>rpm -U <replaceable>filename</replaceable></command></screen> </para>
+<para>If the file is a .deb (Debian Package file), KOffice can be installed with: </para>
+<para><screen><prompt>$</prompt> <command>dpkg -i <replaceable>filename</replaceable></command></screen> </para>
+<para>If the file is a tarball (ends in .tar.gz or .tgz), KOffice can be installed with:
+<screen>
+<prompt>$</prompt> <command>cd /</command>
+<prompt>$</prompt> <command>tar -xzvf <replaceable>filename</replaceable></command></screen> </para></listitem>
+<listitem>
+<para>You are now installed!</para></listitem></orderedlist></para>
+</sect1>
+<sect1 id="GettingSource"><title>Getting Source Code</title><para>You can download the current source code from:</para>
+<para><ulink url="http://koffice.kde.org/">http://koffice.kde.org/</ulink></para>
+<para>or from one of many mirror sites.  The current list of mirror sites can be found at:</para>
+<para><ulink url="http://www.kde.org/mirrors.html">http://www.kde.org/mirrors.html</ulink></para>
+</sect1>
+
+
+<sect1 id="FromSource"><title>From Source Code</title><para>If you want to build KWord from source code, you should 
+<orderedlist numeration="arabic">
+<listitem><para>Ensure your computer has all the required software (excluding KOffice of course), is installed.  You can find the system requirements under <link linkend="Requirements">System Requirements</link>.</para></listitem>
+<listitem><para>Download the KOffice source file (Insert filenames (srpm and tar) here***) into a temporary directory.</para></listitem>
+<listitem><para>If the file is a .rpm (Red Hat Package Management Package), KOffice can be installed with:
+<screen><prompt>$</prompt> <command>rpm -U <replaceable>filename</replaceable></command></screen> </para>
+<para>If the file is a tarball (ends in .tar.gz or .tgz), KOffice can be installed with:
+<screen><prompt>$</prompt> <command>tar -xzvf <replaceable>filename</replaceable></command></screen> </para></listitem>
+<listitem><para>You are now installed!</para></listitem></orderedlist>
+
+STUFF</para></sect1>
+<sect1 id="CompilingProblems"><title>Problems with Compilation</title><para>Problems STUFF</para></sect1>
+</chapter>
+
+<chapter id="firststeps">
+<title>First steps in &KOffice;</title>
+<para></para>
+</chapter>
+
+<chapter id="kparts">
+<title>KParts - the building blocks of &KOffice;</title>
+<para>
+Every &KOffice; application tries to fulfill very specific needs: &KSpread;
+offers spreadsheet calculation, &KWord; offers word processing etc. By
+staying on their own turf, every program aims to be perfect in exactly this
+area. However, depending on what you do with &KOffice; you'll often 
+want to take advantage of functionality provided by different applications, 
+but in <emphasis>one</emphasis> document.
+</para><para>
+Imagine you're writing a scientific paper in &KWord; and want to illustrate
+your thoughts with a table. While &KWord; provides its own functionality for
+the insertion of tables, this may not be enough for your needs: you may want
+to use certain money data formats or do calculations. Now some &KWord; 
+programmer certainly <emphasis>could</emphasis> try to implement this 
+functionality. However, &KWord; would never be as good as &KSpread; in this
+field; and if it tried to implement every functionality you might need in
+a paper, it'd soon be a monster like <application>Emacs</application>.
+</para><para>
+The alternative to this is KParts. Its philosophy is simple: let every 
+application do what it does best. 
+</para>
+<sect1 id="compounddocs"><title>Compound documents with KParts</title>
+<para> 
+With KParts your documents can use <emphasis>all</emphasis> functionality
+offered by <emphasis>all</emphasis> &KOffice; applications. You can take
+advantage of this by inserting so called "parts" into your document. Every
+one of those parts holds another document of your choice, a "document in the
+document". 
+</para><para>In the above mentioned example you'd simply insert a &KSpread;
+part into your &KWord; document. Then, whenever you'd edit your table,
+&KSpread; would take control in the background and would give it back to
+&KWord; when you're working on the text again. The only change you'll notice
+is that of your toolbars and the menu bar: while editing the table, these
+will reflect the functionality of &KSpread;. We in the biz call this "embedding".
+</para>
+</sect1>
+<sect1 id="kpartstryit"><title>Using KParts in your document</title>
+<para>
+If you have never worked with compound documents, you may find them confusing
+at first. The following step-by-step instructions should show you, that using
+KParts is just as easy as working with just one application.</para>
+<procedure>
+<title>Inserting a &KSpread; part into a &KWord; application</title>
+<step><para>Start &KWord;. You can do that either from the panel or by typing
+<command>kword</command> at the command line.</para></step>
+<step><para>Press "okay" to start with an empty document. You may want to
+type some sample text.</para></step>
+<step><para>Chose "create KSpread table frame" from the "Tools" menu. (FIXME: I think
+this menu structure was supposed to be changed). You'll notice that the mouse
+cursor has changed to a cross now. This form indicates that you're supposed
+to select an area.</para></step>
+<step><para>Press the left mouse button where you want the upper left corner of
+your table to be, hold it and drag it to the lower right corner. Release
+the button. You're done.</para></step>
+</procedure>
+<para>
+Easy, isn't it? You should now see a table frame in your &KWord; document.
+Now, click inside the table to see what happens. You'll notice that:</para>
+<itemizedlist>
+<listitem><para>Your menu bar and tool bars have changed. They now reflect those
+of &KSpread;.</para></listitem>
+<listitem><para>You're table frame now contains the elements of a &KSpread; view,
+with scroll bars, a tab bar for the selection of tables etc.</para></listitem>
+</itemizedlist>
+<para>
+Try editing the table. You'll see that it's not different from using
+&KSpread;. In fact you <emphasis>are</emphasis> using &KSpread;.</para>
+<para>
+Now click somewhere into your &KWord; document, outside of the table area.
+The menu bar and tool bars should change back to those of &KWord;, the 
+elements of the &KSpread; view should disappear. You're table stays and still
+reflects all changes you've applied.
+</para>
+<para>
+You see: KParts are easy to use. You may want to play around with them a bit, 
+try inserting other parts or even parts in parts.
+</para>
+</sect1>
+</chapter>
+
+<chapter id="customization">
+<title>Customizing &KOffice;</title>
+<para></para>
+</chapter>
+
+<chapter id="moreinfo">
+<title>How to get more information</title>
+
+<sect1 id="othermanuals"><title>Other &KOffice; manuals</title>
+<para>
+For more in-depth information on the different &KOffice; applications, please
+consult their respective manuals.
+[FIXME: how do I provide links to them? Do we need set-tag?]
+</para>
+</sect1>
+
+<sect1 id="links"><title>Links</title>
+<para>
+The following links you may find useful if you're looking for more information.
+</para>
+<itemizedlist>
+<listitem><para>
+<ulink url="http://koffice.kde.org">The &KOffice; homepage</ulink>. Here you
+can find information on how to get and install &KOffice;, news about &KOffice;
+development, screenshots etc.
+</para></listitem>
+<listitem><para>
+<ulink url="http://www.kde.org">The K Desktop Environment (KDE)</ulink>. The
+most advanced and absolutely free desktop environment for unix-like operating
+systems. &KOffice; makes use of the KDE libraries.
+</para></listitem>
+<listitem><para>
+<ulink url="http://www.troll.no">Troll Tech</ulink>. The creators of the
+C++-toolkit Qt. KDE and &KOffice; make use of Qt.
+</para></listitem>
+</itemizedlist>
+</sect1>
+</chapter>
+
+<chapter id="programmersinfo">
+<title>Programming &KOffice;</title>
+<para>If you want to do &KOffice; development, the following resources
+might be of interest to you:</para>
+<itemizedlist>
+<listitem><para>At <ulink url="http://developer.kde.org">http://developer.kde.org</ulink>
+you'll find many documents about programming with Qt and KDE. Here you can
+find the full online version of the KDE library documentation, too.
+</para></listitem>
+<listitem><para>Use <application>kdoc</application> (in the <filename>kdoc</filename>
+ CVS module) to generate your own KDE library documentation.
+</para></listitem>
+<listitem><para>In the &KOffice; sources you'll find an example application
+in the <filename>example</filename> directory.
+</para></listitem>
+</itemizedlist>
+</chapter>
+
+<chapter id="faq">
+<title>Frequently Asked Questions</title>
+<para></para>
+</chapter>
+
+<chapter id="legal">
+<title>Copyright and Licensing</title>
+<para></para>
+</chapter>
+
+<glossary id="glossary"><title>Glossary</title>
+
+<!-- To be put into the glossary:
+embedding, XML, MORE! -->
+
+<glossdiv><title>?</title><para></para>
+</glossdiv>
+<glossdiv><title>A</title><para></para>
+</glossdiv>
+<glossdiv><title>B</title><para></para>
+</glossdiv>
+<glossdiv><title>C</title><para></para>
+</glossdiv>
+<glossdiv><title>D</title><para></para>
+</glossdiv>
+<glossdiv><title>E</title><para></para>
+</glossdiv>
+<glossdiv><title>F</title><para></para>
+</glossdiv>
+<glossdiv><title>G</title><para></para>
+</glossdiv>
+<glossdiv><title>H</title><para></para>
+</glossdiv>
+<glossdiv><title>I</title><para></para>
+</glossdiv>
+<glossdiv><title>J</title><para></para>
+</glossdiv>
+<glossdiv><title>K</title>
+<glossentry id="glosskde"><glossterm>KDE</glossterm>
+<glossdef>
+<para>The K Desktop Environment (<acronym>KDE</acronym>) is a completely
+free desktop environment for unix-like operating systems. &KOffice; uses
+the KDE-2.0 libraries. See <ulink url="http://www.kde.org">http://www.kde.org</ulink>
+ for details.</para>
+</glossdef>
+</glossentry>
+<glossentry id="glosskparts"><glossterm>KParts</glossterm>
+<glossdef>
+<para>KParts is a technology that allows the embedding of components in
+an application. This way, you can create compound documents in &KOffice;,
+where e.g. a &KWord; document contains a &KSpread; table.</para>
+</glossdef>
+</glossentry>
+</glossdiv>
+<glossdiv><title>L</title><para></para>
+</glossdiv>
+<glossdiv><title>M</title><para></para>
+</glossdiv>
+<glossdiv><title>N</title><para></para>
+</glossdiv>
+<glossdiv><title>O</title><para></para>
+</glossdiv>
+<glossdiv><title>P</title><para></para>
+</glossdiv>
+<glossdiv><title>Q</title><para></para>
+</glossdiv>
+<glossdiv><title>R</title><para></para>
+</glossdiv>
+<glossdiv><title>S</title><para></para>
+</glossdiv>
+<glossdiv><title>T</title><para></para>
+</glossdiv>
+<glossdiv><title>U</title><para></para>
+</glossdiv>
+<glossdiv><title>V</title><para></para>
+</glossdiv>
+<glossdiv><title>W</title><para></para>
+</glossdiv>
+<glossdiv><title>X</title><para></para>
+</glossdiv>
+<glossdiv><title>Y</title><para></para>
+</glossdiv>
+<glossdiv><title>Z</title><para></para>
+</glossdiv>
+
+
+
+</glossary>
+
+
+<![ %addindex; [ &kdedocindex; ]]>
+</book>
