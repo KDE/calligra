@@ -100,11 +100,11 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
   {
     if ( m_strPassword.size() > 0 )
     {
-      QCString str = KCodecs::base64Encode( m_strPassword ); 
+      QCString str = KCodecs::base64Encode( m_strPassword );
       mymap.setAttribute( "protected", QString( str.data() ) );
     }
     else
-      mymap.setAttribute( "protected", "" );      
+      mymap.setAttribute( "protected", "" );
   }
 
   QPtrListIterator<KSpreadSheet> it( m_lstTables );
@@ -118,6 +118,13 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
 
   return mymap;
 }
+
+bool KSpreadMap::loadOasis( const QDomDocument& mymap )
+{
+    //todo
+    return true;
+}
+
 
 bool KSpreadMap::loadXML( const QDomElement& mymap )
 {
@@ -148,11 +155,11 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
   if ( mymap.hasAttribute( "protected" ) )
   {
     QString passwd = mymap.attribute( "protected" );
-    
+
     if ( passwd.length() > 0 )
     {
       QCString str( passwd.latin1() );
-      m_strPassword = KCodecs::base64Decode( str );        
+      m_strPassword = KCodecs::base64Decode( str );
     }
     else
       m_strPassword = QCString( "" );

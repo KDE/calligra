@@ -246,7 +246,7 @@ public:
      * @see #setTableName
      */
     QString tableName()const { return m_strName; }
-    
+
     /**
      * Renames a table. This will automatically adapt all formulas
      * in all tables and all cells to reflect the new name.
@@ -276,6 +276,8 @@ public:
      * Loads the table and all it's children in XML format
      */
     virtual bool loadXML( const QDomElement& );
+
+    virtual bool loadOasis( const QDomElement& table );
 
     /**
      * Saves a children

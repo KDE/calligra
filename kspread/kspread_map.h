@@ -57,6 +57,7 @@ public:
   virtual ~KSpreadMap();
 
   QDomElement save( QDomDocument& doc );
+    bool loadOasis( const QDomDocument& mymap );
   bool loadXML( const QDomElement& mymap );
   bool loadChildren( KoStore* _store );
 
@@ -145,7 +146,7 @@ private:
    */
   KSpreadDoc *m_pDoc;
 
-  /** 
+  /**
    * Password to protect the map from being changed.
    */
   QCString m_strPassword;

@@ -6314,6 +6314,12 @@ void KSpreadSheet::checkContentDirection( QString const & name )
     emit sig_refreshView();
 }
 
+bool KSpreadSheet::loadOasis( const QDomElement& table )
+{
+    //todo
+    return true;
+}
+
 bool KSpreadSheet::loadXML( const QDomElement& table )
 {
     bool ok = false;
