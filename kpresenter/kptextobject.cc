@@ -1473,19 +1473,18 @@ void KPTextView::dragEnterEvent( QDragEnterEvent *e )
 }
 void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
 {
-    if ( !kpTextObject()->kPresenterDocument()->isReadWrite() || !KPrTextDrag::canDecode( e ) )
+    KPresenterDoc *doc= kpTextObject()->kPresenterDocument();
+    if ( !doc->isReadWrite() || !KPrTextDrag::canDecode( e ) )
     {
         e->ignore();
         return;
     }
-#if 0 //FIXME
-    QPoint iPoint=e->pos() - kpTextObject()->getOrig();
+    QPoint iPoint=e->pos() - doc->zoomHandler()->zoomPoint(kpTextObject()->getOrig());
     iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
 
     textObject()->emitHideCursor();
     placeCursor( iPoint );
     textObject()->emitShowCursor();
-#endif
     e->acceptAction(); // here or out of the if ?
 }
 void KPTextView::dragLeaveEvent( QDragLeaveEvent * )
@@ -1496,12 +1495,13 @@ void KPTextView::dragLeaveEvent( QDragLeaveEvent * )
 
 void KPTextView::dropEvent( QDropEvent * e )
 {
-    if ( kpTextObject()->kPresenterDocument()->isReadWrite() && KPrTextDrag::canDecode( e ) )
+    KPresenterDoc *doc= kpTextObject()->kPresenterDocument();
+    if ( doc->isReadWrite() && KPrTextDrag::canDecode( e ) )
     {
         e->acceptAction();
         QTextCursor dropCursor( textDocument() );
-        QPoint dropPoint=e->pos() - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint( kpTextObject()->getOrig());
-        dropPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
+        QPoint dropPoint=e->pos() - doc->zoomHandler()->zoomPoint( kpTextObject()->getOrig());
+        dropPoint=doc->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         dropCursor.place( dropPoint, textDocument()->firstParag() );
         kdDebug(32001) << "KPTextView::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
@@ -1536,7 +1536,7 @@ void KPTextView::dropEvent( QDropEvent * e )
             if ( QTextDrag::decode( e, text ) )
                 textObject()->pasteText( cursor(), text, currentFormat(), false );
         }
-        kpTextObject()->kPresenterDocument()->addCommand(macroCmd);
+        doc->addCommand(macroCmd);
     }
 }
 
