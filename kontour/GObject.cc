@@ -31,9 +31,14 @@
 
 #include "GOval.h"
 #include "GRect.h"
+#include "GPath.h"
+
+unsigned int GObject::mCurId = 0;
 
 GObject::GObject()
 { 
+  mId = mCurId;
+  mCurId++;
   rcount = 0;
   mLayer = 0L;
   sflag = false;
@@ -51,6 +56,8 @@ GObject::GObject(const QDomElement &element)
 
 GObject::GObject(const GObject& obj)
 {
+  mId = mCurId;
+  mCurId++;
   rcount = 0;
   mLayer = obj.mLayer;
   sflag = false;
@@ -98,15 +105,10 @@ void GObject::setWorkInProgress(bool flag)
   
 QDomElement GObject::writeToXml(QDomDocument &document)
 {
-  QDomElement obj = document.createElement("obj");
- // if(hasId())
-//    element.setAttribute ("id", id);
-    // This is strange, because it's done by the child class itself... I'll clean up later (Werner)
-//  if(hasRefId())
-//    obj.setAttribute("ref", getRefId());
-	
-  obj.appendChild(createMatrixElement(tMatrix, document));
-  return obj;
+  QDomElement go = document.createElement("go");
+  go.setAttribute("id", mId);
+  go.appendChild(createMatrixElement(tMatrix, document));
+  return go;
 }
 
 void GObject::setZoomFactor(double f, double pf)
@@ -138,7 +140,7 @@ void GObject::ttransform(const QWMatrix &m, bool update = false)
   
 bool GObject::contains(const KoPoint &p)
 {
-  kdDebug() << "GObject::contains" << endl;
+  kdDebug(38000) << "GObject::contains" << endl;
   return box.contains(p);
 }
 
@@ -153,6 +155,8 @@ static GObject *objectFactory(const QDomElement &element)
     return new GOval(element);
   else if(element.tagName() == "rect")
     return new GRect(element);
+  else if(element.tagName() == "path")
+    return new GPath(element);
   else
     return 0L;
 }
@@ -263,10 +267,10 @@ void GObject::setPen(QPainter *p)
 void GObject::setBrush(QPainter *p)
 {
   // TODO : patterns, gradients, noFill
-	QBrush brush;
-	brush.setStyle(Qt::SolidPattern);
-	brush.setColor(st.fillColor().color());
-	p->setBrush(brush);
+  QBrush brush;
+  brush.setStyle(Qt::SolidPattern);
+  brush.setColor(st.fillColor().color());
+  p->setBrush(brush);
 }
 
 #include "GObject.moc"

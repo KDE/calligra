@@ -79,6 +79,8 @@ public:
    */
   virtual ~GObject();
 
+  unsigned int id() const {return mId; }
+
   void ref();
   void unref();
   
@@ -230,21 +232,23 @@ protected:
   void setBrush(QPainter *p);
   
 protected:
-  unsigned int rcount;       // the reference counter
+  unsigned int rcount;            // the reference counter
+  unsigned int mId;               // object ID
 
-  GLayer *mLayer;            // the layer containing this object
+  GLayer *mLayer;                 // the layer containing this object
   
-  bool sflag:1;              // object is selected
-  bool inWork:1;             // the object is currently manipulated,
+  bool sflag:1;                   // object is selected
+  bool inWork:1;                  // the object is currently manipulated,
   
   GStyle st;
   
-  KoRect box;                // the bounding box
+  KoRect box;                     // the bounding box
 
-  QWMatrix tMatrix;          // transformation matrix
-  QWMatrix tmpMatrix;        // temporary transformation matrix
-  QWMatrix iMatrix;          // inverted transformation matrix
-  
+  QWMatrix tMatrix;               // transformation matrix
+  QWMatrix tmpMatrix;             // temporary transformation matrix
+  QWMatrix iMatrix;               // inverted transformation matrix
+
+  static unsigned int mCurId;     // ID for new objects
 };
 
 class GOState

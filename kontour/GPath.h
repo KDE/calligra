@@ -127,11 +127,16 @@ class GPath : public GObject
 {
   Q_OBJECT
 public:
-  GPath();
+  GPath(bool aClosed);
   GPath(const QDomElement &element);
   GPath(const GPath &obj);
 
+  bool closed() const {return mClosed; }
+  void closed(bool aClosed);
+
   void lineTo(KoPoint &p);
+//  void curveTo();
+//  void arcTo();
 
   QString typeName() const;
   QDomElement writeToXml(QDomDocument &document);
@@ -148,50 +153,13 @@ public:
 private:
   QPtrList<GSegment> segments;
   bool mClosed;
-/*
-  
-  void lineTo(KoPoint &p);
-  void curveTo();
-  void arcTo();
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+};
 
+/*
   virtual void getPath(QValueList<Coord>& path);
 
-  void addLineSegment (const Coord& p1, const Coord& p2);
-  void addBezierSegment (const Coord& p1, const Coord& p2,
-                         const Coord& p3, const Coord& p4);
-  void addSegment (const GSegment& s);
   const GSegment& getSegment (int idx);
   int numOfSegments () const { return segments.count(); }
-
-  void setClosed (bool flag);
-  bool isClosed () const { return closed; }
-
-  static GCurve* blendCurves (GCurve *start, GCurve *end, int step, int num);
-
-protected:
-  static QColor blendColors (const QColor& c1, const QColor& c2,
-                             int step, int num);
-
-  void calcBoundingBox ();
-  void updateGradientShape (QPainter& p);
-  void updatePath ();
-  QValueList<GSegment>::Iterator containingSegment (const Coord& p);
-
-private:
-  QValueList<GSegment> segments;
-  bool closed;*/
-};
+*/
 
 #endif

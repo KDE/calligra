@@ -314,13 +314,7 @@ float GSegment::length () const {
   return len;
 }*/
 
-/*******************[GPath]*********************/
 /*
-GPath::GPath (GDocument* doc)
-: GObject (doc)
-{
-  closed = false;
-}
 
 GPath::GPath (GDocument* doc, const QDomElement &element)
 :GObject (doc, element.namedItem("gobject").toElement())
@@ -462,18 +456,6 @@ GObject* GPath::create (GDocument *doc, const QDomElement &element)
   return new GPath(doc, element);
 }
 
-QDomElement GPath::writeToXml (QDomDocument &document) {
-
-    QDomElement element=document.createElement("curve");
-    element.setAttribute ("closed", (int) closed);
-
-    QValueList<GSegment>::Iterator i;
-    for (i = segments.begin (); i != segments.end (); ++i)
-        element.appendChild((*i).writeToXml (document));
-    element.appendChild(GObject::writeToXml(document));
-    return element;
-}
-
 void GPath::getPath (QValueList<Coord>& ) {
 }
 
@@ -492,9 +474,6 @@ void GPath::calcBoundingBox () {
     ++i;
   }
   box = r.transform (tmpMatrix);
-}
-
-void GPath::updateGradientShape (QPainter& ) {
 }
 
 void GPath::setClosed (bool flag) {
@@ -673,16 +652,27 @@ void GPath::updatePath ()
   }
 }*/
 
-GPath::GPath()
+/*******************[GPath]*********************/
+
+GPath::GPath(bool aClosed):
+GObject()
+{
+  mClosed = aClosed;
+}
+
+GPath::GPath(const QDomElement &element):
+GObject(element.namedItem("go").toElement())
 {
 }
 
-GPath::GPath(const QDomElement &element)
+GPath::GPath(const GPath &obj):
+GObject(obj)
 {
 }
 
-GPath::GPath(const GPath &obj)
+void GPath::closed(bool aClosed)
 {
+  mClosed = aClosed;
 }
 
 void GPath::lineTo(KoPoint &p)
@@ -699,10 +689,22 @@ QString GPath::typeName() const
 
 QDomElement GPath::writeToXml(QDomDocument &document)
 {
+  QDomElement path = document.createElement("path");
+  path.setAttribute("closed", (int)mClosed);
+
+/*  QValueList<GSegment>::Iterator i;
+    for (i = segments.begin (); i != segments.end (); ++i)
+        element.appendChild((*i).writeToXml (document));
+    element.appendChild(GObject::writeToXml(document));*/
+  return path;
 }
 
 void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMarks)
 {
+  p.save();
+  setPen(&p);
+  setBrush(&p);
+  p.restore();
 }
 
 int GPath::getNeighbourPoint(const KoPoint &point)
