@@ -49,15 +49,7 @@
 
 Canvas::Canvas (GDocument* doc, float res, QScrollView* sv, QWidget* parent,
                 const char* name) : QWidget (parent, name) {
-  zoomFactors.append(0.5);
-  zoomFactors.append(1.0);
-  zoomFactors.append(1.5);
-  zoomFactors.append(2.0);
-  zoomFactors.append(4.0);
-  zoomFactors.append(6.0);
-  zoomFactors.append(8.0);
-  zoomFactors.append(10.0);
-
+  
   document = doc;
   resolution = res;
   zoomFactor = 1.0;
@@ -641,63 +633,6 @@ void Canvas::print( QPrinter &printer )
     paint.setClipping (false);
     document->drawContents (paint);
     paint.end ();
-}
-
-void Canvas::zoomIn (int x, int y) {
-  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
-    if (*i == getZoomFactor()) {
-        if(*i!=zoomFactors.last()) {
-             ++i;
-            setZoomFactor(*i);
-            scrollview->center(x, y);
-            break;
-        }
-    }
-  }
-}
-
-void Canvas::zoomIn () {
-  
-  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
-    if (*i == getZoomFactor()) {
-        if(*i!=zoomFactors.last()) {
-             ++i;
-            setZoomFactor(*i);
-            break;
-        }
-    }
-  }
-}
-
-void Canvas::zoomOut () {
-  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
-    if (*i == getZoomFactor ()) {
-        if(*i!=zoomFactors.first()) {
-            --i;
-            setZoomFactor(*i);
-            break;
-        }
-    }
-  }
-}
-
-int Canvas::insertZoomFactor (float z) {
-  QValueList<float>::Iterator i;
-  int pos = 0;
-  for (i = zoomFactors.begin (); i != zoomFactors.end (); ++i, pos++) {
-    if (*i == z) {
-      setZoomFactor (z);
-      return pos;
-    }
-    else if (*i > z) {
-      // insert at position i
-      zoomFactors.insert (i, z);
-      setZoomFactor (z);
-      return pos;
-    }
-  }
-  zoomFactors.append(z);
-  return zoomFactors.count();
 }
 
 void Canvas::readGridProperties () {

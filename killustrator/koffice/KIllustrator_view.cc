@@ -123,6 +123,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 KIllustratorView::~KIllustratorView()
 {
  writeConfig();
+ delete mZoomTool;
  delete objMenu;
 }
 
@@ -425,8 +426,8 @@ void KIllustratorView::setupCanvas()
     QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
     tcontroller->registerTool (ID_TOOL_ZOOM,
-                               tool = new ZoomTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
+                               mZoomTool = new ZoomTool (&cmdHistory));
+    QObject::connect (mZoomTool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
 
     tcontroller->registerTool (ID_TOOL_PATHTEXT,
@@ -465,9 +466,11 @@ void KIllustratorView::writeConfig()
  }
 
 // FIXME (Werner)
-void KIllustratorView::showCurrentMode (const QString& ) {
+void KIllustratorView::showCurrentMode (const QString& msg)
+ {
+  kdDebug(0) << "MESSAGE: " << msg.local8Bit() << endl;
     //statusbar->changeItem (msg, 2);
-}
+ }
 
 void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 {
@@ -1237,12 +1240,12 @@ void KIllustratorView::slotSettingsChanged() {
 
 void KIllustratorView::slotZoomIn()
  {
-  canvas->zoomIn ();
+  mZoomTool->zoomIn();
  }
 
 void KIllustratorView::slotZoomOut()
  {
-  canvas->zoomOut ();
+  mZoomTool->zoomOut();
  }
 
 void KIllustratorView::slotViewResize()

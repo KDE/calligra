@@ -28,11 +28,11 @@
 #include <qwidget.h>
 #include <qvaluelist.h>
 #include <Coord.h>
+#include <qscrollview.h>
 
 class GDocument;
 class GObject;
 class ToolController;
-class QScrollView;
 class QPixmap;
 class QPainter;
 class Rect;
@@ -41,9 +41,11 @@ class QColor;
 class Canvas : public QWidget {
   Q_OBJECT
 public:
-  Canvas (GDocument* doc, float res, QScrollView* sv, QWidget* parent = 0,
-          const char* name = 0);
+  Canvas (GDocument *doc, float res, QScrollView *sv, QWidget *parent = 0,
+          const char *name = 0);
   ~Canvas ();
+
+  QWidget *viewport(void)const { return scrollview->viewport();};
 
   void setZoomFactor (float factor);
   float getZoomFactor () const;
@@ -87,17 +89,10 @@ public:
   void setupPrinter( QPrinter &printer );
   void print( QPrinter &printer );
 
-  void zoomIn (int x, int y);
-  void zoomIn ();
-  void zoomOut ();
-
   void showBasePoints (bool flag = true);
   void setOutlineMode (bool flag);
 
   float scaleFactor () const;
-
-  const QValueList<float>& getZoomFactors () const { return zoomFactors; }
-  int insertZoomFactor (float z);
 
 protected:
   bool eventFilter (QObject *, QEvent *);
@@ -121,7 +116,7 @@ protected:
 signals:
   void sizeChanged ();
   void gridStatusChanged ();
-  void rightButtonAtObjectClicked (int x, int y, GObject* obj);
+  void rightButtonAtObjectClicked (int x, int y, GObject *obj);
   void rightButtonAtSelectionClicked (int x, int y);
   void rightButtonClicked (int x, int y);
 
@@ -150,13 +145,13 @@ private:
   void drawHelplines (QPainter& p);
   void redrawView (bool repaintFlag = true);
 
-  QScrollView* scrollview;
-  QPixmap* pixmap;
+  QScrollView *scrollview;
+  QPixmap *pixmap;
   int m_width, m_height;
   float resolution;
   float zoomFactor;
-  GDocument* document;
-  ToolController* toolController;
+  GDocument *document;
+  ToolController *toolController;
   bool gridIsOn;
   bool gridSnapIsOn;
   QColor mGridColor;
@@ -169,7 +164,6 @@ private:
   QValueList<float> horizHelplines, vertHelplines;
   bool helplinesAreOn, helplinesSnapIsOn;
   float tmpHorizHelpline, tmpVertHelpline;
-  QValueList<float> zoomFactors;
 };
 
 #endif

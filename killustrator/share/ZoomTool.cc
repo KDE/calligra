@@ -22,29 +22,194 @@
 
 */
 
-#include <ZoomTool.h>
+#include "ZoomTool.h"
+#include "Coord.h"
+#include "Canvas.h"
 
 #include <klocale.h>
-#include <Canvas.h>
+#include <kdebug.h>
+#include <qpainter.h>
+#include <qpen.h>
 #include <CommandHistory.h>
 
-ZoomTool::ZoomTool (CommandHistory* history) : Tool (history) {
-}
+ZoomTool::ZoomTool (CommandHistory* history) : Tool (history)
+ {
+  zoomFactors.append(0.5);
+  zoomFactors.append(1.0);
+  zoomFactors.append(1.5);
+  zoomFactors.append(2.0);
+  zoomFactors.append(4.0);
+  zoomFactors.append(6.0);
+  zoomFactors.append(8.0);
+  zoomFactors.append(10.0);
+ }
 
-void ZoomTool::processEvent (QEvent* e, GDocument */*doc*/,
-                             Canvas* canvas) {
-  if (e->type () == QEvent::MouseButtonRelease) {
-    QMouseEvent *me = (QMouseEvent *) e;
-    if (me->button () == LeftButton)
-      canvas->zoomIn (me->x (), me->y ());
-    else if (me->button () == RightButton)
-      canvas->zoomOut ();
+void ZoomTool::processEvent (QEvent* e, GDocument *_doc, Canvas* _canvas)
+ {
+//  doc = _doc;
+//  canvas = _canvas;
+  if (e->type () == QEvent::MouseButtonRelease)
+   {
+    processButtonReleaseEvent((QMouseEvent *) e);
     emit operationDone ();
+   }
+  else
+   if (e->type () == QEvent::MouseButtonPress)
+    {
+     processButtonPressEvent((QMouseEvent *) e);
+     emit operationDone ();
+    }
+   else
+    if (e->type () == QEvent::MouseMove)
+     {
+      processMouseMoveEvent((QMouseEvent *) e);
+      emit operationDone ();
+     }
+ }
+
+void ZoomTool::activate (GDocument *_doc, Canvas *_canvas)
+ {
+  state = S_Init;
+  doc = _doc;
+  canvas = _canvas;
+  emit modeSelected (i18n ("Zoom In"));
+ }
+
+void ZoomTool::processButtonPressEvent (QMouseEvent* e)
+ {
+  /************
+   * S_Init
+   */
+  if (state == S_Init)
+   {
+    state = S_Rubberband;
+    selPoint[0].x(e->x());
+    selPoint[0].y(e->y());
+    selPoint[1].x(e->x());
+    selPoint[1].y(e->y());
+   }
+ }
+ 
+void ZoomTool::processMouseMoveEvent (QMouseEvent* e)
+ {
+  if (state == S_Rubberband)
+   {
+    kdDebug(1) << "S_Rubberband\n";
+    selPoint[1].x(e->x());
+    selPoint[1].y(e->y());
+    canvas->repaint();
+    QPainter painter;
+    painter.save();
+    QPen pen(blue, 1, DotLine);
+    painter.begin(canvas);
+    painter.setPen(pen);
+    float sfactor = canvas->scaleFactor();
+    painter.scale(sfactor, sfactor);
+    Rect selRect(selPoint[0], selPoint[1]);
+    painter.drawRect((int) selRect.x (), (int) selRect.y (),
+                      (int) selRect.width (), (int) selRect.height ());
+    painter.restore();
+    painter.end();
+    return;
+   }
+ }
+ 
+void ZoomTool::processButtonReleaseEvent (QMouseEvent* e)
+ {
+  if (state == S_Rubberband)
+   {
+    zoomRegion(selPoint[0].x(), selPoint[0].y(), selPoint[1].x(), selPoint[1].y());
+    canvas->repaint ();
+    state = S_Init;
+    return;
+   }
+  if(state == S_Init)
+   {
+    if (e->button () == LeftButton)
+     zoomIn (e->x (), e->y ());
+    else
+     if (e->button () == RightButton)
+      zoomOut ();
+    return;
+   }
+ }
+
+void ZoomTool::zoomIn (int x, int y) {
+  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
+    if (*i == canvas->getZoomFactor()) {
+        if(*i!=zoomFactors.last()) {
+             ++i;
+            canvas->setZoomFactor(*i);
+//            scrollview->center(x, y);
+            break;
+        }
+    }
   }
 }
 
-void ZoomTool::activate (GDocument* /*doc*/, Canvas* /*canvas*/) {
-  emit modeSelected (i18n ("Zoom In"));
+void ZoomTool::zoomIn () {
+  
+  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
+    if (*i == canvas->getZoomFactor()) {
+        if(*i!=zoomFactors.last()) {
+             ++i;
+            canvas->setZoomFactor(*i);
+            break;
+        }
+    }
+  }
+}
+
+void ZoomTool::zoomOut ()
+ {
+  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
+    if (*i == canvas->getZoomFactor ()) {
+        if(*i!=zoomFactors.first()) {
+            --i;
+            canvas->setZoomFactor(*i);
+            break;
+        }
+    }
+  }
+ }
+
+void ZoomTool::zoomRegion(int x1, int y1, int x2, int y2)
+ {
+  if (x1 == x2 || y1 == y2)
+   {
+    zoomIn();
+    return;
+   }
+
+  int cw = canvas->viewport()->width();
+  int ch = canvas->viewport()->height();
+  float cz = canvas->getZoomFactor();
+  float zw = (float)cw/(float)(x2-x1);
+  float zh = (float)ch/(float)(y2-y1);
+  float z = QMIN(zw,zh)*cz;
+  
+  if(z > 10.0)
+   z = 10.0;
+  canvas->setZoomFactor(z);
+ }
+
+int ZoomTool::insertZoomFactor (float z) {
+  QValueList<float>::Iterator i;
+  int pos = 0;
+  for (i = zoomFactors.begin (); i != zoomFactors.end (); ++i, pos++) {
+    if (*i == z) {
+      canvas->setZoomFactor (z);
+      return pos;
+    }
+    else if (*i > z) {
+      // insert at position i
+      zoomFactors.insert (i, z);
+      canvas->setZoomFactor (z);
+      return pos;
+    }
+  }
+  zoomFactors.append(z);
+  return zoomFactors.count();
 }
 
 #include <ZoomTool.moc>

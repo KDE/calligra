@@ -62,6 +62,8 @@ class KAction;
 class KToggleAction;
 class KColorBarAction;
 class KSelectAction;
+class KStatusBar;
+class ZoomTool;
 
 class KIllustratorView : public KoView, public MainView
 {
@@ -207,8 +209,11 @@ protected:
     CanvasView *scrollview;
     Canvas *canvas;
     Ruler *hRuler, *vRuler;
+    KStatusBar *statusbar;
     LayerDialog *layerDialog;
     CommandHistory cmdHistory;
+
+    ZoomTool *mZoomTool;
 
     KAction* m_copy;
     KAction* m_cut;
