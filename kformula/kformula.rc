@@ -13,23 +13,19 @@
  </Menu>
  <Menu name="Element"><text>E&amp;lement</text>
   <Menu name="Add"><text>Add...</text>
-  <Action name="addtext"/>
-  <Action name="addroot"/>
-  <Action name="addfrac"/>
-  <Action name="addvspace"/>
-  <Action name="addbra"/>
-  <Action name="addintegral"/>
-  <Action name="addsum"/>
-  <Action name="addproduct"/>
-  <Action name="addmatrix"/>
-  <Action name="rootindex"/>
-  <Action name="ihigher"/>
-  <Action name="ilower"/>
-  <Action name="addupperindex"/>
-  <Action name="addlowerindex"/>
+  <Action name="formula_addtext"/>
+  <Action name="formula_addroot"/>
+  <Action name="formula_addfrac"/>
+  <Action name="formula_addbra"/>
+  <Action name="formula_addintegral"/>
+  <Action name="formula_addsum"/>
+  <Action name="formula_addproduct"/>
+  <Action name="formula_addmatrix"/>
+  <Action name="formula_addupperindex"/>
+  <Action name="formula_addlowerindex"/>
   </Menu>
-  <Action name="typeleft"/>
-  <Action name="typeright"/>
+  <Action name="formula_typeleft"/>
+  <Action name="formula_typeright"/>
 <!--
   <Menu name="VA"><text>Vertical align</text>
    <Action name="fracup"/>
@@ -54,9 +50,8 @@
   </Menu>
 -->
 
-  <Action name="fracmidline"/>
-  <Action name="removeenclosing"/>
-  <Action name="makegreek"/>
+  <Action name="formula_removeenclosing"/>
+  <Action name="formula_makegreek"/>
  </Menu>
 <!--
  <Menu name="Font"><text>Font</text>
@@ -86,25 +81,24 @@
   <Action name="edit_paste"/>
  </ToolBar>
  <ToolBar name="Add"><Text>Add</Text>
-  <Action name="addtext"/>
-  <Action name="addroot"/>
-  <Action name="addfrac"/>
-  <Action name="addvspace"/>
-  <Action name="addbra"/>
-  <Action name="addsqrbra"/>
-  <Action name="addcurbra"/>
-  <Action name="addabsbra"/>
-  <Action name="addintegral"/>
-  <Action name="addsum"/>
-  <Action name="addproduct"/>
-  <Action name="addmatrix"/>
-  <Action name="addupperleft"/>
-  <Action name="addlowerleft"/>
-  <Action name="addupperright"/>
-  <Action name="addlowerright"/>
+  <Action name="formula_addtext"/>
+  <Action name="formula_addroot"/>
+  <Action name="formula_addfrac"/>
+  <Action name="formula_addbra"/>
+  <Action name="formula_addsqrbra"/>
+  <Action name="formula_addcurbra"/>
+  <Action name="formula_addabsbra"/>
+  <Action name="formula_addintegral"/>
+  <Action name="formula_addsum"/>
+  <Action name="formula_addproduct"/>
+  <Action name="formula_addmatrix"/>
+  <Action name="formula_addupperleft"/>
+  <Action name="formula_addlowerleft"/>
+  <Action name="formula_addupperright"/>
+  <Action name="formula_addlowerright"/>
 
-  <Action name="typeleft"/>
-  <Action name="typeright"/>
+  <Action name="formula_typeleft"/>
+  <Action name="formula_typeright"/>
  </ToolBar>
 <!--
  <ToolBar name="Font"><Text>Font</Text>

@@ -95,93 +95,93 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                     "int",
                                     CTRL + Key_6,
                                     this, SLOT(addIntegral()),
-                                    collection, "addintegral");
+                                    collection, "formula_addintegral");
     addSumAction      = new KAction(i18n("Add/change to sum"),
                                     "sum",
                                     CTRL + Key_7,
                                     this, SLOT(addSum()),
-                                    collection, "addsum");
+                                    collection, "formula_addsum");
     addProductAction  = new KAction(i18n("Add/change to product"),
                                     "prod",
                                     CTRL + Key_4,
                                     this, SLOT(addProduct()),
-                                    collection, "addproduct");
+                                    collection, "formula_addproduct");
     addRootAction     = new KAction(i18n("Add/change to root"),
                                     "sqrt",
                                     CTRL + Key_2,
                                     this, SLOT(addRoot()),
-                                    collection, "addroot");
+                                    collection, "formula_addroot");
     addFractionAction = new KAction(i18n("Add/change to fraction"),
                                     "frac",
                                     CTRL + Key_3,
                                     this, SLOT(addFraction()),
-                                    collection, "addfrac");
+                                    collection, "formula_addfrac");
     addBracketAction  = new KAction(i18n("Add/change to bracket"),
                                     "paren",
-                                    CTRL + Key_5,
+                                    0,
                                     this, SLOT(addDefaultBracket()),
-                                    collection,"addbra");
+                                    collection,"formula_addbra");
     addSBracketAction = new KAction(i18n("Add/change to square bracket"),
                                     "brackets",
-                                    CTRL + Key_5,
+                                    0,
                                     this, SLOT(addSquareBracket()),
-                                    collection,"addsqrbra");
+                                    collection,"formula_addsqrbra");
     addCBracketAction = new KAction(i18n("Add/change to curly bracket"),
                                     "brace",
-                                    CTRL + Key_5,
+                                    0,
                                     this, SLOT(addCurlyBracket()),
-                                    collection,"addcurbra");
+                                    collection,"formula_addcurbra");
     addAbsAction      = new KAction(i18n("Add/change to abs"),
                                     "abs",
-                                    CTRL + Key_5,
+                                    0,
                                     this, SLOT(addLineBracket()),
-                                    collection,"addabsbra");
+                                    collection,"formula_addabsbra");
 
     addMatrixAction   = new KAction(i18n("Add matrix"),
                                     "matrix",
                                     CTRL + Key_8,
                                     this, SLOT(addMatrix()),
-                                    collection, "addmatrix");
+                                    collection, "formula_addmatrix");
 
     addUpperLeftAction  = new KAction(i18n("Add upper left index"),
                                       "lsup",
                                       0,
                                       this, SLOT(addUpperLeftIndex()),
-                                      collection, "addupperleft");
+                                      collection, "formula_addupperleft");
     addLowerLeftAction  = new KAction(i18n("Add lower left index"),
                                       "lsub",
                                       0,
                                       this, SLOT(addLowerLeftIndex()),
-                                      collection, "addlowerleft");
+                                      collection, "formula_addlowerleft");
     addUpperRightAction = new KAction(i18n("Add upper right index"),
                                       "rsup",
                                       0,
                                       this, SLOT(addUpperRightIndex()),
-                                      collection, "addupperright");
+                                      collection, "formula_addupperright");
     addLowerRightAction = new KAction(i18n("Add lower right index"),
                                       "rsub",
                                       0,
                                       this, SLOT(addLowerRightIndex()),
-                                      collection, "addlowerright");
+                                      collection, "formula_addlowerright");
 
     addGenericUpperAction = new KAction(i18n("Add upper index"),
                                       CTRL + Key_U,
                                       this, SLOT(addGenericUpperIndex()),
-                                      collection, "addupperindex");
+                                      collection, "formula_addupperindex");
     addGenericLowerAction = new KAction(i18n("Add lower index"),
                                       CTRL + Key_L,
                                       this, SLOT(addGenericLowerIndex()),
-                                      collection, "addlowerindex");
+                                      collection, "formula_addlowerindex");
 
     removeEnclosingAction = new KAction(i18n("Remove enclosing element"),
                                         CTRL + Key_R,
                                         this, SLOT(removeEnclosing()),
-                                        collection, "removeenclosing");
+                                        collection, "formula_removeenclosing");
 
     makeGreekAction = new KAction(i18n("Convert to greek"),
                                   CTRL + Key_G,
                                   this, SLOT(makeGreek()),
-                                  collection, "makegreek");
+                                  collection, "formula_makegreek");
     
     QStringList delimiter;
     delimiter.append(QString("("));
@@ -195,7 +195,7 @@ void KFormulaDocument::createActions(KActionCollection* collection)
     delimiter.append(QString("|"));
     leftBracket = new KSelectAction(i18n("Left delimiter"),
                                     0, this, SLOT(delimiterLeft()),
-                                    collection, "typeleft");
+                                    collection, "formula_typeleft");
     leftBracket->setItems(delimiter);
     //leftBracket->setCurrentItem(0);
 
@@ -211,7 +211,7 @@ void KFormulaDocument::createActions(KActionCollection* collection)
     delimiter.append(QString("|"));
     rightBracket = new KSelectAction(i18n("Right delimiter"),
                                      0, this, SLOT(delimiterRight()),
-                                     collection, "typeright");
+                                     collection, "formula_typeright");
     rightBracket->setItems(delimiter);
     //rightBracket->setCurrentItem(0);
 }
