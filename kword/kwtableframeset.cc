@@ -844,13 +844,6 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
     }
 }
 
-/**
-  Adjusts the size of the cell frames.
-  It computes the sizes based on:
-  (1)  The values in the m_colPositions and m_rowPositions arrays.
-  (2)  The width of the Cell borders.
-
-*/
 void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
     if(!theCell->frame(0)) { // sanity check.
         kdDebug(32004) << "errorous table cell!! row:" << theCell->firstRow()
@@ -887,13 +880,6 @@ void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
         theCell->setVisible(true);
 }
 
-/**
-  Returns a double value from m_rowPositions. This is either the bottom
-  or top position of the row of cells @p row. Note that you cannot index
-  directly into m_rowPositions from a row value obtained from a cell,
-  eg cell->firstRow(), because of the extra elements in m_rowPositions when
-  the table spans multiple pages.
-*/
 double KWTableFrameSet::getPositionOfRow( unsigned int row, bool bottom ) {
     unsigned int adjustment=0;
     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
@@ -977,9 +963,6 @@ void KWTableFrameSet::selectUntil( double x, double y) {
     if(f) selectUntil(static_cast<KWTableFrameSet::Cell *> (f->frameSet()));
 }
 
-/* the selectUntil method will select all frames from the first
-   selected to the frame of the argument frameset.
-*/
 void KWTableFrameSet::selectUntil( Cell *cell)
 {
     unsigned int toRow = 0, toCol = 0;
@@ -2464,7 +2447,7 @@ void KWTableFrameSet::printDebug() {
 
 #endif
 
-/////
+// ===
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString &/*name*/ ) :
     KWTextFrameSet( table->m_doc,

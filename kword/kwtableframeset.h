@@ -411,9 +411,15 @@ public:
     // /** point the outlines of all the cells */
     //void drawAllRects( QPainter &p, int xOffset, int yOffset );
 
-    /** select all frames from the first selected to the argument frameset. */
+    /** 
+     * @brief select all frames from the first selected to the argument frameset.
+     *
+     * the selectUntil method will select all frames from the first
+     * selected to the frame of the argument frameset.
+     */
     void selectUntil( Cell *cell );
-    /** convenience method */
+    
+    /** @overload KWTableFrameSet::selectUntil */
     void selectUntil( double x, double y);
 
     bool getFirstSelected(unsigned int &row, unsigned int &col);
@@ -581,9 +587,27 @@ protected:
     void addCellToArray( Cell* cell );
 
 private:
-    /** position an individual cell in the grid */
+    /** 
+     * @brief position an individual cell in the grid
+     *
+     * Adjusts the size of the cell frames.
+     * It computes the sizes based on:
+     * <ol>
+     * <li>The values in the m_colPositions and m_rowPositions arrays.
+     * <li>The width of the Cell borders.
+     * </ol>
+     */
     void position(Cell *theCell, bool setMinFrameHeight=false);
-    /** returns the absolute top-position of the row in the grid */
+    
+    /** 
+     * @brief Returns the absolute top-position of the row in the grid
+     *
+     * Returns a double value from m_rowPositions. This is either the bottom
+     * or top position of the row of cells @p row. Note that you cannot index
+     * directly into m_rowPositions from a row value obtained from a cell,
+     * eg cell->firstRow(), because of the extra elements in m_rowPositions when
+     * the table spans multiple pages.
+     */
     double getPositionOfRow(unsigned int row, bool bottom=false);
 
     void insertEmptyColumn(uint index);
