@@ -28,6 +28,7 @@
 #include "kivio_shape.h"
 #include "kivio_shape_data.h"
 #include "kivio_sml_stencil.h"
+#include "kivio_dia_stencil_spawner.h"
 #include "kivio_sml_stencil_spawner.h"
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
@@ -1521,7 +1522,14 @@ void KivioSMLStencil::updateGeometry()
     defWidth = m_pSpawner->defWidth();
     defHeight = m_pSpawner->defHeight();
 
-    QList<KivioConnectorTarget> *pOriginalTargets = ((KivioSMLStencilSpawner*)m_pSpawner)->targets();
+    QList<KivioConnectorTarget> *pOriginalTargets;
+
+    KivioSMLStencilSpawner *smlSpawner = dynamic_cast<KivioSMLStencilSpawner *>(m_pSpawner);
+    KivioDiaStencilSpawner *diaSpawner = dynamic_cast<KivioDiaStencilSpawner *>(m_pSpawner);
+    if(smlSpawner != 0)
+	pOriginalTargets = smlSpawner->targets();
+    else if(diaSpawner != 0)
+	pOriginalTargets = diaSpawner->targets();
     pTarget = m_pConnectorTargets->first();
     pOriginal = pOriginalTargets->first();
 

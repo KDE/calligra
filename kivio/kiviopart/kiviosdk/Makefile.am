@@ -22,6 +22,7 @@ libkiviosdk_la_SOURCES = \
 		kivio_shape_data.cpp\
 		kivio_sml_stencil.cpp\
 		kivio_sml_stencil_spawner.cpp\
+		kivio_dia_stencil_spawner.cpp\
 		kivio_stencil.cpp\
 		kivio_stencil_spawner.cpp\
 		kivio_stencil_spawner_info.cpp\

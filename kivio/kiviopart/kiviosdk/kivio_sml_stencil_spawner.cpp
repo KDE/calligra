@@ -76,7 +76,6 @@ QDomElement KivioSMLStencilSpawner::saveXML( QDomDocument &doc )
 
 bool KivioSMLStencilSpawner::load( const QString &file )
 {
-    KivioConnectorTarget *pTarget;
     QDomDocument d("test");
 
     m_filename = QString(file);
@@ -87,8 +86,23 @@ bool KivioSMLStencilSpawner::load( const QString &file )
        kdDebug() << "KivioSMLStencilSpawner::load() - Error opening stencil: " << file << endl;
         return false;
     }
-
     d.setContent(&f);
+
+    if(loadXML(file, d))
+    {
+	f.close();
+	return true;
+    }
+    else
+    {
+	f.close();
+	return false;
+    }
+}
+
+bool KivioSMLStencilSpawner::loadXML( const QString &file, QDomDocument &d )
+{
+    KivioConnectorTarget *pTarget;
 
     QDomElement root = d.documentElement();
     QDomElement e;
@@ -137,8 +151,6 @@ bool KivioSMLStencilSpawner::load( const QString &file )
 
     m_icon.load( xpmFile );
 
-    f.close();
-   
     return true;
 }
 

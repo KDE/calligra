@@ -49,6 +49,10 @@ bool KivioStencilSpawner::load( const QString & )
     return false;
 }
 
+bool KivioStencilSpawner::loadXML( const QString &, QDomDocument & )
+{
+    return false;
+}
 
 
 KivioStencil *KivioStencilSpawner::newStencil()

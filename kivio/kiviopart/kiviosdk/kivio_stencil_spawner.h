@@ -48,6 +48,7 @@ public:
     virtual ~KivioStencilSpawner();
     
     virtual bool load( const QString & );
+    virtual bool loadXML( const QString &, QDomDocument & );
     virtual QDomElement saveXML( QDomDocument & );
 
     virtual KivioStencil *newStencil();
