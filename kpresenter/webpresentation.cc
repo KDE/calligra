@@ -202,34 +202,21 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
 {
     if ( slideInfos.isEmpty() )
         return;
-    QRect rect = doc->pageList().at(slideInfos[0].pageNumber)->getZoomPageRect();
-    QPixmap pix( rect.size() );
+    QPixmap pix( 10, 10 );
     QString filename;
     QString format = imageFormat( imgFormat );
-    int p,dpiX,dpiY;
-    int oldZoom = view->kPresenterDoc()->zoomHandler()->zoom();
-    view->unZoomDocument(dpiX,dpiY);
+    int p;
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
         int pgNum = slideInfos[i].pageNumber;
-        QRect zoomPgRect = doc->pageList().at(pgNum)->getZoomPageRect();
-        pix.resize( zoomPgRect.size() );
-        pix.fill( Qt::white );
-        view->getCanvas()->drawPageInPix( pix, pgNum );
+        view->getCanvas()->drawPageInPix( pix, pgNum, zoom );
         filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
-        if ( zoom != 100 ) {
-            KoRect pgRect = doc->pageList().at(pgNum)->getPageRect();
-            int _w = (int)( pgRect.width() * ( (double)zoom / 100.0 ) );
-            int _h = (int)( pgRect.height() * ( (double)zoom / 100.0 ) );
-            QImage _img( pix.convertToImage().smoothScale( _w, _h, QImage::ScaleFree ) );
-            pix.convertFromImage( _img );
-        }
+
         pix.save( filename, format.upper().latin1() );   //lukas: provide the option to choose image quality
 
         p = progressBar->progress();
         progressBar->setProgress( ++p );
         kapp->processEvents();
     }
-    view->zoomDocument(oldZoom);
 }
 
 /*================================================================*/

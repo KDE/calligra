@@ -56,13 +56,11 @@ void KPSlidePreview::setPage( QListViewItem *item )
     if ( !item )
         return;
     int i = ( (KPPresStructObjectItem*)item )->getPageNum();
-    QRect rect=doc->pageList().at(i)->getZoomPageRect();
-    QPixmap pix( rect.size() );
-    pix.fill( Qt::white );
-    view->getCanvas()->drawPageInPix( pix, i );
+    QPixmap pix( 10, 10 );
+    view->getCanvas()->drawPageInPix( pix, i, 100 );
 
-    int w = rect.width();
-    int h = rect.height();
+    int w = pix.width();
+    int h = pix.height();
     if ( w > h ) {
         w = 297;
         h = 210;

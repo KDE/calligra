@@ -3350,11 +3350,18 @@ bool KPrCanvas::isOneObjectSelected() const
 /*================================================================*/
 // This one is used to generate the pixmaps for the HTML presentation,
 // for the pres-structure-dialog, for the sidebar previews, for template icons.
-void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum )
+void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom )
 {
     //kdDebug(33001) << "Page::drawPageInPix" << endl;
     currPresPage = pgnum + 1;
 
+    int oldZoom = m_view->kPresenterDoc()->zoomHandler()->zoom();
+    m_view->zoomDocument(zoom);
+
+    QRect rect = m_view->kPresenterDoc()->pageList().at(pgnum)->getZoomPageRect( );
+    _pix.resize( rect.size() );
+    _pix.fill( Qt::white );
+    
     QPainter p;
     p.begin( &_pix );
 
@@ -3371,6 +3378,8 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum )
 
     editMode = _editMode;
     p.end();
+
+    m_view->zoomDocument(oldZoom);
 }
 
 /*==================== draw a page in a pixmap ===================*/

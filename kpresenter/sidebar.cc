@@ -340,14 +340,12 @@ void ThumbBar::removeItem( int pos )
 QPixmap ThumbBar::getSlideThumb(int slideNr) const
 {
   //kdDebug(33001) << "ThumbBar::getSlideThumb: " << slideNr << endl;
-  QRect rect = doc->pageList().at(slideNr)->getZoomPageRect();
-  QPixmap pix( rect.size() );
-  pix.fill( Qt::white );
+  QPixmap pix( 10, 10 );
 
-  view->getCanvas()->drawPageInPix( pix, slideNr );
+  view->getCanvas()->drawPageInPix( pix, slideNr, 60 );
 
-  int w = rect.width();
-  int h = rect.height();
+  int w = pix.width();
+  int h = pix.height();
 
   if ( w > h ) {
       w = 130;
