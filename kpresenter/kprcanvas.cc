@@ -1717,14 +1717,12 @@ void KPrCanvas::clipPaste()
 /*======================= change picture  ========================*/
 void KPrCanvas::chPic()
 {
-    KPObject *kpobject = 0;
-
-    for ( unsigned int i = 0; i < objectList().count(); i++ )
+    QPtrListIterator<KPObject> it( getObjectList() );
+    for ( ; it.current() ; ++it )
     {
-        kpobject = objectList().at( i );
-        if ( kpobject->isSelected() && kpobject->getType() == OT_PICTURE )
+        if ( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
         {
-            m_view->changePicture( dynamic_cast<KPPixmapObject*>( kpobject )->getFileName() );
+            m_view->changePicture( dynamic_cast<KPPixmapObject*>( it.current() )->getFileName() );
             break;
         }
     }
@@ -1733,14 +1731,12 @@ void KPrCanvas::chPic()
 /*======================= change clipart  ========================*/
 void KPrCanvas::chClip()
 {
-    KPObject *kpobject = 0;
-
-    for ( unsigned int i = 0; i < objectList().count(); i++ )
+    QPtrListIterator<KPObject> it( getObjectList() );
+    for ( ; it.current() ; ++it )
     {
-        kpobject = objectList().at( i );
-        if ( kpobject->isSelected() && kpobject->getType() == OT_CLIPART )
+        if ( it.current()->isSelected() && it.current()->getType() == OT_CLIPART )
         {
-            m_view->changeClipart( dynamic_cast<KPClipartObject*>( kpobject )->getFileName() );
+            m_view->changeClipart( dynamic_cast<KPClipartObject*>( it.current() )->getFileName() );
             break;
         }
     }
@@ -2084,24 +2080,6 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
         //}
     }
 #endif
-#if 0
-    //unzoom all object in all page
-    QPtrListIterator<KPrPage> it(doc->pageList());
-    for (; it.current(); ++it )
-    {
-        QPtrListIterator<KPObject> oIt(it.current()->objectList());
-        for (; oIt.current(); ++oIt )
-        {
-            if(oIt.current()->isZoomed())
-            {
-                //kdDebug(33001) << "Zooming object " << i << endl;
-                oIt.current()->zoom( _presFakt );
-                //kdDebug(33001) << "Zooming object "<< i << " - done" << endl;
-                oIt.current()->drawSelection( false );
-            }
-        }
-    }
-#endif
     if(m_showOnlyPage==-1)
     {
         QPtrListIterator<KPObject> oIt(doc->pageList().at(0)->objectList());
@@ -2114,12 +2092,6 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
         for (; oIt.current(); ++oIt )
              tmpObjs.append( oIt.current() );
     }
-#if 0
-    if ( doc->hasHeader() && doc->header() )
-	doc->header()->zoom( _presFakt );
-    if ( doc->hasFooter() && doc->footer() )
-	doc->footer()->zoom( _presFakt );
-#endif
     if ( m_showOnlyPage != -1 ) // only one page
     {
         slideList.clear();
@@ -2155,23 +2127,6 @@ void KPrCanvas::stopScreenPresentation()
     setCursor( waitCursor );
 
     KPresenterDoc * doc = m_view->kPresenterDoc();
-#if 0
-    //unzoom all object in all page
-    QPtrListIterator<KPrPage> it(doc->pageList());
-    for (; it.current(); ++it )
-    {
-        QPtrListIterator<KPObject> oIt(it.current()->objectList());
-        for (; oIt.current(); ++oIt )
-        {
-            if(oIt.current()->isZoomed())
-            {
-                //kdDebug(33001) << "KPrCanvas::stopScreenPresentation zooming back object " << i << endl;
-                oIt.current()->zoomOrig();
-                oIt.current()->drawSelection( true );
-            }
-        }
-    }
-#endif
     _presFakt = 1.0;
     // Zoom backgrounds back
     doc->zoomHandler()->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
@@ -2185,12 +2140,6 @@ void KPrCanvas::stopScreenPresentation()
     else
         doc->pageList().at( m_showOnlyPage-1 )->updateBackgroundSize();
 
-#if 0
-    if ( doc->hasHeader() && doc->header() )
-        doc->header()->zoomOrig();
-    if ( doc->hasFooter() && doc->footer() )
-        doc->footer()->zoomOrig();
-#endif
     goingBack = false;
     currPresPage = 1;
     editMode = true;
@@ -2277,13 +2226,6 @@ bool KPrCanvas::pNext( bool )
             tmpObjs.append(oIt.current());
 
 
-#if 0
-        for ( int j = 0; j < static_cast<int>( objectList().count() ); j++ )
-        {
-            if ( getPageOfObj( j, _presFakt ) == static_cast<int>( currPresPage ) )
-                tmpObjs.append( objectList().at( j ) );
-        }
-#endif
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1 );
         currPresStep = *presStepList.begin();
 
@@ -2357,12 +2299,6 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         for (; oIt.current(); ++oIt )
             tmpObjs.append(oIt.current());
 
-#if 0
-        for ( int j = 0; j < static_cast<int>( objectList().count() ); j++ ) {
-            if ( getPageOfObj( j, _presFakt ) == static_cast<int>( currPresPage ) )
-                tmpObjs.append( objectList().at( j ) );
-        }
-#endif
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
         currPresStep = *( --presStepList.end() );
         return true;
@@ -4153,10 +4089,8 @@ void KPrCanvas::dropEvent( QDropEvent *e )
 {
     //disallow dropping objects outside the "page"
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
-    if ( !m_activePage->getZoomPageRect().contains(e->pos())/*!m_view->kPresenterDoc()->getPageRect( m_view->getCurrPgNum()-1, diffx(), diffy(), _presFakt ).contains(e->pos())*/)
+    if ( !m_activePage->getZoomPageRect().contains(e->pos()))
         return;
-
-    //KPresenterDoc *doc = m_view->kPresenterDoc();
 
     if ( QImageDrag::canDecode( e ) ) {
         setToolEditMode( TEM_MOUSE );
@@ -5130,10 +5064,11 @@ void KPrCanvas::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
 QPtrList<KoTextObject> KPrCanvas::objectText()
 {
     QPtrList<KoTextObject>lst;
-    QPtrList<KPObject> listObj(objectList());
-    for ( unsigned int i = 0; i < listObj.count(); i++ ) {
-        if(listObj.at( i )->getType() == OT_TEXT)
-            lst.append(dynamic_cast<KPTextObject*>(listObj.at( i ))->textObject());
+    QPtrListIterator<KPObject> it( getObjectList() );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->getType() == OT_TEXT)
+            lst.append(dynamic_cast<KPTextObject*>(it.current())->textObject());
     }
     return lst;
 }
@@ -5141,10 +5076,10 @@ QPtrList<KoTextObject> KPrCanvas::objectText()
 bool KPrCanvas::oneObjectTextExist()
 {
     KPObject *kpobject = 0;
-    for ( unsigned int i = 0; i < objectList().count(); i++ )
+    QPtrListIterator<KPObject> it( getObjectList() );
+    for ( ; it.current() ; ++it )
     {
-        kpobject = objectList().at( i );
-        if (  kpobject->getType()==OT_TEXT)
+        if (  it.current()->getType()==OT_TEXT)
             return true;
     }
     return false;
