@@ -640,9 +640,9 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
               )
         {
             double resizedFrameRatio = m_resizedFrameInitialSize.width() / m_resizedFrameInitialSize.height();
-
             double width = newRight - newLeft;
             double height = newBottom - newTop;
+
             if ( ( top || bottom ) && ( left || right ) ) // resizing by a corner
                 if ( width < height )
                     width = height * resizedFrameRatio;
@@ -663,57 +663,61 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
             else
                 newBottom = frame->top() + height;
             //kdDebug() << "KWCanvas::mmEditFrameResize after: newRight=" << newRight << " newBottom=" << newBottom << endl;
+            }
         }
-    }
-    // Keep copy of old rectangle, for repaint()
-    QRect oldRect = m_viewMode->normalToView( frame->outerRect() );
-
-    frame->setLeft(newLeft);
-    frame->setTop(newTop);
-    frame->setRight(newRight);
-    frame->setBottom(newBottom);
-    //kdDebug() << "KWCanvas::mmEditFrameResize newTop=" << newTop << " newBottom=" << newBottom << " height=" << frame->height() << endl;
-
-    // If header/footer, resize the first frame
-    if ( frame->getFrameSet()->isHeaderOrFooter() )
+    // Check if frame was really resized because otherwise no repaint is needed
+    if( newLeft != frame->left() || newRight != frame->right() || newTop != frame->top() || newBottom != frame->bottom() )
     {
-        KWFrame * origFrame = frame->getFrameSet()->getFrame( 0 );
-        origFrame->setLeft(newLeft);
-        origFrame->setTop(newTop);
-        origFrame->setRight(newRight);
-        origFrame->setBottom(newBottom);
-    }
+	// Keep copy of old rectangle, for repaint()
+        QRect oldRect = m_viewMode->normalToView( frame->outerRect() );
 
-    //kdDebug() << "KWCanvas::mmEditFrameResize new rect " << DEBUGRECT( *frame ) << endl;
+        frame->setLeft(newLeft);
+        frame->setTop(newTop);
+        frame->setRight(newRight);
+        frame->setBottom(newBottom);
+        //kdDebug() << "KWCanvas::mmEditFrameResize newTop=" << newTop << " newBottom=" << newBottom << " height=" << frame->height() << endl;
+
+        // If header/footer, resize the first frame
+        if ( frame->getFrameSet()->isHeaderOrFooter() )
+        {
+            KWFrame * origFrame = frame->getFrameSet()->getFrame( 0 );
+            origFrame->setLeft(newLeft);
+            origFrame->setTop(newTop);
+            origFrame->setRight(newRight);
+            origFrame->setBottom(newBottom);
+        }
+
+        //kdDebug() << "KWCanvas::mmEditFrameResize new rect " << DEBUGRECT( *frame ) << endl;
 
 #if 0
-    int drawX, drawWidth, drawY, drawHeight;
-    drawX=frame->left();
-    drawWidth=frame->width();
-    drawY=frame->top();
-    drawHeight=frame->height();
-    if (frame->getFrameSet()->getGroupManager()) { // is table
-        if (!(top || bottom)) { /// full height.
-            drawY=frame->getFrameSet()->getGroupManager()->getBoundingRect().y();
-            drawHeight=frame->getFrameSet()->getGroupManager()->getBoundingRect().height();
-        } else if (!(left || right)) { // full width.
-            drawX=frame->getFrameSet()->getGroupManager()->getBoundingRect().x();
-            drawWidth=frame->getFrameSet()->getGroupManager()->getBoundingRect().width();
+        int drawX, drawWidth, drawY, drawHeight;
+        drawX=frame->left();
+        drawWidth=frame->width();
+        drawY=frame->top();
+        drawHeight=frame->height();
+        if (frame->getFrameSet()->getGroupManager()) { // is table
+            if (!(top || bottom)) { /// full height.
+                drawY=frame->getFrameSet()->getGroupManager()->getBoundingRect().y();
+                drawHeight=frame->getFrameSet()->getGroupManager()->getBoundingRect().height();
+            } else if (!(left || right)) { // full width.
+                drawX=frame->getFrameSet()->getGroupManager()->getBoundingRect().x();
+                drawWidth=frame->getFrameSet()->getGroupManager()->getBoundingRect().width();
+            }
         }
-    }
-    //p.drawRect( drawX, drawY, drawWidth, drawHeight );
-    //p.end();
+        //p.drawRect( drawX, drawY, drawWidth, drawHeight );
+        //p.end();
 #endif
 
-    // Move resize handles to new position
-    frame->updateResizeHandles();
-    // Calculate new rectangle for this frame
-    QRect newRect( m_viewMode->normalToView( frame->outerRect() ) );
-    // Repaint only the changed rects (oldRect U newRect)
-    repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
-    m_frameResized = true;
+        // Move resize handles to new position
+        frame->updateResizeHandles();
+        // Calculate new rectangle for this frame
+        QRect newRect( m_viewMode->normalToView( frame->outerRect() ) );
+        // Repaint only the changed rects (oldRect U newRect)
+        repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
+        m_frameResized = true;
 
-    m_gui->getView()->updateFrameStatusBarItem();
+        m_gui->getView()->updateFrameStatusBarItem();
+    }
 }
 
 void KWCanvas::applyGrid( KoPoint &p )
@@ -829,22 +833,24 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame *frame = frameIt.current();
-            if ( frame->isSelected() ) {
-                if ( frameset->type() == FT_TABLE ) {
-                    if ( tablesMoved.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
-                        tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
-                } else {
-                    QRect oldRect( m_viewMode->normalToView( frame->outerRect() ) );
-                    // Move the frame
-                    frame->moveTopLeft( frame->topLeft() + _move );
-                    // Calculate new rectangle for this frame
-                    QRect newRect( frame->outerRect() );
+            if( m_boundingRect.x() != oldBoundingRect.x() || m_boundingRect.y() != oldBoundingRect.y() ) {
+                if ( frame->isSelected() ) {
+                    if ( frameset->type() == FT_TABLE ) {
+                        if ( tablesMoved.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
+                            tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
+                    } else {
+                        QRect oldRect( m_viewMode->normalToView( frame->outerRect() ) );
+                        // Move the frame
+                        frame->moveTopLeft( frame->topLeft() + _move );
+                        // Calculate new rectangle for this frame
+                        QRect newRect( frame->outerRect() );
 
-                    QRect frameRect( m_viewMode->normalToView( newRect ) );
-                    // Repaint only the changed rects (oldRect U newRect)
-                    repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
-                    // Move resize handles to new position
-                    frame->updateResizeHandles();
+                        QRect frameRect( m_viewMode->normalToView( newRect ) );
+                        // Repaint only the changed rects (oldRect U newRect)
+                        repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
+                        // Move resize handles to new position
+                        frame->updateResizeHandles();
+                    }
                 }
             }
         }
