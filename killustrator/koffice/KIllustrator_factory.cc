@@ -45,11 +45,11 @@ KAboutData* KIllustratorFactory::aboutData()
   return aboutData;
 }
 
-KParts::Part* KIllustratorFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KIllustratorFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KIllustratorDocument *doc = new KIllustratorDocument( parent, name, !bWantKoDocument );
+    KIllustratorDocument *doc = new KIllustratorDocument( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
       doc->setReadWrite( false );

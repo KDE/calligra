@@ -36,7 +36,7 @@
 #include <qfileinfo.h>
 #include <klocale.h>
 #include <kstddirs.h>
-#include <koTemplateChooseDia.h>                                                
+#include <koTemplateChooseDia.h>
 #include <koQueryTrader.h>
 #include <koStore.h>
 
@@ -53,8 +53,8 @@ KIllustratorChild::~KIllustratorChild ()
 
 // ----------------------------------------------------------
 
-KIllustratorDocument::KIllustratorDocument( QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parent, name, singleViewMode )
+KIllustratorDocument::KIllustratorDocument( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
     setInstance( KIllustratorFactory::global() );
     m_gdocument = new GDocument();
@@ -205,22 +205,22 @@ bool KIllustratorDocument::insertNewTemplate (int, int, bool clean) {
   QString templ;
   KoTemplateChooseDia::ReturnType ret;
 
-  ret = KoTemplateChooseDia::choose (KIllustratorFactory::global(), 
+  ret = KoTemplateChooseDia::choose (KIllustratorFactory::global(),
 				     templ,
 				     "application/x-killustrator", "*.kil",
-				     "KIllustrator", 
+				     "KIllustrator",
 				     KoTemplateChooseDia::Everything,
-				     "killustrator_template", true);   
+				     "killustrator_template", true);
   if (ret == KoTemplateChooseDia::Template) {
     QFileInfo fileInfo (templ);
-    QString fileName (fileInfo.dirPath (true) + "/" + 
+    QString fileName (fileInfo.dirPath (true) + "/" +
 		      fileInfo.baseName () + ".kil");
-    // load it  
+    // load it
     bool ok = loadNativeFormat (fileName);
     setModified (true);
     return ok;
   } else if (ret == KoTemplateChooseDia::File) {
-    // load it 
+    // load it
     KURL url;
     url.setPath (templ);
     bool ok = openURL (url);
