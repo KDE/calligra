@@ -111,6 +111,8 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 			const QString &property, bool multiple);
 		QStringList autoSaveProperties(const QString &classname);
 
+		WidgetFactory* factoryForClassName(const char* className);
+
 	signals:
 		void prepareInsert(const QString &c);
 

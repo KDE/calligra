@@ -358,6 +358,7 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Container
 	}
 }
 
+/*
 void
 WidgetFactory::addPropertyDescription(Container *container, const char *prop, const QString &desc)
 {
@@ -370,7 +371,7 @@ WidgetFactory::addValueDescription(Container *container, const char *value, cons
 {
 	ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
 	buff->addValueDescription(value, desc);
-}
+}*/
 
 bool
 WidgetFactory::showProperty(const QString&, QWidget*, const QString&, bool multiple)

@@ -204,11 +204,23 @@ ObjectPropertyBuffer::setSelectedWidget(QWidget *w, bool add)
 }
 
 void
-ObjectPropertyBuffer::setWidget(QWidget *widg)
+ObjectPropertyBuffer::setWidget(QWidget *w)
 {
 	kdDebug() << "ObjectPropertyBuffer::setWidget()" << endl;
 
-	QWidget *w = widg;
+	if (m_propDesc.isEmpty()) {
+		m_propDesc["name"] = i18n("Name");
+		m_propDesc["paletteBackgroundPixmap"] = i18n("Background Pixmap");
+		m_propDesc["enabled"] = i18n("Enabled");
+		m_propDesc["geometry"] = i18n("Geometry");
+		m_propDesc["font"] = i18n("Font");
+		m_propDesc["cursor"] = i18n("Cursor");
+
+		m_propValDesc["NoBackground"] = i18n("No Background");
+		m_propValDesc["PaletteForeground"] = i18n("Palette Foreground");
+		m_propValDesc["AutoText"] = i18n("Auto");
+	}
+
 	// We select parent TabWidget or WidgetStack instead of pages
 	/*if(!m_manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 	{
@@ -232,6 +244,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	if(!tree)  return;
 
 	int count = 0;
+	WidgetFactory *factory = m_manager->lib()->factoryForClassName(w->className());
 	//pList.sort();
 	QStrListIterator it(pList);
 	// We go through the list of properties
@@ -240,38 +253,41 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 //		kdDebug() << "ObjectPropertyBuffer::setWidget(): property: " << *it << endl;
 		count = w->metaObject()->findProperty(*it, true);
 		const QMetaProperty *meta = w->metaObject()->property(count, true);
+		const char* propertyName = meta->name();
 		if(meta->designable(w))
 		{
-			if(!showProperty(meta->name(), isTopLevel))
+			if(!showProperty(propertyName, isTopLevel))
 				continue;
 
-			QString desc = descFromName(meta->name());
+			QString desc = m_propDesc[meta->name()];
+			if (factory && desc.isEmpty()) {
+				//try to get property description from factory
+				desc = factory->propertyDescForName(propertyName);
+			}
 			if(meta->isEnumType())
 			{
 				QStrList keys = meta->enumKeys();
-				if(QString(meta->name()) == QString("alignment"))
+				if(0==qstrcmp(propertyName, "alignment"))
 				{
 					createAlignProperty(meta, w);
 					continue;
 				}
-				else
-				{
-					add(new KexiProperty(meta->name(), 
-						meta->valueToKey(w->property(meta->name()).toInt()),
-						new KexiProperty::ListData(QStringList::fromStrList(keys), 
-							descList(QStringList::fromStrList(keys))),
-						desc)
-					);
-				}
+
+				add(new KexiProperty(propertyName, 
+					meta->valueToKey(w->property(propertyName).toInt()),
+					new KexiProperty::ListData(QStringList::fromStrList(keys), 
+						descList(QStringList::fromStrList(keys))),
+					desc)
+				);
 			}
 			else
-				add(new KexiProperty(meta->name(), w->property(meta->name()), desc));
+				add(new KexiProperty(propertyName, w->property(propertyName), desc));
 		}
 
-		if(QString(meta->name()) == "name")
+		if(0==qstrcmp(propertyName, "name"))
 			(*this)["name"].setAutoSync(0); // name should be updated only when pressing Enter
 
-		updateOldValue(tree, meta->name()); // update the KexiProperty.oldValue using the value in modifProp
+		updateOldValue(tree, propertyName); // update the KexiProperty.oldValue using the value in modifProp
 	}
 
 
@@ -457,25 +473,6 @@ ObjectPropertyBuffer::storePixmapName(KexiPropertyBuffer &buf, KexiProperty &pro
 
 // i18n functions /////////////////////////////////
 
-QString
-ObjectPropertyBuffer::descFromName(const QString &name)
-{
-	if(propDesc.isEmpty())
-	{
-		propDesc["name"] = i18n("Name");
-		propDesc["paletteBackgroundPixmap"] = i18n("Background Pixmap");
-		propDesc["enabled"] = i18n("Enabled");
-		propDesc["geometry"] = i18n("Geometry");
-		propDesc["font"] = i18n("Font");
-		propDesc["cursor"] = i18n("Cursor");
-	}
-
-	if(propDesc.contains(name))
-		return propDesc[name];
-	else
-		return name;
-}
-
 QStringList
 ObjectPropertyBuffer::descList(const QStringList &strlist)
 {
@@ -484,39 +481,9 @@ ObjectPropertyBuffer::descList(const QStringList &strlist)
 
 	for(QStringList::iterator it = list.begin(); it != list.end(); ++it)
 	{
-		desc += descFromValue(*it);
+		desc += m_propValDesc[*it]; //descForValue(*it);
 	}
 	return desc;
-}
-
-QString
-ObjectPropertyBuffer::descFromValue(const QString &name)
-{
-	if(valueDesc.isEmpty())
-	{
-		valueDesc["NoBackground"] = i18n("No Background");
-		valueDesc["PaletteForeground"] = i18n("Palette Foreground");
-		valueDesc["AutoText"] = i18n("Auto");
-	}
-
-	if(valueDesc.contains(name))
-		return valueDesc[name];
-	else
-		return name;
-}
-
-void
-ObjectPropertyBuffer::addPropertyDescription(const char *property, const QString &desc)
-{
-	if(!propDesc.contains(property))
-		propDesc[property] = desc;
-}
-
-void
-ObjectPropertyBuffer::addValueDescription(const char *value, const QString &desc)
-{
-	if(!valueDesc.contains(value))
-		valueDesc[value] = desc;
 }
 
 
@@ -654,7 +621,7 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &va
 	}
 	else
 	{
-		kdDebug() << "ERROR NO CONTAINER" << endl;
+		kdWarning() << "ERROR NO CONTAINER" << endl;
 		return;
 	}
 

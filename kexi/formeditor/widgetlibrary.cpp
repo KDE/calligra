@@ -187,7 +187,7 @@ WidgetLibrary::createXML()
 	QDomElement menu = doc.createElement("Menu");
 	menu.setAttribute("name", "widgets");
 
-	QDictIterator<WidgetInfo> it(d->widgets);
+	QAsciiDictIterator<WidgetInfo> it(d->widgets);
 	int i = 0;
 	for(; it.current(); ++it)
 	{
@@ -207,10 +207,10 @@ WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, cons
 {
 	loadFactories();
 	ActionList actions;
-	QDictIterator<WidgetInfo> it(d->widgets);
+	QAsciiDictIterator<WidgetInfo> it(d->widgets);
 	for(; it.current(); ++it)
 	{
-		LibActionWidget *a = new LibActionWidget(*it, parent);
+		LibActionWidget *a = new LibActionWidget(it.current(), parent);
 //		kdDebug() << "WidgetLibrary::createActions(): action " << a << " added" << endl;
 		connect(a, SIGNAL(prepareInsert(const QString &)), receiver, slot);
 		actions.append(a);
@@ -406,6 +406,14 @@ WidgetLibrary::autoSaveProperties(const QString &classname)
 		return wi->factory()->autoSaveProperties(classname);
 	else
 		return QStringList();
+}
+
+WidgetFactory*
+WidgetLibrary::factoryForClassName(const char* classname)
+{
+	loadFactories();
+	WidgetInfo *wi = d->widgets.find(classname);
+	return wi ? wi->factory() : 0;
 }
 
 #include "widgetlibrary.moc"

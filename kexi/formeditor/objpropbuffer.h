@@ -122,11 +122,11 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void    saveLayoutProperty(const QString &property, const QVariant &value);
 
 		/*! \return The i18n'ed name of the property whose name is \a name, that will be displayed in PropertyEditor. */
-		QString      descFromName(const QString &name);
+		QString descForName(const QCString &name);
 		/*! \return The i18n'ed name of the property's vale whose name is \a name. */
-		QString      descFromValue(const QString &name);
+		QString descForValue(const QCString &name);
 		/*! \return The i18n'ed list of values, that will be shown by Property Editor (using descFromValue()).*/
-		QStringList  descList(const QStringList &list);
+		QStringList descList(const QStringList &list);
 
 		void   updateOldValue(ObjectTreeItem *tree, const char *property);
 
@@ -144,8 +144,8 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		QColorGroup* m_origActiveColors;
 
 		// i18n stuff
-		QMap<QString, QString> propDesc;
-		QMap<QString, QString> valueDesc;
+		QMap<QString, QString> m_propDesc;
+		QMap<QString, QString> m_propValDesc;
 
 		friend class PropertyCommand;
 		friend class LayoutPropertyCommand;
