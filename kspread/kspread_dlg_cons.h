@@ -21,24 +21,22 @@
 #define __kspread_dlg_cons__
 
 #include <qdialog.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qcombobox.h>
 #include <qstringlist.h>
 #include <qlistbox.h>
-#include <qrect.h>
-#include <qcheckbox.h>
 
 class KSpreadView;
 class KSpreadTable;
+class QLineEdit;
+class QPushButton;
+class QComboBox;
+class QCheckBox;
 
 class KSpreadConsolidate : public QDialog
 {
   Q_OBJECT
 public:
   KSpreadConsolidate( KSpreadView* parent, const char* name );
-  
+  ~KSpreadConsolidate();
   QStringList refs();
   
 public slots:
@@ -51,8 +49,9 @@ public slots:
   void slotReturnPressed();
 
 protected:
+  virtual void closeEvent ( QCloseEvent * ); 
+
   KSpreadView* m_pView;
-  
   QLineEdit* m_pRef;
   QListBox* m_pRefs;
   QComboBox* m_pFunction;

@@ -30,7 +30,11 @@
 #include <kmessagebox.h>
 #include <qlayout.h>
 #include <assert.h>
-
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qlabel.h>
 #include <kdebug.h>
 
 KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
@@ -97,6 +101,11 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 
   connect( m_pView, SIGNAL( sig_selectionChanged( KSpreadTable*, const QRect& ) ),
 	   this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
+}
+
+KSpreadConsolidate::~KSpreadConsolidate()
+{
+    kdDebug()<<"KSpreadConsolidate::~KSpreadConsolidate()\n";
 }
 
 enum Function { F_SUM, F_AVERAGE };
@@ -667,11 +676,13 @@ void KSpreadConsolidate::slotOk()
   }
   m_pView->updateEditWidget();
   accept();
+  delete this;
 }
 
 void KSpreadConsolidate::slotClose()
 {
   reject();
+  delete this;
 }
 
 void KSpreadConsolidate::slotAdd()
@@ -732,6 +743,11 @@ void KSpreadConsolidate::slotReturnPressed()
     m_pRefs->insertItem( txt );
     m_pOk->setEnabled( true );
   }
+}
+
+void KSpreadConsolidate::closeEvent ( QCloseEvent * )
+{
+    delete this;
 }
 
 #include "kspread_dlg_cons.moc"
