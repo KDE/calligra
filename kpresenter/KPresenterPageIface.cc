@@ -50,6 +50,8 @@ int KPresenterPageIface::numTextObject() const
 
 DCOPRef KPresenterPageIface::object( int num )
 {
+     if( num >= m_page->objNums())
+         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
 		    m_page->getObject(num)->dcopObject()->objId() );
 }
