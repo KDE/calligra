@@ -534,7 +534,7 @@ from the menubar.</para>
 <para>A complete explanation to all these properties, is beyond the scope of this document.</para></listitem>
 <listitem><para>Click <guibutton>OK</guibutton>.</para></listitem>
 </orderedlist>
-<para>Your PDF file will be created and seved at the location specified in <guilabel>Output file</guilabel>.  This file can be uploaded
+<para>Your PDF file will be created and saved at the location specified in <guilabel>Output file</guilabel>.  This file can be uploaded
 onto any website.</para>
 <para>For more information on printing in &kde;, visit <ulink url="http://printing.kde.org">The KDE Print webpage</ulink>.</para>
 <para>For more information on <literal role="extension">.pdf</literal> files, visit 
