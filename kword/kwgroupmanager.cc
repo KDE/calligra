@@ -553,7 +553,8 @@ void KWGroupManager::drawAllRects( QPainter &p, int xOffset, int yOffset )
 
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
         frame = cells.at( i )->frameSet->getFrame( 0 );
-        p.drawRect( frame->x() - xOffset, frame->y() - yOffset, frame->width(), frame->height() );
+        QRect tmpRect(frame->x() - xOffset,  frame->y() - yOffset, frame->width(), frame->height());
+        p.drawRect( doc->zoomRect(tmpRect) );
     }
 }
 
