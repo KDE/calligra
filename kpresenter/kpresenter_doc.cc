@@ -2825,7 +2825,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
     float fakt = 1;
     if ( kppixmapobject->getSize().width() > s.width() )
 	fakt = (float)s.width() / (float)kppixmapobject->getSize().width();
-    if ( kppixmapobject->getSize().height() > s.height() ) 
+    if ( kppixmapobject->getSize().height() > s.height() )
 	fakt = QMIN( fakt, (float)s.height() / (float)kppixmapobject->getSize().height() );
 
     if ( fakt < 1 ) {
@@ -2834,7 +2834,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
 	kppixmapobject->setSize( w, h );
 	repaint( FALSE );
     }
-    
+
     setModified(true);
 }
 
@@ -3229,6 +3229,11 @@ void KPresenterDoc::deletePage( int _page, DelPageMode _delPageMode )
 	}
     }
 
+    for ( kpobject = objectList()->first(); kpobject; kpobject = objectList()->next() ) {
+	if ( kpobject->getType() == OT_TEXT )
+	    ( (KPTextObject*)kpobject )->recalcPageNum( this );
+    }
+    
     _backgroundList.remove( _page );
     repaint( false );
 }

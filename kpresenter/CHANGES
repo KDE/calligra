@@ -597,3 +597,7 @@ Reggie 12.12.1999:
 - Added to rmb menu of pixmaps a point so that you can say: Scale pixmap
   so that it is shown 1:1 in presentation mode when the presentation is done in
   AxB resolution where you can choose A and B
+
+Reggie, 21.12.1999:
+---------------
+- When deleting a page recalc page numbers in textobjs correctly
