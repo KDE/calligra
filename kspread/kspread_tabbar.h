@@ -29,6 +29,9 @@
 #include <qpainter.h>
 #include <qstrlist.h>
 
+class KSpreadSheet;
+class KSpreadView;
+
 namespace KSpread
 {
 

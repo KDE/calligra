@@ -22,22 +22,21 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kspread_tabbar.h"
+
+#include "kspread_canvas.h"
+#include "kspread_doc.h"
+#include "kspread_map.h"
+#include "kspread_undo.h"
+#include "kspread_view.h"
+
 #include <qtimer.h>
 #include <qdrawutil.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-
+#include <kdebug.h>
+#include <klineeditdlg.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
-#include <klineeditdlg.h>
-#include "kspread_canvas.h"
-#include "kspread_doc.h"
-#include "kspread_tabbar.h"
-#include "kspread_map.h"
-#include "kspread_undo.h"
-#include <kdebug.h>
-
 
 namespace KSpread
 {
