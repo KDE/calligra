@@ -1353,8 +1353,130 @@ QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles )
 
 QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles )
 {
-    //todo
-    return "";
+    KoGenStyle gradientStyle( KPresenterDoc::STYLE_GRADIENT /*no family name*/);
+    gradientStyle.addAttribute( "draw:start-color", gColor1.name() );
+    gradientStyle.addAttribute( "draw:end-color", gColor2.name() );
+    if ( unbalanced )
+    {
+    }
+    else
+    {
+    }
+    switch( gType )
+    {
+    case BCT_PLAIN:
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        break;
+    case BCT_GHORZ:
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        break;
+    case BCT_GVERT:
+        gradientStyle.addAttribute( "draw:angle", 900 );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        break;
+    case BCT_GDIAGONAL1:
+        gradientStyle.addAttribute( "draw:angle", 450 );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        break;
+    case BCT_GDIAGONAL2:
+        gradientStyle.addAttribute( "draw:angle", 135 );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        break;
+    case BCT_GCIRCLE:
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", "radial" );
+        break;
+    case BCT_GRECT:
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", "square" );
+        break;
+    case BCT_GPIPECROSS:
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", "axial" );
+        break;
+    case BCT_GPYRAMID: //todo fixme ! it doesn't work !
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", 0 );
+        break;
+    }
+#if 0
+    if ( draw )
+    {
+        if ( type == "linear" )
+        {
+            int angle = draw->attribute( "draw:angle" ).toInt() / 10;
+
+            // make sure the angle is between 0 and 359
+            angle = abs( angle );
+            angle -= ( (int) ( angle / 360 ) ) * 360;
+
+            // What we are trying to do here is to find out if the given
+            // angle belongs to a horizontal, vertical or diagonal gradient.
+            int lower, upper, nearAngle = 0;
+            for ( lower = 0, upper = 45; upper < 360; lower += 45, upper += 45 )
+            {
+                if ( upper >= angle )
+                {
+                    int distanceToUpper = abs( angle - upper );
+                    int distanceToLower = abs( angle - lower );
+                    nearAngle = distanceToUpper > distanceToLower ? lower : upper;
+                    break;
+                }
+            }
+            // nearAngle should now be one of: 0, 45, 90, 135, 180...
+            if ( nearAngle == 0 || nearAngle == 180 )
+                gType = BCT_GHORZ; // horizontal
+            else if ( nearAngle == 90 || nearAngle == 270 )
+                gType = BCT_GVERT; // vertical
+            else if ( nearAngle == 45 || nearAngle == 225 )
+                gType = BCT_GDIAGONAL1; // diagonal 1
+            else if ( nearAngle == 135 || nearAngle == 315 )
+                gType = BCT_GDIAGONAL2; // diagonal 2
+        }
+        else if ( type == "radial" || type == "ellipsoid" )
+            gType = BCT_GCIRCLE; // circle
+        else if ( type == "square" || type == "rectangular" )
+            gType = BCT_GRECT; // rectangle
+        else if ( type == "axial" )
+            gType = BCT_GPIPECROSS; // pipecross
+        else //safe
+            gType = BCT_PLAIN; // plain
+
+        // Hard to map between x- and y-center settings of ooimpress
+        // and (un-)balanced settings of kpresenter. Let's try it.
+        int x, y;
+        if ( draw->hasAttribute( "draw:cx" ) )
+            x = draw->attribute( "draw:cx" ).remove( '%' ).toInt();
+        else
+            x = 50;
+
+        if ( draw->hasAttribute( "draw:cy" ) )
+            y = draw->attribute( "draw:cy" ).remove( '%' ).toInt();
+        else
+            y = 50;
+
+        if ( x == 50 && y == 50 )
+        {
+            unbalanced =  0;
+            xfactor =  100;
+            yfactor= 100;
+        }
+        else
+        {
+            unbalanced =  1;
+            // map 0 - 100% to -200 - 200
+            xfactor = ( 4 * x - 200 );
+            yfactor = ( 4 * y - 200 );
+        }
+    }
+    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
+    setBrush( tmpBrush );
+    setFillType(FT_GRADIENT );
+
+#endif
+    return mainStyles.lookup( gradientStyle, "gradient" );
 }
 
 
