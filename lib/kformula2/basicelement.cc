@@ -23,15 +23,18 @@
 #include "formulacursor.h"
 #include "sequenceelement.h"
 
+int BasicElement::evilDestructionCount = 0;
 
 BasicElement::BasicElement(BasicElement* p)
     : parent(p)
 {
     relativeSize = -1;
+    evilDestructionCount++;
 }
 
 BasicElement::~BasicElement()
 {
+    evilDestructionCount--;
 }
 
 ostream& BasicElement::output(ostream& stream)

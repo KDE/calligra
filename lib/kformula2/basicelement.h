@@ -216,7 +216,7 @@ public:
      * Sets the cursor to select the child. The mark is placed before,
      * the position behind it.
      */
-    //virtual void selectChild(FormulaCursor* cursor, BasicElement* child) {}
+    virtual void selectChild(FormulaCursor* cursor, BasicElement* child) {}
 
     /**
      * Moves the cursor inside the main child.
@@ -254,6 +254,7 @@ public:
 
     // debug
     virtual ostream& output(ostream&);
+    static int getEvilDestructionCount() { return evilDestructionCount; }
     
 protected:
 
@@ -291,6 +292,13 @@ private:
      * Our size relative to those of our parent.
      */
     int relativeSize;
+
+    // debug
+    static int evilDestructionCount;
+
+    // copying not allowed.
+    BasicElement(BasicElement&) {}
+    BasicElement& operator= (BasicElement&) { return *this; }
 };
 
 #endif // __BASICELEMENT_H

@@ -184,17 +184,39 @@ void FormulaCursor::insert(BasicElement* child, BasicElement::Direction directio
     insert(list, direction);
 }
 
-void FormulaCursor::insert(QList<BasicElement>& children, BasicElement::Direction direction)
+void FormulaCursor::insert(QList<BasicElement>& children,
+                           BasicElement::Direction direction)
 {
     BasicElement* element = getElement();
     element->insert(this, children, direction);
 }
 
+
+/**
+ * Removes the current selected children and returns them.
+ * The cursor needs to be normal (that is be inside a SequenceElement)
+ * for this to have any effect.
+ */
 void FormulaCursor::remove(QList<BasicElement>& children,
                            BasicElement::Direction direction)
 {
-    BasicElement* element = getElement();
-    element->remove(this, children, direction);
+    SequenceElement* sequence = getNormal();
+    if (sequence != 0) {
+
+        // If there is no child to remove in the sequence
+        // remove the sequence instead.
+        if (sequence->countChildren() == 0) {
+            BasicElement* parent = sequence->getParent();
+            if (parent != 0) {
+                parent->selectChild(this, sequence);
+                parent->remove(this, children, direction);
+                return;
+            }
+        }
+        else {
+            sequence->remove(this, children, direction);
+        }
+    }
 }
 
 
@@ -206,7 +228,9 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
                                          BasicElement::Direction direction)
 {
     QList<BasicElement> list;
-    remove(list, direction);
+    //remove(list, direction);
+    getElement()->remove(this, list, direction);
+    
     insert(element, direction);
     SequenceElement* mainChild = element->getMainChild();
     if (mainChild != 0) {
@@ -233,7 +257,7 @@ BasicElement* FormulaCursor::replaceByMainChildContent(BasicElement::Direction d
     QList<BasicElement> list;
     BasicElement* element = getElement();
     SequenceElement* mainChild = element->getMainChild();
-    if (mainChild != 0) {
+    if ((mainChild != 0) && (mainChild->countChildren() > 0)) {
         mainChild->selectAllChildren(this);
         remove(childrenList);
     }
@@ -305,4 +329,31 @@ IndexElement* FormulaCursor::getActiveIndexElement()
         }
         return element;
     }
+}
+
+
+/**
+ * The element is going to leave the formula with and all its children.
+ */
+void FormulaCursor::elementWillVanish(BasicElement* element)
+{
+    BasicElement* child = getElement();
+    while (child != 0) {
+        if (child == element) {
+            // This is meant to catch all cursors that did not
+            // cause the deletion.
+            child->getParent()->moveLeft(this, child);
+            return;
+        }
+        child = child->getParent();
+    }
+}
+
+
+/**
+ * Returns the sequence the cursor is in if we are normal. If not returns 0.
+ */
+SequenceElement* FormulaCursor::getNormal()
+{
+    return dynamic_cast<SequenceElement*>(current);
 }

@@ -22,11 +22,13 @@
 #include <qevent.h>
 #include <qstring.h>
 
+#include "bracketelement.h"
 #include "contextstyle.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "indexelement.h"
 #include "kformulacontainer.h"
+#include "operatorelement.h"
 #include "sequenceelement.h"
 #include "textelement.h"
 
@@ -46,6 +48,8 @@ KFormulaContainer::~KFormulaContainer()
 FormulaCursor* KFormulaContainer::createCursor()
 {
     FormulaCursor* cursor = new FormulaCursor(&rootElement);
+    connect(this, SIGNAL(elementWillVanish(BasicElement*)),
+            cursor, SLOT(elementWillVanish(BasicElement*)));
     return cursor;
 }
 
@@ -61,6 +65,7 @@ void KFormulaContainer::destroyCursor(FormulaCursor* cursor)
  */
 void KFormulaContainer::elementRemoval(BasicElement* child)
 {
+    emit elementWillVanish(child);
 }
 
 /**
@@ -91,10 +96,25 @@ void KFormulaContainer::keyPressEvent(FormulaCursor* cursor, QKeyEvent* event)
         int latin1 = ch.latin1();
         switch (latin1) {
         case '(':
+            addBracket(cursor, '(', ')');
+            break;
         case '[':
+            addBracket(cursor, '[', ']');
+            break;
         case '{':
+            break;
         case '|':
+            addBracket(cursor, '|', '|');
+            break;
         case '/':
+            break;
+        case '+':
+        case '-':
+        case '*':
+        case '=':
+        case '<':
+        case '>':
+            addOperator(cursor, ch);
             break;
         case '^':
             addUpperRightIndex(cursor);
@@ -149,6 +169,28 @@ void KFormulaContainer::addText(FormulaCursor* cursor, QChar ch)
     list.append(new TextElement(ch));
     cursor->insert(list);
     cursor->setSelection(false);
+}
+
+void KFormulaContainer::addOperator(FormulaCursor* cursor, QChar ch)
+{
+    QList<BasicElement> list;
+    list.setAutoDelete(true);
+    list.append(new OperatorElement(ch));
+    cursor->insert(list);
+    cursor->setSelection(false);
+}
+
+void KFormulaContainer::addBracket(FormulaCursor* cursor, char left, char right)
+{
+    BracketElement* bracket = new BracketElement(left, right);
+    if (cursor->isSelection()) {
+        cursor->replaceSelectionWith(bracket);
+    }
+    else {
+        cursor->insert(bracket);
+        //cursor->setSelection(false);
+    }
+    cursor->goInsideElement(bracket);
 }
 
 void KFormulaContainer::addLowerRightIndex(FormulaCursor* cursor)

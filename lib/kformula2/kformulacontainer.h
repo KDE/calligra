@@ -82,17 +82,25 @@ signals:
      */
     void formulaChanged();
 
+    /**
+     * The element is going to leave the formula with and all its children.
+     */
+    void elementWillVanish(BasicElement* element);
+
     
-private:
+public slots:    
 
     // There a lot of thing we can do with the formula.
     
     void addText(FormulaCursor* cursor, QChar ch);
+    void addOperator(FormulaCursor* cursor, QChar ch);
+    void addBracket(FormulaCursor* cursor, char left, char right);
     void addLowerRightIndex(FormulaCursor* cursor);
     void addUpperRightIndex(FormulaCursor* cursor);
 
     void removeSelection(FormulaCursor* cursor, BasicElement::Direction);
 
+private:
     
     /**
      * Emits a formulaChanged signal if we are dirty.

@@ -159,6 +159,12 @@ public:
     virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
 
     /**
+     * Sets the cursor to select the child. The mark is placed before,
+     * the position behind it.
+     */
+    virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
+
+    /**
      * Returns wether the element has no more useful
      * children (except its main child) and should therefore
      * be replaced by its main child's content.
@@ -197,6 +203,14 @@ public:
 
 private:
 
+    /**
+     * Sets the cursor to point to the place where the content is.
+     * There always is a content so this is not a useful place.
+     * No insertion or removal will succeed as long as the cursor is
+     * there.
+     */
+    void setToContent(FormulaCursor* cursor);
+    
     /**
      * Our main child. This is guaranteed not to be null.
      */

@@ -499,6 +499,7 @@ void IndexElement::setMainChild(SequenceElement* child)
 {
     formula()->elementRemoval(content);
     content = child;
+    content->setParent(this);
     formula()->changed();
 }
 
@@ -564,32 +565,39 @@ void IndexElement::remove(FormulaCursor* cursor,
                           QList<BasicElement>& removedChildren,
                           Direction direction)
 {
-    BasicElement* index = cursor->getElement();
-    if (index == upperLeft) {
+    int pos = cursor->getPos();
+    switch (pos) {
+    case upperLeftPos:
         removedChildren.append(upperLeft);
         formula()->elementRemoval(upperLeft);
         upperLeft = 0;
         setToUpperLeft(cursor);
-    }
-    else if (index == lowerLeft) {
+        break;
+    case lowerLeftPos:
         removedChildren.append(lowerLeft);
         formula()->elementRemoval(lowerLeft);
         lowerLeft = 0;
         setToLowerLeft(cursor);
+        break;
+    case contentPos: {
+        BasicElement* parent = getParent();
+        parent->selectChild(cursor, this);
+        parent->remove(cursor, removedChildren, direction);
+        break;
     }
-    else if (index == upperRight) {
+    case upperRightPos:
         removedChildren.append(upperRight);
         formula()->elementRemoval(upperRight);
         upperRight = 0;
         setToUpperRight(cursor);
-    }
-    else if (index == lowerRight) {
+        break;
+    case lowerRightPos:
         removedChildren.append(lowerRight);
         formula()->elementRemoval(lowerRight);
         lowerRight = 0;
         setToLowerRight(cursor);
+        break;
     }
-
     formula()->changed();
 }
 
@@ -647,6 +655,30 @@ BasicElement* IndexElement::getChild(FormulaCursor* cursor, Direction direction)
 }
 
 
+/**
+ * Sets the cursor to select the child. The mark is placed before,
+ * the position behind it.
+ */
+void IndexElement::selectChild(FormulaCursor* cursor, BasicElement* child)
+{
+    if (child == content) {
+        setToContent(cursor);
+    }
+    else if (child == upperLeft) {
+        setToUpperLeft(cursor);
+    }
+    else if (child == lowerLeft) {
+        setToLowerLeft(cursor);
+    }
+    else if (child == upperRight) {
+        setToUpperRight(cursor);
+    }
+    else if (child == lowerRight) {
+        setToLowerRight(cursor);
+    }
+}
+
+
 // SequenceElement* IndexElement::requireUpperLeft()
 // {
 //     if (!hasUpperLeft()) {
@@ -679,6 +711,17 @@ BasicElement* IndexElement::getChild(FormulaCursor* cursor, Direction direction)
 //     return lowerRight;
 // }
 
+
+/**
+ * Sets the cursor to point to the place where the content is.
+ * There always is a content so this is not a useful place.
+ * No insertion or removal will succeed as long as the cursor is
+ * there.
+ */
+void IndexElement::setToContent(FormulaCursor* cursor)
+{
+    cursor->setTo(this, contentPos);
+}
 
 // point the cursor to a gap where an index is to be inserted.
 // this makes no sense if there is such an index already.

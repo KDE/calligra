@@ -18,48 +18,38 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpainter.h>
+#include <qfontmetrics.h>
+#include <qpoint.h>
 
-#include "formulacursor.h"
-#include "kformulacontainer.h"
-#include "kformulawidget.h"
+#include "operatorelement.h"
 
 
-KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
-    : QWidget(parent, name, f), document(doc)
+OperatorElement::OperatorElement(QChar ch)
+    : TextElement(ch)
 {
-    cursor = document->createCursor();
-
-    connect(document, SIGNAL(formulaChanged()), this, SLOT(formulaChanged()));
-}
-
-KFormulaWidget::~KFormulaWidget()
-{
-    document->destroyCursor(cursor);
 }
 
 
-void KFormulaWidget::paintEvent(QPaintEvent* event)
+/**
+ * Calculates our width and height and
+ * our children's parentPosition.
+ */
+void OperatorElement::calcSizes(ContextStyle& context, int parentSize)
 {
-    QPainter painter;
-    painter.begin(this);
-    document->draw(painter);
-    cursor->draw(painter);
-    painter.end();
+    TextElement::calcSizes(context, parentSize);
+    QFontMetrics fm(context.getDefaultFont());
+    spaceWidth = fm.width(' ');
+    setWidth(getWidth()+spaceWidth);
 }
 
-void KFormulaWidget::keyPressEvent(QKeyEvent* event)
+/**
+ * Draws the whole element including its children.
+ * The `parentOrigin' is the point this element's parent starts.
+ * We can use our parentPosition to get our own origin then.
+ */
+void OperatorElement::draw(QPainter& painter, ContextStyle& context, int parentSize, const QPoint& parentOrigin)
 {
-    QPainter painter;
-    painter.begin(this);
-    cursor->draw(painter);
-    document->keyPressEvent(cursor, event);
-    cursor->draw(painter);
-    painter.end();
+    TextElement::draw(painter, context, parentSize,
+                      QPoint(parentOrigin.x()+spaceWidth/2, parentOrigin.y()));
 }
 
-
-void KFormulaWidget::formulaChanged()
-{
-    update();
-}

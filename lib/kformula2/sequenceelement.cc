@@ -130,12 +130,13 @@ void SequenceElement::draw(QPainter& painter, ContextStyle& context,
             child->draw(painter, context, mySize, myPos);
 
             // Debug
-            painter.setPen(Qt::green);
-            painter.drawRect(parentOrigin.x() + getX(), parentOrigin.y() + getY(),
-                             getWidth(), getHeight());
+            //painter.setPen(Qt::green);
+            //painter.drawRect(parentOrigin.x() + getX(), parentOrigin.y() + getY(),
+            //                 getWidth(), getHeight());
         }
     }
     else {
+        painter.setBrush(Qt::NoBrush);
         painter.setPen(Qt::blue);
         painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
     }
@@ -429,15 +430,6 @@ void SequenceElement::remove(FormulaCursor* cursor,
                              QList<BasicElement>& removedChildren,
                              Direction direction)
 {
-    // If there is no child to remove the sequence
-    // itself is asked to vanish.
-    if (children.count() == 0) {
-        if (getParent() != 0) {
-            getParent()->remove(cursor, removedChildren, direction);
-            return;
-        }
-    }
-    
     if (cursor->isSelection()) {
         int from = cursor->getSelectionStart();
         int to = cursor->getSelectionEnd();
@@ -479,11 +471,15 @@ void SequenceElement::removeChild(QList<BasicElement>& removedChildren, int pos)
 }
 
 
-// void SequenceElement::replaceElementByMainChild(FormulaCursor* cursor,
-//                                                 BasicElement* child)
-// {
-//     // How to undo this?
-// }
+/**
+ * Moves the cursor to a normal place where new elements
+ * might be inserted.
+ */
+void SequenceElement::normalize(FormulaCursor* cursor, Direction direction)
+{
+    cursor->setSelection(false);
+}
+
 
 /**
  * Returns the child at the cursor.
@@ -505,6 +501,20 @@ BasicElement* SequenceElement::getChild(FormulaCursor* cursor, Direction directi
     }
     return 0;
 }
+
+
+/**
+ * Sets the cursor to select the child. The mark is placed before,
+ * the position behind it.
+ */
+void SequenceElement::selectChild(FormulaCursor* cursor, BasicElement* child)
+{
+    int pos = children.find(child);
+    if (pos > -1) {
+        cursor->setTo(this, pos+1, pos);
+    }
+}
+
 
 /**
  * Selects all children. The cursor is put behind, the mark before them.

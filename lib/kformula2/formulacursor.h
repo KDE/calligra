@@ -21,6 +21,8 @@
 #ifndef __FORMULACURSOR_H
 #define __FORMULACURSOR_H
 
+#include <qobject.h>
+
 #include "basicelement.h"
 
 class FormulaElement;
@@ -38,8 +40,9 @@ class QKeyEvent;
  * Note that it is up to the elements to actually move the cursor.
  * (The cursor has no chance to know how.)
  */
-class FormulaCursor {
-    friend class SequenceElement;
+class FormulaCursor : public QObject {
+
+    Q_OBJECT
     
 public:
 
@@ -114,6 +117,8 @@ public:
 
     /**
      * Removes the current selected children and returns them.
+     * The cursor needs to be normal (that is be inside a SequenceElement)
+     * for this to have any effect.
      */
     void remove(QList<BasicElement>&,
                 BasicElement::Direction = BasicElement::beforeCursor);
@@ -159,6 +164,9 @@ public:
      */
     void setTo(BasicElement* element, int cursor, int mark=-1);
 
+    void setPos(int pos);
+    void setMark(int mark);
+
 
     /**
      * The element we are in. In most cases this is a SequenceElement.
@@ -170,15 +178,6 @@ public:
      * removal.
      */
     BasicElement* getElement() { return current; }
-
-    /**
-     * Returns the child the cursor points to. Depending on the
-     * direction this might be the child before or after the
-     * cursor.
-     *
-     * Might be 0 is there is no such child.
-     */
-    BasicElement* getActiveChild(BasicElement::Direction direction);
 
     
     /**
@@ -195,8 +194,31 @@ public:
      * if there is non.
      */
     IndexElement* getActiveIndexElement();
+
+    
+public slots:
+
+    /**
+     * The element is going to leave the formula with and all its children.
+     */
+    void elementWillVanish(BasicElement* element);
+
     
 private:
+
+    /**
+     * Returns the sequence the cursor is in if we are normal. If not returns 0.
+     */
+    SequenceElement* getNormal();
+    
+    /**
+     * Returns the child the cursor points to. Depending on the
+     * direction this might be the child before or after the
+     * cursor.
+     *
+     * Might be 0 is there is no such child.
+     */
+    BasicElement* getActiveChild(BasicElement::Direction direction);
 
     /**
      * Returns wether we are inside the current sequence's parent
@@ -205,9 +227,6 @@ private:
     //bool isInsideParent() const { return current->isEmpty() &&
     //                                  (current->getParent() != 0); }
     
-    void setPos(int pos);
-    void setMark(int mark);
-
     /**
      * Sets the selection according to the shift key.
      */

@@ -18,48 +18,39 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpainter.h>
+#ifndef __OPERATORELEMENT_H
+#define __OPERATORELEMENT_H
 
-#include "formulacursor.h"
-#include "kformulacontainer.h"
-#include "kformulawidget.h"
-
-
-KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
-    : QWidget(parent, name, f), document(doc)
-{
-    cursor = document->createCursor();
-
-    connect(document, SIGNAL(formulaChanged()), this, SLOT(formulaChanged()));
-}
-
-KFormulaWidget::~KFormulaWidget()
-{
-    document->destroyCursor(cursor);
-}
+#include "textelement.h"
 
 
-void KFormulaWidget::paintEvent(QPaintEvent* event)
-{
-    QPainter painter;
-    painter.begin(this);
-    document->draw(painter);
-    cursor->draw(painter);
-    painter.end();
-}
+/**
+ * An textelement that has spaces before and after the char.
+ */
+class OperatorElement : public TextElement {
+public:
+    OperatorElement(QChar ch);
 
-void KFormulaWidget::keyPressEvent(QKeyEvent* event)
-{
-    QPainter painter;
-    painter.begin(this);
-    cursor->draw(painter);
-    document->keyPressEvent(cursor, event);
-    cursor->draw(painter);
-    painter.end();
-}
+    /**
+     * Calculates our width and height and
+     * our children's parentPosition.
+     */
+    virtual void calcSizes(ContextStyle& context, int parentSize);
+
+    /**
+     * Draws the whole element including its children.
+     * The `parentOrigin' is the point this element's parent starts.
+     * We can use our parentPosition to get our own origin then.
+     */
+    virtual void draw(QPainter& painter, ContextStyle& context, int parentSize, const QPoint& parentOrigin);
+
+private:
+
+    /**
+     * The width that is added to the TextElement's width.
+     */
+    int spaceWidth;
+};
 
 
-void KFormulaWidget::formulaChanged()
-{
-    update();
-}
+#endif // __OPERATORELEMENT_H

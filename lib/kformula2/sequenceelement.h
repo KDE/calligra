@@ -152,16 +152,22 @@ public:
     virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction);
 
     /**
-     * If an element is not needed anymore it requests to be
-     * replaced.
+     * Moves the cursor to a normal place where new elements
+     * might be inserted.
      */
-    //void replaceElementByMainChild(FormulaCursor* cursor, BasicElement* child);
-
+    virtual void normalize(FormulaCursor*, Direction);
+    
     /**
      * Returns the child at the cursor.
      * Does not care about the selection.
      */
     virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
+
+    /**
+     * Sets the cursor to select the child. The mark is placed before,
+     * the position behind it.
+     */
+    virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
     /**
      * Returns the number of children we have.
