@@ -988,21 +988,17 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
   }
 
+  double dwidth = doc()->unzoomItX( width() );
   double ev_PosX;
   if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
-    ev_PosX = doc()->unzoomItX( _ev->pos().x() ) - xOffset();
+    ev_PosX = dwidth - doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   else
     ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
-  double dwidth = doc()->unzoomItX( width() );
 
   double xpos;
   double ypos;
-  int col;
-  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
-    col = table->leftColumn( dwidth - ev_PosX, xpos );
-  else
-    col = table->leftColumn( ev_PosX, xpos );
+  int col = table->leftColumn( ev_PosX, xpos );
   int row  = table->topRow( ev_PosY, ypos );
 
   if ( col > KS_colMax || row > KS_rowMax )
@@ -1035,7 +1031,12 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   // Test whether the mouse is over some anchor
   {
     KSpreadCell *cell = table->visibleCellAt( col, row );
-    QString anchor = cell->testAnchor( doc()->zoomItX( ev_PosX - xpos ),
+    QString anchor;
+    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+      anchor = cell->testAnchor( doc()->zoomItX( cell->dblWidth() - ev_PosX +
+                               xpos ), doc()->zoomItY( ev_PosY - ypos ) );    
+    else
+      anchor = cell->testAnchor( doc()->zoomItX( ev_PosX - xpos ),
                                        doc()->zoomItY( ev_PosY - ypos ) );
     if ( !anchor.isEmpty() && anchor != m_strAnchor )
       setCursor( KCursor::handCursor() );
@@ -1048,14 +1049,16 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   {
     //If the cursor is over the hanlde, than it might be already on the next cell.
     //Recalculate the cell!
-    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
-      col = table->leftColumn( dwidth - ev_PosX - doc()->unzoomItX( 2 ), xpos );
-    else
-      col  = table->leftColumn( ev_PosX - doc()->unzoomItX( 2 ), xpos );
+    col  = table->leftColumn( ev_PosX - doc()->unzoomItX( 2 ), xpos );
     row  = table->topRow( ev_PosY - doc()->unzoomItY( 2 ), ypos );
 
     if ( !table->isProtected() )
-      setCursor( sizeFDiagCursor );
+    {
+      if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+        setCursor( sizeBDiagCursor );
+      else
+        setCursor( sizeFDiagCursor );
+    }
   }
   else if ( !m_strAnchor.isEmpty() )
   {
@@ -5598,8 +5601,16 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
 
     // Over which cell is the mouse ?
     double ypos, xpos;
-    int col = table->leftColumn( (m_canvas->doc()->unzoomItX( p.x() ) +
-                                       m_canvas->xOffset()), xpos );
+    double dwidth = m_canvas->doc()->unzoomItX( m_canvas->width() );
+    int col;
+    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+      col = table->leftColumn( (dwidth - m_canvas->doc()->unzoomItX( p.x() ) +
+                                              m_canvas->xOffset()), xpos );
+    else
+      col = table->leftColumn( (m_canvas->doc()->unzoomItX( p.x() ) +
+                                     m_canvas->xOffset()), xpos );
+
+
     int row = table->topRow( (m_canvas->doc()->unzoomItY( p.y() ) +
                                    m_canvas->yOffset()), ypos );
 
@@ -5649,15 +5660,31 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     }
 
     // Get the cell dimensions
-    KoRect unzoomedMarker( xpos - m_canvas->xOffset(),
-                           ypos - m_canvas->yOffset(),
-                           u,
-                           v );
-    QRect marker( m_canvas->doc()->zoomRect( unzoomedMarker ) );
-
-    if ( marker.contains( p ) )
+    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
     {
-        tip( marker, comment );
+      KoRect unzoomedMarker( dwidth - u - xpos + m_canvas->xOffset(),
+                             ypos - m_canvas->yOffset(),
+                             u,
+                             v );
+
+      QRect marker( m_canvas->doc()->zoomRect( unzoomedMarker ) );
+      if ( marker.contains( p ) )
+      {
+          tip( marker, comment );
+      }
+    }
+    else
+    {
+      KoRect unzoomedMarker( xpos - m_canvas->xOffset(),
+                             ypos - m_canvas->yOffset(),
+                             u,
+                             v );
+
+      QRect marker( m_canvas->doc()->zoomRect( unzoomedMarker ) );
+      if ( marker.contains( p ) )
+      {
+          tip( marker, comment );
+      }
     }
 }
 
