@@ -212,10 +212,12 @@ void KChartView::wizard()
     KChartWizard *wiz =
 	new KChartWizard((KChartPart*)koDocument(), this, "KChart Wizard", true);
     kdDebug(35001) << "Executed. Now, display it" << endl;
-    wiz->exec();
-    repaint();
-    updateGuiTypeOfChart();
-    kdDebug(35001) << "Ok, executed..." << endl;
+    if(wiz->exec())
+    {
+        repaint();
+        updateGuiTypeOfChart();
+        kdDebug(35001) << "Ok, executed..." << endl;
+    }
 }
 
 void KChartView::updateGuiTypeOfChart()
