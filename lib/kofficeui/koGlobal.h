@@ -198,12 +198,12 @@ struct KoKWHeaderFooter
 // 1 inch ^= 25.399956 mm (-pedantic ;p)
 // Note: I don't use division but multiplication with the inverse value
 // because it's faster ;p (Werner)
-#define POINT_TO_MM(px) (px*0.352777167)
-#define MM_TO_POINT(mm) (mm*2.83465058)
-#define POINT_TO_INCH(px) (px*0.01388888888889)
-#define INCH_TO_POINT(inch) (inch*72.0)
-#define MM_TO_INCH(mm) (mm*0.039370147)
-#define INCH_TO_MM(inch) (inch*25.399956)
+#define POINT_TO_MM(px) ((px)*0.352777167)
+#define MM_TO_POINT(mm) ((mm)*2.83465058)
+#define POINT_TO_INCH(px) ((px)*0.01388888888889)
+#define INCH_TO_POINT(inch) ((inch)*72.0)
+#define MM_TO_INCH(mm) ((mm)*0.039370147)
+#define INCH_TO_MM(inch) ((inch)*25.399956)
 
 
 #endif // koGlobal
