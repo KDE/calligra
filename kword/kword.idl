@@ -16,7 +16,7 @@ module KWord
       slot void editPaste();
       slot void editSelectAll();
       slot void editFind();
-      
+
       slot void newView();
       slot void viewFormattingChars();
       slot void viewFrameBorders();
@@ -24,11 +24,17 @@ module KWord
       slot void viewHeader();
       slot void viewFooter();
       slot void viewDocStruct();
-      
+
       slot void insertPicture();
       slot void insertClipart();
       slot void insertSpecialChar();
       slot void insertFrameBreak();
+      slot void insertVariableDateFix();
+      slot void insertVariableDateVar();
+      slot void insertVariableTimeFix();
+      slot void insertVariableTimeVar();
+      slot void insertVariablePageNum();
+      slot void insertVariableOther();
       
       slot void formatFont();
       slot void formatColor();
@@ -37,11 +43,11 @@ module KWord
       slot void formatNumbering();
       slot void formatStyle();
       slot void formatFrameSet();
-      
+
       slot void extraSpelling();
       slot void extraStylist();
       slot void extraOptions();
-      
+
       slot void toolsEdit();
       slot void toolsEditFrame();
       slot void toolsCreateText();
@@ -63,7 +69,7 @@ module KWord
       slot void helpAbout();
       slot void helpAboutKOffice();
       slot void helpAboutKDE();
-      
+
       slot void textStyleSelected(in string size);
       slot void textSizeSelected(in string size);
       slot void textFontSelected(in string font);

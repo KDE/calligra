@@ -1115,6 +1115,13 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
       emit sig_insertObject(ch,frameset);
     }
 
+  if (true /*no variable formats were loaded*/)
+    {
+      varFormats.insert(VT_DATE_FIX,new KWVariableDateFormat());
+      varFormats.insert(VT_DATE_VAR,new KWVariableDateFormat());
+      // ... and so on ...
+    }
+      
   return true;
 }
 
@@ -3215,7 +3222,7 @@ void KWordDocument::setFrameMargins(KWUnit l,KWUnit r,KWUnit t,KWUnit b)
 {
   QList<KWGroupManager> grpMgrs;
   grpMgrs.setAutoDelete(false);
-  
+
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
       if (getFrameSet(i)->hasSelectedFrame())
@@ -3315,7 +3322,7 @@ void KWordDocument::slotUndoRedoChanged(QString undo,QString redo)
 void KWordDocument::updateTableHeaders(QList<KWGroupManager> &grpMgrs)
 {
   KWGroupManager *grpMgr;
-  
+
   for (grpMgr = grpMgrs.first();grpMgr != 0;grpMgr = grpMgrs.next())
     grpMgr->updateTempHeaders();
 }

@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -58,6 +58,7 @@ class KWPaintWindow;
 #include "insdia.h"
 #include "deldia.h"
 #include "docstruct.h"
+#include "variable.h"
 
 #include <koPageLayoutDia.h>
 #include <koPartSelectDia.h>
@@ -76,12 +77,12 @@ class KWordFrame : public KoFrame
 
 public:
   KWordFrame(KWordView*,KWordChild*);
-  
-  KWordChild* child() 
+
+  KWordChild* child()
     { return m_pKWordChild; }
-  KWordView* wordView() 
+  KWordView* wordView()
     { return m_pKWordView; }
-  
+
   void setPartObject(KWPartFrameSet *o) { obj = o; }
   KWPartFrameSet *getPartObject() { return obj; }
 
@@ -107,7 +108,7 @@ public:
   KWordView( QWidget *_parent, const char *_name, KWordDocument *_doc );
   virtual ~KWordView();
 
-  // IDL  
+  // IDL
   virtual void editUndo();
   virtual void editRedo();
   virtual void editCut();
@@ -128,7 +129,13 @@ public:
   virtual void insertClipart();
   virtual void insertSpecialChar();
   virtual void insertFrameBreak();
-
+  virtual void insertVariableDateFix();
+  virtual void insertVariableDateVar();
+  virtual void insertVariableTimeFix();
+  virtual void insertVariableTimeVar();
+  virtual void insertVariablePageNum();
+  virtual void insertVariableOther();
+  
   virtual void formatFont();
   virtual void formatColor();
   virtual void formatParagraph();
@@ -252,13 +259,13 @@ protected:
   bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
 
   virtual void cleanUp();
-  
+
   void resizeEvent(QResizeEvent *e);
   void keyPressEvent(QKeyEvent *e);
   void mousePressEvent(QMouseEvent *e);
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
-  
+
   enum PType {TXT_COLOR,FRAME_COLOR,BACK_COLOR};
   QString colorToPixString(QColor,PType _type);
   void getFonts();
@@ -267,7 +274,7 @@ protected:
   KWordDocument *m_pKWordDoc;
 
   bool m_bUnderConstruction;
-  
+
   // edit menu
   OpenPartsUI::Menu_var m_vMenuEdit;
   CORBA::Long m_idMenuEdit_Undo;
@@ -287,14 +294,22 @@ protected:
   CORBA::Long m_idMenuView_Header;
   CORBA::Long m_idMenuView_Footer;
   CORBA::Long m_idMenuView_DocStruct;
- 
+
   // insert menu
   OpenPartsUI::Menu_var m_vMenuInsert;
   CORBA::Long m_idMenuInsert_Picture;
   CORBA::Long m_idMenuInsert_Clipart;
   CORBA::Long m_idMenuInsert_SpecialChar;
   CORBA::Long m_idMenuInsert_FrameBreak;
- 
+  CORBA::Long m_idMenuInsert_Variable;
+  OpenPartsUI::Menu_var m_vMenuInsert_Variable;
+  CORBA::Long m_idMenuInsert_VariableDateFix;
+  CORBA::Long m_idMenuInsert_VariableDateVar;
+  CORBA::Long m_idMenuInsert_VariableTimeFix;
+  CORBA::Long m_idMenuInsert_VariableTimeVar;
+  CORBA::Long m_idMenuInsert_VariablePageNum;
+  CORBA::Long m_idMenuInsert_VariableOther;
+  
   // format menu
   OpenPartsUI::Menu_var m_vMenuFormat;
   CORBA::Long m_idMenuFormat_Font;
@@ -509,7 +524,7 @@ class KWordGUI : public QWidget
 
 public:
   KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView *_view );
-  
+
   KWordDocument *getDocument()
     { return doc; }
 
@@ -532,9 +547,9 @@ public:
     { return r_horz; }
   KoTabChooser *getTabChooser()
     { return tabChooser; }
-  KWDocStruct *getDocStruct() 
+  KWDocStruct *getDocStruct()
     { return docStruct; }
-  
+
   void showDocStruct(bool __show);
 
   void setOffset(int _x,int _y)
@@ -561,7 +576,7 @@ protected:
   int xOffset,yOffset;
   bool _show;
   QScrollBar *s_vert,*s_horz;
-  KoRuler *r_vert,*r_horz; 
+  KoRuler *r_vert,*r_horz;
   KWPage *paperWidget;
   KWordDocument *doc;
   KWordView *view;

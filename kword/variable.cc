@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -16,26 +16,38 @@
 #include "variable.h"
 
 /******************************************************************/
-/* Class: KWVariablePgNumFormat                                   */
+/* Class: KWVariableDateFormat                                    */
 /******************************************************************/
 
 /*================================================================*/
-KWVariablePgNumFormat::KWVariablePgNumFormat()
-  : KWVariableFormat()
+void KWVariableDateFormat::setFormat(QString _format)
 {
+  KWVariableFormat::setFormat(_format);
+}
+  
+/*================================================================*/
+QString KWVariableDateFormat::convert(KWVariable *_var)
+{
+  return QString();
+}
+ 
+/******************************************************************/
+/* Class: KWDateVariable                                          */
+/******************************************************************/
+
+/*================================================================*/
+KWDateVariable::KWDateVariable(KWordDocument *_doc,bool _fix,QDate _date)
+  : KWVariable(_doc), fix(_fix)
+{
+  if (!fix)
+    date = QDate::currentDate();
+  else
+    date = _date;
+  
+  recalc();
 }
 
-/******************************************************************/
-/* Class: KWPgNumVariable                                         */
-/******************************************************************/
-
 /*================================================================*/
-KWPgNumVariable::KWPgNumVariable(KWordDocument *_doc)
-  : KWVariable(_doc), pgNum(0)
-{
-}
-
-/*================================================================*/
-void KWPgNumVariable::recalc()
+void KWDateVariable::recalc()
 {
 }

@@ -782,6 +782,46 @@ void KWordView::insertFrameBreak()
 }
 
 /*===============================================================*/
+void KWordView::insertVariableDateFix()
+{
+  debug("KWordView::insertVariableDateFix()");
+
+  gui->getPaperWidget()->insertVariable(VT_DATE_FIX);
+}
+
+/*===============================================================*/
+void KWordView::insertVariableDateVar()
+{
+  debug("KWordView::insertVariableDateVar()");
+
+  gui->getPaperWidget()->insertVariable(VT_DATE_VAR);
+}
+
+/*===============================================================*/
+void KWordView::insertVariableTimeFix()
+{
+  debug("KWordView::insertVariableTimeFix()");
+}
+
+/*===============================================================*/
+void KWordView::insertVariableTimeVar()
+{
+  debug("KWordView::insertVariableTimeVar()");
+}
+
+/*===============================================================*/
+void KWordView::insertVariablePageNum()
+{
+  debug("KWordView::insertVariablePageNum()");
+}
+
+/*===============================================================*/
+void KWordView::insertVariableOther()
+{
+  debug("KWordView::insertVariableOther()");
+}
+
+/*===============================================================*/
 void KWordView::formatFont()
 {
 }
@@ -1537,6 +1577,18 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuInsert->insertSeparator( -1 );
   m_idMenuInsert_FrameBreak = m_vMenuInsert->insertItem4(i18n("&Hard frame break"),this,"insertFrameBreak", 0, -1, -1 );
 
+  m_vMenuInsert->insertSeparator(-1);
+  
+  m_vMenuInsert->insertItem8( i18n("&Variable"), m_vMenuInsert_Variable, -1, -1 );
+
+  m_idMenuInsert_VariableDateFix = m_vMenuInsert_Variable->insertItem4(i18n("Date (fix)"), this,"insertVariableDateFix", 0, -1, -1 );
+  m_idMenuInsert_VariableDateVar = m_vMenuInsert_Variable->insertItem4(i18n("Date (variable)"), this,"insertVariableDateVar", 0, -1, -1 );
+  m_idMenuInsert_VariableTimeFix = m_vMenuInsert_Variable->insertItem4(i18n("Time (fix)"), this,"insertVariableTimeFix", 0, -1, -1 );
+  m_idMenuInsert_VariableTimeVar = m_vMenuInsert_Variable->insertItem4(i18n("Time (variable)"), this,"insertVariableTimeVar", 0, -1, -1 );
+  m_idMenuInsert_VariablePageNum = m_vMenuInsert_Variable->insertItem4(i18n("Page Number"), this,"insertVariablePageNum", 0, -1, -1 );
+  m_vMenuInsert_Variable->insertSeparator(-1);
+  m_idMenuInsert_VariableOther = m_vMenuInsert_Variable->insertItem4(i18n("Other..."), this,"insertVariableOther", 0, -1, -1 );
+  
   // tools menu
   _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
 

@@ -199,6 +199,8 @@ public:
 
   KWGroupManager *getTable();
 
+  void insertVariable(VariableType type);
+  
 public slots:
   void newLeftIndent(int _left);
   void newFirstIndent(int _first);
@@ -268,7 +270,7 @@ protected:
   bool editModeChanged(QKeyEvent *e);
   void repaintTableHeaders(KWGroupManager *grpMgr);
 
-  
+
   KWordDocument *doc;
   bool markerIsVisible;
   bool paint_directly,has_to_copy;

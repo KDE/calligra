@@ -2292,7 +2292,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    doc->setNeedRedraw(false);
 
 	    painter.begin(dev);
-  
+
 	  }
       } break;
     }
@@ -3582,7 +3582,7 @@ void KWPage::setLeftFrameBorder(KWParagLayout::Border _brd,bool _enable)
   KWFrame *frame = 0L;
   QList<KWGroupManager> grpMgrs;
   grpMgrs.setAutoDelete(false);
-  
+
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
       frameset = doc->getFrameSet(i);
@@ -3698,7 +3698,7 @@ void KWPage::setBottomFrameBorder(KWParagLayout::Border _brd,bool _enable)
 	    }
 	}
     }
-  
+
   doc->updateTableHeaders(grpMgrs);
   doc->updateAllViews(0L);
 }
@@ -3848,7 +3848,7 @@ bool KWPage::editModeChanged(QKeyEvent *e)
 void KWPage::repaintTableHeaders(KWGroupManager *grpMgr)
 {
   QPainter painter;
-    
+
   if (paint_directly)
     painter.begin(this);
   else
@@ -3861,13 +3861,13 @@ void KWPage::repaintTableHeaders(KWGroupManager *grpMgr)
   r = KRect(r.x() - yOffset,r.y() - yOffset,r.width(),r.height());
   painter.setClipRect(r);
   KWTextFrameSet *fs;
-  
+
   KWFormatContext *paintfc = new KWFormatContext(doc,doc->getFrameSetNum(grpMgr->getCell(0)->frameSet) + 1);
   for (unsigned i = 0;i < grpMgr->getNumCells();i++)
     {
       fs = dynamic_cast<KWTextFrameSet*>(grpMgr->getCell(i)->frameSet);
       if (!fs->isRemoveableHeader()) continue;
-      
+
       KWParag *p = 0L;
       p = fs->getFirstParag();
 		
@@ -3892,4 +3892,16 @@ void KWPage::repaintTableHeaders(KWGroupManager *grpMgr)
   painter.end();
 
   drawBuffer(r);
+}
+
+/*================================================================*/
+void KWPage::insertVariable(VariableType type)
+{
+  if (!doc->getVarFormats().find(static_cast<int>(type)))
+    {
+      warning("HUHU... No variable format for type %d available!",static_cast<int>(type));
+      return;
+    }
+  
+  debug("void KWPage::insertVariable(VariableType type) ... successful");
 }

@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -17,10 +17,12 @@
 #define variable_h
 
 #include <qstring.h>
+#include <qdatetime.h>
 
 class KWordDocument;
+class KWVariable;
 
-enum VariableType {VT_DATE = 0,VT_TIME = 1,VT_PGNUM = 2,VT_NUMPAGES = 3,VT_NONE};
+enum VariableType {VT_DATE_FIX = 0,VT_DATE_VAR = 1,VT_TIME_FIX = 2,VT_TIME_VAR = 3,VT_PGNUM = 4,VT_NUMPAGES = 5,VT_NONE};
 enum VariableFormatType {VFT_DATE = 0,VFT_TIME = 1,VFT_PGNUM = 2,VFT_NUMPAGES = 3};
 
 /******************************************************************/
@@ -35,6 +37,14 @@ public:
 
   virtual VariableFormatType getType() = 0;
 
+  virtual void setFormat(QString _format)
+  { format = _format; }
+  
+  virtual QString convert(KWVariable *_var) = 0;
+  
+protected:
+  QString format;
+
 };
 
 /******************************************************************/
@@ -47,8 +57,12 @@ public:
   KWVariableDateFormat() : KWVariableFormat() {}
 
   virtual VariableFormatType getType()
-    { return VFT_DATE; }
+  { return VFT_DATE; }
 
+  virtual void setFormat(QString _format);
+  
+  virtual QString convert(KWVariable *_var);
+  
 };
 
 /******************************************************************/
@@ -58,10 +72,10 @@ public:
 class KWVariablePgNumFormat : public KWVariableFormat
 {
 public:
-  KWVariablePgNumFormat();
+  KWVariablePgNumFormat() {}
 
   virtual VariableFormatType getType()
-    { return VFT_PGNUM; }
+  { return VFT_PGNUM; }
 
 };
 
@@ -76,23 +90,27 @@ public:
   virtual ~KWVariable() {}
 
   virtual VariableType getType()
-    { return VT_NONE; }
+  { return VT_NONE; }
 
-  void setVariableFormat(KWVariableFormat *_varFormat,bool _deleteOld = true)
-    { if (_deleteOld && varFormat) delete varFormat; varFormat = _varFormat; }
+  void setVariableFormat(KWVariableFormat *_varFormat,bool _deleteOld = false)
+  { if (_deleteOld && varFormat) delete varFormat; varFormat = _varFormat; }
   KWVariableFormat *getVariableFormat()
-    { return varFormat; }
+  { return varFormat; }
 
   QString getText()
-    { return text; }
+  { return varFormat->convert(this); }
 
+  virtual void setInfo(int _frameSetNum,int _frameNum,int _pageNum,int _paragNum) 
+  { frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; paragNum = _pageNum; }
+  
   virtual void recalc() {}
 
 protected:
   KWordDocument *doc;
   KWVariableFormat *varFormat;
   QString text;
-
+  int frameSetNum,frameNum,paragNum,pageNum;
+  
 };
 
 /******************************************************************/
@@ -102,15 +120,36 @@ protected:
 class KWPgNumVariable : public KWVariable
 {
 public:
-  KWPgNumVariable(KWordDocument *_doc);
+  KWPgNumVariable(KWordDocument *_doc) : KWVariable(_doc) {}
 
   virtual VariableType getType()
-    { return VT_PGNUM; }
-  virtual void recalc();
+  { return VT_PGNUM; }
+  
+  virtual void recalc() {}
 
 protected:
   long unsigned int pgNum;
 
+};
+
+/******************************************************************/
+/* Class: KWDateVariable                                          */
+/******************************************************************/
+
+class KWDateVariable : public KWVariable
+{
+public:
+  KWDateVariable(KWordDocument *_doc,bool _fixx,QDate _date);
+
+  virtual VariableType getType()
+  { return fix ? VT_DATE_FIX : VT_DATE_VAR; }
+
+  virtual void recalc();
+
+protected:
+  QDate date;
+  bool fix;
+  
 };
 
 #endif

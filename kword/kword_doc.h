@@ -38,6 +38,7 @@ class QPrinter;
 #include "char.h"
 #include "frame.h"
 #include "kword_undo.h"
+#include "variable.h"
 
 #include <qlist.h>
 #include <qobject.h>
@@ -50,6 +51,7 @@ class QPrinter;
 #include <qstrlist.h>
 #include <qmessagebox.h>
 #include <qstrlist.h>
+#include <qintdict.h>
 
 #include <kurl.h>
 
@@ -385,8 +387,10 @@ public:
   void undo();
   void redo();
 
-  void updateTableHeaders(QList<KWGroupManager> &grpMgrs); 
+  void updateTableHeaders(QList<KWGroupManager> &grpMgrs);
 
+  QIntDict<KWVariableFormat> &getVarFormats() { return varFormats; }
+  
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
@@ -486,7 +490,9 @@ protected:
   int numParags;
 
   KWCommandHistory history;
-
+  
+  QIntDict<KWVariableFormat> varFormats;
+  
 };
 
 #endif
