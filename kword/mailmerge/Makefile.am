@@ -18,5 +18,9 @@ if include_sql
 SQLDIRECTORY=sql
 endif
 
-SUBDIRS = . kabc $(SQLDIRECTORY)
+if ! compile_mimetypes_kde31
+KABCDIRECTORY=kabc
+endif
+
+SUBDIRS = . $(KABCDIRECTORY) $(SQLDIRECTORY)
 
