@@ -66,8 +66,8 @@
 VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bool bDrawNodes )
 : VPainter( target, w, h ), m_target( target ), m_bDrawNodes( bDrawNodes )
 {
-	kdDebug() << "w : " << w << endl;
-	kdDebug() << "h : " << h << endl;
+	//kdDebug() << "w : " << w << endl;
+	//kdDebug() << "h : " << h << endl;
 	m_width = w;//( w > 0 ) ? w : target->width();
 	m_height= h;//( h > 0 ) ? h : target->height();
 	m_buffer = 0L;
@@ -90,8 +90,8 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bo
 VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h, bool bDrawNodes )
 : VPainter( 0L, w, h ), m_buffer( buffer ), m_bDrawNodes( bDrawNodes )
 {
-	kdDebug() << "w : " << w << endl;
-	kdDebug() << "h : " << h << endl;
+	//kdDebug() << "w : " << w << endl;
+	//kdDebug() << "h : " << h << endl;
 	m_target = 0L;
 	m_width = w;
 	m_height= h;
@@ -165,10 +165,6 @@ VKoPainter::blit( const KoRect &r )
 	int y		= QMAX( 0, r.y() );
 	int width	= QMIN( int( m_width ),		r.x() + r.width() );
 	int height	= QMIN( int( m_height ),	r.y() + r.height() );
-	/*kdDebug() << "!!!x : " << x << endl;
-	kdDebug() << "!!!y : " << y << endl;
-	kdDebug() << "!!!width : " << width << endl;
-	kdDebug() << "!!!height : " << height << endl;*/
 	xlib_draw_rgb_32_image( m_target->handle(), gc, x, y, width - x, height - y,
 							XLIB_RGB_DITHER_NONE, m_buffer + (x * 4) + (y * m_width * 4), m_width * 4 );
 }
