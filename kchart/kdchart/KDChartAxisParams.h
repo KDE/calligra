@@ -364,7 +364,7 @@ public:
             ret = AxisPosLeft;
             break;
         default: {
-                qDebug( "IMPLEMENTATION ERROR: type missing in KDChartAcisParams::basicAxisPos()" );
+                qDebug( "IMPLEMENTATION ERROR: type missing in KDChartAxisParams::basicAxisPos()" );
                 Q_ASSERT( ret != AxisPos( pos ) );
             }
         }

@@ -11,9 +11,9 @@
 #define __KDFRAMEPROFILESECTION__
 
 #include <qregion.h>
-#include <qptrlist.h>
 #include <qpen.h>
 #include <qdom.h>
+#include "KDChartGlobal.h"
 
 
 /**

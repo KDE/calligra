@@ -12,7 +12,9 @@
 #include <KDChartEnums.h>
 #include <KDFrame.h>
 #include <KDXMLTools.h>
+#ifndef KDCHART_MASTER_CVS
 #include "KDChartParams.moc"
+#endif
 
 class KDChartData;
 

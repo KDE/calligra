@@ -13,7 +13,9 @@
 #include <KDFrame.h>
 #include <KDFrameProfileSection.h>
 #include <KDXMLTools.h>
+#ifndef KDCHART_MASTER_CVS
 #include "KDFrame.moc"
+#endif
 
 // internal note:
 //

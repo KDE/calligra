@@ -42,6 +42,21 @@
 #endif // Q_OS_TEMP
 #endif // QT_NO_COMPAT
 
+#define QPtrList QList
+#define QPtrListIterator QListIterator
+#define QPtrVector QVector
+#define QMemArray QArray
+
+#include <qlist.h>
+#include <qvector.h>
+#include <qarray.h>
+
+#else
+
+#include <qptrlist.h>
+#include <qptrvector.h>
+#include <qmemarray.h>
+
 #endif
 // end of #if QT_VERSION < 300
 

@@ -11,7 +11,6 @@
 #define __KDCHARTDATAREGION__
 
 #include <qregion.h>
-#include <qptrlist.h>
 #include <qpointarray.h>
 
 #include "KDChartGlobal.h"

@@ -8,7 +8,9 @@
 */
 
 #include <KDChartAxisParams.h>
+#ifndef KDCHART_MASTER_CVS
 #include "KDChartAxisParams.moc"
+#endif
 
 const double KDChartAxisParams::AXIS_LABELS_AUTO_DELTA = 140319.64;
 const int KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS = 14364;
