@@ -2,7 +2,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
    This library is free software; you can redistribute it and/or
-   mod*ify it under the terms of the GNU Library General Public
+   modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
 
@@ -631,6 +631,7 @@ void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
 
 void KSpreadDlgFormula::slotselected(const QString &string)
 {
+
     if(functions->currentItem()!=-1)
         selectFunction->setEnabled(true);
     refresh_result=false;
@@ -828,14 +829,17 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
     }
     if(string == i18n("All"))
     {
+        QStringList tmp;
+        tmp+=list_stat;
+        tmp+=list_trig;
+        tmp+=list_anal;
+        tmp+=list_text;
+        tmp+=list_logic;
+        tmp+=list_date_time;
+        tmp+=list_financial;
+        tmp.sort();
         functions->clear();
-        functions->insertStringList(list_stat);
-        functions->insertStringList(list_trig);
-        functions->insertStringList(list_anal);
-        functions->insertStringList(list_text);
-        functions->insertStringList(list_logic);
-        functions->insertStringList(list_date_time);
-        functions->insertStringList(list_financial);
+        functions->insertStringList(tmp);
         listFunct.setItems(list_stat);
         listFunct.insertItems(list_trig);
         listFunct.insertItems(list_anal);

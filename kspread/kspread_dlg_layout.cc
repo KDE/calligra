@@ -2194,7 +2194,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     grid3->addWidget(tmpQLabel,0,0);
 
     size=new QComboBox(true,tmpQGroupBox);
-    grid3->addWidget(size,1,0);
+    grid3->addWidget(size,1,1);
     size->setValidator(new KIntValidator( size ));
     QString tmp;
     for(int i=0;i<10;i++)
@@ -2205,7 +2205,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     size->setCurrentItem(1);
 
     style=new QComboBox(tmpQGroupBox);
-    grid3->addWidget(style,1,1);
+    grid3->addWidget(style,1,0);
     style->insertItem(paintFormatPixmap(DotLine),0 );
     style->insertItem(paintFormatPixmap(DashLine) ,1);
     style->insertItem(paintFormatPixmap(DashDotLine),2 );
