@@ -58,25 +58,34 @@ static KCmdLineOptions options[] =
 {
 	{ "test <test_name>",
 		"Available tests:\n"
-		"cursors: test for cursors behaviour\n"
-  	"schema: test for db schema retrieving\n"
-  	"dbcreation: test for new db creation\n"
-  	"tables: test for tables creation and data inserting\n"
-  	"tableview: test for KexiDataTableView data-aware widget\n"
-		"parser: test for parsing sql statements,\n"
-		" returns debug string for a given\n"
-		" sql statement or error message", 0},
+		" cursors: test for cursors behaviour\n"
+		" schema: test for db schema retrieving\n"
+		" dbcreation: test for new db creation\n"
+		" tables: test for tables creation and data\n"
+		"  inserting\n"
+		" tableview: test for KexiDataTableView data-aware\n"
+		" widget\n"
+		" parser: test for parsing sql statements,\n"
+		"  returns debug string for a given\n"
+		"  sql statement or error message\n"
+		" dr_prop: shows properties of selected driver"
+		, 0},
 	{ "buffered-cursors",
-		"Optional switch :turns cursors used in any tests to be buffered", 0},
+		"Optional switch :turns cursors used in any tests\n"
+		" to be buffered", 0},
 	{ "", " Notes:\n"
-		"All tests require <driver_name>, <db_name>.\n"
-		"Parser test also requires <sql_statement>\n"
-		"'tables' test, automatically runs 'dbcreation' test.\n" 
-		" <new_db_name> is removed if already exists.\n"
-		" <db_name> must be a valid kexi database e.g. created with 'tables' test.", 0},
-  { "+driver_name", "Driver name", 0},
-  { "+[db_name]", "Database name", 0},
-  { "+[statement]", "Optional SQL statement (for parser test)", 0},
+		"1. 'dr_prop' requires <db_name> argument.\n"
+		"2. 'parser' test requires <db_name>,\n"
+		" <driver_name> and <sql_statement> arguments\n"
+		"3. All other tests require <db_name>\n"
+		" and <driver_name> arguments.\n"
+		"4. 'tables' test automatically runs 'dbcreation'\n"
+		" test. (<new_db_name> is removed if already exists.\n"
+		"5. <db_name> must be a valid kexi database\n"
+		" e.g. created with 'tables' test.", 0},
+	{ "+driver_name", "Driver name", 0},
+	{ "+[db_name]", "Database name", 0},
+	{ "+[sql_statement]", "Optional SQL statement (for parser test)", 0},
 	KCmdLineLastOption
 };
 
