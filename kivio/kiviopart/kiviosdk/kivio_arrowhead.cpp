@@ -82,6 +82,8 @@ void KivioArrowHead::setType(int t)
         case kahtArrowTriangleHollow:
         case kahtDoubleTriangleSolid:
         case kahtDoubleTriangleHollow:
+        case kahtDiamondSolid:
+        case kahtDiamondHollow:
             m_cut = KIVIO_CUT_LENGTH;
             break;
 
@@ -164,6 +166,14 @@ void KivioArrowHead::paint( KivioPainter *painter, float x, float y, float vecX,
 
         case kahtPipe:
             paintPipe( &d );
+            break;
+
+        case kahtDiamondSolid:
+            paintDiamond( &d, true );
+            break;
+
+        case kahtDiamondHollow:
+            paintDiamond( &d, false );
             break;
 
         default:
@@ -312,8 +322,8 @@ void KivioArrowHead::paintDoubleTriangle( KivioArrowHeadData *d, bool solid )
     float _y = zoomHandler->zoomItY(d->y);
     l1.append( new KivioPoint( _x, _y ) );
 
-    _x = zoomHandler->zoomItX(d->x + nvecX * (m_l / 2) + pvecX);
-    _y = zoomHandler->zoomItY(d->y + nvecY * (m_l / 2) + pvecY);
+    _x = zoomHandler->zoomItX(d->x + nvecX * (m_l / 2));
+    _y = zoomHandler->zoomItY(d->y + nvecY * (m_l / 2));
     l2.append( new KivioPoint( _x, _y ) );
 
     _x = zoomHandler->zoomItX((d->x + nvecX * (m_l / 2)) + pvecX*(m_w/2.0f));
@@ -337,8 +347,8 @@ void KivioArrowHead::paintDoubleTriangle( KivioArrowHeadData *d, bool solid )
 
     l1.append( new KivioPoint( zoomHandler->zoomItX(d->x), zoomHandler->zoomItY(d->y) ) );
 
-    _x = zoomHandler->zoomItX(d->x + nvecX * (m_l / 2) + pvecX);
-    _y = zoomHandler->zoomItY(d->y + nvecY * (m_l / 2) + pvecY);
+    _x = zoomHandler->zoomItX(d->x + nvecX * (m_l / 2));
+    _y = zoomHandler->zoomItY(d->y + nvecY * (m_l / 2));
     l2.append( new KivioPoint( _x, _y ) );
 
     painter->drawPolygon( &l1 );
@@ -428,4 +438,56 @@ void KivioArrowHead::paintPipe( KivioArrowHeadData *d )
     int y2 = zoomHandler->zoomItY(d->y - pvecY*(m_w/2.0f));
 
     painter->drawLine(x1, y1, x2, y2);
+}
+
+void KivioArrowHead::paintDiamond( KivioArrowHeadData *d, bool solid )
+{
+    KivioPainter *painter = d->painter;
+    QColor cbg = painter->bgColor();
+
+    if(solid) {
+      painter->setBGColor(painter->fgColor());
+    }
+
+    float vecX = d->vecX;
+    float vecY = d->vecY;
+
+    KoZoomHandler* zoomHandler = d->zoomHandler;
+
+    float nvecX, nvecY; // normalized vectors
+    float pvecX, pvecY; // normal perpendicular vector
+
+    float length = sqrt( vecX*vecX + vecY*vecY );
+
+    nvecX = - vecX / length;
+    nvecY = - vecY / length;
+
+    pvecX = nvecY;
+    pvecY = -nvecX;
+
+    QPtrList<KivioPoint> l;
+    l.setAutoDelete(true);
+
+    float _x = zoomHandler->zoomItX(d->x);
+    float _y = zoomHandler->zoomItY(d->y);
+    l.append( new KivioPoint( _x, _y ) );
+
+    _x = zoomHandler->zoomItX((d->x + nvecX * (m_l/2.0f)) - pvecX*(m_w/2.0f));
+    _y = zoomHandler->zoomItY((d->y + nvecY * (m_l/2.0f)) - pvecY*(m_w/2.0f));
+    l.append( new KivioPoint( _x, _y ) );
+
+    _x = zoomHandler->zoomItX((d->x + nvecX * m_l));
+    _y = zoomHandler->zoomItY((d->y + nvecY * m_l));
+    l.append( new KivioPoint( _x, _y ) );
+
+    _x = zoomHandler->zoomItX((d->x + nvecX * (m_l/2.0f)) + pvecX*(m_w/2.0f));
+    _y = zoomHandler->zoomItY((d->y + nvecY * (m_l/2.0f)) + pvecY*(m_w/2.0f));
+    l.append( new KivioPoint( _x, _y ) );
+
+    _x = zoomHandler->zoomItX(d->x);
+    _y = zoomHandler->zoomItY(d->y);
+    l.append( new KivioPoint( _x, _y ) );
+
+    painter->drawPolygon( &l );
+    painter->setBGColor(cbg);
 }
