@@ -234,6 +234,7 @@ VStrokeFillPreview::drawFill( const VFill &f )
 		}
 		else
 			m_painter->setBrush( f );
+		m_painter->setPen( Qt::NoPen );
 		m_painter->drawRect( KoRect( FILL_TOPX, FILL_TOPY, FILL_BOTTOMX - FILL_TOPX, FILL_BOTTOMY - FILL_TOPY ) );
 	}
 	else
