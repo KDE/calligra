@@ -70,7 +70,7 @@ public:
 
     // Wade through the "file system"
 
-    typedef QList<OLENode> NodeList;
+    typedef QPtrList<OLENode> NodeList;
     NodeList parseRootDir();
     NodeList parseCurrentDir();
     const NodeList currentPath() const;
@@ -174,8 +174,8 @@ private:
         Node *node;
         short subtree;
     };
-    typedef QList<TreeNode> SubTree;
-    QList<SubTree> m_nodeTree;
+    typedef QPtrList<TreeNode> SubTree;
+    QPtrList<SubTree> m_nodeTree;
 
     bool ok;        // is the file OK?
 
