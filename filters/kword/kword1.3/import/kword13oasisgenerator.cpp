@@ -1012,6 +1012,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
     zipWriteData( "\"" );
 #endif
     writer.endElement(); // meta:document-statistic
+    writer.endElement(); // office:meta
     
     writer.endElement();
     writer.endDocument();
