@@ -27,7 +27,7 @@
 
 #include <kinstance.h>
 #include <kiconloader.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 

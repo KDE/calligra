@@ -65,6 +65,14 @@ void Handle::box(const KoRect &r)
   pos[5] = KoPoint(x2, y3);
   pos[6] = KoPoint(x1, y3);
   pos[7] = KoPoint(x1, y2);
+  rpos[0] = KoPoint(x1 - 8, y1 - 8);
+  rpos[1] = KoPoint(x2, y1 - 8);
+  rpos[2] = KoPoint(x3 + 8, y1 - 8);
+  rpos[3] = KoPoint(x3 + 8, y2);
+  rpos[4] = KoPoint(x3 + 8, y3 + 8);
+  rpos[5] = KoPoint(x2, y3 + 8);
+  rpos[6] = KoPoint(x1 - 8, y3 + 8);
+  rpos[7] = KoPoint(x1 - 8, y2);
   mRotCenter = r.center();
 }
 
@@ -134,8 +142,8 @@ void Handle::draw(QPainter &p)
   p.setBrush(brush);
   for(int i = 0; i < 8; i++)
   {
-    p.drawRect(static_cast<int>(pos[i].x() - 3), static_cast<int>(pos[i].y() - 3), 6, 6);
-    p.fillRect(static_cast<int>(pos[i].x() - 2), static_cast<int>(pos[i].y() - 2), 4, 4, brush);
+    p.drawRect(static_cast<int>(pos[i].x() - 3), static_cast<int>(pos[i].y() - 3), 7, 7);
+    p.fillRect(static_cast<int>(pos[i].x() - 2), static_cast<int>(pos[i].y() - 2), 5, 5, brush);
   }
   p.restore();
 }
@@ -153,12 +161,29 @@ int Handle::contains(const KoPoint &p)
     Kontour::HPosBottom | Kontour::HPosLeft,
     Kontour::HPosLeft
   };
+  static int rmask[] =
+  {
+    Kontour::HPosLeftR | Kontour::HPosTopR,
+    Kontour::HPosTopR,
+    Kontour::HPosTopR | Kontour::HPosRightR,
+    Kontour::HPosRightR,
+    Kontour::HPosRightR | Kontour::HPosBottomR,
+    Kontour::HPosBottomR,
+    Kontour::HPosBottomR | Kontour::HPosLeftR,
+    Kontour::HPosLeftR
+  };
   /* Check if one of the outer handles is selected */
   for(int i = 0; i < 8; i++)
   {
-    KoRect r(pos[i].x() - 4, pos[i].y() - 4, 8, 8);
+    KoRect r(pos[i].x() - 3, pos[i].y() - 3, 7, 7);
     if(r.contains(p))
       return mask[i];
+  }
+  for(int i = 0; i < 8; i++)
+  {
+    KoRect r(rpos[i].x() - 3, rpos[i].y() - 3, 7, 7);
+    if(r.contains(p))
+      return rmask[i];
   }
   /* Maybe the rotation center ? */
   if(mRotCenter.isNear(p, 5.0))

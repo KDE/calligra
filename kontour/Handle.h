@@ -55,6 +55,7 @@ private:
 private:
   GPage *mGPage;
   KoPoint pos[8];
+  KoPoint rpos[8];
   KoRect mBox;
   KoPoint mRotCenter;
   bool mShow;

@@ -35,7 +35,6 @@
 #include <qspinbox.h>
 #include <qgroupbox.h>
 #include <qcheckbox.h>
-#include <qspinbox.h>
 #include <qwmatrix.h>
 
 #include <klocale.h>

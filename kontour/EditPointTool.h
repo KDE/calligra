@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -28,6 +28,9 @@
 
 #include "Tool.h"
 
+class GPage;
+class Canvas;
+
 class EditPointTool : public Tool
 {
   Q_OBJECT
@@ -37,6 +40,12 @@ public:
   void activate();
   void deactivate();
   void processEvent(QEvent *e);
+
+protected:
+  void processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
+  void processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
+  void processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
+  void processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas);
 
 private:
 };

@@ -31,7 +31,7 @@
 #include <qdragobject.h>
 #include <qdom.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 
 #include "GDocument.h"

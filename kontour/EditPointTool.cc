@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -52,6 +52,37 @@ void EditPointTool::deactivate()
 }
 
 void EditPointTool::processEvent(QEvent *e)
+{
+  KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+  GPage *page = toolController()->view()->activeDocument()->activePage();
+  Canvas *canvas = toolController()->view()->canvas();
+
+  if(!doc->isReadWrite())
+    return;
+  if(e->type() == QEvent::MouseButtonPress)
+    processButtonPressEvent((QMouseEvent *)e, page, canvas);
+  else if(e->type() == QEvent::MouseMove)
+    processMouseMoveEvent((QMouseEvent *)e, page, canvas);
+  else if(e->type() == QEvent::MouseButtonRelease)
+    processButtonReleaseEvent((QMouseEvent *)e, page, canvas);
+  else if(e->type() == QEvent::KeyPress)
+    processKeyPressEvent((QKeyEvent *)e, page, canvas);
+}
+
+void EditPointTool::processButtonPressEvent(QMouseEvent *, GPage *, Canvas *)
+{
+}
+
+void EditPointTool::processMouseMoveEvent(QMouseEvent *, GPage *, Canvas *)
+{
+}
+
+void EditPointTool::processButtonReleaseEvent(QMouseEvent *, GPage *, Canvas *)
+{
+  toolController()->selectTool("Select");
+}
+
+void EditPointTool::processKeyPressEvent(QKeyEvent *, GPage *, Canvas *)
 {
 }
 

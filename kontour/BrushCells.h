@@ -29,7 +29,7 @@
 
 #include <qtable.h>
 #include <qbrush.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class QColor;
 class QPixmap;

@@ -31,7 +31,7 @@
 #include <qdom.h>
 
 #include <klocale.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 #include "GDocument.h"
 #include "GPage.h"
