@@ -109,6 +109,17 @@ private:
     QLabel *labXFactor, *labYFactor;
     QTabWidget *tabWidget;
 
+    BackType oldBackType;
+    QColor oldBackColor1;
+    QColor oldBackColor2;
+    BCType oldBcType;
+    QString oldBackPic;
+    QString oldBackClip;
+    BackView oldBackPicView;
+    bool oldUnbalanced;
+    int oldXFactor;
+    int oldYFactor;
+
 private slots:
     void selectPic();
     void selectClip();
@@ -119,6 +130,7 @@ private slots:
     void ApplyGlobal() { emit backOk( true ); }
 
     void changeComboText(int _p);
+    void slotReset();
 
 signals:
     void backOk( bool );

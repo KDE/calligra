@@ -83,9 +83,21 @@ BackDia::BackDia( QWidget* parent, const char* name,
                   const QString &backClip, const QDateTime &clipLM,
                   BackView backPicView, bool _unbalanced,
                   int _xfactor, int _yfactor, KPrPage *m_page )
-    : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|KDialogBase::User1 ), picLastModified( picLM ), clipLastModified( clipLM )
+    : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2 ), picLastModified( picLM ), clipLastModified( clipLM )
 {
     lockUpdate = true;
+
+    oldBackType=backType;
+    oldBackColor1=backColor1;
+    oldBackColor2 = backColor2;
+    oldBcType= _bcType;
+    oldBackPic=backPic;
+    oldBackClip=backClip;
+    oldBackPicView=backPicView;
+    oldUnbalanced=_unbalanced;
+    oldXFactor=_xfactor;
+    oldYFactor=_yfactor;
+
     QWidget *page = new QWidget( this );
     setMainWidget(page);
     QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
@@ -237,11 +249,46 @@ BackDia::BackDia( QWidget* parent, const char* name,
     connect( this, SIGNAL(  user1Clicked() ),
              this, SLOT( ApplyGlobal() ) );
 
+    connect( this, SIGNAL(  user2Clicked() ),
+             this, SLOT( slotReset() ) );
+
     connect( this, SIGNAL( okClicked() ),
              this, SLOT( accept() ) );
     setButtonText(KDialogBase::User1,i18n( "Apply &Global" ));
+    setButtonText(KDialogBase::User2,i18n( "Reset" ));
     picChanged = clipChanged = true;
     lockUpdate = false;
+    updateConfiguration();
+}
+
+void BackDia::slotReset()
+{
+    backCombo->setCurrentItem( (int)oldBackType );
+    color1Choose->setColor( oldBackColor1 );
+    color2Choose->setColor( oldBackColor2 );
+    cType->setCurrentItem( oldBcType );
+
+    if ( !oldBackPic.isEmpty() )
+        chosenPic = oldBackPic;
+    else
+        chosenPic = QString::null;
+
+    if ( !oldBackPic.isEmpty() )
+        lPicName->setText( oldBackPic );
+    else
+        lPicName->setText( i18n( "No Picture" ) );
+
+    if ( !oldBackClip.isEmpty() )
+        chosenClip = oldBackClip;
+
+    if ( !oldBackClip.isEmpty() )
+        lClipName->setText( oldBackClip );
+    else
+        lClipName->setText( i18n( "No Clipart" ) );
+    picView->setCurrentItem( (int)oldBackPicView );
+    unbalanced->setChecked( oldUnbalanced );
+    xfactor->setValue( oldXFactor );
+    yfactor->setValue( oldYFactor );
     updateConfiguration();
 }
 
