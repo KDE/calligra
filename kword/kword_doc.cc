@@ -1289,22 +1289,22 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     autoFormat.addAutoFormatEntry( entry );
 
     // do some sanity checking on document.
-    for (unsigned int i = getNumFrameSets()-1; i>0; i--) {
+    for (unsigned int i = getNumFrameSets()-1; i>-1; i--) {
         if(! getFrameSet(i)) {
-            kdDebug () << "frameset " << i << "is NULL!!" << endl;
-            // delete the thing..
+            kdDebug () << "frameset " << i << " is NULL!!" << endl;
+            frames.remove(i);
         } else if(! getFrameSet(i)->getFrame(0)) {
-            kdDebug () << "frameset " << i << "has no frames" << endl;
+            kdDebug () << "frameset " << i << " has no frames" << endl;
             delFrameSet(getFrameSet(i));
         }
     }
-    for (int i = getNumGroupManagers()-1; i>0; i--) {
+    for (unsigned int i = getNumGroupManagers()-1; i>-1; i--) {
         if(! getGroupManager(i)) {
-            kdDebug () << "GroupManager " << i << "is NULL!!" << endl;
-            // delete the thing.. somehow..
+            kdDebug () << "GroupManager " << i << " is NULL!!" << endl;
+            grpMgrs.remove(i);
         } else if(! getGroupManager(i)->getFrameSet(0,0)) {
-            kdDebug () << "GroupManager " << i << "has no frames" << endl;
-            //delGroupManager(getGroupManager(i)); // prevents kword from starting..
+            kdDebug () << "GroupManager " << i << " has no frames" << endl;
+            delGroupManager(getGroupManager(i));
         }
     }
 
@@ -2252,7 +2252,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
                 KWCharAnchor *a = ( KWCharAnchor* )text[ _fc.getTextPos() ].attrib;
 
                 // We might have moved. Signal this fact to the anchor.
-kdDebug(32001) << "new x=" << x <<", new y="<<y<<endl;
+//kdDebug(32001) << "new x=" << x <<", new y="<<y<<endl;
                 a->setOrigin( QPoint( x, y ) );
 
                 // An anchor needs to be a zero-width object. We draw it as a
