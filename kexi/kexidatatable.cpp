@@ -42,7 +42,7 @@
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecord.h"
-
+#include "kexiDB/kexidberror.h"
 
 #include "kexidatatable.h"
 #include "kexiproject.h"
@@ -85,11 +85,17 @@ KexiDataTable::executeQuery(const QString &queryStatement)
 		m_tableView->clearAll();
 
 	kdDebug() << "KexiDataTable::executeQuery(): executing query..." << endl;
-	m_record = kexiProject()->db()->queryRecord(queryStatement, false);
-	if(!m_record)
+//	m_record = kexiProject()->db()->queryRecord(queryStatement, false);
+
+	try
 	{
-		KMessageBox::error(this, i18n("SQL Error"), i18n("databrowser"));
-		return;
+		m_record = kexiProject()->db()->queryRecord(queryStatement, false);
+	}
+	catch(KexiDBError *err)
+	{
+		kdDebug() << "KexiDataTable::executeQuery(): db-error" << endl; 
+		err->toUser(this);
+		return false;
 	}
 
 	for(uint i = 0; i < m_record->fieldCount(); i++)
