@@ -377,15 +377,15 @@ void KPGroupObject::setEffect2( Effect2 _effect2 )
         it.current()->setEffect2( _effect2 );
 }
 
-void KPGroupObject::setPresNum( int _presNum )
+void KPGroupObject::setAppearStep( int _appearStep )
 {
-    KPObject::setPresNum( _presNum );
+    KPObject::setAppearStep( _appearStep );
 
     if ( !updateObjs )
         return;
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
-        it.current()->setPresNum( _presNum );
+        it.current()->setAppearStep( _appearStep );
 }
 
 void KPGroupObject::setDisappear( bool b )
@@ -399,15 +399,15 @@ void KPGroupObject::setDisappear( bool b )
         it.current()->setDisappear( b );
 }
 
-void KPGroupObject::setDisappearNum( int num )
+void KPGroupObject::setDisappearStep( int _disappearStep )
 {
-    KPObject::setDisappearNum( num );
+    KPObject::setDisappearStep( _disappearStep );
 
     if ( !updateObjs )
         return;
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
-        it.current()->setDisappearNum( num );
+        it.current()->setDisappearStep( _disappearStep );
 }
 
 void KPGroupObject::setEffect3( Effect3 _effect3)

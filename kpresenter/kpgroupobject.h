@@ -46,9 +46,9 @@ public:
     virtual void setShadowColor( const QColor &_color );
     virtual void setEffect( Effect _effect );
     virtual void setEffect2( Effect2 _effect2 );
-    virtual void setPresNum( int _presNum );
+    virtual void setAppearStep( int _appearStep );
     virtual void setDisappear( bool b );
-    virtual void setDisappearNum( int num );
+    virtual void setDisappearStep( int _disappearStep );
     virtual void setEffect3( Effect3 _effect3);
     virtual void setAppearTimer( int _appearTimer );
     virtual void setDisappearTimer( int _disappearTimer );
