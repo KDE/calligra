@@ -112,7 +112,6 @@ public:
     virtual bool loadChildren( KoStore *_store );
     virtual bool save( ostream& out, const char* _format );
     virtual bool completeSaving( KoStore *_store );
-
     KoMainWindow* createShell();
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
@@ -247,6 +246,7 @@ public:
     void deSelectFrame( unsigned int mx, unsigned int my );
     void deSelectAllFrames();
     QCursor getMouseCursor( unsigned int mx, unsigned int my );
+    QList<KWFrame> getSelectedFrames();
     KWFrame *getFirstSelectedFrame();
     KWFrame *getFirstSelectedFrame( int &_frameset );
     int getFrameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }

@@ -1244,7 +1244,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     KWordChild *ch = 0L;
     for ( ch = m_lstChildren.first(); ch != 0; ch = m_lstChildren.next() ) {
 	KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
-	frameset->setName( i18n( "Frameset %1" ).arg( frames.count() + 1 ) );
+	frameset->setName( i18n( "PartFrameset %1" ).arg( frames.count() + 1 ) );
 	QRect r = ch->geometry();
 	KWFrame *frame = new KWFrame(frameset, r.x(), r.y(), r.width(), r.height() );
 	frameset->addFrame( frame );
@@ -1366,8 +1366,12 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		    fsname = ( *it ).m_strValue.c_str();
 	    }
 
-	    if ( fsname.isEmpty() )
-		fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
+	    if ( fsname.isEmpty() ) {
+            if(frameInfo!=FI_BODY)
+                fsname = i18n( "TextFrameset %1" ).arg( frames.count() + 1 );
+            else 
+                fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
+        }
 
 	    switch ( frameType ) {
 	    case FT_TEXT: {
@@ -2127,7 +2131,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	}
 
 	if ( _fc.getTextPos() > textLen ) {
-	    warning( "Reggie: WOW - something has gone really wrong here!!!!!" );
+	    warning( "Reggie: WOW - something has gone really wrong here!!!!!, my position in the text is longer then my text" );
 	    return FALSE;
 	}
 
@@ -3161,7 +3165,7 @@ void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenA
     }
 
 //     if ( redrawBackgroundWhenAppendPage )
- 	drawAllBorders();
+// 	drawAllBorders();
     updateAllFrames();
     updateAllViewportSizes();
 
@@ -3268,28 +3272,41 @@ QCursor KWordDocument::getMouseCursor( unsigned int mx, unsigned int my )
     return arrowCursor;
 }
 
+
+/*================================================================*/
+QList<KWFrame> KWordDocument::getSelectedFrames() {
+kdDebug() << "KWordDocument::getSelectedFrames"<< endl;
+    QList<KWFrame> frames;
+    frames.setAutoDelete( FALSE );
+    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
+        KWFrameSet *frameSet = getFrameSet(i);
+        if ( !frameSet->isVisible() )
+            continue;
+        if ( frameSet->isRemoveableHeader() )
+            continue;
+        if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
+             isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
+             isAWrongHeader( frameSet->getFrameInfo(), getHeaderType() ) ||
+             isAWrongFooter( frameSet->getFrameInfo(), getFooterType() ) )
+            continue;
+	for ( unsigned int j = 0; j < getFrameSet(i)->getNumFrames(); j++ ) {
+	    if ( frameSet->getFrame( j )->isSelected() ) {
+		frames.append( frameSet->getFrame( j ));
+kdDebug() << "found a selected frame: "<< i << ", "<<j<< endl;
+            }
+	}
+    }
+    return frames;
+}
+
 /*================================================================*/
 KWFrame *KWordDocument::getFirstSelectedFrame()
 {
-    KWFrameSet *frameSet = 0L;
-
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-	frameSet = getFrameSet( getNumFrameSets() - 1 - i );
-	for ( unsigned int j = 0; j < frameSet->getNumFrames(); j++ ) {
-	    if ( !frameSet->isVisible() )
-		continue;
-	    if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
-		 isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
-		 isAWrongHeader( frameSet->getFrameInfo(), getHeaderType() ) ||
-		 isAWrongFooter( frameSet->getFrameInfo(), getFooterType() ) )
-		continue;
-	    if ( frameSet->isRemoveableHeader() )
-		continue;
-	    if ( frameSet->getFrame( j )->isSelected() )
-		return frameSet->getFrame( j );
-	}
+    for (int i = 0; i < getNumFrameSets(); i++ ) {
+        KWFrame *frame = getFirstSelectedFrame(i);
+        if(frame)
+            return frame;
     }
-
     return 0L;
 }
 
@@ -3752,6 +3769,10 @@ void KWordDocument::getFrameMargins( KWUnit &l, KWUnit &r, KWUnit &t, KWUnit &b 
 /*================================================================*/
 bool KWordDocument::isOnlyOneFrameSelected()
 {
+
+    return getSelectedFrames().count()==1;
+
+/* This code does not check if the frames are headers and visible.. (TZ)
     int _selected = 0;
 
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
@@ -3764,7 +3785,8 @@ bool KWordDocument::isOnlyOneFrameSelected()
 	}
     }
 
-    return _selected == 1;
+    return _selected == 1; 
+*/
 }
 
 /*================================================================*/
@@ -3994,6 +4016,12 @@ void KWordDocument::checkNumberOfPages( KWFormatContext *fc )
     // ### finish this stuff!
     return;
 
+    // what about a loop through all frames and ask the frames which page they
+    // are on. Thereby selecting the max page. filter empty frames from 
+    // frameset 0 (only if WP)
+    // Will get back to this, but the picture and other frames first must remember
+    // their page num ;-) (TZ)
+
     if ( processingType == DTP || fc->getParag()->getNext() || fc->getFrameSet() != 1 )
 	return;
 
@@ -4085,3 +4113,4 @@ void KWordDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHe
 	_hf.inchFooterBodySpacing = zoomIt( _hf.inchFooterBodySpacing );
     }
 }
+

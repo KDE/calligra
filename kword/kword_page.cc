@@ -55,6 +55,7 @@
 #include <qpicture.h>
 #include <kmessagebox.h>
 #include <qfile.h>
+#include <kdebug.h>
 
 #include <math.h>
 
@@ -1058,7 +1059,6 @@ void KWPage::vmrCreateText()
 	}
 
 	frameDia = new KWFrameDia( this, frame,doc,FT_TEXT);
-	//frameDia->setPage(this);
 	connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
 	frameDia->setCaption(i18n("Connect frame"));
 	frameDia->show();
@@ -1466,11 +1466,11 @@ void KWPage::editDeleteFrame()
 	if (result != KMessageBox::Continue)
 	    return;
     }
-
     bool blinking = blinkTimer.isActive();
     if ( blinking )
 	stopBlinkCursor();
 
+    // get previous frameset
     KWFrameSet *f = doc->getFrameSet( fc->getFrameSet() - 1 );
     if ( f == fs ) {
 	fc->setFrameSet( 1 );
@@ -1489,9 +1489,6 @@ void KWPage::editDeleteFrame()
     recalcCursor();
     repaintScreen( TRUE );
     recalcAll = FALSE;
-
-    if ( blinking )
-	startBlinkCursor();
 }
 
 /*================================================================*/
@@ -3527,23 +3524,15 @@ void KWPage::femProps()
 	delete frameDia;
 	frameDia = 0;
     }
-    KWFrame *frame=0L;
 
     //repaintScreen( FALSE );
-    int iFrameset;
-    for ( iFrameset = 0; iFrameset < doc->getNumFrameSets(); iFrameset++ ) {
-	for ( unsigned int j = 0; j < doc->getFrameSet(iFrameset)->getNumFrames(); j++ ) {
-	    if(doc->getFrameSet(iFrameset)->getFrame( j )->isSelected()) {
-		frame=doc->getFrameSet(iFrameset)->getFrame(j);
-		break;
-	    }
-	}
+    KWFrame *frame=doc->getFirstSelectedFrame();
+    if(frame) {
+        frameDia = new KWFrameDia( this, frame);
+        connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
+        frameDia->setCaption(i18n("Frame Properties"));
+        frameDia->show();
     }
-    frameDia = new KWFrameDia( this, frame);
-    //frameDia->setPage(this);
-    connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
-    frameDia->setCaption(i18n("Frame Properties"));
-    frameDia->show();
     //repaintScreen(iFrameset,true);
 }
 
