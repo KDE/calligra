@@ -51,7 +51,7 @@ KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
   list = new QListBox(view);
   lay1->addWidget( list );
 
-  QStringList tabsList = m_pView->tabBar()->listhide();
+  QStringList tabsList = m_pView->doc()->map()->hiddenPages();
   list->insertStringList(tabsList);
 
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)), this, SLOT(slotDoubleClicked(QListBoxItem *)));
