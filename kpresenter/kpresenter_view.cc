@@ -450,6 +450,13 @@ void KPresenterView::print( KPrinter &prt )
     int dpiX=0;
     int dpiY=0;
     int oldZoom = m_pKPresenterDoc->zoomHandler()->zoom();
+    bool displayFieldCode = m_pKPresenterDoc->getVariableCollection()->variableSetting()->displayFiedCode();
+    if ( displayFieldCode )
+    {
+        m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+        m_pKPresenterDoc->recalcVariables(  VT_ALL );
+    }
+
     QPaintDeviceMetrics metrics( &prt );
     unZoomDocument(dpiX,dpiY);
     if ( m_pKPresenterDoc->pageLayout().format == PG_SCREEN )
@@ -470,6 +477,13 @@ void KPresenterView::print( KPrinter &prt )
     painter.end();
 
     zoomDocument(oldZoom);
+    if ( displayFieldCode )
+    {
+        m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFiedCode(true);
+        m_pKPresenterDoc->recalcVariables(  VT_ALL );
+    }
+
+
     m_canvas->repaint();
     kdDebug() << "KPresenterView::print zoom&res reset" << endl;
 }
