@@ -1916,14 +1916,16 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
             int count=0;
             QString searchString ("^("+ i18n("Copy%1-%2").arg("\\d*").arg("){0,1}"));
             searchString=searchString.replace(QRegExp("\\-"), "\\-"); // escape the '-'
-
-            QRegExp searcher(searchString);
-            do {
-                newName=oldName;
-                newName.replace(searcher,i18n("Copy%1-%2").arg(count > 0? QString("%1").arg(count):"").arg(""));
-                count++;
-            } while ( frameSetByName( newName ) );
-
+            newName=oldName;
+            if (frameSetByName( oldName ))//rename it if name frameset exists
+            {
+                QRegExp searcher(searchString);
+                do {
+                    newName=oldName;
+                    newName.replace(searcher,i18n("Copy%1-%2").arg(count > 0? QString("%1").arg(count):"").arg(""));
+                    count++;
+                } while ( frameSetByName( newName ) );
+            }
             m_pasteFramesetsMap->insert( oldName, newName ); // remember the name transformation
             kdDebug(32001) << "KWDocument::pasteFrames new frame : " << oldName << "->" << newName << endl;
             FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( elem, "frameType", FT_BASE ) );
