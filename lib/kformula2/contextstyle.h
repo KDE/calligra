@@ -78,6 +78,8 @@ public:
     int getEmptyRectHeight() const;
 
     Alignment getMatrixAlignment() const { return center; }
+
+    bool getCenterSymbol() const { return centerSymbol; }
     
 private:
 
@@ -162,6 +164,12 @@ private:
     int emptyRectWidth;
     int emptyRectHeight;
 
+    /**
+     * true means to center the symbol between its indexes.
+     * false means alignment to the right.
+     */
+    bool centerSymbol;
+    
     /**
      * All characters that are valid as exponent chars inside a number.
      * This used to be "Ee" but the symbol font has no "e" and some

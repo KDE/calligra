@@ -33,8 +33,6 @@ RootElement::RootElement(BasicElement* parent)
 {
     content = new SequenceElement(this);
     index = 0;
-    //index = new SequenceElement(this);
-    //index->setRelativeSize(-2);
 }
 
 RootElement::~RootElement()
@@ -100,7 +98,7 @@ void RootElement::calcSizes(const ContextStyle& style, int parentSize)
         indexHeight = index->getHeight();
     }
     
-    //int distX = style.getDistanceX(mySize);
+    int distX = style.getDistanceX(mySize);
     int distY = style.getDistanceY(mySize);
     int unit = (content->getHeight() + distY)/ 3;
 
@@ -127,13 +125,13 @@ void RootElement::calcSizes(const ContextStyle& style, int parentSize)
         rootOffset.setY(0);
     }
 
-    setWidth(content->getWidth() + unit+unit/3+ rootOffset.x());
+    setWidth(content->getWidth() + unit+unit/3+ rootOffset.x() + distX/2);
     setHeight(content->getHeight() + distY + rootOffset.y());
     setMidline(getHeight() - content->getHeight() + content->getMidline());
-    calcBaseline();
     
     content->setX(rootOffset.x() + unit+unit/3);
     content->setY(rootOffset.y() + distY);
+    calcBaseline();
 }
 
 /**

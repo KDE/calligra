@@ -95,7 +95,8 @@ void BasicElement::calcBaseline()
 {
     BasicElement* content = getMainChild();
     if (content->getBaseline() > -1) {
-        setBaseline(content->getBaseline() - content->getMidline() + getMidline());
+        //setBaseline(content->getBaseline() - content->getMidline() + getMidline());
+        setBaseline(content->getBaseline() + content->getY());
     }
     else {
         setBaseline(-1);

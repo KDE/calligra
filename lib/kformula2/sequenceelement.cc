@@ -129,7 +129,11 @@ void SequenceElement::calcSizes(const ContextStyle& context, int parentSize)
         int width = 0;
         int toBaseline = 0;
         int fromBaseline = 0;
-        int fromMidline = 0;
+
+        QFont font = context.getDefaultFont();
+        font.setPointSize(mySize);
+        QFontMetrics fm(font);
+        int fromMidline = fm.strikeOutPos();
 
         uint count = children.count();
 
@@ -144,7 +148,6 @@ void SequenceElement::calcSizes(const ContextStyle& context, int parentSize)
                 if (child->getBaseline() > -1) {
                     toBaseline = QMAX(toBaseline, child->getBaseline());
                     fromBaseline = QMAX(fromBaseline, child->getHeight()-child->getBaseline());
-                    fromMidline = QMAX(fromMidline, child->getBaseline() - child->getMidline());
                 }
             }
             else {

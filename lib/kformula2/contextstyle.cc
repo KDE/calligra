@@ -30,7 +30,7 @@ ContextStyle::ContextStyle()
           emptyColor(Qt::blue)
 {
     nameFont.setItalic(true);
-    distance = 5;
+    distance = 4;
     operatorSpace = 4;
     linearMovement = false;
     baseSize = 18;
@@ -39,6 +39,7 @@ ContextStyle::ContextStyle()
     lineWidth = 1;
     emptyRectWidth = 10;
     emptyRectHeight = 10;
+    centerSymbol = false;
 }
 
 void ContextStyle::setResolution(double zX, double zY)

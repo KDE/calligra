@@ -126,42 +126,60 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
 
     // widths
     int xOffset = QMAX(symbol.getWidth(), QMAX(upperWidth, lowerWidth));
-    symbol.setX(xOffset - symbol.getWidth());
+    if (style.getCenterSymbol()) {
+        symbol.setX((xOffset - symbol.getWidth()) / 2);
+    }
+    else {
+        symbol.setX(xOffset - symbol.getWidth());
+    }
     content->setX(xOffset + distX/2);
 
     setWidth(QMAX(content->getX() + content->getWidth(),
                   QMAX(upperWidth, lowerWidth)));
     
     // heights
+    //int toMidline = QMAX(content->getHeight() / 2,
     int toMidline = QMAX(content->getMidline(),
                          upperHeight + symbol.getHeight()/2);
+    //int fromMidline = QMAX(content->getHeight() / 2,
     int fromMidline = QMAX(content->getHeight() - content->getMidline(),
                            lowerHeight + symbol.getHeight()/2);
     setHeight(toMidline + fromMidline);
     setMidline(toMidline);
-    calcBaseline();
 
     symbol.setY(toMidline - symbol.getHeight()/2);
+    //content->setY(toMidline - content->getHeight()/2);
     content->setY(toMidline - content->getMidline());
 
     if (hasUpper()) {
-        if (upperWidth < symbol.getWidth()) {
-            upper->setX(symbol.getX() + (symbol.getWidth() - upperWidth) / 2);
+        if (style.getCenterSymbol()) {
+            upper->setX((xOffset - upperWidth) / 2);
         }
         else {
-            upper->setX(xOffset - upperWidth);
+            if (upperWidth < symbol.getWidth()) {
+                upper->setX(symbol.getX() + (symbol.getWidth() - upperWidth) / 2);
+            }
+            else {
+                upper->setX(xOffset - upperWidth);
+            }
         }
         upper->setY(toMidline - upperHeight - symbol.getHeight()/2);
     }
     if (hasLower()) {
-        if (lowerWidth < symbol.getWidth()) {
-            lower->setX(symbol.getX() + (symbol.getWidth() - lowerWidth) / 2);
+        if (style.getCenterSymbol()) {
+            lower->setX((xOffset - lowerWidth) / 2);
         }
         else {
-            lower->setX(xOffset - lowerWidth);
+            if (lowerWidth < symbol.getWidth()) {
+                lower->setX(symbol.getX() + (symbol.getWidth() - lowerWidth) / 2);
+            }
+            else {
+                lower->setX(xOffset - lowerWidth);
+            }
         }
         lower->setY(toMidline + symbol.getHeight()/2 + distY);
     }
+    calcBaseline();
 }
 
 /**
@@ -186,6 +204,13 @@ void SymbolElement::draw(QPainter& painter, const QRect& r,
     if (hasLower()) {
         lower->draw(painter, r, style, mySize, myPos);
     }
+
+    // Debug
+    painter.setBrush(Qt::NoBrush);
+    painter.setPen(Qt::red);
+    //painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
+    painter.drawLine(myPos.x(), myPos.y()+getMidline(),
+                     myPos.x()+getWidth(), myPos.y()+getMidline());
 }
 
     
