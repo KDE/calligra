@@ -178,7 +178,8 @@ void KWFrame::copySettings(KWFrame *frm)
     m_internalY = 0; // internal Y is recalculated
     setZOrder(frm->zOrder());
     setCopy(frm->isCopy());
-    selected = false; // don't copy this attribute [shouldn't be an attribute of KWFrame]
+    setSelected( false );// don't copy this attribute [shouldn't be an attribute of KWFrame]
+    //selected = false; // don't copy this attribute [shouldn't be an attribute of KWFrame]
     setBackgroundColor( frm->backgroundColor() );
     setLeftBorder(frm->leftBorder());
     setRightBorder(frm->rightBorder());

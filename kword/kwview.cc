@@ -1913,8 +1913,6 @@ void KWView::bringForward()
         }
         if ( frameChangeLevel)
         {
-            frameOfFirstFrameSet->setSelected( false );
-            frameChangeLevel->setSelected( false );
             KWFrame* frameCopy = frameOfFirstFrameSet->getCopy();
             frameOfFirstFrameSet->setZOrder( newZOrder );
             KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameOfFirstFrameSet);
@@ -1942,7 +1940,6 @@ void KWView::bringForward()
         m_doc->updateAllFrames();
         m_doc->layout();
         m_doc->repaintAllViews();
-        m_gui->canvasWidget()->emitFrameSelectedChanged();
     }
 }
 
@@ -1972,8 +1969,6 @@ void KWView::sendBackward()
         }
         if ( frameChangeLevel )
         {
-            frameOfFirstFrameSet->setSelected( false );
-            frameChangeLevel->setSelected( false );
             KWFrame* frameCopy = frameOfFirstFrameSet->getCopy();
             frameOfFirstFrameSet->setZOrder( newZOrder );
 
@@ -2002,7 +1997,6 @@ void KWView::sendBackward()
         m_doc->updateAllFrames();
         m_doc->layout();
         m_doc->repaintAllViews();
-        m_gui->canvasWidget()->emitFrameSelectedChanged();
     }
 
 }
