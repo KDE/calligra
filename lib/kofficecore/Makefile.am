@@ -14,14 +14,15 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koMainWindow.cc \
 	koApplication.cc koQueryTrader.cc \
 	koUndo.cc koIcons.cc \
-	koDataTool.cc koFilter.cc
+	koDataTool.cc koFilter.cc \
+	koDocumentInfo.cc
 
 include_HEADERS = koFilter.h \
 	koStream.h koDocument.h \
 	koMainWindow.h \
 	koApplication.h koQueryTypes.h \
 	koFilterManager.h koUndo.h koIcons.h \
-	koDataTool.h
+	koDataTool.h koDocumentInfo.h
 
 libkofficecore_la_METASOURCES = AUTO
 
