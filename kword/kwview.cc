@@ -509,7 +509,7 @@ void KWView::setupActions()
                                     this, SLOT( insertComment() ),
                                     actionCollection(), "insert_comment" );
     actionInsertComment->setToolTip( i18n( "Insert a comment about the selected text." ) );
-    actionInsertComment->setWhatsThis( i18n( "Insert a comment about the selected text. These comments are not desinged to appear on the final page." ) );
+    actionInsertComment->setWhatsThis( i18n( "Insert a comment about the selected text. These comments are not designed to appear on the final page." ) );
 
     actionEditComment = new KAction( i18n("Edit Comment..."), 0,
                                   this,SLOT(editComment()),
