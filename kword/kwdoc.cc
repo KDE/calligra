@@ -1817,6 +1817,8 @@ void KWDocument::loadDefaultTableTemplates()
 
 void KWDocument::progressItemLoaded()
 {
+    if ( !m_nrItemsToLoad ) // happens when pasting
+        return;
     m_itemsLoaded++;
     // We progress from 20 to 85 -> 65-wide range, 20 offset.
     unsigned int perc = 65 * m_itemsLoaded / m_nrItemsToLoad;
