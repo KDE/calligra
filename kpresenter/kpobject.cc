@@ -200,14 +200,12 @@ void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj )
 
 }
 
-void KPObject::saveOasisObjectStyleAnimation( KoGenStyles& mainStyles, int objectId )
+bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int objectId )
 {
     if ( effect == EF_NONE )
-        return;
-
-    KoGenStyle animation( KPresenterDoc::STYLE_OBJECTANIMATION,"presentation:sound" );
+        return false;
+    animation.startElement( "presentation:show-shape" );
     animation.addAttribute( "draw:shape-id", objectId );
-
     switch( effect )
     {
     case EF_NONE:
@@ -261,7 +259,8 @@ void KPObject::saveOasisObjectStyleAnimation( KoGenStyles& mainStyles, int objec
         animation.addAttribute( "presentation:direction", "from-bottom" );
         break;
     }
-    //mainStyles.lookup( styleobjectauto, "gr" );
+    animation.endElement();
+    return true;
 }
 
 void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)

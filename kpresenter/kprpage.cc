@@ -58,9 +58,11 @@
 #include <kovariable.h>
 #include <korichtext.h>
 #include <koGenStyles.h>
+#include <koxmlwriter.h>
+#include <ktempfile.h>
 #include <qbuffer.h>
 #include <qregexp.h>
-#include <koxmlwriter.h>
+#include <qfile.h>
 
 KPrPage::KPrPage(KPresenterDoc *_doc )
 {
@@ -111,12 +113,38 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     if ( !styleName.isEmpty() )
         xmlWriter.addAttribute( "draw:style-name", styleName );
 
+    KTempFile animationTmpFile;
+    animationTmpFile.setAutoDelete( true );
+    QFile* tmpFile = animationTmpFile.file();
+    KoXmlWriter animationTmpWriter( tmpFile );
+    bool haveAnimation = false;
+    animationTmpWriter.startElement( "presentation:animations" );
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         it.current()->saveOasis( xmlWriter,mainStyles, indexObj );
+        if ( it.current()->saveOasisObjectStyleAnimation( animationTmpWriter, indexObj ) )
+            haveAnimation = true;
         ++indexObj;
     }
+    animationTmpWriter.endElement();//close "presentation:animations"
+    tmpFile->close();
+
+    if ( haveAnimation )
+    {
+        bool openOk = tmpFile->open( IO_ReadOnly );
+        Q_ASSERT( openOk );
+        static const int MAX_CHUNK_SIZE = 8*1024; // 8 KB
+        QByteArray buffer(MAX_CHUNK_SIZE);
+        while ( !tmpFile->atEnd() ) {
+            Q_LONG len = tmpFile->readBlock( buffer.data(), buffer.size() );
+            if ( len <= 0 ) // e.g. on error
+                break;
+            xmlWriter.device()->writeBlock( buffer.data(), len );
+        }
+    }
+    animationTmpFile.close();
+
 
     saveOasisNote( xmlWriter );
     xmlWriter.endElement();

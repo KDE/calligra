@@ -132,7 +132,8 @@ public:
     virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj ) =0;
 
     void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj );
-    void saveOasisObjectStyleAnimation( KoGenStyles& mainStyles, int objectId );
+    //return true if we have a animation into object
+    bool saveOasisObjectStyleAnimation( KoXmlWriter &animation, int objectId );
 
     virtual void flip(bool horizontal );
 
