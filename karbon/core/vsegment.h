@@ -98,9 +98,9 @@ public:
 
 	/**
 	 * Makes the segment a bezier curve. Lines will have control points at
-	 * t = 1/3 and t = 2/3.
+	 * t and 1 - t.
 	 */
-	void convertToCurve();
+	void convertToCurve( double t = 1.0 / 3.0 );
 
 	/// Returns true if lines A0A1 and B0B1 intersect.
 	static bool linesIntersect(

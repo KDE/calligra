@@ -38,7 +38,7 @@ height(
 				( p.y() - a.y() ) * ( p.y() - a.y() ) );
 
 	// normalize:
-	return det / norm;
+	return QABS( det ) / norm;
 }
 
 
@@ -271,7 +271,7 @@ VSegment::splitAt( double t )
 }
 
 void
-VSegment::convertToCurve()
+VSegment::convertToCurve( double t )
 {
 	if(
 		m_type == segment_begin ||
@@ -284,10 +284,10 @@ VSegment::convertToCurve()
 	{
 		m_point[0] =
 			m_prev->m_point[2] +
-			( m_point[2] - m_prev->m_point[2] ) * ( 1.0 / 3.0 );
+			( m_point[2] - m_prev->m_point[2] ) * t;
 		m_point[1] =
 			m_prev->m_point[2] +
-			( m_point[2] - m_prev->m_point[2] ) * ( 2.0 / 3.0 );
+			( m_point[2] - m_prev->m_point[2] ) * ( 1.0 - t );
 	}
 	else if( m_type == segment_curve1 )
 		m_point[0] = m_prev->m_point[2];

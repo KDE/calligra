@@ -1,3 +1,4 @@
+-	rotate/scale/shear tool dont work
 -	optimize boundingbox: cache in vsegmentlist (+ vsegment ?) and apply affine
 	trafos (dont recalculate in that case) to them too
 -	reintroduce whirl
@@ -7,7 +8,5 @@
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
 -	mirror coordinate-system so origin is bottom-left
 -	add validators to all tool-dialog input-fields
--	polygonizing a sinus shapes results in a asymetric polyline
-	(probably error in sinus generation).
 -	examine the problem with non closed paths
 -	implement gradients after libart code reorganisations (Rob)
