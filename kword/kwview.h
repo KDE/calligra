@@ -333,6 +333,7 @@ public slots:
     void slotCompletion();
 
     void applyAutoFormat();
+    void createStyleFromSelection();
     // end of public slots
 
 protected slots:
@@ -522,6 +523,7 @@ private:
     KAction * actionChangeLink;
 
     KAction *actionRefreshAllVariable;
+    KAction *actionCreateStyleFromSelection;
 
     KoCharSelectDia *m_specialCharDlg;
     KoFontDia *m_fontDlg;

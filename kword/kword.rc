@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="45">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="46">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -64,6 +64,7 @@
   <Action name="format_page"/>
   <Separator/>
   <Action name="format_stylist"/>
+  <Action name="create_style"/>
   <Action name="format_stylemenu"/>
   <Menu name="Formula"><text>Formula</text>
     <Action name="formula_addupperindex"/>

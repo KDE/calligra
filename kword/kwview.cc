@@ -62,7 +62,7 @@
 #include <koVariableDlgs.h>
 #include "koInsertLink.h"
 #include <koAutoFormat.h>
-
+#include <koCreateStyleDia.h>
 #include <koMainWindow.h>
 #include <koTemplateCreateDia.h>
 #include <koPartSelectAction.h>
@@ -84,7 +84,7 @@
 #include <kformulamimesource.h>
 
 #include <stdlib.h>
-
+#
 #include <KWordViewIface.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
@@ -905,6 +905,9 @@ void KWView::setupActions()
                                         this, SLOT( applyAutoFormat() ),
                                         actionCollection(), "apply_autoformat" );
 
+    actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection" ), 0,
+                                        this, SLOT( createStyleFromSelection()),
+                                        actionCollection(), "create_style" );
 }
 
 void KWView::refreshMenuExpression()
@@ -4960,6 +4963,28 @@ void KWView::applyAutoFormat()
         delete macro;
 }
 
+void KWView::createStyleFromSelection()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        QStringList list;
+        QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
+        for ( ; styleIt.current(); ++styleIt )
+        {
+            list.append( styleIt.current()->name() );
+        }
+        KoCreateStyleDia *dia = new KoCreateStyleDia( list , this, 0 );
+        if ( dia->exec() )
+        {
+            KoStyle *style=edit->createStyleFromSelection(dia->nameOfNewStyle());
+            m_doc->styleCollection()->addStyleTemplate( style );
+            m_doc->updateAllStyleLists();
+
+        }
+        delete dia;
+    }
+}
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

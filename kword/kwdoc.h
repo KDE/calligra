@@ -260,7 +260,7 @@ public:
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd );
 
 
-    KoStyleCollection * styleCollection() { return m_styleColl;}
+    KoStyleCollection * styleCollection()const  { return m_styleColl;}
 
     QFont defaultFont() const { return m_defaultFont; }
 
