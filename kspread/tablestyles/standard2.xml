@@ -2,8 +2,8 @@
 <!DOCTYPE spreadsheet-snippet>
 <spreadsheet-snippet>
 <cell row="1" column="1" >
-<format bgcolor="#0000c0" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
-<font size="12" family="helvetica" weight="50" />
+<format bgcolor="#0000c0">
+<font size="12" family="Times" weight="50" />
 <pen width="0" style="1" color="#ffffff" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
@@ -14,7 +14,7 @@
 </format>
 </cell>
 <cell row="2" column="1" >
-<format bgcolor="#ffffff" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#ffffff">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
@@ -27,7 +27,7 @@
 a</text>
 </cell>
 <cell row="1" column="2" >
-<format bgcolor="#0000c0" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#0000c0">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <pen width="0" style="1" color="#ffffff" />
 <left-border>
@@ -41,8 +41,8 @@ a</text>
 x</text>
 </cell>
 <cell row="2" column="2" >
-<format bgcolor="#ffffff" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
-<font size="12" family="helvetica" weight="50" />
+<format bgcolor="#ffffff">
+<font size="12" family="Times" weight="50" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>
@@ -54,7 +54,7 @@ x</text>
 1</text>
 </cell>
 <cell row="3" column="1" >
-<format bgcolor="#ffff00" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#ffff00">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
@@ -67,7 +67,7 @@ x</text>
 b</text>
 </cell>
 <cell row="1" column="3" >
-<format bgcolor="#0000c0" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#0000c0">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <pen width="0" style="1" color="#ffffff" />
 <left-border>
@@ -81,7 +81,7 @@ b</text>
 y</text>
 </cell>
 <cell row="4" column="1" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="1" style="0" color="#000000" />
 </left-border>
@@ -91,8 +91,8 @@ y</text>
 </format>
 </cell>
 <cell row="2" column="3" >
-<format bgcolor="#ffffff" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
-<font size="12" family="helvetica" weight="50" />
+<format bgcolor="#ffffff">
+<font size="12" family="Times" weight="50" />
 <left-border>
 <pen width="1" style="1" color="#000000" />
 </left-border>
@@ -104,8 +104,8 @@ y</text>
 2</text>
 </cell>
 <cell row="3" column="2" >
-<format bgcolor="#ffff00" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
-<font size="12" family="helvetica" weight="50" />
+<format bgcolor="#ffff00">
+<font size="12" family="Times" weight="50" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>
@@ -117,7 +117,7 @@ y</text>
 3</text>
 </cell>
 <cell row="1" column="4" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>
@@ -127,7 +127,7 @@ y</text>
 </format>
 </cell>
 <cell row="4" column="2" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="1" style="0" color="#000000" />
 </left-border>
@@ -137,7 +137,7 @@ y</text>
 </format>
 </cell>
 <cell row="2" column="4" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>
@@ -147,8 +147,8 @@ y</text>
 </format>
 </cell>
 <cell row="3" column="3" >
-<format bgcolor="#ffff00" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
-<font size="12" family="helvetica" weight="50" />
+<format bgcolor="#ffff00">
+<font size="12" family="Times" weight="50" />
 <left-border>
 <pen width="1" style="1" color="#000000" />
 </left-border>
@@ -160,7 +160,7 @@ y</text>
 4</text>
 </cell>
 <cell row="4" column="3" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="1" style="0" color="#000000" />
 </left-border>
@@ -170,7 +170,7 @@ y</text>
 </format>
 </cell>
 <cell row="3" column="4" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>

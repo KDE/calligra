@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE spreadsheet-snippet>
 <spreadsheet-snippet>
 <cell row="1" column="1" >
-<format bgcolor="#dcfffd" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#dcfffd">
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>
@@ -11,7 +11,7 @@
 </format>
 </cell>
 <cell row="2" column="1" >
-<format bgcolor="#dcfffd" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#dcfffd">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
@@ -22,7 +22,7 @@
 </format>
 </cell>
 <cell row="3" column="1" >
-<format bgcolor="#dcfffd" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#dcfffd">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
@@ -33,7 +33,7 @@
 </format>
 </cell>
 <cell row="4" column="1" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="1" style="0" color="#000000" />
 </left-border>
@@ -44,7 +44,7 @@
 </cell>
 
 <cell row="1" column="2" >
-<format bgcolor="#dcfffd" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#dcfffd">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
@@ -55,7 +55,7 @@
 </format>
 </cell>
 <cell row="2" column="2" >
-<format bgcolor="#fcffec" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#fcffec">
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>
@@ -65,7 +65,7 @@
 </format>
 </cell>
 <cell row="3" column="2" >
-<format bgcolor="#fcffec" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#fcffec">
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>
@@ -75,7 +75,7 @@
 </format>
 </cell>
 <cell row="4" column="2" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="1" style="0" color="#000000" />
 </left-border>
@@ -86,7 +86,7 @@
 </cell>
 
 <cell row="1" column="3" >
-<format bgcolor="#dcfffd" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#dcfffd">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <left-border>
 <pen width="1" style="1" color="#000000" />
@@ -97,7 +97,7 @@
 </format>
 </cell>
 <cell row="2" column="3" >
-<format bgcolor="#fcffec" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#fcffec">
 <left-border>
 <pen width="1" style="1" color="#000000" />
 </left-border>
@@ -107,7 +107,7 @@
 </format>
 </cell>
 <cell row="3" column="3" >
-<format bgcolor="#fcffec" float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format bgcolor="#fcffec">
 <left-border>
 <pen width="1" style="1" color="#000000" />
 </left-border>
@@ -117,7 +117,7 @@
 </format>
 </cell>
 <cell row="4" column="3" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="1" style="0" color="#000000" />
 </left-border>
@@ -129,7 +129,7 @@
 
 
 <cell row="1" column="4" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>
@@ -139,7 +139,7 @@
 </format>
 </cell>
 <cell row="2" column="4" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>
@@ -149,7 +149,7 @@
 </format>
 </cell>
 <cell row="3" column="4" >
-<format float="3" floatcolor="2" faktor="1" precision="-1" align="4" >
+<format>
 <left-border>
 <pen width="2" style="1" color="#000000" />
 </left-border>
