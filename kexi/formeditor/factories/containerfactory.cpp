@@ -320,7 +320,7 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		tab->setTabReorderingEnabled(true);
 #endif
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
-		container->form()->objectTree()->addItem(container->tree(), new KFormDesigner::ObjectTreeItem(
+		container->form()->objectTree()->addItem(container->objectTree(), new KFormDesigner::ObjectTreeItem(
 		        container->form()->manager()->lib()->displayName(c), n, tab, container));
 		m_manager = container->form()->manager();
 
@@ -360,7 +360,7 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		QWidgetStack *stack = new QWidgetStack(p, n);
 		stack->setLineWidth(2);
 		stack->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
-		container->form()->objectTree()->addItem(container->tree(), new KFormDesigner::ObjectTreeItem(
+		container->form()->objectTree()->addItem(container->objectTree(), new KFormDesigner::ObjectTreeItem(
 		     container->form()->manager()->lib()->displayName(c), n, stack, container));
 
 		if(container->form()->interactiveMode())

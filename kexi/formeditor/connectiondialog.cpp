@@ -181,8 +181,8 @@ ConnectionDialog::slotOk()
 	}
 
 	// then me make it replace form's current one
-	delete m_form->m_connBuffer;
-	m_form->m_connBuffer = m_buffer;
+	delete m_form->connectionBuffer();
+	m_form->setConnectionBuffer(m_buffer);
 
 	QDialog::accept();
 }

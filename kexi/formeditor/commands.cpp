@@ -479,7 +479,7 @@ LayoutPropertyCommand::LayoutPropertyCommand(ObjectPropertyBuffer *buf, const QS
 	m_form = buf->m_manager->activeForm();
 	Container *m_container = m_form->objectTree()->lookup(name)->container();
 	// We save the geometry of each wigdet
-	for(ObjectTreeItem *it = m_container->tree()->children()->first(); it; it = m_container->tree()->children()->next())
+	for(ObjectTreeItem *it = m_container->objectTree()->children()->first(); it; it = m_container->objectTree()->children()->next())
 		m_geometries.insert(it->name(), it->widget()->geometry());
 }
 
@@ -733,7 +733,7 @@ BreakLayoutCommand::BreakLayoutCommand(Container *container)
 	m_form = container->form();
 	m_type = container->layoutType();
 
-	for(ObjectTreeItem *tree = container->tree()->children()->first(); tree; tree = container->tree()->children()->next())
+	for(ObjectTreeItem *tree = container->objectTree()->children()->first(); tree; tree = container->objectTree()->children()->next())
 	{
 		QRect r(container->widget()->mapTo(container->widget()->parentWidget(), tree->widget()->pos()), tree->widget()->size());
 		m_pos.insert(tree->widget()->name(), r);

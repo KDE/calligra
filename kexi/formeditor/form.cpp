@@ -41,37 +41,52 @@
 
 #include "form.h"
 
-using namespace KFormDesigner;
+namespace KFormDesigner {
+
+FormPrivate::FormPrivate()
+{
+	toplevel = 0;
+	topTree = 0;
+	cursors = 0;
+	resizeHandles.setAutoDelete(true);
+	dirty = false;
+	interactive = true;
+	design = true;
+	autoTabstops = false;
+	tabstops.setAutoDelete(false);
+	connBuffer = new ConnectionBuffer();
+}
+
+FormPrivate::~FormPrivate()
+{
+	delete history;
+	delete topTree;
+	delete connBuffer;
+	connBuffer = 0;
+	resizeHandles.setAutoDelete(false);
+	// otherwise, it tries to delete widgets which doesn't exist anymore
+}
 
 Form::Form(FormManager *manager, const char *name)
   : QObject(manager, name)
 {
-	m_toplevel = 0;
-	m_topTree = 0;
-	m_cursors = 0;
-	m_manager = manager;
-	m_resizeHandles.setAutoDelete(true);
-	m_dirty = false;
-	m_inter = true;
-	m_design = true;
-	m_autoTabstops = false;
-	m_tabstops.setAutoDelete(false);
-	m_connBuffer = new ConnectionBuffer();
+	d = new FormPrivate();
+	d->manager = manager;
 
 	// Init actions
-	m_collection = new KActionCollection(0, this);
-	m_history = new KCommandHistory(m_collection, true);
-	connect(m_history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
-	connect(m_history, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
+	d->collection = new KActionCollection(0, this);
+	d->history = new KCommandHistory(d->collection, true);
+	connect(d->history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
+	connect(d->history, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
 }
 
 QWidget*
 Form::widget() const
 {
-	if(m_topTree)
-		return m_topTree->widget();
-	else if(m_toplevel)
-		return m_toplevel->widget();
+	if(d->topTree)
+		return d->topTree->widget();
+	else if(d->toplevel)
+		return d->toplevel->widget();
 	else
 		return 0;
 }
@@ -85,20 +100,20 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const QString &
 	kdDebug() << "Form::createToplevel() container= "<< (container ? container->name() : "<NULL>")
 		<< " formWidget=" << formWidget << "className=" << name() << endl;
 
-	m_formWidget = formWidget;
-	m_toplevel = new Container(0, container, this, name());
-	m_topTree = new ObjectTree(i18n("Form"), container->name(), container, m_toplevel);
-	m_toplevel->setObjectTree(m_topTree);
-	m_toplevel->setForm(this);
-	m_pixcollection = new PixmapCollection(container->name(), this);
+	d->formWidget = formWidget;
+	d->toplevel = new Container(0, container, this, name());
+	d->topTree = new ObjectTree(i18n("Form"), container->name(), container, d->toplevel);
+	d->toplevel->setObjectTree(d->topTree);
+	d->toplevel->setForm(this);
+	d->pixcollection = new PixmapCollection(container->name(), this);
 
-	m_topTree->setWidget(container);
-	m_topTree->addModifiedProperty("caption", name());
+	d->topTree->setWidget(container);
+	d->topTree->addModifiedProperty("caption", name());
 	//m_topTree->addModifiedProperty("icon");
 
 	connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
 
-	kdDebug() << "Form::createToplevel(): m_toplevel=" << m_toplevel << endl;
+	kdDebug() << "Form::createToplevel(): d->toplevel=" << d->toplevel << endl;
 }
 
 
@@ -106,13 +121,13 @@ Container*
 Form::activeContainer()
 {
 	ObjectTreeItem *it;
-	if(m_selected.count() == 0)
-		return m_toplevel;
+	if(d->selected.count() == 0)
+		return d->toplevel;
 
-	if(m_selected.count() == 1)
-		it = m_topTree->lookup(m_selected.last()->name());
+	if(d->selected.count() == 1)
+		it = d->topTree->lookup(d->selected.last()->name());
 	else
-		it = commonParentContainer(&m_selected);
+		it = commonParentContainer( &(d->selected) );
 
 	if (!it)
 		return 0;
@@ -155,7 +170,7 @@ Form::commonParentContainer(WidgetList *wlist)
 
 	// one widget remains == the container we are looking for
 	if(list->count() == 1)
-		item = m_topTree->lookup(list->first()->name());
+		item = d->topTree->lookup(list->first()->name());
 	else // we need to go one level up
 		item =  commonParentContainer(list);
 
@@ -169,9 +184,9 @@ Form::parentContainer(QWidget *w)
 	ObjectTreeItem *it;
 	if(!w)
 		return 0;
-	//	it = m_topTree->lookup(m_selected.last()->name());
+	//	it = d->topTree->lookup(d->selected.last()->name());
 	//else
-	it = m_topTree->lookup(w->name());
+	it = d->topTree->lookup(w->name());
 
 	if(it->parent()->container())
 		return it->parent()->container();
@@ -184,19 +199,19 @@ Form::parentContainer(QWidget *w)
 void
 Form::setDesignMode(bool design)
 {
-	m_design = design;
+	d->design = design;
 	if(!design)
 	{
-		ObjectTreeDict *dict = new ObjectTreeDict( *(m_topTree->dict()) );
+		ObjectTreeDict *dict = new ObjectTreeDict( *(d->topTree->dict()) );
 		ObjectTreeDictIterator it(*dict);
 		for(; it.current(); ++it)
-			m_manager->lib()->previewWidget(it.current()->widget()->className(), it.current()->widget(), m_toplevel);
+			d->manager->lib()->previewWidget(it.current()->widget()->className(), it.current()->widget(), d->toplevel);
 		delete dict;
 
-		delete m_topTree;
-		m_topTree = 0;
-		delete m_toplevel;
-		m_toplevel = 0;
+		delete (d->topTree);
+		d->topTree = 0;
+		delete (d->toplevel);
+		d->toplevel = 0;
 	}
 }
 
@@ -206,22 +221,22 @@ Form::setDesignMode(bool design)
 void
 Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 {
-	if((m_selected.isEmpty()) || (w == m_topTree->widget()) || (m_selected.first() == m_topTree->widget()))
+	if((d->selected.isEmpty()) || (w == widget()) || (d->selected.first() == widget()))
 		add = false;
 
 	if(!w)
 	{
-		setSelectedWidget(m_topTree->widget());
+		setSelectedWidget(widget());
 		return;
 	}
 
 	//raise selected widget and all possible parents
 	QWidget *wtmp = w;
-	while(!dontRaise && wtmp && wtmp->parentWidget() && (wtmp != m_topTree->widget()))
+	while(!dontRaise && wtmp && wtmp->parentWidget() && (wtmp != widget()))
 	{
 		wtmp->raise();
-		if(m_resizeHandles[ wtmp->name() ])
-			m_resizeHandles[ wtmp->name() ]->raise();
+		if(d->resizeHandles[ wtmp->name() ])
+			d->resizeHandles[ wtmp->name() ]->raise();
 		wtmp = wtmp->parentWidget();
 	}
 
@@ -230,66 +245,66 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 
 	if(!add)
 	{
-		m_selected.clear();
-		m_resizeHandles.clear();
+		d->selected.clear();
+		d->resizeHandles.clear();
 	}
-	m_selected.append(w);
+	d->selected.append(w);
 	emit selectionChanged(w, add);
 	emitActionSignals(false);
 
 	// WidgetStack and TabWidget pages widgets shouldn't have resize handles, but their parent
-	if(!m_manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
+	if(!d->manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 	{
 		w = w->parentWidget();
 		if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget"))
 			w = w->parentWidget();
 	}
 
-	if(m_toplevel && w != m_toplevel->widget() && w)
-		m_resizeHandles.insert(w->name(), new ResizeHandleSet(w, this));
+	if(w && w != widget())
+		d->resizeHandles.insert(w->name(), new ResizeHandleSet(w, this));
 }
 
 void
 Form::unSelectWidget(QWidget *w)
 {
-	m_selected.remove(w);
-	m_resizeHandles.remove(w->name());
+	d->selected.remove(w);
+	d->resizeHandles.remove(w->name());
 }
 
 void
 Form::resetSelection()
 {
-	setSelectedWidget(m_topTree->widget(), false);
+	setSelectedWidget(widget(), false);
 }
 
 void
 Form::emitActionSignals(bool withUndoAction)
 {
 	// Update menu and toolbar items
-	if(m_selected.count() > 1)
-		emit m_manager->widgetSelected(this, true);
-	else if(m_selected.first() != m_topTree->widget())
-		emit m_manager->widgetSelected(this, false);
+	if(d->selected.count() > 1)
+		emit d->manager->widgetSelected(this, true);
+	else if(d->selected.first() != widget())
+		emit d->manager->widgetSelected(this, false);
 	else
-		emit m_manager->formWidgetSelected(this);
+		emit d->manager->formWidgetSelected(this);
 
 	if(!withUndoAction)
 		return;
 
-	KAction *undoAction = m_collection->action("edit_undo");
+	KAction *undoAction = d->collection->action("edit_undo");
 	if(undoAction)
-		emit m_manager->undoEnabled(undoAction->isEnabled(), undoAction->text());
+		emit d->manager->undoEnabled(undoAction->isEnabled(), undoAction->text());
 
-	KAction *redoAction = m_collection->action("edit_redo");
+	KAction *redoAction = d->collection->action("edit_redo");
 	if(redoAction)
-		emit m_manager->redoEnabled(redoAction->isEnabled(), redoAction->text());
+		emit d->manager->redoEnabled(redoAction->isEnabled(), redoAction->text());
 }
 
 ///////////////////////////  Various slots and signals /////////////////////
 void
 Form::formDeleted()
 {
-	m_manager->deleteForm(this);
+	d->manager->deleteForm(this);
 	//delete this;
 	deleteLater();
 }
@@ -299,19 +314,19 @@ Form::changeName(const QString &oldname, const QString &newname)
 {
 	if(oldname == newname)
 		return;
-	if(!m_topTree->rename(oldname, newname)) // rename failed
+	if(!d->topTree->rename(oldname, newname)) // rename failed
 	{
-		KMessageBox::sorry(m_toplevel->widget()->topLevelWidget(),
+		KMessageBox::sorry(widget()->topLevelWidget(),
 		i18n("A widget with this name already exists. "
 			"Please choose another name or rename existing widget."));
 		kdDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists" << endl;
-		(*(m_manager->buffer()))["name"] = oldname;
+		(*(d->manager->buffer()))["name"] = oldname;
 	}
 	else
 	{
-		m_connBuffer->fixName(oldname, newname);
-		ResizeHandleSet *temp = m_resizeHandles.take(oldname);
-		m_resizeHandles.insert(newname, temp);
+		d->connBuffer->fixName(oldname, newname);
+		ResizeHandleSet *temp = d->resizeHandles.take(oldname);
+		d->resizeHandles.insert(newname, temp);
 	}
 
 }
@@ -326,18 +341,18 @@ Form::emitChildAdded(ObjectTreeItem *item)
 void
 Form::emitChildRemoved(ObjectTreeItem *item)
 {
-	m_tabstops.remove(item);
-	if(m_connBuffer)
-		m_connBuffer->removeAllConnectionsForWidget(item->name());
+	d->tabstops.remove(item);
+	if(d->connBuffer)
+		d->connBuffer->removeAllConnectionsForWidget(item->name());
 	emit childRemoved(item);
 }
 
 void
 Form::addCommand(KCommand *command, bool execute)
 {
-	emit m_manager->dirty(this, true);
-	m_dirty = true;
-	m_history->addCommand(command, execute);
+	emit d->manager->dirty(this, true);
+	d->dirty = true;
+	d->history->addCommand(command, execute);
 	if(!execute) // simulate command to activate 'undo' menu
 		slotCommandExecuted();
 }
@@ -345,8 +360,8 @@ Form::addCommand(KCommand *command, bool execute)
 void
 Form::slotCommandExecuted()
 {
-	emit m_manager->dirty(this, true);
-	m_dirty = true;
+	emit d->manager->dirty(this, true);
+	d->dirty = true;
 	// because actions text is changed after the commandExecuted() signal is emitted
 	QTimer::singleShot(10, this, SLOT(emitUndoEnabled()));
 	QTimer::singleShot(10, this, SLOT(emitRedoEnabled()));
@@ -355,24 +370,24 @@ Form::slotCommandExecuted()
 void
 Form::emitUndoEnabled()
 {
-	KAction *undoAction = m_collection->action("edit_undo");
+	KAction *undoAction = d->collection->action("edit_undo");
 	if(undoAction)
-		emit m_manager->undoEnabled(undoAction->isEnabled(), undoAction->text());
+		emit d->manager->undoEnabled(undoAction->isEnabled(), undoAction->text());
 }
 
 void
 Form::emitRedoEnabled()
 {
-	KAction *redoAction = m_collection->action("edit_redo");
+	KAction *redoAction = d->collection->action("edit_redo");
 	if(redoAction)
-		emit m_manager->redoEnabled(redoAction->isEnabled(), redoAction->text());
+		emit d->manager->redoEnabled(redoAction->isEnabled(), redoAction->text());
 }
 
 void
 Form::slotFormRestored()
 {
-	emit m_manager->dirty(this, false);
-	m_dirty = false;
+	emit d->manager->dirty(this, false);
+	d->dirty = false;
 }
 
 
@@ -395,17 +410,17 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 		{
 			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus))
 			{
-				if(m_tabstops.findRef(c) == -1)
+				if(d->tabstops.findRef(c) == -1)
 				{
-					m_tabstops.append(c);
+					d->tabstops.append(c);
 					return;
 				}
 			}
 		}
 	}
 
-	if(m_tabstops.findRef(c) == -1) // not yet in the list
-		m_tabstops.append(c);
+	if(d->tabstops.findRef(c) == -1) // not yet in the list
+		d->tabstops.append(c);
 }
 
 void
@@ -414,14 +429,14 @@ Form::autoAssignTabStops()
 	VerWidgetList list;
 	HorWidgetList hlist;
 
-	for(ObjectTreeItem *tree = m_tabstops.first(); tree; tree = m_tabstops.next())
+	for(ObjectTreeItem *tree = d->tabstops.first(); tree; tree = d->tabstops.next())
 	{
 		if(tree->widget())
 			list.append(tree->widget());
 	}
 
 	list.sort();
-	m_tabstops.clear();
+	d->tabstops.clear();
 
 	/// We automatically sort widget from the top-left to bottom-right corner
 	//! \todo Handle RTL layout (ie form top-right to bottom-left)
@@ -439,9 +454,9 @@ Form::autoAssignTabStops()
 
 		for(QWidget *widg = hlist.first(); widg; widg = hlist.next())
 		{
-			ObjectTreeItem *tree = m_topTree->lookup(widg->name());
+			ObjectTreeItem *tree = d->topTree->lookup(widg->name());
 			if(tree)
-				m_tabstops.append(tree);
+				d->tabstops.append(tree);
 		}
 
 		nextw = list.prev();
@@ -451,11 +466,9 @@ Form::autoAssignTabStops()
 
 Form::~Form()
 {
-	delete m_history;
-	delete m_topTree;
-	delete m_connBuffer;
-	m_connBuffer = 0;
-	m_resizeHandles.setAutoDelete(false); // otherwise, it tries to delete widgets which doesn't exist anymore
+	delete d;
+}
+
 }
 
 #include "form.moc"

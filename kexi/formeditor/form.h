@@ -66,6 +66,40 @@ class KFORMEDITOR_EXPORT FormWidget
 		virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;
 };
 
+class FormPrivate
+{
+	public:
+		FormManager  *manager;
+		QGuardedPtr<Container>  toplevel;
+		ObjectTree  *topTree;
+
+		WidgetList  selected;
+		ResizeHandleSet::Dict resizeHandles;
+
+		bool  dirty;
+		bool  interactive;
+		bool  design;
+		QString  filename;
+
+		KCommandHistory  *history;
+		KActionCollection  *collection;
+
+		ObjectTreeList  tabstops;
+		bool  autoTabstops;
+		ConnectionBuffer  *connBuffer;
+
+		PixmapCollection  *pixcollection;
+		//! This map is used to store cursors before inserting (so we can restore it later)
+		QMap<QString, QCursor>  *cursors;
+		//!This string list is used to store the widgets which hasMouseTracking() == true (eg lineedits)
+		QStringList *mouseTrackers;
+
+		FormWidget  *formWidget;
+
+		FormPrivate();
+		~FormPrivate();
+};
+
 /*!
   This class represents one form and holds the corresponding ObjectTree and Containers.
   It takes care of widget selection and pasting widgets.
@@ -91,15 +125,15 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		/*! \return the toplevel Container or 0 if this is a preview Form or createToplevel()
 		   has not been called yet. */
-		Container*		toplevelContainer() const { return m_toplevel; }
+		Container*		toplevelContainer() const { return d->toplevel; }
 		//! \return the FormWidget that holds this Form
-		FormWidget*		formWidget() { return m_formWidget; }
+		FormWidget*		formWidget() { return d->formWidget; }
 		//! \return a pointer to this form's ObjectTree.
-		ObjectTree*		objectTree() const { return m_topTree; }
+		ObjectTree*		objectTree() const { return d->topTree; }
 		//! \return the form's toplevel widget, or 0 if designMode() == false.
 		QWidget*		widget() const;
 		//! \return the FormManager parent of this form.
-		FormManager*		manager() const { return m_manager; }
+		FormManager*		manager() const { return d->manager; }
 
 		/*! \return A pointer to the currently active Container, ie the parent Container for a simple widget,
 		    and the widget's Container if it is itself a container.
@@ -116,7 +150,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		ObjectTreeItem*   commonParentContainer(WidgetList *wlist);
 
 		//! \return the widget currently selected in this form, or 0 if there is not.
-		WidgetList* 		selectedWidgets() {return &m_selected;}
+		WidgetList* 		selectedWidgets() {return &(d->selected);}
 
 		/*! Emits the action signals, and optionaly the undo/redo related signals
 		 if \a withUndoAction == true. See \a FormManager for signals description. */
@@ -125,23 +159,23 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! Sets the Form interactivity mode. Form is not interactive when
 		pasting widgets, or loading a Form.
 		 */
-		void			setInteractiveMode(bool interactive) { m_inter = interactive; }
+		void			setInteractiveMode(bool interactive) { d->interactive = interactive; }
 		/*! \return true if the Form is being updated by the user, ie the created
 		widget were drawn on the Form.
 		    \return false if the Form is being updated by the program, ie the widget
 		     are created by FormIO, and so composed widgets
 		    should not be populated automatically (such as QTabWidget).
 		 */
-		bool			interactiveMode() const { return m_inter; }
+		bool			interactiveMode() const { return d->interactive; }
 
 		/*! If \a design is true, the Form is in Design Mode (by default).
 		If \a design is false, then the Form is in Preview Mode, so
 		  the ObjectTree and the Containers are removed. */
 		void			setDesignMode(bool design);
 		//! \return The actual mode of the Form.
-		bool			designMode() { return m_design; }
+		bool			designMode() { return d->design; }
 
-		bool			isModified() { return m_dirty; }
+		bool			isModified() { return d->dirty; }
 
 		//! \return the x distance between two dots in the background.
 		int		gridX() { return 10;}
@@ -170,13 +204,13 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		/*! \return The filename of the UI file this Form was saved to,
 		or QString::null if the Form hasn't be saved yet. */
-		QString			filename() const { return m_filename; }
+		QString			filename() const { return d->filename; }
 		//! Sets the filename of this Form to \a filename.
-		void			setFilename(const QString &file) { m_filename = file; }
+		void			setFilename(const QString &file) { d->filename = file; }
 
-		KCommandHistory*	commandHistory() { return m_history; }
-		ConnectionBuffer*	connectionBuffer() { return m_connBuffer; }
-		PixmapCollection*	pixmapCollection() { return m_pixcollection; }
+		KCommandHistory*	commandHistory() { return d->history; }
+		ConnectionBuffer*	connectionBuffer() { return d->connBuffer; }
+		PixmapCollection*	pixmapCollection() { return d->pixcollection; }
 
 		/*! Adds a widget in the form CommandList. Please use it instead
 		of calling directly actionCollection()->addCommand(). */
@@ -185,17 +219,17 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! \return A pointer to this Form tabstops list : it contains all the widget
 		that can have focus ( ie no labels, etc)
 		    in the order of the tabs.*/
-		ObjectTreeList*		tabStops() { return &m_tabstops; }
+		ObjectTreeList*		tabStops() { return &(d->tabstops); }
 		/*! Adds the widget at the end of tabstops list. Called on widget creation. */
 		void			addWidgetToTabStops(ObjectTreeItem *c);
 		/*! \return True if the Form automatically handles tab stops. */
-		bool			autoTabStops() { return m_autoTabstops; }
+		bool			autoTabStops() { return d->autoTabstops; }
 		/*! If \a autoTab is true, then the Form will automatically handle tab stops,
 		   and the "Edit Tab Order" dialog will be disabled.
 		   The tab widget will be set from the top-left to the bottom-right corner.\n
 		    If \ autoTab is false, then it's up to the user to change tab stops
 		    (which are by default in order of creation).*/
-		void			setAutoTabStops(bool autoTab) { m_autoTabstops = autoTab;}
+		void			setAutoTabStops(bool autoTab) { d->autoTabstops = autoTab;}
 		/*! Tells the Form to reassign the tab stops because the widget layout has changed
 		(called for example before saving or displaying the tab order dialog) */
 		void			autoAssignTabStops();
@@ -249,33 +283,11 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 */
 		void			childRemoved(ObjectTreeItem *it);
 
+	protected:
+		void			setConnectionBuffer(ConnectionBuffer *b) { d->connBuffer = b; }
+
 	private:
-		FormManager		*m_manager;
-		QGuardedPtr<Container> m_toplevel;
-		ObjectTree		*m_topTree;
-
-		WidgetList		m_selected;
-		ResizeHandleSet::Dict m_resizeHandles;
-
-		bool			m_dirty;
-		bool			m_inter;
-		bool			m_design;
-		QString			m_filename;
-
-		KCommandHistory		*m_history;
-		KActionCollection	*m_collection;
-
-		ObjectTreeList		m_tabstops;
-		bool			m_autoTabstops;
-		ConnectionBuffer	*m_connBuffer;
-
-		PixmapCollection	*m_pixcollection;
-		//! This map is used to store cursors before inserting (so we can restore it later)
-		QMap<QString, QCursor>  *m_cursors;
-		//!This string list is used to store the widgets which hasMouseTracking() == true (eg lineedits)
-		QStringList		*m_mouseTrackers;
-
-		FormWidget		*m_formWidget;
+		FormPrivate *d;
 
 		friend class FormManager;
 		friend class ConnectionDialog;

@@ -32,7 +32,6 @@ class QWidget;
 
 namespace KFormDesigner {
 
-
 class ObjectTreeItem;
 class Container;
 class EventEater;

@@ -146,7 +146,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 			m_form->objectTree()->addItem(parent, it);
 		}
 		else
-			m_form->objectTree()->addItem(toplevel->tree(), it);
+			m_form->objectTree()->addItem(toplevel->objectTree(), it);
 	}
 
 	connect(toplevel, SIGNAL(destroyed()), this, SLOT(widgetDeleted()));
