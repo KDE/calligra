@@ -12,7 +12,7 @@ libkarbonaiimport_la_LDFLAGS = \
 INCLUDES = \
 	$(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/karbon \
-	-I$(top_srcdir)/karbon/visitors \
+	-I$(top_srcdir)/karbon/core \
 	$(all_includes)
 
 service_DATA = karbon_ai_import.desktop
@@ -21,20 +21,18 @@ servicedir = $(kde_servicesdir)
 noinst_HEADERS = \
 	aicolor.h \
 	aielement.h \
+	aiimport.h \
 	ailexer.h \
 	aiparserbase.h \
-	karbonaiparserbase.h \
-	vdocument.h \
-	aiimport.h
+	karbonaiparserbase.h
 
 libkarbonaiimport_la_SOURCES = \
 	aicolor.cc \
 	aielement.cc \
+	aiimport.cc \
 	ailexer.cc \
 	aiparserbase.cc \
-	karbonaiparserbase.cc \
-	vdocument.cc \
-	aiimport.cc
+	karbonaiparserbase.cc
 
 libkarbonaiimport_la_METASOURCES = \
 	AUTO

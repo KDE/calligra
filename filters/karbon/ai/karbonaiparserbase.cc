@@ -124,7 +124,7 @@ void KarbonAIParserBase::gotPathElement (PathElement &element){
 }
 
 // generic
-void KarbonAIParserBase::gotFillPath (bool closed, bool reset, FillMode fm){
+void KarbonAIParserBase::gotFillPath (bool closed, bool reset, FillMode /*fm*/){
 //  qDebug ("found fill path");
   if (!reset) qDebug ("retain filled path");
 
@@ -172,7 +172,7 @@ void KarbonAIParserBase::gotStrokePath (bool closed) {
 }
 
 // generic
-void KarbonAIParserBase::gotClipPath (bool closed){
+void KarbonAIParserBase::gotClipPath (bool /*closed*/){
 
   doOutputCurrentPath2 (POT_Clip);
 }
@@ -212,7 +212,7 @@ void KarbonAIParserBase::gotLineWidth (double val){
   m_stroke.setLineWidth (val);
 }
 
-void KarbonAIParserBase::gotFlatness (double val)
+void KarbonAIParserBase::gotFlatness (double /*val*/)
 {
 //  m_flatness = val;
 //  m_stroke.setFlatness (val);
@@ -261,7 +261,7 @@ void KarbonAIParserBase::gotWindingOrder (int val)
   m_windingOrder = val;
 }
 
-void KarbonAIParserBase::gotBeginGroup (bool clipping)
+void KarbonAIParserBase::gotBeginGroup (bool /*clipping*/)
 {
 //  qDebug ("start begin group");
   VGroup *group = new VGroup();
@@ -270,7 +270,7 @@ void KarbonAIParserBase::gotBeginGroup (bool clipping)
 
 }
 
-void KarbonAIParserBase::gotEndGroup (bool clipping)
+void KarbonAIParserBase::gotEndGroup (bool /*clipping*/)
 {
 //  qDebug ("start end group");
 
@@ -282,7 +282,7 @@ void KarbonAIParserBase::gotEndGroup (bool clipping)
   }
   else
   {
-    m_groupStack.top()->insertObject (group);
+    m_groupStack.top()->append( group );
   }
 
 //  qDebug ("end end group");
@@ -373,7 +373,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
   }
   else
   {
-    m_groupStack.top()->insert( m_curKarbonPath );
+    m_groupStack.top()->append( m_curKarbonPath );
   }
 
   m_curKarbonPath = new VPath();
@@ -388,7 +388,7 @@ bool KarbonAIParserBase::parse (QIODevice& fin, QDomDocument &doc)
   if (res)
   {
       qDebug ("before save document");
-//      m_document->save (doc);
+      m_document->saveXML(doc);
       qDebug ("after save document");
   }
   else
