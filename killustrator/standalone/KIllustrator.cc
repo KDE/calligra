@@ -1343,6 +1343,7 @@ void KIllustrator::importFromFile () {
 						    FilterInfo::FKind_Import);
     if (filterInfo) {
       ImportFilter* filter = filterInfo->importFilter ();
+      cout << "filter = " << filterInfo->type () << endl;
       if (filter->setup (document, filterInfo->extension ())) {
 	filter->setInputFileName (fname);
 	filter->importFromFile (document);
@@ -1515,9 +1516,11 @@ void KIllustrator::updatePalette () {
 void KIllustrator::updateGridSettings () {
   if (canvas->snapToGrid () != layout->isItemChecked (ID_LAYOUT_ALIGN_GRID))
     layout->setItemChecked (ID_LAYOUT_ALIGN_GRID, canvas->snapToGrid ());
+  view->setItemChecked (ID_VIEW_GRID, canvas->showGrid ());
   if (canvas->alignToHelplines () != 
       layout->isItemChecked (ID_LAYOUT_ALIGN_HLINES))
     layout->setItemChecked (ID_LAYOUT_ALIGN_HLINES, 
 			    canvas->alignToHelplines ());
+  view->setItemChecked (ID_VIEW_HELPLINES, canvas->showHelplines ());
 }
 
