@@ -1152,15 +1152,15 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
     case Key_Right:
 
-      if ( !m_bChoose && markerColumn() == 0xFFFF )
+      if ( !m_bChoose && markerColumn() == 26*26)//0xFFFF )
         return;
-      if ( m_bChoose && chooseMarkerColumn() == 0xFFFF )
+      if ( m_bChoose && chooseMarkerColumn() == 26*26)//0xFFFF )
         return;
 
       if ( m_bChoose )
-        chooseGotoLocation( QMIN( 0x7FFF, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
+        chooseGotoLocation( QMIN( 26*26/*0x7FFF*/, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
       else
-        gotoLocation( QMIN( 0x7FFF, markerColumn() + 1 ), markerRow(), 0, make_select );
+        gotoLocation( QMIN( /*26*26*/0x7FFF, markerColumn() + 1 ), markerRow(), 0, make_select );
 
       return;
 
@@ -1505,7 +1505,7 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
   	{
   	if(activeTable()->getLcMode())
   		{
-  		buffer="L"+tmp.setNum(m_iMarkerRow); 
+  		buffer="L"+tmp.setNum(m_iMarkerRow);
 	  	buffer+="C"+tmp.setNum(m_iMarkerColumn);
   		}
   	else
@@ -1532,11 +1532,11 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
   	}
   else
   	{
-  	
+
   	if(activeTable()->getLcMode())
   		{
- 	 	buffer="L"+tmp.setNum(m_iMarkerRow); 
-	  	buffer+="C"+tmp.setNum(m_iMarkerColumn);	
+ 	 	buffer="L"+tmp.setNum(m_iMarkerRow);
+	  	buffer+="C"+tmp.setNum(m_iMarkerColumn);
   		}
   	else
   		{
@@ -2082,10 +2082,10 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
 	  size->setGeometry(3,3+y,len+2, hei+2 ) ;
 	  size->setAlignment(Qt::AlignVCenter);
 	  size->setText(tmpSize);
-	  size->show();    	
+	  size->show();
     	}
     else
-    	{ 
+    	{
 	  size->setGeometry(3,3+y,len+2, hei+2 );
 	  size->setText(tmpSize);
     	}

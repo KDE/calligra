@@ -39,7 +39,9 @@ QString util_columnLabel( int column )
   else if ( column <= 26 * 26 )
     sprintf( buffer, "%c%c",'A'+((column-1)/26)-1,'A'+((column-1)%26));
   else
-    strcpy( buffer,"@@@");
+    sprintf( buffer, "%c%c",'A'+((26-1)/26)-1,'A'+((26-1)%26));
+    //limit is 26*26
+    //strcpy( buffer,"@@@");
 
   return QString( buffer );
 }
@@ -110,7 +112,9 @@ void KSpreadPoint::init( const QString& _str )
 
   while( p < len && _str[p] >= 'A' && _str[p] <= 'Z' )
     x = x*26 + (char)_str[p++] - 'A' + 1;
-
+  //limit is 26*26
+  if(x>(26*26))
+        return;
   // Malformed ?
   if ( p == len  )
     return;
@@ -134,7 +138,7 @@ void KSpreadPoint::init( const QString& _str )
   int y = atoi( _str.latin1() + p2 );
   if ( y <= 0 )
     return;
-  
+
   pos = QPoint( x, y );
 }
 

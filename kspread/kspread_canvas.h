@@ -25,7 +25,7 @@ class QLabel;
 class QPainter;
 
 #define YBORDER_WIDTH 40
-#define XBORDER_HEIGHT 14
+#define XBORDER_HEIGHT 20
 
 /**
  * The widget that appears above the table and allows to
