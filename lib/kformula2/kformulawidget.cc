@@ -39,7 +39,7 @@ KFormulaWidget::~KFormulaWidget()
 }
 
 
-void KFormulaWidget::paintEvent(QPaintEvent* event)
+void KFormulaWidget::paintEvent(QPaintEvent*)
 {
     QPainter painter;
     painter.begin(this);

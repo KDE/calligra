@@ -19,6 +19,7 @@
 */
 
 #include <iostream>
+#include <stdlib.h>
 
 #include <qpainter.h>
 
@@ -475,7 +476,7 @@ void SequenceElement::removeChild(QList<BasicElement>& removedChildren, int pos)
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void SequenceElement::normalize(FormulaCursor* cursor, Direction direction)
+void SequenceElement::normalize(FormulaCursor* cursor, Direction)
 {
     cursor->setSelection(false);
 }

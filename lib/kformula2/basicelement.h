@@ -119,26 +119,26 @@ public:
      * the element `from'. Searches for a cursor position inside
      * this element or above it.
      */
-    virtual void moveUp(FormulaCursor* cursor, BasicElement* from) {}
+    virtual void moveUp(FormulaCursor*, BasicElement*) {}
 
     /**
      * Enters this element while moving down starting inside
      * the element `from'. Searches for a cursor position inside
      * this element or below it.
      */
-    virtual void moveDown(FormulaCursor* cursor, BasicElement* from) {}
+    virtual void moveDown(FormulaCursor*, BasicElement* ) {}
 
     /**
      * Moves the cursor to the first position in this sequence.
      * (That is before the first child.)
      */
-    virtual void moveHome(FormulaCursor* cursor) {}
+    virtual void moveHome(FormulaCursor*) {}
 
     /**
      * Moves the cursor to the last position in this sequence.
      * (That is behind the last child.)
      */
-    virtual void moveEnd(FormulaCursor* cursor) {}
+    virtual void moveEnd(FormulaCursor*) {}
 
     /**
      * Sets the cursor inside this element to its start position.
@@ -216,7 +216,7 @@ public:
      * Sets the cursor to select the child. The mark is placed before,
      * the position behind it.
      */
-    virtual void selectChild(FormulaCursor* cursor, BasicElement* child) {}
+    virtual void selectChild(FormulaCursor*, BasicElement*) {}
 
     /**
      * Moves the cursor inside the main child.

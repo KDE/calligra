@@ -34,7 +34,7 @@ FormulaCursor::FormulaCursor(FormulaElement* element)
     setTo(element, 0);
 }
 
-void FormulaCursor::setTo(BasicElement* element, int cursor, int mark=-1)
+void FormulaCursor::setTo(BasicElement* element, int cursor, int mark)
 {
     current = element;
     cursorPos = cursor;

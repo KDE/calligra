@@ -166,10 +166,8 @@ private:
 
     // everything else
     class EmptyBracket : public Bracket {
-        virtual void calcSizes(ContextStyle& style, int parentSize,
-                               int contentHeight, bool right) {}
-        virtual void draw(QPainter& painter, ContextStyle& style,
-                          int parentSize, const QPoint& origin, bool right) {}
+        virtual void calcSizes(ContextStyle&, int, int, bool) {}
+        virtual void draw(QPainter&, ContextStyle&, int, const QPoint&, bool) {}
     };
 
     

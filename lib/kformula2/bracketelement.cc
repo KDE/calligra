@@ -138,7 +138,7 @@ void BracketElement::moveRight(FormulaCursor* cursor, BasicElement* from)
  * the element `from'. Searches for a cursor position inside
  * this element or above it.
  */
-void BracketElement::moveUp(FormulaCursor* cursor, BasicElement* from)
+void BracketElement::moveUp(FormulaCursor* cursor, BasicElement*)
 {
     getParent()->moveUp(cursor, this);
 }
@@ -148,7 +148,7 @@ void BracketElement::moveUp(FormulaCursor* cursor, BasicElement* from)
  * the element `from'. Searches for a cursor position inside
  * this element or below it.
  */
-void BracketElement::moveDown(FormulaCursor* cursor, BasicElement* from)
+void BracketElement::moveDown(FormulaCursor* cursor, BasicElement*)
 {
     getParent()->moveDown(cursor, this);
 }

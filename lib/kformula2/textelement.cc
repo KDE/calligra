@@ -85,7 +85,7 @@ void TextElement::draw(QPainter& painter, ContextStyle& context,
  * the element `from'. Searches for a cursor position inside
  * this element or to the left of it.
  */
-void TextElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
+void TextElement::moveLeft(FormulaCursor* cursor, BasicElement*)
 {
     getParent()->moveLeft(cursor, this);
 }
@@ -95,7 +95,7 @@ void TextElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
  * the element `from'. Searches for a cursor position inside
  * this element or to the right of it.
  */
-void TextElement::moveRight(FormulaCursor* cursor, BasicElement* from)
+void TextElement::moveRight(FormulaCursor* cursor, BasicElement*)
 {
     getParent()->moveRight(cursor, this);
 }

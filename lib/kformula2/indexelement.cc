@@ -630,7 +630,7 @@ bool IndexElement::isSenseless()
 /**
  * Returns the child at the cursor.
  */
-BasicElement* IndexElement::getChild(FormulaCursor* cursor, Direction direction)
+BasicElement* IndexElement::getChild(FormulaCursor* cursor, Direction)
 {
     int pos = cursor->getPos();
     /*
