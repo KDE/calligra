@@ -421,305 +421,234 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
     }
 }
 
-void KWTableFrameSet::recalcRows(int _col, int _row)
-{
+void KWTableFrameSet::recalcRows(int _col, int _row) {
     //kdDebug() << "KWTableFrameSet::recalcRows" << endl;
-    // remove automatically added headers
-    for ( unsigned int j = 0; j < m_rows; j++ ) {
-        Cell *tmp=getCell( j, 0 );
-        Q_ASSERT(tmp);
-        if ( tmp && tmp->isRemoveableHeader() ) {
-            //kdDebug() << "KWTableFrameSet::recalcRows removing temp row " << j << endl;
-            deleteRow( j, false );
-            j--;
-        }
-    }
-    m_hasTmpHeaders = false;
+
+    if(m_cells.isEmpty()) return; // assertion
+
     // check/set sizes of frames
     unsigned int row=0,col=0;
-    if(!m_cells.isEmpty()) {
-        if(_col!=-1 && _row!=-1)
-        {
-            row=(unsigned int)_row;
-            col=(unsigned int)_col;
-        }
-        else
-            isOneSelected(row,col);
+    if(_col!=-1 && _row!=-1)
+    {
+        row=(unsigned int)_row;
+        col=(unsigned int)_col;
+    }
+    else
+        isOneSelected(row,col);
 
-        // check if topCoordinate is same as rest of tableRow
-        Cell *activeCell = getCell(row,col);
-        Cell *cell;
-        double coordinate;
+    Cell *activeCell = getCell(row,col);
+    double difference = 0;
 
-        if(activeCell->getFrame(0)->isSelected())
-            activeCell->getFrame(0)->setMinFrameHeight(activeCell->getFrame(0)->height());
-        // find old coord.
-        coordinate=activeCell->getFrame(0)->top();
-        bool found=false;
-        for ( unsigned int i = 0; i < m_cols; i++) {
-            // search current row for a cell that starts at this row, just like our does.
-            if( !(i>=col && i<=(activeCell->m_col+activeCell->m_cols-1))) {
-                cell=getCell(row,i);
-                Q_ASSERT(cell);
-                if(cell && cell->m_row==row) {
-                    coordinate=cell->getFrame(0)->top();
-                    found=true;
-                    break;
-                }
-            }
-        }
-        if(!found && row>0) {
-            cell = getCell(row-1,col);
-            if(cell) {
-                coordinate=cell->getFrame(0)->bottom()+tableCellSpacing ;
-            }
-        }
-        double postAdjust=0;
-        if(coordinate != activeCell->getFrame(0)->top()) { // top pos changed
-            for ( unsigned int i = 0; i < m_cols; i++) {
-                double difference=0;
-                if(row==0) { // top cell
-                    cell = getCell(0,i);
-                    if(cell==activeCell)
-                        cell=0;
-                    else
-                        difference = - ( activeCell->getFrame(0)->top() - coordinate );
-                } else {
-                    cell = getCell(row-1,i);
-                    if(cell->m_col == i) // dont resize joined cells more then ones.
-                        difference = activeCell->getFrame(0)->top() - coordinate;
-                    else
-                        cell=0;
-                }
-                if(cell) {
-                    double newHeight= cell->getFrame(0)->height() + difference;
-                    if(newHeight<minFrameHeight) {
-                        if(minFrameHeight-newHeight > postAdjust)
-                            postAdjust = minFrameHeight-newHeight;
-                    }
-                    cell->getFrame(0)->setHeight(newHeight);
-                    cell->getFrame(0)->setMinFrameHeight(newHeight);
-                }
-            }
-            if(row!=0) {
-                double newHeight = activeCell->getFrame(0)->height() +
-                    activeCell->getFrame(0)->top()- coordinate;
-                activeCell->getFrame(0)->setHeight(newHeight);
-                activeCell->getFrame(0)->setMinFrameHeight(newHeight);
-            }
-            if(postAdjust!=0) {
-                if(row==0) row++;
-                for ( unsigned int i = 0; i < m_cols; i++) {
-                    cell = getCell(row-1,i);
-                    if(cell->m_col == i)
-                        cell->getFrame(0)->setHeight(
-                            cell->getFrame(0)->height() + postAdjust);
-                        cell->getFrame(0)->setMinFrameHeight(
-                            cell->getFrame(0)->height() + postAdjust);
-                }
-            }
-        } else { // bottom pos has changed
-            row+=activeCell->m_rows-1;
-            // find old coord.
-            coordinate=activeCell->getFrame(0)->bottom();
-            found=false;
-            for ( unsigned int i = 0; i < m_cols; i++) {
-                if(!(i>=col && i<=(activeCell->m_col+activeCell->m_cols-1))) {
-                    cell=getCell(activeCell->m_row+activeCell->m_rows-1,i);
-                    if(cell->m_row+cell->m_rows==activeCell->m_row+activeCell->m_rows) {
-                        coordinate=cell->getFrame(0)->bottom();
-                        found=true;
-                        break;
-                    }
-                }
-            }
-            if(!found) {
-                cell = getCell(activeCell->m_row + activeCell->m_rows +1);
-                if(cell) {
-                    coordinate=cell->getFrame(0)->top()-tableCellSpacing;
-                }
-            }
+    if(activeCell->getFrame(0)->isSelected())
+        activeCell->getFrame(0)->setMinFrameHeight(activeCell->getFrame(0)->height());
 
-            if(coordinate != activeCell->getFrame(0)->bottom()) {
-                for ( unsigned int i = 0; i < m_cols; i++) {
-                    cell = getCell(row,i);
-                    Q_ASSERT(cell);
-                    Q_ASSERT(activeCell);
-                    if(cell && cell != activeCell && cell->m_col == i) {
-                        double newHeight= cell->getFrame(0)->height() +
-                            activeCell->getFrame(0)->bottom() - coordinate;
-                        if(newHeight<minFrameHeight) {
-                            if(minFrameHeight-newHeight > postAdjust)
-                                postAdjust = minFrameHeight-newHeight;
-                        }
-                        cell->getFrame(0)->setHeight(newHeight);
-kdDebug() << cell->getFrame(0) << "->setMinFrameHeight("<< newHeight<< ")" << endl;
-                        cell->getFrame(0)->setMinFrameHeight(newHeight);
-                    }
-                }
-            }
-            if(postAdjust!=0) {
-                for ( unsigned int i = 0; i < m_cols; i++) {
-                    cell = getCell(row,i);
-                    if(cell->m_col == i) {
-                        cell->getFrame(0)->setHeight( cell->getFrame(0)->height() + postAdjust);
-                        cell->getFrame(0)->setMinFrameHeight( cell->getFrame(0)->height() + postAdjust);
-kdDebug() << "setMinFrameHeight2("<< cell->getFrame(0)->height() + postAdjust << ")" << endl;
-                    }
-                }
-            }
-        }
+    if(activeCell->getFrame(0)->top() - activeCell->topBorder() != getPositionOfRow(activeCell->m_row)) {
+        // top moved.
+        row = activeCell->m_row;
+        difference = activeCell->getFrame(0)->top() - activeCell->topBorder() - getPositionOfRow(row);;
+    } 
+
+    if(activeCell->getFrame(0)->bottom() - activeCell->bottomBorder() != 
+            getPositionOfRow(activeCell->m_row + activeCell->m_rows)) { // bottom moved 
+
+        row = activeCell->m_row + activeCell->m_rows;
+        double difference2 = activeCell->getFrame(0)->bottom() + activeCell->bottomBorder() - getPositionOfRow(row);;
+        if(difference==difference2) { // we were simply moved.
+            row=0;
+        } else
+            difference = difference2;
     }
 
-    // do positioning of frames
-    double y, nextY = getCell( 0, 0 )->getFrame( 0 )->y();
-    unsigned int doingPage = getCell(0,0)->getFrame(0)->pageNum();
-    m_pageBoundaries.clear();
-    m_pageBoundaries.append(0);
-    for ( unsigned int j = 0; j < m_rows; j++ ) {
-        y=nextY;
-        unsigned int i = 0;
-
-        for ( i = 0; i < m_cols; i++ ) {
-            Cell *cell = getCell(j,i);
-            if(!cell)
-                continue;
-            if(!(cell && cell->getFrame(0))) { // sanity check.
-                kdDebug(32002) << "screwy table cell!! row:" << cell->m_row << ", col: " << cell->m_col << endl;
-                continue;
-            }
-            if(cell->m_col==i && cell->m_row==j) { // beware of multi cell frames.
-                cell->getFrame( 0 )->moveTopLeft( KoPoint( cell->getFrame( 0 )->x(), y ) );
-                //cell->getFrame( 0 )->setPageNum(doingPage);
-            }
-            if(cell->m_row + cell->m_rows -1 == j)
-                nextY=cell->getFrame(0) -> bottom() + tableCellSpacing;
+    unsigned int fromRow=m_rows; // possible reposition rows starting with this one, default to no repositioning
+    if(difference!=0) {
+        unsigned int adjustment=0;
+        QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
+        while(pageBound != m_pageBoundaries.end() && (*pageBound) <= row) {
+            adjustment++;
+            pageBound++;
         }
-        // check all cells on this row if one might have fallen off the page.
-        if( j == 0 ) continue;
-        unsigned int fromRow=j;
-        bool _addRow = false;
-        bool hugeRow = false;
-        double pageBottom = (doingPage+1) * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
-        double pageHeight = m_doc->ptPaperHeight() - m_doc->ptBottomBorder() - m_doc->ptTopBorder();
-        for(i = 0; i < m_cols; i++) {
-            Cell *cell = getCell(j,i);
-            if(!cell)
-                continue;
-            KWFrameSet *fs=cell;
-            if(cell->m_row < fromRow)
-                fromRow = cell->m_row;
-            if ( fs->getFrame( 0 )->bottom() > pageBottom ) {
-                 if ( fs->getFrame( 0 )->height() < pageHeight ) {
-                     // doesn't fit on the page - but would fit on an empty page
-                     kdDebug(32002) << "KWTableFrameSet::recalcRows cell " << j << " " << i << " doesn't fit on page " << doingPage << endl;
-                     y = (unsigned)( (doingPage+1) * m_doc->ptPaperHeight() + m_doc->ptTopBorder() );
-                     _addRow = true;
-                 } else
-                     hugeRow = true;
+        double last=row==0?0:m_rowPositions[row-1];
+        for(unsigned int i=row+adjustment; i < m_rowPositions.count(); i++) {
+            double &rowPos = m_rowPositions[i];
+            rowPos = rowPos + difference;
+            if(rowPos-last < minFrameHeight) { // Never make it smaller then allowed!
+                difference += minFrameHeight - rowPos;
+                rowPos = minFrameHeight + last;
             }
+            if(*pageBound == i) break;      // stop at pageBreak.
+            last=rowPos;
         }
-        if ( hugeRow ) {
-            // Row is too big, we don't split it nor insert a temp header
-            doingPage++;
-        }
-        else if ( _addRow ) {
-            j=fromRow;
-            doingPage++;
-
-            if ( y >= m_doc->ptPaperHeight() * m_doc->getPages() )
-                m_doc->appendPage();
-
-            // No header rows for floating tables. If we want one,  then we have to
-            // fix adjustFlow somehow, so that it doesn't move down tables if it can break them
-            // between cells (!)
-            bool addHeaderRow = m_showHeaderOnAllPages && !isFloating();
-            if ( addHeaderRow )
-            {
-                // Refuse to create a huge header row, it makes no sense
-                // When the first line is the one that's higher than the page, we end up with an infinite loop
-                if ( !getCell( 0, 0 ) || getCell( 0, 0 )->getFrame(0)->height() > m_doc->ptPaperHeight() / 2 )
-                    addHeaderRow = false;
-            }
-            if ( addHeaderRow ) {
-                //kdDebug() << "KWTableFrameSet::recalcRows adding header at row " << j << endl;
-                m_hasTmpHeaders = true;
-                QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>();
-                QPtrList<KWFrame> listFrame=QPtrList<KWFrame>();
-                insertRow( j, listFrameSet, listFrame, false, true );
-            }
-            for(i = 0; i < m_cells.count(); i++) {
-                Cell *cell = m_cells.at(i);
-                if(cell->m_row==j+1) cell->getFrame(0)->updateResizeHandles(); // reposition resize handles.
-                if(cell->m_row!=j) continue; //  wrong row
-                if(cell->m_col != 1) m_pageBoundaries.append(i); // new page boundary
-                if ( addHeaderRow ) {
-                    KWTextFrameSet *baseFrameSet = getCell( 0, cell->m_col );
-                    KWFrame *newFrame = cell->getFrame(0);
-                    //newFrameSet->assign( baseFrameSet );
-
-                    newFrame->setBackgroundColor( baseFrameSet->getFrame( 0 )->getBackgroundColor() );
-                    newFrame->setLeftBorder( baseFrameSet->getFrame( 0 )->leftBorder() );
-                    newFrame->setRightBorder( baseFrameSet->getFrame( 0 )->rightBorder() );
-                    newFrame->setTopBorder( baseFrameSet->getFrame( 0 )->topBorder() );
-                    newFrame->setBottomBorder( baseFrameSet->getFrame( 0 )->bottomBorder() );
-                    newFrame->setBLeft( baseFrameSet->getFrame( 0 )->getBLeft() );
-                    newFrame->setBRight( baseFrameSet->getFrame( 0 )->getBRight() );
-                    newFrame->setBTop( baseFrameSet->getFrame( 0 )->getBTop() );
-                    newFrame->setBBottom( baseFrameSet->getFrame( 0 )->getBBottom() );
-
-                    newFrame->setHeight(baseFrameSet->getFrame(0)->height());
-                    newFrame->setMinFrameHeight(baseFrameSet->getFrame(0)->minFrameHeight());
-                    //kdDebug(32002) << "KWTableFrameSet::recalcRows header created, height=" << newFrame->height() << endl;
-                }
-                cell->getFrame( 0 )->moveTopLeft( KoPoint( cell->getFrame( 0 )->x(), y ) );
-                if(cell->m_row + cell->m_rows -1 == j) {
-                    nextY=cell->getFrame(0) -> bottom() + tableCellSpacing;
-                }
-            }
-        }
+        fromRow=row;
+        if(row>0) fromRow--;
+    } else {
+        row=0;
     }
-    m_pageBoundaries.append(m_cells.count());
+
+    double pageHeight = m_doc->ptPaperHeight() - m_doc->ptBottomBorder() - m_doc->ptTopBorder();
+    unsigned int pageNumber=getCell(0,0)->getFrame(0)->pageNum() +1;
+    unsigned int rowNumber=0;
+    QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
+    QValueList<double>::iterator j = m_rowPositions.begin();
+
+    double pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
+    while(++j!=m_rowPositions.end()) {
+        if(pageBound!=m_pageBoundaries.end() && *pageBound == rowNumber ) {
+            if(*j > pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder() ) { // next page marker exists, and is accurate...
+                pageNumber++;
+                pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();    
+                pageBound++;
+            } else { // pagebreak marker should be removed, since it is incorrect.
+                pageBound=m_pageBoundaries.erase(pageBound);
+                QValueList<double>::iterator tmp = j;
+                tmp++;
+                double diff = *tmp - *j;
+                j=m_rowPositions.erase(j);
+                tmp=j;
+                while(tmp != m_rowPositions.end()) {
+                    (*tmp) = (*tmp) - diff; // move the rest of the rows up.
+                    tmp++;
+                }
+                // TODO remove headers and  m_hasTmpHeaders = false;
+            }
+        }
+
+        if((*j) > pageBottom) { // a row falls off the page.
+            bool hugeRow = false;
+            unsigned int breakRow = rowNumber;
+            for(unsigned int i=0; i < m_cols ; i++) {
+                if(getCell(breakRow,i)->m_row < breakRow) {
+                    breakRow = getCell(breakRow,i)->m_row;
+                    i=0;
+                }
+            }
+            fromRow=QMIN(fromRow, breakRow);
+            for(unsigned int i=0; i < m_cols ; i++) {
+                if(getCell(breakRow+1,i) && getCell(breakRow+1,i)->getFrame(0)->height() > pageHeight)
+                    hugeRow=true;
+            }
+            if((*pageBound) != breakRow) {
+                // voeg bottom in in rowPositions
+
+                double topOfPage = m_doc->ptPaperHeight() * pageNumber + m_doc->ptTopBorder();
+                QValueList<double>::iterator tmp = j;
+                tmp--;
+                double diff = topOfPage - (*tmp); // diff between bottom of last row on page and top of new page
+                j=m_rowPositions.insert(j, topOfPage);
+
+                tmp=j;
+                while(++tmp!=m_rowPositions.end()) { // move all succesive rows
+                    (*tmp) = (*tmp) + diff;
+                }
+
+                // voeg nieuwe pageBound toe.
+                pageBound = m_pageBoundaries.insert(pageBound, breakRow);
+                pageBound++;
+                if(!hugeRow) {
+                    // add header-rij toe. (en zet bool) TODO
+                    //j++;
+                    //rowNumber++;
+                    // m_hasTmpHeaders = true;
+                }
+            }
+            pageNumber++;
+            pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();    
+        }
+        if ( *j >= m_doc->ptPaperHeight() * m_doc->getPages() )
+            m_doc->appendPage();
+
+        rowNumber++;
+    }
+
+    // do positioning.
+    Cell *cell;
+    for(cell=m_cells.first();cell;cell=m_cells.next()) {
+        if(cell->m_row >=fromRow) 
+            position(cell, cell->m_row <= row-1 && cell->m_row + cell->m_rows > row-1);
+    }
+
     //kdDebug() << "KWTableFrameSet::recalcRows done" << endl;
 }
 
-void KWTableFrameSet::setBoundingRect( KoRect rect )
-{
-    //kdDebug() << "KWTableFrameSet::setBoundingRect" << endl;
-    if ( m_widthMode == TblAuto )
-    {
+void KWTableFrameSet::setBoundingRect( KoRect rect ) {
+    // Column postions..
+    m_rowPositions.clear();
+    double colWidth = rect.width() / m_cols;
+    if ( m_widthMode == TblAuto ) {
         rect.setLeft( m_doc->ptLeftBorder() );
-        rect.setWidth( m_doc->ptPaperWidth() - ( m_doc->ptLeftBorder() + m_doc->ptRightBorder() ) - 5 /* hack */ );
+        colWidth = (m_doc->ptPaperWidth() - m_doc->ptLeftBorder() - m_doc->ptRightBorder()) / m_cols;
     }
 
-    double baseWidth = (rect.width() - (m_cols-1) * tableCellSpacing) / m_cols;
-    double baseHeight=0;
+    for(unsigned int i=0; i <= m_cols;i++) {
+        m_colPositions.append(rect.x() + colWidth * i);
+    }
+
+    // Row positions..
+    m_rowPositions.clear();
+    m_pageBoundaries.clear();
+    double rowHeight = 0;
     if( m_heightMode != TblAuto )
-        baseHeight = (rect.height() - (m_rows-1) * tableCellSpacing) / m_rows;
+        rowHeight = rect.height() / m_rows;
+    rowHeight=QMAX(rowHeight, 22); // m_doc->getDefaultParagLayout()->getFormat().ptFontSize()) // TODO use table style font-size
 
-    // I will create 1 mm margins, this will recalculate the actual size needed for the frame.
-    double oneMm = MM_TO_POINT( 1.0 );
-    double minBaseHeight = 22;// m_doc->getDefaultParagLayout()->getFormat().ptFontSize() + oneMm * 2; // TODO
-    if(baseHeight < minBaseHeight + oneMm * 2)
-        baseHeight =minBaseHeight + oneMm * 2;
-    if(baseWidth < minFrameWidth + oneMm * 2)
-        baseWidth = minFrameWidth +  oneMm * 2;
-    // move/size the cells
-    // TBD: is there a reason why this cannot be done as a linear scan of the list?
-    for ( unsigned int i = 0; i < m_rows; i++ ) {
-        for ( unsigned int j = 0; j < m_cols; j++ ) {
-            KWFrame *frame = getCell( i, j )->getFrame( 0 );
-            frame->setBLeft( oneMm );
-            frame->setBRight( oneMm );
-            frame->setBTop( oneMm );
-            frame->setBBottom( oneMm );
-            frame->setNewFrameBehaviour( KWFrame::NoFollowup );
-            frame->setRect( rect.x() + j * (baseWidth + tableCellSpacing),
-                rect.y() + i * (baseHeight + tableCellSpacing), baseWidth, baseHeight );
-            //frame->setPageNum(m_doc->getPageOfRect( *frame ));
-            frame->setMinFrameHeight(baseHeight);
-        }
+    for(unsigned int i=0; i <= m_rows;i++) {
+        m_rowPositions.append(rect.y() + rowHeight * i);
     }
+
+KoBorder border = KoBorder(QColor(), KoBorder::SOLID, 2);
+
+    Cell *theCell;
+    double oneMm = MM_TO_POINT( 1.0 );
+    for(theCell=m_cells.first(); theCell; theCell=m_cells.next()) {
+        KWFrame *frame = theCell->getFrame(0);
+        frame->setBLeft( oneMm );
+        frame->setBRight( oneMm );
+        frame->setBTop( oneMm );
+        frame->setBBottom( oneMm );
+// debug borders until the off-by-one error is fixed in frame-borders...
+frame->setLeftBorder(border);
+frame->setRightBorder(border);
+frame->setTopBorder(border);
+frame->setBottomBorder(border);
+        frame->setNewFrameBehaviour( KWFrame::NoFollowup );
+        position(theCell, true);
+    }
+}
+
+void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
+    if(!theCell->getFrame(0)) { // sanity check.
+        kdDebug(32002) << "screwy table cell!! row:" << theCell->m_row << ", col: " << theCell->m_col << endl;
+        return;
+    }
+    double x= *m_colPositions.at(theCell->m_col);
+    double y= getPositionOfRow(theCell->m_row);
+    double width = (*m_colPositions.at(theCell->m_col + theCell->m_cols)) - x;
+    double height  = getPositionOfRow(theCell->m_row + theCell->m_rows-1, true) - y;
+
+    // Now take the border sizes and make the cell smaller so it still fits inside the grid.
+    KWFrame *frame = theCell->getFrame(0);
+    x+=theCell->leftBorder();
+    width-=theCell->leftBorder();
+    width-=theCell->rightBorder();
+    y+=theCell->topBorder();
+    height-=theCell->topBorder();
+    height-=theCell->bottomBorder();
+
+    frame->setRect( x,y,width,height);
+    if( setMinFrameHeight ) {
+        frame->setMinFrameHeight(height);
+    }
+}
+
+double KWTableFrameSet::getPositionOfRow( unsigned int row, bool bottom ) {
+    unsigned int adjustment=0;
+    QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
+    while(pageBound != m_pageBoundaries.end() && (*pageBound) <= row) {
+        adjustment++;
+        pageBound++;
+    }
+    if(m_rowPositions.count() < row+adjustment+(bottom?1:0))  // Requested row does not exist.
+        return 0;
+    return m_rowPositions[row+adjustment+(bottom?1:0)];
 }
 
 void KWTableFrameSet::setHeightMode( CellSize mode )
@@ -1881,6 +1810,30 @@ void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
     if(getGroupManager())
         getGroupManager()->addFrame(_frame, recalc);
     KWTextFrameSet::addFrame(_frame, recalc);
+}
+
+double KWTableFrameSet::Cell::leftBorder() { 
+    double b = getFrame(0)->leftBorder().ptWidth;
+    if(b==0) return 0;
+    return (b / (m_col==0?1:2));
+}
+
+double KWTableFrameSet::Cell::rightBorder() { 
+    double b=getFrame(0)->rightBorder().ptWidth;
+    if(b==0) return 0;
+    return (b / ((m_col+m_cols)==m_table->m_cols?1:2));
+}
+
+double KWTableFrameSet::Cell::topBorder() { 
+    double b = getFrame(0)->topBorder().ptWidth;
+    if(b==0) return 0;
+    return (b / (m_row==0?1:2));
+}
+
+double KWTableFrameSet::Cell::bottomBorder() { 
+    double b = getFrame(0)->bottomBorder().ptWidth;
+    if(b==0) return 0;
+    return ( b / ((m_row+m_rows)==m_table->m_rows?1:2));
 }
 
 

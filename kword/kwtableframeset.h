@@ -74,6 +74,11 @@ public:
         virtual void addFrame(KWFrame *_frame, bool recalc = true);
 
         bool isAboveOrLeftOf( unsigned row, unsigned col );
+
+        double leftBorder();
+        double rightBorder();
+        double topBorder();
+        double bottomBorder();
     private:
         KWTableFrameSet *m_table;
     };
@@ -257,6 +262,11 @@ protected:
     //void addCell( Cell *cell );
 
 private:
+    /** position an individual cell in the grid */
+    void position(Cell *theCell, bool setMinFrameHeight=false);
+    /** returns the absolute top-position of the row in the grid */
+    double getPositionOfRow(unsigned int row, bool bottom=false);
+
     unsigned int m_rows, m_cols;
     CellSize m_widthMode;
     CellSize m_heightMode;
@@ -264,8 +274,9 @@ private:
     bool m_hasTmpHeaders;
     bool m_active;
     QPtrList<Cell> m_cells;
-    QValueList<int> m_pageBoundaries;
+    QValueList<unsigned int> m_pageBoundaries;
     static const unsigned int tableCellSpacing;
+    QValueList<double> m_rowPositions, m_colPositions;
 };
 
 /**
