@@ -27,13 +27,14 @@
 #include <qiodevice.h>
 
 #include <KWEFStructures.h>
+#include <koffice_export.h>
 
 class KWEFKWordLeader;
 
 /**
  * Base worker of the libexport system
  */
-class KWEFBaseWorker
+class KOFFICEFILTER_EXPORT KWEFBaseWorker
 {
     public:
         KWEFBaseWorker(void) : m_kwordLeader(NULL) {}

@@ -34,7 +34,7 @@
 #include "KDChartUnknownTypeException.h"
 #include "KDChartParams.h"
 #include "KDChartDataRegion.h"
-
+#include <koffice_export.h>
 
 /** \file KDChart.h
   \brief Definition of a single entry-point to the charting engine for
@@ -48,7 +48,7 @@ class KDChartPainter;
 class QPainter;
 
 
-class KDChart
+class KDCHART_EXPORT KDChart
 {
     friend void cleanupPainter();
 

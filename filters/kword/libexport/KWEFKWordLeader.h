@@ -29,8 +29,9 @@
 
 #include "KWEFStructures.h"
 #include "KWEFBaseWorker.h"
+#include <koffice_export.h>
 
-class KWEFKWordLeader
+class KOFFICEFILTER_EXPORT KWEFKWordLeader
 {
     public:
         KWEFKWordLeader(void);

@@ -39,6 +39,7 @@
 #include <qsimplerichtext.h>
 #include <qdom.h>
 #include <limits.h>
+#include <koffice_export.h>
 
 #include <math.h>
 #ifdef Q_WS_WIN
@@ -72,7 +73,7 @@
 typedef QMap < int, KDChartPropertySet > KDChartPropertySetList;
 
 
-class KDChartParams : public QObject
+class KDCHART_EXPORT KDChartParams : public QObject
 {
     Q_OBJECT
 
@@ -165,7 +166,7 @@ class KDChartParams : public QObject
         bool removeProperties( int id );
         bool properties( int id, KDChartPropertySet& rSet ) const;
         bool calculateProperties( int startId, KDChartPropertySet& rSet ) const;
-        class KDChartFrameSettings
+        class KDCHART_EXPORT KDChartFrameSettings
         {
             public:
                 KDChartFrameSettings();

@@ -38,6 +38,7 @@
 
 #include "KDChartGlobal.h"
 #include "KDChartData.h"
+#include <koffice_export.h>
 class KDChartParams;
 
 /** \file KDChartAxisParams.h
@@ -46,7 +47,7 @@ class KDChartParams;
   Use the KDChartAxisParams class to modify parameters of one axis each.
   */
 
-class KDChartAxisParams : public QObject
+class KDCHART_EXPORT KDChartAxisParams : public QObject
 {
 Q_OBJECT
 

@@ -141,7 +141,7 @@ private:
  * @author Werner Trobin
  * @todo the class has no constructor and therefore cannot initialize its private class
  */
-class KoEmbeddingFilter : public KoFilter
+class KOFFICECORE_EXPORT KoEmbeddingFilter : public KoFilter
 {
     Q_OBJECT
 

@@ -40,7 +40,7 @@
 #include <qdom.h>
 
 #include <KDFrameProfileSection.h>
-
+#include <koffice_export.h>
 class QBrush;
 
 /** \file KDFrame.h
@@ -83,7 +83,7 @@ class QBrush;
   To learn how to specify your frame profiles have a look at example code given with setProfile()
   \endif
   */
-class KDFrame : public QObject
+class KDCHART_EXPORT KDFrame : public QObject
 {
     Q_OBJECT
 
@@ -481,7 +481,7 @@ public:
         \sa setCorners, setCorner, cornerStyle, cornerWidth, cornerProfile, CornerName, CornerStyle
         \endif
         */
-        class KDFrameCorner
+        class KDCHART_EXPORT KDFrameCorner
         {
             friend class KDFrame;
             public:

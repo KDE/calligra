@@ -23,12 +23,13 @@
 #ifndef KWEF_UTIL_H
 #define KWEF_UTIL_H
 
+#include <koffice_export.h>
 namespace KWEFUtil
 {
 
-QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
+KOFFICEFILTER_EXPORT QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
     const bool quot = false, const bool apos = false );
-void GetNativePaperFormat(const int format,
+KOFFICEFILTER_EXPORT void GetNativePaperFormat(const int format,
     QString& width, QString& height, QString& units);
 }
 

@@ -50,7 +50,7 @@
 #include <qdatetime.h>
 
 #include <koPictureKey.h>
-
+#include <koffice_export.h>
 /**
  * TextFormatting is a container for data retrieved from the \<FORMAT\> tag
  * and its subtags to be used in the \<PARAGRAPH\> tag.
@@ -161,7 +161,7 @@ public:
 
 class ParaData;
 
-class TableCell
+class KOFFICEFILTER_EXPORT TableCell
 {
    public:
       TableCell (): col( 0 ), row( 0 ), m_cols( 0 ), m_rows( 0 ), paraList( 0 ) {}
@@ -214,7 +214,7 @@ class FrameAnchor
 /**
  * Data of variables
  */
-class VariableData
+class KOFFICEFILTER_EXPORT VariableData
 {
 public:
     VariableData (): m_type(-1), footnotePara(0) {}
@@ -380,7 +380,7 @@ public:
 /**
   * Tabulator (see also \<TABULATOR\> element in KWord's DTD)
   */
-class TabulatorData
+class KOFFICEFILTER_EXPORT TabulatorData
 {
 public:
 

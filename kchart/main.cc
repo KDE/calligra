@@ -36,7 +36,7 @@ static const KCmdLineOptions options[]=
 }  //namespace KChart
 
 
-extern "C" int kdemain( int argc, char **argv )
+extern "C" KCHART_EXPORT int kdemain( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, newKChartAboutData());
     KCmdLineArgs::addCmdLineOptions( options );
