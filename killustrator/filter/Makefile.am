@@ -1,7 +1,7 @@
 
 INCLUDES= -I$(srcdir)/../share -I$(srcdir)/.. $(all_includes) 
 
-noinst_LIBRARIES = libfilter.a
+noinst_LTLIBRARIES = libfilter.la
 
 noinst_HEADERS = FilterManager.h \
 	ImageExport.h \
@@ -11,7 +11,7 @@ noinst_HEADERS = FilterManager.h \
 	XfigImport.h \
 	CmxImport.h
 
-libfilter_a_SOURCES = FilterManager.cc \
+libfilter_la_SOURCES = FilterManager.cc \
 	ImageExport.cc \
 	gif.cc \
 	EPSExport.cc \

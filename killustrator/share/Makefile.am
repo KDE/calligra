@@ -2,7 +2,7 @@ INCLUDES= $(all_includes) -I$(srcdir)/..
 
 datadir = $(kde_datadir)/killustrator
 
-noinst_LIBRARIES = libkillu.a
+noinst_LTLIBRARIES = libkillu.la
 
 noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 GText.h GGroup.h GClipart.h GBezier.h GPixmap.h \
@@ -41,7 +41,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h \
 		 StartupScreen.h filter_utils.h
 
-libkillu_a_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
+libkillu_la_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  PathTextTool.cc GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
 			  GText.cc GGroup.cc Tool.cc PolylineTool.cc \
 			  FreeHandTool.cc \
@@ -82,27 +82,5 @@ libkillu_a_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon.
 			  BlendDialog.cc BlendCmd.cc \
 			  StartupScreen.cc filter_utils.cc
 
-# just to make sure, automake makes them 
-METASOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
-		GText.moc GGroup.moc GClipart.moc GBezier.moc GPixmap.moc \
-		Tool.moc PolylineTool.moc FreeHandTool.moc \
-		RectangleTool.moc OvalTool.moc TextTool.moc \
-		SelectionTool.moc PolygonTool.moc ToolController.moc \
-		EditPointTool.moc BezierTool.moc ZoomTool.moc \
-		ColorField.moc Canvas.moc \
-		QwViewport.moc GDocument.moc \
-		PropertyEditor.moc FloatSpinBox.moc ColorComboBox.moc \
-		FontSelector.moc AlignmentDialog.moc GridDialog.moc \
-		PolygonConfigDialog.moc Ruler.moc AboutDialog.moc \
-		PolygonPreview.moc TransformationDialog.moc \
-		koPageLayoutDia.moc \
-		PStateManager.moc OptionDialog.moc UnitBox.moc \
-		ScriptDialog.moc GLayer.moc LayerDialog.moc \
-		LayerView.moc CommandHistory.moc \
-		DocumentInfo.moc BrushCells.moc PathTextTool.moc \
-		EllipseConfigDialog.moc MyTabCtl.moc \
-		HelplineDialog.moc GCurve.moc BlendDialog.moc \
-		StartupScreen.moc
-
-
+METASOURCES =	AUTO
 

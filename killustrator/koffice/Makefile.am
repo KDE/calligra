@@ -1,15 +1,11 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I../share -I../filter -I../
 
-FILTER_LIBS = ../filter/libfilter.a
-XML_LIBS = ../xmlutils/libxml.a
-KSHARE_LIBS = ../share/libkillu.a
-
 killustrator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 killustrator_LDADD = libkillustrator.la
 
 libkillustrator_la_LDFLAGS = -avoid-version -module
 
-libkillustrator_la_LIBADD = $(all_libraries) -L../filter -L../xmlutils -L../share -lkillu -lxml -lfilter ../../lib/kofficeui/libkofficeui.la
+libkillustrator_la_LIBADD = $(all_libraries) ../share/libkillu.a ../xmlutils/libxml.la ../filter/libfilter.la ../../lib/kofficeui/libkofficeui.la
 
 ####### Files
 
