@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Service
-Name=KSpread Crypto Import Filter Dialog
-Export=application/x-kspread
-Import=application/x-kspread-crypt
-X-KDE-Library=libkocryptpwddlg
-ServiceTypes=KOfficeFilterDialog
-
