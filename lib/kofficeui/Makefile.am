@@ -15,7 +15,7 @@ libkofficeui_la_SOURCES = koFind.cc koReplace.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
 	koKoolBar.cc koTemplateCreateDia.cc \
 	kcoloractions.cpp koToolBox.cpp koTemplates.cc \
-	koRect.cpp koPictureFilePreview.cc \
+	koRect.cpp koPictureFilePreview.cc koUnitWidgets.cc \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp \
 	koCharSelectDia.cc koInsertLink.cc koeditpath.cc koSpellConfig.cc kocommandhistory.cpp
 libkofficeui_la_LDFLAGS	= -version-info 2:0:0 -no-undefined $(all_libraries)
@@ -27,7 +27,7 @@ include_HEADERS = koFind.h koReplace.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h koTemplateCreateDia.h \
 	kcoloractions.h koToolBox.h \
-	koRect.h koPoint.h koSize.h koPictureFilePreview.h \
+	koRect.h koPoint.h koSize.h koPictureFilePreview.h koUnitWidgets.h \
 	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h \
 	koCharSelectDia.h koInsertLink.h kotoolbutton.h koeditpath.h \
         koSpellConfig.h kocommandhistory.h
