@@ -515,7 +515,6 @@ VSegment::revert() const
 		return 0L;
 
 	VSegment* segment = new VSegment();
-
 	segment->m_type = m_type;
 
 	// Swap points:

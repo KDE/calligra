@@ -79,8 +79,22 @@ public:
 	bool curve2To( const KoPoint& p1, const KoPoint& p3 );
 
 	/**
-	 * A convenience function to approximate a circular arc with a
-	 * bezier curve. Input: 2 tangent vectors and a radius (same as in postscript):
+	 * A convenience function to aproximate a circular arc with a
+	 * bezier curve. Input: 2 tangent vectors and a radius (same as in PostScript).
+	 */
+
+	/*
+	arcTo():
+	
+	   p1 x....__--x....x p2
+	      :  _/
+	      : /
+	      :/
+	      |
+	      x
+	      |
+	      |
+	      x currP
 	 */
 	bool arcTo(
 		const KoPoint& p1, const KoPoint& p2, double r );

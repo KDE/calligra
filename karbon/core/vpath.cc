@@ -408,15 +408,6 @@ VPath::combine( const VPath& path )
 void
 VPath::combineSegmentList( const VSegmentList& segmentList )
 {
-	// If current segmentlist is empty (only contains a "begin" segment),
-	// clear it before combining:
-	if(
-		m_segmentLists.count() == 1 &&
-		m_segmentLists.getLast()->count() == 1 )
-	{
-		m_segmentLists.clear();
-	}
-
 	VSegmentList* list = segmentList.clone();
 	list->setParent( this );
 

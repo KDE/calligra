@@ -245,7 +245,7 @@ bool
 VSegmentList::arcTo(
 	const KoPoint& p1, const KoPoint& p2, const double r )
 {
-	// this routine is inspired by code in GNU ghostscript.
+	// This routine is inspired by code in GNU ghostscript.
 
 	//           |- P1B3 -|
 	//
@@ -265,17 +265,17 @@ VSegmentList::arcTo(
 
 	if( isClosed() || r < 0.0 ) return false;
 
-	// we need to calculate the tangent points. therefore calculate tangents
+	// We need to calculate the tangent points. Therefore calculate tangents
 	// T10=P1P0 and T12=P1P2 first:
 	KoPoint t10 = currentPoint() - p1;
 	KoPoint t12 = p2 - p1;
 
-	// calculate distance squares:
+	// Calculate distance squares:
 	double dsqT10 = t10.x() * t10.x() + t10.y() * t10.y();
 	double dsqT12 = t12.x() * t12.x() + t12.y() * t12.y();
 
-	// we now calculate tan(a/2) where a is the angle between T10 and T12.
-	// we benefit from the facts T10*T12 = |T10|*|T12|*cos(a),
+	// We now calculate tan(a/2) where a is the angle between T10 and T12.
+	// We benefit from the facts T10*T12 = |T10|*|T12|*cos(a),
 	// |T10xT12| = |T10|*|T12|*sin(a) (cross product) and tan(a/2) = sin(a)/[1-cos(a)].
 	double num   = t10.x() * t12.y() - t10.y() * t12.x();
 	double denom =
@@ -293,7 +293,7 @@ VSegmentList::arcTo(
 		// B0 = P1 + |P1B0| * T10/|T10|:
 		KoPoint b0 = p1 + t10 * ( dP1B0 / sqrt( dsqT10 ) );
 
-		// if B0 deviates from current point P0, add a line to it:
+		// If B0 deviates from current point P0, add a line to it:
 		if( !b0.isNear( currentPoint(), VGlobal::isNearRange ) )
 			lineTo( b0 );
 
@@ -301,7 +301,7 @@ VSegmentList::arcTo(
 		KoPoint b3 = p1 + t12 * ( dP1B0 / sqrt( dsqT12 ) );
 
 
-		// the two bezier-control points are located on the tangents at a fraction
+		// The two bezier-control points are located on the tangents at a fraction
 		// of the distance [tangent points<->tangent intersection].
 		double distsq =
 			( p1.x() - b0.x() ) * ( p1.x() - b0.x() ) +
@@ -317,7 +317,7 @@ VSegmentList::arcTo(
 		KoPoint b1 = b0 + ( p1 - b0 ) * fract;
 		KoPoint b2 = b3 + ( p1 - b3 ) * fract;
 
-		// finally add the bezier-segment:
+		// Finally add the bezier-segment:
 		curveTo( b1, b2, b3 );
 	}
 
@@ -353,12 +353,12 @@ VSegmentList::close()
 			lineTo( getFirst()->knot() );
 		}
 
-		// Make sure we are counter clockwise:
-		if( !counterClockwise() )
-			revert();
-
 		m_isClosed = true;
 	}
+
+	// Make sure we are counter clockwise:
+	if( !counterClockwise() )
+		revert();
 }
 
 bool
@@ -666,6 +666,8 @@ VSegmentList::clear()
 		segment = segment->m_next;
 		delete prev;
 	}
+
+	m_isClosed = false;
 
 	invalidateBoundingBox();
 }
