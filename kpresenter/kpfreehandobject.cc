@@ -69,7 +69,7 @@ DCOPObject* KPFreehandObject::dcopObject()
 /*========================= save =================================*/
 QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )
 {
-    QDomDocumentFragment fragment = KPObject::save( doc, offset );
+    QDomDocumentFragment fragment = KPShadowObject::save( doc, offset );
     if ( !points.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
 	KoPointArray::ConstIterator it;
@@ -96,7 +96,7 @@ QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )
 /*========================== load ================================*/
 double KPFreehandObject::load( const QDomElement &element )
 {
-    double offset=KPObject::load( element );
+    double offset=KPShadowObject::load( element );
 
     QDomElement e = element.namedItem( "POINTS" ).toElement();
     if ( !e.isNull() ) {

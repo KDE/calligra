@@ -67,7 +67,7 @@ DCOPObject* KPLineObject::dcopObject()
 /*========================= save =================================*/
 QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment=KPObject::save(doc, offset);
+    QDomDocumentFragment fragment=KPShadowObject::save(doc, offset);
     if (lineType!=LT_HORZ)
         fragment.appendChild(KPObject::createValueElement("LINETYPE", static_cast<int>(lineType), doc));
     if (lineBegin!=L_NORMAL)
@@ -80,7 +80,7 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
 /*========================== load ================================*/
 double KPLineObject::load(const QDomElement &element)
 {
-    double offset=KPObject::load(element);
+    double offset=KPShadowObject::load(element);
     QDomElement e=element.namedItem("LINETYPE").toElement();
     if(!e.isNull()) {
         int tmp=0;

@@ -77,7 +77,7 @@ KPQuadricBezierCurveObject &KPQuadricBezierCurveObject::operator=( const KPQuadr
 /*========================= save =================================*/
 QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment = KPObject::save( doc, offset );
+    QDomDocumentFragment fragment = KPShadowObject::save( doc, offset );
     if ( !controlPoints.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
 	KoPointArray::ConstIterator it;
@@ -104,7 +104,7 @@ QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, double
 /*========================== load ================================*/
 double KPQuadricBezierCurveObject::load(const QDomElement &element)
 {
-    double offset=KPObject::load( element );
+    double offset=KPShadowObject::load( element );
     QDomElement e = element.namedItem( "POINTS" ).toElement();
     if ( !e.isNull() ) {
         QDomElement elemPoint = e.firstChild().toElement();

@@ -846,7 +846,7 @@ void KP2DObject::setFillType( FillType _fillType )
 
 QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
 {
-    QDomDocumentFragment fragment=KPObject::save(doc, offset);
+    QDomDocumentFragment fragment=KPShadowObject::save(doc, offset);
     if(fillType!=FT_BRUSH)
         fragment.appendChild(KPObject::createValueElement(tagFILLTYPE, static_cast<int>(fillType), doc));
     if(gColor1!=Qt::red || gColor2!=Qt::green || gType!=BCT_GHORZ || unbalanced || xfactor!=100 || yfactor!=100)
@@ -861,7 +861,7 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
 
 double KP2DObject::load(const QDomElement &element)
 {
-    double offset=KPObject::load(element);
+    double offset=KPShadowObject::load(element);
     QDomElement e=element.namedItem(tagPEN).toElement();
     if(!e.isNull())
         setPen(KPObject::toPen(e));

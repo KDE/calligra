@@ -66,36 +66,6 @@ void KPPartObject::rotate( float _angle )
                              zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
-void KPPartObject::setSize( double _width, double _height )
-{
-    KPObject::setSize( _width, _height );
-}
-
-void KPPartObject::setOrig( const KoPoint &_point )
-{
-    setOrig( _point.x(), _point.y() );
-}
-
-void KPPartObject::setOrig( double _x, double _y )
-{
-    KPObject::setOrig( _x, _y );
-}
-
-void KPPartObject::moveBy( const KoPoint &_point )
-{
-    moveBy( _point.x(), _point.y() );
-}
-
-void KPPartObject::moveBy( double _dx, double _dy )
-{
-    KPObject::moveBy( _dx, _dy );
-}
-
-void KPPartObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-}
-
 /*======================== draw ==================================*/
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
 			 bool drawSelection, bool drawContour )
