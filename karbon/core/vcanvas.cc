@@ -30,12 +30,16 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 	viewport()->setBackgroundColor( Qt::white );
 	viewport()->setBackgroundMode( QWidget::NoBackground );
 
+	m_pixmap = 0L;
+
 // TODO: remove this line
 resizeContents( 800, 600 );
+	m_pixmap = new QPixmap( 800, 600 );
 
 	setFocus();
 
 	m_bScrolling = false;
+
 }
 
 // This causes a repaint normally, so just overwriting it omits the repainting
@@ -70,6 +74,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	QPainter qpainter( p->device() );
 	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
+
+	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );
 }
 
 void
@@ -101,6 +107,8 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 	QPainter qpainter( p->device() );
 	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
+
+	bitBlt( viewport(), 0, 0, p->device(), 0, 0, width(), height() );
 }
 
 void
@@ -114,6 +122,10 @@ void
 VCanvas::resizeEvent( QResizeEvent* event )
 {
 	QScrollView::resizeEvent( event );
+	if( !m_pixmap )
+		m_pixmap = new QPixmap( width(), height() );
+	else
+		m_pixmap->resize( width(), height() );
 	drawContents( 0, 0, 0, width(), height() );
     //VPainter *p = m_view->painterFactory()->painter();
     //p->end();

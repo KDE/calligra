@@ -21,6 +21,8 @@ public:
 
 	void repaintAll( bool erase = false );
 
+	QPixmap *pixmap() { return m_pixmap; }
+
 protected:
 	virtual void focusInEvent( QFocusEvent * );
 	virtual void viewportPaintEvent( QPaintEvent* );
@@ -30,10 +32,12 @@ protected:
 
 	virtual void resizeEvent( QResizeEvent* event );
 
+
 private slots:
 	void slotContentsMoving( int , int );
 
 private:
+	QPixmap *m_pixmap;
 	KarbonPart* m_part;
 	KarbonView* m_view;
 

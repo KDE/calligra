@@ -95,7 +95,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	// set up factory
 	m_painterFactory = new VPainterFactory;
-	m_painterFactory->setPainter( canvasWidget()->viewport(), width(), height() );
+	m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
 	m_painterFactory->setEditPainter( canvasWidget()->viewport(), width(), height() );
 
 	// set up status bar message
@@ -533,7 +533,7 @@ KarbonView::viewModeChanged()
 	}
 	else
 	{
-		m_painterFactory->setPainter( canvasWidget()->viewport(), width(), height() );
+		m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
 	}
 	m_canvas->repaintAll();
 }

@@ -102,12 +102,10 @@ VKoPainter::begin()
 void
 VKoPainter::end()
 {
-	QPixmap pix( m_width, m_height );
 	//xlib_draw_rgb_image( m_target->handle(), gc, 0, 0, m_width, m_height,
 	//					 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 4 );
-	xlib_draw_rgb_32_image( pix.handle(), gc, 0, 0, m_width, m_height,
+	xlib_draw_rgb_32_image( m_target->handle(), gc, 0, 0, m_width, m_height,
 						 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 4 );
-	bitBlt( m_target, 0, 0, &pix, 0, 0, m_width, m_height );
 	/*xlib_draw_rgb_image( pix.handle(), gc, 0, 0, m_width, m_height,
 						 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 3 );
 	bitBlt( m_target, 0, 0, &pix, 0, 0, m_width, m_height );*/
@@ -116,10 +114,8 @@ VKoPainter::end()
 void
 VKoPainter::blit( const QRect &r )
 {
-	QPixmap pix( m_width, m_height );
-	xlib_draw_rgb_32_image( pix.handle(), gc, r.x(), r.y(), r.width(), r.height(),
+	xlib_draw_rgb_32_image( m_target->handle(), gc, r.x(), r.y(), r.width(), r.height(),
 							XLIB_RGB_DITHER_NONE, m_buffer + (r.x() * 4) + (r.y() *  m_width * 4), m_width * 4 );
-	bitBlt( m_target, r.x(), r.y(), &pix, r.x(), r.y(), r.width(), r.height() );
 }
 
 void
