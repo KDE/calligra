@@ -15,8 +15,6 @@
   void unselectAllStencils() { page->unselectAllStencils(); }
   bool unselectStencil( KivioStencil *s ) { return page->unselectStencil(s); }
   void selectStencil( KivioStencil *s ) { page->selectStencil(s); }
-//  void selectStencils( float, float, float, float );
-//  bool stencilInRect( float, float, float, float, KivioStencil * );
 
   KivioLayer *curLayer() { return page->curLayer(); }
   void setCurLayer( KivioLayer *pLayer ) { page->setCurLayer(pLayer); }

@@ -255,3 +255,12 @@ void KivioStencil::move(double xOffset, double yOffset)
   setX(x() + xOffset);
   setY(y() + yOffset);
 }
+
+bool KivioStencil::isInRect(const KoRect& rect)
+{
+  bool retVal;
+  retVal = rect.contains(m_x, m_y);
+  retVal = retVal && rect.contains(m_x + m_w, m_y + m_h);
+  
+  return retVal;
+}

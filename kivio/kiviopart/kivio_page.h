@@ -117,7 +117,6 @@ class KivioPage : public QObject
     bool unselectStencil( KivioStencil * );
     void selectStencil( KivioStencil * );
     void selectStencils( double, double, double, double );
-    bool stencilInRect( double, double, double, double, KivioStencil * );
     QPtrList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
 
     KoRect getRectForAllSelectedStencils();

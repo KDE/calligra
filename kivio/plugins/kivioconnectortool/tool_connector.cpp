@@ -138,15 +138,6 @@ void ConnectorTool::connector(QRect)
   KivioDoc* doc = view()->doc();
   KivioPage* page = view()->activePage();
 
-  if (m_pStencil->w() < 3.0 && m_pStencil->h() < 3.0) {
-    page->unselectAllStencils();
-    page->selectStencil(m_pStencil);
-    page->deleteSelectedStencils();
-    m_pStencil = 0;
-    doc->updateView(page);
-    return;
-  }
-
   m_pStencil->searchForConnections(page, view()->zoomHandler()->unzoomItY(4));
   doc->updateView(page);
 }

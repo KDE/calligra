@@ -295,4 +295,16 @@ namespace Kivio {
     
     return KoRect(p, KoSize(0, 0));
   }
+
+  bool PolyLineConnector::isInRect(const KoRect& rect)
+  {
+    QValueList<KoPoint>::Iterator it;
+    bool retVal = true;
+    
+    for(it = m_points.begin(); it != m_points.end(); it++) {
+      retVal = retVal && rect.contains((*it));
+    }
+    
+    return retVal;
+  }
 }

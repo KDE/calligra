@@ -437,7 +437,7 @@ void KivioPage::selectStencils( double x, double y, double w, double h )
   while( pStencil )
   {
     // Is it in the rectangle?
-    if( stencilInRect( x, y, w, h, pStencil )==true )
+    if(pStencil->isInRect(KoRect(x, y, w, h)))
     {
       selectStencil( pStencil );
     }
@@ -447,22 +447,6 @@ void KivioPage::selectStencils( double x, double y, double w, double h )
 
   m_pDoc->slotSelectionChanged();
 }
-
-bool KivioPage::stencilInRect( double x, double y, double w, double h, KivioStencil *pStencil )
-{
-  double sx, sy, sw, sh;
-
-  sx = pStencil->x();
-  sy = pStencil->y();
-  sw = pStencil->w();
-  sh = pStencil->h();
-
-  if( sx >= x && sy >= y && sx+sw <= x+w && sy+sh <= y+h )
-    return true;
-
-  return false;
-}
-
 
 void KivioPage::selectStencil( KivioStencil *pStencil )
 {

@@ -71,7 +71,10 @@ namespace Kivio {
       virtual void setX(double x);
       virtual double y();
       virtual void setY(double y);
+      virtual double w() { return 1; }
+      virtual double h() { return 1; }
       virtual KoRect rect();
+      virtual bool isInRect(const KoRect& rect);
 
       virtual void updateConnectorPoints(KivioConnectorPoint* cp, double /*oldX*/, double /*oldY*/);
       
