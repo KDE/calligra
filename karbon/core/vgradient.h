@@ -106,8 +106,8 @@ protected:
 	VColorStopList        m_colorStops;
   
 private:
-	VGradientType         m_type;
-	VGradientRepeatMethod m_repeatMethod;
+	VGradientType         m_type			: 2;
+	VGradientRepeatMethod m_repeatMethod	: 2;
 
 	// coordinates:
 	KoPoint m_origin;
