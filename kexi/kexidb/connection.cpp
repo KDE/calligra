@@ -454,7 +454,7 @@ bool Connection::useDatabase( const QString &dbName )
 	if (!setupKexiDBSystemSchema())
 		return false;
 
-	if (d->m_kexi_db_used) {
+	if (d->m_kexi_db_used && my_dbName.lower()!=anyAvailableDatabaseName().lower()) {
 		//-get global database information
 		int num;
 		static QString notfound_str = i18n("\"%1\" database property not found");
