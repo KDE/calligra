@@ -93,6 +93,7 @@ public:
     virtual bool doOpenSpellCheckIgnoreList (void); // AbiWord's <ignorewords>
     virtual bool doCloseSpellCheckIgnoreList (void); // AbiWord's </ignorewords>
     virtual bool doFullSpellCheckIgnoreWord (const QString& ignoreword); // AbiWord's <iw>
+    virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo); // AbiWord's <metadata>
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,
@@ -127,6 +128,7 @@ private:
     StyleMap m_styleMap;
     double m_paperBorderTop,m_paperBorderLeft,m_paperBorderBottom,m_paperBorderRight;
     bool m_inIgnoreWords; // true if <ignorewords> has been written
+    KWEFDocumentInfo m_docInfo; // document information
 };
 
 AbiWordWorker::AbiWordWorker(void) : m_ioDevice(NULL), m_streamOut(NULL),
@@ -230,7 +232,9 @@ bool AbiWordWorker::doOpenDocument(void)
     // *m_streamOut << " xmlns:awml=\"http://www.abisource.com/awml.dtd\"";
     *m_streamOut << " xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
     // AbiWord CVS 2002-02-22 defines other namespaces, which we are not using.
-    *m_streamOut << " version=\"\" fileformat=\"1.0\" styles=\"unlocked\">\n";
+    // AbiWord CVS 2002-12-23 has no fileformat attribute anymore 
+    // ### TODO: add document language and document direction of writing.
+    *m_streamOut << " xml:space=\"preserve\" version=\"1.1.2\" template=\"false\" styles=\"unlocked\">\n";
     // Second magic: "<!-- This file is an AbiWord document."
     // TODO/FIXME: write as much spaces as AbiWord does for the following line.
     *m_streamOut << "<!-- This file is an AbiWord document. -->\n";
@@ -239,16 +243,31 @@ bool AbiWordWorker::doOpenDocument(void)
     *m_streamOut << "\n";
 
     // Put the rest of the information in the way AbiWord puts its debug info!
-
+    *m_streamOut << "<metadata>\n";
+    
+    // First all Dublin Core informations
+    *m_streamOut << "<m key=\"dc.format\">application/x-abiword</m>\n";
+    if (!m_docInfo.title.isEmpty())
+    {
+        *m_streamOut << "<m key=\"dc.title\">" << escapeAbiWordText(m_docInfo.title) << "</m>\n";    
+    }
+    
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
-    *m_streamOut << "<!-- KWord_Export_Filter_Version =";
+    *m_streamOut << "<m key=\"abiword.generator\">KWord Export Filter";
 
     QString strVersion("$Revision$");
     // Remove the dollar signs
     //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
     *m_streamOut << strVersion.mid(10).replace('$',"");
 
-    *m_streamOut << " -->\n\n";
+    *m_streamOut << "</m>\n";
+
+    QDateTime now (QDateTime::currentDateTime(Qt::UTC)); // current time in UTC
+    *m_streamOut << "<m key=\"date_last_changed\">"
+         << escapeAbiWordText(now.toString(Qt::ISODate)) // ### PROBLEM: AbiWord uses an unlocalized Qt::TextDate
+         << "</m>\n";
+    
+    *m_streamOut << "</metadata>\n";
 
     return true;
 }
@@ -1170,6 +1189,14 @@ bool AbiWordWorker::doFullSpellCheckIgnoreWord (const QString& ignoreword)
     return true;
 }
 
+bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
+{
+    m_docInfo=docInfo;
+    return true;
+}
+
+
+// ==========================================================================================
 
 ABIWORDExport::ABIWORDExport(KoFilter */*parent*/, const char */*name*/, const QStringList &) :
                      KoFilter() {
