@@ -1172,17 +1172,17 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc, bool us
     // We can't apply the 'default comes from the style' in this case, because
     // there is no way to differenciate between "I want no tabs in the parag"
     // and "use default from style".
-    QDomElement element;
     m_tabList.clear();
-    QDomNodeList listTabs = parentElem.elementsByTagName ( "TABULATOR" );
-    unsigned int count = listTabs.count();
-    for (unsigned int item = 0; item < count; item++)
+    QDomElement element = parentElem.firstChild().toElement();
+    for ( ; !element.isNull() ; element = element.nextSibling().toElement() )
     {
-        element = listTabs.item( item ).toElement();
-        KoTabulator tab;
-        tab.type = static_cast<KoTabulators>( KWDocument::getAttribute( element, "type", T_LEFT ) );
-        tab.ptPos = KWDocument::getAttribute( element, "ptpos", 0.0 );
-        m_tabList.append( tab );
+        if ( element.tagName() == "TABULATOR" )
+        {
+            KoTabulator tab;
+            tab.type = static_cast<KoTabulators>( KWDocument::getAttribute( element, "type", T_LEFT ) );
+            tab.ptPos = KWDocument::getAttribute( element, "ptpos", 0.0 );
+            m_tabList.append( tab );
+        }
     }
     alignment = Qt::AlignLeft;
     element = parentElem.namedItem( "FLOW" ).toElement(); // Flow is what is now called alignment internally

@@ -270,16 +270,21 @@ QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
     // second time to apply the character & paragraph formatting
     QString text;
 
-    // Note: because we need 'count' below, this can't be ported to firstChild/nextSibling
-    QDomNodeList listParagraphs = elem.elementsByTagName ( "PARAGRAPH" );
-    uint count = listParagraphs.count();
-    for (unsigned int item = 0; item < count; item++)
+    QValueList<QDomElement> listParagraphs;
+    QDomElement paragraph = elem.firstChild().toElement();
+    bool first = true;
+    for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
     {
-        QDomElement paragElem = listParagraphs.item( item ).toElement();
-        QString s = paragElem.namedItem( "TEXT" ).toElement().text();
-        if ( item > 0 )
-            text += '\n';
-        text += s;
+        if ( paragraph.tagName() == "PARAGRAPH" )
+        {
+            QString s = paragraph.namedItem( "TEXT" ).toElement().text();
+            if ( !first )
+                text += '\n';
+            else
+                first = false;
+            text += s;
+            listParagraphs.append( paragraph );
+        }
     }
     //kdDebug() << "KWPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
@@ -299,15 +304,17 @@ QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
     firstParag = doc->paragAt( m_parag );
     KWTextParag * parag = static_cast<KWTextParag *>(firstParag);
     //kdDebug() << "KWPasteTextCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
-    for (unsigned int item = 0; item < count; item++)
+    uint count = listParagraphs.count();
+    QValueList<QDomElement>::Iterator it = listParagraphs.begin();
+    QValueList<QDomElement>::Iterator end = listParagraphs.end();
+    for ( uint item = 0 ; it != end ; ++it, ++item )
     {
-        //kdDebug() << "KWPasteTextCommand::execute item=" << item << "/" << count << endl;
         if (!parag)
         {
             kdWarning() << "KWPasteTextCommand: parag==0L ! KWord bug, please report." << endl;
             break;
         }
-        QDomElement paragElem = listParagraphs.item( item ).toElement();
+        QDomElement paragElem = *it;
         // First line (if appending to non-empty line) : apply offset to formatting, don't apply parag layout
         if ( item == 0 && m_idx > 0 )
         {

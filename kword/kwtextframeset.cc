@@ -50,7 +50,7 @@
 
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
-#define DEBUG_FORMAT_MORE
+//#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
 
 //#define DEBUG_NTI
@@ -1121,9 +1121,6 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
     KWTextParag *lastParagraph = 0L;
 
     // <PARAGRAPH>
-    //QDomNodeList listParagraphs = attributes.elementsByTagName ( "PARAGRAPH" );
-    //unsigned int count = listParagraphs.count();
-    //for (unsigned int item = 0; item < count; item++)
     QDomElement paragraph = attributes.firstChild().toElement();
     for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
     {
