@@ -1,0 +1,453 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>StandardWorktimeDialogBase</class>
+<author>Dag Andersen </author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>StandardWorktimeDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>477</width>
+            <height>410</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>StandardWorktime</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout7</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Hours per year:</string>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>year</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>8784</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout8</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Hours per month:</string>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>month</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>744</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout4</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2_2_3_4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Standard work day:</string>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit">
+                    <property name="name">
+                        <cstring>dayTime</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>bEditDay</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Edit...</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Weekdays</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox" row="4" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>Working</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Non-working</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>stateFriday</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="4" column="4">
+                    <property name="name">
+                        <cstring>bEditFriday</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Edit...</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="3" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>Working</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Non-working</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>stateThursday</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="3" column="4">
+                    <property name="name">
+                        <cstring>bEditThursday</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Edit...</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="5" column="4">
+                    <property name="name">
+                        <cstring>bEditSaturday</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Edit...</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="6" column="4">
+                    <property name="name">
+                        <cstring>bEditSunday</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Edit...</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="4">
+                    <property name="name">
+                        <cstring>bEditWednesday</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Edit...</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>Working</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Non-working</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>stateTuesday</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="4">
+                    <property name="name">
+                        <cstring>bEditTuesday</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Edit...</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>Working</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Non-working</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>stateMonday</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="4">
+                    <property name="name">
+                        <cstring>bEditMonday</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Edit...</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel2_2_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Wednesday:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel2_2_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Tuesday:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Monday:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel2_2_3_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Thursday:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>textLabel2_2_3_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Friday:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="5" column="0">
+                    <property name="name">
+                        <cstring>textLabel2_2_3_2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Saturday:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="6" column="0">
+                    <property name="name">
+                        <cstring>textLabel2_2_3_2_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Sunday:</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>Working</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Non-working</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>stateWednesday</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="5" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>Working</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Non-working</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>stateSaturday</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="6" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>Working</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Non-working</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>stateSunday</cstring>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="1" column="3">
+                    <property name="name">
+                        <cstring>tuesdayTime</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="2" column="3">
+                    <property name="name">
+                        <cstring>wednesdayTime</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="3" column="3">
+                    <property name="name">
+                        <cstring>thursdayTime</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="4" column="3">
+                    <property name="name">
+                        <cstring>fridayTime</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="5" column="3">
+                    <property name="name">
+                        <cstring>saturdayTime</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="6" column="3">
+                    <property name="name">
+                        <cstring>sundayTime</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="0" column="3">
+                    <property name="name">
+                        <cstring>mondayTime</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="7" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel1_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Total work time:</string>
+                    </property>
+                </widget>
+                <spacer row="7" column="2">
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel" row="7" column="4">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>hours</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="7" column="3">
+                    <property name="name">
+                        <cstring>weekTime</cstring>
+                    </property>
+                    <property name="acceptDrops">
+                        <bool>false</bool>
+                    </property>
+                    <property name="dragEnabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="readOnly">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
