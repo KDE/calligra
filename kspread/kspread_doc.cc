@@ -359,9 +359,15 @@ void KSpreadDoc::initConfig()
     setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
 }
 
-KSpreadMap* KSpreadDoc::map() const
+KSpreadMap* KSpreadDoc::workbook() const
 {
   return d->workbook;
+}
+
+// obsoleted, removed in future version
+KSpreadMap* KSpreadDoc::map() const
+{
+  return workbook();
 }
 
 KSpreadStyleManager* KSpreadDoc::styleManager()
