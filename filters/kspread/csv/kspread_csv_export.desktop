@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Name=KSpredCSVExportFilterTest
+Name=KSpreadCSVExportFilterTest
 Comment=KSpread CSV Export Filter
 Comment[ca]=Filtre d'exportació CSV per a KSpread
 Comment[cs]=CVS exportní filtr pro KSpread
