@@ -1094,7 +1094,7 @@ void KoMainWindow::print(bool quick) {
             fileName.truncate( fileName.length() - extension.length() );
     }
 
-    if ( title.isNull() )
+    if ( title.isEmpty() )
         title = fileName;
     printer.setDocName( title );
     printer.setDocFileName( fileName );
