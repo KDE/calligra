@@ -686,7 +686,9 @@ public:
      * The returned pen has pen style NoPen set.
      */
     const QPen& emptyPen() const { return m_emptyPen; }
-
+    const QBrush& emptyBrush() const { return m_emptyBrush; }
+    const QColor& emptyColor() const { return m_emptyColor; }
+    
 signals:
     void sig_updateView( KSpreadTable *_table );
     void sig_updateView( KSpreadTable *_table, const QRect& );
@@ -836,6 +838,8 @@ protected:
      * @see #emptyPen
      */
     QPen m_emptyPen;
+    QBrush m_emptyBrush;
+    QColor m_emptyColor;
 };
 
 #endif

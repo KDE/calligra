@@ -2106,12 +2106,12 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     else
     {
 	QColor bg = bgColor( _col, _row );
-	if ( m_pObscuringCell )
-	    bg = m_pObscuringCell->bgColor( m_pObscuringCell->column(),
-					    m_pObscuringCell->row() );
+	// if ( m_pObscuringCell )
+	// bg = m_pObscuringCell->bgColor( m_pObscuringCell->column(),
+	// m_pObscuringCell->row() );
 
-	if ( m_bgColor.isValid() )
-	    _painter.setBackgroundColor( m_bgColor );
+	if ( bg.isValid() )
+	    _painter.setBackgroundColor( bg );
 	else
 	    _painter.setBackgroundColor( defaultColorGroup.base() );
     }
@@ -2771,7 +2771,8 @@ int KSpreadCell::height( int _row, KSpreadCanvas *_canvas )
 
 ///////////////////////////////////////////
 //
-// Borders
+// Misc Properties.
+// Reimplementation of KSpreadLayout methods.
 //
 ///////////////////////////////////////////
 
@@ -2788,6 +2789,9 @@ bool KSpreadCell::hasProperty( Properties p ) const
 
     switch( p )
     {
+    case PBackgroundBrush:
+    case PBackgroundColor:
+	return TRUE;
     case PLeftBorder:
 	if ( column() == m_pObscuringCell->column() )
 	    return TRUE;
@@ -2810,6 +2814,41 @@ bool KSpreadCell::hasProperty( Properties p ) const
 
     return FALSE;
 }
+
+const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
+{
+    if ( m_pObscuringCell )
+    {
+	// Ask the obscuring cell for a rigth border
+	if ( m_pObscuringCell->hasProperty( PBackgroundBrush ) )
+	    return m_pObscuringCell->backGroundBrush( m_pObscuringCell->column(), m_pObscuringCell->row() );
+
+	return m_pTable->emptyBrush();
+    }
+
+    return KSpreadLayout::backGroundBrush( _col, _row );
+}
+
+const QColor& KSpreadCell::bgColor( int _col, int _row ) const
+{
+    if ( m_pObscuringCell )
+    {
+	// Ask the obscuring cell for a rigth border
+	if ( m_pObscuringCell->hasProperty( PBackgroundColor ) )
+	    return m_pObscuringCell->bgColor( m_pObscuringCell->column(), m_pObscuringCell->row() );
+
+	return m_pTable->emptyColor();
+    }
+
+    return KSpreadLayout::bgColor( _col, _row );
+}
+
+///////////////////////////////////////////
+//
+// Borders.
+// Reimplementation of KSpreadLayout methods.
+//
+///////////////////////////////////////////
 
 void KSpreadCell::setLeftBorderPen( const QPen& p )
 {

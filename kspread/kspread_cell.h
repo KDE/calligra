@@ -311,6 +311,16 @@ public:
      */
     const QPen& bottomBorderPen( int col, int row ) const;
 
+    /**
+     * @reimp
+     */
+    const QColor& bgColor( int col, int row ) const;
+
+    /**
+     * @reimp
+     */
+    const QBrush& backGroundBrush( int col, int row ) const;
+    
     ////////////////////////////////
     //
     // Methods for setting layout stuff.
@@ -336,7 +346,7 @@ public:
      * @reimp
      */
     void setBottomBorderPen( const QPen& p );
-
+    
     //////////////////////
     //
     // Other stuff
