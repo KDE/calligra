@@ -31,19 +31,43 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/connection.h>
 
-#include "kexidatatableview.h"
+#include "kexitableview.h"
 
 KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
 	KexiDB::TableSchema &table, const char *name)
  : KexiViewBase(win, parent, name)
 {
 	m_table = &table;
-	m_view = new KexiDataTableView(this, "view");
 	init();
+}
+
+KexiAlterTableDialog::~KexiAlterTableDialog()
+{
 }
 
 void KexiAlterTableDialog::init()
 {
+	KexiTableViewData *data = new KexiTableViewData();
+	data->setInsertingEnabled( false );
+	data->addColumn( new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text) );
+//js TODO: COMBO
+	data->addColumn( new KexiTableViewColumn(i18n("Data type"), KexiDB::Field::Text) );
+	data->addColumn( new KexiTableViewColumn(i18n("Comments"), KexiDB::Field::Text) );
+
+	KexiTableItem *item = new KexiTableItem(0);
+	item->push_back(QVariant("name"));
+	item->push_back(QVariant("Text"));
+	item->push_back(QVariant(""));
+	data->append(item);
+
+	for (int i=0; i<100; i++) {
+		item = new KexiTableItem(0);
+		data->append(item);
+	}
+
+	m_view = new KexiTableView(data, this, "tableview");
+	setFocusProxy(m_view);
+	
 /*
 	connect(m_view, SIGNAL(cellSelected(int,int)), this, SLOT(slotCellSelected(int,int)));
 	//! before closing - we'are accepting editing
@@ -60,10 +84,6 @@ void KexiAlterTableDialog::init()
 	resize(m_view->sizeHint());
 	m_view->setFocus();
 	initActions();
-}
-
-KexiAlterTableDialog::~KexiAlterTableDialog()
-{
 }
 
 void

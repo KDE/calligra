@@ -23,7 +23,7 @@
 #include <kexiviewbase.h>
 
 class KexiMainWindow;
-class KexiDataTableView;
+class KexiTableView;
 class KPopupMenu;
 
 namespace KexiDB
@@ -57,7 +57,7 @@ class KexiAlterTableDialog : public KexiViewBase
 //		void slotUpdateRowActions(int row);
 
 	private:
-		KexiDataTableView *m_view;
+		KexiTableView *m_view;
 		KexiDB::TableSchema *m_table;
 };
 
