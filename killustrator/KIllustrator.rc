@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator" version="5">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator" version="6">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="import"/>
@@ -89,9 +89,11 @@
 <ToolBar fullWidth="false" name="edit"><Text>Edit</Text>
   <Action name="undo"/>
   <Action name="redo"/>
+  <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
   <Action name="paste"/>
+  <Separator/>
   <Action name="view_zoom"/>
   <Separator/>
   <Action name="zoomin"/>
@@ -112,6 +114,7 @@
   <Action name="text"/>
   <Action name="textAlongPath"/>
   <Action name="zoom"/>
+  <Separator/>
   <Action name="insertpart"/>
   <Action name="insertBitmap"/>
   <Action name="insertClipart"/>

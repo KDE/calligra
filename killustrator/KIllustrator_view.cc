@@ -158,8 +158,8 @@ void KIllustratorView::createMyGUI()
     m_undo = KStdAction::undo(this, SLOT( slotUndo() ), actionCollection(), "undo" );
     m_redo = KStdAction::redo(this, SLOT( slotRedo() ), actionCollection(), "redo" );
     new KAction( i18n("Dup&licate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
-    m_delete=new KAction( i18n("&Delete"), Key_Delete, this, SLOT( slotDelete() ), actionCollection(), "delete" );
-    new KAction( i18n("&Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
+    m_delete=new KAction( i18n("&Delete"), "editdelete", Key_Delete, this, SLOT( slotDelete() ), actionCollection(), "delete" );
+    KStdAction::selectAll( this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 
     // View menu
@@ -256,7 +256,7 @@ void KIllustratorView::createMyGUI()
     m_backOne = new KAction( i18n("B&ack One"), 0, this, SLOT( slotBackOne() ), actionCollection(), "backOne" );
     new KAction( i18n("&Group"), 0, this, SLOT( slotGroup() ), actionCollection(), "group" );
     new KAction( i18n("&Ungroup"), 0, this, SLOT( slotUngroup() ), actionCollection(), "ungroup" );
-    new KAction( i18n("Text Along &Path"), "texttool",0, this, SLOT( slotTextAlongPath() ), actionCollection(), "textAlongPath" );
+    new KAction( i18n("Text Alon&g Path"), "texttool",0, this, SLOT( slotTextAlongPath() ), actionCollection(), "textAlongPath" );
     new KAction( i18n("&Convert to Curve"), 0, this, SLOT( slotConvertToCurve() ), actionCollection(), "convertToCurve" );
 
     // Extra menu
@@ -266,7 +266,7 @@ void KIllustratorView::createMyGUI()
     // Settings
     new KAction( i18n("&Defaults..."), 0, this, SLOT( slotOptions() ), actionCollection(), "configure" );
     new KAction( i18n("&Ellipse..."), 0, this, SLOT( slotConfigureEllipse() ), actionCollection(), "ellipseSettings");
-    new KAction( i18n("&Polygon..."), 0, this, SLOT( slotConfigurePolygon() ), actionCollection(), "polygonSettings");
+    new KAction( i18n("P&olygon..."), 0, this, SLOT( slotConfigurePolygon() ), actionCollection(), "polygonSettings");
 
     kdDebug()<<"inside createMyGUI(): b: "<<time.elapsed()<<" msecs elapsed"<<endl;
 
