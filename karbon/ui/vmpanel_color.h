@@ -10,6 +10,8 @@
 
 class QSpinBox;
 class QTabWidget;
+class QPushButton;
+class KButtonBox;
 class KColorPatch;
 class KoMainWindow;
 class KoView;
@@ -27,6 +29,10 @@ private:
 	QSpinBox* mGreen;
 	QSpinBox* mBlue;
 	KColorPatch* mColorPreview;
+	QPushButton *mRGBOutlineButton;
+	QPushButton *mRGBFillButton;
+	KButtonBox *mButtonBox;
+	enum ButtonChoice { Outline, Fill };
 };
 
 #endif
