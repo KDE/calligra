@@ -48,6 +48,10 @@
 #include <GLayer.h>
 #include <SelectionTool.h>
 
+//#define oldmXOffset (width() - actualPaperSizePt().width())/2 - xPaper
+//#define newmXOffset
+
+
 Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidget *parent, const char *name)
    : QWidget (parent, name)
 {
@@ -131,6 +135,19 @@ QSize Canvas::actualPaperSizePt() const
 void Canvas::updateScrollBars()
 {
    //the range of a scrollbar depends on how much of the canvas is not visible
+   /*QSize tmpSize=actualPaperSizePt();
+   int i=tmpSize.width()-width();
+   if (i<=0)
+      hBar->setRange(0,0);
+   else
+      hBar->setRange(0,i);
+      //hBar->setRange(-i/2-10,i/2+10);
+
+   i=tmpSize.height()-height();
+   if (i<=0)
+      vBar->setRange(0,0);
+   else
+      vBar->setRange(0,i);*/
    QSize tmpSize=actualPaperSizePt();
    int i=tmpSize.width()-width();
    if (i<=0)
@@ -152,17 +169,18 @@ void Canvas::updateScrollBars()
 void Canvas::scrollX(int v)
 {
    xPaper = v;
-   int i=actualPaperSizePt().width()-width();
+/*   int i=actualPaperSizePt().width()-width();
    if (i<=0)
    {
-      mXOffset=-width()/2;
+      mXOffset=-i/2;
+      xPaper=
    }
    else
    {
       //mXOffset=(-v+hBar->minValue())/zoomFactor+10;
-      mXOffset=-v+hBar->minValue();
+      mXOffset=-v;
       kdDebug()<<"Canvas::scrollX: mXOffset: "<<mXOffset<<" v: "<<v<<" minValue: "<<hBar->minValue()<<endl;
-   };
+   };*/
    //mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
    mXOffset=(width() - actualPaperSizePt().width())/2 - xPaper;
    repaint();
@@ -719,17 +737,18 @@ void Canvas::drawGrid (QPainter& p)
    float vd = vGridDistance * zoomFactor;
    QPen pen1 (mGridColor, 0);
 
+
    p.save ();
    p.setPen (pen1);
    h = ((width() - actualPaperSizePt().width())/2 - xPaper) % (int)hd;
-   cerr<<"grid x: ";
+   //cerr<<"grid x: ";
    for (; h < width(); h += hd)
    {
       int hi = qRound (h);
       p.drawLine (hi, 0, hi, height());
-      cerr<<hi<<" ";
+      //cerr<<h<<" ";
    }
-   cerr<<endl;
+   //cerr<<endl;
    v = ((height() - actualPaperSizePt().height())/2 - yPaper) % (int)vd;
   
    for (; v < height() ; v += vd)
@@ -737,6 +756,7 @@ void Canvas::drawGrid (QPainter& p)
       int vi = qRound (v);
       p.drawLine (0, vi, width(), vi);
    }
+
    p.restore ();
 }
 

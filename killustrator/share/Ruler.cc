@@ -214,25 +214,25 @@ void Ruler::paintEvent (QPaintEvent *e)
 
    if (orientation == Horizontal)
    {
-      kdDebug()<<"Ruler::paintEvent(): firstVis: "<<firstVisible<<" e->x: "<<rect.x()<<" e->y: "<<rect.y()<<" e->w: "<<rect.width()<<" e->h: "<<rect.height()<<endl;
-      if (firstVisible >= 0)
+      //kdDebug()<<"Ruler::paintEvent(): firstVis: "<<firstVisible<<" e->x: "<<rect.x()<<" e->y: "<<rect.y()<<" e->w: "<<rect.width()<<" e->h: "<<rect.height()<<endl;
+/*      if (firstVisible >= 0)
       {
          bitBlt (this, rect.x (), rect.y (), buffer,
-                 rect.x () + firstVisible, rect.y (),
+                 rect.x () + firstVisible/2, rect.y (),
                  rect.width (), rect.height ());
       }
-      else
+      else*/
          bitBlt (this, rect.x (), rect.y (), buffer,
                  rect.x (), rect.y (),
                  rect.width (), rect.height ());
    }
    else
    {
-      if (firstVisible >= 0)
+      /*if (firstVisible >= 0)
          bitBlt (this, rect.x (), rect.y (), buffer,
                  rect.x (), rect.y () + firstVisible,
                  rect.width (), rect.height ());
-      else
+      else*/
          bitBlt (this, rect.x (), rect.y (), buffer,
                  rect.x (), rect.y (),
                  rect.width (), rect.height ());
