@@ -348,18 +348,12 @@ KoRect KPObject::rotateRectObject(KoZoomHandler */*_zoomHandler*/ ) const
 
 void KPObject::rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler)
 {
-    KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
-    double pw = br.width();
-    double ph = br.height();
-    KoRect rr = br;
-    double yPos = -rr.y();
-    double xPos = -rr.x();
-    rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
-
+    KoRect rr = KoRect( 0, 0, ext.width(), ext.height() );
+    rr.moveTopLeft( KoPoint( -ext.width() / 2.0, -ext.height() / 2.0 ) );
     QWMatrix m;
-    m.translate( _zoomHandler->zoomItX(pw / 2.0), _zoomHandler->zoomItY(ph / 2.0 ));
+    m.translate( _zoomHandler->zoomItX(ext.width() / 2.0), _zoomHandler->zoomItY(ext.height() / 2.0 ));
     m.rotate( angle );
-    m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
+    m.translate( _zoomHandler->zoomItX(rr.left()), _zoomHandler->zoomItY(rr.top()) );
 
     paint->setWorldMatrix( m, true );
 }
@@ -367,22 +361,16 @@ void KPObject::rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler)
 
 void KPObject::rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandler)
 {
-    KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
-    double pw = br.width();
-    double ph = br.height();
-    KoRect rr = br;
-    double yPos = -rr.y();
-    double xPos = -rr.x();
-    rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
-
+    KoRect rr = KoRect( 0, 0, ext.width(), ext.height() );
+    rr.moveTopLeft( KoPoint( -ext.width() / 2.0, -ext.height() / 2.0 ) );
     double sx = 0;
     double sy = 0;
     getShadowCoords( sx, sy );
 
     QWMatrix m;
-    m.translate( _zoomHandler->zoomItX(pw / 2.0), _zoomHandler->zoomItY(ph / 2.0) );
+    m.translate( _zoomHandler->zoomItX(ext.width() / 2.0), _zoomHandler->zoomItY(ext.height() / 2.0) );
     m.rotate( angle );
-    m.translate( _zoomHandler->zoomItX(rr.left() + xPos + sx), _zoomHandler->zoomItY(rr.top() + yPos + sy) );
+    m.translate( _zoomHandler->zoomItX(rr.left() + sx), _zoomHandler->zoomItY(rr.top() + sy) );
 
     paint->setWorldMatrix( m, true );
 }
