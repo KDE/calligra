@@ -132,7 +132,7 @@ void KChartView::createTempData()
 	  for(unsigned int i=0;i<dat->rows();i++)
 		{
 		  QString tmp;
-		  tmp="Legend "+tmp.setNum(i);
+		  tmp=i18n("Legend %1").arg(tmp.setNum(i));
 		  params->legend+=tmp;
 		}
 	}
@@ -142,7 +142,7 @@ void KChartView::createTempData()
 	  for(unsigned int i=0;i<dat->cols();i++)
 		{
 		  QString tmp;
-		  tmp="Year 200"+tmp.setNum(i);
+		  tmp=i18n("Year 200%1").arg(tmp.setNum(i));
 		  params->xlbl+=tmp;
 		}
 	}

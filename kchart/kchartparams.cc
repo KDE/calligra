@@ -4,7 +4,8 @@
  */
 #include "kchartparams.h"
 #include "kglobal.h"
-
+#include <klocale.h>
+#include <kstddirs.h>
 KChartParameters::KChartParameters() :
 	annotation( 0 ),
 	scatter( 0 ),
@@ -268,7 +269,7 @@ void KChartParameters::loadConfig(KConfig *conf) {
 
   backgroundPixmapName = conf->readEntry( "backgroundPixmapName", QString::null );
   if( !backgroundPixmapName.isNull() ) {
-    backgroundPixmap.load( backgroundPixmapName );
+    backgroundPixmap.load( locate( "wallpaper", backgroundPixmapName ));
     backgroundPixmapIsDirty = true;
   } else
     backgroundPixmapIsDirty = false;

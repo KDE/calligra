@@ -22,6 +22,7 @@
 
 #include <kapp.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <qradiobutton.h>
 
@@ -43,15 +44,15 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
     if( !_params->isPie() )	{
 	  _parameterpage = new KChartParameterConfigPage(_params,this );
 	  addTab( _parameterpage, i18n( "&Parameter" ) );
-	  
+
 	} else {
 	  _parameterpiepage = new KChartParameterPieConfigPage(_params,this );
 	  addTab( _parameterpiepage, i18n( "&Parameter" ) );
-	  
+
 	  _piepage = new KChartPieConfigPage(_params, this );
 	  addTab( _piepage, i18n( "&Pie" ) );
 	}
-	
+
     _parameterfontpage = new KChartFontConfigPage(_params,this );
     addTab( _parameterfontpage, i18n( "&Font" ) );
 
@@ -92,7 +93,6 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
     setDefaultButton( i18n( "Defaults" ) );
     setCancelButton( i18n( "Cancel" ) );
 
-	connect( this, SIGNAL( okButtonPressed() ), this, SLOT( apply() ) );
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( apply() ) );
     connect( this, SIGNAL( defaultButtonPressed() ), this, SLOT( defaults() ) );
 }
@@ -100,7 +100,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 
 void KChartConfigDialog::apply()
 {
-  qDebug( "***KChartConfig::apply()" );
+  kdDebug(35001) << "***KChartConfig::apply()";
     // Copy application data from dialog into parameter structure that is also
     // being used by the application.
 
@@ -127,7 +127,7 @@ void KChartConfigDialog::apply()
 	  _parameterpiepage->apply();
 	  _piepage->apply();
 	}
-	
+
     _parameterfontpage->apply();
 
 	if( _subTypePage )
@@ -135,7 +135,7 @@ void KChartConfigDialog::apply()
 
     if( _params->has_hlc_sets() )
 	  _hlcChart->apply();
-	
+
 	_backgroundpixpage->apply();
 
 	// data in the params struct has changed; notify application

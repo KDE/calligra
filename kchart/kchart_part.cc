@@ -140,7 +140,7 @@ void KChartPart::initLabelAndLegend()
   if( _params->legend.isEmpty() ) {
     for(unsigned int i=0;i<currentData.rows();i++) {
       QString tmp;
-      tmp="Legend "+tmp.setNum(i);
+      tmp=i18n("Legend %1").arg(tmp.setNum(i));
       _params->legend+=tmp;
     }
   }
@@ -148,7 +148,7 @@ void KChartPart::initLabelAndLegend()
   if( _params->xlbl.isEmpty() ) {
     for(unsigned int i=0;i<currentData.cols();i++) {
       QString tmp;
-      tmp="Year 200"+tmp.setNum(i);
+      tmp=i18n("Year 200%1").arg(tmp.setNum(i));
       _params->xlbl+=tmp;
     }
   }
@@ -407,7 +407,6 @@ QDomDocument KChartPart::saveXML() {
   backgroundPixmap.setAttribute( "centered", _params->backgroundPixmapCentered );
   backgroundPixmap.setAttribute( "intensity", _params->backgroundPixmapIntensity );
   chart.appendChild( backgroundPixmap );
-
   kdDebug(35001) << "Ok, till here!!!" << endl;
   //  setModified( false );
   return doc;
@@ -897,7 +896,10 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc )
       }
     }
   }
-
+  if( !_params->backgroundPixmapName.isNull() ) {
+    _params->backgroundPixmap.load( locate( "wallpaper", _params->backgroundPixmapName ));
+    _params->backgroundPixmapIsDirty = true;
+    }
   return true;
 };
 
@@ -943,6 +945,12 @@ QFont KChartPart::toFont( QDomElement &element ) const
 
   /**
    * $Log$
+   * Revision 1.50  2000/10/11 14:54:33  faure
+   * +  setInstance( KChartFactory::global(), false );
+   * This fixes saving a kchart child (it was saved with mime="application/x-kspread"),
+   * bug reported by Laurent Montel.
+   * One line missing, and I lost an hour....
+   *
    * Revision 1.49  2000/09/23 21:37:36  hausmann
    * - removed all component specific shells. they are not needed anymore.
    *   (as discussed with David)

@@ -43,17 +43,7 @@ short cnt_nl( const char *nstr,int *len )/* strlen - max seg */
 	return c;
 }
 
-/*
-void out_err( QPainter*,
-		 int,
-		 int,
-		 QColor,
-		 QColor,
-		 char *err_str )
-{
-	debug( "%s", err_str );
-}
-*/
+
 
 int qcmpr( const void *a, const void *b ) {
     if( ((struct YS*)a)->y2 < ((struct YS*)b)->y2 ) return 1;
