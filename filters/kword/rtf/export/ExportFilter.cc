@@ -476,9 +476,9 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     else
                     {
                         str += "{\\field";
-                        str += "{\\*\\fldinst { ";
+                        str += "{\\*\\fldinst ";
                         str +=  rtfField;
-                        str += "  \\\\* MERGEFORMAT }}";
+                        str += "  \\\\* MERGEFORMAT }";
                         str += "{\\fldrslt {";
                         str += value;
                         str += "}}}";
@@ -488,9 +488,9 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 {
                     // A link
                     str += "{\\field";
-                    str += "{\\*\\fldinst { HYPERLINK ";
+                    str += "{\\*\\fldinst HYPERLINK ";
                     str +=  escapeRtfText((*paraFormatDataIt).variable.getHrefName());
-                    str += "}}";
+                    str += "}";
                     str += "{\\fldrslt ";
                     str += "{\\ul";   // underline, ### TODO: use style Hyperlink
                     str += lookupColor("\\cf",QColor(0,0,255));// blue
