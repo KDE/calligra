@@ -11,6 +11,10 @@ Footnote line (section 2.3 esp. 2.3.6)
 dir attribute of <FLOW>
 ...
 
+=== TO BACKPORT ===
+Fix for white space at start or end of span
+Footnote/endnote (libexport?)
+
 === Abiword's rtftest.rtf test file ===
 shadow (RTF import problem)
 wave (RTF import problem?)
@@ -59,3 +63,4 @@ Table
 
 === Long term ===
 Make the filter use less memory
+Change all kdDebugs to the area #30520 (when KOffice 1.3 and libexport compatibilty will not be needed anymore)
