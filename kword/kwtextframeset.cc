@@ -2525,7 +2525,6 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
                              bool removeSelected, const QString & commandName,
                              CustomItemsMap customItemsMap )
 {
-    kdDebug()<<"checkNewLine :"<<checkNewLine<<endl;
     //kdDebug(32001) << "KWTextFrameSet::insert" << endl;
     QTextDocument *textdoc = textDocument();
     emit hideCursor();
@@ -2564,7 +2563,6 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
     emit ensureCursorVisible();
     emit showCursor();
     undoRedoInfo.text += txt;
-    kdDebug()<<"text :"<<txt<<endl;
     for ( int i = 0; i < (int)txt.length(); ++i ) {
         if ( txt[ oldLen + i ] != '\n' )
             copyCharFormatting( c2.parag()->at( c2.index() ), oldLen + i, false );
