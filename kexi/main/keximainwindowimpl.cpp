@@ -105,6 +105,10 @@
 #include <kdockwidget_private.h>
 #endif
 
+#ifndef KEXI_NO_MIGRATION
+#include "migration/importwizard.h"
+#endif
+
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
 
 class KexiMainWindowImpl::Private
@@ -602,6 +606,11 @@ KexiMainWindowImpl::initActions()
 	setActionVolatile( action, true );
 	action->setToolTip(i18n("Sort data in descending order"));
 	action->setWhatsThis(i18n("Sorts data in descending (from Z to A and from 9 to 0). Data from selected column is used for sorting."));
+
+	//TOOLS MENU
+#ifndef KEXI_NO_MIGRATION
+	new KAction(i18n("Import Data"), "toolsdatamigrate", 0, this, SLOT(slotMigrationWizard()), actionCollection(), "tools_data_migration");
+#endif	
 
 	//SETTINGS MENU
 	setStandardToolBarMenuEnabled( true );
@@ -2887,6 +2896,13 @@ KexiMainWindowImpl::initUserActions()
 */
 }
 
-
+#ifndef KEXI_NO_MIGRATION
+void KexiMainWindowImpl::slotMigrationWizard()
+{
+	KexiMigration::importWizard* iw = new KexiMigration::importWizard();
+	iw->setGeometry(300,300,400,300);
+	iw->show();
+}
+#endif
 #include "keximainwindowimpl.moc"
 
