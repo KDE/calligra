@@ -109,11 +109,6 @@ void KWAnchor::resize()
     //kdDebug(32001) << "KWAnchor::resize " << width << "x" << height << endl;
 }
 
-KWTextDocument * KWAnchor::textDocument() const
-{
-    return static_cast<KWTextDocument *>( parent );
-}
-
 KCommand * KWAnchor::createCommand()
 {
     kdDebug(32001) << "KWAnchor::addCreateCommand" << endl;

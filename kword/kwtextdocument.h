@@ -62,6 +62,9 @@ public:
     KWTextCustomItem( KWTextDocument *textdoc ) : QTextCustomItem( textdoc )
     { m_deleted = false; }
 
+    // The text document in which this customitem is
+    KWTextDocument * textDocument() const { return static_cast<KWTextDocument *>( parent ); }
+
     // When the user deletes a custom item, it isn't destroyed but
     // moved into the undo/redo history - setDeleted( true )
     // and it can be then copied back from there into the real world - setDeleted( false ).

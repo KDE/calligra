@@ -2361,19 +2361,26 @@ void KWDocument::recalcVariables( int type )
 {
     bool update = false;
     QListIterator<KWVariable> it( variables );
+    QList<KWTextFrameSet> toRepaint;
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->type() == type )
         {
             update = true;
             it.current()->recalc();
+            QTextParag * parag = it.current()->paragraph();
+            if ( parag )
+            {
+                parag->invalidate( 0 );
+                parag->setChanged( true );
+                KWTextFrameSet * textfs = it.current()->textDocument()->textFrameSet();
+                if ( toRepaint.findRef( textfs ) == -1 )
+                    toRepaint.append( textfs );
+            }
         }
     }
-    if ( update )
-    {
-        layout();
-        repaintAllViews();
-    }
+    for ( KWTextFrameSet * fs = toRepaint.first() ; fs ; fs = toRepaint.next() )
+        slotRepaintChanged( fs );
 }
 
 void KWDocument::setVariableValue( const QString &name, const QString &value )

@@ -39,9 +39,6 @@ public:
     KWAnchor( KWTextDocument *textdoc, KWFrameSet * frameset, int frameNum );
     ~KWAnchor();
 
-    // The text document in which this anchor is
-    KWTextDocument * textDocument() const;
-
     // The frameset and frame number anchored here
     KWFrameSet * frameSet() const { return m_frameset; }
     int frameNum() const { return m_frameNum; }
