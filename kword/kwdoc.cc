@@ -42,8 +42,6 @@
 #include <qregexp.h>
 #include <qtimer.h>
 
-#include <koSconfig.h>
-
 #include <koPictureCollection.h>
 #include <koTemplateChooseDia.h>
 #include <koMainWindow.h>
