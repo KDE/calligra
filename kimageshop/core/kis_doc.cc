@@ -65,7 +65,7 @@ bool KisDoc::initDoc()
     return false;
 
   // add background layer
-  img->addLayer(QRect(0, 0, 512, 512), KisColor::white(), "background");
+  img->addLayer(QRect(0, 0, 512, 512), KisColor::white(), false, "background");
   img->setLayerOpacity(255);
   img->compositeImage(QRect(0, 0, 512, 512));
   setCurrentImage(img);
@@ -316,36 +316,6 @@ void KisDoc::slotRemoveImage( const QString& _name )
     }
 }
 
-/*
-bool KisDoc::loadImage( const QString& file )
-{
-  QImage img(file);
-
-  if (img.isNull())
-    return false;
-
-  QString alphaName = file;
-  alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
-  qDebug("alphaname=%s\n",alphaName.latin1());
-  QImage alpha(alphaName);
-
-  QString name = QFileInfo(file).fileName();
-  int w = img.width();
-  int h = img.height();
-
-  KisImage *kis_img = newImage(name, w, h, cm_RGBA, bm_White);
-  if (!kis_img)
-    return false;
-
-
-  kis_img->addRGBLayer(img, alpha, name);
-  kis_img->setLayerOpacity(255);
-  kis_img->compositeImage(QRect(0, 0, w, h));
-  setCurrentImage(kis_img);
-  return true;
-}
-*/
-
 void KisDoc::slotNewImage()
 {
   if (!m_pNewDialog)
@@ -357,7 +327,7 @@ void KisDoc::slotNewImage()
 
   int w = m_pNewDialog->newwidth();
   int h = m_pNewDialog->newheight();
-  //bgMode bg = m_pNewDialog->backgroundMode();
+  bgMode bg = m_pNewDialog->backgroundMode();
   cMode cm = m_pNewDialog->colorMode();
 
   QString name;
@@ -368,7 +338,15 @@ void KisDoc::slotNewImage()
     return;
   
   // add background layer
-  img->addLayer(QRect(0, 0, w, h), KisColor::white(), "background");
+  if (bg == bm_White)
+	img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
+  else if (bg == bm_Transparent)
+	img->addLayer(QRect(0, 0, w, h), KisColor::white(), true, "background");
+  else if (bg == bm_ForegroundColor)
+	img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background"); // FIXME
+  else if (bg == bm_BackgroundColor)
+	img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background"); // FIXME
+
   img->setLayerOpacity(255);
   img->compositeImage(QRect(0, 0, w, h));
   setCurrentImage(img);

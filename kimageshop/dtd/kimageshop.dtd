@@ -47,6 +47,8 @@
         opacity:    The channel's opactiy. A value betwenn 0 and 255.
         isVisible   Is the channel visible? (yes or no)
         isLinked    Is the channel linked? (yes or no)
+        bitDepth:   The bit depth. == The number of bits a pixel uses _per channel_!.
+        cMode:      The image's color mode. "RGBA" for example. See kis_global.h.
 -->
 <!ELEMENT LAYER (CHANNEL)*>
 <!ATTLIST LAYER name      CDATA #REQUIRED
@@ -56,7 +58,9 @@
                 height    CDATA #REQUIRED
                 opacity   CDATA #REQUIRED
                 isVisible CDATA #REQUIRED
-                isLinked  CDATA #REQUIRED>
+                isLinked  CDATA #REQUIRED
+                bitDepth  CDATA #REQUIRED
+                cMode     CDATA #REQUIRED>
 
 
 
@@ -66,7 +70,9 @@
 
 		Attributes:
 
-		id:	        The channels identifier. "R" for example.
+		cId:	    The channel identifier. See kis_global.h.
+        bitDepth:   The channels bit depth.
 -->
 <!ELEMENT CHANNEL EMPTY>
-<!ATTLIST CHANNEL name   CDATA #REQUIRED>
+<!ATTLIST CHANNEL cId      CDATA #REQUIRED
+                  bitDepth CDATA #REQUIRED>

@@ -90,8 +90,6 @@ bool PenTool::paint(QPoint pos)
 
   uchar *sl;
   uchar bv, invbv;
-  uchar r, g, b, a;
-  int   v;
 
   int red = m_pView->fgColor().R();
   int green = m_pView->fgColor().G();

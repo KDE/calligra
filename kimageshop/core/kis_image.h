@@ -78,9 +78,7 @@ class KisImage : public QObject
     void moveLayerTo( int x, int y, KisLayer *lay = 0 );
     void setLayerOpacity( uchar _opacity, KisLayer *_layer = 0 );
 
-    void addRGBLayer( QString _file );
-    void addRGBLayer(QImage& img, QImage& alpha, const QString name);
-    void addLayer(const QRect& r, const KisColor& c, const QString& name);
+    void addLayer(const QRect& r, const KisColor& c, bool transparent, const QString& name);
     void removeLayer( unsigned int _layer );
 
     KisLayer* layerPtr( KisLayer *_layer );

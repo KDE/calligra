@@ -31,10 +31,11 @@ class KisChannel
 {
  public:
 
-  KisChannel(cId id);
+  KisChannel(cId id, uchar bitDepth = 8);
   virtual ~KisChannel();
 
   cId    channelId()    const { return m_id; }
+  uchar  bitDepth()     const { return m_bitDepth; }
   uint   xTiles()       const { return m_xTiles; }
   uint   yTiles()       const { return m_xTiles; }
   int    width()        const { return m_imgRect.width(); }
@@ -61,6 +62,7 @@ class KisChannel
  protected:
   
   cId      m_id;
+  uchar    m_bitDepth;
   // array of pointers to tile data
   uchar**  m_tiles;
   uint     m_xTiles, m_yTiles;

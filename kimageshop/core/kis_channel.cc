@@ -21,7 +21,9 @@
 
 #include "kis_channel.h"
 
-KisChannel::KisChannel(cId id) : m_id( id )
+KisChannel::KisChannel(cId id, uchar bd)
+  : m_id( id )
+  , m_bitDepth( bd )
 {
   m_xTiles = 0;
   m_yTiles = 0;

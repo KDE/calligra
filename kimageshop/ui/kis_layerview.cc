@@ -318,14 +318,18 @@ void LayerTable::mouseDoubleClickEvent( QMouseEvent *_event )
 
 void LayerTable::slotAddLayer()
 {
-  QString image = locate( "kis_images", "cam9b.jpg", KisFactory::global() );	
-  m_doc->current()->addRGBLayer( image );
-  m_doc->current()->setLayerOpacity( 255 );
+  KisImage *img = m_doc->current();
 
-  QRect updateRect = m_doc->current()->layerList().at( m_doc->current()->layerList().count() - 1 )->imageExtents();
-  m_doc->current()->compositeImage( updateRect );
+  QString name;
+  name.sprintf("layer %d", img->layerList().count());
+  
+  img->addLayer( img->imageExtents(), KisColor::white(), true, name );
+  img->setLayerOpacity( 255 );
 
-  selectLayer( m_doc->current()->layerList().count() - 1 );
+  QRect updateRect = img->layerList().at( img->layerList().count() - 1 )->imageExtents();
+  img->compositeImage( updateRect );
+
+  selectLayer( img->layerList().count() - 1 );
 
   updateTable();
   updateAllCells();

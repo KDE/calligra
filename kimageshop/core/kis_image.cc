@@ -74,10 +74,10 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
   channels=3;
   currentLayer=0;
   
-  compose = new KisLayer( "compose", m_cMode );
+  compose = new KisLayer( "_compose", m_cMode, m_bitDepth );
   compose->allocateRect( QRect( 0, 0, TILE_SIZE, TILE_SIZE ) );
   
-  background = new KisLayer( "background1", m_cMode );
+  background = new KisLayer( "_background", m_cMode, m_bitDepth );
   background->allocateRect( QRect( 0, 0, TILE_SIZE, TILE_SIZE ) );
 
   // FIXME: make it work with non-RGB color spaces
@@ -222,51 +222,12 @@ void KisImage::setUpVisual()
   }
 }	
 
-void KisImage::addRGBLayer(QString file)
+void KisImage::addLayer(const QRect& rect, const KisColor& c, bool tr, const QString& name)
 {
-  QImage img(file);
- 
-  QString alphaName = file;
-  alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
-  qDebug("alphaname=%s\n",alphaName.latin1());
-  QImage alpha(alphaName);
-
-  addRGBLayer(img, alpha, QFileInfo(file).fileName());
-}
-
-void KisImage::addRGBLayer(QImage& img, QImage &alpha, const QString name)
-{
-  // XXX currently assumes the alpha image IS a greyscale and the same size as
-  // the other channels
-  
-  qDebug("KisImage::addRGBLayer: %s\n",name.latin1());
-
-  if (img.isNull())
-    {
-      qDebug("Unable to load image: %s\n",name.latin1());
-      return;
-    }
-
-  img = img.convertDepth(32);
-  
-  if (alpha.isNull() || (img.size()!= alpha.size()))
-    {
-      qDebug("Incorrect sized alpha channel - not loaded");
-      alpha = QImage();
-    }
-
-  KisLayer *lay = new KisLayer(name, m_cMode);
-  lay->loadRGBImage(img, alpha);
-  layers.append(lay);
-  currentLayer=lay;
-}
-
-void KisImage::addLayer(const QRect& rect, const KisColor& c, const QString& name)
-{
-  KisLayer *lay = new KisLayer(name, m_cMode);
+  KisLayer *lay = new KisLayer(name, m_cMode, m_bitDepth);
 
   lay->allocateRect(rect);
-  lay->clear(c);
+  lay->clear(c, tr);
 
   layers.append(lay);
   currentLayer=lay;

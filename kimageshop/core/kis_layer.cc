@@ -22,10 +22,11 @@
 #include "kis_layer.h"
 #include "kis_global.h"
 
-KisLayer::KisLayer(const QString& name, cMode cm)
+KisLayer::KisLayer(const QString& name, cMode cm, uchar bd)
   : QObject()
   , m_name(name)
   , m_cMode(cm)
+  , m_bitDepth(bd)
 {
   m_visible = true;
   m_linked = false;
@@ -36,12 +37,12 @@ KisLayer::KisLayer(const QString& name, cMode cm)
   if (cm == cm_RGB
 	  || cm == cm_RGBA)
 	{
-	  m_ch[0] = new KisChannel(ci_Red);
-	  m_ch[1] = new KisChannel(ci_Green);
-	  m_ch[2] = new KisChannel(ci_Blue);
+	  m_ch[0] = new KisChannel(ci_Red, m_bitDepth);
+	  m_ch[1] = new KisChannel(ci_Green, m_bitDepth);
+	  m_ch[2] = new KisChannel(ci_Blue, m_bitDepth);
 
 	  if (cm == cm_RGBA)
-		m_ch[3] = new KisChannel(ci_Alpha);
+		m_ch[3] = new KisChannel(ci_Alpha, m_bitDepth);
 	}
 }
 
@@ -175,7 +176,7 @@ uchar KisLayer::pixel(uchar channel, uint x, uint y)
   return m_ch[channel]->pixel(x,y);
 }
 
-void KisLayer::clear(const KisColor& c )
+void KisLayer::clear(const KisColor& c, bool transparent )
 {
   if (!m_cMode == cm_RGB
 	  && !m_cMode == cm_RGBA)
@@ -190,10 +191,15 @@ void KisLayer::clear(const KisColor& c )
   for(int y = 0; y < yTiles(); y++)
 	for(int x = 0; x < xTiles(); x++)
       {
-		// set the alpha channel to opaque
+		// set the alpha channel
 		if (alpha)
-		  memset(channelMem(3, y * xTiles() + x, 0, 0), 255 , TILE_SIZE*TILE_SIZE);
-	
+		  {
+			if (transparent)
+			  memset(channelMem(3, y * xTiles() + x, 0, 0), 0 , TILE_SIZE*TILE_SIZE);
+			else
+			  memset(channelMem(3, y * xTiles() + x, 0, 0), 255 , TILE_SIZE*TILE_SIZE);
+		  }
+
 		uchar* ptr0 = channelMem(0, y * xTiles() + x, 0, 0);
 		uchar* ptr1 = channelMem(1, y * xTiles() + x, 0, 0);
 		uchar* ptr2 = channelMem(2, y * xTiles() + x, 0, 0);
@@ -208,44 +214,6 @@ void KisLayer::clear(const KisColor& c )
 			}
 		
       }
-}
-
-void KisLayer::loadRGBImage(QImage , QImage )
-{
-  /*
-  qDebug("loadRGBImage img=(%d,%d) alpha=(%d,%d)\n",img.width(),img.height(),
-	 alpha.width(),alpha.height());
-  if (img.depth()!=32)
-    img=img.convertDepth(32);
-  
-  if (!alpha.isNull()) {
-    if (alpha.depth()!=32)
-      alpha=alpha.convertDepth(32);
-    alphaChannel->loadViaQImage(alpha);
-  } else {
-    alphaChannel->allocateRect(QRect(QPoint(0,0),img.size()));
-    for(int y=0;y<img.height();y++)
-      for(int x=0;x<img.width();x++)
-	alphaChannel->setPixel(x,y,255);
-  }
-  dataChannels->loadViaQImage(img);
-  */
-}
-
-
-void KisLayer::loadGrayImage(QImage , QImage )
-{
-  /*
-  if (img.depth()!=32)
-    img=img.convertDepth(32);
-  
-  if (!alpha.isNull()) {
-    if (alpha.depth()!=32)
-      alpha=alpha.convertDepth(32);
-    alphaChannel->loadViaQImage(alpha);  // ie assume R=B=G as above
-  }
-  dataChannels->loadViaQImage(img);
-  */
 }
 
 #include "kis_layer.moc"

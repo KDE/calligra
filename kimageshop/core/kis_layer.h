@@ -34,7 +34,7 @@ class KisLayer : public QObject
 	Q_OBJECT
 
  public:
-	KisLayer(const QString& name, cMode cm);
+	KisLayer(const QString& name, cMode cm, uchar bitDepth = 8);
 	virtual ~KisLayer();
 
 	QString name()    const { return m_name; }
@@ -42,6 +42,8 @@ class KisLayer : public QObject
 	bool    visible() const { return m_visible; }
 	bool    linked()  const { return m_linked; }
 	uchar   numChannels() const { return m_channels; }
+	cMode   colorMode()   const { return m_cMode; }
+	uchar   bitDepth()    const { return m_bitDepth; }
 
 	void    setName(const QString& name) { m_name = name; };
 	void    setOpacity(uchar o) { m_opacity = o; }
@@ -74,7 +76,7 @@ class KisLayer : public QObject
 	void    setPixel(uchar channel, uint x, uint y, uchar val);
 	uchar   pixel(uchar channel, uint x, uint y);
 
-	void    clear(const KisColor& c);
+	void    clear(const KisColor& c, bool transparent);
 
  signals:
 	void layerPropertiesChanged();
@@ -88,6 +90,7 @@ class KisLayer : public QObject
 	QString  m_name;
 	bool     m_visible, m_linked;
 	cMode    m_cMode;
+	uchar    m_bitDepth;
 	
 	KisChannel* m_ch[MAX_CHANNELS];;
 };
