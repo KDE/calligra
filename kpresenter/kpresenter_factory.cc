@@ -39,7 +39,7 @@ extern "C"
 {
     void* init_libkpresenterpart()
     {
-	return new KPresenterFactory;
+        return new KPresenterFactory;
     }
 };
 
@@ -90,9 +90,11 @@ KInstance* KPresenterFactory::global()
       s_global = new KInstance(aboutData());
 
       s_global->dirs()->addResourceType("kpresenter_template",
-				        KStandardDirs::kde_default("data") + "kpresenter/templates/");
+                                        KStandardDirs::kde_default("data") + "kpresenter/templates/");
       s_global->dirs()->addResourceType("autoforms",
-				        KStandardDirs::kde_default("data") + "kpresenter/autoforms/");
+                                        KStandardDirs::kde_default("data") + "kpresenter/autoforms/");
+      s_global->dirs()->addResourceType("slideshow",
+                                        KStandardDirs::kde_default("data") + "kpresenter/slideshow/");
       // Tell the iconloader about share/apps/koffice/icons
       s_global->iconLoader()->addAppDir("koffice");
     }

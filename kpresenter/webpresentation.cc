@@ -175,9 +175,9 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
 
     while ( pics[ index ] ) {
         filename = pics[index] + format;
-        system( QString( "cp %1 %2/pics/%3" ).
-                arg( locate( "appdata", "slideshow/" + filename ) ).
-                arg( path ).arg( filename ).latin1() );
+        system( QFile::encodeName( QString( "cp %1 %2/pics/%3" ).
+                arg( locate( "slideshow", filename, KPresenterFactory::global() ) ).
+                arg( path ).arg( filename ) ) );
         p = progressBar->value();
         progressBar->setValue( ++p );
         kapp->processEvents();
@@ -284,7 +284,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         if ( !email.isEmpty() )
             html += "</A>";
 
-        html += " - created with <A HREF=\"http://koffice.kde.org/kpresenter.html\">KPresenter</A>\n";
+        html += " - created with <A HREF=\"http://www.koffice.org/kpresenter/\">KPresenter</A>\n";
         html += "  </CENTER><HR noshade>\n";
         html += "</BODY></HTML>\n";
 

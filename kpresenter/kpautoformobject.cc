@@ -20,6 +20,7 @@
 #include "kpautoformobject.h"
 #include "kpresenter_utils.h"
 #include "kpgradient.h"
+#include <kpresenter_factory.h>
 
 #include <qpointarray.h>
 #include <qlist.h>
@@ -162,10 +163,18 @@ void KPAutoformObject::save( QTextStream& out )
     out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
     out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
 
-    QString afDir = locate( "autoforms", "" );
-    int len = afDir.length();
-    QString str = filename;
-    str = str.remove( 0, len );
+    // The filename contains the absolute path to the autoform. This is
+    // bad, so we simply remove everything but the last dir and the name.
+    // e.g. /my/local/path/to/kpresenter/Arrow/Arrow1.atf -> Arrow/Arrow1.atf
+    QStringList afDirs = KPresenterFactory::global()->dirs()->resourceDirs("autoforms");
+    QValueList<QString>::ConstIterator it=afDirs.begin();
+    QString str;
+    for( ; it!=afDirs.end(); ++it) {
+        if(filename.startsWith(*it)) {
+            str=filename.mid((*it).length());
+            break;
+        }
+    }
     out << indent << "<FILENAME value=\"" << str << "\"/>" << endl;
     out << indent << "<FILLTYPE value=\"" << static_cast<int>( fillType ) << "\"/>" << endl;
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
@@ -366,8 +375,13 @@ void KPAutoformObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                 if ( ( *it ).m_strName == "value" )
                 {
                     filename = ( *it ).m_strValue;
-                    // huh? (Werner)
-                    QString afDir = locate( "autoforms", filename );
+                    // workaround for a bug in the old file format
+                    if(filename[0]=='/') {
+                        kdDebug() << "rubbish ahead! cleaning up..." << endl;
+                        // remove the leading absolute path (i.e. to create Arrow/Arrow1.atf)
+                        filename=filename.mid(filename.findRev('/', filename.findRev('/')-1)+1);
+                    }
+                    filename = locate("autoforms", filename, KPresenterFactory::global());
                     atfInterp.load( filename );
                 }
             }
@@ -750,9 +764,3 @@ void KPAutoformObject::paint( QPainter* _painter )
 
     }
 }
-
-
-
-
-
-
