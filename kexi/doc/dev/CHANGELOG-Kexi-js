@@ -113,10 +113,41 @@ distributed on the download page."
 
 TODO: add possibility in cursor: "Operating in-place on data returned by sqlite_get_table()"
 </SQLITE>
+
+<RENAME_PROPOSALS>
+Introduce KexiProject namespace for all components that are specially developed for Kexi project
+
+1. KexiProjectHandler --> KexiProjectPart ( this is a baseclass for project 
+  parts like: queries, tables, forms, reports)
+It seems to be ok, since classes like KexiTablePart already inherits from KexiProjectPart 
+(formerly KexiProjectHandler)
+
+2. KexiProjectHandlerProxy --> KexiProjectPart::Proxy
+..thus it could be consistently named. This also indicated that the class is used 
+as a helper for KexiProjectPart. More, there are already classes like KexiTablePartProxy
+so new name for KexiProjectHandlerProxy is ok.
+
+3. KexiProjectHandlerItem -> KexiProjectPart::Instance 
+(or KexiProjectPart::Data but Im voting for the former)
+This gives us the idea that this class is just an instance of well-defined part.
+
+ALSO TODO: move all simple widget classes (e.g. KexiSettings, KexiTabBrowser) 
+from core, to more detailed dirs,
+and projectWizard/ to wizards/ (there will be more wizards soon)
+
+ALSO TODO: 
+Jowenn's KexiDataProvider class functionality seems to be something like kexidb now offers.
+
+</RENAME_PROPOSALS>
+
 2003-10-12
 - Connection::isDatabaseUsed() fixed
 - Connection: isConnected() is substituted with isDatabaseUsed() in some cases
 	and checkIsDatabaseUsed() is substituted with checkConnected() in many cases.
+- kexidb/tests/newapi tableview now uses KexiDataTableView
+- Connection:: many overloads like queryStatement( KexiDB::QuerySchema& querySchema ) or
+   executeQuery( QuerySchema& query, uint cursor_options = 0 ) added
+- KexiDataTableView: simplified: setDataSet() -> setData(); record -> cursor
 
 2003-10-11
 - Transaction::isNull() fixed 
