@@ -277,7 +277,7 @@ void  BasicElement::substituteElement(BasicElement *clone)
 
 int BasicElement::takeAsciiFromKeyb(char ch) 
 {
-    if(typeid(this) == typeid(BasicElement))     //This function may be used by RootElement
+    if(typeid(* this) == typeid(BasicElement))     //This function may be used by RootElement
 	//  content.insert(content.length(),ch);
 	return FCOM_TEXTCLONE; //  Ask to be cloned into text & deleted
     else return 1;

@@ -40,13 +40,16 @@ void KFormulaShell::fileNew()
 	    QMessageBox::critical( this, i18n("KFormula Error"), i18n("Could not init"), i18n("OK") );
 	    return;
 	}
-  
+   warning("create view");
     OPParts::View_var v = m_rDoc->createView();
+   warning("set partshell");
     v->setPartShell( this );
+ warning("rootPart");
     setRootPart( v );
-
+   warning("setitems");
     m_rMenuBar->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_rToolBarFile->setItemEnabled( m_idButtonFile_Print, true );
+
 }
 
 bool KFormulaShell::openDocument( const char *_filename )
