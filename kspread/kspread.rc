@@ -50,6 +50,8 @@
  </Menu>
  <Menu name="View"><text>View</text>
   <Action name="newView"/>
+  <ActionList name="view_split" />
+  <Separator />
   <Action name="gotoCell"/>
   <Action name="showPageBorders"/>
  </Menu>

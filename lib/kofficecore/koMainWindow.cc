@@ -72,6 +72,7 @@ public:
     bMainWindowGUIBuilt = false;
     m_activePart = 0L;
     m_activeView = 0L;
+    m_splitViewActionList=0L;
   }
   ~KoMainWindowPrivate()
   {
@@ -83,6 +84,8 @@ public:
 
   KParts::Part *m_activePart;
   KoView *m_activeView;
+
+  QList<KAction> *m_splitViewActionList;
 
   bool bMainWindowGUIBuilt;
 };
@@ -131,6 +134,21 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::aboutKDE( m_helpMenu, SLOT( aboutKDE() ), actionCollection(), "about_kde" );
     KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "report_bug" );
 
+    // set up the action list for the splitter stuff
+    d->m_splitViewActionList=new QList<KAction>;
+    d->m_splitViewActionList->append(new KAction(i18n("Split View"), 0, this, SLOT(slotSplitView()),
+						actionCollection(), "view_split"));
+    d->m_splitViewActionList->append(new KAction(i18n("Remove View"), 0, this, SLOT(slotRemoveView()),
+						actionCollection(), "view_rm_splitter"));
+    KSelectAction *orientation=new KSelectAction(i18n("Splitter Orientation"), 0, this, SLOT(slotOrientation(int)),
+						 actionCollection(), "view_splitter_orientation");
+    QStringList items;
+    items << i18n("Vertical")
+	  << i18n("Horizontal");
+    orientation->setItems(items);
+    orientation->setCurrentItem(0);
+    d->m_splitViewActionList->append(orientation);    
+    
     if ( instance )
       setInstance( instance );
 
@@ -177,6 +195,7 @@ KoMainWindow::~KoMainWindow()
 	s_lstMainWindows->removeRef( this );
 
     delete d->m_manager;
+    delete d->m_splitViewActionList;
 
     delete d;
 }
@@ -550,6 +569,19 @@ void KoMainWindow::slotHelpAbout()
     delete dia;
 }
 
+void KoMainWindow::slotSplitView() {
+    kdDebug(30003) << "KoMainWindow::slotSplitView() called" << endl;
+}
+
+void KoMainWindow::slotRemoveView() {
+    kdDebug(30003) << "KoMainWindow::slotRemoveView() called" << endl;
+}
+
+void KoMainWindow::slotSetOrientation(const int &orientation) {
+    kdDebug(30003) << "KoMainWindow::slotSetOrientation() called ... orientation:" << orientation << endl;
+}
+
+
 void KoMainWindow::buildMainWindowGUI()
 {
   KXMLGUIFactory *factory = guiFactory();
@@ -623,6 +655,9 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     pEnd = plugins.end();
     for (; pIt != pEnd; ++pIt )
       factory->addClient( *pIt );
+
+    if(d->m_activeView==d->m_rootView)
+	factory->plugActionList((KXMLGUIClient*)d->m_activeView, "view_split", *d->m_splitViewActionList );
   }
   else
   {

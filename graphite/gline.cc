@@ -121,14 +121,34 @@ void GLine::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
     reg+=boundingRect();
 }
 
-void GLine::drawHandles(QPainter &/*p*/) {
+void GLine::drawHandles(QPainter &p) {
 
+    p.save();
+    p.setPen(Qt::black);
+    p.setBrush(Qt::black);
     if(m_state==Handles) {
-	// TODO
+	int size=GraphiteGlobal::self()->handleSize();
+	int offset=double2Int(static_cast<double>(size)*0.5);
+	p.drawRect(m_a.x()-offset, m_a.y()-offset, size, size);
+	p.drawRect(m_b.x()-offset, m_b.y()-offset, size, size);
+	if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger() ||
+	   boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger())
+	    p.drawRect(m_a.x()+double2Int(static_cast<double>(m_b.x()-m_a.x())*0.5)-offset,
+		       m_a.y()+double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
+		       size, size);	
     }
     else if(m_state==Rot_Handles) {
-	// TODO
+	int size=GraphiteGlobal::self()->rotHandleSize();
+	int offset=double2Int(static_cast<double>(size)*0.5);
+	p.drawEllipse(m_a.x()-offset, m_a.y()-offset, size, size);
+	p.drawEllipse(m_b.x()-offset, m_b.y()-offset, size, size);
+	if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger() ||
+	   boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger())
+	    p.drawEllipse(m_a.x()+double2Int(static_cast<double>(m_b.x()-m_a.x())*0.5)-offset,
+		       m_a.y()+double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
+		       size, size);
     }
+    p.restore();
 }
 
 const GLine *GLine::hit(const QPoint &p) const {
@@ -316,7 +336,7 @@ const bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
 
 const bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
 				     QRect &/*dirty*/) {
-    // TODO
+    // We don't need that one for lines... hmmm ...
     return false;
 }
 #include <gline.moc>

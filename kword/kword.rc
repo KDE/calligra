@@ -20,6 +20,7 @@
  </Menu>
  <Menu name="View"><text>View</text>
   <Action name="view_newview"/>
+  <ActionList name="view_split" />
   <Separator/>
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>
