@@ -70,6 +70,24 @@ int main(int argc, char **argv)
 		std::cout << "SQL> ";
 		getline(std::cin, cmd);
 		parser->parse(cmd.c_str());
+		switch(parser->operation())
+		{
+			case KexiDB::Parser::OP_Error:
+				kdDebug() << "***********************" << endl;
+				kdDebug() << "* error               *" << endl;
+				kdDebug() << "***********************" << endl;
+				break;
+			case KexiDB::Parser::OP_CreateTable:
+			{
+				kdDebug() << "Schema of table: " << parser->table()->name() << endl;
+				parser->table()->debug();
+				break;
+			}
+			default:
+				kdDebug() << "main(): not implemented in main.cpp" << endl;
+
+				
+		}
 		parser->clear();
 	}
 }
