@@ -53,7 +53,7 @@ class KEXI_DB_EXPORT FieldList
 		virtual ~FieldList();
 		
 		/*! \return number of fields in the list. */
-		unsigned int fieldCount() const;
+		inline unsigned int fieldCount() const { return m_fields.count(); }
 		
 		/*! Adds \a field at the and of field list. */
 		FieldList& addField(Field *field);
@@ -71,26 +71,26 @@ class KEXI_DB_EXPORT FieldList
 		virtual void removeField(KexiDB::Field *field);
 
 		/*! \return field #id or NULL if there is no such a field. */
-		Field* field(unsigned int id);
+		inline Field* field(unsigned int id) { return (id < m_fields.count()) ? m_fields.at(id) : 0; }
 		
 		/*! \return field with name \a name or NULL if there is no such a field. */
-		Field* field(const QString& name) const;
+		inline Field* field(const QString& name) const { return m_fields_by_name[name.lower()]; }
 
 		/*! \return true if this list contains given \a field. */
-		bool hasField(Field* field);
+		inline bool hasField(Field* field) { return m_fields.findRef(field)!=-1; }
 
 		/*! \return list of field names for this list. */
 		QStringList names() const;
 		
 		Field::ListIterator fieldsIterator() const { return Field::ListIterator(m_fields); }
 
-		Field::List* fields() { return &m_fields; }
+		inline Field::List* fields() { return &m_fields; }
 
 		/*! \return list of autoincremented fields. The list is owned by this FieldList object. */
 		Field::List* autoIncrementFields();
 
 		/*! \return true if fields in the list are owned by this list. */
-		bool isOwner() const;
+		inline bool isOwner() const { return m_fields.autoDelete(); }
 
 		/*! Removes all fields from the list, clears name. */
 		virtual void clear();

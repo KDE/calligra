@@ -171,14 +171,18 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 and proper error message is set properly on any error. */
 		virtual bool isValid();
 	
-		//! driver's static version information, it is automatically implemented
-		//! in implementation using KEXIDB_DRIVER macro (see driver_p.h)
+		/*! driver's static version information, it is automatically implemented
+		 in implementation using KEXIDB_DRIVER macro (see driver_p.h) */
 		virtual int versionMajor() const = 0;
 		virtual int versionMinor() const = 0;
 
-		//! Escapes and converts value \a v (for type \a ftype) 
-		//! to string representation required by SQL commands.
-		QString valueToSQL( uint ftype, const QVariant& v ) const;
+		/*! Escapes and converts value \a v (for type \a ftype) 
+		 to string representation required by SQL commands.
+		 Reimplement this if you need other behaviour (eg. for 'date' type handling)
+		 This implementation return date, datetime and time values in ISO format,
+		 what seems to be accepted by SQL servers. 
+		 @see Qt::DateFormat */
+		virtual QString valueToSQL( uint ftype, const QVariant& v ) const;
 
 		//! Like above method, for \a field.
 		inline QString valueToSQL( const Field *field, const QVariant& v ) const {

@@ -97,33 +97,6 @@ void FieldList::removeField(KexiDB::Field *field)
 	m_sqlFields = QString::null;
 }
 
-bool FieldList::isOwner() const
-{
-	return m_fields.autoDelete();
-}
-
-KexiDB::Field* FieldList::field(unsigned int id)
-{
-	if (id < m_fields.count())
-		return m_fields.at(id);
-	return 0;
-}
-
-Field* FieldList::field(const QString& name) const
-{
-	return m_fields_by_name[name.lower()];
-}
-
-bool FieldList::hasField(Field* field)
-{
-	return m_fields.findRef(field);
-}
-
-unsigned int FieldList::fieldCount() const
-{
-	return m_fields.count();
-}
-
 QString FieldList::debugString()
 {
 	QString dbg;

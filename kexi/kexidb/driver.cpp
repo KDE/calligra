@@ -252,12 +252,13 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 			return v.toString();
 //TODO: here special encoding method needed
 		case Field::Boolean:
-			return QString::number(v.toInt()); //0 or 1
-		case Field::Date:
+			return QString::number(v.toInt()?1:0); //0 or 1
 		case Field::Time:
-			return QString("\"")+v.toString()+"\"";
+			return QString("\'")+v.toTime().toString(Qt::ISODate)+"\'";
+		case Field::Date:
+			return QString("\'")+v.toDate().toString(Qt::ISODate)+"\'";
 		case Field::DateTime:
-			return QString("\"") + v.toDate().toString( Qt::ISODate ) + " " + v.toTime().toString( Qt::ISODate ) +"\"";
+			return QString("\'")+v.toDateTime().toString(Qt::ISODate)+"\'";
 		case Field::Text:
 		case Field::LongText: {
 			QString s = v.toString();

@@ -22,6 +22,8 @@
 #include "sqliteconnection.h"
 #include "sqliteconnection_p.h"
 
+#include "kexi_utils.h"
+
 #include <kexidb/error.h>
 #include <kexidb/driver.h>
 
@@ -33,8 +35,17 @@
 #include <klocale.h>
 
 #include <qptrvector.h>
+#include <qdatetime.h>
 
 using namespace KexiDB;
+
+//! safer interpretations of boolean values for SQLite
+static bool sqliteStringToBool(const QString& s)
+{
+	return s.lower()=="yes" || (s.lower()!="no" && s!="0");
+}
+
+//----------------------------------------------------
 
 class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 {
@@ -116,7 +127,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 //#endif
 
 #ifdef SQLITE3
-	inline QVariant getValue(KexiDB::Field *f, int i)
+	inline QVariant getValue(Field *f, int i)
 	{
 		int type = sqlite3_column_type(prepared_st_handle, i);
 		if (type==SQLITE_NULL) {
@@ -124,15 +135,38 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 		}
 		else if (!f || type==SQLITE_TEXT) {
 //TODO: support for UTF-16
+#define GET_sqlite3_column_text QString::fromUtf8( (const char*)sqlite3_column_text(prepared_st_handle, i) )
 			if (!f || f->isTextType())
-				return QString::fromUtf8( (const char*)sqlite3_column_text(prepared_st_handle, i) );
-			else
-				return QVariant(); //TODO
+				return GET_sqlite3_column_text;
+			else {
+				switch (f->type()) {
+				case Field::Date:
+					return QDate::fromString( GET_sqlite3_column_text, Qt::ISODate );
+				case Field::Time:
+					//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
+					return Kexi::stringToHackedQTime(GET_sqlite3_column_text);
+				case Field::DateTime:
+					return QDateTime::fromString( GET_sqlite3_column_text, Qt::ISODate );
+				case Field::Boolean:
+					return QVariant(sqliteStringToBool(GET_sqlite3_column_text), 1);
+				default:
+					return QVariant(); //TODO
+				}
+			}
 		}
 		else if (type==SQLITE_INTEGER) {
-			if (f->isIntegerType())
+			switch (f->type()) {
+			case Field::Byte:
+			case Field::ShortInteger:
+			case Field::Integer:
 				return QVariant( sqlite3_column_int(prepared_st_handle, i) );
-			else if (f->isFPNumericType()) //WEIRD, YEAH?
+			case Field::BigInteger:
+				return QVariant( (Q_LLONG)sqlite3_column_int64(prepared_st_handle, i) );
+			case Field::Boolean:
+				return QVariant( sqlite3_column_int(prepared_st_handle, i)!=0, 1 );
+			default:;
+			}
+			if (f->isFPNumericType()) //WEIRD, YEAH?
 				return QVariant( (double)sqlite3_column_int(prepared_st_handle, i) );
 			else
 				return QVariant(); //TODO
@@ -146,7 +180,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 				return QVariant(); //TODO
 		}
 		else if (type==SQLITE_BLOB) {
-			if (f->type()==KexiDB::Field::BLOB) {
+			if (f->type()==Field::BLOB) {
 				QByteArray ba;
 				ba.setRawData((const char*)sqlite3_column_blob(prepared_st_handle, i),
 					sqlite3_column_bytes(prepared_st_handle, i));
@@ -404,8 +438,8 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 			//ERR!
 			break;
 		}
-//		KexiDB::Field *f = m_fieldsExpanded->at(j);
-		KexiDB::Field *f = m_fieldsExpanded->at(j)->field;
+//		Field *f = m_fieldsExpanded->at(j);
+		Field *f = m_fieldsExpanded->at(j)->field;
 //		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0) << endl;
 
 #ifdef SQLITE2
@@ -417,14 +451,34 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 # else
 			data[i] = QVariant( *col ); //only latin1
 # endif
-		else if (f->isIntegerType())
-			data[i] = QVariant( QCString(*col).toInt() );
 		else if (f->isFPNumericType())
 			data[i] = QVariant( QCString(*col).toDouble() );
-		else if (f->type()==KexiDB::Field::Boolean)
-			data[i] = QVariant( QCString(*col).toInt()==0, 0 );
-		else
-			data[i] = QVariant( *col ); //default
+		else {
+			switch (f->type()) {
+//todo: use short, etc.
+			case Field::Byte:
+			case Field::ShortInteger:
+			case Field::Integer:
+				data[i] = QVariant( QCString(*col).toInt() );
+			case Field::BigInteger:
+				data[i] = QVariant( QString::fromLatin1(*col).toLongLong() );
+			case Field::Boolean:
+				data[i] = QVariant( sqliteStringToBool(QString::fromLatin1(*col)), 1 );
+				break;
+			case Field::Date:
+				data[i] = QDate::fromString( QString::fromLatin1(*col), Qt::ISODate );
+				break;
+			case Field::Time:
+				//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
+				data[i] = Kexi::stringToHackedQTime(QString::fromLatin1(*col));
+				break;
+			case Field::DateTime:
+				data[i] = QDateTime::fromString( QString::fromLatin1(*col), Qt::ISODate );
+				break;
+			default:
+				data[i] = QVariant( *col );
+			}
+		}
 
 		col++;
 #else //SQLITE3

@@ -733,11 +733,12 @@ inline QString Connection::internal_valueToSQL( Field::Type ftype, const QVarian
 //TODO: here special encoding method needed
 		case Field::Boolean:
 			return QString::number(v.toInt()); //0 or 1
-		case Field::Date:
 		case Field::Time:
-			return QString("\"")+v.toString()+"\"";
+			return QString("\"")+v.toTime().toString(Qt::ISODate)+"\"";
+		case Field::Date:
+			return QString("\"")+v.toDate().toString(Qt::ISODate)+"\"";
 		case Field::DateTime:
-			return QString("\"") + v.toDate().toString( Qt::ISODate ) + " " + v.toTime().toString( Qt::ISODate ) +"\"";
+			return QString("\"")+v.toDateTime().toString(Qt::ISODate)+"\"";
 		case Field::Text:
 		case Field::LongText: {
 			QString s = v.toString();
@@ -2241,10 +2242,10 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	KexiDBDrvDbg << "Connection::updateRow.." << endl;
 	clearError();
 	//--get PKEY
+	/*disabled: there may be empty rows (with autoinc) 
 	if (buf.dbBuffer().isEmpty()) {
 		KexiDBDrvDbg << " -- NO CHANGES DATA!" << endl;
-		return true;
-	}
+		return true; }*/
 	if (!query.parentTable()) {
 		KexiDBDrvDbg << " -- NO PARENT TABLE!" << endl;
 		return false;
@@ -2253,19 +2254,38 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	if (!pkey || pkey->fields()->isEmpty())
 		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 
-	//insert the record:
-	m_sql = "INSERT INTO " + escapeIdentifier(query.parentTable()->name()) + " (";
 	QString sqlcols, sqlvals;
 	sqlcols.reserve(1024);
 	sqlvals.reserve(1024);
+
+	//insert the record:
+	m_sql = "INSERT INTO " + escapeIdentifier(query.parentTable()->name()) + " (";
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
-	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
-		if (!sqlcols.isEmpty()) {
-			sqlcols+=",";
-			sqlvals+=",";
+
+	if (buf.dbBuffer().isEmpty()) {
+		if (!pkey || pkey->fields()->isEmpty()) {
+			KexiDBDrvDbg << " -- WARNING: PARENT TABLE REQUIRED FOR INSERTING EMPTY ROWS: INSERT CANCELLED" << endl;
+			return false;
 		}
-		sqlcols += escapeIdentifier(it.key()->field->name());
-		sqlvals += m_driver->valueToSQL(it.key()->field,it.data());
+		//at least one value is needed for VALUES section: find it and set to NULL:
+		Field *anyField = query.parentTable()->anyNonPKField();
+		if (!anyField) {
+			//try to set NULL in pkey field (could not work for every SQL engine!)
+			anyField = pkey->fields()->first();
+		}
+		
+		sqlcols += escapeIdentifier(anyField->name());
+		sqlvals += m_driver->valueToSQL(anyField,QVariant()/*NULL*/);
+	}
+	else {
+		for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
+			if (!sqlcols.isEmpty()) {
+				sqlcols+=",";
+				sqlvals+=",";
+			}
+			sqlcols += escapeIdentifier(it.key()->field->name());
+			sqlvals += m_driver->valueToSQL(it.key()->field,it.data());
+		}
 	}
 	m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
 	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;

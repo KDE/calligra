@@ -584,7 +584,7 @@ TableSchema* QuerySchema::table(const QString& tableName) const
 
 bool QuerySchema::contains(TableSchema *table) const
 {
-	return d->tables.find(table)!=-1;
+	return d->tables.findRef(table)!=-1;
 }
 
 QCString QuerySchema::columnAlias(uint position) const

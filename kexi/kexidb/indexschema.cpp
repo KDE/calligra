@@ -158,18 +158,18 @@ void IndexSchema::attachRelationship(Relationship *rel, bool ownedByMaster)
 		return;
 	if (rel->masterIndex()==this) {
 		if (ownedByMaster) {
-			if (m_master_owned_rels.find(rel)==-1) {
+			if (m_master_owned_rels.findRef(rel)==-1) {
 				m_master_owned_rels.append(rel);
 			}
 		}
 		else {//not owned
-			if (m_master_rels.find(rel)==-1) {
+			if (m_master_rels.findRef(rel)==-1) {
 				m_master_rels.append(rel);
 			}
 		}
 	}
 	else if (rel->detailsIndex()==this) {
-		if (m_details_rels.find(rel)==-1) {
+		if (m_details_rels.findRef(rel)==-1) {
 			m_details_rels.append(rel);
 		}
 	}
@@ -179,7 +179,7 @@ void IndexSchema::detachRelationship(Relationship *rel)
 {
 	if (!rel)
 		return;
-	m_master_owned_rels.take( m_master_owned_rels.find(rel) ); //for sanity
-	m_master_rels.take( m_master_rels.find(rel) ); //for sanity
-	m_details_rels.take( m_details_rels.find(rel) ); //for sanity
+	m_master_owned_rels.take( m_master_owned_rels.findRef(rel) ); //for sanity
+	m_master_rels.take( m_master_rels.findRef(rel) ); //for sanity
+	m_details_rels.take( m_details_rels.findRef(rel) ); //for sanity
 }

@@ -61,7 +61,7 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 		/*! \return information about driver's named with \a name.
 			The name is case insensitive. 
 			You can check if driver information is not found calling 
-			Info::name.isEmpty(). */
+			Info::name.isEmpty() (then error message is also set). */
 		KexiDB::Driver::Info driverInfo(const QString &name);
 
 		/*! \return service information about driver's named with \a name.

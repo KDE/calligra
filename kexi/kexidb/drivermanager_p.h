@@ -39,6 +39,8 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 			\return db driver, or 0 if error (then error message is also set) */
 		KexiDB::Driver* driver(const QString& name);
 
+		KexiDB::Driver::Info DriverManagerInternal::driverInfo(const QString &name);
+
 		static DriverManagerInternal *self();
 
 		/*! increments the refcount for the manager */

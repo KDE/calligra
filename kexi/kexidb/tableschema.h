@@ -60,6 +60,9 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		virtual FieldList& insertField(uint index, Field *field);
 //		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
 
+		/*! Reimplemented for internal reasons. */
+		virtual void removeField(KexiDB::Field *field);
+
 		/*! \return list of fields that are primary key of this table.
 		 This method never returns NULL value,
 		 if there is no primary key, empty IndexSchema object is returned.
@@ -131,6 +134,9 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		*/
 		QuerySchema* query();
 
+		/*! */
+		Field* anyNonPKField();
+
 	protected:
 		/*! Automatically retrieves table schema via connection. */
 		TableSchema(Connection *conn, const QString & name = QString::null);
@@ -144,6 +150,9 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		IndexSchema *m_pkey;
 
 		QuerySchema *m_query; //!< cached query schema that is defined by "select * from <this_table_name>"
+
+		class Private;
+		Private *d;
 
 	private:
 		bool m_isKexiDBSystem : 1;

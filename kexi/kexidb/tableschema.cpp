@@ -26,6 +26,21 @@
 
 #include <kdebug.h>
 
+namespace KexiDB {
+class TableSchema::Private
+{
+public:
+	TableSchema::Private()
+	 : anyNonPKField(0)
+	{
+	}
+
+	Field *anyNonPKField;
+};
+}
+//-------------------------------------
+
+
 using namespace KexiDB;
 
 TableSchema::TableSchema(const QString& name)
@@ -61,6 +76,7 @@ TableSchema::TableSchema()
 
 void TableSchema::init()
 {
+	d = new Private();
 	m_indices.setAutoDelete( true );
 	m_pkey = new IndexSchema(this);
 	m_indices.append(m_pkey);
@@ -73,6 +89,7 @@ TableSchema::TableSchema(const TableSchema& ts)
 	, m_query(0) //not cached
 	, m_isKexiDBSystem(false)
 {
+	d = new Private();
 	m_name = ts.m_name;
 	m_indices.setAutoDelete( true );
 	m_pkey = 0; //will be copied
@@ -97,6 +114,7 @@ TableSchema::TableSchema(Connection *conn, const QString & name)
 	, m_query(0)
 	, m_isKexiDBSystem(false)
 {
+	d = new Private();
 	assert(conn);
 	m_name = name;
 	m_indices.setAutoDelete( true );
@@ -109,6 +127,7 @@ TableSchema::~TableSchema()
 	if (m_conn)
 		m_conn->removeMe( this );
 	delete m_query;
+	delete d;
 }
 
 void TableSchema::setPrimaryKey(IndexSchema *pkey)
@@ -129,6 +148,7 @@ void TableSchema::setPrimaryKey(IndexSchema *pkey)
 	}
 	m_pkey = pkey; //todo
 	m_pkey->setPrimaryKey(true);
+	d->anyNonPKField = 0; //for safety
 }
 
 FieldList& TableSchema::insertField(uint index, Field *field)
@@ -170,6 +190,13 @@ FieldList& TableSchema::insertField(uint index, Field *field)
 	if (idx)
 		m_indices.append(idx);
 	return *this;
+}
+
+void TableSchema::removeField(KexiDB::Field *field)
+{
+	if (d->anyNonPKField && field == d->anyNonPKField) //d->anyNonPKField will be removed!
+		d->anyNonPKField = 0;
+	FieldList::removeField(field);
 }
 
 #if 0 //original		
@@ -293,34 +320,18 @@ QuerySchema* TableSchema::query()
 	return m_query;
 }
 
-//----------------------------------------------------
-
-/*
-TableDef::TableDef(const QString& name)
-	: Table(name)
+Field* TableSchema::anyNonPKField()
 {
+	if (!d->anyNonPKField) {
+		Field *f;
+		Field::ListIterator it(m_fields);
+		it.toLast(); //from the end (higher chances to find)
+		for (; (f = it.current()); --it) {
+			if (!f->isPrimaryKey() && (!m_pkey || !m_pkey->hasField(f)))
+				break;
+		}
+		d->anyNonPKField = f;
+	}
+	return d->anyNonPKField;
 }
-
-TableDef::TableDef()
-	: Table()
-{
-}
-
-TableDef::~TableDef()
-{
-}
-
-KexiDB::FieldDef
-TableDef::field(unsigned int id) const
-{
-	if (id<m_fields.count()) return m_fields[id];
-	return KexiDB::FieldDef();
-}
-
-void TableDef::addField(KexiDB::FieldDef field)
-{
-	field.setTable(m_name);
-	m_fields.append(field);
-}
-*/
 
