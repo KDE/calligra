@@ -4246,19 +4246,67 @@ void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
   if( _text.isEmpty() )
     return;
 
-  KSpreadCell* cell = cellAt( _marker.x(), _marker.y() );
-  if ( !m_pDoc->undoBuffer()->isLocked() )
+  QString tmp =_text;
+  int i;
+  int mx   = _marker.x();
+  int my   = _marker.y();
+  int rows = 1;
+  int len  = tmp.length();
+  for (i = 0; i < len; ++i)
+  {
+    if (tmp[i] == '\n')
+      ++rows;
+  }
+
+  KSpreadCell * cell = cellAt( mx, my );
+  if (rows == 1)
+  {
+    if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      KSpreadUndoSetText *undo =new KSpreadUndoSetText( m_pDoc, this , cell->text(), _marker.x(), _marker.y(),cell->formatType() );
+      KSpreadUndoSetText * undo = new KSpreadUndoSetText( m_pDoc, this , cell->text(), mx, my, cell->formatType() );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
-  if ( cell->isDefault() )
+  }
+  else
+  {
+      QRect rect(mx, my, mx, my + rows - 1);
+      KSpreadUndoChangeAreaTextCell * undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this , rect );
+      m_pDoc->undoBuffer()->appendUndo( undo );
+  }
+
+  i = 0;
+  QString rowtext;
+
+  while (i < rows)
+  {
+    int p = 0;
+
+    p = tmp.find('\n');
+
+    if (p < 0)
+      p = tmp.length();
+
+    rowtext = tmp.left(p);
+
+    if ( cell->isDefault() )
     {
-      cell = new KSpreadCell( this, _marker.x(), _marker.y() );
+      cell = new KSpreadCell( this, mx, my + i );
       insertCell( cell );
     }
-  cell->setCellText( _text );
-  cell->updateChart();
+
+    cell->setCellText( rowtext );
+    cell->updateChart();
+
+    // next cell
+    ++i;
+    cell = cellAt( mx, my + i, true);
+
+    if (!cell || p == tmp.length())
+      break;
+
+    // exclude the left part and '\n'
+    tmp = tmp.right(tmp.length() - p - 1);
+  }
 
   if(!isLoading())
     refreshMergedCell();
