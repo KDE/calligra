@@ -81,14 +81,9 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
 	KoRect rect = part()->document().selection()->boundingBox();
-	kdDebug() << "rect.x()  : " << rect.x() << endl;
-	kdDebug() << "rect.y()  : " << rect.y() << endl;
-	kdDebug() << "rect.right()  : " << rect.right() << endl;
-	kdDebug() << "rect.bottom()  : " << rect.bottom() << endl;
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if(
-		part()->document().selection()->objects().count() > 0 && m_activeNode != node_mm )
+	if( part()->document().selection()->objects().count() > 0 && m_activeNode != node_mm )
 	{
 		// scale operation
 		QWMatrix mat;
@@ -142,10 +137,6 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 		}
 		KoPoint sp = KoPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
 		mat.translate( sp.x() / view->zoom(), sp.y() / view->zoom());
-		kdDebug() << "lp.x() : " << lp.x() << endl;
-		kdDebug() << "lp.y() : " << lp.y() << endl;
-		kdDebug() << "m_s1 : " << m_s1 << endl;
-		kdDebug() << "m_s2 : " << m_s2 << endl;
 		mat.scale( m_s1, m_s2 );
 		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoom(),
 						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );

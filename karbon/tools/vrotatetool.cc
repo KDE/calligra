@@ -84,10 +84,7 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	VHandleNode node = part()->document().selection()->node( QPoint( m_lp.x(), m_lp.y() ) );
-	kdDebug() << "node : " << node << endl;
-	if(
-		part()->document().selection()->objects().count() > 0 &&
-		node != node_mm )
+	if( part()->document().selection()->objects().count() > 0 && node != node_mm )
 	{
 		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 		KoRect rect = part()->document().selection()->boundingBox();

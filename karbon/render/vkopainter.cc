@@ -532,14 +532,14 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
 		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
-		double dx = gradient.vector().x() - m_fill->gradient().origin().x();
-		double dy = gradient.vector().y() - m_fill->gradient().origin().y();
+		double dx = ( gradient.vector().x() - m_fill->gradient().origin().x() ) * m_zoomFactor;
+		double dy = ( gradient.vector().y() - m_fill->gradient().origin().y() ) * m_zoomFactor;
 		double scale = 1.0 / ( dx * dx + dy * dy );
 
 		linear->a = dx * scale;
 		linear->b = dy * scale;
-		linear->c = -( ( x0 + gradient.origin().x() ) * linear->a +
-					   ( y0 + gradient.origin().y() ) * linear->b );
+		linear->c = -( ( x0 + gradient.origin().x() * m_zoomFactor ) * linear->a +
+					   ( y0 + gradient.origin().y() * m_zoomFactor ) * linear->b );
 		//kdDebug() << "linear->a" << linear->a << endl;
 		//kdDebug() << "linear->b" << linear->b << endl;
 		//kdDebug() << "linear->c" << linear->c << endl;
@@ -564,12 +564,13 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		radial->affine[4] = m_matrix.dx();
 		radial->affine[5] = m_matrix.dy();
 
-		double cx = gradient.origin().x() + x0;
-		double cy = gradient.origin().y() + y0;
+		double cx = gradient.origin().x() * m_zoomFactor + x0;
+		double cy = gradient.origin().y() * m_zoomFactor + y0;
 		double fx = cx; // TODO : fx, fy should be able to be different
 		double fy = cy;
 		double r = sqrt( pow( gradient.vector().x() - gradient.origin().x(), 2 ) +
 						 pow( gradient.vector().y() - gradient.origin().y(), 2 ) ) / sqrt( 2 );
+		r *= m_zoomFactor;
 
 		radial->fx = (fx - cx) / r;
 		radial->fy = (fy - cy) / r;
