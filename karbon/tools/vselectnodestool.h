@@ -36,6 +36,7 @@ protected:
 	virtual void setCursor() const;
 
 	virtual void mouseButtonPress();
+	virtual void mouseButtonRelease();
 	virtual void mouseDragRelease();
 	virtual void mouseDrag();
 

@@ -151,6 +151,25 @@ VSelectNodesTool::mouseButtonPress()
 }
 
 void
+VSelectNodesTool::mouseButtonRelease()
+{
+	double tolerance = 2.0 / view()->zoom();
+
+	KoRect selrect( last().x() - tolerance, last().y() - tolerance,
+					2 * tolerance + 1.0, 2 * tolerance + 1.0 );
+
+	// erase old object:
+	draw();
+
+	view()->part()->document().selection()->append();	// select all
+	view()->part()->document().selection()->append( selrect.normalize(), false, true );
+
+	view()->selectionChanged();
+	view()->part()->repaintAllViews();
+	m_state = normal;
+}
+
+void
 VSelectNodesTool::mouseDrag()
 {
 	draw();
