@@ -1,4 +1,4 @@
-INCLUDES= $(all_includes) -I.. 
+INCLUDES= $(all_includes) -I$(srcdir)/..
 
 datadir = $(kde_datadir)/killustrator
 
@@ -76,85 +76,26 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  EllipseConfigDialog.cc
 
 # just to make sure, automake makes them 
-BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
+METASOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		GText.moc GGroup.moc GClipart.moc GBezier.moc GPixmap.moc \
 		Tool.moc PolylineTool.moc FreeHandTool.moc \
 		RectangleTool.moc OvalTool.moc TextTool.moc \
 		SelectionTool.moc PolygonTool.moc ToolController.moc \
 		EditPointTool.moc BezierTool.moc ZoomTool.moc \
 		ColorField.moc Canvas.moc \
-		QwViewport.moc GDocument.moc KIllustrator.moc \
+		QwViewport.moc GDocument.moc \
 		PropertyEditor.moc FloatSpinBox.moc ColorComboBox.moc \
 		FontSelector.moc AlignmentDialog.moc GridDialog.moc \
-		PolygonConfigDialog.moc KIllustratorApp.moc \
-		Ruler.moc AboutDialog.moc \
-		PolygonPreview.moc \
-		TransformationDialog.moc koPageLayoutDia.moc \
+		PolygonConfigDialog.moc Ruler.moc AboutDialog.moc \
+		PolygonPreview.moc TransformationDialog.moc \
+		koPageLayoutDia.moc \
 		PStateManager.moc OptionDialog.moc UnitBox.moc \
 		ScriptDialog.moc GLayer.moc LayerDialog.moc \
 		LayerView.moc CommandHistory.moc \
 		DocumentInfo.moc BrushCells.moc PathTextTool.moc \
 		EllipseConfigDialog.moc
 
-DISTCLEANFILES = $(BUILTSOURCES)
+DISTCLEANFILES = $(METASOURCES)
 
-SUFFIXES = .moc .h
-
-.h.moc:
-	$(MOC) $< -o $@  
-
-findmoc:
-	grep moc $(libkillu_a_SOURCES) | sed -e "s/#include \"/ /; s/\"\$$//"
-
-Handle.cc: Handle.moc
-GObject.cc: GObject.moc
-GPolyline.cc: GPolyline.moc
-GPolygon.cc: GPolygon.moc
-GOval.cc: GOval.moc
-GClipart.cc: GClipart.moc
-GBezier.cc: GBezier.moc
-GText.cc: GText.moc
-GGroup.cc: GGroup.moc
-GPixmap.cc: GPixmap.moc
-Tool.cc: Tool.moc
-PolylineTool.cc: PolylineTool.moc
-FreeHandTool.cc: FreeHandTool.moc
-RectangleTool.cc: RectangleTool.moc
-OvalTool.cc: OvalTool.moc
-TextTool.cc: TextTool.moc
-SelectionTool.cc: SelectionTool.moc
-PolygonTool.cc: PolygonTool.moc
-ToolController.cc: ToolController.moc
-EditPointTool.cc: EditPointTool.moc
-BezierTool.cc: BezierTool.moc
-ZoomTool.cc: ZoomTool.moc
-ColorField.cc: ColorField.moc
-Canvas.cc: Canvas.moc
-QwViewport.cc: QwViewport.moc
-GDocument.cc: GDocument.moc
-PropertyEditor.cc: PropertyEditor.moc
-FloatSpinBox.cc: FloatSpinBox.moc
-ColorComboBox.cc: ColorComboBox.moc
-FontSelector.cc: FontSelector.moc
-AlignmentDialog.cc: AlignmentDialog.moc
-PolygonConfigDialog.cc: PolygonConfigDialog.moc
-PolygonPreview.cc: PolygonPreview.moc
-GridDialog.cc: GridDialog.moc
-CommandHistory.cc: CommandHistory.moc
-Ruler.cc: Ruler.moc
-AboutDialog.cc: AboutDialog.moc
-TransformationDialog.cc: TransformationDialog.moc
-koPageLayoutDia.cc: koPageLayoutDia.moc
-PStateManager.cc: PStateManager.moc
-OptionDialog.cc: OptionDialog.moc
-UnitBox.cc: UnitBox.moc
-ScriptDialog.cc: ScriptDialog.moc
-GLayer.cc: GLayer.moc
-LayerDialog.cc: LayerDialog.moc
-LayerView.cc: LayerView.moc
-DocumentInfo.cc: DocumentInfo.moc
-BrushCells.cc: BrushCells.moc
-PathTextTool.cc: PathTextTool.moc
-EllipseConfigDialog.cc: EllipseConfigDialog.moc
 
 

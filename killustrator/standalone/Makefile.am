@@ -23,7 +23,7 @@ MIMEDIR = $(kde_mimedir)/application
 DATADIR = $(kde_datadir)/killustrator
 
 # set the include path for X, qt and KDE
-INCLUDES= -I../share -I.. $(all_includes)
+INCLUDES= -I$(srcdir)/../share -I$(srcdir)/.. $(all_includes)
 # claim, which subdirectories you want to install
 
 EXTRA_DIST = killustrator.xpm \
@@ -53,13 +53,13 @@ killustrator_LDADD   =  $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) \
 noinst_HEADERS = KIllustrator.h
 
 # just to make sure, automake makes them 
-BUILTSOURCES =	KIllustrator.moc 
+METASOURCES =	KIllustrator.moc 
 
 TARGET	=	killustrator 
 
 # if you "make distclean", this files get removed. If you want to remove
 # them while "make clean", use CLEANFILES
-DISTCLEANFILES = $(BUILTSOURCES)
+DISTCLEANFILES = $(METASOURCES)
 
 # make messages.po. Move this one to ../po/ and "make merge" in po
 messages:
@@ -87,10 +87,5 @@ uninstall-local:
 	-rm -f $(kde_icondir)/killustrator.xpm
 	-rm -f $(DATADIR)/default.pal
 
-# add a dependency for every moc file to be full portable
-# I've added a key binding to emacs for this. 
-KIllustrator.cc: KIllustrator.moc
-KIllustrator.moc: KIllustrator.h
-	$(MOC) KIllustrator.h -o KIllustrator.moc
 
 

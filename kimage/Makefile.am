@@ -37,7 +37,7 @@ messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kimage.pot
 
 kimage.h: kimage.idl
-	$(IDL) $(IDL_FLAGS) kimage.idl
+	$(IDL) $(IDL_FLAGS) $(srcdir)/kimage.idl
 
 kimage.cc: kimage.h
 kimage_doc.cc: kimage.h 

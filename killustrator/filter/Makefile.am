@@ -1,5 +1,5 @@
 
-INCLUDES= -I../share -I.. $(all_includes) 
+INCLUDES= -I$(srcdir)/../share -I$(srcdir)/.. $(all_includes) 
 DISTCLEANFILES = $(BUILT_SOURCES)
 
 noinst_LIBRARIES = libfilter.a

@@ -42,10 +42,10 @@ messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kdiagramm.pot
 
 kdiagramm.h: kdiagramm.idl
-	$(IDL) $(IDL_FLAGS) kdiagramm.idl
+	$(IDL) $(IDL_FLAGS) $(srcdir)/kdiagramm.idl
 
-chart.h: $(top_srcdir)/lib/interfaces/chart.idl
-	$(IDL) $(IDL_FLAGS) ../lib/interfaces/chart.idl
+chart.h: $(interfacedir)/chart.idl
+	$(IDL) $(IDL_FLAGS) $(interfacedir)/chart.idl
 
 chart.cc: chart.h
 table.cc: table.h 

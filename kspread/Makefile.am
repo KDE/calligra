@@ -91,5 +91,5 @@ KOffice.py: KSpread.py
 OpenParts.py: KSpread.py
 OpenPartsUI.py: KSpread.py
 KSpread.py: kspread.idl $(kde_bindir)/pyidl $(top_srcdir)/lib/kofficecore/koffice.idl
-	$(kde_bindir)/pyidl "-I$(idldir) -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces kspread.idl"
+	$(kde_bindir)/pyidl "-I$(idldir) -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) $(srcdir)/kspread.idl"
 

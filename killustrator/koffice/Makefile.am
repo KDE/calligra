@@ -27,14 +27,14 @@ noinst_HEADERS = KIllustrator_main.h \
 	InsertPartTool.h \
 	GPart.h
 
-BUILTSOURCES = KIllustrator_main.moc \
+METASOURCES = KIllustrator_main.moc \
 	KIllustrator_shell.moc \
 	KIllustrator_doc.moc \
 	KIllustrator_view.moc \
 	InsertPartTool.moc \
 	GPart.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(BUILTSOURCES)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 idl_DATA = KIllustrator.idl
 idl_HEADERS = KIllustrator.h
@@ -44,24 +44,17 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 
 ####### Implicit rules
 
-SUFFIXES = .h .moc
-
-.h.moc: 
-	$(MOC) $< -o $@
-
 ####### Build rules
 
 install-exec-local:
 	$(INSTALL_SCRIPT) killustrator $(bindir)/killustrator
 
 KIllustrator.h: KIllustrator.idl
-	$(IDL) --query-server-for-narrow -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) KIllustrator.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/KIllustrator.idl
 
 
 KIllustrator.cc: KIllustrator.h
-KIllustrator_main.cc: KIllustrator.h KIllustrator_main.moc
-KIllustrator_doc.cc: KIllustrator.h KIllustrator_doc.moc
-KIllustrator_shell.cc: KIllustrator.h KIllustrator_shell.moc
-KIllustrator_view.cc: KIllustrator.h KIllustrator_view.moc
-InsertPartTool.cc: InsertPartTool.moc
-GPart.cc: GPart.moc
+KIllustrator_main.cc: KIllustrator.h
+KIllustrator_doc.cc: KIllustrator.h
+KIllustrator_shell.cc: KIllustrator.h
+KIllustrator_view.cc: KIllustrator.h
