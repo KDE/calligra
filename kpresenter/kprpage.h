@@ -361,9 +361,6 @@ public:
     bool saveOasisNote( KoXmlWriter &xmlWriter ) const;
     bool saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
 
-
-protected:
-
 private:
     void makeUsedPixmapListForGroupObject( KPObject *_obj );
     void completeLoadingForGroupObject( KPObject *_obj );
