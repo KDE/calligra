@@ -2136,6 +2136,7 @@ void KWView::extraSpelling()
 {
     if (m_spell.kspell) return; // Already in progress
     m_spell.spellCurrFrameSetNum = -1;
+    m_spell.macroCmdSpellCheck=0L;
 
     m_spell.textFramesets.clear();
      for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ ) {
@@ -3047,6 +3048,8 @@ void KWView::spellCheckerReady()
     m_spell.kspell = 0;
     m_spell.textFramesets.clear();
     m_spell.ignoreWord.clear();
+    if(m_spell.macroCmdSpellCheck)
+        m_doc->addCommand(m_spell.macroCmdSpellCheck);
 }
 
 void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
@@ -3087,7 +3090,9 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
     QTextCursor cursor( fs->textDocument() );
     cursor.setParag( p );
     cursor.setIndex( pos );
-    m_doc->addCommand(fs->replaceSelection( &cursor, corr, KWTextFrameSet::HighlightSelection,
+    if(!m_spell.macroCmdSpellCheck)
+        m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct misspelled word"));
+    m_spell.macroCmdSpellCheck->addCommand(fs->replaceSelection( &cursor, corr, KWTextFrameSet::HighlightSelection,
                           i18n("Correct misspelled word") ));
 }
 
@@ -3116,6 +3121,8 @@ void KWView::spellCheckerDone( const QString & )
     {
         m_spell.textFramesets.clear();
         m_ignoreWord.clear();
+        if(m_spell.macroCmdSpellCheck)
+            m_doc->addCommand(m_spell.macroCmdSpellCheck);
     }
 }
 
@@ -3139,6 +3146,9 @@ void KWView::spellCheckerFinished()
         fs->removeHighlight();
     m_spell.textFramesets.clear();
     m_ignoreWord.clear();
+    if(m_spell.macroCmdSpellCheck)
+        m_doc->addCommand(m_spell.macroCmdSpellCheck);
+
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->drawCursor( TRUE );

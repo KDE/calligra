@@ -57,6 +57,7 @@ class TKSelectColorAction;
 class KoPartSelectAction;
 class KCharSelectDia;
 class KWTextFrameset;
+class KMacroCommand;
 
 namespace Qt3 {
 class QTextFormat;
@@ -435,6 +436,7 @@ private:
 	int spellCurrFrameSetNum; 
 	QList<KWTextFrameSet> textFramesets;
 	QStringList ignoreWord;
+	KMacroCommand * macroCmdSpellCheck;
      } m_spell;
 
 };
