@@ -965,7 +965,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
     if ( dt.isValid() )
     {
         writer.startElement( "meta:creation-date");
-        writer.addTextSpan( dt.toString( Qt::ISODate) );
+        writer.addTextNode( dt.toString( Qt::ISODate) );
         writer.endElement();
     }
 
@@ -973,7 +973,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
     if ( dt.isValid() )
     {
         writer.startElement( "dc:date");
-        writer.addTextSpan( dt.toString( Qt::ISODate) );
+        writer.addTextNode( dt.toString( Qt::ISODate) );
         writer.endElement();
     }
 
@@ -981,7 +981,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
     if ( dt.isValid() )
     {
         writer.startElement( "meta:print-date");
-        writer.addTextSpan( dt.toString( Qt::ISODate) );
+        writer.addTextNode( dt.toString( Qt::ISODate) );
         writer.endElement();
     }
     
