@@ -24,19 +24,17 @@ SUBDIRS = kexiDB formeditor core datatable widget . plugins pics data interfaces
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
+kdelnkdir = $(kde_appsdir)/Office
+kdelnk_DATA = kexi.desktop
+
+mimedir = $(kde_mimedir)/application
+mime_DATA = x-kexi.desktop
+
 install-data-local:
-	$(mkinstalldirs) $(kde_appsdir)/Office/
-	$(INSTALL_DATA) $(srcdir)/kexi.desktop $(kde_appsdir)/Office/kexi.desktop
 #	$(mkinstalldirs) $(kde_servicetypesdir)/
 #	$(INSTALL_DATA) $(srcdir)/kexiinterface.desktop $(kde_servicetypesdir)/kexiinterface.desktop
 #	$(mkinstalldirs) $(kde_servicedir)
 #	$(INSTALL_DATA) $(srcdir)/interfaces/mysqlinterface.desktop $(kde_servicesdir)/mysqlinterface.desktop
-	$(mkinstalldirs) $(kde_mimedir)/application/
-	$(INSTALL_DATA) $(srcdir)/x-kexi.desktop $(kde_mimedir)/application/x-kexi.desktop
-
-uninstall-local:
-	rm -f $(kde_appsdir)/Office/kexi.desktop
-	rm -f $(kde_mimedir)/application/x-kexi.desktop
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
