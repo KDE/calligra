@@ -1,4 +1,24 @@
-#include <document.h>
+/* This file is part of the KOffice project
+   Copyright (C) 2002 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2002 David Faure <faure@kde.org>
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#include "document.h"
+#include "conversion.h"
 
 #include <kdebug.h>
 #include <ustring.h>
@@ -79,7 +99,7 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
     // (not if different from 'plain text')
     // This is also why the code below seems to test stuff twice ;)
 
-    QColor color = colorForNumber( chp->ico, -1 );
+    QColor color = Conversion::color( chp->ico, -1 );
     QDomElement colorElem( m_mainDocument.createElement( "COLOR" ) );
     colorElem.setAttribute( "red", color.red() );
     colorElem.setAttribute( "blue", color.blue() );
@@ -208,7 +228,7 @@ QString Document::getFont(unsigned fc) const
     static const char* const fuzzyLookup[ENTRIES][2] =
     {
         // MS contains      X11 font family
-        // substring.       non-AA name.
+        // substring.       non-Xft name.
         { "times",          "times" },
         { "courier",        "courier" },
         { "andale",         "monotype" },
@@ -245,54 +265,6 @@ QString Document::getFont(unsigned fc) const
 #endif
 
     return info.family();
-}
-
-QColor Document::colorForNumber(int number, int defaultcolor, bool defaultWhite)
-{
-    switch(number)
-    {
-	case 0:
-	    if(defaultWhite)
-		return QColor("white");
-	case 1:
-	    return QColor("black");
-	case 2:
-	    return QColor("blue");
-	case 3:
-	    return QColor("cyan");
-	case 4:
-	    return QColor("green");
-	case 5:
-	    return QColor("magenta");
-	case 6:
-	    return QColor("red");
-	case 7:
-	    return QColor("yellow");
-	case 8:
-	    return QColor("white");
-	case 9:
-	    return QColor("darkBlue");
-	case 10:
-	    return QColor("darkCyan");
-	case 11:
-	    return QColor("darkGreen");
-	case 12:
-	    return QColor("darkMagenta");
-	case 13:
-	    return QColor("darkRed");
-	case 14:
-	    return QColor("darkYellow");
-	case 15:
-	    return QColor("darkGray");
-	case 16:
-	    return QColor("lightGray");
-
-	default:
-	    if(defaultcolor == -1)
-		return QColor("black");
-	    else
-		return colorForNumber(defaultcolor, -1);
-    }
 }
 
 void Document::encodeText( QString &text )
@@ -344,19 +316,24 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
 
     if ( m_pap ) {
         QDomElement flowElement = m_mainDocument.createElement("FLOW");
-        QString alignment( "left" );
-        if ( m_pap->jc == 1 )
-            alignment = "center";
-        else if ( m_pap->jc == 2 )
-            alignment = "right";
-        else if ( m_pap->jc == 3 )
-            alignment = "justify";
+        QString alignment = Conversion::alignment( m_pap->jc );
         flowElement.setAttribute("align",alignment);
         layoutElement.appendChild(flowElement);
 
+        kdDebug() << k_funcinfo << " dxaLeft1=" << m_pap->dxaLeft1 << " dxaLeft=" << m_pap->dxaLeft << " dxaRight=" << m_pap->dxaRight << " dyaBefore=" << m_pap->dyaBefore << " dyaAfter=" << m_pap->dyaAfter << " lspd=" << m_pap->lspd.dyaLine << "/" << m_pap->lspd.fMultLinespace << endl;
+
         // TODO: INDENTS dxaRight dxaLeft dxaLeft1 - in which unit are those?
         // TODO: OFFSETS dyaBefore dyaAfter
-        // TODO: LINESPACING lspd
+
+        // Linespacing
+        QString lineSpacing = Conversion::lineSpacing( m_pap->lspd );
+        if ( lineSpacing != "0" ) // ##
+        {
+            QDomElement lineSpacingElem = m_mainDocument.createElement( "LINESPACING" );
+            lineSpacingElem.setAttribute("value", lineSpacing );
+            layoutElement.appendChild( lineSpacingElem );
+        }
+
         if ( m_pap->fKeep || m_pap->fKeepFollow || m_pap->fPageBreakBefore )
         {
             QDomElement pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );

@@ -17,25 +17,26 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef MSWORDIMPORT_H
-#define MSWORDIMPORT_H
+#ifndef CONVERSION_H
+#define CONVERSION_H
 
-#include <koFilter.h>
+#include <qstring.h>
+#include <qcolor.h>
 
-class QDomDocument;
-class QDomElement;
+namespace wvWare {
+    namespace Word97 {
+        class LSPD;
+    }
+}
 
-class MSWordImport : public KoFilter
+// Static methods for simple MSWord->KWord conversions
+// (enums etc.)
+
+namespace Conversion
 {
-    Q_OBJECT
-public:
-    MSWordImport( KoFilter* parent, const char* name, const QStringList& );
-    virtual ~MSWordImport();
-
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
-
-private:
-    void prepareDocument( QDomDocument& mainDocument, QDomElement& mainFramesetElement );
+    QColor color(int number, int defaultcolor, bool defaultWhite = false);
+    QString alignment( int jc );
+    QString lineSpacing( const wvWare::Word97::LSPD& lspd );
 };
 
-#endif // MSWORDIMPORT_H
+#endif

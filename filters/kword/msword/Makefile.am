@@ -6,7 +6,7 @@ INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(LIBWV2_CFLAGS) $(all_includes)
 
 kde_module_LTLIBRARIES = libmswordimport.la
 
-libmswordimport_la_SOURCES = mswordimport.cpp document.cpp
+libmswordimport_la_SOURCES = mswordimport.cpp document.cpp conversion.cpp
 libmswordimport_la_LDFLAGS = -module $(KDE_PLUGIN)
 libmswordimport_la_LIBADD = $(KOFFICE_LIBS) $(LIBWV2_LIBS)
 
