@@ -299,6 +299,8 @@ Field::setConstraints(uint c)
 void
 Field::setLength(uint l)
 {
+	if (m_type!=Field::Text)
+		return;
 	m_length = l;
 }
 

@@ -74,7 +74,7 @@ class KEXI_DB_EXPORT Field
 			Map = 130          /*! mapping from string to string list (more generic than Enum */
 		};
 
-		const int defaultTextLength() { return 200; }
+		static int defaultTextLength() { return 200; }
 
 		/*! Type groups for fields. */
 		enum TypeGroup
@@ -312,6 +312,7 @@ class KEXI_DB_EXPORT Field
 		 enforced as well (see setIndexed()). */
 		void setConstraints(uint c);
 
+		/*! Sets lenght for this field. Only works for Text Type (even not LongText!). */
 		void setLength(uint l);
 
 		void setPrecision(uint p);
