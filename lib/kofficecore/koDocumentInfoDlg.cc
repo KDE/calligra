@@ -39,6 +39,7 @@
 #include <kdebug.h>
 #include <ktempfile.h>
 #include <kmimetype.h>
+#include <qlayout.h>
 #include <qgrid.h>
 #include <kfilterdev.h>
 
@@ -214,16 +215,18 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
-  QGrid *grid = d->m_dialog->addGridPage( 2, QGrid::Horizontal, i18n( "about the document", "About" ) );
-  grid->setMargin(KDialog::marginHint());
-  grid->setSpacing(KDialog::spacingHint());
+  QFrame *page = d->m_dialog->addPage( i18n("about the document", "About") );
+  QGridLayout *grid = new QGridLayout( page, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-  (void) new QLabel( i18n( "Title:" ), grid );
-  d->m_leDocTitle = new QLineEdit( aboutInfo->title(), grid );
+  grid->addWidget( new QLabel( i18n( "Title:" ), page ), 0, 0);
+  d->m_leDocTitle = new QLineEdit( aboutInfo->title(), page );
+  grid->addWidget(d->m_leDocTitle, 0, 1);
 
-  (void) new QLabel( i18n( "Abstract:" ), grid );
-  d->m_meAbstract = new QMultiLineEdit( grid );
+  grid->addWidget(new QLabel( i18n( "Abstract:" ), page ), 1, 0, Qt::AlignTop );
+
+  d->m_meAbstract = new QMultiLineEdit( page );
   d->m_meAbstract->setText( aboutInfo->abstract() );
+  grid->addMultiCellWidget(d->m_meAbstract, 1, 2, 1, 1);
 
   connect( d->m_leDocTitle, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
