@@ -23,6 +23,9 @@
 
 #include <gline.h>
 
+// test
+#include <kdialogbase.h>
+#include <kdebug.h>
 
 GLine::GLine(const QPoint &a, const QPoint &b, const QString &name) : GObject(name),
 								      m_a(a), m_b(b) {
@@ -257,7 +260,7 @@ void GLine::resize(const QRect &boundingRect) {
 }
 
 
-GLineM9r::GLineM9r(GLine *line, const Mode &mode) : G1DObjectM9r(mode), m_line(line) {
+GLineM9r::GLineM9r(GLine *line, const Mode &mode) : G1DObjectM9r(line, mode), m_line(line) {
 
     QApplication::setOverrideCursor(Qt::crossCursor);
     m_line->setState(GObject::Handles);
@@ -266,6 +269,7 @@ GLineM9r::GLineM9r(GLine *line, const Mode &mode) : G1DObjectM9r(mode), m_line(l
 GLineM9r::~GLineM9r() {
 
     m_line->setState(GObject::Visible);
+    // TODO - better solution!
     QApplication::restoreOverrideCursor();
 }
 
@@ -279,9 +283,13 @@ const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, const GraphiteView */*vi
     return false;
 }
 
-const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, const GraphiteView */*view*/,
+const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, const GraphiteView *view,
 				     QRect &/*dirty*/) {
     // TODO
+    // test
+    kdDebug(37001) << "here we go..." << endl;
+    KDialogBase *dia=createPropertyDialog((QWidget*)view);
+    dia->exec();
     return false;
 }
 

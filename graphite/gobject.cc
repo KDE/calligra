@@ -18,10 +18,17 @@
 */
 
 #include <qdom.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qspinbox.h>
+#include <qcombobox.h>
+#include <qpixmap.h>
+#include <qpainter.h>
 
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kcolorbtn.h>
 
 #include <gobject.h>
 #include <graphitefactory.h>
@@ -40,10 +47,46 @@ KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
     if(!dia)
 	return 0L;
 
-    // TODO - add "pen" page and connect the SLOTs...
-    /*QFrame *frame=*/dia->addPage(i18n("Pen"), i18n("Pen Settings"),
-			       BarIcon("exec", 32, KIcon::DefaultState,
-			       GraphiteFactory::global()));
+    QFrame *frame=dia->addPage(i18n("Pen"), i18n("Pen Settings"),
+			       BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
+
+    QGridLayout *grid=new QGridLayout(frame, 3, 2, KDialog::marginHint(), KDialog::spacingHint());
+
+    QLabel *label=new QLabel(i18n("Width:"), frame);
+    grid->addWidget(label, 0, 0);
+
+    QSpinBox *width=new QSpinBox(1, 100, 1, frame);
+    width->setValue(m_object->pen().width());
+    connect(width, SIGNAL(valueChanged(int)), this, SLOT(setPenWidth(int)));
+    grid->addWidget(width, 0, 1);
+
+    label=new QLabel(i18n("Color:"), frame);
+    grid->addWidget(label, 1, 0);
+
+    KColorButton *color=new KColorButton(m_object->pen().color(), frame);
+    connect(color, SIGNAL(changed(const QColor &)), this,
+	    SLOT(setPenColor(const QColor &)));
+    grid->addWidget(color, 1, 1);
+
+    label=new QLabel(i18n("Style:"), frame);
+    grid->addWidget(label, 2, 0);
+
+    QComboBox *style=new QComboBox(frame);
+    QPainter painter;
+    for(int i=0; i<6; ++i) {
+	QPixmap pm(70, 15);
+	painter.begin(&pm);
+	painter.fillRect(0, 0, 70, 15, QColor(Qt::white));
+	painter.setPen(QPen(QColor(Qt::black),
+			    static_cast<unsigned int>(3),
+			    static_cast<Qt::PenStyle>(i)));
+	painter.drawLine(0, 35, 70, 35);
+	painter.end();
+	style->insertItem(pm);
+    }
+    connect(style, SIGNAL(activated(int)), this, SLOT(setPenStyle(int)));
+    grid->addWidget(style, 2, 1);
+
     return dia;
 }
 
@@ -84,15 +127,13 @@ void GObject::setParent(GObject *parent) {
 	m_parent=parent;
 }
 
-GObject::GObject(const QString &name) : m_name(name) {
+GObject::GObject(const QString &name) : m_name(name), m_state(Visible), m_parent(0L),
+    m_zoom(100), m_angle(0.0), m_boundingRectDirty(true), m_fillStyle(Brush), m_ok(true) {
 
-    m_state=Visible;
-    m_parent=0L;
-    m_zoom=100;
-    m_angle=0.0;
-    m_boundingRectDirty=true;
-    m_fillStyle=Brush;
-    m_ok=true;
+    m_gradient.type=KImageEffect::VerticalGradient;
+    m_gradient.xfactor=1;
+    m_gradient.yfactor=1;
+    m_gradient.ncols=1;
 }
 
 GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
@@ -172,7 +213,7 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_zoom(100),
 		m_gradient.ncols=1;	
 	}
 	else {
-	    m_gradient.type=static_cast<KImageEffect::GradientType>(0);
+	    m_gradient.type=KImageEffect::VerticalGradient;
 	    m_gradient.xfactor=1;
 	    m_gradient.yfactor=1;
 	    m_gradient.ncols=1;
@@ -184,11 +225,11 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_zoom(100),
     }
     else {
 	m_fillStyle=Brush;
-	m_gradient.type=static_cast<KImageEffect::GradientType>(0);
+	m_gradient.type=KImageEffect::VerticalGradient;
 	m_gradient.xfactor=1;
 	m_gradient.yfactor=1;
 	m_gradient.ncols=1;	
     }
-    m_ok=true;   // CTOR was successful :)
+    m_ok=true;   // CTOR has been successful :)
 }
 #include <gobject.moc>

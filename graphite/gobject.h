@@ -90,7 +90,7 @@ public:
     virtual GObject *gobject() = 0;
 
 protected:
-    GObjectM9r(const Mode &mode) : QObject(), m_mode(mode) {}
+    GObjectM9r(const Mode &mode) : QObject(), m_mode(mode), first_call(true) {}
 
     // This menthod creates a property dialog for an object. It
     // creates an empty KDialogBase (IconList mode!).
@@ -107,6 +107,8 @@ protected:
     // set correctly form the M9r. Check this in the DTOR and react
     // accordingly!
     Mode m_mode;
+
+    bool first_call; // Whether this is the first call for this M9r (no hit test!)
 };
 
 
@@ -118,14 +120,17 @@ public:
     virtual ~G1DObjectM9r() {}
 
 public slots:
-    virtual void setPenStyle(const Qt::PenStyle &/*style*/) {}
-    virtual void setPenWidth(const int &/*width*/) {}
+    virtual void setPenStyle(int /*style*/) {}
+    virtual void setPenWidth(int /*width*/) {}
     virtual void setPenColor(const QColor &/*color*/) {}
 
 protected:
-    G1DObjectM9r(const Mode &mode) : GObjectM9r(mode) {}
-
+    G1DObjectM9r(GObject *object, const Mode &mode) : GObjectM9r(mode),
+						      m_object(object) {}
     virtual KDialogBase *createPropertyDialog(QWidget *parent);
+
+private:
+    GObject *m_object;
 };
 
 // TODO G2DObjectM9r - with a gradient/brush page
