@@ -35,59 +35,55 @@ KCommand(name)
   mGDoc = aGDoc;
 }
 
-ObjectManipCmd::ObjectManipCmd(GDocument *aGDoc, const QString& name):
+TransformationCmd::TransformationCmd(GDocument *aGDoc, const QString& name):
 Command(aGDoc, name)
 {
   objects.resize(document()->activePage()->selectionCount());
-  states.resize (document()->activePage()->selectionCount());
+  states.resize(document()->activePage()->selectionCount());
 
-  QPtrListIterator<GObject> it(document()->activePage()->getSelection());
+/*  QPtrListIterator<QWMatrix> it(document()->activePage()->getSelection());
   for(unsigned int i = 0; it.current(); ++it, ++i)
   {
     (*it)->ref();
     objects.insert(i, (*it));
-    states.insert(i, 0L);
-  }
+    states.insert(i, (*it)->matrix());
+  }*/
 }
 
-ObjectManipCmd::ObjectManipCmd(GObject *obj, const QString &name):
+TransformationCmd::TransformationCmd(GObject *obj, const QString &name):
 Command(0L, name)
 {
   objects.resize(1);
   states.resize(1);
 
-  obj->ref();
+/*  obj->ref();
   objects.insert(0, obj);
-  states.insert(0, 0L);
+  states.insert(0, obj->matrix());*/
 }
 
-ObjectManipCmd::~ObjectManipCmd()
+TransformationCmd::~TransformationCmd()
+{
+/*  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->unref();*/
+}
+
+void TransformationCmd::execute()
 {
 /*  for(unsigned int i = 0; i < objects.count(); i++)
   {
-    objects[i]->unref();
-    if(states[i])
-      states[i]->unref();
+//    if(states[i])
+//      states[i]->unref();
+    states.insert(i, objects[i]->saveState());
   }*/
 }
 
-void ObjectManipCmd::execute()
+void TransformationCmd::unexecute()
 {
-  for(unsigned int i = 0; i < objects.count(); i++)
-  {
-/*    if(states[i])
-      states[i]->unref();*/
-    states.insert(i, objects[i]->saveState());
-  }
-}
-
-void ObjectManipCmd::unexecute()
-{
-  if(document())
+/*  if(document())
     document()->activePage()->unselectAllObjects();
   for(unsigned int i = 0; i < objects.count(); i++)
   {
-    objects[i]->restoreState(states[i]);
+//    objects[i]->restoreState(states[i]);
     document()->activePage()->selectObject(objects[i]);
-  }
+  }*/
 }

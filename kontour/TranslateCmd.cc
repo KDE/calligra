@@ -31,7 +31,7 @@
 #include "GObject.h"
 
 TranslateCmd::TranslateCmd(GDocument *aGDoc, double x, double y):
-ObjectManipCmd(aGDoc, i18n("Translate"))
+TransformationCmd(aGDoc, i18n("Translate"))
 {
   dx = x;
   dy = y;
@@ -45,8 +45,8 @@ void TranslateCmd::execute()
 //  kdDebug(38000) << "DX=" << dx << " DY=" << dy << endl;
 
   /* save the states */
-  ObjectManipCmd::execute();
+  TransformationCmd::execute();
 
-  for(unsigned int i = 0; i < objects.count(); i++)
-    objects[i]->transform(m, true);
+//  for(unsigned int i = 0; i < objects.count(); i++)
+//    objects[i]->transform(m, true);
 }

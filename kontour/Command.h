@@ -31,7 +31,7 @@
 
 class GDocument;
 class GObject;
-class GOState;
+class QWMatrix;
 
 class Command : public KCommand
 {
@@ -43,21 +43,21 @@ private:
   GDocument *mGDoc;
 };
 
-class ObjectManipCmd : public Command
+class TransformationCmd : public Command
 {
 protected:
-  ObjectManipCmd(GDocument *aGDoc, const QString &name);
-  ObjectManipCmd(GObject *obj, const QString &name);
+  TransformationCmd(GDocument *aGDoc, const QString &name);
+  TransformationCmd(GObject *obj, const QString &name);
 
 public:
-  ~ObjectManipCmd();
+  ~TransformationCmd();
 
   void execute();
   void unexecute();
 
 protected:
   QPtrVector<GObject> objects;
-  QPtrVector<GOState> states;
+  QPtrVector<QWMatrix> states;
 };
 
 #endif

@@ -173,10 +173,6 @@ public:
 
   void matrix(QWMatrix m);
 
-  GOState *saveState();
-  void initState(GOState *state);
-  void restoreState(GOState *state);
-
   /**
    * Initialize a temporary matrix for transformation from the values of
    * the transformation matrix. The temporary matrix is used by interactive
@@ -267,13 +263,6 @@ protected:
   QWMatrix iMatrix;               // inverted transformation matrix
 
   static unsigned int mCurId;     // ID for new objects
-};
-
-class GOState
-{
-private:
-  QWMatrix matrix;
-  GStyle st;
 };
 
 #endif

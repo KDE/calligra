@@ -29,7 +29,7 @@
 #include "Command.h"
 #include <koRect.h>
 
-class ScaleCmd : public ObjectManipCmd
+class ScaleCmd : public TransformationCmd
 {
 public:
   ScaleCmd(GDocument *aGDoc, int mask, double x, double y);

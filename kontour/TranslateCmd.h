@@ -28,7 +28,7 @@
 
 #include "Command.h"
 
-class TranslateCmd : public ObjectManipCmd
+class TranslateCmd : public TransformationCmd
 {
 public:
   TranslateCmd(GDocument *aGDoc, double x, double y);

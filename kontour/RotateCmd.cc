@@ -30,7 +30,7 @@
 #include "GObject.h"
 
 RotateCmd::RotateCmd(GDocument *aGDoc, const KoPoint &center, double a):
-ObjectManipCmd(aGDoc, i18n("Rotate"))
+TransformationCmd(aGDoc, i18n("Rotate"))
 {
   rcenter = center;
   angle = a;
@@ -43,12 +43,12 @@ void RotateCmd::execute()
   m2.rotate(angle);
   m3.translate(rcenter.x(), rcenter.y());
 
-  ObjectManipCmd::execute();
+  TransformationCmd::execute();
 
-  for(unsigned int i = 0; i < objects.count(); i++)
+/*  for(unsigned int i = 0; i < objects.count(); i++)
   {
     objects[i]->transform(m1);
     objects[i]->transform(m2);
     objects[i]->transform(m3, true);
-  }
+  }*/
 }

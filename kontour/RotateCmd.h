@@ -29,7 +29,7 @@
 #include "Command.h"
 #include <koPoint.h>
 
-class RotateCmd : public ObjectManipCmd
+class RotateCmd : public TransformationCmd
 {
 public:
   RotateCmd(GDocument *aGDoc, const KoPoint &center, double a);

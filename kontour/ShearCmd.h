@@ -29,7 +29,7 @@
 #include "Command.h"
 #include <koPoint.h>
 
-class ShearCmd : public ObjectManipCmd
+class ShearCmd : public TransformationCmd
 {
 public:
   ShearCmd(GDocument *aGDoc, const KoPoint &center, double x, double y);

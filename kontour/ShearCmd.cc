@@ -30,7 +30,7 @@
 #include "GObject.h"
 
 ShearCmd::ShearCmd(GDocument *aGDoc, const KoPoint &center, double x, double y):
-ObjectManipCmd(aGDoc, i18n("Shear"))
+TransformationCmd(aGDoc, i18n("Shear"))
 {
   rcenter = center;
   sx = x;
@@ -44,12 +44,12 @@ void ShearCmd::execute()
   m2.shear(sx, sy);
   m3.translate(rcenter.x(), rcenter.y());
 
-  ObjectManipCmd::execute();
+  TransformationCmd::execute();
 
-  for(unsigned int i = 0; i < objects.count(); i++)
+/*  for(unsigned int i = 0; i < objects.count(); i++)
   {
     objects[i]->transform(m1);
     objects[i]->transform(m2);
     objects[i]->transform(m3, true);
-  }
+  }*/
 }

@@ -769,8 +769,6 @@ void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMa
   p.setWorldMatrix(tmpMatrix, true);
   setPen(&p);
   setBrush(&p);
-  //setPen(&p);
-  //setBrush(&p);
 
   for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {

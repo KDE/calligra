@@ -127,27 +127,6 @@ void GObject::matrix(QWMatrix m)
   initTmpMatrix();
 }
 
-GOState *GObject::saveState()
-{
-  GOState *state = new GOState;
-  GObject::initState(state);
-  return state;
-}
-
-void GObject::initState(GOState *state)
-{
-//  state->matrix = tMatrix;
-}
-
-void GObject::restoreState(GOState *state)
-{
-/*  tMatrix = state->matrix;
-  iMatrix = tMatrix.invert();
-  tmpMatrix = tMatrix;
-  setFillInfo (state->fInfo);
-  setOutlineInfo (state->oInfo);*/
-}
-  
 void GObject::initTmpMatrix()
 {
   tmpMatrix = tMatrix;
