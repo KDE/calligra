@@ -2092,7 +2092,12 @@ void KWordDocument::appendPage(unsigned int _page,QPainter &_painter)
   updateAllFrames();
 
   if (hasHeader() || hasFooter())
-    recalcFrames();
+    {
+      QPaintDevice *pd = _painter.device();
+      _painter.end();
+      recalcFrames();
+      _painter.begin(pd);
+    }
 }
 
 /*================================================================*/
