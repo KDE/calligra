@@ -414,6 +414,8 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 			data[i] = QVariant( QCString(*col).toInt() );
 		else if (f->isFPNumericType())
 			data[i] = QVariant( QCString(*col).toDouble() );
+		else if (f->type()==KexiDB::Field::Boolean)
+			data[i] = QVariant( QCString(*col).toInt()==0, 0 );
 		else
 			data[i] = QVariant( *col ); //default
 	}
