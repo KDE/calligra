@@ -920,7 +920,6 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( !settings.isNull() )
     {
         loadOasisSettings( settings );
-        loadOasisIgnoreList( settings );
     }
     emit sigProgress( 90 );
     initConfig();
