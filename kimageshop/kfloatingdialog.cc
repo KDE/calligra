@@ -31,6 +31,10 @@
 KFloatingDialog::KFloatingDialog(QWidget *parent) : QFrame(parent)
 {
   m_pParent = parent;
+  m_shaded = false;
+  m_dragging = false;
+  m_resizing = false;
+
   setMouseTracking(true);
   setFrameStyle(QFrame::Panel | QFrame::Raised);
   setLineWidth(2);
@@ -54,12 +58,45 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
   QFrame::paintEvent(e);
 }
 
+void KFloatingDialog::mouseDoubleClickEvent (QMouseEvent *e)
+{
+  if (e->button() & LeftButton)
+    {
+      QRect title(0,0, width(), 20);
+      if(!title.contains(e->pos()))
+	return;
+      
+      if (m_shaded)
+	{
+	  resize(width(), m_unshadedHeight);
+	  m_shaded = false;
+	}
+      else
+	{
+	  m_shaded = true;
+	  m_unshadedHeight = height();
+	  resize(width(), 20);
+	}
+    }
+}
+
 void KFloatingDialog::mousePressEvent(QMouseEvent *e)
 {
   if (e->button() & LeftButton)
     {
-      m_dragging = true;
-      m_dragStart = e->pos();
+      QRect title(0,0, width(), 20);
+      QRect bottom(0, height()-2, width(), 2);
+
+      if(title.contains(e->pos()))
+	{
+	  m_dragging = true;
+	  m_dragStart = e->pos();
+	}
+      else if(!m_shaded && bottom.contains(e->pos()))
+	{
+	  m_resizing = true;
+	  m_resizeStart = e->globalPos();
+	}
     }
 }
 	
@@ -87,12 +124,22 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
       
       move(newPos);
     }
+  else if (m_resizing)
+    {
+      QPoint dist = m_resizeStart - e->globalPos();
+      QPoint newSize = QPoint(width(), height()) - dist;
+      
+      resize(newSize.x(), newSize.y());
+    }
 }
 
 void KFloatingDialog::mouseReleaseEvent(QMouseEvent *e)
 {
   if (e->button() & LeftButton)
+    {
       m_dragging = false;
+      m_resizing = false;
+    }
 }
 
 void KFloatingDialog::resizeEvent(QResizeEvent *e)

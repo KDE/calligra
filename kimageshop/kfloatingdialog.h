@@ -38,10 +38,18 @@ class KFloatingDialog : public QFrame
   virtual void mousePressEvent(QMouseEvent *);
   virtual void mouseMoveEvent(QMouseEvent *);
   virtual void mouseReleaseEvent(QMouseEvent *);
+  virtual void mouseDoubleClickEvent (QMouseEvent *); 
 
  protected:
   bool     m_dragging;
+  bool     m_resizing;
+  bool     m_shaded;
+
+  QPoint   m_resizeStart;
   QPoint   m_dragStart;
+
+  int      m_unshadedHeight;
+
   QWidget  *m_pParent;
 };
 
