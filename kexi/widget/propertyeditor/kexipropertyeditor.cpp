@@ -62,6 +62,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 
 	setFullWidth(true);
 	setShowSortIndicator(true);
+	setSorting(-1);
 	setItemMargin(3);
 }
 
@@ -353,10 +354,11 @@ KexiPropertyEditor::fill()
 		m_topItem = new KexiPropertyEditorItem(this,"Top Item");
 	}
 	
+	KexiPropertyEditorItem *item=0;
 	for(;it.current(); ++it)
 	{
 		if (it.current()->isVisible()) {
-			new KexiPropertyEditorItem(m_topItem, it.current());
+			item = new KexiPropertyEditorItem(m_topItem, it.current(), item);
 		}
 	}
 }

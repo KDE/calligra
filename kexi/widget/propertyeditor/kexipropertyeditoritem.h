@@ -43,7 +43,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 		 every time the buffer is updated.
 		 It \a property has not desctiption set, its name (i.e. not i18n'ed) is reused.
 		*/
-		KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property);
+		KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property, 
+			KexiPropertyEditorItem *after);
 
 		//! Creates KexiPropertyEditor Top Item which is necessary for drawing all branches.
 		KexiPropertyEditorItem(KListView *parent, const QString &text);

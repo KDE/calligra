@@ -88,8 +88,9 @@ spHelper::keyToValue(const QString &key)
 
 // ======== KexiPropertyEditorItem ============================
 
-KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property)
- : KListViewItem(parent, property->desc().isEmpty() ? property->name() : property->desc()
+KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property,
+	KexiPropertyEditorItem *after)
+ : KListViewItem(parent, after, property->desc().isEmpty() ? property->name() : property->desc()
 	, property->valueText())
 {
 //	m_value = property->value();
@@ -102,8 +103,10 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, K
 	if (children) {
 		m_children = new ChildDict();
 		KexiProperty::ListIterator it(*children);
+		KexiPropertyEditorItem *item = 0;
 		for (;it.current();++it) {
-			m_children->insert( it.current()->name(), new KexiPropertyEditorItem(this, it.current()) );
+			item = new KexiPropertyEditorItem(this, it.current(), item);
+			m_children->insert( it.current()->name(), item );
 		}
 	}
 	else {
