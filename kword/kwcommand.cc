@@ -646,8 +646,8 @@ void KWFrameResizeCommand::execute()
         KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
         if(cell)
         {
-            table->recalcCols(cell->m_col,cell->m_row);
-            table->recalcRows(cell->m_col,cell->m_row);
+            table->recalcCols(cell->firstCol(), cell->firstRow());
+            table->recalcRows(cell->firstCol(), cell->firstRow());
         }
         else
         {
@@ -678,8 +678,8 @@ void KWFrameResizeCommand::unexecute()
         KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
         if(cell)
         {
-            table->recalcCols(cell->m_col,cell->m_row);
-            table->recalcRows(cell->m_col,cell->m_row);
+            table->recalcCols(cell->firstCol(), cell->firstRow());
+            table->recalcRows(cell->firstCol(), cell->firstRow());
         }
         else
         {
@@ -1245,7 +1245,7 @@ void KWInsertColumnCommand::unexecute()
     {
         for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
             KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
-            if(cell->m_col==m_colPos)
+            if(cell->firstCol() == m_colPos)
                 m_ListFrameSet.append(cell);
         }
     }
@@ -1293,7 +1293,7 @@ void KWInsertRowCommand::unexecute()
     {
         for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
             KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
-            if(cell->m_row==m_rowPos)
+            if(cell->firstRow() == m_rowPos)
                 m_ListFrameSet.append(cell);
         }
     }
@@ -1328,7 +1328,7 @@ void KWRemoveRowCommand::execute()
     for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ )
     {
         KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
-        if(cell->m_row==m_rowPos)
+        if(cell->firstRow() == m_rowPos)
         {
             m_ListFrameSet.append(cell);
             m_copyFrame.append(cell->frame(0)->getCopy());
@@ -1374,7 +1374,7 @@ void KWRemoveColumnCommand::execute()
     for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ )
     {
         KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
-        if(cell->m_col==m_colPos)
+        if(cell->firstCol() == m_colPos)
         {
             m_ListFrameSet.append(cell);
             m_copyFrame.append(cell->frame(0)->getCopy());
@@ -1456,7 +1456,8 @@ void KWSplitCellCommand::unexecute()
         }
     }
     KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( m_rowBegin,m_colBegin ));
-    m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd+m_colBegin-1+cell->m_cols-1,m_rowBegin+m_rowEnd-1+cell->m_rows-1);
+    m_pTable->joinCells(m_colBegin, m_rowBegin, m_colEnd+m_colBegin-1+cell->colSpan()-1,
+        m_rowBegin+m_rowEnd-1+cell->rowSpan()-1);
 
     doc->frameSelectedChanged();
     doc->updateAllFrames();

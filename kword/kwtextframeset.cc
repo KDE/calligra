@@ -1734,10 +1734,10 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
         framesetElem.setAttribute( "grpMgr", grpMgr->getName() );
 
         KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)this;
-        framesetElem.setAttribute( "row", cell->m_row );
-        framesetElem.setAttribute( "col", cell->m_col );
-        framesetElem.setAttribute( "rows", cell->m_rows );
-        framesetElem.setAttribute( "cols", cell->m_cols );
+        framesetElem.setAttribute( "row", cell->firstRow() );
+        framesetElem.setAttribute( "col", cell->firstCol() );
+        framesetElem.setAttribute( "rows", cell->rowSpan() );
+        framesetElem.setAttribute( "cols", cell->colSpan() );
         framesetElem.setAttribute( "removable", static_cast<int>( m_removeableHeader ) );
     }
     if ( protectContent() )
@@ -1979,8 +1979,8 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                 if ( resized ) {
                     theFrame->setMinFrameHeight( newMinFrameHeight );
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
-                    table->recalcCols(cell->m_col,cell->m_row);
-                    table->recalcRows(cell->m_col,cell->m_row);
+                    table->recalcCols(cell->firstCol(), cell->firstRow());
+                    table->recalcRows(cell->firstCol(), cell->firstRow());
                 }
                 *abort = false;
                 break;
@@ -2089,8 +2089,8 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom, bool* abort )
 #endif
                     theFrame->setMinFrameHeight(wantedPosition - theFrame->top());
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
-                    table->recalcCols(cell->m_col,cell->m_row);
-                    table->recalcRows(cell->m_col,cell->m_row);
+                    table->recalcCols(cell->firstCol(), cell->firstRow());
+                    table->recalcRows(cell->firstCol(), cell->firstRow());
                     *abort = false;
                 }
             }

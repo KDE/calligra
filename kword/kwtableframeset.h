@@ -61,6 +61,9 @@ public:
     // A cell can be any type of FrameSet, but for now, we only support text!
     class Cell : public KWTextFrameSet
     {
+        unsigned int m_row, m_col;
+        unsigned int m_rows, m_cols;
+
     public:
         // constructor
         Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString & name = QString::null );
@@ -68,9 +71,21 @@ public:
         // destructor
         virtual ~Cell();
 
-        unsigned int m_row, m_col;
-        unsigned int m_rows, m_cols;
+        uint firstRow() const { return m_row; }
+        uint firstCol() const { return m_col; }
+        uint rowSpan() const { return m_rows; }
+        uint colSpan() const { return m_cols; }
 
+        uint lastRow() const { return m_row + m_rows - 1; }
+        uint lastCol() const { return m_col + m_cols - 1; }
+        uint rowAfter() const { return m_row + m_rows; }
+        uint colAfter() const { return m_col + m_cols; }
+
+        void setFirstRow(uint row) { m_row = row; }
+        void setFirstCol(uint col) { m_col = col; }
+        void setRowSpan(uint rows) { m_rows = rows; }
+        void setColSpan(uint cols) { m_cols = cols; }
+	       
         virtual void addFrame(KWFrame *_frame, bool recalc = true);
 
         uint getRow() const {return m_row;}

@@ -435,7 +435,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
             if ( table ) {
                 KWTableFrameSet::Cell *theCell=static_cast<KWTableFrameSet::Cell *>(fs);
                 for(unsigned int col=0; col < table->getCols(); col++) {
-                    KWTableFrameSet::Cell *c = table->getCell(theCell->m_row, col);
+                    KWTableFrameSet::Cell *c = table->getCell(theCell->firstRow(), col);
                     m_boundingRect |= *c->frame(0);
                 }
             } else
