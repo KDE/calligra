@@ -6536,11 +6536,13 @@ void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
     {
       m_removeTable->setEnabled( false );
       m_hideTable->setEnabled( false );
+      m_showTable->setEnabled( false );
     }
     else
     {
       m_removeTable->setEnabled( state);
       m_hideTable->setEnabled( state );
+      m_showTable->setEnabled(m_pTabBar->listhide().count() > 0);
     }
     if ( !m_pDoc || !m_pDoc->map() || m_pDoc->map()->isProtected() )
     {
