@@ -38,7 +38,10 @@ class KexiCellEditorFactory
 		/*! Registers factory item for \a type and (optional) \a subType. 
 		 \a subType is usually obtained (e.g. in KexiTableView) from KexiDB::Field::subType().
 		 Passing KexiDB::Field::Invalid as type will set default item, 
-		 i.e. the one that will be used when no other item is defined for given data type. */
+		 i.e. the one that will be used when no other item is defined for given data type. 
+		 You can register the same \a item many times for different types and subtypes.
+		 Once registered, \a item object will be owned by the factory, so you shouldn't
+		 care about deleting it. */
 		static void registerItem( KexiCellEditorFactoryItem& item, uint type, 
 			const QString& subType = QString::null );
 

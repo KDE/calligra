@@ -161,6 +161,11 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		 Default implementation does nothing. */
 		virtual void clickedOnContents() {};
 
+		/*! \return true if editing should be accepted immediately after
+		 deleting contents for the cell (usually using Delete key).
+		 This flag is false by default, and is true e.g. for date, time and datetime types. */
+		bool acceptEditorAfterDeleteContents() const { return m_acceptEditorAfterDeleteContents; }
+
 	signals:
 		void editRequested();
 		void cancelRequested();
@@ -196,6 +201,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		QScrollView* m_scrollView;
 
 		bool m_hasFocusableWidget : 1;
+		bool m_acceptEditorAfterDeleteContents : 1;
 	private:
 		QWidget* m_view;
 };

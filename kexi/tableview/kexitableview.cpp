@@ -59,6 +59,8 @@
 #include "kexivalidator.h"
 
 #include "kexidatetableedit.h"
+#include "kexitimetableedit.h"
+#include "kexidatetimetableedit.h"
 #include "kexicelleditorfactory.h"
 #include "kexitableedit.h"
 #include "kexiinputtableedit.h"
@@ -170,6 +172,12 @@ void KexiTableView::initCellEditorFactories()
 
 	item = new KexiDateEditorFactoryItem();
 	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Date );
+
+	item = new KexiTimeEditorFactoryItem();
+	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Time );
+
+	item = new KexiDateTimeEditorFactoryItem();
+	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::DateTime );
 
 	item = new KexiComboBoxEditorFactoryItem();
 	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Enum );
@@ -707,6 +715,10 @@ void KexiTableView::deleteCurrentRow()
 		cancelRowEdit();
 		return;
 	}
+
+	if (!acceptRowEdit())
+		return;
+
 	if (!isDeleteEnabled() || !d->pCurrentItem || d->pCurrentItem == d->pInsertItem)
 		return;
 	switch (d->deletionPolicy) {
@@ -1798,8 +1810,12 @@ void KexiTableView::startEditCurrentCell()
 //		return;
 	if (isReadOnly() || !columnEditable(d->curCol))
 		return;
-	if (d->pEditor)
-		return;
+	if (d->pEditor) {
+		if (d->pEditor->hasFocusableWidget()) {
+			d->pEditor->show();
+			d->pEditor->setFocus();
+		}
+	}
 	ensureVisible(columnPos(d->curCol), rowPos(d->curRow)+rowHeight(), columnWidth(d->curCol), rowHeight());
 	createEditor(d->curRow, d->curCol, QString::null, false);
 }
@@ -1819,6 +1835,8 @@ void KexiTableView::deleteAndStartEditCurrentCell()
 	if (!d->pEditor)
 		return;
 	d->pEditor->clear();
+	if (d->pEditor->acceptEditorAfterDeleteContents())
+		acceptEditor();
 }
 
 #if 0//(js) doesn't work!
@@ -2110,8 +2128,10 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	//			if (e->text()[0].isPrint())
 			createEditor(curRow, curCol, e->text(), true);
 		}
-		else 
+		else {
+//TODO show message "key not allowed eg. on a statusbar"
 			kdDebug(44021) << "KexiTableView::KeyPressEvent(): ev pressed: acceptsFirstChar()==false";
+		}
 	}
 
 	d->vScrollBarValueChanged_enabled=false;
@@ -2915,14 +2935,17 @@ bool KexiTableView::acceptEditor()
 	const bool autoIncColumnCanBeOmitted = d->newRowEditing && d->pEditor->field()->isAutoIncrement();
 
 	bool valueChanged = d->pEditor->valueChanged();
+	bool editCurrentCellAgain = false;
 
 	if (valueChanged) {
 		if (d->pEditor->valueIsNull()) {//null value entered
 			if (d->pEditor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 				kdDebug() << "KexiTableView::acceptEditor(): NULL NOT ALLOWED!" << endl;
 				res = KexiValidator::Error;
-				msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
+				msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName())
+					+ "\n\n" + KexiValidator::msgYouCanImproveData();
 				desc = i18n("The column's constraint is declared as NOT NULL.");
+				editCurrentCellAgain = true;
 	//			allow = false;
 	//			removeEditor();
 	//			return true;
@@ -2938,8 +2961,10 @@ bool KexiTableView::acceptEditor()
 				if (d->pEditor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
 					kdDebug() << "KexiTableView::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
 					res = KexiValidator::Error;
-					msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
+					msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName())
+						+ "\n\n" + KexiValidator::msgYouCanImproveData();
 					desc = i18n("The column's constraint is declared as NOT EMPTY.");
+					editCurrentCellAgain = true;
 	//				allow = false;
 	//				removeEditor();
 	//				return true;
@@ -2952,9 +2977,11 @@ bool KexiTableView::acceptEditor()
 				if (d->pEditor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 					kdDebug() << "KexiTableView::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
 					res = KexiValidator::Error;
-					msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
+					msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName())
+						+ "\n\n" + KexiValidator::msgYouCanImproveData();
 					desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
-	//				allow = false;
+					editCurrentCellAgain = true;
+//				allow = false;
 	//				removeEditor();
 	//				return true;
 				}
@@ -2985,7 +3012,9 @@ bool KexiTableView::acceptEditor()
 				kdDebug() << "KexiTableView::acceptEditor(): INVALID VALUE - NOT CHANGED." << endl;
 				res = KexiValidator::Error;
 //js: TODO get detailed info on why d->pEditor->value() failed
-				msg = i18n("Entered value is invalid.");
+				msg = i18n("Entered value is invalid.")
+					+ "\n\n" + KexiValidator::msgYouCanImproveData();
+				editCurrentCellAgain = true;
 //				removeEditor();
 //				return true;
 			}
@@ -3006,11 +3035,13 @@ bool KexiTableView::acceptEditor()
 			KMessageBox::sorry(this, msg);
 		else
 			KMessageBox::detailedSorry(this, msg, desc);
+		editCurrentCellAgain = true;
 //		allow = false;
 	}
 	else if (res == KexiValidator::Warning) {
 		//js: todo: message!!!
 		KMessageBox::messageBox(this, KMessageBox::Sorry, msg + "\n" + desc);
+		editCurrentCellAgain = true;
 	}
 
 	if (res == KexiValidator::Ok) {
@@ -3039,6 +3070,8 @@ bool KexiTableView::acceptEditor()
 			acceptRowEdit();
 		return true;
 	}
+	startEditCurrentCell();
+	d->pEditor->setFocus();
 	return false;
 }
 
@@ -3070,18 +3103,17 @@ bool KexiTableView::acceptRowEdit()
 //	QString msg, desc;
 //	bool inserting = d->pInsertItem && d->pInsertItem==d->pCurrentItem;
 
-	if (m_data->rowEditBuffer()->isEmpty()) {
-		if (d->newRowEditing) {
+	if (m_data->rowEditBuffer()->isEmpty() && !d->newRowEditing) {
+/*		if (d->newRowEditing) {
 			cancelRowEdit();
 			kdDebug() << "-- NOTHING TO INSERT!!!" << endl;
 			return true;
 		}
-		else {
-//			success = true;
+		else {*/
 			kdDebug() << "-- NOTHING TO ACCEPT!!!" << endl;
-		}
+//		}
 	}
-	else {//not empty edit buffer:
+	else {//not empty edit buffer or new row to insert:
 		if (d->newRowEditing) {
 //			emit aboutToInsertRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
 //			if (success) {
@@ -3143,6 +3175,9 @@ bool KexiTableView::acceptRowEdit()
 			KMessageBox::sorry(this, m_data->result()->msg);
 		else
 			KMessageBox::detailedSorry(this, m_data->result()->msg, m_data->result()->desc);
+
+		//edit this cell
+		startEditCurrentCell();
 	}
 
 	return success;
@@ -3764,6 +3799,15 @@ void KexiTableView::navBtnNewClicked()
 {
 	if (!isInsertingEnabled())
 		return;
+	if (d->rowEditing) {
+		if (!acceptRowEdit())
+			return;
+	}
+/*	if (d->pEditor) {
+		//already editing!
+		d->pEditor->setFocus();
+		return;
+	}*/
 	setFocus();
 	selectRow(rows());
 	startEditCurrentCell();

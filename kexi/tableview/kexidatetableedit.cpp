@@ -20,7 +20,9 @@
  */
 
 #include "kexidatetableedit.h"
+#include "kexidatetimeeditor_p.h"
 
+#include <qapplication.h>
 #include <qpainter.h>
 #include <qvariant.h>
 #include <qrect.h>
@@ -45,61 +47,69 @@
 
 #include "kexi_utils.h"
 
-//KexiDateTableEdit::KexiDateTableEdit(KexiDB::Field &f, QScrollView *parent)
 KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent)
  : KexiTableEdit(column, parent,"KexiDateTableEdit")
 {
-//	kdDebug() << "KexiDateTableEdit: Date = " << value.toString() << endl;
+	m_sentEvent = false;
 	setView( new QWidget(this) );
-//	m_edit = new KLineEdit(m_view);
 	m_edit = new QDateEdit(view());
 	m_edit->setAutoAdvance(true);
-//js	m_edit->setFrame(false);
-//js	m_edit->setValidator(new KDateValidator(m_edit, "DateValidator"));
+	m_edit->installEventFilter(this);
+	m_setNumberOnFocus = -1;
+
 	QToolButton* btn = new QToolButton(view());
 	btn->setText("...");
 	btn->setFixedWidth( QFontMetrics(btn->font()).width(" ... ") );
 	btn->setPopupDelay(1); //1 ms
+
+	m_dte_date_obj = Kexi::findFirstChild<QObject>(m_edit, "QDateTimeEditor");
+	if (m_dte_date_obj)
+		m_dte_date_obj->installEventFilter(this);
 	
+#if QDateTimeEditor_HACK
+	m_dte_date = dynamic_cast<QDateTimeEditor*>(m_dte_date_obj);
+#else
+	m_dte_date = 0;
+#endif
+
 	m_datePickerPopupMenu = new KPopupMenu(0, "date_popup");
 	connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
-	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate(), 0);
+	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate::currentDate(), 0);
 
 	KDateTable *dt =Kexi::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
 	if (dt)
 		connect(dt, SIGNAL(tableClicked()), this, SLOT(acceptDate()));
 	m_datePicker->setCloseButton(true);
 	m_datePicker->installEventFilter(this);
-//	, WType_TopLevel | WDestructiveClose | WStyle_Customize
-		//| WStyle_StaysOnTop | WStyle_NoBorder);
 	m_datePickerPopupMenu->insertItem(m_datePicker);
 	btn->setPopup(m_datePickerPopupMenu);
-	
-//	connect(btn, SIGNAL(clicked()), this, SLOT(slotShowDatePicker()));
 	
 	QHBoxLayout* layout = new QHBoxLayout(view());
 	layout->addWidget(m_edit, 1);
 	layout->addWidget(btn, 0);
 
 	setFocusProxy(m_edit);
+
+	m_acceptEditorAfterDeleteContents = true;
 }
 
-void KexiDateTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
+void KexiDateTableEdit::init(const QString& add, bool removeOld)
 {
-	bool ok;
-	QDate date = KGlobal::locale()->readDate(m_origValue.toString(), &ok);
-
-	if(!ok)
-	{
-		date = QDate::currentDate();
+	m_setNumberOnFocus = -1;
+	QDate d;
+	if (removeOld) {
+		if (!add.isEmpty() && add[0].latin1()>='0' && add[0].latin1() <='9') {
+			m_setNumberOnFocus = add[0].latin1()-'0';
+			d = QDate((m_setNumberOnFocus)*1000, 1, 1);
+		}
 	}
-
-	m_edit->setDate(date);
-	
-	m_oldVal = date;
+	else {
+		d = m_origValue.toDate();
+	}
+	m_edit->setDate(d);
+	moveToFirstSection();
 }
 
-//! \return true is editor's value is null (not empty)
 bool KexiDateTableEdit::valueIsNull()
 {
 	return m_edit->date().isNull();
@@ -107,70 +117,50 @@ bool KexiDateTableEdit::valueIsNull()
 
 bool KexiDateTableEdit::valueIsEmpty()
 {
-	return false;//js OK? TODO (nonsense?)
+	return valueIsNull();//js OK? TODO (nonsense?)
 }
 
 void
 KexiDateTableEdit::slotDateChanged(QDate date)
 {
-//js	m_edit->setText(KGlobal::locale()->formatDate(date, true));
 	m_edit->setDate(date);
-
 	repaint();
 }
 
-QVariant
+QVariant 
 KexiDateTableEdit::value(bool &ok)
 {
 	ok = true;
-//js	QDate date = KGlobal::locale()->readDate(m_edit->text(), &ok);
-//	QDate date = m_edit->date();
 	return QVariant(m_edit->date());
-
-/*	if(!ok)
-	{
-		date = m_oldVal;
-	}*/
-
-//	return QVariant(date.toString(Qt::ISODate));
 }
 
 void
 KexiDateTableEdit::slotShowDatePicker()
 {
-	bool ok = true;
-//js	QDate date = KGlobal::locale()->readDate(m_edit->text(), &ok);
 	QDate date = m_edit->date();
 
-	if(!ok)
-		date = QDate::currentDate();
-	
 	m_datePicker->setDate(date);
 	m_datePicker->setFocus();
 	m_datePicker->show();
 	m_datePicker->setFocus();
-	/*
-	bool ok;
-	QDate date = KGlobal::locale()->readDate(m_edit->text(), &ok);
-
-	if(!ok)
-	{
-		date = QDate::currentDate();
-	}
-
-	m_datePicker = new KexiDatePicker(0, date, 0, WType_TopLevel | WDestructiveClose | WStyle_Customize
-		| WStyle_StaysOnTop | WStyle_NoBorder);
-	QPoint global = mapToGlobal(QPoint(width() - height(), height()));
-	m_datePicker->move(global);
-	m_datePicker->show();
-
-	connect(m_datePicker, SIGNAL(dateChanged(QDate)), this, SLOT(slotDateChanged(QDate)));
-	*/
 }
 
-/*! filtering some events on date picket */
-bool
-KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
+//! @internal helper
+void KexiDateTableEdit::moveToFirstSection()
+{
+	if (!m_dte_date_obj)
+		return;
+#if QDateTimeEditor_HACK
+	if (m_dte_date)
+		m_dte_date->setFocusSection(0);
+#else
+	QKeyEvent ke_left(QEvent::KeyPress, Qt::Key_Left, 0, 0);
+	for (int i=0; i<8; i++)
+		QApplication::sendEvent( m_dte_date_obj, &ke_left );
+#endif
+}
+
+bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 {
 	if (o==m_datePicker) {
 		kdDebug() << e->type() << endl;
@@ -184,7 +174,6 @@ KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 			QKeyEvent *ke = (QKeyEvent *)e;
 			if (ke->key()==Key_Enter || ke->key()==Key_Return) {
 				//accepting picker
-//js				m_edit->setText( KGlobal::locale()->formatDate(m_datePicker->date(), true) );
 				acceptDate();
 				return true;
 			}
@@ -201,6 +190,32 @@ KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 			break;
 		}
 	}
+	else if (e->type()==QEvent::FocusIn && o->parent() && o->parent()->parent()==m_edit
+		&& m_setNumberOnFocus >= 0 && m_dte_date_obj)
+	{
+		// there was a number character passed as 'add' parameter in init():
+		moveToFirstSection();
+		QKeyEvent ke(QEvent::KeyPress, int(Qt::Key_0)+m_setNumberOnFocus, 
+			'0'+m_setNumberOnFocus, 0, QString::number(m_setNumberOnFocus));
+		QApplication::sendEvent( m_dte_date_obj, &ke );
+		m_setNumberOnFocus = -1;
+	}
+#if QDateTimeEditor_HACK
+	else if (e->type()==QEvent::KeyPress && m_dte_date) {
+		bool resendEvent = false;
+		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+		if ((ke->key()==Qt::Key_Right && !m_sentEvent && cursorAtEnd())
+			|| (ke->key()==Qt::Key_Left && !m_sentEvent && cursorAtStart()))
+		{
+			//the editor should send this key event:
+			m_sentEvent = true; //avoid recursion
+			QApplication::sendEvent( this, ke );
+			m_sentEvent = false;
+			ke->ignore();
+			return true;
+		}
+	}
+#endif
 	return false;
 }
 
@@ -213,33 +228,26 @@ void KexiDateTableEdit::acceptDate()
 
 bool KexiDateTableEdit::cursorAtStart()
 {
-	//TODO?
+#if QDateTimeEditor_HACK
+	return m_dte_date && m_edit->hasFocus() && m_dte_date->focusSection()==0;
+#else
 	return false;
+#endif
 }
 
 bool KexiDateTableEdit::cursorAtEnd()
 {
-	//TODO?
+#if QDateTimeEditor_HACK
+	return m_dte_date && m_edit->hasFocus() 
+		&& m_dte_date->focusSection()==(m_dte_date->sectionCount()-1);
+#else
 	return false;
+#endif
 }
 
 void KexiDateTableEdit::clear()
 {
-	//TODO??
-}
-
-
-
-// we need the date thing
-
-KexiDatePicker::KexiDatePicker(QWidget *parent, QDate date, const char *name, WFlags f)
- : KDatePicker(parent, date, name)
-{
-	setWFlags(f);
-}
-
-KexiDatePicker::~KexiDatePicker()
-{
+	m_edit->setDate(QDate());
 }
 
 //======================================================

@@ -164,9 +164,16 @@ bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
 			return true;
 		return false;
 	}
-	else if (m_field->type() == KexiDB::Field::Boolean)
+
+	switch (m_field->type()) {
+	case KexiDB::Field::Boolean:
 		return false;
-		
+	case KexiDB::Field::Date:
+	case KexiDB::Field::DateTime:
+	case KexiDB::Field::Time:
+		return ch>="0" && ch<="9";
+	default:;
+	}
 	return true;
 }
 
@@ -493,7 +500,8 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 			//check it
 			if (val->isNull() && !f->isAutoIncrement()) {
 				//NOT NULL violated
-				m_result.msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
+				m_result.msg = i18n("\"%1\" column requires a value to be entered.")
+					.arg(f->captionOrName()) + "\n\n" + KexiValidator::msgYouCanImproveData();
 				m_result.desc = i18n("The column's constraint is declared as NOT NULL.");
 				m_result.column = col;
 				return false;
@@ -503,7 +511,8 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 			GET_VALUE;
 			if (!f->isAutoIncrement() && (val->isNull() || KexiDB::isEmptyValue( f, *val ))) {
 				//NOT EMPTY violated
-				m_result.msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
+				m_result.msg = i18n("\"%1\" column requires a value to be entered.")
+					.arg(f->captionOrName()) + "\n\n" + KexiValidator::msgYouCanImproveData();
 				m_result.desc = i18n("The column's constraint is declared as NOT EMPTY.");
 				m_result.column = col;
 				return false;
@@ -514,7 +523,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 	if (dbaware) {
 		if (insert) {
 			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
-				m_result.msg = i18n("Row inserting failed.");
+				m_result.msg = i18n("Row inserting failed.") + "\n\n" + KexiValidator::msgYouCanImproveData();
 				KexiDB::getHTMLErrorMesage(m_cursor, &m_result);
 
 /*			if (desc)
@@ -529,7 +538,7 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 		}
 		else {
 			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
-				m_result.msg = i18n("Row changing failed.");
+				m_result.msg = i18n("Row changing failed.") + "\n\n" + KexiValidator::msgYouCanImproveData();
 				KexiDB::getHTMLErrorMesage(m_cursor, m_result.desc);
 				return false;
 			}

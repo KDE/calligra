@@ -70,18 +70,6 @@ KexiInputTableEdit::~KexiInputTableEdit()
 {
 }
 
-/*
-//KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& add,
-//	QWidget *parent, const char *name, QStringList comp)
-KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& add,
-	QWidget *parent)
- : KexiTableEdit(parent,"KexiInputTableEdit")
-{
-	m_type = type;
-	m_origValue = value;//original value
-	init(add);
-}*/
-
 void KexiInputTableEdit::init()
 {
 	kdDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
@@ -414,108 +402,6 @@ QSize KexiInputTableEdit::totalSize()
 		return size();
 	return m_lineedit->size();
 }
-
-#if 0 //js: we've QValidator for validating!
-bool
-KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
-{
-	if(watched == m_view)
-	{
-		if(e->type() == QEvent::KeyPress)
-		{
-			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-
-			switch(m_type)
-			{
-				case QVariant::Double:
-					if(ev->text() == KGlobal::locale()->decimalSymbol() || ev->text() == KGlobal::locale()->monetaryDecimalSymbol())
-						return false;
-
-				case QVariant::Int:
-					if(ev->text() == KGlobal::locale()->negativeSign())
-						return false;
-
-				case QVariant::UInt:
-					if(m_calculatedCell)
-					{
-						return false;
-						break;
-					}
-
-					switch(ev->key())
-					{
-						case Key_0:
-						case Key_1:
-						case Key_2:
-						case Key_3:
-						case Key_4:
-						case Key_5:
-						case Key_6:
-						case Key_7:
-						case Key_8:
-						case Key_9:
-						case Key_Return:
-						case Key_Enter:
-						case Key_Insert:
-						case Key_Delete:
-						case Key_Pause:
-						case Key_Print:
-						case Key_Home:
-						case Key_End:
-						case Key_Left:
-						case Key_Up:
-						case Key_Right:
-						case Key_Down:
-						case Key_Prior:
-						case Key_Next:
-						case Key_Escape:
-							return false;
-
-						case Key_Equal:
-							m_calculatedCell = true;
-							return true;
-
-						case Key_Backspace:
-							if(m_cview->text() == "=")
-								m_calculatedCell = false;
-							return false;
-
-						default:
-							return true;
-					}
-
-					break;
-
-				default:
-//					static_cast<KLineEdit*>(m_view)->setCompletedItems(m_comp);
-//					static_cast<KLineEdit*>(m_view)->setKeyBinding(KGlobalSettings::CompletionPopup, Qt::Key_Return);
-
-					switch(ev->key())
-					{
-						case Key_Enter:
-						case Key_Return:
-						case Key_Tab:
-							return false;
-
-						default:
-							QTimer::singleShot(1, this, SLOT(setRestrictedCompletion()));
-							break;
-					}
-					return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	else
-	{
-		return KexiTableEdit::eventFilter(watched, e);
-	}
-}
-#endif //0
-
 
 //======================================================
 

@@ -26,6 +26,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 //KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QScrollView* parent, const char* name)
 KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, const char* name)
@@ -35,6 +36,8 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, c
 // ,m_type(f.type()) //copied because the rest of code uses m_type
  ,m_scrollView(parent)
  ,m_view(0)
+ ,m_hasFocusableWidget(true)
+ ,m_acceptEditorAfterDeleteContents(false)
 {
 	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
 	installEventFilter(this);
@@ -62,7 +65,6 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, c
 #endif
 	}
 
-	m_hasFocusableWidget = true;
 
 	m_rightMargin = 0;//TODO
 }
@@ -153,6 +155,7 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 bool KexiTableEdit::valueChanged()
 {
 	bool ok;
+	kdDebug() << m_origValue.toString() << " ? " << value(ok).toString() << endl;
 	return (m_origValue != value(ok)) && ok;
 }
 
@@ -175,7 +178,6 @@ void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, QVariant 
 //	const int ctype = columnType(col);
 //	align = SingleLine | AlignVCenter;
 //	QString txt; //text to draw
-
 	if (m_column->field()->isFPNumericType()) {
 //js TODO: ADD OPTION to desplaying NULL VALUES as e.g. "(null)"
 		if (!val.isNull())
@@ -184,7 +186,7 @@ void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, QVariant 
 		align |= AlignRight;
 	}
 	else if (m_column->field()->isIntegerType()) {
-		int num = val.toInt();
+		Q_LLONG num = val.toLongLong();
 /*#ifdef Q_WS_WIN
 		x = 1;
 #else
@@ -221,22 +223,45 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 		x = 5;
 //		y_offset = 0;
 #endif*/
-		if (!val.isNull()) {
-			txt = val.toString();
+		switch (m_column->field()->type()) {
+		case KexiDB::Field::Time:
+			//it was QDateTime - a hack needed because QVariant(QTime) has broken isNull()
+			if (!val.isNull()) {
+				txt = val.toTime().toString(Qt::LocalDate);
+			}
+			break;
+		case KexiDB::Field::Date:
+			txt = val.toDate().toString(Qt::LocalDate);
+			break;
+		case KexiDB::Field::DateTime:
+			if (!val.toDate().isNull())
+				txt = val.toDate().toString(Qt::LocalDate) + " " + val.toTime().toString(Qt::LocalDate);
+			break;
+		default:
+			if (!val.isNull()) {
+				txt = val.toString();
+			}
 		}
 		align |= AlignLeft;
 	}
 
 }
 
-void KexiTableEdit::paintSelectionBackground( QPainter *p, bool /*focused*/, const QString& txt, 	int align, int x, int y_offset, int w, int h, const QColor& fillColor,
+void KexiTableEdit::paintSelectionBackground( QPainter *p, bool /*focused*/, 
+	const QString& txt, int align, int x, int y_offset, int w, int h, const QColor& fillColor,
 	bool readOnly, bool fullRowSelection )
 {
 	if (!readOnly && !fullRowSelection && !txt.isEmpty()) {
 		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, align, txt);
-		bound.setX(bound.x()-1);
 		bound.setY(0);
 		bound.setWidth( QMIN( bound.width()+2, w - (x+x)+1 ) );
+		if (align & Qt::AlignLeft) {
+			bound.setX(bound.x()-1);
+		}
+		else if (align & Qt::AlignRight) {
+			bound.moveLeft( w - bound.width() ); //move to left, if too wide
+		}
+//TODO align center
 		bound.setHeight(h-1);
 		p->fillRect(bound, fillColor);
 	}

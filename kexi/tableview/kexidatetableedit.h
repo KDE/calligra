@@ -24,39 +24,29 @@
 
 #include <kexitableedit.h>
 #include <kdatepicker.h>
+
 #include "kexicelleditorfactory.h"
 
-class KDatePicker;
-class KLineEdit;
-class KDateWidget;
 class QDateEdit;
-class QDate;
+class QDateTimeEditor;
+class KDatePicker;
 class KPopupMenu;
 
-/*!
-  this class represents an editor for QVariant::Date
-
-  uhm, thanks to tronical, who added me a second constructor
-  for KDatePicker i dont't have to type so much JIPPIE
-  update (2002-09-02 (00:30))
-*/
+//! @short Editor class for Date type.
 class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 
 	public:
-//		KexiDateTableEdit(KexiDB::Field &f, QScrollView *parent=0);
 		KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
-
 		virtual QVariant value(bool &ok);
-
 		virtual bool valueIsNull();
-
 		virtual bool valueIsEmpty();
-
 		virtual void clear();
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
+
+		virtual bool eventFilter( QObject *o, QEvent *e );
 
 	protected slots:
 		void slotDateChanged(QDate);
@@ -65,23 +55,17 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 
 	protected:
 		virtual void init(const QString& add, bool removeOld);
-
-		virtual bool eventFilter( QObject *o, QEvent *e );
+		void moveToFirstSection();
 
 		KDatePicker	*m_datePicker;
-		/*KLineEdit*/QDateEdit* m_edit;
+		QDateEdit* m_edit;
 		
-		QDate m_oldVal;
 		KPopupMenu *m_datePickerPopupMenu;
-};
 
-class KEXIDATATABLE_EXPORT KexiDatePicker : public KDatePicker
-{
-	Q_OBJECT
-
-	public:
-		KexiDatePicker(QWidget *parent, QDate date, const char *name, WFlags f);
-		~KexiDatePicker();
+		QDateTimeEditor* m_dte_date;
+		QObject *m_dte_date_obj;
+		int m_setNumberOnFocus;
+		bool m_sentEvent : 1;
 };
 
 class KexiDateEditorFactoryItem : public KexiCellEditorFactoryItem
