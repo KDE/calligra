@@ -184,6 +184,7 @@ k_dcop:
     void insertFile();
     void importStyle();
     void backgroundPicture();
+    void insertFile( const QString & file );
 
 private:
     KPresenterView *view;

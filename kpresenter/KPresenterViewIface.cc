@@ -623,3 +623,7 @@ void KPresenterViewIface::backgroundPicture()
     view->backgroundPicture();
 }
 
+void KPresenterViewIface::insertFile( const QString & file )
+{
+    view->insertFile( file );
+}

@@ -7079,7 +7079,7 @@ void KPresenterView::autoSpellCheck()
     m_pKPresenterDoc->changeBgSpellCheckingState( actionAllowBgSpellCheck->isChecked() );
 }
 
-void KPresenterView::insertFile()
+void KPresenterView::insertFile(  )
 {
     KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
     fd.setMimeFilter( "application/x-kpresenter" );
@@ -7096,10 +7096,13 @@ void KPresenterView::insertFile()
                                 i18n("Insert File"));
             return;
         }
-        m_pKPresenterDoc->insertFile(url.path());
+        insertFile(url.path());
     }
-    else
-        return;
+}
+
+void KPresenterView::insertFile(const QString &path)
+{
+    m_pKPresenterDoc->insertFile(path);
 }
 
 void KPresenterView::importStyle()

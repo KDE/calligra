@@ -138,6 +138,8 @@ public:
     void savePicture( KPPixmapObject* obj );
     void saveClipart( KPClipartObject* obj );
 
+    void insertFile(const QString &path);
+
 signals:
     void currentPageChanged( int );
 
