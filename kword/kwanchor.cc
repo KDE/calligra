@@ -23,12 +23,11 @@
 #include "kwviewmode.h"
 #include <kdebug.h>
 
-KWAnchor::KWAnchor( KWTextFrameSet *containingFrameset, KWFrameSet * frameset, int frameNum )
-    : KoTextCustomItem( containingFrameset->textDocument()),
+KWAnchor::KWAnchor( KoTextDocument *textDocument, KWFrameSet * frameset, int frameNum )
+    : KoTextCustomItem( textDocument),
       m_frameset( frameset ),
       m_frameNum( frameNum )
 {
-    m_containingFrameSet=containingFrameset;
 }
 
 KWAnchor::~KWAnchor()
@@ -153,15 +152,10 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     KoPoint topLeft = KoPoint(
         zh->unzoomItX(m_frameset->frame(m_frameNum)->outerRect().x()) + 1, // we add one to x and y to 
         zh->unzoomItY(m_frameset->frame(m_frameNum)->outerRect().y()) + 1);// compensate for rounding errors.
-    
-    QPtrListIterator<KWFrame> frameIt = m_containingFrameSet->frameIterator();
-    KWFrame *containingFrame=0L;
-    for ( ; frameIt.current(); ++frameIt ) {
-        if ( frameIt.current()->contains( topLeft ) ) {
-            containingFrame=frameIt.current();
-            break;
-        }
-    }
+
+    QPoint dud;
+    KWFrame *containingFrame=fs->documentToInternal(topLeft, dud, false);
+
     if(containingFrame==0L) {
         kdDebug() << "KWAnchor::paint Hmm? it seems my frame is positioned outside all text areas!!, aboring draw\n";
         return;

@@ -503,7 +503,7 @@ public:
     KWAnchor * findAnchor( int frameNum );
 
     /** Create an anchor for the floating frame identified by frameNum */
-    virtual KWAnchor * createAnchor( KWTextFrameSet *fs, int frameNum );
+    virtual KWAnchor * createAnchor( KoTextDocument *txt, int frameNum );
 
     /** Move the frame frameNum to the given position - this is called when
         the frame is anchored and the anchor moves (see KWAnchor). */

@@ -41,7 +41,7 @@ public:
               displaying.
      * @param frameNum  Which frame of the frameset (previos argument) is used for displaying.
      */
-    KWAnchor( KWTextFrameSet *containingFrameset, KWFrameSet * frameset, int frameNum );
+    KWAnchor( KoTextDocument *textdoc, KWFrameSet * frameset, int frameNum );
     ~KWAnchor();
 
     /** The frameset that will provide the content to display in this anchor object */
@@ -76,7 +76,6 @@ private:
     KWFrameSet * m_frameset; // the frameset that implements the content for this special char.
     int m_frameNum;          // the reference the frameset needs to identify the content in its
                              // set of frames
-    KWTextFrameSet * m_containingFrameSet;  // the frameset that contains our text.
 };
 
 #endif

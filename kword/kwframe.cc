@@ -641,9 +641,9 @@ void KWFrameSet::setFixed()
     m_anchorTextFs = 0L;
 }
 
-KWAnchor * KWFrameSet::createAnchor( KWTextFrameSet *fs, int frameNum )
+KWAnchor * KWFrameSet::createAnchor( KoTextDocument *txt, int frameNum )
 {
-    KWAnchor * anchor = new KWAnchor( fs, this, frameNum );
+    KWAnchor * anchor = new KWAnchor( txt, this, frameNum );
     return anchor;
 }
 
@@ -657,7 +657,7 @@ void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolder
         //if ( ! frameIt.current()->anchor() )
         {
             // Anchor this frame, after the previous one
-            KWAnchor * anchor = createAnchor( m_anchorTextFs, frameFromPtr( frameIt.current() ) );
+            KWAnchor * anchor = createAnchor( m_anchorTextFs->textDocument(), frameFromPtr( frameIt.current() ) );
             if ( !placeHolderExists )
                 parag->insert( index, KoTextObject::customItemChar() );
             parag->setCustomItem( index, anchor, 0 );

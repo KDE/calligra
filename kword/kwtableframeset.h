@@ -246,7 +246,7 @@ public:
     virtual QSize floatingFrameSize( int frameNum );
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
     virtual KCommand * anchoredObjectDeleteCommand( int frameNum );
-    virtual KWAnchor * createAnchor( KWTextFrameSet *fs, int frameNum );
+    virtual KWAnchor * createAnchor( KoTextDocument *txt, int frameNum );
 
     virtual bool canRemovePage( int num );
 
