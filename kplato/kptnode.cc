@@ -74,7 +74,9 @@ void KPTNode::init() {
     m_effort = 0;
     m_resourceOverbooked = false;
     m_resourceError = false;
+    m_resourceNotAvailable = false;
     m_schedulingError = false;
+    m_notScheduled = true;
     m_visitedForward = false;
     m_visitedBackward = false;
 }
@@ -337,6 +339,11 @@ KPTDuration KPTNode::duration(const KPTDateTime &time, int use, bool backward) {
     if (m_effort->type() == KPTEffort::Type_Effort ||
         m_effort->type() == KPTEffort::Type_FixedDuration) {
         dur = calcDuration(time, effort, backward);
+        if (dur == KPTDuration::zeroDuration) {
+            kdWarning()<<k_funcinfo<<"zero duration: Resource not available"<<endl;
+            m_resourceNotAvailable = true;
+            return effort;
+        }
     } else {
         // error
         kdError()<<k_funcinfo<<"Unsupported effort type: "<<m_effort->type()<<endl;

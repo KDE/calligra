@@ -387,12 +387,12 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     item->setListViewText(task->name());
-    KPTDateTime time = task->startTime();
-    KPTDuration dur = task->duration();
-    if (dur == KPTDuration::zeroDuration)
-        dur.addSeconds(1); // avoid bug in KDGannt
-    item->setStartTime(time);
-    item->setEndTime(task->endTime());
+    KPTDateTime st = task->startTime();
+    KPTDateTime end = task->endTime();
+    if (end == st)
+        end = end.addSecs(1); // avoid bug in KDGannt
+    item->setStartTime(st);
+    item->setEndTime(end);
     //item->setOpen(true);
     item->setText(task->name());
     if (m_showProgress) {
@@ -415,12 +415,20 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
 
     QString sts;
     bool ok = true;
+    if (task->notScheduled()) {
+        sts += "\n"; sts += "Not scheduled";
+        ok = false;
+    }
     if (task->resourceError()) {
         sts += "\n"; sts += "No resource assigned";
         ok = false;
     }
     if (task->resourceOverbooked()) {
         sts += "\n"; sts += "Resource overbooked";
+        ok = false;
+    }
+    if (task->resourceNotAvailable()) {
+        sts += "\n"; sts += "Resource not available";
         ok = false;
     }
     if (task->schedulingError()) {

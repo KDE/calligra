@@ -261,12 +261,17 @@ public:
     virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
     virtual void makeAppointments();
 
+    /// EffortType == Effort, but no resource is requested
     bool resourceError() const { return m_resourceError; }
-
-    virtual void setResourceOverbooked(bool on) { m_resourceOverbooked = on; }
+    /// The assigned resource is overbooked
     virtual bool resourceOverbooked() const { return m_resourceOverbooked; }
-
+    virtual void setResourceOverbooked(bool on) { m_resourceOverbooked = on; }
+    /// The requested resource is not available
+    bool resourceNotAvailable() const { return m_resourceNotAvailable; }
+    /// The task cannot be scheduled to fullfill all the constraints
     virtual bool schedulingError() const { return m_schedulingError; }
+    /// The node has not been scheduled
+    bool notScheduled() const { return m_notScheduled; }
     
     /**
      * Planned cost is the sum total of all resources and other costs
@@ -403,11 +408,17 @@ protected:
       */
     KPTDuration m_duration;
 
-    //TODO: better error indications
+    /// EffortType == Effort, but no resource is requested
     bool m_resourceError;
+    /// The assigned resource is overbooked
     bool m_resourceOverbooked;
+    /// The requested resource is not available
+    bool m_resourceNotAvailable;
+    /// The task cannot be scheduled to fullfill all the constraints
     bool m_schedulingError;
-
+    /// The node has not been scheduled
+    bool m_notScheduled;
+    
     QString m_id; // unique id
     
     bool m_visitedForward;
