@@ -50,49 +50,52 @@ class Canvas;
 class GDocument;
 class TransformationDialog;
 
-#define ID_FILE_NEW           1
-#define ID_FILE_OPEN          2
-#define ID_FILE_OPEN_RECENT  20
-#define ID_FILE_SAVE          4
-#define ID_FILE_SAVE_AS       5
-#define ID_FILE_CLOSE         6
-#define ID_FILE_PRINT         7
-#define ID_FILE_NEW_WINDOW    8 
-#define ID_FILE_EXIT         10 
+#define ID_FILE_NEW              1
+#define ID_FILE_OPEN             2
+#define ID_FILE_OPEN_RECENT     20
+#define ID_FILE_SAVE             4
+#define ID_FILE_SAVE_AS          5
+#define ID_FILE_CLOSE            6
+#define ID_FILE_PRINT            7
+#define ID_FILE_NEW_WINDOW       8 
+#define ID_FILE_EXIT            10 
 
-#define ID_EXPORT           100
+#define ID_EXPORT              100
 
-#define ID_EDIT_UNDO        200
-#define ID_EDIT_REDO        201
-#define ID_EDIT_CUT         202
-#define ID_EDIT_COPY        203
-#define ID_EDIT_PASTE       204
-#define ID_EDIT_DELETE      205
-#define ID_EDIT_SELECT_ALL  206
-#define ID_EDIT_PROPERTIES  207
+#define ID_EDIT_UNDO           200
+#define ID_EDIT_REDO           201
+#define ID_EDIT_CUT            202
+#define ID_EDIT_COPY           203
+#define ID_EDIT_PASTE          204
+#define ID_EDIT_DELETE         205
+#define ID_EDIT_SELECT_ALL     206
+#define ID_EDIT_PROPERTIES     207
 
-#define ID_LAYOUT_PAGE      300
-#define ID_LAYOUT_GRID      301
+#define ID_VIEW_RULER          300
+#define ID_VIEW_GRID           301
 
-#define ID_ARRANGE_ALIGN     400
-#define ID_ARRANGE_FRONT     401
-#define ID_ARRANGE_BACK      402
-#define ID_ARRANGE_1_FORWARD 403
-#define ID_ARRANGE_1_BACK    404
-#define ID_ARRANGE_GROUP     405
-#define ID_ARRANGE_UNGROUP   406
+#define ID_LAYOUT_PAGE         400
+#define ID_LAYOUT_GRID         401
 
-#define ID_TRANSFORM_POSITION  500
-#define ID_TRANSFORM_DIMENSION 501
-#define ID_TRANSFORM_ROTATION  502
-#define ID_TRANSFORM_MIRROR    503
+#define ID_ARRANGE_ALIGN       500
+#define ID_ARRANGE_FRONT       501
+#define ID_ARRANGE_BACK        502
+#define ID_ARRANGE_1_FORWARD   503
+#define ID_ARRANGE_1_BACK      504
+#define ID_ARRANGE_GROUP       505
+#define ID_ARRANGE_UNGROUP     506
 
-#define ID_EXTRAS_OPTIONS    600
-#define ID_EXTRAS_CLIPART    601
+#define ID_TRANSFORM_POSITION  600
+#define ID_TRANSFORM_DIMENSION 601
+#define ID_TRANSFORM_ROTATION  602
+#define ID_TRANSFORM_MIRROR    603
 
-#define ID_HELP_HELP         800
-#define ID_HELP_ABOUT_APP    801
-#define ID_HELP_ABOUT_KDE    802
+#define ID_EXTRAS_OPTIONS      700
+#define ID_EXTRAS_CLIPART      701
+
+#define ID_HELP_HELP           800
+#define ID_HELP_ABOUT_APP      801
+#define ID_HELP_ABOUT_KDE      802
 
 class KIllustrator : public KTopLevelWidget, public MainView {
   Q_OBJECT
@@ -157,11 +160,12 @@ private:
   KStatusBar* statusbar;
   KMenuBar* menubar;
   
-  QPopupMenu *file, *edit, *layout, *effects, *arrangement, *extras, *help;
+  QGridLayout *gridLayout;
+
+  QPopupMenu *file, *edit, *view, *layout, *effects, 
+    *arrangement, *extras, *help;
   QPopupMenu *openRecent;
-  ToolPalette *tpalette;
   ToolGroup *tgroup;
-  //  ColorSelectionPalette *cpalette;
   ToolController *tcontroller;
   QwViewport *viewport;
   GDocument *document;

@@ -153,12 +153,12 @@ void KIllustrator::setupMainView () {
   QPixmap pixmap;
   
   QWidget *w = new QWidget (this);
-  QGridLayout *grid = new QGridLayout (w, 2, 2);
+  gridLayout = new QGridLayout (w, 2, 2);
   
   hRuler = new Ruler (Ruler::Horizontal, Ruler::Point, w);
   vRuler = new Ruler (Ruler::Vertical, Ruler::Point, w);
-  grid->addWidget (hRuler, 0, 1);
-  grid->addWidget (vRuler, 1, 0);
+  gridLayout->addWidget (hRuler, 0, 1);
+  gridLayout->addWidget (vRuler, 1, 0);
 
   viewport = new QwViewport (w);
 
@@ -183,9 +183,9 @@ void KIllustrator::setupMainView () {
   connect (canvas, SIGNAL(mousePositionChanged (int, int)),
 	   vRuler, SLOT(updatePointer(int, int)));
 
-  grid->addWidget (viewport, 1, 1);
-  grid->setRowStretch (1, 20);
-  grid->setColStretch (1, 20);
+  gridLayout->addWidget (viewport, 1, 1);
+  gridLayout->setRowStretch (1, 20);
+  gridLayout->setColStretch (1, 20);
 
   setView (w);
   
@@ -364,7 +364,7 @@ void KIllustrator::initMenu () {
   file = new QPopupMenu ();
   edit = new QPopupMenu ();
   layout = new QPopupMenu ();
-  //  effects = new QPopupMenu ();
+  view = new QPopupMenu ();
   arrangement = new QPopupMenu ();
   extras = new QPopupMenu ();
   help = new QPopupMenu ();
@@ -430,6 +430,12 @@ void KIllustrator::initMenu () {
   edit->insertItem (i18n ("Pr&operties"), ID_EDIT_PROPERTIES);
   connect (edit, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
+  view->insertItem (i18n ("Show Ruler"), ID_VIEW_RULER);
+  view->setItemChecked (ID_VIEW_RULER, true);
+  view->insertItem (i18n ("Show Grid"), ID_VIEW_GRID);
+  view->setItemChecked (ID_VIEW_GRID, false);
+  connect (view, SIGNAL (activated (int)), SLOT (menuCallback (int)));
+
   layout->insertItem (i18n ("&Page"), ID_LAYOUT_PAGE);
   layout->insertSeparator ();
   layout->insertItem (i18n ("&Grid"), ID_LAYOUT_GRID);
@@ -480,6 +486,7 @@ void KIllustrator::initMenu () {
 
   menubar->insertItem (i18n ("&File"), file);
   menubar->insertItem (i18n ("&Edit"), edit);
+  menubar->insertItem (i18n ("&View"), view);
   menubar->insertItem (i18n ("&Layout"), layout);
   menubar->insertItem (i18n ("&Arrange"), arrangement);
   menubar->insertItem (i18n ("Ex&tras"), extras);
@@ -574,6 +581,28 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_EDIT_PROPERTIES:
     PropertyEditor::edit (&cmdHistory, document);
+    break;
+  case ID_VIEW_RULER:
+    {
+      bool show_it = !view->isItemChecked (ID_VIEW_RULER);
+      if (show_it) {
+	hRuler->show ();
+	vRuler->show ();
+      }
+      else {
+	hRuler->hide ();
+	vRuler->hide ();
+      }
+      gridLayout->activate ();
+      view->setItemChecked (ID_VIEW_RULER, show_it);
+    }
+    break;
+  case ID_VIEW_GRID:
+    {
+      bool show_it = !view->isItemChecked (ID_VIEW_GRID);
+      canvas->showGrid (show_it);
+      view->setItemChecked (ID_VIEW_GRID, show_it);
+    }
     break;
   case ID_LAYOUT_PAGE:
     {
