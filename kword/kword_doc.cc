@@ -98,22 +98,17 @@ KWordDocument::KWordDocument(QObject* parent, const char* name, bool singleViewM
       ret_pix( BarIcon( "return" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
       autoFormat( this ), urlIntern(), pglChanged( TRUE )
 {
-    // Use CORBA mechanism for deleting views
     m_lstViews.setAutoDelete( FALSE );
     m_lstChildren.setAutoDelete( TRUE );
 
     setInstance( KWordFactory::global() );
 
-    m_bModified = FALSE;
     hasSelection = FALSE;
 
     rastX = rastY = 10;
 
-    // m_bEmpty = TRUE;
-    //    m_bEmpty = FALSE; // sorry, this leads to trouble at load
-    // change it back when setModified() is called at every keyboard
-    // input. Lotzi Boloni
-    setModified(TRUE);
+    setEmpty();
+    setModified(false);
 
     applyStyleTemplate = 0;
     applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
@@ -174,34 +169,33 @@ bool KWordDocument::initDoc()
 								"*.kwd", "KWord",
 								false );
 
+    bool ok = false;
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate(
 	"kword_template", KWordFactory::global(), _template, TRUE, FALSE, filter, "application/x-kword" );
     if ( ret == KoTemplateChooseDia::Template ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
 	resetURL();
-	return loadNativeFormat( fileName );
+	ok = loadNativeFormat( fileName );
     } else if ( ret == KoTemplateChooseDia::File ||
                 ret == KoTemplateChooseDia::TempFile ) {
 	QString fileName( _template );
         KURL::encode( fileName );
-	bool ok = openURL( KURL( fileName ) );
+	ok = openURL( KURL( fileName ) );
 	if ( ret == KoTemplateChooseDia::TempFile )
 	{
 	    resetURL();
 	    unlink( fileName.ascii() );
 	}
-	return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
 	resetURL();
-	return loadNativeFormat( fileName );
+	ok = loadNativeFormat( fileName );
     }
-    else
-	return FALSE;
 
-
-    return FALSE;
+    setModified( false );
+    setEmpty();
+    return ok;
 }
 
 void KWordDocument::initEmpty()
@@ -226,6 +220,8 @@ void KWordDocument::initEmpty()
     QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
     /*bool ok = */loadNativeFormat( fileName );
     resetURL();
+    setModified( false );
+    setEmpty();
 }
 
 
@@ -1828,6 +1824,7 @@ void KWordDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
 /*================================================================*/
 void KWordDocument::changeChildGeometry( KWordChild *_child, const QRect& _rect )
 {
+    setModified(TRUE);
     _child->setGeometry( _rect );
 
     emit sig_updateChildGeometry( _child );
@@ -2538,6 +2535,7 @@ void KWordDocument::updateAllStyles()
 void KWordDocument::insertPicture( QString _filename, KWPage *_paperWidget )
 {
     _paperWidget->insertPictureAsChar( _filename );
+    setModified(TRUE);
 }
 
 /*================================================================*/
@@ -2710,6 +2708,7 @@ void KWordDocument::deleteSelectedText( KWFormatContext *_fc )
 	}
 	_fc->setTextPos( tmpFC1.getTextPos() );
     }
+    setModified(TRUE);
 }
 
 /*================================================================*/
@@ -2865,6 +2864,7 @@ void KWordDocument::setFormat( KWFormat &_format, int flags )
 	}
 	tmpFC2.getParag()->setFormat( 0, tmpFC2.getTextPos(), _format, flags );
     }
+    setModified(TRUE);
 }
 
 /*================================================================*/
@@ -3089,6 +3089,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 	calcParag = calcParag->getPrev();
 
     recalcWholeText( calcParag, _fc->getFrameSet() - 1 );
+    setModified(TRUE);
 }
 
 /*================================================================*/
@@ -3144,6 +3145,7 @@ void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenA
 
     if ( hasHeader() || hasFooter() )
 	recalcFrames( FALSE, TRUE );
+    setModified(TRUE);
 }
 
 /*================================================================*/
@@ -3581,6 +3583,7 @@ void KWordDocument::addStyleTemplate( KWParagLayout *pl )
 void KWordDocument::setStyleChanged( QString _name )
 {
     changedStyles.append( _name );
+    setModified(TRUE);
 }
 
 /*================================================================*/
@@ -3793,6 +3796,7 @@ void KWordDocument::setFrameMargins( KWUnit l, KWUnit r, KWUnit t, KWUnit b )
     }
 
     updateTableHeaders( grpMgrs );
+    setModified(TRUE);
 }
 
 /*================================================================*/
@@ -3810,6 +3814,7 @@ void KWordDocument::setFrameCoords( unsigned int x, unsigned int y, unsigned int
 	}
     }
     updateAllSelections();
+    setModified(TRUE);
 }
 
 /*================================================================*/
@@ -3844,12 +3849,14 @@ void KWordDocument::saveParagInUndoBuffer( KWParag *parag, int frameset, KWForma
 void KWordDocument::undo()
 {
     history.undo();
+    setModified(TRUE);
 }
 
 /*================================================================*/
 void KWordDocument::redo()
 {
     history.redo();
+    setModified(TRUE);
 }
 
 /*================================================================*/

@@ -119,18 +119,7 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
-    virtual QCString mimeType() const
-    { return MIME_TYPE; }
-
-    virtual bool isModified() const
-    { return m_bModified; }
-
-    // C++
-    // no need for this: it is the same in koDocument!!!
-    /*
-    virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
-    virtual bool isEmpty() { return m_bEmpty; }
-    */
+    virtual QCString mimeType() const { return MIME_TYPE; }
 
     unsigned int viewCount() { return m_lstViews.count(); }
 
@@ -155,9 +144,9 @@ public:
     unsigned int getNumFrameSets()
     { return frames.count(); }
     void addFrameSet( KWFrameSet *f )
-    { frames.append(f); updateAllFrames(); /*updateAllViews(0L);*/ }
+    { frames.append(f); updateAllFrames(); setModified( true ); /*updateAllViews(0L);*/ }
     void delFrameSet( KWFrameSet *f )
-    { frames.remove( f ); }
+    { frames.remove( f ); setModified( true ); }
 
     KWParag *getFirstParag( unsigned int _num ) {
 	if ( frames.at( _num )->getFrameType() == FT_TEXT )
@@ -411,8 +400,6 @@ protected:
 
     QList<KWordView> m_lstViews;
     QList<KWordChild> m_lstChildren;
-
-    bool m_bModified;
 
     KoPageLayout pageLayout;
     KoColumns pageColumns;
