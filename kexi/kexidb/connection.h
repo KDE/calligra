@@ -377,18 +377,26 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \return true if query was successfully executed and first record has been found. */
 		bool querySingleRecord(const QString& sql, RowData &data);
 
-		/*! Executes \a sql query and stores first record's first field's string value 
-		 inside \a value. Therefore, for efficiency it's recommended that a query defined by \a sql
+		/*! Executes \a sql query and stores first record's field's (number \a column) string value 
+		 inside \a value. For efficiency it's recommended that a query defined by \a sql
 		 should have just one field (SELECT one_field FROM ....). 
-		 Adds a LIMIT clause to the query, \a sql should not include one already.
+		 Adds a LIMIT clause to the query, so \a sql should not include one already.
 		 \return true if query was successfully executed and first record has been found.
-		 */
-		bool querySingleString(const QString& sql, QString &value);
+		 \sa queryStringList() */
+		bool querySingleString(const QString& sql, QString &value, uint column = 0);
 
-		/*! Convenience function: executes \a sql query and stores first record's first field's number value 
-		 inside \a value. \sa querySingleString(). 
+		/*! Convenience function: executes \a sql query and stores first 
+		 record's field's (number \a column) value inside \a number. \sa querySingleString(). 
 		 Note: "LIMIT 1" is appended to \a sql statement */
-		bool querySingleNumber(const QString& sql, int &number);
+		bool querySingleNumber(const QString& sql, int &number, uint column = 0);
+
+		/*! Executes \a sql query and stores first record's first field's string value 
+		 inside \a list. The list is initially cleared.
+		 For efficiency it's recommended that a query defined by \a sql
+		 should have just one field (SELECT one_field FROM ....). 
+		 \return true if all values were fetched successfuly
+		 On errors, the list is not cleared, it may contain few retrieved values. */
+		bool queryStringList(const QString& sql, QStringList& list, uint column = 0);
 
 		/*! \return true if there is at least one record returned in \a sql query.
 		 Does not fetch any records. \a success will be set to false 
@@ -943,11 +951,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			return m_driver->escapeIdentifier(id, drvEscaping);
 		}
 		
-		
 		/*! Called by TableSchema -- signals destruction to Connection object
 		 To avoid having deleted table object on its list. */
 		void removeMe(TableSchema *ts);
-				
+
+		/*! @internal 
+		 \return true if the cursor \a cursor contains column \a column,
+		 else, sets appropriate error with a message and returns false. */
+		bool checkIfColumnExists(Cursor *cursor, uint column);
+
 		QGuardedPtr<ConnectionData> m_data;
 		QString m_name;
 		QString m_usedDatabase; //!< database name that is opened now

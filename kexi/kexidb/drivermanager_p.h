@@ -82,6 +82,8 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 		//! result names for KParts::ComponentFactory::ComponentLoadingError
 		QMap<int,QString> m_componentLoadingErrors;
 
+		QStringList possibleProblems;
+
 		bool lookupDriversNeeded : 1;
 
 	friend class DriverManager;

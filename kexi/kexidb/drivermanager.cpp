@@ -136,6 +136,10 @@ bool DriverManagerInternal::lookupDrivers()
 				" has version '%2' but required KexiDB driver version is '%3.%4'\n"
 				" -- skipping this driver!").arg(srv_name.lower()).arg(srv_ver_str)
 				.arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor()) << endl;
+			possibleProblems += QString("\"%1\" database driver has version \"%2\" "
+				"but required driver version is \"%3.%4\"")
+				.arg(srv_name.lower()).arg(srv_ver_str)
+				.arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor());
 			delete ptr;
 			continue;
 		}
@@ -402,6 +406,20 @@ void DriverManager::drv_clearServerResult()
 	d_int->m_serverErrMsg=QString::null;
 	d_int->m_serverResultNum=0;
 	d_int->m_serverResultName=QString::null;
+}
+
+QString DriverManager::possibleProblemsInfoMsg() const
+{
+	QString str;
+	str.reserve(1024);
+	str = "<ul>";
+	for (QStringList::ConstIterator it = d_int->possibleProblems.constBegin();
+		it!=d_int->possibleProblems.constEnd(); ++it)
+	{
+		str += (QString::fromLatin1("<li>") + *it + QString::fromLatin1("</li>"));
+	}
+	str += "</ul>";
+	return str;
 }
 
 #include "drivermanager_p.moc"

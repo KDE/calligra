@@ -84,6 +84,12 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 		virtual int serverResult();
 		virtual QString serverResultName();
 
+		/*! HTML information about possible problems encountered.
+		 It's displayed in 'details' section, if an error encountered. 
+		 Currently it contains a list of incompatible db drivers. 
+		 Used in KexiStartupHandler::detectDriverForFile(). */
+		QString possibleProblemsInfoMsg() const;
+
 	protected:
 		virtual void drv_clearServerResult();
 

@@ -553,9 +553,17 @@ QString KexiStartupHandler::detectDriverForFile(
 	}
 	ret = detectedDriverName;
 	if (ret.isEmpty()) {
+		QString possibleProblemsInfoMsg( Kexi::driverManager().possibleProblemsInfoMsg() );
+		if (!possibleProblemsInfoMsg.isEmpty()) {
+			possibleProblemsInfoMsg.prepend(QString::fromLatin1("<p>")+i18n("Possible problems:"));
+			possibleProblemsInfoMsg += QString::fromLatin1("</p>");
+		}
 		KMessageBox::detailedSorry(parent, 
 			i18n( "The file \"%1\" is not recognized as being supported by Kexi.").arg(dbFileName),
-			i18n("Database driver for this file type not found.\nDetected MIME type: %1").arg(mimename));
+			QString::fromLatin1("<p>")
+			+i18n("Database driver for this file type not found.\nDetected MIME type: %1").arg(mimename)
+			+QString::fromLatin1("</p>")
+			+possibleProblemsInfoMsg);
 		return QString::null;
 	}
 	return ret;

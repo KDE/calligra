@@ -1884,6 +1884,7 @@ bool Connection::querySingleRecord(const QString& sql, RowData &data)
 	}
 	if (!cursor->moveFirst() || cursor->eof()) {
 		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
+		setError(cursor);
 		deleteCursor(cursor);
 		return false;
 	}
@@ -1891,8 +1892,16 @@ bool Connection::querySingleRecord(const QString& sql, RowData &data)
 	return deleteCursor(cursor);
 }
 
-//! Query database for a single record, storing one string field
-bool Connection::querySingleString(const QString& sql, QString &value)
+bool Connection::checkIfColumnExists(Cursor *cursor, uint column)
+{
+	if (column >= cursor->fieldCount()) {
+		setError(ERR_CURSOR_RECORD_FETCHING, i18n("Column %1 does not exist for the query.").arg(column));
+		return false;
+	}
+	return true;
+}
+
+bool Connection::querySingleString(const QString& sql, QString &value, uint column)
 {
 	KexiDB::Cursor *cursor;
 	m_sql = sql + " LIMIT 1"; // is this safe?;
@@ -1905,19 +1914,53 @@ bool Connection::querySingleString(const QString& sql, QString &value)
 		deleteCursor(cursor);
 		return false;
 	}
-	value = cursor->value(0).toString();
+	if (!checkIfColumnExists(cursor, column)) {
+		deleteCursor(cursor);
+		return false;
+	}
+	value = cursor->value(column).toString();
 	return deleteCursor(cursor);
 }
 
-//! Query database for a single integer
-bool Connection::querySingleNumber(const QString& sql, int &number)
+bool Connection::querySingleNumber(const QString& sql, int &number, uint column)
 {
 	static QString str;
 	static bool ok;
-	if (!querySingleString(sql, str))
+	if (!querySingleString(sql, str, column))
 		return false;
 	number = str.toInt(&ok);
 	return ok;
+}
+
+bool Connection::queryStringList(const QString& sql, QStringList& list, uint column)
+{
+	KexiDB::Cursor *cursor;
+	clearError();
+	m_sql = sql;
+	if (!(cursor = executeQuery( m_sql ))) {
+		KexiDBDbg << "Connection::queryStringList(): !executeQuery()" << endl;
+		return false;
+	}
+	if (!checkIfColumnExists(cursor, column)) {
+		deleteCursor(cursor);
+		return false;
+	}
+	cursor->moveFirst();
+	if (cursor->error()) {
+		setError(cursor);
+		deleteCursor(cursor);
+		return false;
+	}
+	list.clear();
+	while (!cursor->eof()) {
+		list.append( cursor->value(column).toString() );
+		if (!cursor->moveNext() && cursor->error()) {
+			setError(cursor);
+			deleteCursor(cursor);
+			return false;
+		}
+	}
+	return deleteCursor(cursor);
 }
 
 bool Connection::resultExists(const QString& sql, bool &success)
@@ -1939,6 +1982,7 @@ bool Connection::resultExists(const QString& sql, bool &success)
 	success = true;
 	if (!cursor->moveFirst() || cursor->eof()) {
 		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
+		setError(cursor);
 		deleteCursor(cursor);
 		return false;
 	}
