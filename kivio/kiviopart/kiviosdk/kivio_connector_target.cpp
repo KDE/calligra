@@ -28,7 +28,8 @@
 KivioConnectorTarget::KivioConnectorTarget()
     : m_pConnectors(NULL)
 {
-    m_position.set( 0.0f, 0.0f );
+    m_position.setX( 0.0f );
+    m_position.setY( 0.0f );
     m_pConnectors = new QPtrList<KivioConnectorPoint>;
     m_pConnectors->setAutoDelete(false);
     m_id = -1;
@@ -36,7 +37,8 @@ KivioConnectorTarget::KivioConnectorTarget()
 
 KivioConnectorTarget::KivioConnectorTarget(float x, float y)
 {
-    m_position.set( x, y );
+    m_position.setX( x );
+    m_position.setY( y );
     m_pConnectors = new QPtrList<KivioConnectorPoint>;
     m_pConnectors->setAutoDelete(false);
 
@@ -200,7 +202,8 @@ void KivioConnectorTarget::setY( float _y )
 
 void KivioConnectorTarget::setPosition( float _x, float _y )
 {
-    m_position.set( _x, _y );
+    m_position.setX( _x );
+    m_position.setY( _y );
 
     KivioConnectorPoint *pPoint = m_pConnectors->first();
     while( pPoint )

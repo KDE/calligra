@@ -20,7 +20,6 @@
 #define KIVIO_PLUGIN_STENCIL_H
 
 class KivioIntraStencilData;
-class KivioPoint;
 class KivioStencil;
 class KivioStencilFactory;
 class QDomDocument;
@@ -37,7 +36,7 @@ class QDomDocument;
 class KivioPluginStencilSpawner : public KivioStencilSpawner
 {
 protected:
-	KivioStencilFactory *fac;
+    KivioStencilFactory *fac;
     void *m_handle;
     QPixmap *m_pIcon;
     QString m_filename;

@@ -22,18 +22,17 @@
 #include <qdom.h>
 #include <qptrlist.h>
 
-#include "kivio_point.h"
+#include <koPoint.h>
 
 class KivioIntraStencilData;
 class KivioPainter;
 class KivioStencil;
 class KivioConnectorPoint;
 
-
 class KivioConnectorTarget
 {
 protected:
-    KivioPoint m_position;
+    KoPoint m_position;
     int m_id;
     QPtrList<KivioConnectorPoint> *m_pConnectors;
 

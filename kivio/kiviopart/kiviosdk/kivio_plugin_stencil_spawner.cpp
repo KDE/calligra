@@ -23,7 +23,6 @@
 #include <kparts/componentfactory.h>
 #include "kiviostencilfactory.h"
 #include "kivio_intra_stencil_data.h"
-#include "kivio_point.h"
 #include "kivio_common.h"
 #include "kivio_stencil.h"
 

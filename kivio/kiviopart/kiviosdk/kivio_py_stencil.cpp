@@ -14,6 +14,7 @@ KivioView *view;
 #include "kivio_intra_stencil_data.h"
 #include "kivio_line_style.h"
 #include "kivio_painter.h"
+#include "kivio_point.h"
 #include "kivio_screen_painter.h"
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
