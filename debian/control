@@ -1,5 +1,5 @@
 Source: koffice
-Build-Depends: autoconf, automake, libtool, debhelper, gettext, kdelibs3-dev (>= 4:2.1-final-0)
+Build-Depends: autoconf, automake, libtool, debhelper, gettext, kdelibs-dev (>= 4:2.1-final-0)
 Section: x11
 Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
@@ -8,7 +8,7 @@ Standards-Version: 3.5.0
 Package: koffice-dev
 Architecture: any
 Section: devel
-Depends: koffice-libs (>= ${Source-Version}), libc6-dev, kdelibs3-dev
+Depends: koffice-libs (>= ${Source-Version}), kdelibs-dev
 Description: Core libraries for KOffice (Development files)
  Core libraries for Koffice (Development files)
 
