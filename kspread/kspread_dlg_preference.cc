@@ -87,6 +87,7 @@ void KSpreadpreference::slotDefault()
   _miscParameter->slotDefault();
   _colorParameter->slotDefault();
   _layoutPage->slotDefault();
+  _spellPage->slotDefault();
 }
 
 preference::preference( KSpreadView* _view,QWidget *parent , char *name )
@@ -875,4 +876,15 @@ void configureSpellPage::apply()
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
   m_pView->doc()->setKSpellConfig(*_spellConfig);
 }
+
+void configureSpellPage::slotDefault()
+{
+    _spellConfig->setNoRootAffix( 0);
+    _spellConfig->setRunTogether(0);
+    _spellConfig->setDictionary( "");
+    _spellConfig->setDictFromList( FALSE);
+    _spellConfig->setEncoding (KS_E_ASCII);
+    _spellConfig->setClient (KS_CLIENT_ISPELL);
+}
+
 #include "kspread_dlg_preference.moc"
