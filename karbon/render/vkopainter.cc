@@ -825,27 +825,27 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 void
 VKoPainter::drawNode( const KoPoint& p, int width )
 {
-	newPath();
-	moveTo( KoPoint( p.x() - width / m_zoomFactor, p.y() - width / m_zoomFactor ) );
-	lineTo( KoPoint( p.x() + width / m_zoomFactor, p.y() - width / m_zoomFactor ) );
-	lineTo( KoPoint( p.x() + width / m_zoomFactor, p.y() + width / m_zoomFactor ) );
-	lineTo( KoPoint( p.x() - width / m_zoomFactor, p.y() + width / m_zoomFactor ) );
-	lineTo( KoPoint( p.x() - width / m_zoomFactor, p.y() - width / m_zoomFactor ) );
+	QPoint _p = m_matrix.map( QPoint( p.x() * m_zoomFactor, p.y() * m_zoomFactor ) );
+	int x1 = _p.x() - width * m_zoomFactor;
+	int x2 = _p.x() + width * m_zoomFactor;
+	int y1 = _p.y() - width * m_zoomFactor;
+	int y2 = _p.y() + width * m_zoomFactor;
 
-	if( m_fill )
+	clampToViewport( x1, y1, x2, y2 );
+
+	int baseindex = 4 * x1 + ( m_width * 4 * y1 );
+
+	QColor color = m_fill->color();
+	for( int i = 0; i < y2 - y1; i++ )
 	{
-		VGradient grad;
-		grad.clearStops();
-		grad.addStop( m_fill->color(), 0.0, 0.5 );
-		grad.addStop( m_fill->color(), 1.0, 0.5 );
-		m_fill->gradient() = grad;
-		m_fill->setType( VFill::grad );
+		for( int j = 0; j < x2 - x1; j++ )
+		{
+			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) ] = color.red();
+			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 1 ] = color.green();
+			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 2 ] = color.blue();
+			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 3 ] = 0xFF;
+		}
 	}
-
-	m_aa = false;
-	fillPath();
-	m_aa = true;
-	newPath();
 }
 
 void
