@@ -1,6 +1,6 @@
-noinst_LTLIBRARIES  = support.la
+noinst_LTLIBRARIES  = libsupport.la
 
-support_la_SOURCES = \
+libsupport_la_SOURCES = \
 	art_affine.c \
 	art_alphagamma.c \
 	art_bpath.c \
