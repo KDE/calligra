@@ -25,7 +25,7 @@
 #include <unistd.h>
 #endif
 
-#include <qstack.h>
+#include <qptrstack.h>
 #include <qmap.h>
 #include <qxml.h>
 #include <qdom.h>
@@ -157,7 +157,7 @@ public:
     int         textPosition; //Normal (0), subscript(1), superscript (2)
 };
 
-class StackItemStack : public QStack<StackItem>
+class StackItemStack : public QPtrStack<StackItem>
 {
 public:
 	StackItemStack(void) { }

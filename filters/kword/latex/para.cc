@@ -30,7 +30,7 @@
 #include "anchor.h"
 
 /* static data */
-QStack<EType> Para::_historicList;
+QPtrStack<EType> Para::_historicList;
 
 /*******************************************/
 /* Constructor                             */

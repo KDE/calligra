@@ -20,7 +20,7 @@
 */
 
 #include <kdebug.h>
-#include <qstack.h>
+#include <qptrstack.h>
 #include <qdom.h>
 
 #include "ImportTags.h"
@@ -40,7 +40,7 @@ void TreatCSS2Styles(QString strProps, CSS2StylesMap &css2StylesMap)
 {
     if (strProps.isEmpty())
         return;
-    
+
     QString name,value;
     bool notFinished=true;
     int position=0;

@@ -21,7 +21,7 @@
 
 #include <stdlib.h>		/* for atoi function */
 #include <kdebug.h>		/* for kdDebug() stream */
-#include <qstack.h>		/* for getFormula() */
+#include <qptrstack.h>		/* for getFormula() */
 #include <qdom.h>
 #include <kformulamimesource.h>
 #include "formula.h"
@@ -49,7 +49,7 @@ void Formula::analyse(const QDomNode balise)
 {
 
 	/* MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE */
-	
+
 	/* Parameters Analyse */
 	Element::analyse(balise);
 
@@ -67,7 +67,7 @@ void Formula::analyse(const QDomNode balise)
 			getFormula(getChild(getChild(balise, "FORMULA"), "FORMULA"), 0);
 			kdDebug() << _formula << endl;
 		}
-		
+
 	}
 	kdDebug() << "END OF A FRAME" << endl;
 }
@@ -149,7 +149,7 @@ void Formula::generate(QTextStream &out)
 	kdDebug() << "FORMULA GENERATION" << endl;
 	QDomDocument *doc = new QDomDocument();
 	doc->setContent(_formula);
-	KFormula::KFormulaMimeSource *formula = 
+	KFormula::KFormulaMimeSource *formula =
 		new KFormula::KFormulaMimeSource(*doc);
 	kdDebug() << QString(formula->encodedData("text/x-tex")) << endl;
 	out << "$" << QString(formula->encodedData("text/x-tex")) << "$";

@@ -23,7 +23,7 @@
 #include <qtextcodec.h>
 #include <qtextstream.h>
 #include <qdom.h>
-#include <qstack.h>
+#include <qptrstack.h>
 
 #include <kdebug.h>
 
@@ -59,7 +59,7 @@ protected:
     void createMainFramesetElement(void);
 private:
     QString indent; // DEBUG
-    QStack<StackItem> structureStack;
+    QPtrStack<StackItem> structureStack;
     QDomDocument mainDocument;
     QDomElement mainFramesetElement;
     MapTag mapTag;

@@ -23,7 +23,7 @@
 #define __KWORD_PARA_H__
 
 #include <qstring.h>
-#include <qstack.h>		/* historic list */
+#include <qptrstack.h>		/* historic list */
 #include <qptrlist.h>		/* for list of format */
 
 /*#include "listeformat.h"*/	/* children class contents the zone (italic, footnote,
@@ -71,7 +71,7 @@ class Para: public Layout
 	/* USEFULL DATA */
 	Texte*                _element;		/* Father frame */
 	unsigned int          _currentPos;	/* Begining of the text to use the good format */
-	static QStack<EType>  _historicList;	/* opened lists but not closed */
+	static QPtrStack<EType>  _historicList;	/* opened lists but not closed */
 	int                   _nbLines;		/* Nb of lines in a cell (table) */
 
 	public:

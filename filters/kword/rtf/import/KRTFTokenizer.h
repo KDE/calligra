@@ -6,7 +6,7 @@
 #define __KRTFTOKENIZER_H__
 
 #include "KRTFToken.h"
-#include <qstack.h>
+#include <qptrstack.h>
 #include <qobject.h>
 
 class QFile;
@@ -21,7 +21,7 @@ public:
 
 private:
     QFile* _file;
-    QStack<KRTFToken> _pushbackstack;
+    QPtrStack<KRTFToken> _pushbackstack;
 };
 
 #endif
