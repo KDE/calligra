@@ -208,6 +208,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
       m_urlIntern()
 {
     dcop = 0;
+    m_pages = 1;
     m_tabStop = MM_TO_POINT( 15.0 );
     bgFrameSpellChecked = 0L;
     m_processingType = WP;
@@ -2104,7 +2105,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, boo
     QDomElement elem = topElem.firstChild().toElement();
     for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
     {
-        kdDebug() << "pasteFrames: elem=" << elem.tagName() << endl;
+        //kdDebug() << "pasteFrames: elem=" << elem.tagName() << endl;
         QDomElement frameElem;
         KWFrameSet * fs = 0L;
         if ( elem.tagName() == "FRAME" )
@@ -2944,13 +2945,22 @@ int KWDocument::appendPage()
 
 void KWDocument::afterAppendPage( int pageNum )
 {
+#ifdef DEBUG_PAGES
+    kdDebug(32002) << "KWDocument::afterAppendPage " << pageNum << endl;
+#endif
     emit newContentsSize();
 
     if ( isHeaderVisible() || isFooterVisible() || m_bHasEndNotes )
     {
+#ifdef DEBUG_PAGES
+        kdDebug(32002) << "KWDocument::afterAppendPage calling recalcFrames" << endl;
+#endif
         // Get headers and footers on the new page
         // This shouldn't delete the newly created page because it's still empty though
         recalcFrames( pageNum, -1, KWFrameLayout::DontRemovePages );
+#ifdef DEBUG_PAGES
+        kdDebug(32002) << "KWDocument::afterAppendPage recalcFrames done" << endl;
+#endif
     }
     // else: is there a call to updateAllFrames missing?
 
