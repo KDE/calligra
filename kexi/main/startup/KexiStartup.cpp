@@ -187,7 +187,7 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &
 	return atLeastOneFound;
 }
 
-tristate KexiStartupHandler::init(int argc, char **argv)
+tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 {
 	m_action = DoNothing;
 	d->showConnectionDetailsExecuted = false;
@@ -315,8 +315,9 @@ tristate KexiStartupHandler::init(int argc, char **argv)
 
 		{
 			delete d->passwordDialog;
-			d->passwordDialog = new KPasswordDialog(int(KPasswordDialog::Password), msg, 
-				false /*keep*/, KDialogBase::User1);
+			d->passwordDialog = new KPasswordDialog(
+				KPasswordDialog::Password, false/*keep*/, KDialogBase::User1 );
+			d->passwordDialog->setPrompt( msg );
 			connect( d->passwordDialog, SIGNAL(user1Clicked()), 
 				this, SLOT(slotShowConnectionDetails()) );
 			d->passwordDialog->setButtonText(KDialogBase::User1, i18n("&Details")+ " >>");
@@ -510,16 +511,22 @@ tristate KexiStartupHandler::init(int argc, char **argv)
 //		importantInfo(true);
 //<TEMP>
 		//some connection data
+		Kexi::connset().clear();
 		KexiDB::ConnectionData *conndata;
+		
+#ifdef KEXI_CUSTOM_HARDCODED_CONNDATA
+#include <custom_connectiondata.h>
+#endif
+
 		conndata = new KexiDB::ConnectionData();
-			conndata->connName = "My connection";
+			conndata->connName = "Local MySQL Connection";
 			conndata->driverName = "mysql";
 			conndata->hostName = "localhost";
 //			conndata->userName = "otheruser";
 //			conndata->port = 53121;
 		Kexi::connset().addConnectionData(conndata);
 		conndata = new KexiDB::ConnectionData();
-			conndata->connName = "Local pgsql connection";
+			conndata->connName = "Local Pgsql Connection";
 			conndata->driverName = "postgresql";
 			conndata->hostName = "localhost"; // -- default //"host.net";
 #if !KDE_IS_VERSION(3,1,9)
@@ -534,7 +541,7 @@ tristate KexiStartupHandler::init(int argc, char **argv)
 		projectData->setCaption("My Big Project");
 		projectData->setDescription("This is my first biger project started yesterday. Have fun!");
 		Kexi::recentProjects().addProjectData(projectData);
-	//</TEMP>
+//</TEMP>
 
 		if (!KexiStartupDialog::shouldBeShown())
 			return true;

@@ -841,7 +841,7 @@ tristate KexiMainWindowImpl::startup()
 		break;
 	case KexiStartupHandler::OpenProject:
 		if (!openProject(Kexi::startupHandler().projectData())) {
-			if (d->final)
+//			if (d->final)
 				return false;
 		}
 		break;
@@ -2792,7 +2792,7 @@ void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _new
 	const bool res = d->prj->renameObject(this, *item, newName);
 	enableMessages(true);
 	if (!res) {
-		showErrorMessage( i18n("Renaming object \"%1\" failed.").arg(newName), d->prj );
+		showErrorMessage( d->prj, i18n("Renaming object \"%1\" failed.").arg(newName) );
 		success = false;
 		return;
 	}

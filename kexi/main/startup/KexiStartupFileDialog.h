@@ -68,20 +68,23 @@ public:
 	 This is true by default. */
 	void setConfirmOverwrites(bool set) { m_confirmOverwrites = set; }
 
+	virtual bool eventFilter ( QObject * watched, QEvent * e );
+
 public slots:
 	virtual void show();
 
 	virtual void setFocus();
+
+	// Typing a file that doesn't exist closes the file dialog, we have to
+	// handle this case better here.
+	virtual void accept();
 
 signals:
 	//entered file name is accepted
 	void accepted();
 	void rejected();
 	
-protected:
-	// Typing a file that doesn't exist closes the file dialog, we have to
-	// handle this case better here.
-	virtual void accept();
+protected slots:
 	virtual void reject();
 
 private:

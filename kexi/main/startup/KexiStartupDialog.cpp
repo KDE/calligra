@@ -55,7 +55,10 @@
 //! we'll remove this later...
 #define NO_DB_TEMPLATES
 
-
+#ifdef KEXI_SHOW_UNIMPLEMENTED
+#define KEXI_STARTUP_SHOW_TEMPLATES
+#define KEXI_STARTUP_SHOW_RECENT
+#endif
 
 class TemplateItem : public KIconViewItem
 {

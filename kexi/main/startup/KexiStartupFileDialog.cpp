@@ -24,6 +24,7 @@
 #include <qlayout.h>
 #include <qobjectlist.h>
 #include <qpushbutton.h>
+#include <qapplication.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -50,19 +51,32 @@ KexiStartupFileDialog::KexiStartupFileDialog(
 	setSizeGripEnabled ( FALSE );
 
 	//dirty hack to customize filedialog view:
-	QObjectList *l = queryList( "QPushButton" );
-	QObjectListIt it( *l );
-	QObject *obj;
-	while ( (obj = it.current()) != 0 ) {
-		++it;
-		((QPushButton*)obj)->hide();
+	{
+		QObjectList *l = queryList( "QPushButton" );
+		QObjectListIt it( *l );
+		QObject *obj;
+		while ( (obj = it.current()) != 0 ) {
+			++it;
+			static_cast<QPushButton*>(obj)->hide();
+		}
+		delete l;
 	}
-	delete l;
+	{
+		QObjectList *l = queryList("QWidget");
+		QObjectListIt it( *l );
+		QObject *obj;
+		while ( (obj = it.current()) != 0 ) {
+			++it;
+			static_cast<QPushButton*>(obj)->installEventFilter(this);
+		}
+		delete l;
+	}	
 	
 #ifndef Q_WS_WIN
 	toggleSpeedbar(false);
 	setFocusProxy( locationEdit );//locationWidget() );
 #endif
+
 }
 	
 void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
@@ -126,7 +140,6 @@ QString KexiStartupFileDialog::currentFileName()
 {
 	setResult( QDialog::Accepted ); // selectedURL tests for it
 	
-//	KURL url = KFileDialog::selectedURL();
 #ifdef Q_WS_WIN
 //	QString path = selectedFile();
 	//js @todo
@@ -139,7 +152,14 @@ QString KexiStartupFileDialog::currentFileName()
 #else
 //	QString path = locationEdit->currentText().stripWhiteSpace(); //url.path().stripWhiteSpace(); that does not work, if the full path is not in the location edit !!!!!
 	QString path=KexiStartupFileDialogBase::selectedURL().path();
-	kdDebug() << "selectedURL() == " << KFileDialog::selectedURL().path() <<endl;
+	kdDebug() << "prev selectedURL() == " << path <<endl;
+	kdDebug() << "locationEdit == " << locationEdit->currentText().stripWhiteSpace() <<endl;
+	//make sure user-entered path is acceped:
+	setSelection( locationEdit->currentText().stripWhiteSpace() );
+	
+	path=KexiStartupFileDialogBase::selectedURL().path();
+	kdDebug() << "selectedURL() == " << path <<endl;
+	
 #endif
 	
 	if (!currentFilter().isEmpty()) {
@@ -198,6 +218,11 @@ bool KexiStartupFileDialog::checkFileName()
 
 void KexiStartupFileDialog::accept()
 {
+//	locationEdit->setFocus();
+//	QKeyEvent ev(QEvent::KeyPress, Qt::Key_Enter, '\n', 0);
+//	QApplication::sendEvent(locationEdit, &ev);
+//	QApplication::postEvent(locationEdit, &ev);
+	
 //	kdDebug() << "KexiStartupFileDialog::accept() m_lastUrl == " << m_lastUrl.path() << endl;
 //	if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
 	if (m_lastFileName==currentFileName()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
@@ -242,8 +267,9 @@ void KexiStartupFileDialog::setLocationText(const QString& fn)
 	setSelection(fn);
 #else
 	setSelection(fn);
-	locationEdit->setCurrentText(fn);
-	locationEdit->lineEdit()->setEdited( true );
+//	locationEdit->setCurrentText(fn);
+//	locationEdit->lineEdit()->setEdited( true );
+//	setSelection(fn);
 #endif
 }
 
@@ -255,6 +281,18 @@ void KexiStartupFileDialog::setFocus()
 	locationEdit->setFocus();
 #endif
 }
+
+bool KexiStartupFileDialog::eventFilter ( QObject * watched, QEvent * e )
+{
+	//filter-out ESC key
+	if (e->type()==QEvent::KeyPress && static_cast<QKeyEvent*>(e)->key()==Qt::Key_Escape
+	 && static_cast<QKeyEvent*>(e)->state()==Qt::NoButton) {
+		static_cast<QKeyEvent*>(e)->accept();
+		emit rejected();
+		return true;
+	}
+	return KexiStartupFileDialogBase::eventFilter(watched,e);
+} 
 
 #include "KexiStartupFileDialog.moc"
 
