@@ -1449,8 +1449,11 @@ KexiMainWindowImpl::slotConfigureToolbars()
 void
 KexiMainWindowImpl::slotProjectNew()
 {
-	if (d->prj)//js: TODO: start new instance!
+	if (d->prj) {
+		//js: TODO: start new instance!
+		KEXI_UNFINISHED(i18n("Create another project"));
 		return;
+	}
 	createBlankDatabase();
 }
 
