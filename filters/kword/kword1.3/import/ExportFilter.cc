@@ -375,7 +375,7 @@ void OOWriterWorker::writeStylesXml(void)
     if ( m_columns > 1 )
     {
         zipWriteData( "    <style:columns" );
-        zipWriteData( " fo:columns=\"" );
+        zipWriteData( " fo:column-count=\"" );
         zipWriteData( QString::number( m_columns ) );
         zipWriteData( "\" fo:column-gap=\"" );
         zipWriteData( QString::number( m_columnspacing ) );
@@ -383,10 +383,10 @@ void OOWriterWorker::writeStylesXml(void)
 
         for (int i=0; i < m_columns; ++i)
         {
-            zipWriteData( "     <style:column style:rel-width=\"1\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\"/>" );
+            zipWriteData( "     <style:column style:rel-width=\"1*\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\"/>\n" );
         }
 
-        zipWriteData( "    </style:columns>" );
+        zipWriteData( "    </style:columns>\n" );
     }
 
     zipWriteData("   </style:properties>\n");
