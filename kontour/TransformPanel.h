@@ -24,25 +24,42 @@
 #define __TransformPanel_h__
 
 #include <qdockwindow.h>
+#include <qpushbutton.h>
 
+class QWMatrix;
 class QTabWidget;
+class QGroupBox;
+class KIntNumInput;
+class GPage;
+class Handle;
+class TransformationCmd;
 class TransformPanel : public QDockWindow
 {
   Q_OBJECT
 public:
   TransformPanel(QWidget *parent = 0L, const char *name = 0L);
 
-/*public slots:
-  void slotStyleChanged(const GStyle &);
+public slots:
+  void setContext(const QWMatrix &, GPage *);
+
+private slots:
+  void slotTranslateChanged();
+  void slotRelativeToggled(bool);
 
 signals:
-  void colorChanged(const KoColor &);
-  void changePaintColor(const KoColor &);
-  void changeFilled(bool);
-  void changeBrushStyle(Qt::BrushStyle);*/
+  void changeTransform(TransformationCmd *);
 
 private:
-  QTabWidget *m_tab;
+  QTabWidget   *m_tab;
+  KIntNumInput *mHoriz;
+  KIntNumInput *mVert;
+  QGroupBox    *mTranslate;
+  QGroupBox    *mRotate;
+  KIntNumInput *mAngle;
+  GPage        *mPage;
+  Handle       *mHandle; // not strictly necessary, so convenience
+  bool         mTRelative : 1;
+  bool         mRRelative : 1;
 };
 
 #endif

@@ -59,6 +59,7 @@ class LayerPanel;
 class PaintPanel;
 class OutlinePanel;
 class TransformPanel;
+class TransformationCmd;
 class KoColor;
 class GStyle;
 class KontourView : public KoView
@@ -119,6 +120,7 @@ private slots:
   void changeBrushStyle(Qt::BrushStyle);
   void changeJoinStyle(Qt::PenJoinStyle);
   void changeCapStyle(Qt::PenCapStyle);
+  void changeTransform(TransformationCmd *);
   void changeSelection();
 
   void slotZoomFactorChanged();

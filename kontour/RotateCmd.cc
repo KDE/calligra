@@ -28,6 +28,8 @@
 #include <klocale.h>
 
 #include "GObject.h"
+#include "GDocument.h"
+#include "GPage.h"
 
 RotateCmd::RotateCmd(GDocument *aGDoc, const KoPoint &center, double a):
 TransformationCmd(aGDoc, i18n("Rotate"))
@@ -49,4 +51,5 @@ void RotateCmd::execute()
     objects[i]->transform(m2);
     objects[i]->transform(m3, true);
   }
+  document()->activePage()->updateSelection();
 }

@@ -368,6 +368,7 @@ void KontourView::setupPanels()
 
   /* Transform properties panel */
   mTransformPanel = new TransformPanel();
+  connect(mTransformPanel, SIGNAL(changeTransform(TransformationCmd *)), this, SLOT(changeTransform(TransformationCmd *)));
   mRightDock->moveDockWindow(mTransformPanel);
 }
 
@@ -640,6 +641,23 @@ void KontourView::changeJoinStyle(Qt::PenJoinStyle style)
   }
 }
 
+void KontourView::changeTransform(TransformationCmd *command)
+{
+  if(activeDocument() && activeDocument()->activePage() &&
+     !activeDocument()->activePage()->selectionIsEmpty() && command)
+  {
+    /*QPtrListIterator<GObject> it(activeDocument()->activePage()->getSelection());
+	GObject *obj;
+	while(obj = it.current())
+	{
+	  obj->transform(mat, true); 
+	  ++it;
+	}
+	activeDocument()->activePage()->updateSelection();*/
+	mDoc->history()->addCommand(command);
+  }
+}
+
 void KontourView::changeCapStyle(Qt::PenCapStyle style)
 {
   if(activeDocument() && activeDocument()->activePage() &&
@@ -652,7 +670,8 @@ void KontourView::changeCapStyle(Qt::PenCapStyle style)
 void KontourView::changeSelection()
 {
   GPage *page = activeDocument()->activePage();
-  if(page && page->selectionIsEmpty())
+  if(!page) return;
+  if(page->selectionIsEmpty())
   {
     m_copy->setEnabled(false);
     m_cut->setEnabled(false);
@@ -677,6 +696,7 @@ void KontourView::changeSelection()
     m_duplicate->setEnabled(true);
 
 	emit changedStyle(page->getSelection().first()->style());
+	mTransformPanel->setContext(page->getSelection().first()->matrix(), page);
   }
   if(page->objectCount() == page->selectionCount())
     m_selectAll->setEnabled(false);
