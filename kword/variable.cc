@@ -509,31 +509,21 @@ void KWFieldVariable::recalc()
                 else if ( m_subtype == VST_COMPANYNAME )
                     m_value = authorPage->company();
             }
-
-#if 0
-            KConfig config( "kofficerc", true );
-            if( config.hasGroup( "Author" ))
-            {
-                config.setGroup( "Author" );
-                if ( m_subtype == VST_AUTHORNAME )
-                    m_value = config.readEntry("full-name");
-                else if ( m_subtype == VST_EMAIL )
-                    m_value = config.readEntry("email");
-                else if ( m_subtype == VST_COMPANYNAME )
-                    m_value = config.readEntry("company");
-            }
+        }
+        case VST_TITLE:
+        case VST_ABSTRACT:
+        {
+            KoDocumentInfo * info = m_doc->documentInfo();
+            KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+            if ( !aboutPage )
+                kdWarning() << "'About' page not found in documentInfo !" << endl;
             else
             {
-                KConfig config2( "emaildefaults", true );
-                config2.setGroup( "Defaults" );
-                QString group = config2.readEntry("Profile","Default");
-                config2.setGroup(QString("PROFILE_%1").arg(group));
-                if ( m_subtype == VST_AUTHORNAME )
-                    m_value = config.readEntry("FullName");
-                else if ( m_subtype == VST_EMAIL )
-                    m_value = config.readEntry("EmailAddress");
+                if ( m_subtype == VST_TITLE )
+                    m_value = aboutPage->title();
+                else
+                    m_value = aboutPage->abstract();
             }
-#endif
         }
     }
 
@@ -550,5 +540,12 @@ QStringList KWFieldVariable::actionTexts()
     lst << i18n( "Author Name" ); // is "Name" necessary ?
     lst << i18n( "Email" );
     lst << i18n( "Company Name" ); // is "Name" necessary ?
+    lst << QString::null; //5
+    lst << QString::null; //6
+    lst << QString::null; //7
+    lst << QString::null; //8
+    lst << QString::null; //9
+    lst << i18n( "Document Title" );
+    lst << i18n( "Document Abstract" );
     return lst;
 }

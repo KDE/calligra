@@ -723,6 +723,9 @@ don't put a </?xml...> at the end of the file!).
                    2... Author (as saved in documentinfo.xml)
                    3... Email (as saved in documentinfo.xml)
                    4... Company Name (as saved in documentinfo.xml)
+                   [room for more 'author' page info fields]
+                   10.. Document Title (as saved in documentinfo.xml)
+                   11.. Document Abstract (as saved in documentinfo.xml)
 
         value... the value of the field (text)
 -->

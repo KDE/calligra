@@ -299,10 +299,12 @@ class KWFieldVariable : public KWVariable
 public:
     KWFieldVariable( KWTextFrameSet *fs, int subtype, KWVariableFormat *varFormat );
 
-    // Always add new types at the _end_ of this list.
+    // Do not change existing values
     enum FieldSubType { VST_NONE = -1,
                         VST_FILENAME = 0, VST_DIRECTORYNAME = 1,
-                        VST_AUTHORNAME = 2, VST_EMAIL = 3, VST_COMPANYNAME = 4 };
+                        VST_AUTHORNAME = 2, VST_EMAIL = 3, VST_COMPANYNAME = 4,
+                        // room for more 'author' page info fields if asked for
+                        VST_TITLE = 10, VST_ABSTRACT = 11 };
 
     virtual VariableType type() const
     { return VT_FIELD; }

@@ -371,12 +371,12 @@ void KWView::setupActions()
     actionInsertVariable = new KActionMenu( i18n( "&Variable" ),
                                             actionCollection(), "insert_variable" );
     // The last argument is only needed if a submenu is to be created
+    addVariableActions( VT_FIELD, KWFieldVariable::actionTexts(), actionInsertVariable, i18n("&Property") );
     addVariableActions( VT_DATE, KWDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
     addVariableActions( VT_TIME, KWTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
     addVariableActions( VT_PGNUM, KWPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
     addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
     addVariableActions( VT_SERIALLETTER, KWSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
-    addVariableActions( VT_FIELD, KWFieldVariable::actionTexts(), actionInsertVariable, i18n("&Property") );
 
     // ------------------------- Format menu
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
@@ -559,7 +559,7 @@ void KWView::addVariableActions( int type, const QStringList & texts,
     QStringList::ConstIterator it = texts.begin();
     for ( int i = 0; it != texts.end() ; ++it, ++i )
     {
-        if ( !(*it).isEmpty() ) // in case of removed subtypes
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
         {
             VariableDef v;
             v.type = type;
