@@ -1647,7 +1647,7 @@ KCommand *KoTextObject::setParagLayoutFormatCommand( KoParagLayout *newLayout,in
     KoTextDocument *textdoc = textDocument();
     textdoc->selectAll( KoTextDocument::Temp );
     QTextCursor *cursor = new QTextCursor( textDocument() );
-    KCommand* cmd = setParagLayoutFormatCommand( cursor, KoTextDocument::Standard, newLayout, flags, marginIndex );
+    KCommand* cmd = setParagLayoutFormatCommand( cursor, KoTextDocument::Temp, newLayout, flags, marginIndex );
     textdoc->removeSelection( KoTextDocument::Temp );
     delete cursor;
     return cmd;
