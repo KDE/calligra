@@ -2037,51 +2037,71 @@ int KPrPage::getPenBrushFlags( QPtrList<KPObject>list ) const
         if(it.current()->isSelected())
         {
             switch ( it.current()->getType() ) {
-                case OT_LINE: case OT_FREEHAND: case OT_POLYLINE:
-                case OT_QUADRICBEZIERCURVE: case OT_CUBICBEZIERCURVE:
-                    flags = flags | StyleDia::SdPen | StyleDia::SdOther;
-                    flags = flags | StyleDia::SdEndBeginLine;
-                    break;
-                case OT_PIE:
-                    flags=flags | StyleDia::SdPen | StyleDia::SdPie;
-                    if((static_cast<KPPieObject*>(it.current())->getPieType())!=PT_ARC)
-                        flags=flags |StyleDia::SdBrush;
-                    break;
-                case OT_RECT:
-                    flags = flags | StyleDia::SdPen | StyleDia::SdRectangle;
-                    flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-                    break;
-                case OT_POLYGON:
-                    flags = flags | StyleDia::SdPen | StyleDia::SdPolygon;
-                    flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-                    break;
-                case OT_PART:  case OT_ELLIPSE:
-                case OT_TEXT: case OT_CLIPART:
-                    flags = flags | StyleDia::SdPen | StyleDia::SdOther;
-                    flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-                    break;
-                case OT_PICTURE:
-                    flags = flags | StyleDia::SdPen | StyleDia::SdPicture;
-                    break;
-                case OT_AUTOFORM:
-                {
-                    flags = flags | StyleDia::SdPen | StyleDia::SdOther;
-                    flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-                    flags = flags | StyleDia::SdEndBeginLine;
-                }
+            case OT_LINE:
+                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
+                flags = flags | StyleDia::SdEndBeginLine;
                 break;
-                case OT_GROUP:
-                {
-                    KPGroupObject *obj=dynamic_cast<KPGroupObject*>( it.current() );
-                    if(obj)
-                    {
-                        obj->selectAllObj();
-                        flags = flags | getPenBrushFlags( obj->objectList() );
-                        obj->deSelectAllObj();
-                    }
-                }
+            case OT_FREEHAND:
+                if(!static_cast<KPFreehandObject*>(it.current())->isClosed())
+                    flags = flags | StyleDia::SdEndBeginLine;
+                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
                 break;
-                default: break;
+            case OT_POLYLINE:
+                if(!static_cast<KPPolylineObject*>(it.current())->isClosed())
+                    flags = flags | StyleDia::SdEndBeginLine;
+                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
+
+                break;
+            case OT_QUADRICBEZIERCURVE:
+                if(!static_cast<KPQuadricBezierCurveObject*>(it.current())->isClosed())
+                    flags = flags | StyleDia::SdEndBeginLine;
+                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
+                break;
+            case OT_CUBICBEZIERCURVE:
+                if(!static_cast<KPCubicBezierCurveObject*>(it.current())->isClosed())
+                    flags = flags | StyleDia::SdEndBeginLine;
+                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
+                break;
+            case OT_PIE:
+                flags=flags | StyleDia::SdPen | StyleDia::SdPie;
+                if((static_cast<KPPieObject*>(it.current())->getPieType())!=PT_ARC)
+                    flags=flags |StyleDia::SdBrush;
+                break;
+            case OT_RECT:
+                flags = flags | StyleDia::SdPen | StyleDia::SdRectangle;
+                flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
+                break;
+            case OT_POLYGON:
+                flags = flags | StyleDia::SdPen | StyleDia::SdPolygon;
+                flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
+                break;
+            case OT_PART:  case OT_ELLIPSE:
+            case OT_TEXT: case OT_CLIPART:
+                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
+                flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
+                break;
+            case OT_PICTURE:
+                flags = flags | StyleDia::SdPen | StyleDia::SdPicture;
+                break;
+            case OT_AUTOFORM:
+            {
+                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
+                flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
+                flags = flags | StyleDia::SdEndBeginLine;
+            }
+            break;
+            case OT_GROUP:
+            {
+                KPGroupObject *obj=dynamic_cast<KPGroupObject*>( it.current() );
+                if(obj)
+                {
+                    obj->selectAllObj();
+                    flags = flags | getPenBrushFlags( obj->objectList() );
+                    obj->deSelectAllObj();
+                }
+            }
+            break;
+            default: break;
             }
         }
     }
