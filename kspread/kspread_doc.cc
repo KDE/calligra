@@ -830,16 +830,9 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
   kdDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 
   setModified( FALSE );
-  updateAreaNameIntoCombobox();
   return true;
 }
 
-void KSpreadDoc::updateAreaNameIntoCombobox()
-{
-    QValueList<Reference>::Iterator it2;
-    for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
-        emit sig_addAreaName( ( *it2 ).ref_name );
-}
 
 void KSpreadDoc::registerPlugin( KSpreadPlugin * plugin )
 {

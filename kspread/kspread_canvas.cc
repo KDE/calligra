@@ -51,6 +51,11 @@ KSpreadComboboxLocationEditWidget::KSpreadComboboxLocationEditWidget( QWidget * 
     m_locationWidget = new KSpreadLocationEditWidget( _parent, _view );
     setLineEdit( m_locationWidget );
     insertItem( "" );
+
+    QValueList<Reference>::Iterator it;
+    QValueList<Reference> area = _view->doc()->listArea();
+    for ( it = area.begin(); it != area.end(); ++it )
+        slotAddAreaName( (*it).ref_name);
 }
 
 void KSpreadComboboxLocationEditWidget::slotAddAreaName( const QString &_name)

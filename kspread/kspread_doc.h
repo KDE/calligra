@@ -542,7 +542,6 @@ public:
   void addAreaName(const QRect &_rect,const QString & name,const QString & tableName);
   const QValueList<Reference>  & listArea();
   void removeArea( const QString &name);
-  void updateAreaNameIntoCombobox();
   KCompletion & completion();
   void addStringCompletion(const QString & stringCompletion);
 
