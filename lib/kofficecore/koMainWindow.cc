@@ -84,6 +84,7 @@ public:
                  bool modal)
         : KFileDialog( startDir, filter, parent, name, modal ) { }
 
+#if KDE_IS_VERSION(3,1,92)
     void setSpecialMimeFilter( QStringList& mimeFilter,
                                const QString& currentFormat, const int specialOutputFlag,
                                const QString& nativeFormat )
@@ -91,7 +92,6 @@ public:
         Q_ASSERT( !mimeFilter.isEmpty() );
         Q_ASSERT( mimeFilter[0] == nativeFormat );
 
-#if KDE_IS_VERSION(3,1,92)
         // Insert two entries with native mimetypes, for the special entries.
         QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
         mimeFilter.insert( mimeFilterIt /* before 1 -> after 0 */, 2, nativeFormat );
@@ -120,20 +120,44 @@ public:
             if (!compatString.isEmpty ())
                 filterWidget->changeItem (i18n ("%1 (%2 Compatible)").arg (mime->comment ()).arg (compatString), i);
         }
+    }
+
 #else
+
+    QString m_nativeFormat;
+
+    void setSpecialMimeFilter( QStringList& mimeFilter,
+                               const QString& currentFormat, const int specialOutputFlag,
+                               const QString& nativeFormat )
+    {
+        Q_ASSERT( !mimeFilter.isEmpty() );
+        Q_ASSERT( mimeFilter[0] == nativeFormat );
+
         // ### FIXME: KDE 3.1.x crashes on filterWidget->changeItem
         // ### FIXME:   So we must provide a hack to have back a minimum of functionality.
         // ### FIXME:   (Saving to KOffice 1.1 format and to directory are not supported.)
 
         // Insert two entries with native mimetypes, for the special entries.
         QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
-        mimeFilter.insert( mimeFilterIt /* before 1 -> after 0 */, 2, "application/x-zerosize" );
+        mimeFilter.insert( mimeFilterIt, "application/x-tgz" );
+        mimeFilter.insert( mimeFilterIt, "text/xml" );
         // Fill in filter combo
         // Note: if currentFormat doesn't exist in mimeFilter, filterWidget
         //       will default to the first item (native format)
         setMimeFilter( mimeFilter, currentFormat.isEmpty() ? nativeFormat : currentFormat );
-#endif
+        m_nativeFormat=nativeFormat;
     }
+
+    QString currentMimeFilter() const // Note: this is not virtual!!!
+    {
+        const QString result ( KFileDialog::currentMimeFilter() );
+        if ( (result == "application/x-tgz") || (result == "text/xml"))
+            return m_nativeFormat;
+        else
+            return result;
+    }
+
+#endif
 
     int specialEntrySelected()
     {
@@ -143,6 +167,7 @@ public:
             return i;
         return 0;
     }
+
 };
 
 class KoMainWindowPrivate
