@@ -3292,6 +3292,9 @@ void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenA
                 frm->setBBottom( frame->getBBottom() );
                 frm->setBackgroundColor( QBrush( frame->getBackgroundColor() ) );
                 frm->setPageNum( pages+1);
+                frm->setNewFrameBehaviour(frame->getNewFrameBehaviour());
+                frm->setFrameBehaviour(frame->getFrameBehaviour());
+                frm->setSheetSide(frame->getSheetSide());
                 frameSet->addFrame( frm );
             }
         }
