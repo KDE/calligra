@@ -752,9 +752,9 @@ public:
     void redo();
     void clear();
 
-    void lock() { m_bLocked = TRUE; }
-    void unlock() { m_bLocked = FALSE; }
-    bool isLocked() const { return m_bLocked; }
+    void lock();
+    void unlock();
+    bool isLocked() const ;
 
     bool hasUndoActions()const { return !m_stckUndo.isEmpty(); }
     bool hasRedoActions()const { return !m_stckRedo.isEmpty(); }
@@ -769,8 +769,6 @@ protected:
     QPtrStack<KSpreadUndoAction> m_stckRedo;
 
     KSpreadDoc *m_pDoc;
-
-    bool m_bLocked;
 };
 
 #endif

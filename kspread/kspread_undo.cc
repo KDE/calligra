@@ -39,8 +39,6 @@ KSpreadUndo::KSpreadUndo( KSpreadDoc *_doc )
 
     m_stckUndo.setAutoDelete( FALSE );
     m_stckRedo.setAutoDelete( FALSE );
-
-    m_bLocked = FALSE;
 }
 
 KSpreadUndo::~KSpreadUndo()
@@ -50,7 +48,7 @@ KSpreadUndo::~KSpreadUndo()
 
 void KSpreadUndo::appendUndo( KSpreadUndoAction *_action )
 {
-    if ( m_bLocked )
+    if ( isLocked() )
 	return;
 
     m_stckRedo.setAutoDelete( TRUE );
@@ -69,7 +67,7 @@ void KSpreadUndo::appendUndo( KSpreadUndoAction *_action )
 
 void KSpreadUndo::clear()
 {
-    if ( m_bLocked )
+    if ( isLocked() )
 	return;
 
     m_stckUndo.setAutoDelete( TRUE );
@@ -120,6 +118,21 @@ void KSpreadUndo::redo()
 	m_pDoc->enableUndo( hasUndoActions() );
 	m_pDoc->enableRedo( hasRedoActions() );
     }
+}
+
+void KSpreadUndo::lock()
+{
+  m_pDoc->undoLock();
+}
+
+void KSpreadUndo::unlock()
+{
+  m_pDoc->undoUnlock();
+}
+
+bool KSpreadUndo::isLocked() const 
+{ 
+  return m_pDoc->undoLocked(); 
 }
 
 QString KSpreadUndo::getRedoName()
@@ -260,7 +273,7 @@ void KSpreadUndoRemoveColumn::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     table->insertColumn( m_iColumn,m_iNbCol);
 
@@ -271,14 +284,14 @@ void KSpreadUndoRemoveColumn::undo()
     table->print()->setPrintRange( m_printRange );
     table->print()->setPrintRepeatColumns( m_printRepeatColumns );
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 
     undoFormulaReference();
 }
 
 void KSpreadUndoRemoveColumn::redo()
 {
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     KSpreadSheet* table = doc()->map()->findTable( m_tableName );
     if ( !table )
@@ -286,7 +299,7 @@ void KSpreadUndoRemoveColumn::redo()
 
     table->removeColumn( m_iColumn,m_iNbCol );
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -314,9 +327,9 @@ void KSpreadUndoInsertColumn::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->removeColumn( m_iColumn,m_iNbCol );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 
     undoFormulaReference();
 }
@@ -327,9 +340,9 @@ void KSpreadUndoInsertColumn::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->insertColumn( m_iColumn,m_iNbCol);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -385,7 +398,7 @@ void KSpreadUndoRemoveRow::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     table->insertRow( m_iRow,m_iNbRow );
 
@@ -397,14 +410,14 @@ void KSpreadUndoRemoveRow::undo()
 
     if(table->getAutoCalc()) table->recalc();
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 
     undoFormulaReference();
 }
 
 void KSpreadUndoRemoveRow::redo()
 {
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     KSpreadSheet* table = doc()->map()->findTable( m_tableName );
     if ( !table )
@@ -412,7 +425,7 @@ void KSpreadUndoRemoveRow::redo()
 
     table->removeRow( m_iRow,m_iNbRow );
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -440,9 +453,9 @@ void KSpreadUndoInsertRow::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->removeRow( m_iRow,m_iNbRow );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 
     undoFormulaReference();
 }
@@ -453,9 +466,9 @@ void KSpreadUndoInsertRow::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->insertRow( m_iRow,m_iNbRow );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 
@@ -499,9 +512,9 @@ void KSpreadUndoHideRow::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->showRow( 0,-1,listRow );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoHideRow::redo()
@@ -510,9 +523,9 @@ void KSpreadUndoHideRow::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->hideRow(0,-1, listRow );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -556,9 +569,9 @@ void KSpreadUndoHideColumn::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->showColumn(0,-1,listCol);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoHideColumn::redo()
@@ -567,9 +580,9 @@ void KSpreadUndoHideColumn::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->hideColumn(0,-1,listCol);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -613,9 +626,9 @@ void KSpreadUndoShowRow::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->hideRow(0,-1,listRow);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoShowRow::redo()
@@ -624,9 +637,9 @@ void KSpreadUndoShowRow::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->showRow(0,-1,listRow);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -671,9 +684,9 @@ void KSpreadUndoShowColumn::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->hideColumn( 0,-1,listCol );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoShowColumn::redo()
@@ -682,9 +695,9 @@ void KSpreadUndoShowColumn::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->showColumn(0,-1,listCol);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 
@@ -725,7 +738,7 @@ void KSpreadUndoPaperLayout::undo()
         return;
     KSpreadSheetPrint* print = table->print();
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     m_plRedo = print->paperLayout();
     print->setPaperLayout( m_pl.ptLeft,  m_pl.ptTop,
@@ -766,7 +779,7 @@ void KSpreadUndoPaperLayout::undo()
     m_iPageLimitYRedo = print->pageLimitY();
     print->setPageLimitY( m_iPageLimitY );
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoPaperLayout::redo()
@@ -776,7 +789,7 @@ void KSpreadUndoPaperLayout::redo()
         return;
     KSpreadSheetPrint* print = table->print();
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     print->setPaperLayout( m_plRedo.ptLeft,  m_plRedo.ptTop,
                            m_plRedo.ptRight, m_plRedo.ptBottom,
                            m_plRedo.format, m_plRedo.orientation );
@@ -799,7 +812,7 @@ void KSpreadUndoPaperLayout::redo()
     print->setPageLimitX( m_iPageLimitX );
     print->setPageLimitY( m_iPageLimitY );
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 
@@ -828,10 +841,10 @@ void KSpreadUndoDefinePrintRange::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     m_printRangeRedo = table->print()->printRange();
     table->print()->setPrintRange( m_printRange );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoDefinePrintRange::redo()
@@ -840,9 +853,9 @@ void KSpreadUndoDefinePrintRange::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->print()->setPrintRange( m_printRangeRedo );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 
@@ -874,7 +887,7 @@ void KSpreadUndoSetText::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
     KSpreadCell *cell = table->nonDefaultCell( m_iColumn, m_iRow );
     m_strRedoText = cell->text();
@@ -886,7 +899,7 @@ void KSpreadUndoSetText::undo()
     else
 	cell->setCellText( m_strText );
     table->updateView( QRect( m_iColumn, m_iRow, 1, 1 ) );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoSetText::redo()
@@ -895,7 +908,7 @@ void KSpreadUndoSetText::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
     KSpreadCell *cell = table->nonDefaultCell( m_iColumn, m_iRow );
     m_strText = cell->text();
@@ -906,7 +919,7 @@ void KSpreadUndoSetText::redo()
 	cell->setCellText( m_strRedoText );
     cell->setFormatType(m_eFormatTypeRedo);
     table->updateView( QRect( m_iColumn, m_iRow, 1, 1 ) );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -934,13 +947,13 @@ void KSpreadUndoSetTableName::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     m_redoName = table->tableName();
 
     table->setTableName( m_name,false,false );
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoSetTableName::redo()
@@ -949,11 +962,11 @@ void KSpreadUndoSetTableName::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     table->setTableName( m_redoName,false,false );
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -1166,7 +1179,7 @@ void KSpreadUndoCellFormat::undo()
   if ( !table )
     return;
 
-  doc()->undoBuffer()->lock();
+  doc()->undoLock();
   doc()->emitBeginOperation();
   copyFormat( m_lstRedoFormats, m_lstRedoColFormats, m_lstRedoRowFormats, table );
   if( util_isColumnSelected( m_rctRect ) )
@@ -1201,7 +1214,7 @@ void KSpreadUndoCellFormat::undo()
   table->setRegionPaintDirty( m_rctRect );
   table->updateView( m_rctRect );
 
-  doc()->undoBuffer()->unlock();
+  doc()->undoUnlock();
 }
 
 void KSpreadUndoCellFormat::redo()
@@ -1210,7 +1223,7 @@ void KSpreadUndoCellFormat::redo()
   if ( !table )
     return;
 
-  doc()->undoBuffer()->lock();
+  doc()->undoLock();
   doc()->emitBeginOperation();
 
   if ( util_isColumnSelected( m_rctRect ) )
@@ -1244,7 +1257,7 @@ void KSpreadUndoCellFormat::redo()
 
   table->setRegionPaintDirty( m_rctRect );
   table->updateView( m_rctRect );
-  doc()->undoBuffer()->unlock();
+  doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -1436,7 +1449,7 @@ void KSpreadUndoSort::undo()
   if ( !table )
     return;
 
-  doc()->undoBuffer()->lock();
+  doc()->undoLock();
   doc()->emitBeginOperation();
 
   copyAll( m_lstRedoFormats, m_lstRedoColFormats,
@@ -1482,7 +1495,7 @@ void KSpreadUndoSort::undo()
   table->setRegionPaintDirty(m_rctRect);
   table->updateView( m_rctRect );
 
-  doc()->undoBuffer()->unlock();
+  doc()->undoUnlock();
 }
 
 void KSpreadUndoSort::redo()
@@ -1491,7 +1504,7 @@ void KSpreadUndoSort::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
     if( util_isColumnSelected( m_rctRect ) )
@@ -1533,7 +1546,7 @@ void KSpreadUndoSort::redo()
     }
     table->setRegionPaintDirty(m_rctRect);
     table->updateView( m_rctRect );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -1620,7 +1633,7 @@ void KSpreadUndoDelete::undo()
 	return;
     createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,table );
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
     if( util_isColumnSelected( m_selection ) )
@@ -1648,7 +1661,7 @@ void KSpreadUndoDelete::undo()
 
     if(table->getAutoCalc()) table->recalc();
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoDelete::redo()
@@ -1658,7 +1671,7 @@ void KSpreadUndoDelete::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
     if( util_isColumnSelected( m_selection ) )
@@ -1688,7 +1701,7 @@ void KSpreadUndoDelete::redo()
     //table->deleteCells( m_selection );
     table->updateView();
     table->refreshView( m_selection );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -1742,7 +1755,7 @@ void KSpreadUndoDragDrop::undo()
       saveCellRect( m_dataRedoSource, table, m_selectionSource );
     saveCellRect( m_dataRedoTarget, table, m_selectionTarget );
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
     table->deleteCells( m_selectionTarget );
@@ -1759,7 +1772,7 @@ void KSpreadUndoDragDrop::undo()
     if ( table->getAutoCalc() )
       table->recalc();
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoDragDrop::redo()
@@ -1768,7 +1781,7 @@ void KSpreadUndoDragDrop::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
     //move next line to refreshView
@@ -1782,7 +1795,7 @@ void KSpreadUndoDragDrop::redo()
     table->updateView();
     table->refreshView( m_selectionSource );
     table->refreshView( m_selectionTarget );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 
@@ -1874,7 +1887,7 @@ void KSpreadUndoResizeColRow::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     createList( m_lstRedoColumn,m_lstRedoRow, table );
 
@@ -1912,7 +1925,7 @@ void KSpreadUndoResizeColRow::undo()
         }
     }
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoResizeColRow::redo()
@@ -1921,7 +1934,7 @@ void KSpreadUndoResizeColRow::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
     {
     QValueList<columnSize>::Iterator it2;
@@ -1956,7 +1969,7 @@ void KSpreadUndoResizeColRow::redo()
         }
     }
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -2057,7 +2070,7 @@ void KSpreadUndoChangeAreaTextCell::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
     createList( m_lstRedoTextCell, table );
 
@@ -2108,7 +2121,7 @@ void KSpreadUndoChangeAreaTextCell::undo()
     }
 
     table->updateView();
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoChangeAreaTextCell::redo()
@@ -2118,7 +2131,7 @@ void KSpreadUndoChangeAreaTextCell::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
     if ( !util_isRowSelected( m_rctRect )
@@ -2167,7 +2180,7 @@ void KSpreadUndoChangeAreaTextCell::redo()
     }
 
     table->updateView();
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -2200,7 +2213,7 @@ void KSpreadUndoMergedCell::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     KSpreadCell *cell = table->nonDefaultCell( m_iCol, m_iRow );
     m_iExtraRedoX=cell->extraXCells();
@@ -2208,7 +2221,7 @@ void KSpreadUndoMergedCell::undo()
 
     table->changeMergedCell( m_iCol, m_iRow, m_iExtraX,m_iExtraY);
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoMergedCell::redo()
@@ -2217,11 +2230,11 @@ void KSpreadUndoMergedCell::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     table->changeMergedCell( m_iCol, m_iRow, m_iExtraRedoX,m_iExtraRedoY);
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -2272,7 +2285,7 @@ void KSpreadUndoAutofill::undo()
 
     createListCell( m_dataRedo, table );
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
     table->deleteCells( m_selection );
@@ -2281,12 +2294,12 @@ void KSpreadUndoAutofill::undo()
 
     table->updateView();
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoAutofill::redo()
 {
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     KSpreadSheet* table = doc()->map()->findTable( m_tableName );
     if ( !table )
@@ -2295,12 +2308,12 @@ void KSpreadUndoAutofill::redo()
     doc()->emitBeginOperation();
 
     table->deleteCells( m_selection );
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->paste( m_dataRedo, m_selection );
     if ( table->getAutoCalc() )
       table->recalc();
     table->updateView();
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -2328,9 +2341,9 @@ void KSpreadUndoInsertCellRow::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->unshiftRow( m_rect);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 
     undoFormulaReference();
 }
@@ -2341,9 +2354,9 @@ void KSpreadUndoInsertCellRow::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->shiftRow( m_rect);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -2372,9 +2385,9 @@ void KSpreadUndoInsertCellCol::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->unshiftColumn( m_rect);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 
     undoFormulaReference();
 }
@@ -2385,9 +2398,9 @@ void KSpreadUndoInsertCellCol::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->shiftColumn( m_rect );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -2430,10 +2443,10 @@ void KSpreadUndoRemoveCellRow::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->shiftRow( m_rect );
     table->paste( m_data, m_rect );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 
     undoFormulaReference();
 }
@@ -2444,9 +2457,9 @@ void KSpreadUndoRemoveCellRow::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->unshiftRow( m_rect);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -2489,10 +2502,10 @@ void KSpreadUndoRemoveCellCol::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->shiftColumn( m_rect );
     table->paste( m_data, m_rect );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 
     undoFormulaReference();
 }
@@ -2503,9 +2516,9 @@ void KSpreadUndoRemoveCellCol::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->unshiftColumn( m_rect );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -2556,26 +2569,26 @@ void KSpreadUndoConditional::undo()
 
     createListCell( m_dataRedo, table );
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->paste( m_data, m_selection );
     if(table->getAutoCalc()) table->recalc();
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoConditional::redo()
 {
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     KSpreadSheet* table = doc()->map()->findTable( m_tableName );
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->paste( m_dataRedo, m_selection );
     if(table->getAutoCalc()) table->recalc();
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 /****************************************************************************
@@ -2602,9 +2615,9 @@ void KSpreadUndoHideTable::execute( bool b )
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->hideTable(b);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 
 }
 void KSpreadUndoHideTable::undo()
@@ -2642,9 +2655,9 @@ void KSpreadUndoShowTable::execute( bool b )
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     table->hideTable(b);
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoShowTable::undo()
@@ -2793,7 +2806,7 @@ void KSpreadUndoCellPaste::undo()
 
     createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,table );
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
     if(nbCol!=0)
@@ -2858,7 +2871,7 @@ void KSpreadUndoCellPaste::undo()
     if(table->getAutoCalc())
         table->recalc();
     table->updateView();
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoCellPaste::redo()
@@ -2867,7 +2880,7 @@ void KSpreadUndoCellPaste::redo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
     if(nbCol!=0)
@@ -2927,7 +2940,7 @@ void KSpreadUndoCellPaste::redo()
 
     table->updateView();
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 
@@ -3023,7 +3036,7 @@ void KSpreadUndoStyleCell::undo()
 
     createListCell( m_lstRedoStyleCell, table );
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
 
@@ -3036,18 +3049,18 @@ void KSpreadUndoStyleCell::undo()
       }
     table->setRegionPaintDirty(m_selection);
     table->updateView( m_selection );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoStyleCell::redo()
 {
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
 
     KSpreadSheet* table = doc()->map()->findTable( m_tableName );
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     doc()->emitBeginOperation();
 
     QValueList<styleCell>::Iterator it2;
@@ -3060,7 +3073,7 @@ void KSpreadUndoStyleCell::redo()
     table->setRegionPaintDirty(m_selection);
     table->updateView();
 
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 
@@ -3078,18 +3091,18 @@ KSpreadUndoAddTable::~KSpreadUndoAddTable()
 
 void KSpreadUndoAddTable::undo()
 {
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     m_table->map()->takeTable( m_table );
     doc()->takeTable( m_table );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoAddTable::redo()
 {
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     m_table->map()->insertTable( m_table );
     doc()->insertTable( m_table );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 KSpreadUndoRemoveTable::KSpreadUndoRemoveTable(KSpreadDoc *_doc, KSpreadSheet* _table)
@@ -3105,18 +3118,18 @@ KSpreadUndoRemoveTable::~KSpreadUndoRemoveTable()
 
 void KSpreadUndoRemoveTable::undo()
 {
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     m_table->map()->insertTable( m_table );
     doc()->insertTable( m_table );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 void KSpreadUndoRemoveTable::redo()
 {
-    doc()->undoBuffer()->lock();
+    doc()->undoLock();
     m_table->map()->takeTable( m_table );
     doc()->takeTable( m_table );
-    doc()->undoBuffer()->unlock();
+    doc()->undoUnlock();
 }
 
 KSpreadUndoInsertData::KSpreadUndoInsertData( KSpreadDoc * _doc, KSpreadSheet * _table, QRect & _selection )
