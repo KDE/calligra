@@ -76,7 +76,7 @@ const QString &KPTextObject::attrBulletColor1=KGlobal::staticQString("bulletColo
 const QString &KPTextObject::attrBulletColor2=KGlobal::staticQString("bulletColor2");
 const QString &KPTextObject::attrBulletColor3=KGlobal::staticQString("bulletColor3");
 const QString &KPTextObject::attrBulletColor4=KGlobal::staticQString("bulletColor4");
-const QString &KPTextObject::attrObjType=KGlobal::staticQString("objType");
+//const QString &KPTextObject::attrObjType=KGlobal::staticQString("objType"); //lukas: was never used AFAIK
 const QString &KPTextObject::tagP=KGlobal::staticQString("P");
 const QString &KPTextObject::attrAlign=KGlobal::staticQString("align");
 const QString &KPTextObject::attrType=KGlobal::staticQString("type");
@@ -252,18 +252,8 @@ double KPTextObject::load(const QDomElement &element)
         ktextobject.document()->setTextSettings( settings );
 #endif
         //  <P ....> .... </P>
-        QString type;
-        if(e.hasAttribute(attrObjType ))
-            type = e.attribute( attrObjType );
-        int t = -1;
-        if ( !type.isEmpty() )
-        {
-            if ( type == "1" )
-                t = 1;
-            if ( type == "2" )
-                t = 2;
-        }
-        loadKTextObject( e, t );
+
+        loadKTextObject( e );
     }
 
     shadowCompatibility();
@@ -574,7 +564,7 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
 }
 
 /*====================== load ktextobject ========================*/
-void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
+void KPTextObject::loadKTextObject( const QDomElement &elem )
 {
     QDomElement e = elem.firstChild().toElement();
     KoTextParag *lastParag = static_cast<KoTextParag *>(textDocument()->firstParag());
@@ -592,26 +582,50 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
 
         if ( e.tagName() == tagP ) {
             QDomElement n = e.firstChild().toElement();
+
+            //skip the whitespace if it's a bullet/number
+            if( e.hasAttribute( attrType ) && n.hasAttribute( attrWhitespace ) )
+                if ( e.attribute( attrType )!="0" && n.attribute( attrWhitespace )=="1" ) {
+                    e = e.nextSibling().toElement();
+                    continue;
+                }
+
             KoParagLayout paragLayout = loadParagLayout(e, m_doc, true);
-            //compatibility
-            if(type!=-1)
+
+            // compatibility (bullet/numbering depth); only a simulation thru the margins, this is how it _looked_ before
+            double depth = 0.0;
+            if( e.hasAttribute(attrDepth) ) {
+                depth = e.attribute( attrDepth ).toDouble();
+                paragLayout.margins[QStyleSheetItem::MarginLeft] = depth * MM_TO_POINT(10.0);
+            }
+
+            //kdDebug(33001) << k_funcinfo << "old bullet depth is: " << depth  << endl;
+
+            //compatibility (bullets, numbering etc)
+            QString type;
+            if( e.hasAttribute(attrType) )
+                type = e.attribute( attrType );
+
+            //kdDebug(33001) << k_funcinfo << "old PARAG type is: " << type  << endl;
+
+            if(!type.isEmpty())
             {
                 if(!paragLayout.counter)
-                {
                     paragLayout.counter = new KoParagCounter;
-                }
-                paragLayout.counter->setNumbering(KoParagCounter::NUM_LIST);
-                if ( type == 1 )
-                {
-                    //t = KTextEdit::EnumList;
-                    paragLayout.counter->setStyle(KoParagCounter::STYLE_NUM);
-                }
-                if ( type == 2 )
+                if ( type == "1" )
                 {
                     //t = KTextEdit::BulletList;
                     paragLayout.counter->setStyle(KoParagCounter::STYLE_DISCBULLET);
+                    paragLayout.counter->setNumbering(KoParagCounter::NUM_LIST);
+                }
+                else if ( type == "2" )
+                {
+                    //t = KTextEdit::EnumList;
+                    paragLayout.counter->setStyle(KoParagCounter::STYLE_NUM);
+                    paragLayout.counter->setNumbering(KoParagCounter::NUM_LIST);
                 }
             }
+
             // This is for very old (KOffice-1.0) documents.
             if ( e.hasAttribute( attrLineSpacing ) )
                 lineSpacing = e.attribute( attrLineSpacing ).toInt();
@@ -644,11 +658,12 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                 else
                     kdDebug(33001)<<"Error in e.attribute( attrAlign ).toInt()\n";
             }
-            // ## lastParag->setListDepth( e.attribute( attrDepth ).toInt() );
+
             // TODO check/convert values
             bool firstTextTag = true;
             while ( !n.isNull() ) {
                 if ( n.tagName() == tagTEXT ) {
+
                     if ( firstTextTag ) {
                         lastParag->remove( 0, 1 ); // Remove current trailing space
                         firstTextTag = false;
@@ -656,6 +671,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     KoTextFormat fm = loadFormat( n, lastParag->paragraphFormat(), m_doc->defaultFont() );
 
                     QString txt = n.firstChild().toText().data();
+
                     if(n.hasAttribute(attrWhitespace)) {
                         int ws=n.attribute(attrWhitespace).toInt();
                         txt.fill(' ', ws);

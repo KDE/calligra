@@ -170,7 +170,7 @@ protected:
     virtual QDomElement saveKTextObject( QDomDocument& doc );
     QDomElement saveHelper(const QString &tmpText,KoTextFormat*lastFormat ,QDomDocument &doc);
 
-    virtual void loadKTextObject( const QDomElement &e, int type );
+    virtual void loadKTextObject( const QDomElement &e );
     void drawText( QPainter* _painter, KoZoomHandler* zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged );
     void drawParags( QPainter *p, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to );
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
