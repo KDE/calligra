@@ -663,6 +663,7 @@ don't put a </?xml...> at the end of the file!).
           1 or single = single underline
           double = double-underline.
           single-bold = thick underline
+          wave = wave underline
         styleline type of underline 
                 : solid, dash, dot, dashdot, dashdotdot
         underlinecolor : color of underline line.
