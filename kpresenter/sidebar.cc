@@ -57,7 +57,7 @@ SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
 
   _thb = new ThumbBar(this, doc, view);
   addTab(_thb,i18n("Thumbs"));
-  
+
 
   //TODO find a better way
   connect(_outline, SIGNAL(showPage(int)),
@@ -65,7 +65,7 @@ SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
 
   connect(_thb, SIGNAL(showPage(int)),
           this, SIGNAL(showPage(int)));
-  
+
   connect(_outline, SIGNAL(movePage(int,int)),
           this, SIGNAL(movePage(int,int)));
 
@@ -74,7 +74,7 @@ SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
 
   connect(this, SIGNAL(currentChanged(QWidget *)),
           this, SLOT(currentChanged(QWidget *)));
-                     
+
 }
 
 void SideBar::currentChanged(QWidget *tab)
@@ -107,7 +107,7 @@ void ThumbBar::rebuildItems()
   kdDebug(33001) << "ThumbBar::rebuildItems" << endl;
 
   QApplication::setOverrideCursor( Qt::waitCursor );
-  
+
   clear();
   for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
     QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
@@ -124,7 +124,7 @@ void ThumbBar::rebuildItems()
 QPixmap ThumbBar::getSlideThumb(int slideNr)
 {
   //kdDebug(33001) << "ThumbBar::getSlideThumb: " << slideNr << endl;
-    
+
   QPixmap pix( doc->getPageRect( 0, 0, 0 ).size() );
   pix.fill( Qt::white );
 
@@ -300,7 +300,7 @@ void Outline::renamePageTitle()
     int pageNumber = QListView::selectedItem()->text( 1 ).toInt() - 1;
     bool ok;
     QString activeTitle = QListView::selectedItem()->text( 0 );
-    QString newTitle = KLineEditDlg::getText( i18n("Page Title"), activeTitle, &ok, this );
+    QString newTitle = KLineEditDlg::getText( i18n("Rename Page"),i18n("Page Title"), activeTitle, &ok, this );
 
     // Have a different name ?
     if ( ok ) { // User pushed an OK button.
