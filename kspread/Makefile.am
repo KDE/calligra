@@ -49,7 +49,7 @@ install-exec-local:
 	$(INSTALL_SCRIPT) kspread $(bindir)/kspread
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(includedir)/corba.pot  *.cc && mv messages.po ../po/kspread.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kspread.pot
 
 kspread.h: kspread.idl
 	$(IDL) --query-server-for-narrow -I$(idldir) kspread.idl

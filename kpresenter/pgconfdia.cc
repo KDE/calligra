@@ -28,14 +28,14 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   general = new QButtonGroup(this,"general");
   general->setFrameStyle(QFrame::Box|QFrame::Sunken);
   general->move(20,20);
-  general->setTitle("General");
+  general->setTitle(i18n("General"));
 
-  infinitLoop = new QCheckBox("&Infinite Loop",general);
+  infinitLoop = new QCheckBox(i18n("&Infinite Loop"),general);
   infinitLoop->resize(infinitLoop->sizeHint());
   infinitLoop->move(10,20);
   infinitLoop->setChecked(infLoop);
 
-  manualSwitch = new QCheckBox("&Manual switch to next step",general);
+  manualSwitch = new QCheckBox(i18n("&Manual switch to next step"),general);
   manualSwitch->resize(manualSwitch->sizeHint());
   manualSwitch->move(infinitLoop->x(),infinitLoop->y()+infinitLoop->height()+10);
   manualSwitch->setChecked(swMan);
@@ -43,23 +43,23 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
 
   page = new QButtonGroup(this,"page");
   page->setFrameStyle(QFrame::Box|QFrame::Sunken);
-  page->setTitle("Page Configuration");
+  page->setTitle(i18n("Page Configuration"));
 
   char str[30];
-  sprintf(str,"Page number: %d",pgNum);
+  sprintf(str,i18n("Page number: %d"),pgNum);
   label1 = new QLabel(str,page);
   label1->resize(label1->sizeHint());
   label1->move(10,20);
 
-  label2 = new QLabel("Effect for changing to next page:",page);
+  label2 = new QLabel(i18n("Effect for changing to next page:"),page);
   label2->resize(label2->sizeHint());
   label2->move(label1->x(),label1->y()+label1->height()+20);
 
   effectCombo = new QComboBox(false,page);
   effectCombo->move(label2->x(),label2->y()+label2->height()+5);
-  effectCombo->insertItem("No effect");
-  effectCombo->insertItem("Close horizontal");
-  effectCombo->insertItem("Close vertical");
+  effectCombo->insertItem(i18n("No effect"));
+  effectCombo->insertItem(i18n("Close horizontal"));
+  effectCombo->insertItem(i18n("Close vertical"));
   effectCombo->resize(effectCombo->sizeHint());
   effectCombo->setCurrentItem((int)pageEffect);
   
@@ -68,12 +68,12 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   page->move(20,general->y()+general->height()+20);
 
   cancelBut = new QPushButton(this,"BCancel");
-  cancelBut->setText("Cancel");
+  cancelBut->setText(i18n("Cancel"));
   cancelBut->resize(cancelBut->sizeHint());
   cancelBut->move(general->x()+general->width()-cancelBut->width(),page->y()+page->height()+20);
  
   okBut = new QPushButton(this,"BOK");
-  okBut->setText("OK");
+  okBut->setText(i18n("OK"));
   okBut->setAutoRepeat(FALSE);
   okBut->setAutoResize(FALSE);
   okBut->setAutoDefault(TRUE);

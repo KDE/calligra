@@ -81,7 +81,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   buttGrp3 = new QButtonGroup(this,"bgrp3");
   buttGrp3->setFrameStyle(QFrame::NoFrame);
 
-  radioColor = new QRadioButton("Color",this,"radioColor");
+  radioColor = new QRadioButton(i18n("Color"),this,"radioColor");
   radioColor->move(col1,row1);
   radioColor->resize(radioColor->sizeHint());
   if (backType == BT_COLOR) radioColor->setChecked(true);
@@ -102,9 +102,9 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   
   bcType = _bcType;
   cType = new QComboBox(false,grp1);
-  cType->insertItem("Plain",-1);
-  cType->insertItem("Horizontal Gradient",-1);
-  cType->insertItem("Vertical Gradient",-1);
+  cType->insertItem(i18n("Plain"),-1);
+  cType->insertItem(i18n("Horizontal Gradient"),-1);
+  cType->insertItem(i18n("Vertical Gradient"),-1);
   cType->resize(cType->sizeHint());
   cType->move(10,color2Choose->y()+color2Choose->height()+20);
   connect(cType,SIGNAL(activated(int)),this,SLOT(selectCType(int)));
@@ -122,7 +122,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   grp1->resize(2*cType->x()+cType->width(),
 	       colorPreview->y()+colorPreview->height()+20);
 
-  radioPic = new QRadioButton("Picture (Pixel-Graphic)",this,"radioPic");
+  radioPic = new QRadioButton(i18n("Picture (Pixel-Graphic)"),this,"radioPic");
   radioPic->move(grp1->x()+grp1->width()+20,radioColor->y());
   radioPic->resize(radioPic->sizeHint());
   if (backType == BT_PIC) radioPic->setChecked(true);
@@ -131,25 +131,25 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   grp2 = new QGroupBox(this);
   grp2->move(grp1->x()+grp1->width()+20,grp1->y());
 
-  vTiled = new QRadioButton("Tiled",grp2,"tiled");
+  vTiled = new QRadioButton(i18n("Tiled"),grp2,"tiled");
   vTiled->move(10,10);
   vTiled->resize(vTiled->sizeHint());
   if (backPicView == BV_TILED) vTiled->setChecked(true);
   buttGrp2->insert(vTiled);
 
-  vCenter = new QRadioButton("Center",grp2,"center");
+  vCenter = new QRadioButton(i18n("Center"),grp2,"center");
   vCenter->move(vTiled->x()+vTiled->width()+10,10);
   vCenter->resize(vCenter->sizeHint());
   if (backPicView == BV_CENTER) vCenter->setChecked(true);
   buttGrp2->insert(vCenter);
 
-  vZoom = new QRadioButton("Zoom",grp2,"zoom");
+  vZoom = new QRadioButton(i18n("Zoom"),grp2,"zoom");
   vZoom->move(vCenter->x()+vCenter->width()+10,10);
   vZoom->resize(vZoom->sizeHint());
   if (backPicView == BV_ZOOM) vZoom->setChecked(true);
   buttGrp2->insert(vZoom);  
 
-  picChoose = new QPushButton("Choose Picture...",grp2,"picChoose");
+  picChoose = new QPushButton(i18n("Choose Picture..."),grp2,"picChoose");
   picChoose->setGeometry(10,vTiled->y()+vTiled->height()+20,
 			 vTiled->width()+vCenter->width()+vZoom->width()+20,
 			 picChoose->sizeHint().height());
@@ -164,14 +164,14 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
  
   lPicName = new QLabel(grp2,"picname");
   if (backPic) lPicName->setText(qstrdup(backPic));
-  else lPicName->setText("no picture");
+  else lPicName->setText(i18n("no picture"));
   lPicName->setGeometry(10,picPreview->y()+picPreview->height()+20,
 			picChoose->width(),lPicName->sizeHint().height());
 
   grp2->resize(2*picChoose->x()+picChoose->width(),
 	       lPicName->y()+lPicName->height()+10);
 
-  radioClip = new QRadioButton("Clipart (Vector-Graphic)",this,"radioClip");
+  radioClip = new QRadioButton(i18n("Clipart (Vector-Graphic)"),this,"radioClip");
   radioClip->move(grp2->x()+grp2->width()+20,radioColor->y());
   radioClip->resize(radioClip->sizeHint());
   if (backType == BT_CLIP) radioClip->setChecked(true);
@@ -181,7 +181,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   grp3->move(grp2->x()+grp2->width()+20,grp2->y());
   grp3->resize(grp2->width(),grp2->height());
 
-  clipChoose = new QPushButton("Choose Clipart...",grp3,"clipChoose");
+  clipChoose = new QPushButton(i18n("Choose Clipart..."),grp3,"clipChoose");
   clipChoose->setGeometry(10,10,grp3->width()-20,clipChoose->sizeHint().height());
   connect(clipChoose,SIGNAL(clicked()),this,SLOT(selectClip()));
 
@@ -194,7 +194,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   
   lClipName = new QLabel(grp3,"clipname");
   if (backClip) lClipName->setText(qstrdup(backClip));
-  else lClipName->setText("no clipart");
+  else lClipName->setText(i18n("no clipart"));
   lClipName->setGeometry(10,clipPreview->y()+clipPreview->height()+20,
 			 clipChoose->width(),lClipName->sizeHint().height());
   
@@ -204,16 +204,16 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   row2 = grp2->y()+grp2->height()+20;
 
   cancelBut = new QPushButton(this,"BCancel");
-  cancelBut->setText("Cancel");
+  cancelBut->setText(i18n("Cancel"));
  
   applyBut = new QPushButton(this,"BApply");
-  applyBut->setText("Apply");
+  applyBut->setText(i18n("Apply"));
 
   applyGlobalBut = new QPushButton(this,"BApplyGlobal");
-  applyGlobalBut->setText("Apply Global");
+  applyGlobalBut->setText(i18n("Apply Global"));
 
   okBut = new QPushButton(this,"BOK");
-  okBut->setText("OK");
+  okBut->setText(i18n("OK"));
   okBut->setAutoRepeat(false);
   okBut->setAutoResize(false);
   okBut->setAutoDefault(true);
@@ -309,14 +309,15 @@ void BackDia::selectPic()
   radioClip->setChecked(false);
 
   QString file = KFileDialog::getOpenFileName(getenv("HOME"),
-					      "*.gif *GIF|GIF-Pictures\n"
-					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
-					      "*.bmp *.BMP|Windows Bitmaps\n"
-					      "*.xbm *.XBM|XWindow Pitmaps\n"
-					      "*.xpm *.XPM|Pixmaps\n"
-					      "*.pnm *.PNM|PNM-Pictures\n"
-					      "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures",0);
-
+					     i18n(  "*.gif *.GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP"
+						   "*.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures\n"
+						   "*.gif *.GIF|GIF-Pictures\n"
+						   "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+						   "*.bmp *.BMP|Windows Bitmaps\n"
+						   "*.xbm *.XBM|XWindow Bitmaps\n"
+						   "*.xpm *.XPM|Pixmaps\n"
+						   "*.pnm *.PNM|PNM-Pictures"),0);
+  
   if (!file.isEmpty()) openPic((const char*)file);
 }
 
@@ -327,7 +328,7 @@ void BackDia::selectClip()
   radioColor->setChecked(false);
   radioPic->setChecked(false);
 
-  QString file = KFileDialog::getOpenFileName(getenv("HOME"),"*.wmf *.WMF|Windows Metafiles",0);
+  QString file = KFileDialog::getOpenFileName(getenv("HOME"),i18n("*.WMF *.wmf|Windows Metafiles"),0);
   if (!file.isEmpty()) openClip((const char*)file);
 }
 

@@ -15,6 +15,7 @@
 #include "sheet.h"
 #include "sheetdlg.h"
 #include "sheetdlg.moc"
+#include <kapp.h>
 
 SheetDlg::SheetDlg( QDialog *parent, const char *name )
     :QWidget( (QWidget*)parent, name )
@@ -22,10 +23,10 @@ SheetDlg::SheetDlg( QDialog *parent, const char *name )
   t = new Sheet(this,"Sheet",TABLE_SIZE); 
   t->move(0,0);
   
-  cancel = new QPushButton("Cancel",this);
+  cancel = new QPushButton(i18n("Cancel"),this);
   cancel->resize(cancel->sizeHint());
 
-  ok = new QPushButton("OK",this);
+  ok = new QPushButton(i18n("OK"),this);
   ok->resize(cancel->sizeHint());
   
   connect(ok,SIGNAL(clicked()),parent,SLOT(accept()));

@@ -157,9 +157,9 @@ void KPresenterView_impl::insertPicture()
   page->deSelectAllObj();
   QString file = KFileDialog::getOpenFileName(getenv("HOME"),
 					      i18n(
-						   "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP"
+						   "*.gif *.GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP"
 						   "*.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures\n"
-						   "*.gif *GIF|GIF-Pictures\n"
+						   "*.gif *.GIF|GIF-Pictures\n"
 						   "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
 						   "*.bmp *.BMP|Windows Bitmaps\n"
 						   "*.xbm *.XBM|XWindow Bitmaps\n"
@@ -1212,9 +1212,9 @@ void KPresenterView_impl::changePicture(unsigned int,const char* filename)
 {
   QFileInfo fileInfo(filename);
   QString file = KFileDialog::getOpenFileName(getenv("HOME"),
-					      i18n(  "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP"
+					      i18n(  "*.gif *.GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP"
 						   "*.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures\n"
-						   "*.gif *GIF|GIF-Pictures\n"
+						   "*.gif *.GIF|GIF-Pictures\n"
 						   "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
 						   "*.bmp *.BMP|Windows Bitmaps\n"
 						   "*.xbm *.XBM|XWindow Bitmaps\n"

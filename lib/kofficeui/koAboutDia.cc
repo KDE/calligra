@@ -139,7 +139,7 @@ void KoAboutDia::about(KoApplication koapp,QString version)
     {
 	QMessageBox::about(0,i18n("About KDE"),
 			   i18n("\nThe KDE Desktop Environment was written by the KDE Team,\n"
-				"a world-wide network of software engineers commited to\n"
+				"a world-wide network of software engineers committed to\n"
 				"free software development.\n\n"
 				"Visit http://www.kde.org for more information on the KDE\n"
 				"Project. Please consider joining and supporting KDE.\n\n"

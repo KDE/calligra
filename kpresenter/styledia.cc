@@ -80,7 +80,7 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   choosePStyle->insertItem(i18n("dash line (----)"));
   choosePStyle->insertItem(i18n("dot line (****)"));
   choosePStyle->insertItem(i18n("dash dot line (-*-*)"));
-  choosePStyle->insertItem(i18n("dahs dot dot line (-**-)"));
+  choosePStyle->insertItem(i18n("dash dot dot line (-**-)"));
   choosePStyle->insertItem(i18n("no pen"));
   choosePStyle->resize(choosePStyle->sizeHint());
   choosePCol->resize(choosePStyle->width(),choosePCol->height());  
