@@ -106,7 +106,7 @@ void KImageShell::setDocument( KImageDoc *_doc )
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
   }
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
@@ -126,6 +126,7 @@ bool KImageShell::newDocument()
   m_pDoc = new KImageDoc;
   if ( !m_pDoc->init() )
   {
+    releaseDocument();
     debug( "ERROR: Could not initialize document" );
     return false;
   }
@@ -144,7 +145,7 @@ bool KImageShell::newDocument()
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
   }
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
@@ -188,7 +189,7 @@ bool KImageShell::openDocument( const char *_url, const char *_format )
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
   }
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
@@ -272,36 +273,36 @@ void KImageShell::releaseDocument()
   int views = 0;
   if ( m_pDoc )
     views = m_pDoc->viewCount();
-  debug( "############## VIEWS=%i #####################", views );
-  
-  debug( "-1) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
 
   setRootPart( 0 );
 
-  debug( "-2) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
-
   interface()->setActivePart( 0 );
 
-  // debug( "-3) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
-  
   if ( m_pView )
     m_pView->decRef();
   
   /* if ( m_pView )
     m_pView->cleanUp(); */
 
-  // debug( "-4) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   if ( m_pDoc && views <= 1 )
     m_pDoc->cleanUp();
-  // debug( "-5) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   // if ( m_pView )
   // CORBA::release( m_pView );
-  // debug( "-6) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   if ( m_pDoc )
     CORBA::release( m_pDoc );
-  // debug( "-7) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   m_pView = 0L;
   m_pDoc = 0L;
+
+  if ( m_pFileMenu )
+  {
+    m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, false );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Save, false );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
+  }
+ 
+  opToolBar()->setItemEnabled( TOOLBAR_PRINT, false );
+  opToolBar()->setItemEnabled( TOOLBAR_SAVE, false );
 }
 
 void KImageShell::slotFileNew()
@@ -356,17 +357,11 @@ void KImageShell::slotFileSaveAs()
 
 void KImageShell::slotFileClose()
 {
-  if ( documentCount() <= 1 )
-  {
-    slotFileQuit();
-    return;
-  }
-  
   if ( isModified() )
     if ( !requestClose() )
       return;
   
-  delete this;
+  releaseDocument();
 }
 
 void KImageShell::slotFilePrint()
