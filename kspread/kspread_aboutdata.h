@@ -17,34 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KSPREAD_FACTORY_H
-#define KSPREAD_FACTORY_H
+#include <kaboutdata.h>
+#include <klocale.h>
 
-#include <koFactory.h>
+static const char* description=I18N_NOOP("KOffice Spreadsheet Application");
+static const char* version="1.1";
 
-class KAboutData;
-class DCOPObject;
-
-class KSpreadFactory : public KoFactory
+KAboutData * newKSpreadAboutData()
 {
-    Q_OBJECT
-public:
-    KSpreadFactory( QObject* parent = 0, const char* name = 0 );
-    ~KSpreadFactory();
-
-    virtual KParts::Part *createPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
-
-    static KInstance* global();
-
-    // _Creates_ a KAboutData but doesn't keep ownership
-    static KAboutData* aboutData();
-
-    static DCOPObject* dcopObject();
-
-private:
-    static KInstance* s_global;
-    static DCOPObject* s_dcopObject;
-    static KAboutData* s_aboutData;
-};
-
-#endif
+    KAboutData * aboutData = new KAboutData( "kspread", I18N_NOOP("KSpread"),
+                                             version, description, KAboutData::License_GPL,
+                                             "(c) 1998-2000, Torben Weis");
+    aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+    aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
+    aboutData->addAuthor("David Faure",0, "faure@kde.org");
+    return aboutData;
+}
