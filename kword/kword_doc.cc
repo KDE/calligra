@@ -69,7 +69,7 @@
 /*================================================================*/
 KWordChild::KWordChild( KWordDocument *_wdoc, const QRect& _rect, KoDocument *_doc, int diffx, int diffy )
     : KoDocumentChild( _wdoc, _doc, QRect( _rect.left() + diffx, _rect.top() + diffy, _rect.width(), _rect.height() ) )
-{       
+{
 }
 
 /*================================================================*/
@@ -178,7 +178,7 @@ KWordDocument::KWordDocument(QWidget *parentWidget, const char *widgetName, QObj
 {
     m_lstViews.setAutoDelete( FALSE );
     m_lstChildren.setAutoDelete( TRUE );
-    varFormats.setAutoDelete(true);    
+    varFormats.setAutoDelete(true);
 
     setInstance( KWordFactory::global() );
 
@@ -199,7 +199,6 @@ KWordDocument::KWordDocument(QWidget *parentWidget, const char *widgetName, QObj
     cParagLayout = 0L;
     cDisplayFont = 0L;
 
-    paragLayoutList.setAutoDelete( FALSE );
     userFontList.setAutoDelete( FALSE );
     displayFontList.setAutoDelete( FALSE );
     frames.setAutoDelete( TRUE );
@@ -716,6 +715,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 /*================================================================*/
 KWordDocument::~KWordDocument()
 {
+    paragLayoutList.setAutoDelete(true);
 }
 
 /*================================================================*/
@@ -4277,18 +4277,18 @@ void KWordDocument::updateFrameSizes( int oldZoom )
 }
 
 void KWordDocument::delGroupManager( KWGroupManager *g, bool deleteit )
-{ 
+{
   if (deleteit)
-    grpMgrs.remove( g ); 
+    grpMgrs.remove( g );
   else
     grpMgrs.take(grpMgrs.find(g));
 }
 
-void KWordDocument::delFrameSet( KWFrameSet *f, bool deleteit) 
+void KWordDocument::delFrameSet( KWFrameSet *f, bool deleteit)
 {
   if (deleteit)
-    frames.remove( f ); 
+    frames.remove( f );
   else
-    frames.take( frames.find(f) ); 
-  setModified( true ); 
+    frames.take( frames.find(f) );
+  setModified( true );
 }
