@@ -1,5 +1,6 @@
 Changes after KOffice-1.3-beta2
 ===============================
+- Support for EPS images: works again for gs interpreters without the png16m device
 - KoText:
   Paragraph borders now support variable width (e.g. being inside
   DTP frames of different widths).

@@ -78,14 +78,18 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
         return QImage();
     }
 
-    // PNG16 is better, but PPM is more widely available -> use ppm if png16m failed
+    // PNG16m is better, but not always available -> fallback to bmp16m, then fallback to ppm (256 colors)
     QImage img;
     int ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "png16m");
     if ( ret == -1 )
     {
-        ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "ppm");
+        ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "bmp16m");
         if ( ret == -1 )
-            kdError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
+        {
+            ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "ppm");
+            if ( ret == -1 )
+                kdError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
+        }
     }
     return img;
 }
@@ -95,7 +99,7 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
 int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, const int resolutionx, const int resolutiony, const char* device )
 // Based on the code of the file kdelibs/kimgio/eps.cpp
 {
-    kdDebug(30003) << "Sampling with GhostScript! (in KoPictureEps::tryScaleWithGhostScript)" << endl;
+    kdDebug(30003) << "Sampling with GhostScript, using device " << device << " (in KoPictureEps::tryScaleWithGhostScript)" << endl;
 
     KTempFile tmpFile;
     tmpFile.setAutoDelete(true);
