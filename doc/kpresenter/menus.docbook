@@ -1,6 +1,6 @@
 <!-- <?xml version="1.0" ?>
 <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd">
-	  
+
 To edit or validate this document separately, uncomment this prolog
 Be sure to comment it out again when you are done -->
 
@@ -13,15 +13,6 @@ with the program. Perhaps the most familiar type of interface is the
 menu which appears on the top of the &kpresenter; window.
 </para>
 
-<screenshot>
-<screeninfo>The menus</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="barmenus.png" format="PNG"/></imageobject>
-<textobject><phrase>The menus</phrase></textobject>
-</mediaobject>
-</screenshot>
-  
 <para>
 Clicking on the menu items gives you a list of commands from which you
 can choose the one you want. Many of the commands can also be accessed
@@ -29,6 +20,12 @@ directly by holding down &Ctrl; or &Alt; and pressing another key on
 your keyboard.  In the next section, each of the menu commands is
 described in brief.
 </para>
+
+<sect1 id="toolbars">
+<title>The Toolbars</title>
+
+<sect2 id="manipulating-toolbars">
+<title>Manipulating the Toolbars</title>
 
 <para>
 In addition to the menus, &kpresenter; also has a set of toolbars.  Each
@@ -42,6 +39,7 @@ toolbar. The stippled area is shown highlighted in red in the screenshot
 below:
 </para>
 
+<!-- FIXME: Update this screenshot -->
 <screenshot>
 <screeninfo>The toolbars</screeninfo>
 <mediaobject>
@@ -57,6 +55,8 @@ Clicking on the toolbar handle results in that toolbar being
 the main editing window:
 </para>
 
+
+<!-- FIXME: Update this screenshot -->
 <screenshot>
 <screeninfo>Flattened toolbar</screeninfo>
 <mediaobject>
@@ -162,10 +162,14 @@ shown in the screenshot below:
 The &kpresenter; menus are discussed in the following sections.
 </para>
 
+</sect2>
+</sect1>
+
 <sect1 id="file-menu">
 <title><guimenu>File</guimenu> Menu</title>
 
 <variablelist>
+
 <varlistentry>
 <term><menuchoice>
 <shortcut>
@@ -179,14 +183,13 @@ The &kpresenter; menus are discussed in the following sections.
 <para>
 <action>Begins a new presentation.</action>  The
 <guilabel>Create Document</guilabel> dialog will open, allowing you to choose a
-template for your presentation. 
+template for your presentation.
 </para>
 </listitem>
 </varlistentry>
-        
+
 <varlistentry>
-<term>
-<menuchoice> 
+<term><menuchoice>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
 </shortcut>
@@ -302,9 +305,8 @@ section <xref linkend="html-wizard"/>.
 Manager</guimenu></menuchoice></term>
 <listitem><para>FIXME: Figure out how this works.</para></listitem>
 </varlistentry>
-<!-- 
-FIXME: Did this turn into 'Template Manager' ? It seems so, based on -->
-<!-- the description below 
+<!-- FIXME: Did this turn into 'Template Manager' ? It seems so, based
+on  the description below
 <varlistentry>
 <term>
 <menuchoice>
@@ -320,15 +322,13 @@ with.  Creating a template is further discussed in section <xref
 linkend="creating-templates"/>.
 </para>
 </listitem>
-</varlistentry>
- --> 
+</varlistentry>  -->
+
 <varlistentry>
-<term>
-<menuchoice>
+<term><menuchoice>
 <guimenu>File</guimenu>
 <guimenuitem>Use Current Slide As Default Template</guimenuitem>
-</menuchoice>
-</term>
+</menuchoice></term>
 <listitem>
 <para>
 <action>Sets the current slide as your default template</action>.
@@ -340,8 +340,7 @@ often.
 </varlistentry>
 
 <varlistentry>
-<term>
-<menuchoice> 
+<term><menuchoice>
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>P</keycap>
 </keycombo></shortcut>
@@ -358,12 +357,10 @@ your presentation.
 </varlistentry>
 
 <varlistentry>
-<term>
-<menuchoice>
+<term><menuchoice>
 <guimenu>File</guimenu>
 <guimenuitem>Print Preview...</guimenuitem>
-</menuchoice>
-</term>
+</menuchoice></term>
 <listitem>
 <para>
 <action>Displays the presentation</action> with a &PostScript; viewer,
@@ -373,24 +370,24 @@ exactly as it would look if printed.
 </varlistentry>
 
 <varlistentry>
-<term>
-<menuchoice>
+<term><menuchoice>
 <guimenu>File</guimenu>
 <guimenuitem>Document Information...</guimenuitem>
-</menuchoice>
-</term>
+</menuchoice></term>
 <listitem>
 <para>
 <action>Allows you to enter information about the document.</action>
 This includes information about the author, and an abstract on the
-documents contents. 
+documents contents.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><menuchoice><guimenu>File</guimenu><guimenuitem>Send
-File...</guimenuitem></menuchoice></term>
+<term><menuchoice>
+<guimenu>File</guimenu><guimenuitem>Send
+File...</guimenuitem>
+</menuchoice></term>
 <listitem>
 <para>FIXME: This doesn't seem to do anything when tested.</para>
 </listitem>
@@ -401,7 +398,7 @@ File...</guimenuitem></menuchoice></term>
 <menuchoice>
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>W</keycap>
-</keycombo></shortcut> 
+</keycombo></shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Close</guimenuitem>
 </menuchoice></term>
@@ -429,8 +426,8 @@ to save all changes in all open presentations first.
 </para>
 </listitem>
 </varlistentry>
-
 </variablelist>
+
 </sect1>
 
 <sect1 id="edit-menu">
@@ -629,7 +626,7 @@ your presentation with a different piece of text.</para></listitem>
 </term>
 <listitem>
 <para>
-<action>Insert an exact copy of the current slide.</action>  
+<action>Insert an exact copy of the current slide.</action>
 </para>
 </listitem>
 </varlistentry>
@@ -678,22 +675,14 @@ corrected to <userinput>The</userinput> automatically.</para>
 <sect1 id="view-menu">
 <title><guimenu>View</guimenu> Menu</title>
 
-<screenshot>
-<screeninfo>The <guimenu>View</guimenu> Menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="menuview.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guimenu>View</guimenu>
-Menu</phrase></textobject>
-</mediaobject>
-</screenshot>
+
 <variablelist>
 
 <varlistentry>
 <term>
 <menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>New View...</guimenuitem>
+<guimenuitem>New View</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -779,6 +768,113 @@ overview of all the slides in your presentation.
 </para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>View</guimenu>
+<guimenuitem>Show Header</guimenuitem>
+</menuchoice></term>
+<listitem><para>FIXME: Find out about headers</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>View</guimenu>
+<guimenuitem>Show Footer</guimenuitem>
+</menuchoice></term>
+<listitem><para>FIXME: Find out about footers</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>View</guimenu>
+<guimenuitem>Formatting Characters</guimenuitem>
+</menuchoice></term>
+<listitem><para>Show a visual representation of <quote>non printing
+characters</quote>, such as tabs and paragraph markers.  This can be
+a useful aid to precisely positioning text.</para>
+<para>This item is a toggle, if enabled, formatting characters are
+visible, if disabled, they are not.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>View</guimenu>
+<guimenuitem>Help Lines</guimenuitem>
+</menuchoice></term>
+<listitem><para>When working in &kpresenter; you can drag a <quote>help
+line</quote> from either the horizontal or vertical ruler onto your
+document.  This guide line will not print or display in the finished
+presentation, it is simply to help you align objects on screen.  If
+this item is enabled, these help lines will be visible.  If this is
+disabled, they will not be visible.</para>
+<para>Help lines work across slides, allowing you to align objects the
+same way across multiple slides.</para>
+<para>Disabling (hiding) help lines does not delete them.  If you have
+created help lines, and then disabled this item, enabling it again
+will retain the help lines you created.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>View</guimenu>
+<guimenuitem>Help Line to Front</guimenuitem>
+<!-- FIXME: should this be help lines? -->
+</menuchoice></term>
+<listitem><para>
+By default, placing objects on a slide will cover any displayed help
+lines.  You can make them visible again with this menu item, and while
+it is enabled, they will not be covered up.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>View</guimenu>
+<guimenuitem>Grid</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>If enabled, &kpresenter; will display a grid of dots
+representing the intersections of imaginary horizontal and vertical
+lines. You can use these dots to precisely position objects on the
+slide.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>View</guimenu><guimenuitem>
+Grid to Front</guimenuitem></menuchoice></term>
+<listitem><para>By default, placing objects on a slide will cover the
+displayed grid.  You can make it visible again with this menu item, and while
+it is enabled, it will not be covered up.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>View</guimenu><guimenuitem>
+Snap to Grid</guimenuitem></menuchoice>
+</term>
+<listitem><para>If this is enabled, when dropping or moving objects on the
+slide the top left corner of the object will <quote>snap</quote> or
+move, to the nearest grid point.</para>
+<para>This does reduce your freedom to freely position objects on the
+slide, however it also helps things to line up precisely.  It is
+easily disabled or enabled with this menu entry, allowing you the best
+of both worlds.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>View</guimenu>
+<guisubmenu>Zoom</guisubmenu></menuchoice>
+</term>
+<listitem><para>This submenu allows you to zoom in or out of the
+slide.  Several predefined zoom levels are available, including
+<guimenuitem>Whole slide</guimenuitem> to scale the entire slide so as
+to be visible in the size window you have open, and
+<guimenuitem>Width</guimenuitem> to scale the slide so it fills the
+entire width of the window, although you may now have to scroll
+vertically.  There are also several other scaling choices, from
+<guimenuitem>33%</guimenuitem> up to
+<guimenuitem>500%</guimenuitem>.</para></listitem>
+</varlistentry>
+
 </variablelist>
 
 </sect1>
@@ -786,23 +882,56 @@ overview of all the slides in your presentation.
 <sect1 id="insert-menu">
 <title><guimenu>Insert</guimenu> Menu</title>
 
-<screenshot>
-<screeninfo>The <guimenu>Insert</guimenu> Menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="menuinsert.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guimenu>Insert</guimenu>
-Menu</phrase></textobject>
-</mediaobject>
-</screenshot>
-
 <variablelist>
+
+<varlistentry>
+<term><menuchoice><shortcut><keycombo action="simul">
+&Alt;&Shift;<keycap>C</keycap></keycombo></shortcut>
+<guimenu>Insert</guimenu>
+<guimenuitem>Special Character...</guimenuitem>
+</menuchoice>
+</term>
+<listitem><para>Insert a special character.  This might be a character
+you don't have a key for on your keyboard layout, for instance &uuml;
+on a US Keyboard.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>Insert</guimenu>
+<guisubmenu>Variable</guisubmenu></menuchoice>
+</term>
+<listitem>
+<para>FIXME: This probably deserves a section to itself</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>Insert</guimenu>
+<guimenuitem>Link...</guimenuitem></menuchoice></term>
+<listitem><para>
+Insert a hyperlink to a file, a website, or an email
+address.</para></listitem>
+<!-- FIXME: Why would you do this? where would it be used? Expand on -->
+<!-- this -->
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>Insert</guimenu>
+<guimenuitem>Comment...</guimenuitem></menuchoice></term>
+<listitem><para>Enter a small note that does not display during the
+real presentation.  You might use this to comment on a colleagues
+text, or to leave a note for yourself about something to do
+later.</para>
+<!-- FIXME: How do you display these again? -->
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term>
 <menuchoice>
 <shortcut><keycap>F2</keycap></shortcut>
 <guimenu>Insert</guimenu>
-<guimenuitem>Page...</guimenuitem>
+<guimenuitem>Slide...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -815,9 +944,83 @@ before or after the currently selected page.
 </varlistentry>
 
 <varlistentry>
+<term><menuchoice><guimenu>Insert</guimenu><guimenuitem>File...</guimenuitem>
+</menuchoice></term>
+<listitem><para>FIXME: What to do with this?</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut><keycap>F10</keycap></shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Text</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>Add a new text object.  Click and drag to create a frame where
+you wish the text to appear.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>Insert</guimenu>
+<guimenuitem>Autoform</guimenuitem>
+</menuchoice></term>
+<listitem><para>FIXME: This name is a little awkward, I didn't know
+what it was.  Perhaps 'stencil' might be a better term?  Shape would
+work, but it's already used.</para>
+<para>Insert a pre-drawn shape that, such as an arrow or a connecting
+line.</para>
+<para>Click and drag to draw a box stretching from the top left to the
+lower right, where you wish the autoform to display.  It will be
+inserted and automatically scaled to the size of your box.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycap>F12</keycap></shortcut>
+<guimenu>Insert</guimenu>
+<guimenuitem>Chart</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>Insert a chart.  Click  and drag to define the size of the
+chart.  Some default data will be displayed.  Double click to edit the
+data and choose the type of chart to display, using the embedded
+&kchart; editor.</para>
+<para>FIXME: KChart has it's own help file, but a brief overview of
+charting in this doc wouldn't go astray either.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut><keycap>F5</keycap></shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Table</guimenuitem>
+</menuchoice></term>
+<listitem><para>Insert a table.  Click and drag to define the size of
+the table.</para>
+<para>A &kspread; open dialog will display.  You may import a
+spreadsheet that you have saved in one of many formats, including
+plain text files.  You may also choose to create a new and empty
+table.</para>
+<para>Double clicking on the table will allow you to edit the
+contents.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice><guimenu>Insert</guimenu>
+<guisubmenu>Object</guisubmenu>
+</menuchoice></term>
+<listitem><para>FIXME: This needs a section of it's own</para>
+<para>An object is an embeddable file, in one of many formats.</para>
+<para>A common use of this action is to insert scaleable clipart in
+vector format.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
-<shortcut><keycap>F3</keycap></shortcut>
+<shortcut><keycombo action="simul">
+&Shift;<keycap>F5</keycap></keycombo></shortcut>
 <guimenu>Insert</guimenu>
 <guimenuitem>Picture...</guimenuitem>
 </menuchoice>
@@ -832,6 +1035,30 @@ role="extension">.jpg</literal>, <literal
 role="extension">.png</literal> and many more.
 </para>
 </listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guisubmenu>Line</guisubmenu>
+</menuchoice></term>
+<listitem>
+<para>
+You can insert several types of lines.  Line drawing is described
+further in the <!-- FIXME: Make a drawing tools section --> section.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guisubmenu>Shape</guisubmenu>
+</menuchoice></term>
+<listitem><para>
+You can insert several prepared shapes, in vector format.  These are
+editable just like lines you have drawn yourself.  Using the drawing
+tools is described in detail in the drawing tools
+section.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -862,8 +1089,8 @@ format, which is common on &Windows;.
 <listitem>
 <para>
 <action>Scan an image with a scanner.</action> This requires you have a
-scanner installed.  TODO: Document how to set up a scanner that
-&kpresenter; can use.
+scanner installed.
+FIXME: Document how to set up a scanner that &kpresenter; can use.
 </para>
 </listitem>
 </varlistentry>
@@ -871,43 +1098,59 @@ scanner installed.  TODO: Document how to set up a scanner that
 
 </sect1>
 
+
 <sect1 id="format-menu">
 <title><guimenu>Format</guimenu> Menu</title>
 
-<screenshot>
-<screeninfo>The <guimenu>Format</guimenu> Menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="menuextra.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guimenu>Format</guimenu>
-Menu</phrase></textobject>
-</mediaobject>
-</screenshot>
-
 <variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Select</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+If you have been using a tool such as the line drawing tool which does
+not allow you to select other objects, you can use this menu item to
+return to the normal selection cursor.</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term>
 <menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Pen And Brush...</guimenuitem>
+<guimenuitem>Rotate</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
-Brings up a dialog box that <action>modifies the thickness, style
-(dashed or solid) color and thickness of a line</action>.</para>
+<para>Changes the cursor to a double headed curved arrow.  Drag with
+the cursor to rotate the object on the slide.  When you are
+happy with the position of the object, click to stop
+rotating.</para>
+<para>If you change your mind and wish to cancel the rotation, you can
+press the &Esc; key to cancel, or use
+<menuchoice><guimenu>Edit</guimenu><guimenuitem>Undo</guimenuitem>
+</menuchoice> to later undo it.</para>
+</listitem> </varlistentry>
 
-<para>It also gives you the Brush (paint bucket or flood fill)
-options. Note that if you have a line selected, it only gives you the
-line options, but as a solid shape has both a line around the outside
-and an area to fill in the middle of the shape, it will give both
-dialogs.</para>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guisubmenu>Arrange Objects</guisubmenu>
+</menuchoice></term>
+<listitem><para>This is where you can manipulate the stacking order of
+objects on the slide.</para>
 
-<para>It also gives both if nothing is selected. The Brush allows both
-plain color fills and several gradients. By moving the dialog box out
-of the way and clicking <guibutton>Apply</guibutton>, you can see the
-effect of your changes. The <guibutton>OK</guibutton> button closes
-the dialog box.</para>
+<para>An object that is on top, will cover, either partially or fully
+depending on it's size, all other objects beneath it. Meanwhile an
+object on the bottom of the sack may not be visible at all, as it is
+covered up by other objects.  An object in the middle may be partially
+covered by other objects, while partially covering yet more objects
+itself.</para>
+
+<para>You can send the selected object down or up a layer, or directly
+to the top or bottom of the stack.</para>
 
 </listitem>
 </varlistentry>
@@ -916,97 +1159,15 @@ the dialog box.</para>
 <term>
 <menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Configure Pie/Arc/Chord...</guimenuitem>
+<guisubmenu>Align Objects</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
 
-<para>You must first make a pie slice, an arc or a chord using the
-fifth tool down on the toolbar to the left of the work area. Once a
-shape has been made, you can change it to one of the other options and
-alter the shape by putting in different values in the boxes. The
-<guilabel>Length</guilabel> box has the most noticeable effect and is
-the one to use to change the shape from the default to what you
-need.</para>
+<para>In the submenu you can quickly align all the currently
+selected objects with a side of the slide, or center them either
+vertically or horizontally.</para>
 
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Configure Rectangle...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-
-<para> Draw a rectangle and it has right angles at each corner. The
-dialog box allows you to set the X and Y values (either type in a
-number, use the slider or spinbox arrows) to make rounded corners on
-your box. If you set both values to 99, your rectangle becomes a
-circle if it started off fairly square or an elipse if it was longer
-on one axis.</para>
-
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
-</shortcut>
-<guimenu>Format</guimenu>
-<guimenuitem>Lower Objects</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-
-<para>When you draw a new object (&eg; a rectangle), it is on an
-invisible layer. Newer objects (drawn after it) are on a layer above
-it, and if both are in the same place, the newer object will be the
-one on top. If this is not what you want, you can use <keycombo
-action="simul">&Ctrl;<keycap>L</keycap></keycombo> to make a newly
-drawn object go behind one you drew earlier.</para>
-
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
-</shortcut>
-<guimenu>Format</guimenu>
-<guimenuitem>Raise Objects</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-
-<para>Raises an object drawn earlier to be in front of an object drawn
-after it</para>
-
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Rotate Objects</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>This gives you the option to rotate a selected object by either
-90, 180 or 270 degrees or by any other value. Click the
-<guilabel>Custom</guilabel> Radio button and use the slider to move
-the preview to whatever value you need. If you are not sure, choose 20
-degrees (or some other small value) and hit Apply several times until
-you are happy with the result. What's the <guilabel>zero
-degrees</guilabel> Radio button for? It is an undo button. It sets the
-object you have rotated back to its original position.</para>
 </listitem>
 </varlistentry>
 
@@ -1020,7 +1181,7 @@ object you have rotated back to its original position.</para>
 <listitem>
 <para>This put as colored copy of either text or a drawn object behind
 it. You can make nice <quote>dropped shadows</quote> for logos with
-this tool. To make it work with text, ensure that you have the text
+this tool. To work with text, ensure that you have the text
 box selected (you will see the six small black boxes around the
 outline) You choose the color, select which way the shadow is going to
 fall and select a distance. For text it looks nice if you set the
@@ -1066,26 +1227,6 @@ parts.</para>
 <term>
 <menuchoice>
 <guimenu>Format</guimenu>
-<guisubmenu>Align Objects</guisubmenu>
-</menuchoice>
-</term>
-<listitem>
-
-<para> Align Objects has another menu as part of it. Select an object
-that you have drawn or some text (ensure that you have the text box
-selected, you will see the six small black boxes around the outline)
-and click one of the options. The selected object moves to the left,
-top center or wherever you have chosen. It's useful for page layout
-when you want some text boxes to align neatly on one side of the slide
-you have made.</para>
-
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Format</guimenu>
 <guimenuitem>Page Layout...</guimenuitem>
 </menuchoice></term>
 <listitem>
@@ -1102,7 +1243,7 @@ A4, US legal.</para>
 <term>
 <menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Page Background...</guimenuitem>
+<guimenuitem>Slide Background...</guimenuitem>
 </menuchoice></term>
 <listitem>
 
@@ -1126,6 +1267,17 @@ choosing a color/gradient.</para>
 
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Properties</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+The properties dialog for an object allows you to maniplate it in a
+very detailed manner</para></listitem>
+</varlistentry>
 </variablelist>
 
 </sect1>
@@ -1134,18 +1286,8 @@ choosing a color/gradient.</para>
 <title><guimenu>Text</guimenu> Menu</title>
 
 <para>This menu modifies text and gives a few word processing tools to
-use when you are making presentations with text rather than drawings
-in them.</para>
-
-<screenshot>
-<screeninfo>The <guimenu>Text</guimenu> Menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="menutext.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guimenu>Text</guimenu>
-Menu</phrase></textobject>
-</mediaobject>
-</screenshot>
+use when you are making presentations with extensive amounts
+of text in them.</para>
 
 <para>To have any effect you must have first created some text by
 making a text box (the tool to the left of the main screen with
@@ -1159,6 +1301,17 @@ text. Anything included within the rectangle will be affected by the
 tools you use under this menu.</para>
 
 <variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Default Format</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>FIXME: What is this? A reset to defaults? Find out.</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term>
 <menuchoice>
@@ -1167,8 +1320,8 @@ tools you use under this menu.</para>
 </menuchoice>
 </term>
 <listitem>
-
-<para>You have to click the Font menu entry to show the dialog box.</para>
+<!-- FIXME: This explanation is pretty verbose, clean it up -->
+<para>Click the Font menu entry to show the dialog box.</para>
 
 <screenshot>
 <screeninfo>The font option dialog</screeninfo>
@@ -1192,6 +1345,16 @@ change the selected text in your presentation or
 </varlistentry>
 
 <varlistentry>
+<term><menuchoice>
+<shortcut><keycombo action="simul">
+&Alt;&Ctrl;<keycap>P</keycap></keycombo></shortcut>
+<guimenu>Text</guimenu>
+<guimenuitem>Paragraph...</guimenuitem> </menuchoice></term>
+<listitem> <para>FIXME: Find out and describe how this works</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
 <guimenu>Text</guimenu>
@@ -1199,10 +1362,6 @@ change the selected text in your presentation or
 </menuchoice>
 </term>
 <listitem>
-
-<para>The <guimenuitem>Color</guimenuitem> menu entry has an
-<guiicon>underlined letter A</guiicon> to the left to show that there
-is an icon on a taskbar that you can use.</para>
 
 <para>This tool is used to change the color of the selected
 text.</para>
@@ -1270,44 +1429,47 @@ return without making changes.</para>
 <varlistentry>
 <term>
 <menuchoice>
+<shortcut><keycombo action="simul">
+&Alt;&Ctrl;<keycap>S</keycap></keycombo></shortcut>
 <guimenu>Text</guimenu>
-<guimenuitem>Settings</guimenuitem>
+<guimenuitem>Style Manager</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
-<guimenuitem>Settings</guimenuitem> has a <guiicon>spanner</guiicon>
-to the left to show that there is an icon to use on the toolbars. This
-allows you to tell &kpresenter; how to display an Unsorted list,
-better known as bullet points.</para>
-
-<screenshot>
-<screeninfo>Configuring bullet points</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="textmenu03.png" format="PNG"/>
-</imageobject>
-<textobject><phrase>Configuring bullet points</phrase></textobject>
-</mediaobject>
-</screenshot>
-
-<para>You can have four levels of indented bullet points (useful if
- you are making a list of items under a bullet point, then another
- list under that one). You can have filled or outline circles and
- squares are your bullet points.</para>
-
-<para>A nice touch is the ability to specify the color of the bullet
- points. The black bars in the diagram are color selection dialog
- boxes. Click inside to modify the color of the bullet points.</para>
-
-<para>The spacing of the lines, paragraphs and margins of the bullet
-point list can also be modified using the tools on the
-right. Underneath is an area that has been created for a enumerated
-(numbered) list. If this is grayed out it has not yet been
-written.</para>
-
-</listitem>
+FIXME: Write a separate 'Working with styles' section
+</para>
+<para>The style manager allows you to create an entire set of
+attributes that will be applied to selected text all at
+once.</para></listitem>
 </varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Import Style...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Here you can import styles
+you have defined in another &kpresenter; document.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Text</guimenu>
+<guisubmenu>Style</guisubmenu>
+</menuchoice></term>
+<listitem><para>Apply a style you have defined to the currently
+selected text.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Create Style From Selection</guimenuitem>
+</menuchoice></term>
+<listitem><para>Copy the properties of the currently selected text and
+save them as a style that you may apply to other of text.</para>
+</listitem></varlistentry>
 
 <varlistentry>
 <term>
@@ -1321,15 +1483,14 @@ written.</para>
 </term>
 <listitem>
 <para>
-<guisubmenu>Align</guisubmenu> has a sub-menu giving three options:
+<guisubmenu>Align</guisubmenu> has a submenu giving several options:
 <guimenuitem>Align Left</guimenuitem>, <guimenuitem>Align
-Center</guimenuitem> and <guimenuitem>Align Right</guimenuitem> and
-also shows the keyboard shortcuts to use.</para>
+Center</guimenuitem>, <guimenuitem>Align Right</guimenuitem>, and
+<guimenuitem>Align Block</guimenuitem> which is also commonly known as
+<quote>justify</quote>.</para>
 
-<para>Text is usually aligned at the left margin of a text box. If was
-want it to align to the right or would like it centered, we can use
-this tool.</para>
-</listitem>
+<para>Text is by default aligned at the left margin of a text
+box.</para> </listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1341,10 +1502,12 @@ this tool.</para>
 </term>
 <listitem>
 <para>
-<guisubmenu>Type</guisubmenu> allows us to make an
-<guimenuitem>Unsorted list</guimenuitem> (bullet points) or remove
-them by making them <guimenuitem>Normal Text</guimenuitem>.
-</para>
+Turn the currently selected text into a list, either numbered or
+bulleted.  If you choose numbered, you can then select a
+numbering style, and likewise if you choose bulleted you can
+choose the style of bullets to use.</para>
+<para>To change a list back to plain text, select
+<guimenuitem>None</guimenuitem> as the style.</para>
 </listitem>
 </varlistentry>
 
@@ -1356,7 +1519,8 @@ them by making them <guimenuitem>Normal Text</guimenuitem>.
 </shortcut>
 <guimenu>Text</guimenu>
 <guimenuitem>Increase Depth</guimenuitem>
-</menuchoice>
+</menuchoice></term>
+<term>
 <menuchoice>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>-</keycap></keycombo>
@@ -1368,7 +1532,7 @@ them by making them <guimenuitem>Normal Text</guimenuitem>.
 <listitem>
 <para>
 <guimenuitem>Increase Depth</guimenuitem> and <guimenuitem>Decrease
-depth</guimenuitem> move the Unsorted List paragraph to the right
+depth</guimenuitem> move the list paragraph to the right
 (<guimenuitem>Increase Depth</guimenuitem>) or back to the left
 (<guimenuitem>Decrease Depth</guimenuitem>).</para>
 
@@ -1393,7 +1557,8 @@ bullet points.</para></caption>
 <menuchoice>
 <guimenu>Text</guimenu>
 <guimenuitem>Extend Contents To Object Height</guimenuitem>
-</menuchoice>
+</menuchoice></term>
+<term>
 <menuchoice>
 <guimenu>Text</guimenu>
 <guimenuitem>Extend Object To Fit The Contents</guimenuitem>
@@ -1403,70 +1568,120 @@ bullet points.</para></caption>
 <para>
 <guimenuitem>Extend Contents to Object Height</guimenuitem> and
 <guimenuitem>Extend Object to fit the Contents</guimenuitem> help to
-re-size text within the text box or make the text box fit the text you
-have typed or pasted into it. 
+resize text within the text box or make the text box fit the text you
+have typed or pasted into it.
 </para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Insert Page Number</guimenuitem>
+</menuchoice></term>
+<listitem><para>Insert a page number.</para>
+<para>FIXME: Find out if this is dynamic</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Change Case...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>Change the case or capitalization of the currently selected
+text.</para>
+<para>You may choose between several styles of capitalization,
+including all lower or upper case, book style capitalization where each
+word except conjunctions has an initial capital letter, and sentence
+style capitalization where the first word in a sentence is
+capitalized.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Text</guimenu>
+<guisubmenu>Spellcheck</guisubmenu>
+</menuchoice></term>
+<listitem><para>&kpresenter; can automatically spell check text
+as you type it, which you can enable and disable here.</para>
+<para>If you prefer to check spelling on demand than automatically, you
+can begin a spelling check here.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Text</guimenu>
+<guisubmenu>Apply Autocorrection...</guisubmenu>
+</menuchoice></term>
+<listitem><para>
+FIXME: The other autocorrection setting is in another menu, shouldn't
+they be together like the spell checking is?</para>
+<para>FIXME: Shouldn't have ..., no dialog is shown *before* the action
+is applied, only after to ask if it should be applied  (where?
+it says 'to new slide', does that mean this one, or ones
+created after this)</para>
+<para>If you did not choose to enable autocorrection in the
+<guimenu>Edit</guimenu> menu, you can apply it on demand here.</para>
+</listitem> </varlistentry>
 
 </variablelist>
 
 </sect1>
 
-<sect1 id="screenpresmenu">
-<title><guimenu>Screen Presentations</guimenu> Menu</title>
+<sect1 id="slide-show-menu">
+<title><guimenu>Slide Show</guimenu> Menu</title>
 
-
-<screenshot>
-<screeninfo>The <guimenu>Screen Presentations</guimenu>
-Menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="menuscreen.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guimenu>Screen Presentations</guimenu>
-Menu</phrase></textobject>
-</mediaobject>
-</screenshot>
 <variablelist>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Configure Pages...</guimenuitem>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Configure Slide Show...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
-
+FIXME: Write a working with slideshows section
 </para>
+<para>You can set up the properties for the entire slide show here,
+including whether to show the duration on screen, which of the slides
+in a presentation to include, and several other global settings.</para>
+<para>This is discussed in detail in the FIXME: link to presentation
+section.</para></listitem> </varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Edit Slide Transition</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+Apply transition effects to the currently open slide.  This is where
+you can choose how the transition from one slide to the next
+will be handled.</para>
+
+<para>The transition effects you select here are applied on the
+transition <emphasis>from</emphasis> this slide
+<emphasis>to</emphasis> the next.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Assign Effect...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Screen Presentations</guimenu>
+<guimenu>Slide Show</guimenu>
 <guimenuitem>Start</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
-
+Begin the slideshow from the current slide.
 </para>
 </listitem>
 </varlistentry>
@@ -1474,8 +1689,8 @@ Menu</phrase></textobject>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>View Current Page</guimenuitem>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Start From First Slide</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1489,13 +1704,13 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>Home</keycap></shortcut>
-<guimenu>Screen Presentations</guimenu>
+<guimenu>Slide Show</guimenu>
 <guimenuitem>Go To Start</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
-
+Go directly to the first slide in the slide show.
 </para>
 </listitem>
 </varlistentry>
@@ -1504,13 +1719,13 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>Page Up</keycap></shortcut>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Previous Step</guimenuitem>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Previous Slide</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
-
+Go back to the previous slide in the slide show.
 </para>
 </listitem>
 </varlistentry>
@@ -1519,13 +1734,13 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>Page Down</keycap></shortcut>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Next Step</guimenuitem>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Next Slide</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
-
+Go to the next slide in the slide show.
 </para>
 </listitem>
 </varlistentry>
@@ -1534,319 +1749,17 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>End</keycap></shortcut>
-<guimenu>Screen Presentations</guimenu>
+<guimenu>Slide Show</guimenu>
 <guimenuitem>Go To End</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
-
+Go immediately to the final slide in the slide show.
 </para>
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Pen Color...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenu>Pen Width</guimenu>
-<guimenuitem>#</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Open Presentation Structure
-Editor</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-</sect1>
-
-<sect1 id="tools-menu">
-<title><guimenu>Tools</guimenu> Menu</title>
-
-<screenshot>
-<screeninfo>The <guimenu>Tools</guimenu> Menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="toolsmenu01.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guimenu>Tools</guimenu>
-Menu</phrase></textobject>
-</mediaobject>
-</screenshot>
-
-<para>The <guimenu>Tools</guimenu> menu contains details of keyboard
-shortcut keys. (Note that the Insert menu has three other shortcut
-keys: <guimenuitem>Insert Page</guimenuitem> with <keycap>F2</keycap>,
-<guimenuitem>Insert Picture</guimenuitem> with <keycap>F3</keycap>,
-and <guimenuitem>Insert Clipart</guimenuitem> with
-<keycap>F4</keycap>).</para>
-
-<para>If you prefer to use both hands, you can draw with the mouse and
-change what you are doing without having to move the pointer to click
-on the <guiicon>Toolbar</guiicon> Icon. For example, draw a rectangle
-(F7 key) and when you have finished, the <keycap>F5</keycap> key will
-put the mouse back into the <quote>select</quote> mode.</para>
-
-<variablelist>
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>F5</keycap></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Mouse</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-Use the mouse to draw with.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>F6</keycap></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Line</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-Draw a straight line. Click with the <mousebutton>left</mousebutton>
-mouse button where you want the line to start, and drag to where you
-want the line to end.  You can select the line later and drag the node
-handles to resize or scale it.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Tools</guimenu>
-<guimenuitem>Freehand</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-Draw a freehand shape.  Click with the &LMB; to begin, and draw with
-your mouse.  Release the mouse button to stop drawing.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Tools</guimenu>
-<guimenuitem>Polyline</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>A polyline is a shape made up of straight lines.  Click with the
-&LMB; to begin. Click again where the first line segment should stop,
-and click again to draw a second line segment connected to the
-first.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Tools</guimenu>
-<guimenuitem>Quadric Bezier Curve</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><!-- FIXME: What's Quadric? --> Click with the &LMB; to begin
-drawing.  Click again to set the endpoint of the curve.  Drag the
-mouse to change the shape of the curve.  Click with the &RMB; to
-finish drawing.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Tools</guimenu>
-<guimenuitem>Cubic Bezier Curve</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><!-- FIXME: What's Cubic? Why should a user care? --> Click with
-the &LMB; to begin drawing.  Click again to set the endpoint of the
-curve.  Drag the mouse to change the shape of the curve.  Click with
-the &RMB; to finish drawing.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>F7</keycap></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Rectangle</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Draw a rectangle.  Click with the &LMB; to begin the rectangle,
-move the mouse to where you want the opposite corner to be, and click
-again.</para>
-
-<para>Click with the &RMB; on the rectangle and choose
-<guimenuitem>Configure Rectangle</guimenuitem> to change the sharpness
-of the corners, and to fill in the rectangle with color or not.</para>
-
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>F8</keycap></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Circle/Ellipse</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-Draw a circle or ellipse.  Click with the &LMB; to begin the circle,
-move the mouse to where you want the opposite side to be, and click
-again.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>F9</keycap></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Pie/Arc/Chord</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-Draw a shape shaped like a piece of pie.  Click with the &LMB; to
-begin the shape, move the mouse to where you want the opposite side to
-be, and click again.
-<!-- FIXME: Lame description. -->
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>F10</keycap></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Text</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-<!-- FIXME: Explain this -->
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>F11</keycap></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Autoform</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para> Choose from a variety of predefined shapes.  At present, these
-are arrows, in various directions, and connectors that you can use to
-construct flow charts.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>F12</keycap></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Diagram</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-<!-- FIXME: This doesn't *do* anything except make a rectangle. -->
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>F1</keycap></keycombo>
-</shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Table</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>The <guimenu>Table</guimenu> menu option requires you to first
-draw a square or rectangle with the left mouse button held down. It
-will then give you a menu. You use it when you want to put a
-spreadsheet into your presentation. The import options are: &kspread;,
-<application>Gnumeric</application>, &Microsoft;
-<application>Excel</application>, <application>Quattro
-Pro</application>, <application>Applix</application>, Text with comma
-separated values or plain text. You also have options to either insert
-a recently used document or to start with an empty document.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>F2</keycap></keycombo>
-</shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Object</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>The menu entry <guimenuitem>Object</guimenuitem> has a
-sub-menu. You can choose to import an object created in one of the
-other &koffice; tools. Again, you must first draw a square or rectangle
-before it gives you a menu where you can choose a file to import.</para>
-</listitem>
-</varlistentry>
 </variablelist>
 
 </sect1>
@@ -1854,27 +1767,60 @@ before it gives you a menu where you can choose a file to import.</para>
 <sect1 id="settingsmenu">
 <title>The <guimenu>Settings</guimenu> Menu</title>
 
-<para>The <guimenu>Settings</guimenu> menu allows us to customize &kpresenter;. </para>
-
-<screenshot>
-<screeninfo>Settings menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="settings01.png" format="PNG" width="206"/>
-</imageobject>
-<textobject><phrase>The <guimenu>Settings</guimenu>
-Menu</phrase></textobject>
-</mediaobject>
-</screenshot>
-
-<para>The top seven menu entries control what toolbars are
-displayed. Clicking on the tick on the left removes it (or restores
-it). It's useful if you want a little more working area and do not
-intend to use one of the toolbars.</para>
-
-<!-- FIXME: Add the menu entries, and a screenshot as to which one they are -->
+<para>The <guimenu>Settings</guimenu> menu allows you to customize
+&kpresenter;.</para>
 
 <variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+</menuchoice></term>
+<listitem><para>
+The items in this submenu are toggles, that is, you can both enable and
+disable the display of specific toolbars here.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Type Anywhere Cursor</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>FIXME: Find out what this is</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Autocorrection...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Autocorrection is &kpresenter;'s ability to correct
+common typing errors or expand abbreviations independently of the spell
+checking function.  There are several common typing errors entered for
+you by default such as replacing <userinput>teh</userinput> with
+<userinput>the</userinput> and you can add as many more as you
+like.</para>
+
+<para>The ability to expand abbreviations can save you a lot of typing
+time, if you often repeat text whether in the same pressentation or in
+multiple presentations.</para>
+
+<para>For instance, if you work for <quote>Company with a really really
+long name Inc.</quote> then you might define an autocorrection entry so
+that whenever you type <userinput>myJob</userinput> or some other piece
+of unique text, it will be replaced with <quote>Company with a really
+really long name Inc.</quote>.</para>
+
+<para>Autocorrection can be applied automatically as you type, or only
+on demand when you choose it from the <guimenu>Text</guimenu>
+menu.</para>
+
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
@@ -1986,7 +1932,6 @@ to whatever the background color was. The
 settings. </para>
 
 </sect1>
-
 
 <sect1 id="helpmenu">
 <title><guimenu>Help</guimenu> Menu</title>
