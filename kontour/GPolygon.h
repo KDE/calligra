@@ -32,19 +32,13 @@ class GPolygon : public GObject
 {
   Q_OBJECT
 public:
-  GPolygon(bool roundness = false);
+  GPolygon();
   GPolygon(const QDomElement &element);
   GPolygon(const GPolygon &obj);
 
+  void createPolygon(const KoPoint &p, int n, double r);
+
   GObject *copy() const;
-
-  bool isSquare() const;
-
-  const KoPoint &startPoint() const {return sPoint; }
-  void startPoint(const KoPoint &p);
-
-  const KoPoint &endPoint() const {return ePoint; }
-  void endPoint(const KoPoint &p);
 
   QString typeName () const;
   QDomElement writeToXml(QDomDocument &document);
@@ -61,7 +55,7 @@ public:
   bool isConvertible() const;
 
 private:
-  int mNumber;
+  int mVertex;
   KoPoint mCenter;
   double mAAngle;
   double mBAngle;

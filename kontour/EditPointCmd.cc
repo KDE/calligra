@@ -22,7 +22,7 @@
 
 */
 
-#include <EditPointCmd.h>
+#include "EditPointCmd.h"
 
 #include <klocale.h>
 

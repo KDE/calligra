@@ -42,6 +42,7 @@ libkontourpart_la_SOURCES = \
 	GPath.cc \
 	GOval.cc \
 	GRect.cc \
+	GPolygon.cc \
 	GImage.cc \
 	GGroup.cc \
 	GStyle.cc \
@@ -56,6 +57,7 @@ libkontourpart_la_SOURCES = \
 	ZoomTool.cc \
 	RectTool.cc \
 	OvalTool.cc \
+	PolygonTool.cc \
 	InsertImageTool.cc \
 	Handle.cc \
 	Command.cc \

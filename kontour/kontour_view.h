@@ -51,6 +51,7 @@ class EditPointTool;
 class ZoomTool;
 class RectTool;
 class OvalTool;
+class PolygonTool;
 class InsertImageTool;
 class QDockArea;
 class QButton;
@@ -237,6 +238,7 @@ private:
   ZoomTool            *mZoomTool;
   RectTool            *mRectTool;
   OvalTool            *mOvalTool;
+  PolygonTool         *mPolygonTool;
   InsertImageTool     *mInsertImageTool;
 
   /* */
@@ -246,7 +248,6 @@ private:
   KAction *m_distribute;
 
   DCOPObject *m_dcop;
-
 };
 
 #endif

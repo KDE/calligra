@@ -1,11 +1,10 @@
 /* -*- C++ -*-
 
-#include "PolygonTool.h"
-
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -24,144 +23,51 @@
 
 */
 
-#include <PolygonTool.h>
+#include "PolygonTool.h"
 
-#include <qkeycode.h>
+#include <kaction.h>
 #include <klocale.h>
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kdebug.h>
 
-#include <GDocument.h>
-#include "KIllustrator_doc.h"
+#include "kontour_view.h"
 #include "GPage.h"
-#include <Canvas.h>
-#include "GPolygon.h"
-#include <Coord.h>
-#include <CommandHistory.h>
-#include <PolygonConfigDialog.h>
-#include <CreatePolygonCmd.h>
+#include "Canvas.h"
 #include "ToolController.h"
-#include "KIllustrator_factory.h"
 
-PolygonTool::PolygonTool (CommandHistory* history)
-   : Tool (history)
+PolygonTool::PolygonTool(QString aId, ToolController *tc):
+Tool(aId, tc)
 {
-   obj = 0L;
-   kdDebug(38000)<<"PolygonTool::PolygonTool()"<<endl;
-   m_id=ToolPolygon;
+  ToolSelectAction *zoom = new ToolSelectAction(actionCollection(), "ToolAction");
+  KRadioAction *mT1 = new KRadioAction(i18n("Polygon"), "polygontool", 0, actionCollection());
+  mT1->setExclusiveGroup("PolygonTool");
+  KRadioAction *mT2 = new KRadioAction(i18n("Polygon"),"polygontool", 0, actionCollection());
+  mT2->setExclusiveGroup("PolygonTool");
+  zoom->insert(mT1);
+  zoom->insert(mT2);
 }
 
-void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
+void PolygonTool::activate()
 {
-  if(!doc->document()->isReadWrite())
-      return;
-   if (e->type () == QEvent::MouseButtonPress)
-   {
-      QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-      canvas->snapPositionToGrid (xpos, ypos);
-
-      obj = new GPolygon (doc, GPolygon::PK_Polygon);
-      sPoint = Coord (xpos, ypos);
-      obj->setSymmetricPolygon (sPoint, sPoint, nCorners,
-                                 createConcavePolygon, sharpValue);
-      doc->activePage()->insertObject (obj);
-   }
-   else if (e->type () == QEvent::MouseMove)
-   {
-      if (obj == 0L)
-         return;
-      QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-      canvas->snapPositionToGrid (xpos, ypos);
-
-      obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners,
-                                createConcavePolygon, sharpValue);
-   }
-   else if (e->type () == QEvent::MouseButtonRelease)
-   {
-      if (obj == 0L)
-         return;
-      QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-      canvas->snapPositionToGrid (xpos, ypos);
-
-      obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners,
-                                createConcavePolygon, sharpValue);
-
-      if (! obj->isValid ())
-      {
-         doc->activePage()->deleteObject (obj);
-      }
-      else
-      {
-         CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
-         history->addCommand (cmd);
-
-         doc->activePage()->unselectAllObjects ();
-         doc->activePage()->setLastObject (obj);
-      }
-      obj = 0L;
-   }
-   else if (e->type () == QEvent::KeyPress)
-   {
-      QKeyEvent *ke = (QKeyEvent *) e;
-      if (ke->key () == Qt::Key_Escape)
-         m_toolController->emitOperationDone (m_id);
-   }
-   return;
+//  toolController()->view()->canvas()->setCursor(Qt::crossCursor);
+//  toolController()->view()->setStatus(i18n("Rectangle Mode"));
 }
 
-void PolygonTool::configure ()
+void PolygonTool::deactivate()
 {
-   PolygonConfigDialog::setupTool(this);
 }
 
-unsigned int PolygonTool::numCorners () const {
-  return nCorners;
-}
-
-unsigned int PolygonTool::sharpness () const {
-  return sharpValue;
-}
-
-bool PolygonTool::concavePolygon () const {
-  return createConcavePolygon;
-}
-
-void PolygonTool::setNumCorners (unsigned int num) {
-  nCorners = num;
-}
-
-void PolygonTool::setSharpness (unsigned int value) {
-  sharpValue = value;
-}
-
-void PolygonTool::setConcavePolygon (bool flag) {
-  createConcavePolygon = flag;
-}
-
-void PolygonTool::writeOutConfig()
+void PolygonTool::processEvent(QEvent *e)
 {
-    KConfig* config = KIllustratorFactory::global()->config ();
-    config->setGroup("PolygonTool");
-    config->writeEntry("Corners", nCorners);
-    config->writeEntry("SharpValue", sharpValue);
-    config->writeEntry("Concave", createConcavePolygon);
+  Canvas *canvas = toolController()->view()->canvas();
+  GPage *page = toolController()->view()->activeDocument()->activePage();
+  if(e->type() == QEvent::MouseButtonPress)
+  {
+  }
+  else if(e->type() == QEvent::MouseMove)
+  {
+  }
+  else if(e->type() == QEvent::MouseButtonRelease)
+  {
+  }
 }
 
-void PolygonTool::activate (GDocument* /*doc*/, Canvas* canvas)
-{
-   canvas->setCursor(Qt::crossCursor);
-   if (!m_configRead)
-   {
-      KConfig* config = KIllustratorFactory::global()->config ();
-      config->setGroup("PolygonTool");
-      nCorners = config->readNumEntry("Corners", 3);
-      sharpValue = config->readNumEntry("SharpValue", 0);
-      createConcavePolygon = config->readBoolEntry("Concave", false);
-      m_configRead=true;
-   };
-   m_toolController->emitModeSelected (m_id,i18n ("Create Polygon"));
-}
+#include "PolygonTool.moc"

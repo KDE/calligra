@@ -24,60 +24,46 @@
 
 #include "GPolygon.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <qdom.h>
 
 #include <klocale.h>
 #include <koVectorPath.h>
 #include <koPainter.h>
-#include <kdebug.h>
 
 #include "kontour_global.h"
 #include "GPath.h"
 
-GPolygon::GPolygon(bool roundness):
+GPolygon::GPolygon():
 GObject()
 {
-  if(roundness)
-  {
-    mXRoundness = 0.25;
-    mYRoundness = 0.25;
-  }
-  else
-  {
-    mXRoundness = 0.0;
-    mYRoundness = 0.0;
-  }
 }
 
 GPolygon::GPolygon(const QDomElement &element):
 GObject(element.namedItem("go").toElement())
 {
-  double x = 0;
-  double y = 0;
-  double sx = 0;
-  double sy = 0;
-
-  x = element.attribute("x").toDouble();
-  y = element.attribute("y").toDouble();
-  sx = element.attribute("sx").toDouble();
-  sy = element.attribute("sy").toDouble();
-
-  sPoint.setX(x);
-  sPoint.setY(y);
-  ePoint.setX(x + sx);
-  ePoint.setY(y + sy);
+  double cx = element.attribute("cx").toDouble();
+  double cy = element.attribute("cy").toDouble();
+  mCenter.setX(cx);
+  mCenter.setY(cy);
+  mVertex = element.attribute("n").toInt();
+  mAAngle = element.attribute("aa").toDouble();
+  mBAngle = element.attribute("ba").toDouble();
+  mARadius = element.attribute("ra").toDouble();
+  mBRadius = element.attribute("rb").toDouble();
   calcBoundingBox();
 }
 
 GPolygon::GPolygon(const GPolygon &obj):
 GObject(obj)
 {
-  ePoint = obj.ePoint;
-  sPoint = obj.sPoint;
-  mXRoundness = obj.mXRoundness;
-  mYRoundness = obj.mYRoundness;
+  mVertex = obj.mVertex;
+  mCenter = obj.mCenter;
+  mAAngle = obj.mAAngle;
+  mBAngle = obj.mBAngle;
+  mARadius = obj.mARadius;
+  mBRadius = obj.mBRadius;
   calcBoundingBox();
 }
 
@@ -86,67 +72,134 @@ GObject *GPolygon::copy() const
   return new GPolygon(*this);
 }
 
-bool GPolygon::isSquare() const
+void GPolygon::createPolygon(const KoPoint &p, int n, double r)
 {
-  if(ePoint.x() - sPoint.x() == ePoint.y() - sPoint.y())
-    return true;
-  else
-    return false;
-}
 
-void GPolygon::startPoint(const KoPoint &p)
-{
-  sPoint = p;
-  calcBoundingBox();
-}
-
-void GPolygon::endPoint(const KoPoint &p)
-{
-  ePoint = p;
-  calcBoundingBox();
 }
 
 QString GPolygon::typeName() const
 {
-  if(isSquare())
-    return i18n("Square");
-  else
-    return i18n("Rectangle");
+  return i18n("Polygon");
 }
 
 QDomElement GPolygon::writeToXml(QDomDocument &document)
 {
-  KoRect r(sPoint, ePoint);
-  r = r.normalize();
-
-  QDomElement rect = document.createElement("rect");
-  rect.setAttribute("x", r.left());
-  rect.setAttribute("y", r.top());
-  rect.setAttribute("sx", r.width());
-  rect.setAttribute("sy", r.height());
-  rect.appendChild(GObject::writeToXml(document));
-  return rect;
+  QDomElement polygon = document.createElement("polygon");
+  polygon.setAttribute("cx", mCenter.x());
+  polygon.setAttribute("cy", mCenter.y());
+  polygon.setAttribute("n", mVertex);
+  polygon.setAttribute("aa", mAAngle);
+  polygon.setAttribute("ab", mBAngle);
+  polygon.setAttribute("ra", mARadius);
+  polygon.setAttribute("rb", mBRadius);
+  polygon.appendChild(GObject::writeToXml(document));
+  return polygon;
 }
 
 void GPolygon::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool)
 {
   setPen(p);
   setBrush(p);
-  KoVectorPath *v = KoVectorPath::rectangle(sPoint.x(), sPoint.y(), ePoint.x() - sPoint.x(), ePoint.y() - sPoint.y(), 0.5 * mXRoundness * (ePoint.x() - sPoint.x()), 0.5 * mYRoundness * (ePoint.y() - sPoint.y()));
-  QWMatrix m;
-  m = m.translate(aXOffset, aYOffset);
+  KoVectorPath *v = new KoVectorPath;
+  double a = 2.0 * Kontour::pi / static_cast<double>(mVertex);
+  double caa = mAAngle;
+  double cab = mBAngle;
+  double x = mCenter.x() + mARadius * cos(caa);
+  double y = mCenter.y() + mARadius * sin(caa);
+  v->moveTo(x, y);
+  for(int i = 1; i <= mVertex; i++)
+  {
+    x = mCenter.x() + mBRadius * cos(cab);
+    y = mCenter.y() + mBRadius * sin(cab);
+    v->lineTo(x, y);
+    cab += a;
+    caa += a;
+    x = mCenter.x() + mARadius * cos(caa);
+    y = mCenter.y() + mARadius * sin(caa);
+    v->lineTo(x, y);
+  }
+  v->end();
   v->transform(tmpMatrix * m);
   p->drawVectorPath(v);
   delete v;
+  if(withBasePoints)
+  {
+    KoPoint c;
+    caa = mAAngle;
+    cab = mBAngle;
+    for(int i = 0; i < mVertex; i++)
+    {
+      c.setX(mCenter.x() + mARadius * cos(caa));
+      c.setY(mCenter.y() + mARadius * sin(caa));
+      c = c.transform(tmpMatrix * m);
+      drawNode(p, static_cast<int>(c.x()), static_cast<int>(c.y()), false);
+      c.setX(mCenter.x() + mBRadius * cos(cab));
+      c.setY(mCenter.y() + mBRadius * sin(cab));
+      c = c.transform(tmpMatrix * m);
+      drawNode(p, static_cast<int>(c.x()), static_cast<int>(c.y()), false);
+      caa += a;
+      cab += a;
+    }
+  }
 }
 
 void GPolygon::calcBoundingBox()
 {
-  KoPoint p1(sPoint.x(), sPoint.y());
-  KoPoint p2(ePoint.x(), sPoint.y());
-  KoPoint p3(ePoint.x(), ePoint.y());
-  KoPoint p4(sPoint.x(), ePoint.y());
-  box = calcUntransformedBoundingBox(p1, p2, p3, p4);
+  double xmax, xmin;
+  double ymax, ymin;
+  double a = 2.0 * Kontour::pi / static_cast<double>(mVertex);
+  double caa = mAAngle;
+  double cab = mBAngle;
+  KoPoint c;
+  c.setX(mCenter.x() + mARadius * cos(caa));
+  c.setY(mCenter.y() + mARadius * sin(caa));
+  c = c.transform(tmpMatrix);
+  xmax = c.x();
+  xmin = c.x();
+  ymax = c.y();
+  ymin = c.y();
+  c.setX(mCenter.x() + mBRadius * cos(cab));
+  c.setY(mCenter.y() + mBRadius * sin(cab));
+  c = c.transform(tmpMatrix);
+  if(c.x() < xmin)
+    xmin = c.x();
+  if(c.x() > xmax)
+    xmax = c.x();
+  if(c.y() < ymin)
+    ymin = c.y();
+  if(c.y() > ymax)
+    ymax = c.y();
+  for(int i = 1; i < mVertex; i++)
+  {
+    c.setX(mCenter.x() + mARadius * cos(caa));
+    c.setY(mCenter.y() + mARadius * sin(caa));
+    c = c.transform(tmpMatrix);
+    if(c.x() < xmin)
+      xmin = c.x();
+    if(c.x() > xmax)
+      xmax = c.x();
+    if(c.y() < ymin)
+      ymin = c.y();
+    if(c.y() > ymax)
+      ymax = c.y();
+    c.setX(mCenter.x() + mBRadius * cos(cab));
+    c.setY(mCenter.y() + mBRadius * sin(cab));
+    c = c.transform(tmpMatrix);
+    if(c.x() < xmin)
+      xmin = c.x();
+    if(c.x() > xmax)
+      xmax = c.x();
+    if(c.y() < ymin)
+      ymin = c.y();
+    if(c.y() > ymax)
+      ymax = c.y();
+    caa += a;
+    cab += a;
+  }
+  box.setLeft(xmin);
+  box.setRight(xmax);
+  box.setTop(ymin);
+  box.setBottom(ymax);
   adjustBBox(box);
 }
 
@@ -165,7 +218,7 @@ void GPolygon::removePoint(int idx, bool update)
 
 bool GPolygon::contains(const KoPoint &p)
 {
-  double x1, y1, x2, y2;
+/*  double x1, y1, x2, y2;
 
   if(box.contains(p))
   {
@@ -193,7 +246,7 @@ bool GPolygon::contains(const KoPoint &p)
 
     if(pp.x() <= x2 && pp.x() >= x1 && pp.y() <= y2 && pp.y() >= y1)
       return true;
-  }
+  }*/
   return false;
 }
 
@@ -205,11 +258,23 @@ bool GPolygon::findNearestPoint(const KoPoint &p, double max_dist, double &dist,
 GPath *GPolygon::convertToPath() const
 {
   GPath *path = new GPath(true);
-  path->beginTo(sPoint.x(), sPoint.y());
-  path->lineTo(sPoint.x(), ePoint.y());
-  path->lineTo(ePoint.x(), ePoint.y());
-  path->lineTo(ePoint.x(), sPoint.y());
-  path->lineTo(sPoint.x(), sPoint.y());
+  double a = 2.0 * Kontour::pi / static_cast<double>(mVertex);
+  double caa = mAAngle;
+  double cab = mBAngle;
+  double x = mCenter.x() + mARadius * cos(caa);
+  double y = mCenter.y() + mARadius * sin(caa);
+  path->beginTo(x, y);
+  for(int i = 1; i <= mVertex; i++)
+  {
+    x = mCenter.x() + mBRadius * cos(cab);
+    y = mCenter.y() + mBRadius * sin(cab);
+    path->lineTo(x, y);
+    cab += a;
+    caa += a;
+    x = mCenter.x() + mARadius * cos(caa);
+    y = mCenter.y() + mARadius * sin(caa);
+    path->lineTo(x, y);
+  }
   path->matrix(matrix());
   path->style(style());
   return path;
@@ -217,7 +282,7 @@ GPath *GPolygon::convertToPath() const
 
 bool GPolygon::isConvertible() const
 {
- return true;
+  return true;
 }
 
 #include "GPolygon.moc"

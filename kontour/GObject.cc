@@ -32,7 +32,10 @@
 
 #include "GOval.h"
 #include "GRect.h"
+#include "GPolygon.h"
 #include "GPath.h"
+#include "GImage.h"
+#include "GGroup.h"
 
 unsigned int GObject::mCurId = 0;
 
@@ -122,8 +125,8 @@ QDomElement GObject::writeToXml(QDomDocument &document)
 void GObject::drawNode(KoPainter *p, int x, int y, bool active)
 {
 // TODO Fix!
-  p->fillAreaRGB(QRect(x - 4, y - 4, 9, 9), KoColor::black());
-  p->fillAreaRGB(QRect(x - 3, y - 3, 7, 7), KoColor::magenta());
+  p->fillAreaRGB(QRect(x - 3, y - 3, 7, 7), KoColor::black());
+  p->fillAreaRGB(QRect(x - 2, y - 2, 5, 5), KoColor::magenta());
 }
 
 void GObject::setZoomFactor(double f, double pf)
@@ -186,8 +189,14 @@ GObject *GObject::objectFactory(const QDomElement &element)
     return new GOval(element);
   else if(element.tagName() == "rect")
     return new GRect(element);
+  else if(element.tagName() == "polygon")
+    return new GPolygon(element);
   else if(element.tagName() == "path")
     return new GPath(element);
+  else if(element.tagName() == "image")
+    return new GImage(element);
+  else if(element.tagName() == "group")
+    return new GGroup(element);
   else
     return 0L;
 }

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,36 +23,22 @@
 
 */
 
-#ifndef PolygonTool_h_
-#define PolygonTool_h_
+#ifndef __PolygonTool_h__
+#define __PolygonTool_h__
 
 #include <Tool.h>
 
 class GPolygon;
 
-class PolygonTool : public Tool {
+class PolygonTool : public Tool
+{
+  Q_OBJECT
 public:
-   PolygonTool (CommandHistory* history);
+  PolygonTool(QString aId, ToolController *tc);
 
-  virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
-  virtual void activate (GDocument* doc, Canvas* canvas);
-  virtual void configure ();
-
-  unsigned int numCorners () const;
-  unsigned int sharpness () const;
-  bool concavePolygon () const;
-
-  void setNumCorners (unsigned int num);
-  void setSharpness (unsigned int value);
-  void setConcavePolygon (bool flag);
-  void writeOutConfig();
-
-private:
-  GPolygon* obj;
-  unsigned int nCorners;
-  unsigned int sharpValue;
-  bool createConcavePolygon;
-  Coord sPoint;
+  void activate();
+  void deactivate();
+  void processEvent(QEvent *e);
 };
 
 #endif

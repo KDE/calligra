@@ -61,6 +61,7 @@
 #include "ZoomTool.h"
 #include "RectTool.h"
 #include "OvalTool.h"
+#include "PolygonTool.h"
 #include "InsertImageTool.h"
 #include "LayerPanel.h"
 #include "StylePanel.h"
@@ -394,6 +395,9 @@ void KontourView::setupTools()
 
   mOvalTool = new OvalTool("Oval", tcontroller);
   tcontroller->registerTool(mOvalTool);
+
+  mPolygonTool = new PolygonTool("Polygon", tcontroller);
+  tcontroller->registerTool(mPolygonTool);
 
   mInsertImageTool = new InsertImageTool("InsertImage", tcontroller);
   tcontroller->registerTool(mInsertImageTool);

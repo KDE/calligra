@@ -24,7 +24,7 @@
 
 #include "GRect.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <qdom.h>
 
