@@ -88,7 +88,6 @@ KPresenterChild::KPresenterChild( KPresenterDoc *_kpr, const QRect& _rect, KOffi
     : KoDocumentChild( _rect, _doc )
 {
     m_pKPresenterDoc = _kpr;
-    m_rDoc = KOffice::Document::_duplicate( _doc );
     setGeometry( QRect( _rect.left() + _diffx, _rect.top() + _diffy, _rect.width(), _rect.height() ) );
 }
 
@@ -115,8 +114,8 @@ KPresenterDoc::KPresenterDoc()
       _hasFooter( false ), urlIntern()
 {
     ADD_INTERFACE( "IDL:KOffice/Print:1.0" )
-	// Use CORBA mechanism for deleting views
-	m_lstViews.setAutoDelete( false );
+    // Use CORBA mechanism for deleting views
+    m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
 
     m_bModified = false;

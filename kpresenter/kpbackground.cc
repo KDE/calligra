@@ -546,7 +546,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 
 	int h = 0;
 	if ( doc->header()->getKTextObject()->isModified() ) {
-	    for ( unsigned int i = 0; i < doc->header()->getKTextObject()->paragraphs(); i++ )
+	    for ( int i = 0; i < doc->header()->getKTextObject()->paragraphs(); i++ )
 		h += doc->header()->getKTextObject()->paragraphAt( i )->height();
 	    h += 2;
 	    doc->header()->setSize( ext.width(), h );
@@ -571,7 +571,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 	    doc->footer()->setSize( ext.width(), 10 );
 
 	    int h = 0;
-	    for ( unsigned int i = 0; i < doc->footer()->getKTextObject()->paragraphs(); i++ )
+	    for ( int i = 0; i < doc->footer()->getKTextObject()->paragraphs(); i++ )
 		h += doc->footer()->getKTextObject()->paragraphAt( i )->height();
 	    h += 2;
 	    doc->footer()->setSize( ext.width(), h );

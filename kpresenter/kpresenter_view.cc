@@ -157,7 +157,7 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
     rndY = 0;
     m_vColorBar = 0;
     allowWebPres = true;
-
+    
     m_pKPresenterDoc = _doc;
     m_bKPresenterModified = true;
 
@@ -197,12 +197,13 @@ void KPresenterView::init()
     else
 	cerr << "Did not get a tool bar manager" << endl;
 
+    
     KPObject *kpobject;
-    for ( unsigned int i = 0; i < m_pKPresenterDoc->objectList()->count(); i++ )
-    {
+    for ( unsigned int i = 0; i < m_pKPresenterDoc->objectList()->count(); i++ ) {
 	kpobject = m_pKPresenterDoc->objectList()->at( i );
 	if ( kpobject->getType() == OT_PART )
-	    slotInsertObject( dynamic_cast<KPPartObject*>( kpobject )->getChild(), dynamic_cast<KPPartObject*>( kpobject ) );
+	    slotInsertObject( dynamic_cast<KPPartObject*>( kpobject )->getChild(), 
+			      dynamic_cast<KPPartObject*>( kpobject ) );
     }
 }
 

@@ -677,7 +677,7 @@ protected:
     bool m_bShowGUI;
     bool presStarted;
     bool allowWebPres;
-
+    
     QSize oldSize;
 
     int screensaver_pid;
