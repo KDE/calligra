@@ -1,6 +1,0 @@
-Sun May 31 02:04:20 1998  Torben Weis  <weis@localhost>
-
-	* torben.h: Added tostrstream
-
-	* komlParser.cc (readTag): Removed warnings
-
