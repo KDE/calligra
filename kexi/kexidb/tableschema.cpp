@@ -30,7 +30,7 @@ namespace KexiDB {
 class TableSchema::Private
 {
 public:
-	TableSchema::Private()
+	Private()
 	 : anyNonPKField(0)
 	{
 	}
