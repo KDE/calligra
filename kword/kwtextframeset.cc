@@ -1046,7 +1046,7 @@ void KWTextFrameSet::UndoRedoInfo::clear()
         {
             textdoc->addCommand( cmd );
             textfs->kWordDocument()->addCommand( new KWTextCommand( textfs, /*cmd, */name ) );
-	    textfs->kWordDocument()->setModified(true);
+	    //textfs->kWordDocument()->setModified(true);
             //kdDebug(32001) << "KWTextFrameSet::UndoRedoInfo::clear New KWTextCommand : " << name << endl;
         }
     }
@@ -1231,7 +1231,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     emit updateUI();
 
     doc->addCommand( macroCmd );
-    doc->setModified(true);
+    //doc->setModified(true);
 
     undoRedoInfo.clear();
     emit showCursor();
@@ -1647,7 +1647,7 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
     KWPasteCommand * cmd = new KWPasteCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
     textDocument()->addCommand( cmd );
     doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
-    doc->setModified(true);
+    //doc->setModified(true);
     *cursor = *( cmd->execute( cursor ) );
 
     formatMore();

@@ -2796,6 +2796,7 @@ bool KWDocument::selection() {
 void KWDocument::addCommand( KCommand * cmd )
 {
     history.addCommand( cmd, false );
+    setModified( true );
 }
 
 void KWDocument::slotDocumentRestored()

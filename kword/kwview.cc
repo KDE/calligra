@@ -1246,12 +1246,12 @@ void KWView::viewZoom( const QString &s )
         gui->getHorzRuler()->setZoom( doc->zoomedResolutionX() );
         gui->getVertRuler()->setZoom( doc->zoomedResolutionY() );
 
-        // What's this for ?
-        KWFrame *frame=doc->getFirstSelectedFrame();
-        if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
+        //After zoom refresh all resize handle
+        QList<KWFrame> selectedFrames = doc->getSelectedFrames();
+        KWFrame *frame=0L;
+        for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
         {
-            if(doc->processingType() == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0) && frame->isSelected())
-                frame->setSelected(true);
+            frame->setSelected(true);
         }
     }
     gui->canvasWidget()->repaintAll();
