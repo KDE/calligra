@@ -44,6 +44,7 @@
 #include <kformula.h>
 #include <kinstance.h>
 #include <klocale.h>
+#include <kglobal.h>
 #include <kscript_parsenode.h>
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
@@ -723,7 +724,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // First get some locale information
     if (!decimal_point)
     { // (decimal_point is static)
-      decimal_point = KSpreadFactory::global()->locale()->decimalSymbol()[0].latin1();
+      decimal_point = KGlobal::locale()->decimalSymbol()[0].latin1();
       // Hmm we should use QChar here and QString a lot more around
       // here... (David)
       debug( "decimal_point is '%c'", decimal_point );
@@ -740,7 +741,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // if precision is -1, ask for a huge number of decimals, we'll remove
     // the zeros later. Is 8 ok ?
     int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
-    QString localizedNumber = KSpreadFactory::global()->locale()->formatNumber(v, p);
+    QString localizedNumber = KGlobal::locale()->formatNumber(v, p);
     qDebug("LOCALIZED NUMBER is %s", localizedNumber.latin1() );
 
     // Remove trailing zeros and the decimal point if necessary
@@ -1312,7 +1313,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bValue = true;
     m_bBool = false;
     // m_strFormularOut.sprintf( "%f", m_dValue );
-    m_strFormularOut = KSpreadFactory::global()->locale()->formatNumber( m_dValue );
+    m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
@@ -1320,7 +1321,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bValue = true;
     m_bBool = false;
     // m_strFormularOut.sprintf( "%f", m_dValue );
-    m_strFormularOut = KSpreadFactory::global()->locale()->formatNumber( m_dValue );
+    m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
