@@ -1,3 +1,10 @@
+koffice (1:1.1.1-7) unstable; urgency=low
+
+  * Fixed documentation conflicts (closes: Bug#140688).
+  * Demo files are all once zipped with no .gz extension (closes: Bug#136288).
+
+ -- Ben Burton <benb@acm.org>  Mon,  1 Apr 2002 15:17:58 +1000
+
 koffice (1:1.1.1-6) unstable; urgency=low
 
   * Incorporated new KOFFICE_1_1_BRANCH patches.
