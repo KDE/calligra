@@ -38,10 +38,12 @@
 //BEGIN KuKexiDataSourceComboBox
 
 KuKexiDataSourceComboBox:: KuKexiDataSourceComboBox ( const PropertyEditor *editor,
-	 QString pname, QString value, KexiDataSourceComboBox::ItemList data, QWidget * parent, const char * name) :
+	 QString pname, QString value, KexiDataSourceComboBox::ItemList data, int level, QWidget * parent,
+		const char * name) :
 	 	KexiDataSourceComboBox(parent,name,data) {
 	setPName(pname);
 	setValue(value);
+	m_level=level;
   	connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
 	connect(this, SIGNAL(propertyChanged(QString, QString)),
 		editor, SLOT(emitPropertyChange(QString, QString)));
@@ -54,14 +56,16 @@ void KuKexiDataSourceComboBox::setValue(const QString value, bool emitChange)
     if (!value.isNull())
     {
         selectGlobalIdentifier(value);
-        if (emitChange)
+        if (emitChange) {
             emit propertyChanged(pname(), value);
+	}
     }
 }
 
 void KuKexiDataSourceComboBox::updateProperty(int val)
 {
     emit propertyChanged(pname(), globalIdentifier());
+    emit propertyChanged(m_level,val);
 }
 
 QString KuKexiDataSourceComboBox::value() const {
@@ -81,12 +85,14 @@ KuKexi::KuKexi(QObject *parent, const char* name, const QStringList& args):KuDes
 
 KuKexi::~KuKexi(){}
 void KuKexi::createPluggedInEditor(QWidget *& retVal,PropertyEditor *editor,
-                Property *p,const CanvasBox *cb) {
+                Property *p, CanvasBox *cb) {
 	if (!cb) return;
 	if (cb->rtti()==KuDesignerRttiDetail) {
 		if (p->type()==1024){
 			//retVal = new PComboBox(editor, p->name(), p->value(), &sourceMapping, false, 0, 0);
-			retVal = new KuKexiDataSourceComboBox(editor,p->name(), p->value(),m_sourceMapping);
+			retVal = new KuKexiDataSourceComboBox(editor,p->name(), p->value(),m_sourceMapping,
+				cb->props["Level"]->value().toInt());
+		        connect(retVal, SIGNAL(propertyChanged(int,int)), this, SLOT(slotDataSourceSelected(int,int)));
 		}
 	} else
 		if ((cb->rtti()==KuDesignerRttiCanvasField) && (p->type()==FieldName)) {
@@ -106,6 +112,19 @@ void KuKexi::newCanvasBox(int type, CanvasBox *cb) {
 		default:
 			break;
 	}
+}
+
+void KuKexi::slotDataSourceSelected(int level, int value)
+{
+	if (!value) return;
+	if (m_fieldMap.contains(value)) return;
+
+	kdDebug()<<"Need to insert new field list into map"<<endl;	
+	KexiDataSourceComboBox::Item item=*m_sourceMapping.at(value);
+	KexiProjectHandler *h=m_kexi->handlerForMime(item.mime);
+	KexiDataProvider *dp=(KexiDataProvider*)h;
+	m_fieldMap[value]=dp->fields(item.identifier);	
+	m_sectionMap[level]=value;
 }
 
 void KuKexi::updateSourceList() {
