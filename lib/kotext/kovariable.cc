@@ -790,7 +790,8 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
                  || localName == "author-initials"
                  || localName == "subject"
                  || localName == "title"
-                 || localName == "description")
+                 || localName == "description"
+                 || localName == "keywords")
         {
             type = VT_FIELD;
             key = "STRING";
@@ -1980,8 +1981,14 @@ QString KoFieldVariable::fieldCode()
     case VST_TITLE:
         return i18n("Title");
         break;
+    case VST_SUBJECT:
+        return i18n("Subject");
+        break;
     case VST_ABSTRACT:
         return i18n("Abstract");
+        break;
+    case VST_KEYWORDS:
+        return i18n("Keywords");
         break;
     case VST_INITIAL:
         return i18n("Initials");
@@ -2041,11 +2048,13 @@ void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
     else if ( localName == "author-initials" )
         m_subtype = VST_INITIAL;
     else if ( localName == "subject" )
-        m_subtype = VST_TITLE; // TODO separate variable
+        m_subtype = VST_SUBJECT;
     else if ( localName == "title" )
         m_subtype = VST_TITLE;
     else if ( localName == "description" )
         m_subtype = VST_ABSTRACT;
+    else if ( localName == "keywords" )
+        m_subtype = VST_KEYWORDS;
 
     else if ( localName == "sender-company" )
         m_subtype = VST_COMPANYNAME;
@@ -2124,6 +2133,12 @@ void KoFieldVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context
         break;
     case VST_TITLE:
         writer.startElement("text:title" );
+        break;
+    case VST_KEYWORDS:
+        writer.startElement("text:keywords" );
+        break;
+    case VST_SUBJECT:
+        writer.startElement("text:subject" );
         break;
     case VST_ABSTRACT:
         writer.startElement("text:description" );
@@ -2222,6 +2237,8 @@ void KoFieldVariable::recalc()
         break;
         case VST_TITLE:
         case VST_ABSTRACT:
+    case VST_SUBJECT:
+    case VST_KEYWORDS:
         {
             KoDocumentInfo * info = m_doc->documentInfo();
             KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
@@ -2231,6 +2248,10 @@ void KoFieldVariable::recalc()
             {
                 if ( m_subtype == VST_TITLE )
                     value = aboutPage->title();
+                else if ( m_subtype == VST_SUBJECT )
+                    value = aboutPage->subject();
+                else if ( m_subtype == VST_KEYWORDS )
+                    value = aboutPage->keywords();
                 else
                     value = aboutPage->abstract();
             }
@@ -2268,6 +2289,8 @@ QStringList KoFieldVariable::actionTexts()
 
     lst << i18n( "Document Title" );
     lst << i18n( "Document Abstract" );
+    lst << i18n( "Document Subject" );
+    lst << i18n( "Document Keywords" );
 
     lst << i18n( "File Name" );
     lst << i18n( "File Name without Extension" );
@@ -2314,15 +2337,19 @@ KoFieldVariable::FieldSubType KoFieldVariable::fieldSubType(short int menuNumber
                 break;
         case 12: v = VST_ABSTRACT;
                 break;
-        case 13: v = VST_FILENAME;
+        case 13: v = VST_SUBJECT;
                 break;
-        case 14: v = VST_FILENAMEWITHOUTEXTENSION;
+        case 14: v = VST_KEYWORDS;
                 break;
-        case 15: v = VST_DIRECTORYNAME;
+        case 15: v = VST_FILENAME;
                 break;
-        case 16: v = VST_PATHFILENAME;
+        case 16: v = VST_FILENAMEWITHOUTEXTENSION;
                 break;
-        case 17: v = VST_INITIAL;
+        case 17: v = VST_DIRECTORYNAME;
+                break;
+        case 18: v = VST_PATHFILENAME;
+                break;
+        case 19: v = VST_INITIAL;
                 break;
         default:
             v = VST_NONE;

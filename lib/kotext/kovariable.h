@@ -572,7 +572,7 @@ public:
                         VST_TELEPHONE_WORK = 7, VST_FAX = 8, VST_COUNTRY = 9,
                         VST_TITLE = 10, VST_ABSTRACT = 11,
                         VST_POSTAL_CODE = 12, VST_CITY = 13, VST_STREET = 14,
-                        VST_AUTHORTITLE = 15, VST_INITIAL = 16, VST_TELEPHONE_HOME = 17 };
+                        VST_AUTHORTITLE = 15, VST_INITIAL = 16, VST_TELEPHONE_HOME = 17, VST_SUBJECT = 18, VST_KEYWORDS=19 };
 
     virtual VariableType type() const
     { return VT_FIELD; }

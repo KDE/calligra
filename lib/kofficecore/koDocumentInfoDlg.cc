@@ -76,6 +76,10 @@ public:
 
   QLineEdit *m_leDocTitle;
   QMultiLineEdit *m_meAbstract;
+    QLineEdit *m_leDocSubject;
+    QLineEdit *m_leDocKeywords;
+
+
 
   KConfig *m_emailCfg;
 
@@ -290,21 +294,34 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
   QFrame *page = d->m_dialog->addPage( i18n("about the document", "Document") );
-  QGridLayout *grid = new QGridLayout( page, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
+  QGridLayout *grid = new QGridLayout( page, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
   grid->addWidget( new QLabel( i18n( "Title:" ), page ), 0, 0);
   d->m_leDocTitle = new QLineEdit( aboutInfo->title(), page );
   grid->addWidget(d->m_leDocTitle, 0, 1);
 
-  grid->addWidget(new QLabel( i18n( "Abstract:" ), page ), 1, 0, Qt::AlignTop );
+  grid->addWidget( new QLabel( i18n( "Subject:" ), page ), 1, 0);
+  d->m_leDocSubject = new QLineEdit( aboutInfo->subject(), page );
+  grid->addWidget(d->m_leDocSubject, 1, 1);
+
+  grid->addWidget( new QLabel( i18n( "Keywords:" ), page ), 2, 0);
+  d->m_leDocKeywords = new QLineEdit( aboutInfo->keywords(), page );
+  grid->addWidget(d->m_leDocKeywords, 2, 1);
+
+
+  grid->addWidget(new QLabel( i18n( "Abstract:" ), page ), 3, 0, Qt::AlignTop );
 
   d->m_meAbstract = new QMultiLineEdit( page );
   d->m_meAbstract->setText( aboutInfo->abstract() );
-  grid->addMultiCellWidget(d->m_meAbstract, 1, 2, 1, 1);
+  grid->addMultiCellWidget(d->m_meAbstract, 3, 5, 1, 1);
 
   connect( d->m_leDocTitle, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
   connect( d->m_meAbstract, SIGNAL( textChanged() ),
+           this, SIGNAL( changed() ) );
+  connect( d->m_leDocSubject, SIGNAL( textChanged( const QString & ) ),
+           this, SIGNAL( changed() ) );
+  connect( d->m_leDocKeywords, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
 }
 
@@ -362,6 +379,8 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
 void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )
 {
   aboutInfo->setTitle( d->m_leDocTitle->text() );
+  aboutInfo->setSubject( d->m_leDocSubject->text() );
+  aboutInfo->setKeywords( d->m_leDocKeywords->text() );
   aboutInfo->setAbstract( d->m_meAbstract->text() );
 }
 

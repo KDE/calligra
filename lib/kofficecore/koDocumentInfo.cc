@@ -390,7 +390,6 @@ void KoDocumentInfoAuthor::setInitial( const QString& n )
     m_initial = n;
 }
 
-
 void KoDocumentInfoAuthor::setTitle( const QString& n )
 {
     m_title = n;
@@ -466,6 +465,18 @@ bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
      xmlWriter.addTextNode( m_abstract );
      xmlWriter.endElement();
     }
+    if ( !m_keywords.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:keyword");
+     xmlWriter.addTextNode( m_keywords );
+     xmlWriter.endElement();
+    }
+    if ( !m_subject.isEmpty() )
+    {
+     xmlWriter.startElement( "dc:subject");
+     xmlWriter.addTextNode( m_subject );
+     xmlWriter.endElement();
+    }
 
     return true;
 }
@@ -481,6 +492,16 @@ bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         m_abstract = e.text();
+    }
+    e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "subject" );
+    if ( !e.isNull() && !e.text().isEmpty() )
+    {
+        m_subject = e.text();
+    }
+    e  = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, "keyword" );
+    if ( !e.isNull() && !e.text().isEmpty() )
+    {
+        m_keywords = e.text();
     }
     return true;
 }
@@ -537,5 +558,27 @@ void KoDocumentInfoAbout::setAbstract( const QString& n )
 {
     m_abstract = n;
 }
+
+QString KoDocumentInfoAbout::keywords() const
+{
+    return m_keywords;
+}
+
+QString KoDocumentInfoAbout::subject() const
+{
+    return m_subject;
+}
+
+void KoDocumentInfoAbout::setKeywords( const QString& n )
+{
+    m_keywords = n;
+}
+
+void KoDocumentInfoAbout::setSubject( const QString& n )
+{
+    m_subject = n;
+}
+
+
 
 #include <koDocumentInfo.moc>

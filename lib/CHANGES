@@ -7,6 +7,10 @@ KOfficeUI:
 
 KOfficeCore:
 - Support MS-DOS EPS files directly without stripping them internally.
+- Add new info in document properties (Subject/Keywords/home-work phone)
+
+KoText:
+- Add new variable (statistic, Subject/Keywords/home-work phone)
 
 Changes after KOffice-1.3-rc1
 =============================

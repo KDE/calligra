@@ -136,6 +136,11 @@ public:
 
     QString title() const;
     QString abstract() const;
+    QString subject() const;
+    QString keywords() const;
+
+    void setKeywords( const QString &n );
+    void setSubject( const QString& n );
 
     void setTitle( const QString& n );
     void setAbstract( const QString& n );
@@ -143,6 +148,8 @@ public:
 private:
     QString m_title;
     QString m_abstract;
+    QString m_keywords;
+    QString m_subject;
 };
 
 #endif
