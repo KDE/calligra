@@ -353,9 +353,9 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
     QHBox *row1=new QHBox(back);
     layout->addWidget(row1);
     row1->setSpacing( KDialog::spacingHint() );
-    edit=new QPushButton(i18n("Edit Current"),row1);
-    create=new QPushButton(i18n("Create New"),row1);
-    open=new QPushButton(i18n("Open Existing"),row1);
+    edit=new QPushButton(i18n("Edit Current..."),row1);
+    create=new QPushButton(i18n("Create New..."),row1);
+    open=new QPushButton(i18n("Open Existing..."),row1);
     QFrame *Line1 = new QFrame( back, "Line1" );
     layout->addWidget(Line1);
     Line1->setFrameShape( QFrame::HLine );
@@ -366,8 +366,8 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
     QHBox *row2=new QHBox(back);
     layout->addWidget(row2);
     row2->setSpacing( KDialog::spacingHint() );
-    preview=new QPushButton(i18n("Print Preview"),row2);
-    document=new QPushButton(i18n("Create new Document"),row2);
+    preview=new QPushButton(i18n("Print Preview..."),row2);
+    document=new QPushButton(i18n("Create New Document"),row2);
     layout->addStretch();
 
     enableDisableEdit();
