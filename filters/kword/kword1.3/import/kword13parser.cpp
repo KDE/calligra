@@ -500,6 +500,7 @@ bool KWord13Parser :: characters ( const QString & ch )
         // <TEXT>
         if ( m_currentParagraph )
         {
+            // ### TODO: this is perhaps a good point to check for non-XML characters
             m_currentParagraph->appendText( ch );
             success = true;
         }
