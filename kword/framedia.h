@@ -84,6 +84,8 @@ protected:
     void enableRunAround();
     void enableOnNewPageOptions();
     void initComboStyleBrush();
+    bool mayDeleteFrameSet(KWTextFrameSet *fs);
+
     QBrush frameBrushStyle();
 
     // TAB 1:
@@ -98,18 +100,15 @@ protected:
 
     // TAB 2:
     QWidget *tab2;
-    //QGridLayout *grid2, *runGrid;
     QRadioButton *rRunNo, *rRunBounding, *rRunContur;
-    //QLabel *runAroundLabel, *lRunNo, *lRunBounding, *lRunContur, *lRGap;
     QGroupBox *runGroup;
     QLineEdit *eRGap;
 
     // TAB 3:
     QWidget *tab3;
-    QGridLayout *grid3;
     QLineEdit *eFrameSetName;
-    QLabel *lFrameSet;
     QListView *lFrameSList;
+    QRadioButton *rExistingFrameset, *rNewFrameset;
 
 
     // TAB 4:
