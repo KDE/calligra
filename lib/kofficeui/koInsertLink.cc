@@ -96,6 +96,7 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
         mailLink->setLinkName(_link);
         showPage(1);
     }
+    slotTextChanged ( );
 }
 
 QString KoInsertLinkDia::linkName()const
