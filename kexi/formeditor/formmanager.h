@@ -305,6 +305,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Signal emitted when the Connection creation by drag-and-drop is aborted by user. */
 		void connectionAborted(KFormDesigner::Form *form);
 
+		/*! Signal emitted when "autoTabStops" is changed. */
+		void autoTabStopsSet(KFormDesigner::Form *form, bool set);
+
 	protected slots:
 		void deleteWidgetLaterTimeout();
 

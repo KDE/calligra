@@ -42,19 +42,11 @@
 
 #define NO_DSWIZARD
 
-//KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, 
-//	KexiDB::Connection *conn)
-// : KexiViewBase(win, parent, name), 
 KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char *name, bool dbAware)
  : KexiDataAwareView( mainWin, parent, name )
  , m_buffer(0)
-//moved m_conn(conn)
  , m_resizeMode(KexiFormView::ResizeDefault)
-// , m_provider(0)
  , m_query(0)
-//moved , m_data(0)
-//moved , m_currentRow(0)
-//moved , m_currentRowNumber(-1)
 {
 	m_delayedFormContentsResizeOnShow = false;
 
@@ -228,6 +220,9 @@ KexiFormView::loadForm()
 	QString data;
 	loadDataBlock(data);
 	KFormDesigner::FormIO::loadFormFromString(form(), m_dbform, data);
+
+	//"autoTabStops" property is loaded -set it within the form tree as well
+	form()->setAutoTabStops( m_dbform->autoTabStops() );
 }
 
 void
@@ -240,11 +235,27 @@ KexiFormView::managerPropertyChanged(KexiPropertyBuffer *b)
 tristate
 KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 {
-	if (mode!=viewMode() && viewMode()!=Kexi::DataViewMode) {
+	if (mode!=viewMode()) {
+		if (viewMode()!=Kexi::DataViewMode) {
 		//remember our pos
 		tempData()->scrollViewContentsPos 
 			= QPoint(m_scrollView->contentsX(), m_scrollView->contentsY());
+		}
+
+		//update tab stops if needed
+		if (mode==Kexi::DataViewMode) {
+			//propagate current "autoTabStops" property value to the form tree
+			form()->setAutoTabStops( m_dbform->autoTabStops() );
+
+			if(form()->autoTabStops())
+				form()->autoAssignTabStops();
+		}
+		else {
+			//set "autoTabStops" property
+			m_dbform->setAutoTabStops( form()->autoTabStops() );
+		}
 	}
+
 
 	// we don't store on db, but in our TempData
 	dontStore = true;
@@ -286,6 +297,10 @@ KexiFormView::afterSwitchFrom(int mode)
 	if (viewMode() == Kexi::DataViewMode) {
 //TMP!!
 		initDataSource();
+
+		//set focus on 1st focusable widget
+		if (form()->tabStops()->first() && form()->tabStops()->first()->widget())
+			form()->tabStops()->first()->widget()->setFocus();
 	}
 	return true;
 }

@@ -42,7 +42,7 @@
 
 #include "form.h"
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 FormPrivate::FormPrivate()
 {
@@ -69,6 +69,10 @@ FormPrivate::~FormPrivate()
 	// otherwise, it tries to delete widgets which doesn't exist anymore
 }
 
+FormWidget::FormWidget()
+{
+}
+
 Form::Form(FormManager *manager, const char *name)
   : QObject(manager, name)
 {
@@ -82,6 +86,11 @@ Form::Form(FormManager *manager, const char *name)
 	connect(d->history, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
 }
 
+Form::~Form()
+{
+	delete d;
+}
+
 QWidget*
 Form::widget() const
 {
@@ -89,7 +98,7 @@ Form::widget() const
 		return d->topTree->widget();
 	else if(d->toplevel)
 		return d->toplevel->widget();
-	else // peview form
+	else // preview form
 		return d->widget;
 }
 
@@ -447,13 +456,6 @@ Form::autoAssignTabStops()
 		--it;
 		hlist.clear();
 	}
-}
-
-Form::~Form()
-{
-	delete d;
-}
-
 }
 
 #include "form.moc"

@@ -29,9 +29,10 @@
 class QEvent;
 class QWidget;
 class QLayout;
-typedef QPtrList<QWidget> WidgetList;
 
 namespace KFormDesigner {
+
+typedef QPtrList<QWidget> WidgetList;
 
 class Container;
 class WidgetLibrary;

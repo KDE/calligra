@@ -27,9 +27,22 @@
 #include "kexidbform.h"
 
 
+class KexiDBForm::Private
+{
+	public:
+		Private()
+		 : autoTabStops(false)
+		{
+		}
+		bool autoTabStops : 1;
+};
+
+//========================
+
 KexiDBForm::KexiDBForm(QWidget *parent, const char *name/*, KexiDB::Connection *conn*/)
  : KexiGradientWidget(parent, name)
  , KexiDataItemInterface()
+ , d(new Private())
 {
 //test	setDisplayMode( KexiGradientWidget::SimpleGradient );
 
@@ -41,6 +54,7 @@ KexiDBForm::KexiDBForm(QWidget *parent, const char *name/*, KexiDB::Connection *
 KexiDBForm::~KexiDBForm()
 {
 	kexipluginsdbg << "KexiDBForm::~KexiDBForm(): close" << endl;
+	delete d;
 }
 
 //repaint all children widgets
@@ -190,6 +204,16 @@ KexiDBForm::sizeHint() const
 void KexiDBForm::setInvalidState( const QString& displayText )
 {
 	//! @todo draw "invalid data source" text on the surface?
+}
+
+bool KexiDBForm::autoTabStops() const
+{
+	return d->autoTabStops;
+}
+
+void KexiDBForm::setAutoTabStops(bool set)
+{
+	d->autoTabStops = set;
 }
 
 #include "kexidbform.moc"

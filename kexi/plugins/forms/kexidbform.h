@@ -27,19 +27,20 @@
 #include <form.h>
 
 //! A DB-aware form widget
-//class KexiDBForm : public QWidget, public KFormDesigner::FormWidget, public KexiDataItemInterface
-class KexiDBForm : public KexiGradientWidget, public KFormDesigner::FormWidget, public KexiDataItemInterface
+class KexiDBForm : 
+	public KexiGradientWidget,
+	public KFormDesigner::FormWidget,
+	public KexiDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	//Q_PROPERTY(bool RecordNavigator READ navigatorShown WRITE showRecordNavigator DESIGNABLE true)
+	Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops DESIGNABLE true)
 
 	public:
 		KexiDBForm(QWidget *parent, const char *name="kexi_dbform");
 		virtual ~KexiDBForm();
 
 		inline QString dataSource() const { return KexiDataItemInterface::dataSource(); }
-		inline void setDataSource(const QString &ds) { KexiDataItemInterface::setDataSource(ds); }
 
 		//! no effect
 		QVariant value() { return QVariant(); }
@@ -54,12 +55,20 @@ class KexiDBForm : public KexiGradientWidget, public KFormDesigner::FormWidget, 
 
 		virtual QSize sizeHint() const;
 
+		bool autoTabStops() const;
+
+	public slots:
+		void setAutoTabStops(bool set);
+		inline void setDataSource(const QString &ds) { KexiDataItemInterface::setDataSource(ds); }
+
 	protected:
 		//! no effect
 		virtual void setValueInternal(const QVariant&) {};
 
 		QPixmap buffer; //!< stores grabbed entire form's area for redraw
 		QRect prev_rect; //!< previously selected rectangle
+		class Private;
+		Private *d;
 };
 
 #endif

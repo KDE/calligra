@@ -74,6 +74,9 @@ class KexiFormPart : public KexiPart::Part
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
+	protected slots:
+		void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
+
 	private:
 		QGuardedPtr<KFormDesigner::FormManager> m_manager;
 };

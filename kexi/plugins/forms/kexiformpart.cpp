@@ -34,6 +34,7 @@
 #include <form.h>
 #include <formIO.h>
 #include <formmanager.h>
+#include <objpropbuffer.h>
 
 #include "kexiformview.h"
 #include "kexiformpart.h"
@@ -49,6 +50,9 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	QStringList supportedFactoryGroups;
 	supportedFactoryGroups += "kexi";
 	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, "form_manager");
+
+	connect( m_manager, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)), 
+		this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
 }
 
 KexiFormPart::~KexiFormPart()
@@ -289,6 +293,11 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 	baseWidget.appendChild(wNameProperty);
 
 	uiElement.appendChild(baseWidget);
+}
+
+void KexiFormPart::slotAutoTabStopsSet(KFormDesigner::Form *form, bool set)
+{
+	m_manager->buffer()->changeProperty("autoTabStops", QVariant(set, 4));
 }
 
 //----------------

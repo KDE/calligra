@@ -28,7 +28,7 @@
 
 #include "tabstopdialog.h"
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////  The Tab Stop Dialog to edit tab order  ///////////////////////////////
@@ -73,6 +73,10 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 	l->addMultiCellWidget(m_check, 1, 1, 0, 1);
 
 	setInitialSize(QSize(400, 250), true);
+}
+
+TabStopDialog::~TabStopDialog()
+{
 }
 
 int TabStopDialog::exec(Form *form)
@@ -150,6 +154,10 @@ TabStopDialog::slotRadioClicked(bool isOn)
 	m_buttons[BDown]->setEnabled(!isOn);
 }
 
+bool
+TabStopDialog::autoTabStops() const
+{
+	return m_check->isChecked();
 }
 
 #include "tabstopdialog.moc"

@@ -42,7 +42,7 @@ class KFORMEDITOR_EXPORT TabStopDialog : public KDialogBase
 
 	public:
 		TabStopDialog(QWidget *parent);
-		virtual ~TabStopDialog() {;}
+		virtual ~TabStopDialog();
 
 	public slots:
 		int exec(KFormDesigner::Form *form);
@@ -50,6 +50,8 @@ class KFORMEDITOR_EXPORT TabStopDialog : public KDialogBase
 		void MoveItemDown();
 		void updateButtons(QListViewItem*);
 		void slotRadioClicked(bool isOn);
+
+		bool autoTabStops() const;
 
 	protected:
 		enum {BUp = 10, BDown};

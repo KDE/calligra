@@ -249,9 +249,11 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   --> altertable view doesn't receive the signal about toggling (because it's not focused)
 
 ==== Forms TODO ====
--make forms db aware
---add record navigator
 -add "datasheet view" to db-aware forms
+-add [NewFormDefaults] option group and:
+--add "autoTabStop" (bool) 
+^^^ implement above so Form::autoAssignTabStops() will be called before form saving 
+    and before switching to data mode (this is already performed in FormIO::saveFormToDom().
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -432,6 +434,11 @@ Startup TODO:
 2005-02-21
 Kexi Startup
 - "useLocalSocketFile" option for .kexis file implemented
+Forms
+- "autoTabStops" property added. 
+   It is synced with changed made by TabStopDialog's checkbox.
+
+TODO: FIX THAT:- after switching to data view mode, focus is set on the first focusable widget
 
 2005-02-11...2005-02-20
 Kexi Startup
