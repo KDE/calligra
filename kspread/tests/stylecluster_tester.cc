@@ -20,13 +20,18 @@
 #include "tester.h"
 #include "stylecluster_tester.h"
 #include "stylecluster.h"
+
+#include "kspread_doc.h"
+#include "kspread_style_manager.h"
+#include "kspread_style.h"
 #include "kspread_sheet.h"
+
 #include <kspread_value.h>
 
 
 
-#define CHECK_PARSE(x,y)  checkParse(__FILE__,__LINE__,#x,x,y,t_locale)
-#define CHECK_EVAL(x,y)  checkEval(__FILE__,__LINE__,#x,x,y,t_locale)
+#define CHECK_STYLE(x,y)  check(__FILE__,__LINE__,#x,x,y)
+
 
 using namespace KSpread;
 
@@ -40,15 +45,33 @@ QString StyleClusterTester::name()
   return QString("Test Cell Styles");
 }
 
+template<typename T>
+void StyleClusterTester::check( const char *file, int line, const char* msg, const T &result, 
+  const T &expected )
+{
+  testCount++;
+  if( &result != &expected )
+  {
+    QString message;
+    QTextStream ts( &message, IO_WriteOnly );
+    ts << msg;
+    ts << "  Result:";
+    ts << &result;
+    ts << ", ";
+    ts << "Expected:";
+    ts << &expected;
+    fail( file, line, message );
+  }
+}
+
 void StyleClusterTester::run()
 {
   testCount = 0;
   errorList.clear();
 
   StyleCluster stylecluster(m_sheet);
+  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
 
-  // simple, single-token formulas
-//  CHECK_PARSE( "True", "b" );
 }
 
 

@@ -38,6 +38,8 @@ public:
   virtual QString name();
   virtual void run();
 private:
+  template<typename T>
+  void check( const char *file, int line, const char* msg, const T& result, const T& expected );
   KSpreadSheet *m_sheet;
 };
 
