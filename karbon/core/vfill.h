@@ -61,7 +61,7 @@ public:
 	VFill( const VFill & );
 
 	const VColor& color() const { return m_color; }
-	void setColor( const VColor& color ) { m_color = color; m_type = solid; }
+	void setColor( const VColor& color, bool bsolid = true ) { m_color = color; if( bsolid ) m_type = solid; }
 
 	VGradient& gradient() { return m_gradient; }
 	const VGradient& gradient() const { return m_gradient; }

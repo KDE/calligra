@@ -19,6 +19,7 @@
 */
 
 #include <qdom.h>
+#include <kdebug.h>
 
 #include "vfill.h"
 
@@ -50,12 +51,12 @@ VFill::save( QDomElement& element ) const
 	QDomElement me = element.ownerDocument().createElement( "FILL" );
 	element.appendChild( me );
 
-	if( m_type == solid )
+	if( m_type != none )
 	{
 		// save color:
 		m_color.save( me );
 	}
-	else if( m_type == grad )
+	if( m_type == grad )
 	{
 		// save gradient:
 		m_gradient.save( me );
@@ -77,6 +78,8 @@ VFill::load( const QDomElement& element )
 	m_fillRule = element.attribute( "fillRule" ) == 0 ?
 		evenOdd : winding;
 
+	m_type = none;
+
 	// load color:
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
@@ -89,7 +92,7 @@ VFill::load( const QDomElement& element )
 				m_type = solid;
 				m_color.load( e );
 			}
-			else if( e.tagName() == "GRADIENT" )
+			if( e.tagName() == "GRADIENT" )
 			{
 				m_type = grad;
 				m_gradient.load( e );

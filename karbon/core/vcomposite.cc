@@ -347,7 +347,7 @@ VComposite::loadSvgPath( const QString &d )
 {
 	QTime s;s.start();
 	parseSVG( d );
-	kdDebug() << "Parsing time : " << s.elapsed() << endl;
+	//kdDebug() << "Parsing time : " << s.elapsed() << endl;
 }
 
 void
