@@ -1,6 +1,6 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-INCLUDES = $(all_includes) -I$(top_srcdir)/kexi/widget/propertyeditor -I$(top_srcdir)/kexi/core
+INCLUDES = -I$(top_srcdir)/kexi/widget/propertyeditor -I$(top_srcdir)/kexi/core $(all_includes)
 lib_LTLIBRARIES =  libkformeditor.la 
 libkformeditor_la_LDFLAGS = -no-undefined $(all_libraries)
 libkformeditor_la_SOURCES = container.cpp resizehandle.cpp widgetfactory.cpp objpropbuffer.cpp \

@@ -35,7 +35,7 @@ SUBDIRS = .
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE
-INCLUDES= -I$(top_srcdir)/kexi $(all_includes)
+INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core $(all_includes)
 
 METASOURCES = AUTO
 
