@@ -868,6 +868,11 @@ don't put a </?xml...> at the end of the file!).
                 for export filters.
 
         display-levels Number of levels to display (e.g. 3 means "1.2.1")
+
+        align   Counter alignment. Possible values include:
+	            int(Qt::AlignAuto), //left for LTR text and right for RTL text
+		    int(Qt::AlignLeft),
+		    int(Qt::AlignRight).
 -->
 <!ELEMENT COUNTER
     EMPTY>
@@ -883,7 +888,8 @@ don't put a </?xml...> at the end of the file!).
     customdef CDATA #IMPLIED
     restart CDATA #IMPLIED
     text CDATA #IMPLIED
-    display-levels CDATA #IMPLIED>
+    display-levels CDATA #IMPLIED
+    align CDATA #IMPLIED>
 
 <!--
         The space to be added between two consecutive lines in a given paragraph.
