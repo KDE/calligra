@@ -58,16 +58,6 @@ Other things: (please add the things you are working on!)
 - other bug fixes                               (everybody, every time)
 
 
-BEGGING: Please: can somebody enhance koScript so that a formula not only gets the values but also
-         the references? (e.g.: =DATAAVG(A1:C12, "weight", A1:C12)
-         puts a list of values to KSContext (as usual) but also A1:C12 (in something like getRef() which
-         returns 0L if there are no references (for the second parameter in the example)
-        I designed the database formulas available in Excel and MultipleOperations which both depend
-        on this, but I have no idea how to add it.
-----I'll take care of this first thing after 1.2. - John        
-
-
-
 *********
 * Taken:
 *********
@@ -99,17 +89,19 @@ Norbert
 =======
 
 - solver (see gnumeric)
-- option: ignore duplicate deliminers in CSV import and Insert data from file/clipboard
-- CSV export dialog: define deliminers, Table(s), cell content in ".."
-- MUST: more than one currency!!
++ option: ignore duplicate deliminers in CSV import and Insert data from file/clipboard
++ CSV export dialog: define deliminers, Table(s), cell content in '"'
++ more than one currency 
++ enhance the Gnumeric import filter
+- sync the Gnumeric export filter
 - Style support
-- StarCalc/OpenCalc filter (when styles are done)
+- StarCalc/OpenCalc import filter
+- StarCalc/OpenCalc export filter
 
 - Multiple Operations
 - Database functions 
-- Subtotals
++ Subtotals
 - more information functions (Excel compatible)
-=> all four after John is done enhancing KSContext (s.a.)
 
 Ariya
 =====
