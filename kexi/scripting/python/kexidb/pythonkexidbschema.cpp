@@ -35,25 +35,36 @@ namespace Kross
  * PythonKexiDBSchema
  */
 
-PythonKexiDBSchema::PythonKexiDBSchema(KexiDB::SchemaData* schema, KexiDB::FieldList* fieldlist)
+template<TEMPLATE_TYPENAME T>
+PythonKexiDBSchema<T>::PythonKexiDBSchema<T>(KexiDB::SchemaData* schema, KexiDB::FieldList* fieldlist)
 {
     d = new PythonKexiDBSchemaPrivate();
     d->schema = schema;
     d->fieldlist = new PythonKexiDBFieldList(fieldlist);
 }
 
-PythonKexiDBSchema::~PythonKexiDBSchema()
+template<TEMPLATE_TYPENAME T>
+PythonKexiDBSchema<T>::~PythonKexiDBSchema<T>()
 {
     //delete d->fieldlist; // got auto destroyed.
     delete d;
 }
 
-bool PythonKexiDBSchema::accepts(PyObject* pyobj) const
+template<TEMPLATE_TYPENAME T>
+bool PythonKexiDBSchema<T>::accepts(PyObject* pyobj) const
 {
     return pyobj && Py::PythonExtension<PythonKexiDBSchema>::check(pyobj);
 }
 
-Py::Object PythonKexiDBSchema::getattr(const char* n)
+template<TEMPLATE_TYPENAME T>
+void PythonKexiDBSchema<T>::init_type(void)
+{
+    behaviors().supportGetattr();
+    behaviors().supportSetattr();
+}
+
+template<TEMPLATE_TYPENAME T>
+Py::Object PythonKexiDBSchema<T>::getattr(const char* n)
 {
     std::string name(n);
 
@@ -75,10 +86,11 @@ Py::Object PythonKexiDBSchema::getattr(const char* n)
     if(name == "fieldlist")
         return Py::asObject(d->fieldlist);
 
-    throw Py::AttributeError("Unknown attribute: " + name);
+    return getattr_methods(n); // needed to eval methods as well.
 }
 
-int PythonKexiDBSchema::setattr(const char* n, const Py::Object& value)
+template<TEMPLATE_TYPENAME T>
+int PythonKexiDBSchema<T>::setattr(const char* n, const Py::Object& value)
 {
     std::string name(n);
 
@@ -94,7 +106,8 @@ int PythonKexiDBSchema::setattr(const char* n, const Py::Object& value)
     return 0;
 }
 
-KexiDB::SchemaData* PythonKexiDBSchema::getSchema()
+template<TEMPLATE_TYPENAME T>
+KexiDB::SchemaData* PythonKexiDBSchema<T>::getSchema()
 {
     return d->schema;
 }
@@ -104,7 +117,7 @@ KexiDB::SchemaData* PythonKexiDBSchema::getSchema()
  */
 
 PythonKexiDBIndexSchema::PythonKexiDBIndexSchema(KexiDB::IndexSchema* indexschema)
-    : PythonKexiDBSchema(indexschema, indexschema)
+    : PythonKexiDBSchema<PythonKexiDBIndexSchema>(indexschema, indexschema)
 {
 }
 
@@ -114,7 +127,6 @@ PythonKexiDBIndexSchema::~PythonKexiDBIndexSchema()
 
 bool PythonKexiDBIndexSchema::accepts(PyObject* pyobj) const
 {
-    //FIXME: is that correct?
     return pyobj && Py::PythonExtension<PythonKexiDBIndexSchema>::check(pyobj);
 }
 
@@ -125,6 +137,8 @@ void PythonKexiDBIndexSchema::init_type(void)
         "The KexiDBIndexSchema object provides access to the "
         "KexiDB::IndexSchema class. "
     );
+
+    PythonKexiDBSchema<PythonKexiDBIndexSchema>::init_type();
 }
 
 /*********************************************************************
@@ -132,7 +146,7 @@ void PythonKexiDBIndexSchema::init_type(void)
  */
 
 PythonKexiDBTableSchema::PythonKexiDBTableSchema(KexiDB::TableSchema* tableschema)
-    : PythonKexiDBSchema(tableschema, tableschema)
+    : PythonKexiDBSchema<PythonKexiDBTableSchema>(tableschema, tableschema)
 {
 }
 
@@ -142,7 +156,6 @@ PythonKexiDBTableSchema::~PythonKexiDBTableSchema()
 
 bool PythonKexiDBTableSchema::accepts(PyObject* pyobj) const
 {
-    //FIXME: is that correct?
     return pyobj && Py::PythonExtension<PythonKexiDBTableSchema>::check(pyobj);
 }
 
@@ -153,5 +166,58 @@ void PythonKexiDBTableSchema::init_type(void)
         "The KexiDBTableSchema object provides access to the "
         "KexiDB::TableSchema class. "
     );
+
+    PythonKexiDBSchema<PythonKexiDBTableSchema>::init_type();
+}
+
+/*********************************************************************
+ * PythonKexiDBQuerySchema
+ */
+
+PythonKexiDBQuerySchema::PythonKexiDBQuerySchema(KexiDB::QuerySchema* queryschema)
+    : PythonKexiDBSchema<PythonKexiDBQuerySchema>(queryschema, queryschema)
+{
+}
+
+PythonKexiDBQuerySchema::~PythonKexiDBQuerySchema()
+{
+}
+
+bool PythonKexiDBQuerySchema::accepts(PyObject* pyobj) const
+{
+    return pyobj && Py::PythonExtension<PythonKexiDBQuerySchema>::check(pyobj);
+}
+
+void PythonKexiDBQuerySchema::init_type(void)
+{
+    behaviors().name("KexiDBQuerySchema");
+    behaviors().doc(
+        "The KexiDBQuerySchema object provides access to the "
+        "KexiDB::QuerySchema class. "
+    );
+
+    PythonKexiDBSchema<PythonKexiDBQuerySchema>::init_type();
+
+    add_varargs_method("statement", &PythonKexiDBQuerySchema::statement,
+        "string KexiDBConnection.statement()\n"
+    );
+    add_varargs_method("setStatement", &PythonKexiDBQuerySchema::setStatement,
+        "KexiDBConnection.setStatement(string)\n"
+    );
+}
+
+Py::Object PythonKexiDBQuerySchema::statement(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 0, 0);
+    return PythonUtils::toPyObject( ((KexiDB::QuerySchema*)getSchema())->statement() );
+}
+
+Py::Object PythonKexiDBQuerySchema::setStatement(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    if(! args[0].isString())
+        throw Py::TypeError("boolean KexiDBQuerySchema.setStatement(string) Invalid argument. String expected.");
+    ((KexiDB::QuerySchema*)getSchema())->setStatement( args[0].as_string().c_str() );
+    return Py::None();
 }
 

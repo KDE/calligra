@@ -21,6 +21,7 @@
 #include "../main/pythonutils.h"
 #include "pythonkexidbconnection.h"
 #include "pythonkexidbconnectiondata.h"
+#include "pythonkexidbfield.h"
 
 using namespace Kross;
 
@@ -39,6 +40,10 @@ PythonKexiDBDriver::PythonKexiDBDriver(PythonKexiDB* kexidb, KexiDB::Driver* dri
     d = new PythonKexiDBDriverPrivate();
     d->kexidb = kexidb;
     d->driver = driver;
+
+    //setAttr("isFileDriver", Py::Int( driver->isFileDriver() ));
+    //setAttr("versionMajor", Py::Int( driver->versionMajor() ));
+    //setAttr("versionMinor", Py::Int( driver->versionMinor() ));
 }
 
 PythonKexiDBDriver::~PythonKexiDBDriver()
@@ -69,6 +74,19 @@ void PythonKexiDBDriver::init_type(void)
         "Returns a list of connectionnames. Use getConnection(connectionname)"
         "to get a KexiDBConnection object to work with. "
     );
+    add_varargs_method(
+        "escapeString",
+        &PythonKexiDBDriver::escapeString,
+        "string KexiDBDriver.escapeString(string)\n"
+        "Returns a Driver-specific escaped SQL string. "
+    );
+    add_varargs_method(
+        "valueToSQL",
+        &PythonKexiDBDriver::valueToSQL,
+        "string KexiDBDriver.valueToSQL(KexiDBField, value)\n"
+        "Escapes and converts a value to the string representation "
+        "required by SQL commands. "
+    );
 }
 
 bool PythonKexiDBDriver::accepts(PyObject* pyobj) const
@@ -96,22 +114,32 @@ Py::Object PythonKexiDBDriver::getConnection(const Py::Tuple& args)
     return Py::asObject( new PythonKexiDBConnection(this, connectiondata, connection) );
 }
 
-Py::Object PythonKexiDBDriver::connectionList(const Py::Tuple& /*args*/)
+Py::Object PythonKexiDBDriver::connectionList(const Py::Tuple& args)
 {
-    /*TODO
-    if(args.size() != 0)
-        throw Py::TypeError("KexiDBDriver.connectionList() expects 0 parameters.");
-    if(! d->driver)
-        throw Py::RuntimeError("KexiDBDriver.connectionList() KexiDB::Driver not initialized.");
-
+    PythonUtils::checkArgs(args, 0, 0);
     Py::List* list = new Py::List();
     QPtrList<KexiDB::Connection> connectionlist = d->driver->connectionsList();
     KexiDB::Connection* connection;
-    for(connection = connectionlist.first(); connection; connection = connectionlist.next()) {
-        //kdDebug() << "PythonKexiDBDriver::connectionList() ITEM currentDatabase()=" << connection->currentDatabase() << " tableNames()=" << connection->tableNames(true) << endl;
+    for(connection = connectionlist.first(); connection; connection = connectionlist.next())
         list->append( Py::String(connection->name()) );
-    }
     return *list;
-    */
+}
+
+Py::Object PythonKexiDBDriver::escapeString(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    if(! args[0].isString())
+        throw Py::TypeError("string KexiDBDriver.escapeString(string) Invalid argument. String expected.");
+    return PythonUtils::toPyObject( d->driver->escapeString(QString(args[0].as_string().c_str())) );
+}
+
+Py::Object PythonKexiDBDriver::valueToSQL(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 2, 2);
+    Py::ExtensionObject<PythonKexiDBField> obj(args[0]);
+    PythonKexiDBField* field = obj.extensionObject();
+    if(! field)
+        throw Py::TypeError("string KexiDBDriver.valueToSQL(KexiDBField, value) Invalid argument.");
+    return PythonUtils::toPyObject( d->driver->valueToSQL(field->getField(), PythonUtils::toVariant(args[1])) );
 }
 

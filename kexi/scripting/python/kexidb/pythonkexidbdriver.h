@@ -47,8 +47,11 @@ namespace Kross
 
             /**
              * Constructor.
+             *
+             * \param kexidb The \a PythonKexiDB instance.
+             * \param driver The \a KexiDB::Driver instance.
              */
-            PythonKexiDBDriver(PythonKexiDB*, KexiDB::Driver*);
+            PythonKexiDBDriver(PythonKexiDB* kexidb, KexiDB::Driver* driver);
 
             /**
              * Destructor.
@@ -75,6 +78,8 @@ namespace Kross
 
             Py::Object getConnection(const Py::Tuple&);
             Py::Object connectionList(const Py::Tuple&);
+            Py::Object escapeString(const Py::Tuple&);
+            Py::Object valueToSQL(const Py::Tuple&);
     };
 
 }

@@ -43,16 +43,60 @@ namespace Kross
     class PythonKexiDBField : public Py::PythonExtension<PythonKexiDBField>
     {
         public:
-            PythonKexiDBField(KexiDB::Field*);
+
+            /**
+             * Constructor.
+             *
+             * \param field The \a KexiDB::Field instance.
+             */
+            explicit PythonKexiDBField(KexiDB::Field* field);
+
+            /**
+             * Destructor.
+             */
             virtual ~PythonKexiDBField();
 
+            /**
+             * From Py::Object Overloaded method to validate if
+             * the PyObject could be used within this context.
+             *
+             * \param pyobj The PyObject to check.
+             * \return true if the PyObject is valid else false.
+             */
             virtual bool accepts(PyObject* pyobj) const;
+
+            /**
+             * Called from PythonKexiDB::PythonKexiDB() to ensure
+             * that this object initializes itself.
+             */
             static void init_type(void);
 
-            virtual Py::Object getattr(const char*);
-            virtual int setattr(const char*, const Py::Object&);
+            /**
+             * Attribute getter handler.
+             *
+             * \param name The attribute name.
+             * \return The Py::Object attribute value on
+             *         success else throws a
+             *         Py::AttributeError exception.
+             */
+            virtual Py::Object getattr(const char* name);
 
-            KexiDB::Field* getField();
+             /**
+             * Attribute setter handler.
+             *
+             * \param name The attribute name.
+             * \param obj The attribute value.
+             * \return 0 on success else throws a
+             *         Py::AttributeError exception.
+             */
+            virtual int setattr(const char* name, const Py::Object& obj);
+
+            /**
+             * Return the \a KexiDB::Field instance.
+             *
+             * \return The field object.
+             */
+            KexiDB::Field* getField() const;
 
         private:
             PythonKexiDBFieldPrivate* d;

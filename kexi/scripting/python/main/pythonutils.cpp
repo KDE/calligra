@@ -60,6 +60,14 @@ Py::List PythonUtils::toPyObject(QValueList<QVariant> list)
     return *l;
 }
 
+Py::List PythonUtils::toPyObject(QValueVector<QVariant> list)
+{
+    Py::List* l = new Py::List();
+    for(QValueVector<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
+        l->append(toPyObject(*it));
+    return *l;
+}
+
 Py::Object PythonUtils::toPyObject(QVariant variant)
 {
     switch(variant.type()) {
@@ -71,6 +79,11 @@ Py::Object PythonUtils::toPyObject(QVariant variant)
             return Py::Long((unsigned long)variant.toUInt());
         case QVariant::Double:
             return Py::Float(variant.toDouble());
+        case QVariant::Date:
+        case QVariant::Time:
+        case QVariant::DateTime:
+        case QVariant::ByteArray:
+        case QVariant::BitArray:
         case QVariant::CString:
         case QVariant::String:
             return toPyObject(variant.toString());
@@ -80,9 +93,17 @@ Py::Object PythonUtils::toPyObject(QVariant variant)
             return toPyObject(variant.toMap());
         case QVariant::List:
             return toPyObject(variant.toList());
-        //Date, Time, DateTime, ByteArray, BitArray
 #if(QT_VERSION >= 0x030200)
-        //LongLong, ULongLong
+        // to handle following both cases is a bit difficult
+        // cause Python doesn't spend an easy possibility
+        // for such large numbers (TODO maybe BigInt?). So,
+        // we risk overflows here, but well...
+        case QVariant::LongLong: {
+            Q_LLONG l = variant.toLongLong();
+            return (l < 0) ? Py::Long((long)l) : Py::Long((unsigned long)l);
+        } break;
+        case QVariant::ULongLong:
+            return Py::Long((unsigned long)variant.toULongLong());
 #endif
         default: {
             kdDebug() << "PythonUtils::variant2object() Not possible to convert the QVariant type '" <<  variant.typeName() << "' to a Py::Object." << endl;

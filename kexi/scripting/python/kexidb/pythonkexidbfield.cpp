@@ -176,7 +176,7 @@ int PythonKexiDBField::setattr(const char* n, const Py::Object& value)
     return 0;
 }
 
-KexiDB::Field* PythonKexiDBField::getField()
+KexiDB::Field* PythonKexiDBField::getField() const
 {
     return d->field;
 }

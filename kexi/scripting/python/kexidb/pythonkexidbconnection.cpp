@@ -101,7 +101,7 @@ void PythonKexiDBConnection::init_type(void)
         "@return list List of tablename-strings.\n"
     );
     add_varargs_method("executeQuery", &PythonKexiDBConnection::executeQuery,
-        "KexiDBCursor KexiDBConnection.executeQuery(querystatement or KexiDBTableSchema)\n"
+        "KexiDBCursor KexiDBConnection.executeQuery(querystatement or KexiDBTableSchema or KexiDBQuerySchema)\n"
     );
     add_varargs_method("querySingleString", &PythonKexiDBConnection::querySingleString,
         "value KexiDBConnection.querySingleString(sqlstatement, columnnumber)\n"
@@ -109,6 +109,10 @@ void PythonKexiDBConnection::init_type(void)
     add_varargs_method("queryStringList", &PythonKexiDBConnection::queryStringList,
         "valuelist KexiDBConnection.queryStringList(sqlstatement, columnnumber)\n"
     );
+    add_varargs_method("querySingleRecord", &PythonKexiDBConnection::querySingleRecord,
+        "valuelist KexiDBConnection.querySingleRecord(sqlstatement)\n"
+    );
+    Py::Object querySingleRecord(const Py::Tuple&);
 
     add_varargs_method("insertRecord", &PythonKexiDBConnection::insertRecord,
         "boolean KexiDBConnection.insertRecord(KexiDBFieldList)\n"
@@ -243,18 +247,28 @@ Py::Object PythonKexiDBConnection::executeQuery(const Py::Tuple& args)
 
     //TODO: move this check to KexiDB::Connection?!
     if(d->connection->currentDatabase().isNull())
-        throw Py::RuntimeError("KexiDBConnection.executeQuery(sqlstatement or tableschema) No database selected, please use connection.useDatabase(databasename) before.");
+        throw Py::RuntimeError("KexiDBConnection.executeQuery(sqlstatement or KexiDBTableSchema or KexiDBQuerySchema) No database selected, please use connection.useDatabase(databasename) before.");
 
     KexiDB::Cursor* cursor = 0;
-    if(args[0].isString())
+    if(args[0].isString()) {
         cursor = d->connection->executeQuery( args[0].as_string().c_str() );
-    else {
-        Py::ExtensionObject<PythonKexiDBTableSchema> obj(args[0]);
-        PythonKexiDBTableSchema* tableschema = obj.extensionObject();
-        if(! tableschema)
-            throw Py::TypeError("boolean KexiDBConnection.executeQuery(sqlstatement or tableschema) Invalid argument.");
-        cursor = d->connection->executeQuery( *(KexiDB::TableSchema*)tableschema->getSchema() );
     }
+    else if(PythonKexiDBTableSchema::check(args[0])) {
+        Py::ExtensionObject<PythonKexiDBTableSchema> obj(args[0]);
+        PythonKexiDBTableSchema* table = obj.extensionObject();
+        if(! table)
+            throw Py::TypeError("boolean KexiDBConnection.executeQuery(sqlstatement or KexiDBTableSchema or KexiDBQuerySchema) Invalid KexiDBTableSchema argument.");
+        cursor = d->connection->executeQuery( *(KexiDB::TableSchema*)table->getSchema() );
+    }
+    else if(PythonKexiDBQuerySchema::check(args[0])) {
+        Py::ExtensionObject<PythonKexiDBQuerySchema> obj(args[0]);
+        PythonKexiDBQuerySchema* query = obj.extensionObject();
+        if(! query)
+            throw Py::TypeError("boolean KexiDBConnection.executeQuery(sqlstatement or KexiDBTableSchema or KexiDBQuerySchema) Invalid KexiDBQuerySchema argument.");
+        cursor = d->connection->executeQuery( *(KexiDB::QuerySchema*)query->getSchema() );
+    }
+    else
+        throw Py::TypeError("boolean KexiDBConnection.executeQuery(sqlstatement or KexiDBTableSchema or KexiDBQuerySchema) Invalid argument.");
 
     if(! cursor)
         throw Py::RuntimeError("KexiDBConnection.executeQuery(sqlstatement) executeQuery() returned with errors.");
@@ -294,6 +308,17 @@ Py::Object PythonKexiDBConnection::queryStringList(const Py::Tuple& args)
         column = (unsigned long)Py::Long(args[1]);
     }
     if(! d->connection->queryStringList(sql, valuelist, column))
+        return Py::None();
+    return PythonUtils::toPyObject(valuelist);
+}
+
+Py::Object PythonKexiDBConnection::querySingleRecord(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    PythonKexiDB::checkObject(d->connection);
+    QString sql = args[0].as_string().c_str();
+    QValueVector<QVariant> valuelist;
+    if(! d->connection->querySingleRecord(sql, valuelist))
         return Py::None();
     return PythonUtils::toPyObject(valuelist);
 }
@@ -351,6 +376,7 @@ Py::Object PythonKexiDBConnection::executeSQL(const Py::Tuple& args)
 Py::Object PythonKexiDBConnection::createTable(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 1, 1);
+    PythonKexiDB::checkObject(d->connection);
     Py::ExtensionObject<PythonKexiDBTableSchema> obj(args[0]);
     PythonKexiDBTableSchema* tableschema = obj.extensionObject();
     if(! tableschema)
@@ -361,6 +387,7 @@ Py::Object PythonKexiDBConnection::createTable(const Py::Tuple& args)
 Py::Object PythonKexiDBConnection::dropTable(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 1, 1);
+    PythonKexiDB::checkObject(d->connection);
     if(args[0].isString())
         return Py::Int( d->connection->dropTable(args[0].as_string().c_str()) );
     Py::ExtensionObject<PythonKexiDBTableSchema> obj(args[0]);
@@ -373,6 +400,7 @@ Py::Object PythonKexiDBConnection::dropTable(const Py::Tuple& args)
 Py::Object PythonKexiDBConnection::alterTable(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 2, 2);
+    PythonKexiDB::checkObject(d->connection);
 
     Py::ExtensionObject<PythonKexiDBTableSchema> obj(args[0]);
     PythonKexiDBTableSchema* tableschema = obj.extensionObject();
@@ -389,6 +417,7 @@ Py::Object PythonKexiDBConnection::alterTable(const Py::Tuple& args)
 Py::Object PythonKexiDBConnection::alterTableName(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 2, 2);
+    PythonKexiDB::checkObject(d->connection);
     Py::ExtensionObject<PythonKexiDBTableSchema> obj(args[0]);
     PythonKexiDBTableSchema* tableschema = obj.extensionObject();
     QString name = args[1].as_string().c_str();
@@ -400,6 +429,7 @@ Py::Object PythonKexiDBConnection::alterTableName(const Py::Tuple& args)
 Py::Object PythonKexiDBConnection::tableSchema(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 1, 1);
+    PythonKexiDB::checkObject(d->connection);
     QString name = args[1].as_string().c_str();
     KexiDB::TableSchema* tableschema = d->connection->tableSchema(name);
     if(! tableschema) {
@@ -412,13 +442,14 @@ Py::Object PythonKexiDBConnection::tableSchema(const Py::Tuple& args)
 Py::Object PythonKexiDBConnection::isEmptyTable(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 1, 1);
+    PythonKexiDB::checkObject(d->connection);
     Py::ExtensionObject<PythonKexiDBTableSchema> obj(args[0]);
     PythonKexiDBTableSchema* tableschema = obj.extensionObject();
     if(! tableschema)
         throw Py::TypeError("boolean KexiDBConnection.isEmptyTable(KexiDBTableSchema) Invalid argument.");
     bool success;
     bool notempty = d->connection->isEmpty(*(KexiDB::TableSchema*)tableschema->getSchema(), success);
-    return Py::Int(! success || ! notempty);
+    return Py::Int(! (success && notempty));
 }
 
 

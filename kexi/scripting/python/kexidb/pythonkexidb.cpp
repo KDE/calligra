@@ -41,6 +41,7 @@ PythonKexiDB::PythonKexiDB()
     PythonKexiDBFieldList::init_type();
     PythonKexiDBIndexSchema::init_type();
     PythonKexiDBTableSchema::init_type();
+    PythonKexiDBQuerySchema::init_type();
 
     add_varargs_method("driverNames", &PythonKexiDB::driverNames,
         "list KexiDB.driverNames()\n"
@@ -71,14 +72,16 @@ PythonKexiDB::PythonKexiDB()
         "KexiDBTableSchema KexiDB.getTableSchema()\n"
         "Returns a new KexiDBTableSchema object."
     );
+    add_varargs_method("getQuerySchema", &PythonKexiDB::getQuerySchema,
+        "KexiDBQuerySchema KexiDB.getQuerySchema()\n"
+        "Returns a new KexiDBQuerySchema object."
+    );
 
     initialize(
         "The KexiDB python module provides a wrapper for the "
         "Kexi::KexiDB library and allows using the functionality "
         "from within python. "
     );
-
-    //setAttr("value1", Py::String("This is value #1"));
 }
 
 PythonKexiDB::~PythonKexiDB()
@@ -129,7 +132,7 @@ Py::Object PythonKexiDB::getConnectionData(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 0, 0);
     return Py::asObject( new PythonKexiDBConnectionData() );
-    //FIXME: does the Python API garbage collect those objects or do we need it???
+    //FIXME: does the Python API garbage collect those objects as well or do we care about it???
 }
 
 Py::Object PythonKexiDB::getField(const Py::Tuple& args)
@@ -141,7 +144,6 @@ Py::Object PythonKexiDB::getField(const Py::Tuple& args)
     /*TODO
     Field(TableSchema *tableSchema);
     Field(QuerySchema *querySchema, BaseExpr* expr = 0);
-    Field();
     */
 }
 
@@ -149,8 +151,16 @@ Py::Object PythonKexiDB::getTableSchema(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 1, 1);
     QString name = args[0].as_string().c_str();
-    KexiDB::TableSchema* tableschema = new KexiDB::TableSchema(name);
-    return Py::asObject( new PythonKexiDBTableSchema(tableschema) );
+    KexiDB::TableSchema* table = new KexiDB::TableSchema(name);
+    return Py::asObject( new PythonKexiDBTableSchema(table) );
+}
+
+Py::Object PythonKexiDB::getQuerySchema(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 0, 0);
+    //TODO arguments
+    KexiDB::QuerySchema* query = new KexiDB::QuerySchema();
+    return Py::asObject( new PythonKexiDBQuerySchema(query) );
 }
 
 

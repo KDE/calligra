@@ -114,7 +114,7 @@ int PythonKexiDBConnectionData::setattr(const char* n, const Py::Object& value)
     return 0;
 }
 
-KexiDB::ConnectionData* PythonKexiDBConnectionData::getConnectionData()
+KexiDB::ConnectionData* PythonKexiDBConnectionData::getConnectionData() const
 {
     return m_connectiondata;
 }

@@ -27,6 +27,7 @@
 #include <qstringlist.h>
 #include <qmap.h>
 #include <qvariant.h>
+#include <qvaluevector.h>
 
 //#include <kdebug.h>
 //#include <qguardedptr.h>
@@ -90,6 +91,14 @@ namespace Kross
             static Py::List toPyObject(QValueList<QVariant> list);
 
             /**
+             * Converts a QValueVector to a Py::List.
+             *
+             * \param list The QValueVector to convert.
+             * \return The to a Py::List converted QValueVector.
+             */
+            static Py::List toPyObject(QValueVector<QVariant> list);
+
+            /**
              * Converts a QVariant to a Py::Object.
              *
              * \param variant The QVariant to convert.
@@ -115,7 +124,7 @@ namespace Kross
             static QVariant toVariant(Py::Object obj);
 
         private:
-            /// Private Constructor. Not needed to instanciate the class.
+            /// Private Constructor. Not needed to instanciate this class.
             PythonUtils() {}
     };
 

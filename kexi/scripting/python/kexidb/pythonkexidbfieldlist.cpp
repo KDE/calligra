@@ -80,7 +80,7 @@ void PythonKexiDBFieldList::init_type(void)
     );
 }
 
-KexiDB::FieldList* PythonKexiDBFieldList::getFieldList()
+KexiDB::FieldList* PythonKexiDBFieldList::getFieldList() const
 {
     return d->fieldlist;
 }

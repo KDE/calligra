@@ -69,6 +69,7 @@ namespace Kross
             Py::Object executeQuery(const Py::Tuple&);
             Py::Object querySingleString(const Py::Tuple&);
             Py::Object queryStringList(const Py::Tuple&);
+            Py::Object querySingleRecord(const Py::Tuple&);
 
             Py::Object executeSQL(const Py::Tuple&);
 

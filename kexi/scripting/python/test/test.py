@@ -2,11 +2,13 @@
 # the Kross::PythonKexiDB module to access the
 # KexiDB functionality from within Python.
 
-#TODO: why the hell the script-execution aborts sometimes with following message;
-#KexiDB: WARNING: DriverManagerInternal::lookupDrivers(): problem with detecting 'sqlite' driver's version -- skipping it!
+####################
+#TODO: why the hell the script-execution aborts sometimes on my
+#system with following message;
+#KexiDB: WARNING: DriverManagerInternal::lookupDrivers(): problem
+#with detecting 'sqlite' driver's version -- skipping it!
 #Alarm clock
-#Skipping the 'sqlite' driver folliwng way works as expected, so what's going on there?
-#if(srv_name.lower() == "sqlite") { delete ptr; continue; }
+####################
 
 # Import the KexiDB module.
 import KexiDB
@@ -60,11 +62,9 @@ class Test:
         if connection.isConnected():
             print "ERROR in connect(): Already connected!"
             return False
-
         if not connection.connect():
             print "ERROR in connect(): connect failed!"
             return False
-
         return True
 
     # Disconnect from KexiDBConnection object.
@@ -72,11 +72,9 @@ class Test:
         if not connection.isConnected():
             print "ERROR in disconnect(): Not connected!"
             return False
-
         if not connection.disconnect():
             print "ERROR in disconnect(): disconnect failed!"
-            return None
-
+            return False
         return True
 
     # Prints various information about a KexiDBConnection object.
@@ -85,32 +83,49 @@ class Test:
         print "connection.currentDatabase() = %s" % connection.currentDatabase()
         print "connection.tableNames() = %s" % connection.tableNames()
 
-    # Execute a SQL-query and print the result.
-    def executeSQLQuery(self, connection, dbname, sqlquerystatement):
-
+    # Open the database for usage. Return true on success else false.
+    def useDatabase(self, connection, dbname):
         if not connection.isDatabase(dbname):
-            print "ERROR in executeSQLQuery(): database %s does not exist!" % dbname
-            return None
-
+            print "ERROR in useDatabase(): database %s does not exist!" % dbname
+            return False
         if not connection.useDatabase(dbname):
-            print "ERROR in executeSQLQuery(): useDatabase %s failed!" % dbname
-            return None
+            print "ERROR in useDatabase(): useDatabase %s failed!" % dbname
+            return False
+
         #print "connection.currentDatabase() = %s" % connection.currentDatabase()
         self.printConnectionInfos(connection)
 
-        cursor = connection.executeQuery(sqlquerystatement)
-        if cursor == None:
-            print "ERROR in executeSQLQuery(): connection.executeQuery() returned a None!"
+        return True
+
+    # Execute a SQL-query and return the cursor.
+    def getCursor(self, connection, dbname, sqlquerystatement):
+        if not self.useDatabase(connection,dbname):
             return None
-        print "connection.executeQuery() cursor = %s %s" % (str(cursor), dir(cursor))
+
+        # Pass the string as raw query-statement
+        cursor = connection.executeQuery(sqlquerystatement)
+
+        # Alternate way with KexiDBQuerySchema
+        #query = KexiDB.getQuerySchema()
+        #query.setStatement(sqlquerystatement)
+        #print "getCursor KexiDBQuerySchema.statement = %s" % query.statement()
+        #cursor = connection.executeQuery(query)
+
+        return cursor
+
+    # Iterate through all elements in the cursor and print there values.
+    def printCursor(self, cursor):
+        if cursor == None:
+            print "ERROR in printCursor(): Cursor is None!"
+            return False
+        print "printCursor() cursor = %s %s" % (str(cursor), dir(cursor))
 
         cursor.moveFirst()
         while(not cursor.eof()):
             for i in range(cursor.fieldCount()):
                 print "Item=%s Field=%s Value=%s" % (cursor.at(), i, cursor.value(i))
             cursor.moveNext()
-
-        return cursor
+        return True
 
 if __name__ == '__main__':
     t = Test()
@@ -133,11 +148,12 @@ if __name__ == '__main__':
 
     t.connect(connection)
 
-    cursor = t.executeSQLQuery(
+    cursor = t.getCursor(
         connection, # KexiDBConnection object.
         "/home/snoopy/New_database.kexi", # databasename
         "SELECT * FROM table1" # sql query statement
     )
+    t.printCursor(cursor)
 
     tableschema = KexiDB.getTableSchema("myTableSchema3")
     print "tableschema = %s %s" % (tableschema, dir(tableschema))
@@ -168,10 +184,10 @@ if __name__ == '__main__':
     # KexiDB: val10: NULL
     #
 
-    field = KexiDB.getField("myField1")
-    #field.name = "myField1"
-    field.Text = True
-    tableschema.fieldlist.addField(field)
+    #field = KexiDB.getField("myField1")
+    ##field.name = "myField1"
+    #field.Text = True
+    #tableschema.fieldlist.addField(field)
 
     # WORKS
     #print "connection.createTable() = %s" % connection.createTable(tableschema)
@@ -183,4 +199,4 @@ if __name__ == '__main__':
     t.disconnect(connection)
 
     #TODO access to cursor without having connection.connect() called crashes. We
-    #need to add a lot more of checks. Maybe add policies like in boost?
+    #need to add a lot more of checks. Maybe extend PyCXX with policies like in boost?

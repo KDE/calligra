@@ -43,8 +43,11 @@ namespace Kross
 
             /**
              * Constructor.
+             *
+             * \param connection The \a PythonKexiDBConnection instance.
+             * \param cursor The \a KexiDB::Cursor instance.
              */
-            PythonKexiDBCursor(PythonKexiDBConnection*, KexiDB::Cursor*);
+            PythonKexiDBCursor(PythonKexiDBConnection* connection, KexiDB::Cursor* cursor);
 
             /**
              * Destructor.

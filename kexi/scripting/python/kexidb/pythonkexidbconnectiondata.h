@@ -49,7 +49,7 @@ namespace Kross
             virtual Py::Object getattr(const char*);
             virtual int setattr(const char*, const Py::Object&);
 
-            KexiDB::ConnectionData* getConnectionData();
+            KexiDB::ConnectionData* getConnectionData() const;
 
         private:
             KexiDB::ConnectionData* m_connectiondata;

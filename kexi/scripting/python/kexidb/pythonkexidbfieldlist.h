@@ -41,13 +41,40 @@ namespace Kross
     class PythonKexiDBFieldList : public Py::PythonExtension<PythonKexiDBFieldList>
     {
         public:
-            explicit PythonKexiDBFieldList(KexiDB::FieldList*);
+
+            /**
+             * Constructor.
+             *
+             * \param fieldlist The \a KexiDB::FieldList instance.
+             */
+            explicit PythonKexiDBFieldList(KexiDB::FieldList* fieldlist);
+
+            /**
+             * Destructor.
+             */
             virtual ~PythonKexiDBFieldList();
 
+            /**
+             * From Py::Object Overloaded method to validate if
+             * the PyObject could be used within this context.
+             *
+             * \param pyobj The PyObject to check.
+             * \return true if the PyObject is valid else false.
+             */
             virtual bool accepts(PyObject* pyobj) const;
+
+            /**
+             * Called from PythonKexiDB::PythonKexiDB() to ensure
+             * that this object initializes itself.
+             */
             static void init_type(void);
 
-            KexiDB::FieldList* getFieldList();
+            /**
+             * Return the \a KexiDB::FieldList instance.
+             *
+             * \return The fieldlist object.
+             */
+            KexiDB::FieldList* getFieldList() const;
 
         private:
             PythonKexiDBFieldListPrivate* d;

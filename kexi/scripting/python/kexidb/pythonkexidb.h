@@ -71,6 +71,7 @@ namespace Kross
             Py::Object getConnectionData(const Py::Tuple&);
             Py::Object getField(const Py::Tuple&);
             Py::Object getTableSchema(const Py::Tuple&);
+            Py::Object getQuerySchema(const Py::Tuple&);
 
             /**
              * Return the shared KexiDB::DriverManager instance
