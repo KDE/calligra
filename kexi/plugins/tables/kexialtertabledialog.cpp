@@ -49,6 +49,12 @@
 
 //#define MAX_FIELDS 101 //nice prime number
 
+//! indexes for table columns
+#define COLUMN_ID_PK 0
+#define COLUMN_ID_NAME 1
+#define COLUMN_ID_TYPE 2
+#define COLUMN_ID_DESC 3
+
 class KexiAlterTableDialogPrivate
 {
 	public:
@@ -171,12 +177,13 @@ void KexiAlterTableDialog::initData()
 	}
 	//add empty space
 //	for (int i=tableFieldCount; i<MAX_FIELDS; i++) {
+	const int columnsCount = d->data->columnsCount();
 	for (int i=tableFieldCount; i<(int)d->buffers->size(); i++) {
 //		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
 //		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
 //		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
 //		m_fields.insert(i, buff);
-		KexiTableItem *item = new KexiTableItem(3);//3 empty fields
+		KexiTableItem *item = new KexiTableItem(columnsCount);//3 empty fields
 		d->data->append(item);
 	}
 
@@ -186,10 +193,10 @@ void KexiAlterTableDialog::initData()
 
 	m_view->setData(d->data);
 
-	m_view->setColumnWidth(0, IconSize( KIcon::Small ) + 10);
-	m_view->adjustColumnWidthToContents(1); //adjust column width
-	m_view->setColumnWidth(2, d->maxTypeNameTextWidth + 2*m_view->rowHeight());
-	m_view->setColumnStretchEnabled( true, 3 ); //last column occupies the rest of the area
+	m_view->setColumnWidth(COLUMN_ID_PK, IconSize( KIcon::Small ) + 10);
+	m_view->adjustColumnWidthToContents(COLUMN_ID_NAME); //adjust column width
+	m_view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2*m_view->rowHeight());
+	m_view->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
 
 	setDirty(false);
 }
@@ -327,7 +334,7 @@ void KexiAlterTableDialog::slotTogglePrimaryKey()
 	if (m_view->selectedItem()) {
 		//show key in the table
 		m_view->data()->clearRowEditBuffer();
-		m_view->data()->updateRowEditBuffer(m_view->selectedItem(), 0, QVariant(set ? "key" : ""));
+		m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_PK, QVariant(set ? "key" : ""));
 		m_view->data()->saveRowChanges(*m_view->selectedItem(), true);
 	}
 
@@ -347,7 +354,7 @@ void KexiAlterTableDialog::slotTogglePrimaryKey()
 			m_view->data()->clearRowEditBuffer();
 			KexiTableItem *item = m_view->itemAt(i);
 			if (item) {
-				m_view->data()->updateRowEditBuffer(item, 0, QVariant());
+				m_view->data()->updateRowEditBuffer(item, COLUMN_ID_PK, QVariant());
 				m_view->data()->saveRowChanges(*item, true);
 			}
 		}
@@ -458,12 +465,12 @@ static KexiDB::Field::Type firstTypeForSelectedGroup( int typegroup )
 void KexiAlterTableDialog::slotBeforeCellChanged(
 	KexiTableItem *item, int colnum, QVariant newValue, KexiDB::ResultInfo* /*result*/)
 {
-	if (colnum==0) {//'name'
+	if (colnum==COLUMN_ID_NAME) {//'name'
 //		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {
 		//if 'type' is not filled yet
-		if (item->at(1).isNull()) {
+		if (item->at(COLUMN_ID_TYPE).isNull()) {
 			//auto select 1st row of 'type' column
-			m_view->data()->updateRowEditBuffer(item, 1, QVariant((int)0));
+			m_view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, QVariant((int)0));
 		}
 
 		if (propertyBuffer()) {
@@ -472,10 +479,10 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 			buf["name"] = newValue;
 		}
 	}
-	else if (colnum==1) {//'type'
+	else if (colnum==COLUMN_ID_TYPE) {//'type'
 		if (newValue.isNull()) {
-			//'type' col will be cleared: clear row 0 as well
-			m_view->data()->updateRowEditBuffer(item, 0, QVariant(QString::null));
+			//'type' col will be cleared: clear 'name' column as well
+			m_view->data()->updateRowEditBuffer(item, COLUMN_ID_NAME, QVariant(QString::null));
 			return;
 		}
 
@@ -510,13 +517,13 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 			propertyBufferReloaded();
 		}
 	}
-	else if (colnum==2) {//'description'
+	else if (colnum==COLUMN_ID_DESC) {//'description'
 		if (!propertyBuffer())
 			return;
 
 		//update field desc.
 		KexiPropertyBuffer &buf = *propertyBuffer();
-		buf["description"] = item->at(2);
+		buf["description"] = newValue; //item->at(COLUMN_ID_DESC);
 	}
 }
 
@@ -526,9 +533,9 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 
 	//-check if the row was empty before updating
 	//if yes: we want to add a property buffer for this new row (field)
-	QString fieldName = item->at(0).toString();
+	QString fieldName = item->at(COLUMN_ID_NAME).toString();
 //	const bool buffer_allowed = !fieldName.isEmpty() && !item->at(1).isNull();
-	const bool buffer_allowed = !item->at(1).isNull();
+	const bool buffer_allowed = !item->at(COLUMN_ID_TYPE).isNull();
 
 	if (!buffer_allowed && propertyBuffer()) {
 		//there is a buffer, but it's not allowed - remove it:
@@ -536,16 +543,16 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 
 		//clear 'type' column:
 		m_view->data()->clearRowEditBuffer();
-		m_view->data()->updateRowEditBuffer(m_view->selectedItem(), 1, QVariant());
+		m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_TYPE, QVariant());
 		m_view->data()->saveRowChanges(*m_view->selectedItem());
 	
 	} else if (buffer_allowed && !propertyBuffer()) {
 		//-- create a new field:
-		int fieldType = firstTypeForSelectedGroup( item->at(1).toInt()+1/*counting from 1*/ );
+		int fieldType = firstTypeForSelectedGroup( item->at(COLUMN_ID_TYPE).toInt()+1/*counting from 1*/ );
 		if (fieldType==0)
 			return;
 
-		QString description = item->at(2).toString();
+		QString description = item->at(COLUMN_ID_DESC).toString();
 
 		KexiDB::Field field( //tmp
 			fieldName,
