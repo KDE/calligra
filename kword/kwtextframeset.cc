@@ -442,6 +442,13 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     // It's cumulative (the space of one break will be included in the further
     // paragraph's y position), which makes it easy to implement.
 
+    // Nothing to do for header/footer. Well, this is probably a quick hack ?
+    //if ( getFrameInfo() != FI_BODY )
+    // {
+    //    QTextFlow::adjustFlow( yp, w, h, parag, FALSE );
+    //    return;
+    // }
+
     int breaked = false;
     bool linesTogether = parag ? static_cast<KWTextParag *>(parag)->linesTogether() : false;
     //kdDebugBody(32002) << "KWTextFrameSet::adjustFlow parag=" << parag
@@ -454,13 +461,17 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     {
         int frameHeight = kWordDocument()->zoomItY( frameIt.current()->height() );
         int bottom = totalHeight + frameHeight;
-        //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
+        // Only skip bottom of frame if there'll be another one. Not for header/footer, for instance.
+        if ( frameIt.current()->getFrameBehaviour() == AutoCreateNewFrame )
+        {
+            //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 
-        // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
-        breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
-        if ( breaked )
-            break;
-        else if ( yp+h < bottom )
+            // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
+            breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
+            if ( breaked )
+                break;
+        }
+        if ( yp+h < bottom )
             break; // we've been past the parag, so stop here
         totalHeight = bottom;
     }

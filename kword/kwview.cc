@@ -239,6 +239,7 @@ void KWView::setupActions()
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
                                                    this, SLOT( viewFormattingChars() ),
                                                    actionCollection(), "view_formattingchars" );
+    actionViewFormattingChars->setEnabled( false ); // ## not implemented
     actionViewFrameBorders = new KToggleAction( i18n( "Frame &Borders" ), 0,
                                                    this, SLOT( viewFrameBorders() ),
                                                    actionCollection(), "view_frameborders" );

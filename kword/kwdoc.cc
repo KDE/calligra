@@ -168,7 +168,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     setInstance( KWFactory::global(), false );
 
-    // ## TODO make this configurable
     m_gridX = m_gridY = 10;
 
     _viewFormattingChars = FALSE;
