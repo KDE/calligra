@@ -44,7 +44,6 @@ class KoLineWidthAction::KoLineWidthActionPrivate
   public:
     KoLineWidthActionPrivate()
     {
-      m_currentIndex = 0;
       m_currentWidth = 1.0;
       m_unit = KoUnit::U_PT;
     }
@@ -54,7 +53,6 @@ class KoLineWidthAction::KoLineWidthActionPrivate
     }
     
     double m_currentWidth;
-    int m_currentIndex;
     KoUnit::Unit m_unit;
 };
 
@@ -125,9 +123,7 @@ void KoLineWidthAction::execute(int index)
   }
 
   if(ok) {
-    popupMenu()->setItemChecked(d->m_currentIndex, false);
-    popupMenu()->setItemChecked(index, true);
-    d->m_currentIndex = index;
+    setCurrentSelection(index);
     emit newLineWidth(d->m_currentWidth);
   }
 }
@@ -144,17 +140,13 @@ void KoLineWidthAction::setCurrentWidth(double width)
   // Check if it is a standard width...
   for(int i = 1; i <= 10; i++) {
     if(KoUnit::toPoint(width) == (double) i) {
-      popupMenu()->setItemChecked(d->m_currentIndex, false);
-      popupMenu()->setItemChecked(i - 1, true);
-      d->m_currentIndex = i - 1;
+      setCurrentSelection(i - 1);
       return;
     }
   }
 
   //Custom width...
-  popupMenu()->setItemChecked(d->m_currentIndex, false);
-  popupMenu()->setItemChecked(11, true);
-  d->m_currentIndex = 11;
+  setCurrentSelection(11);
 }
 
 void KoLineWidthAction::setUnit(KoUnit::Unit unit)
