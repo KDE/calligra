@@ -12,6 +12,8 @@
 #include "vmtool_select.h"
 #include "vmcmd_transform.h"
 
+#include <kdebug.h>
+
 #include <math.h>
 
 VMToolSelect* VMToolSelect::s_instance = 0L;
@@ -47,9 +49,10 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	//QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
 
 	// already selected, so must be a handle operation (move, scale etc.)
+	QRect rect = part()->selection().boundingBox( view->zoomFactor() );
+	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
 	if( !part()->selection().isEmpty()
-		&& ( m_state != normal ||
-			part()->selection().boundingBox( view->zoomFactor() ).contains( fp ) ) )
+		&& ( m_state != normal || rect.contains( fp ) ) )
 //		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
 	{
 		if( m_state != moving )
@@ -145,13 +148,11 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 
 			part()->selectObjectsWithinRect(
 				QRect(
-					qRound( /*view->zoomFactor() */ fp.x() ),
-					qRound( /*view->zoomFactor() */ fp.y() ),
-					qRound( /*view->zoomFactor() */ ( lp.x() - fp.x() ) ),
-					qRound( /*view->zoomFactor() */ ( lp.y() - fp.y() ) ) ).normalize(),
+					qRound( fp.x() ), qRound( fp.y() ), qRound( ( lp.x() - fp.x() ) ),
+					qRound( ( lp.y() - fp.y() ) ) ).normalize(),
 				view->zoomFactor(),
 				true );
-				
+
 			//if( part()->selection().count() > 0  )
 				part()->repaintAllViews();
 		}

@@ -27,6 +27,8 @@ public:
 protected:
 	VMToolScale( KarbonPart* part );
 
+	void setCursor( KarbonView* view ) const;
+
 private:
 	static VMToolScale* s_instance;
 
@@ -35,6 +37,7 @@ private:
 	QPoint m_lp;
 
 	double m_s1, m_s2;
+	QPoint m_sp;
 
 	bool m_isDragging;
 };
