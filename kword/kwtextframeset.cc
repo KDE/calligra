@@ -2784,7 +2784,7 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
         {
             if( start.parag()->at(i)->isCustom())
             {
-                posEnd=i-1;
+                posEnd=i;
                 c1.setParag(start.parag()  );
                 c1.setIndex( posStart );
                 c2.setParag( start.parag() );
@@ -2792,6 +2792,7 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
 
 
                 repl=text.mid(posStart,posEnd-posStart);
+
                 textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
                 textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
                 macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type),
@@ -2825,7 +2826,7 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
         {
             if( start.parag()->at(i)->isCustom())
             {
-                posEnd=i-1;
+                posEnd=i;
 
                 c1.setParag( start.parag() );
                 c1.setIndex( posStart );
@@ -2869,7 +2870,7 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
             {
                 if( p->at(i)->isCustom())
                 {
-                    posEnd=i-1;
+                    posEnd=i;
 
                     c1.setParag( p );
                     c1.setIndex( posStart );
@@ -2905,17 +2906,6 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
 
             p = p->next();
         }
-        //change last word
-        c1.setParag(p  );
-        c1.setIndex( posStart );
-        c2.setParag( p );
-        c2.setIndex( text.length() );
-
-        textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
-        textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
-        repl=text.mid(posStart,end.index()-posStart);
-        macroCmd->addCommand(replaceSelection( cursor, textChangedCase(repl,_type),
-                                                       QTextDocument::Temp, "" ));
 
         text = end.parag()->string()->toString().left( end.index() );
         posStart=0;
@@ -2924,7 +2914,7 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
         {
             if( end.parag()->at(i)->isCustom())
             {
-                posEnd=i-1;
+                posEnd=i;
 
                 c1.setParag( end.parag() );
                 c1.setIndex( posStart );
