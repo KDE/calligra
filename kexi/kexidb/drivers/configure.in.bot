@@ -1,0 +1,49 @@
+echo "=================================================================="
+echo "Kexi PostgreSQL driver status:"
+
+if test -z "$PG_INCDIR"; then
+  echo ""
+  echo "  +The PostgreSQL C-API (libpq) headers were not found"
+  echo "     These usually ship with PostgreSQL, but if you've installed from"
+  echo "     a distros package then these files may be part of a package"
+  echo "     called postgresql-devel or libpq-devel"
+  all_tests=bad
+else
+  echo "  +The PostgreSQL C-API (libpq) headers were found"
+fi
+
+if test -z "$PG_INCDIR"; then
+  echo ""
+  echo "  +The PostgreSQL C-API (libpq) libs were not found"
+  echo "     These usually ship with PostgreSQL, but if you've installed from"
+  echo "     a distros package then these files may be part of a package"
+  echo "     called postgresql-devel or libpq-devel"
+  all_tests=bad
+else
+  echo "  +The PostgreSQL C-API (libpq) libs were found"
+fi
+
+if test -z "$PQXX_INCDIR"; then
+  echo ""
+  echo "  +The PostgreSQL C++ API (libpqxx) headers were not found"
+  echo "     The libpqxx library can be downloaded from pqxx.tk or"
+  echo "     http://gborg.postgresql.org/project/libpqxx/projdisplay.php"
+  echo "     Grab the latest verion (>=2)"
+  all_tests=bad
+else
+  echo "  +The PostgreSQL C++ API (libpqxx) headers were found"
+fi
+
+if test -z "$PQXX_LIBDIR"; then
+  echo ""
+  echo "  +The PostgreSQL C++ API (libpqxx) libs were not found"
+  echo "     The libpqxx library can be downloaded from pqxx.tk or"
+  echo "     http://gborg.postgresql.org/project/libpqxx/projdisplay.php"
+  echo "     Grab the latest verion (>=2)"
+  all_tests=bad
+else
+  echo "  +The PostgreSQL C++ API (libpqxx) libs were found"
+fi 
+echo "=================================================================="
+
+
