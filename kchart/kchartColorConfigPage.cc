@@ -21,6 +21,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
                                               QWidget* parent, KoChart::Data *dat ) :
     QWidget( parent ),
     _params( params ),
+    index( 0 ),
     data( dat )
 {
     QWhatsThis::add( this, i18n( "This page lets you configure the colors "
@@ -172,8 +173,8 @@ void KChartColorConfigPage::changeIndex(int newindex)
     {
         if(!_dataColorCB->isEnabled())
             _dataColorCB->setEnabled(true);
-        extColor.setColor(index,_dataColorCB->color());
-        _dataColorCB->setColor(extColor.color(newindex));
+        extColor[index] = _dataColorCB->color();
+        _dataColorCB->setColor(extColor[newindex]);
         index=newindex;
     }
 }
@@ -190,19 +191,21 @@ void KChartColorConfigPage::initDataColorList()
   QStringList lst;
   for(uint i =0;i<data->rows();i++)
   {
+      extColor.resize( _params->maxDataColor() );
+
       if(i<_params->maxDataColor())
           _dataColorLB->insertItem(_params->legendText( i ).isEmpty() ? i18n("Series %1").arg(i+1) :_params->legendText( i ) );
-      extColor.setColor(i,_params->dataColor(i));
+      extColor[i] =_params->dataColor(i);
   }
   _dataColorLB->setCurrentItem(0);
-  _dataColorCB->setColor( extColor.color(index));
+  _dataColorCB->setColor( extColor[index]);
 }
 
 
 void KChartColorConfigPage::apply()
 {
-    extColor.setColor(index,_dataColorCB->color());
+    extColor[index] = _dataColorCB->color();
     for(uint i =0;i<data->rows();i++)
         if(i<_params->maxDataColor())
-            _params->setDataColor(i,extColor.color(i));
+            _params->setDataColor(i,extColor[i]);
 }

@@ -201,9 +201,6 @@ void KChartFontConfigPage::init()
 
 void KChartFontConfigPage::apply()
 {
-    // PENDING(kalle) Adapt
-    //   _params->setLabelFont(label);
-
       // PENDING(kalle) Adapt
     KDChartAxisParams leftparms = _params->axisParams( KDChartAxisParams::AxisPosLeft );
     KDChartAxisParams rightparms = _params->axisParams( KDChartAxisParams::AxisPosRight );
@@ -219,6 +216,7 @@ void KChartFontConfigPage::apply()
     if( QButton::On == yAxisIsRelative )
       rightparms.setAxisLabelsFontRelSize( yAxis.pointSize() );
     bottomparms.setAxisLabelsFont( xAxis, QButton::Off == xAxisIsRelative );
+//    qDebug( "Set bottom font size to %d",  xAxis.pointSize() );
     if( QButton::On == xAxisIsRelative )
       bottomparms.setAxisLabelsFontRelSize( xAxis.pointSize() );
     // PENDING(khz) Add support for the other 6 possible axes
@@ -230,8 +228,5 @@ void KChartFontConfigPage::apply()
     // use header settings for header 2 and footer as well
     //   (this must be changed, khz 14.12.2001)
     // PENDING(khz) Add support for the other 16 possible hd/ft areas
-
-//     _params->setXTitleFont(xtitle);
-//     _params->setYTitleFont(ytitle);
 
 }
