@@ -17,12 +17,14 @@ $(BUILDDIR)/build-stamp:
 	eval `perl -w ../admin/debianrules echodirs`; \
 	CFLAGS="-O2 -g -Wall" \
 	 CXXFLAGS="-O2 -g -Wall" \
-	../configure --enable-debug --disable-rpath
+	../configure --enable-debug --disable-rpath \
+	--prefix=/usr --libdir=$$libdir --includedir=$$includedir
 	make -C $(BUILDDIR)
 	touch $(BUILDDIR)/build-stamp
 
 clean: debian-clean
 	-rm -rf $(BUILDDIR)
+	dh_clean
 
 debian-clean:
 	dh_testdir
