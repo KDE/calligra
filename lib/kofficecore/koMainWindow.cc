@@ -37,7 +37,6 @@
 #endif
 
 #include <kaboutdialog.h>
-#include <kaction.h>
 #include <kstdaction.h>
 #include <khelpmenu.h>
 #include <kapp.h>
@@ -48,7 +47,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
-#include <kstdaccel.h>
 #include <kstddirs.h>
 #include <kio/netaccess.h>
 
@@ -107,19 +105,13 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     setXMLFile( locate( "data", "koffice/koffice_shell.rc" ) );
 
-    new KAction( i18n("New"), KofficeBarIcon( "filenew" ), KStdAccel::key(KStdAccel::New),
-                 this, SLOT( slotFileNew() ), actionCollection(), "filenew" );
-    new KAction( i18n("Open..."), KofficeBarIcon( "fileopen" ), KStdAccel::key(KStdAccel::Open),
-                 this, SLOT( slotFileOpen() ), actionCollection(), "fileopen" );
-    new KAction( i18n("Save"), KofficeBarIcon( "filefloppy" ), KStdAccel::key(KStdAccel::Save),
-                 this, SLOT( slotFileSave() ), actionCollection(), "filesave" );
-    new KAction( i18n("Save as..."), 0, this, SLOT( slotFileSaveAs() ), actionCollection(), "filesaveas" );
-    new KAction( i18n("Print..."), KofficeBarIcon( "fileprint" ), KStdAccel::key(KStdAccel::Print),
-                 this, SLOT( slotFilePrint() ), actionCollection(), "fileprint" );
-    new KAction( i18n("Close"), KofficeBarIcon( "close" ), KStdAccel::key(KStdAccel::Close),
-                 this, SLOT( slotFileClose() ), actionCollection(), "fileclose" );
-    //new KAction( i18n("Quit"), KofficeBarIcon( "exit" ), KStdAccel::key(KStdAccel::Quit),
-    //             this, SLOT( slotFileQuit() ), actionCollection(), "quit" );
+    KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new" );
+    KStdAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
+    KStdAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
+    KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
+    KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
+    KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
+    KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
     KHelpMenu * m_helpMenu = new KHelpMenu( this );
     KStdAction::helpContents( m_helpMenu, SLOT( appHelpActivated() ), actionCollection(), "contents" );
