@@ -33,8 +33,10 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     : KoView( part, parent, name )
 {
     setInstance( KChartFactory::global() );
-    setXMLFile( "kchart.rc" );
-
+    if ( koDocument()->isReadWrite() )
+        setXMLFile( "kchart.rc" );
+    else
+        setXMLFile( "kchart_readonly.rc" );
     dcop = 0;
     dcopObject(); // build it
 

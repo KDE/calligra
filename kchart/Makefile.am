@@ -90,7 +90,7 @@ noinst_HEADERS =  kchart_part.h \
 METASOURCES = AUTO
 
 rcdir = $(kde_datadir)/kchart
-rc_DATA = kchart.rc
+rc_DATA = kchart.rc kchart_readonly.rc
 
 kdelnk_DATA = kchart.desktop
 kdelnkdir = $(kde_appsdir)/Office
