@@ -115,7 +115,9 @@ int KWFrame::pageNum() const
 int KWFrame::pageNum( KWDocument* doc ) const
 {
     int page = static_cast<int>(y() / doc->ptPaperHeight());
-    return QMIN( page, doc->getPages()-1 );
+    return page;
+    // Circular dependency. KWDoc uses pageNum to calculate the number of pages!
+    //return QMIN( page, doc->getPages()-1 );
 }
 
 QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor defaultCursor )
@@ -1679,7 +1681,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
                                    QColorGroup &, bool, bool, KWFrameSetEdit * )
 {
-    //kdDebug() << "KWPictureFrameSet::drawFrame crect=" << crect << endl;
+    //kdDebug() << "KWPictureFrameSet::drawFrame crect=" << crect << " size=" << kWordDocument()->zoomItX( frame->innerWidth() ) << "x" << kWordDocument()->zoomItY( frame->innerHeight() ) << endl;
     m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
                   crect.x(), crect.y(), crect.width(), crect.height(), !m_finalSize);
 }

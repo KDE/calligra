@@ -103,6 +103,7 @@
 #include <kformulamimesource.h>
 
 #include <stdlib.h>
+#include <qtimer.h>
 
 KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -227,13 +228,6 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     m_gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( m_gui->canvasWidget() );
 
-    // Determine initial scroll position
-    KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
-    if ( textedit )
-        textedit->ensureCursorVisible();
-    else
-        m_gui->canvasWidget()->setContentsPos( 0, 0 );
-
     //when kword is embedded into konqueror apply a zoom=100
     //in konqueror we can't change zoom -- ### TODO ?
     if(!m_doc->isReadWrite())
@@ -241,6 +235,11 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
         setZoom( 100, true );
         slotUpdateRuler();
     }
+
+    // Determine initial scroll position
+    // We do this delayed, so that the GUI has been fully constructed
+    // (and e.g. the statusbar can repaint).
+    QTimer::singleShot( 0, this, SLOT( slotSetInitialPosition() ) );
 }
 
 KWView::~KWView()
@@ -269,6 +268,14 @@ DCOPObject* KWView::dcopObject()
     return dcop;
 }
 
+void KWView::slotSetInitialPosition()
+{
+    KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
+    if ( textedit )
+        textedit->ensureCursorVisible();
+    else
+        m_gui->canvasWidget()->setContentsPos( 0, 0 );
+}
 
 void KWView::clearSelection()
 {
