@@ -25,14 +25,14 @@
 #ifndef CutCmd_h_
 #define CutCmd_h_
 
-#include <qlist.h>
+#include <list>
 #include "GDocument.h"
 #include "GObject.h"
 #include "Command.h"
 
 class CutCmd : public Command {
 public:
-  CutCmd (GDocument* doc, QList<GObject>& cboard);
+  CutCmd (GDocument* doc);
   ~CutCmd ();
 
   void execute ();
@@ -40,8 +40,7 @@ public:
 
 private:
   GDocument* document;
-  QList<GObject> objects;
-  QList<GObject>* clipboard;
+  list<pair<int, GObject*> > objects;
 };
 
 #endif

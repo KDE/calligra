@@ -335,6 +335,9 @@ void GPolyline::calcBoundingBox () {
     r.bottom (QMAX(p.y (), r.bottom ()));
   }
 
+  if (r.left () == r.right ()) r.right (r.left () + 1);
+  if (r.top () == r.bottom ()) r.bottom (r.top () + 1);
+
   if (num < 2)
     return;
 

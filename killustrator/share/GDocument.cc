@@ -422,6 +422,9 @@ bool GDocument::findObjectsContainedIn (const Rect& r, QList<GObject>& olist) {
 }
 
 void GDocument::layerChanged () {
+  if (!autoUpdate)
+    return;
+
   emit changed ();
 }
 
@@ -519,8 +522,195 @@ bool GDocument::saveToXml (ostream& os) {
   return ! os.fail ();
 }
 
+bool GDocument::insertFromXml (istream& is, list<GObject*>& newObjs) {
+  XmlReader xml (is);
+  XmlElement elem;
+
+  if (! xml.validHeader ())
+    return false;
+
+  if (! xml.readElement (elem) || (elem.tag () != "doc"))
+    return false;
+
+  // check mime type
+  list<XmlAttribute>::const_iterator first =  elem.attributes ().begin ();
+  while (first != elem.attributes ().end ()) {
+      if ((*first).name () == "mime") {
+	  const string& v = (*first).stringValue ();
+	  if (v != KILLUSTRATOR_MIMETYPE)
+	      return false;
+      }
+      first++;
+  }
+  return parseBody (xml, newObjs, true);
+}
+
+bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
+			   bool markNew) {
+  GObject* obj = 0L;
+  stack<GGroup*, vector<GGroup*> > groups;
+  bool finished = false;
+  XmlElement elem;
+  bool endOfBody = false;
+
+  do {
+    if (! xml.readElement (elem))
+      break;
+    if (elem.tag () == "kiml" || elem.tag () == "doc") {
+      if (! elem.isEndTag ())
+        break;
+      else
+        endOfBody = true;
+    }
+    else if (elem.isEndTag ()) {
+      finished = true;
+      if (elem.tag () == "group") {
+	  // group object is finished -> recalculate bbox
+	groups.top ()->calcBoundingBox ();
+	groups.pop ();
+      }
+    }
+    else {
+      finished = elem.isClosed () && elem.tag () != "point";
+
+      if (elem.tag () == "layer") {
+	  if (layers.size () == 1 && active_layer->objectCount () == 0) 
+	      // add objects to the current layer
+	      ;
+	  else 
+	      active_layer = addLayer ();
+	  list<XmlAttribute>::const_iterator first = 
+	      elem.attributes ().begin ();
+	  while (first != elem.attributes ().end ()) {
+	      const string& attr = (*first).name ();
+	      if (attr == "id")
+		  active_layer->setName ((*first).stringValue ().c_str ());
+	      else if (attr == "flags") {
+		  int flags = (*first).intValue ();
+		  active_layer->setVisible (flags & LAYER_VISIBLE);
+		  active_layer->setPrintable (flags & LAYER_EDITABLE);
+		  active_layer->setEditable (flags & LAYER_PRINTABLE);
+	      }
+	      first++;
+	  }
+      }
+      else if (elem.tag () == "polyline")
+	obj = new GPolyline (elem.attributes ());
+      else if (elem.tag () == "ellipse")
+	obj = new GOval (elem.attributes ());
+      else if (elem.tag () == "bezier")
+	obj = new GBezier (elem.attributes ());
+      else if (elem.tag () == "rectangle")
+	obj = new GPolygon (elem.attributes (), GPolygon::PK_Rectangle);
+      else if (elem.tag () == "polygon")
+	obj = new GPolygon (elem.attributes ());
+      else if (elem.tag () == "clipart")
+	obj = new GClipart (elem.attributes ());
+      else if (elem.tag () == "text") {
+	obj = new GText (elem.attributes ());
+	// read font attributes 
+	if (! xml.readElement (elem) || elem.tag () != "font") 
+	  break;
+
+	list<XmlAttribute>::const_iterator first = elem.attributes ().begin ();
+	QFont font = QFont::defaultFont ();
+
+	while (first != elem.attributes ().end ()) {
+	  const string& attr = (*first).name ();
+	  if (attr == "face")
+	    font.setFamily ((*first).stringValue ().c_str ());
+	  else if (attr == "point-size")
+	    font.setPointSize ((*first).intValue ());
+	  else if (attr == "weight")
+	    font.setWeight ((*first).intValue ());
+	  else if (attr == "italic")
+	    font.setItalic ((*first).intValue () != 0);
+	  first++;
+	}
+	((GText *)obj)->setFont (font);
+
+	// and the text
+	finished = false;
+	QString text_str;
+	do {
+	  if (! xml.readElement (elem))
+	    // something goes wrong
+	    break;
+	  if (elem.tag () == "#PCDATA")
+	    text_str += xml.getText ().c_str ();
+	  else if (elem.tag () == "font" && elem.isEndTag ()) 
+	    // end of font tag - ignore it
+	    ;
+	  else if (elem.tag () == "br")
+	    // newline
+	    text_str += "\n";
+
+	  // end of element
+	  if (elem.tag () == "text" && elem.isEndTag ()) {
+	    ((GText *) obj)->setText (text_str);
+	    finished = true;
+	  }
+	} while (! finished);
+      }
+      else if (elem.tag () == "group") {
+	GGroup* group = new GGroup (elem.attributes ());
+	group->setLayer (active_layer);
+	//	group->ref ();
+
+	if (!groups.empty ()) {
+	  groups.top ()->addObject (group);
+	}
+	else {
+	    if (markNew)
+		newObjs.push_back (group);
+	  insertObject (group);
+	}
+	groups.push (group);
+      }
+      else if (elem.tag () == "point") {
+	// add a point to the object
+	list<XmlAttribute>::const_iterator first = elem.attributes ().begin ();
+	Coord point;
+	
+	while (first != elem.attributes ().end ()) {
+	  if ((*first).name () == "x")
+	    point.x ((*first).floatValue ());
+	  else if ((*first).name () == "y")
+	    point.y ((*first).floatValue ());
+	  first++;
+	}
+	assert (obj != 0L);
+	if (obj->inherits ("GPolyline")) {
+	  GPolyline* poly = (GPolyline *) obj;
+	  poly->_addPoint (poly->numOfPoints (), point);
+	}
+      }
+      else
+	cout << "invalid object type: " << elem.tag () << endl;
+    }
+    if (finished) {
+      if (obj) {
+        if (!groups.empty ()) {
+	  obj->setLayer (active_layer);
+ 	  groups.top ()->addObject (obj);
+        }
+        else { 
+	    if (markNew)
+		newObjs.push_back (obj);
+	    insertObject (obj);
+	}
+        obj = 0L;
+      }
+      finished = false;
+    }
+  } while (! endOfBody);
+
+  setAutoUpdate (true);
+  return true;
+}
+
 bool GDocument::readFromXml (istream& is) {
-  bool endOfHeader = false, endOfBody = false;
+  bool endOfHeader = false;
 
   XmlReader xml (is);
   if (! xml.validHeader ()) {
@@ -607,6 +797,10 @@ bool GDocument::readFromXml (istream& is) {
   // update page layout
   setPageLayout (pLayout);
 
+  list<GObject*> dummy;
+  bool result = parseBody (xml, dummy, false);
+
+#if not_more
   GObject* obj = 0L;
   stack<GGroup*, vector<GGroup*> > groups;
   bool finished = false;
@@ -614,7 +808,7 @@ bool GDocument::readFromXml (istream& is) {
   do {
     if (! xml.readElement (elem))
       break;
-    if (elem.tag () == "kiml") {
+    if (elem.tag () == "kiml" || elem.tag () == "doc") {
       if (! elem.isEndTag ())
         break;
       else
@@ -758,9 +952,10 @@ bool GDocument::readFromXml (istream& is) {
     }
   } while (! endOfBody);
 
-  setModified (false);
   setAutoUpdate (true);
-  return true;
+#endif
+  setModified (false);
+  return result;
 }
 
 unsigned int GDocument::findIndexOfObject (GObject *obj) {

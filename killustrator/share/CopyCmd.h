@@ -25,14 +25,14 @@
 #ifndef CopyCmd_h_
 #define CopyCmd_h_
 
-#include <qlist.h>
+#include <list>
 #include "GDocument.h"
 #include "GObject.h"
 #include "Command.h"
 
 class CopyCmd : public Command {
 public:
-  CopyCmd (GDocument* doc, QList<GObject>& cboard);
+  CopyCmd (GDocument* doc);
   ~CopyCmd ();
 
   void execute ();
@@ -40,8 +40,7 @@ public:
 
 private:
   GDocument* document;
-  QList<GObject> objects;
-  QList<GObject>* clipboard;
+  list<GObject*> objects;
 };
 
 #endif

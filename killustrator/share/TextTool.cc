@@ -42,7 +42,11 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   if (e->type () == Event_MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     Coord pos (me->x (), me->y ());
-    text = 0;
+
+    if (text != 0L)
+      text->showCursor (false);
+
+    text = 0L;
 
     QList<GObject> olist;
     if (doc->findContainingObjects (me->x (), me->y (), olist)) {
@@ -55,6 +59,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	    origState->unref ();
 	  origState = text->saveState ();
 
+	  text->showCursor (true);
 	  text->updateCursor (pos);
 	  break;
 	}
@@ -72,9 +77,9 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       }
 
       text->setOrigin (Coord (xpos, ypos));
+      text->showCursor (true);
       doc->insertObject (text);
     }
-    text->showCursor (true);
   }
   else if (e->type () == Event_KeyPress) {
     if (text == NULL)
@@ -155,6 +160,6 @@ void TextTool::deactivate (GDocument *doc, Canvas*) {
       SetTextCmd *cmd = new SetTextCmd (doc, text, origState);
       history->addCommand (cmd);
     }
-    text = NULL;
+    text = 0L;
   }
 }

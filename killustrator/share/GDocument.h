@@ -124,7 +124,8 @@ public:
 	
   bool saveToXml (ostream& os);
   bool readFromXml (istream& is);
-  
+  bool insertFromXml (istream& is, list<GObject*>& newObjs);
+
   Handle& handle () { return selHandle; }
   
   unsigned int findIndexOfObject (GObject *obj);
@@ -144,6 +145,7 @@ public:
   
 protected:
   void updateHandle ();
+  bool parseBody (XmlReader& xml, list<GObject*>& newObjs, bool markNew);
   
 public slots:
   void objectChanged ();

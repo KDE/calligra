@@ -23,45 +23,60 @@
 */
 
 #include <iostream.h>
+#include <strstream.h>
+#include <qclipboard.h>
 #include "CutCmd.h"
 
-CutCmd::CutCmd (GDocument* doc, QList<GObject>& cboard) 
+CutCmd::CutCmd (GDocument* doc) 
   : Command(i18n("Cut"))
 {
   document = doc;
-  clipboard = &cboard;
-#ifdef NO_LAYERS
-  QListIterator<GObject> it (doc->getSelection ());
-  for (; it.current (); ++it) {
-    it.current ()->ref ();
-    objects.append (it.current ());
-  }
-#else
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();
        it != doc->getSelection ().end (); it++) {
     GObject* o = *it;
     o->ref ();
-    objects.append (o);
+    // store the old position of the object
+    int pos = doc->findIndexOfObject (o);
+    objects.push_back (pair<int, GObject*> (pos, o));
   }
-#endif
 }
 
 CutCmd::~CutCmd () {
-  QListIterator<GObject> it (objects);
-  for (; it.current (); ++it) 
-    it.current ()->unref ();
+  for (list<pair<int, GObject*> >::iterator it = objects.begin ();
+       it != objects.end (); it++)
+      it->second->unref ();
 }
 
 void CutCmd::execute () {
-  clipboard->clear ();
+  ostrstream os;
+  XmlWriter xs (os);
 
-  QListIterator<GObject> it (objects);
-  for (; it.current (); ++it) {
-    clipboard->append (it.current ()->copy ());
-    document->deleteObject (it.current ());
+  xs.startTag ("doc", false);
+  xs.addAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+  xs.closeTag ();
+
+  for (list<pair<int, GObject*> >::iterator it = objects.begin ();
+       it != objects.end (); it++) {
+      it->second->writeToXml (xs);
+      document->deleteObject (it->second);
   }
+
+  xs.endTag (); // </doc>
+
+  os << ends;
+  QApplication::clipboard ()->setText (os.str ());
 }
 
 void CutCmd::unexecute () {
+  QApplication::clipboard ()->clear ();
+  list<pair<int, GObject*> >::iterator i;
+
+  for (i = objects.begin (); i != objects.end (); i++) {
+    // insert the object at the old position
+    int pos = i->first;
+    GObject* obj = i->second;
+    obj->ref ();
+    document->insertObjectAtIndex (obj, pos);
+  }
 }
 

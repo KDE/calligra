@@ -23,34 +23,38 @@
 */
 
 #include <iostream.h>
+#include <strstream.h>
+#include <qclipboard.h>
 #include "PasteCmd.h"
 
-PasteCmd::PasteCmd (GDocument* doc, QList<GObject>& cboard) 
+PasteCmd::PasteCmd (GDocument* doc) 
   : Command(i18n("Paste")) 
 {
   document = doc;
-  clipboard = &cboard;
 }
 
 PasteCmd::~PasteCmd () {
-  QListIterator<GObject> it (objects);
-  for (; it.current (); ++it) 
-    it.current ()->unref ();
+  for (list<GObject*>::iterator it = objects.begin ();
+       it != objects.end (); it++)
+      (*it)->unref ();
 }
 
 void PasteCmd::execute () {
-  QListIterator<GObject> it (*clipboard);
-  for (; it.current (); ++it) {
-    GObject* obj = it.current ()->copy ();
-    obj->ref ();
-    objects.append (obj);
-    document->insertObject (obj);
-  }
+    for (list<GObject*>::iterator it = objects.begin ();
+	 it != objects.end (); it++)
+	(*it)->unref ();
+    objects.clear ();
+    const char* buf = QApplication::clipboard ()->text ();
+    istrstream is (buf);
+    document->insertFromXml (is, objects);
+    for (list<GObject*>::iterator it = objects.begin ();
+	 it != objects.end (); it++)
+	(*it)->ref ();
 }
 
 void PasteCmd::unexecute () {
-  QListIterator<GObject> it (objects);
-  for (; it.current (); ++it) 
-    document->deleteObject (it.current ());
+  for (list<GObject*>::iterator it = objects.begin ();
+       it != objects.end (); it++)
+      document->deleteObject (*it);
 }
 

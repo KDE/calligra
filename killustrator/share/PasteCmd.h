@@ -25,14 +25,14 @@
 #ifndef PasteCmd_h_
 #define PasteCmd_h_
 
-#include <qlist.h>
+#include <list>
 #include "GDocument.h"
 #include "GObject.h"
 #include "Command.h"
 
 class PasteCmd : public Command {
 public:
-  PasteCmd (GDocument* doc, QList<GObject>& cboard);
+  PasteCmd (GDocument* doc);
   ~PasteCmd ();
 
   void execute ();
@@ -40,8 +40,7 @@ public:
 
 private:
   GDocument* document;
-  QList<GObject> objects;
-  QList<GObject>* clipboard;
+  list<GObject*> objects;
 };
 
 #endif

@@ -23,45 +23,47 @@
 */
 
 #include <iostream.h>
+#include <qclipboard.h>
+#include <strstream.h>
 #include "CopyCmd.h"
 
-CopyCmd::CopyCmd (GDocument* doc, QList<GObject>& cboard) 
+CopyCmd::CopyCmd (GDocument* doc) 
   : Command(i18n("Copy"))
 {
   document = doc;
-  clipboard = &cboard;
-#ifdef NO_LAYERS
-  QListIterator<GObject> it (doc->getSelection ());
-  for (; it.current (); ++it) {
-    it.current ()->ref ();
-    objects.append (it.current ());
-  }
-#else
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();
        it != doc->getSelection ().end (); it++) {
     GObject* o = *it;
     o->ref ();
-    objects.append (o);
+    objects.push_back (o);
   }
-#endif
 }
 
 CopyCmd::~CopyCmd () {
-  QListIterator<GObject> it (objects);
-  for (; it.current (); ++it) 
-    it.current ()->unref ();
+  for (list<GObject*>::iterator it = objects.begin ();
+       it != objects.end (); it++)
+      (*it)->unref ();
 }
 
 void CopyCmd::execute () {
-  clipboard->clear ();
+  ostrstream os;
+  XmlWriter xs (os);
 
-  QListIterator<GObject> it (objects);
-  for (; it.current (); ++it) {
-    clipboard->append (it.current ()->copy ());
-    //    document->unselectObject (it.current ());
-  }
+  xs.startTag ("doc", false);
+  xs.addAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+  xs.closeTag ();
+
+  for (list<GObject*>::iterator it = objects.begin ();
+       it != objects.end (); it++)
+      (*it)->writeToXml (xs);
+
+  xs.endTag (); // </doc>
+
+  os << ends;
+  QApplication::clipboard ()->setText (os.str ());
 }
 
 void CopyCmd::unexecute () {
+  QApplication::clipboard ()->clear ();
 }
 
