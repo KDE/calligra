@@ -208,15 +208,14 @@ void KWordView::initGui()
     ( (KColorAction*)actionFrameBackColor )->blockSignals( FALSE );
 
     showFormulaToolbar( FALSE );
-    /* err? I'm not sure about those two hacks ;-)
-       The second one is easy to solve: copy koffice_shell.rc to kword_shell.rc,
-       hack kword_shell.rc to align the toolbar to the left and call setXMLFile() in your
-       KWordShell constructor
-       For the first one...hrm... Guess we need something for that in libkparts :-)
-       (Simon)
-    KToolBar *tb = shell()->viewToolBar( "frame_toolbar" );
+    
+    QWidget *tb = 0;
+    if ( factory() )
+      tb = factory()->container( "frame_toolbar", this );
     if ( tb )
-	tb->hide();
+      tb->hide();
+    
+    /* ???
     if ( ( (KoMainWindow*)shell() )->fileToolBar() )
 	( (KoMainWindow*)shell() )->fileToolBar()->setBarPos( KToolBar::Left );
     */
@@ -659,15 +658,17 @@ void KWordView::createKWordGUI()
 /*================================================================*/
 void KWordView::showFormulaToolbar( bool show )
 {
-/*
-    KToolBar *tb = shell()->viewToolBar( "formula_toolbar" );
-    if ( !tb )
-	return;
-    if ( show )
-	tb->show();
-    else
-	tb->hide();
-*/	
+  if ( !factory() )
+    return;
+  
+  QWidget *tb = factory()->container( "formula_toolbar", this );
+  if( !tb )
+    return;
+  
+  if ( show )
+    tb->show();
+  else
+    tb->hide();
 }
 
 /*================================================================*/
@@ -992,19 +993,27 @@ void KWordView::setTool( MouseMode _mouseMode )
 	( (KToggleAction*)actionToolsCreatePart )->blockSignals( FALSE );
 	break;
     }
-    /*
-    KToolBar *tbFormat = shell()->viewToolBar( "format_toolbar" );
-    KToolBar *tbFrame = shell()->viewToolBar( "frame_toolbar" );
-    if ( tbFrame && tbFormat ) {
-	if ( _mouseMode == MM_EDIT_FRAME ) {
-	    tbFormat->hide();
-	    tbFrame->show();
-	} else {
-	    tbFormat->show();
-	    tbFrame->hide();
-	}
+    QWidget *tbFormat = 0;
+    QWidget *tbFrame = 0;
+    
+    if ( factory() )
+    {
+      tbFormat = factory()->container( "format_toolbar", this );
+      tbFrame = factory()->container( "frame_toolbar", this );
     }
-    */
+    if ( tbFrame && tbFormat )
+    {
+      if ( _mouseMode == MM_EDIT_FRAME )
+      {
+        tbFormat->hide();
+	tbFrame->show();
+      }
+      else
+      {
+        tbFormat->show();
+	tbFrame->hide();
+      }
+    }
     actionTableInsertRow->setEnabled( FALSE );
     actionTableInsertCol->setEnabled( FALSE );
     actionTableDelRow->setEnabled( FALSE );
