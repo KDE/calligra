@@ -2,10 +2,11 @@
 #define WINWORDDOC_H
 
 #include <qstring.h>
-#include <qlist.h>
+#include <qstrlist.h>
 #include <paragraph.h>
 #include <myfile.h>
 #include <fib.h>
+#include <pcd.h>
 #include <kdebug.h>
 
 
@@ -27,6 +28,8 @@ private:
 
     void FIBInfo();
     void readFIB();
+    const PCD readPCD(const long &pos);
+    const long locatePieceTbl();
 
     const short char2uni(const unsigned char c);
     inline const unsigned short read16(const unsigned char *d);
@@ -35,7 +38,11 @@ private:
     bool success, ready;
     FIB *fib;
     myFile main, table, data;
-    QList<Paragraph> paraList;
+    QString _part;
+    QStrList mainParas;
+
+    // piece table
+    long ptCPBase, ptSize, ptCount, ptPCDBase;
 
     static const short CP2UNI[32];
 };

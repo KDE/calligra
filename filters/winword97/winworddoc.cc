@@ -49,12 +49,38 @@ WinWordDoc::~WinWordDoc() {
 }
 
 void WinWordDoc::convert() {
+
+    QString p;
+    ptCPBase=locatePieceTbl();
+    ptSize=read32(table.data+ptCPBase);
+    ptCPBase+=4;
+
+    if((ptSize-4)%12!=0)
+        kdebug(KDEBUG_ERROR, 31000, "Sumting Wong (inside joke(tm))");
+    ptCount=static_cast<long>((ptSize-4)/12);
+    ptPCDBase=ptCount*4+4+ptCPBase;
+
+    PCD pcd=readPCD(ptPCDBase);
+    kdebug(KDEBUG_ERROR, 31000, "test: pcd[0].fc");
+    kdebug(KDEBUG_ERROR, 31000, (const char*)QString::number((long)pcd.fc));
+    pcd=readPCD(ptPCDBase+8);
+    kdebug(KDEBUG_ERROR, 31000, "test: pcd[1].fc");
+    kdebug(KDEBUG_ERROR, 31000, (const char*)QString::number((long)pcd.fc));
+
+    if(fib->fComplex==0) {
+    }
+    else {
+    }
+
     ready=true;
-    success=false;
+    success=false;  // only now :)
 }
 
 const QString WinWordDoc::part() {
-    return QString("");
+    if(ready && success)
+        return _part;
+    else
+        return QString("");
 }
 
 void WinWordDoc::FIBInfo() {
@@ -149,6 +175,45 @@ void WinWordDoc::readFIB() {
     tmpL=(unsigned long*)&fib->fcStshfOrig;
     for(i=0; i<186; ++i, ++tmpL)
         *tmpL=read32(main.data+154+4*i);
+}
+
+const PCD WinWordDoc::readPCD(const long &pos) {
+
+    PCD ret;
+    unsigned short *tmp=(unsigned short*)&ret;
+
+    *tmp=read16(table.data+pos);
+    ret.fc=read32(table.data+pos+2);
+    if((ret.fc & 0x40000000) == 0x40000000) {
+        ret.fc=(ret.fc & 0xBFFFFFFF)/2;
+        ret.unicode=false;
+    }
+    else
+        ret.unicode=true;
+    ret.prm=read16(table.data+pos+6);
+    return ret;
+}
+
+const long WinWordDoc::locatePieceTbl() {
+
+    long ret=fib->fcClx;
+    QString r;
+
+    while(*(table.data+ret)==1 && ret<static_cast<long>(fib->fcClx+fib->lcbClx)) {
+        ret+=read16(table.data+ret+1)+3;
+        r="ret(grpprl): ";
+        r+=QString::number((long)ret);
+        kdebug(KDEBUG_INFO, 31000, (const char*)r);
+    }
+    if(*(table.data+ret)==2)
+        kdebug(KDEBUG_INFO, 31000, "Found pclfpcd :)");
+    else
+        success=false;
+    ++ret;
+    r="ret(pclfpcd): ";
+    r+=QString::number((long)ret);
+    kdebug(KDEBUG_INFO, 31000, (const char*)r);
+    return ret;
 }
 
 const short WinWordDoc::char2uni(const unsigned char c) {
