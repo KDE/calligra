@@ -3255,6 +3255,9 @@ void KPresenterView::setupActions()
                         this, SLOT( extraStylist() ),
                         actionCollection(), "format_stylist" );
 
+    actionFormatStyleMenu = new KActionMenu( i18n( "St&yle" ), 0,
+                                           actionCollection(), "format_stylemenu" );
+
 
     actionFormatStyle = new KSelectAction( i18n( "St&yle" ), 0,
                                            actionCollection(), "format_style" );
@@ -6324,12 +6327,23 @@ void KPresenterView::showStyle( const QString & styleName )
 void KPresenterView::updateStyleList()
 {
     QString currentStyle = actionFormatStyle->currentText();
+    // Generate list of styles
     QStringList lst;
     QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
-    for (; styleIt.current(); ++styleIt ) {
-        lst << styleIt.current()->translatedName();
+    int pos = -1;
+    for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
+        QString name = styleIt.current()->translatedName();
+        lst << name;
+        if ( pos == -1 && name == currentStyle )
+            pos = i;
     }
+    // Fill the combo - using a KSelectAction
+    actionFormatStyle->setItems( lst );
+    if ( pos > -1 )
+        actionFormatStyle->setCurrentItem( pos );
 
+    // Fill the menu - using a KActionMenu, so that it's possible to bind keys
+    // to individual actions
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
 #if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
@@ -6337,11 +6351,40 @@ void KPresenterView::updateStyleList()
 #else
     lstWithAccels = lst;
 #endif
-    actionFormatStyle->setItems( lstWithAccels );
-    uint pos = 0;
-    for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++pos )
-        if ( (*it) == currentStyle )
-            actionFormatStyle->setCurrentItem( pos );
+    QMap<QString, KShortcut> shortCut;
+    // Delete previous style actions
+    for ( uint i = 0; ; ++i )
+    {
+        KAction* act = actionCollection()->action( QString("style_%1").arg(i).latin1() );
+        if ( act )
+        {
+            if ( !act->shortcut().toString().isEmpty())
+                shortCut.insert( act->name(), KShortcut( act->shortcut()));
+            actionFormatStyleMenu->remove( act );
+            delete act;
+        }
+        else
+            break; // no gaps. As soon as style_N doesn't exist, we're done
+    }
+    uint i = 0;
+    for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
+    {
+        KToggleAction* act = 0L;
+        QCString name = QString("style_%1").arg(i).latin1();
+        if ( shortCut.contains(name))
+        {
+            act = new KToggleAction( (*it),
+                                     (shortCut)[name], this, SLOT( slotStyleSelected() ),
+                                     actionCollection(), name );
+
+        }
+        else
+            act = new KToggleAction( (*it),
+                                     0, this, SLOT( slotStyleSelected() ),
+                                     actionCollection(),name );
+        act->setExclusiveGroup( "styleList" );
+        actionFormatStyleMenu->insert( act );
+    }
 }
 
 void KPresenterView::extraStylist()
@@ -6354,6 +6397,18 @@ void KPresenterView::extraStylist()
     delete styleManager;
     if ( edit )
         edit->showCursor();
+}
+
+// Called when selecting a style in the Format / Style menu
+void KPresenterView::slotStyleSelected()
+{
+    QString actionName = QString::fromLatin1(sender()->name());
+    if ( actionName.startsWith( "style_" ) )
+    {
+        QString styleStr = actionName.mid(6);
+        kdDebug() << "KPresenterView::slotStyleSelected " << styleStr << endl;
+        textStyleSelected( styleStr.toInt() );
+    }
 }
 
 void KPresenterView::textStyleSelected( int index )
@@ -6861,7 +6916,7 @@ void KPresenterView::slotObjectEditChanged()
         actionEditCopy->setEnabled(state);
         actionEditCut->setEnabled(state);
     }
-
+    actionFormatStyleMenu->setEnabled( isText );
     actionFormatStyle->setEnabled(isText);
     state=m_canvas->oneObjectTextExist();
     actionEditSearch->setEnabled(state);

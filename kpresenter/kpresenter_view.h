@@ -375,6 +375,7 @@ public slots:
     void slotHRulerDoubleClicked();
 
     void changeCaseOfText();
+    void slotStyleSelected();
     void textStyleSelected( int );
     void extraStylist();
 
@@ -1035,6 +1036,7 @@ private:
 
     KToggleAction *actionAllowBgSpellCheck;
     KAction *actionEditCustomVarsEdit;
+    KActionMenu *actionFormatStyleMenu;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;
