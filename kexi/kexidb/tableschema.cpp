@@ -32,8 +32,8 @@ TableSchema::TableSchema(const QString& name)
 	: FieldList(true)
 	, SchemaData(KexiDB::TableObjectType)
 	, m_conn(0)
-	, m_isKexiDBSystem(false)
 	, m_query(0)
+	, m_isKexiDBSystem(false)
 {
 	m_name = name;
 	m_indices.setAutoDelete( true );
@@ -45,8 +45,8 @@ TableSchema::TableSchema()
 	: FieldList(true)
 	, SchemaData(KexiDB::TableObjectType)
 	, m_conn(0)
-	, m_isKexiDBSystem(false)
 	, m_query(0)
+	, m_isKexiDBSystem(false)
 {
 	m_indices.setAutoDelete( true );
 	m_pkey = new IndexSchema(this);
@@ -58,8 +58,8 @@ TableSchema::TableSchema(Connection *conn, const QString & name)
 	: FieldList(true)
 	, SchemaData(KexiDB::TableObjectType)
 	, m_conn( conn )
-	, m_isKexiDBSystem(false)
 	, m_query(0)
+	, m_isKexiDBSystem(false)
 {
 	assert(conn);
 	m_name = name;

@@ -352,7 +352,7 @@ Field::setDefaultValue(const QCString& def)
 		}case Integer: {//4 bytes
 			long v = def.toLong(&ok);
 //js: FIXME			if (!ok || (!(m_options & Unsigned) && (-v > 0x080000000 || v > (0x080000000-1))) || ((m_options & Unsigned) && (v < 0 || v > 0x100000000)))
-			if (!ok || (!(m_options & Unsigned) && (-v > 0x080000000 || v > (0x080000000-1))))
+			if (!ok || (!(m_options & Unsigned) && (-v > (int)0x07FFFFFFF || v > (int)(0x080000000-1))))
 				m_defaultValue = QVariant();
 			else
 #if (QT_VERSION >= 0x030200) //TMP
