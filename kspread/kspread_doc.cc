@@ -990,6 +990,10 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       QPen topPen( cell->effTopBorderPen( x, y ) );
       QPen bottomPen( cell->effBottomBorderPen( x, y ) );
 
+      // TODO: right now we paint every border twice: only paint border, if 
+      //       - the other cell is not painted at all
+      //       - if the border has a bigger value
+
       // paint right border if rightmost cell or if the pen is more "worth" than the left border pen
       // of the cell on the left or if the cell on the right is not painted. In the latter case get
       // the pen that is of more "worth"
@@ -999,13 +1003,14 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
         if ( x == regionRight )
         {
           paintBordersRight = true;
-          if ( util_penCompare( rightPen, table->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y ) ) < 0 )
+          if ( cell->effRightBorderValue( x, y ) < table->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
             rightPen = table->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
         }
       else
       {
-        if ( util_penCompare( rightPen, table->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y ) ) > 0 )
-          paintBordersRight = true;
+        paintBordersRight = true;
+        if ( cell->effRightBorderValue( x, y ) < table->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+          rightPen = table->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
       }
 
       // similiar for other borders...
@@ -1016,13 +1021,14 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
         if ( y == regionBottom )
         {
           paintBordersBottom = true;
-          if ( util_penCompare( bottomPen, table->cellAt( x + 1, y )->effTopBorderPen( x + 1, y ) ) < 0 )
-            rightPen = table->cellAt( x + 1, y )->effTopBorderPen( x + 1, y );
+          if ( cell->effBottomBorderValue( x, y ) < table->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+            bottomPen = table->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
         }
       else
       {
-        if ( util_penCompare( bottomPen, table->cellAt( x + 1, y )->effTopBorderPen( x + 1, y ) ) > 0 )
-          paintBordersBottom = true;
+        paintBordersBottom = true;
+        if ( cell->effBottomBorderValue( x, y ) < table->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+          bottomPen = table->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
       }
 
       // left border:
@@ -1032,13 +1038,14 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
         if ( x == regionLeft )
         {
           paintBordersLeft = true;
-          if ( util_penCompare( leftPen, table->cellAt( x - 1, y )->effRightBorderPen( x - 1, y ) ) < 0 )
+          if ( cell->effLeftBorderValue( x, y ) < table->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             leftPen = table->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
         }
       else
       {
-        if ( util_penCompare( leftPen, table->cellAt( x - 1, y )->effRightBorderPen( x - 1, y ) ) >= 0 )
-          paintBordersLeft = true;
+        paintBordersLeft = true;
+        if ( cell->effLeftBorderValue( x, y ) < table->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+          leftPen = table->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
       }
 
       // top border:
@@ -1048,13 +1055,14 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
         if ( y == regionTop )
         {
           paintBordersTop = true;
-          if ( util_penCompare( topPen, table->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 ) ) < 0 )
+          if ( cell->effTopBorderValue( x, y ) < table->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
             topPen = table->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
       else
       {
-        if ( util_penCompare( topPen, table->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 ) ) >= 0 )
-          paintBordersTop = true;          
+        paintBordersTop = true;
+        if ( cell->effTopBorderValue( x, y ) < table->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+          topPen = table->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
       }
 
       cell->paintCell( viewRegion, painter, view, dblCurrentCellPos,
