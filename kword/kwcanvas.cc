@@ -1459,12 +1459,14 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
         case MM_EDIT:
             if ( m_currentFrameSetEdit )
                 m_currentFrameSetEdit->mouseDoubleClickEvent( e, normalPoint, docPoint );
-            else
+/* disable it otherwise we can edit embedded object
+  else
             {
                 editFrameProperties();
                 m_mousePressed = false;
             }
             break;
+*/
         default:
             break;
     }
