@@ -1,4 +1,4 @@
-/* Global variables holding parameter data (for now)  
+/* Global variables holding parameter data (for now)
  *****************************************************/
 
 #include "engine.h"
@@ -9,7 +9,7 @@ GDC_HOLD_IMAGE_T	GDC_hold_img = GDC_DESTROY_IMAGE;
 void				*GDC_image = (void*)NULL;	/* in/out */
 
 /*** Stuff ***/
-short GDC_xlabel_spacing	= 5;			/* pixels  MAXSHORT means force all */
+
 char GDC_yval_style		= TRUE;
 char *GDC_thumblabel;
 float GDC_thumbval		= -MAXFLOAT;
@@ -47,7 +47,7 @@ QColor *GDCPIE_Color( 0 );
 char *GDCPIE_title = 0;		/* NLs ok here */
 int	GDCPIE_label_dist = 1+8/2;		/* 1+GDC_fontc[GDCPIE_label_size].h/2 */
 unsigned char GDCPIE_label_line = false;		/* from label to slice */
-
+short GDC_xlabel_spacing	= 5;			/* pixels  MAXSHORT means force all */
 #endif // probably not needed
 
 #ifdef WE_MIGHT_NEED_THIS_LATER_BETTER_NOT_DELETE_IT_NOW

@@ -72,3 +72,8 @@ But Pb for writing % in label for the moment it's not good
 ------------------------------------------------------
 -Improved save and load parameters (pie parameters, label ,legend ,extcolor)
 -Now you can choose color for data.
+
+2000-01-29 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Add new icon for choose chart
+-bug fix.

@@ -27,10 +27,13 @@ protected slots:
       void saveConfig();
       void loadConfig();
       void createTempData();
-    
+      void pieChart();
+      void barsChart();
+      void lineChart();
+      void areasChart();
 protected:
     void paintEvent( QPaintEvent* );
-    
+
 private:
     QAction* m_cut;
     QAction* m_wizard;
@@ -38,7 +41,10 @@ private:
     QAction* m_config;
     QAction* m_saveconfig;
     QAction* m_loadconfig;
-    
+    QAction* m_chartpie;
+    QAction* m_chartareas;
+    QAction* m_chartbars;
+    QAction* m_chartline;
 };
 
 #endif

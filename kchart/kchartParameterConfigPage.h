@@ -22,7 +22,8 @@ public:
     void init();
     void apply();
 public slots:
-    void changeState( bool );   
+    void changeState( bool );
+    void changeXaxisState( bool );
 private:
     KChartParameters* _params;
     QCheckBox *grid;

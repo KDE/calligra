@@ -39,6 +39,25 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 				0,
 				this, SLOT( saveConfig() ),
 				actionCollection(), "saveconfig");
+    m_chartpie = new KAction( tr("Pie"), KChartBarIcon("cakes"),
+				0,
+				this, SLOT( pieChart() ),
+				actionCollection(), "piechart");
+    m_chartline = new KAction( tr("Line"), KChartBarIcon("lines"),
+				0,
+				this, SLOT( lineChart() ),
+				actionCollection(), "linechart");
+    m_chartareas = new KAction( tr("Areas"), KChartBarIcon("areas"),
+				0,
+				this, SLOT( areasChart() ),
+				actionCollection(), "areaschart");
+    m_chartbars = new KAction( tr("Bars"), KChartBarIcon("bars"),
+ 				0,
+				this, SLOT( barsChart() ),
+				actionCollection(), "barschart");
+
+
+
     // initialize the configuration
     //    loadConfig();
 
@@ -94,7 +113,7 @@ void KChartView::createTempData()
     KChartParameters *params = ((KChartPart*)part())->params();
     if(params->legend.isEmpty())
     	{
-        for(int i=0;i<dat->rows();i++)
+        for(unsigned int i=0;i<dat->rows();i++)
                 {
                 QString tmp;
                 tmp="Legend "+tmp.setNum(i);
@@ -104,7 +123,7 @@ void KChartView::createTempData()
 
     if(params->xlbl.isEmpty())
     	{
-        for(int i=0;i<dat->cols();i++)
+        for(unsigned int i=0;i<dat->cols();i++)
                 {
                 QString tmp;
                 tmp="Year 200"+tmp.setNum(i);
@@ -115,7 +134,7 @@ void KChartView::createTempData()
 QArray<int> tmpExp(dat->cols()*dat->rows());
 QArray<bool> tmpMissing(dat->cols()*dat->rows());
 
-for(int i=0; i<(dat->cols()*dat->rows()); ++i )
+for(unsigned int i=0; i<(dat->cols()*dat->rows()); ++i )
   {
   tmpExp[i]=0;
   tmpMissing[i]=FALSE;
@@ -218,5 +237,28 @@ void KChartView::loadConfig() {
     repaint();
 }
 
+void KChartView::pieChart() {
+KChartParameters* params = ((KChartPart*)part())->params();
+params->type=KCHARTTYPE_2DPIE;
+repaint();
+}
+ 
+void KChartView::lineChart() {
+KChartParameters* params = ((KChartPart*)part())->params();
+params->type=KCHARTTYPE_3DLINE;
+repaint();
+}
+
+void KChartView::barsChart() {
+KChartParameters* params = ((KChartPart*)part())->params();
+params->type=KCHARTTYPE_3DBAR;
+repaint();
+}
+
+void KChartView::areasChart() {
+KChartParameters* params = ((KChartPart*)part())->params();
+params->type=KCHARTTYPE_3DAREA;
+repaint();
+}
 
 #include "kchart_view.moc"

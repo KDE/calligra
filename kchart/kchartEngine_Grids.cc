@@ -139,7 +139,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	char	nmrtr[3+1], dmntr[3+1], whole[8];
 	char	all_whole = ylbl_interval<1.0? FALSE: TRUE;
 	char	*ylbl_str;
-	
+
 	if(params->stack_type==KCHARTSTACKTYPE_PERCENT)
 		{
 		ylbl_str= price_to_str( tmp_y,&n,&d,&w,"%.0f%% ");
@@ -148,7 +148,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 			int len=params->ylabel_fmt.length();
          		//remove %g
          		QString tmp=params->ylabel_fmt.right(len-3);
-			
+
 			strcat(ylbl_str,tmp);
 			}
 		}
@@ -167,18 +167,19 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 
 	//qDebug( "drawing 1" );
 
-	if( params->grid ) 
+	if( params->grid )
 	{
 	  int	x1, x2, y1, y2;
 	  // int	gridline_clr = tmp_y == 0.0? LineColor: GridColor;
 	  // tics
-	  x1 = PX(0);		y1 = PY(tmp_y);
+	  x1 = PX(0);
+          y1 = PY(tmp_y);
 	  p->setPen( GridColor );
 	  p->drawLine( x1-2, y1, x1, y1 );
 	  setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
-	num_sets:
-	  1;			// backmost
-	  x2 = PX(0);		y2 = PY(tmp_y);
+	num_sets:1;// backmost
+	  x2 = PX(0);
+          y2 = PY(tmp_y);
 	  // w/ new setno
 	  p->setPen( GridColor );
 	  p->drawLine( x1, y1, x2, y2 );		// depth for 3Ds
@@ -193,9 +194,9 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	// PENDING(kalle) Originally, here was always used one
 	// font smaller than params->yAxisFont. Do that again?
 	if( params->yaxis )
-	  if( do_ylbl_fractions && params->stack_type!=KCHARTSTACKTYPE_PERCENT) 
+	  if( do_ylbl_fractions && params->stack_type!=KCHARTSTACKTYPE_PERCENT)
 	  {
-	    if( w || (!w && !n && !d) ) 
+	    if( w || (!w && !n && !d) )
 	    {
 	      p->setPen( labelcolor );
 	      p->setFont( params->yAxisFont() );
@@ -208,13 +209,13 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 			   PY(tmp_y)-params->yAxisFontHeight()/2,
 			   whole );
 	    }
-		
+
 
 	    // qDebug( "drawing 3" );
 
 	    // PENDING( original uses a 1 step smaller
 	    // font here. Do that, too?
-	    if( n )	
+	    if( n )
 	    {
 	      p->setPen( labelcolor );
 	      p->setFont( params->yAxisFont() );
@@ -231,10 +232,10 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 			   PY(tmp_y)-params->yAxisFontHeight()/2 + 3,
 			   dmntr );
 	    }
-	  } 
-	  else 
+	  }
+	  else
 	  {
-	    
+
 	    p->setPen( labelcolor );
 	    p->setFont( params->yAxisFont() );
 	    p->drawText( PX(0)-2-strlen(ylbl_str)*params->yAxisFontWidth(),
@@ -341,13 +342,13 @@ void kchartEngine::draw3DGrids() {
 void kchartEngine::drawShelfGrids() {
   int	x1, x2, y1, y2;
   // tics
-  x1 = PX(0);		
+  x1 = PX(0);
   y1 = PY(0);
   p->setPen( LineColor );
   p->drawLine( x1-2, y1, x1, y1 );
   setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
  num_sets:1;				// backmost
-  x2 = PX(0);		
+  x2 = PX(0);
   y2 = PY(0);								// w/ new setno
   p->setPen( LineColor );
   p->drawLine( x1, y1, x2, y2 );			// depth for 3Ds
@@ -361,7 +362,7 @@ void kchartEngine::drawXTicks()
   int num_xlbls = /* maximum x lables that'll fit */
     /* each xlbl + avg due to num_lf_xlbls */
     graphwidth /
-    ( (GDC_xlabel_spacing==MAXSHORT?0:GDC_xlabel_spacing)+params->xAxisFontHeight() +
+    ( (params->xlabel_spacing==MAXSHORT?0:params->xlabel_spacing)+params->xAxisFontHeight() +
       (num_lf_xlbls*(params->xAxisFontHeight()-1))/num_points );
 
   /*QColor labelcolor = params->XLabelColor== Qt::black ?
@@ -373,7 +374,7 @@ void kchartEngine::drawXTicks()
   {
     if( (i%(1+num_points/num_xlbls) == 0) ||   // labels are regulated
 	(num_xlbls >= num_points)         ||
-	GDC_xlabel_spacing == MAXSHORT )
+	params->xlabel_spacing == MAXSHORT )
 	{
       int xi = params->do_bar()? i-1: i;
 
@@ -381,7 +382,8 @@ void kchartEngine::drawXTicks()
       {
 	int x1, x2, y1, y2;
 	// tics
-	x1 = PX(i);		y1 = PY(lowest);
+	x1 = PX(i);
+        y1 = PY(lowest);
 	p->setPen( GridColor );
 	p->drawLine( x1, y1, x1,  y1+2 );
 	setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:num_sets:1; // backmost

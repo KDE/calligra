@@ -15,6 +15,10 @@
   <Action name="wizard"/>
   <Action name="edit"/>
   <Action name="config"/>
+  <Action name="piechart"/>
+  <Action name="linechart"/>
+  <Action name="areaschart"/>
+  <Action name="barschart"/>
  </ToolBar>
 </ToolBars>
 </QConfig>

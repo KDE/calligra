@@ -87,17 +87,16 @@ void KChartFontConfigPage::initList()
 
 void KChartFontConfigPage::changeIndex(int index)
 {
-cout <<"Change Index "<<index<<endl;
 if(index>11)
         colorButton->setEnabled(false);
 else
         {
         if(!colorButton->isEnabled())
                 colorButton->setEnabled(true);
+        extColor.setColor(indice,colorButton->color());
+        colorButton->setColor(extColor.color(index));
+        indice=index;
         }
-extColor.setColor(indice,colorButton->color());
-colorButton->setColor(extColor.color(index));
-indice=index;
 }
 
 void KChartFontConfigPage::changeLabelFont()

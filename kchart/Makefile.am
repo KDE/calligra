@@ -116,16 +116,17 @@ kdelnkdir = $(kde_appsdir)/Applications/KOffice
 kdemime_DATA = x-kchart.desktop
 kdemimedir = $(kde_mimedir)/application
 
-# linktest - from dfaure 
+# linktest - from dfaure
 
 check_PROGRAMS = linktest
 linktest_SOURCES = $(libkchart_la_SOURCES)
 linktest_LDADD = $(lib_LTLIBRARIES)
-linktest_LDFLAGS = $(libkchart_LDFLAGS) 
+linktest_LDFLAGS = $(libkchart_LDFLAGS)
 
 
 
 # SUBDIRS =  . plugins pics dtd toolbar
+SUBDIRS =  . toolbar
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po $(podir)/kchart.pot

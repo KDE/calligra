@@ -20,83 +20,94 @@ KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QW
     QWidget( parent ),_params( params )
 {
     QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
-    
+
     QGridLayout* layout = new QGridLayout( 7, 3 );
     toplevel->addLayout( layout );
-	
+
     grid = new QCheckBox( i18n( "Grid" ), this );
     layout->addWidget(grid,0,0);
-    
+
     border = new QCheckBox( i18n( "Border" ), this );
     layout->addWidget(border,1,0);
-    
+
     xaxis = new QCheckBox( i18n( "X-Axis" ), this );
     layout->addWidget(xaxis,2,0);
-    
+
     yaxis = new QCheckBox( i18n( "Y-Axis" ), this );
     layout->addWidget(yaxis,3,0);
-    
+
     shelf = new QCheckBox( i18n( "Shelf grid" ), this );
     layout->addWidget(shelf,4,0);
-    
+
     yaxis2 = new QCheckBox( i18n( "Y-Axis2" ), this );
     layout->addWidget(yaxis2,5,0);
-    
+
     xlabel = new QCheckBox( i18n( "Has X-Label" ), this );
     layout->addWidget(xlabel,6,0);
-    
+
     QLabel *tmpLabel = new QLabel( i18n( "Title" ), this );
     tmpLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(tmpLabel,0,1);
-    
+
     title= new QLineEdit( this );
     title->setMaximumWidth(130);
     layout->addWidget(title,1,1);
-    
-    
+
+
     tmpLabel = new QLabel( i18n( "Y-Title" ), this );
     tmpLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(tmpLabel,2,1);
-    
+
     ytitle= new QLineEdit( this );
     ytitle->setMaximumWidth(130);
     layout->addWidget(ytitle,3,1);
-    
+
     tmpLabel = new QLabel( i18n( "X-Title" ), this );
     tmpLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(tmpLabel,4,1);
-    
+
     xtitle= new QLineEdit( this );
     xtitle->setMaximumWidth(130);
-    layout->addWidget(xtitle,5,1);  
-  
+    layout->addWidget(xtitle,5,1);
+
     tmpLabel = new QLabel( i18n( "Y-Label format" ), this );
     tmpLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(tmpLabel,0,2);
-    
+
     ylabel_fmt= new QLineEdit( this );
     ylabel_fmt->setMaximumWidth(130);
-    layout->addWidget(ylabel_fmt,1,2);  
-  
+    layout->addWidget(ylabel_fmt,1,2);
+
     tmpLabel = new QLabel( i18n( "Y-Title 2" ), this );
-    tmpLabel->setAlignment(Qt::AlignCenter);    
+    tmpLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(tmpLabel,2,2);
-    
+
     ytitle2= new QLineEdit( this );
     ytitle2->setMaximumWidth(130);
-    layout->addWidget(ytitle2,3,2);  
-  
+    layout->addWidget(ytitle2,3,2);
+
     tmpLabel = new QLabel( i18n( "Y-Label format 2" ), this );
-    tmpLabel->setAlignment(Qt::AlignCenter);    
+    tmpLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(tmpLabel,4,2);
-    
+
     ylabel2_fmt= new QLineEdit( this );
     ylabel2_fmt->setMaximumWidth(130);
-    layout->addWidget(ylabel2_fmt,5,2);  
-    
-    
+    layout->addWidget(ylabel2_fmt,5,2);
+
+
     connect( grid, SIGNAL( toggled( bool ) ),
   		   this, SLOT( changeState( bool ) ) );
+    connect( xaxis, SIGNAL( toggled( bool ) ),
+  		   this, SLOT( changeXaxisState( bool ) ) );
+}
+
+void KChartParameterConfigPage::changeXaxisState(bool state)
+{
+if(state)
+   xlabel->setEnabled(true);
+else
+   xlabel->setEnabled(false);
+
 }
 
 void KChartParameterConfigPage::changeState(bool state)
@@ -143,6 +154,10 @@ void KChartParameterConfigPage::init()
     		int len=_params->ylabel_fmt.length();
          	ylabel_fmt->setText(_params->ylabel_fmt.right(len-3));
          	}
+    if(_params->xaxis)
+    	xlabel->setEnabled(true);
+    else
+    	xlabel->setEnabled(false);
 
 }
 void KChartParameterConfigPage::apply()
@@ -150,23 +165,24 @@ void KChartParameterConfigPage::apply()
     _params->grid=grid->isChecked();
     _params->border=border->isChecked();
     _params->xaxis=xaxis->isChecked();
-    _params->yaxis=yaxis->isChecked(); 
-    _params->hasxlabel=xlabel->isChecked();    
+    _params->yaxis=yaxis->isChecked();
+    if(xaxis->isChecked())
+    	_params->hasxlabel=xlabel->isChecked();
     if(_params->has_yaxis2())
     	{
-    	_params->yaxis2=yaxis2->isChecked(); 
+    	_params->yaxis2=yaxis2->isChecked();
     	if(!ylabel2_fmt->text().isEmpty())
     		_params->ylabel2_fmt="%g "+ylabel2_fmt->text();
     	_params->ytitle2=ytitle2->text();
     	}
-    
-    
+
+
     if(grid->isChecked())
-    	_params->shelf=shelf->isEnabled();
+    	_params->shelf=shelf->isChecked();
     _params->title=title->text();
     _params->xtitle=xtitle->text();
     _params->ytitle=ytitle->text();
     if(!ylabel_fmt->text().isEmpty())
     	_params->ylabel_fmt="%g "+ylabel_fmt->text();
-      
+
 }

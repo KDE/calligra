@@ -89,7 +89,7 @@ void	out_err( QPainter* p,
 /****************************************************/
 /********** USER CHART OPTIONS w/ defaults **********/
 /****************************************************/
-extern short GDC_xlabel_spacing;			/* pixels  MAXSHORT means force all */
+//extern short GDC_xlabel_spacing;			/* pixels  MAXSHORT means force all */
 extern char	GDC_yval_style;
 extern char	*GDC_thumblabel;
 extern float GDC_thumbval;
