@@ -50,15 +50,28 @@ KoPainter::KoPainter(QWidget *aWidget, int w, int h)
   mOutline = 0L;
   mFill = 0L;
   mBuffer = new QImage(w, h, 32);
+  mDeleteBuffer = true;
   mWidth = w;
   mHeight = h;
 //  xlib_rgb_init_with_depth(mWidget->x11Display(), XScreenOfDisplay(mWidget->x11Display(), mWidget->x11Screen()), mWidget->x11Depth());
 //  gc = XCreateGC(mWidget->x11Display(), mWidget->handle(), 0, 0);
 }
 
+KoPainter::KoPainter(QImage *aBuffer)
+{
+  mWidget = 0L;
+  mOutline = 0L;
+  mFill = 0L;
+  mBuffer = aBuffer;
+  mDeleteBuffer = false;
+  mWidth = mBuffer->width();
+  mHeight = mBuffer->height();
+}
+
 KoPainter::~KoPainter()
 {
-  delete mBuffer;
+  if(mDeleteBuffer)
+    delete mBuffer;
 }
 
 void KoPainter::outline(KoOutline *aOutline)

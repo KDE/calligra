@@ -35,6 +35,7 @@ class KoPainter
 {
 public:
   KoPainter(QWidget *aWidget, int w, int h);
+  KoPainter(QImage *aBuffer);
   ~KoPainter();
 
   QImage *image() const {return mBuffer; }
@@ -61,13 +62,14 @@ private:
   void memset(QRgb *p, int n, QRgb c);
 
 private:
-  QWidget *mWidget;
-  QImage *mBuffer;
-  int mWidth;
-  int mHeight;
+  QWidget       *mWidget;
+  QImage        *mBuffer;
+  int            mWidth;
+  int            mHeight;
+  bool           mDeleteBuffer;
 
-  KoOutline *mOutline;
-  KoFill *mFill;
+  KoOutline     *mOutline;
+  KoFill        *mFill;
 };
 
 #endif
