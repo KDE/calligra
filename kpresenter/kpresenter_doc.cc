@@ -912,6 +912,10 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 
     KoGenStyles mainStyles;
+    // Save user styles as KoGenStyles
+    m_styleColl->saveOasis( mainStyles, STYLE_USER );
+
+
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );
     QFile* tmpFile = contentTmpFile.file();
