@@ -138,6 +138,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
     m_pageWhereLoadObject=0L;
+    m_tabStop = -1;//by default negative value
     m_styleColl=new KoStyleCollection();
 
     KoStyle* m_standardStyle = new KoStyle( "Standard" );
@@ -3100,6 +3101,18 @@ void KPresenterDoc::setDontCheckTitleCase(bool _b)
 {
     m_bDontCheckTitleCase=_b;
     m_bgSpellCheck->setIgnoreTitleCase( _b );
+}
+
+void KPresenterDoc::setTabStopValue ( double _tabStop )
+{
+    m_tabStop = _tabStop;
+    QPtrListIterator<KPrPage> it( m_pageList );
+    for ( ; it.current(); ++it )
+    {
+        it.current()->changeTabStopValue( m_tabStop );
+    }
+    //styckypage
+    m_stickyPage->changeTabStopValue( m_tabStop );
 }
 
 

@@ -263,6 +263,8 @@ public:
     bool showGrid() const { return m_bShowGrid; }
     void setShowGrid ( bool _grid ) { m_bShowGrid = _grid; }
 
+    double tabStopValue() const { return m_tabStop; }
+    void setTabStopValue ( double _tabStop );
 
     // The user-chosen global unit
     QString getUnitName()const { return KoUnit::unitName( m_unit ); }
@@ -529,6 +531,7 @@ protected:
     bool m_bSnapToGrid;
     double m_indent; // in pt
 
+    double m_tabStop;
     KoUnit::Unit m_unit;
     int m_maxRecentFiles;
 

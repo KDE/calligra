@@ -615,6 +615,15 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);
+
+    new QLabel(i18n("Tab Stop: (%1)").arg(doc->getUnitName()), gbDocumentSettings);
+    m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
+    m_oldTabStopWidth = doc->tabStopValue();
+    kdDebug()<<" m_oldTabStopWidth :"<<m_oldTabStopWidth<<endl;
+    kdDebug()<<"KoUnit::ptToUnit( m_oldTabStopWidth, m_pView->kPresenterDoc()->getUnit() ) :"<<(KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ))<<endl;
+    m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));
+
+
 }
 
 ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
@@ -643,7 +652,12 @@ void ConfigureDefaultDocPage::apply()
         doc->addCommand(cmd);
         m_oldStartingPage=newStartingPage;
     }
-
+    double newTabStop = KoUnit::ptFromUnit( m_tabStopWidth->value(), doc->getUnit() );
+    if ( newTabStop != m_oldTabStopWidth)
+    {
+        doc->setTabStopValue( newTabStop );
+        m_oldTabStopWidth = newTabStop;
+    }
 }
 
 void ConfigureDefaultDocPage::slotDefault()

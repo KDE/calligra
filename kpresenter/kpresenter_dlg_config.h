@@ -114,12 +114,15 @@ public slots:
 private:
     int oldAutoSaveValue;
     int m_oldStartingPage;
+    double m_oldTabStopWidth;
+
     KPresenterView* m_pView;
     KConfig* config;
     QFont *font;
     QLabel *fontName;
     KIntNumInput* autoSave;
     KIntNumInput* m_variableNumberOffset;
+    KDoubleNumInput *m_tabStopWidth;
 };
 
 class ConfigureToolsPage : public QObject

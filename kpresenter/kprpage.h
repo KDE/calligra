@@ -272,7 +272,7 @@ public:
 
     bool canMoveOneObject();
     KCommand *alignVertical( VerticalAlignmentType _type );
-
+    void changeTabStopValue ( double _tabStop );
 protected:
 
 private:

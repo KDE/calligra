@@ -102,6 +102,8 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     m_textVertAlign = KP_TOP;
     KPrTextDocument * textdoc = new KPrTextDocument( this ,
                                                      new KoTextFormatCollection( doc->defaultFont() ));
+    if ( m_doc->tabStopValue() != -1 )
+        textdoc->setTabStops( m_doc->zoomHandler()->ptToLayoutUnitPt( m_doc->tabStopValue() ));
 
     m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ));
 
