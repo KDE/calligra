@@ -22,8 +22,8 @@
 
 #include <knuminput.h>
 #include <knumvalidator.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
+#include <klineedit.h>
+#include <kcombobox.h>
 #include <koUnit.h>
 
 class KoUnitDoubleBase;
@@ -69,7 +69,7 @@ public:
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 };
 
-class KoUnitDoubleLineEdit : public QLineEdit, public KoUnitDoubleBase
+class KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDoubleBase
 {
 public:
 	KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, unsigned int precision = 2, const char *name = 0 );
@@ -89,7 +89,7 @@ private:
 	double m_upper;
 };
 
-class KoUnitDoubleComboBox : public QComboBox, public KoUnitDoubleBase
+class KoUnitDoubleComboBox : public KComboBox, public KoUnitDoubleBase
 {
 public:
 	KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, unsigned int precision = 2, const char *name = 0 );

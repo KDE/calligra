@@ -85,16 +85,16 @@ KoUnitDoubleSpinBox::changeValue( double val )
 void
 KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
-	KDoubleSpinBox::setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_unit ), unit ) );
 	setMinValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( minValue(), m_unit ), unit ) );
 	setMaxValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( maxValue(), m_unit ), unit ) );
+	KDoubleSpinBox::setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_unit ), unit ) );
 	m_unit = unit;
 	setSuffix( KoUnit::unitName( unit ) );
 }
 
 
 KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
-	: QLineEdit( parent, name ), KoUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
+	: KLineEdit( parent, name ), KoUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
 {
 	setAlignment( Qt::AlignRight );
 	m_validator = new KoUnitDoubleValidator( this, this );
@@ -136,7 +136,7 @@ KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 
 
 KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
-	: QComboBox( true, parent, name ), KoUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
+	: KComboBox( true, parent, name ), KoUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
 {
 	lineEdit()->setAlignment( Qt::AlignRight );
 	m_validator = new KoUnitDoubleValidator( this, this );
