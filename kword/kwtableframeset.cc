@@ -2189,6 +2189,58 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 }
             }
             break;
+            case QKeyEvent::Key_Left:
+            {
+                KoTextCursor *cur = (static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor();
+                if(!cur->parag()->prev()&&cur->index()==0)
+                {
+                    KWTableFrameSet* tableFrame=tableFrameSet();
+                    int row=cell->m_row;
+                    int col=cell->m_col-cell->m_cols;
+                    do {
+                        if(col < 0) {
+                            col= (int)tableFrame->getCols() -1;
+                            row--;
+                        }
+                        if(row <0) {
+                            col= (int)tableFrame->getCols() -1;
+                            row= (int)tableFrame->getRows() -1;
+                        }
+                        fs=tableFrame->getCell(row,col);
+                        if(fs && fs->m_row != row) {
+                            col+=fs->m_cols;
+                            fs=0;
+                        }
+                    } while(fs==0);
+                }
+            }
+            break;
+            case QKeyEvent::Key_Right:
+            {
+                KoTextCursor *cur = (static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor();
+                if(!cur->parag()->next()&&cur->index()==cur->parag()->string()->length()-1)
+                {
+                    KWTableFrameSet* tableFrame=tableFrameSet();
+                    int row=cell->m_row;
+                    int col=cell->m_col+cell->m_cols;
+                    do {
+                        if(col >= tableFrame->getCols()) {
+                            col= 0;
+                            row++;
+                        }
+                        if(row >= tableFrame->getRows()) {
+                            col= 0;
+                            row= 0;
+                        }
+                        fs=tableFrame->getCell(row,col);
+                        if(fs && fs->m_row != row) {
+                            col+=fs->m_cols;
+                            fs=0;
+                        }
+                    } while(fs==0);
+                }
+            }
+            break;
         }
     }
     if ( fs )
