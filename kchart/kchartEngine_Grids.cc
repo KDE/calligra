@@ -377,8 +377,12 @@ void KChartEngine::drawXTicks()
   /* each xlbl + avg due to num_lf_xlbls */
   int neededspace = ( (params->xlabel_spacing==MAXSHORT?0:params->xlabel_spacing)+params->xAxisFontHeight() +
                                           (num_lf_xlbls*(params->xAxisFontHeight()-1))/num_points );
+  ASSERT( neededspace );
   int num_xlbls = /* maximum x lables that'll fit */
     neededspace ? ( graphwidth / neededspace ) : 1;
+
+  if( num_xlbls < 1 )
+    return; // if we cannot draw any x labels, we go out of here
 
   QColor labelcolor = params->XLabelColor;
 

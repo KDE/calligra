@@ -208,17 +208,26 @@ QDomDocument KChartPart::saveXML() {
   chart.setAttribute( "mime", "application/x-kchart" );
   doc.appendChild( chart );
   // now save the data
+
   QDomElement data = doc.createElement("data");
   data.setAttribute("rows", currentData.rows());
   data.setAttribute("cols", currentData.cols());
   for (unsigned int row = 0;row < currentData.rows();row++) {
     for (unsigned int col = 0;col < currentData.cols();col++) {
       // later we need a value
-      kdDebug(35001) << "Row " << row << endl;
       KChartValue t = currentData.cell(row, col);
       QDomElement e = doc.createElement("cell");
-      e.setAttribute("hide", (int)_params->missing[currentData.cols()*col+row]);
-      e.setAttribute("dist", _params->explode[currentData.cols()*col+row]);
+      // Only query arrays missing and explode if they are large
+      // enough (e.g., for all charts except pies, the array is not
+      // initialized at all), otherwise write false.
+      if( currentData.cols()*col+row < _params->missing.size() )
+	e.setAttribute("hide", (int)_params->missing[currentData.cols()*col+row]);
+      else
+	e.setAttribute( "hide", false );
+      if( currentData.cols()*col+row < _params->explode.size() )
+	e.setAttribute("dist", _params->explode[currentData.cols()*col+row]);
+      else
+	e.setAttribute( "dist", false );
       e.setAttribute("value", t.value.toDouble());
       /*
 	if ( e.isNull() )
@@ -227,6 +236,7 @@ QDomDocument KChartPart::saveXML() {
       data.appendChild(e);
     }
   }
+
   // now save the parameters
   chart.appendChild(data);
 
@@ -417,7 +427,8 @@ QDomDocument KChartPart::saveXML() {
   return doc;
 };
 
-bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc ) {
+bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc ) 
+{
   kdDebug(35001) << "kchart loadXML called" << endl;
   // <spreadsheet>
   //  m_bLoading = true;
@@ -425,15 +436,15 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc ) {
     //m_bLoading = false;
     return false;
   }
-
+  
   kdDebug(35001) << "Ok, it is a chart" << endl;
-
+  
   QDomElement chart = doc.documentElement();
   if ( chart.attribute( "mime" ) != "application/x-kchart" )
     return false;
-
+  
   kdDebug(35001) << "Mimetype ok" << endl;
-
+  
   QDomElement data = chart.namedItem("data").toElement();
   bool ok;
   int cols = data.attribute("cols").toInt(&ok);
@@ -447,7 +458,7 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc ) {
   QDomNode n = data.firstChild();
   QArray<int> tmpExp(rows*cols);
   QArray<bool> tmpMissing(rows*cols);
-
+  
   for (int i=0; i!=rows; i++) {
     for (int j=0; j!=cols; j++) {
       if (n.isNull()) {
@@ -646,7 +657,7 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc ) {
       _params->ylabel_density = (short)graph.attribute( "ylabel_density" ).toShort( &ok );
       if( !ok )
 	return false;
-	  }
+    }
     if(graph.hasAttribute( "line")) {
       _params->label_line=(bool) graph.attribute("line").toInt( &ok );
       if(!ok) return false;
@@ -883,68 +894,75 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc ) {
   }
 
   QDomElement extcolor = chart.namedItem("extcolor").toElement();
-    if(!extcolor.isNull()) {
-      unsigned int number = extcolor.attribute("number").toInt(&ok);
-      if (!ok)  { return false; }
-      QDomNode color = extcolor.firstChild();
+  if(!extcolor.isNull()) {
+    unsigned int number = extcolor.attribute("number").toInt(&ok);
+    if (!ok)  { return false; }
+    QDomNode color = extcolor.firstChild();
 
-      for (unsigned int i=0; i<number; i++) {
-	if (color.isNull()) {
-	  kdDebug(35001) << "Some problems, there is less data than it should be!" << endl;
-	  break;
-        }
-	QDomElement element = color.toElement();
-	if( !element.isNull()) {
-	  if(element.hasAttribute( "name" )) {
-	    _params->ExtColor.setColor(i,QColor( element.attribute( "name" ) ));
-	  }
-	  color = color.nextSibling();
-        }
+    for (unsigned int i=0; i<number; i++) {
+      if (color.isNull()) {
+	kdDebug(35001) << "Some problems, there is less data than it should be!" << endl;
+	break;
+      }
+      QDomElement element = color.toElement();
+      if( !element.isNull()) {
+	if(element.hasAttribute( "name" )) {
+	  _params->ExtColor.setColor(i,QColor( element.attribute( "name" ) ));
+	}
+	color = color.nextSibling();
       }
     }
-
-    return true;
-  };
-
-  QDomElement KChartPart::createElement(const QString &tagName, const QFont &font, QDomDocument &doc) const {
-
-    QDomElement e=doc.createElement( tagName );
-
-    e.setAttribute( "family", font.family() );
-    e.setAttribute( "size", font.pointSize() );
-    e.setAttribute( "weight", font.weight() );
-    if ( font.bold() )
-      e.setAttribute( "bold", "yes" );
-    if ( font.italic() )
-      e.setAttribute( "italic", "yes" );
-
-    return e;
   }
 
-  QFont KChartPart::toFont(QDomElement &element) const {
+  return true;
+};
 
-    QFont f;
-    f.setFamily( element.attribute( "family" ) );
+QDomElement KChartPart::createElement( const QString &tagName, const QFont &font, 
+				       QDomDocument &doc ) const 
+{
+  QDomElement e=doc.createElement( tagName );
+  
+  e.setAttribute( "family", font.family() );
+  e.setAttribute( "size", font.pointSize() );
+  e.setAttribute( "weight", font.weight() );
+  if ( font.bold() )
+    e.setAttribute( "bold", "yes" );
+  if ( font.italic() )
+    e.setAttribute( "italic", "yes" );
+  
+  return e;
+}
 
-    bool ok;
-    f.setPointSize( element.attribute("size").toInt( &ok ) );
-    if ( !ok ) return QFont();
+QFont KChartPart::toFont( QDomElement &element ) const 
+{
+  QFont f;
+  f.setFamily( element.attribute( "family" ) );
+  
+  bool ok;
+  f.setPointSize( element.attribute("size").toInt( &ok ) );
+  if ( !ok ) return QFont();
+  
+  f.setWeight( element.attribute("weight").toInt( &ok ) );
+  if ( !ok ) return QFont();
+  
+  if ( element.hasAttribute( "italic" ) )
+    f.setItalic( TRUE );
+  
+  if ( element.hasAttribute( "bold" ) )
+    f.setBold( TRUE );
+  
+  return f;
+}
 
-    f.setWeight( element.attribute("weight").toInt( &ok ) );
-    if ( !ok ) return QFont();
 
-    if ( element.hasAttribute( "italic" ) )
-      f.setItalic( TRUE );
-
-    if ( element.hasAttribute( "bold" ) )
-      f.setBold( TRUE );
-
-    return f;
-  }
 #include "kchart_part.moc"
 
   /**
    * $Log$
+   * Revision 1.46  2000/07/19 00:51:08  kalle
+   * Brushed up the wizard. Still not very nice, but sort of working.
+   * Fixed the font config page. Legend color box needs either rework or removal.
+   *
    * Revision 1.45  2000/07/18 23:02:17  kalle
    * implemented loading/saving of missing parameters, removed unnecessary field from param struct
    *
