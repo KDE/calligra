@@ -2448,7 +2448,11 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
     if(!koDocument()->isReadWrite() )
         return;
     updatePopupMenuChangeAction();
-    ((QPopupMenu*)factory()->container("frame_popup",this))->popup(_point);
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    if(!table)
+        ((QPopupMenu*)factory()->container("frame_popup",this))->popup(_point);
+    else
+        ((QPopupMenu*)factory()->container("frame_popup_table",this))->popup(_point);
 }
 
 void KWView::spellCheckerReady()

@@ -220,5 +220,13 @@
  <Action name="edit_delframe"/>
  <Action name="edit_reconnect"/>
 </Menu>
+<Menu name="frame_popup_table">
+ <Action name="format_frameset"/>
+ <Action name="edit_delframe"/>
+ <Action name="edit_reconnect"/>
+ <Separator/>
+ <Action name="table_joincells"/>
+ <Action name="table_splitcells"/>
+</Menu>
 </kpartgui>
 
