@@ -18,12 +18,12 @@ ARCH = $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 ifeq ($(ARCH),alpha)
   COMPILER_FLAGS=CFLAGS="-O0 -mieee" CXXFLAGS="-O0 -mieee"
 else
-  COMPILER_FLAGS=CXX=g++ CC=gcc
+  ifeq ($(ARCH),hppa)
+    COMPILER_FLAGS=CFLAGS="-Os -ffunction-sections" CXXFLAGS="-Os -ffunction-sections"
+  else
+    COMPILER_FLAGS=CXX=g++ CC=gcc
+  endif
 endif
-# Note: objprelink is no longer recommended for use.
-# ifeq ($(ARCH),i386)
-#   OBJPRELINK=--enable-objprelink
-# endif
 
 build: build-stamp
 
@@ -38,7 +38,7 @@ build-stamp:
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi 
 	$(COMPILER_FLAGS) ./configure $(configkde) \
-	  --libdir=$(kde_libdir) --includedir=$(kde_includedir) $(OBJPRELINK)
+	  --libdir=$(kde_libdir) --includedir=$(kde_includedir)
 	$(MAKE) KDE_PLUGIN_DEBIAN="-module -no-undefined"
 	touch build-stamp
 
