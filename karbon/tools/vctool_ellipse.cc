@@ -10,7 +10,7 @@
 VCToolEllipse* VCToolEllipse::s_instance = 0L;
 
 VCToolEllipse::VCToolEllipse( KarbonPart* part )
-	: m_part( part ), m_isDragging( false ), m_isCircle( false ),
+	: m_part( part ), m_isDragging( false ), m_isSquare( false ),
 	  m_isCentered( false )
 {
 	// create config dialog:
@@ -59,11 +59,8 @@ VCToolEllipse::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
 	{
 		m_isDragging = false;
-		m_isCircle = false;
+		m_isSquare = false;
 		m_isCentered = false;
-
-		// erase old object:
-		drawTemporaryObject( view );
 
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
@@ -85,10 +82,13 @@ VCToolEllipse::eventFilter( KarbonView* view, QEvent* event )
 						tl.x() + m_dialog->valueWidth(),
 						tl.y() + m_dialog->valueHeight() ) );
 			}
+			else
+				// erase old object:
+				drawTemporaryObject( view );
 		}
 		else
 		{
-			// temp vpoints (zoomFactor):
+			// temp points (zoomFactor handling):
 			VPoint tl;
 			VPoint br;
 			tl.setFromQPoint( m_tl, view->zoomFactor() );
@@ -110,7 +110,7 @@ VCToolEllipse::eventFilter( KarbonView* view, QEvent* event )
 		if ( key_event->key() == Qt::Key_Escape && m_isDragging )
 		{
 			m_isDragging = false;
-			m_isCircle = false;
+			m_isSquare = false;
 			m_isCentered = false;
 
 			// erase old object:
@@ -122,7 +122,7 @@ VCToolEllipse::eventFilter( KarbonView* view, QEvent* event )
 		// if SHIFT is pressed, we want a square:
 		if ( key_event->key() == Qt::Key_Shift )
 		{
-			m_isCircle = true;
+			m_isSquare = true;
 
 			if ( m_isDragging )
 			{
@@ -161,7 +161,7 @@ VCToolEllipse::eventFilter( KarbonView* view, QEvent* event )
 
 		if ( key_event->key() == Qt::Key_Shift )
 		{
-			m_isCircle = false;
+			m_isSquare = false;
 
 			if ( m_isDragging )
 			{
@@ -198,13 +198,9 @@ VCToolEllipse::eventFilter( KarbonView* view, QEvent* event )
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
-
-		// set initial object:
-		m_tl.setX( m_fp.x() );
-		m_tl.setY( m_fp.y() );
-		m_br.setX( m_fp.x() + 1 );
-		m_br.setY( m_fp.y() + 1 );
-
+		m_lp.setX( mouse_event->pos().x() );
+		m_lp.setY( mouse_event->pos().y() );
+		
 		// draw initial object:
 		drawTemporaryObject( view );
 

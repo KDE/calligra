@@ -23,6 +23,7 @@ public:
 	const QPoint& getQPoint( const double zoomFactor ) const;
 	// and vice versa:
 	void setFromQPoint( const QPoint& point, const double zoomFactor );
+	void setFromQPoint( const int x, const int y, const double zoomFactor );
 
 	void moveTo( const double x = 0.0, const double y = 0.0 );
 	void rmoveTo( const double x = 0.0, const double y = 0.0 );

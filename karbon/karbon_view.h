@@ -13,6 +13,7 @@ class QPaintEvent;
 
 class KAction;
 class KSelectAction;
+class KToggleAction;
 
 class KarbonPart;
 class VTool;
@@ -66,6 +67,14 @@ private:
 
 	// actions:
 	KSelectAction* m_zoomAction;
+	KToggleAction* m_ellipseToolAction;
+	KToggleAction* m_polygonToolAction;
+	KToggleAction* m_rectangleToolAction;
+	KToggleAction* m_roundRectToolAction;
+	KToggleAction* m_selectToolAction;
+	KToggleAction* m_sinusToolAction;
+	KToggleAction* m_spiralToolAction;
+	KToggleAction* m_starToolAction;
 };
 
 #endif

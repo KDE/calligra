@@ -27,7 +27,6 @@ VCCmdSinus::execute()
 	else
 	{
 		m_object = createPath();
-
 		// add path:
 		m_part->insertObject( m_object );
 	}

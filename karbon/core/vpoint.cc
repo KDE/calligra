@@ -33,6 +33,12 @@ VPoint::setFromQPoint( const QPoint& point, const double zoomFactor )
 	m_y = zoomFactor == 0 ? 0.0 : point.y() / zoomFactor;
 }
 
+void
+VPoint::setFromQPoint( const int x, const int y, const double zoomFactor )
+{
+	m_x = zoomFactor == 0 ? 0.0 : x / zoomFactor;
+	m_y = zoomFactor == 0 ? 0.0 : y / zoomFactor;
+}
 
 // make these functions inline someday :)
 void

@@ -44,24 +44,7 @@ VCCmdEllipse::execute()
 		m_object->setDeleted( false );
 	else
 	{
-		// first create unity-circle around origin (0,0):
-		m_object = new VPath();
-		m_object->moveTo( -0.5, 0.0 );
-		m_object->arcTo( -0.5,  0.5,  0.0,  0.5, 0.5 );
-		m_object->arcTo(  0.5,  0.5,  0.5,  0.0, 0.5 );
-		m_object->arcTo(  0.5, -0.5,  0.0, -0.5, 0.5 );
-		m_object->arcTo( -0.5, -0.5, -0.5,  0.0, 0.5 );
-		m_object->close();
-
-		double w = m_brX - m_tlX;
-		double h = m_tlY - m_brY;
-
-		// translate path and scale:
-		VAffineMap aff_map;
-		aff_map.scale( w, h );
-		aff_map.translate( m_tlX + w*0.5, m_brY + h*0.5 );
-		m_object->transform( aff_map );
-
+		m_object = createPath();
 		// add path:
 		m_part->insertObject( m_object );
 	}
@@ -72,4 +55,28 @@ VCCmdEllipse::unexecute()
 {
 	if ( m_object )
 		m_object->setDeleted();
+}
+
+VPath*
+VCCmdEllipse::createPath()
+{
+	// first create unity-circle around origin (0,0):
+	VPath* path = new VPath();
+	path->moveTo( -0.5, 0.0 );
+	path->arcTo( -0.5,  0.5,  0.0,  0.5, 0.5 );
+	path->arcTo(  0.5,  0.5,  0.5,  0.0, 0.5 );
+	path->arcTo(  0.5, -0.5,  0.0, -0.5, 0.5 );
+	path->arcTo( -0.5, -0.5, -0.5,  0.0, 0.5 );
+	path->close();
+
+	double w = m_brX - m_tlX;
+	double h = m_tlY - m_brY;
+
+	// translate path and scale:
+	VAffineMap aff_map;
+	aff_map.scale( w, h );
+	aff_map.translate( m_tlX + w*0.5, m_brY + h*0.5 );
+	path->transform( aff_map );
+
+	return path;
 }

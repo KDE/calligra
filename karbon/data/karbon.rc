@@ -30,9 +30,12 @@
 		<Text>Zoom</Text>
 		<Action name="view_zoom"/>
 	</ToolBar>
-	<ToolBar name="tool_toolbar" position="left">
-		<Text>Tool</Text>
+	<ToolBar name="selecttools_toolbar" position="left" fullWidth="false">
+		<Text>Selection</Text>
 		<Action name="tool_select"/>
+	</ToolBar>
+	<ToolBar name="shapetools_toolbar" position="left" fullWidth="false">
+		<Text>Shapes</Text>
 		<Action name="tool_ellipse"/>
 		<Action name="tool_polygon"/>
 		<Action name="tool_rectangle"/>

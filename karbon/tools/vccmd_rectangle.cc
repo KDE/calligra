@@ -22,14 +22,7 @@ VCCmdRectangle::execute()
 		m_object->setDeleted( false );
 	else
 	{
-		m_object = new VPath();
-
-		m_object->moveTo( m_tlX, m_tlY );
-		m_object->lineTo( m_brX, m_tlY );
-		m_object->lineTo( m_brX, m_brY );
-		m_object->lineTo( m_tlX, m_brY );
-		m_object->close();
-
+		m_object = createPath();
 		// add path:
 		m_part->insertObject( m_object );
 	}
@@ -40,4 +33,18 @@ VCCmdRectangle::unexecute()
 {
 	if ( m_object )
 		m_object->setDeleted();
+}
+
+VPath*
+VCCmdRectangle::createPath()
+{
+	VPath* path = new VPath();
+
+	path->moveTo( m_tlX, m_tlY );
+	path->lineTo( m_brX, m_tlY );
+	path->lineTo( m_brX, m_brY );
+	path->lineTo( m_tlX, m_brY );
+	path->close();
+
+	return path;
 }

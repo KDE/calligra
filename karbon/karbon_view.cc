@@ -33,11 +33,12 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_canvas->viewport()->installEventFilter( this );
 	m_canvas->setGeometry( 0, 0, width(), height() );
 
+
 // TODO: this is temporary =>
 if ( s_currentTool == 0L )
-//	s_currentTool = VCToolRectangle::instance( m_part );
-	s_currentTool = VCToolRoundRect::instance( m_part );
+	s_currentTool = VCToolEllipse::instance( m_part );
 m_canvas->viewport()->setCursor( crossCursor );
+m_ellipseToolAction->setChecked( true );
 // TODO: <= this is temporary
 }
 
@@ -147,30 +148,39 @@ KarbonView::initActions()
 		"edit_selectall" );
 
 	// tools:
-	new KAction(
+	m_ellipseToolAction = new KToggleAction(
 		i18n("&Ellipse"), "ellipse", 0, this, SLOT( ellipseTool() ),
 		actionCollection(), "tool_ellipse" );
-	new KAction(
+	m_polygonToolAction = new KToggleAction(
 		i18n("&Polygon"), "polygon", 0, this, SLOT( polygonTool() ),
 		actionCollection(), "tool_polygon" );
-	new KAction(
+	m_rectangleToolAction = new KToggleAction(
 		i18n("&Rectangle"), "rectangle", 0, this, SLOT( rectangleTool() ),
 		actionCollection(), "tool_rectangle" );
-	new KAction(
+	m_roundRectToolAction = new KToggleAction(
 		i18n("&Round Rectangle"), "roundrect", 0, this, SLOT( roundRectTool() ),
 		actionCollection(), "tool_roundrect" );
-	new KAction(
+	m_sinusToolAction = new KToggleAction(
 		i18n("S&inus"), "sinus", 0, this, SLOT( sinusTool() ),
 		actionCollection(), "tool_sinus" );
-	new KAction(
-		i18n("&Select"), "select", 0, this, SLOT( selectTool() ),
+	m_selectToolAction = new KToggleAction(
+		i18n("&Select Objects"), "select", 0, this, SLOT( selectTool() ),
 		actionCollection(), "tool_select" );
-	new KAction(
+	m_spiralToolAction = new KToggleAction(
 		i18n("S&piral"), "spiral", 0, this, SLOT( spiralTool() ),
 		actionCollection(), "tool_spiral" );
-	new KAction(
+	m_starToolAction = new KToggleAction(
 		i18n("S&tar"), "star", 0, this, SLOT( starTool() ),
 		actionCollection(), "tool_star" );
+
+	m_ellipseToolAction->setExclusiveGroup( "Tools" );
+	m_polygonToolAction->setExclusiveGroup( "Tools" );
+	m_rectangleToolAction->setExclusiveGroup( "Tools" );
+	m_roundRectToolAction->setExclusiveGroup( "Tools" );
+	m_sinusToolAction->setExclusiveGroup( "Tools" );
+	m_selectToolAction->setExclusiveGroup( "Tools" );
+	m_spiralToolAction->setExclusiveGroup( "Tools" );
+	m_starToolAction->setExclusiveGroup( "Tools" );
 
 	// view
 	m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, actionCollection(),
