@@ -70,12 +70,11 @@
 
 KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const char* name)
 :QScrollView(parent, name, /*Qt::WRepaintNoErase | */Qt::WStaticContents /*| Qt::WResizeNoErase*/)
-	,m_data(0)
-	,m_owner(false)
 	,d( new KexiTableViewPrivate() )
 {
-//TODO:	setXMLFile("kexitableviewui.rc");
-	
+	m_data = new KexiTableViewData(); //to prevent crash because m_data==0
+	m_owner = true;                   //-this will be deleted if needed
+
 	setResizePolicy(Manual);
 	viewport()->setBackgroundMode(NoBackground);
 //	viewport()->setFocusPolicy(StrongFocus);
@@ -148,7 +147,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //	navPanelLyr->addStretch(25);
 //	enableClipper(true);
 
-	setData( data );
+	if (data)
+		setData( data );
 
 #if 0//(js) doesn't work!
 	d->scrollTimer = new QTimer(this);
@@ -2579,7 +2579,7 @@ bool KexiTableView::isInsertingEnabled() const
 {
 	if (d->insertingEnabled == 1 || d->insertingEnabled == 0)
 		return (bool)d->insertingEnabled;
-	return m_data ? m_data->isInsertingEnabled() : true;
+	return m_data->isInsertingEnabled();
 }
 
 bool KexiTableView::isDeleteEnabled() const
