@@ -34,6 +34,7 @@ namespace wvWare {
     class Parser;
 }
 class KWordReplacementHandler;
+class KWordTableHandler;
 class KWordTextHandler;
 
 class Document : public QObject, public wvWare::SubDocumentHandler
@@ -88,6 +89,7 @@ private:
     QDomDocument& m_documentInfo;
     QDomElement& m_framesetsElement;
     KWordReplacementHandler* m_replacementHandler;
+    KWordTableHandler* m_tableHandler;
     KWordTextHandler* m_textHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;

@@ -181,27 +181,27 @@ void KWordTextHandler::paragraphEnd()
         writeOutParagraph( "Standard", m_paragraph );
 }
 
-void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
+void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
 {
     m_fieldType = Conversion::fldToFieldType( fld );
     m_insideField = true;
     m_fieldAfterSeparator = false;
-    m_fieldValue = ""; 
+    m_fieldValue = "";
 }
 
-void KWordTextHandler::fieldSeparator( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
+void KWordTextHandler::fieldSeparator( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
 {
     m_fieldAfterSeparator = true;
 }
 
-void KWordTextHandler::fieldEnd( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
+void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
     // only for handled field type
     if( m_fieldType >= 0 )
     {
         QDomElement varElem = insertVariable( 8, chp, "STRING" );
         QDomElement fieldElem = varElem.ownerDocument().createElement( "FIELD" );
-        fieldElem.setAttribute( "subtype", m_fieldType ); 
+        fieldElem.setAttribute( "subtype", m_fieldType );
         fieldElem.setAttribute( "value", m_fieldValue );
         varElem.appendChild( fieldElem );
     }

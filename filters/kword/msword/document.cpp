@@ -20,6 +20,7 @@
 #include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
+#include "tablehandler.h"
 #include "associatedstrings.h"
 
 #include <koGlobal.h>
@@ -37,8 +38,8 @@
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement )
     : m_mainDocument( mainDocument ), m_documentInfo ( documentInfo ),
       m_framesetsElement( framesetsElement ),
-      m_replacementHandler( new KWordReplacementHandler ), m_textHandler( 0 ),
-      m_parser( wvWare::ParserFactory::createParser( fileName ) ),
+      m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
+      m_textHandler( 0 ), m_parser( wvWare::ParserFactory::createParser( fileName ) ),
       m_headerFooters( 0 ), m_bodyFound( false ),
       m_footNoteNumber( 0 ), m_endNoteNumber( 0 )
 {
@@ -49,6 +50,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
+        m_parser->setTableHandler( m_tableHandler );
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         processStyles();
         processAssociatedStrings();
@@ -58,6 +60,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
 Document::~Document()
 {
     delete m_textHandler;
+    delete m_tableHandler;
     delete m_replacementHandler;
 }
 
@@ -362,6 +365,7 @@ void Document::processSubDocQueue()
         delete subdoc.functorPtr; // delete it
         m_subdocQueue.pop();
     }
+    m_tableHandler->writeOutTables();
 }
 
 #include "document.moc"
