@@ -2432,6 +2432,105 @@ bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
     return TRUE;
 }
 
+
+/*=============================
+  kNext - Next key handler - same as PageDown. Move cursor down one 
+  visible document area height and adjust page view accordingly
+			  ===================================*/
+
+bool KWPage::kPrior( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
+{
+	// can't go to a negative pixel value - set new Y offset to
+	// zero if visible height of viewport is greater than offset
+	// from start of fc + top border height
+	
+	unsigned int newY = fc->getPTY();
+	if(newY <= ptTopBorder())  return FALSE;
+	
+	if(fc->getPTY() >= visibleHeight())
+	{ 
+		newY = fc->getPTY() - visibleHeight();
+		if(newY <= ptTopBorder()) newY = ptTopBorder(); 
+	}	
+	else
+		newY = ptTopBorder();	
+	   
+    if ( !doc->has_selection() && e->state() & ShiftButton )
+        startKeySelection();
+    else
+        *oldFc = *fc;
+
+    bool gotoPrevTableCell = FALSE;
+    if ( fs->getGroupManager() && !parag->getPrev() ) 
+	{
+        if ( fc->isCursorInFirstLine() )
+            gotoPrevTableCell = TRUE;
+    }
+    
+	// move cursor up 1 visible height, keeping current x position
+	fc->cursorGotoPixelLine(fc->getPTPos(), newY);
+	
+    gui->getView()->setFormat( *( ( KWFormat* )fc ) );
+    gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
+    gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
+    gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
+                                     fc->getParag()->getParagLayout()->getRightBorder(),
+                                     fc->getParag()->getParagLayout()->getTopBorder(),
+                                     fc->getParag()->getParagLayout()->getBottomBorder() );
+
+    if ( continueSelection || e->state() & ShiftButton ) 
+	{
+        continueKeySelection();
+        return FALSE;
+    } 
+	else if ( gotoPrevTableCell )
+        cursorGotoPrevTableCell();
+
+    return TRUE;
+}
+
+/*=============================
+  kNext - Next key handler - same as PageDown
+  move cursor down one visible document area height
+  and adjust page view accordingly
+===================================*/
+
+bool KWPage::kNext( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
+{
+	if ( !doc->has_selection() && e->state() & ShiftButton )
+        startKeySelection();
+    else
+        *oldFc = *fc;
+
+    bool gotoNextTableCell = FALSE;
+    if ( fs->getGroupManager() && !parag->getNext() ) {
+        if ( fc->isCursorInLastLine() )
+            gotoNextTableCell = TRUE;
+    }
+	
+	// move cursor down 1 visible height, keeping current x position
+	fc->cursorGotoPixelLine(fc->getPTPos(), fc->getPTY() + visibleHeight());
+
+    gui->getView()->setFormat( *( ( KWFormat* )fc ) );
+    gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
+    gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
+    gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
+                                     fc->getParag()->getParagLayout()->getRightBorder(),
+                                     fc->getParag()->getParagLayout()->getTopBorder(),
+                                     fc->getParag()->getParagLayout()->getBottomBorder() );
+
+    if ( continueSelection || e->state() & ShiftButton ) 
+	{
+        continueKeySelection();
+        return FALSE;
+    } 
+	else if ( gotoNextTableCell )
+        cursorGotoNextTableCell();
+
+    return TRUE;
+}
+
+
 /*================================================================*/
 bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet )
 {
@@ -2792,6 +2891,18 @@ void KWPage::keyPressEvent( QKeyEvent *e )
             STOP;
 
     switch( e->key() ) {
+    case Key_Prior: // PageUp
+	{
+        if ( !kPrior( e, oldPage, oldFrame, oldParag, frameSet ) )
+            STOP;
+        break;
+	}	
+    case Key_Next: // PageDown
+	{
+        if ( !kNext( e, oldPage, oldFrame, oldParag, frameSet ) )
+		  STOP;
+        break;
+	}	
     case Key_Home:
         if ( !kHome( e, oldPage, oldFrame, oldParag, frameSet ) )
             STOP;
