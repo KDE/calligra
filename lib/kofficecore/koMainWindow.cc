@@ -40,7 +40,6 @@
 
 #include <qkeycode.h>
 #include <qfile.h>
-#include <qmsgbox.h>
 
 #include <kapp.h>
 #include <kstdaccel.h>
@@ -49,6 +48,7 @@
 #include <kglobal.h>
 #include <kmimetypes.h>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -249,10 +249,19 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
 	   _native_format, _native_pattern, _native_name, TRUE );
 
-        file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
-        if ( file.isNull() )
-            return false;
+        bool bOk = true;
+        do { 
+            file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
+            if ( file.isNull() )
+                return false;
 
+            if ( QFile::exists( file ) ) { // this file exists => ask for confirmation
+                bOk = KMessageBox::questionYesNo( this, 
+                                                  i18n("A document with this name already exists\n"\
+                                                  "Do you want to overwrite it ?"), 
+                                                  i18n("Warning") ) == KMessageBox::Yes;
+            }
+        } while ( !bOk );
 	KMimeType *t = KMimeType::findByURL( KURL( file ), 0, TRUE );
         outputMimeType = t->mimeType();
 
@@ -261,14 +270,16 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
     }
 
     KURL u( _url );
-    if ( QFile::exists( u.path() ) ) {
-        // TODO : if we choose _url with the file selector, ask before overwrite
+    if ( !u.isLocalFile() ) return false; // only local files
+    if ( QFile::exists( u.path() ) ) { // this file exists => backup
+        // TODO : make this configurable ?
 	system( QString( "rm -rf %1~" ).arg( u.path() ).latin1() );
 	QString cmd = "cp %1 %2~";
 	cmd = cmd.arg( u.path() ).arg( u.path() );
 	system( cmd.latin1() );
     }
     
+    // Not native format : save using export filter
     if ( outputMimeType != _native_format ) {
         char tempfname[256];
         int fildes; 
@@ -285,10 +296,11 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
             return false;
     }
 
+    // Native format => normal save
     if ( !pDoc->saveToURL( _url, _native_format ) ) {
         QString tmp;
         tmp.sprintf( i18n( "Could not save\n%s" ), _url );
-        QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+        KMessageBox::error( this, i18n( "IO Error" ) );
         return false;
     }
     return true;
