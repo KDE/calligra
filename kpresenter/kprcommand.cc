@@ -1912,3 +1912,56 @@ void KPrChangeLinkVariable::unexecute()
     m_doc->recalcVariables(VT_LINK);
 }
 
+KPrStickyObjCommand::KPrStickyObjCommand( const QString &_name, QPtrList<KPObject> &_objects,bool sticky, KPrPage*_page, KPresenterDoc *_doc )
+    : KNamedCommand( _name ), m_bSticky(sticky),objects( _objects )
+{
+    objects.setAutoDelete( false );
+    m_doc = _doc;
+    m_page=_page;
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->incCmdRef();
+}
+
+KPrStickyObjCommand::~KPrStickyObjCommand()
+{
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->decCmdRef();
+}
+
+void KPrStickyObjCommand::execute()
+{
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+    {
+        if(m_bSticky)
+            stickObj(objects.at(i));
+        else
+            unstickObj(objects.at(i));
+    }
+    m_doc->repaint( false );
+}
+
+void KPrStickyObjCommand::unexecute()
+{
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+    {
+        if(m_bSticky)
+            unstickObj(objects.at(i));
+        else
+            stickObj(objects.at(i));
+    }
+    m_doc->repaint( false );
+}
+
+void KPrStickyObjCommand::stickObj(KPObject *_obj)
+{
+    m_page->takeObject(_obj);
+    m_doc->appendStickyObj(_obj);
+    _obj->setSticky(true);
+}
+
+void KPrStickyObjCommand::unstickObj(KPObject *_obj)
+{
+    m_doc->takeStickyObj(_obj);
+    m_page->appendObject(_obj);
+    _obj->setSticky(false);
+}

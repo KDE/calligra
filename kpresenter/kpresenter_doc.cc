@@ -539,7 +539,6 @@ QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
 /*========================== save objects =======================*/
 QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
 {
-    //KPObject *kpobject = 0;
     QDomElement objects=doc.createElement("OBJECTS");
 
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
@@ -2105,5 +2104,16 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
         }
     }
 }
+
+void KPresenterDoc::appendStickyObj(KPObject *_obj)
+{
+    m_stickyObj.append(_obj);
+}
+
+void KPresenterDoc::takeStickyObj(KPObject *_obj)
+{
+    m_stickyObj.take(m_stickyObj.findRef(_obj));
+}
+
 
 #include <kpresenter_doc.moc>

@@ -793,5 +793,21 @@ class KPrChangeLinkVariable : public KNamedCommand
     KoLinkVariable *m_var;
 };
 
+class KPrStickyObjCommand : public KNamedCommand
+{
+ public:
+    KPrStickyObjCommand( const QString &_name, QPtrList<KPObject> &_objects, bool sticky , KPrPage*_page,KPresenterDoc *_doc );
+
+    ~KPrStickyObjCommand();
+    void execute();
+    void unexecute();
+    void stickObj(KPObject *_obj);
+    void unstickObj(KPObject *_obj);
+ protected:
+    QPtrList<KPObject> objects;
+    bool m_bSticky;
+    KPresenterDoc *m_doc;
+    KPrPage*m_page;
+};
 
 #endif
