@@ -883,6 +883,8 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     sx = new KDoubleNumInput( grp1 );
 
     sx->setValue( 0.0 );
+    sx->setRange(0, 9999, 1,  false);
+
     sx->resize( sx->sizeHint() );
     pGrid->addWidget( sx, 2, 0 );
 
@@ -891,7 +893,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     pGrid->addWidget( ly, 1, 1 );
 
     sy = new KDoubleNumInput( grp1 );
-
+    sy->setRange(0, 9999, 1,  false);
     sy->setValue( 0.0 );
     sy->resize( sy->sizeHint() );
     pGrid->addWidget( sy, 2, 1 );
@@ -904,6 +906,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
     sw->setValue( 0.0 );
     sw->resize( sw->sizeHint() );
+    sw->setRange(0, 9999, 1,  false);
     connect( sw, SIGNAL(valueChanged(double)),
 	     this, SLOT(slotUpdateHeightForWidth(double)) );
 
@@ -919,6 +922,8 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
     sh->setValue( 0.0 );
     sh->resize( sh->sizeHint() );
+    sh->setRange(0, 9999, 1,  false);
+
     pGrid->addWidget( sh, 4, 1 );
 
     pGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
@@ -940,6 +945,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         m_inputLeftMargin = new KDoubleNumInput( grp2 );
 
         m_inputLeftMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bLeft()), doc->getUnit() ) );
+        m_inputLeftMargin->setRange(0, 9999, 1,  false);
         m_inputLeftMargin->resize( m_inputLeftMargin->sizeHint() );
         mGrid->addWidget( m_inputLeftMargin, 3, 0 );
 
@@ -951,6 +957,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
         m_inputRightMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bRight()), doc->getUnit() ) );
         m_inputRightMargin->resize( m_inputRightMargin->sizeHint() );
+        m_inputRightMargin->setRange(0, 9999, 1,  false);
         mGrid->addWidget( m_inputRightMargin, 3, 1 );
 
         lmt = new QLabel( i18n( "Top:" ), grp2 );
@@ -961,6 +968,8 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
         m_inputTopMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bTop()), doc->getUnit() ) );
         m_inputTopMargin->resize( m_inputTopMargin->sizeHint() );
+        m_inputTopMargin->setRange(0, 9999, 1,  false);
+
         mGrid->addWidget( m_inputTopMargin, 5, 0 );
 
         lmb = new QLabel( i18n( "Bottom:" ), grp2 );
@@ -971,6 +980,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
         m_inputBottomMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bBottom()), doc->getUnit() ) );
         m_inputBottomMargin->resize( m_inputBottomMargin->sizeHint() );
+        m_inputBottomMargin->setRange(0, 9999, 1,  false);
         mGrid->addWidget( m_inputBottomMargin, 5, 1 );
 
 
