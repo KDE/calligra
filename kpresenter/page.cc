@@ -44,6 +44,8 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       subPresStep = 0;
       _presFakt = 1.0;
       goingBack = false;
+      drawMode = false;
+      presPen.operator=(QPen(red,3,SolidLine));
     }
   else 
     {
@@ -427,10 +429,27 @@ void Page::mousePressEvent(QMouseEvent *e)
     }
   else
     {
+      oldMx = e->x();
+      oldMy = e->y();
       if (e->button() == LeftButton)
-	view->screenNext();
-      if (e->button() == MidButton)
-	  view->screenPrev();
+	{	
+	  if (presMenu->isVisible())
+	    presMenu->hide();
+	  else
+	    {
+	      if (drawMode)
+		{}
+	      else 
+		view->screenNext();
+	    }
+	}
+      else if (e->button() == MidButton)
+	view->screenPrev();
+      else if (e->button() == RightButton)
+	{
+	  pnt.operator=(QCursor::pos());
+	  presMenu->popup(pnt);
+	} 
     }
   mouseMoveEvent(e);
 }
@@ -605,8 +624,15 @@ void Page::mouseMoveEvent(QMouseEvent *e)
       oldMx = e->x()+diffx();
       oldMy = e->y()+diffy();
     }
-  if (!editMode)
+  if (!editMode && drawMode)
     {
+      QPainter p;
+      p.begin(this);
+      p.setPen(presPen);
+      p.drawLine(oldMx,oldMy,e->x(),e->y());
+      oldMx = e->x();
+      oldMy = e->y();
+      p.end();
     }
 }
 
@@ -985,6 +1011,20 @@ void Page::setupMenus()
   pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
   txtMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
   txtMenu->setMouseTracking(true);
+
+  // create right button presentation menu 
+  presMenu = new QPopupMenu();
+  CHECK_PTR(presMenu);
+  presMenu->setCheckable(true);
+  PM_SM = presMenu->insertItem(i18n("&Switching mode"),this,SLOT(switchingMode()));
+  PM_DM = presMenu->insertItem(i18n("&Drawing mode"),this,SLOT(drawingMode()));
+  presMenu->insertSeparator();
+  pixdir = KApplication::kde_datadir();
+  pixmap.load(pixdir+"/kpresenter/toolbar/pen.xpm");
+  presMenu->insertItem(pixmap,i18n("&Choose Pen..."),this,SLOT(choosePen()));
+  presMenu->setItemChecked(PM_SM,true);
+  presMenu->setItemChecked(PM_DM,false);
+  presMenu->setCursor(arrowCursor);
 }
 
 /*======================== clipboard cut =========================*/
@@ -1050,6 +1090,11 @@ void Page::chClip()
 	    }
 	}
     }
+}
+
+/*==================== choose pen for presentations ==============*/
+void Page::choosePen()
+{
 }
 
 /*======================= set text font ==========================*/
@@ -1153,12 +1198,14 @@ void Page::startScreenPresentation()
   currPresPage = 1;
   editMode = false;
   drawBack = true;
+  drawMode = false;
   presStepList = view->KPresenterDoc()->reorderPage(1,diffx(),diffy(),_presFakt);
   currPresStep = (int)presStepList.first();
   subPresStep = 0;
   repaint(true);
   setFocusPolicy(QWidget::StrongFocus);
   setFocus();
+  setCursor(blankCursor);
 }
 
 /*====================== stop screenpresentation =================*/
@@ -1206,6 +1253,7 @@ void Page::stopScreenPresentation()
   editMode = true;
   drawBack = true;
   repaint(true);
+  setCursor(arrowCursor);
 }
 
 /*========================== next ================================*/
@@ -1310,31 +1358,20 @@ bool Page::pNext(bool manual)
       else if (clearSubPres)
 	subPresStep = 0;
 
-//       if (pageList()->at(currPresPage-1)->pageEffect != PEF_NONE)
-// 	{
-	  QPixmap _pix1(QApplication::desktop()->width(),QApplication::desktop()->height());
-	  drawPageInPix(_pix1,view->getDiffY());
-
-	  currPresPage++;
-	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
-	  currPresStep = (int)presStepList.first();
-
-	  QPixmap _pix2(QApplication::desktop()->width(),QApplication::desktop()->height());
-	  drawPageInPix(_pix2,view->getDiffY() + view->KPresenterDoc()->getPageSize(1,0,0,_presFakt).height()+10);
-	  
-	  changePages(_pix1,_pix2,pageList()->at(currPresPage-2)->pageEffect);
-
-	  drawBack = true;
-	  return true;
-// 	}
-//       else
-// 	{
-// 	  currPresPage++;
-// 	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
-// 	  currPresStep = (int)presStepList.first();
-// 	  drawBack = true;
-// 	  return true;
-// 	}
+      QPixmap _pix1(QApplication::desktop()->width(),QApplication::desktop()->height());
+      drawPageInPix(_pix1,view->getDiffY());
+      
+      currPresPage++;
+      presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+      currPresStep = (int)presStepList.first();
+      
+      QPixmap _pix2(QApplication::desktop()->width(),QApplication::desktop()->height());
+      drawPageInPix(_pix2,view->getDiffY() + view->KPresenterDoc()->getPageSize(1,0,0,_presFakt).height()+10);
+      
+      changePages(_pix1,_pix2,pageList()->at(currPresPage-2)->pageEffect);
+      
+      drawBack = true;
+      return true;
     }
   return false;
 }
@@ -1590,10 +1627,7 @@ void Page::drawPageInPix(QPixmap &_pix,int __diffy)
 void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 {
   QTime _time;
-  int _step = 0,_steps;
-  int _h = getPageSize(1,_presFakt).height();
-  int _w = getPageSize(1,_presFakt).width();
-  int _y = (height() - _h) / 2;
+  int _step = 0,_steps,_h,_w;
 
   switch (_effect)
     {
@@ -1603,42 +1637,46 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_HORZ:
       {
-	_steps = 80;
+	_steps = kapp->desktop()->height() / 12;
 	_time.start();
 
 	for (;;)
 	  {
 	    kapp->processEvents();
-	    if (_step == _steps) break;
-	    else if (_time.elapsed() >= 5)
+	    if (_time.elapsed() >= 5)
 	      {
 		_step++;
-		bitBlt(this,0,_y,&_pix2,0,_pix2.height() / 2 - (_pix2.height()/(2 * _steps)) * _step,
-		       width(),(_pix2.height()/(2 * _steps)) * _step);
-		bitBlt(this,0,height() - _y - ((_pix2.height()/(2 * _steps)) * _step),&_pix2,
-		       0,_pix2.height() / 2,width(),(_pix2.height()/(2 * _steps)) * _step);
+		_h = (_pix2.height()/(2 * _steps)) * _step;
+		_h = _h > _pix2.height() / 2 ? _pix2.height() / 2 : _h;
+
+		bitBlt(this,0,0,&_pix2,0,_pix2.height() / 2 - _h,width(),_h);
+		bitBlt(this,0,height() - _h,&_pix2,0,_pix2.height() / 2,width(),_h);
+
 		_time.restart();
 	      }
+	    if ((_pix2.height()/(2 * _steps)) * _step >= _pix2.height() / 2) break;
 	  }
       } break;
     case PEF_CLOSE_VERT:
       {
-	_steps = 80;
+	_steps = kapp->desktop()->width() / 12;
 	_time.start();
 
 	for (;;)
 	  {
 	    kapp->processEvents();
-	    if (_step == _steps) break;
-	    else if (_time.elapsed() >= 5)
+	    if (_time.elapsed() >= 5)
 	      {
 		_step++;
-		bitBlt(this,0,_y,&_pix2,_pix2.width() / 2 - (_pix2.width()/(2 * _steps)) * _step,
-		       _y,(_pix2.width()/(2 * _steps)) * _step,_h);
-		bitBlt(this,width() - ((_pix2.width()/(2 * _steps)) * _step),_y,&_pix2,
-		       _pix2.width() / 2,_y,(_pix2.width()/(2 * _steps)) * _step,_h);
+		_w = (_pix2.width()/(2 * _steps)) * _step;
+		_w = _w > _pix2.width() / 2 ? _pix2.width() / 2 : _w;
+
+		bitBlt(this,0,0,&_pix2,_pix2.width() / 2 - _w,0,_w,height());
+		bitBlt(this,width() - _w,0,&_pix2,_pix2.width() / 2,0,_w,height());
+
 		_time.restart();
 	      }
+	    if ((_pix2.width()/(2 * _steps)) * _step >= _pix2.width() / 2) break;
 	  }
       } break;
     }

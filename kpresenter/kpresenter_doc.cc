@@ -478,6 +478,7 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
   string name;
 
   KoPageLayout __pgLayout;
+  __pgLayout.unit = PG_MM;
   
   // clean
   if (_clean)
@@ -1411,6 +1412,7 @@ QListIterator<KPresenterChild> KPresenterDocument_impl::childIterator()
 void KPresenterDocument_impl::setPageLayout(KoPageLayout pgLayout,int diffx,int diffy)
 {
   _pageLayout = pgLayout;
+   
   for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
     {
        if ((!pagePtr->backPix.isNull()) && (pagePtr->backPicView == BV_ZOOM))

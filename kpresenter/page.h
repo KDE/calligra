@@ -151,7 +151,7 @@ protected:
   void changePages(QPixmap,QPixmap,PageEffect);
 
   // variables
-  QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu;
+  QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
   Background *pagePtr;            
   PageObjects *objPtr;            
   KTextObject *txtPtr;                
@@ -163,10 +163,14 @@ protected:
   bool drawBack;                  
   GraphObj *graphPtr;
   KPresenterView_impl *view;
-  bool editMode,goingBack;
+  bool editMode,goingBack,drawMode;
   unsigned int currPresPage,currPresStep,subPresStep;
   float _presFakt;
   QList<int> presStepList;
+
+  int PM_DM,PM_SM;
+
+  QPen presPen;
 
 private slots:
 
@@ -178,6 +182,11 @@ private slots:
   void chPic();
   void chClip();
   void assignEffect() {view->screenAssignEffect();}
+  void drawingMode()
+    {presMenu->setItemChecked(PM_DM,true);presMenu->setItemChecked(PM_SM,false);drawMode = true;setCursor(arrowCursor);}
+  void switchingMode()
+    {presMenu->setItemChecked(PM_DM,false);presMenu->setItemChecked(PM_SM,true);drawMode = false;setCursor(blankCursor);}
+  void choosePen();
 
 signals:
 
