@@ -136,6 +136,14 @@ KWPgNumVariable::KWPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariab
 
 void KWPgNumVariable::recalc()
 {
+    if ( m_doc->viewMode()->type() == "ModeText")
+    {
+        //necessary to resize it in this mode because in this mode
+        //we don't call KWTextFrameSet::drawFrame()
+        resize();
+        return;
+    }
+
     if ( m_subtype == VST_PGNUM_TOTAL )
     {
         m_varValue = QVariant(m_doc->getPages()+m_varColl->variableSetting()->startingPage()-1);
