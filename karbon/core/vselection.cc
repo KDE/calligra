@@ -6,6 +6,7 @@
 #include <qpainter.h>
 #include <qrect.h>
 
+#include "vdocument.h"
 #include "vselection.h"
 
 #include <kdebug.h>
@@ -29,9 +30,8 @@ VSelection::VSelection( const VSelection& selection )
 
 VSelection::~VSelection()
 {
-	delete[]( m_qrect );
-
 	clear();
+	delete[]( m_qrect );
 }
 
 VSelection*
@@ -41,9 +41,36 @@ VSelection::clone() const
 }
 
 void
-VSelection::take( const VObject& object )
+VSelection::take( VObject& object )
 {
 	m_objects.removeRef( &object );
+	object.setState( state_normal );
+	invalidateBoundingBox();
+}
+
+void
+VSelection::append()
+{
+	clear();
+
+	VObjectList objects;
+	VLayerListIterator itr(
+		static_cast<VDocument*>( parent() )->layers() );
+
+	for ( ; itr.current(); ++itr )
+	{
+		objects = itr.current()->objects();
+
+		VObjectListIterator itr2( objects );
+
+		for ( ; itr2.current(); ++itr2 )
+		{
+			if( static_cast<VObject *>( itr2.current() )->state() != state_deleted )
+			{
+				append( itr2.current() );
+			}
+		}
+	}
 
 	invalidateBoundingBox();
 }
@@ -52,6 +79,27 @@ void
 VSelection::append( VObject* object )
 {
 	m_objects.append( object );
+	object->setState( state_selected );
+	invalidateBoundingBox();
+}
+
+void
+VSelection::append( const KoRect& rect )
+{
+	VObjectList objects;
+	VLayerListIterator itr(
+		static_cast<VDocument*>( parent() )->layers() );
+
+	for ( ; itr.current(); ++itr )
+	{
+		objects = itr.current()->objectsWithinRect( rect );
+
+		VObjectListIterator itr2( objects );
+		for ( ; itr2.current(); ++itr2 )
+		{
+			append( itr2.current() );
+		}
+	}
 
 	invalidateBoundingBox();
 }
@@ -59,8 +107,13 @@ VSelection::append( VObject* object )
 void
 VSelection::clear()
 {
-	m_objects.clear();
+	VObjectListIterator itr = m_objects;
+	for( ; itr.current(); ++itr )
+	{
+		itr.current()->setState( state_normal );
+	}
 
+	m_objects.clear();
 	invalidateBoundingBox();
 }
 

@@ -236,7 +236,9 @@ VSelectTool::eventFilter( QEvent* event )
 		else if( m_state == scaling )
 		{
 			m_state = normal;
-			view()->part()->addCommand( new VScaleCmd( &view()->part()->document(), m_sp, m_s1, m_s2 ), true );
+			view()->part()->addCommand(
+				new VScaleCmd( &view()->part()->document(), m_sp, m_s1, m_s2 ),
+				true );
 		}
 		else
 		{
@@ -255,14 +257,11 @@ VSelectTool::eventFilter( QEvent* event )
 			// erase old object:
 			drawTemporaryObject();
 
-			view()->part()->document().deselect();
-
-			view()->part()->document().select( KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(), true );
+			view()->part()->document().selection()->clear();
+			view()->part()->document().selection()->append(
+				KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
 
 			view()->selectionChanged();
-
-			//if( view()->part()->selection().count() > 0  )
-				view()->part()->repaintAllViews();
 		}
 
 		m_isDragging = false;

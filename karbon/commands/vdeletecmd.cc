@@ -9,12 +9,12 @@
 #include "vselection.h"
 
 
-VDeleteCmd::VDeleteCmd( VDocument *doc )
+VDeleteCmd::VDeleteCmd( VDocument* doc )
 	: VCommand( doc, i18n( "Delete Objects" ) )
 {
 	m_selection = m_doc->selection()->clone();
 
-	m_doc->deselect();
+	m_doc->selection()->clear();
 
 	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Delete Object" ) );

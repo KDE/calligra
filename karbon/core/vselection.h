@@ -17,7 +17,6 @@ class QPainter;
 class QPoint;
 class QRect;
 
-
 typedef QPtrList<VObject> VObjectList;
 typedef QPtrListIterator<VObject> VObjectListIterator;
 
@@ -59,29 +58,56 @@ public:
 	virtual VSelection* clone() const;
 
 
-	/// Removes the reference to the object, not the object itself
-	void take( const VObject& object );
+	/**
+	 * Removes the reference to the object, not the object itself.
+	 */
+	void take( VObject& object );
 
+	/**
+	 * Adds all object to the selection.
+	 */
+	void append();
+
+	/**
+	 * Adds an object to the selection.
+	 */
 	void append( VObject* object );
 
-	/// Clears the group, without destroying the grouped objects.
+	/**
+	 * Adds all objects within rect to the selection.
+	 */
+	void append( const KoRect& rect );
+
+	/**
+	 * Removes the references to all objects, not the objects itselves.
+	 */
 	void clear();
 
-	/// Read only access to the grouped objects.
+	/**
+	 * Read only access to the selected objects.
+	 */
 	const VObjectList& objects() const { return m_objects; }
 
 
-	/// Returns the node id, the QPoint is inside.
+	/**
+	 * Returns the node id, the QPoint is inside.
+	 */
 	VHandleNode node( const QPoint& point ) const;
 
 private:
-	// list of selected objects:
+	/**
+	 * A list of selected objects.
+	 */
 	VObjectList m_objects;
 
-	// handle and nodes paint coords:
+	/**
+	 * Handle and nodes paint coordinates.
+	 */
 	QRect* m_qrect;
 
-	// paint size of nodes:
+	/**
+	 * Paint size of nodes.
+	 */
 	static const uint m_nodeSize = 3;
 };
 

@@ -87,36 +87,6 @@ public:
 	VSelection* selection() const
 		{ return m_selection; }
 
-	/**
-	 * Selects all objects.
-	 */
-	void select() const;
-
-	/**
-	 * Deselects all objects.
-	 */
-	void deselect() const;
-
-	/**
-	 * Adds one objects to the selection. If exclusive is true
-	 * the selection is cleared before, in order to make the newly
-	 * selected object the only selected object.
-	 */
-	void select( VObject& object, bool exclusive = false ) const;
-
-	/**
-	 * Deselects one object.
-	 */
-	void deselect( VObject& object ) const;
-
-	/**
-	 * Selects all objects located within rect. If exclusive is true
-	 * the selection is cleared before, in order to make the newly
-	 * selected objects the only selected objects.
-	 */
-	void select( const KoRect& rect, bool exclusive = false ) const;
-
-
 	// move up/down within layer
 // TODO: move these functions into a command:
 	void moveSelectionToTop();

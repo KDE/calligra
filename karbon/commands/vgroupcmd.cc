@@ -37,19 +37,20 @@ VGroupCmd::execute()
 	}
 
 	m_doc->append( m_group );
-	m_doc->select( *m_group, true );
+	m_doc->selection()->clear();
+	m_doc->selection()->append( m_group );
 }
 
 void
 VGroupCmd::unexecute()
 {
-	m_doc->deselect();
+	m_doc->selection()->clear();
 
 	VObjectListIterator itr( m_group->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_doc->select( *itr.current() );
+		m_doc->selection()->append( itr.current() );
 	}
 
 	VGroup* parent;

@@ -24,6 +24,7 @@
 #include "vrectangletool.h"
 #include "vrotatetool.h"
 #include "vroundrecttool.h"
+#include "vselection.h"
 #include "vselecttool.h"
 #include "vsheartool.h"
 #include "vsinustool.h"
@@ -267,13 +268,13 @@ KarbonView::editPaste()
 		temp->transform( QWMatrix().translate( VGlobal::copyOffset, VGlobal::copyOffset ) );
 		selection.append( temp );
 	}
-	m_part->document().deselect();
-	// calc new selection
+	m_part->document().selection()->clear();
+	// Calc new selection
 	VObjectListIterator itr2( selection );
 	for ( ; itr2.current() ; ++itr2 )
 	{
 		m_part->insertObject( itr2.current() );
-		m_part->document().select( *( itr2.current() ) );
+		m_part->document().selection()->append( itr2.current() );
 	}
 	m_part->repaintAllViews();
 }
@@ -281,7 +282,7 @@ KarbonView::editPaste()
 void
 KarbonView::editSelectAll()
 {
-	m_part->document().select();
+	m_part->document().selection()->append();
 
 	if( m_part->document().selection()->objects().count() > 0 )
 		m_part->repaintAllViews();
@@ -292,7 +293,7 @@ KarbonView::editDeselectAll()
 {
 	if( m_part->document().selection()->objects().count() > 0 )
 	{
-		m_part->document().deselect();
+		m_part->document().selection()->clear();
 		m_part->repaintAllViews();
 	}
 }

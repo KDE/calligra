@@ -5,6 +5,7 @@
 
 #include "vdocument.h"
 #include "vpath.h"
+#include "vselection.h"
 #include "vshapecmd.h"
 
 VShapeCmd::VShapeCmd( VDocument* doc, const QString& name, VPath* path )
@@ -25,7 +26,8 @@ VShapeCmd::execute()
 		m_doc->applyDefaultColors( *m_path );
 		// Add path:
 		m_doc->append( m_path );
-		m_doc->select( *m_path, true );
+		m_doc->selection()->clear();
+		m_doc->selection()->append( m_path );
 	}
 }
 
@@ -35,7 +37,7 @@ VShapeCmd::unexecute()
 	if( !m_path )
 		return;
 
-	m_doc->deselect( *m_path );
+	m_doc->selection()->take( *m_path );
 	m_path->setState( state_deleted );
 }
 

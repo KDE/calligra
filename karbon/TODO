@@ -1,11 +1,13 @@
 TODO:
--	make vselection a pointer
--	move all selection-code into vselection
+-	if selecting many shapes, the fill/stroke state should be "unknown",
+	preview widgets needs to paint questionmarks or something in this case
 -	make vselection a visitor
 -	add a point-list to vselection
+-	add undo/redo to shape commands like VFlattenCmd etc
 -	if we come up that vpaths should always have a defined winding
 	(e.g. ccw), create all shapes accordingly. + check in close() and
 	combine().
+-	vroundcorners needs to be imrpoved for beziers and big radii (lenny)
 
 REAL BUGS:
 -	linewith doesnt update bbox anymore
@@ -16,7 +18,6 @@ REAL BUGS:
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
 -	examine the problem with non closed paths (polygonize combined.karbon for example
 	to make the inner circles rectangles)
--	vroundcorners needs to be imrpoved for beziers and big radii (lenny)
 -	use vflatten in vselectool for more precise selection (lenny)
 	maybe use libart instead ("art_drect_svp from art_rect_svp")
 -	move vdocument::moveSelection* to a proper command.

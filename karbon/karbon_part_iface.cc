@@ -21,7 +21,7 @@
 
 #include "karbon_part.h"
 #include "karbon_part_iface.h"
-
+#include "vselection.h"
 
 KarbonPartIface::KarbonPartIface( KarbonPart *part_ )
 	: KoDocumentIface( part_ )
@@ -31,12 +31,12 @@ KarbonPartIface::KarbonPartIface( KarbonPart *part_ )
 
 void KarbonPartIface::selectAllObjects()
 {
-    m_part->document().select();
+    m_part->document().selection()->append();
 }
 
 void KarbonPartIface::deselectAllObjects()
 {
-    m_part->document().deselect();
+    m_part->document().selection()->clear();
 }
 
 bool KarbonPartIface::showStatusBar () const
