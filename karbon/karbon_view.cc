@@ -5,10 +5,12 @@
 
 #include <qbuttongroup.h>
 #include <qcursor.h>
+#include <qdragobject.h>
 #include <qiconset.h>
 #include <qpainter.h>
 
 #include <kaction.h>
+#include <kcolordrag.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <koMainWindow.h>
@@ -70,6 +72,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
 {
 	setInstance( KarbonFactory::instance() );
+	setAcceptDrops( true );
 
 	setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 	initActions();
@@ -156,6 +159,28 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	m_painterFactory->editpainter()->resize( width(), height() );
 	m_canvas->resize( width(), height() );
         reorganizeGUI();
+}
+
+void
+KarbonView::dragEnterEvent( QDragEnterEvent *event )
+{
+	event->accept( KColorDrag::canDecode( event ));
+}
+
+void
+KarbonView::dropEvent ( QDropEvent *e )
+{
+	//Accepts QColor - from Color Manager's KColorPatch
+	QColor color;
+	VColor realcolor;
+	
+	if ( KColorDrag::decode( e, color) )
+	{
+		float r = color.red() / 255.0, g = color.green() / 255.0, b = color.blue() / 255.0;
+		realcolor.setValues( &r, &g, &b, 0L );
+		if( m_part )
+		m_part->addCommand( new VFillCmd( &m_part->document(), realcolor ), true );
+	}
 }
 
 void

@@ -129,6 +129,8 @@ protected slots:
 protected:
 	virtual void updateReadWrite( bool rw );
 	virtual void resizeEvent( QResizeEvent* event );
+	void dragEnterEvent( QDragEnterEvent *e );
+	void dropEvent ( QDropEvent *e );
 
 private:
 	void initActions();
