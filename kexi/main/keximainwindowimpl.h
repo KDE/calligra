@@ -87,6 +87,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		 To generate this ID, just app-wide internal counter is used. */
 		virtual int generatePrivateDocID();
 
+		/*! Reimplemented */
+		virtual void readProperties(KConfig *config);
+    	virtual void saveProperties(KConfig *config);
+    	virtual void saveGlobalProperties( KConfig* sessionConfig );
+
 	public slots:
 		/** Inherited from KMdiMainFrm: we need to do some tasks before child is closed */
 		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true); 
@@ -191,6 +196,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/*! Updates application's caption - also shows project's name. */
 		void updateAppCaption();
 
+		void restoreWindowConfiguration(KConfig *config);
+		void storeWindowConfiguration(KConfig *config);
+	
 	protected slots:
 
 		/**

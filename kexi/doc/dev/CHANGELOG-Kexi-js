@@ -288,10 +288,15 @@ Detailed TODO for Beta3:
 -use one and multi-key relations from kexidb
 
 2004-02-09
-- --design command-line option added, especially useful for developers
+--design command-line option added, especially useful for developers
+main window:
+- dock/layout/geometries settings are stored/restored (a bit better, not complete though)
 
 2004-02-08
 - libkeximain introduced (by splitting libkexicore)
+Main Window settings:
+- main window size stored and restored before showing
+- "maximized childframes" setting stored/restored
 
 2004-02-04
 Table view:

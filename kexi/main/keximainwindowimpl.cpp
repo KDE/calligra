@@ -66,7 +66,6 @@
 #include "startup/KexiStartup.h"
 #include "kexicontexthelp.h"
 
-
 #if defined(Q_WS_WIN) || !KDE_IS_VERSION(3,1,9)
 # include <unistd.h>
 #else
@@ -82,6 +81,7 @@ class KexiMainWindowImpl::Private
 {
 	public:
 		KexiProject	*prj;
+		KConfig *config;
 #ifndef KEXI_NO_CTXT_HELP
 		KexiContextHelp *ctxHelp;
 #endif
@@ -154,11 +154,23 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 // , KexiSharedActionHost(this)
  , d(new KexiMainWindowImpl::Private() )
 {
+	d->config = kapp->config();
+	
+	if ( !initialGeometrySet() ) {
+    	int scnum = QApplication::desktop()->screenNumber(parentWidget());
+		QRect desk = QApplication::desktop()->screenGeometry(scnum);
+		d->config->setGroup("MainWindow");
+	    QSize s ( d->config->readNumEntry( QString::fromLatin1("Width %1").arg(desk.width()), 700 ),
+              d->config->readNumEntry( QString::fromLatin1("Height %1").arg(desk.height()), 480 ) );
+		resize (kMin (s.width(), desk.width()), kMin(s.height(), desk.height()));
+	}
+	
+	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
+	setStandardMDIMenuEnabled();
 	setAsDefaultHost(); //this is default host now.
 	KGlobal::iconLoader()->addAppDir("kexi");
 	setXMLFile("kexiui.rc");
-	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
-	setStandardMDIMenuEnabled();
+	setAcceptDrops(true);
 
 	//get informed
 	connect(&Kexi::partManager(),SIGNAL(partLoaded(KexiPart::Part*)),this,SLOT(slotPartLoaded(KexiPart::Part*)));
@@ -680,12 +692,13 @@ KexiMainWindowImpl::initNavigator()
 
 void KexiMainWindowImpl::initPropertyEditor()
 {
-/*TODO: FIX LAYOUT PROBLEMS
+//TODO: FIX LAYOUT PROBLEMS
+#ifdef KEXI_PROP_EDIOR
 	d->propEditor = new KexiPropertyEditorView(this);
 	d->propEditor->installEventFilter(this);
 	d->propEditorToolWindow = addToolWindow(d->propEditor, 
 		KDockWidget::DockRight, getMainDockWidget(), 20);
-*/
+#endif
 /*    KMdiToolViewAccessor *tmp=createToolWindow();
     tmp->setWidgetToWrap(d->propEditor);
 	d->propEditor->show(); // I'm not sure, if this is a bug in kdockwidget, which I would better fix there
@@ -799,21 +812,19 @@ KexiMainWindowImpl::closeEvent(QCloseEvent *ev)
 void
 KexiMainWindowImpl::restoreSettings()
 {
-	KConfig *config = kapp->config();
-	config->setGroup("MainWindow");
-
-	//small hack - set the default -- bottom
-	config->setGroup(QString(name()) + " KMdiTaskBar Toolbar style");
-	if (config->readEntry("Position").isEmpty()) {
-		config->writeEntry("Position","Bottom");
-		moveDockWindow(m_pTaskBar, DockBottom);
-	}
-	config->setGroup("MainWindow");
+	d->config->setGroup("MainWindow");
 
 	// Saved settings
-	applyMainWindowSettings( config );//, instance()->instanceName() );
+	applyMainWindowSettings( d->config, "MainWindow" );//, instance()->instanceName() );
 
-	int mdimode = config->readNumEntry("MDIMode", -1);//KMdi::TabPageMode);
+	//small hack - set the default -- bottom
+	d->config->setGroup(QString(name()) + " KMdiTaskBar Toolbar style");
+	if (d->config->readEntry("Position").isEmpty() || d->config->readEntry("Position")=="Bottom") {
+		d->config->writeEntry("Position","Bottom");
+		moveDockWindow(m_pTaskBar, DockBottom);
+	}
+
+	int mdimode = d->config->readNumEntry("MDIMode", -1);//KMdi::TabPageMode);
 
 	switch(mdimode)
 	{
@@ -834,22 +845,42 @@ KexiMainWindowImpl::restoreSettings()
 		default:;//-1
 	}
 
-//	setGeometry(config->readRectEntry("Geometry", new QRect(150, 150, 400, 500)));
+	// restore a possible maximized Childframe mode
+	bool maxChildFrmMode = d->config->readBoolEntry("maximized childframes", true);
+	setEnableMaximizedChildFrmMode(maxChildFrmMode);
 
+#if 0
 	if ( !initialGeometrySet() ) {
 		// Default size
-#if KDE_IS_VERSION(3,1,90)
-		const int deskWidth = KGlobalSettings::desktopGeometry(this).width();
-#else
-		const int deskWidth = QApplication::desktop()->width();
-#endif
-		if (deskWidth > 1100) // very big desktop ?
-			resize( 1000, 800 );
-		if (deskWidth > 850) // big desktop ?
-			resize( 800, 600 );
-		else // small (800x600, 640x480) desktop
-			resize( 600, 400 );
+//		int restoredWidth, restoredHeight;
+    	int scnum = QApplication::desktop()->screenNumber(parentWidget());
+		QRect desk = QApplication::desktop()->screenGeometry(scnum);
+//#if KDE_IS_VERSION(3,1,90)
+//		restoredWidth = KGlobalSettings::screenGeometry(scnum).width();
+	//	restoredHeight = KGlobalSettings::screenGeometry(scnum).height();
+//#else
+//		restoredWidth = QApplication::desktop()->width();
+//		restoredHeight = QApplication::desktop()->height();
+//#endif
+/*		if (restoredWidth > 1100) {// very big desktop ?
+			restoredWidth = 1000;
+			restoredHeight = 800;
+		}
+		if (restoredWidth > 850) {// big desktop ?
+			restoredWidth = 800;
+			restoredHeight = 600;
+		}
+		else {// small (800x600, 640x480) desktop
+			restoredWidth = QMIN( restoredWidth, 600 );
+			restoredHeight = QMIN( restoredHeight, 400 );
+		}*/
+
+		config->setGroup("MainWindow");
+	    QSize s ( config->readNumEntry( QString::fromLatin1("Width %1").arg(desk.width()), 700 ),
+              config->readNumEntry( QString::fromLatin1("Height %1").arg(desk.height()), 480 ) );
+		resize (kMin (s.width(), desk.width()), kMin(s.height(), desk.height()));
 	}
+#endif
 }
 
 void
@@ -857,12 +888,66 @@ KexiMainWindowImpl::storeSettings()
 {
 	kdDebug() << "KexiMainWindowImpl::storeSettings()" << endl;
 
-	KConfig *config = kapp->config();
-	config->setGroup("MainWindow");
-	saveWindowSize( config ); //instance()->config() );
-	saveMainWindowSettings( config );
-	config->writeEntry("MDIMode", mdiMode());
+//	saveWindowSize( d->config ); //instance()->config() );
+	saveMainWindowSettings( d->config, "MainWindow" );
+	d->config->writeEntry("MDIMode", mdiMode());
 //	config->sync();
+	d->config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
+}
+
+void
+KexiMainWindowImpl::restoreWindowConfiguration(KConfig *config)
+{
+	kdDebug()<<"preparing session restoring"<<endl;
+	
+	d->config->setGroup("MainWindow");
+
+	QString dockGrp;
+
+	if (kapp->isRestored())
+		dockGrp=d->config->group()+"-Docking";
+	else
+		dockGrp="MainWindow0-Docking";
+
+	if (d->config->hasGroup(dockGrp))
+		readDockConfig(d->config,dockGrp);
+}
+
+void
+KexiMainWindowImpl::storeWindowConfiguration(KConfig *config)
+{
+	kdDebug()<<"preparing session saving"<<endl;
+	d->config->setGroup("MainWindow");
+	QString dockGrp;
+
+#if KDE_IS_VERSION(3,1,9)
+	if (kapp->sessionSaving())
+		dockGrp=d->config->group()+"-Docking";
+	else
+#endif
+		dockGrp="MainWindow0-Docking";
+  
+	kdDebug()<<"Before write dock config"<<endl;
+	writeDockConfig(config,dockGrp);
+	kdDebug()<<"After write dock config"<<endl;
+}
+
+void
+KexiMainWindowImpl::readProperties(KConfig *config) {
+	restoreWindowConfiguration(config);
+}
+
+void
+KexiMainWindowImpl::saveProperties(KConfig *config)
+{
+	storeWindowConfiguration(config);
+//        m_docManager->saveDocumentList (config);
+  //      m_projectManager->saveProjectList (config);
+}
+
+void
+KexiMainWindowImpl::saveGlobalProperties( KConfig* sessionConfig ) {
+	storeWindowConfiguration(sessionConfig);
 }
 
 void
