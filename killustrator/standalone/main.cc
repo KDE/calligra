@@ -37,7 +37,7 @@
 #include <kapp.h>
 #include "version.h"
 #if NEWKDE
-#include <kio_job.h>
+#include <kio/job.h>
 #include <kstddirs.h>
 #endif
 #include "KIllustrator.h"

@@ -99,7 +99,7 @@
 
 #ifdef NEWKDE
 #include <kstddirs.h>
-#include <kio_job.h>
+#include <kio/job.h>
 #include <kglobal.h>
 #include <ktoolbarradiogroup.h>
 #endif
@@ -1163,13 +1163,12 @@ void KIllustrator::openURL (const char* surl) {
   else {
     // network file
 #ifdef NEWKDE
-    KIOJob *kiojob = new KIOJob;
     QString tmpFile;
-    connect (kiojob, SIGNAL(sigFinished ( int )), this,
-	     SLOT (slotKFMJobDone2 (int)));
-    tmpFile.sprintf ("file:/tmp/killu%i", time (0L));
-    kiojob->copy (surl, tmpFile);
-    KURL tmpURL (tmpFile);
+    tmpFile.sprintf ("file:/tmp/killu%i", (int)time (0L));
+    KURL tmpURL(tmpFile);
+    KIO::Job * kiojob = KIO::copy(QString::fromLatin1(surl), tmpURL);
+    connect(kiojob, SIGNAL(result(KIO::Job*)),
+	    SLOT(slotKFMJobDone2(KIO::Job*)));
     localFile = tmpURL.path ();
 #else
     kfmConn = new KFM;
@@ -1406,8 +1405,11 @@ void KIllustrator::dropActionSlot (KDNDDropZone* dzone) {
 }
 */
 
-void KIllustrator::slotKFMJobDone2 (int) {
-  slotKFMJobDone ();
+void KIllustrator::slotKFMJobDone2 (KIO::Job *job) {
+  if (job->error())
+    job->showErrorDialog();
+  else
+    slotKFMJobDone ();
 }
 
 void KIllustrator::slotKFMJobDone () {

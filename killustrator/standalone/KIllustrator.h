@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -42,6 +42,8 @@
 
 #ifndef NEWKDE
 #include <kfm.h>
+#else
+namespace KIO { class Job; }
 #endif
 
 class QGridLayout;
@@ -62,9 +64,9 @@ class FilterManager;
 #define ID_FILE_SAVE_AS          5
 #define ID_FILE_CLOSE            6
 #define ID_FILE_PRINT            7
-#define ID_FILE_NEW_WINDOW       8 
+#define ID_FILE_NEW_WINDOW       8
 #define ID_FILE_INFO             9
-#define ID_FILE_EXIT            10 
+#define ID_FILE_EXIT            10
 
 #define ID_IMPORT               11
 #define ID_EXPORT               12
@@ -148,14 +150,14 @@ public:
 
   KIllustrator (const char* url = NULL);
   ~KIllustrator ();
-  
+
   GDocument* activeDocument () { return document; }
   Canvas* getCanvas () { return canvas; }
 
 protected:
   QSize sizeHint () const { return QSize (700, 500); }
   void closeEvent (QCloseEvent*);
-  
+
   void saveProperties (KConfig* config);
   void readProperties (KConfig* config);
 
@@ -165,7 +167,7 @@ public slots:
   void setPenColor (const QBrush& b);
   void setFillColor (const QBrush& b);
 
-  void slotKFMJobDone2 (int id);
+    void slotKFMJobDone2 (KIO::Job *);
   void slotKFMJobDone ();
 
   //  void dropActionSlot (KDNDDropZone* dzone);
@@ -194,8 +196,8 @@ protected slots:
   void documentIsModifiedSlot (bool flag);
 
   void saveToolbarStatus ();
-  void saveMenubarStatus ();   
-  
+  void saveMenubarStatus ();
+
 private:
   void saveRulerStatus (bool show_it);
   void restoreRulerStatus ();
@@ -234,7 +236,7 @@ private:
   KToolBar *toolbar, *toolPalette, *colorPalette, *editPointToolbar;
   KStatusBar* statusbar;
   KMenuBar* menubar;
-  
+
   QGridLayout *gridLayout;
 
   QPopupMenu *file, *edit, *view, *layout,
@@ -257,7 +259,7 @@ private:
 #endif
   // the drop zone
   //  KDNDDropZone *dropZone;
-  
+
   CommandHistory cmdHistory;
 
   QString localFile;
