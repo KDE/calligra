@@ -5091,7 +5091,8 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	    // format this line again
 	    if ( doc && h > initialHeight )
 	    {
-		int newLMargin = doc->flow()->adjustLMargin( y + parag->rect().y(), h, left, 4 );
+                int lm = left + ( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0;
+		int newLMargin = doc->flow()->adjustLMargin( y + parag->rect().y(), h, lm, 4 );
 		int newRMargin = doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4 );
 		initialHeight = h;
 		//qDebug("new height: %d => newLMargin=%d newRMargin=%d", h, newLMargin, newRMargin);
