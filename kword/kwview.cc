@@ -1867,7 +1867,7 @@ void KWView::lowerFrame()
 
             KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frame );
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Raise Frame") );
+                macroCmd = new KMacroCommand( i18n("Lower Frame") );
             macroCmd->addCommand(cmd);
 
             // Can't lower under the main frame in a WP document.
