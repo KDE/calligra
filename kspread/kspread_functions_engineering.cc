@@ -747,6 +747,33 @@ static bool kspread_convert_pressure( const QString& fromUnit,
   return true;
 }
 
+static bool kspread_convert_energy( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> energyMap;
+
+  // first-time initialization
+  if( energyMap.isEmpty() )
+  {
+    energyMap[ "J" ]   = 1.0;
+    energyMap[ "e" ]   = 1.0e7;
+    energyMap[ "c" ]   = 0.239006249473467;
+    energyMap[ "cal" ] = 0.238846190642017;
+    energyMap[ "eV" ]  = 6.241457e+18;
+    energyMap[ "HPh" ] = 3.72506111e-7;
+    energyMap[ "Wh" ]  = 0.000277778;
+    energyMap[ "flb" ] = 23.73042222;
+    energyMap[ "BTU" ] = 9.47815067349015e-4;
+  }
+
+  if( !energyMap.contains( fromUnit ) ) return false;
+  if( !energyMap.contains( toUnit ) ) return false;
+
+  result = value * energyMap[ toUnit ] / energyMap[ fromUnit ];
+
+  return true;
+}
+
 static bool kspread_convert_temperature( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -798,7 +825,8 @@ bool kspreadfunc_convert( KSContext& context )
   if( !kspread_convert_distance( fromUnit, toUnit, value, result ) )
     if( !kspread_convert_temperature( fromUnit, toUnit, value, result ) )
       if( !kspread_convert_pressure( fromUnit, toUnit, value, result ) )
-        return false;
+        if( !kspread_convert_energy( fromUnit, toUnit, value, result ) )
+          return false;
 
   context.setValue( new KSValue( result ) );
 
