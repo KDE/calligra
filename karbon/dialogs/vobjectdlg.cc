@@ -37,7 +37,8 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	setCloseMode( QDockWindow::Always );
 	
 	//Widgets layout:
-	QGrid* mainLayout = new QGrid( 2, Horizontal, this );
+	QGrid* mainLayout = new QGrid( 2, Vertical, this );
+	mainLayout->setSpacing( 5 );
 	new QLabel( i18n( "X:" ), mainLayout );
 	new QLabel( i18n( "Y:" ), mainLayout );
 	m_X = new KDoubleNumInput( 0.00, mainLayout );
@@ -46,6 +47,8 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	new QLabel( i18n( "Height:" ), mainLayout );
 	m_Width = new KDoubleNumInput( 0.00, mainLayout );
 	m_Height = new KDoubleNumInput( 0.00, mainLayout );
+	new QLabel( i18n( "Rotation:" ), mainLayout );
+	m_Rotation = new KDoubleNumInput( 0, mainLayout );
 	
 	setWidget( mainLayout );
 }

@@ -67,6 +67,7 @@
 #include "vfilldlg.h"
 #include "vflattendlg.h"
 #include "vinsertknotsdlg.h"
+#include "vobjectdlg.h"
 #include "vroundcornersdlg.h"
 #include "vstrokedlg.h"
 #include "vtransformdlg.h"
@@ -145,6 +146,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	//Create Dockers
 	m_ColorManager = new VColorDlg( m_part, this );
+	m_objectDlg = new VObjectDlg( m_part, this );
 	m_TransformDlg = new VTransformDlg( m_part, this );
 
         setNumberOfRecentFiles( m_part->maxRecentFiles() );
@@ -175,6 +177,7 @@ KarbonView::~KarbonView()
 	delete( m_roundCornersDlg );
 	delete( m_whirlPinchDlg );
 	delete( m_ColorManager );
+	delete( m_objectDlg );
 	delete( m_TransformDlg );
 
 	// tools:
@@ -841,6 +844,16 @@ KarbonView::viewColorManager()
 }
 
 void
+KarbonView::viewSelectionProperties()
+{
+	if (m_objectDlg->isVisible() == false )
+	{
+		mainWindow()->addDockWindow(m_objectDlg, DockBottom);
+		m_objectDlg->show();
+	}
+}
+
+void
 KarbonView::refreshView()
 {
 	m_canvas->repaintAll();
@@ -1034,6 +1047,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
+	new KAction(
+		i18n( "&Selection Properties" ), "objdlg", 0, this,
+		SLOT( viewSelectionProperties() ), actionCollection(), "view_selection_properties" );
 
 	new KAction(
 		i18n( "&Refresh" ), 0, QKeySequence("Ctrl+W"), this,

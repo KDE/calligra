@@ -42,6 +42,7 @@ private:
 	KDoubleNumInput *m_Y;
 	KDoubleNumInput *m_Width;
 	KDoubleNumInput *m_Height;
+	KDoubleNumInput *m_Rotation;
 };
 
 #endif

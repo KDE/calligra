@@ -48,6 +48,7 @@ class VGradientTool;
 class VInsertKnotsDlg;
 class VPainterFactory;
 class VPolygonTool;
+class VObjectDlg;
 class VRectangleTool;
 class VRotateTool;
 class VRoundCornersDlg;
@@ -131,8 +132,6 @@ public slots:
 	void pathRoundCorners();
 	void pathWhirlPinch();
 
-
-
 protected slots:
 	// object related operations:
 	void objectTrafoTranslate();
@@ -159,6 +158,7 @@ protected slots:
 	void viewModeChanged();
 	void zoomChanged();
 	void viewColorManager();
+	void viewSelectionProperties();
 	void refreshView();
 
 	//toolbox dialogs - slots
@@ -185,7 +185,6 @@ private:
 	VPainterFactory* m_painterFactory;
 
 	VTool* m_currentTool;
-
 
 	// tools:
 	KToggleAction* m_ellipseToolAction;
@@ -215,7 +214,6 @@ private:
 	VStarTool* m_starTool;
 	VGradientTool* m_gradTool;
 
-
 	// text:
 	KFontAction *m_setFontFamily;
 	KFontSizeAction *m_setFontSize;
@@ -242,6 +240,7 @@ private:
 	VColorDlg* m_ColorManager;
 	VInsertKnotsDlg* m_insertKnotsDlg;
 	VFlattenDlg* m_flattenDlg;
+	VObjectDlg* m_objectDlg;
 	VRoundCornersDlg* m_roundCornersDlg;
 	VWhirlPinchDlg* m_whirlPinchDlg;
 	VTransformDlg* m_TransformDlg;
