@@ -500,7 +500,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     tab4 = addPage( i18n( "Geometry" ) );
     grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
-    floating = new QCheckBox (i18n("Frame is floating"), tab4);
+    floating = new QCheckBox (i18n("Frame is inline"), tab4);
 
     connect( floating, SIGNAL( toggled(bool) ), this, SLOT( slotFloatingToggled(bool) ) );
     int row = 0;
@@ -690,7 +690,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         floating->setChecked( frameSetFloating );
 
         if ( theFrame->getFrameSet()->getGroupManager() )
-            floating->setText( i18n( "Table is floating" ) );
+            floating->setText( i18n( "Table is inline" ) );
 
         slotFloatingToggled( frameSetFloating );
 
@@ -942,7 +942,7 @@ bool KWFrameDia::applyChanges()
         // Floating
         if ( floating->isChecked() && !parentFs->isFloating() )
         {
-             KMacroCommand * macroCmd = new KMacroCommand( i18n("Make FrameSet Floating") );
+            KMacroCommand * macroCmd = new KMacroCommand( i18n("Make FrameSet Inline") );
 
             QList<FrameIndex> frameindexList;
             QList<FrameResizeStruct> frameindexMove;
@@ -953,7 +953,7 @@ bool KWFrameDia::applyChanges()
             move->sizeOfBegin=frame->normalize();
 
             // turn non-floating frame into floating frame
-            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make FrameSet Floating"), parentFs, true );
+            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make FrameSet Inline"), parentFs, true );
             cmd->execute();
 
             move->sizeOfEnd=frame->normalize();
@@ -971,7 +971,7 @@ bool KWFrameDia::applyChanges()
         else if ( !floating->isChecked() && parentFs->isFloating() )
         {
             // turn floating-frame into non-floating frame
-            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make FrameSet Non-Floating"), parentFs, false );
+            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make FrameSet Non-Inline"), parentFs, false );
             doc->addCommand(cmd);
             cmd->execute();
         }

@@ -126,8 +126,8 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     preview->setBackgroundColor( white );
     grid->addMultiCellWidget( preview, 0, 8, 1, 1 );
 
-    // Checkbox for floating/fixed location. The default is [will be] floating.
-    cbIsFloating = new QCheckBox( i18n( "The table is floating" ), tab1 );
+    // Checkbox for floating/fixed location. The default is floating (aka inline).
+    cbIsFloating = new QCheckBox( i18n( "The table is inline" ), tab1 );
     //cbIsFloating->setEnabled(false);
     cbIsFloating->setChecked( floating );
 
