@@ -34,6 +34,10 @@ public:
 	const VPoint* lastPoint( const VSegment* prevSeg = 0L ) const
 		{ return &m_lastPoint; }
 
+	// move a point (if it belongs to this segment). smooth is for beziers.
+	virtual void movePointTo( const VPoint* point, const double x, const double y,
+		const bool smooth = false ) = 0;
+
 	// revert the segment order:
 	virtual const VSegment* revert( const VSegment& prevSeg ) = 0;
 
@@ -68,6 +72,9 @@ public:
 	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const
 		{ return 0L; }
 
+	virtual void movePointTo( const VPoint* point, const double x, const double y,
+		const bool smooth = false );
+
 	virtual const VSegment* revert( const VSegment& prevSeg )
 		{ return 0L; }
 
@@ -89,6 +96,9 @@ public:
 		{ return 0L; }
 	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const
 		{ return 0L; }
+
+	virtual void movePointTo( const VPoint* point, const double x, const double y,
+		const bool smooth = false );
 
 	virtual const VSegment* revert( const VSegment& prevSeg );
 
@@ -115,6 +125,9 @@ public:
 		{ return &m_firstCtrlPoint; }
 	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const
 		{ return &m_lastCtrlPoint; }
+
+	virtual void movePointTo( const VPoint* point, const double x, const double y,
+		const bool smooth = false );
 
 	virtual const VSegment* revert( const VSegment& prevSeg );
 
@@ -143,6 +156,9 @@ public:
 	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const
 		{ return &m_lastCtrlPoint; }
 
+	virtual void movePointTo( const VPoint* point, const double x, const double y,
+		const bool smooth = false );
+
 	virtual const VSegment* revert( const VSegment& prevSeg );
 
 	virtual void transform( const VAffineMap& affMap );
@@ -168,6 +184,9 @@ public:
 		{ return &m_firstCtrlPoint; }
 	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const
 		{ return &m_lastPoint; }
+
+	virtual void movePointTo( const VPoint* point, const double x, const double y,
+		const bool smooth = false );
 
 	virtual const VSegment* revert( const VSegment& prevSeg );
 
@@ -197,7 +216,9 @@ public:
 		const double zoomFactor = 1.0 );
 
 	const VPoint* currentPoint() const;
-	const VSegment* lastSegment() const { return m_segments.getLast(); };
+	// segments() sacrifies safety but provides (at least) transparent access
+	// for tools (==visitor):
+	QList<VSegment> segments() const { return m_segments; };
 
 	// postscript-like commands:
 	VPath& moveTo( const double x, const double y );

@@ -37,6 +37,17 @@ VFirstPoint::VFirstPoint( const double lpX, const double lpY )
 }
 
 void
+VFirstPoint::movePointTo( const VPoint* point, const double x, const double y,
+	const bool smooth )
+{
+	if ( point == &m_lastPoint )
+	{
+		m_lastPoint.moveTo( x, y );
+		m_isDirty = true;
+	}
+}
+
+void
 VFirstPoint::transform( const VAffineMap& affMap )
 {
 	m_lastPoint = affMap.map( m_lastPoint );
@@ -62,6 +73,17 @@ VFirstPoint::getQPointArray( const VSegment& prevSeg,
 VLine::VLine( const double lpX, const double lpY )
 	: VSegment( lpX, lpY )
 {
+}
+
+void
+VLine::movePointTo( const VPoint* point, const double x, const double y,
+	const bool smooth )
+{
+	if ( point == &m_lastPoint )
+	{
+		m_lastPoint.moveTo( x, y );
+		m_isDirty = true;
+	}
 }
 
 const VSegment*
@@ -102,6 +124,13 @@ VCurve::VCurve(
 	  m_firstCtrlPoint( fcpX, fcpY ),
 	  m_lastCtrlPoint( lcpX, lcpY )
 {
+}
+
+void
+VCurve::movePointTo( const VPoint* point, const double x, const double y,
+	const bool smooth )
+{
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 
 const VSegment*
@@ -157,6 +186,12 @@ VCurve1::VCurve1(
 {
 }
 
+void
+VCurve1::movePointTo( const VPoint* point, const double x, const double y,
+	const bool smooth )
+{
+}
+
 const VSegment*
 VCurve1::revert( const VSegment& prevSeg )
 {
@@ -203,6 +238,12 @@ VCurve1::getQPointArray( const VSegment& prevSeg,
 VCurve2::VCurve2(
 		const double fcpX, const double fcpY, const double lpX, const double lpY )
 	: VSegment( lpX, lpY ), m_firstCtrlPoint( fcpX, fcpY )
+{
+}
+
+void
+VCurve2::movePointTo( const VPoint* point, const double x, const double y,
+	const bool smooth )
 {
 }
 
@@ -391,7 +432,10 @@ VPath::moveTo( const double x, const double y )
 // TODO: what is the exact postscript-beaviour?
 	if ( isClosed() ) return *this;
 
-//	m_segments.getLast()->lastPoint()->moveTo( x, y );
+	m_segments.getLast()->movePointTo(
+		m_segments.getLast()->lastPoint(),
+		x, y );
+
 	return *this;
 }
 

@@ -6,8 +6,10 @@
 #define __VOBJECT_H__
 
 #include "vrect.h"
+#include "vtool.h"
 
 class QPainter;
+class KCommand;
 
 class VAffineMap;
 
@@ -21,6 +23,8 @@ public:
 
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double zoomFactor ) = 0;
+
+	virtual KCommand* accept( VTool& tool ) { return tool.manipulate( this ); }
 
 	virtual VObject& transform( const VAffineMap& affMap ) = 0;
 

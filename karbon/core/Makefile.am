@@ -10,7 +10,8 @@ noinst_HEADERS = \
 	vobject.h \
 	vpath.h \
 	vpoint.h \
-	vrect.h
+	vrect.h \
+	vtool.h
 
 libkarboncore_la_SOURCES = \
 	vaffinemap.cc \
@@ -19,7 +20,8 @@ libkarboncore_la_SOURCES = \
 	vobject.cc \
 	vpath.cc \
 	vpoint.cc \
-	vrect.cc
+	vrect.cc \
+	vtool.cc
 
 libkarboncore_la_METASOURCES = \
 	AUTO
