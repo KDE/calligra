@@ -4060,15 +4060,25 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 		if ( txtCursor->positionLine() != line ||
 		    txtCursor->positionParagraph() != parag ) {
 		    int i = 0;
-		    while ( txtCursor->positionLine() > line || txtCursor->positionParagraph() > parag ) {
-			i++;
-			txtCursor->charBackward();
-			if ( i > 10 )
-			    break;
+		    if ( txtCursor->positionLine() > line ) {
+			while ( txtCursor->positionLine() > line || txtCursor->positionParagraph() > parag ) {
+			    i++;
+			    txtCursor->charBackward();
+			    if ( i > 10 )
+				break;
+			}
+		    } else {
+			while ( txtCursor->positionLine() < line || txtCursor->positionParagraph() > parag ) {
+			    i++;
+			    txtCursor->charForward();
+			    if ( i > 10 )
+				break;
+			}
 		    }
 		    insertChar( QChar( ' ' ) );
 		    repaint( FALSE );
 		}
+		txtCursor->calcPos();
 		doDelete = false;
 	    }
 	    if ( e->key() != Key_Shift && e->key() != Key_Control && e->key() != Key_Alt &&
