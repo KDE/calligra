@@ -93,7 +93,7 @@ VMToolHandle::eventFilter( KarbonView* view, QEvent* event )
 	m_activeNode = NODE_MM;
 
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	QPoint p = QPoint( mouse_event->pos().x(), mouse_event->pos().y() );
+	QPoint p = view->canvasWidget()->viewportToContents( mouse_event->pos() );
 	kdDebug() << "p.x() : " << p.x() << endl;
 	kdDebug() << "p.y() : " << p.y() << endl;
 	if( m_nodes[ NODE_LT ].contains( p ) )

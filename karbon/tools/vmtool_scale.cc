@@ -67,12 +67,11 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
+	QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
 
 	QRect rect =  part()->selection().boundingBox( 1 / view->zoomFactor() );
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
-					//( rect.contains( fp ) ) )
 	{
 		setCursor( view );
 		// scale operation
@@ -80,50 +79,50 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
 		{
 			m_sp = QPoint( rect.right(), rect.bottom() );
-			m_s1 = ( rect.right() - m_lp.x() ) / double( rect.width() );
-			m_s2 = ( rect.bottom() - m_lp.y() ) / double( rect.height() );
+			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
+			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MT )
 		{
 			m_sp = QPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
-			m_s1 = ( rect.right() - m_lp.x() ) / double( rect.width() / 2 );
-			m_s2 = ( rect.bottom() - m_lp.y() ) / double( rect.height() );
+			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
+			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RT )
 		{
 			m_sp = QPoint( rect.x(), rect.bottom() );
-			m_s1 = ( m_lp.x() - rect.x() ) / double( rect.width() );
-			m_s2 = ( rect.bottom() - m_lp.y() ) / double( rect.height() );
+			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
+			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RM)
 		{
 			m_sp = QPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
-			m_s1 = ( m_lp.x() - rect.x() ) / double( rect.width() );
-			m_s2 = ( rect.bottom() - m_lp.y() ) / double( rect.height() / 2 );
+			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
+			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RB )
 		{
 			m_sp = QPoint( rect.x(), rect.y() );
-			m_s1 = ( m_lp.x() - rect.x() ) / double( rect.width() );
-			m_s2 = ( m_lp.y() - rect.y() ) / double( rect.height() );
+			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
+			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MB )
 		{
 			m_sp = QPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
-			m_s1 = ( rect.right() - m_lp.x() ) / double( rect.width() / 2 );
-			m_s2 = ( m_lp.y() - rect.y() ) / double( rect.height() );
+			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
+			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LB )
 		{
 			m_sp = QPoint( rect.right(), rect.y() );
-			m_s1 = ( rect.right() - m_lp.x() ) / double( rect.width() );
-			m_s2 = ( m_lp.y() - rect.y() ) / double( rect.height() );
+			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
+			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LM )
 		{
 			m_sp = QPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
-			m_s1 = ( rect.right() - m_lp.x() ) / double( rect.width() );
-			m_s2 = ( rect.bottom() - m_lp.y() ) / double( rect.height() / 2 );
+			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
+			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
 		mat.translate( m_sp.x() / view->zoomFactor(), m_sp.y() / view->zoomFactor());
 		mat.scale( m_s1, m_s2 );
@@ -186,10 +185,6 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
-
-		QPoint fp;
-		fp.setX( view->canvasWidget()->viewportToContents( m_fp ).x() );
-		fp.setY( view->canvasWidget()->viewportToContents( m_fp ).y() );
 
 		part()->addCommand(
 			new VMCmdScale(

@@ -68,6 +68,8 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
+	QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
+
 	QRect rect =  part()->selection().boundingBox( 1 / view->zoomFactor() );
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
@@ -75,13 +77,14 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 		setCursor( view );
 		QWMatrix mat;
 		m_sp = QPoint( rect.left() + rect.width() / 2, rect.top() + rect.height() / 2 );
+		QPoint sp = QPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
 		// rotate operation
-		mat.translate( m_sp.x() / view->zoomFactor(), m_sp.y() / view->zoomFactor());
-		m_angle = atan2( m_lp.y() - m_sp.y(), m_lp.x() - m_sp.x() );
+		mat.translate( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor());
+		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
 		//m_angle += M_PI / 2;
 		mat.rotate( m_angle / VGlobal::pi_180 );
-		mat.translate(	- ( m_sp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
-						- ( m_sp.y() + view->canvasWidget()->contentsY() ) / view->zoomFactor() );
+		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
+						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoomFactor() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
