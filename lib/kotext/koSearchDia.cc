@@ -428,7 +428,7 @@ bool KoFindReplace::process( const QString &_text )
 
 void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingLength, const QRect & )
 {
-    //kdDebug() << "KWFind::highlight " << matchingIndex << "," << matchingLength << endl;
+    //kdDebug() << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
     highlightPortion(m_currentParag, m_offset + matchingIndex, matchingLength, m_currentTextObj->textDocument());
 }
 
@@ -437,9 +437,10 @@ void KoFindReplace::replace( const QString &, int matchingIndex,
 {
     if(!m_macroCmd)
         m_macroCmd=new KMacroCommand(i18n("Insert Replacement"));
+    //kdDebug() << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << endl;
     int index = m_offset + matchingIndex;
     // highlight might not have happened (if 'prompt on replace' is off)
-    highlightPortion(m_currentParag, index,matchedLength , m_currentTextObj->textDocument());
+    highlightPortion(m_currentParag, index, matchedLength, m_currentTextObj->textDocument());
 
     KoTextDocument * textdoc = m_currentTextObj->textDocument();
     KoTextCursor cursor( textdoc );

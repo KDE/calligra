@@ -437,16 +437,16 @@ void KoTextView::moveCursor( CursorAction action )
     updateUI( true );
 }
 
-KoTextCursor KoTextView::selectWordUnderCursor()
+KoTextCursor KoTextView::selectWordUnderCursor( const KoTextCursor& cursor )
 {
-    KoTextCursor c1 = *m_cursor;
-    KoTextCursor c2 = *m_cursor;
-    if ( m_cursor->index() > 0 && !m_cursor->parag()->at( m_cursor->index()-1 )->c.isSpace() && !m_cursor->parag()->at( m_cursor->index()-1 )->isCustom())
+    KoTextCursor c1 = cursor;
+    KoTextCursor c2 = cursor;
+    if ( cursor.index() > 0 && !cursor.parag()->at( cursor.index()-1 )->c.isSpace() && !cursor.parag()->at( cursor.index()-1 )->isCustom())
         c1.gotoWordLeft();
-    if ( !m_cursor->parag()->at( m_cursor->index() )->c.isSpace() && !m_cursor->atParagEnd() && !m_cursor->parag()->at( m_cursor->index() )->isCustom())
+    if ( !cursor.parag()->at( cursor.index() )->c.isSpace() && !cursor.atParagEnd() && !cursor.parag()->at( cursor.index() )->isCustom())
         c2.gotoWordRight();
 
-    KoTextString *s = m_cursor->parag()->string();
+    KoTextString *s = cursor.parag()->string();
     bool beginFound=false;
     for ( int i = c1.index(); i< c2.index(); i++)
     {
@@ -477,6 +477,17 @@ KoTextCursor KoTextView::selectParagUnderCursor()
     textDocument()->setSelectionStart( KoTextDocument::Standard, &c1 );
     textDocument()->setSelectionEnd( KoTextDocument::Standard, &c2 );
     return c2;
+}
+
+QString KoTextView::wordUnderCursor( const KoTextCursor& cursor )
+{
+    selectWordUnderCursor( cursor );
+    QString text = textObject()->selectedText();
+    textDocument()->removeSelection( KoTextDocument::Standard );
+    // ### Not a very precise method of noticing custom items
+    if(text.find(KoTextObject::customItemChar()) == -1)
+        return text;
+    return QString::null;
 }
 
 void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint )
@@ -615,7 +626,7 @@ void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*ev, const QPoint& i/* 
     }
 
     inDoubleClick = TRUE;
-    *m_cursor = selectWordUnderCursor();
+    *m_cursor = selectWordUnderCursor( *m_cursor );
     textObject()->selectionChangedNotify();
     // Copy the selection.
     QApplication::clipboard()->setSelectionMode( true );
@@ -811,52 +822,31 @@ KoTextDocument * KoTextView::textDocument() const
     return textObject()->textDocument();
 }
 
-void KoTextView::referenceLink(QString & href)
-{
-    KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
-    ch = m_cursor->parag()->at( variablePosition );
-    if(ch->isCustom())
-    {
-        KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(ch->customItem());
-        if(var)
-            href=var->url();
-    }
-}
-
-KoLinkVariable * KoTextView::linkVariable()
-{
-    KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
-    ch = m_cursor->parag()->at( variablePosition );
-    if(ch->isCustom())
-    {
-        KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(ch->customItem());
-        return var;
-    }
-    return 0L;
-}
-
 KoVariable *KoTextView::variable()
 {
-    if ( variablePosition > -1 )
+    if ( variablePosition > -1 ) /// ### shouldn't be a member var, but should be determined here
     {
         KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
         ch = m_cursor->parag()->at( variablePosition );
         if(ch->isCustom())
-        {
-            KoVariable *var=dynamic_cast<KoVariable *>(ch->customItem());
-            return var;
-        }
+            return dynamic_cast<KoVariable *>(ch->customItem());
     }
     return 0L;
 }
 
-QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
+KoLinkVariable * KoTextView::linkVariable()
+{
+    return dynamic_cast<KoLinkVariable *>(variable());
+}
+
+QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance, const QString& word )
 {
     m_singleWord = false;
     m_wordUnderCursor = QString::null;
     m_refLink= QString::null;
-    if(variablePosition!=-1)
-        referenceLink(m_refLink);
+    KoLinkVariable* linkVar = linkVariable();
+    if(linkVar)
+        m_refLink = linkVar->url();
     QString text;
     if ( textObject()->hasSelection() )
     {
@@ -873,40 +863,15 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
                 text = QString::null;
         }
     }
-    else // No selection -> get word under cursor
+    else // No selection -> use word under cursor
     {
-        selectWordUnderCursor();
-        text = textObject()->selectedText();
-        if(text.find(KoTextObject::customItemChar()) == -1)
+        if ( !word.isEmpty() )
         {
-            textDocument()->removeSelection( KoTextDocument::Standard );
             m_singleWord = true;
-            m_wordUnderCursor = text;
-        }
-        else
-            text = QString::null;
-    }
-
-#if 0
-
-    // EEEEEK. Please, no KSpell-specific things in here. This is the generic support
-    // for any datatool!
-    if(!text.isEmpty() && doc->dontCheckTitleCase() && text==text.upper())
-    {
-        text=QString::null;
-        m_singleWord = false;
-    }
-    else if(!text.isEmpty() && doc->dontCheckUpperWord() && text[0]==text[0].upper())
-    {
-        QString tmp=text[0]+text.right(text.length()-1).lower();
-        if(text==tmp)
-        {
-            text=QString::null;
-            m_singleWord = false;
+            m_wordUnderCursor = word;
+            text = word;
         }
     }
-
-#endif
 
     if ( text.isEmpty() ) // Nothing to apply a tool to
         return QPtrList<KAction>();
@@ -966,7 +931,10 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
         if ( origText != text )
         {
             if ( !textObject()->hasSelection() )
-                selectWordUnderCursor();
+            {
+                // Warning: ok for now, but wrong cursor if RMB doesn't place cursor anymore
+                selectWordUnderCursor( *m_cursor );
+            }
             // replace selection with 'text'
             textObject()->emitNewCommand( textObject()->replaceSelectionCommand(
                 cursor(), text, KoTextDocument::Standard, i18n("Replace word") ));
@@ -1150,7 +1118,6 @@ void KoTextView::removeComment()
     if ( !textObject()->hasSelection() )
     {
         KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
-        ch = m_cursor->parag()->at( variablePosition );
         if(ch->isCustom())
         {
             KoNoteVariable *var=dynamic_cast<KoNoteVariable *>(ch->customItem());

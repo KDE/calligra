@@ -116,22 +116,25 @@ public:
     void handleMouseTripleClickEvent( QMouseEvent* e, const QPoint& /* Currently unused */ );
     bool maybeStartDrag( QMouseEvent* e );
 
-    KoTextCursor selectWordUnderCursor();
+    KoTextCursor selectWordUnderCursor( const KoTextCursor& cursor );
     KoTextCursor selectParagUnderCursor();
 
-    QPtrList<KAction> dataToolActionList(KInstance * instance);
+    QString wordUnderCursor( const KoTextCursor& cursor );
 
+    /** Return the list of actions from data-tools. Used to populate a RMB popupmenu usually. */
+    QPtrList<KAction> dataToolActionList(KInstance * instance, const QString& word);
 
     void insertSoftHyphen();
     void insertLineBreak();
     void insertNonbreakingSpace();
     void insertSpecialChar(QChar _c, const QString& font);
     void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
-    void referenceLink(QString & href);
-    KoLinkVariable * linkVariable();
-    //return a pointer to a variable
-    KoVariable *variable();
 
+    //return a pointer to the variable under the cursor, if any
+    KoVariable *variable();
+    //return a pointer to the link variable under the cursor, if any
+    // (special case of variable())
+    KoLinkVariable *linkVariable();
 
     KCommand *dropEvent( KoTextObject *tmp,KoTextCursor dropCursor, bool dropInSameObj);
 
