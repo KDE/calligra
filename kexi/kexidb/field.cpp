@@ -457,7 +457,7 @@ Field::setNotNull(bool n)
 void Field::setNotEmpty(bool n)
 {
 	if (isNotEmpty() != n)
-		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::NotNull);
+		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::NotEmpty);
 }
 
 
