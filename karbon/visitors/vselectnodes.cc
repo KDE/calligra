@@ -58,19 +58,19 @@ VSelectNodes::visitVPath( VPath& path )
 				}
 			}
 
-//			if( path.current()->type() == VSegment::curve 
-//				path.current()->ctrlPointFixing() != VSegment::second &&
-//				m_rect.contains( path.current()->point( 1 ) ) )
-//			{
-				// select second control point, when knot is selected:
-/*				if( path.current()->knotSelected() )
-				{
-					path.current()->selectPoint( 1, m_select );
+			if( path.current()->type() == VSegment::curve &&
+				m_rect.contains( path.current()->point( 0 ) ) )
+			{
+				path.current()->selectPoint( 0, m_select );
+				setSuccess();
+			}
 
-					setSuccess();
-				}
-*/
-//			}
+			if( path.current()->type() == VSegment::curve &&
+				m_rect.contains( path.current()->point( 1 ) ) )
+			{
+				path.current()->selectPoint( 1, m_select );
+				setSuccess();
+			}
 
 			if( m_rect.contains( path.current()->knot() ) )
 			{
@@ -111,7 +111,10 @@ VTestNodes::visitVPath( VPath& path )
 		for( int i = 0; i < path.current()->degree(); i++ )
 			if( m_rect.contains( path.current()->point( i ) ) &&
 				path.current()->pointIsSelected( i ) )
+				{
+					m_segments.append( path.current() );
 					setSuccess();
+				}
 
 		path.next();
 	}

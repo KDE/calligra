@@ -79,7 +79,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				m_painter->setPen( stroke );
 				m_painter->setBrush( Qt::NoBrush );
 
-				if( composite.state() == VObject::editnodes &&
+				if( //composite.state() == VObject::editnodes &&
 					jtr.current()->type() == VSegment::curve )
 				{
 					m_painter->newPath();

@@ -77,13 +77,14 @@ VSelectNodesTool::draw()
 	{
 		if( m_state == normal )
 		{
-			/*view()->part()->document().selection()->append(
+
+			view()->part()->document().selection()->append(
 				KoRect(
 					first().x() - tolerance,
 					first().y() - tolerance,
 					2 * tolerance + 1.0,
 					2 * tolerance + 1.0 ).normalize(),
-				false, false );*/
+				false, true );
 			m_state = moving;
 			recalc();
 		}

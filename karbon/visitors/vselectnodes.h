@@ -24,6 +24,7 @@
 #include "koRect.h"
 
 #include "vvisitor.h"
+#include "vsegment.h"
 
 class VSelectNodes : public VVisitor
 {
@@ -53,13 +54,16 @@ private:
 class VTestNodes : public VVisitor
 {
 public:
-	VTestNodes( const KoRect& rect ) : m_rect( rect ) {}
+	VTestNodes( const KoRect& rect ) : m_rect( rect ) { m_segments.clear(); }
 
 	virtual void visitVPath( VPath& path );
 	virtual void visitVLayer( VLayer& layer );
 
+	QPtrList<VSegment> &result() { return m_segments; }
+
 private:
 	KoRect m_rect;
+	QPtrList<VSegment>	m_segments;
 };
 
 #endif
