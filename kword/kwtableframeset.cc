@@ -1863,7 +1863,8 @@ bool KWTableFrameSet::canRemovePage( int num ) {
 void KWTableFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst )
 {
     for (unsigned int i =0; i < m_cells.count(); i++) {
-        lst.append(m_cells.at(i));
+        if (!m_cells.at(i)->textObject()->protectContent())
+            lst.append(m_cells.at(i));
     }
 }
 

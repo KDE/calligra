@@ -1529,7 +1529,8 @@ void KWTextFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progre
 
 void KWTextFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst )
 {
-    lst.append(this);
+    if (!textObject()->protectContent())
+        lst.append(this);
 }
 
 void KWTextFrameSet::slotNewCommand( KCommand *cmd )

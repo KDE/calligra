@@ -3330,7 +3330,7 @@ QPtrList<KoTextObject> KWDocument::frameTextObject() const
     for ( ; fit.current() ; ++fit )
     {
         KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *> (fit.current());
-        if ( fs && fs->isVisible() )
+        if ( fs && fs->isVisible() && !fs->textObject()->protectContent())
         {
             lst.append(fs->textObject());
         }
