@@ -4,6 +4,9 @@ AC_SUBST(KWMF_INCLUDES)
 KSTORE_INCLUDES='-I$(top_srcdir)/lib/store -I$(top_builddir)/lib/store'
 AC_SUBST(KSTORE_INCLUDES)
 
+KOTEXT_INCLUDES='-I$(top_srcdir)/lib/kotext -I$(top_builddir)/lib/kotext'
+AC_SUBST(KOTEXT_INCLUDES)
+
 KOFFICECORE_INCLUDES='-I$(top_srcdir)/lib/kofficecore -I$(top_builddir)/lib/kofficecore'
 AC_SUBST(KOFFICECORE_INCLUDES)
 
@@ -13,10 +16,12 @@ AC_SUBST(KOFFICEUI_INCLUDES)
 LIB_KOFFICEUI='$(top_builddir)/lib/kofficeui/libkofficeui.la'
 LIB_KOFFICECORE='$(top_builddir)/lib/kofficecore/libkofficecore.la'
 LIB_KSTORE='$(top_builddir)/lib/store/libkstore.la'
+LIB_KOTEXT='$(top_builddir)/lib/kotext/libkotext.la'
 LIB_KWMF='$(top_builddir)/lib/kwmf/libkwmf.la'
 AC_SUBST(LIB_KOFFICEUI)
 AC_SUBST(LIB_KOFFICECORE)
 AC_SUBST(LIB_KSTORE)
+AC_SUBST(LIB_KOTEXT)
 AC_SUBST(LIB_KWMF)
 
 interfacedir='$(top_srcdir)/lib/interfaces'
@@ -27,11 +32,6 @@ AC_SUBST(KOFFICE_LIBS)
 
 KOFFICE_INCLUDES='$(KOFFICEUI_INCLUDES) $(KOFFICECORE_INCLUDES) $(KSTORE_INCLUDES) $(KWMF_INCLUDES)'
 AC_SUBST(KOFFICE_INCLUDES)
-
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-AC_CHECK_HEADERS(streambuf streambuf.h)
-AC_LANG_RESTORE
 
 dnl only use kdeprint if kprinter.h was found (recent kdelibs)
 AC_MSG_CHECKING([for kprinter.h (kdelibs>2.1)])
