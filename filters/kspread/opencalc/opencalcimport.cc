@@ -937,7 +937,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
 
       ColumnFormat * col = new ColumnFormat( table, column );
       col->copy( styleLayout );
-      col->setMMWidth( width );
+      col->setWidth( width );
 
       // if ( insertPageBreak )
       //   col->setPageBreak( true )
