@@ -41,7 +41,6 @@
 
 namespace math_local
 {
-  bool gWorking = false;
   KSpreadCell * gCell = 0;
 }
 
@@ -112,9 +111,8 @@ bool kspreadfunc_multipleOP( KSContext& context );
 // registers all math functions
 void KSpreadRegisterMathFunctions()
 {
-  gWorking = false;
   gCell = 0;
-  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+  KSpreadFunctionRepository * repo = KSpreadFunctionRepository::self();
 
   repo->registerFunction( "MULTIPLEOPERATIONS", kspreadfunc_multipleOP );
 
@@ -2037,20 +2035,20 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
 // Function: MULTIPLEOPERATIONS
 bool kspreadfunc_multipleOP( KSContext& context )
 {
-  if (gWorking)
+  if (gCell)
   {
-    //    context.setValue( new KSValue( ((KSpreadInterpreter *) context.interpreter() )->cell()->strOutText() ) );
+    context.setValue( new KSValue( ((KSpreadInterpreter *) context.interpreter() )->cell()->valueDouble() ) );
     return true;
   }
 
-  gWorking = true;
+  gCell = ((KSpreadInterpreter *) context.interpreter() )->cell();
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
   QValueList<KSValue::Ptr>& extra = context.extraData()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 5, "MULTIPLEOPERATIONS", true ) )
   {
-    gWorking = false;
+    gCell = 0;
     return false;
   }
 
@@ -2060,12 +2058,10 @@ bool kspreadfunc_multipleOP( KSContext& context )
   {
     if ( !KSUtil::checkType( context, args[i], KSValue::DoubleType, true ) )
     {
-      gWorking = false;
+      gCell = 0;
       return false;
     }
   }
-
-  //  gCell = ((KSpreadInterpreter *) context.interpreter() )->cell();
 
   ((KSpreadInterpreter *) context.interpreter() )->document()->emitBeginOperation();
 
@@ -2115,7 +2111,6 @@ bool kspreadfunc_multipleOP( KSContext& context )
 
   context.setValue( new KSValue( (double) d ) );
 
-  gWorking = false;
   gCell = 0;
   return true;
 }

@@ -152,6 +152,8 @@
  <Action name="copy"/>
  <Action name="paste"/>
  <Separator/>
+ <Action name="view_zoom"/>
+ <Separator/>
  <Action name="insertColumn"/>
  <Action name="insertRow"/>
  <Action name="deleteColumn"/>

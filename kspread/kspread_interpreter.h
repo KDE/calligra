@@ -9,6 +9,7 @@
 class KSParseNode;
 class KSContext;
 
+class KSpreadCell;
 class KSpreadDoc;
 class KSpreadSheet;
 
@@ -20,7 +21,7 @@ public:
   KSpreadInterpreter( KSpreadDoc* );
 
   KSParseNode* parse( KSContext& context, KSpreadSheet* table, const QString& formula, QPtrList<KSpreadDependency>& );
-  bool evaluate( KSContext& context, KSParseNode*, KSpreadSheet* );
+  bool evaluate( KSContext& context, KSParseNode*, KSpreadSheet*, KSpreadCell* );
 
   KSNamespace* globalNamespace()const  { return m_global; }
 
@@ -28,8 +29,10 @@ public:
 
   KSpreadDoc* document()const { return m_doc; }
   KSpreadSheet* table()const { return m_table; }
+  KSpreadCell* cell() const { return m_cell; }
 
 private:
+  KSpreadCell* m_cell;
   KSpreadDoc* m_doc;
   KSpreadSheet* m_table;
 };

@@ -650,7 +650,7 @@ QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadSheet* tabl
   if( !code ) return result;
 
   context = table->doc()->context();
-  if ( !table->doc()->interpreter()->evaluate( context, code, table ) )
+  if ( !table->doc()->interpreter()->evaluate( context, code, table, 0 ) )
     return result;
 
   if ( context.value()->type() == KSValue::DoubleType )

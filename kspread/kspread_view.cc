@@ -683,8 +683,8 @@ void KSpreadView::initializeGlobalOperationActions()
            this, SLOT( viewZoom( const QString & ) ) );
 
 
-  //m_viewZoom->setEditable(true);
-  m_viewZoom->setEditable(false);
+  m_viewZoom->setEditable(true);
+  //m_viewZoom->setEditable(false);
 
   QStringList lst1;
   lst1 << "33%";

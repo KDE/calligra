@@ -299,12 +299,15 @@ bool kspreadfunc_column( KSContext & context )
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
   KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
-  KSpreadCell *  cell  = 0;//((KSpreadInterpreter *) context.interpreter() )->cell();
+  KSpreadCell *  cell  = ((KSpreadInterpreter *) context.interpreter() )->cell();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "COLUMN", false ) )
   {
     if ( cell )
-      return cell->column();
+    {
+      context.setValue( new KSValue( (int) cell->column() ) );
+      return true;
+    }
     else
       return false;
   }
@@ -664,12 +667,15 @@ bool kspreadfunc_row( KSContext & context )
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
   KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
-  KSpreadCell *  cell  = 0;//((KSpreadInterpreter *) context.interpreter() )->cell();
+  KSpreadCell *  cell  = ((KSpreadInterpreter *) context.interpreter() )->cell();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "ROW", false ) )
   {
     if ( cell )
-      return cell->row();
+    {
+      context.setValue( new KSValue( (int) cell->row() ) );
+      return true;
+    }
     else
       return false;
   }

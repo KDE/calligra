@@ -439,7 +439,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
   }
 
   KSContext& context2 = m_pTable->doc()->context();
-  if ( !m_pTable->doc()->interpreter()->evaluate( context2, code, m_pTable ) )
+  if ( !m_pTable->doc()->interpreter()->evaluate( context2, code, m_pTable, this ) )
       // Print out exception if any
       if ( context2.exception() &&m_pTable->doc()->getShowMessageError())
       {
@@ -1653,7 +1653,7 @@ bool KSpreadCell::calc(bool delay)
   }
 
   KSContext& context = m_pTable->doc()->context();
-  if ( !m_pTable->doc()->interpreter()->evaluate( context, m_pCode, m_pTable ) )
+  if ( !m_pTable->doc()->interpreter()->evaluate( context, m_pCode, m_pTable, this ) )
   {
     // If we got an error during evaluation ...
     setFlag(Flag_ParseError);

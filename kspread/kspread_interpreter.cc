@@ -256,10 +256,12 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
  *
  *********************************************************************/
 
-KSpreadInterpreter::KSpreadInterpreter( KSpreadDoc* doc ) : KSInterpreter()
+KSpreadInterpreter::KSpreadInterpreter( KSpreadDoc * doc ) 
+  : KSInterpreter(),
+    m_cell( 0 ),
+    m_doc( doc ),
+    m_table( 0 )
 {
-  m_doc = doc;
-
   KSModule::Ptr m = kspreadCreateModule_KSpread( this );
   m_modules.insert( m->name(), m );
 
@@ -442,15 +444,18 @@ KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadSheet* table,
     return n;
 }
 
-bool KSpreadInterpreter::evaluate( KSContext& context, KSParseNode* node, KSpreadSheet* table )
+bool KSpreadInterpreter::evaluate( KSContext& context, KSParseNode* node, KSpreadSheet* table, KSpreadCell* cell )
 {
     // Save the current table to make this function reentrant.
-    KSpreadSheet* t = m_table;
+    KSpreadSheet * t = m_table;
+    KSpreadCell * c  = m_cell;
     m_table = table;
+    m_cell  = cell;
 
     bool b = node->eval( context );
 
     m_table = t;
+    m_cell  = c;
 
     return b;
 }
