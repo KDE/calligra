@@ -12,6 +12,7 @@
 /* Module: KPresenter Document                                    */
 /******************************************************************/
 
+#include <kfiledialog.h>
 #include "kpresenter_doc.h"
 #include "kpresenter_doc.moc"
 
@@ -88,6 +89,7 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   m_bModified = false;
 
   // init
+  _clean = true;
   _pageList.setAutoDelete(true);
   _objList.setAutoDelete(true);
   _objNums = 0;
@@ -145,7 +147,7 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   _pageLayout.bottom = 0;
   _pageLayout.unit = PG_MM;
   setPageLayout(_pageLayout,0,0);
-  insertNewPage(0,0);
+  insertNewTemplate(0,0,true);
 }
 
 /*====================== destructor ==============================*/
@@ -472,21 +474,24 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
   KoPageLayout __pgLayout;
   
   // clean
-  if (!_pageList.isEmpty())
-    _pageList.clear();
-  if (!_objList.isEmpty())
-    _objList.clear();
-  _objNums = 0;
-  _pageNums = 0;
-  _spInfinitLoop = false;
-  _spManualSwitch = true;
-  _rastX = 20;
-  _rastY = 20;
-  _xRnd = 20;
-  _yRnd = 20;
-  _txtBackCol.operator=(white);
-  _txtSelCol.operator=(lightGray);
-      
+  if (_clean)
+    {
+      if (!_pageList.isEmpty())
+	_pageList.clear();
+      if (!_objList.isEmpty())
+	_objList.clear();
+      _objNums = 0;
+      _pageNums = 0;
+      _spInfinitLoop = false;
+      _spManualSwitch = true;
+      _rastX = 20;
+      _rastY = 20;
+      _xRnd = 20;
+      _yRnd = 20;
+      _txtBackCol.operator=(white);
+      _txtSelCol.operator=(lightGray);
+    }
+
   // DOC
   if ( !parser.open( "DOC", tag ) )
   {
@@ -1421,6 +1426,17 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
   repaint(true);
 
   return _pageNums;
+}
+
+/*==================== insert a new page with template ===========*/
+unsigned int KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool clean=false)
+{
+  QString templateDir = KApplication::kde_datadir();
+
+  QString file = KFileDialog::getOpenFileName(templateDir+"/kpresenter/templates/","*.kpt",0);
+  _clean = clean;
+  if (!file.isEmpty()) open(file);
+  _clean = true;
 }
 
 /*==================== set background color ======================*/

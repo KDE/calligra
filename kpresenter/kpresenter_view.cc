@@ -147,7 +147,7 @@ void KPresenterView_impl::newView()
 /*====================== insert a new page ======================*/
 void KPresenterView_impl::insertPage()
 {
-  m_pKPresenterDoc->insertNewPage(xOffset,yOffset);
+  m_pKPresenterDoc->insertNewTemplate(xOffset,yOffset);
   setRanges();
 }
 
