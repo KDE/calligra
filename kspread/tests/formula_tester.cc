@@ -206,7 +206,7 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "1", KSpreadValue(1) );
   CHECK_EVAL( "-1", KSpreadValue(-1) );
   CHECK_EVAL( "3.14e7", KSpreadValue(3.14e7) );
-  CHECK_EVAL( "3.14-e7", KSpreadValue(3.14e-7) );
+  CHECK_EVAL( "3.14e-7", KSpreadValue(3.14e-7) );
   
   
   // simple binary operation  
