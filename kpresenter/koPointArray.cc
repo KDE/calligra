@@ -302,27 +302,19 @@ QPointArray KoPointArray::zoomPointArray( KoZoomHandler* zoomHandler, int penWid
     double fx;
     double fy;
     KoSize ext = boundingRect().size();
-    if(penWidth>1.0)
-    { // Large pen -> apply zoom + reduction due to pen
-        fx = (double)( zoomHandler->zoomItX(ext.width()) - penWidth ) / ext.width();
-        fy = (double)( zoomHandler->zoomItY(ext.height()) - penWidth ) / ext.height();
-    } else
-    { // Normal pen -> apply the zoom only
-        fx = (double)( zoomHandler->zoomItX(ext.width()) ) / ext.width();
-        fy = (double)( zoomHandler->zoomItY(ext.height()) ) / ext.height();
-    }
+    int pw = zoomHandler->zoomItX( penWidth ) / 2;
+
+    fx = (double)( zoomHandler->zoomItX(ext.width()) - 2 * pw ) / ext.width();
+    fy = (double)( zoomHandler->zoomItY(ext.height()) - 2 * pw ) / ext.height();
+
     unsigned int index = 0;
     QPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = begin(); it != end(); ++it, ++index ) {
-        double tmpX = (*it).x() * fx;
-        double tmpY = (*it).y() * fy;
+        int tmpX = qRound((*it).x() * fx + pw);
+        int tmpY = qRound((*it).y() * fy + pw);
 
-        if(penWidth>1.0) {
-            tmpX += penWidth / 2;
-            tmpY += penWidth / 2;
-        }
-        tmpPoints.putPoints( index, 1, qRound(tmpX), qRound(tmpY) );
+        tmpPoints.putPoints( index, 1, tmpX, tmpY );
     }
     return tmpPoints;
 }

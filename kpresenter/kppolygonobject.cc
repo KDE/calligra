@@ -223,16 +223,17 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 			     bool drawingShadow, bool drawContour )
 {
     int _w = pen.width();
-    QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
 
     if ( drawContour ) {
+        QPointArray pointArray2 = points.zoomPointArray( _zoomHandler );
 	QPen pen3( Qt::black, 1, Qt::DotLine );
 	_painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
-	_painter->drawPolygon( pointArray );
+	_painter->drawPolygon( pointArray2 );
 	return;
     }
 
+    QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
     QPen pen2( pen );
     pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
 
@@ -261,8 +262,7 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
         }
 
         QRect _rect = pointArray.boundingRect();
-        _painter->drawPixmap( _zoomHandler->zoomItX( _w / 2 ), _zoomHandler->zoomItX( _w / 2 ),
-                              pix, 0, 0, _rect.width(), _rect.height() );
+        _painter->drawPixmap( 0, 0, pix, 0, 0, _rect.width(), _rect.height() );
 
         _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
