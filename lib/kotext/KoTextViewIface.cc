@@ -93,15 +93,15 @@ void KoTextViewIface::setTextSuperScript(bool on)
     delete cmd;
 }
 
-void KoTextViewIface::setSpellCheckingLanguage(const QString & _lang)
+void KoTextViewIface::setLanguage(const QString & _lang)
 {
-    KCommand *cmd=m_textView->setSpellCheckingLanguage(_lang);
+    KCommand *cmd=m_textView->setLanguage(_lang);
     delete cmd;
 }
 
-QString KoTextViewIface::spellCheckingLanguage() const
+QString KoTextViewIface::language() const
 {
-    return m_textView->spellCheckingLanguage();
+    return m_textView->language();
 }
 
 void KoTextViewIface::setDefaultFormat()

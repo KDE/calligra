@@ -108,7 +108,7 @@ public:
     //void setCounter(const KoParagCounter & counter );
     KCommand *setCounterCommand(const KoParagCounter & counter );
 
-    KCommand *setSpellCheckingLanguage(const QString &);
+    KCommand *setLanguage(const QString &);
 
     KCommand *setShadowTextCommand( bool _b );
 
@@ -124,7 +124,7 @@ public:
     QColor textColor() const;
     QFont textFont() const;
     QString textFontFamily()const;
-    QString spellCheckingLanguage() const;
+    QString language() const;
     QColor textBackgroundColor()const;
     QColor textUnderlineColor()const;
 

@@ -157,8 +157,8 @@ k_dcop:
     QString underlineLineStyle() const;
     QString strikeOutLineStyle()const;
 
-    void setSpellCheckingLanguage(const QString & _lang);
-    QString spellCheckingLanguage() const;
+    void setLanguage(const QString & _lang);
+    QString language() const;
     void addBookmarks(const QString &url);
     void copyLink();
     void removeLink();

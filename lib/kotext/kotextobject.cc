@@ -2246,9 +2246,9 @@ QString KoTextFormatInterface::textFontFamily()const
     return currentFormat()->font().family();
 }
 
-QString KoTextFormatInterface::spellCheckingLanguage() const
+QString KoTextFormatInterface::language() const
 {
-    return currentFormat()->spellCheckingLanguage();
+    return currentFormat()->language();
 }
 
 KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, KoTextFormat::AttributeStyle _fontAttribute, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, bool _wordByWord,int flags)
@@ -2417,11 +2417,11 @@ KCommand *KoTextFormatInterface::setCounterCommand(const KoParagCounter & counte
     return setParagLayoutFormatCommand(&format,KoParagLayout::BulletNumber);
 }
 
-KCommand *KoTextFormatInterface::setSpellCheckingLanguage(const QString &_lang)
+KCommand *KoTextFormatInterface::setLanguage(const QString &_lang)
 {
     KoTextFormat format( *currentFormat() );
-    format.setSpellCheckingLanguage(_lang);
-    return setFormatCommand( &format, KoTextFormat::SpellCheckingLanguage );
+    format.setLanguage(_lang);
+    return setFormatCommand( &format, KoTextFormat::Language );
 }
 
 KoTextDocCommand *KoTextFormatInterface::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )

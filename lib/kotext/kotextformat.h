@@ -63,7 +63,7 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , SpellCheckingLanguage = 4096, ShadowText = 8192, OffsetFromBaseLine = 16384, WordByWord = 32768, Attribute = 65536 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , Language = 4096, ShadowText = 8192, OffsetFromBaseLine = 16384, WordByWord = 32768, Attribute = 65536 };
 
     enum UnderlineLineType { U_NONE = 0, U_SIMPLE = 1, U_DOUBLE = 2, U_SIMPLE_BOLD = 3, U_WAVE = 4};
     enum StrikeOutLineType { S_NONE = 0, S_SIMPLE = 1, S_DOUBLE = 2, S_SIMPLE_BOLD = 3};
@@ -101,8 +101,8 @@ public:
     void setUnderlineLineStyle (UnderlineLineStyle _type);
     UnderlineLineStyle underlineLineStyle()const {return m_underlineLineStyle;}
 
-    void setSpellCheckingLanguage( const QString & _lang);
-    QString spellCheckingLanguage() const { return m_spellCheckLanguage;}
+    void setLanguage( const QString & _lang);
+    QString language() const { return m_language;}
 
     void setAttributeFont( KoTextFormat::AttributeStyle _att );
     KoTextFormat::AttributeStyle attributeFont() const { return m_attributeFont;}
@@ -209,7 +209,7 @@ protected:
     StrikeOutLineType m_strikeOutLine;
     UnderlineLineStyle m_underlineLineStyle;
     StrikeOutLineStyle m_strikeOutLineStyle;
-    QString m_spellCheckLanguage;
+    QString m_language;
     AttributeStyle m_attributeFont;
     class KoTextFormatPrivate;
     KoTextFormatPrivate *d;

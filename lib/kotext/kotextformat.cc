@@ -156,8 +156,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::StrikeOut;
     if ( textBackgroundColor() != format.textBackgroundColor() )
         flags |= KoTextFormat::TextBackgroundColor;
-    if ( spellCheckingLanguage() != format.spellCheckingLanguage() )
-        flags |= KoTextFormat::SpellCheckingLanguage;
+    if ( language() != format.language() )
+        flags |= KoTextFormat::Language;
     if ( shadowText() != format.shadowText() )
         flags |= KoTextFormat::ShadowText;
     if ( offsetFromBaseLine() != format.offsetFromBaseLine() )
@@ -542,11 +542,11 @@ KoTextFormat::AttributeStyle KoTextFormat::stringToAttributeFont( const QString 
 }
 
 
-void KoTextFormat::setSpellCheckingLanguage( const QString & _lang)
+void KoTextFormat::setLanguage( const QString & _lang)
 {
-    if ( m_spellCheckLanguage == _lang )
+    if ( m_language == _lang )
         return;
-    m_spellCheckLanguage = _lang;
+    m_language = _lang;
     update();
 }
 

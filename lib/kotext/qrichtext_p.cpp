@@ -136,7 +136,7 @@ KoTextFormat::KoTextFormat()
     m_strikeOutLine = S_NONE;
     m_underlineLineStyle = U_SOLID;
     m_strikeOutLineStyle = S_SOLID;
-    m_spellCheckLanguage = QString::null;
+    m_language = QString::null;
     d->m_bShadowText = true;
     d->m_relativeTextSize = 0.66;
     d->m_offsetFromBaseLine= 0;
@@ -213,7 +213,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     m_strikeOutLine = S_NONE;
     m_underlineLineStyle = U_SOLID;
     m_strikeOutLineStyle = S_SOLID;
-    m_spellCheckLanguage = QString::null;
+    m_language = QString::null;
     d->m_bShadowText = true;
     d->m_relativeTextSize= 0.66;
     d->m_offsetFromBaseLine = 0;
@@ -258,7 +258,7 @@ KoTextFormat::KoTextFormat( const KoTextFormat &f )
     m_strikeOutLine = f.m_strikeOutLine;
     m_underlineLineStyle = f.m_underlineLineStyle;
     m_strikeOutLineStyle = f.m_strikeOutLineStyle;
-    m_spellCheckLanguage = f.m_spellCheckLanguage;
+    m_language = f.m_language;
     d->m_bShadowText = f.d->m_bShadowText;
     d->m_relativeTextSize = f.d->m_relativeTextSize;
     d->m_offsetFromBaseLine = f.d->m_offsetFromBaseLine;
@@ -315,7 +315,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     m_strikeOutLine = f.m_strikeOutLine;
     m_underlineLineStyle = f.m_underlineLineStyle;
     m_strikeOutLineStyle = f.m_strikeOutLineStyle;
-    m_spellCheckLanguage = f.m_spellCheckLanguage;
+    m_language = f.m_language;
     d->m_bShadowText = f.d->m_bShadowText;
     d->m_relativeTextSize = f.d->m_relativeTextSize;
     d->m_offsetFromBaseLine = f.d->m_offsetFromBaseLine;
@@ -412,7 +412,7 @@ void KoTextFormat::generateKey()
     k += '/';
     k += QString::number( (int)m_strikeOutLineStyle);
     k += '/';
-    k += m_spellCheckLanguage;
+    k += m_language;
     k += '/';
     k += QString::number( (int)d->m_bShadowText);
     k += '/';
@@ -452,6 +452,17 @@ QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelle
     k += '/';
     //k += QString::null; // spellcheck language
     k += "/1";
+    k += '/';
+    k += "0"; //no shadow
+    k += '/';
+    k += "0.66"; //relative text size
+    k += '/';
+    k += "0"; // no offset from base line
+    k += '/';
+    k += "0"; //no wordbyword attribute
+    k += '/';
+    k += "0"; //no font attribute
+
     ////
     return k;
 }
