@@ -658,6 +658,22 @@ void GPage::changeOutlineStyles(const KoColor &c)
   updateHandle();
 }
 
+void GPage::changeStroked(bool stroked)
+{
+  for(GObject *o = selection.first(); o != 0L; o = selection.next())
+    o->changeStroked(stroked);
+
+  //updateHandle();
+}
+
+void GPage::changeFilled(bool filled)
+{
+  for(GObject *o = selection.first(); o != 0L; o = selection.next())
+    o->changeFilled(filled);
+
+  //updateHandle();
+}
+
 /*******************[OLD]*********************
 bool GPage::readFromXml (const QDomElement &page)
 {

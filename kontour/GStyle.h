@@ -27,6 +27,8 @@
 
 #include <koColor.h>
 
+#include <qpen.h>
+
 class QDomDocument;
 class QDomElement;
 
@@ -52,6 +54,18 @@ public:
   const KoColor &fillColor() const;
   void fillColor(const KoColor &c);
   
+  Qt::PenJoinStyle joinStyle() const;
+  void joinStyle(Qt::PenJoinStyle join);
+
+  Qt::PenCapStyle capStyle() const;
+  void capStyle(Qt::PenCapStyle cap);
+
+  bool stroked() const;
+  void stroked(bool stroked);
+
+  bool filled() const;
+  void filled(bool filled);
+
   GStyle &operator=(const GStyle &s);
     
 private:

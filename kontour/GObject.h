@@ -148,6 +148,8 @@ public:
 
   void changePaintStyle(const KoColor &c);
   void changeOutlineStyle(const KoColor &c);
+  void changeStroked(bool stroked);
+  void changeFilled(bool filled);
 
   /**
    * Control points.

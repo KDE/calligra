@@ -33,6 +33,7 @@
 #include <qdockwindow.h>
 #include <qdockarea.h>
 #include <qtabwidget.h>
+#include <qcheckbox.h>
 
 #include <kaction.h>
 #include <kprinter.h>
@@ -69,6 +70,7 @@
 #include "DeleteCmd.h"
 #include "ToPathCmd.h"
 
+//#include <kdebug.h>
 KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc)
 :KoView(doc, parent, name)
 {
@@ -328,9 +330,15 @@ void KontourView::setupPanels()
   win1->setResizeEnabled(true);
   QTabWidget *tab = new QTabWidget(win1, "Tab");
   tab->setTabShape(QTabWidget::Triangular);
-  mPaintPanel = new KoColorChooser(tab);
+  QWidget *paintColor = new QWidget(tab);
+  QBoxLayout *box = new QBoxLayout(paintColor, QBoxLayout::Down);
+  QCheckBox *filled = new QCheckBox(i18n("filled"), paintColor);
+  connect(filled, SIGNAL(toggled(bool)), this, SLOT(changeFilled(bool)));
+  box->addWidget(filled);
+  mPaintPanel = new KoColorChooser(paintColor);
   connect(mPaintPanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
-  tab->insertTab(mPaintPanel, "Color");
+  box->addWidget(mPaintPanel);
+  tab->insertTab(paintColor, "Color");
   // TODO : add some content here :)
   tab->insertTab(new QWidget(tab), "Gradient");
   tab->insertTab(new QWidget(tab), "Pattern");
@@ -344,9 +352,15 @@ void KontourView::setupPanels()
   win2->setResizeEnabled(true);
   QTabWidget *tab2 = new QTabWidget(win2, "Tab");
   tab2->setTabShape(QTabWidget::Triangular);
-  mOutlinePanel = new KoColorChooser(tab2);
+  QWidget *outlineColor = new QWidget(tab2);
+  QBoxLayout *box2 = new QBoxLayout(outlineColor, QBoxLayout::Down);
+  QCheckBox *stroked = new QCheckBox(i18n("stroked"), outlineColor);
+  connect(stroked, SIGNAL(toggled(bool)), this, SLOT(changeStroked(bool)));
+  box2->addWidget(stroked);
+  mOutlinePanel = new KoColorChooser(outlineColor);
   connect(mOutlinePanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changeOutlineColor(const KoColor &)));
-  tab2->insertTab(mOutlinePanel, "Color");
+  box2->addWidget(mOutlinePanel);
+  tab2->insertTab(outlineColor, "Color");
   // TODO : add some content here :)
   tab2->insertTab(new QWidget(tab2), "Style");
   win2->setWidget(tab2);
@@ -574,6 +588,24 @@ void KontourView::changePaintColor(const KoColor &c)
   {
     activeDocument()->activePage()->changePaintStyles(c);
 	activeDocument()->styles()->current()->fillColor(c);
+  }
+}
+
+void KontourView::changeFilled(bool filled)
+{
+  if(activeDocument() && activeDocument()->activePage() &&
+    !activeDocument()->activePage()->selectionIsEmpty())
+  {
+    activeDocument()->activePage()->changeFilled(filled);
+  }
+}
+
+void KontourView::changeStroked(bool stroked)
+{
+  if(activeDocument() && activeDocument()->activePage() &&
+    !activeDocument()->activePage()->selectionIsEmpty())
+  {
+    activeDocument()->activePage()->changeStroked(stroked);
   }
 }
 

@@ -106,6 +106,8 @@ private slots:
 
   void changeOutlineColor(const KoColor &c);
   void changePaintColor(const KoColor &c);
+  void changeFilled(bool filled);
+  void changeStroked(bool stroked);
   void changeSelection();
 
   void slotZoomFactorChanged();

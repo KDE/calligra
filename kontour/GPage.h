@@ -138,6 +138,8 @@ public:
    */
   void changePaintStyles(const KoColor &c);
   void changeOutlineStyles(const KoColor &c);
+  void changeStroked(bool stroked);
+  void changeFilled(bool filled);
 
 public slots:
 //  void objectChanged ();

@@ -296,8 +296,15 @@ void GObject::setPen(QPainter *p)
 {
   // TODO : set dashes, arrows, linewidth etc.
   QPen pen;
-  pen.setColor(st.outlineColor().color());
-  pen.setWidth(st.outlineWidth());
+  if(st.stroked())
+  {
+    pen.setColor(st.outlineColor().color());
+    pen.setWidth(st.outlineWidth());
+    pen.setCapStyle(st.capStyle());
+    pen.setJoinStyle(st.joinStyle());
+  }
+  else
+    pen.setStyle(Qt::NoPen);
   p->setPen(pen);
 }
 
@@ -305,8 +312,11 @@ void GObject::setBrush(QPainter *p)
 {
   // TODO : patterns, gradients, noFill
   QBrush brush;
-  brush.setStyle(Qt::SolidPattern);
-  brush.setColor(st.fillColor().color());
+  if(st.filled())
+  {
+    brush.setColor(st.fillColor().color());
+    brush.setStyle(Qt::SolidPattern);
+  }
   p->setBrush(brush);
 }
 
@@ -318,6 +328,16 @@ void GObject::changePaintStyle(const KoColor &c)
 void GObject::changeOutlineStyle(const KoColor &c)
 {
   st.outlineColor(c);
+}
+
+void GObject::changeStroked(bool stroked)
+{
+  st.stroked(stroked);
+}
+
+void GObject::changeFilled(bool filled)
+{
+  st.filled(filled);
 }
 
 #include "GObject.moc"
