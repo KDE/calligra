@@ -114,3 +114,8 @@ Reggie, 26.4.1999:
 - Using now the KCharSelect widget of libkdeui for the character selector dialog
 - More work on unicode
 - Corrected some stuff in the templates
+
+Reggie, 27.4.1999:
+------------------
+- Some fixes in autoforms
+- Added some new autoforms

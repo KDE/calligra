@@ -274,8 +274,8 @@ void AEditWin::fileOpen()
   afChoose = new AFChoose(0,"Autoform-Choose");
   afChoose->resize(400,300);
   afChoose->setCaption("Open an Autoform");
-  afChoose->setMaximumSize(afChoose->width(),afChoose->height());
-  afChoose->setMinimumSize(afChoose->width(),afChoose->height());
+//   afChoose->setMaximumSize(afChoose->width(),afChoose->height());
+//   afChoose->setMinimumSize(afChoose->width(),afChoose->height());
   connect(afChoose,SIGNAL(formChosen(const QString &)),this,SLOT(afChooseOk(const QString &)));
   afChoose->show();
 }
