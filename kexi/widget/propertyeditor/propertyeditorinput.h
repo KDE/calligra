@@ -28,7 +28,7 @@
 class QLineEdit;
 class KexiProperty;
 class QToolButton;
-class QEvent; 
+class QEvent;
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorInput : public KexiPropertySubEditor
 {
@@ -53,7 +53,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorInput : public KexiPropertySubEdit
 class KEXIPROPERTYEDITOR_EXPORT PropIntSpinBox : public KIntSpinBox
 {
 	Q_OBJECT
-	
+
 	public:
 	PropIntSpinBox(int lower, int upper, int step, int value, int base, QWidget *parent, const char *name);
 	virtual bool eventFilter(QObject *o, QEvent *e);
@@ -73,7 +73,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEdito
 
 	protected slots:
 		void			valueChange(int);
-		
+
 	protected:
 		KIntSpinBox		*m_spinBox;
 };
@@ -83,7 +83,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEdito
 class KEXIPROPERTYEDITOR_EXPORT PropDoubleSpinBox : public KDoubleSpinBox
 {
 	Q_OBJECT
-	
+
 	public:
 	PropDoubleSpinBox(QWidget *parent);
 	virtual bool eventFilter(QObject *o, QEvent *e);
@@ -100,7 +100,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDblSpin : public KexiPropertySubEd
 
 		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
-	
+
 	protected slots:
 		void			valueChange(int);
 
@@ -120,10 +120,10 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorBool : public KexiPropertySubEdito
 
 		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
-		
+
 	protected slots:
 		void			setState(bool state);
-		
+
 	protected:
 		QToolButton		*m_toggle;
 };

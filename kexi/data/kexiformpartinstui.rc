@@ -1,6 +1,15 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kexiformpartinst" version="1">
 
+<MenuBar>
+  <Menu name="edit">
+   <Separator />
+   <Action name="taborder"/>
+   <Action name="adjust"/>
+   <Action name="change_style"/>
+  </Menu>
+</MenuBar>
+
 <ToolBar name="widgets" fullWidth="false">
  <text>Widgets</text>
    <Action name="library_widget_QButtonGroup"/>
@@ -10,6 +19,10 @@
    <Action name="library_widget_QPushButton"/>
    <Action name="library_widget_Spacer"/>
  <ActionList name="library_widgets" />
+</ToolBar>
+<Toolbar name="tools" fullWidth="false">
+   <Action name="pointer"/>
+   <Action name="change_style"/>
 </ToolBar>
 
 </kpartgui>

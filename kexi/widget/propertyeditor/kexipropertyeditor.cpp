@@ -533,7 +533,7 @@ KexiPropertyEditor::slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &pr
 	KexiPropertyEditorItem* item = m_items[prop.name()];
 	if (!item) //this property is not visible here
 		return;
-	if(item == m_editItem)
+	if(item == m_editItem && m_currentEditor)
 		m_currentEditor->setValue(prop.value());
 	item->updateValue();
 	item->updateChildrenValue();

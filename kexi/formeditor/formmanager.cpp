@@ -199,9 +199,23 @@ FormManager::windowChanged(QWidget *w)
 			m_active = form;
 			if(m_treeview)
 				m_treeview->setForm(form);
+
 			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
 			//if(m_collection)
 				//m_collection->addDocCollection(form->actionCollection());
+			KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
+			const QString currentStyle = form->toplevelContainer()->widget()->style().name();
+			const QStringList styles = m_style->items();
+
+			int idx = 0;
+			for (QStringList::ConstIterator it = styles.begin(); it != styles.end(); ++it, ++idx)
+			{
+				if ((*it).lower() == currentStyle) {
+					kdDebug() << "Updating the style to " << currentStyle << endl;
+					m_style->setCurrentItem(idx);
+					break;
+				}
+			}
 
 			//if(m_client)
 			//	m_client->createGUI(m_client->xmlFile());

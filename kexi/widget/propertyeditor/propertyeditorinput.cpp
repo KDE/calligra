@@ -67,7 +67,7 @@ PropertyEditorInput::setValue(const QVariant &value)
 
 //INT
 
-PropIntSpinBox::PropIntSpinBox(int lower, int upper, int step, int value, int base=10, QWidget *parent=0, const char *name=0) 
+PropIntSpinBox::PropIntSpinBox(int lower, int upper, int step, int value, int base=10, QWidget *parent=0, const char *name=0)
 : KIntSpinBox(lower, upper, step, value, base, parent, name)
 {
 	editor()->setAlignment(Qt::AlignLeft);
@@ -88,7 +88,7 @@ PropIntSpinBox::eventFilter(QObject *o, QEvent *e)
 			}
 		}
 	}
-	
+
 	return KIntSpinBox::eventFilter(o, e);
 }
 
@@ -126,7 +126,7 @@ PropertyEditorSpin::valueChange(int)
 
 //DOUBLE
 
-PropDoubleSpinBox::PropDoubleSpinBox(QWidget *parent=0) 
+PropDoubleSpinBox::PropDoubleSpinBox(QWidget *parent=0)
 : KDoubleSpinBox(parent)
 {
 	editor()->setAlignment(Qt::AlignLeft);
@@ -147,7 +147,7 @@ PropDoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 			}
 		}
 	}
-	
+
 	return KDoubleSpinBox::eventFilter(o, e);
 }
 
@@ -197,7 +197,7 @@ PropertyEditorBool::PropertyEditorBool(QWidget *parent, KexiProperty *property, 
 	m_toggle->setUsesTextLabel(true);
 	m_toggle->setTextPosition(QToolButton::Right); //js BesideIcon -didnt work before qt3.2);
 	m_toggle->resize(width(), height());
-	
+
 	connect(m_toggle, SIGNAL(toggled(bool)), this, SLOT(setState(bool)));
 	if(property->value().toBool())
 		m_toggle->setOn(true);
@@ -206,7 +206,7 @@ PropertyEditorBool::PropertyEditorBool(QWidget *parent, KexiProperty *property, 
 		m_toggle->toggle();
 		m_toggle->setOn(false);
 	}
-	
+
 	m_toggle->show();
 	setWidget(m_toggle);
 }
