@@ -547,6 +547,13 @@ DeleteWidgetCommand::DeleteWidgetCommand(QtWidgetList &list, Form *form)
 		FormIO::saveWidget(item, parent, m_domDoc);
 		form->connectionBuffer()->saveAllConnectionsForWidget(w->name(), m_domDoc);
 	}
+
+	// remove includehints element not needed
+	if(!parent.namedItem("includehints").isNull())
+		parent.removeChild(parent.namedItem("includehints"));
+	// and ensure images is at the end
+	if(!parent.namedItem("images").isNull())
+		parent.insertAfter(parent.namedItem("images"), QDomNode());
 }
 
 void

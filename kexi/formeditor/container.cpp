@@ -571,14 +571,35 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_state = MovingWidget;
 			break;
 		}
-		case QEvent::KeyRelease:
+		case QEvent::KeyPress:
 		{
 			QKeyEvent *kev = static_cast<QKeyEvent*>(e);
-			if(kev->key() != Key_F2) // pressing F2 == double-clicking
+			if(kev->key() == Key_F2) // pressing F2 == double-clicking
+			{
+				m_state = InlineEditing;
+				QWidget *w;
+
+				if(m_form->selectedWidgets()->count() == 1)
+					w = m_form->selectedWidgets()->first();
+				else if(m_form->selectedWidgets()->findRef(m_moving) != -1)
+					w = m_moving;
+				else
+					w = m_form->selectedWidgets()->last();
+				m_form->manager()->lib()->startEditing(w->className(), w, this);
+			}
+			else if(kev->key() == Key_Escape)
+			{
+				if(m_form->manager()->draggingConnection())
+					m_form->manager()->stopDraggingConnection();
+				else if(m_form->manager()->inserting())
+					m_form->manager()->stopInsert();
 				return true;
 
-			m_state = InlineEditing;
-			m_form->manager()->lib()->startEditing(m_moving->className(), m_moving, this);
+			}
+			return true;
+		}
+		case QEvent::KeyRelease:
+		{
 			return true;
 		}
 		case QEvent::MouseButtonDblClick: // editing
@@ -599,7 +620,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::Leave:
 		case QEvent::FocusIn:
 		case QEvent::FocusOut:
-		case QEvent::KeyPress:
+		//case QEvent::KeyPress:
 		//case QEvent::KeyRelease:
 			return true; // eat them
 

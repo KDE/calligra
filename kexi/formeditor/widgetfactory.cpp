@@ -176,7 +176,7 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 	else if(ev->type() == QEvent::KeyPress)
 	{
 		QKeyEvent *e = static_cast<QKeyEvent*>(ev);
-		if(((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->state() != ControlButton))
+		if(((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->state() != AltButton))
 			resetEditor();
 		if(e->key() == Qt::Key_Escape)
 		{

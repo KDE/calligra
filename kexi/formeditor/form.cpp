@@ -442,7 +442,7 @@ Form::fixPos(QDomElement el)
 	if(!widg)
 		return el;
 
-	while(widg->geometry() == r) // there is already a widget there, with the same size
+	while((widg->geometry() == r) && (widg != 0))// there is already a widget there, with the same size
 	{
 		widg = m_toplevel->widget()->childAt(widg->x() + 16, widg->y() + 16, false);
 		r.moveBy(10,10);

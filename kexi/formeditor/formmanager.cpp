@@ -272,6 +272,10 @@ FormManager::resetCreatedConnection()
 {
 	delete m_connection;
 	m_connection = new Connection();
+
+	if(m_active && m_active->formWidget())
+		m_active->formWidget()->clearRect();
+	m_active->toplevelContainer()->widget()->repaint();
 }
 
 void
@@ -326,6 +330,8 @@ FormManager::windowChanged(QWidget *w)
 		if(m_treeview)
 			m_treeview->setForm(0);
 		showPropertyBuffer(0);
+		if(draggingConnection())
+			stopDraggingConnection();
 		return;
 	}
 
@@ -337,16 +343,16 @@ FormManager::windowChanged(QWidget *w)
 		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );*/
 //	}
 
+	Form *previousActive = m_active;
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
 		if(form->toplevelContainer() && form->toplevelContainer()->widget() == w)
 		{
-			m_active = form;
 			if(m_treeview)
 				m_treeview->setForm(form);
 			if(m_buffer)
-				m_buffer->setCollection(activeForm()->pixmapCollection());
+				m_buffer->setCollection(form->pixmapCollection());
 
 			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
 			//if(m_collection)
@@ -365,6 +371,10 @@ FormManager::windowChanged(QWidget *w)
 				}
 			}
 
+			if((form != previousActive) && draggingConnection())
+				resetCreatedConnection();
+
+			m_active = form;
 			//if(m_client)
 			//	m_client->createGUI(m_client->xmlFile());
 			/*Actions actions;
@@ -681,9 +691,14 @@ FormManager::createSignalMenu(QWidget *w)
 	QStrListIterator it(list);
 	for(; it.current() != 0; ++it)
 		m_sigSlotMenu->insertItem(*it);
-	connect(m_sigSlotMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
+	//connect(m_sigSlotMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
 
-	m_sigSlotMenu->exec(QCursor::pos());
+	int result = m_sigSlotMenu->exec(QCursor::pos());
+	if(result == -1)
+		resetCreatedConnection();
+	else
+		menuSignalChoosed(result);
+
 	delete m_sigSlotMenu;
 	m_sigSlotMenu = 0;
 }
@@ -708,9 +723,14 @@ FormManager::createSlotMenu(QWidget *w)
 
 		m_sigSlotMenu->insertItem(*it);
 	}
-	connect(m_sigSlotMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
+	//connect(m_sigSlotMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
 
-	m_sigSlotMenu->exec(QCursor::pos());
+	int result = m_sigSlotMenu->exec(QCursor::pos());
+	if(result == -1)
+		resetCreatedConnection();
+	else
+		menuSignalChoosed(result);
+
 	delete m_sigSlotMenu;
 	m_sigSlotMenu = 0;
 }
