@@ -65,6 +65,7 @@ KWSpinBox::KWSpinBox( QWidget * parent, const char * name )
     : QSpinBox(parent,name)
 {
     m_Etype=NONE;
+    setMaxValue ( 65535 );
 }
 KWSpinBox::~KWSpinBox( )
 {
