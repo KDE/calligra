@@ -846,8 +846,17 @@ void KoFieldVariable::recalc()
             m_value = m_doc->url().directory();
             break;
 	case VST_PATHFILENAME:
-	 m_value = m_doc->url().path();
-	 break;
+            m_value=m_doc->url().path();
+            break;
+        case VST_FILENAMEWITHOUTEXTENSION:
+        {
+            QString file=m_doc->url().filename();
+            if(file.findRev(".")==(file.length()-4))
+                m_value=file.left(file.length()-4);
+            else
+                m_value=file;
+        }
+        break;
         case VST_AUTHORNAME:
         case VST_EMAIL:
         case VST_COMPANYNAME:
@@ -899,7 +908,7 @@ QStringList KoFieldVariable::actionTexts()
     lst << i18n( "Email" );
     lst << i18n( "Company Name" ); // is "Name" necessary ?
     lst << i18n( "Path and File Name" );
-    lst << QString::null; //6
+    lst << i18n( "File Name without extension" );
     lst << QString::null; //7
     lst << QString::null; //8
     lst << QString::null; //9

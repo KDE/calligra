@@ -332,7 +332,7 @@ public:
     enum FieldSubType { VST_NONE = -1,
                         VST_FILENAME = 0, VST_DIRECTORYNAME = 1,
                         VST_AUTHORNAME = 2, VST_EMAIL = 3, VST_COMPANYNAME = 4,
-			VST_PATHFILENAME = 5,
+			VST_PATHFILENAME = 5, VST_FILENAMEWITHOUTEXTENSION=6,
                         // room for more 'author' page info fields if asked for
                         VST_TITLE = 10, VST_ABSTRACT = 11 };
 
