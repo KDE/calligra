@@ -1,7 +1,7 @@
 /*
-** A program to convert the XML rendered by KWord into LATEX.
+** A program to convert the XML rendered by KOffice into LATEX.
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2000-2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -26,16 +26,12 @@
 #include "qfile.h"
 
 /* Init static data */
-FileHeader* XmlParser::_fileHeader = 0;
+//FileHeader* XmlParser::_fileHeader = 0;
 Document* XmlParser::_root = 0;
-bool XmlParser::_useLatin1 = true;
-bool XmlParser::_useUnicode = false;
-bool XmlParser::_useLatexStyle = true;
 KoStore* XmlParser::_in = NULL;
-QString XmlParser::_class; /// static objects in libraries are evil!! Don't do that!
 
-XmlParser::XmlParser(QString filename):
-		_filename(filename)
+XmlParser::XmlParser(Config* config, QString filename):	_filename(filename), _config(config)
+	
 {
 	QFile f(filename);
 	if(!f.open(IO_ReadOnly))
@@ -45,18 +41,19 @@ XmlParser::XmlParser(QString filename):
 		f.close();
 		return;
 	}
-	f.close();
+	else
+		f.close();
 	//_eltCurrent = _document.documentElement();
 }
 
-XmlParser::XmlParser(QByteArray in)
+XmlParser::XmlParser(Config* config, QByteArray in): _config(config)
 {
 	_document.setContent(in);
 }
 
-XmlParser::XmlParser(const KoStore* in)
+XmlParser::XmlParser(Config* config, const KoStore* in): _config(config)
 {
-        _in = const_cast<KoStore*>(in);
+  _in = const_cast<KoStore*>(in);
 	if(!_in->open("root"))
 	{
 	        kdError(30503) << "Unable to open input file!" << endl;
@@ -65,10 +62,21 @@ XmlParser::XmlParser(const KoStore* in)
 	/* input file Reading */
 	QByteArray array = _in->read(_in->size());
 	_document.setContent(array);
+	if(!_in->close())
+	{
+		kdError() << "unable to close input file" << endl;
+		return;
+	}
 }
 
 XmlParser::XmlParser()
 {
+	_config = Config::instance();
+	/*_in = xmlParser.getStorage();
+	_fileHeader = xmlParser.getFileHeader();
+	_root = xmlParser.getRoot();
+	_document.setContent(_in);
+	_filename = xmlParser.getFilename();*/
 }
 
 XmlParser::~XmlParser()
@@ -107,6 +115,11 @@ QDomNode XmlParser::getChild(QDomNode balise, int index)
 	if ( children.count() )
 		return children.item(index);
 	return QDomNode();
+}
+
+QString XmlParser::getData(QDomNode balise, int index)
+{
+	return getChild(getChild(balise, index), 0).nodeValue();
 }
 
 int XmlParser::getNbChild(QDomNode balise)
