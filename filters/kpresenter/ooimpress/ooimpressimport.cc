@@ -317,7 +317,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         dp = drawPage.toElement();
         m_styleStack.clear(); // remove all styles
         fillStyleStack( dp );
-        m_styleStack.setMark( StyleStack::PageMark );
+        m_styleStack.save();
 
         // take care of a possible page background or slide transition or sound
         if ( m_styleStack.hasAttribute( "draw:fill" )
@@ -479,11 +479,12 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             QDomElement o = object.toElement();
             QString name = o.tagName();
             QString drawID = o.attribute("draw:id");
+            m_styleStack.save();
 
             QDomElement e;
             if ( name == "draw:text-box" ) // textbox
             {
-                storeObjectStyles( o );
+                fillStyleStack( o );
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 4 );
                 append2DGeometry( doc, e, o, (int)offset );
@@ -496,7 +497,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             }
             else if ( name == "draw:rect" ) // rectangle
             {
-                storeObjectStyles( o );
+                fillStyleStack( o );
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 2 );
                 append2DGeometry( doc, e, o, (int)offset );
@@ -508,7 +509,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             }
             else if ( name == "draw:circle" || name == "draw:ellipse" )
             {
-                storeObjectStyles( o );
+                fillStyleStack( o );
                 e = doc.createElement( "OBJECT" );
                 append2DGeometry( doc, e, o, (int)offset );
                 appendPen( doc, e );
@@ -547,7 +548,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             }
             else if ( name == "draw:line" ) // line
             {
-                storeObjectStyles( o );
+                fillStyleStack( o );
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 1 );
                 appendLineGeometry( doc, e, o, (int)offset );
@@ -558,7 +559,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendObjectEffect(doc, e, o, soundElement);
             }
             else if (name=="draw:polyline") { // polyline
-                storeObjectStyles(o);
+                fillStyleStack(o);
                 e = doc.createElement("OBJECT");
                 e.setAttribute("type", 12);
                 append2DGeometry(doc, e, o, (int)offset);
@@ -570,7 +571,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendObjectEffect(doc, e, o, soundElement);
             }
             else if (name=="draw:polygon") { // polygon
-                storeObjectStyles(o);
+                fillStyleStack(o);
                 e = doc.createElement("OBJECT");
                 e.setAttribute("type", 16);
                 append2DGeometry(doc, e, o, (int)offset);
@@ -583,7 +584,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             }
             else if ( name == "draw:image" ) // image
             {
-                storeObjectStyles( o );
+                fillStyleStack( o );
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 0 );
                 append2DGeometry( doc, e, o, (int)offset );
@@ -611,13 +612,16 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             else
             {
                 kdDebug(30518) << "Unsupported object '" << name << "'" << endl;
+                m_styleStack.restore();
                 continue;
             }
 
             objectElement.appendChild( e );
+            m_styleStack.restore();
         }
 
         m_animations.clear();
+        m_styleStack.restore();
     }
 
     docElement.appendChild( paperElement );
@@ -1182,7 +1186,6 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
         }
 
         textObjectElement.appendChild( e );
-        m_styleStack.popToMark( StyleStack::ObjectMark ); // remove the styles added by the paragraph
     }
 
     return textObjectElement;
@@ -1199,10 +1202,10 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
         isOrdered = false;
 
     // take care of nested lists
+    // ### DF: I think this doesn't take care of them the right way. We need to save/parse-whole-list/restore.
     QDomElement e;
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.firstChild() )
     {
-        // DF: TODO: I feel some setMark/popToMark are missing here!
         e = n.toElement();
         QString name = e.tagName();
         if ( name == "text:unordered-list" )
@@ -1220,6 +1223,7 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
         if ( name == "text:p" )
             break;
     }
+    // ### Where are the sibling paragraphs of 'e' parsed?
 
     QDomElement p = parseParagraph( doc, e );
 
@@ -1246,7 +1250,6 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
     // parse the paragraph-properties
     fillStyleStack( paragraph );
-    m_styleStack.setMark( StyleStack::ParagraphMark );
 
     // Style name
     QString styleName = m_styleStack.userStyleName();
@@ -1291,25 +1294,36 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
     uint pos = 0;
 
+    m_styleStack.save();
     // parse every childnode of the paragraph
-    for( QDomNode n = paragraph.firstChild(); !n.isNull(); n = n.nextSibling() )
-    {
-        QString textData;
-        QDomText t = n.toText();
-        QDomElement ts = n.toElement();
-        QString tagName = ts.tagName();
+    parseSpanOrSimilar( doc, paragraph, p, pos);
+    m_styleStack.restore(); // remove possible garbage (should not be needed)
 
-        if (tagName == "text:s")
-            textData = OoUtils::expandWhitespace(n.toElement());
-        else if (tagName == "text:date" // fields
-                 || tagName == "text:time"
-                 || tagName == "text:page-number"
-                 || tagName == "text:file-name"
-                 || tagName == "text:author-name"
-                 || tagName == "text:author-initials")
+    return p;
+}
+
+void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
+    QDomElement& outputParagraph, uint& pos)
+{
+    // parse every child node of the parent
+    for( QDomNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )
+    {
+        QDomElement ts = node.toElement();
+        QString textData;
+        QString tagName = ts.tagName();
+        QDomText t = node.toText();
+
+        // Try to keep the order of the tag names by probability of happening
+        if ( tagName == "text:span" )
         {
-            textData = "#";     // field placeholder
-            appendField(doc, p, ts, pos);
+            m_styleStack.save();
+            fillStyleStack( ts );
+            parseSpanOrSimilar( doc, ts, outputParagraph, pos);
+            m_styleStack.restore();
+        }
+        else if (tagName == "text:s")
+        {
+            textData = OoUtils::expandWhitespace(ts);
         }
         else if ( tagName == "text:tab-stop" )
         {
@@ -1318,31 +1332,57 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             // One more good reason to switch to <text:tab-stop> instead...
             textData = '\t';
         }
-        else if ( t.isNull() ) // no textnode, so maybe it's a text:span
+        else if ( tagName == "text:line-break" )
         {
-            if ( tagName != "text:span" ) // TODO: are there any other possible
-                continue;                      // elements or even nested test:spans?
-            // DF: yes. There is <tab>, and footnotes, for instance (and many other fields than those above).
-
-            fillStyleStack( ts );
-
-            // We do a look ahead to eventually find a text:span that contains
-            // only a line-break. If found, we'll add it to the current string
-            // and move on to the next sibling.
-            QDomNode next = n.nextSibling();
-            if ( !next.isNull() )
+            textData = '\n';
+        }
+        else if ( tagName == "draw:image" )
+        {
+            textData = '#'; // anchor placeholder
+            // TODO
+        }
+        else if ( tagName == "text:a" )
+        {
+            m_styleStack.save();
+            QString href( ts.attribute("xlink:href") );
+            if ( href.startsWith("#") )
             {
-                QDomNode lineBreak = next.namedItem( "text:line-break" );
-                if ( !lineBreak.isNull() ) // found a line-break
-                {
-                    textData = ts.text() + "\n";
-                    n = n.nextSibling(); // move on to the next sibling
-                }
-                else
-                    textData = ts.text();
+                // We have a reference to a bookmark (### TODO)
+                // As we do not support it now, treat it as a <text:span> without formatting
+                parseSpanOrSimilar( doc, ts, outputParagraph, pos);
             }
             else
-                textData = ts.text();
+            {
+#if 0 // TODO
+                // The problem is that KPresenter's hyperlink text is not inside the normal text, but for OOWriter it is nearly a <text:span>
+                // So we have to fake.
+                QDomElement fakeParagraph, fakeFormats;
+                uint fakePos=0;
+                QString text;
+                parseSpanOrSimilar( doc, ts, fakeParagraph, fakeFormats, text, fakePos);
+                textData = '#'; // hyperlink placeholder
+                QDomElement linkElement (doc.createElement("LINK"));
+                linkElement.setAttribute("hrefName",ts.attribute("xlink:href"));
+                linkElement.setAttribute("linkName",text);
+                appendVariable(doc, ts, pos, "STRING", 9, text, linkElement);
+#endif
+            }
+            m_styleStack.restore();
+        }
+        else if (tagName == "text:date" // fields
+                 || tagName == "text:time"
+                 || tagName == "text:page-number"
+                 || tagName == "text:file-name"
+                 || tagName == "text:author-name"
+                 || tagName == "text:author-initials")
+        {
+            textData = "#";     // field placeholder
+            appendField(doc, outputParagraph, ts, pos);
+        }
+        else if ( t.isNull() ) // no textnode, we must ignore
+        {
+            kdWarning(30518) << "Ignoring tag " << ts.tagName() << endl;
+            continue;
         }
         else
             textData = t.data();
@@ -1506,13 +1546,9 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute("textbackcolor", bgColor);
         }
 
-        appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
-        p.appendChild( text );
-        m_styleStack.popToMark( StyleStack::ParagraphMark ); // remove possible text:span styles from the stack
-
+        appendShadow( doc, outputParagraph ); // this is necessary to take care of shadowed paragraphs
+        outputParagraph.appendChild( text );
     } // for each text span
-
-    return p;
 }
 
 void OoImpressImport::createStyleMap( QDomDocument &docstyles )
@@ -1657,13 +1693,6 @@ QString OoImpressImport::storeSound(const QDomElement & object, QDomElement & p,
     p.appendChild(key);
 
     return url;
-}
-
-void OoImpressImport::storeObjectStyles( const QDomElement& object )
-{
-    m_styleStack.popToMark( StyleStack::PageMark ); // remove styles of previous object
-    fillStyleStack( object );
-    m_styleStack.setMark( StyleStack::ObjectMark );
 }
 
 QDomElement OoImpressImport::saveHelper(const QString &tmpText, QDomDocument &doc)

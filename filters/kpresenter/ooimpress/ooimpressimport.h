@@ -47,7 +47,6 @@ private:
     void insertStyles( const QDomElement& styles );
     void fillStyleStack( const QDomElement& object );
     void addStyles( const QDomElement* style );
-    void storeObjectStyles( const QDomElement& object );
     void append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
     void appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
     void appendPoints(QDomDocument& doc, QDomElement& e, const QDomElement& object);
@@ -72,6 +71,8 @@ private:
     QDomElement parseTextBox( QDomDocument& doc, const QDomElement& textBox );
     QDomElement parseList( QDomDocument& doc, const QDomElement& paragraph );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& list );
+    void parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
+                             QDomElement& outputParagraph, uint& pos);
     KoFilter::ConversionStatus openFile();
 
     int m_numPicture;
