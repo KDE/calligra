@@ -152,7 +152,7 @@ void KFormulaDoc::documentRestored()
 }
 
 
-bool KFormulaDoc::initDoc()
+bool KFormulaDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
     // If nothing is loaded, do initialize here
     return TRUE;

@@ -80,7 +80,7 @@ class KivioDoc : public KoDocument
     virtual bool loadXML( QIODevice *, const QDomDocument& doc );
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );
 
-    virtual bool initDoc();
+    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
 
     virtual QCString mimeType() const { return MIME_TYPE; }
 

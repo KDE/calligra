@@ -151,6 +151,8 @@ signals:
      * This signal is emitted if the document has been saved successfully.
      */
     void documentSaved();
+    /// This signals is emmitted before the save dialog is shown
+    void saveDialogShown(bool reset);
 
 public slots:
 

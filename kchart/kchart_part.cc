@@ -44,7 +44,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName, QObject* 
     setInstance( KChartFactory::global(), false );
 
     (void)new WizardExt( this );
-    initDoc();
+    initDoc(KoDocument::InitDocAppStarting);
     m_bCanChangeValue=true;
     // hack
     setModified(true);
@@ -57,7 +57,7 @@ KChartPart::~KChartPart()
 }
 
 
-bool KChartPart::initDoc()
+bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
     // Initialize the parameter set for this chart document
     kdDebug(35001) << "InitDOC" << endl;

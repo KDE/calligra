@@ -44,7 +44,7 @@ public:
 			      bool transparent = FALSE,
 			      double zoomX = 1.0, double zoomY = 1.0);
 
-    virtual bool initDoc();
+    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
 
     /**
      * Edit the settings of the project

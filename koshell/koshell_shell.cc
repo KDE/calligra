@@ -26,6 +26,7 @@
 
 #include <ktempfile.h>
 #include <kfiledialog.h>
+//#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -137,6 +138,15 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   // The second case is a non-native file. Here we have to create a
   // filter manager, ask it to convert the file to the "closest" available
   // KOffice part and open the temporary file.
+  
+  /*if (!KIO::NetAccess::exists(url,true,0) )
+  {
+    KMessageBox::error(0L, i18n("The file %1 doesn't exist.").arg(url.url()) );
+    recentAction()->removeURL(url); //remove the file from the recent-opened-file-list
+    saveRecentFiles();
+    return false;
+  }*/
+  
   KMimeType::Ptr mimeType = KMimeType::findByURL( url );
   m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().latin1() );
 
@@ -347,8 +357,7 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
     {
         // koshell isn't starting, but this is like starting a new app:
         // offer both "open existing file" and "open new file".
-        doc->setInitDocFlags( KoDocument::InitDocAppStarting );
-        if ( doc->initDoc() )
+        if ( doc->initDoc( KoDocument::InitDocAppStarting) )
         {
             partManager()->addPart( doc, false );
             setRootDocument( doc );
@@ -416,8 +425,7 @@ void KoShellWindow::slotFileNew()
     KoDocument* newdoc = m_documentEntry.createDoc();
     if ( !newdoc )
         return;
-    newdoc->setInitDocFlags( KoDocument::InitDocFileNew );
-    if ( !newdoc->initDoc() )
+    if ( !newdoc->initDoc(KoDocument::InitDocFileNew) )
     {
       delete newdoc;
       return;

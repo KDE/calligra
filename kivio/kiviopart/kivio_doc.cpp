@@ -167,13 +167,21 @@ QPtrList<KivioDoc>& KivioDoc::documents()
   return *s_docs;
 }
 
-bool KivioDoc::initDoc()
+bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
+ if (flags==KoDocument::InitDocEmpty)
+ {
+        KivioPage *t = createPage();
+        m_pMap->addPage( t );
+        setEmpty();
+        return true;
+ }
+
   QString f;
   KoTemplateChooseDia::ReturnType ret;
   KoTemplateChooseDia::DialogType dlgtype;
 
-  if (initDocFlags() != KoDocument::InitDocFileNew) {
+  if (flags != KoDocument::InitDocFileNew) {
     dlgtype = KoTemplateChooseDia::Everything;
     initConfig();
   } else {

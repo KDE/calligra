@@ -102,13 +102,18 @@ KarbonPart::setPageLayout( KoPageLayout& layout, KoUnit::Unit _unit )
 }
 
 bool
-KarbonPart::initDoc()
+KarbonPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
+        if (flags==KoDocument::InitDocEmpty)
+        {
+                initUnit();
+                return true;
+        }
 	QString file;
 	KoTemplateChooseDia::ReturnType result;
 
         KoTemplateChooseDia::DialogType dlgtype;
-        //if (initDocFlags() != KoDocument::InitDocFileNew)
+        //if (flags != KoDocument::InitDocFileNew)
             dlgtype = KoTemplateChooseDia::Everything;
       //  else
         //    dlgtype = KoTemplateChooseDia::OnlyTemplates;

@@ -1357,8 +1357,7 @@ KPPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
     if ( !doc )
         return NULL;
 
-    doc->setInitDocFlags( KoDocument::InitDocEmbedded );
-    if ( !doc->initDoc() )
+    if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
         return NULL;
 
     QRect r = QRect( (int)_rect.left(), (int)_rect.top(),

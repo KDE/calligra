@@ -454,7 +454,7 @@ public:
 
   virtual void addView( KoView *_view );
 
-  virtual bool initDoc();
+  virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
 
 
   /**

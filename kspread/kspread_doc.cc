@@ -256,15 +256,40 @@ QValueList<KSpreadDoc*> KSpreadDoc::documents()
   return DocPrivate::s_docs;
 }
 
-bool KSpreadDoc::initDoc()
+bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
   //  ElapsedTime et( "      initDoc        " );
 
+    setInitDocFlags(flags);
     QString f;
-    KoTemplateChooseDia::ReturnType ret;
+    
+    if (flags==KoDocument::InitDocEmpty)
+    {
+        KConfig *config = KSpreadFactory::global()->config();
+        int _page=1;
+        if( config->hasGroup("Parameters" ))
+        {
+                config->setGroup( "Parameters" );
+                _page=config->readNumEntry( "NbPage",1 ) ;
+        }
 
+        for( int i=0; i<_page; i++ )
+        {
+                KSpreadSheet *t = createTable();
+                d->workbook->addTable( t );
+        }
+
+        resetURL();
+        setEmpty();
+        initConfig();
+        d->styleManager->createBuiltinStyles();
+        
+        return true;
+    }
+    
+    KoTemplateChooseDia::ReturnType ret;
     KoTemplateChooseDia::DialogType dlgtype;
-    if (initDocFlags() != KoDocument::InitDocFileNew )
+    if (flags != KoDocument::InitDocFileNew )
             dlgtype = KoTemplateChooseDia::Everything;
     else
             dlgtype = KoTemplateChooseDia::OnlyTemplates;

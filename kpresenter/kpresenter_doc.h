@@ -156,7 +156,7 @@ class KPresenterDoc : public KoDocument
     virtual bool loadXML( QIODevice *, const QDomDocument & doc );
     virtual bool loadChildren( KoStore* _store );
 
-    virtual bool initDoc();
+    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
     void initEmpty();
     virtual void setEmpty();
 

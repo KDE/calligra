@@ -488,7 +488,7 @@ void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
     }
 }
 
-bool KWDocument::initDoc()
+bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
     m_pages = 1;
 
@@ -505,8 +505,20 @@ bool KWDocument::initDoc()
 
     bool ok = FALSE;
 
+    if (flags==KoDocument::InitDocEmpty)
+    {
+        QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
+        resetURL();
+        initUnit();
+        ok = loadNativeFormat( fileName );
+        setEmpty();
+        setModified( FALSE );
+        return ok;
+    }
+    
     KoTemplateChooseDia::DialogType dlgtype;
-    if (initDocFlags() != KoDocument::InitDocFileNew)
+
+    if (flags != KoDocument::InitDocFileNew)
 	    dlgtype = KoTemplateChooseDia::Everything;
     else
 	    dlgtype = KoTemplateChooseDia::OnlyTemplates;
@@ -3114,6 +3126,7 @@ void KWDocument::removeView( KoView *_view )
 void KWDocument::addShell( KoMainWindow *shell )
 {
     connect( shell, SIGNAL( documentSaved() ), m_commandHistory, SLOT( documentSaved() ) );
+    connect( shell, SIGNAL( saveDialogShown(bool) ), this, SLOT( saveDialogShown(bool) ) );
     KoDocument::addShell( shell );
 }
 
@@ -3228,8 +3241,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
     KoDocument* doc = _e.createDoc( this );
     if ( !doc )
         return;
-    doc->setInitDocFlags( KoDocument::InitDocEmbedded );
-    if ( !doc->initDoc() )
+    if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
         return;
 
     KWChild* ch = new KWChild( this, rect.toQRect(), doc );
@@ -5389,6 +5401,40 @@ void KWDocument::setInsertDirectCursor(bool _b)
     config->setGroup( "Interface" );
     config->writeEntry( "InsertDirectCursor", _b );
     updateDirectCursorButton();
+}
+
+void KWDocument::saveDialogShown(bool reset)
+{
+        if (reset)
+        {
+            resetURL();
+            return;
+        }
+        else if (textFrameSet(0) )
+        {
+                QString first_row = textFrameSet(0)->textDocument()->text(0).left(50);
+                bool truncate = false;
+                QChar ch;
+                for (int i=0;i<first_row.length();i++)
+                {
+                        ch =  first_row.at(i);
+                        if (!truncate)
+                                if (ch.isPunct() || ch.isSpace() || ch == '.' )
+                                {
+                                        first_row.remove(i,1);
+                                        --i;
+                                }
+                                else
+                                        truncate = true;
+                        else if ( truncate && (ch.isPunct() || ch == '.' ) )
+                        {
+                                first_row.truncate(i);
+                                break;
+                        }
+                }
+                first_row = first_row.stripWhiteSpace();
+                setURL(first_row);
+        }
 }
 
 #if 0 // KWORD_HORIZONTAL_LINE

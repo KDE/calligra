@@ -39,8 +39,7 @@ KSpreadAppIface::KSpreadAppIface()
 DCOPRef KSpreadAppIface::createDoc()
 {
     KSpreadDoc* doc = new KSpreadDoc();
-    doc->setInitDocFlags( KoDocument::InitDocFileNew );
-    doc->initDoc();
+    doc->initDoc(KoDocument::InitDocFileNew);
 
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );
 }
@@ -49,7 +48,7 @@ DCOPRef KSpreadAppIface::createDoc( const QString& name )
 {
     // ######### Torben: Check for duplicate names here
     KSpreadDoc* doc = new KSpreadDoc( 0, name.latin1() );
-    doc->initDoc();
+    doc->initDoc(doc->initDocFlags());
 
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );
 }

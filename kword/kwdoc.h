@@ -151,7 +151,7 @@ public:
     static const int CURRENT_SYNTAX_VERSION;
 
 public:
-    virtual bool initDoc();
+    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
     void initEmpty();
 
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store );
@@ -806,6 +806,7 @@ protected slots:
     void slotCommandExecuted();
     void slotDocumentInfoModifed();
     void slotChapterParagraphFormatted( KoTextParag* parag );
+    void saveDialogShown(bool reset); ///called just before the save-dialog is shown
 
 protected:
     void nextParagraphNeedingCheck();

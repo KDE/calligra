@@ -573,12 +573,32 @@ KParts::PartManager *KoMainWindow::partManager()
 
 bool KoMainWindow::openDocument( const KURL & url )
 {
-    return openDocumentInternal( url );
+    if ( !KIO::NetAccess::exists(url,true,0) )
+    {
+        KMessageBox::error(0L, i18n("The file %1 doesn't exist.").arg(url.url()) );
+        m_recent->removeURL(url); //remove the file from the recent-opened-file-list
+        saveRecentFiles();
+        return false;
+    }
+    return  openDocumentInternal( url );
 }
 
 // (not virtual)
 bool KoMainWindow::openDocument( KoDocument *newdoc, const KURL & url )
 {
+    if (!KIO::NetAccess::exists(url,true,0) )
+    {
+        if ( newdoc->checkAutoSaveFile() || newdoc->initDoc(KoDocument::InitDocEmpty) ) //create an emtpy document
+        {
+                setRootDocument( newdoc );
+                newdoc->setURL(url);
+                QString const mime = KMimeType::findByURL(url)->name();
+                if ( mime != KMimeType::defaultMimeType() )
+                        newdoc->setMimeType( mime.utf8() );
+                return true;
+        }
+        return false;
+    }
     return openDocumentInternal( url, newdoc );
 }
 
@@ -598,6 +618,7 @@ bool KoMainWindow::openDocumentInternal( const KURL & url, KoDocument *newdoc )
     bool openRet = (!isImporting ()) ? newdoc->openURL(url) : newdoc->import(url);
     if(!newdoc || !openRet)
     {
+        newdoc->removeShell(this);
         delete newdoc;
         return false;
     }
@@ -713,10 +734,20 @@ bool KoMainWindow::exportConfirmation( const QCString &outputFormat )
 }
 
 bool KoMainWindow::saveDocument( bool saveas )
-{
+{    
     KoDocument* pDoc = rootDocument();
     if(!pDoc)
         return true;
+
+    bool reset_url;
+    if (pDoc->url().isEmpty() )
+    {
+        emit saveDialogShown(false);
+        reset_url = true;
+    }
+    else
+        reset_url = false;
+
     connect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(pDoc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     connect(pDoc, SIGNAL(canceled( const QString & )),
@@ -768,7 +799,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         // force the user to choose outputMimeType
         saveas = true;
     }
-
+    
     bool ret = false;
 
     if ( pDoc->url().isEmpty() || saveas )
@@ -777,7 +808,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog *dialog = new KoFileDialog(isExporting() ? d->m_lastExportURL.url () : suggestedURL.url (),
+        KoFileDialog *dialog = new KoFileDialog( (isExporting() && !d->m_lastExportURL.isEmpty() )? d->m_lastExportURL.url () : suggestedURL.url (),
                                                 QString::null, this, "file dialog", true);
 
         if (!isExporting())
@@ -959,6 +990,8 @@ bool KoMainWindow::saveDocument( bool saveas )
     }
 #endif
 
+    if (!ret && reset_url)
+        saveDialogShown(true);
     return ret;
 }
 
@@ -1060,8 +1093,7 @@ void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFl
     if (!newdoc)
         return;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    newdoc->setInitDocFlags( (KoDocument::InitDocFlags)initDocFlags );
-    if(!newdoc->initDoc())
+    if(!newdoc->initDoc( (KoDocument::InitDocFlags)initDocFlags))
     {
         delete newdoc;
         return;
@@ -1114,7 +1146,7 @@ void KoMainWindow::slotFileOpen()
     if ( url.isEmpty() )
         return;
 
-    (void) openDocumentInternal( url, 0L );
+    (void) openDocument( url );
 }
 
 void KoMainWindow::slotFileOpenRecent( const KURL & url )

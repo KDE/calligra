@@ -24,7 +24,7 @@ public:
                 const char* name = 0, bool singleViewMode = false);
 	virtual ~KugarPart();
 
-	virtual bool initDoc();
+	virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
 
 	virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
 	virtual bool saveOasis(KoStore*, KoXmlWriter*);

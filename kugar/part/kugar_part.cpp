@@ -115,7 +115,7 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc)
         return ok;
 }
 
-bool KugarPart::initDoc()
+bool KugarPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
         QString filename;
 	bool ok=false;

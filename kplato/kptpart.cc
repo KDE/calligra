@@ -58,12 +58,21 @@ KPTPart::~KPTPart() {
 }
 
 
-bool KPTPart::initDoc() {
+bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
     bool result = true;
+    
+    if (flags==KoDocument::InitDocEmpty)
+    {
+        m_project = new KPTProject();
+        setAutoSave(0); // disable
+        setModified(false);
+        return true;
+    }
+    
     QString templateDoc;
     KoTemplateChooseDia::ReturnType ret;
     KoTemplateChooseDia::DialogType dlgtype;
-    if (initDocFlags() != KoDocument::InitDocFileNew )
+    if (flags != KoDocument::InitDocFileNew )
 	    dlgtype = KoTemplateChooseDia::Everything;
     else
 	    dlgtype = KoTemplateChooseDia::OnlyTemplates;

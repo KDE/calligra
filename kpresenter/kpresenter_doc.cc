@@ -2837,13 +2837,25 @@ void KPresenterDoc::updateHeaderFooterPosition( )
     repaint(_footer);
 }
 
-bool KPresenterDoc::initDoc()
+bool KPresenterDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
+
+    if (flags==KoDocument::InitDocEmpty)
+    {
+        QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
+                                 KPresenterFactory::global() ) );
+        objStartY = 0;
+        _clean = true;
+        bool ok = loadNativeFormat( fileName );
+        resetURL();
+        setEmpty();
+        return ok;
+    }
+
     QString _template;
     KoTemplateChooseDia::ReturnType ret;
-
     KoTemplateChooseDia::DialogType dlgtype;
-    if (initDocFlags() != InitDocFileNew)
+    if (flags != InitDocFileNew)
             dlgtype = KoTemplateChooseDia::Everything;
     else
             dlgtype = KoTemplateChooseDia::OnlyTemplates;

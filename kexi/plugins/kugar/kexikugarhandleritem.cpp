@@ -91,7 +91,7 @@ KoDocument *KexiKugarHandlerItem::designer(bool newReport) {
     m_designer=KParts::ComponentFactory::createPartInstanceFromLibrary<KoDocument>(QFile::encodeName("libkudesignerpart"),
                                                                                    0,0,this,0,config);
     if (newReport) {
-        if (!m_designer->initDoc() ) {
+        if (!m_designer->initDoc(KoDocument::InitDocAppStarting) ) {
 			delete m_designer;
 			m_designer=0;
         }
