@@ -780,6 +780,10 @@ void KWView::setupActions()
     actionOpenLink = new KAction( i18n( "Open link" ), 0,
                                      this, SLOT( openLink() ),
                                      actionCollection(), "open_link" );
+    actionChangeLink=new KAction( i18n("Change Link"), 0,
+                                  this,SLOT(changeLink()),
+                                  actionCollection(), "change_link");
+
 
     actionShowDocStruct = new KToggleAction( i18n( "Show doc structure" ), 0,
                                             this, SLOT( showDocStructure() ),
@@ -3975,6 +3979,31 @@ void KWView::openLink()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->openLink();
+}
+
+void KWView::changeLink()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        KoLinkVariable * var=edit->linkVariable();
+        if(var)
+        {
+            QString oldhref= var->url();
+            QString oldLinkName=var->value();
+            QString link=oldLinkName;
+            QString ref=oldhref;
+            if(KoInsertLinkDia::createLinkDia(link, ref))
+            {
+                if(!link.isEmpty() && !ref.isEmpty())
+                {
+                    KWChangeLinkVariable*cmd=new KWChangeLinkVariable( i18n("Change link"), m_doc,oldhref, ref, oldLinkName,link, var);
+                    cmd->execute();
+                    m_doc->addCommand(cmd);
+                }
+            }
+        }
+    }
 }
 
 void KWView::showDocStructure()

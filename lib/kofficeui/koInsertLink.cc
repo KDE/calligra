@@ -62,6 +62,7 @@ bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName)
     bool res = false;
 
     KoInsertLinkDia *dlg = new KoInsertLinkDia( 0L, "Insert Link" );
+    dlg->setHrefLinkName(_hrefName,_linkName);
     if ( dlg->exec() == Accepted )
     {
         _linkName = dlg->linkName();
@@ -73,7 +74,31 @@ bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName)
     return res;
 }
 
-QString KoInsertLinkDia::linkName()
+void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link)
+{
+    if( _href.isEmpty())
+        return;
+    if(_href.find("http://")!=-1)
+    {
+        internetLink->setHrefName(_href);
+        internetLink->setLinkName(_link);
+        showPage(0);
+    }
+    else if(_href.find("file:/")!=-1)
+    {
+        fileLink->setHrefName(_href);
+        fileLink->setLinkName(_link);
+        showPage(2);
+    }
+    else if(_href.find("mailto:")!=-1)
+    {
+        mailLink->setHrefName(_href);
+        mailLink->setLinkName(_link);
+        showPage(1);
+    }
+}
+
+QString KoInsertLinkDia::linkName()const
 {
     QString result;
     switch(activePageIndex())
@@ -165,7 +190,18 @@ QString internetLinkPage::createInternetLink()
     return result;
 }
 
-QString internetLinkPage::linkName()
+
+void internetLinkPage::setLinkName(const QString & _name)
+{
+    m_linkName->setText(_name);
+}
+
+void internetLinkPage::setHrefName(const QString &_name)
+{
+    m_hrefName->setText(_name);
+}
+
+QString internetLinkPage::linkName()const
 {
   return m_linkName->text();
 }
@@ -223,7 +259,18 @@ QString mailLinkPage::createMailLink()
     return result;
 }
 
-QString mailLinkPage::linkName()
+
+void mailLinkPage::setLinkName(const QString & _name)
+{
+    m_linkName->setText(_name);
+}
+
+void mailLinkPage::setHrefName(const QString &_name)
+{
+    m_hrefName->setText(_name);
+}
+
+QString mailLinkPage::linkName()const
 {
   return m_linkName->text();
 }
@@ -282,7 +329,17 @@ QString fileLinkPage::createFileLink()
     return result;
 }
 
-QString fileLinkPage::linkName()
+void fileLinkPage::setLinkName(const QString & _name)
+{
+    m_linkName->setText(_name);
+}
+
+void fileLinkPage::setHrefName(const QString &_name)
+{
+    m_hrefName->lineEdit()->setText(_name);
+}
+
+QString fileLinkPage::linkName()const
 {
   return m_linkName->text();
 }

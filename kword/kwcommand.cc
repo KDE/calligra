@@ -1238,3 +1238,27 @@ void KWChangeCustomVariableValue::unexecute()
     m_var->setValue(oldValue);
     m_doc->recalcVariables( VT_CUSTOM );
 }
+
+KWChangeLinkVariable::KWChangeLinkVariable( const QString &name, KWDocument *_doc,const QString & _oldHref, const QString & _newHref, const QString & _oldLink,const QString &_newLink, KoLinkVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    oldHref(_oldHref),
+    newHref(_newHref),
+    oldLink(_oldLink),
+    newLink(_newLink),
+    m_var(var)
+{
+}
+
+
+void KWChangeLinkVariable::execute()
+{
+    m_var->setLink(newLink,newHref);
+    m_doc->recalcVariables(VT_LINK);
+}
+
+void KWChangeLinkVariable::unexecute()
+{
+    m_var->setLink(oldLink,oldHref);
+    m_doc->recalcVariables(VT_LINK);
+}

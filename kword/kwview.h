@@ -304,6 +304,7 @@ public slots:
     void configureHeaderFooter();
     void inlineFrame();
     void openLink();
+    void changeLink();
     void showDocStructure();
 
     void slotSoftHyphen();
@@ -463,6 +464,7 @@ private:
     KToggleAction *actionInlineFrame;
 
     KAction *actionOpenLink;
+    KAction * actionChangeLink;
 
     KAction *actionRefreshAllVariable;
 

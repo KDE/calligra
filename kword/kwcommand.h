@@ -29,6 +29,7 @@ class KWFrameSet;
 class KWTableFrameSet;
 class KWDocument;
 class KoCustomVariable;
+class KoLinkVariable;
 /**
  * Command created when pasting formatted text
  * [relies on KWord's XML structure, so not moved to kotext]
@@ -483,6 +484,22 @@ class KWChangeCustomVariableValue : public KNamedCommand
     QString newValue;
     QString oldValue;
     KoCustomVariable *m_var;
+};
+
+class KWChangeLinkVariable : public KNamedCommand
+{
+ public:
+    KWChangeLinkVariable( const QString &name, KWDocument *_doc,const QString & _oldHref, const QString & _newHref, const QString & _oldLink,const QString &_newLink, KoLinkVariable *var);
+    ~KWChangeLinkVariable(){};
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    QString oldHref;
+    QString newHref;
+    QString oldLink;
+    QString newLink;
+    KoLinkVariable *m_var;
 };
 
 #endif

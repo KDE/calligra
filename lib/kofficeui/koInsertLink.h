@@ -31,8 +31,10 @@ class internetLinkPage : public QWidget
   Q_OBJECT
 public:
   internetLinkPage( QWidget *parent = 0, char *name = 0 );
-  QString linkName();
+  QString linkName()const;
   QString hrefName();
+    void setLinkName(const QString & _name);
+    void setHrefName(const QString &_name);
 private:
   QString createInternetLink();
   QLineEdit* m_linkName, *m_hrefName;
@@ -47,8 +49,11 @@ class mailLinkPage : public QWidget
   Q_OBJECT
 public:
   mailLinkPage( QWidget *parent = 0, char *name = 0 );
-  QString linkName();
+  QString linkName()const;
   QString hrefName();
+    void setLinkName(const QString & _name);
+    void setHrefName(const QString &_name);
+
 private slots:
   void textChanged ( const QString & );
 private:
@@ -63,8 +68,11 @@ class fileLinkPage : public QWidget
   Q_OBJECT
 public:
   fileLinkPage( QWidget *parent = 0, char *name = 0 );
-  QString linkName();
-  QString hrefName();
+  QString linkName()const;
+    QString hrefName();
+    void setLinkName(const QString & _name);
+    void setHrefName(const QString &_name);
+
 private slots:
   void textChanged ( const QString & );
 private:
@@ -83,9 +91,9 @@ public:
     static bool createLinkDia(QString & linkName, QString & hrefName);
 
     //internal
-    QString linkName();
+    QString linkName()const;
     QString hrefName();
-
+    void setHrefLinkName(const QString &_href, const QString &_link);
 protected slots:
     virtual void slotOk();
     void slotTextChanged (  );
