@@ -33,10 +33,11 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <kinstance.h>
-#include <klocale.h>
 #include <kiconloader.h>
 
 #include <stdio.h>
+
+#define i18n( x ) x
 
 /***************************************************
  *
