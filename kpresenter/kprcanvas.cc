@@ -2957,7 +2957,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                 _step++;
                 _h = _step * blockSize / _steps;
 
-                for( unsigned i=0; i < _pix2.height(); i += blockSize ) 
+                for( unsigned i=0; i < _pix2.height(); i += blockSize )
                   bitBlt( this, 0, i, &_pix2, 0, i, _pix2.width(), _h );
 
                 _time.restart();
@@ -3008,12 +3008,12 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                 _w = ( _pix2.width()/( 2 * _steps ) ) * _step;
                 _w = _w > _pix2.width() / 2 ? _pix2.width() / 2 : _w;
                 _h = _w * _pix2.height() / _pix2.width();
-                _h = _h > _pix2.height() / 2 ? _pix2.height() / 2 : _h; 
+                _h = _h > _pix2.height() / 2 ? _pix2.height() / 2 : _h;
 
                 bitBlt( this, 0, 0, &_pix2, 0, 0, _w, _pix2.height() );
                 bitBlt( this, _pix2.width()-_w, 0, &_pix2, _pix2.width()-_w, 0, _w, _pix2.height() );
                 bitBlt( this, 0, 0, &_pix2, 0, 0, _pix2.width(), _h );
-                bitBlt( this, 0, _pix2.height()-_h, &_pix2, 0, _pix2.height()-_h, _pix2.width(), _h ); 
+                bitBlt( this, 0, _pix2.height()-_h, &_pix2, 0, _pix2.height()-_h, _pix2.width(), _h );
                 _time.restart();
             }
             if( _w >= _pix2.width()/2 ) break;
@@ -3036,9 +3036,9 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                 _w = ( _pix2.width()/( 2 * _steps ) ) * _step;
                 _w = _w > _pix2.width() / 2 ? _pix2.width() / 2 : _w;
                 _h = _w * _pix2.height() / _pix2.width();
-                _h = _h > _pix2.height() / 2 ? _pix2.height() / 2 : _h; 
+                _h = _h > _pix2.height() / 2 ? _pix2.height() / 2 : _h;
 
-                bitBlt( this, _pix2.width()/2-_w, _pix2.height()/2-_h, &_pix2, 
+                bitBlt( this, _pix2.width()/2-_w, _pix2.height()/2-_h, &_pix2,
                    _pix2.width()/2-_w, _pix2.height()/2-_h, _w*2, _h*2 );
                 _time.restart();
             }
@@ -3067,7 +3067,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                 for( unsigned yp = 0; yp < _pix2.height(); yp += blocksize )
                 {
                   unsigned xp = ((yp/blocksize) & 1) ? blocksize : 0;
-                  if( ( xp > 0 ) && ( _w > blocksize ) ) 
+                  if( ( xp > 0 ) && ( _w > blocksize ) )
                     bitBlt( this, 0, yp, &_pix2, 0, yp, _w-blocksize, blocksize );
                   for( ; xp < _pix2.width(); xp += 2*blocksize )
                     bitBlt( this, xp, yp, &_pix2, xp, yp, _w, blocksize );
@@ -3088,7 +3088,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
         unsigned blocksize = _pix2.height() / 8;
 
         _steps /= 2;
-        for ( ; ; ) 
+        for ( ; ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -3100,7 +3100,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                 for( unsigned xp = 0; xp < _pix2.width(); xp += blocksize )
                 {
                   unsigned yp = ((xp/blocksize) & 1) ? blocksize : 0;
-                  if( ( yp > 0 ) && ( _h > blocksize ) ) 
+                  if( ( yp > 0 ) && ( _h > blocksize ) )
                     bitBlt( this, xp, 0, &_pix2, xp, 0, blocksize, _h-blocksize );
                   for( ; yp < _pix2.height(); yp += 2*blocksize )
                     bitBlt( this, xp, yp, &_pix2, xp, yp, blocksize, _h );
@@ -3120,7 +3120,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 
         int dheight = _pix2.height();
         int dwidth = _pix2.width();
- 
+
         _h = 0;
         for ( ; ; )
         {
@@ -3287,7 +3287,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
         int dwidth = _pix2.width();;
 
         _w = 0;
-        for ( ; ; ) 
+        for ( ; ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -3462,7 +3462,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
         int dwidth = _pix2.width();;
 
         _w = _h = 0;
-        for ( ; ; ) 
+        for ( ; ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -3491,7 +3491,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
         int dwidth = _pix2.width();;
 
         _w = _h = 0;
-        for ( ; ; ) 
+        for ( ; ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -3522,7 +3522,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
         int dwidth = _pix2.width();;
 
         _w = _h = 0;
-        for ( ; ; ) 
+        for ( ; ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -3550,8 +3550,8 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
         int dheight = _pix2.height();
         int dwidth = _pix2.width();;
 
-        _w = _h = 0; 
-        for ( ; ; ) 
+        _w = _h = 0;
+        for ( ; ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -3622,9 +3622,9 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
     case PEF_RANDOM:
     {
         KRandomSequence random;
-        
+
         // assume PEF_RANDOM is the last effect !
-        changePages( _pix1, _pix2, static_cast<PageEffect>( random.getLong( PEF_RANDOM ) ) ); 
+        changePages( _pix1, _pix2, static_cast<PageEffect>( random.getLong( PEF_RANDOM ) ) );
 
     } break;
 
@@ -5507,6 +5507,9 @@ void KPrCanvas::moveObject( int x, int y, bool key )
 
     if( m_boundingRect.topLeft() == boundingRect.topLeft() )
         return; // nothing happende (probably due to the grid)
+
+    scrollCanvas();
+
     KoPoint _move=m_boundingRect.topLeft()-boundingRect.topLeft();
     KMacroCommand *macro=new KMacroCommand(i18n( "Move object(s)" ));
     bool macroCreate=false;
@@ -5978,5 +5981,29 @@ KPrPage *KPrCanvas::stickyPage()
 
 void KPrCanvas::scrollCanvas()
 {
-    //todo
+    KoRect visiblePage=m_view->zoomHandler()->unzoomRect(visibleRect());
+    double tmpdiffx=m_view->zoomHandler()->unzoomItY(diffx());
+    double tmpdiffy=m_view->zoomHandler()->unzoomItY(diffy());
+    if( m_boundingRect.bottom()>(visiblePage.bottom()+tmpdiffy))
+    {
+        int y=m_view->zoomHandler()->zoomItY(m_boundingRect.bottom())-(m_view->zoomHandler()->zoomItY(visiblePage.bottom()+tmpdiffy));
+        m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()+y);
+    }
+    else if( m_boundingRect.top()<visiblePage.top()+tmpdiffy)
+    {
+        int y=(m_view->zoomHandler()->zoomItY(visiblePage.top()+tmpdiffy))-m_view->zoomHandler()->zoomItY(m_boundingRect.top());
+        m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()-y);
+    }
+
+    if( m_boundingRect.left()<(visiblePage.left()+tmpdiffx))
+    {
+        int x=m_view->zoomHandler()->zoomItX(visiblePage.left()+tmpdiffx) - m_view->zoomHandler()->zoomItX(m_boundingRect.left());
+        m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()-x);
+    }
+    else if ( m_boundingRect.right()>(visiblePage.right()+tmpdiffx))
+    {
+        int x=m_view->zoomHandler()->zoomItX(m_boundingRect.right())-(m_view->zoomHandler()->zoomItX(visiblePage.right()+tmpdiffy));
+        m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+x);
+    }
+
 }
