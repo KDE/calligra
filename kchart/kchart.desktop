@@ -2,7 +2,6 @@
 Name=KChart
 Name[eo]=Diagramilo
 Name[is]=Rit
-Name[mk]=K-график
 Name[pt_BR]=Gerador de diagramas
 Comment=Chart
 Comment[ca]=Gràfic
@@ -17,7 +16,7 @@ Comment[hu]=A KOffice grafikonkészítője
 Comment[is]=Gröf
 Comment[it]=Grafico
 Comment[ja]=チャート
-Comment[mk]=График
+Comment[mk]=Графици
 Comment[nl]=Diagram
 Comment[no]=Graf
 Comment[no_NY]=Diagram

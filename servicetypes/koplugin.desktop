@@ -30,11 +30,13 @@ Comment[ro]=Modul KOffice
 Comment[ru]=Плагин KOffice
 Comment[sk]=Zásuvný modul Koffice
 Comment[sl]=Vstavek za KOffice
+Comment[sr]=Plugin za KOffice
 Comment[sv]=Insticksprogram till KOffice
 Comment[ta]=KOffice ¦ºÕ¸ø
 Comment[tr]=KOffice Ek Yazılımı
 Comment[uk]=Додаток KOffice
 Comment[zh_CN.GB2312]=KOffice 插件
+Comment[zh_TW.Big5]=KOffice 外掛程式
 
 [PropertyDef::MenuEntries]
 Type=QStringList

@@ -31,11 +31,13 @@ Comment[ro]=Dialog filtru KOffice
 Comment[ru]=Фильтр диалог KOffice
 Comment[sk]=Dialógové okne pre filtre Koffice
 Comment[sl]=Pogovorno okno s filtrom za KOffice
+Comment[sr]=KOffice filter dijalog
 Comment[sv]=KOffice-filter dialog
 Comment[ta]=KOffice ÅÊ¸ðÊ ¯¨ÃÂ¡¼ø
 Comment[tr]=KOffice Süzgeci İletişim Kutusu
 Comment[uk]=Діалог фільтру KOffice
 Comment[zh_CN.GB2312]=KOffice 过滤程序对话
+Comment[zh_TW.Big5]=KOffice 過濾器對話框
 
 [PropertyDef::Import]
 Type=QString

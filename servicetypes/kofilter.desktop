@@ -30,11 +30,13 @@ Comment[ro]=Filtru KOffice
 Comment[ru]=Фильтр KOffice
 Comment[sk]=Filter Koffice
 Comment[sl]=Filter za KOffice
+Comment[sr]=Filter za KOffice
 Comment[sv]=KOffice-filter
 Comment[ta]=KOffice ÅÊ¸ðÊ
 Comment[tr]=KOffice Süzgeci
 Comment[uk]=Фільтр KOffice
 Comment[zh_CN.GB2312]=KOffice 过滤程序
+Comment[zh_TW.Big5]=KOffice 過濾器
 
 [PropertyDef::Import]
 Type=QString

@@ -30,11 +30,13 @@ Comment[ro]=Componentă KOffice
 Comment[ru]=Компонента KOffice
 Comment[sk]=Zložka Koffice
 Comment[sl]=Komponenta za KOffice
+Comment[sr]=KOffice komponenta
 Comment[sv]=KOffice-komponent
 Comment[ta]=KOffice ¯ÚôÒ
 Comment[tr]=KOffice Bileşeni
 Comment[uk]=Компонента KOffice
 Comment[zh_CN.GB2312]=KOffice 部件
+Comment[zh_TW.Big5]=KOffice 元件
 
 [PropertyDef::X-KDE-NativeMimeType]
 Type=QString

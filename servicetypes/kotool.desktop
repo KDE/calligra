@@ -31,11 +31,13 @@ Comment[ro]=Utilitar KOffice
 Comment[ru]=Утилита для KOffice
 Comment[sk]=Nástroje KOffice
 Comment[sl]=Orodje za KOffice
+Comment[sr]=Alat za KOffice
 Comment[sv]=Verktyg till KOffice
 Comment[ta]=KOffice ¸ÕÅ¢
 Comment[tr]=KOffice Aracı
 Comment[uk]=Утіліта KOffice
 Comment[zh_CN.GB2312]=KOffice 工具
+Comment[zh_TW.Big5]=KOffice 工具
 
 [PropertyDef::Commands]
 Type=QStringList
