@@ -536,7 +536,7 @@ If you hold down the CTRL key while shifting, the object will be shifted horizon
 <sect3 id="filling-objects">
 <title>Filling objects</title>
 
-<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="PNG"/></imageobject></mediaobject> To fill an object with a colour select the object and left-click on the desired colour in the colour palette. If the required colour is not in the palette or a pattern fill is required, proceed as follows: 
+<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="PNG"/></imageobject></mediaobject> To fill an object with a color select the object and left-click on the desired color in the color palette. If the required color is not in the palette or a pattern fill is required, proceed as follows: 
 <orderedlist><listitem>
 <para>select the object to be filled.</para>
 </listitem>
@@ -550,11 +550,11 @@ If you hold down the CTRL key while shifting, the object will be shifted horizon
 <para>select the "Fill" tab in the dialog. </para>
 </listitem>
 <listitem>
-<para>choose to fill with a solid colour, a pattern, or a gradient colour.</para>
+<para>choose to fill with a solid color, a pattern, or a gradient color.</para>
 </listitem>
 </orderedlist>
 
-NOTE: Remember to choose a colour by clicking the coloured buttons in the dialog else it might appear that there is no fill. </para>
+NOTE: Remember to choose a color by clicking the colored buttons in the dialog else it might appear that there is no fill. </para>
 </sect3>
 </sect2>
 </sect1>
@@ -819,7 +819,7 @@ Dialogs are similar to those for opening files.</para>
 </sect1>
 
 <sect1 id="handling-colours">
-<title>Handling colours</title>
+<title>Handling colors</title>
 
 <para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="PNG"/></imageobject></mediaobject> The colour handling process in KIllustrator is very simple. Generally, a left-click on a colour in the colour palette changes the fill colour of the selected object(s); a right-click changes the outline colour (or the text colour) of the selected object(s). If the desired colour is not in the colour palette, then proceed as follows: </para>
 
