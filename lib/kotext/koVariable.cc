@@ -50,7 +50,7 @@ void KoVariableSettings::save( QDomElement &parentElem )
     {
         QDomElement elem = parentElem.ownerDocument().createElement( "VARIABLESETTINGS" );
         parentElem.appendChild( elem );
-        elem.setAttribute( "number_offset", m_offset );
+        elem.setAttribute( "startingPageNumber", m_offset );
     }
 }
 
@@ -59,7 +59,7 @@ void KoVariableSettings::load( QDomElement &elem )
     QDomElement e = elem.namedItem( "VARIABLESETTINGS" ).toElement();
     if (!e.isNull())
     {
-        m_offset = e.attribute("number_offset").toInt();
+        m_offset = e.attribute("startingPageNumber").toInt();
     }
 }
 
