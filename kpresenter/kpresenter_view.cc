@@ -644,7 +644,7 @@ void KPresenterView::insertPicture()
     mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( m_pKPresenterDoc->picturePath(), QString::null, 0, 0, true );
+    KFileDialog fd( m_pKPresenterDoc->picturePath(), QString::null, this, 0, true );
     fd.setCaption( i18n( "Insert Picture" ) );
     fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
@@ -696,7 +696,7 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
     QStringList mimetypes;
     mimetypes << mimetype;
 
-    KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
+    KFileDialog fd( oldFile, QString::null, this, 0, TRUE );
     fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Save Picture"));
     if ( fd.exec() == QDialog::Accepted )
@@ -1293,7 +1293,7 @@ void KPresenterView::extraWebPres()
         return;
     else if ( ret == KMessageBox::Yes )
     {
-        url = KFileDialog::getOpenURL( QString::null, i18n("*.kpweb|KPresenter HTML Presentation (*.kpweb)") );
+        url = KFileDialog::getOpenURL( QString::null, i18n("*.kpweb|KPresenter HTML Presentation (*.kpweb)"), this );
 
         if( url.isEmpty() )
             return;
@@ -1878,7 +1878,7 @@ void KPresenterView::penChosen()
     QColor c = actionPenColor->color();
     if ( !m_canvas->currentTextObjectView() )
     {
-        KCommand * cmd( getPenCmd( i18n( "Change Pen Color" ), QPen(c), 
+        KCommand * cmd( getPenCmd( i18n( "Change Pen Color" ), QPen(c),
                                    L_NORMAL, L_NORMAL, PenCmd::Color ) );
         if( cmd )
             m_pKPresenterDoc->addCommand( cmd );
@@ -1900,10 +1900,10 @@ void KPresenterView::brushChosen()
     {
         KMacroCommand * macro= NULL;
         KCommand * cmd = NULL;
-        QBrush newBrush( c ); 
-        
-        cmd = m_canvas->activePage()->setBrush( newBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false, 
-                                                0, 0, BrushCmd::BrushColor | BrushCmd::BrushStyle | 
+        QBrush newBrush( c );
+
+        cmd = m_canvas->activePage()->setBrush( newBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false,
+                                                0, 0, BrushCmd::BrushColor | BrushCmd::BrushStyle |
                                                 BrushCmd::BrushGradientSelect );
         if( cmd )
         {
@@ -1912,8 +1912,8 @@ void KPresenterView::brushChosen()
             macro->addCommand( cmd );
         }
 
-        cmd = stickyPage()->setBrush( newBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false, 
-                                      0, 0, BrushCmd::BrushColor | BrushCmd::BrushStyle | 
+        cmd = stickyPage()->setBrush( newBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false,
+                                      0, 0, BrushCmd::BrushColor | BrushCmd::BrushStyle |
                                       BrushCmd::BrushGradientSelect );
         if( cmd )
         {
@@ -1921,7 +1921,7 @@ void KPresenterView::brushChosen()
                 macro = new KMacroCommand( i18n( "Change Brush Color" ) );
             macro->addCommand(cmd);
         }
-        
+
         if( macro )
             m_pKPresenterDoc->addCommand( macro );
         else
@@ -2006,7 +2006,7 @@ void KPresenterView::extraLineBeginDoubleLineArrow()
 
 void KPresenterView::setExtraLineBegin(LineEnd lb)
 {
-    KCommand * cmd( getPenCmd( i18n("Change Line Begin"), QPen(), 
+    KCommand * cmd( getPenCmd( i18n("Change Line Begin"), QPen(),
                                lb, L_NORMAL, PenCmd::LineBegin ) );
     if( cmd )
         kPresenterDoc()->addCommand( cmd );
@@ -2056,7 +2056,7 @@ void KPresenterView::extraLineEndDoubleLineArrow()
 
 void KPresenterView::setExtraLineEnd(LineEnd le)
 {
-    KCommand * cmd( getPenCmd( i18n("Change Line End"), QPen(), 
+    KCommand * cmd( getPenCmd( i18n("Change Line End"), QPen(),
                                L_NORMAL, le, PenCmd::LineEnd ) );
     if( cmd )
         kPresenterDoc()->addCommand( cmd );
@@ -2096,9 +2096,9 @@ void KPresenterView::extraPenStyleNoPen()
 
 void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
 {
-    KCommand * cmd( getPenCmd( i18n("Change Pen Style"), QPen(style), 
+    KCommand * cmd( getPenCmd( i18n("Change Pen Style"), QPen(style),
                                L_NORMAL, L_NORMAL, PenCmd::Style ) );
-    
+
     if( cmd )
         kPresenterDoc()->addCommand( cmd );
     else
@@ -2159,7 +2159,7 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
 {
     QPen tmpPen;
     tmpPen.setWidth( width );
-    KCommand * cmd( getPenCmd( i18n("Change Pen Width"), tmpPen, 
+    KCommand * cmd( getPenCmd( i18n("Change Pen Width"), tmpPen,
                                L_NORMAL, L_NORMAL, PenCmd::Width ) );
 
     if( cmd )
@@ -3284,7 +3284,7 @@ void KPresenterView::styleOk()
 
     if ((confPenDia = styleDia->getConfPenDia()))
     {
-        cmd = getPenCmd( i18n( "Apply Properties" ), confPenDia->getPen(), confPenDia->getLineBegin(), 
+        cmd = getPenCmd( i18n( "Apply Properties" ), confPenDia->getPen(), confPenDia->getLineBegin(),
                          confPenDia->getLineEnd(), confPenDia->getPenConfigChange() );
         if(cmd)
         {
@@ -3738,7 +3738,7 @@ void KPresenterView::changePicture( const QString & filename )
     mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( filename, QString::null, 0, 0, true );
+    KFileDialog fd( filename, QString::null, this, 0, true );
     fd.setCaption(i18n("Select New Picture"));
     fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
@@ -4675,7 +4675,7 @@ void KPresenterView::insertLink()
         return;
     QString link;
     QString ref;
-    if(KoInsertLinkDia::createLinkDia(link, ref, QStringList(), false))
+    if(KoInsertLinkDia::createLinkDia(link, ref, QStringList(), false, this))
     {
         if(!link.isEmpty() && !ref.isEmpty())
             edit->insertLink(link, ref);
@@ -4694,7 +4694,7 @@ void KPresenterView::changeLink()
             QString oldLinkName=var->value();
             QString link=oldLinkName;
             QString ref=oldhref;
-            if(KoInsertLinkDia::createLinkDia(link, ref, QStringList(), false))
+            if(KoInsertLinkDia::createLinkDia(link, ref, QStringList(), false, this))
             {
                 if(!link.isEmpty() && !ref.isEmpty())
                 {
@@ -6799,7 +6799,7 @@ void KPresenterView::autoSpellCheck()
 
 void KPresenterView::insertFile(  )
 {
-    KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
+    KFileDialog fd( QString::null, QString::null, this, 0, TRUE );
     fd.setMimeFilter( "application/x-kpresenter" );
     fd.setCaption(i18n("Insert File"));
 
@@ -7092,7 +7092,7 @@ KCommand * KPresenterView::getPenCmd( const QString &name, QPen pen, LineEnd lb,
         macro = new KMacroCommand( name );
         macro->addCommand( cmd );
     }
-    
+
     cmd = stickyPage()->setPen( pen, lb, le, flags );
     if( cmd )
     {

@@ -68,7 +68,7 @@
 KPConfig::KPConfig( KPresenterView* parent )
     : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
                   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
-                  KDialogBase::Ok)
+                  KDialogBase::Ok, parent)
 
 {
     m_doc = parent->kPresenterDoc();
