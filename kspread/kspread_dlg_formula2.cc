@@ -34,7 +34,7 @@
 #include <iostream.h>
 #include <knumvalidator.h>
 
-KSpreadDlgFormula2::KSpreadDlgFormula2( KSpreadView* parent, const char* name)
+KSpreadDlgFormula2::KSpreadDlgFormula2( KSpreadView* parent, const char* name,const QString& formulaName)
     : QDialog( parent, name )
 {
 
@@ -160,6 +160,11 @@ KSpreadDlgFormula2::KSpreadDlgFormula2( KSpreadView* parent, const char* name)
     m_pView->canvasWidget()->startChoose();
 
     qApp->installEventFilter( this );
+    if(!formulaName.isEmpty())
+        {
+        functions->setCurrentItem(functions->index(functions->findItem(formulaName)));
+        slotDoubleClicked(functions->findItem(formulaName));
+        }
 }
 
 bool KSpreadDlgFormula2::eventFilter( QObject* obj, QEvent* ev )

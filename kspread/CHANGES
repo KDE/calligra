@@ -374,3 +374,7 @@ can be transforme in Double Value => Create_formula works fine.
 
 -David Faure works too on bugs, thanks.
 So I think that kspread should be the best spread on linux :).
+
+2000-04-09 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add Improved "insert formula"

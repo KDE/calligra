@@ -61,7 +61,7 @@ class KSpreadDlgFormula2 : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadDlgFormula2( KSpreadView* parent, const char* name);
+  KSpreadDlgFormula2( KSpreadView* parent, const char* name,const QString& formulaName=0);
   void changeFunction();
   QString make_formula( const QString& _text,type_create elementType);
 public slots:

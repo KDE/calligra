@@ -58,7 +58,6 @@
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
 #include "kspread_view.h"
-#include "kspread_dlg_formula.h"
 #include "kspread_dlg_formula2.h"
 #include "kspread_dlg_special.h"
 #include "kspread_dlg_goto.h"
@@ -74,7 +73,6 @@
 #include "kspread_editors.h"
 #include "kspread_dlg_format.h"
 #include "kspread_dlg_oszi.h"
-#include "kspread_dlg_create.h"
 #include "kspread_dlg_conditional.h"
 #include "kspread_dlg_series.h"
 
@@ -100,7 +98,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     setXMLFile( "kspread.rc" );
 
     m_toolbarLock = FALSE;
-	
+
     m_pDoc = doc;
     m_pPopupMenu = 0;
     m_pPopupColumn = 0;
@@ -1060,8 +1058,10 @@ void KSpreadView::formulaSelection( const QString &_math )
 	return;
     }
 
-    KSpreadcreate* dlg = new KSpreadcreate( this, _math );
+    KSpreadDlgFormula2* dlg = new KSpreadDlgFormula2( this, "Formula Editor",_math );
     dlg->show();
+    /*KSpreadcreate* dlg = new KSpreadcreate( this, _math );
+    dlg->show();*/
 
     /* if ( !m_pCanvas->editor() )
     {
@@ -1180,7 +1180,7 @@ void KSpreadView::funct()
     if ( m_pTable == 0L )
 	return;
 
-    KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula" );
+    KSpreadDlgFormula2* dlg = new KSpreadDlgFormula2( this, "Formula Editor" );
     dlg->show();
 }
 
