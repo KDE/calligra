@@ -78,7 +78,7 @@ AC_OUTPUT(Makefile \
 	lib/Makefile \
 	lib/kofficecore/Makefile \
 	lib/kofficeui/pics/Makefile \
-	lib/test/Makefile \
+	lib/kofficeui/test/Makefile \
 	lib/kofficeui/Makefile \
 	lib/koml/Makefile \
 	kpresenter/Makefile \

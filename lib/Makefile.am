@@ -1,2 +1,2 @@
 
-SUBDIRS = koml kofficecore kofficeui test
+SUBDIRS = koml kofficecore kofficeui

@@ -6,7 +6,7 @@ LIBADD  =       -lkdeui -lkdecore -lqt -lXext -lX11 -ldl
 
 ####### Files
 
-SUBDIRS = pics
+SUBDIRS = pics test
 
 lib_LTLIBRARIES = libkofficeui.la
 
