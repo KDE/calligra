@@ -383,14 +383,15 @@ bool ClassExportFilterHtml::filter(const QString  &filenameIn, const QString  &f
 
     streamOut << "<body" << getBodyOpeningTagExtraAttributes() << ">" << endl;
 
-    streamOut << getAfterBodyOpeningTag(); // endl given by function if needed!
+    streamOut << "<div>\n"; // For compatibility with AbiWord's XHTML import filter
 
     // Now that we have the header, we can do the real work!
     QString stringBufOut;
     ProcessDocTag (docNodeIn, NULL, stringBufOut, this);
     streamOut << stringBufOut;
 
-    streamOut << getBeforeBodyClosingTag(); // endl given by function if needed!
+    streamOut << "</div>\n"; // For compatibility with AbiWord's XHTML import filter
+
     // Add the tail of the file
     streamOut << "</body>\n</html>\n";
 

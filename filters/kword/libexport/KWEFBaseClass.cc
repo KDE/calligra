@@ -25,13 +25,6 @@
 #include "KWEFStructures.h"
 #include "KWEFBaseClass.h"
 
-// NOTE: KWEFBaseClass::filter is still in htmlexport.cc
-
-bool KWEFBaseClass::isXML(void) const
-{
-    return false;
-}
-
 QString KWEFBaseClass::getHtmlOpeningTagExtraAttributes(void) const
 {
     return QString::null;
@@ -82,21 +75,6 @@ QString KWEFBaseClass::escapeText(const QString& strIn) const
     return strReturn;
 }
 
-QString KWEFBaseClass::getDocType(void) const
-{
-    return QString::null;
-}
-
-QString KWEFBaseClass::getAfterBodyOpeningTag(void) const
-{
-    return QString::null;
-}
-
-QString KWEFBaseClass::getBeforeBodyClosingTag(void) const
-{
-    return QString::null;
-}
-
 QString KWEFBaseClass::processDocTagStylesOnly(QDomElement myNode)
 {
     return QString::null;
@@ -104,11 +82,6 @@ QString KWEFBaseClass::processDocTagStylesOnly(QDomElement myNode)
 
 void KWEFBaseClass::processStyleTag (QDomNode, void *, QString&)
 {
-}
-
-bool KWEFBaseClass::filter(const QString& , const QString&)
-{
-    return false;
 }
 
 void KWEFBaseClass::helpStyleProcessing(QDomNode myNode,LayoutData* layout)

@@ -36,18 +36,15 @@ class KWEFBaseClass
         virtual ~KWEFBaseClass(void) {}
     public: //Non-virtual
     public: //virtual
-        virtual bool filter(const QString &filenameIn, const QString &filenameOut);
+//        virtual bool filter(const QString &filenameIn, const QString &filenameOut);
         virtual QString escapeText(const QString& str) const;
         virtual QString getHtmlOpeningTagExtraAttributes(void) const;
-        virtual bool isXML(void) const;
-        virtual QString getDocType(void) const;
+//        virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
         virtual QString processDocTagStylesOnly(QDomElement myNode);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
         virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
-        virtual QString getAfterBodyOpeningTag(void) const;
-        virtual QString getBeforeBodyClosingTag(void) const;
         virtual void processStyleTag (QDomNode myNode, void * tagData, QString &strStyles);
     protected:
         virtual void helpStyleProcessing(QDomNode myNode,LayoutData* layout);
