@@ -286,12 +286,6 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
     gridX=new KDoubleNumInput( recentFiles, KoUnit::ptToUnit( ptGridX, unit ), gbInterfaceGroup );
     gridX->setRange(KoUnit::ptToUnit( 0.1, unit ),KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
-    //laurent kdoublenuminput changed !!!!
-    //setPrecision doen't work it return a value display * 10^precision !!!!
-    //perhaps it's normal in new API ....
-#if KDE_VERSION < 307
-    gridX->setPrecision(1);
-#endif
     gridX->setSuffix( suffix );
     gridX->setLabel(i18n("&Horizontal grid size:"));
     QWhatsThis::add( gridX, i18n("The grid size on which frames, tabs and other content snaps while "
@@ -302,9 +296,6 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     //laurent kdoublenuminput changed !!!!
     //setPrecision doen't work it return a value display * 10^precision !!!!
     //perhaps it's normal in new API ....
-#if KDE_VERSION < 307
-    gridY->setPrecision(1);
-#endif
 
     gridY->setLabel(i18n("&Vertical grid size:"));
     QWhatsThis::add( gridY, i18n("The grid size on which frames and other content snaps while "
@@ -314,12 +305,6 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     double val = KoUnit::ptToUnit( ptIndent, unit );
     indent = new KDoubleNumInput( gridY, val, gbInterfaceGroup );
     indent->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
-    //laurent kdoublenumvalidator changed !!!!
-    //setPrecision doen't work it return a value display * 10^precision !!!!
-    //perhaps it's normal in new API ....
-#if KDE_VERSION < 307
-    indent->setPrecision(1);
-#endif
 
     indent->setSuffix( suffix );
     indent->setLabel(i18n("&Paragraph indent by toolbar buttons:"));
@@ -677,12 +662,6 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     QString suffix = unitType.prepend(' ');
     columnSpacing=new KDoubleNumInput( KoUnit::ptToUnit( ptColumnSpacing, unit ), gbDocumentDefaults );
     columnSpacing->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
-    //laurent kdoublenuminput changed !!!!
-    //setPrecision doen't work it return a value display * 10^precision !!!!
-    //perhaps it's normal in new API ....
-#if KDE_VERSION < 307
-    columnSpacing->setPrecision(1);
-#endif
     columnSpacing->setSuffix( suffix );
     columnSpacing->setLabel(i18n("Default column spacing:"));
     QWhatsThis::add( columnSpacing, i18n("When setting a document to use more then one column "

@@ -2013,11 +2013,7 @@ void KWView::updateStyleList()
     // to individual actions
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
-#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
     KAccelGen::generate( lst, lstWithAccels );
-#else
-    lstWithAccels = lst;
-#endif
     QMap<QString, KShortcut> shortCut;
 
     KActionPtrList lst2 = actionCollection()->actions("styleList");
@@ -2083,11 +2079,7 @@ void KWView::updateFrameStyleList()
     // to individual actions
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
-#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
     KAccelGen::generate( lst, lstWithAccels );
-#else
-    lstWithAccels = lst;
-#endif
     QMap<QString, KShortcut> shortCut;
 
 
@@ -2158,11 +2150,7 @@ void KWView::updateTableStyleList()
     // to individual actions
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
-#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
     KAccelGen::generate( lst, lstWithAccels );
-#else
-    lstWithAccels = lst;
-#endif
     QMap<QString, KShortcut> shortCut;
 
     KActionPtrList lst2 = actionCollection()->actions("tableStyleList");
@@ -5195,9 +5183,7 @@ void KWView::startKSpell()
     if(m_doc->getKSpellConfig())
     {
         m_doc->getKSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
-#if KDE_VERSION >= 305
         m_doc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
-#endif
     }
     m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
 
@@ -5216,9 +5202,7 @@ void KWView::startKSpell()
     QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 
-#if KDE_VERSION >= 305
     QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
-#endif
 
 }
 
