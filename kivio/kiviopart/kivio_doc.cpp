@@ -573,7 +573,8 @@ void KivioDoc::saveConfig()
     // The config from the config dialog is saved by the dialog itself.
     KConfig *config = KivioFactory::global()->config();
     config->setGroup( "Interface" );
-    config->writeEntry( "ShowGrid", grid().isShow );
+    config->writeEntry("ShowGrid", grid().isShow );
+    config->writeEntry("SnapGrid",grid().isSnap);
 }
 
 void KivioDoc::initConfig()
@@ -584,6 +585,7 @@ void KivioDoc::initConfig()
         config->setGroup( "Interface" );
         KivioGridData d = grid();
         d.isShow = config->readBoolEntry( "ShowGrid", true );
+        d.isSnap = config->readBoolEntry( "SnapGrid", true);
         setGrid(d);
     }
 }
