@@ -1167,7 +1167,7 @@ void KPTextObject::recalcPageNum( KPrPage *page )
 {
     int pgnum=m_doc->pageList().findRef(page);
 
-    if ( pgnum==-1 && isSticky())
+    if ( (pgnum==-1 && isSticky()) || m_doc->hasHeader() || m_doc->hasFooter() )
     {
         if ( m_doc->activePage())
         {
