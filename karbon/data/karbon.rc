@@ -93,13 +93,26 @@
 		<Action name="view_zoom"/>
 		<Action name="help_context"/>
 	</ToolBar>
-	<ToolBar name="PenProp" fullWidth="false">
-		<Text>Stroke Properties</Text>
+	<ToolBar name="object_toolbar" fullWidth="false">
+		<Text>Object</Text>
 		<Action name="setLineWidth"/>
+		<Action name="object_move_totop"/>
+		<Action name="object_move_up"/>
+		<Action name="object_move_down"/>
+		<Action name="object_move_tobottom"/>
 		<Action name="selection_group"/>
 		<Action name="selection_ungroup"/>
 	</ToolBar>
 	<ToolBar name="Tools" position="left">
 		<Text>Toolbox</Text>
+	</ToolBar>
+	<ToolBar name="align_toolbar" fullWidth="false">
+		<Text>Align</Text>
+		<Action name="object_align_horizontal_left"/>
+		<Action name="object_align_horizontal_center"/>
+		<Action name="object_align_horizontal_right"/>
+		<Action name="object_align_vertical_top"/>
+		<Action name="object_align_vertical_center"/>
+		<Action name="object_align_vertical_bottom"/>
 	</ToolBar>
 </kpartgui>
