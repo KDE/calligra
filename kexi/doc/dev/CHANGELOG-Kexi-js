@@ -128,20 +128,23 @@ TODO: add possibility in cursor: "Operating in-place on data returned by sqlite_
 <RENAME_PROPOSALS>
 Introduce KexiProject namespace for all components that are specially developed for Kexi project
 
-1. KexiProjectHandler --> KexiProjectPart ( this is a baseclass for project 
+1. KexiProjectHandler --> KexiPart ( this is a baseclass for project 
   parts like: queries, tables, forms, reports)
 It seems to be ok, since classes like KexiTablePart already inherits from KexiProjectPart 
 (formerly KexiProjectHandler)
+[DONE]
 
-2. KexiProjectHandlerProxy --> KexiProjectPart::Proxy
+2. KexiProjectHandlerProxy --> KexiPart::Proxy
 ..thus it could be consistently named. This also indicated that the class is used 
 as a helper for KexiProjectPart. More, there are already classes like KexiTablePartProxy
 so new name for KexiProjectHandlerProxy is ok. Proxy class should be declared 
 inside KexiProjectPart.
+[DONE] - removed
 
-3. KexiProjectHandlerItem -> KexiProjectPart::Instance 
+3. KexiProjectHandlerItem -> KexiPart::Item 
 (or KexiProjectPart::Data but Im voting for the former)
 This gives us the idea that this class is just an instance of well-defined part.
+[DONE]
 
 ALSO TODO: move all simple widget classes (e.g. KexiSettings, KexiTabBrowser) 
 from core, to more detailed dirs,
@@ -209,8 +212,21 @@ TODO: on Connection::updateRow(): pass field's name together with error message
 
 TODO: win32: Fix saving config files via KConfig (now are ugly overwritten)
 
-2004-01-02
 2004-01-03
+- KexiDB, core:
+	-ConnectionData and KexiProjectData now inherit QObject 
+	 (useful for QGuardedPtr, sharing and for notifications about changes)
+	-project_caption, project_desc properties are now created and stored in projects
+	-some utility functions added in kexidb/utils.cpp
+- KexiMainWindow: application's caption now also contain current project's caption (or name)
+  (this also works ok for maximized windows)
+- mysql driver reenabled (may not work correctly)
+
+- ConnectionData
+  -conflict with QObject fixed
+  -"name" member is now: "connName"
+
+2004-01-02
 - table view:
 	-in key event - we give up with executing actions that are shared with main window, because
 	these actions are executed at main window's level. These actions are declared using plugSharedAction().
@@ -220,14 +236,6 @@ TODO: win32: Fix saving config files via KConfig (now are ugly overwritten)
 
 TODO: show posible errors (as well as for INSERTs and UPDATEs)!!!
 
-- KexiDB, core:
-	-ConnectionData and KexiProjectData now inherit QObject 
-	 (useful for QGuardedPtr, sharing and for notifications about changes)
-	-project_caption, project_desc properties are now created and stored in projects
-	-some utility functions added in kexidb/utils.cpp
-- KexiMainWindow: application's caption now also contain current project's caption (or name)
-  (this also works ok for maximized windows)
-- mysql driver reenabled (may not work correctly)
 
 2003-12-30
 ** Many cleanups and behavioral fixes

@@ -26,22 +26,15 @@
 
 namespace KexiDB {
 
-/*! Connection data, once configured, can be later stored for reuse.
-*/
-class KEXI_DB_EXPORT ConnectionData : public QObject
+//! internal
+class ConnectionDataBase
 {
 	public:
-		typedef QPtrList<ConnectionData> List;
-
-		ConnectionData();
-
-		ConnectionData(const ConnectionData&);
-		
-		~ConnectionData();
+		ConnectionDataBase() : id(-1), port(0) {}
 
 		/*! Name is optional for identyfying given connection
 			by name eg. for users. */
-		QString name;
+		QString connName;
 
 		/*! Optional id used for identyfiyng any single data in a set (ConnectionData::ConstList).
 		 This is set automatically when needed. By default: -1. */
@@ -63,18 +56,6 @@ class KEXI_DB_EXPORT ConnectionData : public QObject
 			to the user as "localhost". */
 		QString hostName;
 
-		/*! \return a user-friendly string like:
-		 - "myhost.org:12345" if a host and port is specified;
-		 - "localhost:12345" of only port is specified; 
-		 - "user@myhost.org:12345" if also user is specified
-		 - "<file>" if file-based driver is assigned but no filename is assigned
-		 - "file: pathto/mydb.kexi" if file-based driver is assigned and 
-		    filename is assigned
-		 
-		 User's name is added if \a addUser is true (the default).
-		*/
-		QString serverInfoString(bool addUser = true) const;
-		
 		/*! Port used for remote connection. Default is 0, what means we use don't
 			change database engine's default port. */
 		unsigned short int port;
@@ -88,6 +69,30 @@ class KEXI_DB_EXPORT ConnectionData : public QObject
 		/*! Username used for connection. Can be empty. */
 		QString userName;
 
+	protected:
+		/*! For file-based database engines like SQLite, \a fileName is used
+			instead hostName and port */
+		QString m_fileName;
+
+		/*! Absolute path to the database file (or empty if database is not file-based) */
+		QString m_dbPath;
+		/*! Filename of the database file (or empty if database is not file-based) */
+		QString m_dbFileName;
+};
+
+/*! Connection data, once configured, can be later stored for reuse.
+*/
+class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
+{
+	public:
+		typedef QPtrList<ConnectionData> List;
+
+		ConnectionData();
+
+		ConnectionData(const ConnectionData&);
+		
+		~ConnectionData();
+
 		void setFileName( const QString& fn );
 
 		/*! For file-based database engines like SQLite, \a fileName is used
@@ -99,15 +104,19 @@ class KEXI_DB_EXPORT ConnectionData : public QObject
 		
 		/*! \return file name (for file-based engines) but without a full path */
 		QString dbFileName() const { return m_dbFileName; }
-	protected:
-		/*! For file-based database engines like SQLite, \a fileName is used
-			instead hostName and port */
-		QString m_fileName;
 
-		/*! Absolute path to the database file (or empty if database is not file-based) */
-		QString m_dbPath;
-		/*! Filename of the database file (or empty if database is not file-based) */
-		QString m_dbFileName;
+			/*! \return a user-friendly string like:
+		 - "myhost.org:12345" if a host and port is specified;
+		 - "localhost:12345" of only port is specified; 
+		 - "user@myhost.org:12345" if also user is specified
+		 - "<file>" if file-based driver is assigned but no filename is assigned
+		 - "file: pathto/mydb.kexi" if file-based driver is assigned and 
+			filename is assigned
+		 
+		 User's name is added if \a addUser is true (the default).
+		*/
+		QString serverInfoString(bool addUser = true) const;
+	protected:
 
 		class Private;
 		Private *priv;

@@ -41,17 +41,17 @@ public:
 
 ConnectionData::ConnectionData()
 : QObject()
-, id(-1)
-, port(0)
+, ConnectionDataBase()
 , priv(new ConnectionData::Private())
 {
 }
 
 ConnectionData::ConnectionData(const ConnectionData& cd)
 : QObject()
+, ConnectionDataBase()
 {
 	if (&cd != this) {
-		*this = cd;//copy data members
+		static_cast<ConnectionDataBase&>(*this) = static_cast<const ConnectionDataBase&>(cd);//copy data members
 	}
 	priv = new ConnectionData::Private();
 //todo: copy priv contents if not empty	*d = *cd.d;

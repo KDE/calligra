@@ -376,14 +376,14 @@ void KexiMainWindow::startup(KexiProjectData *projectData)
 		//some connection data
 		KexiDB::ConnectionData *conndata;
 		conndata = new KexiDB::ConnectionData();
-			conndata->name = "My connection";
+			conndata->connName = "My connection";
 			conndata->driverName = "mysql";
 			conndata->hostName = "myhost.org";
 			conndata->userName = "otheruser";
 			conndata->port = 53121;
 		Kexi::connset().addConnectionData(conndata);
 		conndata = new KexiDB::ConnectionData();
-			conndata->name = "Local pgsql connection";
+			conndata->connName = "Local pgsql connection";
 			conndata->driverName = "postgresql";
 			conndata->hostName = "localhost"; // -- default //"host.net";
 #ifdef Q_WS_WIN
@@ -924,7 +924,7 @@ KexiMainWindow::createBlankDatabase()
 	else if (!wiz.projectDBName().isEmpty()) {
 		//file-based project
 		KexiDB::ConnectionData cdata;
-		cdata.name = wiz.projectCaption();
+		cdata.connName = wiz.projectCaption();
 		cdata.driverName = "sqlite";
 		cdata.setFileName( wiz.projectDBName() );
 		new_data = new KexiProjectData( cdata, wiz.projectDBName(), wiz.projectCaption() );
@@ -1316,7 +1316,10 @@ bool KexiMainWindow::removeObject( KexiPart::Item *item )
 {
 	if (!item)
 		return false;
-	//TODO
+	
+//	if (KMessageBox::questionYesNo(this, i18n("Do you want to delete selected row?"), 0, 
+//			KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeleteRow"/*config entry*/)==KMessageBox::No)
+
 	return true;
 }
 
