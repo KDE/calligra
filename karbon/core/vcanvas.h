@@ -48,6 +48,8 @@ public:
 	 */
 	void setPos( const KoPoint& p );
 
+	KoPoint toContents( const KoPoint & ) const;
+
 protected:
 	virtual void focusInEvent( QFocusEvent * );
 	virtual void viewportPaintEvent( QPaintEvent* );
@@ -59,7 +61,6 @@ protected:
 
 	virtual bool eventFilter( QObject* object, QEvent* event );
 
-	KoPoint toContents( const KoPoint & ) const;
 	void setYMirroring( VPainter * );
 
 private slots:
@@ -71,6 +72,8 @@ private:
 	KarbonView* m_view;
 
 	bool m_bScrolling;
+	int	m_scrollX;
+	int	m_scrollY;
 };
 
 #endif
