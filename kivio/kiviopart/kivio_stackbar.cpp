@@ -35,6 +35,8 @@ KivioStackBar::KivioStackBar( QWidget* parent, const char* name )
   setResizeEnabled(true);
   setNewLine(true);
   m_visiblePage = 0;
+  
+  connect(this, SIGNAL(placeChanged(QDockWindow::Place)), this, SLOT(newPlace(QDockWindow::Place)));
 }
 
 KivioStackBar::~KivioStackBar()
@@ -201,6 +203,13 @@ void KivioStackBar::closeEvent(QCloseEvent* ev)
   }
 
   ev->ignore();
+}
+
+void KivioStackBar::newPlace(QDockWindow::Place place)
+{
+  if((place == OutsideDock) && (orientation() == Qt::Horizontal)) {
+    setOrientation(Qt::Vertical);
+  }
 }
 
 #include "kivio_stackbar.moc"

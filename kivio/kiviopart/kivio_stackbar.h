@@ -32,40 +32,42 @@ namespace Kivio {
 using namespace Kivio;
 
 class KivioStackBar : public QDockWindow
-{Q_OBJECT
-public:
-  KivioStackBar(QWidget* parent=0, const char* name=0);
-  ~KivioStackBar();
-
-  QWidget* findPage(const QString& name);
-  QWidget* findPage(DragBarButton*);
-  void insertPage(QWidget*, const QString&);
-  void removePage(QWidget*);
-  void deletePageAndButton(DragBarButton*);
-  void showPage(QWidget*);
-
-  QWidget* visiblePage()const { return m_visiblePage; }
-
-signals:
-  void aboutToShow(QWidget*);
-  void beginDragPage(DragBarButton*);
-  void finishDragPage(DragBarButton*);
-  void deleteButton(DragBarButton*, QWidget*, KivioStackBar*);
-
-protected:
-  virtual void closeEvent(QCloseEvent*);
-
-protected slots:
-  void showButtonPage();
-  void buttonBeginDrag();
-  void buttonFinishDrag();
-  void slotDeleteButton(DragBarButton*);
-
-private:
-  QVBoxLayout* m_layout;
-  QFrame* m_mainWidget;
-  QPtrDict<QWidget> m_data;
-  QWidget* m_visiblePage;
+{
+  Q_OBJECT
+  public:
+    KivioStackBar(QWidget* parent=0, const char* name=0);
+    ~KivioStackBar();
+  
+    QWidget* findPage(const QString& name);
+    QWidget* findPage(DragBarButton*);
+    void insertPage(QWidget*, const QString&);
+    void removePage(QWidget*);
+    void deletePageAndButton(DragBarButton*);
+    void showPage(QWidget*);
+  
+    QWidget* visiblePage()const { return m_visiblePage; }
+  
+  signals:
+    void aboutToShow(QWidget*);
+    void beginDragPage(DragBarButton*);
+    void finishDragPage(DragBarButton*);
+    void deleteButton(DragBarButton*, QWidget*, KivioStackBar*);
+  
+  protected:
+    virtual void closeEvent(QCloseEvent*);
+  
+  protected slots:
+    void showButtonPage();
+    void buttonBeginDrag();
+    void buttonFinishDrag();
+    void slotDeleteButton(DragBarButton*);
+    void newPlace(QDockWindow::Place place);
+  
+  private:
+    QVBoxLayout* m_layout;
+    QFrame* m_mainWidget;
+    QPtrDict<QWidget> m_data;
+    QWidget* m_visiblePage;
 };
 
 #endif
