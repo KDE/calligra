@@ -44,6 +44,9 @@ public:
      */
     static QString clipartPattern();
 
+    // List of mimetypes for all supported clipart formats.
+    static QStringList clipartMimeTypes();
+
 public slots:
     virtual void showPreview(const KURL &url);
     virtual void clearPreview();

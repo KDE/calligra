@@ -116,3 +116,11 @@ QString KoPictureFilePreview::clipartPattern()
 {
     return i18n( "*.svg *.wmf|Clipart (*.svg *.wmf)" );
 }
+
+QStringList KoPictureFilePreview::clipartMimeTypes()
+{
+    QStringList lst;
+    lst << "image/svg+xml";
+    lst << "image/x-wmf";
+    return lst;
+}
