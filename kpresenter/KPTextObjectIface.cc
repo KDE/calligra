@@ -361,3 +361,18 @@ void KPTextObjectIface::setWordByWord( bool _b )
     KCommand *cmd=m_textobject->textObject()->setWordByWordCommand(_b );
     delete cmd;
 }
+
+QString KPTextObjectIface::fontAttibute()const
+{
+    return KoTextFormat::attributeFontToString( m_textobject->textObject()->fontAttribute() );
+}
+
+QString KPTextObjectIface::underlineLineStyle() const
+{
+    return KoTextFormat::underlineStyleToString( m_textobject->textObject()->underlineLineStyle() );
+}
+
+QString KPTextObjectIface::strikeOutLineStyle()const
+{
+    return KoTextFormat::strikeOutStyleToString( m_textobject->textObject()->strikeOutLineStyle() );
+}
