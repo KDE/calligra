@@ -32,7 +32,7 @@
 #include "version.h"
 
 #define ABOUT_INFO "Version "APP_VERSION"\n\nCopyright (C) 1998\n\
-Kai-Uwe Sattler (kus@iti.cs-uni-magdeburg.de)\n\
+Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)\n\
 Steffen Thorhauer (sth@iti.cs.uni-magdeburg.de)\n\n\
 WMF support\n\
 Copyright (C) 1998\
