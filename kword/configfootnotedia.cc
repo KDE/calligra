@@ -79,13 +79,14 @@ void KWConfigFootNoteDia::setupTab3()
     QVBoxLayout *positionLayout = new QVBoxLayout( positionGroupBox->layout() );
     positionLayout->setAlignment( Qt::AlignTop );
 
-    rbPosLeft = new QRadioButton( i18n("Left"), positionGroupBox, "rbPosLeft" );
+    // i18n context information necessary for gender considerations (e.g. in Polish)
+    rbPosLeft = new QRadioButton( i18n("Position", "Left"), positionGroupBox, "rbPosLeft" );
     positionLayout->addWidget( rbPosLeft );
 
-    rbPosCentered = new QRadioButton( i18n("Centered"), positionGroupBox, "rbPosCentered" );
+    rbPosCentered = new QRadioButton( i18n("Position", "Centered"), positionGroupBox, "rbPosCentered" );
     positionLayout->addWidget( rbPosCentered );
 
-    rbPosRight = new QRadioButton( i18n("Right"), positionGroupBox, "rbPosRight" );
+    rbPosRight = new QRadioButton( i18n("Position", "Right"), positionGroupBox, "rbPosRight" );
     positionLayout->addWidget( rbPosRight );
     pageLayout->addWidget( positionGroupBox );
     switch( m_doc->footNoteSeparatorLinePosition() ) {
