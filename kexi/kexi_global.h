@@ -32,16 +32,16 @@
 /* useful macros */
 
 /*! a shortcut for iterating over lists or maps, eg. QMap, QValueList */
-#define foreach(_class, variable, list) \
-	for (_class variable = list.constBegin(); variable!=list.constEnd(); ++variable)
+#define foreach(_class, _variable, _list) \
+	for (_class _variable = _list.constBegin(); _variable!=_list.constEnd(); ++_variable)
 
 /*! nonconst version of foreach iterator */
-#define foreach_nonconst(_class, variable, list) \
-	for (_class variable = list.begin(); variable!=list.end(); ++variable)
+#define foreach_nonconst(_class, _variable, _list) \
+	for (_class _variable = _list.begin(); variable!=_list.end(); ++_variable)
 
 /*! a shortcut for iterating over QPtrList and QPtrDict */
-#define foreach_list(_class, variable, list) \
-	for (_class variable(list); variable.current(); ++variable)
+#define foreach_list(_class, _variable, _list) \
+	for (_class _variable(_list); _variable.current(); ++_variable)
 
 #endif /* _KEXI_GLOBAL_ */
 
