@@ -103,8 +103,8 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Overlaying Stencils</title>
-<para>Stencils can be positioned on top of one another, a stencil drawn on-top of another stencil will obscure the stencil underneath it. To adjust the drawing order select one of the stencils and select either <menuchoice><guimenu>Edit</guimenu><guimenuitem>Bring to Front</guimenuitem></menuchoice> or <menuchoice><guimenu>Edit</guimenu><guimenuitem>Send to Back</guimenuitem></menuchoice>.</para>
-<para><guimenuitem>Send to Back</guimenuitem> will cause the stencil to be obscured by any stencil which overlaps. <guimenuitem>Bring to Front</guimenuitem> will cause the stencil to obscure any stencil which overlaps it.</para>
+<para>Stencils can be positioned on top of one another. A stencil drawn on top of another stencil will obscure the stencil underneath it. To adjust the drawing order select one of the stencils and select either <menuchoice><guimenu>Edit</guimenu><guimenuitem>Bring to Front</guimenuitem></menuchoice> or <menuchoice><guimenu>Edit</guimenu><guimenuitem>Send to Back</guimenuitem></menuchoice>.</para>
+<para><guimenuitem>Send to Back</guimenuitem> will cause the stencil to be obscured by any stencil which overlaps it. <guimenuitem>Bring to Front</guimenuitem> will cause the stencil to obscure any stencil which it overlaps.</para>
 </sect2>
 
 <sect2>
@@ -116,7 +116,7 @@ The adjustments will only affect the currently selected stencil.</para>
 <sect2>
 <title>Stencil Geometry</title>
 <para>For accurately specifying the dimensions of a stencil use the Geometry docker. To display the docker select <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>Stencil Geometry Panel</guimenuitem></menuchoice>. The panel contains four text boxes for specifying the horizontal and vertical position of the stencil and the width and height.</para>
-<tip><para>Although the measurements are displayed in points it is possible to enter other units into the textbox. For example, entering 2.5cm will be convertedinto points. Millimeters (mm) and inches (in) are also accepted.</para></tip>
+<tip><para>Although the measurements are displayed in points it is possible to enter other units into the textbox. For example, entering 2.5cm will be converted into points. Millimeters (mm) and inches (in) are also accepted.</para></tip>
 </sect2>
 
 </sect1>
@@ -126,51 +126,51 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Zooming In and Out</title>
-<para>To adjust the zoom level select <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom Level</guimenuitem></menuchoice>. This sub-menu contains a list of percentages from 33% to 500%, selecting one of these will adjust the magnification to show that percentage of the document.</para>
+<para>To adjust the zoom level select <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom Level</guimenuitem></menuchoice>. This sub-menu contains a list of percentages from 33% to 500%; selecting one of these will adjust the magnification to show that percentage of the document.</para>
 <para>There is also a list of zoom levels on the Edit toolbar, by default shown at the top of the screen.</para>
-<para>A second method of controlling in the magnification is to use the Zoom tool. This is available on the left-hand tools menu. This tool can be used in two ways. Clicking on the document with the zoom tool active will increase the magnification. Holding down the shift key whilst clicking will decrease the magnification, i.e. zoom out.</para>
-<para>Alternatively holding down the &LMB; and dragging out a box, then releasing the mouse button will increase the magnification so that that portion of the document fills the available space.</para>
+<para>A second method of controlling the magnification is to use the zoom tool. This is available on the left-hand tools menu. This tool can be used in two ways. Clicking on the document with the zoom tool active will increase the magnification. Holding down the &Shift; key whilst clicking will decrease the magnification, &ie; zoom out.</para>
+<para>Alternatively, holding down the &LMB; and dragging out a box then releasing the mouse button will increase the magnification so that that portion of the document fills the available space.</para>
 </sect2>
 
 <sect2>
 <title>Panning the Document</title>
-<para>The pan tool lets you move the document around adjusting the portion that is visible. Very useful when working at high magnifications where the entire document is not completely visible. The pan tool shares a button with the zoom tool on the Tools toolbar. Once activated the mouse pointer turns into a hand. To move the document move the mouse over the currently visible portion, hold down the &LMB; and drag.</para>
+<para>The pan tool lets you move the document around, adjusting the portion that is visible. This is very useful when working at high magnifications where the entire document is not completely visible. The pan tool shares a button with the zoom tool on the Tools toolbar. Once activated the mouse pointer turns into a hand. To move the document move the mouse over the currently visible portion, hold down the &LMB; and drag.</para>
 </sect2>
 
 <sect2>
 <title>The Bird's Eye View</title>
 <para>The Bird's Eye docker provides a quick way of adjusting the zoom level and moving around the document. To enable it select <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>Bird's Eye</guimenuitem></menuchoice>.</para>
-<para>The docker has five buttons along the top, they are: <guibutton>Zoom In</guibutton>, <guibutton>Zoom Out</guibutton>,   </para>
+<para>The docker has five buttons along the top, which are: <guibutton>Zoom In</guibutton>, <guibutton>Zoom Out</guibutton>, <guibutton>Show Page Border</guibutton> and two <guibutton>Autoresize</guibutton> buttons. One to resize up, the other to resize down.</para>
 <para>A miniature representation of the document itself is shown underneath. A red rectangle indicates the portion that is currently visible. Clicking anywhere on this representation pans the view to that area. The rectangle can also be dragged.</para>
 <para>At the bottom of the docker there is a slider for adjusting the zoom level and a box showing the current zoom level.</para>
 </sect2>
 
 <sect2>
 <title>Using Dockers</title>
-<para>All dockers can have a handle on one edge which enables them to be moved around and positioned on any edge of the main view. The can also float anywhere on the screen. If not floating they shrink when not in use to remain unobtrusive, however, this behavior can be toggled by clicking on the icon that looks like a small pin. Next to this is a button marked with a cross that removes the docker.</para>
+<para>All dockers can have a handle on one edge which enables them to be moved around and positioned on any edge of the main view. They can also float anywhere on the screen. If they are not floating they shrink when not in use to remain unobtrusive, however, this behavior can be toggled by clicking on the icon that looks like a small pin. Next to this is a button marked with a cross that removes the docker.</para>
 </sect2>
 
 <sect2>
 <title>Multiple Views</title>
 <para>It is possible to have multiple views of the same document displayed simultaneously.</para>
-<para>Select New View from the View menu and a new &kivio; window showing the same document will appear. This is very useful for multiple monitor set-ups.</para>
-<para>The additional windows can be closed and &kivio; will only prompt you to save the document when the last window is closed. All windows pertaining to a particular document can be closed simultaneously by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem></menuchoice></para>
+<para>Select New View from the View menu and a new &kivio; window showing the same document will appear. This is very useful for multiple monitor setups.</para>
+<para>The additional windows can be closed and &kivio; will only prompt you to save the document when the last window is closed. All windows pertaining to a particular document can be closed simultaneously by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem></menuchoice>.</para>
 </sect2>
 
 <sect2>
 <title>Split Views</title>
 <para>It is also possible to split the window into two or more portions which can be used to view two areas of a document at once.
-To split a window select <menuchoice><guimenu>View</guimenu><guimenuitem>Split View</guimenuitem></menuchoice>. The orientation of the split can be changed from horizontal to vertical using <menuchoice><guimenu>View</guimenu><guimenuitem>Splitter Orientation</guimenuitem></menuchoice>. To restore the window to its original state selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Remove Split</guimenuitem></menuchoice>.</para>
+To split a window select <menuchoice><guimenu>View</guimenu><guimenuitem>Split View</guimenuitem></menuchoice>. The orientation of the split can be changed from horizontal to vertical using <menuchoice><guimenu>View</guimenu><guimenuitem>Splitter Orientation</guimenuitem></menuchoice>. To restore the window to its original state select <menuchoice><guimenu>View</guimenu><guimenuitem>Remove Split</guimenuitem></menuchoice>.</para>
 </sect2>
 
 <sect2>
 <title>The View Manager</title>
-<para>The View Manager allows you to store the current display settings, including zoom level and position. You can then adjust the view but revert back to the previous settings with a single mouse click. A number of different settings can be stored and given names for ease of reference.</para>
+<para>The View Manager allows you to store the current display settings, including zoom level and position. You can then adjust the view and still be able to revert back to the previous settings with a single mouse click. A number of different settings can be stored and given names for ease of reference.</para>
 <para>To display the View Manager choose <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>View Manager</guimenuitem></menuchoice>. The docker contains five buttons and a list of stored views.</para>
-<para>The first button, <guibutton>Add Current View</guibutton>, stores the current display settings. Once the settings have been stored you can modify the display settings. To revert to any of the stored settings click on its name in the list.</para>
-<para>By default &kivio; labels the settings with the page number and the magnification level, to enter a more descriptive name click on the middle button, <guibutton>Rename Item</guibutton>, this lets you enter your own text.</para>
+<para>The first button, <guibutton>Add Current View</guibutton>, stores the current display settings. Once the settings have been stored you can modify the display settings. To revert to any one of the stored settings click on its name in the list.</para>
+<para>By default &kivio; labels the settings with the page number and the magnification level, to enter a more descriptive name click on the middle button, <guibutton>Rename Item</guibutton>; this lets you enter your own text.</para>
 <para>The second button, <guibutton>Remove Item</guibutton>, removes the currently selected set of stored settings.</para>
-<para>The final two buttons, <guibutton>Move Item Up</guibutton> and <guibutton>Move Item Down</guibutton>, allow the order of the settings in list to be adjusted.</para>
+<para>The final two buttons, <guibutton>Move Item Up</guibutton> and <guibutton>Move Item Down</guibutton>, allow the order of the settings in the list to be adjusted.</para>
 </sect2>
 
 <sect2>
