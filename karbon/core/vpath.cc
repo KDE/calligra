@@ -201,34 +201,34 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 							if( jtr.current()->prev()  )
 							{
 								painter->moveTo( KoPoint(
-									jtr.current()->prev()->knot().x() - 2 / zoomFactor,
-									jtr.current()->prev()->knot().y() - 2 / zoomFactor ) );
+									jtr.current()->prev()->knot().x() - 3 / zoomFactor,
+									jtr.current()->prev()->knot().y() - 3 / zoomFactor ) );
 								painter->lineTo( KoPoint(
-									jtr.current()->prev()->knot().x() + 2 / zoomFactor,
-									jtr.current()->prev()->knot().y() - 2 / zoomFactor ) );
+									jtr.current()->prev()->knot().x() + 3 / zoomFactor,
+									jtr.current()->prev()->knot().y() - 3 / zoomFactor ) );
 								painter->lineTo( KoPoint(
-									jtr.current()->prev()->knot().x() + 2 / zoomFactor,
-									jtr.current()->prev()->knot().y() + 2 / zoomFactor ) );
+									jtr.current()->prev()->knot().x() + 3 / zoomFactor,
+									jtr.current()->prev()->knot().y() + 3 / zoomFactor ) );
 								painter->lineTo( KoPoint(
-									jtr.current()->prev()->knot().x() - 2 / zoomFactor,
-									jtr.current()->prev()->knot().y() + 2 / zoomFactor ) );
+									jtr.current()->prev()->knot().x() - 3 / zoomFactor,
+									jtr.current()->prev()->knot().y() + 3 / zoomFactor ) );
 								painter->fillPath();
 								painter->newPath();
 								painter->setRasterOp( Qt::NotROP );
 								painter->setBrush( Qt::blue.light() );
 							}
 							painter->moveTo( KoPoint(
-								jtr.current()->ctrlPoint1().x() - 2 / zoomFactor,
-								jtr.current()->ctrlPoint1().y() - 2 / zoomFactor ) );
+								jtr.current()->ctrlPoint1().x() - 3 / zoomFactor,
+								jtr.current()->ctrlPoint1().y() - 3 / zoomFactor ) );
 							painter->lineTo( KoPoint(
-								jtr.current()->ctrlPoint1().x() + 2 / zoomFactor,
-								jtr.current()->ctrlPoint1().y() - 2 / zoomFactor ) );
+								jtr.current()->ctrlPoint1().x() + 3 / zoomFactor,
+								jtr.current()->ctrlPoint1().y() - 3 / zoomFactor ) );
 							painter->lineTo( KoPoint(
-								jtr.current()->ctrlPoint1().x() + 2 / zoomFactor,
-								jtr.current()->ctrlPoint1().y() + 2 / zoomFactor ) );
+								jtr.current()->ctrlPoint1().x() + 3 / zoomFactor,
+								jtr.current()->ctrlPoint1().y() + 3 / zoomFactor ) );
 							painter->lineTo( KoPoint(
-								jtr.current()->ctrlPoint1().x() - 2 / zoomFactor,
-								jtr.current()->ctrlPoint1().y() + 2 / zoomFactor ) );
+								jtr.current()->ctrlPoint1().x() - 3 / zoomFactor,
+								jtr.current()->ctrlPoint1().y() + 3 / zoomFactor ) );
 
 							painter->fillPath();
 						}
@@ -241,17 +241,17 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 						painter->setBrush( Qt::blue.light() );
 
 						painter->moveTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() - 2 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() - 2 / zoomFactor ) );
+							jtr.current()->ctrlPoint2().x() - 3 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() - 3 / zoomFactor ) );
 						painter->lineTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() + 2 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() - 2 / zoomFactor ) );
+							jtr.current()->ctrlPoint2().x() + 3 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() - 3 / zoomFactor ) );
 						painter->lineTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() + 2 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() + 2 / zoomFactor ) );
+							jtr.current()->ctrlPoint2().x() + 3 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() + 3 / zoomFactor ) );
 						painter->lineTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() - 2 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() + 2 / zoomFactor ) );
+							jtr.current()->ctrlPoint2().x() - 3 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() + 3 / zoomFactor ) );
 
 						painter->fillPath();
 					}
@@ -262,22 +262,22 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 					painter->setBrush( Qt::blue.light() );
 
 					painter->moveTo( KoPoint(
-							jtr.current()->knot().x() - 2 / zoomFactor,
-							jtr.current()->knot().y() - 2 / zoomFactor ) );
+							jtr.current()->knot().x() - 3 / zoomFactor,
+							jtr.current()->knot().y() - 3 / zoomFactor ) );
 					painter->lineTo( KoPoint(
-							jtr.current()->knot().x() + 2 / zoomFactor,
-							jtr.current()->knot().y() - 2 / zoomFactor ) );
+							jtr.current()->knot().x() + 3 / zoomFactor,
+							jtr.current()->knot().y() - 3 / zoomFactor ) );
 					painter->lineTo( KoPoint(
-							jtr.current()->knot().x() + 2 / zoomFactor,
-							jtr.current()->knot().y() + 2 / zoomFactor ) );
+							jtr.current()->knot().x() + 3 / zoomFactor,
+							jtr.current()->knot().y() + 3 / zoomFactor ) );
 					painter->lineTo( KoPoint(
-							jtr.current()->knot().x() - 2 / zoomFactor,
-							jtr.current()->knot().y() + 2 / zoomFactor ) );
+							jtr.current()->knot().x() - 3 / zoomFactor,
+							jtr.current()->knot().y() + 3 / zoomFactor ) );
 					painter->fillPath();
 
 
 					VStroke stroke;
-					stroke.setLineWidth( 1.0 );
+					stroke.setLineWidth( 1.0 / zoomFactor );
 					stroke.setColor( Qt::blue.light().rgb() );
 					painter->setPen( stroke );
 
@@ -296,7 +296,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 									jtr.current()->ctrlPoint1().y() ) );
 							painter->strokePath();
 							VStroke stroke;
-							stroke.setLineWidth( 1.0 );
+							stroke.setLineWidth( 1.0 / zoomFactor );
 							stroke.setColor( Qt::blue.light().rgb() );
 							painter->setPen( stroke );
 							painter->newPath();
