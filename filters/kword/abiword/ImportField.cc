@@ -162,8 +162,20 @@ bool ProcessField(QDomDocument& mainDocument,
         variableElement.appendChild(pgnumElement); //Append to <VARIABLE>
         done=true;
     }
+    else if (strType=="file_name")
+    {
+        QDomElement typeElement=mainDocument.createElement("TYPE");
+        typeElement.setAttribute("key","STRING");
+        typeElement.setAttribute("type",8);
+        typeElement.setAttribute("text","?"); // TODO: do we need this information right now?
+        variableElement.appendChild(typeElement); //Append to <VARIABLE>
+        QDomElement fieldElement=mainDocument.createElement("FIELD");
+        fieldElement.setAttribute("subtype",0);
+        fieldElement.setAttribute("value","?"); // Should be the same as the text attribute
+        variableElement.appendChild(fieldElement); //Append to <VARIABLE>
+        done=true;
+    }
     // Not supported:
-    //  file_name
     //  app_ver
     //  app_id
     //  app_options
