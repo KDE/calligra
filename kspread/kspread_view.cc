@@ -1602,32 +1602,32 @@ void KSpreadView::updateEditWidget()
     else
         editWidget()->setText( cell->text() );
 
-    QColor color=cell->textColor( column,row);
+    QColor color=cell->textColor( column, row );
     if(!color.isValid())
         color=QApplication::palette().active().text();
     m_textColor->setCurrentColor( color );
 
-    color=cell->bgColor(  column,row);
+    color=cell->bgColor(  column, row );
 
     if(!color.isValid())
         color=QApplication::palette().active().base();
 
     m_bgColor->setCurrentColor( color );
 
-    m_selectFontSize->setFontSize( cell->textFontSize( column,row ) );
+    m_selectFontSize->setFontSize( cell->textFontSize( column, row ) );
     m_selectFont->setFont( cell->textFontFamily( column,row ) );
-    m_bold->setChecked( cell->textFontBold(  column,row) );
-    m_italic->setChecked( cell->textFontItalic(  column,row) );
-    m_underline->setChecked( cell->textFontUnderline( column,row ) );
-    m_strikeOut->setChecked( cell->textFontStrike( column,row ) );
+    m_bold->setChecked( cell->textFontBold( column, row ) );
+    m_italic->setChecked( cell->textFontItalic(  column, row) );
+    m_underline->setChecked( cell->textFontUnderline( column, row ) );
+    m_strikeOut->setChecked( cell->textFontStrike( column, row ) );
 
-    m_alignLeft->setChecked( cell->align( column,row ) == KSpreadLayout::Left );
-    m_alignRight->setChecked( cell->align(  column,row) == KSpreadLayout::Right );
-    m_alignCenter->setChecked(cell->align( column,row ) == KSpreadLayout::Center );
+    m_alignLeft->setChecked( cell->align( column, row ) == KSpreadLayout::Left );
+    m_alignCenter->setChecked( cell->align( column, row ) == KSpreadLayout::Center );
+    m_alignRight->setChecked( cell->align( column, row ) == KSpreadLayout::Right );
 
-    m_alignTop->setChecked( cell->alignY( column,row ) == KSpreadLayout::Top );
-    m_alignMiddle->setChecked( cell->alignY( column,row ) == KSpreadLayout::Middle );
-    m_alignBottom->setChecked( cell->alignY(  column,row) == KSpreadLayout::Bottom );
+    m_alignTop->setChecked( cell->alignY( column, row ) == KSpreadLayout::Top );
+    m_alignMiddle->setChecked( cell->alignY( column, row ) == KSpreadLayout::Middle );
+    m_alignBottom->setChecked( cell->alignY( column, row ) == KSpreadLayout::Bottom );
 
     m_verticalText->setChecked( cell->verticalText( column,row ) );
 

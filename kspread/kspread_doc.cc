@@ -139,8 +139,8 @@ bool KSpreadDoc::initDoc()
     QString f;
     KoTemplateChooseDia::ReturnType ret;
 
-    ret = KoTemplateChooseDia::choose(  KSpreadFactory::global(), f, "application/x-kspread",
-                                        "*.ksp", i18n("KSpread"), KoTemplateChooseDia::NoTemplates );
+    ret = KoTemplateChooseDia::choose( KSpreadFactory::global(), f, "application/x-kspread",
+                                       "*.ksp", i18n("KSpread"), KoTemplateChooseDia::NoTemplates );
 
     if ( ret == KoTemplateChooseDia::File )
     {
@@ -159,7 +159,7 @@ bool KSpreadDoc::initDoc()
 		_page=config->readNumEntry( "NbPage",1 ) ;
 	}
 
-	for(int i=0;i<_page;i++)
+	for( int i=0; i<_page; i++ )
 	{
 		KSpreadTable *t = createTable();
 		m_pMap->addTable( t );
@@ -864,16 +864,19 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     painter.setPen( pen );
 
     int left = xpos;
+    RowLayout *row_lay;
+    ColumnLayout *col_lay;
+    KSpreadCell *cell;
     for ( int y = top_row; y <= bottom_row; y++ )
     {
-        RowLayout *row_lay = table->rowLayout( y );
+        row_lay = table->rowLayout( y );
         xpos = left;
 
         for ( int x = left_col; x <= right_col; x++ )
         {
-            ColumnLayout *col_lay = table->columnLayout( x );
+            col_lay = table->columnLayout( x );
 
-            KSpreadCell *cell = table->cellAt( x, y );
+            cell = table->cellAt( x, y );
             cell->paintCell( rect, painter, QPoint(xpos, ypos),
                              QPoint(x,y), drawCursor );
 
