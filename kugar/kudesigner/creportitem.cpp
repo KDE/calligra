@@ -71,6 +71,7 @@ QString CanvasReportItem::getXml()
     int i = 1;
     for (it = props.begin(); it != props.end(); ++it)
     {
+        if (it->first.isNull()) continue;
 	if (!(i%3)) result += "\n\t\t  ";
 	result += " " + it->first + "=" + "\"" + it->second.first + "\"";
 	i++;

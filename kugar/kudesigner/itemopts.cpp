@@ -44,12 +44,14 @@ dlgItemOptions::dlgItemOptions(std::map<QString, std::pair<QString, QStringList>
     props = p;
 
     std::map<QString, std::pair<QString, QStringList> >::const_iterator i;
-    int j;
-    for (i = props->begin(), j = 0; i != props->end(); ++i, ++j)
+    int j = 0;
+    for (i = props->begin(); i != props->end(); ++i)
     {
+	if (i->first.isNull()) continue;
 	taProps->insertRows(taProps->numRows());
 	taProps->setText(j, 0, i->first);
 	taProps->setText(j, 1, i->second.first);
+	j++;
     }
     
     //delete the last empty row if exists

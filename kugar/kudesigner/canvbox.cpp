@@ -334,8 +334,10 @@ void CanvasBand::arrange(int base, bool destructive)
     for (QCanvasItemList::Iterator it=items.begin(); it!=items.end(); ++it)
     {
 	(*it)->moveBy(0, diff);
-	( (CanvasReportItem *)(*it) )->updateGeomProps();
+//	( (CanvasReportItem *)(*it) )->updateGeomProps();
 	canvas()->update();
+	(*it)->hide();
+	(*it)->show();
     }
 }
 
@@ -388,7 +390,8 @@ void CanvasReportHeader::draw(QPainter &painter)
 
 QString CanvasReportHeader::getXml()
 {
-    return "\t<ReportHeader" + CanvasBand::getXml() + "\t</ReportHeader>\n\n";
+    return "\t<ReportHeader PrintFrequency=\"0\"" +
+	CanvasBand::getXml() + "\t</ReportHeader>\n\n";
 }
 
 
@@ -415,7 +418,7 @@ void CanvasReportFooter::draw(QPainter &painter)
 
 QString CanvasReportFooter::getXml()
 {
-    return "\t<ReportFooter" + CanvasBand::getXml() + "\t</ReportFooter>\n\n";
+    return "\t<ReportFooter PrintFrequency=\"0\"" + CanvasBand::getXml() + "\t</ReportFooter>\n\n";
 }
 
 
@@ -442,7 +445,7 @@ void CanvasPageHeader::draw(QPainter &painter)
 
 QString CanvasPageHeader::getXml()
 {
-    return "\t<PageHeader" + CanvasBand::getXml() + "\t</PageHeader>\n\n";
+    return "\t<PageHeader PrintFrequency=\"1\"" + CanvasBand::getXml() + "\t</PageHeader>\n\n";
 }
 
 
@@ -469,7 +472,7 @@ void CanvasPageFooter::draw(QPainter &painter)
 
 QString CanvasPageFooter::getXml()
 {
-    return "\t<PageFooter" + CanvasBand::getXml() + "\t</PageFooter>\n\n";
+    return "\t<PageFooter PrintFrequency=\"1\"" + CanvasBand::getXml() + "\t</PageFooter>\n\n";
 }
 
 

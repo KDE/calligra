@@ -57,13 +57,13 @@ void ReportCanvas::deleteItem(QCanvasItemList &l)
         }
 	if ((*it)->rtti() > 1800)
 	{
-	    if ((*it)->rtti() == RttiDetail)
+/*	    if ((*it)->rtti() == RttiDetail)
 	    {
 		CanvasDetail *det = (CanvasDetail*)(*it);
 		if ( det->props["Level"].first.toInt() <
 		    ((MyCanvas*)(canvas()))->templ->detailsCount - 1)
 		    return;
-	    }
+	    }*/
 	    CanvasDetailHeader *header = 0;
 	    CanvasDetailFooter *footer = 0;
 	    ((MyCanvas*)(canvas()))->templ->removeSection((CanvasBand *)(*it),
