@@ -878,14 +878,15 @@ protected:
 class KPrFlipObjectCommand : public KNamedCommand
 {
 public:
-    KPrFlipObjectCommand( const QString &name, KPresenterDoc *_doc, bool _horizontal ,KPObject *_obj);
-    ~KPrFlipObjectCommand() {};
+    KPrFlipObjectCommand( const QString &name, KPresenterDoc *_doc, bool _horizontal ,
+                          QPtrList<KPObject> &_objects );
+    ~KPrFlipObjectCommand();
     void execute();
     void unexecute();
 protected:
-    void flipObject();
+    void flipObjects();
     KPresenterDoc *m_doc;
-    KPObject *m_object;
+    QPtrList<KPObject> objects;
     bool horizontal;
     KPrPage *m_page;
 };

@@ -2232,31 +2232,47 @@ void KPrHideShowHeaderFooter::unexecute()
     m_doc->updateSideBarItem(pos,  true/*sticky page*/ );
 }
 
-
 KPrFlipObjectCommand::KPrFlipObjectCommand( const QString &name, KPresenterDoc *_doc,
-                                            bool _horizontal, KPObject *_obj):
-    KNamedCommand(name),
-    m_doc(_doc),
-    m_object(_obj),
-    horizontal(_horizontal)
+                                            bool _horizontal, QPtrList<KPObject> &_objects ):
+    KNamedCommand( name ),
+    m_doc( _doc ),
+    objects( _objects ),
+    horizontal( _horizontal )
 {
-    m_page = m_doc->findSideBarPage( _obj );
+    objects.setAutoDelete( false );
+
+    m_page = m_doc->findSideBarPage( objects );
+    
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
+}
+
+KPrFlipObjectCommand::~KPrFlipObjectCommand()
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
 }
 
 void KPrFlipObjectCommand::execute()
 {
-    flipObject();
+    flipObjects();
 }
 
 void KPrFlipObjectCommand::unexecute()
 {
-    flipObject();
+    flipObjects();
 }
 
-void KPrFlipObjectCommand::flipObject()
+void KPrFlipObjectCommand::flipObjects()
 {
-    m_object->flip( horizontal );
-    m_doc->repaint( m_object );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->flip( horizontal );
+        m_doc->repaint( it.current() );
+    }
 
     int pos=m_doc->pageList().findRef(m_page);
     m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );

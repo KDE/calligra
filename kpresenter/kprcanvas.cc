@@ -6218,14 +6218,11 @@ void KPrCanvas::flipObject( bool _horizontal )
     if ( lst.isEmpty() )
         return;
 
-    KMacroCommand *macro = new KMacroCommand( i18n("Flip Objects"));
-    QPtrListIterator<KPObject> it2( lst );
-    for ( ; it2.current() ; ++it2 ) {
-        KCommand * cmd= new KPrFlipObjectCommand(i18n("Flip"), m_view->kPresenterDoc(),  _horizontal , it2.current());
-        macro->addCommand(cmd);
-    }
-    macro->execute();
-    m_view->kPresenterDoc()->addCommand(macro);
+    KPrFlipObjectCommand *flipCmd = new KPrFlipObjectCommand( i18n("Flip Objects"),
+                                                              m_view->kPresenterDoc(), 
+                                                              _horizontal, lst );
+    flipCmd->execute();
+    m_view->kPresenterDoc()->addCommand( flipCmd );
 }
 
 KCommand *KPrCanvas::setKeepRatioObj( bool p )
