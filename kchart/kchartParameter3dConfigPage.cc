@@ -44,7 +44,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KDChartParams* params,
   depth=new KDoubleNumInput(0, gb);
   depth->resize(100,depth->sizeHint().height());
   grid1->addWidget(depth,1,1);
-  depth->setRange(0, 10, 0.1);
+  depth->setRange(0,40, 0.1);
 
   gb->setAlignment(Qt::AlignLeft);
   grid1->addColSpacing(0,depth->width());
@@ -58,12 +58,25 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KDChartParams* params,
 
 void KChartParameter3dConfigPage::init()
 {
-    angle3d->setValue( _params->threeDBarAngle() );
-    depth->setValue( _params->threeDBarDepth() );
+    if(_params->chartType()==KDChartParams::Bar)
+    {
+        angle3d->setValue( _params->threeDBarAngle() );
+        depth->setValue( _params->threeDBarDepth() );
+    }
+    else if(_params->chartType()==KDChartParams::Pie)
+    {
+        angle3d->setEnabled(false);
+        depth->setValue(_params->threeDPieHeight());
+    }
 }
 
 void KChartParameter3dConfigPage::apply()
 {
-    _params->setThreeDBarAngle( angle3d->value() );
-    _params->setThreeDBarDepth( depth->value() );
+    if( _params->chartType()==KDChartParams::Bar)
+    {
+        _params->setThreeDBarAngle( angle3d->value() );
+        _params->setThreeDBarDepth( depth->value() );
+    }
+    else if(_params->chartType()==KDChartParams::Pie)
+        _params->setThreeDPieHeight(depth->value() );
 }
