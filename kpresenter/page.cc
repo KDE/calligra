@@ -1720,7 +1720,6 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
     case PEF_CLOSE_VERT:
       {
 	_steps = (int)(50000.0 / (float)kapp->desktop()->width());
-	//_steps = kapp->desktop()->width() / 16;
 	_time.start();
 
 	for (;;)
@@ -1734,6 +1733,33 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 
 		bitBlt(this,0,0,&_pix2,_pix2.width() / 2 - _w,0,_w,height());
 		bitBlt(this,width() - _w,0,&_pix2,_pix2.width() / 2,0,_w,height());
+
+		_time.restart();
+	      }
+	    if ((_pix2.width()/(2 * _steps)) * _step >= _pix2.width() / 2) break;
+	  }
+      } break;
+    case PEF_CLOSE_ALL:
+      {
+	_steps = (int)(50000.0 / (float)kapp->desktop()->width());
+	_time.start();
+
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_time.elapsed() >= 1)
+	      {
+		_step++;
+		_w = (_pix2.width()/(2 * _steps)) * _step;
+		_w = _w > _pix2.width() / 2 ? _pix2.width() / 2 : _w;
+
+		_h = (_pix2.height()/(2 * _steps)) * _step;
+		_h = _h > _pix2.height() / 2 ? _pix2.height() / 2 : _h;
+
+		bitBlt(this,0,0,&_pix2,0,0,_w,_h);
+		bitBlt(this,width() - _w,0,&_pix2,width() - _w,0,_w,_h);
+		bitBlt(this,0,height() - _h,&_pix2,0,height() - _h,_w,_h);
+		bitBlt(this,width() - _w,height() - _h,&_pix2,width() - _w,height() - _h,_w,_h);
 
 		_time.restart();
 	      }
@@ -1766,16 +1792,16 @@ void Page::doObjEffects()
 	      _objList.append(objPtr);
 	      switch (objPtr->effect)
 		{
-		case EF_FROM_LEFT:
+		case EF_COME_LEFT:
 		  x_pos1 = max(x_pos1,objPtr->ox - diffx() + objPtr->ow);
 		  break;
-		case EF_FROM_BOTTOM:
+		case EF_COME_BOTTOM:
 		  y_pos1 = max(y_pos1,objPtr->oy - diffy() + objPtr->oh);
 		  break;
-		case EF_FROM_RIGHT:
+		case EF_COME_RIGHT:
 		  x_pos2 = min(x_pos2,objPtr->ox - diffx());
 		  break;
-		case EF_FROM_TOP:
+		case EF_COME_TOP:
 		  y_pos2 = min(y_pos2,objPtr->oy - diffy());
 		  break;
 		}
@@ -1812,7 +1838,7 @@ void Page::doObjEffects()
 		  
 		  switch (objPtr->effect)
 		    {
-		    case EF_FROM_LEFT:
+		    case EF_COME_LEFT:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
 			  { 
@@ -1823,7 +1849,7 @@ void Page::doObjEffects()
 			    if (x_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
-		    case EF_FROM_TOP:
+		    case EF_COME_TOP:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
 			  { 
@@ -1834,7 +1860,7 @@ void Page::doObjEffects()
 			    if (y_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
-		    case EF_FROM_RIGHT:
+		    case EF_COME_RIGHT:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
 			  { 
@@ -1845,7 +1871,7 @@ void Page::doObjEffects()
 			    if (x_pos2 != 0) nothingHappens = false;
 			  }
 		      } break;
-		    case EF_FROM_BOTTOM:
+		    case EF_COME_BOTTOM:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
 			  { 

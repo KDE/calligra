@@ -54,6 +54,10 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   cEffect->insertItem(i18n("Come from right/bottom"));
   cEffect->insertItem(i18n("Come from left/top"));
   cEffect->insertItem(i18n("Come from left/bottom"));
+  cEffect->insertItem(i18n("Wipe from left"));
+  cEffect->insertItem(i18n("Wipe from right"));
+  cEffect->insertItem(i18n("Wipe from top"));
+  cEffect->insertItem(i18n("Wipe from bottom"));
   cEffect->setCurrentItem((int)view->KPresenterDoc()->objList()->at(_objNum-1)->effect);
   cEffect->move(max(lEffect->width(),lNum->width())+15,lEffect->y()-5);
   cEffect->resize(cEffect->sizeHint());

@@ -3749,6 +3749,8 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
       TxtCursor *oldCursor = new TxtCursor((KTextObject*)this);
       oldCursor->setPositionAbs(txtCursor->positionAbs());
       
+      changedParagraphs.clear();
+
       // react on the pressed key
       switch (e->key())
 	{

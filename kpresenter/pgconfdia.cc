@@ -61,6 +61,7 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   effectCombo->insertItem(i18n("No effect"));
   effectCombo->insertItem(i18n("Close horizontal"));
   effectCombo->insertItem(i18n("Close vertical"));
+  effectCombo->insertItem(i18n("Close from all directions"));
   effectCombo->resize(effectCombo->sizeHint());
   effectCombo->setCurrentItem((int)pageEffect);
   
