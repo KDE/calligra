@@ -330,6 +330,8 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
         }
         else
         {
+            if ( item == 0 ) // This paragraph existed, store its parag layout
+                m_oldParagLayout = parag->paragLayout();
             parag->loadLayout( paragElem );
             // Last paragraph: some of the text might be from before the paste
             int len = (item == count-1) ? c->index() : parag->string()->length();
@@ -373,6 +375,9 @@ QTextCursor * KWPasteCommand::unexecute( QTextCursor *c )
     cursor.setIndex( m_lastIndex );
     doc->setSelectionEnd( QTextDocument::Temp, &cursor );
     doc->removeSelectedText( QTextDocument::Temp, c /* sets c to the correct position */ );
+
+    if ( m_idx == 0 )
+        static_cast<KWTextParag *>( firstParag )->setParagLayout( m_oldParagLayout );
     return c;
 }
 

@@ -154,6 +154,7 @@ protected:
     // filled in by execute(), for unexecute()
     int m_lastParag;
     int m_lastIndex;
+    KWParagLayout m_oldParagLayout;
 };
 
 ////////////////////////// Frame commands ////////////////////////////////
