@@ -79,14 +79,14 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
         kdError(30518) << "Couldn't open the requested file "<< m_chain->inputFile() << endl;
         return KoFilter::FileNotFound;
     }
-    
+
     if ( !m_zip->directory() )
     {
         kdError(30518) << "Couldn't read ZIP directory of the requested file "<< m_chain->inputFile() << endl;
         return KoFilter::FileNotFound;
     }
-    
-    
+
+
     KoFilter::ConversionStatus preStatus = openFile();
 
     if ( preStatus != KoFilter::OK )
@@ -96,6 +96,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
         return preStatus;
     }
 
+    m_currentMasterPage = QString::null;
     QDomDocument mainDocument;
     QDomElement framesetsElem;
     prepareDocument( mainDocument, framesetsElem );
@@ -113,7 +114,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
 
     m_zip->close();
     delete m_zip; // It has to be so late, as pictures might be read.
-        
+
     KoStoreDevice* out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
     if ( !out ) {
         kdError(30518) << "Unable to open output file!" << endl;
@@ -152,11 +153,13 @@ void OoWriterImport::createStyles( QDomDocument& doc )
 
     QDomNode fixedStyles = m_stylesDoc.documentElement().namedItem( "office:styles" );
     Q_ASSERT( !fixedStyles.isNull() );
-    kdDebug(30518) << "Generating " << fixedStyles.childNodes().count() << " kword styles." << endl;
     for ( QDomNode n = fixedStyles.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
         if ( !e.hasAttribute( "style:name" ) )
+            continue;
+        // We only generate paragraph styles for now
+        if ( e.attribute( "style:family" ) != "paragraph" )
             continue;
 
         // We use the style stack, to flatten out parent styles
@@ -222,21 +225,20 @@ void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& main
     }
 }
 
-void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem )
+void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString& masterPageName )
 {
-    mainDocument = KoDocument::createDomDocument( "kword", "DOC", "1.2" );
     QDomElement docElement = mainDocument.documentElement();
-    docElement.setAttribute( "editor", "KWord's OOWriter Import Filter" );
-    docElement.setAttribute( "mime", "application/x-kword" );
-    docElement.setAttribute( "syntaxVersion", "2" );
 
-    
+    kdDebug(30518) << "writePageLayout " << masterPageName << endl;
     KoOrientation orientation;
     double width, height;
     KoFormat paperFormat;
     double marginLeft, marginTop, marginRight, marginBottom;
-    
-    QDomElement *style = m_styles[m_masterPage.attribute( "style:page-master-name" )];
+
+    QDomElement* masterPage = m_masterPages[ masterPageName ];
+    Q_ASSERT( masterPage );
+    QDomElement *style = masterPage ? m_styles[masterPage->attribute( "style:page-master-name" )] : 0;
+    Q_ASSERT( style );
     if ( style )
     {
         QDomElement properties( style->namedItem( "style:properties" ).toElement() );
@@ -249,7 +251,7 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
             paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(height), MM_TO_POINT(width) );
         else
             paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(width), MM_TO_POINT(height) );
-            
+
         marginLeft = KoUnit::parseValue(properties.attribute("fo:margin-left"));
         marginTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
         marginRight = KoUnit::parseValue(properties.attribute("fo:margin-right"));
@@ -290,6 +292,15 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
     element.setAttribute("right", marginRight);
     element.setAttribute("bottom", marginBottom);
     elementPaper.appendChild(element);
+}
+
+void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem )
+{
+    mainDocument = KoDocument::createDomDocument( "kword", "DOC", "1.2" );
+    QDomElement docElement = mainDocument.documentElement();
+    docElement.setAttribute( "editor", "KWord's OOWriter Import Filter" );
+    docElement.setAttribute( "mime", "application/x-kword" );
+    docElement.setAttribute( "syntaxVersion", "2" );
 
     framesetsElem=mainDocument.createElement("FRAMESETS");
     docElement.appendChild(framesetsElem);
@@ -312,13 +323,13 @@ void OoWriterImport::createInitialFrame( QDomElement& parentFramesetElem, int to
 KoFilter::ConversionStatus OoWriterImport::loadAndParse(const QString& filename, QDomDocument& doc)
 {
     kdDebug(30518) << "Trying to open " << filename << endl;
-    
+
     if (!m_zip)
     {
         kdError(30518) << "No ZIP file!" << endl;
         return KoFilter::CreationError; // Should not happen
     }
-        
+
     const KArchiveEntry* entry = m_zip->directory()->entry( filename );
     if (!entry)
     {
@@ -333,7 +344,7 @@ KoFilter::ConversionStatus OoWriterImport::loadAndParse(const QString& filename,
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
     QIODevice* io=f->device();
     kdDebug(30518) << "Entry " << filename << " has size " << f->size() << endl;
-    
+
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
@@ -346,9 +357,9 @@ KoFilter::ConversionStatus OoWriterImport::loadAndParse(const QString& filename,
         return KoFilter::ParsingError;
     }
     delete io;
-    
+
     kdDebug(30518) << "File " << filename << " loaded and parsed!" << endl;
-    
+
     return KoFilter::OK;
 }
 
@@ -360,7 +371,7 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
         kdError(30518) << "Content.xml could not be parsed correctly! Aborting!" << endl;
         return status;
     }
-    
+
     //kdDebug(30518)<<" m_content.toCString() :"<<m_content.toCString()<<endl;
 
     // We need to keep the QDomDocument for styles too, unfortunately.
@@ -369,7 +380,7 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
     // anyway, so this doesn't make a big difference.
     // We now also rely on this in createStyles.
     //QDomDocument styles;
-    
+
     // We do not stop if the following calls fail.
     loadAndParse("styles.xml", m_stylesDoc);
     loadAndParse("meta.xml", m_meta);
@@ -480,22 +491,19 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 
   QDomNode masterStyles = docElement.namedItem( "office:master-styles" );
 
-  if ( masterStyles.isNull() )
+  if ( !masterStyles.isNull() )
   {
-    kdDebug(30518) << "Nothing found " << endl;
-  }
-
-  QDomElement master = masterStyles.namedItem( "style:master-page" ).toElement();
-  if ( !master.isNull() )
-  {
-    kdDebug(30518) << master.attribute( "style:name" ) << endl;
-    QString name( "pm" );
-    name += master.attribute( "style:name" );
-    kdDebug(30518) << "Master style: '" << name << "' loaded " << endl;
-    m_styles.insert( name, new QDomElement( master ) );
-
-    master = master.nextSibling().toElement();
-    m_masterPage = master;
+      QDomElement master = masterStyles.firstChild().toElement();
+      for ( ; !master.isNull() ; master = master.nextSibling().toElement() )
+      {
+          if ( master.tagName() ==  "style:master-page" )
+          {
+              QString name = master.attribute( "style:name" );
+              kdDebug(30518) << "Master style: '" << name << "' loaded " << endl;
+              m_masterPages.insert( name, new QDomElement( master ) );
+          } else
+              kdWarning(30518) << "Unknown tag " << master.tagName() << " in office:master-styles" << endl;
+      }
   }
 
 
@@ -640,7 +648,7 @@ QDomElement OoWriterImport::parseList( QDomDocument& doc, const QDomElement& lis
     return p;
 }
 
-
+// Name suggestion: parseRunOfText (DF)
 void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
     QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos)
 {
@@ -653,7 +661,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         QDomText t ( node.toText() );
 
         bool shouldWriteFormat=false; // By default no <FORMAT> element should be written
-        
+
         // Try to keep the order of the tag names by probability of happening
         if (tagName == "text:span")
         {
@@ -774,7 +782,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             writeFormat( doc, kwordFormats, 1 /* id for normal text */, pos, length );
             //appendShadow( doc, kwordParagraph ); // this is necessary to take care of shadowed paragraphs
         }
-        
+
         pos += length;
 
     }
@@ -797,7 +805,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
     parseSpanOrSimilar( doc, paragraph, p, formats, paragraphText, pos);
 
     m_styleStack.popToMark( StyleStack::ParagraphMark  ); // remove possible garbage (should not be needed)
-    
+
     QDomElement text = doc.createElement( "TEXT" );
     text.appendChild( doc.createTextNode( paragraphText ) );
     text.setAttribute( "xml:space", "preserve" );
@@ -808,7 +816,6 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
     QDomElement layoutElement = doc.createElement( "LAYOUT" );
     p.appendChild( layoutElement );
 
-    // TODO style name (when specified by user)
     // Style name
     QString styleName = m_styleStack.userStyleName();
     if ( !styleName.isEmpty() )
@@ -819,6 +826,30 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
     }
 
     writeLayout( doc, layoutElement );
+
+    QDomElement* paragraphStyle = m_styles[paragraph.attribute( "text:style-name" )];
+    QString masterPageName = paragraphStyle ? paragraphStyle->attribute( "style:master-page-name" ) : QString::null;
+    if ( masterPageName.isEmpty() )
+        masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
+    if ( masterPageName != m_currentMasterPage )
+    {
+        // Detected a change in the master page -> this means we have to use a new page layout
+        // and insert a frame break if not on the first paragraph.
+        // In KWord we don't support sections so the first paragraph is the one that determines the page layout.
+        if ( m_currentMasterPage.isEmpty() )
+            writePageLayout( doc, masterPageName );
+        else
+        {
+            QDomElement pageBreakElem = layoutElement.namedItem( "PAGEBREAKING" ).toElement();
+            if ( !pageBreakElem.isNull() )  {
+                pageBreakElem = doc.createElement( "PAGEBREAKING" );
+                layoutElement.appendChild( pageBreakElem );
+            }
+            pageBreakElem.setAttribute( "hardFrameBreak", "true" );
+            // We have no way to store the new page layout, KWord doesn't have sections.
+        }
+        m_currentMasterPage = masterPageName;
+    }
 
     return p;
 }
@@ -1119,9 +1150,9 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     const double height=KoUnit::parseValue( object.attribute("svg:height") );
     const double width=KoUnit::parseValue( object.attribute("svg:width") );
     const QString href ( object.attribute("xlink:href") );
-    
+
     kdDebug(30518) << "Picture: " << frameName << " " << href << " (in OoWriterImport::appendPicture)" << endl;
-    
+
     KoPicture picture;
     if ( href[0]=='#' )
     {
@@ -1134,7 +1165,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
         QString filename(href.mid(1));
         KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
         picture.setKey(key);
-        
+
         if (!m_zip)
             return; // Should not happen
 
@@ -1152,7 +1183,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
         const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
         QIODevice* io=f->device();
         kdDebug(30518) << "Picture " << filename << " has size " << f->size() << endl;
-    
+
         if (!io)
         {
             kdWarning(30518) << "No QIODevice for picture  " << frameName << " " << href << endl;
@@ -1167,17 +1198,17 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
         url.setPath(href); // ### TODO: is this really right?
         picture.setKeyAndDownloadPicture(url);
     }
-    
+
     kdDebug(30518) << "Picture ready! Key: " << picture.getKey().toString() << " Size:" << picture.getOriginalSize() << endl;
-    
+
     QString strStoreName;
     strStoreName="pictures/picture";
     strStoreName+=QString::number(++m_pictureNumber);
     strStoreName+='.';
     strStoreName+=picture.getExtension();
-    
+
     kdDebug(30518) << "Storage name: " << strStoreName << endl;
-    
+
     KoStoreDevice* out = m_chain->storageFile( strStoreName , KoStore::Write );
     if (out)
     {
@@ -1195,13 +1226,13 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
          kdWarning(30518) << "Cannot store picture: " << frameName << " " << href << endl;
          return;
     }
-         
+
     // Now that we have copied the image, we need to make some bookkeeping
-    
+
     QDomElement docElement( doc.documentElement() );
-       
+
     QDomElement framesetsPluralElement ( docElement.namedItem("FRAMESETS").toElement() );
-    
+
     QDomElement framesetElement=doc.createElement("FRAMESET");
     framesetElement.setAttribute("frameType",2);
     framesetElement.setAttribute("frameInfo",0);
@@ -1222,7 +1253,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     element.setAttribute("keepAspectRatio","true");
     framesetElement.setAttribute("frameType",2); // Picture
     framesetElement.appendChild(element);
-    
+
     QDomElement singleKey ( doc.createElement("KEY") );
     picture.getKey().saveAttributes(singleKey);
     element.appendChild(singleKey);
@@ -1234,7 +1265,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
         picturesPluralElement = doc.createElement("PICTURES");
         docElement.appendChild(picturesPluralElement);
     }
-    
+
     QDomElement pluralKey ( doc.createElement("KEY") );
     picture.getKey().saveAttributes(pluralKey);
     pluralKey.setAttribute("name",strStoreName);
@@ -1257,7 +1288,7 @@ void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats
     const QString& key, int type, const QString& text, QDomElement& child)
 {
     QDomElement variableElement ( doc.createElement("VARIABLE") );
-    
+
     QDomElement typeElement ( doc.createElement("TYPE") );
     typeElement.setAttribute("key",key);
     typeElement.setAttribute("type",type);
@@ -1270,9 +1301,9 @@ void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats
     formatElement.setAttribute("id",4); // Variable
     formatElement.setAttribute("pos",pos); // Start position
     formatElement.setAttribute("len",1);
-    
+
     formatElement.appendChild(variableElement);
-    
+
     formats.appendChild(formatElement);
 }
 

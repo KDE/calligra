@@ -40,7 +40,7 @@ public:
 
 private:
     void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
-    void createPageDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
+    void writePageLayout( QDomDocument& mainDocument, const QString& masterPageName );
     QDomElement parseList( QDomDocument& doc, const QDomElement& list );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
     void parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent, QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos);
@@ -62,16 +62,17 @@ private:
     void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
         const QString& key, int type, const QString& text, QDomElement& child);
 
-    
+
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
     QDomDocument    m_stylesDoc;
-    QDomElement     m_masterPage;
 
     QDict<QDomElement>   m_styles;
+    QDict<QDomElement>   m_masterPages;
     StyleStack m_styleStack;
-    
+    QString m_currentMasterPage;
+
     uint m_pictureNumber; // Number of the picture (increment *before* use)
     KZip* m_zip; // Input KZip file
 };
