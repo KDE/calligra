@@ -1217,8 +1217,6 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
   if ( m_pTable == 0L )
     return;
 
-  qDebug("============== setActiveTable =============");
-  
   m_pTabBar->setActiveTab( _t->tableName() );
 
   m_pVBorderWidget->repaint();

@@ -23,7 +23,6 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
 {
     if ( ev->type() == QEvent::MouseButtonPress )
     {
-	qDebug("PRESS");
 	QMouseEvent* e = (QMouseEvent*)ev;
 	
 	m_geometryStart = e->pos();
@@ -35,7 +34,6 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
     }
     else if ( ev->type() == QEvent::MouseMove )
     {
-	qDebug("MOVE");
 	if ( !m_clicked )
 	    return TRUE;
 	
@@ -87,7 +85,6 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
     }
     else if ( ev->type() == QEvent::MouseButtonRelease )
     {
-	qDebug("RELEASE");
 	QMouseEvent* e = (QMouseEvent*)ev;
 	
 	if ( !m_started )
@@ -96,8 +93,6 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
 	    return TRUE;
 	}
 	
-	qDebug("RELEASE 2");
-		
 	m_geometryEnd = e->pos();
 
 	int x = m_geometryStart.x();
