@@ -23,6 +23,7 @@
 namespace std { }
 using namespace std;
 #include <kapplication.h>
+#include <kofficemacros.h>
 
 class KoApplicationPrivate;
 
@@ -38,7 +39,7 @@ class KoApplicationPrivate;
  *  If the last mainwindow becomes closed, KoApplication automatically
  *  calls @ref QApplication::quit.
  */
-class KoApplication : public KApplication
+class KDE_EXPORT KoApplication : public KApplication
 {
     Q_OBJECT
 

@@ -21,7 +21,7 @@
 #define KODOM_H
 
 #include <qdom.h>
-
+#include <kofficemacros.h>
 /**
  * This namespace contains a few convenience functions to simplify code using QDom
  * (when loading OASIS documents, in particular).
@@ -58,7 +58,7 @@ namespace KoDom {
      *
      * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
      */
-    QDomElement namedItemNS( const QDomNode& node, const char* nsURI, const char* localName );
+    KDE_EXPORT QDomElement namedItemNS( const QDomNode& node, const char* nsURI, const char* localName );
 
 }
 

@@ -27,7 +27,7 @@
 #include <qframe.h>
 #include <qpixmap.h>
 
-#include <kdemacros.h>
+#include <kofficemacros.h>
 #include <koGlobal.h>
 #include <koTabChooser.h>
 #include <koUnit.h>
@@ -97,7 +97,7 @@ class KoRulerPrivate;
  * It also offers a popupmenu upon right-clicking, for changing the unit,
  * the page layout, or removing a tab.
  */
-class KoRuler : public QFrame
+class KDE_EXPORT KoRuler : public QFrame
 {
     Q_OBJECT
     friend class KoRulerPrivate; // for the Action enum

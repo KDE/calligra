@@ -27,6 +27,7 @@
 #include <kdialogbase.h>
 #include <kicondialog.h>
 #include <kiconview.h>
+#include <kofficemacros.h>
 
 // KoTCD : KoTemplateChooseDia
 
@@ -127,7 +128,7 @@ class KoTemplateChooseDiaPrivate;
  *  @author Reginald Stadlbauer <reggie@kde.org>
  *  @author Werner Trobin <trobin@kde.org>
  */
-class KoTemplateChooseDia : public KDialogBase
+class KDE_EXPORT KoTemplateChooseDia : public KDialogBase
 {
     Q_OBJECT
 

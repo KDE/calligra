@@ -22,6 +22,7 @@
 
 #include <qstring.h>
 #include <qpicture.h>
+#include <kofficemacros.h>
 
 class QPainter;
 class QSize;
@@ -35,7 +36,7 @@ class QSize;
  * @internal
  * KoPictureWmf is a container class for WMF pictures.
  */
-class KoPictureWmf : public KoPictureBase
+class KDE_EXPORT KoPictureWmf : public KoPictureBase
 {
 public:
     /**

@@ -25,7 +25,7 @@
 #include <qobject.h>
 #include <qmap.h>
 #include <koFilterChain.h>
-
+#include <kofficemacros.h>
 class KoDocument;
 
 /**
@@ -97,7 +97,7 @@ public:
      * gets set by the "users" of this method, as we do not have enough
      * information here.
      */
-    static QStringList mimeFilter( const QCString& mimetype, Direction direction );
+    KDE_EXPORT static QStringList mimeFilter( const QCString& mimetype, Direction direction );
 
     /**
      * The same method as KoFilterManager::mimeFilter but suited for KoShell.

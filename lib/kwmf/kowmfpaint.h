@@ -21,7 +21,7 @@
 #include <qpainter.h>
 
 #include "kowmfread.h"
-
+#include <../kofficecore/kofficemacros.h>
 /**
  * KoWmfPaint inherits the abstract class KoWmfRead
  * and redirects WMF actions onto a QPaintDevice.
@@ -39,7 +39,7 @@
  *
  */
 
-class KoWmfPaint : public KoWmfRead
+class KDE_EXPORT KoWmfPaint : public KoWmfRead
 {
 public:
     KoWmfPaint();

@@ -26,6 +26,7 @@
 #include <klineedit.h>
 #include <kcombobox.h>
 #include <koUnit.h>
+#include <kofficemacros.h>
 
 class KoUnitDoubleBase;
 
@@ -35,7 +36,7 @@ class KoUnitDoubleBase;
  * \internal
  * \since 1.4 (change of behavior)
  */
-class KoUnitDoubleValidator : public KDoubleValidator
+class KDE_EXPORT KoUnitDoubleValidator : public KDoubleValidator
 {
 public:
 	KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char *name = 0 );
@@ -51,7 +52,7 @@ private:
  * Base for the unit widgets
  * \since 1.4 (change of behavior)
  */
-class KoUnitDoubleBase
+class KDE_EXPORT KoUnitDoubleBase
 {
 public:
 	KoUnitDoubleBase( KoUnit::Unit unit, unsigned int precision ) : m_unit( unit ), m_precision( precision ) {}
@@ -92,7 +93,7 @@ protected:
  * Spin box for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
+class KDE_EXPORT KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
 public:
 	// lower, upper, step and value are in pt
@@ -123,7 +124,7 @@ private:
  * Line edit for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDoubleBase
+class KDE_EXPORT KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDoubleBase
 {
 public:
 	KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
@@ -149,7 +150,7 @@ private:
  * Combo box for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KoUnitDoubleComboBox : public KComboBox, public KoUnitDoubleBase
+class KDE_EXPORT KoUnitDoubleComboBox : public KComboBox, public KoUnitDoubleBase
 {
 Q_OBJECT
 public:
@@ -184,7 +185,7 @@ protected:
  * Combo box (with spin control) for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KoUnitDoubleSpinComboBox : public QWidget
+class KDE_EXPORT KoUnitDoubleSpinComboBox : public QWidget
 {
 Q_OBJECT
 public:

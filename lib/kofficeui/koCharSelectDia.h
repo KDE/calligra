@@ -21,6 +21,7 @@
 #define KOCHARSELECTDIA_H
 
 #include <kdialogbase.h>
+#include <kofficemacros.h>
 
 class QWidget;
 class QGridLayout;
@@ -47,7 +48,7 @@ public:
                      const QChar &_chr, bool _modal=true );
     ~KoCharSelectDia();
     // select char dialog
-    static bool selectChar( QString &_font, QChar &_chr, bool _enableFont = true, QWidget* parent = 0, const char* name = 0);
+    KDE_EXPORT static bool selectChar( QString &_font, QChar &_chr, bool _enableFont = true, QWidget* parent = 0, const char* name = 0);
 
     // internal
     QChar chr() const;

@@ -24,6 +24,7 @@
 
 #include <koGenStyles.h>
 #include <qstringlist.h>
+#include <kofficemacros.h>
 class QDomElement;
 
 /**
@@ -89,53 +90,53 @@ namespace KoPageFormat
      *
      * @note We return int instead of the enum to avoid including kprinter.h
      */
-    int /*KPrinter::PageSize*/ printerPageSize( KoFormat format );
+    KDE_EXPORT int /*KPrinter::PageSize*/ printerPageSize( KoFormat format );
 
     /**
      * Returns the width (in mm) for a given page format and orientation
      * 'Custom' isn't supported by this function, obviously.
      */
-    double width( KoFormat format, KoOrientation orientation );
+    KDE_EXPORT double width( KoFormat format, KoOrientation orientation );
 
     /**
      * Returns the height (in mm) for a given page format and orientation
      * 'Custom' isn't supported by this function, obviously.
      */
-    double height( KoFormat format, KoOrientation orientation );
+    KDE_EXPORT double height( KoFormat format, KoOrientation orientation );
 
     /**
      * Returns the internal name of the given page format.
      * Use for saving.
      */
-    QString formatString( KoFormat format );
+    KDE_EXPORT QString formatString( KoFormat format );
 
     /**
      * Convert a format string (internal name) to a page format value.
      * Use for loading.
      */
-    KoFormat formatFromString( const QString & string );
+    KDE_EXPORT KoFormat formatFromString( const QString & string );
 
     /**
      * Returns the default format (based on the KControl settings)
      */
-    KoFormat defaultFormat();
+    KDE_EXPORT KoFormat defaultFormat();
 
     /**
      * Returns the translated name of the given page format.
      * Use for showing the user.
      */
-    QString name( KoFormat format );
+    KDE_EXPORT QString name( KoFormat format );
 
     /**
      * Lists the translated names of all the available formats
      */
-    QStringList allFormats();
+    KDE_EXPORT QStringList allFormats();
 
     /**
      * Try to find the paper format for the given width and height (in mm).
      * Useful to some import filters.
      */
-    KoFormat guessFormat( double width, double height );
+    KDE_EXPORT KoFormat guessFormat( double width, double height );
 }
 
 
@@ -188,9 +189,9 @@ struct KoPageLayout
         return !( (*this) == l );
     }
 
-    KoGenStyle saveOasis() const;
+    KDE_EXPORT KoGenStyle saveOasis() const;
 
-    void loadOasis(const QDomElement &style);
+    KDE_EXPORT void loadOasis(const QDomElement &style);
 };
 
 /** structure for header-footer */

@@ -23,6 +23,7 @@
 #define __koDocumentInfoDlg_h__
 
 #include <kpropertiesdialog.h>
+#include <kofficemacros.h>
 
 class KDialogBase;
 class KoDocumentInfo;
@@ -30,7 +31,7 @@ class KoDocumentInfoAuthor;
 class KoDocumentInfoAbout;
 class KArchiveEntry;
 
-class KoDocumentInfoDlg : public QObject
+class KDE_EXPORT KoDocumentInfoDlg : public QObject
 {
   Q_OBJECT
 public:
@@ -60,7 +61,7 @@ private:
   KoDocumentInfoDlgPrivate *d;
 };
 
-class KoDocumentInfoPropsPage : public KPropsDlgPlugin
+class KDE_EXPORT KoDocumentInfoPropsPage : public KPropsDlgPlugin
 {
   Q_OBJECT
 public:

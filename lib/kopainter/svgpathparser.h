@@ -22,6 +22,7 @@
 
 class QString;
 
+#include <kofficemacros.h>
 /**
  * Parser for svg path data, contained in the d attribute.
  *
@@ -33,7 +34,7 @@ class QString;
  * svg path data commands and parameters. In the second mode, it will convert all
  * relative coordinates to absolute ones, and convert all curves to cubic beziers.
  */
-class SVGPathParser
+class KDE_EXPORT SVGPathParser
 {
 public:
 	void parseSVG( const QString &d, bool process = false );

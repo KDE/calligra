@@ -47,6 +47,8 @@ noinst_HEADERS = koDocument_p.h koFilterManager_p.h \
 	koPictureShared.h koPictureBase.h koPictureImage.h koPictureClipart.h \
 	koPictureEps.h koPictureWmf.h
 
+include_HEADERS = kofficemacros.h
+
 kodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
 kodocinfopropspage_la_LIBADD = ./libkofficecore.la
 kodocinfopropspage_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

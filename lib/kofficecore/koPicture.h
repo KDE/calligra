@@ -23,6 +23,7 @@
 #include <qstring.h>
 #include <qiodevice.h>
 #include <qpixmap.h>
+#include <kofficemacros.h>
 
 #include "koPictureKey.h"
 
@@ -39,7 +40,7 @@ class KoPictureShared;
  *
  * @short A picture container class
  */
-class KoPicture
+class KDE_EXPORT KoPicture
 {
 public:
     /**
@@ -250,6 +251,7 @@ protected:
      * Creare the shared data if needed
      */
     void createSharedData(void);
+    QString uniqueName() const;
 
 protected:
     /**
@@ -262,6 +264,9 @@ protected:
      * The shared data
      */
     KoPictureShared* m_sharedData;
+    static uint uniqueValue;
+    
+    QString m_uniqueName;
 };
 
 #endif /* __koPicture_h__ */

@@ -21,7 +21,7 @@
 #ifndef KOSTYLESTACK_H
 #define KOSTYLESTACK_H
 
-#include <kdemacros.h>
+#include <kofficemacros.h>
 
 #include <qvaluelist.h>
 #include <qdom.h>
@@ -49,7 +49,7 @@
  *  So this is some sort of inheritance where the styles on top of the stack overwrite
  *  the same attribute of a lower style on the stack.
  */
-class KoStyleStack
+class KDE_EXPORT KoStyleStack
 {
 public:
     KoStyleStack();

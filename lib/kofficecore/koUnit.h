@@ -23,6 +23,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <math.h> // for floor
+#include <kofficemacros.h>
 
 class KoXmlWriter;
 class QDomElement;
@@ -55,7 +56,7 @@ class QDomElement;
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
  */
-class KoUnit
+class KDE_EXPORT KoUnit
 {
 public:
     enum Unit {

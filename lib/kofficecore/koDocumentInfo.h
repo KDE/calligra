@@ -22,6 +22,7 @@
 #define KO_DOCUMENT_INFO_H
 
 #include <qobject.h>
+#include <kofficemacros.h>
 
 class QString;
 class QStringList;
@@ -32,7 +33,7 @@ class KoStore;
 class KoDocumentInfoPage;
 class KoXmlWriter;
 
-class KoDocumentInfo : public QObject
+class KDE_EXPORT KoDocumentInfo : public QObject
 {
     Q_OBJECT
 public:
@@ -58,7 +59,7 @@ public:
     void sigDocumentInfoModifed();
 };
 
-class KoDocumentInfoPage : public QObject
+class KDE_EXPORT KoDocumentInfoPage : public QObject
 {
 public:
     KoDocumentInfoPage( QObject *parent, const char* name );
@@ -70,7 +71,7 @@ public:
 
 };
 
-class KoDocumentInfoAuthor : public KoDocumentInfoPage
+class KDE_EXPORT KoDocumentInfoAuthor : public KoDocumentInfoPage
 {
     Q_OBJECT
 public:
@@ -126,7 +127,7 @@ private:
     QString m_position;
 };
 
-class KoDocumentInfoAbout : public KoDocumentInfoPage
+class KDE_EXPORT KoDocumentInfoAbout : public KoDocumentInfoPage
 {
     Q_OBJECT
 public:

@@ -24,6 +24,7 @@
 #include <qptrlist.h>
 #include <qstring.h>
 #include <qobject.h>
+#include <kofficemacros.h>
 
 class KAction;
 class KActionCollection;
@@ -53,7 +54,7 @@ signals:
  *
  * @short History of user commands (for undo/redo)
  */
-class KoCommandHistory : public QObject {
+class KDE_EXPORT KoCommandHistory : public QObject {
     Q_OBJECT
 public:
     /**

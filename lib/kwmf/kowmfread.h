@@ -30,6 +30,7 @@
 #include <qptrlist.h>
 #include <qpointarray.h>
 
+#include <../kofficecore/kofficemacros.h>
 class KoWmfReadPrivate;
 
 /**
@@ -42,7 +43,7 @@ class KoWmfReadPrivate;
  *
  */
 
-class KoWmfRead
+class KDE_EXPORT KoWmfRead
 {
 public:
     KoWmfRead();

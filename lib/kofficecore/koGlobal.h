@@ -27,7 +27,8 @@
 #include <qmap.h>
 class KConfig;
 
-class KoGlobal
+#include <kofficemacros.h>
+class KDE_EXPORT KoGlobal
 {
 public:
     /// For KoApplication

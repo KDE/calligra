@@ -21,10 +21,10 @@
 #define __koFactory_h__
 
 #include <kparts/factory.h>
-
+#include <kofficemacros.h>
 class KInstance;
 
-class KoFactory : public KParts::Factory
+class KDE_EXPORT KoFactory : public KParts::Factory
 {
   Q_OBJECT
 public:

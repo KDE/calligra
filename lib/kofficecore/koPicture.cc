@@ -30,13 +30,22 @@
 #include "koPictureShared.h"
 #include "koPicture.h"
 
+uint KoPicture::uniqueValue = 0;
+
+
 KoPicture::KoPicture(void) : m_sharedData(NULL)
 {
+  m_uniqueName = "Pictures"+ QString::number(uniqueValue++);
 }
 
 KoPicture::~KoPicture(void)
 {
     unlinkSharedData();
+}
+
+QString KoPicture::uniqueName() const
+{
+  return m_uniqueName;
 }
 
 KoPicture::KoPicture(const KoPicture &other)
