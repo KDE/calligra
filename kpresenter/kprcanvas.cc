@@ -2886,7 +2886,7 @@ void KPrCanvas::setTextDepthMinus()
         if ( cmd )
         {
             if ( !macroCmd )
-                macroCmd = new KMacroCommand( i18n("Increase Paragraph Depth") );
+                macroCmd = new KMacroCommand( i18n("Decrease Paragraph Depth") );
             macroCmd->addCommand( cmd );
         }
     }
