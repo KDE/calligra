@@ -67,7 +67,7 @@ static FrameAnchor *findAnchor ( const KoPictureKey& key,
             if ( (*formattingIt).id              == 6    &&
                  (*formattingIt).frameAnchor.key == key )
             {
-                kdDebug(30508) << "Trying anchor " << (*formattingIt).frameAnchor.key.toString() << endl;
+                kdDebug(30508) << "Found anchor " << (*formattingIt).frameAnchor.key.toString() << endl;
                 return &(*formattingIt).frameAnchor;
             }
         }
