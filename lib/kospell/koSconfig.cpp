@@ -77,80 +77,80 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
 {
     d= new KOSpellConfigPrivate;
     kc = KGlobal::config();
-  if( _ksc == 0 )
-  {
-    readGlobalSettings();
-  }
-  else
-  {
-    setNoRootAffix (_ksc->noRootAffix());
-    setRunTogether (_ksc->runTogether());
-    setDictionary  (_ksc->dictionary());
-    setDictFromList (_ksc->dictFromList());
-    setIgnoreList (_ksc->ignoreList());
-    setEncoding (_ksc->encoding());
-  }
+    if( _ksc == 0 )
+    {
+        readGlobalSettings();
+    }
+    else
+    {
+        setNoRootAffix (_ksc->noRootAffix());
+        setRunTogether (_ksc->runTogether());
+        setDictionary  (_ksc->dictionary());
+        setDictFromList (_ksc->dictFromList());
+        setIgnoreList (_ksc->ignoreList());
+        setEncoding (_ksc->encoding());
+    }
 
-  QGridLayout *glay = new QGridLayout (this, 6, 3, 0, KDialog::spacingHint() );
-  cb1 = new QCheckBox(i18n("Create root/affix combinations"
-			   " not in dictionary"), this );
-  connect( cb1, SIGNAL(toggled(bool)), SLOT(sNoAff(bool)) );
-  glay->addMultiCellWidget( cb1, 0, 0, 0, 2 );
+    QGridLayout *glay = new QGridLayout (this, 6, 3, 0, KDialog::spacingHint() );
+    cb1 = new QCheckBox(i18n("Create root/affix combinations"
+                             " not in dictionary"), this );
+    connect( cb1, SIGNAL(toggled(bool)), SLOT(sNoAff(bool)) );
+    glay->addMultiCellWidget( cb1, 0, 0, 0, 2 );
 
-  cb2 = new QCheckBox( i18n("Consider run-together words"
-			    " as spelling errors"), this );
-  connect( cb2, SIGNAL(toggled(bool)), SLOT(sRunTogether(bool)) );
-  glay->addMultiCellWidget( cb2, 1, 1, 0, 2 );
+    cb2 = new QCheckBox( i18n("Consider run-together words"
+                              " as spelling errors"), this );
+    connect( cb2, SIGNAL(toggled(bool)), SLOT(sRunTogether(bool)) );
+    glay->addMultiCellWidget( cb2, 1, 1, 0, 2 );
 
-  dictcombo = new QComboBox( this );
-  dictcombo->setInsertionPolicy (QComboBox::NoInsertion);
-  connect (dictcombo, SIGNAL (activated (int)),
-	   this, SLOT (sSetDictionary (int)));
-  glay->addMultiCellWidget( dictcombo, 2, 2, 1, 2 );
+    dictcombo = new QComboBox( this );
+    dictcombo->setInsertionPolicy (QComboBox::NoInsertion);
+    connect (dictcombo, SIGNAL (activated (int)),
+             this, SLOT (sSetDictionary (int)));
+    glay->addMultiCellWidget( dictcombo, 2, 2, 1, 2 );
 
-  dictlist = new QLabel (dictcombo, i18n("Dictionary:"), this);
-  glay->addWidget( dictlist, 2 ,0 );
+    dictlist = new QLabel (dictcombo, i18n("Dictionary:"), this);
+    glay->addWidget( dictlist, 2 ,0 );
 
-  encodingcombo = new QComboBox( this );
-  encodingcombo->insertItem ("US-ASCII");
-  encodingcombo->insertItem ("ISO 8859-1");
-  encodingcombo->insertItem ("ISO 8859-2");
-  encodingcombo->insertItem ("ISO 8859-3");
-  encodingcombo->insertItem ("ISO 8859-4");
-  encodingcombo->insertItem ("ISO 8859-5");
-  encodingcombo->insertItem ("ISO 8859-7");
-  encodingcombo->insertItem ("ISO 8859-8");
-  encodingcombo->insertItem ("ISO 8859-9");
-  encodingcombo->insertItem ("ISO 8859-13");
-  encodingcombo->insertItem ("ISO 8859-15");
-  encodingcombo->insertItem ("UTF-8");
-  encodingcombo->insertItem ("KOI8-R");
-  encodingcombo->insertItem ("KOI8-U");
-  encodingcombo->insertItem ("CP1251");
+    encodingcombo = new QComboBox( this );
+    encodingcombo->insertItem ("US-ASCII");
+    encodingcombo->insertItem ("ISO 8859-1");
+    encodingcombo->insertItem ("ISO 8859-2");
+    encodingcombo->insertItem ("ISO 8859-3");
+    encodingcombo->insertItem ("ISO 8859-4");
+    encodingcombo->insertItem ("ISO 8859-5");
+    encodingcombo->insertItem ("ISO 8859-7");
+    encodingcombo->insertItem ("ISO 8859-8");
+    encodingcombo->insertItem ("ISO 8859-9");
+    encodingcombo->insertItem ("ISO 8859-13");
+    encodingcombo->insertItem ("ISO 8859-15");
+    encodingcombo->insertItem ("UTF-8");
+    encodingcombo->insertItem ("KOI8-R");
+    encodingcombo->insertItem ("KOI8-U");
+    encodingcombo->insertItem ("CP1251");
 
-  connect (encodingcombo, SIGNAL (activated(int)), this,
-	   SLOT (sChangeEncoding(int)));
-  glay->addMultiCellWidget (encodingcombo, 3, 3, 1, 2);
+    connect (encodingcombo, SIGNAL (activated(int)), this,
+             SLOT (sChangeEncoding(int)));
+    glay->addMultiCellWidget (encodingcombo, 3, 3, 1, 2);
 
-  QLabel *tmpQLabel = new QLabel( encodingcombo, i18n("Encoding:"), this);
-  glay->addWidget( tmpQLabel, 3, 0 );
+    QLabel *tmpQLabel = new QLabel( encodingcombo, i18n("Encoding:"), this);
+    glay->addWidget( tmpQLabel, 3, 0 );
 
 
-  clientcombo = new QComboBox( this );
-  clientcombo->insertItem (i18n("Aspell"));
-  glay->addMultiCellWidget( clientcombo, 4, 4, 1, 2 );
+    clientcombo = new QComboBox( this );
+    clientcombo->insertItem (i18n("Aspell"));
+    glay->addMultiCellWidget( clientcombo, 4, 4, 1, 2 );
 
-  tmpQLabel = new QLabel( clientcombo, i18n("Client:"), this );
-  glay->addWidget( tmpQLabel, 4, 0 );
+    tmpQLabel = new QLabel( clientcombo, i18n("Client:"), this );
+    glay->addWidget( tmpQLabel, 4, 0 );
 
-  if( addHelpButton == true )
-  {
-    QPushButton *pushButton = new QPushButton( i18n("&Help"), this );
-    connect( pushButton, SIGNAL(clicked()), this, SLOT(sHelp()) );
-    glay->addWidget(pushButton, 5, 2);
-  }
+    if( addHelpButton == true )
+    {
+        QPushButton *pushButton = new QPushButton( i18n("&Help"), this );
+        connect( pushButton, SIGNAL(clicked()), this, SLOT(sHelp()) );
+        glay->addWidget(pushButton, 5, 2);
+    }
 
-  fillInDialog();
+    fillInDialog();
 }
 
 KOSpellConfig::~KOSpellConfig ()
@@ -197,16 +197,6 @@ KOSpellConfig::sChangeEncoding(int i)
 {
     kdDebug(750) << "KOSpellConfig::sChangeEncoding(" << i << ")" << endl;
   setEncoding (i);
-  emit configChanged();
-}
-
-void
-KOSpellConfig::sChangeClient (int i)
-{
-  // read in new dict list
-  if (dictcombo) {
-      getAvailDictsAspell();
-  }
   emit configChanged();
 }
 
@@ -499,13 +489,6 @@ KOSpellConfig::setDictFromList (bool dfl)
   dictfromlist=dfl;
 }
 
-/*
-void KOSpellConfig::setPersonalDict (const char *s)
-{
-  qspdict=s;
-}
-*/
-
 void
 KOSpellConfig::setEncoding (int enctype)
 {
@@ -533,13 +516,6 @@ QString KOSpellConfig::dictionary () const
 {
   return qsdict;
 }
-
-/*
-const QString KOSpellConfig::personalDict () const
-{
-  return qspdict;
-}
-*/
 
 int
 KOSpellConfig::encoding () const

@@ -202,7 +202,6 @@ class KOSpellConfig : public QWidget
     void sPathDictionary(bool);
     void sSetDictionary (int);
     void sChangeEncoding (int);
-    void sChangeClient (int);
 
   protected:
     // The options
@@ -216,7 +215,6 @@ class KOSpellConfig : public QWidget
     QStringList ignorelist;
     enum {rdictlist=3, rencoding=4, rhelp=6};
     KConfig *kc;
-    int iclient;            // defaults to ispell, may be aspell, too
 
     QCheckBox *cb1, *cb2;
     QLabel *dictlist;
