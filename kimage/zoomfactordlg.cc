@@ -36,19 +36,23 @@ KZoomFactorDialog::KZoomFactorDialog( QWidget* parent, const char* name, WFlags 
   QGridLayout* grid = new QGridLayout( this, 6, 4, 15, 7 );
 
   // Inputline X
-  m_pLineEditXFactor = new KIntNumInput( QString::null, -INT_MAX, INT_MAX, 1,
-					 0,
-					 QString::null, 10, false, this,
-					 "inputZoomX");
+  //m_pLineEditXFactor = new KIntNumInput( QString::null, -INT_MAX, INT_MAX, 1,
+  //					 0,
+  //					 QString::null, 10, false, this,
+  //					 "inputZoomX");
+  m_pLineEditXFactor = new KIntNumInput(0, this, 10, "inputZoomX");
+  m_pLineEditXFactor->setRange(-INT_MAX, INT_MAX, 1);
   grid->addMultiCellWidget( m_pLineEditXFactor, 1, 1, 0, 3 );
   QLabel* label = new QLabel( m_pLineEditXFactor, i18n( "Zoom factor for width in % (1x = 100)" ), this );
   grid->addWidget( label, 0, 0 );
 
   // Inputline Y
-  m_pLineEditYFactor = new KIntNumInput(QString::null, -INT_MAX, INT_MAX, 1,
-					0,
-					QString::null, 10, false, 
-					this, "inputZoomX"  );
+  //m_pLineEditYFactor = new KIntNumInput(QString::null, -INT_MAX, INT_MAX, 1,
+  //					0,
+  //					QString::null, 10, false,
+  //					this, "inputZoomX"  );
+  m_pLineEditYFactor = new KIntNumInput(0, this, 10, "inputZoomY");
+  m_pLineEditYFactor->setRange(-INT_MAX, INT_MAX, 1);
   grid->addMultiCellWidget( m_pLineEditYFactor, 3, 3, 0, 3 );
   label = new QLabel( m_pLineEditYFactor, i18n( "Zoom factor for height in % (1x = 100)" ), this );
   grid->addWidget( label, 2, 0 );
@@ -63,13 +67,13 @@ KZoomFactorDialog::KZoomFactorDialog( QWidget* parent, const char* name, WFlags 
   QPushButton* buttonCancel = new QPushButton( this, "ButtonCancel" );
   buttonCancel->setText( i18n( "Cancel" ) );
   connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
-  grid->addWidget( buttonCancel, 5, 3 ); 
+  grid->addWidget( buttonCancel, 5, 3 );
 
    // Dialog
    grid->setRowStretch( 4, 1 );
    grid->setColStretch( 1, 1 );
 
-   setMinimumSize( label->sizeHint().width() + m_pLineEditXFactor->sizeHint().width() + buttonOK->sizeHint().width() + 30, 
+   setMinimumSize( label->sizeHint().width() + m_pLineEditXFactor->sizeHint().width() + buttonOK->sizeHint().width() + 30,
                    label->sizeHint().height() + buttonOK->sizeHint().height() + buttonCancel->sizeHint().height() + 40);
 }
 

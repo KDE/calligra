@@ -38,10 +38,12 @@ KIntegerInputDialog::KIntegerInputDialog(QWidget *parent, const char *name, cons
     QGridLayout* grid = new QGridLayout( this, 4, 4, 15, 7 );
 
 	// Inputline
-    m_pLineEdit = new KIntNumInput( QString::null, -INT_MAX, INT_MAX, 1,
-				    0,
-				    QString::null, 10, false, this,
-				    "inputtext" );
+    //m_pLineEdit = new KIntNumInput( QString::null, -INT_MAX, INT_MAX, 1,
+    //				    0,
+    //     			    QString::null, 10, false, this,
+    //				    "inputtext" );
+    m_pLineEdit = new KIntNumInput(0, this, 10, "inputtext");
+    m_pLineEdit->setRange(-INT_MAX, INT_MAX, 1);
 	grid->addMultiCellWidget( m_pLineEdit, 1, 1, 0, 3 );
 	
 	// Label
@@ -64,7 +66,7 @@ KIntegerInputDialog::KIntegerInputDialog(QWidget *parent, const char *name, cons
 	buttonCancel->setText( i18n( "Cancel" ) );
 	buttonCancel->resize( buttonOK->sizeHint() );
 	connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
-	grid->addWidget( buttonCancel, 3, 3 ); 
+	grid->addWidget( buttonCancel, 3, 3 );
 
 	// Dialog
 	grid->setRowStretch( 0, 0 );
@@ -78,7 +80,7 @@ KIntegerInputDialog::KIntegerInputDialog(QWidget *parent, const char *name, cons
 
 	m_pLineEdit->setFocus();
 
-	setMinimumSize( label->sizeHint().width() + m_pLineEdit->sizeHint().width() + buttonOK->sizeHint().width() + 30, 
+	setMinimumSize( label->sizeHint().width() + m_pLineEdit->sizeHint().width() + buttonOK->sizeHint().width() + 30,
 	                label->sizeHint().height() + buttonOK->sizeHint().height() + buttonCancel->sizeHint().height() + 40);
 }
 

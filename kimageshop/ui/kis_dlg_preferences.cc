@@ -41,7 +41,9 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
   grid->addWidget( m_saveOnExit, 0, 0 );
 
   // only for testing it
-  KIntNumInput* i = new KIntNumInput( "a", 1, 100, 1, 1, QString::null, 10, true, this );
+  //KIntNumInput* i = new KIntNumInput( "a", 1, 100, 1, 1, QString::null, 10, true, this );
+  KIntNumInput* i = new KIntNumInput(1, this, 10, "a");
+  i->setRange(1, 100, 1);
   grid->addWidget( i, 1, 0 );
 
   grid->setRowStretch( 2, 1 );
