@@ -317,7 +317,7 @@ void KSpreadValue::setValue( const QTime& time )
 {
   // reference time is midnight
   QTime refTime( 0, 0 );
-  double f = refTime.secsTo( time ) / 86400.0;
+  double f = refTime.msecsTo( time ) / 86400000.0;
 
   setValue( f );
 }
@@ -334,13 +334,7 @@ void KSpreadValue::setValue( const QDate& date )
 // get the value as date/time
 QDateTime KSpreadValue::asDateTime() const
 {
-  QDateTime dt = QDate( 1899, 12, 31 );
-
-  double f = asFloat();
-  dt = dt.addSecs( qRound( (f-(int)f) * 86400 ) );
-  if( f > 1.0 ) dt = dt.addDays( (int) f-1 );
-  
-  return dt;
+  return QDateTime( asDate(), asTime() );
 }
 
 // get the value as date
@@ -360,7 +354,7 @@ QTime KSpreadValue::asTime() const
   QTime dt;
   
   double f = asFloat();
-  dt = dt.addSecs( qRound( (f-(int)f) * 86400 ) );
+  dt = dt.addMSecs( qRound( (f-(int)f) * 86400 * 1000 ) );
   
   return dt;
 }
