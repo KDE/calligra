@@ -90,7 +90,6 @@ This manual describes KWord 1.3.
 TODO:
 - Horizontal lines
 - Correct screenshot "footend.png" - Footnotes/Endnotes.
-- Delete from Document structure
 - Write Migrating section
 - Write Watermark proceedure
 - MDI vs SDI
@@ -98,8 +97,6 @@ TODO:
 - Update screenshots/toobar icons
 - Write Chapter Numbering
 - Personal expressions path
-- "Copy link"
-- Spell check selected text
 - Word by word strikout and underline
 - Add offset from baseline
 - Convert table to text

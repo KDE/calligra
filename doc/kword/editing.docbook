@@ -1472,6 +1472,13 @@ convert that paragraph to a numbered paragraph.  All future paragraphs will be c
 </varlistentry>
 
 <varlistentry>
+<term><guilabel>Capitalize names of days</guilabel></term>
+<listitem>
+<para>Automatically capitalize the days of the week (Sunday, Monday, Tuesday, etc...).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guilabel>Use lists formatting for bulleted paragraphs</guilabel></term>
 <listitem>
 <para>When selected, &kword; will look for lines that begin with <emphasis>- </emphasis>, and automatically convert the paragraph style
