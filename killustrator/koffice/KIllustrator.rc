@@ -50,6 +50,7 @@
    <Action name="text"/>
    <Separator/>
    <Action name="zoom"/>
+   <Action name="insertpart"/>
   </Menu>
   <Action name="insertBitmap"/>
   <Action name="insertClipart"/>
@@ -102,9 +103,6 @@
   <Action name="cut"/>
   <Action name="copy"/>
   <Action name="paste"/>
-  <Separator/>
-  <Action name="tool_zoomin"/>
-  <Action name="tool_zoomout"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="colorbar" position="right"><Text>Color</Text>
   <Action name="colorbar"/>
@@ -120,11 +118,16 @@
   <Action name="ellipse"/>
   <Action name="text"/>
   <Action name="zoom"/>
+  <Action name="insertpart"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="nodes" position="left"><Text>Nodes</Text>
   <Action name="moveNode"/>
   <Action name="newNode"/>
   <Action name="deleteNode"/>
   <Action name="splitLine"/>
+</ToolBar>
+<ToolBar fullWidth="false" name="zoom" position="left"><Text>Zoom</Text>
+  <Action name="tool_zoomin"/>
+  <Action name="tool_zoomout"/>
 </ToolBar>
 </kpartgui>

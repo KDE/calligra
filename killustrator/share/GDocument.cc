@@ -56,7 +56,8 @@
 #define LAYER_EDITABLE  2
 #define LAYER_PRINTABLE 4
 
-GDocument::GDocument () {
+GDocument::GDocument (KIllustratorDocument *_doc) {
+  doc = _doc;
   initialize ();
 }
 

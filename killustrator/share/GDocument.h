@@ -40,16 +40,18 @@ class GObject;
 class GLayer;
 class QDomDocument;
 class QDomElement;
+class KIllustratorDocument;
 
 class GDocument : public QObject {
   Q_OBJECT
 public:
-  GDocument ();
+  GDocument (KIllustratorDocument *_doc);
   ~GDocument ();
 
   void initialize ();
   void setAutoUpdate (bool flag);
 
+  KIllustratorDocument *document(void) const {return doc;};
   QString fileName () const { return filename; }
   void setFileName (const QString &s) { filename = s; }
   void setPaperSize (int width, int height);
@@ -170,6 +172,7 @@ signals:
   void wasModified (bool flag);
 
 protected:
+  KIllustratorDocument *doc;
   bool autoUpdate;
   bool modifyFlag;
   QString filename;

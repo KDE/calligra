@@ -40,6 +40,7 @@
 #include <koTemplateChooseDia.h>
 #include <koQueryTrader.h>
 #include <koStore.h>
+#include <kdebug.h>
 
 KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu,
                                       KoDocument* doc,
@@ -58,7 +59,7 @@ KIllustratorDocument::KIllustratorDocument( QWidget *parentWidget, const char *w
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
     setInstance( KIllustratorFactory::global() );
-    m_gdocument = new GDocument();
+    m_gdocument = new GDocument(this);
     connect(m_gdocument, SIGNAL(wasModified(bool)), this, SLOT(modified(bool)));
     GObject::registerPrototype ("object", new GPart());
 }
@@ -124,11 +125,9 @@ bool KIllustratorDocument::completeSaving (KoStore* store)
 
 void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
 {
-    KoDocument* doc = e.createDoc();
-    if ( !doc )
-        return;
+    KoDocument* doc = e.createDoc(this);
 
-    if (! doc->initDoc() )
+    if ( !doc || ! doc->initDoc() )
     {
         KMessageBox::error((QWidget *) 0L, i18n ("KIllustrator Error"),
                                i18n ("Could not insert document"));
@@ -136,13 +135,12 @@ void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
     }
 
     KIllustratorChild *child = new KIllustratorChild (this, doc, rect );
-    insertChild (child);
+    insertChild( child );
 
     GPart* part = new GPart (child);
     m_gdocument->insertObject (part);
     emit partInserted (child, part);
 }
-
 
 void KIllustratorDocument::insertChild( KoDocumentChild* child )
 {

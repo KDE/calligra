@@ -30,7 +30,8 @@
 
 class KIllustratorFrame;
 class KIllustratorChild;
-class Painter;
+class KIllustratorView;
+class QPainter;
 
 class GPart : public GObject {
   Q_OBJECT
@@ -42,7 +43,7 @@ public:
 
   ~GPart ();
 
-  virtual void draw (Painter& p, bool withBasePoints = false,
+  virtual void draw (QPainter& p, bool withBasePoints = false,
                      bool outline = false);
 
   virtual QString typeName () const;
@@ -53,6 +54,9 @@ public:
   virtual QDomElement writeToXml (QDomDocument &document);
 
   KIllustratorChild *getChild () { return child; }
+  
+  virtual void activate(KIllustratorView *view);
+  virtual void deactivate();
 
 protected:
   void calcBoundingBox ();

@@ -28,6 +28,10 @@
 #include <koQueryTrader.h>
 #include <Tool.h>
 
+class Canvas;
+class GDocument;
+class Coord;
+
 class InsertPartTool : public Tool {
   Q_OBJECT
 public:
@@ -39,10 +43,19 @@ public:
 
   void setPartEntry (KoDocumentEntry& entry);
 
+protected:
+  void processButtonPressEvent (QMouseEvent* e);
+  void processMouseMoveEvent (QMouseEvent* e);
+  void processButtonReleaseEvent (QMouseEvent* e);
 private:
   KoDocumentEntry docEntry;
+  GDocument *doc;
+  Canvas *canvas;
+  enum State { S_Init, S_Rubberband};
+  State state;
+  Coord selPoint[2];
+
   bool validEntry;
-  int x, y, width, height;
 };
 
 #endif

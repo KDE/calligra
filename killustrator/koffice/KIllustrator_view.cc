@@ -87,6 +87,7 @@
 #include <kpopupmenu.h>
 #include <kxmlgui.h>
 #include <kparts/event.h>
+#include <GPart.h>
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
                                     KIllustratorDocument* doc) :
@@ -107,16 +108,11 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     // restore default settings
     PStateManager::instance ();
 
-    //kdDebug(38000) << "connect doc" << endl;
-    /*
-      QObject::connect (m_pDoc,
-      SIGNAL (partInserted (KIllustratorChild *, GPart *)),
-      this,
-      SLOT (insertPartSlot (KIllustratorChild *, GPart *)));
-      QObject::connect (m_pDoc,
-      SIGNAL (childGeometryChanged (KIllustratorChild *)),
-      this, SLOT(changeChildGeometrySlot (KIllustratorChild *)));
-    */
+     QObject::connect (m_pDoc, SIGNAL (partInserted (KIllustratorChild *, GPart *)),
+                                          this, SLOT (insertPartSlot (KIllustratorChild *, GPart *)));
+     QObject::connect (m_pDoc, SIGNAL (childGeometryChanged (KIllustratorChild *)),
+                                           this, SLOT(changeChildGeometrySlot (KIllustratorChild *)));
+    
     createMyGUI();
 }
 
@@ -198,6 +194,9 @@ void KIllustratorView::createMyGUI()
     KToggleAction *m_zoomTool = new KToggleAction( i18n("Zoom"), "zoomtool", CTRL+Key_0, actionCollection(), "zoom" );
     m_zoomTool->setExclusiveGroup( "Tools" );
     connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
+    KToggleAction *m_insertPartTool = new KToggleAction( i18n("InsertPart"), "parts", 0, actionCollection(), "insertpart" );
+    m_insertPartTool->setExclusiveGroup( "Tools" );
+    connect( m_insertPartTool, SIGNAL( toggled( bool ) ), this, SLOT( slotInsertPartTool( bool ) ) );
 
     // Layout menu
     new KAction( i18n("&Page..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
@@ -389,8 +388,8 @@ void KIllustratorView::setupCanvas()
                                selTool = new SelectionTool (&cmdHistory));
     QObject::connect (selTool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
-    //  QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
-    //                this, SLOT(activatePart(GObject*)));
+    QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
+                    this, SLOT(activatePart(GObject*)));
     tcontroller->registerTool (ID_TOOL_EDITPOINT,
                                editPointTool = new EditPointTool (&cmdHistory));
     QObject::connect (editPointTool, SIGNAL(modeSelected(const QString&)),
@@ -446,29 +445,14 @@ void KIllustratorView::setupCanvas()
 
 void KIllustratorView::readConfig()
  {
-/*  KConfig *config = kapp->config();
-
-  config->setGroup("MainWin");
-  int w = config->readNumEntry( "Width", 700 );
-  int h = config->readNumEntry( "Height", 500 );
-  mParent->resize(w,h);
-  cout << "WIDTH=" <<  w << "\n";
-  cout << "HEIGHT=" << h << "\n";*/
  }
  
 void KIllustratorView::writeConfig()
  {
-/*  KConfig *config = kapp->config();
-
-  config->setGroup("MainWin");
-  config->writeEntry( "Width", mParent->width() );
-  config->writeEntry( "Height", mParent->height() );*/
  }
 
-// FIXME (Werner)
 void KIllustratorView::showCurrentMode (const QString& msg)
  {
-  kdDebug(0) << "MESSAGE: " << msg.local8Bit() << endl;
     //statusbar->changeItem (msg, 2);
  }
 
@@ -544,19 +528,19 @@ void KIllustratorView::print( QPrinter &printer )
     canvas->print( printer );
 }
 
-/*
+
 void KIllustratorView::editInsertObject ()
 {
     m_pDoc->gdoc()->unselectAllObjects();
     KoDocumentEntry docEntry = KoPartSelectDia::selectPart ();
-    if (docEntry.name.isEmpty ())
+    if (docEntry.isEmpty ())
         return;
 
     insertPartTool->setPartEntry (docEntry);
     // ####### Torben
     // tcontroller->toolSelected (m_idActiveTool = ID_TOOL_INSERTPART);
 }
-*/
+
 
 /*
 void KIllustratorView::setPenColor (long int id) {
@@ -650,10 +634,11 @@ void KIllustratorView::resetTools()
     m_selectTool->setEnabled( true );
 }
 
-// void KIllustratorView::activatePart (GObject *obj) {
-/* if (obj->isA ("GPart")) {
+void KIllustratorView::activatePart (GObject *obj) {
+ if (obj->isA ("GPart")) {
    GPart *part = (GPart *) obj;
-   cout << "setFramesToParts ..." << endl;
+   part->activate(this);
+   /*cout << "setFramesToParts ..." << endl;
    setFramesToParts ();
    cout << "part->activate ..." << endl;
    int xoff = 1, yoff = 1;
@@ -662,14 +647,14 @@ void KIllustratorView::resetTools()
    yoff += 30;
    }
 
-   part->activate (xoff, yoff);
+  //part->activate (xoff, yoff);
    setFocusProxy (part->getView ());
    QWidget::setFocusPolicy (QWidget::StrongFocus);
    cout << "setFocus ..." << endl;
-   part->getView ()->setFocusPolicy (QWidget::StrongFocus);
-   part->getView ()->setFocus ();
-   } */
-// }
+//   part->getView ()->setFocusPolicy (QWidget::StrongFocus);
+//   part->getView ()->setFocus ();*/
+   } 
+ }
 
 
 GDocument* KIllustratorView::activeDocument()
@@ -677,15 +662,17 @@ GDocument* KIllustratorView::activeDocument()
     return m_pDoc->gdoc();
 }
 
-/*
+
 void KIllustratorView::insertPartSlot( KIllustratorChild *, GPart *)
-{
-}
+ {
+  
+ }
 
 void KIllustratorView::changeChildGeometrySlot(KIllustratorChild *)
-{
-}
-*/
+ {
+  
+ }
+
 
 QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
 {
@@ -1169,6 +1156,13 @@ void KIllustratorView::slotZoomTool( bool b  )
 {
     if ( b )
         tcontroller->toolSelected( ID_TOOL_ZOOM );
+}
+
+void KIllustratorView::slotInsertPartTool( bool b  )
+{
+ editInsertObject ();
+ if ( b )
+  tcontroller->toolSelected( ID_TOOL_INSERTPART );
 }
 
 void KIllustratorView::slotMoveNode( bool b )

@@ -85,10 +85,10 @@ public:
 
     bool printDlg();
 
-/*
+
     void editInsertObject ();
 
-    void setPenColor (long int id);
+/*    void setPenColor (long int id);
     void setFillColor (long int id);
 
     void configPolygonTool ();
@@ -121,9 +121,9 @@ protected slots:
     QString getExportFileName (FilterManager *filterMgr);
 
     void showCurrentMode (const QString &msg);
-/*
+
        void insertPartSlot (KIllustratorChild *child, GPart *part);
-       void changeChildGeometrySlot (KIllustratorChild *child); */
+       void changeChildGeometrySlot (KIllustratorChild *child);
 
 private slots:
     /**
@@ -179,6 +179,7 @@ private slots:
     void slotEllipseTool( bool );
     void slotTextTool( bool );
     void slotZoomTool( bool );
+    void slotInsertPartTool( bool );
     void slotMoveNode( bool );
     void slotNewNode( bool );
     void slotDeleteNode( bool );
@@ -194,6 +195,7 @@ private slots:
     void slotZoomIn();
     void slotZoomOut();
     void slotViewResize();
+    void activatePart (GObject *obj);
     
 protected:
     KIllustratorDocument *m_pDoc;

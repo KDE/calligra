@@ -23,8 +23,10 @@
 */
 
 #include <GPart.h>
-
+#include <kdebug.h>
 #include <qdom.h>
+#include <qpainter.h>
+#include <qpixmap.h>
 
 #include <KIllustrator_view.h>
 #include <KIllustrator_doc.h>
@@ -54,7 +56,7 @@ GPart::GPart (const QDomElement &element) :
     initialGeom = QRect (x, y, w, h);
 
   // ####### Torben
-  /* child = new KIllustratorChild ();
+/*  child = new KIllustratorChild ();
   child->setURL (url.c_str ());
   child->setMimeType (mime.c_str ());
   child->setGeometry (initialGeom);  */
@@ -72,42 +74,62 @@ QString GPart::typeName () const {
   return i18n ("Embedded Part");
 }
 
-void GPart::draw (Painter&/*p*/, bool /*withBasePoints*/, bool /*outline*/) {
-    // ####### Torben
-    /**
+void GPart::activate(KIllustratorView *view)
+ {
+  KoDocument* part = child->document();
+  if ( !part )
+    return;
+  view->partManager()->addPart( part, false );
+  view->partManager()->setActivePart( part, view );
+ }
+
+void GPart::deactivate()
+ {
+  
+ }
+
+void GPart::draw (QPainter& p, bool withBasePoints, bool outline)
+ {
   p.save ();
   QRect r = child->geometry ();
-  if (outline) {
+  if (outline)
+   {
     p.setWorldMatrix (tmpMatrix, true);
     p.setPen (black);
     p.drawRect (r.x (), r.y (), r.width (), r.height ());
-  }
-  else {
-    float s = p.worldMatrix ().m11 ();
-    QRect win = p.window ();
-    QRect vPort = p.viewport ();
-    QPicture *pic = child->draw (1.0, true);
-    p.setViewport (r.x () * s, r.y () * s, vPort.width (), vPort.height ());
-    p.drawPicture (*pic);
-    p.setViewport (vPort);
-    p.setWindow (win);
-  }
-  p.restore (); */
-}
+   }
+  else
+   {
+//    float s = p.worldMatrix ().m11 ();
+//    QRect win = p.window ();
+//    QRect vPort = p.viewport ();
+//    QPicture *pic = child->draw (1.0, true);
+//    p.setViewport (r.x () * s, r.y () * s, vPort.width (), vPort.height ());
+    //p.drawPicture (*pic);
+    QPixmap pic(r.width(), r.height());
+    QPainter picp(&pic);
+//    picp.begin();
+    child->document()->paintEverything(picp, QRect(0, 0, r.width(), r.height()), false, 0);
+//    picp.end();
+    p.drawPixmap(r.x(), r.y(), pic);
+//    p.drawRect (r);
+//    p.setViewport (vPort);
+//    p.setWindow (win);
+   }
+  p.restore (); 
+ }
 
-void GPart::calcBoundingBox () {
+void GPart::calcBoundingBox ()
+ {
+  QRect r = tmpMatrix.map (initialGeom);
 
-    QRect r = tmpMatrix.map (initialGeom);
-    if (r != oldGeom) {
-        //cout << "UPDATE CHILD GEOMETRY !!!!!!!!!!!!" << endl;
-        oldGeom = r;
-        child->setGeometry (r);
-        //cout << "new part geometry: " << r.x () << ", " << r.y ()
-        //     << " - " << r.width () << ", " << r.height () << endl;
-    }
-    updateBoundingBox (Coord (r.x (), r.y ()),
-                       Coord (r.right (), r.bottom ()));
-}
+  if (r != oldGeom)
+   {
+    oldGeom = r;
+    child->setGeometry (r);
+   }
+  updateBoundingBox (Coord (r.x (), r.y ()), Coord(r.right(), r.bottom()));
+ }
 
 GObject* GPart::copy () {
   return new GPart (*this);

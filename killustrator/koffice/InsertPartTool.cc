@@ -23,7 +23,7 @@
 */
 
 #include <InsertPartTool.h>
-
+#include <kdebug.h>
 #include <GDocument.h>
 #include <KIllustrator_doc.h>
 #include <Canvas.h>
@@ -34,67 +34,117 @@
 #include <qpainter.h>
 #include <klocale.h>
 
-InsertPartTool::InsertPartTool (CommandHistory* history) : Tool (history) {
-  x = y = -1;
+InsertPartTool::InsertPartTool (CommandHistory* history) : Tool (history)
+ {
   validEntry = false;
-}
+ }
 
-void InsertPartTool::activate (GDocument* , Canvas* ) {
-  x = y = -1;
-}
+void InsertPartTool::activate (GDocument *_doc, Canvas *_canvas)
+ {
+  state = S_Init;
+  doc = _doc;
+  canvas = _canvas;
+ }
 
-void InsertPartTool::deactivate (GDocument*, Canvas* ) {
+void InsertPartTool::deactivate (GDocument*, Canvas* )
+ {
   validEntry = false;
-}
+ }
 
-void InsertPartTool::setPartEntry (KoDocumentEntry& entry) {
+void InsertPartTool::setPartEntry (KoDocumentEntry& entry)
+ {
   docEntry = entry;
   validEntry = true;
-}
+ }
 
-void InsertPartTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == QEvent::KeyPress) {
-    QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Qt::Key_Escape) {
-      /*
-       * Abort the last operation
-       */
-      emit operationDone ();
+void InsertPartTool::processEvent (QEvent* e, GDocument *_doc, Canvas* _canvas)
+ {
+  if (e->type () == QEvent::MouseButtonRelease)
+   {
+    processButtonReleaseEvent((QMouseEvent *) e);
+    emit operationDone ();
+   }
+  else
+   if (e->type () == QEvent::MouseButtonPress)
+    {
+     processButtonPressEvent((QMouseEvent *) e);
+     emit operationDone ();
     }
-  }
-  else if (e->type () == QEvent::MouseButtonPress) {
-    QMouseEvent *me = (QMouseEvent *) e;
-    x = me->x (); y = me->y ();
-    width = height = 0;
-  }
-  else if (e->type () == QEvent::MouseMove) {
-    if (x == -1 || y == -1)
-      return;
+   else
+    if (e->type () == QEvent::MouseMove)
+     {
+      processMouseMoveEvent((QMouseEvent *) e);
+      emit operationDone ();
+     }
+ }
 
-    QMouseEvent *me = (QMouseEvent *) e;
-    width = me->x () - x;
-    height = me->y () - y;
-
-    canvas->repaint ();
+void InsertPartTool::processButtonPressEvent (QMouseEvent* e)
+ {
+  /************
+   * S_Init
+   */
+  if (state == S_Init)
+   {
+    state = S_Rubberband;
+    selPoint[0].x(e->x());
+    selPoint[0].y(e->y());
+    selPoint[1].x(e->x());
+    selPoint[1].y(e->y());
+   }
+ }
+ 
+void InsertPartTool::processMouseMoveEvent (QMouseEvent* e)
+ {
+  if (state == S_Rubberband)
+   {
+    selPoint[1].x(e->x());
+    selPoint[1].y(e->y());
+    canvas->repaint();
     QPainter painter;
-    painter.save ();
-    QPen pen (black, 1);
-    painter.begin (canvas);
-    painter.setPen (pen);
-    float sfactor = canvas->scaleFactor ();
-    painter.scale (sfactor, sfactor);
-    painter.drawRect (x, y, width, height);
-    painter.restore ();
-    painter.end ();
-  }
-  else if (e->type () == QEvent::MouseButtonRelease) {
+    painter.save();
+    QPen pen(red, 1, DotLine);
+    painter.begin(canvas);
+    painter.setPen(pen);
+    float sfactor = canvas->scaleFactor();
+    painter.scale(sfactor, sfactor);
+    Rect selRect(selPoint[0], selPoint[1]);
+    painter.drawRect((int) selRect.x (), (int) selRect.y (),
+                      (int) selRect.width (), (int) selRect.height ());
+    painter.restore();
+    painter.end();
+    return;
+   }
+ }
+ 
+void InsertPartTool::processButtonReleaseEvent (QMouseEvent* e)
+ {
+  if (state == S_Rubberband)
+   {
     if (validEntry) {
-       KIllustratorDocument *kdoc = (KIllustratorDocument *) doc;
-       kdoc->insertPart (QRect (x, y, width, height), docEntry);
+       KIllustratorDocument *kdoc = doc->document();
+       if(selPoint[0].x() > selPoint[1].x())
+        {
+	 int s = selPoint[0].x();
+	 selPoint[0].x(selPoint[1].x());
+	 selPoint[1].x(s);
+	}
+       if(selPoint[0].y() > selPoint[1].y())
+        {
+	 int s = selPoint[0].y();
+	 selPoint[0].y(selPoint[1].y());
+	 selPoint[1].y(s);
+	}
+       kdoc->insertPart (QRect (selPoint[0].x(), selPoint[0].y(), selPoint[1].x() - selPoint[0].x(), selPoint[1].y() - selPoint[0].y()), docEntry);
     }
     canvas->repaint ();
     emit operationDone ();
-  }
-}
+    state = S_Init;
+    return;
+   }
+  if(state == S_Init)
+   {
+    return;
+   }
+ }
 
 #include <InsertPartTool.moc>
