@@ -96,7 +96,7 @@ public:
     { return m_pKWordDoc; }
 
     void setPartFrameSet( KWPartFrameSet* fs ) { m_partFrameSet = fs; }
-
+    KWPartFrameSet * partFrameSet() const { return m_partFrameSet; }
     virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
 
 protected:
@@ -338,7 +338,7 @@ public:
     //use insert file attribute for footnote frameset
     //don't change it attibute otherwise we have a footnote with is not fixed
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false );
-    
+
     void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd );
     void completePasting();
 

@@ -2370,24 +2370,29 @@ QDomDocument KWDocument::saveXML()
     // Write "OBJECT" tag for every child
     QPtrListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
-        QDomElement embeddedElem = doc.createElement( "EMBEDDED" );
-        kwdoc.appendChild( embeddedElem );
-
         KWChild* curr = static_cast<KWChild*>(chl.current());
-
-        QDomElement objectElem = curr->save( doc, true );
-        embeddedElem.appendChild( objectElem );
-
-        QDomElement settingsElem = doc.createElement( "SETTINGS" );
-        embeddedElem.appendChild( settingsElem );
-
-        QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-        for ( ; fit.current() ; ++fit )
+        if ( !curr->partFrameSet()->isDeleted() )
         {
-            KWFrameSet * fs = fit.current();
-            if ( !fs->isDeleted() && fs->type() == FT_PART &&
-                 dynamic_cast<KWPartFrameSet*>( fs )->getChild() == curr )
-                fs->save( settingsElem );
+            QDomElement embeddedElem = doc.createElement( "EMBEDDED" );
+            kwdoc.appendChild( embeddedElem );
+
+            QDomElement objectElem = curr->save( doc, true );
+            embeddedElem.appendChild( objectElem );
+
+            QDomElement settingsElem = doc.createElement( "SETTINGS" );
+            embeddedElem.appendChild( settingsElem );
+
+            curr->partFrameSet()->save( settingsElem );
+#if 0
+            QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+            for ( ; fit.current() ; ++fit )
+            {
+                KWFrameSet * fs = fit.current();
+                if ( !fs->isDeleted() && fs->type() == FT_PART &&
+                     static_cast<KWPartFrameSet*>( fs )->getChild() == curr )
+                    fs->save( settingsElem );
+            }
+#endif
         }
     }
 
@@ -2476,8 +2481,9 @@ bool KWDocument::saveChildren( KoStore *_store )
 
     QPtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
+        KWChild* curr = static_cast<KWChild*>(it.current());
         KoDocument* childDoc = it.current()->document();
-        if (childDoc)
+        if (childDoc && !curr->partFrameSet()->isDeleted())
         {
             kdDebug(32001) << "KWDocument::saveChildren url:" << childDoc->url().url()
                       << " extern:" << childDoc->isStoredExtern() << endl;
