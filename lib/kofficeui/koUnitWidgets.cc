@@ -122,6 +122,9 @@ void
 KoUnitDoubleSpinBox::changeValue( double val )
 {
 	KDoubleSpinBox::setValue( val );
+        // TODO: emit valueChanged ONLY if the value was out-of-bounds
+        // This will allow the 'user' dialog to set a dirty bool and ensure
+        // a proper value is getting saved.
 }
 
 void
