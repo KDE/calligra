@@ -27,9 +27,11 @@
 #include <korichtext.h>
 #include <koQueryTrader.h>
 #include <koPicture.h>
+
 #include "kwtextparag.h"
 #include "kwframe.h"
-#include <kwvariable.h>
+#include "kwvariable.h"
+
 class KWDocument;
 class KWFrame;
 class KWFrameSet;

@@ -26,7 +26,8 @@
 #include <koMainWindow.h>
 #include <kstyle.h>
 #include <kpopupmenu.h>
-#include <kwdrag.h>
+
+#include "kwdrag.h"
 
 class MailMergeDraggableLabel : public QToolButton
 {

@@ -23,8 +23,10 @@
 #include <kdialogbase.h>
 #include <koimportstyledia.h>
 #include <qstringlist.h>
-#include <kwframestyle.h>
-#include <kwtablestyle.h>
+
+#include "kwframestyle.h"
+#include "kwtablestyle.h"
+
 class QLineEdit;
 class QListBox;
 class KWDocument;
@@ -53,8 +55,8 @@ public:
     enum StyleType { frameStyle, TableStyle};
     KWImportFrameTableStyleDia( KWDocument *_doc, const QStringList & _list, StyleType _type , QWidget *parent, const char *name );
     ~KWImportFrameTableStyleDia();
-    QPtrList<KWFrameStyle> listOfFrameStyleImported()const { return m_frameStyleList;}
-    QPtrList<KWTableStyle> listOfTableStyleImported()const { return m_tableStyleList;}
+    QPtrList<KWFrameStyle> listOfFrameStyleImported() const { return m_frameStyleList;}
+    QPtrList<KWTableStyle> listOfTableStyleImported() const { return m_tableStyleList;}
 
 protected slots:
     virtual void slotOk();

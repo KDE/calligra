@@ -23,7 +23,9 @@
 #include <qstring.h>
 #include <qdatetime.h>
 #include <qasciidict.h>
-#include <defs.h>
+
+#include "defs.h"
+
 #include <kovariable.h>
 #include <koparagcounter.h>
 

@@ -19,6 +19,7 @@
 
 #include <klocale.h>
 #include "kwdoc.h"
+
 #include <qvbox.h>
 #include <qlayout.h>
 #include <qlineedit.h>
@@ -28,10 +29,12 @@
 #include "kwimportstyledia.h"
 #include <koStore.h>
 #include <qfile.h>
+
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <qlabel.h>
-#include <kwtextparag.h>
+
+#include "kwtextparag.h"
 
 KWImportStyleDia::KWImportStyleDia( KWDocument *_doc, const QStringList &_list, QWidget *parent, const char *name )
     :KoImportStyleDia( _list, parent, name ),

@@ -20,6 +20,8 @@
 #include "kwdoc.h"
 #include "configfootnotedia.h"
 #include "configfootnotedia.moc"
+#include "kwvariable.h"
+#include "kwcommand.h"
 
 #include <klocale.h>
 #include <qradiobutton.h>
@@ -28,10 +30,10 @@
 #include <qvbuttongroup.h>
 #include <qlabel.h>
 #include <qvbox.h>
-#include <koParagDia.h>
-#include <kwvariable.h>
-#include "kwcommand.h"
 #include <qcombobox.h>
+
+#include <koParagDia.h>
+
 
 KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel , Ok, parent, name, true)

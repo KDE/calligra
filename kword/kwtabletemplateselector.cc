@@ -22,6 +22,9 @@
 
 #include "kwtabletemplate.h"
 #include "kwtableframeset.h"
+#include "kwdoc.h"
+#include "kwtextdocument.h"
+
 #include <koRect.h>
 
 #include <qlabel.h>
@@ -37,8 +40,6 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <kstandarddirs.h>
-#include <kwdoc.h>
-#include <kwtextdocument.h>
 #include <kdebug.h>
 
 #include <stdlib.h>
@@ -190,9 +191,9 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
         m_textdoc->setWidth( widthLU );
         parag->invalidate(0);
     }
-    double x_add = ( (rb < ts->pFrameStyle()->rightBorder().width()) ? 
+    double x_add = ( (rb < ts->pFrameStyle()->rightBorder().width()) ?
         ts->pFrameStyle()->rightBorder().width() : rb ) +1;
-    double y_add = ( (bb < ts->pFrameStyle()->topBorder().width()) ? 
+    double y_add = ( (bb < ts->pFrameStyle()->topBorder().width()) ?
         ts->pFrameStyle()->topBorder().width() : bb ) + 1;
 
     QRect textRect = parag->pixelRect( m_zoomHandler );
@@ -222,31 +223,31 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
     p->translate( insRect.x(), insRect.y() );
 
     if (ts->pFrameStyle()->topBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->topBorder(), 
+        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->topBorder(),
             int(ts->pFrameStyle()->topBorder().width()), black) ); // Top border
 
-        p->drawLine( 0, int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ), 
+        p->drawLine( 0, int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ),
             int(wid + ts->pFrameStyle()->rightBorder().width()), int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ) );
     }
     if (ts->pFrameStyle()->leftBorder().width()>0) {
         p->setPen( KoBorder::borderPen(ts->pFrameStyle()->leftBorder(),
             int(ts->pFrameStyle()->leftBorder().width()), black) ); // Left border
 
-        p->drawLine( int( floor( ts->pFrameStyle()->leftBorder().width()/2 ) ), 0, 
+        p->drawLine( int( floor( ts->pFrameStyle()->leftBorder().width()/2 ) ), 0,
             int( floor( ts->pFrameStyle()->leftBorder().width()/2 ) ), hei + int(ts->pFrameStyle()->bottomBorder().width()) );
     }
     if (ts->pFrameStyle()->bottomBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->bottomBorder(), 
+        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->bottomBorder(),
             int(ts->pFrameStyle()->bottomBorder().width()), black) ); // Bottom border
 
-        p->drawLine( 0, hei+int( floor( ts->pFrameStyle()->bottomBorder().width()/2 ) ), 
+        p->drawLine( 0, hei+int( floor( ts->pFrameStyle()->bottomBorder().width()/2 ) ),
             int(wid + ts->pFrameStyle()->rightBorder().width()), hei + int( floor( ts->pFrameStyle()->bottomBorder().width()/2 ) ) );
     }
     if (ts->pFrameStyle()->rightBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->rightBorder(), 
+        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->rightBorder(),
             int(ts->pFrameStyle()->rightBorder().width()), black) ); // Right border
 
-        p->drawLine( wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), 0, 
+        p->drawLine( wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), 0,
             wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), hei + int(ts->pFrameStyle()->bottomBorder().width()) );
     }
 }

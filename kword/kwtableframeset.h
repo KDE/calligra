@@ -27,8 +27,9 @@ DESCRIPTION
     (one for each cell).
 */
 
-#include <kwframe.h>
-#include <kwtextframeset.h>
+#include "kwframe.h"
+#include "kwtextframeset.h"
+
 #include <qptrlist.h>
 #include <qvaluevector.h>
 #include <qobject.h>
@@ -133,7 +134,7 @@ public:
         bool isJoinedCell() const { return m_isJoinedCell; }
         void clearMark() { m_marker = false; }
         void setMark() { m_marker = true; }
-        bool marked() { return m_marker; }
+        bool marked() const { return m_marker; }
 
         /** Overloaded to not clear any preview borders. */
         void drawContents( QPainter *painter, const QRect & crect,
@@ -524,7 +525,7 @@ public:
 
     KCommand *setProtectContentCommand ( bool _protect );
 
-    // The normal mechanism doesn't apply to tables; cells are protected individually 
+    // The normal mechanism doesn't apply to tables; cells are protected individually
     // (in terms of data; the GUI has an item for protecting all cells at once)
     virtual void setProtectContent ( bool ) {}
     virtual bool protectContent() const { return false; }

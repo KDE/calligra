@@ -21,9 +21,10 @@
 #include "kwframestylemanager.moc"
 #include "kwimportstyledia.h"
 
-#include <kwdoc.h>
+#include "kwdoc.h"
+#include "framedia.h" // for KWBrushStylePreview
+
 #include <koParagDia.h>
-#include <framedia.h> // for KWBrushStylePreview
 
 #include <kcolorbutton.h>
 #include <klocale.h>
