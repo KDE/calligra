@@ -10,6 +10,7 @@
 
 class KexiProject;
 
+
 class KexiDataSourceComboBox: public KComboBox {
 	Q_OBJECT
 public:
@@ -35,9 +36,10 @@ public:
 	KexiDataSourceComboBox(QWidget *parent, const char* name, KexiProject *proj);
 	KexiDataSourceComboBox(QWidget *parent, const char* name, const ItemList &list);
 	virtual ~KexiDataSourceComboBox();
-	QString globalIdentifier();
-	QString mime();
-	QString identifier();
+	QString globalIdentifier() const;
+	QString mime() const ;
+	QString identifier() const;
+	void selectGlobalIdentifier(const QString& gid);
 	static void fillList(KexiProject*,ItemList&);
 private:
 	ItemList m_list;

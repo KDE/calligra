@@ -55,21 +55,29 @@ void KexiDataSourceComboBox::fillList(KexiProject *proj,
 
 }
 
+void KexiDataSourceComboBox::selectGlobalIdentifier(const QString& gid) {
+//better with iterator and find
+	for ( int i=0;i<m_list.count();i++) {
+		if ((*m_list.at(i)).globalIdentifier==gid)
+		{
+			setCurrentItem(i);
+			return;
+		}
+	}
+	setCurrentItem(0);
+}
 
-
-
-
-QString KexiDataSourceComboBox::globalIdentifier(){
+QString KexiDataSourceComboBox::globalIdentifier() const {
 	if (currentItem()<0) return QString();
 	return (*m_list.at(currentItem())).globalIdentifier;
 }
 
-QString KexiDataSourceComboBox::mime(){
+QString KexiDataSourceComboBox::mime() const {
 	if (currentItem()<0) return QString();
 	return (*m_list.at(currentItem())).mime;
 }
 
-QString KexiDataSourceComboBox::identifier(){
+QString KexiDataSourceComboBox::identifier() const{
 	if (currentItem()<0) return QString();
 	return (*m_list.at(currentItem())).identifier;
 }
