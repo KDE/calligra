@@ -457,3 +457,5 @@ bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
     return false;
 }*/
 
+
+#include "pqxxmigrate.moc"
