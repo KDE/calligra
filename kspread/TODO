@@ -372,7 +372,6 @@ Todo:
 In Progress:
 ------------
 -> save/load font format
--> save/load settings (cursor position, active table)
 
 Done:
 -----
@@ -387,7 +386,8 @@ Done:
 -> save/load conditional cell attribute
 -> save/load style
 -> save/load cell border attribute
+-> save/load settings (cursor position, active table)
 
 Fixe todo:
 ----------
-
+-> after loading cursor position me must update view

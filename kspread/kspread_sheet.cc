@@ -47,6 +47,7 @@
 #include <koOasisStyles.h>
 #include <koUnit.h>
 #include <koStyleStack.h>
+#include <koOasisSettings.h>
 
 #include "ksprsavinginfo.h"
 #include "kspread_cluster.h"
@@ -7493,9 +7494,16 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
 }
 
 
-void KSpreadSheet::loadOasisSettings( const QDomElement& setting )
+void KSpreadSheet::loadOasisSettings( const KoOasisSettings &settings )
 {
+    d->hideZero = settings.parseConfigItemBool( "ShowZeroValues", d->name );
+    d->showGrid = settings.parseConfigItemBool( "ShowGrid", d->name );
+    d->firstLetterUpper = settings.parseConfigItemBool( "FirstLetterUpper", d->name );
 
+    int cursorX = settings.parseConfigItemInt( "CursorPositionX", d->name );
+    int cursorY = settings.parseConfigItemInt( "CursorPositionY", d->name );
+
+    kdDebug()<<"d->hideZero :"<<d->hideZero<<" d->showGrid :"<<d->showGrid<<" d->firstLetterUpper :"<<d->firstLetterUpper<<" cursorX :"<<cursorX<<" cursorY :"<<cursorY<< endl;
 }
 
 void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker )

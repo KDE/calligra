@@ -45,6 +45,7 @@ class QDomElement;
 
 class DCOPObject;
 class KPrinter;
+class KoOasisSettings;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -288,7 +289,7 @@ public:
     virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, KSpreadGenValidationStyles &valStyle );
     void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
 
-    void loadOasisSettings( const QDomElement& setting );
+    void loadOasisSettings( const KoOasisSettings &settings );
     void saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker );
 
     /**

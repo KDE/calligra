@@ -93,9 +93,11 @@ void KSpreadMap::loadOasisSettings( KoOasisSettings &settings )
     kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeTable :"<<activeTable<<endl;
 
     QPtrListIterator<KSpreadSheet> it( m_lstTables );
+    bool exist = settings.selectItemMapNamed( "Tables" );
+    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<<exist<<endl;
     for( ; it.current(); ++it )
     {
-        //todo
+        it.current()->loadOasisSettings( settings );
     }
 
     if (!activeTable.isEmpty())
