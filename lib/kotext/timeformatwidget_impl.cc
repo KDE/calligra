@@ -1,5 +1,6 @@
 #include "timeformatwidget.h"
 #include "timeformatwidget_impl.h"
+#include "timeformatwidget_impl.moc"
 #include <qdatetime.h>
 #include <qcombobox.h>
 #include <qlabel.h>
