@@ -2680,6 +2680,7 @@ void KWView::updateButtons()
     actionFormatAlignRight->setEnabled(state);
     actionFormatAlignBlock->setEnabled(state);
     actionFormatIncreaseIndent->setEnabled(state);
+    actionChangeCase->setEnabled(state);
 
 
     bool goodleftMargin=false;
@@ -2699,6 +2700,7 @@ void KWView::updateButtons()
     actionInsertVariable->setEnabled(state);
     actionInsertExpression->setEnabled(state);
     actionInsertFrameBreak->setEnabled(state);
+
 }
 
 void KWView::frameSelectedChanged()

@@ -18,10 +18,11 @@
 */
 
 #include <kapp.h>
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <klocale.h>
 
 #include <qlayout.h>
+#include <qvbox.h>
 #include <kapp.h>
 #include <kbuttonbox.h>
 
@@ -34,18 +35,15 @@
 
 
 KWChangeCaseDia::KWChangeCaseDia( QWidget *parent, const char *name )
-    : QDialog( parent, name, TRUE )
+    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
 
     setCaption( i18n("Change case: ") );
-    QVBoxLayout *lay1 = new QVBoxLayout( this );
-    lay1->setMargin( 5 );
-    lay1->setSpacing( 10 );
+    QVBox *page = makeVBoxMainWidget();
 
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Case:" ),this );
+    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Case:" ),page );
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
-    lay1->addWidget(grp);
     m_upperCase=new QRadioButton( i18n("Uppercase"), grp );
     m_lowerCase=new QRadioButton( i18n("Lowercase"), grp );
 
@@ -54,28 +52,6 @@ KWChangeCaseDia::KWChangeCaseDia( QWidget *parent, const char *name )
     m_upperCase->setChecked(true);
     grp->setRadioButtonExclusive( TRUE );
 
-    KButtonBox *bb = new KButtonBox( this );
-    bb->addStretch();
-    m_pOk = bb->addButton( i18n("OK") );
-    m_pOk->setDefault( TRUE );
-    m_pClose = bb->addButton( i18n( "Close" ) );
-    bb->layout();
-    lay1->addWidget( bb );
-
-    connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-    connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-
-}
-
-
-void KWChangeCaseDia::slotOk()
-{
-    accept();
-}
-
-void KWChangeCaseDia::slotClose()
-{
-    reject();
 }
 
 TypeOfCase KWChangeCaseDia::getTypeOfCase()

@@ -20,13 +20,13 @@
 #ifndef __KWChangeCaseDia__
 #define __KWChangeCaseDia__
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include "defs.h"
 
 class QRadioButton;
 class QPushButton;
 
-class KWChangeCaseDia : public QDialog
+class KWChangeCaseDia : public KDialogBase
 {
     Q_OBJECT
 public:
@@ -34,16 +34,11 @@ public:
 
     TypeOfCase getTypeOfCase();
 
-public slots:
- void slotOk();
- void slotClose();
 
 protected:
     QRadioButton *m_upperCase;
     QRadioButton *m_titleCase;
     QRadioButton *m_lowerCase;
-    QPushButton *m_pOk;
-    QPushButton *m_pClose;
 };
 
 #endif
