@@ -59,7 +59,7 @@ bool KisDoc::initDoc()
 {
   QString name;
   name.sprintf("image %d", m_Images.count()+1);
-  KisImage *img = newImage(name, 512, 512, RGB, WHITE);
+  KisImage *img = newImage(name, 512, 512, CM_RGBA, BM_WHITE);
   if (!img)
     return false;
 
@@ -197,7 +197,7 @@ QSize KisDoc::size()
   return QSize(0, 0);
 }
 
-KisImage* KisDoc::newImage(const QString& _name, int w, int h, int /*colorModel*/, int /*backgroundMode*/)
+KisImage* KisDoc::newImage(const QString& _name, int w, int h, cMode /* cm */ , bgMode /* bgm */ )
 {
   KisImage *img = new KisImage( _name, w, h );
   m_Images.append(img);
@@ -257,7 +257,7 @@ bool KisDoc::loadImage( const QString& file )
   int w = img.width();
   int h = img.height();
 
-  KisImage *kis_img = newImage(name, w, h, RGB, WHITE);
+  KisImage *kis_img = newImage(name, w, h, CM_RGBA, BM_WHITE);
   if (!kis_img)
     return false;
 
@@ -280,13 +280,13 @@ void KisDoc::slotNewImage()
 
   int w = m_pNewDialog->newwidth();
   int h = m_pNewDialog->newheight();
-  int bg = m_pNewDialog->background();
-  int cm = m_pNewDialog->colorModel();
+  bgMode bg = m_pNewDialog->backgroundMode();
+  cMode cm = m_pNewDialog->colorMode();
 
   QString name;
   name.sprintf("image %d", m_Images.count()+1);
 
-  KisImage *img = newImage(name, w, h, bg, cm);
+  KisImage *img = newImage(name, w, h, cm, bg);
   if (!img)
     return;
 

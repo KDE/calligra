@@ -29,7 +29,7 @@ class KisColor
  public:
 
   KisColor();
-  KisColor(int a, int b, int c,  cSpace m = RGB);
+  KisColor(int a, int b, int c,  cSpace m = CS_RGB);
   KisColor(int c, int m, int y,  int k);
   KisColor(const QColor&);
 
@@ -125,54 +125,54 @@ class KisColor
 };
 
 inline const KisColor KisColor::white()
-{ return KisColor(255,255,255,RGB); }
+{ return KisColor(255,255,255,CS_RGB); }
 
 inline const KisColor KisColor::black()
-{ return KisColor(0,0,0,RGB); }
+{ return KisColor(0,0,0,CS_RGB); }
 
 inline const KisColor KisColor::gray()
-{ return KisColor(160,160,164,RGB); }
+{ return KisColor(160,160,164,CS_RGB); }
 
 inline const KisColor KisColor::lightGray()
-{ return KisColor(192,192,192,RGB); }
+{ return KisColor(192,192,192,CS_RGB); }
 
 inline const KisColor KisColor::darkGray()
-{ return KisColor(128,128,128,RGB); }
+{ return KisColor(128,128,128,CS_RGB); }
 
 inline const KisColor KisColor::red()
-{ return KisColor(255,0,0,RGB); }
+{ return KisColor(255,0,0,CS_RGB); }
 
 inline const KisColor KisColor::darkRed()
-{ return KisColor(128,0,0,RGB); }
+{ return KisColor(128,0,0,CS_RGB); }
 
 inline const KisColor KisColor::green()
-{ return KisColor(0,255,0,RGB); }
+{ return KisColor(0,255,0,CS_RGB); }
 
 inline const KisColor KisColor::darkGreen()
-{ return KisColor(0,128,0,RGB); }
+{ return KisColor(0,128,0,CS_RGB); }
 
 inline const KisColor KisColor::blue()
-{ return KisColor(0,0,255,RGB); }
+{ return KisColor(0,0,255,CS_RGB); }
 
 inline const KisColor KisColor::darkBlue()
-{ return KisColor(0,0,128,RGB); }
+{ return KisColor(0,0,128,CS_RGB); }
 
 inline const KisColor KisColor::cyan()
-{ return KisColor(0,255,255,RGB); }
+{ return KisColor(0,255,255,CS_RGB); }
 
 inline const KisColor KisColor::darkCyan()
-{ return KisColor(0,128,128,RGB); }
+{ return KisColor(0,128,128,CS_RGB); }
 
 inline const KisColor KisColor::magenta()
-{ return KisColor(255,0,255,RGB); }
+{ return KisColor(255,0,255,CS_RGB); }
 
 inline const KisColor KisColor::darkMagenta()
-{ return KisColor(128,0,128,RGB); }
+{ return KisColor(128,0,128,CS_RGB); }
 
 inline const KisColor KisColor::yellow()
-{ return KisColor(255,255,0,RGB); }
+{ return KisColor(255,255,0,CS_RGB); }
 
 inline const KisColor KisColor::darkYellow()
-{ return KisColor(128,128,0,RGB); }
+{ return KisColor(128,128,0,CS_RGB); }
 
 #endif

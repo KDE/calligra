@@ -31,6 +31,7 @@
 #include "kis_dlg_new.h"
 #include "kis_layer.h"
 #include "kis_image.h"
+#include "kis_global.h"
 
 class KisBrush;
 class NewDialog;
@@ -40,9 +41,6 @@ class KisDoc : public KoDocument
     Q_OBJECT
 
 public:
-
-    enum {RGB=0, CMYK, LAB, GREYSCALE } ColorModel;
-    enum {BACKGROUND=0, FOREGROUND, WHITE, TRANSPARENT } BgColor;
 
     KisDoc( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KisDoc();
@@ -99,7 +97,7 @@ public:
     void mergeLinkedLayers();
     void mergeLayers(QList<KisLayer>);
 
-    KisImage* newImage(const QString& _name, int w, int h, int colorModel = RGB, int backgroundMode = WHITE);
+    KisImage* newImage(const QString& _name, int w, int h, cMode cm = CM_RGBA, bgMode bgm = BM_WHITE);
     bool saveImage( const QString& file, KisImage *img );
     bool saveCurrentImage( const QString& file );
     bool loadImage( const QString& file );

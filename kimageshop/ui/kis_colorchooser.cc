@@ -284,7 +284,7 @@ void RGBWidget::slotRSliderChanged(int r)
   int g = m_c.G();
   int b = m_c.B();
 
-  m_c = KisColor( r, g, b, RGB );
+  m_c = KisColor( r, g, b, CS_RGB );
 
   m_pGSlider->slotSetColor1( QColor( r, 0, b ) );
   m_pGSlider->slotSetColor2( QColor( r, 255, b ) );
@@ -302,7 +302,7 @@ void RGBWidget::slotGSliderChanged(int g)
   int r = m_c.R();
   int b = m_c.B();
 
-  m_c = KisColor( r, g, b, RGB );
+  m_c = KisColor( r, g, b, CS_RGB );
 
   m_pRSlider->slotSetColor1( QColor( 0, g, b ) );
   m_pRSlider->slotSetColor2( QColor( 255, g, b ) );
@@ -320,7 +320,7 @@ void RGBWidget::slotBSliderChanged(int b)
   int r = m_c.R();
   int g = m_c.G();
 
-  m_c = KisColor( r, g, b, RGB );
+  m_c = KisColor( r, g, b, CS_RGB );
 
   m_pRSlider->slotSetColor1( QColor( 0, g, b ) );
   m_pRSlider->slotSetColor2( QColor( 255, g, b ) );
@@ -338,7 +338,7 @@ void RGBWidget::slotRInChanged(int r)
   int g = m_c.G();
   int b = m_c.B();
 
-  m_c = KisColor( r, g, b, RGB );
+  m_c = KisColor( r, g, b, CS_RGB );
 
   m_pGSlider->slotSetColor1( QColor( r, 0, b ) );
   m_pGSlider->slotSetColor2( QColor( r, 255, b ) );
@@ -356,7 +356,7 @@ void RGBWidget::slotGInChanged(int g)
   int r = m_c.R();
   int b = m_c.B();
 
-  m_c = KisColor( r, g, b, RGB );
+  m_c = KisColor( r, g, b, CS_RGB );
 
   m_pRSlider->slotSetColor1( QColor( 0, g, b ) );
   m_pRSlider->slotSetColor2( QColor( 255, g, b ) );
@@ -374,7 +374,7 @@ void RGBWidget::slotBInChanged(int b)
   int r = m_c.R();
   int g = m_c.G();
 
-  m_c = KisColor( r, g, b, RGB );
+  m_c = KisColor( r, g, b, CS_RGB );
 
   m_pRSlider->slotSetColor1( QColor( 0, g, b ) );
   m_pRSlider->slotSetColor2( QColor( 255, g, b ) );
@@ -460,14 +460,14 @@ void GreyWidget::slotVSliderChanged(int v)
 {
   m_pVIn->setValue(v);
   v = 255 - v;
-  emit colorChanged( KisColor(v,v,v, RGB));
+  emit colorChanged( KisColor(v,v,v, CS_RGB));
 }
 
 void GreyWidget::slotVInChanged(int v)
 {
   m_pVSlider->slotSetValue(v);
   v = 255 - v;
-  emit colorChanged(KisColor(v,v,v, RGB));
+  emit colorChanged(KisColor(v,v,v, CS_RGB));
 }
 
 #include "kis_colorchooser.moc"

@@ -58,31 +58,35 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     grid->addWidget( iheight, 1, 1 );
 
     // Create an exclusive button group
-    QButtonGroup *model = new QButtonGroup( 1, QGroupBox::Horizontal, "Color Model", this);
-    model->setExclusive( TRUE );
+    QButtonGroup *cmodeg = new QButtonGroup( 1, QGroupBox::Horizontal, "Color Mode", this);
+    cmodeg->setExclusive( TRUE );
 
-    // insert 4 radiobuttons
-    cmodel[RGB] = new QRadioButton( "&RGB", model );
-    cmodel[RGB]->setChecked( TRUE );
-    cmodel[CMYK] = new QRadioButton( "CM&YK", model );
-    cmodel[CMYK]->setEnabled(false);
-    cmodel[LAB] = new QRadioButton( "&LAB", model );
-    cmodel[LAB]->setEnabled(false);
-    cmodel[GREYSCALE] = new QRadioButton( "&Greyscale", model );
-    cmodel[GREYSCALE]->setEnabled(false);
+    // insert radiobuttons
+	cmode[CM_INDEXED] = new QRadioButton( "&Indexed", cmodeg );
+	cmode[CM_INDEXED]->setEnabled(false);
+	cmode[CM_GREYSCALE] = new QRadioButton( "&Greyscale", cmodeg );
+    cmode[CM_GREYSCALE]->setEnabled(false);
+    cmode[CM_RGB] = new QRadioButton( "&RGB", cmodeg );
+    cmode[CM_RGB]->setEnabled(false);
+	cmode[CM_RGBA] = new QRadioButton( "RGB + &alpha channel", cmodeg );
+	cmode[CM_RGBA]->setChecked( true );
+	cmode[CM_CMYK] = new QRadioButton( "&CMYK", cmodeg );
+    cmode[CM_CMYK]->setEnabled(false);
+	cmode[CM_CMYKA] = new QRadioButton( "CMY&K + alpha channel", cmodeg );
+    cmode[CM_CMYKA]->setEnabled(false);
 
-    layout->addWidget( model );
+    layout->addWidget( cmodeg );
 
     // Create an exclusive button group
     QButtonGroup *ground = new QButtonGroup( 1, QGroupBox::Horizontal, "Background", this);
     ground->setExclusive( TRUE );
 
-    // insert 4 radiobuttons
-    bground[BACKGROUND] = new QRadioButton( "&Background Color", ground );
-    bground[BACKGROUND]->setChecked( TRUE );
-    bground[FOREGROUND] = new QRadioButton( "&Foreground Color", ground );
-    bground[WHITE] = new QRadioButton( "&White", ground );
-    bground[TRANSPARENT] = new QRadioButton( "&Transparent", ground );
+    // insert radiobuttons
+    bground[BM_BACKGROUNDCOLOR] = new QRadioButton( "&Background Color", ground );
+    bground[BM_FOREGROUNDCOLOR] = new QRadioButton( "&Foreground Color", ground );
+    bground[BM_WHITE] = new QRadioButton( "&White", ground );
+    bground[BM_WHITE]->setChecked( true );
+    bground[BM_TRANSPARENT] = new QRadioButton( "&Transparent", ground );
 
     layout->addWidget( ground );
 
@@ -105,24 +109,26 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     resize( 1, 1 );
 }
 
-int
-NewDialog::background()
+bgMode NewDialog::backgroundMode()
 {
-    if( bground[BACKGROUND]->isChecked() ) return BACKGROUND;
-    if( bground[FOREGROUND]->isChecked() ) return FOREGROUND;
-    if( bground[TRANSPARENT]->isChecked() ) return TRANSPARENT;
-    if( bground[WHITE]->isChecked() ) return WHITE;
-    else return TRANSPARENT;
+  if( bground[BM_BACKGROUNDCOLOR]->isChecked() ) return BM_BACKGROUNDCOLOR;
+  if( bground[BM_FOREGROUNDCOLOR]->isChecked() ) return BM_FOREGROUNDCOLOR;
+  if( bground[BM_TRANSPARENT]->isChecked() ) return BM_TRANSPARENT;
+  if( bground[BM_WHITE]->isChecked() ) return BM_WHITE;
+
+  else return BM_WHITE;
 }
 
-int
-NewDialog::colorModel()
+cMode NewDialog::colorMode()
 {
-    if( cmodel[RGB]->isChecked() ) return RGB;
-    if( cmodel[CMYK]->isChecked() ) return CMYK;
-    if( cmodel[LAB]->isChecked() ) return LAB;
-    if( cmodel[GREYSCALE]->isChecked() ) return GREYSCALE;
-    else return RGB;
+  if( cmode[CM_INDEXED]->isChecked() ) return CM_INDEXED;
+  if( cmode[CM_GREYSCALE]->isChecked() ) return CM_GREYSCALE;
+  if( cmode[CM_RGB]->isChecked() ) return CM_RGB;
+  if( cmode[CM_RGBA]->isChecked() ) return CM_RGBA;
+  if( cmode[CM_CMYK]->isChecked() ) return CM_CMYK;
+  if( cmode[CM_CMYKA]->isChecked() ) return CM_CMYKA;
+
+  else return CM_RGBA;
 }
 
 #include "kis_dlg_new.moc"

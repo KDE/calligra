@@ -27,9 +27,12 @@ const int TILE_SIZE = 64;
 enum ActiveColor { NONE, FOREGROUND, BACKGROUND};
 
 // color spaces
-enum cSpace { INDEXED, RGB, HSV, CMYK, LAB };
+enum cSpace { CS_INDEXED, CS_RGB, CS_HSV, CS_CMYK, CS_LAB };
 
 // color modes
-enum cMode { M_INDEXED, M_GREYSCALE, M_RGB, M_RGBA, M_CMYK, M_CMYKA, M_LAB, M_LABA };
+enum cMode { CM_INDEXED, CM_GREYSCALE, CM_RGB, CM_RGBA, CM_CMYK, CM_CMYKA, CM_LAB, CM_LABA };
+
+// background mode
+enum bgMode {BM_WHITE, BM_TRANSPARENT, BM_BACKGROUNDCOLOR, BM_FOREGROUNDCOLOR };
 
 #endif

@@ -41,7 +41,7 @@ KisColor ColorPicker::pick(int x, int y)
   uchar g = *ptr++;
   uchar r = *ptr++;
   
-  return KisColor((int)r, (int)g, (int)b, RGB);
+  return KisColor((int)r, (int)g, (int)b, CS_RGB);
 }
 
 void ColorPicker::mousePress(QMouseEvent *e)

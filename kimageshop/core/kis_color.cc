@@ -25,7 +25,7 @@
 KisColor::KisColor()
 {
   // initialise to black
-  m_native = RGB;
+  m_native = CS_RGB;
   // rgb
   m_R = m_G = m_B = 0;
   // hsv
@@ -73,30 +73,30 @@ KisColor::KisColor(int a, int b, int c, cSpace m)
 {
   switch (m)
 	{
-	case RGB:
+	case CS_RGB:
 	  m_R = a;
 	  m_G = b;
 	  m_B = c;
-	  m_native = RGB;
+	  m_native = CS_RGB;
 	  rgbChanged();
 	  break;
-	case HSV:
+	case CS_HSV:
 	  m_H = a;
 	  m_S = b;
 	  m_V = c;
-	  m_native = HSV;
+	  m_native = CS_HSV;
 	  hsvChanged();
 	  break;
-	case LAB:
+	case CS_LAB:
 	  m_L = a;
 	  m_a = b;
 	  m_b = c;
-	  m_native = LAB;
+	  m_native = CS_LAB;
 	  labChanged();
 	  break;
 	default:
 	  m_R = m_G = m_B = 0;
-	  m_native = RGB;
+	  m_native = CS_RGB;
 	  rgbChanged();
 	  
 	}
@@ -108,7 +108,7 @@ KisColor::KisColor(int c, int m, int y, int k)
   m_M = m;
   m_Y = y;
   m_K = k;
-  m_native = CMYK;
+  m_native = CS_CMYK;
   cmykChanged();
 }
 
@@ -117,7 +117,7 @@ KisColor::KisColor(const QColor& c)
   m_R = c.red();
   m_G = c.green();
   m_B = c.blue();
-  m_native = RGB;
+  m_native = CS_RGB;
   rgbChanged();
 }
 
@@ -126,7 +126,7 @@ void KisColor::setRGB (int R, int G, int B)
   m_R = R;
   m_G = G;
   m_B = B;
-  m_native = RGB;
+  m_native = CS_RGB;
   rgbChanged();
 }
 
@@ -135,7 +135,7 @@ void KisColor::setHSV (int H, int S, int V)
   m_H = H;
   m_S = S;
   m_V = V;
-  m_native = HSV;
+  m_native = CS_HSV;
   hsvChanged();
 }
 
@@ -144,7 +144,7 @@ void KisColor::setLAB (int L, int a, int b)
   m_L = L;
   m_a = a;
   m_b = b;
-  m_native = LAB;
+  m_native = CS_LAB;
   labChanged();
 }
 
@@ -154,7 +154,7 @@ void KisColor::setCMYK (int C, int M, int Y, int K)
   m_M = M;
   m_Y = Y;
   m_K = K;
-  m_native = CMYK;
+  m_native = CS_CMYK;
   cmykChanged();
 }
 
@@ -163,7 +163,7 @@ void KisColor::setColor (const QColor& c)
   m_R = c.red();
   m_G = c.green();
   m_B = c.blue();
-  m_native = RGB;
+  m_native = CS_RGB;
   rgbChanged();
 }
 
@@ -222,13 +222,13 @@ void KisColor::calcRGB() const
   
   switch ( m_native )
     {
-    case HSV:
+    case CS_HSV:
       HSVtoRGB(m_H, m_S, m_V, &m_R, &m_G, &m_B);
       break;
-    case LAB:
+    case CS_LAB:
       LABtoRGB(m_L, m_a, m_b, &m_R, &m_G, &m_B);
       break;
-    case CMYK:
+    case CS_CMYK:
       CMYKtoRGB(m_C, m_M, m_Y, m_K, &m_R, &m_G, &m_B);
       break;
     default:
@@ -247,13 +247,13 @@ void KisColor::calcHSV() const
   
   switch ( m_native )
     {
-    case RGB:
+    case CS_RGB:
       RGBtoHSV(m_R, m_G, m_B, &m_H, &m_S, &m_V);
       break;
-    case LAB:
+    case CS_LAB:
       LABtoHSV(m_L, m_a, m_b, &m_H, &m_S, &m_V);
       break;
-    case CMYK:
+    case CS_CMYK:
       CMYKtoHSV(m_C, m_M, m_Y, m_K, &m_H, &m_S, &m_V);
       break;
     default:
@@ -273,13 +273,13 @@ void KisColor::calcLAB() const
   
   switch ( m_native )
     {
-    case RGB:
+    case CS_RGB:
       RGBtoLAB(m_R, m_G, m_B, &m_L, &m_a, &m_b);
       break;
-    case HSV:
+    case CS_HSV:
       HSVtoLAB(m_H, m_S, m_V, &m_L, &m_a, &m_b);
       break;
-    case CMYK:
+    case CS_CMYK:
       CMYKtoLAB(m_C, m_M, m_Y, m_K, &m_L, &m_a, &m_b);
       break;
     default:
@@ -299,13 +299,13 @@ void KisColor::calcCMYK() const
   
   switch ( m_native )
     {
-    case RGB:
+    case CS_RGB:
       RGBtoCMYK(m_R, m_G, m_B, &m_C, &m_M, &m_Y, &m_K);
       break;
-    case LAB:
+    case CS_LAB:
       LABtoCMYK(m_L, m_a, m_b, &m_C, &m_M, &m_Y, &m_K);
       break;
-    case HSV:
+    case CS_HSV:
       HSVtoCMYK(m_H, m_S, m_V, &m_C, &m_M, &m_Y, &m_K);
       break;
     default:

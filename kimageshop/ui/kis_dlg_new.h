@@ -24,6 +24,8 @@
 #include <kdialog.h>
 #include <qspinbox.h>
 
+#include "kis_global.h"
+
 class QRadioButton;
 
 class NewDialog : public KDialog
@@ -32,19 +34,16 @@ class NewDialog : public KDialog
 
 public:
 
-    enum {RGB=0, CMYK, LAB, GREYSCALE } ColorModel;
-    enum {BACKGROUND=0, FOREGROUND, WHITE, TRANSPARENT } BgColor;
-
     NewDialog( QWidget *parent = 0, const char *name = 0 );
 
-    int background();
-    int colorModel();
+    bgMode backgroundMode();
+    cMode colorMode();
 
     int newwidth() { return iwidth->value(); };
     int newheight() { return iheight->value(); };
 
 private:
-    QRadioButton* cmodel[4];
+    QRadioButton* cmode[6];
     QRadioButton* bground[4];
     QSpinBox* iwidth;
     QSpinBox* iheight;
