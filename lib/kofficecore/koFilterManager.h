@@ -71,19 +71,19 @@ public:
      *                for example "application/x-kspread".
      * @param _native_pattern is the filename pattern for the native format
      *                        of your application, for example "*.ksp".
-     *                        This variable may be 0L, then no native format
+     *                        This variable may be QString::null, then no native format
      *                        is added.
      * @param _native_name is the name for the native format
      *                        of your application, for example "KSpread".
-     *                        This variable may be 0L, then no native format
+     *                        This variable may be QString::null, then no native format
      *                        is added.
      * @param allfiles Whether a wildcard that matches all files should be added to the list.
      */
     const QString fileSelectorList( const Direction &direction,
                                     const char *_format,
-                                    const QString & _native_pattern,
-                                    const QString & _native_name,
-                                    const bool allfiles ) const;
+                                    const QString & _native_pattern=QString::null,
+                                    const QString & _native_name=QString::null,
+                                    const bool allfiles=false ) const;
 
     /**
      * Prepares a KFileDialog instance. This means it adds the available
@@ -96,11 +96,11 @@ public:
      *                for example "application/x-kspread".
      * @param _native_pattern is the filename pattern for the native format
      *                        of your application, for example "*.ksp".
-     *                        This variable may be 0L, then no native format
+     *                        This variable may be QString::null, then no native format
      *                        is added.
      * @param _native_name is the name for the native format
      *                        of your application, for example "KSpread".
-     *                        This variable may be 0L, then no native format
+     *                        This variable may be QString::null, then no native format
      *                        is added.
      * @param allfiles Whether a wildcard that matches all files should be added to the list.
      * @return Have we been sucessful?
@@ -108,9 +108,9 @@ public:
     const bool prepareDialog( KFileDialog *dialog,
 			      const Direction &direction,
 			      const char *_format,
-			      const QString & _native_pattern,
-			      const QString & _native_name,
-			      const bool allfiles );
+			      const QString & _native_pattern=QString::null,
+			      const QString & _native_name=QString::null,
+			      const bool allfiles=false );
 
     /**
      * Cleans up the prepared KFileDialog (deletes all the stuff)

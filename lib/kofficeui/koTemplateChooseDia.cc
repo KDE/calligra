@@ -46,8 +46,8 @@
 class KoTemplateChooseDiaPrivate {
 public:
     KoTemplateChooseDiaPrivate(const QString& templateType, KInstance* global,
-			       const char *format, const char *nativePattern,
-			       const char *nativeName,
+			       const char *format, const QString &nativePattern,
+			       const QString &nativeName,
 			       const KoTemplateChooseDia::DialogType &dialogType) :
 	m_templateType(templateType), m_global(global), m_format(format),
 	m_nativePattern(nativePattern), m_nativeName(nativeName),
@@ -65,7 +65,8 @@ public:
 
     QString m_templateType;
     KInstance* m_global;
-    const char *m_format, *m_nativePattern, *m_nativeName;
+    const char *m_format;
+    QString m_nativePattern, m_nativeName;
     KoTemplateChooseDia::DialogType m_dialogType;
     bool m_firstTime;
 
@@ -90,12 +91,12 @@ public:
 
 /*================================================================*/
 KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
-					 const char *format, const char *nativePattern,
-					 const char *nativeName, const DialogType &dialogType,
+					 const char *format, const QString &nativePattern,
+					 const QString &nativeName, const DialogType &dialogType,
 					 const QString& templateType, bool hasCancel) :
     KDialog(parent, name, true) {
 
-    d=new KoTemplateChooseDiaPrivate(templateType, global, format, nativePattern, 
+    d=new KoTemplateChooseDiaPrivate(templateType, global, format, nativePattern,
 				     nativeName, dialogType);
 
     d->m_groupList.setAutoDelete(true);
@@ -128,8 +129,8 @@ KoTemplateChooseDia::~KoTemplateChooseDia() {
 
 /*================================================================*/
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, QString &file,
-							    const char *format, const char *nativePattern,
-							    const char *nativeName,
+							    const char *format, const QString &nativePattern,
+							    const QString &nativeName,
 							    const KoTemplateChooseDia::DialogType &dialogType,
 							    const QString& templateType, bool hasCancel) {
     bool res = false;
@@ -364,10 +365,10 @@ void KoTemplateChooseDia::chooseFile()
 
     if(dialog->exec()==QDialog::Accepted)
 	u=dialog->selectedURL();
-    
+
     KoFilterManager::self()->cleanUp();
     delete dialog;
-    
+
     QString filename = u.path();
     QString url = u.url();
     bool local = u.isLocalFile();

@@ -103,8 +103,9 @@ public:
      * @return The return type (see above)
      */
     KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
-			const char *format=0L, const char *nativePattern=0L,
-			const char *nativeName=0L,
+			const char *format=0L, 
+			const QString &nativePattern=QString::null,
+			const QString &nativeName=QString::null,
 			const DialogType &dialogType=Everything,
 			const QString& templateType=QString::null,
 			bool hasCancel=true);
@@ -125,8 +126,9 @@ public:
      * @return The return type (see above)
      */
     static ReturnType choose(KInstance* global, QString &file,
-			     const char *format=0L, const char *nativePattern=0L,
-			     const char *nativeName=0L,
+			     const char *format=0L,
+			     const QString &nativePattern=QString::null,
+			     const QString &nativeName=QString::null,
 			     const DialogType &dialogType=Everything,
 			     const QString& templateType=QString::null,
 			     bool hasCancel=true);

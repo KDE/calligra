@@ -118,7 +118,7 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction,
             mime = vec[i].export_;
 
         t = KMimeType::mimeType( mime );
-        // Did we get exact this mime type ?
+        // Did we get exactly this mime type ?
         if ( t && mime == t->name() )
         {
             QStringList patterns = t->patterns();
@@ -303,7 +303,7 @@ const QString KoFilterManager::import( const QString & _file, const char *_nativ
         ASSERT( filter );
 
 	if(vec[i].implemented.lower()=="file") {
-	    kdDebug(30003) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
+	    //kdDebug(30003) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
 	    KTempFile tempFile; // create with default file prefix, extension and mode
 	    if (tempFile.status() != 0)
 		return "";
@@ -315,7 +315,7 @@ const QString KoFilterManager::import( const QString & _file, const char *_nativ
 		 strcmp(document->className(), "KChartPart")==0 ||   // the right loadXML :)
 		 strcmp(document->className(), "KisDoc")==0 ||
 		 strcmp(document->className(), "KImageDocument")==0)) {
-	    kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
+	    //kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
 	    QDomDocument qdoc;
 	    ok=filter->I_filter( file, mimeType, qdoc, _native_format, d->config);
 	    if(ok) {
@@ -326,7 +326,7 @@ const QString KoFilterManager::import( const QString & _file, const char *_nativ
 	    }
 	}
 	else if(vec[i].implemented.lower()=="kodocument") {
-	    kdDebug(30003) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
+	    //kdDebug(30003) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
 	    ok=filter->I_filter( file, document, mimeType, _native_format, d->config);
 	    if(ok)
 		document->changedByFilter();
