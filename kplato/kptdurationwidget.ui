@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
+            <width>313</width>
             <height>54</height>
         </rect>
     </property>
@@ -23,13 +23,13 @@
     <property name="caption">
         <string>KPTDurationWidget</string>
     </property>
-    <vbox>
+    <hbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>layout2</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -97,6 +97,9 @@
                     </property>
                     <property name="minValue">
                         <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>9999</number>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Days</string>
@@ -168,7 +171,7 @@
                 </widget>
             </hbox>
         </widget>
-    </vbox>
+    </hbox>
 </widget>
 <images>
     <image name="image0">
@@ -190,6 +193,30 @@
         <signal>valueChanged(int)</signal>
         <receiver>KPTDurationWidget</receiver>
         <slot>days_valueChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>addmonth</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTDurationWidget</receiver>
+        <slot>addMonth()</slot>
+    </connection>
+    <connection>
+        <sender>addweek</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTDurationWidget</receiver>
+        <slot>addWeek()</slot>
+    </connection>
+    <connection>
+        <sender>subtractweek</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTDurationWidget</receiver>
+        <slot>subtractWeek()</slot>
+    </connection>
+    <connection>
+        <sender>subtractmonth</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTDurationWidget</receiver>
+        <slot>subtractMonth()</slot>
     </connection>
 </connections>
 <tabstops>
