@@ -29,7 +29,7 @@
 #include "kexiformbase.h"
 
 KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource)
-	: QWidget(parent,name)
+	: KexiDialogBase(parent,name)
 {
 	if(datasource == "")
 	{

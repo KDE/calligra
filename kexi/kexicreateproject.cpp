@@ -36,6 +36,7 @@
 #include "kexi.h"
 #include "kexidb.h"
 #include "kexibrowser.h"
+#include "kexidoc.h"
 
 #include "kexicreateproject.h"
 
@@ -174,7 +175,7 @@ void KexiCreateProject::nextClicked(const QString &pageTitle)
 		if(g_Global->g_db->connectDB(m_cEngine->currentText(), m_dbHost->text(), m_dbName->text(), m_dbUser->text(), m_dbPass->text()))
 		{
 			KListViewItem *i = new KListViewItem(m_connectionLog, i18n("1. connected to the database"));
-			KListViewItem *i2 = new KListViewItem(m_connectionLog, i18n("2. checking content"));
+/*			KListViewItem *i2 = new KListViewItem(m_connectionLog, i18n("2. checking content"));
 			QSqlQuery query("show tables;", g_Global->g_db->m_db);
 			while(query.next())
 			{
@@ -182,6 +183,12 @@ void KexiCreateProject::nextClicked(const QString &pageTitle)
 				kdDebug() << "table: " << tblName << endl;
 				m_main->m_browser->addTableItem(tblName);
 			}
+*/
+			KexiDoc *doc = new KexiDoc();
+			doc->setAttr(m_cEngine->currentText(), m_dbHost->text(), m_dbName->text(), m_dbUser->text(), m_dbPass->text());
+//			doc->saveAs("");
+			m_main->setDocument(doc);
+			setFinishEnabled(m_page2, true);
 		}
 		else
 		{

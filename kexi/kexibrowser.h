@@ -29,7 +29,8 @@ class QListViewItem;
 class KIconLoader;
 class Kexi;
 class KListView;
-class KListViewItem;
+//class KListViewItem;
+class KexiBrowserItem;
 
 class KexiBrowser : public QWidget  {
    Q_OBJECT
@@ -39,23 +40,25 @@ public:
 	~KexiBrowser();
 	
 	void addTableItem(QString name);
+	void clearView();
 	
 protected:
-	void		createForm();
+	void			createForm();
+	void			generateView();
 	
-	KListViewItem*	m_tables;
-	KListViewItem*	m_queries;
-	KListViewItem*	m_forms;
-	KListViewItem*	m_reports;
+	KexiBrowserItem*	m_tables;
+	KexiBrowserItem*	m_queries;
+	KexiBrowserItem*	m_forms;
+	KexiBrowserItem*	m_reports;
 
-	KIconLoader	*iconLoader;
+	KIconLoader		*iconLoader;
 	
-	Kexi*		m_mainWin;
-	QWidget*	m_parent;
+	Kexi*			m_mainWin;
+	QWidget*		m_parent;
 
-	KListView*	m_list;
+	KListView*		m_list;
 
-	KListViewItem*	m_database;
+	KexiBrowserItem*	m_database;
 	
 		
 protected slots:
@@ -63,6 +66,8 @@ protected slots:
 	void		slotCreate();
 	void		slotDelete();
 	void		slotEdit();
+	
+	void		slotCreateTable();
 };
 
 #endif

@@ -18,13 +18,13 @@
 #ifndef KEXIFORMBASE_H
 #define KEXIFORMBASE_H
 
-#include <qwidget.h>
+#include "kexidialogbase.h"
 
 /**
   *@author lucijan busch
   */
 
-class KexiFormBase : public QWidget  {
+class KexiFormBase : public KexiDialogBase  {
 
 Q_OBJECT
    

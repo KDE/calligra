@@ -3,6 +3,8 @@
 
 #include <qworkspace.h>
 
+class KexiDialogBase;
+
 class KexiWorkspace : public QWorkspace
 {
 	Q_OBJECT
@@ -10,7 +12,16 @@ class KexiWorkspace : public QWorkspace
 	public:
 		KexiWorkspace(QWidget *parent=0, const char *name=0);
 		~KexiWorkspace();
+		
+		void addItem(KexiDialogBase *newItem);
+		
+		unsigned int count() { return no; };
+		
+	protected:
+		unsigned int no;
 
+	protected slots:
+		void takeItem(KexiDialogBase *delItem);
 };
 
 #endif
