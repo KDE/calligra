@@ -15,4 +15,5 @@ Changes after KPresenter 1.1
 - Add dcop interface : now we can insert text, change text format, etc...
 - Add support for style
 - Add support for background spell checking
-- Add support for manual completion (use CTRL + T )
+- Add support for manual completion (use CTRL + E )
+- Add Help line

@@ -418,11 +418,12 @@ void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
         QPen _pen = QPen( Qt::black, 1, Qt::DotLine );
         painter->save();
         painter->setPen( _pen );
+        QRect pageRect=activePage()->getZoomPageRect();
         for(i = doc->horizHelplines().begin(); i != doc->horizHelplines().end(); ++i)
         {
             double vi = *i - m_view->zoomHandler()->zoomItY(diffy());
             if( rect.contains(rect.x(), vi) )
-                painter->drawLine(m_view->zoomHandler()->zoomItX(rect.left()), m_view->zoomHandler()->zoomItY(vi), m_view->zoomHandler()->zoomItX(rect.right()), m_view->zoomHandler()->zoomItY(vi));
+                painter->drawLine(pageRect.left(), m_view->zoomHandler()->zoomItY(vi), pageRect.right(), m_view->zoomHandler()->zoomItY(vi));
 
         }
 
@@ -430,7 +431,7 @@ void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
         {
             double vi = *i - m_view->zoomHandler()->zoomItX(diffx());
             if( rect.contains(vi, rect.y()) )
-                painter->drawLine(m_view->zoomHandler()->zoomItX(vi), m_view->zoomHandler()->zoomItY(rect.top()), m_view->zoomHandler()->zoomItX(vi), m_view->zoomHandler()->zoomItY(rect.bottom()));
+                painter->drawLine(m_view->zoomHandler()->zoomItX(vi), pageRect.top(), m_view->zoomHandler()->zoomItX(vi), pageRect.bottom());
         }
         painter->restore();
     }
@@ -636,7 +637,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                             m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()));
                             m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()));
                             tmpHelpLinePosX=m_view->zoomHandler()->unzoomItX(e->pos().x());
-                            tmpHelpLinePosY=m_view->zoomHandler()->unzoomItX(e->pos().y());
+                            tmpHelpLinePosY=m_view->zoomHandler()->unzoomItY(e->pos().y());
 
                         }
                         else
@@ -6338,7 +6339,7 @@ void KPrCanvas::tmpMoveHelpLine( const QPoint & newPos)
         vi = m_view->zoomHandler()->unzoomItX(newPos.x());
 
         p.drawLine(m_view->zoomHandler()->zoomItX(vi), rect.top(), m_view->zoomHandler()->zoomItX(vi),  rect.bottom());
-        tmpHelpLinePosY = vi;
+        tmpHelpLinePosX = vi;
     }
     p.end();
 

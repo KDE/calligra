@@ -5788,6 +5788,7 @@ void KPresenterView::addHelpLine()
             m_pKPresenterDoc->addVertHelpline( zoomHandler()->zoomItX( pos ));
     }
     delete dlg;
+    m_pKPresenterDoc->setModified( true );
     m_canvas->repaint( false );
 }
 
