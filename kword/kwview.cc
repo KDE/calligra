@@ -722,7 +722,7 @@ void KWView::setupActions()
     actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties." ) );
     actionFormatFrameSet->setWhatsThis( i18n( "Alter frameset properties.<p>Currently you can change the frame background." ) );
 
-    actionFormatPage = new KAction( i18n( "P&age..." ), 0,
+    actionFormatPage = new KAction( i18n( "Page &Layout..." ), 0,
                         this, SLOT( formatPage() ),
                         actionCollection(), "format_page" );
     actionFormatPage->setToolTip( i18n( "Change properties of entire page." ) );
