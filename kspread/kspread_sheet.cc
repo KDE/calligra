@@ -6377,7 +6377,17 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                     }
                     
                     cellNode = cellNode.nextSibling();
-                }    
+                }
+                
+                if( rowElement.hasAttribute( "table:number-rows-repeated" ) )
+                {
+                    bool ok = false;
+                    int rows = rowElement.attribute( "table:number-rows-repeated" ).toInt( &ok );
+                    if( ok )
+                        for( int i = 1; i < rows; i++ )
+                            // FIXME copy row layout
+                            rowIndex++;
+                }
             }
         }
         
