@@ -52,6 +52,7 @@
 #include <qdom.h>
 
 #include <kurl.h>
+#include <kapp.h>
 #include <kurldrag.h>
 #include <ktempfile.h>
 #include <klocale.h>
@@ -74,7 +75,6 @@
 #include <config.h>
 
 #include <KPresenterDocIface.h>
-#include <cassert>
 using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 2;

@@ -56,6 +56,7 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kstdaction.h>
+#include <kapp.h>
 #include <kio/netaccess.h>
 
 #include <kpresenter_view.h>
