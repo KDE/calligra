@@ -16,8 +16,12 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+
 #include "kptproject.h"
+
+#include <qdom.h>
 #include <kdebug.h>
+
 
 KPTProject::KPTProject() : KPTNode(), startNode( this ), endNode( this ) {
     // Set start and end nodes to have zero duration
@@ -25,8 +29,10 @@ KPTProject::KPTProject() : KPTNode(), startNode( this ), endNode( this ) {
     endNode.setEffort( const_cast<KPTEffort*>( &KPTEffort::zeroEffort ) );
 }
 
+
 KPTProject::~KPTProject() {
 }
+
 
 KPTDuration *KPTProject::getExpectedDuration() {
     KPTDuration *ed= new KPTDuration();
@@ -40,17 +46,21 @@ KPTDuration *KPTProject::getExpectedDuration() {
     return ed;
 }
 
+
 KPTDuration *KPTProject::getRandomDuration() {
     return 0L;
 }
+
 
 KPTDuration *KPTProject::getStartTime() {
     return 0L;
 }
 
+
 KPTDuration *KPTProject::getFloat() {
     return 0L;
 }
+
 
 void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
     /* Propagate (start) value of first node in list to all nodes in project */
@@ -103,6 +113,7 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
         curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited(&KPTNode::predecessors) );
     }
 }
+
 
 void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
     /* Propagate (start) value of first node in list to all nodes in project */
@@ -164,6 +175,53 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
         curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited( &KPTNode::successors) );
     }
 }
+
+
+bool KPTProject::load(QDomElement &element) {
+    // TODO: Delete old stuff here
+
+    // Load attributes (TODO: Finish with the rest of them)
+    m_name = element.attribute("name");
+    m_leader = element.attribute("leader");
+    m_description = element.attribute("description");
+
+    // Load the project children
+    QDomNodeList list = element.childNodes();
+    for (unsigned int i=0; i<list.count(); ++i) {
+	if (list.item(i).isElement()) {
+	    QDomElement e = list.item(i).toElement();
+
+	    if (e.tagName() == "project") {
+		// TODO: Load the subproject
+	    } else if (e.tagName() == "task") {
+		// TODO: Load the task
+	    } else if (e.tagName() == "milestone") {
+		// TODO: Load the milestone
+	    } else if (e.tagName() == "terminalnode") {
+		// TODO: Load the terminalnode
+	    } else if (e.tagName() == "relation") {
+		// TODO: Load the relation
+	    } else if (e.tagName() == "resource") {
+		// TODO: Load the resource
+	    }
+	}
+    }
+
+    return true;
+}
+
+
+void KPTProject::save(QDomElement &element) const {
+    QDomElement me = element.ownerDocument().createElement("project");
+    element.appendChild(me);
+
+    me.setAttribute("name", m_name);
+    me.setAttribute("leader", m_leader);
+    me.setAttribute("description", m_description);
+
+    // TODO: Save children
+}
+
 
 void KPTProject::pert_cpm() {
     list<KPTNode*> nodelist;

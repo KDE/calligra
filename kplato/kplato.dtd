@@ -1,0 +1,72 @@
+<!--	This is the Document Type Definition for The KDE Planning Tool.
+	Version 0.epsilon. 20020401 (no, no joke).
+	Written by Bo Thorsen <bo@suse.de>
+-->
+
+<!--	A KPlato document consists of a projects, relations and
+	resources. TODO: It should probably also remember settings
+	for stuff like printing etc.
+
+	A node in a project can be a project, task, milestone or terminalnode.
+	Each node is given a unique identifier.
+	A relation is a time restraint on the correlation between two
+	nodes. These are identified by their identifier.
+	A resource is one of the resources available and needed for the
+	project. These could be persons, hardware, money etc.
+-->
+
+<!ELEMENT kplato (project)>
+<!ATTLIST kplato	author CDATA #IMPLIED
+			email  CDATA #IMPLIED
+			editor CDATA #IMPLIED
+			mime   CDATA "application/x-kplato">
+
+<!--	The project description. This has the following fields:
+
+	name		Name of the project
+	leader		Person or group in charge of the project
+	description	Text describing the project briefly
+-->
+<!ELEMENT project (project|task|milestone|terminalnode|relation|resource)*>
+<!ATTLIST project	id CDATA #REQUIRED
+			name CDATA #IMPLIED
+			leader CDATA #IMPLIED
+			description CDATA #IMPLIED>
+
+<!--	Task are for now exactly like projects.
+-->
+<!ELEMENT task (project|task|milestone|terminalnode|relation|resource)*>
+<!ATTLIST task		id CDATA #REQUIRED
+			name CDATA #IMPLIED
+			leader CDATA #IMPLIED
+			description CDATA #IMPLIED>
+
+<!--	Milestone
+-->
+<!ELEMENT milestone EMPTY>
+<!ATTLIST milestone	id CDATA #REQUIRED
+			deadline CDATA #REQUIRED
+			name CDATA #IMPLIED
+			leader CDATA #IMPLIED
+			description CDATA #IMPLIED>
+
+<!--	Terminalnode
+-->
+<!ELEMENT terminalnode (project|relation|resource)*>
+<!ATTLIST terminalnode	id CDATA #REQUIRED
+			name CDATA #IMPLIED
+			leader CDATA #IMPLIED
+			description CDATA #IMPLIED>
+
+<!--	Relations are described by the two IDs and the type of constraint
+-->
+<!ELEMENT relation EMPTY>
+<!ATTLIST relation	id1 CDATA #REQUIRED
+			id2 CDATA #REQUIRED
+			type ("Finish-Start" | "Finish-Finish" | "Start-Start")
+				"Start-Start">
+
+<!-- TBD
+-->
+<!ELEMENT resource EMPTY
+<!ATTLIST resource id CDATA #REQUIRED>

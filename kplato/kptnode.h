@@ -20,15 +20,20 @@
 #ifndef kptnode_h
 #define kptnode_h
 
-#include <vector>
-#include <qptrlist.h> 
-#include <qstring.h> 
 #include "defs.h"
 #include "kptrelation.h"
 #include "kptduration.h"
 
+#include <qptrlist.h> 
+#include <qstring.h> 
+
+#include <vector>
+
 class KPTEffort;
 class KPTProject;
+
+class QDomElement;
+
 
 /**
  * This class represents any node in the project, a node can be a project to a subproject and any task.
@@ -52,6 +57,10 @@ public:
 
     // Declare the class abstract
     virtual ~KPTNode() = 0;
+
+    // The load and save methods
+    virtual bool load(QDomElement &element) = 0;
+    virtual void save(QDomElement &element) const = 0;
 
     // simple child node management
     // Child nodes are things like subtasks, basically a task can exists of

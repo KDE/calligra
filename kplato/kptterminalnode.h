@@ -23,52 +23,67 @@
 #include "kptnode.h"
 
 class KPTTerminalNode : public KPTNode {
- public:
-  /**
-   * A terminal node must have an owning node.
-   * Make sure that we know what it is.
-   * @param owner The KPTNode object that has this as its start/end node.
-   */
-  KPTTerminalNode( KPTNode* owner ){ m_parent = owner; }
-  /* make concrete versions of abstract functions */
-  /** The expected Duration is the expected time to complete a Task, Project, etc. For an 
-   *  individual Task, this will calculate the expected duration by querying 
-   *  the Distribution of the Task. If the Distribution is a simple RiskNone, the value 
-   *  will equal the mode Duration, but for other Distributions like RiskHigh, the value 
-   *  will have to be calculated. For a Project or Subproject, the expected Duration is 
-   *  calculated by PERT/CPM. 
-   */
-  virtual KPTDuration *getExpectedDuration()
-    { return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
+public:
+    /**
+     * A terminal node must have an owning node.
+     * Make sure that we know what it is.
+     * @param owner The KPTNode object that has this as its start/end node.
+     */
+    KPTTerminalNode(KPTNode* owner) { m_parent = owner; }
+
+    /* make concrete versions of abstract functions */
+    /**
+     * The expected Duration is the expected time to complete a Task,
+     * Project, etc. For an  individual Task, this will calculate the
+     * expected duration by querying  the Distribution of the Task. If the
+     * Distribution is a simple RiskNone, the value  will equal the mode
+     * Duration, but for other Distributions like RiskHigh, the value will
+     * have to be calculated. For a Project or Subproject, the expected
+     * Duration is calculated by PERT/CPM. 
+     */
+    virtual KPTDuration *getExpectedDuration()
+	{ return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
   
-  /** Instead of using the expected duration, generate a random value using the Distribution of 
-   *  each Task. This can be used for Monte-Carlo estimation of Project duration.
-   */
-  virtual KPTDuration *getRandomDuration()
-    { return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
+    /**
+     * Instead of using the expected duration, generate a random value
+     * using the Distribution of each Task. This can be used for Monte-Carlo
+     * estimation of Project duration.
+     */
+    virtual KPTDuration *getRandomDuration()
+	{ return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
   
-  /** Calculate the start time, use startTime() for the actually started time.
-   */
-  virtual KPTDuration *getStartTime()
-    { return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
+    /**
+     * Calculate the start time, use startTime() for the actually started time.
+     */
+    virtual KPTDuration *getStartTime()
+	{ return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
   
-  /** Retrieve the calculated float of this node
-   */
-  virtual KPTDuration *getFloat()
-    { return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
- protected:
-  /**
-   * A terminal node should not have a start/end node. Perhaps this function
-   * should throw an exception.
-   * @return Null pointer.
-   */
-  virtual KPTNode* start_node(){ return 0; }
-  /**
-   * A terminal node should not have a start/end node. Perhaps this function
-   * should throw an exception.
-   * @return Null pointer.
-   */
-  virtual KPTNode* end_node(){ return 0; }
+    /**
+     * Retrieve the calculated float of this node
+     */
+    virtual KPTDuration *getFloat()
+	{ return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
+
+    /**
+     * TODO: Load and save
+     */
+    virtual bool load(QDomElement &element) { return true; }
+    virtual void save(QDomElement &element) const { }
+
+protected:
+    /**
+     * A terminal node should not have a start/end node. Perhaps this function
+     * should throw an exception.
+     * @return Null pointer.
+     */
+    virtual KPTNode* start_node(){ return 0; }
+
+    /**
+     * A terminal node should not have a start/end node. Perhaps this function
+     * should throw an exception.
+     * @return Null pointer.
+     */
+    virtual KPTNode* end_node(){ return 0; }
 };
 
 #endif

@@ -29,20 +29,18 @@
 #include <kstandarddirs.h>
 #include <koTemplateChooseDia.h>
 
-KPTPart::KPTPart( QWidget *parentWidget, const char *widgetName,
-		  QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
+		 QObject* parent, const char* name, bool singleViewMode)
+    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
 {
     project = new KPTProject();
 }
 
-KPTPart::~KPTPart()
-{
+KPTPart::~KPTPart() {
     delete project;
 }
 
-bool KPTPart::initDoc()
-{
+bool KPTPart::initDoc() {
     bool result = true;
     QString templateDoc;
     KoTemplateChooseDia::ReturnType ret;
@@ -63,10 +61,13 @@ bool KPTPart::initDoc()
         kdDebug() << "KPTPart::initDoc opening URL " << url.prettyURL() <<endl;
         result = openURL(url);
     } else if (ret == KoTemplateChooseDia::Empty) {
-        QString fileName(locate("kplato_template", "Simple/Plain.kpt",
-				KPTFactory::global()));
-        resetURL();
-        result = loadNativeFormat(fileName);
+	// TODO: Load the simple template file or what??
+//         QString fileName(locate("kplato_template", "Simple/Plain.kpt",
+// 				KPTFactory::global()));
+//         resetURL();
+//         result = loadNativeFormat(fileName);
+	project = new KPTProject();
+	result = true;
     }
 
     setModified(false);
@@ -74,21 +75,65 @@ bool KPTPart::initDoc()
 }
 
 
-KoView* KPTPart::createViewInstance( QWidget* parent, const char* name )
-{
-    return new KPTView( this, parent, name );
+KoView* KPTPart::createViewInstance(QWidget* parent, const char* name) {
+    return new KPTView(this, parent, name);
 }
 
-bool KPTPart::loadXML( QIODevice *, const QDomDocument & )
-{
-    // TODO load the document from the QDomDocument
+
+bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
+    kdDebug() << "Loading document\n";
+
+    QDomElement doc = document.documentElement();
+
+    // Check if this is the right app
+    if (doc.attribute("mime") != "application/x-kplato")
+	return false;
+
+    QDomNodeList list = doc.childNodes();
+    if (list.count() > 1) {
+	// TODO: Make a proper bitching about this
+	kdDebug() << "*** Error ***\n";
+	kdDebug() << "  Children count should be 1 but is " << list.count()
+		  << "\n";
+	return false;
+    }
+
+    for (unsigned int i=0; i<list.count(); ++i) {
+	if (list.item(i).isElement()) {
+	    QDomElement e = list.item(i).toElement();
+
+	    if(e.tagName() == "project") {
+		KPTProject *newProject = new KPTProject();
+		if (newProject->load(e)) {
+		    // The load went fine. Throw out the old project
+		    delete project;
+		    project = newProject;
+		}
+	    }
+	}
+    }
+
     return true;
 }
 
-QDomDocument KPTPart::saveXML()
-{
-    // TODO save the document into a QDomDocument
-    return QDomDocument();
+
+QDomDocument KPTPart::saveXML() {
+    QDomDocument document("kplato");
+
+    document.appendChild(document.createProcessingInstruction(
+			"xml",
+			"version=\"0.1\" encoding=\"UTF-8\""));
+
+    QDomElement doc = document.createElement("kplato");
+    doc.setAttribute("editor", "KPlato");
+    doc.setAttribute("mime", "application/x-kplato");
+    doc.setAttribute("version", "0.1");
+    document.appendChild(doc);
+
+    // Save the project
+    project->save(doc);
+
+    return document;
 }
 
 

@@ -24,26 +24,27 @@
 
 class KPTProject;
 
-class KPTPart : public KoDocument
-{
+class KPTPart : public KoDocument {
     Q_OBJECT
+
 public:
-    KPTPart( QWidget *parentWidget = 0, const char *widgetName = 0,
-	     QObject* parent = 0, const char* name = 0,
-	     bool singleViewMode = false );
+    KPTPart(QWidget *parentWidget = 0, const char *widgetName = 0,
+	    QObject* parent = 0, const char* name = 0,
+	    bool singleViewMode = false);
     ~KPTPart();
 
-    virtual void paintContent( QPainter& painter, const QRect& rect,
-			       bool transparent = FALSE,
-			       double zoomX = 1.0, double zoomY = 1.0 );
+    virtual void paintContent(QPainter& painter, const QRect& rect,
+			      bool transparent = FALSE,
+			      double zoomX = 1.0, double zoomY = 1.0);
 
     virtual bool initDoc();
 
-    virtual bool loadXML( QIODevice *, const QDomDocument & );
+    // The load and save functions. Look in the file kplato.dtd for info
+    virtual bool loadXML(QIODevice *, const QDomDocument &document);
     virtual QDomDocument saveXML();
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent, const char* name );
+    virtual KoView* createViewInstance(QWidget* parent, const char* name);
 
 private:
     KPTProject *project;

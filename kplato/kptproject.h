@@ -78,6 +78,12 @@ public:
      */
     void pert_cpm();
 
+    /**
+     * TODO: Finish the load and save methods
+     */
+    virtual bool load(QDomElement &element);
+    virtual void save(QDomElement &element) const;
+
 protected:
     /**
      * @return The start node.
