@@ -158,6 +158,21 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 	docWriter->addAttributePt( "svg:rx", m_rx );
 	docWriter->addAttributePt( "svg:ry", m_ry );
 
+	if( m_type == full )
+		docWriter->addAttribute( "kind", "full" );
+	else
+	{
+		if( m_type == cut )
+			docWriter->addAttribute( "kind", "cut" );
+		else if( m_type == section )
+			docWriter->addAttribute( "kind", "section" );
+		else
+			docWriter->addAttribute( "kind", "arc" );
+
+		docWriter->addAttribute( "draw:start-angle", m_startAngle );
+		docWriter->addAttribute( "draw:end-angle", m_endAngle );
+	}
+
 	if( !VObject::name().isEmpty() )
 		docWriter->addAttribute( "draw:name", VObject::name() );
 
