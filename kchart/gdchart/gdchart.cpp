@@ -276,7 +276,7 @@ draw_3d_bar( QPainter* p,
 			 QColor clr,
 			 QColor clrshd )
 {
-	debug( "draw 3d bar with color 0 = %d, %d, %d,\nshadow color 0 = %d, %d, %d", clr.red(), clr.green(), clr.blue(), clrshd.red(), clrshd.green(), clrshd.blue() );
+	//	debug( "draw 3d bar with color 0 = %d, %d, %d,\nshadow color 0 = %d, %d, %d", clr.red(), clr.green(), clr.blue(), clrshd.red(), clrshd.green(), clrshd.blue() );
 
     QPointArray poly( 4 );
     int	usd = MIN( y0, yhigh ); // up-side-down bars
