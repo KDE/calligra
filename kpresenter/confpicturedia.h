@@ -115,11 +115,11 @@ protected:
     PicturePreview *picturePreview;
     QPixmap origPixmap;
 
-    PictureMirrorType mirrorType, oldMirrorType;
+    PictureMirrorType mirrorType;
 
-    int depth, bright, oldDepth, oldBright;
-    bool swapRGB, oldSwapRGB;
-    bool grayscal, oldGrayscal;
+    int depth, bright;
+    bool swapRGB;
+    bool grayscal;
 
 protected slots:
     void slotNormalPicture();

@@ -402,24 +402,22 @@ ConfPictureDia::~ConfPictureDia()
 
 void ConfPictureDia::slotReset()
 {
-    m_depth0->setChecked( oldDepth == 0 );
-    m_depth1->setChecked( oldDepth == 1 );
-    m_depth8->setChecked( oldDepth == 8 );
-    m_depth16->setChecked( oldDepth == 16 );
-    m_depth32->setChecked( oldDepth == 32 );
+    m_depth0->setChecked( depth == 0 );
+    m_depth1->setChecked( depth == 1 );
+    m_depth8->setChecked( depth == 8 );
+    m_depth16->setChecked( depth == 16 );
+    m_depth32->setChecked( depth == 32 );
 
-    depth=oldDepth;
     picturePreview->setDepth( depth );
 
-    m_normalPicture->setChecked( oldMirrorType == PM_NORMAL );
-    m_horizontalMirrorPicture->setChecked( oldMirrorType == PM_HORIZONTAL );
-    m_verticalMirrorPicture->setChecked( oldMirrorType == PM_VERTICAL );
-    m_horizontalAndVerticalMirrorPicture->setChecked( oldMirrorType == PM_HORIZONTALANDVERTICAL );
-    mirrorType=oldMirrorType;
+    m_normalPicture->setChecked( mirrorType == PM_NORMAL );
+    m_horizontalMirrorPicture->setChecked( mirrorType == PM_HORIZONTAL );
+    m_verticalMirrorPicture->setChecked( mirrorType == PM_VERTICAL );
+    m_horizontalAndVerticalMirrorPicture->setChecked( mirrorType == PM_HORIZONTALANDVERTICAL );
     picturePreview->setMirrorType (mirrorType);
-    m_brightValue->setValue( oldBright );
-    m_swapRGBCheck->setChecked( oldSwapRGB );
-    m_grayscalCheck->setChecked( oldGrayscal );
+    m_brightValue->setValue(bright );
+    m_swapRGBCheck->setChecked( swapRGB );
+    m_grayscalCheck->setChecked( grayscal );
 }
 
 void ConfPictureDia::slotNormalPicture()
@@ -485,7 +483,6 @@ void ConfPictureDia::slotBrightValue( int _value )
 void ConfPictureDia::setPictureMirrorType(const PictureMirrorType &_mirrorType)
 {
     mirrorType = _mirrorType;
-    oldMirrorType = _mirrorType;
     picturePreview->setMirrorType(mirrorType);
     m_normalPicture->setChecked(mirrorType == PM_NORMAL);
     m_horizontalMirrorPicture->setChecked(mirrorType == PM_HORIZONTAL);
@@ -496,7 +493,6 @@ void ConfPictureDia::setPictureMirrorType(const PictureMirrorType &_mirrorType)
 void ConfPictureDia::setPictureDepth(int _depth)
 {
     depth = _depth;
-    oldDepth = _depth;
     picturePreview->setDepth(depth);
     m_depth0->setChecked(depth == 0);
     m_depth1->setChecked(depth == 1);
@@ -508,7 +504,6 @@ void ConfPictureDia::setPictureDepth(int _depth)
 void ConfPictureDia::setPictureSwapRGB(bool _swapRGB)
 {
     swapRGB = _swapRGB;
-    oldSwapRGB = _swapRGB;
     picturePreview->slotSwapRGBPicture(swapRGB);
     m_swapRGBCheck->setChecked(swapRGB);
 }
@@ -516,17 +511,15 @@ void ConfPictureDia::setPictureSwapRGB(bool _swapRGB)
 void ConfPictureDia::setPictureGrayscal(bool _grayscal)
 {
     grayscal = _grayscal;
-    oldGrayscal = _grayscal;
     picturePreview->slotGrayscalPicture(grayscal);
-    m_grayscalCheck->setChecked( oldGrayscal );
+    m_grayscalCheck->setChecked( grayscal );
 }
 
 void ConfPictureDia::setPictureBright(int _bright)
 {
     bright = _bright;
-    oldBright = _bright;
     picturePreview->slotBrightValue(bright);
-    m_brightValue->setValue( oldBright );
+    m_brightValue->setValue( bright );
 }
 
 void ConfPictureDia::setPicturePixmap(QPixmap _pixmap)
