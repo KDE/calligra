@@ -140,7 +140,8 @@ VGroup::setState( const VState state )
 	VObjectListIterator itr = m_objects;
 
 	for ( ; itr.current() ; ++itr )
-		itr.current()->setState( state );
+		if( itr.current()->state() != VObject::deleted  )
+			itr.current()->setState( state );
 
 	VObject::setState( state );
 }
