@@ -175,7 +175,8 @@ VSegment::isFlat( double flatness ) const
 KoRect
 VSegment::boundingBox() const
 {
-	KoRect rect;
+	// initialize with p3:
+	KoRect rect( m_point[2], m_point[2] );
 
 	if( m_prev )
 	{

@@ -95,7 +95,6 @@ VGroup::boundingBox() const
 		VObjectListIterator itr = m_objects;
 		for( ; itr.current(); ++itr )
 		{
-			itr.current()->invalidateBoundingBox();
 			m_boundingBox |= itr.current()->boundingBox();
 		}
 
@@ -191,3 +190,4 @@ VGroup::insertObject( VShape* object )
 	m_objects.append( object );
 	object->setParent( this );
 }
+

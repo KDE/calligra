@@ -21,20 +21,6 @@ VObjectList::~VObjectList()
 const KoRect&
 VObjectList::boundingBox() const
 {
-	// check bbox-validity of subobjects:
-	if( !m_boundingBoxIsInvalid )
-	{
-		VObjectListIterator itr( *this );
-		for( itr.toFirst(); itr.current(); ++itr )
-		{
-			if( itr.current()->boundingBoxIsInvalid() )
-			{
-				m_boundingBoxIsInvalid = true;
-				break;
-			}
-		}
-	}
-
 	if( m_boundingBoxIsInvalid )
 	{
 		// clear:
