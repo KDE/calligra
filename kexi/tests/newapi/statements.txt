@@ -7,12 +7,14 @@ select id, id from persons;
 select id myid from persons;
 -- aliases for tables
 select id from persons p;
-
-TODO
--- ERR: there's no "persons" table in this query (alias "p" hides it)
+-- ERR: there's no "persons" table in this query (alias "p" covers it)
 select persons.id from persons p;
 -- alias "p" for table "persons" is used
 select p.id from persons p;
+-- multiple aliases for the same table
+select persons.id from persons, persons p, persons p2
+
+TODO
 -- ERR: alias "p" is used twice for tables (so "id" column is ambiguous)
 select id from persons p, cars p;
 -- like above, but it's ok, because we're not using fields from "p" tables
