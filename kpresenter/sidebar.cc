@@ -238,9 +238,50 @@ void ThumbBar::rebuildItems()
 
     clear();
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
-        ThumbItem *item = new ThumbItem(static_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
+        // calculate the size of the thumb
+        QRect rect = view->kPresenterDoc()->pageList().at(i)->getZoomPageRect( );
+
+        int w = rect.width();
+        int h = rect.height();
+        if ( w > h ) {
+            w = 130;
+            float diff = (float)rect.width() / (float)w;
+            h = (int) (rect.height() / diff);
+            if ( h > 120 ) {
+                h = 120;
+                float diff = (float)rect.height() / (float)h;
+                w = (int) (rect.width() / diff);
+            }
+        }
+        else if ( w < h ) {
+            h = 130;
+            float diff = (float)rect.height() / (float)h;
+            w = (int) (rect.width() / diff);
+            if ( w > 120 ) {
+                w = 120;
+                float diff = (float)rect.width() / (float)w;
+                h = (int) (rect.height() / diff);
+            }
+        }
+        else if ( w == h ) {
+            w = 130;
+            h = 130;
+        }
+
+        // draw an empty thumb
+        QPixmap pix(w, h);
+        pix.fill( Qt::white );
+
+        QPainter p(&pix);
+        p.setPen(Qt::black);
+        p.drawRect(pix.rect());
+
+        ThumbItem *item = new ThumbItem(static_cast<QIconView *>(this), QString::number(i+1), pix);
+        item->setUptodate( false );
         item->setDragEnabled(false);  //no dragging for now
     }
+    
+    QTimer::singleShot( 10, this, SLOT( slotRefreshItems() ) );
 
     uptodate = true;
 
@@ -289,10 +330,8 @@ void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
     QIconViewItem *it = firstItem();
     do
     {
-        //Commented out until only the visible objects are updated
         if ( sticky ) {
             if ( it == findFirstVisibleItem( vRect ) ) {
-                //bool cont = true;
                 do
                 {
                     it->setPixmap(getSlideThumb( pagecnt ));
@@ -464,6 +503,11 @@ void ThumbBar::slotContentsMoving(int x, int y)
     offsetY = y;
 kdDebug(33001) << "offset x,y = " << x << ", " << y << endl;
     refreshItems( true );
+}
+
+void ThumbBar::slotRefreshItems()
+{
+    refreshItems();
 }
 
 Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )

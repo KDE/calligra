@@ -63,6 +63,7 @@ public slots:
 private slots:
   void itemClicked(QIconViewItem *i);
   void slotContentsMoving(int x, int y);
+  void slotRefreshItems();
 
 private:
   QPixmap getSlideThumb(int slideNr) const;
