@@ -312,7 +312,7 @@ public:
 
     KOffice::MainWindow_var getMainWindow() { return m_vKoMainWindow; }
     OpenParts::Id getID() { return OPPartIf::m_id; }
-    
+
 public slots:
 
     // Document signals
@@ -323,8 +323,6 @@ public slots:
     // KPresenterFrame signals
     void slotGeometryEnd( KoFrame* );
     void slotMoveEnd( KoFrame* );
-
-    void sendFocusEvent();
 
 protected slots:
 
