@@ -117,6 +117,7 @@ binary-indep: build install
 	dh_testroot
 	dh_movefiles -i
 	dh_installdocs -i
+	dh_installexamples -i
 	dh_installmenu -i
 	dh_installmime -i
 	dh_installman -i

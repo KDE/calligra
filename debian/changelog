@@ -1,3 +1,9 @@
+koffice (1:1.1.1-5) unstable; urgency=low
+
+  * Include demo kword/kspread files in binary packages (closes: Bug#132627).
+
+ -- Ben Burton <benb@acm.org>  Sun, 17 Feb 2002 18:08:59 +1100
+
 koffice (1:1.1.1-4) unstable; urgency=low
 
   * And rebuilt with libpng2 (closes: Bug#128584, Bug#129866).
