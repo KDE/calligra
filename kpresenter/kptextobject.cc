@@ -308,7 +308,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     // And now draw the border for text objects.
     // When they are drawn outside of the object, this can be moved to the standard paint() method,
     // so that we don't have to do it while editing the object, maybe.
-    if ( m_doc->getKPresenterView()->getCanvas()->getEditMode() && !drawingShadow && getDrawEditRect() && getPen().style() == Qt::NoPen )
+    if ( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas()->getEditMode() && !drawingShadow && getDrawEditRect() && getPen().style() == Qt::NoPen )
     {
         _painter->save();
 
