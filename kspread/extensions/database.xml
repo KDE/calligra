@@ -279,6 +279,23 @@ the entire population using all numeric values in a column of a database specifi
       </Help>
     </Function>
 
+    <Function>
+      <Name>GETPIVOTDATA</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+        <Type range="true">String</Type>
+        <Comment>Range containing the pivot table</Comment>
+      </Parameter>
+      <Parameter>
+        <Type>String</Type>
+        <Comment>Name of the field of which you want the summary data.</Comment>
+      </Parameter>
+      <Help>
+      <Text>Fetches summary data from a pivot table.</Text>
+      <Syntax>GETPIVOTDATA(Database; "Sales")</Syntax>
+      </Help>
+    </Function>
+
   </Group>
 
 </KSpreadFunctions>
