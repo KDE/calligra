@@ -432,6 +432,11 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
         newFormat->setTextBackgroundColor(m_replaceContext->m_backGroundColor);
         flags |=KoTextFormat::TextBackgroundColor;
     }
+    if (m_replaceContext->m_optionsMask & KoSearchContext::Shadow)
+    {
+        flags |= KoTextFormat::ShadowText;
+        newFormat->setShadowText( (bool)(m_replaceContext->m_options & KoSearchContext::Shadow) );
+    }
 
     KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
 
@@ -536,6 +541,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_checkBgColor = new QCheckBox( i18n( "Background color:" ), page );
     m_checkBold = new QCheckBox( i18n( "Bold:" ), page );
     m_checkItalic = new QCheckBox( i18n( "Italic:" ),page );
+    m_checkShadow = new QCheckBox( i18n( "Shadow:" ), page );
 
     m_checkUnderline = new QCheckBox( i18n( "Underline:" ), page);
     m_underlineItem = new QComboBox( page );
@@ -583,6 +589,12 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_italicYes=new QRadioButton( i18n("Yes"), grpItalic );
     m_italicNo=new QRadioButton( i18n("No"), grpItalic );
 
+    QButtonGroup *grpShadow = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    grpShadow->setRadioButtonExclusive( TRUE );
+    grpShadow->layout();
+    m_shadowYes=new QRadioButton( i18n("Yes"), grpShadow );
+    m_shadowNo=new QRadioButton( i18n("No"), grpShadow );
+
 
     m_vertAlignItem = new QComboBox( false, page );
     m_vertAlignItem->insertItem( i18n( "Normal" ), -1 );
@@ -599,6 +611,8 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_grid->addWidget( m_checkStrikeOut, 7, 0 );
     m_grid->addWidget( m_checkUnderline, 8, 0 );
     m_grid->addWidget( m_checkVertAlign, 9, 0 );
+    m_grid->addWidget( m_checkShadow, 10, 0 );
+
 
     m_grid->addWidget( m_familyItem, 1, 1 );
     m_grid->addWidget( m_sizeItem, 2, 1 );
@@ -611,6 +625,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_grid->addWidget( m_underlineItem, 8, 1 );
 
     m_grid->addWidget( m_vertAlignItem, 9, 1 );
+    m_grid->addWidget( grpShadow, 10, 1 );
 
     KSeparator *tmpSep = new KSeparator( page );
     m_grid->addMultiCellWidget( tmpSep, 11, 11, 0, 1 );
@@ -624,9 +639,13 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldYes, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicYes, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutItem, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkShadow, SIGNAL( toggled( bool ) ), m_shadowYes, SLOT( setEnabled( bool ) ) );
+
+
 
     QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldNo, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicNo, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkShadow, SIGNAL( toggled( bool ) ), m_shadowNo, SLOT( setEnabled( bool ) ) );
 
 
     QObject::connect( m_checkVertAlign, SIGNAL( toggled( bool ) ), m_vertAlignItem, SLOT( setEnabled( bool ) ) );
@@ -662,6 +681,11 @@ void KoFormatDia::slotReset()
     m_boldYes->setEnabled(m_checkBold->isChecked());
     m_boldNo->setEnabled(m_checkBold->isChecked());
 
+    m_checkShadow->setChecked( m_ctx->m_optionsMask & KoSearchContext::Shadow );
+    m_shadowYes->setEnabled(m_checkShadow->isChecked());
+    m_shadowNo->setEnabled(m_checkShadow->isChecked());
+
+
     m_checkStrikeOut->setChecked( m_ctx->m_optionsMask & KoSearchContext::StrikeOut );
     m_strikeOutItem->setEnabled( m_checkStrikeOut->isChecked());
 
@@ -685,6 +709,12 @@ void KoFormatDia::slotReset()
         m_italicYes->setChecked( true );
     else
         m_italicNo->setChecked( true );
+
+    if (m_ctx->m_options & KoSearchContext::Shadow)
+        m_shadowYes->setChecked( true );
+    else
+        m_shadowNo->setChecked( true );
+
 }
 
 void KoFormatDia::ctxOptions( )
@@ -709,12 +739,16 @@ void KoFormatDia::ctxOptions( )
         optionsMask |= KoSearchContext::VertAlign;
     if ( m_checkStrikeOut->isChecked() )
         optionsMask |= KoSearchContext::StrikeOut;
+    if ( m_checkShadow->isChecked() )
+        optionsMask |= KoSearchContext::Shadow;
 
 
     if ( m_boldYes->isChecked() )
         options |= KoSearchContext::Bold;
     if ( m_italicYes->isChecked() )
         options |= KoSearchContext::Italic;
+    if ( m_shadowYes->isChecked() )
+        options |= KoSearchContext::Shadow;
 
 
     m_ctx->m_optionsMask = optionsMask;
@@ -745,6 +779,13 @@ bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matc
             if ( (!format->font().bold() && (searchContext->m_options & KoSearchContext::Bold)) || (format->font().bold() && ((searchContext->m_options & KoSearchContext::Bold)==0)))
                 return false;
         }
+        if (searchContext->m_optionsMask & KoSearchContext::Shadow)
+        {
+            if ( (!format->shadowText() && (searchContext->m_options & KoSearchContext::Shadow)) || (format->shadowText() && ((searchContext->m_options & KoSearchContext::Shadow)==0)))
+                return false;
+        }
+
+
         if (searchContext->m_optionsMask & KoSearchContext::Size)
         {
             if ( format->font().pointSize () !=  KoTextZoomHandler::ptToLayoutUnitPt(searchContext->m_size))

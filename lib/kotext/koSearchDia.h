@@ -64,7 +64,8 @@ public:
         Underline = 32 * KoFindDialog::MinimumUserOption,
         VertAlign = 64 * KoFindDialog::MinimumUserOption,
         StrikeOut = 128 * KoFindDialog::MinimumUserOption,
-        BgColor = 256 *KoFindDialog::MinimumUserOption
+        BgColor = 256 *KoFindDialog::MinimumUserOption,
+        Shadow = 512 *KoFindDialog::MinimumUserOption
     } Options;
 
     KoSearchContext();
@@ -275,6 +276,7 @@ private:
     QCheckBox *m_checkBgColor;
     QCheckBox *m_checkBold;
     QCheckBox *m_checkItalic;
+    QCheckBox *m_checkShadow;
     QCheckBox *m_checkUnderline;
     QCheckBox *m_checkVertAlign;
     QCheckBox *m_checkStrikeOut;
@@ -286,6 +288,8 @@ private:
     QRadioButton *m_boldNo;
     QRadioButton *m_italicYes;
     QRadioButton *m_italicNo;
+    QRadioButton *m_shadowYes;
+    QRadioButton *m_shadowNo;
 
     QComboBox *m_vertAlignItem;
     QComboBox *m_underlineItem;
