@@ -51,6 +51,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_advancedAutoCorrect( true ),
       m_autoDetectUrl( false ),
       m_ignoreDoubleSpace( false ),
+      m_removeSpaceBeginEndLine( false ),
       m_useBulletStyle(false),
       m_autoChangeFormat(false),
       m_autoReplaceNumber(false),
@@ -62,57 +63,65 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_includeAbbreviation(false),
       m_ignoreUpperCase(false),
       m_bAutoFormatActive(true),
+      m_bulletStyle(),
       m_typographicSimpleQuotes(),
       m_typographicDoubleQuotes(),
+      m_listCompletion( new KCompletion ),
+      m_entries(),
+      m_upperCaseExceptions(),
+      m_twoUpperLetterException(),
       m_maxlen( 0 ),
       m_maxFindLength( 0 ),
       m_minCompletionWordLength( 5 ),
       m_nbMaxCompletionWord( 500 )
 {
-    m_listCompletion=new KCompletion();
-    kdDebug() << "KoAutoFormat::KoAutoFormat " << this << " m_listCompletion: " << m_listCompletion << endl;
     //load once this list not each time that we "readConfig"
     loadListOfWordCompletion();
 }
 
-KoAutoFormat::KoAutoFormat( const KoAutoFormat & autoFormat )
+KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
+    : m_doc( format.m_doc ),
+      m_varCollection( format.m_varCollection ),
+      m_varFormatCollection( format.m_varFormatCollection ),
+      m_configRead( format.m_configRead ),
+      m_convertUpperCase( format.m_convertUpperCase ),
+      m_convertUpperUpper( format.m_convertUpperUpper ),
+      m_advancedAutoCorrect( format.m_advancedAutoCorrect ),
+      m_autoDetectUrl( format.m_autoDetectUrl ),
+      m_ignoreDoubleSpace( format.m_ignoreDoubleSpace ),
+      m_removeSpaceBeginEndLine( format.m_removeSpaceBeginEndLine ),
+      m_useBulletStyle( format.m_useBulletStyle ),
+      m_autoChangeFormat( format.m_autoChangeFormat ),
+      m_autoReplaceNumber( format.m_autoReplaceNumber ),
+      m_useAutoNumberStyle( format.m_useAutoNumberStyle ),
+      m_autoCompletion( format.m_autoCompletion ),
+      m_completionAppendSpace( format.m_completionAppendSpace ),
+      m_addCompletionWord( format.m_addCompletionWord ),
+      m_includeTwoUpperLetterException( format.m_includeTwoUpperLetterException ),
+      m_includeAbbreviation( format.m_includeAbbreviation ),
+      m_ignoreUpperCase( format.m_ignoreUpperCase ),
+      m_bAutoFormatActive( format.m_bAutoFormatActive ),
+      m_bulletStyle( format.m_bulletStyle ),
+      m_typographicSimpleQuotes( format.m_typographicSimpleQuotes ),
+      m_typographicDoubleQuotes( format.m_typographicDoubleQuotes ),
+      m_listCompletion( 0L ), // don't copy it!
+      m_entries( format.m_entries ),
+      m_upperCaseExceptions( format.m_upperCaseExceptions ),
+      m_twoUpperLetterException( format.m_twoUpperLetterException ),
+      m_maxlen( format.m_maxlen ),
+      m_maxFindLength( format.m_maxFindLength ),
+      m_minCompletionWordLength( format.m_minCompletionWordLength ),
+      m_nbMaxCompletionWord( format.m_nbMaxCompletionWord )
 {
-    m_listCompletion=new KCompletion();
-    m_listCompletion->setItems( autoFormat.listCompletion() );
-
-    m_typographicSimpleQuotes = autoFormat.getConfigTypographicSimpleQuotes();
-    m_typographicDoubleQuotes = autoFormat.getConfigTypographicDoubleQuotes();
-    m_convertUpperCase= autoFormat.getConfigUpperCase();
-    m_convertUpperUpper = autoFormat.getConfigUpperUpper();
-    m_advancedAutoCorrect = autoFormat.getConfigAdvancedAutoCorrect();
-    m_autoDetectUrl = autoFormat.getConfigAutoDetectUrl();
-    m_ignoreDoubleSpace = autoFormat.getConfigIgnoreDoubleSpace();
-    m_removeSpaceBeginEndLine = autoFormat.getConfigRemoveSpaceBeginEndLine();
-    m_useBulletStyle = autoFormat.getConfigUseBulletSyle();
-    m_bulletStyle = autoFormat.getConfigBulletStyle();
-    m_autoChangeFormat = autoFormat.getConfigAutoChangeFormat();
-    m_autoReplaceNumber = autoFormat.getConfigAutoReplaceNumber();
-    m_useAutoNumberStyle = autoFormat.getConfigAutoNumberStyle();
-    m_autoCompletion = autoFormat.getConfigAutoCompletion();
-    m_completionAppendSpace = autoFormat.getConfigAppendSpace();
-    m_minCompletionWordLength = autoFormat.getConfigMinWordLength();
-    m_nbMaxCompletionWord = autoFormat.getConfigNbMaxCompletionWord();
-    m_addCompletionWord = autoFormat.getConfigAddCompletionWord();
-    m_includeTwoUpperLetterException = autoFormat.getConfigIncludeTwoUpperUpperLetterException();
-    m_includeAbbreviation = autoFormat.getConfigIncludeAbbreviation();
-    m_upperCaseExceptions = autoFormat.listException();
-    m_twoUpperLetterException = autoFormat.listTwoUpperLetterException();
-    copyAutoFormatEntries( autoFormat );
-
+    //m_listCompletion=new KCompletion();
+    //m_listCompletion->setItems( autoFormat.listCompletion() );
+    //copyAutoFormatEntries( autoFormat );
 }
-
 
 KoAutoFormat::~KoAutoFormat()
 {
-    kdDebug() << "KoAutoFormat::~KoAutoFormat " << this << " deleting m_listCompletion: " << m_listCompletion << endl;
     delete m_listCompletion;
 }
-
 
 void KoAutoFormat::loadListOfWordCompletion()
 {

@@ -78,6 +78,8 @@ KoStyle* KoStyleCollection::addStyleTemplate( KoStyle * sty )
 
 void KoStyleCollection::removeStyleTemplate ( KoStyle *style ) {
     if( m_styleList.removeRef(style)) {
+        if ( m_lastStyle == style )
+            m_lastStyle = 0L;
         // Remember to delete this style when deleting the document
         m_deletedStyles.append(style);
     }

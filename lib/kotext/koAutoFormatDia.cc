@@ -470,18 +470,15 @@ void KoAutoFormatDia::setupTab4()
     ( void )new QWidget( tab4 );
     twoUpperLetter=new KoAutoFormatExceptionWidget(tab4,i18n("Accept two uppercase letters in:"),m_autoFormat.listTwoUpperLetterException(),m_autoFormat.getConfigIncludeTwoUpperUpperLetterException());
     ( void )new QWidget( tab4 );
-    saveExceptionAbbreviationList = m_autoFormat.listException();
-    saveExceptionTwoUpperLetterList = m_autoFormat.listTwoUpperLetterException();
     initTab4();
-
 }
 
 void KoAutoFormatDia::initTab4()
 {
-    abbreviation->setListException( saveExceptionAbbreviationList );
-    abbreviation->setAutoInclude( m_autoFormat.getConfigIncludeAbbreviation() );
-    twoUpperLetter->setListException( saveExceptionTwoUpperLetterList );
-    twoUpperLetter->setAutoInclude( m_autoFormat.getConfigIncludeTwoUpperUpperLetterException() );
+    abbreviation->setListException( m_docAutoFormat->listException() );
+    abbreviation->setAutoInclude( m_docAutoFormat->getConfigIncludeAbbreviation() );
+    twoUpperLetter->setListException( m_docAutoFormat->listTwoUpperLetterException() );
+    twoUpperLetter->setAutoInclude( m_docAutoFormat->getConfigIncludeTwoUpperUpperLetterException() );
 }
 
 void KoAutoFormatDia::setupTab5()
@@ -491,16 +488,18 @@ void KoAutoFormatDia::setupTab5()
     grid->setAutoAdd( true );
 
     cbAllowAutoCompletion = new QCheckBox( tab5 );
-    cbAllowAutoCompletion->setText( i18n( "Auto Completion" ) );
+    cbAllowAutoCompletion->setText( i18n( "Enable Auto Completion" ) );
+    // TODO whatsthis or text, to tell about the key to use for autocompletion....
     cbAllowAutoCompletion->resize( cbAllowAutoCompletion->sizeHint() );
 
     cbAddCompletionWord = new QCheckBox( tab5 );
-    cbAddCompletionWord->setText( i18n( "Add Completion word" ) );
+    cbAddCompletionWord->setText( i18n( "Automatically add new words to completion list" ) );
+    QWhatsThis::add( cbAddCompletionWord, i18n("If this is option is enabled, any word typed in this document will automatically be added to the list of words used by the completion." ) );
     cbAddCompletionWord->resize( cbAddCompletionWord->sizeHint() );
 
-    m_listCompletion = new QListBox( tab5 );
-    connect( m_listCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
-    connect( m_listCompletion, SIGNAL( highlighted ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
+    m_lbListCompletion = new QListBox( tab5 );
+    connect( m_lbListCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
+    connect( m_lbListCompletion, SIGNAL( highlighted ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
 
 
     pbRemoveCompletionEntry = new QPushButton(i18n( "Remove Completion Entry"), tab5  );
@@ -528,8 +527,8 @@ void KoAutoFormatDia::setupTab5()
     cbAppendSpace = new QCheckBox( tab5 );
     cbAppendSpace->setText( i18n( "Append Space" ) );
     cbAppendSpace->resize( cbAppendSpace->sizeHint() );
-    saveCompletionList=m_autoFormat.listCompletion();
 
+    m_listCompletion = m_docAutoFormat->listCompletion();
     initTab5();
 }
 
@@ -537,10 +536,10 @@ void KoAutoFormatDia::initTab5()
 {
     cbAllowAutoCompletion->setChecked( m_autoFormat.getConfigAutoCompletion());
     cbAddCompletionWord->setChecked( m_autoFormat.getConfigAddCompletionWord());
-    m_listCompletion->clear();
-    m_listCompletion->insertStringList( saveCompletionList );
-    m_docAutoFormat->getCompletion()->setItems( saveCompletionList );
-    if( saveCompletionList.count()==0 || m_listCompletion->currentText().isEmpty())
+    m_lbListCompletion->clear();
+    QStringList lst = m_docAutoFormat->listCompletion();
+    m_lbListCompletion->insertStringList( lst );
+    if( lst.isEmpty() || m_lbListCompletion->currentText().isEmpty())
         pbRemoveCompletionEntry->setEnabled( false );
     m_minWordLength->setValue ( m_docAutoFormat->getConfigMinWordLength() );
     m_maxNbWordCompletion->setValue ( m_docAutoFormat->getConfigNbMaxCompletionWord() );
@@ -554,13 +553,12 @@ void KoAutoFormatDia::slotCompletionWordSelected( const QString & word)
 
 void KoAutoFormatDia::slotRemoveCompletionEntry()
 {
-    QString text = m_listCompletion->currentText();
+    QString text = m_lbListCompletion->currentText();
     if( !text.isEmpty() )
     {
-        m_autoFormat.getCompletion()->removeItem( text );
-        m_listCompletion->removeItem( m_listCompletion->currentItem () );
-        m_docAutoFormat->getCompletion()->removeItem( text );
-        if( m_listCompletion->count()==0 )
+        m_listCompletion.remove( text );
+        m_lbListCompletion->removeItem( m_lbListCompletion->currentItem () );
+        if( m_lbListCompletion->count()==0 )
             pbRemoveCompletionEntry->setEnabled( false );
     }
 }
@@ -742,6 +740,7 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configIncludeTwoUpperUpperLetterException( twoUpperLetter->autoInclude());
     m_docAutoFormat->configIncludeAbbreviation( abbreviation->autoInclude());
 
+    m_docAutoFormat->getCompletion()->setItems( m_listCompletion );
     // Save to config file
     m_docAutoFormat->saveConfig();
 
@@ -843,6 +842,8 @@ void KoAutoFormatDia::slotSaveCompletionEntry()
 {
     KConfig config("kofficerc");
     KConfigGroupSaver cgs( &config, "Completion Word" );
-    config.writeEntry( "list", m_autoFormat.listCompletion());
+    config.writeEntry( "list", m_listCompletion );
     config.sync();
+    KMessageBox::information( this, i18n("Completion list saved.\nIt will be used for all documents from now on."),
+                              i18n("Completion List Saved") /* + dontShowAgainName? */ );
 }

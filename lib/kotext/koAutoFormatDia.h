@@ -106,11 +106,6 @@ protected:
     void initTab4();
     void initTab5();
 
-    QStringList saveCompletionList;
-    QStringList saveExceptionAbbreviationList;
-    QStringList saveExceptionTwoUpperLetterList;
-
-
     QWidget *tab1;
     QWidget *tab2;
     QWidget *tab3;
@@ -136,10 +131,11 @@ protected:
     QChar bulletStyle;
     KoAutoFormat m_autoFormat; // The copy we're working on
     KoAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
+    QStringList m_listCompletion; // The copy of the completion items - don't use m_autoFormat.getCompletion()!
 
     KoAutoFormatExceptionWidget *abbreviation;
     KoAutoFormatExceptionWidget *twoUpperLetter;
-    QListBox *m_listCompletion;
+    QListBox *m_lbListCompletion;
     KIntNumInput *m_minWordLength;
     KIntNumInput *m_maxNbWordCompletion;
 

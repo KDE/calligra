@@ -69,7 +69,10 @@ public:
      * (and a temporary one in the auto-format dialog).
      */
     KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollection, KoVariableFormatCollection *_varFormatCollection );
-    KoAutoFormat( const KoAutoFormat & autoFormat );
+
+    /** Copy constructor, used by KoAutoFormatDia */
+    KoAutoFormat( const KoAutoFormat& format );
+
     ~KoAutoFormat();
     /**
      * Called by edit widget when a character (@p ch) has been inserted
