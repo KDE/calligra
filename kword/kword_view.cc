@@ -79,7 +79,6 @@ KWordFrame::KWordFrame( KWordView* _view, KWordChild* _child )
 {
     m_pKWordView = _view;
     m_pKWordChild = _child;
-    obj = 0L;
 }
 
 /******************************************************************/
@@ -101,7 +100,6 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     m_vMenuTools = 0L;
     m_vToolBarTools = 0L;
     m_vToolBarText = 0L;
-    m_lstFrames.setAutoDelete( true );
     gui = 0;
     flow = KWParagLayout::LEFT;
     paragDia = 0L;
@@ -174,7 +172,7 @@ void KWordView::init()
     else
         cerr << "Did not get a tool bar manager" << endl;
 
-  // Create GUI
+    // Create GUI
     gui = new KWordGUI( this, m_bShowGUI, m_pKWordDoc, this );
     gui->setGeometry( 0, 0, width(), height() );
     gui->show();
@@ -242,32 +240,6 @@ void KWordView::selectionOnOff()
 }
 
 /*================================================================*/
-void KWordView::setFramesToParts()
-{
-    KWordFrame *frame = 0L;
-    for ( unsigned int i = 0; i < m_lstFrames.count(); i++ )
-    {
-        frame = m_lstFrames.at( i );
-        frame->hide();
-        frame->view()->setMainWindow( mainWindow() );
-        frame->getPartObject()->setView( frame );
-        frame->getPartObject()->setMainWindow( mainWindow() );
-        frame->getPartObject()->setParentID( id() );
-    }
-}
-
-/*================================================================*/
-void KWordView::hideAllFrames()
-{
-    KWordFrame *frame = 0L;
-    for ( unsigned int i = 0; i < m_lstFrames.count(); i++ )
-    {
-        frame = m_lstFrames.at( i );
-        frame->hide();
-    }
-}
-
-/*================================================================*/
 void KWordView::cleanUp()
 {
     cerr << "void KWordView::cleanUp()" << endl;
@@ -284,8 +256,6 @@ void KWordView::cleanUp()
         tool_bar_manager->unregisterClient( id() );
 
     m_pKWordDoc->removeView( this );
-
-    m_lstFrames.clear();
 
     KoViewIf::cleanUp();
 
@@ -2936,53 +2906,25 @@ void KWordView::slotInsertObject( KWordChild *_child, KWPartFrameSet *_kwpf )
         exit( 1 );
     }
 
-    KWordFrame *p = new KWordFrame( this, _child );
-    p->setGeometry( _child->geometry() );
-    m_lstFrames.append( p );
-
     KOffice::View_var kv = KOffice::View::_narrow( v );
     kv->setMode( KOffice::View::ChildMode );
     assert( !CORBA::is_nil( kv ) );
-    p->attachView( kv );
-
-    p->hide();
-    _kwpf->setView( p );
-    p->setPartObject( _kwpf );
+    _kwpf->setView( kv );
 }
 
 /*================================================================*/
 void KWordView::slotUpdateChildGeometry( KWordChild *_child )
 {
-    // Find frame for child
-    KWordFrame *f = 0L;
-    QListIterator<KWordFrame> it( m_lstFrames );
-    for ( ; it.current() && !f; ++it )
-        if ( it.current()->child() == _child ) f = it.current();
-
-    assert( f != 0L );
-
-    // Are we already up to date ?
-    if ( _child->geometry() == f->partGeometry() )
-        return;
-
-  // TODO scaling
-    f->setPartGeometry( _child->geometry() );
 }
 
 /*================================================================*/
 void KWordView::slotGeometryEnd( KoFrame* _frame )
 {
-    KWordFrame *f = ( KWordFrame* )_frame;
-    // TODO scaling
-    m_pKWordDoc->changeChildGeometry( f->child(), _frame->partGeometry() );
 }
 
 /*================================================================*/
 void KWordView::slotMoveEnd( KoFrame* _frame )
 {
-    KWordFrame *f = ( KWordFrame* )_frame;
-    // TODO scaling
-    m_pKWordDoc->changeChildGeometry( f->child(), _frame->partGeometry() );
 }
 
 /*================================================================*/

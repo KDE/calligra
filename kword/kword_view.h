@@ -76,13 +76,9 @@ public:
     KWordView* wordView()
     { return m_pKWordView; }
 
-    void setPartObject( KWPartFrameSet *o ) { obj = o; }
-    KWPartFrameSet *getPartObject() { return obj; }
-
 protected:
     KWordChild *m_pKWordChild;
     KWordView *m_pKWordView;
-    KWPartFrameSet *obj;
 
 };
 
@@ -224,9 +220,6 @@ public:
     bool getViewFrameBorders() { return _viewFrameBorders; }
     bool getViewTableGrid() { return _viewTableGrid; }
 
-    void setFramesToParts();
-    void hideAllFrames();
-
     void setSearchEntry( KWSearchDia::KWSearchEntry *e ) { searchEntry = e; }
     void setReplaceEntry( KWSearchDia::KWSearchEntry *e ) { replaceEntry = e; }
 
@@ -234,6 +227,9 @@ public:
     void changeRedo( QString, bool );
 
     void sendFocusEvent();
+
+    KOffice::MainWindow_var getMainWindow() { return m_vKoMainWindow; }
+    OpenParts::Id getID() { return OPPartIf::m_id; }
 
 public slots:
     void slotInsertObject( KWordChild *_child, KWPartFrameSet *_kwpf );
@@ -438,8 +434,6 @@ protected:
     CORBA::Long m_idButtonTable_DeleteRow;
     CORBA::Long m_idButtonTable_InsertCol;
     CORBA::Long m_idButtonTable_DeleteCol;
-
-    QList<KWordFrame> m_lstFrames;
 
     // text toolbar values
     QFont tbFont;

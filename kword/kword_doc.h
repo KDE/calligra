@@ -259,7 +259,6 @@ public:
     void drawAllBorders();
     void recalcWholeText( bool _cursor = false, bool _fast = false );
     void recalcWholeText( KWParag *start, unsigned int fs );
-    void hideAllFrames();
 
     int getPages() { return pages; }
 

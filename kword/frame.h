@@ -325,11 +325,8 @@ protected:
 class KWPartFrameSet : public KWFrameSet
 {
 public:
-    KWPartFrameSet( KWordDocument *_doc, KWordChild *_child )
-        : KWFrameSet( _doc )
-    { child = _child; _enableDrawing = true; }
-    virtual ~KWPartFrameSet()
-    {; }
+    KWPartFrameSet( KWordDocument *_doc, KWordChild *_child );
+    virtual ~KWPartFrameSet();
 
     virtual FrameType getFrameType()
     { return FT_PART; }
@@ -339,11 +336,8 @@ public:
     virtual void activate( QWidget *_widget, int diffx, int diffy, int diffxx );
     virtual void deactivate();
 
-    KWordFrame *getView() { return view; }
-    void setView( KWordFrame *_view ) { view = _view; }
-
-    void setMainWindow( OpenParts::MainWindow_ptr _mainWindow ) { mainWindow = KOffice::MainWindow::_narrow( _mainWindow ); }
-    void setParentID( OpenParts::Id _id ) { parentID = _id; }
+    void setView( KOffice::View_var kv )
+    { view = KOffice::View::_narrow( kv ); }
 
     KWordChild *getChild() { return child; }
 
@@ -352,10 +346,11 @@ public:
     void enableDrawing( bool f ) { _enableDrawing = f; }
 
 protected:
-    KWordFrame *view;
+    KWordFrame *frame;
     KWordChild *child;
-    KOffice::MainWindow_var mainWindow;
     OpenParts::Id parentID;
+    KOffice::View_var view;
+
     bool _enableDrawing;
 
 };

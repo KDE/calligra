@@ -454,7 +454,7 @@ int KWFrameSet::selectFrame( unsigned int mx, unsigned int my, bool simulate )
         if ( frames.at( i )->contains( QPoint( mx, my ) ) )
         {
             int r = 1;
-            if ( frames.at( i )->isSelected() ) 
+            if ( frames.at( i )->isSelected() )
                 r = 2;
             if ( !simulate )
                 frames.at( i )->setSelected( true );
@@ -1440,6 +1440,25 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 /******************************************************************/
 
 /*================================================================*/
+KWPartFrameSet::KWPartFrameSet( KWordDocument *_doc, KWordChild *_child )
+    : KWFrameSet( _doc )
+{
+    child = _child; 
+    _enableDrawing = true; 
+    frame = 0L;
+}
+
+/*================================================================*/
+KWPartFrameSet::~KWPartFrameSet()
+{
+    if ( frame )
+    {
+        frame->detach();
+        delete frame;
+    }
+}
+
+/*================================================================*/
 QPicture *KWPartFrameSet::getPicture()
 {
     if ( !_enableDrawing ) return 0L;
@@ -1448,18 +1467,30 @@ QPicture *KWPartFrameSet::getPicture()
 }
 
 /*================================================================*/
-void KWPartFrameSet::activate( QWidget */*_widget*/, int diffx, int diffy, int diffxx )
+void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffxx )
 {
-    view->setGeometry( frames.at( 0 )->x() - diffx + diffxx, frames.at( 0 )->y() - diffy + 20, frames.at( 0 )->width(), frames.at( 0 )->height() );
-    view->show();
-    view->view()->mainWindow()->setActivePart( view->view()->id() );
+    if ( !frame ) 
+    {
+        frame = new KWordFrame( dynamic_cast<KWordView*>( _widget ), child );
+        frame->attachView( view );
+        frame->show();
+    }
+    frame->setGeometry( frames.at( 0 )->x() - diffx + diffxx, frames.at( 0 )->y() - diffy + 20, 
+                        frames.at( 0 )->width(), frames.at( 0 )->height() );
+    frame->view()->mainWindow()->setActivePart( frame->view()->id() );
+    
+    parentID = dynamic_cast<KWordView*>( _widget )->getID();
 }
 
 /*================================================================*/
 void KWPartFrameSet::deactivate()
 {
-    view->hide();
-    view->view()->mainWindow()->setActivePart( parentID );
+    if ( frame )
+    {
+        frame->view()->mainWindow()->setActivePart( parentID );
+        // HACK!
+        frame->setGeometry( -10, -10, 1, 1 );
+    }
 }
 
 /*================================================================*/

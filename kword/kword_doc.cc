@@ -708,7 +708,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     pixmapKeys.clear();
     imageRequests.clear();
     imageRequests2.clear();
-    
+
     pageLayout.unit = PG_MM;
 
     pageColumns.columns = 1; //STANDARD_COLUMNS;
@@ -1072,7 +1072,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
             while ( parser.open( 0L, tag ) )
             {
                 QString key;
-                
+
                 KOMLParser::parseTag( tag.c_str(), name, lst );
                 if ( name == "KEY" )
                 {
@@ -1431,14 +1431,14 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 
             KWImage image( this, img, *it );
             imageCollection.insertImage( *it, image );
-            
+
         }
     }
 
     QDictIterator<KWCharImage> it2( imageRequests );
     for ( ; it2.current(); ++it2 )
         it2.current()->setImage( imageCollection.getImage( it2.currentKey() ) );
-    
+
     QDictIterator<KWPictureFrameSet> it3( imageRequests2 );
     for ( ; it3.current(); ++it3 )
         it3.current()->setImage( imageCollection.getImage( it3.currentKey() ) );
@@ -3525,18 +3525,6 @@ void KWordDocument::setStyleChanged( QString _name )
 bool KWordDocument::isStyleChanged( QString _name )
 {
     return ( changedStyles.find( _name ) != -1 );
-}
-
-/*================================================================*/
-void KWordDocument::hideAllFrames()
-{
-    KWordView *viewPtr = 0L;
-
-    if ( !m_lstViews.isEmpty() )
-    {
-        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-            viewPtr->hideAllFrames();
-    }
 }
 
 /*================================================================*/

@@ -1340,3 +1340,8 @@ Reggie 21.6.1999:
 - Implemented very simple and limited ASCII export
 - fixes for drawing selection
 - Cut&Copy&Paste works again
+
+Reggie, 22.6.1999:
+------------------
+- Activating/Deactivating embedded parts works now
+  (no crashes anymore :-)

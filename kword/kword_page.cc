@@ -1081,7 +1081,7 @@ void KWPage::vmrCreatePartAnSoOn()
     if ( insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() )
     {
         doc->insertObject( insRect, partEntry, contentsX(), contentsY() );
-        repaintScreen( false );
+        repaintScreen( true );
     }
     mmEdit();
 }
@@ -1232,9 +1232,7 @@ void KWPage::vmdEditFrame( unsigned int mx, unsigned int my )
     if ( doc->getFrameSet( frameset )->getFrameType() == FT_PART )
     {
         KWPartFrameSet *fs = dynamic_cast<KWPartFrameSet*>( doc->getFrameSet( frameset ) );
-        doc->hideAllFrames();
-        gui->getView()->setFramesToParts();
-        fs->activate( this, contentsX(), contentsY(), gui->getVertRuler()->width() + gui->getDocStruct()->width() );
+        fs->activate( gui->getView(), contentsX(), contentsY(), gui->getVertRuler()->width() + gui->getDocStruct()->width() );
         editNum = frameset;
     }
 }
