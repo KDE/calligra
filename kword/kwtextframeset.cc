@@ -589,18 +589,30 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #endif
     QPoint p;
     KWFrame * frame = internalToNormal( QPoint(0, yp), p );
-#ifdef DEBUG_FLOW
     if (!frame)
-        kdDebug() << "  getMargins: internalToNormal returned frame=0L for yp=" << yp << endl;
+    {
+#ifdef DEBUG_FLOW
+        kdDebug(32002) << "  getMargins: internalToNormal returned frame=0L for yp=" << yp << " ->aborting with 0 margins" << endl;
+#endif
         // frame == 0 happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
+        // Abort then, no need to return precise values
+        if ( marginLeft )
+            *marginLeft = 0;
+        if ( marginRight )
+            *marginRight = 0;
+        if ( breakEnd )
+            *breakEnd = 0;
+        return;
+    }
+#ifdef DEBUG_FLOW
     else
         kdDebugBody(32002) << "  getMargins: internalToNormal returned frame=" << DEBUGRECT( *frame )
                            << " and p=" << p.x() << "," << p.y() << endl;
 #endif
     // Everything from there is in 'normal' coordinates.
-    int left = frame ? kWordDocument()->zoomItX( frame->left() ) : 0;
+    int left = kWordDocument()->zoomItX( frame->left() );
     int from = left;
-    int to = frame ? kWordDocument()->zoomItX( frame->right() ) : 0;
+    int to = kWordDocument()->zoomItX( frame->right() );
 #ifdef DEBUG_FLOW
     int width = to - from;
 #endif
@@ -667,9 +679,10 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     if ( marginRight )
     {
 #ifdef DEBUG_FLOW
-        kdDebug() << "KWTextFrameSet::getMargins " << getName()
-                  << " textdoc's width=" << textdoc->width()
-                  << " frame's width=" << width << " to=" << to << endl;
+        kdDebug(32002) << "    getMargins " << getName()
+                       << " textdoc's width=" << textdoc->width()
+                       << " frame's width=" << kWordDocument()->zoomItX( frame->width() )
+                       << " to=" << to << endl;
 #endif
         *marginRight = textdoc->width() /*width*/ - to;
     }
@@ -830,8 +843,8 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
                     // (adjustFlow is called twice for each paragraph, if a break was done)
                     yp = bottom /*+ 2*/;
 #ifdef DEBUG_FLOW
-                    kdDebug() << "KWTextFrameSet::adjustFlow -> HARD FRAME BREAK" << endl;
-                    kdDebug() << "KWTextFrameSet::adjustFlow yp now " << yp << endl;
+                    kdDebug(32002) << "KWTextFrameSet::adjustFlow -> HARD FRAME BREAK" << endl;
+                    kdDebug(32002) << "KWTextFrameSet::adjustFlow yp now " << yp << endl;
 #endif
                     break;
                 }
@@ -925,32 +938,8 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
 }
 
 // ################## Not called anymore, to be removed
-void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorGroup & cg )
+void KWTextFrameSet::eraseAfter( QTextParag *, QPainter *, const QColorGroup & )
 {
-    // This is called when adjustFlow above moved a paragraph downwards to move
-    // it to the next frame. Then we have to erase the space under the paragraph,
-    // up to the bottom of the frame. This is what should be done here.
-
-    QPoint nPoint;
-    QRect r = parag->rect();
-    QPoint iPoint = r.bottomLeft();
-    iPoint.ry()++; // go under the paragraph
-    //kdDebug(32002) << "KWTextFrameSet::eraseAfter parag=" << parag->paragId() << endl;
-    KWFrame * frame = internalToNormal( iPoint, nPoint );
-    if(frame)
-    {
-        int frameBottom = kWordDocument()->zoomItY( frame->bottom() );
-        ASSERT( nPoint.y() <= frameBottom );
-        //kdDebug(32002) << " parag bottom=" << nPoint.y()
-        //               << " frameBottom=" << frameBottom
-        //               << " height of fillRect: " << frameBottom - nPoint.y() << endl;
-
-        p->fillRect( iPoint.x(), iPoint.y(),
-                     kWordDocument()->zoomItX( frame->width() ) /*r.width()*/, // erase the whole width of the frame
-                     frameBottom - nPoint.y(),
-                     /*Qt::blue*/ cg.brush( QColorGroup::Base ) );
-    }
-
 }
 
 KWTextFrameSet::~KWTextFrameSet()
@@ -1006,10 +995,10 @@ void KWTextFrameSet::updateFrames()
     }
     if ( width != textdoc->width() )
     {
-        kdDebug() << "KWTextFrameSet::updateFrames setWidth " << width << endl;
+        //kdDebug(32002) << "KWTextFrameSet::updateFrames setWidth " << width << endl;
         textdoc->setMinimumWidth( -1, 0 );
         textdoc->setWidth( width );
-    }
+    } //else kdDebug(32002) << "KWTextFrameSet::updateFrames width already " << width << endl;
 
     qHeapSort( sortedFrames );
 
