@@ -145,6 +145,7 @@ k_dcop:
     virtual void insertVariable();
 
     virtual void editCustomVars ();
+    virtual void changeCaseOfText();
 
 private:
     KPresenterView *view;

@@ -474,3 +474,8 @@ void KPresenterViewIface::insertNewCustomVariable()
 {
     view->insertNewCustomVariable();
 }
+
+void KPresenterViewIface::changeCaseOfText()
+{
+    view->changeCaseOfText();
+}
