@@ -689,8 +689,9 @@ void XfigImport::parseCompoundObject (istream& fin, GDocument* ) {
  */
 void XfigImport::buildDocument (GDocument *doc) {
   doc->setAutoUpdate (false);
-  QMapIterator<int, GObject*> it;
-  for (it=objList.end() ; it!=objList.begin(); --it) {
+  QMapIterator<int, GObject*> it=objList.end();
+  --it;
+  for ( ; it!=objList.begin(); --it) {
     GObject* obj = it.data();
     obj->ref ();
     doc->insertObject (obj);
