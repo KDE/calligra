@@ -204,7 +204,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int hLU
     // Now draw any bullet that is required over the space left for it.
     if ( m_layout.counter->isBullet() )
     {
-	int xBullet = zh->layoutUnitToPixelX( m_layout.counter->bulletX() );
+	int xBullet = xLeft + zh->layoutUnitToPixelX( m_layout.counter->bulletX() );
 
 	// The width and height of the bullet is the width of one space
         int width = zh->layoutUnitToPixelX( format->width( ' ' ) );
