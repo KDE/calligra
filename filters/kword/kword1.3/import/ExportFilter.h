@@ -56,7 +56,7 @@ public:
     virtual ~OOWriterWorker(void) { delete m_streamOut; }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
-    virtual bool doCloseFile(void); // Close file in normal conditions
+    virtual bool doCloseFile(void); ///< Close file in normal conditions
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
@@ -116,35 +116,35 @@ private: // ZIP methods
     bool zipWriteData(const char* str);
     bool zipWriteData(const QByteArray& array);
     bool zipWriteData(const QCString& cstr);
-    bool zipWriteData(const QString& str); // Assumes UTF-8
+    bool zipWriteData(const QString& str); ///< Assumes UTF-8
 private:
     QTextStream* m_streamOut;
     QString m_pagesize;
     StyleMap m_styleMap;
     double m_paperBorderTop,m_paperBorderLeft,m_paperBorderBottom,m_paperBorderRight;
-    KWEFDocumentInfo m_docInfo; // document information
-    QByteArray m_contentBody; // office:body element of content.xml
-    KZip* m_zip; // Output OOWriter file
-    QMap<QString,QString> m_fontNames; // List of used font names (the data() are extra attributes for font declaration time.)
+    KWEFDocumentInfo m_docInfo; ///< document information
+    QByteArray m_contentBody; ///< office:body element of content.xml
+    KZip* m_zip; ///< Output OOWriter file
+    QMap<QString,QString> m_fontNames; ///< List of used font names (the data() are extra attributes for font declaration time.)
 
-    ulong m_pictureNumber; // Number of picture (increment *before* use)
-    ulong m_automaticParagraphStyleNumber; // Number of paragraph-based automatic styles (increment *before* use)
-    ulong m_automaticTextStyleNumber; // Number of text-based automatic styles (increment *before* use)
-    ulong m_footnoteNumber; // Number of footnote (for text:id) (increment *before* use)
-    /// Number of footnote (for table:name) (increment *before* use)
-    ulong m_tableNumber;
+    ulong m_pictureNumber; ///< Number of picture (increment *before* use)
+    ulong m_automaticParagraphStyleNumber; ///< Number of paragraph-based automatic styles (increment *before* use)
+    ulong m_automaticTextStyleNumber; ///< Number of text-based automatic styles (increment *before* use)
+    ulong m_footnoteNumber; ///< Number of footnote (for text:id) (increment *before* use)
+    ulong m_tableNumber; ///< Number of footnote (for table:name) (increment *before* use)
+    
 
-    QString m_styles; // Normal paragraph styles (in OO format)
-    QString m_contentAutomaticStyles; // Automatic styles for content.xml (in OO format)
+    QString m_styles; ///< Normal paragraph styles (in OO format)
+    QString m_contentAutomaticStyles; ///< Automatic styles for content.xml (in OO format)
 
-    uint m_size; // Size of ZIP entry
+    uint m_size; ///< Size of ZIP entry
     int m_paperFormat;
     double m_paperWidth;
     double m_paperHeight;
     int m_paperOrientation;
 
-    QMap<QString,QString> m_mapTextStyleKeys; // Map of keys to automatic text styles
-    QMap<QString,QString> m_mapParaStyleKeys; // Map of keys to automatic paragraph styles
-    VariableSettingsData m_varSet; // KWord's <VARIABLESETTINGS>
+    QMap<QString,QString> m_mapTextStyleKeys; ///< Map of keys to automatic text styles
+    QMap<QString,QString> m_mapParaStyleKeys; ///< Map of keys to automatic paragraph styles
+    VariableSettingsData m_varSet; ///< KWord's \<VARIABLESETTINGS\>
 };
 #endif // _EXPORTFILTER_H

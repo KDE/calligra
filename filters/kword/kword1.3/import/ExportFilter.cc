@@ -1207,8 +1207,8 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
 #ifdef ALLOW_TABLE
 
-    // Be careful that while being similar the following 3 strings have different purposes
-    const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) );
+    // Be careful that while being similar the following 4 strings have different purposes
+    const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) ); // It also increases m_tableNumber
     const QString tableName( QString( "Table" ) + QString::number( m_tableNumber ) ); // m_tableNumber was already increased
     const QString translatedName( i18n( "Object name", "Table %1").arg( m_tableNumber ) );
     const QString translatedFrameName( i18n( "Object name", "Table Frame %1").arg( m_tableNumber ) );

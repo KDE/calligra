@@ -13,6 +13,7 @@ dir attribute of <FLOW>
 
 === TO BACKPORT ===
 Footnote/endnote (libexport?)
+Tables
 
 === Abiword's rtftest.rtf test file ===
 shadow (RTF import problem)
