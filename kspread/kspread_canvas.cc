@@ -972,7 +972,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     m_eMouseAction = Mark;
     gotoLocation(QPoint(col, row), activeTable(), false);
   }
-  else if ( _ev->button() == RightButton )
+  else if ( _ev->button() == RightButton &&
+            !selection.contains(QPoint(col, row)) )
   {
     // No selection or the mouse press was outside of an existing selection ?
     gotoLocation(QPoint(col, row), activeTable(), false);
@@ -1585,7 +1586,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
     {
       cell = table->getNextCellUp(marker.x(), marker.y());
 
-      while((cell != NULL) && 
+      while((cell != NULL) &&
             (cell->isEmpty() || (table->rowLayout(cell->row())->isHide())))
       {
         cell = table->getNextCellUp(cell->column(), cell->row());
@@ -1631,7 +1632,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
     {
       cell = table->getNextCellDown(marker.x(), marker.y());
 
-      while((cell != NULL) && 
+      while((cell != NULL) &&
             (cell->isEmpty() || (table->rowLayout(cell->row())->isHide())))
       {
         cell = table->getNextCellDown(cell->column(), cell->row());
@@ -1677,13 +1678,13 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
     {
       cell = table->getNextCellLeft(marker.x(), marker.y());
 
-      while((cell != NULL) && 
+      while((cell != NULL) &&
             (cell->isEmpty() || (table->columnLayout(cell->column())->isHide())))
       {
         cell = table->getNextCellLeft(cell->column(), cell->row());
       }
     }
- 
+
     if (cell == NULL)
       col = 1;
     else
@@ -1723,7 +1724,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
     {
       cell = table->getNextCellRight(marker.x(), marker.y());
 
-      while((cell != NULL) && 
+      while((cell != NULL) &&
             (cell->isEmpty() || (table->columnLayout(cell->column())->isHide())))
       {
         cell = table->getNextCellRight(cell->column(), cell->row());
