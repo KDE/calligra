@@ -25,18 +25,19 @@
 #include <unistd.h>
 #endif
 
-#include <abiwordimport.h>
-#include <abiwordimport.moc>
-#include <kdebug.h>
+#include <qstack.h>
+#include <qmap.h>
 #include <qxml.h>
 #include <qdom.h>
-#include <qstack.h>
 
-#include <ktempfile.h>
+#include <kdebug.h>
+
 #include <koGlobal.h>
 
 #include "processors.h"
 #include "kqiodevicegzip.h"
+#include <abiwordimport.h>
+#include <abiwordimport.moc>
 
 // *Note for the reader of this code*
 // Tags in lower case (e.g. <c>) are AbiWord's ones.
@@ -46,14 +47,30 @@ class AbiProps
 {
 public:
     AbiProps() {};
-    AbiProps(QString newName, void* newValue) : name(newName), value(newValue) {};
+    AbiProps(QString newValue) : m_value(newValue) {};
     virtual ~AbiProps() {};
-    QString name;
-    void* value;
+public:
+    inline QString getValue(void) const { return m_value; }
+private:
+    QString m_value;
 };
 
+class AbiPropsMap : public QMap<QString,AbiProps>
+{
+public:
+    AbiPropsMap() {};
+    virtual ~AbiPropsMap() {};
+public:
+    bool setProperty(QString newName, QString newValue);
+};
+
+bool AbiPropsMap::setProperty(QString newName, QString newValue)
+{
+    replace(newName,AbiProps(newValue));
+}
+
 // Treat the "props" attribute of AbiWord's tags and split it in separates names and values
-static void TreatAbiProps(QString strProps,QValueList<AbiProps> &abiPropsList)
+static void TreatAbiProps(QString strProps, AbiPropsMap &abiPropsMap)
 {
     if (strProps.isEmpty())
         return;
@@ -89,20 +106,8 @@ static void TreatAbiProps(QString strProps,QValueList<AbiProps> &abiPropsList)
             }
         }
         kdDebug(30506) << "========== (Property :" << name << "=" << value <<":)"<<endl;
-        //Now treat the name and the value that we have just found
-        QValueList<AbiProps>::Iterator iterator;
-        for (iterator=abiPropsList.begin();iterator!=abiPropsList.end();iterator++)
-        {
-            if (name==(*iterator).name)
-            {
-                if((*(iterator)).value)
-                {
-                    void *pointer=(*(iterator)).value;
-                    *((QString*) pointer)=value;
-                }
-                break;
-            }
-        }
+        // Now set the property
+        abiPropsMap.setProperty(name,value);
     }
 }
 
@@ -183,6 +188,104 @@ private:
     QDomElement mainFramesetElement;     // The main <FRAMESET> where the body text will be under.
 };
 
+void PopulateProperties(StackItem* stackItem, 
+                        const QXmlAttributes& attributes,
+                        AbiPropsMap& abiPropsMap, const bool allowInit)
+// TODO: find a better name for this function
+{
+    if (allowInit)
+    {
+        // Initialize the QStrings with the previous values of the properties
+        if (stackItem->italic)
+        {
+            abiPropsMap.setProperty("font-style","italic");
+        }
+        if (stackItem->bold)
+        {
+            abiPropsMap.setProperty("font-weight","bold");
+        }
+
+        if (stackItem->underline)
+        {
+            abiPropsMap.setProperty("text-decoration","underline");
+        }
+        else if (stackItem->strikeout)
+        {
+            abiPropsMap.setProperty("text-decoration","line-through");
+        }
+    }
+
+    kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
+    // Treat the props attributes in the two available flavors: lower case and upper case.
+    TreatAbiProps(attributes.value("props"),abiPropsMap);
+    TreatAbiProps(attributes.value("PROPS"),abiPropsMap);
+
+    stackItem->italic=(abiPropsMap["font-style"].getValue()=="italic");
+    stackItem->bold=(abiPropsMap["font-weight"].getValue()=="bold");
+
+    QString strDecoration=abiPropsMap["text-decoration"].getValue();
+    stackItem->underline=(strDecoration=="underline");
+    stackItem->strikeout=(strDecoration=="line-through");
+
+    QString strTextPosition=abiPropsMap["text-position"].getValue();
+    if (strTextPosition=="subscript")
+    {
+        stackItem->textPosition=1;
+    }
+    else if (strTextPosition=="superscript")
+    {
+        stackItem->textPosition=2;
+    }
+    else if (!strTextPosition.isEmpty())
+    {
+        // we have any other new value, assume it means normal!
+        stackItem->textPosition=0;
+    }
+
+    QString strColour=abiPropsMap["color"].getValue();
+    if (!strColour.isEmpty())
+    {
+        // we have a new colour, so decode it!
+        long int colour=strColour.toLong(NULL,16);
+        stackItem->red  =(colour&0xFF0000)>>16;
+        stackItem->green=(colour&0x00FF00)>>8;
+        stackItem->blue =(colour&0x0000FF);
+    }
+
+    QString strFontSize=abiPropsMap["font-size"].getValue();
+    if (!strFontSize.isEmpty())
+    {
+        int size=0;
+        int ch; // digit value of the character
+        for (int pos=0;;pos++)
+        {
+            ch=strFontSize.at(pos).digitValue();
+            if (ch==-1)
+            {
+                // Not a digit
+                break;
+            }
+            else
+            {
+                size*=10;
+                size+=ch;
+            }
+        }
+        // TODO: verify that the unit of the font size is really "pt"
+        if (size>0)
+        {
+            stackItem->fontSize=size;
+        }
+    }
+
+    QString strFontFamily=abiPropsMap["font-family"].getValue();
+    if (!strFontFamily.isEmpty())
+    {
+        // TODO: transform the font-family in a font we have on the system on which KWord runs.
+        stackItem->fontName=strFontFamily;
+    }
+}
+
 // Element <c>
 
 bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
@@ -191,88 +294,16 @@ bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttr
     // AbiWord does not use it but explicitely allows external programs to write AbiWord files with nested <c> elements!
     if ((stackCurrent->elementType==ElementTypeParagraph)||(stackCurrent->elementType==ElementTypeContent))
     {
+
+        AbiPropsMap abiPropsMap;
+        PopulateProperties(stackItem,attributes,abiPropsMap,true);
+
         QDomNode nodeOut=stackCurrent->stackNode;
         QDomNode nodeOut2=stackCurrent->stackNode2;
-        QValueList<AbiProps> abiPropsList;
-        // Initialize the QStrings with the previous values of the properties they represent!
-        QString strFontStyle(stackItem->italic?"italic":"");
-        QString strWeight(stackItem->bold?"bold":"");
-        QString strDecoration(stackItem->underline?"underline":"");
-        QString strTextPosition("old");
-        QString strColour("old");
-        QString strFontSize("old");
-        QString strFontFamily("old");
-
-        abiPropsList.append( AbiProps("font-style",&strFontStyle));
-        abiPropsList.append( AbiProps("font-weight",&strWeight));
-        abiPropsList.append( AbiProps("text-decoration",&strDecoration));
-        abiPropsList.append( AbiProps("text-position",&strTextPosition));
-        abiPropsList.append( AbiProps("color",&strColour));
-        abiPropsList.append( AbiProps("font-size",&strFontSize));
-        abiPropsList.append( AbiProps("font-family",&strFontFamily));
-        kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
-        // Treat the props attributes in the two available flavors: lower case and upper case.
-        TreatAbiProps(attributes.value("props"),abiPropsList);
-        TreatAbiProps(attributes.value("PROPS"),abiPropsList);
         stackItem->elementType=ElementTypeContent;
         stackItem->stackNode=nodeOut;   // <TEXT>
         stackItem->stackNode2=nodeOut2; // <FORMATS>
         stackItem->pos=stackCurrent->pos; //Propagate the position
-
-        stackItem->italic=(strFontStyle=="italic");
-        stackItem->bold=(strWeight=="bold");
-        stackItem->underline=(strDecoration=="underline");
-        stackItem->strikeout=(strDecoration=="line-through");
-        if (strTextPosition=="subscript")
-        {
-            stackItem->textPosition=1;
-        }
-        else if (strTextPosition=="superscript")
-        {
-            stackItem->textPosition=2;
-        }
-        else if (strTextPosition!="old")
-        {
-            // we have any other new value, assume it means normal!
-            stackItem->textPosition=0;
-        }
-        if (!strColour.isEmpty() && (strColour!="old"))
-        {
-            // we have a new colour, so decode it!
-            long int colour=strColour.toLong(NULL,16);
-            stackItem->red  =(colour&0xFF0000)>>16;
-            stackItem->green=(colour&0x00FF00)>>8;
-            stackItem->blue =(colour&0x0000FF);
-        }
-        if (!strFontSize.isEmpty() && (strFontSize!="old"))
-        {
-            int size=0;
-            int ch; // digit value of the character
-            for (int pos=0;;pos++)
-            {
-                ch=strFontSize.at(pos).digitValue();
-                if (ch==-1)
-                {
-                    // Not a digit
-                    break;
-                }
-                else
-                {
-                    size*=10;
-                    size+=ch;
-                }
-            }
-            // TODO: verify that the unit of the font size is really "pt"
-            if (size>0)
-            {
-                stackItem->fontSize=size;
-            }
-        }
-        if (!strFontFamily.isEmpty() && (strFontFamily!="old"))
-        {
-            // TODO: transform the font-family in a font we have on the system on which KWord runs.
-            stackItem->fontName=strFontFamily;
-        }
     }
     else
     {//we are not nested correctly, so consider it a parse error!
@@ -380,90 +411,13 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     QDomElement formatsPluralElementOut=mainFramesetElement.ownerDocument().createElement("FORMATS");
     paragraphElementOut.appendChild(formatsPluralElementOut);
 
-    QValueList<AbiProps> abiPropsList;
-
-    QString strFontStyle;
-    QString strWeight;
-    QString strDecoration;
-    QString strTextPosition;
-    QString strColour;
-    QString strFontSize;
-    QString strFontFamily;
-    QString strFlow;
-
-    abiPropsList.append( AbiProps("font-style",&strFontStyle));
-    abiPropsList.append( AbiProps("font-weight",&strWeight));
-    abiPropsList.append( AbiProps("text-decoration",&strDecoration));
-    abiPropsList.append( AbiProps("text-position",&strTextPosition));
-    abiPropsList.append( AbiProps("color",&strColour));
-    abiPropsList.append( AbiProps("font-size",&strFontSize));
-    abiPropsList.append( AbiProps("font-family",&strFontFamily));
-    abiPropsList.append( AbiProps("text-align",&strFlow));
-
-    kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
-    // Treat the props attributes in the two available flavors: lower case and upper case.
-    TreatAbiProps(attributes.value("props"),abiPropsList);
-    TreatAbiProps(attributes.value("PROPS"),abiPropsList);
-
+    AbiPropsMap abiPropsMap;
+    PopulateProperties(stackItem,attributes,abiPropsMap,false);
 
     stackItem->elementType=ElementTypeParagraph;
     stackItem->stackNode=textElementOut; // <TEXT>
     stackItem->stackNode2=formatsPluralElementOut; // <FORMATS>
     stackItem->pos=0; // No text characters yet
-    stackItem->italic=(strFontStyle=="italic");
-    stackItem->bold=(strWeight=="bold");
-    stackItem->underline=(strDecoration=="underline");
-	stackItem->strikeout=(strDecoration=="line-through");
-    if (strTextPosition=="subscript")
-    {
-        stackItem->textPosition=1;
-    }
-    else if (strTextPosition=="superscript")
-    {
-        stackItem->textPosition=2;
-    }
-    else
-    {
-        // we have any other new value, assume it means normal!
-        stackItem->textPosition=0;
-    }
-    if (!strColour.isEmpty())
-    {
-        // we have a new colour, so decode it!
-        long int colour=strColour.toLong(NULL,16);
-        stackItem->red  =(colour&0xFF0000)>>16;
-        stackItem->green=(colour&0x00FF00)>>8;
-        stackItem->blue =(colour&0x0000FF);
-    }
-    if (!strFontSize.isEmpty())
-    {
-        int size=0;
-        int ch; // digit value of the character
-        for (int pos=0;;pos++)
-        {
-            ch=strFontSize.at(pos).digitValue();
-            if (ch==-1)
-            {
-                // Not a digit
-                break;
-            }
-            else
-            {
-                size*=10;
-                size+=ch;
-            }
-        }
-        // TODO: verify that the unit of the font size is really "pt"
-        if (size>0)
-        {
-            stackItem->fontSize=size;
-        }
-    }
-    if (!strFontFamily.isEmpty())
-    {
-        // TODO: transform the font-family in a font we have on the system on which KWord runs.
-        stackItem->fontName=strFontFamily;
-    }
 
     // Now we populate the layout
     QDomElement layoutElement=nodeOut.ownerDocument().createElement("LAYOUT");
@@ -478,6 +432,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     element.setAttribute("value","Standard");
     layoutElement.appendChild(element);
 
+    QString strFlow=abiPropsMap["text-align"].getValue();
     element=layoutElement.ownerDocument().createElement("FLOW");
     if ((strFlow=="left") || (strFlow=="center") || (strFlow=="right") || (strFlow=="justify"))
     {
@@ -637,19 +592,8 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
     // Do we know the page size or do we need to measure
     // For page format that KWord knows, use our own values in case the values in the file would be wrong.
 
-    if (strPageType=="Custom")
-    {
-        // We have a Custom page.
-        // FIXME/TODO: AbiWord CVS 2001-04-24 cannot handle custom pages
-        // The height and width values are null, therefore useless.
-        // We prefer to set a A4 page size!
-        kwordHeight = CentimetresToPoints(29.7);
-        kwordWidth  = CentimetresToPoints(21.0);
-        kwordFormat = 6; // At least, say that we are a custom format!
-        kdWarning(30506) << "Custom page format found! Ignored!" << endl;
-    }
-    // The two most used formats first: A4 and Letter
-    else if (strPageType=="A4")
+    // At first, the two of the most used formats
+    if (strPageType=="A4")
     {
         kwordHeight = CentimetresToPoints(29.7);
         kwordWidth  = CentimetresToPoints(21.0);
@@ -999,6 +943,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
     //Initiate QDomDocument (TODO: is there are better way?)
     QString strHeader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    // TODO: syntax version 2 (KWord 1.0)
     strHeader+="<DOC editor=\"KWord\" mime=\"application/x-kword\" syntaxVersion=\"1\" >\n";
     strHeader+="<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\" />\n";
 
