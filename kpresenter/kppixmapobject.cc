@@ -108,6 +108,10 @@ void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
     {
         styleobjectauto.addProperty( "draw:luminance", convertValueToPercent( bright ) );
     }
+    if ( grayscal )
+    {
+        styleobjectauto.addProperty( "draw:color-mode","greyscale" );
+    }
 
     switch (m_effect)
     {
@@ -284,6 +288,11 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
 {
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
+    if ( styleStack.hasAttribute( "draw:color-mode" ) &&  ( styleStack.attribute( "draw:color-mode" )=="greyscale" ) )
+    {
+        grayscal = true;
+    }
+
     if ( styleStack.hasAttribute( "draw:contrast" ) )
     {
         QString str( styleStack.attribute( "draw:contrast" ) );

@@ -1006,7 +1006,10 @@ void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElemen
     e.appendChild( image );
 
     QDomElement settings = doc.createElement( "PICTURESETTINGS" );
-    settings.setAttribute( "grayscal", 0 );
+    if ( m_styleStack.hasAttribute( "draw:color-mode" ) &&  ( m_styleStack.attribute( "draw:color-mode" )=="greyscale" ) )
+        settings.setAttribute( "grayscal", 1 );
+    else
+        settings.setAttribute( "grayscal", 0 );
 
     if ( m_styleStack.hasAttribute( "draw:luminance" ) )
     {
