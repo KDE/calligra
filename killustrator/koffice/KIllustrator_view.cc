@@ -77,7 +77,6 @@
 #include <unistd.h>
 #include <qfileinfo.h>
 #include <qscrollview.h>
-
 #include <koPartSelectDia.h>
 #include <kaction.h>
 #include <kstdaction.h>
@@ -221,6 +220,8 @@ void KIllustratorView::createMyGUI()
 
     // Settings
     new KAction( i18n("&Configure..."), 0, this, SLOT( slotOptions() ), actionCollection(), "configure" );
+    new KAction( i18n("&Ellipse Settings..."), 0, this, SLOT( slotConfigureEllipse() ), actionCollection(), "ellipseSettings");
+    new KAction( i18n("&Polygon Settings..."), 0, this, SLOT( slotConfigurePolygon() ), actionCollection(), "polygonSettings");
 
     KSelectAction *m_viewZoom = new KSelectAction (i18n ("&Zoom"), 0, actionCollection (), "view_zoom");
     QStringList zooms;
@@ -269,8 +270,8 @@ void KIllustratorView::createMyGUI()
     m_selectTool->setChecked( true );
     m_normal->setChecked( true );
     m_showRuler->setChecked( true );
-    m_showHelplines->setChecked( false );
-    m_showGrid->setChecked( false );
+    m_showHelplines->setChecked(canvas->showHelplines());
+    m_showGrid->setChecked(canvas->showGrid());
 
     // Disable node actions
     slotPointTool( false );
@@ -414,7 +415,6 @@ void KIllustratorView::showCurrentMode (const QString& ) {
 
 void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 {
-    qDebug("+++++++++++ UNDO - REDO +++++++++++");
     m_undo->setEnabled( undoPossible );
     m_redo->setEnabled( redoPossible );
 
@@ -541,17 +541,13 @@ void KIllustratorView::setFillColor (long int id) {
 }
 */
 
-/*
-void KIllustratorView::configPolygonTool () {
-    // ###### Torben
-    // tcontroller->configureTool (ID_TOOL_POLYGON);
+void KIllustratorView::slotConfigurePolygon() {
+    tcontroller->configureTool (ID_TOOL_POLYGON);
 }
 
-void KIllustratorView::configEllipseTool () {
-    // ###### Torben
-    // tcontroller->configureTool (ID_TOOL_ELLIPSE);
+void KIllustratorView::slotConfigureEllipse() {
+    tcontroller->configureTool (ID_TOOL_ELLIPSE);
 }
-*/
 
 /*
 void KIllustratorView::zoomSizeSelected (const QString & s)
@@ -612,18 +608,15 @@ void KIllustratorView::changeChildGeometrySlot(KIllustratorChild *)
 
 QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
 {
-    const char *defaultExt = 0L;
     QString extension;
 
     if (! lastExport.isEmpty ()) {
         int pos = lastExport.findRev ('.', -1, false);
         if (pos != -1) {
-            extension =
-                lastExport.right (lastExport.length () - pos - 1);
-            defaultExt = (const char *) extension;
+            extension = lastExport.right (lastExport.length () - pos - 1);
         }
     }
-    QString filter = filterMgr->exportFilters (defaultExt);
+    QString filter = filterMgr->exportFilters (extension);
 
     KFileDialog *dlg = new KFileDialog (lastExportDir,
                                         filter, this,
@@ -659,7 +652,7 @@ void KIllustratorView::slotImport()
     QString fname = url.path();
     if (! fname.isEmpty ())
     {
-        QFileInfo finfo ((const char *) fname);
+        QFileInfo finfo (fname);
         if (!finfo.isFile () || !finfo.isReadable ())
             return;
 
@@ -733,8 +726,7 @@ void KIllustratorView::slotInsertBitmap()
     if (! fname.isEmpty ()) {
         QFileInfo finfo (fname);
         lastBitmapDir = finfo.dirPath ();
-        InsertPixmapCmd *cmd = new InsertPixmapCmd (m_pDoc->gdoc(),
-                                                    (const char *) fname);
+        InsertPixmapCmd *cmd = new InsertPixmapCmd (m_pDoc->gdoc(), fname);
         cmdHistory.addCommand (cmd, true);
     }
 }
@@ -750,8 +742,7 @@ void KIllustratorView::slotInsertClipart()
     {
         QFileInfo finfo (fname);
         lastClipartDir = finfo.dirPath ();
-        InsertClipartCmd *cmd = new InsertClipartCmd (m_pDoc->gdoc(),
-                                                      (const char *) fname);
+        InsertClipartCmd *cmd = new InsertClipartCmd (m_pDoc->gdoc(), fname);
         cmdHistory.addCommand (cmd, true);
     }
 }

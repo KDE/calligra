@@ -1,5 +1,7 @@
 /* -*- C++ -*-
 
+#include "PolygonTool.h"
+
   $Id$
 
   This file is part of KIllustrator.
@@ -26,6 +28,8 @@
 
 #include <qkeycode.h>
 #include <klocale.h>
+#include <kapp.h>
+#include <kconfig.h>
 
 #include <GDocument.h>
 #include <Canvas.h>
@@ -37,9 +41,13 @@
 
 PolygonTool::PolygonTool (CommandHistory* history) : Tool (history) {
   obj = 0L;
-  nCorners = 3;
-  sharpValue = 0;
-  createConcavePolygon = false;
+  KConfig* config = kapp->config ();
+  QString oldgroup = config->group ();
+  config->setGroup("PolygonTool");
+  nCorners = config->readEntry("Corners", "3").toInt();
+  sharpValue = config->readEntry("SharpValue", "0").toInt();
+  createConcavePolygon = config->readBoolEntry("Concave", false);
+  config->setGroup (oldgroup);
 }
 
 void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
@@ -120,6 +128,17 @@ void PolygonTool::setSharpness (unsigned int value) {
 
 void PolygonTool::setConcavePolygon (bool flag) {
   createConcavePolygon = flag;
+}
+
+void PolygonTool::writeOutConfig() {
+
+    KConfig* config = kapp->config ();
+    QString oldgroup = config->group ();
+    config->setGroup("PolygonTool");
+    config->writeEntry("Corners", nCorners);
+    config->writeEntry("SharpValue", sharpValue);
+    config->writeEntry("Concave", createConcavePolygon);
+    config->setGroup(oldgroup);
 }
 
 void PolygonTool::activate (GDocument* /*doc*/, Canvas* /*canvas*/) {

@@ -28,7 +28,6 @@
 #include <kapp.h>
 #include <kconfig.h>
 
-//#include "version.h"
 #include <GObject.h>
 #include <GText.h>
 #include <UnitBox.h>

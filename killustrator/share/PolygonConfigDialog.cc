@@ -44,7 +44,7 @@ PolygonConfigDialog::PolygonConfigDialog (QWidget* parent, const char* name) :
 
 void PolygonConfigDialog::createWidget(QWidget* parent) {
 
-    QGridLayout *layout=new QGridLayout(parent, 3, 3, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QGridLayout *layout=new QGridLayout(parent, 4, 3, KDialogBase::marginHint(), KDialogBase::spacingHint());
     QButtonGroup *group = new QVButtonGroup(parent);
     layout->addMultiCellWidget(group, 0, 0, 0, 1);
 
@@ -70,7 +70,9 @@ void PolygonConfigDialog::createWidget(QWidget* parent) {
     layout->addWidget(slider, 2, 1);
 
     preview = new PolygonPreview(parent);
-    layout->addMultiCellWidget(preview, 0, 2, 2, 2);
+    layout->addMultiCellWidget(preview, 0, 3, 2, 2);
+    layout->setColStretch(2, 1);
+    layout->setRowStretch(3, 1);
 
     connect (slider, SIGNAL(sliderMoved (int)), preview,
              SLOT(slotSharpness (int)));
@@ -97,6 +99,7 @@ unsigned int PolygonConfigDialog::sharpness () {
 
 void PolygonConfigDialog::setSharpness (unsigned int value) {
     slider->setValue (value);
+    preview->slotSharpness(value);
 }
 
 bool PolygonConfigDialog::concavePolygon () {
@@ -105,8 +108,12 @@ bool PolygonConfigDialog::concavePolygon () {
 
 void PolygonConfigDialog::setConcavePolygon (bool flag) {
     concaveButton->setChecked (flag);
-    convexButton->setChecked (! flag);
+    convexButton->setChecked (!flag);
     slider->setEnabled (flag);
+    if(flag)
+        preview->slotConcavePolygon();
+    else
+        preview->slotConvexPolygon();
 }
 
 void PolygonConfigDialog::slotConcavePolygon () {
@@ -128,6 +135,7 @@ void PolygonConfigDialog::setupTool (PolygonTool* tool) {
         tool->setNumCorners (dialog.numCorners ());
         tool->setSharpness (dialog.sharpness ());
         tool->setConcavePolygon (dialog.concavePolygon ());
+        tool->writeOutConfig();
     }
 }
 

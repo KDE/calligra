@@ -23,12 +23,13 @@
 #include <klocale.h>
 #include <dcopclient.h>
 
-#include "KIllustrator_factory.h"
+#include <KIllustrator_factory.h>
+#include <PStateManager.h>
 
 static const KCmdLineOptions options[]=
 {
-	{"+[file]", I18N_NOOP("File To Open"),0},
-	{0,0,0}
+        {"+[file]", I18N_NOOP("File To Open"),0},
+        {0,0,0}
 };
 
 int main( int argc, char **argv )
@@ -42,6 +43,5 @@ int main( int argc, char **argv )
 
     app.start();
     app.exec();
-
-    return 0;
+    PStateManager::instance()->saveDefaultSettings();
 }

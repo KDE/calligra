@@ -29,19 +29,18 @@
 #include <MainView.h>
 #include <koView.h>
 
-#define ID_TOOL_SELECT        1001
-#define ID_TOOL_EDITPOINT     1002
-#define ID_TOOL_FREEHAND      1003
-#define ID_TOOL_LINE          1004
-#define ID_TOOL_BEZIER        1005
-#define ID_TOOL_RECTANGLE     1006
-#define ID_TOOL_POLYGON       1007
-#define ID_TOOL_ELLIPSE       1008
-#define ID_TOOL_TEXT          1009
-#define ID_TOOL_ZOOM          1010
-#define ID_TOOL_PATHTEXT      1011
-
-#define ID_TOOL_INSERTPART    1012
+const int ID_TOOL_SELECT=1001;
+const int ID_TOOL_EDITPOINT=1002;
+const int ID_TOOL_FREEHAND=1003;
+const int ID_TOOL_LINE=1004;
+const int ID_TOOL_BEZIER=1005;
+const int ID_TOOL_RECTANGLE=1006;
+const int ID_TOOL_POLYGON=1007;
+const int ID_TOOL_ELLIPSE=1008;
+const int ID_TOOL_TEXT=1009;
+const int ID_TOOL_ZOOM=1010;
+const int ID_TOOL_PATHTEXT=1011;
+const int ID_TOOL_INSERTPART=1012;
 
 class KIllustratorView;
 class KIllustratorChild;
@@ -86,52 +85,8 @@ public:
 /*
     void editInsertObject ();
 
-    void viewOutline ();
-    void viewNormal ();
-
-    void transformPosition ();
-    void transformDimension ();
-    void transformRotation ();
-    void transformMirror ();
-
-    void arrangeAlign ();
-    void arrangeToFront ();
-    void arrangeToBack ();
-    void arrangeOneForward ();
-    void arrangeOneBack ();
-    void arrangeGroup ();
-    void arrangeUngroup ();
-    void arrangeTextAlongPath ();
-
-    void toggleRuler ();
-    void toggleGrid ();
-    void toggleHelplines ();
-
-    void setupGrid ();
-    void alignToGrid ();
-    void setupHelplines ();
-    void alignToHelplines ();
-
-    void editLayers ();
-    void setupPage ();
-
     void setPenColor (long int id);
     void setFillColor (long int id);
-
-    void toolSelection ();
-    void toolEditPoint ();
-    void toolFreehandLine ();
-    void toolPolyline ();
-    void toolBezier ();
-    void toolRectangle ();
-    void toolPolygon ();
-    void toolEllipse ();
-    void toolText ();
-    void toolZoom ();
-
-    void toolMovePoint ();
-    void toolInsertPoint ();
-    void toolRemovePoint ();
 
     void configPolygonTool ();
     void configEllipseTool ();
@@ -167,7 +122,6 @@ protected slots:
 
        void popupForSelection (int x, int y);
        void setUndoStatus(bool undoPossible, bool redoPossible);
-       void resetTools ();
 
        void insertPartSlot (KIllustratorChild *child, GPart *part);
        void changeChildGeometrySlot (KIllustratorChild *child); */
@@ -233,6 +187,8 @@ private slots:
     void slotLayers();
     void slotViewZoom (const QString&);
     void slotLoadPalette ();
+    void slotConfigurePolygon();
+    void slotConfigureEllipse();
 
 protected:
     KIllustratorDocument *m_pDoc;

@@ -45,6 +45,7 @@ public:
   void setNumCorners (unsigned int num);
   void setSharpness (unsigned int value);
   void setConcavePolygon (bool flag);
+  void writeOutConfig();
 
 private:
   GPolygon* obj;

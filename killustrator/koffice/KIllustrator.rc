@@ -84,15 +84,17 @@
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="configure"/>
+  <Menu name="toolsettings"><text>&amp;Tools</text>
+   <Action name="ellipseSettings"/>
+   <Action name="polygonSettings"/>
+  </Menu>
   <Separator/>
  </Menu>
 </MenuBar>
 <ToolBar fullWidth="false" name="edit"><Text>Edit</Text>
   <Action name="undo"/>
   <Action name="redo"/>
-  <Separator/>
   <Action name="view_zoom"/>
-  <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
 </ToolBar>
