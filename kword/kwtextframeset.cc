@@ -2646,6 +2646,10 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                 {
                     macroCmd->addCommand(cmd);
                     createMacro = true;
+                    //relayout textframeset after a dnd otherwise autoextend
+                    //frameset is not re-layout
+                    tmp->layout();
+                    textFrameSet()->layout();
                 }
                 else
                 {
