@@ -28,7 +28,7 @@ class KWGUI;
 class QWidget;
 class KWFrame;
 class KWFrameSet;
-class KWParag;
+class KWTextParag;
 
 /******************************************************************/
 /* Class: KWDocStructParagItem                                    */
@@ -40,14 +40,14 @@ class KWDocStructParagItem : public QObject,
     Q_OBJECT
 
 public:
-    KWDocStructParagItem( QListViewItem *_parent, QString _text, KWParag *_parag, KWGUI *__parent );
-    KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, QString _text, KWParag *_parag, KWGUI*__parent );
+    KWDocStructParagItem( QListViewItem *_parent, QString _text, KWTextParag *_parag, KWGUI *__parent );
+    KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, QString _text, KWTextParag *_parag, KWGUI*__parent );
 
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
 
 protected:
-    KWParag *parag;
+    KWTextParag *parag;
     KWGUI *gui;
 
 };

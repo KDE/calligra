@@ -24,6 +24,7 @@
 #include "kwgroupmanager.h"
 #include "docstruct.h"
 #include "docstruct.moc"
+#include "kwtextframeset.h"
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -39,7 +40,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QString _text, KWParag *_parag, KWGUI*__parent )
+KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QString _text, KWTextParag *_parag, KWGUI*__parent )
     : QListViewItem( _parent, _text )
 {
     parag = _parag;
@@ -47,7 +48,7 @@ KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QString _tex
 }
 
 /*================================================================*/
-KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, QString _text, KWParag *_parag, KWGUI*__parent )
+KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, QString _text, KWTextParag *_parag, KWGUI*__parent )
     : QListViewItem( _parent, _after, _text )
 {
     parag = _parag;
@@ -230,79 +231,72 @@ void KWDocStructRootItem::setOpen( bool o )
 /*================================================================*/
 void KWDocStructRootItem::setupArrangement()
 {
-#if 0
+    //#if 0
     if ( childCount() > 0 )
-    {
-        QListViewItem *child = firstChild(), *delChild;
-
-        while( child )
         {
-            delChild = child;
-            child = child->nextSibling();
-            delete delChild;
+            QListViewItem *child = firstChild(), *delChild;
+
+            while( child )
+                {
+                    delChild = child;
+                    child = child->nextSibling();
+                    delete delChild;
+                }
         }
-    }
 
     QIntDict<KWDocStructParagItem> parags;
     parags.setAutoDelete( false );
 
     KWFrameSet *frameset = 0L;
-    KWParag *parag = 0L;
-    KWParagLayout *pLayout = 0L;
+    KWTextParag *parag = 0L;
+    //    KWParagLayout *pLayout = 0L;
+
+    QTextDocument * textdoc=0L;
+
     QListViewItem *item = 0L;
     QString _name;
 
     //int j = 0;
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
-    {
-        frameset = doc->getFrameSet( i );
-        if ( frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager() )
         {
-            item = new QListViewItem( this, frameset->getName() );
-
-            parag = dynamic_cast<KWTextFrameSet*>( frameset )->getFirstParag();
-            while ( parag )
-            {
-                pLayout = parag->getParagLayout();
-                if ( pLayout->getCounterType() != KWParagLayout::CT_NONE && pLayout->getNumberingType() == KWParagLayout::NT_CHAPTER )
+            frameset = doc->getFrameSet( i );
+            if ( frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager() )
                 {
-                    int _depth = pLayout->getCounterDepth();
-                    if ( _depth == 0 )
-                    {
-                        if ( item->childCount() == 0 )
-                            parags.replace( _depth, new KWDocStructParagItem( item,
-                                                                              QString( parag->getCounterText() + "  " +
-                                                                                       parag->getKWString()->toString( 0, parag->getKWString()->size() ) ),
-                                                                              parag, gui ) );
-                        else
-                            parags.replace( _depth, new KWDocStructParagItem( item, parags[ _depth ],
-                                                                              QString( parag->getCounterText() + "  " +
-                                                                                       parag->getKWString()->toString( 0, parag->getKWString()->size() ) ),
-                                                                              parag, gui ) );
-                    }
-                    else
-                    {
-                        if ( parags[ _depth - 1 ]->childCount() == 0 )
-                            parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ],
-                                                                              QString( parag->getCounterText() + "  " +
-                                                                                       parag->getKWString()->toString( 0, parag->getKWString()->size() ) ),
-                                                                              parag, gui ) );
-                        else
-                            parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ], parags[ _depth ],
-                                                                              QString( parag->getCounterText() + "  " +
-                                                                                       parag->getKWString()->toString( 0, parag->getKWString()->size() ) ),
-                                                                              parag, gui ) );
-                    }
-                    QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), parags[ _depth ], SLOT( slotDoubleClicked( QListViewItem* ) ) );
+                    item = new QListViewItem( this, frameset->getName() );
+                    KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
+                    textdoc= tmpParag->textDocument();
+
+
+                    parag = static_cast<KWTextParag *>(textdoc->firstParag());
+                    while ( parag )
+                        {
+                            if ( (parag->counter()->style() != /*Style::*/Counter::NUM_NONE) &&  (parag->counter()->numbering() == /*Numbering::*/Counter::NUM_CHAPTER) )
+                                {
+                                    int _depth = parag->counter()->depth();
+                                    if ( _depth == 0 )
+                                        {
+                                            if ( item->childCount() == 0 )
+                                                parags.replace( _depth, new KWDocStructParagItem( item,QString( parag->counter()->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                                            else
+                                                parags.replace( _depth, new KWDocStructParagItem( item, parags[ _depth ],QString( parag->counter()->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                                        }
+                                    else
+                                        {
+                                            if ( parags[ _depth - 1 ]->childCount() == 0 )
+                                                parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ],QString( parag->counter()->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                                            else
+                                                parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ], parags[ _depth ],QString( parag->counter()->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                                        }
+                                    QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), parags[ _depth ], SLOT( slotDoubleClicked( QListViewItem* ) ) );
+                                }
+                            parag = static_cast<KWTextParag *>(parag->next());
+                        }
                 }
-                parag = parag->getNext();
-            }
         }
-    }
 
     if ( childCount() == 0 )
         ( void )new QListViewItem( this, i18n( "Empty" ) );
-#endif
+    //#endif
 }
 
 /*================================================================*/

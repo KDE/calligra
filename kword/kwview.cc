@@ -1724,21 +1724,25 @@ void KWView::tableDeleteRow()
                             i18n( "You have to put the cursor into a table\n"
                                   "before deleting a row." ),
                             i18n( "Delete Row" ) );
-    } else {
+    }
+    else
+    {
         if ( grpMgr->getRows() == 1 )
         {
             int result;
             result = KMessageBox::warningContinueCancel(this,
-                        i18n("The table has only one row.\n"
-                             "Deleting this row will delete the table.\n\n"
-                             "Do you want to delete the table?"),
-                        i18n("Delete Row"),
-                        i18n("&Delete"));
+                                                        i18n("The table has only one row.\n"
+                                                             "Deleting this row will delete the table.\n\n"
+                                                             "Do you want to delete the table?"),
+                                                        i18n("Delete Row"),
+                                                        i18n("&Delete"));
             if (result == KMessageBox::Continue)
             {
-                //gui->canvasWidget()->deleteTable( grpMgr );
+                gui->canvasWidget()->deleteTable( grpMgr );
             }
-        } else {
+        }
+        else
+        {
             KWDeleteDia dia( this, "", grpMgr, doc, KWDeleteDia::ROW, gui->canvasWidget() );
             dia.setCaption( i18n( "Delete Row" ) );
             dia.show();
@@ -1759,22 +1763,25 @@ void KWView::tableDeleteCol()
                             i18n( "You have to put the cursor into a table\n"
                                   "before deleting a column." ),
                             i18n( "Delete Column" ) );
-    } else {
+    }
+    else
+    {
         if ( grpMgr->getCols() == 1 )
         {
             int result;
             result = KMessageBox::warningContinueCancel(this,
-                        i18n("The table has only one column.\n"
-                             "Deleting this column will delete the table.\n\n"
-                             "Do you want to delete the table?"),
-                        i18n("Delete Column"),
-                        i18n("&Delete"));
+                                                        i18n("The table has only one column.\n"
+                                                             "Deleting this column will delete the table.\n\n"
+                                                             "Do you want to delete the table?"),
+                                                        i18n("Delete Column"),
+                                                        i18n("&Delete"));
             if (result == KMessageBox::Continue)
             {
-                //todo write this function
                 gui->canvasWidget()->deleteTable( grpMgr );
             }
-        } else {
+        }
+        else
+        {
             KWDeleteDia dia( this, "", grpMgr, doc, KWDeleteDia::COL, gui->canvasWidget() );
             dia.setCaption( i18n( "Delete Column" ) );
             dia.show();
