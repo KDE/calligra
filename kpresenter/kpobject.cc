@@ -1260,12 +1260,35 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
             //type not defined by default
             //try to use style.
             QDomElement* draw = oasisStyles.drawStyles()[style];
-            //fixme !!!!
-            kdDebug()<<" draw :"<<draw<<endl;
-            if ( draw && draw->hasAttribute( "draw:color" ) )
+            if ( draw) 
                 {
-                    kdDebug()<<" color !!!!!!!!!!!!!!!!!!!!!!!!\n";
-                    tmpBrush.setColor(draw->attribute( "draw:color" ) );
+                    if(draw->hasAttribute( "draw:color" ) )
+                        {
+                            //kdDebug()<<" draw:color :"<<draw->attribute( "draw:color" )<<endl;
+                            tmpBrush.setColor(draw->attribute( "draw:color" ) );
+                        }
+                    if( draw->hasAttribute( "draw:distance" ))
+                        {
+                            //todo implemente it into kpresenter
+                        }
+                    if( draw->hasAttribute("draw:display-name"))
+                        {
+                            //todo implement it into kpresenter
+                        }
+                    if( draw->hasAttribute( "draw:style" ))
+                        {
+                            //todo implemente it into kpresenter
+                            QString styleHash = draw->attribute( "draw:style" );
+                            if( styleHash == "single")
+                                {
+                                }
+                            else if( styleHash == "double")
+                                {
+                                }
+                            else if( styleHash == "triple")
+                                {
+                                }
+                        }
                     if( draw->hasAttribute( "draw:rotation" ))
                         {
                             int angle = (draw->attribute( "draw:rotation" ).toInt())/10;
@@ -1289,7 +1312,7 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
                                     break;
                                 default:
                                     //todo fixme when we will have a kopaint
-                                    kdDebug()<<" angle : "<<angle<<endl;
+                                    kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
                                     break;
                                 }
                         }

@@ -423,7 +423,6 @@ KPresenterDoc::~KPresenterDoc()
 {
     if(isReadWrite())
         saveConfig();
-    //_commands.clear(); // done before deleting the objectlist (e.g. for lowraicmd)
     //Be carefull !!!!!! don't delete this pointer delete in stickypage
 #if 0
     delete _header;
@@ -1008,12 +1007,19 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 	//All animation object for current page is store into this element
 	createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement());
 
-        if ( m_loadingInfo->styleStackHasAttribute( "draw:fill" )
-             || m_loadingInfo->styleStackHasAttribute( "presentation:transition-style" ))
-        {
-            kdDebug()<<" load Background \n";
-            m_pageList.at(pos)->background()->loadOasis( m_loadingInfo->styleStack(), oasisStyles);
-        }
+	if ( dp.hasAttribute("draw:style-name"))
+	  {
+	    kdDebug()<<" m_loadingInfo->styleStack() :"<<m_loadingInfo->styleStack().hasAttribute("draw:style-name")<<endl;
+	    kdDebug()<<"dp.attribute(draw:style-name) :"<<dp.attribute("draw:style-name")<<endl;
+	    QDomElement *stylePage = oasisStyles.styles()[ dp.attribute("draw:style-name") ];
+	    
+	    kdDebug()<<"stylePage :"<<stylePage<<endl;
+	    if( stylePage )
+	    {
+	      kdDebug()<<" load Background \n";
+	      m_pageList.at(pos)->background()->loadOasis( stylePage );
+	    }
+	  }
 
         // parse all objects
         for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
@@ -1115,7 +1121,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     setModified(false);
 
     ignoreSticky = TRUE;
-    kdDebug()<<" _ clean :"<<_clean<<endl;
+    kdDebug()<<" _clean :"<<_clean<<endl;
     if(_clean)
     {
         setModified(false);
@@ -1131,12 +1137,12 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 
 void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
 {
-  kdDebug()<<"void KPresenterDoc::createPresentationAnimation(const QDomElement& element)-***\n";
+  kdDebug()<<"void KPresenterDoc::createPresentationAnimation(const QDomElement& element)\n";
   for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
 	QCString tagName = e.tagName().latin1();
-	kdDebug()<<"tagName :"<<tagName<<endl;
+	kdDebug()<<"(createPresentationAnimation) tagName found :"<<tagName<<endl;
         if ( tagName == "presentation:show-shape")
         {
             Q_ASSERT( e.hasAttribute( "draw:shape-id" ) );
@@ -1211,22 +1217,22 @@ void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisStyles&oas
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttribute( "presentation:style-name" ))
     {
-        kdDebug()<<"presentation:style-name \n";
+        kdDebug()<<"Add 'presentation:style-name' \n";
         addStyles( oasisStyles.styles()[object.attribute( "presentation:style-name" )], oasisStyles );
     }
     if ( object.hasAttribute( "draw:style-name" ) )
     {
-        kdDebug()<<"draw:style-name \n";
+      kdDebug()<<"draw:style-name :"<<object.attribute( "draw:style-name" )<<endl;
         addStyles( oasisStyles.styles()[object.attribute( "draw:style-name" )], oasisStyles );
     }
     if ( object.hasAttribute( "draw:text-style-name" ) )
     {
-        kdDebug()<<"draw:text-style-name \n";
+        kdDebug()<<"Add 'draw:text-style-name' \n";
         addStyles( oasisStyles.styles()[object.attribute( "draw:text-style-name" )],oasisStyles );
     }
     if ( object.hasAttribute( "text:style-name" ) )
     {
-        kdDebug()<<"text:style-name\n";
+        kdDebug()<<"Add 'text:style-name' \n";
         addStyles( oasisStyles.styles()[object.attribute( "text:style-name" )], oasisStyles );
     }
 }
@@ -1236,7 +1242,6 @@ void KPresenterDoc::addStyles( const QDomElement* style, KoOasisStyles&oasisStyl
     // this function is necessary as parent styles can have parents themself
     if ( style->hasAttribute( "style:parent-style-name" ) )
         addStyles( oasisStyles.styles()[style->attribute( "style:parent-style-name" )], oasisStyles );
-    kdDebug()<<" style->text() :"<<style->text()<<endl;
     m_loadingInfo->styleStackPush( *style );
 }
 
@@ -1360,8 +1365,7 @@ void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroC
             kppartobject->setOrig(kppartobject->getOrig().x(),newPos);
 
             InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Part Object" ), kppartobject, this,page );
-            kdDebug(33001)<<" InsertCmd *insertCmd*********************\n";
-            insertCmd->execute();
+	    insertCmd->execute();
             if ( !macroCmd )
                 macroCmd = new KMacroCommand( i18n("Insert Part Object"));
             macroCmd->addCommand( insertCmd );

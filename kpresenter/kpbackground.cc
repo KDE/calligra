@@ -196,22 +196,23 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     return page;
 }
 
-void KPBackGround::loadOasis(  const KoStyleStack &styleStack, const KoOasisStyles & styles )
+void KPBackGround::loadOasis(  QDomElement * stylePage )
 {
-    // background
     kdDebug()<<"void KPBackGround::loadOasis( const KoStyleStack &styleStack )**********************************\n";
-    if ( styleStack.hasAttribute( "draw:fill" ) )
+    kdDebug()<<"stylePage->hasAttribute( draw:fill ) :"<<stylePage->hasAttribute( "draw:fill" )<<endl;
+    if ( stylePage->hasAttribute( "draw:fill" ) )
     {
         kdDebug()<<" fill page \n";
-        const QString fill = styleStack.attribute( "draw:fill" );
+        const QString fill = stylePage->attribute( "draw:fill" );
         kdDebug()<<" type :"<<fill<<endl;
         if ( fill == "solid" )
         {
             kdDebug()<<"solid \n";
-            setBackColor1(QColor(styleStack.attribute( "draw:fill-color" ) ) );
+            setBackColor1(QColor(stylePage->attribute( "draw:fill-color" ) ) );
             setBackColorType(BCT_PLAIN);
             setBackType(BT_COLOR);
         }
+#if 0
         else if ( fill == "gradient" )
         {
             kdDebug()<<"gradient \n";
@@ -299,6 +300,7 @@ void KPBackGround::loadOasis(  const KoStyleStack &styleStack, const KoOasisStyl
                 }
             }
         }
+#endif
     }
 }
 
