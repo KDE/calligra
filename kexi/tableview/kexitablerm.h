@@ -51,6 +51,8 @@ public slots:
 	void addLabel();
 	void removeLabel();
 
+	void clear();
+
 protected:
 	int	m_rowHeight;
 	int	m_offset;

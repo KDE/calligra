@@ -32,13 +32,13 @@
 #include "kexidatatableview.h"
 
 KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name)
- : KexiTableView(parent, name)
+ : KexiTableView(0, parent, name)
 {
 	init();
 }
 
 KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *cursor)
- : KexiTableView(parent, name)
+ : KexiTableView(0, parent, name)
 {
 	init();
 	setData(cursor);
@@ -59,61 +59,85 @@ KexiDataTableView::init()
 bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 {
 	if (!m_first)
-		clearAll();
+		clearColumns();
 	if (!cursor) {
-		clearAll();
+		clearColumns();
 		m_cursor = 0;
 		return true;
 	}
 	if (cursor!=m_cursor) {
-		clearAll();
+		clearColumns();
 	}
 	m_cursor = cursor;
 
 	if (!m_cursor->query()) {
 		kdDebug() << "KexiDataTableView::setData(): WARNING: cursor should have query schema defined!\n--aborting setData()." << endl;
 		m_cursor->debug();
-		clearAll();
+		clearColumns();
 		return false;
 	}
 
 	if (m_cursor->fieldCount()<1) {
-		clearAll();
+		clearColumns();
 		return true;
 	}
 
 	if (!m_cursor->isOpened() && !m_cursor->open()) {
 		kdDebug() << "KexiDataTableView::setData(): WARNING: cannot open cursor\n--aborting setData()." << endl;
 		m_cursor->debug();
-		clearAll();
+		clearColumns();
 		return false;
 	}
 
 	uint i = 0;
 	KexiDB::Field::List *list = m_cursor->query()->fieldsExpanded();
 	KexiDB::Field *f = list->first();
+	KexiTableViewData *tv_data = new KexiTableViewData();
+	KexiTableViewColumn col;
 	while (f) {
-		QString fname;
+		col.type = f->variantType();
 		if (!f->caption().isEmpty())
-			fname = f->caption();
+			col.caption = f->caption();
 		else {
 			//reuse alias if available:
-			fname = m_cursor->query()->alias(f);
+			col.caption = m_cursor->query()->alias(f);
 			//last hance: use field name
-			if (fname.isEmpty())
-				fname = f->name();
+			if (col.caption.isEmpty())
+				col.caption = f->name();
 		}
-		addColumn(fname, f->variantType(), true);
+		/*TEMPORARY: not editable -- TODO: set editable if supported*/
+		tv_data->columns.append( col );
+
+//		addColumn(fname, f->variantType(), 
+//			false/*TEMPORARY: not editable*/
+//		);
 		f = list->next();
 	}
 
-//	for(uint i = 0; i < m_cursor->fieldCount(); i++)
-//	{
-//		QVariant defaultval = QVariant("");
-//		addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(),
-//		 defaultval, 100, m_record->fieldInfo(i)->auto_increment());
-////		addColumn("named", QVariant::String, true);
+	QString caption = m_cursor->query()->caption();
+	if (caption.isEmpty()) {
+		caption = m_cursor->query()->name();
+	}
+	setCaption( caption );
+
+	//PRIMITIVE!! data setting:
+	const char **cd = m_cursor->recordData();
+
+	const int fcount = m_cursor->fieldCount();
+	m_cursor->moveFirst();
+	while (!m_cursor->eof()) {
+		KexiTableItem *item = new KexiTableItem(fcount);
+		for (int f=0; f<fcount; f++) {
+			item->at(f) = m_cursor->value(f);
+		}
+		tv_data->append( item );
+		m_cursor->moveNext();
+	}
+//	if (m_cursor->moveFirst() && m_cursor->moveLast()) {
 //	}
+
+	KexiTableView::setData(tv_data);
+
 
 #if 0
 	if(!m_first)
@@ -194,13 +218,13 @@ KexiDataTableView::insertNext()
 #endif
 }
 
-void
+/*jsvoid
 KexiDataTableView::appendInsertItem()
 {
 	KexiTableItem *it = new KexiTableItem(this);
 	it->setInsertItem(true);
 	m_maxRecord++;
-}
+}*/
 
 void
 KexiDataTableView::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)

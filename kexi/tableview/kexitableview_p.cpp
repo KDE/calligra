@@ -30,7 +30,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 {
 	clearVariables();
 
-	numCols = 0;
+//	numCols = 0;
 	editOnDoubleClick = true;
 	pBufferPm = 0;
 	deletionPolicy = KexiTableView::NoDelete;
@@ -38,13 +38,13 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 void KexiTableViewPrivate::clearVariables() {
 	// Initialize variables
 	pEditor = 0;
-	numRows = 0;
+//	numRows = 0;
 	curRow = -1;
 	curCol = -1;
 	pCurrentItem=0;
 	pInsertItem = 0;
-	sortedColumn = -1;
-	sortOrder = true;
+//	sortedColumn = -1;
+//	sortOrder = true;
 	recordIndicator = false;
 }
 

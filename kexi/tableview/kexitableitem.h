@@ -31,19 +31,21 @@
 
 class KexiTableView;
 
-class KEXIDATATABLE_EXPORT KexiTableItem
+typedef QValueVector<QVariant> KexiTableItemBase;
+
+class KEXIDATATABLE_EXPORT KexiTableItem : public KexiTableItemBase
 {
 
 public:
 	KexiTableItem(int numCols);
-	KexiTableItem(KexiTableView *tableView);
+//js	KexiTableItem(KexiTableView *tableView);
 
 	~KexiTableItem();
 
-	void attach(KexiTableView *tableView, bool sorted=false);
-	void attach(KexiTableView *tableView, int position);
+//js	void attach(KexiTableView *tableView, bool sorted=false);
+//js	void attach(KexiTableView *tableView, int position);
 
-	void setTable(KexiTableView *table) { m_pTable = table; }
+/*js	void setTable(KexiTableView *table) { m_pTable = table; }
 
 	void setHint(QVariant hint)
 	{
@@ -126,21 +128,22 @@ public:
 	{
 		return (float)m_columns[col].toDouble();
 	}
+*/
+//js	void setUserData(void* userData) {m_userData=userData;}
+//js	void* getUserData() const {return m_userData;}
 
-	void setUserData(void* userData) {m_userData=userData;}
-	void* getUserData() const {return m_userData;}
+//js	QValueVector<QVariant>	 m_columns;
 
 protected:
-	QValueVector<QVariant>	 m_columns;
-	QVariant		m_hint;
-	KexiTableView		*m_pTable;
+//js	QVariant		m_hint;
+//js	KexiTableView		*m_pTable;
 
-	bool			m_insertItem;
+//js	bool			m_insertItem;
 
-	int			m_position;
+//js	int			m_position;
 
 private:
-	void *			m_userData;
+//js	void *			m_userData;
 };
 
 #endif

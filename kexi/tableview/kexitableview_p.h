@@ -55,11 +55,11 @@ class KexiTableViewPrivate
 	KexiTableRM		*pRecordMarker;
 	KexiTableEdit	*pEditor;
 
-	int numRows;
-	int numCols;
+//	int numRows;
+//	int numCols;
 	int rowHeight;
-	int sortedColumn;
-	bool sortOrder;
+//	int sortedColumn;
+//	bool sortOrder;
 
 	KexiTableView::AdditionPolicy additionPolicy;
 	KexiTableView::DeletionPolicy deletionPolicy;
@@ -70,9 +70,9 @@ class KexiTableViewPrivate
 	int menu_id_addRecord;
 	int menu_id_removeRecord;
 
-	QMemArray<QVariant::Type> pColumnTypes;
-	QMemArray<int> pColumnModes;
-	QPtrList<QVariant> pColumnDefaults;
+//	QMemArray<QVariant::Type> pColumnTypes;
+//	QMemArray<int> pColumnModes;
+//	QPtrList<QVariant> pColumnDefaults;
 
 	bool			needAutoScroll;
 	QTimer			*scrollTimer;

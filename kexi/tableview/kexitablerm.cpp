@@ -57,6 +57,12 @@ void KexiTableRM::removeLabel()
 	update();
 }
 
+void KexiTableRM::clear()
+{
+	m_max=0;
+	update();
+}
+
 void KexiTableRM::paintEvent(QPaintEvent *e)
 {
 	QPainter p(this);

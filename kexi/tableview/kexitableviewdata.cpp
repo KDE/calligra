@@ -21,9 +21,9 @@
    Original Project: buX (www.bux.at)
 */
 
-#include "kexitablelist.h"
+#include "kexitableviewdata.h"
 
-unsigned short KexiTableList::charTable[]=
+unsigned short KexiTableViewData::charTable[]=
 {
 	#include "chartable.txt"
 };
@@ -36,37 +36,67 @@ KexiTableList::KexiTableList() {};
 KexiTableList::~KexiTableList() {};
 */
 
-void KexiTableList::setSorting(int key, bool order /*=true*/, short type /*=1*/)
+KexiTableViewData::KexiTableViewData() 
+	: KexiTableViewDataBase()
+	, m_key(0)
+	, m_order(1)
+	, m_type(1)
 {
-	m_key = key;
-	m_order = (order ? 1 : -1);
-	m_type = type;
-	switch(m_type)
+	setAutoDelete(true);
+}
+
+KexiTableViewData::KexiTableViewData(KexiTableViewColumnList& cols) 
+	: KexiTableViewDataBase()
+	, columns(cols)
+	, m_key(0)
+	, m_order(1)
+	, m_type(1)
+{
+	setAutoDelete(true);
+}
+
+KexiTableViewData::~KexiTableViewData()
+{
+}
+
+void KexiTableViewData::setSorting(int column, bool ascending)
+{
+	m_order = (ascending ? 1 : -1);
+
+	if (column>=0 && column<(int)columns.count()) {
+		m_key = column;
+	} 
+	else {
+		m_key = -1;
+		return;
+	}
+
+	switch(columns[m_key].type)
 	{
 		case QVariant::Bool:
 		case QVariant::Int:
-			cmpFunc = &KexiTableList::cmpInt;
+			cmpFunc = &KexiTableViewData::cmpInt;
 			break;
 		default:
-			cmpFunc = &KexiTableList::cmpStr;
+			cmpFunc = &KexiTableViewData::cmpStr;
 	}
 }
 
-int KexiTableList::compareItems(Item item1, Item item2)
+int KexiTableViewData::compareItems(Item item1, Item item2)
 {
 	return ((this->*cmpFunc) (item1, item2));
 }
 
-int KexiTableList::cmpInt(Item item1, Item item2)
+int KexiTableViewData::cmpInt(Item item1, Item item2)
 {
-	return m_order* (((KexiTableItem *)item1)->getValue(m_key).toInt() - ((KexiTableItem *)item2)->getValue(m_key).toInt());
+	return m_order* (((KexiTableItem *)item1)->at(m_key).toInt() - ((KexiTableItem *)item2)->at(m_key).toInt());
 }
 
 
-int KexiTableList::cmpStr(Item item1, Item item2)
+int KexiTableViewData::cmpStr(Item item1, Item item2)
 {
-	const QString &as =((KexiTableItem *)item1)->getValue(m_key).toString();
-	const QString &bs =((KexiTableItem *)item2)->getValue(m_key).toString();
+	const QString &as =((KexiTableItem *)item1)->at(m_key).toString();
+	const QString &bs =((KexiTableItem *)item2)->at(m_key).toString();
 
 	const QChar *a = as.unicode();
 	const QChar *b = bs.unicode();

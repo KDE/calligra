@@ -75,7 +75,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 	protected:
 		void		init();
 //		virtual QSize	tableSize() const;
-		void		appendInsertItem();
+//js		void		appendInsertItem();
 
 	protected slots:
 //		void		recordInsertFinished(KexiDBUpdateRecord*);

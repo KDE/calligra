@@ -24,12 +24,11 @@
    Original Project: buX (www.bux.at)
 */
 
-//we want to have kde-support:
-#define USE_KDE
-
-
 #ifndef KEXITABLEVIEW_H
 #define KEXITABLEVIEW_H
+
+//we want to have kde-support:
+#define USE_KDE
 
 #include <qscrollview.h>
 #include <qtimer.h>
@@ -37,7 +36,7 @@
 #include <qptrlist.h>
 
 #include "kexitablerm.h"
-#include "kexitablelist.h"
+#include "kexitableviewdata.h"
 
 class QHeader;
 class QLineEdit;
@@ -59,38 +58,60 @@ class KexiTableViewPrivate;
 
 class KEXIDATATABLE_EXPORT KexiTableView : public QScrollView
 {
-	friend class KexiTableItem;
-
 Q_OBJECT
 public:
-	KexiTableView(QWidget* parent=0, const char* name=0, KexiTableList *contents=0);
+	
+	KexiTableView(KexiTableViewData* data=0, QWidget* parent=0, const char* name=0);
 	~KexiTableView();
 
-	enum ColumnModes
+	KexiTableViewData *data() const { return m_data; }
+
+	/*! Sets data for this table view. if \a owner is true, the table view will own 
+	 \a data and therefore will destoy when required, else: \a data is (possibly) shared and
+	 not owned by the widget. 
+	 If widget already has data assigned (and owns this data),
+	 old data is destroyed before new assignment.
+	 */
+	void setData( KexiTableViewData *data, bool owner = true );
+
+	/*! Clears internal table data and its visible representation. 
+	 Does not clear columns information.
+	 Does not destroy KexiTableViewData object (if present) but only clears its contents.
+	 Repaints widget if \a repaint is true. */
+	void clearData(bool repaint = true);
+
+	/*! Clears columns information.and thus 
+	 all internal table data and its visible representation (using clearData()).
+	 Repaints widget if \a repaint is true.
+	 */
+	void clearColumns(bool repaint = true);
+
+/*js	enum ColumnModes
 	{
 		ColumnReadOnly = 1,
 		ColumnEditable,
 		ColumnAutoIncrement
-	};
+	};*/
 
-	virtual void addColumn(QString name, QVariant::Type type, bool editable, QVariant defaultValue = QVariant(""),
-		int width=100, bool autoinc=false);
+//	virtual void addColumn(QString name, QVariant::Type type, bool editable, QVariant defaultValue = QVariant(""),
+//		int width=100, bool autoinc=false);
 
-	QString column(int section);
+	QString columnCaption(int colNum) const;
 	void setSorting(int col, bool ascending=true);
 
-	QVariant::Type			columnType(int col);
-	QVariant			columnDefault(int col);
-	bool				columnEditable(int col);
-	inline KexiTableItem		*itemAt(int row);
+	QVariant::Type			columnType(int col) const;
+	QVariant			columnDefault(int col) const;
+	bool				columnEditable(int col) const;
+	inline KexiTableItem		*itemAt(int row) const;
 
-	int currentRow();
-	KexiTableItem *selectedItem();
+	int currentColumn() const;
+	int currentRow() const;
+
+	KexiTableItem *selectedItem() const;
 
 	int		rows() const;
 	int		cols() const;
 
-	int		currentCol();
 
 	QRect		cellGeometry(int row, int col) const;
 	int		columnWidth(int col) const;
@@ -103,19 +124,17 @@ public:
 	void		updateCell(int row, int col);
 //	void		updateRow(int row);
 	int		sorting();
-	void		clear();
-	void		clearAll();
 	void		remove(int row);
 	void		remove(KexiTableItem *item, bool moveCursor=true);
 
 	// properties
-	bool		backgroundAltering();
+	bool		backgroundAltering() const;
 	void		setBackgroundAltering(bool altering);
-	bool		recordIndicator();
+	bool		recordIndicator() const;
 	void		setRecordIndicator(bool indicator);
-	bool		editableOnDoubleClick();
+	bool		editableOnDoubleClick() const;
 	void		setEditableOnDoubleClick(bool set);
-	QColor		emptyAreaColor();
+	QColor		emptyAreaColor() const;
 	void		setEmptyAreaColor(QColor c);
 
 #ifndef KEXI_NO_PRINT
@@ -136,14 +155,12 @@ public:
 
 	void		emitSelected();
 
-	KexiTableRM	*recordMarker();
-	KexiTableRM *verticalHeader();
+	KexiTableRM	*recordMarker() const;
+	KexiTableRM *verticalHeader() const;
 	
-	KexiTableList	*contents() { return m_contents; }
-
 	void		takeInsertItem();
 	void		setInsertItem(KexiTableItem *i);
-	KexiTableItem	*insertItem();
+	KexiTableItem	*insertItem() const;
 
 	enum AdditionPolicy
 	{
@@ -161,10 +178,10 @@ public:
 	};
 
 	virtual void	setAdditionPolicy(AdditionPolicy policy);
-	AdditionPolicy	additionPolicy();
+	AdditionPolicy	additionPolicy() const;
 
 	virtual void	setDeletionPolicy(DeletionPolicy policy);
-	DeletionPolicy	deletionPolicy();
+	DeletionPolicy	deletionPolicy() const;
 
 	void triggerUpdate();
 
@@ -211,22 +228,22 @@ protected:
 
 protected slots:
 	void			columnWidthChanged( int col, int os, int ns );
-	void			columnSort(int col);
-	void			editorCancel();
-	virtual void		editorOk();
+	void			cancelEditor();
+	virtual void		acceptEditor();
 	virtual void		boolToggled();
 	void			slotUpdate();
 
 	void			slotAutoScroll();
 
 public slots:
+	void sortColumn(int col);
 	void			sort();
 	void			setCursor(int row, int col = -1);
 	void			selectRow(int row);
 	void			selectNext();
 	void			selectPrev();
 	void			gotoNext();
-	int			findString(const QString &string);
+//js	int			findString(const QString &string);
 	virtual void		removeRecord();
 	virtual void		addRecord();
 
@@ -244,61 +261,17 @@ signals:
 	void			sortedColumnChanged(int col);
 
 protected:
-
-/*
-	bool		m_editOnDubleClick;
-
-	// cursor position
-	int			m_curRow;
-	int			m_curCol;
-	KexiTableItem	*m_pCurrentItem;
-
-    // foreign widgets
-	QHeader			*m_pTopHeader;
-	KexiTableHeader	*m_pVerticalHeader;
-	KexiTableRM		*m_pRecordMarker;
-	KexiTableEdit	*m_pEditor;
-
-	bool			m_recordIndicator;
-
-	int			m_numRows;
-	int			m_numCols;
-	int			m_rowHeight;
-	int			m_sortedColumn;
-	bool			m_sortOrder;
-
-	AdditionPolicy		m_additionPolicy;
-	DeletionPolicy		m_deletionPolicy;
-
-	QPixmap			*m_pBufferPm;
-	QTimer			*m_pUpdateTimer;
-	QPopupMenu		*m_pContextMenu;
-	int menu_id_addRecord;
-	int menu_id_removeRecord;
-
-	KexiTableList		*m_contents;
-	QMemArray<QVariant::Type>	*m_pColumnTypes;
-	QMemArray<int>		*m_pColumnModes;
-	QPtrList<QVariant>		*m_pColumnDefaults;
-
-	bool			m_needAutoScroll;
-	QTimer			*m_scrollTimer;
-	KexiTableItem		*m_pInsertItem;
-
-	QStringList		m_dropFilters;
-
-	ScrollDirection		m_scrollDirection;
-
-	bool			m_bgAltering;*/
-
-	KexiTableList *m_contents;
+	KexiTableViewData *m_data;
+	bool m_owner : 1;
 
 	KexiTableViewPrivate *d;
+
+	friend class KexiTableItem;
 };
 
-inline KexiTableItem *KexiTableView::itemAt(int row)
+inline KexiTableItem *KexiTableView::itemAt(int row) const
 {
-	return m_contents->at(row);
+	return m_data->at(row);
 }
 /*
 inline int KexiTableView::currentRow()

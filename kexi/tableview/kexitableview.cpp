@@ -61,10 +61,10 @@
 
 #include "kexitableview_p.h"
 
-KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *contents)
+KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const char* name)
 :QScrollView(parent, name, /*Qt::WRepaintNoErase | */Qt::WStaticContents /*| Qt::WResizeNoErase*/)
 //:QScrollView(parent, name, Qt::WRepaintNoErase | Qt::WStaticContents | Qt::WResizeNoErase)
-	,m_contents(0)
+	, m_owner(false)
 	,d( new KexiTableViewPrivate() )
 {
 	setResizePolicy(Manual);
@@ -82,7 +82,9 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 	//context menu
 	d->pContextMenu = new QPopupMenu(this);
 	d->menu_id_addRecord = d->pContextMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), CTRL+Key_Insert);
-	d->menu_id_removeRecord = d->pContextMenu->insertItem(kapp->iconLoader()->loadIcon("button_cancel", KIcon::Small), i18n("Remove Record"), this, SLOT(removeRecord()), CTRL+Key_Delete);
+	d->menu_id_removeRecord = d->pContextMenu->insertItem(
+		kapp->iconLoader()->loadIcon("button_cancel", KIcon::Small),
+		i18n("Remove Record"), this, SLOT(removeRecord()), CTRL+Key_Delete);
 
 #ifdef Q_WS_WIN
 	d->rowHeight = fontMetrics().lineSpacing() + 4;
@@ -126,27 +128,9 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 */
 
 //	enableClipper(true);
-	if(!contents)
-	{
-		m_contents = new KexiTableList();
-	}
-	else
-	{
-		kdDebug() << "KexiTableView::KexiTableView(): using shared contents" << endl;
-		m_contents = contents;
-		d->numRows = contents->count();
-		triggerUpdate();
-		KexiTableItem *it;
-		for(it = m_contents->first(); it; it = m_contents->next())
-		{
-			d->pVerticalHeader->addLabel();
-/*			if(!it->isInsertItem())
-				d->pVerticalHeader->addLabel("",  d->rowHeight);
-			else
-				d->pVerticalHeader->addLabel("*",  d->rowHeight);*/
-		}
-	}
-	m_contents->setAutoDelete(true);
+
+	setData( data );
+
 
 	d->scrollTimer = new QTimer(this);
 	connect(d->scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
@@ -157,9 +141,60 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 	connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), d->pTopHeader, SLOT(setOffset(int)));
 	connect(verticalScrollBar(), SIGNAL(valueChanged(int)),	d->pVerticalHeader, SLOT(setOffset(int)));
 	connect(d->pTopHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(columnWidthChanged(int, int, int)));
-	connect(d->pTopHeader, SIGNAL(clicked(int)), this, SLOT(columnSort(int)));
+	connect(d->pTopHeader, SIGNAL(clicked(int)), this, SLOT(sortColumn(int)));
 
 	connect(d->pUpdateTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
+}
+
+KexiTableView::~KexiTableView()
+{
+	cancelEditor();
+
+	if (m_owner)
+		delete m_data;
+//	delete d->pColumnTypes;
+//	delete d->pColumnModes;
+//	delete d->pColumnDefaults;
+	delete d->pBufferPm;
+}
+
+void KexiTableView::setData( KexiTableViewData *data, bool owner )
+{
+	if (m_owner && m_data) {
+		kdDebug() << "KexiTableView::setData(): destroying old data (owned)" << endl;
+		delete m_data; //destroy old data
+	}
+	m_owner = owner;
+	if(!data) {
+		m_data = new KexiTableViewData(KexiTableViewColumnList());
+		m_owner = true;
+		clearData();
+	}
+	else {
+		m_data = data;
+		m_owner = owner;
+		kdDebug() << "KexiTableView::setData(): using shared data" << endl;
+//		d->numRows = contents->count();
+		//add columns
+		d->pTopHeader->setUpdatesEnabled(false);
+		{
+			KexiTableViewColumnList::const_iterator it;
+			for (it=m_data->columns.begin(); it!=m_data->columns.end(); ++it) {
+				d->pTopHeader->addLabel((*it).caption, (*it).width);
+			}
+		}
+		d->pTopHeader->setUpdatesEnabled(true);
+		//add rows
+		triggerUpdate();
+		for(KexiTableItem *it = m_data->first(); it; it = m_data->next())
+		{
+			d->pVerticalHeader->addLabel();
+/*			if(!it->isInsertItem())
+				d->pVerticalHeader->addLabel("",  d->rowHeight);
+			else
+				d->pVerticalHeader->addLabel("*",  d->rowHeight);*/
+		}
+	}
 }
 
 void KexiTableView::addDropFilter(const QString &filter)
@@ -167,10 +202,10 @@ void KexiTableView::addDropFilter(const QString &filter)
 	d->dropFilters.append(filter);
 }
 
-void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, QVariant defaultValue,
- int width, bool autoinc)
+/*js
+void KexiTableView::addColumn(ColumnData colData)
 {
-	d->numCols++;
+//	d->numCols++;
 	d->pColumnTypes.resize(d->numCols);
 	d->pColumnModes.resize(d->numCols);
 
@@ -193,7 +228,7 @@ void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, 
 	d->pTopHeader->addLabel(name, width);
 	d->pTopHeader->setUpdatesEnabled(true);
 }
-
+*/
 
 void KexiTableView::setFont(const QFont &f)
 {
@@ -211,10 +246,10 @@ void KexiTableView::setFont(const QFont &f)
 
 void KexiTableView::remove(KexiTableItem *item, bool moveCursor/*=true*/)
 {
-	if(m_contents->removeRef(item))
+	if(m_data->removeRef(item))
 	{
-		d->pVerticalHeader->removeLabel();
-		d->numRows--;
+		d->pVerticalHeader->removeLabel();//TODO
+//js		d->numRows--;
 		if(moveCursor)
 			setCursor(d->curRow);
 //		selectPrev();
@@ -225,15 +260,15 @@ void KexiTableView::remove(KexiTableItem *item, bool moveCursor/*=true*/)
 void KexiTableView::removeRecord()
 {
 	if (d->deletionPolicy == NoDelete)
-    return;
-  if (d->deletionPolicy == ImmediateDelete && d->pCurrentItem) {
-    remove(d->pCurrentItem);
-  } else if (d->deletionPolicy == AskDelete) {
-    //TODO(js)
-  } else if (d->deletionPolicy == SignalDelete) {
-  	emit itemRemoveRequest(d->pCurrentItem);
-	  emit currentItemRemoveRequest();
-  }
+		return;
+	if (d->deletionPolicy == ImmediateDelete && d->pCurrentItem) {
+		remove(d->pCurrentItem);
+	} else if (d->deletionPolicy == AskDelete) {
+		//TODO(js)
+	} else if (d->deletionPolicy == SignalDelete) {
+		emit itemRemoveRequest(d->pCurrentItem);
+		emit currentItemRemoveRequest();
+	}
 }
 
 void KexiTableView::addRecord()
@@ -241,26 +276,35 @@ void KexiTableView::addRecord()
 	emit addRecordRequest();
 }
 
-void KexiTableView::clear()
+void KexiTableView::clearData(bool repaint)
 {
-	for(int i=0; i < rows(); i++)
+/*	for(int i=0; i < rows(); i++)
 	{
 		d->pVerticalHeader->removeLabel();
-	}
+	}*/
+	d->pVerticalHeader->clear();
 
-	editorCancel();
-	m_contents->clear();
+	cancelEditor();
+	m_data->clear();
 
 	d->clearVariables();
-
 	d->pVerticalHeader->setCurrentRow(-1);
+
 //	d->pUpdateTimer->start(1,true);
-	viewport()->repaint();
+	if (repaint)
+		viewport()->repaint();
 }
 
-void KexiTableView::clearAll()
+void KexiTableView::clearColumns(bool repaint)
 {
-	for(int i=0; i < rows(); i++)
+	clearData(false);
+	while(d->pTopHeader->count()>0)
+		d->pTopHeader->removeLabel(0);
+
+	if (repaint)
+		viewport()->repaint();
+
+/*	for(int i=0; i < rows(); i++)
 	{
 		d->pVerticalHeader->removeLabel();
 	}
@@ -271,18 +315,19 @@ void KexiTableView::clearAll()
 	d->clearVariables();
 	d->numCols = 0;
 
-	while(d->pTopHeader->count())
+	while(d->pTopHeader->count()>0)
 		d->pTopHeader->removeLabel(0);
 
 	d->pVerticalHeader->setCurrentRow(-1);
 
 	viewport()->repaint();
 
-	d->pColumnTypes.resize(0);
-	d->pColumnModes.resize(0);
-	d->pColumnDefaults.clear();
+//	d->pColumnTypes.resize(0);
+//	d->pColumnModes.resize(0);
+//	d->pColumnDefaults.clear();*/
 }
 
+#if 0 //todo
 int KexiTableView::findString(const QString &string)
 {
 	int row = 0;
@@ -306,7 +351,7 @@ int KexiTableView::findString(const QString &string)
 				QString str2 = string.lower();
 				for(; it.current(); ++it)
 				{
-					if(it.current()->getText(col).left(string.length()).lower().compare(str2)==0)
+					if(it.current()->at(col).toString().left(string.length()).lower().compare(str2)==0)
 					{
 						center(columnPos(col), rowPos(row));
 						setCursor(row, col);
@@ -320,7 +365,7 @@ int KexiTableView::findString(const QString &string)
 			case QVariant::Bool:
 				for(; it.current(); ++it)
 				{
-					if(QString::number(it.current()->getInt(col)).left(string.length()).compare(string)==0)
+					if(QString::number(it.current()->at(col).toInt()).left(string.length()).compare(string)==0)
 					{
 						center(columnPos(col), rowPos(row));
 						setCursor(row, col);
@@ -342,7 +387,7 @@ int KexiTableView::findString(const QString &string)
 			case QVariant::String:
 				for(; it.current(); ++it)
 				{
-					if(it.current()->getText(col).find(str2,0,false) >= 0)
+					if(it.current()->at(col).toString().find(str2,0,false) >= 0)
 					{
 						center(columnPos(col), rowPos(row));
 						setCursor(row, col);
@@ -355,7 +400,7 @@ int KexiTableView::findString(const QString &string)
 			case QVariant::Bool:
 				for(; it.current(); ++it)
 				{
-					if(QString::number(it.current()->getInt(col)).find(str2,0,true) >= 0)
+					if(QString::number(it.current()->at(col).toInt()).find(str2,0,true) >= 0)
 					{
 						center(columnPos(col), rowPos(row));
 						setCursor(row, col);
@@ -371,17 +416,8 @@ int KexiTableView::findString(const QString &string)
 	}
 	return -1;
 }
+#endif
 
-
-KexiTableView::~KexiTableView()
-{
-	editorCancel();
-
-//	delete d->pColumnTypes;
-//	delete d->pColumnModes;
-//	delete d->pColumnDefaults;
-	delete d->pBufferPm;
-}
 /*
 void KexiTableView::setColumn(int col, QString name, ColumnTyFpe type, bool changeable=false)
 {
@@ -393,11 +429,11 @@ void KexiTableView::setColumn(int col, QString name, ColumnTyFpe type, bool chan
 void KexiTableView::setSorting(int col, bool ascending/*=true*/)
 {
 //	d->sortOrder = ascending;
-	d->sortedColumn = col;
-	d->pTopHeader->setSortIndicator(col, d->sortOrder);
-	m_contents->setSorting(col, d->sortOrder, columnType(col));
+//	d->sortedColumn = col;
+	d->pTopHeader->setSortIndicator(col, ascending);//d->sortOrder);
+	m_data->setSorting(col, ascending); //d->sortOrder);
 //	sort();
-	columnSort(col);
+//	columnSort(col);
 }
 
 void KexiTableView::slotUpdate()
@@ -414,7 +450,7 @@ void KexiTableView::slotUpdate()
 
 int KexiTableView::sorting()
 {
-	return d->sortedColumn;
+	return m_data->sortedColumn();// d->sortedColumn;
 }
 
 void KexiTableView::sort()
@@ -424,12 +460,12 @@ void KexiTableView::sort()
 		return;
 	}
 
+	if (m_data->sortedColumn()==-1)
+		m_data->sort();
 
-	m_contents->sort();
+	d->curRow = m_data->findRef(d->pCurrentItem);
 
-	d->curRow = m_contents->findRef(d->pCurrentItem);
-
-	d->pCurrentItem = m_contents->at(d->curRow);
+	d->pCurrentItem = m_data->at(d->curRow);
 
 	int cw = columnWidth(d->curCol);
 	int rh = rowHeight();
@@ -452,7 +488,8 @@ QSizePolicy KexiTableView::sizePolicy() const
 QSize KexiTableView::sizeHint() const
 {
 	return QSize(tableSize().width(),
-		QMAX(d->rowHeight*d->numRows + d->pTopHeader->height(), minimumSizeHint().height()) );
+		QMAX(d->rowHeight*(int)m_data->count() + d->pTopHeader->height(), minimumSizeHint().height()) );
+//js		QMAX(d->rowHeight*d->numRows + d->pTopHeader->height(), minimumSizeHint().height()) );
 }
 
 QSize KexiTableView::minimumSizeHint() const
@@ -500,7 +537,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	int r;
 //	pb->fillRect(0, 0, cw, ch, colorGroup().base());
 
-	QPtrListIterator<KexiTableItem> it(*m_contents);
+	QPtrListIterator<KexiTableItem> it(*m_data);
 	it += rowfirst;
 
 //	int maxwc = QMIN(cw, (columnPos(d->numCols - 1) + columnWidth(d->numCols - 1)));
@@ -623,6 +660,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 //	int iOffset = 0;
 	QPen fg(colorGroup().text());
 	p->setPen(fg);
+#if 0 //todo(js)
 	if(item->isInsertItem())
 	{
 //		QFont f = p->font();
@@ -632,6 +670,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		p->setPen(QColor(190,190,190));
 //		iOffset = 3;
 	}
+#endif
+
 #ifdef Q_WS_WIN
 	int x = 1;
 	int y_offset = 1;
@@ -646,7 +686,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		case QVariant::UInt:
 		case QVariant::Int:
 		{
-			int num = item->getValue(col).toInt();
+			int num = item->at(col).toInt();
 //			if(num < 0)
 //				p->setPen(red);
 //			p->drawText(x - (x+x) - 2, 2, w, h, AlignRight, QString::number(num));
@@ -657,7 +697,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 #else
 			x = 0;
 #endif
-			if(item->isInsertItem() && d->pColumnModes.at(col) == 3)  //yes that isn't beautiful
+#if 0 //todo(js)
+			if(item->isInsertItem() && m_data->columns[col]......... d->pColumnModes.at(col) == 3)  //yes that isn't beautiful
 			{
 				p->drawText(x, y_offset, w - (x+x) - 6, h, AlignRight, "[Auto]");
 			}
@@ -665,6 +706,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			{
 				p->drawText(x, y_offset, w - (x+x) - 6, h, AlignRight, QString::number(num));
 			}
+#else
+				p->drawText(x, y_offset, w - (x+x) - 6, h, AlignRight, QString::number(num));
+#endif
 //			p->drawRect(x - 1, 1, w - (x+x) - 1, h + 1);
 			break;
 		}
@@ -674,7 +718,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 #else
 			x = 0;
 #endif
-			QString f = KGlobal::locale()->formatNumber(item->getValue(col).toDouble());
+			QString f = KGlobal::locale()->formatNumber(item->at(col).toDouble());
+#if 0 //todo(js)
 			if(item->isInsertItem() && d->pColumnModes.at(col) == 3)  //yes that isn't beautiful
 			{
 				p->drawText(x, y_offset, w - (x+x) - 6, h, AlignRight, "[Auto]");
@@ -683,6 +728,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			{
 				p->drawText(x, y_offset, w - (x+x) - 6, h, AlignRight, f);
 			}
+#else
+				p->drawText(x, y_offset, w - (x+x) - 6, h, AlignRight, f);
+#endif
 			break;
 		}
 		case QVariant::Bool:
@@ -695,7 +743,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			QRect r(w/2 - s/2 + x, h/2 - s/2, s, s);
 			p->setPen(QPen(colorGroup().text(), 1));
 			p->drawRect(r);
-			if(item->getValue(col).asBool())
+			if(item->at(col).asBool())
 			{
 				p->drawLine(r.x() + 2, r.y() + 2, r.right() - 1, r.bottom() - 1);
 				p->drawLine(r.x() + 2, r.bottom() - 2, r.right() - 1, r.y() + 1);
@@ -714,10 +762,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 #endif
 			QString s = "";
 
-			if(item->getValue(col).toDate().isValid())
+			if(item->at(col).toDate().isValid())
 			{
 				#ifdef USE_KDE
-				s = KGlobal::locale()->formatDate(item->getValue(col).toDate(), true);
+				s = KGlobal::locale()->formatDate(item->at(col).toDate(), true);
 				#else
 				s = item->getDate(col).toString(Qt::LocalDate);
 				#endif
@@ -729,9 +777,11 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		}
 		case QVariant::StringList:
 		{
+#if 0 //todo(js)
 			QStringList sl = d->pColumnDefaults.at(col)->toStringList();
 			p->drawText(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter,
-				sl[item->getInt(col)]);
+				sl[item->at(col).toInt()]);
+#endif
 			break;
 		}
 		case QVariant::String:
@@ -744,10 +794,11 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			x = 5;
 			y_offset = 0;
 #endif
-			p->drawText(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->getText(col));
+			p->drawText(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->at(col).toString());
 		}
 	}
 	p->setPen(fg);
+#if 0 //todo(js)
 	if(item->isInsertItem())
 	{
 		QFont f = p->font();
@@ -755,6 +806,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		p->setFont(f);
 //		iOffset = 3;
 	}
+#endif
 }
 
 QPoint KexiTableView::contentsToViewport2( const QPoint &p )
@@ -824,14 +876,14 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 
 void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 {
-	if(d->numRows == 0)
+	if(m_data->count() == 0)
 		return;
 	if (rowAt(e->pos().y())==-1 || columnAt(e->pos().x())==-1)
 		return; //clicked outside a grid
 
 	// get rid of editor
 	if (d->pEditor)
-		editorOk();
+		acceptEditor();
 
 	// remember old focus cell
 	int oldRow = d->curRow;
@@ -954,7 +1006,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
 	kdDebug() << "KexiTableView::KeyPressEvent()" << endl;
 
-	if(d->pCurrentItem == 0 && d->numRows > 0)
+	if(d->pCurrentItem == 0 && m_data->count() > 0)
 	{
 		d->curCol = d->curRow = 0;
 		int cw = columnWidth(d->curCol);
@@ -965,7 +1017,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		d->pCurrentItem = itemAt(d->curRow);
 		emit itemSelected(d->pCurrentItem);
 	}
-	else if(d->numRows == 0)
+	else if(m_data->count() == 0)
 	{
 		return;
 	}
@@ -974,9 +1026,9 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	if(d->pEditor)
 	{
 		if (e->key() == Key_Escape)
-			editorCancel();
+			cancelEditor();
 		else if (e->key() == Key_Return || e->key() == Key_Enter)
-			editorOk();
+			acceptEditor();
 		return;
 	}
 
@@ -1036,7 +1088,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		d->curRow = 0;
 		break;
     case Key_End:
-		d->curRow = d->numRows-1;
+		d->curRow = m_data->count()-1;
 		break;
 
 #ifndef _WIN32
@@ -1101,9 +1153,9 @@ void KexiTableView::emitSelected()
 
 void KexiTableView::boolToggled()
 {
-	int s = d->pCurrentItem->getInt(d->curCol);
-	QVariant oldValue=d->pCurrentItem->getValue(d->curCol);
-	d->pCurrentItem->setInt(d->curCol, (s ? 0 : 1));
+	int s = d->pCurrentItem->at(d->curCol).toInt();
+	QVariant oldValue=d->pCurrentItem->at(d->curCol);
+	(*d->pCurrentItem)[d->curCol] = QVariant(s ? 0 : 1);
 	updateCell(d->curRow, d->curCol);
 	emit itemChanged(d->pCurrentItem, d->curCol,oldValue);
 	emit itemChanged(d->pCurrentItem, d->curCol);
@@ -1196,7 +1248,7 @@ void KexiTableView::gotoNext()
 
 void KexiTableView::createEditor(int row, int col, QString addText/* = QString::null*/, bool backspace/* = false*/)
 {
-	if(d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
+	if (m_data->columns[col].readOnly)//d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
 		return;
 
 	
@@ -1220,7 +1272,7 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 			break;
 	}*/
 
-	val = d->pCurrentItem->getValue(d->curCol);
+	val = d->pCurrentItem->at(d->curCol);
 
 	//it's getting ugly :)
 
@@ -1234,16 +1286,26 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 			d->pEditor->setFocus();
 			return;
 		case QVariant::StringList:
+#if 0 //todo(js)
 			d->pEditor = new KexiComboBoxTableEdit(static_cast<KexiDB::Field::Type>(val.toInt()),
 				d->pColumnDefaults.at(col)->toStringList(), viewport(), "inPlaceEd");
+#else
+			d->pEditor = new KexiComboBoxTableEdit(static_cast<KexiDB::Field::Type>(val.toInt()),
+				QStringList(), viewport(), "inPlaceEd");
+#endif
 			break;
 		case QVariant::Date:
 			d->pEditor = new KexiDateTableEdit(val, viewport(), "inPlaceEd");
 			kdDebug() << "date editor created..." << endl;
 			break;
 		default:
+#if 0 //todo(js)
 			d->pEditor = new KexiInputTableEdit(val, columnType(col), addText, false, viewport(), "inPlaceEd",
 			 d->pColumnDefaults.at(col)->toStringList());
+#else
+			d->pEditor = new KexiInputTableEdit(val, columnType(col), addText, false, viewport(), "inPlaceEd",
+			 QStringList());
+#endif
 			static_cast<KexiInputTableEdit*>(d->pEditor)->end(false);
 			if(backspace)
 				static_cast<KexiInputTableEdit*>(d->pEditor)->backspace();
@@ -1349,7 +1411,7 @@ void KexiTableView::updateCell(int row, int col)
 	}
 	else
 	{
-		for(int i = 0; i < d->numCols; i++)
+		for(int i = 0; i < (int)m_data->columnsCount(); i++)
 		{
 			updateContents(cellGeometry(row, i));
 		}
@@ -1357,36 +1419,39 @@ void KexiTableView::updateCell(int row, int col)
 
 }
 
-void KexiTableView::columnSort(int col)
+void KexiTableView::sortColumn(int col)
 {
 	bool i = false;
-	QVariant hint;
+//js	QVariant hint;
 	if (d->pEditor)
 		return;
 	if(d->pInsertItem)
 	{
 		i = true;
-		hint = d->pInsertItem->getHint();
+//js		hint = d->pInsertItem->getHint();
 //		delete d->pInsertItem;
 		remove(d->pInsertItem);
 		d->pInsertItem = 0;
 //		d->pVerticalHeader->removeLabel(rows());
 	}
 
-	if(d->sortedColumn == col)
-		d->sortOrder = !d->sortOrder;
-	else
-		d->sortOrder = true;
-	d->sortedColumn = col;
-	d->pTopHeader->setSortIndicator(col, d->sortOrder);
-	m_contents->setSorting(col, d->sortOrder, columnType(col));
+	if(m_data->sortedColumn() == col) {
+		m_data->setSorting(col, !m_data->sortingAscending());
+	}
+	else {
+		m_data->setSorting(col);
+	}
+//js	else
+//js		d->sortOrder = true;
+//	d->sortedColumn = col;
+	d->pTopHeader->setSortIndicator(col, m_data->sortingAscending());
 	sort();
 
 	if(i)
 	{
-		KexiTableItem *insert = new KexiTableItem(this);
-		insert->setHint(hint);
-		insert->setInsertItem(true);
+		KexiTableItem *insert = new KexiTableItem(cols());
+//js		insert->setHint(hint);
+//js		insert->setInsertItem(true);
 		d->pInsertItem = insert;
 
 	}
@@ -1460,7 +1525,7 @@ int KexiTableView::rowAt(int pos, bool ignoreEnd) const
 	pos /=d->rowHeight;
 	if (pos < 0)
 		return 0;
-	if ((pos >= d->numRows) && !ignoreEnd)
+	if ((pos >= (int)m_data->count()) && !ignoreEnd)
 		return -1;
 	return pos;
 }
@@ -1481,19 +1546,19 @@ QSize KexiTableView::tableSize() const
 
 int KexiTableView::rows() const
 {
-	return d->numRows;
+	return m_data->count();
 }
 
 int KexiTableView::cols() const
 {
-    return d->pTopHeader->count();
+	return m_data->columns.count();
 }
 
 void KexiTableView::setCursor(int row, int col/*=-1*/)
 {
 	// get rid of editor
 	if (d->pEditor)
-		editorOk();
+		acceptEditor();
 	if(rows() <= 0)
 	{
 		d->curRow=0;
@@ -1528,19 +1593,19 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 	}
 }
 
-void KexiTableView::editorOk()
+void KexiTableView::acceptEditor()
 {
 	if (!d->pEditor)
 		return;
 //	d->pCurrentItem->setText(d->curCol, d->pEditor->text());
-	QVariant oldValue=d->pCurrentItem->getValue(d->curCol);
-	d->pCurrentItem->setValue(d->curCol, d->pEditor->value());
-	editorCancel();
+	QVariant oldValue=d->pCurrentItem->at(d->curCol);
+	(*d->pCurrentItem)[d->curCol] = d->pEditor->value();
+	cancelEditor();
 	emit itemChanged(d->pCurrentItem, d->curCol,oldValue);
 	emit itemChanged(d->pCurrentItem, d->curCol);
 }
 
-void KexiTableView::editorCancel()
+void KexiTableView::cancelEditor()
 {
 	if (!d->pEditor)
 		return;
@@ -1556,7 +1621,7 @@ void KexiTableView::setAdditionPolicy(AdditionPolicy policy)
 //	updateContextMenu();
 }
 
-KexiTableView::AdditionPolicy KexiTableView::additionPolicy()
+KexiTableView::AdditionPolicy KexiTableView::additionPolicy() const
 {
 	return d->additionPolicy;
 }
@@ -1567,7 +1632,7 @@ void KexiTableView::setDeletionPolicy(DeletionPolicy policy)
 //	updateContextMenu();
 }
 
-KexiTableView::DeletionPolicy KexiTableView::deletionPolicy()
+KexiTableView::DeletionPolicy KexiTableView::deletionPolicy() const
 {
 	return d->deletionPolicy;
 }
@@ -1586,8 +1651,13 @@ bool KexiTableView::updateContextMenu()
 //	{
 //		d->pContextMenu = new QPopupMenu(this);
   d->pContextMenu->setItemVisible(d->menu_id_addRecord, d->additionPolicy != NoAdd);
+#if 0 //todo(js)
   d->pContextMenu->setItemVisible(d->menu_id_removeRecord, d->deletionPolicy != NoDelete
     && d->pCurrentItem && !d->pCurrentItem->isInsertItem());
+#else
+  d->pContextMenu->setItemVisible(d->menu_id_removeRecord, d->deletionPolicy != NoDelete
+    && d->pCurrentItem);
+#endif
   for (int i=0; i<(int)d->pContextMenu->count(); i++) {
     if (d->pContextMenu->isItemVisible( d->pContextMenu->idAt(i) ))
       return true;
@@ -1657,7 +1727,7 @@ KexiTableView::print(KPrinter &printer)
 	int yOffset = topMargin;
 	int row = 0;
 	int right = 0;
-	for(i = m_contents->first(); i; i = m_contents->next())
+	for(i = m_data->first(); i; i = m_data->next())
 	{
 		if(!i->isInsertItem())
 		{	kdDebug() << "KexiTableView::print: row = " << row << " y = " << yOffset << endl;
@@ -1702,40 +1772,50 @@ KexiTableView::takeInsertItem()
 	d->pInsertItem = 0;
 }
 
-KexiTableRM* KexiTableView::recordMarker()
+KexiTableRM* KexiTableView::recordMarker() const
 {
 	return d->pVerticalHeader;
 }
 
-KexiTableRM* KexiTableView::verticalHeader()
+KexiTableRM* KexiTableView::verticalHeader() const
 {
 	return d->pVerticalHeader; 
 }
 
-QString KexiTableView::column(int section)
+QString KexiTableView::columnCaption(int colNum) const
 {
-	return d->pTopHeader->label(section);
+	return d->pTopHeader->label(colNum);
 }
 
-int KexiTableView::currentCol()
+int KexiTableView::currentColumn() const
 { 
 	return d->curCol;
 }
 
+int KexiTableView::currentRow() const
+{
+	return d->curRow;
+}
+
+KexiTableItem *KexiTableView::selectedItem() const
+{
+	return d->pCurrentItem;
+}
+
 void KexiTableView::setBackgroundAltering(bool altering) { d->bgAltering = altering; }
-bool KexiTableView::backgroundAltering() { return d->bgAltering; }
+bool KexiTableView::backgroundAltering()  const { return d->bgAltering; }
 
 void KexiTableView::setRecordIndicator(bool indicator) { d->recordIndicator = indicator; }
-bool KexiTableView::recordIndicator() { return d->recordIndicator; }
+bool KexiTableView::recordIndicator() const { return d->recordIndicator; }
 
 void KexiTableView::setEditableOnDoubleClick(bool set) { d->editOnDoubleClick = set; }
-bool KexiTableView::editableOnDoubleClick() { return d->editOnDoubleClick; }
+bool KexiTableView::editableOnDoubleClick() const { return d->editOnDoubleClick; }
 
 void KexiTableView::setEmptyAreaColor(QColor c) { d->emptyAreaColor = c; }
-QColor KexiTableView::emptyAreaColor() { return d->emptyAreaColor; }
+QColor KexiTableView::emptyAreaColor() const { return d->emptyAreaColor; }
 
 void KexiTableView::setInsertItem(KexiTableItem *i) { d->pInsertItem = i; }
-KexiTableItem *KexiTableView::insertItem() { return d->pInsertItem; }
+KexiTableItem *KexiTableView::insertItem() const { return d->pInsertItem; }
 
 void KexiTableView::triggerUpdate()
 {
@@ -1743,33 +1823,27 @@ void KexiTableView::triggerUpdate()
 		d->pUpdateTimer->start(1, true);
 }
 
-int KexiTableView::currentRow()
+QVariant::Type KexiTableView::columnType(int col) const
 {
-	return d->curRow;
+	return m_data->columns[col].type;
 }
 
-KexiTableItem *KexiTableView::selectedItem()
+bool KexiTableView::columnEditable(int col) const
 {
-	return d->pCurrentItem;
-}
-
-QVariant::Type KexiTableView::columnType(int col)
-{
-	return d->pColumnTypes.at(col);
-}
-
-bool KexiTableView::columnEditable(int col)
-{
-	return d->pColumnModes.at(col);
+	return !m_data->columns[col].readOnly; //d->pColumnModes.at(col);
 //	if(d->pColumnModes.at(col) & ColumnEditable)
 //		return true;
 
 //	return false;
 }
 
-QVariant KexiTableView::columnDefault(int col)
+QVariant KexiTableView::columnDefault(int col) const
 {
+#if 0 //todo(js)
 	return *d->pColumnDefaults.at(col);
+#else
+	return QVariant();
+#endif
 }
 
 #include "kexitableview.moc"

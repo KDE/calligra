@@ -21,23 +21,29 @@
    Original Project: buX (www.bux.at)
 */
 
-#include <qtimer.h>
+//#include <qtimer.h>
 //#include <stdarg.h>
-#include "kexitableheader.h"
-#include "kexitableview.h"
-#include "kexitablerm.h"
+//#include "kexitableheader.h"
+//#include "kexitableview.h"
+//#include "kexitablerm.h"
 #include "kexitableitem.h"
 
-#include "kexitableview_p.h"
+//#include "kexitableview_p.h"
 
 KexiTableItem::KexiTableItem(int numCols)
+: KexiTableItemBase(numCols)
 {
-	m_userData=0;
-	m_columns.resize(numCols);
-	m_insertItem = false;
-	m_pTable = 0;
+//js	m_userData=0;
+//js	m_columns.resize(numCols);
+//js	m_insertItem = false;
+//js	m_pTable = 0;
 }
 
+KexiTableItem::~KexiTableItem()
+{
+}
+
+#if 0
 void KexiTableItem::attach(KexiTableView *tableView, bool sorted)
 {
 	if(!sorted)
@@ -153,7 +159,4 @@ KexiTableItem::setInsertItem(bool insertItem)
 }
 
 
-KexiTableItem::~KexiTableItem()
-{
-//	qDebug("KexiTableItem::~KexiTableItem()");
-}
+#endif
