@@ -642,10 +642,16 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
 
     p->setFont( font ); // already done by KoTextCustomItem::draw but someone might
                         // change the font passed to drawCustomItemHelper (e.g. KoLinkVariable)
-
-    KoTextParag::drawFontEffects( p, fmt, zh, font, textColor, x, ascentpix, wpix, y, hpix );
     QString str = text();
-    p->drawText( x, y + ascentpix + offset - fmt->offsetFromBaseLine(), str );
+    KoTextParag::drawFontEffects( p, fmt, zh, font, textColor, x, ascentpix, wpix, y, hpix );
+    int posY = y + ascentpix + offset;
+    if ( fmt->vAlign() == KoTextFormat::AlignSuperScript )
+        posY -= ( p->fontMetrics().height() / 2 );
+    else if ( fmt->vAlign() == KoTextFormat::AlignSubScript )
+        posY +=p->fontMetrics().height() / 6;
+
+
+    p->drawText( x, posY - fmt->offsetFromBaseLine(), str );
     p->restore();
 }
 
