@@ -21,6 +21,7 @@
 #define KEXIDBPARSER_H
 
 #include <qobject.h>
+#include <qptrlist.h>
 
 namespace KexiDB
 {
@@ -28,6 +29,7 @@ namespace KexiDB
 class Connection;
 class QuerySchema;
 class TableSchema;
+class Field;
 
 /**
  * parser for sql statements
@@ -99,7 +101,6 @@ class KEXI_DB_EXPORT Parser
 		 * creates a new select object (only parser will need to call that)
 		 */
 		void		createSelect();
-
 
 	private:
 		OPCode		m_operation;

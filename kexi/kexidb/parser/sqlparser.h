@@ -732,7 +732,7 @@ void parseData(KexiDB::Parser *p, const char *data);
 
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 432 "sqlparser.y"
+#line 439 "sqlparser.y"
 typedef union YYSTYPE {
 	char stringValue[255];
 	int integerValue;

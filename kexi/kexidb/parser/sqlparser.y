@@ -373,6 +373,7 @@
 
 #include <qobject.h>
 #include <kdebug.h>
+#include <qptrlist.h>
 
 #include <connection.h>
 #include <queryschema.h>
@@ -391,6 +392,7 @@
 	KexiDB::Parser *parser;
 	KexiDB::Field *field;
 	bool requiresTable;
+	QPtrList<KexiDB::Field> fieldList;
 
 	int yyparse();
 	int yylex();
@@ -406,6 +408,7 @@
 	{
 		parser = p;
 		field = 0;
+		fieldList.clear();
 		requiresTable = false;
 		tookenize(data);
 		yyparse();
@@ -629,6 +632,7 @@ ColItem:
 ColExpression
 {
 	kdDebug() << " adding field '" << $1->name() << "'" << endl;
+	parser->select()->addField($1);
 }
 | ColWildCard
 {
@@ -636,6 +640,8 @@ ColExpression
 | ColExpression AS USER_DEFINED_NAME
 {
 	kdDebug() << " adding field '" << $1->name() << "' as '" << $3 << "'" << endl;
+	parser->select()->addField($1);
+	parser->select()->setAlias($1, $3);
 }
 ;
 
@@ -654,6 +660,7 @@ USER_DEFINED_NAME
 	$$ = new KexiDB::Field();
 //	s->setTable($1);
 	$$->setName($3);
+	$$->setTable(parser->db()->tableSchema($1));
 //	parser->select()->addField(field);
 	requiresTable = true;
 }
@@ -790,19 +797,19 @@ ColWildCard:
 ASTERISK
 {
 	kdDebug() << "all columns" << endl;
-	field = new KexiDB::Field();
-	field->setName("*");
-	parser->select()->addField(field);
-//	parser->select()->setUnresolvedWildcard(true);
+//	field = new KexiDB::Field();
+//	field->setName("*");
+	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select());
+//	parser->select()->addAsterisk(ast);
+//	fieldList.append(ast);
 	requiresTable = true;
 }
 | USER_DEFINED_NAME DOT ASTERISK
 {
 	kdDebug() << "  + all columns from " << $1 << endl;
-	field = new KexiDB::Field();
-	field->setName("*");
-	parser->select()->addField(field);
-//	parser->select()->setUnresolvedWildcard(true);
+	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), parser->db()->tableSchema($1));
+//	parser->select()->addAsterisk(ast);
+//	fieldList.append(ast);
 	requiresTable = true;
 }
 ;
