@@ -107,7 +107,7 @@ Item								   Prio Status
     - Combo		When is this used?			     S1 --
     - Data		OK					     S1 done
     - Font		Ugly					     S1 --
-    - Geometry							     S1 --
+    - Geometry		REMOVE					     S1 --
     - HeaderFooter	Somewhat ugly?				     S1 --
     - Legend		OK					     S1 done
     - Line3d		UGLY!!  FIX!				     S1 --
@@ -122,8 +122,7 @@ Item								   Prio Status
 
 * Wizard
   + New data page?						     S1 ----
-  + Pages:
-    - "Select Chart Type" page: Reorder like the toolbar		DONE
+  + "Select Chart Type" page: Reorder like the toolbar			DONE
   + Make Help button work or disable it.			      1 ----
   + The Back button should be in the same place on all pages.	      3 ----
   + Subtype page should have icons for subtypes like config dialog.   2 ----

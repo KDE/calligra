@@ -1,7 +1,8 @@
 2005-03-14  Inge Wallin  <inge@lysator.liu.se>
-
+	
 	Remove more unnecessary files
 	* kchartBarConfigPage.{h,cc}: removed
+	* kchartGeometryConfigPage.{h,cc}: removed
 
 	----------------------------------------------------------------
 
