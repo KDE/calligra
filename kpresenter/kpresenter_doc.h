@@ -302,8 +302,8 @@ public:
     void deletePage( int _page, DelPageMode _delPageMode );
     void insertPage( int _page, InsPageMode _insPageMode, InsertPos _insPos );
 
-    void setObjectList( QList<KPObject> *_list ) { 
-	_objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false ); 
+    void setObjectList( QList<KPObject> *_list ) {
+	_objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false );
     }
 
     int getPenBrushFlags();
@@ -428,6 +428,7 @@ protected:
     KPFooterHeaderEditor *headerFooterEdit;
 
     QValueList<KPPixmapDataCollection::Key> pixmapCollectionKeys;
+    QStringList pixmapCollectionNames;
     QValueList<KPClipartCollection::Key> clipartCollectionKeys;
     KoPageLayout __pgLayout;
 
@@ -437,7 +438,7 @@ protected:
     QMap<int,bool> selectedSlides;
     QValueList<KPPixmapDataCollection::Key> usedPixmaps;
 
-    
+
 };
 
 #endif

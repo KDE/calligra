@@ -334,13 +334,21 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     makeUsedPixmapList();
 
     out << otag << "<PIXMAPS>" << endl;
-
+    
+    int i = 0;
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
 
     for ( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it ) {
 	if ( usedPixmaps.contains( it.key() ) ) {
 	    KPPixmapDataCollection::Key key = it.key();
-	    out << indent << "<KEY " << key << " />" << endl;
+	    QString format = QFileInfo( it.key().filename ).extension().upper();
+	    if ( format == "JPG" )
+		format = "JPEG";
+	    if ( QImage::outputFormats().find( format ) == -1 )
+		format = "BMP";
+	    out << indent << "<KEY " << key << " name=\"" 
+		<< QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() ).latin1() 
+		<< "\" />" << endl;
 	}
     }
 
@@ -413,22 +421,24 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
     CORBA::String_var u = KURL( url() ).path().latin1();
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
 
+    int i = 0;
     for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it ) {
 	if ( _pixmapCollection.getPixmapDataCollection().references( it.key() ) > 0 &&
 	     !it.key().filename.isEmpty() && usedPixmaps.contains( it.key() ) ) {
-	    QString u2 = u.in();
-	    u2 += "/";
-	    u2 += it.key().toString();
-
+// 	    QString u2 = u.in();
+// 	    u2 += "/";
+// 	    u2 += it.key().toString();
+	    
 	    QString format = QFileInfo( it.key().filename ).extension().upper();
 	    if ( format == "JPG" )
 		format = "JPEG";
 	    if ( QImage::outputFormats().find( format ) == -1 )
 		format = "BMP";
 
+	    QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
+
 	    QString mime = "image/" + format.lower();
-	    if ( _store->open( u2, mime.lower() ) )
-	    {
+	    if ( _store->open( u2, mime.lower() ) ) {
 	        ostorestream out( _store );
 	        writeImageToStream( out, it.data(), format );
 	        out.flush();
@@ -487,6 +497,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     string name;
 
     pixmapCollectionKeys.clear();
+    pixmapCollectionNames.clear();
     clipartCollectionKeys.clear();
 
     // clean
@@ -782,11 +793,13 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    while ( parser.open( 0L, tag ) ) {
 		KPPixmapDataCollection::Key key;
 		int year, month, day, hour, minute, second, msec;
-
+		QString n;
+		
 		KOMLParser::parseTag( tag.c_str(), name, lst );
 		if ( name == "KEY" ) {
 		    KOMLParser::parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
+		    n = QString::null;
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "filename" )
 			    key.filename = ( *it ).m_strValue.c_str();
@@ -804,6 +817,8 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 			    second = atoi( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "msec" )
 			    msec = atoi( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "name" )
+			    n = ( *it ).m_strValue.c_str();
 			else
 			    cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
 		    }
@@ -811,6 +826,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		    key.lastModified.setTime( QTime( hour, minute, second, msec ) );
 
 		    pixmapCollectionKeys.append( key );
+		    pixmapCollectionNames.append( n );
 		} else
 		    cerr << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
 
@@ -1062,12 +1078,19 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	CORBA::String_var str = urlIntern.isEmpty() ? KURL( url() ).path().latin1() : urlIntern.latin1();
 
 	QValueListIterator<KPPixmapDataCollection::Key> it = pixmapCollectionKeys.begin();
+	QStringList::Iterator nit = pixmapCollectionNames.begin();
 
-	for ( ; it != pixmapCollectionKeys.end(); ++it ) {
-	    QString u = str.in();
-	    u += "/";
-	    u += it.node->data.toString();
-
+	for ( ; it != pixmapCollectionKeys.end(); ++it, ++nit ) {
+	    QString u = QString::null;
+	    
+	    if ( !( *nit ).isEmpty() )
+		u = *nit;
+	    else {
+		u = str.in();
+		u += "/";
+		u += it.node->data.toString();
+	    }
+	    
 	    QImage img;
 
 	    if ( _store->open( u, 0L ) ) {

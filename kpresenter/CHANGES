@@ -445,3 +445,8 @@ Reggie, 4.9.1999:
 Reggie, 12.9.1999:
 ------------------
 - Some fixes for pixmaps and cliparts in new and old fileformat
+
+Reggie, 13.9.1999:
+------------------
+- Saving pixmaps follows now the SPECS
+
