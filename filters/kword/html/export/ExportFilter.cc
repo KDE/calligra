@@ -147,7 +147,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
         *m_streamOut << "<img "; // This is an empty element!
         *m_streamOut << "src=\"" << escapeHtmlText(strImageName) << "\" ";
-        *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key) << "\"";
+        *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key.filename()) << "\"";
         *m_streamOut << (isXML()?"/>":">") << "\n";
         kdDebug(30503) << "Image written" << endl;
     }
@@ -162,7 +162,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 bool HtmlWorker::makeClipart(const FrameAnchor& anchor)
 {
     kdDebug(30506) << "New clipart: " << anchor.picture.koStoreName
-        << " , " << anchor.picture.key <<endl;
+        << " , " << anchor.picture.key.toString() <<endl;
 
     QString strAdditionalName(anchor.picture.koStoreName);
     if (!strAdditionalName.endsWith(".svg"))
@@ -361,7 +361,6 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
     QString strParaText=paraText;
     QString strTag; // Tag that will be written.
 
-    // As KWord has only one depth of lists (FIXME/TODO: that's wrong!), we can process lists very simply.
     if ( layout.counter.numbering == CounterData::NUM_LIST )
     {
         const uint layoutDepth=layout.counter.depth+1; // Word's depth starts at 0!
