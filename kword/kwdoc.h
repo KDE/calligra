@@ -47,6 +47,7 @@ class KoVariable;
 class KoVariableFormatCollection;
 class KWVariableCollection;
 class KoTextObject;
+class KWBgSpellCheck;
 
 class DCOPObject;
 
@@ -348,7 +349,7 @@ public:
     int getMailMergeRecord() const;
     void setMailMergeRecord( int r );
 
-    bool backgroundSpellCheckEnabled() const { return m_bSpellCheckEnabled; }
+    bool backgroundSpellCheckEnabled() const;
     void enableBackgroundSpellCheck( bool b );
 
     bool canRemovePage( int num );
@@ -535,12 +536,6 @@ protected slots:
     void slotCommandExecuted();
     void slotDocumentInfoModifed();
 
-    void spellCheckerReady();
-    void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
-    void spellCheckerDone( const QString & );
-    void spellCheckerFinished( );
-    void spellCheckNextParagraph();
-
 protected:
     void nextParagraphNeedingCheck();
 
@@ -612,30 +607,12 @@ private:
     // in, this variable reflects that value.
     int m_syntaxVersion;
 
-    // KSpell config, used for both interactive and background spellcheck
-    KSpellConfig *m_pKSpellConfig;
-    // Structure holding the background spellcheck data
-    struct KWBGSpell {
-        KWBGSpell() : kspell(0L), currentTextFrameSet(0L), currentParag(0L) {}
-
-        // KSpell object for the background spellcheck
-	KSpell *kspell;
-        // The text frameset currently being checked
-	// TODO change current text frameset, and implementing nextTextFrameSet, see kwview.cc
-        // TODO implement "skip unchanged framesets" and "stop timer after all checked and until
-        // user types something again"
-        KWTextFrameSet *currentTextFrameSet;
-        // The paragraph currently being checked
-        Qt3::QTextParag *currentParag;
-    };
-    KWBGSpell m_bgSpell;
 
     QFont m_defaultFont;
     bool m_headerVisible, m_footerVisible;
     bool m_viewFormattingChars;
     bool m_viewFrameBorders;
     bool m_bShowRuler;
-    bool m_bSpellCheckEnabled;
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;
     bool m_bShowDocStruct;
@@ -652,6 +629,9 @@ private:
 
     QString m_lastViewMode;
     KWVariableCollection *m_varColl;
+    KWBgSpellCheck *m_bgSpellCheck;
+    KSpellConfig *m_pKSpellConfig;
+
 };
 
 
