@@ -559,7 +559,7 @@ private:
     KToggleAction *actionTextAlignCenter;
     KToggleAction *actionTextAlignRight;
     KToggleAction *actionTextAlignBlock;
-    KAction *actionTextTypeEnumList;
+    KToggleAction *actionTextTypeEnumList;
     KToggleAction *actionTextTypeUnsortList;
     KAction *actionTextDepthPlus;
     KAction *actionTextDepthMinus;

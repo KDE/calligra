@@ -1398,6 +1398,26 @@ void KPresenterView::mtextFont()
 /*===============================================================*/
 void KPresenterView::textEnumList()
 {
+    KoParagCounter c;
+    if ( actionTextTypeEnumList->isChecked() )
+    {
+        if(actionTextTypeUnsortList->isChecked())
+            actionTextTypeUnsortList->setChecked(false);
+        c.setNumbering( KoParagCounter::NUM_LIST );
+        c.setStyle( KoParagCounter::STYLE_NUM );
+    }
+    else
+    {
+        c.setNumbering( KoParagCounter::NUM_NONE );
+    }
+    KPTextView * edit = page->currentTextObjectView();
+    Q_ASSERT(edit);
+    if ( edit )
+    {
+        KCommand *cmd=edit->setCounterCommand( c );
+        if(cmd)
+            m_pKPresenterDoc->addCommand(cmd);
+    }
 #if 0
     KPTextObject *txtObj = page->currentTextObjectView()->textObject();
     if ( !txtObj )
@@ -1418,6 +1438,26 @@ void KPresenterView::textEnumList()
 /*===============================================================*/
 void KPresenterView::textUnsortList()
 {
+    KoParagCounter c;
+    if ( actionTextTypeUnsortList->isChecked() )
+    {
+        if(actionTextTypeEnumList->isChecked())
+            actionTextTypeEnumList->setChecked(false);
+        c.setNumbering( KoParagCounter::NUM_LIST );
+        c.setStyle( KoParagCounter::STYLE_DISCBULLET );
+    }
+    else
+    {
+        c.setNumbering( KoParagCounter::NUM_NONE );
+    }
+    KPTextView * edit = page->currentTextObjectView();
+    Q_ASSERT(edit);
+    if ( edit )
+    {
+        KCommand *cmd=edit->setCounterCommand( c );
+        if(cmd)
+            m_pKPresenterDoc->addCommand(cmd);
+    }
 #if 0
     KPTextObject *txtObj = page->currentTextObjectView()->textObject();
     if ( !txtObj )
@@ -2130,11 +2170,10 @@ void KPresenterView::setupActions()
     actionTextAlignBlock->setExclusiveGroup( "align" );
 
 
-#if 0
-    actionTextTypeEnumList = new KAction( i18n( "&Enumerated List" ), "enum_list", 0,
+    actionTextTypeEnumList = new KToggleAction( i18n( "&Enumerated List" ), "enum_list", 0,
 					  this, SLOT( textEnumList() ),
 					  actionCollection(), "text_enumList" );
-#endif
+
     actionTextTypeUnsortList = new KToggleAction( i18n( "&Unsorted List" ), "unsorted_list",
 					    0, this, SLOT( textUnsortList() ),
 					    actionCollection(), "text_unsortedList" );

@@ -86,6 +86,7 @@
   <Separator/>
   <Menu name="Type"><text>T&amp;ype</text>
    <Action name="text_unsortedList"/>
+   <Action name="text_enumList"/>
    <Action name="text_normalText"/>
   </Menu>
   <Separator/>
@@ -199,6 +200,7 @@
   <Action name="text_alignblock"/>
   <Separator/>
   <Action name="text_unsortedList"/>
+  <Action name="text_enumList"/>
   <Action name="text_normalText"/>
   <Separator/>
   <Action name="text_depthMinus"/>
