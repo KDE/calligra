@@ -44,7 +44,7 @@ DESCRIPTION
 #include <qclipboard.h>
 
 // ### TODO : multi page tables
-#define SUPPORT_MULTI_PAGE_TABLES 1
+#define SUPPORT_MULTI_PAGE_TABLES 0
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
@@ -625,19 +625,9 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             
             QValueList<double>::iterator tmp = m_rowPositions.at(breakRow);
             diff += topOfPage - (*tmp); // diff between bottom of last row on page and top of new page
-#if 0 // def SUPPORT_MULTI_PAGE_TABLES
-            kdDebug(32004) << "diff += " <<  topOfPage  << " - " << (*tmp) << ". diff += " << topOfPage - (*tmp) <<" ="<< diff  << endl;
-            
-            // ### TODO: unfinished, does not work!
-            m_rowPositions.insert( tmp, topOfPage );
-            (*tmp) += diff; // ### ?
-            breakRow -= 2; // ### ?
-            lineNumber++;
-#else
 //kdDebug() << "diff += " <<  topOfPage  << " - " << (*tmp) << ". diff += " << topOfPage - (*tmp) <<" ="<< diff  << endl;
             lineNumber++;
             m_rowPositions.insert(j, topOfPage);
-#endif
 
             // insert new pageBound. It points to last LINE on previous page
             pageBound = m_pageBoundaries.insert(pageBound, breakRow);
