@@ -115,7 +115,7 @@ KexiCreateProjectPageEngine::fill()
 		<< "ODBC";
 		//(uniwersalne polaczenie do baz) 
 
-	QPixmap &icon = kapp->iconLoader()->loadIcon("exec", KIcon::Small);
+	QPixmap icon = kapp->iconLoader()->loadIcon("exec", KIcon::Small);
 	for ( QStringList::Iterator it = m_example_engines.begin(); it != m_example_engines.end(); ++it ) {
 	m_engine->listBox()->insertItem( new KexiListBoxItem( 0, icon, *it, false ) );
 //		m_engine->insertItem( kapp->iconLoader()->loadIcon("exec", KIcon::Small), *it);
