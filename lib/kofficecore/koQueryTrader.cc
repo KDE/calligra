@@ -165,7 +165,7 @@ KoFilterEntry::KoFilterEntry( KService::Ptr service )
 {
   import = service->property( "X-KDE-Import" ).toStringList();
   export_ = service->property( "X-KDE-Export" ).toStringList();
-  int w = service->property( "X-KDE-Weight" ).toString().toInt();
+  int w = service->property( "X-KDE-Weight" ).toInt();
   weight = w < 0 ? UINT_MAX : static_cast<unsigned int>( w );
   available = service->property( "X-KDE-Available" ).toString();
 }
