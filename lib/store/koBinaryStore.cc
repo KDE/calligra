@@ -164,13 +164,13 @@ CORBA::Boolean KoBinaryStore::open( const char* _name, const char *_mime_type )
     
   if ( !_mime_type && m_mode != KOStore::Read )
   {
-    kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Mimetype omitted while opening entry %c for writing", _name );
+    kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Mimetype omitted while opening entry %s for writing", _name );
     return false;
   }
   
   if ( strlen( _name ) > 512 )
   {
-    kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Filename %c is too long", _name );
+    kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Filename %s is too long", _name );
     return false;
   }
   
@@ -178,7 +178,7 @@ CORBA::Boolean KoBinaryStore::open( const char* _name, const char *_mime_type )
   {
     if ( m_map.find( _name ) != m_map.end() )
     {
-      kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Duplicate filename %c", _name );
+      kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Duplicate filename %s", _name );
       return false;
     }
     
@@ -192,18 +192,18 @@ CORBA::Boolean KoBinaryStore::open( const char* _name, const char *_mime_type )
   }
   else if ( m_mode == KOStore::Read )
   { 
-    kdebug( KDEBUG_INFO, 30002, "Opening for reading %c", _name );
+    kdebug( KDEBUG_INFO, 30002, "Opening for reading %s", _name );
     
     map<string,Entry>::iterator it = m_map.find( _name );
     if ( it == m_map.end() )
     {
-      kdebug( KDEBUG_INFO, 30002, "Unknown filename %c", _name );
+      kdebug( KDEBUG_INFO, 30002, "Unknown filename %s", _name );
       return false;
     }
     if ( _mime_type && strlen( _mime_type ) != 0 && it->second.mimetype != _mime_type )
     {
-      kdebug( KDEBUG_INFO, 30002, "Wrong mime_type in file %c", _name );
-      kdebug( KDEBUG_INFO, 30002, "Expected %c but got %c", _mime_type, it->second.mimetype.c_str() );
+      kdebug( KDEBUG_INFO, 30002, "Wrong mime_type in file %s", _name );
+      kdebug( KDEBUG_INFO, 30002, "Expected %s but got %s", _mime_type, it->second.mimetype.c_str() );
       return false;
     }
     m_in.seekg( it->second.data );
@@ -330,6 +330,10 @@ long KoBinaryStore::read( char *_buffer, unsigned long _len )
 
 CORBA::Boolean KoBinaryStore::write( const KOStore::Data& data )
 {
+  unsigned int len = data.length();
+  if (len == 0)
+    return true;
+
   if ( !m_bIsOpen )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: You must open before writing" );
@@ -341,7 +345,6 @@ CORBA::Boolean KoBinaryStore::write( const KOStore::Data& data )
     return 0L;
   }
 
-  unsigned int len = data.length();
   unsigned char *p = new unsigned char[ len ];
   for( unsigned int i = 0; i < len; i++ )
     p[i] = data[i];
@@ -361,6 +364,8 @@ CORBA::Boolean KoBinaryStore::write( const KOStore::Data& data )
 
 bool KoBinaryStore::write( const char* _data, unsigned long _len )
 {
+  if ( _len == 0 ) return true;
+
   if ( !m_bIsOpen )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: You must open before writing" );
