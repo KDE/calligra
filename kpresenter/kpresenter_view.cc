@@ -6015,14 +6015,22 @@ void KPresenterView::slotUpdateRuler()
 }
 
 
+// This handles Tabulators _only_
 void KPresenterView::slotHRulerDoubleClicked( double ptpos )
 {
     showParagraphDialog( KoParagDia::PD_TABS, ptpos );
 }
 
+// This handles either:
+// - Indents
+// - Page Layout
+//
+// This does _not_ handle Tabulators!
 void KPresenterView::slotHRulerDoubleClicked()
 {
-    if ( m_canvas && m_canvas->currentTextObjectView() && (getHRuler()->flags() & KoRuler::F_TABS) )
+    KoRuler *ruler = getHRuler();
+
+    if ( m_canvas && m_canvas->currentTextObjectView() && (ruler->flags() & KoRuler::F_INDENTS) && ruler->doubleClickedIndent() )
         formatParagraph();
     else
         openPageLayoutDia();

@@ -216,6 +216,17 @@ public:
     int flags() const;
 
     /**
+     * @return whether the current doubleClicked() signal was triggered
+     * by the user double-clicking on an indent (BCI).  It returns false
+     * if the user just double-clicked on an "empty" part of the ruler.
+     *
+     * This method is strictly provided for use in a slot connected to the
+     * doubleClicked() signal; calling it at any other time results in
+     * undefined behavior.
+     */
+    bool doubleClickedIndent() const;
+
+    /**
      * Enable or disable the "Page Layout" menu item.
      */
     void setPageLayoutMenuItemEnabled(bool b);
@@ -227,7 +238,7 @@ signals:
     void newRightIndent( double );
     /** Old signal, kept for compatibility. Use doubleClicked instead. */
     void openPageLayoutDia();
-    /** This signal is emitted when double-clicking the ruler */
+    /** This signal is emitted when double-clicking the ruler (or an indent) */
     void doubleClicked();
     /** This signal is emitted when double-clicking a tab */
     void doubleClicked( double ptPos );

@@ -84,7 +84,6 @@
 #include <kaccel.h>
 #include <kaccelgen.h>
 #include <kdebug.h>
-#include <kdebugclasses.h>
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
@@ -3613,21 +3612,33 @@ void KWView::slotApplyParag()
     m_paragDlg->setParagLayout( lay );
 }
 
+// This handles Tabulators _only_
 void KWView::slotHRulerDoubleClicked( double ptpos )
 {
     showParagraphDialog( KoParagDia::PD_TABS, ptpos );
 }
 
+// This handles either:
+// - Indents
+// - Page Layout
+//
+// This does _not_ handle Tabulators!
 void KWView::slotHRulerDoubleClicked()
 {
     QString mode = m_gui->canvasWidget()->viewMode()->type();
     bool state = (mode!="ModeText");
     if ( !state )
         return;
-    if ( (m_gui->getHorzRuler()->flags() & KoRuler::F_TABS)&&currentTextEdit() )
-        formatParagraph();
-    else
-        formatPage();
+
+    KoRuler *ruler = m_gui->getHorzRuler ();
+    if ( (ruler->flags() & KoRuler::F_INDENTS) && currentTextEdit() ) {
+        if ( ruler->doubleClickedIndent () ) {
+            formatParagraph();
+            return;
+        }
+    }
+
+    formatPage();
 }
 
 void KWView::formatPage()

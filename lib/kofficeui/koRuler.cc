@@ -54,6 +54,7 @@ public:
     int frameEnd;
     double i_right;
     bool m_bReadWrite;
+    bool doubleClickedIndent;
 };
 
 
@@ -869,8 +870,10 @@ void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
 
 void KoRuler::handleDoubleClick()
 {
-    if(!d->m_bReadWrite)
+    if ( !d->m_bReadWrite )
         return;
+
+    d->doubleClickedIndent = false;
     if ( d->tabChooser && ( d->flags & F_TABS ) ) {
         // Double-click and mousePressed inserted a tab -> need to remove it
         if ( d->tabChooser->getCurrTabType() != 0 && d->removeTab.type != T_INVALID && !d->tabList.isEmpty()) {
@@ -882,14 +885,27 @@ void KoRuler::handleDoubleClick()
             d->currTab.type = T_INVALID;
             emit tabListChanged( d->tabList );
             update();
+            // --- we didn't click on a tab, fall out to indents test ---
         } else if ( d->action == A_TAB ) {
             // Double-click on a tab
-            emit doubleClicked( d->currTab.ptPos );
+            emit doubleClicked( d->currTab.ptPos ); // usually paragraph dialog
             return;
         }
-        emit doubleClicked(); // usually paragraph dialog
-    } else
-        emit doubleClicked(); // usually page layout dialog
+    } 
+	 
+    // When Binary Compatibility is broken this will hopefully emit a
+    // doubleClicked(int) to differentiate between double-clicking an
+    // indent and double-clicking the ruler
+    if ( d->flags & F_INDENTS ) {
+        if ( d->action == A_LEFT_INDENT || d->action == A_RIGHT_INDENT || d->action == A_FIRST_INDENT ) {
+            d->doubleClickedIndent = true;
+            emit doubleClicked(); // usually paragraph dialog
+            return;
+        }
+    }
+        
+    // Double-click nothing
+    emit doubleClicked(); // usually page layout dialog
 }
 
 void KoRuler::setTabList( const KoTabulatorList & _tabList )
@@ -1045,6 +1061,11 @@ void KoRuler::changeFlags(int _flags)
 int KoRuler::flags() const
 {
     return d->flags;
+}
+
+bool KoRuler::doubleClickedIndent() const
+{
+    return d->doubleClickedIndent;
 }
 
 double KoRuler::applyRtlAndZoom( double value ) const
