@@ -40,8 +40,11 @@ public:
     KWStyle( const KWStyle & rhs ) { *this = rhs; }
     void operator=( const KWStyle & );
 
+    // The internal name (untranslated if a standard style)
     QString name() const { return m_name; }
     void setName( const QString & name ) { m_name = name; }
+    // The translated name
+    QString translatedName() const;
 
     const KWParagLayout & paragLayout() const { return m_paragLayout; }
     KWParagLayout & paragLayout()  { return m_paragLayout; }

@@ -20,6 +20,7 @@
 #include "kwstyle.h"
 #include <qdom.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 KWStyle::KWStyle( const QString & name )
 {
@@ -80,4 +81,9 @@ void KWStyle::save( QDomElement parentElem )
 
     QDomElement formatElem = KWTextParag::saveFormat( doc, &m_format, 0L, 0, 0 );
     styleElem.appendChild( formatElem );
+}
+
+QString KWStyle::translatedName() const
+{
+    return i18n( "KWord style", name().utf8() );
 }

@@ -1336,7 +1336,7 @@ void KWView::updateStyleList()
     QStringList lst;
     QListIterator<KWStyle> styleIt( m_doc->styleList() );
     for (; styleIt.current(); ++styleIt ) {
-        lst << i18n("KWord style", styleIt.current()->name().utf8()); // try to translate the name, if standard
+        lst << styleIt.current()->translatedName();
     }
     actionFormatStyle->setItems( lst );
     showStyle( currentStyle );
