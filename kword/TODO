@@ -5,6 +5,7 @@ Bugs:
 -----
 - textformatter: need to check for line-level breaking during the formatting of each line
 Currently we do it afterwards, so if the margins differ, where the line ends up, we can't notice.
+- footnotes: check move to next page, copy-n-paste
 - anything else that http://bugs.kde.org mentions ;)
 
 Missing or incomplete stuff:
@@ -138,9 +139,7 @@ mean. Toolbars are the greatest example of this.
 
 - one should be able to introduce dependencies between styles, so if I want to change the general font of the text, I do not have to modify all the styles.
 - If I specify a "document title" in the preferences, I would still like to see the filepath in the window titlebar.
-- split view: when I move the cursor in one of the views, the other moves too... all the benefit is lost !
 - when writing bulks of text, when the cursor gets to the border of the window, it should not only scroll 1 line (to make sure the cursor stays in the visible portion of the document) but should be moved to the center of the window (like in emacs:-). So the average position of the cursor is the center of the window, rather than the bollom line.
-- non-breakable spaces?
 
 - interaction with KoParts is somehow strange. Especially positioning them in the document, as the size when using the handles is not the same as the end product. But I am not used to it in the Windows world either...
   This is due to the problemsn that we don't zoom and dont allow easy moving in the parts. A square which representst the whole placed document when moving just the little screen would be nice.

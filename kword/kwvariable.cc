@@ -274,6 +274,7 @@ void KWFootNoteVariable::setDeleted( bool del )
     {
         Q_ASSERT( m_frameset );
         if ( m_frameset ) {
+            m_frameset->deleteAllFrames(); // Important, because we don't want to save it!
             m_frameset->setVisible( false );
         }
     }
@@ -283,6 +284,7 @@ void KWFootNoteVariable::setDeleted( bool del )
         if ( m_frameset ) {
             kdDebug() << "Making frameset " << m_frameset << " visible" << endl;
             m_frameset->setVisible( true );
+            m_frameset->createInitialFrame( 0 ); // Page number shouldn't matter (see recalcFrames below).
             Q_ASSERT( m_frameset->isVisible() );
         }
     }
@@ -297,6 +299,9 @@ void KWFootNoteVariable::setDeleted( bool del )
     textfs->renumberFootNotes();
 
     m_doc->recalcFrames();
+
+    if (!del)
+        m_frameset->layout(); // format its text, so that it resizes the frame
 
     // Does this compress? Probably not.
     QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );

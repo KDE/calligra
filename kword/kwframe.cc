@@ -51,6 +51,8 @@
 #include "KWordPartFrameSetIface.h"
 #include "KWordPartFrameSetEditIface.h"
 
+//#define DEBUG_DRAW
+
 /******************************************************************/
 /* Class: KWFrame                                                 */
 /******************************************************************/
@@ -580,7 +582,7 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
     for ( ; frameIt.current(); ++frameIt )
     {
         QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect() ) );
-        //kdDebug() << "KWFrameSet::createEmptyRegion outerRect=" << DEBUGRECT( outerRect ) << " crect=" << DEBUGRECT( crect ) << endl;
+        //kdDebug() << "KWFrameSet::createEmptyRegion outerRect=" << outerRect << " crect=" << crect << endl;
         outerRect &= crect; // This is important, to avoid calling subtract with a Y difference > 65536
         if ( !outerRect.isEmpty() )
         {
@@ -596,11 +598,11 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect,QC
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
     //kdDebug(32002) << "KWFrameSet::drawFrameBorder frame: " << frame
-    //               << " outerRect: " << DEBUGRECT( outerRect ) << endl;
+    //               << " outerRect: " << outerRect << endl;
 
     if ( !crect.intersects( outerRect ) )
     {
-        kdDebug() << "KWFrameSet::drawMargins no intersection with " << DEBUGRECT(crect) << endl;
+        kdDebug() << "KWFrameSet::drawMargins no intersection with " << crect << endl;
         return;
     }
     QRect frameRect( viewMode->normalToView( m_doc->zoomRect(  *frame ) ) );
@@ -637,11 +639,11 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
     //kdDebug(32002) << "KWFrameSet::drawFrameBorder frame: " << frame
-    //               << " outerRect: " << DEBUGRECT( outerRect ) << endl;
+    //               << " outerRect: " << outerRect << endl;
 
     if ( !crect.intersects( outerRect ) )
     {
-        //kdDebug() << "KWFrameSet::drawFrameBorder no intersection with " << DEBUGRECT(crect) << endl;
+        //kdDebug() << "KWFrameSet::drawFrameBorder no intersection with " << crect << endl;
         return;
     }
 
@@ -975,12 +977,14 @@ void KWFrameSet::updateFrames()
                         KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
                         if( !intersect.isEmpty() )
                         {
+#if 0
                             kdDebug(32002)
                                 << "KWFrameSet::updateFrames adding frame "
                                 << frameMaybeOnTop << " (zorder: " << frameMaybeOnTop->zOrder() << ")"
                                 << " on top of frame " << fIt.current() << " (zorder: " << fIt.current()->zOrder() << ")"
-                                << "\n   intersect: " << DEBUGRECT(intersect)
-                                << " (zoomed: " << DEBUGRECT( m_doc->zoomRect( intersect ) ) << endl;
+                                << "\n   intersect: " << intersect
+                                << " (zoomed: " << m_doc->zoomRect( intersect ) << endl;
+#endif
                             fIt.current()->addFrameOnTop( frameMaybeOnTop );
                         }
                     }
@@ -998,7 +1002,6 @@ void KWFrameSet::updateFrames()
         //for ( ; frameIt.current(); ++frameIt, ++frameNum )
         {
             KWAnchor * anchor = findAnchor( frameNum );
-            //KWAnchor * anchor = frameIt.current()->anchor();
             //kdDebug() << "KWFrameSet::updateFrames anchor=" << anchor << endl;
             if ( anchor )
                 anchor->resize();
@@ -1020,8 +1023,6 @@ const QPtrList<KWFrame> & KWFrameSet::framesInPage( int pageNum ) const
     return * m_framesInPage[pageNum - m_firstPage];
 }
 
-//#define DEBUG_DRAW
-
 void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg,
                                bool onlyChanged, bool resetChanged,
                                KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas )
@@ -1029,7 +1030,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
 #ifdef DEBUG_DRAW
     kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
                    << " onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged
-                   << " crect= " << DEBUGRECT(crect)
+                   << " crect= " << crect
                    << endl;
 #endif
     m_currentDrawnCanvas = canvas;
@@ -1054,9 +1055,9 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
         QRect frameRect( viewMode->normalToView( normalFrameRect ) );
         r = r.intersect( frameRect );
 #ifdef DEBUG_DRAW
-        kdDebug(32002) << "                    frame=" << frame << " " << DEBUGRECT(*frame) << endl;
+        kdDebug(32002) << "                    frame=" << frame << " " << *frame << endl;
         kdDebug(32002) << "                    normalFrameRect=" << normalFrameRect << " frameRect=" << frameRect << endl;
-        kdDebug(32002) << "                    crect=" << DEBUGRECT(crect) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
+        kdDebug(32002) << "                    crect=" << crect << " intersec=" << r << " todraw=" << !r.isEmpty() << endl;
 #endif
         if ( !r.isEmpty() )
         {
@@ -1069,7 +1070,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
 
             QRect fcrect = viewMode->viewToNormal( r );
 #ifdef DEBUG_DRAW
-            kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << DEBUGRECT( fcrect ) << "."
+            kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << fcrect << "."
                       << " Will move by (" << -offsetX << ", -(" << normalFrameRect.top() << "-" << m_doc->zoomItY(frameTopPt) << ") == " << -offsetY << ")." << endl;
 #endif
             // y=-1 means all (in QRT), so let's not go there !
@@ -1082,7 +1083,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             // fcrect is now the portion of the frame to be drawn,
             // in the frame's coordinates and in pixels
 #ifdef DEBUG_DRAW
-            kdDebug() << "KWFrameSet::drawContents in internal coords:" << DEBUGRECT( fcrect ) << ". Will translate painter by intersec-fcrect: " << r.x()-fcrect.x() << "," << r.y()-fcrect.y() << "." << endl;
+            kdDebug() << "KWFrameSet::drawContents in internal coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << r.x()-fcrect.x() << "," << r.y()-fcrect.y() << "." << endl;
 #endif
             // The settings come from this frame
             KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
@@ -1351,15 +1352,19 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 {
     KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
+#ifdef DEBUG_DRAW
+    kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << rc << endl;
+#endif
 
     Q_ASSERT( frame );
     if ( clipFrame )
     {
-        //kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << DEBUGRECT(rc) << endl;
         rc &= painter->xForm( viewMode->normalToView( doc->zoomRect( (*frame) ) ) ); // intersect
-        //kdDebug(32002) << "KWFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
-        //               << " clip region rect=" << DEBUGRECT(rc)
-        //               << " rc.isEmpty()=" << rc.isEmpty() << endl;
+#ifdef DEBUG_DRAW
+        kdDebug(32002) << "KWFrameSet::frameClipRegion frame=" << *frame
+                       << " clip region rect=" << rc
+                       << " rc.isEmpty()=" << rc.isEmpty() << endl;
+#endif
     }
     if ( !rc.isEmpty() )
     {
@@ -1384,15 +1389,18 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
             }
         }
 
+        QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
+        for ( ; fIt.current() ; ++fIt )
         {
-            QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
-            for ( ; fIt.current() ; ++fIt )
-            {
-                QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect() ) );
-                //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
-                reg -= r; // subtract
-            }
+            QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect() ) );
+#ifdef DEBUG_DRAW
+            kdDebug(32002) << "frameClipRegion subtract rect "<< r << endl;
+#endif
+            reg -= r; // subtract
         }
+#ifdef DEBUG_DRAW
+        kdDebug() << "KWFrameSet::frameClipRegion result:" << reg << endl;
+#endif
         return reg;
     } else return QRegion();
 }
@@ -1571,7 +1579,8 @@ void KWPictureFrameSet::setSize( const QSize & /*_imgSize*/ )
 void KWPictureFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
 {
     KWFrameSet::resizeFrame( frame, newWidth, newHeight, finalSize );
-    QSize newSize = kWordDocument()->zoomSize( frame->innerRect().size() );
+    //QSize newSize = kWordDocument()->zoomSize( frame->innerRect().size() );
+    /// ### the fast vs slow resize of EPS images (depending on finalSize) is gone :(
 }
 
 QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
@@ -1634,7 +1643,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
                                    QColorGroup &, bool, bool, KWFrameSetEdit * )
 {
-    //kdDebug() << "KWPictureFrameSet::drawFrame crect=" << DEBUGRECT(crect) << endl;
+    //kdDebug() << "KWPictureFrameSet::drawFrame crect=" << crect << endl;
     m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
                   crect.x(), crect.y(), crect.width(), crect.height());
 }
@@ -1786,7 +1795,7 @@ void KWPartFrameSet::drawFrame( KWFrame* frame, QPainter * painter, const QRect 
         // Does it define the area to be repainted only ? (here it doesn't, really, but it should)
         QRect rframe( 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ),
                       kWordDocument()->zoomItY( frame->innerHeight() ) );
-        //kdDebug() << "rframe=" << DEBUGRECT( rframe ) << endl;
+        //kdDebug() << "rframe=" << rframe << endl;
 
         m_child->document()->paintEverything( *painter, rframe, true, 0L,
                                             kWordDocument()->zoomedResolutionX(), kWordDocument()->zoomedResolutionY() );
@@ -1888,8 +1897,8 @@ void KWPartFrameSetEdit::slotChildChanged()
         frame->setHeight( r.height() / frameSet()->kWordDocument()->zoomedResolutionY() );
         // ## TODO an undo/redo command (move frame)
 
-        kdDebug() << "KWPartFrameSet::slotChildChanged child's geometry " << DEBUGRECT(partFrameSet()->getChild()->geometry() )
-                  << " frame set to " << DEBUGRECT( *frame ) << endl;
+        kdDebug() << "KWPartFrameSet::slotChildChanged child's geometry " << partFrameSet()->getChild()->geometry()
+                  << " frame set to " << *frame << endl;
         partFrameSet()->kWordDocument()->frameChanged( frame );
         //there is just a frame
         if(m_cmdMoveChild)
@@ -1910,7 +1919,7 @@ void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
     // (the child is in unzoomed view coords!)
     QRect r( m_canvas->viewMode()->normalToView( frameSet()->kWordDocument()->zoomRect( *frame ) ) );
     partFrameSet()->getChild()->setGeometry( frameSet()->kWordDocument()->unzoomRect( r ).toQRect() );
-    kdDebug() << "KWPartFrameSetEdit: activating. child set to " << DEBUGRECT( partFrameSet()->getChild()->geometry() ) << endl;
+    kdDebug() << "KWPartFrameSetEdit: activating. child set to " << partFrameSet()->getChild()->geometry() << endl;
 
     KoDocument* part = partFrameSet()->getChild()->document();
     if ( !part )
@@ -2036,7 +2045,7 @@ void KWFormulaFrameSet::drawFrame( KWFrame* /*frame*/, QPainter* painter, const 
         }
         else
         {
-            //kdDebug() << "KWFormulaFrameSet::drawFrame drawing (without edit) crect=" << DEBUGRECT( crect ) << endl;
+            //kdDebug() << "KWFormulaFrameSet::drawFrame drawing (without edit) crect=" << crect << endl;
             formula->draw( *painter, crect, cg );
         }
     }

@@ -576,7 +576,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
             case KWFrameSet::FI_FOOTNOTE: {
                 KWFootNoteFrameSet* fnfs = dynamic_cast<KWFootNoteFrameSet *>(fs);
-                if (fnfs)
+                if ( fnfs && fnfs->isVisible() ) // not visible is when the footnote has been deleted
                     footnotesList.append( fnfs );
             }
             break;
@@ -680,15 +680,12 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
     for ( ; fnfsIt.current() ; ++fnfsIt )
     {
         KWFootNoteFrameSet* fnfs = fnfsIt.current();
-        if ( fnfs->isVisible() ) // false when the footnote has been deleted
-        {
-            KWFrame* frame = fnfs->getNumFrames() > 0 ? fnfs->frame(0) : 0L;
-            int pageNum = frame ? frame->pageNum() : 0;
-            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                         fnfs, pageNum, pageNum /*TODO overflows*/,
-                                         m_pageHeaderFooter.ptFooterBodySpacing, // do we need another var?
-                                         KWFrameLayout::HeaderFooterFrameset::All ) );
-        }
+        KWFrame* frame = fnfs->getNumFrames() > 0 ? fnfs->frame(0) : 0L;
+        int pageNum = frame ? frame->pageNum() : 0;
+        headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                     fnfs, pageNum, pageNum /*TODO overflows*/,
+                                     m_pageHeaderFooter.ptFooterBodySpacing, // do we need another var?
+                                     KWFrameLayout::HeaderFooterFrameset::All ) );
     }
 
     if ( m_processingType == WP ) { // In WP mode the pages are created automatically. In DTP not...
@@ -2002,7 +1999,7 @@ void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChange
 
 void KWDocument::repaintAllViews( bool erase )
 {
-    //kdDebug(32001) << "KWDocument::repaintAllViews" << endl;
+    kdDebug(32001) << "KWDocument::repaintAllViews" << endl;
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
 }

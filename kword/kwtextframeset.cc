@@ -51,12 +51,13 @@
 #include "KWordTextFrameSetEditIface.h"
 #include "KWordFrameSetIface.h"
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include <assert.h>
 
 //#define DEBUG_MARGINS
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
-//#define DEBUG_FORMAT_MORE
+#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
 //#define DEBUG_CURSOR
 
@@ -170,7 +171,7 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
         }
 #ifdef DEBUG_DTI
         //else
-        //  kdDebug() << "DTI: " << DEBUGRECT(frameRect)
+        //  kdDebug() << "DTI: " << frameRect
         //            << " doesn't contain nPoint:" << nPoint.x() << "," << nPoint.y() << endl;
 #endif
     }
@@ -210,7 +211,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
         KoRect openLeftRect( theFrame->innerRect() );
         openLeftRect.setLeft( theFrame->bLeft() );
 #ifdef DEBUG_DTI
-        kdDebug() << "documentToInternal: openLeftRect=" << DEBUGRECT( openLeftRect ) << endl;
+        kdDebug() << "documentToInternal: openLeftRect=" << openLeftRect << endl;
 #endif
         if ( openLeftRect.contains( dPoint ) )
         {
@@ -219,7 +220,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
             iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->top() + theFrame->internalY() ) );
 #ifdef DEBUG_DTI
             kdDebug() << "documentToInternal: returning LeftOfFrame " << iPoint.x() << "," << iPoint.y()
-                      << " internalY=" << theFrame->internalY() << " because openLeftRect=" << DEBUGRECT(openLeftRect)
+                      << " internalY=" << theFrame->internalY() << " because openLeftRect=" << openLeftRect
                       << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
             relPos = LeftOfFrame;
@@ -227,7 +228,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
         }
         KoRect openTopRect( KoPoint( 0, 0 ), theFrame->innerRect().bottomRight() );
 #ifdef DEBUG_DTI
-        kdDebug() << "documentToInternal: openTopRect=" << DEBUGRECT( openTopRect ) << endl;
+        kdDebug() << "documentToInternal: openTopRect=" << openTopRect << endl;
 #endif
         if ( openTopRect.contains( dPoint ) )
         {
@@ -236,7 +237,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
             iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) );
 #ifdef DEBUG_DTI
             kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
-                      << " internalY=" << theFrame->internalY() << " because openTopRect=" << DEBUGRECT(openTopRect)
+                      << " internalY=" << theFrame->internalY() << " because openTopRect=" << openTopRect
                       << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
             relPos = TopOfFrame;
@@ -301,7 +302,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
         KWFrame *theFrame = frameIt.current();
         QRect r( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() ), m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() ), m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() ) );
 #ifdef DEBUG_ITD
-        kdDebug() << "ITD: r=" << DEBUGRECT(r) << " iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
+        kdDebug() << "ITD: r=" << r << " iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
 #endif
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in layout units (aka internal)
@@ -374,7 +375,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit )
 {
-    //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << DEBUGRECT( r ) << " onlyChanged=" << onlyChanged << endl;
+    //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
     m_currentDrawnFrame = theFrame;
     // Update variables for each frame (e.g. for page-number)
     // If more than KWPgNumVariable need this functionality, create an intermediary base class
@@ -446,7 +447,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
         int totalHeight = m_doc->zoomItY( frames.last()->internalY() + frames.last()->innerHeight() );
 
         QRect blank( 0, docHeight, frameRect.width(), totalHeight + frameRect.height() - docHeight );
-        //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
+        //kdDebug(32002) << this << " Blank area: " << blank << endl;
         painter->fillRect( blank, cg.brush( QColorGroup::Base ) );
         // for debugging :)
         //painter->setPen( QPen(Qt::blue, 1, DashLine) );  painter->drawRect( blank );
@@ -500,14 +501,14 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
         QRect clip( vPoint.x() - 5, vPoint.y(), 10, cursorHeight );
 
 #ifdef DEBUG_CURSOR
-        kdDebug() << " clip(view, before intersect)=" << DEBUGRECT(clip) << endl;
+        kdDebug() << " clip(view, before intersect)=" << clip << endl;
 #endif
 
         QRect viewFrameRect = viewMode->normalToView( normalFrameRect );
         clip &= viewFrameRect; // clip to frame
 #ifdef DEBUG_CURSOR
-        kdDebug() << "KWTextFrameSet::drawCursor normalFrameRect=" << DEBUGRECT(normalFrameRect)
-                  << " clip(view, after intersect)=" << DEBUGRECT(clip) << endl;
+        kdDebug() << "KWTextFrameSet::drawCursor normalFrameRect=" << normalFrameRect
+                  << " clip(view, after intersect)=" << clip << endl;
 #endif
 
         QRegion reg = frameClipRegion( p, theFrame, clip, viewMode, true );
@@ -776,7 +777,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     }
 #ifdef DEBUG_MARGINS
     else
-        kdDebugBody(32002) << "  getMargins: internalToDocument returned frame=" << DEBUGRECT( *theFrame )
+        kdDebugBody(32002) << "  getMargins: internalToDocument returned frame=" << *theFrame
                            << " and pt=" << pt.x() << "," << pt.y() << endl;
 #endif
     // Everything from there is in layout units
@@ -799,7 +800,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
         {
             KoRect rectOnTop = theFrame->intersect( (*fIt)->outerKoRect() );
 #ifdef DEBUG_MARGINS
-            kdDebugBody(32002) << "   getMargins found rect-on-top at (normal coords) " << DEBUGRECT(rectOnTop) << endl;
+            kdDebugBody(32002) << "   getMargins found rect-on-top at (normal coords) " << rectOnTop << endl;
 #endif
             QPoint iTop, iBottom; // top and bottom of intersection in internal coordinates
             if ( documentToInternal( rectOnTop.topLeft(), iTop ) &&
@@ -807,7 +808,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                  documentToInternal( rectOnTop.bottomRight(), iBottom ) )
             {
 #ifdef DEBUG_MARGINS
-                kdDebugBody(32002) << "      in internal coords: " << DEBUGRECT(QRect(iTop,iBottom)) << endl;
+                kdDebugBody(32002) << "      in internal coords: " << QRect(iTop,iBottom) << endl;
 #endif
                 // Look for intersection between p.y() -- p.y()+h  and iTop -- iBottom
                 if ( QMAX( yp, iTop.y() ) <= QMIN( yp+h, iBottom.y() ) )
@@ -1357,7 +1358,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
                  m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() ) +1,
                  m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() )+1 );
 #ifdef DEBUG_ITD
-        kdDebug() << "KWTextFrameSet::internalToDocument frame's LU-rect:" << DEBUGRECT(r) << endl;
+        kdDebug() << "KWTextFrameSet::internalToDocument frame's LU-rect:" << r << endl;
 #endif
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
@@ -1388,7 +1389,7 @@ void KWTextFrameSet::printDebug()
             QPtrListIterator<KWFrame> it( *m_framesInPage[i] );
             int pgNum = i + m_firstPage;
             for ( ; it.current() ; ++it )
-                kdDebug() << "  " << pgNum << ": " << it.current() << "   " << DEBUGRECT( *it.current() )
+                kdDebug() << "  " << pgNum << ": " << it.current() << "   " << *it.current()
                           << " internalY=" << it.current()->internalY()
                           << " (in LU:" << m_doc->ptToLayoutUnitPixY( it.current()->internalY() ) << ")" << endl;
         }
@@ -1579,14 +1580,20 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 // Footers and footnotes go up
                 if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() )
                 {
-                    // Actually this code doesn't matter much, recalcFrames will reposition the frame
-                    // But the point of this code is to call it only if the frame really needs to be resized...
-                    double maxFooterSize = footerHeaderSizeMax(  theFrame );
+                    // The Y position doesn't matter much, recalcFrames will reposition the frame
+                    // But the point of this code is set the correct height for the frame.
+                    double maxFooterSize = footerHeaderSizeMax( theFrame );
                     wantedPosition = theFrame->top() - m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
-                    if ( wantedPosition != theFrame->top() && QMAX(theFrame->bottom()-maxFooterSize,wantedPosition)==wantedPosition )
+                    if ( wantedPosition != theFrame->top() &&
+                         ( theFrame->frameSet()->isFootEndNote() ||
+                           theFrame->bottom() - maxFooterSize <= wantedPosition ) ) // Apply maxFooterSize for footers only
                     {
                         theFrame->setTop( wantedPosition);
                         frameResized( theFrame, true );
+                        // We only got room for the next paragraph, we still have to keep the formatting going...
+                        m_textobj->formatMore();
+                        *abort = true;
+                        return;
                     }
                     break;
                 }
@@ -1668,7 +1675,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
             if ( lastFormatted )
             {
                 // Reformat the last paragraph. If it's over the two pages, it will need
-                // the new page (e.g. for inline frames that need itn to work)
+                // the new page (e.g. for inline frames that need internalToDocument to work)
                 if ( lastFormatted->prev() )
                 {
                     m_textobj->setLastFormattedParag( lastFormatted->prev() );
@@ -1792,7 +1799,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 
 void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
 {
-    //kdDebug() << "KWTextFrameSet::frameResized " << theFrame << endl;
+    kdDebug() << "KWTextFrameSet::frameResized " << theFrame << endl;
     if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
         m_doc->recalcFrames();
 
@@ -1807,6 +1814,7 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
     // m_doc->frameChanged( theFrame );
     // Warning, can't call layout() (frameChanged calls it)
     // from here, since it calls formatMore() !
+
     m_doc->updateAllFrames();
     if ( invalidateLayout )
         m_doc->invalidate();

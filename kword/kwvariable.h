@@ -29,6 +29,7 @@
 
 class KWDocument;
 class KWTextFrameSet;
+class KWFootNoteFrameSet;
 class KoVariable;
 class KoPgNumVariable;
 class KoMailMergeVariable;
@@ -112,8 +113,8 @@ public:
     virtual void drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
 
     /** The frameset that contains the text for this footnote */
-    KWTextFrameSet * frameSet() const { return m_frameset; }
-    void setFrameSet( KWTextFrameSet* fs ) { Q_ASSERT( !m_frameset ); m_frameset = fs; }
+    KWFootNoteFrameSet * frameSet() const { return m_frameset; }
+    void setFrameSet( KWFootNoteFrameSet* fs ) { Q_ASSERT( !m_frameset ); m_frameset = fs; }
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
@@ -136,7 +137,7 @@ public:
 private:
     KWDocument *m_doc;
     NoteType m_noteType;
-    KWTextFrameSet* m_frameset;
+    KWFootNoteFrameSet* m_frameset;
     Numbering m_numberingType;
     int m_num;
 };
