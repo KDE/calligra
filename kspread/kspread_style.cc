@@ -249,7 +249,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
     {
         m_bgColor = QColor(  styleStack.attributeNS( KoXmlNS::fo, "background-color" ) );
-        m_featuresSet |= SAlignY;
+        m_featuresSet |= SBackgroundColor;
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" )&&( styleStack.attributeNS( KoXmlNS::fo, "wrap-option" )=="wrap" ) )
@@ -966,6 +966,7 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
         style.addProperty( "style:vertical-align", ( alignY() == KSpreadFormat::Bottom ? "bottom" : "top" ) );
     }
 
+    //TODO FIXME not saved :(
     if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
         style.addProperty( "fo:background-color", m_bgColor.name() );
 
