@@ -19,7 +19,6 @@
 
 #include <qprinter.h> // has to be first
 
-// #include <iostream>
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>

@@ -1287,7 +1287,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
         }
         break;
     case ShortDate:
-    case TextDate :
+    case TextDate:
     case date_format1:
     case date_format2:
     case date_format3:
@@ -1329,8 +1329,6 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
 
     return localizedNumber;
 }
-
-
 
 void KSpreadCell::verifyCondition()
 {
@@ -1831,7 +1829,6 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate =false;
     m_bTime=false;
-    //m_strFormularOut = locale()->formatNumber( m_dValue );
 
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
@@ -1845,7 +1842,6 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate = false;
     m_bTime=false;
-    //m_strFormularOut = locale()->formatNumber( m_dValue );
 
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
@@ -3326,11 +3322,9 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 {
   QString oldText=m_strText;
   setDisplayText( _text, updateDepends );
-  bool result;
   if(!m_pTable->isLoading())
         {
-        result=testValidity();
-        if(!result)
+        if(!testValidity())
                 {
                 //reapply old value if action == stop
                 setDisplayText( oldText, updateDepends );
