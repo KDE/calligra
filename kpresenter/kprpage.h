@@ -74,11 +74,11 @@ public:
     /**
      * set the master page to masterPage
      */
-    void setMasterPage( const KPrPage masterPage );
+    void setMasterPage( KPrPage *_masterPage ) { m_masterPage = _masterPage; }
     /**
      * return the master page
      */
-    KPrPage * masterPage();
+    KPrPage * masterPage() const { return m_masterPage; }
 
     /**
      * @return the object of the page
