@@ -62,6 +62,20 @@ public:
   KImageShopDoc* doc();
   CORBA::Boolean printDlg();
 
+  int xPaintOffset();
+  int yPaintOffset();
+
+  int docWidth();
+  int docHeight();
+
+  int viewWidth();
+  int viewHeight();
+
+  int hScrollValue();
+  int vScrollValue();
+
+  void scrollTo(const QPoint & pos);
+
 public slots:
 
   void slotUpdateView(const QRect &area);

@@ -309,8 +309,8 @@ void KImageShopView::setupScrollbars()
   m_pVert->show();
   m_pHorz->show();
 
-  QObject::connect(m_pVert, SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
-  QObject::connect(m_pHorz, SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
+  QObject::connect(m_pVert, SIGNAL(sliderMoved(int)), this, SLOT(scrollV(int)));
+  QObject::connect(m_pHorz, SIGNAL(sliderMoved(int)), this, SLOT(scrollH(int)));
 
 }
 
@@ -333,13 +333,33 @@ void KImageShopView::setupRulers()
 void KImageShopView::scrollH(int)
 {
   m_pHRuler->setOffset(m_pHorz->value());
+  resizeEvent(0L);
   slotCVPaint(0L);
 }
 
 void KImageShopView::scrollV(int)
 {
   m_pVRuler->setOffset(m_pVert->value());
+  resizeEvent(0L);
   slotCVPaint(0L);
+}
+
+void KImageShopView::scrollTo(const QPoint &pos)
+{
+  m_pHorz->setValue(pos.x());
+  m_pVert->setValue(pos.y());
+  resizeEvent(0L);
+  m_pCanvasView->repaint();
+}
+
+int KImageShopView::hScrollValue()
+{
+  return m_pHorz->value();
+}
+
+int KImageShopView::vScrollValue()
+{
+  return m_pVert->value();
 }
 
 void KImageShopView::newView()
@@ -372,99 +392,112 @@ CORBA::Boolean KImageShopView::printDlg()
   return true;
 }
 
+int KImageShopView::viewWidth()
+{
+  return m_pCanvasView->width();
+}
+
+int KImageShopView::viewHeight()
+{
+  return m_pCanvasView->height();
+}
+
+int KImageShopView::docWidth()
+{
+  return static_cast<int>(m_pDoc->width() * m_ZoomFactor);
+}
+
+int KImageShopView::docHeight()
+{
+  return static_cast<int>(m_pDoc->height() * m_ZoomFactor);
+}
+
+int KImageShopView::xPaintOffset()
+{
+  return (viewWidth() > docWidth()) ? static_cast<int>((viewWidth() -  docWidth())/2) : 0;
+}
+
+int KImageShopView::yPaintOffset()
+{
+  return (viewHeight() > docHeight()) ? static_cast<int>((viewHeight() - docHeight())/2) : 0;
+}
+
 void KImageShopView::resizeEvent(QResizeEvent*)
 {
   if ((KoViewIf::hasFocus() || mode() == KOffice::View::RootMode))
     {
-      int docHeight = static_cast<int>(m_pDoc->height() * m_ZoomFactor);
-      int docWidth = static_cast<int>(m_pDoc->width() * m_ZoomFactor);
-
       m_pHRuler->show();
       m_pVRuler->show();
-
       m_pCanvasView->move(20, 20);
 
-      if (docHeight <= (height() - 20) && docWidth <= (width() - 20))
+      // KImageShopView heigth/width - ruler heigth/width
+      int viewH = height() - 20;
+      int viewW = width() - 20;
+
+      // scrollbar and canvasview geometry
+      if (docHeight() <= viewH && docWidth() <= viewW) // we need no scrollbars
 	{
 	  m_pVert->hide();
 	  m_pHorz->hide();
 	  m_pVert->setValue(0);
 	  m_pHorz->setValue(0);
+	  m_pCanvasView->resize(width() - 20, height() - 20);
 	}
-      else if (docHeight <= (height() - 20))
+      else if (docHeight() <= viewH) // we need a horizontal scrollbar
 	{
 	  m_pVert->hide();
 	  m_pVert->setValue(0);
-	  m_pHorz->setRange(0, docWidth - width() + 20);
+	  m_pHorz->setRange(0, docWidth() - viewW);
+	  m_pHorz->setGeometry(0, height() - 16, width(), 16);
 	  m_pHorz->show();
+	  m_pCanvasView->resize(width() - 20, height() - 36);
+
 	}
-      else if(docWidth <= (width() - 20))
+      else if(docWidth() <= viewW) // we need a vertical scrollbar
 	{
 	  m_pHorz->hide();
 	  m_pHorz->setValue(0);
-	  m_pVert->setRange(0, docHeight - height() + 20);
+	  m_pVert->setRange(0, docHeight() - viewH);
+	  m_pVert->setGeometry(width() - 16, 0, 16, height());
 	  m_pVert->show();
+	  m_pCanvasView->resize(width() - 36, height() - 20);
 	}
-      else
+      else // we need both scrollbars
 	{
-	  m_pVert->setRange(0, docHeight - height() + 36);
+	  m_pVert->setRange(0, docHeight() - viewH + 16);
+	  m_pVert->setGeometry(width() - 16, 0, 16, height() - 16);
 	  m_pVert->show();
-	  m_pHorz->setRange(0, docWidth - width() + 36);
+	  m_pHorz->setRange(0, docWidth() - viewW + 16);
+	  m_pHorz->setGeometry(0, height() - 16, width() - 16, 16);
 	  m_pHorz->show();
+	  m_pCanvasView->resize(width() - 36, height() - 36);
 	}
-	
-      if (m_pHorz->isVisible() && m_pVert->isVisible())
-	m_pCanvasView->resize( width() - 36, height() - 36 );
-      else if (m_pHorz->isVisible())
-	m_pCanvasView->resize( width() - 20, height() - 36 );
-      else if (m_pVert->isVisible())
-	m_pCanvasView->resize( width() - 36, height() - 20 );
-      else
-	m_pCanvasView->resize( width() - 20, height() - 20 );
-
-      m_pHRuler->setGeometry(20, 0, m_pCanvasView->width(), 20);
-      m_pVRuler->setGeometry(0, 20, 20, m_pCanvasView->height());
-
-      if (docHeight > height())
-	m_pVRuler->setRange(-docHeight, docHeight);
-      else
-	m_pVRuler->setRange(-height(), height());
-
-      if (docWidth > width())
-	m_pHRuler->setRange(-docWidth, docWidth);
-      else
-	m_pHRuler->setRange(-width(), width());
       
-      if(!m_pVert->isVisible())
-	m_pVRuler->setOffset(-(m_pCanvasView->height() - docHeight)/2);
-      else
-	m_pVRuler->setOffset(0);
+      // ruler geometry
+      m_pHRuler->setGeometry(20, 0, viewWidth(), 20);
+      m_pVRuler->setGeometry(0, 20, 20, viewHeight());
 
-      if(!m_pHorz->isVisible())
-	m_pHRuler->setOffset(-(m_pCanvasView->width() -  docWidth)/2);
+      // ruler ranges
+      m_pVRuler->setRange(0, docHeight());
+      m_pHRuler->setRange(0, docWidth());
+      
+      // ruler offset
+      if(m_pVert->isVisible())
+	m_pVRuler->setOffset(m_pVert->value());
       else
-	m_pHRuler->setOffset(0);
-  
+	m_pVRuler->setOffset(-yPaintOffset());
 
-      if (m_pHorz->isVisible())
-	m_pVert->setGeometry(width() - 16, 0, 16, height() - 16);
+      if(m_pHorz->isVisible())
+	m_pHRuler->setOffset(m_pHorz->value());
       else
-	m_pVert->setGeometry(width() - 16, 0, 16, height());
-
-      if (m_pVert->isVisible())
-	m_pHorz->setGeometry(0, height() - 16, width() - 16, 16);
-      else
-	m_pHorz->setGeometry(0, height() - 16, width(), 16);
+	m_pHRuler->setOffset(-xPaintOffset());
     }
   else
     {
       m_pHorz->hide();
       m_pVert->hide();
-
-      if ( m_pHRuler )
-	m_pHRuler->hide();
-      if ( m_pVRuler )
-	m_pVRuler->hide();
+      m_pHRuler->hide();
+      m_pVRuler->hide();
 
       m_pCanvasView->move(0, 0);
       m_pCanvasView->resize(widget()->width(), widget()->height());
@@ -559,20 +592,16 @@ void KImageShopView::slotUpdateView(const QRect &_area) // _area in canvas coord
   // offset
   QPoint offset(static_cast<int>(m_pHorz->value()/m_ZoomFactor), static_cast<int>(m_pVert->value()/m_ZoomFactor));
 
-  // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width() * m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width()*m_ZoomFactor)/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height() * m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->height() - m_pDoc->height()*m_ZoomFactor)/2) : 0;
-  
   // repaint
-  m_pDoc->paintPixmap(m_pCanvasView, area, offset, QPoint(x,y), m_ZoomFactor);
+  m_pDoc->paintPixmap(m_pCanvasView, area, offset, QPoint(xPaintOffset(),yPaintOffset()), m_ZoomFactor);
 }
 
 void KImageShopView::slotCVPaint(QPaintEvent *)
 {
-  // repaint the whole canvasview
-  slotUpdateView(QRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width()/m_ZoomFactor, m_pCanvasView->height()/m_ZoomFactor));
+  // viewrect in canvas coordinates
+  QRect viewRect(static_cast<int>(m_pHorz->value()/m_ZoomFactor), static_cast<int>(m_pVert->value()/m_ZoomFactor), m_pCanvasView->width()/m_ZoomFactor, m_pCanvasView->height()/m_ZoomFactor);
+ 
+  slotUpdateView(viewRect);
 }
 
 void KImageShopView::slotCVMousePress(QMouseEvent *e)
@@ -580,16 +609,10 @@ void KImageShopView::slotCVMousePress(QMouseEvent *e)
   if(!m_pTool)
     return;
 
-  // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width() * m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width()*m_ZoomFactor)/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height() * m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->height() - m_pDoc->height()*m_ZoomFactor)/2) : 0;
-
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
-  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - x;
-  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - y;
+  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - xPaintOffset();
+  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - yPaintOffset();
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -609,16 +632,10 @@ void KImageShopView::slotCVMouseMove(QMouseEvent *e)
   if(!m_pTool)
     return;
 
-  // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width() * m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width()*m_ZoomFactor)/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height() * m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->height() - m_pDoc->height()*m_ZoomFactor)/2) : 0;
-
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
-  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - x;
-  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - y;
+  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - xPaintOffset();
+  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - yPaintOffset();
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -632,8 +649,8 @@ void KImageShopView::slotCVMouseMove(QMouseEvent *e)
 
   m_pTool->mouseMove(mouseEvent);
   
-  m_pHRuler->slotNewValue(e->x() - x);
-  m_pVRuler->slotNewValue(e->y() - y);
+  m_pHRuler->slotNewValue(e->x() - xPaintOffset());
+  m_pVRuler->slotNewValue(e->y() - yPaintOffset());
 }
 
 void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
@@ -641,16 +658,10 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
   if(!m_pTool)
     return;
 
-  // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width() * m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width()*m_ZoomFactor)/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height() * m_ZoomFactor) ?
-    static_cast<int>((m_pCanvasView->height() - m_pDoc->height()*m_ZoomFactor)/2) : 0;
-
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
-  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - x;
-  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - y;
+  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - xPaintOffset();
+  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - yPaintOffset();
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -667,7 +678,7 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
 
 void KImageShopView::slotSetZoomFactor(float zoomFactor)
 {
-  // avoid divide by null
+  // avoid divide by zero
   if (zoomFactor == 0)
     m_ZoomFactor = 1;
 
@@ -683,7 +694,6 @@ void KImageShopView::slotSetZoomFactor(float zoomFactor)
     return;
 
   m_ZoomFactor = zoomFactor;
-  resizeEvent(0L);
 }
 
 void KImageShopView::editUndo()

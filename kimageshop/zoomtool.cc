@@ -18,8 +18,10 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "zoomtool.h"
+#include "qpoint.h"
+
 #include "kimageshop_doc.h"
+#include "zoomtool.h"
 
 ZoomTool::ZoomTool(KImageShopView *view) : Tool(0L, view){}
 ZoomTool::~ZoomTool() {}
@@ -39,6 +41,14 @@ void ZoomTool::mousePress(const KImageShop::MouseEvent& e)
     zf*=2;
   
   m_pView->slotSetZoomFactor(zf);
+
+  int x = static_cast<int>(e.posX*zf - m_pView->viewWidth()/2);
+  int y = static_cast<int>(e.posY*zf - m_pView->viewHeight()/2);
+
+  if (x < 0) x = 0;
+  if (y < 0) y = 0;
+
+  m_pView->scrollTo(QPoint(x,y));
 }
 
 void ZoomTool::mouseMove(const KImageShop::MouseEvent& e){}
