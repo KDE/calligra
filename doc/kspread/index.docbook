@@ -37,7 +37,7 @@ It is part of the KOffice suite of utilities.
 
 </bookinfo>
 
-<chapter ID="todo">
+<chapter id="todo">
 <title>Still to be done on this manual</title>
 
 <para>This is a list of things which still need work in this manual:</para>
@@ -196,7 +196,7 @@ STUFF</para></sect1>
 <chapter id="fundamental"><title>Fundamentals</title><para>This next section is designed to introduce
  you to:
 
-<orderedlist Numeration="Arabic">
+<orderedlist numeration="arabic">
 <listitem><para><link linkend="StartingKSpread">How to start KSpread</link></para></listitem>
 <listitem><para>Rest deleted, will see to that later</para></listitem>
 </orderedlist></para>

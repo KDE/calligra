@@ -350,8 +350,8 @@ exactly as it would look if printed.
 </term>
 <listitem>
 <para>
-<action>Allows you to enter <quote>meta</quote> information about the
-document.</action>  This includes information about the author, and an
+Allows you to enter <quote>meta</quote> information about the
+document. This includes information about the author, and an
 abstract on the documents contents.
 </para>
 </listitem>
