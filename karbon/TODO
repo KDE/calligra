@@ -21,7 +21,6 @@ REAL BUGS:
 -	fix i18n singular/plural
 -	copying works wrong: the last selected shape is pasted instead of the shape one copied
 -	crashes in vtext
--	crash in VRoundCornersCmd
 -	make curve1To, curve2To work
 
 TODO:

@@ -120,6 +120,7 @@ public:
 	 * Returns index of the node at point p. Returns 0 of none
 	 * matches.
 	 */
+// TODO: Move this function into "userland"
 	uint nodeNear( const KoPoint& p,
 		double isNearRange = VGlobal::isNearRange ) const;
 

@@ -82,7 +82,7 @@ VSegment::VSegment( VSegmentType type )
 
 VSegment::VSegment( const VSegment& segment )
 {
-	// Copying the pointers m_prev/m_next has some advantages ( see vsegment::length() ).
+	// Copying the pointers m_prev/m_next has some advantages (see VSegment::length()).
 	// Inserting a segment into a path overwrites these anyway.
 	m_prev = segment.m_prev;
 	m_next = segment.m_next;
@@ -267,9 +267,9 @@ VSegment::length( double t ) const
 	else if( m_type == curve )
 	{
 		// This algortihm is based on an idea by Jens Gravesen <gravesen@mat.dth.dk>.
-		// We calculate the chord length chord=|P0P3| and the length of the control point
-		// polygon poly=|P0P1|+|P1P2|+|P2P3|. The approximation for the bezier length is
-		// 0.5 * poly + 0.5 * chord. poly - chord is a measure for the error.
+		// We calculate the chord length "chord"=|P0P3| and the length of the control point
+		// polygon "poly"=|P0P1|+|P1P2|+|P2P3|. The approximation for the bezier length is
+		// 0.5 * poly + 0.5 * chord. "poly - chord" is a measure for the error.
 		// We subdivide each segment until the error is smaller than a given tolerance
 		// and add up the subresults.
 
@@ -479,8 +479,9 @@ VSegment::splitAt( double t )
 	segment->m_node[2] =
 		segment->m_node[1] + ( p1 - segment->m_node[1] ) * t;
 
-	// Set the new segment type.
+	// Set the new segment type and state.
 	segment->m_type = curve;
+	segment->m_state = m_state;
 
 	return segment;
 }
@@ -533,6 +534,7 @@ VSegment::linesIntersect(
 	return true;
 }
 
+// TODO: Move this function into "userland"
 uint
 VSegment::nodeNear( const KoPoint& p, double isNearRange ) const
 {

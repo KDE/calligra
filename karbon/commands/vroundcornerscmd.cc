@@ -35,14 +35,17 @@ VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
 void
 VRoundCornersCmd::visitVPath( VPath& path )
 {
-	// Note: we change segments from path. that doesnt hurt, since we
-	// replace path with newPath afterwards.
+	// Optimize and avoid a crash.
+	if( path.isEmpty() )
+		return;
 
-	// Temporary path:
+	// Note: we modiy segments from path. that doesnt hurt, since we
+	// replace "path" with the temporary path "newPath" afterwards.
+
 	VPath newPath( 0L );
 
 	path.first();
-	// skip "begin":
+	// Skip "begin".
 	path.next();
 
 	// Description of the algorithm:
@@ -73,7 +76,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	//
 	// 1) Begin
 	//    -----
-	//    Split the first segment of path (called "path[1]" here)
+	//    Split the first segment of the first path (called "path[1]" here)
 	//    at parameter t and move newPath to this new knot. While
 	//
 	//        t = path[1]->param( m_radius )
@@ -132,7 +135,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	double length;
 	double param;
 
-	// Begin step.
+	// "Begin" step.
 	if(
 		path.isClosed() &&
 		!(
@@ -165,7 +168,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	}
 
 
-	// Middle step.
+	// "Middle" step.
 	while(
 		path.current() &&
 		path.current()->next() )
@@ -201,7 +204,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 				path.current()->splitAt( param ) );
 
 
-			// Round corner:
+			// Round corner.
 			newPath.curveTo(
 				path.current()->prev()->point( 0.5 ),
 				path.current()->point( 0.5 ),
@@ -218,7 +221,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	}
 
 
-	// End step.
+	// "End" step.
 	if( path.isClosed() )
 	{
 		if(
@@ -242,7 +245,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 			path.first();
 			path.next();
 
-			// Round corner:
+			// Round corner.
 			newPath.curveTo(
 				path.getLast()->point( 0.5 ),
 				path.current()->point( 0.5 ),
@@ -263,6 +266,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 
 	path = newPath;
 
-	// invalidate bounding box once:
+	// Invalidate bounding box once.
 	path.invalidateBoundingBox();
 }
+
