@@ -1,5 +1,5 @@
 
-INCLUDES = -I. -I./winword97 $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) \
+INCLUDES = -I$(srcdir) -I$(srcdir)/winword97 $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) \
            $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ./winword97/libwinword97.la $(LIB_KOFFICECORE)

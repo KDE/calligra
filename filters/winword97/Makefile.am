@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES=	-I. -I.. $(all_includes) $(MICO_INCLUDES)
+INCLUDES=	-I$(srcdir) -I$(srcdir)/.. $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	=	$(all_libraries) -version-info 1:0:0
 
 ####### Files
