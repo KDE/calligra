@@ -1,4 +1,4 @@
-koffice (1:1.2.90-1) unstable; urgency=low
+koffice (1:1.2.91-1) unstable; urgency=low
 
   * New upstream release (1.3-beta1).
   * New binary packages kexi and krita.
@@ -17,9 +17,10 @@ koffice (1:1.2.90-1) unstable; urgency=low
   * KPresenter now handles transparent images correctly (closes: #184598).
   * KWord HTML export is no longer white-on-white (closes: #184421).
   * Support for openoffice imports/exports (closes: #188779).
+  * Libtool updated (closes: #194303).
   * Thanks to James Greenhalgh for helping start this build.
 
- -- Ben Burton <bab@debian.org>  Fri,  9 May 2003 17:19:37 +1000
+ -- Ben Burton <bab@debian.org>  Sun,  8 Jun 2003 12:01:13 +1000
 
 koffice (1:1.2.1-5) unstable; urgency=low
 
