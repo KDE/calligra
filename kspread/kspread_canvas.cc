@@ -2177,6 +2177,34 @@ void KSpreadHBorder::resizeColumn(int resize,int nb  )
     }
 }
 
+void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * _ev )
+{
+	KSpreadTable *table = m_pCanvas->activeTable();
+	assert( table );
+
+	int x = 0;
+	int col = table->leftColumn( 0, x, m_pCanvas );
+	
+	while ( x < width() )
+	{
+		int w = table->columnLayout( col )->width( m_pCanvas );
+		col++;
+		if ( _ev->pos().x() >= x + w - 1 && _ev->pos().x() <= x + w + 1 )
+		{
+			m_bSelection = TRUE;
+			table->unselect();
+			m_iSelectionAnchor = --col;	
+			QRect r;
+			r.setCoords( col, 1, col, 0x7FFF );
+			table->setSelection( r, m_pCanvas );
+			m_bSelection = FALSE;
+			adjustColumn();
+			return;
+		}
+		x += w;
+    }
+}
+
 void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = m_pCanvas->activeTable();

@@ -444,7 +444,8 @@ protected:
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
-    virtual void mouseMoveEvent( QMouseEvent* _ev );
+    virtual void mouseDoubleClickEvent( QMouseEvent* _ev );
+	virtual void mouseMoveEvent( QMouseEvent* _ev );
 
     KSpreadCanvas *m_pCanvas;
     KSpreadView *m_pView;
