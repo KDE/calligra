@@ -171,13 +171,17 @@ KWChar* KWString::split(unsigned int _pos)
 QString KWString::toString(unsigned int _pos,unsigned int _len)
 {
   QString str = "";
-  
+  char c = 1;
+
   if (_pos + _len <= _len_)
     {
       for (unsigned int i = _pos;i <= _len + _pos;i++)
 	{
 	  if (static_cast<int>(i) > static_cast<int>(size() - 1)) break;
-	  str += _data_[i].c;
+	  if (_data_[i].c != 0)
+	    str += _data_[i].c;
+	  else
+	    str += c;
 	}
     }
 
@@ -399,10 +403,88 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
   return __data;
 }
 
-int KWString::find(QString _expr,int _index,bool _cs)
+int KWString::find(QString _expr,KWFormat *_format,int _index,bool _cs)
 {
   QString str = toString(0,size());
-  return str.find(_expr,_index,_cs);
+  int res = str.find(_expr,_index,_cs);
+
+  if (res != -1)
+    {
+      if (!_format) return res;
+
+      for (unsigned int i = 0;i < _expr.length();i++)
+	{	
+	  if (_data_[i + res].attrib->getClassId() != ID_KWCharFormat)
+	    return -1;
+	  if (*(dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat()) != *_format)
+	    return -1;
+	}
+      return res;
+    }
+  else return -1;
+}
+
+int KWString::find(QRegExp _regexp,KWFormat *_format,int _index)
+{
+  QString str = toString(0,size());
+  int res = str.find(_regexp,_index);
+
+  if (res != -1)
+    {
+//       if (!_format) return res;
+
+//       for (unsigned int i = 0;i < _expr.length();i++)
+// 	{	
+// 	  if (_data_[i + res].attrib->getClassId() != ID_Format)
+// 	    return -1;
+// 	  if (*(dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat()) != *_format)
+// 	    return -1;
+// 	}
+      return res;
+    }
+  else return -1;
+}
+
+int KWString::findRev(QString _expr,KWFormat *_format,int _index,bool _cs)
+{
+  QString str = toString(0,size());
+  int res = str.findRev(_expr,_index,_cs);
+
+  if (res != -1)
+    {
+      if (!_format) return res;
+
+      for (unsigned int i = 0;i < _expr.length();i++)
+	{	
+	  if (_data_[i + res].attrib->getClassId() != ID_KWCharFormat)
+	    return -1;
+	  if (*(dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat()) != *_format)
+	    return -1;
+	}
+      return res;
+    }
+  else return -1;
+}
+
+int KWString::findRev(QRegExp _regexp,KWFormat *_format,int _index)
+{
+  QString str = toString(0,size());
+  int res = str.findRev(_regexp,_index);
+
+  if (res != -1)
+    {
+//       if (!_format) return res;
+
+//       for (unsigned int i = 0;i < _expr.length();i++)
+// 	{	
+// 	  if (_data_[i + res].attrib->getClassId() != ID_Format)
+// 	    return -1;
+// 	  if (*(dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat()) != *_format)
+// 	    return -1;
+// 	}
+      return res;
+    }
+  else return -1;
 }
 
 void freeChar( KWChar& _char )

@@ -168,6 +168,9 @@ public:
   void setPartEntry(KoDocumentEntry e) { partEntry = e; }
 
   void clear() { buffer.fill(white); drawBuffer(); }
+
+  bool find(QString _expr,KWFormat *_format,bool _first = true,bool _cs = false);
+  bool findRev(QString _expr,KWFormat *_format,bool _first = true,bool _cs = false);
   
 public slots:
   void newLeftIndent(int _left); 
@@ -230,6 +233,8 @@ protected:
   void setupMenus();
   void mmUncheckAll();
 
+  void selectText(int _pos,int _len,int _frameSetNum,KWTextFrameSet *_frameset,KWParag *_parag);
+
   KWordDocument *doc;
   bool markerIsVisible;
   bool paint_directly,has_to_copy;
@@ -283,6 +288,10 @@ protected:
 
   KoDocumentEntry partEntry;
   int editNum;
+
+  KWParag *currFindParag;
+  int currFindPos;
+  int currFindFS;
 
 };
 

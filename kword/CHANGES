@@ -585,3 +585,7 @@ Reggie, 30.12.1998:
 -------------------
 - Cleanups
 - Implemented internals for searching and replacing text (will be used for autoformat too)
+
+Reggie, 1.1.1999:
+-----------------
+- More work on searching and replacing text (internals seems to work now - only the dialog is missing :-)

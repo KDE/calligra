@@ -141,7 +141,10 @@ public:
     void applyStyle(QString _style);
     void tabListChanged(QList<KoTabulator>*);
 
-    int find(QString _expr,int _index,bool _cs);
+    int find(QString _expr,KWFormat *_format,int _index,bool _cs);
+    int find(QRegExp _regexp,KWFormat *_format,int _index);
+    int findRev(QString _expr,KWFormat *_format,int _index,bool _cs);
+    int findRev(QRegExp _regexp,KWFormat *_format,int _index);
     void replace(int _pos,int _len,QString _text,KWFormat &_format);
 
 protected:

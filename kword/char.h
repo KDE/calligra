@@ -6,6 +6,7 @@
 
 #include <qimage.h>
 #include <qstring.h>
+#include <qregexp.h>
 
 #include <iostream>
 
@@ -127,7 +128,10 @@ public:
   void saveFormat(ostream &out);
   void loadFormat(KOMLParser&,vector<KOMLAttrib>&,KWordDocument*,KWTextFrameSet*);
 
-  int find(QString _expr,int _index,bool _cs);
+  int find(QString _expr,KWFormat *_format,int _index,bool _cs);
+  int find(QRegExp _regexp,KWFormat *_format,int _index);
+  int findRev(QString _expr,KWFormat *_format,int _index,bool _cs);
+  int findRev(QRegExp _regexp,KWFormat *_format,int _index);
 
 protected:
   KWChar* alloc(unsigned int _size);

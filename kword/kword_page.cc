@@ -73,6 +73,10 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   frameDia = 0;
   pixmap_name = "";
   doRaster = true;
+
+  currFindParag = 0L;
+  currFindPos = 0;
+  currFindFS = 0;
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
@@ -790,7 +794,7 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 	  fc->cursorGotoPixelLine(mx,my,_painter);
 	  fc->cursorGotoPixelInLine(mx,my,_painter);
 	  
-	  KWFormatContext fc1(doc,fc->getFrameSet() - 1),fc2(doc,fc->getFrameSet() - 1);
+	  KWFormatContext fc1(doc,fc->getFrameSet()),fc2(doc,fc->getFrameSet());
 	  fc->selectWord(fc1,fc2,_painter);
 	  
 	  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
@@ -2197,7 +2201,7 @@ void KWPage::formatChanged(KWFormat &_format,bool _redraw = true)
       
       doc->setSelection(false);
       doc->setFormat(format);
-      KWFormatContext fc1(doc,doc->getSelStart()->getFrameSet() - 1),fc2(doc,doc->getSelEnd()->getFrameSet() - 1);
+      KWFormatContext fc1(doc,doc->getSelStart()->getFrameSet()),fc2(doc,doc->getSelEnd()->getFrameSet());
       fc1 = *doc->getSelStart();
       fc2 = *doc->getSelEnd();
       recalcCursor(false,-1,&fc1);
@@ -2892,3 +2896,115 @@ void KWPage::tabListChanged(QList<KoTabulator> *_tablist)
   recalcCursor(); 
 }
 
+/*================================================================*/
+bool KWPage::find(QString _expr,KWFormat *_format,bool _first = true,bool _cs = false)
+{
+  debug("find start");
+  if (_first || !currFindParag)
+    {
+      for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+	{
+	  if (doc->getFrameSet(i)->getFrameType() == FT_TEXT)
+	    {
+	      currFindParag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getFirstParag();
+	      currFindPos = 0;
+	      currFindFS = i;
+	      debug("  => frameset: %d, parag: %p, pos: %d",currFindFS,currFindParag,currFindPos);
+	      break;
+	    }
+	}
+    }
+
+  while (true)
+    {
+      currFindPos = currFindParag->find(_expr,_format,currFindPos,_cs);
+      if (currFindPos != -1)
+	{
+	  debug("  => `%s' found at %d",_expr.data(),currFindPos);
+	  debug("  => select text - pos: %d, len: %d, frameset: %d",currFindPos,_expr.length(),currFindFS);
+	  selectText(currFindPos,_expr.length(),currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag);
+	  debug("find end (true)");
+	  return true;
+	}
+      else
+	{
+	  debug("  => `%s' not found",_expr.data());
+	  if (currFindParag->getNext())
+	    {
+	      currFindParag = currFindParag->getNext();
+	      currFindPos = 0;
+	      debug("  => goto next parag %p, pos: %d",currFindParag,currFindPos);
+	    }
+	  else if (!currFindParag->getNext() && currFindFS <= static_cast<int>(doc->getNumFrameSets()))
+	    {
+	      debug("  => trying to find next textframe set");
+	      currFindPos = -1;
+	      for (unsigned int i = currFindFS + 1;i < doc->getNumFrameSets();i++)
+		{
+		  if (doc->getFrameSet(i)->getFrameType() == FT_TEXT)
+		    {
+		      currFindParag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getFirstParag();
+		      currFindPos = 0;
+		      currFindFS = i;
+		      debug("  => found next textframeset: frameset: %d, parag: %p, pos: %d",currFindFS,currFindParag,currFindPos);
+		      break;
+		    }
+		}
+	      if (currFindPos == -1) 
+		{
+		  debug("  => couldn't find a new textframeset");
+		  debug("find end (false)");
+		  return false;
+		}
+	    }
+	  else 
+	    {
+	      debug("  => no hope to find anything... giving up");
+	      debug("find end (false)");
+	      return false;
+	    }
+	}
+    }
+}
+
+/*================================================================*/
+bool KWPage::findRev(QString _expr,KWFormat *_format,bool _first = true,bool _cs = false)
+{
+}
+
+/*================================================================*/
+void KWPage::selectText(int _pos,int _len,int _frameSetNum,KWTextFrameSet *_frameset,KWParag *_parag)
+{
+  QPainter p;
+  p.begin(this);
+
+  doc->drawMarker(*fc,&p,xOffset,yOffset);
+
+  KWFormatContext fc1(doc,_frameSetNum + 1);
+  KWFormatContext fc2(doc,_frameSetNum + 1);
+
+  fc1.init(_parag,p,true,true);
+  fc2.init(_parag,p,true,true);
+
+  fc1.gotoStartOfParag(p);
+  fc1.cursorGotoLineStart(p);
+  fc2.gotoStartOfParag(p);
+  fc2.cursorGotoLineStart(p);
+  fc1.cursorGotoRight(p,_pos);
+  fc2 = fc1;
+  fc2.cursorGotoRight(p,_len);
+  *fc = fc1;
+
+  doc->setSelStart(fc1);
+  doc->setSelEnd(fc2);
+  doc->setSelection(true);
+  doc->drawSelection(p,xOffset,yOffset);
+
+  p.end();
+  scrollToCursor(*fc);
+  p.begin(this);
+
+  doc->drawMarker(*fc,&p,xOffset,yOffset);
+
+  p.end();
+}

@@ -614,6 +614,7 @@ void KWordView::editSelectAll()
 /*===============================================================*/
 void KWordView::editFind()
 {
+  gui->getPaperWidget()->find("Hallo",0L,true,false);
 }
 
 /*===============================================================*/
