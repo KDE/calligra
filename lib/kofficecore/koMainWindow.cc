@@ -536,7 +536,7 @@ bool KoMainWindow::queryClose()
   if ( rootDocument() == 0 )
     return true;
   //kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
-                 << " shellcount=" << rootDocument()->shellCount() << endl;
+  //               << " shellcount=" << rootDocument()->shellCount() << endl;
   if ( !d->m_forQuit && rootDocument()->shellCount() > 1 )
     // there are more open, and we are closing just one, so no problem for closing
     return true;
