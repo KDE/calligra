@@ -33,12 +33,170 @@
 #include <qpixmap.h>
 #include <qcolor.h>
 #include <qpushbutton.h>
+#include <qtimer.h>
 #include <kurlrequester.h>
 
 
 #include <qobjectlist.h>
 
 #include "kexiformbase.h"
+
+
+
+KexiFormBaseResizeHandle::KexiFormBaseResizeHandle(QWidget *parent,QWidget *buddy, HandlePos pos):QWidget(parent)
+{
+	m_dragging=false;
+	setBackgroundColor(black);
+	setFixedWidth(6);
+	setFixedHeight(6);
+	m_pos=pos;	
+	m_buddy=buddy;
+	buddy->installEventFilter(this);
+	updatePos();
+	show();
+}
+
+void KexiFormBaseResizeHandle::updatePos()
+{
+	switch (m_pos)
+	{
+		case TopLeft: 		move(m_buddy->x(),m_buddy->y());
+					setCursor(QCursor(SizeFDiagCursor));
+					break;
+		case TopCenter: 	move(m_buddy->x()+m_buddy->width()/2-3,m_buddy->y());
+					setCursor(QCursor(SizeVerCursor));
+					break;
+		case TopRight: 		move(m_buddy->x()+m_buddy->width()-6,m_buddy->y());
+					setCursor(QCursor(SizeBDiagCursor));
+					break;
+		case LeftCenter: 	move(m_buddy->x(),m_buddy->y()+m_buddy->height()/2-3);
+					setCursor(QCursor(SizeHorCursor));
+					break;
+		case RightCenter: 	move(m_buddy->x()+m_buddy->width()-6,m_buddy->y()+m_buddy->height()/2-3);
+					setCursor(QCursor(SizeHorCursor));
+					break;
+		case BottomLeft: 	move(m_buddy->x(),m_buddy->y()+m_buddy->height()-6);
+					setCursor(QCursor(SizeBDiagCursor));
+					break;
+		case BottomCenter: 	move(m_buddy->x()+m_buddy->width()/2-3,m_buddy->y()+m_buddy->height()-6);
+					setCursor(QCursor(SizeVerCursor));
+					break;
+		case BottomRight:	move(m_buddy->x()+m_buddy->width()-6,m_buddy->y()+m_buddy->height()-6);
+				  	setCursor(QCursor(SizeFDiagCursor));
+					break;
+
+	}	
+
+}
+
+
+bool KexiFormBaseResizeHandle::eventFilter(QObject *obj, QEvent *ev)
+{
+	if ((ev->type()==QEvent::Move) || (ev->type()==QEvent::Resize))
+	{
+		QTimer::singleShot(0,this,SLOT(updatePos()));
+	}
+	return false;
+}
+
+void KexiFormBaseResizeHandle::mousePressEvent(QMouseEvent *ev)
+{
+	m_dragging=true;
+	m_x=ev->x();
+	m_y=ev->y();
+}
+
+void KexiFormBaseResizeHandle::mouseMoveEvent(QMouseEvent *ev)
+{
+	int m_dotSpacing=10;
+	if (!m_dragging) return;
+
+	int tmpx=m_buddy->x();
+	int tmpy=m_buddy->y();
+	int tmpw=m_buddy->width();
+	int tmph=m_buddy->height();
+	int dummyx=ev->x()-m_x;
+	int dummyy=ev->y()-m_y;
+        dummyy = (((float)dummyy)/((float)m_dotSpacing)+0.5);
+        dummyy*=m_dotSpacing;
+        dummyx = (((float)dummyx)/((float)m_dotSpacing)+0.5);
+        dummyx*=m_dotSpacing;
+
+	switch (m_pos)
+	{
+		case TopRight:
+				tmpw=tmpw+dummyx;
+				tmpy=tmpy+dummyy;
+				tmph=tmph-dummyy;
+			break;
+		case RightCenter:
+				tmpw=tmpw+dummyx;
+			break;
+		case BottomRight:
+				tmpw=tmpw+dummyx;
+				tmph=tmph+dummyy;
+			break;
+		case TopCenter:
+				tmpy=tmpy+dummyy;
+				tmph=tmph-dummyy;
+			break;
+		case BottomCenter:
+				tmph=tmph+dummyy;
+			break;
+		case TopLeft:
+				tmpx=tmpx+dummyx;
+				tmpw=tmpw-dummyx;
+				tmpy=tmpy+dummyy;
+				tmph=tmph-dummyy;
+			break;
+		case LeftCenter:
+				tmpx=tmpx+dummyx;
+				tmpw=tmpw-dummyx;
+			break;
+		case BottomLeft:
+				tmpx=tmpx+dummyx;
+				tmpw=tmpw-dummyx;
+				tmph=tmph+dummyy;
+			break;
+	}
+
+	if ( (tmpx!=m_buddy->x()) || (tmpy!=m_buddy->y()) )
+		m_buddy->move(tmpx,tmpy);
+
+	if ( (tmpw!=m_buddy->width()) || (tmph!=m_buddy->height()) )
+		m_buddy->resize(tmpw,tmph);
+
+}
+
+void KexiFormBaseResizeHandle::mouseReleaseEvent(QMouseEvent *ev)
+{
+	m_dragging=false;
+}
+
+
+
+KexiFormBaseResizeHandle::~KexiFormBaseResizeHandle()
+{
+}
+
+KexiFormBaseResizeHandleSet::KexiFormBaseResizeHandleSet(QWidget *modify):QObject(modify->parentWidget()),m_widget(modify)
+{
+	QWidget *parent=modify->parentWidget();
+	handles[0]=new KexiFormBaseResizeHandle(parent,modify,KexiFormBaseResizeHandle::TopLeft);
+	handles[1]=new KexiFormBaseResizeHandle(parent,modify,KexiFormBaseResizeHandle::TopCenter);
+	handles[2]=new KexiFormBaseResizeHandle(parent,modify,KexiFormBaseResizeHandle::TopRight);
+	handles[3]=new KexiFormBaseResizeHandle(parent,modify,KexiFormBaseResizeHandle::LeftCenter);
+	handles[4]=new KexiFormBaseResizeHandle(parent,modify,KexiFormBaseResizeHandle::RightCenter);
+	handles[5]=new KexiFormBaseResizeHandle(parent,modify,KexiFormBaseResizeHandle::BottomLeft);
+	handles[6]=new KexiFormBaseResizeHandle(parent,modify,KexiFormBaseResizeHandle::BottomCenter);
+	handles[7]=new KexiFormBaseResizeHandle(parent,modify,KexiFormBaseResizeHandle::BottomRight);
+}
+
+KexiFormBaseResizeHandleSet::~KexiFormBaseResizeHandleSet()
+{
+	for (int i=0;i<8;i++) delete handles[i];
+}
+
 
 KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource)
 	: KexiDialogBase(parent,name)
@@ -62,6 +220,7 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource
 	m_widgetRect = false;
 	m_activeWidget=0;
 	m_activeMoveWidget=0;
+	m_resizeHandleSet=0;
 }
 
 void KexiFormBase::initActions()
@@ -249,9 +408,25 @@ void KexiFormBase::insertWidget(QWidget *widget, int x, int y, int w, int h)
 //	grabKeyboard();
 }
 
+void KexiFormBase::setResizeHandles(QWidget *m_activeWidget)
+{
+	if (!m_resizeHandleSet)
+	{
+		m_resizeHandleSet=new KexiFormBaseResizeHandleSet(m_activeWidget);
+		return;
+	}
+	if (m_resizeHandleSet &&(m_resizeHandleSet->widget()!=m_activeWidget))
+	{
+		delete m_resizeHandleSet;
+		m_resizeHandleSet=new KexiFormBaseResizeHandleSet(m_activeWidget);
+	}
+
+}
+
 bool KexiFormBase::eventFilter(QObject *obj, QEvent *ev)
 {
 	kdDebug() << "event!" << endl;
+	QWidget *sh;
 	switch (ev->type())
 	{
 		case QEvent::MouseButtonPress:
@@ -261,6 +436,7 @@ bool KexiFormBase::eventFilter(QObject *obj, QEvent *ev)
 			m_activeMoveWidget=m_activeWidget;
 			m_moveBX=static_cast<QMouseEvent*>(ev)->x();
 			m_moveBY=static_cast<QMouseEvent*>(ev)->y();
+			setResizeHandles(m_activeWidget);
 			return true;
 			break;
 		case QEvent::MouseButtonRelease:

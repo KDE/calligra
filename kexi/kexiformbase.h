@@ -30,6 +30,45 @@ template <class type> class QPtrList;
 
 class KAction;
   
+
+class KexiFormBaseResizeHandle : public QWidget
+{
+Q_OBJECT
+public:
+	enum HandlePos {TopLeft=0,TopCenter=2,TopRight=4,LeftCenter=8,RightCenter=16,BottomLeft=32,BottomCenter=64,BottomRight=128};
+        KexiFormBaseResizeHandle(QWidget *parent,QWidget *buddy, HandlePos pos);
+        virtual ~KexiFormBaseResizeHandle();
+
+protected:
+                void mousePressEvent(QMouseEvent *ev);
+                void mouseMoveEvent(QMouseEvent *ev);
+                void mouseReleaseEvent(QMouseEvent *ev);
+protected slots:
+	bool eventFilter(QObject *obj, QEvent *ev);
+	void updatePos();	
+
+private:
+	HandlePos m_pos;
+	QWidget *m_buddy;
+	bool m_dragging;
+	int m_x;
+	int m_y;
+};
+
+class KexiFormBaseResizeHandleSet: public QObject
+{
+Q_OBJECT
+public:
+	KexiFormBaseResizeHandleSet(QWidget *modify);
+	~KexiFormBaseResizeHandleSet();
+	QWidget *widget(){return m_widget;};
+private:
+	QGuardedPtr<KexiFormBaseResizeHandle> handles[8];
+	QGuardedPtr<QWidget> m_widget;
+	
+};
+
+
 class KexiFormBase : public KexiDialogBase
 {
 
@@ -54,7 +93,7 @@ class KexiFormBase : public KexiDialogBase
 		void insertWidget(QWidget *widget, int x, int y, int w, int h);
 		void installEventFilterRecursive(QObject *obj);
 
-
+		void setResizeHandles(QWidget *m_activeWidget);
 		
 		QWidget	*m_pendingWidget;
 		
@@ -75,7 +114,7 @@ class KexiFormBase : public KexiDialogBase
 
 		QWidget *m_activeWidget;
 		QWidget *m_activeMoveWidget;
-
+		KexiFormBaseResizeHandleSet *m_resizeHandleSet;
 	protected slots:
 		void slotWidgetLineEdit();
 		void slotWidgetPushButton();
