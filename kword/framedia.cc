@@ -616,6 +616,7 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
 
     eRGap = new KDoubleNumInput( tab2 );
     eRGap->setValue( 0.0 );
+    eRGap->setRange(0, 9999, 1,  false);
     eRGap->setMinimumWidth ( 100 );
     Layout1->addWidget( eRGap );
     tabLayout->addLayout( Layout1 );
