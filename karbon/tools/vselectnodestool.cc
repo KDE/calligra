@@ -263,6 +263,18 @@ VSelectNodesTool::mouseDragRelease()
 }
 
 void
+VSelectNodesTool::cancel()
+{
+	// Erase old object:
+	if ( isDragging() )
+	{
+		draw();
+		m_state = normal;
+		view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+	}
+}
+
+void
 VSelectNodesTool::recalc()
 {
 	if( m_state == dragging )

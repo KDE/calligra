@@ -135,6 +135,17 @@ VShearTool::mouseDragRelease()
 }
 
 void
+VShearTool::cancel()
+{
+	// Erase old object:
+	if ( isDragging() )
+	{
+		draw();
+		view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+	}
+}
+
+void
 VShearTool::recalc()
 {
 	KoRect rect = view()->part()->document().selection()->boundingBox();

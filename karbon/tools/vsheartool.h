@@ -44,6 +44,8 @@ protected:
 	virtual void mouseDrag();
 	virtual void mouseDragRelease();
 
+	virtual void cancel();
+
 private:
 	void recalc();
 

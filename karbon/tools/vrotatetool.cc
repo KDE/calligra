@@ -114,6 +114,17 @@ VRotateTool::mouseDragRelease()
 }
 
 void
+VRotateTool::cancel()
+{
+	// Erase old object:
+	if ( isDragging() )
+	{
+		draw();
+		view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+	}
+}
+
+void
 VRotateTool::recalc()
 {
 	// Get center:

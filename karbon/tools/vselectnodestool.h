@@ -48,6 +48,8 @@ protected:
 
 	virtual bool keyReleased( Qt::Key );
 
+	virtual void cancel();
+
 private:
 	enum { normal, dragging, moving, movingbezier1, movingbezier2 } m_state;
 
