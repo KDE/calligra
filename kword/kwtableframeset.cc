@@ -1194,7 +1194,6 @@ void KWTableFrameSet::validate()
 }
 
 bool KWTableFrameSet::contains( unsigned int mx, unsigned int my ) {
-kdDebug() << "contains: " << mx << ", " << my << ": " << getBoundingRect().contains(mx,my) << endl;
     return getBoundingRect().contains(mx,my);
 }
 
@@ -1236,7 +1235,6 @@ bool KWTableFrameSet::Cell::isAboveOrLeftOf( unsigned row, unsigned col )
 void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect, 
         QColorGroup & cg, bool onlyChanged, bool resetChanged ) 
 {
-kdDebug() << "drawContents" << endl;
     for (unsigned int i=0; i < m_cells.count() ; i++)
         m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged );
 

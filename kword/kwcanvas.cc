@@ -183,25 +183,16 @@ void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int c
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
-kdDebug() << "fs:" << endl;
         KWFrameSet * frameset = fit.current();
         if ( !onlyFrameset || (frameset == onlyFrameset) ) // Draw all, or draw only one
         {
-kdDebug() << "  --" << endl;
             if ( frameset->isVisible() )
             {
-kdDebug() << "  visible " << endl;
                 QColorGroup gb = QApplication::palette().active();
                 if ( focus && m_currentFrameSetEdit && frameset == m_currentFrameSetEdit->frameSet() )     // Currently edited frameset
-{
-kdDebug() << "  edit " << endl;
                     m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged, resetChanged );
-}
                 else
-{
-kdDebug() << "  paint " << endl;
                     frameset->drawContents( painter, crect, gb, onlyChanged, resetChanged );
-}
             }
         }
     }
