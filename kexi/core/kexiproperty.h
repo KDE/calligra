@@ -45,8 +45,7 @@ class QStringList;
     \endcode
     
  **/
- //! A property object for use in KexiPropertyEditor
-class KEXIPROPERTYEDITOR_EXPORT KexiProperty
+class KEXICORE_EXPORT KexiProperty
 {
 	public:
 		/*! Creates a simple property with \a name as name and \a value as value. */

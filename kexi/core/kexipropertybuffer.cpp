@@ -22,9 +22,10 @@
 
 #include "kexipropertybuffer.h"
 
-KexiPropertyBuffer::KexiPropertyBuffer(QObject *parent, const char *name)
- : QObject(parent, name),
-   PropertyBuffer()
+KexiPropertyBuffer::KexiPropertyBuffer(QObject *parent, const QString &type_name)
+ : QObject(parent, type_name.latin1())
+	,PropertyBuffer()
+	,m_typeName( type_name )
 {
 }
 

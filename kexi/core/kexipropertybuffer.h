@@ -32,14 +32,16 @@ typedef QMap<QString, KexiProperty> PropertyBuffer;
     \sa KexiPropertyEditor for help on how to use KexiPropertyBuffer.
     \sa KexiProperty to see how to create properties.
 **/
-//! A buffer containing KexiProperty objects
-class KEXIPROPERTYEDITOR_EXPORT KexiPropertyBuffer : public QObject, public PropertyBuffer
+class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public PropertyBuffer
 {
 	Q_OBJECT
 
 	public:
-		//! Creates an empty KexiPropertyBuffer, ie a QMap<QString, KexiProperty>
-		KexiPropertyBuffer(QObject *parent, const char *name=0);
+		/*! Creates an empty KexiPropertyBuffer, i.e. a QMap<QString, KexiProperty>.
+		 \a type_name means a name of this property buffer type. See typeName() description 
+		 for more information on type names.
+		*/
+		KexiPropertyBuffer(QObject *parent, const QString &type_name);
 		virtual ~KexiPropertyBuffer();
 
 		/*! Add \a property to buffer with property->name() as key in QMap.
@@ -52,11 +54,24 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyBuffer : public QObject, public Prop
 		*/
 		virtual void	changeProperty(const char *property, const QVariant &value);
 
+		/* A name of this property buffer type, that is usable when
+		 we want to know if two property buffer objects have the same type.
+		 For example, \a type_name may be "KexiDB::Field::Integer" for property buffer
+		 for given selected field of type integer, in "Alter Table Dialog".
+		 This avoids e.g. reloading of all KexiPropertyEditor's contents.
+		 Also, this allows to know if two property-buffer objects are compatible 
+		 by their property sets.
+		 For comparing purposes, type names are case insensitive.
+		*/
+		QString typeName() const { return m_typeName; }
 	signals:
 		/*! This signal is emitted when property whose key is \a property has changed 
 		   (ie when changeProperty() was called). \a value is the new property value.
 		*/
 		void	propertyChanged(const char *property, const QVariant &value);
+
+	protected:
+		QString m_typeName;
 };
 
 #endif
