@@ -90,7 +90,7 @@ public:
 
     void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
 
-    void recalcPageNum( KPresenterDoc *doc, KPrPage *page );
+    void recalcPageNum( KPrPage *page );
 
 
     /** Return the contained text object */

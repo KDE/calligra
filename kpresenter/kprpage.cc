@@ -2457,7 +2457,7 @@ void KPrPage::recalcPageNum()
     for ( ; it.current() ; ++it )
     {
 	if ( it.current()->getType() == OT_TEXT )
-	    ( (KPTextObject*)it.current() )->recalcPageNum( m_doc, this );
+	    ( (KPTextObject*)it.current() )->recalcPageNum( this );
     }
 }
 
@@ -2706,7 +2706,7 @@ void KPrPage::completeLoading( bool _clean, int lastObj )
         {
                 KPTextObject*obj=dynamic_cast<KPTextObject*>( it.current() );
                 if(obj)
-                    obj->recalcPageNum( m_doc,this );
+                    obj->recalcPageNum( this );
         }
         else if ( it.current()->getType() == OT_GROUP )
             completeLoadingForGroupObject( it.current() );
@@ -2730,7 +2730,7 @@ void KPrPage::completeLoadingForGroupObject( KPObject *_obj )
             else if ( it.current()->getType() == OT_TEXT ) {
                 KPTextObject *_textObj=  dynamic_cast<KPTextObject*>( it.current() );
                 if ( _textObj )
-                    _textObj->recalcPageNum( m_doc, this );
+                    _textObj->recalcPageNum(  this );
             }
             else if ( it.current()->getType() == OT_GROUP )
                 completeLoadingForGroupObject( it.current() ); // recursion

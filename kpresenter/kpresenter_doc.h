@@ -129,7 +129,7 @@ public:
     const QPtrList<KPrPage> & getPageList() const {return m_pageList;}
 
     KPrPage * stickyPage() const;
-
+    KPrPage * activePage()const;
     // We need one that's not const, due to QPtrList::at() not being const
     QPtrList<KPrPage>& pageList() { return m_pageList;}
 

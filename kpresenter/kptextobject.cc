@@ -1104,17 +1104,16 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
 }
 
 /*================================================================*/
-void KPTextObject::recalcPageNum( KPresenterDoc *doc, KPrPage *page )
+void KPTextObject::recalcPageNum( KPrPage *page )
 {
     int pgnum=m_doc->pageList().findRef(page);
-    if ( pgnum==-1 )
+    if ( pgnum==-1 && isSticky())
     {
-        if( page==m_doc->stickyPage())
+        if ( m_doc->activePage())
         {
-            //todo
+            page = m_doc->activePage();
+            pgnum=m_doc->pageList().findRef(page);
         }
-        else
-            pgnum = doc->getPageNums();
     }
 
     pgnum+=1;

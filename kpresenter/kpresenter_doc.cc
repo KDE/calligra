@@ -2683,6 +2683,8 @@ void KPresenterDoc::recalcPageNum()
     KPrPage *page=0L;
     for(page=pageList().first(); page; page=pageList().next())
         page->recalcPageNum();
+    m_stickyPage->recalcPageNum();
+#if 0
     //specific sticky page recalc
     QPtrListIterator<KPObject> it( m_stickyPage->objectList() );
     //test for load file, activepage doesn't exist during loading
@@ -2694,6 +2696,14 @@ void KPresenterDoc::recalcPageNum()
                 ( (KPTextObject*)it.current() )->recalcPageNum( this, m_kpresenterView->getCanvas()->activePage() );
         }
     }
+#endif
+}
+
+KPrPage * KPresenterDoc::activePage()const
+{
+    if ( m_kpresenterView && m_kpresenterView->getCanvas())
+        return m_kpresenterView->getCanvas()->activePage();
+    return 0L;
 }
 
 void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
