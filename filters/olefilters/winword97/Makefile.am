@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES = -I$(srcdir) -I$(srcdir)/../lib $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) -I$(srcdir) -I$(srcdir)/../lib $(all_includes)
 LDFLAGS = $(all_libraries)
 
 ####### Files
