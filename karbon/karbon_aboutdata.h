@@ -15,7 +15,7 @@ KAboutData * newKarbonAboutData()
 		"0.1",
 		I18N_NOOP( "Yet another vector graphics application." ),
 		KAboutData::License_GPL,
-		I18N_NOOP( "(c) 2001-2004, The Karbon Developers" ),
+		I18N_NOOP( "(c) 2001-2005, The Karbon Developers" ),
 		I18N_NOOP( "You are invited to participate in any way." ),
 		"http://www.xs4all.nl/~rwlbuis/karbon/");
 	aboutData->addAuthor(
@@ -26,7 +26,7 @@ KAboutData * newKarbonAboutData()
 	aboutData->addAuthor(
 		"Tomislav Lukman",
 		0,
-		"tomislav.lukman@ck.hinet.hr",
+		"tomislav.lukman@ck.t-com.hr",
 		0 );
 	aboutData->addAuthor(
 		"Benoît Vautrin",
