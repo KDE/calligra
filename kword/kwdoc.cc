@@ -263,6 +263,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bShowScrollBar = true;
     m_cursorInProtectectedArea=true;
 
+    m_bInsertDirectCursor=false;
+
     m_lastViewMode="ModeNormal";
     m_viewMode = 0;
 
@@ -442,7 +444,7 @@ void KWDocument::initConfig()
       if ( isEmbedded() )
           m_bShowDocStruct = false; // off by default for embedded docs, but still toggleable
       m_pgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", false );
-
+      m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
   }
   else
       m_zoom = 100;

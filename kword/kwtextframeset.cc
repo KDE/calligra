@@ -2961,7 +2961,7 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
     {
         // Let KoTextView handle the mousepress event - but don't let it start
         // a drag if clicking on the left of the text (out of the frame itself)
-        textView()->handleMousePressEvent( e, iPoint, relPos != KWTextFrameSet::LeftOfFrame );
+        textView()->handleMousePressEvent( e, iPoint, relPos != KWTextFrameSet::LeftOfFrame, frameSet()->kWordDocument()->insertDirectCursor() );
 
         // Clicked on the left of the text -> select the whole paragraph
         if ( relPos == KWTextFrameSet::LeftOfFrame )

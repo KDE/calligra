@@ -573,6 +573,9 @@ public:
     bool allowAutoFormat() const { return m_bAllowAutoFormat; }
     void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
 
+    bool insertDirectCursor() const { return m_bInsertDirectCursor; }
+    void setInsertDirectCursor(bool _b){ m_bInsertDirectCursor=_b; }
+
 
     // in pt
     double indentValue()const { return m_indent; }
@@ -925,6 +928,7 @@ private:
 
     QStringList m_personalExpressionPath;
     QString m_picturePath;
+    bool  m_bInsertDirectCursor;
 };
 
 

@@ -788,7 +788,9 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
     m_cursorInProtectedArea->setChecked(doc->cursorInProtectedArea());
 
-
+    m_directInsertCursor= new QCheckBox(i18n("Direct insert cursor"),gbDocumentCursor);
+    m_directInsertCursor->setChecked(doc->insertDirectCursor());
+    m_directInsertCursor->setEnabled( false );
 }
 
 KCommand *ConfigureDefaultDocPage::apply()
@@ -827,6 +829,12 @@ KCommand *ConfigureDefaultDocPage::apply()
         doc->setCursorInProtectedArea( state );
     }
 
+    state = m_directInsertCursor->isChecked();
+    if ( state != doc->insertDirectCursor() )
+    {
+        config->writeEntry( "InsertDirectCursor", state );
+        doc->setInsertDirectCursor( state );
+    }
 
     KMacroCommand * macroCmd=0L;
     int newStartingPage=m_variableNumberOffset->value();
