@@ -206,7 +206,7 @@ bool KoDocument::saveFile()
   return ret;
 }
 
-KAction *KoDocument::action( const QDomElement &element )
+KAction *KoDocument::action( const QDomElement &element ) const
 {
   return d->m_views.getFirst()->action( element );
 }

@@ -96,7 +96,7 @@ public:
    * @see KXMLGUIClient::actionCollection
    * @see KoView::action
    */
-  virtual KAction *action( const QDomElement &element );
+  virtual KAction *action( const QDomElement &element ) const;
 
     // ######## Where and why is this needed ?
   /**
