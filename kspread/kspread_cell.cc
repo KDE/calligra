@@ -3249,13 +3249,13 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
   /**
    * QML
    */
-/*  else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
+  else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
   {
     m_pQML = new QSimpleRichText( m_strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
     setFlag(Flag_LayoutDirty);
     m_content = RichText;
     m_dataType = OtherData;
-  }*/
+  }
   /**
    * Some numeric value or a string.
    */
@@ -4627,13 +4627,9 @@ KSpreadCell::~KSpreadCell()
     if ( m_previousCell )
         m_previousCell->setNextCell( m_nextCell );
 
-    if ( m_pPrivate )
-        delete m_pPrivate;
-    if ( m_pQML )
-        delete m_pQML;
-
-    if(m_Validity!=0)
-        delete m_Validity;
+    delete m_pPrivate;
+    delete m_pQML;
+    delete m_Validity;
 
     // Unobscure cells.
     for( int x = 0; x <= m_iExtraXCells; ++x )
