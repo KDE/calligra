@@ -114,7 +114,7 @@ VStar::init()
 				lineTo( p );
 			else
 			{
-				p2.setX( m_innerRadius * cos( nextInnerAngle ) ); 
+				p2.setX( m_innerRadius * cos( nextInnerAngle ) );
 				p2.setY( m_innerRadius * sin( nextInnerAngle ) );
 
 				p3.setX( m_outerRadius * cos( nextOuterAngle ) +
@@ -320,7 +320,7 @@ VStar::load( const QDomElement& element )
 
 	m_roundness  = element.attribute( "roundness" ).toDouble();
 
-	m_type = element.attribute( "type" ).toInt();
+	m_type =(VStar::VStarType) element.attribute( "type" ).toInt();
 
 	init();
 

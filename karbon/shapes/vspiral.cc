@@ -161,7 +161,7 @@ VSpiral::load( const QDomElement& element )
 
 	m_clockwise = element.attribute( "clockwise" ).toInt();
 
-	m_type = element.attribute( "type" ).toInt();
+	m_type = (VSpiral::VSpiralType)element.attribute( "type" ).toInt();
 
 	init();
 
