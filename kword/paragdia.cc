@@ -355,11 +355,16 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
         : KWParagLayoutWidget( KWParagDia::PD_SPACING, parent, name ), m_unit( unit )
 {
     QString unitName = KWUnit::unitName( m_unit );
-    QGridLayout *grid = new QGridLayout( this, 5, 2, 15, 7 );
+    QGridLayout *mainGrid = new QGridLayout( this, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    // mainGrid gives equal space to each groupbox, apparently
+    // I tried setRowStretch but the result is awful (much space between them and not equal!)
+    // Any other way (in order to make the 2nd, the one with a single checkbox, a bit
+    // smaller than the other 3) ? (DF)
 
     // --------------- indent ---------------
     QGroupBox * indentFrame = new QGroupBox( i18n( "Indent" ), this );
-    QGridLayout * indentGrid = new QGridLayout( indentFrame, 4, 2, 15, 7 );
+    QGridLayout * indentGrid = new QGridLayout( indentFrame, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel * lLeft = new QLabel( i18n("Left ( %1 ):").arg(unitName), indentFrame );
     lLeft->setAlignment( AlignRight );
@@ -400,13 +405,28 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     connect( eFirstLine, SIGNAL( textChanged( const QString & ) ), this, SLOT( firstChanged( const QString & ) ) );
     indentGrid->addWidget( eFirstLine, 3, 1 );
 
-     // grid row spacing
-    indentGrid->addRowSpacing( 0, 5 );
-    grid->addWidget( indentFrame, 0, 0 );
+    // grid row spacing
+    indentGrid->addRowSpacing( 0, 12 );
+    for ( int i = 1 ; i < indentGrid->numRows() ; ++i )
+        indentGrid->setRowStretch( i, 1 );
+    mainGrid->addWidget( indentFrame, 0, 0 );
+
+    // --------------- End of page /frame ---------------
+    QGroupBox * endFramePage = new QGroupBox( i18n( "Behaviour at end of frame/page" ), this );
+    QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 2, 1,
+                                                      KDialog::marginHint(), KDialog::spacingHint() );
+
+    cEndOfFramePage = new QCheckBox( i18n("Keep lines together"),endFramePage);
+    endFramePageGrid->addWidget( cEndOfFramePage, 1, 0 );
+    endFramePageGrid->addRowSpacing( 0, 12 );
+    endFramePageGrid->setRowStretch( 0, 0 );
+    endFramePageGrid->setRowStretch( 1, 1 );
+    mainGrid->addWidget( endFramePage, 2, 0 );
 
     // --------------- line spacing ---------------
     QGroupBox * spacingFrame = new QGroupBox( i18n( "Line Spacing" ), this );
-    QGridLayout * spacingGrid = new QGridLayout( spacingFrame, 3, 1, 15, 7 );
+    QGridLayout * spacingGrid = new QGridLayout( spacingFrame, 3, 1,
+                                                 KDialog::marginHint(), KDialog::spacingHint() );
 
     cSpacing = new QComboBox( false, spacingFrame, "" );
     cSpacing->insertItem( i18n( "0.5 lines" ) );
@@ -427,26 +447,19 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     spacingGrid->addWidget( eSpacing, 2, 0 );
 
     // grid row spacing
-    spacingGrid->addRowSpacing( 0, 5 );
-    grid->addWidget( spacingFrame, 2, 0 );
+    spacingGrid->addRowSpacing( 0, 12 );
+    for ( int i = 1 ; i < spacingGrid->numRows() ; ++i )
+        spacingGrid->setRowStretch( i, 1 );
+    mainGrid->addWidget( spacingFrame, 4, 0 );
 
     cSpacing->setCurrentItem( 4 );
     cSpacing->setEnabled( false ); // TODO: handle 0.5 lines, 1 line etc
     eSpacing->setEnabled( true );
 
-    //
-    // --------------- End of page /frame ---------------
-    QGroupBox * endFramePage = new QGroupBox( i18n( "Behaviour at end of frame/page" ), this );
-    QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 3, 2, 15, 7 );
-
-    cEndOfFramePage = new QCheckBox( i18n("Keep lines together"),endFramePage);
-    endFramePageGrid->addWidget(cEndOfFramePage,0,0);
-    endFramePageGrid->addRowSpacing( 0, 5 );
-    grid->addWidget( endFramePage, 1, 0 );
-
     // --------------- paragraph spacing ---------------
     QGroupBox * pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), this );
-    QGridLayout * pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2, 15, 7 );
+    QGridLayout * pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2,
+                                                KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel * lBefore = new QLabel( i18n("Before ( %1 ):").arg(unitName), pSpaceFrame );
     lBefore->setAlignment( AlignRight );
@@ -475,15 +488,17 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     pSpaceGrid->addWidget( eAfter, 2, 1 );
 
     // grid row spacing
-    pSpaceGrid->addRowSpacing( 0, 5 );
-    grid->addWidget( pSpaceFrame, 3, 0 );
+    pSpaceGrid->addRowSpacing( 0, 12 );
+    for ( int i = 1 ; i < pSpaceGrid->numRows() ; ++i )
+        pSpaceGrid->setRowStretch( i, 1 );
+    mainGrid->addWidget( pSpaceFrame, 6, 0 );
 
     // --------------- preview --------------------
     prev1 = new KWPagePreview( this );
-    grid->addMultiCellWidget( prev1, 0, 4, 1, 1 );
+    mainGrid->addMultiCellWidget( prev1, 0, mainGrid->numRows()-1, 1, 1 );
 
-    grid->setColStretch( 1, 1 );
-    grid->setRowStretch( 4, 1 );
+    mainGrid->setColStretch( 1, 1 );
+    //mainGrid->setRowStretch( 4, 1 );
 }
 
 double KWIndentSpacingWidget::leftIndent() const
@@ -628,7 +643,7 @@ void KWIndentSpacingWidget::afterChanged( const QString & _text )
 KWParagAlignWidget::KWParagAlignWidget( QWidget * parent, const char * name )
         : KWParagLayoutWidget( KWParagDia::PD_ALIGN, parent, name )
 {
-    QGridLayout *grid = new QGridLayout( this, 6, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( this, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel * lAlign = new QLabel( i18n( "Align:" ), this );
     grid->addWidget( lAlign, 0, 0 );
@@ -744,7 +759,7 @@ void KWParagAlignWidget::clearAligns()
 KWParagBorderWidget::KWParagBorderWidget( QWidget * parent, const char * name )
     : KWParagLayoutWidget( KWParagDia::PD_BORDERS, parent, name )
 {
-    QGridLayout *grid = new QGridLayout( this, 8, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( this, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel * lStyle = new QLabel( i18n( "Style:" ), this );
     grid->addWidget( lStyle, 0, 0 );
@@ -907,25 +922,10 @@ void KWParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
 
 void KWParagBorderWidget::updateBorders()
 {
-    if ( m_leftBorder.ptWidth == 0 )
-        bLeft->setOn( false );
-    else
-        bLeft->setOn( true );
-
-    if ( m_rightBorder.ptWidth == 0 )
-        bRight->setOn( false );
-    else
-        bRight->setOn( true );
-
-    if ( m_topBorder.ptWidth == 0 )
-        bTop->setOn( false );
-    else
-        bTop->setOn( true );
-
-    if ( m_bottomBorder.ptWidth == 0 )
-        bBottom->setOn( false );
-    else
-        bBottom->setOn( true );
+    bLeft->setOn( m_leftBorder.ptWidth > 0 );
+    bRight->setOn( m_rightBorder.ptWidth > 0 );
+    bTop->setOn( m_topBorder.ptWidth > 0 );
+    bBottom->setOn( m_bottomBorder.ptWidth > 0 );
     prev3->setLeftBorder( m_leftBorder );
     prev3->setRightBorder( m_rightBorder );
     prev3->setTopBorder( m_topBorder );
@@ -1026,23 +1026,28 @@ KWParagDia::~KWParagDia()
 void KWParagDia::setupTab4()
 {
     QWidget *tab = addPage( i18n( "Bullets/Numbers" ) );
-    QGridLayout *grid = new QGridLayout( tab, 4, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( tab, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     // What type of numbering is required?
     gNumbering = new QButtonGroup( i18n("Numbering"), tab );
-    QGridLayout *ngrid = new QGridLayout( gNumbering, 1, 3, 15, 7 );
+    QGridLayout *ngrid = new QGridLayout( gNumbering, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    ngrid->addRowSpacing( 0, 12 );
+    ngrid->setRowStretch( 0, 0 );
+    int row = 1;
 
     QRadioButton *tmp;
     tmp = new QRadioButton( i18n( "&None" ), gNumbering );
-    ngrid->addWidget( tmp, 0, 0 );
+    ngrid->addWidget( tmp, row, 0 );
     gNumbering->insert( tmp, Counter::NUM_NONE );
 
+    ++row;
     tmp = new QRadioButton( i18n( "&List Numbering" ), gNumbering );
-    ngrid->addWidget( tmp, 1, 0 );
+    ngrid->addWidget( tmp, row, 0 );
     gNumbering->insert( tmp, Counter::NUM_LIST );
 
+    ++row;
     tmp = new QRadioButton( i18n( "&Chapter Numbering" ), gNumbering );
-    ngrid->addWidget( tmp, 2, 0 );
+    ngrid->addWidget( tmp, row, 0 );
     gNumbering->insert( tmp, Counter::NUM_CHAPTER );
 
     connect( gNumbering, SIGNAL( clicked( int ) ), this, SLOT( numTypeChanged( int ) ) );
@@ -1050,34 +1055,45 @@ void KWParagDia::setupTab4()
 
     // How should the numbers be displayed?
     gStyle = new QButtonGroup( i18n("Style"), tab );
-    QGridLayout *tgrid = new QGridLayout( gStyle, 1, 10, 15, 7 );
+    QGridLayout *tgrid = new QGridLayout( gStyle, 0 /*auto*/, 2,
+                                          KDialog::marginHint(), KDialog::spacingHint() );
+    tgrid->addRowSpacing( 0, 12 );
+    tgrid->setRowStretch( 0, 0 );
+    row = 1;
 
     tmp = new QRadioButton( i18n( "&None" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 0, 0, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, row, row, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_NONE );
 
+    ++row;
     tmp = new QRadioButton( i18n( "&Arabic Numbers ( 1, 2, 3, 4, ... )" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 1, 1, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, row, row, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_NUM );
 
+    ++row;
     tmp = new QRadioButton( i18n( "L&ower Alphabetical ( a, b, c, d, ... )" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 2, 2, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, row, row, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_ALPHAB_L );
 
+    ++row;
     tmp = new QRadioButton( i18n( "U&pper Alphabetical ( A, B, C, D, ... )" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 3, 3, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, row, row, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_ALPHAB_U );
 
+    ++row;
     tmp = new QRadioButton( i18n( "&Lower Roman Numbers ( i, ii, iii, iv, ... )" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 4, 4, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, row, row, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_ROM_NUM_L );
 
+    ++row;
     tmp = new QRadioButton( i18n( "&Upper Roman Numbers ( I, II, III, IV, ... )" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 5, 5, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, row, row, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_ROM_NUM_U );
 
+    /*
+    ++row;
     tmp = new QRadioButton( i18n( "&Custom" ), gStyle );
-    tgrid->addWidget( tmp, 6, 0 );
+    tgrid->addWidget( tmp, row, 0 );
     gStyle->insert( tmp, Counter::STYLE_CUSTOM );
     tmp->setEnabled(false); // Not implemented
 
@@ -1088,7 +1104,6 @@ void KWParagDia::setupTab4()
     connect( eCustomNum, SIGNAL( textChanged(const QString&) ),
              this, SLOT( numCounterDefChanged(const QString&) ) );
 
-
     QString custcountwt(i18n("<h1>Create custom counters</h1>\n"
         "<p>You can enter a string describing your custom counter, consisting of \n"
         " the following symbols. For now, this string may not contain any whitespace \n"
@@ -1098,29 +1113,34 @@ void KWParagDia::setupTab4()
         "<p>This will hopefully have more options in the future (like enumerated lists or greek letters).</p>" ));
     QWhatsThis::add( tmp, custcountwt );
     QWhatsThis::add( eCustomNum, custcountwt );
+    */
 
+    ++row;
     tmp = new QRadioButton( i18n( "&Disc Bullet" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 7, 7, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, row, row, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_DISCBULLET );
     rDisc = tmp;
 
+    ++row;
     tmp = new QRadioButton( i18n( "&Square Bullet" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 8, 8, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, row, row, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_SQUAREBULLET );
     rSquare = tmp;
 
+    ++row;
     tmp = new QRadioButton( i18n( "&Circle Bullet" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 9, 9, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, row, row, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_CIRCLEBULLET );
     rCircle = tmp;
 
+    ++row;
     tmp = new QRadioButton( i18n( "Custom Bullet" ), gStyle );
-    tgrid->addWidget( tmp, 10, 0 );
+    tgrid->addWidget( tmp, row, 0 );
     gStyle->insert( tmp, Counter::STYLE_CUSTOMBULLET );
     rCustom = tmp;
 
     bBullets = new QPushButton( gStyle );
-    tgrid->addWidget( bBullets, 10, 1 );
+    tgrid->addWidget( bBullets, row, 1 );
     connect( bBullets, SIGNAL( clicked() ), this, SLOT( numChangeBullet() ) );
 
     grid->addWidget( gStyle, 1, 0 );
@@ -1128,40 +1148,47 @@ void KWParagDia::setupTab4()
 
     // Miscellaneous stuff.
     gText = new QGroupBox( i18n("Other Settings"), tab );
-    QGridLayout *txtgrid = new QGridLayout( gText, 2, 4, 15, 7 );
-
+    QGridLayout *othergrid = new QGridLayout( gText, 4, 4,
+                                              KDialog::marginHint(), KDialog::spacingHint() );
+    othergrid->addRowSpacing( 0, 12 );
+    othergrid->setRowStretch( 0, 0 );
+    row = 1;
     QLabel *lcLeft = new QLabel( i18n( "Prefix Text" ), gText );
-    txtgrid->addWidget( lcLeft, 0, 0 );
+    othergrid->addMultiCellWidget( lcLeft, row, row, 0, 1 );
 
     QLabel *lcRight = new QLabel( i18n( "Suffix Text" ), gText );
-    txtgrid->addWidget( lcRight, 0, 1 );
+    othergrid->addMultiCellWidget( lcRight, row, row, 2, 3 );
 
+    ++row;
     ecLeft = new QLineEdit( gText );
-    txtgrid->addWidget( ecLeft, 1, 0 );
-    connect( ecLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( numLeftTextChanged( const QString & ) ) );
+    othergrid->addMultiCellWidget( ecLeft, row, row, 0, 1 );
+    connect( ecLeft, SIGNAL( textChanged( const QString & ) ),
+             this, SLOT( numLeftTextChanged( const QString & ) ) );
 
     ecRight = new QLineEdit( gText );
-    txtgrid->addWidget( ecRight, 1, 1 );
-    connect( ecRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( numRightTextChanged( const QString & ) ) );
+    othergrid->addMultiCellWidget( ecRight, row, row, 2, 3 );
+    connect( ecRight, SIGNAL( textChanged( const QString & ) ),
+             this, SLOT( numRightTextChanged( const QString & ) ) );
 
+    ++row;
     lStart = new QLabel( i18n( "Start at ( 1, 2, ... ) :" ), gText );
     lStart->setAlignment( AlignRight | AlignVCenter );
-    txtgrid->addWidget( lStart, 2, 0 );
+    othergrid->addWidget( lStart, row, 0 );
 
-    // TODO: make this a spinbox or a combo, with values depending on the type
-    // of numbering.
     eStart = new KWSpinBox(gText);
     eStart->setMinValue ( 1);
-    txtgrid->addWidget( eStart, 2, 1 );
-    connect( eStart, SIGNAL( valueChanged ( const QString &  )  ), this, SLOT( numStartChanged( const QString & ) ) );
+    othergrid->addWidget( eStart, row, 1 );
+    connect( eStart, SIGNAL( valueChanged ( const QString &  )  ),
+             this, SLOT( numStartChanged( const QString & ) ) );
 
     QLabel *lDepth = new QLabel( i18n( "Depth:" ), gText );
     lDepth->setAlignment( AlignRight | AlignVCenter );
-    txtgrid->addWidget( lDepth, 3, 0 );
+    othergrid->addWidget( lDepth, row, 2 );
 
     sDepth = new QSpinBox( 0, 15, 1, gText );
-    txtgrid->addWidget( sDepth, 3, 1 );
-    connect( sDepth, SIGNAL( valueChanged( int ) ), this, SLOT( numDepthChanged( int ) ) );
+    othergrid->addWidget( sDepth, row, 3 );
+    connect( sDepth, SIGNAL( valueChanged( int ) ),
+             this, SLOT( numDepthChanged( int ) ) );
     grid->addWidget( gText, 2, 0 );
 
     // Add the preview.
@@ -1173,7 +1200,7 @@ void KWParagDia::setupTab4()
 void KWParagDia::setupTab5()
 {
     QWidget *tab = addPage( i18n( "Tabulators" ) );
-    QGridLayout *grid = new QGridLayout( tab, 4, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( tab, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     lTab = new QLabel(  tab );
     grid->addWidget( lTab, 0, 0 );
@@ -1209,7 +1236,7 @@ void KWParagDia::setupTab5()
     grid->addWidget( lTabs, 3, 0 );
 
     QButtonGroup * g3 = new QButtonGroup( "", tab );
-    QGridLayout * tabGrid = new QGridLayout( g3, 5, 1, 15, 7 );
+    QGridLayout * tabGrid = new QGridLayout( g3, 5, 1, KDialog::marginHint(), KDialog::spacingHint() );
     g3->setExclusive( true );
 
     rtLeft = new QRadioButton( i18n( "Left" ), g3 );
