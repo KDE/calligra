@@ -91,6 +91,7 @@ class KEXICORE_EXPORT Info
 	protected:
 		friend class Manager;
 		friend class KexiProject;
+		friend class KexiMainWindowImpl;
 
 		/**
 		 * @sets the project-part-id

@@ -138,8 +138,11 @@ Manager::checkProject(KexiDB::Connection *conn)
 	if(!cursor)
 		return;
 
+	int id=0;
+
 	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
 	{
+		id++;
 		Info *i = info(cursor->value(2).toString());
 		if(!i)
 		{
@@ -157,6 +160,21 @@ Manager::checkProject(KexiDB::Connection *conn)
 	}
 
 	conn->deleteCursor(cursor);
+
+	if(id < 2)
+	{
+		KexiDB::TableSchema *ts = conn->tableSchema("kexi__parts");
+		if (!ts)
+			return;
+			
+		KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
+		if (!fl)
+			return;
+
+		conn->insertRecord(*fl, QVariant(1), QVariant("Tables"), QVariant("kexi/table"), QVariant("http://"));
+		conn->insertRecord(*fl, QVariant(2), QVariant("Queries"), QVariant("kexi/query"), QVariant("http://"));
+	}
+
 
 	return;
 }
