@@ -6,6 +6,7 @@
 #include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
+#include <qvaluelist.h>
 
 #include <kgenericfactory.h>
 #include <koFilter.h>
@@ -13,6 +14,7 @@
 #include <koStore.h>
 
 #include "epsexport.h"
+#include "vdashpattern.h"
 #include "vdocument.h"
 #include "vfill.h"
 #include "vgroup.h"
@@ -81,7 +83,7 @@ EpsExport::convert( const QCString& from, const QCString& to )
 	// load the document and export it:
 	VDocument doc;
 	doc.load( docNode );
-	exportDocument( doc );
+	doc.accept( *this );
 
 
 	fileOut.close();
@@ -93,7 +95,7 @@ EpsExport::convert( const QCString& from, const QCString& to )
 }
 
 void
-EpsExport::exportDocument( const VDocument& document )
+EpsExport::visitVDocument( VDocument& document )
 {
 	// select all objects:
 	document.select();
@@ -124,53 +126,77 @@ EpsExport::exportDocument( const VDocument& document )
 		"/l {lineto} def\n"
 		"/s {stroke} def\n"
 		"/f {fill} def\n"
+		"/w {setlinewidth} def\n"
+		"/d {setdash} def\n"
 	<< endl;
 
 	// export layers:
 	VLayerListIterator itr( document.layers() );
 	for( ; itr.current(); ++itr )
-		exportLayer( *itr.current() );
+		itr.current()->accept( *this );
 }
 
 void
-EpsExport::exportGroup( const VGroup& group )
+EpsExport::visitVGroup( VGroup& group )
 {
 	// export objects:
 	VObjectListIterator itr( group.objects() );
 	for( ; itr.current(); ++itr )
-	{
-		if( VPath* path = dynamic_cast<VPath*>( itr.current() ) )
-			exportPath( *path );
-		else if( VGroup* group = dynamic_cast<VGroup*>( itr.current() ) )
-			exportGroup( *group );
-	}
+		itr.current()->accept( *this );
 }
 
 void
-EpsExport::exportLayer( const VLayer& layer )
+EpsExport::visitVLayer( VLayer& layer )
 {
-	exportGroup( layer );
+	// export objects:
+	VObjectListIterator itr( layer.objects() );
+	for( ; itr.current(); ++itr )
+		itr.current()->accept( *this );
 }
 
 void
-EpsExport::exportPath( const VPath& path )
+EpsExport::visitVPath( VPath& path )
 {
 	// export segmentlists:
 	VSegmentListListIterator itr( path.segmentLists() );
 	for( ; itr.current(); ++itr )
-		exportSegmentList( *itr.current() );
+		itr.current()->accept( *this );
 
 	if( path.stroke()->type() != stroke_none )
+	{
+		// dash pattern:
+		*m_stream << "[";
+
+		const QValueList<float>&
+			array( path.stroke()->dashPattern().array() );
+
+		QValueListConstIterator<float> itr = array.begin();
+		for( ; itr != array.end(); ++itr )
+			 *m_stream << *itr << " ";
+
+		*m_stream << "] " << path.stroke()->dashPattern().offset()
+			<< " d\n";
+
+
+		// setlinewidth:
+		*m_stream << path.stroke()->lineWidth() << " w ";
+
+
+		// stroke:
 		*m_stream << "s ";
+	}
 
 	if( path.fill()->type() != fill_none )
+	{
+		// fill:
 		*m_stream << "f ";
+	}
 
-	*m_stream << endl;
+	*m_stream << "\n" << endl;
 }
 
 void
-EpsExport::exportSegmentList( const VSegmentList& segmentList )
+EpsExport::visitVSegmentList( VSegmentList& segmentList )
 {
 	*m_stream << "N\n";
 
@@ -228,7 +254,7 @@ EpsExport::exportSegmentList( const VSegmentList& segmentList )
 	}
 
 	if( segmentList.isClosed() )
-		*m_stream << "C ";
+		*m_stream << "C\n";
 }
 
 #include "epsexport.moc"

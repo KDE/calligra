@@ -9,6 +9,8 @@
 
 #include <koFilter.h>
 
+#include "vvisitor.h"
+
 class QTextStream;
 class VDocument;
 class VGroup;
@@ -16,7 +18,7 @@ class VLayer;
 class VPath;
 class VSegmentList;
 
-class EpsExport : public KoFilter
+class EpsExport : public KoFilter, private VVisitor
 {
 	Q_OBJECT
 
@@ -27,11 +29,11 @@ public:
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 private:
-	void exportDocument( const VDocument& document );
-	void exportGroup( const VGroup& group );
-	void exportLayer( const VLayer& layer );
-	void exportPath( const VPath& path );
-	void exportSegmentList( const VSegmentList& segmentList );
+	virtual void visitVDocument( VDocument& document );
+	virtual void visitVGroup( VGroup& group );
+	virtual void visitVLayer( VLayer& layer );
+	virtual void visitVPath( VPath& path );
+	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 	QTextStream* m_stream;
 };

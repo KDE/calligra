@@ -16,6 +16,7 @@ INCLUDES = \
 	$(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/karbon \
 	-I$(top_srcdir)/karbon/core \
+	-I$(top_srcdir)/karbon/visitors \
 	$(all_includes)
 
 service_DATA = \
