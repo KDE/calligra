@@ -100,6 +100,18 @@ class KSpreadStyle
 
   virtual ~KSpreadStyle();
 
+    static QString saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix);
+    static QString saveOasisStyleNumericDate( KoGenStyles &mainStyles, FormatType _style );
+    static QString saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString _suffix );
+    static QString saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _style );
+    static QString saveOasisStyleNumericCustom( KoGenStyles&mainStyles, FormatType _style );
+    static QString saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatType _style, const QString &_prefix, const QString _suffix );
+    static QString saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType _style );
+    static QString saveOasisStyleNumericMoney( KoGenStyles&mainStyles, FormatType _style );
+    static QString saveOasisStyleNumericText( KoGenStyles&mainStyles, FormatType _style );
+    static QString saveOasisStyleNumericNumber( KoGenStyles&mainStyles, FormatType _style );
+
+
   StyleType type() const { return m_type; }
 
   void saveXML( QDomDocument & doc, QDomElement & format ) const;
@@ -297,18 +309,6 @@ class KSpreadStyle
   uint m_rightPenValue;
   uint m_leftPenValue;
   uint m_topPenValue;
-
-    QString saveOasisStyleNumeric( KoGenStyles &mainStyles );
-    QString saveOasisStyleNumericDate( KoGenStyles &mainStyles );
-    QString saveOasisStyleNumericFraction( KoGenStyles &mainStyles );
-    QString saveOasisStyleNumericTime( KoGenStyles& mainStyles );
-    QString saveOasisStyleNumericCustom( KoGenStyles&mainStyles );
-    QString saveOasisStyleNumericScientific( KoGenStyles&mainStyles );
-    QString saveOasisStyleNumericPercentage( KoGenStyles&mainStyles );
-    QString saveOasisStyleNumericMoney( KoGenStyles&mainStyles );
-    QString saveOasisStyleNumericText( KoGenStyles&mainStyles );
-    QString saveOasisStyleNumericNumber( KoGenStyles&mainStyles );
-
 
   bool featureSet( FlagsSet f ) const { return ( !m_parent || ( m_featuresSet & (uint) f ) ); }
 };

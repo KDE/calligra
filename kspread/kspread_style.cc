@@ -476,29 +476,29 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
 #endif
 }
 
-QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles )
+QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix )
 {
     QString styleName;
-    switch( m_formatType )
+    switch( _style )
     {
     case Number_format:
-        styleName = saveOasisStyleNumericNumber( mainStyles );
+        styleName = saveOasisStyleNumericNumber( mainStyles,_style );
         break;
     case Text_format:
-        styleName = saveOasisStyleNumericText( mainStyles );
+        styleName = saveOasisStyleNumericText( mainStyles,_style );
         break;
     case Money_format:
-        styleName = saveOasisStyleNumericMoney( mainStyles );
+        styleName = saveOasisStyleNumericMoney( mainStyles,_style );
         break;
     case Percentage_format:
-        styleName = saveOasisStyleNumericPercentage( mainStyles );
+        styleName = saveOasisStyleNumericPercentage( mainStyles,_style );
         break;
     case Scientific_format:
-        styleName = saveOasisStyleNumericScientific( mainStyles );
+        styleName = saveOasisStyleNumericScientific( mainStyles,_style, _prefix, _postfix );
         break;
     case ShortDate_format:
     case TextDate_format:
-        styleName = saveOasisStyleNumericDate( mainStyles );
+        styleName = saveOasisStyleNumericDate( mainStyles,_style );
         break;
     case Time_format:
     case SecondeTime_format:
@@ -510,7 +510,7 @@ QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles )
     case Time_format6:
     case Time_format7:
     case Time_format8:
-        styleName = saveOasisStyleNumericTime( mainStyles );
+        styleName = saveOasisStyleNumericTime( mainStyles,_style );
         break;
     case fraction_half:
     case fraction_quarter:
@@ -521,7 +521,7 @@ QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles )
     case fraction_one_digit:
     case fraction_two_digits:
     case fraction_three_digits:
-        styleName = saveOasisStyleNumericFraction( mainStyles );
+        styleName = saveOasisStyleNumericFraction( mainStyles,_style, _prefix, _postfix );
         break;
     case date_format1:
     case date_format2:
@@ -549,32 +549,32 @@ QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles )
     case date_format24:
     case date_format25:
     case date_format26:
-        styleName = saveOasisStyleNumericDate( mainStyles );
+        styleName = saveOasisStyleNumericDate( mainStyles,_style );
         break;
     case Custom_format:
-        styleName = saveOasisStyleNumericCustom( mainStyles );
+        styleName = saveOasisStyleNumericCustom( mainStyles,_style );
         break;
     }
     return styleName;
 }
 
-QString KSpreadStyle::saveOasisStyleNumericNumber( KoGenStyles&mainStyles )
+QString KSpreadStyle::saveOasisStyleNumericNumber( KoGenStyles&mainStyles, FormatType _style )
 {
     return "";
 }
 
-QString KSpreadStyle::saveOasisStyleNumericText( KoGenStyles&mainStyles )
+QString KSpreadStyle::saveOasisStyleNumericText( KoGenStyles&mainStyles, FormatType _style )
 {
     return "";
 }
 
-QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles&mainStyles )
+QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles&mainStyles, FormatType _style )
 {
     QString format;
     return KoOasisStyles::saveOasisCurrencyStyle( mainStyles, format );
 }
 
-QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles )
+QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType _style )
 {
     //<number:percentage-style style:name="N106" style:family="data-style">
     //<number:number number:decimal-places="6" number:min-integer-digits="1"/>
@@ -587,7 +587,7 @@ QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles )
 }
 
 
-QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
+QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatType _style, const QString &_prefix, const QString _suffix )
 {
     //<number:number-style style:name="N60" style:family="data-style">
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -595,14 +595,14 @@ QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
     //TODO add decimal etc.
     //TODO change with precision
     QString format="0.0E+00";
-    return KoOasisStyles::saveOasisScientificStyle( mainStyles, format, prefix(), postfix() );
+    return KoOasisStyles::saveOasisScientificStyle( mainStyles, format, _prefix,_suffix );
 }
 
-QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
+QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles, FormatType _style )
 {
     QString format;
     bool locale = false;
-    switch( m_formatType )
+    switch( _style )
     {
         //TODO fixme use locale of kspread and not kglobal
     case ShortDate_format:
@@ -692,13 +692,13 @@ QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
         format = "yyyy/MMM/dd";
         break;
     default:
-        kdDebug()<<"this date format is not defined ! :"<<m_formatType<<endl;
+        kdDebug()<<"this date format is not defined ! :"<<_style<<endl;
         break;
     }
     return KoOasisStyles::saveOasisDateStyle( mainStyles, format, locale );
 }
 
-QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
+QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles, FormatType _style )
 {
     //TODO
     //<number:date-style style:name="N50" style:family="data-style" number:automatic-order="true" number:format-source="language">
@@ -717,7 +717,7 @@ QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
     return "";
 }
 
-QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
+QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _style )
 {
     //<number:time-style style:name="N42" style:family="data-style">
     //<number:hours number:style="long"/>
@@ -729,7 +729,7 @@ QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
 
     QString format;
     bool locale = false;
-    switch( m_formatType )
+    switch( _style )
     {
     case Time_format:
         //format = ;
@@ -762,20 +762,20 @@ QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
         format = "h:mm";
         break;
     default:
-        kdDebug()<<"time format not defined :"<<m_formatType<<endl;
+        kdDebug()<<"time format not defined :"<<_style<<endl;
         break;
     }
     return KoOasisStyles::saveOasisTimeStyle( mainStyles, format, locale );
 }
 
 
-QString KSpreadStyle::saveOasisStyleNumericFraction( KoGenStyles &mainStyles )
+QString KSpreadStyle::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString _suffix )
 {
     //<number:number-style style:name="N71" style:family="data-style">
     //<number:fraction number:min-integer-digits="0" number:min-numerator-digits="2" number:min-denominator-digits="2"/>
     //</number:number-style>
     QString format;
-    switch( m_formatType )
+    switch( _style )
     {
     case fraction_half:
         format = "# ?/2";
@@ -805,11 +805,11 @@ QString KSpreadStyle::saveOasisStyleNumericFraction( KoGenStyles &mainStyles )
         format = "# \?\?\?/\?\?\?";
         break;
     default:
-        kdDebug()<<" fraction format not defined :"<<m_formatType<<endl;
+        kdDebug()<<" fraction format not defined :"<<_style<<endl;
         break;
     }
 
-    return KoOasisStyles::saveOasisFractionStyle( mainStyles, format, prefix(), postfix() );
+    return KoOasisStyles::saveOasisFractionStyle( mainStyles, format,_prefix, _suffix );
 }
 
 
@@ -973,7 +973,7 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
         format.setAttribute( "brushstyle", (int) m_backGroundBrush.style() );
     }
 #endif
-    return saveOasisStyleNumeric( mainStyles );
+    return saveOasisStyleNumeric( mainStyles, m_formatType, prefix(), postfix() );
 }
 
 
