@@ -39,7 +39,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 BrushCells.h PathTextTool.h \
 		 EllipseConfigDialog.h MyTabCtl.h HelplineDialog.h \
 		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h \
-		 StartupScreen.h
+		 StartupScreen.h filter_utils.h
 
 libkillu_a_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  PathTextTool.cc GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
@@ -80,7 +80,7 @@ libkillu_a_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon.
 			  EllipseConfigDialog.cc MyTabCtl.cc \
 			  HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
 			  BlendDialog.cc BlendCmd.cc \
-			  StartupScreen.cc
+			  StartupScreen.cc filter_utils.cc
 
 # just to make sure, automake makes them 
 METASOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \

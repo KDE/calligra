@@ -35,8 +35,8 @@ FilterInfo::FilterInfo (Kind kind, const char* type, const char* ext,
   f_extension = ext;
   f_vendor = vendor;
   f_release = release;
-  import = imp;
-  export = exp;
+  import_ = imp;
+  export_ = exp;
 }
 
 const char* FilterInfo::type () const {
@@ -60,9 +60,9 @@ FilterInfo::Kind FilterInfo::kind () const {
 }
 
 ExportFilter* FilterInfo::exportFilter () {
-  return export;
+  return export_;
 }
 
 ImportFilter* FilterInfo::importFilter () {
-  return import;
+  return import_;
 }

@@ -98,6 +98,7 @@ protected:
   QList<Coord> points;
   Arrow *sArrow, *eArrow;
   float sAngle, eAngle;
+  float sdx, sdy, edx, edy;
 };
 
 #endif

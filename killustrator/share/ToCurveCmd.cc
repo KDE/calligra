@@ -46,6 +46,7 @@ ToCurveCmd::~ToCurveCmd () {
 }
 
 void ToCurveCmd::execute () {
+  document->setAutoUpdate (false);
   list<GObject*>::iterator i;
   for (i = objects.begin (); i != objects.end (); i++) {
     unsigned int idx = document->findIndexOfObject (*i);
@@ -54,8 +55,10 @@ void ToCurveCmd::execute () {
       curves.push_back (curve);
       document->deleteObject (*i);
       document->insertObjectAtIndex (curve, idx);
+      document->selectObject (curve);
     }
   }
+  document->setAutoUpdate (true);
 }
 
 void ToCurveCmd::unexecute () {

@@ -38,6 +38,8 @@ GPolyline::GPolyline () {
   points.setAutoDelete (true);
   sArrow = eArrow = 0L;
   sAngle = eAngle = 0;
+  sdx = sdy = 0;
+  edx = edy = 0;
 }
 
 GPolyline::GPolyline (const list<XmlAttribute>& attribs) : GObject (attribs) {
@@ -122,10 +124,6 @@ QString GPolyline::typeName () const {
 void GPolyline::draw (Painter& p, bool withBasePoints, bool /*outline*/) {
   unsigned int i;
   QPen pen;
-  int sdx = 0;
-  int sdy = 0;
-  int edx = 0;
-  int edy = 0;
 
   initPen (pen);
   p.save ();
@@ -134,25 +132,13 @@ void GPolyline::draw (Painter& p, bool withBasePoints, bool /*outline*/) {
 
   float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
 
-  // check for arrows
-  // (xAngle/RAD_FACTOR) doesnt work!?
-  if (sArrow != 0L) {
-    sdx = qRound (w*sArrow->length () * cos (1/(RAD_FACTOR/(sAngle))));
-    sdy = qRound (w*sArrow->length () * sin (1/(RAD_FACTOR/(sAngle))));
-  }
-
-  if (eArrow != 0L) {
-    edx = qRound (w*eArrow->length () * cos (1/(RAD_FACTOR/(eAngle))));
-    edy = qRound (w*eArrow->length () * sin (1/(RAD_FACTOR/(eAngle))));
-  }
-
   unsigned int num = points.count ();
-
-  for (i = 1; i < num; i++) 
-      p.drawLine (points.at (i - 1)->x () + ((i==1) ? sdx : 0), 
-                  points.at (i - 1)->y () + ((i==1) ? sdy : 0),
-		              points.at (i)->x () + ((i==num-1) ? edx : 0), 
-		              points.at (i)->y () + ((i==num-1) ? edy : 0));     
+  for (i = 1; i < num; i++) {
+    p.drawLine (points.at (i - 1)->x () + ((i==1) ? sdx : 0), 
+		points.at (i - 1)->y () + ((i==1) ? sdy : 0),
+		points.at (i)->x () - ((i==num-1) ? edx : 0), 
+		points.at (i)->y () - ((i==num-1) ? edy : 0));     
+  }
 
   p.restore ();
   if (sArrow != 0L) {
@@ -310,6 +296,14 @@ void GPolyline::calcBoundingBox () {
     sAngle = calcArrowAngle (p1, p2, 0);
     Rect sr = sArrow->boundingBox (p1, w, sAngle);
     r = r.unite (sr);
+
+    float angle = calcArrowAngle (*(points.at (0)), *(points.at (1)), 0);
+    angle = 1.0 / (RAD_FACTOR / angle);
+    sdx = w * sArrow->length () * cos (angle);
+    sdy = w * sArrow->length () * sin (angle);
+  }
+  else {
+    sdx = sdy = 0;
   }
   if (eArrow != 0L) {
     Coord p1 = points.at (num - 2)->transform (tmpMatrix);
@@ -317,6 +311,15 @@ void GPolyline::calcBoundingBox () {
     eAngle = calcArrowAngle (p1, p2, 1);
     Rect er = eArrow->boundingBox (p2, w, eAngle);
     r = r.unite (er);
+
+    float angle = calcArrowAngle (*(points.at (num - 2)), 
+				  *(points.at (num - 1)), 0);
+    angle = 1.0 / (RAD_FACTOR / angle);
+    edx = w * eArrow->length () * cos (angle);
+    edy = w * eArrow->length () * sin (angle);
+  }
+  else {
+    edx = edy = 0;
   }
 
   updateBoundingBox (r);

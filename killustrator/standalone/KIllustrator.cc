@@ -892,7 +892,7 @@ void KIllustrator::menuCallback (int item) {
     }
   case ID_EDIT_PROPERTIES:
     {
-      int result = 1;
+      int result = 0;
 
       if (document->selectionIsEmpty ()) {
 	result =

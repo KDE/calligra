@@ -44,17 +44,71 @@
 #include "KIllustrator.h"
 #include "PStateManager.h"
 #include "StartupScreen.h"
+#include "filter_utils.h"
 
 #ifndef KDEMAXPATHLEN
 #define KDEMAXPATHLEN 4095
 #endif
 
-int main (int argc, char** argv) {
+#include <getopt.h>
 
+static struct option kill_options[] = {
+  {"help", 0, 0, 0 }, 
+  {"version", 0, 0, 0 }, 
+  {"export", 2, 0, 0 },
+  { 0, 0, 0, 0 }
+};
+
+int main (int argc, char** argv) {
 #ifdef __FreeBSD__
   fpsetmask (fpgetmask() & ~(FP_X_DZ|FP_X_INV));
 #endif
+  int option_index = 0;
+  bool show_gui = true;
+
   KApplication* app = new KApplication (argc, argv, APP_NAME);
+
+  QObject::connect (app, SIGNAL(saveYourself ()),
+		    PStateManager::instance (), SLOT(saveDefaultSettings ()));
+
+  if (argc != 1) {
+    opterr = 0;
+    while (1) {
+      int c = getopt_long_only (argc, argv, "hve::", 
+				kill_options, &option_index);
+      if (c == -1)
+	break;
+      switch (c) {
+      case 'h':
+	cout << "KIllustrator Release " << APP_VERSION << '\n'
+	     << "Options:\n" 
+	     << " -h             Print this message\n"
+	     << " -v             Print version number\n"
+	     << " -e fmt files   Convert KIllustrator files into "
+	     << "output format fmt\n"
+	     << " -e             List supported output formats"
+	     << endl;
+	show_gui = false;
+	break;
+      case 'v':
+	cout << APP_VERSION << endl;
+	show_gui = false;
+	break;
+      case 'e':
+	if (optind == argc)
+	  list_export_filters ();
+	else
+	  convert_to_format (argv[optind], &argv[optind + 1], 
+			     argc - optind - 1);
+	show_gui = false;
+      default:
+	break;
+      }
+    }
+  }
+
+  if (!show_gui)
+    exit (0);
 
   if (PStateManager::instance ()->showSplashScreen ())
 #ifdef NEWKDE
@@ -64,9 +118,6 @@ int main (int argc, char** argv) {
     new StartupScreen (kapp->kde_datadir() + 
 		       "/killustrator/pics/killustrator-intro.gif", 5);
 #endif
-  QObject::connect (app, SIGNAL(saveYourself ()),
-		    PStateManager::instance (), SLOT(saveDefaultSettings ()));
-
   if (app->isRestored ()) {
     int n = 1;
     while (KTMainWindow::canBeRestored (n)) {

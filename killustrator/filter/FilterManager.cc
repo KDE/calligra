@@ -183,6 +183,6 @@ QStrList FilterManager::getInstalledFilters () {
   QStrList flist;
   QDictIterator<FilterInfo> iter (filters);
   for (; iter.current (); ++iter)
-    flist.append (iter.current ()->type ());
+    flist.append (iter.currentKey ());
   return flist;
 }

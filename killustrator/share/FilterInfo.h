@@ -51,8 +51,8 @@ class FilterInfo {
 private:
   QString f_type, f_vendor, f_release, f_extension;
   Kind f_kind;
-  ExportFilter* export;
-  ImportFilter* import;
+  ExportFilter* export_;
+  ImportFilter* import_;
 };
 
 #endif

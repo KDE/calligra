@@ -43,6 +43,18 @@ void Painter::drawEllipse (float x, float y, float w, float h) {
   QPainter::drawEllipse (round (x), round (y), round (w), round (h));
 }
 
+void Painter::drawArc (float x, float y, float w, float h, 
+		       float a, float alen) {
+  QPainter::drawArc (round (x), round (y), round (w), round (h),
+		     round (a), round (alen));
+}
+
+void Painter::drawPie (float x, float y, float w, float h, 
+		       float a, float alen) {
+  QPainter::drawPie (round (x), round (y), round (w), round (h),
+		     round (a), round (alen));
+}
+
 void Painter::drawBezier (QList<Coord>& points, int index) {
     float th,th2,th3;
     float t,t2,t3;      

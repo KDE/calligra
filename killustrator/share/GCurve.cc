@@ -342,11 +342,18 @@ void GCurve::movePoint (int idx, float dx, float dy) {
       // move point of segment[i]
       int sidx = idx - (pidx - num);
       i->movePoint (sidx, ndx, ndy);
-      if (pidx == idx + 1) {
+      if (sidx == num - 1) {
 	// it's a endpoint, so move the first point of segment[i+1]
 	i++;
 	if (i != segments.end ()) {
 	  i->movePoint (0, ndx, ndy);
+	}
+      }
+      else if (sidx == 0) {
+	// it's a startpoint, so move the first point of segment[i-1]
+	if (i == segments.begin () && closed) {
+	  GSegment& seg = segments.back ();
+	  seg.movePoint (seg.kind () == GSegment::sk_Line ? 1 : 3, ndx, ndy);
 	}
       }
       updatePath ();

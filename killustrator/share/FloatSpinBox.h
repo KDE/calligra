@@ -55,6 +55,7 @@ public slots:
 
 protected slots:
   void slotValueChange ();
+  void reportChanges ();
 
 protected:
   int mapTextToValue (bool *ok);

@@ -367,7 +367,22 @@ bool GPolygon::inside_polygon (const Coord& p) {
   Coord t1 (p), t2 (10000.0, p.y ());
   int counter = 0;
   bool ready = false;
+  unsigned int i = 0, num = points.count ();
 
+  while (i < num) {
+    p1 = points.at (i);
+    if (! line_intersects (*p1, *p1, t1, t2)) {
+      if (i == num - 1)
+	p2 = points.at (0);
+      else
+	p2 = points.at (i + 1);
+      if (line_intersects (*p1, *p2, t1, t2)) {
+        counter++;
+      }
+    }
+    i++;
+  }
+  /*
   p1 = points.first ();
   while (! ready) {
     if (! line_intersects (*p1, *p1, t1, t2)) {
@@ -379,8 +394,9 @@ bool GPolygon::inside_polygon (const Coord& p) {
       if (line_intersects (*p1, *p2, t1, t2)) 
         counter++;
       p1 = p2;
-    }
+    } 
   }
+  */
   return counter & 1;
 }
 
