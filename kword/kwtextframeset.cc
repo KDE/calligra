@@ -48,9 +48,9 @@
 
 #include <kdebug.h>
 
-//#define DEBUG_FLOW
+#define DEBUG_FLOW
 //#define DEBUG_FORMATS
-//#define DEBUG_FORMAT_MORE
+#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
 
 //#define DEBUG_NTI
@@ -554,7 +554,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
 void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd )
 {
 #ifdef DEBUG_FLOW
-    kdDebugBody(32002) << "  KWTextFrameSet " << this << " getMargins yp=" << yp
+    kdDebugBody(32002) << "  KWTextFrameSet " << this << "(" << getName() << ") getMargins yp=" << yp
                        << " h=" << h << " called by "
                        << (marginLeft?"adjustLMargin":marginRight?"adjustRMargin":"adjustFlow")
                        << endl;
@@ -1014,7 +1014,9 @@ const QList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
 
 KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) const
 {
-    //kdDebug() << getName() << " ITN called for iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
+#ifdef DEBUG_ITN
+    kdDebug() << getName() << " ITN called for iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
+#endif
     // This does a binary search in the m_framesInPage array, with internalY as criteria
     // We only look at the first frame of each page. Refining is done later on.
     ASSERT( !m_framesInPage.isEmpty() );
@@ -1026,24 +1028,35 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
     while ( n1 <= n2 ) {
         int res;
         mid = (n1 + n2)/2;
-        //kdDebug() << "ITN: begin. mid=" << mid << endl;
+#ifdef DEBUG_ITN
+        kdDebug() << "ITN: begin. mid=" << mid << endl;
+#endif
         ASSERT( m_framesInPage[mid] ); // We have no null items
         if ( m_framesInPage[mid]->isEmpty() )
             res = -1;
         else
         {
             KWFrame * frame = m_framesInPage[mid]->first();
-            //kdDebug() << "ITN: iPoint.y=" << iPoint.y() << " internalY=" << frame->internalY() << endl;
+#ifdef DEBUG_ITN
+            kdDebug() << "ITN: iPoint.y=" << iPoint.y() << " internalY=" << frame->internalY() << endl;
+#endif
             res = iPoint.y() - frame->internalY();
-            //kdDebug() << "ITN: res=" << res << endl;
+#ifdef DEBUG_ITN
+            kdDebug() << "ITN: res=" << res << endl;
+#endif
             // Anything between this internalY (top) and internalY+height (bottom) is fine
             // (Using the next page's first frame's internalY only works if there is a frame on the next page)
             if ( res >= 0 )
             {
                 int height = m_doc->zoomItY( frame->height() );
+#ifdef DEBUG_ITN
+                kdDebug() << "ITN: height=" << height << endl;
+#endif
                 if ( iPoint.y() < frame->internalY() + height )
                 {
-                    //kdDebug() << "ITN: found a match " << mid << endl;
+#ifdef DEBUG_ITN
+                    kdDebug() << "ITN: found a match " << mid << endl;
+#endif
                     found = true;
                     break;
                 }
@@ -1054,14 +1067,25 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
             n2 = mid - 1;
         else // if ( res > 0 )
             n1 = mid + 1;
-        //kdDebug() << "ITN: End of loop. n1=" << n1 << " n2=" << n2 << endl;
+#ifdef DEBUG_ITN
+        kdDebug() << "ITN: End of loop. n1=" << n1 << " n2=" << n2 << endl;
+#endif
     }
     if ( !found )
     {
-        //kdDebug(32002) << "KWTextFrameSet::internalToNormal " << iPoint.x() << "," << iPoint.y()
-        //               << " not in any frame of " << (void*)this << endl;
+        // Not found (n2 < n1)
+        // We might have missed the frame because n2 has many frames
+        // (and we only looked at the first one).
+        mid = n2;
+#ifdef DEBUG_ITN
+        kdDebug() << "ITN: Setting mid to n2=" << mid << endl;
+#endif
+#if 0
+        kdDebug(32002) << "KWTextFrameSet::internalToNormal " << iPoint.x() << "," << iPoint.y()
+                       << " not in any frame of " << (void*)this << endl;
         nPoint = iPoint; // "bah", I said above :)
         return 0L;
+#endif
     }
     // search to first of equal items
     // ## don't think this can happen here
@@ -1083,8 +1107,10 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
             return frame;
         }
     }
+#ifdef DEBUG_ITN
     kdDebug(32002) << "KWTextFrameSet::internalToNormal " << iPoint.x() << "," << iPoint.y()
                    << " not in any frame of " << (void*)this << " (looked on page " << mid << ")" << endl;
+#endif
     nPoint = iPoint; // bah again
     return 0L;
 }
