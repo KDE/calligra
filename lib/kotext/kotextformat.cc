@@ -89,6 +89,15 @@ void KoTextFormat::setTextUnderlineColor(const QColor &_col)
     update();
 }
 
+void KoTextFormat::setShadowText(bool _b)
+{
+    if ( m_bShadowText == _b )
+        return;
+    m_bShadowText=_b;
+    update();
+}
+
+
 int KoTextFormat::compare( const KoTextFormat & format ) const
 {
     int flags = 0;
@@ -115,6 +124,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::TextBackgroundColor;
     if ( spellCheckingLanguage() != format.spellCheckingLanguage() )
         flags |= KoTextFormat::SpellCheckingLanguage;
+    if ( shadowText() != format.shadowText() )
+        flags |= KoTextFormat::ShadowText;
     return flags;
 }
 

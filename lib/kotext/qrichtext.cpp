@@ -6012,6 +6012,8 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
     }
     if( flags & KoTextFormat::SpellCheckingLanguage)
         setSpellCheckingLanguage(nf.spellCheckingLanguage());
+    if( flags & KoTextFormat::ShadowText)
+        setShadowText(nf.shadowText());
 
     //////
     update();
