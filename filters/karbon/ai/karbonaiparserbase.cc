@@ -2,8 +2,8 @@
                           karbonaiparserbase.cpp  -  description
                              -------------------
     begin                : Wed Feb 20 2002
-    copyright            : (C) 2002 by 
-    email                : 
+    copyright            : (C) 2002 by
+    email                :
  ***************************************************************************/
 
 /***************************************************************************
@@ -296,14 +296,14 @@ void KarbonAIParserBase::gotEndGroup (bool /*clipping*/)
   {
     if (m_debug) qDebug ("insert object");
     ensureLayer();
-    m_layer->insertObject (group);
+    m_layer->append (group);
     if (m_debug) qDebug ("/insert object");
   }
   else
   {
     if (m_debug) qDebug ("insert object to group");
 
-    m_groupStack.top()->insertObject (group);
+    m_groupStack.top()->append (group);
     if (m_debug) qDebug ("/insert object to group");
   }
 
@@ -426,7 +426,7 @@ void KarbonAIParserBase::ensureLayer ()
 {
   if (!m_layer)
   {
-    m_layer = new VLayer();
+    m_layer = new VLayer( 0 );
     m_document->insertLayer (m_layer);
   }
 }
@@ -564,7 +564,3 @@ void KarbonPathHandler::gotClipPath (bool closed)
 {
   delegate->gotClipPath(closed);
 }
-
-=======
-
->>>>>>> 1.11
