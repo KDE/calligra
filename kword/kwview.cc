@@ -850,6 +850,11 @@ void KWView::setupActions()
     actLineBreak->plugAccel( accel );
     actAutoComplete->plugAccel( accel );
 
+    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
+                                        this, SLOT( editCustomVars() ),
+                                        actionCollection(), "edit_customvars" );
+
+
 }
 
 void KWView::refreshMenuExpression()
@@ -989,9 +994,6 @@ void KWView::refreshCustomMenu()
 
     actionInsertCustom->popupMenu()->insertSeparator();
 
-    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
-                                        this, SLOT( editCustomVars() ),
-                                        actionCollection(), "edit_customvars" );
     actionEditCustomVars->setEnabled(state);
     actionInsertCustom->insert( actionEditCustomVars );
 }
