@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #ifndef STDWIDGETFACTORY_H
 #define STDWIDGETFACTORY_H
 
@@ -49,7 +68,7 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 		virtual void		startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
 		virtual void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         QDomElement &parentNode, QDomDocument &parent);
-		virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w);
+		virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item);
 		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
 		virtual QStringList     autoSaveProperties(const QString &classname);
 

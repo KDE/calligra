@@ -1,7 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Lucijan Busch                                   *
- *   lucijan@kde.org                                                       *
- *                                                                         *
+ *   Copyright (C) 2003 by Lucijan Busch <lucijan@kde.org>                 *
+ *   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>            *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
  *   published by the Free Software Foundation; either version 2 of the    *
@@ -670,7 +669,7 @@ StdWidgetFactory::saveSpecialProperty(const QString &classname, const QString &n
 }
 
 void
-StdWidgetFactory::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w)
+StdWidgetFactory::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
 {
 	QString tag = node.tagName();
 	QString name = node.attribute("name");

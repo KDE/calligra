@@ -1,5 +1,6 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
+* Handle tab stops (maybe in ObjectTreeView)
 * Create an event editor and manage signals/slots (EventBuffer ?)
 	HOWEVER, SIGNAL/SLOT ISSUES (js):
 	1. signals/slots mechanism is hard to use for average folks
@@ -16,10 +17,12 @@
 ****** Bugfixes/Changes : *****
 * Add a grouping ability to Widget
 * Make actions toggable (with KRadioAction)
+* Modify Spacer for better compatibility (save orientation and expanding)
 
 ^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
 * Move tab between two QTabWidgets by drag'n drop
 * Better editor for iconview and listview if they really are necessary
+* Rich text editor (see BasKet source)
 
 ^^^^^^^^^^^^^^^^ DONE ^^^^^^^^^^^^^^
 * Finish sync between Form and ObjectTreeView (2/21/04)

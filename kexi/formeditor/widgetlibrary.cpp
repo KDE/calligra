@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -185,10 +186,10 @@ WidgetLibrary::saveSpecialProperty(const QString &classname, const QString &name
 }
 
 void
-WidgetLibrary::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w)
+WidgetLibrary::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item)
 {
 	if(m_widgets.find(classname))
-		m_widgets[classname]->factory()->readSpecialProperty(classname, node, w);
+		m_widgets[classname]->factory()->readSpecialProperty(classname, node, w, item);
 	else
 		return;
 }

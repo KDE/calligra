@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Lucijan Busch                                   *
- *   lucijan@kde.org                                                       *
+ *   Copyright (C) 2003 by Lucijan Busch          lucijan@kde.org          *
+ *   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -242,7 +242,7 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	else if(c == "KTabWidget")
 	{
 		MyTabWidget *tab = new MyTabWidget(p, n, container);
-#if KDE_IS_VERSION(3,1,9) 
+#if KDE_IS_VERSION(3,1,9)
 		tab->setTabReorderingEnabled(true);
 #endif
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
@@ -388,13 +388,14 @@ ContainerFactory::saveSpecialProperty(const QString &classname, const QString &n
 }
 
 void
-ContainerFactory::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w)
+ContainerFactory::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
 {
 	QString name = node.attribute("name");
-	if((name == "title") && (w->parentWidget()->inherits("QTabWidget")))
+	if((name == "title") && (item->parent()->widget()->inherits("QTabWidget")))
 	{
 		QTabWidget *tab = (QTabWidget*)w->parentWidget();
 		tab->addTab(w, node.firstChild().toElement().text());
+		item->addModProperty("title", node.firstChild().toElement().text());
 	}
 	else if((name == "id") && (w->parentWidget()->isA("QWidgetStack")))
 	{
@@ -402,6 +403,7 @@ ContainerFactory::readSpecialProperty(const QString &classname, QDomElement &nod
 		int id = KFormDesigner::FormIO::readProp(node.firstChild(), w, name).toInt();
 		stack->addWidget(w, id);
 		stack->raiseWidget(w);
+		item->addModProperty("id", id);
 	}
 }
 

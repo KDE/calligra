@@ -95,10 +95,7 @@ Form::setCurrentWidget(QWidget *w)
 		m_selected.append(w);
 		emit selectionChanged(w);
 	}
-	/*if(w->parentWidget()->inherits("QWidgetStack"))
-	{
-		w = w->parentWidget()->parentWidget();
-	}*/
+
 	if(!m_manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 	{
 		w = w->parentWidget();

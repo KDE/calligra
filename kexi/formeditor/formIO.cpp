@@ -889,7 +889,7 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 				continue;
 
 			if(w->metaObject()->findProperty(name.latin1(), true) == -1)
-				lib->readSpecialProperty(w->className(), node, w);
+				lib->readSpecialProperty(w->className(), node, w, tree);
 			else
 			{
 				QVariant val = readProp(node.firstChild(), w, name);
@@ -920,7 +920,7 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 		else
 		{
 			QDomElement node = n.toElement();
-			lib->readSpecialProperty(w->className(), node, w);
+			lib->readSpecialProperty(w->className(), node, w, tree);
 		}
 	}
 }

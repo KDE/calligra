@@ -41,6 +41,7 @@ namespace KFormDesigner {
 class WidgetFactory;
 class Container;
 class ResizeHandleSet;
+class ObjectTreeItem;
 
 /**
  * this class holds properties of widgets
@@ -135,7 +136,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 		virtual void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         QDomElement &parentNode,  QDomDocument &parent)=0;
-		virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w)=0;
+		virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item)=0;
 		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple) { return !multiple; }
 		virtual QStringList     autoSaveProperties(const QString &classname)=0;
 

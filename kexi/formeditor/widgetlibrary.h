@@ -41,6 +41,7 @@ namespace KFormDesigner {
 class Widget;
 class WidgetFactory;
 class Container;
+class ObjectTreeItem;
 
 typedef QDict<Widget> Widgets;
 typedef QPtrList<KAction> Actions;
@@ -103,7 +104,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 		void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		        QDomElement &parentNode, QDomDocument &parent);
-		void	readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w);
+		void	readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item);
 		bool    showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
 		QStringList  autoSaveProperties(const QString &classname);
 
