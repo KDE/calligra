@@ -23,16 +23,16 @@
 #include <qkeycode.h>
 #include <qpainter.h>
 #include <qwidget.h>
-#include <qfontmet.h>
+#include <qfontmetrics.h>
 #include <qevent.h>
 #include <qcursor.h>
 #include <qpicture.h>
-#include <qscrbar.h>
+#include <qscrollbar.h>
 #include <qfile.h>
-#include <qtstream.h>
+#include <qtextstream.h>
 #include <qpixmap.h>
-#include <qclipbrd.h>
-#include <qpopmenu.h>
+#include <qclipboard.h>
+#include <qpopupmenu.h>
 #include <qaccel.h>
 
 #include <kapp.h>

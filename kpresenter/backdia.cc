@@ -28,7 +28,7 @@
 #include <qwidget.h>
 #include <qevent.h>
 #include <qpainter.h>
-#include <qcombo.h>
+#include <qcombobox.h>
 #include <qslider.h>
 #include <qlayout.h>
 #include <qtabwidget.h>

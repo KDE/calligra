@@ -20,13 +20,13 @@
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qstring.h>
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <qkeycode.h>
-#include <qscrbar.h>
+#include <qscrollbar.h>
 #include <qevent.h>
-#include <qpopmenu.h>
+#include <qpopupmenu.h>
 #include <qcursor.h>
-#include <qfileinf.h>
+#include <qfileinfo.h>
 #include <qtextstream.h>
 #include "backdia.h"
 #include "autoformEdit/afchoose.h"

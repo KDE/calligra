@@ -21,13 +21,13 @@
 #include "kcharselectdia.moc"
 
 #include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qlayout.h>
-#include <qcombo.h>
+#include <qcombobox.h>
 #include <qstrlist.h>
 #include <qwidget.h>
 #include <qframe.h>
-#include <qchkbox.h>
+#include <qcheckbox.h>
 #include <qpalette.h>
 
 #include <kbuttonbox.h>

@@ -27,8 +27,8 @@
 #include <qvbox.h>
 #include <qlistview.h>
 #include <qradiobutton.h>
-#include <qchkbox.h>
-#include <qcombo.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qheader.h>
 
 #include <klocale.h>

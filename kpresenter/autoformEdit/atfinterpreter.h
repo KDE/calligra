@@ -22,7 +22,7 @@
 
 #include <qobject.h>
 #include <qstack.h>
-#include <qpntarry.h>
+#include <qpointarray.h>
 #include <qstring.h>
 #include <qlist.h>
 #include <qfile.h>

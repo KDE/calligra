@@ -20,14 +20,14 @@
 #ifndef AFCHOOSE_H
 #define AFCHOOSE_H
 
-#include <qtabdlg.h>
+#include <qtabdialog.h>
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qstring.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qlistbox.h>
 #include <qlist.h>
-#include <qfileinf.h>
+#include <qfileinfo.h>
 #include <qpixmap.h>
 #include <qstring.h>
 #include <qevent.h>

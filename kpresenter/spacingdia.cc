@@ -21,7 +21,7 @@
 #include "spacingdia.moc"
 
 #include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qstring.h>
 #include <qvalidator.h>
 #include <qlineedit.h>

@@ -22,9 +22,9 @@
 
 #include <qwidget.h>
 #include <qlabel.h>
-#include <qchkbox.h>
+#include <qcheckbox.h>
 #include <qstring.h>
-#include <qgrpbox.h>
+#include <qgroupbox.h>
 #include <qvalidator.h>
 
 #include <kapp.h>

@@ -22,7 +22,7 @@
 #include "inspagedia.moc"
 
 #include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qradiobutton.h>
 
 #include <kapp.h>

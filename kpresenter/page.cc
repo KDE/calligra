@@ -18,22 +18,22 @@
 */
 
 #include <qprinter.h>
-#include <qprogdlg.h>
-#include <qprogbar.h>
+#include <qprogressdialog.h>
+#include <qprogressbar.h>
 #include <qdragobject.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qevent.h>
 #include <qpainter.h>
-#include <qscrbar.h>
-#include <qpaintd.h>
+#include <qscrollbar.h>
+#include <qpaintdevice.h>
 #include <qwmatrix.h>
-#include <qapp.h>
+#include <qapplication.h>
 #include <qpicture.h>
-#include <qpntarry.h>
-#include <qpopmenu.h>
+#include <qpointarray.h>
+#include <qpopupmenu.h>
 #include <qimage.h>
-#include <qdatetm.h>
+#include <qdatetime.h>
 #include <qdropsite.h>
 
 #include "page.h"

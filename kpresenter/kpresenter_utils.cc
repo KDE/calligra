@@ -20,7 +20,7 @@
 #include "kpresenter_utils.h"
 
 #include <qpainter.h>
-#include <qpntarry.h>
+#include <qpointarray.h>
 
 #include <qsize.h>
 

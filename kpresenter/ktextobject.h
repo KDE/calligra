@@ -20,7 +20,7 @@
 #ifndef KTEXTOBJECT_H
 #define KTEXTOBJECT_H
 
-#include <qtablevw.h>
+#include <qtableview.h>
 #include <qcolor.h>
 #include <qfont.h>
 #include <qstring.h>

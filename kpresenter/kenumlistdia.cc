@@ -21,14 +21,14 @@
 #include "kenumlistdia.moc"
 
 #include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qlayout.h>
-#include <qcombo.h>
+#include <qcombobox.h>
 #include <qstringlist.h>
 
-#include <qchkbox.h>
-#include <qlined.h>
-#include <qradiobt.h>
+#include <qcheckbox.h>
+#include <qlineedit.h>
+#include <qradiobutton.h>
 
 #include <kapp.h>
 #include <kbuttonbox.h>

@@ -24,9 +24,9 @@
 #include "kpobject.h"
 
 #include <qlabel.h>
-#include <qpushbt.h>
-#include <qbttngrp.h>
-#include <qcombo.h>
+#include <qpushbutton.h>
+#include <qbuttongroup.h>
+#include <qcombobox.h>
 #include <qlabel.h>
 #include <qgroupbox.h>
 #include <qcheckbox.h>

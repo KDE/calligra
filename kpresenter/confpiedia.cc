@@ -21,8 +21,8 @@
 #include "confpiedia.moc"
 
 #include <qlabel.h>
-#include <qpushbt.h>
-#include <qgrpbox.h>
+#include <qpushbutton.h>
+#include <qgroupbox.h>
 #include <qcolor.h>
 #include <qpainter.h>
 #include <qcombobox.h>

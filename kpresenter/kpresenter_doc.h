@@ -27,7 +27,7 @@ class DCOPObject;
 #include <koDocument.h>
 #include <koQueryTypes.h>
 
-#include <qapp.h>
+#include <qapplication.h>
 #include <qlist.h>
 #include <qobject.h>
 #include <qstring.h>

@@ -22,7 +22,7 @@
 #include "delpagedia.moc"
 
 #include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 

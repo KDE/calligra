@@ -21,14 +21,14 @@
 #include "rotatedia.moc"
 
 #include <qlabel.h>
-#include <qpushbt.h>
-#include <qgrpbox.h>
-#include <qradiobt.h>
+#include <qpushbutton.h>
+#include <qgroupbox.h>
+#include <qradiobutton.h>
 #include <qcolor.h>
 #include <qpainter.h>
 #include <qpen.h>
 #include <qfont.h>
-#include <qfontmet.h>
+#include <qfontmetrics.h>
 #include <qwmatrix.h>
 #include <qvalidator.h>
 #include <qlineedit.h>

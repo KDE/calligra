@@ -30,14 +30,14 @@
 #include <kglobal.h>
 
 #include <qlabel.h>
-#include <qpushbt.h>
-#include <qgrpbox.h>
+#include <qpushbutton.h>
+#include <qgroupbox.h>
 #include <qcolor.h>
 #include <qpainter.h>
 #include <qpen.h>
 #include <qfont.h>
 #include <qstring.h>
-#include <qfontmet.h>
+#include <qfontmetrics.h>
 
 #include <stdlib.h>
 

@@ -20,10 +20,10 @@
 #include "ksearchdialogs.h"
 #include "ksearchdialogs.moc"
 
-#include <qpushbt.h>
-#include <qchkbox.h>
-#include <qlined.h>
-#include <qgrpbox.h>
+#include <qpushbutton.h>
+#include <qcheckbox.h>
+#include <qlineedit.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 
 #include <kapp.h>

@@ -57,12 +57,12 @@
 #include <qwmatrix.h>
 #include <qbrush.h>
 #include <qpen.h>
-#include <qpopmenu.h>
+#include <qpopupmenu.h>
 #include <qcursor.h>
-#include <qmsgbox.h>
-#include <qclipbrd.h>
+#include <qmessagebox.h>
+#include <qclipboard.h>
 #include <qregexp.h>
-#include <qfileinf.h>
+#include <qfileinfo.h>
 #include <qmap.h>
 #include <qdatetime.h>
 #include <qimage.h>

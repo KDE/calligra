@@ -20,7 +20,7 @@
 #ifndef OPTIONDIA_H
 #define OPTIONDIA_H
 
-#include <qtabdlg.h>
+#include <qtabdialog.h>
 #include <qcolor.h>
 #include <qstring.h>
 

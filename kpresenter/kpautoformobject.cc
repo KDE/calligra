@@ -21,7 +21,7 @@
 #include "kpresenter_utils.h"
 #include "kpgradient.h"
 
-#include <qpntarry.h>
+#include <qpointarray.h>
 #include <qlist.h>
 #include <qregion.h>
 #include <qpicture.h>
