@@ -277,11 +277,20 @@ MySqlDB::escape(const QString &str)
 QString
 MySqlDB::escape(const QByteArray& str)
 {
-	char* escaped = (char*) malloc(str.size() * 2 + 2);
-	mysql_real_escape_string(m_mysql, escaped, str.data(), str.size());
+	QString rval;
 	
-	QString rval = escaped;
-	free(escaped);
+	if(str.size() > 0)
+	{
+		char* escaped = (char*) malloc(str.size() * 2 + 2);
+		mysql_real_escape_string(m_mysql, escaped, str.data(), str.size());
+		rval = escaped;
+		free(escaped);
+	}
+	else
+	{
+		rval = "";
+	}
+	
 	return rval;
 }
 

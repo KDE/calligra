@@ -52,6 +52,7 @@
 #include "kexitableedit.h"
 #include "kexiinputtableedit.h"
 #include "kexicomboboxtableedit.h"
+#include "kexiblobtableedit.h"
 
 KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *contents)
 :QScrollView(parent, name, Qt::WRepaintNoErase | Qt::WStaticContents | Qt::WResizeNoErase)
@@ -961,6 +962,9 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 
 	switch(columnType(col))
 	{
+		case QVariant::ByteArray:
+			m_pEditor = new KexiBlobTableEdit(val.toByteArray(), viewport(), "inPlaceEd");
+			break;
 		case QVariant::StringList:
 			m_pEditor = new KexiComboBoxTableEdit(static_cast<KexiDBField::ColumnType>(val.toInt()),
 				m_pColumnDefaults->at(col)->toStringList(), viewport(), "inPlaceEd");

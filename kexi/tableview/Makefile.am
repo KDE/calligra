@@ -1,7 +1,7 @@
 lib_LTLIBRARIES = libkexidatatable.la
 libkexidatatable_la_SOURCES = kexitableedit.cpp kexitableheader.cpp kexitableitem.cpp kexitablelist.cpp \
 		kexitablerm.cpp kexitableview.cpp kexicomboboxtableedit.cpp  kexidatetableedit.cpp  \
-		kexiinputtableedit.cpp 
+		kexiinputtableedit.cpp kexiblobtableedit.cpp
 
 
 
