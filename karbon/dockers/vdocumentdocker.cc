@@ -323,9 +323,10 @@ VObjectListViewItem::update()
 
 	VSelectionDescription selectionDesc;
 	selectionDesc.visit( *m_object );
-	setText( 2, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
-	setPixmap( 1, QPixmap( il.iconPath( ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ? "14_layer_novisible.png" : "14_layer_visible.png" ), KIcon::Small ) ) );
-	setPixmap( 2, preview );
+	setText( 0, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
+	setPixmap( 2, QPixmap( il.iconPath( ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ? "14_layer_novisible.png" : "14_layer_visible.png" ), KIcon::Small ) ) );
+	setPixmap( 1, QPixmap( il.iconPath( "lock.png", KIcon::Small ) ) );
+	setPixmap( 0, preview );
 }
 
 
@@ -359,9 +360,10 @@ VLayerListViewItem::update()
 	p.end();
 
 	setOn( m_layer->selected() );
-	setText( 2, m_layer->name() );
-	setPixmap( 1, QPixmap( il.iconPath( ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ? "14_layer_visible.png" : "14_layer_novisible.png" ), KIcon::Small ) ) );
-	setPixmap( 2, preview );
+	setText( 0, m_layer->name() );
+	setPixmap( 1, QPixmap( il.iconPath( "lock.png", KIcon::Small ) ) );
+	setPixmap( 2, QPixmap( il.iconPath( ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ? "14_layer_visible.png" : "14_layer_novisible.png" ), KIcon::Small ) ) );
+	setPixmap( 0, preview );
 } // VLayerListViewItem::update
 
 void
@@ -411,11 +413,11 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	layout->setMargin( 3 );
 
 	m_layersListView->setAllColumnsShowFocus( true );
-	m_layersListView->addColumn( i18n( "S" ), 20 );
+	m_layersListView->addColumn( i18n( "Item" ), 40 );
+	m_layersListView->addColumn( i18n( "L" ) );
 	m_layersListView->addColumn( i18n( "V" ), 20 );
-	m_layersListView->addColumn( i18n( "Layer" ) );
-	m_layersListView->setColumnAlignment( 1, Qt::AlignCenter );
-	m_layersListView->setColumnWidthMode( 2, QListView::Maximum );
+	m_layersListView->setColumnWidthMode( 0, QListView::Maximum );
+	m_layersListView->setColumnAlignment( 2, Qt::AlignCenter );
 	m_layersListView->setResizeMode( QListView::LastColumn );
 	m_layersListView->setSorting( 0, false );
 
@@ -459,7 +461,7 @@ VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
 			m_document->setActiveLayer( layerItem->layer() );
 			m_document->selection()->clear();
 
-			if( col == 1 )
+			if( col == 2 )
 			{
 				obj->setState( obj->state() == VObject::normal || obj->state() == VObject::normal_locked ? VObject::hidden : VObject::normal );
 				layerItem->update();
@@ -471,7 +473,7 @@ VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
 			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
 			VObject *obj = objectItem->object();
 
-			if( col == 1 ) // set visibility
+			if( col == 2 ) // set visibility
 			{
 				obj->setState( obj->state() == VObject::hidden ? VObject::normal : VObject::hidden );
 				objectItem->update();
