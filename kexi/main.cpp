@@ -137,7 +137,11 @@ static KCmdLineOptions options[] =
 
 extern "C" int kdemain(int argc, char *argv[])
 {
-	KCmdLineArgs::init( argc, argv, newKexiAboutData() );
+	KAboutData *about = newKexiAboutData();
+#ifdef OOPL_VERSION
+# include "oopl_startup.h"
+#endif
+	KCmdLineArgs::init( argc, argv, about );
 	KCmdLineArgs::addCmdLineOptions( options );
 
 	bool GUIenabled = true;
