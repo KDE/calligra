@@ -324,9 +324,8 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   text = Q2C( i18n( "&Preferences" ) );
   m_idMenuView_Preferences = m_vMenuView->insertItem( text, this, "viewPreferences", 0 );
 
-  m_vMenuEdit->setCheckable( true );
-  m_vMenuEdit->setItemChecked( m_idMenuView_LayerDialog, true );
-  m_vMenuEdit->setItemChecked( m_idMenuView_ColorDialog, true );
+  m_vMenuView->setCheckable( true );
+  m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, true );
 
 /*
   // image menu
@@ -386,6 +385,7 @@ void KImageShopView::createGUI()
   m_pLayerDialog->resize( 205, 267 );
   m_pLayerDialog->move( 200, 20 );
   m_pLayerDialog->show();
+  m_pLayerDialog->setFocus();
   addDialog(m_pLayerDialog);
 
   // create gradient dialog
@@ -918,6 +918,16 @@ void KImageShopView::viewGradientEditorDialog()
 
 void KImageShopView::viewColorDialog()
 {
+  if( m_pColorDialog )
+	{
+	  if(m_pColorDialog->isVisible())
+		m_pColorDialog->hide();
+	  else
+		m_pColorDialog->show();
+	  
+	  // TODO: make this working
+	  m_vMenuView->setItemChecked( m_idMenuView_ColorDialog, true );
+  }
 }
 
 void KImageShopView::viewPreferences()
