@@ -104,7 +104,7 @@ protected:
    *                       or a @ref istringstream.
    *  @param _store        Pointer to a Store object. May be 0L.
    */
-  virtual bool loadBinary( istream& _stream, bool _randomaccess, KOStore::Store_ptr _store )
+  virtual bool loadBinary( istream& , bool , KOStore::Store_ptr  )
   { cerr << "KoDocument::loadBinary not implemented" << endl; return false; };
   /**
    *  This function loads a XML document. It is called by @ref KoDocument#load.
