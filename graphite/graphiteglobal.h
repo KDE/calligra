@@ -157,9 +157,12 @@ QValueList<FxRect> diff(const PageLayout &oldLayout, const PageLayout &newLayout
 
 // Small struct to keep track of the mouse state
 struct MouseState {
-    MouseState() : pressed(false), startSelectionX(0), startSelectionY(0) {}
+    MouseState() : pressed(false), haveToErase(false), oldMX(0), oldMY(0),
+        startSelectionX(0), startSelectionY(0) {}
 
     bool pressed;
+    bool haveToErase;
+    int oldMX, oldMY;
     int startSelectionX;
     int startSelectionY;
 };

@@ -65,7 +65,7 @@ private:
     GraphiteView *m_view;
     Ruler *m_vertical, *m_horizontal;
     int m_eraseWidth, m_eraseHeight;
-    bool m_haveFocus, m_gotFocus;
+    bool m_haveFocus;
 };
 
 #endif // gcanvas_h

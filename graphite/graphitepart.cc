@@ -212,11 +212,7 @@ void GraphitePart::showPageLayoutDia(QWidget *parent) {
 
 // This method handles the "rubber band" selection and the "mouseover"
 // cursor effects
-void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view, bool focusIn) {
-
-    static int oldMX=e->x();
-    static int oldMY=e->y();
-    static bool haveToErase=false;
+void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view) {
 
     setGlobalZoom(view->zoom());  // ### really necessary?
 
@@ -229,6 +225,10 @@ void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view, bool focus
         return;
     }
 
+    if(!m_mouse.haveToErase && !m_mouse.pressed)
+        return;
+
+    kdDebug() << "still here" << endl;
     if(!view)
         return;
     QWidget *canvas=view->canvas();
@@ -238,35 +238,32 @@ void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view, bool focus
     QPainter p(scrollview->viewport());
     p.setRasterOp(Qt::NotROP);
 
-    if(m_mouse.startSelectionX>oldMX) // right to left selection
+    if(m_mouse.startSelectionX>m_mouse.oldMX) // right to left selection
         p.setPen(QPen(Qt::black, 0, Qt::DashLine));
     else
         p.setPen(QPen(Qt::black, 0, Qt::DotLine));
 
-    kdDebug() << "GraphitePart::mouseMoveEvent -- focusIn: " << focusIn << endl;
-    if(haveToErase && !focusIn) {
-        kdDebug() << "GraphitePart::mouseMoveEvent -- have to erase" << endl;
-        p.drawRect(Graphite::min(m_mouse.startSelectionX, oldMX)-scrollview->contentsX(),
-                   Graphite::min(m_mouse.startSelectionY, oldMY)-scrollview->contentsY(),
-                   Graphite::abs(m_mouse.startSelectionX-oldMX),
-                   Graphite::abs(m_mouse.startSelectionY-oldMY));
-        haveToErase=false;
+    if(m_mouse.haveToErase) {
+        p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-scrollview->contentsX(),
+                   Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-scrollview->contentsY(),
+                   Graphite::abs(m_mouse.startSelectionX-m_mouse.oldMX),
+                   Graphite::abs(m_mouse.startSelectionY-m_mouse.oldMY));
+        m_mouse.haveToErase=false;
     }
 
-    oldMX=e->x();
-    oldMY=e->y();
-    if(m_mouse.startSelectionX>oldMX) // right to left selection
+    m_mouse.oldMX=e->x();
+    m_mouse.oldMY=e->y();
+    if(m_mouse.startSelectionX>m_mouse.oldMX) // right to left selection
         p.setPen(QPen(Qt::black, 0, Qt::DashLine));
     else
         p.setPen(QPen(Qt::black, 0, Qt::DotLine));
 
     if(m_mouse.pressed) {
-        kdDebug() << "GraphitePart::mouseMoveEvent -- painting" << endl;
-        p.drawRect(Graphite::min(m_mouse.startSelectionX, oldMX)-scrollview->contentsX(),
-                   Graphite::min(m_mouse.startSelectionY, oldMY)-scrollview->contentsY(),
-                   Graphite::abs(m_mouse.startSelectionX-oldMX),
-                   Graphite::abs(m_mouse.startSelectionY-oldMY));
-        haveToErase=true;
+        p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-scrollview->contentsX(),
+                   Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-scrollview->contentsY(),
+                   Graphite::abs(m_mouse.startSelectionX-m_mouse.oldMX),
+                   Graphite::abs(m_mouse.startSelectionY-m_mouse.oldMY));
+        m_mouse.haveToErase=true;
     }
     p.end();
 }

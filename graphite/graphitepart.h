@@ -82,7 +82,7 @@ public:
     // (Normally we create a Manipulator (M9r) class for the
     // object which has been hit. This class is the first
     // one which gets the Events before testing the whole tree.)
-    void mouseMoveEvent(QMouseEvent *e, GraphiteView *view, bool focusIn=false);
+    void mouseMoveEvent(QMouseEvent *e, GraphiteView *view);
     void mousePressEvent(QMouseEvent *e, GraphiteView *view);
     void mouseReleaseEvent(QMouseEvent *e, GraphiteView *view);
     void mouseDoubleClickEvent(QMouseEvent *e, GraphiteView *view);
