@@ -57,7 +57,7 @@ public:
      * @returns the name of the type. Only name types are allowed
      * to have a name.
      */
-    virtual QString getName() const { return QString::null; }
+    //virtual QString getName() const { return QString::null; }
 
     /**
      * @returns whether we want to see this element.
@@ -187,43 +187,6 @@ public:
 
 
 /**
- * A recognized name.
- */
-class NameType : public MultiElementType {
-public:
-    NameType( SequenceParser* parser, QString name );
-
-    /**
-     * @returns the name of the type. Only name types are allowed
-     * to have a name.
-     */
-    virtual QString getName() const { return name; }
-
-    /**
-     * @returns whether we want to see this element.
-     */
-    virtual bool isInvisible( const TextElement& element ) const;
-
-    /**
-     * @returns the font to be used for this kind of element
-     */
-    virtual QFont getFont( const ContextStyle& context );
-
-private:
-
-    /**
-     * The symbol table entry this name referres to.
-     */
-    //SymbolTableEntry* entry;
-
-    /**
-     * Our name.
-     */
-    QString name;
-};
-
-
-/**
  * A range of elements that make up a number.
  */
 class NumberType : public MultiElementType {
@@ -248,6 +211,43 @@ public:
 class SingleElementType : public ElementType {
 public:
     SingleElementType( SequenceParser* parser );
+};
+
+
+/**
+ * A recognized name.
+ */
+class NameType : public MultiElementType {
+public:
+    NameType( SequenceParser* parser );
+
+    /**
+     * @returns the name of the type. Only name types are allowed
+     * to have a name.
+     */
+    //virtual QString getName() const { return name; }
+
+    /**
+     * @returns whether we want to see this element.
+     */
+    virtual bool isInvisible( const TextElement& element ) const;
+
+    /**
+     * @returns the font to be used for this kind of element
+     */
+    virtual QFont getFont( const ContextStyle& context );
+
+private:
+
+    /**
+     * The symbol table entry this name referres to.
+     */
+    //SymbolTableEntry* entry;
+
+    /**
+     * Our name.
+     */
+    //QString name;
 };
 
 

@@ -173,7 +173,8 @@ public:
     /**
      * @returns the cursor to be used for editing.
      */
-    FormulaCursor* getActiveCursor();
+    FormulaCursor* activeCursor();
+    const FormulaCursor* activeCursor() const;
 
     /**
      * Sets the cursor that is to be used for any editing.
@@ -262,11 +263,18 @@ signals:
 
 public:
 
+    /**
+     * General input. ch must be a printable char. We still need
+     * to figure out what to do with it.
+     */
+    void input( QChar ch );
+
     // There are a lot of thing we can do with the formula.
 
     void addText(QChar ch, bool isSymbol = false);
     void addText(const QString& text);
 
+    void addNameSequence();
     void addSpace( SpaceWidths space );
 
     void addLineBreak();
@@ -384,6 +392,11 @@ private:
      * @returns true if there is a cursor that is allowed to edit the formula.
      */
     bool hasValidCursor() const;
+
+    /**
+     * @returns true if the cursor can insert any type of element.
+     */
+    bool hasMightyCursor() const;
 
     struct Container_Impl;
     Container_Impl* impl;

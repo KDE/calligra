@@ -148,7 +148,12 @@ void Container::changed()
 }
 
 
-FormulaCursor* Container::getActiveCursor()
+FormulaCursor* Container::activeCursor()
+{
+    return impl->activeCursor;
+}
+
+const FormulaCursor* Container::activeCursor() const
 {
     return impl->activeCursor;
 }
@@ -179,6 +184,16 @@ bool Container::hasValidCursor() const
     return (impl->activeCursor != 0) && !impl->activeCursor->isReadOnly();
 }
 
+bool Container::hasMightyCursor() const
+{
+    if ( hasValidCursor() ) {
+        const SequenceElement* sequence = activeCursor()->normal();
+        if ( sequence != 0 ) {
+            return sequence->getTokenType() != NAME;
+        }
+    }
+    return false;
+}
 
 void Container::testDirty()
 {
@@ -192,13 +207,13 @@ void Container::recalc()
     impl->dirty = false;
     ContextStyle& context = document()->getContextStyle();
     rootElement()->calcSizes( context );
-    emit cursorChanged(getActiveCursor());
+    emit cursorChanged(activeCursor());
 
     emit formulaChanged( context.layoutUnitToPixelX( rootElement()->getWidth() ),
                          context.layoutUnitToPixelY( rootElement()->getHeight() ) );
     emit formulaChanged( context.layoutUnitToPt( rootElement()->getWidth() ),
                          context.layoutUnitToPt( rootElement()->getHeight() ) );
-    emit cursorMoved( getActiveCursor() );
+    emit cursorMoved( activeCursor() );
 }
 
 bool Container::isEmpty()
@@ -227,6 +242,17 @@ void Container::draw(QPainter& painter, const QRect& r)
 }
 
 
+void Container::input( QChar ch )
+{
+    if ( !hasValidCursor() )
+        return;
+    SequenceElement* current = activeCursor()->normal();
+    if ( current != 0 ) {
+        current->input( this, ch );
+    }
+}
+
+
 void Container::addText(QChar ch, bool isSymbol)
 {
     if (!hasValidCursor())
@@ -248,9 +274,21 @@ void Container::addText(const QString& text)
     execute(command);
 }
 
+void Container::addNameSequence()
+{
+    if ( !hasMightyCursor() )
+        return;
+    if ( !NameSequence::isValidSelection( activeCursor() ) ) {
+        return;
+    }
+    KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add name" ), this );
+    command->setElement( new NameSequence() );
+    execute(command);
+}
+
 void Container::addSpace( SpaceWidths space )
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
     KFCReplace* command = new KFCReplace(i18n("Add space"), this);
     SpaceElement* element = new SpaceElement( space );
@@ -260,14 +298,14 @@ void Container::addSpace( SpaceWidths space )
 
 void Container::addLineBreak()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
     // Not supported right now.
 }
 
 void Container::addBracket(char left, char right)
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add bracket"), this);
     command->setElement(new BracketElement(left, right));
@@ -276,7 +314,7 @@ void Container::addBracket(char left, char right)
 
 void Container::addFraction()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add fraction"), this);
     command->setElement(new FractionElement());
@@ -286,7 +324,7 @@ void Container::addFraction()
 
 void Container::addRoot()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add root"), this);
     command->setElement(new RootElement());
@@ -296,7 +334,7 @@ void Container::addRoot()
 
 void Container::addSymbol(SymbolType type)
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add symbol"), this);
     command->setElement(new SymbolElement(type));
@@ -305,7 +343,7 @@ void Container::addSymbol(SymbolType type)
 
 void Container::addMatrix(int rows, int columns)
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add matrix"), this);
     command->setElement(new MatrixElement(rows, columns));
@@ -315,7 +353,7 @@ void Container::addMatrix(int rows, int columns)
 
 void Container::addOneByTwoMatrix()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add 1x2 matrix"), this);
     FractionElement* element = new FractionElement();
@@ -337,9 +375,9 @@ void Container::addMatrix()
 
 void Container::addLowerLeftIndex()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
         element = createIndexElement();
@@ -353,9 +391,9 @@ void Container::addLowerLeftIndex()
 
 void Container::addUpperLeftIndex()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
         element = createIndexElement();
@@ -369,9 +407,9 @@ void Container::addUpperLeftIndex()
 
 void Container::addLowerRightIndex()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
         element = createIndexElement();
@@ -385,9 +423,9 @@ void Container::addLowerRightIndex()
 
 void Container::addUpperRightIndex()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
         element = createIndexElement();
@@ -402,7 +440,7 @@ void Container::addUpperRightIndex()
 IndexElement* Container::createIndexElement()
 {
     IndexElement* element = new IndexElement;
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     if (!cursor->isSelection()) {
         cursor->moveLeft(SelectMovement | WordMovement);
     }
@@ -415,9 +453,9 @@ IndexElement* Container::createIndexElement()
  */
 void Container::addGenericLowerIndex()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     SymbolElement* symbol = cursor->getActiveSymbolElement();
     if (symbol != 0) {
         addGenericIndex(cursor, symbol->getLowerIndex());
@@ -441,9 +479,9 @@ void Container::addGenericLowerIndex()
  */
 void Container::addGenericUpperIndex()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     SymbolElement* symbol = cursor->getActiveSymbolElement();
     if (symbol != 0) {
         addGenericIndex(cursor, symbol->getUpperIndex());
@@ -497,7 +535,7 @@ void Container::replaceElementWithMainChild(Direction direction)
 {
     if (!hasValidCursor())
         return;
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     if (!cursor->isSelection()) {
         KFCRemoveEnclosing* command = new KFCRemoveEnclosing(this, direction);
         execute(command);
@@ -509,38 +547,26 @@ void Container::compactExpression()
 {
     if (!hasValidCursor())
         return;
-    FormulaCursor* cursor = getActiveCursor();
-    QString name = cursor->getCurrentName();
-    if (!name.isNull()) {
-        QChar ch = document()->getSymbolTable().unicode( name );
-        if (!ch.isNull()) {
-            addText( ch, true );
+    FormulaCursor* cursor = activeCursor();
+    NameSequence* sequence = cursor->getActiveNameSequence();
+    if ( sequence != 0 ) {
+        BasicElement* element = sequence->replaceElement( document()->getSymbolTable() );
+        if ( element != 0 ) {
+            sequence->getParent()->selectChild( cursor, sequence );
+
+            KFCReplace* command = new KFCReplace( i18n( "Add element" ), this );
+            command->addElement( element );
+            execute( command );
         }
-        else if ( name == "\\," ) {
-            addSpace( THIN );
-        }
-        else if ( name == "\\>" ) {
-            addSpace( MEDIUM );
-        }
-        else if ( name == "\\;" ) {
-            addSpace( THICK );
-        }
-        else if ( name == "\\quad" ) {
-            addSpace( QUAD );
-        }
-    }
-    else {
-        // It might have moved the cursor. So tell them.
-        emit cursorMoved(cursor);
     }
 }
 
 
 void Container::makeGreek()
 {
-    if (!hasValidCursor())
+    if ( !hasMightyCursor() )
         return;
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     TextElement* element = cursor->getActiveTextElement();
     if ((element != 0) && !element->isSymbol()) {
         cursor->selectActiveElement();
@@ -569,7 +595,7 @@ void Container::paste()
         QPtrList<BasicElement> list;
         list.setAutoDelete(true);
 
-        FormulaCursor* cursor = getActiveCursor();
+        FormulaCursor* cursor = activeCursor();
         if (cursor->buildElementsFromDom(formula, list)) {
             uint count = list.count();
             // You must not execute an add command that adds nothing.
@@ -587,7 +613,7 @@ void Container::paste()
 void Container::copy()
 {
     // read-only cursors are fine for copying.
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     if (cursor != 0) {
         QDomDocument formula = cursor->copy();
         QClipboard* clipboard = QApplication::clipboard();
@@ -599,7 +625,7 @@ void Container::cut()
 {
     if (!hasValidCursor())
         return;
-    FormulaCursor* cursor = getActiveCursor();
+    FormulaCursor* cursor = activeCursor();
     if (cursor->isSelection()) {
         copy();
         remove();

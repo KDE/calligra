@@ -154,37 +154,8 @@ void View::keyPressEvent(QKeyEvent* event)
     }
 
     QChar ch = event->text().at(0);
-    if (ch.isPrint()) {
-        int latin1 = ch.latin1();
-        switch (latin1) {
-        case '(':
-            container()->document()->addDefaultBracket();
-            break;
-        case '[':
-            container()->addSquareBracket();
-            break;
-        case '{':
-            container()->addCurlyBracket();
-            break;
-        case '|':
-            container()->addLineBracket();
-            break;
-        case '^':
-            container()->addUpperRightIndex();
-            break;
-        case '_':
-            container()->addLowerRightIndex();
-            break;
-        case ' ':
-            container()->compactExpression();
-            break;
-        case '}':
-        case ']':
-        case ')':
-            break;
-        default:
-            container()->addText(ch);
-        }
+    if ( ch.isPrint() ) {
+        container()->input( ch );
     }
     else {
         int action = event->key();

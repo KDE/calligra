@@ -30,6 +30,7 @@ KFORMULA_NAMESPACE_BEGIN
 
 class FormulaElement;
 class IndexElement;
+class NameSequence;
 class RootElement;
 class SymbolElement;
 class TextElement;
@@ -240,6 +241,12 @@ public:
 
 
     /**
+     * Returns the sequence the cursor is in if we are normal. If not returns 0.
+     */
+    SequenceElement* normal();
+    const SequenceElement* normal() const;
+
+    /**
      * Returns the IndexElement the cursor is on or 0
      * if there is non.
      */
@@ -258,6 +265,12 @@ public:
     SymbolElement* getActiveSymbolElement();
 
     /**
+     * @returns the NameSequence the cursor is on or 0
+     * if there is non.
+     */
+    NameSequence* getActiveNameSequence();
+
+    /**
      * @returns the TextElement the cursor is on or 0.
      */
     TextElement* getActiveTextElement();
@@ -267,12 +280,6 @@ public:
      * if there is such an element and if there is no selection.
      */
     void selectActiveElement();
-
-    /**
-     * @returns the name of the name element the cursor is inside
-     * Selects the name if one is found.
-     */
-    QString getCurrentName();
 
     /**
      * Stores the currently selected elements inside a dom.
@@ -339,6 +346,7 @@ public:
      * @returns the area the cursor is currently on.
      */
     const LuRect& getCursorSize() const { return cursorSize; }
+    void addCursorSize( const LuRect& rect ) { cursorSize |= rect; }
 
     /**
      * @returns whether we are allowed to alter the document.
@@ -351,12 +359,6 @@ public:
     void setReadOnly(bool ro) { readOnly = ro; }
 
 private:
-
-    /**
-     * Returns the sequence the cursor is in if we are normal. If not returns 0.
-     */
-    SequenceElement* getNormal();
-    const SequenceElement* getNormal() const;
 
     /**
      * Returns the child the cursor points to. Depending on the
@@ -431,6 +433,12 @@ private:
      * each time the cursor is drawn.
      */
     LuRect cursorSize;
+
+    /**
+     * The area that gets inverted when the cursor is in selection
+     * mode.
+     */
+    LuRect selectionArea;
 
     /**
      * Tells whether the cursor has been changed. This is set

@@ -233,8 +233,8 @@ TextType::TextType( SequenceParser* parser )
 }
 
 
-NameType::NameType( SequenceParser* parser, QString n )
-    : MultiElementType( parser ), name( n )
+NameType::NameType( SequenceParser* parser )
+    : MultiElementType( parser )
 {
 }
 

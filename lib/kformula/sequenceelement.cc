@@ -32,12 +32,15 @@
 #include "formulaelement.h"
 #include "fractionelement.h"
 #include "indexelement.h"
+#include "kformulacontainer.h"
+#include "kformuladocument.h"
 #include "matrixelement.h"
 #include "rootelement.h"
 #include "sequenceelement.h"
 #include "sequenceparser.h"
-#include "symbolelement.h"
 #include "spaceelement.h"
+#include "symbolelement.h"
+#include "symboltable.h"
 #include "textelement.h"
 
 
@@ -56,7 +59,6 @@ SequenceElement::~SequenceElement()
 {
     delete parseTree;
 }
-
 
 /**
  * Returns the element the point is in.
@@ -240,17 +242,24 @@ void SequenceElement::draw( QPainter& painter, const LuRect& r,
             //                 getWidth(), getHeight());
         }
     }
-    else if ( painter.device()->devType() != QInternal::Printer ) {
+    else {
+        drawEmptyRect( painter, context, myPos );
+    }
+}
+
+void SequenceElement::drawEmptyRect( QPainter& painter, const ContextStyle& context,
+                                     const LuPoint& upperLeft )
+{
+    if ( painter.device()->devType() != QInternal::Printer ) {
         painter.setBrush(Qt::NoBrush);
         painter.setPen( QPen( context.getEmptyColor(),
                               context.layoutUnitToPixelX( context.getLineWidth() ) ) );
-        painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
-                          context.layoutUnitToPixelY( myPos.y() ),
+        painter.drawRect( context.layoutUnitToPixelX( upperLeft.x() ),
+                          context.layoutUnitToPixelY( upperLeft.y() ),
                           context.layoutUnitToPixelX( getWidth() ),
                           context.layoutUnitToPixelY( getHeight() ) );
     }
 }
-
 
 void SequenceElement::calcCursorSize( const ContextStyle& context,
                                       FormulaCursor* cursor, bool smallCursor )
@@ -278,6 +287,7 @@ void SequenceElement::calcCursorSize( const ContextStyle& context,
             cursor->cursorSize.setRect( point.x()+x, point.y() - 2*unit,
                                         width + unit, height + 4*unit );
         }
+        cursor->selectionArea = cursor->cursorSize;
     }
     else {
         if ( smallCursor ) {
@@ -286,7 +296,7 @@ void SequenceElement::calcCursorSize( const ContextStyle& context,
         }
         else {
             cursor->cursorSize.setRect( point.x(), point.y() - 2*unit,
-                                        getWidth() + unit, height + 6*unit );
+                                        getWidth() + unit, height + 4*unit );
         }
     }
 
@@ -303,7 +313,7 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
 {
     painter.setRasterOp( Qt::XorROP );
     if ( cursor->isSelection() ) {
-        const LuRect& r = cursor->getCursorSize();
+        const LuRect& r = cursor->selectionArea;
         painter.fillRect( context.layoutUnitToPixelX( r.x() ),
                           context.layoutUnitToPixelY( r.y() ),
                           context.layoutUnitToPixelX( r.width() ),
@@ -769,28 +779,6 @@ void SequenceElement::childWillVanish(FormulaCursor* cursor, BasicElement* child
     }
 }
 
-QString SequenceElement::getCurrentName(FormulaCursor* cursor)
-{
-    uint pos = cursor->getPos();
-    if (pos > 0) {
-        ElementType* type = children.at(pos-1)->getElementType();
-        if (type != 0) {
-            QString name = type->getName();
-            if (!name.isNull()) {
-                cursor->setTo(this, type->start(), type->end());
-                return name;
-            }
-        }
-        if (pos == children.count()) {
-            bool linear = cursor->getLinearMovement();
-            cursor->setLinearMovement(false);
-            cursor->moveRight();
-            cursor->setLinearMovement(linear);
-        }
-    }
-    return QString::null;
-}
-
 
 /**
  * Selects all children. The cursor is put behind, the mark before them.
@@ -800,6 +788,58 @@ void SequenceElement::selectAllChildren(FormulaCursor* cursor)
     cursor->setTo(this, children.count(), 0);
 }
 
+bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
+{
+    if ( cursor->isSelection() ) {
+        uint from = QMIN( cursor->getPos(), cursor->getMark() );
+        uint to = QMAX( cursor->getPos(), cursor->getMark() );
+        for ( uint i = from; i < to; i++ ) {
+            BasicElement* element = getChild( i );
+            if ( element->getCharacter() == QChar::null ) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
+void SequenceElement::input( Container* container, QChar ch )
+{
+    int latin1 = ch.latin1();
+    switch (latin1) {
+    case '(':
+        container->document()->addDefaultBracket();
+        break;
+    case '[':
+        container->addSquareBracket();
+        break;
+    case '{':
+        container->addCurlyBracket();
+        break;
+    case '|':
+        container->addLineBracket();
+        break;
+    case '^':
+        container->addUpperRightIndex();
+        break;
+    case '_':
+        container->addLowerRightIndex();
+        break;
+    case ' ':
+        container->compactExpression();
+        break;
+    case '}':
+    case ']':
+    case ')':
+        break;
+    case '\\':
+        container->addNameSequence();
+        break;
+    default:
+        container->addText(ch);
+    }
+}
 
 /**
  * Stores the given childrens dom in the element.
@@ -849,18 +889,19 @@ bool SequenceElement::buildChildrenFromDom(QPtrList<BasicElement>& list, QDomNod
 }
 
 
-BasicElement* SequenceElement::createElement(QString type)
+BasicElement* SequenceElement::createElement( QString type )
 {
-    if      (type == "TEXT")       return new TextElement();
-    else if (type == "SPACE")      return new SpaceElement();
-    else if (type == "ROOT")       return new RootElement();
-    else if (type == "BRACKET")    return new BracketElement();
-    else if (type == "MATRIX")     return new MatrixElement();
-    else if (type == "INDEX")      return new IndexElement();
-    else if (type == "FRACTION")   return new FractionElement();
-    else if (type == "SYMBOL")     return new SymbolElement();
-    else if (type == "SEQUENCE") {
-        cerr << "malformed data: sequence inside sequence.\n";
+    if      ( type == "TEXT" )         return new TextElement();
+    else if ( type == "SPACE" )        return new SpaceElement();
+    else if ( type == "ROOT" )         return new RootElement();
+    else if ( type == "BRACKET" )      return new BracketElement();
+    else if ( type == "MATRIX" )       return new MatrixElement();
+    else if ( type == "INDEX" )        return new IndexElement();
+    else if ( type == "FRACTION" )     return new FractionElement();
+    else if ( type == "SYMBOL" )       return new SymbolElement();
+    else if ( type == "NAMESEQUENCE" ) return new NameSequence();
+    else if ( type == "SEQUENCE" ) {
+        kdDebug( 40000 ) << "malformed data: sequence inside sequence." << endl;
         return 0;
     }
     return 0;
@@ -952,6 +993,144 @@ QString SequenceElement::toLatex()
     }
     content += "}";
     return content;
+}
+
+
+
+NameSequence::NameSequence( BasicElement* parent )
+    : SequenceElement( parent )
+{
+}
+
+void NameSequence::calcCursorSize( const ContextStyle& context,
+                                   FormulaCursor* cursor, bool smallCursor )
+{
+    inherited::calcCursorSize( context, cursor, smallCursor );
+    LuPoint point = widgetPos();
+    lu unit = context.ptToLayoutUnit( 1 );
+    cursor->addCursorSize( LuRect( point.x()-unit, point.y()-unit,
+                                   getWidth()+2*unit, getHeight()+2*unit ) );
+}
+
+void NameSequence::drawCursor( QPainter& painter, const ContextStyle& context,
+                               FormulaCursor* cursor, bool smallCursor )
+{
+    LuPoint point = widgetPos();
+    painter.setPen( QPen( context.getEmptyColor(),
+                          context.layoutUnitToPixelX( context.getLineWidth()/2 ) ) );
+    lu unit = context.ptToLayoutUnit( 1 );
+    painter.drawRect( context.layoutUnitToPixelX( point.x()-unit ),
+                      context.layoutUnitToPixelY( point.y()-unit ),
+                      context.layoutUnitToPixelX( getWidth()+2*unit ),
+                      context.layoutUnitToPixelY( getHeight()+2*unit ) );
+
+    inherited::drawCursor( painter, context, cursor, smallCursor );
+}
+
+void NameSequence::moveWordLeft( FormulaCursor* cursor )
+{
+    uint pos = cursor->getPos();
+    if ( pos > 0 ) {
+        cursor->setTo( this, 0 );
+    }
+    else {
+        moveLeft( cursor, this );
+    }
+}
+
+void NameSequence::moveWordRight( FormulaCursor* cursor )
+{
+    int pos = cursor->getPos();
+    if ( pos < countChildren() ) {
+        cursor->setTo( this, countChildren() );
+    }
+    else {
+        moveRight( cursor, this );
+    }
+}
+
+void NameSequence::input( Container* container, QChar ch )
+{
+    int latin1 = ch.latin1();
+    switch (latin1) {
+    case '(':
+    case '[':
+    case '|':
+    case '^':
+    case '_':
+    case '}':
+    case ']':
+    case ')':
+    case '\\':
+        break;
+    case '{':
+    case ' ':
+        container->compactExpression();
+        break;
+    default:
+        container->addText( ch );
+    }
+}
+
+void NameSequence::setElementType( ElementType* t )
+{
+    inherited::setElementType( t );
+    parse();
+}
+
+BasicElement* NameSequence::replaceElement( const SymbolTable& table )
+{
+    QString name = buildName();
+    QChar ch = table.unicode( name );
+    if ( !ch.isNull() ) return new TextElement( ch, true );
+
+    if ( name == "," )    return new SpaceElement( THIN );
+    if ( name == ">" )    return new SpaceElement( MEDIUM );
+    if ( name == ";" )    return new SpaceElement( THICK );
+    if ( name == "quad" ) return new SpaceElement( QUAD );
+
+    if ( name == "frac" ) return new FractionElement();
+    if ( name == "atop" ) {
+        FractionElement* frac = new FractionElement();
+        frac->showLine( false );
+        return frac;
+    }
+    if ( name == "sqrt" ) return new RootElement();
+
+    return 0;
+}
+
+BasicElement* NameSequence::createElement( QString type )
+{
+    if      ( type == "TEXT" )         return new TextElement();
+    return 0;
+}
+
+void NameSequence::parse()
+{
+    // A name sequence is known as name and so are its children.
+    // Caution: this is fake!
+    for ( int i = 0; i < countChildren(); i++ ) {
+        getChild( i )->setElementType( getElementType() );
+    }
+}
+
+QString NameSequence::buildName()
+{
+    QString name;
+    for ( int i = 0; i < countChildren(); i++ ) {
+        name += getChild( i )->getCharacter();
+    }
+    return name;
+}
+
+bool NameSequence::isValidSelection( FormulaCursor* cursor )
+{
+    SequenceElement* sequence = cursor->normal();
+    if ( sequence == 0 ) {
+        return false;
+    }
+    return sequence->onlyTextSelected( cursor );
 }
 
 KFORMULA_NAMESPACE_END

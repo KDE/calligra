@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream>
 #include <qstring.h>
+#include <kdebug.h>
 
 #include "contextstyle.h"
 #include "basicelement.h"
@@ -160,7 +160,7 @@ QDomElement BasicElement::getElementDom(QDomDocument& doc)
 bool BasicElement::buildFromDom(QDomElement& element)
 {
     if (element.tagName() != getTagName()) {
-        std::cerr << "Wrong tag name " << element.tagName().latin1() << " for " << getTagName().latin1() << ".\n";
+        kdDebug( 40000 ) << "Wrong tag name " << element.tagName().latin1() << " for " << getTagName().latin1() << ".\n";
         return false;
     }
     if (!readAttributesFromDom(element)) {

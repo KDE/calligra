@@ -183,7 +183,7 @@ bool FormulaCursor::isHome() const
 bool FormulaCursor::isEnd() const
 {
     return ( getElement() == getElement()->formula() ) &&
-                  ( getPos() == getNormal()->countChildren() );
+                  ( getPos() == normal()->countChildren() );
 }
 
 void FormulaCursor::mousePress( const LuPoint& pos, int flag )
@@ -315,7 +315,7 @@ void FormulaCursor::remove(QPtrList<BasicElement>& children,
 {
     if (readOnly)
         return;
-    SequenceElement* sequence = getNormal();
+    SequenceElement* sequence = normal();
     if (sequence != 0) {
 
         // If there is no child to remove in the sequence
@@ -538,6 +538,22 @@ SymbolElement* FormulaCursor::getActiveSymbolElement()
     return element;
 }
 
+/**
+ * @returns the NameSequence the cursor is on or 0
+ * if there is non.
+ */
+NameSequence* FormulaCursor::getActiveNameSequence()
+{
+    NameSequence* element = dynamic_cast<NameSequence*>( getSelectedChild() );
+
+    if ( ( element == 0 ) && !isSelection() ) {
+        element = dynamic_cast<NameSequence*>( getElement() );
+        if ( !pointsAfterMainChild( element ) ) {
+            return 0;
+        }
+    }
+    return element;
+}
 
 /**
  * @returns the TextElement the cursor is on or 0.
@@ -545,19 +561,6 @@ SymbolElement* FormulaCursor::getActiveSymbolElement()
 TextElement* FormulaCursor::getActiveTextElement()
 {
     return dynamic_cast<TextElement*>(getSelectedChild());
-}
-
-
-QString FormulaCursor::getCurrentName()
-{
-    if (isSelection()) {
-        return QString::null;
-    }
-    SequenceElement* sequence = getNormal();
-    if (sequence != 0) {
-        return sequence->getCurrentName(this);
-    }
-    return QString::null;
 }
 
 
@@ -604,13 +607,13 @@ QDomDocument FormulaCursor::copy()
     QDomElement de = doc.createElement("KFORMULACOPY");
     doc.appendChild(de);
     if (isSelection()) {
-        SequenceElement* sequence = getNormal();
+        SequenceElement* sequence = normal();
         if (sequence != 0) {
             sequence->getChildrenDom(doc, de, getSelectionStart(), getSelectionEnd());
         }
         else {
             // This must never happen.
-            qFatal("A not normalized cursor is selection in.");
+            qFatal("A not normalized cursor is selecting.");
         }
     }
     return doc;
@@ -624,7 +627,7 @@ bool FormulaCursor::buildElementsFromDom(QDomDocument doc, QPtrList<BasicElement
 {
     if (readOnly)
         return false;
-    SequenceElement* sequence = getNormal();
+    SequenceElement* sequence = normal();
     if (sequence != 0) {
         QDomNode n = doc.firstChild();
         if (n.isElement()) {
@@ -682,12 +685,12 @@ void FormulaCursor::setCursorData(FormulaCursor::CursorData* data)
 /**
  * Returns the sequence the cursor is in if we are normal. If not returns 0.
  */
-SequenceElement* FormulaCursor::getNormal()
+SequenceElement* FormulaCursor::normal()
 {
     return dynamic_cast<SequenceElement*>(current);
 }
 
-const SequenceElement* FormulaCursor::getNormal() const
+const SequenceElement* FormulaCursor::normal() const
 {
     return dynamic_cast<SequenceElement*>(current);
 }

@@ -110,7 +110,7 @@ protected:
      * @returns the cursor that is active. It will be used to @ref execute
      * the command.
      */
-    FormulaCursor* getActiveCursor() { return doc->getActiveCursor(); }
+    FormulaCursor* getActiveCursor() { return doc->activeCursor(); }
 
     /**
      * Tells the document to check if the formula changed.
@@ -209,7 +209,7 @@ private:
 
 
 /**
- * Removes the current selection and adds the any new elements
+ * Removes the current selection and adds any new elements
  * afterwards.
  */
 class KFCReplace : public KFCAdd

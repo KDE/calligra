@@ -129,6 +129,12 @@ protected:
 private:
 
     /**
+     * The introduction of 'NameSequence' changed the DOM.
+     * However, we need to read the old version.
+     */
+    void convertNames( QDomNode node );
+
+    /**
      * The document that owns (is) this formula.
      */
     FormulaDocument* document;

@@ -28,6 +28,10 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
+class Container;
+class SymbolTable;
+
+
 /**
  * The element that contains a number of children.
  * The children are aligned in one line.
@@ -87,14 +91,17 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPoint& parentOrigin );
 
-    void calcCursorSize( const ContextStyle& context,
-                         FormulaCursor* cursor, bool smallCursor);
+    virtual void drawEmptyRect( QPainter& painter, const ContextStyle& context,
+                                const LuPoint& upperLeft );
+
+    virtual void calcCursorSize( const ContextStyle& context,
+                                 FormulaCursor* cursor, bool smallCursor );
 
     /**
      * If the cursor is inside a sequence it needs to be drawn.
      */
-    void drawCursor( QPainter& painter, const ContextStyle& context,
-                     FormulaCursor* cursor, bool smallCursor);
+    virtual void drawCursor( QPainter& painter, const ContextStyle& context,
+                             FormulaCursor* cursor, bool smallCursor );
 
     // navigation
     //
@@ -122,13 +129,13 @@ public:
      * Moves to the beginning of this word or if we are there already
      * to the beginning of the previous.
      */
-    void moveWordLeft(FormulaCursor* cursor);
+    virtual void moveWordLeft(FormulaCursor* cursor);
 
     /**
      * Moves to the end of this word or if we are there already
      * to the end of the next.
      */
-    void moveWordRight(FormulaCursor* cursor);
+    virtual void moveWordRight(FormulaCursor* cursor);
 
     /**
      * Enters this element while moving up starting inside
@@ -205,15 +212,6 @@ public:
     virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child);
 
     /**
-     * Selects the current name if there currently is a name.
-     * If there is no name and the cursor is at the end of the sequence
-     * it moves one step right.
-     * Leaves the cursor untouched otherwise.
-     * @returns the current name
-     */
-    QString getCurrentName(FormulaCursor* cursor);
-
-    /**
      * @returns the number of children we have.
      */
     int countChildren() const { return children.count(); }
@@ -227,6 +225,16 @@ public:
      * Selects all children. The cursor is put behind, the mark before them.
      */
     void selectAllChildren(FormulaCursor* cursor);
+
+    bool onlyTextSelected( FormulaCursor* cursor );
+
+
+    /**
+     * Parses the input. It's the container which does create
+     * new elements because it owns the undo stack. But only the
+     * sequence knows what chars are allowed.
+     */
+    virtual void input( Container* container, QChar ch );
 
     /**
      * Stores the given childrens dom in the element.
@@ -300,19 +308,18 @@ protected:
      */
     lu getChildPosition( const ContextStyle& context, uint child );
 
-
-private:
-
     /**
      * Parses the sequence and generates a new syntax tree.
      * Has to be called after each modification.
      */
-    void parse();
+    virtual void parse();
 
     /**
      * @returns whether the child is the first element of its token.
      */
-    bool isFirstOfToken( BasicElement* child );
+    virtual bool isFirstOfToken( BasicElement* child );
+
+private:
 
     /**
      * Removes the children at pos and appends it to the list.
@@ -335,6 +342,104 @@ private:
      * true if the sequence contains only text
      */
     bool textSequence;
+};
+
+
+/**
+ * The sequence thats a name. Actually the purpose
+ * is to be able to insert any element by keyboard.
+ */
+class NameSequence : public SequenceElement {
+    typedef SequenceElement inherited;
+public:
+
+    NameSequence( BasicElement* parent = 0 );
+
+    /**
+     * @returns the type of this element. Used for
+     * parsing a sequence.
+     */
+    virtual TokenType getTokenType() const { return NAME; }
+
+    /**
+     * We are our own main child. This causes interessting effects.
+     */
+    virtual SequenceElement* getMainChild() { return this; }
+
+    virtual void calcCursorSize( const ContextStyle& context,
+                                 FormulaCursor* cursor, bool smallCursor );
+
+    /**
+     * If the cursor is inside a sequence it needs to be drawn.
+     */
+    virtual void drawCursor( QPainter& painter, const ContextStyle& context,
+                             FormulaCursor* cursor, bool smallCursor );
+
+    /**
+     * Moves to the beginning of this word or if we are there already
+     * to the beginning of the previous.
+     */
+    virtual void moveWordLeft(FormulaCursor* cursor);
+
+    /**
+     * Moves to the end of this word or if we are there already
+     * to the end of the next.
+     */
+    virtual void moveWordRight(FormulaCursor* cursor);
+
+    /**
+     * Parses the input. It's the container which does create
+     * new elements because it owns the undo stack. But only the
+     * sequence knows what chars are allowed.
+     */
+    virtual void input( Container* container, QChar ch );
+
+    /**
+     * Sets a new type. This is done during parsing.
+     */
+    virtual void setElementType( ElementType* t );
+
+    /**
+     * @returns the element this sequence is to be replaced with.
+     */
+    BasicElement* replaceElement( const SymbolTable& table );
+
+    /**
+     * Tests whether the selected elements can be inserted in a
+     * name sequence.
+     */
+    static bool isValidSelection( FormulaCursor* cursor );
+
+protected:
+
+    /**
+     * Returns the tag name of this element type.
+     */
+    virtual QString getTagName() const { return "NAMESEQUENCE"; }
+
+    /**
+     * Creates a new element with the given type.
+     *
+     * @param type the desired type of the element
+     */
+    virtual BasicElement* createElement( QString type );
+
+    /**
+     * Parses the sequence and generates a new syntax tree.
+     * Has to be called after each modification.
+     */
+    virtual void parse();
+
+    /**
+     * @returns whether the child is the first element of its token.
+     * This can never happen here. Our children reuse our own
+     * element type.
+     */
+    virtual bool isFirstOfToken( BasicElement* ) { return false; }
+
+private:
+
+    QString buildName();
 };
 
 KFORMULA_NAMESPACE_END

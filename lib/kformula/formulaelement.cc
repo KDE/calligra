@@ -95,6 +95,7 @@ const SymbolTable& FormulaElement::getSymbolTable() const
 void FormulaElement::writeDom(QDomElement& element)
 {
     inherited::writeDom(element);
+    element.setAttribute( "VERSION", "4" );
 }
 
 /**
@@ -105,6 +106,14 @@ bool FormulaElement::readAttributesFromDom(QDomElement& element)
 {
     if (!inherited::readAttributesFromDom(element)) {
         return false;
+    }
+    int version = 0;
+    QString versionStr = element.attribute( "VERSION" );
+    if ( !versionStr.isNull() ) {
+        version = versionStr.toInt();
+    }
+    if ( version < 4 ) {
+        convertNames( element );
     }
     return true;
 }
@@ -117,6 +126,41 @@ bool FormulaElement::readAttributesFromDom(QDomElement& element)
 bool FormulaElement::readContentFromDom(QDomNode& node)
 {
     return inherited::readContentFromDom(node);
+}
+
+void FormulaElement::convertNames( QDomNode node )
+{
+    if ( node.isElement() && ( node.nodeName().upper() == "TEXT" ) ) {
+        QDomNamedNodeMap attr = node.attributes();
+        QDomAttr ch = attr.namedItem( "CHAR" ).toAttr();
+        if ( ch.value() == "\\" ) {
+            QDomNode sequence = node.parentNode();
+            QDomDocument doc = sequence.ownerDocument();
+            QDomElement nameseq = doc.createElement( "NAMESEQUENCE" );
+            sequence.replaceChild( nameseq, node );
+
+            bool inName = true;
+            while ( inName ) {
+                inName = false;
+                QDomNode n = nameseq.nextSibling();
+                if ( n.isElement() && ( n.nodeName().upper() == "TEXT" ) ) {
+                    attr = n.attributes();
+                    ch = attr.namedItem( "CHAR" ).toAttr();
+                    if ( ch.value().at( 0 ).isLetter() ) {
+                        nameseq.appendChild( sequence.removeChild( n ) );
+                        inName = true;
+                    }
+                }
+            }
+        }
+    }
+    if ( node.hasChildNodes() ) {
+        QDomNode n = node.firstChild();
+        while ( !n.isNull() ) {
+            convertNames( n );
+            n = n.nextSibling();
+        }
+    }
 }
 
 QString FormulaElement::toLatex()

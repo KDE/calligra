@@ -665,7 +665,7 @@ void Document::redo()
 
 bool Document::hasFormula()
 {
-    return (formula() != 0) && (formula()->getActiveCursor() != 0);
+    return ( formula() != 0 ) && ( formula()->activeCursor() != 0 );
 }
 
 void Document::recalc()

@@ -82,7 +82,7 @@ void SequenceParser::nextToken()
     if ( !binOpAllowed && ( type == BINOP ) ) {
         type = ORDINARY;
     }
-    binOpAllowed = ( type == ORDINARY ) || ( type == NUMBER ) ||
+    binOpAllowed = ( type == ORDINARY ) || ( type == NUMBER ) || ( type == NAME ) ||
           ( type == ELEMENT ) || ( type == BRACKET ) || ( type == INNER );
 
     //cerr << "SequenceParser::nextToken(): " << type << " "
@@ -179,16 +179,16 @@ ElementType* SequenceParser::getPrimitive()
     //     << tokenStart << " " << tokenEnd << endl;
     switch ( type ) {
     case ORDINARY: {
-        QString text = getText();
-        if ( table.contains( text ) || ( text == "\\quad" ) ) {
-            return new NameType( this, text );
-        }
-        else {
+//         QString text = getText();
+//         if ( table.contains( text ) || ( text == "\\quad" ) ) {
+//             return new NameType( this, text );
+//         }
+//         else {
             return new TextType( this );
-        }
+//         }
     }
     case NAME:
-        return new NameType( this, getText() );
+        return new NameType( this );
     case NUMBER:
         return new NumberType( this );
     case ELEMENT:

@@ -317,6 +317,11 @@ public:
     // debug
     static int getEvilDestructionCount() { return evilDestructionCount; }
 
+    /**
+     * Sets a new type. This is done during parsing.
+     */
+    virtual void setElementType(ElementType* t) { elementType = t; }
+
 protected:
 
     //KoPoint getSize() { return KoPoint( m_width, m_height ); }
@@ -381,13 +386,7 @@ protected:
      */
     virtual QString toLatex();
 
-
 private:
-
-    /**
-     * Sets a new type. This is done during parsing.
-     */
-    void setElementType(ElementType* t) { elementType = t; }
 
     /**
      * Our parent.
