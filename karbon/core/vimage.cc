@@ -67,7 +67,7 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 	//painter->setWorldMatrix( m_matrix );
 
 	//*m_image = m_image->smoothScale( m_image->width() * zoomFactor, m_image->height() * zoomFactor, QImage::ScaleMin );
-	m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
+	//m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
 	//m_boundingBox = m_boundingBox.transform( m_matrix );
 	painter->drawImage( *m_image, m_matrix );
 }
@@ -75,9 +75,10 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 void
 VImage::transform( const QWMatrix& m )
 {
-	m_matrix = m;
+	QWMatrix m2 = m;
+	//m_matrix *= m2.scale( 1.0, -1.0 );
+	m_matrix *= m;
 	kdDebug() << "dx : " << m.dx() << ", dy : " << m.dy() << endl;
-	m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
 	m_boundingBox = m_boundingBox.transform( m );
 }
 
