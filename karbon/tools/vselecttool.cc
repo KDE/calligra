@@ -254,6 +254,30 @@ VSelectTool::mouseDrag( const KoPoint& current )
 }
 
 void
+VSelectTool::mouseButtonRelease( const KoPoint& current )
+{
+	if( m_state == normal )
+	{
+		KoPoint fp = first();
+		KoPoint lp = last();
+
+		if( (fabs( lp.x() - fp.x() ) + fabs( lp.y() - fp.y() ) ) < 3.0 )
+		{
+			// AK - should take the middle point here
+			fp = lp - KoPoint( 8.0, 8.0 );
+			lp = lp + KoPoint( 8.0, 8.0 );
+		}
+
+		view()->part()->document().selection()->clear();
+		view()->part()->document().selection()->append(
+			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
+
+		view()->selectionChanged();
+		view()->part()->repaintAllViews( true );
+	}
+}
+
+void
 VSelectTool::mouseDragRelease( const KoPoint& current )
 {
 	if( m_state == normal )
