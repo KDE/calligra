@@ -735,27 +735,27 @@ class KWInsertRemovePageCommand : public KCommand
     int m_pgNum;
 };
 
-struct FrameMarginsStruct {
-    FrameMarginsStruct() {}
-    FrameMarginsStruct( KWFrame *frame );
-    FrameMarginsStruct( double _left, double top, double right, double bottom );
-    double topMargin;
-    double bottomMargin;
-    double leftMargin;
-    double rightMargin;
+struct FramePaddingStruct {
+    FramePaddingStruct() {}
+    FramePaddingStruct( KWFrame *frame );
+    FramePaddingStruct( double _left, double top, double right, double bottom );
+    double topPadding;
+    double bottomPadding;
+    double leftPadding;
+    double rightPadding;
 };
 
-class KWFrameChangeFrameMarginCommand :public KNamedCommand
+class KWFrameChangeFramePaddingCommand :public KNamedCommand
 {
 public:
-    KWFrameChangeFrameMarginCommand( const QString &name, FrameIndex _frameIndex, FrameMarginsStruct _frameMarginsBegin, FrameMarginsStruct _frameMarginsEnd );
-    ~KWFrameChangeFrameMarginCommand() {}
+    KWFrameChangeFramePaddingCommand( const QString &name, FrameIndex _frameIndex, FramePaddingStruct _framePaddingBegin, FramePaddingStruct _framePaddingEnd );
+    ~KWFrameChangeFramePaddingCommand() {}
     void execute();
     void unexecute();
 protected:
     FrameIndex m_indexFrame;
-    FrameMarginsStruct m_frameMarginsBegin;
-    FrameMarginsStruct m_frameMarginsEnd;
+    FramePaddingStruct m_framePaddingBegin;
+    FramePaddingStruct m_framePaddingEnd;
 };
 
 

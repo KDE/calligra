@@ -445,7 +445,7 @@ public:
     const KoKWHeaderFooter& headerFooterInfo() const { return m_pageHeaderFooter; }
 
     bool isOnlyOneFrameSelected();
-    void setFrameMargins( double l, double r, double t, double b );
+    void setFramePadding( double l, double r, double t, double b );
     void setFrameCoords( double x, double y, double w, double h );
 
     // The user-chosen global unit

@@ -3900,7 +3900,7 @@ bool KWDocument::isOnlyOneFrameSelected() {
     return getSelectedFrames().count()==1;
 }
 
-void KWDocument::setFrameMargins( double l, double r, double t, double b )
+void KWDocument::setFramePadding( double l, double r, double t, double b )
 {
     // todo, make this more OO, and update the tableheaders as well..
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {

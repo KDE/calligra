@@ -1756,48 +1756,48 @@ void KWInsertRemovePageCommand::unexecute()
     }
 }
 
-FrameMarginsStruct::FrameMarginsStruct( KWFrame *frame )
+FramePaddingStruct::FramePaddingStruct( KWFrame *frame )
 {
-    topMargin = frame->paddingTop();
-    bottomMargin= frame->paddingBottom();
-    leftMargin = frame->paddingLeft();
-    rightMargin= frame->paddingRight();
+    topPadding = frame->paddingTop();
+    bottomPadding= frame->paddingBottom();
+    leftPadding = frame->paddingLeft();
+    rightPadding= frame->paddingRight();
 }
 
-FrameMarginsStruct::FrameMarginsStruct( double _left, double _top, double _right, double _bottom ):
-    topMargin(_top),
-    bottomMargin(_bottom),
-    leftMargin(_left),
-    rightMargin(_right)
+FramePaddingStruct::FramePaddingStruct( double _left, double _top, double _right, double _bottom ):
+    topPadding(_top),
+    bottomPadding(_bottom),
+    leftPadding(_left),
+    rightPadding(_right)
 {
 }
 
 
-KWFrameChangeFrameMarginCommand::KWFrameChangeFrameMarginCommand( const QString &name, FrameIndex _frameIndex, FrameMarginsStruct _frameMarginsBegin, FrameMarginsStruct _frameMarginsEnd ) :
+KWFrameChangeFramePaddingCommand::KWFrameChangeFramePaddingCommand( const QString &name, FrameIndex _frameIndex, FramePaddingStruct _framePaddingBegin, FramePaddingStruct _framePaddingEnd ) :
     KNamedCommand(name),
     m_indexFrame(_frameIndex),
-    m_frameMarginsBegin(_frameMarginsBegin),
-    m_frameMarginsEnd(_frameMarginsEnd)
+    m_framePaddingBegin(_framePaddingBegin),
+    m_framePaddingEnd(_framePaddingEnd)
 {
 }
 
-void KWFrameChangeFrameMarginCommand::execute()
+void KWFrameChangeFramePaddingCommand::execute()
 {
     KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
     Q_ASSERT( frameSet );
     KWFrame *frame = frameSet->frame(m_indexFrame.m_iFrameIndex);
     Q_ASSERT( frame );
-    frame->setFrameMargins( m_frameMarginsEnd.leftMargin,m_frameMarginsEnd.topMargin , m_frameMarginsEnd.rightMargin, m_frameMarginsEnd.bottomMargin);
+    frame->setFramePadding( m_framePaddingEnd.leftPadding,m_framePaddingEnd.topPadding , m_framePaddingEnd.rightPadding, m_framePaddingEnd.bottomPadding);
     frameSet->kWordDocument()->frameChanged( frame );
 }
 
-void KWFrameChangeFrameMarginCommand::unexecute()
+void KWFrameChangeFramePaddingCommand::unexecute()
 {
     KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
     Q_ASSERT( frameSet );
     KWFrame *frame = frameSet->frame(m_indexFrame.m_iFrameIndex);
     Q_ASSERT( frame );
-    frame->setFrameMargins( m_frameMarginsBegin.leftMargin,m_frameMarginsBegin.topMargin , m_frameMarginsBegin.rightMargin, m_frameMarginsBegin.bottomMargin);
+    frame->setFramePadding( m_framePaddingBegin.leftPadding,m_framePaddingBegin.topPadding , m_framePaddingBegin.rightPadding, m_framePaddingBegin.bottomPadding);
     frameSet->kWordDocument()->frameChanged( frame );
 }
 

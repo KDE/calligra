@@ -96,10 +96,9 @@ public:
      * The page number will be automatically determined from the position of the frame.
      * @param ra the "runaround" setting, i.e. whether text should flow below the frame,
      * around the frame, or avoiding the frame on the whole horizontal band.
-     * @param gap ...
      */
     KWFrame(KWFrameSet *fs, double left, double top, double width, double height,
-            RunAround ra = RA_BOUNDINGRECT, double gap = MM_TO_POINT( 1.0 ));
+            RunAround ra = RA_BOUNDINGRECT);
     KWFrame(KWFrame * frame);
     /** Destructor
      */
@@ -114,8 +113,17 @@ public:
 
     MouseMeaning getMouseMeaning( const KoPoint& docPoint, MouseMeaning defaultMeaning );
 
-    double runAroundGap()const { return m_runAroundGap; }
-    void setRunAroundGap( double gap ) { m_runAroundGap = gap; }
+    double runAroundLeft() const { return m_runAroundLeft; }
+    double runAroundRight() const { return m_runAroundRight; }
+    double runAroundTop() const { return m_runAroundTop; }
+    double runAroundBottom() const { return m_runAroundBottom; }
+
+    void setRunAroundGap( double left, double right, double top, double bottom ) {
+        m_runAroundLeft = left;
+        m_runAroundRight = right;
+        m_runAroundTop = top;
+        m_runAroundBottom = bottom;
+    }
 
     // Don't look at the implementation, it's about saving one byte ;)
     RunAround runAround()const { return (RunAround)(m_runAround & 0x0f); }
@@ -263,7 +271,7 @@ public:
     /// get bottom padding
     double paddingBottom() const { return m_paddingBottom; }
 
-    void setFrameMargins( double _left, double _top, double right, double bottom);
+    void setFramePadding( double _left, double _top, double right, double bottom);
     /** returns a copy of self
      */
     KWFrame *getCopy();
@@ -300,7 +308,7 @@ private:
     char /*RunAroundSide*/ m_runAround; // includes runaround side
     char /*FrameBehavior*/ m_frameBehavior;
     char /*NewFrameBehavior*/ m_newFrameBehavior;
-    double m_runAroundGap;
+    double m_runAroundLeft, m_runAroundRight, m_runAroundTop, m_runAroundBottom;
     double m_paddingLeft, m_paddingRight, m_paddingTop, m_paddingBottom;
     double m_minFrameHeight;
 
@@ -580,9 +588,10 @@ public:
     /**
      * Draw a particular frame of this frameset.
      * This is called by drawContents and is what framesets must reimplement.
-     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels). Doesn't include margins.
-     @
-     * @param crect rectangle to be repainted, in view coordinates. Includes margins.
+     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels).
+     * Doesn't include padding.
+     *
+     * @param crect rectangle to be repainted, in view coordinates. Includes padding.
      * Default implementation does double-buffering and calls drawFrameContents.
      */
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &crect,
@@ -596,16 +605,16 @@ public:
      * You MUST reimplement one or the other, or you'll get infinite recursion ;)
      *
      * In this method, the painter has been translated to the frame's coordinate system
-     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels). Doesn't include margins.
+     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels). Doesn't include padding.
      */
     virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect& fcrect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode *viewMode );
 
     /**
-     * Draw a margin of a specific frame of this frameSet
+     * Draw the padding area inside of a specific frame of this frameSet
      */
-    virtual void drawMargins( KWFrame *frame, QPainter *p, const QRect &fcrect, const QColorGroup &cg, KWViewMode *viewMode);
+    virtual void drawPadding( KWFrame *frame, QPainter *p, const QRect &fcrect, const QColorGroup &cg, KWViewMode *viewMode);
 
     enum UpdateFramesFlags {
         UpdateFramesInPage = 1,

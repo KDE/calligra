@@ -22,6 +22,7 @@
 
 #include <kdialogbase.h>
 #include <koUnit.h>
+#include <qgroupbox.h>
 
 class KWFrame;
 class KWDocument;
@@ -55,11 +56,40 @@ private:
     QBrush brush;
 };
 
+/**
+ * A widget showing unitwidgets for 4 doubles (for left/right/top/bottom values)
+ * and a checkbox to synchronize changes to all values
+ */
+class KWFourSideConfigWidget : public QGroupBox
+{
+    Q_OBJECT
+public:
+    KWFourSideConfigWidget( KWDocument* doc, const QString& title, QWidget*, const char* name = 0 );
+
+    bool changed() const { return m_changed; }
+
+    void setValues( double left, double right, double top, double bottom ); // in pt
+    double leftValue() const; // in pt
+    double rightValue() const; // in pt
+    double topValue() const; // in pt
+    double bottomValue() const; // in pt
+
+signals:
+
+public slots:
+    void slotValueChanged( double );
+
+private:
+    KDoubleNumInput *m_inputLeft, *m_inputRight, *m_inputTop, *m_inputBottom;
+    QCheckBox *m_synchronize;
+    KWDocument *doc;
+    bool m_changed;
+    bool noSignal;
+};
 
 /******************************************************************/
 /* Class: KWFrameDia                                              */
 /******************************************************************/
-
 class KWFrameDia : public KDialogBase
 {
     Q_OBJECT
@@ -97,7 +127,6 @@ protected slots:
     void slotProtectSizeToggled(bool);
     void textNameFrameChanged ( const QString & );
     void updateBrushConfiguration();
-    void slotMarginsChanged( double );
     void slotProtectContentChanged( bool );
     void enableRunAround();
     void selectExistingFrameset();
@@ -123,7 +152,7 @@ private:
     QRadioButton *rRunNo, *rRunBounding, *rRunSkip;
     QRadioButton *rRunLeft, *rRunRight, *rRunBiggest;
     QGroupBox *runGroup, *runSideGroup;
-    KDoubleNumInput *eRGap;
+    KWFourSideConfigWidget* m_raDistConfigWidget;
 
     // TAB 3:
     QWidget *tab3;
@@ -135,13 +164,12 @@ private:
     // TAB 4:
     QWidget *tab4;
     QGroupBox *grp1;
-    QGridLayout *grid4, *pGrid, *mGrid;
-    QLabel *lx, *lml, *lmr, *lmt, *lmb, *ly, *lw, *lh;
+    QLabel *lx, *ly, *lw, *lh;
     KDoubleNumInput *sx, *sy, *sw, *sh;
-    KDoubleNumInput *m_inputLeftMargin, *m_inputRightMargin, *m_inputTopMargin, *m_inputBottomMargin;
-    QCheckBox *synchronize;
+    KWFourSideConfigWidget* m_paddingConfigWidget;
     QCheckBox *floating;
     QCheckBox *protectSize;
+
     // TAB 5:
     QWidget *tab5;
     QGridLayout *grid5;
@@ -157,7 +185,6 @@ private:
     bool frameSetFloating;
     bool frameSetProtectedSize;
     double oldX, oldY, oldW, oldH;
-    double oldMarginLeft, oldMarginRight, oldMarginTop, oldMarginBottom;
     double heightByWidthRatio;
     int /*FrameBehavior*/ frameBehavior;
     KoUnit::Unit frameUnits;
@@ -167,5 +194,3 @@ private:
 };
 
 #endif
-
-

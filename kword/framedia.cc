@@ -451,7 +451,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     }
 
 
-    // SideHeads definition - is that for text frames only ?   - Yes (TZ)
+    // SideHeads definition - for text frames only
     if( false && frameType == FT_TEXT ) // disabled in the GUI for now! (TZ June 2002)
     {
         row++;
@@ -628,22 +628,13 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
 
     tabLayout->addWidget( runSideGroup );
 
-    // [useless?] spacer
-    QHBoxLayout *Layout1 = new QHBoxLayout( 0, 0, 6);
-    QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    Layout1->addItem( spacer );
+    m_raDistConfigWidget = new KWFourSideConfigWidget( doc, i18n("Distance between frame and text (%1)").arg(doc->getUnitName()), tab2 );
+    m_raDistConfigWidget->setValues( QMAX(0.00, frame->runAroundLeft()),
+                                     QMAX(0.00, frame->runAroundRight()),
+                                     QMAX(0.00, frame->runAroundTop()),
+                                     QMAX(0.00, frame->runAroundBottom()) );
+    tabLayout->addWidget( m_raDistConfigWidget );
 
-    QLabel *lRGap = new QLabel( i18n( "Distance between frame and text (%1):" ).arg(doc->getUnitName()), tab2 );
-    Layout1->addWidget( lRGap );
-
-    eRGap = new KDoubleNumInput( tab2 );
-    eRGap->setValue( 0.0 );
-    eRGap->setRange(0, 9999, 1,  false);
-    eRGap->setMinimumWidth ( 100 );
-    Layout1->addWidget( eRGap );
-    tabLayout->addLayout( Layout1 );
-    QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    tabLayout->addItem( spacer_2 );
 
 
     // Show current settings
@@ -696,24 +687,34 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
 
     // Runaround gap
     show=true;
-    double ragap = 0;
-    if ( frame )
-        ragap = frame->runAroundGap();
+    double ragapLeft = 0;
+    double ragapRight = 0;
+    double ragapTop = 0;
+    double ragapBottom = 0;
+    if ( frame ) {
+        ragapLeft = frame->runAroundLeft();
+        ragapRight = frame->runAroundRight();
+        ragapTop = frame->runAroundTop();
+        ragapBottom = frame->runAroundBottom();
+    }
     else {
-        KWFrame *f=allFrames.first();
-        ragap = f->runAroundGap();
-        f=allFrames.next();
-        while(f) {
-            if(ragap != f->runAroundGap()) show=false;
-            f=allFrames.next();
+        KWFrame *f = allFrames.first();
+        ragapLeft = f->runAroundLeft();
+        ragapRight = f->runAroundRight();
+        ragapTop = f->runAroundTop();
+        ragapBottom = f->runAroundBottom();
+        for( f = allFrames.next() ; f ; f = allFrames.next() ) {
+            if( ragapLeft != f->runAroundLeft() ||
+                ragapRight != f->runAroundRight() ||
+                ragapTop != f->runAroundTop() ||
+                ragapBottom != f->runAroundBottom() )
+                show = false; // TODO special value in the spinbox
+            f = allFrames.next();
         }
     }
 
-    double str=0.0;
     if(show)
-        str = KoUnit::ptToUnit( ragap, doc->getUnit() );
-    eRGap->setValue( str );
-
+        m_raDistConfigWidget->setValues( ragapLeft, ragapRight, ragapTop, ragapBottom );
 
     enableRunAround();
 
@@ -866,9 +867,9 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     noSignal = true;
 
     tab4 = addPage( i18n( "Geometry" ) );
-    grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout* grid4 = new QGridLayout( tab4, 5, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
-    floating = new QCheckBox (i18n("Frame is inline"), tab4);
+    floating = new QCheckBox( i18n("Frame is inline"), tab4 );
 
     connect( floating, SIGNAL( toggled(bool) ), this, SLOT( slotFloatingToggled(bool) ) );
     int row = 0;
@@ -899,7 +900,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     */
 
     grp1 = new QGroupBox( i18n("Position (%1)").arg(doc->getUnitName()), tab4 );
-    pGrid = new QGridLayout( grp1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout* pGrid = new QGridLayout( grp1, 3, 4, KDialog::marginHint(), KDialog::spacingHint() );
 
     lx = new QLabel( i18n( "Left:" ), grp1 );
     lx->resize( lx->sizeHint() );
@@ -911,21 +912,21 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     sx->setRange(0, 9999, 1,  false);
 
     sx->resize( sx->sizeHint() );
-    pGrid->addWidget( sx, 2, 0 );
+    pGrid->addWidget( sx, 1, 1 );
 
     ly = new QLabel( i18n( "Top:" ), grp1 );
     ly->resize( ly->sizeHint() );
-    pGrid->addWidget( ly, 1, 1 );
+    pGrid->addWidget( ly, 1, 2 );
 
     sy = new KDoubleNumInput( grp1 );
     sy->setRange(0, 9999, 1,  false);
     sy->setValue( 0.0 );
     sy->resize( sy->sizeHint() );
-    pGrid->addWidget( sy, 2, 1 );
+    pGrid->addWidget( sy, 1, 3 );
 
     lw = new QLabel( i18n( "Width:" ), grp1 );
     lw->resize( lw->sizeHint() );
-    pGrid->addWidget( lw, 3, 0 );
+    pGrid->addWidget( lw, 2, 0 );
 
     sw = new KDoubleNumInput( grp1 );
 
@@ -935,11 +936,11 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     connect( sw, SIGNAL(valueChanged(double)),
 	     this, SLOT(slotUpdateHeightForWidth(double)) );
 
-    pGrid->addWidget( sw, 4, 0 );
+    pGrid->addWidget( sw, 2, 1 );
 
     lh = new QLabel( i18n( "Height:" ), grp1 );
     lh->resize( lh->sizeHint() );
-    pGrid->addWidget( lh, 3, 1 );
+    pGrid->addWidget( lh, 2, 2 );
 
     sh = new KDoubleNumInput( grp1 );
     connect( sh, SIGNAL(valueChanged(double)),
@@ -949,96 +950,30 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     sh->resize( sh->sizeHint() );
     sh->setRange(0, 9999, 1,  false);
 
-    pGrid->addWidget( sh, 4, 1 );
+    pGrid->addWidget( sh, 2, 3 );
 
-    pGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
+    pGrid->setRowSpacing( 0, KDialog::spacingHint() + 5 );
 
     row++;
     grid4->addMultiCellWidget( grp1, row, row, 0,1 );
 
     if(frame) {
-        QGroupBox *grp2 = new QGroupBox( i18n("Margins (%1)").arg(doc->getUnitName()), tab4 );
-        mGrid = new QGridLayout( grp2, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
-
-        synchronize=new QCheckBox( i18n("Synchronize changes"), grp2 );
-        QWhatsThis::add(synchronize, i18n("When this is checked any change in margins will be used for all directions"));
-        mGrid->addMultiCellWidget( synchronize, 1, 1, 0, 1);
-
-        lml = new QLabel( i18n( "Left:" ), grp2 );
-        lml->resize( lml->sizeHint() );
-        mGrid->addWidget( lml, 2, 0 );
-
-        m_inputLeftMargin = new KDoubleNumInput( grp2 );
-
-        m_inputLeftMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->paddingLeft()), doc->getUnit() ) );
-        m_inputLeftMargin->setRange(0, 9999, 1,  false);
-        m_inputLeftMargin->resize( m_inputLeftMargin->sizeHint() );
-        mGrid->addWidget( m_inputLeftMargin, 3, 0 );
-
-        lmr = new QLabel( i18n( "Right:" ), grp2 );
-        lmr->resize( lmr->sizeHint() );
-        mGrid->addWidget( lmr, 2, 1 );
-
-        m_inputRightMargin = new KDoubleNumInput( grp2 );
-
-        m_inputRightMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->paddingRight()), doc->getUnit() ) );
-        m_inputRightMargin->resize( m_inputRightMargin->sizeHint() );
-        m_inputRightMargin->setRange(0, 9999, 1,  false);
-        mGrid->addWidget( m_inputRightMargin, 3, 1 );
-
-        lmt = new QLabel( i18n( "Top:" ), grp2 );
-        lmt->resize( lmt->sizeHint() );
-        mGrid->addWidget( lmt, 4, 0 );
-
-        m_inputTopMargin = new KDoubleNumInput( grp2 );
-
-        m_inputTopMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->paddingTop()), doc->getUnit() ) );
-        m_inputTopMargin->resize( m_inputTopMargin->sizeHint() );
-        m_inputTopMargin->setRange(0, 9999, 1,  false);
-
-        mGrid->addWidget( m_inputTopMargin, 5, 0 );
-
-        lmb = new QLabel( i18n( "Bottom:" ), grp2 );
-        lmb->resize( lmb->sizeHint() );
-        mGrid->addWidget( lmb, 4, 1 );
-
-        m_inputBottomMargin = new KDoubleNumInput( grp2 );
-
-        m_inputBottomMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->paddingBottom()), doc->getUnit() ) );
-        m_inputBottomMargin->resize( m_inputBottomMargin->sizeHint() );
-        m_inputBottomMargin->setRange(0, 9999, 1,  false);
-        mGrid->addWidget( m_inputBottomMargin, 5, 1 );
-
-
-        oldMarginLeft=m_inputLeftMargin->value();
-        oldMarginRight=m_inputRightMargin->value();
-        oldMarginTop=m_inputTopMargin->value();
-        oldMarginBottom=m_inputBottomMargin->value();
-
-        connect( m_inputBottomMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
-        connect( m_inputLeftMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
-        connect( m_inputRightMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
-        connect( m_inputTopMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+        m_paddingConfigWidget = new KWFourSideConfigWidget( doc, i18n("Margins (%1)").arg(doc->getUnitName()), tab4 );
+        m_paddingConfigWidget->setValues( QMAX(0.00, frame->paddingLeft()),
+                                          QMAX(0.00, frame->paddingRight()),
+                                          QMAX(0.00, frame->paddingTop()),
+                                          QMAX(0.00, frame->paddingBottom()) );
         row++;
-        grid4->addMultiCellWidget( grp2, row, row, 0,1 );
-        mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
+        grid4->addMultiCellWidget( m_paddingConfigWidget, row, row, 0, 1 );
 
-        if (tab1 && cbProtectContent )
+        if ( tab1 && cbProtectContent )
         {
-            bool state = !cbProtectContent->isChecked();
-            m_inputBottomMargin->setEnabled( state );
-            m_inputRightMargin->setEnabled( state );
-            m_inputTopMargin->setEnabled( state );
-            m_inputLeftMargin->setEnabled( state );
-            synchronize->setEnabled( state );
+            m_paddingConfigWidget->setEnabled( !cbProtectContent->isChecked() );
         }
     }
     else
     {
-        m_inputLeftMargin = 0L;
-        m_inputRightMargin = 0L;
-        m_inputTopMargin = 0L;
-        m_inputBottomMargin = 0L;
+        m_paddingConfigWidget = 0;
     }
 
 
@@ -1140,6 +1075,9 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         protectSize->hide();
     }
     noSignal=false;
+
+    ++row;
+    grid4->setRowStretch( row, 1 );
 }
 
 void KWFrameDia::setupTab5() { // Tab Background fill/color
@@ -1197,15 +1135,10 @@ void KWFrameDia::setupTab5() { // Tab Background fill/color
     updateBrushConfiguration();
 }
 
-void KWFrameDia::slotProtectContentChanged( bool b)
+void KWFrameDia::slotProtectContentChanged( bool b )
 {
-    if (tab4 && !noSignal && m_inputLeftMargin)
-    {
-        m_inputLeftMargin->setEnabled( !b );
-        m_inputRightMargin->setEnabled( !b );
-        m_inputTopMargin->setEnabled( !b );
-        m_inputBottomMargin->setEnabled( !b );
-        synchronize->setEnabled( !b);
+    if (tab4 && !noSignal && m_paddingConfigWidget) {
+        m_paddingConfigWidget->setEnabled( !b );
     }
 }
 
@@ -1459,19 +1392,6 @@ void KWFrameDia::slotFloatingToggled(bool b)
     enableRunAround();
 }
 
-void KWFrameDia::slotMarginsChanged( double val)
-{
-    if ( synchronize->isChecked() && !noSignal && m_inputLeftMargin )
-    {
-        noSignal = true;
-        m_inputLeftMargin->setValue( val );
-        m_inputBottomMargin->setValue( val );
-        m_inputRightMargin->setValue( val );
-        m_inputTopMargin->setValue( val );
-        noSignal = false;
-    }
-}
-
 // Enable or disable the "on new page" options
 void KWFrameDia::enableOnNewPageOptions()
 {
@@ -1510,7 +1430,7 @@ void KWFrameDia::enableRunAround()
                 runGroup->setEnabled( true );
         }
         runSideGroup->setEnabled( runGroup->isEnabled() && rRunBounding->isChecked() );
-        eRGap->setEnabled( runGroup->isEnabled() &&
+        m_raDistConfigWidget->setEnabled( runGroup->isEnabled() &&
             ( rRunBounding->isChecked() || rRunSkip->isChecked() ) );
     }
 }
@@ -1792,12 +1712,17 @@ bool KWFrameDia::applyChanges()
         }
 
         // Run around gap.
-        double newValue = QMAX( 0, KoUnit::ptFromUnit( eRGap->value(), doc->getUnit() ));
-        if(frame)
-            frame->setRunAroundGap(newValue);
+        double runAroundLeft = m_raDistConfigWidget->leftValue();
+        double runAroundRight = m_raDistConfigWidget->rightValue();
+        double runAroundTop = m_raDistConfigWidget->topValue();
+        double runAroundBottom = m_raDistConfigWidget->bottomValue();
+
+        if(frame) {
+            frame->setRunAroundGap( runAroundLeft, runAroundRight, runAroundTop, runAroundBottom );
+        }
         else
             for(KWFrame *f=allFrames.first();f; f=allFrames.next())
-                f->setRunAroundGap(newValue);
+                f->setRunAroundGap( runAroundLeft, runAroundRight, runAroundTop, runAroundBottom );
     }
     if(tab5) { // Tab Background fill/color
         QBrush tmpBrush=frameBrushStyle();
@@ -1828,12 +1753,12 @@ bool KWFrameDia::applyChanges()
         py = QMAX(0, KoUnit::ptFromUnit(sy->value(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
         pw = QMAX(KoUnit::ptFromUnit( sw->value(), doc->getUnit() ),0);
         ph = QMAX(KoUnit::ptFromUnit(sh->value(), doc->getUnit() ),0);
-        if ( m_inputLeftMargin )
+        if ( m_paddingConfigWidget )
         {
-            uLeft=QMAX(0, KoUnit::ptFromUnit( m_inputLeftMargin->value(), doc->getUnit() ));
-            uRight=QMAX(0, KoUnit::ptFromUnit( m_inputRightMargin->value(), doc->getUnit() ));
-            uTop=QMAX(0, KoUnit::ptFromUnit( m_inputTopMargin->value(), doc->getUnit() ));
-            uBottom=QMAX(0, KoUnit::ptFromUnit( m_inputBottomMargin->value(), doc->getUnit() ));
+            uLeft = m_paddingConfigWidget->leftValue();
+            uRight = m_paddingConfigWidget->rightValue();
+            uTop = m_paddingConfigWidget->topValue();
+            uBottom = m_paddingConfigWidget->bottomValue();
         }
     }
     KoRect rect( px, py, pw, ph );
@@ -1851,8 +1776,8 @@ bool KWFrameDia::applyChanges()
             if( !doc->isOutOfPage( rect , frame->pageNum() ) ) {
                 frame->setRect( px, py, pw, ph );
                 //don't change margins when frame is protected.
-                if ( m_inputLeftMargin && ( !tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked())) )
-                    frame->setFrameMargins( uLeft, uTop, uRight, uBottom);
+                if ( m_paddingConfigWidget && ( !tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked())) )
+                    frame->setFramePadding( uLeft, uTop, uRight, uBottom );
                 doc->frameChanged( frame );
             } else {
                 KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
@@ -1869,7 +1794,10 @@ bool KWFrameDia::applyChanges()
                            || frameCopy->newFrameBehavior()!=frame->newFrameBehavior()
                            || frameCopy->runAround()!=frame->runAround()
                            || frameCopy->runAroundSide()!=frame->runAroundSide()
-                           || frameCopy->runAroundGap()!=frame->runAroundGap()
+                           || frameCopy->runAroundLeft()!=frame->runAroundLeft()
+                           || frameCopy->runAroundRight()!=frame->runAroundRight()
+                           || frameCopy->runAroundTop()!=frame->runAroundTop()
+                           || frameCopy->runAroundBottom()!=frame->runAroundBottom()
                            || (tab5 && frameCopy->backgroundColor()!=frameBrushStyle())))
         {
             if(!macroCmd)
@@ -1957,17 +1885,16 @@ bool KWFrameDia::applyChanges()
                         KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
                     }
                 }
-                if (m_inputLeftMargin && (!tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked())))
+                if (m_paddingConfigWidget && (!tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked())))
                 {
-                    if ( oldMarginLeft!=m_inputLeftMargin->value() || oldMarginRight!=m_inputRightMargin->value() ||
-                         oldMarginTop!=m_inputTopMargin->value() || oldMarginBottom!=m_inputBottomMargin->value())
+                    if ( m_paddingConfigWidget->changed() )
                     {
                         FrameIndex index( f );
-                        FrameMarginsStruct tmpMargBegin(f);
-                        FrameMarginsStruct tmpMargEnd(uLeft, uTop, uRight, uBottom);
+                        FramePaddingStruct tmpMargBegin(f);
+                        FramePaddingStruct tmpMargEnd(uLeft, uTop, uRight, uBottom);
                         if(!macroCmd)
                             macroCmd = new KMacroCommand( i18n("Change Margin Frame") );
-                        KWFrameChangeFrameMarginCommand *cmd = new KWFrameChangeFrameMarginCommand( i18n("Change Margin Frame"), index, tmpMargBegin, tmpMargEnd) ;
+                        KWFrameChangeFramePaddingCommand *cmd = new KWFrameChangeFramePaddingCommand( i18n("Change Margin Frame"), index, tmpMargBegin, tmpMargEnd) ;
                         cmd->execute();
                         macroCmd->addCommand(cmd);
                     }
@@ -2034,3 +1961,115 @@ bool KWFrameDia::mayDeleteFrameSet(KWTextFrameSet *fs) {
     }
     return true;
 }
+
+KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString& title,
+                                                QWidget* parent, const char* name )
+    : QGroupBox( title, parent, name ),
+      doc( _doc ),
+      m_changed( false ), noSignal( false )
+{
+    QGroupBox *grp2 = this;
+    QGridLayout* mGrid = new QGridLayout( grp2, 4, 4, KDialog::marginHint(), KDialog::spacingHint() );
+
+    m_synchronize=new QCheckBox( i18n("Synchronize changes"), grp2 );
+    QWhatsThis::add(m_synchronize, i18n("When this is checked any change in margins will be used for all directions"));
+    mGrid->addMultiCellWidget( m_synchronize, 1, 1, 0, 1 );
+
+    QLabel* lml = new QLabel( i18n( "Left:" ), grp2 );
+    //lml->resize( lml->sizeHint() );
+    mGrid->addWidget( lml, 2, 0 );
+
+    // TODO port to KoUnitWidgets
+    m_inputLeft = new KDoubleNumInput( grp2 );
+
+    m_inputLeft->setRange(0, 9999, 1,  false);
+    //m_inputLeft->resize( m_inputLeft->sizeHint() );
+    mGrid->addWidget( m_inputLeft, 2, 1 );
+
+    QLabel* lmt = new QLabel( i18n( "Top:" ), grp2 );
+    //lmt->resize( lmt->sizeHint() );
+    mGrid->addWidget( lmt, 2, 2 );
+
+    m_inputTop = new KDoubleNumInput( grp2 );
+
+    //m_inputTop->resize( m_inputTop->sizeHint() );
+    m_inputTop->setRange(0, 9999, 1,  false);
+
+    mGrid->addWidget( m_inputTop, 2, 3 );
+
+    QLabel* lmr = new QLabel( i18n( "Right:" ), grp2 );
+    //lmr->resize( lmr->sizeHint() );
+    mGrid->addWidget( lmr, 3, 0 );
+
+    m_inputRight = new KDoubleNumInput( grp2 );
+
+    //m_inputRight->resize( m_inputRight->sizeHint() );
+    m_inputRight->setRange(0, 9999, 1,  false);
+    mGrid->addWidget( m_inputRight, 3, 1 );
+
+    QLabel* lmb = new QLabel( i18n( "Bottom:" ), grp2 );
+    //lmb->resize( lmb->sizeHint() );
+    mGrid->addWidget( lmb, 3, 2 );
+
+    m_inputBottom = new KDoubleNumInput( grp2 );
+
+    //m_inputBottom->resize( m_inputBottom->sizeHint() );
+    m_inputBottom->setRange(0, 9999, 1,  false);
+    mGrid->addWidget( m_inputBottom, 3, 3 );
+    mGrid->setRowSpacing( 0, KDialog::spacingHint() + 5 );
+
+    connect( m_inputLeft, SIGNAL( valueChanged(double)), this, SLOT( slotValueChanged( double )));
+    connect( m_inputRight, SIGNAL( valueChanged(double)), this, SLOT( slotValueChanged( double )));
+    connect( m_inputTop, SIGNAL( valueChanged(double)), this, SLOT( slotValueChanged( double )));
+    connect( m_inputBottom, SIGNAL( valueChanged(double)), this, SLOT( slotValueChanged( double )));
+}
+
+// Called right after the ctor, so m_synchronize can't be checked
+void KWFourSideConfigWidget::setValues( double left, double right, double top, double bottom )
+{
+    m_inputLeft->setValue( KoUnit::ptToUnit( left, doc->getUnit() ) );
+    m_inputRight->setValue( KoUnit::ptToUnit( right, doc->getUnit() ) );
+    m_inputTop->setValue( KoUnit::ptToUnit( top, doc->getUnit() ) );
+    m_inputBottom->setValue( KoUnit::ptToUnit( bottom, doc->getUnit() ) );
+}
+
+void KWFourSideConfigWidget::slotValueChanged( double val )
+{
+    m_changed = true;
+    if ( m_synchronize->isChecked() && !noSignal )
+    {
+        noSignal = true;
+        m_inputLeft->setValue( val );
+        m_inputBottom->setValue( val );
+        m_inputRight->setValue( val );
+        m_inputTop->setValue( val );
+        noSignal = false;
+    }
+}
+
+double KWFourSideConfigWidget::leftValue() const
+{
+    return KoUnit::ptFromUnit( m_inputLeft->value(), doc->getUnit() );
+}
+
+double KWFourSideConfigWidget::rightValue() const
+{
+    return KoUnit::ptFromUnit( m_inputRight->value(), doc->getUnit() );
+}
+
+double KWFourSideConfigWidget::topValue() const
+{
+    return KoUnit::ptFromUnit( m_inputTop->value(), doc->getUnit() );
+}
+
+double KWFourSideConfigWidget::bottomValue() const
+{
+    return KoUnit::ptFromUnit( m_inputBottom->value(), doc->getUnit() );
+}
+
+// not needed, setEnabled does it
+// m_inputBottom->setEnabled( state );
+// m_inputRight->setEnabled( state );
+// m_inputTop->setEnabled( state );
+// m_inputLeft->setEnabled( state );
+// m_synchronize->setEnabled( state );

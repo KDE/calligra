@@ -82,7 +82,7 @@ KWFrame::KWFrame(KWFrame * frame)
     m_minFrameHeight=0;
 }
 
-KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround _ra, double _gap )
+KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround _ra )
     : KoRect( left, top, width, height ),
       // Initialize member vars here. This ensures they are all initialized, since it's
       // easier to compare this list with the member vars list (compiler ensures order).
@@ -90,7 +90,10 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_runAround( _ra ),
       m_frameBehavior( AutoExtendFrame ),
       m_newFrameBehavior( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
-      m_runAroundGap( _gap ),
+      m_runAroundLeft( 1.0 ),
+      m_runAroundRight( 1.0 ),
+      m_runAroundTop( 1.0 ),
+      m_runAroundBottom( 1.0 ),
       m_paddingLeft( 0 ),
       m_paddingRight( 0 ),
       m_paddingTop( 0 ),
@@ -214,7 +217,7 @@ void KWFrame::copySettings(KWFrame *frm)
     setRunAroundSide(frm->runAroundSide());
     setFrameBehavior(frm->frameBehavior());
     setNewFrameBehavior(frm->newFrameBehavior());
-    setRunAroundGap(frm->runAroundGap());
+    setRunAroundGap(frm->runAroundLeft(), frm->runAroundRight(), frm->runAroundTop(), frm->runAroundBottom());
     setPaddingLeft(frm->paddingLeft());
     setPaddingRight(frm->paddingRight());
     setPaddingTop(frm->paddingTop());
@@ -347,10 +350,10 @@ KoRect KWFrame::outerKoRect() const
 KoRect KWFrame::runAroundRect() const
 {
     KoRect raRect = outerKoRect();
-    raRect.rLeft() -= m_runAroundGap;
-    raRect.rTop() -= m_runAroundGap;
-    raRect.rRight() += m_runAroundGap;
-    raRect.rBottom() += m_runAroundGap;
+    raRect.rLeft() -= m_runAroundLeft;
+    raRect.rRight() += m_runAroundRight;
+    raRect.rTop() -= m_runAroundTop;
+    raRect.rBottom() += m_runAroundBottom;
     return raRect;
 }
 
@@ -378,8 +381,15 @@ void KWFrame::save( QDomElement &frameElem )
                 frameElem.setAttribute( "runaroundSide", "biggest" );
         }
     }
-    if(runAroundGap()!=0)
-        frameElem.setAttribute( "runaroundGap", runAroundGap() );
+    if(runAroundLeft()!=0 || runAroundRight()!=0 || runAroundTop()!=0 || runAroundBottom()!=0) {
+        frameElem.setAttribute( "runaroundLeft", m_runAroundLeft );
+        frameElem.setAttribute( "runaroundRight", m_runAroundRight );
+        frameElem.setAttribute( "runaroundTop", m_runAroundTop );
+        frameElem.setAttribute( "runaroundBottom", m_runAroundBottom );
+        // The old file format had only one value, keep compat
+        double runAroundGap = QMAX( QMAX( m_runAroundLeft, m_runAroundRight ), QMAX( m_runAroundTop, m_runAroundBottom ) );
+        frameElem.setAttribute( "runaroundGap", runAroundGap );
+    }
 
     if(leftBorder().penWidth()!=0)
         frameElem.setAttribute( "lWidth", leftBorder().penWidth() );
@@ -473,9 +483,14 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
         setRunAroundSide( RA_RIGHT );
     // default case: RA_BIGGEST, since it's 0
 
-    m_runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
+    double runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
                           ? frameElem.attribute( "runaroundGap" ).toDouble()
                           : frameElem.attribute( "runaGapPT" ).toDouble();
+    setRunAroundGap( KWDocument::getAttribute( frameElem, "runaroundLeft", runAroundGap ),
+                     KWDocument::getAttribute( frameElem, "runaroundRight", runAroundGap ),
+                     KWDocument::getAttribute( frameElem, "runaroundTop", runAroundGap ),
+                     KWDocument::getAttribute( frameElem, "runaroundBottom", runAroundGap ) );
+
     m_sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
     m_frameBehavior = static_cast<FrameBehavior>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
     // Old documents had no "NewFrameBehavior" for footers/headers -> default to Copy.
@@ -560,6 +575,13 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     m_paddingTop = KoUnit::parseValue( styleStack.attribute( "fo:padding", "top" ) );
     m_paddingBottom = KoUnit::parseValue( styleStack.attribute( "fo:padding", "bottom" ) );
 
+    // margins, i.e. runAroundGap. fo:margin for 4 values or padding-left/right/top/bottom
+    m_runAroundLeft = KoUnit::parseValue( styleStack.attribute( "fo:margin", "left" ) );
+    m_runAroundRight = KoUnit::parseValue( styleStack.attribute( "fo:margin", "right" ) );
+    m_runAroundTop = KoUnit::parseValue( styleStack.attribute( "fo:margin", "top" ) );
+    m_runAroundBottom = KoUnit::parseValue( styleStack.attribute( "fo:margin", "bottom" ) );
+
+
     // background color (3.11.25)
     if ( styleStack.hasAttribute( "fo:background-color" ) ) {
         QString color = styleStack.attribute( "fo:background-color" );
@@ -601,6 +623,25 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     // Footnotes and endnotes are handled in a special way.
     if ( frameSet->isFootEndNote() ) // note that isFootNote/isEndNote are not possible yet
         m_newFrameBehavior = NoFollowup;
+
+    KWFrame::RunAround runAround = KWFrame::RA_BOUNDINGRECT;
+    KWFrame::RunAroundSide runAroundSide = KWFrame::RA_BIGGEST;
+    const QCString oowrap = context.styleStack().attribute( "style:wrap" ).latin1();
+    if ( oowrap == "none" )        // 'no wrap' means 'avoid horizontal space'
+        runAround = KWFrame::RA_SKIP;
+    else if ( oowrap == "left" )
+        runAroundSide = KWFrame::RA_LEFT;
+    else if ( oowrap == "right" )
+        runAroundSide= KWFrame::RA_RIGHT;
+    else if ( oowrap == "run-through" )
+        runAround = KWFrame::RA_NO;
+    //if ( oowrap == "biggest" ) // OASIS extension
+    // ->( KWFrame::RA_BOUNDINGRECT, KWFrame::RA_BIGGEST ), already set above
+    //if ( oowrap == "parallel" || oowrap == "dynamic" )
+    // dynamic is called "optimal" in the OO GUI. It's different from biggest because it can lead to parallel.
+    // Those are not supported in KWord, let's use biggest instead
+    setRunAround( runAround );
+    setRunAroundSide( runAroundSide );
 }
 
 bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) {
@@ -627,7 +668,7 @@ double KWFrame::innerHeight() const
     return KMAX( 0.0, height() - m_paddingTop - m_paddingBottom );
 }
 
-void KWFrame::setFrameMargins( double _left, double _top, double _right, double _bottom)
+void KWFrame::setFramePadding( double _left, double _top, double _right, double _bottom)
 {
     m_paddingLeft = _left;
     m_paddingTop = _top;
@@ -758,18 +799,17 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
     }
 }
 
-// This is in fact called "padding" now (from the OO/OASIS definition)
-void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, const QColorGroup &, KWViewMode *viewMode )
+void KWFrameSet::drawPadding( KWFrame *frame, QPainter *p, const QRect &crect, const QColorGroup &, KWViewMode *viewMode )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect(viewMode) ) );
-    //kdDebug(32001) << "KWFrameSet::drawMargins frame: " << frameFromPtr( frame )
+    //kdDebug(32001) << "KWFrameSet::drawPadding frame: " << frameFromPtr( frame )
     //               << " outerRect: " << outerRect
     //               << " crect: " << crect << endl;
 
     if ( !crect.intersects( outerRect ) )
     {
 #ifdef DEBUG_DRAW
-        kdDebug(32001) << "KWFrameSet::drawMargins no intersection with " << crect << endl;
+        kdDebug(32001) << "KWFrameSet::drawPadding no intersection with " << crect << endl;
 #endif
         return;
     }
@@ -782,7 +822,7 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, c
     int topMargin = m_doc->zoomItY(frame->paddingTop());
     int rightMargin = m_doc->zoomItX(frame->paddingRight());
     int bottomMargin = m_doc->zoomItY(frame->paddingBottom());
-    //kdDebug(32001) << "KWFrameSet::drawMargins leftMargin=" << leftMargin << " topMargin=" << topMargin << " rightMargin=" << rightMargin << " bottomMargin=" << bottomMargin << endl;
+    //kdDebug(32001) << "KWFrameSet::drawPadding leftMargin=" << leftMargin << " topMargin=" << topMargin << " rightMargin=" << rightMargin << " bottomMargin=" << bottomMargin << endl;
 
     if ( topMargin != 0 )
     {
@@ -1390,7 +1430,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
         }
 
         if ( frame->paddingLeft() || frame->paddingTop() || frame->paddingRight() || frame->paddingBottom() )
-            drawMargins( frame, doubleBufPainter, outerCRect, cg, viewMode );
+            drawPadding( frame, doubleBufPainter, outerCRect, cg, viewMode );
         doubleBufPainter->save();
 #ifdef DEBUG_DRAW
         kdDebug(32001) << "  translating by " << translationOffset.x() << ", " << translationOffset.y() << " before drawFrameContents" << endl;
@@ -1413,7 +1453,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
     else
     {
         if ( frame && (frame->paddingLeft() || frame->paddingTop() || frame->paddingRight() || frame->paddingBottom()) )
-            drawMargins( frame, painter, outerCRect, cg, viewMode );
+            drawPadding( frame, painter, outerCRect, cg, viewMode );
         painter->save();
         painter->translate( translationOffset.x(), translationOffset.y() );
         //painter->setBrushOrigin( painter->brushOrigin() + translationOffset );
@@ -1581,56 +1621,14 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
     }
     //kdDebug(32001) << k_funcinfo << "width=" << width << " height=" << height << " pt" << endl;
 
-    KWFrame::RunAround runAround = KWFrame::RA_BOUNDINGRECT;
-    KWFrame::RunAroundSide runAroundSide = KWFrame::RA_BIGGEST;
-    const QCString oowrap = context.styleStack().attribute( "style:wrap" ).latin1();
-    if ( oowrap == "none" )        // 'no wrap' means 'avoid horizontal space'
-        runAround = KWFrame::RA_SKIP;
-    else if ( oowrap == "left" )
-        runAroundSide = KWFrame::RA_LEFT;
-    else if ( oowrap == "right" )
-        runAroundSide= KWFrame::RA_RIGHT;
-    else if ( oowrap == "run-through" )
-        runAround = KWFrame::RA_NO;
-    //if ( oowrap == "biggest" ) // OASIS extension
-    // ->( KWFrame::RA_BOUNDINGRECT, KWFrame::RA_BIGGEST ), already set above
-    //if ( oowrap == "parallel" || oowrap == "dynamic" )
-    // dynamic is called "optimal" in the OO GUI. It's different from biggest because it can lead to parallel.
-    // Those are not supported in KWord, let's use biggest instead
-
-    // ## runAroundGap is a problem. KWord has one value, OO has 4 (margins on all sides, see p98).
-    // => TODO, implement 4 values in KWord.
-    double runAroundGap = 0;
-
     KWFrame * frame = new KWFrame(this,
                                   KoUnit::parseValue( tag.attribute( "svg:x" ) ),
                                   KoUnit::parseValue( tag.attribute( "svg:y" ) ),
-                                  width, height, runAround, runAroundGap );
+                                  width, height );
     if ( hasMinHeight )
         frame->setMinFrameHeight( height );
-    frame->setRunAroundSide( runAroundSide );
     frame->setZOrder( tag.attribute( "draw:z-index" ).toInt() );
     frame->loadCommonOasisProperties( context, this );
-
-    // Load overflow behavior (OASIS 14.27.27, not in OO-1.1 DTD). This is here since it's only for text framesets.
-    const QCString overflowBehavior = context.styleStack().attribute( "style:overflow-behavior" ).latin1();
-    if ( overflowBehavior == "clip" )
-        frame->setFrameBehavior( KWFrame::Ignore );
-    else if ( overflowBehavior == "auto-create-new-frame" )
-    {
-        if ( hasMinHeight )
-            frame->setFrameBehavior( KWFrame::AutoExtendFrame );
-        else {
-            frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
-            frame->setNewFrameBehavior( KWFrame::Reconnect ); // anything else doesn't make sense
-        }
-    }
-    else if ( overflowBehavior.isEmpty() ) // OO-1.1 documents
-    {
-        frame->setFrameBehavior( hasMinHeight ? KWFrame::AutoExtendFrame : KWFrame::Ignore );
-    }
-    else
-        kdWarning(32001) << "Unknown value for style:overflow-behavior: " << overflowBehavior << endl;
 
     addFrame( frame, false );
 

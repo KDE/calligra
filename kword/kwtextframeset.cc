@@ -2011,6 +2011,27 @@ KWFrame* KWTextFrameSet::loadOasis( const QDomElement &tag, KoOasisContext& cont
     context.styleStack().save();
     context.fillStyleStack( tag, "draw:style-name" ); // get the style for the graphics element
     KWFrame* frame = loadOasisFrame( tag, context );
+
+    // Load overflow behavior (OASIS 14.27.27, not in OO-1.1 DTD). This is here since it's only for text framesets.
+    const QCString overflowBehavior = context.styleStack().attribute( "style:overflow-behavior" ).latin1();
+    if ( overflowBehavior == "clip" )
+        frame->setFrameBehavior( KWFrame::Ignore );
+    else if ( overflowBehavior == "auto-create-new-frame" )
+    {
+        if ( frame->minFrameHeight() > 0 )
+            frame->setFrameBehavior( KWFrame::AutoExtendFrame );
+        else {
+            frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
+            frame->setNewFrameBehavior( KWFrame::Reconnect ); // anything else doesn't make sense
+        }
+    }
+    else if ( overflowBehavior.isEmpty() ) // OO-1.1 documents
+    {
+        frame->setFrameBehavior( frame->minFrameHeight() > 0 ? KWFrame::AutoExtendFrame : KWFrame::Ignore );
+    }
+    else
+        kdWarning(32001) << "Unknown value for style:overflow-behavior: " << overflowBehavior << endl;
+
     context.styleStack().restore();
 
     loadOasisContent( tag, context );

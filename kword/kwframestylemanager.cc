@@ -23,7 +23,7 @@
 
 #include <kwdoc.h>
 #include <koParagDia.h>
-#include <framedia.h>
+#include <framedia.h> // for KWBrushStylePreview
 
 #include <kcolorbutton.h>
 #include <klocale.h>
