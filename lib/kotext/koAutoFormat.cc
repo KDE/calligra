@@ -1998,7 +1998,7 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::Size)
         {
-            format->setPointSize( KoTextZoomHandler::ptToLayoutUnitPt(formatOptions->m_size) );
+            format->setPointSize( formatOptions->m_size );
             flags |=KoTextFormat::Size;
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::Family)

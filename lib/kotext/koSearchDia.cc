@@ -397,7 +397,7 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     if (m_replaceContext->m_optionsMask & KoSearchContext::Size)
     {
         flags |= KoTextFormat::Size;
-        newFormat->setPointSize( KoTextZoomHandler::ptToLayoutUnitPt(m_replaceContext->m_size) );
+        newFormat->setPointSize( m_replaceContext->m_size );
 
     }
     if ( m_replaceContext->m_optionsMask & KoSearchContext::Family)
@@ -857,7 +857,7 @@ bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matc
 
         if (searchContext->m_optionsMask & KoSearchContext::Size)
         {
-            if ( format->font().pointSize () !=  KoTextZoomHandler::ptToLayoutUnitPt(searchContext->m_size))
+            if ( format->font().pointSize() != searchContext->m_size )
                 return false;
         }
         if ( searchContext->m_optionsMask & KoSearchContext::Family)

@@ -913,7 +913,7 @@ void KoTextView::showCurrentFormat()
 {
     //kdDebug(32500) << "KoTextView::showCurrentFormat currentFormat=" << currentFormat() << " " << currentFormat()->key() << endl;
     KoTextFormat format = *currentFormat();
-    format.setPointSize( textObject()->docFontSize( currentFormat() ) ); // "unzoom" the font size
+    //format.setPointSize( textObject()->docFontSize( currentFormat() ) ); // "unzoom" the font size
     showFormat( &format );
 }
 

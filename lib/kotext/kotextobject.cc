@@ -137,7 +137,7 @@ void KoTextObject::slotParagraphDeleted(KoTextParag * /*parag*/)
 int KoTextObject::docFontSize( KoTextFormat * format ) const
 {
     Q_ASSERT( format );
-    return static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt( format->font().pointSize() ) );
+    return format->pointSize();
 }
 
 int KoTextObject::zoomedFontSize( int docFontSize ) const
@@ -900,7 +900,7 @@ KCommand *KoTextObject::setFormatCommand( KoTextFormat *format, int flags, bool 
     return cmd;
 }
 
-KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat ** pCurrentFormat, KoTextFormat *format, int flags, bool zoomFont, int selectionId )
+KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat ** pCurrentFormat, KoTextFormat *format, int flags, bool /*zoomFont*/, int selectionId )
 {
     KCommand *ret = 0;
     if ( protectContent() )
@@ -914,13 +914,15 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
     bool isNewFormat = ( pCurrentFormat && *pCurrentFormat && (*pCurrentFormat)->key() != format->key() );
     if ( isNewFormat || !pCurrentFormat )
     {
+#if 0
         int origFontSize = 0;
         if ( zoomFont ) // The format has a user-specified font (e.g. setting a style, or a new font size)
         {
-            origFontSize = format->font().pointSize();
+            origFontSize = format->pointSize();
             format->setPointSize( zoomedFontSize( origFontSize ) );
-            kdDebug(32500) << "KoTextObject::setFormatCommand format " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSizeFloat() << endl;
+            //kdDebug(32500) << "KoTextObject::setFormatCommand format " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSizeFloat() << endl;
         }
+#endif
         // Remove ref to current format, if caller wanted that
         if ( pCurrentFormat )
             (*pCurrentFormat)->removeRef();
@@ -1018,15 +1020,20 @@ KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagC
     } else {
         KoTextParag *start = textdoc->selectionStart( selectionId );
         KoTextParag *end = textdoc->selectionEnd( selectionId );
+#if 0
         // Special hack for BR25742, don't apply bullet to last empty parag of the selection
         if ( start != end && end->length() <= 1 )
         {
             end = end->prev();
             undoRedoInfo.eid = end->paragId();
         }
+#endif
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
-            start->setCounter( counter );
+        {
+            if ( start->length() > 1 )  // don't apply to empty paragraphs (#25742, #34062)
+                start->setCounter( counter );
+        }
     }
     formatMore( 2 );
     emit repaintChanged( this );
@@ -1960,7 +1967,7 @@ void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont
         emit newCommand( cmd );
 
     KoTextFormat format = *currentFormat();
-    format.setPointSize( docFontSize( currentFormat() ) ); // "unzoom" the font size
+    //format.setPointSize( docFontSize( currentFormat() ) ); // "unzoom" the font size
     emit showFormatObject(format);
 }
 
@@ -2245,7 +2252,7 @@ QFont KoTextFormatInterface::textFont() const
 {
     QFont fn( currentFormat()->font() );
     // "unzoom" the font size
-    fn.setPointSize( static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt( fn.pointSize() ) ) );
+    //fn.setPointSize( static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt( fn.pointSize() ) ) );
     return fn;
 }
 

@@ -3237,73 +3237,6 @@ int KoTextDocument::length() const
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//// kotext: implemented differently in kotextformat.cc
-#if 0
-int KoTextFormat::width( const QChar &c ) const
-{
-    if ( c.unicode() == 0xad ) // soft hyphen
-	return 0;
-    if ( !painter || !painter->isActive() ) {
-	if ( c == '\t' )
-	    return fm.width( 'x' ) * 8;
-	if ( ha == AlignNormal ) {
-	    int w;
-	    if ( c.row() ) {
-		w = fm.width( c );
-	    } else {
-		w = widths[ c.unicode() ];
-            }
-	    if ( w == 0 && !c.row() ) {
-		w = fm.width( c );
-		( (KoTextFormat*)this )->widths[ c.unicode() ] = w;
-                Q_ASSERT( w < 65535 );
-                Q_ASSERT( widths[ c.unicode() ] == w );
-	    }
-	    return w;
-	} else {
-	    QFont f( fn );
-	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
-	    QFontMetrics fm_( f );
-	    return fm_.width( c );
-	}
-    }
-
-    QFont f( fn );
-    if ( ha != AlignNormal )
-	f.setPointSize( ( f.pointSize() * 2 ) / 3 );
-    painter->setFont( f );
-
-    return painter->fontMetrics().width( c );
-}
-#endif
-
-// Used only by KoTextFormat::charWidth
-int KoTextFormat::width( const QString &str, int pos ) const
-{
-    int w = 0;
-    if ( str[ pos ].unicode() == 0xad )
-	return w;
-    //if ( !painter || !painter->isActive() ) {
-	if ( ha == AlignNormal ) {
-	    w = fm.charWidth( str, pos );
-	} else {
-	    QFont f( fn );
-	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
-	    QFontMetrics fm_( f );
-	    w = fm_.charWidth( str, pos );
-	}
-    /*} else {
-	QFont f( fn );
-	if ( ha != AlignNormal )
-	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
-	painter->setFont( f );
-	w = painter->fontMetrics().charWidth( str, pos );
-    }*/
-    return w;
-}
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 KoTextString::KoTextString()
 {
     bidiDirty = FALSE;
@@ -3950,7 +3883,7 @@ void KoTextParag::format( int start, bool doMove )
     if ( invalid == -1 )
 	return;
 
-    //kdDebug() << "KoTextParag::format " << this << " id:" << paragId() << endl;
+    kdDebug() << "KoTextParag::format " << this << " id:" << paragId() << endl;
 
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     if ( p )
@@ -4217,7 +4150,7 @@ void KoTextParag::setFormat( int index, int len, KoTextFormat *f, bool useCollec
         // ######## Is this test exhaustive?
 	if ( invalid == -1 &&
 	     ( f->font().family() != of->font().family() ||
-	       f->font().pointSize() != of->font().pointSize() ||
+	       f->pointSize() != of->pointSize() ||
 	       f->font().weight() != of->font().weight() ||
 	       f->font().italic() != of->font().italic() ||
 	       f->vAlign() != of->vAlign() ||
@@ -4649,10 +4582,12 @@ KoTextFormatCollection *KoTextParag::formatCollection() const
 QString KoTextParag::richText() const
 {
     QString s;
+#if 0
     KoTextStringChar *formatChar = 0;
     QString spaces;
     for ( int i = 0; i < length()-1; ++i ) {
 	KoTextStringChar *c = &str->at( i );
+#endif
 #if 0
         if ( c->isAnchor() && !c->anchorName().isEmpty() ) {
             if ( c->anchorName().contains( '#' ) ) {
@@ -4664,6 +4599,7 @@ QString KoTextParag::richText() const
             }
         }
 #endif
+#if 0
         if ( !formatChar ) {
             s += c->format()->makeFormatChangeTags( 0, QString::null, QString::null /*c->anchorHref()*/ );
             formatChar = c;
@@ -4705,6 +4641,7 @@ QString KoTextParag::richText() const
 
     if ( formatChar )
         s += formatChar->format()->makeFormatEndTags( QString::null /*formatChar->anchorHref()*/ );
+#endif
     return s;
 }
 
@@ -5971,139 +5908,12 @@ void KoTextFormatCollection::updateFontAttributes( const QFont &f, const QFont &
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
-{
-    if ( flags & KoTextFormat::Bold )
-	fn.setBold( nf.fn.bold() );
-    if ( flags & KoTextFormat::Italic )
-	fn.setItalic( nf.fn.italic() );
-    if ( flags & KoTextFormat::Underline )
-	fn.setUnderline( nf.fn.underline() );
-    if ( flags & KoTextFormat::Family )
-	fn.setFamily( nf.fn.family() );
-    if ( flags & KoTextFormat::Size )
-	fn.setPointSize( nf.fn.pointSize() );
-    if ( flags & KoTextFormat::Color )
-	col = nf.col;
-    if ( flags & KoTextFormat::Misspelled )
-	missp = nf.missp;
-    if ( flags & KoTextFormat::VAlign )
-    {
-	ha = nf.ha;
-        setRelativeTextSize( nf.relativeTextSize());
-    }
-    ////// kotext addition
-    //if ( flags & KoTextFormat::Size )
-    //    fn.setPointSizeFloat( nf.font().pointSizeFloat() );
-    if ( flags & KoTextFormat::StrikeOut )
-    {
-        setStrikeOutLineStyle( nf.strikeOutLineStyle() );
-        setStrikeOutLineType (nf.strikeOutLineType());
-    }
-    if( flags & KoTextFormat::TextBackgroundColor)
-        setTextBackgroundColor(nf.textBackgroundColor());
-    if( flags & KoTextFormat::ExtendUnderLine)
-    {
-        setTextUnderlineColor(nf.textUnderlineColor());
-        setUnderlineLineType (nf.underlineLineType());
-        setUnderlineLineStyle (nf.underlineLineStyle());
-    }
-    if( flags & KoTextFormat::Language)
-        setLanguage(nf.language());
-    if( flags & KoTextFormat::ShadowText)
-        setShadowText(nf.shadowText());
-    if( flags & KoTextFormat::OffsetFromBaseLine)
-        setOffsetFromBaseLine(nf.offsetFromBaseLine());
-    if( flags & KoTextFormat::WordByWord)
-        setWordByWord(nf.wordByWord());
-    if( flags & KoTextFormat::Attribute)
-        setAttributeFont(nf.attributeFont());
-
-    //////
-    update();
-    //kdDebug(32500) << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags
-    //        << " ==> result " << this << " " << key() << endl;
-}
-
-void KoTextFormat::setBold( bool b )
-{
-    if ( b == fn.bold() )
-	return;
-    fn.setBold( b );
-    update();
-}
-
-void KoTextFormat::setMisspelled( bool b )
-{
-    if ( b == (bool)missp )
-	return;
-    missp = b;
-    update();
-}
-
-void KoTextFormat::setVAlign( VerticalAlignment a )
-{
-    if ( a == ha )
-	return;
-    ha = a;
-    update();
-}
-
-void KoTextFormat::setItalic( bool b )
-{
-    if ( b == fn.italic() )
-	return;
-    fn.setItalic( b );
-    update();
-}
-
-void KoTextFormat::setUnderline( bool b )
-{
-    if ( b == fn.underline() )
-	return;
-    fn.setUnderline( b );
-    update();
-}
-
-void KoTextFormat::setFamily( const QString &f )
-{
-    if ( f == fn.family() )
-	return;
-    fn.setFamily( f );
-    update();
-}
-
-void KoTextFormat::setPointSize( int s )
-{
-    if ( s == fn.pointSize() )
-	return;
-    fn.setPointSize( s );
-    update();
-}
-
-void KoTextFormat::setFont( const QFont &f )
-{
-    if ( f == fn && !k.isEmpty() )
-	return;
-    fn = f;
-    update();
-}
-
-void KoTextFormat::setColor( const QColor &c )
-{
-    if ( c == col )
-	return;
-    col = c;
-    update();
-}
-
 #if 0
 void KoTextFormat::setPainter( QPainter *p )
 {
     painter = p;
     update();
 }
-#endif
 
 static int makeLogicFontSize( int s )
 {
@@ -6123,8 +5933,6 @@ static int makeLogicFontSize( int s )
     return 7;
 }
 
-static KoTextFormat *defaultFormat = 0;
-
 QString KoTextFormat::makeFormatChangeTags( KoTextFormat *f, const QString& oldAnchorHref, const QString& anchorHref  ) const
 {
     if ( !defaultFormat ) // #### wrong, use the document's default format instead
@@ -6133,7 +5941,7 @@ QString KoTextFormat::makeFormatChangeTags( KoTextFormat *f, const QString& oldA
     if ( f ) {
         if ( f->font() != defaultFormat->font() ) {
             if ( f->font().family() != defaultFormat->font().family()
-                 || f->font().pointSize() != defaultFormat->font().pointSize()
+                 || f->pointSize() != defaultFormat->pointSize()
                  || f->color().rgb() != defaultFormat->color().rgb() )
                 tag += "</font>";
             if ( f->font().underline() && f->font().underline() != defaultFormat->font().underline() )
@@ -6163,7 +5971,7 @@ QString KoTextFormat::makeFormatChangeTags( KoTextFormat *f, const QString& oldA
         QString f;
         if ( font().family() != defaultFormat->font().family() )
             f +=" face=\"" + fn.family() + "\"";
-        if ( font().pointSize() != defaultFormat->font().pointSize() ) {
+        if ( pointSize() != defaultFormat->pointSize() ) {
             f +=" size=\"" + QString::number( makeLogicFontSize( fn.pointSize() ) ) + "\"";
             f +=" style=\"font-size:" + QString::number( fn.pointSize() ) + "pt\"";
         }
@@ -6183,7 +5991,7 @@ QString KoTextFormat::makeFormatEndTags( const QString& anchorHref ) const
     QString tag;
     if ( font() != defaultFormat->font() ) {
         if ( font().family() != defaultFormat->font().family()
-             || font().pointSize() != defaultFormat->font().pointSize()
+             || pointSize() != defaultFormat->pointSize()
              || color().rgb() != defaultFormat->color().rgb() )
             tag += "</font>";
         if ( font().underline() && font().underline() != defaultFormat->font().underline() )
@@ -6198,7 +6006,6 @@ QString KoTextFormat::makeFormatEndTags( const QString& anchorHref ) const
     return tag;
 }
 
-#if 0
 KoTextFormat KoTextFormat::makeTextFormat( const QStyleSheetItem *style, const QMap<QString,QString>& attr ) const
 {
     KoTextFormat format(*this);

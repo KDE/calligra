@@ -21,6 +21,13 @@
    Boston, MA 02111-1307, USA.
 */
 
+class Q_EXPORT KoTextFormat
+{
+    friend class KoTextFormatCollection;
+    friend class KoTextDocument;
+
+    // Having it here allows inline methods returning d->blah, for speed
+private:
 class KoTextFormatPrivate
 {
 public:
@@ -52,6 +59,87 @@ public:
     bool m_bWordByWord;
 };
 
+public:
+    enum Flags {
+	NoFlags,
+	Bold = 1,
+	Italic = 2,
+	Underline = 4,
+	Family = 8,
+	Size = 16,
+	Color = 32,
+	Misspelled = 64,
+	VAlign = 128,
+	Font = Bold | Italic | Underline | Family | Size,
+	Format = Font | Color | Misspelled | VAlign
+    };
+
+    enum VerticalAlignment { AlignNormal, AlignSubScript, AlignSuperScript }; // QRT now has it in another order, but it's too late, we use this order in KWord's file format now !
+
+    KoTextFormat();
+    ~KoTextFormat();
+
+    //KoTextFormat( const QStyleSheetItem *s );
+    KoTextFormat( const QFont &f, const QColor &c, const QString &_language, KoTextFormatCollection *parent = 0 );
+    KoTextFormat( const KoTextFormat &fm );
+    //KoTextFormat makeTextFormat( const QStyleSheetItem *style, const QMap<QString,QString>& attr ) const;
+    KoTextFormat& operator=( const KoTextFormat &fm );
+    void copyFormat( const KoTextFormat &fm, int flags );
+    QColor color() const;
+    QFont font() const;
+    int pointSize() const { return font().pointSize(); }
+    bool isMisspelled() const;
+    VerticalAlignment vAlign() const;
+    //int minLeftBearing() const;
+    //int minRightBearing() const;
+    /**
+     * Return the width of one char (from a string, not necessarily from a paragraph) in LU pixels.
+     * Do not call this for custom items, or for complex glyphs.
+     * But this can still be used for ' ' (for parag counters), 'x' (for tabs) etc.
+     */
+    int width( const QChar &c ) const;
+    int width( const QString &str, int pos ) const;
+    int height() const;
+    int ascent() const;
+    int descent() const;
+    bool useLinkColor() const;
+
+    void setBold( bool b );
+    void setItalic( bool b );
+    void setUnderline( bool b );
+    void setFamily( const QString &f );
+    void setPointSize( int s );
+    void setFont( const QFont &f );
+    void setColor( const QColor &c );
+    void setMisspelled( bool b );
+    void setVAlign( VerticalAlignment a );
+
+    bool operator==( const KoTextFormat &f ) const;
+    KoTextFormatCollection *parent() const;
+    void setCollection( KoTextFormatCollection *parent ) { collection = parent; }
+    QString key() const;
+
+    static QString getKey( const QFont &f, const QColor &c, bool misspelled, VerticalAlignment vAlign );
+
+    void addRef();
+    void removeRef();
+
+    //QString makeFormatChangeTags( KoTextFormat *f, const QString& oldAnchorHref, const QString& anchorHref ) const;
+    //QString makeFormatEndTags( const QString& anchorHref ) const;
+
+    //void setPainter( QPainter *p );
+    //void updateStyle();
+    //void updateStyleFlags();
+    //void setStyle( const QString &s );
+    //QString styleName() const { return style; }
+
+    //int changed() const { return different; }
+
+protected:
+    void generateKey();
+
+private:
+    void update();
 
 /**
  * Our extension of KoTextFormat, to add support for storing StrikeOut and
@@ -71,11 +159,6 @@ public:
     enum StrikeOutLineStyle { S_SOLID = 0 , S_DASH = 1, S_DOT = 2, S_DASH_DOT = 3, S_DASH_DOT_DOT = 4};
 
     enum AttributeStyle { ATT_NONE = 0, ATT_UPPER = 1, ATT_LOWER = 2 , ATT_SMALL_CAPS};
-
-    /** Set a decimal point size. NOTE: this value isn't stored in the formay key.
-        You should NOT call this - it's a special treat for KoTextFormatter */
-    void setPointSizeFloat( float );
-    //float pointSizeFloat() const { return fn.pointSizeFloat(); }
 
     /** Call this when a text color is set to 'invalid', meaning 'whatever the
      * default for the color scheme is' */
@@ -128,7 +211,8 @@ public:
     bool isStrikeUnderline() const { return ((m_underlineLine != U_NONE) ||(m_strikeOutLine!=S_NONE));}
 
     /**
-     * @return the reference point size, i.e. the one in layout units used during formatting.
+     * @return the reference point size, i.e. the size specified by the user.
+     * This is the one used during formatting, independently from the zoom level.
      * This method takes care of superscript and subscript (smaller font).
      */
     float refPointSize() const;
@@ -140,7 +224,8 @@ public:
     float screenPointSize( const KoZoomHandler* zh ) const;
 
     /**
-     * Get metrics for the reference font (in layout units).
+     * @return the metrics for the reference font, i.e. with the size specified by the user.
+     * This is the one used during formatting, independently from the zoom level.
      * This method takes care of superscript and subscript (smaller font).
      */
     const QFontMetrics& refFontMetrics() const;
@@ -153,7 +238,7 @@ public:
     const QFontMetrics& screenFontMetrics( const KoZoomHandler* zh ) const;
 
     /**
-     * Returns the reference font, i.e. the one in layout units.
+     * @return the reference font, i.e. with the size specified by the user.
      * This is used at text layout time (e.g. kotextformatter)
      */
     QFont refFont() const;
@@ -164,6 +249,8 @@ public:
      * This method takes care of superscript and subscript (smaller font).
      */
     QFont screenFont( const KoZoomHandler* zh ) const;
+
+    QFont smallCapsFont( const KoZoomHandler* zh, bool applyZoom ) const;
 
     /**
      * Return the width of one char in one paragraph.
@@ -179,13 +266,6 @@ public:
      */
     int charWidthLU( const KoTextStringChar* c,
                      const KoTextParag* parag, int i ) const;
-
-    /**
-     * Return the width of one char (from a string, not necessarily from a paragraph) in LU pixels.
-     * Do not call this for custom items, or for complex glyphs.
-     * But this can still be used for ' ' (for parag counters), 'x' (for tabs) etc.
-     */
-    //int width( const QChar &ch ) const; // already declared in qrichtext_p.h
 
     static QString underlineStyleToString( UnderlineLineStyle _lineType );
     static QString strikeOutStyleToString( StrikeOutLineStyle _lineType );
@@ -219,3 +299,14 @@ protected:
     AttributeStyle m_attributeFont;
     class KoTextFormatPrivate;
     KoTextFormatPrivate *d;
+
+private:
+    QFont fn;
+    QColor col;
+    uint missp : 1;
+    uint linkColor : 1;
+    VerticalAlignment ha;
+    KoTextFormatCollection *collection;
+    int ref;
+    QString k;
+};
