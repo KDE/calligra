@@ -50,6 +50,7 @@ class DCOPObject;
 #include <komlParser.h>
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
+#include <ktempfile.h>
 
 #include <iostream.h>
 #include <fstream.h>
@@ -236,7 +237,8 @@ public:
     void deleteObjs( bool _add = true );
     void copyObjs( int, int );
     void pasteObjs( int, int );
-
+    void savePage( const QString &file, int pgnum );
+    
     // repaint all views
     void repaint( bool );
 
@@ -439,6 +441,8 @@ protected:
     QValueList<KPPixmapDataCollection::Key> usedPixmaps;
     DCOPObject *dcop;
 
+    int saveOnlyPage;
+    
 };
 
 #endif

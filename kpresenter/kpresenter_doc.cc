@@ -170,6 +170,8 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
     headerFooterEdit->setCaption( i18n( "KPresenter - Header/Footer Editor" ) );
     headerFooterEdit->hide();
 
+    saveOnlyPage = -1;
+    
     QObject::connect( &_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
 		      this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
 
@@ -383,6 +385,9 @@ void KPresenterDoc::saveBackground( ostream& out )
     KPBackGround *kpbackground = 0;
 
     for ( int i = 0; i < static_cast<int>( _backgroundList.count() ); i++ ) {
+	if ( saveOnlyPage != -1 &&
+	     i != saveOnlyPage )
+	    continue;
 	kpbackground = _backgroundList.at( i );
 	out << otag << "<PAGE>" << endl;
 	kpbackground->save( out );
@@ -396,6 +401,11 @@ void KPresenterDoc::saveObjects( ostream& out )
     KPObject *kpobject = 0;
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
+	if ( saveOnlyPage != -1 ) {
+	    int pg = getPageOfObj( i, 0, 0 ) - 1;
+	    if ( saveOnlyPage != pg )
+		continue;
+	}
 	kpobject = objectList()->at( i );
 	if ( kpobject->getType() == OT_PART ) continue;
 	out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
@@ -3301,6 +3311,17 @@ void KPresenterDoc::copyObjs( int diffx, int diffy )
     out << etag << "</DOC>" << endl;
 
     cb->setText( clip_str.c_str() );
+}
+
+/*=============================================================*/
+void KPresenterDoc::savePage( const QString &file, int pgnum )
+{
+    string str;
+    tostrstream out( str );
+    
+    saveOnlyPage = pgnum;
+    saveToURL( file, "" );
+    saveOnlyPage = -1;
 }
 
 /*========================= paste objects ========================*/

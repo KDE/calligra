@@ -75,6 +75,7 @@
 #include <koRuler.h>
 #include <koUIUtils.h>
 #include <koIcons.h>
+#include <koTemplateCreateDia.h>
 #include <kcoloractions.h>
 #include <kaction.h>
 
@@ -811,6 +812,29 @@ void KPresenterView::extraOptions()
     optionDia->setRastY( kPresenterDoc()->getRastY() );
     optionDia->setBackCol( kPresenterDoc()->getTxtBackCol() );
     optionDia->show();
+}
+
+/*===============================================================*/
+void KPresenterView::extraCreateTemplate()
+{
+    QPixmap pix( QSize( m_pKPresenterDoc->getPageSize( 0, 0, 0 ).width(), 
+			m_pKPresenterDoc->getPageSize( 0, 0, 0 ).height() ) );
+    pix.fill( Qt::white );
+    int i = getCurrPgNum() - 1;
+    page->drawPageInPix2( pix, i * m_pKPresenterDoc->getPageSize( 0, 0, 0 ).height(), i );
+
+    QWMatrix m;
+    m.scale( 60.0 / (float)pix.width(), 45.0 / (float)pix.height() );
+    pix = pix.xForm( m );
+    
+    QString file = "/tmp/kpt";
+    m_pKPresenterDoc->savePage( file, i );
+    
+    KoTemplateCreateDia::createTemplate( this, file, pix,
+					 KPresenterFactory::global()->
+					 dirs()->resourceDirs( "kpresenter_template" ),
+					 "kpt" );
+    system( QString( "rm %1" ).arg( file ).latin1() );
 }
 
 /*===============================================================*/
@@ -1800,6 +1824,10 @@ void KPresenterView::setupActions()
 				      KPBarIcon( "webpres" ), 0,
 				      this, SLOT( extraWebPres() ),
 				      actionCollection(), "extra_webpres" );
+
+    actionExtraCreateTemplate = new KAction( i18n( "Create Template from current slide..." ), 0,
+					     this, SLOT( extraCreateTemplate() ),
+					     actionCollection(), "extra_template" );
 
     actionExtraAlignObjs = new KAction( i18n( "" ),
 					KPBarIcon( "alignobjs" ), 0,

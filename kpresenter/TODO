@@ -25,7 +25,8 @@ MISSING FEATURES, todo :
 - Group objects (finish: resizing is fucked up, set properties doesn´t work)
 - Possibility to print 1, 2 or 4 slides / page
 - Setting colors in the text using color bar
-- Add menu item for creating templates from slides
+- When creating a template from current slide, make it working also if current slide
+  is not the first one
 
 
 Reginald Stadlbauer <reggie@kde.org>

@@ -170,6 +170,7 @@ public slots:
     virtual void extraLineBegin();
     virtual void extraLineEnd();
     virtual void extraWebPres();
+    virtual void extraCreateTemplate();
     virtual void extraGroup();
     virtual void extraUnGroup();
 
@@ -528,6 +529,7 @@ protected:
     QAction *actionExtraLayout;
     QAction *actionExtraOptions;
     QAction *actionExtraWebPres;
+    QAction *actionExtraCreateTemplate;
     QAction *actionExtraLineBegin;
     QAction *actionExtraLineEnd;
     QAction *actionExtraGroup;

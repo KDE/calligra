@@ -95,9 +95,10 @@
   <Action name="extra_background"/>
   <Action name="extra_layout"/>
   <Separator/>
-  <Action name="extra_options"/>
-  <Separator/>
   <Action name="extra_webpres"/>
+  <Action name="extra_template"/>
+  <Separator/>
+  <Action name="extra_options"/>
  </Menu>
  <Menu name="Screen Presentations"><text>Screen Presentations</text>
   <Action name="screen_configpages"/>
