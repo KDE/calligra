@@ -158,9 +158,9 @@ public:
 		{ m_drawCenterNode = drawCenterNode; }
 
 	/// For svg path data parsing
-	virtual void svgMoveTo( const KoPoint & );
-	virtual void svgLineTo( const KoPoint & );
-	virtual void svgCurveTo( const KoPoint &, const KoPoint &, const KoPoint & );
+	virtual void svgMoveTo( double x1, double y1 );
+	virtual void svgLineTo( double x1, double y1 );
+	virtual void svgCurveTo( double x1, double y1, double x2, double y2, double x3, double y3 );
 	virtual void svgClosePath();
 
 	void loadSvgPath( const QString & );

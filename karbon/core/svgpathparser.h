@@ -33,6 +33,7 @@ public:
 
 private:
 	const char *getCoord( const char *, double & );
+	void calculateArc( bool relative, double &curx, double &cury, double angle, double x, double y, double r1, double r2, bool largeArcFlag, bool sweepFlag );
 };
 
 #endif

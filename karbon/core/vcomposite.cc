@@ -362,21 +362,21 @@ VComposite::saveSvgPath( QString &d ) const
 }
 
 void
-VComposite::svgMoveTo( const KoPoint &p )
+VComposite::svgMoveTo( double x1, double y1 )
 {
-	moveTo( p );
+	moveTo( KoPoint( x1, y1 ) );
 }
 
 void
-VComposite::svgLineTo( const KoPoint &p )
+VComposite::svgLineTo( double x1, double y1 )
 {
-	lineTo( p );
+	lineTo( KoPoint( x1, y1 ) );
 }
 
 void
-VComposite::svgCurveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
+VComposite::svgCurveTo( double x1, double y1, double x2, double y2, double x3, double y3 )
 {
-	curveTo( p1, p2, p3 );
+	curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
 }
 
 void
