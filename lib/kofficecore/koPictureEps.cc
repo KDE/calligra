@@ -29,6 +29,7 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qapplication.h>
+#include <qdragobject.h>
 
 #include <kdebug.h>
 #include <kdebugclasses.h>
@@ -64,22 +65,24 @@ bool KoPictureEps::isNull(void) const
     return m_rawData.isNull();
 }
 
-void KoPictureEps::scaleWithGhostScript(const QSize& size)
+QImage KoPictureEps::scaleWithGhostScript(const QSize& size)
 // Based on the code of the file kdelibs/kimgio/eps.cpp
 {
+    kdDebug(30003) << "Sampling with GhostScript! (in KoPictureEps::scaleWithGhostScript)" << endl;
+    
     if (!m_boundingBox.width() || !m_boundingBox.height())
     {
         kdDebug(30003) << "EPS image has a null size! (in KoPictureEps::scaleWithGhostScript)" << endl;
-        return;
+        return QImage();
     }
 
     KTempFile tmpFile;
     tmpFile.setAutoDelete(true);
 
-    if( ! tmpFile.status() )
+    if ( tmpFile.status() )
     {
         kdError(30003) << "No KTempFile! (in KoPictureEps::scaleWithGhostScript)" << endl;
-        return;
+        return QImage();
     }
 
     const int wantedWidth = size.width();
@@ -107,7 +110,7 @@ void KoPictureEps::scaleWithGhostScript(const QSize& size)
     if ( ghostfd == 0 )
     {
         kdError(30003) << "No connection to GhostScript (in KoPictureEps::scaleWithGhostScript)" << endl;
-        return;
+        return QImage();
     }
 
     fprintf (ghostfd, "\n%d %d translate\n", -qRound(m_boundingBox.left()*xScale), -qRound(m_boundingBox.top()*yScale));
@@ -124,7 +127,7 @@ void KoPictureEps::scaleWithGhostScript(const QSize& size)
     if( !image.load (tmpFile.name()) )
     {
         kdError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
-        return;
+        return QImage();
     }
     if ( image.size() != size ) // this can happen due to rounding problems
     {
@@ -133,9 +136,7 @@ void KoPictureEps::scaleWithGhostScript(const QSize& size)
         image = image.scale( size ); // hmm, smoothScale instead?
     }
     kdDebug(30003) << "Image parameters: " << image.width() << "x" << image.height() << "x" << image.depth() << endl;
-    m_cachedPixmap = image;
-    m_cacheIsInFastMode=false;
-    m_cachedSize=size;
+    return image;
 }
 
 void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
@@ -174,10 +175,11 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
         QTime time;
         time.start();
         
-        kdDebug(30003) << "Sampling with GhostScript!" << endl;
         QApplication::setOverrideCursor( Qt::waitCursor );
-        scaleWithGhostScript(size);
+        m_cachedPixmap = scaleWithGhostScript(size); // ### TODO: what happens when EPS file is invalid?
         QApplication::restoreOverrideCursor();
+        m_cacheIsInFastMode=false;
+        m_cachedSize=size;
         
         kdDebug(30003) << "Time: " << (time.elapsed()/1000.0) << " s" << endl;
     }
@@ -306,4 +308,9 @@ QPixmap KoPictureEps::generatePixmap(const QSize& size, bool smoothScale)
 QString KoPictureEps::getMimeType(const QString&) const
 {
     return "image/x-eps";
+}
+
+QDragObject* KoPictureEps::dragObject( QWidget *dragSource, const char *name )
+{
+    return new QImageDrag( scaleWithGhostScript ( m_originalSize ) , dragSource, name );
 }

@@ -72,6 +72,8 @@ public:
      */
     virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
+    virtual QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+
     virtual bool load(QIODevice* io, const QString& extension);
 
     virtual bool save(QIODevice* io);
@@ -85,7 +87,7 @@ public:
 protected:
     QPixmap getPixmap(QImage& image);
     void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);
-    void scaleWithGhostScript(const QSize& size);
+    QImage scaleWithGhostScript(const QSize& size);
     bool extractPostScriptStream( void );
 
 
