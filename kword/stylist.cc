@@ -367,7 +367,7 @@ void KWStyleManager::updateStyleList()
 }
 
 /*================================================================*/
-void KWStyleManager::updateButtons( const QString &s )
+void KWStyleManager::updateButtons( const QString & /* s */ )
 {
 /* // Give user freedom :)
     if ( s == QString( "Standard" ) ||

@@ -840,6 +840,10 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
         }
         p = static_cast<KWTextParag *>(p->next());
     }
+    setLastFormattedParag( textdoc->firstParag() );
+    emit repaintChanged( this );
+    emit updateUI();
+    formatMore();
 }
 
 /*================================================================*/
@@ -1237,11 +1241,14 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
             static_cast<KWTextParag*>(start)->setParagLayout( newStyle->paragLayout() );
     }
 
-    //kdDebug(32001) << "KWTextFrameSet::applyStyle KWTextParagCommand" << endl;
-    QTextCommand * cmd = new KWTextParagCommand( textdoc, undoRedoInfo.id, undoRedoInfo.eid, undoRedoInfo.oldParagLayouts,
-                                                 newStyle->paragLayout(), KWTextParagCommand::All );
-    textdoc->addCommand( cmd );
-    macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
+    if ( cursor )
+    {
+        //kdDebug(32001) << "KWTextFrameSet::applyStyle KWTextParagCommand" << endl;
+        QTextCommand * cmd = new KWTextParagCommand( textdoc, undoRedoInfo.id, undoRedoInfo.eid, undoRedoInfo.oldParagLayouts,
+                                                     newStyle->paragLayout(), KWTextParagCommand::All );
+        textdoc->addCommand( cmd );
+        macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
+    }
 
     // 2
     //kdDebug(32001) << "KWTextFrameSet::applyStyle gathering text and formatting" << endl;
@@ -1259,37 +1266,41 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
         lastParag = textdoc->selectionEnd( selectionId );
     }
 
-    QString str;
-    for ( QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
-    {
-        str += parag->string()->toString(); // ## do we need to add a '\n' here ?
-        lstFormats.append( parag->paragFormat() );
-    }
-
-    QTextCursor c1( textdoc );
-    c1.setParag( firstParag );
-    c1.setIndex( 0 );
-    QTextCursor c2( textdoc );
-    c2.setParag( lastParag );
-    c2.setIndex( lastParag->string()->length()-1 );
-    undoRedoInfo.clear();
-    undoRedoInfo.type = UndoRedoInfo::Invalid; // same trick
-    undoRedoInfo.text = str;
-    readFormats( c1, c2, 0 ); // gather char-format info but not paraglayouts nor customitems
-
     QTextFormat * newFormat = zoomFormatFont( & newStyle->format() );
 
-    cmd = new QTextFormatCommand( textdoc, firstParag->paragId(), 0, lastParag->paragId(), c2.index(),
-                                  undoRedoInfo.text.rawData(), newFormat,
-                                  QTextFormat::Format );
-    textdoc->addCommand( cmd );
-    macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
+    if ( cursor )
+    {
+        QString str;
+        for ( QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
+        {
+            str += parag->string()->toString(); // ## do we need to add a '\n' here ?
+            lstFormats.append( parag->paragFormat() );
+        }
 
-    // sub-command for '3' (paragFormat)
-    cmd = new KWParagFormatCommand( textdoc, firstParag->paragId(), lastParag->paragId(),
-                                    lstFormats, newFormat );
-    textdoc->addCommand( cmd );
-    macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
+        QTextCursor c1( textdoc );
+        c1.setParag( firstParag );
+        c1.setIndex( 0 );
+        QTextCursor c2( textdoc );
+        c2.setParag( lastParag );
+        c2.setIndex( lastParag->string()->length()-1 );
+        undoRedoInfo.clear();
+        undoRedoInfo.type = UndoRedoInfo::Invalid; // same trick
+        undoRedoInfo.text = str;
+        readFormats( c1, c2, 0 ); // gather char-format info but not paraglayouts nor customitems
+
+        QTextCommand * cmd = new QTextFormatCommand( textdoc, firstParag->paragId(), 0,
+                                                     lastParag->paragId(), c2.index(),
+                                                     undoRedoInfo.text.rawData(), newFormat,
+                                                     QTextFormat::Format );
+        textdoc->addCommand( cmd );
+        macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
+
+        // sub-command for '3' (paragFormat)
+        cmd = new KWParagFormatCommand( textdoc, firstParag->paragId(), lastParag->paragId(),
+                                        lstFormats, newFormat );
+        textdoc->addCommand( cmd );
+        macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
+    }
 
     // apply '2' and '3' (format)
     for ( QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
@@ -1299,13 +1310,16 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
         parag->setFormat( newFormat ); // set default format (for counter)
     }
 
-    setLastFormattedParag( firstParag );
-    emit repaintChanged( this );
-    formatMore();
-    emit updateUI();
 
-    doc->addCommand( macroCmd );
-    //doc->setModified(true);
+    if ( cursor )
+    {
+        setLastFormattedParag( firstParag );
+        emit repaintChanged( this );
+        formatMore();
+        emit updateUI();
+        doc->addCommand( macroCmd );
+        //doc->setModified(true);
+    }
 
     undoRedoInfo.clear();
     emit showCursor();
