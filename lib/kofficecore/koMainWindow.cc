@@ -314,7 +314,7 @@ bool KoMainWindow::openDocument( const KURL & url )
 	
     // get the real root document
     while(doc && doc->isEmbedded())
-      doc = dynamic_cast<KoDocument*>(doc->parent());
+      doc = static_cast<KoDocument*>(doc->parent());
 
     KoDocument *newdoc;
     if(doc) {
@@ -324,7 +324,7 @@ bool KoMainWindow::openDocument( const KURL & url )
     }
     if ( !newdoc || !newdoc->openURL( url ) )
     {
-	delete newdoc;
+	newdoc->delayedDestruction();
 	return false;
     }
 
@@ -456,7 +456,7 @@ void KoMainWindow::slotFileNew()
     }
     if ( !newdoc || !newdoc->initDoc() )
     {
-	delete newdoc;
+	newdoc->delayedDestruction();
 	return;
     }
     if ( doc && doc->isEmpty() )
