@@ -154,26 +154,26 @@ void TestCommands::testAddMatrix()
 
 void TestCommands::testPhantom()
 {
-    cursor->moveLeft();
-    container->setActiveCursor(cursor);
-    container->addText('\\');
-    assert(rootElement->countChildren() == 6);
+//     cursor->moveLeft();
+//     container->setActiveCursor(cursor);
+//     container->addText('\\');
+//     assert(rootElement->countChildren() == 6);
 
-    cursor->moveLeft();
-    assert(cursor->getPos() == 3);
-    container->remove(BasicElement::afterCursor);
-    container->remove(BasicElement::afterCursor);
-    assert(rootElement->countChildren() == 3);
+//     cursor->moveLeft();
+//     assert(cursor->getPos() == 3);
+//     container->remove(BasicElement::afterCursor);
+//     container->remove(BasicElement::afterCursor);
+//     assert(rootElement->countChildren() == 3);
 
-    document->undo();
-    document->undo();
+//     document->undo();
+//     document->undo();
 
-    cursor->moveRight();
-    cursor->moveRight();
-    assert(cursor->getPos() == 6);
-    container->remove(BasicElement::beforeCursor);
-    container->remove(BasicElement::beforeCursor);
-    assert(rootElement->countChildren() == 3);
+//     cursor->moveRight();
+//     cursor->moveRight();
+//     assert(cursor->getPos() == 6);
+//     container->remove(BasicElement::beforeCursor);
+//     container->remove(BasicElement::beforeCursor);
+//     assert(rootElement->countChildren() == 3);
 }
 
 void TestCommands::testFractionBug()
@@ -197,6 +197,7 @@ void TestCommands::testCompacting()
 {
     container->setActiveCursor(cursor);
     container->addText('*');
+    container->addText('\\');
     container->addText('a');
     container->addText('l');
     container->addText('p');

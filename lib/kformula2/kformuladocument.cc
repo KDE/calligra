@@ -424,6 +424,7 @@ void KFormulaDocument::toggleSyntaxHighlighting()
     KFormulaContainer* f;
     for (f=formulae.first(); f != 0; f=formulae.next()) {
         f->changed();
+        f->testDirty();
     }
 }
 
