@@ -30,6 +30,7 @@
 #include "karbon_view.h"
 #include "karbon_part.h"
 #include "vselection.h"
+#include "vtransformcmd.h"
 #include <koRect.h>
 
 VSelectToolBar::VSelectToolBar( KarbonView *view, const char* name ) : KToolBar( view, name ), m_view( view )
@@ -38,10 +39,12 @@ VSelectToolBar::VSelectToolBar( KarbonView *view, const char* name ) : KToolBar(
 	QLabel *x_label = new QLabel( i18n( "X:" ), this );
 	insertWidget( 0, x_label->width(), x_label );
 	m_x = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( slotXChanged( double ) ) );
 	insertWidget( 1, m_x->width(), m_x );
 	QLabel *y_label = new QLabel( i18n( "Y:" ), this );
 	insertWidget( 2, y_label->width(), y_label );
 	m_y = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( slotYChanged( double ) ) );
 	insertWidget( 3, m_y->width(), m_y );
 	
 	insertSeparator( 4 );
@@ -59,6 +62,20 @@ VSelectToolBar::VSelectToolBar( KarbonView *view, const char* name ) : KToolBar(
 
 VSelectToolBar::~VSelectToolBar()
 {
+}
+
+void
+VSelectToolBar::slotXChanged( double newval )
+{
+	double dx = newval - m_view->part()->document().selection()->boundingBox().topLeft().x();
+	m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), dx, 0.0 ), true );
+}
+
+void
+VSelectToolBar::slotYChanged( double newval )
+{
+	double dy = newval - m_view->part()->document().selection()->boundingBox().topLeft().y();
+	m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), 0.0, dy ), true );
 }
 
 void
