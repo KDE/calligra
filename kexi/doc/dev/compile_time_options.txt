@@ -73,8 +73,8 @@ Example custom_connectiondata.h file for adding a single connection data:
 	conndata->connName = "My Custom Pgsql Connection";
 	conndata->driverName = "postgresql"; //can be also "sqlite3", "sqlite2", "mysql"
 	conndata->hostName = "myhost.example.com";
-	conndata->userName = "john"
-	conndata->password = "secret"
+	conndata->userName = "john";
+	conndata->password = "secret";
 	Kexi::connset().addConnectionData(conndata); //always call this to add 
 ----- cut here ------------------------------
 Notes: 

@@ -440,6 +440,28 @@ Startup TODO:
 - add "Save Special->Shortcut file for this project" action
 - split .kexis format to .kexis and .kexic
 
+Migration (Import Project Wizard) TODO:
+- change drivers comboboxes to KexiDBDriverList
+  (impl. this one with drv name and description columns)
+
+2005-03-03
+- doc/dev/compile_time_options.txt document added
+KexiDB
+- API CHANGED - version 1.5
+- KexiMessageHandler moved to KexiDB::MessageHandler, KexiDB::Title added 
+  as public available, KexiDB::Object now uses MessageHandler.
+KexiProject
+- KexiProject now uses recent KexiDB additions
+Migration (Import Project Wizard)
+- fixed accepting entered target db filename
+- user is asked for confirming overwrites
+Main
+- KEXI_CUSTOM_HARDCODED_CONNDATA temp. compile-time option added,
+   see doc/dev/compile_time_options.txt
+KexiStartupFileDialog
+- Esc key is filtered-out so it's not hidden and 
+  dialogs using this widget can bahave properly
+
 2005-02-27
 KexiDB
 - mysql/sqlite drivers: fixed problem with xxxxConnection::value(int)
