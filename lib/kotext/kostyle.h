@@ -51,7 +51,14 @@ public:
     ~KoStyleCollection();
     const QPtrList<KoParagStyle> & styleList() const { return m_styleList; }
 
+    /**
+     * find style based on the untranslated name @p name
+     */
     KoParagStyle* findStyle( const QString & name ) const;
+    /**
+     * find style based on the translated name @p name
+     */
+    KoParagStyle* findTranslatedStyle( const QString & name ) const;
     // ### TODO: rename findStyleByShortcut
     KoParagStyle* findStyleShortCut( const QString & _shortCut ) const;
     /**

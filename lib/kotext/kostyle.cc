@@ -147,6 +147,28 @@ KoParagStyle* KoStyleCollection::findStyle( const QString & _name ) const
 }
 
 
+KoParagStyle* KoStyleCollection::findTranslatedStyle( const QString & _name ) const
+{
+    // Caching, to speed things up
+    if ( m_lastStyle && i18n( m_lastStyle->name().utf8() ) == _name )
+        return m_lastStyle;
+
+    QPtrListIterator<KoParagStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( i18n( styleIt.current()->name().utf8() ) == _name ) {
+            m_lastStyle = styleIt.current();
+            return m_lastStyle;
+        }
+    }
+
+    if ( ( _name == "Standard" ) || ( _name == i18n( "Standard" ) ) )
+        return m_styleList.getFirst(); // fallback..
+
+    return 0L;
+}
+
+
 KoParagStyle* KoStyleCollection::findStyleShortCut( const QString & _shortCut ) const
 {
     // Caching, to speed things up

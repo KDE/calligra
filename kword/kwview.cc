@@ -2083,7 +2083,7 @@ void KWView::updateStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act = 0L;
-        KoParagStyle *tmp = m_doc->styleCollection()->findStyle( lst[ i]);
+        KoParagStyle *tmp = m_doc->styleCollection()->findTranslatedStyle( lst[ i]);
         if ( tmp )
         {
             QCString name = tmp->shortCutName().latin1();
