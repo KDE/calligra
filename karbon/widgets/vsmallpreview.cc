@@ -28,6 +28,7 @@
 #include <klocale.h>
 
 #include "karbon_part.h"
+#include "vcolor.h"
 #include "vfill.h"
 #include "vkopainter.h"
 #include "vstroke.h"
@@ -41,13 +42,13 @@ VSmallPreview::VSmallPreview( KarbonPart *part, QWidget* parent, const char* nam
 {
 	/* Create widget layout */
 	QHBoxLayout *layout = new QHBoxLayout( this, 4 );
-	m_strokeLabel = new QLabel( i18n( "Stroke: none" ), this );
+	m_strokeLabel = new QLabel( i18n( "Stroke: None" ), this );
 	layout->addWidget( m_strokeLabel );
 	m_strokeFrame = new QFrame( this );
 	m_strokeFrame->setFixedWidth ( FRAMEWIDTH );
 	m_strokeFrame->setFrameStyle( QFrame::GroupBoxPanel | QFrame::Plain );
 	layout->addWidget( m_strokeFrame );
-	m_fillLabel = new QLabel( i18n( "Fill: none" ), this );
+	m_fillLabel = new QLabel( i18n( "Fill: None" ), this );
 	layout->addWidget( m_fillLabel );
 	m_fillFrame = new QFrame( this );
 	m_fillFrame->setFixedWidth ( FRAMEWIDTH );
@@ -104,18 +105,29 @@ VSmallPreview::drawFill( const VFill &f )
 			{
 				fill.gradient() = f.gradient();
 				fill.setType( VFill::grad );
-				m_fillLabel->setText( i18n( "Fill: gradient") );
+				m_fillLabel->setText( i18n( "Fill: Gradient") );
 			}
 			else
 			{
 				fill.pattern() = f.pattern();
 				fill.setType( VFill::patt );
-				m_fillLabel->setText( i18n( "Fill: pattern") );
+				m_fillLabel->setText( i18n( "Fill: Pattern") );
 			}
 		}
 		else
 		{
-			m_fillLabel->setText( i18n( "Fill: color") );
+			switch ( f.color().colorSpace() ) {
+			case VColor::rgb:
+				m_fillLabel->setText( i18n( "Fill: RGB") ); break;
+			case VColor::cmyk:
+				m_fillLabel->setText( i18n( "Fill: CMYK") ); break;
+			case VColor::hsb:
+				m_fillLabel->setText( i18n( "Fill: HSB") ); break;
+			case VColor::gray:
+				m_fillLabel->setText( i18n( "Fill: Grayscale") ); break;
+			default:
+				m_fillLabel->setText( i18n( "Fill: Color") );
+			}
 			fill.setColor( f.color() );
 		}
 		//stroke.setColor( Qt::black );
@@ -127,7 +139,7 @@ VSmallPreview::drawFill( const VFill &f )
 	
 	if( f.type() == VFill::none )
 	{
-		m_fillLabel->setText( i18n( "Fill: none") );
+		m_fillLabel->setText( i18n( "Fill: None") );
 
 		fill.setColor( Qt::white );
 		m_painter->setBrush( fill );
@@ -167,18 +179,29 @@ VSmallPreview::drawStroke( const VStroke &s )
 			{
 				fill.gradient() = s.gradient();
 				fill.setType( VFill::grad );
-				m_strokeLabel->setText( i18n( "Stroke: gradient") );
+				m_strokeLabel->setText( i18n( "Stroke: Gradient") );
 			}
 			else
 			{
 				fill.pattern() = s.pattern();
 				fill.setType( VFill::patt );
-				m_strokeLabel->setText( i18n( "Stroke: pattern") );
+				m_strokeLabel->setText( i18n( "Stroke: Pattern") );
 			}
 		}
 		else
 		{
-			m_strokeLabel->setText( i18n( "Stroke: color") );
+			switch ( s.color().colorSpace() ) {
+			case VColor::rgb:
+				m_strokeLabel->setText( i18n( "Stroke: RGB") ); break;
+			case VColor::cmyk:
+				m_strokeLabel->setText( i18n( "Stroke: CMYK") ); break;
+			case VColor::hsb:
+				m_strokeLabel->setText( i18n( "Stroke: HSB") ); break;
+			case VColor::gray:
+				m_strokeLabel->setText( i18n( "Stroke: Grayscale") ); break;
+			default:
+				m_strokeLabel->setText( i18n( "Stroke: Color") );
+			}
 			fill.setColor( s.color() );
 		}
 		m_painter->setPen( stroke );
@@ -188,7 +211,7 @@ VSmallPreview::drawStroke( const VStroke &s )
 	
 	if( s.type() == VStroke::none )
 	{
-		m_strokeLabel->setText( i18n( "Stroke: none") );
+		m_strokeLabel->setText( i18n( "Stroke: None") );
 
 		fill.setColor( Qt::white );
 		m_painter->setBrush( fill );
