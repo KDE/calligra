@@ -139,9 +139,12 @@ public:
     int plannedWork(QDateTime &dt);
     int actualWork();
 
+    void calculateDuration(); 
+
 private:
 
-    void calculateDuration(const KPTDateTime &start); // stores duration to m_duration
+    // Calculates duration and stores to m_duration
+    void calculateDuration(const KPTDateTime &start); 
 
     QPtrList<KPTResourceGroup> m_resource;
 

@@ -277,6 +277,7 @@ public:
 
     virtual void calculateStartEndTime() {}
     virtual void calculateStartEndTime(const KPTDateTime &start) {}
+    virtual void calculateDuration() {}
 
     virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
     virtual void makeAppointments();

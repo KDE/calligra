@@ -62,8 +62,7 @@ int KPTTask::type() const {
 KPTDuration *KPTTask::getExpectedDuration() {
     //kdDebug()<<k_funcinfo<<endl;
     // Duration should already be calculated
-    KPTDuration *ed= new KPTDuration(m_duration);
-    return ed;
+    return new KPTDuration(m_duration);
 }
 
 KPTDuration *KPTTask::getRandomDuration() {
@@ -72,6 +71,8 @@ KPTDuration *KPTTask::getRandomDuration() {
 
 void KPTTask::setStartTime() {
     //kdDebug()<<k_funcinfo<<endl;
+    if (m_deleted)
+        return;
     if(type() == KPTNode::Type_Task ||
        type() == KPTNode::Type_Milestone) {
         switch (m_constraint)
@@ -107,29 +108,35 @@ void KPTTask::setStartTime() {
             break;
         }
     } else if (type() == KPTNode::Type_Summarytask) {
+        QPtrListIterator<KPTNode> it(m_nodes);
+        for (; it.current(); ++it) {
+            it.current()->setStartTime();
+        }
         m_startTime = QDateTime();
         KPTDateTime *time = 0;
-        QPtrListIterator<KPTNode> it(m_nodes);
-        for ( ; it.current(); ++it ) {
-            it.current()->setStartTime();
+        for (it.toFirst(); it.current(); ++it) {
             time = it.current()->getStartTime();
-            if (!m_startTime.isValid() || m_startTime < *time)
+            if (!m_startTime.isValid() || m_startTime > *time)
                 m_startTime = *time;
         }
         delete time;
     }
+    //kdDebug()<<k_funcinfo<<m_name<<": "<<m_startTime.toString()<<endl;
 }
 
 void KPTTask::setEndTime() {
     //kdDebug()<<k_funcinfo<<endl;
-    if(numChildren() == 0) {
-        m_endTime = m_startTime + m_duration;
-    } else {
+    if (m_deleted)
+        return;
+    if(type() == KPTNode::Type_Summarytask) {
         // summary task
+        QPtrListIterator<KPTNode> it(m_nodes);
+        for (; it.current(); ++it) {
+            it.current()->setEndTime();
+        }
         m_endTime = QDateTime();
         KPTDateTime *time = 0;
-        QPtrListIterator<KPTNode> it(m_nodes);
-        for ( ; it.current(); ++it ) {
+        for (it.toFirst(); it.current(); ++it) {
             it.current()->setEndTime();
             time = it.current()->getEndTime();
             if (!m_endTime.isValid() || *time > m_endTime)
@@ -137,15 +144,18 @@ void KPTTask::setEndTime() {
 
         }
         delete time;
+    } else {
+        m_endTime = m_startTime + m_duration;
     }
+    //kdDebug()<<k_funcinfo<<m_name<<": "<<m_endTime.toString()<<endl;
 }
 
 KPTDateTime *KPTTask::getStartTime() {
     //kdDebug()<<k_funcinfo<<endl;
+    if (m_deleted)
+        return new KPTDateTime();
     KPTDateTime *time = new KPTDateTime();
-    if(numChildren() == 0) {
-        *time = m_startTime;
-    } else {
+    if(type() == KPTNode::Type_Summarytask) {
         // summary task
         KPTDateTime *start = 0;
         QPtrListIterator<KPTNode> it(m_nodes);
@@ -156,16 +166,18 @@ KPTDateTime *KPTTask::getStartTime() {
             }
             delete start;
         }
+    } else {
+        *time = m_startTime;
     }
     return time;
 }
 
 KPTDateTime *KPTTask::getEndTime() {
     //kdDebug()<<k_funcinfo<<endl;
+    if (m_deleted)
+        return new KPTDateTime();
     KPTDateTime *time = new KPTDateTime();
-    if(numChildren() == 0) {
-        *time = m_endTime;
-    } else {
+    if(type() == KPTNode::Type_Summarytask) {
         // summary task
         KPTDateTime *end;
         QPtrListIterator<KPTNode> it(m_nodes);
@@ -176,6 +188,8 @@ KPTDateTime *KPTTask::getEndTime() {
             }
             delete end;
         }
+    } else {
+        *time = m_endTime;
     }
     return time;
 }
@@ -186,7 +200,12 @@ KPTDuration *KPTTask::getFloat() {
 
 const KPTDuration& KPTTask::expectedDuration(const KPTDateTime &start) {
     //kdDebug()<<k_funcinfo<<endl;
-    calculateDuration(start);
+    if (m_deleted)
+        return KPTDuration::zeroDuration;
+    if (type() == KPTNode::Type_Task)
+        calculateDuration(start);
+    else
+        m_duration = KPTDuration::zeroDuration;
     return m_duration;
  }
 
@@ -214,6 +233,18 @@ void KPTTask::calculateDuration(const KPTDateTime &start) {
     // TODO: handle risc
 
     //kdDebug()<<k_funcinfo<<m_name<<"="<<m_duration.toString(KPTDuration::Format_Day)<<"  <<<----"<<endl;
+}
+
+void KPTTask::calculateDuration() {
+    // only for summarytasks
+    if(type() == KPTNode::Type_Summarytask) {
+        m_duration = m_endTime - m_startTime;
+        //kdDebug()<<k_funcinfo<<m_name<<": "<<m_duration.toString()<<endl;
+        QPtrListIterator<KPTNode> it(m_nodes);
+        for ( ; it.current(); ++it ) {
+            it.current()->calculateDuration();
+        }
+    }
 }
 
 KPTResourceGroupRequest *KPTTask::resourceGroupRequest(KPTResourceGroup *group) const {

@@ -96,6 +96,9 @@ void KPTProject::calculate() {
     for ( ; nit.current(); ++nit ) {
         nit.current()->setStartEndTime();
     }
+    for ( nit.toFirst(); nit.current(); ++nit ) {
+        nit.current()->calculateDuration(); // For summarytasks
+    }
 
     makeAppointments();
 }
@@ -156,14 +159,13 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
     /* First find the first node with no predecessors values */
     std::list<KPTNode*>::iterator curNode;
     curNode = find_if( nodelist.begin(), nodelist.end(),
-		       no_unvisited( &KPTNode::predecessors ) );
+                      no_unvisited( &KPTNode::predecessors ) );
 
     while(curNode != nodelist.end()) {
         /* At this point curNode will contain the first node from
          * which we can search: refer to node as currentNode and earliest
          * finish (or latest start) time for currentNode as duration */
         KPTNode &currentNode = **curNode;
-        //kdDebug()<<k_funcinfo<<"currentNode="<<currentNode.name()<<" earliest start="<<currentNode.earliestStart.toString()<<endl;
         KPTDateTime startTime = currentNode.earliestStart;
         /* *** expected should be more general than this *** */
         /* *** we could use (say) a member function pointer *** */
@@ -171,36 +173,36 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
         /* Go through arcs from currentNode, propagating values */
         for( std::vector<KPTNode*>::iterator i = currentNode.successors.list.begin(); i != currentNode.successors.list.end(); ++i ) {
             /* add new nodes if necessary */
-            if( (*i)->predecessors.unvisited == (*i)->predecessors.number )
-            nodelist.push_back( *i );
+            if( (*i)->predecessors.unvisited == (*i)->predecessors.number ) {
+                nodelist.push_back( *i );
+            }
             /* reduce unvisited to indicate that an arc/relation has been followed */
             (*i)->predecessors.unvisited--;
             /* act if duration is later than start of arc node */
             if( startTime > (*i)->earliestStart ){
                 (*i)->earliestStart = startTime;
             }
-            //kdDebug()<<"Node="<<currentNode.name()<<" Successor Node="<<(*i)->name()<<" Earliest start="<<(*i)->earliestStart.toString()<<endl;
         }
         /* Only act if node is an end node here - KPTRelations
          * should not be followed for a start node */
         if( (*curNode)->owner_node()->end_node() == *curNode )
             /* Go through relations from currentNode, propagating values */
             for( QPtrListIterator<KPTRelation> i( currentNode.owner_node()->m_dependChildNodes ); i.current(); ++i ) {
-                //kdDebug()<<k_funcinfo<<"child relations"<<endl;
                 /* add new nodes if necessary */
                 if( i.current()->child()->start_node()->predecessors.unvisited == i.current()->child()->start_node()->predecessors.number )
                     nodelist.push_back( i.current()->child()->start_node() );
+                    
                 /* reduce unvisited to indicate that a relation has been followed */
                 i.current()->child()->start_node()->predecessors.unvisited--;
                 /* calculate u = duration (plus) lag of relation */
                 KPTDateTime u = startTime;
                 u += i.current()->lag();
                 /* act if u is later than start of next node */
-                //kdDebug()<<k_funcinfo<<"Calc time="<<u.toString()<<" childs time="<<i.current()->child()->start_node()->getEarliestStart().toString()<<endl;
+                //kdDebug()<<"---"<<"Calc time="<<u.toString()<<" childs time="<<i.current()->child()->start_node()->getEarliestStart().toString()<<endl;
                 if( u > i.current()->child()->start_node()->earliestStart ) {
                     i.current()->child()->start_node()->earliestStart = u;
                 }
-                //kdDebug()<<"Node="<<currentNode.owner_node()->name()<<" Child node="<<i.current()->child()->start_node()->name()<<" Move earliest start="<<u.toString()<<endl;
+                //kdDebug()<<"--- Node="<<currentNode.owner_node()->name()<<" Child node="<<i.current()->child()->start_node()->name()<<" Move earliest start="<<u.toString()<<endl;
             }
         /* Remove currentNode from list so that we don't use it again */
         nodelist.erase( curNode );

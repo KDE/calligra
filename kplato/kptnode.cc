@@ -308,6 +308,8 @@ bool KPTNode::isDependChildOf(KPTNode *node) {
 }
 
 void KPTNode::initialize_arcs() {
+  if (m_deleted)
+      return;
   // Clear all lists of arcs and set unvisited to zero
   start_node()->successors.list.clear();
   start_node()->successors.unvisited = 0;
@@ -329,6 +331,9 @@ void KPTNode::initialize_arcs() {
 }
 
 void KPTNode::set_up_arcs() {
+  if (m_deleted)
+      return;
+  //kdDebug()<<k_funcinfo<<m_name<<endl;
   // Call this function for all nodes by recursive descent
   // and set up implicit arcs.
   for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
@@ -355,6 +360,9 @@ void KPTNode::set_up_arcs() {
 }
 
 void KPTNode::set_unvisited_values() {
+  if (m_deleted)
+      return;
+  //kdDebug()<<k_funcinfo<<m_name<<endl;
   // Call this function for all nodes by recursive descent
   for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
     {
@@ -367,16 +375,21 @@ void KPTNode::set_unvisited_values() {
   end_node()->predecessors.unvisited
     = end_node()->predecessors.number
     = end_node()->predecessors.list.size();
+  // Don't count implicit links for summarytasks
+  int implicit = type() == Type_Summarytask ? numChildren() : 0;
   start_node()->predecessors.unvisited
     = start_node()->predecessors.number
-    = start_node()->predecessors.list.size() + numDependParentNodes();
+    = start_node()->predecessors.list.size() + numDependParentNodes() - implicit;
   end_node()->successors.unvisited
     = end_node()->successors.number
-    = end_node()->successors.list.size() + numDependChildNodes();
+    = end_node()->successors.list.size() + numDependChildNodes() - implicit;
 }
 
 void KPTNode::set_pert_values( const KPTDateTime& time,
                    start_type start ) {
+  if (m_deleted)
+      return;
+  //kdDebug()<<k_funcinfo<<m_name<<endl;
   start_node()->*start = time;
   if( start_node() != end_node() )
     end_node()->*start = time;
