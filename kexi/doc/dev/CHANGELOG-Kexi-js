@@ -17,11 +17,6 @@
 TODO: kexiprojectwizard: don't allow user to use the wizard when no db drivers are available
 FIXME: Shorcuts conf dialog: two sections with the same name "Kexi"
 
-TODO: Translate datatypes (visible eg. at alter table), but types set need simplification
-      and unification (with optional advanced view)
-
-TODO: rename KexiDBConnection to KexiDBConnectionData and use it inside KexiDB
-
 TODO: rename KexiTabBrowser to KexiProjectWindow
 TODO: rename KexiBrowser to KexiProjectListView
 TODO: rename KexiBrowserItem to KexiProjectListViewItem
@@ -131,42 +126,14 @@ TODO: maybe also use "pragma table_info" for sanity checking, or more in kexidb 
 <RENAME_PROPOSALS>
 Introduce KexiProject namespace for all components that are specially developed for Kexi project
 
-1. KexiProjectHandler --> KexiPart ( this is a baseclass for project 
-  parts like: queries, tables, forms, reports)
-It seems to be ok, since classes like KexiTablePart already inherits from KexiProjectPart 
-(formerly KexiProjectHandler)
-[DONE]
-
-2. KexiProjectHandlerProxy --> KexiPart::Proxy
-..thus it could be consistently named. This also indicated that the class is used 
-as a helper for KexiProjectPart. More, there are already classes like KexiTablePartProxy
-so new name for KexiProjectHandlerProxy is ok. Proxy class should be declared 
-inside KexiProjectPart.
-[DONE] - removed
-
-3. KexiProjectHandlerItem -> KexiPart::Item 
-(or KexiProjectPart::Data but Im voting for the former)
-This gives us the idea that this class is just an instance of well-defined part.
-[DONE]
-
 ALSO TODO: move all simple widget classes (e.g. KexiSettings, KexiTabBrowser) 
 from core, to more detailed dirs,
 and projectWizard/ to wizards/ (there will be more wizards soon)
-
-ALSO TODO: 
-Jowenn's KexiDataProvider class functionality seems to be something like kexidb now offers.
 
 </RENAME_PROPOSALS>
 
 TODO:
 - add kexi__parts (p_id integer, p_type) table and appropriate part objects in kexi__objects
-
-TODO: (tableview):
-- add top-left putton that allow select all rows
-- enable clicked vheader button to select given row
-- enable column dragging
-- add action "restore original column order"
-- enable up/down moving even when cell editor is activated
 
 TODO:
 - In mysql and pgsql drivers ConnectionData::fileName() is reused for socket names.
@@ -273,6 +240,7 @@ TODO: fix lucijan's hack, with part loading (29 feb)
   "getting index schema"
 
 === Combo box editor TODO ====
+-add F4 key support
 -we're completely dropping using regular combobox
 -new layout: a lineedit + dropdown button + popup tableview, when needed
 -use (and add few) methods for tableview to enable adjusting it for use it as dropdown tv
@@ -289,6 +257,10 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 === Table View TODO ====
 - add a function for moving rows
 - extended support for enums (combo boxes)
+- add top-left button that allow select all rows
+- enable clicked vheader button to select given row
+- enable column dragging
+- add action "restore original column order"
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -315,30 +287,50 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 - make "table" field work as combo
 - make "field" field work as combo
 - add "sort" field (as combo)
-- make "1" and "inf" signs a bit larger
+- make "1" and "inf" signs a bit larger (scalable)
 
+==== Main window TODO ====
+- show error message if createView() returned 0
 
-TODO: reuse KexiNameWidget in KexiNewProjectWizard!
+=== Startup TODO ===
+- reuse KexiNameWidget in KexiNewProjectWizard!
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
 CC_MAIL: dkite@shaw.ca
 
+2004-04-06..08
+KexiDB
+	- Reference class renamed to Relationship, documentation improved
+	- QuerySchema: added 'field visibility' flag
+Table Views
+	- added 'column visibility' flag, inherited from QuerySchema's 'field visibility'
+	- many sanity checks added usable when data is destroyed
+	- added possibility of disabling vertical scrollbar's tooltip
+	- table can be refreshed if data model changed outside of this table
+Combobox Table Columns
+	- key-based related data in columns added as an option (still of Field::Enum type)
+	- flickering removed when popping up for the first time
+Query Designer
+	- table of fields ('field' and 'table' columns) is updated a bit on table adding;
+	  not finished though
+
 2004-04-05
 Kexi Alter Table
 	- fixed possible crash when the view is initialized with no table schema specified 
-	  (ie. for designing new table)
+	  (ie. for designing a new table)
 	- a pointer to table schema is updated after creating a new table
 	- compilter warnings removed
+KexiDB
+	- names and docs in Reference class improved
+	- Connection: major versions of database and kexidb is are compared on useDatabase(): 
+	  errors are presented if needed
 
 2004-04-02
 KexiDialogBase
 	- beforeSwitchTo(int mode, bool &cancelled) is called also on newly created view
 
-2004-04-01
-2004-03-31
-2004-03-30
-2004-03-29
+2004-03-29..2004-04-01
 Kexi Query Designer Editor
 	- KexiSectionHeader class introduced
 	- section's size hind fixed
