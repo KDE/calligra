@@ -756,7 +756,7 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
     painter->setBrush( bgBrush );
 
     // Draw default borders using view settings...
-    QPen viewSetting( lightGray ); // TODO use qcolorgroup
+    QPen viewSetting( QApplication::palette().color( QPalette::Active, QColorGroup::Mid ) );
     // ...except when printing, or embedded doc, or disabled.
     if ( !viewMode || !viewMode->drawFrameBorders() )
     {
