@@ -70,6 +70,8 @@ protected:
     void    readView           (QTextStream &, QString, t_rc &);
     void    filterSHFGBG       (QString, int *, int *, int *);
     void    transPenFormat     (QString, int *, int *);
+    int     readHeader         (QTextStream &);
+    int     translateColumnNumber (QString);
 
 private:
     int m_stepsize;

@@ -14,6 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+
    Boston, MA 02111-1307, USA.
 */
 
@@ -30,6 +31,7 @@
 #include <applixspreadimport.h>
 #include <applixspreadimport.moc>
 #include <kdebug.h>
+#include <math.h>
 
 
 
@@ -90,12 +92,10 @@ APPLIXSPREADImport::filter (
 
     // QTextStream
     QTextStream stream (&in);
-    m_stepsize  = in.size()/50;
-    m_instep = 0;
+    m_stepsize = in.size()/50;
+    m_instep   = 0;
     m_progress = 0;
-    int  rueck;
     int  pos;
-    int  vers[3] = { 0, 0, 0 };
     char ccol;
     int  irow, icol;
     QString  tabctr ;  // Tab control
@@ -105,35 +105,20 @@ APPLIXSPREADImport::filter (
     //    QStringList rclist;
     t_rc my_rc;
 
-    // Read Headline  
-    mystr = nextLine( stream );
-    rueck = sscanf (mystr.latin1(), 
-                    "*BEGIN SPREADSHEETS VERSION=%d/%d ENCODING=%dBIT", 
-	             &vers[0], &vers[1], &vers[2]); 
-    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]); 
 
-    // Check the headline
-    if (rueck <= 0)  
-    {
-      printf ("Header not correkt - May be it is not an applixspreadsheet file\n");  
-      printf ("Headerline: <%s>\n", (const char *) mystr.latin1());
-
-      QMessageBox::critical (0L, "Applix spreadsheet header problem",
-              QString ("The Applix Spreadsheet header is not correct. "
-                       "May be it is not an applix spreadsheet file! <BR>"
-                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr.latin1()),
-			"Okay");
-
-
-      return false;
-    }
+									       
+    /**************************************************************************
+     * Read header                                                            *
+     **************************************************************************/
+    if (! readHeader (stream)) return false; 
+ 
 
     while (!stream.atEnd ())
     {
         // Read one line
         mystr = nextLine( stream );
 
-        printf ("INPUT <%s>\n", (const char *) mystr.latin1() );
+        printf ("INPUT <%s>\n", mystr.latin1() );
  
 
         /**********************************************************************
@@ -143,7 +128,7 @@ APPLIXSPREADImport::filter (
 	{
           readColormap (stream, mcol);
 	}
-
+ 
         /**********************************************************************
          *  Looking for the typeface table                                    *
          **********************************************************************/
@@ -166,7 +151,7 @@ APPLIXSPREADImport::filter (
          **********************************************************************/
         else if (mystr[0] == '(') 
 	{
-	  int fg=-1, sh=-1, bg=-1; // foregound, sh=shading
+	  int fg=-1; // fg = foregound
 
           // Delete  '('
           mystr.remove (0, 1);
@@ -178,7 +163,7 @@ APPLIXSPREADImport::filter (
           alllenght = mystr.length ();
           if (alllenght >= 80-1) 
           { 
-            printf (" !!!!! Zeile <= 80 Zeichen \n");
+            printf (" Line >= 80 chars \n");
             int ok = true;
             do
 	    {
@@ -229,17 +214,50 @@ APPLIXSPREADImport::filter (
           // Delete cellnumber informations
           cellnostr.remove (0, pos+1);
 
-          sscanf ((const char *) cellnostr.latin1(), "%c%d",&ccol, &irow);
+          int  len = cellnostr.length ();
+          char tmp[300], tmp1[300];
+          int  leni;
+
+
+
+          pos = cellnostr.find (QRegExp ("[0-9]"));
+	  printf (" findpos:%d\n",pos);
+
+
+
+          QString rowstr;
+          bool ok;
+          int bla;
+          rowstr = cellnostr.mid (pos, cellnostr.length()-pos);
+          irow   = rowstr.toInt(&ok);
+
+	  printf (" findpos: %s %d\n",rowstr.latin1(), irow );
+          sscanf (cellnostr.latin1(), "%s%d",tmp, &bla);
+          sprintf (tmp1, "%d", irow);
+          leni = strlen (tmp1);
+	  QString cellcolstr;
+          cellcolstr = cellnostr;
+          cellcolstr.remove (cellcolstr.length()-leni, leni);
+
+	  printf ("  INFO: length:%d  cellnostr:<%s> tmp:<%s> irow:%d  cellcolstr:<%s>\n", 
+                  len,  cellnostr.latin1(), 
+                  tmp, irow, cellcolstr.latin1());
+
+          // Transformat ascii column to int column
+          icol = translateColumnNumber (cellcolstr);
+
+
+	  //  sscanf (cellnostr.latin1(), "%c%d",&ccol, &irow);
   
-          // Transformat ASCII column to int column
-          icol = ccol - 64;
+          // Transformat ascii column to int column
+	  //  icol = ccol - 64;
 
           // Remove first whitespace 
           mystr.remove    (0, 1);
           tabnostr.remove (0, 1);
 
 
-          // Replace Part for this characters: <, >, &
+          // Replace part for this characters: <, >, &
           mystr.replace (QRegExp ("&"), "&amp;");
           mystr.replace (QRegExp ("<"), "&lt;");
           mystr.replace (QRegExp (">"), "&gt;");
@@ -307,12 +325,12 @@ APPLIXSPREADImport::filter (
           }
 
           printf (" -DATA: Text:<%s>  Tab:<%s> <%s> %c  %d    <%s> <%s> <%s>\n", 
-                  (const char *) mystr.latin1(),  
-                  (const char *) tabnostr.latin1(), 
-                  (const char *) cellnostr.latin1(), ccol, irow,
-                  (const char *) typeFormStr.latin1(), 
-                  (const char *) typeCharStr.latin1(), 
-                  (const char *) typeCellStr.latin1());
+                  mystr.latin1(),  
+                  tabnostr.latin1(), 
+                  cellnostr.latin1(), ccol, irow,
+                  typeFormStr.latin1(), 
+                  typeCharStr.latin1(), 
+                  typeCellStr.latin1());
 
 
           /********************************************************************
@@ -348,18 +366,18 @@ APPLIXSPREADImport::filter (
 	    }
             else if ((*it).startsWith("FG") )
 	    {
-              sscanf ((const char *) (*it).latin1(), "FG%d", &fg);
+              sscanf ((*it).latin1(), "FG%d", &fg);
               printf ("  = Colornr %d\n", fg); 
 	    }
             else if ((*it).startsWith("TF") )
 	    {
-              sscanf ((const char *) (*it).latin1(), "TF%d", &fontnr);
+              sscanf ((*it).latin1(), "TF%d", &fontnr);
               printf ("  = Font (%d) %s\n", 
                       fontnr, (const char *) typefacetab[fontnr].latin1()); 
 	    }
             else if ((*it).startsWith("P") )
 	    {
-              sscanf ((const char *) (*it).latin1(), "P%d", &fontsize);
+              sscanf ((*it).latin1(), "P%d", &fontsize);
               printf ("   = Fontsize %d\n", fontsize); 
 	    }
             else
@@ -429,7 +447,7 @@ APPLIXSPREADImport::filter (
            * examine cell format String, splitt it up in basic parts          *
            ********************************************************************/
           QStringList typeCellList;
-          int topPenWidth=0, bottomPenWidth=0, leftPenWidth = 0, rightPenWidth = 0, sh_bg=-1, fg_bg=-1;
+          int topPenWidth=0, bottomPenWidth=0, leftPenWidth = 0, rightPenWidth = 0, fg_bg=-1;
           int topPenStyle=0, bottomPenStyle=0, leftPenStyle = 0, rightPenStyle = 0;
           int brushstyle=0,     brushcolor=1;
           int topbrushstyle=0,  topbrushcolor=1, topfg_bg=1;
@@ -438,7 +456,6 @@ APPLIXSPREADImport::filter (
           int bottombrushstyle=0, bottombrushcolor=1, bottomfg_bg=1;
   
           typeCellList = QStringList::split (',', typeCellStr);
-
           nn=0;
           for ( QStringList::Iterator it = typeCellList.begin(); it != typeCellList.end(); ++it ) 
           {
@@ -508,7 +525,7 @@ APPLIXSPREADImport::filter (
 	    {
               printf ("   = ???\n"); 
 	    }
-            
+
           }
 
 
@@ -524,9 +541,9 @@ APPLIXSPREADImport::filter (
               align != 0 || valign != 0 ||
               topPenStyle  != 0  || bottomPenStyle != 0 || 
               leftPenStyle != 0  || rightPenStyle  != 0 || fg !=-1 || fg_bg != -1 ||
-              fontsize != 12 || brushstyle != 0)
+              fontsize != 12 || brushstyle != 0 || fontnr != -1)
 	  {
-	    str += "    <format";
+            str += "    <format";
             if (brushstyle != 0)
             { 
                str += " brushstyle=\""  + QString::number(brushstyle) + "\" ";
@@ -589,14 +606,32 @@ APPLIXSPREADImport::filter (
               str += "    </top-border>\n";
 	    }
 
+            // Font (size and family)
+            if ((fontsize != 12) || (fontnr != -1))
+	    {
+              str += "     <font ";
+              // Fontsize
+              if (fontsize != 12)
+	      {
+                str += "size=\"";
+                str += QString::number (fontsize); 
+                str += "\" ";
+	      }
+              // Fontfamily
+              if (fontnr != -1)
+	      {
+                str += "family=\"";
+                str += typefacetab[fontnr].latin1();
+                str += "\" ";
+	      }
+              str += "weight=\"0\""; 
 
-            str += "     <font size=\"";
-            str += QString::number (fontsize); 
-            str += "\" family=\"helvetica\" weight=\"0\""; 
-            if (italic    == 1) str += " italic=\"yes\"";
-            if (bold      == 1) str += " bold=\"yes\"";
-            if (underline == 1) str += " underline=\"yes\"";
-            str +=" />\n";    
+              if (italic    == 1) str += " italic=\"yes\"";
+              if (bold      == 1) str += " bold=\"yes\"";
+              if (underline == 1) str += " underline=\"yes\"";
+
+              str +=" />\n";    
+	    }
 	    str += "    </format>\n";
 	  }
           str += "    <text>" + mystr + "</text>\n";  
@@ -624,7 +659,7 @@ APPLIXSPREADImport::filter (
     }
 
     QCString cstring = str.utf8();
-    out.write ( (const char*)cstring, cstring.length() );
+    out.write ( cstring, cstring.length() );
 
     out.close ();
     in.close  ();
@@ -880,7 +915,7 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
      if (mystr == "END TYPEFACE TABLE" ) ok = false;
      else 
      {
-       printf ("  %2d: <%s>\n", tftabCounter, (const char *) mystr.latin1());  
+       printf ("  %2d: <%s>\n", tftabCounter, mystr.latin1());  
        typefacetab.append(mystr); 
        tftabCounter++;
      }
@@ -914,7 +949,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  QList<t_mycolor> &mcol)
      if (mystr == "END COLORMAP") ok = false;
      else
      {
-       printf ("  -> <%-32s> ", (const char *) mystr.latin1());
+       printf ("  -> <%-32s> ", mystr.latin1());
 
        // Count the number of  whitespaces
        contcount = mystr.contains (' ');
@@ -932,12 +967,12 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  QList<t_mycolor> &mcol)
        t_mycolor *tmc = new t_mycolor;
 
        // get sub colors
-       pos = sscanf ((const char *) mystr.latin1(), "0 %d %d %d %d 0", 
+       pos = sscanf (mystr.latin1(), "0 %d %d %d %d 0", 
                      &tmc->c, &tmc->m, &tmc->y, &tmc->k); 
 
        printf ("  - <%-20s> <%-15s> <%3d> <%3d> <%3d> <%3d>  pos: %d\n", 
-               (const char *) mystr.latin1(),
-               (const char *) colstr.latin1(),
+                mystr.latin1(),
+                colstr.latin1(),
                 tmc->c, tmc->m, tmc->y, tmc->k, pos);
 
        // Color transformation cmyk -> rgb
@@ -986,14 +1021,14 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
 
    tabname.remove (0, 19);
    tabname.remove (tabname.length()-2, 2);
-   printf ("  - Table name: %s\n", (const char *) tabname.latin1());
+   printf ("  - Table name: %s\n", tabname.latin1());
 
    ok = true;
    do
    {
      mystr = nextLine( stream );
     
-     printf ("  %s\n", (const char *) mystr.latin1());
+     printf ("  %s\n", mystr.latin1());
      if (mystr.startsWith ("View End, Name:")) ok = false;
      else
      {
@@ -1002,7 +1037,7 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
        {
           printf ("   - Column Widths\n");
 	  mystr.remove (0, 20);
-          printf ("      <%s>\n", (const char *) mystr.latin1());
+          printf ("      <%s>\n", mystr.latin1());
               
           int  colwidth, icolumn;
           char ccolumn;
@@ -1013,10 +1048,21 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
 
           for ( QStringList::Iterator it = ColumnList.begin(); it != ColumnList.end(); ++it ) 
           {
-            sscanf ((const char *) (*it).latin1(), "%c:%d", &ccolumn, &colwidth);
+            
+            sscanf ((*it).latin1(), "%c:%d", &ccolumn, &colwidth);
+            int len = (*it).length ();
+            int pos = (*it).find (":");
+            (*it).remove (pos, len-pos);
+
             printf( "     >%s<- -<%c><%d>  \n", (*it).latin1(), ccolumn, colwidth);
 
-            icolumn = ccolumn - 64;
+            // Transformat ascii column to int column
+            icolumn = translateColumnNumber (*it);
+
+            //icolumn = ccolumn - 64;
+            // Translate the column width right from applix to kspread
+            icolumn = icolumn * 5;
+
 
             rowcolstr += "  <column width=\"";
             rowcolstr += QString::number (colwidth);
@@ -1033,7 +1079,7 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
        {
          printf ("   - Row Heights\n");
 	 mystr.remove (0, 17);
-         printf ("      <%s>\n", (const char *) mystr.latin1());
+         printf ("      <%s>\n", mystr.latin1());
 
          int irow, rowheight;
 
@@ -1043,9 +1089,11 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
 
          for ( QStringList::Iterator it = RowList.begin(); it != RowList.end(); ++it ) 
          {
-            sscanf ((const char *) (*it).latin1(), " %d:%d", 
+            sscanf ((*it).latin1(), " %d:%d", 
                     &irow, &rowheight);
             printf ("   row: %2d   height: %2d\n", irow, rowheight);
+            if (rowheight > 32768) rowheight -= 32768;
+            printf ("              height: %2d\n", rowheight);
             rowcolstr += "  <row row=\"";
             rowcolstr += QString::number (irow);
             rowcolstr += "\" height=\"";
@@ -1066,8 +1114,8 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
    rc.tabname.append (tabname);
    rc.rc.append (rowcolstr);
 
-   printf ("%s %s\n", (const char *) tabname.latin1(),
-                      (const char *) rowcolstr.latin1());
+   printf ("%s %s\n", tabname.latin1(),
+                      rowcolstr.latin1());
 
    printf ("...done \n\n");
 }
@@ -1093,7 +1141,7 @@ APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor,
   {
      tmpstr = it;
      if (pos > 0)   tmpstr.remove(0, pos);
-     pos = sscanf ((const char *) tmpstr.latin1(), "SH%d", 
+     pos = sscanf (tmpstr.latin1(), "SH%d", 
                    style);
 
      printf ("style: %d(%d)  ", 
@@ -1107,7 +1155,7 @@ APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor,
   {
     tmpstr = it;
     if (pos > 0)   tmpstr.remove(0, pos);
-    pos = sscanf ((const char *) tmpstr.latin1(), "FG%d", 
+    pos = sscanf (tmpstr.latin1(), "FG%d", 
                   fgcolor);
     printf ("fg: %d(%d)  ", 
             *fgcolor, pos);
@@ -1121,7 +1169,7 @@ APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor,
   {
     tmpstr = it;
     if (pos > 0)   tmpstr.remove(0, pos);
-    pos = sscanf ((const char *) tmpstr.latin1(), "BG%d", 
+    pos = sscanf (tmpstr.latin1(), "BG%d", 
                   bgcolor);
     printf ("bgcolor: %d(%d)  ", 
             *bgcolor, pos);
@@ -1203,5 +1251,90 @@ APPLIXSPREADImport::transPenFormat (QString it, int *PenWidth, int *PenStyle)
      *PenStyle = 1;
    }
 
-   printf ("frame (w:%d - s:%d) ", *PenWidth, *PenStyle); 
+   printf ("frame (w:%d - s:%d) \n", *PenWidth, *PenStyle); 
+}
+
+
+
+
+/******************************************************************************
+ *  function: readHeader                                                       *
+ ******************************************************************************/
+int 
+APPLIXSPREADImport::readHeader (QTextStream &stream)
+{
+  QString mystr;
+  int     vers[3] = { 0, 0, 0 };
+  int     rueck;
+   
+
+    // Read Headline  
+    mystr = nextLine (stream);
+    rueck = sscanf (mystr.latin1(), 
+                    "*BEGIN SPREADSHEETS VERSION=%d/%d ENCODING=%dBIT", 
+	             &vers[0], &vers[1], &vers[2]); 
+    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]); 
+
+    // Check the headline
+    if (rueck <= 0)  
+    {
+      printf ("Header not correkt - May be it is not an applixspreadsheet file\n");  
+      printf ("Headerline: <%s>\n", mystr.latin1());
+
+      QMessageBox::critical (0L, "Applix spreadsheet header problem",
+              QString ("The Applix Spreadsheet header is not correct. "
+                       "May be it is not an applix spreadsheet file! <BR>"
+                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr.latin1()),
+			"Okay");
+
+
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+}
+
+
+
+/******************************************************************************
+ *  function: translateRowNumber                                              *
+ ******************************************************************************/
+int 
+APPLIXSPREADImport::translateColumnNumber (QString colstr)
+{
+  int icol=0; 
+  int p, x, len;
+  
+  
+  len = colstr.length ();
+  p = len-1;
+  x = 1;
+
+  printf ("HI 0 len:%d\n", len );
+  while ((p >= 0))
+  {
+     printf ("HI 1 x:%d p:%d char:<%c>\n", x, p, colstr[p].latin1());
+     // Upper chars
+     if      ((colstr[p] >= 'A') && (colstr[p] <= 'Z'))
+     {
+       printf (" UPPER\n");
+       icol = icol + ((int)pow (x, 26) * (colstr[p].latin1() - 'A' + 1)  );
+       x++;
+     }
+     // lower chars
+     else if ((colstr[p] >= 'a') && (colstr[p] <= 'z'))
+     {
+       printf (" lower\n");
+       icol = icol + ((int)pow (x, 26) * (colstr[p].latin1() - 'a' + 1)  );
+       x++;
+     }
+     p--;
+     printf ("HI 2\n");
+     
+   }
+
+   printf ("translateColumnNumber : <%s> -> %d\n", colstr.latin1(), icol);
+   return icol;
 }
