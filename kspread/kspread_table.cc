@@ -27,11 +27,11 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qpicture.h>
-#include <qdragobject.h>   
+#include <qdragobject.h>
 #include <qregexp.h>
 
 #include <koReplace.h>
-#include <kprinter.h> 
+#include <kprinter.h>
 #include <koDocumentInfo.h>
 
 #include "kspread_global.h"
@@ -266,7 +266,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_oldPos=QPoint(1,1);
   m_iScrollPosX=0;
   m_iScrollPosY=0;
-  
+
   //Init the printing options
   m_leftBorder = 20.0;
   m_rightBorder = 20.0;
@@ -278,7 +278,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_paperHeight = PG_A4_HEIGHT;
   m_orientation = PG_PORTRAIT;
   calcPaperSize();
-  
+
 }
 
 bool KSpreadTable::isEmpty( unsigned long int x, unsigned long int y )
@@ -6033,7 +6033,7 @@ QDomElement KSpreadTable::saveXML( QDomDocument& doc )
     paper.setAttribute( "format", paperFormatString() );
     paper.setAttribute( "orientation", orientationString() );
     table.appendChild( paper );
-    
+
     QDomElement borders = doc.createElement( "borders" );
     borders.setAttribute( "left", leftBorder() );
     borders.setAttribute( "top", topBorder() );
@@ -6080,7 +6080,7 @@ QDomElement KSpreadTable::saveXML( QDomDocument& doc )
       foot.appendChild( right );
       right.appendChild( doc.createTextNode( footRight() ) );
     }
-       
+
     // Save all cells.
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
@@ -6202,8 +6202,8 @@ bool KSpreadTable::loadXML( const QDomElement& table )
     {
         m_bFirstLetterUpper = (int)table.attribute("firstletterupper").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
-    }       
-    
+    }
+
     // Load the paper layout
     QDomElement paper = table.namedItem( "paper" ).toElement();
     if ( !paper.isNull() )
@@ -6845,7 +6845,7 @@ void KSpreadTable::convertObscuringBorders()
       }
     }
   }
-}         
+}
 
 /**********************
  * Printout Functions *
@@ -7063,7 +7063,7 @@ const char* KSpreadTable::orientationString()
     return 0;
 }
 
-QString KSpreadTable::completeHeading( const QString &_data, int _page, const QString &_table )
+QString KSpreadTable::completeHeading( const QString &_data, int _page, const QString &_table ) const
 {
     QString page(QString::number(_page));
 

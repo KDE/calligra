@@ -40,7 +40,7 @@ class DCOPObject;
 class KPrinter;
 
 #include <koDocument.h>
-#include <koDocumentChild.h>  
+#include <koDocumentChild.h>
 
 #include <qpen.h>
 #include <qptrlist.h>
@@ -116,8 +116,8 @@ public:
   ~KSpreadChild();
 
   KSpreadDoc* parent() { return (KSpreadDoc*)parent(); }
-  KSpreadTable* table() { return m_pTable; }
-  
+  KSpreadTable* table()const { return m_pTable; }
+
 protected:
   KSpreadTable *m_pTable;
 };
@@ -236,7 +236,7 @@ public:
      *
      * @see #setTableName
      */
-    QString tableName() { return m_strName; }
+    QString tableName()const { return m_strName; }
     /**
      * Renames a table. This will automatically adapt all formulas
      * in all tables and all cells to reflect the new name.
@@ -258,7 +258,7 @@ public:
      * @see #tableName
      */
     bool setTableName( const QString& name, bool init = FALSE, bool makeUndo=true );
-    
+
     /**
      * Saves the table and all it's children in XML format
      */
@@ -267,7 +267,7 @@ public:
      * Loads the table and all it's children in XML format
      */
     virtual bool loadXML( const QDomElement& );
-    
+
     /**
      * Saves a children
      */
@@ -342,7 +342,7 @@ public:
      */
     KSpreadCell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false );
 
-    KSpreadCell* defaultCell() { return m_pDefaultCell; }
+    KSpreadCell* defaultCell()const { return m_pDefaultCell; }
 
     KSpreadLayout* defaultLayout() { return m_defaultLayout; };
     const KSpreadLayout* defaultLayout() const { return m_defaultLayout; }
@@ -372,11 +372,11 @@ public:
     /**
      * @retrun the maximum size of the column range
      */
-    unsigned long sizeMaxX() { return m_ulSizeMaxX; }
+    unsigned long sizeMaxX()const { return m_ulSizeMaxX; }
     /**
      * @retrun the maximum size of the row range
      */
-    unsigned long sizeMaxY() { return m_ulSizeMaxY; }
+    unsigned long sizeMaxY()const { return m_ulSizeMaxY; }
 
     /**
      * Adjusts the internal reference of the sum of the widths of all columns.
@@ -550,12 +550,12 @@ public:
     void sortByColumn( int ref_column, SortingOrder );
     void sortByColumn( int key1, int key2, int key3,
                        SortingOrder order1, SortingOrder order2, SortingOrder order3,
-                       QStringList const * firstKey, bool copyLayout, bool headerRow, 
+                       QStringList const * firstKey, bool copyLayout, bool headerRow,
                        KSpreadPoint const & outputPoint );
     void swapCells( int x1, int y1, int x2, int y2, bool cpLayout );
 
     /**
-     * @param x1, y1: values from source cell, 
+     * @param x1, y1: values from source cell,
      * @param x2, y2: values from target cell
      * @param cpLayout: if true: cell layout (format) gets copied, too
      */
@@ -664,7 +664,7 @@ public:
      * Returns, if the grid shall be shown on printouts
      */
     bool getPrintGrid() const { return m_bPrintGrid; }
-    
+
     /**
      * Sets, if the grid shall be shown on printouts
      */
@@ -710,12 +710,12 @@ public:
     void removeTable();
 
     void setActiveTable();
-    QPoint getOldPos() {return m_oldPos;}
+    QPoint getOldPos()const {return m_oldPos;}
 
-    int getScrollPosX() {return m_iScrollPosX;}
+    int getScrollPosX()const {return m_iScrollPosX;}
     void setScrollPosX( int _scrollX) { m_iScrollPosX=_scrollX;}
 
-    int getScrollPosY() {return m_iScrollPosY;}
+    int getScrollPosY()const {return m_iScrollPosY;}
     void setScrollPosY( int _scrollY) { m_iScrollPosY=_scrollY;}
 
 
@@ -759,7 +759,7 @@ public:
     /**
      * @return true if this table is hidden
      */
-    bool isHidden() { return m_bTableHide; }
+    bool isHidden()const { return m_bTableHide; }
     /**
      * Hides or shows this tables
      */
@@ -775,8 +775,8 @@ public:
      */
     void setMap( KSpreadMap* _map ) { m_pMap = _map; }
 
-    KSpreadDoc* doc() { return m_pDoc; }
-    KSpreadMap* map() { return m_pMap; }
+    KSpreadDoc* doc()const { return m_pDoc; }
+    KSpreadMap* map()const { return m_pMap; }
 
     /**
      * @return a painter for the hidden widget ( @ref #widget ).
@@ -798,7 +798,7 @@ public:
      * @see #setShowPageBorders
      * @see #bShowPageBorders
      */
-    bool isShowPageBorders() { return m_bShowPageBorders; }
+    bool isShowPageBorders()const { return m_bShowPageBorders; }
 
     /**
      * Turns the page break lines on or off.
@@ -905,7 +905,7 @@ public:
 
     /**
      * returns the text to be copied to the clipboard
-     */ 
+     */
     QString copyAsText(const QPoint &_marker);
 
     /**
@@ -939,19 +939,19 @@ public:
 
     const QColorGroup& colorGroup() { return m_pWidget->colorGroup(); }
 
-    int id() { return m_id; }
+    int id() const { return m_id; }
 
     /**
      * Return the currently maximum defined column of the horizontal scrollbar.
      * It's always 10 times higher than the maximum access column.
      * In an empty table it starts with 256.
      */
-    int maxColumn() { return m_iMaxColumn; }
-    
+    int maxColumn()const { return m_iMaxColumn; }
+
     /**
      * Checks if the argument _column is out of the current maximum range of the vertical border
      * If this is the case, the current maximum value m_iMaxColumn is adjusted and the vertical border
-     * is resized. 
+     * is resized.
      * Use this function with care, as it involves a repaint of the border, when it is out of range.
      */
     void checkRangeHBorder ( int _column );
@@ -961,17 +961,17 @@ public:
      * It's always 10 times higher than the maximum access row.
      * In an empty table it starts with 256.
      */
-    int maxRow() { return m_iMaxRow; }
+    int maxRow()const { return m_iMaxRow; }
 
     /**
      * Checks if the argument _row is out of the current maximum range of the horizontal border
      * If this is the case, the current maximum value m_iMaxRow is adjusted and the horizontal border
-     * is resized. 
+     * is resized.
      * Use this function with care, as it involves a repaint of the border, when it is out of range.
      */
     void checkRangeVBorder ( int _row );
 
-    
+
     void enableScrollBarUpdates( bool _enable );
 
     virtual DCOPObject* dcopObject();
@@ -1294,8 +1294,8 @@ protected:
 
     QPoint m_oldPos;
     int m_iScrollPosX;
-    int m_iScrollPosY;  
-    
+    int m_iScrollPosY;
+
     /**********************/
     /* Printout functions */
     /**********************/
@@ -1305,7 +1305,7 @@ public:
     /**
      * @return the printable width of the paper in millimeters.
      */
-    float printableWidth() { return m_paperWidth - m_leftBorder - m_rightBorder; }
+    float printableWidth()const { return m_paperWidth - m_leftBorder - m_rightBorder; }
 
     /**
      * @return the printable height of the paper in millimeters.
@@ -1372,25 +1372,25 @@ public:
     void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
                          const QString& _paper, const QString& _orientation );
 
-    QString headLeft( int _p, const QString &_t  ) { if ( m_headLeft.isNull() ) return "";
+    QString headLeft( int _p, const QString &_t  )const { if ( m_headLeft.isNull() ) return "";
     return completeHeading( m_headLeft, _p, _t ); }
-    QString headMid( int _p, const QString &_t ) { if ( m_headMid.isNull() ) return "";
+    QString headMid( int _p, const QString &_t )const { if ( m_headMid.isNull() ) return "";
     return completeHeading( m_headMid, _p, _t ); }
-    QString headRight( int _p, const QString &_t ) { if ( m_headRight.isNull() ) return "";
+    QString headRight( int _p, const QString &_t )const { if ( m_headRight.isNull() ) return "";
     return completeHeading( m_headRight, _p, _t ); }
-    QString footLeft( int _p, const QString &_t ) { if ( m_footLeft.isNull() ) return "";
+    QString footLeft( int _p, const QString &_t )const { if ( m_footLeft.isNull() ) return "";
     return completeHeading( m_footLeft, _p, _t ); }
-    QString footMid( int _p, const QString &_t ) { if ( m_footMid.isNull() ) return "";
+    QString footMid( int _p, const QString &_t )const { if ( m_footMid.isNull() ) return "";
     return completeHeading( m_footMid, _p, _t ); }
-    QString footRight( int _p, const QString &_t ) { if ( m_footRight.isNull() ) return "";
+    QString footRight( int _p, const QString &_t )const { if ( m_footRight.isNull() ) return "";
     return completeHeading( m_footRight, _p, _t ); }
 
-    QString headLeft() { if ( m_headLeft.isNull() ) return ""; return m_headLeft; }
-    QString headMid() { if ( m_headMid.isNull() ) return ""; return m_headMid; }
-    QString headRight() { if ( m_headRight.isNull() ) return ""; return m_headRight; }
-    QString footLeft() { if ( m_footLeft.isNull() ) return ""; return m_footLeft; }
-    QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid; }
-    QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight; }
+    QString headLeft()const { if ( m_headLeft.isNull() ) return ""; return m_headLeft; }
+    QString headMid()const { if ( m_headMid.isNull() ) return ""; return m_headMid; }
+    QString headRight()const { if ( m_headRight.isNull() ) return ""; return m_headRight; }
+    QString footLeft()const { if ( m_footLeft.isNull() ) return ""; return m_footLeft; }
+    QString footMid()const { if ( m_footMid.isNull() ) return ""; return m_footMid; }
+    QString footRight()const { if ( m_footRight.isNull() ) return ""; return m_footRight; }
 
     /**
      * Replaces in _text all _search text parts by _replace text parts.
@@ -1420,7 +1420,7 @@ public slots:
      */
     void paperLayoutDlg();
 
-protected: 
+protected:
 
     /**
      * Looks at @ref #m_paperFormat and calculates @ref #m_paperWidth and @ref #m_paperHeight.
@@ -1434,7 +1434,7 @@ protected:
      * @param _page is the page number for which the heading is produced.
      * @param _KSpreadTable is the name of the KSpreadTable for which we generate the headings.
      */
-    QString completeHeading( const QString &_data, int _page, const QString &_table );
+    QString completeHeading( const QString &_data, int _page, const QString &_table ) const ;
 
     /**
      * The orientation of the paper.
@@ -1505,8 +1505,8 @@ protected:
      */
     QString m_footMid;
 
-    
-    
+
+
 public:
     // see kspread_table.cc for an explanation of this
     // this is for type B and also for type A (better use CellWorkerTypeA for that)
