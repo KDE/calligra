@@ -1563,7 +1563,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      y = y0 =  markerRow();
 
 	      emptycell = activeTable()->cellAt(x,y)->isEmpty();
-
+              // HELP! This is by far to slow and inefficent!
 	      if(!emptycell){
 		  while (!emptycell && !(activeTable()->cellAt( x,y - 1 ))->isEmpty() && y >= 0 ){
 		      y --;
@@ -1595,6 +1595,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      x = x0 =  markerColumn();
 	      y = y0 =  markerRow();
 	      
+              // HELP! This is by far to slow and inefficent!
 	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x,QMAX(y+1,0x7FFF))->isEmpty()){
 		  
 		  gotoLocation( markerColumn(), QMIN(0x7FFF,y+1  ), 0, make_select,true,true  );
@@ -1643,13 +1644,14 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 	      x = x0 =  markerColumn();
 	      y = y0 =  markerRow();
-	      
+
 	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x+1,y)->isEmpty()){
 		  
 		  gotoLocation( x+1, markerRow()  , 0, make_select,true,true  );
 	      }
 	      else{
 		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y))->isEmpty()){
+              // HELP! This is by far to slow and inefficent!
 
 		      while (( activeTable()->cellAt( x +1 ,y ))->isEmpty() && x <=26*26  ){
 
@@ -1695,6 +1697,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 	      if(!emptycell){
 		  while (!emptycell && !(activeTable()->cellAt( x - 1,y  ))->isEmpty() && x >= 0 ){
+              // HELP! This is by far to slow and inefficent!
 		      x --;
 		  }
 	      }
