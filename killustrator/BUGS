@@ -1,4 +1,4 @@
-Bugs ($ID: $)
+Bug-List
 
 See also: http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator-bw.html
 ------------------------------------
@@ -33,8 +33,12 @@ Bugs from above bug page:
   after the first Landscape <-> Portait change the displayed
   minipage is not updated (the change is internally done correct)
 
-* UnitBox: The given range is relative, since internally point is used,
-  it probably should be absolute and regard the values as points.
+* UnitBox
+  - When changing the units the pt value shouldn't be affected
+    (thus ensureing higher preciseness)
+  - the fmt string and the stepwidth etc. should be better adapted for
+    the different units (especially for the very small and very large ones,
+    such as inch/cm and pt/dd)
 
 * Point editing doesn't always obey the Grid and/or auxilary line
   More bugs: You cannot select a point using a fine grid
