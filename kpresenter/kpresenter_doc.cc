@@ -392,7 +392,7 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
     out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl;
     out << indent << "<PRESSPEED value=\"" << static_cast<int>( presSpeed ) << "\"/>" << endl;
 
-    if ( saveOnlyPage != -1 )
+    if ( saveOnlyPage == -1 )
     {
         out << otag << "<SELSLIDES>" << endl;
         QValueList<bool>::Iterator sit = m_selectedSlides.begin();
