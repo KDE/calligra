@@ -122,6 +122,9 @@ public:
 
     void gotoPage( int pg );
 
+    bool mouseSelectedObject;
+    int objectPosX, objectPosY;
+
 public slots:
     void exitEditMode();
 
@@ -258,8 +261,6 @@ private:
 
     void moveObject( int x, int y, bool key );
     void resizeObject();
-    bool mouseSelectedObject;
-    int objectPosX, objectPosY;
 
 public slots:
     void chPic();

@@ -329,6 +329,10 @@ void KPresenterView::editPaste()
         {
             m_pKPresenterDoc->pasteObjs( data->encodedData("application/x-kpresenter-selection"),
                                          xOffset, yOffset, currPg );
+
+            page->mouseSelectedObject = true;
+            page->objectPosX = xOffset + 20;
+            page->objectPosY = yOffset + 20;
         }
     } else {
 	page->kTxtObj()->paste();
