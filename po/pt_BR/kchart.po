@@ -1,0 +1,219 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1998-10-04 15:30+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: kchart_doc.cc:55
+msgid "A Simple Bar Chart"
+msgstr ""
+
+#: kchart_doc.cc:56
+msgid "X Label"
+msgstr ""
+
+#: kchart_doc.cc:57
+msgid "Y Label"
+msgstr ""
+
+#: kchart_shell.cc:40
+msgid "KChart Error"
+msgstr ""
+
+#: kchart_shell.cc:40
+msgid "Could not init"
+msgstr ""
+
+#: kchart_view.cc:106
+msgid "&Edit data..."
+msgstr ""
+
+#: kchart_view.cc:118 ui/KChartWizardSelectChartTypePage.cpp:34
+msgid "Bars"
+msgstr ""
+
+#: kchart_view.cc:123
+msgid "Area"
+msgstr ""
+
+#: kchart_view.cc:128 ui/KChartWizardSelectChartTypePage.cpp:49
+msgid "Lines"
+msgstr ""
+
+#: ui/KChartWizard.cpp:32
+msgid "Select data"
+msgstr ""
+
+#: ui/KChartWizard.cpp:41
+msgid "Select chart type"
+msgstr ""
+
+#: ui/KChartWizard.cpp:49
+msgid "Select chart subtype"
+msgstr ""
+
+#: ui/KChartWizard.cpp:58
+msgid "Data setup"
+msgstr ""
+
+#: ui/KChartWizard.cpp:66
+msgid "Labels and legend"
+msgstr ""
+
+#: ui/KChartWizard.cpp:74
+msgid "Setup axes"
+msgstr ""
+
+#: ui/KChartWizardLabelsLegendPage.cpp:19
+msgid "X-Label:"
+msgstr ""
+
+#: ui/KChartWizardLabelsLegendPage.cpp:27
+msgid "Y-Label:"
+msgstr ""
+
+#: ui/KChartWizardLabelsLegendPage.cpp:35
+msgid "Title:"
+msgstr ""
+
+#: ui/KChartWizardLabelsLegendPage.cpp:43
+msgid "Legend placement"
+msgstr ""
+
+#: ui/KChartWizardLabelsLegendPage.cpp:47
+msgid "Right/Top"
+msgstr ""
+
+#: ui/KChartWizardLabelsLegendPage.cpp:51
+msgid "Right/Center"
+msgstr ""
+
+#: ui/KChartWizardLabelsLegendPage.cpp:55
+msgid "Right/Bottom"
+msgstr ""
+
+#: ui/KChartWizardLabelsLegendPage.cpp:59
+msgid "Bottom/Left"
+msgstr ""
+
+#: ui/KChartWizardLabelsLegendPage.cpp:63
+msgid "Bottom/Center"
+msgstr ""
+
+#: ui/KChartWizardLabelsLegendPage.cpp:67
+msgid "Bottom/Right"
+msgstr ""
+
+#: ui/KChartWizardSelectChartSubTypePage.cpp:85
+msgid "Normal"
+msgstr ""
+
+#: ui/KChartWizardSelectChartSubTypePage.cpp:103
+msgid "On Top"
+msgstr ""
+
+#: ui/KChartWizardSelectChartSubTypePage.cpp:121
+msgid "In Front"
+msgstr ""
+
+#: ui/KChartWizardSelectChartSubTypePage.cpp:132
+msgid "There are no subtypes for this chart type"
+msgstr ""
+
+#: ui/KChartWizardSelectChartTypePage.cpp:64
+msgid "Points"
+msgstr ""
+
+#: ui/KChartWizardSelectChartTypePage.cpp:79
+msgid "Lines and Points"
+msgstr ""
+
+#: ui/KChartWizardSelectChartTypePage.cpp:94
+msgid "Areas"
+msgstr ""
+
+#: ui/KChartWizardSelectChartTypePage.cpp:109
+msgid "Pie"
+msgstr ""
+
+#: ui/KChartWizardSelectChartTypePage.cpp:124
+msgid "3D Pie"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:33
+msgid "Use two Y axes"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:41
+msgid "Tick settings"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:44
+msgid "Show full grid"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:50
+msgid "Show ticks on X axis"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:57
+msgid "Tick length:"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:66
+msgid "Number of ticks on Y axis:"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:76
+msgid "Axes labelling"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:79
+msgid "Show values on X axis"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:86 ui/KChartWizardSetupAxesPage.cpp:106
+msgid "Show every"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:95
+msgid ". value on X axis"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:98
+msgid "Show values on Y axis"
+msgstr ""
+
+#: ui/KChartWizardSetupAxesPage.cpp:115
+msgid ". value on Y axis"
+msgstr ""
+
+#: ui/KChartWizardSetupDataPage.cpp:27
+msgid "Rows"
+msgstr ""
+
+#: ui/KChartWizardSetupDataPage.cpp:34
+msgid "Columns"
+msgstr ""
+
+#: ui/KChartWizardSetupDataPage.cpp:43
+msgid "Data is in:"
+msgstr ""
+
+#: ui/KChartWizardSetupDataPage.cpp:57
+msgid "Use first row as description"
+msgstr ""
+
+#: ui/KChartWizardSetupDataPage.cpp:69
+msgid "Use first column as description"
+msgstr ""

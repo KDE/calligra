@@ -1,0 +1,440 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1998-11-15 18:07+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: kspread_autofill.cc:105
+msgid "January"
+msgstr ""
+
+#: kspread_autofill.cc:106
+msgid "February"
+msgstr ""
+
+#: kspread_autofill.cc:107
+msgid "March"
+msgstr ""
+
+#: kspread_autofill.cc:108
+msgid "April"
+msgstr ""
+
+#: kspread_autofill.cc:109
+msgid "May"
+msgstr ""
+
+#: kspread_autofill.cc:110
+msgid "June"
+msgstr ""
+
+#: kspread_autofill.cc:111
+msgid "July"
+msgstr ""
+
+#: kspread_autofill.cc:112
+msgid "August"
+msgstr ""
+
+#: kspread_autofill.cc:113
+msgid "September"
+msgstr ""
+
+#: kspread_autofill.cc:114
+msgid "October"
+msgstr ""
+
+#: kspread_autofill.cc:115
+msgid "November"
+msgstr ""
+
+#: kspread_autofill.cc:116
+msgid "December"
+msgstr ""
+
+#: kspread_dlg_cons.cc:11 kspread_view.cc:449
+msgid "Consolidate"
+msgstr ""
+
+#: kspread_dlg_cons.cc:16
+msgid "Function"
+msgstr ""
+
+#: kspread_dlg_cons.cc:20
+msgid "sum"
+msgstr ""
+
+#: kspread_dlg_cons.cc:24
+msgid "Reference"
+msgstr ""
+
+#: kspread_dlg_cons.cc:31
+msgid "Entered References"
+msgstr ""
+
+#: kspread_dlg_cons.cc:36 kspread_shell.cc:284 kspread_table.cc:1190
+#: kspread_table.cc:2360 kspread_table.cc:2367 kspread_view.cc:1825
+msgid "Ok"
+msgstr ""
+
+#: kspread_dlg_layout.cc:286 kspread_dlg_layout.cc:496
+msgid "Border"
+msgstr ""
+
+#: kspread_dlg_layout.cc:289
+msgid "Number Format"
+msgstr ""
+
+#: kspread_dlg_layout.cc:292
+msgid "Misc"
+msgstr ""
+
+#: kspread_dlg_layout.cc:376
+msgid "Prefix"
+msgstr ""
+
+#: kspread_dlg_layout.cc:387
+msgid "Postfix"
+msgstr ""
+
+#: kspread_dlg_layout.cc:402
+msgid "Precision"
+msgstr ""
+
+#: kspread_dlg_layout.cc:423
+msgid "Format"
+msgstr ""
+
+#: kspread_dlg_layout.cc:490
+msgid "Pattern"
+msgstr ""
+
+#: kspread_dlg_layout.cc:502
+msgid "Outline"
+msgstr ""
+
+#: kspread_dlg_layout.cc:506
+msgid "Left"
+msgstr ""
+
+#: kspread_dlg_layout.cc:510
+msgid "Right"
+msgstr ""
+
+#: kspread_dlg_layout.cc:514
+msgid "Top"
+msgstr ""
+
+#: kspread_dlg_layout.cc:518
+msgid "Bottom"
+msgstr ""
+
+#: kspread_dlg_layout.cc:669
+msgid "Color"
+msgstr ""
+
+#: kspread_dlg_layout.cc:952
+msgid "Text Color"
+msgstr ""
+
+#: kspread_dlg_layout.cc:956
+msgid "Background Color"
+msgstr ""
+
+#: kspread_dlg_layout.cc:972
+msgid "Functionality"
+msgstr ""
+
+#: kspread_dlg_layout.cc:976 kspread_dlg_layout.cc:1346
+msgid "Normal"
+msgstr ""
+
+#: kspread_dlg_layout.cc:977
+msgid "Button"
+msgstr ""
+
+#: kspread_dlg_layout.cc:978
+msgid "Select"
+msgstr ""
+
+#: kspread_dlg_layout.cc:981
+msgid "######"
+msgstr ""
+
+#: kspread_dlg_layout.cc:989
+msgid "Action"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1115
+msgid "Requested Font"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1120
+msgid "Actual Font"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1124 kspread_dlg_layout.cc:1128
+msgid "Family:"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1135 kspread_dlg_layout.cc:1140
+msgid "Size:"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1149 kspread_dlg_layout.cc:1154
+msgid "Weight:"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1163 kspread_dlg_layout.cc:1171
+msgid "Style:"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1232 kspread_dlg_layout.cc:1305
+msgid "normal"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1233 kspread_dlg_layout.cc:1307
+msgid "bold"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1244 kspread_dlg_layout.cc:1317
+#: kspread_dlg_layout.cc:1351
+msgid "roman"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1245 kspread_dlg_layout.cc:1319
+#: kspread_dlg_layout.cc:1349
+msgid "italic"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1261
+msgid "Dolor Ipse"
+msgstr ""
+
+#: kspread_dlg_layout.cc:1344 kspread_view.cc:311
+msgid "Bold"
+msgstr ""
+
+#: kspread_dlg_scripts.cc:18
+msgid "KSpread Scripts"
+msgstr ""
+
+#: kspread_dlg_scripts.cc:72 kspread_dlg_scripts.cc:80
+#: kspread_dlg_scripts.cc:90 kspread_dlg_scripts.cc:140
+#: kspread_dlg_scripts.cc:148 kspread_shell.cc:284 kspread_table.cc:1190
+#: kspread_table.cc:2360 kspread_table.cc:2366 kspread_view.cc:637
+#: kspread_view.cc:1823
+msgid "KSpread Error"
+msgstr ""
+
+#: kspread_dlg_scripts.cc:72 kspread_dlg_scripts.cc:140
+msgid "You must enter a name"
+msgstr ""
+
+#: kspread_dlg_scripts.cc:80 kspread_dlg_scripts.cc:148
+msgid "The file already exists"
+msgstr ""
+
+#: kspread_dlg_scripts.cc:90
+msgid ""
+"Could not open file.\n"
+"Perhaps access denied"
+msgstr ""
+
+#: kspread_dlg_scripts.cc:108
+#, c-format
+msgid ""
+"Do you really want to delete the script\n"
+"%s"
+msgstr ""
+
+#: kspread_dlg_scripts.cc:210
+msgid "Scripts"
+msgstr ""
+
+#: kspread_dlg_scripts.cc:230
+msgid "Rename"
+msgstr ""
+
+#: kspread_doc.cc:493
+#, c-format
+msgid "Table %i"
+msgstr ""
+
+#: kspread_shell.cc:44
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr ""
+
+#: kspread_shell.cc:284
+msgid "Could not create new document"
+msgstr ""
+
+#: kspread_shell.cc:316
+#, c-format
+msgid ""
+"Could not save\n"
+"%s"
+msgstr ""
+
+#: kspread_shell.cc:326
+msgid "Could not save file"
+msgstr ""
+
+#: kspread_table.cc:1190
+msgid "Clipboard is empty"
+msgstr ""
+
+#: kspread_table.cc:2359
+#, c-format
+msgid "The server %s does not support the required interface"
+msgstr ""
+
+#: kspread_table.cc:2367
+msgid "The chart application seems to have an internal error"
+msgstr ""
+
+#: kspread_view.cc:263
+msgid "Delete Row"
+msgstr ""
+
+#: kspread_view.cc:268
+msgid "Delete Column"
+msgstr ""
+
+#: kspread_view.cc:273
+msgid "Insert Row"
+msgstr ""
+
+#: kspread_view.cc:278
+msgid "Insert Column"
+msgstr ""
+
+#: kspread_view.cc:323
+msgid "Money Format"
+msgstr ""
+
+#: kspread_view.cc:328
+msgid "Percent Format"
+msgstr ""
+
+#: kspread_view.cc:335
+msgid "Align Left"
+msgstr ""
+
+#: kspread_view.cc:340
+msgid "Align Center"
+msgstr ""
+
+#: kspread_view.cc:345
+msgid "Align Right"
+msgstr ""
+
+#: kspread_view.cc:351
+msgid "Allow multiple lines"
+msgstr ""
+
+#: kspread_view.cc:359
+msgid "Lower Precision"
+msgstr ""
+
+#: kspread_view.cc:365
+msgid "Higher Precision"
+msgstr ""
+
+#: kspread_view.cc:372
+msgid "Insert Chart"
+msgstr ""
+
+#: kspread_view.cc:422
+msgid "&Table"
+msgstr ""
+
+#: kspread_view.cc:423
+msgid "&Image"
+msgstr ""
+
+#: kspread_view.cc:424
+msgid "&Chart"
+msgstr ""
+
+#: kspread_view.cc:425
+msgid "&Object ..."
+msgstr ""
+
+#: kspread_view.cc:429
+msgid "C&ell"
+msgstr ""
+
+#: kspread_view.cc:433
+msgid "Paper &Layout"
+msgstr ""
+
+#: kspread_view.cc:439
+msgid "New View"
+msgstr ""
+
+#: kspread_view.cc:443
+msgid "Show Page Borders"
+msgstr ""
+
+#: kspread_view.cc:447
+msgid "D&ata"
+msgstr ""
+
+#: kspread_view.cc:452
+msgid "F&older"
+msgstr ""
+
+#: kspread_view.cc:454
+msgid "New Table"
+msgstr ""
+
+#: kspread_view.cc:457
+msgid "Fo&rmat"
+msgstr ""
+
+#: kspread_view.cc:459
+msgid "&Auto Fill ..."
+msgstr ""
+
+#: kspread_view.cc:462
+msgid "&Scripts"
+msgstr ""
+
+#: kspread_view.cc:464
+msgid "Edit &global scripts..."
+msgstr ""
+
+#: kspread_view.cc:465
+msgid "Edit &local script"
+msgstr ""
+
+#: kspread_view.cc:466
+msgid "&Reload scripts"
+msgstr ""
+
+#: kspread_view.cc:477
+msgid "&Using KSpread"
+msgstr ""
+
+#: kspread_view.cc:637
+msgid "Could not start editor"
+msgstr ""
+
+#: kspread_view.cc:1823
+msgid ""
+"You must first select the cells\n"
+"which contain the data."
+msgstr ""
