@@ -302,9 +302,23 @@ void KPTResource::clearAppointments() {
 }
 
 void KPTResource::makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) {
-    //TODO: units and moderated by availability
-    KPTAppointment *a = new KPTAppointment(start, duration, this, task);
-    m_appointments.append(a);
+    //TODO: units and moderated by availability, and standard non-working days
+    KPTDateTime time = start;
+    KPTDateTime end = start+duration;
+    while (time < end) {
+        //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
+        if (!m_calendar->hasInterval(time, end)) {
+            //kdDebug()<<time.toString()<<" to "<<end.toString()<<": No (more) interval(s)"<<endl;
+            return; // nothing more to do
+        }
+        QPair<KPTDateTime, KPTDateTime> i = m_calendar->interval(time, end);
+        if (time == i.second)
+            return; // hmmm, didn't get a new interval, avoid loop
+        KPTAppointment *a = new KPTAppointment(i.first, i.second - i.first, this, task);
+        m_appointments.append(a);
+        //kdDebug()<<i.first.toString()<<" to "<<i.second.toString()<<": Made appointment"<<endl;
+        time = i.second;
+    }
 }
 
 void KPTResource::saveAppointments(QDomElement &element) const {
@@ -440,7 +454,7 @@ bool KPTResourceRequest::load(QDomElement &element, KPTProject *project) {
     //kdDebug()<<k_funcinfo<<endl;
     int id  = element.attribute("resource-id").toInt();
     if (!(m_resource = project->resource(id))) {
-        //kdDebug()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<id<<endl;
+        kdDebug()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<id<<endl;
         return false;
     }
     m_units  = element.attribute("units").toInt();
@@ -550,7 +564,7 @@ int KPTResourceGroupRequest::workUnits() const {
     return units;
 }
 
-//TODO: handle uspecific resources
+//TODO: handle nonspecific resources
 KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &start, const KPTDuration &effort) {
     //kdDebug()<<k_funcinfo<<"effort: "<<effort.toString(KPTDuration::Format_Day)<<endl;
     KPTDuration dur = effort; // have to start somewhere
@@ -598,6 +612,10 @@ void KPTResourceGroupRequest::makeAppointments(KPTTask *task) {
     }
 }
 
+void KPTResourceGroupRequest::reserve(const KPTDateTime &start, const KPTDuration &duration) {
+    m_start = start;
+    m_duration = duration;
+}
 
 /////////
 KPTResourceRequestCollection::KPTResourceRequestCollection() {
@@ -696,6 +714,13 @@ void KPTResourceRequestCollection::makeAppointments(KPTTask *task) {
     }
 }
 
+void KPTResourceRequestCollection::reserve(const KPTDateTime &start, const KPTDuration &duration) {
+    //kdDebug()<<k_funcinfo<<endl;
+    QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
+    for (; it.current(); ++it) {
+        it.current()->reserve(start, duration);
+    }
+}
 
 #ifndef NDEBUG
 

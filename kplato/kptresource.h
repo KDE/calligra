@@ -385,7 +385,6 @@ class KPTResourceRequest {
  
         void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) 
             { if (m_resource) m_resource->makeAppointment(start, duration, task); }
-        
     private:
         KPTResource *m_resource;
         int m_units;
@@ -437,6 +436,11 @@ class KPTResourceGroupRequest {
          */
         void makeAppointments(KPTTask *task);
             
+        /**
+         * Reserves the requested resources for the specified interval
+         */
+        void reserve(const KPTDateTime &start, const KPTDuration &duration);
+
     private:
         KPTResourceGroup *m_group;
         int m_units;
@@ -488,7 +492,11 @@ public:
     * Assumes that @ref duration() has been run.
     */
     void makeAppointments(KPTTask *task);
-    
+    /**
+     * Reserves the requested resources for the specified interval
+     */
+    void reserve(const KPTDateTime &start, const KPTDuration &duration);
+
 protected:
     struct Interval {
         KPTDateTime start;

@@ -26,7 +26,9 @@
 #include <qpair.h>
 
 class QDomElement;
+class QDateTime;
 class QTime;
+class QDate;
 class KPTDuration;
 class KPTDateTime;
 
@@ -60,10 +62,22 @@ public:
 
     /**
      * Returns the amount of 'worktime' that can be done on
-     * this day between the times @parem start and @param end.
+     * this day between the times @param start and @param end.
      */
     KPTDuration effort(const QTime &start, const QTime &end);
 
+    /**
+     * Returns the actual 'work interval' for the interval @param start to @param end.
+     * If no 'work interval' exists, returns the interval start, end.
+     * Use @ref hasInterval() to check if a 'work interval' exists.
+     */
+    QPair<QTime, QTime> interval(const QTime &start, const QTime &end) const;
+    /**
+     * Returns true if at least a part of a 'work interval' exists 
+     * for the interval @param start to @param end.
+     */
+    bool hasInterval(const QTime &start, const QTime &end) const;
+    
 protected:
     const KPTCalendarDay &copy(const KPTCalendarDay &day);
 
@@ -105,6 +119,20 @@ public:
 
     KPTDuration effort(const QDate &date, const QTime &start, const QTime &end);
     
+    /**
+     * Returns the actual 'work interval' on the weekday defined by @param date
+     * for the interval @param start to @param end.
+     * If no 'work interval' exists, returns the interval start, end.
+     * Use @ref hasInterval() to check if a 'work interval' exists.
+     */
+    QPair<QTime, QTime> interval(const QDate date, const QTime &start, const QTime &end) const;
+    /**
+     * Returns true if at least a part of a 'work interval' exists 
+     * on the weekday defined by @param date
+     * for the interval @param start to @param end.
+     */
+    bool hasInterval(const QDate date, const QTime &start, const QTime &end) const;
+
 protected:
     const KPTCalendarWeekdays &copy(const KPTCalendarWeekdays &weekdays);
 
@@ -179,7 +207,7 @@ public:
     bool load(QDomElement &element);
     void save(QDomElement &element);
 
-    KPTCalendarDay *findDay(const QDate &date);
+    KPTCalendarDay *findDay(const QDate &date) const;
     void addDay(KPTCalendarDay *day) { m_days.append(day); }
     const QPtrList<KPTCalendarDay> &days() const { return m_days; }
     
@@ -200,7 +228,7 @@ public:
 
     /**
      * Returns the amount of 'worktime' that can be done on
-     * the date @param date between the times @parem start and @param end.
+     * the date @param date between the times @param start and @param end.
      */
     KPTDuration effort(const QDate &date, const QTime &start, const QTime &end);
     /**
@@ -210,13 +238,17 @@ public:
     KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration);
 
     /**
-     * Used for estimation and calculation of effort.
+     * Returns the actual 'work interval' for the interval 
+     * starting at @param start with duration @param duration.
+     * If no 'work interval' exists, returns the interval start, start+duration.
+     * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    // FIXME
-    double standardDay() { return 8; } // hours
-    double standardWeek() { return 5*standardDay(); }  // hours
-    double standardMonth() { return 22*standardDay(); } // hours
-    double standardYear() { return 220*standardDay(); } // hours
+    QPair<KPTDateTime, KPTDateTime> interval(const KPTDateTime &start, const KPTDateTime &end) const;
+    /**
+     * Returns true if at lesst a part of a 'work interval' exists 
+     * for the interval starting at @param start with duration @param duration.
+     */
+    bool hasInterval(const KPTDateTime &start, const KPTDateTime &end) const;
     
 protected:
     const KPTCalendar &copy(KPTCalendar &calendar);

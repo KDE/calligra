@@ -137,6 +137,37 @@ KPTDuration KPTCalendarDay::effort(const QTime &start, const QTime &end) {
     return eff;
 }
 
+QPair<QTime, QTime> KPTCalendarDay::interval(const QTime &start, const QTime &end) const {
+    //kdDebug()<<k_funcinfo<<endl;
+    QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
+    for (; it.current(); ++it) {
+        QTime t1, t2;
+        if (start < it.current()->second && end > it.current()->first) {
+            start > it.current()->first ? t1 = start : t1 = it.current()->first;
+            end < it.current()->second ? t2 = end : t2 = it.current()->second;
+            //kdDebug()<<k_funcinfo<<t1.toString()<<" to "<<t2.toString()<<endl;
+            return QPair<QTime, QTime>(t1, t2);
+        }
+    }
+    kdError()<<k_funcinfo<<"No interval"<<endl;
+    return QPair<QTime, QTime>(start, end); // hmmmm, what else to do?
+}
+
+bool KPTCalendarDay::hasInterval(const QTime &start, const QTime &end) const {
+    //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
+    QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
+    for (; it.current(); ++it) {
+        if ((start < it.current()->first && end > it.current()->second) || // whole interval
+            (start >= it.current()->first && start < it.current()->second) || // starts inside
+            (end > it.current()->first && end <= it.current()->second)) // ends inside
+        {
+            //kdDebug()<<k_funcinfo<<"true:"<<it.current()->first.toString()<<" - "<<it.current()->second.toString()<<endl;
+            return true;
+        }
+    }
+    return false;
+}
+
 /////   KPTCalendarWeekdays   ////
 KPTCalendarWeekdays::KPTCalendarWeekdays()
     : m_workHours(40) {
@@ -227,6 +258,21 @@ KPTDuration KPTCalendarWeekdays::effort(const QDate &date, const QTime &start, c
         eff = day->effort(start, end);
     }
     return eff;
+}
+
+QPair<QTime, QTime> KPTCalendarWeekdays::interval(const QDate date, const QTime &start, const QTime &end) const {
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTCalendarDay *day = weekday(date.dayOfWeek()-1);
+    if (day && day->hasInterval(start, end))
+        return day->interval(start, end);
+        
+    return QPair<QTime, QTime>(start, end); // what to do?
+}
+
+bool KPTCalendarWeekdays::hasInterval(const QDate date, const QTime &start, const QTime &end) const {
+    //kdDebug()<<k_funcinfo<<date.toString()<<": "<<start.toString()<<" - "<<end.toString()<<endl;
+    KPTCalendarDay *day = weekday(date.dayOfWeek()-1);
+    return day && day->hasInterval(start, end);
 }
 
 KPTCalendarDay *KPTCalendarWeekdays::weekday(int day) const {
@@ -385,7 +431,7 @@ void KPTCalendar::save(QDomElement &element) {
     
 }
 
-KPTCalendarDay *KPTCalendar::findDay(const QDate &date) {
+KPTCalendarDay *KPTCalendar::findDay(const QDate &date) const {
     //kdDebug()<<k_funcinfo<<date.toString()<<endl;
     QPtrListIterator<KPTCalendarDay> it = m_days;
     for (; it.current(); ++it) {
@@ -444,16 +490,80 @@ KPTDuration KPTCalendar::effort(const KPTDateTime &start, const KPTDuration &dur
     }
     eff = effort(date, startTime, endTime); // first day
     // Now get all the rest of the days
-    int i=0;
-    for (date = date.addDays(1); i < 20 && date <= end.date(); date = date.addDays(1), i++) {
+    int i=0; //FIXME: for safety
+    for (date = date.addDays(1); i < 50 && date <= end.date(); date = date.addDays(1)) {
         if (date < end.date())
              eff += effort(date, QTime(), QTime(23, 59, 59)); // whole day
-        else
+        else 
              eff += effort(date, QTime(), end.time());
         //kdDebug()<<k_funcinfo<<": eff now="<<eff.toString(KPTDuration::Format_Day)<<endl;
     }
     //kdDebug()<<k_funcinfo<<start.date().toString()<<"- "<<end.date().toString()<<": total="<<eff.toString(KPTDuration::Format_Day)<<endl;
     return eff;
+}
+
+QPair<KPTDateTime, KPTDateTime> KPTCalendar::interval(const KPTDateTime &start, const KPTDateTime &end) const {
+    //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
+    QTime startTime;
+    QTime endTime;
+    QDate date = start.date();
+    for (int i=0; date <= end.date() && i<20; date = date.addDays(1), ++i) { //FIXME
+        if (date < end.date())
+            endTime = QTime(23, 59, 59);
+        else
+            endTime = end.time();
+        if (date > start.date())
+            startTime = QTime();
+        else 
+            startTime = start.time();
+            
+        //kdDebug()<<k_funcinfo<<date.toString()<<": "<<startTime.toString()<<" - "<<endTime.toString()<<endl;
+        KPTCalendarDay *day = findDay(date);
+        if (day) {
+            if (day->hasInterval(startTime, endTime)) {
+                QPair<QTime, QTime> res = day->interval(startTime, endTime);
+                //kdDebug()<<k_funcinfo<<res.first.toString()<<" to "<<res.second.toString()<<endl;
+                return QPair<KPTDateTime, KPTDateTime>(KPTDateTime(date,res.first), KPTDateTime(date,res.second));
+            }
+        } else if (m_weeks && m_weeks->state(date) == KPTMap::NonWorking) {
+            //kdDebug()<<k_funcinfo<<date.toString()<<" is nonworking day"<<endl;
+            continue;
+        } else if (m_weekdays && m_weekdays->hasInterval(date, startTime, endTime)) {
+            QPair<QTime, QTime> res = m_weekdays->interval(date, startTime, endTime);
+            //kdDebug()<<k_funcinfo<<res.first.toString()<<" to "<<res.second.toString()<<endl;
+            return QPair<KPTDateTime, KPTDateTime>(KPTDateTime(date,res.first), KPTDateTime(date,res.second));
+        }
+    }
+    kdError()<<k_funcinfo<<"Didn't find an interval"<<endl;
+    return QPair<KPTDateTime, KPTDateTime>(start, end); // hmmmm, what else to do?
+}
+
+bool KPTCalendar::hasInterval(const KPTDateTime &start, const KPTDateTime &end) const {
+    //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
+    QTime startTime;
+    QTime endTime;
+    QDate date = start.date();
+    for (int i=0; date <= end.date() && i<50; date = date.addDays(1), ++i) { // FIXME
+        if (date < end.date())
+            endTime = QTime(23, 59, 59);
+        else
+            endTime = end.time();
+        if (date > start.date())
+            startTime = QTime();
+        else 
+            startTime = start.time();
+            
+        KPTCalendarDay *day = findDay(date);
+        if (day) {
+            if (day->hasInterval(startTime, endTime))
+                return true;
+        } else if (m_weeks && m_weeks->state(date) == KPTMap::NonWorking) {
+             continue;
+        } else if (m_weekdays && m_weekdays->hasInterval(date, startTime, endTime)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 #ifndef NDEBUG

@@ -203,6 +203,8 @@ void KPTTask::calculateDuration(const KPTDateTime &start) {
         }
     } else if (m_effort->type() == KPTEffort::Type_FixedDuration) {
         // The amount of resource doesn't matter
+        if (m_requests)
+            m_requests->reserve(start, m_effort->expected());
         m_duration = m_effort->expected(); //hmmm, non-working days?
     } else {
         // error

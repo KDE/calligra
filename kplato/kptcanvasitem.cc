@@ -751,7 +751,7 @@ void KPTGanttViewTaskItem::insertRelations()
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(group, this, child);
+            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
         }
     }
 }

@@ -145,6 +145,19 @@ public:
     void addCalendar(KPTCalendar *calendar);
     KPTCalendar *calendar(int id) const;
 
+    /**
+     * Used eg. for estimation and calculation of effort, 
+     * and presentation in gantt chart.
+     */
+    // FIXME
+    int standardDay() const { return 8; } // hours
+    int standardWeek() const { return 40; }  // hours
+    int standardMonth() const { return 22*standardDay(); } // hours
+    int standardYear() const { return 220*standardDay(); } // hours
+    QTime startOfDay() const { return QTime(8, 0, 0); }
+    QTime endOfDay() const { return QTime(16, 0, 0); }
+    
+    
 protected:
     /**
      * @return The start node.
