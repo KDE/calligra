@@ -78,7 +78,10 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				VStroke stroke( color );
 				stroke.setLineWidth( 1.0 );
 				if( !editnodes )
+				{
 					m_painter->setPen( stroke );
+					m_painter->setPen( Qt::blue );
+				}
 				else
 					m_painter->setPen( Qt::yellow );
 				m_painter->setBrush( Qt::NoBrush );
@@ -100,7 +103,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						m_painter->strokePath();
 						// Draw control node2:
 						m_painter->newPath();
-						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue.light() );
+						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
 						m_painter->drawNode( jtr.current()->point( 1 ), 2 );
 						m_painter->strokePath();
 					}
@@ -118,7 +121,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						m_painter->strokePath();
 						// Draw control node1:
 						m_painter->newPath();
-						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue.light() );
+						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
 						m_painter->drawNode( jtr.current()->point( 0 ), 2 );
 						m_painter->strokePath();
 					}
