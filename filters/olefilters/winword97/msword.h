@@ -35,6 +35,8 @@ DESCRIPTION
 #include <myfile.h>
 #include <qarray.h>
 
+#define MAX_TABLE_SIZE 500
+
 class Properties;
 
 class MsWord: public MsWordGenerated
@@ -454,9 +456,9 @@ private:
 
     bool m_wasInTable;
     unsigned m_tableColumn;
-    QString m_tableText[64];
-    PAP m_tableStyle[64];
-    CHPXarray m_tableRuns[64];
+    QString m_tableText[MAX_TABLE_SIZE];
+    PAP m_tableStyle[MAX_TABLE_SIZE];
+    CHPXarray m_tableRuns[MAX_TABLE_SIZE];
 
     // Get the styles in the style sheet into the cache.
 

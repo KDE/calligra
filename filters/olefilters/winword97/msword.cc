@@ -237,7 +237,6 @@ void MsWord::decodeParagraph(
     m_wasInTable = false;
 
     // What kind of paragraph was this?
-
     if ((properties.m_pap.istd >= 1) && (properties.m_pap.istd <= 9))
     {
         gotHeadingParagraph(text, properties.m_pap, chpxs);
