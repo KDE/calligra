@@ -57,6 +57,8 @@
         <Action name="view_mode"/>
 	<Separator/>
 	<Action name="view_color_manager"/>
+	<Action name="view_layers_manager"/>
+	<Action name="view_tool_options"/>
 	<Action name="view_context_help"/>
 	<Action name="view_stroke_docker"/>
 	</Menu>

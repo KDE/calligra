@@ -82,7 +82,9 @@
 #include "vcontexthelpdocker.h"
 #include "vstrokedocker.h"
 #include "vtooldocker.h"
+#include "vlayersdocker.h"
 #include "vtooloptionsdocker.h"
+#include "vcontexthelpdocker.h"
 
 // The rest.
 #include "karbon_factory.h"
@@ -135,10 +137,12 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_whirlPinchDlg->setPinch( 0.0 );
 	m_whirlPinchDlg->setRadius( 100.0 );
 
+	m_layersDocker = new VLayersDocker( this );
+	mainWindow()->addDockWindow( m_layersDocker, DockRight );
 	m_contextHelpDocker = new VContextHelpDocker( this );
 	mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
 	m_toolOptionsDocker = new VToolOptionsDocker( this );
-	mainWindow()->addDockWindow( m_toolOptionsDocker, DockRight );
+	m_toolOptionsDocker->show();
 	
 	// tools:
 	m_ellipseTool = new VEllipseTool( this );
@@ -897,6 +901,25 @@ KarbonView::viewColorManager()
 	}
 }
 
+void 
+KarbonView::viewLayersDocker()
+{
+	if( m_layersDocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_layersDocker, DockRight );
+		m_layersDocker->show();
+	}
+}
+
+void 
+KarbonView::viewToolOptions()
+{
+	if( m_toolOptionsDocker->isVisible() == false )
+	{
+		m_toolOptionsDocker->show();
+	}
+}
+
 void
 KarbonView::viewStrokeDocker()
 {
@@ -1049,6 +1072,12 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
+	new KAction(
+		i18n( "&Layers manager" ), "layersman", 0, this,
+		SLOT( viewLayersDocker() ), actionCollection(), "view_layers_manager" );
+	new KAction(
+		i18n( "&Tool options" ), "tooloptions", 0, this,
+		SLOT( viewToolOptions() ), actionCollection(), "view_tool_options" );
 	new KAction(
 		i18n( "Context &Help" ), "help", 0, this,
 		SLOT( viewContextHelp() ), actionCollection(), "view_context_help" );

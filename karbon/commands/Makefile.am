@@ -20,6 +20,7 @@ noinst_HEADERS = \
 	vtransformcmd.h \
 	vungroupcmd.h \
 	vwhirlpinchcmd.h \
+	vlayercommand.h \
 	vzordercmd.h
 
 libkarboncommands_la_SOURCES = \
@@ -36,6 +37,7 @@ libkarboncommands_la_SOURCES = \
 	vtransformcmd.cc \
 	vungroupcmd.cc \
 	vwhirlpinchcmd.cc \
+	vlayercommand.cc \
 	vzordercmd.cc
 
 libkarboncommands_la_METASOURCES = \

@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <koTemplateChooseDia.h>
 
+#include "vlayersdocker.h"
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_part_iface.h"
@@ -210,7 +211,8 @@ KarbonPart::repaintAllViews( bool repaint )
 	QPtrListIterator<KoView> itr( views() );
 	for( ; itr.current() ; ++itr )
 	{
- 		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( repaint );
+		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( repaint );
+		static_cast<KarbonView*>( itr.current() )->layersDocker()->updatePreviews();
 	}
 }
 

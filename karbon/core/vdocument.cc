@@ -32,7 +32,8 @@
 VDocument::VDocument()
 	: VObject( 0L ),
 		m_mime( "application/x-karbon" ), m_version( "0.1" ),
-		m_editor( "karbon14 0.0.1" ), m_syntaxVersion( "0.1" )
+		m_editor( "karbon14 0.0.1" ), m_syntaxVersion( "0.1" ),
+		m_selectionMode( VDocument::ActiveLayer )
 {
 	m_selection = new VSelection( this );
 
@@ -68,10 +69,54 @@ VDocument::draw( VPainter *painter, const KoRect* rect ) const
 void
 VDocument::insertLayer( VLayer* layer )
 {
-	qDebug ("insert layer");
-	m_layers.append( layer );
+//	if ( pos == -1 || !m_layers.insert( layer, pos ))
+		m_layers.append( layer );
 	m_activeLayer = layer;
-}
+} // VDocument::insertLayer
+
+void 
+VDocument::removeLayer( VLayer* layer )
+{
+	m_layers.remove( layer );
+	if ( m_layers.count() == 0 )
+		m_layers.append( new VLayer( this ) );
+	m_activeLayer = m_layers.getLast();
+} // VDocument::removeLayer
+
+void 
+VDocument::raiseLayer( VLayer* layer )
+{
+	int pos = m_layers.find( layer );
+	if ( pos != m_layers.count() - 1 && pos >= 0 )
+	{
+		VLayer* layer = m_layers.take( pos );
+		m_layers.insert( pos + 1, layer );
+	}
+} // VDocument::raiseLayer
+
+void 
+VDocument::lowerLayer( VLayer* layer )
+{
+	int pos = m_layers.find( layer );
+	if ( pos > 0 )
+	{
+		VLayer* layer = m_layers.take( pos );
+		m_layers.insert( pos - 1, layer );
+	}
+} // VDocument::lowerLayer
+
+int 
+VDocument::layerPos( VLayer* layer )
+{
+	return m_layers.find( layer );
+} // VDocument::layerPos
+
+void 
+VDocument::setActiveLayer( VLayer* layer )
+{
+	if ( m_layers.find( layer ) != -1 )
+		m_activeLayer = layer;
+} // VDocument::setActiveLayer
 
 void
 VDocument::append( VObject* object )

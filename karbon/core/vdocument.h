@@ -49,6 +49,13 @@ typedef QPtrListIterator<VLayer> VLayerListIterator;
 class VDocument : public VObject
 {
 public:
+	enum VSelectionMode {
+		ActiveLayer,
+		VisibleLayers,
+		SelectedLayers,
+		AllLayers
+	};
+
 	VDocument();
 	VDocument( const VDocument& document );
 
@@ -80,8 +87,45 @@ public:
 	void setSyntaxVersion( const QString& syntaxVersion )
 		{ m_syntaxVersion = syntaxVersion; }
 
-	void insertLayer( VLayer* layer );
+	/**
+	 * Lifts the layer.
+	 */
+	void raiseLayer( VLayer* layer );
 
+	/**
+	 * Lowers the layer.
+	 */
+	void lowerLayer( VLayer* layer );
+
+	/**
+	 * Returns the position of the layer.
+	 */
+	int layerPos( VLayer* layer );
+
+	/** 
+	 * Inserts a new layer. 
+	 * if pos is -1, appends it to the list.
+	 */
+	void insertLayer( VLayer* layer );
+	
+	/**
+	 * Removes the layer.
+	 */
+	void removeLayer( VLayer* layer );
+	
+	/**
+	 * Sets the active layer. 
+	 */
+	void setActiveLayer( VLayer* layer );
+	
+	/**
+	 * Returns a pointer to the active layer.
+	 */
+	VLayer* activeLayer() const { return m_activeLayer; }
+	
+	/** 
+	 * Returns the list of layers.
+	 */
 	const VLayerList& layers() const { return m_layers; }
 
 	void saveXML( QDomDocument& doc ) const;
@@ -101,15 +145,19 @@ public:
 		{ return m_selection; }
 
 	/**
+	 * Returns the selection mode. 
+	 */
+	VSelectionMode selectionMode() { return m_selectionMode; }
+	
+	/**
+	 * Sets the selection mode.
+	 */
+	void setSelectionMode( VSelectionMode mode ) { m_selectionMode = mode; }
+
+	/**
 	 * Append a new object.
 	 */
 	void append( VObject* object );
-
-	/**
-	 * Returns a pointer to the active layer.
-	 */
-	VLayer* activeLayer() const
-		{ return m_activeLayer; }
 
 private:
 	/// The layers in this document.
@@ -119,6 +167,8 @@ private:
 
 	/// The selection. A list of selected objects.
 	VSelection* m_selection;
+	/// The selectionMode
+	VSelectionMode m_selectionMode;
 
 	/// The mime type.
 	QString m_mime;

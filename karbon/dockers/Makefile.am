@@ -2,6 +2,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
 	-I$(srcdir)/../commands \
+	-I$(srcdir)/../render \
 	-I$(srcdir)/../tools \
 	-I$(srcdir)/../widgets \
 	-I$(srcdir)/../dialogs \
@@ -14,6 +15,7 @@ noinst_HEADERS = \
 	vdocker.h \
 	vtooldocker.h \
 	vcolordocker.h \
+	vlayersdocker.h \
 	vcontexthelpdocker.h \
 	vstrokedocker.h \
 	vtooloptionsdocker.h
@@ -23,6 +25,7 @@ libkarbondockers_la_SOURCES = \
 	vdocker.cc \
 	vtooldocker.cc \
 	vcolordocker.cc \
+	vlayersdocker.cc \
 	vcontexthelpdocker.cc \
 	vstrokedocker.cc \
 	vtooloptionsdocker.cc

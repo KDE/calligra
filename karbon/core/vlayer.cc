@@ -24,6 +24,7 @@
 #include <koRect.h>
 
 #include "vcomposite.h"
+#include "vdocument.h"
 #include "vgroup.h"
 #include "vlayer.h"
 #include "vobject.h"
@@ -33,7 +34,7 @@
 #include <kdebug.h>
 
 VLayer::VLayer( VObject* parent, VState state )
-	: VGroup( parent, state ), m_name( i18n( "Layer" ) )
+	: VGroup( parent, state ), m_selected( true ), m_name( i18n( "Layer" ) )
 {
 }
 
@@ -179,6 +180,12 @@ VLayer::clone() const
 void
 VLayer::accept( VVisitor& visitor )
 {
-	visitor.visitVLayer( *this );
+	VDocument* doc = (VDocument*)parent();
+	if ( ( state() != deleted ) &&
+	     ( ( doc->selectionMode() == VDocument::AllLayers ) ||
+	       ( doc->selectionMode() == VDocument::VisibleLayers && ( state() == normal || state() == normal_locked ) ) ||
+	       ( doc->selectionMode() == VDocument::SelectedLayers && selected() ) ||
+	       ( doc->selectionMode() == VDocument::ActiveLayer && doc->activeLayer() == this ) ) )
+		visitor.visitVLayer( *this );
 }
 

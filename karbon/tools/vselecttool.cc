@@ -22,10 +22,12 @@
 
 #include <qcursor.h>
 #include <qlabel.h>
+#include <qradiobutton.h>
 
 #include <klocale.h>
 #include <koPoint.h>
 #include <koRect.h>
+#include <kdebug.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -35,18 +37,35 @@
 #include "vselecttool.h"
 #include "vtransformcmd.h"
 
-#include <kdebug.h>
+VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
+	: QButtonGroup( 1, Qt::Horizontal, i18n( "Selection mode:" ) ), m_view( view )
+{
+	new QRadioButton( i18n( "Select in current layer" ), this );
+	new QRadioButton( i18n( "Select in visible layers" ), this );
+	new QRadioButton( i18n( "Select in selected layers" ), this );
+	
+	setRadioButtonExclusive( true );
+	setButton( m_view->part()->document().selectionMode() );
+	
+	connect( this, SIGNAL( clicked( int ) ), this, SLOT( modeChange( int ) ) );
+} // VSelectOptionsWidget::VSelectOptionsWidget
 
+void VSelectOptionsWidget::modeChange( int mode )
+{
+	m_view->part()->document().setSelectionMode( (VDocument::VSelectionMode)mode );
+} // VSelectOptionsWidget::modeChanged
 
 VSelectTool::VSelectTool( KarbonView* view )
 	: VTool( view ), m_state( normal )
 {
 	m_lock = none;
 	m_objects.setAutoDelete( true );
+	m_optionsWidget = new VSelectOptionsWidget( view );
 }
 
 VSelectTool::~VSelectTool()
 {
+	delete m_optionsWidget;
 }
 
 void
@@ -60,6 +79,15 @@ VSelectTool::doActivate()
 	view()->part()->document().selection()->setState( VObject::selected );
 	view()->part()->document().selection()->clearNodes();
 }
+
+QString VSelectTool::contextHelp()
+{
+	QString s = i18n( "<qt><b>Selection tool:</b><br>" );
+	s += i18n( "<i>Select in current layer:</i><br>The selection is made in the layer selected in the layers docker.<br><br>" );
+	s += i18n( "<i>Select in visible layers:</i><br>The selection is made in the visible layers (eye in the layers docker).<br><br>" );
+	s += i18n( "<i>Select in selected layers:</i><br>The selection is made in the checked layers in the layers docker." );
+	return s;
+} // VSelectTool::contextHelp
 
 void
 VSelectTool::draw()
@@ -316,3 +344,4 @@ VSelectTool::recalc()
 	}
 }
 
+#include "vselecttool.moc"

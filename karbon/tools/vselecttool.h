@@ -21,10 +21,28 @@
 #ifndef __VSELECTTOOL_H__
 #define __VSELECTTOOL_H__
 
+#include <qbuttongroup.h>
+
 #include <klocale.h>
 
 #include "vtool.h"
 #include "vselection.h"
+
+class KarbonView;
+
+class VSelectOptionsWidget : public QButtonGroup
+{
+	Q_OBJECT
+
+	public:
+		VSelectOptionsWidget( KarbonView* view );
+
+	public slots:
+		void modeChange( int mode );
+
+	private:
+		KarbonView*     m_view;
+}; // VSelectOptionsWidget
 
 class VSelectTool : public VTool
 {
@@ -33,8 +51,10 @@ public:
 	virtual ~VSelectTool();
 
 	virtual void doActivate();
-	
+
+	virtual QWidget* optionsWidget() { return m_optionsWidget; }
 	virtual QString name() { return i18n( "Select tool" ); }
+	virtual QString contextHelp();
 
 protected:
 	virtual void draw();
@@ -63,6 +83,8 @@ private:
 
 	// A list of temporary objects:
 	VObjectList m_objects;
+	// The options widget.
+	QWidget*    m_optionsWidget;
 };
 
 #endif

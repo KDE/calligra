@@ -66,10 +66,15 @@ public:
 
 	void sendToBack( const VObject& object );
 
+	void setName( const QString& name ) { m_name = name; }
 	const QString& name() { return m_name; }
+	
+	void setSelected( bool state ) { m_selected = state; }
+	bool selected() { return m_selected; }
 
 private:
-	QString m_name;  /// id for the layer
+	bool    m_selected; /// True if the layer is checked in the layer docker
+	QString m_name;     /// id for the layer
 };
 
 #endif
