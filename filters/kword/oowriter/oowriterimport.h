@@ -59,7 +59,9 @@ private:
     void insertStyles( const QDomElement& element );
     void fillStyleStack( const QDomElement& object );
     void addStyles( const QDomElement* style );
-    void appendPicture(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos);
+    QString appendPicture(QDomDocument& doc, const QDomElement& object);
+    QString appendTextBox(QDomDocument& doc, const QDomElement& object);
+    void anchorFrameset( QDomDocument& doc, QDomElement& formats, uint pos, const QString& frameName );
     void appendField(QDomDocument& doc, QDomElement& outputFormats, const QDomElement& object, uint pos);
     void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
         const QString& key, int type, QDomElement& child);

@@ -41,6 +41,7 @@
 #include <koGlobal.h>
 #include <koPicture.h>
 #include "conversion.h"
+#include <koRect.h>
 
 #if ! KDE_IS_VERSION(3,1,90)
 # include <kdebugclasses.h>
@@ -712,7 +713,14 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         else if ( tagName == "draw:image" )
         {
             textData = '#'; // anchor placeholder
-            appendPicture(doc, outputFormats, ts, pos);
+            QString frameName = appendPicture(doc, ts);
+            anchorFrameset( doc, outputFormats, pos, frameName );
+        }
+        else if ( tagName == "draw:text-box" )
+        {
+            textData = '#'; // anchor placeholder
+            QString frameName = appendTextBox(doc, ts);
+            anchorFrameset( doc, outputFormats, pos, frameName );
         }
         else if ( tagName == "text:a" )
         {
@@ -1148,12 +1156,106 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
     vertical alignment - a bit like offsetfrombaseline (but not for subscript/superscript, in general)
   Michael said those are in fact parag properties:
     style:text-autospace, 3.10.32 - not implemented in kotext
-    style:line-break, 3.10.37 - what's strict linebreaking?
+    style:line-break, 3.10.37 - apparently that's for some Asian languages
 */
 
 }
 
-void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos)
+QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& object)
+{
+    const QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
+    kdDebug() << "appendTextBox " << frameName << endl;
+    m_styleStack.save();
+    fillStyleStack( object );
+
+    double width = 100;
+    if ( object.hasAttribute( "svg:width" ) ) // fixed width
+    {
+        // TODO handle percentage (of enclosing table/frame/page)
+        width = KoUnit::parseValue( object.attribute( "svg:width" ) );
+    } else if ( object.hasAttribute( "fo:min-width" ) ) {
+        // min-width is not supported in KWord. Let's use it as a fixed width.
+        width = KoUnit::parseValue( object.attribute( "fo:min-width" ) );
+    } else {
+        kdWarning(30518) << "Error in text-box: neither width nor min-width specified!" << endl;
+    }
+    double height = 100;
+    bool hasMinHeight = false;
+    if ( object.hasAttribute( "svg:height" ) ) // fixed height
+    {
+        // TODO handle percentage (of enclosing table/frame/page)
+        height = KoUnit::parseValue( object.attribute( "svg:height" ) );
+    } else if ( object.hasAttribute( "fo:min-height" ) ) {
+        height = KoUnit::parseValue( object.attribute( "fo:min-height" ) );
+        hasMinHeight = true;
+    } else {
+        kdWarning(30518) << "Error in text-box: neither height nor min-height specified!" << endl;
+    }
+
+    int overflowBehavior;
+    if ( m_styleStack.hasAttribute( "style:overflow-behavior" ) ) // OASIS extension
+    {
+        overflowBehavior = Conversion::importOverflowBehavior( m_styleStack.attribute( "style:overflow-behavior" ) );
+    }
+    else
+    {
+        // AutoCreateNewFrame not supported in OO-1.1. The presence of min-height tells if it's an auto-resized frame.
+        overflowBehavior = hasMinHeight ? 0 /*AutoExtendFrame*/ : 2 /*Ignore, i.e. fixed size*/;
+    }
+
+    // Available in the style: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color,
+    // draw:textarea-vertical-align, draw:textarea-horizontal-align
+    // More generally: Anchor (not in kword), Background, Border, Padding, Shadow, Columns
+
+    // Not supported in KWord: fo:max-height  fo:max-width
+    //                         #### horizontal-pos horizontal-rel vertical-pos vertical-rel anchor-type
+    //                         All the above changes the placement!
+
+    // TODO margins (p98)
+    // TODO draw:auto-grow-height  draw:auto-grow-width - hmm? I thought min-height meant auto-grow-height...
+    // TODO editable
+
+    // Create KWord frameset
+    QDomElement framesetElement(doc.createElement("FRAMESET"));
+    framesetElement.setAttribute("frameType",1);
+    framesetElement.setAttribute("frameInfo",0);
+    framesetElement.setAttribute("visible",1);
+    framesetElement.setAttribute("name",frameName);
+    QDomElement framesetsPluralElement (doc.documentElement().namedItem("FRAMESETS").toElement());
+    framesetsPluralElement.appendChild(framesetElement);
+
+    QDomElement frameElementOut(doc.createElement("FRAME"));
+    KoRect frameRect( KoUnit::parseValue( object.attribute( "svg:x" ) ),
+                      KoUnit::parseValue( object.attribute( "svg:y" ) ),
+                      width, height );
+
+    frameElementOut.setAttribute("left", frameRect.left() );
+    frameElementOut.setAttribute("right", frameRect.right() );
+    frameElementOut.setAttribute("top", frameRect.top() );
+    frameElementOut.setAttribute("bottom", frameRect.bottom() );
+    frameElementOut.setAttribute( "z-index", object.attribute( "draw:z-index" ) );
+    QPair<int, QString> attribs = Conversion::importWrapping( m_styleStack.attribute( "style:wrap" ) );
+    frameElementOut.setAttribute("runaround", attribs.first );
+    if ( !attribs.second.isEmpty() )
+        frameElementOut.setAttribute("runaroundSide", attribs.second );
+    // Not implemented in KWord: contour wrapping
+    frameElementOut.setAttribute("autoCreateNewFrame", overflowBehavior);
+    // ### TODO: a few attributes are missing
+    framesetElement.appendChild(frameElementOut);
+
+
+    // Obey draw:text-style-name
+    if ( m_styleStack.hasAttribute( "draw:text-style-name" ) )
+        addStyles( m_styles[m_styleStack.attribute( "draw:text-style-name" )] );
+
+    // Parse contents
+    parseBodyOrSimilar( doc, object, framesetElement );
+
+    m_styleStack.restore();
+    return frameName;
+}
+
+QString OoWriterImport::appendPicture(QDomDocument& doc, const QDomElement& object)
 {
     const QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
     const double height=KoUnit::parseValue( object.attribute("svg:height") );
@@ -1176,18 +1278,18 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
         picture.setKey(key);
 
         if (!m_zip)
-            return; // Should not happen
+            return frameName; // Should not happen
 
         const KArchiveEntry* entry = m_zip->directory()->entry( filename );
         if (!entry)
         {
             kdWarning(30518) << "Picture " << filename << " not found!" << endl;
-            return;
+            return frameName;
         }
         if (entry->isDirectory())
         {
             kdWarning(30518) << "Picture " << filename << " is a directory!" << endl;
-            return;
+            return frameName;
         }
         const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
         QIODevice* io=f->device();
@@ -1196,7 +1298,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
         if (!io)
         {
             kdWarning(30518) << "No QIODevice for picture  " << frameName << " " << href << endl;
-            return;
+            return frameName;
         }
         if (!picture.load(io,strExtension))
             kdWarning(30518) << "Cannot load picture: " << frameName << " " << href << endl;
@@ -1224,7 +1326,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
         if (!out->open(IO_WriteOnly))
         {
             kdWarning(30518) << "Cannot open for saving picture: " << frameName << " " << href << endl;
-            return;
+            return frameName;
         }
         if (!picture.save(out))
         kdWarning(30518) << "Cannot save picture: " << frameName << " " << href << endl;
@@ -1233,7 +1335,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     else
     {
          kdWarning(30518) << "Cannot store picture: " << frameName << " " << href << endl;
-         return;
+         return frameName;
     }
 
     // Now that we have copied the image, we need to make some bookkeeping
@@ -1279,9 +1381,13 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     picture.getKey().saveAttributes(pluralKey);
     pluralKey.setAttribute("name",strStoreName);
     picturesPluralElement.appendChild(pluralKey);
+    return frameName;
+}
 
+void OoWriterImport::anchorFrameset( QDomDocument& doc, QDomElement& formats, uint pos, const QString& frameSetName )
+{
     QDomElement formatElementOut=doc.createElement("FORMAT");
-    formatElementOut.setAttribute("id",6); // Normal text!
+    formatElementOut.setAttribute("id",6); // Floating frame
     formatElementOut.setAttribute("pos",pos); // Start position
     formatElementOut.setAttribute("len",1); // Start position
     formats.appendChild(formatElementOut); //Append to <FORMATS>
@@ -1289,7 +1395,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     QDomElement anchor=doc.createElement("ANCHOR");
     // No name attribute!
     anchor.setAttribute("type","frameset");
-    anchor.setAttribute("instance",frameName);
+    anchor.setAttribute("instance",frameSetName);
     formatElementOut.appendChild(anchor);
 }
 

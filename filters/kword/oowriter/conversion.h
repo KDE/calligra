@@ -21,6 +21,7 @@
 #define CONVERSION_H
 
 #include <qstring.h>
+#include <qpair.h>
 
 // Static methods for simple OO<->KWord conversions
 // (enums etc.)
@@ -35,6 +36,14 @@ namespace Conversion
     QString importAlignment( const QString& );
     QString exportAlignment( const QString& );
 
+    // Convert frame wrapping (run-around)
+    // KWord-1.3 knows runaround(int) and runaroundSide(QString)
+    QPair<int,QString> importWrapping( const QString& );
+    QString exportWrapping( const QPair<int,QString>& runAroundAttribs );
+
+    // Convert overflow behavior ("what to do if the text is bigger than the frame")
+    int importOverflowBehavior( const QString& oasisOverflowBehavior );
+    QString exportOverflowBehavior( const QString& kwordAutoCreateNewFrame );
 }
 
 #endif

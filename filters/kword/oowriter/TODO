@@ -2,10 +2,8 @@ Paragraph direction (http://web4.w3.org/TR/xsl/sliceA.html#writing-mode-add, fo:
 Paragraph bullets/counters
 Fields/Variables (Done?)
 Footnotes/Endnotes
-Images (Done?)
-Text boxes (framesets)
+Better positioning images and text boxes (currently always inline)
 Annotations (aka "note")
-Anchors
 Links
 Mail merge
 "Sections" (e.g. table of contents)
