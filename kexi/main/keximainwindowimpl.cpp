@@ -1634,9 +1634,14 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled ) //, 
 		}
 		while (found);
 
+		//update name and caption
+		dlg->partItem()->setName( d->nameDialog->widget()->nameText() );
+		dlg->partItem()->setCaption( d->nameDialog->widget()->captionText() );
+
 		if (!dlg->storeNewData())
 			return false;
-		
+
+		//update navigator
 		d->nav->addItem(dlg->partItem());
 		return true;
 	}

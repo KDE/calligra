@@ -320,15 +320,21 @@ TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 
 CC_MAIL: dkite@shaw.ca
 
+2004-03-11
+Main Window
+	-fix: object's name and caption enteredy by user is used to create this object
+Kexi Dialogs
+	-'neverSaved' flag is cleared on first successful saving
+
 2004-03-10
 Table View
 	-Combo box editor: after new row selecting (not hightlighting) editing is accepted
 	-setFilteringEnabled() added
+KexiDB::Field
+	-forgotten: Byte is numeric type, of course
 Alter Table Dialog
 	-anyway, subtype property is always created (may be needed later)
 	-subtype is properly opdated on type (group) changing
-KexiDB::Field
-	-forgotten: Byte is numeric type, of course
 Properties
 	-fixed possible crash
 	-KexiProperty: now it's possible to change a list of values (in case 

@@ -330,6 +330,7 @@ bool KexiDialogBase::storeNewData()
 	//new schema data has now ID updated to a unique value 
 	//-assign that to item's identifier
 	m_item->setIdentifier( m_schemaData->id() );
+	m_item->setNeverSaved(false);
 	return true;
 }
 
