@@ -474,7 +474,7 @@ don't put a </?xml...> at the end of the file!).
             bkStyle : style of a frame background color
             None = 0, SolidPattern = 1, Dense1Pattern = 2, Dense2Pattern = 3, Dense3Pattern = 4, Dense4Pattern = 5 etc... (look at in qbrush documentation)
 
-            bleftpt, brightpt, btoppt, bbottompt: frame margins
+            bleftpt, brightpt, btoppt, bbottompt: frame margins (internal to the frame)
 
             z-index: z index (signed int).
                      Relative to the other frame in the same page.
@@ -1135,9 +1135,15 @@ don't put a </?xml...> at the end of the file!).
         day...  the day number
         month.. the month number
         year... the year number
-        fix.... 1 if the date is fixed, 0 if it's variable ("the current date")
-          A date that is not fixed (variable) will be updated as soon as the file is loaded.
-          The value in the file is only the value that the var had when saving.
+        fix.... 1 if the time is fixed, 0 if it's variable ("the current time")
+        correct... adjustement
+        subtype...
+           0 = fixed date, will never update itself automatically
+           1 = current date, updated as soon as the file is loaded
+               The value in the file is the value that the var had when saving.
+           2 = date of last printing
+           3 = date of file creation
+           4 = date of last modification
 -->
 <!ELEMENT DATE
     EMPTY>
@@ -1145,7 +1151,12 @@ don't put a </?xml...> at the end of the file!).
     day   CDATA #REQUIRED
     month CDATA #REQUIRED
     year  CDATA #REQUIRED
-    fix   CDATA #REQUIRED>
+    fix   CDATA #REQUIRED
+    correct CDATA #IMPLIED
+    subtype CDATA #REQUIED
+    hour   CDATA #IMPLIED
+    minute CDATA #IMPLIED
+    second CDATA #IMPLIED>
 
 <!--   Time value contained in a time variable.
         hour...  the hour number
@@ -1154,6 +1165,7 @@ don't put a </?xml...> at the end of the file!).
         fix.... 1 if the time is fixed, 0 if it's variable ("the current time")
           A time that is not fixed (variable) will be updated as soon as the file is loaded.
           The value in the file is only the value that the var had when saving.
+        correct... adjustement
 -->
 <!ELEMENT TIME
     EMPTY>
@@ -1161,7 +1173,8 @@ don't put a </?xml...> at the end of the file!).
     hour   CDATA #REQUIRED
     minute CDATA #REQUIRED
     second CDATA #REQUIRED
-    fix    CDATA #REQUIRED>
+    fix    CDATA #REQUIRED
+    correct CDATA #IMPLIED>
 
 <!--   Details for a page-related variable.
          subtype... Variable subtype:
