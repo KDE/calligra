@@ -4016,7 +4016,72 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
   }
 }
 
-QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
+
+QDomElement KSpreadCell::saveParameters( QDomDocument& doc ) const
+{
+    QDomElement format = doc.createElement( "format" );
+    if ( align(m_iColumn,m_iRow)!= Undefined)
+        format.setAttribute( "align", (int)align(m_iColumn,m_iRow) );
+    if ( alignY(m_iColumn,m_iRow) != Middle)
+        format.setAttribute( "alignY", (int)alignY(m_iColumn,m_iRow) );
+    if (bgColor( m_iColumn,m_iRow ).isValid())
+        format.setAttribute( "bgcolor", bgColor(m_iColumn,m_iRow).name() );
+    if (multiRow( m_iColumn,m_iRow ))
+        format.setAttribute( "multirow", "yes" );
+    if ( verticalText(m_iColumn,m_iRow) )
+        format.setAttribute( "verticaltext", "yes" );
+    if ( precision(m_iColumn,m_iRow)!=-1)
+        format.setAttribute( "precision", precision(m_iColumn,m_iRow) );
+    if (  !prefix( m_iColumn,m_iRow ).isEmpty() )
+        format.setAttribute( "prefix", prefix( m_iColumn,m_iRow ) );
+    if (  !postfix( m_iColumn,m_iRow ).isEmpty() )
+        format.setAttribute( "postfix", postfix( m_iColumn,m_iRow ) );
+    format.setAttribute( "float", (int)floatFormat(m_iColumn,m_iRow ) );
+    format.setAttribute( "floatcolor", (int)floatColor(m_iColumn,m_iRow )  );
+    if ( faktor(m_iColumn,m_iRow )!=1.0 )
+	format.setAttribute( "faktor", faktor(m_iColumn,m_iRow ) );
+    if ( getFormatNumber(m_iColumn,m_iRow )!= Number)
+	format.setAttribute( "format",(int) getFormatNumber(m_iColumn,m_iRow ));
+    if ( getAngle(m_iColumn,m_iRow )!=0)
+	format.setAttribute( "angle", getAngle(m_iColumn,m_iRow ) );
+    if ( getIndent(m_iColumn,m_iRow )!=0 )
+	format.setAttribute( "indent", getIndent(m_iColumn,m_iRow ) );
+    format.appendChild( createElement( "font", textFont( m_iColumn,m_iRow ), doc ) );
+    if ( textPen( m_iColumn,m_iRow).color().isValid())
+	format.appendChild( createElement( "pen", textPen( m_iColumn,m_iRow), doc ) );
+    format.setAttribute( "brushcolor", backGroundBrush(m_iColumn,m_iRow).color().name() );
+    format.setAttribute( "brushstyle",(int)backGroundBrush(m_iColumn,m_iRow).style() );
+
+    QDomElement left = doc.createElement( "left-border" );
+    left.appendChild( createElement( "pen", leftBorderPen(m_iColumn,m_iRow), doc ) );
+    format.appendChild( left );
+
+    QDomElement top = doc.createElement( "top-border" );
+    top.appendChild( createElement( "pen",topBorderPen(m_iColumn,m_iRow), doc ) );
+    format.appendChild( top );
+
+    QDomElement right = doc.createElement( "right-border" );
+    right.appendChild( createElement( "pen", rightBorderPen(m_iColumn,m_iRow), doc ) );
+    format.appendChild( right );
+
+    QDomElement bottom = doc.createElement( "bottom-border" );
+    bottom.appendChild( createElement( "pen", bottomBorderPen(m_iColumn,m_iRow), doc ) );
+    format.appendChild( bottom );
+
+    QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
+    fallDiagonal.appendChild( createElement( "pen", fallDiagonalPen(m_iColumn,m_iRow), doc ) );
+    format.appendChild( fallDiagonal );
+
+    QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
+    goUpDiagonal.appendChild( createElement( "pen", goUpDiagonalPen(m_iColumn,m_iRow), doc ) );
+    format.appendChild( goUpDiagonal );
+
+return format;
+}
+
+
+
+QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, bool fallBack )
 {
     // Save the position of this cell
     QDomElement cell = doc.createElement( "cell" );
@@ -4029,7 +4094,11 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     //
     // Save the formatting information
     //
-    QDomElement format = KSpreadLayout::save( doc );
+    QDomElement format;
+    if( !fallBack)
+        format = KSpreadLayout::save( doc );
+    else
+        format=saveParameters( doc );
     cell.appendChild( format );
 
     if ( isForceExtraCells() )

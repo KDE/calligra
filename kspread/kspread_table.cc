@@ -5734,7 +5734,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
         {
             QPoint p( c->column(), c->row() );
             if ( _rect.contains( p ) )
-                spread.appendChild( c->save( doc, _rect.left() - 1, _rect.top() - 1 ) );
+                spread.appendChild( c->save( doc, _rect.left() - 1, _rect.top() - 1  ,true));
         }
     }
 

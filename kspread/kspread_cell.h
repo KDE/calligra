@@ -166,9 +166,14 @@ public:
      */
     void tableDies();
 
-    virtual QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0 );
+    virtual QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool fallBack=false );
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite );
+    /**
+    * save layout parameters when you copy cell
+    * used fallback
+    */
+    QDomElement saveParameters( QDomDocument& doc ) const;
 
     /**
      * Copyies the layout from the cell at the position (_column|_row).
