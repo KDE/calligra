@@ -69,7 +69,7 @@ private:
     QString formatTextParagraph(const QString& strText,
         const FormatData& formatOrigin, const FormatData& format);
     bool makeTable(const FrameAnchor& anchor);
-    bool convertUnknownImage(QByteArray& unknownImage, QByteArray& image);
+    bool convertUnknownPicture(const QString& strName, const QString& extension, QByteArray& image);
     bool makeImage(const FrameAnchor& anchor);
     void writeFontData(void);
     void writeColorData(void);

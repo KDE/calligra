@@ -36,6 +36,8 @@
 #include <kdebug.h>
 #include <kdebugclasses.h>
 
+#include <koPicture.h>
+
 #include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>
 
@@ -111,34 +113,47 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
 
 // convert unknown image to PNG using QImageIO
 // return false is failed
-// TODO use KoPicture::generatePixmaps
 
-bool RTFWorker::convertUnknownImage(QByteArray& unknownImage, QByteArray& image)
+bool RTFWorker::convertUnknownPicture(const QString& strName, const QString& extension, QByteArray& image)
 {
-    // try to load the "unknown" image
-    QBuffer inbuf(unknownImage); 
-    inbuf.open(IO_ReadOnly);
-    QImageIO imageIO(&inbuf,NULL);
-    if (!imageIO.read())
+    QIODevice* io=getSubFileDevice(strName);
+    if (!io)
+    {
+        // NO message error, as there must be already one
         return false;
-    inbuf.close();
+    }
 
-    // prepare outbuf & try to convert to PNG
-    QBuffer outbuf(image);
-    outbuf.open(IO_WriteOnly);
-    imageIO.setIODevice(&outbuf);
-    imageIO.setFormat("PNG");
+    kdDebug(30515) << "Picture " << strName << " has size: " << io->size() << endl;
+    
+    KoPicture picture;
+    if (!picture.load(io, extension)) // we do not care about KoPictureKey
+    {
+        kdWarning(30515) << "Could not read picture: " << strName << " (RTFWorker::convertUnknownPicture)" << endl;
+        return false;
+    }
+    
+    QImageIO imageIO;
+    imageIO.setImage(picture.generateImage(picture.getOriginalSize())); // ### TODO: KoPicture::getOriginalSize is bad for cliparts
+
+    QBuffer buffer(image); // A QBuffer is a QIODevice
+    if (!buffer.open(IO_WriteOnly))
+    {
+        kdWarning(30515) << "Could not open buffer! (RTFWorker::convertUnknownPicture)" << endl;
+        return false;
+    }
+
+    imageIO.setIODevice(&buffer);
+    imageIO.setFormat("PNG"); // Save as PNG
 
     if (!imageIO.write())
     {
-        kdWarning(30515) << "Could not write converted image! " << endl;
+        kdWarning(30515) << "Could not write converted image! (RTFWorker::convertUnknownPicture)" << endl;
         return false;
     }
-    outbuf.close();
+    buffer.close();
 
     return true;
 }
-
 
 bool RTFWorker::makeImage(const FrameAnchor& anchor)
 {
@@ -149,16 +164,16 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     kdDebug(30515) << "RTFWorker::makeImage" << endl << anchor.picture.koStoreName << endl;
 
     const int pos=strImageName.findRev('.');
-    if(pos!=-1) strExt = strImageName.mid(pos).lower();
+    if(pos!=-1) strExt = strImageName.mid(pos+1).lower();
 
     QString strTag;
-    if (strExt==".bmp")
+    if (strExt=="bmp")
         strTag="\\dibitmap";
-    else if (strExt==".png")
+    else if (strExt=="png")
         strTag="\\pngblip";
-    else if ( (strExt==".jpeg") || (strExt==".jpg") )
+    else if ( (strExt=="jpeg") || (strExt=="jpg") )
         strTag="\\jpegblip";
-    else if (strExt==".wmf")
+    else if (strExt=="wmf")
         strTag="\\wmetafile8"; // 8 == anisotropic
     else
     {
@@ -167,9 +182,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
         kdDebug(30515) << "Converting image " << anchor.picture.koStoreName << endl;
 
         strTag="\\pngblip";
-        QByteArray unknownImage;
-        loadKoStoreFile(anchor.picture.koStoreName,unknownImage);
-        if( !convertUnknownImage(unknownImage,image) )
+        if( !convertUnknownPicture(anchor.picture.koStoreName,strExt,image) )
         {
             kdWarning(30515) << "Unable to convert " << anchor.picture.koStoreName << endl;
             return true;
@@ -192,7 +205,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     // find original image width and height (in twips)
     long origWidth  = width;
     long origHeight = height;
-    if( strExt == ".wmf" )
+    if( strExt == "wmf" )
     {
         // special treatment for WMF with metaheader
         // d7cdc69a is metaheader magic id
