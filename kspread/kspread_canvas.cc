@@ -4280,16 +4280,16 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     int height = m_pCanvas->doc()->zoomItY( yPos + row_lay->dblHeight() ) - zoomedYPos;
 
 
-    if ( selected )
+    if ( selected || current )
     {
-      QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
+      QBrush fillSelected( colorGroup().highlight().light() );
       qDrawShadePanel( &painter,
                        0, zoomedYPos, width, height,
                        colorGroup(), FALSE, 1, &fillSelected );
     }
     else if ( highlighted )
     {
-      QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
+      QBrush fillHighlighted( colorGroup().highlight().light() );
       qDrawShadePanel( &painter,
                        0, zoomedYPos, width, height,
                        colorGroup(), true, 1, &fillHighlighted );
@@ -4312,6 +4312,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
       painter.setPen( colorGroup().highlightedText() );
     else if ( highlighted || current )
       painter.setFont( boldFont );
+      
     int len = painter.fontMetrics().width( rowText );
     if (!row_lay->isHide())
         painter.drawText( ( width-len )/2, zoomedYPos +
@@ -5161,16 +5162,16 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
       int zoomedXPos = m_pCanvas->doc()->zoomItX( xPos );
       int width = m_pCanvas->doc()->zoomItX( xPos + col_lay->dblWidth() ) - zoomedXPos;
 
-      if ( selected )
+      if ( selected || current )
       {
-        QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
+        QBrush fillSelected( colorGroup().highlight().light() );
         qDrawShadePanel( &painter,
                          zoomedXPos, 0, width, height,
                          colorGroup(), FALSE, 1, &fillSelected );
       }
       else if ( highlighted )
       {
-        QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
+        QBrush fillHighlighted( colorGroup().highlight().light() );
         qDrawShadePanel( &painter,
                          zoomedXPos, 0, width, height,
                          colorGroup(), true, 1, &fillHighlighted );
