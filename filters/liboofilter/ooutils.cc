@@ -103,7 +103,9 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
         if ( value != "normal" )
         {
             QDomElement lineSpacing = parentElement.ownerDocument().createElement( "LINESPACING" );
-            if( value=="150%")
+            if ( value == "100%" )
+                lineSpacing.setAttribute("type","single");
+            else if( value=="150%")
                 lineSpacing.setAttribute("type","oneandhalf");
             else if( value=="200%")
                 lineSpacing.setAttribute("type","double");
