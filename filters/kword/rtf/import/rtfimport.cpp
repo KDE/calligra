@@ -21,6 +21,7 @@
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
 #include <qwmf.h>
+#include <qcstring.h>
 
 typedef KGenericFactory<RTFImport, KoFilter> RTFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "rtfimport" ) );
@@ -45,6 +46,7 @@ RTFProperty propertyTable[] =
 	MEMBER(	"@info",	"@doccomm",	parsePlainText,		doccomm, false ),
 	PROP(	"@rtf",		"@fonttbl",	parseFontTable,		0L, true ),
 	MEMBER(	"@rtf",		"@footer",	parseRichText,		evenPagesFooter, true ),
+	PROP(	"@rtf",		"@footnote",	parseFootNote,		0L, true ),
 	MEMBER(	"@rtf",		"@footerf",	parseRichText,		firstPageFooter, true ),
 	MEMBER(	"@rtf",		"@footerl",	parseRichText,		oddPagesFooter, true ),
 	MEMBER(	"@rtf",		"@footerr",	parseRichText,		evenPagesFooter, true ),
@@ -223,6 +225,7 @@ RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
     {
 	properties.insert( propertyTable[i].name, &propertyTable[i] );
     }
+    fnnum=0;
 }
 
 /**
@@ -489,6 +492,21 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 			(paperWidth - rightMargin), (topMargin - 80), 2, 2, 2 );
 	      mainDoc.closeNode( "FRAME" );
 	      mainDoc.appendNode( evenPagesFooter.node );
+	    mainDoc.closeNode( "FRAMESET" );
+	}
+	// Write out footnotes
+	int num=1;
+	for(RTFTextState* i=footnotes.first();i;i=footnotes.next())
+	{
+	    QCString str;
+	    str.setNum(num);
+	    str.prepend("Footnote ");
+	    num++;
+	    mainDoc.addFrameSet( str, 1, 7 );
+	      mainDoc.addFrame( leftMargin, paperHeight - bottomMargin-80,
+			(paperWidth - rightMargin), paperHeight-bottomMargin, 2, 1, 0 );
+	      mainDoc.closeNode( "FRAME" );
+	      mainDoc.appendNode( i->node );
 	    mainDoc.closeNode( "FRAMESET" );
 	}
 	mainDoc.appendNode( frameSets );
@@ -1206,6 +1224,49 @@ void RTFImport::parsePicture( RTFProperty * )
 }
 
 /**
+ * This function parses footnotes TODO: endnotes
+ */
+void RTFImport::parseFootNote( RTFProperty * property)
+{
+    if(token.type==RTFTokenizer::OpenGroup)
+    {
+        RTFTextState* newTextState=new RTFTextState;
+        footnotes.append(newTextState);
+        fnnum++;
+        destination.target=(char*)newTextState;
+
+        QCString str;
+        str.setNum(fnnum);
+        str.prepend("Footnote ");
+
+        DomNode node;
+
+        node.clear( 6 );
+        node.addNode( "VARIABLE" );
+        node.closeTag(true);
+            node.addNode("TYPE");
+            node.setAttribute( "type", 11 );
+            node.setAttribute( "key", "STRING" );
+            node.setAttribute( "text", 1 );
+            node.closeNode("TYPE");
+
+            node.addNode("FOOTNOTE");
+            node.setAttribute("numberingtype", "auto");
+            node.setAttribute("notetype", "footnote");
+            node.setAttribute("frameset", str);
+            node.closeNode("FOOTNOTE");
+        node.closeNode( "VARIABLE" );
+        kwFormat.xmldata = node.data();
+        kwFormat.id  = 4;
+        kwFormat.pos = textState->length++;
+        kwFormat.len = 1;
+        textState->text.putch( '#' );
+        textState->formats << kwFormat;
+    }
+    parseRichText(property);
+}
+
+/**
  * Rich text destination callback.
  */
 void RTFImport::parseRichText( RTFProperty * )
@@ -1390,7 +1451,10 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
     {
 	// Add pos and len if this is not a style sheet definition
 	node.setAttribute( "pos", (int)format.pos );
+	if(format.id !=4) //if somebody knows what to do with this hack please correct
 	node.setAttribute( "len", (int)format.len );
+	else
+	    node.setAttribute( "len", 1);
     }
     if (format.id == 1)
     {

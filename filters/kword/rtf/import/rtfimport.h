@@ -25,6 +25,7 @@
 #include <qtextcodec.h>
 #include "rtfimport_dom.h"
 #include "rtfimport_tokenizer.h"
+#include <qptrlist.h>
 
 
 class RTFImport;
@@ -224,6 +225,7 @@ public:
     void insertHexSymbol( RTFProperty * );
     void insertUnicodeSymbol( RTFProperty * );
     void parseFontTable( RTFProperty * );
+    void parseFootNote( RTFProperty * );
     void parseStyleSheet( RTFProperty * );
     void parseColorTable( RTFProperty * );
     void parsePicture( RTFProperty * );
@@ -248,6 +250,8 @@ public:
     DomNode cliparts;
     DomNode author, company, title, doccomm;
     RTFTextState bodyText;
+    QPtrList<RTFTextState> footnotes; //list of footnotes
+    int fnnum; //number of last footnote
     RTFTextState firstPageHeader, oddPagesHeader, evenPagesHeader;
     RTFTextState firstPageFooter, oddPagesFooter, evenPagesFooter;
     QMap<int,QCString> fontTable;
