@@ -1188,30 +1188,27 @@ KCommand *KoTextView::dropEvent( KoTextObject *tmp, KoTextCursor dropCursor, boo
 
 void KoTextView::removeComment()
 {
-    if ( !textObject()->hasSelection() )
+    KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
+    if(ch->isCustom())
     {
-        KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
-        if(ch->isCustom())
+        KoNoteVariable *var=dynamic_cast<KoNoteVariable *>(ch->customItem());
+        if( var )
         {
-            KoNoteVariable *var=dynamic_cast<KoNoteVariable *>(ch->customItem());
-            if( var )
-            {
-                if( variablePosition == m_cursor->index() )
-                    m_cursor->setIndex( m_cursor->index() );
-                else
-                    m_cursor->setIndex( m_cursor->index() -1 );
+            if( variablePosition == m_cursor->index() )
+                m_cursor->setIndex( m_cursor->index() );
+            else
+                m_cursor->setIndex( m_cursor->index() -1 );
 
-                textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
+            textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
 
-                if( variablePosition == m_cursor->index() )
-                    m_cursor->setIndex( m_cursor->index() +1);
-                else
-                    m_cursor->setIndex( m_cursor->index()  );
+            if( variablePosition == m_cursor->index() )
+                m_cursor->setIndex( m_cursor->index() +1);
+            else
+                m_cursor->setIndex( m_cursor->index()  );
 
-                textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
+            textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
 
-                textObject()->removeSelectedText( m_cursor,  KoTextDocument::Standard, i18n("Remove Comment") );
-            }
+            textObject()->removeSelectedText( m_cursor,  KoTextDocument::Standard, i18n("Remove Comment") );
         }
     }
 }
