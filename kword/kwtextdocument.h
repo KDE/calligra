@@ -102,6 +102,10 @@ public:
     // Slightly slow (does a linear search in the paragraph)
     int index() const;
 
+    // The formatting given to this 'special' character
+    // Slightly slow (does a linear search in the paragraph)
+    QTextFormat * format() const;
+
 protected:
     virtual void adjustToPainter( QPainter* ) { resize(); }
     bool m_deleted;

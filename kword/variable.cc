@@ -74,13 +74,6 @@ KWVariable::~KWVariable()
     m_doc->unregisterVariable( this );
 }
 
-QTextFormat * KWVariable::format() const
-{
-    QTextParag * parag = paragraph();
-    //kdDebug() << "KWVariable::format index=" << index() << " format=" << parag->at( index() )->format() << endl;
-    return parag->at( index() )->format();
-}
-
 void KWVariable::resize()
 {
     if ( m_deleted )

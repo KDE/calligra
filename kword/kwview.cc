@@ -458,6 +458,7 @@ void KWView::setupActions()
                                               actionCollection(), "format_fontsize" );
     connect( actionFormatFontSize, SIGNAL( fontSizeChanged( int ) ),
              this, SLOT( textSizeSelected( int ) ) );
+    actionFormatFontSize->setComboWidth( 30 );
     actionFormatFontFamily = new KFontAction( i18n( "Font Family" ), 0,
                                               actionCollection(), "format_fontfamily" );
     connect( actionFormatFontFamily, SIGNAL( activated( const QString & ) ),

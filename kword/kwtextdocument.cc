@@ -68,6 +68,13 @@ int KWTextCustomItem::index() const
     return parag->findCustomItem( this );
 }
 
+QTextFormat * KWTextCustomItem::format() const
+{
+    QTextParag * parag = paragraph();
+    //kdDebug() << "KWTextCustomItem::format index=" << index() << " format=" << parag->at( index() )->format() << endl;
+    return parag->at( index() )->format();
+}
+
 void CustomItemsMap::insertItems( const QTextCursor & startCursor, int size )
 {
     if ( isEmpty() )

@@ -53,6 +53,7 @@ public:
     virtual bool ownLine() const;
     virtual int widthHint() const { return size().width(); }
     virtual int minimumWidth() const { return size().width(); }
+    virtual int ascent() const;
 
     virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool /*selected*/ );
 

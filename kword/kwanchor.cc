@@ -117,6 +117,13 @@ QSize KWAnchor::size() const
     return m_frameset->floatingFrameSize( m_frameNum );
 }
 
+
+int KWAnchor::ascent() const
+{
+    int baseline = m_frameset->floatingFrameBaseline( m_frameNum );
+    return ( baseline == -1 ) ? height : baseline;
+}
+
 void KWAnchor::resize()
 {
     if ( m_deleted )

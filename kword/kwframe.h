@@ -476,6 +476,9 @@ public:
     /** Get the [zoomed] size of the "floating frame" identified by frameNum.
         By default a real frame but not for tables. */
     virtual QSize floatingFrameSize( int frameNum );
+    /** Get the 'baseline' to use for the "floating frame" identified by frameNum.
+        -1 means same as the height (usual case) */
+    virtual int floatingFrameBaseline( int /*frameNum*/ ) { return -1; }
     /** Store command for creating an anchored object */
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
     /** Store command for deleting an anchored object */
