@@ -334,22 +334,25 @@ void KPrPage::takeObject(KPObject *_obj)
     m_objectList.take( m_objectList.findRef( _obj ) );
 }
 
-void KPrPage::insertObject(KPObject *_oldObj, KPObject *_newObject)
+void KPrPage::replaceObject( KPObject *oldObject, KPObject *newObject )
 {
-    unsigned int pos = m_objectList.findRef( _oldObj );
+    //XXX check if object name gets set
+    unsigned int pos = m_objectList.findRef( oldObject );
     m_objectList.take( pos );
-    m_objectList.insert( pos, _newObject );
+    m_objectList.insert( pos, newObject );
+}
+
+#if 0 // not used
+void KPrPage::removeObject( int pos)
+{
+    m_objectList.remove(pos);
 }
 
 void KPrPage::insertObject(KPObject *_obj,int pos)
 {
     m_objectList.insert(pos,_obj);
 }
-
-void KPrPage::removeObject( int pos)
-{
-    m_objectList.remove(pos);
-}
+#endif
 
 KCommand * KPrPage::deleteObjs( bool _add )
 {

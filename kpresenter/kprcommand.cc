@@ -327,7 +327,7 @@ ChgPixCmd::~ChgPixCmd()
 
 void ChgPixCmd::execute()
 {
-    m_page->insertObject(oldObject, newObject);
+    m_page->replaceObject( oldObject, newObject );
     doc->repaint( newObject );
 
     int pos=doc->pageList().findRef(m_page);
@@ -336,7 +336,7 @@ void ChgPixCmd::execute()
 
 void ChgPixCmd::unexecute()
 {
-    m_page->insertObject(newObject, oldObject);
+    m_page->replaceObject( newObject, oldObject );
     doc->repaint( oldObject );
 
     int pos=doc->pageList().findRef(m_page);

@@ -69,15 +69,33 @@ public:
     void setNoteText( const QString &_text );
     QString noteText( )const;
 
-    const QPtrList<KPObject> & objectList() const { return m_objectList;}
+    /**
+     * @return the object of the page
+     */
+    const QPtrList<KPObject> & objectList() const { return m_objectList; }
 
-    KPObject *getObject(int num);
+    /**
+     * @return object at position num
+     */ 
+    KPObject *getObject( int num );
 
-    void appendObject(KPObject *);
-    void insertObject(KPObject *_oldObj, KPObject *_newObject);
+    /**
+     * appends object _obj to m_objectList
+     * the name of the object is unified
+     */
+    void appendObject( KPObject *_obj );
+    /**
+     * replaces object oldObject by newObject
+     */
+    void replaceObject( KPObject *oldObject, KPObject *newObject );
+    /**
+     * take object object from m_objectList
+     */
     void takeObject(KPObject *_obj);
+#if 0 //not used 
     void removeObject( int pos);
     void insertObject(KPObject *_obj,int pos);
+#endif    
     void completeLoading( bool _clean, int lastObj );
     void unifyObjectName( KPObject *object );
 
