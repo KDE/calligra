@@ -940,13 +940,12 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 
 	KexiDB::BaseExpr *valueExpr = 0;
 	QRegExp re;
-	if (str.left(1)=="\"" || str.left(1)=="'") {
-		if (str.length()<2 
-			|| (str.left(1)=="\"" && str.right(1)!="\"")
-			|| (str.left(1)=="'" && str.right(1)!="'"))
-		{
-			return 0;
-		}
+	if (str.length()>=2 
+		&& (
+		(str.startsWith("\"") && str.endsWith("\""))
+		|| (str.startsWith("'") && str.endsWith("'")))
+		)
+	{
 		valueExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, str.mid(1,str.length()-2));
 	}
 	else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch( str ))

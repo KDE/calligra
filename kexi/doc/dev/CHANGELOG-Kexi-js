@@ -409,6 +409,10 @@ Query Designer
 Main
 - on table schema altering or removing, user if now asked 
   for closing windows using this table
+win32 File Dialog
+- make 'My Documents' folder as default
+Query Designer, SQL Parser
+- fixed invalid parsing string constants
 
 2004-11-19
 Query Designer

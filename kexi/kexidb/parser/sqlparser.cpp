@@ -569,9 +569,9 @@ static const short yyrline[] = { 0,
    797,   802,   807,   811,   815,   819,   823,   828,   833,   837,
    842,   847,   851,   856,   862,   866,   870,   874,   879,   884,
    888,   892,   897,   903,   907,   911,   915,   928,   934,   945,
-   952,   960,   977,   982,   987,   995,  1005,  1011,  1019,  1060,
-  1066,  1073,  1109,  1118,  1131,  1138,  1146,  1156,  1161,  1173,
-  1187,  1232,  1240,  1250
+   952,   961,   978,   983,   988,   996,  1006,  1012,  1020,  1061,
+  1067,  1074,  1110,  1119,  1132,  1139,  1147,  1157,  1162,  1174,
+  1188,  1233,  1241,  1251
 };
 #endif
 
@@ -1744,7 +1744,8 @@ case 70:
 case 71:
 #line 953 "sqlparser.y"
 {
-	yyval.expr = new ConstExpr( CHARACTER_STRING_LITERAL, yyvsp[0].stringValue );
+	QCString s(yyvsp[0].stringValue);
+	yyval.expr = new ConstExpr( CHARACTER_STRING_LITERAL, s.mid(1,s.length()-2) );
 //	$$ = new Field();
 //	$$->setName($1);
 //	parser->select()->addField(field);
@@ -1752,7 +1753,7 @@ case 71:
 ;
     break;}
 case 72:
-#line 961 "sqlparser.y"
+#line 962 "sqlparser.y"
 {
 	QVariant val;
 	if (yyvsp[0].integerValue <= INT_MAX && yyvsp[0].integerValue >= INT_MIN)
@@ -1771,21 +1772,21 @@ case 72:
 ;
     break;}
 case 73:
-#line 978 "sqlparser.y"
+#line 979 "sqlparser.y"
 {
 	yyval.expr = new ConstExpr( REAL_CONST, QPoint( yyvsp[0].realValue.integer, yyvsp[0].realValue.fractional ) );
 	kdDebug() << "  + real constant: " << yyvsp[0].realValue.integer << "." << yyvsp[0].realValue.fractional << endl;
 ;
     break;}
 case 75:
-#line 989 "sqlparser.y"
+#line 990 "sqlparser.y"
 {
 	kdDebug() << "(expr)" << endl;
 	yyval.expr = new UnaryExpr('(', yyvsp[-1].expr);
 ;
     break;}
 case 76:
-#line 997 "sqlparser.y"
+#line 998 "sqlparser.y"
 {
 //	$$ = new NArgExpr(0, 0);
 //	$$->add( $1 );
@@ -1794,14 +1795,14 @@ case 76:
 ;
     break;}
 case 77:
-#line 1007 "sqlparser.y"
+#line 1008 "sqlparser.y"
 {
 	yyval.exprList = yyvsp[0].exprList;
 	yyval.exprList->prepend( yyvsp[-2].expr );
 ;
     break;}
 case 78:
-#line 1012 "sqlparser.y"
+#line 1013 "sqlparser.y"
 {
 	yyval.exprList = new NArgExpr(0, 0);
 	yyval.exprList->add( yyvsp[-2].expr );
@@ -1809,27 +1810,27 @@ case 78:
 ;
     break;}
 case 79:
-#line 1021 "sqlparser.y"
+#line 1022 "sqlparser.y"
 {
 	yyval.exprList = yyvsp[0].exprList;
 ;
     break;}
 case 80:
-#line 1062 "sqlparser.y"
+#line 1063 "sqlparser.y"
 {
 	yyval.exprList = yyvsp[-2].exprList;
 	yyval.exprList->add(yyvsp[0].expr);
 ;
     break;}
 case 81:
-#line 1067 "sqlparser.y"
+#line 1068 "sqlparser.y"
 {
 	yyval.exprList = new NArgExpr(KexiDBExpr_TableList, IDENTIFIER); //ok?
 	yyval.exprList->add(yyvsp[0].expr);
 ;
     break;}
 case 82:
-#line 1075 "sqlparser.y"
+#line 1076 "sqlparser.y"
 {
 	kdDebug() << "FROM: '" << yyvsp[0].stringValue << "'" << endl;
 
@@ -1866,7 +1867,7 @@ case 82:
 ;
     break;}
 case 83:
-#line 1110 "sqlparser.y"
+#line 1111 "sqlparser.y"
 {
 	//table + alias
 	yyval.expr = new BinaryExpr(
@@ -1877,7 +1878,7 @@ case 83:
 ;
     break;}
 case 84:
-#line 1119 "sqlparser.y"
+#line 1120 "sqlparser.y"
 {
 	//table + alias
 	yyval.expr = new BinaryExpr(
@@ -1888,7 +1889,7 @@ case 84:
 ;
     break;}
 case 85:
-#line 1133 "sqlparser.y"
+#line 1134 "sqlparser.y"
 {
 	yyval.exprList = yyvsp[-2].exprList;
 	yyval.exprList->add( yyvsp[0].expr );
@@ -1896,7 +1897,7 @@ case 85:
 ;
     break;}
 case 86:
-#line 1139 "sqlparser.y"
+#line 1140 "sqlparser.y"
 {
 	yyval.exprList = new NArgExpr(0,0);
 	yyval.exprList->add( yyvsp[0].expr );
@@ -1904,7 +1905,7 @@ case 86:
 ;
     break;}
 case 87:
-#line 1148 "sqlparser.y"
+#line 1149 "sqlparser.y"
 {
 //	$$ = new Field();
 //	dummy->addField($$);
@@ -1915,14 +1916,14 @@ case 87:
 ;
     break;}
 case 88:
-#line 1157 "sqlparser.y"
+#line 1158 "sqlparser.y"
 {
 	yyval.expr = yyvsp[0].expr;
 	kdDebug() << " added column wildcard: '" << yyvsp[0].expr->debugString() << "'" << endl;
 ;
     break;}
 case 89:
-#line 1162 "sqlparser.y"
+#line 1163 "sqlparser.y"
 {
 //	$$ = new Field();
 //	$$->setExpression( $1 );
@@ -1936,7 +1937,7 @@ case 89:
 ;
     break;}
 case 90:
-#line 1174 "sqlparser.y"
+#line 1175 "sqlparser.y"
 {
 //	$$ = new Field();
 //	$$->setExpression( $1 );
@@ -1950,13 +1951,13 @@ case 90:
 ;
     break;}
 case 91:
-#line 1189 "sqlparser.y"
+#line 1190 "sqlparser.y"
 {
 	yyval.expr = yyvsp[0].expr;
 ;
     break;}
 case 92:
-#line 1233 "sqlparser.y"
+#line 1234 "sqlparser.y"
 {
 	yyval.expr = yyvsp[-1].expr;
 //TODO
@@ -1964,7 +1965,7 @@ case 92:
 ;
     break;}
 case 93:
-#line 1242 "sqlparser.y"
+#line 1243 "sqlparser.y"
 {
 	yyval.expr = new VariableExpr("*");
 	kdDebug() << "all columns" << endl;
@@ -1975,7 +1976,7 @@ case 93:
 ;
     break;}
 case 94:
-#line 1251 "sqlparser.y"
+#line 1252 "sqlparser.y"
 {
 	QString s = QString::fromLatin1(yyvsp[-2].stringValue);
 	s+=".*";
@@ -2205,7 +2206,7 @@ yyerrhandle:
     }
   return 1;
 }
-#line 1265 "sqlparser.y"
+#line 1266 "sqlparser.y"
 
 
 const char * const tname(int offset) { return yytname[offset]; }

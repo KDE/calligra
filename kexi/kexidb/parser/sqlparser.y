@@ -951,11 +951,12 @@ aExpr9:
 }
 | CHARACTER_STRING_LITERAL
 {
-	$$ = new ConstExpr( CHARACTER_STRING_LITERAL, $1 );
+	QCString s($1);
+	$$ = new ConstExpr( CHARACTER_STRING_LITERAL, s.mid(1,s.length()-2) );
 //	$$ = new Field();
 //	$$->setName($1);
 //	parser->select()->addField(field);
-	kdDebug() << "  + constant \"" << $1 << "\"" << endl;
+	kdDebug() << "  + constant << s << endl;
 }
 | INTEGER_CONST
 {
