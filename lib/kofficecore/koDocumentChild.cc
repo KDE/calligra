@@ -66,6 +66,7 @@ KoDocumentChild::KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRe
   d->m_parent = parent;
   d->m_doc = doc;
   setGeometry( geometry );
+  d->m_deleted = false;
 }
 
 KoDocumentChild::KoDocumentChild( KoDocument* parent )
