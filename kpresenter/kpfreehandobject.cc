@@ -57,6 +57,13 @@ DCOPObject* KPFreehandObject::dcopObject()
 bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter )
 {
     kdDebug()<<"bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
+    xmlWriter.startElement( "draw:path" );
+    saveOasisPosObject(xmlWriter );
+    if( !objectName.isEmpty())
+        xmlWriter.addAttribute( "draw:name", objectName );
+    //save path I don't know how to do.
+    //add "svg:viewBox" add "svg:d"
+    xmlWriter.endElement();
     return true;
 }
 

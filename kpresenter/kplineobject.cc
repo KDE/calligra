@@ -70,6 +70,28 @@ bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter )
     //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
     //save object name and other generic attribute
     //KPObject::saveOasis( xmlWriter );
+
+
+    float x1 = orig.x();
+    float y1 = orig.y();
+    float x2 = ext.width();
+    float y2 = ext.height();
+    x2 += x1;
+    y2 += y1;
+
+    xmlWriter.addAttributePt( "svg:x1", orig.x() );
+    xmlWriter.addAttributePt( "svg:x2", x2 );
+    if ( lineType == LT_LD_RU ) // from left bottom to right top
+    {
+        xmlWriter.addAttributePt( "svg:y1", y2 );
+        xmlWriter.addAttributePt( "svg:y2", y1 );
+    }
+    else // from left top to right bottom
+    {
+        xmlWriter.addAttributePt( "svg:y1", y1 );
+        xmlWriter.addAttributePt( "svg:y2", y2 );
+    }
+
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
     xmlWriter.endElement();
