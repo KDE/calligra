@@ -2251,7 +2251,10 @@ void KSpreadView::setText( const QString& _text )
   m_pTable->setText( m_pCanvas->markerRow(), m_pCanvas->markerColumn(), _text );
   KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
   if(!cell->isValue() && !cell->isFormular() &&!cell->isBool() && !cell->isDate() && !cell->isTime())
-        m_pDoc->addStringCompletion(_text);
+        {
+        if(_text.at(0)<'0' || _text.at(0)>'9')
+                m_pDoc->addStringCompletion(_text);
+        }
 }
 
 //------------------------------------------------
