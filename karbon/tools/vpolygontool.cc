@@ -24,10 +24,11 @@
 #include <klocale.h>
 #include <koUnitWidgets.h>
 
-#include "karbon_view.h"
-#include "karbon_part.h"
-#include "vpolygon.h"
+#include <karbon_view.h>
+#include <karbon_part.h>
+#include <shapes/vpolygon.h>
 #include "vpolygontool.h"
+#include <kgenericfactory.h>
 
 VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
@@ -72,12 +73,16 @@ VPolygonTool::VPolygonOptionsWidget::refreshUnit()
 	m_radius->setUnit( m_part->unit() );
 }
 
-VPolygonTool::VPolygonTool( KarbonView* view )
+typedef KGenericFactory<VPolygonTool, KarbonView> PolygonToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_polygontoolplugin, PolygonToolPluginFactory( "karbonpolygontoolplugin" ) );
+
+VPolygonTool::VPolygonTool( KarbonView* view, const char *, const QStringList & )
 	: VShapeTool( view, i18n( "Insert Polygon" ), true )
 {
 	// create config dialog:
 	m_optionsWidget = new VPolygonOptionsWidget( view->part() );
 	m_optionsWidget->setEdges( 5 );
+	registerTool( this );
 }
 
 VPolygonTool::~VPolygonTool()

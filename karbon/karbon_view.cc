@@ -43,28 +43,6 @@
 
 #include "vstroke.h"
 
-// Tools.
-#include "vcliparttool.h"
-#include "vellipsetool.h"
-#include "vgradienttool.h"
-#include "vpatterntool.h"
-#include "vpolygontool.h"
-#include "vpolylinetool.h"
-#include "vrectangletool.h"
-#include "vrotatetool.h"
-#include "vroundrecttool.h"
-#include "vselection.h"
-#include "vselectnodestool.h"
-#include "vselecttool.h"
-#include "vsheartool.h"
-#include "vsinustool.h"
-#include "vspiraltool.h"
-#include "vstartool.h"
-#include "vpath.h"
-#ifdef HAVE_KARBONTEXT
-#include "vtexttool.h"
-#endif
-
 // Commands.
 #include "vcleanupcmd.h"
 #include "vdeletecmd.h"
@@ -93,7 +71,10 @@
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_view_iface.h"
+#include "vselection.h"
+#include "vtool.h"
 #include "vgroup.h"
+#include "vpath.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
 #include "vstrokefillpreview.h"
@@ -108,8 +89,13 @@
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p )
 {
+	m_toolbox = 0L;
+	m_currentTool = 0L;
+
 	setInstance( KarbonFactory::instance() );
 	setAcceptDrops( true );
+
+	m_toolbox->setupTools();
 
 	setClientBuilder( this );
 
@@ -123,30 +109,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	dcopObject(); // build it
 
 	// tools:
-	m_selectTool = new VSelectTool( this );
-
-	if( shell() )
-	{
-		m_ellipseTool = new VEllipseTool( this );
-		m_gradTool = new VGradientTool( this );
-		m_polygonTool = new VPolygonTool( this );
-		m_rectangleTool = new VRectangleTool( this );
-		m_rotateTool = new VRotateTool( this );
-		m_roundRectTool = new VRoundRectTool( this );
-		m_selectNodesTool = new VSelectNodesTool( this );
-		m_shearTool = new VShearTool( this );
-		m_sinusTool = new VSinusTool( this );
-		m_spiralTool = new VSpiralTool( this );
-		m_starTool = new VStarTool( this );
-		m_polylineTool = new VPolylineTool( this );
-		m_clipartTool = new VClipartTool( this );
-		m_patternTool = new VPatternTool( this );
-	}
-
-#ifdef HAVE_KARBONTEXT
-	m_textTool = new VTextTool( this );
-
-#endif
+	//m_tools.setAutoDelete( true );
+	//m_selectTool = new VSelectTool( this );
 
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
@@ -158,8 +122,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	addStatusBarItem( m_status, 0 );
 
 	initActions();
-
-	m_toolbox = 0L;
 
 	m_strokeFillPreview = 0L;
 
@@ -182,8 +144,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	setNumberOfRecentFiles( part()->maxRecentFiles() );
 
-	// initial tool is select-tool:
-	m_currentTool = m_selectTool;
 	reorganizeGUI();
 
 	// widgets:
@@ -209,31 +169,6 @@ KarbonView::~KarbonView()
 		delete( m_TransformDocker );
 	}
 
-	// tools:
-	delete( m_selectTool );
-
-	if( shell() )
-	{
-		delete( m_ellipseTool );
-		delete( m_gradTool );
-		delete( m_polygonTool );
-		delete( m_rectangleTool );
-		delete( m_rotateTool );
-		delete( m_roundRectTool );
-		delete( m_shearTool );
-		delete( m_sinusTool );
-		delete( m_spiralTool );
-		delete( m_starTool );
-		delete( m_polylineTool );
-		delete( m_clipartTool );
-		delete( m_patternTool );
-	}
-
-#ifdef HAVE_KARBONTEXT
-	delete( m_textTool );
-
-#endif
-
 	// widgets:
 	delete( m_status );
 
@@ -244,31 +179,23 @@ KarbonView::~KarbonView()
 	delete( m_dcop );
 }
 
+void
+KarbonView::registerTool( VTool *tool )
+{
+	if( !m_toolbox )
+		m_toolbox = new VToolBox( m_part, mainWindow(), "toolbox" );
+	m_toolbox->registerTool( tool );
+	m_currentTool = tool;
+}
+
 QWidget *
 KarbonView::createContainer( QWidget *parent, int index, const QDomElement &element, int &id )
 {
 	if( element.attribute( "name" ) == "toolbox" )
 	{
-		m_toolbox = new VToolBox( m_part, mainWindow(), "toolbox" );
-		connect( m_toolbox, SIGNAL( selectToolActivated() ), this, SLOT( selectTool() ) );
-		connect( m_toolbox, SIGNAL( selectNodesToolActivated() ), this, SLOT( selectNodesTool() ) );
-		connect( m_toolbox, SIGNAL( rotateToolActivated() ), this, SLOT( rotateTool() ) );
-		connect( m_toolbox, SIGNAL( shearToolActivated() ), this, SLOT( shearTool() ) );
-		connect( m_toolbox, SIGNAL( rectangleToolActivated() ), this, SLOT( rectangleTool() ) );
-		connect( m_toolbox, SIGNAL( roundRectToolActivated() ), this, SLOT( roundRectTool() ) );
-		connect( m_toolbox, SIGNAL( ellipseToolActivated() ), this, SLOT( ellipseTool() ) );
-		connect( m_toolbox, SIGNAL( polygonToolActivated() ), this, SLOT( polygonTool() ) );
-		connect( m_toolbox, SIGNAL( starToolActivated() ), this, SLOT( starTool() ) );
-		connect( m_toolbox, SIGNAL( sinusToolActivated() ), this, SLOT( sinusTool() ) );
-		connect( m_toolbox, SIGNAL( spiralToolActivated() ), this, SLOT( spiralTool() ) );
-		connect( m_toolbox, SIGNAL( gradToolActivated() ), this, SLOT( gradTool() ) );
-		connect( m_toolbox, SIGNAL( polylineToolActivated() ), this, SLOT( polylineTool() ) );
-		connect( m_toolbox, SIGNAL( clipartToolActivated() ), this, SLOT( clipartTool() ) );
-		connect( m_toolbox, SIGNAL( patternToolActivated() ), this, SLOT( patternTool() ) );
-#ifdef HAVE_KARBONTEXT
-
-		connect( m_toolbox, SIGNAL( textToolActivated() ), this, SLOT( textTool() ) );
-#endif
+		if( !m_toolbox )
+			m_toolbox = new VToolBox( m_part, mainWindow(), "toolbox" );
+		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 
 		if( shell() )
 		{
@@ -284,7 +211,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			mainWindow()->addDockWindow( m_documentDocker, DockRight );
 			m_toolOptionsDocker = new VToolOptionsDocker( this );
 			m_toolOptionsDocker->show();
-			selectTool();
+			//selectTool();
 		}
 
 		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
@@ -626,227 +553,15 @@ KarbonView::objectTrafoShear()
 }
 
 void
-KarbonView::ellipseTool()
+KarbonView::slotActiveToolChanged( VTool *tool )
 {
-	if( m_currentTool == m_ellipseTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_ellipseTool;
-		m_currentTool->activateAll();
-	}
-}
-
-void
-KarbonView::polygonTool()
-{
-	if( m_currentTool == m_polygonTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_polygonTool;
-		m_currentTool->activateAll();
-	}
-}
-
-void
-KarbonView::rectangleTool()
-{
-	if( m_currentTool == m_rectangleTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_rectangleTool;
-		m_currentTool->activateAll();
-	}
-}
-
-void
-KarbonView::roundRectTool()
-{
-	if( m_currentTool == m_roundRectTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_roundRectTool;
-		m_currentTool->activateAll();
-	}
-}
-
-void
-KarbonView::selectTool()
-{
-	if( m_currentTool == m_selectTool )
-		m_toolOptionsDocker->show();
-
 	m_currentTool->deactivate();
 
-	m_currentTool = m_selectTool;
+	m_currentTool = tool;
 
 	m_currentTool->activateAll();
 
 	m_canvas->repaintAll();
-}
-
-void
-KarbonView::selectNodesTool()
-{
-	if( m_currentTool == m_selectNodesTool )
-		m_toolOptionsDocker->show();
-
-	m_currentTool->deactivate();
-
-	m_currentTool = m_selectNodesTool;
-
-	m_currentTool->activateAll();
-
-	m_canvas->repaintAll();
-}
-
-void
-KarbonView::rotateTool()
-{
-	if( m_currentTool == m_rotateTool )
-		m_toolOptionsDocker->show();
-
-	m_currentTool->deactivate();
-
-	m_currentTool = m_rotateTool;
-
-	m_currentTool->activateAll();
-
-	m_canvas->repaintAll();
-}
-
-void
-KarbonView::textTool()
-{
-#ifdef HAVE_KARBONTEXT
-
-	if( m_currentTool == m_textTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_textTool;
-		m_currentTool->activateAll();
-	}
-
-#endif
-}
-
-void
-KarbonView::shearTool()
-{
-	if( m_currentTool == m_shearTool )
-		m_toolOptionsDocker->show();
-
-	m_currentTool->deactivate();
-
-	m_currentTool = m_shearTool;
-
-	m_currentTool->activateAll();
-
-	m_canvas->repaintAll();
-}
-
-void
-KarbonView::sinusTool()
-{
-	if( m_currentTool == m_sinusTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_sinusTool;
-		m_currentTool->activateAll();
-	}
-}
-
-void
-KarbonView::spiralTool()
-{
-	if( m_currentTool == m_spiralTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_spiralTool;
-		m_currentTool->activateAll();
-	}
-}
-
-void
-KarbonView::starTool()
-{
-	if( m_currentTool == m_starTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_starTool;
-		m_currentTool->activateAll();
-	}
-}
-
-void
-KarbonView::gradTool()
-{
-	if( m_currentTool == m_gradTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_gradTool;
-		m_currentTool->activateAll();
-	}
-}
-
-void
-KarbonView::polylineTool()
-{
-	if( m_currentTool == m_polylineTool )
-	{
-		// Ends the current polyline and prepare for the next.
-		m_currentTool->deactivate();
-		m_currentTool->activateAll();
-	}
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_polylineTool;
-		m_currentTool->activateAll();
-	}
-}
-
-void
-KarbonView::clipartTool()
-{
-	if( m_currentTool == m_clipartTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_clipartTool;
-		m_currentTool->activateAll();
-	}
-}
-
-void
-KarbonView::patternTool()
-{
-	if( m_currentTool == m_patternTool )
-		m_toolOptionsDocker->show();
-	else
-	{
-		m_currentTool->deactivate();
-		m_currentTool = m_patternTool;
-		m_currentTool->activateAll();
-	}
 }
 
 void
@@ -1295,13 +1010,13 @@ KarbonView::selectionChanged()
 
 void KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
 {
-	m_ellipseTool->refreshUnit();
+	/*m_ellipseTool->refreshUnit();
 	m_rectangleTool->refreshUnit();
 	m_sinusTool->refreshUnit();
 	m_spiralTool->refreshUnit();
 	m_starTool->refreshUnit();
 	m_roundRectTool->refreshUnit();
-	m_polygonTool->refreshUnit();
+	m_polygonTool->refreshUnit();*/
 }
 
 #include "karbon_view.moc"

@@ -23,12 +23,12 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "karbon_view.h"
-#include "karbon_part.h"
-#include "vroundrect.h"
+#include <karbon_view.h>
+#include <karbon_part.h>
+#include <shapes/vroundrect.h>
 #include "vroundrecttool.h"
 #include "koUnitWidgets.h"
-
+#include <kgenericfactory.h>
 
 VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* part, QWidget* parent, const char* name )
 		: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
@@ -90,12 +90,16 @@ VRoundRectTool::VRoundRectOptionsWidget::refreshUnit ()
 	m_height->setUnit( m_part->unit() );
 }
 
-VRoundRectTool::VRoundRectTool( KarbonView* view )
+typedef KGenericFactory<VRoundRectTool, KarbonView> RoundRectToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_roundrecttoolplugin, RoundRectToolPluginFactory( "karbonroundrecttoolplugin" ) );
+
+VRoundRectTool::VRoundRectTool( KarbonView* view, const char* name, const QStringList & )
 		: VShapeTool( view, i18n( "Insert Round Rectangle" ) )
 {
 	// Create config dialog:
 	m_optionsWidget = new VRoundRectOptionsWidget( view->part() );
 	m_optionsWidget->setRound( 20.0 );
+	registerTool( this );
 }
 
 VRoundRectTool::~VRoundRectTool()

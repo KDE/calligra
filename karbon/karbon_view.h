@@ -51,34 +51,15 @@ class VColorDocker;
 class VDocumentDocker;
 class VToolOptionsDocker;
 
-class VClipartTool;
-class VEllipseTool;
 class VFill;
-class VGradientTool;
 class VPainterFactory;
-class VPatternTool;
-class VPolygonTool;
-class VPolylineTool;
-class VRectangleTool;
-class VRotateTool;
-class VRoundRectTool;
 class VScaleTool;
-class VSelectNodesTool;
-class VSelectTool;
 class VSelectToolBar;
-class VShearTool;
-class VSinusTool;
-class VSpiralTool;
-class VStarTool;
 class VStateButton;
 class VStroke;
 class VStrokeDocker;
 class VStrokeFillPreview;
 class VTransformDocker;
-
-#ifdef HAVE_KARBONTEXT
-class VTextTool;
-#endif
 
 class VTool;
 class VToolBox;
@@ -145,6 +126,9 @@ public:
 
 	void setUnit( KoUnit::Unit _unit );
 
+	// manage tools
+	void registerTool( VTool * );
+
 public slots:
 	// editing:
 	void editCut();
@@ -171,30 +155,14 @@ public slots:
 	void setLineWidth();
 	void selectionChanged();
 
+	void slotActiveToolChanged( VTool * );
+
 protected slots:
 	// Object related operations.
 	void objectTrafoTranslate();
 	void objectTrafoScale();
 	void objectTrafoRotate();
 	void objectTrafoShear();
-
-	// Shape Tools.
-	void ellipseTool();
-	void polygonTool();
-	void rectangleTool();
-	void roundRectTool();
-	void selectTool();
-	void selectNodesTool();
-	void rotateTool();
-	void shearTool();
-	void sinusTool();
-	void spiralTool();
-	void starTool();
-	void textTool();
-	void gradTool();
-	void polylineTool();
-	void clipartTool();
-	void patternTool();
 
 	// View.
 	void viewModeChanged();
@@ -236,26 +204,6 @@ private:
 	VPainterFactory* m_painterFactory;
 
 	VTool* m_currentTool;
-
-	// tools:
-	VEllipseTool* m_ellipseTool;
-	VPolygonTool* m_polygonTool;
-	VRectangleTool* m_rectangleTool;
-	VRotateTool* m_rotateTool;
-	VRoundRectTool* m_roundRectTool;
-	VSelectTool* m_selectTool;
-	VSelectNodesTool* m_selectNodesTool;
-	VShearTool* m_shearTool;
-	VSinusTool* m_sinusTool;
-	VSpiralTool* m_spiralTool;
-	VStarTool* m_starTool;
-	VGradientTool* m_gradTool;
-	VPolylineTool* m_polylineTool;
-	VClipartTool* m_clipartTool;
-	VPatternTool* m_patternTool;
-#ifdef HAVE_KARBONTEXT
-	VTextTool* m_textTool;
-#endif
 
 	// text:
 	KFontAction *m_setFontFamily;

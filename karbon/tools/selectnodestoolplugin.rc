@@ -1,0 +1,3 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="selectnodestoolplugin" library="karbon_selectnodestoolplugin">
+</kpartplugin>

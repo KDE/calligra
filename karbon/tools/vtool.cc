@@ -30,11 +30,23 @@
 #include "vtooloptionsdocker.h"
 
 
-VTool::VTool( KarbonView* view )
-		: m_view( view )
+VTool::VTool( KarbonView *view, const char* name )
+		: Plugin( view, name ), m_view( view )
 {
 	m_mouseButtonIsDown = false;
 	m_isDragging = false;
+}
+
+VTool::~VTool()
+{
+	//kdDebug() << "Deleting : " << name().latin1() << endl;
+	// Unregister here
+}
+
+void
+VTool::registerTool( VTool *tool )
+{
+	m_view->registerTool( tool );
 }
 
 void VTool::activateAll()

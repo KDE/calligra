@@ -23,27 +23,32 @@
 #include <qlabel.h>
 
 #include <klocale.h>
+#include <kgenericfactory.h>
 #include <koPoint.h>
 #include <koRect.h>
 
-#include "karbon_part.h"
-#include "karbon_view.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
+#include <karbon_part.h>
+#include <karbon_view.h>
+
+#include <render/vpainter.h>
+#include <render/vpainterfactory.h>
+#include <visitors/vselectnodes.h>
+#include <commands/vtransformcmd.h>
+#include <visitors/vdrawselection.h>
+#include <core/vselection.h>
 #include "vselectnodestool.h"
-#include "vselectnodes.h"
-#include "vtransformcmd.h"
-#include "vdrawselection.h"
-#include "vselection.h"
-#include "vtransformnodes.h"
-#include "vdeletenodescmd.h"
+#include <vtransformnodes.h>
+#include <commands/vdeletenodescmd.h>
 
 #include <kdebug.h>
 
+typedef KGenericFactory<VSelectNodesTool, KarbonView> SelectNodesToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_selectnodestoolplugin, SelectNodesToolPluginFactory( "karbonselectnodestoolplugin" ) );
 
-VSelectNodesTool::VSelectNodesTool( KarbonView* view )
-	: VTool( view ), m_state( normal )
+VSelectNodesTool::VSelectNodesTool( KarbonView* view, const char* name, const QStringList & )
+	: VTool( view, name ), m_state( normal )
 {
+	registerTool( this );
 }
 
 VSelectNodesTool::~VSelectNodesTool()

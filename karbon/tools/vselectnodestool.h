@@ -25,10 +25,15 @@
 class VSelectNodesTool : public VTool
 {
 public:
-	VSelectNodesTool( KarbonView* view );
+	VSelectNodesTool( KarbonView* view, const char* name, const QStringList & );
 	virtual ~VSelectNodesTool();
 
 	virtual void activate();
+
+	virtual QString name() { return i18n( "Select nodes tool" ); }
+	virtual QString icon() { return "14_selectnodes"; }
+	virtual QString category() { return "manipulation"; }
+	virtual uint priority() { return 2; }
 
 protected:
 	virtual void draw();

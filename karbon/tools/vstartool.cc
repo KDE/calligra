@@ -23,11 +23,12 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "karbon_view.h"
-#include "karbon_part.h"
-#include "vstar.h"
+#include <karbon_view.h>
+#include <karbon_part.h>
+#include <shapes/vstar.h>
 #include "vstartool.h"
 #include "koUnitWidgets.h"
+#include <kgenericfactory.h>
 
 
 VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
@@ -93,12 +94,16 @@ VStarTool::VStarOptionsWidget::outerRadius() const
 	return m_outerR->value();
 }
 
-VStarTool::VStarTool( KarbonView* view )
+typedef KGenericFactory<VStarTool, KarbonView> StarToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_startoolplugin, StarToolPluginFactory( "karbonstartoolplugin" ) );
+
+VStarTool::VStarTool( KarbonView* view, const char *, const QStringList & )
 	: VShapeTool( view, i18n( "Insert Star" ), true )
 {
 	// create config dialog:
 	m_optionsWidget = new VStarOptionsWidget( view->part() );
 	m_optionsWidget->setEdges( 5 );
+	registerTool( this );
 }
 
 void VStarTool::refreshUnit()

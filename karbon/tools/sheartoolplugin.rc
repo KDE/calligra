@@ -1,0 +1,3 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="sheartoolplugin" library="karbon_sheartoolplugin">
+</kpartplugin>

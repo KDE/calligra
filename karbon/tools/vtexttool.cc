@@ -36,16 +36,17 @@
 #include <kiconloader.h>
 #include <knuminput.h>
 
-#include "karbon_view.h"
-#include "karbon_part.h"
-#include "vdocument.h"
-#include "vkopainter.h"
-#include "vglobal.h"
-#include "vpainterfactory.h"
-#include "vselection.h"
+#include <karbon_view.h>
+#include <karbon_part.h>
+#include <core/vdocument.h>
+#include <core/vglobal.h>
+#include <core/vselection.h>
+#include <core/vfill.h>
+#include <core/vstroke.h>
+#include <render/vpainterfactory.h>
+#include <render/vkopainter.h>
 #include "vtexttool.h"
-#include "vfill.h"
-#include "vstroke.h"
+#include <kgenericfactory.h>
 
 
 static void
@@ -520,12 +521,16 @@ VTextOptionsWidget::shadowDistance()
 	return m_shadow->shadowDistance();
 }
 
-VTextTool::VTextTool( KarbonView* view )
-		: VTool( view )
+typedef KGenericFactory<VTextTool, KarbonView> TextToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_texttoolplugin, TextToolPluginFactory( "karbontexttoolplugin" ) );
+
+VTextTool::VTextTool( KarbonView* view, const char *name, const QStringList & )
+		: VTool( view, name )
 {
 	m_optionsWidget = new VTextOptionsWidget( this );
 	m_text = 0L;
 	m_editedText = 0L;
+	registerTool( this );
 }
 
 VTextTool::~VTextTool()

@@ -38,6 +38,7 @@ public:
 
 	virtual QString name() { return m_name; }
 	virtual QString icon() { return "14_polygon"; }
+	virtual QString category() { return "shapecreation"; }
 	virtual QString contextHelp();
 	
 	virtual void activate();

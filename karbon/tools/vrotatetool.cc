@@ -24,24 +24,27 @@
 #include <qlabel.h>
 
 #include <klocale.h>
-
 #include <koRect.h>
 
-#include "karbon_part.h"
-#include "karbon_view.h"
-#include "vglobal.h"
+#include <karbon_part.h>
+#include <karbon_view.h>
+#include <core/vglobal.h>
 #include "vrotatetool.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vtransformcmd.h"
+#include <render/vpainter.h>
+#include <render/vpainterfactory.h>
+#include <commands/vtransformcmd.h>
+#include <kgenericfactory.h>
 
 #include <kdebug.h>
 
+typedef KGenericFactory<VRotateTool, KarbonView> RotateToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_rotatetoolplugin, RotateToolPluginFactory( "karbonrotatetoolplugin" ) );
 
-VRotateTool::VRotateTool( KarbonView* view )
-	: VTool( view )
+VRotateTool::VRotateTool( KarbonView* view, const char* name, const QStringList & )
+	: VTool( view, name )
 {
 	m_objects.setAutoDelete( true );
+	registerTool( this );
 }
 
 VRotateTool::~VRotateTool()

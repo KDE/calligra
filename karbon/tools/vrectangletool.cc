@@ -23,11 +23,12 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "karbon_view.h"
-#include "karbon_part.h"
-#include "vrectangle.h"
+#include <karbon_view.h>
+#include <karbon_part.h>
+#include <shapes/vrectangle.h>
 #include "vrectangletool.h"
-#include "koUnitWidgets.h"
+#include <koUnitWidgets.h>
+#include <kgenericfactory.h>
 
 
 VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
@@ -77,11 +78,15 @@ VRectangleTool::VRectangleOptionsWidget::refreshUnit()
 	m_height->setUnit( m_part->unit() );
 }
 
-VRectangleTool::VRectangleTool( KarbonView* view )
+typedef KGenericFactory<VRectangleTool, KarbonView> RectangleToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_rectangletoolplugin, RectangleToolPluginFactory( "karbonrectangletoolplugin" ) );
+
+VRectangleTool::VRectangleTool( KarbonView* view, const char *, const QStringList & )
 	: VShapeTool( view, i18n( "Insert Rectangle" ) )
 {
 	// Create config dialog:
 	m_optionsWidget = new VRectangleOptionsWidget( view->part() );
+	registerTool( this );
 }
 
 VRectangleTool::~VRectangleTool()

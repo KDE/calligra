@@ -36,7 +36,7 @@ class KoUnitDoubleSpinBox;
 class VRoundRectTool : public VShapeTool
 {
 public:
-	VRoundRectTool( KarbonView* view );
+	VRoundRectTool( KarbonView* view, const char* name, const QStringList & );
 	virtual ~VRoundRectTool();
 
 	virtual QWidget *optionsWidget()

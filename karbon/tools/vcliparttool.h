@@ -35,62 +35,7 @@ class QHButtonGroup;
 class QToolButton;
 class VObject;
 
-
-class VClipartIconItem : public KoIconItem
-{
-public:
-	VClipartIconItem( const VObject* clipart, double width, double height, QString filename );
-	VClipartIconItem( const VClipartIconItem& item );
-	~VClipartIconItem();
-
-	virtual QPixmap& thumbPixmap() const
-	{
-		return ( QPixmap& ) m_thumbPixmap;
-	}
-
-	virtual QPixmap& pixmap() const
-	{
-		return ( QPixmap& ) m_pixmap;
-	}
-
-	const VObject* clipart() const
-	{
-		return m_clipart;
-	}
-
-	QString filename() const
-	{
-		return m_filename;
-	}
-
-	bool canDelete() const
-	{
-		return m_delete;
-	}
-
-	double originalWidth() const
-	{
-		return m_width;
-	}
-
-	double originalHeight() const
-	{
-		return m_height;
-	}
-
-	VClipartIconItem* clone();
-
-private:
-	QPixmap m_pixmap;
-	QPixmap m_thumbPixmap;
-	VObject* m_clipart;
-	QString m_filename;
-	bool m_delete;
-	double m_width;
-	double m_height;
-}
-
-; // VClipartIconItem
+class VClipartIconItem;
 
 class VClipartWidget : public QFrame
 {
@@ -122,21 +67,15 @@ private:
 class VClipartTool : public VTool
 {
 public:
-	VClipartTool( KarbonView* view );
+	VClipartTool( KarbonView* view, const char *, const QStringList & );
 	~VClipartTool();
 
 	virtual void activate();
 
-	virtual QString name()
-	{
-		return "Clipart tool";
-	}
-
+	virtual QString name() { return "Clipart tool"; }
+	virtual QString icon() { return "14_clipart"; }
 	virtual QString contextHelp();
-	virtual QWidget* optionsWidget()
-	{
-		return m_optionsWidget;
-	}
+	virtual QWidget* optionsWidget() { return m_optionsWidget; }
 
 protected:
 	virtual void draw();

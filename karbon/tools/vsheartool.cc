@@ -24,20 +24,24 @@
 #include <qlabel.h>
 
 #include <klocale.h>
+#include <kgenericfactory.h>
 #include <koRect.h>
 
-#include "karbon_part.h"
-#include "karbon_view.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vselection.h"
+#include <karbon_part.h>
+#include <karbon_view.h>
+#include <render/vpainter.h>
+#include <render/vpainterfactory.h>
+#include <vselection.h>
 #include "vsheartool.h"
-#include "vtransformcmd.h"
+#include <commands/vtransformcmd.h>
 
+typedef KGenericFactory<VShearTool, KarbonView> ShearToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_sheartoolplugin, ShearToolPluginFactory( "karbonsheartoolplugin" ) );
 
-VShearTool::VShearTool( KarbonView* view ) : VTool( view )
+VShearTool::VShearTool( KarbonView* view, const char* name, const QStringList & ) : VTool( view, name )
 {
 	m_objects.setAutoDelete( true );
+	registerTool( this );
 }
 
 VShearTool::~VShearTool()

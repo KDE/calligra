@@ -1,0 +1,3 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="ellipsetoolplugin" library="karbon_ellipsetoolplugin">
+</kpartplugin>

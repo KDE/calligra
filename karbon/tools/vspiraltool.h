@@ -36,7 +36,7 @@ class KarbonPart;
 class VSpiralTool : public VShapeTool
 {
 public:
-	VSpiralTool( KarbonView *view );
+	VSpiralTool( KarbonView *view, const char *, const QStringList & );
 	virtual ~VSpiralTool();
 
 	virtual QWidget *optionsWidget() { return m_optionsWidget; }

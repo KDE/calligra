@@ -1,0 +1,3 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="rectangletoolplugin" library="karbon_rectangletoolplugin">
+</kpartplugin>

@@ -26,10 +26,14 @@
 class VShearTool : public VTool
 {
 public:
-	VShearTool( KarbonView* view );
+	VShearTool( KarbonView* view, const char* name, const QStringList & );
 	virtual ~VShearTool();
 
 	virtual void activate();
+
+	virtual QString name() { return i18n( "Shear tool" ); }
+	virtual QString icon() { return "14_shear"; }
+	virtual QString category() { return "manipulation"; }
 
 protected:
 	virtual void draw();

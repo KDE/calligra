@@ -35,6 +35,7 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "karbon_factory.h"
+#include "vtool.h"
 
 #include "vtoolbox.h"
 #include "vstrokefillpreview.h"
@@ -48,6 +49,7 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	setFullSize( false );
 	buttonGroup = new QButtonGroup( 0L );
 	buttonGroup->setExclusive( true );
+	connect( buttonGroup, SIGNAL( pressed( int ) ), this, SLOT( slotButtonPressed( int ) ) );
 
 	QBoxLayout::Direction d = orientation() == Qt::Vertical ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
 	QWidget *base = new QWidget( this );
@@ -66,62 +68,68 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	columnsLayouter->addWidget( right );
 
 	insertLeft = true;
-	QToolButton *button = addButton( "14_select", i18n( "Select tool" ) );
-	button->toggle();
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( selectToolActivated() ) );
-
-	button = addButton( "14_selectnodes", i18n( "Select nodes tool") );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( selectNodesToolActivated() ) );
-
-	button = addButton( "14_rotate", i18n( "Rotate tool" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( rotateToolActivated() ) );
-
-	button = addButton("14_shear", i18n( "Shear tool" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( shearToolActivated() ) );
-
-	button = addButton( "14_rectangle", i18n( "Create rectangle" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( rectangleToolActivated() ) );
-
-	button = addButton( "14_roundrect", i18n( "Create rounded rectangle" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( roundRectToolActivated() ) );
-
-	button = addButton( "14_ellipse", i18n( "Create ellipse" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( ellipseToolActivated() ) );
-
-	button = addButton( "14_polygon", i18n( "Create polygon" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( polygonToolActivated() ) );
-
-	button = addButton( "14_star", i18n( "Create star" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( starToolActivated() ) );
-
-	button = addButton( "14_sinus", i18n("Create sine wave" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( sinusToolActivated() ) );
-
-	button = addButton( "14_spiral", i18n( "Create spiral" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( spiralToolActivated() ) );
-
-	button = addButton( "14_polyline", i18n( "Create polyline" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( polylineToolActivated() ) );
-
-	button = addButton( "14_pattern", i18n( "Fill with pattern" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( patternToolActivated() ) );
-
-	button = addButton( "14_gradient", i18n( "Fill with gradient" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( gradToolActivated() ) );
-
-	button = addButton( "14_clipart", i18n( "Insert clipart" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( clipartToolActivated() ) );
-
-#ifdef HAVE_KARBONTEXT
-	button = addButton( "14_text", i18n( "Insert text" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( textToolActivated() ) );
-#endif
 
 	m_strokeFillPreview = new VStrokeFillPreview( part, this );
+
+	// setup tool collections
+	m_manipulationtools.resize( 10 );
+	m_shapetools.resize( 20 );
+	m_misctools.resize( 30 );
+}
+
+void
+VToolBox::slotButtonPressed( int id )
+{
+	int shapestart = m_manipulationtools.count();
+	int miscstart = m_manipulationtools.count() + m_shapetools.count();
+	if( id < shapestart )
+		emit activeToolChanged( m_manipulationtools.at( id ) );
+	else if( id < miscstart )
+		emit activeToolChanged( m_shapetools.at( id - shapestart ) );
+	else
+		emit activeToolChanged( m_misctools.at( id - miscstart ) );
+}
+
+void
+VToolBox::registerTool( VTool *tool )
+{
+	uint prio = tool->priority();
+	if( tool->category() == "shapecreation" )
+		m_shapetools.insert( ( prio == 0 ) ? m_shapetools.count() : prio - 1, tool );
+	else if( tool->category() == "manipulation" )
+		m_manipulationtools.insert( ( prio == 0 ) ? m_manipulationtools.count() : prio - 1, tool );
+	else
+		m_misctools.insert( ( prio == 0 ) ? m_misctools.count() : prio - 1, tool );
+}
+
+void
+VToolBox::setupTools()
+{
+	int id = 0;
+	for( uint i = 0; i < m_manipulationtools.count() ; i++ )
+	{
+		VTool *tool = m_manipulationtools.at( i );
+		if( tool )
+			addButton( tool->icon().latin1(), tool->name(), id++ );
+	}
+
+	for( uint i = 0; i < m_shapetools.count() ; i++ )
+	{
+		VTool *tool = m_shapetools.at( i );
+		if( tool )
+			addButton( tool->icon().latin1(), tool->name(), id++ );
+	}
+
+	for( uint i = 0; i < m_misctools.count() ; i++ )
+	{
+		VTool *tool = m_misctools.at( i );
+		if( tool )
+			addButton( tool->icon().latin1(), tool->name(), id++ );
+	}
 }
 
 QToolButton *
-VToolBox::addButton( const char* iconName, QString tooltip )
+VToolBox::addButton( const char* iconName, QString tooltip, int id )
 {
 	QToolButton *button = new QToolButton( insertLeft ? left : right );
 	if( iconName != "" )
@@ -137,7 +145,7 @@ VToolBox::addButton( const char* iconName, QString tooltip )
 	else
 		rightLayout->addWidget( button );
 
-	buttonGroup->insert( button );
+	buttonGroup->insert( button, id );
 	insertLeft =! insertLeft;
 
 	return button;

@@ -28,10 +28,15 @@
 class VRotateTool : public VTool
 {
 public:
-	VRotateTool( KarbonView* view );
+	VRotateTool( KarbonView* view, const char* name, const QStringList & );
 	virtual ~VRotateTool();
 
 	virtual void activate();
+
+	virtual QString name() { return i18n( "Rotate tool" ); }
+	virtual QString icon() { return "14_rotate"; }
+	virtual QString category() { return "manipulation"; }
+	virtual uint priority() { return 3; }
 
 protected:
 	virtual void draw();

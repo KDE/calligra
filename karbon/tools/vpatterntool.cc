@@ -32,14 +32,15 @@
 #include <koIconChooser.h>
 #include <kfiledialog.h>
 
-#include "karbon_factory.h"
-#include "karbon_resourceserver.h"
-#include "karbon_view.h"
-#include "karbon_part.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vselection.h"
-#include "vfillcmd.h"
+#include <karbon_factory.h>
+#include <karbon_resourceserver.h>
+#include <karbon_view.h>
+#include <karbon_part.h>
+#include <render/vpainter.h>
+#include <render/vpainterfactory.h>
+#include <core/vselection.h>
+#include <commands/vfillcmd.h>
+#include <kgenericfactory.h>
 
 VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool* tool, QWidget* parent )
 		: QFrame( parent ), m_tool( tool )
@@ -113,10 +114,14 @@ void VPatternWidget::patternSelected( KoIconItem* item )
 	m_deletePatternButton->setEnabled( QFileInfo( m_pattern->tilename() ).isWritable() );
 } // VPatternWidget::patternSelected
 
-VPatternTool::VPatternTool( KarbonView* view )
-	: VTool( view )
+typedef KGenericFactory<VPatternTool, KarbonView> PatternToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_patterntoolplugin, PatternToolPluginFactory( "karbonpatterntoolplugin" ) );
+
+VPatternTool::VPatternTool( KarbonView* view, const char *name, const QStringList & )
+	: VTool( view, name )
 {
 	m_optionsWidget = new VPatternWidget( &KarbonFactory::rServer()->patterns(), this );
+	registerTool( this );
 } // VPatternTool::VPatternTool
 
 VPatternTool::~VPatternTool()

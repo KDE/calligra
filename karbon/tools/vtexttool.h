@@ -145,13 +145,11 @@ protected:
 class VTextTool : public VTool, public VVisitor
 {
 public:
-	VTextTool( KarbonView* view );
+	VTextTool( KarbonView* view, const char *, const QStringList & );
 	~VTextTool();
 
-	virtual QString name()
-	{
-		return i18n( "Text tool" );
-	}
+	virtual QString name() { return i18n( "Text tool" ); }
+	virtual QString icon() { return "14_text"; }
 
 	virtual QString contextHelp();
 	virtual QWidget* optionsWidget()

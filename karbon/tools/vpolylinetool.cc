@@ -25,23 +25,27 @@
 
 #include <klocale.h>
 
-#include "karbon_part.h"
-#include "karbon_view.h"
-#include "vcolor.h"
-#include "vcomposite.h"
-#include "vfill.h"
-#include "vglobal.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
+#include <karbon_part.h>
+#include <karbon_view.h>
+#include <core/vcolor.h>
+#include <core/vcomposite.h>
+#include <core/vfill.h>
+#include <core/vstroke.h>
+#include <core/vglobal.h>
+#include <render/vpainter.h>
+#include <render/vpainterfactory.h>
 #include "vpolylinetool.h"
-#include "vshapecmd.h"
-#include "vstroke.h"
+#include <commands/vshapecmd.h>
+#include <kgenericfactory.h>
 
+typedef KGenericFactory<VPolylineTool, KarbonView> PolylineToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_polylinetoolplugin, PolylineToolPluginFactory( "karbonpolylinetoolplugin" ) );
 
-VPolylineTool::VPolylineTool( KarbonView* view )
-	: VTool( view )
+VPolylineTool::VPolylineTool( KarbonView* view, const char *name, const QStringList & )
+	: VTool( view, name )
 {
 	m_bezierPoints.setAutoDelete( true );
+	registerTool( this );
 }
 
 VPolylineTool::~VPolylineTool()

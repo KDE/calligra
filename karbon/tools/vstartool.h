@@ -35,7 +35,7 @@ class KarbonPart;
 class VStarTool : public VShapeTool
 {
 public:
-	VStarTool( KarbonView* view );
+	VStarTool( KarbonView* view, const char *, const QStringList & );
 	virtual ~VStarTool();
 
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }

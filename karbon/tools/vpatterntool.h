@@ -61,12 +61,13 @@ private:
 class VPatternTool : public VTool
 {
 public:
-	VPatternTool( KarbonView* view );
+	VPatternTool( KarbonView* view, const char *, const QStringList & );
 	virtual ~VPatternTool();
 
 	virtual void activate();
 
 	virtual QString name() { return i18n( "Pattern tool" ); }
+	virtual QString icon() { return "14_pattern"; }
 	virtual QString contextHelp();
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }
 

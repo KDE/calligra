@@ -38,6 +38,8 @@
 #include "vgroup.h"
 #include "vobject.h"
 #include "vtext.h"
+#include "vkopainter.h"
+#include "vtransformcmd.h"
 
 
 KarbonResourceServer::KarbonResourceServer()
@@ -403,5 +405,70 @@ KarbonResourceServer::saveClipart( VObject* clipart, double width, double height
 	file.flush();
 
 	file.close();
+}
+
+VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double height, QString filename )
+		: m_filename( filename ), m_width( width ), m_height( height )
+{
+	m_clipart = clipart->clone();
+	m_clipart->setState( VObject::normal );
+
+	m_pixmap.resize( 64, 64 );
+	VKoPainter p( &m_pixmap, 64, 64 );
+	QWMatrix mat( 64., 0, 0, 64., 0, 0 );
+
+	VTransformCmd trafo( 0L, mat );
+	trafo.visit( *m_clipart );
+
+	m_clipart->draw( &p, &m_clipart->boundingBox() );
+
+	trafo.setMatrix( mat.invert() );
+	trafo.visit( *m_clipart );
+
+	p.end();
+
+	m_thumbPixmap.resize( 32, 32 );
+	VKoPainter p2( &m_thumbPixmap, 32, 32 );
+	mat.setMatrix( 32., 0, 0, 32., 0, 0 );
+
+	trafo.setMatrix( mat );
+	trafo.visit( *m_clipart );
+
+	m_clipart->draw( &p2, &m_clipart->boundingBox() );
+
+	trafo.setMatrix( mat.invert() );
+	trafo.visit( *m_clipart );
+
+	p2.end();
+
+	validPixmap = true;
+	validThumb = true;
+
+	m_delete = QFileInfo( filename ).isWritable();
+}
+
+
+VClipartIconItem::VClipartIconItem( const VClipartIconItem& item )
+		: KoIconItem( item )
+{
+	m_clipart = item.m_clipart->clone();
+	m_filename = item.m_filename;
+	m_delete = item.m_delete;
+	m_pixmap = item.m_pixmap;
+	m_thumbPixmap = item.m_thumbPixmap;
+	validPixmap = item.validPixmap;
+	validThumb = item.validThumb;
+	m_width = item.m_width;
+	m_height = item.m_height;
+}
+
+VClipartIconItem::~VClipartIconItem()
+{
+	delete m_clipart;
+}
+
+VClipartIconItem* VClipartIconItem::clone()
+{
+	return new VClipartIconItem( *this );
 }
 

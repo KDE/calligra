@@ -46,13 +46,16 @@ class VSelectOptionsWidget : public QButtonGroup
 class VSelectTool : public VTool
 {
 public:
-	VSelectTool( KarbonView* view );
+	VSelectTool( KarbonView* view, const char* name, const QStringList & );
 	virtual ~VSelectTool();
 
 	virtual void activate();
 
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }
 	virtual QString name() { return i18n( "Select tool" ); }
+	virtual QString icon() { return "14_select"; }
+	virtual QString category() { return "manipulation"; }
+	virtual uint priority() { return 1; }
 	virtual QString contextHelp();
 
 protected:

@@ -26,11 +26,12 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "karbon_view.h"
-#include "vsinus.h"
+#include <karbon_view.h>
+#include <karbon_part.h>
+#include <shapes/vsinus.h>
 #include "vsinustool.h"
-#include "karbon_part.h"
 #include "koUnitWidgets.h"
+#include <kgenericfactory.h>
 
 
 VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* parent, const char* name )
@@ -94,12 +95,16 @@ VSinusTool::VSinusOptionsWidget::refreshUnit ()
 	m_height->setUnit( m_part->unit() );
 }
 
-VSinusTool::VSinusTool( KarbonView* view )
+typedef KGenericFactory<VSinusTool, KarbonView> SinusToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_sinustoolplugin, SinusToolPluginFactory( "karbonsinustoolplugin" ) );
+
+VSinusTool::VSinusTool( KarbonView* view, const char *, const QStringList & )
 	: VShapeTool( view, i18n( "Insert Sinus" ) )
 {
 	// create config widget:
 	m_optionsWidget = new VSinusOptionsWidget(view->part());
 	m_optionsWidget->setPeriods( 1 );
+	registerTool( this );
 }
 
 VSinusTool::~VSinusTool()

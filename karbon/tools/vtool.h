@@ -21,9 +21,9 @@
 #ifndef __VTOOL_H__
 #define __VTOOL_H__
 
-
 #include <klocale.h>
 #include <koPoint.h>
+#include <kparts/plugin.h>
 
 class KarbonView;
 class QEvent;
@@ -31,10 +31,14 @@ class QWidget;
 class VPainter;
 
 
-class VTool
+class VTool : public KParts::Plugin
 {
 public:
-	VTool( KarbonView* view );
+	VTool( KarbonView *view, const char* name );
+	// Make VTool "abstract":
+	virtual ~VTool();
+
+	virtual void registerTool( VTool *tool );
 
 	/**
 	 * Activates the tool and sets up some dockers and finally calls activate().
@@ -46,49 +50,41 @@ public:
 	 * Called during the tool activation. A tool is supposed to set a mouse cursor and/or
 	 * the statusbar properly here.
 	 */
-	virtual void activate()
-	{
-	}
+	virtual void activate() {}
 
 	/**
 	 * Deactivates the tool.
 	 */
-	virtual void deactivate()
-	{
-	}
+	virtual void deactivate() {}
 
 	/**
 	 * The options widget for this tool to show in a docker.
 	 */
-	virtual QWidget* optionsWidget()
-	{
-		return 0L;
-	}
+	virtual QWidget* optionsWidget() { return 0L; }
 
 	/**
 	 * The name of the tool.
 	 */
-	virtual QString name()
-	{
-		return i18n( "Unnamed tool" );
-	}
+	virtual QString name() { return i18n( "Unnamed tool" ); }
 
 	/**
 	 * The context help of the tool.
 	 */
-	virtual QString contextHelp()
-	{
-		return i18n( "This tool has no description." );
-	}
+	virtual QString contextHelp() { return i18n( "This tool has no description." ); }
 
 	/**
-	 * The tool icon
+	 * The tool icon name.
 	 */
-	virtual QString icon()
-	{
-		return "help";
-	}
-	
+	virtual QString icon() { return "help"; }
+
+	virtual QString category() { return "misc"; }
+
+	/**
+	 * Position in toolbox. Zero means no preferred position, other
+	 * values indicate the true position.
+	 */
+	virtual uint priority() { return 0; }
+
 	/**
 	 * This function processes every important mouse or keyboard event.
 	 * It then calls suiting functions like mouseMoved() so deriving tools
@@ -98,144 +94,92 @@ public:
 	bool keyEvent( QEvent* event );
 
 protected:
-	bool isDragging() const
-	{
-		return m_isDragging;
-	}
+	bool isDragging() const { return m_isDragging; }
 
-	virtual void draw( /*VPainter* painter*/ )
-	{
-	}
+	virtual void draw( /*VPainter* painter*/ ) {}
 
-	virtual void setCursor() const
-	{
-	}
+	virtual void setCursor() const {}
 
 	/**
 	 * Mouse button press.
 	 */
-	virtual void mouseButtonPress()
-	{
-	}
+	virtual void mouseButtonPress() {}
 
 	/**
 	 * Mouse button release. The mouse wasn't moved.
 	 */
-	virtual void mouseButtonRelease()
-	{
-	}
+	virtual void mouseButtonRelease() {}
 
 	/**
 	 * Mouse button double click.
 	 */
-	virtual void mouseButtonDblClick()
-	{
-	}
+	virtual void mouseButtonDblClick() {}
 
 	/**
 	 * Mouse move. No mouse button is pressed.
 	 */
-	virtual void mouseMove()
-	{
-	}
+	virtual void mouseMove() {}
 
 	/**
 	 * Mouse drag.
 	 */
-	virtual void mouseDrag()
-	{
-	}
+	virtual void mouseDrag() {}
 
 	/**
 	 * Mouse button release. The mouse was moved before.
 	 */
-	virtual void mouseDragRelease()
-	{
-	}
+	virtual void mouseDragRelease() {}
 
 	/**
 	 * Mouse drag with "Shift" key pressed at the same time.
 	 */
-	virtual void mouseDragShiftPressed()
-	{
-	}
+	virtual void mouseDragShiftPressed() {}
 
 	/**
 	 * Mouse drag with "Ctrl" key pressed at the same time.
 	 */
-	virtual void mouseDragCtrlPressed()
-	{
-	}
+	virtual void mouseDragCtrlPressed() {}
 
 	/**
 	 * "Shift" key released while mouse drag.
 	 */
-	virtual void mouseDragShiftReleased()
-	{
-	}
+	virtual void mouseDragShiftReleased() {}
 
 	/**
 	 * "Ctrl" key released while mouse drag.
 	 */
-	virtual void mouseDragCtrlReleased()
-	{
-	}
+	virtual void mouseDragCtrlReleased() {}
 
 	/**
 	 * "Arrow" key released up, down, left, right
 	 */
-	virtual void arrowKeyReleased( Qt::Key )
-	{
-	}
+	virtual void arrowKeyReleased( Qt::Key ) {}
 
-	virtual bool keyReleased( Qt::Key )
-	{
-		return false;
-	}
+	virtual bool keyReleased( Qt::Key ) { return false; }
 
 	/**
 	 * Cancels all tool operations. This event is invoked when ESC is pressed.
 	 */
-	virtual void cancel()
-	{
-	}
+	virtual void cancel() {}
 
 	/**
 	 * Cancels the last tool step (if any). This event is invoked when Backspace is pressed.
 	 */
-	virtual void cancelStep()
-	{
-	}
+	virtual void cancelStep() {}
 
 	/**
 	 * Terminates the current tool drawing (if any). This event is invoked when Enter/Return is pressed.
 	 */
-	virtual void accept()
-	{
-	}
+	virtual void accept() {}
 
-	// Make VTool "abstract":
-	virtual ~VTool()
-	{
-	}
-
-	KarbonView* view() const
-	{
-		return m_view;
-	}
+	KarbonView* view() const { return m_view; }
 
 	/**
 	 * Most tools need to know the first mouse coordinate.
 	 */
-	const KoPoint& first() const
-	{
-		return m_firstPoint;
-	}
+	const KoPoint& first() const { return m_firstPoint; }
 
-	const KoPoint& last() const
-	{
-		return m_lastPoint;
-	}
+	const KoPoint& last() const { return m_lastPoint; }
 
 private:
 	/**

@@ -1,0 +1,3 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="polylinetoolplugin" library="karbon_polylinetoolplugin">
+</kpartplugin>

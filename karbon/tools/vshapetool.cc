@@ -34,7 +34,7 @@
 
 
 VShapeTool::VShapeTool( KarbonView* view, const QString& name, bool polar )
-	: VTool( view ), m_name( name )
+	: VTool( view, name.latin1() ), m_name( name )
 {
 	m_isPolar = polar;
 	m_isSquare   = false;

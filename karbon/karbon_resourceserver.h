@@ -30,12 +30,12 @@
 #include <qptrlist.h>
 #include <qstring.h>
 
-#include "vcliparttool.h"
 #include "vgradient.h"
 #include "vpattern.h"
 
 class VGradient;
 class VGradientListItem;
+class VClipartIconItem;
 class VObject;
 
 
@@ -99,6 +99,62 @@ private:
 	QPtrList<VGradientListItem>* m_gradients;
 	QPtrList<VClipartIconItem>* m_cliparts;
 };
+
+class VClipartIconItem : public KoIconItem
+{
+public:
+	VClipartIconItem( const VObject* clipart, double width, double height, QString filename );
+	VClipartIconItem( const VClipartIconItem& item );
+	~VClipartIconItem();
+
+	virtual QPixmap& thumbPixmap() const
+	{
+		return ( QPixmap& ) m_thumbPixmap;
+	}
+
+	virtual QPixmap& pixmap() const
+	{
+		return ( QPixmap& ) m_pixmap;
+	}
+
+	const VObject* clipart() const
+	{
+		return m_clipart;
+	}
+
+	QString filename() const
+	{
+		return m_filename;
+	}
+
+	bool canDelete() const
+	{
+		return m_delete;
+	}
+
+	double originalWidth() const
+	{
+		return m_width;
+	}
+
+	double originalHeight() const
+	{
+		return m_height;
+	}
+
+	VClipartIconItem* clone();
+
+private:
+	QPixmap m_pixmap;
+	QPixmap m_thumbPixmap;
+	VObject* m_clipart;
+	QString m_filename;
+	bool m_delete;
+	double m_width;
+	double m_height;
+}
+
+; // VClipartIconItem
 
 #endif
 

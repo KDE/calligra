@@ -1,0 +1,3 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="startoolplugin" library="karbon_startoolplugin">
+</kpartplugin>

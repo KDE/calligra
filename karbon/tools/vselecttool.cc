@@ -30,13 +30,14 @@
 #include <koRect.h>
 #include <kdebug.h>
 
-#include "karbon_part.h"
-#include "karbon_view.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vselection.h"
+#include <karbon_part.h>
+#include <karbon_view.h>
+#include <render/vpainter.h>
+#include <render/vpainterfactory.h>
+#include <core/vselection.h>
 #include "vselecttool.h"
-#include "vtransformcmd.h"
+#include <commands/vtransformcmd.h>
+#include <kgenericfactory.h>
 
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
@@ -57,12 +58,16 @@ void VSelectOptionsWidget::modeChange( int mode )
 	m_view->part()->document().setSelectionMode( (VDocument::VSelectionMode)mode );
 } // VSelectOptionsWidget::modeChanged
 
-VSelectTool::VSelectTool( KarbonView* view )
-	: VTool( view ), m_state( normal )
+typedef KGenericFactory<VSelectTool, KarbonView> SelectToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_selecttoolplugin, SelectToolPluginFactory( "karbonselecttoolplugin" ) );
+
+VSelectTool::VSelectTool( KarbonView* view, const char* name, const QStringList & )
+	: VTool( view, name ), m_state( normal )
 {
 	m_lock = false;
 	m_objects.setAutoDelete( true );
 	m_optionsWidget = new VSelectOptionsWidget( view );
+	registerTool( this );
 }
 
 VSelectTool::~VSelectTool()

@@ -23,24 +23,29 @@
 
 #include <klocale.h>
 
-#include "karbon_part.h"
-#include "karbon_view.h"
-#include "karbon_factory.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
+#include <karbon_part.h>
+#include <karbon_view.h>
+#include <karbon_factory.h>
+#include <render/vpainter.h>
+#include <render/vpainterfactory.h>
 #include "vgradienttool.h"
-#include "vgradienttabwidget.h"
-#include "vfillcmd.h"
-#include "vstrokecmd.h"
-#include "vstroke.h"
-#include "vselection.h"
+#include <widgets/vgradienttabwidget.h>
+#include <commands/vfillcmd.h>
+#include <commands/vstrokecmd.h>
+#include <core/vstroke.h>
+#include <core/vselection.h>
+#include <kgenericfactory.h>
 
 #include <kdebug.h>
 
-VGradientTool::VGradientTool( KarbonView* view )
-	: VTool( view )
+typedef KGenericFactory<VGradientTool, KarbonView> GradientToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_gradienttoolplugin, GradientToolPluginFactory( "karbongradienttoolplugin" ) );
+
+VGradientTool::VGradientTool( KarbonView* view, const char *name, const QStringList & )
+	: VTool( view, name )
 {
 	m_optionsWidget = new VGradientTabWidget( m_gradient, KarbonFactory::rServer() );
+	registerTool( this );
 }
 
 VGradientTool::~VGradientTool()

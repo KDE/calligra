@@ -36,7 +36,7 @@ class KoUnitDoubleSpinBox;
 class VRectangleTool : public VShapeTool
 {
 public:
-	VRectangleTool( KarbonView* view );
+	VRectangleTool( KarbonView* view, const char* name, const QStringList & );
 	virtual ~VRectangleTool();
 
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }
