@@ -52,7 +52,7 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 	myDock=0;
 	if (! ((m_mainWindow->windowMode()==KexiMainWindow::MDIWindowMode) && (wt==DocumentWindow)))
         {
-		myDock=m_mainWindow->createDockWidget( "Widget", 
+		myDock=m_mainWindow->createDockWidget( "Widget",
 			(icon()?(*(icon())):SmallIcon("kexi")), 0, caption());
 		myDock->setWidget(this);
 		myDock->setEnableDocking(KDockWidget::DockFullDocking);
@@ -88,13 +88,13 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 		s_ToolWindows->insert(0,this);
 		s_activeToolWindow=this;
 	}
-	
+
 	if (myDock) myDock->makeDockVisible();
 }
 
 void KexiDialogBase::focusInEvent ( QFocusEvent *)
 {
-kdDebug()<<"FocusInEvent";
+    kdDebug()<<"FocusInEvent"<<endl;
 
 }
 void KexiDialogBase::closeEvent(QCloseEvent *ev)
