@@ -528,7 +528,11 @@ bool KoDocument::saveNativeFormat( const QString & file )
 {
   kdDebug(30003) << "Saving to store" << endl;
 
-  KoStore* store = new KoStore( file, KoStore::Write );
+  QCString appIdentification( "KOffice " ); // We are limited in the number of chars.
+  appIdentification += nativeFormatMimeType();
+  appIdentification += '\004'; // Two magic bytes to make the identification
+  appIdentification += '\006'; // more reliable (DF)
+  KoStore* store = new KoStore( file, KoStore::Write, appIdentification );
 
   // Save childen first since they might get a new url
   if ( store->bad() || !saveChildren( store, STORE_PROTOCOL ) )
