@@ -128,6 +128,7 @@ KoTextFormat::KoTextFormat()
     //// kotext: WYSIWYG works much much better with scalable fonts -> force it to be scalable
     fn.setStyleStrategy( QFont::ForceOutline );
     d = new KoTextFormatPrivate;
+    m_doubleUnderline = false;
     ////
 //#ifdef DEBUG_COLLECTION
 //    qDebug("KoTextFormat simple ctor, no addRef, no generateKey ! %p",this);
@@ -194,6 +195,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     //memset( widths, 0, 256 * sizeof( ushort ) );
     //// kotext
     d = new KoTextFormatPrivate;
+    m_doubleUnderline = false;
     ////
     generateKey();
     addRef();
@@ -228,6 +230,7 @@ KoTextFormat::KoTextFormat( const KoTextFormat &f )
     //// kotext addition
     d = new KoTextFormatPrivate;
     m_textBackColor=f.m_textBackColor;
+    m_doubleUnderline = f.m_doubleUnderline;
     ////
     addRef();
 }
@@ -273,6 +276,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     //// kotext addition
     d = new KoTextFormatPrivate;
     m_textBackColor=f.m_textBackColor;
+    m_doubleUnderline=f.m_doubleUnderline;
     ////
     addRef();
     return *this;
@@ -362,14 +366,18 @@ void KoTextFormat::generateKey()
     //// kotext addition
     k += '/';
     k += QString::number( (int)fn.strikeOut() );
+    k += '/';
+    k += QString::number( (int)doubleUnderline() );
     //k += '/';
     //k += QString::number( (int)(fn.pointSizeFloat() * 10) );
     k += '/';
     if (m_textBackColor.isValid())
-        k += m_textBackColor.rgb();
+        k += QString::number( (uint)m_textBackColor.rgb() );
     ////
 }
 
+// This is used to create "simple formats", with font and color etc., but without
+// advanced features. Doesn't matter, don't extend the args.
 QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelled, VerticalAlignment a )
 {
     QString k = QString::number( fn.pointSize() );
@@ -393,11 +401,12 @@ QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelle
     //// kotext addition
     k += '/';
     k += QString::number( (int)fn.strikeOut() );
+    k += '/';
+    k += QString::number( (int)false ); // no double-underline in a "simple format"
     //k += '/';
     //k += QString::number( (int)(fn.pointSizeFloat() * 10) );
     k += '/';
-    //if (m_textBackColor.isValid())
-    //    k += m_textBackColor.rgb();
+    // And no text background color.
     ////
     return k;
 }

@@ -4090,6 +4090,7 @@ void KoTextParag::setFormat( int index, int len, KoTextFormat *f, bool useCollec
 	of = str->at( i + index ).format();
 	if ( !changed && f->key() != of->key() )
 	    changed = TRUE;
+        // ######## Is this test exhaustive?
 	if ( invalid == -1 &&
 	     ( f->font().family() != of->font().family() ||
 	       f->font().pointSize() != of->font().pointSize() ||
@@ -6034,6 +6035,8 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
         fn.setStrikeOut( nf.font().strikeOut() );
     if( flags & KoTextFormat::TextBackgroundColor)
         setTextBackgroundColor(nf.textBackgroundColor());
+    if ( flags & KoTextFormat::DoubleUnderline )
+        setDoubleUnderline(nf.doubleUnderline());
     //////
     update();
     //kdDebug() << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags

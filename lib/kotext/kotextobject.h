@@ -70,6 +70,8 @@ public:
     KCommand *setItalicCommand(bool on);
     //void setUnderline(bool on);
     KCommand *setUnderlineCommand(bool on);
+    //void setDoubleUnderline(bool on);
+    KCommand *setDoubleUnderlineCommand(bool on);
     //void setStrikeOut(bool on);
     KCommand *setStrikeOutCommand(bool on);
     //void setTextColor(const QColor &color);
@@ -79,7 +81,7 @@ public:
     //void setFamily(const QString &font);
     KCommand *setFamilyCommand(const QString &font);
     //void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
-    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
+    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript, bool _doubleUnderline, const QColor &col, const QColor &backGroundColor, int flags);
     //void setTextSubScript(bool on);
     KCommand *setTextSubScriptCommand(bool on);
     //void setTextSuperScript(bool on);

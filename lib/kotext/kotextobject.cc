@@ -1840,6 +1840,13 @@ KCommand *KoTextFormatInterface::setUnderlineCommand( bool on )
     return setFormatCommand( &format, KoTextFormat::Underline );
 }
 
+KCommand *KoTextFormatInterface::setDoubleUnderlineCommand( bool on )
+{
+    KoTextFormat format( *currentFormat() );
+    format.setDoubleUnderline( on );
+    return setFormatCommand( &format, KoTextFormat::DoubleUnderline );
+}
+
 KCommand *KoTextFormatInterface::setStrikeOutCommand( bool on )
 {
     KoTextFormat format( *currentFormat() );
@@ -1891,12 +1898,14 @@ QString KoTextFormatInterface::textFontFamily()const
     return currentFormat()->font().family();
 }
 
-KCommand *KoTextFormatInterface::setFontCommand( const QFont &font, bool _subscript, bool _superscript, const QColor &col,const QColor &backGroundColor, int flags )
+KCommand *KoTextFormatInterface::setFontCommand( const QFont &font, bool _subscript, bool _superscript, bool _doubleUnderline, const QColor &col,const QColor &backGroundColor, int flags )
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
     format.setColor( col );
     format.setTextBackgroundColor(backGroundColor);
+    format.setDoubleUnderline( _doubleUnderline );
+
     if(!_subscript)
     {
         if(!_superscript)

@@ -57,13 +57,17 @@ KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSu
     m_strikeOut = new QCheckBox(i18n("Strike Out"),grp);
     grid->addWidget(m_strikeOut,1,1);
 
+    m_doubleUnderline = new QCheckBox(i18n("Double Underline"),grp);
+    grid->addWidget(m_doubleUnderline,0,2);
+
     m_colorButton = new QPushButton( i18n( "Change Color..." ), grp );
-    grid->addWidget(m_colorButton,0,2);
+    grid->addWidget(m_colorButton,0,3);
 
     m_backGroundColorButton = new QPushButton( i18n( "Change Background Color..." ), grp );
-    grid->addWidget(m_backGroundColorButton,1,2);
+    grid->addWidget(m_backGroundColorButton,1,3);
 
     connect( m_underline, SIGNAL(clicked()), this, SLOT( slotUnderlineClicked() ) );
+    connect( m_doubleUnderline, SIGNAL(clicked()), this, SLOT( slotDoubleUnderlineClicked() ) );
     connect( m_strikeOut, SIGNAL(clicked()), this, SLOT( slotStrikeOutClicked() ) );
     connect( m_subScript, SIGNAL(clicked()), this, SLOT( slotSubScriptClicked() ) );
     connect( m_superScript, SIGNAL(clicked()), this, SLOT( slotSuperScriptClicked() ) );
@@ -77,7 +81,7 @@ KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSu
     m_changedFlags = 0;
 }
 
-void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscript )
+void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscript, bool _doubleUnderline )
 {
     m_newFont = _font;
     m_chooseFont->setFont( m_newFont );
@@ -85,6 +89,7 @@ void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscr
     m_strikeOut->setChecked( _font.strikeOut() );
     m_subScript->setChecked( _subscript );
     m_superScript->setChecked( _superscript );
+    m_doubleUnderline->setChecked( _doubleUnderline );
     m_changedFlags = 0;
 }
 
@@ -125,6 +130,11 @@ void KoFontChooser::slotUnderlineClicked()
     m_newFont.setUnderline(m_underline->isChecked());
     m_chooseFont->setFont(m_newFont);
     m_changedFlags |= KoTextFormat::Underline;
+}
+
+void KoFontChooser::slotDoubleUnderlineClicked()
+{
+    m_changedFlags |= KoTextFormat::DoubleUnderline;
 }
 
 void KoFontChooser::slotStrikeOutClicked()
@@ -176,13 +186,14 @@ void KoFontChooser::slotChangeBackGroundColor()
 
 
 KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
-                      bool _subscript, bool _superscript, const QColor & color,
+                      bool _subscript, bool _superscript, bool _doubleunderline, const QColor & color,
                       const QColor & backGroundColor ,bool _withSubSuperScript )
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel|User1, Ok ),
       m_font(_font),
       m_subscript( _subscript ),
       m_superscript(_superscript ),
+      m_doubleunderline( _doubleunderline ),
       m_color( color),
       m_backGroundColor( backGroundColor)
 {
@@ -196,7 +207,7 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
 
 void KoFontDia::slotReset()
 {
-    m_chooser->setFont( m_font, m_subscript, m_superscript );
+    m_chooser->setFont( m_font, m_subscript, m_superscript, m_doubleunderline );
     m_chooser->setColor( m_color );
     m_chooser->setBackGroundColor(m_backGroundColor);
 }

@@ -34,16 +34,16 @@ public:
      *        @see KFontChooser::FontListCriteria for the individual values
      */
     KoFontChooser( QWidget * parent, const char* name = 0L,
-            bool _withSubSuperScript = true,
-            uint fontListCriteria=0);
+            bool _withSubSuperScript = true, uint fontListCriteria=0);
     virtual ~KoFontChooser() {}
 
-    void setFont( const QFont &_font, bool _subscript, bool _superscript );
+    void setFont( const QFont &_font, bool _subscript, bool _superscript, bool _doubleUnderline );
     void setColor( const QColor & col );
     void setBackGroundColor( const QColor & col );
 
     bool getSuperScript() const { return m_superScript->isChecked(); }
     bool getSubScript() const { return m_subScript->isChecked(); }
+    bool getDoubleUnderline() const { return m_doubleUnderline->isChecked(); }
     QFont getNewFont() const { return m_newFont; }
     QColor color() const { return m_chooseFont->color(); }
     QColor backGroundColor() const { return m_backGroundColor;}
@@ -53,6 +53,7 @@ protected slots:
     void slotSuperScriptClicked();
     void slotSubScriptClicked();
     void slotUnderlineClicked();
+    void slotDoubleUnderlineClicked();
     void slotStrikeOutClicked();
     void slotFontChanged(const QFont &);
     void slotChangeColor();
@@ -60,6 +61,7 @@ protected slots:
 private:
     KFontChooser *m_chooseFont;
     QCheckBox *m_underline;
+    QCheckBox *m_doubleUnderline;
     QCheckBox *m_superScript;
     QCheckBox *m_subScript;
     QCheckBox *m_strikeOut;
@@ -75,12 +77,13 @@ class KoFontDia : public KDialogBase
     Q_OBJECT
 public:
     KoFontDia( QWidget* parent, const char* name, const QFont &_font,
-               bool _subscript, bool _superscript, const QColor & color,
+               bool _subscript, bool _superscript, bool _doubleunderline, const QColor & color,
 	       const QColor & backGroundColor,
                bool _withSubSuperScript=true );
 
     bool getSuperScript() const { return m_chooser->getSuperScript(); }
     bool getSubScript() const { return m_chooser->getSubScript(); }
+    bool getDoubleUnderline() const { return m_chooser->getDoubleUnderline(); }
     QFont getNewFont() const { return m_chooser->getNewFont(); }
     QColor color() const { return m_chooser->color(); }
     QColor backGroundColor() const {return m_chooser->backGroundColor();}
@@ -94,6 +97,7 @@ private:
     QFont m_font;
     bool m_subscript;
     bool m_superscript;
+    bool m_doubleunderline;
     QColor m_color;
     QColor m_backGroundColor;
 };

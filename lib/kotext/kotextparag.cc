@@ -526,6 +526,20 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	painter.setFont( font );
     }
 
+    bool doubleUnderline = lastFormat->doubleUnderline();
+    if ( doubleUnderline )
+    {
+        //kdDebug() << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
+	int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+        painter.setPen( QPen( textColor, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        painter.drawLine( startX, y, startX + bw, y );
+        //kdDebug() << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
+	y = lastY + baseLine + zh->layoutUnitToPixelY( lastFormat->descent() ) - KoBorder::zoomWidthY( 1, zh, 0 );
+        //kdDebug() << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
+	painter.drawLine( startX, y, startX + bw, y );
+	painter.setFont( font );
+    }
+
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
     if ( dir != QPainter::RTL && start + len == length() ) // don't draw the last character (trailing space)

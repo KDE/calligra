@@ -56,7 +56,7 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024, DoubleUnderline = 2048 };
 
     /** Set a decimal point size. NOTE: this value isn't stored in the formay key.
         You should NOT call this - it's a special treat for KoTextFormatter */
@@ -68,6 +68,9 @@ public:
     static QColor defaultTextColor( QPainter * painter );
 
     void setStrikeOut(bool);
+    
+    void setDoubleUnderline( bool );
+    bool doubleUnderline() const { return m_doubleUnderline;}
 
     void setTextBackgroundColor(const QColor &);
     QColor textBackgroundColor()const {return m_textBackColor;}
@@ -119,5 +122,6 @@ public:
 
 protected:
     QColor m_textBackColor;
+    bool m_doubleUnderline;
     class KoTextFormatPrivate;
     KoTextFormatPrivate *d;

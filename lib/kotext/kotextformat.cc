@@ -38,6 +38,14 @@ void KoTextFormat::setStrikeOut(bool b)
     update();
 }
 
+void KoTextFormat::setDoubleUnderline( bool b )
+{
+    if( m_doubleUnderline == b )
+         return;
+    m_doubleUnderline = b;
+    update();
+}
+
 void KoTextFormat::setTextBackgroundColor(const QColor &_col)
 {
     if(m_textBackColor==_col)
@@ -61,7 +69,6 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::Size;
     if ( color() != format.color() )
         flags |= KoTextFormat::Color;
-    // todo misspelled
     if ( vAlign() != format.vAlign() )
         flags |= KoTextFormat::VAlign;
 
@@ -69,6 +76,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::StrikeOut;
     if ( textBackgroundColor() != format.textBackgroundColor() )
         flags |= KoTextFormat::TextBackgroundColor;
+    if ( doubleUnderline() != format.doubleUnderline() )
+        flags |= KoTextFormat::DoubleUnderline;
     return flags;
 }
 
