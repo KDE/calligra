@@ -565,12 +565,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     }
 
 
-    //disallow selecting objects outside the "page"
-    if ( editMode ) {
-        if( !m_activePage->getPageRect().contains( docPoint,m_view->zoomHandler() ) )
-            return;
-    }
-
     if ( e->state() & ControlButton )
         keepRatio = true;
 
