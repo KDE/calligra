@@ -2536,10 +2536,15 @@ void KPrPage::changePicture( const QString & filename )
         if(it.current()->isSelected() && it.current()->getType()==OT_PICTURE)
         {
     	    KPPixmapObject *pix = new KPPixmapObject( m_doc->getImageCollection(), image.getKey() );
-
-	    ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change pixmap" ), dynamic_cast<KPPixmapObject*>( it.current() ),pix, m_doc,this );
-	    chgPixCmd->execute();
-	    m_doc->addCommand( chgPixCmd );
+            KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
+            if( obj)
+            {
+                ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change pixmap" ), dynamic_cast<KPPixmapObject*>( it.current() ),pix, m_doc,this );
+                chgPixCmd->execute();
+                m_doc->addCommand( chgPixCmd );
+            }
+            else
+                delete pix;
 	    break;
 	}
     }
@@ -2556,12 +2561,16 @@ void KPrPage::changeClipart( const QString & filename )
     {
         if(it.current()->isSelected()&& it.current()->getType()==OT_CLIPART)
         {
-	    ChgClipCmd *chgClipCmd = new ChgClipCmd( i18n( "Change clipart" ),
-						     dynamic_cast<KPClipartObject*>( it.current() ),
-						     dynamic_cast<KPClipartObject*>( it.current() )->getKey(),
-						     clipart.getKey(), m_doc);
-	    chgClipCmd->execute();
-	    m_doc->addCommand( chgClipCmd );
+            KPClipartObject* obj=dynamic_cast<KPClipartObject*>( it.current() );
+            if (obj )
+            {
+                ChgClipCmd *chgClipCmd = new ChgClipCmd( i18n( "Change clipart" ),
+                                                         dynamic_cast<KPClipartObject*>( it.current() ),
+                                                         dynamic_cast<KPClipartObject*>( it.current() )->getKey(),
+                                                         clipart.getKey(), m_doc);
+                chgClipCmd->execute();
+                m_doc->addCommand( chgClipCmd );
+            }
 	    break;
 	}
     }

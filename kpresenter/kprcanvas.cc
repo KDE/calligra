@@ -1461,65 +1461,68 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 /*==================== mouse double click ========================*/
 void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 {
-  if(!m_view->koDocument()->isReadWrite())
-    return;
-  QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-  KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
-  if(m_currentTextObjectView)
+    if(!m_view->koDocument()->isReadWrite())
+        return;
+    QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
+    if(m_currentTextObjectView)
     {
-      KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
-      Q_ASSERT(txtObj);
-      if(txtObj->contains( docPoint,m_view->zoomHandler() ))
+        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+        Q_ASSERT(txtObj);
+        if(txtObj->contains( docPoint,m_view->zoomHandler() ))
         {
-	  KoPoint pos = contentsPoint - txtObj->getOrig();
-	  //pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x(),pos.y()));
-	  m_currentTextObjectView->mouseDoubleClickEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) );
-	  return;
+            KoPoint pos = contentsPoint - txtObj->getOrig();
+            //pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x(),pos.y()));
+            m_currentTextObjectView->mouseDoubleClickEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) );
+            return;
         }
     }
 
-  //disallow activating objects outside the "page"
-  if ( !m_activePage->getPageRect().contains(docPoint,m_view->zoomHandler()))
-    return;
+    //disallow activating objects outside the "page"
+    if ( !m_activePage->getPageRect().contains(docPoint,m_view->zoomHandler()))
+        return;
 
-  if ( toolEditMode != TEM_MOUSE || !editMode ) return;
+    if ( toolEditMode != TEM_MOUSE || !editMode ) return;
 
-  deSelectAllObj();
-  KPObject *kpobject = 0;
-  kpobject=m_activePage->getEditObj(docPoint);
-  if( !kpobject)
+    deSelectAllObj();
+    KPObject *kpobject = 0;
+    kpobject=m_activePage->getEditObj(docPoint);
+    if( !kpobject)
     {
-      kpobject=stickyPage()->getEditObj(docPoint );
-      if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
-      {
-          if( objectIsAHeaderFooterHidden(kpobject))
-              kpobject=0L;
-      }
+        kpobject=stickyPage()->getEditObj(docPoint );
+        if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
+        {
+            if( objectIsAHeaderFooterHidden(kpobject))
+                kpobject=0L;
+        }
     }
-  if(kpobject)
+    if(kpobject)
     {
-      if ( kpobject->getType() == OT_TEXT )
+        if ( kpobject->getType() == OT_TEXT )
 	{
-	KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-	if(m_currentTextObjectView)
-	  {
-	    m_currentTextObjectView->terminate();
-	    delete m_currentTextObjectView;
-	  }
-	m_currentTextObjectView=kptextobject->createKPTextView(this);
+            KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+            if(kptextobject)
+            {
+                if(m_currentTextObjectView)
+                {
+                    m_currentTextObjectView->terminate();
+                    delete m_currentTextObjectView;
+                }
+                m_currentTextObjectView=kptextobject->createKPTextView(this);
 
-	setTextBackground( kptextobject );
-	setCursor( arrowCursor );
-	editNum = kpobject;
-      }
-      else if ( kpobject->getType() == OT_PART )
+                setTextBackground( kptextobject );
+                setCursor( arrowCursor );
+                editNum = kpobject;
+            }
+        }
+        else if ( kpobject->getType() == OT_PART )
 	{
-	  KPPartObject * obj=dynamic_cast<KPPartObject *>(kpobject);
-          if(obj)
-          {
-              obj->activate( m_view );
-              editNum = obj;
-          }
+            KPPartObject * obj=dynamic_cast<KPPartObject *>(kpobject);
+            if(obj)
+            {
+                obj->activate( m_view );
+                editNum = obj;
+            }
 	}
     }
 }
