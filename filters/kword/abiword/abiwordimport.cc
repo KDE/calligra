@@ -114,7 +114,8 @@ static void TreatAbiProps(QString strProps, AbiPropsMap &abiPropsMap)
 enum StackItemElementType{
     ElementTypeUnknown  = 0,
     ElementTypeBottom,      // Bottom of the stack
-    ElementTypeIgnore,      // Element is known but ignored (e.g. empty elements)
+    ElementTypeIgnore,      // Element is known but ignored 
+    ElementTypeEmpty,       // Element is empty
     ElementTypeAbiWord,     // <abiword>
     ElementTypeSection,     // <section>
     ElementTypeParagraph,   // <p>
@@ -310,7 +311,7 @@ bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttr
         kdError(30506) << "Abiword Import: parse error <c> tag not nested in neither a <p>  nor a <c> tag" << endl;
         return false;
     }
-	return true;
+    return true;
 }
 
 bool charactersElementC (StackItem* stackItem, const QString & ch)
@@ -444,17 +445,19 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     }
     layoutElement.appendChild(element);
 
+#if 0
+    // The following tabulators were KWord's 0.8 one
+    // We trust now on KWord's 1.0 default tabulators.
     element=layoutElement.ownerDocument().createElement("TABULATOR");
-    element.setAttribute("mmpos","64.2055");
+    element.setAttribute("type","0");
     element.setAttribute("ptpos","182");
-    element.setAttribute("inchpos","2.52778");
     layoutElement.appendChild(element);
 
     element=layoutElement.ownerDocument().createElement("TABULATOR");
-    element.setAttribute("mmpos","128.764");
+    element.setAttribute("type","0");
     element.setAttribute("ptpos","365");
-    element.setAttribute("inchpos","5.06944");
     layoutElement.appendChild(element);
+#endif
 
     QDomElement formatElementOut=layoutElement.ownerDocument().createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
@@ -535,10 +538,66 @@ bool EndElementP (StackItem* stackItem)
 {
     if (!stackItem->elementType==ElementTypeParagraph)
     {
-        kdError(30506) << "Wrong element type!! Aborting! (</p> in StructureParser::endElement)" << endl;
+        kdError(30506) << "Wrong element type!! Aborting! (in endElementP)" << endl;
         return false;
     }
     stackItem->stackNode.toElement().normalize();
+    return true;
+}
+
+// <pbr> (forced bage break
+bool StartElementPBR(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& mainDocument, QDomElement& mainFramesetElement)
+{
+    if (stackCurrent->elementType==ElementTypeContent)
+    {
+        kdWarning(30506) << "Forced page break in <c> element! Ignoring! (Not supported)" <<endl;
+        return true; // It is only a warning, so continue parsing!
+    }
+    if (stackCurrent->elementType!=ElementTypeParagraph)
+    {
+        kdError(30506) << "Forced page break found out of turn! Aborting! (in StartElementPBR)" <<endl;
+        return false;
+    }
+    // Now we are sure to be the child of a <p> element
+
+    // The following code is similar to StartElementP
+    // We use mainFramesetElement here not to be dependant that <section> has happened before
+    QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
+    mainFramesetElement.appendChild(paragraphElementOut);
+    QDomElement textElementOut=mainDocument.createElement("TEXT");
+    paragraphElementOut.appendChild(textElementOut);
+    QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
+    paragraphElementOut.appendChild(formatsPluralElementOut);
+
+    // We must now copy/clone the layout of nodeOut.
+
+    QDomNodeList nodeList=stackCurrent->stackNode.toElement().elementsByTagName("LAYOUT");
+
+    if (!nodeList.count())
+    {
+        kdError(30506) << "Unable to find <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        return false;
+    }
+
+    // Now clone it
+    QDomNode newNode=nodeList.item(0).cloneNode(true); // We make a deep cloning of the first element/node
+    if (newNode.isNull())
+    {
+        kdError(30506) << "Unable to clone <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        return false;
+    }
+    paragraphElementOut.appendChild(newNode);
+
+    // TODO: add to layout that a page break occured! (in the old paragraph!)
+
+    // NOTE: The following code is similar to StartElementP but we are working on stackCurrent!
+    // Now that we have done with the old paragraph,
+    //  we can write stackCurrent with the data of the new one!
+    stackCurrent->elementType=ElementTypeParagraph;
+    stackCurrent->stackNode=textElementOut; // <TEXT>
+    stackCurrent->stackNode2=formatsPluralElementOut; // <FORMATS>
+    stackCurrent->pos=0; // No text characters yet
+
     return true;
 }
 
@@ -782,7 +841,11 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     // Create a new stack element copying the top of the stack.
     StackItem *stackItem=new StackItem(*structureStack.current());
 
-    //TODO: memory failure recovery
+    if (!stackItem)
+    {
+        kdError(30506) << "Could not create Stack Item! Aborting! (in StructureParser::startElement)" << endl;
+        return false;
+    }
 
     bool success=false;
 
@@ -801,10 +864,19 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         stackItem->stackNode=structureStack.current()->stackNode;
         success=true;
     }
+    else if ((name=="pbr") || (name=="PBR")) // TODO: does it really exists as upper-case?
+    {
+        // We have a forced page break
+        // NOTE: this is an empty element!
+        stackItem->elementType=ElementTypeEmpty;
+        stackItem->stackNode=structureStack.current()->stackNode;
+        success=StartElementPBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement);
+    }
     else if (name=="pagesize")
         // Does only exists as lower case tag!
+        // NOTE: this is an empty element!
     {
-        stackItem->elementType=ElementTypeIgnore; // It is in fact an empty element!
+        stackItem->elementType=ElementTypeEmpty;
         stackItem->stackNode=structureStack.current()->stackNode;
         success=StartElementPageSize(mainDocument,attributes);
     }
@@ -886,6 +958,15 @@ bool StructureParser :: characters ( const QString & ch )
     { // <p>
         success=charactersElementC(stackItem,ch);
     }
+    else if (stackItem->elementType==ElementTypeEmpty)
+    {
+        success=ch.stripWhiteSpace().isEmpty();
+        if (!success)
+        {
+            // We have a parsing error, so abort!
+            kdError(30506) << "Empty element is not empty! Aborting! (in StructureParser::characters)" << endl;
+        }
+    }
     else
     {
         success=true;
@@ -943,24 +1024,25 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
     //Initiate QDomDocument (TODO: is there are better way?)
     QString strHeader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    // TODO: syntax version 2 (KWord 1.0)
-    strHeader+="<DOC editor=\"KWord\" mime=\"application/x-kword\" syntaxVersion=\"1\" >\n";
+    strHeader+="<DOC editor=\"KWord's AbiWord Import Filter\"";
+    strHeader+=" mime=\"application/x-kword\" syntaxVersion=\"2\" >\n";
     strHeader+="<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\" />\n";
 
     // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
-    strHeader+="<PAPER format=\"1\" width=\"595\" height=\"841\" orientation=\"0\" columns=\"1\" columnspacing=\"2\"";
+    // FIXME: default paper of AbiWord is "Letter" not "ISO A4"
+    strHeader+="<PAPER format=\"1\" width=\"595\" height=\"841\"";
+    strHeader+=" orientation=\"0\" columns=\"1\" columnspacing=\"2\"";
     strHeader+="hType=\"0\" fType=\"0\" spHeadBody=\"9\" spFootBody=\"9\" zoom=\"100\">\n";
 
     strHeader+="<PAPERBORDERS left=\"28\" top=\"42\" right=\"28\" bottom=\"42\" />\n";
-    strHeader+="</PAPER>\n";
-    strHeader+="</DOC>\n";
+    strHeader+="</PAPER>\n</DOC>\n";
 
     QDomDocument qDomDocumentOut(fileOut);
     qDomDocumentOut.setContent(strHeader);
 
     StructureParser handler(qDomDocumentOut);
 
-    //For now, we arbitrarily decide that Qt can handle the encoding in which the file was written!!
+    //We arbitrarily decide that Qt can handle the encoding in which the file was written!!
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
 
