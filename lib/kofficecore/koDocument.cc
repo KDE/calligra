@@ -1220,7 +1220,7 @@ QDomDocument KoDocument::createDomDocument( const QString& appName, const QStrin
     // The namespace URN doesn't need to include the version number.
     QString namespaceURN = QString("http://www.koffice.org/DTD/%1").arg(appName);
     QDomDocument doc = impl.createDocument( namespaceURN, tagName, dtype );
-    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    doc.insertBefore( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ), doc.documentElement() );
     return doc;
 }
 
