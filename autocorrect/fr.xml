@@ -113,6 +113,8 @@
   <item find="agraffes" replace="agrafes" />
   <item find="aieul" replace="aïeul" />
   <item find="aieux" replace="aïeux" />
+  <item find="aigüe" replace="aiguë" />
+  <item find="aigües" replace="aiguës" />
   <item find="aillant" replace="ayant" />
   <item find="ainé" replace="aîné" />
   <item find="ainée" replace="aînée" />
@@ -126,6 +128,8 @@
   <item find="allo" replace="allô" />
   <item find="alosr" replace="alors" />
   <item find="ambigue" replace="ambiguë" />
+  <item find="ambigüe" replace="ambiguë" />
+  <item find="ambigüité" replace="ambiguïté" />
   <item find="ambigüité " replace="ambiguïté " />
   <item find="ame" replace="âme" />
   <item find="amortisement" replace="amortissement" />
@@ -196,6 +200,9 @@
   <item find="aujurd'hui" replace="aujourd'hui" />
   <item find="ausi" replace="aussi" />
   <item find="autatn" replace="autant" />
+  <item find="auto induction" replace="autoinduction" />
+  <item find="auto-correction" replace="autocorrection" />
+  <item find="autoinduction" replace="auto-induction" />
   <item find="autremnt" replace="autrement" />
   <item find="autrment" replace="autrement" />
   <item find="avatn" replace="avant" />
@@ -269,6 +276,8 @@
   <item find="canada" replace="Canada" />
   <item find="canoé" replace="canoë" />
   <item find="carreaus" replace="carreaux" />
+  <item find="cauchemard" replace="cauchemar" />
+  <item find="cauchemards" replace="cauchemars" />
   <item find="ce pendant" replace="cependant" />
   <item find="ceal" replace="cela" />
   <item find="celle là" replace="celle-là" />
@@ -408,6 +417,11 @@
   <item find="déviser" replace="dévisser" />
   <item find="dûe" replace="due" />
   <item find="dûs" replace="dus" />
+  <item find="ellaborer" replace="élaborer" />
+  <item find="ellaboré" replace="élaboré" />
+  <item find="ellaborée" replace="élaborée" />
+  <item find="ellaborées" replace="élaborées" />
+  <item find="ellaborés" replace="élaborés" />
   <item find="elle aperçu" replace="elle aperçut" />
   <item find="elle choisi" replace="elle choisit" />
   <item find="elle conseil" replace="elle conseille" />
@@ -417,6 +431,7 @@
   <item find="elle survie" replace="elle survit" />
   <item find="elle transfert" replace="elle transfère" />
   <item find="elles mêmes" replace="elles-mêmes" />
+  <item find="elles sons" replace="elles sont" />
   <item find="empiètement" replace="empiétement" />
   <item find="en adhérent" replace="en adhérant" />
   <item find="en fabricant" replace="en fabriquant" />
@@ -574,6 +589,7 @@
   <item find="il sans va" replace="il s'en va" />
   <item find="il survie" replace="il survit" />
   <item find="il transfert" replace="il transfère" />
+  <item find="ils sons" replace="ils sont" />
   <item find="imge" replace="image" />
   <item find="imobile" replace="immobile" />
   <item find="imobiles" replace="immobiles" />
@@ -628,6 +644,7 @@
   <item find="la-bas" replace="là-bas" />
   <item find="laisser-passer" replace="laissez-passer" />
   <item find="laissé pour compte" replace="laissé-pour-compte" />
+  <item find="lancer de pois" replace="lancer de poids" />
   <item find="language" replace="langage" />
   <item find="languages" replace="langages" />
   <item find="laors" replace="alors" />
@@ -703,11 +720,17 @@
   <item find="modme" replace="modem" />
   <item find="moi même" replace="moi-même" />
   <item find="monaco" replace="Monaco" />
+  <item find="monoindustrie" replace="mono-industrie" />
+  <item find="monoiodé" replace="mono-iodé" />
   <item find="mort né" replace="mort-né" />
   <item find="mouffle" replace="moufle" />
   <item find="mouffles" replace="moufles" />
   <item find="mourrir" replace="mourir" />
   <item find="muffle" replace="mufle" />
+  <item find="multi-tâche" replace="multitâche" />
+  <item find="multi-tâches" replace="multitâche" />
+  <item find="multi-utilisateur" replace="multiutilisateur" />
+  <item find="multi-utilisateurs" replace="multiutilisateur" />
   <item find="mâçon" replace="maçon" />
   <item find="mêche" replace="mèche" />
   <item find="mêches" replace="mèches" />
@@ -738,6 +761,7 @@
   <item find="on a pas" replace="on n'a pas" />
   <item find="on est pas" replace="on n'est pas" />
   <item find="on y survie" replace="on y survit" />
+  <item find="ont aperçut" replace="ont aperçu" />
   <item find="ont investit" replace="ont investi" />
   <item find="ontario" replace="Ontario" />
   <item find="optionel" replace="optionnel" />
@@ -827,7 +851,10 @@
   <item find="plutot" replace="plutôt" />
   <item find="poele" replace="poêle" />
   <item find="poeles" replace="poêles" />
+  <item find="poids cassés" replace="pois cassés" />
+  <item find="poids de senteur" replace="pois de senteur" />
   <item find="point virgule" replace="point-virgule" />
+  <item find="pois lourd" replace="poids lourd" />
   <item find="poitn" replace="point" />
   <item find="poitns" replace="points" />
   <item find="pole" replace="pôle" />
@@ -967,6 +994,9 @@
   <item find="sous estimées" replace="sous-estimées" />
   <item find="sous estimés" replace="sous-estimés" />
   <item find="sous main" replace="sous-main" />
+  <item find="sous marin" replace="sous-marin" />
+  <item find="sous marine" replace="sous-marine" />
+  <item find="sous marins" replace="sous-marins" />
   <item find="soutien gorge" replace="soutien-gorge" />
   <item find="soutiens-gorges" replace="soutiens-gorge" />
   <item find="stastitiques" replace="statistiques" />
@@ -975,6 +1005,14 @@
   <item find="suffir" replace="suffire" />
   <item find="suffisemment" replace="suffisamment" />
   <item find="suisse" replace="Suisse" />
+  <item find="super utilisateur" replace="superutilisateur" />
+  <item find="super-forme" replace="superforme" />
+  <item find="super-marché" replace="supermarché" />
+  <item find="super-marchés" replace="supermarchés" />
+  <item find="super-ordinateur" replace="superordinateur" />
+  <item find="super-ordinateurs" replace="superordinateurs" />
+  <item find="super-oxyde" replace="superoxyde" />
+  <item find="super-utilisateur" replace="superutilisateur" />
   <item find="suprème" replace="suprême" />
   <item find="sursoir" replace="surseoir" />
   <item find="sus dit" replace="susdit" />
