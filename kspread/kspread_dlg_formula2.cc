@@ -63,7 +63,11 @@ KSpreadDlgFormula2::KSpreadDlgFormula2( KSpreadView* parent, const char* name,co
     typeFunction->insertItem(i18n("Financial"));
 
     functions=new QListBox(this);
-    grid1->addMultiCellWidget( functions,1,8,0,0 );
+    grid1->addMultiCellWidget( functions,1,7,0,0 );
+
+    selectFunction = new QPushButton(QString::null, this);
+    selectFunction->setPixmap(BarIcon("down", KIcon::SizeSmall));
+    grid1->addWidget(selectFunction,8,0);
 
     result= new QLineEdit(this);
     grid1->addMultiCellWidget(result,9,9,0,1);
@@ -125,7 +129,8 @@ KSpreadDlgFormula2::KSpreadDlgFormula2( KSpreadView* parent, const char* name,co
     connect( functions, SIGNAL( doubleClicked(QListBoxItem *)),
              this ,SLOT( slotDoubleClicked(QListBoxItem *) ) );
     slotActivated(i18n("All"));
-
+    connect(selectFunction, SIGNAL(clicked()),
+          this,SLOT(slotSelectButton()));
     connect(firstElement,SIGNAL(textChanged ( const QString & )),
             this,SLOT(slotChangeText(const QString &)));
     connect(secondElement,SIGNAL(textChanged ( const QString & )),
@@ -165,6 +170,8 @@ KSpreadDlgFormula2::KSpreadDlgFormula2( KSpreadView* parent, const char* name,co
         functions->setCurrentItem(functions->index(functions->findItem(formulaName)));
         slotDoubleClicked(functions->findItem(formulaName));
         }
+    if(functions->currentItem()==-1)
+        selectFunction->setEnabled(false);
 }
 
 bool KSpreadDlgFormula2::eventFilter( QObject* obj, QEvent* ev )
@@ -199,13 +206,15 @@ void KSpreadDlgFormula2::slotOk()
     m_pView->canvasWidget()->setMarkerColumn( m_column );
     m_pView->canvasWidget()->setMarkerRow( m_row );
 
-    ASSERT( m_pView->canvasWidget()->editor() );
+    if( m_pView->canvasWidget()->editor()!=0)
+        {
+        ASSERT( m_pView->canvasWidget()->editor() );
 
-    int pos=m_pView->canvasWidget()->editor()->cursorPosition()+ result->text().length();
-    m_pView->canvasWidget()->editor()->setText( result->text() );
-    m_pView->canvasWidget()->editor()->setFocus();
-    m_pView->canvasWidget()->editor()->setCursorPosition( pos );
-
+        int pos=m_pView->canvasWidget()->editor()->cursorPosition()+ result->text().length();
+        m_pView->canvasWidget()->editor()->setText( result->text() );
+        m_pView->canvasWidget()->editor()->setFocus();
+        m_pView->canvasWidget()->editor()->setCursorPosition( pos );
+        }
     accept();
 }
 
@@ -224,6 +233,14 @@ void KSpreadDlgFormula2::slotClose()
     reject();
 }
 
+void KSpreadDlgFormula2::slotSelectButton()
+{
+if(functions->currentItem()!=-1)
+        {
+        slotDoubleClicked(functions->findItem(functions->text(functions->currentItem())));
+        }
+}
+
 void KSpreadDlgFormula2::slotChangeText(const QString &string)
 {
     if(refresh_result)
@@ -232,90 +249,181 @@ void KSpreadDlgFormula2::slotChangeText(const QString &string)
         QString tmp;
         if(firstElement->hasFocus()||m_focus==firstElement)
         {
-            tmp=m_leftText+m_funcName+"("+make_formula(string,funct.firstElementType);
-            if(funct.nb_param>1)
+
+            tmp=m_leftText+m_funcName+"(";
+
+            if(funct.multiple)
             {
-                tmp=tmp+","+make_formula(secondElement->text(),funct.secondElementType);
+                tmp=create_formula(tmp);
             }
-            if(funct.nb_param>2)
+            else
             {
-                tmp=tmp+","+make_formula(thirdElement->text(),funct.thirdElementType);
-            }
-            if(funct.nb_param>3)
-            {
-                tmp=tmp+","+make_formula(fourElement->text(),funct.fourElementType);
-            }
-            if(funct.nb_param>4)
-            {
-                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
+                if(!firstElement->text().isEmpty())
+                        tmp=tmp+make_formula(firstElement->text(),funct.firstElementType);
+
+                if(funct.nb_param>1)
+                {
+                        if( !secondElement->text().isEmpty())
+                                tmp=tmp+","+make_formula(secondElement->text(),funct.secondElementType);
+                        else if( !thirdElement->text().isEmpty()
+                                || !fourElement->text().isEmpty()|| !fiveElement->text().isEmpty())
+                                tmp=tmp+",";
+
+                }
+                if(funct.nb_param>2)
+                {
+                        if( !thirdElement->text().isEmpty())
+                                tmp=tmp+","+make_formula(thirdElement->text(),funct.thirdElementType);
+                        else if(!fourElement->text().isEmpty() || !fiveElement->text().isEmpty())
+                                tmp=tmp+",";
+                }
+                if(funct.nb_param>3)
+                {
+                        if(!fourElement->text().isEmpty())
+                                tmp=tmp+","+make_formula(fourElement->text(),funct.fourElementType);
+                        else if( !fiveElement->text().isEmpty())
+                                tmp=tmp+",";
+                }
+                if(funct.nb_param>4)
+                {
+                        if( !fiveElement->text().isEmpty())
+                                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
+                }
             }
         }
         else if(secondElement->hasFocus()||m_focus==secondElement)
         {
-
             tmp=m_leftText+m_funcName+"(";
-            tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)+","+
-                make_formula(string,funct.secondElementType);
-            if(funct.nb_param>2)
+            if(funct.multiple)
             {
-                tmp=tmp+","+make_formula(thirdElement->text(),funct.thirdElementType);
+                tmp=create_formula(tmp);
             }
-            if(funct.nb_param>3)
+            else
             {
-                tmp=tmp+","+make_formula(fourElement->text(),funct.fourElementType);
-            }
-            if(funct.nb_param>4)
-            {
-                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
-            }
 
+                tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)+","+
+                        make_formula(string,funct.secondElementType);
+                if(funct.nb_param>2)
+                {
+                        if( !thirdElement->text().isEmpty())
+                                tmp=tmp+","+make_formula(thirdElement->text(),funct.thirdElementType);
+                        else if(!fourElement->text().isEmpty() || !fiveElement->text().isEmpty())
+                                tmp=tmp+",";
+                }
+                if(funct.nb_param>3)
+                {
+                        if(!fourElement->text().isEmpty())
+                                tmp=tmp+","+make_formula(fourElement->text(),funct.fourElementType);
+                        else if( !fiveElement->text().isEmpty())
+                                tmp=tmp+",";
+                }
+                if(funct.nb_param>4)
+                {
+                        if( !fiveElement->text().isEmpty())
+                                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
+                }
+            }
         }
         else if(thirdElement->hasFocus()||m_focus==thirdElement)
         {
 
             tmp=m_leftText+m_funcName+"(";
-            tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)
+
+            if(funct.multiple)
+            {
+                 tmp=create_formula(tmp);
+            }
+            else
+            {
+                tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)
                 +","+make_formula(secondElement->text(),funct.secondElementType)+","+
                 make_formula(string,funct.thirdElementType);
 
-            if(funct.nb_param>3)
-            {
-                tmp=tmp+","+ make_formula(fourElement->text(),funct.fourElementType);
+                if(funct.nb_param>3)
+                {
+                        if( !fourElement->text().isEmpty())
+                                tmp=tmp+","+ make_formula(fourElement->text(),funct.fourElementType);
+                        else if(!fiveElement->text().isEmpty())
+                                tmp=tmp+",";
+                }
+                if(funct.nb_param>4)
+                {
+                        if( !fiveElement->text().isEmpty())
+                                tmp=tmp+","+ make_formula(fiveElement->text(),funct.fiveElementType);
+                }
             }
-            if(funct.nb_param>4)
-            {
-                tmp=tmp+","+ make_formula(fiveElement->text(),funct.fiveElementType);
-            }
-
         }
         else if(fourElement->hasFocus()||m_focus==fourElement)
         {
             tmp=m_leftText+m_funcName+"(";
-            tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)+","+
-                make_formula(secondElement->text(),funct.secondElementType)+",";
-            tmp=tmp+make_formula(thirdElement->text(),funct.thirdElementType)+","+
-                make_formula(string,funct.fourElementType);
-            if(funct.nb_param>4)
-            {
-                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
-            }
 
+            if(funct.multiple)
+            {
+                tmp=create_formula(tmp);
+            }
+            else
+            {
+                tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)+","+
+                        make_formula(secondElement->text(),funct.secondElementType)+",";
+                tmp=tmp+make_formula(thirdElement->text(),funct.thirdElementType)+","+
+                        make_formula(string,funct.fourElementType);
+                if(funct.nb_param>4)
+                {
+                        if( !fiveElement->text().isEmpty())
+                                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
+                }
+            }
         }
         else if(fiveElement->hasFocus()||m_focus==fiveElement)
         {
-
             tmp=m_leftText+m_funcName+"(";
-            tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)+","+
-                make_formula(secondElement->text(),funct.secondElementType)+",";
-            tmp=tmp+make_formula(thirdElement->text(),funct.thirdElementType)+","+
-                make_formula(fourElement->text(),funct.fourElementType)+","+
-                make_formula(string,funct.fiveElementType);
+            if(funct.multiple)
+            {
+                tmp=create_formula(tmp);
+            }
+            else
+            {
+
+                tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)+","+
+                        make_formula(secondElement->text(),funct.secondElementType)+",";
+                tmp=tmp+make_formula(thirdElement->text(),funct.thirdElementType)+","+
+                        make_formula(fourElement->text(),funct.fourElementType)+","+
+                        make_formula(string,funct.fiveElementType);
+            }
         }
         tmp=tmp+")"+m_rightText;
         result->setText(tmp);
     }
 }
 
+QString KSpreadDlgFormula2::create_formula(QString tmp)
+{
+if(!firstElement->text().isEmpty())
+        tmp=tmp+make_formula(firstElement->text(),funct.firstElementType);
+if(!secondElement->text().isEmpty())
+        if(!firstElement->text().isEmpty())
+                tmp=tmp+","+make_formula(secondElement->text(),funct.secondElementType);
+        else
+                tmp=tmp+make_formula(secondElement->text(),funct.secondElementType);
+if(!thirdElement->text().isEmpty())
+        if(!secondElement->text().isEmpty()||!firstElement->text().isEmpty())
+                tmp=tmp+","+make_formula(thirdElement->text(),funct.thirdElementType);
+        else
+                tmp=tmp+make_formula(thirdElement->text(),funct.thirdElementType);
+if(!fourElement->text().isEmpty())
+        if(!secondElement->text().isEmpty()||!firstElement->text().isEmpty()
+        ||!thirdElement->text().isEmpty())
+                tmp=tmp+","+make_formula(fourElement->text(),funct.fourElementType);
+        else
+                tmp=tmp+make_formula(fourElement->text(),funct.fourElementType);
+if(!fiveElement->text().isEmpty())
+        if(!secondElement->text().isEmpty()||!firstElement->text().isEmpty()
+        ||!thirdElement->text().isEmpty()||!fourElement->text().isEmpty())
+                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
+        else
+                tmp=tmp+make_formula(fiveElement->text(),funct.fiveElementType);
+return(tmp);
+}
 QString KSpreadDlgFormula2::make_formula( const QString& _text,type_create elementType)
 {
     QString text=_text;
@@ -479,6 +587,8 @@ void KSpreadDlgFormula2::slotDoubleClicked(QListBoxItem *)
 
 void KSpreadDlgFormula2::slotselected(const QString &string)
 {
+    if(functions->currentItem()!=-1)
+        selectFunction->setEnabled(true);
     refresh_result=false;
     m_funcName=string;
     changeFunction();
@@ -674,6 +784,7 @@ void KSpreadDlgFormula2::changeFunction()
 {
     param tmp;
     tmp.nb_param=0;
+    tmp.multiple=false;
     if(m_funcName=="cos" || m_funcName=="sin" || m_funcName=="tan" || m_funcName=="acos" || m_funcName=="asin" || m_funcName=="atan" ||
        m_funcName=="cosh" || m_funcName=="sinh" || m_funcName=="tanh" || m_funcName=="acosh" || m_funcName=="asinh" || m_funcName=="atanh" ||
        m_funcName=="degree" || m_funcName=="radian" )
@@ -743,12 +854,12 @@ void KSpreadDlgFormula2::changeFunction()
   	tmp.fourElementLabel=i18n("Double");
   	tmp.fiveElementLabel=i18n("Double");
         tmp.help=m_funcName+"("+"Double,Double,..."+")";
-
   	tmp.firstElementType=type_double;
   	tmp.secondElementType=type_double;
   	tmp.thirdElementType=type_double;
   	tmp.fourElementType=type_double;
   	tmp.fiveElementType=type_double;
+        tmp.multiple=true;
     }
     else if (m_funcName=="if")
     {
@@ -866,6 +977,7 @@ void KSpreadDlgFormula2::changeFunction()
         tmp.thirdElementType=type_string;
         tmp.fourElementType=type_string;
         tmp.fiveElementType=type_string;
+        tmp.multiple=true;
     }
 
     else if(m_funcName=="AND"||m_funcName=="OR"||m_funcName=="NAND"||m_funcName=="NOR")
@@ -882,6 +994,7 @@ void KSpreadDlgFormula2::changeFunction()
         tmp.thirdElementType=type_logic;
         tmp.fourElementType=type_logic;
         tmp.fiveElementType=type_logic;
+        tmp.multiple=true;
     }
     else if(m_funcName=="BINO" || m_funcName=="INVBINO")
     {

@@ -29,6 +29,7 @@
 #include <qlistbox.h>
 #include <qlineedit.h>
 #include <qlabel.h>
+#include <qpushbutton.h>
 
 class KSpreadView;
 class KSpreadTable;
@@ -53,7 +54,7 @@ struct param
 
   QString fiveElementLabel;
   type_create fiveElementType;
-
+  bool multiple;
   QString help;
 };
 
@@ -64,14 +65,16 @@ public:
   KSpreadDlgFormula2( KSpreadView* parent, const char* name,const QString& formulaName=0);
   void changeFunction();
   QString make_formula( const QString& _text,type_create elementType);
+  QString create_formula(QString _text);
 public slots:
-    void slotOk();
+  void slotOk();
   void slotClose();
   void slotselected(const QString &);
   void slotDoubleClicked(QListBoxItem *);
   void slotActivated(const QString &);
   void slotChangeText(const QString &);
   void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
+  void slotSelectButton();
 private:
   bool eventFilter( QObject* obj, QEvent* ev );
 protected:
@@ -100,6 +103,7 @@ protected:
   QString m_funcName;
   QString m_tableName;
   param funct;
+  QPushButton *selectFunction;
 
   int m_oldLength;
   QString m_rightText;
