@@ -528,7 +528,7 @@ public:
 		    int row, int column,
 		    const QMap<QString, QString> &attr,
 		    const QStyleSheetItem* style,
-		    const QTextFormat& fmt, const QString& context,
+		    const QTextFormat&, const QString& context,
 		    QMimeSourceFactory &factory, QStyleSheet *sheet, const QString& doc );
     QTextTableCell( QTextTable* table, int row, int column );
 
@@ -2218,8 +2218,10 @@ inline void QTextParag::setParagId( int i )
 
 inline int QTextParag::paragId() const
 {
+#if 0
     if ( id == -1 )
 	qWarning( "invalid parag id!!!!!!!! (%p)", this );
+#endif
     return id;
 }
 
@@ -2532,7 +2534,6 @@ inline QTextStringChar::~QTextStringChar()
 	format()->removeRef();
     switch ( type ) {
 	case Custom:
-            qDebug("Deleting QTextStringChar's custom item %p", d.custom);
 	    delete d.custom; break;
 	case Mark:
 	    delete d.mark; break;
