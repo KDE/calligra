@@ -629,7 +629,8 @@ void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete, bool re
 		remove();
 		last_r++;
 	}
-	emit refreshRequested(); //! \todo more effective?
+//DON'T CLEAR BECAUSE KexiTableViewPropertyBuffer will clear BUFFERS!
+//-->	emit refreshRequested(); //! \todo more effective?
 	emit rowsDeleted( rowsToDelete );
 }
 
