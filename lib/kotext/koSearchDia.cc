@@ -48,148 +48,27 @@ KoSearchContextUI::KoSearchContextUI( KoSearchContext *ctx, QWidget *parent )
     connect( m_btnShowOptions, SIGNAL( clicked() ), SLOT( slotShowOptions() ) );
     m_grid = new QGridLayout( m_parent, 1, 1, 0, 6 );
     m_grid->addWidget( m_btnShowOptions, 0, 0 );
-    m_checkFamily = 0L;
-
-    // ### currently not implemented
-    m_btnShowOptions->setEnabled( /*false*/true );
+    m_btnShowOptions->setEnabled( true );
 }
 
 void KoSearchContextUI::slotShowOptions()
 {
     m_bOptionsShown = true;
-    delete m_btnShowOptions;
-    delete m_grid;
-    m_grid = new QGridLayout( m_parent, 7, 2, 0, 6 );
-    m_checkFamily = new QCheckBox( i18n( "Family" ), m_parent );
-    m_checkSize = new QCheckBox( i18n( "Size" ), m_parent );
-    m_checkColor = new QCheckBox( i18n( "Color" ), m_parent );
-    m_checkBold = new QCheckBox( i18n( "Bold" ), m_parent );
-    m_checkItalic = new QCheckBox( i18n( "Italic" ), m_parent );
-    m_checkUnderline = new QCheckBox( i18n( "Underline" ), m_parent );
-    m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment" ), m_parent );
 
-    m_familyItem = new QComboBox( true, m_parent );
-    m_familyItem->insertStringList( m_ctx->m_family );
-    for ( int j = 0; j < m_familyItem->count(); j++ )
-        if ( m_familyItem->text( j ) == m_ctx->m_family )
-        {
-            m_familyItem->setCurrentItem( j );
-            break;
-        }
-
-    m_sizeItem = new QSpinBox( 4, 100, 1, m_parent );
-    m_sizeItem->setValue( m_ctx->m_size );
-
-    m_colorItem = new KColorButton( m_parent );
-    m_colorItem->setColor( m_ctx->m_color );
-
-    m_boldItem = new QCheckBox( i18n( "Bold" ), m_parent );
-    m_italicItem = new QCheckBox( i18n( "Italic" ), m_parent );
-    m_underlineItem = new QCheckBox( i18n( "Underline" ), m_parent );
-
-    m_vertAlignItem = new QComboBox( false, m_parent );
-    m_vertAlignItem->insertItem( i18n( "Normal" ), -1 );
-    m_vertAlignItem->insertItem( i18n( "Subscript" ), -1 );
-    m_vertAlignItem->insertItem( i18n( "Superscript" ), -1 );
-    m_vertAlignItem->setCurrentItem( (int)m_ctx->m_vertAlign );
-
-    m_grid->addWidget( m_checkFamily, 1, 0 );
-    m_grid->addWidget( m_checkSize, 2, 0 );
-    m_grid->addWidget( m_checkColor, 3, 0 );
-    m_grid->addWidget( m_checkBold, 4, 0 );
-    m_grid->addWidget( m_checkItalic, 5, 0 );
-    m_grid->addWidget( m_checkUnderline, 6, 0 );
-    m_grid->addWidget( m_checkVertAlign, 7, 0 );
-    m_grid->addWidget( m_familyItem, 1, 1 );
-    m_grid->addWidget( m_sizeItem, 2, 1 );
-    m_grid->addWidget( m_colorItem, 3, 1 );
-    m_grid->addWidget( m_boldItem, 4, 1 );
-    m_grid->addWidget( m_italicItem, 5, 1 );
-    m_grid->addWidget( m_underlineItem, 6, 1 );
-    m_grid->addWidget( m_vertAlignItem, 7, 1 );
-
-    m_checkFamily->show();
-    m_checkSize->show();
-    m_checkColor->show();
-    m_checkBold->show();
-    m_checkItalic->show();
-    m_checkUnderline->show();
-    m_checkVertAlign->show();
-    m_familyItem->show();
-    m_sizeItem->show();
-    m_colorItem->show();
-    m_boldItem->show();
-    m_italicItem->show();
-    m_underlineItem->show();
-    m_vertAlignItem->show();
-
-    // signals and slots connections
-    QObject::connect( m_checkFamily, SIGNAL( toggled( bool ) ), m_familyItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkSize, SIGNAL( toggled( bool ) ), m_sizeItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkColor, SIGNAL( toggled( bool ) ), m_colorItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkUnderline, SIGNAL( toggled( bool ) ), m_underlineItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkVertAlign, SIGNAL( toggled( bool ) ), m_vertAlignItem, SLOT( setEnabled( bool ) ) );
-
-    m_checkFamily->setChecked( m_ctx->m_optionsMask & KoSearchContext::Family );
-    m_familyItem->setEnabled(m_checkFamily->isChecked());
-
-    m_checkSize->setChecked( m_ctx->m_optionsMask & KoSearchContext::Size );
-    m_sizeItem->setEnabled(m_checkSize->isChecked());
-
-    m_checkColor->setChecked( m_ctx->m_optionsMask & KoSearchContext::Color );
-    m_colorItem->setEnabled(m_checkColor->isChecked());
-
-    m_checkBold->setChecked( m_ctx->m_optionsMask & KoSearchContext::Bold );
-    m_boldItem->setEnabled(m_checkBold->isChecked());
-
-    m_checkItalic->setChecked( m_ctx->m_optionsMask & KoSearchContext::Italic );
-    m_italicItem->setEnabled(m_checkItalic->isChecked());
-
-    m_checkUnderline->setChecked( m_ctx->m_optionsMask & KoSearchContext::Underline );
-    m_underlineItem->setEnabled(m_checkUnderline->isChecked());
-
-    m_checkVertAlign->setChecked( m_ctx->m_optionsMask & KoSearchContext::VertAlign );
-    m_vertAlignItem->setEnabled(m_checkVertAlign->isChecked());
-
-    m_boldItem->setChecked( m_ctx->m_options & KoSearchContext::Bold );
-    m_italicItem->setChecked( m_ctx->m_options & KoSearchContext::Italic );
-    m_underlineItem->setChecked( m_ctx->m_options & KoSearchContext::Underline );
+    KoFormatDia * dlg = new KoFormatDia( m_parent, m_ctx );
+    if ( dlg->exec())
+    {
+        dlg->ctxOptions( );
+    }
+    delete dlg;
 }
 
 void KoSearchContextUI::setCtxOptions( long options )
 {
+
     if ( m_bOptionsShown )
     {
-        long optionsMask = 0;
-
-        if ( m_checkFamily->isChecked() )
-            optionsMask |= KoSearchContext::Family;
-        if ( m_checkSize->isChecked() )
-            optionsMask |= KoSearchContext::Size;
-        if ( m_checkColor->isChecked() )
-            optionsMask |= KoSearchContext::Color;
-        if ( m_checkBold->isChecked() )
-            optionsMask |= KoSearchContext::Bold;
-        if ( m_checkItalic->isChecked() )
-            optionsMask |= KoSearchContext::Italic;
-        if ( m_checkUnderline->isChecked() )
-            optionsMask |= KoSearchContext::Underline;
-        if ( m_checkVertAlign->isChecked() )
-            optionsMask |= KoSearchContext::VertAlign;
-
-        if ( m_boldItem->isChecked() )
-            options |= KoSearchContext::Bold;
-        if ( m_italicItem->isChecked() )
-            options |= KoSearchContext::Italic;
-        if ( m_underlineItem->isChecked() )
-            options |= KoSearchContext::Underline;
-        m_ctx->m_optionsMask = optionsMask;
-        m_ctx->m_family = m_familyItem->currentText();
-        m_ctx->m_size = m_sizeItem->cleanText().toInt();
-        m_ctx->m_color = m_colorItem->color();
-        m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
+        options |= m_ctx->m_options;
     }
     m_ctx->m_options = options;
 }
@@ -667,5 +546,131 @@ bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int match
     return true;
 
 }
+
+KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* name)
+    : KDialogBase( parent, name, true, i18n("Formatting Options"), Ok|Cancel ),
+      m_ctx(_ctx)
+{
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+
+    QGridLayout *m_grid = new QGridLayout( page, 7, 2, 0, 6 );
+    m_checkFamily = new QCheckBox( i18n( "Family" ),page  );
+    m_checkSize = new QCheckBox( i18n( "Size" ), page );
+    m_checkColor = new QCheckBox( i18n( "Color" ), page );
+    m_checkBold = new QCheckBox( i18n( "Bold" ), page );
+    m_checkItalic = new QCheckBox( i18n( "Italic" ),page );
+    m_checkUnderline = new QCheckBox( i18n( "Underline" ), page);
+    m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment" ), page );
+
+    m_familyItem = new QComboBox( true, page );
+    m_familyItem->insertStringList( m_ctx->m_family );
+    for ( int j = 0; j < m_familyItem->count(); j++ )
+        if ( m_familyItem->text( j ) == m_ctx->m_family )
+        {
+            m_familyItem->setCurrentItem( j );
+            break;
+        }
+
+    m_sizeItem = new QSpinBox( 4, 100, 1, page );
+    m_sizeItem->setValue( m_ctx->m_size );
+
+    m_colorItem = new KColorButton( page );
+    m_colorItem->setColor( m_ctx->m_color );
+
+    m_boldItem = new QCheckBox( i18n( "Bold" ), page );
+    m_italicItem = new QCheckBox( i18n( "Italic" ), page );
+    m_underlineItem = new QCheckBox( i18n( "Underline" ),page  );
+
+    m_vertAlignItem = new QComboBox( false, page );
+    m_vertAlignItem->insertItem( i18n( "Normal" ), -1 );
+    m_vertAlignItem->insertItem( i18n( "Subscript" ), -1 );
+    m_vertAlignItem->insertItem( i18n( "Superscript" ), -1 );
+    m_vertAlignItem->setCurrentItem( (int)m_ctx->m_vertAlign );
+
+    m_grid->addWidget( m_checkFamily, 1, 0 );
+    m_grid->addWidget( m_checkSize, 2, 0 );
+    m_grid->addWidget( m_checkColor, 3, 0 );
+    m_grid->addWidget( m_checkBold, 4, 0 );
+    m_grid->addWidget( m_checkItalic, 5, 0 );
+    m_grid->addWidget( m_checkUnderline, 6, 0 );
+    m_grid->addWidget( m_checkVertAlign, 7, 0 );
+    m_grid->addWidget( m_familyItem, 1, 1 );
+    m_grid->addWidget( m_sizeItem, 2, 1 );
+    m_grid->addWidget( m_colorItem, 3, 1 );
+    m_grid->addWidget( m_boldItem, 4, 1 );
+    m_grid->addWidget( m_italicItem, 5, 1 );
+    m_grid->addWidget( m_underlineItem, 6, 1 );
+    m_grid->addWidget( m_vertAlignItem, 7, 1 );
+
+    // signals and slots connections
+    QObject::connect( m_checkFamily, SIGNAL( toggled( bool ) ), m_familyItem, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkSize, SIGNAL( toggled( bool ) ), m_sizeItem, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkColor, SIGNAL( toggled( bool ) ), m_colorItem, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldItem, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicItem, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkUnderline, SIGNAL( toggled( bool ) ), m_underlineItem, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkVertAlign, SIGNAL( toggled( bool ) ), m_vertAlignItem, SLOT( setEnabled( bool ) ) );
+
+    m_checkFamily->setChecked( m_ctx->m_optionsMask & KoSearchContext::Family );
+    m_familyItem->setEnabled(m_checkFamily->isChecked());
+
+    m_checkSize->setChecked( m_ctx->m_optionsMask & KoSearchContext::Size );
+    m_sizeItem->setEnabled(m_checkSize->isChecked());
+
+    m_checkColor->setChecked( m_ctx->m_optionsMask & KoSearchContext::Color );
+    m_colorItem->setEnabled(m_checkColor->isChecked());
+
+    m_checkBold->setChecked( m_ctx->m_optionsMask & KoSearchContext::Bold );
+    m_boldItem->setEnabled(m_checkBold->isChecked());
+
+    m_checkItalic->setChecked( m_ctx->m_optionsMask & KoSearchContext::Italic );
+    m_italicItem->setEnabled(m_checkItalic->isChecked());
+
+    m_checkUnderline->setChecked( m_ctx->m_optionsMask & KoSearchContext::Underline );
+    m_underlineItem->setEnabled(m_checkUnderline->isChecked());
+
+    m_checkVertAlign->setChecked( m_ctx->m_optionsMask & KoSearchContext::VertAlign );
+    m_vertAlignItem->setEnabled(m_checkVertAlign->isChecked());
+
+    m_boldItem->setChecked( m_ctx->m_options & KoSearchContext::Bold );
+    m_italicItem->setChecked( m_ctx->m_options & KoSearchContext::Italic );
+    m_underlineItem->setChecked( m_ctx->m_options & KoSearchContext::Underline );
+}
+
+void KoFormatDia::ctxOptions( )
+{
+    long optionsMask = 0;
+    long options = 0;
+    if ( m_checkFamily->isChecked() )
+        optionsMask |= KoSearchContext::Family;
+    if ( m_checkSize->isChecked() )
+        optionsMask |= KoSearchContext::Size;
+    if ( m_checkColor->isChecked() )
+        optionsMask |= KoSearchContext::Color;
+    if ( m_checkBold->isChecked() )
+        optionsMask |= KoSearchContext::Bold;
+    if ( m_checkItalic->isChecked() )
+        optionsMask |= KoSearchContext::Italic;
+    if ( m_checkUnderline->isChecked() )
+        optionsMask |= KoSearchContext::Underline;
+    if ( m_checkVertAlign->isChecked() )
+        optionsMask |= KoSearchContext::VertAlign;
+
+    if ( m_boldItem->isChecked() )
+        options |= KoSearchContext::Bold;
+    if ( m_italicItem->isChecked() )
+        options |= KoSearchContext::Italic;
+    if ( m_underlineItem->isChecked() )
+        options |= KoSearchContext::Underline;
+
+    m_ctx->m_optionsMask = optionsMask;
+    m_ctx->m_family = m_familyItem->currentText();
+    m_ctx->m_size = m_sizeItem->cleanText().toInt();
+    m_ctx->m_color = m_colorItem->color();
+    m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
+    m_ctx->m_options = options;
+}
+
 
 #include "koSearchDia.moc"

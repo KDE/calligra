@@ -94,9 +94,14 @@ private slots:
 
 private:
     KoSearchContext *m_ctx;
+    QGridLayout *m_grid;
+    bool m_bOptionsShown;
+    QPushButton *m_btnShowOptions;
     QWidget *m_parent;
 
-    bool m_bOptionsShown;
+#if 0
+    QWidget *m_parent;
+
     QPushButton *m_btnShowOptions;
     QGridLayout *m_grid;
     QCheckBox *m_checkFamily;
@@ -113,6 +118,7 @@ private:
     QCheckBox *m_italicItem;
     QCheckBox *m_underlineItem;
     QComboBox *m_vertAlignItem;
+#endif
 };
 
 //
@@ -248,6 +254,31 @@ private:
     KoSearchContext *m_searchContext;
     KoSearchContext *m_replaceContext;
     KoFindReplace * m_findReplace;
+};
+
+class KoFormatDia: public KDialogBase
+{
+    Q_OBJECT
+public:
+    KoFormatDia( QWidget* parent, KoSearchContext *_ctx, const char* name=0L);
+    //apply to parameter to context !
+    void ctxOptions( );
+private:
+    QCheckBox *m_checkFamily;
+    QCheckBox *m_checkSize;
+    QCheckBox *m_checkColor;
+    QCheckBox *m_checkBold;
+    QCheckBox *m_checkItalic;
+    QCheckBox *m_checkUnderline;
+    QCheckBox *m_checkVertAlign;
+    QComboBox *m_familyItem;
+    QSpinBox *m_sizeItem;
+    KColorButton *m_colorItem;
+    QCheckBox *m_boldItem;
+    QCheckBox *m_italicItem;
+    QCheckBox *m_underlineItem;
+    QComboBox *m_vertAlignItem;
+    KoSearchContext *m_ctx;
 };
 
 #endif
