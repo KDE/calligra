@@ -430,7 +430,7 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
     }
 
 }
-#include <kdebug.h>
+
 void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList,
                                  QList<AutoFillSequence>& _seqList )
 {
