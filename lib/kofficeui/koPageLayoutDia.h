@@ -170,12 +170,12 @@ protected:
     QComboBox *cpgFormat;
     QComboBox *cpgOrientation;
     QComboBox *cpgUnit;
-    QLineEdit *epgWidth;
-    QLineEdit *epgHeight;
-    QLineEdit *ebrLeft;
-    QLineEdit *ebrRight;
-    QLineEdit *ebrTop;
-    QLineEdit *ebrBottom;
+    KDoubleNumInput *epgWidth;
+    KDoubleNumInput *epgHeight;
+    KDoubleNumInput *ebrLeft;
+    KDoubleNumInput *ebrRight;
+    KDoubleNumInput *ebrTop;
+    KDoubleNumInput *ebrBottom;
     KoPagePreview *pgPreview;
     KoPagePreview *pgPreview2;
     QLineEdit *eHeadLeft;
@@ -231,7 +231,7 @@ private slots:
     void nSpaceChanged( double );
 
 private:
-    void changed(QLineEdit *line, double &pt);
+    void changed(KDoubleNumInput *line, double &pt);
 
     KoPageLayoutDiaPrivate *d;
 };

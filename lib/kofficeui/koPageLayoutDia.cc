@@ -337,36 +337,22 @@ void KoPageLayoutDia::setupTab1()
     formatGrid->addWidget( lpgWidth, 2, 0 );
 
     // linedit width
-    epgWidth = new QLineEdit( formatFrame, "Width" );
-    epgWidth->setValidator( new KFloatValidator( 0,9999,true,epgWidth ) );
-    epgWidth->setText( i18n("000.00") );
-    epgWidth->setMaxLength( 6 );
-    epgWidth->setEchoMode( QLineEdit::Normal );
-    epgWidth->setFrame( true );
+    epgWidth = new KDoubleNumInput( formatFrame, "Width" );
     formatGrid->addWidget( epgWidth, 3, 0 );
     if ( layout.format != PG_CUSTOM )
         epgWidth->setEnabled( false );
-    connect( epgWidth, SIGNAL( returnPressed() ), this, SLOT( rPressed() ) );
-    connect( epgWidth, SIGNAL( returnPressed() ), this, SLOT( widthChanged() ) );
-    connect( epgWidth, SIGNAL( textChanged( const QString& ) ), this, SLOT( widthChanged() ) );
+    connect( epgWidth, SIGNAL( valueChanged(double) ), this, SLOT( widthChanged() ) );
 
     // label height
     QLabel *lpgHeight = new QLabel( i18n( "Height:" ), formatFrame );
     formatGrid->addWidget( lpgHeight, 2, 1 );
 
     // linedit height
-    epgHeight = new QLineEdit( formatFrame, "Height" );
-    epgHeight->setValidator( new KFloatValidator( 0,9999,true,epgHeight ) );
-    epgHeight->setText( i18n("000.00") );
-    epgHeight->setMaxLength( 6 );
-    epgHeight->setEchoMode( QLineEdit::Normal );
-    epgHeight->setFrame( true );
+    epgHeight = new KDoubleNumInput( formatFrame, "Height" );
     formatGrid->addWidget( epgHeight, 3, 1 );
     if ( layout.format != PG_CUSTOM )
         epgHeight->setEnabled( false );
-    connect( epgHeight, SIGNAL( returnPressed() ), this, SLOT( rPressed() ) );
-    connect( epgHeight, SIGNAL( returnPressed() ), this, SLOT( heightChanged() ) );
-    connect( epgHeight, SIGNAL( textChanged( const QString & ) ), this, SLOT( heightChanged() ) );
+    connect( epgHeight, SIGNAL( valueChanged(double ) ), this, SLOT( heightChanged() ) );
 
     // grid col spacing
     formatGrid->addColSpacing( 0, lpgFormat->width() );
@@ -399,16 +385,9 @@ void KoPageLayoutDia::setupTab1()
     borderGrid->addWidget( lbrLeft, 0, 0 );
 
     // linedit left
-    ebrLeft = new QLineEdit( borderFrame, "Left" );
-    ebrLeft->setValidator( new KFloatValidator( 0,9999,true,ebrLeft ) );
-    ebrLeft->setText( i18n("000.00") );
-    ebrLeft->setMaxLength( 6 );
-    ebrLeft->setEchoMode( QLineEdit::Normal );
-    ebrLeft->setFrame( true );
+    ebrLeft = new KDoubleNumInput( borderFrame, "Left" );
     borderGrid->addWidget( ebrLeft, 1, 0 );
-    connect( ebrLeft, SIGNAL( returnPressed() ), this, SLOT( rPressed() ) );
-    connect( ebrLeft, SIGNAL( returnPressed() ), this, SLOT( leftChanged() ) );
-    connect( ebrLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( leftChanged() ) );
+    connect( ebrLeft, SIGNAL( valueChanged( double ) ), this, SLOT( leftChanged() ) );
     if ( !enableBorders ) ebrLeft->setEnabled( false );
 
     // label right
@@ -416,16 +395,9 @@ void KoPageLayoutDia::setupTab1()
     borderGrid->addWidget( lbrRight, 0, 1 );
 
     // linedit right
-    ebrRight = new QLineEdit( borderFrame, "Right" );
-    ebrRight->setValidator( new KFloatValidator( 0,9999,true,ebrRight ) );
-    ebrRight->setText( i18n("000.00") );
-    ebrRight->setMaxLength( 6 );
-    ebrRight->setEchoMode( QLineEdit::Normal );
-    ebrRight->setFrame( true );
+    ebrRight = new KDoubleNumInput( borderFrame, "Right" );
     borderGrid->addWidget( ebrRight, 1, 1 );
-    connect( ebrRight, SIGNAL( returnPressed() ), this, SLOT( rPressed() ) );
-    connect( ebrRight, SIGNAL( returnPressed() ), this, SLOT( rightChanged() ) );
-    connect( ebrRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( rightChanged() ) );
+    connect( ebrRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged() ) );
     if ( !enableBorders ) ebrRight->setEnabled( false );
 
     // label top
@@ -433,16 +405,9 @@ void KoPageLayoutDia::setupTab1()
     borderGrid->addWidget( lbrTop, 2, 0 );
 
     // linedit top
-    ebrTop = new QLineEdit( borderFrame, "Top" );
-    ebrTop->setValidator( new KFloatValidator( 0,9999,true,ebrTop ) );
-    ebrTop->setText( i18n("000.00") );
-    ebrTop->setMaxLength( 6 );
-    ebrTop->setEchoMode( QLineEdit::Normal );
-    ebrTop->setFrame( true );
+    ebrTop = new KDoubleNumInput( borderFrame, "Top" );
     borderGrid->addWidget( ebrTop, 3, 0 );
-    connect( ebrTop, SIGNAL( returnPressed() ), this, SLOT( rPressed() ) );
-    connect( ebrTop, SIGNAL( returnPressed() ), this, SLOT( topChanged() ) );
-    connect( ebrTop, SIGNAL( textChanged( const QString & ) ), this, SLOT( topChanged() ) );
+    connect( ebrTop, SIGNAL( valueChanged( double ) ), this, SLOT( topChanged() ) );
     if ( !enableBorders ) ebrTop->setEnabled( false );
 
     // label bottom
@@ -450,16 +415,9 @@ void KoPageLayoutDia::setupTab1()
     borderGrid->addWidget( lbrBottom, 2, 1 );
 
     // linedit bottom
-    ebrBottom = new QLineEdit( borderFrame, "Bottom" );
-    ebrBottom->setValidator( new KFloatValidator( 0,9999,true,ebrBottom ) );
-    ebrBottom->setText( i18n("000.00") );
-    ebrBottom->setMaxLength( 6 );
-    ebrBottom->setEchoMode( QLineEdit::Normal );
-    ebrBottom->setFrame( true );
+    ebrBottom = new KDoubleNumInput( borderFrame, "Bottom" );
     borderGrid->addWidget( ebrBottom, 3, 1 );
-    connect( ebrBottom, SIGNAL( returnPressed() ), this, SLOT( rPressed() ) );
-    connect( ebrBottom, SIGNAL( returnPressed() ), this, SLOT( bottomChanged() ) );
-    connect( ebrBottom, SIGNAL( textChanged( const QString & ) ), this, SLOT( bottomChanged() ) );
+    connect( ebrBottom, SIGNAL( valueChanged( double ) ), this, SLOT( bottomChanged() ) );
     if ( !enableBorders ) ebrBottom->setEnabled( false );
 
     // grid col spacing
@@ -527,12 +485,12 @@ void KoPageLayoutDia::setValuesTab1()
 }
 
 void KoPageLayoutDia::setValuesTab1Helper() {
-    epgWidth->setText( KoUnit::userValue( layout.ptWidth, m_unit ) );
-    epgHeight->setText( KoUnit::userValue( layout.ptHeight, m_unit ) );
-    ebrLeft->setText( KoUnit::userValue( layout.ptLeft, m_unit ) );
-    ebrRight->setText( KoUnit::userValue( layout.ptRight, m_unit ) );
-    ebrTop->setText( KoUnit::userValue( layout.ptTop, m_unit ) );
-    ebrBottom->setText( KoUnit::userValue( layout.ptBottom, m_unit ) );
+    epgWidth->setValue( KoUnit::ptToUnit( layout.ptWidth, m_unit ) );
+    epgHeight->setValue( KoUnit::ptToUnit( layout.ptHeight, m_unit ) );
+    ebrLeft->setValue( KoUnit::ptToUnit( layout.ptLeft, m_unit ) );
+    ebrRight->setValue( KoUnit::ptToUnit( layout.ptRight, m_unit ) );
+    ebrTop->setValue( KoUnit::ptToUnit( layout.ptTop, m_unit ) );
+    ebrBottom->setValue( KoUnit::ptToUnit( layout.ptBottom, m_unit ) );
 }
 
 /*================ setup header and footer tab ===================*/
@@ -813,8 +771,8 @@ void KoPageLayoutDia::formatChanged( int _format )
         layout.ptWidth = w;
         layout.ptHeight = h;
 
-        epgWidth->setText( KoUnit::userValue( layout.ptWidth, m_unit ) );
-        epgHeight->setText( KoUnit::userValue( layout.ptHeight, m_unit ) );
+        epgWidth->setValue( KoUnit::ptToUnit( layout.ptWidth, m_unit ) );
+        epgHeight->setValue( KoUnit::ptToUnit( layout.ptHeight, m_unit ) );
 
         updatePreview( layout );
     }
@@ -825,12 +783,12 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
 {
     if ( ( KoOrientation )_orientation != layout.orientation ) {
 
-        layout.ptWidth = KoUnit::fromUserValue( epgWidth->text(), m_unit );
-        layout.ptHeight = KoUnit::fromUserValue( epgHeight->text(), m_unit );
-        layout.ptLeft = KoUnit::fromUserValue( ebrLeft->text(), m_unit );
-        layout.ptRight = KoUnit::fromUserValue( ebrRight->text(), m_unit );
-        layout.ptTop = KoUnit::fromUserValue( ebrTop->text(), m_unit );
-        layout.ptBottom = KoUnit::fromUserValue( ebrBottom->text(), m_unit );
+        layout.ptWidth = KoUnit::ptToUnit( epgWidth->value(), m_unit );
+        layout.ptHeight = KoUnit::ptToUnit( epgHeight->value(), m_unit );
+        layout.ptLeft = KoUnit::ptToUnit( ebrLeft->value(), m_unit );
+        layout.ptRight = KoUnit::ptToUnit( ebrRight->value(), m_unit );
+        layout.ptTop = KoUnit::ptToUnit( ebrTop->value(), m_unit );
+        layout.ptBottom = KoUnit::ptToUnit( ebrBottom->value(), m_unit );
 
         qSwap( layout.ptWidth, layout.ptHeight );
 
@@ -854,13 +812,13 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
     }
 }
 
-void KoPageLayoutDia::changed(QLineEdit *line, double &pt) {
+void KoPageLayoutDia::changed(KDoubleNumInput *line, double &pt) {
 
-    if ( line->text().length() == 0 && retPressed )
-        line->setText( i18n("0.00") );
-    if ( line->text().toDouble()<0)
-        line->setText( i18n("0.00") );
-    pt = KoUnit::fromUserValue( line->text(), m_unit );
+    if ( line->value() == 0 && retPressed )
+        line->setValue( 0.0 );
+    if ( line->value()<0)
+        line->setValue( 0.0 );
+    pt = KoUnit::ptFromUnit( line->value(), m_unit );
     retPressed = false;
 }
 
