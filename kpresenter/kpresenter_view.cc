@@ -250,6 +250,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     splitter = 0;
     pageBase = 0;
     sticky = FALSE;
+    protect = FALSE;
     m_canvas = 0L;
     m_spell.kspell = 0;
     automaticScreenPresFirstTimer = true;
@@ -963,6 +964,7 @@ void KPresenterView::extraPenBrush()
 
     //now all sticky object are stored in sticky page
     styleDia->setSticky( stickyPage()->getSticky( sticky ) );
+    styleDia->setProtected( page->getProtect( protect ) );
 
     styleDia->setCaption( i18n( "Pen and Brush" ) );
     QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
@@ -3172,6 +3174,15 @@ void KPresenterView::setupActions()
     actionZoomPageHeight= new KAction( i18n( "Zoom Page Height" ), 0,
                                    this, SLOT( zoomPageHeight() ),
                                    actionCollection(), "zoom_page_height" );
+
+    actionFlipHorizontal= new KAction( i18n( "Horizontal Flip" ), 0,
+                                   this, SLOT( flipHorizontal() ),
+                                   actionCollection(), "horizontal_flip" );
+
+    actionFlipVertical= new KAction( i18n( "Vertical Flip" ), 0,
+                                       this, SLOT( flipVertical() ),
+                                       actionCollection(), "vertical_flip" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -3399,6 +3410,13 @@ void KPresenterView::styleOk()
         macro->addCommand(cmd);
         createMacro=true;
     }
+    bool prot = styleDia->isProtected();
+    cmd = m_canvas->setProtectObj(prot);
+    if ( cmd)
+    {
+        createMacro=true;
+        macro->addCommand( cmd );
+    }
     if(createMacro)
         kPresenterDoc()->addCommand(macro);
     else
@@ -3419,6 +3437,7 @@ void KPresenterView::styleOk()
 	sticky = bSticky;
         actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
         actionPenColor->setCurrentColor( (styleDia->getPen()).color() );
+        protect = styleDia->isProtected();
     }
     else {
         actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
@@ -6318,6 +6337,24 @@ void KPresenterView::zoomPageHeight()
     int zoom = qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptHeight ) );
     viewZoom( QString::number(zoom ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
+}
+
+void KPresenterView::flipHorizontal()
+{
+    m_canvas->flipObject( true );
+}
+
+void KPresenterView::flipVertical()
+{
+    m_canvas->flipObject( false );
+}
+
+void KPresenterView::openPopupMenuFlipObject( const QPoint &_point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    static_cast<QPopupMenu*>(factory()->container("flip_popup",this))->popup(_point);
+
 }
 
 #include <kpresenter_view.moc>

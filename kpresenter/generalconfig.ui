@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>PageConfigGeneral</class>
-<widget>
-    <class>QWidget</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QWidget">
+    <property name="name">
         <cstring>PageConfigGeneral</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,53 +12,58 @@
             <height>146</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Form1</string>
     </property>
-    <vbox>
-        <property stdset="1">
-            <name>margin</name>
-            <number>11</number>
+    <spacer>
+        <property name="name" stdset="0">
+            <cstring>Spacer2</cstring>
         </property>
-        <property stdset="1">
-            <name>spacing</name>
-            <number>6</number>
+        <property name="orientation">
+            <enum>Vertical</enum>
         </property>
-        <widget>
-            <class>QCheckBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>checkboxSticky</cstring>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;Sticky Object</string>
-            </property>
-        </widget>
-        <spacer>
-            <property>
-                <name>name</name>
-                <cstring>Spacer1</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>58</x>
-                    <y>34</y>
-                    <width>20</width>
-                    <height>101</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>orientation</name>
-                <enum>Vertical</enum>
-            </property>
-            <property stdset="1">
-                <name>sizeType</name>
-                <enum>Expanding</enum>
-            </property>
-        </spacer>
-    </vbox>
+        <property name="sizeType">
+            <enum>Expanding</enum>
+        </property>
+        <property name="sizeHint">
+            <size>
+                <width>20</width>
+                <height>20</height>
+            </size>
+        </property>
+    </spacer>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>checkboxprotect</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>40</y>
+                <width>180</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Protect Size and Position</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>checkboxSticky</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>11</y>
+                <width>115</width>
+                <height>19</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>&amp;Sticky Object</string>
+        </property>
+    </widget>
 </widget>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

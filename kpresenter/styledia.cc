@@ -161,6 +161,7 @@ void StyleDia::slotReset()
     setFillType( oldFillType );
     setGradient( oldC1, oldC1, oldBCType,oldUnbalanced, oldXfactor, oldYfactor );
     setSticky( oldSticky );
+    setProtected( oldProtect );
 }
 
 /*==============================================================*/
@@ -261,6 +262,7 @@ void StyleDia::setupTab3()
 {
     PageConfigGeneral *w = new PageConfigGeneral( this );
     sticky = w->checkboxSticky;
+    protect = w->checkboxprotect;
     addTab( w , i18n( "&General" ) );
 }
 
@@ -572,7 +574,7 @@ void StyleDia::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
 }
 
 /*==============================================================*/
-QPen StyleDia::getPen()
+QPen StyleDia::getPen() const
 {
     QPen pen;
 
@@ -598,7 +600,7 @@ QPen StyleDia::getPen()
 }
 
 /*==============================================================*/
-QBrush StyleDia::getBrush()
+QBrush StyleDia::getBrush() const
 {
     QBrush brush;
 
@@ -641,55 +643,55 @@ QBrush StyleDia::getBrush()
 }
 
 /*==============================================================*/
-LineEnd StyleDia::getLineBegin()
+LineEnd StyleDia::getLineBegin() const
 {
     return (LineEnd)clineBegin->currentItem();
 }
 
 /*==============================================================*/
-LineEnd StyleDia::getLineEnd()
+LineEnd StyleDia::getLineEnd() const
 {
     return (LineEnd)clineEnd->currentItem();
 }
 
 /*==============================================================*/
-FillType StyleDia::getFillType()
+FillType StyleDia::getFillType() const
 {
     return (FillType)cFillType->currentItem();
 }
 
 /*==============================================================*/
-QColor StyleDia::getGColor1()
+QColor StyleDia::getGColor1() const
 {
     return gradient1->color();
 }
 
 /*==============================================================*/
-QColor StyleDia::getGColor2()
+QColor StyleDia::getGColor2() const
 {
     return gradient2->color();
 }
 
 /*==============================================================*/
-BCType StyleDia::getGType()
+BCType StyleDia::getGType() const
 {
     return (BCType)( gradients->currentItem() + 1 );
 }
 
 /*==============================================================*/
-bool StyleDia::getGUnbalanced()
+bool StyleDia::getGUnbalanced() const
 {
     return unbalanced->isChecked();
 }
 
 /*==============================================================*/
-int StyleDia::getGXFactor()
+int StyleDia::getGXFactor() const
 {
     return xfactor->value();
 }
 
 /*==============================================================*/
-int StyleDia::getGYFactor()
+int StyleDia::getGYFactor() const
 {
     return yfactor->value();
 }
@@ -701,12 +703,27 @@ void StyleDia::setSticky( bool s )
         sticky->setChecked( s );
 }
 
-
-bool StyleDia::isSticky()
+bool StyleDia::isSticky() const
 {
     if( stickyObj )
         return sticky->isChecked();
     return false;
 }
+
+void StyleDia::setProtected( bool p )
+{
+    oldProtect=p;
+    if( stickyObj)
+        protect->setChecked( p );
+}
+
+bool StyleDia::isProtected() const
+{
+    if (protect )
+        return protect->isChecked();
+    else
+        return false;
+}
+
 
 #include <styledia.moc>

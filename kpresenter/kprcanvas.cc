@@ -65,7 +65,7 @@
 #include <stdlib.h>
 #include <qclipboard.h>
 #include <krandomsequence.h>
-
+#include "kppolylineobject.h"
 #include "kprpage.h"
 #include <math.h>
 
@@ -365,8 +365,8 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
         if ( objectIsAHeaderFooterHidden(it.current()))
             continue;
         //don't draw rotate indicator when we are a header or footer
-        if( m_view->kPresenterDoc()->isHeaderFooter(it.current()))
-            selectionMode=SM_HEADERFOOTER;
+        if( m_view->kPresenterDoc()->isHeaderFooter(it.current()) || it.current()->isProtect())
+            selectionMode=SM_PROTECT;
 
 	if ( it.current()->isSticky() || editMode ||
 	     ( rect2.intersects( it.current()->getBoundingRect(m_view->zoomHandler() ) ) && editMode ) ||
@@ -956,6 +956,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuPolygonObject( pnt );
+                } else if ( kpobject->getType() == OT_POLYLINE || kpobject->getType() == OT_LINE ) {
+                    if ( state )
+                        deSelectAllObj();
+                    selectObj( kpobject );
+                    m_view->openPopupMenuFlipObject( pnt );
                 } else {
                     if ( state )
                         deSelectAllObj();
@@ -1659,7 +1664,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 m_view->brushColorChanged( m_view->getBrush() );
 	    } break;
             case INS_FREEHAND: {
-                m_dragEndPoint = QPoint( e->x() + diffx(), e->y() + diffy() );
+                m_dragEndPoint = QPoint( e->x() /*- diffx()*/, e->y() /*- diffy()*/ );
 
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
@@ -2006,6 +2011,10 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 	case Key_End:
 	    m_view->getVScrollBar()->setValue( m_view->getVScrollBar()->maxValue());
 	    break;
+        case Key_Escape:
+            if ( toolEditMode == TEM_ZOOM )
+                setToolEditMode( TEM_MOUSE );
+            break;
 	default: break;
 	}
     }
@@ -6748,3 +6757,58 @@ void KPrCanvas::textObjectToContents()
 
 }
 
+void KPrCanvas::flipObject( bool _horizontal )
+{
+    QPtrList<KPObject> lst;
+    QPtrListIterator<KPObject> it(getObjectList());
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE) )
+            lst.append( it.current()  );
+    }
+    //get sticky obj
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE))
+            lst.append(  it.current() );
+    }
+    if ( lst.isEmpty())
+        return;
+
+    KMacroCommand *macro = new KMacroCommand( i18n("Flips Object"));
+    QPtrListIterator<KPObject> it2( lst );
+    for ( ; it2.current() ; ++it2 ) {
+        KCommand * cmd= new KPrFlipPolyLineCommand(i18n("Flip"), m_view->kPresenterDoc(),  _horizontal , it2.current());
+        macro->addCommand(cmd);
+    }
+    macro->execute();
+    m_view->kPresenterDoc()->addCommand(macro);
+}
+
+KCommand *KPrCanvas::setProtectObj(bool p)
+{
+    QPtrList<KPObject> lst;
+    QValueList<bool> listProt;
+    QPtrListIterator<KPObject> it(getObjectList());
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() )
+        {
+            lst.append( it.current() );
+            listProt.append( it.current()->isProtect());
+        }
+    }
+    //get sticky obj
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() )
+        {
+            lst.append( it.current() );
+            listProt.append( it.current()->isProtect());
+        }
+    }
+    if ( lst.isEmpty())
+        return 0L;
+    KCommand *cmd= new KPrProtectObjCommand( i18n("Protect Object"), listProt, lst , p, m_view->kPresenterDoc() );
+    cmd->execute();
+    return cmd;
+
+}

@@ -123,6 +123,9 @@ public:
     bool setLineEnd( LineEnd le );
     bool setLineBegin( LineEnd lb );
 
+    bool getProtect( bool p );
+    void setProtect( bool p );
+
     KCommand *setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const  QColor& g1, const QColor &g2,
 			   BCType gt, bool unbalanced, int xfactor, int yfactor,QPtrList<KPObject> list);
 

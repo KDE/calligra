@@ -196,6 +196,9 @@ public:
     virtual void setSticky( bool b ) { sticky = b; }
     bool isSticky() const { return sticky; }
 
+    virtual void setProtect( bool b ) { protect = b; }
+    bool isProtect() const { return protect; }
+
     static void setupClipRegion( QPainter *painter, const QRegion &clipRegion );
 
     virtual void setOrigPointInGroup( const KoPoint &_point ) { origTopLeftPointInGroup = _point; }
@@ -252,6 +255,7 @@ protected:
     bool inObjList:1;
     bool resize:1;
     bool sticky:1;
+    bool protect:1;
 
     float presFakt;
     KoPoint oldOrig;

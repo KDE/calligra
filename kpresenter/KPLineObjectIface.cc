@@ -96,3 +96,13 @@ QString KPLineObjectIface::lineEnd() const
     return QString::null;
 
 }
+
+void KPLineObjectIface::horizontalFlips()
+{
+    obj->flip( true);
+}
+
+void KPLineObjectIface::verticalFlips()
+{
+    obj->flip( false );
+}

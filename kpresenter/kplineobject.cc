@@ -235,3 +235,25 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
     } break;
     }
 }
+
+void KPLineObject::flip(bool horizontal )
+{
+    if ( horizontal )
+    {
+        if ( lineType == LT_LU_RD )
+            lineType = LT_LD_RU;
+        else
+            lineType = LT_LU_RD;
+    }
+    else
+    {
+        if ( lineType == LT_LU_RD )
+            lineType = LT_LD_RU;
+        else
+            lineType = LT_LU_RD;
+
+        LineEnd tmp = lineBegin;
+        lineBegin = lineEnd;
+        lineEnd = tmp;
+    }
+}

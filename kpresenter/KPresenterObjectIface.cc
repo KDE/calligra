@@ -261,3 +261,13 @@ void KPresenterObjectIface::setEffect3(const QString & effect)
         obj->setEffect3(EF3_WIPE_BOTTOM);
 
 }
+
+void KPresenterObjectIface::setProtect( bool b )
+{
+    obj->setProtect(b);
+}
+
+bool KPresenterObjectIface::isProtect() const
+{
+    return obj->isProtect();
+}

@@ -49,6 +49,7 @@ class KoParagLayout;
 class KPrPage;
 class KoCustomVariable;
 class KoLinkVariable;
+class KPPolylineObject;
 
 /******************************************************************/
 /* Class: ShadowCmd                                               */
@@ -851,6 +852,36 @@ class KPrHideShowHeaderFooter : public KNamedCommand
     KPTextObject *m_textObject;
     bool newValue;
 };
+
+class KPrFlipPolyLineCommand : public KNamedCommand
+{
+public:
+    KPrFlipPolyLineCommand( const QString &name, KPresenterDoc *_doc, bool _horizontal ,KPObject *_obj);
+    ~KPrFlipPolyLineCommand() {};
+    void execute();
+    void unexecute();
+protected:
+    KPresenterDoc *m_doc;
+    KPObject *m_object;
+    bool horizontal;
+};
+
+class KPrProtectObjCommand : public KNamedCommand
+{
+public:
+    KPrProtectObjCommand( const QString &_name, QValueList<bool> &_b, QPtrList<KPObject> &_objects, bool _newVal, KPresenterDoc *_doc );
+    ~KPrProtectObjCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    QValueList<bool> protect;
+    QPtrList<KPObject> objects;
+    bool newValue;
+    KPresenterDoc *doc;
+};
+
 
 #endif
 

@@ -2045,3 +2045,87 @@ void KPrHideShowHeaderFooter::unexecute()
         kdDebug()<<"Error in void KPrHideShowHeaderFooter::unexecute()\n";
 
 }
+
+
+KPrFlipPolyLineCommand::KPrFlipPolyLineCommand( const QString &name, KPresenterDoc *_doc, bool _horizontal , KPObject *_obj):
+    KNamedCommand(name),
+    m_doc(_doc),
+    m_object(_obj),
+    horizontal(_horizontal)
+{
+}
+
+void KPrFlipPolyLineCommand::execute()
+{
+    if ( m_object->getType() == OT_LINE)
+    {
+        KPLineObject *obj=dynamic_cast<KPLineObject *>(m_object);
+        if ( obj)
+            obj->flip(horizontal );
+        m_doc->repaint( obj );
+    }
+    else if ( m_object->getType() == OT_POLYLINE)
+    {
+        KPPolylineObject *obj=dynamic_cast<KPPolylineObject *>(m_object);
+        if ( obj)
+            obj->flip(horizontal);
+        m_doc->repaint( obj );
+
+    }
+}
+
+void KPrFlipPolyLineCommand::unexecute()
+{
+    if ( m_object->getType() == OT_LINE)
+    {
+        KPLineObject *obj=dynamic_cast<KPLineObject *>(m_object);
+        if ( obj)
+            obj->flip(horizontal );
+        m_doc->repaint( obj );
+    }
+    else if ( m_object->getType() == OT_POLYLINE)
+    {
+        KPPolylineObject *obj=dynamic_cast<KPPolylineObject *>(m_object);
+        if ( obj)
+            obj->flip(horizontal);
+        m_doc->repaint( obj );
+
+    }
+}
+
+KPrProtectObjCommand::KPrProtectObjCommand( const QString &_name, QValueList<bool> &_b, QPtrList<KPObject> &_objects, bool _newValue, KPresenterDoc *_doc ):
+    KNamedCommand( _name ),
+    protect( _b ),
+    newValue( _newValue ),
+    objects( _objects ),
+    doc(_doc)
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
+}
+
+KPrProtectObjCommand::~KPrProtectObjCommand()
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+}
+
+void KPrProtectObjCommand::execute()
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->setProtect( newValue );
+    }
+}
+
+void KPrProtectObjCommand::unexecute()
+{
+    KPObject *obj = 0;
+    for ( unsigned int i = 0; i < objects.count(); ++i ) {
+	obj = objects.at( i );
+        obj->setProtect( *protect.at(i) );
+    }
+}

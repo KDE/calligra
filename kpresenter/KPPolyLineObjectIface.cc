@@ -17,33 +17,29 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPLINE_OBJECT_IFACE_H
-#define KPLINE_OBJECT_IFACE_H
+#include "KPPolyLineObjectIface.h"
+#include "kppolylineobject.h"
+#include "kpobject.h"
 
-#include <dcopobject.h>
-#include <dcopref.h>
-#include "KPresenterObjectIface.h"
-#include <qstring.h>
-#include <qcolor.h>
+#include <kapplication.h>
+#include <dcopclient.h>
 
-class KPLineObject;
+KPPolyLineObjectIface::KPPolyLineObjectIface( KPPolylineObject *_obj )
+    : KPresenterObjectIface(_obj)
 
-class KPLineObjectIface : virtual public KPresenterObjectIface
 {
-    K_DCOP
-public:
-    KPLineObjectIface( KPLineObject *obj_ );
+   obj = _obj;
+}
 
-k_dcop:
+void KPPolyLineObjectIface::horizontalFlips()
+{
+    //todo repaint it
+    obj->flip(true );
+}
 
-    void setLineBegin( const QString & );
-    void setLineEnd( const QString & );
-    QString lineBegin()const;
-    QString lineEnd() const;
-    void horizontalFlips();
-    void verticalFlips();
-private:
-    KPLineObject *obj;
-};
+void KPPolyLineObjectIface::verticalFlips()
+{
+    //todo repaint it
+    obj->flip( false );
+}
 
-#endif

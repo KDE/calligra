@@ -81,6 +81,8 @@ k_dcop:
     QString disappearSoundEffectFileName() const;
     QString typeString() const;
 
+    void setProtect( bool b );
+    bool isProtect() const;
 
 private:
     KPObject *obj;

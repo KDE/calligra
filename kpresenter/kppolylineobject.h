@@ -27,6 +27,7 @@
 #define RAD_FACTOR 180.0 / M_PI
 
 class QPainter;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPPolylineObject                                        */
@@ -38,6 +39,8 @@ public:
     KPPolylineObject();
     KPPolylineObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPPolylineObject() {}
+
+    virtual DCOPObject* dcopObject();
 
     KPPolylineObject &operator=( const KPPolylineObject & );
 
@@ -57,6 +60,8 @@ public:
     { setSize( _size.width(), _size.height() ); }
     virtual void resizeBy( const KoSize &_size );
     virtual void resizeBy( double _dx, double _dy );
+
+    virtual void flip(bool horizontal );
 
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,

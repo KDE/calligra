@@ -22,3 +22,8 @@ Changes after KPresenter 1.1
 - Add Help Point
 - Add support to change zoom with mouse (zoom selected area)
 - Add Configure Picture Dialog
+
+
+KPresenter 1.2beta1 -> 1.2 beta 2
+---------------------------------
+- Add support for flip polyline object

@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPLINE_OBJECT_IFACE_H
-#define KPLINE_OBJECT_IFACE_H
+#ifndef KPPOLYLINE_OBJECT_IFACE_H
+#define KPPOLYLINE_OBJECT_IFACE_H
 
 #include <dcopobject.h>
 #include <dcopref.h>
@@ -26,24 +26,20 @@
 #include <qstring.h>
 #include <qcolor.h>
 
-class KPLineObject;
+class KPPolylineObject;
 
-class KPLineObjectIface : virtual public KPresenterObjectIface
+class KPPolyLineObjectIface : virtual public KPresenterObjectIface
 {
     K_DCOP
 public:
-    KPLineObjectIface( KPLineObject *obj_ );
+    KPPolyLineObjectIface( KPPolylineObject *obj_ );
 
 k_dcop:
-
-    void setLineBegin( const QString & );
-    void setLineEnd( const QString & );
-    QString lineBegin()const;
-    QString lineEnd() const;
     void horizontalFlips();
     void verticalFlips();
+
 private:
-    KPLineObject *obj;
+    KPPolylineObject *obj;
 };
 
 #endif

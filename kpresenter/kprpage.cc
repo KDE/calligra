@@ -1136,7 +1136,7 @@ KCommand * KPrPage::alignObjsLeft()
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
 
-        if(it.current()->isSelected())
+        if(it.current()->isSelected() && !it.current()->isProtect())
         {
 	    _objects.append( it.current() );
             if( !newPosition &&_x != it.current()->getOrig().x())
@@ -1178,7 +1178,7 @@ KCommand * KPrPage::alignObjsCenterH()
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
 
-        if(it.current()->isSelected())
+        if(it.current()->isSelected()&& !it.current()->isProtect())
         {
 	    _objects.append( it.current() );
             if(!newPosition && (( _w - it.current()->getSize().width() ) / 2 - it.current()->getOrig().x() + _x)!=0)
@@ -1217,7 +1217,7 @@ KCommand * KPrPage::alignObjsRight()
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
 
-        if(it.current()->isSelected())
+        if(it.current()->isSelected()&& !it.current()->isProtect())
         {
 	    _objects.append( it.current() );
             if(!newPosition && (( _w - it.current()->getSize().width() ) != it.current()->getOrig().x()))
@@ -1256,7 +1256,7 @@ KCommand *KPrPage::alignObjsTop()
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
 
-        if(it.current()->isSelected())
+        if(it.current()->isSelected()&& !it.current()->isProtect())
         {
             _y = getPageRect( ).y();
             _objects.append( it.current() );
@@ -1298,7 +1298,7 @@ KCommand * KPrPage::alignObjsCenterV()
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
 
-        if(it.current()->isSelected())
+        if(it.current()->isSelected()&& !it.current()->isProtect())
         {
             _y = getPageRect( ).y();
             _h = getPageRect( ).height();
@@ -1339,7 +1339,7 @@ KCommand * KPrPage::alignObjsBottom()
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
 
-        if(it.current()->isSelected())
+        if(it.current()->isSelected()&& !it.current()->isProtect())
         {
             _h = getPageRect( ).y() + getPageRect().height();
             _objects.append( it.current() );
@@ -1649,7 +1649,6 @@ bool KPrPage::setLineBegin( LineEnd lb )
 KCommand * KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft, const QColor &g1, const QColor &g2,
                                     BCType gt, bool unbalanced, int xfactor, int yfactor,QPtrList<KPObject>list )
 {
-    kdDebug() << "KPrPage::setPenBrush" << endl;
     KPObject *kpobject = 0;
     PenBrushCmd *penBrushCmd=0L;
     bool cmdCreate=false;
@@ -3195,7 +3194,7 @@ KoRect KPrPage::getBoundingRect(const KoRect &rect, KPresenterDoc *doc)
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
 
-        if(it.current()->isSelected())
+        if(it.current()->isSelected() && !it.current()->isProtect())
         {
             boundingRect|=it.current()->getBoundingRect(doc->zoomHandler());
         }
@@ -3249,7 +3248,7 @@ KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if ( it.current()->isSelected() )
+        if ( it.current()->isSelected() && !it.current()->isProtect())
         {
             _objects.append( it.current() );
             QRect br = _view->zoomHandler()->zoomRect(it.current()->getBoundingRect(_view->zoomHandler()) );
@@ -3277,7 +3276,7 @@ KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool k
         //don't move a header/footer
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
-        if ( it.current()->isSelected() ) {
+        if ( it.current()->isSelected() && !it.current()->isProtect()) {
 
             KoRect oldKoBoundingRect = it.current()->getBoundingRect(m_view->zoomHandler());
             double _dx = oldKoBoundingRect.x() - 5.0;
@@ -3296,7 +3295,7 @@ KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool k
         }
     }
 
-    if ( key ) {
+    if ( key && !_objects.isEmpty()) {
         moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
                                    KoPoint( _move ),
                                    _objects, m_doc,this );
@@ -3496,7 +3495,7 @@ KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bo
     if ( (int)m_objectList.count() - 1 >= 0 ) {
         for ( int i = m_objectList.count() - 1; i >= 0 ; i-- ) {
             kpobject = m_objectList.at( i );
-            if ( kpobject->contains( pos,m_doc->zoomHandler() ) ) {
+            if ( !kpobject->isProtect() && kpobject->contains( pos,m_doc->zoomHandler() ) ) {
                 _over = true;
                 if ( kpobject->isSelected() && modType == MT_MOVE )
                     desel = false;
@@ -3577,4 +3576,23 @@ void KPrPage::reactivateBgSpellChecking(bool refreshTextObj)
                 m_doc->repaint( oIt.current() );
         }
     }
+}
+
+bool KPrPage::getProtect( bool p )
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        //don't test header/footer all the time sticky
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+        if(it.current()->isSelected())
+            return it.current()->isProtect();
+    }
+    return p;
+}
+
+void KPrPage::setProtect( bool p )
+{
+    //todo
 }

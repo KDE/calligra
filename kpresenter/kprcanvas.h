@@ -64,7 +64,7 @@ class KPrPage;
 class KPrinter;
 class KPTextView;
 class KPPartObject;
-
+class KCommand;
 /**
  * Class KPCanvas - There is a single instance of this class for a given view.
  *
@@ -245,6 +245,10 @@ public:
 
     void textContentsToHeight();
     void textObjectToContents();
+
+    void flipObject( bool _horizontal );
+
+    KCommand *setProtectObj(bool p);
 
 public slots:
     void exitEditMode();

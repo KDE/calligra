@@ -104,18 +104,22 @@ public:
 		      bool _unbalanced, int _xfactor, int _yfactor );
     void setSticky( bool s );
 
-    QPen getPen();
-    QBrush getBrush();
-    LineEnd getLineBegin();
-    LineEnd getLineEnd();
-    FillType getFillType();
-    QColor getGColor1();
-    QColor getGColor2();
-    BCType getGType();
-    bool getGUnbalanced();
-    int getGXFactor();
-    int getGYFactor();
-    bool isSticky();
+    QPen getPen()const;
+    QBrush getBrush()const;
+    LineEnd getLineBegin()const;
+    LineEnd getLineEnd()const;
+    FillType getFillType() const;
+    QColor getGColor1()const;
+    QColor getGColor2()const;
+    BCType getGType()const;
+    bool getGUnbalanced()const;
+    int getGXFactor() const;
+    int getGYFactor() const;
+    bool isSticky()const;
+
+    void setProtected( bool p );
+    bool isProtected()const;
+
 
 private:
     void setupTab1();
@@ -127,7 +131,7 @@ private:
     KComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd, *cFillType;
     KIntNumInput *choosePWidth;
     PBPreview *penPrev, *brushPrev;
-    QCheckBox *unbalanced, *sticky;
+    QCheckBox *unbalanced, *sticky, *protect;
     KComboBox *gradients;
     KColorButton *gradient1, *gradient2;
     QSlider *xfactor, *yfactor;
@@ -144,7 +148,7 @@ private:
     QColor oldC1, oldC2;
     BCType oldBCType;
     bool oldUnbalanced;
-    bool oldSticky;
+    bool oldSticky,  oldProtect;
     int oldXfactor, oldYfactor;
 
 private slots:

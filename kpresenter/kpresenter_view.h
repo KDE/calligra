@@ -371,6 +371,9 @@ public slots:
     void zoomSelectedObject();
     void zoomPageHeight();
 
+    void flipHorizontal();
+    void flipVertical();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -466,6 +469,7 @@ public:
     void openPopupMenuSideBar(const QPoint & _point);
     void openPopupMenuPicObject(const QPoint & _point);
     void openPopupMenuPolygonObject( const QPoint &_point );
+    void openPopupMenuFlipObject( const QPoint &_point );
 
     void openPopupMenuHelpLine( const QPoint & _point );
     void openPopupMenuHelpPoint( const QPoint & _point );
@@ -688,7 +692,7 @@ private:
     int pieLength, pieAngle;
     int rndX, rndY;
     bool sticky;
-
+    bool protect;
     // for Convex/Concave Polygon
     bool checkConcavePolygon;
     int cornersValue;
@@ -922,6 +926,9 @@ private:
     KAction *actionZoomPlus;
     KAction *actionZoomSelectedObject;
     KAction *actionZoomPageHeight;
+
+    KAction *actionFlipHorizontal;
+    KAction *actionFlipVertical;
 
 
     QTimer automaticScreenPresTimer;

@@ -103,6 +103,7 @@ KPObject::KPObject()
     cmds = 0;
     resize = false;
     sticky = false;
+    protect = false;
     dcop = 0;
 }
 
@@ -165,6 +166,11 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
         elem=doc.createElement("DISAPPEARSOUNDEFFECT");
         elem.setAttribute("disappearSoundEffect", static_cast<int>(disappearSoundEffect));
         elem.setAttribute("disappearSoundFileName", d_fileName);
+        fragment.appendChild(elem);
+    }
+    if(protect) {
+        elem=doc.createElement("PROTECT");
+        elem.setAttribute("state" , protect);
         fragment.appendChild(elem);
     }
 
@@ -278,6 +284,12 @@ double KPObject::load(const QDomElement &element) {
     else {
         disappearSoundEffect = false;
         d_fileName = QString::null;
+    }
+    e=element.namedItem("PROTECT").toElement();
+    if (!e.isNull())
+    {
+        if(e.hasAttribute("state"))
+            protect=static_cast<bool>(e.attribute("state").toInt());
     }
     return offset;
 }
@@ -557,7 +569,7 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
 	_painter->drawRect( x + w / 2, y,zX6, zY6 );
 	_painter->drawRect( x + w / 2, y + h, zX6, zY6 );
     }
-    else if ( mode == SM_HEADERFOOTER) {
+    else if ( mode == SM_PROTECT) {
 	_painter->drawRect( x, y,  zX6, zY6 );
 	_painter->drawRect( x, y + h / 2, zX6, zY6 );
 	_painter->drawRect( x, y + h, zX6, zY6 );
