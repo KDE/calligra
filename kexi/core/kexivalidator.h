@@ -70,8 +70,8 @@ class KEXICORE_EXPORT KexiValidator : public QValidator
 	protected:
 		/* Used by check(), for reimplementation, 
 		 by default always returns \a Error.*/
-		virtual Result internalCheck(const QString &valueName, const QVariant& v, QString &message,
-			QString &details);
+		virtual Result internalCheck(const QString &valueName, const QVariant& v, 
+			QString &message, QString &details);
 
 		bool m_acceptsEmptyValue : 1;
 };
