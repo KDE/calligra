@@ -123,6 +123,8 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     // Send our "repaintChanged" signals to the document.
     connect( this, SIGNAL( repaintChanged( KPTextObject * ) ),
              m_doc, SLOT( slotRepaintChanged( KPTextObject * ) ) );
+    connect(m_textobj, SIGNAL( showFormatObject(const KoTextFormat &) ),
+             SLOT( slotFormatChanged(const KoTextFormat &)) );
 }
 
 KPTextObject::~KPTextObject()
@@ -831,7 +833,7 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc )
 #endif
 }
 
-void KPTextObject::drawParags( QPainter */*p*/, int /*from*/, int /*to*/ )
+void KPTextObject::drawParags( QPainter *p, int from, int to )
 {
 #if 0
     int i = 0;
@@ -850,7 +852,47 @@ void KPTextObject::drawParags( QPainter */*p*/, int /*from*/, int /*to*/ )
         if ( i > to )
             return;
     }
+QRect r( 0, 0, ext.width(), ext.height() );
+void drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
+                           QPixmap *&doubleBuffer, const QColorGroup &cg,
+                           KoZoomHandler* zoomHandler,
+                           bool drawCursor, QTextCursor *cursor,
+                           bool resetChanged = TRUE,
+			   bool drawFormattingChars = FALSE);
+
+
+Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+                _painter, r.x(), r.y(), r.width(), r.height(),
+                cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
+                onlyChanged, cursor != 0, cursor, resetChanged );
+
 #endif
+
+    int i = 0;
+    QRect r( 0, 0, ext.width(), ext.height() );
+    QColorGroup cg = QApplication::palette().active();
+    //// ### Transparent background - TODO use configuration ?
+    cg.setBrush( QColorGroup::Base, NoBrush );
+    Qt3::QTextParag *parag = textDocument()->firstParag();
+    while ( parag ) {
+        //p->translate( 0, parag->rect().y() );
+        if ( i >= from && i <= to )
+        {
+            kdDebug()<<"***************************************\n";
+            textDocument()->drawWYSIWYG(
+                p, r.x(), r.y(), r.width(), r.height(),
+                cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
+                true, true, 0L, true );
+        }
+            //parag->paint( *p, ktextobject.colorGroup(), 0, FALSE );
+        //p->translate( 0, -parag->rect().y() );
+        parag = parag->next();
+
+        ++i;
+        if ( i > to )
+            return;
+    }
+
 }
 
 void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, Page* page )
@@ -985,6 +1027,11 @@ void KPTextObject::setShadowParameter(int _distance,ShadowDirection _direction,Q
         static_cast<KoTextParag *>(parag)->setShadow( (int)shadowDistance, shadowDirection, shadowColor );
         parag = parag->next();
     }
+}
+
+void KPTextObject::slotFormatChanged(const KoTextFormat &_format)
+{
+    m_doc->getKPresenterView()->showFormat( _format );
 }
 
 KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )

@@ -3980,6 +3980,7 @@ void KPresenterView::insertLink()
 
 void KPresenterView::showFormat( const KoTextFormat &currentFormat )
 {
+    kdDebug()<<"showFormat( const KoTextFormat &currentFormat )\n";
     actionTextFontFamily->setFont( currentFormat.font().family() );
     actionTextFontSize->setFontSize( currentFormat.font().pointSize() );
     actionTextBold->setChecked( currentFormat.font().bold());

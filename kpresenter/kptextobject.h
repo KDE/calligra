@@ -114,6 +114,9 @@ public:
 signals:
     void repaintChanged( KPTextObject* );
 
+protected slots:
+    void slotFormatChanged(const KoTextFormat &);
+
 protected:
     virtual QDomElement saveKTextObject( QDomDocument& doc );
     QDomElement saveHelper(const QString &tmpText,KoTextFormat*lastFormat ,QDomDocument &doc);
