@@ -1,14 +1,11 @@
 
 INCLUDES = $(all_includes)
 
-bin_PROGRAMS = kthesaurus
+bin_PROGRAMS = klanguage
 
-kthesaurus_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kthesaurus_SOURCES = main.cc
-kthesaurus_LDADD = $(LIB_KSYCOCA)
+klanguage_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+klanguage_SOURCES = main.cc
+klanguage_LDADD = $(LIB_KSYCOCA)
  
 appsdir = $(kde_appsdir)/Office
-apps_DATA = KThesaurus.desktop
-
-messages:
-	$(XGETTEXT) *.cc -o $(podir)/kthesaurus.pot
+apps_DATA = KLanguage.desktop
