@@ -1922,7 +1922,7 @@ void QDOM_ElementPrivate::setAttribute( const QString& name, const QString& valu
 {
   QDOM_NodePrivate* n = m_attr->namedItem( name );
   if ( n )
-      removeAttributeNode( name );
+      removeAttributeNode( n );
   
   n = new QDOM_AttrPrivate( ownerDocument(), this, name );
   n->setNodeValue( value );
