@@ -21,3 +21,4 @@
 
 #undef HAVE_LIBPNG
 
+#undef WITH_SYMBOL_UNDERSCORE
