@@ -27,15 +27,15 @@
 
 class KisBrush;
 
-class PenTool : public Tool
+class PenTool : public KisTool
 {
  public:
   PenTool(KisDoc *doc, KisView *view, const KisBrush *_brush);
   ~PenTool();
   
-  QString toolName() { return QString("KisBrushTool"); }
+  QString toolName() { return QString("BrushTool"); }
 
-  void setKisBrush(const KisBrush *_brush);
+  void setBrush(const KisBrush *_brush);
   bool paint(QPoint pos);
 
  public slots:
@@ -47,7 +47,7 @@ class PenTool : public Tool
   QPoint 	m_dragStart;
   bool   	m_dragging;
   float         m_dragdist;
-  const KisBrush  	*m_pKisBrush;
+  const KisBrush  	*m_pBrush;
 };
 
 #endif //__pentool_h__

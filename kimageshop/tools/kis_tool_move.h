@@ -45,7 +45,7 @@ private:
   QPoint m_newPos;
 };
 
-class MoveTool : public Tool
+class MoveTool : public KisTool
 {
 public:
 

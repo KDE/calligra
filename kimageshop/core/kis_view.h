@@ -32,7 +32,7 @@ class KAction;
 class KToggleAction;
 class QPaintEvent;
 
-class KisBrushDialog;
+class BrushDialog;
 class GradientDialog;
 class GradientEditorDialog;
 class ColorDialog;
@@ -45,11 +45,11 @@ class QScrollBar;
 class KRuler;
 
 class KisBrush;
-class KisBrushesWidget;
-class Tool;
+class BrushesWidget;
+class KisTool;
 class MoveTool;
-class KisBrushTool;
-class AirKisBrushTool;
+class BrushTool;
+class AirBrushTool;
 class EraserTool;
 class PenTool;
 class ZoomTool;
@@ -70,7 +70,7 @@ class KisView : public ContainerView
  public slots:
   void slotDocUpdated();
   void slotDocUpdated(const QRect&);
-  void slotSetKisBrush(const KisBrush *);
+  void slotSetBrush(const KisBrush *);
 
   void slotSetFGColor(const KisColor&);
   void slotSetBGColor(const KisColor&);
@@ -148,7 +148,7 @@ class KisView : public ContainerView
   void setupActions();
   void setupTabBar();
 
-  void activateTool(Tool*);
+  void activateTool(KisTool*);
 
  private:
   int 	docWidth();
@@ -173,19 +173,19 @@ class KisView : public ContainerView
   KAction *m_merge_all_layers, *m_merge_visible_layers, *m_merge_linked_layers;
 
   KisDoc               *m_pDoc;
-  Tool                 *m_pTool; // currently active tool
+  KisTool              *m_pTool; // currently active tool
   MoveTool             *m_pMoveTool;
-  KisBrushTool            *m_pKisBrushTool;
+  BrushTool            *m_pBrushTool;
   EraserTool           *m_pEraserTool;
-  AirKisBrushTool         *m_pAirKisBrushTool;
+  AirBrushTool         *m_pAirBrushTool;
   PenTool              *m_pPenTool;
   ZoomTool             *m_pZoomTool;
   GradientTool         *m_pGradientTool;
   ColorPicker          *m_pColorPicker;
-  const KisBrush          *m_pKisBrush; // current brush
-  const KisBrushesWidget  *m_pKisBrushChooser;
+  const KisBrush       *m_pBrush; // current brush
+  const BrushesWidget  *m_pBrushChooser;
 
-  KisBrushDialog          *m_pKisBrushDialog;
+  BrushDialog          *m_pBrushDialog;
   LayerDialog          *m_pLayerDialog;
   GradientDialog       *m_pGradientDialog;
   GradientEditorDialog *m_pGradientEditorDialog;
@@ -194,7 +194,7 @@ class KisView : public ContainerView
   KisCanvas            *m_pCanvas;
   QScrollBar           *m_pHorz, *m_pVert;
   KRuler               *m_pHRuler, *m_pVRuler;
-  KisColor                m_fg, m_bg;
+  KisColor              m_fg, m_bg;
 
   KisTabBar            *m_pTabBar;
   QButton              *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;

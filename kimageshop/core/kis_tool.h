@@ -27,13 +27,13 @@
 class KisDoc;
 class KisView;
 
-class Tool : public QObject
+class KisTool : public QObject
 {
   Q_OBJECT;
 
  public:
-  Tool(KisDoc *doc, KisView *view = 0L);
-  ~Tool();
+  KisTool(KisDoc *doc, KisView *view = 0L);
+  ~KisTool();
 
   QString toolName();
   void optionsDialog();

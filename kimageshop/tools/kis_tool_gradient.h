@@ -28,7 +28,7 @@
 class KisDoc;
 class Gradient;
 
-class GradientTool : public Tool
+class GradientTool : public KisTool
 {
 public:
 

@@ -24,7 +24,7 @@
 #include "kis_cursor.h"
 
 ColorPicker::ColorPicker(KisDoc *doc, KisView *view)
-  : Tool(doc, view)
+  : KisTool(doc, view)
 {
   m_Cursor = KisCursor::pickerCursor();
   m_dragging = false;
@@ -34,7 +34,7 @@ ColorPicker::~ColorPicker() {}
 
 KisColor ColorPicker::pick(int x, int y)
 {
-  Layer *lay = m_pDoc->getCurrentLayer();
+  KisLayer *lay = m_pDoc->getCurrentLayer();
   uint pixel = lay->getPixel(x, y);
 
   uchar* ptr = (uchar*)&pixel;

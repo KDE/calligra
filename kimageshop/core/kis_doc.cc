@@ -363,14 +363,14 @@ void KisDoc::compositeImage(QRect r)
     m_pCurrent->compositeImage( r );
 }
 
-Layer* KisDoc::layerPtr( Layer *_layer )
+KisLayer* KisDoc::layerPtr( KisLayer *_layer )
 {
   if (m_pCurrent)
     return m_pCurrent->layerPtr( _layer );
   return 0;
 }
 
-Layer* KisDoc::getCurrentLayer()
+KisLayer* KisDoc::getCurrentLayer()
 {
   if (m_pCurrent)
     return m_pCurrent->getCurrentLayer();
@@ -390,19 +390,19 @@ void KisDoc::setCurrentLayer( int _layer )
     m_pCurrent->setCurrentLayer( _layer );
 }
 
-void KisDoc::setLayerOpacity( uchar _opacity, Layer *_layer )
+void KisDoc::setLayerOpacity( uchar _opacity, KisLayer *_layer )
 {
   if (m_pCurrent)
     m_pCurrent->setLayerOpacity( _opacity, _layer );
 }
 
-void KisDoc::moveLayer( int _dx, int _dy, Layer *_lay )
+void KisDoc::moveLayer( int _dx, int _dy, KisLayer *_lay )
 {
   if (m_pCurrent)
     m_pCurrent->moveLayer( _dx, _dy, _lay );
 }
 
-void KisDoc::moveLayerTo( int _x, int _y, Layer *_lay )
+void KisDoc::moveLayerTo( int _x, int _y, KisLayer *_lay )
 {
   if (m_pCurrent)
     m_pCurrent->moveLayerTo( _x, _y, _lay );
@@ -426,7 +426,7 @@ void KisDoc::mergeLinkedLayers()
     m_pCurrent->mergeLinkedLayers();
 }
 
-void KisDoc::mergeLayers(QList<Layer> list)
+void KisDoc::mergeLayers(QList<KisLayer> list)
 {
   if (m_pCurrent)
     m_pCurrent->mergeLayers( list );
@@ -456,31 +456,31 @@ void KisDoc::setBackgroundLayer( unsigned int _layer )
     m_pCurrent->setBackgroundLayer( _layer );
 }
 
-void KisDoc::rotateLayer180(Layer *_layer)
+void KisDoc::rotateLayer180(KisLayer *_layer)
 {
   if (m_pCurrent)
     m_pCurrent->rotateLayer180( _layer );
 }
 
-void KisDoc::rotateLayerLeft90(Layer *_layer)
+void KisDoc::rotateLayerLeft90(KisLayer *_layer)
 {
   if (m_pCurrent)
     m_pCurrent->rotateLayerLeft90( _layer );
 }
 
-void KisDoc::rotateLayerRight90(Layer *_layer)
+void KisDoc::rotateLayerRight90(KisLayer *_layer)
 {
   if (m_pCurrent)
     m_pCurrent->rotateLayerRight90( _layer );
 }
 
-void KisDoc::mirrorLayerX(Layer *_layer)
+void KisDoc::mirrorLayerX(KisLayer *_layer)
 {
   if (m_pCurrent)
     m_pCurrent->mirrorLayerX( _layer );
 }
 
-void KisDoc::mirrorLayerY(Layer *_layer)
+void KisDoc::mirrorLayerY(KisLayer *_layer)
 {
   if (m_pCurrent)
     m_pCurrent->mirrorLayerY( _layer );

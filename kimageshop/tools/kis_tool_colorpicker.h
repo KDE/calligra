@@ -26,7 +26,7 @@
 #include "kis_color.h"
 #include "kis_tool.h"
 
-class ColorPicker : public Tool
+class ColorPicker : public KisTool
 {
 
  public:

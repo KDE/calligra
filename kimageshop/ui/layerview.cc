@@ -427,7 +427,7 @@ LayerPropertyDialog::LayerPropertyDialog( QString _layername, uchar _opacity, QW
   QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
-bool LayerPropertyDialog::editProperties( Layer &_layer )
+bool LayerPropertyDialog::editProperties( KisLayer &_layer )
 {
   LayerPropertyDialog *dialog;
 

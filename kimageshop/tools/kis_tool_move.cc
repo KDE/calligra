@@ -74,7 +74,7 @@ void MoveCommand::moveTo( QPoint _pos )
 }
 
 MoveTool::MoveTool( KisDoc *doc )
-  : Tool( doc )
+  : KisTool( doc )
 {
   m_Cursor = KisCursor::moveCursor();
   m_dragging = false;

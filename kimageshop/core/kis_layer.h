@@ -27,16 +27,16 @@
 
 #include "kis_channeldata.h"
 
-class Layer;
+class KisLayer;
 
-typedef QList<Layer> LayerList;
+typedef QList<KisLayer> LayerList;
 
-class Layer : public QObject {
+class KisLayer : public QObject {
 	Q_OBJECT;
 
  public:
-	Layer(int ch);
-	~Layer();
+	KisLayer(int ch);
+	~KisLayer();
 	
 	void    loadRGBImage(QImage img, QImage alpha);
 	void    loadGrayImage(QImage img, QImage alpha);

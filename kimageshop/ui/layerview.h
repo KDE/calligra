@@ -31,7 +31,7 @@ class QPopupMenu;
 class QLineEdit;
 class KIntSpinBox;
 
-class Layer;
+class KisLayer;
 
 class LayerView : public QTableView
 {
@@ -89,7 +89,7 @@ class LayerPropertyDialog : QDialog
 
 public:
 
-  static bool editProperties( Layer& _layer );
+  static bool editProperties( KisLayer& _layer );
 
 protected:
 

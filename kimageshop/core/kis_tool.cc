@@ -23,37 +23,37 @@
 #include "kis_tool.h"
 #include "kis_cursor.h"
 
-Tool::Tool(KisDoc *doc, KisView *view)
+KisTool::KisTool(KisDoc *doc, KisView *view)
 {
   m_pDoc = doc;
   m_pView = view;
   m_Cursor = KisCursor::arrowCursor();
 }
 
-Tool::~Tool() {}
+KisTool::~KisTool() {}
 
-QString Tool::toolName()
+QString KisTool::toolName()
 {
   return "BaseTool";
 }
 
-void Tool::optionsDialog()
+void KisTool::optionsDialog()
 {
   QMessageBox::information (0L, "KimageShop", "No Options available for this tool.", 1);
 }
 
-void Tool::setCursor( const QCursor& c )
+void KisTool::setCursor( const QCursor& c )
 {
   m_Cursor = c;
 }
 
-QCursor Tool::cursor()
+QCursor KisTool::cursor()
 {
   return m_Cursor;
 }
 
-void Tool::mousePress(QMouseEvent*){}
-void Tool::mouseMove(QMouseEvent*){}
-void Tool::mouseRelease(QMouseEvent*){}
+void KisTool::mousePress(QMouseEvent*){}
+void KisTool::mouseMove(QMouseEvent*){}
+void KisTool::mouseRelease(QMouseEvent*){}
 
 #include "kis_tool.moc"

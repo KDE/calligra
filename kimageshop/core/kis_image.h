@@ -57,7 +57,7 @@ class KisImage : public QObject
     QSize size()          { return QSize( w, h); }
     QRect imageExtents()  { return QRect(0, 0, w, h); }
 
-    Layer* getCurrentLayer() { return currentLayer; }
+    KisLayer* getCurrentLayer() { return currentLayer; }
     int getCurrentLayerIndex() { return layers.find( currentLayer ); }
     void setCurrentLayer( int _layer );
 
@@ -65,30 +65,30 @@ class KisImage : public QObject
     void lowerLayer( unsigned int _layer );
     void setFrontLayer( unsigned int _layer );
     void setBackgroundLayer( unsigned int _layer );
-    void moveLayer( int dx, int dy, Layer *lay = 0 );
-    void moveLayerTo( int x, int y, Layer *lay = 0 );
-    void setLayerOpacity( uchar _opacity, Layer *_layer = 0 );
+    void moveLayer( int dx, int dy, KisLayer *lay = 0 );
+    void moveLayerTo( int x, int y, KisLayer *lay = 0 );
+    void setLayerOpacity( uchar _opacity, KisLayer *_layer = 0 );
 
     void addRGBLayer( QString _file );
     void addRGBLayer(QImage& img, QImage& alpha, const QString name);
     void addRGBLayer(const QRect& r, const QColor& c, const QString& name);
     void removeLayer( unsigned int _layer );
 
-    Layer* layerPtr( Layer *_layer );
+    KisLayer* layerPtr( KisLayer *_layer );
     LayerList layerList() { return layers; };
  
     void compositeImage( QRect _rect );
      
-    void rotateLayer180(Layer *_layer);
-    void rotateLayerLeft90(Layer *_layer);
-    void rotateLayerRight90(Layer *_layer);
-    void mirrorLayerX(Layer *_layer);
-    void mirrorLayerY(Layer *_layer);
+    void rotateLayer180(KisLayer *_layer);
+    void rotateLayerLeft90(KisLayer *_layer);
+    void rotateLayerRight90(KisLayer *_layer);
+    void mirrorLayerX(KisLayer *_layer);
+    void mirrorLayerY(KisLayer *_layer);
 
     void mergeAllLayers();
     void mergeVisibleLayers();
     void mergeLinkedLayers();
-    void mergeLayers(QList<Layer>);
+    void mergeLayers(QList<KisLayer>);
     
  signals:
     void updated();
@@ -96,10 +96,10 @@ class KisImage : public QObject
     void layersUpdated();
     
  protected:
-    void compositeTile( int x, int y, Layer *dstLay = 0, int dstTile = -1 );
-    void convertTileToPixmap( Layer *lay, int tileNo, QPixmap *pix );
-    void renderLayerIntoTile( QRect tileBoundary, const Layer *srcLay, Layer *dstLay, int dstTile );
-    void renderTileQuadrant( const Layer *srcLay, int srcTile, Layer *dstLay,
+    void compositeTile( int x, int y, KisLayer *dstLay = 0, int dstTile = -1 );
+    void convertTileToPixmap( KisLayer *lay, int tileNo, QPixmap *pix );
+    void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay, KisLayer *dstLay, int dstTile );
+    void renderTileQuadrant( const KisLayer *srcLay, int srcTile, KisLayer *dstLay,
 			     int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
     void setUpVisual();
     void convertImageToPixmap( QImage *img, QPixmap *pix );
@@ -114,9 +114,9 @@ class KisImage : public QObject
     int         xTiles;
     int         yTiles;
     LayerList   layers;
-    Layer       *compose;
+    KisLayer    *compose;
     QImage      img;
-    Layer       *currentLayer;
+    KisLayer    *currentLayer;
     QPixmap     **tiles;
     bool        dragging;
     QPoint      dragStart;

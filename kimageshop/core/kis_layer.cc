@@ -21,7 +21,7 @@
 #include "kis_layer.h"
 #include "kis_util.h"
 
-Layer::Layer(int ch)
+KisLayer::KisLayer(int ch)
 	: QObject()
 {
   channels=ch;
@@ -33,13 +33,13 @@ Layer::Layer(int ch)
   alphaChannel=new KisChannelData( 1, KisChannelData::ALPHA);
 }
 
-Layer::~Layer()
+KisLayer::~KisLayer()
 {
   delete dataChannels;
   delete alphaChannel;
 }
 
-void Layer::clear(const QColor& c)
+void KisLayer::clear(const QColor& c)
 {
   uchar r = static_cast<uchar>(c.red());
   uchar g = static_cast<uchar>(c.green());
@@ -65,14 +65,14 @@ void Layer::clear(const QColor& c)
       }
 }
 
-void Layer::setOpacity(uchar o)
+void KisLayer::setOpacity(uchar o)
 {
   opacityVal=o;
   //	emit layerPropertiesChanged();
 }
 
 
-void Layer::loadRGBImage(QImage img, QImage alpha)
+void KisLayer::loadRGBImage(QImage img, QImage alpha)
 {
   qDebug("loadRGBImage img=(%d,%d) alpha=(%d,%d)\n",img.width(),img.height(),
 	 alpha.width(),alpha.height());
@@ -93,7 +93,7 @@ void Layer::loadRGBImage(QImage img, QImage alpha)
 }
 
 
-void Layer::loadGrayImage(QImage img, QImage alpha)
+void KisLayer::loadGrayImage(QImage img, QImage alpha)
 {
   if (img.depth()!=32)
     img=img.convertDepth(32);
@@ -107,14 +107,14 @@ void Layer::loadGrayImage(QImage img, QImage alpha)
 }
 
 
-void Layer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
+void KisLayer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
 {
   pt=pt-dataChannels->tileExtents().topLeft();
   *tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
   *offset=(pt.y()%TILE_SIZE)*TILE_SIZE + pt.x()%TILE_SIZE;
 }
 
-void Layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
+void KisLayer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
 {
   pt=pt-dataChannels->tileExtents().topLeft();
   *tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
@@ -122,12 +122,12 @@ void Layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
   *x=pt.x()%TILE_SIZE;
 }
 
-QRect Layer::tileRect(int tileNo)
+QRect KisLayer::tileRect(int tileNo)
 {
   return(dataChannels->tileRect(tileNo));
 }
 
-uchar* Layer::channelMem(int tileNo, int ox, int oy, bool alpha) const
+uchar* KisLayer::channelMem(int tileNo, int ox, int oy, bool alpha) const
 {
   if (alpha)
     return alphaChannel->tileBlock()[tileNo]+(oy*TILE_SIZE+ox);
@@ -136,122 +136,122 @@ uchar* Layer::channelMem(int tileNo, int ox, int oy, bool alpha) const
 }
 
 
-QRect Layer::imageExtents() const // Extents of the image in canvas coords
+QRect KisLayer::imageExtents() const // Extents of the image in canvas coords
 {
   return dataChannels->imageExtents();
 }
 
-QRect Layer::tileExtents() const// Extents of the image in canvas coords
+QRect KisLayer::tileExtents() const// Extents of the image in canvas coords
 {
   return dataChannels->tileExtents();
 }
 
 // TopLeft of the image in the channel (not always 0,0)
-QPoint Layer::channelOffset() const 
+QPoint KisLayer::channelOffset() const 
 {
   return dataChannels->offset();
 }
 
-int Layer::xTiles() const
+int KisLayer::xTiles() const
 {
   return dataChannels->xTiles();
 }
 
-int Layer::yTiles() const
+int KisLayer::yTiles() const
 {
   return dataChannels->yTiles();
 }
 
 
-void Layer::moveBy(int dx, int dy)
+void KisLayer::moveBy(int dx, int dy)
 {
   alphaChannel->moveBy(dx, dy);	
   dataChannels->moveBy(dx, dy);	
 }
 
-void Layer::moveTo(int x, int y) const
+void KisLayer::moveTo(int x, int y) const
 {
   alphaChannel->moveTo(x, y);	
   dataChannels->moveTo(x, y);	
 }
 
-int Layer::channelLastTileOffsetX() const
+int KisLayer::channelLastTileOffsetX() const
 {
   return dataChannels->lastTileOffsetX();
 }
 
-int Layer::channelLastTileOffsetY() const
+int KisLayer::channelLastTileOffsetY() const
 {
   return dataChannels->lastTileOffsetY();
 }
 
-bool Layer::boundryTileX(int tile) const
+bool KisLayer::boundryTileX(int tile) const
 {
   return(((tile % xTiles())+1)==xTiles());
 }
 
-bool Layer::boundryTileY(int tile) const
+bool KisLayer::boundryTileY(int tile) const
 {
   return(((tile/xTiles())+1)==yTiles());
 }
 
-void Layer::allocateRect(QRect _r)
+void KisLayer::allocateRect(QRect _r)
 {
   alphaChannel->allocateRect(_r);
   dataChannels->allocateRect(_r);
 }
 
-void Layer::setPixel(int x, int y, uint pixel)
+void KisLayer::setPixel(int x, int y, uint pixel)
 {
   dataChannels->setPixel(x,y, pixel);
 }
 
-uint Layer::getPixel(int x, int y)
+uint KisLayer::getPixel(int x, int y)
 {
   return dataChannels->getPixel(x,y);
 }
 
-void Layer::setAlpha(int x, int y, uint pixel)
+void KisLayer::setAlpha(int x, int y, uint pixel)
 {
   alphaChannel->setPixel(x,y, pixel);
 }
 
-uint Layer::getAlpha(int x, int y)
+uint KisLayer::getAlpha(int x, int y)
 {
   return alphaChannel->getPixel(x,y);
 }
 
-void Layer::rotate180()
+void KisLayer::rotate180()
 {
   alphaChannel->rotate180();
   dataChannels->rotate180();
 }
 
-void Layer::rotateLeft90()
+void KisLayer::rotateLeft90()
 {
   alphaChannel->rotateLeft90();
   dataChannels->rotateLeft90();
 }
 
-void Layer::rotateRight90()
+void KisLayer::rotateRight90()
 {
   alphaChannel->rotateRight90();
   dataChannels->rotateRight90();
 }
 
-void Layer::mirrorX()
+void KisLayer::mirrorX()
 {
   alphaChannel->mirrorX();
   dataChannels->mirrorX();
 }
 
-void Layer::mirrorY()
+void KisLayer::mirrorY()
 {
   alphaChannel->mirrorY();
   dataChannels->mirrorY();
 }
 
-void Layer::renderOpacityToAlpha()
+void KisLayer::renderOpacityToAlpha()
 {
   uchar *alpha;
   int xt = xTiles();

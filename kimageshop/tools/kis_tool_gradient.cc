@@ -23,7 +23,7 @@
 #include "kis_gradient.h"
 
 GradientTool::GradientTool( KisDoc *_doc, Gradient *_gradient )
-  : Tool( _doc )
+  : KisTool( _doc )
   , m_gradient( _gradient )
 {
 }

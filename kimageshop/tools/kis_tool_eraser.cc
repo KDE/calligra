@@ -27,19 +27,19 @@
 #include "kis_util.h"
 
 EraserTool::EraserTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
-  : Tool(doc, view)
+  : KisTool(doc, view)
 {
   m_dragging = false;
   m_Cursor = KisCursor::brushCursor();
-  m_pKisBrush = _brush;
+  m_pBrush = _brush;
   m_dragdist = 0;
 }
 
 EraserTool::~EraserTool() {}
 
-void EraserTool::setKisBrush(const KisBrush *_brush)
+void EraserTool::setBrush(const KisBrush *_brush)
 {
-  m_pKisBrush = _brush;
+  m_pBrush = _brush;
 }
 
 void EraserTool::mousePress(QMouseEvent *e)
@@ -56,20 +56,20 @@ void EraserTool::mousePress(QMouseEvent *e)
 
   paint(e->pos());
   
-  QRect updateRect(e->pos() - m_pKisBrush->hotSpot(), m_pKisBrush->size());
+  QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
   m_pDoc->compositeImage(updateRect);
 }
 
 bool EraserTool::paint(QPoint pos)
 {
-  if (!m_pKisBrush)
+  if (!m_pBrush)
     return false;
 
-  QPoint start = pos - m_pKisBrush->hotSpot();
+  QPoint start = pos - m_pBrush->hotSpot();
   int startx = start.x();
   int starty = start.y();
 
-  QRect clipRect(startx, starty, m_pKisBrush->width(), m_pKisBrush->width());
+  QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->width());
 
   if (!clipRect.intersects(m_pDoc->getCurrentLayer()->imageExtents()))
     return false;
@@ -81,7 +81,7 @@ bool EraserTool::paint(QPoint pos)
   int ex = clipRect.right() - startx;
   int ey = clipRect.bottom() - starty;
 
-  Layer *lay = m_pDoc->getCurrentLayer();
+  KisLayer *lay = m_pDoc->getCurrentLayer();
  
   uchar srcPix, dstPix;
   uchar *sl;
@@ -91,7 +91,7 @@ bool EraserTool::paint(QPoint pos)
     {
       for (int y = sy; y <= ey; y++)
 	{
-	  sl = m_pKisBrush->scanline(y);
+	  sl = m_pBrush->scanline(y);
 
 	  for (int x = sx; x <= ex; x++)
 	    {
@@ -120,7 +120,7 @@ bool EraserTool::paint(QPoint pos)
 
   for (int y = sy; y <= ey; y++)
     {
-      sl = m_pKisBrush->scanline(y);
+      sl = m_pBrush->scanline(y);
       
       for (int x = sx; x <= ex; x++)
 	{
@@ -150,7 +150,7 @@ bool EraserTool::paint(QPoint pos)
 
 void EraserTool::mouseMove(QMouseEvent *e)
 {
-  int spacing = m_pKisBrush->spacing();
+  int spacing = m_pBrush->spacing();
 
   if (spacing <= 0) spacing = 1;
 
@@ -194,7 +194,7 @@ void EraserTool::mouseMove(QMouseEvent *e)
 	  QPoint p(step.x(), step.y());
 	  	  
 	  if (paint(p))
-	    updateRect = updateRect.unite(QRect(p - m_pKisBrush->hotSpot(), m_pKisBrush->size()));
+	    updateRect = updateRect.unite(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
 	  dist -= spacing;
 	}
       if (!updateRect.isEmpty())

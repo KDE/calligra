@@ -27,7 +27,7 @@
 
 class KisBrush;
 
-class EraserTool : public Tool
+class EraserTool : public KisTool
 {
  public:
   EraserTool(KisDoc *doc, KisView *view, const KisBrush *_brush);
@@ -35,7 +35,7 @@ class EraserTool : public Tool
   
   QString toolName() { return QString("EraserTool"); }
 
-  void setKisBrush(const KisBrush *_brush);
+  void setBrush(const KisBrush *_brush);
   bool paint(QPoint pos);
 
  public slots:
@@ -46,7 +46,7 @@ class EraserTool : public Tool
  protected:
   QPoint 	m_dragStart;
   bool   	m_dragging;
-  const KisBrush  	*m_pKisBrush;
+  const KisBrush  	*m_pBrush;
   float         m_dragdist;
 };
 

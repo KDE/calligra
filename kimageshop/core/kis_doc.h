@@ -63,7 +63,7 @@ public:
     QRect imageExtents();
     QSize size();
 
-    Layer* getCurrentLayer();
+    KisLayer* getCurrentLayer();
     int getCurrentLayerIndex();
     void setCurrentLayer( int _layer );
 
@@ -76,27 +76,27 @@ public:
     void addRGBLayer(const QRect& r, const QColor& c, const QString& name);
     void removeLayer( unsigned int _layer );
     void compositeImage( QRect _rect );
-    Layer* layerPtr( Layer *_layer );
-    void setLayerOpacity( uchar _opacity, Layer *_layer = 0 );
+    KisLayer* layerPtr( KisLayer *_layer );
+    void setLayerOpacity( uchar _opacity, KisLayer *_layer = 0 );
     
-    void renderLayerIntoTile( QRect tileBoundary, const Layer *srcLay, 
-			      Layer *dstLay, int dstTile );
-    void moveLayer( int dx, int dy, Layer *lay = 0 );
-    void moveLayerTo( int x, int y, Layer *lay = 0 );
-    void renderTileQuadrant( const Layer *srcLay, int srcTile, Layer *dstLay,
+    void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay, 
+			      KisLayer *dstLay, int dstTile );
+    void moveLayer( int dx, int dy, KisLayer *lay = 0 );
+    void moveLayerTo( int x, int y, KisLayer *lay = 0 );
+    void renderTileQuadrant( const KisLayer *srcLay, int srcTile, KisLayer *dstLay,
 			     int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
     LayerList layerList();
     
-    void rotateLayer180(Layer *_layer);
-    void rotateLayerLeft90(Layer *_layer);
-    void rotateLayerRight90(Layer *_layer);
-    void mirrorLayerX(Layer *_layer);
-    void mirrorLayerY(Layer *_layer);
+    void rotateLayer180(KisLayer *_layer);
+    void rotateLayerLeft90(KisLayer *_layer);
+    void rotateLayerRight90(KisLayer *_layer);
+    void mirrorLayerX(KisLayer *_layer);
+    void mirrorLayerY(KisLayer *_layer);
 
     void mergeAllLayers();
     void mergeVisibleLayers();
     void mergeLinkedLayers();
-    void mergeLayers(QList<Layer>);
+    void mergeLayers(QList<KisLayer>);
 
     KisImage* newImage(const QString& _name, int w, int h, int colorModel = RGB, int backgroundMode = WHITE);
     bool saveImage( const QString& file, KisImage *img );

@@ -25,7 +25,7 @@
 
 #include "kis_tool.h"
 
-class ZoomTool : public Tool
+class ZoomTool : public KisTool
 {
  public:
   ZoomTool(KisView *view);

@@ -174,16 +174,16 @@ void KisView::setupTools()
   m_pMoveTool = new MoveTool(m_pDoc);
   
   // brush tool
-  m_pKisBrushTool = new KisBrushTool(m_pDoc, this, m_pKisBrush);
+  m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
 
   // airbrush tool
-  m_pAirKisBrushTool = new AirKisBrushTool(m_pDoc, this, m_pKisBrush);
+  m_pAirBrushTool = new AirBrushTool(m_pDoc, this, m_pBrush);
   
   // pen tool
-  m_pPenTool = new PenTool(m_pDoc, this, m_pKisBrush);
+  m_pPenTool = new PenTool(m_pDoc, this, m_pBrush);
 
   // eraser tool
-  m_pEraserTool = new EraserTool(m_pDoc, this, m_pKisBrush);
+  m_pEraserTool = new EraserTool(m_pDoc, this, m_pBrush);
   
   // color picker
   m_pColorPicker = new ColorPicker(m_pDoc, this);
@@ -194,7 +194,7 @@ void KisView::setupTools()
   m_pZoomTool = new ZoomTool(this);
   
   m_tool_brush->setChecked( true );
-  activateTool(m_pKisBrushTool);
+  activateTool(m_pBrushTool);
 }
 
 void KisView::setupDialogs()
@@ -217,16 +217,16 @@ void KisView::setupDialogs()
   connect( m_pLayerDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // brush dialog
-  m_pKisBrushDialog = new KisBrushDialog(this);
-  m_pKisBrushDialog->resize(185, 158);
-  m_pKisBrushDialog->move(523, 220);
-  m_pKisBrushDialog->hide();
-  connect( m_pKisBrushDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
+  m_pBrushDialog = new BrushDialog(this);
+  m_pBrushDialog->resize(185, 158);
+  m_pBrushDialog->move(523, 220);
+  m_pBrushDialog->hide();
+  connect( m_pBrushDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // brush
-  m_pKisBrushChooser = m_pKisBrushDialog->brushChooser();
-  m_pKisBrush = m_pKisBrushChooser->currentKisBrush();
-  QObject::connect(m_pKisBrushChooser, SIGNAL(selected(const KisBrush *)), this, SLOT(slotSetKisBrush(const KisBrush*)));
+  m_pBrushChooser = m_pBrushDialog->brushChooser();
+  m_pBrush = m_pBrushChooser->currentBrush();
+  QObject::connect(m_pBrushChooser, SIGNAL(selected(const KisBrush *)), this, SLOT(slotSetBrush(const KisBrush*)));
 
   // gradient dialog
   m_pGradientDialog = new GradientDialog( m_pDoc, this );
@@ -534,7 +534,7 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
   p.end();
 }
 
-void KisView::activateTool(Tool* t)
+void KisView::activateTool(KisTool* t)
 {
   if (!t)
     return;
@@ -574,12 +574,12 @@ void KisView::tool_zoom()
 
 void KisView::tool_brush()
 {
-  activateTool(m_pKisBrushTool);
+  activateTool(m_pBrushTool);
 }
 
 void KisView::tool_airbrush()
 {
-  activateTool(m_pAirKisBrushTool);
+  activateTool(m_pAirBrushTool);
 }
 
 void KisView::tool_eraser()
@@ -660,11 +660,11 @@ void KisView::dialog_brush()
 {
   if (m_dialog_brush->isChecked())
   {
-    m_pKisBrushDialog->show();
-    m_pKisBrushDialog->setFocus();
+    m_pBrushDialog->show();
+    m_pBrushDialog->setFocus();
   }
   else
-    m_pKisBrushDialog->hide();
+    m_pBrushDialog->hide();
 }
 
 void KisView::dialog_gradient()
@@ -696,7 +696,7 @@ void KisView::updateToolbarButtons()
   
   m_dialog_layer->setChecked( m_pLayerDialog->isVisible() );
   m_dialog_color->setChecked( m_pColorDialog->isVisible() );
-  m_dialog_brush->setChecked( m_pKisBrushDialog->isVisible() );
+  m_dialog_brush->setChecked( m_pBrushDialog->isVisible() );
   m_dialog_gradient->setChecked( m_pGradientDialog->isVisible() );
   m_dialog_gradienteditor->setChecked( m_pGradientEditorDialog->isVisible() );
 }
@@ -795,17 +795,17 @@ float KisView::zoomFactor()
   return 2.0; // FIXME
 }
 
-void KisView::slotSetKisBrush(const KisBrush* b)
+void KisView::slotSetBrush(const KisBrush* b)
 {
-  m_pKisBrush = b;
-  if (m_pKisBrushTool)
-    m_pKisBrushTool->setKisBrush(b);
+  m_pBrush = b;
+  if (m_pBrushTool)
+    m_pBrushTool->setBrush(b);
   if (m_pPenTool)
-    m_pPenTool->setKisBrush(b);
-  if (m_pAirKisBrushTool)
-    m_pAirKisBrushTool->setKisBrush(b);
+    m_pPenTool->setBrush(b);
+  if (m_pAirBrushTool)
+    m_pAirBrushTool->setBrush(b);
   if (m_pEraserTool)
-    m_pEraserTool->setKisBrush(b);
+    m_pEraserTool->setBrush(b);
 }
 
 void KisView::slotSetFGColor(const KisColor& c)

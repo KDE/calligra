@@ -35,7 +35,7 @@
 #include "integerwidget.h"
 
 
-KisBrushesWidget::KisBrushesWidget( QWidget *parent, const char *name )
+BrushesWidget::BrushesWidget( QWidget *parent, const char *name )
   : QWidget( parent, name )
 {
 
@@ -45,7 +45,7 @@ KisBrushesWidget::KisBrushesWidget( QWidget *parent, const char *name )
   slSpacing->setTickmarks( QSlider::Below );
   slSpacing->setTickInterval( 10 );
   QObject::connect( slSpacing, SIGNAL( valueChanged(int) ),
-		    this, SLOT( slotSetKisBrushSpacing(int) ));
+		    this, SLOT( slotSetBrushSpacing(int) ));
 
 
   // only serves as beautifier for the iconchooser
@@ -53,20 +53,20 @@ KisBrushesWidget::KisBrushesWidget( QWidget *parent, const char *name )
   frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
 
   chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );
-  loadKisBrushes();
+  loadBrushes();
   QObject::connect( chooser, SIGNAL( selected( IconItem * ) ),
 		    this, SLOT( slotItemSelected( IconItem * )));
 				
 
   initGUI();
 
-  const KisBrush *brush = currentKisBrush();
+  const KisBrush *brush = currentBrush();
   if ( brush )
     slSpacing->setValue( brush->spacing() );
 }
 
 
-KisBrushesWidget::~KisBrushesWidget()
+BrushesWidget::~BrushesWidget()
 {
   delete lbSpacing;
   delete slSpacing;
@@ -76,7 +76,7 @@ KisBrushesWidget::~KisBrushesWidget()
 
 
 // load all brushes from all available brushes locations
-void KisBrushesWidget::loadKisBrushes()
+void BrushesWidget::loadBrushes()
 {
   // FIXME this needs to be changed in the near future
   // (brushes will be saved differently)
@@ -88,14 +88,14 @@ void KisBrushesWidget::loadKisBrushes()
   for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
     {
       file = *it;
-      (void) loadKisBrush( file );
+      (void) loadBrush( file );
     }
 }
 
 
 // load one brush and add it to the chooser widget
 // return the brush if successful, otherwise return 0L
-const KisBrush * KisBrushesWidget::loadKisBrush( const QString& filename ) const
+const KisBrush * BrushesWidget::loadBrush( const QString& filename ) const
 {
   KisBrush *brush = new KisBrush( filename );
 
@@ -112,7 +112,7 @@ const KisBrush * KisBrushesWidget::loadKisBrush( const QString& filename ) const
 
 
 // set the active brush in the chooser - does NOT emit selected() (should it?)
-void KisBrushesWidget::setCurrentKisBrush( const KisBrush *brush )
+void BrushesWidget::setCurrentBrush( const KisBrush *brush )
 {
   chooser->setCurrentItem( (IconItem *) brush );
   slSpacing->setValue( brush->spacing() );
@@ -120,13 +120,13 @@ void KisBrushesWidget::setCurrentKisBrush( const KisBrush *brush )
 
 
 // return the active brush
-const KisBrush * KisBrushesWidget::currentKisBrush() const
+const KisBrush * BrushesWidget::currentBrush() const
 {
   return (const KisBrush *) chooser->currentItem();
 }
 
 
-void KisBrushesWidget::initGUI()
+void BrushesWidget::initGUI()
 {
   QVBoxLayout *mainLayout = new QVBoxLayout( this, 2, -1, "main layout" );
   QHBoxLayout *spacingLayout = new QHBoxLayout( -1, "spacing layout" );
@@ -142,7 +142,7 @@ void KisBrushesWidget::initGUI()
 
 // called when an item is selected in the chooser
 // set the slider to the correct position
-void KisBrushesWidget::slotItemSelected( IconItem *item )
+void BrushesWidget::slotItemSelected( IconItem *item )
 {
   const KisBrush *brush = (KisBrush *) item;
   slSpacing->setValue( brush->spacing() );
@@ -151,9 +151,9 @@ void KisBrushesWidget::slotItemSelected( IconItem *item )
 
 
 // sliderposition (spacing) changed, apply that to the current brush
-void KisBrushesWidget::slotSetKisBrushSpacing( int spacing )
+void BrushesWidget::slotSetBrushSpacing( int spacing )
 {
-  KisBrush *brush = (KisBrush *) currentKisBrush();
+  KisBrush *brush = (KisBrush *) currentBrush();
   if ( brush )
     brush->setSpacing( spacing );
   else

@@ -35,18 +35,18 @@ class QLabel;
 class IconChooser;
 class IntegerWidget;
 
-class KisBrushesWidget : public QWidget
+class BrushesWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  KisBrushesWidget( QWidget *parent, const char *name );
-  ~KisBrushesWidget();
+  BrushesWidget( QWidget *parent, const char *name );
+  ~BrushesWidget();
 
-  void 		loadKisBrushes();
-  const KisBrush	*loadKisBrush( const QString& filename ) const;
-  const KisBrush	*currentKisBrush()	const;
-  void 		setCurrentKisBrush( const KisBrush * );
+  void 		  loadBrushes();
+  const KisBrush  *loadBrush( const QString& filename ) const;
+  const KisBrush  *currentBrush()	const;
+  void 		  setCurrentBrush( const KisBrush * );
 
 
 protected:
@@ -63,7 +63,7 @@ private:
 
 private slots:
   void 		slotItemSelected( IconItem * );
-  void 		slotSetKisBrushSpacing( int );
+  void 		slotSetBrushSpacing( int );
 
 
 signals:
