@@ -239,6 +239,7 @@ private:
     KWGUI *m_gui;
     QTimer *scrollTimer;
     bool m_mousePressed;
+    bool m_printing;
     KWViewMode *m_viewMode;
 
     // Frame stuff

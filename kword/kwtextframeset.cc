@@ -313,7 +313,8 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
         KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
         if ( var && var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
         {
-            //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << frame->pageNum()+1 << endl;
+            //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << frame->pageNum()+1
+            //          << " and invalidating parag " << var->paragraph() << endl;
             var->setPgNum( frame->pageNum() + 1 );
             var->resize();
             var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
@@ -442,7 +443,7 @@ void KWTextFrameSet::layout()
 
 void KWTextFrameSet::invalidate()
 {
-    kdDebug() << "KWTextFrameSet::invalidate " << getName() << endl;
+    //kdDebug() << "KWTextFrameSet::invalidate " << getName() << endl;
     m_lastFormatted = textdoc->firstParag();
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
@@ -1180,7 +1181,7 @@ void KWTextFrameSet::zoom( bool forPrint )
     // If you change this, fix zoomedFontSize too.
     double factor = kWordDocument()->zoomedResolutionY() *
                     ( forPrint ? 1.0 : 72.0 / QPaintDevice::x11AppDpiY() );
-    kdDebugBody(32002) << "KWTextFrameSet::zoom factor=" << factor << endl;
+    //kdDebugBody(32002) << "KWTextFrameSet::zoom factor=" << factor << endl;
 
 #ifdef DEBUG_FORMATS
     kdDebug(32002) << this << " KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
@@ -1617,6 +1618,8 @@ void KWTextFrameSet::formatMore()
                   << " height=" << m_lastFormatted->rect().height()
                   << " bottom=" << bottom << " m_lastFormatted(next parag) = " << m_lastFormatted->next() << endl;
 #endif
+        if (!m_lastFormatted->isValid())
+            kdWarning() << "PARAGRAPH " << m_lastFormatted->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
         m_lastFormatted = m_lastFormatted->next();
     }
 #ifdef DEBUG_FORMAT_MORE

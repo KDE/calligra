@@ -61,6 +61,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_table.floating = true;
 
     curTable = 0L;
+    m_printing = false;
 
     viewport()->setBackgroundMode( PaletteBase );
     viewport()->setAcceptDrops( TRUE );
@@ -137,6 +138,11 @@ void KWCanvas::repaintAll( bool erase /* = false */ )
 
 void KWCanvas::print( QPainter *painter, KPrinter *printer )
 {
+    // Prevent cursor drawing and editing
+    if ( m_currentFrameSetEdit )
+        m_currentFrameSetEdit->focusOutEvent();
+    m_printing = true;
+
     QValueList<int> pageList;
 #ifndef HAVE_KDEPRINT
     int from = printer->fromPage();
@@ -181,6 +187,9 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         kapp->processEvents();
         painter->restore();
     }
+    if ( m_currentFrameSetEdit )
+        m_currentFrameSetEdit->focusInEvent();
+    m_printing = false;
 }
 
 void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
@@ -434,6 +443,8 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     // Only edit-mode (and only LMB) allowed on read-only documents (to select text)
     if ( !m_doc->isReadWrite() && ( m_mouseMode != MM_EDIT || e->button() != LeftButton ) )
        return;
+    if ( m_printing )
+        return;
 
     // This code here is common to all mouse buttons, so that RMB and MMB place the cursor (or select the frame) too
     switch ( m_mouseMode ) {
@@ -888,6 +899,8 @@ void KWCanvas::drawMovingRect( QPainter & p )
 
 void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
 {
+    if ( m_printing )
+        return;
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
     if ( m_mousePressed ) {
@@ -1135,6 +1148,8 @@ KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to creat
 
 void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
 {
+    if ( m_printing )
+        return;
     if ( scrollTimer->isActive() )
 	scrollTimer->stop();
     if ( m_mousePressed ) {
@@ -1187,6 +1202,8 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
 
 void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
 {
+    if ( m_printing )
+        return;
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
     switch ( m_mouseMode ) {
@@ -1892,11 +1909,11 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
     if ( o == this || o == viewport() ) {
 	switch ( e->type() ) {
             case QEvent::FocusIn:
-                if ( m_currentFrameSetEdit )
+                if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusInEvent();
                 return TRUE;
             case QEvent::FocusOut:
-                if ( m_currentFrameSetEdit )
+                if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusOutEvent();
                 m_mousePressed = false;
                 return TRUE;
@@ -1925,7 +1942,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     // For some reason 'T' doesn't work (maybe kxkb)
                 }
 #endif
-                if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() )
+                if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )
                 {
                     m_currentFrameSetEdit->keyPressEvent( keyev );
                     return TRUE;
@@ -1938,7 +1955,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
                     viewport()->setCursor( m_doc->getMouseCursor( normalPoint, true ) );
                 }
-                else if ( (keyev->key() == Key_Delete ||keyev->key() ==Key_Backspace ) && m_doc->getFirstSelectedFrame() )
+                else if ( (keyev->key() == Key_Delete || keyev->key() ==Key_Backspace )
+                          && m_doc->getFirstSelectedFrame() && !m_printing )
                 {
                     m_gui->getView()->editDeleteFrame();
                 }

@@ -815,18 +815,13 @@ void KWFrameSet::updateFrames()
         QListIterator<KWFrame> frameIt = frameIterator();
         int frameNum = 0;
         // At the moment there's only one anchor per frameset
-        // With tables the loop below will be wrong anyway...
         //for ( ; frameIt.current(); ++frameIt, ++frameNum )
         {
             KWAnchor * anchor = findAnchor( frameNum );
             //KWAnchor * anchor = frameIt.current()->anchor();
             //kdDebug() << "KWFrameSet::updateFrames anchor=" << anchor << endl;
             if ( anchor )
-            {
                 anchor->resize();
-                // The frame[s] might have been resized -> invalidate the parag to recompute widths & heights
-                anchor->paragraph()->invalidate( 0 );
-            }
         }
     }
 }

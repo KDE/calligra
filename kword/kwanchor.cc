@@ -122,9 +122,15 @@ void KWAnchor::resize()
     if ( m_deleted )
         return;
     QSize s = size();
-    width = s.width();
-    height = s.height();
-    //kdDebug(32001) << "KWAnchor::resize " << width << "x" << height << endl;
+    if ( width != s.width() || height != s.height() )
+    {
+        width = s.width();
+        height = s.height();
+        //kdDebug(32001) << "KWAnchor::resize " << width << "x" << height << endl;
+        QTextParag * parag = paragraph();
+        if ( parag )
+            parag->invalidate( 0 );
+    }
 }
 
 KCommand * KWAnchor::createCommand()

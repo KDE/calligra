@@ -2491,6 +2491,7 @@ void KWDocument::recalcVariables( int type )
             QTextParag * parag = it.current()->paragraph();
             if ( parag )
             {
+                kdDebug() << "KWDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
                 parag->invalidate( 0 );
                 parag->setChanged( true );
                 KWTextFrameSet * textfs = it.current()->textDocument()->textFrameSet();
