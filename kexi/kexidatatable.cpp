@@ -19,12 +19,12 @@
    Boston, MA 02111-1307, USA.
  */
 
-#include <qsqlquery.h>
+/*#include <qsqlquery.h>
 #include <qsqlrecord.h>
 #include <qsqlcursor.h>
 #include <qsqlquery.h>
 #include <qsqlerror.h>
-#include <qsqlindex.h>
+#include <qsqlindex.h> */
 #include <qvariant.h>
 #include <qlayout.h>
 #include <qstatusbar.h>
@@ -60,7 +60,7 @@ KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name)
 bool
 KexiDataTable::executeQuery(QString queryStatement)
 {
-	QTime t;
+/*	QTime t;
 	t.start();
 	QSqlDatabase *db = kexi->project()->db();
 	QSqlQuery query(queryStatement);
@@ -74,7 +74,6 @@ KexiDataTable::executeQuery(QString queryStatement)
 	}
 
 	QSqlIndex index = cursor.primaryIndex();
-	// kdDebug() << "index: " << index.fieldName(0) << endl; /* nice joke :) */
 
 
 	QSqlRecord record = db->record(query);
@@ -111,6 +110,7 @@ KexiDataTable::executeQuery(QString queryStatement)
 	m_statusBar->addWidget(rwStatus, 0, true);
 
 	return true;
+	*/
 }
 
 void
@@ -125,7 +125,7 @@ KexiDataTable::getInvolvedTables(QString query)
 	// switching to perl-mode :)
 	// for now it's enought to get the main table
 	// rest comes later...
-
+	/*
 	QStringList tableList;
 
 	QStringList queryFrags = QStringList::split(" ", query);
@@ -147,6 +147,7 @@ KexiDataTable::getInvolvedTables(QString query)
 
 
 	return tableList;
+	*/
 }
 
 KexiDataTable::~KexiDataTable()

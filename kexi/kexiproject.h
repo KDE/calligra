@@ -23,7 +23,9 @@
 #define KEXI_PROJECT_H
 
 #include <qobject.h>
-#include <qsqldatabase.h>
+//#include <qsqldatabase.h>
+
+#include "kexiDB/kexidb.h"
 
 class KexiDoc;
 
@@ -48,7 +50,7 @@ public:
 	bool loadProject();
 	bool initDbConnection(const Credentials& cred);
 	
-	QSqlDatabase* db() { return m_db; };
+	KexiDB* db() { return m_db; };
 
 signals:
 	void docModified();
@@ -58,7 +60,7 @@ protected:
 	
 private:
 	KexiDoc* m_settings;
-	QSqlDatabase* m_db;
+	KexiDB* m_db;
 	Credentials m_cred;
 };
 

@@ -28,6 +28,8 @@
 #include <qlayout.h>
 #include <qwidgetstack.h>
 
+#include "kexiDB/kexidb.h"
+
 #include "kexiapplication.h"
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"

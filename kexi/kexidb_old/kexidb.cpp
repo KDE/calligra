@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
    Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
@@ -18,7 +17,9 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
  */
-
+ 
+#include <kdebug.h>
+ 
 #include "kexidbinterfacemanager.h"
 #include "kexidb.h"
 
@@ -48,10 +49,75 @@ KexiDB::add(QString driver)
 //	}
 }
 
+
+bool
+KexiDB::connect(QString, QString, QString)
+{
+	/*! implemented for linking reasons */
+	kdDebug() << "KexiDB::connect(host): sorry you are wrong here" << endl;
+	return false;
+}
+
+bool
+KexiDB::connect(QString, QString, QString, QString)
+{
+	/*! implemented for linking reasons */
+	kdDebug() << "KexiDB::connect(db): sorry you are wrong here" << endl;
+	return false;
+}
+
+bool
+KexiDB::load(QString file)
+{
+	return false;
+}
+
 QStringList
 KexiDB::getDrivers() const
 {
 	return m_manager->getDrivers();
+}
+
+QStringList
+KexiDB::tables() const
+{
+	return QStringList();
+}
+
+QStringList
+KexiDB::databases() const
+{
+	return QStringList();
+}
+
+int
+KexiDB::query(QString)
+{
+	return -1;
+}
+
+QString
+KexiDB::escape(QString &)
+{
+	return QString::null;
+}
+		
+KexiDBResult*
+KexiDB::storeResult()
+{
+	return new KexiDBResult();
+}
+
+KexiDBResult*
+KexiDB::useResult()
+{
+	return new KexiDBResult();
+}
+
+unsigned long
+KexiDB::affectedRows()
+{
+	return 0;
 }
 
 KexiDB::~KexiDB()

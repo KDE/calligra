@@ -28,6 +28,8 @@
 #include <qpoint.h>
 #include <qlistview.h>
 
+#include "kexiDB/kexidb.h"
+
 #include "keximainwindow.h"
 #include "kexiapplication.h"
 #include "kexibrowser.h"

@@ -29,6 +29,8 @@
 
 KexiProject::KexiProject(QObject* parent) : QObject(parent)
 {
+	//hope that changes soon too
+	m_db = new KexiDB(this);
 }
 
 KexiProject::~KexiProject()
@@ -130,24 +132,33 @@ KexiProject::loadProject()
 bool 
 KexiProject::initDbConnection(const Credentials &cred)
 {
-	kdDebug() << "using driver " << cred.driver << endl;
-	m_db = QSqlDatabase::addDatabase(cred.driver);
+	KexiDB *addDB = m_db->add(cred.driver);
+	if(addDB)
+	{
+		m_db = addDB;
+	}
+	else
+	{
+		return false;
+	}
+//	hope that will change to static soon
 	
-	m_db->setDatabaseName(cred.database);
+/*	m_db->setDatabaseName(cred.database);
 	m_db->setUserName(cred.user);
 	m_db->setPassword(cred.password);
-	m_db->setHostName(cred.host);
-	
-	if(!m_db->open())
+	m_db->setHostName(cred.host); */
+
+	kdDebug() << "KexiProject::initDbConnection(): connecting" << endl;
+	if(!m_db->connect(cred.host, cred.user, cred.password, cred.database))
 	{
-		kdDebug() << "connection failed: " << m_db->lastError().databaseText() << endl;
+		kdDebug() << "KexiProject::initDbConnection(): connection failed: #need to implement" /*m_db->lastError().databaseText() */ << endl;
 		m_cred = cred;
 		return false;
 	}
 	else
 	{
 		m_cred = cred;
-		kdDebug() << "loading succeeded" << endl;
+		kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
 		kexi->mainWindow()->slotProjectModified();
 		return true;
 	}

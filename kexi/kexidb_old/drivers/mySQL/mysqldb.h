@@ -48,8 +48,12 @@ class MySqlDB : public KexiDB
 //		int		connect(const char *host, const char *user, const char *passwd,
 //					const char *db, unsigned int port = 0, const char *unix_socket = 0, unsigned int client_flag = 0);
 
-		int		connect(QString host, QString user, QString password);
+		bool		connect(QString host, QString user, QString password);
+		bool		connect(QString host, QString user, QString password, QString db);
 
+		QStringList	databases() const;
+		QStringList	tables() const;
+		
 		/*!
 		 *  get the last error
 		 */

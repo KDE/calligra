@@ -23,6 +23,8 @@ Boston, MA 02111-1307, USA.
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
+#include "../../kexiDB/kexidbresult.h"
+
 #include "mysqldb.h"
 
 K_EXPORT_COMPONENT_FACTORY(keximysqlinterface, KGenericFactory<MySqlDB>( "mysqlinterface" ));
@@ -32,14 +34,89 @@ MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &args) : K
 	kdDebug() << "MySqlDB::MySqlDB()" << endl;
 	
 	m_mysql = 0;
+	m_mysql = mysql_init(m_mysql);
 	m_connected = 0;
 	
 }
 
-int
+bool
 MySqlDB::connect(QString host, QString user, QString password)
 {
+	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password)" << endl;
 	m_mysql = mysql_connect(m_mysql, host.latin1(), user.latin1(), password.latin1());
+	kdDebug() << "MySqlDB::connect(host): errno: " << mysql_errno(m_mysql) << endl;
+	if(mysql_errno(m_mysql) == 0)
+	{
+		m_connected = true;
+		return true;
+	}
+	else
+	{
+		kdDebug() << "MySqlDB::connect(host): error: " << mysql_error(m_mysql) << endl;
+		return false;
+	}
+}
+
+bool
+MySqlDB::connect(QString host, QString user, QString password, QString db)
+{
+	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password, QString db)" << endl;
+	MYSQL *nConnect = mysql_connect(m_mysql, host.latin1(), user.latin1(), password.latin1());
+	if(!nConnect)
+	{
+		kdDebug() << "MySqlDB::connect(db): error: " << mysql_error(m_mysql) << endl;
+		return false;
+	}
+	
+	m_mysql = nConnect;	
+	kdDebug() << "MySqlDB::connect(db): errno: " << mysql_errno(m_mysql) << endl;
+	
+	if(mysql_errno(m_mysql) == 0)
+	{
+		m_connected = true;
+		return true;
+	}
+	else
+	{
+		kdDebug() << "MySqlDB::connect(db): error: " << mysql_error(m_mysql) << endl;
+		return false;
+	}
+}
+
+QStringList
+MySqlDB::databases() const
+{
+	return QStringList();
+}
+
+QStringList
+MySqlDB::tables() const
+{
+	return QStringList();
+}
+
+int
+MySqlDB::query(QString)
+{
+	return -1;
+}
+
+KexiDBResult*
+MySqlDB::storeResult()
+{
+	return new KexiDBResult();
+}
+
+KexiDBResult*
+MySqlDB::useResult()
+{
+	return new KexiDBResult();
+}
+
+unsigned long
+MySqlDB::affectedRows()
+{
+	return 0;
 }
 
 MySqlDB::~MySqlDB()

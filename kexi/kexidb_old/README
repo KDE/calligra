@@ -1,3 +1,9 @@
 this directory is the sourcedirectory, which provides
 the KexiDB framework lib
-plugins can be found under ./interfaces
+
+I hear you ask: yet another database lib?
+KexiDB aims to be 100% ansi-compatible without the user forcing
+the users to care about differences.
+In the interface it self are the difference between ansi and engine-natives
+mearged
+

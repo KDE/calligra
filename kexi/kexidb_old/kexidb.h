@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
 Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-Daniel Molkentin <molkentin@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public
@@ -42,21 +41,22 @@ class KexiDB : public QObject
 		//now driver related functions
 
 		/*! connect to database hope that is ansi-compatible */
-		int connect(QString host, QString user, QString password);
+		virtual bool connect(QString host, QString user, QString password);
+		virtual bool connect(QString host, QString user, QString password, QString db);
 		/*! connect method for file-based databases*/
-		int load(QString file);
+		virtual bool load(QString file);
 
 		/*! hope thats ansi-compatilbe too */
-		QStringList getDatabases() const;
-		QStringList getTables() const;
+		virtual QStringList databases() const;
+		virtual QStringList tables() const;
 
-		int query(QString statement);
-		QString escape(QString &str);
+		virtual int query(QString statement);
+		virtual QString escape(QString &str);
 		
-		KexiDBResult	*storeResult();
-		KexiDBResult	*useResult();
+		virtual KexiDBResult	*storeResult();
+		virtual KexiDBResult	*useResult();
 
-		unsigned long	affectedRows();
+		virtual unsigned long	affectedRows();
 
 
 	protected:

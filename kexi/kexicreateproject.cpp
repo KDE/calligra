@@ -32,6 +32,8 @@
 #include <kstandarddirs.h>
 #include <klistview.h>
 
+#include "kexiDB/kexidb.h"
+
 #include "kexiapplication.h"
 #include "keximainwindow.h"
 #include "kexitabbrowser.h"
@@ -85,7 +87,7 @@ QWidget *KexiCreateProject::generatePage0()
 	
 	
 	//checking drivers and making them avaible	
-	QStringList drivers = QSqlDatabase::drivers();
+	QStringList drivers = kexi->project()->db()->getDrivers();
 	for(QStringList::Iterator it = drivers.begin(); it != drivers.end(); ++it)
 	{
 		kdDebug() << "found driver:" << *it << endl;
@@ -188,9 +190,9 @@ void KexiCreateProject::nextClicked(const QString &pageTitle)
 		}
 		else
 		{
-			QString msg = i18n("Connection failed: ");
-			msg += kexi->project()->db()->lastError().databaseText();
-			KListViewItem *i = new KListViewItem(m_connectionLog, msg);
+			QString msg = i18n("Connection failed: #need to implement");
+//			msg += kexi->project()->db()->lastError().databaseText();
+//			KListViewItem *i = new KListViewItem(m_connectionLog, msg);
 		}
 		
 	}

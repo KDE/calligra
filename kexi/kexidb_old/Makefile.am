@@ -12,6 +12,8 @@ libkexidb_la_SOURCES = kexidbdriver.cpp kexidbinterfacemanager.cpp kexidbresult.
 
 libkexidb_la_LIBADD = $(LIB_KPARTS)
 
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
 install-data-local:
 	$(mkinstalldirs) $(kde_servicetypesdir)/
 	$(INSTALL_DATA) $(srcdir)/kexidbdriver.desktop $(kde_servicetypesdir)/kexidbdriver.desktop
