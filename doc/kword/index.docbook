@@ -801,7 +801,11 @@ can read and write effectively.  <link linkend="filters-rtf">Rich Text Font</lin
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 
 &underFDL;
-&underGPL;
+<para>This program is licensed under the terms of the <ulink
+ url="http://www.gnu.org/copyleft/library.html#SEC1">GNU Library General
+Public License v2</ulink>.</para>
+
+
 </chapter>
 
 <!-- **************************************************************************************************** -->
