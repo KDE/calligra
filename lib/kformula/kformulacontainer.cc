@@ -492,7 +492,7 @@ void Container::save( QDomElement root )
 /**
  * Loads a formula from the document.
  */
-bool Container::load( QDomElement fe )
+bool Container::load( const QDomElement &fe )
 {
     if (!fe.isNull()) {
         FormulaElement* root = createMainSequence();
@@ -535,10 +535,10 @@ void Container::saveMathML( QTextStream& stream, bool oasisFormat )
     }
 }
 
-bool Container::loadMathML( QDomDocument doc )
+bool Container::loadMathML( const QDomDocument &doc, bool oasisFormat )
 {
     const ContextStyle& context = document()->getContextStyle();
-    MathML2KFormula filter( doc, context );
+    MathML2KFormula filter( doc, context, oasisFormat );
     filter.startConversion();
 
     if ( load( filter.getKFormulaDom().documentElement() ) ) {

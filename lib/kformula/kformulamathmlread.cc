@@ -1325,11 +1325,12 @@ bool MathML2KFormulaPrivate::isSpaceLike( QDomNode node )
 }
 
 
-MathML2KFormula::MathML2KFormula( QDomDocument mmldoc, const ContextStyle &contextStyle )
+MathML2KFormula::MathML2KFormula( QDomDocument mmldoc, const ContextStyle &contextStyle, bool _oasisFormat )
     : context( contextStyle )
 {
     done = false;
     origdoc = mmldoc;
+    oasisFormat = _oasisFormat;
 }
 
 QDomDocument MathML2KFormula::getKFormulaDom()
@@ -1367,85 +1368,85 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
 	QDomElement element = node.toElement();
 	QString tag = element.tagName();
 
-	if ( tag == "mi" ) {
+	if ( tag == ( oasisFormat ? "math:mi" : "mi" ) ) {
 	    type = TOKEN;
             impl->mi( element, docnode );
 	}
-	else if ( tag == "mo" ) {
+	else if ( tag == ( oasisFormat ? "math:mo" : "mo" )) {
 	    type = TOKEN;
             impl->mo( element, docnode );
 	}
-	else if ( tag == "mn" ) {
+	else if ( tag ==( oasisFormat ? "math:mn": "mn" ) ) {
 	    type = TOKEN;
             impl->mn( element, docnode );
 	}
-	else if ( tag == "mtext" ) {
+	else if ( tag == ( oasisFormat ? "math:mtext": "mtext" ) ) {
 	    type = TOKEN;
             impl->mtext( element, docnode );
 	}
-	else if ( tag == "ms" ) {
+	else if ( tag ==( oasisFormat ? "math:ms": "ms" ) ) {
 	    type = TOKEN;
             impl->ms( element, docnode );
 	}
-        else if ( tag == "mspace" ) {
+        else if ( tag == ( oasisFormat ? "math:mspace" : "mspace" ) ) {
             type = TOKEN;
             impl->mspace( element, docnode );
         }
-	else if ( tag == "mrow" ) {
+	else if ( tag == ( oasisFormat ? "math:mrow" : "mrow" ) ) {
 	    type = LAYOUT;
             impl->mrow( element, docnode );
 	}
-	else if ( tag == "mfrac" ) {
+	else if ( tag == ( oasisFormat ? "math:mfrac": "mfrac" ) ) {
 	    type = LAYOUT;
             impl->mfrac( element, docnode );
 	}
-	else if ( tag == "mroot" ) {
+	else if ( tag == ( oasisFormat ? "math:mroot": "mroot" )) {
 	    type = LAYOUT;
             impl->mroot( element, docnode );
 	}
-	else if ( tag == "msqrt" ) {
+	else if ( tag == ( oasisFormat ? "math:msqrt": "msqrt" ) ) {
 	    type = LAYOUT;
             impl->msqrt( element, docnode );
 	}
-        else if ( tag == "mstyle" ) {
+        else if ( tag == ( oasisFormat ? "math:mstyle" : "mstyle" ) ) {
             type = LAYOUT;
             impl->mstyle( element, docnode );
         }
 
-        else if ( tag == "mfenced" ) {
+        else if ( tag == ( oasisFormat ? "math:mfenced" : "mfenced" ) ) {
 	    type = LAYOUT;
             impl->mfenced( element, docnode );
         }
 
-	else if ( tag == "mtable" ) {
+	else if ( tag == ( oasisFormat ? "math:mtable": "mtable" ) ) {
 	    type = TABLE;
             impl->mtable( element, docnode );
 	}
 
-	else if ( tag == "msub" || tag == "msup" ) {
+	else if ( tag == ( oasisFormat ? "math:msub": "msub" )  || tag == ( oasisFormat ? "math:msup": "msup" ) ) {
 	    type = SCRIPT;
             impl->msub_msup( element, docnode );
 	}
 
-	else if ( tag == "munder" ) {
+	else if ( tag ==( oasisFormat ? "math:munder" :  "munder" ) ) {
 	    type = SCRIPT;
             impl->munder( element, docnode );
 	}
-        else if ( tag == "mover" ) {
+        else if ( tag == ( oasisFormat ? "math:mover" : "mover" ) ) {
 	    type = SCRIPT;
             impl->mover( element, docnode );
 	}
-        else if ( tag == "munderover" ) {
+        else if ( tag == ( oasisFormat ? "math:munderover" : "munderover" ) ) {
             type = SCRIPT;
             impl->munderover( element, docnode );
         }
-	else if ( tag == "msubsup" ) {
+	else if ( tag == ( oasisFormat ? "math:msubsup" : "msubsup" )) {
 	    type = SCRIPT;
             impl->msubsup( element, docnode );
 	}
 
         // content markup (not yet usable)
-        else if ( tag == "apply" ) {
+        else if ( tag == ( oasisFormat ? "math:apply" : "apply" )) {
             type = CONTENT;
             QDomNode n = element.firstChild();
             QDomElement op = n.toElement();
@@ -1514,7 +1515,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
 
         }
 
-        else if ( tag == "cn" ) {
+        else if ( tag == ( oasisFormat ? "math:cn" : "cn" ) ) {
             type = CONTENT;
             QString type = element.attribute( "type", "real" );
 
@@ -1607,7 +1608,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
             }
         }
 
-        else if ( tag == "ci" ) {
+        else if ( tag == ( oasisFormat ? "math:ci" : "ci" )) {
             type = CONTENT;
             QDomNode n = element.firstChild();
 
@@ -1628,7 +1629,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
                 kdDebug( DEBUGID ) << "ci: " << n.nodeName().latin1() << endl;
         }
 
-        else if ( tag == "list" ) {
+        else if ( tag == ( oasisFormat ? "math:list" :"list" ) ) {
             type = CONTENT;
             QDomNode n = element.firstChild();
 

@@ -192,12 +192,12 @@ public:
      * Load function.
      * Load the formula from the specified file containing MathML .
      */
-    bool loadMathML( QDomDocument doc );
+    bool loadMathML( const QDomDocument &doc, bool oasisFormat = false );
 
     /**
      * Loads a formula from the document.
      */
-    bool load( QDomElement fe );
+    bool load( const QDomElement &fe );
 
     /**
      * @returns Tex string for the formula

@@ -48,7 +48,7 @@ public:
      * a @conversionFinished signal, than call
      * @getKFormulaDom to get the converted DOM
      */
-    MathML2KFormula( QDomDocument mmldoc, const ContextStyle &contextStyle );
+    MathML2KFormula( QDomDocument mmldoc, const ContextStyle &contextStyle, bool oasisFormat = false );
 
     /*
      * Get the just created DOM.
@@ -66,7 +66,7 @@ private:
 
     QDomDocument origdoc;
     QDomDocument formuladoc;
-
+    bool oasisFormat;
     const ContextStyle& context;
 
     MathML2KFormulaPrivate* impl;
