@@ -334,8 +334,19 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
       (needed for switching back to GUI editor from texdt mode)
 - remove single-char token names with chars (more readable + more effective)
 
-2004-07-16
-
+2004-07-19
+Kexi
+- We've now --final-mode and --design-mode CL-options for completness.
+KexiCore, KexiMain
+- KexiStartupHandler introduced: handles startup actions, thet 
+ are new performed independently from Main Window's stuff. 
+ We're now prepared to having 'startup mode' 
+ database's property, which can be overriden by --final-* CL-options.
+FormDesigner
+- A small fix to reduce widget flickering on resizing: 
+  when we're dragging left, top-left or top
+  handle, both size and position of widget changes. We're now hiding 
+  the widget and showing it again after transformation.
 
 ===================== Kexi 0.1 Beta 4 =====================
 

@@ -67,7 +67,8 @@ KexiUserAction::fromCurrentRecord(KexiMainWindow *context, KActionCollection *pa
 
 	Arguments arg;
 	QString tmp;
-	for(unsigned int i=0; i < args.length(); i++)
+	const int len = args.length();
+	for(int i=0; i < len; i++)
 	{
 		if(args[i] == '"') // if current char is quoted unqote or other way round
 		{
@@ -93,6 +94,7 @@ KexiUserAction::fromCurrentRecord(KexiMainWindow *context, KActionCollection *pa
 	arg.append(QVariant(tmp));
 
 	a->setMethod(c->value(4).toInt(), arg);
+	return a;
 }
 
 KexiUserAction::~KexiUserAction()

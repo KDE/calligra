@@ -16,7 +16,7 @@ typedef QValueVector<QVariant> Arguments;
     the actions can have some predefined \ref Methods which are described in \ref KexiUserActionMethod
     e.g. OpenObject, ExecuteScript ... those methods take different arguments also described in \ref KexiUserActionMethod
 */ 
-class KexiUserAction : public KAction
+class KEXICORE_EXPORT KexiUserAction : public KAction
 {
 	Q_OBJECT
 

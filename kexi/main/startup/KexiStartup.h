@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,19 +17,51 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXI_MAIN_STARTUP_H
-#define KEXI_MAIN_STARTUP_H
+#ifndef KEXI_STARTUPHANDLER_H
+#define KEXI_STARTUPHANDLER_H
 
 #include <qstring.h>
+#include <qwidget.h>
+
+#include <core/kexistartupdata.h>
+#include <core/kexi.h>
 
 class KexiProjectData;
-class QWidget;
+class KexiProjectData;
+class KCmdLineArgs;
+class KexiStartupHandlerPrivate;
+namespace KexiDB {
+	class ConnectionData;
+}
+
+class KEXIMAIN_EXPORT KexiStartupHandler 
+	: public QObject, public KexiStartupData, public Kexi::ObjectStatus
+{
+	public:
+	
+		KexiStartupHandler();
+		virtual ~KexiStartupHandler();
+
+		virtual bool init();
+		
+		/*! Detects filename by mime type and returns project data, if it can be detected,
+			otherwise - NULL. \a parent is passed as parent for potential error message boxes. */
+		static KexiProjectData* detectProjectData( const QString &fname, QWidget *parent = 0 );
+
+		/*! Allows user to select a project with KexiProjectSelectorDialog.
+			\return selected project's data or NULL if dialog was cancelled.
+		*/
+		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, QWidget *parent = 0);
+
+	protected:
+		void getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name);
+
+		KexiStartupHandlerPrivate *d;
+};
 
 namespace Kexi
 {
-	/*! Detects filename by mime type and returns project data, if it can be detected,
-	 otherwise - NULL. \a parent is passed as parent for potential error message boxes */
-	KEXIMAIN_EXPORT KexiProjectData* detectProjectData( const QString &fname, QWidget *parent = 0 );
+	KEXIMAIN_EXPORT KexiStartupHandler& startupHandler();
 }
 
 #endif

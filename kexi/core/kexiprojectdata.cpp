@@ -37,10 +37,22 @@
 #include <kexidb/drivermanager.h>
 #include "kexiprojectdata.h"
 
-/*KexiProjectConnectionData::KexiProjectConnectionData()
- : KexiDB::ConnectionData()
+
+class KexiProjectDataPrivate
 {
-}*/
+public:
+	KexiProjectDataPrivate(const KexiDB::ConnectionData &cdata)
+	 : connData(cdata)
+	 , finalMode(false)
+	{}
+	
+	KexiDB::ConnectionData connData;
+	QDateTime lastOpened;
+	QString desc;
+	bool finalMode : 1;
+};
+
+//---------------------------------------
 
 KexiProjectData::KexiProjectData()
 {
@@ -49,15 +61,16 @@ KexiProjectData::KexiProjectData()
 KexiProjectData::KexiProjectData( 
 	const KexiDB::ConnectionData &cdata, const QString& dbname, const QString& caption )
  : QObject(0, "KexiProjectData"), KexiDB::SchemaData()
- , m_connData(cdata)
+ , d( new KexiProjectDataPrivate(cdata) )
 {
+	d->connData = cdata;
 	setDatabaseName(dbname);
 	setCaption(caption);
 }
 
 KexiProjectData::KexiProjectData( KexiProjectData& pdata )
  : QObject(0, "KexiProjectData"), KexiDB::SchemaData()
- , m_connData(*pdata.connectionData())
+ , d( new KexiProjectDataPrivate(*pdata.connectionData()) )
 {
 	setDatabaseName(pdata.databaseName());
 	setCaption(pdata.caption());
@@ -65,16 +78,17 @@ KexiProjectData::KexiProjectData( KexiProjectData& pdata )
 
 KexiProjectData::~KexiProjectData()
 {
+ 	delete d;
 }
 
 KexiDB::ConnectionData* KexiProjectData::connectionData()
 {
-	return &m_connData;
+	return &d->connData;
 }
 
 const KexiDB::ConnectionData* KexiProjectData::constConnectionData() const
 {
-	return &m_connData;
+	return &d->connData;
 }
 
 QString KexiProjectData::databaseName() const
@@ -85,6 +99,31 @@ QString KexiProjectData::databaseName() const
 void KexiProjectData::setDatabaseName(const QString& dbName)
 {
 	static_cast<KexiDB::SchemaData*>(this)->setName(dbName);
+}
+
+bool KexiProjectData::finalMode() const
+{
+	return d->finalMode;
+}
+
+QDateTime KexiProjectData::lastOpened() const
+{
+	return d->lastOpened;
+}
+
+void KexiProjectData::setLastOpened(const QDateTime& lastOpened)
+{
+	d->lastOpened=lastOpened;
+
+}
+QString KexiProjectData::description() const
+{
+	return d->desc;
+}
+
+void KexiProjectData::setDescription(const QString& desc)
+{
+	d->desc=desc;
 }
 
 /*

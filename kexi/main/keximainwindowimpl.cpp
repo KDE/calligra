@@ -43,6 +43,7 @@
 #include <kstandarddirs.h>
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
+#include <kiconloader.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -67,20 +68,16 @@
 #include "kexiinternalpart.h"
 #include "kexiuseraction.h"
 
+#include "startup/KexiStartup.h"
+#include "startup/KexiNewProjectWizard.h"
 #include "startup/KexiStartupDialog.h"
+/*
 #include "startup/KexiConnSelector.h"
 #include "startup/KexiProjectSelectorBase.h"
 #include "startup/KexiProjectSelector.h"
-#include "startup/KexiNewProjectWizard.h"
-#include "startup/KexiStartup.h"
+*/
 #include "kexicontexthelp.h"
 #include "kexinamedialog.h"
-
-#if defined(Q_WS_WIN) || !KDE_IS_VERSION(3,1,9)
-# include <unistd.h>
-#else
-# include <kuser.h>
-#endif
 
 //Extreme verbose debug
 #if defined(Q_WS_WIN)
@@ -187,7 +184,7 @@ class KexiMainWindowImpl::Private
 		bool disableErrorMessages : 1;
 
 		//! Indicates if project is started in --final mode
-		bool final;
+		bool final : 1;
 
 	Private()
 		: dialogs(401)
@@ -235,13 +232,16 @@ class KexiMainWindowImpl::Private
 
 //-------------------------------------------------
 
-KexiMainWindowImpl::KexiMainWindowImpl(bool final)
+KexiMainWindowImpl::KexiMainWindowImpl()
  : KexiMainWindow()
  , d(new KexiMainWindowImpl::Private() )
 {
-	d->final = final;
+	KexiProjectData *pdata = Kexi::startupHandler().projectData();
+	d->final = Kexi::startupHandler().forcedFinalMode() /* <-- simply forced final mode */
+		/* project has 'final mode' set as default and not 'design mode' override is found: */
+		|| (pdata && pdata->finalMode() && !Kexi::startupHandler().forcedDesignMode()); 
 
-	if(final)
+	if(d->final)
 		kdDebug() << "KexiMainWindowImpl::KexiMainWindowImpl(): starting up in final mode" << endl;
 
 	d->config = kapp->config();
@@ -260,12 +260,6 @@ KexiMainWindowImpl::KexiMainWindowImpl(bool final)
 	setAsDefaultHost(); //this is default host now.
 	KGlobal::iconLoader()->addAppDir("kexi");
 
-	if(!final)
-	{
-		setXMLFile("kexiui.rc");
-		setAcceptDrops(true);
-	}
-
 	//get informed
 	connect(&Kexi::partManager(),SIGNAL(partLoaded(KexiPart::Part*)),this,SLOT(slotPartLoaded(KexiPart::Part*)));
 	connect( m_pMdi, SIGNAL(nowMaximized(bool)), this, SLOT(slotCaptionForCurrentMDIChild(bool)) );
@@ -278,8 +272,10 @@ KexiMainWindowImpl::KexiMainWindowImpl(bool final)
 		this, SLOT(slotMdiModeHasBeenChangedTo(KMdi::MdiMode)));
 
 
-	if(!final)
+	if(!d->final)
 	{
+		setXMLFile("kexiui.rc");
+		setAcceptDrops(true);
 		initActions();
 		createShellGUI(true);
 	}
@@ -290,7 +286,7 @@ KexiMainWindowImpl::KexiMainWindowImpl(bool final)
 
 	restoreSettings();
 
-	if(!final)
+	if(!d->final)
 	{
 		initContextHelp();
 		initPropertyEditor();
@@ -320,11 +316,10 @@ KexiMainWindowImpl::KexiMainWindowImpl(bool final)
 
 	m_pTaskBar->setCaption(i18n("Task Bar"));	//js TODO: move this to KMDIlib
 
-	if(!final)
+	if (!d->final) {
 		invalidateActions();
-
-	if(!final)
 		d->timer.singleShot(0,this,SLOT(slotLastActions()));
+	}
 }
 
 KexiMainWindowImpl::~KexiMainWindowImpl()
@@ -621,8 +616,34 @@ void KexiMainWindowImpl::invalidateViewModeActions()
 	}
 }
 
+bool KexiMainWindowImpl::startup()
+{
+	switch (Kexi::startupHandler().action()) {
+	case KexiStartupHandler::CreateBlankProject:
+		createBlankProject();
+		break;
+	case KexiStartupHandler::UseTemplate:
+		//TODO
+		break;
+	case KexiStartupHandler::OpenProject:
+		if (!openProject(Kexi::startupHandler().projectData())) {
+			if (d->final)
+				return false;
+		}
+		break;
+	default:;
+	}
+	return true;
+}
+
+#if 0
 void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 {
+	if (d->final) {
+		//TODO: maybe also auto allow to open objects...
+		return KexiMainWindowImpl::initFinalMode(projectData);
+	}
+
 	kdDebug() << "KexiMainWindowImpl::startup()..." << endl;
 	if (!projectData) {
 		importantInfo(true);
@@ -655,12 +676,12 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 	//</TEMP>
 
 		if (!KexiStartupDialog::shouldBeShown())
-			return;
+			return true;
 
 		KexiStartupDialog dlg(KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
 			Kexi::connset(), Kexi::recentProjects(), 0, "dlg");
 		if (dlg.exec()!=QDialog::Accepted)
-			return;
+			return true;
 
 		projectData = 0;
 		int r = dlg.result();
@@ -670,7 +691,7 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 				createBlankDatabase();
 				return;
 			}
-			return;//todo - templates
+			return true;//todo - templates
 		}
 		else if (r==KexiStartupDialog::OpenExistingResult) {
 			kdDebug() << "Existing project --------" << endl;
@@ -678,7 +699,7 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 			if (!selFile.isEmpty()) {
 				//file-based project
 				kdDebug() << "Project File: " << selFile << endl;
-				projectData = Kexi::detectProjectData( selFile, this );
+				projectData = KexiStartupHandler::detectProjectData( selFile, this );
 			}
 			else if (dlg.selectedExistingConnection()) {
 				kdDebug() << "Existing connection: " << dlg.selectedExistingConnection()->serverInfoString() << endl;
@@ -695,17 +716,19 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 					<< " connection=" << data->constConnectionData()->serverInfoString() << endl;
 			}
 			//js: TODO
-			return;
+			return true;
 		}
 
 		if (!projectData)
-			return;
+			return false;
 	}
-	openProject(projectData);
+	bool ret = openProject(projectData);
 
 	//show if wasn't show yet
 	importantInfo(true);
+	return ret;
 }
+#endif
 
 static QString internalReason(KexiDB::Object *obj)
 {
@@ -719,6 +742,10 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 {
 	if (!projectData)
 		return false;
+	if (d->final) {
+		//TODO: maybe also auto allow to open objects...
+		return initFinalMode(projectData);
+	}
 	createKexiProject( projectData );
 //	d->prj = new KexiProject( projectData );
 //	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
@@ -801,6 +828,7 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 	return true;
 }
 
+#if 0
 KexiProjectData*
 KexiMainWindowImpl::selectProject(KexiDB::ConnectionData *cdata)
 {
@@ -822,6 +850,7 @@ KexiMainWindowImpl::selectProject(KexiDB::ConnectionData *cdata)
 	}
 	return projectData;
 }
+#endif
 
 bool KexiMainWindowImpl::closeProject(bool &cancelled)
 {
@@ -1493,7 +1522,7 @@ KexiMainWindowImpl::slotProjectNew()
 		KEXI_UNFINISHED(i18n("Create another project"));
 		return;
 	}
-	createBlankDatabase();
+	createBlankProject();
 }
 
 void
@@ -1508,7 +1537,7 @@ KexiMainWindowImpl::createKexiProject(KexiProjectData* new_data)
 }
 
 bool
-KexiMainWindowImpl::createBlankDatabase()
+KexiMainWindowImpl::createBlankProject()
 {
 	KexiNewProjectWizard wiz(Kexi::connset(), 0, "KexiNewProjectWizard", true);
 	if (wiz.exec() != QDialog::Accepted)
@@ -1565,14 +1594,17 @@ KexiMainWindowImpl::slotProjectOpen()
 	KexiProjectData* projectData = 0;
 	KexiDB::ConnectionData *cdata = dlg.selectedExistingConnection();
 	if (cdata) {
-		projectData = selectProject( cdata );
+		projectData = Kexi::startupHandler().selectProject( cdata, this );
+		if (!projectData && Kexi::startupHandler().error()) {
+			showErrorMessage(&Kexi::startupHandler());
+		}
 	}
 	else {
 		QString selFile = dlg.selectedExistingFile();
 		if (!selFile.isEmpty()) {
 			//file-based project
 			kdDebug() << "Project File: " << selFile << endl;
-			projectData = Kexi::detectProjectData( selFile, this );
+			projectData = KexiStartupHandler::detectProjectData( selFile, this );
 		}
 	}
 
@@ -1799,10 +1831,21 @@ KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB::Object *obj)
 }
 
 void
+KexiMainWindowImpl::showErrorMessage(Kexi::ObjectStatus *status)
+{
+	showErrorMessage("", status);
+}
+
+void
 KexiMainWindowImpl::showErrorMessage(const QString &message, Kexi::ObjectStatus *status)
 {
 	if (status && status->error()) {
 		QString msg = message;
+		if (msg.isEmpty()) {
+			msg = status->message;
+			status->message = status->description;
+			status->description = "";
+		}
 		QString desc;
 		if (!status->message.isEmpty()) {
 			if (status->description.isEmpty()) {
@@ -1879,7 +1922,6 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 	//update name and caption
 	dlg->partItem()->setName( d->nameDialog->widget()->nameText() );
 	dlg->partItem()->setCaption( d->nameDialog->widget()->captionText() );
-	bool cancel = false;
 
 	const bool r = dlg->storeNewData(cancelled);
 	if (cancelled)
@@ -1901,7 +1943,6 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 
 bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool layoutTaskBar)
 {
-
 	cancelled = false;
 	if (!dlg)
 		return true;
@@ -2394,7 +2435,7 @@ void KexiMainWindowImpl::slotImportantInfo()
 	importantInfo(false);
 }
 
-void KexiMainWindowImpl::importantInfo(bool onStartup)
+void KexiMainWindowImpl::importantInfo(bool /*onStartup*/)
 {
 #if 0
 	if (onStartup && !d->showImportantInfoOnStartup)
@@ -2468,9 +2509,15 @@ void KexiMainWindowImpl::slotOptionsEnableForms(bool show, bool noMessage)
 	}
 }
 
-bool
-KexiMainWindowImpl::initFinal(KexiProjectData *projectData)
+bool KexiMainWindowImpl::inFinalMode() const
 {
+	return d->final;
+}
+
+bool
+KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
+{
+//TODO
 	Kexi::tempShowForms() = true;
 	if(!projectData)
 		return false;
@@ -2482,16 +2529,20 @@ KexiMainWindowImpl::initFinal(KexiProjectData *projectData)
 		return false;
 
 	KexiDB::TableSchema *sch = d->prj->dbConnection()->tableSchema("kexi__final");
+	QString err_msg = i18n("Could not start project \"%1\" in Final Mode.")
+		.arg(static_cast<KexiDB::SchemaData*>(projectData)->name());
 	if(!sch)
 	{
-		KMessageBox::error(this, i18n("No <b>Finalmode data</b> found"));
+		hide();
+		showErrorMessage( err_msg, i18n("No Final Mode data found.") );
 		return false;
 	}
 
 	KexiDB::Cursor *c = d->prj->dbConnection()->executeQuery(*sch);
 	if(!c)
 	{
-		KMessageBox::error(this, i18n("Couldn't read <b>Finalmode data</b>"));
+		hide();
+		showErrorMessage( err_msg, i18n("Error reading Final Mode data.") );
 		return false;
 	}
 
@@ -2499,7 +2550,7 @@ KexiMainWindowImpl::initFinal(KexiProjectData *projectData)
 	QString startupItem;
 	while(c->moveNext())
 	{
-		kdDebug() << "KexiMainWinImpl::initFinal(): property: [" << c->value(1).toString() << "] " << c->value(2).toString() << endl;
+		kdDebug() << "KexiMainWinImpl::initFinalMode(): property: [" << c->value(1).toString() << "] " << c->value(2).toString() << endl;
 		if(c->value(1).toString() == "startup-part")
 			startupPart = c->value(2).toString();
 		else if(c->value(1).toString() == "startup-item")
@@ -2509,8 +2560,8 @@ KexiMainWindowImpl::initFinal(KexiProjectData *projectData)
 	}
 	d->prj->dbConnection()->deleteCursor(c);
 
-	kdDebug() << "KexiMainWinImpl::initFinal(): part: " << startupPart << endl;
-	kdDebug() << "KexiMainWinImpl::initFinal(): item: " << startupItem << endl;
+	kdDebug() << "KexiMainWinImpl::initFinalMode(): part: " << startupPart << endl;
+	kdDebug() << "KexiMainWinImpl::initFinalMode(): item: " << startupItem << endl;
 
 	initActions();
 	initUserActions();
@@ -2520,18 +2571,20 @@ KexiMainWindowImpl::initFinal(KexiProjectData *projectData)
 
 	KexiPart::Info *i = Kexi::partManager().info(startupPart.latin1());
 	if (!i) {
-		KMessageBox::error(this, i18n("Specified part does not exist"));
+		hide();
+		showErrorMessage( err_msg, i18n("Specified plugin does not exist.") );
 		return false;
 	}
 
 	Kexi::partManager().part(i);
 	KexiPart::Item *item = d->prj->item(i, startupItem);
 	if(!openObject(item, Kexi::DataViewMode)) {
-		KMessageBox::error(this, i18n("Specified document couldn't be opened"));
+		hide();
+		showErrorMessage( err_msg, i18n("Specified object could not be opened.") );
 		return false;
 	}
 
-	QWidget::setCaption("MyApp");
+	QWidget::setCaption("MyApp");//TODO
 
 	return true;
 }

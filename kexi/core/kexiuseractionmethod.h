@@ -9,7 +9,7 @@ typedef QValueVector<int> ArgTypes;
 typedef QValueVector<QString> ArgNames;
 
 /*! describes a UserActionCommand */
-class KexiUserActionMethod
+class KEXICORE_EXPORT KexiUserActionMethod
 {
 	public:
 		/*! constructs a UserActionCommand describtion */

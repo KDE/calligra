@@ -26,6 +26,8 @@
 
 #include <qdatetime.h>
 
+class KexiProjectDataPrivate;
+
 /**
  Kexi project core data member:
  - project name
@@ -33,7 +35,6 @@
  - connection data
  - data+time of last opening
 */
-
 class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaData
 {
 	public:
@@ -53,11 +54,10 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 
 		~KexiProjectData();
 		
-		/**
-		 * connect to a embedded database
-		 */
-//		KexiProjectConnectionData(const QString &driverName, const QString &fileName=QString::null);
-
+		/*! \return true if there is final mode set in internal 
+		 project settings. */
+		bool finalMode() const;
+		
 		KexiDB::ConnectionData* connectionData();
 
 		const KexiDB::ConnectionData* constConnectionData() const;
@@ -66,12 +66,13 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 		QString databaseName() const;
 		void setDatabaseName(const QString& dbName);
 
-		inline QDateTime lastOpened() const { return m_lastOpened; }
-		void setLastOpened(const QDateTime& lastOpened) { m_lastOpened=lastOpened; }
-		inline QString description() const { return m_desc; }
-		void setDescription(const QString& desc) { m_desc=desc; }
+		QDateTime lastOpened() const;
+		void setLastOpened(const QDateTime& lastOpened);
+		QString description() const;
+		void setDescription(const QString& desc);
 
-		//! objects to open on startup (come from command line "-open" option)
+		/*! objects to open on startup (come from command line "-open" option)
+		 It's public for convenience */
 		QValueList<ObjectInfo> autoopenObjects;
 
 /*		static const QString &generateTmpName();
@@ -87,11 +88,7 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 		QString driverName() const;
 		QString databaseName() const;*/
 	private:
-		KexiDB::ConnectionData m_connData;
-//		QString  m_driverName;
-		
-		QDateTime m_lastOpened;
-		QString m_desc;
+		KexiProjectDataPrivate *d;
 };
 
 #endif

@@ -44,10 +44,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 	Q_OBJECT
 
 	public:
-		/**
-		 * creates an empty mainwindow
-		 */
-		KexiMainWindowImpl(bool final=false);
+		/*! Creates an empty mainwindow. */
+		KexiMainWindowImpl();
 		virtual ~KexiMainWindowImpl();
 
 		//! Project data of currently opened project or NULL if no project here yet.
@@ -63,12 +61,13 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/*! Like above, using \a dlg passed explicity. Above method just calls this one. */
 		bool activateWindow(KexiDialogBase *dlg);
 
-		void startup(KexiProjectData* pdata);
+//		void startup(KexiProjectData* pdata);
+		/*! Performs startup actions. \return false if application should exit immediately 
+		 with an error status. */
+		bool startup();
 
-		/*! Initialises final mode: constructs window according to kexi__final database and loads the specified part
-		    \return true on success or false if e.g. kexi__final does not exist or a fatal exception happened */
-		bool initFinal(KexiProjectData *projectData);
-
+		/*! \return true if this window is in the Final Mode. */
+		bool inFinalMode() const;
 
 		virtual bool eventFilter( QObject *obj, QEvent * e );
 
@@ -123,6 +122,12 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 			const QString& messageWhenAskingForName = QString::null );
 
 	protected:
+		/*! Initialises final mode: constructs window according to kexi__final database 
+		 and loads the specified part.
+		 \return true on success or false if e.g. kexi__final does not exist 
+		 or a fatal exception happened */
+		bool initFinalMode(KexiProjectData *projectData);
+		
 		/*!
 		 Creates navigator (if it's not yet created),
 		 lookups items for current project and fills the nav. with not-opened items
@@ -171,7 +176,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/*! Allows user to select a project with KexiProjectSelectorDialog.
 			\return selected project's data or NULL if dialog was cancelled.
 		*/
-		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata);
+//		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata);
 		
 		/*! Closes current project, \return true on success.
 		 Application state (e.g. actions) is updated. 
@@ -179,12 +184,12 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		 If closing was cancelled by user, true is returned and cancelled is true. */
 		bool closeProject(bool &cancelled);
 		
-		/*! Shows dialog for creating new blank database,
+		/*! Shows dialog for creating new blank project,
 		 ans creates one. Dialog is not shown if option for automatic creation 
-		 is checkekd.
+		 is checked.
 		 \return true if database was created, false on error or when cancel pressed
 		*/
-		bool createBlankDatabase();
+		bool createBlankProject();
 
 		void setWindowMenu(QPopupMenu *menu);
 
@@ -241,6 +246,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		//! Shows an error message signaled by project's objects, connections, etc.
 		void showErrorMessage(const QString&,KexiDB::Object *obj);
 		void showErrorMessage(const QString &title, const QString &details = QString::null);
+		void showErrorMessage(Kexi::ObjectStatus *status);
 		void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
 
 		//! internal - creates and initializes kexi project
