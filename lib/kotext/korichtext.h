@@ -83,6 +83,9 @@
 #include "qapplication.h"
 #endif // QT_H
 
+// ### TODO: make it depend on Qt version
+#define INDIC
+
 class KoTextParag;
 class KoTextString;
 class KoTextCursor;
@@ -120,6 +123,7 @@ public:
     ~KoTextStringChar();
 
     QChar c;
+#ifdef INDIC
 
     // this is the same struct as in qtextengine_p.h. Don't change!
     uchar softBreak      :1;     // Potential linebreak point
@@ -128,11 +132,21 @@ public:
     uchar wordStop       :1;     // Valid cursor position (for ctrl + left/right arrow) (TODO: use)
     //uchar nobreak        :1;
 
+#endif
     enum Type { Regular, Custom };
     uint lineStart : 1;
-    Type type : 1;
-    uint startOfRun : 1;
+#ifndef INDIC
     uint rightToLeft : 1;
+    //uint hasCursor : 1;
+    //uint canBreak : 1;
+    Type type : 2;
+#else
+    Type type : 1;
+#endif
+    uint startOfRun : 1;
+#ifdef INDIC
+    uint rightToLeft : 1;
+#endif
 
     // --- added for WYSIWYG ---
     Q_INT8 pixelxadj; // adjustment to apply to lu2pixel(x)
@@ -149,6 +163,9 @@ public:
     void setFormat( KoTextFormat *f );
     void setCustomItem( KoTextCustomItem *i );
     void loseCustomItem();
+#ifndef INDIC
+    KoTextStringChar *clone() const;
+#endif
     struct CustomData
     {
 	KoTextFormat *format;
@@ -191,7 +208,11 @@ public:
     KoTextStringChar &at( int i ) const;
     int length() const;
 
+#ifndef INDIC
+    //int width( int idx ) const;
+#else
     //int width( int idx ) const; // moved to KoTextFormat
+#endif
 
     void insert( int index, const QString &s, KoTextFormat *f );
     void insert( int index, KoTextStringChar *c );
@@ -219,11 +240,13 @@ public:
     void operator+=( const QString &s );
     void prepend( const QString &s ) { insert( 0, s, 0 ); }
 
+#ifdef INDIC
     // return next and previous valid cursor positions.
     bool validCursorPosition( int idx );
     int nextCursorPosition( int idx );
     int previousCursorPosition( int idx );
 
+#endif
 private:
     void checkBidi() const;
 
@@ -303,7 +326,9 @@ public:
     void insert( const QString &s, bool checkNewLine, QMemArray<KoTextStringChar> *formatting = 0 );
     void splitAndInsertEmptyParag( bool ind = TRUE, bool updateIds = TRUE );
     bool remove();
+#ifdef INDIC
     bool removePreviousChar();
+#endif
     void killLine();
     void indent();
 
@@ -326,7 +351,11 @@ public:
 
     int x() const;
     int y() const;
+#ifndef INDIC
+
+#else
     void fixCursorPosition();
+#endif
     int nestedDepth() const { return (int)indices.count(); } //### size_t/int cast
 
 private:

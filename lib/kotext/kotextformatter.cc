@@ -40,6 +40,9 @@
 /////// keep in sync with kotextformat.cc !
 //#define REF_IS_LU
 
+// ### TODO: check Qt version
+#define INDIC
+
 KoTextFormatter::KoTextFormatter()
 {
     try {
@@ -825,6 +828,7 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
     space = QMAX( space, 0 ); // #### with nested tables this gets negative because of a bug I didn't find yet, so workaround for now. This also means non-left aligned nested tables do not work at the moment
     int start = (startChar - &string->at(0));
     int last = (lastChar - &string->at(0) );
+#ifdef INDIC
 
     KoTextStringChar *ch = lastChar;
     while ( ch > startChar && ch->whiteSpace ) {
@@ -835,6 +839,7 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
     if (space < 0)
         space = 0;
 
+#endif
     // do alignment Auto == Left in this case
     if ( align & Qt::AlignHCenter || align & Qt::AlignRight ) {
         if ( align & Qt::AlignHCenter )

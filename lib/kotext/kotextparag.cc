@@ -30,6 +30,9 @@
 
 //#define DEBUG_PAINT
 
+// ### TODO: make it depend on the Qt version
+#define INDIC
+
 // Return the counter associated with this paragraph.
 KoParagCounter *KoTextParag::counter()
 {
@@ -609,8 +612,12 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
 	    flush = flush || ( nextchr->rightToLeft != chr->rightToLeft );
 #ifdef CHECK_PIXELXADJ
             // we flush when the value of pixelxadj changes
+#ifndef INDIC
+            flush = flush || ( nextchr->pixelxadj != chr->pixelxadj );
+#else
             // [unless inside a ligature]
             flush = flush || ( nextchr->pixelxadj != chr->pixelxadj && nextchr->charStop );
+#endif
 #endif
 	    // we flush before and after tabs
 	    flush = flush || ( chr->c == '\t' || nextchr->c == '\t' );
@@ -623,10 +630,18 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
 	    // when painting justified we flush on spaces
 	    if ((alignment() & Qt::AlignJustify) == Qt::AlignJustify )
 		//flush = flush || QTextFormatter::isBreakable( str, i );
+#ifndef INDIC
+                flush = flush || chr->c.isSpace();
+#else
                 flush = flush || chr->whiteSpace;
+#endif
 	    // when underlining or striking "word by word" we flush before/after spaces
 	    if (!flush && chr->format()->wordByWord() && chr->format()->isStrikedOrUnderlined())
+#ifndef INDIC
+                flush = flush || chr->c.isSpace() || nextchr->c.isSpace();
+#else
                 flush = flush || chr->whiteSpace || nextchr->whiteSpace;
+#endif
 	    // we flush when the string is getting too long
 	    flush = flush || ( i - paintStart >= 256 );
 	    // we flush when the selection state changes
