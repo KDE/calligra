@@ -255,7 +255,7 @@ KarbonView::scaleTool()
 void
 KarbonView::textTool()
 {
-    /*kdDebug() << "KarbonView::textTool()" << endl;
+    kdDebug() << "KarbonView::textTool()" << endl;
 	QFont f;
 
 	KoFontDia *fontDia = new KoFontDia( this, "", f, false, false, Qt::black, Qt::white, false );
@@ -272,7 +272,7 @@ KarbonView::textTool()
 	delete fontDia;
 
 	// TODO : find a way to edit the text, no predefined strings
-	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ) );*/
+	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ) );
 }
 
 void

@@ -1,4 +1,4 @@
-INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) \
+INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir) \
 	-I$(srcdir)/core \
 	-I$(srcdir)/tools \
@@ -19,7 +19,7 @@ libkarbonpart_la_SOURCES = \
 	karbon_factory.cc KArbonViewIface.skel KArbonViewIface.cc
 
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
-libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) \
+libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) \
 	tools/libkarbontools.la \
 	core/libkarboncore.la \
 	render/libvpainter.la
