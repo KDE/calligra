@@ -318,6 +318,11 @@ QCString KoDocument::outputMimeType() const
     return d->outputMimeType;
 }
 
+int KoDocument::specialOutputFlag() const
+{
+    return d->m_specialOutputFlag;
+}
+
 void KoDocument::slotAutoSave()
 {
     //kdDebug(30003)<<"Autosave : modifiedAfterAutosave "<<d->modifiedAfterAutosave<<endl;

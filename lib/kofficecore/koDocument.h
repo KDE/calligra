@@ -173,6 +173,7 @@ public:
      */
     void setOutputMimeType( const QCString & mimeType, int specialOutputFlag = 0 );
     QCString outputMimeType() const;
+    int specialOutputFlag() const;
 
     /**
      * Sets the error message to be shown to the user (use i18n()!)
