@@ -171,7 +171,9 @@ bool
 VComposite::moveTo( const KoPoint& p )
 {
 	// Append a new subpath if current subpath is not empty.
-	if( !m_paths.getLast()->isEmpty() )
+	if( m_paths.count() == 0 )
+		m_paths.append( new VPath( this ) );
+	else if( !m_paths.getLast()->isEmpty() )
 	{
 		VPath* path = new VPath( this );
 		path->moveTo( currentPoint() );
@@ -313,6 +315,7 @@ VComposite::save( QDomElement& element ) const
 void
 VComposite::load( const QDomElement& element )
 {
+	m_paths.clear();
 	setState( normal );
 
 	QString data = element.attribute ("d");
