@@ -5,7 +5,7 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula $(all_includes)
 ####### Files
 
 bin_PROGRAMS = kword
-lib_LTLIBRARIES = kword.la libkwordpart.la
+lib_LTLIBRARIES = libkwordpart.la kword.la
 
 libkwordpart_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \
                 fc.cc font.cc format.cc kword_page.cc parag.cc \

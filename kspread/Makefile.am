@@ -5,7 +5,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
 ####### Files
 
 bin_PROGRAMS = kspread
-lib_LTLIBRARIES = kspread.la libkspreadpart.la
+lib_LTLIBRARIES = libkspreadpart.la kspread.la
 
 libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_formula.cc \

@@ -6,7 +6,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
 bin_PROGRAMS = kpresenter
 bin_SCRIPTS = kprconverter.pl
-lib_LTLIBRARIES = kpresenter.la libkpresenterpart.la
+lib_LTLIBRARIES = libkpresenterpart.la kpresenter.la 
 
 libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \

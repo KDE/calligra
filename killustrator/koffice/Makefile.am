@@ -3,7 +3,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) -I$(top_srcdir)/killustrator/s
 ####### Files
 
 bin_PROGRAMS = killustrator
-lib_LTLIBRARIES = killustrator.la libkillustratorpart.la
+lib_LTLIBRARIES = libkillustratorpart.la killustrator.la
 
 libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
 	KIllustrator_view.cc \

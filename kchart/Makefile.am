@@ -3,7 +3,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/interfaces -I$(interfacedir) $(a
 ####### Files
 
 bin_PROGRAMS = kchart
-lib_LTLIBRARIES = kchart.la libkchartpart.la
+lib_LTLIBRARIES = libkchartpart.la kchart.la
 
 libkchartpart_la_SOURCES = kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
