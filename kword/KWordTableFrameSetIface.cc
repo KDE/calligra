@@ -35,16 +35,16 @@ KWordTableFrameSetIface::KWordTableFrameSetIface( KWTableFrameSet *_frame )
    m_table = _frame;
 }
 
-unsigned int KWordTableFrameSetIface::nbRows()
+uint KWordTableFrameSetIface::nbRows()
 {
   return m_table->getRows();
 }
 
-unsigned int KWordTableFrameSetIface::numCols()
+uint KWordTableFrameSetIface::numCols()
 {
   return m_table->getCols();
 }
-unsigned int KWordTableFrameSetIface::numCells()
+uint KWordTableFrameSetIface::numCells()
 {
   return m_table->getNumCells();
 }
@@ -67,7 +67,7 @@ DCOPRef KWordTableFrameSetIface::getCell( int pos )
 		    m_table->getCell(pos)->dcopObject()->objId() );
 }
 
-DCOPRef KWordTableFrameSetIface::getCell( unsigned int row, unsigned int col )
+DCOPRef KWordTableFrameSetIface::getCell( uint row, uint col )
 {
   if( row>=m_table->getRows() || col>= m_table->getCols())
         return DCOPRef();
@@ -75,7 +75,7 @@ DCOPRef KWordTableFrameSetIface::getCell( unsigned int row, unsigned int col )
 		    m_table->getCell(row,col)->dcopObject()->objId() );
 }
 
-DCOPRef KWordTableFrameSetIface::startEditingCell(unsigned int row, unsigned int col )
+DCOPRef KWordTableFrameSetIface::startEditingCell(uint row, uint col )
 {
     if( row>=m_table->getRows() || col>= m_table->getCols())
         return DCOPRef();

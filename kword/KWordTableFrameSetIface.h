@@ -36,15 +36,15 @@ public:
     KWordTableFrameSetIface( KWTableFrameSet *_frame );
 
 k_dcop:
-    unsigned int nbRows();
-    unsigned int numCols();
-    unsigned int numCells() ;
+    uint nbRows();
+    uint numCols();
+    uint numCells() ;
     bool hasSelectedFrame();
     void deselectAll();
     //return reference to a cell
     DCOPRef getCell( int pos );
-    DCOPRef getCell( unsigned int row, unsigned int col );
-    DCOPRef startEditingCell(unsigned int row, unsigned int col );
+    DCOPRef getCell( uint row, uint col );
+    DCOPRef startEditingCell(uint row, uint col );
 
 private:
     KWTableFrameSet *m_table;
