@@ -937,7 +937,8 @@ QTextStream& operator<<( QTextStream& ts, KSpreadValue value )
     case KSpreadValue::String:  
       ts << ": " << value.asString(); break;
       
-    case KSpreadValue::Error:   break;
+    case KSpreadValue::Error: 
+      ts << "(" << value.errorMessage() << ")"; break;
     
     default: break;
   }
