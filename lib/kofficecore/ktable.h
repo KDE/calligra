@@ -196,7 +196,7 @@ public:
   KTable( const KTable& _t ) { sh = _t.sh; sh->ref(); }
   ~KTable() { if ( sh->deref() ) delete sh; }
 
-  KTable& operator=( const KTable& t ) { if ( sh->deref() ) delete sh; sh = t.sh; sh->ref(); return *this; }
+  KTable& operator=( const KTable& t ) { t.sh->ref(); if ( sh->deref() ) delete sh; sh = t.sh; return *this; }
 
   Iterator begin() { return sh->matrix.begin(); }
   ConstIterator begin() const { return sh->matrix.begin(); }

@@ -93,6 +93,10 @@ public:
     m_toolbarList.setAutoDelete( true );
     m_firstTime=true;
     m_progress=0L;
+    m_paDocInfo = 0;
+    m_paSave = 0;
+    m_paSaveAs = 0;
+    m_paPrint = 0;
   }
   ~KoMainWindowPrivate()
   {
@@ -122,6 +126,11 @@ public:
   bool m_splitted;
   bool m_forQuit;
   bool m_firstTime;
+
+  KAction *m_paDocInfo;
+  KAction *m_paSave;
+  KAction *m_paSaveAs;
+  KAction *m_paPrint;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
@@ -146,13 +155,13 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new" );
     KStdAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
     m_recent = KStdAction::openRecent( this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection() );
-    KStdAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
-    KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
-    KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
+    d->m_paSave = KStdAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
+    d->m_paSaveAs = KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
+    d->m_paPrint = KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
     KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
     KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
-    (void) new KAction( i18n( "&Document Information..." ), "documentinfo", 0,
+    d->m_paDocInfo = new KAction( i18n( "&Document Information..." ), "documentinfo", 0,
                         this, SLOT( slotDocumentInfo() ),
                         actionCollection(), "file_documentinfo" );
 
@@ -165,6 +174,11 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::aboutApp( this, SLOT( slotHelpAbout() ), actionCollection(), "about_app" );
     KStdAction::aboutKDE( m_helpMenu, SLOT( aboutKDE() ), actionCollection(), "about_kde" );
     KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "report_bug" );
+
+    d->m_paDocInfo->setEnabled( false );
+    d->m_paSaveAs->setEnabled( false );
+    d->m_paSave->setEnabled( false );
+    d->m_paPrint->setEnabled( false );
 
     d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
     setCentralWidget( d->m_splitter );
@@ -275,6 +289,12 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_orientation->setEnabled(false);
   }
 
+  bool enable = d->m_rootDoc != 0 ? true : false;
+  d->m_paDocInfo->setEnabled( enable );
+  d->m_paSave->setEnabled( enable );
+  d->m_paSaveAs->setEnabled( enable );
+  d->m_paPrint->setEnabled( enable );
+
   updateCaption();
 
   d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );
@@ -294,6 +314,11 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc )
   d->m_rootDoc = doc;
   // maybe we want to add the KoView as parameter and set it into
   // d->m_rootView but it doesn't seem used at all ?!? (David)
+  bool enable = d->m_rootDoc != 0 ? true : false;
+  d->m_paDocInfo->setEnabled( enable );
+  d->m_paSave->setEnabled( enable );
+  d->m_paSaveAs->setEnabled( enable );
+  d->m_paPrint->setEnabled( enable );
 }
 
 KoDocument* KoMainWindow::createDoc() const
