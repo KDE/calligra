@@ -3943,10 +3943,6 @@ void Qt3::QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCurs
 	    curh = h;
 	    cury = cy;
 	    curline = line;
-
-            // ## for debug
-            //painter.fillRect( QRect( clipx, clipy, clipw, cliph ), Qt::green );
-
 	}
 
 	// first time - start again...

@@ -139,11 +139,8 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 	return;
 
     if ( paper ) {
-//QT2HACK
-//	p->setBrushOrigin( -(int)p->translationX(),
-//			   -(int)p->translationY() );
-	p->setBrushOrigin( -(int)p->worldMatrix().dx(),
-			   -(int)p->worldMatrix().dy() );
+	p->setBrushOrigin( -(int)p->translationX(),
+			   -(int)p->translationY() );
 	p->fillRect( cr, *paper );
     }
 
@@ -173,7 +170,9 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
                                        QPixmap *&doubleBuffer, const QColorGroup &cg,
                                        bool drawCursor, QTextCursor *cursor, bool resetChanged )
 {
-    //qDebug( "drawParagWYSIWYG %p %d", parag, parag->paragId() );
+#ifdef DEBUG_PAINTING
+    kdDebug() << "drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
+#endif
     QPainter *painter = 0;
     if ( resetChanged )
 	parag->setChanged( FALSE );
@@ -181,8 +180,12 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
     QRect ir( rect );
     QRect crect( cx, cy, cw, ch ); // in pixels
 
-    //kdDebug() << "KoTextDocument::drawParagWYSIWYG parag->rect=" << DEBUGRECT( parag->rect() )
-    //          << " ir=" << DEBUGRECT(ir) << endl;
+#ifdef DEBUG_PAINTING
+    kdDebug() << "KoTextDocument::drawParagWYSIWYG parag->rect=" << DEBUGRECT( parag->rect() )
+              << " pixelRect()=" << DEBUGRECT(ir)
+              << " crect (pixels)=" << DEBUGRECT(crect) << endl;
+#endif
+
     bool useDoubleBuffer = !parag->document()->parent();
     // no parent docs in libkotext (and no access to nextDoubleBuffered)
     //if ( !useDoubleBuffer && parag->document()->nextDoubleBuffered )
@@ -229,11 +232,16 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
     }
 
     painter->translate( rect.x() - ir.x(), rect.y() - ir.y() );
+#ifdef DEBUG_PAINTING
+    kdDebug() << "KoTextDocument::drawParagWYSIWYG translate " << rect.x() - ir.x() << "," << rect.y() - ir.y() << endl;
+#endif
     //painter->setBrushOrigin( painter->brushOrigin() + rect.topLeft() - ir.topLeft() );
 
     // The cliprect is checked in layout units, in QTextParag::paint
     QRect crect_lu( m_zoomHandler->pixelToLayoutUnit( crect ) );
-    //kdDebug() << "KoTextDocument::drawParagWYSIWYG crect_lu=" << DEBUGRECT( crect_lu ) << endl;
+#ifdef DEBUG_PAINTING
+    kdDebug() << "KoTextDocument::drawParagWYSIWYG crect_lu=" << DEBUGRECT( crect_lu ) << endl;
+#endif
 
     parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE,
                   crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
@@ -250,6 +258,12 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
 	delete painter;
 	painter = 0;
 	p->drawPixmap( ir.topLeft(), *doubleBuffer, QRect( QPoint( 0, 0 ), ir.size() ) );
+/* // for debug!
+        p->save();
+        p->setPen( Qt::blue );
+        p->drawRect( ir.x(), ir.y(), ir.width(), ir.height() );
+        p->restore();
+*/
     } else {
 	painter->translate( -ir.x(), -ir.y() );
         //painter->setBrushOrigin( painter->brushOrigin() - ir.topLeft() );
