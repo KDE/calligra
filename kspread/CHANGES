@@ -350,3 +350,8 @@ you can't resize column or row, you can't rename table etc...
 2000-03-10 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -bug fix
+
+2000-03-17 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add financial functions that Jonathan Singer created.
+thanks

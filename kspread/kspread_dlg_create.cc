@@ -632,6 +632,173 @@ void KSpreadcreate::init()
    	edit[2]=type_double;
 
 	}
+   else if(m_funcName=="FV" || m_funcName=="PV" )
+   {
+       nb_param=3;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       if (m_funcName=="FV") { tmp_label->setText(i18n("Present Value")); }
+       		else  { tmp_label->setText(i18n("Future Value")); }
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(i18n("Interest Rate"));
+        s_param = new QLineEdit( this );
+  	lay1->addWidget(s_param);
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(i18n("Periods"));
+
+	t_param = new QLineEdit( this );
+  	lay1->addWidget(t_param);
+  	exp_funct=m_funcName+"("+"Double,Double,Double"+")";
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(exp_funct);
+   	edit[0]=type_double;
+   	edit[1]=type_double;
+   	edit[2]=type_double;
+   }
+   else if(m_funcName=="PV_annuity" || m_funcName=="FV_annuity")
+   {
+       nb_param=5;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Payment Amount"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Interest Rate (eff.)"));
+       s_param = new QLineEdit( this );
+       lay1->addWidget(s_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Periods"));
+       t_param = new QLineEdit( this );
+       lay1->addWidget(t_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Initial Amount"));
+       fo_param = new QLineEdit( this );
+       lay1->addWidget(fo_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Paid Start Of Period"));
+       fi_param = new QLineEdit( this );
+       lay1->addWidget(fi_param);
+
+       exp_funct=m_funcName+"("+"double,...,double,bool"+")";
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label,10,0);
+       tmp_label->setText(exp_funct);
+       edit[0]=type_double;
+       edit[1]=type_double;
+       edit[2]=type_double;
+       edit[3]=type_double;
+       edit[4]=type_double;
+   }
+   else if(m_funcName=="compound" )
+   {
+   	nb_param=4;
+
+   	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+   	tmp_label->setText(i18n("Principal"));
+        f_param = new QLineEdit( this );
+  	lay1->addWidget(f_param);
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(i18n("Interest Rate"));
+        s_param = new QLineEdit( this );
+  	lay1->addWidget(s_param);
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(i18n("Periods per Year"));
+	t_param = new QLineEdit( this );
+  	lay1->addWidget(t_param);
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(i18n("Years"));
+        fo_param = new QLineEdit( this );
+  	lay1->addWidget(fo_param);
+
+  	exp_funct=m_funcName+"("+"Double,Double,..."+")";
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label,10,0);
+  	tmp_label->setText(exp_funct);
+  	edit[0]=type_double;
+  	edit[1]=type_double;
+  	edit[2]=type_double;
+  	edit[3]=type_double;
+
+
+   }
+   else if(m_funcName=="continuous" )
+   {
+       nb_param=3;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Principal"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(i18n("Interest Rate"));
+        s_param = new QLineEdit( this );
+  	lay1->addWidget(s_param);
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(i18n("Years"));
+	t_param = new QLineEdit( this );
+  	lay1->addWidget(t_param);
+
+  	exp_funct=m_funcName+"("+"Double,Double,Double"+")";
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(exp_funct);
+   	edit[0]=type_double;
+   	edit[1]=type_double;
+   	edit[2]=type_double;
+   }
+   else if( m_funcName=="effective" || m_funcName=="nominal"  )
+   {
+        nb_param=2;
+        tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+        if( m_funcName=="effective")
+        	 {tmp_label->setText(i18n("Nominal Rate")); }
+        	else {tmp_label->setText(i18n("Effective Rate")); }
+        f_param = new QLineEdit( this );
+  	lay1->addWidget(f_param);
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+        tmp_label->setText(i18n("Periods per Year"));
+
+        s_param=new QLineEdit( this );
+  	lay1->addWidget(s_param);
+  	exp_funct=m_funcName+"("+"Double,Double"+")";
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(exp_funct);
+  	edit[0]=type_double;
+  	edit[1]=type_double;
+
+   }
 
    else if(m_funcName=="STXT")
    {

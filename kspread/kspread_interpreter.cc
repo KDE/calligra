@@ -1546,6 +1546,225 @@ static bool kspreadfunc_bino_inv( KSContext& context )
   
 }
 
+static bool kspreadfunc_fv( KSContext& context )
+{
+/* Returns future value, given current value, interest rate and time */
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "FV", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  double present = args[0]->doubleValue();
+  double interest = args[1]->doubleValue();
+  double periods = args[2]->doubleValue();
+
+
+  context.setValue( new KSValue( present * pow(1+interest, periods)));
+  return true;
+}
+
+static bool kspreadfunc_compound( KSContext& context )
+{
+/* Returns value after compounded interest, given principal, rate, periods
+per year and year */
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 4, "compound", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+    return false;
+  double principal = args[0]->doubleValue();
+  double interest = args[1]->doubleValue();
+  double periods = args[2]->doubleValue();
+  double years = args[3]->doubleValue();
+
+  context.setValue( new KSValue( principal * pow(1+(interest/periods),
+periods*years)));
+
+  return true;
+}
+
+static bool kspreadfunc_continuous( KSContext& context )
+{
+/* Returns value after continuous compounding of interest, given prinicpal,
+rate and years */
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "continuous", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  double principal = args[0]->doubleValue();
+  double interest = args[1]->doubleValue();
+  double years = args[2]->doubleValue();
+
+
+  context.setValue( new KSValue( principal * exp(interest * years)));
+  return true;
+}
+
+static bool kspreadfunc_pv( KSContext& context )
+{
+/* Returns presnt value, given future value, interest rate and years */
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "PV", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  double future = args[0]->doubleValue();
+  double interest = args[1]->doubleValue();
+  double periods = args[2]->doubleValue();
+
+
+  context.setValue( new KSValue( future / pow(1+interest, periods)));
+  return true;
+}
+
+static bool kspreadfunc_pv_annuity( KSContext& context )
+{
+/* Returns present value of an annuity or cash flow, given payment,
+interest rate,
+periods, initial amount and whether payments are made at the start (TRUE)
+or end of a period */
+
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 5, "PV_annuity", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[4], KSValue::BoolType, true ) )
+    return false;
+  double amount= args[0]->doubleValue();
+  double interest = args[1]->doubleValue();
+  double periods = args[2]->doubleValue();
+  double initial = args[3]->doubleValue();
+  bool start = args[4]->boolValue();
+
+  if (start) periods +=1;
+  double first_term = 1/interest;
+  double second_term = 1/(interest*pow(1+interest, periods)) ;
+
+  context.setValue( new KSValue( initial + amount * (first_term -
+second_term)  ));
+  return true;
+}
+
+
+static bool kspreadfunc_fv_annuity( KSContext& context )
+{
+/* Returns future value of an annuity or cash flow, given payment, interest
+rate,
+periods, initial amount and whether payments are made at the start (TRUE)
+or end of a period */
+
+
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 5, "FV_annuity", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[4], KSValue::BoolType, true ) )
+    return false;
+  double amount= args[0]->doubleValue();
+  double interest = args[1]->doubleValue();
+  double periods = args[2]->doubleValue();
+  double initial = args[3]->doubleValue();
+  bool start = args[4]->boolValue();
+
+  if (start) periods +=1;
+  double first_term = pow(1+interest, periods)/interest ;
+  double second_term = 1/interest;
+  initial =  initial * pow(1+interest, periods);
+  context.setValue( new KSValue( initial + amount * (first_term -
+second_term)  ));
+  return true;
+}
+
+
+static bool kspreadfunc_effective( KSContext& context )
+{
+/* Returns effective interest rate given nominal rate and periods per year */
+
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "effective", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  double nominal = args[0]->doubleValue();
+  double periods = args[1]->doubleValue();
+
+
+  context.setValue( new KSValue(  pow(1+nominal/periods, periods)-1));
+  return true;
+}
+
+
+static bool kspreadfunc_nominal( KSContext& context )
+{
+/* Returns nominal interest rate given effective rate and periods per year */
+
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "nominal", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  double effective = args[0]->doubleValue();
+  double periods = args[1]->doubleValue();
+
+
+  context.setValue( new KSValue(  periods *( pow(1+effective, 1/periods)-1)
+));
+  return true;
+}
+
 
 static bool kspreadfunc_cell( KSContext& context )
 {
@@ -1748,6 +1967,22 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "lower", new KSValue( new KSBuiltinFunction( module,"lower",kspreadfunc_lower) ) );
   module->addObject( "upper", new KSValue( new KSBuiltinFunction( module,"upper",kspreadfunc_upper) ) );
   module->addObject( "find", new KSValue( new KSBuiltinFunction( module,"find",kspreadfunc_find) ) );
+  module->addObject( "compound", new KSValue( new KSBuiltinFunction(
+module,"compound",kspreadfunc_compound) ) );
+  module->addObject( "continuous", new KSValue( new KSBuiltinFunction(
+module,"continuous",kspreadfunc_continuous) ) );
+  module->addObject( "effective", new KSValue( new KSBuiltinFunction(
+module,"effective",kspreadfunc_effective) ) );
+  module->addObject( "nominal", new KSValue( new KSBuiltinFunction(
+module,"nominal",kspreadfunc_nominal) ) );
+  module->addObject( "FV", new KSValue( new KSBuiltinFunction(
+module,"FV",kspreadfunc_fv) ) );
+  module->addObject( "PV_annuity", new KSValue( new KSBuiltinFunction(
+module,"PV_annuity",kspreadfunc_pv_annuity) ) );
+  module->addObject( "PV", new KSValue( new KSBuiltinFunction(
+module,"PV",kspreadfunc_pv) ) );
+  module->addObject( "FV_annuity", new KSValue( new KSBuiltinFunction(
+module,"FV_annuity",kspreadfunc_fv_annuity) ) );
 
   return module;
 }

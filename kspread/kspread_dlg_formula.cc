@@ -70,6 +70,7 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   type_formula->insertItem(i18n("Logic"));
   type_formula->insertItem(i18n("Text"));
   type_formula->insertItem(i18n("Time and Date"));
+  type_formula->insertItem(i18n("Financial"));
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   QObject::connect( type_formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected(const QString &) ) );
@@ -187,6 +188,18 @@ list_date_time+="currentDateTime";
 list_date_time+="dayOfYear";
 list_date_time.sort();
 
+
+QStringList list_financial;
+list_financial+="compound";
+list_financial+="continuous";
+list_financial+="effective";
+list_financial+="nominal";
+list_financial+="FV";
+list_financial+="FV_annuity";
+list_financial+="PV";
+list_financial+="PV_annuity";
+list_financial.sort();
+
 if(string== i18n("Statistic") )
 	{
 	formula->clear();
@@ -217,6 +230,11 @@ if(string== i18n("Time and Date") )
 	formula->clear();
 	formula->insertStringList(list_date_time);
 	}
+if(string== i18n("Financial") )
+	{
+	formula->clear();
+	formula->insertStringList(list_financial);
+	}
 if(string == i18n("All"))
 	{
 	formula->clear();
@@ -226,6 +244,7 @@ if(string == i18n("All"))
 	formula->insertStringList(list_text);
 	formula->insertStringList(list_logic);
 	formula->insertStringList(list_date_time);
+	formula->insertStringList(list_financial);
 	}
 }
 
