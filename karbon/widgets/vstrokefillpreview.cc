@@ -120,7 +120,23 @@ void
 VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 {
 	m_painter->begin();
-	m_painter->clear( paletteBackgroundColor() );
+
+	// draw checkerboard
+	VFill fill;
+	m_painter->setPen( Qt::NoPen );
+	for(unsigned int y = 0;y < PANEL_SIZEX;y += 10)
+		for(unsigned int x = 0;x < PANEL_SIZEX;x += 10)
+		{
+			fill.setColor( ( ( (x + y) % 20 ) == 0 ) ? QColor( 153, 153, 153 ) : QColor( 102, 102, 102 ) );
+			m_painter->setBrush( fill );
+			m_painter->newPath();
+			m_painter->moveTo( KoPoint( x, y ) );
+			m_painter->lineTo( KoPoint( x + 10, y ) );
+			m_painter->lineTo( KoPoint( x + 10, y + 10 ) );
+			m_painter->lineTo( KoPoint( x, y + 10 ) );
+			m_painter->lineTo( KoPoint( x, y ) );
+			m_painter->fillPath();
+		}
 
 	VStroke stroke;
 	stroke.setLineWidth( 2.0 );
