@@ -327,7 +327,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
     }
 #endif
     //shadow
-#if 0
+#if 0 //move it to kptextobject
     if ( !element.hasAttribute( "type" ) ||
          ( element.hasAttribute( "type" ) && element.attribute( "type" ) == "4" ) )
     {

@@ -407,6 +407,22 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             pef=PEF_RANDOM;
         setPageEffect( pef );
     }
+    if ( styleStack.hasChildNode("presentation:sound"))
+    {
+#if 0 //load sound file store it into kpresenter_doc "m_page->kPresenterDoc()"
+        QString soundUrl = storeSound(m_styleStack.childNode("presentation:sound").toElement(),
+                                      soundElement, doc);
+
+        if (!soundUrl.isNull())
+        {
+            QDomElement pseElem = doc.createElement("PGSOUNDEFFECT");
+            pseElem.setAttribute("soundEffect", 1);
+            pseElem.setAttribute("soundFileName", soundUrl);
+
+            bgPage.appendChild(pseElem);
+        }
+#endif
+    }
 }
 
 void KPBackGround::load( const QDomElement &element )

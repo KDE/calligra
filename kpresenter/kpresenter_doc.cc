@@ -2055,7 +2055,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element, bool paste )
 void KPresenterDoc::loadTitle( const QDomElement &element )
 {
     QDomElement title=element.firstChild().toElement();
-    int i=0+m_insertFilePage;
+    int i=m_insertFilePage;
     while ( !title.isNull() ) {
         if ( title.tagName()=="Title" )
         {
@@ -2078,7 +2078,7 @@ void KPresenterDoc::loadTitle( const QDomElement &element )
 void KPresenterDoc::loadNote( const QDomElement &element )
 {
     QDomElement note=element.firstChild().toElement();
-    int i=0+m_insertFilePage;
+    int i=m_insertFilePage;
     while ( !note.isNull() ) {
         if ( note.tagName()=="Note" )
         {
@@ -2182,7 +2182,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 
 void KPresenterDoc::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list )
 {
-    int i = 0+m_insertFilePage;
+    int i = m_insertFilePage;
     QStringList::Iterator it = _list.begin();
     for ( ; it != _list.end(); ++it ) {
         QString soundFile = *it;
