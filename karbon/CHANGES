@@ -2,4 +2,11 @@ Changes after 1.3 beta 1 :
 
 - new tool controller
 - refactoring flattenpath cmd after wmf filter changes
-- zooming fix
+- zooming fixes
+- svg exporting uses document dimension, not dimension of
+  the active selection
+- new style docker introduced, with dragable cliparts
+- added aspect-ratio keeping way of scaling for select tool
+- various ui tweaks, including new icons (Tomislav)
+- improved behaviour for strokefill preview widget (Tomislav)
+- speedups on large documents for the document tree widget
