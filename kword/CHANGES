@@ -115,3 +115,4 @@ Reggie, 23.9.1998:
 ------------------
 - Indents are configuarble with the ruler now
 - Fixed a bug with indents and makeing the line format (line-breaking)
+- Another fix with indents and redrawing

@@ -590,7 +590,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
       + indent;
 
     ptLeft = xShift;
-    ptWidth = document->getPTColumnWidth();
+    ptWidth = document->getPTColumnWidth() - indent;
 
     // First line ? Draw the couter ?
     if ( lineStartPos == 0 && parag->getParagLayout()->getCounterNr() != -1 )
@@ -809,14 +809,29 @@ void KWFormatContext::calcTextLen()
   
   unsigned int pos = lineStartPos,tmpPTPos = 0,_ptPos = 0;
   KWChar *text = parag->getText();
-  unsigned int xShift = document->getPTLeftBorder() + ( column - 1 ) * ( document->getPTColumnWidth() + document->getPTColumnSpacing() );
-
+  unsigned int indent;
+  if ( lineStartPos == 0 )
+    {
+      // Reset font size, color etc. to the documents default
+      setDefaults( document );
+      // Change fonts & stuff to match the paragraphs layout
+      apply( parag->getParagLayout()->getFormat() );
+      
+      indent = parag->getParagLayout()->getPTFirstLineLeftIndent();
+    }
+    else
+      indent = parag->getParagLayout()->getPTLeftIndent();
+    
+  // Calculate the shift for the first visible character. This may be the counter, too
+  unsigned int xShift = document->getPTLeftBorder() + ( column - 1 ) * ( document->getPTColumnWidth() + document->getPTColumnSpacing() )
+    + indent;
+  
   tmpFormat.apply( *this );
   KWDisplayFont *font = tmpFormat.loadFont( document );
   displayFont = font;
 
 
-  while ( _ptPos < xShift + document->getPTColumnWidth() && pos < getParag()->getTextLen())
+  while ( _ptPos < xShift + document->getPTColumnWidth() - indent && pos < getParag()->getTextLen())
     {
       char c = text[ pos ].c;
       
