@@ -1,37 +1,27 @@
 /**
- * $Id:$
+ * $Id$
  */
 
 #ifndef __KRTFTOKEN_H__
 #define __KRTFTOKEN_H__
 
 #include <qstring.h>
+#include <qobject.h>
 
 enum KRTFTokenType { TokenEOF = -1, Unknown, ControlWord, ControlSymbol, OpenGroup, CloseGroup, PlainText };
 
-struct KRTFToken
+class KRTFToken : public QObject
 {
+public:
     KRTFTokenType _type;
     QString _text;
     QString _param;
 
-    KRTFToken() {
-	_type = Unknown;
-    }
-
-    KRTFToken( const KRTFToken& token ) {
-	_type = token._type;
-	_text = token._text;
-	_param = token._param;
-    }
-    KRTFToken& operator=( const KRTFToken& token ) {
-	if( this != &token ) {
-	    this->_type = token._type;
-	    this->_text = token._text;
-	    this->_param = token._param;
+    KRTFToken( QObject* parent ) :
+	QObject( parent ) 
+	{
+	    _type = Unknown;
 	}
-	return *this;
-    }
 };
 
 

@@ -14,11 +14,15 @@ void KRTFParser::skipGroup()
     int bracelevel = 1; // first brace has already been opened
 
     while( bracelevel > 0 ) {
-	KRTFToken token = _tokenizer->nextToken();
-	if( token._type == OpenGroup )
+	KRTFToken* token = _tokenizer->nextToken();
+	if( token->_type == OpenGroup ) {
 	    bracelevel++;
-	else if( token._type == CloseGroup )
+	}
+	else if( token->_type == CloseGroup ) {
 	    bracelevel--;
+	}
+	else if( token->_type == ControlWord ) {}
+	    
 	// don´t need to do anything with the other token types
     };
 }
