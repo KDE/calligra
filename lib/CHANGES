@@ -21,6 +21,7 @@ KoText:
   not loaded correctly.
 - Background spellchecking works again
 - Fixed crash during background spellchecking (refcounting of formats)
+- Fixed race condition during background spellchecking (leading to misplaced red underlines)
 - Fixed hyphenation checkbox not correctly set in font dialog
 - Fixed wrong hyphenation in many cases, due to wrong word sent to hyphenation engine
 - Font dialog usability: turn radiobuttons superscript/subscript into
