@@ -101,6 +101,7 @@ bool KoZipStore::openRead( const QString& name )
 Q_LONG KoZipStore::write( const char* _data, Q_ULONG _len )
 {
   if ( _len == 0L ) return 0;
+  //kdDebug() << "KoZipStore::write " << _len << endl;
 
   if ( !m_bIsOpen )
   {
@@ -114,7 +115,9 @@ Q_LONG KoZipStore::write( const char* _data, Q_ULONG _len )
   }
 
   m_iSize += _len;
-  return m_pZip->writeData( _data, _len );
+  if ( m_pZip->writeData( _data, _len ) ) // writeData returns a bool!
+      return _len;
+  return 0L;
 }
 
 bool KoZipStore::closeWrite()
