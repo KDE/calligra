@@ -65,6 +65,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_ignoreUpperCase(false)
 {
     m_listCompletion=new KCompletion();
+    m_bAutoFormatActive=true;
 }
 
 void KoAutoFormat::readConfig()
@@ -175,6 +176,7 @@ void KoAutoFormat::readConfig()
     }
     xmlFile.close();
     buildMaxLen();
+    autoFormatIsActive();
     m_configRead = true;
 }
 
@@ -330,14 +332,27 @@ void KoAutoFormat::doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *p
     }
 }
 
+void KoAutoFormat::autoFormatIsActive()
+{
+    m_bAutoFormatActive = m_useBulletStyle ||
+                          m_removeSpaceBeginEndLine ||
+                          m_autoDetectUrl ||
+                          m_convertUpperUpper ||
+                          m_convertUpperCase ||
+                          m_autoReplaceNumber ||
+                          m_autoChangeFormat ||
+                          m_autoCompletion ||
+                          m_typographicDoubleQuotes.replace ||
+                          m_typographicSimpleQuotes.replace ||
+       m_entries.count()!=0;
+}
+
 void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag, int index, QChar ch,KoTextObject *txtObj )
 {
     if ( !m_configRead )
         readConfig();
 
-    if ( !m_useBulletStyle && !m_removeSpaceBeginEndLine && !m_autoDetectUrl
-         && !m_convertUpperUpper && !m_convertUpperCase && ! m_autoReplaceNumber && !m_autoChangeFormat && !m_autoCompletion
-         && !m_typographicDoubleQuotes.replace && !m_typographicSimpleQuotes.replace && m_entries.count()==0)
+    if ( !m_bAutoFormatActive )
         return;
 
     if( ch.isSpace())

@@ -244,7 +244,7 @@ protected:
 
 private:
     void detectStartOfLink(const QString &word);
-
+    void autoFormatIsActive();
     KoDocument *m_doc;
     KoVariableCollection *m_varCollection;
     KoVariableFormatCollection *m_varFormatCollection;
@@ -275,6 +275,7 @@ private:
     uint m_nbMaxCompletionWord;
 
     bool m_ignoreUpperCase;
+    bool m_bAutoFormatActive;
 };
 
 #endif
