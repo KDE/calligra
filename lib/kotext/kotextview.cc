@@ -75,7 +75,7 @@ KoTextView::KoTextView( KoTextObject *textobj )
     connect( dragStartTimer, SIGNAL( timeout() ),
              this, SLOT( startDrag() ) );
 
-    m_textobj->formatMore();
+    m_textobj->formatMore( 2 );
 
     blinkCursorVisible = FALSE;
     inDoubleClick = FALSE;
@@ -114,7 +114,7 @@ void KoTextView::terminate(bool removeselection)
 
 void KoTextView::deleteWordRight()
 {
-    if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
+    if ( textObject()->hasSelection() ) {
         textObject()->removeSelectedText( m_cursor );
         return;
     }
@@ -130,7 +130,7 @@ void KoTextView::deleteWordRight()
 
 void KoTextView::deleteWordLeft()
 {
-    if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
+    if ( textObject()->hasSelection() ) {
         textObject()->removeSelectedText( m_cursor );
         return;
     }
@@ -208,7 +208,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         moveCursor( e->state() & ControlButton ? MovePgDown : MoveViewportDown, e->state() & ShiftButton );
         break;
     case Key_Return: case Key_Enter:
-        if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
+        if ( textObject()->hasSelection() )
             textObject()->removeSelectedText( m_cursor );
         clearUndoRedoInfo = FALSE;
         textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
@@ -218,7 +218,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
                           m_cursor->parag()->prev()->length() - 1, '\n' );
         break;
     case Key_Delete:
-        if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
+        if ( textObject()->hasSelection() ) {
             textObject()->removeSelectedText( m_cursor );
             break;
         }
@@ -228,7 +228,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         clearUndoRedoInfo = FALSE;
         break;
     case Key_Backspace:
-        if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
+        if ( textObject()->hasSelection() ) {
             textObject()->removeSelectedText( m_cursor );
             break;
         }
@@ -673,7 +673,9 @@ void KoTextView::handleMouseReleaseEvent()
     else
     {
         if ( textDocument()->selectionStartCursor( KoTextDocument::Standard ) == textDocument()->selectionEndCursor( KoTextDocument::Standard ) )
+        {
             textDocument()->removeSelection( KoTextDocument::Standard );
+        }
 
         textObject()->selectionChangedNotify();
 
@@ -1117,7 +1119,7 @@ KCommand *KoTextView::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _ty
 KCommand *KoTextView::dropEvent( KoTextObject *tmp, KoTextCursor dropCursor, bool dropInSameObj)
 {
     KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
-    if ( tmp->textDocument()->hasSelection( KoTextDocument::Standard ) )
+    if ( tmp->hasSelection() )
     {
         // Dropping into the selection itself ?
         KoTextCursor startSel = textDocument()->selectionStartCursor( KoTextDocument::Standard );

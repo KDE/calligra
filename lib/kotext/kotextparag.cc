@@ -383,7 +383,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     //kdDebug(32500) << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
 
     // Let's call drawLabel ourselves, rather than having to deal with QStyleSheetItem to get paintDefault to call it!
-    if ( m_layout.counter && m_layout.counter->numbering() != KoParagCounter::NUM_NONE )
+    if ( m_layout.counter && m_layout.counter->numbering() != KoParagCounter::NUM_NONE && m_lineChanged <= 0 )
     {
         int cy, h, baseLine;
         lineInfo( 0, cy, h, baseLine );

@@ -174,7 +174,7 @@ bool KoTextObject::selectionHasCustomItems( int selectionId ) const
 
 void KoTextObject::slotAfterUndoRedo()
 {
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     emit updateUI( true );
     emit showCursor();
@@ -383,14 +383,14 @@ void KoTextObject::storeParagUndoRedoInfo( KoTextCursor * cursor, int selectionI
     undoRedoInfo.oldParagLayouts.clear();
     undoRedoInfo.text = " ";
     undoRedoInfo.index = 1;
-    if ( cursor && !textdoc->hasSelection( selectionId ) ) {
+    if ( cursor && !textdoc->hasSelection( selectionId, true ) ) {
         KoTextParag * p = cursor->parag();
         undoRedoInfo.id = p->paragId();
         undoRedoInfo.eid = p->paragId();
         undoRedoInfo.oldParagLayouts << p->paragLayout();
     }
     else{
-        Q_ASSERT( textdoc->hasSelection( selectionId ) );
+        Q_ASSERT( textdoc->hasSelection( selectionId, true ) );
         KoTextParag *start = textdoc->selectionStart( selectionId );
         KoTextParag *end = textdoc->selectionEnd( selectionId );
         undoRedoInfo.id = start->paragId();
@@ -540,7 +540,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
     if ( !undoRedoInfo.customItemsMap.isEmpty() )
         clearUndoRedoInfo();
 
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     emit ensureCursorVisible();
     emit showCursor();
@@ -556,10 +556,10 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         return;
     //kdDebug(32500) << "KoTextObject::insert txt=" << txt << endl;
     KoTextDocument *textdoc = textDocument();
+    bool tinyRepaint = !checkNewLine;
     if ( repaint )
         emit hideCursor();
-    if ( textdoc->hasSelection( selectionId ) && removeSelected  ) {
-        //removeSelectedText( cursor );
+    if ( textdoc->hasSelection( selectionId, true ) && removeSelected  ) {
         if( customItemsMap.isEmpty())
         {
             emitNewCommand(replaceSelectionCommand( cursor, txt, selectionId, commandName, repaint ));
@@ -570,6 +570,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
             KCommand* removeSelCmd = removeSelectedTextCommand( cursor, selectionId );
             if (removeSelCmd)
                 emitNewCommand( removeSelCmd );
+            tinyRepaint = false;
         }
     }
     KoTextCursor c2 = *cursor;
@@ -584,14 +585,16 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         undoRedoInfo.text = QString::null;
     }
     int oldLen = undoRedoInfo.text.length();
-    setLastFormattedParag( checkNewLine && cursor->parag()->prev() ?
-                           cursor->parag()->prev() : cursor->parag() );
     KoTextCursor oldCursor = *cursor;
+    bool wasChanged = cursor->parag()->hasChanged();
     cursor->insert( txt, checkNewLine );  // insert the text
+    setLastFormattedParag( checkNewLine && cursor->parag()->prev() ? cursor->parag()->prev() :
+                           cursor->parag() );
 
     if ( !customItemsMap.isEmpty() ) {
         customItemsMap.insertItems( oldCursor, txt.length() );
         undoRedoInfo.customItemsMap = customItemsMap;
+        tinyRepaint = false;
     }
 
     textdoc->setSelectionStart( KoTextDocument::Temp, &oldCursor );
@@ -600,20 +603,32 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     textdoc->setFormat( KoTextDocument::Temp, currentFormat, KoTextFormat::Format );
     textdoc->removeSelection( KoTextDocument::Temp );
 
-
     // Speed optimization: if we only type a char, and it doesn't
     // invalidate the next parag, only format the current one
+    // ### This idea is wrong. E.g. when the last parag grows and must create a new page.
+#if 0
     KoTextParag *parag = cursor->parag();
-    if ( !checkNewLine && m_lastFormatted == parag && parag->next() && parag->next()->isValid() )
+    if ( !checkNewLine && m_lastFormatted == parag && ( !parag->next() || parag->next()->isValid() ) )
     {
         parag->format();
         m_lastFormatted = m_lastFormatted->next();
-    } else
-    {
-        // Too slow, e.g. when called from a search-n-replace.
-        // doKeyboardAction seems to do it anyway, for the interactive case.
-        //formatMore();
     }
+#endif
+    ensureFormatted( cursor->parag() ); // call formatMore until necessary
+
+    // Speed optimization: if we only type a char, only repaint from current line
+    if ( !checkNewLine && tinyRepaint && !wasChanged )
+    {
+        // insert() called format() which called setChanged().
+        // We're reverting that, and calling setLineChanged() only.
+        Q_ASSERT( cursor->parag() == oldCursor.parag() ); // no newline!
+        KoTextParag* parag = cursor->parag();
+        parag->setChanged( false );
+        int line;
+        parag->lineStartOfChar( oldCursor.index(), 0, &line );
+        parag->setLineChanged( line );
+    }
+
     if ( repaint ) {
         emit repaintChanged( this );
         emit ensureCursorVisible();
@@ -689,7 +704,7 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
     undoRedoInfo.type = UndoRedoInfo::Invalid; // tricky, we don't want clear() to create a command
     if ( paragLayoutFlags != 0 )
     {
-        if ( !textdoc->hasSelection( selectionId ) ) {
+        if ( !textdoc->hasSelection( selectionId, true ) ) {
             cursor->parag()->setParagLayout( newStyle->paragLayout(), paragLayoutFlags );
         } else {
             KoTextParag *start = textdoc->selectionStart( selectionId );
@@ -713,7 +728,7 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
     //kdDebug(32500) << "KoTextObject::applyStyle gathering text and formatting" << endl;
     KoTextParag * firstParag;
     KoTextParag * lastParag;
-    if ( !textdoc->hasSelection( selectionId ) ) {
+    if ( !textdoc->hasSelection( selectionId, true ) ) {
         // No selection -> apply style formatting to the whole paragraph
         firstParag = cursor->parag();
         lastParag = cursor->parag();
@@ -782,7 +797,7 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
     if ( interactive )
     {
         setLastFormattedParag( firstParag );
-        formatMore();
+        formatMore( 2 );
         emit repaintChanged( this );
         emit updateUI( true );
         if ( createUndoRedo && emitCommand )
@@ -867,7 +882,7 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
         p = p->next();
     }
     setLastFormattedParag( textdoc->firstParag() );
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     emit updateUI( true );
 }
@@ -917,7 +932,7 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
             (*pCurrentFormat) = newFormat;
     }
 
-    if ( textdoc->hasSelection( selectionId ) ) {
+    if ( textdoc->hasSelection( selectionId, true ) ) {
         emit hideCursor();
         KoTextCursor c1 = textdoc->selectionStartCursor( selectionId );
         KoTextCursor c2 = textdoc->selectionEndCursor( selectionId );
@@ -943,7 +958,7 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
         ret = new KoTextCommand( this, /*cmd, */i18n("Format Text") );
         undoRedoInfo.clear();
         setLastFormattedParag( c1.parag() );
-        formatMore();
+        formatMore( 2 );
         emit repaintChanged( this );
         emit showCursor();
     }
@@ -988,12 +1003,12 @@ KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagC
     const KoParagCounter * curCounter = 0L;
     if(cursor)
         curCounter=cursor->parag()->counter();
-    if ( !textdoc->hasSelection( selectionId ) &&
+    if ( !textdoc->hasSelection( selectionId, true ) &&
          curCounter && counter == *curCounter )
         return 0L;
     emit hideCursor();
     storeParagUndoRedoInfo( cursor, selectionId );
-    if ( !textdoc->hasSelection( selectionId ) && cursor) {
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor) {
         cursor->parag()->setCounter( counter );
         setLastFormattedParag( cursor->parag() );
     } else {
@@ -1009,7 +1024,7 @@ KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagC
         for ( ; start && start != end->next() ; start = start->next() )
             start->setCounter( counter );
     }
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     if ( !undoRedoInfo.newParagLayout.counter )
         undoRedoInfo.newParagLayout.counter = new KoParagCounter;
@@ -1031,13 +1046,13 @@ KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align , int
     if ( protectContent() )
         return 0L;
     KoTextDocument * textdoc = textDocument();
-    if ( !textdoc->hasSelection( selectionId ) && cursor &&
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
          cursor->parag()->alignment() == align )
         return 0L; // No change needed.
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor ,selectionId );
-    if ( !textdoc->hasSelection( selectionId ) &&cursor ) {
+    if ( !textdoc->hasSelection( selectionId, true ) &&cursor ) {
         cursor->parag()->setAlign(align);
         setLastFormattedParag( cursor->parag() );
     }
@@ -1049,7 +1064,7 @@ KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align , int
         for ( ; start && start != end->next() ; start = start->next() )
             start->setAlign(align);
     }
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     undoRedoInfo.newParagLayout.alignment = align;
     KoTextParagCommand *cmd = new KoTextParagCommand(
@@ -1070,13 +1085,13 @@ KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetIte
     KoTextDocument * textdoc = textDocument();
     //kdDebug(32500) << "KoTextObject::setMargin " << m << " to value " << margin << endl;
     //kdDebug(32500) << "Current margin is " << cursor->parag()->margin(m) << endl;
-    if ( !textdoc->hasSelection( selectionId ) && cursor &&
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
          cursor->parag()->margin(m) == margin )
         return 0L; // No change needed.
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor, selectionId );
-    if ( !textdoc->hasSelection( selectionId )&&cursor ) {
+    if ( !textdoc->hasSelection( selectionId, true )&&cursor ) {
         cursor->parag()->setMargin(m, margin);
         setLastFormattedParag( cursor->parag() );
     }
@@ -1088,7 +1103,7 @@ KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetIte
         for ( ; start && start != end->next() ; start = start->next() )
             start->setMargin(m, margin);
     }
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     undoRedoInfo.newParagLayout.margins[m] = margin;
     KoTextParagCommand *cmd = new KoTextParagCommand(
@@ -1118,13 +1133,13 @@ KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double sp
     //kdDebug(32500) << "Current spacing is " << cursor->parag()->kwLineSpacing() << endl;
     //kdDebug(32500) << "Comparison says " << ( cursor->parag()->kwLineSpacing() == spacing ) << endl;
     //kdDebug(32500) << "hasSelection " << textdoc->hasSelection( selectionId ) << endl;
-    if ( !textdoc->hasSelection( selectionId ) && cursor &&
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
          cursor->parag()->kwLineSpacing() == spacing )
         return 0L; // No change needed.
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor, selectionId );
-    if ( !textdoc->hasSelection( selectionId ) && cursor ) {
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor ) {
         cursor->parag()->setLineSpacing(spacing);
         setLastFormattedParag( cursor->parag() );
     }
@@ -1136,7 +1151,7 @@ KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double sp
         for ( ; start && start != end->next() ; start = start->next() )
             start->setLineSpacing(spacing);
     }
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     undoRedoInfo.newParagLayout.lineSpacing = spacing;
     KoTextParagCommand *cmd = new KoTextParagCommand(
@@ -1156,7 +1171,7 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
     if ( protectContent() )
         return 0L;
     KoTextDocument * textdoc = textDocument();
-  if ( !textdoc->hasSelection( selectionId ) && cursor &&
+  if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
        cursor->parag()->leftBorder() ==leftBorder &&
        cursor->parag()->rightBorder() ==rightBorder &&
        cursor->parag()->topBorder() ==topBorder &&
@@ -1165,7 +1180,7 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor, selectionId );
-    if ( !textdoc->hasSelection( selectionId ) ) {
+    if ( !textdoc->hasSelection( selectionId, true ) ) {
       cursor->parag()->setLeftBorder(leftBorder);
       cursor->parag()->setRightBorder(rightBorder);
       cursor->parag()->setBottomBorder(bottomBorder);
@@ -1190,7 +1205,7 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
         end->setBottomBorder(bottomBorder);
         textDocument()->selectionStart( selectionId )->setTopBorder(topBorder);
     }
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     undoRedoInfo.newParagLayout.leftBorder=leftBorder;
     undoRedoInfo.newParagLayout.rightBorder=rightBorder;
@@ -1215,14 +1230,14 @@ KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabul
     if ( protectContent() )
         return 0L;
     KoTextDocument * textdoc = textDocument();
-    if ( !textdoc->hasSelection( selectionId ) && cursor &&
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
          cursor->parag()->tabList() == tabList )
         return 0L; // No change needed.
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor, selectionId );
 
-    if ( !textdoc->hasSelection( selectionId ) && cursor ) {
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor ) {
         cursor->parag()->setTabList( tabList );
         setLastFormattedParag( cursor->parag() );
     }
@@ -1235,7 +1250,7 @@ KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabul
             start->setTabList( tabList );
     }
 
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     undoRedoInfo.newParagLayout.setTabList( tabList );
     KoTextParagCommand *cmd = new KoTextParagCommand(
@@ -1254,7 +1269,7 @@ KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, sh
     if ( protectContent() )
         return 0L;
     KoTextDocument * textdoc = textDocument();
-    if ( !textdoc->hasSelection( selectionId ) && cursor &&
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
          cursor->parag()->shadowColor() == col &&
          cursor->parag()->shadowDirection() == direction &&
          cursor->parag()->shadowDistance() == dist )
@@ -1263,7 +1278,7 @@ KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, sh
     emit hideCursor();
     storeParagUndoRedoInfo( cursor, selectionId );
 
-    if ( !textdoc->hasSelection( selectionId ) && cursor ) {
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor ) {
         cursor->parag()->setShadow( dist, direction, col );
         setLastFormattedParag( cursor->parag() );
     }
@@ -1276,7 +1291,7 @@ KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, sh
             start->setShadow( dist, direction, col );
     }
 
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     undoRedoInfo.newParagLayout.shadowDistance=dist;
     undoRedoInfo.newParagLayout.shadowColor=col;
@@ -1297,14 +1312,14 @@ KCommand * KoTextObject::setParagDirectionCommand( KoTextCursor * cursor, QChar:
     if ( protectContent() )
         return 0L;
     KoTextDocument * textdoc = textDocument();
-    if ( !textdoc->hasSelection( selectionId ) && cursor &&
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
          cursor->parag()->direction() == d )
         return 0L; // No change needed.
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor, selectionId );
 
-    if ( !textdoc->hasSelection( selectionId ) && cursor ) {
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor ) {
         cursor->parag()->setDirection( d );
         setLastFormattedParag( cursor->parag() );
     }
@@ -1317,7 +1332,7 @@ KCommand * KoTextObject::setParagDirectionCommand( KoTextCursor * cursor, QChar:
             start->setDirection( d );
     }
 
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     ////// ### TODO
 #if 0
@@ -1361,7 +1376,7 @@ void KoTextObject::removeSelectedText( KoTextCursor * cursor, int selectionId, c
     textdoc->removeSelectedText( selectionId, cursor );
 
     setLastFormattedParag( cursor->parag() );
-    formatMore();
+    formatMore( 2 );
     emit repaintChanged( this );
     emit ensureCursorVisible();
     emit updateUI( true );
@@ -1376,7 +1391,7 @@ KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int s
 {
     if ( protectContent() )
         return 0L;
-    if ( !textdoc->hasSelection( selectionId ) )
+    if ( !textdoc->hasSelection( selectionId, true ) )
         return 0L;
 
     undoRedoInfo.clear();
@@ -1446,7 +1461,7 @@ KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QS
     setLastFormattedParag( c1.parag() );
     if ( repaint ) // false during search/replace
     {
-        formatMore();
+        formatMore( 2 );
         emit repaintChanged( this );
         emit ensureCursorVisible();
         emit updateUI( true );
@@ -1490,7 +1505,7 @@ void KoTextObject::highlightPortion( KoTextParag * parag, int index, int length,
 
 void KoTextObject::removeHighlight(bool repaint)
 {
-    if ( textdoc->hasSelection( HighlightSelection ) )
+    if ( textdoc->hasSelection( HighlightSelection, true ) )
     {
         KoTextParag * oldParag = textdoc->selectionStart( HighlightSelection );
         oldParag->setChanged( true );
@@ -1529,17 +1544,20 @@ void KoTextObject::setLastFormattedParag( KoTextParag *parag )
 
 void KoTextObject::ensureFormatted( KoTextParag * parag, bool emitAfterFormatting /* = true */ )
 {
+    if ( !textDocument()->lastParag() )
+        return; // safety test
     while ( !parag->isValid() )
     {
         if ( !m_lastFormatted || m_availableHeight == -1 || d->abortFormatting ) {
             d->abortFormatting = false;
             return; // formatMore will do nothing -> give up
         }
-        formatMore( emitAfterFormatting );
+        // The paragid diff is "a good guess". The >=1 is a safety measure ;)
+        formatMore( QMAX( 1, parag->paragId() - m_lastFormatted->paragId() ), emitAfterFormatting );
     }
 }
 
-void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
+void KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /* = true */ )
 {
     if ( ( !m_lastFormatted && d->afterFormattingEmitted )
          || !m_visible || m_availableHeight == -1 )
@@ -1557,7 +1575,6 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
     if ( m_lastFormatted )
     {
         d->afterFormattingEmitted = false;
-        int to = !sender() ? 2 : 20; // 20 when it comes from the formatTimer
 
         int viewsBottom = 0;
         QMapIterator<QWidget *, int> mapIt = m_mapViewAreas.begin();
@@ -1569,7 +1586,7 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
                        << " lastFormatted id=" << m_lastFormatted->paragId()
                        << " lastFormatted's top=" << m_lastFormatted->rect().top()
                        << " lastFormatted's height=" << m_lastFormatted->rect().height()
-                       << " to=" << to << " viewsBottom=" << viewsBottom
+                       << " count=" << count << " viewsBottom=" << viewsBottom
                        << " availableHeight=" << m_availableHeight << endl;
 #endif
         if ( m_lastFormatted->prev() == 0 )
@@ -1587,7 +1604,7 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
         int i;
         for ( i = 0;
               m_lastFormatted && bottom + m_lastFormatted->rect().height() <= m_availableHeight &&
-                  ( i < to || bottom <= viewsBottom ) ; ++i )
+                  ( i < count || bottom <= viewsBottom ) ; ++i )
         {
             KoTextParag* parag = m_lastFormatted;
 #ifdef DEBUG_FORMAT_MORE

@@ -537,6 +537,7 @@ void KoTextCursor::invalidateNested()
 
 void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTextStringChar> *formatting )
 {
+    string->invalidate( idx );
     tmpIndex = -1;
     bool justInsert = TRUE;
     QString s( str );
@@ -611,12 +612,14 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTe
 	}
     }
 
+#if 0  //// useless and slow
     int h = string->rect().height();
     string->format( -1, TRUE );
     if ( h != string->rect().height() )
 	invalidateNested();
     else if ( doc && doc->parent() )
 	doc->nextDoubleBuffered = TRUE;
+#endif
 }
 
 void KoTextCursor::gotoLeft()
@@ -3701,6 +3704,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 	doc->setLastParag( this );
 
     changed = FALSE;
+    m_lineChanged = -1;
     //firstFormat = TRUE; //// unused
     state = -1;
     needPreProcess = FALSE;
@@ -3789,6 +3793,28 @@ void KoTextParag::invalidate( int chr )
     }
 #endif
     lm = rm = bm = tm = flm = -1;
+}
+
+void KoTextParag::setChanged( bool b, bool recursive )
+{
+    changed = b;
+    m_lineChanged = -1; // all
+    if ( recursive ) {
+	if ( doc && doc->parentParag() )
+	    doc->parentParag()->setChanged( b, recursive );
+    }
+}
+
+void KoTextParag::setLineChanged( short int line )
+{
+    if ( m_lineChanged == -1 ) {
+        if ( !changed ) // only if the whole parag wasn't "changed" already
+            m_lineChanged = line;
+    }
+    else
+        m_lineChanged = QMIN( m_lineChanged, line ); // also works if line=-1
+    changed = true;
+    //qDebug( "KoTextParag::setLineChanged line=%d -> m_lineChanged=%d", line, m_lineChanged );
 }
 
 void KoTextParag::insert( int index, const QString &s )
@@ -3923,6 +3949,8 @@ void KoTextParag::format( int start, bool doMove )
 
     if ( invalid == -1 )
 	return;
+
+    //kdDebug() << "KoTextParag::format " << this << " id:" << paragId() << endl;
 
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     if ( p )
@@ -4237,8 +4265,6 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
     KoTextStringChar *chr = at( 0 );
     Q_ASSERT( chr );
     if (!chr) { qDebug("paragraph %p %d, can't paint, EMPTY !", (void*)this, paragId()); return; }
-    //qDebug( "painting paragraph %p %d", (void*)this, paragId() );
-    int i = 0;
     int h = 0;
     int baseLine = 0, lastBaseLine = 0;
     KoTextFormat *lastFormat = 0;
@@ -4263,7 +4289,7 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
     QMemArray<int> selectionEnds( nSels );
     if ( drawSelections ) {
 	bool hasASelection = FALSE;
-	for ( i = 0; i < nSels; ++i ) {
+	for ( int i = 0; i < nSels; ++i ) {
 	    if ( !hasSelection( i ) ) {
 		selectionStarts[ i ] = -1;
 		selectionEnds[ i ] = -1;
@@ -4282,10 +4308,18 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 
     int line = -1;
     int cw;
-    int paintStart = 0;
     int paintEnd = -1;
     int lasth = 0;
-    for ( i = 0; i < length(); i++ ) {
+    int i = 0;
+    if ( m_lineChanged > 0 )
+    {
+        //qDebug( "painting paragraph %p id:%d from line %d", (void*)this, paragId(), m_lineChanged );
+        lineStartOfLine( m_lineChanged, &i );
+    }
+    //else
+    //    qDebug( "painting paragraph %p id:%d", (void*)this, paragId() );
+    int paintStart = i;
+    for ( ; i < length(); i++ ) {
 	chr = at( i );
 
         cw = chr->width;

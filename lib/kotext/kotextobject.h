@@ -183,7 +183,7 @@ public:
     void clearUndoRedoInfo();
 
     /** return true if some text is selected */
-    bool hasSelection() const { return textdoc->hasSelection( KoTextDocument::Standard ); }
+    bool hasSelection() const { return textdoc->hasSelection( KoTextDocument::Standard, true ); }
     /** returns the selected text [without formatting] if hasSelection() */
     QString selectedText( int selectionId = KoTextDocument::Standard ) const {
         return textdoc->selectedText( selectionId );
@@ -398,7 +398,8 @@ signals:
     void paragraphDeleted( KoTextParag* parag );
 
 public slots:
-    void formatMore( bool emitAfterFormatting = true );
+    // The default arguments are those used by the formatTimer.
+    void formatMore( int count = 10, bool emitAfterFormatting = true );
 
 public: // made public for KWTextFrameSet...
 

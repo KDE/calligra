@@ -92,9 +92,12 @@ int KoTextCursor::y() const
     return string->lineY( line );
 }
 
-bool KoTextDocument::hasSelection( int id ) const
+bool KoTextDocument::hasSelection( int id, bool visible ) const
 {
-    return selections.find( id ) != selections.end();
+    return ( selections.find( id ) != selections.end() &&
+             ( !visible ||
+               ( (KoTextDocument*)this )->selectionStartCursor( id ) !=
+               ( (KoTextDocument*)this )->selectionEndCursor( id ) ) );
 }
 
 void KoTextDocument::setSelectionStart( int id, KoTextCursor *cursor )

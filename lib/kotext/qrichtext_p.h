@@ -778,7 +778,7 @@ public:
     bool invertSelectionText( int id ) const;
     void setSelectionColor( int id, const QColor &c );
     void setInvertSelectionText( int id, bool b );
-    bool hasSelection( int id ) const;
+    bool hasSelection( int id, bool visible = false ) const;
     bool isSelectionSwapped( int id ); //// kotext
     void setSelectionStart( int id, KoTextCursor *cursor );
     bool setSelectionEnd( int id, KoTextCursor *cursor );
@@ -1221,6 +1221,8 @@ public:
     bool isValid() const;
     bool hasChanged() const;
     void setChanged( bool b, bool recursive = FALSE );
+    short int lineChanged(); // first line that has been changed.
+    void setLineChanged( short int line );
 
     int lineHeightOfChar( int i, int *bl = 0, int *y = 0 ) const;
     KoTextStringChar *lineStartOfChar( int i, int *index = 0, int *line = 0 ) const;
@@ -1375,6 +1377,7 @@ private:
     uint breakable : 1;
     uint isBr : 1;
     uint movedDown : 1;
+    short int m_lineChanged;
     QMap<int, KoTextParagSelection> *mSelections;
     int state, id;
     KoTextString *str;
@@ -1398,7 +1401,6 @@ private:
     KoTextDocCommandHistory *commandHistory;
     int list_val;
     QColor *bgcol;
-
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1983,13 +1985,9 @@ inline bool KoTextParag::hasChanged() const
     return changed;
 }
 
-inline void KoTextParag::setChanged( bool b, bool recursive )
+inline short int KoTextParag::lineChanged()
 {
-    changed = b;
-    if ( recursive ) {
-	if ( doc && doc->parentParag() )
-	    doc->parentParag()->setChanged( b, recursive );
-    }
+    return m_lineChanged;
 }
 
 inline void KoTextParag::setBackgroundColor( const QColor & c )
