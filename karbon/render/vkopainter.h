@@ -23,6 +23,7 @@ class VKoPainter : public VPainter
 {
 public:
 	VKoPainter( QPaintDevice *target, unsigned int w = 0, unsigned int h = 0 );
+	VKoPainter( unsigned char *buffer, unsigned int w = 0, unsigned int h = 0 );
 	virtual ~VKoPainter();
 
     //
@@ -64,6 +65,8 @@ public:
 	virtual void setRasterOp( Qt::RasterOp );
 
 	virtual QPaintDevice *device() { return m_target; } 
+	unsigned char *buffer() { return m_buffer; }
+
 
 private:
 	void drawVPath( struct _ArtVpath * );

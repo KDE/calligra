@@ -67,9 +67,29 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h ) :
 	m_zoomFactor = 1;
 }
 
+VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h ) : VPainter( 0L, w, h ), m_buffer( buffer )
+{
+	kdDebug() << "w : " << w << endl;
+	kdDebug() << "h : " << h << endl;
+	m_target = 0L;
+	m_width = w;
+	m_height= h;
+	m_path = 0L;
+	m_index = 0;
+	clear();
+
+	m_stroke = 0L;
+	m_fill = 0L;
+
+	m_zoomFactor = 1;
+}
+
 VKoPainter::~VKoPainter()
 {
-	art_free( m_buffer );
+	// If we are in target mode, we created a buffer, else if we used the other ctor
+	// we didnt.
+	if( m_target )
+		art_free( m_buffer );
 
 	delete m_stroke;
 	delete m_fill;
