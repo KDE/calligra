@@ -139,11 +139,6 @@ public:
     void insertFrameBreak( QTextCursor * cursor );
     KCommand * setPageBreakingCommand( QTextCursor * cursor, int pageBreaking );
 
-    void changeCaseOfText(QTextCursor *cursor, KoChangeCaseDia::TypeOfCase _type);
-    QString textChangedCase(const QString _text, KoChangeCaseDia::TypeOfCase _type);
-
-    KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag);
-
     QRect paragRect( Qt3::QTextParag * parag ) const; // in normal coords
 
     KCommand *deleteAnchoredFrame( KWAnchor * anchor );
@@ -295,8 +290,6 @@ public:
     void insertTOC() { textFrameSet()->insertTOC( cursor() ); }
     KCommand * setPageBreakingCommand( int pageBreaking )
     { return textFrameSet()->setPageBreakingCommand( cursor(), pageBreaking ); }
-
-    void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
 
 
     const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
