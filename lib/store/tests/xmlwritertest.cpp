@@ -75,6 +75,10 @@ int main( int argc, char** argv ) {
     writer.endElement();
     TEST_END( "textnode test", "<!DOCTYPE r>\n<r>\n <a>\n  <b>\n   <c/>text</b>\n </a>\n</r>\n" );
 
+    TEST_BEGIN( 0, 0 );
+    writer.addManifestEntry( "foo/bar/blah", "mime/type" );
+    TEST_END( "addManifestEntry", "<!DOCTYPE r>\n<r>\n <manifest:file-entry manifest:media-type=\"mime/type\" manifest:full-path=\"foo/bar/blah\"/>\n</r>\n" );
+
     int sz = 15000;  // must be more than KoXmlWriter::s_escapeBufferLen
     QCString x( sz );
     x.fill( 'x', sz );

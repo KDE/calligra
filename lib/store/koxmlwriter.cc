@@ -256,3 +256,11 @@ char* KoXmlWriter::escapeForXML( const char* source ) const
     // NOTREACHED (see case 0)
     return output;
 }
+
+void KoXmlWriter::addManifestEntry( const QString& fullPath, const QString& mediaType )
+{
+    startElement( "manifest:file-entry" );
+    addAttribute( "manifest:media-type", mediaType );
+    addAttribute( "manifest:full-path", fullPath );
+    endElement();
+}

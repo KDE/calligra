@@ -140,6 +140,15 @@ public:
      */
     void addTextNode( const char* cstr );
 
+    // #### Maybe we want to subclass KoXmlWriter for manifest files.
+    /**
+     * Special helper for writing "manifest" files
+     * This is equivalent to startElement/2*addAttribute/endElement
+     * This API will probably have to change (or not be used anymore)
+     * when we add support for encrypting/signing.
+     */
+    void addManifestEntry( const QString& fullPath, const QString& mediaType );
+
 private:
     struct Tag {
         Tag( const char* t = 0 ) : tagName( t ), hasChildren( false ),
