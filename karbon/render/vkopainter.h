@@ -20,16 +20,17 @@
 #ifndef __VKOPAINTER_H__
 #define __VKOPAINTER_H__
 
+// kopainter/libart wrapper
+
 #include "vpainter.h"
 #include <qwmatrix.h>
 #include <qptrlist.h>
 
-namespace agg {
-	class path_storage;
-	class rendering_buffer;
-};
-
 class QPainter;
+struct _ArtVpath;
+struct _ArtBpath;
+struct _ArtSVP;
+struct _ArtGradientStop;
 class VGradient;
 class VPattern;
 class KoRect;
@@ -92,9 +93,18 @@ public:
 	unsigned char *buffer() { return m_buffer; }
 
 private:
-	agg::path_storage *m_path;
-	agg::rendering_buffer *m_buf;
+	void drawVPath( struct _ArtVpath * );
+	void applyGradient( _ArtSVP *, bool );
+	void applyPattern( _ArtSVP *, bool );
+	_ArtGradientStop *buildStopArray( VGradient &gradient, int & );
+	void clampToViewport( const _ArtSVP &, int &, int &, int &, int & );
+	void clampToViewport( int &, int &, int &, int & );
+	void ensureSpace( unsigned int );
+
+private:
+	struct _ArtBpath *m_path;
 	unsigned int m_index;
+	unsigned int m_alloccount;
 	unsigned char *m_buffer;
 	QPaintDevice *m_target;
 	unsigned int m_width;
@@ -104,7 +114,10 @@ private:
 	VFill *m_fill;
 	VFillRule m_fillRule;
 	double m_zoomFactor;
+	QPtrList<_ArtSVP> m_clipPaths;
+
 	bool m_bDrawNodes;
+
 	GC gc;
 };
 

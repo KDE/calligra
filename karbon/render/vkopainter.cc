@@ -30,6 +30,25 @@
 #include <qpointarray.h>
 #include <qimage.h>
 
+#include "libart_lgpl/art_vpath.h"
+#include <libart_lgpl/art_bpath.h>
+#include <libart_lgpl/art_vpath_bpath.h>
+#include <libart_lgpl/art_svp_vpath.h>
+#include <libart_lgpl/art_svp_vpath_stroke.h>
+#include <libart_lgpl/art_svp.h>
+#include <libart_lgpl/art_svp_ops.h>
+#include <libart_lgpl/art_affine.h>
+#include <libart_lgpl/art_svp_intersect.h>
+#include <libart_lgpl/art_rect_svp.h>
+#include <libart_lgpl/art_pathcode.h>
+#include <libart_lgpl/art_vpath_dash.h>
+#include "art_rgba_affine.h"
+#include "art_render_misc.h"
+#include <libart_lgpl/art_render_svp.h>
+
+#include "art_rgb_svp.h"
+#include "art_render_pattern.h"
+
 #include <X11/Xlib.h>
 
 #include <gdk-pixbuf-xlibrgb.h>
@@ -37,91 +56,12 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <math.h>
-#include <stdlib.h>
 
 #include <koPoint.h>
 #include <koRect.h>
 
-#include "agg_basics.h"
-#include "agg_color_rgba8.h"
-#include "agg_path_storage.h"
-#include "agg_rendering_buffer.h"
-#include "agg_renderer_rgba32_basic.h"
-#include "agg_rendering_buffer.h"
-#include "agg_rasterizer.h"
-#include "agg_conv_curve.h"
-#include "agg_conv_stroke.h"
-#include "agg_conv_dash.h"
-#include "agg_conv_transform.h"
-#include "agg_affine_matrix.h"
-#include "agg_span_bgra32_image.h"
-#include "agg_gradient_attr.h"
-#include "agg_gradient_functions.h"
-#include "agg_rounded_rect.h"
-
-unsigned char default_gamma[] =
-{
-0,  0,  1,  1,  2,  2,  3,  4,  4,  5,  5,  6,  7,  7,  8,  8,
-9, 10, 10, 11, 11, 12, 13, 13, 14, 14, 15, 16, 16, 17, 18, 18,
-19, 19, 20, 21, 21, 22, 22, 23, 24, 24, 25, 25, 26, 27, 27, 28,
-29, 29, 30, 30, 31, 32, 32, 33, 34, 34, 35, 36, 36, 37, 37, 38,
-39, 39, 40, 41, 41, 42, 43, 43, 44, 45, 45, 46, 47, 47, 48, 49,
-49, 50, 51, 51, 52, 53, 53, 54, 55, 55, 56, 57, 57, 58, 59, 60,
-60, 61, 62, 62, 63, 64, 65, 65, 66, 67, 68, 68, 69, 70, 71, 71,
-72, 73, 74, 74, 75, 76, 77, 78, 78, 79, 80, 81, 82, 83, 83, 84,
-85, 86, 87, 88, 89, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99,
-100,101,101,102,103,104,105,106,107,108,109,110,111,112,114,115,
-116,117,118,119,120,121,122,123,124,126,127,128,129,130,131,132,
-134,135,136,137,139,140,141,142,144,145,146,147,149,150,151,153,
-154,155,157,158,159,161,162,164,165,166,168,169,171,172,174,175,
-177,178,180,181,183,184,186,188,189,191,192,194,195,197,199,200,
-202,204,205,207,209,210,212,214,215,217,219,220,222,224,225,227,
-229,230,232,234,236,237,239,241,242,244,246,248,249,251,253,255
-};
-
-
-#define pix_format agg::pix_format_rgba32
-typedef agg::renderer_rgba32_solid renderer_solid;
-typedef agg::renderer_rgba32_util  renderer_util;
-template<class F> class renderer_gradient :
-public agg::renderer_rgba32_gradient<F>
-{
-public:
-    renderer_gradient(agg::rendering_buffer& rbuf) :
-            agg::renderer_rgba32_gradient<F>(rbuf) {}
-};
-typedef agg::renderer_rgba32_gouraud renderer_gouraud;
-
-using namespace agg;
-
-typedef conv_curve<path_storage> curved;
-typedef conv_stroke<curved>                     curved_stroked;
-typedef conv_transform<curved_stroked>          curved_stroked_trans;
-typedef conv_dash<curved> 			curved_dashed;
-typedef conv_stroke<curved_dashed> 		curved_dashed_stroked;
-typedef conv_transform<curved_dashed_stroked>   curved_dashed_stroked_trans;
-
-
-class gradient_polymorphic_wrapper_base
-{
-public:
-	virtual int calculate(int x, int y, int) const = 0;
-};
-
-template<class GradientF>
-class gradient_polymorphic_wrapper : public gradient_polymorphic_wrapper_base
-{
-public:
-	virtual int calculate(int x, int y, int) const;
-private:
-	GradientF m_gradient;
-};
-
-template<class GradientF> int
-gradient_polymorphic_wrapper<GradientF>::calculate(int x, int y, int d) const
-{
-	return m_gradient.calculate(x, y, d);
-}
+#define INITIAL_ALLOC	300
+#define ALLOC_INCREMENT	100
 
 VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bool bDrawNodes )
 : VPainter( target, w, h ), m_target( target ), m_bDrawNodes( bDrawNodes )
@@ -131,11 +71,11 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bo
 	m_width = w;//( w > 0 ) ? w : target->width();
 	m_height= h;//( h > 0 ) ? h : target->height();
 	m_buffer = 0L;
-	m_path = new path_storage();
-	m_buf = new rendering_buffer();
+	m_path = 0L;
 	m_index = 0;
 	resize( m_width, m_height );
 	clear();
+	m_clipPaths.setAutoDelete( false );
 
 	m_stroke = 0L;
 	m_fill = 0L;
@@ -156,10 +96,10 @@ VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h, b
 	m_target = 0L;
 	m_width = w;
 	m_height= h;
+	m_path = 0L;
 	m_index = 0;
-	m_buf = new rendering_buffer();
-	m_path = new path_storage();
 	clear();
+	m_clipPaths.setAutoDelete( false );
 
 	m_stroke = 0L;
 	m_fill = 0L;
@@ -174,10 +114,12 @@ VKoPainter::~VKoPainter()
 	// If we are in target mode, we created a buffer, else if we used the other ctor
 	// we didnt.
 	if( m_target )
-		free( m_buffer );
+		art_free( m_buffer );
 
 	delete m_stroke;
 	delete m_fill;
+	if( m_path )
+		art_free( m_path );
 
 	if( gc )
 		XFreeGC( m_target->x11Display(), gc );
@@ -189,13 +131,12 @@ VKoPainter::resize( unsigned int w, unsigned int h )
 	if( !m_buffer || w != m_width || h != m_height )
 	{
 		// TODO : realloc?
-		free( m_buffer );
+		art_free( m_buffer );
 		m_buffer = 0;
 		m_width = w;
 		m_height = h;
 		if ( m_width != 0 && m_height != 0 )
-			m_buffer = (unsigned char *)malloc( m_width * m_height * 4 );
-		m_buf->attach( m_buffer, m_width, m_height, m_width * 4 );
+			m_buffer = art_new( art_u8, m_width * m_height * 4 );
 		clear();
 	}
 }
@@ -272,29 +213,67 @@ VKoPainter::setZoomFactor( double zoomFactor )
 	m_zoomFactor = zoomFactor;
 }
 
+void
+VKoPainter::ensureSpace( unsigned int newindex )
+{
+	if( m_index == 0 )
+	{
+		if( !m_path )
+			m_path = art_new( ArtBpath, INITIAL_ALLOC );
+		m_alloccount = INITIAL_ALLOC;
+	}
+	else if( newindex > m_alloccount )
+	{
+		m_alloccount += ALLOC_INCREMENT;
+		m_path = art_renew( m_path, ArtBpath, m_alloccount );
+	}
+}
+
 void 
 VKoPainter::moveTo( const KoPoint &p )
 {
-	m_path->move_to( p.x() * m_zoomFactor, p.y() * m_zoomFactor );
+	ensureSpace( m_index + 1 );
+
+	m_path[ m_index ].code = ART_MOVETO;
+
+	m_path[ m_index ].x3 = p.x() * m_zoomFactor;
+	m_path[ m_index ].y3 = p.y() * m_zoomFactor;
+
+	m_index++;
 }
 
 void 
 VKoPainter::lineTo( const KoPoint &p )
 {
-	m_path->line_to( p.x() * m_zoomFactor, p.y() * m_zoomFactor );
+	ensureSpace( m_index + 1 );
+
+	m_path[ m_index ].code = ART_LINETO;
+	m_path[ m_index ].x3	= p.x() * m_zoomFactor;
+	m_path[ m_index ].y3	= p.y() * m_zoomFactor;
+
+	m_index++;
 }
 
 void
 VKoPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 {
-	m_path->curve4( p1.x() * m_zoomFactor, p1.y() * m_zoomFactor, p2.x() * m_zoomFactor, p2.y() * m_zoomFactor, p3.x() * m_zoomFactor, p3.y() * m_zoomFactor );
+	ensureSpace( m_index + 1 );
+
+	m_path[ m_index ].code = ART_CURVETO;
+	m_path[ m_index ].x1	= p1.x() * m_zoomFactor;
+	m_path[ m_index ].y1	= p1.y() * m_zoomFactor;
+	m_path[ m_index ].x2	= p2.x() * m_zoomFactor;
+	m_path[ m_index ].y2	= p2.y() * m_zoomFactor;
+	m_path[ m_index ].x3	= p3.x() * m_zoomFactor;
+	m_path[ m_index ].y3	= p3.y() * m_zoomFactor;
+
+	m_index++;
 }
 
 void
 VKoPainter::newPath()
 {
-	m_path->remove_all();
-	m_path->add_new_path();
+	m_index = 0;
 }
 
 void
@@ -304,212 +283,75 @@ VKoPainter::setFillRule( VFillRule fillRule )
 }
 
 void
-buildStopArray( VGradient &gradient, rgba8 *color_profile, int opa )
-{
-	// TODO : make this generic
-	QPtrVector<VColorStop> colorStops = gradient.colorStops();
-	int offsets = colorStops.count();
-
-	unsigned int index = 0;
-	double rstep, gstep, bstep;
-	int r, g, b, steps;
-	int oldr, oldg, oldb;
-	for( int offset = 0; offset < offsets; offset++ )
-	{
-		double ramp = colorStops[ offset ]->rampPoint;
-		steps = ramp * 256 - index;
-		QColor qStopColor = colorStops[ offset ]->color;
-		r = qRed( qStopColor.rgb() );
-		g = qGreen( qStopColor.rgb() );
-		b = qBlue( qStopColor.rgb() );
-		if( offset == 0 )
-		{
-			rstep = gstep = bstep = 0;
-			oldr = r;
-			oldg = g;
-			oldb = b;
-		}
-		else
-		{
-			rstep = ( r - oldr ) / steps;
-			gstep = ( g - oldg ) / steps;
-			bstep = ( b - oldb ) / steps;
-		}
-		for( int i = 0; i < steps;i++ )
-		{
-			//kdDebug() << "Setting : " << index + i << endl;
-			color_profile[index + i].r = oldr + rstep * i;
-			color_profile[index + i].g = oldg + gstep * i;
-			color_profile[index + i].b = oldb + bstep * i;
-			color_profile[index + i].a = opa;
-		}
-		index += steps;
-		oldr = r;
-		oldg = g;
-		oldb = b;
-	}
-	for( ;index < 256; index++ )
-	{
-		//kdDebug() << "Setting : " << index << endl;
-		color_profile[index].r = r;
-		color_profile[index].g = g;
-		color_profile[index].b = b;
-		color_profile[index].a = opa;
-	}
-}
-
-void
 VKoPainter::fillPath()
 {
-	if( m_fill && m_fill->type() != VFill::none )
+	if( m_index == 0 ) return;
+
+	// find begin of last subpath
+	int find = -1;
+	for( int i = m_index - 1; i >= 0; i-- )
 	{
-		agg::renderer_rgba32_solid ren(*m_buf);
-		rasterizer<scanline_u8, agg::gamma8> ras;
-		typedef conv_curve<path_storage> curved;
-		typedef conv_transform<curved> curved_trans;
-		curved c(*m_path);
-
-		affine_matrix mat( m_matrix.m11(), 0, 0, m_matrix.m22(), m_matrix.dx(), m_matrix.dy() );
-
-		ras.reset();
-		curved_trans cs(c, mat);
-
-		ras.filling_rule( m_fillRule == evenOdd ? fill_even_odd : fill_non_zero);
-
-		if( m_fill->type() == VFill::solid )
+		if( m_path[i].code == ART_MOVETO_OPEN || m_path[i].code == ART_MOVETO )
 		{
-			QColor col = m_fill->color();
-			rgba8 color( col.red(), col.green(), col.blue() );
-			color.opacity( m_fill->color().opacity() );
-			ren.attribute(color);
-
-			ras.add_path(cs);
-			ras.render(ren);
-		}
-		else if( m_fill->type() == VFill::grad )
-		{
-			VGradient gradient = m_fill->gradient();
-			float opa = m_fill->color().opacity();
-			// TODO : make variable
-			/*if( gradient.repeatMethod() == VGradient::none )
-				linear->spread = ART_GRADIENT_PAD;
-			else if( gradient.repeatMethod() == VGradient::repeat )
-				linear->spread = ART_GRADIENT_REPEAT;
-			else if( gradient.repeatMethod() == VGradient::reflect )
-				linear->spread = ART_GRADIENT_REFLECT;*/
-
-			double _x1 = gradient.origin().x();
-			double _x2 = gradient.vector().x();
-			double _y1 = gradient.origin().y();
-			double _y2 = gradient.vector().y();
-			_y1 = m_matrix.m22() * _y1 + m_matrix.dy() / m_zoomFactor;
-			_y2 = m_matrix.m22() * _y2 + m_matrix.dy() / m_zoomFactor;
-
-			rgba8 color_profile[256];
-			buildStopArray( gradient, color_profile, opa * 255 );
-
-			affine_matrix mtx_g1;
-			//mtx_g1 *= agg::scaling_matrix(m_scale_x, m_scale_y);
-			mtx_g1 *= agg::rotation_matrix( atan2( _y2 - _y1, _x2 - _x1 ) );
-			mtx_g1 *= agg::translation_matrix( _x1, _y1 );
-			//mtx_g1 *= resizing_matrix();
-			mtx_g1.invert();
-
-			gradient_polymorphic_wrapper<agg::gradient_x> gr_x;
-			gradient_polymorphic_wrapper<agg::gradient_circle> gr_circle;
-			gradient_polymorphic_wrapper_base* gr_ptr;
-			if( gradient.type() == VGradient::linear )
-				gr_ptr = &gr_x;
-			else
-				gr_ptr = &gr_circle;
-			typedef renderer_gradient <gradient_polymorphic_wrapper_base> span_renderer_type;
-
-			span_renderer_type r1( *m_buf );
-			span_renderer_type::attr_type g1( mtx_g1, *gr_ptr, color_profile, default_gamma, 0, 150 );//abs( _x2 - _x1 ) );
-			r1.attribute( g1 );
-
-			ras.add_path( cs );
-			ras.render( r1 );
+			find = i;
+			break;
 		}
 	}
+
+	// for now, always close
+	if( find != -1 && ( m_path[ find ].x3 != m_path[ m_index - 1 ].x3 ||
+						m_path[ find ].y3 != m_path[ m_index - 1 ].y3 ) )
+	{
+		ensureSpace( m_index + 1 );
+
+		m_path[ m_index ].code = ART_LINETO;
+		m_path[ m_index ].x3	= m_path[ find ].x3;
+		m_path[ m_index ].y3	= m_path[ find ].y3;
+
+		m_index++;
+		m_path[ m_index ].code = ART_END;
+	}
+	else
+		m_path[ m_index++ ].code = ART_END;
+
+	if( m_fill && m_fill->type() != VFill::none )
+	{
+		ArtVpath *path = art_bez_path_to_vec( m_path , 0.25 );
+		drawVPath( path );
+	}
+
+	m_index--;
 }
 
 void
 VKoPainter::strokePath()
 {
-	if( m_stroke && m_stroke->type() != VStroke::none )
-	{
-		agg::renderer_rgba32_solid ren( *m_buf );
-		rasterizer<scanline_u8, agg::gamma8> ras;
-		curved c( *m_path );
+	if( m_index == 0 ) return;
 
-		affine_matrix mat( m_matrix.m11(), 0, 0, m_matrix.m22(), m_matrix.dx(), m_matrix.dy() );
+	if( m_stroke && m_stroke->lineWidth() == 0 )
+		return;
+	if( m_path[ m_index ].code != ART_END)
+		m_path[ m_index ].code = ART_END;
 
-		ras.reset();
-		double ratio = m_zoomFactor;//sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
+	ArtVpath *path = art_bez_path_to_vec( m_path , 0.25 );
 
-		gen_stroke::line_cap_e cap;
-		// caps translation karbon -> agg2
-		if( m_stroke->lineCap() == VStroke::capRound )
-			cap = gen_stroke::round_cap;
-		else if( m_stroke->lineCap() == VStroke::capSquare )
-			cap = gen_stroke::square_cap;
-		else
-			cap = gen_stroke::butt_cap;
-
-		gen_stroke::line_join_e join;
-		// join translation karbon -> agg2
-		if( m_stroke->lineJoin() == VStroke::joinRound )
-			join = gen_stroke::round_join;
-		else if( m_stroke->lineJoin() == VStroke::joinBevel )
-			join = gen_stroke::bevel_join;
-		else
-			join = gen_stroke::miter_join;
-
-		if( m_stroke->dashPattern().array().count() > 0 )
-		{
-			// there are dashes to be rendered
-			curved_dashed path_dash( c );
-			curved_dashed_stroked path2( path_dash );
-			curved_dashed_stroked_trans path3( path2, mat );
-			double offset = m_stroke->dashPattern().offset() * ratio;
-			path_dash.dash_start( offset );
-			int ndashes = m_stroke->dashPattern().array().count();
-			for( int i = 0; i + 1 < ndashes; i += 2 )
-				path_dash.add_dash( m_stroke->dashPattern().array()[i] * ratio,
-							m_stroke->dashPattern().array()[i + 1] * ratio );
-			path2.width( ratio * m_stroke->lineWidth() );
-			path2.line_cap( cap );
-			path2.line_join( join );
-			path2.miter_limit( m_stroke->miterLimit() );
-			ras.add_path( path3 );
-		}
-		else
-		{
-			curved_stroked cs( c );
-			cs.width( ratio * m_stroke->lineWidth() );
-			cs.line_cap( cap );
-			cs.line_join( join );
-			cs.miter_limit( m_stroke->miterLimit() );
-			curved_stroked_trans cst( cs, mat );
-			ras.add_path( cst );
-		}
-		QColor col = m_stroke->color();
-		rgba8 color( col.red(), col.green(), col.blue() );
-		color.opacity( m_stroke->color().opacity() );
-		ren.attribute( color );
-		ras.render( ren );
-	}
+	drawVPath( path );
 }
 
 void
 VKoPainter::setClipPath()
 {
+	ArtVpath *path;
+	path = art_bez_path_to_vec( m_path , 0.25 );
+	m_clipPaths.append( art_svp_from_vpath( path ) );
+	art_free( path );
 }
 
 void
 VKoPainter::resetClipPath()
 {
+	art_svp_free( m_clipPaths.current() );
+	m_clipPaths.remove();
 }
 
 void
@@ -594,6 +436,424 @@ VKoPainter::setRasterOp( Qt::RasterOp  )
 }
 
 void
+VKoPainter::clampToViewport( int &x0, int &y0, int &x1, int &y1 )
+{
+	// clamp to viewport
+	x0 = kMax( x0, 0 );
+	x0 = kMin( x0, int( m_width ) );
+	y0 = kMax( y0, 0 );
+	y0 = kMin( y0, int ( m_height ) );
+	x1 = kMax( x1, 0 );
+	x1 = kMin( x1, int( m_width ) );
+	y1 = kMax( y1, 0 );
+	y1 = kMin( y1, int( m_height ) );
+}
+
+void
+VKoPainter::clampToViewport( const ArtSVP &svp, int &x0, int &y0, int &x1, int &y1 )
+{
+	// get SVP bbox
+	ArtDRect bbox;
+	art_drect_svp( &bbox, &svp );
+	// Remove comments if we really decide for SVP bbox usage
+	//m_bbox = KoRect( bbox.x0, bbox.y0, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0 );
+
+	// clamp to viewport
+	x0 = int( bbox.x0 );
+	x0 = kMax( x0, 0 );
+	x0 = kMin( x0, int( m_width ) );
+	y0 = int( bbox.y0 );
+	y0 = kMax( y0, 0 );
+	y0 = kMin( y0, int ( m_height ) );
+	x1 = int( bbox.x1 ) + 1;
+	x1 = kMax( x1, 0 );
+	x1 = kMin( x1, int( m_width ) );
+	y1 = int( bbox.y1 ) + 1;
+	y1 = kMax( y1, 0 );
+	y1 = kMin( y1, int( m_height ) );
+}
+
+void
+VKoPainter::drawVPath( ArtVpath *vec )
+{
+	ArtSVP *strokeSvp = 0L;
+	ArtSVP *fillSvp = 0L;
+
+	// set up world matrix
+	double affine[6];
+	affine[0] = m_matrix.m11();
+	affine[1] = 0;//m_matrix.m12();
+	affine[2] = 0;//m_matrix.m21();
+	affine[3] = m_matrix.m22();
+	affine[4] = m_matrix.dx();
+	affine[5] = m_matrix.dy();
+	ArtVpath *temp = art_vpath_affine_transform( vec, affine );
+	art_free( vec );
+	vec = temp;
+
+	int af = 0;
+	int as = 0;
+	art_u32 fillColor = 0;
+
+	// filling
+	QColor color;
+	if( m_fill && m_fill->type() != VFill::none )
+	{
+		color = m_fill->color();
+		af = qRound( 255 * m_fill->color().opacity() );
+		fillColor = ( 0 << 24 ) | ( color.blue() << 16 ) | ( color.green() << 8 ) | color.red();
+
+		ArtSvpWriter *swr;
+		ArtSVP *temp;
+		temp = art_svp_from_vpath( vec );
+
+		if( m_fillRule == evenOdd )
+			swr = art_svp_writer_rewind_new( ART_WIND_RULE_ODDEVEN );
+		else
+			swr = art_svp_writer_rewind_new( ART_WIND_RULE_NONZERO );
+
+		art_svp_intersector( temp, swr );
+		fillSvp = art_svp_writer_rewind_reap( swr );
+
+		art_svp_free( temp );
+	}
+
+	art_u32 strokeColor = 0;
+	// stroke
+	if( m_stroke && m_stroke->type() != VStroke::none )
+	{
+		ArtPathStrokeCapType capStyle = ART_PATH_STROKE_CAP_BUTT;
+		ArtPathStrokeJoinType joinStyle = ART_PATH_STROKE_JOIN_MITER;
+		// TODO : non rgb support ?
+
+		color = m_stroke->color();
+		as = qRound( 255 * m_stroke->color().opacity() );
+		strokeColor = ( 0 << 24 ) | ( color.blue() << 16 ) | ( color.green() << 8 ) | color.red();
+
+		double ratio = m_zoomFactor;//sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
+		if( m_stroke->dashPattern().array().count() > 0 )
+		{
+			// there are dashes to be rendered
+			ArtVpathDash dash;
+			dash.offset = m_stroke->dashPattern().offset() * ratio;
+			dash.n_dash = m_stroke->dashPattern().array().count();
+			double *dashes = new double[ dash.n_dash ];
+			for( int i = 0; i < dash.n_dash; i++ )
+				dashes[i] = m_stroke->dashPattern().array()[i] * ratio;
+
+			dash.dash = dashes;
+			// get the dashed VPath and use that for the stroke render operation
+			ArtVpath *vec2 = art_vpath_dash( vec, &dash );
+			art_free( vec );
+
+			vec = vec2;
+			delete [] dashes;
+		}
+		// caps translation karbon -> art
+		if( m_stroke->lineCap() == VStroke::capRound )
+			capStyle = ART_PATH_STROKE_CAP_ROUND;
+		else if( m_stroke->lineCap() == VStroke::capSquare )
+			capStyle = ART_PATH_STROKE_CAP_SQUARE;
+
+		// join translation karbon -> art
+		if( m_stroke->lineJoin() == VStroke::joinRound )
+			joinStyle = ART_PATH_STROKE_JOIN_ROUND;
+		else if( m_stroke->lineJoin() == VStroke::joinBevel )
+			joinStyle = ART_PATH_STROKE_JOIN_BEVEL;
+
+		// zoom stroke width;
+		strokeSvp = art_svp_vpath_stroke( vec, joinStyle, capStyle, ratio * m_stroke->lineWidth(), m_stroke->miterLimit(), 0.25 );
+	}
+
+	int x0, y0, x1, y1;
+
+	// render the svp to the buffer
+	if( strokeSvp )
+	{
+		if( m_stroke && m_stroke->type() == VStroke::grad )
+			applyGradient( strokeSvp, false );
+		else if( m_stroke && m_stroke->type() == VStroke::patt )
+			applyPattern( strokeSvp, false );
+		else
+		{
+			clampToViewport( *strokeSvp, x0, y0, x1, y1 );
+			if( x0 != x1 && y0 != y1 )
+				art_rgb_svp_alpha_( strokeSvp, x0, y0, x1, y1, strokeColor, as, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
+		}
+		art_svp_free( strokeSvp );
+	}
+
+	if( fillSvp )
+	{
+		if( m_fill && m_fill->type() == VFill::grad )
+			applyGradient( fillSvp, true );
+		else if( m_fill && m_fill->type() == VFill::patt )
+			applyPattern( fillSvp, true );
+		else
+		{
+			clampToViewport( *fillSvp, x0, y0, x1, y1 );
+			if( x0 != x1 && y0 != y1 )
+				art_rgb_svp_alpha_( fillSvp, x0, y0, x1, y1, fillColor, af, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
+		}
+		art_svp_free( fillSvp );
+	}
+
+	//delete m_stroke;
+	//m_stroke = 0L;
+	//delete m_fill;
+	//m_fill = 0L;
+
+	art_free( vec );
+}
+
+void
+VKoPainter::applyPattern( ArtSVP *svp, bool fill )
+{
+	int x0, y0, x1, y1;
+	clampToViewport( *svp, x0, y0, x1, y1 );
+
+	ArtRender *render = 0L;
+
+	VPattern pat = fill ? m_fill->pattern() : m_stroke->pattern();
+
+	ArtPattern *pattern = art_new( ArtPattern, 1 );
+
+	double dx = ( pat.vector().x() - pat.origin().x() ) * m_zoomFactor;
+	double dy = ( pat.vector().y() - pat.origin().y() ) * m_zoomFactor;
+
+	pattern->twidth = pat.tileWidth();
+	pattern->theight = pat.tileHeight();
+	pattern->buffer = pat.pixels();
+	pattern->opacity = fill ? short( m_fill->color().opacity() * 255.0 ) : short( m_stroke->color().opacity() * 255.0 );
+	pattern->angle = atan2( dy, dx );
+
+	if( x0 != x1 && y0 != y1 )
+	{
+		render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
+		art_render_svp( render, svp );
+		art_render_pattern( render, pattern, ART_FILTER_HYPER );
+	}
+
+	if( render )
+		art_render_invoke( render );
+	art_free( pattern );
+}
+
+void
+VKoPainter::applyGradient( ArtSVP *svp, bool fill )
+{
+	int x0, y0, x1, y1;
+	clampToViewport( *svp, x0, y0, x1, y1 );
+
+	ArtRender *render = 0L;
+
+	VGradient gradient = fill ? m_fill->gradient() : m_stroke->gradient();
+	float opa = fill ? m_fill->color().opacity() : m_stroke->color().opacity();
+
+	if( gradient.type() == VGradient::linear )
+	{
+		ArtGradientLinear *linear = art_new( ArtGradientLinear, 1 );
+
+		// TODO : make variable
+		if( gradient.repeatMethod() == VGradient::none )
+			linear->spread = ART_GRADIENT_PAD;
+		else if( gradient.repeatMethod() == VGradient::repeat )
+			linear->spread = ART_GRADIENT_REPEAT;
+		else if( gradient.repeatMethod() == VGradient::reflect )
+			linear->spread = ART_GRADIENT_REFLECT;
+
+		double _x1 = gradient.origin().x();
+		double _x2 = gradient.vector().x();
+		double _y2 = gradient.origin().y();
+		double _y1 = gradient.vector().y();
+
+		double dx = ( _x2 - _x1 ) * m_zoomFactor;
+		_y1 = m_matrix.m22() * _y1 + m_matrix.dy() / m_zoomFactor;
+		_y2 = m_matrix.m22() * _y2 + m_matrix.dy() / m_zoomFactor;
+		double dy = ( _y1 - _y2 ) * m_zoomFactor;
+		double scale = 1.0 / ( dx * dx + dy * dy );
+
+		linear->a = dx * scale;
+		linear->b = dy * scale;
+		linear->c = -( ( _x1 * m_zoomFactor + m_matrix.dx() ) * linear->a +
+					   ( _y2 * m_zoomFactor ) * linear->b );
+
+		// get stop array
+		int offsets = -1;
+		linear->stops = buildStopArray( gradient, offsets );
+		linear->n_stops = offsets;
+
+		if( x0 != x1 && y0 != y1 )
+		{
+			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
+			int opacity = int( opa * 255.0 );
+			art_render_svp( render, svp );
+			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
+			art_karbon_render_gradient_linear( render, linear, ART_FILTER_NEAREST );
+			art_render_invoke( render );
+		}
+		art_free( linear->stops );
+		art_free( linear );
+	}
+	else if( gradient.type() == VGradient::radial )
+	{
+		ArtGradientRadial *radial = art_new( ArtGradientRadial, 1 );
+
+		// TODO : make variable
+		if( gradient.repeatMethod() == VGradient::none )
+			radial->spread = ART_GRADIENT_PAD;
+		else if( gradient.repeatMethod() == VGradient::repeat )
+			radial->spread = ART_GRADIENT_REPEAT;
+		else if( gradient.repeatMethod() == VGradient::reflect )
+			radial->spread = ART_GRADIENT_REFLECT;
+
+		radial->affine[0] = m_matrix.m11();
+		radial->affine[1] = m_matrix.m12();
+		radial->affine[2] = m_matrix.m21();
+		radial->affine[3] = m_matrix.m22();
+		radial->affine[4] = m_matrix.dx();
+		radial->affine[5] = m_matrix.dy();
+
+		double cx = gradient.origin().x() * m_zoomFactor;
+		double cy = gradient.origin().y() * m_zoomFactor;
+		double fx = gradient.focalPoint().x() * m_zoomFactor;
+		double fy = gradient.focalPoint().y() * m_zoomFactor;
+		double r = sqrt( pow( gradient.vector().x() - gradient.origin().x(), 2 ) +
+						 pow( gradient.vector().y() - gradient.origin().y(), 2 ) );
+		r *= m_zoomFactor;
+
+		radial->fx = (fx - cx) / r;
+		radial->fy = (fy - cy) / r;
+
+		double aff1[6], aff2[6];
+		art_affine_scale( aff1, r, r);
+		art_affine_translate( aff2, cx, cy );
+		art_affine_multiply( aff1, aff1, aff2 );
+		art_affine_multiply( aff1, aff1, radial->affine );
+		art_affine_invert( radial->affine, aff1 );
+
+		// get stop array
+		int offsets = -1;
+		radial->stops = buildStopArray( gradient, offsets );
+		radial->n_stops = offsets;
+
+		if( x0 != x1 && y0 != y1 )
+		{
+			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
+			int opacity = int( opa * 255.0 );
+			art_render_svp( render, svp );
+			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
+			art_karbon_render_gradient_radial( render, radial, ART_FILTER_NEAREST );
+			art_render_invoke( render );
+		}
+		art_free( radial->stops );
+		art_free( radial );
+	}
+	else if( gradient.type() == VGradient::conic )
+	{
+		ArtGradientConical *conical = art_new( ArtGradientConical, 1 );
+
+		// TODO : make variable
+		if( gradient.repeatMethod() == VGradient::none )
+			conical->spread = ART_GRADIENT_PAD;
+		else if( gradient.repeatMethod() == VGradient::repeat )
+			conical->spread = ART_GRADIENT_REPEAT;
+		else if( gradient.repeatMethod() == VGradient::reflect )
+			conical->spread = ART_GRADIENT_REFLECT;
+
+		double cx = gradient.origin().x() * m_zoomFactor;
+		cx = m_matrix.m11() * cx + m_matrix.dx();
+		double cy = gradient.origin().y() * m_zoomFactor;
+		cy = m_matrix.m22() * cy + m_matrix.dy();
+		double r = sqrt( pow( gradient.vector().x() - gradient.origin().x(), 2 ) +
+						 pow( gradient.vector().y() - gradient.origin().y(), 2 ) );
+		r *= m_zoomFactor;
+
+		conical->cx = cx;
+		conical->cy = cy;
+		conical->r  = r;
+
+		// get stop array
+		int offsets = -1;
+		conical->stops = buildStopArray( gradient, offsets );
+		conical->n_stops = offsets;
+
+		if( x0 != x1 && y0 != y1 )
+		{
+			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
+			int opacity = int( opa * 255.0 );
+			art_render_svp( render, svp );
+			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
+			art_karbon_render_gradient_conical( render, conical, ART_FILTER_NEAREST );
+			art_render_invoke( render );
+		}
+		art_free( conical->stops );
+		art_free( conical );
+	}
+}
+
+ArtGradientStop *
+VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
+{
+	// TODO : make this generic
+	QPtrVector<VColorStop> colorStops = gradient.colorStops();
+	offsets = colorStops.count();
+
+	ArtGradientStop *stopArray = art_new( ArtGradientStop, offsets * 2 - 1 );
+
+	for( int offset = 0 ; offset < offsets ; offset++ )
+	{
+		double ramp = colorStops[ offset ]->rampPoint;
+		//double mid  = colorStops[ offset ]->midPoint;
+		stopArray[ offset * 2 ].offset = ramp;
+
+		QColor qStopColor = colorStops[ offset ]->color;
+		int r = qRed( qStopColor.rgb() );
+		int g = qGreen( qStopColor.rgb() );
+		int b = qBlue( qStopColor.rgb() );
+		art_u32 rgba = (r << 24) | (g << 16) | (b << 8) | qAlpha(qStopColor.rgb());
+		/* convert from separated to premultiplied alpha */
+		int a = int( colorStops[ offset]->color.opacity() * 255.0 );
+		r = (rgba >> 24) * a + 0x80;
+		r = (r + (r >> 8)) >> 8;
+		g = ((rgba >> 16) & 0xff) * a + 0x80;
+		g = (g + (g >> 8)) >> 8;
+		b = ((rgba >> 8) & 0xff) * a + 0x80;
+		b = (b + (b >> 8)) >> 8;
+		stopArray[ offset * 2 ].color[ 0 ] = ART_PIX_MAX_FROM_8(r);
+		stopArray[ offset * 2 ].color[ 1 ] = ART_PIX_MAX_FROM_8(g);
+		stopArray[ offset * 2 ].color[ 2 ] = ART_PIX_MAX_FROM_8(b);
+		stopArray[ offset * 2 ].color[ 3 ] = ART_PIX_MAX_FROM_8(a);
+
+		if( offset + 1 != offsets )
+		{
+			stopArray[ offset * 2 + 1 ].offset = ramp + ( colorStops[ offset + 1 ]->rampPoint - ramp ) * colorStops[ offset ]->midPoint;
+
+			QColor qStopColor2 = colorStops[ offset + 1 ]->color;
+			rgba = int(r + ((qRed(qStopColor2.rgb()) - r)) * 0.5) << 24 |
+						int(g + ((qGreen(qStopColor2.rgb()) - g)) * 0.5) << 16 |
+						int(b + ((qBlue(qStopColor2.rgb()) - b)) * 0.5) << 8 |
+						qAlpha(qStopColor2.rgb());
+			/* convert from separated to premultiplied alpha */
+			int a = int( colorStops[ offset]->color.opacity() * 255.0 );
+			r = (rgba >> 24) * a + 0x80;
+			r = (r + (r >> 8)) >> 8;
+			g = ((rgba >> 16) & 0xff) * a + 0x80;
+			g = (g + (g >> 8)) >> 8;
+			b = ((rgba >> 8) & 0xff) * a + 0x80;
+			b = (b + (b >> 8)) >> 8;
+			stopArray[ offset * 2 + 1 ].color[ 0 ] = ART_PIX_MAX_FROM_8(r);
+			stopArray[ offset * 2 + 1 ].color[ 1 ] = ART_PIX_MAX_FROM_8(g);
+			stopArray[ offset * 2 + 1 ].color[ 2 ] = ART_PIX_MAX_FROM_8(b);
+			stopArray[ offset * 2 + 1 ].color[ 3 ] = ART_PIX_MAX_FROM_8(a);
+		}
+	}
+
+	offsets = offsets * 2 - 1;
+	return stopArray;
+}
+
+void
 VKoPainter::drawNode( const KoPoint& p, int width )
 {
 	if( !m_bDrawNodes ) return;
@@ -604,7 +864,7 @@ VKoPainter::drawNode( const KoPoint& p, int width )
 	int y1 = int( _p.y() - width );
 	int y2 = int( _p.y() + width );
 
-	//clampToViewport( x1, y1, x2, y2 );
+	clampToViewport( x1, y1, x2, y2 );
 
 	int baseindex = 4 * x1 + ( m_width * 4 * y1 );
 
@@ -624,36 +884,26 @@ VKoPainter::drawNode( const KoPoint& p, int width )
 void
 VKoPainter::drawImage( const QImage &image, const QWMatrix &affine )
 {
-	//QWMatrix *r= m_gstate->matrix();
-	affine_matrix mat( m_matrix.m11(), 0, 0, m_matrix.m22(), m_matrix.dx(), m_matrix.dy() );
-	//affine_matrix mat;//( r->m11(), r->m12(), r->m21(), r->m22(), r->dx(), r->dy() );
-
-	// Version with "hardcoded" bilinear filter
-	typedef image_transform_attr<null_distortions,
-					  null_color_alpha,
-					  null_gradient_alpha> attr_type;
-
-	typedef span_bgra32_image_bilinear<attr_type> renderer;
-
-	null_distortions    distortions;
-	null_color_alpha    color_alpha;
-	null_gradient_alpha gradient_alpha;
-
-	rendering_buffer rbuf_img;
-	rbuf_img.attach( image.bits(), image.width(), image.height(), image.width() * 4 );
-
-	attr_type attr( rbuf_img, mat, distortions, color_alpha, gradient_alpha );
-
-	renderer_u8<renderer> ri( *m_buf );
-	ri.attribute(attr);
-
-	rasterizer<scanline_u8> ras;
-	rounded_rect rect;
-	rect.rect( 0, 0, image.width(), image.height() );
-	conv_transform<rounded_rect> tr( rect, mat );
-
-	ras.add_path( rect );
-	ras.render(ri);
+	// set up world matrix
+	double affineresult[6];
+	affineresult[0] = ( m_matrix.m11() * affine.m11() ) * m_zoomFactor;
+	affineresult[1] = affine.m12();
+	affineresult[2] = affine.m21();
+	affineresult[3] = ( m_matrix.m22() * affine.m22() ) * m_zoomFactor;
+	affineresult[4] = m_matrix.dx() + affine.dx() * m_zoomFactor;
+	affineresult[5] = m_matrix.dy() - ( affine.dy() ) * m_zoomFactor;
+	/*kdDebug() << "affineresult[0] : " << affineresult[0] << endl;
+	kdDebug() << "affineresult[1] : " << affineresult[1] << endl;
+	kdDebug() << "affineresult[2] : " << affineresult[2] << endl;
+	kdDebug() << "affineresult[3] : " << affineresult[3] << endl;
+	kdDebug() << "affineresult[4] : " << affineresult[4] << endl;
+	kdDebug() << "affineresult[5] : " << affineresult[5] << endl;
+	kdDebug() << "m_matrix.dx() : " << m_matrix.dx() << endl;
+	kdDebug() << "affine.dx() : " << affine.dx() << endl;
+	kdDebug() << "image.height() : " << image.height() << endl;*/
+	art_rgba_affine( m_buffer, 0, 0, m_width, m_height, m_width * 4,
+					 image.bits(), image.width(), image.height(), image.width() * 4,
+					 affineresult, ART_FILTER_NEAREST, 0L );
 }
 
 void

@@ -2,7 +2,6 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../render \
 	-I$(srcdir)/../visitors \
-	-I/cvs/agg2/include \
 	$(LIBFREETYPE_CFLAGS) $(all_includes)
 
 noinst_LTLIBRARIES = libkarboncore.la
