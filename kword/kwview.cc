@@ -4520,13 +4520,16 @@ void KWView::frameSelectedChanged()
     {
         bool okForDelete = true;
         bool okForLowerRaise = false;
+        bool okForChangeParagStyle = true;
         QPtrListIterator<KWFrame> it( selectedFrames );
-        for ( ; it.current() && ( okForDelete || okForLowerRaise ) ; ++it )
+        for ( ; it.current() && ( okForDelete || okForLowerRaise || okForChangeParagStyle) ; ++it )
         {
             // Check we selected no footer nor header
-
-            bool headerFooterFootNote = it.current()->frameSet()->isHeaderOrFooter() || it.current()->frameSet()->isFootEndNote();
+            bool isFootNote = it.current()->frameSet()->isFootEndNote();
+            bool headerFooterFootNote = it.current()->frameSet()->isHeaderOrFooter() || isFootNote;
             bool isMainWPFrame = it.current()->frameSet()->isMainFrameset();
+            if ( isFootNote )
+                okForChangeParagStyle = false;
 
             okForDelete &= !headerFooterFootNote;
             okForDelete &= !isMainWPFrame;
@@ -4543,6 +4546,9 @@ void KWView::frameSelectedChanged()
         actionRaiseFrame->setEnabled( okForLowerRaise );
         actionSendBackward->setEnabled( okForLowerRaise );
         actionBringToFront->setEnabled( okForLowerRaise );
+        actionFormatBullet->setEnabled( okForChangeParagStyle );
+        actionFormatNumber->setEnabled( okForChangeParagStyle );
+
     } else
     {   // readonly document, or no frame selected -> disable
         actionEditDelFrame->setEnabled( false );
@@ -4552,6 +4558,9 @@ void KWView::frameSelectedChanged()
         actionRaiseFrame->setEnabled( false );
         actionSendBackward->setEnabled( false );
         actionBringToFront->setEnabled( false );
+        actionFormatBullet->setEnabled( false );
+        actionFormatNumber->setEnabled( false );
+
     }
     bool frameDifferentOfPart=false;
     if(nbFrame >= 1)
