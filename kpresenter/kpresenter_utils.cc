@@ -84,8 +84,8 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         painter->setPen( QPen(color , _zoomHandler->zoomItX( _w )) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
-        QPoint p1( _zoomHandler->zoomItX(_w/2), _zoomHandler->zoomItY(-5 - _w / 2) );
-        QPoint p2( _zoomHandler->zoomItX(_w/2), _zoomHandler->zoomItY(5 + _w / 2 ) );
+        QPoint p1( _zoomHandler->zoomItX(/*-5 - _w/2*/0), _zoomHandler->zoomItY(-5 - _w / 2) );
+        QPoint p2( _zoomHandler->zoomItX(/*-5 -_w/2*/0), _zoomHandler->zoomItY(5 + _w / 2 ) );
         painter->drawLine( p1, p2);
     }break;
     default: break;
