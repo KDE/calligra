@@ -869,7 +869,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 #ifdef DEBUG_PAINT
             kdDebug(32500) << "drawing hyphen at x=" << startX+bw << endl;
 #endif
-            painter.drawText( startX + bw, lastY + baseLine, "\xad" );
+            painter.drawText( startX + bw, lastY + baseLine, "-" ); // \xad gives squares with some fonts (!?)
         }
     }
 
