@@ -48,14 +48,15 @@ protected:
 	class VInsertImageCmd : public VCommand
 	{
 	public:
-		VInsertImageCmd( VDocument* doc, const QString& name, VImage *image );
+		VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, KoPoint pos );
 		virtual ~VInsertImageCmd() {}
 
 		virtual void execute();
 		virtual void unexecute();
 
 	protected:
-		VImage *m_image;
+		VImage	*m_image;
+		KoPoint	m_pos;
 	};
 
 	virtual void mouseButtonRelease();

@@ -76,14 +76,14 @@ VImageTool::mouseButtonRelease()
 	kdDebug() << "Image name : " << fname.latin1() << endl;
 
 	VImage *image = new VImage( 0L, fname );
-	VInsertImageCmd *cmd = new VInsertImageCmd( &view()->part()->document(), i18n( "Insert Image" ), image );
+	VInsertImageCmd *cmd = new VInsertImageCmd( &view()->part()->document(), i18n( "Insert Image" ), image, first() );
 
 	view()->part()->addCommand( cmd, true );
 	//view()->selectionChanged();
 }
 
-VImageTool::VInsertImageCmd::VInsertImageCmd( VDocument* doc, const QString& name, VImage *image )
-	: VCommand( doc, name, "frame_image" ), m_image( image )
+VImageTool::VInsertImageCmd::VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, KoPoint pos )
+	: VCommand( doc, name, "frame_image" ), m_image( image ), m_pos( pos )
 {
 }
 
@@ -98,6 +98,7 @@ VImageTool::VInsertImageCmd::execute()
 	else
 	{
 		m_image->setState( VObject::normal );
+		m_image->transform( QWMatrix().translate( m_pos.x(), m_pos.y() ) );
 		document()->append( m_image );
 		document()->selection()->clear();
 		document()->selection()->append( m_image );
