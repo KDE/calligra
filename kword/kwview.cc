@@ -2441,7 +2441,7 @@ void KWView::updatePopupMenuChangeAction()
         return;
 
     // enable delete
-    actionEditDelFrame->setEnabled(true);
+    actionEditDelFrame->setEnabled(true && doc->getSelectedFrames().count()==1);
 
     // if text frame,
     if(frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
