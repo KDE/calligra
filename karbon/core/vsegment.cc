@@ -541,6 +541,14 @@ VSegment::select( const KoPoint& p, double isNearRange, bool select )
 			m_prev->m_nodeSelected[2] )
 		{
 			m_nodeSelected[0] = select;
+
+			if( select )
+			{
+				m_prev->m_nodeSelected[2] = false;
+				m_nodeSelected[1] = false;
+				m_nodeSelected[2] = false;
+			}
+
 			success = true;
 		}
 	}
@@ -553,6 +561,14 @@ VSegment::select( const KoPoint& p, double isNearRange, bool select )
 		if( m_nodeSelected[2] )
 		{
 			m_nodeSelected[1] = select;
+
+			if( select )
+			{
+				m_prev->m_nodeSelected[2] = false;
+				m_nodeSelected[0] = false;
+				m_nodeSelected[2] = false;
+			}
+
 			success = true;
 		}
 	}
