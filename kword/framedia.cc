@@ -322,7 +322,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     {
         cbAspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
         connect( cbAspectRatio, SIGNAL(toggled(bool)),
-	     this, SLOT(slotKeepRatioToggled(bool)));
+                 this, SLOT(slotKeepRatioToggled(bool)));
         bool show=true;
         bool on=true;
         if(frame) {
@@ -364,12 +364,28 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
         eofGrid= new QGridLayout (endOfFrame, 4, 1, KDialog::marginHint(), KDialog::spacingHint());
         rAppendFrame = new QRadioButton( i18n( "Create a new page" ), endOfFrame );
+        QWhatsThis::add( rAppendFrame, "<b>Create a new page:</b><br/> if there is too "
+            "much text for this text frame, a new page will be created and, "
+            "since \"Reconnect frame to current flow\" is the only possible "
+            "option together with this one, "
+            "the new page will have a frame for showing the additional text." );
         eofGrid->addWidget( rAppendFrame, 1, 0 );
 
         rResizeFrame = new QRadioButton( i18n( "Resize last frame" ), endOfFrame );
+        QWhatsThis::add( rResizeFrame, "<b>Resize last frame:</b><br/> "
+            "if there is too much text for this text frame, "
+            "the frame will resize itself (increasing its height) as much as it needs, "
+            "to be able to contain all the text. More precisely, when the frameset has "
+            "multiple chained frames, it's always the last one which will be resized." );
         eofGrid->addWidget( rResizeFrame, 2, 0 );
 
         rNoShow = new QRadioButton( i18n( "Don't show the extra text" ), endOfFrame );
+        QWhatsThis::add( rNoShow, "<b>Don't show the extra text:</b><br/> "
+            "if there is too much text for this text frame, nothing happens "
+            "automatically. Initially the extra text won't appear. One possibility "
+            "then is to resize the frame manually. The other possibility is, with the option "
+            "\"Reconnect frame to current flow\" selected, to create a new page "
+            "which will then have a followup frame with the extra text." );
         eofGrid->addWidget( rNoShow, 3, 0 );
         QButtonGroup *grp = new QButtonGroup( endOfFrame );
         grp->hide();
@@ -417,17 +433,30 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
     onpGrid = new QGridLayout( onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
     reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), onNewPage);
+    QWhatsThis::add(reconnect, i18n("<b>Reconnect frame to current flow:</b><br/> "
+        "when a new page is created, a new frame will be created for this "
+        "frameset, so that the text can flow from one page to the next if necessary. "
+        "This is what happens for the \"main text frameset\", but this option makes it possible "
+        "to choose the same behavior for other framesets, for instance in magazine layouts."));
     if ( rResizeFrame )
         connect( reconnect, SIGNAL( clicked() ), this, SLOT( setFrameBehaviorInputOn() ) );
     onpGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
     onpGrid->addWidget( reconnect, 1, 0 );
 
     noFollowup = new QRadioButton (i18n ("Don't create a followup frame"), onNewPage);
+    QWhatsThis::add(noFollowup, i18n("<b>Don't create a followup frame:</b><br/> "
+        "when a new page is created, no frame will be created for this frameset."));
     if ( rResizeFrame )
         connect( noFollowup, SIGNAL( clicked() ), this, SLOT( setFrameBehaviorInputOn() ) );
     onpGrid->addWidget( noFollowup, 2, 0 );
 
     copyRadio= new QRadioButton (i18n ("Place a copy of this frame"), onNewPage);
+    QWhatsThis::add(copyRadio, i18n("<b>Place a copy of this frame:</b><br/> "
+        "when a new page is created, a frame will be created for this frameset, "
+        "which will always show the exact same thing as the frame on the previous "
+        "page. This is what happens for headers and footers, but this option "
+        "makes it possible to choose the same behavior for other framesets, for "
+        "instance a company logo and/or title that should appear exactly the same on every page."));
     if ( rResizeFrame )
         connect( copyRadio, SIGNAL( clicked() ), this, SLOT( setFrameBehaviorInputOff() ) );
     onpGrid->addWidget( copyRadio, 3, 0);
@@ -514,7 +543,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     row++;
     grid1->addMultiCellWidget(cbAllFrames,row,row, 0, 1);
     cbProtectContent = new QCheckBox( i18n("Protect content"), tab1);
-    QWhatsThis::add(cbProtectContent, i18n("Disallow changes to be made to the contents of the frame(s)"));
+    QWhatsThis::add(cbProtectContent, i18n("<b>Protect content:</b><br/> "
+        "disallow changes to be made to the contents of the frame(s)"));
     connect( cbProtectContent, SIGNAL(toggled ( bool ) ), this, SLOT(slotProtectContentChanged( bool )));
     row++;
     grid1->addMultiCellWidget(cbProtectContent,row,row, 0, 1);
@@ -953,7 +983,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     sw->resize( sw->sizeHint() );
     sw->setRange(0, 9999, 1,  false);
     connect( sw, SIGNAL(valueChanged(double)),
-	     this, SLOT(slotUpdateHeightForWidth(double)) );
+             this, SLOT(slotUpdateHeightForWidth(double)) );
 
     pGrid->addWidget( sw, 2, 1 );
 
@@ -963,7 +993,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
     sh = new KDoubleNumInput( grp1 );
     connect( sh, SIGNAL(valueChanged(double)),
-	     this, SLOT(slotUpdateWidthForHeight(double)) );
+             this, SLOT(slotUpdateWidthForHeight(double)) );
 
     sh->setValue( 0.0 );
     sh->resize( sh->sizeHint() );
@@ -1383,7 +1413,7 @@ void KWFrameDia::updateBrushPreview()
 void KWFrameDia::setFrameBehaviorInputOn() {
     if ( tab4 && floating->isChecked() )
         return;
-    if( rAppendFrame && rResizeFrame && rNoShow && !rAppendFrame->isEnabled() ) {
+    if( rAppendFrame && rResizeFrame && rNoShow /*&& !rAppendFrame->isEnabled()*/ ) {
         if(frameBehavior== KWFrame::AutoExtendFrame) {
             rResizeFrame->setChecked(true);
         } else if (frameBehavior== KWFrame::AutoCreateNewFrame) {
@@ -1392,7 +1422,9 @@ void KWFrameDia::setFrameBehaviorInputOn() {
             rNoShow->setChecked(true);
         }
         rResizeFrame->setEnabled(true);
-        rAppendFrame->setEnabled(true);
+        // Can't have "create a new page" if "no followup", that wouldn't work
+        kdDebug() << "setFrameBehaviorInputOn: reconnect->isChecked()==" << reconnect->isChecked() << endl;
+        rAppendFrame->setEnabled( reconnect->isChecked() );
         rNoShow->setEnabled(true);
     }
 }
@@ -2058,7 +2090,8 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString&
     QGridLayout* mGrid = new QGridLayout( grp2, 4, 4, KDialog::marginHint(), KDialog::spacingHint() );
 
     m_synchronize=new QCheckBox( i18n("Synchronize changes"), grp2 );
-    QWhatsThis::add(m_synchronize, i18n("When this is checked any change in margins will be used for all directions"));
+    QWhatsThis::add(m_synchronize, i18n("<b>Synchronize changes:</b><br/>"
+        "when this is checked any change in margins will be used for all directions"));
     mGrid->addMultiCellWidget( m_synchronize, 1, 1, 0, 1 );
 
     QLabel* lml = new QLabel( i18n( "Left:" ), grp2 );
