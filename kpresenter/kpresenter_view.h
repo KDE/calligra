@@ -46,6 +46,7 @@ class ConfPieDia;
 class ConfRectDia;
 class QToolButton;
 class SideBar;
+class NoteBar;
 
 class KAction;
 class KToggleAction;
@@ -127,6 +128,7 @@ public slots:
 
     // view menu
     void viewShowSideBar();
+    void viewShowNoteBar();
 
     // insert menu
     void insertPage();
@@ -586,6 +588,7 @@ private:
     KAction *actionEditHeaderFooter;
 
     KToggleAction *actionViewShowSideBar;
+    KToggleAction *actionViewShowNoteBar;
 
     KAction *actionInsertPage;
     KAction *actionInsertPicture;
@@ -693,6 +696,7 @@ private:
 
     QToolButton *pgNext, *pgPrev;
     SideBar *sidebar;
+    NoteBar *notebar;
     QSplitter *splitter;
     PageBase *pageBase;
 

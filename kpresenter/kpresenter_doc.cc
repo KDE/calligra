@@ -402,6 +402,8 @@ QDomDocument KPresenterDoc::saveXML()
 
     presenter.appendChild(saveTitle( doc ));
 
+    presenter.appendChild(saveNote( doc ));
+
     presenter.appendChild(saveObjects(doc));
 
     // ### If we will create a new version of the file format, fix that spelling error
@@ -556,6 +558,26 @@ QDomElement KPresenterDoc::saveTitle( QDomDocument &doc )
     return titles;
 }
 
+/*===================== save page note ========================*/
+QDomElement KPresenterDoc::saveNote( QDomDocument &doc )
+{
+    QDomElement notes=doc.createElement("PAGENOTES");
+
+    if ( saveOnlyPage == -1 ) { // All page notes.
+        for ( QStringList::Iterator it = noteTextList.begin(); it != noteTextList.end(); ++it ) {
+            QDomElement note=doc.createElement("Note");
+            note.setAttribute("note", (*it));
+            notes.appendChild(note);
+        }
+    }
+    else { // Only current page note.
+        QDomElement note=doc.createElement("Note");
+        note.setAttribute("note", noteTextList[saveOnlyPage]);
+        notes.appendChild(note);
+    }
+
+    return notes;
+}
 
 /*==============================================================*/
 bool KPresenterDoc::completeSaving( KoStore* _store )
@@ -824,6 +846,8 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             }
         } else if(elem.tagName()=="PAGETITLES") {
             loadTitle(elem);
+        } else if(elem.tagName()=="PAGENOTES") {
+            loadNote(elem);
         } else if(elem.tagName()=="OBJECTS") {
             lastObj = _objectList->count() - 1;
             loadObjects(elem);
@@ -892,6 +916,13 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     if ( manualTitleList.isEmpty() ) {
         for ( unsigned int i = 0; i <= getPageNums() - 1; ++i )
             manualTitleList.append(QString::null);
+    }
+
+    // Initialization of noteTextList
+    // for version before adding this new feature ( notebar )
+    if ( noteTextList.isEmpty() ) {
+        for ( unsigned int i = 0; i <= getPageNums() - 1; ++i )
+            noteTextList.append( QString::null );
     }
 
     if ( _rastX == 0 ) _rastX = 10;
@@ -1062,6 +1093,17 @@ void KPresenterDoc::loadTitle( const QDomElement &element )
         if ( title.tagName()=="Title" )
             manualTitleList.append(title.attribute("title"));
         title=title.nextSibling().toElement();
+    }
+}
+
+/*========================= load page note =========================*/
+void KPresenterDoc::loadNote( const QDomElement &element )
+{
+    QDomElement note=element.firstChild().toElement();
+    while ( !note.isNull() ) {
+        if ( note.tagName()=="Note" )
+            noteTextList.append(note.attribute("note"));
+        note=note.nextSibling().toElement();
     }
 }
 
@@ -3066,6 +3108,9 @@ void KPresenterDoc::deletePage( int _page )
     // Delete page title.
     pageTitleDelete( _page );
 
+    // Delete page note.
+    pageNoteDelete( _page );
+
     // Update the sidebars
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
@@ -3141,6 +3186,9 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 
     // Insert page title.
     pageTitleInsert( _page );
+
+    // Insert page note.
+    pageNoteInsert( _page );
 
     for ( kpobject = objectList()->first(); kpobject; kpobject = objectList()->next() ) {
 	if ( kpobject->getType() == OT_TEXT )
@@ -3954,6 +4002,43 @@ void KPresenterDoc::reorganizeGUI()
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
 	((KPresenterView*)it.current())->reorganize();
+}
+
+void KPresenterDoc::setNoteText( int _pageNum, const QString &_text )
+{
+    if ( _pageNum >= 0 ) {
+        *noteTextList.at( _pageNum ) = _text;
+
+        if ( !_text.isEmpty() )
+            setModified( true );
+    }
+}
+
+QString KPresenterDoc::getNoteText( int _pageNum )
+{
+    QString text = QString::null;
+
+    if ( _pageNum >= 0 )
+        text = *noteTextList.at( _pageNum );
+
+    return text;
+}
+
+void KPresenterDoc::pageNoteInsert( unsigned int _pageNum )
+{
+    if ( getPageNums() == noteTextList.count()+1 )
+        noteTextList.insert( noteTextList.at( _pageNum ), QString::null );
+    else {
+        // For "Move Page", "Copy Page and paste" and "Duplicate Page".
+        QString note = *noteTextList.fromLast();
+        noteTextList.remove( noteTextList.fromLast() );
+        noteTextList.insert( noteTextList.at( _pageNum ), note );
+    }
+}
+
+void KPresenterDoc::pageNoteDelete( unsigned int _pageNum )
+{
+    noteTextList.remove( noteTextList.at( _pageNum ) );
 }
 
 #include <kpresenter_doc.moc>

@@ -47,6 +47,7 @@
 #include <kppartobject.h>
 #include <textdialog.h>
 #include <sidebar.h>
+#include <notebar.h>
 #include <insertpagedia.h>
 #include <koPictureFilePreview.h>
 
@@ -220,6 +221,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     allowWebPres = true;
     currPg = 0;
     sidebar = 0;
+    notebar = 0;
     splitter = 0;
     pageBase = 0;
     sticky = FALSE;
@@ -299,6 +301,11 @@ KPresenterView::~KPresenterView()
         config->setGroup("Global");
         config->writeEntry("Sidebar", sidebar->isVisible());
     }
+    if(notebar) {
+        KConfig *config=KGlobal::config();
+        config->setGroup("Global");
+        config->writeEntry("Notebar", notebar->isVisible());
+    }
 
     if(m_spell.kspell)
     {
@@ -319,6 +326,7 @@ KPresenterView::~KPresenterView()
     delete m_zoomHandler;
     delete m_specialCharDlg;
     delete m_sbPageLabel;
+    delete notebar;
 }
 
 /*=========================== file print =======================*/
@@ -2017,9 +2025,12 @@ void KPresenterView::createGUI()
         splitter->setResizeMode( sidebar, QSplitter::KeepSize );
     }
 
+    QSplitter *splitterVertical = new QSplitter( QSplitter::Vertical, splitter );
+
     // setup page
-    pageBase = new PageBase( splitter, this );
+    pageBase = new PageBase( splitterVertical, this );
     pageBase->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
+
     page = new Page( pageBase, "Page", ( KPresenterView* )this );
     QObject::connect( page, SIGNAL( fontChanged( const QFont & ) ),
 		      this, SLOT( fontChanged( const QFont & ) ) );
@@ -2033,6 +2044,18 @@ void KPresenterView::createGUI()
                       this, SLOT( objectSelectedChanged()));
     QObject::connect( page, SIGNAL( mouseWheelEvent( QWheelEvent* ) ),
                       this, SLOT( getPageMouseWheelEvent( QWheelEvent* ) ) );
+
+
+    // setup notebar.
+    if ( !m_pKPresenterDoc->isEmbedded()
+         && !m_pKPresenterDoc->isSingleViewMode() ) // No notebar if the document is embedded
+    {
+        notebar = new NoteBar( splitterVertical, m_pKPresenterDoc, this );
+
+        QValueList<int> tmpList;
+        tmpList << 100 << 10;
+        splitterVertical->setSizes( tmpList );
+    }
 
     // setup GUI
     setupActions();
@@ -2053,6 +2076,16 @@ void KPresenterView::createGUI()
         if(!config->readBoolEntry("Sidebar", true)) {
             sidebar->hide();
             actionViewShowSideBar->setChecked(false);
+        }
+    }
+
+    if ( notebar )
+    {
+        KConfig *config=KGlobal::config();
+        config->setGroup("Global");
+        if(!config->readBoolEntry("Notebar", true)) {
+            notebar->hide();
+            actionViewShowNoteBar->setChecked(false);
         }
     }
 }
@@ -2122,6 +2155,11 @@ void KPresenterView::setupActions()
                                                    this, SLOT( viewShowSideBar() ),
                                                    actionCollection(), "view_showsidebar" );
         actionViewShowSideBar->setChecked(true);
+
+        actionViewShowNoteBar = new KToggleAction( i18n("Show Notebar"), 0,
+                                                   this, SLOT( viewShowNoteBar() ),
+                                                   actionCollection(), "view_shownotebar" );
+        actionViewShowNoteBar->setChecked(true);
     }
 
     // ---------------- insert actions
@@ -3408,6 +3446,12 @@ void KPresenterView::skipToPage( int num )
     if( sidebar )
         sidebar->setCurrentPage( currPg );
 
+    if ( notebar ) {
+        kdDebug() << "Current Page: " << currPg << endl;
+        QString text = m_pKPresenterDoc->getNoteText( currPg );
+        notebar->setCurrentNoteText( text );
+    }
+
     refreshPageButton();
 
     yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
@@ -3692,6 +3736,16 @@ void KPresenterView::viewShowSideBar()
         sidebar->hide();
     else
         sidebar->show();
+}
+
+void KPresenterView::viewShowNoteBar()
+{
+    if ( !notebar )
+        return;
+    if ( notebar->isVisible() )
+        notebar->hide();
+    else
+        notebar->show();
 }
 
 void KPresenterView::extraChangeClip()

@@ -25,7 +25,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
 	textdialog.ui sidebar.cc \
 	insertpagedia.ui generalconfig.ui kpimage.cc \
-	kpresenter_dlg_config.cc kprvariable.cc kprdrag.cc
+	kpresenter_dlg_config.cc kprvariable.cc kprdrag.cc notebar.cc
 
 libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell  -lqtmcop -lkmedia2_idl -lsoundserver_idl -lartskde
@@ -61,7 +61,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		footer_header.h kpresenter_factory.h kpresenter_aboutdata.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
 		KPresenterBackgroundIface.h sidebar.h  kpresenter_dlg_config.h \
-		kprvariable.h kprdrag.h
+		kprvariable.h kprdrag.h notebar.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

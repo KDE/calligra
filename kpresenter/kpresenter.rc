@@ -31,6 +31,7 @@
   <Separator/>
   <ActionList name="view_split"/>
   <Action name="view_showsidebar"/>
+  <Action name="view_shownotebar"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="insert_specialchar"/>

@@ -358,6 +358,11 @@ public:
 
     void reorganizeGUI();
 
+
+    // For NoteBar
+    void setNoteText( int _pageNum, const QString &_text );
+    QString getNoteText( int _pageNum );
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -390,9 +395,11 @@ protected:
     QDomDocumentFragment saveBackground( QDomDocument& );
     QDomElement saveObjects( QDomDocument &doc );
     QDomElement saveTitle( QDomDocument &doc );
+    QDomElement saveNote( QDomDocument &doc );
     void loadBackground( const QDomElement &element );
     void loadObjects( const QDomElement &element, bool _paste = false );
     void loadTitle( const QDomElement &element );
+    void loadNote( const QDomElement &element );
     virtual bool completeLoading( KoStore* /* _store */ );
     void makeUsedPixmapList();
 
@@ -479,10 +486,17 @@ protected:
     KoVariableFormatCollection *m_varFormatCollection;
     KoVariableCollection *m_varColl;
 
+    // For NoteBar
+    QStringList noteTextList;
+
 
 private:
     void pageTitleInsert( unsigned int pageNumber);
     void pageTitleDelete( unsigned int pageNumber );
+
+    // For NoteBar
+    void pageNoteInsert( unsigned int _pageNum );
+    void pageNoteDelete( unsigned int _pageNum );
 
 };
 
