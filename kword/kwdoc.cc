@@ -448,7 +448,7 @@ void KWDocument::initEmpty()
 }
 
 
-void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf )
+void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf, bool updateViews )
 {
     if ( m_processingType == WP ) {
         //kdDebug() << "KWDocument::setPageLayout WP" << endl;
@@ -468,19 +468,14 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
     recalcFrames();
 
     updateAllFrames();
-}
 
-void KWDocument::updateRuler()
-{
-    //kdDebug() << "KWDocument::updateRuler" << endl;
-    // Invalidate document layout
-    layout();
-    //refresh koRuler in each view
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+    if ( updateViews )
     {
-        viewPtr->getGUI()->getHorzRuler()->setPageLayout( m_pageLayout);
-        viewPtr->getGUI()->getVertRuler()->setPageLayout( m_pageLayout );
-        viewPtr->getGUI()->canvasWidget()->repaintAll( true );
+        // Invalidate document layout, for proper repaint
+        layout();
+        emit pageLayoutChanged( m_pageLayout );
+        updateResizeHandles();
+        updateContentsSize();
     }
 }
 
@@ -1172,7 +1167,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
     m_unit = KoUnit::unit( unitName );
 
-    setPageLayout( __pgLayout, __columns, __hf );
+    setPageLayout( __pgLayout, __columns, __hf, false );
 
     getVariableCollection()->variableSetting()->load(word );
 
@@ -1413,9 +1408,12 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     // Connect to notifications from main text-frameset
     KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
-    if ( frameset )
+    if ( frameset ) {
         connect( frameset->textObject(), SIGNAL( chapterParagraphFormatted( KoTextParag * ) ),
                  SLOT( slotChapterParagraphFormatted( KoTextParag * ) ) );
+        connect( frameset, SIGNAL( mainTextHeightChanged() ),
+                 SIGNAL( mainTextHeightChanged() ) );
+    }
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
 

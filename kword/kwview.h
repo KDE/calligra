@@ -346,6 +346,7 @@ protected slots:
     void spellCheckerReplaceAll( const QString &,  const QString &);
     void slotApplyFont();
     void slotApplyParag();
+    void slotPageLayoutChanged( const KoPageLayout& layout );
 
 protected:
     void addVariableActions( int type, const QStringList & texts,

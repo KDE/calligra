@@ -71,6 +71,7 @@
 
 #include <ktempfile.h>
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include <kfiledialog.h>
 #include <kstdaction.h>
 #include <klocale.h>
@@ -141,6 +142,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     connect( m_doc, SIGNAL( pageNumChanged() ),
              this, SLOT( pageNumChanged()) );
+
+    connect( m_doc, SIGNAL( pageLayoutChanged( const KoPageLayout& ) ),
+             this, SLOT( slotPageLayoutChanged( const KoPageLayout& )) );
 
     connect( m_doc, SIGNAL( docStructureChanged(int) ),
              this, SLOT( docStructChanged(int)) );
@@ -1292,7 +1296,7 @@ void KWView::print( KPrinter &prt )
         pgLayout.ptLeft += 25.8;         // Not sure why we need this....
         pgLayout.ptRight += 15.0;
         // TODO the other units. Well, better get rid of the multiple-unit thing.
-        m_doc->setPageLayout( pgLayout, cl, hf );
+        m_doc->setPageLayout( pgLayout, cl, hf, false );
     }
 
     QPainter painter;
@@ -1353,7 +1357,7 @@ void KWView::print( KPrinter &prt )
     painter.end();
 
     if ( pgLayout.format == PG_SCREEN )
-        m_doc->setPageLayout( oldPGLayout, cl, hf );
+        m_doc->setPageLayout( oldPGLayout, cl, hf, false );
 
 #ifdef KW_PASS_PAINTER_TO_QRT
     fit.toFirst();
@@ -2990,13 +2994,6 @@ void KWView::formatPage()
             m_doc->addCommand(cmd);
 
             m_doc->setPageLayout( pgLayout, cl, kwhf );
-            m_doc->updateRuler();
-
-            m_doc->updateResizeHandles();
-            m_doc->updateContentsSize();
-#if 0
-            m_gui->canvasWidget()->frameSizeChanged( pgLayout );
-#endif
         }
         if ( unit != oldUnit )
             m_doc->setUnit( unit ); // needs undo/redo support
@@ -4096,10 +4093,15 @@ void KWView::newPageLayout( KoPageLayout _layout )
         edit->textFrameSet()->clearUndoRedoInfo();
     KWPageLayoutCommand *cmd = new KWPageLayoutCommand( i18n("Change Layout"),m_doc,tmpOldLayout,tmpNewLayout ) ;
     m_doc->addCommand(cmd);
+}
 
-    m_doc->updateRuler();
-
-    m_doc->updateResizeHandles();
+void KWView::slotPageLayoutChanged( const KoPageLayout& layout )
+{
+    // This is connected to a signal of KWDocument, so that when the
+    // above method, or any other way of changing the page layout happens,
+    // the rulers are updated in all views.
+    m_gui->canvasWidget()->viewMode()->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), layout );
+    m_gui->canvasWidget()->repaintAll( true );
 }
 
 void KWView::newFirstIndent( double _firstIndent )
@@ -4520,29 +4522,14 @@ void KWView::slotFrameSetEditChanged()
 
 void KWView::slotUpdateRuler()
 {
-    // Set the "frame start" in the ruler (tabs are relative to that position)
-    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-    KWFrame * frame = 0L;
-    // Use the currently edited (fallback: the first selected) frame
-    if ( edit && edit->currentFrame() )
-        frame = edit->currentFrame();
-    else
-        frame = m_doc->getFirstSelectedFrame();
-    if( !frame) {
-        KWFrameSet *fs= m_doc->frameSet(0);
-        if(fs) frame=fs->frame(0);
-    }
-    if ( frame )
+    KWCanvas* canvas = m_gui->canvasWidget();
+    QRect r( canvas->viewMode()->rulerFrameRect( canvas ) );
+    if ( !r.isNull() )
     {
-        QRect r = m_doc->zoomRect( *frame );
-        KWCanvas* canvas = m_gui->canvasWidget();
-        r = canvas->viewMode()->normalToView( r );
-        // Now we need to make those coordinates relative to the page corner
-        QPoint pc = canvas->viewMode()->pageCorner( canvas );
-        m_gui->getHorzRuler()->setFrameStartEnd( r.left() - pc.x(), r.right() - pc.x() );
-        m_gui->getVertRuler()->setFrameStartEnd( r.top() - pc.y(), r.bottom() - pc.y() );
+        m_gui->getHorzRuler()->setFrameStartEnd( r.left(), r.right() );
+        m_gui->getVertRuler()->setFrameStartEnd( r.top(), r.bottom() );
     }
-    m_gui->canvasWidget()->updateRulerOffsets();
+    canvas->updateRulerOffsets();
 }
 
 void KWView::frameSelectedChanged()
@@ -4761,9 +4748,6 @@ void KWView::configureHeaderFooter()
             m_doc->addCommand(cmd);
 
             m_doc->setPageLayout( pgLayout, cl, kwhf );
-            m_doc->updateRuler();
-
-            m_doc->updateResizeHandles();
         }
         if ( unit != oldUnit )
             m_doc->setUnit( unit ); // needs undo/redo support

@@ -1771,6 +1771,9 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
             }
         }
     }
+    if ( m_doc->processingType() == KWDocument::WP
+         && this == m_doc->frameSet( 0 ) )
+        emit mainTextHeightChanged();
 }
 
 double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )

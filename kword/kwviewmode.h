@@ -27,6 +27,8 @@ class QRegion;
 class KWTextFrameSet;
 class KWFrameSet;
 class KWCanvas;
+class KoRuler;
+class KoPageLayout;
 
 /**
  * Abstract base class for KWCanvas's view modes.
@@ -67,6 +69,12 @@ public:
     // The default implementation is good enough for any page-based viewmode,
     // since it calls normalToView. But the textmode has no page concept.
     virtual QPoint pageCorner( KWCanvas* canvas );
+    // The result of this is passed to setFrameStartEnd for both rulers
+    // (after adjustement with pageCorner())
+    virtual QRect rulerFrameRect( KWCanvas* canvas );
+    // Called when the page layout is set, or changes.
+    // Usually this is directly passed to KoRuler (for page-based viewmodes)
+    virtual void setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLayout& layout );
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion ) = 0;
 
@@ -179,6 +187,8 @@ public:
     virtual QSize contentsSize();
     // There is no page concept. Keep everything relative to (0,0)
     virtual QPoint pageCorner( KWCanvas* ) { return QPoint( 0, 0 ); }
+    virtual QRect rulerFrameRect( KWCanvas* canvas );
+    virtual void setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLayout& layout );
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
     virtual const QString type() {return "ModeText";}

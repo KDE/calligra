@@ -88,6 +88,9 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     connect( m_doc, SIGNAL( newContentsSize() ),
              this, SLOT( slotNewContentsSize() ) );
 
+    connect( m_doc, SIGNAL( mainTextHeightChanged() ),
+             this, SLOT( slotMainTextHeightChanged() ) );
+
     connect( m_doc, SIGNAL( sig_terminateEditing( KWFrameSet * ) ),
              this, SLOT( terminateEditing( KWFrameSet * ) ) );
 
@@ -1162,7 +1165,7 @@ void KWCanvas::mrCreatePixmap()
         m_insRect.setRight(m_doc->ptPaperWidth());
     }
     int page = static_cast<int>(m_insRect.top() / m_doc->ptPaperHeight()) + 1;
-    kdDebug() << "page: " << page << endl;
+    //kdDebug() << "page: " << page << endl;
 
     if(m_insRect.bottom() > m_doc->ptPaperHeight() * page) {
         double height = m_insRect.height();
@@ -2019,6 +2022,16 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
     // cx and cy contain the future values for contentsx and contentsy, so we need to
     // pass them to updateRulerOffsets.
     updateRulerOffsets( cx, cy );
+}
+
+void KWCanvas::slotMainTextHeightChanged()
+{
+    if ( dynamic_cast<KWViewModeText *>(m_viewMode) )
+    {
+        slotNewContentsSize();
+        m_viewMode->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), KoPageLayout() /*unused*/ );
+        emit updateRuler();
+    }
 }
 
 void KWCanvas::slotNewContentsSize()

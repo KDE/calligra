@@ -101,6 +101,43 @@ QPoint KWViewMode::pageCorner( KWCanvas* canvas )
     return cPoint;
 }
 
+QRect KWViewMode::rulerFrameRect( KWCanvas* canvas )
+{
+    // Set the "frame start" in the ruler (tabs are relative to that position)
+    KWFrameSetEdit * edit = canvas->currentFrameSetEdit();
+    KWFrame * frame = 0L;
+    // Use the currently edited (fallback: the first selected) frame
+    if ( edit && edit->currentFrame() )
+        frame = edit->currentFrame();
+    else
+        frame = m_doc->getFirstSelectedFrame();
+    if( !frame) {
+        KWFrameSet *fs= m_doc->frameSet(0);
+        if(fs) frame=fs->frame(0);
+    }
+    if ( frame )
+    {
+        QRect r = m_doc->zoomRect( *frame );
+        r = canvas->viewMode()->normalToView( r );
+
+        // Calculate page corner (see pageCorner above)
+        int pageNum = frame->pageNum();
+        QPoint nPoint( 0, m_doc->pageTop(pageNum) + 1 );
+        QPoint cPoint( normalToView( nPoint ) );
+
+        // Frame start/end is relative to page corner.
+        r.moveBy( -cPoint.x(), -cPoint.y() );
+        return r;
+    }
+    return QRect();
+}
+
+void KWViewMode::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLayout& layout )
+{
+    hRuler->setPageLayout( layout );
+    vRuler->setPageLayout( layout );
+}
+
 KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc )
 {
     Q_ASSERT(doc);
@@ -332,8 +369,10 @@ QSize KWViewModeText::contentsSize()
     // But we want to show at least a page if the doc is empty, IMHO.
     int pageHeight = m_doc->zoomItY( textfs->frame(0)->height() );
 
-    return QSize( m_doc->layoutUnitToPixelX( luSize.width() ),
-                  QMAX( m_doc->layoutUnitToPixelY( luSize.height() ), pageHeight ) );
+    QSize cSize( m_doc->layoutUnitToPixelX( luSize.width() ),
+                 QMAX( m_doc->layoutUnitToPixelY( luSize.height() ), pageHeight ) );
+    //kdDebug() << "KWViewModeText::contentsSize " << cSize << endl;
+    return cSize;
 }
 
 bool KWViewModeText::isFrameSetVisible( const KWFrameSet *fs )
@@ -384,4 +423,27 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
     if ( !grayRegion.isEmpty() )
         m_doc->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     painter->restore();
+}
+
+QRect KWViewModeText::rulerFrameRect( KWCanvas* )
+{
+    return QRect( QPoint(0,0), contentsSize() );
+}
+
+void KWViewModeText::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLayout& /*layout*/ )
+{
+    // Create a dummy page-layout, as if we had a single page englobing the whole text.
+    KoPageLayout layout;
+    layout.format = PG_CUSTOM;
+    layout.orientation = PG_PORTRAIT;
+    QSize cSize = contentsSize();
+    layout.ptWidth = m_doc->unzoomItX( cSize.width() );
+    layout.ptHeight = m_doc->unzoomItY( cSize.height() );
+    kdDebug() << "KWViewModeText::setPageLayout layout size " << layout.ptWidth << "x" << layout.ptHeight << endl;
+    layout.ptLeft = 0;
+    layout.ptRight = 0;
+    layout.ptTop = 0;
+    layout.ptBottom = 0;
+    hRuler->setPageLayout( layout );
+    vRuler->setPageLayout( layout );
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="47">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="48">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -24,6 +24,7 @@
   <ActionList name="view_split" />
   <Action name="view_pagemode"/>
   <Action name="view_previewmode"/>
+  <Action name="view_textmode"/>
   <Separator/>
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>

@@ -164,7 +164,7 @@ public:
     virtual void addShell( KoMainWindow *shell );
 
     virtual void insertObject( const KoRect& _rect, KoDocumentEntry& _e );
-    void setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf );
+    void setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf, bool updateViews = true );
 
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
 
@@ -239,9 +239,6 @@ public:
 
     /** Return true if @p r (in real pt coordinates) is out of the page @p page */
     bool isOutOfPage( KoRect & r, int page ) const;
-
-    /** update koRuler in each view */
-    void updateRuler();
 
     void repaintAllViews( bool erase = false );
     /** Update all views of this document, area can be cleared before redrawing with the
@@ -552,7 +549,18 @@ public:
     void updateTextFrameSetEdit();
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
+
+    // This is emitted by setPageLayout if updateViews=true
+    void pageLayoutChanged( const KoPageLayout& );
+
+    // Emitted when the scrollview contents must be resized (e.g. new page, new layout...)
     void newContentsSize();
+
+    // This is emitted when the height of the text in the main frameset changes
+    // Mostly useful for the text viewmode.
+    void mainTextHeightChanged();
+
+    // This is emitted when the number of pages changes.
     void pageNumChanged();
 
     void docStructureChanged(int);

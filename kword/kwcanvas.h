@@ -227,6 +227,7 @@ signals:
 private slots:
     void slotContentsMoving( int, int );
     void slotNewContentsSize();
+    void slotMainTextHeightChanged();
     void doAutoScroll();
 
     //Terminate editing this frameset, if we were editing it.

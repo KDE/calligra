@@ -233,6 +233,9 @@ signals:
     /** Tell the Edit object that this frame got deleted */
     void frameDeleted( KWFrame* frame );
 
+    /** Tell the text viewmode that the height of the text might have changed */
+    void mainTextHeightChanged();
+
 protected slots:
     // All those slots are connected to KoTextObject
     void slotAvailableHeightNeeded();
