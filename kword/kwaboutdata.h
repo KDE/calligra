@@ -40,7 +40,7 @@ KAboutData * newKWordAboutData()
 					   "http://www.koffice.org/kword/" );
     aboutData->addAuthor("Reginald Stadlbauer", 0, "reggie@kde.org");
     aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
-    aboutData->addAuthor("David Faure", 0, "david@mandrakesoft.com");
+    aboutData->addAuthor("David Faure", 0, "faure@kde.org");
     aboutData->addAuthor("Laurent Montel", 0, "montel@kde.org");
     aboutData->addAuthor("Sven Lüppken", 0, "sven@kde.org");
     aboutData->addAuthor("Frank Dekervel", 0, "Frank.dekervel@student.kuleuven.ac.Be");
