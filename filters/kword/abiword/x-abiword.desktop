@@ -1,0 +1,8 @@
+[Desktop Entry]
+Comment=AbiWord Document
+Comment[de]=AbiWord Dokument
+Comment[fr]=Document AbiWord
+Icon=kword
+MimeType=application/x-abiword
+Patterns=*.abw;*.ABW;*.abw.gz;*.ABW.GZ;*.zabw;*.ZABW;
+Type=MimeType

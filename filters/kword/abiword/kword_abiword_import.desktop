@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=KWord AbiWord Import Filter
+Name[de]=AbiWord-Import-Filter für KWord
+Name[fr]=Filtre d'importation AbiWord de KWord
+Export=application/x-kword
+Import=application/x-abiword
+Implemented=file
+X-KDE-Library=libabiwordimport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter
