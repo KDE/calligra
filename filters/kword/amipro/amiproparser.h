@@ -136,7 +136,7 @@ class AmiProParser
     QString m_currentSection;
 
     bool setResult( int );
-    bool parseParagraph( const QString& partext );
+    bool parseParagraph( const QStringList& lines );
     bool parseStyle( const QStringList& line );
     AmiProStyle findStyle( const QString& name );
 

@@ -24,6 +24,72 @@
 #include <qstringlist.h>
 #include <qtextstream.h>
 
+// helper function to "unescape" AmiPro string
+static QString AmiProUnescape( const QString& str )
+{
+  QString result;
+
+  for( unsigned i=0; i< str.length(); i++ )
+  {
+    QChar c = str[i];
+    result.append( c );
+
+    // check for "@@", decoded as '@'
+    if( c == '@' )
+      if( str[i+1] == '@' )
+         i++ ; // eat !
+
+    // a few possible escape sequence
+    if( c == '<'  )
+    {
+
+      // check for "<<", decoded as '<'
+      if( str[i+1] == '<' )
+      {
+        result.truncate( result.length() - 1 ); // remove the '<'
+        result.append( '<' );
+        i++;
+      }
+
+      // check for "<;>", decoded as '>'
+      if( str[i+1] == ';' )
+      {
+        result.truncate( result.length() - 1 ); // remove the '<'
+        result.append( '>' );
+        i+=2;
+      }
+
+      // check for "<[>", decoded as '['
+      if( str[i+1] == '[' )
+      {
+        result.truncate( result.length() - 1 ); // remove the '<'
+        result.append( '[' );
+        i+=2;
+      }
+
+      // some special characters
+      if( str[i+1] == '/' )
+      {
+        result.truncate( result.length() - 1 ); // remove the '<'
+        result.append( QChar(str[i+2].unicode() | 0x80) );
+        i += 3;
+      }
+
+      // yet another special characters
+      if( str[i+1] == '\\' )
+      {
+        result.truncate( result.length() - 1 ); // remove the '<'
+        result.append( QChar(str[i+2].unicode()&0x7f) ); // FIXME !
+        i += 3;
+      }
+
+    }
+
+  }
+
+  return result;
+}
+
 AmiProParser::AmiProParser()
 {
   m_result = OK;
@@ -106,9 +172,9 @@ bool AmiProParser::process( const QString& filename )
     }
 
     // leave [edoc]
-    if( enter_new_section && ( old_section != "edoc" ) )
+    if( enter_new_section && ( old_section == "edoc" ) )
     {
-      parseParagraph( lines.join( " " ) );
+      parseParagraph( lines );
       lines.clear();
     }
 
@@ -123,13 +189,10 @@ bool AmiProParser::process( const QString& filename )
     {
       if( line.isEmpty() ) 
       {
-         parseParagraph( lines.join( " " ) );
+         parseParagraph( lines );
          lines.clear(); 
       }
-      else
-      {
-        if( line[0] != '>' ) lines.append( line );
-      }
+        lines.append( line );
     }
 
     // enter [tag]
@@ -168,40 +231,35 @@ bool AmiProParser::processCloseDocument()
   return true;
 }
 
-bool AmiProParser::parseParagraph( const QString& partext )
+bool AmiProParser::parseParagraph( const QStringList& lines )
 {
   m_text = "";
   m_formatList.clear();
   m_layout = AmiProLayout();
 
+  // join the lines, up until first char in a line is '>'
+  QString partext = "";
+  for( unsigned i=0; i<lines.count(); i++ )
+    if( lines[i][0] == '>' ) break;
+      else partext.append( lines[i] + "\n" );
+
+  // "unescape", process special chars and such
+  QString text = AmiProUnescape( partext );
+
   // apply default style first
   m_layout.applyStyle( findStyle( "Body Text" ) );
 
-  for( unsigned i=0; i<partext.length(); i++ )
+  for( unsigned i=0; i<text.length(); i++ )
   {
-    QChar ch = partext[i];
+    QChar ch = text[i];
 
     // handle a tag
     if( ch == '<' )
     {
-
-      // check for <<, which is decoded as <, not tag
-      if( i+1 < partext.length() )
-        if( partext[i+1] == '<' )
-        {
-          m_text.append( '<' );
-          i++;
-        }
-
-      else
-      {
-        // this is a tag, enclosed with >
         QString tag = "";
-        for( i++; (i < partext.length()) && 
-           (partext[i] != '>'); i++) tag.append( partext[i] );
+        for( i++; (i < text.length()) && 
+           (text[i] != '>'); i++) tag.append( text[i] );
         handleTag( tag );
-      }
-
     }
 
     else
@@ -209,18 +267,6 @@ bool AmiProParser::parseParagraph( const QString& partext )
     // handle style change
     if( ch == '@' )
     {
-
-      // check for @@ which is decoded as @ (not style tag)
-      if( i+1 < partext.length() )
-        if( partext[i+1] == '@' )
-        {
-          m_text.append( '@' );
-          i++;
-        } 
-
-      else
-      {
-        // apply style
         QString styleName;
         for( i++; (i < partext.length()) && (partext[i] != '@'); i++)
           styleName += partext[i];
@@ -229,7 +275,6 @@ bool AmiProParser::parseParagraph( const QString& partext )
         m_currentFormat.applyStyle( style );
         m_formatList.append( m_currentFormat ); 
         m_layout.applyStyle( style );
-      }
     }
 
      else 
@@ -259,7 +304,7 @@ bool AmiProParser::parseStyle( const QStringList& lines )
 {
   AmiProStyle style;
 
-  style.name = lines[0].stripWhiteSpace();
+  style.name = AmiProUnescape( lines[0].stripWhiteSpace() );
   if( style.name.isEmpty() ) return true;
 
   // font

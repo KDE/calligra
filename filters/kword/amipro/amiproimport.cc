@@ -58,6 +58,22 @@ class AmiProConverter: public AmiProListener
     AmiProStyleList styleList;
 };
 
+// helper function to escape string for XML-ness
+static QString XMLEscape( const QString& str )
+{
+  QString result;
+
+  for( unsigned i=0; i<str.length(); i++ )
+    if( str[i] == '&' ) result += "&amp;";
+    else if( str[i] == '<' ) result += "&lt;";
+    else if( str[i] == '>' ) result += "&gt;";
+    else if( str[i] == '"' ) result += "&quot;";
+    else if( str[i] == QChar(39) ) result += "&apos;";
+    else result += str[i];
+
+  return result;
+}
+
 // helper function to convert AmiPro format to KWord's FORMAT
 static QString AmiProFormatAsXML( AmiProFormat format )
 {
@@ -204,7 +220,7 @@ static QString AmiProStyleAsXML( const AmiProStyle& style )
             "\" after=\"" + QString::number(style.spaceAfter) + "\"";
 
   result.append( "<STYLE>\n" );
-  result.append( "  <NAME value=\"" + style.name + "\" />\n" );
+  result.append( "  <NAME value=\"" + XMLEscape( style.name ) + "\" />\n" );
   result.append( "  <FOLLOWING name=\"Body Text\" />\n" );
   result.append( "  <FLOW align=\"" + align + "\" />\n" );
   result.append( "  <LINESPACING value=\"" + linespacing + "\" />\n" );
@@ -287,21 +303,11 @@ bool AmiProConverter::doDefineStyle( const AmiProStyle& style )
   styleList.append( style );
 }
 
-bool AmiProConverter::doParagraph( const QString& _text, AmiProFormatList formatList,
+bool AmiProConverter::doParagraph( const QString& text, AmiProFormatList formatList,
   AmiProLayout& layout )
 {
-  // encode text for XML-ness
-  // FIXME could be faster without QRegExp
-  QString text = _text;
-  text.replace( QRegExp("&"), "&amp;" );
-  text.replace( QRegExp("<"), "&lt;" );
-  text.replace( QRegExp(">"), "&gt;" );
-  text.replace( QRegExp("\""), "&quot;" );
-  text.replace( QRegExp("'"), "&apos;" );
-
-  // assemble
   root.append( "<PARAGRAPH>\n" );
-  root.append( "<TEXT>" + text + "</TEXT>\n" );
+  root.append( "<TEXT>" + XMLEscape( text ) + "</TEXT>\n" );
   root.append( AmiProFormatListAsXML( formatList ) );
   root.append( AmiProLayoutAsXML( layout ) );
   root.append( "</PARAGRAPH>\n" );
