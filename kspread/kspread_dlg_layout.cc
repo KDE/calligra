@@ -971,7 +971,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     QLabel* tmpQLabel;
     tmpQLabel = new QLabel( box, "Label_1" );
     grid->addWidget(tmpQLabel,2,0);
-    tmpQLabel->setText( i18n("Prefix") );
+    tmpQLabel->setText( i18n("Postfix") );
 
     if ( dlg->postfix.isNull() )
         postfix->setText( "########" );
@@ -980,7 +980,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     tmpQLabel = new QLabel( box, "Label_2" );
     grid->addWidget(tmpQLabel,0,0);
-    tmpQLabel->setText( i18n("Postfix") );
+    tmpQLabel->setText( i18n("Prefix") );
 
     tmpQLabel = new QLabel( box, "Label_3" );
     grid->addWidget(tmpQLabel,1,0);
