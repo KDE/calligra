@@ -2053,7 +2053,7 @@ int ColumnLayout::width( KSpreadCanvas *_canvas )
     return 0;
 
   if ( _canvas )
-    return (int) _canvas->zoom() * m_fWidth;
+    return (int) ( _canvas->zoom() * m_fWidth );
   else
     return (int) m_fWidth;
 }
