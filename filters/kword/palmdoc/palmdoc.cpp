@@ -88,21 +88,25 @@ bool PalmDoc::load( const char* filename )
   // initialize
   setText( QString::null );
 
-  // if the text is compressed, then uncompress each record
-  if( format == 2 )
-    for( unsigned r = 1; r < records.count(); r++ )
-    {
-      QByteArray rec( *records.at( r ) );
-      m_text.append( uncompress( rec ) );
-    }
+  // assemble the records
+  QByteArray rec;
+  unsigned i = 0;
+  for( unsigned r = 1; r < records.count(); r++ )
+  {
+     QByteArray *p = records.at( r );
+     if( !p ) continue;
+     rec.resize( rec.size() + p->size() );
+     for( unsigned s=0; s<p->size(); s++ )
+       rec[i++] = p->at( s );
+  }
 
-  // if the text is not compressed, assemble the records
+  // if the text is compressed, then uncompress
+  if( format == 2 )
+    setText( uncompress( rec ) );
+
+  // if the text is not compressed, simply append as string
   if( format == 1 )
-    for( unsigned r = 1; r < records.count(); r++ )
-    {
-      QByteArray rec( *records.at( r ) );
-      m_text.append( QString::fromLatin1( rec.data(),rec.count() ) );
-    }
+      setText( QString::fromLatin1( rec.data(),rec.count() ) );
 
   // done
   m_result = OK;
@@ -126,7 +130,7 @@ bool PalmDoc::save( const char* filename )
 
   // prepare the records
   records.clear();
-  for( unsigned i=0; i<data.count(); i++ )
+  for( unsigned i=0; i<data.count(); )
   {
     QByteArray* ptr = new QByteArray;
     unsigned rs = data.count() - i;
@@ -134,7 +138,6 @@ bool PalmDoc::save( const char* filename )
     ptr->resize( rs );
     for( unsigned m=0; m<rs; m++ )
       (*ptr)[m] = data[i++];
-    --i;
     records.append( ptr );
   } 
 
@@ -147,17 +150,17 @@ bool PalmDoc::save( const char* filename )
   header[5] = (docsize >> 16) & 255;
   header[6] = (docsize >> 8) & 255;
   header[7] = docsize & 255;  
-  header[8] = data.count()>> 8; // no of records
-  header[9] = data.count() & 255; 
+  header[8] = records.count()>> 8; // no of records
+  header[9] = records.count() & 255;
   header[10] = recsize >>8; // record size
   header[11] = recsize & 255;
   header[12] = header[13] = 0;
   header[14] = header[15] = 0;
- 
-  // header should be the very first record  
+
+  // header should be the very first record
   records.prepend( new QByteArray( header ) );
 
-  // write to file 
+  // write to file
   bool ok = PalmDB::save( filename );
   if( !ok )
   {
@@ -171,16 +174,72 @@ bool PalmDoc::save( const char* filename )
 }
 
 // TODO describe in brief about compression algorithm
-// NOTE at the moment, the text is not really compressed anyway !
 QByteArray PalmDoc::compress( QString text )
 {
   QByteArray result;
-  QCString ctext;
- 
-  ctext = text.latin1();
-  result.resize( text.length() );
-  for( unsigned i=0; i<text.length(); i++ )
-    result[i]=ctext[i];
+  unsigned textlen = text.length();
+  const char *ctext =  text.latin1();
+  unsigned int i, j;
+
+  // we don't know the compressed size yet
+  // therefore allocate buffer big enough
+  result.resize( textlen );
+
+  for( i=j=0; i<textlen;  )
+  {
+    int horizon = 2047;
+    int start = (i < horizon) ? 0 : i-horizon;
+    bool match = false;
+    int match_pos=0, match_len=0;
+
+    // look for match in the buffer
+    for( int back = i-1; (!match) && (back > start); back-- )
+      if( ctext[i] == ctext[back] )
+      if( ctext[i+1] == ctext[back+1] )
+      if( ctext[i+2] == ctext[back+2] )
+      {
+         match = true;
+         match_pos = i-back;
+         match_len = 3;
+
+         if( i+3 < textlen )
+           if( ctext[i+3] == ctext[back+3] )
+           {
+              match_len = 4;
+              if( i+4 < textlen )
+                if( ctext[i+4] == ctext[back+4] )
+                {
+                  match_len = 5;
+                }
+           }
+
+      }
+
+   if( match )
+   {
+     unsigned char p = 0x80 | ((match_pos >> 5)&0x3f);
+     unsigned char q = ((match_pos & 0x1f) << 3) | (match_len-3);
+     result[j++] = p;
+     result[j++] = q;
+     i+= match_len;
+   }
+   else
+   {
+     char ch = ctext[i++] & 0x7f;
+     bool space_pack = false;
+
+     if( ch == 0x20 )
+       if ( i<textlen )
+         if( ctext[i] >= 0x40 )
+            space_pack = true;
+
+     if( !space_pack ) result[j++] = ch;
+     else result[j++] = ctext[i++] | 0x80;
+   }
+
+  }
+
+  result.resize( j );
 
   return result;
 }

@@ -104,7 +104,7 @@ bool PalmDocWorker::doFullParagraph(const QString& paraText,
 {
   kdDebug() << "Entering ::doFullParagraph" << endl;
   text.append( paraText );
-  text.append( "\n" );
+  text.append( "\n\n" );
 
   return TRUE;
 }

@@ -112,7 +112,7 @@ QString PalmDocImport::processPlainParagraph( QString text )
   layout.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
   layout.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
   layout.append( "  <INDENTS />\n" );
-  layout.append( "  <OFFSETS after=\"18\" />\n" );
+  layout.append( "  <OFFSETS after=\"9\" />\n" );
   layout.append( "  <PAGEBREAKING />\n" );
   layout.append( "  <COUNTER />\n" );
   layout.append( "  <FORMAT id=\"1\">\n" );
