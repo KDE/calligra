@@ -37,6 +37,7 @@
 #include <qfontdialog.h>
 #include <qdragobject.h>
 #include <kglobalsettings.h>
+#include <kcharsets.h>
 
 #include <qstringlist.h>
 #include <qfont.h>
@@ -3267,7 +3268,9 @@ int KTextEditFormatterBreakWords::format( KTextEditParag *parag, int start )
 KTextEditFormatCollection::KTextEditFormatCollection()
 {
     zoomFakt = 1;
-    defFormat = new KTextEditFormat( QFont( "utopia", 20 ), Qt::black );
+    QFont font = QFont( "utopia", 20 );
+    KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
+    defFormat = new KTextEditFormat( font, Qt::black );
     lastFormat = cres = 0;
     cflags = -1;
     cachedFormat = 0;
