@@ -116,7 +116,7 @@ public:
 	/**
 	 * Deselects all nodes.
 	 */
-	void clearNodes();
+	void selectNodes( bool select = true );
 
 	/**
 	 * Returns the handle node id, the KoPoint is inside.

@@ -34,11 +34,8 @@ VSelectNodes::visitVPath( VPath& path )
 	{
 		if( m_rect.isEmpty() )
 		{
-/*
-			path.current()->selectCtrlPoint1( m_select );
-			path.current()->selectCtrlPoint2( m_select );
-			path.current()->selectKnot( m_select );
-*/
+			for( int i = 0; i < path.current()->degree(); i++ )
+				path.current()->selectPoint( i, m_select );
 
 			setSuccess();
 		}

@@ -76,7 +76,7 @@ VSelectTool::activate()
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->showHandle();
 	view()->part()->document().selection()->setState( VObject::selected );
-	view()->part()->document().selection()->clearNodes();
+	view()->part()->document().selection()->selectNodes();
 }
 
 QString VSelectTool::contextHelp()

@@ -51,7 +51,8 @@ public:
 
 		// shape specific states:
 		selected      = 5,	/// visible, active and can be manipulated by tools
-		edit          = 6	/// visible, active and is currently manipulated by a tool
+		edit          = 6,	/// visible, active and is currently manipulated by a tool
+		editnodes     = 7	/// visible, active and is currently manipulated by a tool
 	};
 
 	VObject( VObject* parent, VState state = edit );

@@ -269,9 +269,9 @@ VSelection::pathNode( const KoRect& rect )
 }
 
 void
-VSelection::clearNodes()
+VSelection::selectNodes( bool select )
 {
-	VSelectNodes op( false );
+	VSelectNodes op( select );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )

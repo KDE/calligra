@@ -40,7 +40,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 
 	m_painter->setPen( Qt::SolidLine );
 
-	if( composite.state() == VObject::selected )
+	if( composite.state() == VObject::selected || composite.state() == VObject::editnodes )
     {
 		// paint fill:
 		m_painter->newPath();
@@ -58,7 +58,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 	}
 
 	// Draw nodes and control lines:
-	if( composite.state() == VObject::selected )
+	if( composite.state() == VObject::selected || composite.state() == VObject::editnodes )
 	{
 		itr.toFirst();
 		//++itr;		// Skip "begin".
@@ -79,7 +79,8 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				m_painter->setPen( stroke );
 				m_painter->setBrush( Qt::NoBrush );
 
-				if( jtr.current()->type() == VSegment::curve )
+				if( composite.state() == VObject::editnodes &&
+					jtr.current()->type() == VSegment::curve )
 				{
 					m_painter->newPath();
 
