@@ -59,7 +59,8 @@ void KexiTablePart::initInstanceActions()
 //moved to main window	createSharedAction(Kexi::DataViewMode, i18n("Filter"), "filter", 0, "tablepart_filter");
 
 	KAction *a = createSharedToggleAction(
-		Kexi::DesignViewMode, i18n("Toggle Primary Key"), "key", 0, "tablepart_toggle_pkey");
+		Kexi::DesignViewMode, i18n("Primary Key"), "key", 0, "tablepart_toggle_pkey");
+//		Kexi::DesignViewMode, i18n("Toggle Primary Key"), "key", 0, "tablepart_toggle_pkey");
 	a->setWhatsThis(i18n("Sets or removes primary key for currently selected field."));
 }
 

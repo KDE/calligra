@@ -100,18 +100,22 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	d->data->addColumn( col );
 
 	col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text);
-//		KexiDB::Field::PrimaryKey);
 	KexiValidator *vd = new Kexi::IdentifierValidator();
 	vd->setAcceptsEmptyValue(true);
 	col->setValidator( vd );
 
 	d->data->addColumn( col );
 	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
-//		KexiDB::Field::NotEmpty | KexiDB::Field::NotNull);
+	
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
+#else
+//TODO: remove this later
+	QValueVector<QString> types(KexiDB::Field::LastTypeGroup-1); //don't show last (BLOB) type
+#endif
 	d->maxTypeNameTextWidth = 0;
 	QFontMetrics fm(font());
-	for (int i=1; i<=KexiDB::Field::LastTypeGroup; i++) {
+	for (int i=1; i<=types.count(); i++) {
 		types[i-1] = KexiDB::Field::typeGroupName(i);
 		d->maxTypeNameTextWidth = QMAX(d->maxTypeNameTextWidth, fm.width(types[i-1]));
 	}
@@ -139,6 +143,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	
 	plugSharedAction("tablepart_toggle_pkey", this, SLOT(slotTogglePrimaryKey()));
 	d->action_toggle_pkey = static_cast<KToggleAction*>( sharedAction("tablepart_toggle_pkey") );
+	d->action_toggle_pkey->plug(m_view->popup(), 0); //add at the beg.
 }
 
 KexiAlterTableDialog::~KexiAlterTableDialog()
@@ -507,7 +512,13 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		//-get type group number
 		KexiDB::Field::TypeGroup fieldTypeGroup;
 		int i_fieldTypeGroup = newValue.toInt()+1/*counting from 1*/;
-		if (i_fieldTypeGroup < 1 || i_fieldTypeGroup > (int)KexiDB::Field::LastTypeGroup)
+		if (i_fieldTypeGroup < 1 || i_fieldTypeGroup > 
+#ifdef KEXI_SHOW_UNIMPLEMENTED
+			(int)KexiDB::Field::LastTypeGroup)
+#else
+//TODO: remove this later
+			(int)KexiDB::Field::LastTypeGroup-1) //don't show last (BLOB) type
+#endif
 			return;
 		fieldTypeGroup = static_cast<KexiDB::Field::TypeGroup>(i_fieldTypeGroup);
 
