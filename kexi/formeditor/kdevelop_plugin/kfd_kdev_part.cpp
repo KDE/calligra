@@ -508,7 +508,7 @@ static void repaintAll(QWidget *w)
 }
 
 void
-FormWidgetBase::drawRect(const QRect& r, int type)
+FormWidgetBase::drawRects(const QValueList<QRect> &list, int type)
 {
 	QPainter p;
 	p.begin(this, true);
@@ -525,12 +525,25 @@ FormWidgetBase::drawRect(const QRect& r, int type)
 	else if(type == 2) // insert rect
 		p.setPen(QPen(white, 2));
 	p.setRasterOp(XorROP);
-	p.drawRect(r);
-	prev_rect = r;
+
+	prev_rect = QRect();
+	QValueList<QRect>::ConstIterator endIt = list.constEnd();
+	for(QValueList<QRect>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
+		p.drawRect(*it);
+		prev_rect = prev_rect.unite(*it);
+	}
 
 	if (!unclipped)
 		clearWFlags( WPaintUnclipped );
 	p.end();
+}
+
+void
+FormWidgetBase::drawRect(const QRect& r, int type)
+{
+	QValueList<QRect> l;
+	l.append(r);
+	drawRects(l, type);
 }
 
 void

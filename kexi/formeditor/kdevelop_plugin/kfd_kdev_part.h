@@ -118,6 +118,7 @@ class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public KFormDesigner::
 		~FormWidgetBase() {;}
 
 		void drawRect(const QRect& r, int type);
+		void drawRects(const QValueList<QRect> &list, int type);
 		void initRect();
 		void clearRect();
 		void highlightWidgets(QWidget *from, QWidget *to);//, const QPoint &p);

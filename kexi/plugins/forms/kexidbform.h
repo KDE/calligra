@@ -45,6 +45,7 @@ class KexiDBForm : public QWidget, public KFormDesigner::FormWidget
 		virtual void paintEvent(QPaintEvent *ev);
 
 		virtual void drawRect(const QRect& r, int type);
+		virtual void drawRects(const QValueList<QRect> &list, int type);
 		virtual void initBuffer();
 		virtual void clearForm();
 		virtual void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
