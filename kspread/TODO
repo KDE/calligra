@@ -353,8 +353,26 @@ Bug fix :
 ---------
 -and also bug fix :)
 
-<montell@club-internet.fr>
+<montel@kde.org>
 
 Torbens TODO-List:
 ------------------
 - Write-Protect cells
+
+
+Oasis File Format:
+==================
+
+Todo:
+-----
+-> save/load validation
+-> save/load conditional cell attribute
+-> save/load font format
+-> save/load formula
+
+Done:
+-----
+-> save/load page name
+-> save/load column/row attribute (without font)
+-> save/load note
+
