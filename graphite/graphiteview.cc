@@ -45,7 +45,7 @@ GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
     // doc-view magic
     connect(m_doc, SIGNAL(unitChanged(Graphite::Unit)), this,
             SLOT(rulerUnitChanged(Graphite::Unit)));
-    connect(m_doc, SIGNAL(layoutChanged()), this, SLOT(layoutChanged()));
+    connect(m_doc, SIGNAL(layoutChanged(const QRegion &)), this, SLOT(layoutChanged(const QRegion &)));
 }
 
 GraphiteView::~GraphiteView() {
@@ -53,11 +53,23 @@ GraphiteView::~GraphiteView() {
     m_canvas=0L;
 }
 
-void GraphiteView::layoutChanged() {
+void GraphiteView::layoutChanged(const QRegion &diff) {
+
+    kdDebug() << ":::GraphiteView::layoutChanged::: --->" << endl;
     m_vert->setPageLayout(m_doc->pageLayout());
     m_horiz->setPageLayout(m_doc->pageLayout());
+    m_canvas->resizeContentsMM(m_doc->pageLayout().width(),m_doc->pageLayout().height());
+    if(diff.isEmpty()) {
+        kdDebug() << "+++ diff empty +++" << endl;
+        m_canvas->viewport()->erase();
+    }
+    else {
+        kdDebug() << "+++ DIFF! +++" << endl;
+        m_canvas->viewport()->erase(diff);
+    }
     m_canvas->viewport()->update(0, 0, m_canvas->visibleWidth(),
                                  m_canvas->visibleHeight());
+    kdDebug() << "<--- :::GraphiteView::layoutChanged:::" << endl;
 }
 
 void GraphiteView::slotViewZoom(const QString &t) {
@@ -157,6 +169,7 @@ void GraphiteView::slotViewZoom(const QString &t) {
     m_horiz->setZoomedRes(zr);
     m_vert->setZoomedRes(zr);
     setZoom(zoomValue);
+    m_canvas->resizeContentsMM(m_doc->pageLayout().width(),m_doc->pageLayout().height());
     m_canvas->viewport()->erase();
     m_canvas->viewport()->update(0, 0, m_canvas->visibleWidth(),
                                  m_canvas->visibleHeight());
@@ -168,15 +181,6 @@ void GraphiteView::contentsMoving(int x, int y) {
         m_horiz->setOffset(x, y);
     if(y!=m_oldY)
         m_vert->setOffset(x, y);
-    int w=m_oldX-x;
-    if(w==0)
-        w=m_canvas->visibleWidth();
-    int h=m_oldY-y;
-    if(h==0)
-        h=m_canvas->visibleHeight();
-    kdDebug() << "GraphiteView::contentsMoving: w=" << w << " h=" << h << endl;
-    //m_canvas->viewport()->erase(0, 0, w, h);
-    m_canvas->viewport()->erase();
     m_oldX=x;
     m_oldY=y;
 }

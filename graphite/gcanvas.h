@@ -41,6 +41,8 @@ public:
     void setRulers(Ruler *hruler, Ruler *vruler);
     void showMousePos(bool show);
 
+    void resizeContentsMM(const double &x, const double &y);
+
 protected:
     virtual void contentsMousePressEvent(QMouseEvent *e) { m_doc->mousePressEvent(e, m_view); }
     virtual void contentsMouseReleaseEvent(QMouseEvent *e) { m_doc->mouseReleaseEvent(e, m_view); }
@@ -59,10 +61,14 @@ protected:
 
     virtual bool eventFilter(QObject *obj, QEvent *e);
 
+private slots:
+    void contentsMoving(int x, int y);
+
 private:
     GraphitePart *m_doc;
     GraphiteView *m_view;
     Ruler *m_vertical, *m_horizontal;
+    int m_eraseWidth, m_eraseHeight;
 };
 
 #endif // gcanvas_h

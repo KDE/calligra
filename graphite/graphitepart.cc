@@ -232,9 +232,9 @@ void GraphitePart::documentRestored() {
     setModified(false);
 }
 
-void GraphitePart::updatePage() {
+void GraphitePart::updatePage(const QRegion &diff) {
     m_nodeZero->resize(m_pageLayout.fxRect());
-    emit layoutChanged();
+    emit layoutChanged(diff);
 }
 
 

@@ -307,6 +307,10 @@ bool operator!=(const PageLayout &lhs, const PageLayout &rhs) {
     return !(lhs==rhs);
 }
 
+QRegion diff(const PageLayout &oldLayout, const PageLayout &newLayout) {
+    return QRegion();
+}
+
 }; //namespace Graphite
 
 

@@ -29,7 +29,7 @@
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     : QScrollView(view, "GCanvas", Qt::WNorthWestGravity | Qt::WResizeNoErase | Qt::WRepaintNoErase),
-      m_doc(doc), m_view(view), m_vertical(0L), m_horizontal(0L) {
+      m_doc(doc), m_view(view), m_vertical(0L), m_horizontal(0L), m_eraseWidth(0), m_eraseHeight(0) {
 
     viewport()->setFocusPolicy(QWidget::StrongFocus);
     viewport()->setMouseTracking(true);
@@ -38,7 +38,8 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     viewport()->setBackgroundMode(QWidget::PaletteLight);
     installEventFilter(viewport());
     setFrameStyle(QFrame::NoFrame);
-    resizeContents(1000,1400);
+    resizeContentsMM(m_doc->pageLayout().width(),m_doc->pageLayout().height());
+    connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(contentsMoving(int, int)));
 }
 
 void GCanvas::setRulers(Ruler *hruler, Ruler *vruler) {
@@ -51,6 +52,13 @@ void GCanvas::showMousePos(bool show) {
     m_horizontal->showMousePos(show);
 }
 
+void GCanvas::resizeContentsMM(const double &x, const double &y) {
+    GraphiteGlobal::self()->setZoom(m_view->zoom());
+    double zoomedRes=GraphiteGlobal::self()->zoomedResolution();
+    resizeContents(Graphite::double2Int(x*zoomedRes),
+                   Graphite::double2Int(y*zoomedRes));
+}
+
 void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
     m_vertical->setMousePos(e->x()-contentsX(), e->y()-contentsY());
     m_horizontal->setMousePos(e->x()-contentsX(), e->y()-contentsY());
@@ -59,7 +67,9 @@ void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
 
 void GCanvas::viewportPaintEvent(QPaintEvent *e) {
 
+    kdDebug() << "GCanvas::viewportPaintEvent" << endl;
     m_doc->setGlobalZoom(m_view->zoom());
+    viewport()->erase(0, 0, m_eraseWidth, m_eraseHeight);
     QPainter p(viewport());
     p.setClipRect(e->rect());
 #ifdef GRAPHITE_DEBUG_PAINTING
@@ -111,6 +121,25 @@ bool GCanvas::eventFilter(QObject *obj, QEvent *e) {
     else if(e->type()==QEvent::Leave)
         showMousePos(false);
     return QScrollView::eventFilter(obj, e);
+}
+
+void GCanvas::contentsMoving(int x, int y) {
+
+    static int oldX=0;
+    static int oldY=0;
+    m_eraseWidth=oldX-x;
+    m_eraseHeight=oldY-y;
+
+    if(m_eraseHeight!=0 && m_eraseWidth!=0) {
+        m_eraseHeight=0;
+        m_eraseWidth=0;
+    }
+    else if(m_eraseWidth==0)
+        m_eraseWidth=visibleWidth();
+    else if(m_eraseHeight==0)
+        m_eraseHeight=visibleHeight();
+    oldX=x;
+    oldY=y;
 }
 
 #include <gcanvas.moc>
