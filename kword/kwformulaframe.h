@@ -91,6 +91,10 @@ public:
 
     void showPopup( KWFrame *, KWView *view, const QPoint &point );
 
+    // TODO support for protecting the formula's contents
+    virtual void setProtectContent ( bool ) {}
+    virtual bool protectContent() const { return false; }
+
 protected slots:
 
     void slotFormulaChanged( double width, double height );

@@ -60,6 +60,7 @@ class KWTableStyleCollection;
 class KWTableTemplateCollection;
 class KWFootNoteVariable;
 class DCOPObject;
+class KWLoadingInfo;
 
 class QFont;
 class QStringList;
@@ -82,6 +83,7 @@ class KoOasisContext;
 #include <kozoomhandler.h>
 #include <koUnit.h>
 #include "kwanchorpos.h"
+#include "kwbookmark.h"
 #include "defs.h"
 
 #include <qmap.h>
@@ -111,48 +113,6 @@ public:
 protected:
     KWDocument *m_pKWordDoc;
     KWPartFrameSet *m_partFrameSet;
-};
-
-struct bookMark
-{
-    QString bookname;
-    int paragStartIndex;
-    int paragEndIndex;
-    QString frameSetName;
-    int cursorStartIndex;
-    int cursorEndIndex;
-};
-
-class KWBookMark
-{
-public:
-    KWBookMark(const QString &_name);
-    KWBookMark(const QString &_name, KoTextParag *_startParag, KoTextParag *_endParag, KWFrameSet *_frameSet, int _start, int _end);
-    ~KWBookMark();
-    QString bookMarkName()const { return m_name;}
-    void setBookMarkName( const QString & _name ) { m_name = _name;}
-    KWFrameSet * frameSet()const{ return m_frameSet;}
-    void setFrameSet(KWFrameSet * _frame) { m_frameSet = _frame;}
-
-    KoTextParag *startParag() const { return m_startParag;}
-    void setStartParag( KoTextParag *_parag ) { m_startParag = _parag;}
-
-    KoTextParag *endParag() const { return m_endParag;}
-    void setEndParag( KoTextParag *_parag ) { m_endParag = _parag;}
-
-    void setBookmarkStartIndex( int _pos ) { m_startIndex = _pos;}
-    int bookmarkStartIndex() const  { return m_startIndex ; }
-
-    void setBookmarkEndIndex( int _end ) { m_endIndex = _end;}
-    int bookmarkEndIndex() const  { return m_endIndex ; }
-
-private:
-    QString m_name;
-    KoTextParag *m_startParag;
-    KoTextParag *m_endParag;
-    KWFrameSet *m_frameSet;
-    int m_startIndex;
-    int m_endIndex;
 };
 
 /******************************************************************/
@@ -846,6 +806,8 @@ public:
     bool globalHyphenation() const { return m_bGlobalHyphenation; }
     void setGlobalHyphenation ( bool _hyphen ) { m_bGlobalHyphenation = _hyphen; }
 
+    KWLoadingInfo* loadingInfo() const { return m_loadingInfo; }
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -950,6 +912,7 @@ private:
     // The viewmode used by all views.
     KWViewMode *m_viewMode;
 
+    ////////////// Legacy loading stuff, remove when switching to OASIS ////////
     // Shared between loadXML and loadComplete
     QString m_urlIntern;
 
@@ -959,7 +922,8 @@ private:
     QPtrList<KWTextImage> m_textImageRequests;
     QPtrList<KWPictureFrameSet> m_pictureRequests;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
-    QMap<QString, KWFootNoteVariable *> m_footnoteVarRequests;
+    QMap<QString, KWFootNoteVariable *> m_footnoteVarRequests; // still needed? (move to KWLoadingInfo if so)
+    ////////// End of legacy loading stuff ////////////
 
     QMap<QString,QString> * m_pasteFramesetsMap;
 
@@ -1032,12 +996,13 @@ private:
     KWFrameSet * bgFrameSpellChecked;
     QPixmap* m_bufPixmap;
 
+    KWLoadingInfo* m_loadingInfo;
+
+    // Remains alive a little bit longer than the loading info (until KWCanvas ctor)
     class InitialEditing;
     InitialEditing *m_initialEditing;
 
-    QPtrList<KWBookMark>m_bookmarkList;
-    //necessary before when we load bookmark.
-    QPtrList<bookMark>m_tmpBookMarkList;
+    QPtrList<KWBookMark> m_bookmarkList;
 
     QStringList m_personalExpressionPath;
     QString m_picturePath;

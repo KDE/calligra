@@ -62,7 +62,7 @@ KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
 
 bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& context,
                                   KoTextParag* parag, int pos,
-                                  QString& textData, KoTextCustomItem* & /*customItem*/ )
+                                  QString& /*textData*/, KoTextCustomItem* & /*customItem*/ )
 {
     const QString tagName( tag.tagName() );
     const bool textFoo = tagName.startsWith( "text:" );
@@ -83,14 +83,18 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
         }
         if ( tagName == "draw:text-box" )
         {
-            textData = '#'; // anchor placeholder
-            // TODO new KWTextFrameSet
-            // TODO anchorFrameset( frameName, parag, pos );
-            return false;
+            // We don't support multiple frames for inline text-framesets at the moment,
+            // so we don't obey style:chain-next-name
+            // ###### In fact this shows we should inline frames, not framesets, in KWord (!!!!) (big TODO)
+            KWTextFrameSet* fs = new KWTextFrameSet( m_textfs->kWordDocument(), tag, context );
+            m_textfs->kWordDocument()->addFrameSet( fs, false );
+            fs->loadOasis( tag, context );
+            fs->setAnchored( m_textfs, parag, pos, false /*no placeholder yet*/, false /*don't repaint yet*/ );
+            return true;
         }
     }
 
-#if 0 // TODO
+#if 0 // TODO Implement loading of following Oasis tags
     if ( textFoo &&
          ( tagName == "text:footnote" || tagName == "text:endnote" ) )
         {

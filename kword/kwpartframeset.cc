@@ -27,7 +27,7 @@
 #include <klocale.h>
 
 KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name )
-    : KWFrameSet( _doc )
+    : KWFrameSet( _doc ), m_protectContent( false )
 {
     m_child = _child;
     m_child->setPartFrameSet( this );
@@ -159,6 +159,9 @@ MouseMeaning KWPartFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState
 
 void KWPartFrameSet::startEditing()
 {
+    // Content is protected -> can't edit. Maybe we should open part in readonly mode?
+    if ( m_protectContent )
+        return;
     kdDebug() << k_funcinfo << endl;
     //create undo/redo move command
     KWFrame* frame = frames.first();

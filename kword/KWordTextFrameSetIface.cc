@@ -247,14 +247,15 @@ void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType)
     delete cmd;
 }
 
+// ## move to KWordFrameSetIface
 void KWordTextFrameSetIface::setProtectContent ( bool _protect )
 {
-    m_frametext->textObject()->setProtectContent( _protect );
+    m_frametext->setProtectContent( _protect );
 }
 
 bool KWordTextFrameSetIface::isProtectContent() const
 {
-    return m_frametext->textObject()->protectContent();
+    return m_frametext->protectContent();
 }
 
 /*

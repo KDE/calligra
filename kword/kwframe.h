@@ -276,7 +276,7 @@ public:
     /** read attributes from XML. @p headerOrFooter if true some defaults are different
      */
     void load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVersion );
-    void loadCommonOasisProperties( KoOasisContext& context );
+    void loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet );
 
     void setMinFrameHeight(double h);
     double minFrameHeight(void)const {return m_minFrameHeight;}
@@ -783,6 +783,9 @@ public:
     /** set z-order for all frames */
     virtual void setZOrder();
 
+    virtual void setProtectContent ( bool protect ) = 0;
+    virtual bool protectContent() const = 0;
+
 signals:
 
     // Emitted when something has changed in this frameset,
@@ -890,6 +893,10 @@ public:
 
     bool keepAspectRatio() const;
     void setKeepAspectRatio( bool b );
+
+    virtual void setProtectContent ( bool protect ) { m_protectContent = protect; }
+    virtual bool protectContent() const { return m_protectContent; }
+
 protected:
     void loadOasis( const QDomElement& tag, KoOasisContext& context );
 
@@ -898,6 +905,7 @@ protected:
     bool m_keepAspectRatio;
     /// Cache the finalSize parameter of the method resizeFrame for drawFrame
     bool m_finalSize;
+    bool m_protectContent;
 };
 
 #if 0 // KWORD_HORIZONTAL_LINE

@@ -2317,7 +2317,7 @@ void KWTableFrameSet::setRightBorder(KoBorder newBorder)
     }
 }
 
-KCommand *KWTableFrameSet::setProtectContent( bool _protect )
+KCommand *KWTableFrameSet::setProtectContentCommand( bool _protect )
 {
     KMacroCommand *macro = 0L;
     for (TableIter cell(this) ; cell ; ++cell  ) {

@@ -56,9 +56,11 @@ class KWTextFrameSet : public KWFrameSet, public KoTextFlow, public KoTextFormat
 {
     Q_OBJECT
 public:
-    /** constructor */
+    /// Cnstructor
     KWTextFrameSet( KWDocument *_doc, const QString & name );
-    /** destructor */
+    /// Used for OASIS loading
+    KWTextFrameSet( KWDocument* doc, const QDomElement& tag, KoOasisContext& context );
+    /// Destructor
     ~KWTextFrameSet();
 
     virtual KWordFrameSetIface* dcopObject();
@@ -143,7 +145,8 @@ public:
     { return saveInternal( parentElem, saveFrames, true ); }
 
     virtual void load( QDomElement &attributes, bool loadFrames = true );
-    void loadOasis( const QDomElement &bodyElem, KoOasisContext& context );
+    void loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context );
+    KWFrame* loadOasis( const QDomElement &bodyElem, KoOasisContext& context );
 
     virtual void finalize();
     virtual void zoom( bool forPrint );
@@ -303,7 +306,8 @@ protected slots:
     void slotParagraphCreated(KoTextParag*_parag);
     void slotParagraphModified(KoTextParag*_parag, int /*KoTextParag::ParagModifyType*/, int, int);
 
-protected:
+private:
+    void init();
     void slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *lastFormatted, bool* abort );
     void slotAfterFormattingTooMuchSpace( int bottom, bool* abort );
     void getMargins( int yp, int h, int reqMinWidth, int* marginLeft, int* marginRight, int* pageWidth, int* validHeight,

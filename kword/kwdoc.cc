@@ -72,6 +72,7 @@
 #include <koSconfig.h>
 
 #include "koApplication.h"
+#include "kwloadinginfo.h"
 #include <kooasiscontext.h>
 
 //#define DEBUG_PAGES
@@ -164,7 +165,7 @@ void KWDocument::clearUndoRedoInfos()
 
 /**
  * Temporary storage for the initial edition info
- * (activeFrameset, cursorParagraph and cursorIndex attributes of the XML
+ * (activeFrameset, cursorParagraph and cursorIndex attributes of the XML)
  */
 class KWDocument::InitialEditing {
 public:
@@ -172,33 +173,6 @@ public:
     int m_initialCursorParag;
     int m_initialCursorIndex;
 };
-
-KWBookMark::KWBookMark(const QString &_name)
-    : m_name(_name),
-      m_startParag(0L),
-      m_endParag(0L),
-      m_frameSet(0L),
-      m_startIndex( 0 ),
-      m_endIndex( 0)
-{
-}
-
-KWBookMark::KWBookMark(const QString &_name, KoTextParag *_startParag, KoTextParag *_endParag,KWFrameSet *_frameSet, int _pos, int _end)
-    : m_name(_name),
-      m_startParag(_startParag),
-      m_endParag(_endParag),
-      m_frameSet(_frameSet),
-      m_startIndex( _pos ),
-      m_endIndex( _end )
-{
-}
-
-KWBookMark::~KWBookMark()
-{
-    m_startParag=0L;
-    m_endParag=0L;
-    m_frameSet=0L;
-}
 
 /******************************************************************/
 /* Class: KWDocument                                              */
@@ -379,7 +353,7 @@ KWDocument::~KWDocument()
     // formula frames have to be deleted before m_formulaDocumentWrapper
     m_lstFrameSet.clear();
     m_bookmarkList.clear();
-    m_tmpBookMarkList.clear();
+    delete m_loadingInfo;
     delete m_autoFormat;
     delete m_formulaDocumentWrapper;
     delete m_commandHistory;
@@ -1192,6 +1166,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         m_footerVisible = false;
     }
 
+    m_loadingInfo = new KWLoadingInfo;
+
     // <text:page-sequence> oasis extension for DTP (2003-10-27 post by Daniel)
     m_processingType = ( body.firstChild().toElement().tagName() == "text:page-sequence" )
                        ? DTP : WP;
@@ -1306,6 +1282,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             return false;
         }
     }
+
+    m_loadingInfo = new KWLoadingInfo;
 
     // Looks like support for the old way of naming images internally,
     // see completeLoading.
@@ -1483,23 +1461,24 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     QDomElement bookmark = word.namedItem( "BOOKMARKS" ).toElement();
     if( !bookmark.isNull() )
     {
-        QDomElement bookmarkitem=word.namedItem("BOOKMARKS").toElement();
-        bookmarkitem=bookmarkitem.firstChild().toElement();
+        QDomElement bookmarkitem = word.namedItem("BOOKMARKS").toElement();
+        bookmarkitem = bookmarkitem.firstChild().toElement();
 
         while ( !bookmarkitem.isNull() )
         {
-            if ( bookmarkitem.tagName()=="BOOKMARKITEM" )
+            if ( bookmarkitem.tagName() == "BOOKMARKITEM" )
             {
-                bookMark *tmp=new bookMark;
-                tmp->bookname=bookmarkitem.attribute("name");
-                tmp->cursorStartIndex=bookmarkitem.attribute("cursorIndexStart").toInt();
-                tmp->frameSetName=bookmarkitem.attribute("frameset");
-                tmp->paragStartIndex = bookmarkitem.attribute("startparag").toInt();
-                tmp->paragEndIndex = bookmarkitem.attribute("endparag").toInt();
-                tmp->cursorEndIndex = bookmarkitem.attribute("cursorIndexEnd").toInt();
-                m_tmpBookMarkList.append(tmp);
+                KWLoadingInfo::BookMark bk;
+                bk.bookname=bookmarkitem.attribute("name");
+                bk.cursorStartIndex=bookmarkitem.attribute("cursorIndexStart").toInt();
+                bk.frameSetName=bookmarkitem.attribute("frameset");
+                bk.paragStartIndex = bookmarkitem.attribute("startparag").toInt();
+                bk.paragEndIndex = bookmarkitem.attribute("endparag").toInt();
+                bk.cursorEndIndex = bookmarkitem.attribute("cursorIndexEnd").toInt();
+                Q_ASSERT( m_loadingInfo );
+                m_loadingInfo->bookMarkList.append( bk );
             }
-            bookmarkitem=bookmarkitem.nextSibling().toElement();
+            bookmarkitem = bookmarkitem.nextSibling().toElement();
         }
     }
 
@@ -2228,6 +2207,14 @@ bool KWDocument::completeLoading( KoStore *_store )
     //attributes isReadWrite is not placed at the beginning !
     if ( !isReadWrite())
         enableBackgroundSpellCheck( false );
+
+    // Load bookmarks
+    initBookmarkList();
+
+    // Delete loading info
+    delete m_loadingInfo;
+    m_loadingInfo = 0;
+
     return true;
 }
 
@@ -5071,40 +5058,38 @@ void KWDocument::paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm )
 
 void KWDocument::initBookmarkList()
 {
-    QPtrListIterator<bookMark> book(m_tmpBookMarkList);
-    for ( ; book.current() ; ++book )
+    Q_ASSERT( m_loadingInfo );
+    if ( !m_loadingInfo )
+        return;
+    KWLoadingInfo::BookMarkList bookmarks();
+    KWLoadingInfo::BookMarkList::Iterator it = m_loadingInfo->bookMarkList.begin();
+    KWLoadingInfo::BookMarkList::Iterator end = m_loadingInfo->bookMarkList.end();
+    for( ; it != end; ++it )
     {
         KWFrameSet * fs = 0L;
-        QString fsName = book.current()->frameSetName;
+        QString fsName = (*it).frameSetName;
         if ( !fsName.isEmpty() )
             fs = frameSetByName( fsName );
         if ( fs )
         {
             KWTextFrameSet *frm = dynamic_cast<KWTextFrameSet *>(fs);
-            if ( frm)
+            if ( frm )
             {
-                KWBookMark *tmp =new KWBookMark( book.current()->bookname);
-                tmp->setFrameSet(frm);
-                KWTextParag* startparag = dynamic_cast<KWTextParag*>(frm->textDocument()->paragAt( book.current()->paragStartIndex ));
-                KWTextParag* endparag = dynamic_cast<KWTextParag*>(frm->textDocument()->paragAt( book.current()->paragEndIndex ));
-
-                if ( !startparag || !endparag)
+                KoTextParag* startparag = frm->textDocument()->paragAt( (*it).paragStartIndex );
+                KoTextParag* endparag = frm->textDocument()->paragAt( (*it).paragEndIndex );
+                if ( startparag && endparag )
                 {
-                    delete tmp;
-                }
-                else
-                {
-                    tmp->setStartParag( startparag );
-                    tmp->setEndParag( endparag );
-                    tmp->setBookmarkStartIndex( book.current()->cursorStartIndex);
-                    tmp->setBookmarkEndIndex( book.current()->cursorEndIndex);
-                    m_bookmarkList.append( tmp );
+                    KWBookMark *bk = new KWBookMark( (*it).bookname );
+                    bk->setFrameSet( frm );
+                    bk->setStartParag( startparag );
+                    bk->setEndParag( endparag );
+                    bk->setBookmarkStartIndex( (*it).cursorStartIndex );
+                    bk->setBookmarkEndIndex( (*it).cursorEndIndex );
+                    m_bookmarkList.append( bk );
                 }
             }
         }
     }
-    m_tmpBookMarkList.setAutoDelete( true );
-    m_tmpBookMarkList.clear();
 }
 
 QPixmap* KWDocument::doubleBufferPixmap( const QSize& s )

@@ -551,7 +551,7 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
     m_zOrder = frameElem.attribute( "z-index" ).toInt();
 }
 
-void KWFrame::loadCommonOasisProperties( KoOasisContext& context )
+void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet )
 {
     KoStyleStack& styleStack = context.styleStack();
     // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
@@ -585,7 +585,22 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context )
     // TODO more refined border spec for double borders (3.11.28)
 
     // TODO m_bCopy
-    // TODO m_newFrameBehavior
+
+    const QCString frameBehaviorOnNewPage = styleStack.attribute( "style:frame-behavior-on-new-page" ).latin1();
+    if ( frameBehaviorOnNewPage == "followup" )
+        m_newFrameBehavior = Reconnect;
+    else if ( frameBehaviorOnNewPage == "copy" )
+        m_newFrameBehavior = Copy;
+    else if ( frameBehaviorOnNewPage == "none" )
+        m_newFrameBehavior = NoFollowup;
+    else { // Defaults for OASIS documents not created by KWord
+        m_newFrameBehavior = frameSet->isHeaderOrFooter() ? Copy : NoFollowup;
+        if ( !frameBehaviorOnNewPage.isEmpty() )
+            kdWarning(32001) << "Unknown value for style:frame-behavior-on-new-page: " << frameBehaviorOnNewPage << endl;
+    }
+    // Footnotes and endnotes are handled in a special way.
+    if ( frameSet->isFootEndNote() ) // note that isFootNote/isEndNote are not possible yet
+        m_newFrameBehavior = NoFollowup;
 }
 
 bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) {
@@ -1506,20 +1521,6 @@ void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
     }
 }
 
-#if 0
-//
-// This function is intended as a helper for all the derived classes. It reads
-// in all the attributes common to all framesets and loads all frames.
-//
-void KWFrameSet::loadOasis( QDomElement &bodyElem, bool loadFrames )
-{
-    // TODO removableheader
-    // TODO protectSize
-    // TODO visible?
-    // TODO load frames (see loadOasisFrames)
-}
-#endif
-
 //
 // This function is intended as a helper for all the derived classes. It reads
 // in all the attributes common to all framesets and loads all frames.
@@ -1565,7 +1566,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
         // min-width is not supported in KWord. Let's use it as a fixed width.
         width = KoUnit::parseValue( tag.attribute( "fo:min-width" ) );
     } else {
-        kdWarning(32001) << "Error in text-box: neither width nor min-width specified!" << endl;
+        kdWarning(32001) << "Error in frame " << tag.tagName() << " " << tag.attribute( "draw:name" ) << " : neither width nor min-width specified!" << endl;
     }
     double height = 100;
     bool hasMinHeight = false;
@@ -1576,7 +1577,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
         height = KoUnit::parseValue( tag.attribute( "fo:min-height" ) );
         hasMinHeight = true;
     } else {
-        kdWarning(32001) << "Error in text-box: neither height nor min-height specified!" << endl;
+        kdWarning(32001) << "Error in frame " << tag.tagName() << " " << tag.attribute( "draw:name" ) << " : neither height nor min-height specified!" << endl;
     }
     //kdDebug(32001) << k_funcinfo << "width=" << width << " height=" << height << " pt" << endl;
 
@@ -1609,9 +1610,38 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
         frame->setMinFrameHeight( height );
     frame->setRunAroundSide( runAroundSide );
     frame->setZOrder( tag.attribute( "draw:z-index" ).toInt() );
-    frame->loadCommonOasisProperties( context );
+    frame->loadCommonOasisProperties( context, this );
+
+    // Load overflow behavior (OASIS 14.27.27, not in OO-1.1 DTD). This is here since it's only for text framesets.
+    const QCString overflowBehavior = context.styleStack().attribute( "style:overflow-behavior" ).latin1();
+    if ( overflowBehavior == "clip" )
+        frame->setFrameBehavior( KWFrame::Ignore );
+    else if ( overflowBehavior.isEmpty() || overflowBehavior == "auto-create-new-frame" )
+    {
+        if ( hasMinHeight )
+            frame->setFrameBehavior( KWFrame::AutoExtendFrame );
+        else {
+            frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
+            frame->setNewFrameBehavior( KWFrame::Reconnect ); // anything else doesn't make sense
+        }
+    }
+    else
+        kdWarning(32001) << "Unknown value for style:overflow-behavior: " << overflowBehavior << endl;
 
     addFrame( frame, false );
+
+    // Protect (OASIS 14.27.7, also in OO-1.1)
+    // A frame with protected contents means that the frameset is protected (makes sense)
+    // A frame with protected size means that the frameset is size-protected (hmm, kword did it that way)
+    // TODO implement position protection
+    QString protectList = context.styleStack().attribute( "style:protect" );
+    if ( protectList.contains( "content" ) )
+        setProtectContent( true );
+    if ( protectList.contains( "size" ) )
+        m_protectSize = true;
+
+    // TODO m_visible ? User-toggeable or internal?
+
     return frame;
 }
 
@@ -1916,7 +1946,7 @@ void KWFrameSetEdit::showPopup( KWFrame* frame, KWView* view, const QPoint & _po
 /* Class: KWPictureFrameSet                                       */
 /******************************************************************/
 KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
-    : KWFrameSet( _doc ), m_keepAspectRatio( true ), m_finalSize( false )
+    : KWFrameSet( _doc ), m_keepAspectRatio( true ), m_finalSize( false ), m_protectContent( false )
 {
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Picture %1" ) );

@@ -58,6 +58,7 @@
 #include <kdebugclasses.h>
 #endif
 #include <assert.h>
+#include "kwloadinginfo.h"
 
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY
@@ -102,17 +103,34 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
         m_name = name;
 
     QObject::setName( m_name.utf8() ); // store name in the QObject, for DCOP users
+    init();
+}
+
+KWTextFrameSet::KWTextFrameSet( KWDocument* doc, const QDomElement& tag, KoOasisContext& /*context*/ )
+    : KWFrameSet( doc )
+{
+    m_name = tag.attribute( "draw:name" );
+    if ( doc->frameSetByName( m_name ) ) // already exists!
+        m_name = doc->generateFramesetName( m_name + " %1" );
+    init();
+    // Note that we don't call loadOasis here. The caller wants to do it,
+    // to get the frame it returns.
+}
+
+void KWTextFrameSet::init()
+{
     m_currentViewMode = 0L;
     m_currentDrawnFrame = 0L;
     m_lastTextDocHeight = 0;
     // Create the text document to set in the text object
     KWTextDocument* textdoc = new KWTextDocument( this,
-        new KoTextFormatCollection( _doc->defaultFont(), QColor(), _doc->globalLanguage(), _doc->globalHyphenation(), 1.0 ),
-                                                  new KWTextFormatter( this ) );
+        new KoTextFormatCollection( m_doc->defaultFont(), QColor(), m_doc->globalLanguage(),
+                                    m_doc->globalHyphenation(), 1.0 ),
+        new KWTextFormatter( this ) );
     textdoc->setFlow( this );
     textdoc->setPageBreakEnabled( true );              // get verticalBreak to be called
-    if ( _doc->tabStopValue() != -1 )
-        textdoc->setTabStops( _doc->ptToLayoutUnitPixX( _doc->tabStopValue() ));
+    if ( m_doc->tabStopValue() != -1 )
+        textdoc->setTabStops( m_doc->ptToLayoutUnitPixX( m_doc->tabStopValue() ));
 
     m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ),
                                   this, (m_name+"-textobj").utf8() );
@@ -136,7 +154,6 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
              SLOT( slotParagraphCreated(KoTextParag*) ));
     connect( m_textobj, SIGNAL( paragraphModified( KoTextParag*, int, int, int) ),
              SLOT( slotParagraphModified(KoTextParag*, int, int, int) ));
-
 }
 
 void KWTextFrameSet::slotParagraphModified(KoTextParag* _parag, int /*KoTextParag::ParagModifyType*/ _type, int start, int lenght)
@@ -1812,17 +1829,17 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
     for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
     {
         context.styleStack().save();
-        QDomElement e = text.toElement();
-        const QString tagName = e.tagName();
+        QDomElement tag = text.toElement();
+        const QString tagName = tag.tagName();
         const bool textFoo = tagName.startsWith( "text:" );
 
         if ( textFoo )
         {
             if ( tagName == "text:p" ) {  // text paragraph
-                context.fillStyleStack( e, "text:style-name" );
+                context.fillStyleStack( tag, "text:style-name" );
 
                 KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
-                parag->loadOasis( e, context, m_doc->styleCollection() );
+                parag->loadOasis( tag, context, m_doc->styleCollection() );
                 if ( !lastParagraph )        // First parag
                     textDocument()->setFirstParag( parag );
                 lastParagraph = parag;
@@ -1830,8 +1847,8 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
             }
             else if ( tagName == "text:h" ) // heading
             {
-                context.fillStyleStack( e, "text:style-name" );
-                int level = e.attribute( "text:level" ).toInt();
+                context.fillStyleStack( tag, "text:style-name" );
+                int level = tag.attribute( "text:level" ).toInt();
                 bool listOK = false;
                 // When a heading is inside a list, it seems that the list prevails.
                 // Example:
@@ -1845,12 +1862,12 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
                 // === The new method for this is that we simply override it in parseList, afterwards.
                 listOK = context.pushOutlineListLevelStyle( level );
                 int restartNumbering = -1;
-                if ( e.hasAttribute( "text:start-value" ) )
+                if ( tag.hasAttribute( "text:start-value" ) )
                     // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
-                    restartNumbering = e.attribute( "text:start-value" ).toInt();
+                    restartNumbering = tag.attribute( "text:start-value" ).toInt();
 
                 KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
-                parag->loadOasis( e, context, m_doc->styleCollection() );
+                parag->loadOasis( tag, context, m_doc->styleCollection() );
                 if ( !lastParagraph )        // First parag
                     textDocument()->setFirstParag( parag );
                 lastParagraph = parag;
@@ -1862,28 +1879,28 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
             else if ( tagName == "text:unordered-list" || tagName == "text:ordered-list" // OOo-1.1
                       || tagName == "text:list" )  // OASIS
             {
-                lastParagraph = loadList( e, context, lastParagraph );
+                lastParagraph = loadList( tag, context, lastParagraph );
                 context.styleStack().restore();
                 continue;
             }
             else if ( tagName == "text:section" ) // Provisory support (###TODO)
             {
                 kdDebug(32002) << "Section found!" << endl;
-                context.fillStyleStack( e, "text:style-name" );
-                lastParagraph = loadOasisText( e, context, lastParagraph );
+                context.fillStyleStack( tag, "text:style-name" );
+                lastParagraph = loadOasisText( tag, context, lastParagraph );
             }
             else if ( tagName == "text:variable-decls" )
             {
                 // We don't parse variable-decls since we ignore var types right now
                 // (and just storing a list of available var names wouldn't be much use)
             }
-#if 0 // TODO
+#if 0 // TODO (OASIS text:table-of-content)
             else if ( tagName == "text:table-of-content" )
             {
                 appendTOC( e );
             }
 #endif
-            // TODO text:sequence-decls
+            // TODO OASIS text:sequence-decls
             else
             {
                 kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
@@ -1891,22 +1908,73 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
         }
         else // not text:
         {
-            if ( tagName == "draw:image" )
+            if ( tagName == "draw:frame" ) {
+                kdWarning(32001) << "Loading of OASIS element draw:frame not implemented yet! Please report this." << endl;
+                // TODO draw:frame is an OASIS change
+                // IIRC this means moving draw:image and draw:text-box
+                // here, being the child element of the draw:frame
+                // and loading the frame attributes from the draw:frame element.
+            }
+            else if ( tagName == "draw:image" )
             {
-                KWFrameSet* fs = new KWPictureFrameSet( m_doc, e, context );
+                KWFrameSet* fs = new KWPictureFrameSet( m_doc, tag, context );
                 m_doc->addFrameSet( fs, false );
             }
-#if 0
+#if 0 // TODO OASIS table:table
             if ( tagName == "table:table" )
             {
                 kdDebug(32002) << "Table found!" << endl;
-                parseTable( e, currentFramesetElement );
-            }
-            else if ( tagName == "draw:text-box" )
-            {
-                appendTextBox( e );
+                parseTable( tag, currentFramesetElement );
             }
 #endif
+            else if ( tagName == "draw:text-box" )
+            {
+                // Text frame chains. When seeing frame 'B' is chained to this frame A when loading,
+                // we store 'B' -> A, so that when loading B we can add it to A's frameset.
+                // If we load B first, no problem: when loading A we can chain.
+                // This is all made simpler by the fact that we don't have manually configurable order in KWord...
+                // But it's made more complex by the fact that frames don't have names in KWord (framesets do).
+                // Hence the framename temporary storage in KWLoadingInfo
+
+                KWTextFrameSet* fs = 0;
+                QString frameName = tag.attribute( "draw:name" );
+                QString chainNextName = tag.attribute( "draw:chain-next-name" );
+                if ( !chainNextName.isEmpty() ) { // 'B' in the above example
+                    //kdDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
+                    // Check if we already loaded that frame (then we need to go 'before' it)
+                    KWFrame* nextFrame = m_doc->loadingInfo()->frameByName( chainNextName );
+                    if ( nextFrame ) {
+                        fs = dynamic_cast<KWTextFrameSet *>( nextFrame->frameSet() );
+                        chainNextName = QString::null; // already found, no need to store it
+                        //kdDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->getName() : QString::null ) << endl;
+                    }
+                }
+                KWFrame* prevFrame = m_doc->loadingInfo()->chainPrevFrame( frameName );
+                //kdDebug(32001) << "Loading " << frameName << " : chainPrevFrame=" << prevFrame << endl;
+                if ( prevFrame ) {
+                    if ( fs ) // we are between prevFrame and nextFrame. They'd better be for the same fs!!
+                        Q_ASSERT( fs == prevFrame->frameSet() );
+                    fs = dynamic_cast<KWTextFrameSet *>( prevFrame->frameSet() );
+                    //kdDebug(32001) << "  found " << prevFrame << " -> frameset " << fs->getName() << endl;
+                }
+                KWFrame* frame = 0;
+                if ( !fs ) {
+                    fs = new KWTextFrameSet( m_doc, tag, context );
+                    m_doc->addFrameSet( fs, false );
+                    frame = fs->loadOasis( tag, context );
+                } else { // Adding frame to existing frameset
+                    context.styleStack().save();
+                    context.fillStyleStack( tag, "draw:style-name" ); // get the style for the graphics element
+                    frame = loadOasisFrame( tag, context );
+                    context.styleStack().restore();
+                }
+
+                m_doc->loadingInfo()->storeFrameName( frame, frameName );
+
+                if ( !chainNextName.isEmpty() ) {
+                    m_doc->loadingInfo()->storeNextFrame( frame, chainNextName );
+                }
+            }
             else
             {
                 kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
@@ -1918,7 +1986,7 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
     return lastParagraph;
 }
 
-void KWTextFrameSet::loadOasis( const QDomElement &bodyElem, KoOasisContext& context )
+void KWTextFrameSet::loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context )
 {
     textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
     m_textobj->setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
@@ -1935,6 +2003,17 @@ void KWTextFrameSet::loadOasis( const QDomElement &bodyElem, KoOasisContext& con
         textDocument()->setLastParag( lastParagraph );
 
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
+}
+
+KWFrame* KWTextFrameSet::loadOasis( const QDomElement &tag, KoOasisContext& context )
+{
+    context.styleStack().save();
+    context.fillStyleStack( tag, "draw:style-name" ); // get the style for the graphics element
+    KWFrame* frame = loadOasisFrame( tag, context );
+    context.styleStack().restore();
+
+    loadOasisContent( tag, context );
+    return frame;
 }
 
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
@@ -2564,7 +2643,7 @@ bool KWTextFrameSet::canRemovePage( int num )
 void KWTextFrameSet::delFrame( unsigned int num, bool remove, bool recalc )
 {
     KWFrame *frm = frames.at( num );
-    kdDebug() << "KWTextFrameSet(" << this << ")::delFrame " << frm << " (" << num << ")" << endl;
+    kdDebug() << "KWTextFrameSet(" << getName() << ")::delFrame " << frm << " (" << num << ")" << endl;
     if ( frm )
         emit frameDeleted( frm );
     KWFrameSet::delFrame( num, remove, recalc );

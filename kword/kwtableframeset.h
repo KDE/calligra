@@ -522,7 +522,12 @@ public:
     */
     void setRightBorder(KoBorder newBorder);
 
-    KCommand *setProtectContent ( bool _protect );
+    KCommand *setProtectContentCommand ( bool _protect );
+
+    // The normal mechanism doesn't apply to tables; cells are protected individually 
+    // (in terms of data; the GUI has an item for protecting all cells at once)
+    virtual void setProtectContent ( bool ) {}
+    virtual bool protectContent() const { return false; }
 
     virtual KWTextFrameSet* nextTextObject( KWFrameSet * );
     /**

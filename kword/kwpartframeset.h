@@ -92,12 +92,16 @@ public:
 
     virtual void storeInternal();
 
-private:
-    KWChild *m_child;
-    KWFramePartMoveCommand *m_cmdMoveChild;
+    virtual void setProtectContent (  bool protect ) { m_protectContent = protect; }
+    virtual bool protectContent() const { return m_protectContent; }
 
 private slots:
     void slotChildChanged();
+
+private:
+    KWChild *m_child;
+    KWFramePartMoveCommand *m_cmdMoveChild;
+    bool m_protectContent;
 };
 
 #if 0

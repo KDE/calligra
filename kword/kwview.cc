@@ -4154,7 +4154,7 @@ void KWView::tableProtectCells()
     Q_ASSERT(table);
     if (!table)
         return;
-    KCommand *cmd = table->setProtectContent ( actionTableProtectCells->isChecked() );
+    KCommand *cmd = table->setProtectContentCommand( actionTableProtectCells->isChecked() );
     if ( cmd )
         m_doc->addCommand( cmd );
 }
@@ -5247,10 +5247,12 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
         {
             KWFrame *frame=m_doc->getFirstSelectedFrame();
             KWFrameSet *frameSet=frame->frameSet();
+            // ## TODO design: move this to KWFrameSet and derived classes (virtual method)
             if( frameSet->type()==FT_PICTURE )
             {
                 actionList.append(separator);
-                actionList.append(actionChangePicture);
+                if ( !frameSet->protectContent() )
+                    actionList.append(actionChangePicture);
                 actionList.append(actionSavePicture);
             }
 #if 0 // KWORD_HORIZONTAL_LINE
@@ -5872,6 +5874,8 @@ void KWView::changePicture()
 {
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
+    if ( frameset->protectContent() )
+        return;
     KoPictureKey oldKey ( frameset->picture().getKey() );
     QString oldFile ( oldKey.filename() );
     KURL url;
