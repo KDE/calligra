@@ -832,7 +832,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "ISERR",            126,  1 },
 	{ "ISTEXT",           127,  1 },
 	{ "ISNUMBER",         128,  1 },
-	{ "ISBALNK",          129,  1 },
+	{ "ISBLANK",          129,  1 },
 	{ "T",                130,  1 },
 	{ "N",                131,  1 },
 	{ "DATEVALUE",        140,  1 },
@@ -875,7 +875,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "ACOSH",            233,  1 },  /* EXCEL: ARCCOSHYP */
 	{ "ATANH",            234,  1 },  /* EXCEL: ARCTANHYP */
 	{ "DGET",             235,  3 },
-	{ "INFO",             244,  1 },  /* EXCEL: GDA2 */
+	{ "INFO",             244,  1 },
 	{ "DB",               247,  0 },  /* EXCEL: GDA2 */
 	{ "FREQUENCY",        252,  2 },
 	{ "ERRORTYPE",        261,  1 },
