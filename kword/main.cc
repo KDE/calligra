@@ -23,7 +23,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include "kwfactory.h"
+#include "kwaboutdata.h"
 #include <qfile.h>
 
 static const KCmdLineOptions options[]=
@@ -34,17 +34,17 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, KWFactory::aboutData());
+    KCmdLineArgs::init( argc, argv, newKWordAboutData());
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
 
     // #### this has to disappear
-    if ( QFile::exists( "bidi.txt" ) ) {
+/*    if ( QFile::exists( "bidi.txt" ) ) {
 	QFont fnt( app.font() );
 	fnt.setCharSet( QFont::Unicode );
 	app.setFont( fnt );
-    }
+    }*/
 
     if (!app.start()) {
 	return 1;

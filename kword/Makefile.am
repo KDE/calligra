@@ -3,11 +3,8 @@ KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula2 \
 	-I$(top_srcdir)/qt3stuff $(all_includes)
 
-lib_LTLIBRARIES = libkwordpart.la kword.la
-
 ## The part
-## Note that the application links to it (for the aboutdata),
-## so it can't be moved to kde_module (where normal parts are)
+kde_module_LTLIBRARIES = libkwordpart.la 
 libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
                 kwtextparag.cc kwstyle.cc \
 		paragdia.cc searchdia.cc \
@@ -24,9 +21,10 @@ libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula2/libkf
 libkwordpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
+lib_LTLIBRARIES = kword.la
 kword_la_SOURCES = main.cc
 kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kword_la_LIBADD = libkwordpart.la
+kword_la_LIBADD = ../lib/kofficecore/libkofficecore.la
 
 ## The executable
 bin_PROGRAMS = kword
