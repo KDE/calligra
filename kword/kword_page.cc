@@ -114,51 +114,51 @@ KWPage::KWPage(QWidget *parent,KWordDocument *_doc,KWordGUI *_gui)
 }
 
 /*================================================================*/
-unsigned int KWPage::ptLeftBorder() 
-{ 
-  return doc->getPTLeftBorder(); 
+unsigned int KWPage::ptLeftBorder()
+{
+  return doc->getPTLeftBorder();
 }
 
 /*================================================================*/
-unsigned int KWPage::ptRightBorder() 
-{ 
-  return doc->getPTRightBorder(); 
+unsigned int KWPage::ptRightBorder()
+{
+  return doc->getPTRightBorder();
 }
 
 /*================================================================*/
-unsigned int KWPage::ptTopBorder() 
-{ 
-  return doc->getPTTopBorder(); 
+unsigned int KWPage::ptTopBorder()
+{
+  return doc->getPTTopBorder();
 }
 
 /*================================================================*/
-unsigned int KWPage::ptBottomBorder() 
-{ 
-  return doc->getPTBottomBorder(); 
+unsigned int KWPage::ptBottomBorder()
+{
+  return doc->getPTBottomBorder();
 }
 
 /*================================================================*/
-unsigned int KWPage::ptPaperWidth() 
-{ 
-  return doc->getPTPaperWidth(); 
+unsigned int KWPage::ptPaperWidth()
+{
+  return doc->getPTPaperWidth();
 }
 
 /*================================================================*/
-unsigned int KWPage::ptPaperHeight() 
-{ 
-  return doc->getPTPaperHeight(); 
+unsigned int KWPage::ptPaperHeight()
+{
+  return doc->getPTPaperHeight();
 }
 
 /*================================================================*/
-unsigned int KWPage::ptColumnWidth() 
-{ 
-  return doc->getPTColumnWidth(); 
+unsigned int KWPage::ptColumnWidth()
+{
+  return doc->getPTColumnWidth();
 }
 
 /*================================================================*/
-unsigned int KWPage::ptColumnSpacing() 
-{ 
-  return doc->getPTColumnSpacing(); 
+unsigned int KWPage::ptColumnSpacing()
+{
+  return doc->getPTColumnSpacing();
 }
 
 /*================================================================*/
@@ -1093,7 +1093,7 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
   if (e->button() != LeftButton) return;
 
   stopBlinkCursor();
-  
+
   unsigned int mx = e->x() + xOffset;
   unsigned int my = e->y() + yOffset;
 
@@ -1171,7 +1171,7 @@ void KWPage::recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_f
   bool blinking = blinkTimer.isActive();
   if (blinking)
     stopBlinkCursor();
-  
+
   if (!_fc) _fc = fc;
 
   QPainter _painter;
@@ -1451,7 +1451,7 @@ void KWPage::recalcPage(KWParag *_p)
 void KWPage::paintEvent(QPaintEvent* e)
 {
   stopBlinkCursor();
-  
+
   QPainter painter;
   if (paint_directly)
     painter.begin(this);
@@ -1659,7 +1659,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
   if (mouseMode != MM_EDIT) return;
 
   stopBlinkCursor();
-  
+
   editModeChanged(e);
   doc->getAutoFormat().setEnabled(true);
 
@@ -2578,12 +2578,12 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 void KWPage::resizeEvent(QResizeEvent *)
 {
   stopBlinkCursor();
-  
+
   buffer.resize(width() < static_cast<int>(doc->getPTPaperWidth() + 20) ? width() : static_cast<int>(doc->getPTPaperWidth() + 20),
 		height());
   buffer.fill(white);
   calcVisiblePages();
-  
+
   startBlinkCursor();
 }
 
@@ -2630,7 +2630,7 @@ void KWPage::scrollToCursor(KWFormatContext &_fc)
 void KWPage::scrollToParag(KWParag *_parag)
 {
   stopBlinkCursor();
-  
+
   QPainter p;
   p.begin(this);
 
@@ -2645,7 +2645,7 @@ void KWPage::scrollToParag(KWParag *_parag)
   p.begin(this);
   doc->drawMarker(*fc,&p,xOffset,yOffset);
   p.end();
-  
+
   startBlinkCursor();
 }
 
@@ -4004,7 +4004,7 @@ bool KWPage::editModeChanged(QKeyEvent *e)
     }
 
   return false;
-  
+
   switch (e->key())
     {
     case Key_Delete:
@@ -4196,7 +4196,14 @@ void KWPage::startDrag()
 /*================================================================*/
 void KWPage::dragEnterEvent(QDragEnterEvent *e)
 {
-  //debug("void KWPage::dragEnterEvent(QDragEnterEvent *e)");
+  stopBlinkCursor();
+  //printf("void KWPage::dragEnterEvent(QDragEnterEvent *e)\n");
+}
+
+/*================================================================*/
+void KWPage::dragMoveEvent(QDragMoveEvent *e)
+{
+  //debug("void KWPage::dragMoveEvent(QDragMoveEvent *e)");
 
   if (KWordDrag::canDecode(e) ||
       QImageDrag::canDecode(e) ||
@@ -4283,14 +4290,9 @@ void KWPage::dragEnterEvent(QDragEnterEvent *e)
 }
 
 /*================================================================*/
-void KWPage::dragMoveEvent(QDragMoveEvent *e)
-{
-  //debug("void KWPage::dragMoveEvent(QDragMoveEvent *e)");
-}
-
-/*================================================================*/
 void KWPage::dragLeaveEvent(QDragLeaveEvent *e)
 {
+  startBlinkCursor();
   //debug("void KWPage::dragLeaveEvent(QDragLeaveEvent *e)");
 }
 
@@ -4394,6 +4396,7 @@ void KWPage::dropEvent(QDropEvent *e)
 	  doc->getAutoFormat().setEnabled(false);
 	}
     }
+  startBlinkCursor();
 }
 
 /*================================================================*/
@@ -4464,7 +4467,7 @@ void KWPage::stopBlinkCursor()
 {
   if (!cursorIsVisible)
     blinkCursor();
-  
+
   blinkTimer.stop();
 }
 
@@ -4476,13 +4479,13 @@ void KWPage::keyReleaseEvent(QKeyEvent *e)
 }
 
 /*================================================================*/
-void KWPage::focusInEvent(QFocusEvent *) 
+void KWPage::focusInEvent(QFocusEvent *)
 {
   startBlinkCursor();
 }
 
 /*================================================================*/
-void KWPage::focusOutEvent(QFocusEvent *) 
+void KWPage::focusOutEvent(QFocusEvent *)
 {
   stopBlinkCursor();
 }

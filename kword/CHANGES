@@ -1177,3 +1177,8 @@ Reggie, 6.5.1999:
 -----------------
 - Implemented blinking cursor
 - Disabled Undo/Redo for now (it's broken at the moment)
+
+Reggie, 12.5.1999:
+------------------
+- Fixed and improved Drag'n'Drop
+- Fixed a problem with blinking cursor
