@@ -71,7 +71,7 @@ StyleSheet::StyleSheet(const myFile &t, const FIB * const f) : table(t),
                 mySTD.style.lenPAPX=0;
             }
             else
-                kdebug(KDEBUG_ERROR, 31000, "StyleSheet::chain_rec(): Error: Don't know this stylesheet-format!");
+                kDebugError(31000, "StyleSheet::chain_rec(): Error: Don't know this stylesheet-format!");
             offset+=len;                            // next STD
             mySTD.istd=istd-1;
             styleMap.insert(sti, mySTD);
@@ -122,7 +122,7 @@ const bool StyleSheet::chain_rec(const unsigned short &istd) {
         QString d="StyleSheet::chain_rec(): ERROR: Didn't find istd(";
         d+=QString::number((long)istd);
         d+=")!";
-        kdebug(KDEBUG_ERROR, 31000, static_cast<const char*>(d));
+        kDebugError(31000, static_cast<const char*>(d));
     }
     return success;
 }

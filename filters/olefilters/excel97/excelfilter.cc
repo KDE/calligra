@@ -74,7 +74,7 @@ const QDomDocument * const ExcelFilter::part()
 {
 
   if(m_ready && m_success) {
-    //kdebug(KDEBUG_INFO, 31000, tree->part());
+    //kDebugInfo(31000, tree->part());
     return tree->part();
   }
   else {

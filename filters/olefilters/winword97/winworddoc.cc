@@ -36,7 +36,7 @@ WinWordDoc::WinWordDoc(QDomDocument &part, const myFile &mainStream,
     readFIB();
 
     if(m_fib->fEncrypted==1) {
-        kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::WinWordDoc(): Sorry - the document is encrypted.");
+        kDebugError(31000, "WinWordDoc::WinWordDoc(): Sorry - the document is encrypted.");
         m_success=false;
     }
     if(m_fib->fWhichTblStm==0)
@@ -239,7 +239,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
                               const unsigned char * const stream) {
 
     if(lcb==0) {
-        //kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty STTBF");
+        //kDebugInfo(31000, "WinWordDoc::sttbf(): empty STTBF");
         sttbf.ok=false;
         return;
     }
@@ -252,7 +252,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
     sttbf.extraDataLen=read16(stream+fc+2);
 
     if(numStrings==0xffff) {
-        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): extended...");
+        kDebugInfo(31000, "WinWordDoc::sttbf(): extended...");
         unicode=true;
         base=fc+6;
         numStrings=sttbf.extraDataLen;
@@ -266,7 +266,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
             base+=2;
             if(len==0) {
                 sttbf.stringList.append(QString(""));
-                //kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty string");
+                //kDebugInfo(31000, "WinWordDoc::sttbf(): empty string");
             }
             else {
                 str="";
@@ -275,19 +275,19 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
                     str+=QChar(read16(stream+base+j));
 
                 sttbf.stringList.append(str);
-                kdebug(KDEBUG_INFO, 31000, str);
+                kDebugInfo(31000, str);
                 base+=j;
 
                 if(sttbf.extraDataLen!=0) {
-                    kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): extra data");
+                    kDebugInfo(31000, "WinWordDoc::sttbf(): extra data");
                     unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
-                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)sttbf.extraDataLen));
+                    kDebugInfo(31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kDebugInfo(31000, (const char*)QString::number((long)sttbf.extraDataLen));
                     for(j=0; j<sttbf.extraDataLen; ++base)
                         tmpArray[j]=*(stream+base);
-                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kDebugInfo(31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     sttbf.extraData.append(&tmpArray);
-                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kDebugInfo(31000, "STILL ALIVE 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
             }
         }
@@ -298,7 +298,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
             ++base;
             if(len==0) {
                 sttbf.stringList.append(QString(""));
-                //kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty string");
+                //kDebugInfo(31000, "WinWordDoc::sttbf(): empty string");
             }
             else {
                 str="";
@@ -307,19 +307,19 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
                     str+=QChar(char2uni(*(stream+base+j)));
 
                 sttbf.stringList.append(str);
-                kdebug(KDEBUG_INFO, 31000, str);
+                kDebugInfo(31000, str);
                 base+=j;
-                
+
                 if(sttbf.extraDataLen!=0) {
-                    kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): extra data");
+                    kDebugInfo(31000, "WinWordDoc::sttbf(): extra data");
                     unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
-                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)sttbf.extraDataLen));
+                    kDebugInfo(31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kDebugInfo(31000, (const char*)QString::number((long)sttbf.extraDataLen));
                     for(j=0; j<sttbf.extraDataLen; ++base)
                         tmpArray[j]=*(stream+base);
-                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kDebugInfo(31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     sttbf.extraData.append(&tmpArray);
-                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kDebugInfo(31000, "STILL ALIVE 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
             }
         }
@@ -329,42 +329,42 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
 
 void WinWordDoc::FIBInfo() {
 
-    kdebug(KDEBUG_INFO, 31000, "WinWordDoc::FIBInfo() - start -----------------");
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->wIdent))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->nFib))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->nProduct))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->lid))));
-    kdebug(KDEBUG_INFO, 31000, "some bits -----------------");
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fDot))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fGlsy))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fComplex))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fHasPic))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->cQuickSaves))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fEncrypted))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fWhichTblStm))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fReadOnlyRecommended))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fWriteReservation))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fExtChar))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fLoadOverride))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fFarEast))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fCrypto))));
-    kdebug(KDEBUG_INFO, 31000, "--------------------------");
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->nFibBack))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->lKey))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->envr))));
-    kdebug(KDEBUG_INFO, 31000, "bits - bits - bits -------");
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fMac))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fEmptySpecial))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fLoadOverridePage))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fFutureSavedUndo))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fWord97Saved))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fSpare0))));
-    kdebug(KDEBUG_INFO, 31000, "--------------------------");
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->chs))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->chsTables))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fcMin))));
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fcMac))));
-    kdebug(KDEBUG_INFO, 31000, "--------------------------");
+    kDebugInfo(31000, "WinWordDoc::FIBInfo() - start -----------------");
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->wIdent))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->nFib))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->nProduct))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->lid))));
+    kDebugInfo(31000, "some bits -----------------");
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fDot))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fGlsy))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fComplex))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fHasPic))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->cQuickSaves))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fEncrypted))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fWhichTblStm))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fReadOnlyRecommended))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fWriteReservation))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fExtChar))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fLoadOverride))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fFarEast))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fCrypto))));
+    kDebugInfo(31000, "--------------------------");
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->nFibBack))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->lKey))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->envr))));
+    kDebugInfo(31000, "bits - bits - bits -------");
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fMac))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fEmptySpecial))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fLoadOverridePage))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fFutureSavedUndo))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fWord97Saved))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fSpare0))));
+    kDebugInfo(31000, "--------------------------");
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->chs))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->chsTables))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fcMin))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fcMac))));
+    kDebugInfo(31000, "--------------------------");
 }
 
 void WinWordDoc::readFIB() {
@@ -437,7 +437,7 @@ const bool WinWordDoc::locatePCD() {
         size=read32(m_table.data+tmp);
         m_pcdCPBase=tmp+4;
         if((size-4)%12!=0) {
-            kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::locatePieceTbl(): Sumting Wong (inside joke(tm))");
+            kDebugError(31000, "WinWordDoc::locatePieceTbl(): Sumting Wong (inside joke(tm))");
             found=false;
         }
         m_pcdCount=static_cast<unsigned long>((size-4)/12);
@@ -445,7 +445,7 @@ const bool WinWordDoc::locatePCD() {
     }
     else {
         m_success=false;
-        kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::locatePieceTbl(): Can't locate the piece table");
+        kDebugError(31000, "WinWordDoc::locatePieceTbl(): Can't locate the piece table");
     }
     return found;
 }
@@ -481,14 +481,14 @@ const bool WinWordDoc::checkBinTables() {
        m_fib->pnFbpLvcFirst==0xfffff)
         notCompressed=true;
     else {
-        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::checkBinTables(): Sigh! It's compressed...");
+        kDebugInfo(31000, "WinWordDoc::checkBinTables(): Sigh! It's compressed...");
         m_success=false;
     }
     return notCompressed;
 }
 
 void WinWordDoc::browseDop() {
-    // TODO
+    // TODO, but currently I don't have any information
 }
 
 void WinWordDoc::readCommentStuff() {

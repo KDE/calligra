@@ -259,8 +259,8 @@ CStyle::~CStyle() {
                 if(tmp<255)
                     size=tmp+1;
                 else {
-                    kdebug(KDEBUG_INFO, 31000, "Sigh - don't know the length of that sprm! Guessing :)");
-                    size=3;  // don't know really, but algorithm should be quite ok >:)
+                    kDebugInfo(31000, "Sigh - don't know the length of that sprm! Guessing :)");
+                    size=3;  // don't know really, but the algorithm should be quite ok >:)
                     tmp=*(_main.data+fcGrpprl+offset+3);
                     tmp*=4;
                     size+=tmp;
