@@ -16,9 +16,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include "kwview.h"
+
 #include "kwdoc.h"
-#include "kwcanvas.h"
 #include "kwcommand.h"
 #include "kwtextframeset.h"
 #include <qrichtext_p.h>
@@ -281,12 +280,7 @@ void KWFrameBorderCommand::execute()
         }
     }
     //update frame
-    QList<KWView> listView=m_pDoc->getAllViews();
-    KWView *lst;
-    for (lst=listView.first(); lst != 0; lst=listView.next() )
-    {
-        lst->getGUI()->canvasWidget()->repaintAll();
-    }
+    m_pDoc->refreshAllFrames();
 }
 
 void KWFrameBorderCommand::unexecute()
@@ -316,12 +310,7 @@ void KWFrameBorderCommand::unexecute()
         }
     }
     //update frames
-    QList<KWView> listView=m_pDoc->getAllViews();
-    KWView *lst;
-    for (lst=listView.first(); lst != 0; lst=listView.next() )
-    {
-        lst->getGUI()->canvasWidget()->repaintAll();
-    }
+    m_pDoc->refreshAllFrames();
 }
 
 KWFrameBackGroundColorCommand::KWFrameBackGroundColorCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_listFrameIndex, QList<QBrush> &_oldBrush,const QBrush & _newColor ):
@@ -343,12 +332,7 @@ void KWFrameBackGroundColorCommand::execute()
         frame->setBackgroundColor(m_newColor);
     }
     //update frame
-    QList<KWView> listView=m_pDoc->getAllViews();
-    KWView *lst;
-    for (lst=listView.first(); lst != 0; lst=listView.next() )
-    {
-        lst->getGUI()->canvasWidget()->repaintAll();
-    }
+    m_pDoc->refreshAllFrames();
 }
 
 void KWFrameBackGroundColorCommand::unexecute()
@@ -361,13 +345,9 @@ void KWFrameBackGroundColorCommand::unexecute()
         QBrush *tmpFrameStruct=m_oldBackGroundColor.at(m_IndexFrame.find(tmp));
         frame->setBackgroundColor(*tmpFrameStruct);
     }
+
     //update frames
-    QList<KWView> listView=m_pDoc->getAllViews();
-    KWView *lst;
-    for (lst=listView.first(); lst != 0; lst=listView.next() )
-    {
-        lst->getGUI()->canvasWidget()->repaintAll();
-    }
+    m_pDoc->refreshAllFrames();
 }
 
 

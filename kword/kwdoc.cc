@@ -2085,6 +2085,20 @@ void KWDocument::updateAllStyleLists()
 }
 
 /*================================================================*/
+void KWDocument::refreshAllFrames()
+{
+    KWView *viewPtr;
+
+    if ( !m_lstViews.isEmpty() )
+    {
+        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        {
+            viewPtr->getGUI()->canvasWidget()->repaintAll();
+        }
+    }
+}
+
+/*================================================================*/
 void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage*/ )
 {
     int thisPageNum  = pages-1;

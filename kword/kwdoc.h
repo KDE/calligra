@@ -173,6 +173,7 @@ public:
     void setUnitToAll();
     void updateAllCursors();
     void drawAllBorders( bool back = true);
+    void refreshAllFrames();
     //void recalcWholeText( bool _cursor = false, bool completeRender=false);
     //void recalcWholeText( KWParag *start, unsigned int fs );
 
