@@ -98,7 +98,7 @@ protected:
     bool m_paperOrientation;
     double m_paperWidth, m_paperHeight;
     double m_paperMarginTop, m_paperMarginLeft, m_paperMarginBottom, m_paperMarginRight;
-    QString prefix;
+    QString m_prefix;
 };
 
 #endif /* EXPORTFILTERFULLPOWER_H */

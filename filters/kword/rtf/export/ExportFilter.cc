@@ -74,17 +74,23 @@ RTFWorker::RTFWorker():
 
 bool RTFWorker::makeTable(const FrameAnchor& anchor)
 {
+#undef FULL_TABLE_SUPPORT
+    m_textBody += m_prefix;
 
-    QValueList<TableCell>::ConstIterator itCell;
-
+#ifdef FULL_TABLE_SUPPORT
     int rowCurrent=0;
     m_textBody += "\\row";
     m_textBody += m_eol;
-    m_inTable=true;
 
+    const bool oldInTable=m_inTable;
+    m_inTable=true;
+#endif
+
+    QValueList<TableCell>::ConstIterator itCell;
     for (itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); itCell++)
     {
+#ifdef FULL_TABLE_SUPPORT
         // ### TODO: rowspan, colspan
         if (rowCurrent!=(*itCell).row)
         {
@@ -93,18 +99,27 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
             m_textBody += m_eol;
         }
         m_textBody += "\\trowd \\trgaph60 \\trleft-60";  // start new row
+#endif
 
         QValueList<ParaData> paraList = *(*itCell).paraList;
         QValueList<ParaData>::ConstIterator it;
         for (it=paraList.begin();it!=paraList.end();it++)
-            m_textBody += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList) + m_eol;
-
+        {
+            m_textBody += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
+            m_textBody += m_eol;
+            m_textBody += "\\par";
+        }
+#ifdef FULL_TABLE_SUPPORT
         m_textBody += "\\cell";
+#endif
     }
-    m_inTable=false;
 
+#ifdef FULL_TABLE_SUPPORT
+    m_inTable=oldInTable;
     m_textBody += "\\row\\par";  // delimit last row
     m_textBody += m_eol;
+#endif
+    m_prefix = QString::null;
 
     return true;
 }
@@ -284,9 +299,9 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 
     // open paragraph
     str += "\\pard";
+    str += "\\plain";
     if (m_inTable)
         str += "\\intbl";
-    str += "\\plain";
 
     LayoutData styleLayout;
     str += lookupStyle(layout.styleName, styleLayout);
@@ -459,14 +474,14 @@ bool RTFWorker::doFullParagraph(const QString& paraText,
 {
     kdDebug(30515) << "Entering RTFWorker::doFullParagraph" << endl << paraText << endl;
 
-    m_textBody += prefix;
+    m_textBody += m_prefix;
 
     QString par = ProcessParagraphData( paraText, layout, paraFormatDataList);
 
     m_textBody += par;
     m_textBody += m_eol;
 
-    prefix = "\\par";
+    m_prefix = "\\par";
 
     kdDebug(30515) << "Quiting RTFWorker::doFullParagraph" << endl;
     return true;
@@ -826,7 +841,7 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
         else if ( ch == 0x201c ) escapedText += "\\ldblquote ";
         else if ( ch == 0x201d ) escapedText += "\\rdblquote ";
         else if ( ch == 0x2022 ) escapedText += "\\bullet ";
-        else if ( ch >= 160 && ch < 256) // check for ISO-8859-1 chararcters (needed for OOWriter 1.0x)
+        else if ( ch >= 160 && ch < 256) // check for ISO-8859-1 characters (needed for OOWriter 1.0x)
         {   // NOTE: 128 to 159 in CP1252 are somewhere else in UTF-8 and do not exist in ISO-8859-1 (### TODO?)
             escapedText += "\\\'";   // escape upper page character to 7 bit
             escapedText += QString::number ( ch, 16 );
