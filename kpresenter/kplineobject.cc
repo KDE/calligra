@@ -146,7 +146,19 @@ void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & contex
 
     kdDebug()<<"KPLineObject::loadOasis(const QDomElement &element) : real position x :"<<x<<" y "<<y<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
 
-    if ( ( x1 < x2 && y1 < y2 ) || ( x1 > x2 && y1 > y2 ) )
+    if ( y1 == y2 )
+    {
+        lineType=LT_HORZ;
+        //define default height
+        ext.setHeight( 2*pen.width()+10 );
+    }
+    else if ( x1 == x2 )
+    {
+        lineType=LT_VERT;
+        //define default width
+        ext.setWidth( 2*pen.width()+10 );
+    }
+    else if ( ( x1 < x2 && y1 < y2 ) || ( x1 > x2 && y1 > y2 ) )
          lineType=LT_LU_RD;
     else
         lineType=LT_LD_RU;
