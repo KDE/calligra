@@ -21,11 +21,13 @@
 #ifndef __VSELECTION_H__
 #define __VSELECTION_H__
 
+
 #include <koRect.h>
 
 #include <qptrlist.h>
 
 #include "vobject.h"
+#include "vvisitor.h"
 
 
 class QObject;
@@ -60,7 +62,7 @@ enum VHandleNode
  * Objects in a layer can be manipulated and worked on independant of objects
  * in other layers.
  */
-class VSelection : public VObject
+class VSelection : public VObject, private VVisitor
 {
 public:
 	VSelection( VObject* parent = 0L );
@@ -121,6 +123,21 @@ public:
 	VHandleNode handleNode( const KoPoint &point ) const;
 
 private:
+	/**
+	 * Select or deselect?
+	 */
+	bool m_select;
+
+	/**
+	 * Select objects and not nodes?
+	 */
+	bool m_selectObjects;
+
+	/**
+	 * Select or deselect all objects inside this rectangle.
+	 */
+	KoRect m_rect;
+
 	/**
 	 * A list of selected objects.
 	 */

@@ -139,32 +139,30 @@ KarbonPart::removeView( KoView *view )
 bool
 KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
+	bool success = false;
+
 	QDomElement root = document.documentElement();
-	QString unitName="mm";
-	if( !root.isNull() )
-	{
-		m_pageLayout.ptWidth	= root.attribute( "width", "0.0" ).toDouble();
-		m_pageLayout.ptHeight	= root.attribute( "height", "0.0" ).toDouble();
-		if( root.hasAttribute( "unit" ) )
-		{
-			unitName = root.attribute("unit");
-		}
-	}
-	setUnit(KoUnit::unit( unitName ));
-	return m_doc.loadXML( root );
+
+	success = m_doc.loadXML( root );
+
+	m_pageLayout.ptWidth	= m_doc.width();
+	m_pageLayout.ptHeight	= m_doc.height();
+
+	setUnit( KoUnit::unit( m_doc.unitName() ) );
+
+	return success;
 }
 
 QDomDocument
 KarbonPart::saveXML()
 {
-	QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
-	QDomElement me = doc.documentElement();
+//TODO help me!
+//	QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
+//	QDomElement me = doc.documentElement();
 
-	me.setAttribute( "width", m_pageLayout.ptWidth );
-	me.setAttribute( "height", m_pageLayout.ptHeight );
-	me.setAttribute( "unit", KoUnit::unitName( getUnit() ) );
 
 	m_doc.save( me );
+
 	return doc;
 }
 

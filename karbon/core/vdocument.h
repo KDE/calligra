@@ -87,6 +87,33 @@ public:
 	void setSyntaxVersion( const QString& syntaxVersion )
 		{ m_syntaxVersion = syntaxVersion; }
 
+
+	/**
+	 * Returns document width.
+	 */
+	double width() const { return m_width; }
+
+	/**
+	 * Returns document height.
+	 */
+	double height() const { return m_height; }
+
+	/**
+	 * Sets document width.
+	 */
+	void setWidth( double width ) { m_width = width; }
+
+	/**
+	 * Sets document height.
+	 */
+	void setHeight( double height ) { m_height = height; }
+
+
+	const QString& unitName()
+		{ return m_unitName; }
+	void setUnitName( const QString& unitName )
+		{ m_unitName = unitName; }
+
 	/**
 	 * Lifts the layer.
 	 */
@@ -130,8 +157,8 @@ public:
 
 	void saveXML( QDomDocument& doc ) const;
 	bool loadXML( const QDomElement& doc );
-	virtual void save( QDomElement& ) const;
-	virtual void load( const QDomElement& element );
+	virtual void save( QDomElement& me ) const;
+	virtual void load( const QDomElement& me );
 
 	virtual VDocument* clone() const;
 
@@ -160,6 +187,17 @@ public:
 	void append( VObject* object );
 
 private:
+	/**
+	 * Document width.
+	 */
+	double m_width;
+
+	/**
+	 * Document height.
+	 */
+	double m_height;
+
+
 	/// The layers in this document.
 	VLayerList m_layers;
 	/// The active layer.
@@ -170,8 +208,18 @@ private:
 	/// The selectionMode
 	VSelectionMode m_selectionMode;
 
-	/// The mime type.
+
+	/**
+	 * The unit name.
+	 */
+	QString m_unitName;
+
+	/**
+	 * The mime type.
+	 */
 	QString m_mime;
+
+
 	/// The version.
 	QString m_version;
 	/// The editor name.

@@ -46,7 +46,6 @@ protected:
 	VSelection* m_selection;
 
 	QWMatrix m_mat;
-	bool m_selectedSubObjects;
 };
 
 class VTranslateCmd : public VTransformCmd

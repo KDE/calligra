@@ -138,31 +138,13 @@ VDocument::saveXML( QDomDocument& doc ) const
 void
 VDocument::save( QDomElement& me ) const
 {
-	QDomAttr attr;
-/*
-  attr = doc.createAttribute ("mime");
-  attr.setValue (m_mime);
-  me.setAttributeNode (attr); */
-
 	me.setAttribute( "mime", m_mime );
-
-/*  attr = doc.createAttribute ("version");
-  attr.setValue (m_version);
-  me.setAttributeNode (attr); */
-
 	me.setAttribute( "version", m_version );
-
-/*  attr = doc.createAttribute ("editor");
-  attr.setValue (m_editor);
-  me.setAttributeNode (attr); */
-
 	me.setAttribute( "editor", m_editor );
-
-/*  attr = doc.createAttribute ("syntaxVersion");
-  attr.setValue (m_syntaxVersion);
-  me.setAttributeNode (attr); */
-
 	me.setAttribute( "syntaxVersion", m_syntaxVersion );
+	me.setAttribute( "width", m_width );
+	me.setAttribute( "height", m_height );
+	me.setAttribute( "unit", m_unitName );
 
 	// save objects:
 	VLayerListIterator itr( m_layers );
@@ -199,6 +181,11 @@ VDocument::loadXML( const QDomElement& doc )
 	m_version = doc.attribute( "version" );
 	m_editor = doc.attribute( "editor" );
 	m_syntaxVersion = doc.attribute( "syntaxVersion" );
+
+	m_width  = doc.attribute( "width", "0.0" ).toDouble();
+	m_height = doc.attribute( "height", "0.0" ).toDouble();
+
+	m_unitName = doc.attribute( "unit", "mm" );
 
 	QDomNodeList list = doc.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
