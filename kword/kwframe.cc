@@ -1046,8 +1046,7 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
     if ( !reg.isEmpty() ) {
         painter->save();
         painter->setClipRegion( reg );
-        painter->fillRect( crect, cg.base() );
-        formula->draw( *painter, crect );
+        formula->draw( *painter, crect, cg );
         painter->restore();
     }
 }
