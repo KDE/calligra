@@ -32,4 +32,4 @@ Connection::Connection(const QString &sender, const QString &signal, const QStri
 
 }
 
-#include "events.moc"
+//#include "events.moc"
