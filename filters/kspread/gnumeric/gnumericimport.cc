@@ -27,7 +27,7 @@
 
 #include <gnumericimport.h>
 #include <kmessagebox.h>
-#include <kfilterdev.h> 
+#include <kfilterdev.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <koFilterChain.h>
@@ -213,7 +213,7 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
     }
     else if (gmr_name.toElement().text() == "keywords")
     {
-      /* Not supported by KSpread */
+        aboutPage->setKeywords( gmr_value.toElement().text());
     }
     else if (gmr_name.toElement().text() == "comments")
     {
@@ -1361,7 +1361,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
 
     QIODevice* in = KFilterDev::deviceForFile(m_chain->inputFile(),"application/x-gzip");
-    
+
     if ( !in )
     {
         kdError(30521) << "Cannot create device for uncompressing! Aborting!" << endl;
@@ -1374,12 +1374,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
         delete in;
         return KoFilter::FileNotFound;
     }
-    
+
     QDomDocument doc;
 
     // ### TODO: error message
     doc.setContent(in);
-    
+
     in->close();
     delete in;
 
@@ -1526,7 +1526,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 		    // expr = exprID_dict[QString("1")];
 
 		    kdDebug(30521) << "FOO:" << column << row << endl;
-		    kdDebug(30521) << 
+		    kdDebug(30521) <<
                            table->cellAt( column, row, false )->decodeFormula( expr, column, row ).latin1() << endl;
 		    kdDebug(30521) << expr << endl;
 
@@ -1568,7 +1568,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
     if ( selTable )
       ksdoc->setDisplayTable( selTable );
-      
+
     emit sigProgress(100);
     if ( bSuccess )
         return KoFilter::OK;
