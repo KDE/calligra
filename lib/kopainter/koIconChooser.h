@@ -40,6 +40,8 @@ public:
   virtual void setSpacing(int) {}
   virtual QPixmap &pixmap() const = 0;
   virtual QPixmap &thumbPixmap() const = 0;
+  // Return -1 if this is less than other, 0 if equal, 1 if greater than.
+  virtual int compare(const KoIconItem */*other*/) const { return 0; }
 };
 
 class KoPixmapWidget : public QFrame
@@ -59,7 +61,8 @@ class KoIconChooser: public QGridView
 {
   Q_OBJECT
 public:
-  KoIconChooser(QSize iconSize, QWidget *parent = 0L, const char *name = 0L);
+  // To make the items sorted, set 'sort' to true and override KoIconItem::compare().
+  KoIconChooser(QSize iconSize, QWidget *parent = 0L, const char *name = 0L, bool sort = false);
   virtual ~KoIconChooser();
 
   bool autoDelete() const {return mIconList.autoDelete(); }
@@ -93,6 +96,7 @@ private:
   int cellIndex(int row, int col);
   void calculateCells();
   void showFullPixmap(const QPixmap &pix, const QPoint &p);
+  int sortInsertionIndex(const KoIconItem *item);
 
 private:
   QPtrList<KoIconItem>    mIconList;
@@ -107,6 +111,7 @@ private:
   QPoint                  mDragStartPos;
   bool                    mMouseButtonDown;
   bool                    mDragEnabled;
+  bool                    mSort;
 };
 
 // This is a first attempt at a pattern chooser widget abstraction which is at least

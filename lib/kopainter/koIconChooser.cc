@@ -59,7 +59,7 @@ void KoPixmapWidget::paintEvent(QPaintEvent *e)
 
 
 
-KoIconChooser::KoIconChooser(QSize aIconSize, QWidget *parent, const char *name):
+KoIconChooser::KoIconChooser(QSize aIconSize, QWidget *parent, const char *name, bool sort):
 QGridView(parent, name)
 {
   QGridView::setBackgroundColor(Qt::white);
@@ -78,6 +78,7 @@ QGridView(parent, name)
   mItemHeight = aIconSize.height();
   mMouseButtonDown = false;
   mDragEnabled = false;
+  mSort = sort;
 }
 
 KoIconChooser::~KoIconChooser()
@@ -92,9 +93,34 @@ void KoIconChooser::addItem(KoIconItem *item)
   Q_INT32 n = mItemCount;
 
   Q_ASSERT(item);
-  mIconList.insert(mItemCount++, item);
+
+  int i;
+
+  if (mSort)
+  {
+    i = sortInsertionIndex(item);
+  }
+  else
+  {
+    i = mItemCount;
+  }
+
+  mIconList.insert(i, item);
+  mItemCount++;
   calculateCells();
-  updateCell(n / numCols(), n - (n / numCols()) * numCols());
+
+  if (mSort)
+  {
+    for (int c = 0; c < numCols(); c++) {
+      for (int r = 0; r < numRows(); r++) {
+	updateCell(r, c);
+      }
+    }
+  }
+  else
+  {
+    updateCell(n / numCols(), n - (n / numCols()) * numCols());
+  }
 }
 
 bool KoIconChooser::removeItem(KoIconItem *item)
@@ -345,6 +371,53 @@ void KoIconChooser::calculateCells()
 void KoIconChooser::showFullPixmap(const QPixmap &pix, const QPoint &/*p*/)
 {
   mPixmapWidget = new KoPixmapWidget(pix, 0L);
+}
+
+int KoIconChooser::sortInsertionIndex(const KoIconItem *item)
+{
+  int index = 0;
+
+  if (!mIconList.isEmpty())
+  {
+    // Binary insertion
+    int first = 0;
+    int last = mIconList.count() - 1;
+    
+    while (first != last)
+    {
+      int middle = (first + last) / 2;
+    
+      if (item -> compare(mIconList.at(middle)) < 0)
+      {
+        last = middle - 1;
+
+        if (last < first)
+        {
+          last = first;
+        }
+      }
+      else
+      {
+        first = middle + 1;
+
+        if (first > last)
+        {
+          first = last;
+        }
+      }
+    }
+
+    if (item -> compare(mIconList.at(first)) < 0)
+    {
+      index = first;
+    }
+    else
+    {
+      index = first + 1;
+    }
+  }
+
+  return index;
 }
 
 KoPatternChooser::KoPatternChooser( const QPtrList<KoIconItem> &list, QWidget *parent, const char *name )
