@@ -284,6 +284,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement soundElement = doc.createElement( "SOUNDS" );
     QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
     QDomElement helpLineElement = doc.createElement( "HELPLINES" );
+    QDomElement attributeElement = doc.createElement( "ATTRIBUTES" );
 
     QDomElement settingsDoc = m_settings.documentElement();
 
@@ -401,8 +402,9 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
     docElement.appendChild( paperElement );
     docElement.appendChild( backgroundElement );
-    if ( appendHelpLine( doc, settingsDoc, helpLineElement ) )
+    if ( parseSettings( doc, settingsDoc, helpLineElement, attributeElement ) )
         docElement.appendChild( helpLineElement );
+    docElement.appendChild( attributeElement );
     docElement.appendChild( pageTitleElement );
     docElement.appendChild( pageNoteElement );
     docElement.appendChild( objectElement );
@@ -413,14 +415,26 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     doccontent.appendChild( doc );
 }
 
-bool OoImpressImport::appendHelpLine( QDomDocument &doc,const QDomElement &settingElement, QDomElement &helpLineElement )
+QString OoImpressImport::parseConfigItem( const QDomElement& configItem, const QString & configName )
 {
-    bool foundElement = false;
-    //<config:config-item config:name="SnapLinesDrawing" config:type="string">V7939H1139</config:config-item>
-    //by default show line
+    QDomNode item = configItem.firstChild(); //<config:config-item-map-entry>
+    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
+    {
+        QDomElement viewItem = item2.toElement();
+        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
+        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
+        {
+            return viewItem.text();
+        }
+    }
+    return QString::null;
+}
+
+QDomElement OoImpressImport::mapItem( const QDomElement &settingElement, const QString &mapItemName)
+{
     QDomNode tmp = settingElement.namedItem( "office:settings" );
     if (tmp.isNull() )
-        return false;
+        return QDomElement();
 
     for ( QDomNode n = tmp.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
@@ -432,29 +446,59 @@ bool OoImpressImport::appendHelpLine( QDomDocument &doc,const QDomElement &setti
             {
                 QDomElement configItem = viewSetting.toElement();
                 if ( configItem.tagName()== "config:config-item-map-indexed"
-                     && ( configItem.attribute( "config:name" )=="Views" ) )
+                     && ( configItem.attribute( "config:name" )==/*"Views"*/ mapItemName ) )
                 {
-                    QDomNode item = configItem.firstChild(); //<config:config-item-map-entry>
-                    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
-                    {
-                        QDomElement viewItem = item2.toElement();
-                        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
-                        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")=="SnapLinesDrawing" ) )
-                        {
-                            kdDebug()<<"SnapLinesDrawing****************:"<<viewItem.text()<<endl;
-                            parseHelpLine( doc, helpLineElement, viewItem.text() );
-                            //display it by default
-                            helpLineElement.setAttribute( "show", true );
-                            foundElement = true;
-                            break;
-                        }
-
-                    }
+                    return configItem;
                 }
             }
         }
     }
+    return QDomElement();
+}
 
+bool OoImpressImport::parseSettings( QDomDocument &doc,const QDomElement &settingElement, QDomElement &helpLineElement, QDomElement &attributeElement )
+{
+    bool foundElement = false;
+    //<config:config-item config:name="SnapLinesDrawing" config:type="string">V7939H1139</config:config-item>
+    //by default show line
+    QDomElement configItem = mapItem( settingElement, "Views");
+    if (  configItem.isNull() )
+        return false;
+
+    QString str = parseConfigItem( configItem, "SnapLinesDrawing" );
+    if ( !str.isEmpty() )
+    {
+        parseHelpLine( doc, helpLineElement, str );
+        //display it by default
+        helpLineElement.setAttribute( "show", true );
+        foundElement = true;
+    }
+    int gridX = 0;
+    int gridY = 0;
+    bool snapToGrid = false;
+    int selectedPage = 0;
+
+    gridX = ( parseConfigItem( configItem, "GridFineWidth" ) ).toInt();
+    gridY = ( parseConfigItem( configItem, "GridFineHeight" ) ).toInt();
+    snapToGrid = ( parseConfigItem(configItem, "IsSnapToGrid" ) ) == "true" ? true: false;
+    selectedPage = parseConfigItem( configItem, "SelectedPage" ).toInt();
+
+    attributeElement.setAttribute( "activePage", selectedPage );
+
+    QString pt_x;
+    pt_x.setNum(( gridX/100.0 ));
+    pt_x+="mm";
+    attributeElement.setAttribute("gridx", KoUnit::parseValue(pt_x) );
+
+    QString pt_y;
+    pt_y.setNum(( gridY/100.0 ));
+    pt_y+="mm";
+    attributeElement.setAttribute("gridy", KoUnit::parseValue(pt_y) );
+    attributeElement.setAttribute("snaptogrid", (int)snapToGrid );
+
+
+
+    kdDebug()<<" gridX :"<<gridX<<" gridY :"<<gridY<<" snapToGrid :"<<snapToGrid<<" selectedPage :"<<selectedPage<<endl;
     return foundElement;
 }
 
