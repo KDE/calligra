@@ -45,7 +45,7 @@ QString KoDataToolInfo::dataType() const
     if ( !m_service )
 	return QString::null;
 
-    return m_service->property( "DataType" )->toString();
+    return m_service->property( "DataType" ).toString();
 }
 
 QStringList KoDataToolInfo::mimeTypes() const
@@ -53,7 +53,7 @@ QStringList KoDataToolInfo::mimeTypes() const
     if ( !m_service )
 	return QStringList();
 
-    return m_service->property( "DataMimeTypes" )->toStringList();
+    return m_service->property( "DataMimeTypes" ).toStringList();
 }
 
 bool KoDataToolInfo::isReadOnly() const
@@ -61,7 +61,7 @@ bool KoDataToolInfo::isReadOnly() const
     if ( !m_service )
 	return TRUE;
 
-    return m_service->property( "ReadOnly" )->toBool();
+    return m_service->property( "ReadOnly" ).toBool();
 }
 
 QPixmap KoDataToolInfo::icon() const
@@ -97,7 +97,7 @@ QStringList KoDataToolInfo::commands() const
     if ( !m_service )
 	return QString::null;
 
-    return m_service->property( "Commands" )->toStringList();
+    return m_service->property( "Commands" ).toStringList();
 }
 
 QStringList KoDataToolInfo::userCommands() const
@@ -105,7 +105,7 @@ QStringList KoDataToolInfo::userCommands() const
     if ( !m_service )
 	return QString::null;
 
-    return m_service->property( "CommandsI18N" )->toStringList();
+    return m_service->property( "CommandsI18N" ).toStringList();
 }
 
 KoDataTool* KoDataToolInfo::createTool( QObject* parent, const char* name )

@@ -183,10 +183,10 @@ static KoFilterEntry koParseFilterProperties( KService::Ptr service )
 {
   KoFilterEntry e( koParseComponentProperties( service ) );
 
-  e.import = service->property( "Import" )->toString();
-  e.importDescription = service->property( "ImportDescription" )->toString();
-  e.export_ = service->property( "Export" )->toString();
-  e.exportDescription = service->property( "ExportDescription" )->toString();
+  e.import = service->property( "Import" ).toString();
+  e.importDescription = service->property( "ImportDescription" ).toString();
+  e.export_ = service->property( "Export" ).toString();
+  e.exportDescription = service->property( "ExportDescription" ).toString();
 
   return e;
 }
@@ -262,10 +262,10 @@ static KoFilterDialogEntry koParseFilterDialogProperties( KService::Ptr service 
 {
   KoFilterDialogEntry e( koParseComponentProperties( service ) );
 
-  e.import = service->property( "Import" )->toString();
-  e.importDescription = service->property( "ImportDescription" )->toString();
-  e.export_ = service->property( "Export" )->toString();
-  e.exportDescription = service->property( "ExportDescription" )->toString();
+  e.import = service->property( "Import" ).toString();
+  e.importDescription = service->property( "ImportDescription" ).toString();
+  e.export_ = service->property( "Export" ).toString();
+  e.exportDescription = service->property( "ExportDescription" ).toString();
 
   return e;
 }
@@ -340,9 +340,9 @@ static KoToolEntry koParseToolProperties( KService::Ptr service )
 {
     KoToolEntry e( koParseComponentProperties( service ) );
 
-    QStringList mimeTypes = service->property( "MimeTypes" )->toString();
-    QStringList commands = service->property( "Commands" )->toString();
-    QStringList commandsI18N = service->property( "CommandsI18N" )->toString();
+    QStringList mimeTypes = service->property( "MimeTypes" ).toString();
+    QStringList commands = service->property( "Commands" ).toString();
+    QStringList commandsI18N = service->property( "CommandsI18N" ).toString();
 
     return e;
 }
