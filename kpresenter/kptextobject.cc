@@ -390,6 +390,13 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
     bool editMode = false;
     if( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas())
         editMode = m_doc->getKPresenterView()->getCanvas()->getEditMode();
+
+    uint drawingFlags = KoTextDocument::DrawSelections;
+    if ( m_doc->backgroundSpellCheckEnabled() && editMode )
+        drawingFlags |= KoTextDocument::DrawMisspelledLine;
+            //if ( m_doc->viewFormattingChars() )
+            //    drawingFlags |= KoTextDocument::DrawFormattingChars;
+
     if ( specEffects )
     {
         switch ( effect2 )
@@ -402,7 +409,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
             /*KoTextParag * lastFormatted =*/ textDocument()->drawWYSIWYG(
                 _painter, r.x(), r.y(), r.width(), r.height(),
                 cg, zoomHandler,
-                onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled()&& editMode );
+                onlyChanged, cursor != 0, cursor, resetChanged, drawingFlags );
         }
     }
     else
@@ -412,7 +419,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
         /*KoTextParag * lastFormatted = */ textDocument()->drawWYSIWYG(
             _painter, r.x(), r.y(), r.width(), r.height(),
             cg, zoomHandler,
-            onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled() && editMode );
+            onlyChanged, cursor != 0, cursor, resetChanged, drawingFlags );
     }
     _painter->restore();
 }
@@ -1141,10 +1148,14 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
         parag = parag->next();
     }
 
+    uint drawingFlags = 0; // don't draw selections
+    if ( m_doc->backgroundSpellCheckEnabled() && editMode )
+        drawingFlags |= KoTextDocument::DrawMisspelledLine;
     textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
-        false /*onlyChanged*/, false /*cursor != 0*/, 0 /*cursor*/ ,true/*, resetChanged*/,m_doc->backgroundSpellCheckEnabled() && editMode );
+        false /*onlyChanged*/, false /*cursor != 0*/, 0 /*cursor*/,
+        true /*resetChanged*/, drawingFlags );
 }
 
 void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
@@ -1184,11 +1195,15 @@ void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVis
 
     bool wasChanged = parag->hasChanged();
     parag->setChanged( TRUE );      // To force the drawing to happen
+    uint drawingFlags = KoTextDocument::DrawSelections;
+    if ( m_doc->backgroundSpellCheckEnabled() )
+        drawingFlags |= KoTextDocument::DrawMisspelledLine;
+
     textDocument()->drawParagWYSIWYG(
         p, parag,
         iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
         pix, cg, m_doc->zoomHandler(),
-        cursorVisible, cursor, false /*m_doc->viewFormattingChars()*/ );
+        cursorVisible, cursor, drawingFlags );
     parag->setChanged( wasChanged );      // Maybe we have more changes to draw!
 
     // XIM Position
