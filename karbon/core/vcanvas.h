@@ -67,6 +67,9 @@ protected:
 private slots:
 	void slotContentsMoving( int , int );
 
+signals:
+	void viewportChanged();
+
 private:
 	QPixmap *m_pixmap;
 	KarbonPart* m_part;

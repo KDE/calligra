@@ -241,6 +241,7 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 	connect( view->part()->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( slotCommandAdded( VCommand* ) ) );
 	connect( view->part()->commandHistory(), SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 	connect( view, SIGNAL( zoomChanged( double ) ), this, SLOT( slotZoomChanged( double ) ) );
+	connect( view->canvasWidget(), SIGNAL( viewportChanged() ), this, SLOT( slotViewportChanged() ) );
 
 	updateDocumentInfo();
 } // VDocumentTab::VDocumentTab
@@ -266,6 +267,12 @@ VDocumentTab::slotCommandAdded( VCommand * )
 
 void
 VDocumentTab::slotZoomChanged( double )
+{
+	m_documentPreview->update();
+}
+
+void
+VDocumentTab::slotViewportChanged()
 {
 	m_documentPreview->update();
 }

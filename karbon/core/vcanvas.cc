@@ -258,6 +258,7 @@ void
 VCanvas::slotContentsMoving( int /*x*/, int /*y*/ )
 {
 	m_bScrolling = true;
+	emit viewportChanged();
 }
 
 #include <vcanvas.moc>
