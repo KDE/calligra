@@ -27,7 +27,7 @@
 
 //class PropertyBufferItem;
 
-/** This class is a QDict<KexiProperty> which holds properties to be shown in 
+/** This class is a QDict<KexiProperty> which holds properties to be shown in
     Property Editor. Properties are indexed by their names, case insensitively.
     \sa KexiPropertyEditor for help on how to use KexiPropertyBuffer.
     \sa KexiProperty to see how to create properties.
@@ -39,7 +39,7 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public QDict<KexiProp
 	public:
 
 		/*! Creates an empty KexiPropertyBuffer, i.e. a QMap<QString, KexiProperty>.
-		 \a type_name means a name of this property buffer type. See typeName() description 
+		 \a type_name means a name of this property buffer type. See typeName() description
 		 for more information on type names.
 		*/
 		KexiPropertyBuffer(QObject *parent, const QString &type_name);
@@ -65,7 +65,7 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public QDict<KexiProp
 		 For example, \a type_name may be "KexiDB::Field::Integer" for property buffer
 		 for given selected field of type integer, in "Alter Table Dialog".
 		 This avoids e.g. reloading of all KexiPropertyEditor's contents.
-		 Also, this allows to know if two property-buffer objects are compatible 
+		 Also, this allows to know if two property-buffer objects are compatible
 		 by their property sets.
 		 For comparing purposes, type names are case insensitive.
 		*/
@@ -77,10 +77,11 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public QDict<KexiProp
 		void debug();
 
 	signals:
-		/*! This signal is emitted when \a property has changed 
+		/*! This signal is emitted when \a property has changed
 		   (i.e. when changeProperty() was called).
 		*/
 		void propertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);//const QString &property, const QVariant &value);
+		void propertyReset(KexiPropertyBuffer &buf, KexiProperty &property);
 
 		void destroying();
 

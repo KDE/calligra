@@ -38,7 +38,7 @@ class SPHelper
 {
 	public:
 	SPHelper() {
-		list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding" 
+		list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding"
 			<< "MinimumExpanding" << "Ignored";
 	}
 	~SPHelper() {;}
@@ -57,7 +57,7 @@ SPHelper::valueToKey(int value)
 	QStringList::iterator it = list.at(value);
 	if (it==list.end())
 		return QString::null;//err
-	kdDebug() << "value is " << value << " key is " << *it << endl;
+
 	return *it;
 }
 /*
@@ -87,7 +87,7 @@ SPHelper::keyToValue(const QString& key)
 spHelper::list()
 {
 	QStringList list;
-	list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding" 
+	list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding"
 		<< "MinimumExpanding" << "Ignored";
 	return list;
 }*/
@@ -145,8 +145,8 @@ KexiProperty::KexiProperty(const QString &name, QVariant value, const QString &d
 	init(value);
 }
 
-KexiProperty::KexiProperty(const QString &name, const QString &value, 
- const QStringList &key_list, const QStringList &name_list, 
+KexiProperty::KexiProperty(const QString &name, const QString &value,
+ const QStringList &key_list, const QStringList &name_list,
  const QString &desc)
 {
 	m_name = name;
@@ -186,7 +186,7 @@ void KexiProperty::init(QVariant value)
 		kdDebug() << "KexiProperty::KexiProperty(): labeled property (" << m_desc << ")" << endl;
 
 
-	//automatically add children if necessary 
+	//automatically add children if necessary
 	switch(value.type())
 	{
 		case QVariant::Size:
@@ -216,10 +216,10 @@ void KexiProperty::init(QVariant value)
 		{
 			QSizePolicy p = value.toSizePolicy();
 
-			addChild( new KexiProperty("horSizeType", spHelper.valueToKey(p.horData()), 
+			addChild( new KexiProperty("horSizeType", spHelper.valueToKey(p.horData()),
 				spHelper.list, spHelper.list, i18n("horSizeType")) );
 
-			addChild( new KexiProperty("verSizeType", 
+			addChild( new KexiProperty("verSizeType",
 				spHelper.valueToKey(p.verData()), spHelper.list, spHelper.list, i18n("verSizeType")) );
 
 			addChild( new KexiProperty("hStretch", (int)p.horStretch(), i18n("hStretch") ) );
@@ -323,7 +323,7 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 	bool ch = false;
 	if (m_value.type()==QVariant::DateTime
 		|| m_value.type()==QVariant::Time) {
-		//for date and datetime types: compare with strings, because there 
+		//for date and datetime types: compare with strings, because there
 		//can be miliseconds difference
 		ch = m_value.toString() != v.toString();
 	}
@@ -435,7 +435,7 @@ void KexiProperty::setChildValue(const QString& childName, const QVariant &v, bo
 	prop->setValue(v, saveOldValue);
 }
 
-void KexiProperty::updateValueForChild(const QString& childName, 
+void KexiProperty::updateValueForChild(const QString& childName,
 	const QVariant &v, bool saveOldValue)
 {
 	debug();
@@ -506,6 +506,8 @@ void KexiProperty::updateValueForChild(const QString& childName,
 void KexiProperty::resetValue()
 {
 	setValue( oldValue(), false );
+	if (!m_buf.isNull())
+		emit m_buf->propertyReset(*m_buf, *this);
 }
 
 bool KexiProperty::changed() const
@@ -568,7 +570,7 @@ KexiProperty* KexiProperty::child(const QString& name)
 
 void KexiProperty::debug()
 {
-	QString dbg = "KexiProperty( name='" + m_name + "' desc='" + m_desc 
+	QString dbg = "KexiProperty( name='" + m_name + "' desc='" + m_desc
 		+ "' val=" + (m_value.isValid() ? m_value.toString() : "<INVALID>");
 	if (!m_oldValue.isValid())
 		dbg += (", oldVal='" + m_oldValue.toString() + "'");
@@ -614,7 +616,7 @@ KexiProperty::format(const QVariant &v)
 			{
 				return i18n("True");
 			}
-			
+
 			return i18n("False");
 		}
 		case QVariant::Font:
@@ -639,7 +641,7 @@ KexiProperty::format(const QVariant &v)
 		}
 		case QVariant::SizePolicy:
 		{
-			QSizePolicy p = v.toSizePolicy(); 
+			QSizePolicy p = v.toSizePolicy();
 			return QString(spHelper.valueToKey(p.horData()) + "/" + spHelper.valueToKey(p.verData()));
 		}
 		case QVariant::Cursor:
