@@ -1422,7 +1422,7 @@ void KWTextFrameSet::setVisible(bool visible)
 
 void KWTextFrameSet::setInlineFramesVisible(bool visible)
 {
-    QListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
+    QPtrListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
       KWAnchor *anc = dynamic_cast<KWAnchor *>( cit.current() );

@@ -4018,7 +4018,7 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
 
     // count paragraphs for progress dialog:
     ulong paragraphs = 0L;
-    QListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
         KWFrameSet *frameSet = framesetIt.current();
         if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() ) {
@@ -4128,7 +4128,7 @@ void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel )
 
 bool KWStatisticsDialog::docHasSelection()
 {
-    QListIterator<KWFrameSet> fsIt( m_doc->framesetsIterator() );
+    QPtrListIterator<KWFrameSet> fsIt( m_doc->framesetsIterator() );
 
     for ( ; fsIt.current(); ++fsIt ) {
         KWFrameSet *fs = fsIt.current();

@@ -183,7 +183,7 @@ public:
     // Prefer this over frameSet(i), if iterating over all of them
     QPtrListIterator<KWFrameSet> framesetsIterator() const { return QPtrListIterator<KWFrameSet>(frames); }
 
-    QList<KoTextObject> frameTextObject() const;
+    QPtrList<KoTextObject> frameTextObject() const;
 
     void addFrameSet( KWFrameSet *f, bool finalize = true );
     // Remove frameset from list (don't delete)

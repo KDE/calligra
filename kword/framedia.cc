@@ -479,7 +479,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
 
     tab2 = addPage( i18n( "Text run around" ) );
 
-    QVBoxLayout *form1Layout = new QVBoxLayout( tab2, 11, 6, "tab2Layout"); 
+    QVBoxLayout *form1Layout = new QVBoxLayout( tab2, 11, 6, "tab2Layout");
 
     runGroup = new QButtonGroup(  i18n( "Text in other frames will:" ), tab2);
     runGroup->setColumnLayout(0, Qt::Vertical );
@@ -517,7 +517,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
 
     form1Layout->addWidget( runGroup );
 
-    QHBoxLayout *Layout1 = new QHBoxLayout( 0, 0, 6); 
+    QHBoxLayout *Layout1 = new QHBoxLayout( 0, 0, 6);
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout1->addItem( spacer );
 
@@ -1306,7 +1306,7 @@ bool KWFrameDia::applyChanges()
                 }
             }
         }
-    } 
+    }
 
     if ( tab1 )
     {
@@ -1409,7 +1409,7 @@ bool KWFrameDia::applyChanges()
             ra = KWFrame::RA_BOUNDINGRECT;
         else if ( rRunContur->isChecked() )
             ra = KWFrame::RA_SKIP;
-        else 
+        else
             update=false;
         if(frame)
             frame->setRunAround(ra);
@@ -1420,7 +1420,7 @@ bool KWFrameDia::applyChanges()
         // run around gap.
         if(! eRGap->text().isEmpty()) {
             double newValue = KoUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() );
-            if(frame) 
+            if(frame)
                 frame->setRunAroundGap(newValue);
             else
                 for(KWFrame *f=allFrames.first();f; f=allFrames.next())
@@ -1482,8 +1482,8 @@ bool KWFrameDia::applyChanges()
             if(!macroCmd)
                 macroCmd = new KMacroCommand( i18n("Make FrameSet Inline") );
 
-            QList<FrameIndex> frameindexList;
-            QList<FrameResizeStruct> frameindexMove;
+            QPtrList<FrameIndex> frameindexList;
+            QPtrList<FrameResizeStruct> frameindexMove;
 
             FrameIndex *index=new FrameIndex( frame );
             FrameResizeStruct *move=new FrameResizeStruct;

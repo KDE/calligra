@@ -1722,7 +1722,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
             QString oldName = elem.attribute( "name" );
             QString newName;
 
-            // make up a new name for the frame, use Copy[digits]-[oldname] as template. 
+            // make up a new name for the frame, use Copy[digits]-[oldname] as template.
             // Fully translatable naturally :)
             int count=0;
             QString searchString ("^("+ i18n("Copy%1-%2").arg("\\d*").arg("){0,1}"));
@@ -3092,13 +3092,13 @@ void KWDocument::setUndoRedoLimit(int val)
     m_commandHistory->setRedoLimit(val);
 }
 
-void KWDocument::setGridX(double _gridx) { 
-    m_gridX = _gridx; 
+void KWDocument::setGridX(double _gridx) {
+    m_gridX = _gridx;
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         viewPtr->getGUI()->getHorzRuler()->setGridSize(_gridx);
 }
 
-QList<KoTextObject> KWDocument::frameTextObject() const
+QPtrList<KoTextObject> KWDocument::frameTextObject() const
 {
     QPtrList<KoTextObject>lst;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
