@@ -492,7 +492,7 @@ void QTextView::keyPressEvent( QKeyEvent *e )
 		    indent();
 		    break;
 		case Key_A:
-#if defined(Q_WS_X11)
+#if defined(_WS_X11_)
 		    moveCursor( MoveHome, e->state() & ShiftButton, FALSE );
 #else
 		    selectAll( TRUE );
@@ -864,7 +864,7 @@ void QTextView::moveCursor( MoveDirectionPrivate direction, bool control )
 void QTextView::resizeEvent( QResizeEvent *e )
 {
     QScrollView::resizeEvent( e );
-#if defined(Q_WS_X11)
+#if defined(_WS_X11_)
     if ( e->oldSize().width() != e->size().width() )
 #endif
 	doResize();
