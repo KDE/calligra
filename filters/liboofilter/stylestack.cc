@@ -49,10 +49,10 @@ void StyleStack::push( const QDomElement& style )
     m_stack.append( style );
 }
 
-bool StyleStack::hasAttribute( const QString& name )
+bool StyleStack::hasAttribute( const QString& name ) const
 {
     // TODO: has to be fixed for complex styles like list-styles
-    QValueList<QDomElement>::Iterator it = m_stack.end();
+    QValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -64,10 +64,10 @@ bool StyleStack::hasAttribute( const QString& name )
     return false;
 }
 
-QString StyleStack::attribute( const QString& name )
+QString StyleStack::attribute( const QString& name ) const
 {
     // TODO: has to be fixed for complex styles like list-styles
-    QValueList<QDomElement>::Iterator it = m_stack.end();
+    QValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -79,9 +79,9 @@ QString StyleStack::attribute( const QString& name )
     return QString::null;
 }
 
-bool StyleStack::hasChildNode(const QString & name)
+bool StyleStack::hasChildNode(const QString & name) const
 {
-    QValueList<QDomElement>::Iterator it = m_stack.end();
+    QValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -93,9 +93,9 @@ bool StyleStack::hasChildNode(const QString & name)
     return false;
 }
 
-QDomNode StyleStack::childNode(const QString & name)
+QDomNode StyleStack::childNode(const QString & name) const
 {
-    QValueList<QDomElement>::Iterator it = m_stack.end();
+    QValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;

@@ -70,24 +70,24 @@ public:
     /**
      * Check if any of the styles on the stack has an attribute called 'name'.
      */
-    bool hasAttribute( const QString& name );
+    bool hasAttribute( const QString& name ) const;
 
     /**
      * Search for the attribute called 'name', starting on top of the stack,
      * and return it.
      */
-    QString attribute( const QString& name );
+    QString attribute( const QString& name ) const;
 
     /**
      * Check if any of the styles on the stack has a child node called 'name'.
      */
-    bool hasChildNode(const QString & name);
+    bool hasChildNode(const QString & name) const;
 
     /**
      * Search for a child node called 'name', starting on top of the stack,
      * and return it.
      */
-    QDomNode childNode(const QString & name);
+    QDomNode childNode(const QString & name) const;
 
 private:
     uint m_pageMark, m_objectMark;

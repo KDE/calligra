@@ -24,12 +24,36 @@
 
 #include <qstring.h>
 class QColor;
+class QDomElement;
+class StyleStack;
 
 namespace OoUtils
 {
-    double toPoint( QString value, double defaultVal = 0.0 );
+    QString expandWhitespace(const QDomElement& tag);
 
     bool parseBorder(const QString & tag, double * width, int * style, QColor * color);
+
+    ///////// Paragraph properties /////////
+
+    // Convert fo:margin-left, fo:margin-right and fo:text-indent to <INDENTS>
+    void importIndents( QDomElement& parentElement, const StyleStack& styleStack );
+
+    // Convert fo:line-height, style:line-height-at-least and style:line-spacing to <LINESPACING>
+    void importLineSpacing( QDomElement& parentElement, const StyleStack& styleStack );
+
+    // Convert fo:margin-top and fo:margin-bottom to <OFFSETS>
+    void importTopBottomMargin( QDomElement& parentElement, const StyleStack& styleStack );
+
+    // Convert style:tab-stops to <TABULATORS>
+    void importTabulators( QDomElement& parentElement, const StyleStack& styleStack );
+
+    // Convert fo:border* to <*BORDER>
+    void importBorders( QDomElement& parentElement, const StyleStack& styleStack );
+
+    /////////// Text properties ///////////
+
+    // From style:text-underline to kword/kpresenter's underline/underlinestyleline
+    void importUnderline( const QString& text_underline, QString& underline, QString& styleline );
 };
 
 #endif /* OOUTILS_H */

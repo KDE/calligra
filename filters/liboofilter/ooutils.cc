@@ -20,30 +20,23 @@
 */
 
 #include "ooutils.h"
+#include "stylestack.h"
+#include <qdom.h>
 #include <qcolor.h>
 #include <koUnit.h>
 #include <qregexp.h>
+#include <kdebug.h>
 
-double OoUtils::toPoint( QString value, double defaultVal )
+QString OoUtils::expandWhitespace(const QDomElement& tag)
 {
-    value.simplifyWhiteSpace();
-    value.remove( ' ' );
+    //tags like <text:s text:c="4">
 
-    int index = value.find( QRegExp( "[a-z]{1,2}$" ), -1 );
-    if ( index == -1 )
-        return defaultVal;
+    int howmany=1;
+    if (tag.hasAttribute("text:c"))
+        howmany = tag.attribute("text:c").toInt();
 
-    QString unit = value.mid( index - 1 );
-    value.truncate ( index - 1 );
-
-    if ( unit == "cm" )
-        return CM_TO_POINT( value.toDouble() );
-    else if ( unit == "mm" )
-        return MM_TO_POINT( value.toDouble() );
-    else if ( unit == "pt" )
-        return value.toDouble();
-    else
-        return defaultVal;
+    QString result;
+    return result.fill(32, howmany);
 }
 
 bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QColor * color)
@@ -57,7 +50,7 @@ bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QCol
     QString _style = tag.section(' ', 1, 1);
     QString _color = tag.section(' ', 2, 2);
 
-    *width = toPoint(_width, 1.0);
+    *width = KoUnit::parseValue(_width, 1.0);
 
     if (_style=="double")
         *style = 5;
@@ -67,7 +60,309 @@ bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QCol
     if (_color.isEmpty())
         *color = QColor();
     else
-        *color = QColor(_color);
+        color->setNamedColor(_color);
 
     return true;
+}
+
+void OoUtils::importIndents( QDomElement& parentElement, const StyleStack& styleStack )
+{
+    if ( styleStack.hasAttribute( "fo:margin-left" ) ||
+         styleStack.hasAttribute( "fo:margin-right" ) )
+         // *text-indent must always be bound to either margin-left or margin-right
+    {
+        double marginLeft = KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ) );
+        double marginRight = KoUnit::parseValue( styleStack.attribute( "fo:margin-right" ) );
+        double first = 0;
+        if (styleStack.hasAttribute("style:auto-text-indent")) // style:auto-text-indent takes precedence
+            // ### It has another meaning, no?
+            first = KoUnit::parseValue( styleStack.attribute("style:auto-text-indent"));
+        else if (styleStack.hasAttribute("fo:text-indent"))
+            first = KoUnit::parseValue( styleStack.attribute("fo:text-indent"));
+
+        if ( marginLeft != 0 || marginRight != 0 || first != 0 )
+        {
+            QDomElement indent = parentElement.ownerDocument().createElement( "INDENTS" );
+            if( marginLeft != 0 )
+                indent.setAttribute( "left", marginLeft );
+            if( marginRight != 0 )
+                indent.setAttribute( "right", marginLeft );
+            if( first != 0 )
+                indent.setAttribute( "first", first );
+            parentElement.appendChild( indent );
+        }
+    }
+}
+
+void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& styleStack )
+{
+    if( styleStack.hasAttribute("fo:line-height") )
+    {
+        QString value = styleStack.attribute( "fo:line-height" );
+        if ( value != "normal" )
+        {
+            QDomElement lineSpacing = parentElement.ownerDocument().createElement( "LINESPACING" );
+            if( value=="150%")
+                lineSpacing.setAttribute("type","oneandhalf");
+            else if( value=="200%")
+                lineSpacing.setAttribute("type","double");
+            else if ( value.find('%') > -1 )
+            {
+                double percent = value.toDouble();
+                lineSpacing.setAttribute("type", "multiple");
+                lineSpacing.setAttribute("spacingvalue", percent/100);
+            }
+            else // fixed value (use KoUnit::parseValue to get it in pt)
+            {
+                kdWarning() << "Unhandled value for fo:line-height: " << value << endl;
+            }
+            parentElement.appendChild( lineSpacing );
+        }
+    }
+    // Line-height-at-least is mutually exclusive with line-height
+    else if ( styleStack.hasAttribute("style:line-height-at-least") )
+    {
+        QString value = styleStack.attribute( "style:line-height-at-least" );
+        // kotext has "atleast" but that's for the linespacing, not for the entire line height!
+        // Strange. kotext also has "at least" for the whole line height....
+        // Did we make the wrong choice in kotext?
+        //kdWarning() << "Unimplemented support for style:line-height-at-least: " << value << endl;
+        // Well let's see if this makes a big difference.
+        QDomElement lineSpacing = parentElement.ownerDocument().createElement("LINESPACING");
+        lineSpacing.setAttribute("type", "atleast");
+        lineSpacing.setAttribute("spacingvalue", KoUnit::parseValue(value));
+        parentElement.appendChild(lineSpacing);
+    }
+    // Line-spacing is mutually exclusive with line-height and line-height-at-least
+    else if ( styleStack.hasAttribute("style:line-spacing") )
+    {
+        double value = KoUnit::parseValue( styleStack.attribute( "style:line-spacing" ) );
+        if ( value != 0.0 )
+        {
+            QDomElement lineSpacing = parentElement.ownerDocument().createElement( "LINESPACING" );
+            lineSpacing.setAttribute( "type", "custom" );
+            lineSpacing.setAttribute( "spacingvalue", value );
+            parentElement.appendChild( lineSpacing );
+        }
+    }
+
+}
+
+void OoUtils::importTopBottomMargin( QDomElement& parentElement, const StyleStack& styleStack )
+{
+    if( styleStack.hasAttribute("fo:margin-top") ||
+        styleStack.hasAttribute("fo:margin-bottom"))
+    {
+        double mtop = KoUnit::parseValue( styleStack.attribute( "fo:margin-top" ) );
+        double mbottom = KoUnit::parseValue( styleStack.attribute("fo:margin-bottom" ) );
+        if( mtop != 0 || mbottom != 0 )
+        {
+            QDomElement offset = parentElement.ownerDocument().createElement( "OFFSETS" );
+            if( mtop != 0 )
+                offset.setAttribute( "before", mtop );
+            if( mbottom != 0 )
+                offset.setAttribute( "after", mbottom );
+            parentElement.appendChild( offset );
+        }
+    }
+}
+
+void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& styleStack )
+{
+    if ( !styleStack.hasChildNode( "style:tab-stops" ) )
+        return;
+    QDomElement tabStops = styleStack.childNode( "style:tab-stops" ).toElement();
+    for ( QDomNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
+    {
+        QDomElement tabStop = it.toElement();
+        Q_ASSERT( tabStop.tagName() == "style:tab-stop" );
+        QString type = tabStop.attribute( "style:type" ); // left, right, center or char
+        int kOfficeType = 0;
+        if ( type == "left" )
+            kOfficeType = 0;
+        else if ( type == "center" )
+            kOfficeType = 1;
+        else if ( type == "right" )
+            kOfficeType = 2;
+        else if ( type == "char" ) {
+            //QString delimiterChar = tabStop.attribute( "style:char" ); // single character
+            // TODO save delimiterChar
+            kOfficeType = 3; // "alignment on decimal point"
+        }
+
+        QDomElement elem = parentElement.ownerDocument().createElement( "TABULATOR" );
+        elem.setAttribute( "type", kOfficeType );
+
+        double pos = KoUnit::parseValue( tabStop.attribute( "style:position" ) );
+        elem.setAttribute( "ptpos", pos );
+
+        // TODO Convert leaderChar's unicode value to the KOffice enum
+        // (blank/dots/line/dash/dash-dot/dash-dot-dot, 0 to 5)
+        //QString leaderChar = tabStop.attribute( "style:leader-char" ); // single character
+        //elem.setAttribute( "filling", 0 );
+        parentElement.appendChild( elem );
+    }
+
+}
+
+void OoUtils::importBorders( QDomElement& parentElement, const StyleStack& styleStack )
+{
+    // First case, we set all the borders at once
+    if ( styleStack.hasAttribute( "fo:border" ) )
+    {
+        double width;
+        int style;
+        QColor color;
+        if (OoUtils::parseBorder(styleStack.attribute("fo:border"), &width, &style, &color))
+        {
+            QDomElement lbElem = parentElement.ownerDocument().createElement("LEFTBORDER");
+            lbElem.setAttribute("width", width);
+            lbElem.setAttribute("style", style);
+            if (color.isValid()) {
+                lbElem.setAttribute("red", color.red());
+                lbElem.setAttribute("green", color.green());
+                lbElem.setAttribute("blue", color.blue());
+            }
+            parentElement.appendChild(lbElem);
+
+            QDomElement rbElem = parentElement.ownerDocument().createElement("RIGHTBORDER");
+            rbElem = lbElem.cloneNode(false).toElement();
+            parentElement.appendChild(rbElem);
+
+            QDomElement tbElem = parentElement.ownerDocument().createElement("TOPBORDER");
+            tbElem = lbElem.cloneNode(false).toElement();
+            parentElement.appendChild(tbElem);
+
+            QDomElement bbElem = parentElement.ownerDocument().createElement("BOTTOMBORDER");
+            bbElem = lbElem.cloneNode(false).toElement();
+            parentElement.appendChild(bbElem);
+        }
+    }
+         // Second case: we set each border independently
+         else if ( styleStack.hasAttribute( "fo:border-left" )
+                   || styleStack.hasAttribute( "fo:border-right" )
+                   || styleStack.hasAttribute( "fo:border-top" )
+                   || styleStack.hasAttribute( "fo:border-bottom" ) )
+    {
+        if (styleStack.hasAttribute("fo:border-left"))
+        {
+            double width;
+            int style;
+            QColor color;
+            if (OoUtils::parseBorder(styleStack.attribute("fo:border-left"), &width, &style, &color))
+            {
+                QDomElement lbElem = parentElement.ownerDocument().createElement("LEFTBORDER");
+                lbElem.setAttribute("width", width);
+                lbElem.setAttribute("style", style);
+                if (color.isValid()) {
+                    lbElem.setAttribute("red", color.red());
+                    lbElem.setAttribute("green", color.green());
+                    lbElem.setAttribute("blue", color.blue());
+                }
+                parentElement.appendChild(lbElem);
+            }
+        }
+
+        if (styleStack.hasAttribute("fo:border-right"))
+        {
+            double width;
+            int style;
+            QColor color;
+            if (OoUtils::parseBorder(styleStack.attribute("fo:border-right"), &width, &style, &color))
+            {
+                QDomElement lbElem = parentElement.ownerDocument().createElement("RIGHTBORDER");
+                lbElem.setAttribute("width", width);
+                lbElem.setAttribute("style", style);
+                if (color.isValid()) {
+                    lbElem.setAttribute("red", color.red());
+                    lbElem.setAttribute("green", color.green());
+                    lbElem.setAttribute("blue", color.blue());
+                }
+                parentElement.appendChild(lbElem);
+            }
+        }
+
+        if (styleStack.hasAttribute("fo:border-top"))
+        {
+            double width;
+            int style;
+            QColor color;
+            if (OoUtils::parseBorder(styleStack.attribute("fo:border-top"), &width, &style, &color))
+            {
+                QDomElement lbElem = parentElement.ownerDocument().createElement("TOPBORDER");
+                lbElem.setAttribute("width", width);
+                lbElem.setAttribute("style", style);
+                if (color.isValid()) {
+                    lbElem.setAttribute("red", color.red());
+                    lbElem.setAttribute("green", color.green());
+                    lbElem.setAttribute("blue", color.blue());
+                }
+                parentElement.appendChild(lbElem);
+            }
+        }
+
+        if (styleStack.hasAttribute("fo:border-bottom"))
+        {
+            double width;
+            int style;
+            QColor color;
+            if (OoUtils::parseBorder(styleStack.attribute("fo:border-bottom"), &width, &style, &color))
+            {
+                QDomElement lbElem = parentElement.ownerDocument().createElement("BOTTOMBORDER");
+                lbElem.setAttribute("width", width);
+                lbElem.setAttribute("style", style);
+                if (color.isValid()) {
+                    lbElem.setAttribute("red", color.red());
+                    lbElem.setAttribute("green", color.green());
+                    lbElem.setAttribute("blue", color.blue());
+                }
+                parentElement.appendChild(lbElem);
+            }
+        }
+    }
+}
+
+// TODO use this in OoImpressImport!
+void OoUtils::importUnderline( const QString& in, QString& underline, QString& styleline )
+{
+    underline = "single";
+    if ( in == "none" )
+        underline = "0";
+    else if ( in == "single" )
+        styleline = "solid";
+    else if ( in == "double" )
+    {
+        underline = in;
+        styleline = "solid";
+    }
+    else if ( in == "dotted" || in == "bold-dotted" ) // bold-dotted not in libkotext
+        styleline = "dot";
+    else if ( in == "dash"
+              // those are not in libkotext:
+              || in == "long-dash"
+              || in == "bold-dash"
+              || in == "bold-long-dash"
+        )
+        styleline = "dash";
+    else if ( in == "dot-dash"
+              || in == "bold-dot-dash") // not in libkotext
+        styleline = "dashdot"; // tricky ;)
+    else if ( in == "dot-dot-dash"
+              || in == "bold-dot-dot-dash") // not in libkotext
+        styleline = "dashdotdot"; // this is getting fun...
+    else if ( in == "wave"
+              || in == "bold-wave" // not in libkotext
+              || in == "double-wave" // not in libkotext
+              || in == "small-wave" ) // not in libkotext
+    {
+        underline = in;
+        styleline = "solid";
+    }
+    else if( in == "bold" )
+    {
+        underline = "single-bold";
+        styleline = "solid";
+    }
+    else
+        kdWarning() << k_funcinfo << " unsupported text-underline value: " << in << endl;
 }
