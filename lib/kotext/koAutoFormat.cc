@@ -68,8 +68,7 @@ void KoAutoFormatEntry::createNewEntryContext()
 
 void KoAutoFormatEntry::setFormatEntryContext( KoSearchContext *_cont )
 {
-    if ( m_formatOptions)
-        delete m_formatOptions;
+    delete m_formatOptions;
     m_formatOptions=_cont;
 }
 
@@ -1463,11 +1462,10 @@ KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTe
 KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
 {
     KoTextString *s = parag->string();
-    bool refreshCursor=false;
     KoTextDocument * textdoc = parag->textDocument();
     KoTextCursor cursor( parag->document() );
 
-    KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (remove start and end line space)"));
+    KMacroCommand *macroCmd = 0L;
     for ( int i = parag->string()->length()-1; i >= 0; --i )
     {
         QChar ch = s->at( i ).c;
@@ -1484,9 +1482,11 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
             KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "",KoTextObject::HighlightSelection , QString::null );
 
             if(cmd)
+            {
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Autocorrect (remove start and end line space)"));
                 macroCmd->addCommand(cmd);
-
-            refreshCursor=true;
+            }
             break;
         }
     }
@@ -1510,23 +1510,23 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
             KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "",KoTextObject::HighlightSelection , QString::null );
 
             if(cmd)
+            {
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Autocorrect (remove start and end line space)"));
                 macroCmd->addCommand(cmd);
-            refreshCursor=true;
+            }
             break;
         }
     }
 
-    if( refreshCursor)
+    if( macroCmd )
     {
         txtObj->emitHideCursor();
         textEditCursor->setParag( parag->next() );
         //textEditCursor->cursorgotoRight();
         txtObj->emitShowCursor();
-        return macroCmd;
     }
-    else
-        delete macroCmd;
-    return 0L;
+    return macroCmd;
 }
 
 KCommand *KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
@@ -1756,24 +1756,19 @@ void KoAutoFormat::configAutoFormatLanguage( const QString &_lang)
 KCommand *KoAutoFormat::applyAutoFormat( KoTextObject * obj )
 {
     KoTextParag * parag = obj->textDocument()->firstParag();
-    KMacroCommand *macro = new KMacroCommand( i18n("Apply Autoformat"));
-    bool createCmd = false;
+    KMacroCommand *macro = 0L;
     while ( parag )
     {
         KCommand *cmd = scanParag( parag,obj );
         if ( cmd )
         {
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Apply Autoformat"));
             macro->addCommand( cmd);
-            createCmd = true;
         }
         parag = parag->next();
     }
-    if ( createCmd )
-    {
-        return macro;
-    }
-    delete macro;
-    return 0L;
+    return macro;
 }
 
 KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
