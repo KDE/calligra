@@ -331,6 +331,24 @@ TODO:
 
 ===================== Kexi 0.1 Beta 4 =====================
 
+2004-07-08
+Query Designer
+- switching between design modes improved
+- on generating sql from GUI: "*" added if no fields are picked
+KexiMainWindow
+- neverending-story: actions availability updating fixed
+TableView
+- KexiTableViewPropertyBuffer: all buffers are cleared when view's 
+   data is cleared (using clear())
+Relation Widget
+- view clearing supported
+Core
+- KexiViewBase: 'dirty' flag is now better signaled to a dialog
+KexiDB/SQL Parser
+- lexer: USER_DEFINED_NAME now accepts also [0-9] (after 1st char)
+- optional ';' is allowed at the end of top level statement
+- dummy table is removed from query after parsing
+TODO: remove single-char token names with chars (more readable + more effective)
 
 2004-07-07
 Core
