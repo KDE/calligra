@@ -2389,6 +2389,7 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 			       QPixmap *&doubleBuffer, const QColorGroup &cg,
 			       bool drawCursor, QTextCursor *cursor, bool resetChanged )
 {
+    //qDebug( "drawParag %p %d", parag, parag->paragId() );
     QPainter *painter = 0;
     if ( resetChanged )
 	parag->setChanged( FALSE );
@@ -2401,6 +2402,12 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 
     if ( useDoubleBuffer  ) {
 	painter = new QPainter;
+        if ( verticalBreak() && parag->next() )
+            if ( ir.y() + ir.height() < parag->next()->rect().y() ) {
+                ir.setLeft( 0 );
+                ir.setRight( parag->document()->x() + parag->document()->width() );
+                ir.setBottom( parag->next()->rect().y() - 1 );
+            }
 	if ( cx >= 0 && cy >= 0 )
 	    ir = ir.intersect( QRect( cx, cy, cw, ch ) );
 	if ( !doubleBuffer ||
@@ -2454,8 +2461,8 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 		     parag->rect().height(), cg.brush( QColorGroup::Base ) );
     }
 
-    if ( verticalBreak() && parag->lastInFrame && parag->document()->flow() )
-	parag->document()->flow()->eraseAfter( parag, p, cg );
+    //if ( verticalBreak() && parag->lastInFrame && parag->document()->flow() )
+    //    parag->document()->flow()->eraseAfter( parag, p, cg );
 
     parag->document()->nextDoubleBuffered = FALSE;
 }
@@ -2494,12 +2501,19 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 	if ( !parag->isValid() )
 	    parag->format();
 
-	if ( !parag->rect().intersects( QRect( cx, cy, cw, ch ) ) ) {
-	    QRect pr( parag->rect() );
-	    pr.setWidth( parag->document()->width() );
-	    if ( pr.intersects( QRect( cx, cy, cw, ch ) ) )
-                p->fillRect( pr.intersect( QRect( cx, cy, cw, ch ) ), cg.brush( QColorGroup::Base ) );
-	    if ( parag->rect().y() > cy + ch ) {
+        QRect ir = parag->rect();
+        if ( verticalBreak() && parag->next() )
+            if ( ir.y() + ir.height() < parag->next()->rect().y() ) {
+                ir.setLeft( 0 );
+                ir.setRight( parag->document()->x() + parag->document()->width() );
+                ir.setBottom( parag->next()->rect().y() - 1 );
+            }
+
+	if ( !ir.intersects( QRect( cx, cy, cw, ch ) ) ) {
+	    ir.setWidth( parag->document()->width() );
+	    if ( ir.intersects( QRect( cx, cy, cw, ch ) ) )
+                p->fillRect( ir.intersect( QRect( cx, cy, cw, ch ) ), cg.brush( QColorGroup::Base ) );
+	    if ( ir.y() > cy + ch ) {
 		tmpCursor = 0;
 		if ( buf_pixmap && buf_pixmap->height() > 300 ) {
 		    delete buf_pixmap;
@@ -2515,6 +2529,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 	}
 
 	if ( !parag->hasChanged() && onlyChanged ) {
+            //qDebug( "skipping unchanged parag %p %d", parag, parag->paragId() );
 	    parag = parag->next();
 	    continue;
 	}
@@ -3511,6 +3526,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
     QTextStringChar *chr = at( 0 );
     ASSERT( chr );
     if (!chr) { qDebug("paragraph %p %d, can't paint, EMPTY !", this, paragId()); return; }
+    //qDebug( "painting paragraph %p %d", this, paragId() );
     int i = 0;
     int h = 0;
     int baseLine = 0, lastBaseLine = 0;
