@@ -1233,6 +1233,7 @@ void RTFImport::parsePicture( RTFProperty * )
         sprintf( pictName, "pictures/picture%d.%s", id, ext );
         sprintf( frameName, "Picture %d", id );
 
+        kdDebug(30515) << "Picture: " << pictName << " Frame: " << frameName << endl;
         // Store picture
         writeOutPart( pictName, picture.bits );
 
@@ -1990,7 +1991,7 @@ void RTFImport::addLayout( DomNode &node, QCString &name, RTFLayout &layout, boo
 	node.addNode( "PAGEBREAKING" );
 	  node.setAttribute( "linesTogether", boolN[layout.keep] );
 	  node.setAttribute( "hardFrameBreak", boolN[layout.pageBB] );
-	  node.setAttribute( "hardFrameBreakAfter", boolN[layout.pageBA] || boolN[frameBreak] );
+	  node.setAttribute( "hardFrameBreakAfter", boolN[layout.pageBA || frameBreak] );
 	  node.setAttribute( "keepWithNext", boolN[layout.keepNext] );
 	node.closeNode( "PAGEBREAKING" );
     }
