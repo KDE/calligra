@@ -88,6 +88,7 @@ void
 VSmallPreview::drawFill( const VFill &f )
 {
 	VFill fill;
+	fill = f;
 	VStroke stroke;
 
 	m_painter->begin();
@@ -121,12 +122,26 @@ VSmallPreview::drawFill( const VFill &f )
 			fill.gradient() = f.gradient();
 			fill.setType( VFill::grad );
 			m_fillLabel->setText( i18n( "Fill: Gradient") );
+			if( f.gradient().type() == VGradient::linear )
+			{
+				fill.gradient().setOrigin( KoPoint( m_fillFrame->width() * 0.5, 0 ) );
+				fill.gradient().setVector( KoPoint( m_fillFrame->width() * 0.5, m_fillFrame->height() ) );
+			}
+			else if( f.gradient().type() == VGradient::radial ||
+				f.gradient().type() == VGradient::conic )
+			{
+				fill.gradient().setOrigin( KoPoint( m_fillFrame->width() * 0.5, m_fillFrame->height() * 0.5 ) );
+				fill.gradient().setFocalPoint( KoPoint( m_fillFrame->width() * 0.5, m_fillFrame->height() * 0.5 ) );
+				fill.gradient().setVector( KoPoint( m_fillFrame->width() * 0.5, m_fillFrame->height() ) );
+			}
 			break;
 
 		}
 		case VFill::patt:
 		{
 			fill.pattern() = f.pattern();
+			fill.pattern().setOrigin( KoPoint( 0, 0 ) );
+			fill.pattern().setVector( KoPoint( m_fillFrame->width() * 0.5, 0 ) );
 			fill.setType( VFill::patt );
 			m_fillLabel->setText( i18n( "Fill: Pattern") );
 			break;
@@ -197,11 +212,25 @@ VSmallPreview::drawStroke( const VStroke &s )
 			fill.gradient() = s.gradient();
 			fill.setType( VFill::grad );
 			m_strokeLabel->setText( i18n( "Stroke: Gradient") );
+			if( s.gradient().type() == VGradient::linear )
+			{
+				fill.gradient().setOrigin( KoPoint( m_strokeFrame->width() * 0.5, 0 ) );
+				fill.gradient().setVector( KoPoint( m_strokeFrame->width() * 0.5, m_strokeFrame->height() ) );
+			}
+			else if( s.gradient().type() == VGradient::radial ||
+				s.gradient().type() == VGradient::conic )
+			{
+				fill.gradient().setOrigin( KoPoint( m_strokeFrame->width() * 0.5, m_strokeFrame->height() * 0.5 ) );
+				fill.gradient().setFocalPoint( KoPoint( m_strokeFrame->width() * 0.5, m_strokeFrame->height() * 0.5 ) );
+				fill.gradient().setVector( KoPoint( m_strokeFrame->width() * 0.5, m_strokeFrame->height() ) );
+			}
 			break;
 		}
 		case VStroke::patt:
 		{
 			fill.pattern() = s.pattern();
+			fill.pattern().setOrigin( KoPoint( 0, 0 ) );
+			fill.pattern().setVector( KoPoint( m_strokeFrame->width() * 0.5, 0 ) );
 			fill.setType( VFill::patt );
 			m_strokeLabel->setText( i18n( "Stroke: Pattern") );
 			break;
