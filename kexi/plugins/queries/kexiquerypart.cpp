@@ -110,8 +110,34 @@ KexiQueryPart::data(KexiDB::Connection *conn, KexiPart::Item &i)
 	return doc;
 }
 
+KexiPart::DataSource *
+KexiQueryPart::dataSource()
+{
+	return new KexiQueryDataSource(this);
+}
+
 K_EXPORT_COMPONENT_FACTORY( kexihandler_query, KGenericFactory<KexiQueryPart> )
 
+KexiQueryDataSource::KexiQueryDataSource(KexiPart::Part *part)
+ : KexiPart::DataSource(part)
+{
+}
+
+KexiQueryDataSource::~KexiQueryDataSource()
+{
+}
+
+KexiDB::FieldList *
+KexiQueryDataSource::fields(KexiProject *, const KexiPart::Item &)
+{
+	return 0;
+}
+
+KexiDB::Cursor *
+KexiQueryDataSource::cursor(KexiProject *, const KexiPart::Item &, bool)
+{
+	return 0;
+}
 
 #include "kexiquerypart.moc"
 

@@ -71,6 +71,7 @@ KexiQueryDesignerSQL::beforeSwitchTo(int)
 		delete parser;
 	}
 
+	setDirty(true);
 	return true;
 }
 

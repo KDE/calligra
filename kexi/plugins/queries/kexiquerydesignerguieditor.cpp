@@ -43,6 +43,7 @@
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
+	setDirty(true);
 	m_conn = mainWin->project()->dbConnection();
 	m_doc = doc;
 
@@ -108,6 +109,8 @@ KexiQueryDesignerGuiEditor::addRow(const QString &tbl, const QString &field)
 
 	//TODO: this should deffinitly not go here :)
 	m_table->updateContents();
+
+	setDirty(true);
 }
 
 void
