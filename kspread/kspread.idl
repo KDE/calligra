@@ -38,6 +38,8 @@ module KSpread
 		signal void precisionMinus();
 		signal void precisionPlus();
 		signal void insertChart();
+		signal void fontSizeSelected( in string size );
+		signal void fontSelected( in string font );
 	};
 
 	interface Document : OPParts::Document

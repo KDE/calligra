@@ -1,3 +1,14 @@
+Tue Apr 21 00:17:41 1998  Torben Weis  <weis@localhost>
+
+	* kspread_view.cc (insertRow): Inserting rows and columns
+	  works now.
+	
+	* (addTable): Can handle multiple tables.
+
+Mon Apr 20 02:10:29 1998  Torben Weis  <weis@localhost>
+
+	* kspread.idl: Selecting font and font sizes work now.
+
 Sun Apr 19 18:03:26 1998  Torben Weis  <weis@localhost>
 
 	* kspread_view.cc (slotUpdateView): View does now connect to the

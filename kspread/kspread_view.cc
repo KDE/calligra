@@ -9,6 +9,7 @@
 #include <qobjcoll.h>
 #include <qkeycode.h>
 #include <kbutton.h>
+#include <klocale.h>
 
 #include "kspread_map.h"
 #include "kspread_table.h"
@@ -142,13 +143,14 @@ void KSpreadView::createGUI()
 
     m_rToolBarLayout = m_vToolBarFactory->createToolBar( this, CORBA::string_dup( i18n( "Layout" ) ) );
 
-    m_idComboLayout_Font = m_rToolBarLayout->insertCombo( false, CORBA::string_dup( i18n( "Font" ) ), 120 );
+    m_idComboLayout_Font = m_rToolBarLayout->insertCombo( false, CORBA::string_dup( i18n( "Font" ) ), 120, this, "fontSelected" );
     m_rToolBarLayout->insertComboItem ( m_idComboLayout_Font, CORBA::string_dup( "Courier" ), -1 );
     m_rToolBarLayout->insertComboItem ( m_idComboLayout_Font, CORBA::string_dup( "Helvetica" ), -1 );
     m_rToolBarLayout->insertComboItem ( m_idComboLayout_Font, CORBA::string_dup( "Symbol" ), -1 );
     m_rToolBarLayout->insertComboItem ( m_idComboLayout_Font, CORBA::string_dup( "Times" ), -1 );
   
-    m_idComboLayout_FontSize = m_rToolBarLayout->insertCombo( false, CORBA::string_dup( i18n( "Font Size" ) ), 50 );
+    m_idComboLayout_FontSize = m_rToolBarLayout->insertCombo( false, CORBA::string_dup( i18n( "Font Size" ) ), 50,
+							      this, "fontSizeSelected" );
     int sizes[24] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 48, 64 };
     for( int i = 0; i < 24; i++ )
     {
@@ -473,7 +475,7 @@ void KSpreadView::insertRow()
 {
   if ( !m_pTable )
     return;
-  m_pTable->insertRow( m_iMarkerColumn );
+  m_pTable->insertRow( m_iMarkerRow );
 }
 
 void KSpreadView::fontSelected( const char *_font )
@@ -527,23 +529,22 @@ void KSpreadView::editLocalScripts()
 void KSpreadView::addTable( KSpreadTable *_t )
 {
   m_pTabBar->addTab( _t->name() );
-  if ( m_pTable == 0L )
-  {
-    setActiveTable( _t );
-    QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable* ) ), SLOT( slotUpdateView( KSpreadTable* ) ) );
-    QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable *, const QRect& ) ),
-		      SLOT( slotUpdateView( KSpreadTable*, const QRect& ) ) );
-    QObject::connect( _t, SIGNAL( sig_updateCell( KSpreadTable *, KSpreadCell*, int, int ) ),
-		      SLOT( slotUpdateCell( KSpreadTable *, KSpreadCell*, int, int ) ) );
-    QObject::connect( _t, SIGNAL( sig_unselect( KSpreadTable *, const QRect& ) ),
-		      SLOT( slotUnselect( KSpreadTable *, const QRect& ) ) );
-    QObject::connect( _t, SIGNAL( sig_updateHBorder( KSpreadTable * ) ),
-		      SLOT( slotUpdateHBorder( KSpreadTable * ) ) );
-    QObject::connect( _t, SIGNAL( sig_updateVBorder( KSpreadTable * ) ),
-		      SLOT( slotUpdateVBorder( KSpreadTable * ) ) );
-    QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QRect & ) ),
-		      SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
-  }
+
+  setActiveTable( _t );
+
+  QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable* ) ), SLOT( slotUpdateView( KSpreadTable* ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable *, const QRect& ) ),
+		    SLOT( slotUpdateView( KSpreadTable*, const QRect& ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateCell( KSpreadTable *, KSpreadCell*, int, int ) ),
+		    SLOT( slotUpdateCell( KSpreadTable *, KSpreadCell*, int, int ) ) );
+  QObject::connect( _t, SIGNAL( sig_unselect( KSpreadTable *, const QRect& ) ),
+		    SLOT( slotUnselect( KSpreadTable *, const QRect& ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateHBorder( KSpreadTable * ) ),
+		    SLOT( slotUpdateHBorder( KSpreadTable * ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateVBorder( KSpreadTable * ) ),
+		    SLOT( slotUpdateVBorder( KSpreadTable * ) ) );
+  QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QRect & ) ),
+		    SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
 }
 
 void KSpreadView::removeTable( KSpreadTable *_t )
@@ -603,6 +604,8 @@ void KSpreadView::slotChangeTable( const char *_name )
       return;
     }
   }
+
+  warning("Unknown table '%s'\n",_name);
 }
 
 void KSpreadView::slotScrollToFirstTable()
@@ -1045,9 +1048,7 @@ void KSpreadView::percent()
 
 void KSpreadView::insertChart()
 {
-  // TODO
-  /* if ( m_pTable != 0L )
-    m_pTable->chart(); */
+  m_pCanvasWidget->setAction( KSpreadCanvas::Chart );
 }
 
 void KSpreadView::autoFill()
@@ -1553,8 +1554,12 @@ void KSpreadCanvas::setAction( Actions _act )
   if ( _act == Chart )
   {    
     // Something must be selected
-    if ( selection.right() == 0x7fff || selection.bottom() == 0x7fff )
+    if ( selection.right() == 0x7fff || selection.bottom() == 0x7fff || selection.left() == 0 )
+    {
+      QMessageBox::critical( this, i18n("KSpread Error" ), i18n("You must first select the cells\nwhich contain the data." ),
+			     i18n( "Ok" ) );
       return;
+    }
   }
   
   m_eAction = _act;
@@ -2073,14 +2078,14 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   
   // Are we making a selection right now ? Go thru this only if no selection is made
   // or if we neither selected complete rows nor columns.
-  /* if ( ( _ev->state() & ShiftButton ) == ShiftButton &&
+  if ( ( _ev->state() & ShiftButton ) == ShiftButton &&
        ( selection.left() == 0 || ( selection.right() != 0 && selection.bottom() != 0 ) ) && 
        ( _ev->key() == Key_Down || _ev->key() == Key_Up || _ev->key() == Key_Left || _ev->key() == Key_Right ) )
     make_select = TRUE;
 
   // Do we have an old selection ? If yes, unselect everything
   if ( selection.left() != 0 && !make_select )
-    table->unselect(); */
+    table->unselect();
     
   switch( _ev->key() )
     {

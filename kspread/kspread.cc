@@ -534,6 +534,38 @@ void KSpread::View_stub::insertChart()
 }
 
 
+void KSpread::View_stub::fontSizeSelected( const char* size )
+{
+  CORBA::Request_var _req = this->_request( "fontSizeSelected" );
+  _req->add_in_arg( "size" ) <<= CORBA::Any::from_string( (char *) size, 0 );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->send_oneway();
+  #ifdef HAVE_EXCEPTIONS
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    mico_throw( *_ex );
+  #else
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    CORBA::Exception::_throw_failed( _ex );
+  #endif
+}
+
+
+void KSpread::View_stub::fontSelected( const char* font )
+{
+  CORBA::Request_var _req = this->_request( "fontSelected" );
+  _req->add_in_arg( "font" ) <<= CORBA::Any::from_string( (char *) font, 0 );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->send_oneway();
+  #ifdef HAVE_EXCEPTIONS
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    mico_throw( *_ex );
+  #else
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    CORBA::Exception::_throw_failed( _ex );
+  #endif
+}
+
+
 struct _global_init_KSpread_View {
   _global_init_KSpread_View()
   {
@@ -978,6 +1010,34 @@ bool KSpread::View_skel::dispatch( CORBA::ServerRequest_ptr _req, CORBA::Environ
     _req->params( _args );
 
     insertChart();
+    return true;
+  }
+  if( strcmp( _req->op_name(), "fontSizeSelected" ) == 0 ) {
+    CORBA::String_var size;
+
+    CORBA::NVList_ptr _args;
+    _orb()->create_list( 1, _args );
+    _args->add( CORBA::ARG_IN );
+    _args->item( 0 )->value()->type( CORBA::_tc_string );
+
+    _req->params( _args );
+
+    *_args->item( 0 )->value() >>= CORBA::Any::to_string( size, 0 );
+    fontSizeSelected( size );
+    return true;
+  }
+  if( strcmp( _req->op_name(), "fontSelected" ) == 0 ) {
+    CORBA::String_var font;
+
+    CORBA::NVList_ptr _args;
+    _orb()->create_list( 1, _args );
+    _args->add( CORBA::ARG_IN );
+    _args->item( 0 )->value()->type( CORBA::_tc_string );
+
+    _req->params( _args );
+
+    *_args->item( 0 )->value() >>= CORBA::Any::to_string( font, 0 );
+    fontSelected( font );
     return true;
   }
   return false;

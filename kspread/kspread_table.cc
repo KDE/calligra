@@ -119,7 +119,7 @@ int KSpreadTable::leftColumn( int _xpos, int &_left, KSpreadView *_view )
     while ( x < _xpos )
     {
 	// Should never happen
-	if ( col == 0xFFFF )
+	if ( col == 0x10000 )
 	    return 1;
 	_left += columnLayout( col )->width( _view );
 	col++;
@@ -138,8 +138,8 @@ int KSpreadTable::rightColumn( int _xpos, KSpreadView *_view )
     while ( x < _xpos )
     {
 	// Should never happen
-	if ( col == 0xFFFF )
-	    return 0xFFFF;
+	if ( col == 0x10000 )
+	    return 0x10000;
 	x += columnLayout( col )->width( _view );
 	col++;
     }
@@ -157,7 +157,7 @@ int KSpreadTable::topRow( int _ypos, int & _top, KSpreadView *_view )
     while ( y < _ypos )
     {
 	// Should never happen
-	if ( row == 0xFFFF )
+	if ( row == 0x10000 )
 	    return 1;
 	_top += rowLayout( row )->height( _view );
 	row++;
@@ -176,8 +176,8 @@ int KSpreadTable::bottomRow( int _ypos, KSpreadView *_view )
     while ( y < _ypos )
     {
 	// Should never happen
-	if ( row == 0xFFFF )
-	    return 0xFFFF;
+	if ( row == 0x10000 )
+	    return 0x10000;
 	y += rowLayout( row )->height( _view );
 	row++;
     }
@@ -192,7 +192,7 @@ int KSpreadTable::columnPos( int _col, KSpreadView *_view )
     while ( col < _col )
     {
 	// Should never happen
-	if ( col == 0xFFFF )
+	if ( col == 0x10000 )
 	    return x;
 	
 	x += columnLayout( col )->width( _view );
@@ -209,7 +209,7 @@ int KSpreadTable::rowPos( int _row, KSpreadView *_view )
     while ( row < _row )
     {
 	// Should never happen
-	if ( row == 0xFFFF )
+	if ( row == 0x10000 )
 	    return y;
 	
 	y += rowLayout( row )->height( _view );
@@ -221,7 +221,7 @@ int KSpreadTable::rowPos( int _row, KSpreadView *_view )
 
 KSpreadCell* KSpreadTable::cellAt( int _column, int _row )
 {
-    int i = _row + ( _column * 0xFFFF );
+    int i = _row + ( _column * 0x10000 );
     
     KSpreadCell *p = m_dctCells[ i ];
     if ( p != 0L )
@@ -259,7 +259,7 @@ RowLayout* KSpreadTable::nonDefaultRowLayout( int _row )
 
 KSpreadCell* KSpreadTable::nonDefaultCell( int _column, int _row )
 {
-    int key = _row + ( _column * 0xFFFF );
+    int key = _row + ( _column * 0x10000 );
     
     KSpreadCell *p = m_dctCells[ key ];
     if ( p != 0L )
@@ -364,7 +364,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	      if ( cell == m_pDefaultCell )
 	      {
 		cell = new KSpreadCell( this, x, y );
-		int key = y + ( x * 0xFFFF );
+		int key = y + ( x * 0x10000 );
 		m_dctCells.insert( key, cell );
 	      }
 
@@ -423,7 +423,7 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 		if ( cell == m_pDefaultCell )
 		{
 		    cell = new KSpreadCell( this, x, y );
-		    int key = y + ( x * 0xFFFF );
+		    int key = y + ( x * 0x10000 );
 		    m_dctCells.insert( key, cell );
 		}
 
@@ -476,7 +476,7 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker)
 		if ( cell == m_pDefaultCell )
 		{
 		    cell = new KSpreadCell( this, x, y );
-		    int key = y + ( x * 0xFFFF );
+		    int key = y + ( x * 0x10000 );
 		    m_dctCells.insert( key, cell );
 		}
 
@@ -524,7 +524,7 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
 		if ( cell == m_pDefaultCell )
 		{
 		    cell = new KSpreadCell( this, x, y );
-		    int key = y + ( x * 0xFFFF );
+		    int key = y + ( x * 0x10000 );
 		    m_dctCells.insert( key, cell );
 		}
 
@@ -574,7 +574,7 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 		if ( cell == m_pDefaultCell )
 		{
 		    cell = new KSpreadCell( this, x, y );
-		    int key = y + ( x * 0xFFFF );
+		    int key = y + ( x * 0x10000 );
 		    m_dctCells.insert( key, cell );
 		}
 
@@ -634,7 +634,7 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 		if ( cell == m_pDefaultCell )
 		{
 		    cell = new KSpreadCell( this, x, y );
-		    int key = y + ( x * 0xFFFF );
+		    int key = y + ( x * 0x10000 );
 		    m_dctCells.insert( key, cell );
 		}
 
@@ -662,51 +662,61 @@ void KSpreadTable::insertRow( int _row )
     m_dctCells.setAutoDelete( FALSE );
     m_dctRows.setAutoDelete( FALSE );
     
+    KSpreadCell* (list[m_dctCells.count() ]);
+    int count = 0;
+    // Find the last row
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     int max_row = 1;
     for ( ; it.current(); ++it ) 
-	if ( it.current()->row() > max_row )
-	    max_row = it.current()->row();
+    {
+      list[ count++ ] = it.current();  
+      if ( it.current()->row() > max_row )
+	max_row = it.current()->row();
+    }
     
     for ( int i = max_row; i >= _row; i-- )
     {
-	it.toFirst();
-	for ( ; it.current(); ++it ) 
-	{   
-	    if ( it.current()->row() == i && !it.current()->isDefault() )
-	    {
-		int key = it.current()->row() + ( it.current()->column() * 0xFFFF );
-		m_dctCells.remove( key );
+      for( int k = 0; k < count; k++ )
+      {  
+	if ( list[ k ]->row() == i && !list[ k ]->isDefault() )
+	{
+	  int key = list[ k ]->row() + ( list[ k ]->column() * 0x10000 );
+	  m_dctCells.remove( key );
 	
-		it.current()->setRow( it.current()->row() + 1 );
+	  list[ k ]->setRow( list[ k ]->row() + 1 );
 		
-		key = it.current()->row() + ( it.current()->column() * 0xFFFF );
-		m_dctCells.insert( key, it.current() );
-	    }
+	  key = list[ k ]->row() + ( list[ k ]->column() * 0x10000 );
+	  m_dctCells.insert( key, list[ k ] );
 	}
+      }
     }
 
+    RowLayout* (list2[ m_dctRows.count() ]);
+    count = 0;
     QIntDictIterator<RowLayout> it2( m_dctRows );
     max_row = 1;
     for ( ; it2.current(); ++it2 ) 
-	if ( it2.current()->row() > max_row )
-	    max_row = it2.current()->row();
+    {
+      list2[ count++ ] = it2.current();
+      if ( it2.current()->row() > max_row )
+	max_row = it2.current()->row();
+    }
+    
     for ( int i = max_row; i >= _row; i-- )
     {
-	it2.toFirst();
-	for ( ; it2.current(); ++it2 ) 
+      for( int k = 0; k < count; k++ )
+      {  
+	if ( list2[ k ]->row() == i )
 	{
-	    if ( it2.current()->row() == i )
-	    {
-		int key = it2.current()->row();
-		m_dctRows.remove( key );
+	  int key = list2[ k ]->row();
+	  m_dctRows.remove( key );
 		
-		it2.current()->setRow( it2.current()->row() + 1 );
+	  list2[ k ]->setRow( list2[ k ]->row() + 1 );
 		
-		key = it2.current()->row();
-		m_dctRows.insert( key, it2.current() );
-	    }
+	  key = list2[ k ]->row();
+	  m_dctRows.insert( key, list2[ k ] );
 	}
+      }
     }
 
     m_dctCells.setAutoDelete( TRUE );
@@ -743,7 +753,7 @@ void KSpreadTable::deleteRow( int _row )
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it ) 
     {
-	int key = it.current()->row() + ( it.current()->column() * 0xFFFF );
+	int key = it.current()->row() + ( it.current()->column() * 0x10000 );
 
 	if ( it.current()->row() == _row && !it.current()->isDefault() )
 	{
@@ -769,12 +779,12 @@ void KSpreadTable::deleteRow( int _row )
 	{
 	    if ( it.current()->row() == i && !it.current()->isDefault() )
 	    {
-		int key = it.current()->row() + ( it.current()->column() * 0xFFFF );
+		int key = it.current()->row() + ( it.current()->column() * 0x10000 );
 		m_dctCells.remove( key );
 		
 		it.current()->setRow( it.current()->row() - 1 );
 		
-		key = it.current()->row() + ( it.current()->column() * 0xFFFF );
+		key = it.current()->row() + ( it.current()->column() * 0x10000 );
 		m_dctCells.insert( key, it.current() );
 	    }
 	}
@@ -871,51 +881,63 @@ void KSpreadTable::insertColumn( int _column )
     m_dctCells.setAutoDelete( FALSE );
     m_dctColumns.setAutoDelete( FALSE );
     
+    KSpreadCell* (list[ m_dctCells.count() ]);
+    int count = 0;
     QIntDictIterator<KSpreadCell> it( m_dctCells );
+    // Determine right most column
     int max_column = 1;
     for ( ; it.current(); ++it ) 
-	if ( it.current()->column() > max_column )
-	    max_column = it.current()->column();
+    {
+      list[ count++ ] = it.current();
+      if ( it.current()->column() > max_column )
+	max_column = it.current()->column();
+    }
     
     for ( int i = max_column; i >= _column; i-- )
     {
-	it.toFirst();
-	for ( ; it.current(); ++it ) 
-	{   
-	    if ( it.current()->column() == i && !it.current()->isDefault() )
-	    {
-		int key = it.current()->row() + ( it.current()->column() * 0xFFFF );
-		m_dctCells.remove( key );
+      for( int k = 0; k < count; k++ )
+      {
+	if ( list[ k ]->column() == i && !list[ k ]->isDefault() )
+	{
+	  printf("Moving Cell %i %i\n",list[k]->column(),list[k]->row());
+	  int key = list[ k ]->row() | ( list[ k ]->column() * 0x10000 );
+	  m_dctCells.remove( key );
 	
-		it.current()->setColumn( it.current()->column() + 1 );
+	  list[ k ]->setColumn( list[ k ]->column() + 1 );
 		
-		key = it.current()->row() + ( it.current()->column() * 0xFFFF );
-		m_dctCells.insert( key, it.current() );
-	    }
+	  key = list[ k ]->row() | ( list[ k ]->column() * 0x10000 );
+	  m_dctCells.insert( key, list[ k ] );
 	}
+      }
     }
 
+    ColumnLayout* (list2[ m_dctColumns.count() ]);
+    count = 0;
+    // Find right most ColumnLayout
     QIntDictIterator<ColumnLayout> it2( m_dctColumns );
     max_column = 1;
-    for ( ; it2.current(); ++it2 ) 
-	if ( it2.current()->column() > max_column )
-	    max_column = it2.current()->column();
+    for ( ; it2.current(); ++it2 )
+    {
+      list2[ count++ ] = it2.current();
+      if ( it2.current()->column() > max_column )
+	max_column = it2.current()->column();
+    }
+    
     for ( int i = max_column; i >= _column; i-- )
     {
-	it2.toFirst();
-	for ( ; it2.current(); ++it2 ) 
+      for( int k = 0; k < count; k++ )
+      {
+	if ( list2[ k ]->column() == i )
 	{
-	    if ( it2.current()->column() == i )
-	    {
-		int key = it2.current()->column();
-		m_dctColumns.remove( key );
+	  int key = list2[ k ]->column();
+	  m_dctColumns.remove( key );
 		
-		it2.current()->setColumn( it2.current()->column() + 1 );
+	  list2[k]->setColumn( list2[ k ]->column() + 1 );
 		
-		key = it2.current()->column();
-		m_dctColumns.insert( key, it2.current() );
-	    }
+	  key = list2[k]->column();
+	  m_dctColumns.insert( key, list2[k] );
 	}
+      }
     }
 
     m_dctCells.setAutoDelete( TRUE );
@@ -951,7 +973,7 @@ void KSpreadTable::deleteColumn( int _column )
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it ) 
     {
-	int key = it.current()->row() + ( it.current()->column() * 0xFFFF );
+	int key = it.current()->row() + ( it.current()->column() * 0x10000 );
 
 	if ( it.current()->column() == _column && !it.current()->isDefault() )
 	{
@@ -977,12 +999,12 @@ void KSpreadTable::deleteColumn( int _column )
 	{
 	    if ( it.current()->column() == i && !it.current()->isDefault() )
 	    {
-		int key = it.current()->row() + ( it.current()->column() * 0xFFFF );
+		int key = it.current()->row() + ( it.current()->column() * 0x10000 );
 		m_dctCells.remove( key );
 		
 		it.current()->setColumn( it.current()->column() - 1 );
 		
-		key = it.current()->row() + ( it.current()->column() * 0xFFFF );
+		key = it.current()->row() + ( it.current()->column() * 0x10000 );
 		m_dctCells.insert( key, it.current() );
 	    }
 	}
@@ -1166,7 +1188,7 @@ void KSpreadTable::deleteCells( int _left, int _top, int _right, int _bottom )
     {
 	KSpreadCell *cell = cellStack.pop();
 	
-	int key = cell->row() + ( cell->column() * 0xFFFF );
+	int key = cell->row() + ( cell->column() * 0x10000 );
 	m_dctCells.remove( key );
     }
 
@@ -1773,7 +1795,7 @@ bool KSpreadTable::load( KorbSession *korb, OBJECT o_table )
 	
 	// printf(".... Loaded cell\n");
 	
-	int key = cell->row() + ( cell->column() * 0xFFFF );
+	int key = cell->row() + ( cell->column() * 0x10000 );
 	m_dctCells.insert( key, cell );
     }
 
@@ -2071,7 +2093,7 @@ bool KSpreadTable::loadCells( KorbSession *korb, OBJECT o_cells, int _insert_x, 
 	// cell->setRow( cell->row() + _insert_y - 1 );
 	// cell->setColumn( cell->column() + _insert_x - 1 );
 	
-	int key = cell->row() + ( cell->column() * 0xFFFF );
+	int key = cell->row() + ( cell->column() * 0x10000 );
 	m_dctCells.insert( key, cell );
     }
 
@@ -2120,7 +2142,7 @@ bool KSpreadTable::isOnNewPageX( int _column )
     while ( col <= _column )
     {
 	// Should never happen
-	if ( col == 0xFFFF )
+	if ( col == 0x10000 )
 	    return FALSE;
 
 	if ( x > m_pDoc->printableWidth() )
@@ -2145,7 +2167,7 @@ bool KSpreadTable::isOnNewPageY( int _row )
     while ( row <= _row )
     {
 	// Should never happen
-	if ( row == 0xFFFF )
+	if ( row == 0x10000 )
 	    return FALSE;
 
 	if ( y > m_pDoc->printableHeight() )
@@ -2211,7 +2233,7 @@ KSpreadTable* KSpreadTable::findTable( const char *_name )
 
 void KSpreadTable::insertCell( KSpreadCell *_cell )
 {
-  int key = _cell->row() + ( _cell->column() * 0xFFFF );    
+  int key = _cell->row() + ( _cell->column() * 0x10000 );    
   m_dctCells.replace( key, _cell );
 }
 
