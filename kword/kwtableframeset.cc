@@ -1160,8 +1160,8 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
     if(cell->m_cols < 1)  cell->m_cols=1;
 
     // If we created extra rows/cols, adjust the groupmanager counters.
-    m_rows+= rowsDiff;
-    m_cols+= colsDiff;
+    if(rowsDiff>0) m_rows+= rowsDiff;
+    if(colsDiff>0) m_cols+= colsDiff;
 
     // create new cells
     for (unsigned int y = 0; y < intoRows; y++) {
@@ -1320,7 +1320,6 @@ bool KWTableFrameSet::contains( double mx, double my ) {
 
         KoRect rect( KoPoint( first->x(), first->y() ), KoPoint( last->right(), last->bottom() ) );
         if(rect.contains(mx,my)) {
-kdDebug() << "Inside table\n" ;
             return true;
         }
     }
@@ -1495,6 +1494,12 @@ void KWTableFrameSet::printDebug( KWFrame * frame )
         kdDebug() << " |  +- cols:" << cell->m_cols << endl;
     }
 }
+
+void KWTableFrameSet::printDebug() {
+    kdDebug() << " |  Table size (" << m_rows << "x" << m_cols << ")" << endl;
+    KWFrameSet::printDebug();
+}
+
 #endif
 
 /////

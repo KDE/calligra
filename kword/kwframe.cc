@@ -998,8 +998,8 @@ void KWFrameSet::printDebug()
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {
         KWFrame * frame = frameIt.current();
-        printDebug( frame );
         kdDebug() << " +-- Frame " << j << " of "<< getNumFrames() << "    (" << frame << ")" << endl;
+        printDebug( frame );
         kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
         kdDebug() << "     RunAround: "<< runaround[ frame->getRunAround() ] << endl;
         kdDebug() << "     FrameBehaviour: "<< frameBh[ frame->getFrameBehaviour() ] << endl;

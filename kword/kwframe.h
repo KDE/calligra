@@ -466,7 +466,7 @@ public:
     static QString UniqueName( const QString & templateName, int startNum );
 
 #ifndef NDEBUG
-    void printDebug();
+    virtual void printDebug();
     virtual void printDebug( KWFrame * );
 #endif
 

@@ -219,6 +219,7 @@ public:
 
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );
+    virtual void printDebug();
 #endif
 
 protected:
