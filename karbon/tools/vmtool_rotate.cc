@@ -76,7 +76,7 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 	{
 		setCursor( view );
 		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
-		KoRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
+		KoRect rect = part()->selection().boundingBox( 1 / view->zoom() );
 		m_sp = KoPoint( int( rect.left() + rect.width() / 2 ), int( rect.top() + rect.height() / 2 ) );
 		KoPoint sp( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
 		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
@@ -100,10 +100,10 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 		}
 		// rotate operation
 		QWMatrix mat;
-		mat.translate( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor());
+		mat.translate( sp.x() / view->zoom(), sp.y() / view->zoom());
 		mat.rotate( m_angle / VGlobal::pi_180 );
-		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
-						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoomFactor() );
+		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoom(),
+						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -113,7 +113,7 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 		{
 			list.append( itr.current()->clone() );
 		}
-		painter->setZoomFactor( view->zoomFactor() );
+		painter->setZoomFactor( view->zoom() );
 		VObjectListIterator itr2 = list;
 		for( ; itr2.current() ; ++itr2 )
 		{
@@ -121,11 +121,11 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 			{
 				//path->insertKnots( 5 );
 //				path->convertToCurves();
-//				path->whirlPinch( KoPoint( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor() ), m_angle / VGlobal::pi_180, 1.0 );
+//				path->whirlPinch( KoPoint( sp.x() / view->zoom(), sp.y() / view->zoom() ), m_angle / VGlobal::pi_180, 1.0 );
 			}
 			itr2.current()->transform( mat );
 			itr2.current()->setState( state_edit );
-			itr2.current()->draw( painter, itr2.current()->boundingBox( view->zoomFactor() ) );
+			itr2.current()->draw( painter, itr2.current()->boundingBox( view->zoom() ) );
 		}
 		painter->setZoomFactor( 1.0 );
 	}
@@ -168,7 +168,7 @@ VMToolRotate::eventFilter( KarbonView* view, QEvent* event )
 		part()->addCommand(
 			new VMCmdRotate(
 				part(),
-				part()->selection(), m_sp * (1.0 / view->zoomFactor() ), m_angle / VGlobal::pi_180 ),
+				part()->selection(), m_sp * (1.0 / view->zoom() ), m_angle / VGlobal::pi_180 ),
 			true );
 
 		m_isDragging = false;

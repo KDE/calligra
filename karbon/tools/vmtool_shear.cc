@@ -70,21 +70,21 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
-		KoRect rect = part()->selection().boundingBox( view->zoomFactor() );
+		KoRect rect = part()->selection().boundingBox( view->zoom() );
 		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
 		{
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MT )
 		{
 			m_s1 = 0;
-			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoomFactor() );
+			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoom() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RT )
 		{
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RM)
 		{
-			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoomFactor() );
+			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoom() );
 			m_s2 = 0;
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RB )
@@ -93,22 +93,22 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MB )
 		{
 			m_s1 = 0;
-			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoomFactor() );
+			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoom() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LB )
 		{
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LM )
 		{
-			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoomFactor() );
+			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoom() );
 			m_s2 = 0;
 		}
 		// shear operation
 		QWMatrix mat;
-		mat.translate( m_fp.x() / view->zoomFactor(), m_fp.y() / view->zoomFactor() );
+		mat.translate( m_fp.x() / view->zoom(), m_fp.y() / view->zoom() );
 		mat.shear( m_s1, m_s2 );
-		mat.translate(	- ( m_fp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
-						- ( m_fp.y() + view->canvasWidget()->contentsY() ) / view->zoomFactor() );
+		mat.translate(	- ( m_fp.x() + view->canvasWidget()->contentsX() ) / view->zoom(),
+						- ( m_fp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -118,13 +118,13 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 		{
 			list.append( itr.current()->clone() );
 		}
-		painter->setZoomFactor( view->zoomFactor() );
+		painter->setZoomFactor( view->zoom() );
 		VObjectListIterator itr2 = list;
 		for( ; itr2.current() ; ++itr2 )
 		{
 			itr2.current()->transform( mat );
 			itr2.current()->setState( state_edit );
-			itr2.current()->draw( painter, itr2.current()->boundingBox( view->zoomFactor() ) );
+			itr2.current()->draw( painter, itr2.current()->boundingBox( view->zoom() ) );
 		}
 		painter->setZoomFactor( 1.0 );
 	}
@@ -169,7 +169,7 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 		part()->addCommand(
 			new VMCmdShear(
 				part(),
-				part()->selection(), fp * (1.0 / view->zoomFactor() ), m_s1, m_s2 ),
+				part()->selection(), fp * (1.0 / view->zoom() ), m_s1, m_s2 ),
 			true );
 
 		m_isDragging = false;

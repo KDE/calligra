@@ -19,7 +19,7 @@
 
 VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
     : QScrollView( view, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
-	  WRepaintNoErase ), m_part( part ), m_view( view ), m_zoomFactor( 1.0 )
+	  WRepaintNoErase ), m_part( part ), m_view( view )
 {
 	connect(this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotContentsMoving( int, int ) ) );
 	viewport()->setFocusPolicy( QWidget::StrongFocus );
@@ -55,7 +55,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		// TODO : only update ROIs
 		KoRect r( 0, 0, viewport()->width(), viewport()->height() );
 		p->begin();
-		p->setZoomFactor( m_zoomFactor );
+		p->setZoomFactor( m_view->zoom() );
 		QWMatrix mat;
 		mat.translate( -contentsX(), -contentsY() );
 		p->setWorldMatrix( mat );
@@ -72,9 +72,9 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	// draw handle:
 	QPainter qpainter( p->device() );
 	//qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY()) );
-	//qpainter.setWorldMatrix( QWMatrix().scale( 1 / m_zoomFactor, 1 / m_zoomFactor ).translate( -contentsX(), -contentsY() ) );
+	//qpainter.setWorldMatrix( QWMatrix().scale( 1 / m_view->zoom(), 1 / m_view->zoom() ).translate( -contentsX(), -contentsY() ) );
 	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
-	VMToolHandle::instance( m_part )->draw( qpainter, m_zoomFactor );
+	VMToolHandle::instance( m_part )->draw( qpainter, m_view->zoom() );
 }
 
 void
@@ -91,7 +91,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 	//kdDebug() << "drawDoc rect : " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
 	VPainter* p = m_view->painterFactory()->painter();
 	p->begin();
-	p->setZoomFactor( m_zoomFactor );
+	p->setZoomFactor( m_view->zoom() );
 	QWMatrix mat;
 	mat.translate( -contentsX(), -contentsY() );
 	p->setWorldMatrix( mat );
@@ -107,10 +107,10 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 
 	// draw handle:
 	QPainter qpainter( p->device() );
-	//qpainter.setWorldMatrix( QWMatrix().scale( 1 / m_zoomFactor, 1 / m_zoomFactor ).translate( -contentsX(), -contentsY() ) );
+	//qpainter.setWorldMatrix( QWMatrix().scale( 1 / m_view->zoom(), 1 / m_view->zoom() ).translate( -contentsX(), -contentsY() ) );
 	//qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY()) );
 	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
-	VMToolHandle::instance( m_part )->draw( qpainter, m_zoomFactor );
+	VMToolHandle::instance( m_part )->draw( qpainter, m_view->zoom() );
 }
 
 void

@@ -47,7 +47,7 @@ public:
 	// this is the kword-solution at least:
 	VCanvas* canvasWidget() { return m_canvas; }
 
-	const double& zoomFactor() { return m_canvas->zoomFactor(); }
+	//const double& zoomFactor() { return m_canvas->zoomFactor(); }
 
 	VPainterFactory* painterFactory() { return m_painterFactory; }
 

@@ -21,9 +21,6 @@ public:
 
 	void repaintAll( bool erase = false );
 
-	const double& zoomFactor() const { return m_zoomFactor; }
-	void setZoomFactor( double zoom ) { m_zoomFactor = zoom; }
-
 protected:
 	virtual void focusInEvent( QFocusEvent * );
 	virtual void viewportPaintEvent( QPaintEvent* );
@@ -40,7 +37,6 @@ private:
 	KarbonPart* m_part;
 	KarbonView* m_view;
 
-	double m_zoomFactor;
 	bool m_bScrolling;
 };
 

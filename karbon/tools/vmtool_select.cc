@@ -49,18 +49,18 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	KoRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
+	KoRect rect = part()->selection().boundingBox( 1 / view->zoom() );
 	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
 	if( !part()->selection().isEmpty()
-		&& ( m_state != normal || rect.contains( fp /* view->zoomFactor() */ ) ) )
+		&& ( m_state != normal || rect.contains( fp /* view->zoom() */ ) ) )
 	{
 		if( m_state != moving )
 			m_state = moving;
 
 		// move operation
 		QWMatrix mat;
-		mat.translate(	( m_lp.x() - fp.x() ) / view->zoomFactor(),
-						( m_lp.y() - fp.y() ) / view->zoomFactor() );
+		mat.translate(	( m_lp.x() - fp.x() ) / view->zoom(),
+						( m_lp.y() - fp.y() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -71,7 +71,7 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 			list.append( itr.current()->clone() );
 		}
 		VObjectListIterator itr2 = list;
-		painter->setZoomFactor( view->zoomFactor() );
+		painter->setZoomFactor( view->zoom() );
 		for( ; itr2.current() ; ++itr2 )
 		{
 			itr2.current()->transform( mat );
@@ -79,7 +79,7 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 
 			itr2.current()->draw(
 				painter,
-				itr2.current()->boundingBox( view->zoomFactor() ) );
+				itr2.current()->boundingBox( view->zoom() ) );
 		}
 		painter->setZoomFactor( 1.0 );
 	}
@@ -92,7 +92,7 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 		painter->lineTo( KoPoint( m_lp.x(), m_lp.y() ) );
 		painter->lineTo( KoPoint( m_fp.x(), m_lp.y() ) );
 		painter->lineTo( KoPoint( m_fp.x(), m_fp.y() ) );
-		painter->setZoomFactor( view->zoomFactor() );
+		painter->setZoomFactor( view->zoom() );
 		painter->strokePath();
 
 		m_state = normal;
@@ -134,8 +134,8 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 				new VMCmdTranslate(
 					part(),
 					part()->selection(),
-					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view->zoomFactor() ) ),
-					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view->zoomFactor() ) ) ),
+					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view->zoom() ) ),
+					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view->zoom() ) ) ),
 				true );
 
 //			part()->repaintAllViews();
@@ -156,9 +156,9 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 
 			part()->selectObjectsWithinRect(
 				KoRect(
-					qRound( fp.x() / view->zoomFactor() ), qRound( fp.y() / view->zoomFactor() ),
-					qRound( ( lp.x() - fp.x() ) / view->zoomFactor() ),
-					qRound( ( lp.y() - fp.y() ) / view->zoomFactor() ) ).normalize(), 1,
+					qRound( fp.x() / view->zoom() ), qRound( fp.y() / view->zoom() ),
+					qRound( ( lp.x() - fp.x() ) / view->zoom() ),
+					qRound( ( lp.y() - fp.y() ) / view->zoom() ) ).normalize(), 1,
 				true );
 
 			//if( part()->selection().count() > 0  )

@@ -70,7 +70,7 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 
 	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
-	KoRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
+	KoRect rect = part()->selection().boundingBox( 1 / view->zoom() );
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
@@ -126,10 +126,10 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
 		KoPoint sp = KoPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
-		mat.translate( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor());
+		mat.translate( sp.x() / view->zoom(), sp.y() / view->zoom());
 		mat.scale( m_s1, m_s2 );
-		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
-						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoomFactor() );
+		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoom(),
+						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -139,13 +139,13 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 		{
 			list.append( itr.current()->clone() );
 		}
-		painter->setZoomFactor( view->zoomFactor() );
+		painter->setZoomFactor( view->zoom() );
 		VObjectListIterator itr2 = list;
 		for( ; itr2.current() ; ++itr2 )
 		{
 			itr2.current()->transform( mat );
 			itr2.current()->setState( state_edit );
-			itr2.current()->draw( painter, itr2.current()->boundingBox( view->zoomFactor() ) );
+			itr2.current()->draw( painter, itr2.current()->boundingBox( view->zoom() ) );
 		}
 		painter->setZoomFactor( 1.0 );
 	}
@@ -190,7 +190,7 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 		part()->addCommand(
 			new VMCmdScale(
 				part(),
-				part()->selection(), m_sp * ( 1.0 / view->zoomFactor() ), m_s1, m_s2 ),
+				part()->selection(), m_sp * ( 1.0 / view->zoom() ), m_s1, m_s2 ),
 			true );
 
 		m_isDragging = false;

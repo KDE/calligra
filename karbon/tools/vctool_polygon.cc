@@ -55,7 +55,7 @@ VCToolPolygon::drawTemporaryObject(
 
 	VObject* path = cmd->createPath();
 	path->setState( state_edit );
-	path->draw( painter, path->boundingBox( view->zoomFactor() ) );
+	path->draw( painter, path->boundingBox( view->zoom() ) );
 
 	delete( cmd );
 	delete( path );

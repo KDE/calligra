@@ -98,7 +98,7 @@ KarbonViewIface::objectMoveDown()
 double
 KarbonViewIface::zoomFactor() const
 {
-	return m_view->zoomFactor();
+	return m_view->zoom();
 }
 
 // TODO: remove this someday:

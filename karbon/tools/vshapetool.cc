@@ -49,10 +49,10 @@ VShapeTool::eventFilter( KarbonView* view, QEvent* event )
 		// adjust to real viewport contents instead of raw mouse coords:
 		KoPoint p = view->canvasWidget()->viewportToContents( QPoint( m_p.x(), m_p.y() ) );
 		cmd = createCmd(
-			p.x() / view->zoomFactor(),
-			p.y() / view->zoomFactor(),
-			m_d1 / view->zoomFactor(),
-			m_calcPolar ? m_d2 : m_d2 / view->zoomFactor() );
+			p.x() / view->zoom(),
+			p.y() / view->zoom(),
+			m_d1 / view->zoom(),
+			m_calcPolar ? m_d2 : m_d2 / view->zoom() );
 
 		if( cmd )
 			part()->addCommand( cmd, true );
