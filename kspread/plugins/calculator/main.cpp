@@ -92,8 +92,9 @@ Calculator::Calculator( KSpreadView* parent, const char* name )
 
     parent->installEventFilter( this );
 
-    (void)new KAction( tr("Calculator"), CalcFactory::global()->iconLoader()->loadApplicationMiniIcon( "kspreadcalc.png" ), 0,
-		       this, SLOT( showCalculator() ), actionCollection(), "kspreadcalc");
+    (void)new KAction( tr("Calculator"), 
+		       CalcFactory::global()->iconLoader()->loadApplicationIcon( "kspreadcalc.png", KIconLoader::Small ),
+		       0, this, SLOT( showCalculator() ), actionCollection(), "kspreadcalc");
 }
 
 void Calculator::showCalculator()
