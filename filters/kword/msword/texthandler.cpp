@@ -54,7 +54,7 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser )
     : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
       m_previousOutlineLSID( 0 ), m_previousEnumLSID( 0 ),
-      m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 ),
+      m_currentStyle( 0L ), m_index( 0 ),
       m_currentTable( 0L ),
       m_bInParagraph( false ),
       m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 )
@@ -195,7 +195,6 @@ QDomElement KWordTextHandler::insertAnchor( const QString& fsname )
 
 void KWordTextHandler::paragLayoutBegin()
 {
-    m_shadowTextFound = NoShadow;
 }
 
 void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties )
@@ -214,14 +213,6 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
         Q_ASSERT( m_currentStyle );
     }
     paragLayoutBegin();
-    // If the style's format includes shadowtext, then we need a <SHADOW> tag
-    // in the parag layout
-    if ( m_currentStyle ) {
-        if ( m_currentStyle->chp().fShadow )
-            m_shadowTextFound = Shadow;
-        else if ( m_currentStyle->chp().fImprint )
-            m_shadowTextFound = Imprint;
-    }
 }
 
 void KWordTextHandler::paragraphEnd()
@@ -435,13 +426,20 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
 
     // Shadow text. Only on/off. The properties are defined at the paragraph level (in KWord).
     if ( !refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint ) {
-        QDomElement weight( mainDocument().createElement( "SHADOWTEXT" ) );
-        weight.setAttribute( "value", (chp->fShadow || chp->fImprint) ? "1" : "0" );
-        format.appendChild( weight );
-        if ( chp->fShadow )
-            m_shadowTextFound = Shadow;
-        else if ( chp->fImprint )
-            m_shadowTextFound = Imprint;
+        QDomElement shadowElem( mainDocument().createElement( "SHADOW" ) );
+        QString css = "none";
+        // Generate a shadow with hardcoded values that make it look like in MSWord.
+        // We need to make the distance depend on the font size though, to look good
+        if (chp->fShadow || chp->fImprint)
+        {
+            int fontSize = (int)(chp->hps / 2);
+            int dist = fontSize > 20 ? 2 : 1;
+            if (chp->fImprint) // ## no real support for imprint, we use a topleft shadow
+                dist = -dist;
+            css = QString::fromLatin1("#bebebe %1pt %1pt").arg(dist).arg(dist);
+        }
+        shadowElem.setAttribute( "text-shadow", css );
+        format.appendChild( shadowElem );
     }
 
     if ( pChildElement || !format.firstChild().isNull() ) // Don't save an empty format tag, unless the caller asked for it
@@ -655,21 +653,6 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
     if ( pap.ilfo > 0 )
     {
         writeCounter( parentElement, paragraphProperties, style );
-    }
-
-    if ( m_shadowTextFound != NoShadow )
-    {
-        // SHADOW - if any SHADOWTEXT was generated, generate <SHADOW> with hardcoded
-        // values that make it look like in MSWord.
-        QDomElement shadowElement = mainDocument().createElement( "SHADOW" );
-        shadowElement.setAttribute( "distance", 1 );
-        // Shadow -> bottom right; Imprint -> top left
-        int direction = m_shadowTextFound == Shadow ? 5 : 1;
-        shadowElement.setAttribute( "direction", direction );
-        shadowElement.setAttribute( "red", 190 );
-        shadowElement.setAttribute( "blue", 190 );
-        shadowElement.setAttribute( "green", 190 );
-        parentElement.appendChild( shadowElement );
     }
 }
 
