@@ -256,8 +256,12 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
 
 void Document::startHeader( wvWare::HeaderData::Type type )
 {
-    kdDebug() << k_funcinfo << type << endl;
+    kdDebug() << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")" << endl;
     // Werner says the headers are always emitted in the order of the Type enum.
+
+#if 0 // This is not necessary anymore. KWord's odd/even mess has been fixed,
+    // and it happens that now, KWord also uses Odd headers on all pages (if there are no Even headers)
+
     // So when HeaderOdd arrives, there are two cases.
     // * If HeaderEven was sent before, we know we're in the even/odd case.
     // * If not, the HeaderOdd header will be used for odd and even pages
@@ -268,6 +272,8 @@ void Document::startHeader( wvWare::HeaderData::Type type )
     else if ( type == wvWare::HeaderData::FooterOdd &&
               ( ( m_headerFooters & wvWare::HeaderData::FooterEven ) == 0 ) )
         type = wvWare::HeaderData::FooterEven;
+    kdDebug() << "  type is now " << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")" << endl;
+#endif
 
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
     framesetElement.setAttribute("frameType",1);
