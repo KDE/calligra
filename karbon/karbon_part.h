@@ -25,6 +25,8 @@ public:
 	virtual bool loadXML( QIODevice*, const QDomDocument& );
 	virtual QDomDocument saveXML();
 
+	QList<VLayer> &layers() { return m_layers; }
+		
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 

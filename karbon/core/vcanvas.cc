@@ -30,13 +30,13 @@ VCanvas::drawDocument( QPainter* painter, const QRect& rect )
 {
 	QPainter p;
 	QPixmap pixmap( width(), height() );
-	pixmap.fill(QApplication::palette().color(QPalette::Normal, QColorGroup::Background));
+	pixmap.fill( QApplication::palette().color( QPalette::Normal, QColorGroup::Background ) );
 	
 	p.begin( viewport() );
 	p.drawPixmap( 0, 0, pixmap );
 	p.end();
 	
-	QListIterator<VLayer> i = m_part->m_layers;
+	QListIterator<VLayer> i = m_part->layers();
 	for ( ; i.current() ; ++i )
 	{
 		if ( i.current()->isVisible() )
