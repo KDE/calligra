@@ -2852,7 +2852,6 @@ void KWPage::drawFrameSelection( QPainter &_painter, KWFrame *_frame )
 void KWPage::frameSizeChanged( KoPageLayout /* _layout */)
 {
     setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );
-    return;
 }
 
 /*================================================================*/
