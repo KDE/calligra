@@ -142,7 +142,7 @@ void KoAboutDia::about(KoApplication koapp,QString version)
       delete dlg;
     }
   else {
-    ::KoApplication *app = dynamic_cast< ::KoApplication* >(KApplication::getKApplication());
+    ::KoApplication *app = dynamic_cast< ::KoApplication* >(KApplication::kApplication());
     ASSERT(app);
     app->aboutKDE();
   }

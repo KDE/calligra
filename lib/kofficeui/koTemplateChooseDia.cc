@@ -86,7 +86,7 @@ void KoTemplateChooseDia::getGroups()
 	QString str;
 	char c[256];
 	
-	QStringList dirs = KGlobal::dirs()->getResourceDirs(template_type);
+	QStringList dirs = KGlobal::dirs()->resourceDirs(template_type);
 	for (QStringList::ConstIterator it = dirs.begin(); it != dirs.end(); it++) {
 	    QFile templateInf(*it + ".templates");
 	
