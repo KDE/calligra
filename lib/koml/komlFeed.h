@@ -40,8 +40,8 @@ public:
   KOMLFeed();
   virtual ~KOMLFeed();
   
-  virtual KOMLData* read() = 0L;
-  virtual void free( KOMLData* _data ) = 0L;
+  virtual KOMLData* read() = 0;
+  virtual void free( KOMLData* _data ) = 0;
 };
 
 #endif
