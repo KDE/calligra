@@ -22,10 +22,11 @@
 
 #include <qdatetime.h> 
 #include "kptnode.h"
+#include "defs.h"
 
 class KPTResource;
 
-class KPTTask {
+class KPTTask : public KPTNode {
     public:
 
         KPTTask();
@@ -38,21 +39,21 @@ class KPTTask {
          *  will have to be calculated. For a Project or Subproject, the expected Duration is 
          *  calculated by PERT/CPM. 
          */
-        QTime getExpectedDuration();
+        QDateTime *getExpectedDuration();
 
         /** Instead of using the expected duration, generate a random value using the Distribution of 
          *  each Task. This can be used for Monte-Carlo estimation of Project duration.
          */
-        QTime getRandomDuration();
+        QDateTime *getRandomDuration();
 
         /** Retrive the time this node starts. This is either implied from the set time, or calculated
          *  by asking the parents.
          */
-        QTime getStartTime();
+        QDateTime *getStartTime();
 
         /** Retrieve the calculated float of this node
          */
-        QTime getFloat();
+        QDateTime *getFloat();
 
 };
 #endif

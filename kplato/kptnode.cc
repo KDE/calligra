@@ -18,14 +18,19 @@
 */
 #include "kptnode.h"
 
-KPTNode::KPTNode() m_nodes(), m_dependChildNodes(), m_dependParentNodes(), m_risk() {
-        m_name=new QString("");
+KPTNode::KPTNode() : m_nodes(), m_dependChildNodes(), m_dependParentNodes(), m_risk() {
+        m_name="";
         m_risk.setAutoDelete(true);
-
+/*
+something like
+QDate *nul = neq QDate(0,1,1);
+m_startTime=new QDateTime(*log);
+etc..
         m_startTime=new QTime(0), m_endTime=new QTime(0);
         m_optimisticDuration=new QTime(0);
         m_pessemisticDuration=new QTime(0);
         m_expectedDuration=new QTime(0);
+*/
 }
 
 KPTNode::~KPTNode() {
@@ -46,18 +51,6 @@ void KPTNode::removeRisk( KPTRisk *risk ){
 
 void KPTNode::removeRisk( int number ){
    // always auto remove
-}
-
-void KPTNode::addDependNode( KPTNode *node, TimingType t, ParentRelation p) {
-}
-
-void KPTNode::delDependNode( KPTNode *node, bool remove) {
-}
-
-void KPTNode::delDependNode( int number, bool remove) {
-}
-
-void KPTNode::insertDependNode( unsigned int index, KPTNode *node, TimingType t, ParentRelation p) {
 }
 
 void KPTNode::insertRisk( unsigned int index, KPTRisk *risk ) {

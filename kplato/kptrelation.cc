@@ -17,21 +17,22 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kptrelation.h"
+#include "defs.h"
 
-KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, timingRelation tr, QTime lag) {
+KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, QDateTime *lag) {
     m_parent=parent;
     m_child=child;
-    m_timingTime=tt;
+    m_timingType=tt;
     m_timingRelation=tr;
     m_lag=lag;
 }
 
-KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, timingRelation tr) {
+KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr) {
     m_parent=parent;
     m_child=child;
-    m_timingTime=tt;
+    m_timingType=tt;
     m_timingRelation=tr;
-    m_lag=new QTime(0);
+    // m_lag=new QTime(0); // TODO
 }
 
 KPTRelation::~KPTRelation() {

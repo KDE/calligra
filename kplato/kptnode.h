@@ -23,9 +23,10 @@
 #include <qdatetime.h> 
 #include <qlist.h> 
 #include <qstring.h> 
+#include "defs.h"
+#include "kptresource.h"
+#include "kptrelation.h"
 
-class KPTRisk;
-class KPTRelation;
 
 /**
  * This class represents any node in the project, a node can be a project to a subproject and any task.
@@ -67,7 +68,7 @@ class KPTNode {
         /** The resources are coupled with a user specified risk, we list the
          *  risks here, the risks contain a link to the resource itself.
          */
-        const QList<KPTRisk> &riskIterator() const { return m_risks; }
+        const QList<KPTRisk> &riskIterator() const { return m_risk; }
         virtual void addRisk( KPTRisk *risk );
         virtual void insertRisk( unsigned int index, KPTRisk *risk );
         void removeRisk( KPTRisk *risk );
@@ -86,25 +87,26 @@ class KPTNode {
         // Building a house requires the table to be finished, therefor the house-building
         // is time dependent on the table-building. So a child of the table-building node is the 
         // house-building node.
-
-        const QList<KPTNode> &dependNodeIterator() const { return m_dependNodes; }
+/*
+    Make 2 sets of these methods, one set for the parents and one for the children.
         int numDependNodes() const { return m_dependNodes.count(); }
-        virtual void addDependNode( KPTNode *node, TimingType t=START_ON_DATE, ParentRelation p=FINISH_START);
-        virtual void insertDependNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, ParentRelation p=FINISH_START);
+        virtual void addDependNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
+        virtual void insertDependNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
         void delDependNode( KPTNode *node, bool remove=false);
         void delDependNode( int number, bool remove=false);
-        KPTNode *getDependNode( int number) { return m_dependNodes.at(number); }
+        KPTNode *getDependNode( int number) { return m_dependNodes.at(number); } 
+*/
 
-        void setStartTime(QTime startTime) { m_startTime=startTime; }
-        QTime startTime() { return m_startTime; }
-        void setEndTime(QTime endTime) { m_endTime=endTime; }
-        QTime endTime() { return endTime; }
-        void setOptimisticDuration(QTime od) {m_optimisticDuration = od; }
-        QTime optimisticDuration() { return m_optimisticDuration; }
-        void setPessemisticDuration(QTime pd) {m_pessemisticDuration = pd; }
-        QTime pessemisticDuration() { return m_pessemisticDuration; }
-        void setExpectedDuration(QTime ed) { m_expectedDuration=ed; }
-        QTime expectedDuration() { return m_expectedDuration; }
+        void setStartTime(QDateTime *startTime) { m_startTime=startTime; }
+        QDateTime *startTime() { return m_startTime; }
+        void setEndTime(QDateTime *endTime) { m_endTime=endTime; }
+        QDateTime *endTime() { return m_endTime; }
+        void setOptimisticDuration(QDateTime *od) {m_optimisticDuration = od; }
+        QDateTime *optimisticDuration() { return m_optimisticDuration; }
+        void setPessemisticDuration(QDateTime *pd) {m_pessemisticDuration = pd; }
+        QDateTime *pessemisticDuration() { return m_pessemisticDuration; }
+        void setExpectedDuration(QDateTime *ed) { m_expectedDuration=ed; }
+        QDateTime *expectedDuration() { return m_expectedDuration; }
 
         /** The expected Duration is the expected time to complete a Task, Project, etc. For an 
          *  individual Task, this will calculate the expected duration by querying 
@@ -113,24 +115,24 @@ class KPTNode {
          *  will have to be calculated. For a Project or Subproject, the expected Duration is 
          *  calculated by PERT/CPM. 
          */
-        virtual QTime getExpectedDuration() = 0;
+        virtual QDateTime *getExpectedDuration() = 0;
 
         /** Instead of using the expected duration, generate a random value using the Distribution of 
          *  each Task. This can be used for Monte-Carlo estimation of Project duration.
          */
-        virtual QTime getRandomDuration() = 0;
+        virtual QDateTime *getRandomDuration() = 0;
 
         /** Calculate the start time, use startTime() for the actually started time.
          */
-        virtual QTime getStartTime() = 0;
+        virtual QDateTime *getStartTime() = 0;
 
         /** Retrieve the calculated float of this node
          */
-        virtual QTime getFloat() =0;
+        virtual QDateTime *getFloat() =0;
 
         /** Calculate the delay of this node. Use the calculated startTime and the setted startTime.
          */
-        QTime getDelay();
+        QDateTime *getDelay();
 
         QString name() const { return m_name; }
 
@@ -143,8 +145,8 @@ class KPTNode {
         NodeType m_nodeType;
         QString m_name;
 
-        QTime m_startTime, m_endTime; // both entered during the project, not at the initial calculation.
+        QDateTime *m_startTime, *m_endTime; // both entered during the project, not at the initial calculation.
         // effort variables.
-        QTime m_optimisticDuration, m_pessemisticDuration, m_expectedDuration;
+        QDateTime *m_optimisticDuration, *m_pessemisticDuration, *m_expectedDuration;
 };
 #endif

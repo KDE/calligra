@@ -20,10 +20,17 @@
 #ifndef kptresource_h
 #define kptresource_h
 
+#include <qstring.h>
+#include <qdatetime.h>
+#include <qlist.h>
+#include "defs.h"
+
 class KPTRisk;
 class KPTEffort;
 class KPTAppointment;
 class KPTRisk;
+class KPTTask;
+class KPTNode;
 
 class KPTResource {
     public:
@@ -37,59 +44,59 @@ class KPTResource {
         void setName(QString);
         QString &name();
 
-        void setAvailableFrom(QTime af);
-        QTime availableFrom();
-        void setAvailableUntil(QTime au);
-        QTime availableUntil();
+        void setAvailableFrom(QDateTime *af);
+        QDateTime *availableFrom();
+        void setAvailableUntil(QDateTime *au);
+        QDateTime *availableUntil();
 
-        void addWorkingHour(QTime from, QTime until);
+        void addWorkingHour(QDateTime *from, QDateTime *until);
 
-        QTime getFirstAvailableTime(QTime after=0);
-        QTime getBestAvailableTime(QTime duration);
+        QDateTime *getFirstAvailableTime(QDateTime *after=0);
+        QDateTime *getBestAvailableTime(QDateTime *duration);
 
     private:
         QList<KPTAppointment> m_appointments;
         KPTRisk *m_risk;
-        QSting m_name;
-        QTime m_availableFrom;
-        QTime m_availableUntil;
-        QList<QTime> m_workingHours;
+        QString m_name;
+        QDateTime *m_availableFrom;
+        QDateTime *m_availableUntil;
+        QList<QDateTime> m_workingHours;
 };
 
 class KPTAppointment {
     public:
-        KPTAppointment(QTime startTime, QTime duration, KPTResource resource, KPTNode task=0);
+        KPTAppointment(QDateTime *startTime, QDateTime *duration, KPTResource *resource, KPTTask *taskNode=0);
         ~KPTAppointment();
 
         // get/set member values.
-        QTime startTime() { return m_startTime; }
-        void setStartTime(QTime st) { m_startTime=st; }
+        QDateTime *startTime() { return m_startTime; }
+        void setStartTime(QDateTime *st) { m_startTime=st; }
 
-        QTime duration() { return m_duration; }
-        void setDuration(QTime d) { m_duration=d; }
+        QDateTime *duration() { return m_duration; }
+        void setDuration(QDateTime *d) { m_duration=d; }
 
         KPTTask *task() { return m_task; }
         void setTask(KPTTask *t) { m_task = t; }
 
-        QTime repeatInterval() {return m_repeatInterval;}
-        void setRepeatInterval(QTime ri) {m_repeatInterval=ri;}
+        QDateTime *repeatInterval() {return m_repeatInterval;}
+        void setRepeatInterval(QDateTime *ri) {m_repeatInterval=ri;}
 
         int repeatCount() { return m_repeatCount; }
         void setRepeatCount(int rc) { m_repeatCount=rc; }
 
-        void deleteAppointmentFromRepeatList(QTime time);
-        void addAppointmentToRepeatList(QTime time);
+        void deleteAppointmentFromRepeatList(QDateTime *time);
+        void addAppointmentToRepeatList(QDateTime *time);
 
     private:
-        QTime m_startTime;
-        QTime m_duration;
-        KPTTask m_task;
-        KPTResource m_resource;
-        QTime m_repeatInterval;
+        QDateTime *m_startTime;
+        QDateTime *m_duration;
+        KPTTask *m_task;
+        KPTResource *m_resource;
+        QDateTime *m_repeatInterval;
         int m_repeatCount;
-        QList<QTime> m_extraRepeats;
-        QList<QTime> m_skipRepeats;
-}
+        QList<QDateTime> m_extraRepeats;
+        QList<QDateTime> m_skipRepeats;
+};
 
 
 /** 
@@ -103,10 +110,10 @@ class KPTRisk {
         enum RiskType {
             NONE=0,
             LOW=1,
-            HIGH=2;
-        }
+            HIGH=2
+        };
 
-        KPTRisk(KPTNode *n, KPTResource *r, RiskType rt=0);
+        KPTRisk(KPTNode *n, KPTResource *r, RiskType rt=NONE);
         ~KPTRisk();
 
         RiskType riskType() { return m_riskType; }
@@ -118,6 +125,6 @@ class KPTRisk {
         KPTNode *m_node;
         KPTResource *m_resource;
         RiskType m_riskType;
-}
+};
 
 #endif

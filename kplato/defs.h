@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Thomas zander <zander@kde.org>
+   Copyright (C) 2001 Thomas Zander zander@kde.org
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,17 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kptmilestone.h"
+#ifndef defs_h
+#define defs_h
 
-KPTMilestone::KPTMilestone() : KPTNode() {
-        m_nodeType=POINT_IN_TIME;
-}
+enum TimingType {
+  START_ON_DATE=0,
+  FINISH_BY_DATE=1,
+  WORK_BETWEEN_DATES=2,
+  MILESTONE=3,
+  PERCENT_OF_PROJECT=4 };
 
-QDateTime *KPTMilestone::getStartTime() {
-    return 0L;
-}
+enum TimingRelation {
+  FINISH_START=0,   // child node cannot start until this node has finished 
+  FINISH_FINISH=1,  // child node cannot finish until this node has finished
+  START_START=2 };  // child node cannot start until this node has started
 
-QDateTime *KPTMilestone::getFloat() {
-    return 0L;
-}
-
+#endif

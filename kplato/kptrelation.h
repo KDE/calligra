@@ -21,31 +21,33 @@
 #define kptrelation_h
 
 #include <qdatetime.h> 
-#include "kptnode.h"
+#include "defs.h"
+
+class KPTNode;
 
 class KPTRelation {
     public:
 
-        KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, timingRelation tr, QTime lag);
-        KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt=START_ON_DATE, timingRelation tr=FINISH_START);
+        KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, QDateTime *lag);
+        KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt=START_ON_DATE, TimingRelation tr=FINISH_START);
         ~KPTRelation();
 
-        void timingType(KPTNode::TimingType );
-        KPTNode::TimingType timingType() { return m_timingType; }
-        void timingRelation(KPTNode::TimingRelation );
-        KPTNode::TimingRelation timingRelation() { return m_timingRelation; }
+        void timingType(TimingType );
+        TimingType timingType() { return m_timingType; }
+        void timingRelation(TimingRelation );
+        TimingRelation timingRelation() { return m_timingRelation; }
 
         /** returns the lag.
          *  The lag of a relation is the time it takes between the parent starting/stopping
          *  and the start of the child.
          */
-        QTime lag() { return m_lag; }
+        QDateTime *lag() { return m_lag; }
         
     protected: // variables
         KPTNode *m_parent;
         KPTNode *m_child;
-        KPTNode::TimingType m_timingTime;
-        KPTNode::TimingRelation m_timingRelation;
-        QTime m_lag;
+        TimingType m_timingType;
+        TimingRelation m_timingRelation;
+        QDateTime *m_lag;
 };
 #endif

@@ -16,7 +16,9 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include <qdatetime.h>
 #include "kptresource.h"
+#include "kpttask.h"
 
 KPTResource::KPTResource() : m_appointments(), m_workingHours() {
 }
@@ -36,44 +38,44 @@ void KPTResource::setName(QString) {
 QString &KPTResource::name() {
 }
 
-void KPTResource::setAvailableFrom(QTime af) {
+void KPTResource::setAvailableFrom(QDateTime *af) {
 }
 
-QTime KPTResource::availableFrom() {
+QDateTime *KPTResource::availableFrom() {
 }
 
-void KPTResource::setAvailableUntil(QTime au) {
+void KPTResource::setAvailableUntil(QDateTime *au) {
 }
 
-QTime KPTResource::availableUntil() {
+QDateTime *KPTResource::availableUntil() {
 }
 
-void KPTResource::addWorkingHour(QTime from, QTime until) {
+void KPTResource::addWorkingHour(QDateTime *from, QDateTime *until) {
 }
 
-QTime KPTResource::getFirstAvailableTime(QTime after) {
+QDateTime *KPTResource::getFirstAvailableTime(QDateTime *after) {
 }
 
-QTime KPTResource::getBestAvailableTime(QTime duration) {
+QDateTime *KPTResource::getBestAvailableTime(QDateTime *duration) {
 }
 
 
-KPTAppointment::KPTAppointment(QTime startTime, QTime duration, KPTResource resource, KPTNode task) :m_extraRepeats(), m_skipRepeats() {
+KPTAppointment::KPTAppointment(QDateTime *startTime, QDateTime *duration, KPTResource *resource, KPTTask *taskNode) :m_extraRepeats(), m_skipRepeats() {
     m_startTime=startTime;
     m_duration=duration;
-    m_task=task;
+    m_task=taskNode;
     m_resource=resource;
-    m_repeatInterval=new QTime(0);
+    //m_repeatInterval=new QDateTime(0);
     m_repeatCount=0;
 }
 
 KPTAppointment::~KPTAppointment() {
 }
 
-void KPTAppointment::deleteAppointmentFromRepeatList(QTime time) {
+void KPTAppointment::deleteAppointmentFromRepeatList(QDateTime *time) {
 }
 
-void KPTAppointment::addAppointmentToRepeatList(QTime time) {
+void KPTAppointment::addAppointmentToRepeatList(QDateTime *time) {
 }
 
 

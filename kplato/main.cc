@@ -17,17 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kptmilestone.h"
-
-KPTMilestone::KPTMilestone() : KPTNode() {
-        m_nodeType=POINT_IN_TIME;
+int main( int argc, char **argv ) {
+    return 0;
 }
-
-QDateTime *KPTMilestone::getStartTime() {
-    return 0L;
-}
-
-QDateTime *KPTMilestone::getFloat() {
-    return 0L;
-}
-

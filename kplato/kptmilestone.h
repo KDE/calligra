@@ -22,6 +22,7 @@
 
 #include <qdatetime.h> 
 #include "kptnode.h"
+#include "defs.h"
 
 class KPTResource;
 
@@ -29,19 +30,19 @@ class KPTResource;
  * This class represents any node in the project, a node can be a project to a subproject and any task.
  * This class is basically an abstract interface to make the design more OO.
  */
-class KPTMilestone : KPTNode {
+class KPTMilestone : public KPTNode {
     public:
 
         KPTMilestone();
         ~KPTMilestone();
 
         // no children permitted.
-        void addChildNode( KPTNode *node) {}
-        void addResource( KPTResource *resource ) {}
-        void insertChildNode( unsigned int index, KPTNode *node) {}
-        void insertRisk( unsigned int index, KPTRisk *risk ) {}
-        void addDependNode( KPTNode *node, TimingType t=START_ON_DATE, ParentRelation p=FINISH_START) {}
-        void insertDependNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, ParentRelation p=FINISH_START) {}
+        void addChildNode( KPTNode *) {}
+        void addResource( KPTResource *) {}
+        void insertChildNode( unsigned int, KPTNode *) {}
+        void insertRisk( unsigned int, KPTRisk *) {}
+        void addDependNode( KPTNode*, TimingType, TimingRelation) {}
+        void insertDependNode( unsigned int, KPTNode *, TimingType, TimingRelation) {}
 
 
         /** The expected Duration is the expected time to complete a Task, Project, etc. For an 
@@ -51,21 +52,21 @@ class KPTMilestone : KPTNode {
          *  will have to be calculated. For a Project or Subproject, the expected Duration is 
          *  calculated by PERT/CPM. 
          */
-        QTime getExpectedDuration() { return new QTime(0); }
+        QDateTime *getExpectedDuration() { return new QDateTime(*(new QDate(0,1,1))); }
 
         /** Instead of using the expected duration, generate a random value using the Distribution of 
          *  each Task. This can be used for Monte-Carlo estimation of Project duration.
          */
-        QTime getRandomDuration() { return getExpectedDuration(); }
+        QDateTime *getRandomDuration() { return getExpectedDuration(); }
 
         /** Retrive the time this node starts. This is either implied from the set time, or calculated
          *  by asking the parents.
          */
-        QTime getStartTime();
+        QDateTime *getStartTime();
 
         /** Retrieve the calculated float of this node
          */
-        QTime getFloat();
+        QDateTime *getFloat();
 
 };
 #endif
