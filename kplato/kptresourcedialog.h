@@ -21,7 +21,7 @@
 #define KPTRESOURCE_H
 
 #include <kdialogbase.h>
-TEST
+
 class KPTResourceGroup;
 class KPTResource;
 class KLineEdit;
