@@ -55,6 +55,8 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     m_ie_par1 = QVariant();
     m_ie_par2 = QVariant();
     m_ie_par3 = QVariant();
+    // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
+    m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 }
 
 KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key )
@@ -74,6 +76,8 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoP
     m_ie_par1 = QVariant();
     m_ie_par2 = QVariant();
     m_ie_par3 = QVariant();
+    // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
+    m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 
     setPixmap( key );
 }
@@ -328,6 +332,7 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 
 
     image.draw(paint, 0, 0, size.width(), size.height(), 0, 0, -1, -1, false); // Always slow mode!
+    image.clearCache(); // Release the memoy of the picture cache
 
     image.setAlphaBuffer(true);
     QBitmap tmpMask;
@@ -379,40 +384,57 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         QRect rect( (int)( penw ), (int)( penw ),
                     (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
                     (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+        // ### HACK QT seems not to be able to correctly compare QVariant
+        bool variants1;
+        if (m_ie_par1.isNull())
+            variants1=m_cachedPar1.isNull();
+        else
+            variants1=(m_ie_par1 == m_cachedPar1);
+        bool variants2;
+        if (m_ie_par2.isNull())
+            variants2=m_cachedPar2.isNull();
+        else
+            variants2=(m_ie_par2 == m_cachedPar2);
+        bool variants3;
+        if (m_ie_par3.isNull())
+            variants3=m_cachedPar3.isNull();
+        else
+            variants3=(m_ie_par3 == m_cachedPar3);
+
+        if (m_cachedRect == rect
+            // All what KPPixmapObject::changePictureSettings needs
+            && m_cachedMirrorType == mirrorType && m_cachedSwapRGB == swapRGB && m_cachedGrayscal == grayscal
+            && m_cachedBright == bright && m_cachedEffect == m_effect
+            // Who needs it?
+            && m_cachedDepth == depth
 #if 0
-        QSize size( _zoomHandler->zoomSize( ext ) );
-
-        // Draw background
-        _painter->setPen( Qt::NoPen );
-        _painter->setBrush( brush );
-
-        if ( fillType == FT_BRUSH || !gradient )
-            _painter->drawRect( rect );
-        else {
-            // ### TODO: this was also drawn for drawContour==true, but why?
-            gradient->setSize( size );
-            _painter->drawPixmap( (int)( penw ),
-                                  (int)( penw ),
-                                  gradient->pixmap(), 0, 0,
-                                  (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                                  (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
-        }
-
-        // Draw pixmap
-        QPixmap _pixmap = image.generatePixmap( rect.size(), true );
+            && m_ie_par1 == m_cachedPar1 && m_ie_par2 == m_cachedPar2 && m_ie_par3 == m_cachedPar3
 #else
-        // Generate a QPixmap from background and from the picture
-        QPixmap _pixmap = generatePixmap( _zoomHandler );
+            && variants1 && variants2 && variants3
 #endif
-
-        if (mirrorType != PM_NORMAL || swapRGB || grayscal || bright != 0 || m_effect!=IE_NONE) {
-            QPixmap tmpPix = changePictureSettings( _pixmap ); // hmm, what about caching that pixmap?
-            _painter->drawPixmap( rect, tmpPix );
+            )
+        {
+            kdDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
         }
-        else {
-            _painter->drawPixmap( rect, _pixmap );
-            kdDebug(33001) << k_funcinfo << "generating pixmap" << endl;
+        else
+        {
+            if (mirrorType != PM_NORMAL || swapRGB || grayscal || bright != 0 || m_effect!=IE_NONE)
+                m_cachedPixmap = changePictureSettings( generatePixmap( _zoomHandler ) );
+            else
+                m_cachedPixmap = generatePixmap( _zoomHandler );
+            m_cachedRect = rect;
+            m_cachedMirrorType = mirrorType;
+            m_cachedSwapRGB = swapRGB;
+            m_cachedGrayscal = grayscal;
+            m_cachedBright = bright;
+            m_cachedEffect = m_effect;
+            m_cachedDepth = depth;
+            m_cachedPar1 = m_ie_par1;
+            m_cachedPar2 = m_ie_par2;
+            m_cachedPar3 = m_ie_par3;
+            kdDebug(33001) <<  "Drawing non-cached pixmap " << (void*) this << " " << k_funcinfo << endl;
         }
+        _painter->drawPixmap( rect, m_cachedPixmap);
     }
 
     // Draw border
@@ -441,6 +463,7 @@ QPixmap KPPixmapObject::getOriginalPixmap()
 {
     QSize _pixSize = image.getOriginalSize();
     QPixmap _pixmap = image.generatePixmap( _pixSize, true );
+    image.clearCache(); // Release the memoy of the picture cache
 
     return _pixmap;
 }

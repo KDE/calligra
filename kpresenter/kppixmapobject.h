@@ -114,17 +114,20 @@ protected:
     KoPictureCollection *imageCollection;
     KoPicture image;
 
-    PictureMirrorType mirrorType;
-    int depth;
-    bool swapRGB;
-    bool grayscal;
-    int bright;
+    PictureMirrorType mirrorType, m_cachedMirrorType;
+    int depth, m_cachedDepth;
+    bool swapRGB, m_cachedSwapRGB;
+    bool grayscal, m_cachedGrayscal;
+    int bright, m_cachedBright;
 
     //image effect and its params
-    ImageEffect m_effect;
-    QVariant m_ie_par1;
-    QVariant m_ie_par2;
-    QVariant m_ie_par3;
+    ImageEffect m_effect, m_cachedEffect;
+    QVariant m_ie_par1, m_cachedPar1;
+    QVariant m_ie_par2, m_cachedPar2;
+    QVariant m_ie_par3, m_cachedPar3;
+
+    QPixmap m_cachedPixmap;
+    QRect m_cachedRect;
 };
 
 #endif
