@@ -1434,6 +1434,7 @@ void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
 
 void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<KAction>& actionList )
 {
+    QString word = wordUnderCursor( *cursor() );
     view->unplugActionList( "datatools" );
     view->unplugActionList( "datatools_link" );
     view->unplugActionList( "variable_action" );
@@ -1457,7 +1458,7 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
     }
     else
     {
-        actionList = dataToolActionList(view->kPresenterDoc()->instance());
+        actionList = dataToolActionList(view->kPresenterDoc()->instance(), word);
         //kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
         if(refLink().isNull())
         {

@@ -2788,10 +2788,26 @@ void KWTextFrameSetEdit::showFormat( KoTextFormat *format )
 
 void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPoint &point )
 {
+    // Decided against that - no other word processor does it that way apparently
+#if 0
+    // Place a KoTextCursor where we clicked
+    KoTextCursor cursor( textDocument() );
+    KoPoint dPoint = frameSet()->kWordDocument()->unzoomPoint( m_canvas->viewMode()->viewToNormal( point ) );
+    QPoint iPoint;
+    if ( textFrameSet()->documentToInternal( dPoint, iPoint, true ) )
+        cursor.place( iPoint, textDocument()->firstParag() );
+    else
+        kdWarning() << "documentToInternal couldn't place cursor for RMB position! " << point.x() << "," << point.y() << endl;
+    QString word = wordUnderCursor( cursor );
+#endif
+    QString word = wordUnderCursor( *cursor() );
+
     // Removed previous stuff
     view->unplugActionList( "datatools" );
     view->unplugActionList( "variable_action" );
     view->unplugActionList( "datatools_link" );
+
+    // Those lists are stored in the KWView. Grab a ref to them.
     QPtrList<KAction> &actionList = view->dataToolActionList();
     QPtrList<KAction> &variableList = view->variableActionList();
 
@@ -2799,7 +2815,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     variableList.clear();
 
     KWDocument * doc = frameSet()->kWordDocument();
-    actionList = dataToolActionList(doc->instance());
+    actionList = dataToolActionList(doc->instance(), word);
 
     doc->getVariableCollection()->setVariableSelected(variable());
     if ( variable() )
