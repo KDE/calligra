@@ -31,19 +31,17 @@ Parser::Parser(Connection *db)
 	m_db = db;
 
 	m_operation = OP_None;
-//	m_table = 0;
+	m_table = 0;
 	m_select = 0;
 }
 
 void
 Parser::createTable(const char *t)
 {
-#if 0
 	if(m_table)
 		return;
 
-	m_table = new KexiDBTable(t);
-#endif
+	m_table = new KexiDB::TableSchema(t);
 }
 
 void
