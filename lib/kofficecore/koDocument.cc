@@ -157,7 +157,7 @@ bool KoDocument::singleViewMode() const
   return d->m_bSingleViewMode;
 }
 
-const bool KoDocument::isEmbedded() const {
+bool KoDocument::isEmbedded() const {
   return parent() && parent()->inherits( "KoDocument" );
 }
 
