@@ -53,7 +53,7 @@ public:
 
   virtual QDomElement writeToXml(QDomDocument &document);
 
-  const QList<GObject> &getMembers() const { return members; }
+  const QPtrList<GObject> &getMembers() const { return members; }
 
   void calcBoundingBox ();
 
@@ -61,7 +61,7 @@ protected:
   virtual void updateProperties (GObject::Property prop, int mask);
 
 private:
-  QList<GObject> members;
+  QPtrList<GObject> members;
 };
 
 #endif

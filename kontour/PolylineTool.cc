@@ -135,11 +135,11 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
          else
          {
             // look for existing polylines with a point near the mouse pointer
-            QList<GObject> olist;
+            QPtrList<GObject> olist;
 
             if (doc->activePage()->findContainingObjects (qRound (xpos), qRound (ypos), olist))
             {
-               QListIterator<GObject> it (olist);
+               QPtrListIterator<GObject> it (olist);
                while (it.current ())
                {
                   if (it.current ()->isA ("GPolyline"))
@@ -243,11 +243,11 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 #if defined(not_yet)
             // XXXX
             // look for existing polylines with a point near the mouse pointer
-            QList<GObject> olist;
+            QPtrList<GObject> olist;
             GPolyline *obj = 0L;
             if (doc->findContainingObjects (xpos, ypos, olist))
             {
-               QListIterator<GObject> it (olist);
+               QPtrListIterator<GObject> it (olist);
                while (it.current ())
                {
                   if (it.current () != line && it.current ()->isA ("GPolyline")) {

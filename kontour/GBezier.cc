@@ -719,7 +719,7 @@ GCurve* GBezier::convertToCurve () const {
   unsigned int nsegs = (points.count () - 3) / 3;
   GCurve* curve = new GCurve (m_gdoc);
   curve->setOutlineInfo (outlineInfo);
-  QListIterator<Coord> it (points);
+  QPtrListIterator<Coord> it (points);
   ++it;
   Coord p1 = it.current ()->transform (tmpMatrix); ++it;
   for (unsigned int i = 0; i < nsegs; i++) {

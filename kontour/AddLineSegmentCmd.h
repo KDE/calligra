@@ -33,7 +33,7 @@ class GPolyline;
 class AddLineSegmentCmd : public Command {
 public:
   AddLineSegmentCmd (GDocument* doc, GPolyline* obj, int idx,
-                     QList<Coord>& pnts);
+                     QPtrList<Coord>& pnts);
   ~AddLineSegmentCmd ();
 
   void execute ();
@@ -43,7 +43,7 @@ private:
   GDocument* document;
   GPolyline* line;
   int index;
-  QList<Coord> points;
+  QPtrList<Coord> points;
 };
 
 #endif

@@ -27,7 +27,7 @@
 
 #include <GObject.h>
 #include <qfont.h>
-#include <qvector.h>
+#include <qptrvector.h>
 
 class GTextState;
 class QFontMetrics;
@@ -122,7 +122,7 @@ private:
   bool cursorActive;
   int max_width;
   GObject* pathObj;
-  QVector<QWMatrix> cmatrices;
+  QPtrVector<QWMatrix> cmatrices;
 
   static TextInfo defaultTextInfo;
 };

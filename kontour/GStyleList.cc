@@ -1,7 +1,7 @@
 /* -*- C++ -*-
 
   $Id$
-  
+
   This file is part of Kontour.
   Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
@@ -34,7 +34,7 @@ GStyleList::GStyleList()
 {
   list.clear();
   GStyle *st = new GStyle();
-  list.insert(i18n("defaul"), st);
+  list.insert(i18n("default"), st);
   mCurStyle = st;
   mCur = 0;
 }

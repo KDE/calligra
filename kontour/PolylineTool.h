@@ -42,7 +42,7 @@ private:
   GPolyline* line;
   int last;
   bool newObj;
-  QList<Coord> points;
+  QPtrList<Coord> points;
 };
 
 #endif

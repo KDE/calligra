@@ -39,7 +39,7 @@ CreatePolylineCmd::CreatePolylineCmd (GDocument* doc, GPolyline* line)
 }
 
 CreatePolylineCmd::CreatePolylineCmd (GDocument* doc,
-                                      const QList<Coord>& pts)
+                                      const QPtrList<Coord>& pts)
   : Command(i18n("Create Polyline"))
 {
   document = doc;
@@ -56,7 +56,7 @@ void CreatePolylineCmd::execute () {
   if (object == 0L) {
     // create new object
     object = new GPolyline (document);
-    QListIterator<Coord> it (points);
+    QPtrListIterator<Coord> it (points);
     for (int i = 0; it.current (); ++it, ++i)
       object->addPoint (i, *(it.current ()));
     //    object->ref ();

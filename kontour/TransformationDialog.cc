@@ -331,10 +331,10 @@ void TransformationDialog::translate (bool onDuplicate) {
     yval -= r.top ();
   }
   if (onDuplicate) {
-    QList<GObject> duplicates;
+    QPtrList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for(QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
+    for(QPtrListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m;
       m.translate (xval, yval);
@@ -371,10 +371,10 @@ void TransformationDialog::scale (bool onDuplicate) {
     Rect box = document->activePage()->boundingBoxForSelection ();
     float xoff = box.x (), yoff = box.y ();
 
-    QList<GObject> duplicates;
+    QPtrList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
+    for (QPtrListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
 
@@ -412,10 +412,10 @@ void TransformationDialog::rotate (bool onDuplicate) {
     ycenter += r.top ();
   }
   if (onDuplicate) {
-    QList<GObject> duplicates;
+    QPtrList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
+    for (QPtrListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
       m1.translate (-xcenter, -ycenter);
@@ -447,10 +447,10 @@ void TransformationDialog::mirror (bool onDuplicate) {
     Rect box = document->activePage()->boundingBoxForSelection ();
     float xoff = box.x (), yoff = box.y ();
 
-    QList<GObject> duplicates;
+    QPtrList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
+    for (QPtrListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
 

@@ -85,7 +85,7 @@ GPolyline::GPolyline (const GPolyline& obj)
 {
     //connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,SLOT(updateProperties (GObject::Property, int)));
     points.setAutoDelete (true);
-    QListIterator<Coord> it (obj.points);
+    QPtrListIterator<Coord> it (obj.points);
     for (; it.current (); ++it)
         points.append (new Coord (* (it.current ())));
     sArrow = obj.sArrow;
@@ -232,7 +232,7 @@ const Coord& GPolyline::getPoint (int idx)
    return *(points.at (idx));
 }
 
-QList<Coord>& GPolyline::getPoints () {
+QPtrList<Coord>& GPolyline::getPoints () {
   return points;
 }
 
@@ -374,7 +374,7 @@ QDomElement GPolyline::writeToXml (QDomDocument &document) {
     polyline.setAttribute ("arrow1", QString::number(outlineInfo.startArrowId));
     polyline.setAttribute ("arrow2", QString::number(outlineInfo.endArrowId));
 
-    for (QListIterator<Coord> it (points); it.current (); ++it) {
+    for (QPtrListIterator<Coord> it (points); it.current (); ++it) {
         QDomElement point=document.createElement("point");
         point.setAttribute ("x", it.current ()->x ());
         point.setAttribute ("y", it.current ()->y ());
@@ -554,7 +554,7 @@ GCurve* GPolyline::convertToCurve () const
 {
   GCurve* curve = new GCurve (m_gdoc);
   curve->setOutlineInfo (outlineInfo);
-  QListIterator<Coord> it (points);
+  QPtrListIterator<Coord> it (points);
   Coord p0 = it.current ()->transform (tmpMatrix);
   ++it;
   for (; it.current (); ++it) {

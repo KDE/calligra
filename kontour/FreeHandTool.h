@@ -42,7 +42,7 @@ private:
   int last;
   bool newObj;
   bool buttonIsDown;
-  QList<Coord> points;
+  QPtrList<Coord> points;
 };
 
 #endif

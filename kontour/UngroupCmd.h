@@ -43,9 +43,9 @@ private:
     GDocument* document;
     struct GPair {
         GGroup *group;
-        QList<GObject> members;
+        QPtrList<GObject> members;
     };
-    QList<GPair> groups;
+    QPtrList<GPair> groups;
 };
 
 #endif

@@ -27,7 +27,7 @@
 
 #include <qtableview.h>
 #include <qbrush.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class QColor;
 class QPixmap;
@@ -56,7 +56,7 @@ protected:
     virtual void mousePressEvent (QMouseEvent *event);
 
 private:
-    QList<QPixmap> brushPixmaps;
+    QPtrList<QPixmap> brushPixmaps;
     int currentBrush;
 };
 

@@ -32,7 +32,7 @@ class GObject;
 
 class InsertObjCmd : public Command {
 public:
-  InsertObjCmd (GDocument* doc, QList<GObject>& objs);
+  InsertObjCmd (GDocument* doc, QPtrList<GObject>& objs);
 
   ~InsertObjCmd ();
 
@@ -41,7 +41,7 @@ public:
 
 private:
   GDocument* document;
-  QList<GObject> objects;
+  QPtrList<GObject> objects;
 };
 
 #endif

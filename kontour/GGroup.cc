@@ -74,7 +74,7 @@ GGroup::GGroup (GDocument *doc, const QDomElement &element)
 
 GGroup::GGroup (const GGroup& obj) : GObject (obj)
 {
-    QList<GObject> tmp=obj.getMembers();
+    QPtrList<GObject> tmp=obj.getMembers();
     for (GObject *o=tmp.first(); o!=0L; o=tmp.next())
         members.append(o->copy());
     calcBoundingBox ();

@@ -76,16 +76,16 @@ void GLayer::setVisible(bool flag)
     emit propertyChanged();
   }
 }
-  
+
 void GLayer::setPrintable(bool flag)
 {
-  if(printableFlag != flag) 
+  if(printableFlag != flag)
   {
     printableFlag = flag;
     emit propertyChanged();
   }
 }
-  
+
 void GLayer::setEditable(bool flag)
 {
   if(editableFlag != flag)
@@ -118,7 +118,7 @@ bool GLayer::readFromXml(const QDomElement &layer)
   if(id.isEmpty())
     return;
   setName(id);
-  
+
   int flags = layer.attribute("flags").toInt();
   setVisible(flags & LAYER_VISIBLE);
   setPrintable(flags & LAYER_EDITABLE);
@@ -144,10 +144,10 @@ bool GLayer::readFromXml(const QDomElement &layer)
   }
 //TODO change GOBject \/
 // update object connections
-  for (QListIterator<GLayer> i(layers); i.current(); ++i)
+  for (QPtrListIterator<GLayer> i(layers); i.current(); ++i)
   {
-    const QList<GObject>& contents = (*i)->objects ();
-    for (QListIterator<GObject> oi(contents); oi.current(); ++oi)
+    const QPtrList<GObject>& contents = (*i)->objects ();
+    for (QPtrListIterator<GObject> oi(contents); oi.current(); ++oi)
     {
     // this should be more general !!
       if ((*oi)->hasRefId () && (*oi)->isA ("GText"))

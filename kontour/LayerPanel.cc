@@ -94,7 +94,7 @@ void LayerTreeItem::paintCell(QPainter *p, const QColorGroup &cg, int column, in
   }
   else
     p->fillRect(0, 0, width,height(), cg.base());
-  
+
   p->drawText( 1, 0, width, height(), align | AlignVCenter, layer->name(), -1);
 }
 
@@ -117,10 +117,10 @@ LayerView::~LayerView()
 void LayerView::updateView()
 {
   clear();
-  for(QListIterator<GPage> it(mGDoc->getPages()); it.current(); ++it)
+  for(QPtrListIterator<GPage> it(mGDoc->getPages()); it.current(); ++it)
   {
     PageTreeItem *p = new PageTreeItem(this, (GPage *)it);
-    for(QListIterator<GLayer> itt(((GPage *)it)->getLayers()); itt.current(); ++itt)
+    for(QPtrListIterator<GLayer> itt(((GPage *)it)->getLayers()); itt.current(); ++itt)
       new LayerTreeItem((QListViewItem*)p, (GLayer *)itt);
   }
 }
@@ -159,14 +159,14 @@ QWidget(parent, name)
   connect(mLowerButton, SIGNAL(clicked()), SLOT(downPressed()));
   connect(mNewButton, SIGNAL(clicked()), SLOT(newPressed()));
   connect(mDeleteButton, SIGNAL(clicked()), SLOT(deletePressed()));
-    
+
   stateOfButton();
 }
 
 void LayerPanel::updatePanel()
 {
   mLayerView->updateView();
-  QList<GLayer> list = mGDoc->activePage()->getLayers();
+  QPtrList<GLayer> list = mGDoc->activePage()->getLayers();
   mLowerButton->setEnabled(list.first() != mGDoc->activePage()->activeLayer());
   mRaiseButton->setEnabled(list.last() != mGDoc->activePage()->activeLayer());
 }
@@ -226,7 +226,7 @@ void LayerPanel::stateOfButton()
 
 void LayerPanel::slotLayerChanged()
 {
-/*    QList<GLayer> list =document->activePage()->getLayers();
+/*    QPtrList<GLayer> list =document->activePage()->getLayers();
     btn_ll->setEnabled(list.first()!=document->activePage()->activeLayer ());
     btn_rl->setEnabled(list.last()!=document->activePage()->activeLayer ());*/
 }

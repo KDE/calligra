@@ -52,7 +52,7 @@ public:
   void movePoint (int idx, float dx, float dy, bool ctrlPressed=false);
 
   const Coord& getPoint (int idx);
-  QList<Coord>& getPoints ();
+  QPtrList<Coord>& getPoints ();
 
   virtual int containingSegment (float xpos, float ypos);
   virtual bool isValid ();
@@ -86,7 +86,7 @@ protected:
   Rect calcEnvelope ();
 
 protected:
-  QList<Coord> points;
+  QPtrList<Coord> points;
   Arrow *sArrow, *eArrow;
   float sAngle, eAngle;
   float sdx, sdy, edx, edy;

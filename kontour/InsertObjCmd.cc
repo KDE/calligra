@@ -30,11 +30,11 @@
 #include <GObject.h>
 #include "GPage.h"
 
-InsertObjCmd::InsertObjCmd (GDocument* doc, QList<GObject>& objs)
+InsertObjCmd::InsertObjCmd (GDocument* doc, QPtrList<GObject>& objs)
   : Command(i18n("Insert Object"))
 {
   document = doc;
-  QListIterator<GObject> it (objs);
+  QPtrListIterator<GObject> it (objs);
   for (; it.current (); ++it) {
     GObject* obj = it.current ();
     obj->ref ();
@@ -43,7 +43,7 @@ InsertObjCmd::InsertObjCmd (GDocument* doc, QList<GObject>& objs)
 }
 
 InsertObjCmd::~InsertObjCmd () {
-  QListIterator<GObject> it (objects);
+  QPtrListIterator<GObject> it (objects);
   for (; it.current (); ++it) {
     GObject* obj = it.current ();
     obj->unref ();
@@ -51,7 +51,7 @@ InsertObjCmd::~InsertObjCmd () {
 }
 
 void InsertObjCmd::execute () {
-  QListIterator<GObject> it (objects);
+  QPtrListIterator<GObject> it (objects);
   for (; it.current (); ++it) {
     GObject* obj = it.current ();
     obj->ref ();
@@ -60,7 +60,7 @@ void InsertObjCmd::execute () {
 }
 
 void InsertObjCmd::unexecute () {
-  QListIterator<GObject> it (objects);
+  QPtrListIterator<GObject> it (objects);
   for (; it.current (); ++it) {
     GObject* obj = it.current ();
     document->activePage()->deleteObject (obj);

@@ -45,7 +45,7 @@ private:
         GObject *o;
         int pos;
     };
-    QList<MyPair> objects;
+    QPtrList<MyPair> objects;
 };
 
 #endif

@@ -33,7 +33,7 @@
 DeleteCmd::DeleteCmd (GDocument* doc) : Command(i18n("Delete")) {
   document = doc;
   objects.setAutoDelete(true);
-  for(QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
+  for(QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
       MyPair *p=new MyPair;
       p->o=*it;
       p->o->ref ();

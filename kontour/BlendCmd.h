@@ -44,7 +44,7 @@ private:
   GDocument* document;
   GObject *sobj, *eobj;
   GCurve *start, *end;
-  QList<GCurve> curves;
+  QPtrList<GCurve> curves;
   int num_steps;
 };
 

@@ -36,7 +36,7 @@ public:
   GPolygon (GDocument* parent, Kind pkind = PK_Polygon);
   GPolygon (GDocument* parent, const QDomElement &element, Kind pkind = PK_Polygon);
   GPolygon (const GPolygon& obj);
-  GPolygon (GDocument* parent, QList<Coord>& coords);
+  GPolygon (GDocument* parent, QPtrList<Coord>& coords);
   ~GPolygon () {}
 
   virtual void movePoint (int idx, float dx, float dy, bool ctrlPressed=false);
@@ -82,7 +82,7 @@ protected:
 
 private:
   Kind kind;
-  QList<Coord> rpoints;
+  QPtrList<Coord> rpoints;
 };
 
 #endif

@@ -33,7 +33,7 @@ UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup")) {
 
     groups.setAutoDelete(true);
     document = doc;
-    for(QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
+    for(QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
         GObject* o = *it;
         if (o->isA ("GGroup")) {
             GGroup* gobj = (GGroup *) o;
@@ -60,7 +60,7 @@ void UngroupCmd::execute () {
         if (pos != -1) {
             document->setAutoUpdate (false);
             // extract the members of the group
-            QList <GObject> members = group->getMembers ();
+            QPtrList <GObject> members = group->getMembers ();
             GObject *mo=members.first();
             for (int offs = 0; mo!=0L; mo=members.next(), offs++) {
                 // transform it according to the group transformation matrix

@@ -26,8 +26,8 @@
 #define ReorderCmd_h_
 
 #include <Command.h>
-#include <qvector.h>
-#include <qarray.h>
+#include <qptrvector.h>
+#include <qmemarray.h>
 
 class GDocument;
 
@@ -44,8 +44,8 @@ public:
   void unexecute ();
 
 private:
-  QVector<GObject> objects;
-  QArray<unsigned int> oldpos;
+  QPtrVector<GObject> objects;
+  QMemArray<unsigned int> oldpos;
   GDocument* document;
   ReorderPosition position;
 };

@@ -37,7 +37,7 @@ KCommand(name)
   objects.resize (doc->activePage()->selectionCount ());
   states.resize (doc->activePage()->selectionCount ());
 
-  QListIterator<GObject> it(doc->activePage()->getSelection());
+  QPtrListIterator<GObject> it(doc->activePage()->getSelection());
   for (unsigned int i = 0; it.current(); ++it, ++i) {
     (*it)->ref ();
     kdDebug() << "1)MASK=" << (*it)->getFillInfo().mask << endl;

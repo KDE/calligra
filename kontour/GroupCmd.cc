@@ -37,7 +37,7 @@ GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
 
   QMap<int, GObject*> idx_map;
 
-  for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
+  for (QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
     // remember position of object in order to keep the order of
     // objects in the group
     GObject* o = *it;
@@ -82,8 +82,8 @@ void GroupCmd::unexecute () {
   if (pos != -1) {
     document->setAutoUpdate (false);
     // extract the members of the group
-    const QList<GObject> members = group->getMembers ();
-    QListIterator<GObject> mi(members);
+    const QPtrList<GObject> members = group->getMembers ();
+    QPtrListIterator<GObject> mi(members);
     for (int offs = 0; mi.current(); ++mi, ++offs) {
       GObject* obj = *mi;
       // transform it according to the group transformation matrix

@@ -127,7 +127,7 @@ GPolygon::GPolygon (const GPolygon& obj)
   kind = obj.kind;
 }
 
-GPolygon::GPolygon (GDocument *doc, QList<Coord>& coords)
+GPolygon::GPolygon (GDocument *doc, QPtrList<Coord>& coords)
 :GPolyline (doc)
 {
   Coord *p1 = coords.first (), *p2 = 0L;
@@ -634,7 +634,7 @@ bool GPolygon::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
 GCurve* GPolygon::convertToCurve () const
 {
   GCurve* curve = new GCurve (m_gdoc);
-  QListIterator<Coord> it (points);
+  QPtrListIterator<Coord> it (points);
   Coord p0 = it.current ()->transform (tmpMatrix), p = p0;
   ++it;
   for (; it.current (); ++it)

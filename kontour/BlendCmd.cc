@@ -35,7 +35,7 @@ BlendCmd::BlendCmd (GDocument* doc, int steps)
 {
   document = doc;
   num_steps = steps;
-  QListIterator<GObject> it(doc->activePage()->getSelection());
+  QPtrListIterator<GObject> it(doc->activePage()->getSelection());
   for (int i = 0; it.current(); ++it, ++i) {
     if (i == 2)
       break;

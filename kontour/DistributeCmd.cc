@@ -51,11 +51,11 @@ void DistributeCmd::execute () {
 
   ObjectManipCmd::execute ();
 
-  QList<GObject>& objs = document->activePage()->getSelection ();
+  QPtrList<GObject>& objs = document->activePage()->getSelection ();
 
   firstObj = objs.first();
   lastObj = objs.last();
-  QListIterator<GObject> it(objs);
+  QPtrListIterator<GObject> it(objs);
 
   switch (hDistrib) {
   case HDistrib_Left:

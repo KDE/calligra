@@ -41,8 +41,8 @@ public:
 
 private:
   GDocument* document;
-  QList<GObject> objects;
-  QList<GCurve> curves;
+  QPtrList<GObject> objects;
+  QPtrList<GCurve> curves;
 };
 
 #endif

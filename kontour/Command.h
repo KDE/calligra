@@ -35,7 +35,7 @@ class Command : public KCommand
 public:
   Command(GDocument *aGDoc, const QString &name);
   GDocument *document() const {return mGDoc; }
-  
+
 private:
   GDocument *mGDoc;
 };
@@ -53,8 +53,8 @@ public:
   void unexecute();
 
 protected:
-  QVector<GObject> objects;
-  QVector<GOState> states;
+  QPtrVector<GObject> objects;
+  QPtrVector<GOState> states;
 };
 */
 #endif

@@ -41,7 +41,7 @@ CutCmd::CutCmd (GDocument* doc)
 {
   document = doc;
   objects.setAutoDelete(true);
-  for(QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it)
+  for(QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it)
   {
     MyPair *p=new MyPair;
     p->o = *it;
@@ -73,7 +73,7 @@ void CutCmd::execute()
     layer.appendChild(p->o->writeToXml(docu));
     document->activePage()->deleteObject (p->o);
   }
-    
+
   QBuffer buffer;
   buffer.open( IO_WriteOnly );
   QTextStream stream( &buffer );

@@ -84,7 +84,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
                 }
             }
             else { // segments were added
-                QList<Coord> points;
+                QPtrList<Coord> points;
                 points.setAutoDelete (true);
                 if (addAtEnd) {
                     int last_valid = last - ((last - 5) % 3);
@@ -158,11 +158,11 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
                 }
             }
             else {
-                QList<GObject> olist;
+                QPtrList<GObject> olist;
                 // look for existing bezier curves with an
                 // end point near the mouse pointer
                 if (doc->activePage()->findContainingObjects (qRound (xpos), qRound (ypos), olist)) {
-                    QListIterator<GObject> it (olist);
+                    QPtrListIterator<GObject> it (olist);
                     while (it.current ()) {
                         if (it.current ()->isA ("GBezier")) {
                             obj = (GBezier *) it.current ();
@@ -263,7 +263,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
                     history->addCommand (cmd);
                 }
                 else {
-                    QList<Coord> points;
+                    QPtrList<Coord> points;
                     points.setAutoDelete (true);
 
                     if (last == 0) {

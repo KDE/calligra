@@ -102,7 +102,7 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
    }
    else
    {
-      for (QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it)
+      for (QPtrListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it)
       {
          GObject* o = *it;
          if (o->inherits ("GText"))

@@ -42,7 +42,7 @@ public:
 private:
   GDocument* document;
   GGroup* group;
-  QList<GObject> objects;
+  QPtrList<GObject> objects;
 };
 
 #endif

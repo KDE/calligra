@@ -34,7 +34,7 @@ ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos)
   objects.resize (doc->activePage()->selectionCount ());
   oldpos.resize (doc->activePage()->selectionCount ());
 
-  QListIterator<GObject> it(doc->activePage()->getSelection());
+  QPtrListIterator<GObject> it(doc->activePage()->getSelection());
   for (unsigned int i = 0; it.current(); ++it, ++i) {
     GObject *o = *it;
     o->ref ();

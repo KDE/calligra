@@ -33,7 +33,7 @@ class GPolyline;
 class CreatePolylineCmd : public Command {
 public:
   CreatePolylineCmd (GDocument* doc, GPolyline* line);
-  CreatePolylineCmd (GDocument* doc, const QList<Coord>& pts);
+  CreatePolylineCmd (GDocument* doc, const QPtrList<Coord>& pts);
 
   ~CreatePolylineCmd ();
 
@@ -43,7 +43,7 @@ public:
 private:
   GDocument* document;
   GPolyline* object;
-  QList<Coord> points;
+  QPtrList<Coord> points;
 };
 
 #endif

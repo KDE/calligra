@@ -40,7 +40,7 @@ public:
 
 private:
   GDocument* document;
-  QList<GObject> objects;
+  QPtrList<GObject> objects;
 };
 
 #endif

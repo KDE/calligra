@@ -69,9 +69,9 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 
         text = 0L;
 
-        QList<GObject> olist;
+        QPtrList<GObject> olist;
         if (doc->activePage()->findContainingObjects (me->x (), me->y (), olist)) {
-            QListIterator<GObject> it (olist);
+            QPtrListIterator<GObject> it (olist);
             while (it.current ()) {
                 if (it.current ()->isA ("GText")) {
                     text = (GText *) it.current ();

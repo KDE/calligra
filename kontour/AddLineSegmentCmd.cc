@@ -28,7 +28,7 @@
 #include <klocale.h>
 
 AddLineSegmentCmd::AddLineSegmentCmd (GDocument* doc, GPolyline* obj,
-                                      int idx, QList<Coord>& pnts)
+                                      int idx, QPtrList<Coord>& pnts)
   : Command(i18n("Add Line Segment"))
 {
   document = doc;

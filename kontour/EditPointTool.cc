@@ -121,7 +121,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
     pointIdx = -1;
     // for performance reasons check if an object from the selection
     // has to be edited
-    for (QListIterator<GObject>it(doc->activePage()->getSelection()); it.current(); ++it)
+    for (QPtrListIterator<GObject>it(doc->activePage()->getSelection()); it.current(); ++it)
     {
       GObject* o = *it;
       int idx = o->getNeighbourPoint (Coord (xpos, ypos));
@@ -164,7 +164,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
          bool isOver = false;
          int pidx;
 
-         for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it)
+         for (QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it)
          {
             GObject* o = *it;
             if ((pidx = o->getNeighbourPoint (Coord (xpos, ypos))) != -1)

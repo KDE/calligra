@@ -43,7 +43,7 @@ public:
 
 private:
   GDocument* document;
-  QList<GObject> objects, new_objects;
+  QPtrList<GObject> objects, new_objects;
 
   static bool repeatCmd; // repeat command with given offsets
   static float repOffX, repOffY; // offset for repetition

@@ -44,7 +44,7 @@ private:
         int pos;
     };
     GDocument* document;
-    QList<MyPair> objects;
+    QPtrList<MyPair> objects;
 };
 
 #endif
