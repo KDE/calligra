@@ -43,6 +43,7 @@ protected:
 
     int m_flags;
     QPtrList <KivioStencil> *m_pStencilList;
+    QPtrList <KivioStencil> *m_pDeletedStencilList;
     QString m_name;
     KivioPage *m_pPage;
     DCOPObject* m_dcop;

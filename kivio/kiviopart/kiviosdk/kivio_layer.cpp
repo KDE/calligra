@@ -46,6 +46,9 @@ KivioLayer::KivioLayer( KivioPage *pPage )
     m_pStencilList = new QPtrList<KivioStencil>;
     m_pStencilList->setAutoDelete(true);
 
+    m_pDeletedStencilList = new QPtrList<KivioStencil>;
+    m_pDeletedStencilList->setAutoDelete(true);
+
     m_flags = 0;
     m_dcop = 0;
     setVisible(true);
@@ -61,16 +64,22 @@ DCOPObject* KivioLayer::dcopObject()
 
 KivioLayer::~KivioLayer()
 {
+    kdDebug()<<"KivioLayer::~KivioLayer()***************:"<<this<<endl;
     if( m_pStencilList )
     {
         delete m_pStencilList;
         m_pStencilList = NULL;
     }
+    delete m_pDeletedStencilList;
     delete m_dcop;
 }
 
 bool KivioLayer::addStencil( KivioStencil *pStencil )
 {
+    int pos=m_pDeletedStencilList->findRef(pStencil);
+    if ( pos != -1 )
+        m_pDeletedStencilList->take( pos);
+
     m_pStencilList->append( pStencil );
 
     return true;
@@ -80,10 +89,15 @@ void KivioLayer::takeStencilFromList(  KivioStencil *pStencil )
 {
     int pos=m_pStencilList->findRef(pStencil);
     m_pStencilList->take( pos );
+    m_pDeletedStencilList->append( pStencil );
 }
 
 void KivioLayer::insertStencil( KivioStencil *pStencil )
 {
+    int pos=m_pDeletedStencilList->findRef(pStencil);
+    if ( pos != -1 )
+        m_pDeletedStencilList->take( pos);
+
     m_pStencilList->append( pStencil );
 }
 
