@@ -2,7 +2,7 @@
 #define PIX( pix ) *OPUIUtils::convertPixmap( ICON( pix ) )
 
 #define MENU( menu, text ) _menubar->insertMenu( TEXT( text ), menu, -1, -1 );
-#define ITEM1( id, menu, text, func ) id = menu->insertItem( TEXT( text ), this, func, 0, -1, -1 );
+#define ITEM1( id, menu, text, func ) id = menu->insertItem( TEXT( text ), this, func, 0 );
 #define ITEM2( id, menu, text, func, key ) id = menu->insertItem4( TEXT( text ), this, func, key, -1, -1 );
 #define ITEM3( id, menu, pix, text, func ) id = menu->insertItem6( PIX( pix ), TEXT( text ), this, func, 0, -1, -1 );
 #define ITEM4( id, menu, pix, text, func, key ) id = menu->insertItem6( PIX( pix ), TEXT( text ), this, func, key, -1, -1 );
