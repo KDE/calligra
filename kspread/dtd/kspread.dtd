@@ -188,7 +188,8 @@
                 printCommentIndicator  show/hide comment indicator on printout (hide="1", show="0")
                 printFormulaIndicator  show/hide formula indicator on printout (hide="1", show="0")
                 printGrid              show/hide grid on printout (hide="1", show="0")
-                formular               show/hide formular
+                showFormula            show/hide formula
+                showFormulaIndicator   show/hide formula indicator on screen (hide="1", show="0")
                 lcmode                 write on LxCx area selected 
 -->
 <!ELEMENT table (paper|cell|chart|column|row|printrange-rect|printrepeatcolumns|printrepeatrows)*>
@@ -202,9 +203,10 @@
                  printGrid              CDATA #REQUIRED
                  printCommentIndicator  CDATA #REQUIRED
                  printFormulaIndicator  CDATA #REQUIRED
-                 formular               CDATA #REQUIRED
+                 showFormula            CDATA #REQUIRED
+                 showFormulaIndicator   CDATA #REQUIRED
                  lcmode                 CDATA #REQUIRED
-		 borders1.2             CDATA #REQUIRED>
+                 borders1.2             CDATA #REQUIRED>
 
 
 <!--	Describes one cell including contents.

@@ -6268,17 +6268,21 @@ QDomElement KSpreadTable::saveXML( QDomDocument& doc )
 {
     QDomElement table = doc.createElement( "table" );
     table.setAttribute( "name", m_strName );
+    table.setAttribute( "columnnumber", (int)m_bShowColumnNumber);
+    table.setAttribute( "borders", (int)m_bShowPageBorders);
+    table.setAttribute( "hide", (int)m_bTableHide);
+    table.setAttribute( "hidezero", (int)m_bHideZero);
+    table.setAttribute( "firstletterupper", (int)m_bFirstLetterUpper);
     table.setAttribute( "grid", (int)m_bShowGrid );
     table.setAttribute( "printGrid", (int)m_bPrintGrid );
     table.setAttribute( "printCommentIndicator", (int)m_bPrintCommentIndicator );
     table.setAttribute( "printFormulaIndicator", (int)m_bPrintFormulaIndicator );
-    table.setAttribute( "hide", (int)m_bTableHide);
-    table.setAttribute( "formular", (int)m_bShowFormula);
-    table.setAttribute( "borders", (int)m_bShowPageBorders);
+    if ( m_pDoc->specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
+      table.setAttribute( "formular", (int)m_bShowFormula); //Was named different
+    else
+      table.setAttribute( "showFormula", (int)m_bShowFormula);
+    table.setAttribute( "showFormulaIndicator", (int)m_bShowFormulaIndicator);
     table.setAttribute( "lcmode", (int)m_bLcMode);
-    table.setAttribute( "columnnumber", (int)m_bShowColumnNumber);
-    table.setAttribute( "hidezero", (int)m_bHideZero);
-    table.setAttribute( "firstletterupper", (int)m_bFirstLetterUpper);
     table.setAttribute( "borders1.2", 1);
 
     // paper parameters
@@ -6473,9 +6477,20 @@ bool KSpreadTable::loadXML( const QDomElement& table )
         m_bTableHide = (int)table.attribute("hide").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
+    if( table.hasAttribute( "showFormula" ) )
+    {
+        m_bShowFormula = (int)table.attribute("showFormula").toInt( &ok );
+        // we just ignore 'ok' - if it didn't work, go on
+    }
+    //Compatibility with KSpread 1.1.x
     if( table.hasAttribute( "formular" ) )
     {
         m_bShowFormula = (int)table.attribute("formular").toInt( &ok );
+        // we just ignore 'ok' - if it didn't work, go on
+    }
+    if( table.hasAttribute( "showFormulaIndicator" ) )
+    {
+        m_bShowFormulaIndicator = (int)table.attribute("showFormulaIndicator").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "borders" ) )
