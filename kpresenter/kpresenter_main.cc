@@ -24,10 +24,6 @@
 #include <koQueryTypes.h>
 #include "formats.h"
 
-bool g_bWithGUI = true;
-
-list<string> g_openFiles;
-
 KOFFICE_DOCUMENT_FACTORY( KPresenterDoc, KPresenterFactory, KPresenter::DocumentFactory_skel )
 typedef OPAutoLoader<KPresenterFactory> KPresenterAutoLoader;
 
@@ -46,49 +42,15 @@ KPresenterApp::~KPresenterApp()
 {
 }
 
-/*=================== start application ==========================*/
-void KPresenterApp::start()
-{
-    if ( g_bWithGUI )
-    {
-        if ( g_openFiles.size() == 0 )
-        {
-            KPresenterShell* shell = new KPresenterShell;
-            shell->show();
-            shell->newDocument();
-        }
-        else
-        {
-            list<string>::iterator it = g_openFiles.begin();
-            for( ; it != g_openFiles.end(); ++it )
-            {
-                KPresenterShell* shell = new KPresenterShell;
-                shell->show();
-                shell->openDocument( it->c_str(), "" );
-            }
-        }
-    }
-}
-
 /*======================== main ==================================*/
 int main( int argc, char **argv )
 {
-    KPresenterAutoLoader loader( "IDL:KPresenter/DocumentFactory:1.0", "KPresenter" );
-
-    KPresenterApp app( argc, argv );
-
     FormatManager *formatMngr;
     formatMngr = new FormatManager();
 
-    int i = 1;
-    if ( strcmp( argv[ i ], "-s" ) == 0 || strcmp( argv[ i ], "--server" ) == 0 )
-    {
-        i++;
-        g_bWithGUI = false;
-    }
+    KPresenterAutoLoader loader( "IDL:KPresenter/DocumentFactory:1.0", "KPresenter" );
 
-    for( ; i < argc; i++ )
-        g_openFiles.push_back( ( const char* )argv[ i ] );
+    KPresenterApp app( argc, argv );
 
     app.exec();
 

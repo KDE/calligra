@@ -17,6 +17,10 @@
 
 #include <koApplication.h>
 
+class KoMainWindow;
+
+#include "kpresenter_shell.h"
+
 /******************************************************************/
 /* class KPresenterApp - KPresenter Application                   */
 /******************************************************************/
@@ -29,9 +33,9 @@ public:
     // constructor - destructor
     KPresenterApp( int &argc, char** argv );
     ~KPresenterApp();
-
-    // start application
-    virtual void start();
+	
+	// create a new shell
+	KoMainWindow* createNewShell() { return new KPresenterShell; }
 };
 
 #endif
