@@ -44,7 +44,7 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
     for ( int pageNum = fromPage ; pageNum <= toPage ; ++pageNum )
     {
         double top = pageNum * doc->ptPaperHeight() + doc->ptTopBorder();
-        double bottom = doc->ptPaperHeight() - doc->ptBottomBorder();
+        double bottom = ( pageNum + 1 ) * doc->ptPaperHeight() - doc->ptBottomBorder();
         double left = doc->ptLeftBorder();
         double right = doc->ptPaperWidth() - doc->ptRightBorder();
         Q_ASSERT( left < right );
