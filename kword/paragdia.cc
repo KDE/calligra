@@ -1097,7 +1097,6 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     layout8->setSpacing( 6 );
     layout8->setMargin( 11 );
 
-    stylesList.append( new StyleRepresenter(i18n( "None" ) , KoParagCounter::STYLE_NONE));
     stylesList.append( new StyleRepresenter(i18n( "Arabic Numbers" )
             ,  KoParagCounter::STYLE_NUM));
     stylesList.append( new StyleRepresenter(i18n( "Lower Alphabetical" )
@@ -1116,6 +1115,7 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
             ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
             ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
+    stylesList.append( new StyleRepresenter(i18n( "None" ) , KoParagCounter::STYLE_NONE));
 
     lstStyle = new QListBox( gStyle, "styleListBox" );
     fillStyleCombo();
@@ -1204,7 +1204,11 @@ void KWParagCounterWidget::fillStyleCombo(KoParagCounter::Numbering type) {
 
     QListIterator<StyleRepresenter> style( stylesList );
     while ( style.current() ) {
-            if(type == KoParagCounter::NUM_LIST || !style.current()->listStyle())
+        if(style.current()->style() == KoParagCounter::STYLE_NONE) {
+            if(type == KoParagCounter::NUM_NONE)
+                lstStyle->insertItem( style.current()->name() );
+        } else if(type == KoParagCounter::NUM_LIST || !style.current()->listStyle())
+            if(type != KoParagCounter::NUM_NONE)
                 lstStyle->insertItem( style.current()->name() );
         ++style;
     }
@@ -1229,7 +1233,6 @@ void KWParagCounterWidget::selectCustomBullet() {
     unsigned int i;
     for (i=0; stylesList.count() > i && stylesList.at(i)->style() != KoParagCounter::STYLE_CUSTOMBULLET; i++);
     lstStyle->setCurrentItem(i);
-    //numStyleChanged( i );
 
     QString f = m_counter.customBulletFont();
     if ( f.isEmpty() )
@@ -1247,9 +1250,7 @@ void KWParagCounterWidget::selectCustomBullet() {
 }
 
 void KWParagCounterWidget::numStyleChanged() {
-    if(noSignals) return;
-
-    // We selected another style from the combo box.
+    // We selected another style from the list box.
     styleBuffer = 999;
     StyleRepresenter *sr = stylesList.at(lstStyle->currentItem());
     m_counter.setStyle(sr->style());
@@ -1288,6 +1289,7 @@ void KWParagCounterWidget::changeKWSpinboxType() {
 }
 
 void KWParagCounterWidget::numTypeChanged( int nType ) {
+    // radio buttons pressed to change numbering type
     m_counter.setNumbering( static_cast<KoParagCounter::Numbering>( nType ) );
 
     preview->setEnabled( m_counter.numbering() != KoParagCounter::NUM_NONE );
