@@ -24,5 +24,5 @@
 #include <core/kexi_factory.h>
 #include <klibloader.h>
 
-K_EXPORT_COMPONENT_FACTORY( kexipart, KexiFactory );
+K_EXPORT_COMPONENT_FACTORY( libkexipart, KexiFactory );
 
