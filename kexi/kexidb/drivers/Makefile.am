@@ -3,11 +3,11 @@ mysql_dir=mySQL
 endif
 
 
-#piggz: please fix the driver
-#if compile_pgsql_plugin
-#pgsql_dir=pqxx
-#endif
+if compile_pgsql_plugin
+pgsql_dir=pqxx
+endif
 
+#piggz: please port the driver to newer API
 #SUBDIRS =  sqlite  $(pgsql_dir) $(mysql_dir)
-#SUBDIRS =  sqlite $(mysql_dir)
+SUBDIRS =  sqlite $(mysql_dir)
 
