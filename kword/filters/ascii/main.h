@@ -34,7 +34,6 @@ public:
   MyApplication(int &argc,char **argv);
 
   void start();
-
 };
 
 /******************************************************************/

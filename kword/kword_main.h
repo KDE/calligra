@@ -18,6 +18,10 @@
 
 #include <koApplication.h>
 
+class KoMainWindow;
+
+#include "kword_shell.h"
+
 /******************************************************************/
 /* Class: KWordApp                                                */
 /******************************************************************/
@@ -30,7 +34,7 @@ public:
     KWordApp( int &argc, char** argv );
     ~KWordApp();
 
-    virtual void start();
+	KoMainWindow* createNewShell() { return new KWordShell; }
 };
 
 #endif

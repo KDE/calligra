@@ -30,13 +30,8 @@
 
 #include <list>
 
-bool g_bWithGUI = true;
-
-list<string> g_openFiles;
-
 KOFFICE_DOCUMENT_FACTORY( KWordDocument, KWordFactory, KWord::DocumentFactory_skel )
 typedef OPAutoLoader<KWordFactory> KWordAutoLoader;
-
 
 /******************************************************************/
 /* Class: KWordApp                                                */
@@ -54,31 +49,6 @@ KWordApp::~KWordApp()
 }
 
 /*================================================================*/
-void KWordApp::start()
-{
-    // Are we going to create a GUI ?
-    if ( g_bWithGUI )
-    {
-        if ( g_openFiles.size() == 0 )
-        {
-            KWordShell* m_pShell = new KWordShell;
-            m_pShell->show();
-            m_pShell->newDocument();
-        }
-        else
-        {
-            list<string>::iterator it = g_openFiles.begin();
-            for( ; it != g_openFiles.end(); ++it )
-            {
-                KWordShell* m_pShell = new KWordShell;
-                m_pShell->show();
-                m_pShell->openDocument( it->c_str(), "" );
-            }
-        }
-    }
-}
-
-/*================================================================*/
 int main( int argc, char **argv )
 {
     FormatManager *formatMngr;
@@ -89,16 +59,6 @@ int main( int argc, char **argv )
 
     // Lets rock
     KWordApp app( argc, argv );
-
-    int i = 1;
-    if ( strcmp( argv[ i ], "-s" ) == 0 || strcmp( argv[ i ], "--server" ) == 0 )
-    {
-        i++;
-        g_bWithGUI = false;
-    }
-
-    for( ; i < argc; i++ )
-        g_openFiles.push_back( ( const char* )argv[ i ] );
 
     app.exec();
 
