@@ -5730,8 +5730,8 @@ void KPresenterView::viewHelpLines()
 
 void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
 {
-    //todo
-    kdDebug()<<" drawTmpHelpLine( const QPoint & pos, bool _horizontal) \n";
+    QPoint newPos( pos.x() -16 , pos.y()-16);
+    m_canvas->tmpDrawMoveHelpLine( newPos,  _horizontal );
 }
 
 void KPresenterView::addHelpline(const QPoint & pos, bool _horizontal)
@@ -5807,7 +5807,7 @@ void KPresenterView::changeHelpLinePosition()
 
 void KPresenterView::openPopupMenuHelpLine( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !m_pKPresenterDoc->showHelplines())
         return;
     static_cast<QPopupMenu*>(factory()->container("helpline_popup",this))->popup(_point);
 }

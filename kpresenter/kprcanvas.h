@@ -220,6 +220,11 @@ public:
     int tmpHorizHelpLine() const { return  m_tmpHorizHelpline;}
     int tmpVertHelpLine() const { return m_tmpVertHelpline;}
 
+    void tmpDrawMoveHelpLine( const QPoint & newPos, bool _horizontal );
+
+    void setTmpHelpLinePosX( double pos) { tmpHelpLinePosX = pos ;}
+    void setTmpHelpLinePosY( double pos) { tmpHelpLinePosY = pos;}
+
 
 public slots:
     void exitEditMode();
@@ -364,7 +369,6 @@ protected:
 
     void moveHelpLine(const QPoint & pos);
     void tmpMoveHelpLine( const QPoint & newPos);
-
 
 private:
     QValueList<int> pages(const QString &range);

@@ -6308,14 +6308,14 @@ void KPrCanvas::moveHelpLine( const QPoint & pos)
     m_tmpHorizHelpline = -1;
 }
 
-void KPrCanvas::tmpMoveHelpLine( const QPoint & newPos)
+void KPrCanvas::tmpDrawMoveHelpLine( const QPoint & newPos, bool _horizontal )
 {
     QPainter p;
     p.begin( this );
     p.setRasterOp( NotROP );
     p.setPen( QPen( black, 0, DotLine ) );
     QRect rect = m_activePage->getZoomPageRect();
-    if ( m_tmpHorizHelpline != -1)
+    if (  _horizontal )
     {
         double vi = tmpHelpLinePosY ;
         p.drawLine(rect.left(), m_view->zoomHandler()->zoomItY(vi), rect.right(), m_view->zoomHandler()->zoomItY(vi));
@@ -6327,7 +6327,7 @@ void KPrCanvas::tmpMoveHelpLine( const QPoint & newPos)
         p.drawLine(rect.left(), m_view->zoomHandler()->zoomItY(vi), rect.right(), m_view->zoomHandler()->zoomItY(vi));
         tmpHelpLinePosY = vi;
     }
-    else if ( m_tmpVertHelpline != -1 )
+    else
     {
         double vi = tmpHelpLinePosX;
         p.drawLine(m_view->zoomHandler()->zoomItX(vi), rect.top(), m_view->zoomHandler()->zoomItX(vi),  rect.bottom());
@@ -6341,6 +6341,15 @@ void KPrCanvas::tmpMoveHelpLine( const QPoint & newPos)
     }
     p.end();
     m_view->kPresenterDoc()->setModified(true);
+
+}
+
+void KPrCanvas::tmpMoveHelpLine( const QPoint & newPos)
+{
+    if( m_tmpHorizHelpline != -1 )
+        tmpDrawMoveHelpLine( newPos, true );
+    else if( m_tmpVertHelpline != -1 )
+        tmpDrawMoveHelpLine( newPos, false );
 }
 
 void KPrCanvas::removeHelpLine()
