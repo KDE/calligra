@@ -57,6 +57,8 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 			if the refcount reaches a value less than 1 the manager is freed */
 		void decRefCount();
 
+		/*! Called from Driver dtor (because sometimes KLibrary (used by Driver) 
+		 is destroyed before DriverManagerInternal) */
 		void aboutDelete( Driver* drv );
 
 	protected slots:

@@ -315,7 +315,7 @@ KexiDB
 - Connection::storeObjectSchemaData() identifier is not obtained if 
   it's already provided
 - DriverManagerInternal::aboutDelete() added: called from Driver dtor
-  (because sometimes KFactory is destroyed before DriverManagerInternal)
+  (because sometimes KLibrary is destroyed before DriverManagerInternal)
 Table Designer
 - saving changes to tables works now (data is just dropped, though);
   user is warned about this, when needed
