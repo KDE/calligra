@@ -1360,7 +1360,11 @@ void KSpreadView::paste()
     if ( !m_pTable )
         return;
 
-    m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    QRect r( activeTable()-> selectionRect() );
+    if(r.left()==0 )
+        r.setCoords(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,
+                m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+    m_pTable->paste( QPoint( r.left(),r.top() ) );
     if(m_pTable->getAutoCalc())
         m_pTable->recalc(true);
     updateEditWidget();
@@ -2188,8 +2192,13 @@ void KSpreadView::slotInsertCellCopy()
 {
      if ( !m_pTable )
         return;
+    QRect r( activeTable()->selectionRect() );
+    if(r.left()==0 )
+        r.setCoords(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,
+                m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+
     if( !m_pTable->testAreaPasteInsert())
-        m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,true, Normal,OverWrite,true);
+        m_pTable->paste( QPoint( r.left(), r.top() ) ,true, Normal,OverWrite,true);
     else
         {
         QRect r( activeTable()-> selectionRect() );
