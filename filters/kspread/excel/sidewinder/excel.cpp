@@ -978,7 +978,7 @@ ColInfoRecord::ColInfoRecord():
   Record(), ColumnSpanInfo()
 {
   d = new ColInfoRecord::Private();
-  d->width        = 100;
+  d->width        = 2340;
   d->xfIndex      = 0;
   d->hidden       = false;
   d->collapsed    = false;
