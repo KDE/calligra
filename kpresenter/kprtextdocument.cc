@@ -18,29 +18,13 @@
 */
 
 #include "kprtextdocument.h"
-#include "kotextparag.h"
 #include "kpresenter_doc.h"
 #include "kptextobject.h"
 #include <kdebug.h>
 
 KPrTextDocument::KPrTextDocument( KPTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter )
-    : KoTextDocument( textobj->kPresenterDocument(), fc, formatter, false ), m_textobj( textobj )
+    : KoTextDocument( textobj->kPresenterDocument()->zoomHandler(), fc, formatter, true ), m_textobj( textobj )
 {
-    init();
-}
-
-KPrTextDocument::KPrTextDocument( KoZoomHandler * zoomHandler )
-    : KoTextDocument( zoomHandler, new KoTextFormatCollection( QFont("helvetica") /*unused*/ ), 0L, false ),
-      m_textobj( 0 )
-{
-    init();
-    setWidth( 1000 );
-}
-
-void KPrTextDocument::init()
-{
-    // Create initial paragraph as a KWTextParag
-    clear( true );
 }
 
 KPrTextDocument::~KPrTextDocument()

@@ -26,26 +26,22 @@ class KPTextObject;
 class KoTextFormatCollection;
 
 /**
- * This is our QTextDocument reimplementation, to create KWTextParag instead of QTextParags,
- * and to relate it to the text frameset it's in.
+ * This is our KoTextDocument reimplementation, to relate it
+ * to the textobject it's in.
  */
 class KPrTextDocument : public KoTextDocument
 {
     Q_OBJECT
 public:
-    /** A real text document inside a frameset */
+    /** A text document inside a kptextobject */
     KPrTextDocument( KPTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter = 0L );
-    /** A standalone text document, for a preview */
-    KPrTextDocument( KoZoomHandler * zoomHandler );
 
     ~KPrTextDocument();
 
-    /** Return the text frameset in which this document is.
+    /** Return the text object in which this document is.
      * Note that this can be 0L (e.g. for paragraphs in the paragdia preview) */
     KPTextObject * textObject() const { return m_textobj; }
 
-protected:
-    void init();
 private:
     KPTextObject * m_textobj;
 };

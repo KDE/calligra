@@ -27,6 +27,7 @@
 #include <kpautoformobject.h>
 #include <kpclipartobject.h>
 #include <kptextobject.h>
+#include <kprtextdocument.h>
 #include <kppixmapobject.h>
 #include <kppieobject.h>
 #include <kppartobject.h>
@@ -126,6 +127,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_defaultFont = KoGlobal::defaultFont();
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
     m_defaultFont.setPointSize( KoTextZoomHandler::ptToLayoutUnit( QFontInfo(m_defaultFont).pointSize() ) );
+    m_standardStyle->format().setFont( m_defaultFont );
     m_zoomHandler = new KoZoomHandler;
 
     m_varFormatCollection = new KoVariableFormatCollection;
@@ -922,6 +924,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     // Initialization of manualTitleList
     // for version before adding this new feature (save/load page title to file)
     if ( manualTitleList.isEmpty() ) {
+        kdDebug() << "KPresenterDoc::loadXML no manual titles -> filling with Null" << endl;
         for ( unsigned int i = 0; i <= getPageNums() - 1; ++i )
             manualTitleList.append(QString::null);
     }
@@ -3665,21 +3668,18 @@ QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title, 
     QPtrList<KPTextObject> objs;
     QRect rect = getPageRect( pgNum, 0, 0, fakt );
 
+    // Create list of text objects in page pgNum
     KPObject *kpobject = 0L;
-    KPTextObject *tmp = 0L;
     for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
         if ( kpobject->getType() == OT_TEXT && rect.contains( kpobject->getBoundingRect( 0, 0 ) ) ) {
-            tmp=static_cast<KPTextObject*>( kpobject );
-#if 0
-            if(tmp->textObjectView()->lines() > 0)
-                objs.append( tmp );
-#endif
+            objs.append( static_cast<KPTextObject*>( kpobject ) );
         }
 
     if ( objs.isEmpty() )
         return QString( _title );
 
-    tmp = objs.first();
+    // Find object most on top
+    KPTextObject *tmp = objs.first();
     KPTextObject *textobject=tmp;
     for ( tmp = objs.next(); tmp; tmp = objs.next() )
         if ( tmp->getOrig().y() < textobject->getOrig().y() )
@@ -3689,14 +3689,12 @@ QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title, 
     if ( !textobject )
         return QString( _title );
 
-    QString txt = "";
-#if 0
-    textobject->textObjectView()->text().stripWhiteSpace();
-#endif
+    QString txt = textobject->textDocument()->text().stripWhiteSpace();
     if ( txt.isEmpty() )
         return _title;
     unsigned int i=0;
-    for( ; i<txt.length(), txt[i]=='\n'; ++i);
+    while( i<txt.length() && txt[i]=='\n' )
+        ++i;
     int j=txt.find('\n', i);
     if(i==0 && j==-1)
         return txt;

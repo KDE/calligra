@@ -232,7 +232,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
-    // Handle the rotation, draw the background/border, then call drawTextObject()
+    // Handle the rotation, draw the background/border, then call drawText()
     int penw = pen.width() / 2;
     _painter->translate( ox, oy );
     if ( angle == 0 )
@@ -242,7 +242,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
       else
         _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
-      drawTextObject( _painter, onlyChanged, cursor, resetChanged );
+      drawText( _painter, onlyChanged, cursor, resetChanged );
     }
     else
     {
@@ -268,40 +268,33 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
         _painter->drawPixmap( rr.left() + xPos + penw, rr.top() + yPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
       _painter->translate( rr.left() + xPos, rr.top() + yPos );
-      drawTextObject( _painter, onlyChanged, cursor, resetChanged );
+      drawText( _painter, onlyChanged, cursor, resetChanged );
     }
     _painter->restore();
 
     KPObject::draw( _painter, _diffx, _diffy );
 }
 
-// This method simply draws the paragraphs (and their shadow) in the given painter
+// This method simply draws the paragraphs in the given painter
 // Assumes the painter is already set up correctly.
-void KPTextObject::drawTextObject( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
-{
-    if ( shadowDistance > 0 )
-    {
-        int sx = 0;
-        int sy = 0;
-        getShadowCoords( sx, sy );
-        _painter->save();
-        _painter->translate( sx, sy );
-#if 0
-        // TODO
-        ktextobject.document()->enableDrawAllInOneColor( shadowColor );
-#endif
-        drawText( _painter, onlyChanged, 0L, false );
-        // TODO disable 'drawInAllOneColor'
-        _painter->restore();
-    }
-    // Now draw the normal text
-    drawText( _painter, onlyChanged, cursor, resetChanged );
-}
-
 void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
+    // HACK: propagate shadow setting from object to paragraphs here (TODO)
+    if ( shadowDistance )
+    {
+        Qt3::QTextParag *parag = textDocument()->firstParag();
+        while ( parag ) {
+            // The double->int conversion for shadowDistance assumes pt=pixel. Bah.
+            static_cast<KoTextParag *>(parag)->setShadow( (int)shadowDistance, shadowDirection, shadowColor );
+            parag = parag->next();
+        }
+    }
+
+
     kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     QColorGroup cg = QApplication::palette().active();
+    //// ### Transparent background - TODO use configuration ?
+    cg.setBrush( QColorGroup::Base, NoBrush );
     QRect r( 0, 0, ext.width(), ext.height() );
 
     if ( specEffects )
@@ -447,7 +440,6 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
 {
     QDomElement e = elem.firstChild().toElement();
     KoTextParag *lastParag = static_cast<KoTextParag *>(textDocument()->firstParag());
-    lastParag->remove( 0, 1 ); // ?
     int i = 0;
     int listNum = 0;
     int lineSpacing = 0, paragSpacing = 0;
@@ -500,10 +492,14 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
             // TODO check/convert values
             lineSpacing = QMAX( e.attribute( attrLineSpacing ).toInt(), lineSpacing );
             paragSpacing = QMAX( QMAX( e.attribute( "distBefore" ).toInt(), e.attribute( "distAfter" ).toInt() ), paragSpacing );
+            bool firstTextTag = true;
             while ( !n.isNull() ) {
                 if ( n.tagName() == tagTEXT ) {
+                    if ( firstTextTag ) {
+                        lastParag->remove( 0, 1 ); // Remove current trailing space
+                        firstTextTag = false;
+                    }
                     KoTextFormat *fm=loadFormat( n );
-
 
                     QString txt = n.firstChild().toText().data();
                     if(n.hasAttribute(attrWhitespace)) {
@@ -513,14 +509,12 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     n=n.nextSibling().toElement();
                     if ( txt.isEmpty() )
                         txt = ' ';
-                    if ( !txt.isEmpty() ) {
-                        if ( ( !txt[txt.length()-1].isSpace()  && n.isNull() ) )
-                            txt+=' ';
-                        lastParag->append( txt );
-                        lastParag->setFormat( i, txt.length(), fm, false );
-                        //kdDebug()<<"setFormat :"<<txt<<" i :"<<i<<" txt.length() "<<txt.length()<<endl;
-                        i += txt.length();
-                    }
+                    if ( ( !txt[txt.length()-1].isSpace()  && n.isNull() ) )
+                        txt+=' '; // trailing space at end of paragraph
+                    lastParag->append( txt, true );
+                    lastParag->setFormat( i, txt.length(), fm, false );
+                    //kdDebug()<<"setFormat :"<<txt<<" i :"<<i<<" txt.length() "<<txt.length()<<endl;
+                    i += txt.length();
                 }
                 else
                     n = n.nextSibling().toElement();
@@ -845,7 +839,7 @@ void KPTextObject::drawParags( QPainter */*p*/, int /*from*/, int /*to*/ )
 void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, Page* page )
 {
     p->translate( orig.x(), orig.y() );
-    Qt3::QTextParag* parag = cursor->parag();
+    KoTextParag* parag = static_cast<KoTextParag *>(cursor->parag());
 
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
     int lineY;
@@ -877,11 +871,11 @@ void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisi
 
     //XIM Position
     QPoint ximPoint = vPoint;
-    QFont f = cursor->parag()->at( cursor->index() )->format()->font();
+    QFont f = parag->at( cursor->index() )->format()->font();
     int line;
-    cursor->parag()->lineStartOfChar( cursor->index(), 0, &line );
+    parag->lineStartOfChar( cursor->index(), 0, &line );
     m_doc->getKPresenterView()->getPage()->setXimPosition( ximPoint.x(), ximPoint.y(),
-                                                           0, cursorHeight - cursor->parag()->lineSpacing( line ),
+                                                           0, cursorHeight - parag->lineSpacing( line ),
                                                            &f );
 }
 
@@ -973,7 +967,6 @@ KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
     connect( textView(), SIGNAL( copy() ), SLOT( copy() ) );
     connect( textView(), SIGNAL( paste() ), SLOT( paste() ) );
     updateUI( true, true );
-    m_actionList.setAutoDelete( true );
 #if 0
     if( m_page->getView() && m_page->getView()->getHRuler())
     {
@@ -1089,7 +1082,7 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
     if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)
         || m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine)
         || m_paragLayout.margins[QStyleSheetItem::MarginRight] != parag->margin(QStyleSheetItem::MarginRight)
-	|| force )
+        || force )
     {
         m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
         m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
@@ -1158,6 +1151,11 @@ void KPTextView::keyPressEvent( QKeyEvent *e )
     handleKeyPressEvent(e);
 }
 
+void KPTextView::keyReleaseEvent( QKeyEvent *e )
+{
+    handleKeyReleaseEvent(e);
+}
+
 void KPTextView::clearSelection()
 {
     if ( textDocument()->hasSelection( QTextDocument::Standard ) )
@@ -1212,17 +1210,16 @@ void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
     handleMouseReleaseEvent();
 }
 
-void KPTextView::showPopup( KPresenterView *view, const QPoint &point )
+void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<KAction>& actionList )
 {
-    // Removed previous stuff
     view->unplugActionList( "datatools" );
     view->unplugActionList( "datatools_link" );
-    m_actionList.clear();
-    m_actionList = dataToolActionList(view->kPresenterDoc()->instance());
-    //kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << m_actionList.count() << " actions" << endl;
+    actionList.clear();
+    actionList = dataToolActionList(view->kPresenterDoc()->instance());
+    //kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
     if(refLink().isNull())
     {
-        view->plugActionList( "datatools", m_actionList );
+        view->plugActionList( "datatools", actionList );
         QPopupMenu * popup = view->popupMenu("text_popup");
         Q_ASSERT(popup);
         if (popup)
@@ -1230,14 +1227,13 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point )
     }
     else
     {
-        view->plugActionList( "datatools_link", m_actionList );
+        view->plugActionList( "datatools_link", actionList );
         QPopupMenu * popup = view->popupMenu("text_popup_link");
         Q_ASSERT(popup);
         if (popup)
             popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
     }
 }
-
 
 void KPTextView::insertCustomVariable( const QString &name)
 {
@@ -1347,7 +1343,7 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
     }
 
     QPoint iPoint;
-    iPoint=kpTextObject()->kPresenterDocument()->pixelToLayoutUnit( e->pos() - kpTextObject()->getOrig() );
+    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( e->pos() - kpTextObject()->getOrig() );
     textObject()->emitHideCursor();
     placeCursor( iPoint );
     textObject()->emitShowCursor();
@@ -1366,7 +1362,8 @@ void KPTextView::dropEvent( QDropEvent * e )
         e->acceptAction();
         QTextCursor dropCursor( textDocument() );
         QPoint dropPoint;
-        dropPoint=kpTextObject()->kPresenterDocument()->pixelToLayoutUnit( e->pos() - kpTextObject()->getOrig() );
+        dropPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( e->pos() - kpTextObject()->getOrig() );
+        // ####### Factorize code in libkotext!
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         dropCursor.place( dropPoint, textDocument()->firstParag() );
         kdDebug(32001) << "KPTextView::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;

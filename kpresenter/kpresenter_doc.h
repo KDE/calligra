@@ -83,7 +83,7 @@ public:
 /*****************************************************************/
 /* class KPresenterDoc                                           */
 /*****************************************************************/
-class KPresenterDoc : public KoDocument, public KoZoomHandler
+class KPresenterDoc : public KoDocument
 {
     Q_OBJECT
 
@@ -377,7 +377,7 @@ public slots:
     void clipboardDataChanged();
 
     void slotRepaintChanged( KPTextObject * );
-    
+
     void slotRepaintVariable();
 
 signals:
@@ -489,7 +489,7 @@ protected:
 
     KoUnit::Unit m_unit;
     int m_maxRecentFiles;
-    
+
     KoVariableFormatCollection *m_varFormatCollection;
     KoVariableCollection *m_varColl;
 

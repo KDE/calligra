@@ -172,8 +172,8 @@ bool Page::focusNextPrevChild( bool )
 /*======================== paint event ===========================*/
 void Page::paintEvent( QPaintEvent* paintEvent )
 {
-    kdDebug(33001) << "Page::paintEvent " << paintEvent->rect().x() << "," << paintEvent->rect().y()
-                   << " " << paintEvent->rect().width() << "x" << paintEvent->rect().height() << endl;
+    //kdDebug(33001) << "Page::paintEvent " << paintEvent->rect().x() << "," << paintEvent->rect().y()
+    //               << " " << paintEvent->rect().width() << "x" << paintEvent->rect().height() << endl;
     QPainter painter;
 
     painter.begin( &buffer );
@@ -269,7 +269,7 @@ void Page::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion
 void Page::drawObjects( QPainter *painter, QRect rect, bool drawCursor, bool ignoreSkip )
 {
     int pgNum = editMode ? (int)view->getCurrPgNum() : currPresPage;
-    kdDebug(33001) << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " drawCursor=" << drawCursor << endl;
+    //kdDebug(33001) << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " drawCursor=" << drawCursor << endl;
 
     QPtrListIterator<KPObject> it(*objectList());
     for ( int i = 0 ; it.current(); ++it, ++i ) {
@@ -302,7 +302,7 @@ void Page::drawObjects( QPainter *painter, QRect rect, bool drawCursor, bool ign
 		kpobject->setOrig( op.x(), op.y() - pg * getPageRect( 0, _presFakt ).height() + pgNum * getPageRect( 0, _presFakt ).height() );
 	    }
 
-            kdDebug(33001) << "                 drawing object at " << diffx() << "," << diffy() << "  and setting subpresstep to 0 !" << endl;
+            //kdDebug(33001) << "                 drawing object at " << diffx() << "," << diffy() << "  and setting subpresstep to 0 !" << endl;
             if ( drawCursor && kpobject->getType() == OT_TEXT && m_currentTextObjectView )
             {
                 KPTextObject* textObject = static_cast<KPTextObject*>( kpobject );
@@ -334,11 +334,11 @@ void Page::mousePressEvent( QMouseEvent *e )
         if(txtObj->contains( e->pos(), diffx(), diffy() ))
         {
             QPoint pos;
-            pos=view->kPresenterDoc()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
+            pos=view->zoomHandler()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
             mousePressed=true;
             if(e->button() == RightButton)
             {
-                m_currentTextObjectView->showPopup( view, QCursor::pos() );
+                m_currentTextObjectView->showPopup( view, QCursor::pos(), view->actionList() );
                 mousePressed=false;
             }
             else if( e->button() == MidButton )
@@ -839,7 +839,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
         if(txtObj->contains( e->pos(), diffx(), diffy() )&&mousePressed)
         {
             QPoint pos;
-            pos=view->kPresenterDoc()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
+            pos=view->zoomHandler()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
             m_currentTextObjectView->mouseMoveEvent( e, pos);
             return;
         }
@@ -1048,7 +1048,7 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
         if(txtObj->contains( e->pos(), diffx(), diffy() ))
         {
             QPoint pos;
-            pos=view->kPresenterDoc()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
+            pos=view->zoomHandler()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
             m_currentTextObjectView->mouseDoubleClickEvent( e, pos);
             return;
         }
@@ -1101,7 +1101,7 @@ void Page::wheelEvent( QWheelEvent *e )
         e->accept();
     }
     else if ( editMode )
-        emit mouseWheelEvent( e );
+        emit sigMouseWheelEvent( e );
 }
 
 
@@ -1207,6 +1207,14 @@ void Page::keyPressEvent( QKeyEvent *e )
     }
 }
 
+void Page::keyReleaseEvent( QKeyEvent *e )
+{
+    if ( editMode && m_currentTextObjectView )
+    {
+        m_currentTextObjectView->keyReleaseEvent( e );
+    }
+}
+
 /*========================= resize Event =========================*/
 void Page::resizeEvent( QResizeEvent *e )
 {
@@ -1305,7 +1313,7 @@ void Page::deSelectObj( KPObject *kpobject )
 /*====================== select all objects ======================*/
 void Page::selectAllObj()
 {
-    if(view->kPresenterDoc()->numSelected()==objectList()->count())
+    if(view->kPresenterDoc()->numSelected()==(int)objectList()->count())
         return;
 
     QProgressDialog progress( i18n( "Selecting..." ), 0,
@@ -3139,7 +3147,7 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
 
     if ( printer->fromPage() > 1 )
         view->setDiffY( ( printer->fromPage() - 1 ) * ( getPageRect( 1, 1.0, false ).height() ) -
-                        MM_TO_POINT( top_margin ) );
+                        (int)MM_TO_POINT( top_margin ) );
 
     for ( i = printer->fromPage(); i <= printer->toPage(); i++ )
     {

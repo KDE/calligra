@@ -64,7 +64,7 @@ public:
     { return OT_TEXT; }
     virtual QString getTypeString() const
     { return i18n("Text"); }
-    
+
     virtual bool getDrawEditRect() const
     { return drawEditRect; }
     virtual bool getDrawEmpty() const
@@ -100,7 +100,7 @@ public:
 
     KCommand * pasteKPresenter( QTextCursor * cursor, const QCString & data, bool removeSelected );
 
-    void saveParagraph( QDomDocument& doc, 
+    void saveParagraph( QDomDocument& doc,
 			KoTextParag * parag,
 			QDomElement &parentElem,
 			int from /* default 0 */,
@@ -117,7 +117,6 @@ protected:
     QDomElement saveHelper(const QString &tmpText,KoTextFormat*lastFormat ,QDomDocument &doc);
 
     virtual void loadKTextObject( const QDomElement &e, int type );
-    void drawTextObject( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
     void drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
     void drawParags( QPainter *p, int from, int to );
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
@@ -155,6 +154,7 @@ public:
     KPTextObject * kpTextObject() { return m_kptextobj; }
 
     void keyPressEvent( QKeyEvent * );
+    void keyReleaseEvent( QKeyEvent * );
     void mousePressEvent( QMouseEvent *, const QPoint &);
 
     void mouseMoveEvent( QMouseEvent *, const QPoint & );
@@ -170,7 +170,7 @@ public:
     virtual void drawCursor( bool b );
 
     const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
-    void showPopup( KPresenterView *view, const QPoint &point );
+    void showPopup( KPresenterView *view, const QPoint &point, QPtrList<KAction> &actionList );
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertVariable( KoVariable *var);

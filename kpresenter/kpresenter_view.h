@@ -422,6 +422,9 @@ public:
     // For NoteBar
     NoteBar *getNoteBar() { return notebar; }
 
+    // Used by Page to plug/unplug the datatool actions
+    QPtrList<KAction>& actionList() { return m_actionList; }
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -475,8 +478,7 @@ protected slots:
     void doAutomaticScreenPres();
 
     void getPageMouseWheelEvent( QWheelEvent *e );
-
-
+// end of protected slots
 protected:
 
 // ********* functions ***********
@@ -521,6 +523,7 @@ private:
 
     // right button popup menus
     QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend, *rb_pstyle, *rb_pwidth;
+    QPtrList<KAction> m_actionList; // for the kodatatools
 
     // scrollbars
     QScrollBar *vert, *horz;

@@ -116,8 +116,6 @@ public:
 
     bool canAssignEffect( QPtrList<KPObject> &objs ) const;
 
-    void keyPressEvent( QKeyEvent *e );
-
     void print( QPainter*, KPrinter*, float, float );
 
 
@@ -153,7 +151,7 @@ public:
     KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 
     KPresenterView * getView(){return view;}
-    QPtrList<KPObject> *objectList();	
+    QPtrList<KPObject> *objectList();
 
     void stopSound();
 
@@ -195,9 +193,8 @@ signals:
     void stopPres();
     void objectSelectedChanged();
 
-    void mouseWheelEvent( QWheelEvent * );
-
     void selectionChanged( bool hasSelection );
+    void sigMouseWheelEvent( QWheelEvent * );
 
 protected:
 
@@ -209,25 +206,28 @@ protected:
     };
 
     // functions for displaying
-    void paintEvent( QPaintEvent* );
+    virtual void paintEvent( QPaintEvent* );
     void paintBackground( QPainter*, QRect );
     void drawBackground( QPainter*, QRect, bool ignoreSkip = false );
     void drawObjects( QPainter*, QRect, bool drawCursor, bool ignoreSkip = false );
-    void mousePressEvent( QMouseEvent *e );
-    void mouseReleaseEvent( QMouseEvent *e );
-    void mouseMoveEvent( QMouseEvent *e );
-    void mouseDoubleClickEvent( QMouseEvent *e );
-    void wheelEvent( QWheelEvent *e );
-    void resizeEvent( QResizeEvent *e );
+    virtual void mousePressEvent( QMouseEvent *e );
+    virtual void mouseReleaseEvent( QMouseEvent *e );
+    virtual void mouseMoveEvent( QMouseEvent *e );
+    virtual void mouseDoubleClickEvent( QMouseEvent *e );
+    virtual void wheelEvent( QWheelEvent *e );
+    virtual void resizeEvent( QResizeEvent *e );
     int getObjectAt( int x, int y );
-    void focusInEvent( QFocusEvent* ) {}
-    void focusOutEvent( QFocusEvent* ) {}
-    void enterEvent( QEvent *e );
-    void leaveEvent( QEvent *e );
-    void dragEnterEvent( QDragEnterEvent *e );
-    void dragLeaveEvent( QDragLeaveEvent *e );
-    void dragMoveEvent( QDragMoveEvent *e );
-    void dropEvent( QDropEvent *e );
+    virtual void focusInEvent( QFocusEvent* ) {}
+    virtual void focusOutEvent( QFocusEvent* ) {}
+    virtual void enterEvent( QEvent *e );
+    virtual void leaveEvent( QEvent *e );
+    virtual void dragEnterEvent( QDragEnterEvent *e );
+    virtual void dragLeaveEvent( QDragLeaveEvent *e );
+    virtual void dragMoveEvent( QDragMoveEvent *e );
+    virtual void dropEvent( QDropEvent *e );
+    virtual void keyPressEvent( QKeyEvent *e );
+    virtual void keyReleaseEvent( QKeyEvent *e );
+
     void eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush );
 
     // setup popupmenus
@@ -278,8 +278,8 @@ protected:
 				const QSize &presSize, KPPixmapObject *obj );
     QSize getPixmapOrigSize( KPPixmapObject *&obj );
     void setTextBackground( KPTextObject *obj );
-    bool eventFilter( QObject *o, QEvent *e );
-    bool focusNextPrevChild( bool );
+    virtual bool eventFilter( QObject *o, QEvent *e );
+    virtual bool focusNextPrevChild( bool );
 
 private:
     // variables
