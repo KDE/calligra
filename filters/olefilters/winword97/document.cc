@@ -436,12 +436,12 @@ void Document::Attributes::setRuns(
                         // A drawing.
 
                         drawingId = chp->fcPic_fcObj_lTagObj;
-                        found = m_doc->getPicture(
+			found = m_doc->getPicture(
                                     drawingId,
                                     drawingType,
                                     &drawingLength,
                                     &drawingData);
-                        delayData = 0L;
+	                delayData = 0L;
                     }
                     else
                     {

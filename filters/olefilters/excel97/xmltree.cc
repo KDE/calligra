@@ -1658,7 +1658,7 @@ bool XMLTree::_mulrk(Q_UINT32 size, QDataStream &body)
 
   body >> row >> first;
   last = (size-6)/6;
-  for (int i=0; i < last-first; ++i) {
+  for (int i=0; i < last; ++i) {
     body >> xf >> number;
 
     switch (number & 0x03) {
