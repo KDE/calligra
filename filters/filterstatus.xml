@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE filters [
+
+    <!-- Document element -->
+    <!ELEMENT filters (status*, version+ )>
+
+    <!-- Definition of an application
+        id: unique identifier of the application
+        released: will this application will be released?
+     -->
+    <!ELEMENT application ( title+, description*, filter*)>
+    <!ATTLIST application id ID #REQUIRED
+              released ( yes | no ) "yes">
+
+    <!-- Defintion of a KOffice version
+        id: unique identifier of the version
+        cvstag: name of the version's CVS tag (for example branch)
+        stable: is this version stable or not?
+        webcvscheckout: URL for a WebCVS checkout
+     -->
+    <!ELEMENT version ( title+, description*, application+ )>
+    <!ATTLIST version id ID #REQUIRED
+                      cvstag CDATA "HEAD"
+                      stable ( yes | no ) #REQUIRED
+                      webcvscheckout CDATA #REQUIRED>
+
+    <!-- Definition of a status
+        id: unique identifier of the status
+     -->
+    <!ELEMENT status (title+, description*)>
+    <!ATTLIST status id ID #REQUIRED
+              symbol CDATA #REQUIRED>
+
+    <!-- Title
+        xml:lang: language of the title
+        path: relative path in KDE's CVS
+    -->
+    <!ELEMENT title (#PCDATA)>
+    <!ATTLIST title xml:lang CDATA "en_us"
+                    path CDATA #IMPLIED>
+
+    <!-- Note
+        xml:lang: language of the title
+    -->
+    <!ELEMENT note (#PCDATA)>
+    <!ATTLIST note xml:lang CDATA "en_us">
+
+    <!-- Description
+        xml:lang: language of the description
+    -->
+    <!ELEMENT description (#PCDATA)>
+    <!ATTLIST description xml:lang CDATA "en_us">
+
+    <!-- Defintion of a filter
+        id: unique identifier of the filter
+    -->
+    <!ELEMENT filter (title+, note*, description*, contact*, stat+)>
+    <!ATTLIST filter id ID #REQUIRED>
+
+    <!-- Definition of a filter status
+        import: id of a status for the import filter
+        export: id of a status for the export filter
+    -->
+    <!ELEMENT stat EMPTY>
+    <!ATTLIST stat import IDREF #REQUIRED
+                   export IDREF #REQUIRED>
+
+    <!-- Contact (TODO: replace it by XLink)
+        href: referenced URL
+    -->
+    <!ELEMENT contact (#PCDATA)>
+    <!ATTLIST contact href CDATA #REQUIRED>
+]>
+
+<filters>
+
+    <status id="good" symbol="*****">
+        <title xml:lang="en_us">Good</title>
+        <description xml:lang="en_us">The filter is stable and generally works well.</description>
+    </status>
+    <status id="nearlygood" symbol="****">
+        <title xml:lang="en_us">Nearly Good</title>
+        <description xml:lang="en_us">The filter generally works well.</description>
+    </status>
+    <status id="working" symbol="***">
+        <title xml:lang="en_us">Working</title>
+        <description xml:lang="en_us">The filter generally works well, however some features might be missing or might not work correctly yet.</description>
+    </status>
+    <status id="beta" symbol="**">
+        <title xml:lang="en_us">Beta</title>
+        <description xml:lang="en_us">The filter generally works although it is not finished, and it may suffer from some unstability.</description>
+    </status>
+    <status id="alpha" symbol="*">
+        <title xml:lang="en_us">Alpha</title>
+        <description xml:lang="en_us">Work has begun on the filter although the code is still at an early stage of development, and may not work properly.</description>
+    </status>
+    <status id="planned" symbol="+">
+        <title xml:lang="en_us">Planned</title>
+        <description xml:lang="en_us">An author has volunteered to work on the filter, although the code does not actually exist yet, or is at a very early stage of development.</description>
+    </status>
+    <status id="none" symbol="-">
+        <title xml:lang="en_us">None</title>
+        <description xml:lang="en_us">The filter does not currently exist, and nobody is working on it.</description>
+    </status>
+    <status id="abandoned" symbol="?">
+        <title xml:lang="en_us">Abandoned</title>
+        <description xml:lang="en_us">The status of this filter is unknown, as development has been abandoned.</description>
+    </status>
+
+    <version id="rc1" cvstag="KOFFICE_1_2_RC1" stable="no" webcvscheckout="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~">
+        <title xml:lang="en_us">KOffice 1.2 RC 1</title>
+        <description xml:lang="en_us">KOffice 1.2 Release Candidate 1</description>
+
+        <application id="generic">
+            <title xml:lang="en_us">Generic (for all KOffice applications)</title>
+            <filter id="generic_xslt" path="koffice/filters/xsltfilter">
+                <title xml:lang="en_us">XSLT</title>
+                <stat import="alpha" export="beta"/>
+            </filter>
+        </application>
+
+        <application id="kword">
+            <title xml:lang="en_us">KWord</title>
+            <filter id="kword_abiword" path="koffice/filters/kword/abiword">
+                <title xml:lang="en_us">AbiWord</title>
+                <stat import="working" export="working"/>
+            </filter>
+            <filter id="kword_amipro" path="koffice/filters/kword/amipro">
+                <title xml:lang="en_us">AmiPro</title>
+                <note xml:lang="en_us">Lotus word processor</note>
+                <stat import="beta" export="beta"/>
+            </filter>
+            <filter id="kword_applixword" path="koffice/filters/kword/applixword">
+                <title xml:lang="en_us">Applix Word</title>
+                <stat import="beta" export="none"/>
+            </filter>
+            <filter id="kword_docbook" path="koffice/filters/kword/docbook">
+                <title xml:lang="en_us">DocBook</title>
+                <note xml:lang="en_us">SGML DocBook only</note>
+                <stat import="none" export="beta"/>
+            </filter>
+            <filter id="kword_hamcomword" path="koffice/filters/olefilters/hancomword">
+                <title xml:lang="en_us">HancomWord</title>
+                <note xml:lang="en_us">for version 2.0, text only</note>
+                <stat import="beta" export="none"/>
+            </filter>
+            <filter id="kword_html" path="koffice/filters/kword/html">
+                <title xml:lang="en_us">HTML</title>
+                <note xml:lang="en_us">HTML 4.01 / XHTML 1.0</note>
+                <stat import="alpha" export="beta"/>
+            </filter>
+            <filter id="kword_latex" path="koffice/filters/kword/latex">
+                <title xml:lang="en_us">LaTeX</title>
+                <stat import="alpha" export="beta"/>
+            </filter>
+            <filter id="kword_mif" path="koffice/kword/filters/mif">
+                <title xml:lang="en_us">MIF</title>
+                <stat import="abandoned" export="none"/>
+            </filter>
+            <filter id="kword_mswrite" path="koffice/filters/kword/mswrite">
+                <title xml:lang="en_us">MS Write</title>
+                <stat import="beta" export="none"/>
+            </filter>
+            <filter id="kword_palmdoc" path="koffice/filters/kword/palmdoc">
+                <title xml:lang="en_us">Palmdoc</title>
+                <note xml:lang="en_us">Palm documents</note>
+                <stat import="good" export="good"/>
+            </filter>
+            <filter id="kword_ascii" path="koffice/filters/kword/ascii">
+                <title xml:lang="en_us">Plain text</title>
+                <stat import="good" export="good"/>
+            </filter>
+            <filter id="kword_rtf" path="koffice/filters/kword/rtf">
+                <title xml:lang="en_us">RTF</title>
+                <note xml:lang="en_us">Rich Text Format</note>
+                <stat import="beta" export="alpha"/>
+            </filter>
+            <filter id="kword_starwriter">
+                <title xml:lang="en_us">StarWriter</title>
+                <contact href="mailto:karypid@inf.uth.gr">Alexandros Karypidis</contact>
+                <contact href="mailto:info@marcozanon.com">Marco Zanon</contact>
+                <stat import="planned" export="none"/>
+            </filter>
+            <filter id="kword_msword" path="koffice/filters/olefilters/winword97">
+                <title xml:lang="en_us">MS Word</title>
+                <note xml:lang="en_us">Microsoft Word 97/2000</note>
+                <stat import="working" export="none"/>
+            </filter>
+            <filter id="kword_wml" path="koffice/filters/kword/wml">
+                <title xml:lang="en_us">WML</title>
+                <note xml:lang="en_us">Wireless markup language</note>
+                <stat import="beta" export="beta"/>
+            </filter>
+            <filter id="kword_wordperfect" path="koffice/filters/kword/wordperfect">
+                <title xml:lang="en_us">WordPerfect</title>
+                <note xml:lang="en_us">WP 5.x and WP 6/7/8 documents, text only</note>
+                <stat import="working" export="none"/>
+            </filter>
+        </application>
+
+        <application id="kspread">
+            <title xml:lang="en_us">KSpread</title>
+            <filter id="kspread_applix" path="koffice/filters/kspread/applixspread">
+                <title xml:lang="en_us">Applix Spreadsheet</title>
+                <stat import="beta" export="none"/>
+            </filter>
+            <filter id="kspread_csv" path="koffice/filters/kspread/csv">
+                <title xml:lang="en_us">CSV</title>
+                <note xml:lang="en_us">Comma Separated Values</note>
+                <stat import="good" export="good"/>
+            </filter>
+            <filter id="kspread_dbase" path="koffice/filters/kspread/dbase">
+                <title xml:lang="en_us">dBase</title>
+                <stat import="beta" export="none"/>
+            </filter>
+            <filter id="kspread_excel" path="koffice/filters/olefilters/excel97">
+                <title xml:lang="en_us">Excel</title>
+                <note xml:lang="en_us">Microsoft Excel 97/2000</note>
+                <stat import="working" export="none"/>
+            </filter>
+            <filter id="kspread_gnumeric" path="koffice/filters/kspread/gnumeric">
+                <title xml:lang="en_us">Gnumeric</title>
+                <note xml:lang="en_us">Part of GNOME Office</note>
+                <stat import="beta" export="beta"/>
+            </filter>
+            <filter id="kspread_html" path="koffice/filters/kspread/html">
+                <title xml:lang="en_us">HTML</title>
+                <stat import="none" export="beta"/>
+            </filter>
+            <filter id="kspread_quattro" path="koffice/filters/kspread/qpro">
+                <title xml:lang="en_us">Quattro Pro</title>
+                <stat import="beta" export="none"/>
+            </filter>
+        </application>
+
+        <application id="kpresenter">
+            <title xml:lang="en_us">KPresenter</title>
+            <filter id="kpresenter_powerpoint" path="koffice/filters/olefilters/powerpoint97">
+                <title xml:lang="en_us">PowerPoint 97</title>
+                <note xml:lang="en_us">Microsoft PowerPoint 97</note>
+                <stat import="alpha" export="none"/>
+            </filter>
+            <filter id="kpresenter_kword" path="koffice/filters/kpresenter/kword">
+                <title xml:lang="en_us">KWord</title>
+                <note xml:lang="en_us">Text export only</note>
+                <stat import="none" export="good"/>
+            </filter>
+        </application>
+
+        <application id="karbon">
+            <title xml:lang="en_us">Karbon 14</title>
+            <filter id="karbon_illustrator">
+                <title xml:lang="en_us">Adobe Illustrator</title>
+                <stat import="alpha" export="none"/>
+            </filter>
+            <filter id="karbon_kontour">
+                <title xml:lang="en_us">Kontour</title>
+                <stat import="alpha" export="none"/>
+            </filter>
+            <filter id="karbon_eps">
+                <title xml:lang="en_us">EPS</title>
+                <note xml:lang="en_us">Encapsulated PostScript</note>
+                <stat import="alpha" export="none"/>
+            </filter>
+            <filter id="karbon_svg">
+                <title xml:lang="en_us">SVG</title>
+                <note xml:lang="en_us">Scaleable Vector Graphics (W3C)</note>
+                <stat import="none" export="alpha"/>
+            </filter>
+            <filter id="karbon_wmf">
+                <title xml:lang="en_us">WMF</title>
+                <note xml:lang="en_us">Windows MetaFile</note>
+                <stat import="alpha" export="none"/>
+            </filter>
+            <filter id="karbon_png">
+                <title xml:lang="en_us">PNG</title>
+                <stat import="none" export="alpha"/>
+            </filter>
+        </application>
+
+        <application id="krita">
+            <title xml:lang="en_us">Krita</title>
+        </application>
+
+        <application id="kivio">
+            <title xml:lang="en_us">Kivio</title>
+        </application>
+
+        <application id="kontour" released="no">
+            <title xml:lang="en_us">Kontour</title>
+            <filter id="kontour_illustrator">
+                <title xml:lang="en_us">Adobe Illustrator</title>
+                <contact href="mailto:dirk.schoenberger@sz-online.de">Dirk Schönberger</contact>
+                <stat import="planned" export="none"/>
+            </filter>
+            <filter id="kontour_applix" path="koffice/filters/kontour/applixgraphics">
+                <title xml:lang="en_us">Applix Graphics</title>
+                <stat import="beta" export="none"/>
+            </filter>
+            <filter id="kontour_latex" path="koffice/filters/kontour/latex">
+                <title xml:lang="en_us">LaTeX</title>
+                <stat import="none" export="beta"/>
+            </filter>
+            <filter id="kontour_msod" path="koffice/filters/kontour/msod">
+                <title xml:lang="en_us">MSOD</title>
+                <note xml:lang="en_us">Microsoft Office Drawing</note>
+                <stat import="beta" export="none"/>
+            </filter>
+            <filter id="kontour_svg" path="koffice/filters/kontour/svg">
+                <title xml:lang="en_us">SVG</title>
+                <note xml:lang="en_us">Scaleable Vector Graphics (W3C)</note>
+                <stat import="beta" export="beta"/>
+            </filter>
+            <filter id="kontour_windraw">
+                <title xml:lang="en_us">WinDraw 3.1</title>
+                <note xml:lang="en_us">Micrografx Windraw 3.1</note>
+                <contact href="mailto:ebartels@nwn.de">Enno Bartels</contact>
+                <stat import="planned" export="none"/>
+            </filter>
+            <filter id="kontour_wmf" path="koffice/filters/kontour/wmf">
+                <title xml:lang="en_us">WMF</title>
+                <note xml:lang="en_us">Windows MetaFile</note>
+                <stat import="beta" export="none"/>
+            </filter>
+            <filter id="kontour_xfig" path="koffice/filters/kontour/xfig">
+                <title xml:lang="en_us">Xfig</title>
+                <stat import="beta" export="none"/>
+            </filter>
+            <filter id="kontour_rtf" path="koffice/filters/kontour/rtf">
+                <title xml:lang="en_us">RTF</title>
+                <note xml:lang="en_us">Rich Text Format</note>
+                <stat import="none" export="alpha"/>
+            </filter>
+        </application>
+    
+    </version>
+
+</filters>
