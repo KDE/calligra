@@ -47,13 +47,15 @@ KexiCreateProjectPageLocation::KexiCreateProjectPageLocation(KexiCreateProject *
 	QRadioButton *localRBtn = new QRadioButton(i18n("Local"), this);
 	QRadioButton *remoteRBtn = new QRadioButton(i18n("Remote"), this);
 
-	QCheckBox *customSockChk = new QCheckBox(i18n("Custom socket:"), this);
-	m_sock = new QLineEdit(this);
-	
+	QCheckBox* customSockChk = new QCheckBox(i18n("Custom socket:"), this);
+	m_sock = new KLineEdit(this);
+	m_sock->setEnabled(false);
+
 	QLabel *lHost = new QLabel(i18n("Host:"), this);
-	m_host = new QLineEdit(this);
+	m_host = new KLineEdit(this);
 	QCheckBox *customPortChk = new QCheckBox(i18n("Custom port:"), this);
 	m_port = new QSpinBox(0, 9999, 1, this);
+	m_port->setEnabled(false);
 
 	//buttongroup hinting
 	QButtonGroup* selectBGrp = new QButtonGroup(this);
@@ -117,6 +119,7 @@ KexiCreateProjectPageLocation::slotPortChanged(const QString & t)
 void
 KexiCreateProjectPageLocation::slotUseCustomSock(bool b)
 {
+	m_sock->setEnabled(b);
 	if(b)
 	{
 		slotSockChanged(m_sock->text());
@@ -130,6 +133,7 @@ KexiCreateProjectPageLocation::slotUseCustomSock(bool b)
 void
 KexiCreateProjectPageLocation::slotUseCustomPort(bool b)
 {
+	m_port->setEnabled(b);
 	if(b)
 	{
 		slotPortChanged(m_port->cleanText());
@@ -143,6 +147,11 @@ KexiCreateProjectPageLocation::slotUseCustomPort(bool b)
 void
 KexiCreateProjectPageLocation::slotSetLocal(bool b)
 {
+	m_sock->setEnabled(b);
+
+	m_host->setEnabled(!b);
+	m_port->setEnabled(!b);
+
 	if(b)
 	{
 		slotHostChanged("localhost");

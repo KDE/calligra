@@ -34,10 +34,10 @@ class KexiCreateProjectPageLocation : public KexiCreateProjectPage
 		~KexiCreateProjectPageLocation();
 
 	protected:
-		KLineEdit* m_sock;
-		KLineEdit* m_host;
-		QSpinBox* m_port;
-	
+		KLineEdit*	m_sock;
+		KLineEdit*	m_host;
+		QSpinBox*	m_port;
+
 	protected slots:
 		void slotHostChanged(const QString & t);
 		void slotSockChanged(const QString & t);
