@@ -28,7 +28,7 @@ BasicElement::BasicElement(KFormulaDoc *Formula,
 	numericFont=prev->getNumericFont();
 	//warning("Font OK");
     } else
-	numericFont=32;
+	numericFont=24;
 
     childrenNumber=0;    
     index[0]=0L;
@@ -300,6 +300,10 @@ void  BasicElement::insertElement(BasicElement *element)
 	    else
 		prev->setChild(element,relation-4);
 	}
+    else //I'm the first element!! 
+	formula->setFirstElement(element);  
+
+
     prev=element;
     element->setRelation(relation);
     element->setNext(this);

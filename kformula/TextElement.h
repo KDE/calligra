@@ -49,7 +49,7 @@ class TextElement : public BasicElement
     * 
     * if pos=-1 it splits to the current cursor position
     */
-   void split(int) {};
+   void split(int pos);
      
    /*
     * each derived class must implement its own Draw()

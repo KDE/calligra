@@ -47,7 +47,7 @@ void RootElement::draw(QPoint drawPoint,int resolution)
     /*  
 	Draw root!!
     */
-    int ofs=(numericFont/32); 
+    int ofs=(numericFont/24); 
     /*
       I think I'll change this part of code using a Fill function
       Because painting on a printer I think I may have problems.
@@ -118,8 +118,8 @@ void RootElement::checkSize()
   
     child[0]->checkSize();
     familySize=child[0]->getSize();
-    familySize.setTop(familySize.top()-8-(numericFont/32));
-    familySize.setLeft(familySize.left()-8-(numericFont/30)-(familySize.height()/4));  
+    familySize.setTop(familySize.top()-8-(numericFont/24));
+    familySize.setLeft(familySize.left()-8-(numericFont/24)-(familySize.height()/4));  
   
     /*
     localSize is

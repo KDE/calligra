@@ -32,7 +32,7 @@ KFormulaDoc::KFormulaDoc()
     
     warning("General Settings");
     theFont.setFamily( "utopia" );
-    theFont.setPointSize(32);
+    theFont.setPointSize(24);
     theFont.setWeight( QFont::Normal );
     theFont.setItalic( false ); 
     theColor=black;
@@ -391,7 +391,7 @@ void KFormulaDoc::mousePressEvent( QMouseEvent *a,QWidget *wid)
 
 void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 {
-
+cerr << " key received , " << k->ascii() << endl; 
     /*
       if(k->key()==Key_Left) {
       if((type==0)&&(pos>0)) pos--;

@@ -122,6 +122,7 @@ void KFormulaView::resizeEvent( QResizeEvent * )
 
 void KFormulaView::keyPressEvent( QKeyEvent *k )
 {
+ cerr << "Key pressed, ascii "<< k->ascii() << endl;
   m_pDoc->keyPressEvent(k);
 }
 
@@ -133,7 +134,7 @@ CORBA::Long KFormulaView::addToolButton( OpenPartsUI::ToolBar_ptr toolbar,
 					 const char* func,
 					 CORBA::Long _id ) 
 {
-    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( pictname );
+    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON(pictname) );
    
     CORBA::Long id = 
 	toolbar->insertButton2( pix, _id, 
@@ -147,12 +148,14 @@ bool KFormulaView::event( const char* _event, const CORBA::Any& _value )
 {
     cerr << "CALLED" << endl;
   
-    EVENT_MAPPER( _event, _value );
-    
+       EVENT_MAPPER( _event, _value );
+     
     MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar );
     MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
     
     END_EVENT_MAPPER;
+   
+    cerr << "CALLE2D" << endl;
     
     return false;
 }
@@ -298,7 +301,7 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
 bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
-  cerr << "bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
+  cerr << "bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
   
   if ( CORBA::is_nil( _factory ) )
   {
@@ -312,10 +315,11 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
 
   // Formula
   m_vToolBarFormula = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-	
+
   m_idButtonFormula_0 = addToolButton(m_vToolBarFormula, "mini-xy.xpm", 
 				      i18n( "Add/change to simple text" ),
 				      "addText", 0 );
+
 
   m_idButtonFormula_1 = addToolButton(m_vToolBarFormula, "mini-root.xpm", 
 				      i18n( "Add/change to root" ), "addRoot", 1 );
@@ -357,12 +361,14 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   m_vToolBarFont->setCurrentComboItem( m_idComboFont_FontFamily, 0 );
 	
   OpenPartsUI::StrList sizelist;
-  int sizes[24] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 48, 64 };
-  sizelist.length( 24 );
-  for( unsigned int i = 0; i < 24; i++ )
+//  int sizes[24] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 48, 64 };
+  // Why  only these size ?
+  
+  sizelist.length( 100 );
+  for( unsigned int i = 0; i < 100; i++ )
   {
     char buffer[ 10 ];
-    sprintf( buffer, "%i", sizes[i] );
+    sprintf( buffer, "%i", i+1 );
     sizelist[i] = CORBA::string_dup( buffer );
   }
   m_idComboFont_FontSize = m_vToolBarFont->insertCombo( sizelist,  1, true, SIGNAL( activated( const char* ) ),
@@ -397,11 +403,11 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     sprintf(buffer,"*(/) %i/%i",i,i+1);
     sizelist[ 10 + i - 1 ] = CORBA::string_dup( buffer );
   }
-  warning("provo1");
+
    m_idComboFont_ScaleMode = m_vToolBarFont->insertCombo( sizelist,  5    ,true, SIGNAL( activated( const char* ) ),
 					                 this, "sizeSelected", true,
 	  						    i18n( "Font scale mode" ), 80, -1, OpenPartsUI::AtBottom );
-warning("provo1");
+
 
 //    m_vToolBarFont->setCurrentComboItem( m_idComboFont_ScaleMode,  2 );
 	    warning("provo1");
@@ -542,8 +548,8 @@ warning("Fine ");
 //m_vToolBarType->insertSeparator( 26 );
 
   // *********************** General *************************
-  m_idButtonType_Pix = addToolButton(m_vToolBarType, "pixmap.xpm", 
-				     i18n( "Toggle pixmap use" ), "togglePixmap", 20 );
+       m_idButtonType_Pix = addToolButton(m_vToolBarType, "remcol.xpm", 
+  				     i18n( "Toggle pixmap use" ), "togglePixmap", 20 );
 warning("vai");
   m_vToolBarType->setToggle( m_idButtonType_UAl, true );
   m_vToolBarType->setToggle( m_idButtonType_MAl, true );
@@ -609,7 +615,7 @@ void KFormulaView::slotTypeChanged( const BasicElement *elm)
     m_vToolBarType->setItemEnabled(m_idButtonType_ReR,isMatrix);
 
     if (elm)              
-    m_vToolBarFont->setCurrentComboItem(m_idComboFont_FontSize, elm->getNumericFont()-1 );
+    m_vToolBarFont->setCurrentComboItem(m_idComboFont_FontSize, elm->getNumericFont()-1);
 
     if (isFraction) { 
 	QString content=elm->getContent();
@@ -784,7 +790,7 @@ void KFormulaView::fractionAlignM()
     QString content=m_pDoc->activeElement()->getContent();
     content[1]='M';
     m_pDoc->activeElement()->setContent(content);
-    m_vToolBarType->setButton(m_idButtonType_MAl,false);
+    m_vToolBarType->setButton(m_idButtonType_MAl,true);
     m_vToolBarType->setButton(m_idButtonType_DAl,false);
     m_vToolBarType->setButton(m_idButtonType_UAl,false);
     update();
@@ -797,7 +803,7 @@ void KFormulaView::fractionAlignU()
     m_pDoc->activeElement()->setContent(content);
     m_vToolBarType->setButton(m_idButtonType_MAl,false);
     m_vToolBarType->setButton(m_idButtonType_DAl,false);
-    m_vToolBarType->setButton(m_idButtonType_UAl,false);
+    m_vToolBarType->setButton(m_idButtonType_UAl,true);
     update();
 }
 
@@ -808,7 +814,7 @@ void KFormulaView::fractionAlignD()
     content[1]='D';
     m_pDoc->activeElement()->setContent(content);
     m_vToolBarType->setButton(m_idButtonType_MAl,false);
-    m_vToolBarType->setButton(m_idButtonType_DAl,false);
+    m_vToolBarType->setButton(m_idButtonType_DAl,true);
     m_vToolBarType->setButton(m_idButtonType_UAl,false);
     update();
 }
@@ -820,7 +826,7 @@ void KFormulaView::fractionAlignL()
     m_pDoc->activeElement()->setContent(content);
     m_vToolBarType->setButton(m_idButtonType_CAl,false);
     m_vToolBarType->setButton(m_idButtonType_RAl,false);
-    m_vToolBarType->setButton(m_idButtonType_LAl,false);
+    m_vToolBarType->setButton(m_idButtonType_LAl,true);
     update();
 }
 void KFormulaView::fractionAlignR()
@@ -830,7 +836,7 @@ void KFormulaView::fractionAlignR()
     content[2]='R';
     m_pDoc->activeElement()->setContent(content);
     m_vToolBarType->setButton(m_idButtonType_CAl,false);
-    m_vToolBarType->setButton(m_idButtonType_RAl,false);
+    m_vToolBarType->setButton(m_idButtonType_RAl,true);
     m_vToolBarType->setButton(m_idButtonType_LAl,false);
     update();
 }
@@ -840,7 +846,7 @@ void KFormulaView::fractionAlignC()
     QString content=m_pDoc->activeElement()->getContent();
     content[2]='C';
     m_pDoc->activeElement()->setContent(content);
-    m_vToolBarType->setButton(m_idButtonType_CAl,false);
+    m_vToolBarType->setButton(m_idButtonType_CAl,true);
     m_vToolBarType->setButton(m_idButtonType_RAl,false);
     m_vToolBarType->setButton(m_idButtonType_LAl,false);
     update();
@@ -955,6 +961,20 @@ void KFormulaView::textFont()
 void KFormulaView::textSplit()
 { 
     warning("Slot textSplit");
+
+    BasicElement *el=m_pDoc->activeElement();
+
+    if (el==0) 
+	return;
+
+    TextElement *te = dynamic_cast<TextElement*>(el);
+
+    if (te==0)
+	return;
+    
+    te->split(-1);
+    update();
+
 }
 void KFormulaView::togglePixmap()
 { 

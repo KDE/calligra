@@ -49,7 +49,7 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
     /*  
 	Draw Prefixed!!
     */
-    int ofs=(numericFont/32)+1; 
+    int ofs=(numericFont/24)+1; 
     unit = 0;
     int symT=0;   //Top & Bottmo of
     int symB=0;   // symbol (integral,sum...)
@@ -195,7 +195,7 @@ void PrefixedElement::checkSize()
      unit = atoi(content.mid(2,3));
      if (unit< 4) unit =4;
     warning("Unit=%i ",unit);
-    int ofs=(numericFont/32);
+    int ofs=(numericFont/24);
     if (unit <6)ofs=1;
     familySize.setTop(familySize.top()-1-ofs);
     familySize.setLeft(familySize.left()-1-ofs-unit*2);  

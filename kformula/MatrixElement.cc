@@ -58,7 +58,7 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
     /*
       Here draw borders
     */  
-    int ofs=numericFont/32;
+    int ofs=numericFont/24;
     int r,c;
     int minX;
     
@@ -185,7 +185,7 @@ void MatrixElement::checkSize()
 	child[chi]->checkSize();           //check size of every child
  
     int vspace = space, hspace=space;               //real spaces (change if there are borders)
-    int ofs=numericFont/32;
+    int ofs=numericFont/24;
     if (ofs<1) ofs=1;
     if(content[1]=='C') midr=0;
     if(content[16]=='L') hspace+=ofs;

@@ -43,7 +43,7 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
   /*  
       Draw Bracket!!
   */
-  int ofs=(numericFont/32); 
+  int ofs=(numericFont/24); 
   if (ofs>0) ofs-=1;
   char ch=0;
   x+=1;
@@ -121,7 +121,11 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
       {
       QColor elementColor(pen->pen().color());
       pen->setBrush(elementColor);
-      pen->drawChord(x+familySize.x(),y+familySize.y(),
+      pen->setPen(QPen(elementColor,ofs));
+      pen->drawArc(x+familySize.x(),y+familySize.y(),
+                      unit+ofs,familySize.height(),
+		      90*16,180*16);
+     /* pen->drawChord(x+familySize.x(),y+familySize.y(),
                       unit+ofs,familySize.height(),
 		      90*16,180*16);
       pen->setBrush(pen->backgroundColor());
@@ -129,6 +133,8 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
       pen->drawChord(x+familySize.x()+ofs+1,y+familySize.y(),
                       unit,familySize.height(),
 		      90*16,180*16);
+      */
+      
       pen->setPen(elementColor);
     
       }
@@ -137,15 +143,17 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
       {
       QColor elementColor(pen->pen().color());
       pen->setBrush(elementColor);
-      pen->drawChord(x+familySize.x(),y+familySize.y(),
+      pen->setPen(QPen(elementColor,ofs));
+
+      pen->drawArc(x+familySize.x(),y+familySize.y(),
                       unit+ofs,familySize.height(),
 		      270*16,180*16);
-      pen->setBrush(pen->backgroundColor());
+/*      pen->setBrush(pen->backgroundColor());
       pen->setPen(pen->backgroundColor());
       pen->drawChord(x+familySize.x()-1,y+familySize.y(),
                       unit,familySize.height(),
 		      270*16,180*16);
-      pen->setPen(elementColor);
+*/      pen->setPen(elementColor);
     
       }
       break;
@@ -204,8 +212,8 @@ void BracketElement::checkSize()
      familySize.setTop(familySize.top()-(16-fmY)/2-1);
      familySize.setBottom(familySize.bottom()+(16-fmY)/2+1);
     }
-  familySize.setLeft(familySize.left()-(numericFont/32)-(familySize.height()/4)-2);  
-  familySize.setRight(familySize.right()+(numericFont/32)+(familySize.height()/4)+2);  
+  familySize.setLeft(familySize.left()-(numericFont/24)-(familySize.height()/4)-2);  
+  familySize.setRight(familySize.right()+(numericFont/24)+(familySize.height()/4)+2);  
 
   
   localSize=familySize;

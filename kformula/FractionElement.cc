@@ -45,13 +45,13 @@ void FractionElement::draw(QPoint drawPoint,int resolution)
     y=drawPoint.y();
     int space=atoi(content.right(content.length()-3));
     warning("Sapce %i",space);
-    space+=numericFont/32;
+    space+=numericFont/24;
   
     if( beActive )
 	pen->setPen(red);
  
  
-    int ofs=(numericFont/32); 
+    int ofs=(numericFont/24); 
     warning("Array");
   
     if (content[0]=='F') {
@@ -106,7 +106,7 @@ void FractionElement::checkSize()
     child[1]->checkSize();
     int space=atoi(content.right(content.length()-3));
     warning("Space %i",space);
-    space+=numericFont/32;
+    space+=numericFont/24;
     QRect child0Size=child[0]->getSize();
     QRect child1Size=child[1]->getSize();
     if(content[1]=='U')

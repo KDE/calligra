@@ -58,8 +58,8 @@ void TextElement::draw(QPoint drawPoint,int resolution)
 	pen->drawText(x+familySize.x(),y+offsetY,content); 
 	if( beActive ) {
 	    QFontMetrics fm(formulaFont);
-	    formula->setCursor(QRect(x+fm.width(content,position),
-				     y+familySize.top()-1,
+	    formula->setCursor(QRect(x+familySize.x()+fm.width(content,position),
+				     y+familySize.top()-1,        
 				     3,familySize.height()+2));
 	}
 	
@@ -155,12 +155,21 @@ int TextElement::takeActionFromKeyb(int action)
 	    }
 	}
     else 
-	if(action==Key_Delete) 
+     if(action==Key_Delete) 
 	    content.remove(position,1);   //Change this....
+      else
+       if(action==Key_Left)
+            position--;	
+    
+    
     
     if(position > content.length()) 
 	position = content.length();
-
+    if(position < 0 ) 
+      {
+      	position = content.length();
+        return -1;
+      }
     return position;
 }
 
@@ -184,4 +193,21 @@ void TextElement::setNumericFont(int value)
 {
     numericFont=value;
     if(font!=0L) font->setPointSize( numericFont );
+}
+
+void TextElement::split(int pos)
+{
+ if(pos==-1)
+  pos=position;
+ TextElement *FirstHalf = new TextElement(formula);
+ insertElement(FirstHalf);
+ FirstHalf->setContent(content.left(pos));
+ FirstHalf->setNumericFont(numericFont);
+ if (font !=0L) 
+  FirstHalf->changeFontFamily(font->family());
+ 
+ setContent(content.right(content.length()-pos));
+ warning(content);
+ position=content.length();
+
 }
