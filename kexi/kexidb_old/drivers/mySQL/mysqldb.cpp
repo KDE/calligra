@@ -26,8 +26,6 @@ Boston, MA 02111-1307, USA.
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-#include <kexidberror.h>
-
 #include "mysqldb.h"
 #include "mysqlresult.h"
 #include "mysqlrecord.h"
