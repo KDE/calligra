@@ -112,9 +112,19 @@ public:
         return qRound( POINT_TO_CC( ptValue ) * 100000.0 ) / 100000.0;
     }
 
-    /// This method is the one to use to display a value in a dialog
-    /// @return the value @p ptValue converted to @p unit and rounded, ready to be displayed
+    /**
+     * This method is the one to use to display a value in a dialog
+     * \warning: as the number is multiplied by 10000, beware of overflow of bigger numbers
+     * \return the value @p ptValue converted to @p unit and rounded, ready to be displayed
+     */
     static double ptToUnit( double ptValue, Unit unit );
+    
+    /**
+     * Convert the value @p ptValue to a given unit @p unit
+     * Unlike KoUnit::ptToUnit the return value remains unrounded, so that it can be used in complex calculation
+     * \return the converted value
+     */
+    static double ptToUnitUnrounded( const double ptValue, const Unit unit );
 
     /// This method is the one to use to display a value in a dialog
     /// @return the value @p ptValue converted to @p unit and rounded, ready to be displayed

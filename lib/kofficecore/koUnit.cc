@@ -83,6 +83,30 @@ double KoUnit::ptToUnit( double ptValue, Unit unit )
     }
 }
 
+double KoUnit::ptToUnitUnrounded( const double ptValue, const Unit unit )
+{
+    switch ( unit )
+    {
+    case U_MM:
+        return POINT_TO_MM( ptValue );
+    case U_CM:
+        return POINT_TO_CC( ptValue );
+    case U_DM:
+        return POINT_TO_DM( ptValue );
+    case U_INCH:
+        return POINT_TO_INCH( ptValue );
+    case U_PI:
+        return POINT_TO_PI( ptValue );
+    case U_DD:
+        return POINT_TO_DD( ptValue );
+    case U_CC:
+        return POINT_TO_CC( ptValue );
+    case U_PT:
+    default:
+        return ptValue;
+    }
+}
+
 QString KoUnit::userValue( double ptValue, Unit unit )
 {
     return KGlobal::locale()->formatNumber( ptToUnit( ptValue, unit ) );
