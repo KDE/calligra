@@ -18,14 +18,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef QMIN
-	#define QMIN(a, b)      ((a) < (b) ? (a) : (b))
-#endif
-
 #include <klocale.h>
 
 #include "vroundrect.h"
-
+#include "vglobal.h"
 
 VRoundRect::VRoundRect( VObject* parent,
 		const KoPoint& topLeft, double width, double height, double edgeRadius )
@@ -39,7 +35,7 @@ VRoundRect::VRoundRect( VObject* parent,
 	// Catch case, when radius is larger than width or height:
 	double minimum;
 
-	if( edgeRadius > ( minimum = QMIN( width * 0.5, height * 0.5 ) ) )
+	if( edgeRadius > ( minimum = kMin( width * 0.5, height * 0.5 ) ) )
 	{
  		edgeRadius = minimum;
 	}

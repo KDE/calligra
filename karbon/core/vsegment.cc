@@ -87,7 +87,7 @@ VSegment::setDegree( unsigned short deg )
 
 
 	// Copy old node data (from the knot "backwards".
-	unsigned short offset = QMAX( 0, deg - m_degree );
+	unsigned short offset = kMax( 0, deg - m_degree );
 
 	for( unsigned short i = offset; i < deg; ++i )
 	{
@@ -549,10 +549,10 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	// Set f(u)-values.
 	for( unsigned short k = 0; k <= 2 * degree() - 1; ++k )
 	{
-		unsigned short min = QMIN( k, degree() );
+		unsigned short min = kMin( k, degree() );
 
 		for(
-			unsigned short i = QMAX( 0, k - ( degree() - 1 ) );
+			unsigned short i = kMax( 0, k - ( degree() - 1 ) );
 			i <= min;
 			++i )
 		{

@@ -129,7 +129,7 @@ VClipartWidget::addClipart()
 	if( clipart )
 	{
 		KoRect clipartBox = clipart->boundingBox();
-		double scaleFactor = 1. / QMAX( clipartBox.width(), clipartBox.height() );
+		double scaleFactor = 1. / kMax( clipartBox.width(), clipartBox.height() );
 		QWMatrix trMatrix( scaleFactor, 0, 0, scaleFactor, -clipartBox.x() * scaleFactor, -clipartBox.y() * scaleFactor );
 
 		VTransformCmd trafo( 0L, trMatrix );
@@ -137,7 +137,7 @@ VClipartWidget::addClipart()
 
 		// center the clipart
 		trMatrix.reset();
-		double size = QMAX( clipart->boundingBox().width(), clipart->boundingBox().height() );
+		double size = kMax( clipart->boundingBox().width(), clipart->boundingBox().height() );
 		trMatrix.translate( ( size - clipart->boundingBox().width() ) / 2, ( size - clipart->boundingBox().height() ) / 2 );
 
 		trafo.setMatrix( trMatrix );
@@ -257,7 +257,7 @@ VClipartTool::mouseButtonRelease()
 {
     if( !m_optionsWidget->selectedClipart())
         return;
-	double s = QMAX( m_optionsWidget->selectedClipart()->originalWidth(), m_optionsWidget->selectedClipart()->originalHeight() );
+	double s = kMax( m_optionsWidget->selectedClipart()->originalWidth(), m_optionsWidget->selectedClipart()->originalHeight() );
 
 	if( m_clipart )
 	{
@@ -285,7 +285,7 @@ VClipartTool::mouseDrag()
 	{
 		draw();
 
-		double s = QMAX( last().x() - first().x(), -last().y() + first().y() );
+		double s = kMax( last().x() - first().x(), -last().y() + first().y() );
 
 		if( m_centered )
 			if( m_keepRatio )
@@ -312,7 +312,7 @@ VClipartTool::mouseDragRelease()
 {
 	if( m_clipart )
 	{
-		double s = QMAX( last().x() - first().x(), -last().y() + first().y() );
+		double s = kMax( last().x() - first().x(), -last().y() + first().y() );
 
 		if( m_centered )
 			if( m_keepRatio )

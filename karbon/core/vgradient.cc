@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include "vgradient.h"
+#include "vglobal.h"
 #include "vkopainter.h"
 #include "vfill.h"
 
@@ -113,11 +114,11 @@ void
 VGradient::addStop( const VColor &color, float rampPoint, float midPoint )
 {
 	// Clamping between 0.0 and 1.0
-	rampPoint = QMAX( 0.0, rampPoint );
-	rampPoint = QMIN( 1.0, rampPoint );
+	rampPoint = kMax( 0.0f, rampPoint );
+	rampPoint = kMin( 1.0f, rampPoint );
 	// Clamping between 0.0 and 1.0
-	midPoint = QMAX( 0.0, midPoint );
-	midPoint = QMIN( 1.0, midPoint );
+	midPoint = kMax( 0.0f, midPoint );
+	midPoint = kMin( 1.0f, midPoint );
 
 	m_colorStops.inSort( new VColorStop( rampPoint, midPoint, color ) );
 }

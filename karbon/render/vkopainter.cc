@@ -448,14 +448,14 @@ void
 VKoPainter::clampToViewport( int &x0, int &y0, int &x1, int &y1 )
 {
 	// clamp to viewport
-	x0 = QMAX( x0, 0 );
-	x0 = QMIN( x0, int( m_width ) );
-	y0 = QMAX( y0, 0 );
-	y0 = QMIN( y0, int ( m_height ) );
-	x1 = QMAX( x1, 0 );
-	x1 = QMIN( x1, int( m_width ) );
-	y1 = QMAX( y1, 0 );
-	y1 = QMIN( y1, int( m_height ) );
+	x0 = kMax( x0, 0 );
+	x0 = kMin( x0, int( m_width ) );
+	y0 = kMax( y0, 0 );
+	y0 = kMin( y0, int ( m_height ) );
+	x1 = kMax( x1, 0 );
+	x1 = kMin( x1, int( m_width ) );
+	y1 = kMax( y1, 0 );
+	y1 = kMin( y1, int( m_height ) );
 }
 
 void
@@ -469,17 +469,17 @@ VKoPainter::clampToViewport( const ArtSVP &svp, int &x0, int &y0, int &x1, int &
 
 	// clamp to viewport
 	x0 = int( bbox.x0 );
-	x0 = QMAX( x0, 0 );
-	x0 = QMIN( x0, int( m_width ) );
+	x0 = kMax( x0, 0 );
+	x0 = kMin( x0, int( m_width ) );
 	y0 = int( bbox.y0 );
-	y0 = QMAX( y0, 0 );
-	y0 = QMIN( y0, int ( m_height ) );
+	y0 = kMax( y0, 0 );
+	y0 = kMin( y0, int ( m_height ) );
 	x1 = int( bbox.x1 ) + 1;
-	x1 = QMAX( x1, 0 );
-	x1 = QMIN( x1, int( m_width ) );
+	x1 = kMax( x1, 0 );
+	x1 = kMin( x1, int( m_width ) );
 	y1 = int( bbox.y1 ) + 1;
-	y1 = QMAX( y1, 0 );
-	y1 = QMIN( y1, int( m_height ) );
+	y1 = kMax( y1, 0 );
+	y1 = kMin( y1, int( m_height ) );
 }
 
 void

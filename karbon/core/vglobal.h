@@ -21,6 +21,8 @@
 #ifndef __VGLOBAL_H__
 #define __VGLOBAL_H__
 
+#include <kglobal.h>
+
 // define some often used mathematical constants et al:
 
 // TODO: optimize those values.
