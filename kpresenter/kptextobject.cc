@@ -1138,8 +1138,7 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
     else if ( m_paragLayout.style != parag->style() || force )
     {
         m_paragLayout.style = parag->style();
-        //todo
-        //m_canvas->gui()->getView()->showStyle( m_paragLayout.style->name() );
+        m_canvas->getView()->showStyle( m_paragLayout.style->name() );
     }
 
     if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)

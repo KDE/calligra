@@ -3064,7 +3064,7 @@ void KPresenterView::objectSelectedChanged()
         actionEditCut->setEnabled(state);
         actionChangeCase->setEnabled( val);
     }
-
+    actionFormatStyle->setEnabled(val);
     state=m_canvas->oneObjectTextExist();
     actionEditSearch->setEnabled(state);
     actionEditReplace->setEnabled(state);

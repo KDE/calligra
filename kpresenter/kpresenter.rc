@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="33">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="34">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -214,6 +214,7 @@
   <Action name="extra_ungroup"/>
 </ToolBar>
 <ToolBar name="textToolBar" position="top" fullWidth="false"><Text>Text</Text>
+  <Action name="format_style"/>
   <Action name="text_fontfamily"/>
   <Action name="text_fontsize"/>
   <Separator/>
