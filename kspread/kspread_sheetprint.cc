@@ -18,10 +18,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kspread_sheetprint.h"
 #include "kspread_sheet.h"
+#include "kspread_selection.h"
+#include "kspread_locale.h"
 #include "kspread_doc.h"
 #include "kspread_undo.h"
+
+#include "kspread_sheetprint.h"
 
 #include "commands.h"
 #include <koDocumentInfo.h>

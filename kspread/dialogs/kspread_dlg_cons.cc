@@ -46,8 +46,11 @@
 #include <kspread_doc.h>
 #include <kspread_global.h>
 #include <kspread_interpreter.h>
+#include <kspread_locale.h>
+#include <kspread_selection.h>
 #include <kspread_sheet.h>
 #include <kspread_util.h>
+#include <kspread_view.h>
 
 
 KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )

@@ -32,7 +32,6 @@
 #include <qstringlist.h>
 #include <qvaluelist.h>
 
-#include <koDocument.h>
 #include <koView.h>
 
 class QScrollBar;

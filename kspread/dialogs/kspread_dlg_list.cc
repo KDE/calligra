@@ -37,6 +37,7 @@
 #include "kspread_dlg_list.h"
 
 #include <kspread_doc.h>
+#include <kspread_locale.h>
 #include <kspread_view.h>
 
 KSpreadList::KSpreadList( KSpreadView* parent, const char* name )

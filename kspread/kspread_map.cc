@@ -21,6 +21,8 @@
 #include "kspread_map.h"
 #include "kspread_doc.h"
 #include "kspread_canvas.h"
+#include "kspread_view.h"
+#include "kspread_locale.h"
 #include "kspread_genvalidationstyle.h"
 #include "KSpreadMapIface.h"
 

@@ -29,6 +29,7 @@
 #include "kspread_view.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
+#include "kspread_selection.h"
 
 #include <kapplication.h>
 #include <dcopclient.h>

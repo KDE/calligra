@@ -44,6 +44,9 @@
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_global.h"
+#include "kspread_view.h"
+#include "kspread_selection.h"
+#include "kspread_locale.h"
 
 #include <kmessagebox.h>
 #include <kcursor.h>
@@ -59,6 +62,7 @@
 #include <qapplication.h>
 #include <qtimer.h>
 #include <qpoint.h>
+#include <qscrollbar.h>
 #include <float.h>
 
 
@@ -424,6 +428,11 @@ bool KSpreadCanvas::focusNextPrevChild( bool )
     return TRUE; // Don't allow to go out of the canvas widget by pressing "Tab"
 }
 
+KSpreadSelection* KSpreadCanvas::selectionInfo() const
+{
+  return m_pView->selectionInfo();
+}
+
 QRect KSpreadCanvas::selection() const
 {
   return m_pView->selectionInfo()->selection();
@@ -442,6 +451,11 @@ int KSpreadCanvas::markerColumn() const
 int KSpreadCanvas::markerRow() const
 {
     return m_pView->selectionInfo()->marker().y();
+}
+
+double KSpreadCanvas::zoom() const
+{
+  return m_pView->zoom();
 }
 
 void KSpreadCanvas::startChoose()

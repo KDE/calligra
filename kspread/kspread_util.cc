@@ -20,6 +20,7 @@
 #include "kspread_util.h"
 #include "kspread_map.h"
 #include "kspread_doc.h"
+#include "kspread_locale.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>

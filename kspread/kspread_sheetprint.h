@@ -22,13 +22,12 @@
 #define __kspread_sheetprint_h__
 
 class KSpreadDoc;
+class KSpreadSelection;
 class KSpreadPrintNewPageEntry;
 class KoGenStyles;
 
 #include <qobject.h>
 #include <koUnit.h>
-
-#include "kspread_sheet.h"
 
 class KSpreadSheetPrint : public QObject
 {

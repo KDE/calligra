@@ -73,8 +73,9 @@
 #include <kparts/partmanager.h>
 
 #include "commands.h"
-#include "kspread_sheetprint.h"
 #include "kspread_map.h"
+#include "kspread_selection.h"
+#include "kspread_locale.h"
 #include "kspread_dlg_csv.h"
 #include "kspread_dlg_cons.h"
 #include "kspread_dlg_database.h"
@@ -93,6 +94,7 @@
 #include "kspread_handler.h"
 #include "kspread_events.h"
 #include "kspread_editors.h"
+#include "kspread_sheetprint.h"
 #include "kspread_dlg_format.h"
 #include "kspread_dlg_conditional.h"
 #include "kspread_dlg_series.h"

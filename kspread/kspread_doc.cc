@@ -53,7 +53,10 @@
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
+#include "kspread_interpreter.h"
+#include "kspread_locale.h"
 #include "kspread_map.h"
+#include "kspread_selection.h"
 #include "kspread_sheetprint.h"
 #include "kspread_style_manager.h"
 #include "kspread_undo.h"

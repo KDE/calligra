@@ -2,6 +2,7 @@
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
+#include "kspread_view.h"
 
 #include <klineedit.h>
 #include <qapplication.h>

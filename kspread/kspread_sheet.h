@@ -34,6 +34,7 @@ class KSpreadPoint;
 class KSpreadMap;
 class KSpreadCanvas;
 class KSpreadDoc;
+class KSpreadSelection;
 class KSpreadUndoInsertRemoveAction;
 class KoDocumentEntry;
 class KoStyleStack;
@@ -64,7 +65,6 @@ class KoOasisSettings;
 #include "kspread_format.h"
 #include "kspread_cell.h"
 #include "kspread_global.h"
-#include "kspread_selection.h"
 
 /********************************************************************
  *

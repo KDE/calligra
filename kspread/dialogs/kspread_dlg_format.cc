@@ -25,6 +25,8 @@
 
 #include "kspread_dlg_format.h"
 #include "kspread_doc.h"
+#include "kspread_locale.h"
+#include "kspread_selection.h"
 #include "kspread_sheet.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"

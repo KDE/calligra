@@ -38,14 +38,13 @@ class QTabWidget;
 class KSpreadView;
 class KSpreadSheet;
 class KSpreadCell;
+class KSpreadFunctionDescription;
 class QLineEdit;
 class QLabel;
 class QListBox;
 class QComboBox;
 class QPushButton;
 class KLineEdit;
-
-#include "kspread_functions.h"
 
 class KSpreadDlgFormula : public KDialogBase
 {

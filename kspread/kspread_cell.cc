@@ -58,6 +58,9 @@
 #include "kspread_util.h"
 #include "ksploadinginfo.h"
 #include "kspread_genvalidationstyle.h"
+#include "kspread_interpreter.h"
+#include "kspread_locale.h"
+#include "kspread_view.h"
 
 #include "kspread_value.h"
 #include <koxmlwriter.h>
@@ -251,7 +254,6 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   d = new CellPrivate;
   d->row = _row;
   d->column = _column;
-
   clearAllErrors();
 }
 

@@ -38,9 +38,8 @@
 #include <kcombobox.h>
 
 #include <koQueryTrader.h>
-#include "kspread_view.h"
-#include "kspread_doc.h"
-#include "kspread_selection.h"
+
+#include "kspread_util.h"
 
 class KSpreadEditWidget;
 class KSpreadCanvas;
@@ -50,6 +49,8 @@ class KSpreadSheet;
 class KSpreadDoc;
 class KSpreadPoint;
 class KSpreadRange;
+class KSpreadView;
+class KSpreadSelection;
 class KSpreadCellEditor;
 class KSpreadCell;
 class QWidget;
@@ -58,6 +59,7 @@ class QButton;
 class KSpreadLocationEditWidget;
 class QPainter;
 class QLabel;
+class QScrollBar;
 
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
@@ -170,7 +172,7 @@ public:
      */
     int chooseTextLen() const { return length_namecell; }
 
-    KSpreadSelection* selectionInfo() const {return m_pView->selectionInfo();}
+    KSpreadSelection* selectionInfo() const;
     QRect selection() const;
     QPoint marker() const;
     int markerColumn() const;
@@ -181,7 +183,7 @@ public:
 
     const QPen& defaultGridPen() const { return m_defaultGridPen; }
 
-    double zoom() const { return m_pView->zoom(); }
+    double zoom() const;
 
     /**
      * Returns the width of the columns before the current screen

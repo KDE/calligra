@@ -24,7 +24,10 @@
 #include "kspread_dlg_validity.h"
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
+#include "kspread_locale.h"
 #include "kspread_sheet.h"
+#include "kspread_view.h"
+
 #include <qlayout.h>
 #include <qbuttongroup.h>
 #include <knumvalidator.h>

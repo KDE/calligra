@@ -20,6 +20,7 @@
 #include "kspread_selection.h"
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
+#include "kspread_doc.h"
 #include "kspread_global.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"

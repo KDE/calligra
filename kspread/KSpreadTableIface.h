@@ -33,8 +33,6 @@
 #include <qrect.h>
 #include <qcolor.h>
 
-#include "kspread_selection.h"
-
 class KSpreadSheet;
 class KSpreadCellProxy;
 

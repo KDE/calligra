@@ -35,6 +35,8 @@
 #include "kspread_sheetprint.h"
 #include "kspread_doc.h"
 #include "kspread_canvas.h"
+#include "kspread_view.h"
+#include "kspread_locale.h"
 
 #include <kconfig.h>
 #include <kstatusbar.h>

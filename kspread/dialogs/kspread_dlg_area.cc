@@ -27,6 +27,7 @@
 #include "kspread_view.h"
 #include "kspread_sheet.h"
 #include "kspread_doc.h"
+#include "kspread_locale.h"
 
 #include <qlayout.h>
 #include <qlabel.h>

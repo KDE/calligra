@@ -52,9 +52,9 @@ class QDomDocument;
 class KSpellConfig;
 
 #include <koDocument.h>
-#include <koPageLayoutDia.h>
 #include <kozoomhandler.h>
 #include <koGenStyles.h>
+#include <koUnit.h>
 
 #include <kcompletion.h>
 #include <qmap.h>
@@ -64,8 +64,9 @@ class KSpellConfig;
 #include <qstring.h>
 #include <qvaluelist.h>
 
-#include "kspread_interpreter.h"
-#include "kspread_locale.h"
+#include <kspread_global.h>
+
+#include <koscript_context.h>
 
 #define MIME_TYPE "application/x-kspread"
 

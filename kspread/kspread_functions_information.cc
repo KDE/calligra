@@ -40,6 +40,7 @@
 #include "kspread_util.h"
 #include "kspread_doc.h"
 #include "kspread_sheet.h"
+#include "kspread_interpreter.h"
 
 // prototypes (sort alphabetically)
 //bool kspreadfunc_countblank( KSContext & context );

@@ -53,6 +53,8 @@
 #include "kspread_cluster.h"
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
+#include "kspread_locale.h"
+#include "kspread_selection.h"
 #include "kspread_global.h"
 #include "kspread_undo.h"
 #include "kspread_map.h"

@@ -32,6 +32,7 @@
 
 #include "kspread_canvas.h"
 #include "kspread_dlg_layout.h"
+#include "kspread_locale.h"
 #include "kspread_sheet.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
@@ -40,8 +41,10 @@
 
 #include <qbitmap.h>
 #include <qlabel.h>
+#include <qlistbox.h>
 #include <qlayout.h>
 #include <qfontdatabase.h>
+#include <kdialog.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
@@ -50,7 +53,6 @@
 #include <qcheckbox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-#include <qcombobox.h>
 
 
 KSpreadPatternSelect::KSpreadPatternSelect( QWidget *parent, const char * )

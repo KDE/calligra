@@ -33,8 +33,6 @@
 #include <qpen.h>
 #include <qfont.h>
 
-#include "kspread_cell.h"
-
 class QComboBox;
 class QLabel;
 class QDomDocument;

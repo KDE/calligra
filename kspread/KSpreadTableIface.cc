@@ -28,15 +28,13 @@
 */
 
 #include "KSpreadTableIface.h"
-#include "KSpreadCellIface.h"
-#include "KSpreadColumnIface.h"
-#include "KSpreadRowIface.h"
-
 
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_util.h"
 #include "kspread_doc.h"
+
+#include "KSpreadCellIface.h"
 
 #include <kapplication.h>
 #include <dcopclient.h>
