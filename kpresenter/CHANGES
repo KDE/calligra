@@ -279,3 +279,4 @@ Reggie, 2.6.1999:
 -----------------
 - Implemented for Textobjects: Resize object to fit contents  
   (How is this called in real english? :-)
+- Started implementing "Copy page" - doesn't do anything yet...

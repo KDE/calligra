@@ -130,6 +130,7 @@ public:
     virtual void editPaste();
     virtual void editDelete();
     virtual void editSelectAll();
+    virtual void editCopyPage();
     virtual void editDelPage();
     virtual void editFind();
     virtual void editFindReplace();
@@ -458,6 +459,7 @@ protected:
     CORBA::Long m_idMenuEdit_Paste;
     CORBA::Long m_idMenuEdit_Delete;
     CORBA::Long m_idMenuEdit_SelectAll;
+    CORBA::Long m_idMenuEdit_CopyPage;
     CORBA::Long m_idMenuEdit_DelPage;
     CORBA::Long m_idMenuEdit_Find;
     CORBA::Long m_idMenuEdit_FindReplace;

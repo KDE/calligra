@@ -254,6 +254,7 @@ private slots:
     void pageLayout();
     void pageBackground();
     void pageInsert();
+    void pageCopy();
     void pageDelete();
     void pagePaste();
     void configPages();

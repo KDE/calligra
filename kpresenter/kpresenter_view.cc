@@ -399,6 +399,11 @@ void KPresenterView::editSelectAll()
 }
 
 /*===============================================================*/
+void KPresenterView::editCopyPage()
+{
+}
+
+/*===============================================================*/
 void KPresenterView::editDelPage()
 {
     if ( delPageDia )
@@ -3091,6 +3096,10 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem( text, this, "editSelectAll", CTRL + Key_A );
 
     m_vMenuEdit->insertSeparator( -1 );
+
+    pix = OPUIUtils::convertPixmap( ICON( "newslide.xpm" ) );
+    text = Q2C( i18n( "&Copy Page..." ) );
+    m_idMenuEdit_CopyPage = m_vMenuEdit->insertItem6( pix, text, this, "editCopyPage", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap( ICON( "delslide.xpm" ) );
     text = Q2C( i18n( "&Delete Page..." ) );
