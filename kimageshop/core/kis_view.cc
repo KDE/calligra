@@ -626,7 +626,7 @@ void KisView::setupActions()
         0, this, SLOT( remove_layer() ),
         actionCollection(), "remove_layer" );
 
-    (void) new KAction( i18n("&Link/Unilnk layer..."),
+    (void) new KAction( i18n("&Link/Unlink layer..."),
         0, this, SLOT( link_layer() ),
         actionCollection(), "link_layer" );
 
