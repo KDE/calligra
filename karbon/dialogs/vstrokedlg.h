@@ -6,17 +6,15 @@
 #ifndef __VSTROKEDLG_H__
 #define __VSTROKEDLG_H__
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 
-class QColor;
-class QSpinBox;
-class KHSSelector;
-class KGradientSelector;
-class KColorPatch;
+class QComboBox;
+class QVButtonGroup;
+
 class KarbonPart;
-class KIntNumInput;
+class TKUFloatSpinBox;
 
-class VStrokeDlg : public QTabDialog
+class VStrokeDlg : public KDialogBase
 {
 	Q_OBJECT
 
@@ -24,30 +22,17 @@ public:
 	VStrokeDlg( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
 
 private:
-	QWidget* mRGBWidget;
-	KHSSelector* mColorSelector;
-	QSpinBox* mRed;
-	QSpinBox* mGreen;
-	QSpinBox* mBlue;
-	QSpinBox* mHue;
-	QSpinBox* mSaturation;
-	QSpinBox* mValue;
-	KIntNumInput* mOpacity;
-	KGradientSelector* mSelector;
-	KColorPatch* mOldColor;
-	KColorPatch* mColorPreview;
+	
 	KarbonPart *m_part;
+	TKUFloatSpinBox *m_setLineWidth;
+	QComboBox *m_styleCombo;
+	QVButtonGroup *m_typeOption;
+	QVButtonGroup *m_capOption;
+	QVButtonGroup *m_joinOption;
 
 signals:
 	void strokeChanged( const VStroke & );
 
-private slots:
-	void slotUpdateFromRGBSpinBoxes( int );
-	void slotUpdateFromHSVSpinBoxes( int );
-	void slotApplyButtonPressed();
-	void slotUpdate( QColor *color = 0L );
-	void slotVChanged( int );
-	void slotHSChanged( int, int );
 };
 
 #endif
