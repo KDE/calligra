@@ -284,6 +284,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement soundElement = doc.createElement( "SOUNDS" );
     QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
     QDomElement helpLineElement = doc.createElement( "HELPLINES" );
+    QDomElement attributeElement = doc.createElement( "ATTRIBUTES" );
 
     QDomElement settingsDoc = m_settings.documentElement();
 
@@ -401,8 +402,9 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
     docElement.appendChild( paperElement );
     docElement.appendChild( backgroundElement );
-    if ( appendHelpLine( doc, settingsDoc, helpLineElement ) )
+    if ( parseSettings( doc, settingsDoc, helpLineElement, attributeElement ) )
         docElement.appendChild( helpLineElement );
+    docElement.appendChild( attributeElement );
     docElement.appendChild( pageTitleElement );
     docElement.appendChild( pageNoteElement );
     docElement.appendChild( objectElement );
@@ -413,14 +415,26 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     doccontent.appendChild( doc );
 }
 
-bool OoImpressImport::appendHelpLine( QDomDocument &doc,const QDomElement &settingElement, QDomElement &helpLineElement )
+QString OoImpressImport::parseConfigItem( const QDomElement& configItem, const QString & configName )
 {
-    bool foundElement = false;
-    //<config:config-item config:name="SnapLinesDrawing" config:type="string">V7939H1139</config:config-item>
-    //by default show line
+    QDomNode item = configItem.firstChild(); //<config:config-item-map-entry>
+    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
+    {
+        QDomElement viewItem = item2.toElement();
+        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
+        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
+        {
+            return viewItem.text();
+        }
+    }
+    return QString::null;
+}
+
+QDomElement OoImpressImport::mapItem( const QDomElement &settingElement, const QString &mapItemName)
+{
     QDomNode tmp = settingElement.namedItem( "office:settings" );
     if (tmp.isNull() )
-        return false;
+        return QDomElement();
 
     for ( QDomNode n = tmp.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
@@ -432,29 +446,52 @@ bool OoImpressImport::appendHelpLine( QDomDocument &doc,const QDomElement &setti
             {
                 QDomElement configItem = viewSetting.toElement();
                 if ( configItem.tagName()== "config:config-item-map-indexed"
-                     && ( configItem.attribute( "config:name" )=="Views" ) )
+                     && ( configItem.attribute( "config:name" )==/*"Views"*/ mapItemName ) )
                 {
-                    QDomNode item = configItem.firstChild(); //<config:config-item-map-entry>
-                    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
-                    {
-                        QDomElement viewItem = item2.toElement();
-                        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
-                        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")=="SnapLinesDrawing" ) )
-                        {
-                            kdDebug()<<"SnapLinesDrawing****************:"<<viewItem.text()<<endl;
-                            parseHelpLine( doc, helpLineElement, viewItem.text() );
-                            //display it by default
-                            helpLineElement.setAttribute( "show", true );
-                            foundElement = true;
-                            break;
-                        }
-
-                    }
+                    return configItem;
                 }
             }
         }
     }
+    return QDomElement();
+}
 
+bool OoImpressImport::parseSettings( QDomDocument &doc,const QDomElement &settingElement, QDomElement &helpLineElement, QDomElement &attributeElement )
+{
+    bool foundElement = false;
+    //<config:config-item config:name="SnapLinesDrawing" config:type="string">V7939H1139</config:config-item>
+    //by default show line
+    QDomElement configItem = mapItem( settingElement, "Views");
+    if (  configItem.isNull() )
+        return false;
+
+    QString str = parseConfigItem( configItem, "SnapLinesDrawing" );
+    if ( !str.isEmpty() )
+    {
+        parseHelpLine( doc, helpLineElement, str );
+        //display it by default
+        helpLineElement.setAttribute( "show", true );
+        foundElement = true;
+    }
+    int gridX = 0;
+    int gridY = 0;
+    bool snapToGrid = false;
+    int selectedPage = 0;
+
+    gridX = ( parseConfigItem( configItem, "GridFineWidth" ) ).toInt();
+    gridY = ( parseConfigItem( configItem, "GridFineHeight" ) ).toInt();
+    snapToGrid = ( parseConfigItem(configItem, "IsSnapToGrid" ) ) == "true" ? true: false;
+    selectedPage = parseConfigItem( configItem, "SelectedPage" ).toInt();
+
+    attributeElement.setAttribute( "activePage", selectedPage );
+    attributeElement.setAttribute("gridx", MM_TO_POINT( gridX / 100.0 ) );
+
+    attributeElement.setAttribute("gridy", MM_TO_POINT( gridY / 100.0 ) );
+    attributeElement.setAttribute("snaptogrid", (int)snapToGrid );
+
+
+
+    //kdDebug()<<" gridX :"<<gridX<<" gridY :"<<gridY<<" snapToGrid :"<<snapToGrid<<" selectedPage :"<<selectedPage<<endl;
     return foundElement;
 }
 
@@ -475,14 +512,8 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             QStringList listVal = QStringList::split( ",", str );
             int posX = ( listVal[0].toInt()/100 );
             int posY = ( listVal[1].toInt()/100 );
-            QString pt_x;
-            QString pt_y;
-            pt_x.setNum(posX);
-            pt_x+="mm";
-            pt_y.setNum(posY);
-            pt_y+="mm";
-            point.setAttribute("posX", KoUnit::parseValue(pt_x));
-            point.setAttribute("posY", KoUnit::parseValue(pt_y));
+            point.setAttribute("posX", MM_TO_POINT(  posX ));
+            point.setAttribute("posY", MM_TO_POINT(  posY ));
 
             helpLineElement.appendChild( point );
             newPos = pos-1;
@@ -494,10 +525,7 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             str = text.mid( pos+1, ( newPos-pos ) );
             kdDebug()<<" vertical  :"<< str <<endl;
             int posX = ( str.toInt()/100 );
-            QString pt_x;
-            pt_x.setNum(posX);
-            pt_x+="mm";
-            lines.setAttribute( "value",  KoUnit::parseValue(pt_x) );
+            lines.setAttribute( "value",  MM_TO_POINT( posX ) );
             helpLineElement.appendChild( lines );
 
             newPos = ( pos-1 );
@@ -511,11 +539,7 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             kdDebug()<<" horizontal  :"<< str <<endl;
 
             int posY = ( str.toInt()/100 );
-            QString pt_y;
-            pt_y.setNum(posY);
-            pt_y+="mm";
-
-            lines.setAttribute( "value", KoUnit::parseValue(pt_y)  );
+            lines.setAttribute( "value", MM_TO_POINT(  posY )  );
             helpLineElement.appendChild( lines );
             newPos = pos-1;
         }
@@ -978,6 +1002,41 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
         if ( fill == "solid" )
         {
             QDomElement brush = doc.createElement( "BRUSH" );
+            if ( m_styleStack.hasAttribute( "draw:transparency" ) )
+            {
+                QString transparency = m_styleStack.attribute( "draw:transparency" );
+                transparency = transparency.remove( '%' );
+                int value = transparency.toInt();
+                if ( value >= 94 && value <= 99 )
+                {
+                    brush.setAttribute( "style", 2 );
+                }
+                else if ( value>=64 && value <= 93 )
+                {
+                    brush.setAttribute( "style", 3 );
+                }
+                else if ( value>=51 && value <= 63 )
+                {
+                    brush.setAttribute( "style", 4 );
+                }
+                else if ( value>=38 && value <= 50 )
+                {
+                    brush.setAttribute( "style", 5 );
+                }
+                else if ( value>=13 && value <= 37 )
+                {
+                    brush.setAttribute( "style", 6 );
+                }
+                else if ( value>=7 && value <= 12 )
+                {
+                    brush.setAttribute( "style", 7 );
+                }
+                else if ( value>=1 && value <= 6 )
+                {
+                    brush.setAttribute( "style", 8 );
+                }
+            }
+            else
             brush.setAttribute( "style", 1 );
             if ( m_styleStack.hasAttribute( "draw:fill-color" ) )
                 brush.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );

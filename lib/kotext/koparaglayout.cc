@@ -529,6 +529,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
         element.setAttribute( "ptpos", (*it).ptPos );
         element.setAttribute( "filling", (*it).filling );
         element.setAttribute( "width", (*it).ptWidth );
-        element.setAttribute( "alignchar", QString((*it).alignChar) );
+        if ( !(*it).alignChar.isNull() )
+          element.setAttribute( "alignchar", QString((*it).alignChar) );
     }
 }

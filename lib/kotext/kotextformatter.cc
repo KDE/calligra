@@ -17,6 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qglobal.h>
+#if QT_VERSION >= 0x030200
+#define INDIC
+#endif
+
 #include "kotextformatter.h"
 #include "kotextformat.h"
 #include "kotextdocument.h"
@@ -825,6 +830,18 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
     space = QMAX( space, 0 ); // #### with nested tables this gets negative because of a bug I didn't find yet, so workaround for now. This also means non-left aligned nested tables do not work at the moment
     int start = (startChar - &string->at(0));
     int last = (lastChar - &string->at(0) );
+#ifdef INDIC
+
+    KoTextStringChar *ch = lastChar;
+    while ( ch > startChar && ch->whiteSpace ) {
+        space += ch->format()->width( ' ' );
+        --ch;
+    }
+
+    if (space < 0)
+        space = 0;
+
+#endif
     // do alignment Auto == Left in this case
     if ( align & Qt::AlignHCenter || align & Qt::AlignRight ) {
         if ( align & Qt::AlignHCenter )
@@ -922,6 +939,18 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
     KoTextParag * /*parag*/, KoTextString *text, KoTextParagLineStart *line,
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
+    // This comes from Qt (3.3.x) but seems wrong: the last space is where we draw
+    // the "end of paragraph" sign, so it needs to be correctly positioned too.
+#if 0
+    // ignore white space at the end of the line.
+    int endSpaces = 0;
+    while ( lastChar > startChar && lastChar->whiteSpace ) {
+        space += lastChar->format()->width( ' ' );
+        --lastChar;
+        ++endSpaces;
+    }
+#endif
+
     int start = (startChar - &text->at(0));
     int last = (lastChar - &text->at(0) );
 #ifdef DEBUG_FORMATTER

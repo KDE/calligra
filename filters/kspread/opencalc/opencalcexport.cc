@@ -42,6 +42,8 @@
 #include <kspread_doc.h>
 #include <kspread_format.h>
 #include <kspread_map.h>
+#include <kspread_view.h>
+#include <kspread_canvas.h>
 #include <kspread_sheet.h>
 #include <kspread_sheetprint.h>
 #include <kspread_style.h>
@@ -72,7 +74,7 @@ K_EXPORT_COMPONENT_FACTORY( libopencalcexport, OpenCalcExportFactory() )
   } while(0)
 
 OpenCalcExport::OpenCalcExport( KoFilter *, const char *, const QStringList & )
-  : KoFilter()
+  : KoFilter(), m_locale( 0 )
 {
 }
 
@@ -118,6 +120,8 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
     return KoFilter::NotImplemented;
   }
 
+  m_locale = static_cast<KSpreadDoc*>(document)->locale();
+
   if ( !writeFile( ksdoc ) )
     return KoFilter::CreationError;
 
@@ -150,6 +154,11 @@ bool OpenCalcExport::writeFile( KSpreadDoc const * const ksdoc )
     STOPEXPORT;
   else
     filesWritten |= stylesXML;
+
+  if ( !exportSettings( store, ksdoc ) )
+    STOPEXPORT;
+  else
+    filesWritten |= settingsXML;
 
   if ( !writeMetaFile( store, filesWritten ) )
     STOPEXPORT;
@@ -206,9 +215,16 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, KSpreadDoc const * const ks
   data.appendChild( meta.createTextNode( aboutPage->abstract() ) );
   officeMeta.appendChild( data );
 
+  const QDateTime dt ( QDateTime::currentDateTime() );
+  if ( dt.isValid() )
+  {
+    data = meta.createElement( "dc:date" );
+    data.appendChild( meta.createTextNode( dt.toString( Qt::ISODate ) ) );
+    officeMeta.appendChild( data );
+  }
+
   /* TODO:
     <meta:creation-date>2003-01-08T23:57:31</meta:creation-date>
-    <dc:date>2003-01-08T23:58:05</dc:date>
     <dc:language>en-US</dc:language>
     <meta:editing-cycles>2</meta:editing-cycles>
     <meta:editing-duration>PT38S</meta:editing-duration>
@@ -281,6 +297,99 @@ bool OpenCalcExport::exportContent( KoStore * store, KSpreadDoc const * const ks
 
   return true;
 }
+
+bool OpenCalcExport::exportSettings( KoStore * store, const KSpreadDoc * ksdoc )
+{
+    if ( !store->open( "settings.xml" ) )
+    return false;
+
+  QDomDocument doc;
+  doc.appendChild( doc.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+  QDomElement settings = doc.createElement( "office:document-settings" );
+  settings.setAttribute( "xmlns:office", "http://openoffice.org/2000/office");
+  settings.setAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
+  settings.setAttribute( "xmlns:config", "http://openoffice.org/2001/config" );
+  settings.setAttribute( "office:version", "1.0" );
+
+  QDomElement begin = doc.createElement( "office:settings" );
+
+  QDomElement configItem = doc.createElement("config:config-item-set" );
+  configItem.setAttribute( "config:name", "view-settings" );
+
+  QDomElement mapIndexed = doc.createElement( "config:config-item-map-indexed" );
+  mapIndexed.setAttribute("config:name", "Views" );
+  configItem.appendChild( mapIndexed );
+
+  QDomElement mapItem = doc.createElement("config:config-item-map-entry" );
+
+  QDomElement attribute =  doc.createElement("config:config-item" );
+  attribute.setAttribute( "config:name", "ActiveTable" );
+  attribute.setAttribute( "config:type", "string" );
+
+  KSpreadView * view = static_cast<KSpreadView*>( ksdoc->views().getFirst());
+  QString activeTable;
+  if ( view ) // no view if embedded document
+  {
+      KSpreadCanvas * canvas = view->canvasWidget();
+      activeTable = canvas->activeTable()->tableName();
+      // save current sheet selection before to save marker, otherwise current pos is not saved
+      view->saveCurrentSheetSelection();
+  }
+  attribute.appendChild( doc.createTextNode( activeTable ) );
+  mapItem.appendChild( attribute );
+
+  QDomElement configmaped = doc.createElement( "config:config-item-map-named" );
+  configmaped.setAttribute( "config:name","Tables" );
+
+  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
+  for( ; it.current(); ++it )
+  {
+      QPoint marker;
+      if ( view )
+      {
+          marker = view->markerFromSheet( *it );
+      }
+      QDomElement tmpItemMapNamed = doc.createElement( "config:config-item-map-entry" );
+      tmpItemMapNamed.setAttribute( "config:name", ( *it )->tableName() );
+
+      QDomElement sheetAttribute = doc.createElement( "config:config-item" );
+      sheetAttribute.setAttribute( "config:name", "CursorPositionX" );
+      sheetAttribute.setAttribute( "config:type", "int" );
+      sheetAttribute.appendChild( doc.createTextNode( QString::number(marker.x() )  ) );
+      tmpItemMapNamed.appendChild( sheetAttribute );
+
+      sheetAttribute = doc.createElement( "config:config-item" );
+      sheetAttribute.setAttribute( "config:name", "CursorPositionY" );
+      sheetAttribute.setAttribute( "config:type", "int" );
+      sheetAttribute.appendChild( doc.createTextNode( QString::number(marker.y() )  ) );
+      tmpItemMapNamed.appendChild( sheetAttribute );
+
+      configmaped.appendChild( tmpItemMapNamed );
+  }
+  mapItem.appendChild( configmaped );
+
+
+
+  mapIndexed.appendChild( mapItem );
+
+  begin.appendChild( configItem );
+
+  settings.appendChild( begin );
+
+  doc.appendChild( settings );
+
+  QCString f( doc.toCString() );
+  kdDebug(30518) << "Settings: " << (char const * ) f << endl;
+
+  store->write( f, f.length() );
+
+  if ( !store->close() )
+    return false;
+
+  return true;
+}
+
 
  // e.g.: Sheet4.A1:Sheet4.E28
 QString convertRangeToRef( const QString & tableName, const QRect & _area )
@@ -1087,6 +1196,16 @@ void insertBracket( QString & s )
 
 QString OpenCalcExport::convertFormula( QString const & formula ) const
 {
+  QChar decimalSymbol( '.' );
+  if ( m_locale )
+  {
+    const QString decimal ( m_locale->decimalSymbol() );
+    if ( !decimal.isEmpty() )
+    {
+        decimalSymbol = decimal.at( 0 );
+    }
+  }
+  
   QString s;
   QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
   int n = exp.search( formula, 0 );
@@ -1139,6 +1258,12 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
       ++i;
       continue;
     }
+    else if ( formula[i] == decimalSymbol )
+    {
+      s += '.'; // decimal point
+      ++i;
+      continue;
+    }
     if ( n == i )
     {
       int ml = exp.matchedLength();
@@ -1169,6 +1294,7 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
 
 bool OpenCalcExport::writeMetaFile( KoStore * store, uint filesWritten )
 {
+    store->enterDirectory( "META-INF" );
   if ( !store->open( "manifest.xml" ) )
     return false;
 

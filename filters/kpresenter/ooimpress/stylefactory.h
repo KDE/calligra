@@ -193,7 +193,7 @@ private:
         m_text_shadow, m_text_underline, m_font_weight, m_line_height,
         m_text_align, m_fill, m_fill_color, m_enable_numbering, m_stroke_dash,
         m_fill_hatch_name, m_marker_start, m_marker_start_width,
-        m_marker_end, m_marker_end_width, m_fill_gradient_name;
+        m_marker_end, m_marker_end_width, m_fill_gradient_name, m_transparency;
 };
 
 class ParagraphStyle

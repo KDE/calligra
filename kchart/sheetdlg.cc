@@ -49,6 +49,7 @@ SheetDlg::SheetDlg( QWidget *parent, const char *name )
   connect(ok,SIGNAL(clicked()),parent,SLOT(accept()));
   connect(ok,SIGNAL(clicked()),t,SLOT(ok()));
   connect(cancel,SIGNAL(clicked()),parent,SLOT(reject()));
+  ok->setDefault(true);
 
   resizeHandle( size() );
 }

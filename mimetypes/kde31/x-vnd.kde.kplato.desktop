@@ -1,0 +1,11 @@
+# KDE Config File
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=application/x-vnd.kde.kplato
+#Comment=...
+Type=MimeType
+Patterns=*.kplato;*.kplatot;
+X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.kplato

@@ -1,0 +1,29 @@
+SUBDIRS = kohyphen . tests
+INCLUDES= $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(KOSPELL_INCLUDES) $(all_includes)
+## Needed for kohyphen...
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
+lib_LTLIBRARIES = libkotext.la
+libkotext_la_SOURCES = qcomplextext.cpp korichtext.cpp \
+	kozoomhandler.cc koborder.cc \
+	kotextformat.cc koparagcounter.cc kostyle.cc kocommand.cc \
+	kotextparag.cc kotextdocument.cc kotextformatter.cc koparaglayout.cc \
+	kotextobject.cc kotextview.cc koAutoFormat.cc koAutoFormatDia.cc \
+	koParagDia.cc kovariable.cc koVariableDlgs.cc \
+	koChangeCaseDia.cc koStylist.cc koSearchDia.cc \
+	timedateformatwidget.ui timeformatwidget_impl.cc dateformatwidget_impl.cc \
+	KoTextViewIface.skel KoTextViewIface.cc koFontDia.cc koBgSpellCheck.cc \
+	koCommentDia.cc kospell.cc koCreateStyleDia.cc kotextcustomitem.cc \
+	koimportstyledia.cc kotextiterator.cc
+
+libkotext_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
+# We use kofficeui for koRect :)
+libkotext_la_LIBADD = $(LIB_KOFFICEUI) kohyphen/libkohyphen.la -lkspell -lkutils
+
+METASOURCES = AUTO
+
+KDE_OPTIONS = nofinal
+
+# include_HEADERS = 
+#	kozoomhandler.h kotextformat.h koparagcounter.h kostyle.h 
+#	kotextdocument.h koBgSpellCheck.h koCommentDia.h koCreateStyleDia.h
