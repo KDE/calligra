@@ -15,7 +15,7 @@
 #include <kfontdialog.h>
 #include <qdialog.h>
 #include <qchkbox.h>
-#include <klined.h>
+#include <klineedit.h>
 #include <qradiobt.h>
 
 #include <qscrbar.h>
