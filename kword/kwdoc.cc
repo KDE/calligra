@@ -458,9 +458,12 @@ void KWDocument::recalcFrames()
         int pages2=0;
         for (int m = getNumFrameSets()-1; m>=0; m--) {
             KWFrameSet *fs=getFrameSet(m);
-            for (int n = fs->getNumFrames()-1;  n >=0; n--) {
-                //kdDebug() << "KWDocument::recalcFrames frameset " << m << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
-                pages2=QMAX(pages2, fs->getFrame(n)->bottom());
+            if ( fs->isVisible() )
+            {
+                for (int n = fs->getNumFrames()-1;  n >=0; n--) {
+                    kdDebug() << "KWDocument::recalcFrames frameset " << m << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
+                    pages2=QMAX(pages2, fs->getFrame(n)->bottom());
+                }
             }
         }
         pages2=static_cast<int>( ceil( pages2 / ptPaperHeight() ) );

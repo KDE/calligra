@@ -145,9 +145,9 @@ public:
     virtual void setWidth( int w );
     virtual int adjustLMargin( int yp, int h, int margin, int space );
     virtual int adjustRMargin( int yp, int h, int margin, int space );
-    virtual void adjustFlow( int  &yp, int w, int h, bool pages = TRUE );
+    virtual void adjustFlow( int &yp, int w, int h, QTextParag *parag, bool pages = TRUE );
     virtual void draw( QPainter *p, int cx, int cy, int cw, int ch );
-    virtual void eraseAfter( QTextParag *parag, QPainter *p );
+    virtual void eraseAfter( QTextParag *parag, QPainter *p, const QColorGroup & cg );
 
 signals:
     void hideCursor();

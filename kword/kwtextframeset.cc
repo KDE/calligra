@@ -300,7 +300,7 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
             QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
             // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
             if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) )
-                newMargin = QMAX( newMargin, m_width + 20 ); // bigger than the width -> no text here
+                newMargin = QMAX( newMargin, m_width + 1 ); // bigger than the width -> no text here
         }
         break;
         default: // case RA_NO:
@@ -321,57 +321,118 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
     QListIterator<KWFrame> fIt( m_framesOnTop );
     for ( ; fIt.current() ; ++fIt )
     {
-        QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
-        // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
-        if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) &&
-             frameRect.left() - p.x() >= middle ) // adjust the right margin only
-                                               // for frames which are in the
-                                               // right half
+        switch( fIt.current()->getRunAround() ) {
+        case RA_BOUNDINGRECT:
+        {
+            QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
+            // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
+            if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) &&
+                 frameRect.left() - p.x() >= middle ) // adjust the right margin only
+                // for frames which are in the right half
                 newMargin = QMAX( newMargin, m_width - ( frameRect.x() - p.x() ) - space );
+        }
+        break;
+        case RA_SKIP:
+        {
+            QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
+            // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
+            if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) )
+                newMargin = QMAX( newMargin, m_width + 1 ); // bigger than the width -> no text here
+        }
+        break;
+        default: // case RA_NO:
+            break;
+        }
     }
 
     return QTextFlow::adjustRMargin( yp, h, margin + newMargin, space );
 }
 
-void KWTextFrameSet::adjustFlow( int &yp, int w, int h, bool /*pages*/ )
+void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool /*pages*/ )
 {
-    // This is called since vertical break is true. End of frames/pages
-    // lead to those "vertical breaks". What we might do, is adjust the Y accordingly,
-    // to implement page-break at the paragraph level ?
+    // This is called since the 'vertical break' QRT flag is true.
+    // End of frames/pages lead to those "vertical breaks".
+    // What we do, is adjust the Y accordingly,
+    // to implement page-break at the paragraph level (TODO: line-level).
     // It's cumulative (the space of one break will be included in the further
-    // paragraph's y position).
+    // paragraph's y position), which makes it easy to implement.
 
-#if 0
-    int topBoder = doc->topBorder();
-    int bottomBoder = doc->bottomBorder();
-    int pageHeight = doc->paperHeight() - topBoder - bottomBoder;
-    int paperHeight = doc->paperHeight();
+    bool PARAGBREAK = false; // TODO make this a property of the parag
 
-    int num = yp / paperHeight;
+    int totalHeight = 0;
+    QListIterator<KWFrame> frameIt( frameIterator() );
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        int frameHeight = kWordDocument()->zoomItY( frameIt.current()->height() );
+        int bottom = totalHeight + frameHeight;
 
-    if ( yp < num * paperHeight + topBoder )
-	yp = num * paperHeight + topBoder;
-    else if ( yp + h > num * paperHeight + pageHeight )
-	yp = ( num + 1 ) * paperHeight + topBoder;
+        //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 
-    int yp2 = yp;
-    QTextFlow::adjustFlow( yp2, w, h, FALSE ); // adjust flow height
-#endif
-    QTextFlow::adjustFlow( yp, w, h, FALSE ); // adjust flow height
+        if ( yp < bottom && yp+h > bottom ) // This parag intersects with the bottom of the frame
+        {
+            if ( !parag || PARAGBREAK ) // Paragraph-level breaking
+            {
+                kdDebug(32002) << "KWTextFrameSet::adjustFlow ADJUSTING yp=" << yp << " w=" << w << " h=" << h << " r.bottom() [new value for yp]=" << bottom << endl;
+                yp = bottom; // Move down,  to the next frame's top (same as bottom, since this is in QRT coords).
+                break;
+            }
+            else // Line-level breaking
+            {
+                QMap<int, QTextParagLineStart*>& lineStarts = parag->lineStartList();
+                int dy = 0;
+                // Note that we can't use parag->lines() here, it loops !
+                for ( int l = 0; lineStarts.find( l ) != lineStarts.end() ; ++l )
+                {
+                    QTextParagLineStart * ls = lineStarts[l];
+                    ASSERT( ls );
+                    int y = parag->rect().y() + ls->y;
+                    kdDebug() << "KWTextFrameSet::adjustFlow line " << l << " ls->y=" << ls->y << " ls->h=" << ls->h
+                              << " y=" << y << " bottom=" << bottom << endl;
+                    if ( !dy )
+                        if ( y < bottom && y + ls->h > bottom )
+                        {
+                            if ( l == 0 ) // First line ? It's like a paragraph breaking then
+                            {
+                                kdDebug() << "KWTextFrameSet::adjustFlow first line -> parag break" << endl;
+                                yp = bottom;
+                                break;
+                            }
+                            dy = bottom - y;
+                            kdDebug() << "KWTextFrameSet::adjustFlow breaking at line " << l << " dy=" << dy << endl;
+                            ls->y = bottom - parag->rect().y();
+                        }
+                    else
+                        ls->y += dy;
+                }
+                parag->setHeight( h + dy );
+            }
+            break;
+        }
+        else if ( yp+h < bottom )
+            break; // we've been past the parag, so stop here
+        totalHeight = bottom;
+    }
+
+    int yp_ro = yp;
+    QTextFlow::adjustFlow( yp_ro, w, h, parag, FALSE );
 }
 
 void KWTextFrameSet::draw( QPainter *, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/ )
 {
 }
 
-void KWTextFrameSet::eraseAfter( QTextParag * /*parag*/, QPainter * /*p*/ )
+void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorGroup & cg )
 {
     // This is called when adjustFlow above moved a paragraph downwards to move
     // it to the next frame. Then we have to erase the space under the paragraph,
     // up to the bottom of the frame. This is what should be done here.
+    QPoint cPoint;
+    /*KWFrame * frame = */internalToContents( parag->rect().bottomLeft(), cPoint );
+    QRect r = parag->rect();
+    ASSERT( cPoint.y() > r.bottom() );
+    kdDebug() << "KWTextFrameSet::eraseAfter height of fillRect: " << cPoint.y() - r.bottom() << endl;
+    p->fillRect( r.x(), r.y(), r.width(), cPoint.y() - r.bottom(), cg.brush( QColorGroup::Base ) );
     /*
-    // #### this calculation only works for pages yet, not fency frames
-    int py = parag->rect().y();
     int topBoder = doc->topBorder();
     int bottomBoder = doc->tottomBorder();
     int pageHeight = doc->paperHeight() - topBoder - bottomBoder;
@@ -380,7 +441,7 @@ void KWTextFrameSet::eraseAfter( QTextParag * /*parag*/, QPainter * /*p*/ )
     int top = num * paperHeight;
     py += parag->rect().height();
     p->fillRect( doc->leftBorder(), py, doc->paperWidth() - doc->leftBorder() - doc->rightBorder(),
-		 top + topBoder + pageHeight - py, Qt::white );
+		 top + topBoder + pageHeight - py, gb.brush( QColorGroup::Base ) );
     */
 }
 
@@ -926,12 +987,12 @@ void KWTextFrameSet::formatMore()
           lastFormatted && bottom + lastFormatted->rect().height() <= m_availableHeight &&
           ( i < to || bottom <= viewsBottom ) ; ++i )
     {
-        kdDebug(32002) << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
+        //kdDebug(32002) << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
 	lastFormatted->format();
 	bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
 	lastFormatted = lastFormatted->next();
     }
-    kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. Setting m_lastFormatted to " << lastFormatted << endl;
+    //kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. Setting m_lastFormatted to " << lastFormatted << endl;
     m_lastFormatted = lastFormatted;
 
     if ( lastFormatted && bottom != -1 && bottom + lastFormatted->rect().height() > m_availableHeight )
@@ -1841,7 +1902,9 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 	moveCursor( MovePgDown, e->state() & ShiftButton, e->state() & ControlButton );
 	break;
     case Key_Return: case Key_Enter:
-	textDocument()->removeSelection( QTextDocument::Standard );
+	// ??? textDocument()->removeSelection( QTextDocument::Standard );
+	if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+            textFrameSet()->removeSelectedText( cursor );
 	clearUndoRedoInfo = FALSE;
 	textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionReturn );
 	break;
@@ -2242,7 +2305,8 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
         e->acceptAction();
 
         QTextCursor dropCursor( textDocument() );
-        dropCursor.place( textFrameSet()->contentsToInternal( e->pos() ), textDocument()->firstParag() );
+        QPoint dropPoint = textFrameSet()->contentsToInternal( e->pos() );
+        dropCursor.place( dropPoint, textDocument()->firstParag() );
         kdDebug(32001) << "KWTextFrameSetEdit::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
 
         if ( ( e->source() == m_canvas ||
@@ -2251,6 +2315,18 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
 
             if ( textDocument()->hasSelection( QTextDocument::Standard ) )
             {
+                // Dropping into the selection itself ?
+                if ( textDocument()->inSelection( QTextDocument::Standard, dropPoint ) )
+                {
+                    textDocument()->removeSelection( QTextDocument::Standard );
+                    textFrameSet()->selectionChanged();
+                    hideCursor();
+                    *cursor = dropCursor;
+                    showCursor();
+                    ensureCursorVisible();
+                    return;
+                }
+
                 // Tricky. We don't want to do the placeCursor after removing the selection
                 // (the user pointed at some text with the old selection in place).
                 // However, something got deleted in our parag, dropCursor's index needs adjustment.

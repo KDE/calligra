@@ -1762,6 +1762,8 @@ void KWCanvas::printRTDebug()
     for (QTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
     {
         kdDebug() << "Paragraph " << parag << "   (" << parag->paragId() << ") ------------------ " << endl;
+        if ( parag->prev() && parag->prev()->paragId() + 1 != parag->paragId() )
+            kdWarning() << "Previous paragraph " << parag->prev() << " has ID " << parag->prev()->paragId() << endl;
         QVector<QStyleSheetItem> vec = parag->styleSheetItems();
         for ( uint i = 0 ; i < vec.size() ; ++i )
         {
