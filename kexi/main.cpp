@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 		"0.1", description, KAboutData::License_GPL,
 		"(c) 2002, Lucijan Busch", 0, 0, "lucijan@gmx.at");
 	aboutData.addAuthor("Lucijan Busch","Developer & Maintainer", "lucijan@gmx.at");
+	aboutData.addAuthor("Peter Simonsson","Developer","psn@linux.se");
 	aboutData.addAuthor("Daniel Molkentin","Developer",  "molkentin@kde.org");
 	aboutData.addAuthor("Till Busch", "Buxfixes and Improvements", "till@bux.at");
 	aboutData.addAuthor("Joseph Wenninger", "A lot of work for formeditor, and a lot other stuff", "jowenn@kde.org");
