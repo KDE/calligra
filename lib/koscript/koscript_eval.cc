@@ -535,6 +535,7 @@ bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
         context.value()->setValue( result );
 
         // chance to overflow ? promote to double
+        // this fixes bug #42499
         KScript::Double v = r.value()->doubleValue() * l.value()->doubleValue();
         if( fabs( v ) > 1e9 ) 
           context.value()->setValue( v );
