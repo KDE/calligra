@@ -689,13 +689,14 @@ void KPresenterDocIface::setHelpLineToFront( bool _front )
         doc->repaint( false );
 }
 
-void KPresenterDocIface::updateHelpPoint( int idx, double posX, double posY )
+bool KPresenterDocIface::updateHelpPoint( int idx, double posX, double posY ) const
 {
-    if( idx < 0)
-        return;
+    if( idx < 0 || idx >= (int)doc->helpPoints().count() )
+        return false ;
     doc->updateHelpPoint( idx, KoPoint( posX, posY ));
     if( showHelplines() )
         doc->repaint( false);
+    return true;
 
 }
 
@@ -727,3 +728,17 @@ void KPresenterDocIface::setConfigAutoSuperScript( bool b)
     doc->getAutoFormat()->configAutoSuperScript( b );
 }
 
+
+double KPresenterDocIface::helpPointPosX( int index ) const
+{
+    if( index < 0 || index >= (int)doc->helpPoints().count() )
+        return -1.0;
+    return doc->helpPoints()[index].x();
+}
+
+double KPresenterDocIface::helpPointPosY( int index ) const
+{
+    if( index < 0 || index >= (int)doc->helpPoints().count() )
+        return -1.0;
+    return doc->helpPoints()[index].y();
+}

@@ -197,7 +197,14 @@ k_dcop:
     bool helpLineToFront() const;
     void setHelpLineToFront( bool _front );
 
-    void updateHelpPoint( int idx, double posX, double posY );
+    //return false when we idx doesn't exist
+    bool updateHelpPoint( int idx, double posX, double posY ) const ;
+
+    //return -1.0 if idx doesn't exist
+    double helpPointPosX( int idx ) const ;
+    double helpPointPosY( int idx ) const ;
+
+
     void addHelpPoint( double posX, double posY );
 
     //return false when index doesn't exist

@@ -2414,7 +2414,7 @@ void KPresenterDoc::reorganizeGUI()
 	((KPresenterView*)it.current())->reorganize();
 }
 
-int KPresenterDoc::undoRedoLimit()
+int KPresenterDoc::undoRedoLimit() const
 {
     return m_commandHistory->undoLimit();
 }

@@ -283,7 +283,7 @@ public:
     void setUnit( KoUnit::Unit _unit );
 
     // in pt
-    double getIndentValue() { return m_indent; }
+    double getIndentValue()const { return m_indent; }
     void setIndentValue(double _ind) { m_indent=_ind; }
 
     int maxRecentFiles() const { return m_maxRecentFiles; }
@@ -306,7 +306,7 @@ public:
     // Get KPresenterView
     KPresenterView *getKPresenterView() const { return m_kpresenterView; }
 
-    int undoRedoLimit();
+    int undoRedoLimit() const;
     void setUndoRedoLimit(int _val);
 
 
