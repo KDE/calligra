@@ -680,12 +680,12 @@ QStringList KPresenterDocIface::spellListIgnoreAll() const
 
 bool KPresenterDocIface::displayFieldCode()const
 {
-    return doc->getVariableCollection()->variableSetting()->displayFiedCode();
+    return doc->getVariableCollection()->variableSetting()->displayFieldCode();
 }
 
 void KPresenterDocIface::setDisplayFieldCode( bool b)
 {
-    doc->getVariableCollection()->variableSetting()->setDisplayFiedCode( b );
+    doc->getVariableCollection()->variableSetting()->setDisplayFieldCode( b );
     doc->recalcVariables(VT_ALL);
 }
 

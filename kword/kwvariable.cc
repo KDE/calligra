@@ -168,7 +168,7 @@ void KWPgNumVariable::recalc()
 
 QString KWPgNumVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode()&& !realValue)
+    if (m_varColl->variableSetting()->displayFieldCode()&& !realValue)
         return fieldCode();
     else if ( m_subtype !=  VST_CURRENT_SECTION && m_doc->viewMode()->type() == "ModeText" && !realValue)
         return fieldCode();
@@ -244,7 +244,7 @@ QString KWMailMergeVariable::value() const
 
 QString KWMailMergeVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode()&& !realValue)
+    if (m_varColl->variableSetting()->displayFieldCode()&& !realValue)
         return fieldCode();
     // ## should use a format maybe
     QString v = value();
@@ -378,7 +378,7 @@ QString KWFootNoteVariable::applyStyle(  )
 
 QString KWFootNoteVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode()&& !realValue)
+    if (m_varColl->variableSetting()->displayFieldCode()&& !realValue)
         return fieldCode();
     return m_varFormat->convert( m_varValue );
 }

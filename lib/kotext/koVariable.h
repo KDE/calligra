@@ -50,20 +50,20 @@ class KoVariableSettings
  public:
     KoVariableSettings();
     virtual ~KoVariableSettings();
-    int startingPage()const{return m_startingpage;}
-    void setStartingPage(int _startingpage){ m_startingpage=_startingpage;}
+    int startingPage()const{return m_startingPageNumber;}
+    void setStartingPage(int _startingPageNumber){ m_startingPageNumber=m_startingPageNumber;}
 
     bool displayLink()const{return m_displayLink;}
     void setDisplayLink( bool b){ m_displayLink=b;}
 
-    bool displayComment()const {return m_displayComment;}
-    void setDisplayComment( bool b){ m_displayComment=b;}
-
     bool underlineLink()const {return m_underlineLink;}
     void setUnderlineLink( bool b){ m_underlineLink=b;}
+    
+	 bool displayComment()const {return m_displayComment;}
+    void setDisplayComment( bool b){ m_displayComment=b;}
 
-    bool displayFiedCode()const {return m_displayFieldCode;}
-    void setDisplayFiedCode( bool b){ m_displayFieldCode=b;}
+    bool displayFieldCode()const {return m_displayFieldCode;}
+    void setDisplayFieldCode( bool b){ m_displayFieldCode=b;}
 
 
     virtual void save( QDomElement &parentElem );
@@ -80,7 +80,7 @@ class KoVariableSettings
 
 
  private:
-    int m_startingpage;
+    int m_startingPageNumber;
     bool m_displayLink;
     bool m_displayComment;
     bool m_underlineLink;

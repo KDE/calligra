@@ -2179,7 +2179,7 @@ void KPrChangeVariableSettingsCommand::changeValue( bool b )
         m_doc->recalcVariables( VT_NOTE );
         break;
     case VS_DISPLAYFIELDCODE:
-        m_doc->getVariableCollection()->variableSetting()->setDisplayFiedCode(b);
+        m_doc->getVariableCollection()->variableSetting()->setDisplayFieldCode(b);
         m_doc->recalcVariables( VT_ALL );
         break;
     }

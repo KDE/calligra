@@ -221,7 +221,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     dcop = 0;
     dcopObject(); // build it
 
-    m_bDisplayFiedCode=false;
+    m_bDisplayFieldCode=false;
     // init
     afChoose = 0;
     styleDia = 0;
@@ -499,10 +499,10 @@ void KPresenterView::print( KPrinter &prt )
     int dpiX=0;
     int dpiY=0;
     int oldZoom = m_pKPresenterDoc->zoomHandler()->zoom();
-    bool displayFieldCode = m_pKPresenterDoc->getVariableCollection()->variableSetting()->displayFiedCode();
+    bool displayFieldCode = m_pKPresenterDoc->getVariableCollection()->variableSetting()->displayFieldCode();
     if ( displayFieldCode )
     {
-        m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+        m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
         m_pKPresenterDoc->recalcVariables(  VT_ALL );
     }
 
@@ -527,7 +527,7 @@ void KPresenterView::print( KPrinter &prt )
     zoomDocument(oldZoom);
     if ( displayFieldCode )
     {
-        m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFiedCode(true);
+        m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFieldCode(true);
         m_pKPresenterDoc->recalcVariables(  VT_ALL );
     }
 
@@ -1562,10 +1562,10 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 
         xOffsetSaved = canvasXOffset();
         yOffsetSaved = canvasYOffset();
-        m_bDisplayFiedCode = m_pKPresenterDoc->getVariableCollection()->variableSetting()->displayFiedCode();
-        if ( m_bDisplayFiedCode )
+        m_bDisplayFieldCode = m_pKPresenterDoc->getVariableCollection()->variableSetting()->displayFieldCode();
+        if ( m_bDisplayFieldCode )
         {
-            m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+            m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
             m_pKPresenterDoc->recalcVariables(  VT_ALL );
         }
 
@@ -1633,9 +1633,9 @@ void KPresenterView::screenStop()
         setCanvasXOffset( xOffsetSaved );
         setCanvasYOffset( yOffsetSaved );
 
-        if ( m_bDisplayFiedCode )
+        if ( m_bDisplayFieldCode )
         {
-            m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFiedCode(true);
+            m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFieldCode(true);
             m_pKPresenterDoc->recalcVariables(  VT_ALL );
         }
 

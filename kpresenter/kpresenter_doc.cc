@@ -1241,7 +1241,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             getVariableCollection()->variableSetting()->load(document);
             //by default display real variable value
             if ( !isReadWrite())
-                getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+                getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
 
         }
         else if(elem.tagName()=="BACKGROUND") {
@@ -2769,7 +2769,7 @@ void KPresenterDoc::slotRepaintVariable()
 
 void KPresenterDoc::slotDocumentInfoModifed()
 {
-    if (!getVariableCollection()->variableSetting()->displayFiedCode())
+    if (!getVariableCollection()->variableSetting()->displayFieldCode())
         recalcVariables( VT_FIELD );
 }
 

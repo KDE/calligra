@@ -456,14 +456,14 @@ void KWordDocIface::setDisplayComment( bool b)
 }
 
 
-bool KWordDocIface::displayFiedCode()const
+bool KWordDocIface::displayFieldCode()const
 {
-    return doc->getVariableCollection()->variableSetting()->displayFiedCode();
+    return doc->getVariableCollection()->variableSetting()->displayFieldCode();
 }
 
-void KWordDocIface::setDisplayFiedCode( bool b)
+void KWordDocIface::setDisplayFieldCode( bool b)
 {
-    doc->getVariableCollection()->variableSetting()->setDisplayFiedCode( b );
+    doc->getVariableCollection()->variableSetting()->setDisplayFieldCode( b );
     doc->recalcVariables(VT_ALL);
 }
 

@@ -1550,10 +1550,10 @@ void KWChangeVariableSettingsCommand::changeValue( bool b )
         m_doc->recalcVariables( VT_NOTE );
         break;
     case VS_DISPLAYFIELDCODE:
-        m_doc->getVariableCollection()->variableSetting()->setDisplayFiedCode(b);
+        m_doc->getVariableCollection()->variableSetting()->setDisplayFieldCode(b);
         //hack necessary otherwise footnote frameset is not refreshing
         //and footnote is not resize.
-        m_doc->displayFootNoteFiedCode();
+        m_doc->displayFootNoteFieldCode();
         m_doc->recalcVariables( VT_ALL );
         break;
     }

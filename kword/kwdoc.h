@@ -753,7 +753,7 @@ public:
     void clearIgnoreWordAll( );
     void updateTextFrameSetEdit();
     void changeFootNoteConfig();
-    void displayFootNoteFiedCode();
+    void displayFootNoteFieldCode();
 
 
     double tabStopValue() const { return m_tabStop; }

@@ -3385,10 +3385,10 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRea
     m_view->zoomDocument(zoom);
     if ( forceRealVariableValue )
     {
-        oldDisplayFieldValue = m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayFiedCode();
+        oldDisplayFieldValue = m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayFieldCode();
         if ( oldDisplayFieldValue )
         {
-            m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+            m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
             m_view->kPresenterDoc()->recalcVariables(  VT_ALL );
         }
     }
@@ -3434,7 +3434,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRea
     {
         if ( oldDisplayFieldValue )
         {
-            m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->setDisplayFiedCode(true);
+            m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->setDisplayFieldCode(true);
             m_view->kPresenterDoc()->recalcVariables(  VT_ALL );
         }
     }

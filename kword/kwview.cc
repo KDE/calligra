@@ -1620,10 +1620,10 @@ void KWView::setupPrinter( KPrinter &prt )
 
 void KWView::print( KPrinter &prt )
 {
-    bool displayFieldCode = m_doc->getVariableCollection()->variableSetting()->displayFiedCode();
+    bool displayFieldCode = m_doc->getVariableCollection()->variableSetting()->displayFieldCode();
     if ( displayFieldCode )
     {
-        m_doc->getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+        m_doc->getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
         m_doc->recalcVariables(  VT_ALL );
     }
 
@@ -1770,7 +1770,7 @@ void KWView::print( KPrinter &prt )
 
     if ( displayFieldCode )
     {
-        m_doc->getVariableCollection()->variableSetting()->setDisplayFiedCode(true);
+        m_doc->getVariableCollection()->variableSetting()->setDisplayFieldCode(true);
         m_doc->recalcVariables(  VT_ALL );
     }
     else

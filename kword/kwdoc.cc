@@ -1256,7 +1256,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     getVariableCollection()->variableSetting()->load(word );
     //by default display real variable value
     if ( !isReadWrite())
-        getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+        getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
 
     emit sigProgress(10);
 
@@ -4120,7 +4120,7 @@ void KWDocument::reorganizeGUI()
 
 void KWDocument::slotDocumentInfoModifed()
 {
-    if (!getVariableCollection()->variableSetting()->displayFiedCode())
+    if (!getVariableCollection()->variableSetting()->displayFieldCode())
         recalcVariables( VT_FIELD );
 }
 
@@ -4516,7 +4516,7 @@ void KWDocument::updateTextFrameSetEdit()
 
 }
 
-void KWDocument::displayFootNoteFiedCode()
+void KWDocument::displayFootNoteFieldCode()
 {
     QPtrListIterator<KoVariable> it( m_varColl->getVariables() );
     for ( ; it.current() ; ++it )

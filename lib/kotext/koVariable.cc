@@ -55,7 +55,7 @@ public:
 KoVariableSettings::KoVariableSettings()
 {
     d = new KoVariableSettingPrivate;
-    m_startingpage = 1;
+    m_startingPageNumber = 1;
     m_displayLink = true;
     m_displayComment = true;
     m_underlineLink = true;
@@ -105,9 +105,9 @@ void KoVariableSettings::save( QDomElement &parentElem )
 {
      QDomElement elem = parentElem.ownerDocument().createElement( "VARIABLESETTINGS" );
      parentElem.appendChild( elem );
-    if(m_startingpage!=1)
+    if(m_startingPageNumber!=1)
     {
-        elem.setAttribute( "startingPageNumber", m_startingpage );
+        elem.setAttribute( "startingPageNumber", m_startingPageNumber );
     }
     elem.setAttribute("displaylink",(int)m_displayLink);
     elem.setAttribute("underlinelink",(int)m_underlineLink);
@@ -143,7 +143,7 @@ void KoVariableSettings::load( QDomElement &elem )
     if (!e.isNull())
     {
         if(e.hasAttribute("startingPageNumber"))
-            m_startingpage = e.attribute("startingPageNumber").toInt();
+            m_startingPageNumber = e.attribute("startingPageNumber").toInt();
         if(e.hasAttribute("displaylink"))
             m_displayLink=(bool)e.attribute("displaylink").toInt();
         if(e.hasAttribute("underlinelink"))
@@ -587,7 +587,7 @@ QString KoVariable::text(bool realValue)
 {
     KoTextFormat *fmt = format();
     QString str;
-    if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
+    if (m_varColl->variableSetting()->displayFieldCode()&&!realValue)
         str = fieldCode();
     else
         str = m_varFormat->convert( m_varValue );
@@ -1175,7 +1175,7 @@ QString KoCustomVariable::fieldCode()
 
 QString KoCustomVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
+    if (m_varColl->variableSetting()->displayFieldCode()&&!realValue)
         return fieldCode();
     else
         return value();
@@ -1411,7 +1411,7 @@ QString KoFieldVariable::fieldCode()
 
 QString KoFieldVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
+    if (m_varColl->variableSetting()->displayFieldCode()&&!realValue)
         return fieldCode();
     else
         return value();
@@ -1634,7 +1634,7 @@ QString KoLinkVariable::fieldCode()
 
 QString KoLinkVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
+    if (m_varColl->variableSetting()->displayFieldCode()&&!realValue)
         return fieldCode();
     else
         return value();
@@ -1729,7 +1729,7 @@ QStringList KoNoteVariable::actionTexts()
 QString KoNoteVariable::text(bool realValue)
 {
     if (m_varColl->variableSetting()->displayComment() &&
-        m_varColl->variableSetting()->displayFiedCode()&&!realValue)
+        m_varColl->variableSetting()->displayFieldCode()&&!realValue)
         return fieldCode();
     else
         //for a note return just a "space" we can look at
