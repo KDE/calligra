@@ -933,188 +933,230 @@ void PenBrushCmd::execute()
     kpobject = objects.at( i );
     switch ( kpobject->getType() ) {
     case OT_LINE:
-      if(dynamic_cast<KPLineObject*>( kpobject ))
+      {
+      KPLineObject* obj=dynamic_cast<KPLineObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPLineObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPLineObject*>( kpobject )->setLineBegin( newPen.lineBegin );
-	  static_cast<KPLineObject*>( kpobject )->setLineEnd( newPen.lineEnd );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setLineBegin( newPen.lineBegin );
+	  obj->setLineEnd( newPen.lineEnd );
+	  doc->repaint( obj );
 	}
+      }
       break;
     case OT_RECT:
-      if(dynamic_cast<KPRectObject*>( kpobject ))
+      {
+      KPRectObject* obj=dynamic_cast<KPRectObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPRectObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPRectObject*>( kpobject )->setBrush( newBrush.brush );
-	  static_cast<KPRectObject*>( kpobject )->setFillType( newBrush.fillType );
-	  static_cast<KPRectObject*>( kpobject )->setGColor1( newBrush.gColor1 );
-	  static_cast<KPRectObject*>( kpobject )->setGColor2( newBrush.gColor2 );
-	  static_cast<KPRectObject*>( kpobject )->setGType( newBrush.gType );
-	  static_cast<KPRectObject*>( kpobject )->setGUnbalanced( newBrush.unbalanced );
-	  static_cast<KPRectObject*>( kpobject )->setGXFactor( newBrush.xfactor );
-	  static_cast<KPRectObject*>( kpobject )->setGYFactor( newBrush.yfactor );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setBrush( newBrush.brush );
+	  obj->setFillType( newBrush.fillType );
+	  obj->setGColor1( newBrush.gColor1 );
+	  obj->setGColor2( newBrush.gColor2 );
+	  obj->setGType( newBrush.gType );
+	  obj->setGUnbalanced( newBrush.unbalanced );
+	  obj->setGXFactor( newBrush.xfactor );
+	  obj->setGYFactor( newBrush.yfactor );
+	  doc->repaint( obj );
 	}
+      }
       break;
     case OT_ELLIPSE:
-      if(dynamic_cast<KPEllipseObject*>( kpobject ))
+      {
+      KPEllipseObject* obj=dynamic_cast<KPEllipseObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPEllipseObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPEllipseObject*>( kpobject )->setBrush( newBrush.brush );
-	  static_cast<KPEllipseObject*>( kpobject )->setFillType( newBrush.fillType );
-	  static_cast<KPEllipseObject*>( kpobject )->setGColor1( newBrush.gColor1 );
-	  static_cast<KPEllipseObject*>( kpobject )->setGColor2( newBrush.gColor2 );
-	  static_cast<KPEllipseObject*>( kpobject )->setGType( newBrush.gType );
-	  static_cast<KPEllipseObject*>( kpobject )->setGUnbalanced( newBrush.unbalanced );
-	  static_cast<KPEllipseObject*>( kpobject )->setGXFactor( newBrush.xfactor );
-	  static_cast<KPEllipseObject*>( kpobject )->setGYFactor( newBrush.yfactor );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setBrush( newBrush.brush );
+	  obj->setFillType( newBrush.fillType );
+	  obj->setGColor1( newBrush.gColor1 );
+	  obj->setGColor2( newBrush.gColor2 );
+	  obj->setGType( newBrush.gType );
+	  obj->setGUnbalanced( newBrush.unbalanced );
+	  obj->setGXFactor( newBrush.xfactor );
+	  obj->setGYFactor( newBrush.yfactor );
+	  doc->repaint( obj );
 	}
+      }
       break;
     case OT_AUTOFORM:
-      if(dynamic_cast<KPAutoformObject*>( kpobject ))
+      {
+      KPAutoformObject* obj=dynamic_cast<KPAutoformObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPAutoformObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPAutoformObject*>( kpobject )->setBrush( newBrush.brush );
-	  static_cast<KPAutoformObject*>( kpobject )->setLineBegin( newPen.lineBegin );
-	  static_cast<KPAutoformObject*>( kpobject )->setLineEnd( newPen.lineEnd );
-	  static_cast<KPAutoformObject*>( kpobject )->setFillType( newBrush.fillType );
-	  static_cast<KPAutoformObject*>( kpobject )->setGColor1( newBrush.gColor1 );
-	  static_cast<KPAutoformObject*>( kpobject )->setGColor2( newBrush.gColor2 );
-	  static_cast<KPAutoformObject*>( kpobject )->setGType( newBrush.gType );
-	  static_cast<KPAutoformObject*>( kpobject )->setGUnbalanced( newBrush.unbalanced );
-	  static_cast<KPAutoformObject*>( kpobject )->setGXFactor( newBrush.xfactor );
-	  static_cast<KPAutoformObject*>( kpobject )->setGYFactor( newBrush.yfactor );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setBrush( newBrush.brush );
+	  obj->setLineBegin( newPen.lineBegin );
+	  obj->setLineEnd( newPen.lineEnd );
+	  obj->setFillType( newBrush.fillType );
+	  obj->setGColor1( newBrush.gColor1 );
+	  obj->setGColor2( newBrush.gColor2 );
+	  obj->setGType( newBrush.gType );
+	  obj->setGUnbalanced( newBrush.unbalanced );
+	  obj->setGXFactor( newBrush.xfactor );
+	  obj->setGYFactor( newBrush.yfactor );
+	  doc->repaint( obj );
 	}
+      }
       break;
     case OT_PIE:
-      if(dynamic_cast<KPPieObject*>( kpobject ))
+      {
+      KPPieObject* obj=dynamic_cast<KPPieObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPPieObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPPieObject*>( kpobject )->setBrush( newBrush.brush );
-	  static_cast<KPPieObject*>( kpobject )->setLineBegin( newPen.lineBegin );
-	  static_cast<KPPieObject*>( kpobject )->setLineEnd( newPen.lineEnd );
-	  static_cast<KPPieObject*>( kpobject )->setFillType( newBrush.fillType );
-	  static_cast<KPPieObject*>( kpobject )->setGColor1( newBrush.gColor1 );
-	  static_cast<KPPieObject*>( kpobject )->setGColor2( newBrush.gColor2 );
-	  static_cast<KPPieObject*>( kpobject )->setGType( newBrush.gType );
-	  static_cast<KPPieObject*>( kpobject )->setGUnbalanced( newBrush.unbalanced );
-	  static_cast<KPPieObject*>( kpobject )->setGXFactor( newBrush.xfactor );
-	  static_cast<KPPieObject*>( kpobject )->setGYFactor( newBrush.yfactor );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setBrush( newBrush.brush );
+	  obj->setLineBegin( newPen.lineBegin );
+	  obj->setLineEnd( newPen.lineEnd );
+	  obj->setFillType( newBrush.fillType );
+	  obj->setGColor1( newBrush.gColor1 );
+	  obj->setGColor2( newBrush.gColor2 );
+	  obj->setGType( newBrush.gType );
+	  obj->setGUnbalanced( newBrush.unbalanced );
+	  obj->setGXFactor( newBrush.xfactor );
+	  obj->setGYFactor( newBrush.yfactor );
+	  doc->repaint( obj );
 	}
+      }
       break;
     case OT_PART:
-      if(dynamic_cast<KPPartObject*>( kpobject ))
+      {
+      KPPartObject* obj=dynamic_cast<KPPartObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPPartObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPPartObject*>( kpobject )->setBrush( newBrush.brush );
-	  static_cast<KPPartObject*>( kpobject )->setFillType( newBrush.fillType );
-	  static_cast<KPPartObject*>( kpobject )->setGColor1( newBrush.gColor1 );
-	  static_cast<KPPartObject*>( kpobject )->setGColor2( newBrush.gColor2 );
-	  static_cast<KPPartObject*>( kpobject )->setGType( newBrush.gType );
-	  static_cast<KPPartObject*>( kpobject )->setGUnbalanced( newBrush.unbalanced );
-	  static_cast<KPPartObject*>( kpobject )->setGXFactor( newBrush.xfactor );
-	  static_cast<KPPartObject*>( kpobject )->setGYFactor( newBrush.yfactor );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setBrush( newBrush.brush );
+	  obj->setFillType( newBrush.fillType );
+	  obj->setGColor1( newBrush.gColor1 );
+	  obj->setGColor2( newBrush.gColor2 );
+	  obj->setGType( newBrush.gType );
+	  obj->setGUnbalanced( newBrush.unbalanced );
+	  obj->setGXFactor( newBrush.xfactor );
+	  obj->setGYFactor( newBrush.yfactor );
+	  doc->repaint( obj );
 	}
+      }
       break;
     case OT_TEXT:
-      if(dynamic_cast<KPTextObject*>( kpobject ))
+      {
+      KPTextObject* obj=dynamic_cast<KPTextObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPTextObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPTextObject*>( kpobject )->setBrush( newBrush.brush );
-	  static_cast<KPTextObject*>( kpobject )->setFillType( newBrush.fillType );
-	  static_cast<KPTextObject*>( kpobject )->setGColor1( newBrush.gColor1 );
-	  static_cast<KPTextObject*>( kpobject )->setGColor2( newBrush.gColor2 );
-	  static_cast<KPTextObject*>( kpobject )->setGType( newBrush.gType );
-	  static_cast<KPTextObject*>( kpobject )->setGUnbalanced( newBrush.unbalanced );
-	  static_cast<KPTextObject*>( kpobject )->setGXFactor( newBrush.xfactor );
-	  static_cast<KPTextObject*>( kpobject )->setGYFactor( newBrush.yfactor );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setBrush( newBrush.brush );
+	  obj->setFillType( newBrush.fillType );
+	  obj->setGColor1( newBrush.gColor1 );
+	  obj->setGColor2( newBrush.gColor2 );
+	  obj->setGType( newBrush.gType );
+	  obj->setGUnbalanced( newBrush.unbalanced );
+	  obj->setGXFactor( newBrush.xfactor );
+	  obj->setGYFactor( newBrush.yfactor );
+	  doc->repaint( obj );
 	}
+      }
       break;
     case OT_PICTURE:
-      if(dynamic_cast<KPPixmapObject*>( kpobject ))
+      {
+      KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPPixmapObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPPixmapObject*>( kpobject )->setBrush( newBrush.brush );
-	  static_cast<KPPixmapObject*>( kpobject )->setFillType( newBrush.fillType );
-	  static_cast<KPPixmapObject*>( kpobject )->setGColor1( newBrush.gColor1 );
-	  static_cast<KPPixmapObject*>( kpobject )->setGColor2( newBrush.gColor2 );
-	  static_cast<KPPixmapObject*>( kpobject )->setGType( newBrush.gType );
-	  static_cast<KPPixmapObject*>( kpobject )->setGUnbalanced( newBrush.unbalanced );
-	  static_cast<KPPixmapObject*>( kpobject )->setGXFactor( newBrush.xfactor );
-	  static_cast<KPPixmapObject*>( kpobject )->setGYFactor( newBrush.yfactor );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setBrush( newBrush.brush );
+	  obj->setFillType( newBrush.fillType );
+	  obj->setGColor1( newBrush.gColor1 );
+	  obj->setGColor2( newBrush.gColor2 );
+	  obj->setGType( newBrush.gType );
+	  obj->setGUnbalanced( newBrush.unbalanced );
+	  obj->setGXFactor( newBrush.xfactor );
+	  obj->setGYFactor( newBrush.yfactor );
+	  doc->repaint( obj );
 	}
+      }
       break;
     case OT_CLIPART:
-      if(dynamic_cast<KPClipartObject*>( kpobject ))
+    {
+        KPClipartObject* obj=dynamic_cast<KPClipartObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPClipartObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPClipartObject*>( kpobject )->setBrush( newBrush.brush );
-	  static_cast<KPClipartObject*>( kpobject )->setFillType( newBrush.fillType );
-	  static_cast<KPClipartObject*>( kpobject )->setGColor1( newBrush.gColor1 );
-	  static_cast<KPClipartObject*>( kpobject )->setGColor2( newBrush.gColor2 );
-	  static_cast<KPClipartObject*>( kpobject )->setGType( newBrush.gType );
-	  static_cast<KPClipartObject*>( kpobject )->setGUnbalanced( newBrush.unbalanced );
-	  static_cast<KPClipartObject*>( kpobject )->setGXFactor( newBrush.xfactor );
-	  static_cast<KPClipartObject*>( kpobject )->setGYFactor( newBrush.yfactor );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setBrush( newBrush.brush );
+	  obj->setFillType( newBrush.fillType );
+	  obj->setGColor1( newBrush.gColor1 );
+	  obj->setGColor2( newBrush.gColor2 );
+	  obj->setGType( newBrush.gType );
+	  obj->setGUnbalanced( newBrush.unbalanced );
+	  obj->setGXFactor( newBrush.xfactor );
+	  obj->setGYFactor( newBrush.yfactor );
+	  doc->repaint( obj );
 	}
+    }
       break;
     case OT_FREEHAND:
-      if(dynamic_cast<KPFreehandObject*>( kpobject ))
+    {
+        KPFreehandObject *obj=dynamic_cast<KPFreehandObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPFreehandObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPFreehandObject*>( kpobject )->setLineBegin( newPen.lineBegin );
-	  static_cast<KPFreehandObject*>( kpobject )->setLineEnd( newPen.lineEnd );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setLineBegin( newPen.lineBegin );
+	  obj->setLineEnd( newPen.lineEnd );
+	  doc->repaint( obj );
 	}
+    }
       break;
     case OT_POLYLINE:
-      if(dynamic_cast<KPPolylineObject*>( kpobject ))
+    {
+        KPPolylineObject *obj=dynamic_cast<KPPolylineObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPPolylineObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPPolylineObject*>( kpobject )->setLineBegin( newPen.lineBegin );
-	  static_cast<KPPolylineObject*>( kpobject )->setLineEnd( newPen.lineEnd );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setLineBegin( newPen.lineBegin );
+	  obj->setLineEnd( newPen.lineEnd );
+	  doc->repaint( obj );
 	}
+    }
       break;
     case OT_QUADRICBEZIERCURVE:
-      if(dynamic_cast<KPQuadricBezierCurveObject*>( kpobject ))
+    {
+        KPQuadricBezierCurveObject *obj=dynamic_cast<KPQuadricBezierCurveObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPQuadricBezierCurveObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPQuadricBezierCurveObject*>( kpobject )->setLineBegin( newPen.lineBegin );
-	  static_cast<KPQuadricBezierCurveObject*>( kpobject )->setLineEnd( newPen.lineEnd );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setLineBegin( newPen.lineBegin );
+	  obj->setLineEnd( newPen.lineEnd );
+	  doc->repaint( obj );
 	}
+    }
       break;
     case OT_CUBICBEZIERCURVE:
-      if(dynamic_cast<KPCubicBezierCurveObject*>( kpobject ))
+    {
+        KPCubicBezierCurveObject* obj=dynamic_cast<KPCubicBezierCurveObject*>( kpobject );
+      if(obj)
 	{
-	  static_cast<KPCubicBezierCurveObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPCubicBezierCurveObject*>( kpobject )->setLineBegin( newPen.lineBegin );
-	  static_cast<KPCubicBezierCurveObject*>( kpobject )->setLineEnd( newPen.lineEnd );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setLineBegin( newPen.lineBegin );
+	  obj->setLineEnd( newPen.lineEnd );
+	  doc->repaint( obj );
 	}
+    }
       break;
     case OT_POLYGON:
-      if(dynamic_cast<KPPolygonObject*>( kpobject ))
+    {
+        KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( kpobject );
+        if(obj)
 	{
-	  static_cast<KPPolygonObject*>( kpobject )->setPen( newPen.pen );
-	  static_cast<KPPolygonObject*>( kpobject )->setBrush( newBrush.brush );
-	  static_cast<KPPolygonObject*>( kpobject )->setFillType( newBrush.fillType );
-	  static_cast<KPPolygonObject*>( kpobject )->setGColor1( newBrush.gColor1 );
-	  static_cast<KPPolygonObject*>( kpobject )->setGColor2( newBrush.gColor2 );
-	  static_cast<KPPolygonObject*>( kpobject )->setGType( newBrush.gType );
-	  static_cast<KPPolygonObject*>( kpobject )->setGUnbalanced( newBrush.unbalanced );
-	  static_cast<KPPolygonObject*>( kpobject )->setGXFactor( newBrush.xfactor );
-	  static_cast<KPPolygonObject*>( kpobject )->setGYFactor( newBrush.yfactor );
-	  doc->repaint( kpobject );
+	  obj->setPen( newPen.pen );
+	  obj->setBrush( newBrush.brush );
+	  obj->setFillType( newBrush.fillType );
+	  obj->setGColor1( newBrush.gColor1 );
+	  obj->setGColor2( newBrush.gColor2 );
+	  obj->setGType( newBrush.gType );
+	  obj->setGUnbalanced( newBrush.unbalanced );
+	  obj->setGXFactor( newBrush.xfactor );
+	  obj->setGYFactor( newBrush.yfactor );
+	  doc->repaint( obj );
 	}
+    }
       break;
     default: break;
     }
@@ -1127,238 +1169,253 @@ void PenBrushCmd::execute()
 /*====================== unexecute ===============================*/
 void PenBrushCmd::unexecute()
 {
-  KPObject *kpobject = 0L;
+    KPObject *kpobject = 0L;
 
-  for ( unsigned int i = 0; i < objects.count(); i++ ) {
-    kpobject = objects.at( i );
-    switch ( kpobject->getType() ) {
-    case OT_LINE: {
-      if ( oldPen.count() > i ) {
-	if(dynamic_cast<KPLineObject*>( kpobject ))
-	  {
-	    static_cast<KPLineObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	    static_cast<KPLineObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
-	    static_cast<KPLineObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
-	    doc->repaint( kpobject );
-	  }
-      }
-    } break;
-    case OT_RECT: {
-      if(dynamic_cast<KPRectObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i )
-	    static_cast<KPRectObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	  if ( oldBrush.count() > i ) {
-	    static_cast<KPRectObject*>( kpobject )->setBrush( oldBrush.at( i )->brush );
-	    static_cast<KPRectObject*>( kpobject )->setFillType( oldBrush.at( i )->fillType );
-	    static_cast<KPRectObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
-	    static_cast<KPRectObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
-	    static_cast<KPRectObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
-	    static_cast<KPRectObject*>( kpobject )->setGUnbalanced( oldBrush.at( i )->unbalanced );
-	    static_cast<KPRectObject*>( kpobject )->setGXFactor( oldBrush.at( i )->xfactor );
-	    static_cast<KPRectObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
-	  }
-	  doc->repaint( kpobject );
-	}
-    } break;
-    case OT_ELLIPSE: {
-      if(dynamic_cast<KPEllipseObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i )
-	    static_cast<KPEllipseObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	  if ( oldBrush.count() > i ) {
-	    static_cast<KPEllipseObject*>( kpobject )->setBrush( oldBrush.at( i )->brush );
-	    static_cast<KPEllipseObject*>( kpobject )->setFillType( oldBrush.at( i )->fillType );
-	    static_cast<KPEllipseObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
-	    static_cast<KPEllipseObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
-	    static_cast<KPEllipseObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
-	    static_cast<KPEllipseObject*>( kpobject )->setGUnbalanced( oldBrush.at( i )->unbalanced );
-	    static_cast<KPEllipseObject*>( kpobject )->setGXFactor( oldBrush.at( i )->xfactor );
-	    static_cast<KPEllipseObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
-	  }
-	  doc->repaint( kpobject );
-	}
-    } break;
-    case OT_AUTOFORM: {
-      if(dynamic_cast<KPAutoformObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i )
-	    static_cast<KPAutoformObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	  if ( oldBrush.count() > i )
-	    static_cast<KPAutoformObject*>( kpobject )->setBrush( oldBrush.at( i )->brush );
-	  if ( oldPen.count() > i ) {
-	    static_cast<KPAutoformObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
-	    static_cast<KPAutoformObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
-	  }
-	  if ( oldBrush.count() > i ) {
-	    static_cast<KPAutoformObject*>( kpobject )->setFillType( oldBrush.at( i )->fillType );
-	    static_cast<KPAutoformObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
-	    static_cast<KPAutoformObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
-	    static_cast<KPAutoformObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
-	    static_cast<KPAutoformObject*>( kpobject )->setGUnbalanced( oldBrush.at( i )->unbalanced );
-	    static_cast<KPAutoformObject*>( kpobject )->setGXFactor( oldBrush.at( i )->xfactor );
-	    static_cast<KPAutoformObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
-	  }
-	  doc->repaint( kpobject );
-	}
-    } break;
-    case OT_PIE: {
-      if(dynamic_cast<KPPieObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i )
-	    static_cast<KPPieObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	  if ( oldBrush.count() > i ) {
-	    static_cast<KPPieObject*>( kpobject )->setBrush( oldBrush.at( i )->brush );
-	    static_cast<KPPieObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
-	    static_cast<KPPieObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
-	    static_cast<KPPieObject*>( kpobject )->setFillType( oldBrush.at( i )->fillType );
-	    static_cast<KPPieObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
-	    static_cast<KPPieObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
-	    static_cast<KPPieObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
-	    static_cast<KPPieObject*>( kpobject )->setGUnbalanced( oldBrush.at( i )->unbalanced );
-	    static_cast<KPPieObject*>( kpobject )->setGXFactor( oldBrush.at( i )->xfactor );
-	    static_cast<KPPieObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
-	  }
-	}
-      doc->repaint( kpobject );
-    } break;
-    case OT_PART: {
-      if(static_cast<KPPartObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i )
-	    static_cast<KPPartObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	  if ( oldBrush.count() > i ) {
-	    static_cast<KPPartObject*>( kpobject )->setBrush( oldBrush.at( i )->brush );
-	    static_cast<KPPartObject*>( kpobject )->setFillType( oldBrush.at( i )->fillType );
-	    static_cast<KPPartObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
-	    static_cast<KPPartObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
-	    static_cast<KPPartObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
-	    static_cast<KPPartObject*>( kpobject )->setGUnbalanced( oldBrush.at( i )->unbalanced );
-	    static_cast<KPPartObject*>( kpobject )->setGXFactor( oldBrush.at( i )->xfactor );
-	    static_cast<KPPartObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
-	  }
-	  doc->repaint( kpobject );
-	}
-    } break;
-    case OT_TEXT: {
-      if(dynamic_cast<KPTextObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i )
-	    static_cast<KPTextObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	  if ( oldBrush.count() > i ) {
-	    static_cast<KPTextObject*>( kpobject )->setBrush( oldBrush.at( i )->brush );
-	    static_cast<KPTextObject*>( kpobject )->setFillType( oldBrush.at( i )->fillType );
-	    static_cast<KPTextObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
-	    static_cast<KPTextObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
-	    static_cast<KPTextObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
-	    static_cast<KPTextObject*>( kpobject )->setGUnbalanced( oldBrush.at( i )->unbalanced );
-	    static_cast<KPTextObject*>( kpobject )->setGXFactor( oldBrush.at( i )->xfactor );
-	    static_cast<KPTextObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
-	  }
-	  doc->repaint( kpobject );
-	}
-    } break;
-    case OT_PICTURE: {
-      if(dynamic_cast<KPPixmapObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i )
-	    static_cast<KPPixmapObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	  if ( oldBrush.count() > i ) {
-	    static_cast<KPPixmapObject*>( kpobject )->setBrush( oldBrush.at( i )->brush );
-	    static_cast<KPPixmapObject*>( kpobject )->setFillType( oldBrush.at( i )->fillType );
-	    static_cast<KPPixmapObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
-	    static_cast<KPPixmapObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
-	    static_cast<KPPixmapObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
-	    static_cast<KPPixmapObject*>( kpobject )->setGUnbalanced( oldBrush.at( i )->unbalanced );
-	    static_cast<KPPixmapObject*>( kpobject )->setGXFactor( oldBrush.at( i )->xfactor );
-	    static_cast<KPPixmapObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
-	  }
-	  doc->repaint( kpobject );
-	}
-    } break;
-    case OT_CLIPART: {
-      if(dynamic_cast<KPClipartObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i )
-	    static_cast<KPClipartObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	  if ( oldBrush.count() > i ) {
-	    static_cast<KPClipartObject*>( kpobject )->setBrush( oldBrush.at( i )->brush );
-	    static_cast<KPClipartObject*>( kpobject )->setFillType( oldBrush.at( i )->fillType );
-	    static_cast<KPClipartObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
-	    static_cast<KPClipartObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
-	    static_cast<KPClipartObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
-	    static_cast<KPClipartObject*>( kpobject )->setGUnbalanced( oldBrush.at( i )->unbalanced );
-	    static_cast<KPClipartObject*>( kpobject )->setGXFactor( oldBrush.at( i )->xfactor );
-	    static_cast<KPClipartObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
-	  }
-	  doc->repaint( kpobject );
-	}
-    } break;
-    case OT_FREEHAND: {
-      if(dynamic_cast<KPFreehandObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i ) {
-	    static_cast<KPFreehandObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	    static_cast<KPFreehandObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
-	    static_cast<KPFreehandObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
-	    doc->repaint( kpobject );
-	  }
-	}
-    } break;
-    case OT_POLYLINE: {
-      if(dynamic_cast<KPPolylineObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i ) {
-	    static_cast<KPPolylineObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	    static_cast<KPPolylineObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
-	    static_cast<KPPolylineObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
-	    doc->repaint( kpobject );
-	  }
-	}
-    } break;
-    case OT_QUADRICBEZIERCURVE: {
-      if(dynamic_cast<KPQuadricBezierCurveObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i ) {
-	    static_cast<KPQuadricBezierCurveObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	    static_cast<KPQuadricBezierCurveObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
-	    static_cast<KPQuadricBezierCurveObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
-	    doc->repaint( kpobject );
-	  }
-	}
-    } break;
-    case OT_CUBICBEZIERCURVE: {
-      if(dynamic_cast<KPCubicBezierCurveObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i ) {
-	    static_cast<KPCubicBezierCurveObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	    static_cast<KPCubicBezierCurveObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
-	    static_cast<KPCubicBezierCurveObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
-	    doc->repaint( kpobject );
-	  }
-	}
-    } break;
-    case OT_POLYGON: {
-      if(dynamic_cast<KPPolygonObject*>( kpobject ))
-	{
-	  if ( oldPen.count() > i )
-	    static_cast<KPPolygonObject*>( kpobject )->setPen( oldPen.at( i )->pen );
-	  if ( oldBrush.count() > i ) {
-	    static_cast<KPPolygonObject*>( kpobject )->setBrush( oldBrush.at( i )->brush );
-	    static_cast<KPPolygonObject*>( kpobject )->setFillType( oldBrush.at( i )->fillType );
-	    static_cast<KPPolygonObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
-	    static_cast<KPPolygonObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
-	    static_cast<KPPolygonObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
-	    static_cast<KPPolygonObject*>( kpobject )->setGUnbalanced( oldBrush.at( i )->unbalanced );
-	    static_cast<KPPolygonObject*>( kpobject )->setGXFactor( oldBrush.at( i )->xfactor );
-	    static_cast<KPPolygonObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
-	  }
-	  doc->repaint( kpobject );
-	}
-    } break;
-    default: break;
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+        kpobject = objects.at( i );
+        switch ( kpobject->getType() ) {
+        case OT_LINE: {
+            KPLineObject* obj=dynamic_cast<KPLineObject*>( kpobject );
+            if ( oldPen.count() > i ) {
+                if(obj)
+                {
+                    obj->setPen( oldPen.at( i )->pen );
+                    obj->setLineBegin( oldPen.at( i )->lineBegin );
+                    obj->setLineEnd( oldPen.at( i )->lineEnd );
+                    doc->repaint( obj );
+                }
+            }
+        } break;
+        case OT_RECT: {
+            KPRectObject *obj=dynamic_cast<KPRectObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i )
+                    obj->setPen( oldPen.at( i )->pen );
+                if ( oldBrush.count() > i ) {
+                    obj->setBrush( oldBrush.at( i )->brush );
+                    obj->setFillType( oldBrush.at( i )->fillType );
+                    obj->setGColor1( oldBrush.at( i )->gColor1 );
+                    obj->setGColor2( oldBrush.at( i )->gColor2 );
+                    obj->setGType( oldBrush.at( i )->gType );
+                    obj->setGUnbalanced( oldBrush.at( i )->unbalanced );
+                    obj->setGXFactor( oldBrush.at( i )->xfactor );
+                    obj->setGYFactor( oldBrush.at( i )->yfactor );
+                }
+                doc->repaint( obj );
+            }
+        } break;
+        case OT_ELLIPSE: {
+            KPEllipseObject*obj=dynamic_cast<KPEllipseObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i )
+                    obj->setPen( oldPen.at( i )->pen );
+                if ( oldBrush.count() > i ) {
+                    obj->setBrush( oldBrush.at( i )->brush );
+                    obj->setFillType( oldBrush.at( i )->fillType );
+                    obj->setGColor1( oldBrush.at( i )->gColor1 );
+                    obj->setGColor2( oldBrush.at( i )->gColor2 );
+                    obj->setGType( oldBrush.at( i )->gType );
+                    obj->setGUnbalanced( oldBrush.at( i )->unbalanced );
+                    obj->setGXFactor( oldBrush.at( i )->xfactor );
+                    obj->setGYFactor( oldBrush.at( i )->yfactor );
+                }
+                doc->repaint( obj );
+            }
+        } break;
+        case OT_AUTOFORM: {
+            KPAutoformObject* obj=dynamic_cast<KPAutoformObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i )
+                    obj->setPen( oldPen.at( i )->pen );
+                if ( oldBrush.count() > i )
+                    obj->setBrush( oldBrush.at( i )->brush );
+                if ( oldPen.count() > i ) {
+                    obj->setLineBegin( oldPen.at( i )->lineBegin );
+                    obj->setLineEnd( oldPen.at( i )->lineEnd );
+                }
+                if ( oldBrush.count() > i ) {
+                    obj->setFillType( oldBrush.at( i )->fillType );
+                    obj->setGColor1( oldBrush.at( i )->gColor1 );
+                    obj->setGColor2( oldBrush.at( i )->gColor2 );
+                    obj->setGType( oldBrush.at( i )->gType );
+                    obj->setGUnbalanced( oldBrush.at( i )->unbalanced );
+                    obj->setGXFactor( oldBrush.at( i )->xfactor );
+                    obj->setGYFactor( oldBrush.at( i )->yfactor );
+                }
+                doc->repaint( obj );
+            }
+        } break;
+        case OT_PIE: {
+            KPPieObject* obj=dynamic_cast<KPPieObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i )
+                    obj->setPen( oldPen.at( i )->pen );
+                if ( oldBrush.count() > i ) {
+                    obj->setBrush( oldBrush.at( i )->brush );
+                    obj->setLineBegin( oldPen.at( i )->lineBegin );
+                    obj->setLineEnd( oldPen.at( i )->lineEnd );
+                    obj->setFillType( oldBrush.at( i )->fillType );
+                    obj->setGColor1( oldBrush.at( i )->gColor1 );
+                    obj->setGColor2( oldBrush.at( i )->gColor2 );
+                    obj->setGType( oldBrush.at( i )->gType );
+                    obj->setGUnbalanced( oldBrush.at( i )->unbalanced );
+                    obj->setGXFactor( oldBrush.at( i )->xfactor );
+                    obj->setGYFactor( oldBrush.at( i )->yfactor );
+                }
+            }
+            doc->repaint( obj );
+        } break;
+        case OT_PART: {
+            KPPartObject* obj=dynamic_cast<KPPartObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i )
+                    obj->setPen( oldPen.at( i )->pen );
+                if ( oldBrush.count() > i ) {
+                    obj->setBrush( oldBrush.at( i )->brush );
+                    obj->setFillType( oldBrush.at( i )->fillType );
+                    obj->setGColor1( oldBrush.at( i )->gColor1 );
+                    obj->setGColor2( oldBrush.at( i )->gColor2 );
+                    obj->setGType( oldBrush.at( i )->gType );
+                    obj->setGUnbalanced( oldBrush.at( i )->unbalanced );
+                    obj->setGXFactor( oldBrush.at( i )->xfactor );
+                    obj->setGYFactor( oldBrush.at( i )->yfactor );
+                }
+                doc->repaint( obj );
+            }
+        } break;
+        case OT_TEXT: {
+            KPTextObject* obj=dynamic_cast<KPTextObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i )
+                    obj->setPen( oldPen.at( i )->pen );
+                if ( oldBrush.count() > i ) {
+                    obj->setBrush( oldBrush.at( i )->brush );
+                    obj->setFillType( oldBrush.at( i )->fillType );
+                    obj->setGColor1( oldBrush.at( i )->gColor1 );
+                    obj->setGColor2( oldBrush.at( i )->gColor2 );
+                    obj->setGType( oldBrush.at( i )->gType );
+                    obj->setGUnbalanced( oldBrush.at( i )->unbalanced );
+                    obj->setGXFactor( oldBrush.at( i )->xfactor );
+                    obj->setGYFactor( oldBrush.at( i )->yfactor );
+                }
+                doc->repaint( obj );
+            }
+        } break;
+        case OT_PICTURE: {
+            KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i )
+                    obj->setPen( oldPen.at( i )->pen );
+                if ( oldBrush.count() > i ) {
+                    obj->setBrush( oldBrush.at( i )->brush );
+                    obj->setFillType( oldBrush.at( i )->fillType );
+                    obj->setGColor1( oldBrush.at( i )->gColor1 );
+                    obj->setGColor2( oldBrush.at( i )->gColor2 );
+                    obj->setGType( oldBrush.at( i )->gType );
+                    obj->setGUnbalanced( oldBrush.at( i )->unbalanced );
+                    obj->setGXFactor( oldBrush.at( i )->xfactor );
+                    obj->setGYFactor( oldBrush.at( i )->yfactor );
+                }
+                doc->repaint( obj );
+            }
+        } break;
+        case OT_CLIPART: {
+            KPClipartObject* obj=dynamic_cast<KPClipartObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i )
+                    obj->setPen( oldPen.at( i )->pen );
+                if ( oldBrush.count() > i ) {
+                    obj->setBrush( oldBrush.at( i )->brush );
+                    obj->setFillType( oldBrush.at( i )->fillType );
+                    obj->setGColor1( oldBrush.at( i )->gColor1 );
+                    obj->setGColor2( oldBrush.at( i )->gColor2 );
+                    obj->setGType( oldBrush.at( i )->gType );
+                    obj->setGUnbalanced( oldBrush.at( i )->unbalanced );
+                    obj->setGXFactor( oldBrush.at( i )->xfactor );
+                    obj->setGYFactor( oldBrush.at( i )->yfactor );
+                }
+                doc->repaint( obj );
+            }
+        } break;
+        case OT_FREEHAND: {
+            KPFreehandObject * obj=dynamic_cast<KPFreehandObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i ) {
+                    obj->setPen( oldPen.at( i )->pen );
+                    obj->setLineBegin( oldPen.at( i )->lineBegin );
+                    obj->setLineEnd( oldPen.at( i )->lineEnd );
+                    doc->repaint( obj );
+                }
+            }
+        } break;
+        case OT_POLYLINE: {
+            KPPolylineObject *obj=dynamic_cast<KPPolylineObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i ) {
+                    obj->setPen( oldPen.at( i )->pen );
+                    obj->setLineBegin( oldPen.at( i )->lineBegin );
+                    obj->setLineEnd( oldPen.at( i )->lineEnd );
+                    doc->repaint( obj );
+                }
+            }
+        } break;
+        case OT_QUADRICBEZIERCURVE: {
+            KPQuadricBezierCurveObject* obj=dynamic_cast<KPQuadricBezierCurveObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i ) {
+                    obj->setPen( oldPen.at( i )->pen );
+                    obj->setLineBegin( oldPen.at( i )->lineBegin );
+                    obj->setLineEnd( oldPen.at( i )->lineEnd );
+                    doc->repaint( obj );
+                }
+            }
+        }
+            break;
+        case OT_CUBICBEZIERCURVE: {
+            KPCubicBezierCurveObject *obj=dynamic_cast<KPCubicBezierCurveObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i ) {
+                    obj->setPen( oldPen.at( i )->pen );
+                    obj->setLineBegin( oldPen.at( i )->lineBegin );
+                    obj->setLineEnd( oldPen.at( i )->lineEnd );
+                    doc->repaint( obj );
+                }
+            }
+        } break;
+        case OT_POLYGON: {
+            KPPolygonObject* obj=dynamic_cast<KPPolygonObject*>( kpobject );
+            if(obj)
+            {
+                if ( oldPen.count() > i )
+                    obj->setPen( oldPen.at( i )->pen );
+                if ( oldBrush.count() > i ) {
+                    obj->setBrush( oldBrush.at( i )->brush );
+                    obj->setFillType( oldBrush.at( i )->fillType );
+                    obj->setGColor1( oldBrush.at( i )->gColor1 );
+                    obj->setGColor2( oldBrush.at( i )->gColor2 );
+                    obj->setGType( oldBrush.at( i )->gType );
+                    obj->setGUnbalanced( oldBrush.at( i )->unbalanced );
+                    obj->setGXFactor( oldBrush.at( i )->xfactor );
+                    obj->setGYFactor( oldBrush.at( i )->yfactor );
+                }
+                doc->repaint( obj );
+            }
+        } break;
+        default: break;
+        }
     }
-  }
 }
 
 
@@ -1504,7 +1561,7 @@ void PieValueCmd::execute()
 	  static_cast<KPPieObject*>( objects.at( i ) )->setPieType( newValues.pieType );
 	  static_cast<KPPieObject*>( objects.at( i ) )->setPieAngle( newValues.pieAngle );
 	  static_cast<KPPieObject*>( objects.at( i ) )->setPieLength( newValues.pieLength );
-    
+
 	}
 
     }
@@ -1521,7 +1578,7 @@ void PieValueCmd::unexecute()
 	  static_cast<KPPieObject*>( objects.at( i ) )->setPieType( oldValues.at( i )->pieType );
 	  static_cast<KPPieObject*>( objects.at( i ) )->setPieAngle( oldValues.at( i )->pieAngle );
 	  static_cast<KPPieObject*>( objects.at( i ) )->setPieLength( oldValues.at( i )->pieLength );
-    
+
 	}
     }
   doc->repaint( false );
