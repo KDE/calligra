@@ -1,5 +1,6 @@
 Changes from 1.1 to 1.2
 =======================
 - bug fixes :-)
+- support up to 2^15 columns
 - add support for spell-check
 - move functions in kspread_interpreter into several kspread_functions_*.cc
