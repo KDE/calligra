@@ -4875,8 +4875,6 @@ void KWView::spellCheckerFinished()
     bool kspellNotConfigured=false;
     if (status == KSpell::Error)
     {
-        KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
-                                      "Please make sure you have ISpell properly configured and in your PATH."));
         kspellNotConfigured=true;
     }
     else if (status == KSpell::Crashed)
@@ -4903,10 +4901,18 @@ void KWView::spellCheckerFinished()
         edit->drawCursor( TRUE );
     if(kspellNotConfigured)
     {
-        KWConfig configDia( this );
-        configDia.openPage( KWConfig::KW_KSPELL);
-        configDia.exec();
+        configureSpellChecker();
     }
+}
+
+void KWView::configureSpellChecker()
+{
+    KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
+                                  "Please make sure you have ISpell properly configured and in your PATH."));
+
+    KWConfig configDia( this );
+    configDia.openPage( KWConfig::KW_KSPELL);
+    configDia.exec();
 }
 
 void KWView::spellCheckerIgnoreAll( const QString & word)

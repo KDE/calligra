@@ -139,6 +139,7 @@ public:
     void saveClipart( KPClipartObject* obj );
 
     void insertFile(const QString &path);
+    void configureSpellChecker();
 
 signals:
     void currentPageChanged( int );

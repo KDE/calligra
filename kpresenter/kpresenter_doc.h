@@ -407,7 +407,7 @@ public:
     bool refreshSideBar()const  { return m_refreshSideBar;}
 
     void spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm);
-
+    void configureSpellChecker();
 
 public slots:
     void movePage( int from, int to );

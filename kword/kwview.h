@@ -172,6 +172,8 @@ public:
     void switchModeView();
     void changeFootNoteMenuItem( bool b);
     void insertFile(const QString & path);
+    void configureSpellChecker();
+
 public slots:
     void fileStatistics();
     void editCut();

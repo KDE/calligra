@@ -40,6 +40,9 @@ public:
 
     KoTextObject *nextTextObject( KoTextObject *obj );
 
+    //spell checker is not configurate.
+    virtual void configurateSpellChecker();
+
 private:
     KPresenterDoc *m_doc;
     KPTextObject *m_currentObj;

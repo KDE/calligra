@@ -5436,8 +5436,6 @@ void KPresenterView::spellCheckerFinished()
     bool kspellNoConfigured=false;
     if (status == KSpell::Error)
     {
-        KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
-                                      "Please make sure you have ISpell properly configured and in your PATH."));
         kspellNoConfigured=true;
     }
     else if (status == KSpell::Crashed)
@@ -5467,12 +5465,19 @@ void KPresenterView::spellCheckerFinished()
     if (edit)
         edit->drawCursor( TRUE );
     if(kspellNoConfigured)
-    {
-            KPConfig configDia( this );
-            configDia.openPage( KPConfig::KP_KSPELL);
-            configDia.exec();
-    }
+        configureSpellChecker();
 }
+
+void KPresenterView::configureSpellChecker()
+{
+    KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
+                                  "Please make sure you have ISpell properly configured and in your PATH."));
+
+    KPConfig configDia( this );
+    configDia.openPage( KPConfig::KP_KSPELL);
+    configDia.exec();
+}
+
 
 void KPresenterView::showCounter( KoParagCounter &c )
 {

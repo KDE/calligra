@@ -3204,5 +3204,14 @@ void KPresenterDoc::spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObje
     m_bgSpellCheck->spellCheckParagraphDeleted( _parag, frm->textObject());
 }
 
+void KPresenterDoc::configureSpellChecker()
+{
+    KPresenterView * view = static_cast<KPresenterView*>(views().getFirst());
+    if ( view ) // no view if embedded document
+    {
+        view->configureSpellChecker();
+    }
+}
+
 
 #include <kpresenter_doc.moc>

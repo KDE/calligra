@@ -60,3 +60,8 @@ KoTextObject *KPrBgSpellCheck::nextTextObject( KoTextObject *obj )
     else
         return m_currentObj->textObject();
 }
+
+void KPrBgSpellCheck::configurateSpellChecker()
+{
+    m_doc->configureSpellChecker();
+}

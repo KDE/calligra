@@ -62,3 +62,9 @@ KoTextObject *KWBgSpellCheck::nextTextObject( KoTextObject *  /*obj*/ )
     else
         return m_currentFrame->textObject();
 }
+
+void KWBgSpellCheck::configurateSpellChecker()
+{
+    m_doc->configureSpellChecker();
+}
+

@@ -696,6 +696,8 @@ public:
     void loadImagesFromStore( KoStore *_store );
     void loadPictureMap ( QDomElement& domElement );
 
+    void configureSpellChecker();
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 

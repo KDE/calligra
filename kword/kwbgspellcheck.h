@@ -37,8 +37,10 @@ public:
     //repaint object when we spell check
     virtual void slotRepaintChanged(KoTextObject *obj);
 
+    //spell checker is not configurate.
+    virtual void configurateSpellChecker();
 
-    KWTextFrameSet *currentCheckSpellingFrame(){ return m_currentFrame;}
+    KWTextFrameSet *currentCheckSpellingFrame()const{ return m_currentFrame;}
 
     virtual KoTextObject *nextTextObject( KoTextObject *obj );
 
