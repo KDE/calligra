@@ -53,6 +53,6 @@ const QString CSVFilterDia::state() {
     else if(r2==box->selected())
         return QString(QChar(','));
     else
-        return QString(QChar(0x08));  // Is that the only possibility? (Werner)
+        return QString(QChar('\t'));  // Is that the only possibility? (Werner)
 }
 #endif

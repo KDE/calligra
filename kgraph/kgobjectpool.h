@@ -41,6 +41,17 @@ public:
     KGObjectPool(const KGraphPart * const part);
     virtual ~KGObjectPool() {}
 
+    virtual QDomElement save(QDomDocument &doc);
+    
+    // used by all the KGObjects to connect the actions
+    const KGraphPart * const part() const { return m_part; }
+
+    // used by all the KGOs to find out the current zoom value
+    // more complex KGOs store the zoomed values and a flag
+    // which signals zoom changes (-> reclac)
+    const double zoom() const { return m_zoom; }
+    void setZoom(const double &zoom) { m_zoom=zoom; }
+        
     virtual const bool remove(const unsigned int &index);
     virtual const bool remove(const KGObject *object);
 
@@ -59,11 +70,14 @@ public:
 public slots:
     void requestRepaint(const QRect &r);
     void requestRepaint();
-    
+
 private:
     KGObjectPool &operator=(const KGObjectPool &rhs);
 
     const KGraphPart * const m_part;  // a ptr to our part (b/c of SLOTs)
+    
+    double m_zoom;
+    bool m_zoomChanged;
 
     // This list stores the active objects or objects which
     // are created at the moment. These objects need serious
@@ -79,8 +93,8 @@ private:
     // (TODO): Check out the double buffer stuff with the
     // Canvas :)
     QList<KGObject> activeObject;
-    
+
     bool m_dirty;       // a repaint was requested
-    QRect rect;         // for this region (0, 0, 0, 0) -> total repaint
+    QRect rect;         // rect=for this region, (0, 0, 0, 0)=total repaint
 };
 #endif // kgobjectpool_h

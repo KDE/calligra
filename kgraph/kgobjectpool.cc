@@ -17,11 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qdom.h>
 #include <kgobjectpool.h>
 
 
 KGObjectPool::KGObjectPool(const KGraphPart * const part) :
     KGGenericPool<KGObject>(), m_part(part) {
+}
+
+QDomElement KGObjectPool::save(QDomDocument &doc) {
+
+    QDomElement e=doc.createElement("objects");
+    // TODO: Save all the objects + the ObjectPool's properties
+    return e;
 }
 
 const bool KGObjectPool::remove(const unsigned int &index) {

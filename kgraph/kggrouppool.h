@@ -37,7 +37,9 @@ class KGGroupPool : public KGGenericPool<KGGroup> {
 
 public:
     KGGroupPool();
-    virtual ~KGGroupPool() {}    
+    virtual ~KGGroupPool() {}
+    
+    virtual QDomElement save(QDomDocument &doc);
 
     KGGroup *find(const int &id);  // find the group via its ID
 
@@ -45,7 +47,7 @@ public:
     virtual const bool remove(const unsigned int &index);
     virtual const bool remove(const KGGroup *group);
 
-    const KGGroup *createGroup(const QDomElement &element);    
+    const KGGroup *createGroup(const QDomElement &element);
 
 private:
     KGGroupPool &operator=(const KGGroupPool &rhs);

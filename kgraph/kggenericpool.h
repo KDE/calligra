@@ -22,10 +22,14 @@
 
 #include <qlist.h>
 
+class QDomDocument;
+class QDomElement;
 
 template<class type> class KGGenericPool {
 
 public:
+    virtual QDomElement save(QDomDocument &doc) = 0;
+    
     type *first() { return pool.first(); }
     type *last() { return pool.last(); }
     type *next() { return pool.next(); }

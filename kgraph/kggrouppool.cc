@@ -17,10 +17,18 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qdom.h>
 #include <kggrouppool.h>
 
 
 KGGroupPool::KGGroupPool() : KGGenericPool<KGGroup>() {
+}
+
+QDomElement KGGroupPool::save(QDomDocument &doc) {
+    
+    QDomElement e=doc.createElement("groups");
+    // TODO: Save all groups
+    return e;
 }
 
 KGGroup *KGGroupPool::find(const int &id) {

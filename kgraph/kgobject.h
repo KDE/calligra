@@ -35,7 +35,7 @@ class QRect;
 class QPainter;
 class KActionCollection;
 class KGGroup;
-class KGraphPart;
+class KGObjectPool;
 
 class KGObject : public QObject {
 
@@ -53,7 +53,7 @@ class KGObject : public QObject {
 
 public:
     virtual KGObject *clone() const = 0;           // exact copy of "this" (calls the Copy-CTOR)
-    const KGraphPart * const part() const { return m_part; }
+    const KGObjectPool * const pool() const { return m_pool; }
 
     virtual ~KGObject();
 
@@ -102,11 +102,11 @@ signals:
     void requestRepaint(const QRect &);        // request a repaint for this rect
 
 protected:
-    KGObject(const KGraphPart * const part, const QString &name=QString::null);
+    KGObject(const KGObjectPool * const pool, const QString &name=QString::null);
     KGObject(const KGObject &rhs);
-    KGObject(const KGraphPart * const part, const QDomElement &element); // create an object from xml (loading)
+    KGObject(const KGObjectPool * const pool, const QDomElement &element); // create an object from xml (loading)
 
-    const KGraphPart * const m_part;
+    const KGObjectPool * const m_pool;
 
     STATE m_state;                               // are there handles to draw or not?
     KGGroup *tmpGroup;
@@ -126,6 +126,5 @@ protected:
 
 private:
     KGObject &operator=(const KGObject &rhs);    // don't assign the objects, clone them
-    void initActionCollection();
 };
 #endif

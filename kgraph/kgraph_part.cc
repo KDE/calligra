@@ -34,12 +34,12 @@ KGraphPart::KGraphPart(QObject *parent, const char *name, bool singleViewMode)
 
     objectPool=new KGObjectPool(this);
     groupPool=new KGGroupPool();
-    
+
     KStdAction::cut(this, SLOT( edit_cut() ), actionCollection(), "edit_cut" );
 }
 
 KGraphPart::~KGraphPart() {
-    
+
     delete objectPool;
     objectPool=0L;
     delete groupPool;
@@ -72,8 +72,9 @@ KoMainWindow *KGraphPart::createShell() {
 
 void KGraphPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bool /*transparent*/) {
 
-    /*    kdDebug(37001) << "KGraphPart::painEvent()" << endl;
-    // ####### handle transparency
+    kdDebug(37001) << "KGraphPart::painEvent()" << endl;
+
+    /*// ####### handle transparency
 
     // Need to draw only the document rectangle described in the parameter rect.
     int left=rect.left()/20;

@@ -17,13 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-// kinda dummy file at the moment :)
 #include <qdom.h>
 
-#include <kaction.h>
 #include <kgobject.h>
 #include <kggroup.h>
-#include <kgraph_part.h>
+#include <kgobjectpool.h>
 
 
 KGObject::~KGObject() {
@@ -32,8 +30,6 @@ KGObject::~KGObject() {
 	m_group->removeMember(this);
     if(tmpGroup!=0L)
 	tmpGroup->removeMember(this);
-    delete popup;
-    popup=0L;
 }
 
 QDomElement KGObject::save(QDomDocument &doc) const {
@@ -64,28 +60,18 @@ const bool KGObject::setGroup(KGGroup *group) {
     return true;
 }
 
-KGObject::KGObject(const KGraphPart * const part, const QString &name) :
-    QObject(0L, name.local8Bit()), m_part(part), m_name(name) {
+KGObject::KGObject(const KGObjectPool * const pool, const QString &name) :
+    QObject(0L, name.local8Bit()), m_pool(pool), m_name(name) {
 }
 
 KGObject::KGObject(const KGObject &rhs) : QObject(0L, rhs.name().local8Bit()),
-					  m_part(rhs.part()), m_name(rhs.name()) {
+					  m_pool(rhs.pool()), m_name(rhs.name()) {
     m_origin=rhs.origin();
     // TODO
 }
 
-KGObject::KGObject(const KGraphPart * const part, const QDomElement &/*element*/) :
-    QObject(), m_part(part) {
+KGObject::KGObject(const KGObjectPool * const pool, const QDomElement &/*element*/) :
+    QObject(), m_pool(pool) {
     // TODO (don't forget so set the QObject name!)
-}
-
-void KGObject::initActionCollection() {
-
-    popup=new KActionCollection();
-    // Here the actionCollection is created, but no actions
-    // are added. The standard actions (Delete, Cut, Copy,
-    // Paste, Rotate, Properties,... which are common for
-    // all KGOs are added before the popup menu is shown.
-    // This saves much space in the mem and is even faster :)
 }
 #include <kgobject.moc>
