@@ -112,9 +112,11 @@ Cursor* MySqlConnection::prepareQuery( const QString& statement) {
 }
 
 QString MySqlConnection::escapeString(const QString& str) const {
+	return QString();//TODO
 }
 
 QCString MySqlConnection::escapeString(const QCString& str) const {
+	return QCString();//TODO
 }
                 
 void MySqlConnection::escapeString( const QString& str, char *target ) {
@@ -149,6 +151,7 @@ bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
 	
 
 bool MySqlConnection::drv_createDatabase( const QString &dbName) {
+	return false; //TODO
 }
 
 bool MySqlConnection::drv_useDatabase( const QString &dbName) {

@@ -73,9 +73,11 @@ bool MySqlCursor::drv_close() {
 	m_lengths=0;
 	m_opened=false;
 	m_numRows=0;
+	return true;
 }
         
 bool MySqlCursor::drv_moveFirst() {
+	return false; //TODO
 }
        
 bool MySqlCursor::drv_getNextRecord() {
@@ -93,6 +95,7 @@ bool MySqlCursor::drv_getNextRecord() {
 		m_afterLast = true;
 		return false;	
 	}
+	return true;
 }
 
 bool MySqlCursor::drv_getPrevRecord() {

@@ -38,7 +38,7 @@ Boston, MA 02111-1307, USA.
 #include <kexidb/field.h>
 
 
-K_EXPORT_COMPONENT_FACTORY(kexidb_mysqldriver, KGenericFactory<KexiDB::MySqlDriver>( "keximysqldriver" ))
+K_EXPORT_COMPONENT_FACTORY(kexidb_mysqldriver, KGenericFactory<KexiDB::MySqlDriver>( "kexidb_mysqldriver" ))
 
 using namespace KexiDB;
 

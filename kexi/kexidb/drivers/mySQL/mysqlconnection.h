@@ -41,7 +41,7 @@ class MySqlResult;
 
 namespace KexiDB {
 
-class KEXI_MYSQL_IFACE_EXPORT MySqlConnection : public Connection
+class KEXIDB_MYSQL_DRIVER_EXPORT MySqlConnection : public Connection
 {
 	Q_OBJECT
 

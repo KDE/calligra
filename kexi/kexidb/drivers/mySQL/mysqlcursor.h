@@ -31,7 +31,7 @@ Boston, MA 02111-1307, USA.
 
 namespace KexiDB {
 
-class MySqlCursor: public Cursor {
+class KEXIDB_MYSQL_DRIVER_EXPORT MySqlCursor: public Cursor {
 public:
 	MySqlCursor(Connection* conn, const QString& statement = QString::null );
 	~MySqlCursor();
