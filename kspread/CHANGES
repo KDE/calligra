@@ -214,3 +214,12 @@ it's not a function in kspread
 it's loading a the begining =>math.ks
 Add a Manual for kscript in koffice/lib/kscript/Manual
 =>Now everybody can create extern function or script
+
+1999-12-03 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add functions PERMUT COMBIN and fract
+
+Summary 1999-11-28 ->1999-12-03
+A bug was fixed by Mr Well (I believe)
+=>Now kspread don't crash when you write bad tablename in a cell
+thanks.

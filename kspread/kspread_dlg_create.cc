@@ -193,14 +193,14 @@ void KSpreadcreate::init()
    else if (m_funcName=="ISLOGIC"||m_funcName=="ISTEXT"||m_funcName=="ISNUM")
    	{
    	nb_param=1;
-   	
+
    	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
    	tmp_label->setText(i18n("Value"));
 
         f_param = new QLineEdit( this );
   	lay1->addWidget(f_param);
-  	
+
   	exp_funct=m_funcName+"("+"Value"+")";
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
@@ -214,19 +214,19 @@ void KSpreadcreate::init()
 	    m_funcName=="multiply" || m_funcName=="average" || m_funcName=="variance" || m_funcName=="stddev")
    {
    	nb_param=5;
-   	
+
    	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
    	tmp_label->setText(i18n("Double"));
         f_param = new QLineEdit( this );
   	lay1->addWidget(f_param);
-  	
+
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Double"));
         s_param = new QLineEdit( this );
   	lay1->addWidget(s_param);
-  	
+
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Double"));
@@ -371,6 +371,43 @@ void KSpreadcreate::init()
        lay1->addWidget(tmp_label);
        tmp_label->setText(exp_funct);
        edit[0]=type_double;
+   }
+   else if (m_funcName=="fact")
+   {
+       nb_param=1;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("int"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+       exp_funct=m_funcName+"("+"int"+")";
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(exp_funct);
+       edit[0]=type_double;
+   }
+   else if (m_funcName=="PERMUT"||m_funcName=="COMBIN")
+   {
+       nb_param=2;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("int"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("int"));
+       s_param = new QLineEdit( this );
+       lay1->addWidget(s_param);
+
+       exp_funct=m_funcName+"("+"int,int"+")";
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(exp_funct);
+       edit[0]=type_double;
+       edit[1]=type_double;
    }
    else if (m_funcName=="not")
    {

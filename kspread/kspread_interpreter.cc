@@ -768,7 +768,7 @@ static bool kspreadfunc_not( KSContext& context )
     return false;
 
   bool toto = !args[0]->boolValue();
-  context.setValue( new KSValue(toto)); 	
+  context.setValue( new KSValue(toto));
   return true;
 }
 
@@ -877,7 +877,7 @@ static bool kspreadfunc_len( KSContext& context )
     return false;
 
   int nb=args[0]->stringValue().length();
-  context.setValue( new KSValue(nb)); 	
+  context.setValue( new KSValue(nb));
   return true;
 }
 
@@ -981,7 +981,7 @@ static bool kspreadfunc_islogic( KSContext& context )
   	logic=false;
  	
 
-  context.setValue( new KSValue(logic)); 	
+  context.setValue( new KSValue(logic));
   return true;
 }
 
@@ -999,7 +999,7 @@ static bool kspreadfunc_istext( KSContext& context )
   	logic=false;
 
 
-  context.setValue( new KSValue(logic)); 	
+  context.setValue( new KSValue(logic));
   return true;
 }
 
@@ -1168,6 +1168,118 @@ static bool kspreadfunc_dayOfYear( KSContext& context )
   context.setValue( new KSValue(QDate(args[0]->intValue(),
   			args[1]->intValue(),args[2]->intValue()).dayOfYear() ));
 
+  return true;
+}
+
+double fact(double val,double end)
+{
+/* fact =i*(i-1)*(i-2)*...*1 */
+if(val <0||end<0)
+        return (-1);
+if(val==0)
+        return(1);
+else if(val==end)
+        return(1);
+        /*val==end => you don't multiplie it */
+else
+        return(val*fact((double)(val-1),end));
+
+}
+
+
+static bool kspreadfunc_fact( KSContext& context )
+{
+  double result;
+  QString tmp;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "fact",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  result=fact((double)args[0]->intValue(),0);
+  //In fact function val must be positive
+  tmp="err";
+  if(result==-1)
+        context.setValue( new KSValue(tmp));
+  else
+        context.setValue( new KSValue(result ));
+
+  return true;
+}
+
+static bool kspreadfunc_arrang( KSContext& context )
+{ /* arrang : fact(n)/(fact(n-m) */
+  double result;
+  QString tmp;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,2, "PERMUT",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  tmp="err";
+  if((double)args[0]->intValue()<(double)args[1]->intValue())
+          context.setValue( new KSValue(tmp ));
+
+  else if((double)args[1]->intValue()<0)
+          context.setValue( new KSValue(tmp ));
+
+  else
+        {
+        result=fact((double)args[0]->intValue(),
+        ((double)args[0]->intValue()-(double)args[1]->intValue()));
+        //In fact function val must be positive
+
+        if(result==-1)
+                context.setValue( new KSValue(tmp));
+        else
+                context.setValue( new KSValue(result ));
+        }
+  return true;
+}
+
+static bool kspreadfunc_combin( KSContext& context )
+{ /*combin : fact(n)/(fact(n-m)*fact(m)) */
+  double result;
+  QString tmp;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,2, "COMBIN",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  tmp="err";
+  if((double)args[0]->intValue()<(double)args[1]->intValue())
+          context.setValue( new KSValue(tmp ));
+
+  else if((double)args[1]->intValue()<0)
+          context.setValue( new KSValue(tmp ));
+
+  else
+        {
+        result=(fact((double)args[0]->intValue(),
+        ((double)args[0]->intValue()-(double)args[1]->intValue()))
+        /fact((double)args[1]->intValue(),0));
+        //In fact function val must be positive
+
+        if(result==-1)
+                context.setValue( new KSValue(tmp));
+        else
+                context.setValue( new KSValue(result ));
+        }
   return true;
 }
 
@@ -1359,6 +1471,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "currentDate", new KSValue( new KSBuiltinFunction( module,"currentDate",kspreadfunc_currentDate) ) );
   module->addObject( "currentDateTime", new KSValue( new KSBuiltinFunction( module,"currentDateTime",kspreadfunc_currentDateTime) ) );
   module->addObject( "dayOfYear", new KSValue( new KSBuiltinFunction( module,"dayOfYear",kspreadfunc_dayOfYear) ) );
+  module->addObject( "fact", new KSValue( new KSBuiltinFunction( module,"fact",kspreadfunc_fact) ) );
+  module->addObject( "COMBIN", new KSValue( new KSBuiltinFunction( module,"COMBIN",kspreadfunc_combin) ) );
+  module->addObject( "PERMUT", new KSValue( new KSBuiltinFunction( module,"PERMUT",kspreadfunc_arrang) ) );
   return module;
 }
 

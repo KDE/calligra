@@ -166,6 +166,9 @@ list_trig+="asinh";
 list_trig+="atanh";
 list_trig+="degree";
 list_trig+="radian";
+list_trig+="PERMUT";
+list_trig+="COMBIN";
+list_trig+="fact";
 
 QStringList list_logic;
 list_logic+="if";
