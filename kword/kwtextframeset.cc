@@ -49,7 +49,7 @@
 
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
-//#define DEBUG_FORMAT_MORE
+#define DEBUG_FORMAT_MORE
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), undoRedoInfo( this )
@@ -357,6 +357,8 @@ void KWTextFrameSet::layout()
 {
     m_lastFormatted = textdoc->firstParag();
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
+    // Get the thing going though, repainting doesn't call formatMore
+    formatMore();
 }
 
 void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences )
@@ -1469,9 +1471,11 @@ void KWTextFrameSet::doChangeInterval()
 void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
 {
     (void) availableHeight(); // make sure that it's not -1
-    /*kdDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name()
+#ifdef DEBUG_FORMAT_MORE
+    kdDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name()
                      << " nPointBottom=" << nPointBottom.x() << "," << nPointBottom.y()
-                     << " m_availableHeight=" << m_availableHeight << " textdoc->height()=" << textdoc->height() << endl;*/
+                     << " m_availableHeight=" << m_availableHeight << " textdoc->height()=" << textdoc->height() << endl;
+#endif
 
     // Convert to internal qtextdoc coordinates
     QPoint iPoint;
@@ -1481,7 +1485,9 @@ void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
     else // not found, assume worse
         maxY = m_availableHeight;
 
-    //kdDebug(32002) << "KWTextFrameSet (" << getName() << ")::updateViewArea maxY now " << maxY << endl;
+#ifdef DEBUG_FORMAT_MORE
+    kdDebug(32002) << "KWTextFrameSet (" << getName() << ")::updateViewArea maxY now " << maxY << endl;
+#endif
     // Update map
     m_mapViewAreas.replace( w, maxY );
 
