@@ -53,10 +53,13 @@ will appear.  Select <guimenuitem>Frame/Frameset</guimenuitem>.</para>
 </itemizedlist>
 
 <para>The Properties dialog consists of one dialog box, with five index
-tabs labeled <guilabel>Options</guilabel>, <guilabel>Text Run
-Around</guilabel>, <guilabel>Connect Text Frames</guilabel>, 
-<guilabel>Geometry</guilabel> and
-<guilabel>Background</guilabel>.</para>
+tabs labeled <link linkend="format-frame-options">Options</link>,
+<link linkend="format-frame-tra">Text Run Around</link>,
+<link linkend="format-frame-connect">Connect Text Frames</link>,
+<link linkend="format-frame-geometry">Geometry</link> and
+<link linkend="format-frame-background">Background</link>.</para>
+
+<sect2 id="format-frame-options"><title>General Options</title>
 
 <screenshot>
 <mediaobject>
@@ -101,12 +104,36 @@ frame set.</para></listitem>
 
 <para>Simply make your selection in the section labeled <guilabel>If text is too long for frame</guilabel>.</para>
 
+<para>In the section entitled <guilabel>On new page creation</guilabel>, you have three options available.  You must select one.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Reconnect frame to current flow</guilabel></term>
+<listitem><para>Create a new frame, the same size and shape on a new page, and make it the last frame in the frameset.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Don't create a followup frame</guilabel></term>
+<listitem><para>Creates a new page, but not a new frame.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Place a copy of this frame</guilabel></term>
+<listitem><para>Creates a new page, with a new frame the same size, shape and position on the page.  Additionally, &kword; 
+copies the contents of the frame from the previous page.</para>
+<tip><para>This is useful for title frames, headers and footer frames.  Each page will have an automatic copy of the information
+on every new page.</para></tip></listitem>
+</varlistentry>
+</variablelist>
+
+
 <note>
 <para>Remember these options only apply to a full frame set.  If there is
 already another window for text to flow into, the text will flow into
 the next frame in the frame set as you have previously determined.</para>
 </note>
-
+</sect2>
+<sect2 id="format-frame-tra"><title>Text Flow around frames</title>
 <para>To adjust how text flows around overlapping frames, click the tab
 labeled <guilabel>Text Run Around</guilabel>.</para>
 
@@ -158,6 +185,9 @@ frame.</para>
 the size of the runaround gap will create a white border between the
 text in the two text frames. </para>
 
+</sect2>
+<sect2 id="format-frame-connect"><title>Reconnect frames</title>
+
 <para>You can change which frameset the current frame belongs to by selecting 
 the <guilabel>Connect text frames</guilabel> tab.</para>
 
@@ -179,6 +209,8 @@ as the only frame in the frameset (for now).</para>
 <tip><para>It is helpful to name your framesets with descriptive names.   Name the frameset with a description of the contents
 so that you can quickly refer to it again later.</para></tip>
 
+</sect2>
+<sect2 id="format-frame-geometry"><title>Frame size and position</title>
 
 <para>You can adjust the size and position of your frame by
 clicking on the tab labeled <guilabel>Geometry</guilabel>.</para>
@@ -205,6 +237,8 @@ page.</para>
 <para>You can also determine the exact size of the frame by entering its
 height and width in the text boxes provided.  These two measurements are
 relative to the top left corner of the frame you specified above. not to the size of the page.</para>
+</sect2>
+<sect2 id="format-frame-background"><title>Frame Background</title>
 
 <para>You can adjust the background color of the text frame by selecting the <guilabel>Background</guilabel> tab.</para>
 
@@ -225,5 +259,5 @@ relative to the top left corner of the frame you specified above. not to the siz
 
 <para>Select <guibutton>OK</guibutton> to accept all of your changes.</para>
 <para>Select <guibutton>Cancel</guibutton> to forget all of your changes.</para>
-
+</sect2>
 </sect1>
