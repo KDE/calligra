@@ -72,7 +72,12 @@ void KoPictureBase::draw(QPainter& painter, int x, int y, int width, int height,
     painter.restore();
 }
 
-bool KoPictureBase::load(QIODevice*, const QString&)
+bool KoPictureBase::load(QIODevice* io, const QString& extension)
+{
+    return load(io->readAll(), extension);
+}
+
+bool KoPictureBase::load(const QByteArray&, const QString&)
 {
     // Nothing to load!
     return false;

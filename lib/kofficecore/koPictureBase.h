@@ -84,6 +84,8 @@ public:
 
     virtual bool load(QIODevice* io, const QString& extension);
 
+    virtual bool load(const QByteArray& array, const QString& extension);
+    
     /**
      * save file
      * @param io QIODevice used for saving

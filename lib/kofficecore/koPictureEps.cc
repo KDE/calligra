@@ -253,11 +253,12 @@ bool KoPictureEps::extractPostScriptStream( void )
     return true;
 }
 
-bool KoPictureEps::load(QIODevice* io, const QString& /*extension*/)
+bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ )
 {
+    
     kdDebug(30003) << "KoPictureEps::load" << endl;
     // First, read the raw data
-    m_rawData=io->readAll();
+    m_rawData=array;
 
     if (m_rawData.isNull())
     {

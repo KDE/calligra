@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -126,11 +126,9 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     }
 }
 
-bool KoPictureImage::load(QIODevice* io, const QString& /*extension*/)
+bool KoPictureImage::load(const QByteArray& array, const QString& /* extension*/ )
 {
-    // First, read the raw data
-    m_rawData=io->readAll();
-
+    m_rawData=array;
     // Second, create the original image
     QBuffer buffer(m_rawData);
     buffer.open(IO_ReadWrite);

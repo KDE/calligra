@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
    Copyright (c) 2001 David Faure <faure@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -80,13 +80,11 @@ void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int heig
     drawQPicture(m_clipart, painter, x, y, width, height, sx, sy, sw, sh);
 }
 
-bool KoPictureClipart::load(QIODevice* io, const QString& extension)
+bool KoPictureClipart::load(const QByteArray& array, const QString& extension)
 {
-    // First, read the raw data
-    m_rawData=io->readAll();
-
     // Second, create the original clipart
     kdDebug(30003) << "Trying to load clipart... (Size:" << m_rawData.size() << ")" << endl;
+    m_rawData=array;
     QBuffer buffer(m_rawData);
     buffer.open(IO_ReadWrite);
     bool check = true;

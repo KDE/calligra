@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -72,8 +72,8 @@ public:
 
     virtual QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
 
-    virtual bool load(QIODevice* io, const QString& extension);
-
+    virtual bool load(const QByteArray& array, const QString& extension);
+    
     virtual bool save(QIODevice* io);
 
     virtual QSize getOriginalSize(void) const;
