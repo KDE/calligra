@@ -56,7 +56,7 @@ public:
 protected:
     void resizeEvent( QResizeEvent *e );
 
-    QString getSoundFileFilter();
+    QString getSoundFileFilter() const;
 
     QComboBox *cEffect, *cEffect2, *cDisappear;
     QLabel *lEffect, *lEffect2, *lNum, *lDisappear, *lDEffect;
@@ -64,7 +64,7 @@ protected:
     QCheckBox *disappear;
     QBoxLayout *topLayout;
     KIntNumInput *timerOfAppear, *timerOfDisappear;
-    
+
     QCheckBox *appearSoundEffect, *disappearSoundEffect;
     QLabel *lSoundEffect1, *lSoundEffect2;
     KURLRequester *requester1, *requester2;

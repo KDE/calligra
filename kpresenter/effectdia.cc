@@ -517,7 +517,7 @@ void EffectDia::stopSound2()
 }
 
 /*================================================================*/
-QString EffectDia::getSoundFileFilter()
+QString EffectDia::getSoundFileFilter() const
 {
     QStringList fileList;
     fileList << "wav" << "au" << "mp3" << "mp1" << "mp2" << "mpg" << "dat"

@@ -54,17 +54,17 @@ public:
                PageEffect pageEffect, PresSpeed presSpeed, int pageTimer,
                bool soundEffect, QString fileName, bool showPresentationDuration );
     ~PgConfDia();
-    bool getInfinitLoop();
-    bool getManualSwitch();
-    PageEffect getPageEffect();
-    PresSpeed getPresSpeed();
-    int getPageTimer();
-    bool getPageSoundEffect();
-    QString getPageSoundFileName();
-    bool getPresentationDuration();
+    bool getInfinitLoop() const;
+    bool getManualSwitch() const;
+    PageEffect getPageEffect() const;
+    PresSpeed getPresSpeed() const;
+    int getPageTimer() const;
+    bool getPageSoundEffect() const;
+    QString getPageSoundFileName()const;
+    bool getPresentationDuration()const;
 
 protected:
-    QString getSoundFileFilter();
+    QString getSoundFileFilter()const;
 
 protected:
     QButtonGroup *general, *page, *slides;

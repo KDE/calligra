@@ -240,48 +240,48 @@ void PgConfDia::presSlidesChanged( int )
 }
 
 /*================================================================*/
-bool PgConfDia::getInfinitLoop()
+bool PgConfDia::getInfinitLoop() const
 {
     return infinitLoop->isChecked();
 }
 
 /*================================================================*/
-bool PgConfDia::getManualSwitch()
+bool PgConfDia::getManualSwitch() const
 {
     return manualSwitch->isChecked();
 }
 
 /*================================================================*/
-PageEffect PgConfDia::getPageEffect()
+PageEffect PgConfDia::getPageEffect() const
 {
     return static_cast<PageEffect>( effectCombo->currentItem() );
 }
 
 /*================================================================*/
-PresSpeed PgConfDia::getPresSpeed()
+PresSpeed PgConfDia::getPresSpeed() const
 {
     return speedOfObject->value();
 }
 
 /*================================================================*/
-int PgConfDia::getPageTimer()
+int PgConfDia::getPageTimer() const
 {
     return timerOfPage->value();
 }
 
 /*================================================================*/
-bool PgConfDia::getPageSoundEffect()
+bool PgConfDia::getPageSoundEffect() const
 {
     return checkSoundEffect->isChecked();
 }
 
 /*================================================================*/
-QString PgConfDia::getPageSoundFileName()
+QString PgConfDia::getPageSoundFileName() const
 {
     return requester->url();
 }
 
-bool PgConfDia::getPresentationDuration()
+bool PgConfDia::getPresentationDuration() const
 {
     return presentationDuration->isChecked();
 }
@@ -388,7 +388,7 @@ void PgConfDia::stopSound()
 }
 
 /*================================================================*/
-QString PgConfDia::getSoundFileFilter()
+QString PgConfDia::getSoundFileFilter() const
 {
     QStringList fileList;
     fileList << "wav" << "au" << "mp3" << "mp1" << "mp2" << "mpg" << "dat"
