@@ -45,13 +45,20 @@ class FormulaCursor : public QObject {
     Q_OBJECT
     
 public:
-
+	    
     /**
      * Creates a cursor and puts is at the beginning
      * of the rootElement.
      */
     FormulaCursor(FormulaElement* element);
 
+    /**
+     * Flag for movement functions.
+     * Select means move selecting the text (usually Shift key)
+     * Word means move by whole words  (usuallu Control key)
+     */
+    enum MoveFlag { SelectMovement = 1, WordMovement = 2  };
+    
     // where the cursor and the mark are
     int getPos() const { return cursorPos; }
     int getMark() const { return markPos; }
@@ -87,13 +94,13 @@ public:
     
     // simple cursor movement.
     
-    void moveLeft(QKeyEvent* event);
-    void moveRight(QKeyEvent* event);
-    void moveUp(QKeyEvent* event);
-    void moveDown(QKeyEvent* event);
+    void moveLeft(int flag);
+    void moveRight(int flag);
+    void moveUp(int flag);
+    void moveDown(int flag);
 
-    void moveHome(QKeyEvent* event);
-    void moveEnd(QKeyEvent* event);
+    void moveHome(int flag);
+    void moveEnd(int flag);
 
     /**
      * Moves the cursor inside the element. Selection is turned off.
@@ -230,7 +237,7 @@ private:
     /**
      * Sets the selection according to the shift key.
      */
-    void handleShiftState(int state);
+    void handleSelectState(int state);
 
     
     /**

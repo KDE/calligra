@@ -142,18 +142,27 @@ void KFormulaContainer::keyPressEvent(FormulaCursor* cursor, QKeyEvent* event)
     }
     else {
         int action = event->key();
-        switch (action) {
-        case Qt::Key_Left:
-            cursor->moveLeft(event);
+        int state = event->state();
+	int flag=0;
+	
+	if(state & Qt::ControlButton)
+	  flag+=FormulaCursor::WordMovement;
+	
+	if(state & Qt::ShiftButton)
+	  flag+=FormulaCursor::SelectMovement;
+		  
+	switch (action) {
+	case Qt::Key_Left:
+            cursor->moveLeft(flag);
             break;
         case Qt::Key_Right:
-            cursor->moveRight(event);
+            cursor->moveRight(flag);
             break;
         case Qt::Key_Up:
-            cursor->moveUp(event);
+            cursor->moveUp(flag);
             break;
         case Qt::Key_Down:
-            cursor->moveDown(event);
+            cursor->moveDown(flag);
             break;
         case Qt::Key_BackSpace:
             removeSelection(cursor, BasicElement::beforeCursor);
@@ -162,10 +171,10 @@ void KFormulaContainer::keyPressEvent(FormulaCursor* cursor, QKeyEvent* event)
             removeSelection(cursor, BasicElement::afterCursor);
             break;
         case Qt::Key_Home:
-            cursor->moveHome(event);
+            cursor->moveHome(flag);
             break;
         case Qt::Key_End:
-            cursor->moveEnd(event);
+            cursor->moveEnd(flag);
             break;
         case Qt::Key_F1:
             addSymbol(cursor, Artwork::product);

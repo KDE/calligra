@@ -18,7 +18,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qevent.h>
 #include <qpainter.h>
 
 #include "formulacursor.h"
@@ -70,9 +69,9 @@ void FormulaCursor::draw(QPainter& painter)
 }
 
 
-void FormulaCursor::handleShiftState(int state)
+void FormulaCursor::handleSelectState(int state)
 {
-    if (state & Qt::ShiftButton) {
+    if (state & SelectMovement) {
         if (!isSelection()) {
             setMark(getPos());
             setSelection(true);
@@ -83,12 +82,11 @@ void FormulaCursor::handleShiftState(int state)
     }
 }
 
-void FormulaCursor::moveLeft(QKeyEvent* event)
+void FormulaCursor::moveLeft(int flag)
 {
     BasicElement* element = getElement();
-    int state = event->state();
-    handleShiftState(state);
-    if (state & Qt::ControlButton) {
+    handleSelectState(flag);
+    if (flag & WordMovement) {
         element->moveHome(this);
     }
     else {
@@ -96,12 +94,11 @@ void FormulaCursor::moveLeft(QKeyEvent* event)
     }
 }
 
-void FormulaCursor::moveRight(QKeyEvent* event)
+void FormulaCursor::moveRight(int flag)
 {
     BasicElement* element = getElement();
-    int state = event->state();
-    handleShiftState(state);
-    if (state & Qt::ControlButton) {
+    handleSelectState(flag);
+    if (flag & WordMovement) {
         element->moveEnd(this);
     }
     else {
@@ -109,35 +106,31 @@ void FormulaCursor::moveRight(QKeyEvent* event)
     }
 }
 
-void FormulaCursor::moveUp(QKeyEvent* event)
+void FormulaCursor::moveUp(int flag)
 {
     BasicElement* element = getElement();
-    int state = event->state();
-    handleShiftState(state);
+    handleSelectState(flag);
     element->moveUp(this, element);
 }
 
-void FormulaCursor::moveDown(QKeyEvent* event)
+void FormulaCursor::moveDown(int flag)
 {
     BasicElement* element = getElement();
-    int state = event->state();
-    handleShiftState(state);
+    handleSelectState(flag);
     element->moveDown(this, element);
 }
 
-void FormulaCursor::moveHome(QKeyEvent* event)
+void FormulaCursor::moveHome(int flag)
 {
     BasicElement* element = getElement();
-    int state = event->state();
-    handleShiftState(state);
+    handleSelectState(flag);
     element->formula()->moveHome(this);
 }
 
-void FormulaCursor::moveEnd(QKeyEvent* event)
+void FormulaCursor::moveEnd(int flag)
 {
     BasicElement* element = getElement();
-    int state = event->state();
-    handleShiftState(state);
+    handleSelectState(flag);
     element->formula()->moveEnd(this);
 }
 
