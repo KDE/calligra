@@ -30,14 +30,16 @@
 #include <qcursor.h>
 #include <qpixmapcache.h>
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <koMainWindow.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "karbon_factory.h"
+#include "karbon_resourceserver.h"
 #include "vdocument.h"
 #include "vkopainter.h"
 #include "vlayer.h"
@@ -313,6 +315,12 @@ VObjectListViewItem::key( int, bool ) const
 void
 VObjectListViewItem::update()
 {
+	// text description
+	VSelectionDescription selectionDesc;
+	selectionDesc.visit( *m_object );
+	setText( 0, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
+
+	// draw thumb preview (16x16)
 	QPixmap preview;
 	preview.resize( 16, 16 );
 	VKoPainter p( &preview, 16, 16, false );
@@ -335,25 +343,12 @@ VObjectListViewItem::update()
 	p.drawRect( KoRect( 0, 0, 16, 16 ) );
 	p.end();
 
-	VSelectionDescription selectionDesc;
-	selectionDesc.visit( *m_object );
-	setText( 0, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
-	QPixmap pm;
-	QString s = ( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked ) ? "locked.png" : "unlocked.png";
-	if( !QPixmapCache::find( s, pm ) )
-	{
-		pm = QPixmap( KGlobal::iconLoader()->iconPath( s, KIcon::Small ) );
-		QPixmapCache::insert( s, pm );
-	}
-	setPixmap( 1, pm );
-	s = ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ) ? "14_layer_novisible.png" : "14_layer_visible.png";
-	if( !QPixmapCache::find( s, pm ) )
-	{
-		pm = QPixmap( KGlobal::iconLoader()->iconPath( s, KIcon::Small ) );
-		QPixmapCache::insert( s, pm );
-	}
-	setPixmap( 2, pm );
+	// set thumb preview, lock and visible pixmaps
 	setPixmap( 0, preview );
+	QString s = ( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked ) ? "locked.png" : "unlocked.png";
+	setPixmap( 1, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
+	s = ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ) ? "14_layer_novisible.png" : "14_layer_visible.png";
+	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
 }
 
 

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +28,7 @@
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
@@ -133,6 +133,8 @@ KarbonResourceServer::KarbonResourceServer()
 		kdDebug() << " - " << file << endl;
 		loadClipart( file );
 	}
+
+	m_pixmaps.setAutoDelete( true );
 
 	kdDebug() << m_cliparts->count() << " cliparts loaded." << endl;
 } // KarbonResourceServer::KarbonResourceServer
@@ -404,6 +406,18 @@ KarbonResourceServer::saveClipart( VObject* clipart, double width, double height
 	file.flush();
 
 	file.close();
+}
+
+QPixmap *
+KarbonResourceServer::cachePixmap( const QString &key, int group_or_size )
+{
+	QPixmap *result = 0L;
+	if( !( result = m_pixmaps[ key ] ) )
+	{
+		result = new QPixmap( KGlobal::iconLoader()->iconPath( key, group_or_size ) );
+		m_pixmaps.insert( key, result );
+	}
+	return result;
 }
 
 VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double height, QString filename )

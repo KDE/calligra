@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    Original work :
    kis_resourceserver.h - part of KImageShop
@@ -28,6 +27,7 @@
 
 
 #include <qptrlist.h>
+#include <qdict.h>
 #include <qstring.h>
 
 #include "vgradient.h"
@@ -85,6 +85,8 @@ public:
 	VClipartIconItem* addClipart( VObject* clipart, double width, double height );
 	void removeClipart( VClipartIconItem* clipartIcon );
 
+	QPixmap *cachePixmap( const QString &key, int group_or_size );
+
 protected:
 	const VPattern* loadPattern( const QString& filename );
 
@@ -98,6 +100,7 @@ private:
 	QPtrList<KoIconItem> m_patterns;
 	QPtrList<VGradientListItem>* m_gradients;
 	QPtrList<VClipartIconItem>* m_cliparts;
+	QDict<QPixmap> m_pixmaps;
 };
 
 class VClipartIconItem : public KoIconItem
