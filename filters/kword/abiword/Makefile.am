@@ -10,11 +10,13 @@ libabiwordexport_la_LIBADD = $(KOFFICE_LIBS)
 
 lib_LTLIBRARIES = libabiwordimport.la libabiwordexport.la
 
-libabiwordimport_la_SOURCES = abiwordimport.cc abiwordimport_factory.cc processors.cc
-libabiwordexport_la_SOURCES = abiwordexport.cc abiwordexport_factory.cc processors.cc
+libabiwordimport_la_SOURCES = abiwordimport.cc abiwordimport_factory.cc \
+processors.cc kqiodevicegzip.cc
+libabiwordexport_la_SOURCES = abiwordexport.cc abiwordexport_factory.cc \
+processors.cc kqiodevicegzip.cc
 
 noinst_HEADERS = abiwordimport.h abiwordimport_factory.h abiwordexport.h \
-abiwordexport_factory.h processors.h
+abiwordexport_factory.h processors.h kqiodevicegzip.h
 
 METASOURCES = AUTO
 
