@@ -2120,6 +2120,7 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
         QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
         QPoint normalPoint = m_viewMode->viewToNormal( mousep );
         viewport()->setCursor( m_doc->getMouseCursor( normalPoint, false /*....*/ ) );
+        m_frameInline = false;
     } break;
     case MM_CREATE_TEXT:
     case MM_CREATE_PIX:
