@@ -1,4 +1,8 @@
-INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../../lib/kofficeui $(all_includes)
+INCLUDES = \
+	-I$(srcdir)/.. \
+	-I$(srcdir)/../../lib/kofficeui \
+	-I$(srcdir)/../tools \
+	$(all_includes)
 
 noinst_LTLIBRARIES = libkarboncore.la
 
@@ -8,15 +12,13 @@ noinst_HEADERS = \
 	vglobal.h \
 	vlayer.h \
 	vobject.h \
-	vpath.h \
-	vtool.h
+	vpath.h 
 
 libkarboncore_la_SOURCES = \
 	vcanvas.cc \
 	vcommand.cc \
 	vlayer.cc \
-	vpath.cc \
-	vtool.cc
+	vpath.cc 
 
 libkarboncore_la_METASOURCES = \
 	AUTO

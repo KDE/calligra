@@ -1,4 +1,9 @@
-INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../core -I$(srcdir)/../ui -I$(srcdir)/../../lib/kofficeui $(all_includes)
+INCLUDES = \
+	-I$(srcdir)/.. \
+	-I$(srcdir)/../core \
+	-I$(srcdir)/../ui \
+	-I$(srcdir)/../../lib/kofficeui \
+	$(all_includes)
 
 noinst_LTLIBRARIES = libkarbontools.la
 
@@ -18,7 +23,8 @@ noinst_HEADERS = \
 	vctool_rectangle.h \
 	vctool_roundrect.h \
 	vctool_sinus.h \
-	vctool_star.h
+	vctool_star.h \
+	vtool.h
 
 libkarbontools_la_SOURCES = \
 	vccommand.cc \
@@ -36,7 +42,7 @@ libkarbontools_la_SOURCES = \
 	vctool_rectangle.cc \
 	vctool_roundrect.cc \
 	vctool_sinus.cc \
-	vctool_star.cc
+	vctool_star.cc 
 
 libkarbontools_la_LIBADD = \
         ../ui/libkarbonui.la

@@ -17,7 +17,7 @@ class VObject;
 class VTool
 {
 public:
-	virtual ~VTool() = 0;
+	virtual ~VTool() {}
 
 	// handling mouse/keyboard events:
 	virtual bool eventFilter( KarbonView* /*view*/, QEvent* /*event*/ )

@@ -2,6 +2,7 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
+#include <qdom.h>
 #include <qpainter.h>
 #include <kdebug.h>
 
@@ -98,8 +99,20 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& )
 QDomDocument
 KarbonPart::saveXML()
 {
-	// TODO save the document into a QDomDocument
-	return QDomDocument();
+	QDomDocument doc( "karbon" );
+
+	doc.appendChild(
+		doc.createProcessingInstruction(
+			"xml",
+			"version=\"0.1\" encoding=\"UTF-8\"") );
+
+	QDomElement app = doc.createElement( "karbon14" );
+	app.setAttribute( "editor", "karbon14 0.0.1" );
+	app.setAttribute( "mime", "application/x-karbon" );
+	app.setAttribute( "version", "0.1" );
+	doc.appendChild( app );
+
+	return doc;
 }
 
 void
