@@ -48,6 +48,7 @@ KuDesignerDoc::KuDesignerDoc(QWidget *parent, const char *name) : QObject(parent
 {
     docCanvas = 0;
     modified = false;
+
   if(!pViewList)
   {
     pViewList = new QPtrList<KuDesignerView>();
@@ -58,6 +59,7 @@ KuDesignerDoc::KuDesignerDoc(QWidget *parent, const char *name) : QObject(parent
 
 KuDesignerDoc::~KuDesignerDoc()
 {
+    delete pViewList;
 }
 
 void KuDesignerDoc::addView(KuDesignerView *view)
@@ -161,7 +163,7 @@ bool KuDesignerDoc::newDocument(QSize pSize, int top, int bottom, int left, int 
   	    height = width;
   	    width = temp;
   	}
-		
+
   	//zooming canvas according to screen resolution
   	QPrinter* printer;
 
@@ -170,7 +172,7 @@ bool KuDesignerDoc::newDocument(QSize pSize, int top, int bottom, int left, int 
   	printer->setFullPage(true);
   	printer->setPageSize((QPrinter::PageSize)pageSize);
   	printer->setOrientation((QPrinter::Orientation)orientation);
-	
+
   	// Get the page metrics and set appropriate wigth and height
   	QPaintDeviceMetrics pdm(printer);
   	width = pdm.width();
@@ -179,7 +181,7 @@ bool KuDesignerDoc::newDocument(QSize pSize, int top, int bottom, int left, int 
   	//this is not needed anymore
   	delete printer;
 
-    	
+
    	//creating canvas
   	docCanvas = new MyCanvas(width, height);
   	docCanvas->setAdvancePeriod(30);
@@ -399,7 +401,7 @@ bool KuDesignerDoc::openDocument(const KURL& url, const char *format /*=0*/)
 	height = width;
 	width = temp;
     }
-		
+
     //zooming canvas according to screen resolution
     QPrinter* printer;
 
@@ -408,7 +410,7 @@ bool KuDesignerDoc::openDocument(const KURL& url, const char *format /*=0*/)
     printer->setFullPage(true);
     printer->setPageSize((QPrinter::PageSize)attributes.namedItem("PageSize").nodeValue().toInt());
     printer->setOrientation((QPrinter::Orientation)attributes.namedItem("PageOrientation").nodeValue().toInt());
-	
+
     // Get the page metrics and set appropriate wigth and height
     QPaintDeviceMetrics pdm(printer);
     width = pdm.width();
@@ -421,7 +423,7 @@ bool KuDesignerDoc::openDocument(const KURL& url, const char *format /*=0*/)
 //    int scale = this->width()/width;
 //    width *= scale;
 //    height *= scale;
-	
+
     //creating canvas
     docCanvas = new MyCanvas(width, height);
     docCanvas->setAdvancePeriod(30);
