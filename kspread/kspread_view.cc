@@ -3170,6 +3170,12 @@ void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
     m_pCanvas->slotMaxRow( m_pTable->maxRow() );
   }
 
+  // enable/disable state of sheet scroll buttons
+  m_pTabBarFirst->setEnabled( m_pTabBar->canScrollLeft() );
+  m_pTabBarLeft->setEnabled( m_pTabBar->canScrollLeft() );
+  m_pTabBarRight->setEnabled( m_pTabBar->canScrollRight() );
+  m_pTabBarLast->setEnabled( m_pTabBar->canScrollRight() );
+
   m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
   m_protectSheet->setChecked( m_pTable->isProtected() );
   m_protectDoc->setChecked( m_pDoc->map()->isProtected() );
@@ -3253,6 +3259,11 @@ void KSpreadView::slotScrollToLeftTable()
   m_pDoc->emitBeginOperation(false);
   m_pTabBar->scrollLeft();
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
+
+  m_pTabBarFirst->setEnabled( m_pTabBar->canScrollLeft() );
+  m_pTabBarLeft->setEnabled( m_pTabBar->canScrollLeft() );
+  m_pTabBarRight->setEnabled( m_pTabBar->canScrollRight() );
+  m_pTabBarLast->setEnabled( m_pTabBar->canScrollRight() );
 }
 
 void KSpreadView::slotScrollToRightTable()
@@ -3260,6 +3271,11 @@ void KSpreadView::slotScrollToRightTable()
   m_pDoc->emitBeginOperation(false);
   m_pTabBar->scrollRight();
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
+
+  m_pTabBarFirst->setEnabled( m_pTabBar->canScrollLeft() );
+  m_pTabBarLeft->setEnabled( m_pTabBar->canScrollLeft() );
+  m_pTabBarRight->setEnabled( m_pTabBar->canScrollRight() );
+  m_pTabBarLast->setEnabled( m_pTabBar->canScrollRight() );
 }
 
 void KSpreadView::slotScrollToLastTable()
@@ -3267,6 +3283,11 @@ void KSpreadView::slotScrollToLastTable()
   m_pDoc->emitBeginOperation(false);
   m_pTabBar->scrollLast();
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
+
+  m_pTabBarFirst->setEnabled( m_pTabBar->canScrollLeft() );
+  m_pTabBarLeft->setEnabled( m_pTabBar->canScrollLeft() );
+  m_pTabBarRight->setEnabled( m_pTabBar->canScrollRight() );
+  m_pTabBarLast->setEnabled( m_pTabBar->canScrollRight() );
 }
 
 void KSpreadView::insertTable()

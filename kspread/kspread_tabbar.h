@@ -81,6 +81,10 @@ public:
      */
     void removeAllTabs();
 
+    bool canScrollLeft() const;
+
+    bool canScrollRight() const;
+
     void scrollLeft();
     void scrollRight();
     void scrollFirst();
@@ -122,6 +126,7 @@ public:
      * @return the name of all hidden tables.
      */
     QStringList listhide()const{return  tablehide;}
+
 
 signals:
     /**

@@ -33,6 +33,23 @@
 #include "kspread_undo.h"
 #include <kdebug.h>
 
+
+static int tabbar_text_width( QPainter& painter, const QString& text )
+{
+    painter.save();
+
+    QFont f = painter.font();
+    f.setBold( true );
+    painter.setFont( f );
+
+    QFontMetrics fm = painter.fontMetrics();
+    int width = fm.width( text );
+
+    painter.restore();
+
+    return width;
+}
+
 KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent )
     : QWidget( (QWidget *)_parent )
 {
@@ -120,13 +137,34 @@ void KSpreadTabBar::moveTab( int _from, int _to, bool _before )
     repaint();
 }
 
+bool KSpreadTabBar::canScrollLeft() const
+{
+    if ( tabsList.count() == 0 )
+        return false;
+
+    if ( leftTab == 1 )
+        return false;
+
+    return true;
+}
+
+bool KSpreadTabBar::canScrollRight() const
+{
+    if ( tabsList.count() == 0 )
+        return false;
+
+    if ( m_rightTab == (int)tabsList.count() )
+        return false;
+
+    if ( (unsigned int )leftTab == tabsList.count() )
+        return false;
+
+    return true;
+}
 
 void KSpreadTabBar::scrollLeft()
 {
-    if ( tabsList.count() == 0 )
-        return;
-
-    if ( leftTab == 1 )
+    if ( !canScrollLeft() )
         return;
 
     leftTab--;
@@ -135,13 +173,7 @@ void KSpreadTabBar::scrollLeft()
 
 void KSpreadTabBar::scrollRight()
 {
-    if ( tabsList.count() == 0 )
-        return;
-
-        if ( m_rightTab == (int)tabsList.count() )
-        return;
-
-    if ( (unsigned int )leftTab == tabsList.count() )
+    if ( !canScrollRight() )
         return;
 
     leftTab++;
@@ -150,10 +182,7 @@ void KSpreadTabBar::scrollRight()
 
 void KSpreadTabBar::scrollFirst()
 {
-    if ( tabsList.count() == 0 )
-        return;
-
-    if ( leftTab == 1 )
+    if ( !canScrollLeft() )
         return;
 
     leftTab = 1;
@@ -162,36 +191,27 @@ void KSpreadTabBar::scrollFirst()
 
 void KSpreadTabBar::scrollLast()
 {
-    if ( tabsList.count() == 0 )
+    if ( !canScrollRight() )
         return;
-
-    QPainter painter;
-    painter.begin( this );
 
     int i = tabsList.count();
     int x = 0;
-
-        kdDebug(36001) << "i: " << i << " rt: " << m_rightTab << endl;
-
-        if ( m_rightTab == i )
-        return;
-
-    QStringList::Iterator it;
-        it = tabsList.end();
-        do
-        {
-                --it;
-                QFontMetrics fm = painter.fontMetrics();
-
-            x += 10 + fm.width( *it );
-                if ( x > width() )
-                {
-                        leftTab = i + 1;
-                        break;
-                }
-                --i;
+    QStringList::Iterator it = tabsList.end();
+    QPainter painter( this );
+    do
+    {
+      --it;
+      x += 10 + tabbar_text_width( painter, *it );
+      if ( x > width() )
+      {
+        leftTab = i + 1;
+        break;
+      }
+      --i;
     } while ( it != tabsList.begin() );
+
     painter.end();
+
     repaint( false );
 }
 
@@ -246,40 +266,47 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
     int active_x = -1;
     int active_width = 0;
     int active_y = 0;
+    bool paint_active = false;
 
     QStringList::Iterator it;
     for ( it = tabsList.begin(); it != tabsList.end(); ++it )
     {
         text = *it;
+        int text_width = tabbar_text_width( painter, text );
         QFontMetrics fm = painter.fontMetrics();
-        int text_width = fm.width( text );
         int text_y = ( height() - fm.ascent() - fm.descent() ) / 2 + fm.ascent();
 
-        if ( i == activeTab )
+        if ( i >= leftTab )
         {
-            active_text = text;
-            active_x = x;
-            active_y = text_y;
-            active_width = text_width;
-
-            if ( i >= leftTab )
-                x += 10 + text_width;
-        }
-        else if ( i >= leftTab )
-        {
-        if ( m_moveTab == i )
-                  paintTab( painter, x, text, text_width, text_y, false, true );
+            // the tab is visible
+            if( i != activeTab )
+            {
+                if ( m_moveTab == i )
+                    paintTab( painter, x, text, text_width, text_y, false, true );
                 else
                     paintTab( painter, x, text, text_width, text_y, false );
+            }
+            else
+            {
+                // don't paint active tab now
+                // it will be painter later
+                active_text = text;
+                active_x = x;
+                active_y = text_y;
+                active_width = text_width;
+                paint_active = true;
+            }
+
             x += 10 + text_width;
         }
+
         if ( x - 10 < width() )
                 m_rightTab = i;
         i++;
     }
 
-//    if ( active_text != 0L )
-    paintTab( painter, active_x, active_text, active_width, active_y, TRUE );
+    if( paint_active )
+      paintTab( painter, active_x, active_text, active_width, active_y, TRUE );
 
     painter.end();
     bitBlt( this, 0, 0, &pm );
@@ -327,7 +354,18 @@ void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, in
                 painter.setBrush( oldBrush );
             }
     }
-    painter.drawText( x + 10, text_y , text );
+
+    if( isactive )
+    {
+      painter.save();
+      QFont f = painter.font();
+      f.setBold( true );
+      painter.setFont( f );
+      painter.drawText( x + 10, text_y , text );
+      painter.restore();
+    }
+    else
+      painter.drawText( x + 10, text_y , text );
 }
 
 
@@ -366,7 +404,7 @@ void KSpreadTabBar::rename( KSpreadSheet * table, QString newName, QString const
         while (!util_validateTableName(newName))
         {
             KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."), 
+            KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."),
                                       i18n("Change Sheet Name") );
 
             newName = newName.simplifyWhiteSpace();
@@ -437,8 +475,7 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
     for ( it = tabsList.begin(); it != tabsList.end(); ++it )
     {
         text = *it;
-        QFontMetrics fm = painter.fontMetrics();
-        int text_width = fm.width( text );
+        int text_width = tabbar_text_width( painter, text );
 
         if ( i >= leftTab )
         {
@@ -562,8 +599,7 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
         QStringList::Iterator it;
             for ( it = tabsList.begin(); it != tabsList.end(); ++it )
         {
-            QFontMetrics fm = painter.fontMetrics();
-            int text_width = fm.width( *it );
+            int text_width = tabbar_text_width( painter, *it );
 
             if ( i >= leftTab )
             {
