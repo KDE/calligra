@@ -347,7 +347,7 @@ void KivioView::setupActions()
   AddSpawnerSetAction* addSpSet =  new AddSpawnerSetAction( i18n("Add Stencil Set"), "open_stencilset", 0, actionCollection(), "addStencilSet" );
   connect(addSpSet,SIGNAL(activated(const QString&)),SLOT(addStencilSet(const QString&)));
 
-  (void) new KAction( i18n("Align && Distribute"), ALT+Key_A, this, SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
+  (void) new KAction( i18n("Align && Distribute..."), ALT+Key_A, this, SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
 
   KStdAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
   KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
@@ -359,8 +359,8 @@ void KivioView::setupActions()
   (void) new KAction( i18n("Group Selected Stencils"), "group_stencils", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
   (void) new KAction( i18n("Ungroup Selected Stencils"), "ungroup_stencils", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
 
-  (void) new KAction( i18n("Bring To Front"), "bring_stencil_to_front", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
-  (void) new KAction( i18n("Send To Back"), "send_stencil_to_back", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
+  (void) new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
+  (void) new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
 
   /* Create the fg color button */
   m_setFGColor = new TKSelectColorAction( i18n("Set Foreground Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor" );
@@ -410,27 +410,27 @@ void KivioView::setupActions()
   m_hidePage = new KAction( i18n("Hide Page"),0 ,this,SLOT(hidePage()), actionCollection(), "hidePage" );
   m_exportPage = new KAction( i18n("Export Page..."),0,this,SLOT(exportPage()), actionCollection(), "exportPage");
 
-  KToggleAction* showPageBorders = new KToggleAction( i18n("Show page borders"), BarIcon("view_pageborder",KivioFactory::global()), CTRL+Key_B, actionCollection(), "showPageBorders" );
+  KToggleAction* showPageBorders = new KToggleAction( i18n("Show Page Borders"), BarIcon("view_pageborder",KivioFactory::global()), CTRL+Key_B, actionCollection(), "showPageBorders" );
   connect( showPageBorders, SIGNAL(toggled(bool)), SLOT(togglePageBorders(bool)));
 
-  KToggleAction* showPageMargins = new KToggleAction( i18n("Show page margins"), "view_margins", 0, actionCollection(), "showPageMargins" );
+  KToggleAction* showPageMargins = new KToggleAction( i18n("Show Page Margins"), "view_margins", 0, actionCollection(), "showPageMargins" );
   connect( showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
 
-  KToggleAction* showRulers = new KToggleAction( i18n("Show rulers"), "view_ruler", 0, actionCollection(), "showRulers" );
+  KToggleAction* showRulers = new KToggleAction( i18n("Show Rulers"), "view_ruler", 0, actionCollection(), "showRulers" );
   connect( showRulers, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
   // Grid actions
-  KToggleAction* showGrid = new KToggleAction( i18n("Show grid"), "view_grid", 0, actionCollection(), "showGrid" );
+  KToggleAction* showGrid = new KToggleAction( i18n("Show Grid"), "view_grid", 0, actionCollection(), "showGrid" );
   connect( showGrid, SIGNAL(toggled(bool)), SLOT(toggleShowGrid(bool)));
 
-  KToggleAction* snapGrid = new KToggleAction( i18n("Snap grid"), "view_grid", 0, actionCollection(), "snapGrid" );
+  KToggleAction* snapGrid = new KToggleAction( i18n("Snap Grid"), "view_grid", 0, actionCollection(), "snapGrid" );
   connect( snapGrid, SIGNAL(toggled(bool)), SLOT(toggleSnapGrid(bool)));
 
   // Guides actions
-  KToggleAction* showGuides = new KToggleAction( i18n("Show guides"), 0, actionCollection(), "showGuides" );
+  KToggleAction* showGuides = new KToggleAction( i18n("Show Guides"), 0, actionCollection(), "showGuides" );
   connect( showGuides, SIGNAL(toggled(bool)), SLOT(toggleShowGuides(bool)));
 
-  KToggleAction* snapGuides = new KToggleAction( i18n("Snap guides"), 0, actionCollection(), "snapGuides" );
+  KToggleAction* snapGuides = new KToggleAction( i18n("Snap Guides"), 0, actionCollection(), "snapGuides" );
   connect( snapGuides, SIGNAL(toggled(bool)), SLOT(toggleSnapGuides(bool)));
   //--
 

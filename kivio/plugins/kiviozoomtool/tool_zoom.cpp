@@ -46,25 +46,25 @@ ZoomTool::ZoomTool(KivioView* view)
   connect(m_z1,SIGNAL(activated()),SLOT(zoomActivated()));
   connect(m_z2,SIGNAL(activated()),SLOT(handActivated()));
 
-  m_pPlus = new KAction( i18n("Zoom plus"), "kivio_zoom_plus", SHIFT+Key_F2, actionCollection(), "zoomPlus" );
+  m_pPlus = new KAction( i18n("Zoom Plus"), "kivio_zoom_plus", SHIFT+Key_F2, actionCollection(), "zoomPlus" );
   connect(m_pPlus,SIGNAL(activated()),SLOT(zoomPlus()));
 
-  m_pMinus = new KAction( i18n("Zoom minus"), "kivio_zoom_minus", SHIFT+Key_F3, actionCollection(), "zoomMinus" );
+  m_pMinus = new KAction( i18n("Zoom Minus"), "kivio_zoom_minus", SHIFT+Key_F3, actionCollection(), "zoomMinus" );
   connect(m_pMinus,SIGNAL(activated()),SLOT(zoomMinus()));
 
-  m_pZoomWidth = new KAction( i18n("Zoom width"), "kivio_zoom_width", SHIFT+Key_F4, actionCollection(), "zoomWidth" );
+  m_pZoomWidth = new KAction( i18n("Zoom Width"), "kivio_zoom_width", SHIFT+Key_F4, actionCollection(), "zoomWidth" );
   connect(m_pZoomWidth,SIGNAL(activated()),SLOT(zoomWidth()));
 
-  m_pZoomHeight = new KAction( i18n("Zoom height"), "kivio_zoom_height", SHIFT+Key_F5, actionCollection(), "zoomHeight" );
+  m_pZoomHeight = new KAction( i18n("Zoom Height"), "kivio_zoom_height", SHIFT+Key_F5, actionCollection(), "zoomHeight" );
   connect(m_pZoomHeight,SIGNAL(activated()),SLOT(zoomHeight()));
 
-  m_pZoomPage = new KAction( i18n("Zoom page"), "kivio_zoom_page", SHIFT+Key_F6, actionCollection(), "zoomPage" );
+  m_pZoomPage = new KAction( i18n("Zoom Page"), "kivio_zoom_page", SHIFT+Key_F6, actionCollection(), "zoomPage" );
   connect(m_pZoomPage,SIGNAL(activated()),SLOT(zoomPage()));
 
-  m_pZoomSelected = new KAction( i18n("Zoom selected"), "kivio_zoom_selected", CTRL+Key_Y, actionCollection(), "zoomSelected" );
+  m_pZoomSelected = new KAction( i18n("Zoom Selected"), "kivio_zoom_selected", CTRL+Key_Y, actionCollection(), "zoomSelected" );
   connect(m_pZoomSelected,SIGNAL(activated()),SLOT(zoomSelected()));
 
-  m_pZoomAllObjects = new KAction( i18n("Zoom all objects"), "kivio_zoom_allobject", 0, actionCollection(), "zoomAllObjects" );
+  m_pZoomAllObjects = new KAction( i18n("Zoom All Objects"), "kivio_zoom_allobject", 0, actionCollection(), "zoomAllObjects" );
   connect(m_pZoomAllObjects,SIGNAL(activated()),SLOT(zoomAllobjects()));
 
   QPixmap pix;

@@ -537,7 +537,7 @@ bool KoMainWindow::saveDocument( bool saveas )
     if ( pDoc->url().isEmpty() || saveas )
     {
         KoFileDialog *dialog=new KoFileDialog(QString::null, QString::null, 0L, "file dialog", true);
-        dialog->setCaption( i18n("Save document as") );
+        dialog->setCaption( i18n("Save Document As") );
         dialog->setKeepLocation( true );
         dialog->setOperationMode( KFileDialog::Saving );
         QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export );
@@ -726,7 +726,7 @@ void KoMainWindow::slotFileNew()
 void KoMainWindow::slotFileOpen()
 {
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
-    dialog->setCaption( i18n("Open document") );
+    dialog->setCaption( i18n("Open Document") );
     dialog->setMimeFilter( KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
                                                         KoFilterManager::Import ) );
     if(dialog->exec()!=QDialog::Accepted) {

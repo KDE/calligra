@@ -317,113 +317,113 @@ void Document::formulaDies(Container* f)
 
 void Document::createActions(KActionCollection* collection)
 {
-    impl->addThinSpaceAction = new KAction( i18n( "Add thin space" ),
+    impl->addThinSpaceAction = new KAction( i18n( "Add Thin Space" ),
                                     0,
                                     this, SLOT( addThinSpace() ),
                                     collection, "formula_addthinspace") ;
-    impl->addMediumSpaceAction = new KAction( i18n( "Add medium space" ),
+    impl->addMediumSpaceAction = new KAction( i18n( "Add Medium Space" ),
                                     0,
                                     this, SLOT( addMediumSpace() ),
                                     collection, "formula_addmediumspace" );
-    impl->addThickSpaceAction = new KAction( i18n( "Add thick space" ),
+    impl->addThickSpaceAction = new KAction( i18n( "Add Thick Space" ),
                                     0,
                                     this, SLOT( addThickSpace() ),
                                     collection, "formula_addthickspace" );
-    impl->addQuadSpaceAction = new KAction( i18n( "Add quad space" ),
+    impl->addQuadSpaceAction = new KAction( i18n( "Add Quad Space" ),
                                     0,
                                     this, SLOT( addQuadSpace() ),
                                     collection, "formula_addquadspace" );
 
-    impl->addIntegralAction = new KAction(i18n("Add integral"),
+    impl->addIntegralAction = new KAction(i18n("Add Integral"),
                                     "int",
                                     CTRL + Key_6,
                                     this, SLOT(addIntegral()),
                                     collection, "formula_addintegral");
-    impl->addSumAction      = new KAction(i18n("Add sum"),
+    impl->addSumAction      = new KAction(i18n("Add Sum"),
                                     "sum",
                                     CTRL + Key_7,
                                     this, SLOT(addSum()),
                                     collection, "formula_addsum");
-    impl->addProductAction  = new KAction(i18n("Add product"),
+    impl->addProductAction  = new KAction(i18n("Add Product"),
                                     "prod",
                                     CTRL + Key_4,
                                     this, SLOT(addProduct()),
                                     collection, "formula_addproduct");
-    impl->addRootAction     = new KAction(i18n("Add root"),
+    impl->addRootAction     = new KAction(i18n("Add Root"),
                                     "sqrt",
                                     CTRL + Key_2,
                                     this, SLOT(addRoot()),
                                     collection, "formula_addroot");
-    impl->addFractionAction = new KAction(i18n("Add fraction"),
+    impl->addFractionAction = new KAction(i18n("Add Fraction"),
                                     "frac",
                                     CTRL + Key_3,
                                     this, SLOT(addFraction()),
                                     collection, "formula_addfrac");
-    impl->addBracketAction  = new KAction(i18n("Add bracket"),
+    impl->addBracketAction  = new KAction(i18n("Add Bracket"),
                                     "paren",
                                     0,
                                     this, SLOT(addDefaultBracket()),
                                     collection,"formula_addbra");
-    impl->addSBracketAction = new KAction(i18n("Add square bracket"),
+    impl->addSBracketAction = new KAction(i18n("Add Square Bracket"),
                                     "brackets",
                                     0,
                                     this, SLOT(addSquareBracket()),
                                     collection,"formula_addsqrbra");
-    impl->addCBracketAction = new KAction(i18n("Add curly bracket"),
+    impl->addCBracketAction = new KAction(i18n("Add Curly Bracket"),
                                     "brace",
                                     0,
                                     this, SLOT(addCurlyBracket()),
                                     collection,"formula_addcurbra");
-    impl->addAbsAction      = new KAction(i18n("Add abs"),
+    impl->addAbsAction      = new KAction(i18n("Add Abs"),
                                     "abs",
                                     0,
                                     this, SLOT(addLineBracket()),
                                     collection,"formula_addabsbra");
 
-    impl->addMatrixAction   = new KAction(i18n("Add matrix"),
+    impl->addMatrixAction   = new KAction(i18n("Add Matrix"),
                                     "matrix",
                                     CTRL + Key_8,
                                     this, SLOT(addMatrix()),
                                     collection, "formula_addmatrix");
 
-    impl->addOneByTwoMatrixAction   = new KAction(i18n("Add 1x2 matrix"),
+    impl->addOneByTwoMatrixAction   = new KAction(i18n("Add 1x2 Matrix"),
                                     "onetwomatrix",
                                     0,
                                     this, SLOT(addOneByTwoMatrix()),
                                     collection, "formula_add_one_by_two_matrix");
 
 
-    impl->addUpperLeftAction  = new KAction(i18n("Add upper left index"),
+    impl->addUpperLeftAction  = new KAction(i18n("Add Upper Left Index"),
                                       "lsup",
                                       0,
                                       this, SLOT(addUpperLeftIndex()),
                                       collection, "formula_addupperleft");
-    impl->addLowerLeftAction  = new KAction(i18n("Add lower left index"),
+    impl->addLowerLeftAction  = new KAction(i18n("Add Lower Left Index"),
                                       "lsub",
                                       0,
                                       this, SLOT(addLowerLeftIndex()),
                                       collection, "formula_addlowerleft");
-    impl->addUpperRightAction = new KAction(i18n("Add upper right index"),
+    impl->addUpperRightAction = new KAction(i18n("Add Upper Right Index"),
                                       "rsup",
                                       0,
                                       this, SLOT(addUpperRightIndex()),
                                       collection, "formula_addupperright");
-    impl->addLowerRightAction = new KAction(i18n("Add lower right index"),
+    impl->addLowerRightAction = new KAction(i18n("Add Lower Right Index"),
                                       "rsub",
                                       0,
                                       this, SLOT(addLowerRightIndex()),
                                       collection, "formula_addlowerright");
 
-    impl->addGenericUpperAction = new KAction(i18n("Add upper index"),
+    impl->addGenericUpperAction = new KAction(i18n("Add Upper Index"),
                                       CTRL + Key_U,
                                       this, SLOT(addGenericUpperIndex()),
                                       collection, "formula_addupperindex");
-    impl->addGenericLowerAction = new KAction(i18n("Add lower index"),
+    impl->addGenericLowerAction = new KAction(i18n("Add Lower Index"),
                                       CTRL + Key_L,
                                       this, SLOT(addGenericLowerIndex()),
                                       collection, "formula_addlowerindex");
 
-    impl->removeEnclosingAction = new KAction(i18n("Remove enclosing element"),
+    impl->removeEnclosingAction = new KAction(i18n("Remove Enclosing Element"),
                                         CTRL + Key_R,
                                         this, SLOT(removeEnclosing()),
                                         collection, "formula_removeenclosing");
@@ -464,7 +464,7 @@ void Document::createActions(KActionCollection* collection)
                                          this, SLOT( removeRow() ),
                                          collection, "formula_removerow" );
 
-    impl->syntaxHighlightingAction = new KToggleAction(i18n("Syntax highlighting"),
+    impl->syntaxHighlightingAction = new KToggleAction(i18n("Syntax Highlighting"),
                                                  0,
                                                  this, SLOT(toggleSyntaxHighlighting()),
                                                  collection, "formula_syntaxhighlighting");
@@ -482,7 +482,7 @@ void Document::createActions(KActionCollection* collection)
     delimiter.append(QString("]"));
     delimiter.append(QString("}"));
     delimiter.append(QString(">"));
-    impl->leftBracket = new KSelectAction(i18n("Left delimiter"),
+    impl->leftBracket = new KSelectAction(i18n("Left Delimiter"),
                                     0, this, SLOT(delimiterLeft()),
                                     collection, "formula_typeleft");
     impl->leftBracket->setItems(delimiter);
@@ -501,13 +501,13 @@ void Document::createActions(KActionCollection* collection)
     delimiter.append(QString("["));
     delimiter.append(QString("{"));
     delimiter.append(QString("<"));
-    impl->rightBracket = new KSelectAction(i18n("Right delimiter"),
+    impl->rightBracket = new KSelectAction(i18n("Right Delimiter"),
                                      0, this, SLOT(delimiterRight()),
                                      collection, "formula_typeright");
     impl->rightBracket->setItems(delimiter);
     //rightBracket->setCurrentItem(0);
 
-    impl->insertSymbolAction = new KAction(i18n("Insert symbol"),
+    impl->insertSymbolAction = new KAction(i18n("Insert Symbol"),
                                            "key_enter",
                                            CTRL + Key_I,
                                            this, SLOT(insertSymbol()),

@@ -40,7 +40,7 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
 	: QDialog( parent, name,TRUE )
 {
   QGridLayout *grid1 = new QGridLayout(this,10,3,15,7);
-  setCaption( i18n("Sort lists") );
+  setCaption( i18n("Sort Lists") );
 
   QLabel *lab=new QLabel(this);
   lab->setText(i18n("List:" ));

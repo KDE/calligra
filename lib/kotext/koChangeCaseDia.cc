@@ -31,7 +31,7 @@ KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
 
-    setCaption( i18n("Change case") );
+    setCaption( i18n("Change Case") );
     QVBox *page = makeVBoxMainWidget();
 
     QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Case:" ),page );

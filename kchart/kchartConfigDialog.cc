@@ -49,7 +49,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     // Geometry page
     //_geompage = new KChartGeometryConfigPage( this );
     //addTab( _geompage, i18n( "&Geometry" ) );
-    setCaption( i18n( "Chart config dialog" ) );
+    setCaption( i18n( "Chart Config Dialog" ) );
     // Color page
 
     if(flags & KC_COLORS )

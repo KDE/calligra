@@ -27,7 +27,7 @@
 
 
 KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )
-	: KDialogBase( parent, name, TRUE,i18n("Goto cell"),Ok|Cancel )
+	: KDialogBase( parent, name, TRUE,i18n("Goto Cell"),Ok|Cancel )
 {
   m_pView = parent;
   QWidget *page = new QWidget( this );

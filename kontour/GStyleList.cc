@@ -35,7 +35,7 @@ GStyleList::GStyleList()
 {
   list.clear();
   GStyle *st = new GStyle();
-  list.insert(i18n("default"), st);
+  list.insert(i18n("Default"), st);
   mStyle = st;
   mCur = 0;
   mNum = 1;

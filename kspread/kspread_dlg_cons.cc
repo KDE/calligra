@@ -71,9 +71,9 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pRefs = new QListBox( this );
   grid1->addMultiCellWidget( m_pRefs,5,8,0,0);
 
-  m_pRow = new QCheckBox( i18n("Description in Row"), this );
+  m_pRow = new QCheckBox( i18n("Description in row"), this );
   grid1->addWidget( m_pRow,9,0);
-  m_pCol = new QCheckBox( i18n("Description in Column"), this );
+  m_pCol = new QCheckBox( i18n("Description in column"), this );
   grid1->addWidget(m_pCol,10,0);
   m_pCopy = new QCheckBox( i18n("Copy data"), this );
   grid1->addWidget(m_pCopy,11,0);

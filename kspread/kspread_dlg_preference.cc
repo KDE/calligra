@@ -137,7 +137,7 @@ preference::preference( KSpreadView* _view, QVBox *box, char *name )
   m_pFormula= new QCheckBox(i18n("Show &formula"),tmpQGroupBox);
   m_pFormula->setChecked(m_pView->activeTable()->getShowFormula());
 
-  m_pGrid=new QCheckBox(i18n("Show &Grid"),tmpQGroupBox);
+  m_pGrid=new QCheckBox(i18n("Show &grid"),tmpQGroupBox);
   m_pGrid->setChecked(m_pView->activeTable()->getShowGrid());
 
   m_pColumn=new QCheckBox(i18n("Show c&olumn number"),tmpQGroupBox);
@@ -146,10 +146,10 @@ preference::preference( KSpreadView* _view, QVBox *box, char *name )
   m_pLcMode=new QCheckBox(i18n("&LC mode"),tmpQGroupBox);
   m_pLcMode->setChecked(m_pView->activeTable()->getLcMode());
 
-  m_pAutoCalc= new QCheckBox(i18n("&Automatic Recalculation"),tmpQGroupBox);
+  m_pAutoCalc= new QCheckBox(i18n("&Automatic recalculation"),tmpQGroupBox);
   m_pAutoCalc->setChecked(m_pView->activeTable()->getAutoCalc());
 
-  m_pHideZero= new QCheckBox(i18n("&Hide Zero"),tmpQGroupBox);
+  m_pHideZero= new QCheckBox(i18n("&Hide zero"),tmpQGroupBox);
   m_pHideZero->setChecked(m_pView->activeTable()->getHideZero());
 
   m_pFirstLetterUpper= new QCheckBox(i18n("Convert first letter to &upper case"),tmpQGroupBox);
@@ -215,7 +215,7 @@ parameterLocale::parameterLocale( KSpreadView* _view, QVBox *box , char *name )
   m_money=new QLabel( tmpQGroupBox,"label3");
   m_money->setText( i18n("Money: %1").arg( locale->formatMoney(12.55) ));
 
-  m_updateButton=new QPushButton ( i18n("&Update to locale system"), tmpQGroupBox);
+  m_updateButton=new QPushButton ( i18n("&Update to Locale System"), tmpQGroupBox);
   connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
 }
 
@@ -293,9 +293,9 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
   showHScrollBar->setChecked(horizontal);
 
 
-  showColHeader=new QCheckBox(i18n("Show C&olumn Header"),tmpQGroupBox);
+  showColHeader=new QCheckBox(i18n("Show c&olumn header"),tmpQGroupBox);
   showColHeader->setChecked(colHeader);
-  showRowHeader=new QCheckBox(i18n("Show &Row Header"),tmpQGroupBox);
+  showRowHeader=new QCheckBox(i18n("Show &row header"),tmpQGroupBox);
   showRowHeader->setChecked(rowHeader);
 
   showTabBar =new QCheckBox(i18n("Show ta&bs"),tmpQGroupBox);

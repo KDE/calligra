@@ -789,7 +789,7 @@ void KoCompletionDia::setup()
 {
     QVBox *page = makeVBoxMainWidget();
     cbAllowCompletion = new QCheckBox( page );
-    cbAllowCompletion->setText( i18n( "Enable Completion" ) );
+    cbAllowCompletion->setText( i18n( "Enable completion" ) );
     // TODO whatsthis or text, to tell about the key to use for autocompletion....
     cbAllowCompletion->resize( cbAllowCompletion->sizeHint() );
 

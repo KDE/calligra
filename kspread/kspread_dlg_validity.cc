@@ -101,7 +101,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     val_max->setValidator( new KFloatValidator( val_max ) );
     lay1->addWidget(tmpQButtonGroup);
 
-    QFrame *page2 = addPage(i18n("Error alert"));
+    QFrame *page2 = addPage(i18n("Error Alert"));
 
     lay1 = new QVBoxLayout( page2 );
     lay1->setMargin( 5 );

@@ -383,7 +383,7 @@ void KoTemplateChooseDia::chooseFile()
         dir = QFileInfo( d->m_file.path() ).absFilePath();
 
     KFileDialog *dialog=new KFileDialog(dir, QString::null, 0L, "file dialog", true);
-    dialog->setCaption( i18n("Open document") );
+    dialog->setCaption( i18n("Open Document") );
     dialog->setMimeFilter( KoFilterManager::mimeFilter( d->m_format, KoFilterManager::Import ) );
     // ##### CHECK
     //KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import, d->m_format,

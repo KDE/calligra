@@ -797,7 +797,7 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
 {
     switch ( *request ) {
     case req_addText: {
-        KFCReplace* command = new KFCReplace( i18n("Add text"), container );
+        KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
         TextRequest* tr = static_cast<TextRequest*>( request );
         for ( uint i = 0; i < tr->text().length(); i++ ) {
             command->addElement( new TextElement( tr->text()[i] ) );
@@ -805,7 +805,7 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
         return command;
     }
     case req_addTextChar: {
-        KFCReplace* command = new KFCReplace( i18n("Add text"), container );
+        KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
         TextCharRequest* tr = static_cast<TextCharRequest*>( request );
         TextElement* element = new TextElement( tr->ch(), tr->isSymbol() );
         command->addElement( element );
@@ -814,42 +814,42 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
     case req_addNameSequence:
         if ( onlyTextSelected( container->activeCursor() ) ) {
             //kdDebug( DEBUGID ) << "SequenceElement::buildCommand" << endl;
-            KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add name" ), container );
+            KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Name" ), container );
             command->setElement( new NameSequence() );
             return command;
         }
         break;
     case req_addBracket: {
-        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add bracket"), container);
+        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Bracket"), container);
         BracketRequest* br = static_cast<BracketRequest*>( request );
         command->setElement( new BracketElement( br->left(), br->right() ) );
         return command;
     }
     case req_addSpace: {
-        KFCReplace* command = new KFCReplace( i18n("Add space"), container );
+        KFCReplace* command = new KFCReplace( i18n("Add Space"), container );
         SpaceRequest* sr = static_cast<SpaceRequest*>( request );
         SpaceElement* element = new SpaceElement( sr->space() );
         command->addElement( element );
         return command;
     }
     case req_addFraction: {
-        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add fraction"), container);
+        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Fraction"), container);
         command->setElement(new FractionElement());
         return command;
     }
     case req_addRoot: {
-        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add root"), container);
+        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Root"), container);
         command->setElement(new RootElement());
         return command;
     }
     case req_addSymbol: {
-        KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add symbol" ), container );
+        KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Symbol" ), container );
         SymbolRequest* sr = static_cast<SymbolRequest*>( request );
         command->setElement( new SymbolElement( sr->type() ) );
         return command;
     }
     case req_addOneByTwoMatrix: {
-        KFCAddReplacing* command = new KFCAddReplacing( i18n("Add 1x2 matrix"), container );
+        KFCAddReplacing* command = new KFCAddReplacing( i18n("Add 1x2 Matrix"), container );
         FractionElement* element = new FractionElement();
         element->showLine(false);
         command->setElement(element);
@@ -867,7 +867,7 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
             delete dialog;
         }
         if ( ( rows != 0 ) && ( cols != 0 ) ) {
-            KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add matrix" ), container );
+            KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Matrix" ), container );
             command->setElement( new MatrixElement( rows, cols ) );
             return command;
         }
@@ -1303,7 +1303,7 @@ Command* NameSequence::buildCommand( Container* container, Request* request )
         if ( element != 0 ) {
             getParent()->selectChild( container->activeCursor(), this );
 
-            KFCReplace* command = new KFCReplace( i18n( "Add element" ), container );
+            KFCReplace* command = new KFCReplace( i18n( "Add Element" ), container );
             command->addElement( element );
             return command;
         }

@@ -53,7 +53,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   switch(type)
 	{
 	case resize_row:
-		setCaption( i18n("Resize row") );
+		setCaption( i18n("Resize Row") );
 		if(selection.top()==0)
 			rl = m_pView->activeTable()->rowLayout( m_pView->canvasWidget()->markerRow());
 		else
@@ -66,7 +66,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 		tmpCheck+=" (20 mm)";
 		break;
 	case resize_column:
-		setCaption( i18n("Resize column") );
+		setCaption( i18n("Resize Column") );
 		if(selection.left()==0)
 			cl = m_pView->activeTable()->columnLayout( m_pView->canvasWidget()->markerColumn());
 		else

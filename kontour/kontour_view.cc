@@ -161,8 +161,8 @@ void KontourView::setupActions()
 
   // View menu
 
-  m_zoomIn = new KAction(i18n("Zoom in"), "viewmag+", CTRL+Key_Plus, this, SLOT(slotZoomIn()), actionCollection(), "zoomin");
-  m_zoomOut = new KAction(i18n("Zoom out"), "viewmag-", CTRL+Key_Minus, this, SLOT(slotZoomOut()), actionCollection(), "zoomout");
+  m_zoomIn = new KAction(i18n("Zoom In"), "viewmag+", CTRL+Key_Plus, this, SLOT(slotZoomIn()), actionCollection(), "zoomin");
+  m_zoomOut = new KAction(i18n("Zoom Out"), "viewmag-", CTRL+Key_Minus, this, SLOT(slotZoomOut()), actionCollection(), "zoomout");
 
   m_viewZoom = new KSelectAction(i18n("&Zoom"), 0, actionCollection(), "view_zoom");
   QStringList zooms;
@@ -197,11 +197,11 @@ void KontourView::setupActions()
   connect(m_showHelplines, SIGNAL(toggled(bool)), this, SLOT(slotShowHelplines(bool)));
 
   // Layout menu
-  m_snapToGrid = new KToggleAction(i18n("&Align To Grid"), "snap_to_grid", 0, actionCollection(), "alignToGrid");
+  m_snapToGrid = new KToggleAction(i18n("&Align to Grid"), "snap_to_grid", 0, actionCollection(), "alignToGrid");
   connect(m_snapToGrid, SIGNAL(toggled(bool)), this, SLOT(slotAlignToGrid(bool)));
   m_snapToGrid->setChecked(activeDocument()->snapToGrid());
 
-  m_alignToHelplines = new KToggleAction( i18n("Align &To Helplines"), 0, actionCollection(), "alignToHelplines" );
+  m_alignToHelplines = new KToggleAction( i18n("Align &to Helplines"), 0, actionCollection(), "alignToHelplines" );
   connect( m_alignToHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToHelplines( bool ) ) );
   m_alignToHelplines->setChecked(activeDocument()->snapToHelplines());
 
@@ -219,9 +219,9 @@ void KontourView::setupActions()
   m_styles = new KSelectAction(i18n("&Styles"), 0, actionCollection(), "styles");
   connect(m_styles, SIGNAL(activated(const QString &)),this, SLOT(slotStyles(const QString &)));
 
-  m_addStyle = new KAction(i18n("&Add style"), 0, this, SLOT(slotAddStyle()), actionCollection(), "addStyle");
-  m_deleteStyle = new KAction(i18n("&Delete style"), 0, this, SLOT(slotDeleteStyle()), actionCollection(), "deleteStyle");
-  m_dashEdit = new KAction(i18n("&Edit dashes"), 0, this, SLOT(slotDashEdit()), actionCollection(), "dashEdit");
+  m_addStyle = new KAction(i18n("&Add Style"), 0, this, SLOT(slotAddStyle()), actionCollection(), "addStyle");
+  m_deleteStyle = new KAction(i18n("&Delete Style"), 0, this, SLOT(slotDeleteStyle()), actionCollection(), "deleteStyle");
+  m_dashEdit = new KAction(i18n("&Edit Dashes"), 0, this, SLOT(slotDashEdit()), actionCollection(), "dashEdit");
 
   // Settings menu
   m_showLayerPanel = new KToggleAction(i18n("Show &Layer Panel"), 0, actionCollection(), "showLayerPanel");

@@ -211,12 +211,12 @@ void OptionsDialog::createGridWidget(QWidget *parent)
   hspinbox->setValue(mGDoc->xGrid());
   vspinbox->setValue(mGDoc->yGrid());
 
-  gbutton = new QCheckBox(i18n("Snap To Grid"), parent);
+  gbutton = new QCheckBox(i18n("Snap to grid"), parent);
   gbutton->setChecked(mGDoc->snapToGrid());
   connect(gbutton, SIGNAL(stateChanged(int)), this, SLOT(slotSetDocModified()));
   layout->addWidget(gbutton, 1, 0);
 
-  sbutton = new QCheckBox(i18n("Show Grid"), parent);
+  sbutton = new QCheckBox(i18n("Show grid"), parent);
   sbutton->setChecked(mGDoc->showGrid());
   connect(sbutton, SIGNAL(stateChanged(int)), this, SLOT(slotSetDocModified()));
   connect(sbutton, SIGNAL(stateChanged(int)), this, SLOT(slotSetViewUpdate()));

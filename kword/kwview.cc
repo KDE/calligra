@@ -333,7 +333,7 @@ void KWView::setupActions()
     // accelerator clashes.
 
     // -------------- File menu
-    actionExtraCreateTemplate = new KAction( i18n( "&Create Template from Document..." ), 0,
+    actionExtraCreateTemplate = new KAction( i18n( "&Create Template From Document..." ), 0,
                                              this, SLOT( extraCreateTemplate() ),
                                              actionCollection(), "extra_template" );
     actionExtraCreateTemplate->setToolTip( i18n( "Save this document and use it later as a template" ) );
@@ -369,13 +369,13 @@ void KWView::setupActions()
     actionEditDelFrame->setToolTip( i18n( "Delete the currently selected frame." ) ); // #### there can be more than one frame selected (DF)
     actionEditDelFrame->setWhatsThis( i18n( "Delete the currently selected frame." ) );
 
-    actionRaiseFrame = new KAction( i18n( "Ra&ise frame" ), "raise",
+    actionRaiseFrame = new KAction( i18n( "Ra&ise Frame" ), "raise",
                                     CTRL +SHIFT+ Key_R, this, SLOT( raiseFrame() ),
                                     actionCollection(), "raiseframe" );
     actionRaiseFrame->setToolTip( i18n( "Raise the currently selected frame so that it appears above all the other frames" ) );
     actionRaiseFrame->setWhatsThis( i18n( "Raise the currently selected frame so that it appears above all the other frames. This is only useful if frames overlap each other. If multiple frames are selected they are all raised in turn." ) );
 
-    actionLowerFrame = new KAction( i18n( "&Lower frame" ), "lower",
+    actionLowerFrame = new KAction( i18n( "&Lower Frame" ), "lower",
                                     CTRL +SHIFT+ Key_L, this, SLOT( lowerFrame() ),
                                     actionCollection(), "lowerframe" );
     actionLowerFrame->setToolTip( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it" ) );
@@ -389,15 +389,15 @@ void KWView::setupActions()
     actionViewTextMode->setWhatsThis( i18n( "Text mode." ) );
 
     actionViewTextMode->setExclusiveGroup( "viewmodes" );
-    actionViewPageMode = new KToggleAction( i18n( "&Page mode" ), 0,
+    actionViewPageMode = new KToggleAction( i18n( "&Page Mode" ), 0,
                                             this, SLOT( viewPageMode() ),
                                             actionCollection(), "view_pagemode" );
-    actionViewPageMode->setWhatsThis( i18n( "Switch from preview mode to page mode.<br><br>Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to Preview mode." ) );
+    actionViewPageMode->setWhatsThis( i18n( "Switch from preview mode to page mode.<br><br> is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to Preview mode." ) );
     actionViewPageMode->setToolTip( i18n( "Switch from preview mode to page editing mode." ) );
 
     actionViewPageMode->setExclusiveGroup( "viewmodes" );
     actionViewPageMode->setChecked( true );
-    actionViewPreviewMode = new KToggleAction( i18n( "Pre&view mode" ), 0,
+    actionViewPreviewMode = new KToggleAction( i18n( "Pre&view Mode" ), 0,
                                             this, SLOT( viewPreviewMode() ),
                                             actionCollection(), "view_previewmode" );
     actionViewPreviewMode->setWhatsThis( i18n( "Zoom out from your document to get a look at several pages of your document.<br><br>The number of pages per line can be customized." ) );
@@ -821,13 +821,13 @@ void KWView::setupActions()
     actionAutoFormat->setToolTip( i18n( "Change autocorrection options." ) );
     actionAutoFormat->setWhatsThis( i18n( "Change autocorrection options including:<p> <UL><LI><P>exceptions to autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> <LI><P>and basic autocorrection options</P>." ) );
 
-    actionEditPersonnalExpr=new KAction( i18n( "Edit personal expressions..." ), 0,
+    actionEditPersonnalExpr=new KAction( i18n( "Edit Personal Expressions..." ), 0,
                                          this, SLOT( editPersonalExpr() ),
                                      actionCollection(), "personal_expr" );
     actionEditPersonnalExpr->setToolTip( i18n( "Add or change one or more personal expressions." ) );
     actionEditPersonnalExpr->setWhatsThis( i18n( "Add or change one or more personal expressions.<p>Personal expressions are a way to quickly insert commonly used phrases or text into your document." ) );
 
-    actionChangeCase=new KAction( i18n( "Change case..." ), 0,
+    actionChangeCase=new KAction( i18n( "Change Case..." ), 0,
                                      this, SLOT( changeCaseOfText() ),
                                      actionCollection(), "change_case" );
     actionChangeCase->setToolTip( i18n( "Alter the capitalization of selected text." ) );
@@ -859,13 +859,13 @@ void KWView::setupActions()
                                   actionCollection(), "change_link");
 
 
-    actionShowDocStruct = new KToggleAction( i18n( "Show doc structure" ), 0,
+    actionShowDocStruct = new KToggleAction( i18n( "Show Doc Structure" ), 0,
                                             this, SLOT( showDocStructure() ),
                                             actionCollection(), "show_docstruct" );
     actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar." ) );
     actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables, etc." ) );
 
-    actionConfigureCompletion = new KAction( i18n( "&Configure completion..." ), 0,
+    actionConfigureCompletion = new KAction( i18n( "&Configure Completion..." ), 0,
                         this, SLOT( configureCompletion() ),
                         actionCollection(), "configure_completion" );
 
@@ -2101,7 +2101,7 @@ void KWView::changeZoomMenu( int zoom )
     QStringList lst;
     if(zoom>0)
     {
-	if( lst.contains( i18n( "Zoom to width" ) ) == 0 )
+	if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
 	    lst << i18n( "Zoom to width" );
         if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
             lst << i18n( "Zoom to Whole Page" );
@@ -2132,7 +2132,7 @@ void KWView::changeZoomMenu( int zoom )
     }
     else
     {
-          lst << i18n( "Zoom to width" );
+          lst << i18n( "Zoom to Width" );
           lst << i18n( "Zoom to Whole Page" );
           lst << "33%";
           lst << "50%";
@@ -2311,7 +2311,7 @@ void KWView::viewZoom( const QString &s )
     KWCanvas * canvas = m_gui->canvasWidget();
     int zoom = 0;
 
-    if ( z == i18n("Zoom to width") )
+    if ( z == i18n("Zoom to Width") )
     {
         zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->ptPaperWidth() ) );
         ok = true;

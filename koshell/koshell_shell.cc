@@ -362,7 +362,7 @@ void KoShellWindow::slotFileNew()
 void KoShellWindow::slotFileOpen()
 {
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
-    dialog->setCaption( i18n("Open document") );
+    dialog->setCaption( i18n("Open Document") );
     dialog->setMimeFilter( KoFilterManager::mimeFilter() );
 
     KURL url;

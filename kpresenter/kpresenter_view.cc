@@ -2770,15 +2770,15 @@ void KPresenterView::setupActions()
 				    CTRL +SHIFT+ Key_R, this, SLOT( extraRaise() ),
 				    actionCollection(), "extra_raise" );
 
-    actionExtraLower = new KAction( i18n( "&Lower object(s)" ), "lower", CTRL +SHIFT+ Key_L,
+    actionExtraLower = new KAction( i18n( "&Lower Object(s)" ), "lower", CTRL +SHIFT+ Key_L,
 				    this, SLOT( extraLower() ),
 				    actionCollection(), "extra_lower" );
 
-    actionExtraRotate = new KAction( i18n( "R&otate object(s)..." ), "rotate", 0,
+    actionExtraRotate = new KAction( i18n( "R&otate Object(s)..." ), "rotate", 0,
 				     this, SLOT( extraRotate() ),
 				     actionCollection(), "extra_rotate" );
 
-    actionExtraShadow = new KAction( i18n( "&Shadow object(s)..." ), "shadow", 0,
+    actionExtraShadow = new KAction( i18n( "&Shadow Object(s)..." ), "shadow", 0,
 				     this, SLOT( extraShadow() ),
 				     actionCollection(), "extra_shadow" );
 
@@ -2831,7 +2831,7 @@ void KPresenterView::setupActions()
 					     this, SLOT( extraCreateTemplate() ),
 					     actionCollection(), "extra_template" );
 
-    actionExtraDefaultTemplate = new KAction( i18n( "Use Current Slide As Default Template" ), 0,
+    actionExtraDefaultTemplate = new KAction( i18n( "Use Current Slide as Default Template" ), 0,
 					     this, SLOT( extraDefaultTemplate() ),
 					     actionCollection(), "extra_defaulttemplate" );
 
@@ -2876,7 +2876,7 @@ void KPresenterView::setupActions()
 					   this, SLOT( screenPresStructView() ),
 					   actionCollection(), "screen_presstruct" );
 
-    actionScreenAssignEffect = new KAction( i18n( "&Assign effect..." ),
+    actionScreenAssignEffect = new KAction( i18n( "&Assign Effect..." ),
 					   "effect", 0,
 					   this, SLOT( screenAssignEffect() ),
 					   actionCollection(), "screen_assigneffect");
@@ -2886,7 +2886,7 @@ void KPresenterView::setupActions()
 				     this, SLOT( screenStart() ),
 				     actionCollection(), "screen_start" );
 
-    actionScreenViewPage = new KAction( i18n( "&View current page" ),
+    actionScreenViewPage = new KAction( i18n( "&View Current Page" ),
 				     "viewmag", 0,
 				     this, SLOT( screenViewPage() ),
 				     actionCollection(), "screen_viewpage" );
@@ -2941,7 +2941,7 @@ void KPresenterView::setupActions()
      actionPenColor->setDefaultColor(QColor());
     actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ), actionCollection(), "extendobjectheight" );
 
-    actionResizeTextObject = new KAction( i18n( "&Resize Object to fit the Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
+    actionResizeTextObject = new KAction( i18n( "&Resize Object to Fit the Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
 
     actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
 				       this, SLOT( extraPenBrush() ),
@@ -2953,7 +2953,7 @@ void KPresenterView::setupActions()
                      SLOT( renamePageTitle() ),
                      actionCollection(), "rename_page" );
 
-    actionPicOriginalSize = new KAction( i18n( "Sca&le to original size" ), 0, this,
+    actionPicOriginalSize = new KAction( i18n( "Sca&le to Original Size" ), 0, this,
                                          SLOT( picViewOrignalSize() ),
                                          actionCollection(), "pic_original_size" );
 
@@ -2996,12 +2996,12 @@ void KPresenterView::setupActions()
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
 
-    actionInsertLink = new KAction( i18n( "Insert link" ), 0,
+    actionInsertLink = new KAction( i18n( "Insert Link" ), 0,
                                     this, SLOT( insertLink() ),
                                     actionCollection(), "insert_link" );
 
     // ------------------- Actions with a key binding and no GUI item
-    KAction* actSoftHyphen = new KAction( i18n( "Insert soft hyphen" ), CTRL+Key_Minus,
+    KAction* actSoftHyphen = new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
                                           this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
     // Necessary for the actions that are not plugged anywhere
     KAccel * accel = new KAccel( this );
@@ -3056,20 +3056,20 @@ void KPresenterView::setupActions()
     addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
 
     actionInsertVariable->popupMenu()->insertSeparator();
-    actionRefreshAllVariable = new KAction( i18n( "&Refresh all variables" ), 0,
+    actionRefreshAllVariable = new KAction( i18n( "&Refresh All Vvariables" ), 0,
                                     this, SLOT( refreshAllVariable() ),
                                     actionCollection(), "refresh_all_variable" );
     actionInsertVariable->insert(actionRefreshAllVariable);
 
-    actionIncreaseFontSize = new KAction( i18n("Increase font size"),"fontsizeup", 0,
+    actionIncreaseFontSize = new KAction( i18n("Increase Font Size"),"fontsizeup", 0,
                                   this, SLOT( increaseFontSize() ),
                                   actionCollection(), "increaseFontSize" );
 
-    actionDecreaseFontSize = new KAction( i18n("Decrease font size"),"fontsizedown", 0,
+    actionDecreaseFontSize = new KAction( i18n("Decrease Font Size"),"fontsizedown", 0,
                                   this, SLOT( decreaseFontSize() ),
                                   actionCollection(), "decreaseFontSize" );
 
-    actionChangeCase=new KAction( i18n( "Change case..." ), 0,
+    actionChangeCase=new KAction( i18n( "Change Case..." ), 0,
                                   this, SLOT( changeCaseOfText() ),
                                   actionCollection(), "change_case" );
 
@@ -3123,7 +3123,7 @@ void KPresenterView::setupActions()
                                     this, SLOT( changeHelpLinePosition() ),
                                                actionCollection(), "change_helplinepos" );
 
-    actionAddHelpLine = new KAction( i18n( "Add new help line..."), 0,
+    actionAddHelpLine = new KAction( i18n( "Add new Help Line..."), 0,
                                      this, SLOT(addHelpLine()),
                                      actionCollection(), "add_helpline");
 
@@ -3137,7 +3137,7 @@ void KPresenterView::setupActions()
                                     this, SLOT( changeHelpPointPosition() ),
                                                actionCollection(), "change_helppointpos" );
 
-    actionAddHelpLine = new KAction( i18n( "Add new help point..."), 0,
+    actionAddHelpLine = new KAction( i18n( "Add new Help Point..."), 0,
                                      this, SLOT(addHelpPoint()),
                                      actionCollection(), "add_helppoint");
 
@@ -3146,7 +3146,7 @@ void KPresenterView::setupActions()
                                        this,SLOT(removeComment()),
                                        actionCollection(), "remove_comment");
 
-    actionConfigureCompletion = new KAction( i18n( "&Configure completion..." ), 0,
+    actionConfigureCompletion = new KAction( i18n( "&Configure Completion..." ), 0,
                                              this, SLOT( configureCompletion() ),
                                              actionCollection(), "configure_completion" );
 

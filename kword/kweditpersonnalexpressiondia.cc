@@ -32,7 +32,7 @@
 #include <qpushbutton.h>
 
 KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, i18n("Edit personal expression"), Ok|Cancel, Ok, true )
+    : KDialogBase( parent, name , true, i18n("Edit Personal Expression"), Ok|Cancel, Ok, true )
 {
     QWidget *page = new QWidget( this );
     setMainWidget(page);
@@ -64,15 +64,15 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     grid->addWidget(m_renameGroup,3,2);
     connect(m_renameGroup,SIGNAL(clicked ()),this,SLOT(slotRenameGroup()));
 
-    m_addExpression=new QPushButton(i18n("Add new expression"),page);
+    m_addExpression=new QPushButton(i18n("Add New Expression"),page);
     grid->addWidget(m_addExpression,4,2);
     connect(m_addExpression,SIGNAL(clicked ()),this,SLOT(slotAddExpression()));
 
-    m_delExpression=new QPushButton(i18n("Delete expression"),page);
+    m_delExpression=new QPushButton(i18n("Delete Expression"),page);
     grid->addWidget(m_delExpression,5,2);
     connect(m_delExpression,SIGNAL(clicked ()),this,SLOT(slotDelExpression()));
 
-    m_renameExpression=new QPushButton(i18n("Rename expression"),page);
+    m_renameExpression=new QPushButton(i18n("Rename Expression"),page);
     grid->addWidget(m_renameExpression,6,2);
     connect(m_renameExpression,SIGNAL(clicked ()),this,SLOT(slotRenameExpression()));
 

@@ -541,7 +541,7 @@ KarbonView::initActions()
 
 	// object ----->
 	new KAction(
-		i18n( "Bring To &Front" ), 0, QKeySequence("Shift+PgUp"), this,
+		i18n( "Bring to &Front" ), 0, QKeySequence("Shift+PgUp"), this,
 		SLOT( selectionMoveToTop() ), actionCollection(), "object_move_totop" );
 	new KAction(
 		i18n( "&Raise" ), 0, QKeySequence("Ctrl+PgUp"), this,
@@ -550,13 +550,13 @@ KarbonView::initActions()
 		i18n( "&Lower" ), 0, QKeySequence("Ctrl+PgDown"), this,
 		SLOT( selectionMoveDown() ), actionCollection(), "object_move_down" );
 	new KAction(
-		i18n( "Send To &Back" ), 0, QKeySequence("Shift+PgDown"), this,
+		i18n( "Send to &Back" ), 0, QKeySequence("Shift+PgDown"), this,
 		SLOT( selectionMoveToBottom() ), actionCollection(), "object_move_tobottom" );
 	new KAction(
-		i18n( "Group objects" ), 0, QKeySequence("Shift+G"), this,
+		i18n( "Group Objects" ), 0, QKeySequence("Shift+G"), this,
 		SLOT( groupSelection() ), actionCollection(), "selection_group" );
 	new KAction(
-		i18n( "Ungroup objects" ), 0, QKeySequence("Shift+U"), this,
+		i18n( "Ungroup Objects" ), 0, QKeySequence("Shift+U"), this,
 		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	new KAction(
 		i18n( "&Translate" ), "translate", 0, this,

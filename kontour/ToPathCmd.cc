@@ -32,7 +32,7 @@
 #include "GPath.h"
 
 ToPathCmd::ToPathCmd(GDocument *aGDoc):
-Command(aGDoc, i18n("Convert to path"))
+Command(aGDoc, i18n("Convert to Path"))
 {
   QPtrListIterator<GObject> it(document()->activePage()->getSelection());
   for(; it.current(); ++it)

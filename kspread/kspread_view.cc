@@ -466,7 +466,7 @@ void KSpreadView::initializeCalcActions()
 
 void KSpreadView::initializeInsertActions()
 {
-  (void) new KAction( i18n("&Math expression..."), "funct", 0, this,
+  (void) new KAction( i18n("&Math Expression..."), "funct", 0, this,
                       SLOT( insertMathExpr() ), actionCollection(),
                       "insertMathExpr" );
 
@@ -491,7 +491,7 @@ void KSpreadView::initializeEditActions()
                              "copy" );
   m_copy->setToolTip("Copy the cell object to the clipboard.");
 
-  m_copy_as_text=new KAction( i18n("Copy as text"),0, this, SLOT( copyAsText() ),
+  m_copy_as_text=new KAction( i18n("Copy as Text"),0, this, SLOT( copyAsText() ),
                               actionCollection(), "copy_as_text" );
   m_copy_as_text->setToolTip
     ("Copy the text result of the cell to the clipboard.");
@@ -523,15 +523,15 @@ void KSpreadView::initializeEditActions()
 
 void KSpreadView::initializeAreaOperationActions()
 {
-  m_areaName = new KAction( i18n("Area name..."), 0, this,
+  m_areaName = new KAction( i18n("Area Name..."), 0, this,
                             SLOT( setAreaName() ), actionCollection(),
                             "areaname" );
 
-  m_showArea = new KAction( i18n("Show area..."), 0, this,
+  m_showArea = new KAction( i18n("Show Area..."), 0, this,
                             SLOT( showAreaName() ), actionCollection(),
                             "showArea" );
 
-  m_sortList = new KAction( i18n("Custom lists..."), 0, this,
+  m_sortList = new KAction( i18n("Custom Lists..."), 0, this,
                             SLOT( sortList() ), actionCollection(),
                             "sortlist" );
 
@@ -541,10 +541,10 @@ void KSpreadView::initializeAreaOperationActions()
   m_autoSum = new KAction( i18n("AutoSum"), "black_sum", 0, this,
                            SLOT( autoSum() ), actionCollection(), "autoSum" );
 
-  m_sortDec = new KAction( i18n("Sort decreasing"), "sort_decrease", 0, this,
+  m_sortDec = new KAction( i18n("Sort Decreasing"), "sort_decrease", 0, this,
                            SLOT( sortDec() ), actionCollection(), "sortDec" );
 
-  m_sortInc = new KAction( i18n("Sort increasing"), "sort_incr", 0, this,
+  m_sortInc = new KAction( i18n("Sort Increasing"), "sort_incr", 0, this,
                            SLOT( sortInc() ), actionCollection(), "sortInc" );
 
   m_consolidate = new KAction( i18n("Consolidate..."), 0, this,
@@ -579,7 +579,7 @@ void KSpreadView::initializeGlobalOperationActions()
                                  SLOT( reloadScripts() ), actionCollection(),
                                  "reloadScripts" );
 
-  m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0,
+  m_showPageBorders = new KToggleAction( i18n("Show Page Borders"), 0,
                                          actionCollection(), "showPageBorders");
   connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this,
            SLOT( togglePageBorders( bool ) ) );
@@ -601,7 +601,7 @@ void KSpreadView::initializeGlobalOperationActions()
            this, SLOT( formulaSelection( const QString& ) ) );
 
 
-  m_transform = new KAction( i18n("Transform object..."), "rotate", 0, this,
+  m_transform = new KAction( i18n("Transform Object..."), "rotate", 0, this,
                              SLOT( transformPart() ),
                              actionCollection(), "transform" );
 
@@ -633,11 +633,11 @@ void KSpreadView::initializeCellOperationActions()
   m_gotoCell = new KAction( i18n("Goto Cell..."),"goto", 0, this,
                             SLOT( gotoCell() ), actionCollection(), "gotoCell" );
 
-  m_mergeCell = new KAction( i18n("Merge cells"),"mergecell" ,0, this,
+  m_mergeCell = new KAction( i18n("Merge Cells"),"mergecell" ,0, this,
                              SLOT( mergeCell() ), actionCollection(),
                              "mergecell" );
 
-  m_dissociateCell = new KAction( i18n("Dissociate cells"),"dissociatecell" ,0,
+  m_dissociateCell = new KAction( i18n("Dissociate Cells"),"dissociatecell" ,0,
                                   this, SLOT( dissociateCell() ),
                                   actionCollection(), "dissociatecell" );
 
@@ -645,7 +645,7 @@ void KSpreadView::initializeCellOperationActions()
                               SLOT( slotRemove() ), actionCollection(),
                               "removeCell" );
 
-  m_insertCellCopy = new KAction( i18n("Paste with insertion..."),
+  m_insertCellCopy = new KAction( i18n("Paste with Insertion..."),
                                   "insertcellcopy", 0, this,
                                   SLOT( slotInsertCellCopy() ),
                                   actionCollection(), "insertCellCopy" );
@@ -658,15 +658,15 @@ void KSpreadView::initializeCellOperationActions()
 
 void KSpreadView::initializeCellPropertyActions()
 {
-  m_addModifyComment = new KAction( i18n("&Add/modify comment..."),"comment", 0,
+  m_addModifyComment = new KAction( i18n("&Add/Modify Comment..."),"comment", 0,
                                     this, SLOT( addModifyComment() ),
                                     actionCollection(), "addmodifycomment" );
 
-  m_removeComment = new KAction( i18n("&Remove comment"),"removecomment", 0,
+  m_removeComment = new KAction( i18n("&Remove Comment"),"removecomment", 0,
                                  this, SLOT( removeComment() ),
                                  actionCollection(), "removecomment" );
 
-  m_conditional = new KAction( i18n("Conditional cell attributes..."), 0, this,
+  m_conditional = new KAction( i18n("Conditional Cell Attributes..."), 0, this,
                                SLOT( conditional() ), actionCollection(),
                                "conditional" );
 
@@ -681,16 +681,16 @@ void KSpreadView::initializeCellPropertyActions()
                                  SLOT( clearValiditySelection() ),
                                  actionCollection(), "clearvalidity" );
 
-  m_clearConditional = new KAction( i18n("Conditional cell attributes"), 0, this,
+  m_clearConditional = new KAction( i18n("Conditional Cell Attributes"), 0, this,
                                     SLOT( clearConditionalSelection() ),
                                     actionCollection(), "clearconditional" );
 
-  m_increaseIndent = new KAction( i18n("Increase indent"),
+  m_increaseIndent = new KAction( i18n("Increase Indent"),
                                   "format_increaseindent",0, this,
                                   SLOT( increaseIndent() ), actionCollection(),
                                   "increaseindent" );
 
-  m_decreaseIndent = new KAction( i18n("Decrease indent"),
+  m_decreaseIndent = new KAction( i18n("Decrease Indent"),
                                   "format_decreaseindent" ,0, this,
                                   SLOT( decreaseIndent() ), actionCollection(),
                                   "decreaseindent");
@@ -720,22 +720,22 @@ void KSpreadView::initializeCellPropertyActions()
 void KSpreadView::initializeTextFormatActions()
 {
   /*******************************/
-  m_percent = new KToggleAction( i18n("Percent format"), "percent", 0,
+  m_percent = new KToggleAction( i18n("Percent Format"), "percent", 0,
                                  actionCollection(), "percent");
   connect( m_percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
 
   /*******************************/
-  m_precplus = new KAction( i18n("Increase precision"), "prec_plus", 0, this,
+  m_precplus = new KAction( i18n("Increase Precision"), "prec_plus", 0, this,
                             SLOT( precisionPlus() ), actionCollection(),
                             "precplus");
 
   /*******************************/
-  m_precminus = new KAction( i18n("Decrease precision"), "prec_minus", 0, this,
+  m_precminus = new KAction( i18n("Decrease Precision"), "prec_minus", 0, this,
                              SLOT( precisionMinus() ), actionCollection(),
                              "precminus");
 
   /*******************************/
-  m_money = new KToggleAction( i18n("Money format"), "money", 0,
+  m_money = new KToggleAction( i18n("Money Format"), "money", 0,
                                actionCollection(), "money");
   connect( m_money, SIGNAL( toggled( bool ) ), this,
            SLOT( moneyFormat( bool ) ) );
@@ -749,7 +749,7 @@ void KSpreadView::initializeTextFormatActions()
                          SLOT( lower() ), actionCollection(), "lower" );
 
   /*******************************/
-  m_firstLetterUpper = new KAction( i18n("Convert first letter to upper case"),
+  m_firstLetterUpper = new KAction( i18n("Convert First Letter to Upper Case"),
                                     "first_letter_upper" ,0, this,
                                     SLOT( firstLetterUpper() ),
                                     actionCollection(), "firstletterupper" );
@@ -918,22 +918,22 @@ void KSpreadView::initializeSpellChecking()
 
 void KSpreadView::initializeRowColumnActions()
 {
-  m_adjust = new KAction( i18n("Adjust row and column"), 0, this,
+  m_adjust = new KAction( i18n("Adjust Row and Column"), 0, this,
                           SLOT( adjust() ), actionCollection(), "adjust" );
 
-  m_resizeRow = new KAction( i18n("Resize row..."), "resizerow", 0, this,
+  m_resizeRow = new KAction( i18n("Resize Row..."), "resizerow", 0, this,
                              SLOT( resizeRow() ), actionCollection(),
                              "resizeRow" );
 
-  m_resizeColumn = new KAction( i18n("Resize column..."), "resizecol", 0, this,
+  m_resizeColumn = new KAction( i18n("Resize Column..."), "resizecol", 0, this,
                                 SLOT( resizeColumn() ), actionCollection(),
                                 "resizeCol" );
 
-  m_equalizeRow = new KAction( i18n("Equalize row"), "adjustrow", 0, this,
+  m_equalizeRow = new KAction( i18n("Equalize Row"), "adjustrow", 0, this,
                                SLOT( equalizeRow() ), actionCollection(),
                                "equalizeRow" );
 
-  m_equalizeColumn = new KAction( i18n("Equalize column"), "adjustcol", 0, this,
+  m_equalizeColumn = new KAction( i18n("Equalize Column"), "adjustcol", 0, this,
                                   SLOT( equalizeColumn() ), actionCollection(),
                                   "equalizeCol" );
 
@@ -982,7 +982,7 @@ void KSpreadView::initializeRowColumnActions()
 
 void KSpreadView::initializeBorderActions()
 {
-  m_borderLeft = new KAction( i18n("Border left"), "border_left", 0, this,
+  m_borderLeft = new KAction( i18n("Border Left"), "border_left", 0, this,
                               SLOT( borderLeft() ), actionCollection(),
                               "borderLeft" );
 
@@ -998,7 +998,7 @@ void KSpreadView::initializeBorderActions()
                                 SLOT( borderBottom() ), actionCollection(),
                                 "borderBottom" );
 
-  m_borderAll = new KAction( i18n("All borders"), "border_all", 0, this,
+  m_borderAll = new KAction( i18n("All Borders"), "border_all", 0, this,
                              SLOT( borderAll() ), actionCollection(),
                              "borderAll" );
 
@@ -3650,7 +3650,7 @@ void KSpreadView::setAreaName()
 
 void KSpreadView::showAreaName()
 {
-    KSpreadreference dlg( this, "Show area" );
+    KSpreadreference dlg( this, "Show Area" );
     dlg.exec();
 }
 
@@ -3660,7 +3660,7 @@ void KSpreadView::resizeRow()
         KMessageBox::error( this, i18n("Area too large!"));
     else
     {
-        KSpreadresize2 dlg( this, "Resize row", KSpreadresize2::resize_row );
+        KSpreadresize2 dlg( this, "Resize Row", KSpreadresize2::resize_row );
         dlg.exec();
     }
 }
@@ -3671,7 +3671,7 @@ void KSpreadView::resizeColumn()
         KMessageBox::error( this, i18n("Area too large!"));
     else
         {
-        KSpreadresize2 dlg( this, "Resize column", KSpreadresize2::resize_column );
+        KSpreadresize2 dlg( this, "Resize Column", KSpreadresize2::resize_column );
         dlg.exec();
         }
 }

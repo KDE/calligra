@@ -373,10 +373,10 @@ void KoTemplateCreateDia::slotRemove() {
         QString removed;
         if (item->depth()==0) {
                 what =  i18n("Do you really want to remove that group?");
-                removed = i18n("Remove group");
+                removed = i18n("Remove Group");
         } else {
                 what =  i18n("Do you really want to remove that template?");
-        removed = i18n("Remove template");
+        removed = i18n("Remove Template");
         }
 
     if(KMessageBox::warningYesNo(this, what,
@@ -442,7 +442,7 @@ void KoTemplateCreateDia::fillGroupTree() {
 
 
 KoNewGroupDia::KoNewGroupDia(QWidget *parent) :
-    KDialogBase(parent, "KoNewGroupDia", true, i18n("Enter a name"),
+    KDialogBase(parent, "KoNewGroupDia", true, i18n("Enter a Name"),
                 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok) {
 
     QFrame *mainwidget=makeMainWidget();
