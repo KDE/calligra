@@ -10,7 +10,7 @@
 /**
  * A paragraph
  */
-class KWordParagraph
+class KWord13Paragraph
 {
 public:
     void xmldump( QTextStream& iostream );
@@ -27,7 +27,7 @@ private:
  * Group of paragraphs
  * (Mostly all paragraphs of a text frameset)
  */
-class KWordParagraphGroup : public QValueList <KWordParagraph>
+class KWord13ParagraphGroup : public QValueList <KWord13Paragraph>
 {
 public:
     void xmldump( QTextStream& iostream );

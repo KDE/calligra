@@ -216,7 +216,7 @@ bool KWord13Parser::startElementParagraph( const QString&, const QXmlAttributes&
         delete m_currentParagraph;
     }
         
-    m_currentParagraph = new KWordParagraph;
+    m_currentParagraph = new KWord13Paragraph;
     
     return true;
 }

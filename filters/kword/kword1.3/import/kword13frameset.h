@@ -35,7 +35,7 @@ public:
     KWordFrameset( int frameType, int frameInfo, const QString& name );
     virtual ~KWordFrameset( void );
 public:
-    virtual bool addParagraph(const KWordParagraph& para);
+    virtual bool addParagraph(const KWord13Paragraph& para);
     virtual void xmldump( QTextStream& iostream );
 public:
     int m_numFrames; ///< Number of frames
@@ -52,10 +52,10 @@ public:
     KWordTextFrameset( int frameType, int frameInfo, const QString& name );
     virtual ~KWordTextFrameset( void );
 public:
-    virtual bool addParagraph(const KWordParagraph& para);
+    virtual bool addParagraph(const KWord13Paragraph& para);
     virtual void xmldump( QTextStream& iostream );
 public:
-    KWordParagraphGroup m_paragraphGroup;
+    KWord13ParagraphGroup m_paragraphGroup;
 };
 
 #endif // _FILTER_KWORD_1_3__KWORDFRAMESET_H

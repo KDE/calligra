@@ -51,7 +51,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
         return;
     }
     
-    for ( QValueList<KWordParagraph>::Iterator it = frameset->m_paragraphGroup.begin();
+    for ( QValueList<KWord13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
         it != frameset->m_paragraphGroup.end(); ++it)
     {
         declareLayout( (*it).m_layout );
@@ -671,7 +671,7 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
         return;
     }
     
-    for ( QValueList<KWordParagraph>::Iterator it = frameset->m_paragraphGroup.begin();
+    for ( QValueList<KWord13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
         it != frameset->m_paragraphGroup.end(); ++it)
     {
         // Write rawly the paragrapgh (see KoTextParag::saveOasis)

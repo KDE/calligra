@@ -25,7 +25,7 @@
 #include <qxml.h>
 #include <qptrstack.h>
 
-class KWordParagraph;
+class KWord13Paragraph;
 class KWord13Document;
 class KWordFrameset;
 class KWord13Layout;
@@ -109,7 +109,7 @@ protected:
     QString indent; //DEBUG
     StackItemStack parserStack;
     KWord13Document* m_kwordDocument;
-    KWordParagraph* m_currentParagraph; ///< Current paragraph
+    KWord13Paragraph* m_currentParagraph; ///< Current paragraph
     KWord13Layout* m_currentLayout; ///< Current layout (or style)
     KWord13FormatOne* m_currentFormat; ///< Current character format 
 };

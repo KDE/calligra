@@ -34,7 +34,7 @@ KWordFrameset::~KWordFrameset( void )
 {
 }
 
-bool KWordFrameset::addParagraph(const KWordParagraph&)
+bool KWordFrameset::addParagraph(const KWord13Paragraph&)
 {
     kdDebug(30520) << "Cannot add paragraph! Not a text frameset!" << endl;
     return false;
@@ -57,7 +57,7 @@ KWordTextFrameset::~KWordTextFrameset( void )
 {
 }
 
-bool KWordTextFrameset::addParagraph(const KWordParagraph& para)
+bool KWordTextFrameset::addParagraph(const KWord13Paragraph& para)
 {
     m_paragraphGroup << para;
     return true;
