@@ -1496,15 +1496,12 @@ void KPTextView::dragLeaveEvent( QDragLeaveEvent * )
 
 void KPTextView::dropEvent( QDropEvent * e )
 {
-#if 0 //FIXME
     if ( kpTextObject()->kPresenterDocument()->isReadWrite() && KPrTextDrag::canDecode( e ) )
     {
         e->acceptAction();
         QTextCursor dropCursor( textDocument() );
-        QPoint dropPoint=e->pos() - kpTextObject()->getOrig();
+        QPoint dropPoint=e->pos() - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint( kpTextObject()->getOrig());
         dropPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
-
-        // ####### Factorize code in libkotext!
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         dropCursor.place( dropPoint, textDocument()->firstParag() );
         kdDebug(32001) << "KPTextView::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
@@ -1512,72 +1509,16 @@ void KPTextView::dropEvent( QDropEvent * e )
         if ( ( e->source() == m_canvas ) &&
              e->action() == QDropEvent::Move ) {
             //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;;
-            if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
+            KCommand *cmd=textView()->dropEvent(textObject(), dropCursor, true/* for the moment we can't dnd on other textbj*/);
+            if(cmd)
+                macroCmd->addCommand(cmd);
+            else
             {
-                // Dropping into the selection itself ?
-                QTextCursor startSel = textDocument()->selectionStartCursor( KoTextDocument::Standard );
-                QTextCursor endSel = textDocument()->selectionEndCursor( KoTextDocument::Standard );
-                bool inSelection = false;
-                if ( startSel.parag() == endSel.parag() )
-                    inSelection = ( dropCursor.parag() == startSel.parag() )
-                                    && dropCursor.index() >= startSel.index()
-                                    && dropCursor.index() <= endSel.index();
-                else
-                {
-                    // Looking at first line first:
-                    inSelection = dropCursor.parag() == startSel.parag() && dropCursor.index() >= startSel.index();
-                    if ( !inSelection )
-                    {
-                        // Look at all other paragraphs except last one
-                        Qt3::QTextParag *p = startSel.parag()->next();
-                        while ( !inSelection && p && p != endSel.parag() )
-                        {
-                            inSelection = ( p == dropCursor.parag() );
-                            p = p->next();
-                        }
-                        // Look at last paragraph
-                        if ( !inSelection )
-                            inSelection = dropCursor.parag() == endSel.parag() && dropCursor.index() <= endSel.index();
-                    }
-                }
-                if ( inSelection )
-                {
-                    delete macroCmd;
-                    textDocument()->removeSelection( KoTextDocument::Standard );
-                    textObject()->selectionChangedNotify();
-                    hideCursor();
-                    *cursor() = dropCursor;
-                    showCursor();
-                    ensureCursorVisible();
-                    return;
-                }
-
-                // Tricky. We don't want to do the placeCursor after removing the selection
-                // (the user pointed at some text with the old selection in place).
-                // However, something got deleted in our parag, dropCursor's index needs adjustment.
-                if ( endSel.parag() == dropCursor.parag() )
-                {
-                    // Does the selection starts before (other parag or same parag) ?
-                    if ( startSel.parag() != dropCursor.parag() || startSel.index() < dropCursor.index() )
-                    {
-                        // If other -> endSel.parag() will get deleted. The final position is in startSel.parag(),
-                        // where the selection started + how much after the end we are. Make a drawing :)
-                        // If same -> simply move back by how many chars we've deleted. Funny thing is, it's the same formula.
-                        int dropIndex = dropCursor.index();
-                        dropCursor.setParag( startSel.parag() );
-                        // If dropCursor - endSel < 0, selection ends after, we're dropping into selection (no-op)
-                        dropCursor.setIndex( dropIndex - QMIN( endSel.index(), dropIndex ) + startSel.index() );
-                    }
-                    kdDebug(32001) << "dropCursor: parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
-                }
-                macroCmd->addCommand(textObject()->removeSelectedTextCommand( cursor(), KoTextDocument::Standard ));
+                delete macroCmd;
+                return;
             }
-            hideCursor();
-            *cursor() = dropCursor;
-            showCursor();
-            kdDebug(32001) << "cursor set back to drop cursor: parag=" << cursor()->parag()->paragId() << " index=" << cursor()->index() << endl;
-
-        } else
+        }
+        else
         {   // drop coming from outside -> forget about current selection
             textDocument()->removeSelection( KoTextDocument::Standard );
             textObject()->selectionChangedNotify();
@@ -1597,7 +1538,6 @@ void KPTextView::dropEvent( QDropEvent * e )
         }
         kpTextObject()->kPresenterDocument()->addCommand(macroCmd);
     }
-#endif
 }
 
 void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElement &parentElem,
