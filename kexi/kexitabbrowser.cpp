@@ -38,6 +38,7 @@
 KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
 	: KexiDialogBase(parent, name)
 {
+	setCaption("Project");
 	QGridLayout *layout = new QGridLayout(this);
 
 	m_tabBar = new KMultiTabBar(this, KMultiTabBar::Vertical);

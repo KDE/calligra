@@ -25,6 +25,7 @@
 #include <kdockwidget.h>
 #include <netwm_def.h>
 #include <qtimer.h>
+#include <kdebug.h>
 
 KexiDialogBase *KexiDialogBase::s_activeDocumentWindow=0;
 KexiDialogBase *KexiDialogBase::s_activeToolWindow=0;
@@ -46,7 +47,7 @@ KexiDialogBase::KexiDialogBase(QWidget *parent, const char *name) : QWidget(pare
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 {
-	myDock=m_mainWindow->createDockWidget( "Widget", 0, 0, name());
+	myDock=m_mainWindow->createDockWidget( "Widget", 0, 0, caption());
 	myDock->setWidget(this);
 	myDock->setEnableDocking(KDockWidget::DockFullDocking);
 	myDock->setDockSite(KDockWidget::DockFullDocking);
@@ -55,8 +56,11 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 
 	if (wt==DocumentWindow) {
 		if ((s_activeDocumentWindow==0) || (s_activeDocumentWindow->myDock==0)) {
-			myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockTop, 100);
-//			myDock->toDesktop();
+			if (m_mainWindow->windowMode()==KexiMainWindow::SingleWindowMode)
+				myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockTop, 100);
+			else
+				myDock->toDesktop();
+
 		}
 		else
 			myDock->manualDock(s_activeDocumentWindow->myDock,KDockWidget::DockCenter);
@@ -64,9 +68,12 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 		s_activeDocumentWindow=this;
 	}
 	else {
-		if ((s_activeToolWindow==0) || (s_activeToolWindow->myDock==0))
-			myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockLeft, 20);
-//			myDock->toDesktop();
+		if ((s_activeToolWindow==0) || (s_activeToolWindow->myDock==0)) {
+			if (m_mainWindow->windowMode()==KexiMainWindow::SingleWindowMode)
+				myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockLeft, 20);
+			else
+				myDock->toDesktop();
+		}
 		else
 			myDock->manualDock(s_activeToolWindow->myDock,KDockWidget::DockCenter);
 		s_ToolWindows->insert(0,this);
@@ -76,6 +83,11 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 	myDock->makeDockVisible();
 }
 
+void KexiDialogBase::focusInEvent ( QFocusEvent *)
+{
+kdDebug()<<"FocusInEvent";
+
+}
 void KexiDialogBase::closeEvent(QCloseEvent *ev)
 {
 	emit closing(this);

@@ -40,6 +40,7 @@ class KexiDialogBase : public QWidget
 		void closing(KexiDialogBase *);
 	
 	protected:
+		virtual void focusInEvent ( QFocusEvent *);
 		enum WindowType {ToolWindow, DocumentWindow};
 		void registerAs(KexiDialogBase::WindowType wt);
 		void closeEvent(QCloseEvent *ev);
