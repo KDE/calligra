@@ -12,8 +12,14 @@ dir attribute of <FLOW>
 correctly define the default style (by default "Standard", if not, the 1st style) (see bug #45868)
 ...
 
-=== TO BACKPORT ===
-Footnote/endnote (libexport?)
+=== What the old filter knew ===
+<LAYOUT>, <STYLE>, <FORMATS>
+KWord 0.8 character format
+KWord 0.8 layout <FLOW>, <ILEFT>, <IFIRST>
+Syntax 2/3 print/creation/modification dates
+Pictures
+Tables
+...
 
 === Abiword's rtftest.rtf test file ===
 shadow (RTF import problem)
