@@ -5,6 +5,7 @@ Name[da]=Regnearksfilter
 Name[sv]=Kalkyl-filter
 Exec=kspread_filter.bin --server
 Comment=Torben's KSpread Filter
+Comment[ca]=El filtre de la fulla de càlcul de Torben
 Comment[cs]=Klient pro ètení diskusních skupin (NEWS)
 Comment[da]=Torbens regneark filter
 Comment[no]=Torbens KSpread-filter

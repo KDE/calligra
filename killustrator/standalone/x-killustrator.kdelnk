@@ -6,6 +6,7 @@ Icon=killustrator.xpm
 Patterns=*.kil;
 DefaultApp=killustrator
 Comment=KIllustrator file
+Comment[ca]=Fitxer KIllustrator
 Comment[cs]=Soubor KIllustratoru
 Comment[fr]=Fichier KIllustrator
 Comment[is]=killustrator skrá
