@@ -115,39 +115,49 @@ Bugfixes:
 
 Changes after KPresenter 1.2
 ============================
-- Use ForbiddenCursor when object is "protect size"
-- Spell checker can spellcheck only selection
-- Now Shadow is a text properties
-- Add "copy link" feature.
 - Add "add to bookmark" feature
-- We can change "picture path"
-- Add "remove link"
 - Add font properties : change relative font size when we sub/super script font
 - Add support to add offset from baseline
 - Now koinsertlink use 'recent document'
-- Creating backup files is configurable
 - Add support to insert cursor directly
-- Add support to "word by word" underline/strikeout attribute
-- New variables: Next page number, Previous page number
-- Add time/date variable offset
-- Fix #24242 add variable : created/modified/printed document date
-- Now we can copy text of comment.
-- Add support for font attribute ( Uppercase/lowercase )
 - Add autocorrection : "Capitalize name of days"
-- Add new font attribute : small caps
-- Now we can modify "ignore list"
-- Now we can modify personal dictonary
-- Now we can change backup path
-- Now kotextformat support language
-- Use kocommandhistory
 - Added support for global language
-- Add new lineSpacing type :"At least"/"exactly"/"Multiple"
 - Use new kospell API
-- Allow to copy/paste image/embedded object from different kpresenter app, thanks to David to implement koStoreDrag
-- Access to spellcheck result via context menu
-- Transition effect dialog (with preview)
-- Better loading of background pictures (especially for remote files)
-- Web presentation: better HTML generation, usability improvement of the wizard
-- Display an "End of presentation"-slide at end of presentation
-- Ability to go with a per-slide default when inserting a new one (wishlist #22629)
-- Support for drawing images having alpha channels
+
+Visual stuff:
+- objects use "forbidden" cursor when they're protected (new)
+- display an "End of presentation"-slide at end of presentation; configurable
+  (new)
+- transition effect dialog with preview (new)
+
+Text boxes:
+- can spellcheck in selection only (new)
+- shadow is a text property now (bugfix)
+- link manipulation (add/copy/remove) (new)
+- access to spellcheck result via context menu
+- text formats now include language information (new)
+- new line spacing types: at least / exactly / multiple of (new)
+- new font attributes: small caps, uppercase, lowercase (new)
+- new underline and strikethru type: word by word
+
+Images:
+- properly draw images with alpha channels (bugfix)
+- better loading of background pictures; especially for remote files (new)
+
+Variables:
+- created/modified/printed document date (bug #24242)
+- added time/date variable offset (new)
+- added new variables: Next page number, Previous page number (new)
+
+Configurability:
+- whether and where to create backup files (new)
+- path to pictures (new)
+- personal dictionary (new)
+- list of ignored words when spellchecking (new)
+- go with a per-slide default when inserting a new one (wish #22629)
+
+Misc:
+- web presentation: better HTML generation, usability improvement of the wizard (new)
+- copy/paste image/embedded objects between different instances (bugfix)
+- comment text can be copied now (bugfix)
+- undo/redo shows history of commands (new)
