@@ -69,14 +69,14 @@ public:
 	// manipulate selection:
 	const VSelection* selection() const { return m_selection; }
 
-	void select();    // select all vobjects period.
-	void deselect();  // unselect all vobjects from all vlayers.
+	void select() const;	// select all vobjects period.
+	void deselect() const;	// unselect all vobjects from all vlayers.
 
-	void select( VObject& object, bool exclusive = false );
-	void deselect( VObject& object );
+	void select( VObject& object, bool exclusive = false ) const;
+	void deselect( VObject& object ) const;
 
 	/// Select all objects within rect.
-	void select( const KoRect& rect, bool exclusive = false );
+	void select( const KoRect& rect, bool exclusive = false ) const;
 
 
 	// move up/down within layer

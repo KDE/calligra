@@ -148,7 +148,7 @@ VDocument::loadXML( const QDomElement& doc )
 }
 
 void
-VDocument::select( VObject& object, bool exclusive )
+VDocument::select( VObject& object, bool exclusive ) const
 {
 	if( exclusive )
 		deselect();
@@ -158,14 +158,14 @@ VDocument::select( VObject& object, bool exclusive )
 }
 
 void
-VDocument::deselect( VObject& object )
+VDocument::deselect( VObject& object ) const
 {
 	object.setState( state_normal );
 	m_selection->take( object );
 }
 
 void
-VDocument::select()
+VDocument::select() const
 {
 	m_selection->clear();
 
@@ -190,7 +190,7 @@ VDocument::select()
 }
 
 void
-VDocument::select( const KoRect& rect, bool exclusive )
+VDocument::select( const KoRect& rect, bool exclusive ) const
 {
 	if( exclusive )
 		deselect();
@@ -211,7 +211,7 @@ VDocument::select( const KoRect& rect, bool exclusive )
 }
 
 void
-VDocument::deselect()
+VDocument::deselect() const
 {
 	// deselect objects:
 	VObjectListIterator itr( m_selection->objects() );

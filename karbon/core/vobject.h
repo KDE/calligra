@@ -159,7 +159,7 @@ protected:
 private:
 	VObject* m_parent;
 
-	VState m_state;
+	mutable VState m_state;
 };
 
 #endif

@@ -117,6 +117,10 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
 			painter->newPath();
+			painter->setRasterOp( Qt::XorROP );
+			painter->setPen( Qt::yellow );
+			painter->setBrush( Qt::NoBrush );
+
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
@@ -144,28 +148,50 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				else
 					painter->moveTo( jtr.current()->knot2() );
 			}
+
+			painter->strokePath();
 		}
 
+		// draw a "knot" at the center:
+		const KoPoint center = boundingBox().center();
+
+		painter->newPath();
 		painter->setRasterOp( Qt::XorROP );
-		//painter->setPen( stroke() );
-		painter->setPen( Qt::yellow );
-		painter->setBrush( Qt::NoBrush );
-		painter->strokePath();
+		painter->setPen( Qt::NoPen );
+		painter->setBrush( Qt::yellow );
+
+		painter->moveTo(
+			KoPoint(
+				center.x() - 2 / zoomFactor,
+				center.y() - 2 / zoomFactor ) );
+		painter->lineTo(
+			KoPoint(
+				center.x() + 2 / zoomFactor,
+				center.y() - 2 / zoomFactor ) );
+		painter->lineTo(
+			KoPoint(
+				center.x() + 2 / zoomFactor,
+				center.y() + 2 / zoomFactor ) );
+		painter->lineTo(
+			KoPoint(
+				center.x() - 2 / zoomFactor,
+				center.y() + 2 / zoomFactor ) );
+		painter->fillPath();
 	}
 
 	// draw small boxes for path nodes:
-	if( state() == state_selected )
+	if( state() == state_selected || state() == state_edit )
 	{
-		painter->setRasterOp( Qt::NotROP );
-		painter->setPen( Qt::NoPen );
-
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
 				painter->newPath();
+				painter->setRasterOp( Qt::NotROP );
+				painter->setPen( Qt::NoPen );
 				painter->setBrush( Qt::blue.light() );
+
 				painter->moveTo(
 					KoPoint(
 						jtr.current()->knot2().x() - 2 / zoomFactor,
@@ -185,6 +211,32 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				painter->fillPath();
 			}
 		}
+
+		// draw a "knot" at the center:
+		const KoPoint center = boundingBox().center();
+
+		painter->newPath();
+		painter->setRasterOp( Qt::NotROP );
+		painter->setPen( Qt::NoPen );
+		painter->setBrush( Qt::blue.light() );
+
+		painter->moveTo(
+			KoPoint(
+				center.x() - 2 / zoomFactor,
+				center.y() - 2 / zoomFactor ) );
+		painter->lineTo(
+			KoPoint(
+				center.x() + 2 / zoomFactor,
+				center.y() - 2 / zoomFactor ) );
+		painter->lineTo(
+			KoPoint(
+				center.x() + 2 / zoomFactor,
+				center.y() + 2 / zoomFactor ) );
+		painter->lineTo(
+			KoPoint(
+				center.x() - 2 / zoomFactor,
+				center.y() + 2 / zoomFactor ) );
+		painter->fillPath();
 	}
 
 	painter->restore();
