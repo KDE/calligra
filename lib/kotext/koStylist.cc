@@ -81,6 +81,11 @@ KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrLi
     newTab = new KoStyleParagTab( m_tabs );
     newTab->setWidget( new KoParagTabulatorsWidget( unit, -1, newTab ) );
     addTab( newTab );
+
+    newTab = new KoStyleParagTab( m_tabs );
+    newTab->setWidget( new KoParagShadowWidget( newTab ) );
+    addTab( newTab );
+
     m_stylesList->setCurrentItem( 0 );
     noSignals=false;
     switchStyle();

@@ -357,7 +357,7 @@ class KoParagShadowWidget: public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoParagShadowWidget( QWidget * parent, const char * name );
+    KoParagShadowWidget( QWidget * parent, const char * name=0 );
     virtual ~KoParagShadowWidget() {}
 
     virtual void display( const KoParagLayout & lay );
