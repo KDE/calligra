@@ -1552,7 +1552,9 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
             // parag->decDepth(); // We don't have support for nested lists at the moment
                                   // (only in titles, but you don't want Backspace to move it up)
             KoParagCounter c;
-            setCounter( cursor, c );
+            KCommand *cmd=setCounterCommand( cursor, c );
+            if(cmd)
+                m_doc->addCommand(cmd);
         }
         else
         {
@@ -2371,13 +2373,13 @@ void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor, int selection
     }
 }
 
-void KWTextFrameSet::setCounter( QTextCursor * cursor, const KoParagCounter & counter )
+KCommand *KWTextFrameSet::setCounterCommand( QTextCursor * cursor, const KoParagCounter & counter )
 {
     QTextDocument * textdoc = textDocument();
     const KoParagCounter * curCounter = static_cast<KWTextParag*>(cursor->parag())->counter();
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
          curCounter && counter == *curCounter )
-        return;
+        return 0L;
     emit hideCursor();
     storeParagUndoRedoInfo( cursor );
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
@@ -2406,19 +2408,20 @@ void KWTextFrameSet::setCounter( QTextCursor * cursor, const KoParagCounter & co
         undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
         KoParagLayout::BulletNumber );
     textdoc->addCommand( cmd );
-    m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change list type") ) );
+    //m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change list type") ) );
 
     undoRedoInfo.clear(); // type is still Invalid -> no command created
     emit showCursor();
     emit updateUI( true );
+    return new KWTextCommand( this, /*cmd, */i18n("Change list type") );
 }
 
-void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
+KCommand * KWTextFrameSet::setAlignCommand( QTextCursor * cursor, int align )
 {
     QTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
          cursor->parag()->alignment() == align )
-        return; // No change needed.
+        return 0L; // No change needed.
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor );
@@ -2442,19 +2445,20 @@ void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
         undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
         KoParagLayout::Alignment );
     textdoc->addCommand( cmd );
-    m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Alignment") ) );
+    //m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Alignment") ) );
     undoRedoInfo.clear(); // type is still Invalid -> no command created
     emit showCursor();
     emit updateUI( true );
+    return new KWTextCommand( this, /*cmd, */i18n("Change Alignment") );
 }
 
-void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin ) {
+KCommand * KWTextFrameSet::setMarginCommand( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin ) {
     QTextDocument * textdoc = textDocument();
     //kdDebug(32001) << "KWTextFrameSet::setMargin " << m << " to value " << margin << endl;
     //kdDebug(32001) << "Current margin is " << static_cast<KWTextParag *>(cursor->parag())->margin(m) << endl;
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
          static_cast<KWTextParag *>(cursor->parag())->margin(m) == margin )
-        return; // No change needed.
+        return 0L; // No change needed.
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor );
@@ -2485,13 +2489,14 @@ void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m,
         name = i18n("Change Indent");
     else
         name = i18n("Change Paragraph Spacing");
-    m_doc->addCommand( new KWTextCommand( this, /*cmd, */name ) );
+    //m_doc->addCommand( new KWTextCommand( this, /*cmd, */name ) );
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI( true );
+    return  new KWTextCommand( this, /*cmd, */name );
 }
 
-void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, double spacing )
+KCommand * KWTextFrameSet::setLineSpacingCommand( QTextCursor * cursor, double spacing )
 {
     QTextDocument * textdoc = textDocument();
     //kdDebug(32001) << "KWTextFrameSet::setLineSpacing to value " << spacing << endl;
@@ -2500,7 +2505,7 @@ void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, double spacing )
     //kdDebug(32001) << "hasSelection " << textdoc->hasSelection( QTextDocument::Standard ) << endl;
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
          static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing() == spacing )
-        return; // No change needed.
+        return 0L; // No change needed.
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor );
@@ -2524,14 +2529,15 @@ void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, double spacing )
         undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
         KoParagLayout::LineSpacing );
     textdoc->addCommand( cmd );
-    m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Line Spacing") ) );
+    //m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Line Spacing") ) );
 
     undoRedoInfo.clear();
     emit showCursor();
+    return new KWTextCommand( this, /*cmd, */i18n("Change Line Spacing") );
 }
 
 
-void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder )
+KCommand * KWTextFrameSet::setBordersCommand( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder )
 {
   QTextDocument * textdoc = textDocument();
   if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
@@ -2539,7 +2545,7 @@ void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border
        static_cast<KWTextParag *>(cursor->parag())->rightBorder() ==rightBorder &&
        static_cast<KWTextParag *>(cursor->parag())->topBorder() ==topBorder &&
        static_cast<KWTextParag *>(cursor->parag())->bottomBorder() ==bottomBorder )
-        return; // No change needed.
+        return 0L; // No change needed.
 
     emit hideCursor();
     storeParagUndoRedoInfo( cursor );
@@ -2580,19 +2586,20 @@ void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border
         undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
         KoParagLayout::Borders);
     textdoc->addCommand( cmd );
-    m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Borders") ) );
+    //m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Borders") ) );
 
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI( true );
+    return new KWTextCommand( this, /*cmd, */i18n("Change Borders") );
 }
 
 
-void KWTextFrameSet::setTabList( QTextCursor * cursor, const KoTabulatorList &tabList )
+KCommand * KWTextFrameSet::setTabListCommand( QTextCursor * cursor, const KoTabulatorList &tabList )
 {
     QTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( QTextDocument::Standard ) && static_cast<KWTextParag *>(cursor->parag())->tabList() == tabList )
-        return; // No change needed.
+        return 0L; // No change needed.
 
     emit hideCursor();
 
@@ -2619,18 +2626,19 @@ void KWTextFrameSet::setTabList( QTextCursor * cursor, const KoTabulatorList &ta
         undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
         KoParagLayout::Tabulator);
     textdoc->addCommand( cmd );
-    m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Tabulator") ) );
+    //m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Tabulator") ) );
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI( true );
+    return new KWTextCommand( this, /*cmd, */i18n("Change Tabulator") );
 }
 
-void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, int pageBreaking )
+KCommand * KWTextFrameSet::setPageBreakingCommand( QTextCursor * cursor, int pageBreaking )
 {
     QTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
          static_cast<KWTextParag *>(cursor->parag())->pageBreaking() == pageBreaking )
-        return; // No change needed.
+        return 0L; // No change needed.
 
     emit hideCursor();
 
@@ -2658,11 +2666,12 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, int pageBreaking )
         KoParagLayout::PageBreaking );
     textdoc->addCommand( cmd );
     // ## find a better name for the command
-    m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Paragraph Attribute") ) );
+    //m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Change Paragraph Attribute") ) );
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI( true );
     emit ensureCursorVisible();
+    return new KWTextCommand( this, /*cmd, */i18n("Change Paragraph Attribute") );
 }
 
 

@@ -25,6 +25,7 @@
 #include "kwframe.h"
 #include "kwtextparag.h" // for KWParagLayout
 #include "kwtextdocument.h"
+#include "kwcommand.h"
 class KWStyle;
 class KWTextDrag;
 class KWDocument;
@@ -188,12 +189,12 @@ public:
     void doKeyboardAction( QTextCursor * cursor, KWTextFormat * & currentFormat, KeyboardAction action );
 
     // -- Paragraph settings --
-    void setCounter( QTextCursor * cursor, const KoParagCounter & counter );
-    void setAlign( QTextCursor * cursor, int align );
-    void setLineSpacing( QTextCursor * cursor, double spacing );
-    void setPageBreaking( QTextCursor * cursor, int pageBreaking );
-    void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder );
-    void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin );
+    KCommand * setCounterCommand( QTextCursor * cursor, const KoParagCounter & counter );
+    KCommand * setAlignCommand( QTextCursor * cursor, int align );
+    KCommand * setLineSpacingCommand( QTextCursor * cursor, double spacing );
+    KCommand * setPageBreakingCommand( QTextCursor * cursor, int pageBreaking );
+    KCommand * setBordersCommand( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder );
+    KCommand * setMarginCommand( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin );
     void applyStyle( QTextCursor * cursor, const KWStyle * style,
                      int selectionId = QTextDocument::Standard,
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = QTextFormat::Format,
@@ -201,7 +202,7 @@ public:
 
     void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
 
-    void setTabList( QTextCursor * cursor,const KoTabulatorList & tabList );
+    KCommand* setTabListCommand( QTextCursor * cursor,const KoTabulatorList & tabList );
 
 #ifndef NDEBUG
     void printRTDebug( int );
@@ -411,15 +412,16 @@ public:
     QString textFontFamily()const;
 
     // -- Paragraph settings --
-    void setCounter( const KoParagCounter & counter ) { textFrameSet()->setCounter( cursor, counter ); }
-    void setAlign( int align ) { textFrameSet()->setAlign( cursor, align ); }
-    void setPageBreaking( int pageBreaking ) { textFrameSet()->setPageBreaking( cursor, pageBreaking ); }
-    void setLineSpacing( double spacing ) { textFrameSet()->setLineSpacing( cursor, spacing ); }
-    void setBorders( Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder )
-          { textFrameSet()->setBorders( cursor, leftBorder, rightBorder, bottomBorder, topBorder ); }
-    void setMargin( QStyleSheetItem::Margin m, double margin )
-          { textFrameSet()->setMargin( cursor, m, margin ); }
-    void setTabList( const KoTabulatorList & tabList ){ textFrameSet()->setTabList( cursor, tabList ); }
+    KCommand * setCounter( const KoParagCounter & counter ) { return textFrameSet()->setCounterCommand( cursor, counter ); }
+    KCommand * setAlign( int align ) { return textFrameSet()->setAlignCommand( cursor, align ); }
+    KCommand * setPageBreaking( int pageBreaking ) { return textFrameSet()->setPageBreakingCommand( cursor, pageBreaking ); }
+    KCommand * setLineSpacing( double spacing ) { return textFrameSet()->setLineSpacingCommand( cursor, spacing ); }
+    KCommand * setBorders( Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder )
+          { return textFrameSet()->setBordersCommand( cursor, leftBorder, rightBorder, bottomBorder, topBorder ); }
+    KCommand * setMargin( QStyleSheetItem::Margin m, double margin )
+          { return textFrameSet()->setMarginCommand( cursor, m, margin ); }
+    KCommand * setTabList( const KoTabulatorList & tabList ){ return textFrameSet()->setTabListCommand( cursor, tabList ); }
+
     void applyStyle( const KWStyle * style );
 
     const KoParagLayout & currentParagLayout() const { return m_paragLayout; }

@@ -1921,53 +1921,122 @@ void KWView::formatParagraph()
         paragDia->setParagLayout( lay );
         if(!paragDia->exec())
             return;
-
-        // TODO a macro command with all the changes in it !
-        // undo should do all in one step.
+        KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph settings" ) );
+        KCommand *cmd=0L;
+        bool changed=false;
         if(paragDia->isLeftMarginChanged())
         {
-            edit->setMargin( QStyleSheetItem::MarginLeft, paragDia->leftIndent() );
+            cmd=edit->setMargin( QStyleSheetItem::MarginLeft, paragDia->leftIndent() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
             m_gui->getHorzRuler()->setLeftIndent( KWUnit::userValue( paragDia->leftIndent(), m_doc->getUnit() ) );
+
         }
 
         if(paragDia->isRightMarginChanged())
         {
-            edit->setMargin( QStyleSheetItem::MarginRight, paragDia->rightIndent() );
-            //koRuler doesn't support setRightIndent
-            //m_gui->getHorzRuler()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
+            cmd=edit->setMargin( QStyleSheetItem::MarginRight, paragDia->rightIndent() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                //koRuler doesn't support setRightIndent
+                //m_gui->gEthorzrule()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
+                changed=true;
+            }
         }
         if(paragDia->isSpaceBeforeChanged())
-            edit->setMargin( QStyleSheetItem::MarginTop, paragDia->spaceBeforeParag() );
-
+        {
+            cmd=edit->setMargin( QStyleSheetItem::MarginTop, paragDia->spaceBeforeParag() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
         if(paragDia->isSpaceAfterChanged())
-            edit->setMargin( QStyleSheetItem::MarginBottom, paragDia->spaceAfterParag() );
-
+        {
+            cmd=edit->setMargin( QStyleSheetItem::MarginBottom, paragDia->spaceAfterParag() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
         if(paragDia->isFirstLineChanged())
         {
-            edit->setMargin( QStyleSheetItem::MarginFirstLine, paragDia->firstLineIndent());
+            cmd=edit->setMargin( QStyleSheetItem::MarginFirstLine, paragDia->firstLineIndent());
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
             m_gui->getHorzRuler()->setFirstIndent(
                 KWUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_doc->getUnit() ) );
         }
 
         if(paragDia->isAlignChanged())
-            edit->setAlign( paragDia->align() );
-
+        {
+            cmd=edit->setAlign( paragDia->align() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
         if(paragDia->isCounterChanged())
-            edit->setCounter( paragDia->counter() );
-
+        {
+            cmd=edit->setCounter( paragDia->counter() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
         if(paragDia->listTabulatorChanged())
-            edit->setTabList( paragDia->tabListTabulator() );
+        {
+            cmd=edit->setTabList( paragDia->tabListTabulator() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
 
         if(paragDia->isLineSpacingChanged())
-            edit->setLineSpacing( paragDia->lineSpacing() );
-
+        {
+            cmd=edit->setLineSpacing( paragDia->lineSpacing() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
         if(paragDia->isBorderChanged())
-            edit->setBorders( paragDia->leftBorder(), paragDia->rightBorder(),
+        {
+            cmd=edit->setBorders( paragDia->leftBorder(), paragDia->rightBorder(),
                               paragDia->topBorder(), paragDia->bottomBorder() );
-
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
         if ( paragDia->isPageBreakingChanged() )
-            edit->setPageBreaking( paragDia->pageBreaking() );
-
+        {
+            cmd=edit->setPageBreaking( paragDia->pageBreaking() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
+        if(changed)
+            m_doc->addCommand(macroCommand);
+        else
+            delete macroCommand;
         delete paragDia;
     }
 
@@ -2428,7 +2497,11 @@ void KWView::textAlignLeft()
     {
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
-            edit->setAlign(Qt::AlignLeft);
+        {
+            KCommand *cmd=edit->setAlign(Qt::AlignLeft);
+            if(cmd)
+                m_doc->addCommand(cmd);
+        }
     } else
         actionFormatAlignLeft->setChecked( true );
 }
@@ -2439,7 +2512,11 @@ void KWView::textAlignCenter()
     {
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
-            edit->setAlign(Qt::AlignCenter);
+        {
+            KCommand *cmd=edit->setAlign(Qt::AlignCenter);
+            if(cmd)
+                m_doc->addCommand(cmd);
+        }
     } else
         actionFormatAlignCenter->setChecked( true );
 }
@@ -2450,7 +2527,11 @@ void KWView::textAlignRight()
     {
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
-        edit->setAlign(Qt::AlignRight);
+        {
+            KCommand *cmd=edit->setAlign(Qt::AlignRight);
+            if(cmd)
+                m_doc->addCommand(cmd);
+        }
     } else
         actionFormatAlignRight->setChecked( true );
 }
@@ -2461,7 +2542,11 @@ void KWView::textAlignBlock()
     {
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
-            edit->setAlign(Qt3::AlignJustify);
+        {
+            KCommand *cmd=edit->setAlign(Qt3::AlignJustify);
+            if(cmd)
+                m_doc->addCommand(cmd);
+        }
     } else
         actionFormatAlignBlock->setChecked( true );
 }
@@ -2481,7 +2566,11 @@ void KWView::textList()
     KWTextFrameSetEdit * edit = currentTextEdit();
     ASSERT(edit);
     if ( edit )
-        edit->setCounter( c );
+    {
+        KCommand *cmd=edit->setCounter( c );
+        if(cmd)
+            m_doc->addCommand(cmd);
+    }
 }
 
 void KWView::textSuperScript()
@@ -2532,7 +2621,9 @@ void KWView::textIncreaseIndent()
         // a frame anywhere, even closer to the edges than left/right border allows (DF).
         //if( newVal <= (m_doc->ptPaperWidth()-m_doc->ptRightBorder()-m_doc->ptLeftBorder()))
         {
-            edit->setMargin( QStyleSheetItem::MarginLeft, newVal );
+            KCommand *cmd=edit->setMargin( QStyleSheetItem::MarginLeft, newVal );
+            if(cmd)
+                m_doc->addCommand(cmd);
         }
     }
 }
@@ -2547,7 +2638,9 @@ void KWView::textDecreaseIndent()
         {
             double indent = m_doc->getIndentValue();
             double newVal = leftMargin - indent;
-            edit->setMargin( QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ) );
+            KCommand *cmd=edit->setMargin( QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ) );
+            if(cmd)
+                m_doc->addCommand(cmd);
         }
     }
 }
@@ -2685,7 +2778,9 @@ void KWView::borderSet()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if ( edit )
     {
-        edit->setBorders( m_border.left, m_border.right, m_border.top, m_border.bottom );
+        KCommand *cmd=edit->setBorders( m_border.left, m_border.right, m_border.top, m_border.bottom );
+        if(cmd)
+            m_doc->addCommand(cmd);
     }
     else
     {
@@ -2734,7 +2829,9 @@ void KWView::tabListChanged( const KoTabulatorList & tabList )
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit)
         return;
-    edit->setTabList( tabList );
+    KCommand *cmd=edit->setTabList( tabList );
+    if(cmd)
+        m_doc->addCommand(cmd);
 }
 
 void KWView::newPageLayout( KoPageLayout _layout )
@@ -2775,14 +2872,20 @@ void KWView::newFirstIndent( double _firstIndent )
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit) return;
     double val = _firstIndent - edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-    edit->setMargin( QStyleSheetItem::MarginFirstLine, val );
+    KCommand *cmd=edit->setMargin( QStyleSheetItem::MarginFirstLine, val );
+    if(cmd)
+        m_doc->addCommand(cmd);
 }
 
 void KWView::newLeftIndent( double _leftIndent)
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
-        edit->setMargin( QStyleSheetItem::MarginLeft, _leftIndent );
+    {
+        KCommand *cmd=edit->setMargin( QStyleSheetItem::MarginLeft, _leftIndent );
+        if(cmd)
+            m_doc->addCommand(cmd);
+    }
 }
 
 void KWView::openPopupMenuInsideFrame( KWFrame* frame, const QPoint & _point )
