@@ -158,7 +158,10 @@ void KWFootNoteVariable::saveVariable( QDomElement &parentElem )
     QDomElement footnoteElem = parentElem.ownerDocument().createElement( "FOOTNOTE" );
     parentElem.appendChild( footnoteElem );
     //footnoteElem.setAttribute( "subtype", 0 );
-    footnoteElem.setAttribute( "value", m_varValue.toString() );
+    if ( m_numberingType == Auto )
+        footnoteElem.setAttribute( "value", m_numDisplay );
+    else
+        footnoteElem.setAttribute( "value", m_varValue.toString() );
     footnoteElem.setAttribute( "notetype", m_noteType == FootNote ? "footnote" : "endnote" );
     footnoteElem.setAttribute( "numberingtype", m_numberingType == Auto ? "auto" : "manual" );
     Q_ASSERT( m_frameset );
@@ -189,7 +192,10 @@ void KWFootNoteVariable::load( QDomElement &elem )
             kdWarning() << "Unknown footnote numbering: '" << str << "'" << endl;
 
         if ( m_numberingType == Auto )
-            m_varValue = QVariant(footnoteElem.attribute("value").toInt());
+        {
+            m_numDisplay = footnoteElem.attribute("value").toInt();
+            formatedNote();
+        }
         else
             m_varValue = QVariant(footnoteElem.attribute("value"));
 
