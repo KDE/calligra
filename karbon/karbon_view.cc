@@ -123,10 +123,10 @@ KarbonView::~KarbonView()
 
 	// widgets:
 	//delete m_toolbox;
-	delete m_status;
+//	delete m_status;
 	delete m_painterFactory;
-	delete m_canvas;
-	m_canvas = 0L;
+//	delete m_canvas;
+//	m_canvas = 0L;
 
 
 	delete m_dcop;

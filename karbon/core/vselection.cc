@@ -137,22 +137,10 @@ VSelection::draw( QPainter* painter, double zoomFactor ) const
 const KoRect&
 VSelection::boundingBox() const
 {
-	// check children for bbox invalidity:
-	if( !m_boundingBoxIsInvalid )
-	{
-		VObjectListIterator itr = m_objects;
-		for( ; itr.current(); ++itr )
-		{
-			if( itr.current()->boundingBoxIsInvalid() )
-			{
-				m_boundingBoxIsInvalid = true;
-				break;
-			}
-		}
-	}
-
-	if( m_boundingBoxIsInvalid )
-	{
+// disable bbox caching for selection since there is no reliable
+// way to get notified of a bbox change:
+//	if( m_boundingBoxIsInvalid )
+//	{
 		// clear:
 		m_boundingBox = KoRect();
 
@@ -162,8 +150,8 @@ VSelection::boundingBox() const
 			m_boundingBox |= itr.current()->boundingBox();
 		}
 
-		m_boundingBoxIsInvalid = false;
-	}
+//		m_boundingBoxIsInvalid = false;
+//	}
 
 	return m_boundingBox;
 }

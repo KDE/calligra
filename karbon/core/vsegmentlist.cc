@@ -324,10 +324,10 @@ VSegmentList::boundingBox() const
 
 		VSegment* segment = m_first;
 
-		// ommit "begin" segment:
-		while( ( segment = segment->m_next ) )
+		while( segment )
 		{
 			m_boundingBox |= segment->boundingBox();
+			segment = segment->m_next;
 		}
 
 		m_boundingBoxIsInvalid = false;
