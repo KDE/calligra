@@ -158,7 +158,7 @@ public:
     virtual void addShell( KoMainWindow *shell );
 
     virtual void insertObject( const KoRect& _rect, KoDocumentEntry& _e );
-    void setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf );
+    void setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf );
 
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
     KoPageLayout pageLayout() const { return m_pageLayout; }
@@ -304,7 +304,6 @@ public:
     KoHFType getHeaderType() { return m_pageHeaderFooter.header; }
     KoHFType getFooterType() { return m_pageHeaderFooter.footer; }
 
-    void frameMargins( double &l, double &r, double &t, double &b );
     bool isOnlyOneFrameSelected();
     void setFrameMargins( double l, double r, double t, double b );
     void setFrameCoords( double x, double y, double w, double h );
@@ -337,7 +336,7 @@ public:
     void loadEmbedded( QDomElement embedded );
 
     void recalcVariables( int type );
-    
+
     KWVariableCollection *getVariableCollection() {return m_varColl;}
 
     KWSerialLetterDataBase *getSerialLetterDataBase() const { return m_slDataBase; }
@@ -441,8 +440,9 @@ public:
     void setChangeLastModeView(const QString &_mode){ m_lastModeView=_mode;}
     const QString & ChangeLastModeView() {return m_lastModeView;}
 
-    int defaultColumnSpacing(){ return m_defaultColumnSpacing ;}
-    void setDefaultColumnSpacing(int _val){m_defaultColumnSpacing=_val;}
+    // in pt
+    double defaultColumnSpacing(){ return m_defaultColumnSpacing ;}
+    void setDefaultColumnSpacing(double _val){ m_defaultColumnSpacing=_val; }
     /**
      * @returns the document for the formulas
      */
@@ -550,7 +550,6 @@ private:
     KoPageLayout m_pageLayout;
     KoColumns m_pageColumns;
     KoKWHeaderFooter m_pageHeaderFooter;
-    unsigned int m_ptColumnWidth;
 
     KWImageCollection m_imageCollection;
     KoClipartCollection m_clipartCollection;
@@ -610,11 +609,10 @@ private:
     KFormula::Document* m_formulaDocument;
 
     double m_indent; // in pt
+    double m_defaultColumnSpacing;
 
     int m_iNbPagePerRow;
     int m_maxRecentFiles;
-
-    int m_defaultColumnSpacing;
 
     bool m_hasTOC;
 

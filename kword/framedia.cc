@@ -851,13 +851,13 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     /// ##### grid4->addWidget( grp2, ++row, 0 );
 
-    double l, r, t, b;
-    doc->frameMargins( l, r, t, b );
-    sml->setText( QString::number( QMAX(0.00,KoUnit::userValue( l, doc->getUnit() ) ) ));
-    smr->setText( QString::number( QMAX(0.00,KoUnit::userValue( r, doc->getUnit() ) ) ));
-    smt->setText( QString::number( QMAX(0.00,KoUnit::userValue( t, doc->getUnit() ) ) ));
-    smb->setText( QString::number( QMAX(0.00,KoUnit::userValue( b, doc->getUnit() ) ) ));
-
+    if ( frame )
+    {
+        sml->setText( QString::number( QMAX(0.00,KoUnit::userValue( frame->bLeft(), doc->getUnit() ) ) ));
+        smr->setText( QString::number( QMAX(0.00,KoUnit::userValue( frame->bRight(), doc->getUnit() ) ) ));
+        smt->setText( QString::number( QMAX(0.00,KoUnit::userValue( frame->bTop(), doc->getUnit() ) ) ));
+        smb->setText( QString::number( QMAX(0.00,KoUnit::userValue( frame->bBottom(), doc->getUnit() ) ) ));
+    }
     sx->setValidator( new KFloatValidator( 0,9999,sx ) );
     sy->setValidator( new KFloatValidator( 0,9999,sy ) );
     smb->setValidator( new KFloatValidator( 0,9999,smb ) );
@@ -1205,7 +1205,7 @@ void KWFrameDia::enableRunAround()
 bool KWFrameDia::applyChanges()
 {
     //kdDebug() << "KWFrameDia::applyChanges************************"<<endl;
-    KWFrame *frameCopy;
+    KWFrame *frameCopy = 0L;
     bool isNewFrame=false;
     if(frame) { // only do undo/redo when we have 1 frame to change for now..
         frameCopy = frame->getCopy(); // keep a copy of the original (for undo/redo)

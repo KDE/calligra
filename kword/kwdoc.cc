@@ -380,7 +380,7 @@ void KWDocument::initUnit()
     {
         config->setGroup( "Misc" );
         setUnit(KoUnit::unit( config->readEntry("Units",KoUnit::unitName(KoUnit::U_MM  ))));
-        setDefaultColumnSpacing((int)config->readDoubleNumEntry("ColumnSpacing",3));
+        setDefaultColumnSpacing( config->readDoubleNumEntry("ColumnSpacing", 3.0) );
     }
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 }
@@ -405,7 +405,7 @@ void KWDocument::initEmpty()
 }
 
 
-void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf )
+void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf )
 {
     if ( m_processingType == WP ) {
         kdDebug() << "KWDocument::setPageLayout WP" << endl;
@@ -2510,23 +2510,6 @@ void KWDocument::setFooterVisible( bool f )
     layout();
     setModified(true);
     repaintAllViews( true );
-}
-
-void KWDocument::frameMargins( double &l, double &r, double &t, double &b )
-{
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-        if ( frameSet( i )->hasSelectedFrame() ) {
-            for ( unsigned int j = 0; j < frameSet( i )->getNumFrames(); j++ ) {
-                if ( frameSet( i )->frame( j )->isSelected() ) {
-                    l = frameSet( i )->frame( j )->bLeft();
-                    r = frameSet( i )->frame( j )->bRight();
-                    t = frameSet( i )->frame( j )->bTop();
-                    b = frameSet( i )->frame( j )->bBottom();
-                    return;
-                }
-            }
-        }
-    }
 }
 
 bool KWDocument::isOnlyOneFrameSelected() {

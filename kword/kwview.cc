@@ -2513,9 +2513,9 @@ void KWView::formatPage()
     KoHeadFoot hf;
     int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER | DISABLE_UNIT;
     if ( m_doc->processingType() == KWDocument::WP )
-        flags = flags | COLUMNS;
+        flags |= COLUMNS;
     else
-        flags = flags | DISABLE_BORDERS;
+        flags |= DISABLE_BORDERS;
 
     KoUnit::Unit unit = m_doc->getUnit();
     KoUnit::Unit oldUnit = unit;
