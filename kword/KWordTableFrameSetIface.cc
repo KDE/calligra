@@ -83,7 +83,7 @@ DCOPRef KWordTableFrameSetIface::startEditingCell(unsigned int row, unsigned int
     KWDocument *doc=m_table->kWordDocument();
     QPtrList <KWView> lst=doc->getAllViews();
     KWTextFrameSet *m_frametext=m_table->getCell(row,col);
-    if( !m_frametext)
+    if( !m_frametext || m_frametext->isDeleted())
         return DCOPRef();
     lst.at(0)->getGUI()->canvasWidget()->checkCurrentEdit(m_frametext, true);
     return DCOPRef( kapp->dcopClient()->appId(),
