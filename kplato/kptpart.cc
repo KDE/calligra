@@ -89,9 +89,9 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
 	    dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
     ret = KoTemplateChooseDia::choose(KPTFactory::global(), templateDoc,
-				      "application/x-vnd.kde.kplato", "*.kplato",
-				      i18n("KPlato"), dlgtype,
-				      "kplato_template");
+				      dlgtype,
+				      "kplato_template",
+				      NULL);
     if (ret == KoTemplateChooseDia::Template) {
         QFileInfo fileInfo(templateDoc);
         QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName()

@@ -7,6 +7,7 @@
 ** place of a destructor.
 *****************************************************************************/
 
+
 /* This file is part of the KDE project
    Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
 
@@ -26,8 +27,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-using namespace KPlato;
+//TODO it seems this file can be removed
+
+namespace KPlato
+{
 
 void KPTTaskResourcesPanelBase::init()
 {
 }
+
+}  //KPlato namespace

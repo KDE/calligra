@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>RelationPanel</class>
+<class>KPlato::RelationPanel</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
@@ -224,7 +224,7 @@
                                 <set>AlignBottom</set>
                             </property>
                         </widget>
-                        <widget class="KPTDurationWidget">
+                        <widget class="KPlato::KPTDurationWidget">
                             <property name="name">
                                 <cstring>lag</cstring>
                             </property>
@@ -251,7 +251,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>KPTDurationWidget</class>
+        <class>KPlato::KPTDurationWidget</class>
         <header location="local">kptdurationwidget.h</header>
         <sizehint>
             <width>0</width>

@@ -39,10 +39,10 @@ class KDGanttViewTaskLink;
 
 class KPrinter;
 
-class KPTTaskAppointmentsView;  //TODO ui files are not yet in the KPlato namespace
-
 namespace KPlato
 {
+
+class KPTTaskAppointmentsView;
 
 class KPTView;
 class KPTNode;

@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>KPTTaskAppointmentsView</class>
+<class>KPlato::KPTTaskAppointmentsView</class>
 <widget class="QWidget">
     <property name="name">
         <cstring>KPTTaskAppointmentsView</cstring>

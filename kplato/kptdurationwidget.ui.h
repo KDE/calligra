@@ -27,7 +27,8 @@
 */
 
 
-using namespace KPlato;
+namespace KPlato
+{
 
 /**
  * This structure describes one of the fields shown.
@@ -142,7 +143,7 @@ void KPTDurationWidget::setValue(const KPlato::KPTDuration &newDuration)
     emit valueChanged();
 }
 
-KPlato::KPTDuration KPTDurationWidget::value() const
+KPTDuration KPTDurationWidget::value() const
 {
     int i;
     unsigned v[5];
@@ -320,3 +321,4 @@ void KPTDurationWidget::setFieldUnit(int f, QString unit)
     }
 }
 
+}  //KPlato namespace

@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>KPTTaskNotesPanelBase</class>
+<class>KPlato::KPTTaskNotesPanelBase</class>
 <widget class="QWidget">
     <property name="name">
         <cstring>KPTTaskNotesPanelBase</cstring>

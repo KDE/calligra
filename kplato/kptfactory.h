@@ -24,6 +24,8 @@
 
 class KAboutData;
 
+//FIXME KPTFactory is not in the KPlato namespace, can it be put there? (external dependencies?)
+
 class KPTFactory : public KoFactory
 {
     Q_OBJECT

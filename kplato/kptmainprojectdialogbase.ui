@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>KPTMainProjectDialogBase</class>
+<class>KPlato::KPTMainProjectDialogBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">

@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>StandardWorktimeDialogBase</class>
+<class>KPlato::StandardWorktimeDialogBase</class>
 <author>Dag Andersen </author>
 <widget class="QWidget">
     <property name="name">

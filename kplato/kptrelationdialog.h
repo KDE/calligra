@@ -26,11 +26,11 @@
 class QButtonGroup;
 class KCommand;
 
-class RelationPanel;
-class KPTDurationWidget;
-
 namespace KPlato
 {
+
+class RelationPanel;
+class KPTDurationWidget;
 
 class KPTNode;
 class KPTRelation;

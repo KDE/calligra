@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPTTaskResourcesPanelBase</class>
+<class>KPlato::KPTTaskResourcesPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
@@ -128,10 +128,10 @@
     <include location="local" impldecl="in implementation">kptdurationwidget.h</include>
 </includes>
 <forwards>
-    <forward>class KPTDurationWidget;</forward>
+    <forward>namespace KPlato { class KPTDurationWidget; }</forward>
 </forwards>
 <variables>
-    <variable access="public">KPTDurationWidget *effort;</variable>
+    <variable access="public">KPlato::KPTDurationWidget *effort;</variable>
 </variables>
 <functions>
     <function>init()</function>

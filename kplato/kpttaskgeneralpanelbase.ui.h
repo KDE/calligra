@@ -29,6 +29,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+namespace KPlato
+{
+
 void KPTTaskGeneralPanelBase::setSchedulingType(int type)
 
 {
@@ -148,7 +151,7 @@ void KPTTaskGeneralPanelBase::estimationTypeChanged( int type )
 
 
 
-void KPTTaskGeneralPanelBase::setEstimate( const KPlato::KPTDuration & duration)
+void KPTTaskGeneralPanelBase::setEstimate( const KPTDuration & duration)
 {
     estimate->setValue( duration );
 }
@@ -167,7 +170,7 @@ void KPTTaskGeneralPanelBase::checkAllFieldsFilled()
 }
 
 
-KPlato::KPTDuration KPTTaskGeneralPanelBase::estimationValue()
+KPTDuration KPTTaskGeneralPanelBase::estimationValue()
 {
     return estimate->value();
 }
@@ -220,3 +223,5 @@ void KPTTaskGeneralPanelBase::endTimeChanged( const QDateTime &dt )
         scheduleStartTime->blockSignals(false);
     }
 }
+
+}  //KPlato namespace

@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPTTaskGeneralPanelBase</class>
+<class>KPlato::KPTTaskGeneralPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
@@ -252,7 +252,7 @@
                         <string>End time or Latest finish</string>
                     </property>
                 </widget>
-                <widget class="KPTDurationWidget" row="2" column="2">
+                <widget class="KPlato::KPTDurationWidget" row="2" column="2">
                     <property name="name">
                         <cstring>estimate</cstring>
                     </property>
@@ -441,7 +441,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>KPTDurationWidget</class>
+        <class>KPlato::KPTDurationWidget</class>
         <header location="local">kptdurationwidget.h</header>
         <sizehint>
             <width>0</width>

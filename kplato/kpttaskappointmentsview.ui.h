@@ -29,7 +29,8 @@
 
 #include <kdebug.h>
 
-using namespace KPlato;
+namespace KPlato
+{
 
 void KPTTaskAppointmentsView::clear()
 {
@@ -91,3 +92,5 @@ void KPTTaskAppointmentsView::init()
     m_appList->setColumnAlignment(5, AlignRight);
     m_appList->setColumnAlignment(6, AlignRight);
 }
+
+}  //KPlato namespace
