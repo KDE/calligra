@@ -276,6 +276,8 @@ protected:
 
   // ************ functions ************
   void saveBackground(ostream&);
+  void saveObjects(ostream&);
+  void saveTxtObj(ostream&,KTextObject*);
 
   // ************ variables ************
 

@@ -93,6 +93,21 @@ void GraphObj::setFileName(QString fn)
   if (objType == OT_AUTOFORM) atfInterp->load(fileName);
 }
 
+/*========================== save ================================*/
+void GraphObj::save(ostream& out)
+{
+  out << indent << "<LINETYPE value=" << lineType << "/>" << endl;
+  out << indent << "<RECTTYPE value=" << rectType << "/>" << endl;
+  out << indent << "<PEN red=" << oPen.color().red() << " green=" << oPen.color().green()
+      << " blue=" << oPen.color().blue() << " width=" << oPen.width()
+      << " style=" << oPen.style() << "/>" << endl;
+  out << indent << "<BRUSH red=" << oBrush.color().red() << " green=" << oBrush.color().green()
+      << " blue=" << oBrush.color().blue() << " style=" << oBrush.style() << "/>" << endl;
+  out << indent << "<XRND value=" << xRnd << "/>" << endl;
+  out << indent << "<YRND value=" << yRnd << "/>" << endl;
+  out << indent << "<FILENAME value=\"" << fileName << "\"/>" << endl;
+}
+
 /*======================= paint event ============================*/
 void GraphObj::paintEvent(QPaintEvent* paintEvent)
 {

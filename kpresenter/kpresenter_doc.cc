@@ -210,10 +210,12 @@ bool KPresenterDocument_impl::save(ostream& out)
   out << etag << "</PAPER>" << endl;
   
   out << otag << "<BACKGROUND pages=" << _pageList.count() << ">" << endl;
-
   saveBackground(out);
-
   out << etag << "</BACKGROUND>" << endl;
+
+  out << otag << "<OBJECTS objects=" << _objList.count() << ">" << endl;
+  saveObjects(out);
+  out << etag << "</OBJECTS>" << endl;
 
   out << etag << "</DOC>" << endl;
     
@@ -242,6 +244,97 @@ void KPresenterDocument_impl::saveBackground(ostream& out)
     }
 }
 
+/*========================== save objects =======================*/
+void KPresenterDocument_impl::saveObjects(ostream& out)
+{
+  for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
+    {
+      out << otag << "<OBJECT>" << endl;
+      out << indent << "<OBJTYPE value=" << objPtr->objType << "/>" << endl; 
+      out << indent << "<ISSELECTED value=" << objPtr->isSelected << "/>" << endl; 
+      out << indent << "<OBJNUM value=" << objPtr->objNum << "/>" << endl; 
+      out << indent << "<COORDINATES x=" << objPtr->ox << " x=" << objPtr->ox
+	  << " w=" << objPtr->ow << " h=" << objPtr->oh << "/>" << endl; 
+      
+      if (objPtr->objType == OT_TEXT)
+	saveTxtObj(out,objPtr->textObj);
+      else
+	{
+	  out << otag << "<GRAPHOBJ>" << endl;
+	  objPtr->graphObj->save(out);
+	  out << etag << "</GRAPHOBJ>" << endl;
+	}
+ 
+      out << etag << "</OBJECT>" << endl;
+    }
+}
+
+/*========================== save textobject ====================*/
+void KPresenterDocument_impl::saveTxtObj(ostream& out,KTextObject *txtPtr)
+{
+  TxtObj *txtObj;
+  TxtLine *txtLine;
+  TxtParagraph *txtParagraph;
+  unsigned int i,j,k;
+  QFont font;
+
+  out << otag << "<TEXTOBJ objType=" << txtPtr->objType() << "/>" << endl;
+  out << indent << "<ENUMLISTTYPE type=" << txtPtr->enumListType().type << " before=\""
+      << txtPtr->enumListType().before << "\" after=\"" << txtPtr->enumListType().after
+      << "\" start=" << txtPtr->enumListType().start << " family=\"" 
+      << txtPtr->enumListType().font.family() << "\" pointSize=" << txtPtr->enumListType().font.pointSize()
+      << " bold=" << txtPtr->enumListType().font.bold() << " italic=" << txtPtr->enumListType().font.italic()
+      << " underline=" << txtPtr->enumListType().font.underline() << " red=" 
+      << txtPtr->enumListType().color.red() << " green=" << txtPtr->enumListType().color.green() 
+      << " blue=" << txtPtr->enumListType().color.blue() << "/>" << endl; 
+  out << indent << "<UNSORTEDLISTTYPE type=" << " family=\"" 
+      << txtPtr->unsortListType().font.family() << "\" pointSize=" << txtPtr->unsortListType().font.pointSize()
+      << " bold=" << txtPtr->unsortListType().font.bold() << " italic=" << txtPtr->unsortListType().font.italic()
+      << " underline=" << txtPtr->unsortListType().font.underline() << " red=" 
+      << txtPtr->unsortListType().color.red() << " green=" << txtPtr->unsortListType().color.green() 
+      << " blue=" << txtPtr->unsortListType().color.blue() << " chr=" << txtPtr->unsortListType().chr
+      << "/>" << endl; 
+
+  for (i = 0;i < txtPtr->paragraphs();i++)
+    {
+      txtParagraph = txtPtr->paragraphAt(i);
+
+      out << otag << "<PARAGRAPH horzAlign=" << txtParagraph->horzAlign() << "/>" << endl; 
+
+      for (j = 0;j < txtParagraph->lines();j++)
+	{
+	  txtLine = txtParagraph->lineAt(j);
+
+	  out << otag << "<LINE>" << endl;
+
+	  for (k = 0;k < txtLine->items();k++)
+	    {
+	      txtObj = txtLine->itemAt(k);
+	      font = txtObj->font();
+	      
+	      out << otag << "<OBJ>" << endl;
+	      out << indent << "<TYPE value=" << txtObj->type() << "/>" << endl;
+	      out << indent << "<FONT family=\"" << font.family() << "\" pointSize="
+		  << font.pointSize() << " bold=" << font.bold() << " italic=" << font.italic()
+		  << " underline=" << font.underline() << "/>" << endl;
+	      out << indent << "<COLOR red=" << txtObj->color().red() << " green="
+		  << txtObj->color().green() << " blue=" << txtObj->color().blue() << "/>" << endl;
+	      out << indent << "<VERTALIGN value=" << txtObj->vertAlign() << "/>" << endl;
+	      out << indent << "<TEXT value=\"" << txtObj->text() << "\"/>" << endl;
+	      out << etag << "</OBJ>" << endl;
+	    }
+
+	  out << etag << "</LINE>" << endl;
+
+	}
+      
+      out << etag << "</PARAGRAPH>" << endl;
+
+    }
+
+  out << etag << "</TEXTOBJ>" << endl;
+}
+
 /*========================== load ===============================*/
 bool KPresenterDocument_impl::load(const char *_url)
 {
@@ -251,7 +344,7 @@ bool KPresenterDocument_impl::load(const char *_url)
   
   if (!u.isLocalFile())
     {
-      cerr << "Can not save to remote URL" << endl;
+      cerr << "Can not open remote URL" << endl;
       return false;
     }
 

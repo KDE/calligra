@@ -29,6 +29,13 @@
 #include <qpntarry.h>
 #include <qfileinf.h>
 
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <komlWriter.h>
+
+#include <iostream.h>
+#include <fstream.h>
+
 #include "autoformEdit/atfinterpreter.h"
 #include "qwmf.h"
 #include "global.h"
@@ -68,6 +75,9 @@ public:
   void setRnds(int rx,int ry) {xRnd = rx; yRnd = ry;}
   int getRndX() {return xRnd;}
   int getRndY() {return yRnd;}
+
+  // save - load
+  void save(ostream&);
 
 protected:
 
