@@ -278,6 +278,17 @@
  kspread_la_LIBADD = $(LIB_KOFFICECORE)
  
  ## The executable
+--- kugar/kudesigner/kudesigner.desktop	2002/06/09 08:14:49	1.2
++++ kugar/kudesigner/kudesigner.desktop	2002/07/05 12:00:23
+@@ -4,7 +4,7 @@ Encoding=UTF-8
+ Type=Application
+ Exec=kudesigner
+ Icon=kudesigner
+-DocPath=kudesigner/index.html
++DocPath=
+ Terminal=0
+ Name=Kugar Designer
+ Comment=Report Designer
 --- kugar/part/Makefile.am	2002/02/27 13:41:41	1.5
 +++ kugar/part/Makefile.am	2002/07/05 11:01:44
 @@ -2,7 +2,7 @@ INCLUDES = -I$(srcdir)/../lib $(KOFFICE_
