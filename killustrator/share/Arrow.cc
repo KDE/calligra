@@ -123,7 +123,7 @@ Rect Arrow::boundingBox (const Coord& c, float width, float angle) {
   r.right (p.x ());
   r.bottom (p.y ());
 
-  for (int i = 1; i < points.size (); i++) {
+  for (unsigned int i = 1; i < points.size (); i++) {
     p = points.at (i);
 
     r.left (QMIN(p.x (), r.left ()));

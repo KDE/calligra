@@ -95,6 +95,8 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
   inWork = false;
   wrapper = 0L;
 
+  outlineInfo.mask = 0;
+  fillInfo.mask = 0;
   while (first != attribs.end ()) {
     const string& attr = (*first).name ();
     if (attr == "matrix") {
@@ -102,24 +104,42 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
       iMatrix = tMatrix.invert ();
       tmpMatrix = tMatrix;
     }
-    else if (attr == "strokecolor")
+    else if (attr == "strokecolor") {
       outlineInfo.color = (*first).colorValue ();
-    else if (attr == "strokestyle")
+      outlineInfo.mask |= OutlineInfo::Color;
+    }
+    else if (attr == "strokestyle") {
       outlineInfo.style = (QT_PRFX::PenStyle) (*first).intValue ();
-    else if (attr == "linewidth")
+      outlineInfo.mask |= OutlineInfo::Style;
+    }
+    else if (attr == "linewidth") {
       outlineInfo.width = (*first).floatValue ();
-    else if (attr == "fillstyle")
+      outlineInfo.mask |= OutlineInfo::Width;
+    }
+    else if (attr == "fillstyle") {
       fillInfo.fstyle = (FillInfo::Style) (*first).intValue ();
-    else if (attr == "fillcolor")
+      fillInfo.mask |= FillInfo::FillStyle;
+    }
+    else if (attr == "fillcolor") {
       fillInfo.color = (*first).colorValue ();
-    else if (attr == "fillpattern")
+      fillInfo.mask |= FillInfo::Color;
+    }
+    else if (attr == "fillpattern") {
       fillInfo.pattern = (QT_PRFX::BrushStyle) (*first).intValue ();
-    else if (attr == "gradcolor1")
+      fillInfo.mask |= FillInfo::Pattern;
+    }
+    else if (attr == "gradcolor1") {
       fillInfo.gradient.setColor1 ((*first).colorValue ());
-    else if (attr == "gradcolor2")
+      fillInfo.mask |= FillInfo::GradientInfo;
+    }
+    else if (attr == "gradcolor2") {
       fillInfo.gradient.setColor2 ((*first).colorValue ());
-    else if (attr == "gradstyle")
+      fillInfo.mask |= FillInfo::GradientInfo;
+    }
+    else if (attr == "gradstyle") {
       fillInfo.gradient.setStyle ((Gradient::Style) (*first).intValue ());
+      fillInfo.mask |= FillInfo::GradientInfo;
+    }
     else if (attr == "id")
       id = (*first).stringValue ().c_str ();
     else if (attr == "ref")

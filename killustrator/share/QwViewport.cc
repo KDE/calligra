@@ -8,6 +8,8 @@
 **
 ** Copyright (C) 1995,1996 by Warwick Allison.
 **
+** Modified for KIllustrator by: Kai-Uwe Sattler
+**
 *****************************************************************************/
 
 #include <kdebug.h>
@@ -16,6 +18,8 @@
 #include <qscrbar.h>
 #include <qobjcoll.h>
 #include "QwViewport.h"
+
+#include <iostream.h>
 
 /*!
 \class QwViewport QwViewport.h
@@ -33,16 +37,20 @@ to the portHole() of the created QwViewport.
 \sa portHole().
 */
 QwViewport::QwViewport(QWidget *parent, const char *name, WFlags f) :
-	QWidget(parent,name,f),
-	hbar(QScrollBar::Horizontal,this,"horizontal"),
-	vbar(QScrollBar::Vertical,this,"vertical"),
-	porthole(this,"porthole")
+  QWidget(parent,name,f),
+  hbar(QScrollBar::Horizontal,this,"horizontal"),
+  vbar(QScrollBar::Vertical,this,"vertical"),
+  porthole(this,"porthole")
 {
-	connect(&hbar, SIGNAL(valueChanged(int)),
-		this, SLOT(hslide(int)));
-	connect(&vbar, SIGNAL(valueChanged(int)),
-		this, SLOT(vslide(int)));
-	visibleScrollBars = true;
+  connect(&hbar, SIGNAL(valueChanged(int)),
+	  this, SLOT(hslide(int)));
+  connect(&vbar, SIGNAL(valueChanged(int)),
+	  this, SLOT(vslide(int)));
+  visibleScrollBars = true;
+  porthole.setBackgroundMode (QWidget::PaletteDark);
+  hbar.setSteps (20, 1);
+  vbar.setSteps (20, 1);
+  xoff = yoff = 0;
 }
 
 /*!
@@ -50,17 +58,17 @@ The QWidget in the scrolling area.
 */
 QWidget* QwViewport::viewedWidget() const
 {
-	const QObjectList *l = porthole.children();
-
-	if (l) {
-		QObjectListIt iter(*l);
-		QObject *ch = iter.current();;
-		if (ch && ch->isWidgetType()) {
-			return (QWidget*)ch;
-		}
-	}
-
-	return 0;
+  const QObjectList *l = porthole.children();
+  
+  if (l) {
+    QObjectListIt iter(*l);
+    QObject *ch = iter.current();;
+    if (ch && ch->isWidgetType()) {
+      return (QWidget*)ch;
+    }
+  }
+  
+  return 0;
 }
 
 // This variable allows ensureVisible to move the viewed widget then
@@ -71,32 +79,34 @@ bool QwViewport::signal_choke=false;
 
 void QwViewport::hslide(int pos)
 {
-	if (!signal_choke && viewedWidget()) {
-		viewedWidget()->move(-pos,viewedWidget()->y());
-	}
+  if (!signal_choke && viewedWidget()) {
+    viewedWidget()->move(-pos + xoff,
+                         /*viewedWidget()->y() + */yoff);
+  }
 }
 
 void QwViewport::vslide(int pos)
 {
-	if (!signal_choke && viewedWidget()) {
-		viewedWidget()->move(viewedWidget()->x(),-pos);
-	}
+  if (!signal_choke && viewedWidget()) {
+    viewedWidget()->move(/*viewedWidget()->x() +*/ xoff,
+                         -pos + yoff);
+  }
 }
 
 /*!
-Call this if properties change dynamically that would require resizing
+  Call this if properties change dynamically that would require resizing
 the scrollbar.
 */
 void QwViewport::resizeScrollBars()
 {
   int w=width();
   int h=height();
-
+  
   if (viewedWidget()) {
     int portw,porth;
-
+    
     bool needh, needv;
-
+    
     if (visibleScrollBars) {
       needh = w<viewedWidget()->width();
       needv = h<viewedWidget()->height();
@@ -129,11 +139,11 @@ void QwViewport::resizeScrollBars()
     
     if (needv) {
       vbar.setRange(0,viewedWidget()->height()-porth);
-      vbar.setSteps(1,porth);
+      vbar.setSteps(20,porth);
     }
     if (needh) {
       hbar.setRange(0,viewedWidget()->width()-portw);
-      hbar.setSteps(1,portw);
+      hbar.setSteps(20,portw);
     }
     
     int top,bottom;
@@ -188,35 +198,36 @@ An override - ensures scrollbars are correct size upon showing.
 */
 void QwViewport::show()
 {
-	resizeScrollBars();
-	QWidget::show();
+  resizeScrollBars();
+  QWidget::show();
 }
 
 /*!
-An override - ensures scrollbars are correct size upon resize.
+  An override - ensures scrollbars are correct size upon resize.
 */
 void QwViewport::resizeEvent(QResizeEvent* event)
 {
-	QWidget::resizeEvent(event);
-	resizeScrollBars();
+  QWidget::resizeEvent(event);
+  resizeScrollBars();
+  recalculateChildPosition (0L);
 }
 
 /*!
-Override this to adjust width of scrollbars.
-Default returns 16.
+  Override this to adjust width of scrollbars.
+  Default returns 16.
 */
 int QwViewport::scrollBarWidth() const
 {
-	return 16;
+  return 16;
 }
 
 /*!
-Overriding this to determine which on side the vertical scrollbar appears.
-Default returns false (always on left).
+  Overriding this to determine which on side the vertical scrollbar appears.
+  Default returns false (always on left).
 */
 bool QwViewport::scrollBarOnLeft() const
 {
-	return false;
+  return false;
 }
 
 /*!
@@ -225,7 +236,7 @@ Default returns false (always on bottom).
 */
 bool QwViewport::scrollBarOnTop() const
 {
-	return false;
+  return false;
 }
 
 /*!
@@ -237,7 +248,7 @@ Default returns true (empty when both appear).
 */
 bool QwViewport::emptyCorner() const
 {
-	return true;
+  return true;
 }
 
 /*!
@@ -250,7 +261,7 @@ Default returns false.
 */
 bool QwViewport::alwaysEmptyCorner() const
 {
-	return false;
+  return false;
 }
 
 // Inlines:
@@ -289,51 +300,51 @@ before attaching it. ??do what if it resizes??
 */
 void QwViewport::ensureVisible(int x, int y, int xmargin, int ymargin)
 {
-	// Algorithm taken from my WAX++ original
-
-	int pw=portHole()->width();
-	int ph=portHole()->height();
-
-	QWidget* child=viewedWidget();
-	if (!child) return;
-
-	int cx=child->x();
-	int cy=child->y();
-	int cw=child->width();
-	int ch=child->height();
-
-	// int mbw=0; // XXX border width - is this a problem in Qt?
-
-	if (pw < xmargin*2) xmargin=pw/2;
-	if (ph < ymargin*2) ymargin=ph/2;
-
-	if (cw <= pw) { xmargin=0; cx=0; }
-	if (ch <= ph) { ymargin=0; cy=0; }
-
-	if (x < -cx+xmargin) {
-		cx = -x+pw-xmargin;
-	} else if (x >= -cx+pw-xmargin) {
-		cx = -x+xmargin;
-	}
-
-	if (y < -cy+ymargin) {
-		cy = -y+ph-ymargin;
-	} else if (y >= -cy+ph-ymargin) {
-		cy = -y+ymargin;
-	}
-
-	if (cx > 0) cx=0;
-	else if (cx < pw-cw && cw>pw) cx=pw-cw;
-	if (cy > 0) cy=0;
-	else if (cy < ph-ch && ch>ph) cy=ph-ch;
-
-	// Choke signal handling while we update BOTH sliders.
-	signal_choke=true;
-	child->move(cx,cy);
-	vbar.setValue(-cy);
-	hbar.setValue(-cx);
-	resizeScrollBars();
-	signal_choke=false;
+  // Algorithm taken from my WAX++ original
+  
+  int pw=portHole()->width();
+  int ph=portHole()->height();
+  
+  QWidget* child=viewedWidget();
+  if (!child) return;
+  
+  int cx=child->x();
+  int cy=child->y();
+  int cw=child->width();
+  int ch=child->height();
+  
+  // int mbw=0; // XXX border width - is this a problem in Qt?
+  
+  if (pw < xmargin*2) xmargin=pw/2;
+  if (ph < ymargin*2) ymargin=ph/2;
+  
+  if (cw <= pw) { xmargin=0; cx=0; }
+  if (ch <= ph) { ymargin=0; cy=0; }
+  
+  if (x < -cx+xmargin) {
+    cx = -x+pw-xmargin;
+  } else if (x >= -cx+pw-xmargin) {
+    cx = -x+xmargin;
+  }
+  
+  if (y < -cy+ymargin) {
+    cy = -y+ph-ymargin;
+  } else if (y >= -cy+ph-ymargin) {
+    cy = -y+ymargin;
+  }
+  
+  if (cx > 0) cx=0;
+  else if (cx < pw-cw && cw>pw) cx=pw-cw;
+  if (cy > 0) cy=0;
+  else if (cy < ph-ch && ch>ph) cy=ph-ch;
+  
+  // Choke signal handling while we update BOTH sliders.
+  signal_choke=true;
+  child->move(cx,cy);
+  vbar.setValue(-cy);
+  hbar.setValue(-cx);
+  resizeScrollBars();
+  signal_choke=false;
 }
 
 /*!
@@ -341,7 +352,7 @@ void QwViewport::ensureVisible(int x, int y, int xmargin, int ymargin)
 */
 void QwViewport::centerOn(int x, int y)
 {
-	ensureVisible(x,y,32000,32000);
+  ensureVisible(x,y,32000,32000);
 }
 
 /*!
@@ -352,9 +363,26 @@ void QwViewport::centerOn(int x, int y)
 */
 void QwViewport::centralize(int x, int y, float xmargin, float ymargin)
 {
-	int pw=portHole()->width();
-	int ph=portHole()->height();
-	ensureVisible(x,y,int(xmargin/2.0*pw+0.5),int(ymargin/2.0*ph+0.5));
+  int pw=portHole()->width();
+  int ph=portHole()->height();
+  ensureVisible(x,y,int(xmargin/2.0*pw+0.5),int(ymargin/2.0*ph+0.5));
 }
+
+void QwViewport::recalculateChildPosition (QWidget *child) {
+  if (child == 0)
+    child = viewedWidget ();
+  if (child) {
+    if (porthole.width () > child->width ())
+      xoff = (porthole.width () - child->width ()) / 2;
+    else
+      xoff = 0;
+    if (porthole.height () > child->height ())
+      yoff = (porthole.height () - child->height ()) / 2;
+    else
+      yoff = 0;
+    child->move (xoff, yoff);
+  }
+}
+
 
 #include "QwViewport.moc"

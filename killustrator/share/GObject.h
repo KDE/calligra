@@ -56,6 +56,7 @@
 class GOState;
 class GLayer;
 class SWrapper;
+class GCurve;
 
 /**
  * The base class for all graphical objects.
@@ -355,6 +356,8 @@ public:
   virtual void calcBoundingBox () = 0;
 
   virtual void getPath (vector<Coord>& path) {}
+
+  virtual GCurve* convertToCurve () const { return 0L; }
 
   bool workInProgress () const { return inWork; }
   void setWorkInProgress (bool flag) { inWork = flag; }

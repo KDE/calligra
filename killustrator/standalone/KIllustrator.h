@@ -102,11 +102,14 @@ class FilterManager;
 #define ID_ARRANGE_GROUP       505
 #define ID_ARRANGE_UNGROUP     506
 #define ID_ARRANGE_PATHTEXT    507
+#define ID_ARRANGE_TO_CURVE    508
 
 #define ID_TRANSFORM_POSITION  600
 #define ID_TRANSFORM_DIMENSION 601
 #define ID_TRANSFORM_ROTATION  602
 #define ID_TRANSFORM_MIRROR    603
+
+#define ID_EFFECTS_BLEND       701
 
 #define ID_EXTRAS_OPTIONS      800
 #define ID_EXTRAS_LOAD_PALETTE 801
@@ -234,7 +237,7 @@ private:
   QGridLayout *gridLayout;
 
   QPopupMenu *file, *edit, *view, *layout,
-    *arrangement, *extras, *help, *popupMenu;
+    *arrangement, *effects, *extras, *help, *popupMenu;
   QPopupMenu *openRecent;
   ToolController *tcontroller;
   QwViewport *viewport;

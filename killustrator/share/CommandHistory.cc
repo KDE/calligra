@@ -36,12 +36,12 @@ CommandHistory::CommandHistory () {
 }
 
 void CommandHistory::addCommand (Command *cmd, bool exec = false) {
-  //  cout << "add command: " << cmd->getName () << endl;
   if (exec)
     cmd->execute ();
-  // remove all command objects "behind" the current command
-  for (unsigned int i = index; i < history.count (); i++)
-    history.remove (i);
+  // remove all command objects "behind" the current command 
+  unsigned int num = history.count ();
+  for (unsigned int i = index; i < num; i++)
+    history.remove (index);
 
   history.append (cmd);
   if (history.count () > MAX_HISTSIZE)

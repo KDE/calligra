@@ -141,26 +141,36 @@ void Ruler::updatePointer (int x, int y) {
 
   if (orientation == Horizontal) {
     if (currentPosition != -1) {
-      pos = qRound (currentPosition * zoom - MARKER_WIDTH / 2);
-      r1 = QRect (pos - firstVisible, 1, MARKER_WIDTH, MARKER_HEIGHT);
+      pos = qRound (currentPosition * zoom  
+		    - (firstVisible >= 0 ? 0 : firstVisible) 
+		    - MARKER_WIDTH / 2);
+      r1 = QRect (pos - (firstVisible >= 0 ? firstVisible : 0), 
+		  1, MARKER_WIDTH, MARKER_HEIGHT);
       bitBlt (buffer, pos, 1, bg, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
     }
     if (x != -1) {
-      pos = qRound (x * zoom - MARKER_WIDTH / 2);
-      r2 = QRect (pos - firstVisible, 1, MARKER_WIDTH, MARKER_HEIGHT);
+      pos = qRound (x * zoom - (firstVisible >= 0 ? 0 : firstVisible) 
+		    - MARKER_WIDTH / 2);
+      r2 = QRect (pos - (firstVisible >= 0 ? firstVisible : 0), 
+		  1, MARKER_WIDTH, MARKER_HEIGHT);
       bitBlt (buffer, pos, 1, marker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
       currentPosition = x;
     }
   }
   else {
     if (currentPosition != -1) {
-      pos = qRound (currentPosition * zoom - MARKER_HEIGHT / 2);
-      r1 = QRect (1, pos - firstVisible, MARKER_HEIGHT, MARKER_WIDTH);
+      pos = qRound (currentPosition * zoom
+		    - (firstVisible >= 0 ? 0 : firstVisible) 
+		    - MARKER_HEIGHT / 2);
+      r1 = QRect (1, pos - (firstVisible >= 0 ? firstVisible : 0), 
+		  MARKER_HEIGHT, MARKER_WIDTH);
       bitBlt (buffer, 1, pos, bg, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
     }
     if (y != -1) {
-      pos = qRound (y * zoom - MARKER_HEIGHT / 2);
-      r2 = QRect (1, pos - firstVisible, MARKER_HEIGHT, MARKER_WIDTH);
+      pos = qRound (y * zoom - (firstVisible >= 0 ? 0 : firstVisible) 
+		    - MARKER_HEIGHT / 2);
+      r2 = QRect (1, pos -  (firstVisible >= 0 ? firstVisible : 0), 
+		  MARKER_HEIGHT, MARKER_WIDTH);
       bitBlt (buffer, 1, pos, marker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
       currentPosition = y;
     }
@@ -173,6 +183,7 @@ void Ruler::updateVisibleArea (int xpos, int ypos) {
     firstVisible = -xpos;
   else
     firstVisible = -ypos;
+  drawRuler ();
   repaint ();
 }
 
@@ -182,37 +193,62 @@ void Ruler::paintEvent (QPaintEvent *e) {
 
   const QRect& rect = e->rect ();
 
-  if (orientation == Horizontal)
-    bitBlt (this, rect.x (), rect.y (), buffer, 
-	    rect.x () + firstVisible, rect.y (), 
-	    rect.width (), rect.height ());
-  else
-    bitBlt (this, rect.x (), rect.y (), buffer, 
-	    rect.x (), rect.y () + firstVisible, 
-	    rect.width (), rect.height ());
+  if (orientation == Horizontal) {
+    if (firstVisible >= 0)
+      bitBlt (this, rect.x (), rect.y (), buffer, 
+	      rect.x () + firstVisible, rect.y (), 
+	      rect.width (), rect.height ());
+    else
+      bitBlt (this, rect.x (), rect.y (), buffer, 
+	      rect.x (), rect.y (), 
+	      rect.width (), rect.height ());
+  }
+  else {
+    if (firstVisible >= 0)
+      bitBlt (this, rect.x (), rect.y (), buffer, 
+	      rect.x (), rect.y () + firstVisible, 
+	      rect.width (), rect.height ());
+    else
+      bitBlt (this, rect.x (), rect.y (), buffer, 
+	      rect.x (), rect.y (), 
+	      rect.width (), rect.height ());
+  }
   QFrame::paintEvent (e);
 }
 
 void Ruler::drawRuler () {
   Painter p;
   char buf[10];
-  int step = 0, step1 = 0, step2 = 0;
+  int step = 0, step1 = 0, step2 = 0, start = 0, ioff = 0;
 
   if (! buffer)
     return;
 
   switch (munit) {
   case UnitPoint:
+    if (firstVisible < 0) {
+      start = -((firstVisible / 10) * 10);
+      ioff = -firstVisible % 10;
+    }
     step = (int) (10.0 * zoom);
     step1 = (int) (100.0 * zoom);
     step2 = (int) (50.0 * zoom);
     break;
   case UnitInch:
+    if (firstVisible < 0) {
+      start = -((firstVisible / 10) * 10);
+      ioff = -firstVisible % 10;
+    }
     step = (int) (1.0 * zoom);
+    if (step == 0) step = 1;
     step1 = (int) (10.0 * zoom);
     step2 = (int) (5.0 * zoom);
     break;
   case UnitMillimeter:
+    if (firstVisible < 0) {
+      start = -((firstVisible / 2) * 2);
+      ioff = -firstVisible % 2;
+    }
     step = (int) (2.0 * zoom);
     step1 = (int) (20.0 * zoom);
     step2 = (int) (10.0 * zoom);
@@ -222,59 +258,69 @@ void Ruler::drawRuler () {
   p.begin (buffer);
   p.setBackgroundColor (colorGroup ().background ());
   p.setPen (black);
-  p.setFont (QFont ("times", 10));
+  p.setFont (QFont ("helvetica", 8));
   buffer->fill (backgroundColor ());
   p.eraseRect (0, 0, width (), height ());
 
 #define MM_FACTOR 72.0 / 25.4
 #define INCH_FACTOR 7.2
-  
+
+  /*
+  start = -((firstVisible / 10) * 10);
+  ioff = -firstVisible % 10;
+  cout << "ioff with = " << ioff 
+       << ", start = " << start 
+       << "(" << firstVisible << ")" << endl;
+  */
   if (orientation == Horizontal) {
     switch (munit) {
     case UnitPoint:
       {
-	for (int i = 0; i < buffer->width (); i += step) {
+	for (int i = -start; i < buffer->width (); i += step) {
+	  int poff = i + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (i, 10, i, 30);
+	    p.drawLine (poff, 10, poff, 30);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
-	    p.drawText (i + 3, 18, buf);
+	    p.drawText (poff + 3, 18, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (i, 15, i, 30);
+	    p.drawLine (poff, 15, poff, 30);
 	  else
-	    p.drawLine (i, 20, i, 30);
+	    p.drawLine (poff, 20, poff, 30);
 	}
 	break;
       }
     case UnitMillimeter:
       {
-	for (int i = 0; i < buffer->width (); i += step) {
+	for (int i = -start; i < buffer->width (); i += step) {
 	  int pos = qRound (i * MM_FACTOR) + 1;
+	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (pos, 10, pos, 30);
+	    p.drawLine (poff, 10, poff, 30);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
-	    p.drawText (pos + 3, 18, buf);
+	    p.drawText (poff + 3, 18, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (pos, 15, pos, 30);
+	    p.drawLine (poff, 15, poff, 30);
 	  else
-	    p.drawLine (pos, 20, pos, 30);
+	    p.drawLine (poff, 20, poff, 30);
 	}
 	break;
       }
     case UnitInch:
       {
-	for (int i = 0; i < buffer->width (); i += step) {
+	for (int i = -start; i < buffer->width (); i += step) {
 	  int pos = qRound (i * INCH_FACTOR);
+	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (pos, 10, pos, 30);
+	    p.drawLine (poff, 10, poff, 30);
 	    sprintf (buf, "%d", (int) ((float) i / (zoom * 10)));
-	    p.drawText (pos + 3, 18, buf);
+	    p.drawText (poff + 3, 18, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (pos, 15, pos, 30);
+	    p.drawLine (poff, 15, poff, 30);
 	  else
-	    p.drawLine (pos, 20, pos, 30);
+	    p.drawLine (poff, 20, poff, 30);
 	}
 	break;
       }
@@ -286,48 +332,51 @@ void Ruler::drawRuler () {
     switch (munit) {
     case UnitPoint:
       {
-	for (int i = 0; i < buffer->height (); i += step) {
+	for (int i = -start; i < buffer->height (); i += step) {
+	  int poff = i + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (10, i, 30, i);
+	    p.drawLine (10, poff, 30, poff);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
-	    p.drawText (10, i + 9, buf);
+	    p.drawText (10, poff + 9, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (15, i, 30, i);
+	    p.drawLine (15, poff, 30, poff);
 	  else
-	    p.drawLine (20, i, 30, i);
+	    p.drawLine (20, poff, 30, poff);
 	}
 	break;
       }
     case UnitMillimeter:
       {
-	for (int i = 0; i < buffer->height (); i += step) {
+	for (int i = -start; i < buffer->height (); i += step) {
 	  int pos = qRound (i * MM_FACTOR) + 1;
+	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (10, pos, 30, pos);
+	    p.drawLine (10, poff, 30, poff);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
-	    p.drawText (10, pos + 9, buf);
+	    p.drawText (10, poff + 9, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (15, pos, 30, pos);
+	    p.drawLine (15, poff, 30, poff);
 	  else
-	    p.drawLine (20, pos, 30, pos);
+	    p.drawLine (20, poff, 30, poff);
 	}
 	break;
       }
     case UnitInch:
       {
-	for (int i = 0; i < buffer->height (); i += step) {
+	for (int i = -start; i < buffer->height (); i += step) {
 	  int pos = qRound (i * INCH_FACTOR);
+	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (10, pos, 30, pos);
+	    p.drawLine (10, poff, 30, poff);
 	    sprintf (buf, "%d", (int) (((float) i) / (zoom * 10.0)));
-	    p.drawText (10, pos + 9, buf);
+	    p.drawText (10, poff + 9, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (15, pos, 30, pos);
+	    p.drawLine (15, poff, 30, poff);
 	  else
-	    p.drawLine (20, pos, 30, pos);
+	    p.drawLine (20, poff, 30, poff);
 	}
 	break;
       }

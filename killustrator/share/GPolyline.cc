@@ -27,6 +27,7 @@
 #include <math.h>
 #include "GPolyline.h"
 #include "GPolyline.moc"
+#include "GCurve.h"
 
 #include <klocale.h>
 #include <kapp.h>
@@ -115,7 +116,7 @@ float GPolyline::calcArrowAngle (const Coord& p1, const Coord& p2,
 }
 
 const char* GPolyline::typeName () {
-  return i18n ("Polyline");
+  return I18N ("Polyline");
 }
 
 void GPolyline::draw (Painter& p, bool withBasePoints, bool outline) {
@@ -511,4 +512,18 @@ bool GPolyline::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
     obj2 = other2;
   }
   return result;
+}
+
+GCurve* GPolyline::convertToCurve () const {
+  GCurve* curve = new GCurve ();
+  curve->setOutlineInfo (outlineInfo);
+  QListIterator<Coord> it (points);
+  Coord p0 = it.current ()->transform (tmpMatrix);
+  ++it;
+  for (; it.current (); ++it) {
+    Coord p1 = it.current ()->transform (tmpMatrix);
+    curve->addLineSegment (p0, p1);
+    p0 = p1;
+  }
+  return curve;
 }

@@ -102,6 +102,7 @@ void Canvas::calculateSize () {
   pixmap = 0L;
   if (zoomFactor < 3.0)
     pixmap = new QPixmap (width, height);
+  viewport->recalculateChildPosition (this);
   updateView ();
   emit sizeChanged ();
 }
@@ -442,18 +443,19 @@ void Canvas::redrawView (bool repaintFlag) {
 
   p.scale (s, s);
 
+  // clear the canvas
+  //  p.translate (1, 1);
+  p.eraseRect (0, 0, document->getPaperWidth (),
+	       document->getPaperHeight ());
+
   p.setPen (black);
-  //  p.drawRect (0, 0, width - 2, height - 2);
+  p.drawRect (0, 0, width - 2, height - 2);
   p.setPen (QPen (darkGray, 2));
   p.moveTo (width - 1, 2);
   p.lineTo (width - 1, height - 1);
   p.lineTo (2, height - 1);
   p.setPen (black);
 
-  // clear the canvas
-  //  p.translate (1, 1);
-  p.eraseRect (0, 0, document->getPaperWidth (),
-	       document->getPaperHeight ());
 
   // draw the grid
   if (gridIsOn)

@@ -22,23 +22,27 @@
 
 */
 
-#ifndef version_h_
-#define version_h_
+#ifndef ToCurveCmd_h_
+#define ToCurveCmd_h_
 
-#include <qapp.h>
+#include "GDocument.h"
+#include "GObject.h"
+#include "GCurve.h"
+#include "Command.h"
 
-#if QT_VERSION >= 199
-#define QT_PRFX Qt
-#define NEWKDE
-#define QSTR_NULL QString::null
-#define I18N(s) i18n(s).ascii()
-#else
-#define QT_PRFX
-#define QSTR_NULL (const char *) 0L
-#define I18N(s) i18n(s)
-#endif
+class ToCurveCmd : public Command {
+public:
+  ToCurveCmd (GDocument* doc);
 
-#define APP_NAME "killustrator"
-#define APP_VERSION "0.7"
+  ~ToCurveCmd ();
+
+  void execute ();
+  void unexecute ();
+
+private:
+  GDocument* document;
+  list<GObject*> objects;
+  list<GCurve*> curves;
+};
 
 #endif

@@ -37,7 +37,8 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 GLayer.h LayerDialog.h LayerView.h \
 		 DocumentInfo.h Gradient.h GradientShape.h \
 		 BrushCells.h PathTextTool.h \
-		 EllipseConfigDialog.h MyTabCtl.h HelplineDialog.h
+		 EllipseConfigDialog.h MyTabCtl.h HelplineDialog.h \
+		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h
 
 libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
@@ -76,7 +77,8 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  DocumentInfo.cc Gradient.cc GradientShape.cc \
 			  BrushCells.cc PathTextTool.cc \
 			  EllipseConfigDialog.cc MyTabCtl.cc \
-			  HelplineDialog.cc
+			  HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
+			  BlendDialog.cc BlendCmd.cc
 
 # just to make sure, automake makes them 
 METASOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
@@ -97,7 +99,7 @@ METASOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		LayerView.moc CommandHistory.moc \
 		DocumentInfo.moc BrushCells.moc PathTextTool.moc \
 		EllipseConfigDialog.moc MyTabCtl.moc \
-		HelplineDialog.moc
+		HelplineDialog.moc GCurve.moc BlendDialog.moc
 
 DISTCLEANFILES = $(METASOURCES)
 

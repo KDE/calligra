@@ -126,17 +126,16 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     float xoff = xpos - firstpos.x ();
     float yoff = ypos - firstpos.y ();
     if (me->state () & ControlButton) {
-      bool wasNegative;
       if (fabs (xoff) > fabs (yoff)) {
-	wasNegative = yoff < 0.0;
 	yoff = xoff;
-	if ((yoff > 0 && wasNegative) || (yoff < 0 && !wasNegative)) 
+	if ((oldmask & (Handle::HPos_Left | Handle::HPos_Bottom)) ||
+	    (oldmask & (Handle::HPos_Right | Handle::HPos_Top)))
 	  yoff = -yoff;
       }
       else {
-	wasNegative = xoff < 0.0;
 	xoff = yoff;
-	if ((xoff > 0 && wasNegative) || (xoff < 0 && !wasNegative)) 
+	if ((oldmask & (Handle::HPos_Left | Handle::HPos_Bottom)) ||
+	    (oldmask & (Handle::HPos_Right | Handle::HPos_Top)))
 	  xoff = -xoff;
       }
     }
@@ -321,17 +320,16 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
 	    canvas->setCursor (crossCursor);
 	  }
 	  if (me->state () & ControlButton) {
-	    bool wasNegative;
 	    if (fabs (xoff) > fabs (yoff)) {
-	      wasNegative = yoff < 0.0;
 	      yoff = xoff;
-	      if ((yoff > 0 && wasNegative) || (yoff < 0 && !wasNegative)) 
+	      if ((oldmask & (Handle::HPos_Left | Handle::HPos_Bottom)) ||
+		  (oldmask & (Handle::HPos_Right | Handle::HPos_Top)))
 		yoff = -yoff;
 	    }
 	    else {
-	      wasNegative = xoff < 0.0;
 	      xoff = yoff;
-	      if ((xoff > 0 && wasNegative) || (xoff < 0 && !wasNegative)) 
+	      if ((oldmask & (Handle::HPos_Left | Handle::HPos_Bottom)) ||
+		  (oldmask & (Handle::HPos_Right | Handle::HPos_Top)))
 		xoff = -xoff;
 	    }
 	  }

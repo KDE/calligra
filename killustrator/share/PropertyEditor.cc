@@ -593,7 +593,7 @@ void PropertyEditor::readProperties () {
       GObject* object = document->getSelection ().front ();
       // Info tab
       Rect boundingBox = object->boundingBox ();
-      infoLabel[0]->setText (object->typeName ());
+      infoLabel[0]->setText (QString (object->typeName ()));
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.left ()),
 	       ustr);
       infoLabel[1]->setText (buf);

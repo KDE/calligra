@@ -81,6 +81,8 @@ public:
 
   virtual bool splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2);
 
+  virtual GCurve* convertToCurve () const;
+
 protected:
   void calcBoundingBox ();
   void updateGradientShape (QPainter& p);

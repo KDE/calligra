@@ -28,6 +28,7 @@
 #include "GPolygon.h"
 #include "GPolygon.moc"
 #include "GradientShape.h"
+#include "GCurve.h"
 
 #include <qpntarry.h>
 #include <klocale.h>
@@ -156,11 +157,11 @@ void GPolygon::setKind (GPolygon::Kind k) {
 
 const char* GPolygon::typeName () {
   if (kind == PK_Polygon)
-    return i18n ("Polygon");
+    return I18N ("Polygon");
   else if (kind == PK_Rectangle)
-    return i18n ("Rectangle");
+    return I18N ("Rectangle");
   else
-    return i18n ("Square");
+    return I18N ("Square");
 }
 
 bool GPolygon::isFilled () const {
@@ -579,3 +580,19 @@ bool GPolygon::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
   return result;
 }
 
+GCurve* GPolygon::convertToCurve () const {
+  GCurve* curve = new GCurve ();
+  QListIterator<Coord> it (points);
+  Coord p0 = it.current ()->transform (tmpMatrix), p = p0;
+  ++it;
+  for (; it.current (); ++it) {
+    Coord p1 = it.current ()->transform (tmpMatrix);
+    curve->addLineSegment (p0, p1);
+    p0 = p1;
+  }
+  curve->addLineSegment (p0, p);
+  curve->setClosed (true);
+  curve->setOutlineInfo (outlineInfo);
+  curve->setFillInfo (fillInfo);
+  return curve;
+}

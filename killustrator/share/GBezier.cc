@@ -32,6 +32,7 @@
 #endif
 #include "GBezier.h"
 #include "GBezier.moc"
+#include "GCurve.h"
 
 #include <qpntarry.h>
 #include <klocale.h>
@@ -89,8 +90,9 @@ static bool bezier_segment_part_contains (int x0, int y0, int x1,int y1,
   return false;
 }
 
-static bool bezier_segment_contains (const Coord& p0, const Coord& p1,
-         const Coord& p2, const Coord& p3, const Coord& c)
+bool GBezier::bezier_segment_contains (const Coord& p0, const Coord& p1,
+				       const Coord& p2, const Coord& p3, 
+				       const Coord& c)
 {
   /** every bezier_segment contains 1/DELTA lines, we have to compute the
       lines
@@ -209,7 +211,7 @@ void GBezier::movePoint (int idx, float dx, float dy) {
 }
 
 const char* GBezier::typeName () {
-  return i18n ("Bezier curve");
+  return I18N ("Bezier curve");
 }
 
 void GBezier::draw (Painter& p, bool withBasePoints, bool outline) {
@@ -717,4 +719,23 @@ bool GBezier::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
     }
   }
   return result;
+}
+
+GCurve* GBezier::convertToCurve () const {
+  unsigned int nsegs = (points.count () - 3) / 3;
+  GCurve* curve = new GCurve ();
+  curve->setOutlineInfo (outlineInfo);
+  QListIterator<Coord> it (points);
+  ++it;
+  Coord p1 = it.current ()->transform (tmpMatrix); ++it;
+  for (unsigned int i = 0; i < nsegs; i++) {
+    Coord p2 = it.current ()->transform (tmpMatrix); ++it;
+    Coord p3 = it.current ()->transform (tmpMatrix); ++it;
+    Coord p4 = it.current ()->transform (tmpMatrix); ++it;
+    curve->addBezierSegment (p1, p2, p3, p4);
+    p1 = p4;
+  }
+
+  curve->setClosed (closed);
+  return curve;
 }

@@ -81,7 +81,7 @@ GClipart::GClipart (const GClipart& obj) : GObject (obj) {
 }
 
 const char* GClipart::typeName () {
-  return i18n ("Clipart object");
+  return I18N ("Clipart object");
 }
 
 void GClipart::draw (Painter& p, bool withBasePoints, bool outline) {

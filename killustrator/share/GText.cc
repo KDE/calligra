@@ -479,7 +479,11 @@ void GText::writeToXml (XmlWriter& xml) {
   xml.closeTag (false);
 
   xml.startTag ("font", false);
-  xml.addAttribute ("face", textInfo.font.family ().latin1());
+#if QT_VERSION >= 199
+  xml.addAttribute ("face", textInfo.font.family ().latin1 ());
+#else
+  xml.addAttribute ("face", textInfo.font.family ());
+#endif
   xml.addAttribute ("point-size", textInfo.font.pointSize ());
   xml.addAttribute ("weight", textInfo.font.weight ());
   if (textInfo.font.italic ())

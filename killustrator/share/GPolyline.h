@@ -80,6 +80,7 @@ public:
 				 float& dist, int& pidx, bool all = false);
 
   virtual void getPath (vector<Coord>& path);
+  virtual GCurve* convertToCurve () const;
 
   virtual bool splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2);
 

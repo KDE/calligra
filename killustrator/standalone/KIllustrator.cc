@@ -49,6 +49,7 @@
 #include "PropertyEditor.h"
 #include "AlignmentDialog.h"
 #include "GridDialog.h"
+#include "BlendDialog.h"
 #include "TransformationDialog.h"
 #include "OptionDialog.h"
 #include "LayerDialog.h"
@@ -67,6 +68,8 @@
 #include "ReorderCmd.h"
 #include "SetPropertyCmd.h"
 #include "InsertPixmapCmd.h"
+#include "ToCurveCmd.h"
+#include "BlendCmd.h"
 #include "filter/FilterManager.h"
 #include "Preview.h"
 #include "units.h"
@@ -531,6 +534,7 @@ void KIllustrator::initMenu () {
   layout = new QPopupMenu ();
   view = new QPopupMenu ();
   arrangement = new QPopupMenu ();
+  effects = new QPopupMenu ();
   extras = new QPopupMenu ();
   help = new QPopupMenu ();
   openRecent = new QPopupMenu ();
@@ -653,7 +657,11 @@ void KIllustrator::initMenu () {
   arrangement->setAccel (CTRL + Key_U, ID_ARRANGE_UNGROUP);
   arrangement->insertSeparator ();
   arrangement->insertItem (i18n ("Text along Path"), ID_ARRANGE_PATHTEXT);
+  arrangement->insertItem (i18n ("Convert to Curve"), ID_ARRANGE_TO_CURVE);
   connect (arrangement, SIGNAL (activated (int)), SLOT (menuCallback (int)));
+
+  effects->insertItem (i18n ("Blend"), ID_EFFECTS_BLEND);
+  connect (effects, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
   //  extras->insertItem (i18n ("Load &Palette..."), ID_EXTRAS_LOAD_PALETTE);
   //  extras->insertSeparator ();
@@ -678,6 +686,7 @@ void KIllustrator::initMenu () {
   menubar->insertItem (i18n ("&View"), view);
   menubar->insertItem (i18n ("&Layout"), layout);
   menubar->insertItem (i18n ("&Arrange"), arrangement);
+  menubar->insertItem (i18n ("Effe&cts"), effects);
   menubar->insertItem (i18n ("Ex&tras"), extras);
   menubar->insertItem (i18n ("&Help"), help);
 
@@ -1003,6 +1012,17 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_ARRANGE_PATHTEXT:
     tcontroller->toolSelected (ID_TOOL_PATHTEXT);
+    break;
+  case ID_ARRANGE_TO_CURVE:
+    if (!document->selectionIsEmpty ())
+      cmdHistory.addCommand (new ToCurveCmd (document), true);
+    break;
+  case ID_EFFECTS_BLEND:
+    if (document->selectionCount () == 2) {
+      int steps = BlendDialog::getNumOfSteps ();
+      if (steps > 0)
+	cmdHistory.addCommand (new BlendCmd (document, steps), true);
+    }
     break;
   case ID_EXTRAS_OPTIONS:
     OptionDialog::setup ();

@@ -78,6 +78,11 @@ public:
 
   virtual bool splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2);
 
+  virtual GCurve* convertToCurve () const;
+
+  static bool bezier_segment_contains (const Coord& p0, const Coord& p1,
+				       const Coord& p2, const Coord& p3, 
+				       const Coord& c);
 protected:
   void calcBoundingBox ();
 

@@ -33,6 +33,7 @@
 #include "GClipart.h"
 #include "GGroup.h"
 #include "GPixmap.h"
+#include "GCurve.h"
 
 #include <string>
 #include <map>
@@ -341,6 +342,7 @@ void GDocument::deleteObject (GObject* obj) {
   bool selected = false;
 
   GLayer* layer = obj->getLayer ();
+  assert (layer);
   if (layer->isEditable ()) {
     selected = obj->isSelected ();
     if (selected) 
@@ -650,6 +652,73 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
 	obj = new GClipart (elem.attributes ());
       else if (elem.tag () == "pixmap")
 	obj = new GPixmap (elem.attributes ());
+      else if (elem.tag () == "curve") {
+	obj = new GCurve (elem.attributes ());
+	finished = false;
+	if (! xml.readElement (elem))
+	  // something goes wrong
+	  return false;
+
+	do {
+	  GSegment::Kind kind = GSegment::sk_Line;
+	  if (elem.tag () != "seg") 
+	    return false;
+
+	  list<XmlAttribute>::const_iterator first = 
+	    elem.attributes ().begin ();
+	  while (first != elem.attributes ().end ()) {
+	    const string& attr = (*first).name ();
+	    if (attr == "kind")
+	      kind = (GSegment::Kind) (*first).intValue ();
+	    first++;
+	  }
+	  GSegment seg (kind);
+	  if (kind == GSegment::sk_Line) {
+	    for (int i = 0; i < 2; i++) {
+	      Coord p;
+	      if (! xml.readElement (elem) || elem.tag () != "point") 
+		return false;
+	      first = elem.attributes ().begin ();
+	      
+	      while (first != elem.attributes ().end ()) {
+		if ((*first).name () == "x")
+		  p.x ((*first).floatValue ());
+		else if ((*first).name () == "y")
+		  p.y ((*first).floatValue ());
+		first++;
+	      }
+	      seg.setPoint (i, p);
+	    }
+	  }
+	  else {
+	    for (int i = 0; i < 4; i++) {
+	      Coord p;
+	      if (! xml.readElement (elem) || elem.tag () != "point") 
+		return false;
+	      first = elem.attributes ().begin ();
+	      
+	      while (first != elem.attributes ().end ()) {
+		if ((*first).name () == "x")
+		  p.x ((*first).floatValue ());
+		else if ((*first).name () == "y")
+		  p.y ((*first).floatValue ());
+		first++;
+	      }
+	      seg.setPoint (i, p);
+	    }
+	  }
+	  if (! xml.readElement (elem) || elem.tag () != "seg" || 
+	      ! elem.isEndTag ()) 
+	    return false;
+	  ((GCurve *) obj)->addSegment (seg);
+
+	  if (! xml.readElement (elem))
+	    return false;
+	  // end of element
+	  if (elem.tag () == "curve" && elem.isEndTag ()) 
+	    finished = true;
+	} while (! finished);
+      }
       else if (elem.tag () == "text") {
 	obj = new GText (elem.attributes ());
 	// read font attributes 
@@ -745,12 +814,12 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
  	  groups.top ()->addObject (obj);
         }
         else { 
-	    if (markNew)
-		newObjs.push_back (obj);
-	    if (obj->hasId ())
-	      idtable.insert (pair<string, GObject*> (obj->getId (), obj));
-
-	    insertObject (obj);
+	  if (markNew)
+	    newObjs.push_back (obj);
+	  if (obj->hasId ())
+	    idtable.insert (pair<string, GObject*> (obj->getId (), obj));
+	  
+	  insertObject (obj);
 	}
         obj = 0L;
       }
