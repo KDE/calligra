@@ -424,11 +424,12 @@ void KoAutoFormatDia::setupTab5()
     QStringList list=m_autoFormat.listCompletion();
     m_listCompletion->insertStringList(list);
     connect( m_listCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
+    connect( m_listCompletion, SIGNAL( highlighted ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
 
 
     pbRemoveCompletionEntry = new QPushButton(i18n( "Remove Completion Entry"), tab5  );
     connect( pbRemoveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotRemoveCompletionEntry()));
-    if( list.count()==0 )
+    if( list.count()==0 || m_listCompletion->currentText().isEmpty())
         pbRemoveCompletionEntry->setEnabled( false );
 
     pbSaveCompletionEntry= new QPushButton(i18n( "Save Completion List"), tab5  );
