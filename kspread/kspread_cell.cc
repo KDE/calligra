@@ -1767,6 +1767,8 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
   {
     paintMarker(painter, corner, cellRef);
   }
+  paintPageBorders( painter,corner, cellRef);
+
 
   if (isObscured() && paintingObscured == 0)
   {
