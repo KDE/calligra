@@ -34,8 +34,16 @@ namespace wvWare {
 
 namespace Conversion
 {
+    // Prepare text for inclusion in XML
+    void encodeText(QString &text);
+
+    // Convert color code (ico) to QColor
     QColor color(int number, int defaultcolor, bool defaultWhite = false);
+
+    // Conversion alignment code to string
     QString alignment( int jc );
+
+    // Conversion linespacing struct to string
     QString lineSpacing( const wvWare::Word97::LSPD& lspd );
 };
 

@@ -27,7 +27,6 @@
 #include <parserfactory.h>
 #include <qfont.h>
 #include <qfontinfo.h>
-#include <qregexp.h>
 
 
 wvWare::U8 KWordCharacterHandler::hardLineBreak()
@@ -85,7 +84,7 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
     QConstString newTextStr( reinterpret_cast<const QChar*>( text.data() ), text.length() );
     QString newText = newTextStr.string();
     kdDebug() << "runOfText: " << newText << endl;
-    encodeText( newText );
+    Conversion::encodeText( newText );
 
     m_paragraph += newText;
 
@@ -265,27 +264,6 @@ QString Document::getFont(unsigned fc) const
 #endif
 
     return info.family();
-}
-
-void Document::encodeText( QString &text )
-{
-    // When encoding the stored form of text to its run-time form,
-    // be sure to do the conversion for "&amp;" to "&" first to avoid
-    // accidentally converting user text into one of the other escape
-    // sequences.
-
-    text.replace(QRegExp("&"), "&amp;");
-    text.replace(QRegExp("<"), "&lt;");
-
-    // Strictly, there is no need to encode >, but we do so to for safety.
-
-    text.replace(QRegExp(">"), "&gt;");
-
-    // Strictly, there is no need to encode " or ', but we do so to allow
-    // them to co-exist!
-
-    text.replace(QRegExp("\""), "&quot;");
-    text.replace(QRegExp("'"), "&apos;");
 }
 
 void Document::pageBreak()

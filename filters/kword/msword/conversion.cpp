@@ -21,6 +21,28 @@
 
 #include <word97_generated.h>
 #include <kdebug.h>
+#include <qregexp.h>
+
+void Conversion::encodeText( QString &text )
+{
+    // When encoding the stored form of text to its run-time form,
+    // be sure to do the conversion for "&amp;" to "&" first to avoid
+    // accidentally converting user text into one of the other escape
+    // sequences.
+
+    text.replace(QRegExp("&"), "&amp;");
+    text.replace(QRegExp("<"), "&lt;");
+
+    // Strictly, there is no need to encode >, but we do so to for safety.
+
+    text.replace(QRegExp(">"), "&gt;");
+
+    // Strictly, there is no need to encode " or ', but we do so to allow
+    // them to co-exist!
+
+    text.replace(QRegExp("\""), "&quot;");
+    text.replace(QRegExp("'"), "&apos;");
+}
 
 QColor Conversion::color(int number, int defaultcolor, bool defaultWhite)
 {
