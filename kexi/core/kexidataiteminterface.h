@@ -63,6 +63,15 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		//! \return value saved in a widget item.
 		virtual QVariant value() = 0;
 
+		/*! Sets 'invalid' state, e.g. a text editor widget should display
+		 text \a displayText and become read only to prevent entering data, 
+		 because updating at the database backend is not available.
+		 \a displayText is usually set to something i18n'd like "#NAME?". 
+		 Note: that even widgets that usualy do not display texts (e.g. pixmaps) 
+		 should display \a displayText too.
+		*/
+		virtual void setInvalidState( const QString& displayText ) = 0;
+
 	protected:
 		//! Sets value \a value for a widget. 
 		//! Implement this method to allow setting value for this widget item.
