@@ -309,7 +309,7 @@ public:
     KSpreadTable* table() { return m_pTable; }
     const KSpreadTable* table() const { return m_pTable; }
 
-    KLocale* locale();
+    KLocale* locale()const;
 
     virtual bool hasProperty( Properties p ) const;
 
@@ -625,7 +625,7 @@ public:
     virtual QDomElement save( QDomDocument&, int xshift = 0 );
     virtual bool load( const QDomElement& row, int xshift = 0,PasteMode sp=Normal );
     virtual DCOPObject* dcopObject();
-    
+
     /**
      * @param _canvas is needed to get information about the zooming factor.
      *

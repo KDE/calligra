@@ -241,8 +241,8 @@ public:
     // but is in fact a sibling of the canvas, which needs to know about it.
     void setEditWidget( KSpreadEditWidget * ew ) { m_pEditWidget = ew; }
 
-    KSpreadView* view() { return m_pView; }
-    KSpreadDoc* doc() { return m_pDoc; }
+    KSpreadView* view()const { return m_pView; }
+    KSpreadDoc* doc()const { return m_pDoc; }
 
     /**
      * Find support.
@@ -255,6 +255,8 @@ public:
     void replace( const QPoint &_marker, QString _find, QString _replace, long options );
 
     virtual bool focusNextPrevChild( bool );
+
+    bool chooseFormulaArea() const { return m_bChoose;}
 
 public slots:
     void slotScrollVert( int _value );

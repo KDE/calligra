@@ -1681,7 +1681,7 @@ bool KSpreadLayout::isDefault() const
     return TRUE;
 }
 
-KLocale* KSpreadLayout::locale()
+KLocale* KSpreadLayout::locale()const
 {
     return m_pTable->doc()->locale();
 }
