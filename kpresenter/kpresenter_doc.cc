@@ -1084,6 +1084,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             else if ( name == "presentation:notes" ) // notes
             {
                 //we must extend note attribute
+	      kdDebug()<<"presentation:notes----------------------------------\n";
                 QDomNode textBox = o.namedItem( "draw:text-box" );
                 if ( !textBox.isNull() )
                 {
@@ -1235,7 +1236,7 @@ void KPresenterDoc::addStyles( const QDomElement* style, KoOasisStyles&oasisStyl
     // this function is necessary as parent styles can have parents themself
     if ( style->hasAttribute( "style:parent-style-name" ) )
         addStyles( oasisStyles.styles()[style->attribute( "style:parent-style-name" )], oasisStyles );
-
+    kdDebug()<<" style->text() :"<<style->text()<<endl;
     m_loadingInfo->styleStackPush( *style );
 }
 
