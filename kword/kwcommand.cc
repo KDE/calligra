@@ -596,8 +596,7 @@ KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFram
 
 KWTableTemplateCommand::~KWTableTemplateCommand()
 {
-    if (m_tableCommands)
-        delete m_tableCommands;
+    delete m_tableCommands;
 }
 
 void KWTableTemplateCommand::execute()
@@ -1641,14 +1640,14 @@ KWChangeDateVariableFormat::~KWChangeDateVariableFormat()
 void KWChangeDateVariableFormat::execute()
 {
     Q_ASSERT(m_var);
-    dynamic_cast<KoVariableDateFormat *>(m_var->variableFormat())->m_strFormat = newValue;
+    static_cast<KoVariableDateFormat *>(m_var->variableFormat())->m_strFormat = newValue;
     m_doc->recalcVariables( VT_DATE );
 }
 
 void KWChangeDateVariableFormat::unexecute()
 {
     Q_ASSERT(m_var);
-    dynamic_cast<KoVariableDateFormat *>(m_var->variableFormat())->m_strFormat = oldValue;
+    static_cast<KoVariableDateFormat *>(m_var->variableFormat())->m_strFormat = oldValue;
     m_doc->recalcVariables( VT_DATE );
 }
 
@@ -1699,14 +1698,14 @@ KWChangeTimeVariableFormat::~KWChangeTimeVariableFormat()
 void KWChangeTimeVariableFormat::execute()
 {
     Q_ASSERT(m_var);
-    dynamic_cast<KoVariableTimeFormat *>(m_var->variableFormat())->m_strFormat = newValue;
+    static_cast<KoVariableTimeFormat *>(m_var->variableFormat())->m_strFormat = newValue;
     m_doc->recalcVariables( VT_TIME );
 }
 
 void KWChangeTimeVariableFormat::unexecute()
 {
     Q_ASSERT(m_var);
-    dynamic_cast<KoVariableTimeFormat *>(m_var->variableFormat())->m_strFormat = oldValue;
+    static_cast<KoVariableTimeFormat *>(m_var->variableFormat())->m_strFormat = oldValue;
     m_doc->recalcVariables( VT_TIME );
 }
 
@@ -1819,7 +1818,6 @@ void KWProtectContentCommand::execute()
     m_pFrameSet->textObject()->setProtectContent(m_bProtect);
     m_pFrameSet->kWordDocument()->updateTextFrameSetEdit();
     m_pFrameSet->kWordDocument()->testAndCloseAllFrameSetProtectedContent();
-    m_pFrameSet->kWordDocument()->testAndCloseAllFrameSetProtectedContent();
     m_pFrameSet->kWordDocument()->updateRulerInProtectContentMode();
 
 }
@@ -1866,8 +1864,7 @@ void KWFrameChangeFrameMarginCommand::execute()
     KWFrame *frame = frameSet->frame(m_indexFrame.m_iFrameIndex);
     Q_ASSERT( frame );
     frame->setFrameMargins( m_frameMarginsEnd.leftMargin,m_frameMarginsEnd.topMargin , m_frameMarginsEnd.rightMargin, m_frameMarginsEnd.bottomMargin);
-    KWDocument * doc = frameSet->kWordDocument();
-    doc->frameChanged( frame );
+    frameSet->kWordDocument()->frameChanged( frame );
 }
 
 void KWFrameChangeFrameMarginCommand::unexecute()
@@ -1877,8 +1874,7 @@ void KWFrameChangeFrameMarginCommand::unexecute()
     KWFrame *frame = frameSet->frame(m_indexFrame.m_iFrameIndex);
     Q_ASSERT( frame );
     frame->setFrameMargins( m_frameMarginsBegin.leftMargin,m_frameMarginsBegin.topMargin , m_frameMarginsBegin.rightMargin, m_frameMarginsBegin.bottomMargin);
-    KWDocument * doc = frameSet->kWordDocument();
-    doc->frameChanged( frame );
+    frameSet->kWordDocument()->frameChanged( frame );
 }
 
 KWChangeFootEndNoteSettingsCommand::KWChangeFootEndNoteSettingsCommand( const QString &name, KoParagCounter _oldCounter, KoParagCounter _newCounter ,bool _footNote ,KWDocument *_doc):
