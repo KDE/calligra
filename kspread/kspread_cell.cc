@@ -3541,7 +3541,8 @@ void KSpreadCell::checkValue()
         if ( m_strText.contains('E') || m_strText.contains('e') )
             setFormatNumber(Scientific);
         else
-            setFormatNumber(Number);
+            checkNumberFormat();
+            //setFormatNumber(Number);
         return;
     }
 
