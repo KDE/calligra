@@ -346,6 +346,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
     flddst = -1;
     emptyCell = state.tableCell;
+    state.format.uc=1;
 
     // Parse RTF document
     while (true)
