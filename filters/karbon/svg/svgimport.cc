@@ -210,6 +210,9 @@ SvgImport::parseGradient( const QDomElement &e )
 	}
 	else
 	{
+		gradient.setOrigin( KoPoint( e.attribute( "cx" ).toDouble(), e.attribute( "cy" ).toDouble() ) );
+		gradient.setVector( KoPoint( e.attribute( "cx" ).toDouble() + e.attribute( "r" ).toDouble(),
+									 e.attribute( "cy" ).toDouble() ) );
 		gradient.setType( VGradient::radial );
 	}
 	parseColorStops( &gradient, e );
