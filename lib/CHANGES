@@ -6,7 +6,7 @@ KOfficeCore:
 This fixes the long-standing "program exits with error code 1 and no warning" problem.
 
 KOfficeUI:
-- 
+- Fixed initial active tab in the opening dialog, to also remember when "Open Recent File" was used last.
 
 KoText:
 - Fixed date format not available for some date variables (#82198)
