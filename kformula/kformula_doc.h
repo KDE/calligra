@@ -29,7 +29,6 @@
 
 #include <kformuladefs.h>
 
-#include "formuladef.h"
 #include "kformula_view.h"
 
 

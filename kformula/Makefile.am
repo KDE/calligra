@@ -27,8 +27,8 @@ dummy.cc:
 	echo > dummy.cc
 
 noinst_HEADERS =  kformula_doc.h \
-		  kformula_view.h kformula_factory.h formuladef.h \
-		  matrixwidget.h kformula_aboutdata.h kformula_view_iface.h
+		  kformula_view.h kformula_factory.h \
+		  kformula_aboutdata.h kformula_view_iface.h
 
 kdelnk_DATA = kformula.desktop
 kdelnkdir = $(kde_appsdir)/Office

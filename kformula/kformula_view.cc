@@ -37,7 +37,6 @@ class KPrinter;
 #include "kformula_view.h"
 #include "kformulawidget.h"
 #include "kfconfig.h"
-#include "matrixwidget.h"
 
 #include "kformula_view_iface.h"
 
