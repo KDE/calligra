@@ -27,7 +27,7 @@
 #include "karbon_part.h"
 #include "vrectangle.h"
 #include "vrectangletool.h"
-#include "vunitspinbox.h"
+#include "koUnitWidgets.h"
 
 
 VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )

@@ -30,7 +30,7 @@
 #include <koMainWindow.h>
 #include <koView.h>
 
-#include "vunitspinbox.h"
+#include "koUnitWidgets.h"
 
 #include "karbon_part.h"
 #include "vreference.h"

@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <koMainWindow.h>
 
-#include "vunitspinbox.h"
+#include "koUnitWidgets.h"
 
 #include "karbon_part.h"
 #include "karbon_view.h"

@@ -20,7 +20,6 @@ noinst_HEADERS = \
 	vtranslate.h \
 	vselecttoolbar.h \
 	vstatebutton.h \
-	vunitspinbox.h \
 	vtoolbox.h
 
 libkarbonwidgets_la_SOURCES = \
@@ -34,7 +33,6 @@ libkarbonwidgets_la_SOURCES = \
 	vtranslate.cc \
 	vselecttoolbar.cc \
 	vstatebutton.cc \
-	vunitspinbox.cc \
 	vtoolbox.cc
 
 libkarbonwidgets_la_METASOURCES = \

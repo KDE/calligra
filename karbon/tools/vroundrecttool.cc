@@ -27,7 +27,7 @@
 #include "karbon_part.h"
 #include "vroundrect.h"
 #include "vroundrecttool.h"
-#include "vunitspinbox.h"
+#include "koUnitWidgets.h"
 
 
 VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* part, QWidget* parent, const char* name )

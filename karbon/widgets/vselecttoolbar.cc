@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 
-#include "vunitspinbox.h"
+#include "koUnitWidgets.h"
 #include "vselecttoolbar.h"
 
 VSelectToolBar::VSelectToolBar( QWidget* parent, const char* name ) : KToolBar( parent, name )

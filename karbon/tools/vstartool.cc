@@ -27,7 +27,7 @@
 #include "karbon_part.h"
 #include "vstar.h"
 #include "vstartool.h"
-#include "vunitspinbox.h"
+#include "koUnitWidgets.h"
 
 
 VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )

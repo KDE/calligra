@@ -30,7 +30,7 @@
 #include "vsinus.h"
 #include "vsinustool.h"
 #include "karbon_part.h"
-#include "vunitspinbox.h"
+#include "koUnitWidgets.h"
 
 
 VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* parent, const char* name )
