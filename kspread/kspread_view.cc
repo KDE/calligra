@@ -813,7 +813,7 @@ void KSpreadView::formulaSubscript()
 void KSpreadView::formulaParentheses()
 {
     activateFormulaEditor();
-	
+
     canvasWidget()->insertFormulaChar(Box::PAREN );
 }
 
@@ -2114,7 +2114,8 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
 
-    if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty()&& koDocument()->isReadWrite() )
+    if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty()
+    && !cell->isTime() &&!cell->isDate() && koDocument()->isReadWrite() )
     {
       m_popupMenuFirstToolId = 10;
       int i = 0;

@@ -354,8 +354,8 @@ void KSpreadTabBar::openPopupMenu( const QPoint &_global )
     m_pPopupMenu = new QPopupMenu();
 
     m_pPopupMenu->insertItem( i18n( "Rename table..." ), this, SLOT( slotRename() ) );
-    m_pPopupMenu->insertItem( KSBarIcon("delete_table"),i18n( "Remove table" ), this, SLOT( slotRemove() ) );
     m_pPopupMenu->insertItem( KSBarIcon("inserttable"),i18n( "Insert table" ), this, SLOT( slotAdd() ) );
+    m_pPopupMenu->insertItem( KSBarIcon("delete_table"),i18n( "Remove table" ), this, SLOT( slotRemove() ) );
     m_pPopupMenu->popup( _global );
 }
 
@@ -363,7 +363,7 @@ void KSpreadTabBar::renameTab( const QString& old_name, const QString& new_name 
 {
     QStringList::Iterator it = tabsList.find( old_name );
     (*it) = new_name;
-        
+
     update();
 }
 
