@@ -1824,6 +1824,33 @@ void Page::setTabList( const KoTabulatorList & tabList )
         it.current()->setTabList(tabList );
 }
 
+void Page::setTextDepthPlus()
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    double leftMargin=0.0;
+    if(!lst.isEmpty())
+        leftMargin=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
+    double indent = view->kPresenterDoc()->getIndentValue();
+    double newVal = leftMargin + indent;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setMargin(QStyleSheetItem::MarginLeft, newVal);
+
+}
+
+void Page::setTextDepthMinus()
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    double leftMargin=0.0;
+    if(!lst.isEmpty())
+        leftMargin=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
+    double indent = view->kPresenterDoc()->getIndentValue();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    double newVal = leftMargin - indent;
+    for ( ; it.current() ; ++it )
+        it.current()->setMargin(QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ));
+}
+
 /*================================================================*/
 bool Page::haveASelectedPictureObj()
 {

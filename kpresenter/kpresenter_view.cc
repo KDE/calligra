@@ -1611,36 +1611,13 @@ void KPresenterView::textUnsortList()
 /*===============================================================*/
 void KPresenterView::textDepthPlus()
 {
-    KPTextView *edit=page->currentTextObjectView();
-    if ( edit )
-    {
-        double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-        double indent = m_pKPresenterDoc->getIndentValue();
-        double newVal = leftMargin + indent;
-        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, newVal );
-        if(cmd)
-            m_pKPresenterDoc->addCommand(cmd);
-    }
-
+    page->setTextDepthPlus();
 }
 
 /*===============================================================*/
 void KPresenterView::textDepthMinus()
 {
-    KPTextView *edit=page->currentTextObjectView();
-    if ( edit )
-    {
-        double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-        if ( leftMargin > 0 )
-        {
-            double indent = m_pKPresenterDoc->getIndentValue();
-            double newVal = leftMargin - indent;
-            KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ) );
-            if(cmd)
-                m_pKPresenterDoc->addCommand(cmd);
-        }
-    }
-
+    page->setTextDepthMinus();
 }
 
 /*===============================================================*/

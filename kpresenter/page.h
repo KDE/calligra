@@ -88,6 +88,8 @@ public:
     void setTextColor( const QColor & );
     void setTextBackgroundColor( const QColor & );
     void setTextAlign( int );
+    void setTextDepthPlus();
+    void setTextDepthMinus();
     void setTabList( const KoTabulatorList & tabList );
     void setTextBold( bool b );
     void setTextItalic( bool b );
