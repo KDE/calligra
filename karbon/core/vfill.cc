@@ -89,6 +89,8 @@ VFill::saveOasis( KoGenStyles &mainStyles, KoGenStyle &style ) const
 		style.addProperty( "draw:fill", "gradient" );
 		QString grad = m_gradient.saveOasis( mainStyles );
 		style.addProperty( "draw:fill-gradient-name", grad );
+		if( m_color.opacity() < 1 )
+			style.addProperty( "draw:opacity", QString( "%1%" ).arg( m_color.opacity() * 100. ) );
 	}
 	else if( m_type == patt )
 		style.addProperty( "draw:fill", "hatch" );
@@ -106,8 +108,6 @@ VFill::loadOasis( const QDomElement &object, KoOasisContext &context )
 		{
 			setType( VFill::solid );
 			setColor( QColor( stack.attribute( "draw:fill-color" ) ) );
-			if( stack.hasAttribute( "draw:opacity" ) )
-				m_color.setOpacity( stack.attribute( "draw:opacity" ).remove( '%' ).toFloat() / 100. );
 		}
 		else if( stack.attribute( "draw:fill" ) == "gradient" )
 		{
@@ -119,6 +119,8 @@ VFill::loadOasis( const QDomElement &object, KoOasisContext &context )
 			if( grad )
 				m_gradient.loadOasis( *grad, stack );
 		}
+		if( stack.hasAttribute( "draw:opacity" ) )
+			m_color.setOpacity( stack.attribute( "draw:opacity" ).remove( '%' ).toFloat() / 100. );
 	}
 }
 
