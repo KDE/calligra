@@ -20,6 +20,7 @@
 */
 
 #include <qfile.h>
+#include <qtextcodec.h>
 #include <qtextstream.h>
 #include <qdom.h>
 #include <qstack.h>
@@ -30,6 +31,7 @@
 #include "htmlimportsax.h"
 #include "ImportParser.h"
 #include "ImportListener.h"
+#include "ImportDialog.h"
 
 // *Note for the reader of this code*
 // Tags in lower case (e.g. <p>) are HTML's ones.
@@ -293,14 +295,54 @@ QString FindCharset(const QString &fileIn)
 
 bool HtmlFilter(const QString &fileIn, QDomDocument& qDomDocumentOut)
 {
-    // At first, we must find the charset of the input file.
-    QString strCharset=FindCharset(fileIn);
+    HtmlImportDialog* dialog = new HtmlImportDialog();
+
+    if (!dialog)
+    {
+        kdError(30503) << "Dialog has not been created! Aborting!" << endl;
+        return false;
+    }
+
+    dialog->setHintCharset(QTextCodec::codecForLocale()->name());
+    // TODO (QT3): use QTextCodec::mimeName()
+
+    if (!dialog->exec())
+    {
+        kdError(30503) << "Dialog was aborted! Aborting filter!" << endl;
+        return false;
+    }
+
+    QString strHintCharset=dialog->getHintCharset();
+    int hintValue=dialog->getHint();
+
+    delete dialog; // Free memory of dialog
+
+    QString strCharset;
+
+    if (hintValue!=2)
+    {
+        // At first, we must find the charset of the input file.
+        strCharset=FindCharset(fileIn);
+    }
 
     if (strCharset.isEmpty())
     {
-        //We have no charset, so we assume that it is a XHTML file in UTF-8
-        kdWarning(30503) << "No explicit charset definition found! Assuming UTF-8!" << endl;
-        strCharset="UTF-8";
+        if (2==hintValue)
+        {
+            kdWarning(30503) << "Charset was forced by user! Using:" << strHintCharset << endl;
+            strCharset=strHintCharset;
+        }
+        else if (1==hintValue)
+        {
+            kdWarning(30503) << "No explicit charset definition found! Using hint:" << strHintCharset << endl;
+            strCharset=strHintCharset;
+        }
+        else
+        {
+            //We have no charset and no hint, so we assume that it is a XHTML file in UTF-8
+            kdWarning(30503) << "No explicit charset definition found! Assuming UTF-8!" << endl;
+            strCharset="UTF-8";
+        }
     }
 
     QFile in(fileIn);
