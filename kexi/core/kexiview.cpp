@@ -136,7 +136,7 @@ void KexiView::initHelper()
         help->setCloseMode(QDockWindow::Always);
 //	mainWindow()->moveDockWindow(help,DockLeft);
 	mainWindow()->moveDockWindow(help, DockLeft);
-	help->setContextHelp(i18n("welcome"), i18n("welcome to kexi!"));
+	help->setContextHelp(i18n("welcome"), i18n("Welcome to kexi!"));
 
 }
 

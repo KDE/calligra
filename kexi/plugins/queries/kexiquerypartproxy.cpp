@@ -40,7 +40,7 @@ KexiQueryPartProxy::KexiQueryPartProxy(KexiQueryPart *part,KexiView *view)
 	m_queryPart=part;
 	kdDebug() << "KexiQueryPartProxy::KexiQueryPartProxy()" << endl;
 
-        (void*) new KAction(i18n("Create &Query ..."), 0,
+        (void*) new KAction(i18n("Create &Query..."), 0,
                 this,SLOT(slotCreateQuery()), actionCollection(), "querypart_create");
 
         setXMLFile("kexiquerypartui.rc");
@@ -54,7 +54,7 @@ KexiPartPopupMenu*
 KexiQueryPartProxy::groupContext()
 {
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Create Query"), SLOT(slotCreateQuery()));
+	m->insertAction(i18n("Create Query..."), SLOT(slotCreateQuery()));
 	return m;
 }
 
@@ -80,7 +80,7 @@ void
 KexiQueryPartProxy::slotCreateQuery()
 {
         bool ok = false;
-        QString name = KLineEditDlg::getText(i18n("New Query"), i18n("Query Name:"), "", &ok, kexiView());
+        QString name = KLineEditDlg::getText(i18n("New Query"), i18n("Query name:"), "", &ok, kexiView());
 
 	KexiProjectHandler::ItemList *list=part()->items();
 

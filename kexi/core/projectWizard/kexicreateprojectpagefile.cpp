@@ -43,7 +43,7 @@ KexiCreateProjectPageFile::KexiCreateProjectPageFile(KexiCreateProject *parent, 
 	buttonBase->hide();
 	m_btnEmbedd = new QRadioButton(i18n("Embedd new file into project"), this);
 	m_btnEmbedd->toggle();
-	m_btnExtern = new QRadioButton(i18n("Use erternal file reference"), this);
+	m_btnExtern = new QRadioButton(i18n("Use external file reference"), this);
 	connect(m_btnExtern, SIGNAL(toggled(bool)), this, SLOT(slotExternToggle(bool)));
 	buttonBase->insert(m_btnEmbedd);
 	buttonBase->insert(m_btnExtern);

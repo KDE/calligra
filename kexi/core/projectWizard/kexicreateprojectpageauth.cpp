@@ -49,7 +49,7 @@ KexiCreateProjectPageAuth::KexiCreateProjectPageAuth(KexiCreateProject *parent, 
 	m_passwordEdit = new KLineEdit(this);
 	m_passwordEdit->setEchoMode(QLineEdit::Password);
 
-	m_savePassChk = new QCheckBox(i18n("save password"), this);
+	m_savePassChk = new QCheckBox(i18n("Save password"), this);
 	m_savePassChk->setChecked(true);
 	setProperty("savePassword", QVariant(m_savePassChk->isChecked()));
 

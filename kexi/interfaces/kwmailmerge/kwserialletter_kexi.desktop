@@ -3,9 +3,28 @@ Encoding=UTF-8
 Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
-Name=Kexi source
+Name=Kexi Source
+Name[bg]=Kexi източник
+Name[da]=Kexi-kilde
+Name[es]=Origen de kexi
+Name[et]=Kexi andmeallikas
+Name[fr]=Source Kexi
+Name[hu]=Kexi forrás
+Name[pt]=Fonte do Kexi
+Name[pt_BR]=Fonte Kexi
+Name[sk]=Zdrojový kód Kexi
+Name[sv]=Kexi-källfil
 
 Comment=This datasource allows you choosing a existing kexi project
+Comment[bg]=Този източник на база данни ви позволява да избирате изпълнение на kexi проект
+Comment[da]=Denne datakilde tillader dig at vælge et eksisterende kexi-projekt
+Comment[es]=Este origen de datos le permite elegir un proyecto kexi existente
+Comment[et]=See andmeallikas võimaldab valida olemasolevat kexi projekti
+Comment[fr]=Cette source de données vous permet de choisir un projet kexi existant
+Comment[hu]=Ez az adatforrás egy már létező Kexi projekt felhasználását teszi lehetővé
+Comment[pt_BR]=Esta fonte de dados lhe permite escolher um projeto kexi existente
+Comment[sk]=Tento zdroj dát umožňuje vybrať existujúci projekt kexi
+Comment[sv]=Den här datakällfilen låter dig välja ett befintligt Kexi-projekt
 
 X-KDE-Library=kwmailmerge_kexi
 X-KDE-Capabilities=edit,open

@@ -41,7 +41,7 @@ KexiTablePartProxy::KexiTablePartProxy(KexiTablePart *part,KexiView *view)
 	m_tablePart=part;
 	kdDebug() << "KexiTablePartProxy::KexiTablePartProxy()" << endl;
 
-	(void*) new KAction(i18n("Create &Table ..."), 0,
+	(void*) new KAction(i18n("Create &Table..."), 0,
                 this,SLOT(slotCreate()), actionCollection(), "tablepart_create");
         
 	setXMLFile("kexitablepartui.rc");	
@@ -54,7 +54,7 @@ KexiTablePartProxy::groupContext()
 {
 	kdDebug() << "KexiTablePart::groupContext()" << endl;
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Create Table"), SLOT(slotCreate()));
+	m->insertAction(i18n("Create Table..."), SLOT(slotCreate()));
 
 	return m;
 }
@@ -76,7 +76,7 @@ KexiTablePartProxy::slotCreate()
 {
 	KexiProjectHandler::ItemList *list=m_tablePart->items();
         bool ok = false;
-        QString name = KLineEditDlg::getText(i18n("New Table"), i18n("Table Name:"), "", &ok, 0);
+        QString name = KLineEditDlg::getText(i18n("New Table"), i18n("Table name:"), "", &ok, 0);
 
         if(ok && name.length() > 0)
         {
