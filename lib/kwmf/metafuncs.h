@@ -6,11 +6,11 @@
 
 class QWinMetaFile;
 
-struct MetaFuncRec
+static const struct MetaFuncRec
 {
     const char* name;
     unsigned short func;
-    void ( QWinMetaFile::*method )( short, short* );
+    void ( QWinMetaFile::*method )( long, short* );
 } metaFuncTab[] =
   {
       { "SETBKCOLOR",           0x0201, &QWinMetaFile::setBkColor },
@@ -35,15 +35,15 @@ struct MetaFuncRec
       { "MOVETO",               0x0214, &QWinMetaFile::moveTo },
       { "EXCLUDECLIPRECT",      0x0415, 0 },
       { "INTERSECTCLIPRECT",    0x0416, 0 },
-      { "ARC",                  0x0817, 0 },
+      { "ARC",                  0x0817, &QWinMetaFile::arc },
       { "ELLIPSE",              0x0418, &QWinMetaFile::ellipse },
       { "FLOODFILL",            0x0419, 0 },
-      { "PIE",                  0x081A, 0 },
-      { "RECTANGLE",            0x041B, 0 },
-      { "ROUNDRECT",            0x061C, 0 },
+      { "PIE",                  0x081A, &QWinMetaFile::pie },
+      { "RECTANGLE",            0x041B, &QWinMetaFile::rectangle },
+      { "ROUNDRECT",            0x061C, &QWinMetaFile::roundRect },
       { "PATBLT",               0x061D, 0 },
-      { "SAVEDC",               0x001E, 0 },
-      { "SETPIXEL",             0x041F, 0 },
+      { "SAVEDC",               0x001E, &QWinMetaFile::saveDC },
+      { "SETPIXEL",             0x041F, &QWinMetaFile::setPixel },
       { "OFFSETCLIPRGN",        0x0220, 0 },
       { "TEXTOUT",              0x0521, 0 },
       { "BITBLT",               0x0922, 0 },
@@ -51,7 +51,7 @@ struct MetaFuncRec
       { "POLYGON",              0x0324, &QWinMetaFile::polygon },
       { "POLYLINE",             0x0325, &QWinMetaFile::polyline },
       { "ESCAPE",               0x0626, &QWinMetaFile::escape },
-      { "RESTOREDC",            0x0127, 0 },
+      { "RESTOREDC",            0x0127, &QWinMetaFile::restoreDC },
       { "FILLREGION",           0x0228, 0 },
       { "FRAMEREGION",          0x0429, 0 },
       { "INVERTREGION",         0x012A, 0 },
@@ -59,7 +59,7 @@ struct MetaFuncRec
       { "SELECTCLIPREGION",     0x012C, 0 },
       { "SELECTOBJECT",         0x012D, &QWinMetaFile::selectObject },
       { "SETTEXTALIGN",         0x012E, 0 },
-      { "CHORD",                0x0830, 0 },
+      { "CHORD",                0x0830, &QWinMetaFile::chord },
       { "SETMAPPERFLAGS",       0x0231, 0 },
       { "EXTTEXTOUT",           0x0a32, 0 },
       { "SETDIBTODEV",          0x0d33, 0 },
@@ -69,18 +69,18 @@ struct MetaFuncRec
       { "SETPALENTRIES",        0x0037, 0 },
       { "POLYPOLYGON",          0x0538, 0 },
       { "RESIZEPALETTE",        0x0139, 0 },
-      { "DIBBITBLT",            0x0940, 0 },
-      { "DIBSTRETCHBLT",        0x0b41, 0 },
-      { "DIBCREATEPATTERNBRUSH", 0x0142, 0 },
-      { "STRETCHDIB",           0x0f43, 0 },
+      { "DIBBITBLT",            0x0940, &QWinMetaFile::dibBitBlt },
+      { "DIBSTRETCHBLT",        0x0b41, &QWinMetaFile::dibStretchBlt },
+      { "DIBCREATEPATTERNBRUSH", 0x0142, &QWinMetaFile::dibCreatePatternBrush },
+      { "STRETCHDIB",           0x0f43, &QWinMetaFile::stretchDib },
       { "EXTFLOODFILL",         0x0548, 0 },
       { "DELETEOBJECT",         0x01f0, &QWinMetaFile::deleteObject },
-      { "CREATEPALETTE",        0x00f7, &QWinMetaFile::createPalette },
-      { "CREATEPATTERNBRUSH",   0x01F9, 0 },
+      { "CREATEPALETTE",        0x00f7, &QWinMetaFile::createEmptyObject },
+      { "CREATEPATTERNBRUSH",   0x01F9, &QWinMetaFile::createEmptyObject },
       { "CREATEPENINDIRECT",    0x02FA, &QWinMetaFile::createPenIndirect },
-      { "CREATEFONTINDIRECT",   0x02FB, &QWinMetaFile::createFontIndirect },
+      { "CREATEFONTINDIRECT",   0x02FB, &QWinMetaFile::createEmptyObject },
       { "CREATEBRUSHINDIRECT",  0x02FC, &QWinMetaFile::createBrushIndirect },
-      { "CREATEREGION",         0x06FF, &QWinMetaFile::createRegion },
+      { "CREATEREGION",         0x06FF, &QWinMetaFile::createEmptyObject },
       { NULL,                   0,      0 }
   };
 

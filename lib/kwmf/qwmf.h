@@ -18,8 +18,13 @@
 #ifndef qwmf_h
 #define qwmf_h
 
+#include <qstring.h>
 #include <qpainter.h>
 #include <qpointarray.h>
+#include <qpen.h>
+#include <qcolor.h>
+#include <qimage.h>
+#include <qrect.h>
 
 class QString;
 class WmfCmd;
@@ -34,71 +39,105 @@ public:
     QWinMetaFile();
     virtual ~QWinMetaFile();
 
-    /** Load WMF file. Returns true on success. */
+    /**
+     * Load WMF file. Returns true on success.
+     */
     virtual bool load( const QString &fileName );
     virtual bool load( QBuffer &buffer );
 
-    /** Paint metafile to given paint-device. Returns true on success. */
+    /**
+     * Paint metafile to given paint-device. Returns true on success.
+     */
     virtual bool paint( const QPaintDevice* target );
 
-    /** Returns true if the metafile is placeable. */
+    /**
+     * Returns true if the metafile is placeable.
+     */
     bool isPlaceable( void ) const { return mIsPlaceable; }
 
-    /** Returns true if the metafile is enhanced. */
+    /**
+     * Returns true if the metafile is enhanced.
+     */
     bool isEnhanced( void ) const { return mIsEnhanced; }
 
     /** Set single-step mode. */
     virtual void singleStep( bool ss );
 
-    /** Returns bounding rectangle if isPlaceable()==true,
-        otherwise unspecified result. */
+    /**
+     * Returns bounding rectangle
+     */
     QRect bbox( void ) const { return mBBox; }
 
 public: // should be protected but cannot
     /** Metafile painter methods */
 
     // set window origin
-    void setWindowOrg( short num, short* parms );
+    void setWindowOrg( long num, short* parms );
     // set window extents
-    void setWindowExt( short num, short* parms );
-    // draw polygon
-    void polygon( short num, short* parms );
-    // draw series of lines
-    void polyline( short num, short* parms );
-    // set polygon fill mode
-    void setPolyFillMode( short num, short* parms );
-    // create palette
-    void createPalette( short num, short* parms );
-    // create a logical font
-    void createFontIndirect( short num, short* parms );
-    // create region
-    void createRegion( short num, short* parms );
-    // create a logical brush
-    void createBrushIndirect( short num, short* parms );
-    // create a logical pen
-    void createPenIndirect( short num, short* parms );
-    // set background pen color
-    void setBkColor( short num, short* parms );
-    // set background pen mode
-    void setBkMode( short num, short* parms );
+    void setWindowExt( long num, short* parms );
+
+    /****************** Drawing *******************/
     // draw line to coord
-    void lineTo( short num, short* parms );
+    void lineTo( long num, short* parms );
     // move pen to coord
-    void moveTo( short num, short* parms );
+    void moveTo( long num, short* parms );
     // draw ellipse
-    void ellipse( short num, short* parms );
-    // Activate object handle
-    void selectObject( short num, short* parms );
-    // Free object handle
-    void deleteObject( short num, short* parms );
+    void ellipse( long num, short* parms );
+    // draw polygon
+    void polygon( long num, short* parms );
+    // draw series of lines
+    void polyline( long num, short* parms );
+    /* draw a rectangle */
+    void rectangle( long num, short* parms );
+    /* draw round rectangle */
+    void roundRect( long num, short* parms );
+    /* draw arc */
+    void arc( long num, short* parms );
+    /* draw chord */
+    void chord( long num, short* parms );
+    /* draw pie */
+    void pie( long num, short* parms );
+    // set polygon fill mode
+    void setPolyFillMode( long num, short* parms );
+    // set background pen color
+    void setBkColor( long num, short* parms );
+    // set background pen mode
+    void setBkMode( long num, short* parms );
+    /* set a pixel */
+    void setPixel( long num, short* parms );
     // Set raster operation mode
-    void setRop( short num, short* parms );
+    void setRop( long num, short* parms );
+    /* save device context */
+    void saveDC( long num, short* parms );
+    /* restore device context */
+    void restoreDC( long num, short* parms );
+
+    /****************** Bitmap *******************/
+    /* copies a DIB into a dest location */
+    void dibBitBlt( long num, short* parms );
+    /* stretches a DIB into a dest location */
+    void dibStretchBlt( long num, short* parms );
+    void stretchDib( long num, short* parms );
+    /* create a pattern brush */
+    void dibCreatePatternBrush( long num, short* parms );
+
+    /****************** Object handle *******************/
+    // Activate object handle
+    void selectObject( long num, short* parms );
+    // Free object handle
+    void deleteObject( long num, short* parms );
+    /* create an empty object in the object list */
+    void createEmptyObject( long num, short* parms );
+    // create a logical brush
+    void createBrushIndirect( long num, short* parms );
+    // create a logical pen
+    void createPenIndirect( long num, short* parms );
+
+    /****************** misc *******************/
     // Escape ( enhanced command set )
-    void escape( short num, short* parms );
-
+    void escape( long num, short* parms );
     // do nothing
-    void noop( short /*num*/, short* /*parms*/ ) { }
-
+    void noop( long /*num*/, short* /*parms*/ ) { }
     // Resolution of the image in dots per inch
     int dpi( void ) const { return mDpi; }
 
@@ -119,16 +158,24 @@ protected:
     /** Converts two parameters to long */
     unsigned int toDWord( short* parm );
 
+    /** Convert (x1,y1) and (x2, y2) positions in angle and angleLength */
+    void xyToAngle( int xStart, int yStart, int xEnd, int yEnd, int& angle, int& aLength );
+
     /** Handle win-object-handles */
-    int handleIndex( void ) const;
-    WinObjPenHandle* createPen( void );
-    WinObjBrushHandle* createBrush( void );
+    void addHandle( WinObjHandle*  );
     void deleteHandle( int );
+
+    /** Convert windows rasterOp in QT rasterOp */
+    Qt::RasterOp winToQtRaster( short parm ) const;
+    Qt::RasterOp winToQtRaster( long parm ) const;
+
+    /** Converts DIB to BMP */
+    bool dibToBmp( QImage& bmp, const char* dib, long size);
 
 protected:
     QPainter mPainter;
     QPointArray mPoints;
-    bool mIsPlaceable, mIsEnhanced;
+    bool mIsPlaceable, mIsEnhanced, mValid;
     WmfCmd* mFirstCmd;
     bool mWinding;
     QBrush mBrush;
