@@ -24,6 +24,13 @@
 #ifndef KEXITABBROWSER_H
 #define KEXITABBROWSER_H
 
+#include <qwidget.h>
+#include <qintdict.h>
+
+class QWidgetStack;
+class KMultiTabBar;
+class KexiBrowser;
+
 class KexiTabBrowser : public QWidget
 {
 	Q_OBJECT
@@ -31,6 +38,29 @@ class KexiTabBrowser : public QWidget
 	public:
 		KexiTabBrowser(QWidget *parent=0, const char *name=0);
 		~KexiTabBrowser();
+
+		void			generateView();
+
+	protected:
+		void			addBrowser(KexiBrowser *browser, QString icon);
+
+		void			generateTables();
+
+		KMultiTabBar		*m_tabBar;
+		QWidgetStack		*m_stack;
+		QIntDict<QWidget>	m_browserDict;
+
+		int			m_tabs;
+		int			m_activeTab;
+
+		KexiBrowser		*m_db;
+		KexiBrowser		*m_tables;
+		KexiBrowser		*m_queries;
+		KexiBrowser		*m_forms;
+		KexiBrowser		*m_reports;
+
+	protected slots:
+		void			slotTabActivated(int id);
 };
 
 #endif

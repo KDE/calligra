@@ -34,7 +34,7 @@
 
 #include "kexiapplication.h"
 #include "keximainwindow.h"
-#include "kexibrowser.h"
+#include "kexitabbrowser.h"
 #include "kexidoc.h"
 #include "kexiproject.h"
 

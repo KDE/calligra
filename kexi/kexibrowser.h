@@ -37,17 +37,19 @@ public:
 	enum Section
 	{
 		SectionDB,
-		SectionTables,
-		SectionQueries,
-		SectionForms,
-		SectionReports
+		SectionTable,
+		SectionQuery,
+		SectionForm,
+		SectionReport
 	};
 
 	KexiBrowser(QWidget *parent=0, Section s=SectionDB, const char *name=0);
 	~KexiBrowser();
 	
-	void clearView();
+	void			clearView();
 	void			generateView();
+
+	Section			section();
 	
 protected:
 	void			createForm();
@@ -62,6 +64,8 @@ protected:
 	QWidget*		m_parent;
 
 	KexiBrowserItem*	m_database;
+
+	Section			m_section;
 	
 		
 protected slots:

@@ -19,19 +19,99 @@
  */
 
 #include <kiconloader.h>
+#include <kdebug.h>
+#include <klistview.h>
+#include "kmultitabbar.h"
 
 #include <qtabwidget.h>
+#include <qlayout.h>
+#include <qwidgetstack.h>
 
 #include "kexiapplication.h"
 #include "kexibrowser.h"
+#include "kexibrowseritem.h"
 #include "kexitabbrowser.h"
 
 KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
 	: QWidget(parent, name)
 {
-	QTabWidget *w = new QTabWidget(this);
-	KexiBrowser *b = new KexiBrowser(this, KexiBrowser::SectionDB);
-	w->addTab(b, kexi->iconLoader()->loadIcon("database", KIcon::Small), "");
+	QGridLayout *layout = new QGridLayout(this);
+
+	m_tabBar = new KMultiTabBar(this, KMultiTabBar::Vertical);
+	m_tabBar->setPosition(KMultiTabBar::Left);
+
+	m_stack = new QWidgetStack(this);
+
+	m_activeTab = -1;
+
+	m_db = new KexiBrowser(this, KexiBrowser::SectionDB);
+	m_tables = new KexiBrowser(this, KexiBrowser::SectionTable);
+	m_forms = new KexiBrowser(this, KexiBrowser::SectionForm);
+	m_queries = new KexiBrowser(this, KexiBrowser::SectionQuery);
+	m_reports = new KexiBrowser(this, KexiBrowser::SectionReport);
+
+	addBrowser(m_db, "db");
+	addBrowser(m_tables, "tables");
+	addBrowser(m_forms, "forms");
+	addBrowser(m_queries, "queries");
+	addBrowser(m_reports, "reports");
+
+	layout->addWidget(m_tabBar,	0,	0);
+	layout->addWidget(m_stack,	0,	1);
+	layout->setColStretch(1, 1);
+}
+
+void
+KexiTabBrowser::addBrowser(KexiBrowser *browser, QString icon)
+{
+	m_tabs++;
+	m_tabBar->insertTab(kexi->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs);
+
+	connect(m_tabBar->getTab(m_tabs), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
+	m_stack->addWidget(browser);
+	m_browserDict.insert(m_tabs, browser);
+
+	if(m_activeTab == -1)
+	{
+		m_tabBar->setTab(m_tabs, true);
+		m_activeTab = m_tabs;
+		m_stack->raiseWidget(browser);
+	}
+}
+
+void
+KexiTabBrowser::generateView()
+{
+	m_db->generateView();
+
+	generateTables();
+}
+
+void
+KexiTabBrowser::generateTables()
+{
+	QStringList tables = kexi->project()->db()->tables();
+
+	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )
+	{
+		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_tables, (*it) );
+		item->setPixmap(0, kexi->iconLoader()->loadIcon("table", KIcon::Small));
+	}
+}
+
+void
+KexiTabBrowser::slotTabActivated(int id)
+{
+	if(m_activeTab != id)
+	{
+		m_tabBar->setTab(m_activeTab, false);
+		m_activeTab = id;
+		m_stack->raiseWidget(m_browserDict[id]);
+	}
+	else
+	{
+		m_tabBar->setTab(id, true);
+	}
 }
 
 KexiTabBrowser::~KexiTabBrowser()

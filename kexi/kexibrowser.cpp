@@ -40,6 +40,7 @@
 KexiBrowser::KexiBrowser(QWidget *parent, Section s, const char *name ) : KListView(parent,name)
 {
 	m_parent = parent;
+	m_section = s;
 
 	iconLoader = KGlobal::iconLoader();
 
@@ -161,8 +162,13 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 }
 
 
-void KexiBrowser::slotDelete() {};
-void KexiBrowser::slotEdit() {};
+void KexiBrowser::slotDelete()
+{
+}
+
+void KexiBrowser::slotEdit()
+{
+}
 
 void KexiBrowser::slotCreateTable()
 {
