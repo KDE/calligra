@@ -234,7 +234,8 @@ void koScanPartFile( Trader *_trader, const char* _file, CORBA::ImplRepository_p
   CosTrading::ServiceTypeName_var stype;
   stype = CORBA::string_dup( "KOfficeDocument" );
   
-  CORBA::Object_var obj = Activator::self()->createReference( name, "IDL:KOffice/DocumentFactory:1.0" );
+  //CORBA::Object_var obj = Activator::self()->createReference( name, "IDL:KOffice/DocumentFactory:1.0" );
+  CORBA::Object_var obj = Activator::self()->createReference( name, repoids.first() );
 
   // Register at IMR
   imrCreate( name, mode, cmd, repoids.first(), _imr );
