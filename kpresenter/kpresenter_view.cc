@@ -4727,8 +4727,8 @@ void KPresenterView::extraSpelling()
 #endif
 
     m_pKPresenterDoc->setReadWrite(false); // prevent editing text
-    m_spell.firstSpellPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
-    m_spell.currentSpellPage=m_spell.firstSpellPage;
+    m_initSwitchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());;
+    m_switchPage = m_initSwitchPage;
 
     spellAddTextObject();
 
@@ -4826,17 +4826,16 @@ void KPresenterView::spellCheckerReady()
         return;
     }
     //kdDebug() << "KPresenterView::spellCheckerReady done" << endl;
-    if(!spellSwitchToNewPage())
+    if(!switchInOtherPage(i18n( "Do you want to spellcheck new page?")))
     {
         // Done
         m_spell.kspell->cleanUp();
         m_pKPresenterDoc->setReadWrite(true);
         delete m_spell.kspell;
         m_spell.kspell = 0;
-        m_spell.firstSpellPage=-1;
-        m_spell.currentSpellPage=-1;
+        m_initSwitchPage = -1;
+        m_switchPage = -1;
         m_spell.textObject.clear();
-        m_spell.firstSpellPage=-1;
         if(m_spell.macroCmdSpellCheck)
             m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
         m_spell.macroCmdSpellCheck=0L;
@@ -4846,24 +4845,6 @@ void KPresenterView::spellCheckerReady()
         spellAddTextObject();
         spellCheckerReady();
     }
-}
-
-bool KPresenterView::spellSwitchToNewPage()
-{
-    //there is not other page
-    if(m_pKPresenterDoc->pageList().count()==1)
-        return false;
-    m_spell.currentSpellPage++;
-    if( m_spell.currentSpellPage>=(int)m_pKPresenterDoc->pageList().count())
-        m_spell.currentSpellPage=0;
-    if( m_spell.currentSpellPage==m_spell.firstSpellPage)
-        return false;
-    if ( KMessageBox::questionYesNo( this,
-                                     i18n( "Do you want to spellcheck new page?") )
-         != KMessageBox::Yes )
-        return false;
-    skipToPage(m_spell.currentSpellPage);
-    return true;
 }
 
 

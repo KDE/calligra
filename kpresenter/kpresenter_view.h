@@ -644,7 +644,6 @@ protected:
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
     void doFindReplace();
 
-    bool spellSwitchToNewPage();
     void spellAddTextObject();
 
     bool switchInOtherPage( const QString & text );
@@ -964,8 +963,6 @@ private:
     // Spell-checking
     struct {
 	KSpell *kspell;
-        int firstSpellPage;
-        int currentSpellPage;
 	int spellCurrTextObjNum;
 	QPtrList<KPTextObject> textObject;
 	KMacroCommand * macroCmdSpellCheck;
