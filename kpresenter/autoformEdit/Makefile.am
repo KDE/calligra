@@ -15,10 +15,10 @@ kautoformEdit_SOURCES = main.cc autoformEdit.cc editWidget.cc \
 	drawWidget.cc atfinterpreter.cc pntInsDia.cc afchoose.cc \
 	saveAsDia.cc
 
-noinst_HEADERS	= autoformEdit.h editWidget.h drawWidget.h atfinterpreter.h\
+noinst_HEADERS	= autoformEdit.h editWidget.h drawWidget.h atfinterpreter.h \
 		pntInsDia.h afchoose.h saveAsDia.h 
 
-SRCMETA = autoformEdit.moc editWidget.moc drawWidget.moc atfinterpreter.moc\
+SRCMETA = autoformEdit.moc editWidget.moc drawWidget.moc atfinterpreter.moc \
 	pntInsDia.moc afchoose.moc saveAsDia.moc
 
 ####### Build rules
@@ -28,42 +28,15 @@ all:  $(TARGET)
 
 ######## Meta objects 
 
-autoformEdit.moc: autoformEdit.h
-	$(MOC) autoformEdit.h -o autoformEdit.moc
+SUFFIXES = .h .moc 
 
-editWidget.moc: editWidget.h
-	$(MOC) editWidget.h -o editWidget.moc
-
-drawWidget.moc: drawWidget.h
-	$(MOC) drawWidget.h -o drawWidget.moc
-
-atfinterpreter.moc: atfinterpreter.h
-	$(MOC) atfinterpreter.h -o atfinterpreter.moc
-
-pntInsDia.moc: pntInsDia.h
-	$(MOC) pntInsDia.h -o pntInsDia.moc
-
-ainfodia.moc: ainfodia.h
-	$(MOC) ainfodia.h -o ainfodia.moc
-
-afchoose.moc: afchoose.h
-	$(MOC) afchoose.h -o afchoose.moc
-
-saveAsDia.moc: saveAsDia.h
-	$(MOC) saveAsDia.h -o saveAsDia.moc
-
+.h.moc:
+	$(MOC) $< -o $@      
 
 afchoose.cc: afchoose.moc
 atfinterpreter.cc: atfinterpreter.moc
-backdia.cc: backdia.moc
-graphobj.cc: graphobj.moc
-kcharselect.cc: kcharselect.moc
-kcharselectdia.cc: kcharselectdia.moc
-kenumlistdia.cc: kenumlistdia.moc
-kpresenter_doc.cc: kpresenter_doc.moc
-kpresenter_main.cc: kpresenter_main.moc
-kpresenter_shell.cc: kpresenter_shell.moc
-kpresenter_view.cc: kpresenter_view.moc
-ktextobject.cc: ktextobject.moc
-page.cc: page.moc
-styledia.cc: styledia.moc      
+saveAsDia.cc: saveAsDia.moc      
+pntInsDia.cc: pntInsDia.moc
+autoformEdit.cc: autoformEdit.moc
+drawWidget.cc: drawWidget.moc
+editWidget.cc: editWidget.moc

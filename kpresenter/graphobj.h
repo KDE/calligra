@@ -29,7 +29,7 @@
 #include <qpntarry.h>
 #include <qfileinf.h>
 
-#include "atfinterpreter.h"
+#include "autoformEdit/atfinterpreter.h"
 #include "qwmf.h"
 #include "global.h"
 

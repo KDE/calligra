@@ -60,7 +60,7 @@ class Page;
 #include "kpresenter_main.h"
 #include "global.h"
 #include "backdia.h"
-#include "afchoose.h"
+#include "autoformEdit/afchoose.h"
 #include "styledia.h"
 #include "ktextobject.h"
 #include "kcharselectdia.h"
