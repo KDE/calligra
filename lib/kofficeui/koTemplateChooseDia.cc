@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
+/* Version: 0.1.0alpha                                            */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
@@ -10,73 +10,86 @@
 /* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Autoform Choose Dialog                                 */
+/* Module: Template Choose Dialog                                 */
 /******************************************************************/
 
-#include "afchoose.h"
-#include "afchoose.moc"
+#include "koTemplateChooseDia.h"
+#include "koTemplateChooseDia.moc"
 
 /******************************************************************/
-/* class AFChoose                                                 */
+/* Class: KoTemplateChooseDia                                     */
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-AFChoose::AFChoose(QWidget *parent=0,const char *name=0)
-  :QTabDialog(parent,name,true)
+KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name,QString _templatePath)
+  : QTabDialog(parent,name,true), templatePath(_templatePath)
 {
   setCancelButton(i18n("Cancel"));
-  setOkButton(i18n("OK"));
   groupList.setAutoDelete(true);
   getGroups();
   setupTabs();
   connect(this,SIGNAL(applyButtonPressed()),this,SLOT(chosen()));
+  templateName = "";
 }
 
-/*===================== destrcutor ===============================*/
-AFChoose::~AFChoose()
+/*================================================================*/
+bool KoTemplateChooseDia::chooseTemplate(QString _templatePath,QString &_template)
 {
+  bool res = false;
+  KoTemplateChooseDia *dlg = new KoTemplateChooseDia(0,"Template",_templatePath);
+
+  dlg->resize(400,300);
+  dlg->setCaption(i18n("Choose a Template"));
+
+  if (dlg->exec() == QDialog::Accepted)
+    {
+      res = true;
+      _template = dlg->getTemplate();
+    }
+
+  delete dlg;
+
+  return res;
 }
 
 /*======================= get Groups =============================*/
-void AFChoose::getGroups()
+void KoTemplateChooseDia::getGroups()
 {
-  // global autoforms
-  QString afDir = qstrdup(KApplication::kde_datadir());
-  afDir += "/kpresenter/autoforms/";
   QString str;
   char* c = new char[256];
+  QString templateDir = qstrdup(templatePath);
   
-  QFile afInf(afDir + ".autoforms");
+  QFile templateInf(templatePath + ".templates");
 
-  if (afInf.open(IO_ReadOnly))
+  if (templateInf.open(IO_ReadOnly))
     {
-      while (!afInf.atEnd())
+      while (!templateInf.atEnd())
 	{
-	  afInf.readLine(c,256);
+	  templateInf.readLine(c,256);
 	  str = c;
 	  str = str.stripWhiteSpace();
 	  if (!str.isEmpty())
 	    {
 	      grpPtr = new Group;
-	      grpPtr->dir.setFile(afDir + QString(c).stripWhiteSpace() + "/");
+	      grpPtr->dir.setFile(templateDir + QString(c).stripWhiteSpace() + "/");
 	      grpPtr->name = QString(qstrdup(c)).stripWhiteSpace();
 	      groupList.append(grpPtr);
 	    }
 	  strcpy(c,"");
 	}
       
-      afInf.close();
+      templateInf.close();
     }
 
   delete c;
 }
 
 /*======================= setup Tabs =============================*/
-void AFChoose::setupTabs()
+void KoTemplateChooseDia::setupTabs()
 {
   if (!groupList.isEmpty())
     {
-      for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
+      for (grpPtr = groupList.first();grpPtr != 0;grpPtr = groupList.next())
 	{
 	  grpPtr->tab = new QWidget(this);
  	  grpPtr->loadWid = new KIconLoaderCanvas(grpPtr->tab);
@@ -88,7 +101,7 @@ void AFChoose::setupTabs()
 	  connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
 		  this,SLOT(chosen()));
 	  connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
-		  this,SLOT(reject()));
+		  this,SLOT(accept()));
 	  grpPtr->label = new QLabel(grpPtr->tab);
 	  grpPtr->tab->setMinimumSize(400,300);
  	  addTab(grpPtr->tab,grpPtr->name);
@@ -97,7 +110,7 @@ void AFChoose::setupTabs()
 }  
 
 /*====================== resize event ============================*/
-void AFChoose::resizeEvent(QResizeEvent *e)
+void KoTemplateChooseDia::resizeEvent(QResizeEvent *e)
 {
   QTabDialog::resizeEvent(e);
   if (!groupList.isEmpty())
@@ -112,7 +125,7 @@ void AFChoose::resizeEvent(QResizeEvent *e)
 }
 
 /*====================== name changed ===========================*/
-void AFChoose::nameChanged(const char* name)
+void KoTemplateChooseDia::nameChanged(const char* name)
 {
   QFileInfo fi(name);
 
@@ -123,15 +136,18 @@ void AFChoose::nameChanged(const char* name)
     }
 }
 
-/*======================= form chosen ==========================*/
-void AFChoose::chosen()
+/*======================= template chosen =======================*/
+void KoTemplateChooseDia::chosen()
 {
   if (!groupList.isEmpty())
     {
-      for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
+      for (grpPtr = groupList.first();grpPtr != 0;grpPtr = groupList.next())
 	{
 	  if (grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty()) 
-	    emit formChosen(static_cast<const char*>(QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent())));
+	    {
+	      emit templateChosen(static_cast<const char*>(QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent())));
+	      templateName = QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent());
+	    }
 	}
     }
 }

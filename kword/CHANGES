@@ -237,3 +237,10 @@ Reggie, 13.10.1998:
 - Fixed some bug in saving documents
 - Fixed a bug in KWParagLayout::operator=()
 - Changed the way to configure the borders of the parags using the toolbar
+
+Reggie, 16.10.1998 - 19.10.1998
+-------------------------------
+- Made KWord frame orientated instead of page orientated - these were _BIG_ changes
+- Everything which worked before the page-orientation -> frame-orientation changes, works again now
+- Implemented templates
+- Started implementation of printing (at the moment, only the dialog opens :-)

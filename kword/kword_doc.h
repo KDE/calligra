@@ -36,6 +36,7 @@ class KWPage;
 #include "imagecollection.h"
 #include "image.h"
 #include "char.h"
+#include "frame.h"
 
 #include <qlist.h>
 #include <qobject.h>
@@ -46,8 +47,12 @@ class KWPage;
 #include <qstring.h>
 #include <qclipboard.h>
 #include <qstrlist.h>
+#include <qmessagebox.h>
+
+#include <kurl.h>
 
 #include <koPageLayoutDia.h>
+#include <koTemplateChooseDia.h>
 
 #define MIME_TYPE "application/x-kword"
 #define KWordRepoID "IDL:KWord/KWordDocument:1.0"
@@ -85,6 +90,8 @@ class KWordDocument_impl : public QObject,
 public:
   KWordDocument_impl();
   ~KWordDocument_impl();
+
+  enum ProcessingType {WP = 0,DTP = 1};
   
 protected:
   virtual void cleanUp();
@@ -96,6 +103,7 @@ public:
   virtual CORBA::Boolean init();
 
   // C++
+  virtual bool loadTemplate(const char *_url);
   virtual bool load(KOMLParser& parser);
   virtual bool loadChildren(OPParts::MimeMultipartDict_ptr _dict);
   virtual bool save(ostream& out);
@@ -127,21 +135,28 @@ public:
   virtual QListIterator<KWordChild> childIterator();
 
   /**
-   * If another parag becomes the first one it uses this function
-   * to tell the document about it.
-   */
-  void setFirstParag(KWParag *_parag) 
-    { parags = _parag; }
-
-  /**
    * Sets the paper size and recalculates the papers width and height.
    */
-  void setPageLayout(KoPageLayout _layout,KoColumns _cl)
-    { pageLayout = _layout; pageColumns = _cl; calcColumnWidth(); updateAllViews(0L); updateAllCursors(); }
+  void setPageLayout(KoPageLayout _layout,KoColumns _cl);
 
   void getPageLayout(KoPageLayout& _layout,KoColumns& _cl)
     { _layout = pageLayout; _cl = pageColumns; }
-    
+
+  KWFrameSet *getFrameSet(unsigned int _num)
+    { return frames.at(_num); }
+  unsigned int getNumFrameSets()
+    { return frames.count(); }
+
+  /**
+   * Returns the first parag of the frameset <i>_num</i>.
+   */
+  KWParag *getFirstParag(unsigned int _num) { 
+    if (frames.at(_num)->getFrameType() == FT_TEXT)
+      return dynamic_cast<KWTextFrameSet*>(frames.at(_num))->getFirstParag();
+    else
+      return 0L;
+  }
+      
   /**
    * @return the default user font.
    *
@@ -184,9 +199,8 @@ public:
    */
   KWParagLayout* findParagLayout(const char *_name);
 
-  KWParag* findFirstParagOfPage(unsigned int _page);
+  KWParag* findFirstParagOfPage(unsigned int _page,unsigned int _frameset);
     
-  KWParag* getFirstParag() { return parags; }
 
   float getMMTopBorder() { return pageLayout.top; }
   float getMMBottomBorder() { return pageLayout.bottom; }
@@ -214,7 +228,7 @@ public:
    *         page with number '_page'. The borders of the paper
    *         are not considered to belong to the printable area.
    */
-  bool isPTYIn(unsigned int _page,unsigned int _ypos);
+  bool isPTYInFrame(unsigned int _frameSet,unsigned int _frame,unsigned int _ypos);
   
   void printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h);
   
@@ -223,16 +237,12 @@ public:
   void updateAllViews(KWordView_impl *_view);
   void updateAllRanges();
   void updateAllCursors();
+  void drawAllBorders(QPainter *_painter = 0);
 
   int getPages() { return pages; }
 
   void setPages(int _pages)
     { pages = _pages; updateAllRanges(); }
-
-  void deleteParag(KWParag *_parag);
-  void joinParag(KWParag *_parag1,KWParag *_parag2);
-  void insertParag(KWParag *_parag,InsertPos _pos);
-  void splitParag(KWParag *_parag,unsigned int _pos);
 
   KWFormatCollection *getFormatCollection()
     { return &formatCollection; }
@@ -261,6 +271,13 @@ public:
 
   void paste(KWFormatContext *_fc,QString _string,KWPage *_page);
 
+  void appendPage(unsigned int _page,QPainter &_painter);
+
+  ProcessingType getProcessingType()
+    { return processingType; }
+  
+  int getFrameSet(unsigned int mx,unsigned int my);
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child);
@@ -274,7 +291,8 @@ protected:
   virtual void draw(QPaintDevice*,CORBA::Long _width,CORBA::Long _height);
   QPen setBorderPen(KWParagLayout::Border _brd);
 
-  void loadParagraphs(KOMLParser&,vector<KOMLAttrib>&);
+  void loadFrameSets(KOMLParser&,vector<KOMLAttrib>&);
+  void recalcFrames();
 
   QList<KWordView_impl> m_lstViews;
   QList<KWordChild> m_lstChildren;
@@ -287,7 +305,7 @@ protected:
    * @see #columnWidth
    * @see #ptColumnWidth
    */
-  void calcColumnWidth();
+  //void calcColumnWidth();
     
   KoPageLayout pageLayout;
   KoColumns pageColumns;
@@ -301,12 +319,12 @@ protected:
   unsigned int ptColumnWidth;
   
   /**
-   * List of all parags that make up the text.
+   * List of all framesets.
    *
-   * @see KWParag
+   * @see KWFrame
    */
-  KWParag *parags;
-  
+  QList<KWFrameSet> frames;
+
   /**
    * The default user font.
    *
@@ -327,6 +345,8 @@ protected:
 
   KWFormatContext selStart,selEnd;
   bool hasSelection;
+
+  ProcessingType processingType;
 
 };
 

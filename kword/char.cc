@@ -10,6 +10,7 @@
 #include <unistd.h>
 
 #include "kword_doc.h"
+#include "frame.h"
 
 KWString::KWString(const char *_str)
 {
@@ -215,13 +216,13 @@ void KWString::saveFormat(ostream &out)
     }
 }
 
-void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument_impl *_doc)
+void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument_impl *_doc,KWTextFrameSet *_frameset)
 {
   string tag;
   string name;
 
   unsigned int addToPos = 0;
-  if (!_doc->getFirstParag()->getNext())
+  if (!_frameset->getFirstParag()->getNext() && _doc->getNumFrameSets() == 0)
     addToPos = 1;
 
   while (parser.open(0L,tag))

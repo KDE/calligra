@@ -11,25 +11,26 @@
 #include <fstream>
 #include <unistd.h>
 
-KWParag::KWParag( KWordDocument_impl *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout )
+KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument_impl *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout )
 {
     prev = _prev;
     next = _next;
     paragLayout = new KWParagLayout(_doc);
     *paragLayout = *_paragLayout;
     document = _doc;
-    
+    frameSet = _frameSet;
+
     if ( prev )
 	prev->setNext( this );
     else
-	document->setFirstParag( this );
+	frameSet->setFirstParag( this );
     
     if ( next )
 	next->setPrev( this );
 
     startPage = 1;
-    startColumn = 1;
-    endColumn = 1;
+    startFrame = 1;
+    endFrame = 1;
     ptYStart = 0;
     ptYEnd = 0;
 }
@@ -172,7 +173,7 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	    }
-	  text.loadFormat(parser,lst,document);
+	  text.loadFormat(parser,lst,document,frameSet);
 	}
 
       // layout

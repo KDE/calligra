@@ -10,18 +10,17 @@
 /* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Autoform Choose Dialog (header)                        */
+/* Module: Template Choose Dialog (header)                        */
 /******************************************************************/
 
-#ifndef AFCHOOSE_H
-#define AFCHOOSE_H
+#ifndef koTemplateChooseDia_h
+#define koTemplateChooseDia_h
 
 #include <qtabdlg.h>
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qstring.h>
 #include <qpushbt.h>
-#include <qlistbox.h>
 #include <qlist.h>
 #include <qfileinf.h>
 #include <qpixmap.h>
@@ -34,22 +33,22 @@
 #include <kapp.h>
 
 /******************************************************************/
-/* class AFChoose                                                 */
+/* Class: KoTemplateChooseDia                                     */
 /******************************************************************/
 
-class AFChoose : public QTabDialog
+class KoTemplateChooseDia : public QTabDialog
 {
   Q_OBJECT
 
 public:
+  KoTemplateChooseDia(QWidget *parent,const char *name,QString _templatePath); 
+  ~KoTemplateChooseDia() {;}
 
-  // constructor - destructor
-  AFChoose(QWidget *parent=0,const char *name=0); 
-  ~AFChoose();                                    
+  static bool chooseTemplate(QString _templatePath,QString &_template);
+
+  QString getTemplate() { return templateName; }
 
 protected:
-
-  // structure of a group
   struct Group
   {
     QFileInfo dir;
@@ -59,34 +58,23 @@ protected:
     QLabel *label;
   };
 
-  // set groups
   void getGroups();
-
-  // setup tabs
   void setupTabs();
-
-  // resize event
   void resizeEvent(QResizeEvent *);
 
-  // ********** variables **********
-
-  // list of groups and a pointer to a group
   QList<Group> groupList;
   Group *grpPtr;
+  QString templatePath;
+  QString templateName;
 
 private slots:
-
-  // name changed 
   void nameChanged(const char*);
-
-  // autoform chosen
   void chosen();
 
 signals:
-
-  //autoform chosen
-  void formChosen(const char*);
+  void templateChosen(const char*);
 
 };
-#endif //AFCHOOSE_H
+
+#endif
 

@@ -13,6 +13,7 @@
 /* Module: View                                                   */
 /******************************************************************/
 
+#include <qprinter.h>
 #include <kfiledialog.h>
 
 #include "kword_view.h"
@@ -139,6 +140,78 @@ void KWordView_impl::setDocument(KWordDocument_impl *_doc)
 
 }
   
+/*=========================== file print =======================*/
+CORBA::Boolean KWordView_impl::printDlg()
+{
+  QPrinter prt;
+  prt.setMinMax(1,m_pKWordDoc->getPages());
+  bool makeLandscape = false;
+
+  KoPageLayout pgLayout;
+  KoColumns cl;
+  m_pKWordDoc->getPageLayout(pgLayout,cl);
+
+  switch (pgLayout.format)
+    {
+#if QT_VERSION >= 141
+    case PG_DIN_A3: prt.setPageSize(QPrinter::A3);
+      break;
+#endif
+    case PG_DIN_A4: prt.setPageSize(QPrinter::A4);
+      break;
+#if QT_VERSION >= 141
+    case PG_DIN_A5: prt.setPageSize(QPrinter::A5);
+      break;
+#endif
+    case PG_US_LETTER: prt.setPageSize(QPrinter::Letter);
+      break;
+    case PG_US_LEGAL: prt.setPageSize(QPrinter::Legal);
+      break;
+    case PG_US_EXECUTIVE: prt.setPageSize(QPrinter::Executive);
+      break;
+    case PG_DIN_B5: prt.setPageSize(QPrinter::B5);
+      break;
+    case PG_SCREEN:
+      {
+	warning(i18n("You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!"));
+	prt.setPageSize(QPrinter::A4);
+	makeLandscape = true;
+      }	break;
+    default:
+      {
+	warning(i18n("The used page layout is not supported by QPrinter. I set it to DIN A4."));
+	prt.setPageSize(QPrinter::A4);
+      } break;
+    }
+
+  switch (pgLayout.orientation)
+    {
+    case PG_PORTRAIT: prt.setOrientation(QPrinter::Portrait);
+      break;
+    case PG_LANDSCAPE: prt.setOrientation(QPrinter::Landscape);
+      break;
+    }
+
+  float left_margin = 0.0;
+  float top_margin = 0.0;
+
+  if (makeLandscape) 
+    {
+      prt.setOrientation(QPrinter::Landscape);
+      left_margin = 28.5;
+      top_margin = 15.0;
+    }
+
+  if (prt.setup(this))
+    {    
+      QPainter painter;
+      painter.begin(&prt);
+      //page->print(&painter,&prt,left_margin,top_margin);
+      painter.end();
+    }
+  return true;
+}
+
 /*================================================================*/
 void KWordView_impl::construct()
 {
@@ -448,8 +521,13 @@ void KWordView_impl::formatPage()
   m_pKWordDoc->getPageLayout(pgLayout,cl);
 
   KoHeadFoot hf;
+  int flags = FORMAT_AND_BORDERS;
+  if (m_pKWordDoc->getProcessingType() == KWordDocument_impl::WP)
+    flags = flags | COLUMNS;
+  else
+    flags = flags | DISABLE_BORDERS;
   
-  if (KoPageLayoutDia::pageLayout(pgLayout,hf,cl,FORMAT_AND_BORDERS | COLUMNS)) 
+  if (KoPageLayoutDia::pageLayout(pgLayout,hf,cl,flags)) 
     {
       m_pKWordDoc->setPageLayout(pgLayout,cl);
       gui->getVertRuler()->setPageLayout(pgLayout);
@@ -1431,6 +1509,9 @@ void KWordView_impl::newPageLayout(KoPageLayout _layout)
   m_pKWordDoc->setPageLayout(_layout,cl);
   gui->getHorzRuler()->setPageLayout(_layout);
   gui->getVertRuler()->setPageLayout(_layout);
+
+  if (m_pKWordDoc->getProcessingType() == KWordDocument_impl::DTP)
+    gui->getPaperWidget()->frameSizeChanged(_layout);
 }
 
 /*================================================================*/
@@ -1507,6 +1588,12 @@ KWordGUI::KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordVie
   r_horz->setLeftIndent(static_cast<int>(paperWidget->getLeftIndent()));
   r_horz->setFirstIndent(static_cast<int>(paperWidget->getFirstLineIndent()));
 
+//   if (doc->getProcessingType() == KWordDocument_impl::DTP)
+//     {
+//       connect(r_horz,SIGNAL(newPageLayout(KoPageLayout)),paperWidget,SLOT(frameSizeChanged(KoPageLayout)));
+//       connect(r_vert,SIGNAL(newPageLayout(KoPageLayout)),paperWidget,SLOT(frameSizeChanged(KoPageLayout)));
+//     }
+
   r_horz->hide();
   r_vert->hide();
 
@@ -1522,6 +1609,8 @@ KWordGUI::KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordVie
   paperWidget->setYOffset(yOffset);
 
   reorganize();
+
+  paperWidget->setRuler2Frame(0,0);
 
   // HACK
   if (doc->getNumViews() == 1)
@@ -1552,7 +1641,7 @@ void KWordGUI::setRanges()
       int range;
       
       s_vert->setSteps(10,hei);
-      range = (hei * 10 - paperWidget->height());
+      range = (hei * doc->getPages() - paperWidget->height());
       s_vert->setRange(0,range);
 
       s_horz->setSteps(10,wid);

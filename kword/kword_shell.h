@@ -44,6 +44,7 @@ public:
   virtual bool saveDocument(const char *_file,const char *_format);
 
   virtual void fileNew();
+  virtual bool printDlg();
 
   virtual void cleanUp();
   

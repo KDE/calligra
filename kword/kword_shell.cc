@@ -104,3 +104,11 @@ void KWordShell_impl::fileNew()
   m_rToolBarFile->setItemEnabled(m_idButtonFile_Save,true);
   m_rToolBarFile->setFullWidth(false);
 }
+
+/*========================= file print ===========================*/
+bool KWordShell_impl::printDlg()
+{
+  assert(!CORBA::is_nil(m_vView));
+
+  return m_vView->printDlg();
+}

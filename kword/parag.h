@@ -9,6 +9,7 @@ class KWordDocument_impl;
 #include "fc.h"
 #include "char.h"
 #include "formatcollection.h"
+#include "frame.h"
 
 #include <assert.h>
 #include <iostream>
@@ -33,7 +34,7 @@ public:
      *
      * @see KWParagraphLayout
      */
-    KWParag( KWordDocument_impl *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout );
+    KWParag(KWTextFrameSet *_frameSet, KWordDocument_impl *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout );
     /**
      * Desctructor
      *
@@ -54,16 +55,17 @@ public:
      *         in front of the last modified paragraph. The value is zoomed.
      */
     unsigned int getStartPage() { return startPage; }
+    unsigned int getEndPage() { return endPage; }
     /**
      * @return The column this paragraph starts in. This value is only valid if this paragraph is
      *         in front of the last modified paragraph. The value is zoomed.
      */
-    unsigned int getStartColumn() { return startColumn; }
+    unsigned int getStartFrame() { return startFrame; }
     /**
      * @return The column this paragraph ends in. This value is only valid if this paragraph is
      *         in front of the last modified paragraph. The value is zoomed.
      */
-    unsigned int getEndColumn() { return endColumn; }
+    unsigned int getEndFrame() { return endFrame; }
     /**
      * @return The y position on the page on which this paragraph starts.
      *         This value is only valid if this paragraph is in front of the last modified paragraph.
@@ -116,7 +118,9 @@ public:
     void setPrev( KWParag* _p ) { prev = _p; }
 
     void setStartPage( unsigned int _page ) { startPage = _page; }
-    void setStartColumn( unsigned int _col ) { startColumn = _col; }    
+    void setEndPage( unsigned int _page ) { endPage = _page; }
+    void setStartFrame( unsigned int _frame ) { startFrame = _frame; }    
+    void setEndFrame( unsigned int _frame ) { endFrame = _frame; }    
     void setPTYStart( unsigned int _y ) { ptYStart = _y; }
 
     void insertText( unsigned int _pos, const char *_text);
@@ -165,16 +169,17 @@ protected:
      * in front of the last modified paragraph. The value is zoomed.
      */
     unsigned int startPage;
+    unsigned int endPage;
     /**
      * The column this paragraph starts in. This value is only valid if this paragraph is
      * in front of the last modified paragraph. The value is zoomed.
      */
-    unsigned int startColumn;
+    unsigned int startFrame;
     /**
      * The column this paragraph ends in. This value is only valid if this paragraph is
      * in front of the last modified paragraph. The value is zoomed.
      */
-    unsigned int endColumn;
+    unsigned int endFrame;
     /**
      * The y position on the page on which this paragraph starts.
      * This value is only valid if this paragraph is in front of the last modified paragraph.
@@ -190,6 +195,8 @@ protected:
 
     unsigned short counters[ 10 ];
     unsigned short numberLikeCounters[ 10 ];
+
+    KWTextFrameSet *frameSet;
 };
 
 #endif

@@ -780,23 +780,23 @@ bool KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool clean=f
 {
   QString templateDir = KApplication::kde_datadir();
 
-  QString file = KFilePreviewDialog::getOpenFileName(templateDir + "/kpresenter/templates/plain.kpt","*.kpt|KPresenter templates",0);
-  _clean = clean;
-  objStartY = getPageSize(_backgroundList.count() - 1,0,0).y() + getPageSize(_backgroundList.count() - 1,0,0).height();
+  QString _template;
+  QString _templatePath = kapp->kde_datadir() + "/kpresenter/templates/";
 
-  if (!file.isEmpty()) load_template(file);
-  else 
+  if (KoTemplateChooseDia::chooseTemplate(_templatePath,_template))
     {
+      QFileInfo fileInfo(_template);
+      QString fileName(_templatePath + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".kpt");
+      _clean = clean;
+      objStartY = getPageSize(_backgroundList.count() - 1,0,0).y() + getPageSize(_backgroundList.count() - 1,0,0).height();
+      load_template(fileName.data());
       objStartY = 0;
       _clean = true;
-      return false;
+      m_bModified = true;
+      return true;
     }
-
-  objStartY = 0;
-  _clean = true;
-
-  m_bModified = true;
-  return true;
+  else
+    return false;
 }
 
 /*==================== set background color ======================*/

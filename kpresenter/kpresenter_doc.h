@@ -47,6 +47,7 @@ class KPresenterView_impl;
 #include <koIMR.h>
 #include <koDocument.h>
 #include <koPrintExt.h>
+#include <koTemplateChooseDia.h>
 
 #include <kurl.h>
 

@@ -390,6 +390,7 @@ void KPresenterView_impl::insertAutoform()
       afChoose = 0;
     }
   afChoose = new AFChoose(0,i18n("Autoform-Choose"));
+  afChoose->resize(400,300);
   afChoose->setCaption(i18n("KPresenter - Insert an Autoform"));
   afChoose->setMaximumSize(afChoose->width(),afChoose->height());
   afChoose->setMinimumSize(afChoose->width(),afChoose->height());

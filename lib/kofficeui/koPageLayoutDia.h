@@ -55,6 +55,7 @@
 const int FORMAT_AND_BORDERS = 1;
 const int HEADER_AND_FOOTER = 2;
 const int COLUMNS = 4;
+const int DISABLE_BORDERS = 8;
 
 enum KoFormat {PG_DIN_A3 = 0,PG_DIN_A4 = 1,PG_DIN_A5 = 2,PG_US_LETTER = 3,PG_US_LEGAL = 4,PG_SCREEN = 5,PG_CUSTOM = 6,PG_DIN_B5 = 7,PG_US_EXECUTIVE = 8};
 enum KoOrientation {PG_PORTRAIT = 0,PG_LANDSCAPE = 1};
@@ -68,6 +69,25 @@ struct KoPageLayout
   double width,height;
   double left,right,top,bottom;
   KoUnit unit;
+
+  bool operator==(const KoPageLayout _l) {
+    return (_l.format == format &&
+	    _l.orientation == orientation &&
+	    _l.width == width &&
+	    _l.height == height &&
+	    _l.left == left && _l.right == right &&
+	    _l.top == top && _l.bottom == bottom &&
+	    _l.unit == unit);
+  }
+  bool operator!=(const KoPageLayout _l) {
+    return (_l.format != format &&
+	    _l.orientation != orientation ||
+	    _l.width != width ||
+	    _l.height != height ||
+	    _l.left != left || _l.right != right ||
+	    _l.top != top || _l.bottom != bottom ||
+	    _l.unit != unit);
+  }
 };
 
 // structure for header-footer
@@ -177,6 +197,7 @@ protected:
   KoColumns cl;
 
   bool retPressed;
+  bool enableBorders;
 
 private slots:     
 

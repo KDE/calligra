@@ -26,7 +26,7 @@ class KWFormatContext : public KWFormat
 public:
     enum LayoutError { COLUMN_TOO_TALL, PAPER_HEIGHT_TOO_SMALL, NO_ERROR };
 
-    KWFormatContext( KWordDocument_impl *_doc );
+    KWFormatContext(KWordDocument_impl *_doc,unsigned int _frameSet);
     ~KWFormatContext();
 
     void init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true );
@@ -104,7 +104,9 @@ public:
      *
      * @see #column
      */
-    unsigned int getColumn() { return column; }
+  //unsigned int getColumn() { return column; }
+    unsigned int getFrameSet() { return frameSet; }
+    unsigned int getFrame() { return frame; }
 
     /**
      * @return the text that represents the counter
@@ -166,6 +168,8 @@ public:
 
     void selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPainter &painter);
 
+    void setFrameSet(unsigned int _frameSet) { frameSet = _frameSet; }
+
 protected:
     unsigned int ptTextLen;
     unsigned int ptAscender;
@@ -178,9 +182,11 @@ protected:
     unsigned int WantedPtPos;
     bool during_vertical_cursor_movement;
     unsigned int specialHeight;
+    unsigned int frameSet;
+    unsigned int frame;
     
     unsigned int page;
-    unsigned int column;
+  //unsigned int column;
     
     unsigned int lineStartPos;
     KWFormat lineStartFormat;
@@ -251,7 +257,7 @@ protected:
      * We store all paragraph counters in this array.
      */
     unsigned short counters[8][8];
-
+    bool compare_formats;
 };
 
 #endif

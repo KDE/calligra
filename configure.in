@@ -68,12 +68,16 @@ AC_OUTPUT( \
 	kpresenter/autoforms/Makefile \
 	kpresenter/pics/Makefile \
 	kpresenter/templates/Makefile \
+	kpresenter/templates/Screenpresentations/Makefile \
 	kpresenter/toolbar/Makefile \
 	kspread/Makefile \
 	kspread/pics/Makefile \
 	kspread/scripts/Makefile \
 	kword/Makefile \
 	kword/toolbar/Makefile \
+	kword/templates/Makefile \
+	kword/templates/Wordprocessing/Makefile \
+	kword/templates/DTP/Makefile \
 	lib/Makefile \
 	lib/kofficecore/Makefile \
 	lib/kofficeui/Makefile \

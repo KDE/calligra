@@ -9,7 +9,8 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
-KWFormatContext::KWFormatContext( KWordDocument_impl *_doc ) : KWFormat()
+KWFormatContext::KWFormatContext(KWordDocument_impl *_doc,unsigned int _frameSet) 
+  : KWFormat()
 {
   displayFont = 0;
   setDefaults( _doc );
@@ -31,6 +32,9 @@ KWFormatContext::KWFormatContext( KWordDocument_impl *_doc ) : KWFormat()
   specialHeight = 0;
   ptMaxAscender = 0;
   ptMaxDescender = 0;
+  frameSet = _frameSet;
+  frame = 1;
+  compare_formats = true;
 }
 
 KWFormatContext::~KWFormatContext()
@@ -44,8 +48,10 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
   ptMaxAscender = 0;
   ptMaxDescender = 0;
     // Offset from the top of the page
-    ptY = document->getPTTopBorder();
-    column = 1;
+  //ptY = document->getPTTopBorder();
+    ptY = document->getFrameSet(frameSet - 1)->getFrame(0).top();
+    //column = 1;
+    frame = 1;
     page = 1;
 
     // Enter the first paragraph
@@ -79,11 +85,13 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
       }
     }
     else
-      parag = document->getFirstParag();
+      parag = dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag();
     // On which page are we now ...
     parag->setStartPage( page );
+    parag->setEndPage( page );
     // In which column ...
-    parag->setStartColumn( column );
+    parag->setStartFrame( frame );
+    parag->setEndFrame( frame );
     // Vertical position ...
     parag->setPTYStart( ptY );
 
@@ -528,7 +536,7 @@ void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPaint
 {
   textPos = 0;
 
-  init(document->getFirstParag(),_painter);
+  init(dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(),_painter);
   
   if (ptY <= my && ptY + getLineHeight() >= my &&
       ptLeft <= mx && ptLeft + ptWidth >= mx)
@@ -631,6 +639,7 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
     {
 	if ( parag->getNext() == 0L )
 	    return FALSE;
+	else
 	ptY += getLineHeight();
 	enterNextParag( _painter );
     }
@@ -646,6 +655,7 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 
 bool KWFormatContext::makeLineLayout( QPainter &_painter )
 {
+    compare_formats = false;
     ptTextLen = 0;
     specialHeight = 0;
 
@@ -686,11 +696,10 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
       indent = parag->getParagLayout()->getPTLeftIndent();
     
     // Calculate the shift for the first visible character. This may be the counter, too
-    unsigned int xShift = document->getPTLeftBorder() + ( column - 1 ) * ( document->getPTColumnWidth() + document->getPTColumnSpacing() )
-      + indent;
+    unsigned int xShift = document->getFrameSet(frameSet - 1)->getFrame(frame - 1).left() + indent;
 
     ptLeft = xShift;
-    ptWidth = document->getPTColumnWidth() - indent;
+    ptWidth = document->getFrameSet(frameSet - 1)->getFrame(frame - 1).width() - indent;
 
     // First line ? Draw the couter ?
     if ( lineStartPos == 0 && parag->getParagLayout()->getCounterNr() != -1 )
@@ -735,7 +744,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     }
     else
     { // the counter is fixed to the right side
-	ptCounterPos = xShift + document->getPTColumnWidth() - ptCounterWidth; // Attention!
+	ptCounterPos = xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1).width() - ptCounterWidth; // Attention!
     }
     
     // Get the correct font
@@ -751,7 +760,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     lineStartFormat = *this;
     
     // Loop until we reach the end of line
-    while( ptPos < xShift + document->getPTColumnWidth() - indent  && textPos < parag->getTextLen() )
+    while( ptPos < xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1).width() - indent  && textPos < parag->getTextLen() )
     {
 	char c = text[ textPos ].c;
 
@@ -768,12 +777,13 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	// if we will not fit into the line anymore, let us leave the loop
 	if (c != 0)
 	  {
-	    if (ptPos + font->getPTWidth(c) >= xShift + document->getPTColumnWidth() - indent)
+	    if (ptPos + font->getPTWidth(c) >= xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1).width() - indent)
 	      break;
 	  }
 	else
 	  {
-	    if (((KWCharImage*)text[textPos].attrib)->getImage()->width() + ptPos >= xShift + document->getPTColumnWidth() - indent)
+	    if (((KWCharImage*)text[textPos].attrib)->getImage()->width() + ptPos >= 
+		xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1).width() - indent)
 	      break;
 	  }
 
@@ -784,12 +794,12 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	    lineEndPos = textPos + 1;
 	    // If we break here, then the line has the following width ...
 	    ptTextLen = tmpPTWidth;
-	    ptAscender = tmpPTAscender;
-	    ptDescender = tmpPTDescender;
-	    if ( ptAscender > ptMaxAscender )
-		ptMaxAscender = ptAscender;
-	    if ( ptDescender > ptMaxDescender )
-		ptMaxDescender = ptDescender;
+// 	    ptAscender = tmpPTAscender;
+// 	    ptDescender = tmpPTDescender;
+// 	    if ( ptAscender > ptMaxAscender )
+// 		ptMaxAscender = ptAscender;
+// 	    if ( ptDescender > ptMaxDescender )
+// 		ptMaxDescender = ptDescender;
 	    // The amount of spaces in the line if
 	    // we do a line break here ...
 	    spaces = tmpSpaces;
@@ -817,7 +827,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     }
 
     // Are we at the paragraphs end ?
-    if ( textPos == parag->getTextLen() )
+    if ( textPos == parag->getTextLen())
     {
 	// We have to take the last possible linebreak
 	lineEndPos = textPos;
@@ -833,41 +843,51 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     
     if ( parag->getParagLayout()->getFlow() == KWParagLayout::CENTER )
       {
-	ptPos = xShift + ( document->getPTColumnWidth() - indent - left - right - ptTextLen ) / 2;
+	ptPos = xShift + ( document->getFrameSet(frameSet - 1)->getFrame(frame - 1).width() - indent - left - right - ptTextLen ) / 2;
 	ptStartPos = ptPos;
       }
     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT )
       {      
-	ptPos = xShift + document->getPTColumnWidth() - right - ptTextLen - indent;
+	ptPos = xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1).width() - right - ptTextLen - indent;
 	ptStartPos = ptPos;
       }
 
     // Calculate the space between words if we have "block" formating.
     if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK && spaces > 0)
-      ptSpacing = (float)( document->getPTColumnWidth() - ptTextLen - indent) / (float)spaces;
+      ptSpacing = (float)( document->getFrameSet(frameSet - 1)->getFrame(frame - 1).width() - ptTextLen - indent) / (float)spaces;
     else
       ptSpacing = 0;
 
-    // Does this line still fit on this column/page ?
-    if ( !document->isPTYIn( page, ptY + getLineHeight() ) )
+    // Does this line still fit on this frame ?
+    if (!document->isPTYInFrame(frameSet - 1,frame - 1,ptY + getLineHeight()))
     {
-	// Can we jump to the next column ?
-	if ( column < document->getColumns() )
+	// Can we jump to the next frame ?
+	if (frame < document->getFrameSet(frameSet - 1)->getNumFrames())
 	{
-	    ptY = document->getPTPaperHeight() * ( page - 1 ) + document->getPTTopBorder();
-	    column++;
+	    frame++;
+	    if (document->getFrameSet(frameSet - 1)->getFrame(frame - 1).top() >
+		static_cast<int>(page) * static_cast<int>(document->getPTPaperHeight()))
+	      page++;
+	    parag->setEndPage(page);
+	    parag->setEndFrame(page);
+	    ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1).top();
 	    return makeLineLayout(_painter);
 	}
-	else // We chnage to another page
+	else // append a page
 	{
-	    column = 1;
+	    document->appendPage(page - 1,_painter);
 	    page++;
-	    ptY = document->getPTPaperHeight() * ( page - 1 ) + document->getPTTopBorder();
+	    frame++;
+	    parag->setEndPage(page);
+	    parag->setEndFrame(page);
+	    ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1).top();
 	    return makeLineLayout(_painter);
 	}
     }
 
     //debug("start: %d, end: %d",lineStartPos,lineEndPos);
+
+    compare_formats = true;
 
     // If we are in the last line, return FALSE
     if ( lineEndPos == parag->getTextLen() )
@@ -905,7 +925,7 @@ void KWFormatContext::makeCounterLayout( QPainter &_painter )
 
 void KWFormatContext::apply( KWFormat &_format )
 {
-  if (_format == *((KWFormat*)this)) return;
+  if (compare_formats && _format == *((KWFormat*)this)) return;
 
   KWFormat::apply(_format);
   if (displayFont)
@@ -943,7 +963,7 @@ void KWFormatContext::selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPa
   KWChar *text = parag->getText();
   bool goLeft = false;
 
-  KWFormatContext fc(document);
+  KWFormatContext fc(document,frameSet);
   fc = *this;
 
   if (text[textPos].c == ' ')

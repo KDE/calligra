@@ -21,6 +21,7 @@
 #include "format.h"
 #include "paraglayout.h"
 #include "char.h"
+#include "frame.h"
 
 #include <qevent.h>
 #include <math.h>
@@ -118,7 +119,7 @@ public:
     { return fc->getParag()->getParagLayout()->getPTLineSpacing(); }
 
 
-  void recalcCursor(bool _repaint = true,int _pos = -1);
+  void recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_fc = 0L);
 
   int getVertRulerPos();
 
@@ -129,12 +130,15 @@ public:
   void editPaste(QString _string);
 
   void recalcText();
-
+  void drawBorders(QPainter &_painter,QRect v_area);
+  void setRuler2Frame(unsigned int _frameset,unsigned int _frame);
+  
 public slots:
   void newLeftIndent(int _left)
     { setLeftIndent(static_cast<float>(_left)); }
   void newFirstIndent(int _first)
     { setFirstLineIndent(static_cast<float>(_first)); }
+  void frameSizeChanged(KoPageLayout);
 
 protected:
   unsigned int ptLeftBorder();
@@ -151,8 +155,6 @@ protected:
   void focusInEvent(QFocusEvent *) {}
   void focusOutEvent(QFocusEvent *) {}
 
-  void drawBorders(QPainter &_painter);
-
   /**
    * Looks at 'yOffset' and 'paperHeight' and calculates the first and
    * last visible pages. The values are stored in 'firstVisiblePage' and
@@ -166,8 +168,9 @@ protected:
   void calcVisiblePages();
 
   void drawBuffer();
+  void drawBuffer(QRect _rect);
   void copyBuffer();
-  
+
   KWordDocument_impl *doc;
   bool markerIsVisible;
   bool paint_directly,has_to_copy;
@@ -202,7 +205,7 @@ protected:
   
   bool mousePressed;
   bool inKeyEvent;
-
+  
 };
 
 #endif

@@ -131,6 +131,9 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
   hf = _hf;
   cl = _cl;
 
+  enableBorders = true;
+
+  if (tabs & DISABLE_BORDERS) enableBorders = false;
   if (tabs & FORMAT_AND_BORDERS) setupTab1();
   if (tabs & HEADER_AND_FOOTER) setupTab2();
   if (tabs & COLUMNS) setupTab3();
@@ -372,6 +375,7 @@ void KoPageLayoutDia::setupTab1()
   connect(ebrLeft,SIGNAL(returnPressed()),this,SLOT(rPressed()));
   connect(ebrLeft,SIGNAL(returnPressed()),this,SLOT(leftChanged()));
   connect(ebrLeft,SIGNAL(textChanged(const char*)),this,SLOT(leftChanged()));
+  if (!enableBorders) ebrLeft->setEnabled(false);
 
   // label right
   lbrRight = new QLabel(i18n("\nRight:"),borderFrame);
@@ -389,6 +393,7 @@ void KoPageLayoutDia::setupTab1()
   connect(ebrRight,SIGNAL(returnPressed()),this,SLOT(rPressed()));
   connect(ebrRight,SIGNAL(returnPressed()),this,SLOT(rightChanged()));
   connect(ebrRight,SIGNAL(textChanged(const char*)),this,SLOT(rightChanged()));
+  if (!enableBorders) ebrRight->setEnabled(false);
 
   // label top
   lbrTop = new QLabel(i18n("Top:"),borderFrame);
@@ -406,6 +411,7 @@ void KoPageLayoutDia::setupTab1()
   connect(ebrTop,SIGNAL(returnPressed()),this,SLOT(rPressed()));
   connect(ebrTop,SIGNAL(returnPressed()),this,SLOT(topChanged()));
   connect(ebrTop,SIGNAL(textChanged(const char*)),this,SLOT(topChanged()));
+  if (!enableBorders) ebrTop->setEnabled(false);
 
   // label bottom
   lbrBottom = new QLabel(i18n("Bottom:"),borderFrame);
@@ -423,6 +429,7 @@ void KoPageLayoutDia::setupTab1()
   connect(ebrBottom,SIGNAL(returnPressed()),this,SLOT(rPressed()));
   connect(ebrBottom,SIGNAL(returnPressed()),this,SLOT(bottomChanged()));
   connect(ebrBottom,SIGNAL(textChanged(const char*)),this,SLOT(bottomChanged()));
+  if (!enableBorders) ebrBottom->setEnabled(false);
 
   // grid col spacing
   borderGrid->addColSpacing(0,lbrLeft->width());

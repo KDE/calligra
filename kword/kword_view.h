@@ -148,6 +148,7 @@ public:
 
   // C++
   virtual void setDocument(KWordDocument_impl *_doc);
+  virtual CORBA::Boolean KWordView_impl::printDlg();
 
   virtual void createGUI();
   virtual void construct();

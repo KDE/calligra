@@ -1,7 +1,7 @@
 
 INCLUDES = -I../lib/kofficecore -I../lib/kofficeui \
-	-I../lib/koml $(all_includes) $(MICO_INCLUDES) -I$(idldir)
-LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
+	-I../lib/koml $(all_includes) $(MICO_INCLUDES) -I$(idldir) -g
+LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH) -g
 LDADD = ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
 	-lop -lkfile -lkfm -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
@@ -14,12 +14,12 @@ bin_PROGRAMS = kword.bin
 kword_bin_SOURCES = char.cc kword_main.cc kword_doc.cc kword_view.cc kword.cc kword_shell.cc \
 		fc.cc font.cc format.cc kword_page.cc parag.cc paraglayout.cc \
 		formatcollection.cc paragdia.cc imagecollection.cc image.cc \
-		jpeg.cc formats.cc
+		jpeg.cc formats.cc frame.cc
 
 noinst_HEADERS = char.h kword_main.h kword_doc.h kword_view.h kword.h kword_shell.h \
 		fc.h font.h format.h kword_page.h parag.h paraglayout.h \
 		formatcollection.h paragdia.h imagecollection.h image.h \
-		jpeg.h formats.h
+		jpeg.h formats.h frame.h
 
 SRCMETA =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc kword_page.moc
 
@@ -31,7 +31,7 @@ idl_HEADERS =  kword.h
 kdelnk_DATA = kword_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = toolbar
+SUBDIRS = toolbar templates
 
 ####### Implicit rules
 
@@ -73,4 +73,6 @@ kword_page.cc: kword_page.moc
 imagecollection.cc: imagecollection.h
 image.cc: image.h
 kword_view.h: kword.h
+frame.cc: frame.h
+
 

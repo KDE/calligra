@@ -19,6 +19,9 @@
 #include <koIMR.h>
 #include <komlMime.h>
 #include <koStream.h>
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <komlWriter.h>
 
 #include <kurl.h>
 
@@ -61,7 +64,7 @@ KWordChild::~KWordChild()
 
 /*================================================================*/
 KWordDocument_impl::KWordDocument_impl()
-  : formatCollection(this), imageCollection(this), selStart(this), selEnd(this)
+  : formatCollection(this), imageCollection(this), selStart(this,1), selEnd(this,1)
 {
   ADD_INTERFACE("IDL:OPParts/Print:1.0");
 
@@ -96,63 +99,90 @@ CORBA::Boolean KWordDocument_impl::init()
   pageColumns.columns = 1; //STANDARD_COLUMNS;
   pageColumns.columnSpacing = STANDARD_COLUMN_SPACING;
 
-  calcColumnWidth();
+  QString _template;
+  QString _templatePath = kapp->kde_datadir() + "/kword/templates/";
 
-  KWParag *p = new KWParag(this,0L,0L,defaultParagLayout);
-  p->insertText(0," ");
-
-  //   parags->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-
-//   for (int i = 0;i < 500;i++)
-//     {
-//       p = new KWParag( this, p, 0L, defaultParagLayout );
-//       p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen.");
-//       KWFormat *format = new KWFormat(this);
-//       format->setDefaults(this);
-//       p->setFormat(0,strlen("Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen."),*format);
-//     }
-
-//   debug("insert text");
-
-//   for (int i = 0;i < 50;i++)
-//     {
-//       p = new KWParag( this, p, 0L, defaultParagLayout );
-//       p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung.");
-//       KWFormat *format = new KWFormat(this);
-//       format->setDefaults(this);
-//       p->setFormat(0,strlen("Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung."),*format);
-//     }
-
-      //   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
-//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+  if (KoTemplateChooseDia::chooseTemplate(_templatePath,_template))
+    {
+      QFileInfo fileInfo(_template);
+      QString fileName(_templatePath + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".kwt");
+      loadTemplate(fileName.data());
+    }
+  else
+    debug("no template chosen");
 
   return true;
+}
+
+/*================================================================*/
+bool KWordDocument_impl::loadTemplate(const char *_url)
+{
+  KURL u(_url);
+  if (u.isMalformed())
+    return false;
+  
+  if (!u.isLocalFile())
+    {
+      cerr << "Can not open remote URL" << endl;
+      return false;
+    }
+
+  ifstream in(u.path());
+  if (!in)
+    {
+      cerr << "Could not open" << u.path() << endl;
+      return false;
+    }
+
+  KOMLStreamFeed feed(in);
+  KOMLParser parser(&feed);
+  
+  if (!load(parser))
+    return false;
+ 
+  m_bModified = true;
+  return true;
+}
+
+/*================================================================*/
+void KWordDocument_impl::setPageLayout(KoPageLayout _layout,KoColumns _cl)
+{ 
+  if (processingType == WP)
+    {
+      pageLayout = _layout; 
+      pageColumns = _cl; 
+    }
+  else
+    {
+      pageLayout = _layout; 
+      pageLayout.left = 0;
+      pageLayout.right = 0;
+      pageLayout.top = 0;
+      pageLayout.bottom = 0;
+    }
+
+  if (processingType == WP)
+    recalcFrames();
+
+  updateAllCursors(); 
+}
+
+/*================================================================*/
+void KWordDocument_impl::recalcFrames()
+{
+  pages = 1;
+  KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet*>(frames.at(0));
+ 
+  unsigned int frms = frameset->getNumFrames();
+
+  ptColumnWidth = (getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder() - getPTColumnSpacing() * (pageColumns.columns - 1)) 
+    / pageColumns.columns;
+ 
+  for (int i = 0;i < pageColumns.columns;i++)
+    frameset->addFrame(QRect(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),getPTTopBorder(),
+			     ptColumnWidth,getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder()));
+  for (unsigned int j = 0;j < frms;j++)
+    frameset->delFrame(0);
 }
 
 /*================================================================*/
@@ -204,7 +234,25 @@ bool KWordDocument_impl::loadChildren(OPParts::MimeMultipartDict_ptr _dict)
 /*================================================================*/
 bool KWordDocument_impl::load(KOMLParser& parser)
 {
-  init();
+  pageLayout.format = PG_DIN_A4;
+  pageLayout.orientation = PG_PORTRAIT;
+  pageLayout.width = PG_A4_WIDTH;
+  pageLayout.height = PG_A4_HEIGHT;
+  pageLayout.left = DEFAULT_LEFT_BORDER;
+  pageLayout.right = DEFAULT_RIGHT_BORDER;
+  pageLayout.top = DEFAULT_TOP_BORDER;
+  pageLayout.bottom = DEFAULT_BOTTOM_BORDER;  
+  pageLayout.unit = PG_MM;
+
+  defaultUserFont = new KWUserFont(this,"times");
+  defaultParagLayout = new KWParagLayout(this);
+  defaultParagLayout->setName("Standard");
+  defaultParagLayout->setCounterNr(-1);
+    
+  pages = 1;
+
+  pageColumns.columns = 1; //STANDARD_COLUMNS;
+  pageColumns.columnSpacing = STANDARD_COLUMN_SPACING;
 
   string tag;
   vector<KOMLAttrib> lst;
@@ -303,14 +351,27 @@ bool KWordDocument_impl::load(KOMLParser& parser)
 
 	}
       
-      else if (name == "PARAGRAPHS")
+      else if (name == "ATTRIBUTES")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "processing")
+		processingType = static_cast<ProcessingType>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "standardpage")
+		  ;
+	    }
+	}
+
+      else if (name == "FRAMESETS")
 	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
 	    }
-	  loadParagraphs(parser,lst);
+	  loadFrameSets(parser,lst);
 	}
 
       else
@@ -329,45 +390,41 @@ bool KWordDocument_impl::load(KOMLParser& parser)
 }
 
 /*================================================================*/
-void KWordDocument_impl::loadParagraphs(KOMLParser& parser,vector<KOMLAttrib>& lst)
+void KWordDocument_impl::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
   string name;
-
-  KWParag *last = 0L;
 
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
       
       // paragraph
-      if (name == "PARAGRAPH")
+      if (name == "FRAMESET")
 	{    
+	  FrameType frameType = FT_BASE;
+
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
+	      if ((*it).m_strName == "frameType")
+		frameType = static_cast<FrameType>(atoi((*it).m_strValue.c_str()));
 	    }
 
-	  if (!last)
+	  switch (frameType)
 	    {
-	      delete parags;
-	      parags = new KWParag(this,0L,0L,defaultParagLayout);
-	      parags->insertText(0," ");
-	      KWFormat *format = new KWFormat(this);
-	      format->setDefaults(this);
-	      parags->setFormat(0,1,*format);
-	      parags->load(parser,lst);
-	      last = parags;
-	    }
-	  else
-	    {
-	      last = new KWParag(this,last,0L,defaultParagLayout);
-	      last->load(parser,lst);
+	    case FT_TEXT:
+	      {
+		KWTextFrameSet *frame = new KWTextFrameSet(this);
+		frame->load(parser,lst);
+		frames.append(frame);
+	      } break;
+	    default: break;
 	    }
 	}
       else
-	cerr << "Unknown tag '" << tag << "' in PARAGRAPHS" << endl;    
+	cerr << "Unknown tag '" << tag << "' in FRAMESETS" << endl;    
       
       if (!parser.close(tag))
 	{
@@ -389,18 +446,18 @@ bool KWordDocument_impl::save(ostream &out)
   out << indent << "<PAPERBORDERS left=\"" << pageLayout.left << "\" top=\"" << pageLayout.top << "\" right=\"" << pageLayout.right
       << "\" bottom=\"" << pageLayout.bottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
+  out << indent << "<ATTRIBUTES processing=\"" << static_cast<int>(processingType) << "\" standardpage=\"" << 1 << "\"/>" << endl;
 
-  out << otag << "<PARAGRAPHS>" << endl;
+  out << otag << "<FRAMESETS>" << endl;
 
-  KWParag *parag = getFirstParag();
-  while (parag)
+  KWFrameSet *frameSet = 0L;
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
-      out << otag << "<PARAGRAPH>" << endl;
-      parag->save(out);
-      parag = parag->getNext();
-      out << etag << "</PARAGRAPH>" << endl;
+      frameSet = getFrameSet(i);
+      frameSet->save(out);
     }
-  out << etag << "</PARAGRAPHS>" << endl;
+
+  out << etag << "</FRAMESETS>" << endl;
 
   // Write "OBJECT" tag for every child
   QListIterator<KWordChild> chl(m_lstChildren);
@@ -593,33 +650,28 @@ KWParagLayout* KWordDocument_impl::findParagLayout(const char *_name)
 
 
 /*================================================================*/
-void KWordDocument_impl::calcColumnWidth()
+// void KWordDocument_impl::calcColumnWidth()
+// {
+//   ptColumnWidth = (getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder() - getPTColumnSpacing() * (pageColumns.columns - 1)) 
+//     / pageColumns.columns;
+// }
+
+/*================================================================*/
+bool KWordDocument_impl::isPTYInFrame(unsigned int _frameSet,unsigned int _frame,unsigned int _ypos)
 {
-  ptColumnWidth = (getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder() - getPTColumnSpacing() * (pageColumns.columns - 1)) 
-    / pageColumns.columns;
+  return frames.at(_frameSet)->isPTYInFrame(_frame,_ypos);
 }
 
 /*================================================================*/
-bool KWordDocument_impl::isPTYIn(unsigned int _page,unsigned int _ypos)
+KWParag* KWordDocument_impl::findFirstParagOfPage(unsigned int _page,unsigned int _frameset)
 {
-  // Calculate the y-coordinate relative to page '_page'.
-  unsigned int y = _ypos - (_page - 1) * getPTPaperHeight();
-    
-  // Is y inside the printable area of the paper ?
-  if (y >= getPTTopBorder() && y <= getPTPaperHeight() - getPTBottomBorder())
-    return true;
-    
-  return false;
-}
+  if (frames.at(_frameset)->getFrameType() != FT_TEXT) return 0L;
 
-/*================================================================*/
-KWParag* KWordDocument_impl::findFirstParagOfPage(unsigned int _page)
-{
-  KWParag *p = parags;
+  KWParag *p = dynamic_cast<KWTextFrameSet*>(frames.at(_frameset))->getFirstParag();
   while (p)
     {
-      if (p->getStartPage() == _page)
-	return p;
+      if (p->getEndPage() == _page || p->getStartPage() == _page)
+ 	return p;
       p = p->getNext();
     }
   
@@ -631,17 +683,20 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 {
   _painter.save();
 
-  unsigned int xShift = getPTLeftBorder() + ( _fc.getColumn() - 1 ) * ( getPTColumnWidth() + getPTColumnSpacing() );
-  QRegion cr = QRegion(xShift - xOffset - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth - 
-		       _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2,
+  unsigned int xShift = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).left();
+
+  QRegion cr = QRegion(xShift - xOffset - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2 -
+		       _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth,
 		       _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth - 
 		       _fc.getParag()->getParagLayout()->getTopBorder().ptWidth / 2,
-		       getPTColumnWidth() + _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + 
+		       getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).width() + 
+		       _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + 
 		       _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
 		       _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth,
 		       _fc.getLineHeight() + _fc.getParag()->getParagLayout()->getTopBorder().ptWidth +
 		       _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth + 
 		       _fc.getParag()->getParagLayout()->getTopBorder().ptWidth);
+
   QRegion visible(0,0,_w,_h);
 
   if (_painter.hasClipping())
@@ -657,10 +712,10 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 
   if (_fc.isCursorInFirstLine() && _fc.getParag()->getParagLayout()->getTopBorder().ptWidth > 0)
     {
-      unsigned int _x1 = getPTLeftBorder() + (_fc.getColumn() - 1) * (getPTColumnWidth() + getPTColumnSpacing()) - xOffset -
+      unsigned int _x1 = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).left() - xOffset -
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2;
       unsigned int _y = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
-      unsigned int _x2 = _x1 + getPTColumnWidth() +
+      unsigned int _x2 = _x1 + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).width() +
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2 + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2 -
 	((_fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2) * 2 == 
@@ -671,10 +726,10 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
     }
   if (_fc.isCursorInLastLine() && _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth > 0)
     {
-      unsigned int _x1 = getPTLeftBorder() + (_fc.getColumn() - 1) * (getPTColumnWidth() + getPTColumnSpacing()) - xOffset -
+      unsigned int _x1 = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).left() - xOffset -
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2;
       unsigned int _y = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth - 1;
-      unsigned int _x2 = _x1 + getPTColumnWidth() +
+      unsigned int _x2 = _x1 + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).width() +
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2 + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2 -
 	((_fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2) * 2 == 
@@ -685,7 +740,7 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
     }
   if (_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth > 0)
     {
-      unsigned int _x = getPTLeftBorder() + (_fc.getColumn() - 1) * (getPTColumnWidth() + getPTColumnSpacing()) - xOffset - 
+      unsigned int _x = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).left() - xOffset - 
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth;
       unsigned int _y1 = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
       unsigned int _y2 = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth;
@@ -695,8 +750,8 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
     }
   if (_fc.getParag()->getParagLayout()->getRightBorder().ptWidth > 0)
     {
-      unsigned int _x = getPTLeftBorder() + (_fc.getColumn() - 1) * (getPTColumnWidth() + getPTColumnSpacing()) - xOffset + 
-	_fc.getParag()->getParagLayout()->getRightBorder().ptWidth + getPTColumnWidth() - 1;
+      unsigned int _x = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).left() - xOffset + 
+	_fc.getParag()->getParagLayout()->getRightBorder().ptWidth + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).width() - 1;
       unsigned int _y1 = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
       unsigned int _y2 = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth;
       
@@ -878,7 +933,10 @@ void KWordDocument_impl::updateAllRanges()
   if (!m_lstViews.isEmpty())
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
-	viewPtr->getGUI()->setRanges();
+	{
+	  if (viewPtr->getGUI())
+	    viewPtr->getGUI()->setRanges();
+	}
     }
 }
 
@@ -890,87 +948,39 @@ void KWordDocument_impl::updateAllCursors()
   if (!m_lstViews.isEmpty())
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
-	viewPtr->getGUI()->getPaperWidget()->recalcCursor();
+	{
+	  if (viewPtr->getGUI())
+	    {
+	      viewPtr->getGUI()->getPaperWidget()->recalcText();
+	      viewPtr->getGUI()->getPaperWidget()->recalcCursor();
+	    }
+	}
     }
 }
 
 /*================================================================*/
-void KWordDocument_impl::deleteParag(KWParag *_parag)
+void KWordDocument_impl::drawAllBorders(QPainter *_painter = 0)
 {
-  KWParag *p,*p2;
+  KWordView_impl *viewPtr;
+  QPainter p;
 
-  if (!parags->getPrev() && !parags->getNext()) return;
-
-  if (!_parag->getPrev())
+  if (!m_lstViews.isEmpty())
     {
-      p = _parag->getNext(); 
-      p->setPrev(0L);
-      setFirstParag(p);
-      delete _parag;
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	{
+	  if (viewPtr->getGUI())
+	    {
+	      if (!_painter)
+		{
+		  p.begin(viewPtr->getGUI()->getPaperWidget());
+		  viewPtr->getGUI()->getPaperWidget()->drawBorders(p,viewPtr->getGUI()->getPaperWidget()->rect());
+		  p.end();
+		}
+	      else
+		viewPtr->getGUI()->getPaperWidget()->drawBorders(*_painter,viewPtr->getGUI()->getPaperWidget()->rect());
+	    }
+	}
     }
-  else
-    {
-      p = _parag->getNext();
-      p2 = _parag->getPrev();
-      if (p) p->setPrev(p2);
-      p2->setNext(p);
-      delete _parag;
-    }
-}
-
-/*================================================================*/
-void KWordDocument_impl::joinParag(KWParag *_parag1,KWParag *_parag2)
-{
-  if (!_parag1 || !_parag2) return;
-
-  if (_parag2->getNext()) _parag2->getNext()->setPrev(_parag1);
-  _parag1->setNext(_parag2->getNext());
-
-  _parag1->appendText(_parag2->getText(),_parag2->getTextLen());
-
-  delete _parag2;
-}
-
-/*================================================================*/
-void KWordDocument_impl::insertParag(KWParag *_parag,InsertPos _pos)
-{
-  KWParag *_new = 0L,*_prev = 0L,*_next = 0L;
-
-  if (_parag)
-    {
-      _prev = _parag->getPrev();
-      _next = _parag->getNext();
-    }
-
-  switch (_pos)
-    {
-    case I_AFTER:
-      {
-	_new = new KWParag(this,_parag,_next,_parag->getParagLayout());
-	if (_next) _next->setPrev(_new);
-      } break;
-    case I_BEFORE:
-      {
-	_new = new KWParag(this,_prev,_parag,_parag->getParagLayout());
-	if (_parag) _parag->setPrev(_new);
-	else setFirstParag(_new);
-      } break;
-    }
-}
-
-/*================================================================*/
-void KWordDocument_impl::splitParag(KWParag *_parag,unsigned int _pos)
-{
-  KWParag *_new = 0L,*_next = 0L;
-
-  if (_parag) _next = _parag->getNext();
-    
-  unsigned int len = _parag->getTextLen() - _pos;
-  KWChar* _string = _parag->getKWString()->split(_pos);
-  _new = new KWParag(this,_parag,_next,_parag->getParagLayout());
-  if (_next) _next->setPrev(_new);
-  
-  _new->appendText(_string,len);
 }
 
 /*================================================================*/
@@ -989,8 +999,8 @@ void KWordDocument_impl::drawSelection(QPainter &_painter,int xOffset,int yOffse
   _painter.setBrush(black);
   _painter.setPen(NoPen);
   
-  KWFormatContext tmpFC2(this);
-  KWFormatContext tmpFC1(this);
+  KWFormatContext tmpFC2(this,selStart.getFrameSet() - 1);
+  KWFormatContext tmpFC1(this,selStart.getFrameSet() - 1);
 
   if (selStart.getParag() == selEnd.getParag())
     {
@@ -1007,7 +1017,7 @@ void KWordDocument_impl::drawSelection(QPainter &_painter,int xOffset,int yOffse
     }
   else
     {
-      KWParag *parag = getFirstParag();
+      KWParag *parag = getFirstParag(selStart.getFrameSet() - 1);
       while (parag)
 	{
 	  if (parag == selStart.getParag())
@@ -1054,8 +1064,8 @@ void KWordDocument_impl::drawSelection(QPainter &_painter,int xOffset,int yOffse
 /*================================================================*/
 void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_painter)
 {
-  KWFormatContext tmpFC2(this);
-  KWFormatContext tmpFC1(this);
+  KWFormatContext tmpFC2(this,selStart.getFrameSet() - 1);
+  KWFormatContext tmpFC1(this,selStart.getFrameSet() - 1);
 
   if (selStart.getParag() == selEnd.getParag())
     {
@@ -1081,13 +1091,13 @@ void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_pain
 	  if (_fc->getParag()->getNext())
 	    {
 	      parag = _fc->getParag()->getNext();
-	      deleteParag(_fc->getParag());
+	      dynamic_cast<KWTextFrameSet*>(frames.at(_fc->getFrameSet() - 1))->deleteParag(_fc->getParag());
 	      _fc->init(parag,_painter);
 	    }
 	  else if (_fc->getParag()->getPrev())
 	    {
 	      parag = _fc->getParag()->getPrev();
-	      deleteParag(_fc->getParag());
+	      dynamic_cast<KWTextFrameSet*>(frames.at(_fc->getFrameSet() - 1))->deleteParag(_fc->getParag());
 	      _fc->init(parag,_painter);
 	    }
 	}
@@ -1095,7 +1105,7 @@ void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_pain
     }
   else
     {
-      KWParag *parag = getFirstParag(),*tmpParag = 0;
+      KWParag *parag = getFirstParag(selStart.getFrameSet() - 1),*tmpParag = 0;
       while (parag)
 	{
 	  if (parag == selStart.getParag())
@@ -1117,12 +1127,12 @@ void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_pain
       while (parag && parag != tmpFC2.getParag())
 	{
 	  tmpParag = parag->getNext();
-	  deleteParag(parag);
+	  dynamic_cast<KWTextFrameSet*>(frames.at(_fc->getFrameSet() - 1))->deleteParag(parag);
 	  parag = tmpParag;
 	}
       tmpFC2.getParag()->deleteText(0,tmpFC2.getTextPos());
 
-      joinParag(tmpFC1.getParag(),tmpFC2.getParag());
+      dynamic_cast<KWTextFrameSet*>(frames.at(_fc->getFrameSet() - 1))->joinParag(tmpFC1.getParag(),tmpFC2.getParag());
       _fc->init(tmpFC1.getParag(),_painter);
       _fc->setTextPos(tmpFC1.getTextPos());
 
@@ -1131,13 +1141,13 @@ void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_pain
 	  if (_fc->getParag()->getNext())
 	    {
 	      parag = _fc->getParag()->getNext();
-	      deleteParag(_fc->getParag());
+	      dynamic_cast<KWTextFrameSet*>(frames.at(_fc->getFrameSet() - 1))->deleteParag(_fc->getParag());
 	      _fc->init(parag,_painter);
 	    }
 	  else if (_fc->getParag()->getPrev())
 	    {
 	      parag = _fc->getParag()->getPrev();
-	      deleteParag(_fc->getParag());
+	      dynamic_cast<KWTextFrameSet*>(frames.at(_fc->getFrameSet() - 1))->deleteParag(_fc->getParag());
 	      _fc->init(parag,_painter);
 	    }
 	}
@@ -1148,8 +1158,8 @@ void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_pain
 /*================================================================*/
 void KWordDocument_impl::copySelectedText()
 {
-  KWFormatContext tmpFC2(this);
-  KWFormatContext tmpFC1(this);
+  KWFormatContext tmpFC2(this,selStart.getFrameSet() - 1);
+  KWFormatContext tmpFC1(this,selStart.getFrameSet() - 1);
 
   QString clipString = "";
 
@@ -1170,7 +1180,7 @@ void KWordDocument_impl::copySelectedText()
     }
   else
     {
-      KWParag *parag = getFirstParag();
+      KWParag *parag = getFirstParag(selStart.getFrameSet() - 1);
       while (parag)
 	{
 	  if (parag == selStart.getParag())
@@ -1211,8 +1221,8 @@ void KWordDocument_impl::copySelectedText()
 /*================================================================*/
 void KWordDocument_impl::setFormat(KWFormat &_format)
 {
-  KWFormatContext tmpFC2(this);
-  KWFormatContext tmpFC1(this);
+  KWFormatContext tmpFC2(this,selStart.getFrameSet() - 1);
+  KWFormatContext tmpFC1(this,selStart.getFrameSet() - 1);
 
   if (selStart.getParag() == selEnd.getParag())
     {
@@ -1231,7 +1241,7 @@ void KWordDocument_impl::setFormat(KWFormat &_format)
     }
   else
     {
-      KWParag *parag = getFirstParag();
+      KWParag *parag = getFirstParag(selStart.getFrameSet() - 1);
       while (parag)
 	{
 	  if (parag == selStart.getParag())
@@ -1358,7 +1368,7 @@ void KWordDocument_impl::paste(KWFormatContext *_fc,QString _string,KWPage *_pag
 	    {
 	      str = QString(strList.at(i));
 	      len = str.length();
-	      p = new KWParag(this,p,0L,defaultParagLayout);
+	      p = new KWParag(dynamic_cast<KWTextFrameSet*>(getFrameSet(_fc->getFrameSet() - 1)),this,p,0L,defaultParagLayout);
 	      p->insertText(0,str);
 	      p->setFormat(0,len,*format);
 	    }
@@ -1368,4 +1378,51 @@ void KWordDocument_impl::paste(KWFormatContext *_fc,QString _string,KWPage *_pag
     }
 }
 
+/*================================================================*/
+void KWordDocument_impl::appendPage(unsigned int _page,QPainter &_painter)
+{
+  pages++;
+  QRect pageRect(0,_page * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
 
+  QList<QRect> frameList;
+  frameList.setAutoDelete(false);
+
+  KWFrameSet *frameSet = 0L;
+  QRect frame;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      frameSet = getFrameSet(i);
+
+      for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
+	{
+	  frame = frameSet->getFrame(j);
+	  if (pageRect.intersects(frame))
+	    frameList.append(new QRect(frame.x(),frame.y() + getPTPaperHeight(),frame.width(),frame.height()));
+	}
+
+      if (!frameList.isEmpty())
+	{
+	  for (unsigned int k = 0;k < frameList.count();k++)
+	    frameSet->addFrame(*frameList.at(k));
+	}
+
+      frameList.clear();
+    }
+  updateAllRanges();
+  drawAllBorders(&_painter);
+}
+
+/*================================================================*/
+int KWordDocument_impl::getFrameSet(unsigned int mx,unsigned int my)
+{
+  KWFrameSet *frameSet = 0L;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      frameSet = getFrameSet(i);
+      if (frameSet->contains(mx,my)) return i;
+    }
+  
+  return -1;
+}
