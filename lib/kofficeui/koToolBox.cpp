@@ -20,19 +20,23 @@
 #include "koToolBox.h"
 #include "koDocumentChild.h"
 
+#include <kwin.h>
+
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qspinbox.h>
 #include <qobjectlist.h>
 
 KoToolBox::KoToolBox( QWidget* parent, const char* name )
-    : QFrame( parent, name, WStyle_Tool )
+    : QFrame( parent, name, WType_TopLevel | WStyle_Tool )
 {
+    KWin::setType( winId(), NET::Tool );
+
     setFrameShape( Panel );
     setFrameShadow( Raised );
 
     m_layout = new QVBoxLayout( this, 2, 2 );
-    m_layout->addSpacing( 12 );
+    // m_layout->addSpacing( 12 );
 }
 
 void KoToolBox::setEnabled( bool enable )
@@ -72,11 +76,7 @@ void KoToolBox::setEnabled( bool enable )
     }
 }
 
-void KoToolBox::setCaption( const QString& )
-{
-    // #### todo
-}
-
+/*
 void KoToolBox::paintEvent( QPaintEvent* ev )
 {
     QPainter painter;
@@ -88,6 +88,7 @@ void KoToolBox::paintEvent( QPaintEvent* ev )
 
     QFrame::paintEvent( ev );
 }
+*/
 
 void KoToolBox::childEvent( QChildEvent* ev )
 {

@@ -34,13 +34,11 @@ class KoToolBox : public QFrame
 public:
     KoToolBox( QWidget* parent = 0, const char* name = 0 );
 
-    virtual void setCaption( const QString& );
-
 public slots:
     void setEnabled( bool enable );
 
 protected:
-    void paintEvent( QPaintEvent* );
+    // void paintEvent( QPaintEvent* );
     void childEvent( QChildEvent* ev );
     void mousePressEvent( QMouseEvent* ev );
     void mouseMoveEvent( QMouseEvent* ev );
