@@ -56,11 +56,11 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPresenterDoc * _doc, con
 
     tmp=new KSeparator(page);
 
-    lab=new QLabel(i18n("Increase X (%1):").arg(m_doc->getUnitName()), page);
+    lab=new QLabel(i18n("Increase Width (%1):").arg(m_doc->getUnitName()), page);
     m_increaseX= new KDoubleNumInput( page );
     m_increaseX->setRange( 0.0, KoUnit::ptToUnit( pageRect.width(), unit ), KoUnit::ptToUnit( 1, unit ), false);
 
-    lab=new QLabel(i18n("Increase Y (%1):").arg(m_doc->getUnitName()), page);
+    lab=new QLabel(i18n("Increase Height (%1):").arg(m_doc->getUnitName()), page);
     m_increaseY= new KDoubleNumInput( page );
     m_increaseY->setRange( 0.0, KoUnit::ptToUnit( pageRect.height(), unit ), KoUnit::ptToUnit( 1, unit ), false);
 
