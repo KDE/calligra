@@ -389,6 +389,33 @@ int KSpreadTable::rowPos( int _row, KSpreadCanvas *_canvas )
     int y = 0;
     if ( _canvas )
       y -= _canvas->yOffset();
+
+/*    _row--; //we need the height until the questioned row, so we need the heights of the previous ones
+    int row = 0;
+    RowLayout *p;
+
+kdDebug(36001) << "row1: " << row << "  y: " << y << endl;
+
+    while ( ( p = m_rows.getNextRowLayoutDown( row ) ) && ( p->row() < _row ) )
+    {
+      y += p->height( _canvas );
+      y += ( p->row() - row - 1 ) * 20;
+kdDebug(36001) << "row (n)): " << row << "   p->row()" << p->row() << "   y: " << y << endl;
+      row = p->row();
+    }
+kdDebug(36001) << "row2: " << row << "  y: " << y << endl;
+
+//    if ( p != NULL )
+    {
+kdDebug(36001) << "arow2: " << row << "  y: " << y << endl;
+//      y += p->height( _canvas );
+kdDebug(36001) << "_row2: " << _row << "  y: " << y << endl;
+      y += ( _row - row ) * 20;
+    }
+kdDebug(36001) << "row3: " << row << "  y: " << y << endl;
+kdDebug(36001) << endl;
+*/
+
     for ( int row = 1 ; row < _row ; row++ )
     {
         // Should never happen
@@ -4031,7 +4058,10 @@ void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Ope
         b = mime->encodedData( "application/x-kspread-snippet" );
     else if( mime->provides( "text/plain" ) )
       {
-	pasteTextPlain( mime, _marker);
+        // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
+        // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
+	QString _text = QApplication::clipboard()->text();
+	pasteTextPlain( _text, _marker);
 	return;
       }
     else
@@ -4040,12 +4070,13 @@ void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Ope
     paste( b, _marker,makeUndo, sp, op,insert, insertTo );
 }
 
-void KSpreadTable::pasteTextPlain( QMimeSource * _mime, const QPoint &_marker)
+void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
 {
-  QString tmp;
-  tmp= QString::fromLocal8Bit(_mime->encodedData( "text/plain" ));
-  if(tmp.isEmpty())
+//  QString tmp;
+//  tmp= QString::fromLocal8Bit(_mime->encodedData( "text/plain" ));
+  if( _text.isEmpty() )
     return;
+
   KSpreadCell* cell = cellAt( _marker.x(), _marker.y() );
   if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -4057,7 +4088,7 @@ void KSpreadTable::pasteTextPlain( QMimeSource * _mime, const QPoint &_marker)
       cell = new KSpreadCell( this, _marker.x(), _marker.y() );
       insertCell( cell );
     }
-  cell->setCellText( tmp );
+  cell->setCellText( _text );
   cell->updateChart();
 
   if(!isLoading())
@@ -4920,20 +4951,20 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     //because it's necessary when there is a  layout on a column/row
     //but I remove cell which is inserted.
     for (int i=_rect.left();i<=_rect.right();i++)
-        for(int j=_rect.top();j<=_rect.bottom();j++)
-                {
-                bool insert=false;
-                KSpreadCell *cell = cellAt( i, j );
-                if ( cell == m_pDefaultCell )
-               {
-                  cell = new KSpreadCell( this, i, j );
-		  insertCell( cell );
-                  insert=true;
-               }
-                spread.appendChild( cell->save( doc, _rect.left() - 1, _rect.top() - 1  ,true));
-                if(insert)
-                        m_cells.remove(i,j);
-                }
+	for(int j=_rect.top();j<=_rect.bottom();j++)
+	{
+	    bool insert=false;
+	    KSpreadCell *cell = cellAt( i, j, false );
+	    if ( cell == m_pDefaultCell )
+	    {
+		cell = new KSpreadCell( this, i, j );
+		insertCell( cell );
+		insert=true;
+	    }
+	    spread.appendChild( cell->save( doc, _rect.left() - 1, _rect.top() - 1  ,true));
+	    if(insert)
+	        m_cells.remove(i,j);
+	}
 
     return doc;
 }
