@@ -85,9 +85,9 @@ public:
     inline void setPT_MM_INCH( unsigned int __pt, float ___mm, float __inch )
     { _pt = __pt; _mm = ___mm; _inch = __inch; }
 
-    inline const unsigned int pt() { return _pt; }
-    inline const float mm() { return _mm; }
-    inline const float inch() { return _inch; }
+    inline const unsigned int pt() const { return _pt; }
+    inline const float mm() const { return _mm; }
+    inline const float inch() const { return _inch; }
 
     KWUnit &operator=( const KWUnit &unit );
 
