@@ -3240,20 +3240,20 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     for (; oIt.current(); ++oIt )
         oIt.current()->drawSelection( true );
 #else
-    QValueList<int> pages(pages(printer->option("kde-range")));
+    QValueList<int> pages_(pages(printer->option("kde-range")));
     // okay, if it's empty we simply print everything...
-    if(pages.isEmpty()) {
+    if(pages_.isEmpty()) {
         for(int k=printer->fromPage(); k<=printer->toPage(); ++k)
-            pages.append(k);
+            pages_.append(k);
     }
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
-                              pages.count() + 2, this );
+                              pages_.count() + 2, this );
 
     int j = 0;
     progress.setProgress( 0 );
 
     QValueList<int>::ConstIterator it;
-    for ( it=pages.begin() ; it!=pages.end(); ++it )
+    for ( it=pages_.begin() ; it!=pages_.end(); ++it )
     {
         progress.setProgress( ++j );
         kapp->processEvents();
@@ -3279,7 +3279,7 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     view->setDiffX( _xOffset );
     view->setDiffY( _yOffset );
 
-    progress.setProgress( pages.count() );
+    progress.setProgress( pages_.count() );
     kapp->setWinStyleHighlightColor( c );
 
     QListIterator<KPObject> oIt( *objectList() );
