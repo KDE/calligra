@@ -1,0 +1,822 @@
+# Norwegian translations for KOFFICE, killustrator
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Hans Petter Bieker <zerium@webindex.no>, 1999.
+# Richard Saue <Richard.Saue@jur.uib.no>, 1999.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: KOFFICE/killustrator\n"
+"POT-Creation-Date: 1999-02-02 02:54+0100\n"
+"PO-Revision-Date: 1999-02-04 19:50+0200\n"
+"Last-Translator: Richard Saue <Richard.Saue@jur.uib.no>\n"
+"Language-Team: no <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO_8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: koffice/GPart.cc:85
+msgid "Embedded Part"
+msgstr ""
+
+#: koffice/KIllustrator_doc.cc:149 koffice/KIllustrator_shell.cc:306
+#: koffice/KIllustrator_shell.cc:319 koffice/KIllustrator_shell.cc:334
+#: koffice/KIllustrator_shell.cc:341 koffice/KIllustrator_shell.cc:378
+#: koffice/KIllustrator_shell.cc:382 koffice/KIllustrator_shell.cc:405
+#: koffice/KIllustrator_shell.cc:409 standalone/KIllustrator.cc:1280
+#: standalone/KIllustrator.cc:1284 standalone/KIllustrator.cc:1310
+#: standalone/KIllustrator.cc:1314
+msgid "KIllustrator Error"
+msgstr "KIllustrator feil"
+
+#: koffice/KIllustrator_doc.cc:150
+msgid "Could not insert document"
+msgstr "Kunne ikke sette inn dokument"
+
+#: koffice/KIllustrator_shell.cc:96
+msgid "&New"
+msgstr "&Ny"
+
+#: koffice/KIllustrator_shell.cc:115 standalone/KIllustrator.cc:527
+msgid "Import..."
+msgstr "Importer"
+
+#: koffice/KIllustrator_shell.cc:118 standalone/KIllustrator.cc:528
+msgid "Export..."
+msgstr "Eksporter"
+
+#: koffice/KIllustrator_shell.cc:128
+msgid "Document Info..."
+msgstr "Dokumentinformasjon"
+
+#: koffice/KIllustrator_shell.cc:307
+msgid "Could not create new document"
+msgstr "Kunne ikke opprette nytt dokument"
+
+#: koffice/KIllustrator_shell.cc:320
+msgid "Could not open file"
+msgstr "Kunne ikke åpne fil"
+
+#: koffice/KIllustrator_shell.cc:335 koffice/KIllustrator_shell.cc:342
+msgid "Could not save file"
+msgstr "Kunne ikke lagre fil"
+
+#: koffice/KIllustrator_shell.cc:379 standalone/KIllustrator.cc:1311
+msgid "Cannot import from file"
+msgstr "Kan ikke importer fra fil"
+
+#: koffice/KIllustrator_shell.cc:383 standalone/KIllustrator.cc:1315
+msgid "Unknown import format"
+msgstr "Ukjent import-format"
+
+#: koffice/KIllustrator_shell.cc:406 standalone/KIllustrator.cc:1281
+msgid "Cannot export to file"
+msgstr "Kan ikke eksportere til fil"
+
+#: koffice/KIllustrator_shell.cc:410 standalone/KIllustrator.cc:1285
+msgid "Unknown export format"
+msgstr "Ukjent eksport-format"
+
+#: koffice/KIllustrator_shell.cc:442
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr ""
+"Dokumentet er endret.\n"
+"Vil du lagre endringene?"
+
+#: koffice/KIllustrator_view.cc:189 koffice/KIllustrator_view.cc:295
+#: share/AlignCmd.cc:30 share/AlignmentDialog.cc:61
+#: standalone/KIllustrator.cc:601 standalone/KIllustrator.cc:655
+msgid "Align"
+msgstr "Justering"
+
+#: koffice/KIllustrator_view.cc:191 koffice/KIllustrator_view.cc:297
+#: standalone/KIllustrator.cc:603 standalone/KIllustrator.cc:657
+msgid "To Front"
+msgstr "Til front"
+
+#: koffice/KIllustrator_view.cc:192 koffice/KIllustrator_view.cc:300
+#: standalone/KIllustrator.cc:605 standalone/KIllustrator.cc:658
+msgid "To Back"
+msgstr "Til rygg"
+
+#: koffice/KIllustrator_view.cc:193 koffice/KIllustrator_view.cc:303
+#: standalone/KIllustrator.cc:607 standalone/KIllustrator.cc:659
+msgid "Forward One"
+msgstr "Frem en"
+
+#: koffice/KIllustrator_view.cc:195 koffice/KIllustrator_view.cc:305
+#: standalone/KIllustrator.cc:610 standalone/KIllustrator.cc:660
+msgid "Back One"
+msgstr "Tilbake en"
+
+#: koffice/KIllustrator_view.cc:241 standalone/KIllustrator.cc:563
+msgid "&Select All"
+msgstr "Velg &alle"
+
+#: koffice/KIllustrator_view.cc:248 standalone/KIllustrator.cc:567
+msgid "Pr&operties"
+msgstr "&Valg"
+
+#: koffice/KIllustrator_view.cc:253
+msgid "&Object..."
+msgstr "&Objekt"
+
+#: koffice/KIllustrator_view.cc:256 standalone/KIllustrator.cc:544
+msgid "&Clipart..."
+msgstr "&Utklippsbilde"
+
+#: koffice/KIllustrator_view.cc:259 standalone/KIllustrator.cc:543
+msgid "&Bitmap..."
+msgstr "&Bilde"
+
+#: koffice/KIllustrator_view.cc:265 share/PropertyEditor.cc:111
+#: standalone/KIllustrator.cc:570
+msgid "Outline"
+msgstr ""
+
+#: koffice/KIllustrator_view.cc:268 share/FontSelector.cc:377
+#: standalone/KIllustrator.cc:572
+msgid "Normal"
+msgstr "Normal"
+
+#: koffice/KIllustrator_view.cc:271
+msgid "Ruler"
+msgstr "Linjal"
+
+#: koffice/KIllustrator_view.cc:274 share/GridDialog.cc:46
+msgid "Grid"
+msgstr "Rutenett"
+
+#: koffice/KIllustrator_view.cc:278 standalone/KIllustrator.cc:642
+msgid "&Layout"
+msgstr "&Utseende"
+
+#: koffice/KIllustrator_view.cc:280 share/koPageLayoutDia.cc:100
+msgid "Page Layout"
+msgstr "Sideutseende"
+
+#: koffice/KIllustrator_view.cc:283 share/GDocument.cc:1018
+#: share/LayerDialog.cc:49
+msgid "Layers"
+msgstr "Lagdeling"
+
+#: koffice/KIllustrator_view.cc:286
+msgid "Setup Grid"
+msgstr "Oppsett for rutenett"
+
+#: koffice/KIllustrator_view.cc:288
+msgid "Align to Grid"
+msgstr "Juster til rute"
+
+#: koffice/KIllustrator_view.cc:293 standalone/KIllustrator.cc:643
+msgid "&Arrange"
+msgstr "&Arranger"
+
+#: koffice/KIllustrator_view.cc:294 share/TransformationDialog.cc:54
+#: standalone/KIllustrator.cc:600
+msgid "Transform"
+msgstr "Omdann"
+
+#: koffice/KIllustrator_view.cc:308 share/GGroup.cc:64
+#: standalone/KIllustrator.cc:614
+msgid "Group"
+msgstr "Gruppere"
+
+#: koffice/KIllustrator_view.cc:310 share/UngroupCmd.cc:28
+#: standalone/KIllustrator.cc:616
+msgid "Ungroup"
+msgstr "Frigjøre"
+
+#: koffice/KIllustrator_view.cc:315 share/TextAlongPathCmd.cc:28
+msgid "Text along path"
+msgstr ""
+
+#: koffice/KIllustrator_view.cc:321 share/TransformationDialog.cc:62
+#: standalone/KIllustrator.cc:589
+msgid "Position"
+msgstr "Posisjon"
+
+#: koffice/KIllustrator_view.cc:324 share/TransformationDialog.cc:65
+#: standalone/KIllustrator.cc:591
+msgid "Dimension"
+msgstr "Dimensjon"
+
+#: koffice/KIllustrator_view.cc:327 share/TransformationDialog.cc:68
+#: standalone/KIllustrator.cc:593
+msgid "Rotation"
+msgstr "Rotering"
+
+#: koffice/KIllustrator_view.cc:330 share/TransformationDialog.cc:71
+#: standalone/KIllustrator.cc:595
+msgid "Mirror"
+msgstr "Speil"
+
+#: koffice/KIllustrator_view.cc:365 share/SelectionTool.cc:607
+#: standalone/KIllustrator.cc:378
+msgid "Selection Mode"
+msgstr "Valg-modus"
+
+#: koffice/KIllustrator_view.cc:375 share/EditPointCmd.cc:29
+#: share/EditPointTool.cc:202 standalone/KIllustrator.cc:383
+msgid "Edit Point"
+msgstr "Rediger punkt"
+
+#: koffice/KIllustrator_view.cc:385 share/FreeHandTool.cc:177
+msgid "Create FreeHand Line"
+msgstr "Lag frihåndslinje"
+
+#: koffice/KIllustrator_view.cc:395 share/CreatePolylineCmd.cc:29
+#: share/CreatePolylineCmd.cc:39 share/PolylineTool.cc:221
+#: standalone/KIllustrator.cc:394
+msgid "Create Polyline"
+msgstr "Lag Polylinje"
+
+#: koffice/KIllustrator_view.cc:405 share/BezierTool.cc:289
+#: standalone/KIllustrator.cc:400
+msgid "Create Bezier Curve"
+msgstr "Lag Bezier-kurve"
+
+#: koffice/KIllustrator_view.cc:416 share/CreateRectangleCmd.cc:29
+#: share/CreateRectangleCmd.cc:38 share/RectangleTool.cc:95
+#: standalone/KIllustrator.cc:406
+msgid "Create Rectangle"
+msgstr "Lag rektangel"
+
+#: koffice/KIllustrator_view.cc:427 share/CreatePolygonCmd.cc:29
+#: share/CreatePolygonCmd.cc:39 share/PolygonTool.cc:126
+#: standalone/KIllustrator.cc:411
+msgid "Create Polygon"
+msgstr "Lag Polygon"
+
+#: koffice/KIllustrator_view.cc:439 share/OvalTool.cc:124
+#: standalone/KIllustrator.cc:416
+msgid "Create Ellipse"
+msgstr "Lag elipse"
+
+#: koffice/KIllustrator_view.cc:451
+msgid "Create/Edit Text"
+msgstr "Skriv/rediger tekst"
+
+#: koffice/KIllustrator_view.cc:461 share/ZoomTool.cc:47
+#: standalone/KIllustrator.cc:426
+msgid "Zoom In"
+msgstr "forstørr"
+
+#: koffice/KIllustrator_view.cc:534
+msgid "Zoom Factors"
+msgstr "forstørrelsesfaktor"
+
+#: koffice/KIllustrator_view.cc:577 standalone/KIllustrator.cc:469
+msgid "Move Point"
+msgstr "Flytt punkt"
+
+#: koffice/KIllustrator_view.cc:587 share/InsertPointCmd.cc:29
+#: standalone/KIllustrator.cc:473
+msgid "Insert Point"
+msgstr "Sett inn punkt"
+
+#: koffice/KIllustrator_view.cc:597 share/RemovePointCmd.cc:28
+#: standalone/KIllustrator.cc:477
+msgid "Remove Point"
+msgstr "Fjern punkt"
+
+#: koffice/KIllustrator_view.cc:913 koffice/KIllustrator_view.cc:1021
+#: koffice/KIllustrator_view.cc:1050 standalone/KIllustrator.cc:825
+#: standalone/KIllustrator.cc:1153 standalone/KIllustrator.cc:1179
+msgid ""
+"This action will set the default\n"
+"properties for new objects !\n"
+"Would you like to do it ?"
+msgstr ""
+
+#: share/AboutDialog.cc:47
+msgid "About KIllustrator"
+msgstr "Om KIllustrator"
+
+#: share/AddLineSegmentCmd.cc:29
+msgid "Add Line Segment"
+msgstr "Legg til linjesegment"
+
+#: share/AlignmentDialog.cc:50
+msgid "Alignment"
+msgstr "Justering"
+
+#: share/AlignmentDialog.cc:64 share/DistributeCmd.cc:31
+msgid "Distribute"
+msgstr "Distribuer"
+
+#: share/AlignmentDialog.cc:104 share/AlignmentDialog.cc:180
+#: share/GridDialog.cc:99
+msgid "Vertically"
+msgstr "Vertikalt"
+
+#: share/AlignmentDialog.cc:129 share/AlignmentDialog.cc:210
+#: share/GridDialog.cc:88
+msgid "Horizontally"
+msgstr "Horisontalt"
+
+#: share/AlignmentDialog.cc:154
+msgid "To Grid"
+msgstr "Gå til rute"
+
+#: share/AlignmentDialog.cc:159
+msgid "Align To Center of Page"
+msgstr "Midtstill "
+
+#: share/AlignmentDialog.cc:240
+msgid "Distribute at"
+msgstr "Distribuer til"
+
+#: share/AlignmentDialog.cc:243
+msgid "Selection"
+msgstr "Utvalg"
+
+#: share/AlignmentDialog.cc:248
+msgid "Page"
+msgstr "Side"
+
+#: share/CreateBezierCmd.cc:29
+msgid "Create Bezier"
+msgstr "Lag Bezier"
+
+#: share/CreateOvalCmd.cc:29 share/CreateOvalCmd.cc:38
+msgid "Create Oval"
+msgstr "Lag oval"
+
+#: share/CreateTextCmd.cc:29 share/CreateTextCmd.cc:38
+#: standalone/KIllustrator.cc:421
+msgid "Create Text"
+msgstr "Skriv tekst"
+
+#: share/DocumentInfo.cc:42 standalone/KIllustrator.cc:533
+msgid "Document Info"
+msgstr "Dokumentinformasjon"
+
+#: share/DocumentInfo.cc:56
+msgid "Done"
+msgstr "Ferdig"
+
+#: share/DuplicateCmd.cc:31
+msgid "Duplicate"
+msgstr "Dupliser"
+
+#: share/EllipseConfigDialog.cc:47
+msgid "Setup Ellipse Tool"
+msgstr "Valg for elipseverktøy"
+
+#: share/EllipseConfigDialog.cc:83
+msgid "Draw ellipse"
+msgstr "Tegn elipse"
+
+#: share/EllipseConfigDialog.cc:87
+msgid "between points"
+msgstr "mellom punkter"
+
+#: share/EllipseConfigDialog.cc:92
+msgid "around fixed center"
+msgstr "rundt fast punkt"
+
+#: share/FontSelector.cc:85
+msgid "Requested Font"
+msgstr "Ønsket skrfttype"
+
+#: share/FontSelector.cc:90
+msgid "Actual Font"
+msgstr "Skrifttype i bruk"
+
+#: share/FontSelector.cc:94 share/FontSelector.cc:98
+msgid "Family:"
+msgstr "Familie:"
+
+#: share/FontSelector.cc:118 share/FontSelector.cc:123
+msgid "Size:"
+msgstr "Størrelse:"
+
+#: share/FontSelector.cc:132 share/FontSelector.cc:137
+msgid "Weight:"
+msgstr "Vekt:"
+
+#: share/FontSelector.cc:146 share/FontSelector.cc:154
+#: share/PropertyEditor.cc:253 share/PropertyEditor.cc:457
+msgid "Style:"
+msgstr "Stil:"
+
+#: share/FontSelector.cc:189
+msgid "Charset"
+msgstr "Skrifttype:"
+
+#: share/FontSelector.cc:201
+msgid "Size"
+msgstr "Størrelse"
+
+#: share/FontSelector.cc:240
+msgid "Weight"
+msgstr "Vekt"
+
+#: share/FontSelector.cc:241 share/FontSelector.cc:339
+msgid "normal"
+msgstr "normal"
+
+#: share/FontSelector.cc:242 share/FontSelector.cc:341
+msgid "bold"
+msgstr "fet"
+
+#: share/FontSelector.cc:251
+msgid "Style"
+msgstr "Stil"
+
+#: share/FontSelector.cc:252 share/FontSelector.cc:352
+#: share/FontSelector.cc:382
+msgid "roman"
+msgstr "roman"
+
+#: share/FontSelector.cc:253 share/FontSelector.cc:354
+#: share/FontSelector.cc:380
+msgid "italic"
+msgstr "kursiv"
+
+#: share/FontSelector.cc:375
+msgid "Bold"
+msgstr "Fet"
+
+#: share/GBezier.cc:212
+msgid "Bezier curve"
+msgstr "Bezier-kurve"
+
+#: share/GClipart.cc:84
+msgid "Clipart object"
+msgstr "Utklippsbilde"
+
+#: share/GDocument.cc:1017
+msgid "Document"
+msgstr "Dokument"
+
+#: share/GDocument.cc:1019
+msgid "Objects"
+msgstr "Objekter"
+
+#: share/GLayer.cc:48
+msgid "Layer"
+msgstr "Lag"
+
+#: share/GOval.cc:87
+msgid "Circle"
+msgstr "Sirkel"
+
+#: share/GOval.cc:89
+msgid "Ellipse"
+msgstr "Elipse"
+
+#: share/GPixmap.cc:96
+msgid "Pixmap object"
+msgstr ""
+
+#: share/GPolygon.cc:152 share/PolygonConfigDialog.cc:86
+msgid "Polygon"
+msgstr ""
+
+#: share/GPolygon.cc:154
+msgid "Rectangle"
+msgstr "Rektangel"
+
+#: share/GPolygon.cc:156
+msgid "Square"
+msgstr "Firkant"
+
+#: share/GPolyline.cc:118
+msgid "Polyline"
+msgstr "Polylinje"
+
+#: share/GText.cc:139
+msgid "Text"
+msgstr "Tekst"
+
+#: share/GridDialog.cc:83
+msgid "Distance"
+msgstr "Avstand"
+
+#: share/GridDialog.cc:109
+msgid "Snap To Grid"
+msgstr "Juster til rute"
+
+#: share/GridDialog.cc:113 standalone/KIllustrator.cc:579
+msgid "Show Grid"
+msgstr "Vis rutenett"
+
+#: share/GroupCmd.cc:28
+msgid "Group Objects"
+msgstr "Samel objekter"
+
+#: share/InsertClipartCmd.cc:30
+msgid "Insert Clipart"
+msgstr "Sett inn utklippsbilde"
+
+#: share/InsertObjCmd.cc:29
+msgid "Insert Object"
+msgstr "Sett inn objekt"
+
+#: share/InsertPixmapCmd.cc:29
+msgid "Insert Pixmap"
+msgstr ""
+
+#: share/OptionDialog.cc:40
+msgid "Option"
+msgstr "Valg"
+
+#: share/OptionDialog.cc:44
+msgid "General"
+msgstr "Generelt"
+
+#: share/OptionDialog.cc:66
+msgid "Unit:"
+msgstr "Enhet:"
+
+#: share/PolygonConfigDialog.cc:47
+msgid "Setup Polygon Tool"
+msgstr "Valg for poligonverktøy"
+
+#: share/PolygonConfigDialog.cc:92
+msgid "Concave Polygon"
+msgstr "Konkav polygon"
+
+#: share/PolygonConfigDialog.cc:99
+msgid "Corners:"
+msgstr "Hjørner:"
+
+#: share/PolygonConfigDialog.cc:109
+msgid "Sharpness:"
+msgstr "Kontrast:"
+
+#: share/PropertyEditor.cc:108
+msgid "Info"
+msgstr "Info"
+
+#: share/PropertyEditor.cc:114
+msgid "Fill"
+msgstr "Fyll"
+
+#: share/PropertyEditor.cc:158
+msgid "Type:"
+msgstr "Type:"
+
+#: share/PropertyEditor.cc:170
+msgid "Bounding Box"
+msgstr ""
+
+#: share/PropertyEditor.cc:176
+msgid "X Position:"
+msgstr "X posisjon:"
+
+#: share/PropertyEditor.cc:188
+msgid "Y Position:"
+msgstr "Y posisjon:"
+
+#: share/PropertyEditor.cc:200 share/PropertyEditor.cc:233
+msgid "Width:"
+msgstr "Bredde:"
+
+#: share/PropertyEditor.cc:212
+msgid "Height:"
+msgstr "Høyde:"
+
+#: share/PropertyEditor.cc:244 share/PropertyEditor.cc:395
+#: share/PropertyEditor.cc:408 share/PropertyEditor.cc:437
+#: share/PropertyEditor.cc:447
+msgid "Color:"
+msgstr "Farge:"
+
+#: share/PropertyEditor.cc:268
+msgid "Arrows:"
+msgstr "Piler:"
+
+#: share/PropertyEditor.cc:290
+msgid "Shape:"
+msgstr "Tilstand:"
+
+#: share/PropertyEditor.cc:321
+msgid "Roundness:"
+msgstr "Rundhet:"
+
+#: share/PropertyEditor.cc:332
+msgid "Alignment:"
+msgstr "Justering:"
+
+#: share/PropertyEditor.cc:390
+msgid "Solid Fill"
+msgstr ""
+
+#: share/PropertyEditor.cc:404
+msgid "Pattern Fill"
+msgstr ""
+
+#: share/PropertyEditor.cc:419
+msgid "No Fill"
+msgstr "Intet fyll"
+
+#: share/PropertyEditor.cc:426
+msgid "Tile Fill"
+msgstr ""
+
+#: share/PropertyEditor.cc:433
+msgid "Gradient Fill"
+msgstr ""
+
+#: share/PropertyEditor.cc:461
+msgid "Horizontal"
+msgstr "Horisontal"
+
+#: share/PropertyEditor.cc:462
+msgid "Vertical"
+msgstr "Vertikal"
+
+#: share/PropertyEditor.cc:463
+msgid "Radial"
+msgstr "Radius"
+
+#: share/PropertyEditor.cc:464
+msgid "Rectangular"
+msgstr "Rektangulær"
+
+#: share/PropertyEditor.cc:690
+msgid "no selection"
+msgstr "intet utvalg"
+
+#: share/PropertyEditor.cc:692
+msgid "multiple selection"
+msgstr "flere utvalgte"
+
+#: share/ReorderCmd.cc:28
+msgid "Reorder"
+msgstr "Opptaker"
+
+#: share/RotateCmd.cc:29
+msgid "Rotate"
+msgstr "Roter"
+
+#: share/ScaleCmd.cc:29 share/ScaleCmd.cc:37
+msgid "Scale"
+msgstr "Skaler"
+
+#: share/ScriptConsole.cc:43
+msgid "Scripting Console"
+msgstr "Skript-konsoll"
+
+#: share/ScriptConsole.cc:56
+msgid "Evaluate"
+msgstr "Evaluer"
+
+#: share/ScriptDialog.cc:45
+msgid "Scripts"
+msgstr "Skript"
+
+#: share/ScriptDialog.cc:60
+msgid "Execute"
+msgstr "Kjør"
+
+#: share/SetPropertyCmd.cc:30 share/SetPropertyCmd.cc:40
+msgid "Set property"
+msgstr "Sett innstillinger"
+
+#: share/SetTextCmd.cc:28 share/SetTextCmd.cc:37
+msgid "Change Text"
+msgstr "Endre tekst"
+
+#: share/ShearCmd.cc:29
+msgid "Shear"
+msgstr ""
+
+#: share/TransformationDialog.cc:103 share/TransformationDialog.cc:172
+#: share/TransformationDialog.cc:243
+msgid "Horizontal:"
+msgstr "Horisontal:"
+
+#: share/TransformationDialog.cc:114 share/TransformationDialog.cc:184
+#: share/TransformationDialog.cc:254
+msgid "Vertical:"
+msgstr "Vertikal:"
+
+#: share/TransformationDialog.cc:124 share/TransformationDialog.cc:264
+msgid "Relative Position"
+msgstr "Relativ posisjon"
+
+#: share/TransformationDialog.cc:132 share/TransformationDialog.cc:204
+#: share/TransformationDialog.cc:273 share/TransformationDialog.cc:315
+msgid "Apply To Duplicate"
+msgstr "Legg til duplikat"
+
+#: share/TransformationDialog.cc:159
+msgid "Absolute"
+msgstr "Absolutt"
+
+#: share/TransformationDialog.cc:165
+msgid "Percentage"
+msgstr "Prosent"
+
+#: share/TransformationDialog.cc:196
+msgid "Proportional"
+msgstr "Proposjonal"
+
+#: share/TransformationDialog.cc:227
+msgid "Angle:"
+msgstr "Vinkel:"
+
+#: share/TransformationDialog.cc:238
+msgid "Center"
+msgstr "Senter"
+
+#: share/TranslateCmd.cc:28
+msgid "Translate"
+msgstr "Oversett"
+
+#: standalone/KIllustrator.cc:333
+msgid "New Document"
+msgstr "Nytt dokument"
+
+#: standalone/KIllustrator.cc:335
+msgid "Open Document"
+msgstr "Åpne dokument"
+
+#: standalone/KIllustrator.cc:337
+msgid "Save Document"
+msgstr "Lagre dokument"
+
+#: standalone/KIllustrator.cc:340
+msgid "Print Document"
+msgstr "Skriv ut"
+
+#: standalone/KIllustrator.cc:389
+msgid "Create Freehand Line"
+msgstr "Lag frihåndslinje"
+
+#: standalone/KIllustrator.cc:510
+msgid "&New..."
+msgstr "&Ny"
+
+#: standalone/KIllustrator.cc:518
+msgid "Open Recent"
+msgstr "Åpne nylig"
+
+#: standalone/KIllustrator.cc:531
+msgid "&Print"
+msgstr "&Skriv ut"
+
+#: standalone/KIllustrator.cc:535
+msgid "New &Window"
+msgstr "Nytt &vindu"
+
+#: standalone/KIllustrator.cc:558
+msgid "D&uplicate"
+msgstr "D&upliser"
+
+#: standalone/KIllustrator.cc:575
+msgid "Layers..."
+msgstr "Lagdeler"
+
+#: standalone/KIllustrator.cc:577
+msgid "Show Ruler"
+msgstr "Vis linjal"
+
+#: standalone/KIllustrator.cc:583
+msgid "&Page"
+msgstr "&Side"
+
+#: standalone/KIllustrator.cc:585
+msgid "&Grid"
+msgstr "&Ruter"
+
+#: standalone/KIllustrator.cc:619
+msgid "Text along Path"
+msgstr ""
+
+#: standalone/KIllustrator.cc:624
+msgid "&Options..."
+msgstr "&Valg"
+
+#: standalone/KIllustrator.cc:629
+msgid "&Help..."
+msgstr "&Hjelp"
+
+#: standalone/KIllustrator.cc:631
+msgid "About..."
+msgstr "Om"
+
+#: standalone/KIllustrator.cc:644
+msgid "Ex&tras"
+msgstr "Eks&tra"
+
+#: standalone/KIllustrator.cc:1048
+msgid ""
+"This Document has been modified.\n"
+"Would you like to save it ?"
+msgstr ""
+"Dokumentet er endret.\n"
+"Vil du lagre endringene?"
+
+#: standalone/KIllustrator.cc:1085
+msgid ""
+"This Document already exists.\n"
+"Would you like to override it ?"
+msgstr ""
+"Dokumentet eksiserer allerede.\n"
+"Vil du overskrive det?"

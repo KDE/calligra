@@ -1,0 +1,1650 @@
+# Norwegian translations for KOFFICE, kpresenter
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Hans Petter Bieker <zerium@webindex.no>, 1999.
+# Richard Saue <Richard.Saue@jur.uib.no>, 1999.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: KOFFICE/kpresenter\n"
+"POT-Creation-Date: 1999-02-01 02:40+0100\n"
+"PO-Revision-Date: 1999-02-04 19:50+0200\n"
+"Last-Translator: Richard Saue <Richard.Saue@jur.uib.no>\n"
+"Language-Team: no <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO_8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: backdia.cc:84 kpresenter_view.cc:3306
+msgid "Color"
+msgstr "Farge"
+
+#: backdia.cc:105
+msgid "Plain"
+msgstr ""
+
+#: backdia.cc:106 styledia.cc:248
+msgid "Horizontal Gradient"
+msgstr "Horisontal gradient"
+
+#: backdia.cc:107 styledia.cc:249
+msgid "Vertical Gradient"
+msgstr "Vertikal gradient"
+
+#: backdia.cc:108 styledia.cc:250
+msgid "Diagonal Gradient 1"
+msgstr "Diagonal gradient 1"
+
+#: backdia.cc:109 styledia.cc:251
+msgid "Diagonal Gradient 2"
+msgstr "Diagonal gradient 2"
+
+#: backdia.cc:110 styledia.cc:252
+msgid "Circle Gradient"
+msgstr "Sirkel-gradient"
+
+#: backdia.cc:111 styledia.cc:253
+msgid "Rectangle Gradient"
+msgstr "Rektangel-gradient"
+
+#: backdia.cc:128
+msgid "Picture (Pixel-Graphic)"
+msgstr "Bilde (piksel-grafikk)"
+
+#: backdia.cc:137
+msgid "Tiled"
+msgstr ""
+
+#: backdia.cc:143
+msgid "Center"
+msgstr "Senter"
+
+#: backdia.cc:149
+msgid "Zoom"
+msgstr ""
+
+#: backdia.cc:155
+msgid "Choose Picture..."
+msgstr "Velg bilde"
+
+#: backdia.cc:170
+msgid "no picture"
+msgstr "intet bilde"
+
+#: backdia.cc:177
+msgid "Clipart (Vector-Graphic)"
+msgstr "Utklippsbilde (vektor-grafikk)"
+
+#: backdia.cc:187
+msgid "Choose Clipart..."
+msgstr "Velg utklippsbilde"
+
+#: backdia.cc:200
+msgid "no clipart"
+msgstr "ingen utklippsbilder"
+
+#: backdia.cc:216
+msgid "Apply Global"
+msgstr ""
+
+#: backdia.cc:297 kpresenter_view.cc:448 kpresenter_view.cc:2498
+msgid ""
+"*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM *.PBM *.PGM *.PPM "
+"*.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG *.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+"*.gif *.GIF|GIF-Pictures\n"
+"*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+"*.bmp *.BMP|Windows Bitmaps\n"
+"*.xbm *.XBM|XWindow Pitmaps\n"
+"*.xpm *.XPM|Pixmaps\n"
+"*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"
+msgstr ""
+
+#: backdia.cc:318 kpresenter_view.cc:473 kpresenter_view.cc:2516
+msgid "*.WMF *.wmf|Windows Metafiles"
+msgstr ""
+
+#: confpiedia.cc:69 confrectdia.cc:53
+msgid "Settings"
+msgstr "Oppsett"
+
+#: confpiedia.cc:72
+msgid "Type:"
+msgstr ""
+
+#: confpiedia.cc:77
+msgid "Pie"
+msgstr "Kakestykke"
+
+#: confpiedia.cc:78
+msgid "Arc"
+msgstr ""
+
+#: confpiedia.cc:79
+msgid "Chord"
+msgstr ""
+
+#: confpiedia.cc:86
+msgid "Angle (0 .. 5760 = (0 * 16) .. (360 * 16)):"
+msgstr ""
+
+#: confpiedia.cc:95
+msgid "Length (0 .. 5760 = (0 * 16) .. (360 * 16)):"
+msgstr ""
+
+#: confpiedia.cc:108 confrectdia.cc:78 rotatedia.cc:111 shadowdia.cc:188
+msgid "Preview"
+msgstr "Forhåndsvisning"
+
+#: confrectdia.cc:56 presstructview.cc:509
+msgid "Roundedness X"
+msgstr "Rundhet X"
+
+#: confrectdia.cc:65 presstructview.cc:513
+msgid "Roundedness Y"
+msgstr "Rundhet Y"
+
+#: delpagedia.cc:31
+msgid "Delete Page Number: "
+msgstr "Slett sidenummer"
+
+#: delpagedia.cc:41 inspagedia.cc:46
+msgid "&Leave all objects untouched."
+msgstr "&La alle objekter stå urørt"
+
+#: delpagedia.cc:46
+msgid ""
+"&Move the objects which are behind the deleted page \n"
+"one page backwards, so that they stay on their current page, \n"
+"and don't touch the objects, which are on the deleted page."
+msgstr ""
+"&Flytt objektene som ligger bak den innsatte siden en side \n"
+"fram, slik at de forblir på sin nåværende side, og ikke rør \n"
+"objektene som er på den slettede siden."
+
+#: delpagedia.cc:53
+msgid ""
+"&Delete the objects which are on the deleted page and \n"
+"leave the other objects untouched."
+msgstr ""
+"Slett objektene som er på den slettede siden og la andre \n"
+"objekter stå urørt."
+
+
+#: delpagedia.cc:59
+msgid ""
+"M&ove the objects which are behind the deleted page \n"
+"one page backwards, so that they stay on their current page, \n"
+"and delete the objects which are on the deleted page."
+msgstr ""
+"&Flytt objektene som ligger bak den innsatte siden en side \n"
+"fram, slik at de forblir på sin nåværende side, og slett \n"
+"objektene som er på den slettede siden."
+
+#: effectdia.cc:32
+msgid "Number: "
+msgstr "Nummer:"
+
+#: effectdia.cc:43
+msgid "Effect (appearing): "
+msgstr "Effekter:"
+
+#: effectdia.cc:48 effectdia.cc:70
+msgid "No Effect"
+msgstr "Ingen effekter"
+
+#: effectdia.cc:49
+msgid "Come from right"
+msgstr "Kom fra høyre"
+
+#: effectdia.cc:50
+msgid "Come from left"
+msgstr "Kom fra venstre"
+
+#: effectdia.cc:51
+msgid "Come from top"
+msgstr "Kom fra toppen"
+
+#: effectdia.cc:52
+msgid "Come from bottom"
+msgstr "Kom fra bunnen"
+
+#: effectdia.cc:53
+msgid "Come from right/top"
+msgstr "Kom fra høyre/topp"
+
+#: effectdia.cc:54
+msgid "Come from right/bottom"
+msgstr "Kom fra høyre/bunn"
+
+#: effectdia.cc:55
+msgid "Come from left/top"
+msgstr "Kom fra venstre/topp"
+
+#: effectdia.cc:56
+msgid "Come from left/bottom"
+msgstr "Kom fra venstre/bunn"
+
+#: effectdia.cc:57
+msgid "Wipe from left"
+msgstr "Slett fra venstre"
+
+#: effectdia.cc:58
+msgid "Wipe from right"
+msgstr "Slett fra høyre"
+
+#: effectdia.cc:59
+msgid "Wipe from top"
+msgstr "Slett fra toppen"
+
+#: effectdia.cc:60
+msgid "Wipe from bottom"
+msgstr "Slett fra bunnen"
+
+#: effectdia.cc:65
+msgid "Effect (object specific): "
+msgstr "Effekter:"
+
+#: effectdia.cc:76
+msgid "Paragraph after paragraph"
+msgstr "Tegn etter tegn"
+
+#: effectdia.cc:133
+msgid "Assign Object Effects"
+msgstr "Tildel effekter for objekter"
+
+#: inspagedia.cc:31
+msgid "&Before page:"
+msgstr "&Før side:"
+
+#: inspagedia.cc:36
+msgid "&After page:"
+msgstr "&Etter side:"
+
+#: inspagedia.cc:51
+msgid ""
+"&Move the objects which are behind the inserted page \n"
+"one page forward, so that they stay on their current page."
+msgstr ""
+"&Flytt objektene som ligger bak den innsatte siden en side \n"
+"fremover, slik at det forblir å stå på sin gjeldende side."
+
+#: kpresenter_doc.cc:120
+msgid "KPresenter doesn't support KoDocument::draw(...) now!"
+msgstr "KPresenter støtter foreløpig ikke KoDocument::draw(...)"
+
+#: kpresenter_doc.cc:258 kpresenter_doc.cc:894 kpresenter_shell.cc:335
+#: kpresenter_view.cc:341 kpresenter_view.cc:913
+msgid "KPresenter Error"
+msgstr "KPresenter feil"
+
+#: kpresenter_doc.cc:258
+msgid "HTML export is not implemented!"
+msgstr "HTML-eksport er ikke implementert"
+
+#: kpresenter_doc.cc:695
+msgid "Insert Line"
+msgstr "Sett inn linje"
+
+#: kpresenter_doc.cc:710
+msgid "Insert Rectangle"
+msgstr "Sett inn rektangel"
+
+#: kpresenter_doc.cc:724
+msgid "Insert Ellipse"
+msgstr "Sett inn elipse"
+
+#: kpresenter_doc.cc:738
+msgid "Insert Pie/Arc/Chors"
+msgstr "Sett inn kakestykke"
+
+#: kpresenter_doc.cc:752
+msgid "Insert Autoform"
+msgstr ""
+
+#: kpresenter_doc.cc:766 kpresenter_view.cc:3154
+msgid "Insert Clipart"
+msgstr "Sett inn utklippsbilde"
+
+#: kpresenter_doc.cc:780
+msgid "Insert Text"
+msgstr "Sett inn tekst"
+
+#: kpresenter_doc.cc:794 kpresenter_view.cc:3150
+msgid "Insert Picture"
+msgstr "Sett inn bilde"
+
+#: kpresenter_doc.cc:894
+msgid "Could not init"
+msgstr "Kunne ikke initiere"
+
+#: kpresenter_doc.cc:908
+msgid "Embed Object"
+msgstr ""
+
+#: kpresenter_doc.cc:1204
+msgid "Apply Styles"
+msgstr "Tilføy stiler"
+
+#: kpresenter_doc.cc:1276
+msgid "Change Line Begin"
+msgstr "Endre linjestart"
+
+#: kpresenter_doc.cc:1349
+msgid "Change Line End"
+msgstr "Endre linjeslutt"
+
+#: kpresenter_doc.cc:1403
+msgid "Change Pie/Arc/Chord Values"
+msgstr "Endre verdier for kakestykke"
+
+#: kpresenter_doc.cc:1451
+msgid "Change Rectangle values"
+msgstr "Endre verdier for rektangel"
+
+#: kpresenter_doc.cc:1596
+msgid "Change Pen"
+msgstr "Endre penn"
+
+#: kpresenter_doc.cc:1739
+msgid "Change Brush"
+msgstr "Endre pensel"
+
+#: kpresenter_doc.cc:2258 kpresenter_doc.cc:2287
+msgid "Lower Object(s)"
+msgstr "Senke objekt(er)"
+
+#: kpresenter_doc.cc:2301
+msgid "Insert picture"
+msgstr "Sett inn bilde"
+
+#: kpresenter_doc.cc:2316
+msgid "Insert clipart"
+msgstr "Sett inn utklippsbilde"
+
+#: kpresenter_doc.cc:2335
+msgid "Change pixmap"
+msgstr "Endre pixmap"
+
+#: kpresenter_doc.cc:2356
+msgid "Change clipart"
+msgstr "Endre utklippsbilde"
+
+#: kpresenter_doc.cc:2375
+msgid "Insert line"
+msgstr "Sett inn linje"
+
+#: kpresenter_doc.cc:2391
+msgid "Insert rectangle"
+msgstr "Sett inn rektangel"
+
+#: kpresenter_doc.cc:2407
+msgid "Insert ellipse"
+msgstr "Sett inn elipse"
+
+#: kpresenter_doc.cc:2423
+msgid "Insert pie/arc/chord"
+msgstr "Sett inn kakestykke"
+
+#: kpresenter_doc.cc:2438
+msgid "Insert text"
+msgstr "Sett inn tekst"
+
+#: kpresenter_doc.cc:2454
+msgid "Insert autoform"
+msgstr ""
+
+#: kpresenter_doc.cc:2779
+msgid "Delete object(s)"
+msgstr "Slett objekt(er)"
+
+#: kpresenter_doc.cc:2856
+msgid "Set new options"
+msgstr "Sett nye valg"
+
+#: kpresenter_doc.cc:2938
+msgid "Align object(s) left"
+msgstr "Venstrejuster objekt(er)"
+
+#: kpresenter_doc.cc:2964
+msgid "Align object(s) centered (horizontal)"
+msgstr "Midtstill objekt(er)"
+
+#: kpresenter_doc.cc:2989
+msgid "Align object(s) right"
+msgstr "Høyrejuster objekt(er)"
+
+#: kpresenter_doc.cc:3019 kpresenter_doc.cc:3050 kpresenter_doc.cc:3080
+msgid "Align object(s) top"
+msgstr "Toppjuster objekt(er)"
+
+#: kpresenter_shell.cc:84
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr ""
+"Dokumentet er endret.\n"
+"Vil du lagre endringene?"
+
+#: kpresenter_shell.cc:335
+msgid "Could not create new document"
+msgstr "Kunne ikke opprette nytt dokument"
+
+#: kpresenter_shell.cc:335 kpresenter_view.cc:521 kpresenter_view.cc:539
+#: kpresenter_view.cc:557
+msgid "Ok"
+msgstr "Ok"
+
+#: kpresenter_shell.cc:351
+#, c-format
+msgid ""
+"Could not open\n"
+"%s"
+msgstr ""
+"Kunne ikke åpne\n"
+"%s"
+
+#: kpresenter_shell.cc:352 kpresenter_shell.cc:375 kpresenter_shell.cc:397
+msgid "IO Error"
+msgstr "IO feil"
+
+#: kpresenter_shell.cc:374
+#, c-format
+msgid ""
+"Could not save\n"
+"%s"
+msgstr ""
+"Kunne ikke lagre\n"
+"%s"
+
+#: kpresenter_shell.cc:396
+msgid "Could not save file"
+msgstr "Kunne ikke lagre fil"
+
+#: kpresenter_view.cc:237
+msgid "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!"
+msgstr "Du bruker sideoppsett SCREEN. Jeg skriver det ut i DIN A4 LANDSCAPE!"
+
+#: kpresenter_view.cc:243
+msgid "The used page layout is not supported by QPrinter. I set it to DIN A4."
+msgstr "Det benyttede sisdeoppsett er ikke støttet av QPrinter. Jeg setter det til DIN A4."
+
+#: kpresenter_view.cc:342
+msgid ""
+"Every document has to have at least one page. Because this document \n"
+"has not more that one page you can't delete this one."
+msgstr ""
+"Alle dokumenter må ha minst en side. Da dette dokumentet kun har en \n"
+"side, kan du ikke slette denne siden."
+
+#: kpresenter_view.cc:349
+msgid "KPresenter - Delete Page"
+msgstr "KPresenter - Slett side"
+
+#: kpresenter_view.cc:427
+msgid "KPresenter - Insert Page"
+msgstr "KPresenter - Sett inn side"
+
+#: kpresenter_view.cc:521
+msgid "Sorry, no charting component registered"
+msgstr "Beklager, ingen diagramkomponent registrert"
+
+#: kpresenter_view.cc:539
+msgid "Sorry, no table component registered"
+msgstr "Beklager, ingen tabellkomponent registrert"
+
+#: kpresenter_view.cc:557
+msgid "Sorry, no formula component registered"
+msgstr "Beklager, ingen formelkomponent registrert"
+
+#: kpresenter_view.cc:584
+msgid "Autoform-Choose"
+msgstr ""
+
+#: kpresenter_view.cc:586
+msgid "KPresenter - Insert an Autoform"
+msgstr ""
+
+#: kpresenter_view.cc:628
+msgid "KPresenter - Pen and Brush"
+msgstr "KPresenter - Penn og Pensel"
+
+#: kpresenter_view.cc:652
+msgid "KPresenter - Configure Pie/Arc/Chord"
+msgstr "KPresenter- Konfigurer kakestykke"
+
+#: kpresenter_view.cc:673
+msgid "KPresenter - Configure Rectangle"
+msgstr "KPresenter - Konfirgurer rektangel"
+
+#: kpresenter_view.cc:709
+msgid "KPresenter - Rotate"
+msgstr "KPresenter - Roter"
+
+#: kpresenter_view.cc:733
+msgid "KPresenter - Shadow"
+msgstr "KPresenter - Skygge"
+
+#: kpresenter_view.cc:778
+msgid "KPresenter - Page Background"
+msgstr "KPresenter - Sidebakgrunn"
+
+#: kpresenter_view.cc:792 kpresenter_view.cc:1521
+msgid "Set Pagelayout"
+msgstr "Sett sideutseende"
+
+#: kpresenter_view.cc:809
+msgid "KPresenter - Options"
+msgstr "KPresenter - Valg"
+
+#: kpresenter_view.cc:867
+msgid "KPresenter - Page Configuration for Screenpresentations"
+msgstr "KPresenter - Sideoppsett for Skjermpresentasjoner"
+
+#: kpresenter_view.cc:881 kpresenter_view.cc:3651
+msgid "KPresenter - Presentation structure viewer"
+msgstr "KPresenter - Strukturviser"
+
+#: kpresenter_view.cc:905
+msgid "KPresenter - Assign effects"
+msgstr "KPresenter - Tildel effekter"
+
+#: kpresenter_view.cc:914
+msgid "I can't assign an effect. You have to select EXACTLY one object!"
+msgstr "Jeg kan ikke tildele effekten. Du må velge NØYAKTIG ett objekt"
+
+#: kpresenter_view.cc:1382
+msgid "KPresenter - Spacings"
+msgstr "KPresenter - Mellomrom"
+
+#: kpresenter_view.cc:1672
+msgid "Set Background"
+msgstr "Sett bakgrunn"
+
+#: kpresenter_view.cc:1739
+msgid "Configure Page for Screenpresentations"
+msgstr "Konfigurer side for skjermpresentasjoner"
+
+#: kpresenter_view.cc:1782
+msgid "Change Rotation"
+msgstr "Endre rotasjon"
+
+#: kpresenter_view.cc:1824
+msgid "Change Shadow"
+msgstr "Endre skygge"
+
+#: kpresenter_view.cc:2287 kpresenter_view.cc:2672 kpresenter_view.cc:3022
+msgid "Pen color..."
+msgstr "Fargepenn"
+
+#: kpresenter_view.cc:2381 kpresenter_view.cc:2398 kpresenter_view.cc:2428
+#: kpresenter_view.cc:2446
+msgid "The search string '"
+msgstr "Søkestrengen"
+
+#: kpresenter_view.cc:2634
+#, c-format
+msgid "Undo: %s"
+msgstr "Gjør om: %s"
+
+#: kpresenter_view.cc:2640 kpresenter_view.cc:2708
+msgid "No Undo possible"
+msgstr "Kan ikke omgjøre"
+
+#: kpresenter_view.cc:2653
+#, c-format
+msgid "Redo: %s"
+msgstr "Gjenta: %s"
+
+#: kpresenter_view.cc:2659 kpresenter_view.cc:2712
+msgid "No Redo possible"
+msgstr "Ikke mulig å gjenta"
+
+#: kpresenter_view.cc:2730
+msgid "&Select all"
+msgstr "&Velg alle"
+
+#: kpresenter_view.cc:2735 page.cc:1406
+msgid "&Delete Page..."
+msgstr "&Slett side"
+
+#: kpresenter_view.cc:2739
+msgid "&Find..."
+msgstr "&Finn"
+
+#: kpresenter_view.cc:2741
+msgid "&Replace..."
+msgstr "&Erstatt"
+
+#: kpresenter_view.cc:2752
+msgid "Pa&ge..."
+msgstr "Si&de"
+
+#: kpresenter_view.cc:2756
+msgid "&Picture..."
+msgstr "&Bilde"
+
+#: kpresenter_view.cc:2759
+msgid "&Clipart..."
+msgstr "&Utklippsbilder"
+
+#: kpresenter_view.cc:2764
+msgid "&Tools"
+msgstr "&Verktøy"
+
+#: kpresenter_view.cc:2767
+msgid "&Mouse"
+msgstr "&Mus"
+
+#: kpresenter_view.cc:2770
+msgid "&Line"
+msgstr "&Linje"
+
+#: kpresenter_view.cc:2773
+msgid "&Rectangle"
+msgstr "&Rektangel"
+
+#: kpresenter_view.cc:2776
+msgid "C&ircle or Ellipse"
+msgstr "S&irkel eller elipse"
+
+#: kpresenter_view.cc:2779
+msgid "Pie/&Arc/Chord"
+msgstr "Ka&kestykke"
+
+#: kpresenter_view.cc:2782
+msgid "&Text"
+msgstr "&Tekst"
+
+#: kpresenter_view.cc:2785
+msgid "&Autoform..."
+msgstr ""
+
+#: kpresenter_view.cc:2788
+msgid "&Diagramm"
+msgstr "&Diagram"
+
+#: kpresenter_view.cc:2791
+msgid "&Table"
+msgstr "&Tabell"
+
+#: kpresenter_view.cc:2794
+msgid "&Formula"
+msgstr "&Formel"
+
+#: kpresenter_view.cc:2797
+msgid "&Object..."
+msgstr "&Objekt"
+
+#: kpresenter_view.cc:2802
+msgid "T&ext"
+msgstr "&Tekst"
+
+#: kpresenter_view.cc:2804
+msgid "&Font..."
+msgstr "&Skrifttype"
+
+#: kpresenter_view.cc:2806
+msgid "Text &Color..."
+msgstr "Tekst&farge"
+
+#: kpresenter_view.cc:2808 kpresenter_view.cc:2869
+msgid "Text &Alignment"
+msgstr "Tekst&justering"
+
+#: kpresenter_view.cc:2812 kpresenter_view.cc:2872
+msgid "Align &Left"
+msgstr "&venstrejuster"
+
+#: kpresenter_view.cc:2816
+msgid "Align &Center"
+msgstr "Midtstill"
+
+#: kpresenter_view.cc:2820 kpresenter_view.cc:2881
+msgid "Align &Right"
+msgstr "&høyrejuster"
+
+#: kpresenter_view.cc:2823
+msgid "Text &Type"
+msgstr "Tekst&type"
+
+#: kpresenter_view.cc:2826
+msgid "&Enumerated List"
+msgstr "&Nummerliste"
+
+#: kpresenter_view.cc:2829
+msgid "&Unsorted List"
+msgstr "&Usortert liste"
+
+#: kpresenter_view.cc:2832
+msgid "&Normal Text"
+msgstr "&Normal tekst"
+
+#: kpresenter_view.cc:2835
+msgid "&Increase Depth"
+msgstr "&Øk dybde"
+
+#: kpresenter_view.cc:2838
+msgid "&Decrease Depth"
+msgstr "&Minsk dybde"
+
+#: kpresenter_view.cc:2841
+msgid "Paragraph &Spacing..."
+msgstr "&Avsnittsmellomrom"
+
+#: kpresenter_view.cc:2845
+msgid "&Extra"
+msgstr "&Ekstra"
+
+#: kpresenter_view.cc:2848
+msgid "&Pen and Brush..."
+msgstr "&Penn og pensel"
+
+#: kpresenter_view.cc:2851
+msgid "&Configure Pie/Arc/Chord..."
+msgstr "&Konfigurer kakestykke"
+
+#: kpresenter_view.cc:2854
+msgid "C&onfigure Rectangle..."
+msgstr "K&onfigurer rektangel"
+
+#: kpresenter_view.cc:2857
+msgid "&Raise object(s)"
+msgstr "&Hev objekt(er)"
+
+#: kpresenter_view.cc:2860
+msgid "&Lower object(s)"
+msgstr "&Senk objekt(er)"
+
+#: kpresenter_view.cc:2863
+msgid "Rot&ate object(s)..."
+msgstr "Rot&er objekt(er)"
+
+#: kpresenter_view.cc:2866
+msgid "&Shadow object(s)..."
+msgstr "Sk&yggelegg objekt(er)"
+
+#: kpresenter_view.cc:2877
+msgid "Align Center (&horizontal)"
+msgstr "Midtstill (&horisontalt)"
+
+#: kpresenter_view.cc:2885
+msgid "Align &Top"
+msgstr "Toppjuster"
+
+#: kpresenter_view.cc:2889
+msgid "Align Center (&vertical)"
+msgstr "Midtstill (&vertikalt)"
+
+#: kpresenter_view.cc:2893
+msgid "Align &Bottom"
+msgstr "&Bunnjuster"
+
+#: kpresenter_view.cc:2897 page.cc:1400
+msgid "Page &Background..."
+msgstr "Side&bakgrunn"
+
+#: kpresenter_view.cc:2899 page.cc:1399
+msgid "Pa&ge Layout..."
+msgstr "S&ideoppsett"
+
+#: kpresenter_view.cc:2903
+msgid "&Options..."
+msgstr "&Valg"
+
+#: kpresenter_view.cc:2906
+msgid "&Screen Presentations"
+msgstr "Vis på s&kjerm"
+
+#: kpresenter_view.cc:2908 page.cc:1402
+msgid "&Configure pages..."
+msgstr "&Konfigurer sider"
+
+#: kpresenter_view.cc:2909 page.cc:1403
+msgid "&Open presentation structure viewer..."
+msgstr "&Åpne strukturviser"
+
+#: kpresenter_view.cc:2912 page.cc:1276 page.cc:1292 page.cc:1310 page.cc:1328
+#: page.cc:1346 page.cc:1364 page.cc:1381
+msgid "&Assign effect..."
+msgstr "&Tildel effekt"
+
+#: kpresenter_view.cc:2929
+msgid "&Go to start"
+msgstr "&Gå til start"
+
+#: kpresenter_view.cc:2932
+msgid "&Previous step"
+msgstr "&Forrige steg"
+
+#: kpresenter_view.cc:2935
+msgid "&Next step"
+msgstr "&Neste steg"
+
+#: kpresenter_view.cc:2938
+msgid "&Go to end"
+msgstr "Gå til sl&utten"
+
+#: kpresenter_view.cc:2946
+msgid "&Choose Pen"
+msgstr "&Velg penn"
+
+#: kpresenter_view.cc:2949 kpresenter_view.cc:3019
+msgid "Pen width"
+msgstr "Penntykkelse"
+
+#: kpresenter_view.cc:2952
+msgid "Pen color"
+msgstr "Pennfarge"
+
+#: kpresenter_view.cc:2954
+msgid "1"
+msgstr ""
+
+#: kpresenter_view.cc:2956
+msgid "2"
+msgstr ""
+
+#: kpresenter_view.cc:2958
+msgid "3"
+msgstr ""
+
+#: kpresenter_view.cc:2960
+msgid "4"
+msgstr ""
+
+#: kpresenter_view.cc:2962
+msgid "5"
+msgstr ""
+
+#: kpresenter_view.cc:2964
+msgid "6"
+msgstr ""
+
+#: kpresenter_view.cc:2966
+msgid "7"
+msgstr ""
+
+#: kpresenter_view.cc:2968
+msgid "8"
+msgstr ""
+
+#: kpresenter_view.cc:2970
+msgid "9"
+msgstr ""
+
+#: kpresenter_view.cc:2972
+msgid "10"
+msgstr ""
+
+#: kpresenter_view.cc:3145
+msgid "Insert Page"
+msgstr "Sett inn side"
+
+#: kpresenter_view.cc:3167
+msgid "Mouse Tool"
+msgstr "Musverktøy"
+
+#: kpresenter_view.cc:3175
+msgid "Create Line"
+msgstr "Sett inn linje"
+
+#: kpresenter_view.cc:3183
+msgid "Create Rectangle"
+msgstr "Sett inn rektangel"
+
+#: kpresenter_view.cc:3190
+msgid "Create Circle or Ellipse"
+msgstr "Sett inn sirkel eller elipse"
+
+#: kpresenter_view.cc:3197
+msgid "Create Pie/Arc/Chord"
+msgstr "Sett inn kakestykke"
+
+#: kpresenter_view.cc:3204
+msgid "Create Text"
+msgstr "Skriv inn tekst"
+
+#: kpresenter_view.cc:3211
+msgid "Create Autoform"
+msgstr ""
+
+#: kpresenter_view.cc:3218
+msgid "Create Diagramm"
+msgstr "Sett inn diagram"
+
+#: kpresenter_view.cc:3225
+msgid "Create Table"
+msgstr "Sett inn tabell"
+
+#: kpresenter_view.cc:3232
+msgid "Create Formula"
+msgstr "Sett inn formel"
+
+#: kpresenter_view.cc:3239
+msgid "Create Object"
+msgstr "Sett inn objekt"
+
+#: kpresenter_view.cc:3273
+msgid "Font List"
+msgstr "Liste over skrifttyper"
+
+#: kpresenter_view.cc:3282
+msgid "Bold"
+msgstr "Fet"
+
+#: kpresenter_view.cc:3297
+msgid "Underline"
+msgstr "Understreket"
+
+#: kpresenter_view.cc:3314
+msgid "Align Left"
+msgstr "Venstrejuster"
+
+#: kpresenter_view.cc:3322
+msgid "Align Center"
+msgstr "Midtstill"
+
+#: kpresenter_view.cc:3329
+msgid "Align Right"
+msgstr "Høyrejuster"
+
+#: kpresenter_view.cc:3338
+msgid "Enumerated List"
+msgstr "Nummerliste"
+
+#: kpresenter_view.cc:3342
+msgid "Unsorted List"
+msgstr "Usortert liste"
+
+#: kpresenter_view.cc:3346
+msgid "Normal Text"
+msgstr "Normal tekst"
+
+#: kpresenter_view.cc:3352
+msgid "Increase Depth"
+msgstr "Øk dybde"
+
+#: kpresenter_view.cc:3356
+msgid "Decrease Depth"
+msgstr "Reduser dybde"
+
+#: kpresenter_view.cc:3360
+msgid "Paragraph Spacing"
+msgstr "Linjemellomrom"
+
+#: kpresenter_view.cc:3372 presstructview.cc:312
+msgid "Pen & Brush"
+msgstr "Penn & Pensel"
+
+#: kpresenter_view.cc:3377 presstructview.cc:327
+msgid "Configure Pie"
+msgstr "Konfigurer kakestykke"
+
+#: kpresenter_view.cc:3382 presstructview.cc:329
+msgid "Configure Rectangle"
+msgstr "Konfigurer rektangel"
+
+#: kpresenter_view.cc:3387
+msgid "Raise object"
+msgstr "Hev objekt"
+
+#: kpresenter_view.cc:3391
+msgid "Lower object"
+msgstr "Senk objekt"
+
+#: kpresenter_view.cc:3396
+msgid "Rotate object"
+msgstr "Roter objekt"
+
+#: kpresenter_view.cc:3400
+msgid "Shadow object"
+msgstr "Skyggelegg objekt"
+
+#: kpresenter_view.cc:3405
+msgid "Align object"
+msgstr "Juster objekt"
+
+#: kpresenter_view.cc:3411 presstructview.cc:601 presstructview.cc:639
+#: presstructview.cc:669
+msgid "Line Begin"
+msgstr "Linjestart"
+
+#: kpresenter_view.cc:3415 presstructview.cc:605 presstructview.cc:643
+#: presstructview.cc:673
+msgid "Line End"
+msgstr "Linjeslutt"
+
+#: kpresenter_view.cc:3427
+msgid "Start"
+msgstr "Start"
+
+#: kpresenter_view.cc:3432
+msgid "First"
+msgstr "Først"
+
+#: kpresenter_view.cc:3436
+msgid "Previous"
+msgstr "Forrige"
+
+#: kpresenter_view.cc:3440
+msgid "Next"
+msgstr "Neste"
+
+#: kpresenter_view.cc:3444
+msgid "Last"
+msgstr "Siste"
+
+#: kpresenter_view.cc:3449
+msgid "Assign Effect"
+msgstr "Tildel effekt"
+
+#: kpresenter_view.cc:3454
+msgid "choose Pen"
+msgstr "velg penn"
+
+#: ksearchdialogs.cc:23 ksearchdialogs.cc:25 ksearchdialogs.cc:34
+#: ksearchdialogs.cc:65
+msgid "Find"
+msgstr "Finn"
+
+#: ksearchdialogs.cc:31 ksearchdialogs.cc:76
+msgid "Case Sensitive"
+msgstr ""
+
+#: ksearchdialogs.cc:32 ksearchdialogs.cc:77
+msgid "Find Backwards"
+msgstr "Finn baklengs"
+
+#: ksearchdialogs.cc:37 ksearchdialogs.cc:85
+msgid "Done"
+msgstr "Ferdig"
+
+#: ksearchdialogs.cc:63
+msgid "Find & Replace"
+msgstr "Finn & erstatt"
+
+#: ksearchdialogs.cc:79
+msgid "Replace all"
+msgstr "Erstatt alle"
+
+#: ktextobject.cc:1638
+msgid "Doubleclick to edit"
+msgstr "Dobbeltklikk for å redigere"
+
+#: ktextobject.cc:5872 page.cc:1268 page.cc:1285 page.cc:1301 page.cc:1319
+#: page.cc:1337 page.cc:1355 page.cc:1373
+msgid "C&opy"
+msgstr "K&opier"
+
+#: optiondia.cc:31 optiondia.cc:94 pgconfdia.cc:32
+msgid "General"
+msgstr "Generelt"
+
+#: optiondia.cc:34
+msgid "Horizontal Raster: "
+msgstr "Horisontal rast:"
+
+#: optiondia.cc:39
+msgid "Vertikal Raster: "
+msgstr "Vertikal rast:"
+
+#: optiondia.cc:67
+msgid "Objects in Editing-Mode"
+msgstr "Objekter i redigerer-modus"
+
+#: optiondia.cc:71
+msgid "Backgroud color:"
+msgstr "Bakgrunnsfarge:"
+
+#: optiondia.cc:95
+msgid "Objects"
+msgstr "Objekter"
+
+#: page.cc:445
+msgid "Move object(s)"
+msgstr "Flytt objekt(er)"
+
+#: page.cc:469
+msgid "Resize object up"
+msgstr ""
+
+#: page.cc:487
+msgid "Resize object down"
+msgstr ""
+
+#: page.cc:505
+msgid "Resize object left"
+msgstr ""
+
+#: page.cc:523
+msgid "Resize object right"
+msgstr ""
+
+#: page.cc:541
+msgid "Resize object left up"
+msgstr ""
+
+#: page.cc:559
+msgid "Resize object left down"
+msgstr ""
+
+#: page.cc:577
+msgid "Resize object right up"
+msgstr ""
+
+#: page.cc:595
+msgid "Resize object right down"
+msgstr ""
+
+#: page.cc:1271 page.cc:1288 page.cc:1304 page.cc:1322 page.cc:1340
+#: page.cc:1358 page.cc:1376
+msgid "&Rotate..."
+msgstr "&Roter"
+
+#: page.cc:1272 page.cc:1305 page.cc:1323 page.cc:1341 page.cc:1359
+#: page.cc:1377
+msgid "&Shadow..."
+msgstr "&Skygge"
+
+#: page.cc:1278 page.cc:1294 page.cc:1312 page.cc:1330 page.cc:1348
+#: page.cc:1366 page.cc:1383
+msgid "&Align objects"
+msgstr "&Juster objekter"
+
+#: page.cc:1308
+msgid "&Configure Rectangle..."
+msgstr "&Konfigurer rektangel"
+
+#: page.cc:1326
+msgid "&Configure pie/arc/chord..."
+msgstr "&Konfigurer kakestykke"
+
+#: page.cc:1343
+msgid "&Change Picture..."
+msgstr "&Endre bilde"
+
+#: page.cc:1361
+msgid "&Change Clipart..."
+msgstr "&Endre utklippsbilde"
+
+#: page.cc:1390
+msgid "&Switching mode"
+msgstr "&Vekslemodus"
+
+#: page.cc:1391
+msgid "&Drawing mode"
+msgstr "&Tegnemodus"
+
+#: page.cc:1405
+msgid "&Insert Page..."
+msgstr "&Sett inn side"
+
+#: page.cc:2576
+msgid "Printing..."
+msgstr "Skriver ut"
+
+#: pgconfdia.cc:34
+msgid "&Infinite Loop"
+msgstr "&Uendelig løkke"
+
+#: pgconfdia.cc:39
+msgid "&Manual switch to next step"
+msgstr "&Manuell veksling"
+
+#: pgconfdia.cc:44
+msgid "Speed of the presentation:"
+msgstr "Hastighet"
+
+#: pgconfdia.cc:50
+msgid "Slow"
+msgstr "Sen"
+
+#: pgconfdia.cc:51
+msgid "Normal"
+msgstr "Normal"
+
+#: pgconfdia.cc:52
+msgid "Fast"
+msgstr "Hurtig"
+
+#: pgconfdia.cc:58
+msgid "Page Configuration"
+msgstr "Sideutseende"
+
+#: pgconfdia.cc:61
+#, c-format
+msgid "Page number: %d"
+msgstr "Sidenummer: %d"
+
+#: pgconfdia.cc:66
+msgid "Effect for changing to next page:"
+msgstr "Effekt ved sideveksling:"
+
+#: pgconfdia.cc:72
+msgid "No effect"
+msgstr "Ingen effekt"
+
+#: pgconfdia.cc:73
+msgid "Close horizontal"
+msgstr "Lukk horisontalt"
+
+#: pgconfdia.cc:74
+msgid "Close vertical"
+msgstr "Lukk vertikalt"
+
+#: pgconfdia.cc:75
+msgid "Close from all directions"
+msgstr "Lukk fra alle retninger"
+
+#: pgconfdia.cc:76
+msgid "Open horizontal"
+msgstr "Åpne horisontalt"
+
+#: pgconfdia.cc:77
+msgid "Open vertical"
+msgstr "Åpne vertikalt"
+
+#: pgconfdia.cc:78
+msgid "Open from all directions"
+msgstr "Åpne fra alle retninger"
+
+#: pgconfdia.cc:79
+msgid "Interlocking horizontal 1"
+msgstr ""
+
+#: pgconfdia.cc:80
+msgid "Interlocking horizontal 2"
+msgstr ""
+
+#: pgconfdia.cc:81
+msgid "Interlocking vertical 1"
+msgstr ""
+
+#: pgconfdia.cc:82
+msgid "Interlocking vertical 2"
+msgstr ""
+
+#: pgconfdia.cc:83
+msgid "Surround 1"
+msgstr ""
+
+#: presstructview.cc:105
+msgid "Step"
+msgstr "Steg"
+
+#: presstructview.cc:106
+msgid "Object"
+msgstr "Objekt"
+
+#: presstructview.cc:134
+msgid "appear"
+msgstr "opptre"
+
+#: presstructview.cc:139
+msgid "stay"
+msgstr "bli"
+
+#: presstructview.cc:176
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: presstructview.cc:177
+msgid "Value"
+msgstr "Verdi"
+
+#: presstructview.cc:313
+msgid "Rotate"
+msgstr "Roter"
+
+#: presstructview.cc:314 shadowdia.cc:109
+msgid "Shadow"
+msgstr "Skygge"
+
+#: presstructview.cc:315
+msgid "Align"
+msgstr "Juster"
+
+#: presstructview.cc:316
+msgid "Assign effect"
+msgstr "Tildel effekt"
+
+#: presstructview.cc:320
+msgid "Raise"
+msgstr "Heve"
+
+#: presstructview.cc:321
+msgid "Lower"
+msgstr "Senke"
+
+#: presstructview.cc:326
+msgid "Edit Text"
+msgstr "Rediger tekst"
+
+#: presstructview.cc:331
+msgid "Change Filename"
+msgstr "Endre filnavn"
+
+#: presstructview.cc:335
+msgid "Background"
+msgstr "Bakgrunn"
+
+#: presstructview.cc:337
+msgid "Configure Pages"
+msgstr "Konfigurer sider"
+
+#: presstructview.cc:355 presstructview.cc:416
+msgid "Number"
+msgstr "Nummer"
+
+#: presstructview.cc:358
+msgid "Back Type"
+msgstr ""
+
+#: presstructview.cc:362
+msgid "Back View"
+msgstr ""
+
+#: presstructview.cc:369
+msgid "Color1"
+msgstr "Farge1"
+
+#: presstructview.cc:375
+msgid "Color2"
+msgstr "Farge2"
+
+#: presstructview.cc:378
+msgid "Picture Filename"
+msgstr "Bildefilnavn"
+
+#: presstructview.cc:381
+msgid "Clipart Filename"
+msgstr "Utklippsbildefilnavn"
+
+#: presstructview.cc:384
+msgid "Effect for changing to next page"
+msgstr ""
+
+#: presstructview.cc:388
+msgid "Speed for screenpresentations"
+msgstr "Hastighet for skjermpresentasjoner"
+
+#: presstructview.cc:392
+msgid "Manual switching to next page"
+msgstr "Manuell veksling til neste side"
+
+#: presstructview.cc:396
+msgid "Infinit loop"
+msgstr ""
+
+#: presstructview.cc:419
+msgid "Type"
+msgstr ""
+
+#: presstructview.cc:424
+msgid "X-Coordinate"
+msgstr "X-Koordinat"
+
+#: presstructview.cc:428
+msgid "Y-Coordinate"
+msgstr "Y-Koordinat"
+
+#: presstructview.cc:432
+msgid "Width"
+msgstr "Bredde"
+
+#: presstructview.cc:436
+msgid "Height"
+msgstr "Høyde"
+
+#: presstructview.cc:440 rotatedia.cc:73
+msgid "Angle"
+msgstr "Vinkel"
+
+#: presstructview.cc:444
+msgid "Shadow Distance"
+msgstr "Skyggelengde"
+
+#: presstructview.cc:447
+msgid "Shadow Direction"
+msgstr "Skyggeretning"
+
+#: presstructview.cc:452
+msgid "Appearing number in the Presentation"
+msgstr ""
+
+#: presstructview.cc:455
+msgid "Effect"
+msgstr "Effekt"
+
+#: presstructview.cc:459
+msgid "Objectspecific Effect"
+msgstr "Objektspesifikk effekt"
+
+#: presstructview.cc:467 presstructview.cc:519 presstructview.cc:563
+#: presstructview.cc:625 presstructview.cc:655
+msgid "Pen Color"
+msgstr "Fargepenn"
+
+#: presstructview.cc:473 presstructview.cc:525 presstructview.cc:569
+#: presstructview.cc:631 presstructview.cc:661
+msgid "Pen Style"
+msgstr "Pennstil"
+
+#: presstructview.cc:478 presstructview.cc:530 presstructview.cc:574
+#: presstructview.cc:636 presstructview.cc:666
+msgid "Pen Width"
+msgstr "Pennbredde"
+
+#: presstructview.cc:483 presstructview.cc:535 presstructview.cc:579
+#: presstructview.cc:679
+msgid "Brush Color"
+msgstr "Fargepensel"
+
+#: presstructview.cc:489 presstructview.cc:541 presstructview.cc:585
+#: presstructview.cc:685
+msgid "Brush Style"
+msgstr "Penselstil"
+
+#: presstructview.cc:495 presstructview.cc:547 presstructview.cc:591
+#: presstructview.cc:691
+msgid "Gradient Color1"
+msgstr ""
+
+#: presstructview.cc:498 presstructview.cc:550 presstructview.cc:594
+#: presstructview.cc:694
+msgid "Gradient Color2"
+msgstr ""
+
+#: presstructview.cc:501 presstructview.cc:553 presstructview.cc:597
+#: presstructview.cc:697
+msgid "Gradient Type"
+msgstr ""
+
+#: presstructview.cc:560
+msgid "Sub-Type"
+msgstr ""
+
+#: presstructview.cc:611
+msgid "Pie/Arc/Chord Angle"
+msgstr "Kakestykkevinkel"
+
+#: presstructview.cc:616
+msgid "Pie/Arc/Chord Length"
+msgstr "Kakestykkelengde"
+
+#: presstructview.cc:621
+msgid "Direction"
+msgstr "Retning"
+
+#: presstructview.cc:649
+msgid "Name"
+msgstr "Navn"
+
+#: presstructview.cc:704 presstructview.cc:709
+msgid "Filename"
+msgstr "Filnavn"
+
+#: rotatedia.cc:80
+msgid "Custom: "
+msgstr "Tilpasset:"
+
+#: shadowdia.cc:112
+msgid "Color:"
+msgstr "Farge:"
+
+#: shadowdia.cc:121
+msgid "Distance:"
+msgstr "Avstand:"
+
+#: shadowdia.cc:130
+msgid "Direction:"
+msgstr "Retning:"
+
+#: spacingdia.cc:29
+msgid "Line Spacing (pt)"
+msgstr "Linjemellomrom (pt)"
+
+#: spacingdia.cc:39
+msgid "Distance before the Paragraph (pt)"
+msgstr ""
+
+#: spacingdia.cc:49
+msgid "Distance after the Paragraph (pt)"
+msgstr ""
+
+#: styledia.cc:85 styledia.cc:181
+msgid "Choose color..."
+msgstr "Velg farge"
+
+#: styledia.cc:91 styledia.cc:187
+msgid "Choose style:"
+msgstr "Velg stil:"
+
+#: styledia.cc:97
+msgid "solid line"
+msgstr "Heltrukket linje"
+
+#: styledia.cc:98
+msgid "dash line (----)"
+msgstr "stiplet linje"
+
+#: styledia.cc:99
+msgid "dot line (****)"
+msgstr "Prikkelinje"
+
+#: styledia.cc:100
+msgid "dash dot line (-*-*)"
+msgstr "Strekprikklinje"
+
+#: styledia.cc:101
+msgid "dash dot dot line (-**-)"
+msgstr "Kombinert linje"
+
+#: styledia.cc:102
+msgid "no pen"
+msgstr "ingen penn"
+
+#: styledia.cc:108
+msgid "Choose width:"
+msgstr "Vegl bredde:"
+
+#: styledia.cc:130
+msgid "Choose line begin:"
+msgstr "Velg linjestart:"
+
+#: styledia.cc:144
+msgid "Choose line end:"
+msgstr "Velg linjeslutt:"
+
+#: styledia.cc:165
+msgid "Pen"
+msgstr "Penn"
+
+#: styledia.cc:174
+msgid "Fill with brush:"
+msgstr "Fyll med pensel:"
+
+#: styledia.cc:193
+#, c-format
+msgid "100% fill pattern"
+msgstr ""
+
+#: styledia.cc:194
+#, c-format
+msgid "94% fill pattern"
+msgstr ""
+
+#: styledia.cc:195
+#, c-format
+msgid "88% fill pattern"
+msgstr ""
+
+#: styledia.cc:196
+#, c-format
+msgid "63% fill pattern"
+msgstr ""
+
+#: styledia.cc:197
+#, c-format
+msgid "50% fill pattern"
+msgstr ""
+
+#: styledia.cc:198
+#, c-format
+msgid "37% fill pattern"
+msgstr ""
+
+#: styledia.cc:199
+#, c-format
+msgid "12% fill pattern"
+msgstr ""
+
+#: styledia.cc:200
+#, c-format
+msgid "6% fill pattern"
+msgstr ""
+
+#: styledia.cc:201
+msgid "horizontal lines"
+msgstr "horisontale linjer"
+
+#: styledia.cc:202
+msgid "vertical lines"
+msgstr "vertikale linjer"
+
+#: styledia.cc:203
+msgid "crossing lines"
+msgstr "kryssende linjer"
+
+#: styledia.cc:204
+msgid "diagonal lines (/)"
+msgstr "diagonale linjer (/)"
+
+#: styledia.cc:205
+msgid "diagonal lines (\\)"
+msgstr "diagonale linjer (\\)"
+
+#: styledia.cc:206
+msgid "diagonal crossing lines"
+msgstr "diagonale kryssende linjer"
+
+#: styledia.cc:207
+msgid "no brush"
+msgstr "ingen pensel"
+
+#: styledia.cc:222
+msgid "Fill with gradient:"
+msgstr ""
+
+#: styledia.cc:229
+msgid "Choose gradient colors:"
+msgstr ""
+
+#: styledia.cc:242
+msgid "Choose gradient style:"
+msgstr ""
+
+#: styledia.cc:270
+msgid "Brush"
+msgstr "Pensel"
