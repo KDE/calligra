@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
+#include "kpresenter_dlg_config.h"
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -583,7 +585,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     autoSave->setSpecialValueText( i18n("No auto save") );
     autoSave->setSuffix( i18n("min") );
 
-    QLabel *varLabel= new QLabel(i18n("Starting page number:"), gbDocumentSettings);
+    new QLabel(i18n("Starting page number:"), gbDocumentSettings);
     KPresenterDoc* doc = m_pView->kPresenterDoc();
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
     m_variableNumberOffset=new QLineEdit(gbDocumentSettings);
@@ -646,6 +648,7 @@ ConfigureToolsPage::ConfigureToolsPage( KPresenterView *_view, QVBox *box, char 
 {
     m_pView = _view;
     config = KPresenterFactory::global()->config();
+    m_pView->getCanvas()->deSelectAllObj();
 
     QTabWidget *tab = new QTabWidget(box);
     box->setMargin( 5 );
@@ -688,11 +691,15 @@ ConfigureToolsPage::ConfigureToolsPage( KPresenterView *_view, QVBox *box, char 
     }
 
     m_confPolygonDia = new ConfPolygonDia(tab, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
+    m_confPolygonDia->setPenBrush(m_pView->getCanvas()->activePage()->getPen(m_pView->getPen()),
+                                  m_pView->getCanvas()->activePage()->getBrush(m_pView->getBrush()));
     tab->addTab(m_confPolygonDia, i18n("P&olygon"));
 
     m_confRectDia = new ConfRectDia(tab, "ConfRectDia" );
     m_confRectDia->setRnds(m_pView->getCanvas()->activePage()->getRndX(m_pView->getRndX()),
                            m_pView->getCanvas()->activePage()->getRndY(m_pView->getRndY()));
+    m_confRectDia->setPenBrush(m_pView->getCanvas()->activePage()->getPen(m_pView->getPen()),
+                               m_pView->getCanvas()->activePage()->getBrush(m_pView->getBrush()));
     tab->addTab(m_confRectDia, i18n("&Rectangle"));
 }
 
@@ -719,6 +726,12 @@ void ConfigureToolsPage::apply()
     m_pView->setGYFactor(m_confBrushDia->getGYFactor());
     m_pView->getActionBrushColor()->setCurrentColor((m_confBrushDia->getBrush()).color());
     m_pView->getActionPenColor()->setCurrentColor((m_confPenDia->getPen()).color());
+    m_confRectDia->setPenBrush(m_confPenDia->getPen(),
+                               m_confBrushDia->getBrush());
+    m_confPolygonDia->setPenBrush(m_confPenDia->getPen(),
+                                  m_confBrushDia->getBrush());
+    m_confPieDia->setPenBrush(m_confPenDia->getPen(),
+                              m_confBrushDia->getBrush());
 }
 
 void ConfigureToolsPage::slotDefault()
@@ -741,4 +754,3 @@ void ConfigureToolsPage::slotDefault()
 }
 
 #include <kpresenter_dlg_config.moc>
-

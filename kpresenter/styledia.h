@@ -245,9 +245,10 @@ private:
     bool allTextObj;
     bool oldSticky,  oldProtect, oldKeepRatio;
     bool oldProtectContent;
+
 private slots:
     void slotReset();
-    void styleDone() { emit styleOk(); }
+    void styleDone();
     void protectChanged();
 
 signals:

@@ -63,7 +63,8 @@ void PolygonPreview::drawContents( QPainter *painter )
 
     painter->setWindow( qRound( -radius ), qRound( -radius ), qRound( diameter ), qRound( diameter ) );
     painter->setViewport( 5, 5, width() - 10, height() - 10 );
-    painter->setPen( QPen( Qt::black, 1 ) );
+    painter->setPen( pen );
+    painter->setBrush( brush );
 
     QPointArray points( isConcave ? nCorners * 2 : nCorners );
     points.setPoint( 0, 0, qRound( -radius ) );
@@ -264,6 +265,11 @@ void ConfPolygonDia::setSharpnessValue(int _sharpnessValue)
 {
     sharpnessValue = _sharpnessValue;
     m_sharpness->setValue(sharpnessValue);
+}
+
+void ConfPolygonDia::setPenBrush( const QPen &_pen, const QBrush &_brush )
+{
+    polygonPreview->setPenBrush( _pen, _brush );
 }
 
 #include <confpolygondia.moc>

@@ -694,6 +694,21 @@ void StyleDia::slotReset()
     setSize( oldRect);
 }
 
+void StyleDia::styleDone()
+{
+    if (m_confRectDia)
+        m_confRectDia->setPenBrush(m_confPenDia->getPen(),
+                                   m_confBrushDia->getBrush());
+    if (m_confPolygonDia)
+        m_confPolygonDia->setPenBrush(m_confPenDia->getPen(),
+                                      m_confBrushDia->getBrush());
+    if (m_confPieDia)
+        m_confPieDia->setPenBrush(m_confPenDia->getPen(),
+                                  m_confBrushDia->getBrush());
+
+    emit styleOk();
+}
+
 void StyleDia::setupTabPen()
 {
     m_confPenDia = new ConfPenDia(this, 0, flags);
@@ -822,6 +837,8 @@ void StyleDia::setupTabPolygon()
     }
 
     m_confPolygonDia = new ConfPolygonDia( this, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
+    m_confPolygonDia->setPenBrush( m_canvas->activePage()->getPen( m_doc->getKPresenterView()->getPen() ),
+                                   m_canvas->activePage()->getBrush( m_doc->getKPresenterView()->getBrush() ) );
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confPolygonDia, SLOT( slotReset() ) );
     addTab( m_confPolygonDia, i18n( "P&olygon" ) );
@@ -861,6 +878,8 @@ void StyleDia::setupTabRectangle()
     m_confRectDia = new ConfRectDia( this, "ConfRectDia" );
     m_confRectDia->setRnds( m_canvas->activePage()->getRndX( m_doc->getKPresenterView()->getRndX() ),
                           m_canvas->activePage()->getRndY( m_doc->getKPresenterView()->getRndY()) );
+    m_confRectDia->setPenBrush( m_canvas->activePage()->getPen( m_doc->getKPresenterView()->getPen() ),
+                                m_canvas->activePage()->getBrush( m_doc->getKPresenterView()->getBrush() ) );
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confRectDia, SLOT( slotReset() ) );
     addTab( m_confRectDia, i18n( "&Rectangle" ) );

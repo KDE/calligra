@@ -25,6 +25,8 @@
 #define confpolygondia_h
 
 #include <qframe.h>
+#include <qpen.h>
+#include <qbrush.h>
 
 class QPainter;
 class QLabel;
@@ -46,6 +48,9 @@ public:
                     int _cornersValue, int _sharpnessValue );
     ~PolygonPreview() {}
 
+    void setPenBrush( const QPen &_pen, const QBrush &_brush )
+    { pen = _pen; brush = _brush; repaint( true ); }
+
 public slots:
     void slotConvexPolygon();
     void slotConcavePolygon();
@@ -58,6 +63,8 @@ protected:
     int nCorners;
     int sharpness;
     bool isConcave;
+    QPen pen;
+    QBrush brush;
 
 };
 
@@ -81,6 +88,7 @@ public:
     void setCheckConcavePolygon(bool _concavePolygon);
     void setCornersValue(int _cornersValue);
     void setSharpnessValue(int _sharpnessValue);
+    void setPenBrush( const QPen &_pen, const QBrush &_brush );
 
 protected:
     QRadioButton *m_convexPolygon, *m_concavePolygon;
@@ -102,6 +110,7 @@ protected slots:
     void slotSharpnessValue( int value );
     void Apply() { emit confPolygonDiaOk(); }
     void slotReset();
+
 signals:
     void confPolygonDiaOk();
 

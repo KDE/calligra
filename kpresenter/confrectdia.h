@@ -21,6 +21,8 @@
 #define confrectdia_h
 
 #include <qframe.h>
+#include <qpen.h>
+#include <qbrush.h>
 
 class QPainter;
 class QLabel;
@@ -42,11 +44,15 @@ public:
 
     void setRnds( int _rx, int _ry )
     { xRnd = _rx; yRnd = _ry; repaint( contentsRect(), true ); }
+    void setPenBrush( const QPen &_pen, const QBrush &_brush )
+    { pen = _pen; brush = _brush; repaint( true ); }
 
 protected:
     void drawContents( QPainter* );
 
     int xRnd, yRnd;
+    QPen pen;
+    QBrush brush;
 
 };
 
@@ -63,6 +69,7 @@ public:
     ~ConfRectDia();
 
     void setRnds( int _rx, int _ry );
+    void setPenBrush( const QPen &_pen, const QBrush &_brush );
 
     int getRndX() { return xRnd; }
     int getRndY() { return yRnd; }

@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
+#include "confrectdia.h"
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -52,8 +54,8 @@ void RectPreview::drawContents( QPainter* painter )
     int ow = width();
     int oh = height();
 
-    painter->setPen( QPen( Qt::red, 3 ) );
-    painter->setBrush( QBrush( Qt::blue ) );
+    painter->setPen( pen );
+    painter->setBrush( brush );
 
     painter->save();
     painter->drawRoundRect( 10, 10, ow - 20, oh - 20, xRnd, yRnd );
@@ -141,6 +143,11 @@ void ConfRectDia::slotReset()
 
     eRndX->setValue( oldXRnd );
     eRndY->setValue( oldYRnd );
+}
+
+void ConfRectDia::setPenBrush( const QPen &_pen, const QBrush &_brush )
+{
+    rectPreview->setPenBrush( _pen, _brush );
 }
 
 #include <confrectdia.moc>

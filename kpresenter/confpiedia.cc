@@ -166,7 +166,6 @@ void ConfPieDia::slotReset()
     piePreview->setAngle( oldAngle );
     piePreview->setLength( oldLen );
     piePreview->setType( oldType );
-    piePreview->setPenBrush( oldPen, oldBrush );
 }
 
 void ConfPieDia::setAngle( int _angle )
@@ -195,11 +194,7 @@ void ConfPieDia::setType( PieType _type )
 
 void ConfPieDia::setPenBrush( const QPen &_pen, const QBrush &_brush )
 {
-    pen = _pen;
-    oldPen = _pen;
-    brush = _brush;
-    oldBrush = _brush;
-    piePreview->setPenBrush( pen, brush );
+    piePreview->setPenBrush( _pen, _brush );
 }
 
 

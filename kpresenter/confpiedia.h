@@ -95,11 +95,8 @@ protected:
     QComboBox *cType;
 
     PieType type;
-    QPen pen;
-    QBrush brush;
     PieType oldType;
-    QPen oldPen;
-    QBrush oldBrush;
+
     int angle, len;
     int oldAngle, oldLen;
 
