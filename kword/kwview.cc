@@ -1614,6 +1614,10 @@ void KWView::changeZoomMenu( int zoom )
             if(ok && val>9  &&list.contains(val)==0)
                 list.append( val );
         }
+        //necessary at the beginning when we read config
+        //this value is not in combo list
+        if(list.contains(zoom)==0)
+            list.append( zoom );
 
         qHeapSort( list );
 
