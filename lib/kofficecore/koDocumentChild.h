@@ -73,26 +73,28 @@ public:
   virtual KURL url();
 
   /**
-   *  Writes the OBJECT tag, but does NOT write the content of the
+   *  Writes the "object" tag, but does NOT write the content of the
    *  embedded documents. Saving the embedded documents themselves
-   *  is done in @ref Document_impl. This function just stores information
-   *  about the position and id of the embedded document.
+   *  is done in @ref KoDocument::saveChildren. This function just stores information
+   *  about the position and id of the embedded document and should be
+   *  called from within KoDocument::saveXML.
    *
-   *  The OBJECT element is not added to the document. It is just created
+   *  The "object" element is not added to the document. It is just created
    *  and returned.
    *
-   *  Use this function if your application uses the DOM.
-   *
-   *  @return the element containing the OBJECT tag.
+   *  @return the element containing the "object" tag.
    */
   virtual QDomElement save( QDomDocument& doc );
 
   /**
-   *  Parses the OBJECT tag. This does NOT mean creating the child documents.
+   *  Parses the "object" tag. This does NOT mean creating the child documents.
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
    *  to actually load the embedded documents.
    *
-   *  Use this function if your application uses the DOM.
+   *  What you hsould have in mind is that this method is called from within
+   *  @ref KoDocument::loadXML while @ref #loadDocument is called from within
+   *  @ref KoDocument::loadChildren, respectively from your implementation
+   *  of these methods.
    */
   virtual bool load( const QDomElement& element );
 
