@@ -149,13 +149,13 @@ else
                 {
                 if(linear->isChecked() &&step->text().toInt() ==0)
                 {
-                KMessageBox::error( this, i18n("Sorry, but the step value has to be greater than zero.\n"
+                KMessageBox::error( this, i18n("Sorry, but the step value has to be greater than zero. "
                 "Otherwise the linear series is infinite!") );
                 step->setFocus();
                 }
                 else if(geometric->isChecked() &&step->text().toInt() <=1)
                 {
-                KMessageBox::error( this, i18n("Sorry, but the step value has to be greater than one\n"
+                KMessageBox::error( this, i18n("Sorry, but the step value has to be greater than one. "
                 "Otherwise the geometric series is infinite!") );
                 step->setFocus();
                 }

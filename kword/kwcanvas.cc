@@ -1207,7 +1207,7 @@ void KWCanvas::mrCreateTable()
     if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) {
         if ( m_table.cols * minFrameWidth + m_insRect.x() > m_doc->ptPaperWidth() )
         {
-            KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there\n"
+            KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there "
                                        "is not enough space available."));
         }
         else {

@@ -1293,14 +1293,14 @@ bool KWFrameDia::applyChanges()
                        fs != fit.current() && fit.current()->getName() == name) {
                     if ( rNewFrameset->isChecked() )
                         KMessageBox::sorry( this,
-                                            i18n( "A new frameset with the name '%1'\n"
-                                                  "can not be made because a frameset with that name\n"
-                                                  "already exists. Please enter another name or select\n"
+                                            i18n( "A new frameset with the name '%1' "
+                                                  "can not be made because a frameset with that name "
+                                                  "already exists. Please enter another name or select "
                                                   "an existing frameset from the list.").arg(name));
                     else
                         KMessageBox::sorry( this,
-                                            i18n( "A frameset with the name '%1'\n"
-                                                  "already exists. Please enter another name.\n" ).arg(name) );
+                                            i18n( "A frameset with the name '%1' "
+                                                  "already exists. Please enter another name." ).arg(name) );
                     eFrameSetName->setText(oldFrameSetName);
                     return false;
                 }
@@ -1608,9 +1608,9 @@ bool KWFrameDia::mayDeleteFrameSet(KWTextFrameSet *fs) {
     bool isEmpty = parag->next() == 0L && parag->length() == 1;
     if ( !isEmpty ) {
         int result = KMessageBox::warningContinueCancel(this,
-           i18n( "You are about to reconnect the last Frame of the\n"
-           "Frameset '%1'.\n"
-           "The contents of this Frameset will be deleted\n\n"
+           i18n( "You are about to reconnect the last Frame of the "
+           "Frameset '%1'. "
+           "The contents of this Frameset will be deleted.\n"
            "Are you sure you want to do that?").arg(fs->getName()),
            i18n("Reconnect Frame"), i18n("&Reconnect"));
         if (result != KMessageBox::Continue)

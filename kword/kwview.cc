@@ -1567,10 +1567,10 @@ void KWView::deleteFrame( bool _warning )
             {
                 int result = KMessageBox::warningContinueCancel(
                     this,
-                    i18n( "You are about to delete the last Frame of the\n"
-                          "Frameset '%1'.\n"
-                          "The contents of this Frameset will not appear\n"
-                          "anymore!\n\n"
+                    i18n( "You are about to delete the last Frame of the "
+                          "Frameset '%1'. "
+                          "The contents of this Frameset will not appear "
+                          "anymore!\n"
                           "Are you sure you want to do that?").arg(fs->getName()),
                     i18n("Delete Frame"), i18n("&Delete"),
                     "DeleteLastFrameConfirmation",
@@ -2141,7 +2141,7 @@ void KWView::insertFootNoteEndNote()
     if ( start == -1 )
     {
         KMessageBox::sorry( this,
-                            i18n( "Sorry, you can only insert footnotes or\n"
+                            i18n( "Sorry, you can only insert footnotes or "
                                   "endnotes into the first frameset."),
                             i18n("Insert Footnote/Endnote"));
     } else {
@@ -2594,7 +2594,7 @@ void KWView::tableInsertCol()
     if ( table->boundingRect().right() + 62 > static_cast<int>( m_doc->ptPaperWidth() ) )
     {
         KMessageBox::sorry( this,
-                            i18n( "There is not enough space at the right of the table\n"
+                            i18n( "There is not enough space at the right of the table "
                                   "to insert a new column." ),
                             i18n( "Insert Column" ) );
     }
@@ -2616,8 +2616,8 @@ void KWView::tableDeleteRow()
     {
         int result;
         result = KMessageBox::warningContinueCancel(this,
-                                                    i18n("The table has only one row.\n"
-                                                         "Deleting this row will delete the table.\n\n"
+                                                    i18n("The table has only one row. "
+                                                         "Deleting this row will delete the table.\n"
                                                          "Do you want to delete the table?"),
                                                     i18n("Delete Row"),
                                                     i18n("&Delete"));
@@ -2646,8 +2646,8 @@ void KWView::tableDeleteCol()
     {
         int result;
         result = KMessageBox::warningContinueCancel(this,
-                                                    i18n("The table has only one column.\n"
-                                                         "Deleting this column will delete the table.\n\n"
+                                                    i18n("The table has only one column. "
+                                                         "Deleting this column will delete the table.\n"
                                                          "Do you want to delete the table?"),
                                                     i18n("Delete Column"),
                                                     i18n("&Delete"));
@@ -2675,7 +2675,7 @@ void KWView::tableJoinCells()
     if ( !cmd )
     {
         KMessageBox::sorry( this,
-                            i18n( "You have to select some cells which are next to each other\n"
+                            i18n( "You have to select some cells which are next to each other "
                                   "and are not already joined." ),
                             i18n( "Join Cells" ) );
         return;
@@ -2712,7 +2712,7 @@ void KWView::tableSplitCells(int cols, int rows)
 
     if(selectedFrames.count() >1 || table == 0) {
         KMessageBox::sorry( this,
-                            i18n( "You have to put the cursor into a table\n"
+                            i18n( "You have to put the cursor into a table "
                                   "before splitting cells." ),
                             i18n( "Split Cells" ) );
         return;
