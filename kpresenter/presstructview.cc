@@ -32,7 +32,6 @@
 #include <qwmatrix.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
-#include <qregexp.h>
 
 /******************************************************************
  *
@@ -58,9 +57,9 @@ void KPSlidePreview::setPage( QListViewItem *item )
     int i = ( (KPPresStructObjectItem*)item )->getPageNum();
     view->getPage()->drawPageInPix2( pix, i * doc->getPageRect( 0, 0, 0 ).height(), i );
 
-    float faktW = static_cast<float>( width() ) / static_cast<float>( doc->getPageRect( 0, 0, 0 ).width() );
-    float faktH = static_cast<float>( height() ) / static_cast<float>( doc->getPageRect( 0, 0, 0 ).height() );
-    float fakt = QMIN( faktW, faktH ) - 0.05;
+    double faktW = static_cast<double>( width() ) / static_cast<double>( doc->getPageRect( 0, 0, 0 ).width() );
+    double faktH = static_cast<double>( height() ) / static_cast<double>( doc->getPageRect( 0, 0, 0 ).height() );
+    double fakt = QMIN( faktW, faktH ) - 0.05;
 
     QWMatrix m;
     m.scale( fakt, fakt );
@@ -99,54 +98,56 @@ void KPPresStructObjectItem::setPage( KPBackGround *p, int pgnum )
 /*================================================================*/
 void KPPresStructObjectItem::setObject( KPObject *o, int num )
 {
-    object = o;
-    if ( object && parent() ) {
-        switch ( object->getType() ) {
-        case OT_PICTURE:
-            setText( 0, i18n( "Picture (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "frame_image" ) );
-            break;
-        case OT_LINE:
-            setText( 0, i18n( "Line (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "mini_line" ) );
-            break;
-        case OT_RECT:
-            setText( 0, i18n( "Rectangle (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "mini_rect" ) );
-            break;
-        case OT_ELLIPSE:
-            setText( 0, i18n( "Circle/Ellipse (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "mini_circle" ) );
-            break;
-        case OT_TEXT:
-            setText( 0, i18n( "Text (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "frame_text" ) );
-            break;
-        case OT_AUTOFORM:
-            setText( 0, i18n( "Autoform (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "mini_autoform" ) );
-            break;
-        case OT_CLIPART:
-            setText( 0, i18n( "Clipart (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "mini_clipart" ) );
-            break;
-        case OT_UNDEFINED:
-            setText( 0, i18n( "Undefined (%1)" ).arg( num + 1 ) );
-            break;
-        case OT_PIE:
-            setText( 0, i18n( "Pie/Arc/Chord (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "mini_pie" ) );
-            break;
-        case OT_PART:
-            setText( 0, i18n( "Embedded Part (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "frame_query" ) );
-            break;
-        case OT_GROUP:
-            setText( 0, i18n( "Group Object (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "group" ) );
-            break;
-        }
+  object = o;
+  if ( object && parent() ) {
+    QString type = object->getTypeString() + " (%1)";
+    setText(0, type.arg( num + 1 ));
+    switch ( object->getType() ) {
+    case OT_PICTURE:
+      //setText( 0, i18n( "Picture (%1)" ).arg( num + 1 ) );
+      setPixmap( 0, KPBarIcon( "frame_image" ) );
+      break;
+    case OT_LINE:
+      //setText( 0, i18n( "Line (%1)" ).arg( num + 1 ) );
+      setPixmap( 0, KPBarIcon( "mini_line" ) );
+      break;
+    case OT_RECT:
+      //setText( 0, i18n( "Rectangle (%1)" ).arg( num + 1 ) );
+      setPixmap( 0, KPBarIcon( "mini_rect" ) );
+      break;
+    case OT_ELLIPSE:
+      //setText( 0, i18n( "Circle/Ellipse (%1)" ).arg( num + 1 ) );
+      setPixmap( 0, KPBarIcon( "mini_circle" ) );
+      break;
+    case OT_TEXT:
+      //setText( 0, i18n( "Text (%1)" ).arg( num + 1 ) );
+      setPixmap( 0, KPBarIcon( "frame_text" ) );
+      break;
+    case OT_AUTOFORM:
+      //setText( 0, i18n( "Autoform (%1)" ).arg( num + 1 ) );
+      setPixmap( 0, KPBarIcon( "mini_autoform" ) );
+      break;
+    case OT_CLIPART:
+      //setText( 0, i18n( "Clipart (%1)" ).arg( num + 1 ) );
+      setPixmap( 0, KPBarIcon( "mini_clipart" ) );
+      break;
+    case OT_UNDEFINED:
+      setText( 0, i18n( "Undefined (%1)" ).arg( num + 1 ) );
+      break;
+    case OT_PIE:
+      //setText( 0, i18n( "Pie/Arc/Chord (%1)" ).arg( num + 1 ) );
+      setPixmap( 0, KPBarIcon( "mini_pie" ) );
+      break;
+    case OT_PART:
+      //setText( 0, i18n( "Embedded Part (%1)" ).arg( num + 1 ) );
+      setPixmap( 0, KPBarIcon( "frame_query" ) );
+      break;
+    case OT_GROUP:
+      //setText( 0, i18n( "Group Object (%1)" ).arg( num + 1 ) );
+      setPixmap( 0, KPBarIcon( "group" ) );
+      break;
     }
+  }
 }
 
 /*================================================================*/
@@ -206,6 +207,7 @@ void KPPresStructView::setupSlideList()
                 KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
                 item_->setPage( doc->backgroundList()->at( i ), i );
                 item_->setObject( doc->objectList()->at( j ), j );
+                item_->setNum(j);
             }
         }
     }
@@ -247,29 +249,23 @@ void KPPresStructView::makeStuffVisible( QListViewItem *item )
     if ( !item->parent() )
         view->skipToPage( item->text( 0 ).toInt() - 1 );
     else {
-        QString s = item->text( 0 );
-        QRegExp r( QString::fromLatin1( "([a-zA-Z0-9\\.\\*\\?\\ \\+\\;]*)$" ) );
-        int len;
-        int index = r.match( s, 0, &len );
-        if ( index >= 0 )
-            s = s.mid( index + 1, len - 2 );
-        else
-            return;
         view->getPage()->deSelectAllObj();
         if (item->parent())
             view->skipToPage( item->parent()->text( 0 ).toInt() - 1 );
         else
             view->skipToPage( item->text( 0 ).toInt() - 1 );
-        int obj = s.toInt() - 1;
+        int obj = dynamic_cast<KPPresStructObjectItem *>(item)->getNum();
         KPObject *kpobject = doc->objectList()->at( obj );
-        QRect rect( kpobject->getBoundingRect( 0, 0 ) );
-        kpobject->setSelected( true );
-        doc->repaint( kpobject );
-        rect.setLeft( rect.left() - 20 );
-        rect.setTop( rect.top() - 20 );
-        rect.setRight( rect.right() + 20 );
-        rect.setBottom( rect.bottom() + 20 );
-        view->makeRectVisible( rect );
+        if (kpobject) {
+          QRect rect( kpobject->getBoundingRect( 0, 0 ) );
+          kpobject->setSelected( true );
+          doc->repaint( kpobject );
+          rect.setLeft( rect.left() - 20 );
+          rect.setTop( rect.top() - 20 );
+          rect.setRight( rect.right() + 20 );
+          rect.setBottom( rect.bottom() + 20 );
+          view->makeRectVisible( rect );
+        }
     }
 }
 

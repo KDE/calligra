@@ -69,6 +69,8 @@ public:
 
     void setPage( KPBackGround *p, int pgnum );
     void setObject( KPObject *o, int num );
+    void setNum(int _num) {num = _num;};
+    int getNum() {return num;};
     KPBackGround *getPage();
     int getPageNum();
     KPObject *getObject();
@@ -77,7 +79,7 @@ protected:
     KPBackGround *page;
     KPObject *object;
     int pageNum;
-
+    int num;
 };
 
 /******************************************************************
