@@ -50,8 +50,8 @@ bool WMFImport::filter(
 
     m_text = "";
     m_text += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    m_text += "<!DOCTYPE killustrator>\n";
-    m_text += "<killustrator mime=\"application/x-killustrator\" version=\"3\" editor=\"WMF import filter\">\n";
+    m_text += "<!DOCTYPE kontour>\n";
+    m_text += "<kontour mime=\"application/x-kontour\" version=\"3\" editor=\"WMF import filter\">\n";
     m_text += " <head currentpagenum=\"2\">\n";
     m_text += "  <grid dx=\"50\" dy=\"50\" align=\"0\">\n";
     m_text += "   <helplines align=\"0\"/>\n";
@@ -65,7 +65,7 @@ bool WMFImport::filter(
         return false;
     m_text += "  </layer>\n";
     m_text += " </page>\n";
-    m_text += "</killustrator>\n";
+    m_text += "</kontour>\n";
 
     emit sigProgress(100);
 
