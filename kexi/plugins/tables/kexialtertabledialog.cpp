@@ -199,9 +199,9 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiProper
 	bool changed = false;
 	KexiProperty *prop;
 	bool visible;
-	//if there is no more than 1 subType name: hide the property
+	//if there is no more than 1 subType name or it's a PK: hide the property
 	prop = &buf["subType"];
-	visible = prop->keys() && prop->keys()->count()>1;
+	visible = prop->keys() && prop->keys()->count()>1 && buf["primaryKey"].value().toBool()==false;
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
 		changed = true;
@@ -361,6 +361,7 @@ void KexiAlterTableDialog::setPrimaryKey(KexiPropertyBuffer &buf, bool set)
 				break;
 		}
 		if (i<count) {//remove
+			(*b)["autoNumber"] = QVariant(false, 0);
 			(*b)["primaryKey"] = QVariant(false, 0);
 			//remove key from table
 			m_view->data()->clearRowEditBuffer();
@@ -370,6 +371,17 @@ void KexiAlterTableDialog::setPrimaryKey(KexiPropertyBuffer &buf, bool set)
 				m_view->data()->saveRowChanges(*item, true);
 			}
 		}
+		//set unsigned big-integer type
+//		m_view->data()->saveRowChanges(*m_view->selectedItem());
+		m_view->data()->clearRowEditBuffer();
+		m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_TYPE, 
+			QVariant(KexiDB::Field::IntegerGroup-1/*counting from 0*/));
+//			QVariant(KexiDB::Field::typeGroupName(KexiDB::Field::IntegerGroup)));
+		m_view->data()->saveRowChanges(*m_view->selectedItem(), true);
+//		buf["type"] = KexiDB::Field::typeGroupName(KexiDB::Field::IntegerGroup);
+//		buf["type"] = (int)KexiDB::Field::IntegerGroup;
+		buf["subType"] = KexiDB::Field::typeString(KexiDB::Field::BigInteger);
+		buf["unsigned"] = QVariant(true,4);
 	}
 	updateActions();
 }
@@ -503,7 +515,8 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		KexiDB::Field::Type fieldType = KexiDB::defaultTypeForGroup( fieldTypeGroup );
 		if (fieldType==KexiDB::Field::InvalidType)
 			fieldType = KexiDB::Field::Text;
-		buf["type"] = (int)fieldType;
+//		buf["type"] = (int)fieldType;
+//		buf["subType"] = KexiDB::Field::typeName(fieldType);
 
 		//-get subtypes for this type: keys (slist) and names (nlist)
 		const QStringList slist = KexiDB::typeStringsForGroup(fieldTypeGroup);
@@ -512,10 +525,12 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 
 		//update subtype list and value
 		subTypeProperty->setList(slist, nlist);
+		if (buf["primaryKey"].value().toBool()==true) //primary keys require big int
+			fieldType = KexiDB::Field::BigInteger;
 		subTypeProperty->setValue( KexiDB::Field::typeString(fieldType) );
 		if (updatePropertiesVisibility(fieldType, buf)) {
 			//properties' visiblility changed: refresh buffer
-			propertyBufferReloaded();
+			propertyBufferReloaded(true);
 		}
 	}
 	else if (colnum==COLUMN_ID_DESC) {//'description'
@@ -592,7 +607,8 @@ void KexiAlterTableDialog::updateActions()
 
 void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProperty &property)
 {
-	if (property.name()=="primaryKey") {
+	const QCString pname = property.name();
+	if (pname=="primaryKey") {
 		if (property.value().toBool()==true) {
 			//primary key implies some rules
 			buf["unique"] = QVariant(true,1);
@@ -606,25 +622,42 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProp
 			buf["autoIncrement"] = QVariant(false,1);
 		}
 		setPrimaryKey(buf, property.value().toBool());
+		updatePropertiesVisibility(
+			KexiDB::Field::typeForString( buf["subType"].value().toString() ), buf);
+		//properties' visiblility changed: refresh buffer
+		propertyBufferReloaded(true/*preservePrevSelection*/);
 	}
 //TODO: perhaps show a hint in help panel telling what happens?
-	else if (property.value().toBool()==false) {
-		if (property.name()=="indexed" || property.name()=="unique" || property.name()=="notNull") {
+	else if (property.value().toBool()==false
+		&& (pname=="indexed" || pname=="unique" || pname=="notNull"))
+	{
 //			buf["primaryKey"] = QVariant(false,1);
-			setPrimaryKey(buf, false);
-		}
-		if (property.name()=="notNull")
+		setPrimaryKey(buf, false);
+		if (pname=="notNull")
 			buf["allowEmpty"] = QVariant(true,1);
 	}
+	else if (pname=="subType") {
+		if (buf["primaryKey"].value().toBool()==true && property.value()!=KexiDB::Field::typeString(KexiDB::Field::BigInteger)) {
+			kdDebug() << "INVALID " << property.value().toString() << endl;
+//			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg, 
+//				i18n("This field has promary key assigned. Setting autonumber field"),
+//				KGuiItem(i18n("Create &primary key"), "key"), KStdGuiItem::cancel() ))
+
+		}
+	}
 	else {//prop==true:
-		if (property.name()=="autoIncrement") {
+		if (property.value().toBool()==true && pname=="autoIncrement") {
 			if (buf["primaryKey"].value().toBool()==false) {//we need PKEY here!
-				QString msg = QString("<p>")+i18n("Setting autonumber requires primary key to be set for current field.")+"</p>";
+				QString msg = QString("<p>")
+					+i18n("Setting autonumber requires primary key to be set for current field.")+"</p>";
 				if (d->primaryKeyExists)
 					msg += (QString("<p>")+ i18n("Previous primary key will be removed.")+"</p>");
-				msg += (QString("<p>")+ i18n("Do you want to create primary key for current field? Click \"Cancel\" to cancel setting autoincrement.")+"</p>");
+				msg += (QString("<p>")
+					+i18n("Do you want to create primary key for current field? "
+					"Click \"Cancel\" to cancel setting autonumber.")+"</p>");
 
-				if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg, i18n("Setting autoincrement field"),
+				if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg, 
+					i18n("Setting autonumber field"),
 					KGuiItem(i18n("Create &primary key"), "key"), KStdGuiItem::cancel() ))
 				{
 					setPrimaryKey(buf, true);
@@ -652,10 +685,13 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 	tristate res = true;
 	//check for pkey; automatically add a pkey if user wanted
 	if (!d->primaryKeyExists) {
-		const int questionRes = KMessageBox::questionYesNoCancel(this, i18n("<p>There is not <b>primary key</b> defined.</p>"
-			"<p>Although a primary key is not required, it is needed for creating relations between database tables. "
+		const int questionRes = KMessageBox::questionYesNoCancel(this, 
+			i18n("<p>Table \"%1\" has no <b>primary key</b> defined.</p>"
+			"<p>Although a primary key is not required, it is needed "
+			"for creating relations between database tables. "
 			"Do you want to add primary key automatically now?</p>"
-			"<p>If you want to add a primary key by hand, press \"Cancel\" to cancel saving table design.</p>"),
+			"<p>If you want to add a primary key by hand, press \"Cancel\" "
+			"to cancel saving table design.</p>").arg(schema.name()),
 			QString::null, KGuiItem(i18n("&Add a primary key"), "key"), KStdGuiItem::no(), 
 				"autogeneratePrimaryKeysOnTableDesignSaving");
 		if (questionRes==KMessageBox::Cancel) {
@@ -665,8 +701,10 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 			m_view->insertEmptyRow(0);
 			m_view->setCursor(0, COLUMN_ID_NAME);
 			//name and type
-			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_NAME, QVariant("id"));
-			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_TYPE, QVariant(KexiDB::Field::IntegerGroup-1/*counting from 0*/));
+			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_NAME, 
+				QVariant("id"));
+			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_TYPE, 
+				QVariant(KexiDB::Field::IntegerGroup-1/*counting from 0*/));
 			if (!m_view->data()->saveRowChanges(*m_view->selectedItem(), true)) {
 				return cancelled;
 			}
@@ -699,13 +737,16 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 		}
 	}
 	if (res && no_fields) {//no fields added
-		KMessageBox::information(this, i18n("You have added no fields.\nEvery table should have at least one field.") );
+		KMessageBox::information(this, 
+			i18n("You have added no fields.\nEvery table should have at least one field.") );
 		res = cancelled;
 	}
 	if (res && b && i<(int)d->buffers->size()) {//found a duplicate
 		m_view->setCursor(i, COLUMN_ID_NAME);
 		m_view->startEditCurrentCell();
-		KMessageBox::information(this, i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. Correct name of the field.")
+		KMessageBox::information(this, 
+			i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. "
+			"Correct name of the field.")
 			.arg((*b)["name"].value().toString()) );
 		res = cancelled;
 	}
