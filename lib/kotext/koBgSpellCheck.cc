@@ -183,6 +183,7 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
     {
         return;
     }
+
     if ( parag && parag->next() )
         parag = parag->next();
     // Skip any unchanged parags
@@ -202,12 +203,24 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
     if( !m_bgSpell.currentParag)
     {
         KoTextObject *obj=m_bgSpell.currentTextObj;
+        //kdDebug()<<" obj :"<<obj<<endl;
         m_bgSpell.currentTextObj=nextTextObject( m_bgSpell.currentTextObj );
+        //kdDebug()<<" m_bgSpell.currentTextObj !"<<m_bgSpell.currentTextObj<<endl;
         if ( m_bgSpell.currentTextObj && m_bgSpell.currentTextObj!=obj)
+        {
             m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
+        }
         else
+        {
+            if ( m_bgSpell.currentParag )
+                m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
+            if ( m_bgSpell.currentTextObj )
+                m_bgSpell.currentTextObj->setNeedSpellCheck( false );
             m_bgSpell.currentParag = 0L;
+        }
     }
+    //kdDebug()<<" KoBgSpellCheck::nextParagraphNeedingCheck() : m_bgSpell.currentParag :"<<m_bgSpell.currentParag<<endl;
+
 }
 
 void KoBgSpellCheck::spellCheckNextParagraph()
