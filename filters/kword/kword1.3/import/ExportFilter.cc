@@ -601,7 +601,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         }
     }
 
-    key += ",";
+    key += ';'; // Another separator
 
     if (force || (formatOrigin.fgColor!=formatData.fgColor))
     {
@@ -627,10 +627,11 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         }
     }
 
-    key += ',';
+    key += ';'; // Another separator
 
     if ( force || ( formatOrigin.underline != formatData.underline )
-        || ( formatOrigin.underlineColor != formatData.underlineColor ) )
+        || ( formatOrigin.underlineColor != formatData.underlineColor )
+         )
     {
         strElement+="style:text-underline=\"";
         if ( formatData.underline )
@@ -653,6 +654,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
             strElement += "\" ";
             key += colorName;
         }
+
     }
 
     key += ',';
@@ -671,6 +673,26 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
             key += 'N';
         }
         strElement+="\" ";
+    }
+
+    key += ',';
+
+    if (force || ( formatOrigin.underlineWord != formatData.underlineWord )
+        || (formatOrigin.strikeoutWord != formatData.strikeoutWord ) )
+    {
+        // Strikeout and underline can only have one word-by.word behaviour in OO
+        strElement+="fo:score-spaces=\"";
+        if ( formatData.underlineWord || formatData.strikeoutWord )
+        {
+            strElement += "true";
+            key += 'W';
+        }
+        else
+        {
+            strElement += "false";
+            key += 'N';
+        }
+        strElement += "\" ";
     }
 
     key += ',';

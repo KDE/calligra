@@ -245,15 +245,16 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
 {
     TextFormatting* text=(TextFormatting*) tagData;
     QString str,style;
-    bool wordbyword = false;
     QString strColor;
+
+    text->underlineWord = false;
 
     QValueList<AttrProcessing> attrProcessingList;
 
     attrProcessingList
         << AttrProcessing ( "value",   "QString", &str )
         << AttrProcessing ( "styleline", "QString",  &style )
-        << AttrProcessing ( "wordbyword", "bool", &wordbyword )
+        << AttrProcessing ( "wordbyword", text->underlineWord )
         << AttrProcessing ( "underlinecolor",   "QString", &strColor )
         ;
     ProcessAttributes (myNode, attrProcessingList);
@@ -268,14 +269,8 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     {
         // We assume that anything else is underlined
         text->underline=true;
-    }
-
-    // if underline, process more attributes
-    if( text->underline )
-    {
         text->underlineStyle = style;
-        text->underlineWord = wordbyword;
-        text->underlineColor.setNamedColor(strColor);
+        text->underlineColor.setNamedColor( strColor );
     }
 }
 
@@ -284,15 +279,15 @@ static void ProcessStrikeoutTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     TextFormatting* text=(TextFormatting*) tagData;
     QString type, linestyle;
 
+    text->strikeoutWord = false;
+
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ("value" , "QString", (void *) &type );
     attrProcessingList << AttrProcessing ("styleline" , "QString", (void *) &linestyle );
-    attrProcessingList << AttrProcessing ( "wordbyword", "", 0 ); // ### TODO
+    attrProcessingList << AttrProcessing ( "wordbyword", text->strikeoutWord );
     ProcessAttributes (myNode, attrProcessingList);
 
-    if( type.isEmpty() )
-        text->strikeout = false;
-    else if( type == "0" )
+    if( type.isEmpty() || ( type == "0" ) )
         text->strikeout = false;
     else
     {

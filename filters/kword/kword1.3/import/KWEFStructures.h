@@ -97,6 +97,7 @@ class TextFormatting
         bool    strikeout;             // true if strikeout
         QString strikeoutType;         // single, bold, double
         QString strikeoutLineStyle;    // solid, dash, dot, ....
+        bool    strikeoutWord;         // Is strike out word-by-word?
 
         int     weight;
         int     fontSize;
