@@ -70,8 +70,6 @@ VStrokeFillPreview::VStrokeFillPreview(
 VStrokeFillPreview::~VStrokeFillPreview()
 {
 	delete( m_painter );
-	delete( m_fill );
-	delete( m_stroke );
 }
 
 void
@@ -166,8 +164,8 @@ void
 VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 {
 	m_painter->begin();
-	if ( ! m_fill ) m_fill = new VFill( f );
-	if ( ! m_stroke ) m_stroke = new VStroke( s );
+	m_fill = &f;
+	m_stroke = &s;
 
 	// draw checkerboard
 	VFill fill;
