@@ -16,8 +16,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koMainWindow.cc \
 	koApplication.cc koQueryTrader.cc \
 	koFilter.cc koFilterChain.cpp \
-	koImage.cc koImageCollection.cc \
-	koClipart.cc koClipartCollection.cc \
+	koImage.cc koClipart.cc \
 	koPictureKey.cc koPictureBase.cc koPicture.cc koPictureShared.cc \
 	koPictureImage.cc koPictureClipart.cc koPictureCollection.cc \
 	koDocumentInfo.cc \
@@ -37,7 +36,7 @@ include_HEADERS = koFilter.h koFilterChain.h \
 	koView.h koFrame.h handler.h koDocumentChild.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h \
-	koImage.h koImageCollection.h koClipart.h koClipartCollection.h \
+	koImage.h koClipart.h \
 	koPictureKey.h koPictureBase.h koPicture.h koPictureShared.h \
 	koPictureImage.h koPictureClipart.h koPictureCollection.h
 
