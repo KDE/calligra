@@ -2,7 +2,7 @@ kde_module_LTLIBRARIES = libkexipart.la
 libkexipart_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kexiinputtableedit.cpp kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp \
 	kexitableheader.cpp kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp \
-	kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceSDI.cpp kexiworkspaceMDI.cpp kexicreateprojectpage.cpp \
+	kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceMDI.cpp kexicreateprojectpage.cpp \
 	kexicreateproject.cpp kexibrowser.cpp kexiview.cpp kexiformmanager.cpp \
 	kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp \
 	kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h \

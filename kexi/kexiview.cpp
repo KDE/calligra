@@ -45,7 +45,6 @@
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"
 #include "kexiworkspaceMDI.h"
-#include "kexiworkspaceSDI.h"
 #include "kexicreateproject.h"
 #include "kexiformbase.h"
 #include "kexiprojectproperties.h"
@@ -122,27 +121,6 @@ void KexiView::initMainDock()
 {
 	(new QVBoxLayout (this))->setAutoAdd(true);
 	m_workspace = new KexiWorkspaceMDI(this,"kexiworkspace",this);
-
-#if 0
-	m_mainDock = createDockWidget(i18n("no document"), 0, 0L, "");
-
-	if (m_windowMode==MDIWindowMode)
-	m_workspace = new KexiWorkspaceMDI(m_mainDock,"kexiworkspace",this);
-	else
-	m_workspace = new KexiWorkspaceSDI(m_mainDock,"kexiworkspace",this);
-//	connect(m_workspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(slotActiveWindowChanged(QWidget *)));
-	m_mainDock->setWidget(m_workspace);
-	if (m_windowMode == MultipleWindowMode)
-		m_mainDock->setDockSite(KDockWidget::DockNone);
-	else
-	if (m_windowMode == MDIWindowMode)
-		m_mainDock->setDockSite(KDockWidget::DockCorner);
-	else
-		m_mainDock->setDockSite(KDockWidget::DockTop);
-	m_mainDock->setEnableDocking(KDockWidget::DockNone);
-	setView(m_mainDock);
-	setMainDockWidget(m_mainDock);
-#endif
 }
 
 void KexiView::initDocBrowser()
