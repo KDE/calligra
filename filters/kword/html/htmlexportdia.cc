@@ -38,27 +38,51 @@ HTMLExportDia::HTMLExportDia(QWidget *parent, const char *name) :
                            KoFilterDialog(parent, name) {
 
     QBoxLayout *ml=new QVBoxLayout(this);
-    box=new QVButtonGroup(i18n("Document Type"),this);
-    ml->addWidget(box);
-    QBoxLayout *bl=new QVBoxLayout(box);
-    r1=new QRadioButton(i18n("HTML 4.01"), box);
-    bl->addWidget(r1);
-    r2=new QRadioButton(i18n("XHTML 1.0"), box);
-    bl->addWidget(r2);
-    box->setExclusive(true);
-    box->setButton(0);
-    bl->activate();
+    box1=new QVButtonGroup(i18n("Document Type"),this);
+    ml->addWidget(box1);
+    QBoxLayout *bl1=new QVBoxLayout(box1);
+    r1=new QRadioButton(i18n("HTML 4.01"), box1);
+    bl1->addWidget(r1);
+    r2=new QRadioButton(i18n("XHTML 1.0"), box1);
+    bl1->addWidget(r2);
+    box1->setExclusive(true);
+    box1->setButton(0);
+    bl1->activate();
+//    ml->addStretch(5);
+    box2=new QVButtonGroup(i18n("Flavor"),this);
+    ml->addWidget(box2);
+    QBoxLayout *bl2=new QVBoxLayout(box2);
+    ra1=new QRadioButton(i18n("Spartan (Only document structure, no formatting!)"), box2);
+    bl2->addWidget(ra1);
+    ra2=new QRadioButton(i18n("Direct (Formatting coded directly, no style sheets)"), box2);
+    bl2->addWidget(ra2);
+    box2->setExclusive(true);
+    box2->setButton(1);
+    bl2->activate();
     ml->addStretch(5);
     ml->activate();
 }
 
-QString HTMLExportDia::state() {
+QString HTMLExportDia::state()
+{
+    QString result;
 
-    if(r1==box->selected())
-        return "HTML";
-    else if(r2==box->selected())
-        return "XHTML";
+    if(r1==box1->selected())
+        result += "HTML";
+    else if(r2==box1->selected())
+        result += "XHTML";
     else
-        return "HTML";
+        result += "HTML";
+
+    result += '-';
+
+    if(ra1==box2->selected())
+        result += "SPARTAN";
+    else if(ra2==box2->selected())
+        result += "TRANSITIONAL";
+    else
+        result += "TRANSITIONAL"; // TODO: best is CSS2 in fact!
+
+    return result;
 }
 #endif

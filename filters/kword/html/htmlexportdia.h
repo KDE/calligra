@@ -55,8 +55,9 @@ public:
     virtual QString state();
 
 private:
-    QVButtonGroup *box;
-    QRadioButton *r1, *r2;
+    QVButtonGroup *box1, *box2;
+    QRadioButton *r1, *r2;  // Document Type
+    QRadioButton *ra1, *ra2; // Flavour
 };
 #endif
 #endif // HTMLEXPORTDIA_H

@@ -50,21 +50,7 @@
 
 #undef DEBUG_KWORD_TAGS // Debugging KWord's tags and attributes
 
-class ClassExportFilterBase
-{
-    public:
-        ClassExportFilterBase(void) {}
-        virtual ~ClassExportFilterBase(void) {}
-    public: //Non-virtual
-        const bool filter(const QString  &filenameIn, const QString  &filenameOut);
-        QString& escapeText(QString& str) const;
-    public: //virtual
-        virtual bool isXML(void) {return false;}
-        virtual QString getDocType(void) const = 0;
-        virtual QString getHtmlOpeningTagExtraAttributes(void) const = 0;
-    protected:
-        QDomDocument qDomDocumentIn;
-};
+class ClassExportFilterBase;
 
 // Start processor's header
 
@@ -383,6 +369,7 @@ class FormatData
             verticalAlignment=0;
             italic=false;
             underline=false;
+            fontName="times";
         }
 };
 
@@ -559,11 +546,30 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, ClassExp
     AllowNoSubtags (myNode);
 }
 
+class ClassExportFilterBase
+{
+    public:
+        ClassExportFilterBase(void) {}
+        virtual ~ClassExportFilterBase(void) {}
+    public: //Non-virtual
+        const bool filter(const QString  &filenameIn, const QString  &filenameOut);
+        QString escapeText(QString& str) const;
+    public: //virtual
+        virtual bool isXML(void) {return false;}
+        virtual QString getDocType(void) const = 0;
+        virtual QString getHtmlOpeningTagExtraAttributes(void) const = 0;
+        virtual QString getBodyOpeningTagExtraAttributes(void) const = 0;
+        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText) = 0;
+    protected:
+        QDomDocument qDomDocumentIn;
+};
+
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
 
-static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText, ClassExportFilterBase* exportFilter)
+static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText,
+                                                 ClassExportFilterBase* exportFilter)
 {
     if (! paraText.isEmpty() )
     {
@@ -578,13 +584,45 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
         {
             //Retrieve text
             partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-            //Code all possible predefined HTML entities
-            exportFilter->escapeText(partialText);
 
             // TODO: first and last characters of partialText should not be a space (white space problems!)
             // TODO: replace multiples spaces in non-breaking spaces!
             // Opening elements
-            if ( (*paraFormatDataIt).weight > 50 )
+
+            // <font> is always set
+            outputText+="<font face=\"";
+            outputText+=(*paraFormatDataIt).fontName; // TODO: add alternative font names
+            outputText+="\"";
+            // Give the font size relatively (be kind with people with impered vision)
+            int size=(*paraFormatDataIt).fontSize;
+            // 12pt is considered the normal size // TODO: relative to layout!
+            if (size>0)
+            {
+                size /= 4;
+                size -= 3;
+                //if (size<-4) size=-4; // Cannot be triggered
+                if (size>4) size=4;
+                if (size)
+                {
+                    outputText+=" size=\""; // in XML numbers must be quoted!
+                    outputText+=QString::number(size,10);
+                    outputText+="\"";
+                }
+            }
+            // Give colour
+            outputText+=" color=\"#";
+            //We must have two hex digits for each colour channel!
+            outputText+=QString::number(((*paraFormatDataIt).colourRed&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourRed&0x0f,16);
+
+            outputText+=QString::number(((*paraFormatDataIt).colourGreen&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourGreen&0x0f,16);
+
+            outputText+=QString::number(((*paraFormatDataIt).colourBlue&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourBlue&0x0f,16);
+            outputText+="\">";
+            // end of <font> tag
+            if ( (*paraFormatDataIt).weight >= 75 )
             {
                 outputText+="<b>";
             }
@@ -596,11 +634,35 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
             {
                 outputText+="<u>";
             }
+            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="<sub>"; //Subscript
+            }
+            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="<sup>"; //Superscript
+            }
 
             // The text
-            outputText += partialText;
-
+            if (outputText==" ")
+            {//Just a space as text. Therefore we must use a non-breaking space.
+                outputText += "&nbsp;";
+            }
+            else
+            {
+                //Code all possible predefined HTML entities
+                outputText += exportFilter->escapeText(partialText);
+            }
             // Closing elements
+
+            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="</sup>"; //Superscript
+            }
+            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="</sub>"; //Subscript
+            }
             if ( (*paraFormatDataIt).underline )
             {
                 outputText+="</u>";
@@ -609,26 +671,21 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
             {
                 outputText+="</i>";
             }
-            if ( (*paraFormatDataIt).weight > 50 )
+            if ( (*paraFormatDataIt).weight >= 75 )
             {
                 outputText+="</b>";
             }
+            // <font> is always set, so close it unconditionaly
+            outputText+="</font>";
        }
 
     }
-/*
-    //We must have two hex digits for each colour channel!
-     += QString::number((red&0xf0)>>4,16);
-     += QString::number(red&0x0f,16);
-
-     += QString::number((green&0xf0)>>4,16);
-     += QString::number(green&0x0f,16);
-
-     += QString::number((blue&0xf0)>>4,16);
-     += QString::number(blue&0x0f,16);
-*/
 }
 
+static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText, ClassExportFilterBase* exportFilter)
+{
+    exportFilter->ProcessParagraphData(paraText,paraFormatDataList,outputText);
+}
 
 static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter)
 {
@@ -706,6 +763,7 @@ static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText,
     int frameInfo=-1;
 
     QValueList<AttrProcessing> attrProcessingList;
+
     attrProcessingList.append ( AttrProcessing ( "frameType", "int", (void*) &frameType ) );
     attrProcessingList.append ( AttrProcessing ( "frameInfo", "int", (void*) &frameInfo) );
     attrProcessingList.append ( AttrProcessing ( "removable", "", NULL ) );
@@ -769,9 +827,10 @@ const QRegExp regExpGt  (">");
 const QRegExp regExpQuot("\"");
 
 
-QString& ClassExportFilterBase::escapeText(QString& str) const
+QString ClassExportFilterBase::escapeText(QString& strIn) const
 {// TODO: escape text that cannot be encoded in the current encoding!
     //Code all possible predefined HTML entities
+    QString str(strIn);
     str.replace (regExpAmp , strAmp)
        .replace (regExpLt  , strLt)
        .replace (regExpGt  , strGt)
@@ -839,7 +898,8 @@ const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QStri
     //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
     streamOut << "<meta name=\"Generator\" content=\"KWord HTML Export Filter Version ="
               << strVersion.mid(10).replace(QRegExp("\\$"),"") // Note: double escape character (one for C++, one for QRegExp!)
-              << "\""<< (isXML()?" /":"") << ">" << endl;
+              << "\""<< (isXML()?" /":"") // X(HT)ML closes empty elements, HTML not!
+              << ">" << endl;
 
     // Put the filename as HTML title // TODO: take the real title from documentinfo.xml (if any!)
     QString strTitle(filenameOut);
@@ -852,7 +912,9 @@ const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QStri
 
     //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
-    streamOut << "</head>" << endl << "<body>" << endl;
+    streamOut << "</head>" << endl;
+
+    streamOut << "<body" << getBodyOpeningTagExtraAttributes() << ">" << endl;
 
     // Now that we have the header, we can do the real work!
     QString stringBufOut;
@@ -877,6 +939,8 @@ class ClassExportFilterHtmlTransitional : public ClassExportFilterBase
     public: //virtual
         virtual QString getDocType(void) const;
         virtual QString getHtmlOpeningTagExtraAttributes(void) const { return QString::null; }
+        virtual QString getBodyOpeningTagExtraAttributes(void) const;
+        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
 };
 
 QString ClassExportFilterHtmlTransitional::getDocType(void) const
@@ -885,6 +949,52 @@ QString ClassExportFilterHtmlTransitional::getDocType(void) const
     return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
 }
 
+QString ClassExportFilterHtmlTransitional::getBodyOpeningTagExtraAttributes(void) const
+{
+    // Define the background colour as white!
+    return " bgcolor=\"#FFFFFF\""; // Leading space is important!
+}
+
+void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText)
+{
+    ProcessParagraphDataTransitional(paraText,paraFormatDataList,outputText,this);
+}
+
+// ClassExportFilterHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
+
+class ClassExportFilterHtmlSpartan : public ClassExportFilterHtmlTransitional
+{
+    public:
+        ClassExportFilterHtmlSpartan (void) {}
+        virtual ~ClassExportFilterHtmlSpartan (void) {}
+    public: //virtual
+        virtual QString getDocType(void) const;
+        virtual QString getHtmlOpeningTagExtraAttributes(void) const;
+        virtual QString getBodyOpeningTagExtraAttributes(void) const;
+        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
+};
+
+QString ClassExportFilterHtmlSpartan::getDocType(void) const
+{
+    // We are STRICT
+    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
+}
+
+QString ClassExportFilterHtmlSpartan::getHtmlOpeningTagExtraAttributes(void) const
+{
+    return QString::null;
+}
+
+QString ClassExportFilterHtmlSpartan::getBodyOpeningTagExtraAttributes(void) const
+{
+    // Define the background colour as white!
+    return QString::null;
+}
+
+void ClassExportFilterHtmlSpartan::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &, QString &outputText)
+{
+    outputText += escapeText(paraText); //TODO: do the real implementation
+}
 
 // ClassExportFilterHtmlTransitional (normal XHTML 1.0 Transitional)
 
@@ -897,6 +1007,8 @@ class ClassExportFilterXHtmlTransitional : public ClassExportFilterBase
         virtual bool isXML(void) {return true;}
         virtual QString getDocType(void) const;
         virtual QString getHtmlOpeningTagExtraAttributes(void) const;
+        virtual QString getBodyOpeningTagExtraAttributes(void) const;
+        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
 };
 
 QString ClassExportFilterXHtmlTransitional::getDocType(void) const
@@ -910,8 +1022,56 @@ QString ClassExportFilterXHtmlTransitional::getHtmlOpeningTagExtraAttributes(voi
 {
     // XHTML must return an extra attribute defining its namespace (in the <html> opening tag)
     return " xmlns=\"http://www.w3.org/1999/xhtml\""; // Leading space is important!
-
 }
+
+QString ClassExportFilterXHtmlTransitional::getBodyOpeningTagExtraAttributes(void) const
+{
+    // Define the background colour as white!
+    return " bgcolor=\"#FFFFFF\""; // Leading space is important!
+}
+
+void ClassExportFilterXHtmlTransitional::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText)
+{
+    ProcessParagraphDataTransitional(paraText,paraFormatDataList,outputText,this);
+}
+
+// ClassExportFilterXHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
+
+class ClassExportFilterXHtmlSpartan : public ClassExportFilterHtmlTransitional
+{
+    public:
+        ClassExportFilterXHtmlSpartan (void) {}
+        virtual ~ClassExportFilterXHtmlSpartan (void) {}
+    public: //virtual
+        virtual bool isXML(void) {return true;}
+        virtual QString getDocType(void) const;
+        virtual QString getHtmlOpeningTagExtraAttributes(void) const;
+        virtual QString getBodyOpeningTagExtraAttributes(void) const;
+        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
+};
+
+QString ClassExportFilterXHtmlSpartan::getDocType(void) const
+{
+    // We are STRICT
+    return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">";
+}
+
+QString ClassExportFilterXHtmlSpartan::getHtmlOpeningTagExtraAttributes(void) const
+{
+    // XHTML must return an extra attribute defining its namespace (in the <html> opening tag)
+    return " xmlns=\"http://www.w3.org/1999/xhtml\""; // Leading space is important!
+}
+
+QString ClassExportFilterXHtmlSpartan::getBodyOpeningTagExtraAttributes(void) const
+{
+    return QString::null;
+}
+
+void ClassExportFilterXHtmlSpartan::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &, QString &outputText)
+{
+    outputText += escapeText(paraText); //TODO: do the real implementation
+}
+
 // HTMLExport
 HTMLExport::HTMLExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -936,12 +1096,36 @@ const bool HTMLExport::filter(const QString  &filenameIn,
 
     ClassExportFilterBase* exportFilter=NULL;
 
-    if (param=="XHTML")
+    kdDebug(30503) << "Received parameters = :" << param << ":" << endl;
+
+    if (param=="XHTML-SPARTAN")
+    { // spartan XHTML 1.0
+        kdDebug(30503) << "Spartan XHTML option" << endl;
+        exportFilter=new ClassExportFilterXHtmlSpartan;
+    }
+    else if (param=="HTML-SPARTAN")
+    { // spartan HTML 4.01
+        kdDebug(30503) << "Spartan HTML option" << endl;
+        exportFilter=new ClassExportFilterHtmlSpartan;
+    }
+    else if (param=="XHTML-TRANSITIONAL")
+    { // spartan XHTML 1.0
+        kdDebug(30503) << "Transitional XHTML option" << endl;
+        exportFilter=new ClassExportFilterXHtmlTransitional;
+    }
+    else if (param=="HTML-TRANSITIONAL")
+    { // spartan HTML 4.01
+        kdDebug(30503) << "Transitional HTML option" << endl;
+        exportFilter=new ClassExportFilterHtmlTransitional;
+    }
+    else if (param.contains("XHTML",false)>0)
     { //XHTML 1.0 Transitional
+        kdDebug(30503) << "Unknown XHTML option" << endl;
         exportFilter=new ClassExportFilterXHtmlTransitional;
     }
     else
     { //HTML 4.01 Transitional
+        kdDebug(30503) << "Unknown HTML option" << endl;
         exportFilter=new ClassExportFilterHtmlTransitional;
     }
     //TODO memory failure recovery
