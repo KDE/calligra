@@ -33,6 +33,7 @@
 #include <kbutton.h>
 #include <klocale.h>
 #include <kapp.h>
+#include <kiconloader.h>
 #include <kstdaccel.h>
 
 #include <opUIUtils.h>
@@ -112,13 +113,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   m_pHorzScrollBar->setOrientation( QScrollBar::Horizontal );
 
   // Tab Bar
-  m_pTabBarFirst = newIconButton( "/kspread/pics/tab_first.xpm" );
+  m_pTabBarFirst = newIconButton( "tab_first.xpm" );
   QObject::connect( m_pTabBarFirst, SIGNAL( clicked() ), SLOT( slotScrollToFirstTable() ) );
-  m_pTabBarLeft = newIconButton( "/kspread/pics/tab_left.xpm" );    
+  m_pTabBarLeft = newIconButton( "tab_left.xpm" );    
   QObject::connect( m_pTabBarLeft, SIGNAL( clicked() ), SLOT( slotScrollToLeftTable() ) );
-  m_pTabBarRight = newIconButton( "/kspread/pics/tab_right.xpm" );    
+  m_pTabBarRight = newIconButton( "tab_right.xpm" );    
   QObject::  connect( m_pTabBarRight, SIGNAL( clicked() ), SLOT( slotScrollToRightTable() ) );
-  m_pTabBarLast = newIconButton( "/kspread/pics/tab_last.xpm" );    
+  m_pTabBarLast = newIconButton( "tab_last.xpm" );    
   QObject::connect( m_pTabBarLast, SIGNAL( clicked() ), SLOT( slotScrollToLastTable() ) );
 
   m_pTabBar = new KSpreadTabBar( this );
@@ -137,9 +138,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   m_pPosWidget->setFrameStyle( QFrame::WinPanel|QFrame::Sunken );
   m_pPosWidget->setGeometry( 2,2,50,26 );
   
-  m_pCancelButton = newIconButton( "/kspread/pics/abort.xpm", TRUE, m_pToolWidget );
+  m_pCancelButton = newIconButton( "abort.xpm", TRUE, m_pToolWidget );
   m_pCancelButton->setGeometry( 60, 2, 26, 26 );
-  m_pOkButton = newIconButton( "/kspread/pics/done.xpm", TRUE, m_pToolWidget );     
+  m_pOkButton = newIconButton( "done.xpm", TRUE, m_pToolWidget );     
   m_pOkButton->setGeometry( 90, 2, 26, 26 );
 
   m_pEditWidget = new KSpreadEditWidget( m_pToolWidget, this );
@@ -548,42 +549,29 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarEdit->setFullWidth(false);
-
-  QString tmp = kapp->kde_toolbardir().copy();
-  tmp += "/editcopy.xpm";
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
+  
+  OpenPartsUI::Pixmap_var pix;
+  pix = OPUIUtils::convertPixmap( ICON("editcopy.xpm") );
   m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "copySelection", true, i18n( "Copy" ), -1 );
 
-  tmp = kapp->kde_toolbardir().copy();
-  tmp += "/editcut.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("editcut.xpm") );
   m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "cutSelection", true, i18n( "Cut" ), -1 );
 
-  tmp = kapp->kde_toolbardir().copy();
-  tmp += "/editpaste.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("editpaste.xpm") );
   m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "paste", true, i18n( "Paste" ), -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/rowout.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("rowout.xpm") );
   m_idButtonEdit_DelRow = m_vToolBarEdit->insertButton2( pix, 4, SIGNAL( clicked() ), this, "deleteRow", true, i18n( "Delete Row" ), -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/colout.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("colout.xpm") );
   m_idButtonEdit_DelCol = m_vToolBarEdit->insertButton2( pix, 5, SIGNAL( clicked() ), this, "deleteColumn", true, i18n( "Delete Column"), -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/rowin.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("rowin.xpm") );
   m_idButtonEdit_InsRow = m_vToolBarEdit->insertButton2( pix, 6, SIGNAL( clicked() ), this, "insertRow", true, i18n( "Insert Row"  ), -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/colin.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("colin.xpm") );
   m_idButtonEdit_InsCol = m_vToolBarEdit->insertButton2( pix, 7, SIGNAL( clicked() ), this, "insertColumn", true, i18n( "Insert Column"  ), -1 );
 
   m_vToolBarEdit->setFullWidth(false);  
@@ -616,70 +604,48 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 							    this, "fontSizeSelected", true,
 							    i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/bold.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("bold.xpm") );
   m_idButtonLayout_Bold = m_vToolBarLayout->insertButton2( pix, 3, SIGNAL( clicked() ), this, "bold", true, i18n( "Bold" ), -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/italic.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("italic.xpm") );
   m_idButtonLayout_Italic = m_vToolBarLayout->insertButton2( pix, 4, SIGNAL( clicked() ), this, "italic", true, i18n( "Italic" ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/money.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("money.xpm") );
   m_idButtonLayout_Money = m_vToolBarLayout->insertButton2( pix, 5, SIGNAL( clicked() ), this, "moneyFormat", true, i18n( "Money Format" ), -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/percent.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("percent.xpm") );
   m_idButtonLayout_Percent = m_vToolBarLayout->insertButton2( pix, 6, SIGNAL( clicked() ), this, "percent", true, i18n( "Percent Format" ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/left.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("left.xpm") );
   m_idButtonLayout_Left = m_vToolBarLayout->insertButton2( pix, 7, SIGNAL( clicked() ), this, "alignLeft", true, i18n( "Align Left" ), -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/center.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("center.xpm") );
   m_idButtonLayout_Center = m_vToolBarLayout->insertButton2( pix, 8, SIGNAL( clicked() ), this, "alignCenter", true, i18n( "Align Center" ), -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/right.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("right.xpm") );
   m_idButtonLayout_Right = m_vToolBarLayout->insertButton2( pix, 9, SIGNAL( clicked() ), this, "alignRight", true, i18n( "Align Right" ), -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/multirow.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("multirow.xpm") );
   m_idButtonLayout_MultiRows = m_vToolBarLayout->insertButton2( pix, 10, SIGNAL( clicked() ), this, "multiRow", true,
 							       i18n( "Allow multiple lines" ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/precminus.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("precminus.xpm") );
   m_idButtonLayout_PrecMinus = m_vToolBarLayout->insertButton2( pix, 11, SIGNAL( clicked() ), this, "precisionMinus", true,
 								 i18n( "Lower Precision"  ), -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/precplus.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("precplus.xpm") );
   m_idButtonLayout_PrecPlus = m_vToolBarLayout->insertButton2( pix, 12, SIGNAL( clicked() ), this, "precisionPlus", true,
 							      i18n( "Higher Precision" ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kspread/pics/chart.xpm";
-  pix = OPUIUtils::loadPixmap( tmp );
+  pix = OPUIUtils::convertPixmap( ICON("chart.xpm") );
   m_idButtonLayout_Chart = m_vToolBarLayout->insertButton2( pix, 13, SIGNAL( clicked() ), this, "insertChart", true, i18n( "Insert Chart" ), -1 );
 
   m_vToolBarLayout->enable( OpenPartsUI::Show );
@@ -715,30 +681,21 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // Edit  
   _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
-  QString path = kapp->kde_toolbardir().copy();
-  path += "/undo.xpm";
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( path );
+  OpenPartsUI::Pixmap_var pix;
+  pix = OPUIUtils::convertPixmap( ICON("undo.xpm") );
   m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n("Un&do"), this, "undo", stdAccel.undo(), -1, -1 );
-  path = kapp->kde_toolbardir().copy();
-  path += "/redo.xpm";
-  pix = OPUIUtils::loadPixmap( path );
+  pix = OPUIUtils::convertPixmap( ICON("redo.xpm") );
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, i18n("&Redo"), this, "redo", 0, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  path = kapp->kde_toolbardir().copy();
-  path += "/editcut.xpm";
-  pix = OPUIUtils::loadPixmap( path );
+  pix = OPUIUtils::convertPixmap( ICON("editcut.xpm") );
   m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, i18n("C&ut"), this, "cutSelection", stdAccel.cut(), -1, -1 );
   
-  path = kapp->kde_toolbardir().copy();
-  path += "/editcopy.xpm";
-  pix = OPUIUtils::loadPixmap( path );
+  pix = OPUIUtils::convertPixmap( ICON("editcopy.xpm") );
   m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, i18n("&Copy"), this, "copySelection", stdAccel.copy(), -1, -1 );
   
-  path = kapp->kde_toolbardir().copy();
-  path += "/editpaste.xpm";
-  pix = OPUIUtils::loadPixmap( path );
+  pix = OPUIUtils::convertPixmap( ICON("editpaste.xpm") );
   m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n("&Paste"), this, "paste", stdAccel.paste(), -1, -1 );
     
   m_vMenuEdit->insertSeparator( -1 );
@@ -846,10 +803,7 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
     
   QPixmap *pixmap = 0L;
     
-  QString filename = kapp->kde_datadir().copy();
-  filename += _file;        
-  pixmap = new QPixmap();
-  pixmap->load( filename.data() );
+  pixmap = new QPixmap(ICON(_file) );
     
   QButton *pb;
   if ( !_kbutton )
