@@ -52,6 +52,8 @@ bool kspreadfunc_dec2hex( KSContext& context );
 bool kspreadfunc_dec2oct( KSContext& context );
 bool kspreadfunc_dec2bin( KSContext& context );
 bool kspreadfunc_delta( KSContext& context );
+bool kspreadfunc_erf( KSContext& context );
+bool kspreadfunc_erfc( KSContext& context );
 bool kspreadfunc_gestep( KSContext& context );
 bool kspreadfunc_hex2dec( KSContext& context );
 bool kspreadfunc_hex2bin( KSContext& context );
@@ -91,6 +93,8 @@ void KSpreadRegisterEngineeringFunctions()
   repo->registerFunction( "DEC2BIN",     kspreadfunc_dec2bin );
   repo->registerFunction( "DEC2OCT",     kspreadfunc_dec2oct );
   repo->registerFunction( "DELTA",       kspreadfunc_delta );
+  repo->registerFunction( "ERF",         kspreadfunc_erf );
+  repo->registerFunction( "ERFC",        kspreadfunc_erfc );
   repo->registerFunction( "GESTEP",      kspreadfunc_gestep );
   repo->registerFunction( "HEX2BIN",     kspreadfunc_hex2bin );
   repo->registerFunction( "HEX2DEC",     kspreadfunc_hex2dec );
@@ -1669,6 +1673,60 @@ bool kspreadfunc_delta( KSContext& context )
     result = 0;
 
   kdDebug() << "Here4" << endl;
+  context.setValue( new KSValue( result ) );
+
+  return true;
+}
+
+// Function: ERF
+bool kspreadfunc_erf( KSContext & context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  double result = 0.0;
+
+  if ( KSUtil::checkArgumentsCount( context, 2, "ERF", false ) )
+  {
+    double lower_limit = args[0]->doubleValue();
+    double upper_limit = args[1]->doubleValue();
+    result = erf( upper_limit ) - erf( lower_limit );
+  }
+  else
+  if ( KSUtil::checkArgumentsCount( context, 1, "ERF", false ) )
+  {
+    double limit = args[0]->doubleValue();
+    result = erf( limit );
+  }
+  else
+    return false;
+
+  context.setValue( new KSValue( result ) );
+
+  return true;
+}
+
+// Function: ERFC
+bool kspreadfunc_erfc( KSContext & context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  double result = 0.0;
+
+  if ( KSUtil::checkArgumentsCount( context, 2, "ERFC", false ) )
+  {
+    double lower_limit = args[0]->doubleValue();
+    double upper_limit = args[1]->doubleValue();
+    result = erfc( upper_limit ) - erfc( lower_limit );
+  }
+  else
+  if ( KSUtil::checkArgumentsCount( context, 1, "ERFC", false ) )
+  {
+    double limit = args[0]->doubleValue();
+    result = erfc( limit );
+  }
+  else
+    return false;
+
   context.setValue( new KSValue( result ) );
 
   return true;
