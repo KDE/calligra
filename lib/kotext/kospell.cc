@@ -67,6 +67,7 @@ KoSpell::KoSpell( const Broker::Ptr& broker,  QObject *parent,
     d = new Private;
     d->parag = 0;
     d->itr = 0;
+    d->dialog = false;
     d->needsIncrement = false;
 }
 
