@@ -637,37 +637,37 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
       else
         date = kspread_cell->value().asDate();
 
-      KSpreadFormat::FormatType type;
+      FormatType type;
       switch( i )
       {
-       case 0:  type = KSpreadCell::date_format5;  break;
-       case 1:  type = KSpreadCell::date_format6;  break;
-       case 2:  type = KSpreadCell::date_format1;  break;
-       case 3:  type = KSpreadCell::date_format2;  break;
-       case 4:  type = KSpreadCell::date_format3;  break;
-       case 5:  type = KSpreadCell::date_format4;  break;
-       case 6:  type = KSpreadCell::date_format11; break;
-       case 7:  type = KSpreadCell::date_format12; break;
-       case 8:  type = KSpreadCell::date_format19; break;
-       case 9:  type = KSpreadCell::date_format18; break;
-       case 10: type = KSpreadCell::date_format20; break;
-       case 11: type = KSpreadCell::date_format21; break;
-       case 16: type = KSpreadCell::date_format7;  break;
-       case 17: type = KSpreadCell::date_format22; break;
-       case 18: type = KSpreadCell::date_format8;  break;
-       case 19: type = KSpreadCell::date_format9;  break;
-       case 22: type = KSpreadCell::date_format25; break;
-       case 23: type = KSpreadCell::date_format14; break;
-       case 24: type = KSpreadCell::date_format25; break;
-       case 25: type = KSpreadCell::date_format26; break;
-       case 26: type = KSpreadCell::date_format16; break;
-       case 27: type = KSpreadCell::date_format15; break;
-       case 28: type = KSpreadCell::date_format16; break;
-       case 29: type = KSpreadCell::date_format15; break;
-       case 30: type = KSpreadCell::date_format24; break;
-       case 31: type = KSpreadCell::date_format23; break;
+       case 0:  type = date_format5;  break;
+       case 1:  type = date_format6;  break;
+       case 2:  type = date_format1;  break;
+       case 3:  type = date_format2;  break;
+       case 4:  type = date_format3;  break;
+       case 5:  type = date_format4;  break;
+       case 6:  type = date_format11; break;
+       case 7:  type = date_format12; break;
+       case 8:  type = date_format19; break;
+       case 9:  type = date_format18; break;
+       case 10: type = date_format20; break;
+       case 11: type = date_format21; break;
+       case 16: type = date_format7;  break;
+       case 17: type = date_format22; break;
+       case 18: type = date_format8;  break;
+       case 19: type = date_format9;  break;
+       case 22: type = date_format25; break;
+       case 23: type = date_format14; break;
+       case 24: type = date_format25; break;
+       case 25: type = date_format26; break;
+       case 26: type = date_format16; break;
+       case 27: type = date_format15; break;
+       case 28: type = date_format16; break;
+       case 29: type = date_format15; break;
+       case 30: type = date_format24; break;
+       case 31: type = date_format23; break;
        default:
-        type = KSpreadCell::ShortDate;
+        type = ShortDate_format;
         break;
         /* 12, 13, 14, 15, 20, 21 */
       }
@@ -703,17 +703,17 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
       else
         time = kspread_cell->value().asTime();
 
-      KSpreadFormat::FormatType type;
+      FormatType type;
       switch( i )
       {
-       case 0: type = KSpreadCell::Time_format1; break;
-       case 1: type = KSpreadCell::Time_format2; break;
-       case 2: type = KSpreadCell::Time_format4; break;
-       case 3: type = KSpreadCell::Time_format5; break;
-       case 5: type = KSpreadCell::Time_format6; break;
-       case 6: type = KSpreadCell::Time_format6; break;
+       case 0: type = Time_format1; break;
+       case 1: type = Time_format2; break;
+       case 2: type = Time_format4; break;
+       case 3: type = Time_format5; break;
+       case 5: type = Time_format6; break;
+       case 6: type = Time_format6; break;
        default:
-        type = KSpreadCell::Time_format1; break;
+        type = Time_format1; break;
       }
 
       kdDebug() << "i: " << i << ", Type: " << type << endl;
@@ -848,30 +848,30 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
 
   if (formatString[l - 1] == '%')
   {
-    kspread_cell->setFormatType(KSpreadFormat::Percentage);
+    kspread_cell->setFormatType(Percentage_format);
     kspread_cell->setFactor(100);
   }
   else if (formatString[0] == '$')
   {
-    kspread_cell->setFormatType(KSpreadFormat::Money);
+    kspread_cell->setFormatType(Money_format);
     kspread_cell->setCurrency( 1, "$" );
     lastPos = 1;
   }
   else if (formatString[0] == '£')
   {
-    kspread_cell->setFormatType(KSpreadFormat::Money);
+    kspread_cell->setFormatType(Money_format);
     kspread_cell->setCurrency( 1, "£" );
     lastPos = 1;
   }
   else if (formatString[0] == '¥')
   {
-    kspread_cell->setFormatType(KSpreadFormat::Money);
+    kspread_cell->setFormatType(Money_format);
     kspread_cell->setCurrency( 1, "¥" );
     lastPos = 1;
   }
   else if (formatString[0] == '¤')
   {
-    kspread_cell->setFormatType(KSpreadFormat::Money);
+    kspread_cell->setFormatType(Money_format);
     kspread_cell->setCurrency( 1, "¤" );
     lastPos = 1;
   }
@@ -883,14 +883,14 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
       if (n != -1)
       {
         QString currency = formatString.mid(2, n - 2);
-        kspread_cell->setFormatType(KSpreadFormat::Money);
+        kspread_cell->setFormatType(Money_format);
         kspread_cell->setCurrency( 1, currency );
       }
       lastPos = ++n;
     }
     else if (formatString.find("E+0") != -1)
     {
-      kspread_cell->setFormatType(KSpreadFormat::Scientific);
+      kspread_cell->setFormatType(Scientific_format);
     }
     else
     {
@@ -903,7 +903,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
       if (formatString.find("?/?") != -1)
       {
         // TODO: fixme!
-        kspread_cell->setFormatType( KSpreadFormat::fraction_three_digits );
+        kspread_cell->setFormatType( fraction_three_digits );
         return;
       }
       // so it's nothing we want to understand:-)

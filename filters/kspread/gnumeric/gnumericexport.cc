@@ -331,13 +331,13 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
     
 	switch( cell->getFormatType(currentcolumn, currentrow))
 	{
-        case KSpreadCell::Number:
+        case Number_format:
             stringFormat="0.00";			
 			break;
-        case KSpreadCell::Text_format:
+        case Text_format:
             stringFormat="general";
             break;
-		case KSpreadCell::Money:
+		case Money_format:
             
             if (!cell->currencyInfo(c))
             {
@@ -359,152 +359,152 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
                 stringFormat="[$" + currency.getCurrencyCode(c.type) + "]0.00";
 
             break;
-		case KSpreadCell::Percentage:
+		case Percentage_format:
 		    stringFormat="0.00%";
 			break;
-		case KSpreadCell::Scientific:
+		case Scientific_format:
 		    stringFormat="0.00E+00";
 			break;
-		case KSpreadCell::ShortDate:
+		case ShortDate_format:
 			stringFormat=cell->locale()->dateFormatShort();
 			break;
-		case KSpreadCell::TextDate:
+		case TextDate_format:
 			stringFormat=cell->locale()->dateFormat();
 			break;
-		case KSpreadCell::date_format1:
+		case date_format1:
             stringFormat="dd-mmm-yy";
             break;
-		case KSpreadCell::date_format2:
+		case date_format2:
             stringFormat="dd-mmm-yyyy";
             break;
-		case KSpreadCell::date_format3:
+		case date_format3:
             stringFormat="dd-mmm";
             break;
-		case KSpreadCell::date_format4:
+		case date_format4:
             stringFormat="dd-mm";
             break;
-		case KSpreadCell::date_format5:
+		case date_format5:
             stringFormat="dd/mm/yy";
             break;
-		case KSpreadCell::date_format6:
+		case date_format6:
             stringFormat="dd/mm/yyyy";
             break;
-		case KSpreadCell::date_format7:
+		case date_format7:
             stringFormat="mmm-yy";
             break;
-		case KSpreadCell::date_format8:
+		case date_format8:
             stringFormat="mmmm-yy";
             break;
-		case KSpreadCell::date_format9:
+		case date_format9:
             stringFormat="mmmm-yyyy";
             break;
-		case KSpreadCell::date_format10:
+		case date_format10:
             stringFormat="m-yy";
             break;
-		case KSpreadCell::date_format11:
+		case date_format11:
             stringFormat="dd/mmm";
             break;
-		case KSpreadCell::date_format12:
+		case date_format12:
             stringFormat="dd/mm";
             break;
-		case KSpreadCell::date_format13:
+		case date_format13:
             stringFormat="dd/mmm/yyyy";
             break;
-		case KSpreadCell::date_format14:
+		case date_format14:
             stringFormat="yyyy/mmm/dd";
             break;
-		case KSpreadCell::date_format15:
+		case date_format15:
             stringFormat="yyyy-mmm-dd";
             break;
-		case KSpreadCell::date_format16:
+		case date_format16:
             stringFormat="yyyy-mm-dd";
             break;
-        case KSpreadCell::date_format17:
+        case date_format17:
             stringFormat="d mmmm yyyy";
             break;
-        case KSpreadCell::date_format18:
+        case date_format18:
             stringFormat="mm/dd/yyyy";
             break;
-        case KSpreadCell::date_format19:
+        case date_format19:
             stringFormat="mm/dd/yy";
             break;
-        case KSpreadCell::date_format20:
+        case date_format20:
             stringFormat="mmm/dd/yy";
             break;
-        case KSpreadCell::date_format21:
+        case date_format21:
             stringFormat="mmm/dd/yyyy";
             break;
-        case KSpreadCell::date_format22:
+        case date_format22:
             stringFormat="mmm-yyyy";
             break;
-        case KSpreadCell::date_format23:
+        case date_format23:
             stringFormat="yyyy";
             break;
-        case KSpreadCell::date_format24:
+        case date_format24:
             stringFormat="yy";
             break;
-        case KSpreadCell::date_format25:
+        case date_format25:
             stringFormat="yyyy/mm/dd";
             break;
-        case KSpreadCell::date_format26:
+        case date_format26:
 			stringFormat="yyyy/mmm/dd";
             break;
-		case KSpreadCell::Time:
-		case KSpreadCell::SecondeTime:
+		case Time_format:
+		case SecondeTime_format:
 			stringFormat=cell->locale()->timeFormat();
 			break;
-        case KSpreadCell::Time_format1:
+        case Time_format1:
             stringFormat = "h:mm AM/PM";
             break;
-        case KSpreadCell::Time_format2:
+        case Time_format2:
             stringFormat = "h:mm:ss AM/PM";
             break;
-        case KSpreadCell::Time_format3:
+        case Time_format3:
             stringFormat = "h \"h\" mm \"min\" ss \"s\"";
             break;
-        case KSpreadCell::Time_format4:
+        case Time_format4:
             stringFormat = "h:mm";
             break;   
-        case KSpreadCell::Time_format5:
+        case Time_format5:
             stringFormat = "h:mm:ss";
             break;
-        case KSpreadCell::Time_format6:
+        case Time_format6:
             stringFormat = "mm:ss";
             break; 
-        case KSpreadCell::Time_format7:
+        case Time_format7:
             stringFormat = "[h]:mm:ss";
             break;   
-        case KSpreadCell::Time_format8:
+        case Time_format8:
             stringFormat = "[h]:mm";
             break;
-		case KSpreadCell::fraction_half:
+		case fraction_half:
 			stringFormat="# ?/2";
 			break;
-		case KSpreadCell::fraction_quarter:
+		case fraction_quarter:
 			stringFormat="# ?/4";
 			break;
-		case KSpreadCell::fraction_eighth:
+		case fraction_eighth:
 			stringFormat="# ?/8";
 			break;
-		case KSpreadCell::fraction_sixteenth:
+		case fraction_sixteenth:
 			stringFormat="# ?/16";
 			break;
-		case KSpreadCell::fraction_tenth:
+		case fraction_tenth:
 			stringFormat="# ?/10";
 			break;
-		case KSpreadCell::fraction_hundredth:
+		case fraction_hundredth:
 			stringFormat="# ?/100";
 			break;
-		case KSpreadCell::fraction_one_digit:
+		case fraction_one_digit:
 			stringFormat="# ?/?";
 			break;
-		case KSpreadCell::fraction_two_digits:
+		case fraction_two_digits:
 			stringFormat="# ??/??";
 			break;
-		case KSpreadCell::fraction_three_digits:
+		case fraction_three_digits:
 			stringFormat="# ???/???";
 			break;
-        case KSpreadCell::Custom:
+        case Custom_format:
             stringFormat = cell->getFormatString(currentcolumn,currentrow);
             break;
     }
