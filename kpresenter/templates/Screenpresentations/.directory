@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Screenpresentations
 Name[af]=skerm aanbiedinge
-Name[ara]=عروض تقديمية
 Name[az]=Ekrannümayişləri
 Name[bg]=Екранни презентации
 Name[bs]=Prezentacije na zaslonu
@@ -27,9 +26,9 @@ Name[lt]=Pristatymai ekrane
 Name[lv]=Ekrānaprezentācijas
 Name[mk]=Презентации на екран
 Name[mt]=PreżentazzjonijietFuqSkrin
+Name[nb]=Skjermpresentasjoner
 Name[nl]=Schermpresentaties
-Name[no]=Skjermpresentasjoner
-Name[no_NY]=Skjermpresentasjonar
+Name[nn]=Skjermpresentasjonar
 Name[oc]=Presentacions de pantalla
 Name[pl]=Prezentacje na ekranie
 Name[pt]=Apresentações no Ecrã
@@ -44,6 +43,6 @@ Name[tr]=Ekransunumları
 Name[uk]=Представлення екрана
 Name[vi]=Trình diễn màn hình 
 Name[xh]=Ababonisi bekhusi
-Name[xxx]=xx
+Name[xx]=xx
 Name[zh_CN.GB2312]=屏幕演示
 Name[zh_TW.Big5]=簡報佈景
