@@ -94,6 +94,7 @@ KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const 
 
     exceptionList=new QListBox(this);
     exceptionList->insertStringList(m_listException);
+    exceptionList->sort();
     grid->addWidget(exceptionList,2,0);
 
     grid->setRowStretch( 2, 1 );
@@ -126,6 +127,7 @@ void KoAutoFormatExceptionWidget::slotAddException()
 
             exceptionList->clear();
             exceptionList->insertStringList(m_listException);
+            exceptionList->sort();
             pbRemoveException->setEnabled( exceptionList->currentItem()!=-1);
             pbAddException->setEnabled(false);
         }

@@ -490,10 +490,34 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
             undoRedoInfo.text = QString::null;
         }
         undoRedoInfo.text += "\n";
-        cursor->splitAndInsertEmptyParag();
+
+        if ( cursor->parag() )
+        {
+                QString last_line = cursor->parag()->toString();
+                last_line = last_line.remove(0,last_line.find(' ')+1);
+       
+                if( last_line.isEmpty() && cursor->parag()->counter() ) //if the previous line the in paragraph is empty
+                {
+                        KoParagCounter c;
+                        KCommand *cmd=setCounterCommand( cursor, c );
+                        if(cmd)
+                                emit newCommand(cmd);
+                        setLastFormattedParag( cursor->parag() );
+                        cursor->parag()->setNoCounter();
+	       
+                        formatMore( 2 );
+                        emit repaintChanged( this );
+                        emit ensureCursorVisible();
+                        emit showCursor();
+                        emit updateUI( doUpdateCurrentFormat );
+                        return;
+                }
+                else
+                        cursor->splitAndInsertEmptyParag();
+        }
+        
         Q_ASSERT( cursor->parag()->prev() );
-        if ( cursor->parag()->prev() )
-            setLastFormattedParag( cursor->parag()->prev() );
+        setLastFormattedParag( cursor->parag() );
 
         doUpdateCurrentFormat = false;
         KoParagStyle * style = cursor->parag()->prev()->style();

@@ -294,7 +294,7 @@ protected:
     KCommand * doTypographicQuotes( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes );
     void buildMaxLen();
 
-    void doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag, int & index, const QString & word, KoTextObject *txtObj );
+    void doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag, int & index, QString & word, KoTextObject *txtObj );
     KCommand *doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
     KCommand *doAutoChangeFormat( KoTextCursor *textEditCursor, KoTextParag *parag, int index, const QString & word, KoTextObject *txtObj );
     KCommand *doUseBulletStyle(KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj, int& index );
@@ -368,6 +368,8 @@ private:
     uint m_minCompletionWordLength;
     uint m_nbMaxCompletionWord;
     QStringList m_cacheNameOfDays;
+    /// Indicates if doAutoFormat has called itself
+    bool m_wordInserted;
 };
 
 #endif
