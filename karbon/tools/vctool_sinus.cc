@@ -40,12 +40,12 @@ VCToolSinus::instance( KarbonPart* part )
 
 void
 VCToolSinus::drawTemporaryObject(
-	KarbonView* view, const QPoint& tl, const QPoint& br )
+	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 	
 	VCCmdSinus* cmd =
-		new VCCmdSinus( part(), tl.x(), tl.y(), br.x(), br.y(),
+		new VCCmdSinus( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,
 			m_dialog->valuePeriods() );
 
 	VPath* path = cmd->createPath();
@@ -57,23 +57,26 @@ VCToolSinus::drawTemporaryObject(
 }
 
 VCommand*
-VCToolSinus::createCmdFromDialog( const QPoint& point )
+VCToolSinus::createCmd( const QPoint& p, double d1, double d2 )
 {
-	if ( m_dialog->exec() )
-		return
-			new VCCmdSinus( part(), point.x(), point.y(),
-				point.x() + m_dialog->valueWidth(),
-				point.y() + m_dialog->valueHeight(),
-				m_dialog->valuePeriods() );
+	if( d1 <= 1.0 && d2 <= 1.0 )
+	{
+		if ( m_dialog->exec() )
+			return
+				new VCCmdSinus( part(),
+					p.x(), p.y(),
+					p.x() + m_dialog->valueWidth(),
+					p.y() + m_dialog->valueHeight(),
+					m_dialog->valuePeriods() );
+		else
+			return 0L;
+	}
 	else
-		return 0L;
-}
-
-VCommand*
-VCToolSinus::createCmdFromDragging( const QPoint& tl, const QPoint& br )
-{
-	return
-		new VCCmdSinus(
-			part(), tl.x(), tl.y(), br.x(), br.y(), m_dialog->valuePeriods() );
+		return
+			new VCCmdSinus( part(),
+				p.x(), p.y(),
+				p.x() + d1,
+				p.y() + d2,
+				m_dialog->valuePeriods() );
 }
 

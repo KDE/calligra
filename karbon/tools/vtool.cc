@@ -19,7 +19,7 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
 	{
 		// erase old object:
-		drawTemporaryObject( view, m_tl, m_br );
+		drawTemporaryObject( view, m_p, m_d1, m_d2 );
 
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
@@ -28,34 +28,30 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 		recalcCoords();
 
 		// paint new object:
-		drawTemporaryObject( view, m_tl, m_br );
+		drawTemporaryObject( view, m_p, m_d1, m_d2 );
 
 		return true;
 	}
 
 	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
 	{
-		m_isDragging = false;
-		m_isSquare = false;
-		m_isCentered = false;
-
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		// did we drag the mouse?
-		if ( m_fp == m_lp )
-		{
-			// we didnt drag => show a config-dialog:
-			VCommand* cmd = createCmdFromDialog( m_fp );
-			if( cmd )
-				m_part->addCommand( cmd );
-			else
-				// erase old object:
-				drawTemporaryObject( view, m_tl, m_br );
-		}
+		recalcCoords();
+
+		VCommand* cmd = createCmd( m_p, m_d1, m_d2 );
+
+		if( cmd )
+			m_part->addCommand( cmd );
 		else
-			m_part->addCommand( createCmdFromDragging( m_tl, m_br ) );
+			// erase old object:
+			drawTemporaryObject( view, m_p, m_d1, m_d2 );
+
+		m_isDragging = false;
+		m_isSquare = false;
+		m_isCentered = false;
 
 		return true;
 	}
@@ -73,7 +69,7 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 			m_isCentered = false;
 
 			// erase old object:
-			drawTemporaryObject( view, m_tl, m_br );
+			drawTemporaryObject( view, m_p, m_d1, m_d2 );
 
 			return true;
 		}
@@ -86,10 +82,10 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 			if ( m_isDragging )
 			{
 				// erase old object:
-				drawTemporaryObject( view, m_tl, m_br );
+				drawTemporaryObject( view, m_p, m_d1, m_d2 );
 				recalcCoords();
 				// draw new old object:
-				drawTemporaryObject( view, m_tl, m_br );
+				drawTemporaryObject( view, m_p, m_d1, m_d2 );
 			}
 
 			return true;
@@ -103,10 +99,10 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 			if ( m_isDragging )
 			{
 				// erase old object:
-				drawTemporaryObject( view, m_tl, m_br );
+				drawTemporaryObject( view, m_p, m_d1, m_d2 );
 				recalcCoords();
 				// draw new old object:
-				drawTemporaryObject( view, m_tl, m_br );
+				drawTemporaryObject( view, m_p, m_d1, m_d2 );
 			}
 
 			return true;
@@ -125,10 +121,10 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 			if ( m_isDragging )
 			{
 				// erase old object:
-				drawTemporaryObject( view, m_tl, m_br );
+				drawTemporaryObject( view, m_p, m_d1, m_d2 );
 				recalcCoords();
 				// draw new old object:
-				drawTemporaryObject( view, m_tl, m_br );
+				drawTemporaryObject( view, m_p, m_d1, m_d2 );
 			}
 
 			return true;
@@ -141,10 +137,10 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 			if ( m_isDragging )
 			{
 				// erase old object:
-				drawTemporaryObject( view, m_tl, m_br );
+				drawTemporaryObject( view, m_p, m_d1, m_d2 );
 				recalcCoords();
 				// draw new old object:
-				drawTemporaryObject( view, m_tl, m_br );
+				drawTemporaryObject( view, m_p, m_d1, m_d2 );
 			}
 
 			return true;
@@ -161,7 +157,7 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 		
 		// draw initial object:
-		drawTemporaryObject( view, m_tl, m_br );
+		drawTemporaryObject( view, m_p, m_d1, m_d2 );
 
 		m_isDragging = true;
 

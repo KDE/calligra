@@ -13,7 +13,7 @@
 VCToolStar* VCToolStar::s_instance = 0L;
 
 VCToolStar::VCToolStar( KarbonPart* part )
-	: VTool( part )
+	: VTool( part, true )
 {
 	// create config dialog:
 	m_dialog = new VCDlgStar();
@@ -40,13 +40,17 @@ VCToolStar::instance( KarbonPart* part )
 
 void
 VCToolStar::drawTemporaryObject(
-	KarbonView* view, const QPoint& tl, const QPoint& br )
+	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 	
 	VCCmdStar* cmd =
-		new VCCmdStar( part(), tl.x(), tl.y(), br.x(), br.y(),
-			m_dialog->valueEdges() );
+		new VCCmdStar( part(),
+			p.x(), p.y(),
+			d1,
+			m_dialog->valueInnerR() * d1 / m_dialog->valueOuterR(),
+			m_dialog->valueEdges(),
+			d2 );
 
 	VPath* path = cmd->createPath();
 	path->setState( VObject::edit );
@@ -57,23 +61,27 @@ VCToolStar::drawTemporaryObject(
 }
 
 VCommand*
-VCToolStar::createCmdFromDialog( const QPoint& point )
+VCToolStar::createCmd( const QPoint& p, double d1, double d2 )
 {
-	if ( m_dialog->exec() )
-		return
-			new VCCmdStar( part(), point.x(), point.y(),
-				point.x() + m_dialog->valueOuterR(),
-				point.y() + m_dialog->valueInnerR(),
-				m_dialog->valueEdges() );
+	if( d1 == 0.0 && d2 == 0.0 )
+	{
+		if ( m_dialog->exec() )
+			return
+				new VCCmdStar( part(),
+					p.x(), p.y(),
+					m_dialog->valueOuterR(),
+					m_dialog->valueInnerR(),
+					m_dialog->valueEdges() );
+		else
+			return 0L;
+	}
 	else
-		return 0L;
-}
-
-VCommand*
-VCToolStar::createCmdFromDragging( const QPoint& tl, const QPoint& br )
-{
-	return
-		new VCCmdStar(
-			part(), tl.x(), tl.y(), br.x(), br.y(), m_dialog->valueEdges() );
+		return
+			new VCCmdStar( part(),
+				p.x(), p.y(),
+				d1,
+				m_dialog->valueInnerR() * d1 / m_dialog->valueOuterR(),
+				m_dialog->valueEdges(),
+				d2 );
 }
 

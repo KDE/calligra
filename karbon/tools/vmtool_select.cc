@@ -32,28 +32,29 @@ VMToolSelect::instance( KarbonPart* part )
 
 void
 VMToolSelect::drawTemporaryObject(
-	KarbonView* view, const QPoint& tl, const QPoint& br )
+	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
+	painter.save();
+	painter.setPen( Qt::DotLine );
+	painter.setRasterOp( Qt::NotROP );
 
-	painter.moveTo( tl.x(), tl.y() );
-	painter.lineTo( br.x(), tl.y() );
-	painter.lineTo( br.x(), br.y() );
-	painter.lineTo( tl.x(), br.y() );
-	painter.lineTo( tl.x(), tl.y() );
+	painter.moveTo( p.x(), p.y() );
+	painter.lineTo( p.x() + d1, p.y() );
+	painter.lineTo( p.x() + d1, p.y() + d2 );
+	painter.lineTo( p.x(), p.y() + d2 );
+	painter.lineTo( p.x(), p.y() );
+
+	painter.restore();
 }
 
 VCommand*
-VMToolSelect::createCmdFromDialog( const QPoint& point )
-{
-	return 0L;
-}
-
-VCommand*
-VMToolSelect::createCmdFromDragging( const QPoint& tl, const QPoint& br )
+VMToolSelect::createCmd( const QPoint& p, double d1, double d2 )
 {
 	return
-		new VMCmdSelect(
-			part(), tl.x(), tl.y(), br.x(), br.y() );
+		new VMCmdSelect( part(),
+			p.x(), p.y(),
+			p.x() + d1,
+			p.y() + d2 );
 }
 

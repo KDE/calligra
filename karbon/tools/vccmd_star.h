@@ -14,8 +14,8 @@ class VPath;
 class VCCmdStar : public VCCommand
 {
 public:
-	VCCmdStar( KarbonPart* part, const double centerX, const double centerY,
-		const double outerR, const double innerR, const uint edges );
+	VCCmdStar( KarbonPart* part, double centerX, double centerY,
+		double outerR, double innerR, uint edges, double angle = 0.0 );
 	virtual ~VCCmdStar() {}
 
 	// for complex shapes. needed to draw while creation (creation tool):
@@ -27,6 +27,7 @@ private:
 	double m_outerR;
 	double m_innerR;
 	uint m_edges;
+	double m_angle;
 };
 
 #endif

@@ -11,9 +11,10 @@
 #include "vpath.h"
 
 VCCmdStar::VCCmdStar( KarbonPart* part,
-		const double centerX, const double centerY,
-		const double outerR, const double innerR, const uint edges )
-	: VCCommand( part, i18n("Insert Star") ), m_centerX( centerX ), m_centerY( centerY )
+		double centerX, double centerY,
+		double outerR, double innerR, uint edges, double angle )
+	: VCCommand( part, i18n( "Insert Star" ) ), m_centerX( centerX ), m_centerY( centerY ),
+		m_angle( angle )
 {
 	// a star should have at least 3 edges:
 	m_edges = edges < 3 ? 3 : edges;
@@ -28,16 +29,19 @@ VCCmdStar::createPath()
 {
 	VPath* path = new VPath();
 
-	// we start at 90 degrees:
-	path->moveTo( 0.0, m_outerR );
+	// we start at m_angle + VGlobal::pi_2:
+	path->moveTo(
+		m_outerR * cos( m_angle + VGlobal::pi_2 ),
+		m_outerR * sin( m_angle + VGlobal::pi_2 ) );
+
 	for ( uint i = 0; i < m_edges; ++i )
 	{
 		path->lineTo(
-			m_innerR * cos( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ),
-			m_innerR * sin( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ) );
+			m_innerR * cos( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ),
+			m_innerR * sin( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ) );
 		path->lineTo(
-			m_outerR * cos( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 ) ),
-			m_outerR * sin( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 ) ) );
+			m_outerR * cos( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 ) ),
+			m_outerR * sin( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 ) ) );
 	}
 	path->close();
 

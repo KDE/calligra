@@ -18,11 +18,10 @@ public:
 	virtual ~VCToolRoundRect();
 	static VCToolRoundRect* instance( KarbonPart* part );
 
-	virtual VCommand* createCmdFromDialog( const QPoint& point );
-	virtual VCommand* createCmdFromDragging( const QPoint& tl, const QPoint& br );
+	virtual VCommand* createCmd( const QPoint& p, double d1, double d2 );
 
 	virtual void drawTemporaryObject(
-		KarbonView* view, const QPoint& tl, const QPoint& br );
+		KarbonView* view, const QPoint& p, double d1, double d2 );
 
 protected:
 	VCToolRoundRect( KarbonPart* part );

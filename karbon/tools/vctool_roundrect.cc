@@ -40,12 +40,12 @@ VCToolRoundRect::instance( KarbonPart* part )
 
 void
 VCToolRoundRect::drawTemporaryObject(
-	KarbonView* view, const QPoint& tl, const QPoint& br )
+	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 	
 	VCCmdRoundRect* cmd =
-		new VCCmdRoundRect( part(), tl.x(), tl.y(), br.x(), br.y(),
+		new VCCmdRoundRect( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,
 			m_dialog->valueRound() );
 
 	VPath* path = cmd->createPath();
@@ -57,23 +57,25 @@ VCToolRoundRect::drawTemporaryObject(
 }
 
 VCommand*
-VCToolRoundRect::createCmdFromDialog( const QPoint& point )
+VCToolRoundRect::createCmd( const QPoint& p, double d1, double d2 )
 {
-	if ( m_dialog->exec() )
-		return
-			new VCCmdRoundRect( part(), point.x(), point.y(),
-				point.x() + m_dialog->valueWidth(),
-				point.y() + m_dialog->valueHeight(),
-				m_dialog->valueRound() );
+	if( d1 <= 1.0 && d2 <= 1.0 )
+	{
+		if ( m_dialog->exec() )
+			return
+				new VCCmdRoundRect( part(),
+					p.x(), p.y(),
+					p.x() + m_dialog->valueWidth(),
+					p.y() + m_dialog->valueHeight(),
+					m_dialog->valueRound() );
+		else
+			return 0L;
+	}
 	else
-		return 0L;
-}
-
-VCommand*
-VCToolRoundRect::createCmdFromDragging( const QPoint& tl, const QPoint& br )
-{
-	return
-		new VCCmdRoundRect( part(), tl.x(), tl.y(), br.x(), br.y(),
+		return
+			new VCCmdRoundRect( part(),
+				p.x(), p.y(),
+				p.x() + d1,
+				p.y() + d2,
 				m_dialog->valueRound() );
 }
-

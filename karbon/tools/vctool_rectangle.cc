@@ -39,12 +39,12 @@ VCToolRectangle::instance( KarbonPart* part )
 
 void
 VCToolRectangle::drawTemporaryObject(
-	KarbonView* view, const QPoint& tl, const QPoint& br )
+	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 	
 	VCCmdRectangle* cmd =
-		new VCCmdRectangle( part(), tl.x(), tl.y(), br.x(), br.y() );
+		new VCCmdRectangle( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 
 	VPath* path = cmd->createPath();
 	path->setState( VObject::edit );
@@ -55,23 +55,24 @@ VCToolRectangle::drawTemporaryObject(
 }
 
 VCommand*
-VCToolRectangle::createCmdFromDialog( const QPoint& point )
+VCToolRectangle::createCmd( const QPoint& p, double d1, double d2 )
 {
-	if ( m_dialog->exec() )
+	if( d1 <= 1.0 && d2 <= 1.0 )
+	{
+		if ( m_dialog->exec() )
+			return
+				new VCCmdRectangle( part(),
+					p.x(), p.y(),
+					p.x() + m_dialog->valueWidth(),
+					p.y() + m_dialog->valueHeight() );
+		else
+			return 0L;
+	}
+	else
 		return
 			new VCCmdRectangle( part(),
-				point.x(), point.y(),
-				point.x() + m_dialog->valueWidth(),
-				point.y() + m_dialog->valueHeight() );
-	else
-		return 0L;
-}
-
-VCommand*
-VCToolRectangle::createCmdFromDragging( const QPoint& tl, const QPoint& br )
-{
-	return
-		new VCCmdRectangle(
-			part(), tl.x(), tl.y(), br.x(), br.y() );
+				p.x(), p.y(),
+				p.x() + d1,
+				p.y() + d2 );
 }
 
