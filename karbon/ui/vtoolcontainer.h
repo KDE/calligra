@@ -20,8 +20,10 @@ public:
 	VToolContainer( KoView* parent = 0L, const char* name = 0L );
 	~VToolContainer();
 	QButtonGroup *btngroup;
+	QButtonGroup *dlggroup;
 private:
 	enum ButtonChoice { Select, Scale, Rotate, Shear, Ellipse, Rectangle, Roundrect, Polygon, Star, Sinus, Spiral };
+	enum DlgChoice { Outline, SolidFill, Gradient };
 private slots:
 	void slotButton( int ID );
 signals:
