@@ -118,6 +118,7 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	button = new QToolButton(dlggroup);
 	pixmap = BarIcon("outlinedlg",KarbonFactory::instance());
 	button->setPixmap(pixmap);
+	connect( button, SIGNAL( clicked() ), this, SIGNAL( strokeActivated() ) );
 	dlggroup->insert( button, Outline);
 
 	button = new QToolButton(dlggroup);

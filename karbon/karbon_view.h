@@ -91,6 +91,7 @@ protected slots:
 	
 	//toolbox dialogs - slots
 	void solidFillClicked();
+	void strokeClicked();
 
 protected:
 	virtual void updateReadWrite( bool rw );

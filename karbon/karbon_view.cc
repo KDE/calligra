@@ -33,6 +33,7 @@
 #include "vpainterfactory.h"
 #include "vpainter.h"
 #include "vmdlg_solidfill.h"
+#include "vmdlg_stroke.h"
 #include "vmpanel_color.h"
 #include "vccmd_text.h"
 #include "vtext.h"
@@ -344,6 +345,13 @@ KarbonView::solidFillClicked()
 }
 
 void
+KarbonView::strokeClicked()
+{
+	VMDlgStroke* m_strokeDialog = new VMDlgStroke( m_part );
+	m_strokeDialog->show();
+}
+
+void
 KarbonView::viewColorManager()
 {
 	VColorPanel* m_ColorPanel = new VColorPanel ( this );
@@ -512,6 +520,7 @@ KarbonView::initActions()
 	connect( m_toolbox, SIGNAL(spiralToolActivated()), this, SLOT(spiralTool()) );
 	connect( m_toolbox, SIGNAL(textToolActivated()), this, SLOT(textTool()) );
 	connect( m_toolbox, SIGNAL(solidFillActivated()), this, SLOT(solidFillClicked()) );
+	connect( m_toolbox, SIGNAL(strokeActivated()), this, SLOT(strokeClicked()) );
 	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
 	m_toolbox->show();
 }

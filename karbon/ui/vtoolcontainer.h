@@ -37,6 +37,7 @@ signals:
 	void starToolActivated();
 	void textToolActivated();
 	void solidFillActivated();
+	void strokeActivated();
 };
 
 #endif

@@ -16,6 +16,7 @@ noinst_HEADERS = \
 	vcdlg_spiral.h \
 	vcdlg_star.h \
 	vmdlg_solidfill.h \
+	vmdlg_stroke.h \
 	vtoolcontainer.h \
 	vmpanel_color.h
 
@@ -29,6 +30,7 @@ libkarbonui_la_SOURCES = \
 	vcdlg_spiral.cc \
 	vcdlg_star.cc \
 	vmdlg_solidfill.cc \
+	vmdlg_stroke.cc \
 	vtoolcontainer.cc \
 	vmpanel_color.cc
 
