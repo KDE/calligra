@@ -2047,7 +2047,7 @@ void RTFImport::addAnchor( const char *instance )
  * @param format the format information
  * @param baseFormat the format information is based on this format
  */
-void RTFImport::addFormat( DomNode &node, KWFormat &format, const RTFFormat* baseFormat )
+void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFFormat* baseFormat )
 {
     // Support both (\dn, \up) and (\sub, \super) for super/sub script
     int vertAlign  = format.fmt.vertAlign;
@@ -2463,18 +2463,17 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
     // Insert character formatting
     bool hasFormats = false;
 
-    // ### TODO: use ConstIterator
-    for (uint i=0; i < textState->formats.count(); i++)
+    for ( QValueList<KWFormat>::ConstIterator it = textState->formats.begin(); it != textState->formats.end(); ++it )
     {
-	if (textState->formats[i].id != 1 ||
-	    memcmp( &textState->formats[i].fmt, format, sizeof(RTFFormat) ))
+	if ( (*it).id != 1 ||
+	    memcmp( &(*it).fmt, format, sizeof(RTFFormat) ) )
 	{
 	    if (!hasFormats)
 	    {
 		node.addNode( "FORMATS" );
 		hasFormats = true;
 	    }
-	    addFormat( node, textState->formats[i], format );
+	    addFormat( node, (*it), format );
 	}
     }
     if (hasFormats)
