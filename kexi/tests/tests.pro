@@ -1,6 +1,6 @@
 TEMPLATE	= subdirs
 
-SUBDIRS += \
-newapi \
-parser
+SUBDIRS += newapi
+
+#parser
 
