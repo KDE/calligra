@@ -910,11 +910,26 @@ bool KoDocument::loadNativeFormat( const QString & file )
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
   {
     in.at(0);
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
     QDomDocument doc;
-    doc.setContent( &in );
-    bool res = loadXML( &in, doc );
-    if ( res )
-      res = completeLoading( 0L );
+    bool res;
+    if ( doc.setContent( &in , &errorMsg, &errorLine, &errorColumn ) )
+    {
+      res = loadXML( &in, doc );
+      if ( res )
+        res = completeLoading( 0L );
+    }
+    else
+    {
+        kdError (30003) << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << endl
+          << "  Line: " << errorLine << " Column: " << errorColumn << endl
+          << "  Message: " << errorMsg << endl;
+        d->lastErrorMessage = i18n( "Parsing error in file at line %1, column %2" )
+          .arg( errorLine ).arg( errorColumn );
+        res=false;
+    }
 
     QApplication::restoreOverrideCursor();
     in.close();
@@ -935,8 +950,21 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     if ( store->open( "root" ) )
     {
+      QString errorMsg;
+      int errorLine;
+      int errorColumn;
       QDomDocument doc;
-      doc.setContent( store->device() );
+      if ( !doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn ) )
+      {
+        kdError (30003) << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (KoStore))" << endl
+          << "  Line: " << errorLine << " Column: " << errorColumn << endl
+          << "  Message: " << errorMsg << endl;
+        d->lastErrorMessage = i18n( "Parsing error in file at line %1, column %2" )
+          .arg( errorLine ).arg( errorColumn );
+        delete store;
+        QApplication::restoreOverrideCursor();
+        return false;
+      }
       if ( !loadXML( store->device(), doc ) )
       {
         delete store;
