@@ -1694,7 +1694,13 @@ void RTFImport::parseField( RTFProperty * )
 	    {
                 QString strFldinst( QString::fromUtf8(fldinst) );
                 QRegExp regexp("\\\\@\\s*\"(.+)\""); // \@ "Text"
-                regexp.search(strFldinst);
+                if (regexp.search(strFldinst)==-1)
+                { // Not found? Perhaps it is not in quotes (even if it is rare)
+                    kdWarning(30515) << "Date/time field format not in quotes!" << endl;
+                    strFldinst += ' '; // Add a space at the end to simplify the regular expression
+                    regexp = QRegExp("\\\\@(\\S+)\\s+"); // \@some_text_up_to_a_space
+                    regexp.search(strFldinst);
+                }
                 QString format(regexp.cap(1));
                 kdDebug(30515) << "Date/time field format: " << format << endl;
 		format.replace("am/pm", "ap");
