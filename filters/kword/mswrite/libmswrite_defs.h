@@ -434,6 +434,14 @@ namespace MSWrite
 	class MemoryDevice : public Device
 	{
 	public:
+		MemoryDevice ()
+		{
+		}
+
+		virtual ~MemoryDevice ()
+		{
+		}
+
 		bool read (Byte * /*buf*/, const DWord /*numBytes*/)
 		{
 			error (Error::InternalError, "memory device not reading from memory?\n");
@@ -500,6 +508,10 @@ namespace MSWrite
 		UseThisMuchPrefixSize (const int val = 0)
 		{
 			setVal (val);
+		}
+
+		~UseThisMuchPrefixSize ()
+		{
 		}
 
 		bool operator== (const UseThisMuchPrefixSize &rhs)
@@ -573,6 +585,15 @@ namespace MSWrite
 				return biggest / 8 + 1;	// account for fractional byte
 			else
 				return biggest / 8;
+		}
+
+	public:
+		UseThisMuch ()
+		{
+		}
+
+		virtual ~UseThisMuch ()
+		{
 		}
 	};
 	

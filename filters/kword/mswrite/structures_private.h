@@ -37,18 +37,10 @@ namespace MSWrite
 		bool writeToDevice (void);	friend class InternalGenerator;
 
 	public:
-		Header &operator= (const Header &rhs)
-		{
-			if (this == &rhs)
-				return *this;
+		Header ();
+		virtual ~Header ();
 
-			HeaderGenerated::operator= (rhs);
-
-			m_numCharBytes = rhs.m_numCharBytes;
-			m_pageCharInfo = rhs.m_pageCharInfo;
-
-			return *this;
-		}
+		Header &operator= (const Header &rhs);
 
 		Word getFormat (void) const	{	return getMagic ();	}
 		void setFormat (const Word f)	{	setMagic (f);	}
@@ -91,7 +83,7 @@ namespace MSWrite
 
 			return *this;
 		}
-		
+
 		void setHeader (Header *header)	{	m_header = header;	}
 	};
 
@@ -99,20 +91,21 @@ namespace MSWrite
 	class SectionDescriptor : public SectionDescriptorGenerated
 	{
 	public:
-		SectionDescriptor &operator= (const SectionDescriptor &rhs)
-		{
-			if (this == &rhs)
-				return *this;
+		SectionDescriptor ();
+		virtual ~SectionDescriptor ();
 
-			SectionDescriptorGenerated::operator= (rhs);
-
-			return *this;
-		}
+		SectionDescriptor &operator= (const SectionDescriptor &rhs);
 	};
 
 
 	class SectionTable : public SectionTableGenerated, public NeedsHeader
 	{
+	public:
+		SectionTable ();
+		virtual ~SectionTable ();
+
+		SectionTable &operator= (const SectionTable &rhs);
+
 	private:
 		bool readFromDevice (void);	friend class InternalParser;
 		bool writeToDevice (const bool needed);	friend class InternalGenerator;
@@ -130,7 +123,7 @@ namespace MSWrite
 
 	public:
 		FontTable ();
-		~FontTable ();
+		virtual ~FontTable ();
 
 		FontTable &operator= (const FontTable &rhs);
 
@@ -139,7 +132,7 @@ namespace MSWrite
 		DWord addFont (const Font *input);
 	};
 
-	
+
 	class PagePointer : public PagePointerGenerated
 	{
 	private:
@@ -148,18 +141,13 @@ namespace MSWrite
 			bool writeToDevice (void);
 
 	public:
-		PagePointer &operator= (const PagePointer &rhs)
-		{
-			if (this == &rhs)
-				return *this;
+		PagePointer ();
+		virtual ~PagePointer ();
 
-			PagePointerGenerated::operator= (rhs);
-
-			return *this;
-		}
+		PagePointer &operator= (const PagePointer &rhs);
 	};
 
-	
+
 	class PageTable : public PageTableGenerated, public NeedsHeader
 	{
 	private:
@@ -178,24 +166,9 @@ namespace MSWrite
 
 	public:
 		PageTable ();
-		~PageTable ();
+		virtual ~PageTable ();
 
-		PageTable &operator= (const PageTable &rhs)
-		{
-			if (this == &rhs)
-				return *this;
-
-			PageTableGenerated::operator= (rhs);
-			NeedsHeader::operator= (rhs);
-
-			m_pagePointerList = rhs.m_pagePointerList;
-			m_pageNumberStart = rhs.m_pageNumberStart;
-
-			m_pageTableIterator = rhs.m_pageTableIterator;
-
-			return *this;
-		}
-		
+		PageTable &operator= (const PageTable &rhs);
 
 		PagePointer *begin (void)
 		{
@@ -208,7 +181,7 @@ namespace MSWrite
 			m_pageTableIterator = m_pageTableIterator.next ();
 			return &(*m_pageTableIterator);
 		}
-		
+
 		bool end (void) /*const*/
 		{
 			return m_pageTableIterator == m_pagePointerList.end ();
@@ -220,7 +193,7 @@ namespace MSWrite
 		}
 	};
 
-	
+
 	class FormatPointer : public FormatPointerGenerated
 	{
 	private:
@@ -232,7 +205,7 @@ namespace MSWrite
 
 			//
 			// for exporting
-			// 
+			//
 			const void *m_formatProperty;
 
 			const void *getFormatProperty (void) const	{	return m_formatProperty;	}
@@ -240,20 +213,9 @@ namespace MSWrite
 
 	public:
 		FormatPointer ();
-		~FormatPointer ();
+		virtual ~FormatPointer ();
 
-		FormatPointer &operator= (const FormatPointer &rhs)
-		{
-			if (this == &rhs)
-				return *this;
-
-			FormatPointerGenerated::operator= (rhs);
-
-			m_afterEndCharByte = rhs.m_afterEndCharByte;
-			m_formatProperty = rhs.m_formatProperty;
-
-			return *this;
-		}
+		FormatPointer &operator= (const FormatPointer &rhs);
 
 		DWord getAfterEndCharByte (void) const	{	return m_afterEndCharByte;	}
 		void setAfterEndCharByte (const DWord val)	{	m_afterEndCharByte = val;	}
@@ -274,7 +236,7 @@ namespace MSWrite
 		DWord m_firstCharByte;	// FormatInfoPageGenerated::m_firstCharBytePlus128 - 128
 		enum FormatInfoPageTypes m_type;	// CharInfo or ParaInfo?
 
-		
+
 		//
 		// uncompressed data
 		//
@@ -288,7 +250,7 @@ namespace MSWrite
 		FormatParaProperty *m_formatParaProperty;
 			Word m_leftMargin, m_rightMargin;	// for ParaProperty
 
-			
+
 		//
 		// Iterator helpers
 		//
@@ -309,7 +271,7 @@ namespace MSWrite
 
 	public:
 		FormatInfoPage ();
-		~FormatInfoPage ();
+		virtual ~FormatInfoPage ();
 
 		void setMargins (const Word leftMargin, const Word rightMargin)
 		{
@@ -339,6 +301,11 @@ namespace MSWrite
 	class BMP_BitmapFileHeader : public BMP_BitmapFileHeaderGenerated
 	{
 	public:
+		BMP_BitmapFileHeader ();
+		virtual ~BMP_BitmapFileHeader ();
+
+		BMP_BitmapFileHeader &operator= (const BMP_BitmapFileHeader &rhs);
+
 		bool readFromDevice (void);
 		bool writeToDevice (void);
 	};
@@ -347,6 +314,11 @@ namespace MSWrite
 	class BMP_BitmapInfoHeader : public BMP_BitmapInfoHeaderGenerated
 	{
 	public:
+		BMP_BitmapInfoHeader ();
+		virtual ~BMP_BitmapInfoHeader ();
+
+		BMP_BitmapInfoHeader &operator= (const BMP_BitmapInfoHeader &rhs);
+
 		bool readFromDevice (void);
 		bool writeToDevice (void);
 	};
@@ -354,6 +326,11 @@ namespace MSWrite
 
 	class BMP_BitmapColourIndex : public BMP_BitmapColourIndexGenerated
 	{
+	public:
+		BMP_BitmapColourIndex ();
+		virtual ~BMP_BitmapColourIndex ();
+
+		BMP_BitmapColourIndex &operator= (const BMP_BitmapColourIndex &rhs);
 	};
 
 
@@ -362,6 +339,11 @@ namespace MSWrite
 	//private:
 	//	friend class ImageGenerated;
 	public:
+		BitmapHeader ();
+		virtual ~BitmapHeader ();
+
+		BitmapHeader &operator= (const BitmapHeader &rhs);
+
 		bool readFromDevice (void);
 		bool writeToDevice (void);
 	};
@@ -372,6 +354,11 @@ namespace MSWrite
 	//private:
 	//	friend class Image;
 	public:
+		WMFHeader ();
+		virtual ~WMFHeader ();
+
+		WMFHeader &operator= (const WMFHeader &rhs);
+
 		bool readFromDevice (void);
 		bool writeToDevice (void);
 	};

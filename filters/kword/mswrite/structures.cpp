@@ -23,7 +23,7 @@
  * structures.cpp - Process Internal Microsoft(r) Write file structures
  * This file has ugly reading/writing code that couldn't be generated.
  * It performs some higher-level sanity checks.
- * 
+ *
  */
 
 #include "structures.h"
@@ -37,6 +37,19 @@ namespace MSWrite
 
 	PageLayout::~PageLayout ()
 	{
+	}
+
+	PageLayout &PageLayout::operator= (const PageLayout &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		PageLayoutGenerated::operator= (rhs);
+		NeedsHeader::operator= (rhs);
+
+		m_numModified = rhs.m_numModified;
+
+		return *this;
 	}
 
 	bool PageLayout::readFromDevice (void)
@@ -69,7 +82,7 @@ namespace MSWrite
 	#ifdef DEBUG_PAGELAYOUT
 		Dump (magic102);
 		Dump (magic512);
-		
+
 		Dump (pageHeight);
 		Dump (pageWidth);
 		Dump (pageNumberStart);
@@ -79,7 +92,7 @@ namespace MSWrite
 		Dump (textWidth);
 
 		Dump (magic256);
-		
+
 		Dump (headerFromTop);
 		Dump (footerFromTop);
 
@@ -109,7 +122,7 @@ namespace MSWrite
 		//UpdateModifiedCount (unknown);	// no reliable default for unknown
 		UpdateModifiedCount (zero2);
 		#undef UpdateModifiedCount
-		
+
 		return true;
 	}
 
@@ -143,6 +156,18 @@ namespace MSWrite
 	Font::~Font ()
 	{
 		delete [] m_name;
+	}
+
+	Font &Font::operator= (const Font &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		FontGenerated::operator= (rhs);
+
+		setName (rhs.getName ());
+
+		return *this;
 	}
 
 	bool Font::readFromDevice (void)
@@ -228,11 +253,38 @@ namespace MSWrite
 	FormatCharProperty::~FormatCharProperty ()
 	{
 	}
-	
+
+	FormatCharProperty &FormatCharProperty::operator= (const FormatCharProperty &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		FormatCharPropertyGenerated::operator= (rhs);
+
+		m_afterEndCharByte = rhs.m_afterEndCharByte;
+		m_fontTable = rhs.m_fontTable;
+		m_font = rhs.m_font;
+
+		return *this;
+	}
+
+	bool FormatCharProperty::operator== (FormatCharProperty &rhs)
+	{
+		DWord numDataBytes;
+
+		if ((numDataBytes = getNumDataBytes ()) != rhs.getNumDataBytes ())
+			return false;
+
+		writeToArray ();
+		rhs.writeToArray ();
+
+		return memcmp (m_data + sizeof (m_numDataBytes), rhs.m_data + sizeof (m_numDataBytes), numDataBytes) == 0;
+	}
+
 	bool FormatCharProperty::readFromDevice (void)
 	{
 	CHECK_DEVICE;
-	
+
 	#ifdef DEBUG_CHAR
 		m_device->debug ("\nFormatCharProperty::readFromDevice\n");
 	#endif
@@ -259,7 +311,7 @@ namespace MSWrite
 
 		return FormatCharPropertyGenerated::writeToDevice ();
 	}
-	
+
 	bool FormatCharProperty::updateFont (void)
 	{
 		Font *fontPtr = m_fontTable->getFont (getFontCode ());
@@ -289,6 +341,16 @@ namespace MSWrite
 
 	FormatParaPropertyTabulator::~FormatParaPropertyTabulator ()
 	{
+	}
+
+	FormatParaPropertyTabulator &FormatParaPropertyTabulator::operator= (const FormatParaPropertyTabulator &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		FormatParaPropertyTabulatorGenerated::operator= (rhs);
+
+		return *this;
 	}
 
 	bool FormatParaPropertyTabulator::readFromDevice (void)
@@ -328,13 +390,39 @@ namespace MSWrite
 																m_numTabulators (0),
 																m_addedTooManyTabs (false)
 	{
-		// m_afterEndCharByte = 
+		// m_afterEndCharByte =
 	}
 
 	FormatParaProperty::~FormatParaProperty ()
 	{
 	}
 
+	FormatParaProperty &FormatParaProperty::operator= (const FormatParaProperty &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		FormatParaPropertyGenerated::operator= (rhs);
+
+		m_afterEndCharByte = rhs.m_afterEndCharByte;
+		m_leftMargin = rhs.m_leftMargin, m_rightMargin = rhs.m_rightMargin;
+		m_numTabulators = rhs.m_numTabulators;
+		m_addedTooManyTabs = rhs.m_addedTooManyTabs;
+
+		return *this;
+	}
+
+	bool FormatParaProperty::operator== (FormatParaProperty &rhs)
+	{
+		DWord numDataBytes;
+		if ((numDataBytes = getNumDataBytes ()) != rhs.getNumDataBytes ())
+			return false;
+
+		writeToArray ();
+		rhs.writeToArray ();
+
+		return memcmp (m_data + sizeof (m_numDataBytes), rhs.m_data + sizeof (m_numDataBytes), numDataBytes) == 0;
+	}
 
 	bool FormatParaProperty::readFromDevice (void)
 	{
@@ -343,7 +431,7 @@ namespace MSWrite
 	#ifdef DEBUG_PARA
 		m_device->debug ("\nFormatParaProperty::readFromDevice\n");
 	#endif
-		
+
 	#ifdef CHECK_INTERNAL
 		if (m_leftMargin == 0xFFFF && m_rightMargin == 0xFFFF)
 			ErrorAndQuit (Error::InternalError, "FormatParaProperty::readFromDevice call not setup\n");
@@ -405,9 +493,9 @@ namespace MSWrite
 
 		if (m_numTabulators > 12)
 			m_device->error (Error::Warn, "should not have more than 12 tabulators since you can only access 12 tabs via the GUI\n");
-		
+
 		// --- indents adjusted in updateIndents() called by FormatInfoPage::add() ---
-		
+
 		if (!FormatParaPropertyGenerated::writeToDevice ())
 			return false;
 
@@ -426,6 +514,33 @@ namespace MSWrite
 	Image::~Image ()
 	{
 		delete [] m_externalImage;
+	}
+
+	Image &Image::operator= (const Image &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		ImageGenerated::operator= (rhs);
+
+		m_externalImageSize = rhs.m_externalImageSize;
+		m_externalImageUpto = rhs.m_externalImageUpto;
+
+		delete [] m_externalImage;
+		m_externalImage = new Byte [m_externalImageSize];
+		if (!m_externalImage)
+			return *this;  // TODO: error check
+
+		if (rhs.m_externalImage)
+			memcpy (m_externalImage, rhs.m_externalImage, m_externalImageUpto);
+
+		m_originalWidth = rhs.m_originalWidth;
+		m_originalHeight = rhs.m_originalHeight;
+
+		m_displayedWidth = rhs.m_displayedWidth;
+		m_displayedHeight = rhs.m_displayedHeight;
+
+		return *this;
 	}
 
 	// returns how many bytes are needed for each scanline (with byte padding)
@@ -539,10 +654,10 @@ namespace MSWrite
 				m_device->error (Error::Warn, "m_MFP_height != m_bmh->getHeight() * 2.64\n");
 
 #undef MSWrite_fabs
-				
+
 			if (m_width)
 				m_device->error (Error::Warn, "m_width should not be set for BMPs\n");
-			
+
 			if (m_height)
 				m_device->error (Error::Warn, "m_height should not be set for BMPs\n");
 
@@ -550,13 +665,13 @@ namespace MSWrite
 			//
 			// read image
 			//
-			
+
 			Byte *internalData = new Byte [getNumDataBytes ()];
 			if (!internalData)
 				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for internal BMP image\n");
 			if (!m_device->readInternal (internalData, getNumDataBytes ()))
 				ErrorAndQuit (Error::FileError, "could not read internal BMP\n");
-		
+
 			// infoHeader
 			BMP_BitmapInfoHeader infoHeader;
 			infoHeader.setWidth (m_bmh->getWidth ());
@@ -713,8 +828,8 @@ namespace MSWrite
 
 			// not used by WMFs
 			m_horizontalScalingRel1000 = m_verticalScalingRel1000 = 1000;
-			
-			
+
+
 			// write header
 			setNumDataBytes (m_externalImageSize);
 			if (!ImageGenerated::writeToDevice ())
@@ -748,7 +863,7 @@ namespace MSWrite
 			BMP_BitmapInfoHeader infoHeader;
 			infoHeader.setDevice (m_device);
 			if (!infoHeader.readFromDevice ()) return false;
-			
+
 			// write out each scanline
 			// to .WRI (padded to 2) vs input BMP (padded to 4
 			Word scanLineWRILength = getBytesPerScanLine (infoHeader.getWidth (), infoHeader.getBitsPerPixel (), 2);
@@ -758,7 +873,7 @@ namespace MSWrite
 				ErrorAndQuit (Error::Warn, "infoHeader width != m_originalWidth\n");
 			if (infoHeader.getHeight () != Word (Twip2Point (m_originalHeight)))
 				ErrorAndQuit (Error::Warn, "infoHeader.height != m_originalHeight\n");
-				
+
 			m_bmh->setWidth (infoHeader.getWidth ());
 			m_bmh->setHeight (infoHeader.getHeight ());
 			m_bmh->setWidthBytes (scanLineWRILength);
@@ -792,20 +907,20 @@ namespace MSWrite
 			// finish reading from m_externalImage
 			m_device->setCache (NULL);
 
-		
+
 			//
 			// set image dimensions
 			//
-			
+
 			m_MFP_width = Word (Twip2Point (m_originalWidth) * 2.64);
 			m_MFP_height = Word (Twip2Point (m_originalHeight) * 2.64);
-			
+
 			// BMPs don't use
 			m_width = 0, m_height = 0;
-			
+
 			m_horizontalScalingRel1000 = Word (m_displayedWidth * 1.38889 * 1000.0 / m_originalWidth);
 			m_verticalScalingRel1000 = Word (m_displayedHeight * 1.38889 * 1000.0 / m_originalHeight);
-			
+
 
 			// write header
 			setNumDataBytes (infoHeader.getHeight () * scanLineBMPLength);
@@ -839,6 +954,27 @@ namespace MSWrite
 	OLE::~OLE ()
 	{
 		delete [] m_externalObject;
+	}
+
+	OLE &OLE::operator= (const OLE &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		OLEGenerated::operator= (rhs);
+
+		m_externalObjectSize = rhs.m_externalObjectSize;
+		m_externalObjectUpto = rhs.m_externalObjectUpto;
+
+		delete [] m_externalObject;
+		m_externalObject = new Byte [m_externalObjectSize];
+		if (!m_externalObject)
+			return *this;  // TODO: error check
+
+		if (rhs.m_externalObject)
+			memcpy (m_externalObject, rhs.m_externalObject, m_externalObjectUpto);
+
+		return *this;
 	}
 
 	bool OLE::readFromDevice (void)
@@ -900,7 +1036,7 @@ namespace MSWrite
 	#ifdef DEBUG_OBJECT
 		m_device->debug ("\n>>>> OLE::writeToDevice <<<<\n");
 	#endif
-		
+
 	#ifdef DEBUG_OBJECT
 		Dump (zero);
 
@@ -934,11 +1070,11 @@ namespace MSWrite
 		// write header
 		if (!OLEGenerated::writeToDevice ())
 			return false;
-		
+
 		// write data
 		if (!m_device->writeInternal (m_externalObject, m_externalObjectSize))
 			return false;
-		
+
 		return true;
 	}
 

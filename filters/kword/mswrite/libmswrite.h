@@ -86,7 +86,7 @@ namespace MSWrite
 		FormatInfo &operator= (const FormatInfo &rhs);	// TODO
 	public:
 		FormatInfo ();
-		~FormatInfo ();
+		virtual ~FormatInfo ();
 
 		void setType (const enum FormatInfoPageTypes t)	{	m_type = t;	}
 
@@ -129,6 +129,9 @@ namespace MSWrite
 	class Generator
 	{
 	public:
+		Generator ();
+		virtual ~Generator ();
+
 		/**
 		 *
 		 * Document block (you must implement these signals)
@@ -251,7 +254,7 @@ namespace MSWrite
 
 	public:
 		InternalParser ();
-		~InternalParser ();
+		virtual ~InternalParser ();
 
 		bool parse (void);
 	};
@@ -274,7 +277,7 @@ namespace MSWrite
 		
 	public:
 		InternalGenerator ();
-		~InternalGenerator ();
+		virtual ~InternalGenerator ();
 
 		bool writeDocumentBegin (const Word format, const PageLayout *pageLayout);
 		bool writeDocumentEnd (const Word format, const PageLayout *pageLayout);

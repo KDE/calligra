@@ -65,7 +65,9 @@ namespace MSWrite
 
 	public:
 		PageLayout ();
-		~PageLayout ();
+		virtual ~PageLayout ();
+
+		PageLayout &operator= (const PageLayout &rhs);
 
 		bool getIsModified (void) const	{	return m_numModified > 0;	}
 
@@ -161,19 +163,9 @@ namespace MSWrite
 		};
 
 		Font (const Byte *name = NULL, const Byte family = DontCare);
-		~Font ();
+		virtual ~Font ();
 
-		Font &operator= (const Font &rhs)
-		{
-			if (this == &rhs)
-				return *this;
-
-			FontGenerated::operator= (rhs);
-
-			setName (rhs.getName ());
-
-			return *this;
-		}
+		Font &operator= (const Font &rhs);
 
 		Byte *getName (void) const	{	return m_name;	}
 		Byte *setName (const Byte *s)
@@ -258,21 +250,9 @@ namespace MSWrite
 
 	public:
 		FormatCharProperty ();
-		~FormatCharProperty ();
+		virtual ~FormatCharProperty ();
 
-		FormatCharProperty &operator= (const FormatCharProperty &rhs)
-		{
-			if (this == &rhs)
-				return *this;
-
-			FormatCharPropertyGenerated::operator= (rhs);
-
-			m_afterEndCharByte = rhs.m_afterEndCharByte;
-			m_fontTable = rhs.m_fontTable;
-			m_font = rhs.m_font;
-
-			return *this;
-		}
+		FormatCharProperty &operator= (const FormatCharProperty &rhs);
 
 		const Font *getFont (void) const
 		{
@@ -310,18 +290,7 @@ namespace MSWrite
 		void setIsSubscript (void)	{	setPosition (252);	/* common value */	}
 
 		// compares if the contents are the same (not if it points to the same place etc. etc.)
-		bool operator== (FormatCharProperty &rhs)
-		{
-			DWord numDataBytes;
-			
-			if ((numDataBytes = getNumDataBytes ()) != rhs.getNumDataBytes ())
-				return false;
-			
-			writeToArray ();
-			rhs.writeToArray ();
-			
-			return memcmp (m_data + sizeof (m_numDataBytes), rhs.m_data + sizeof (m_numDataBytes), numDataBytes) == 0;
-		}
+		bool operator== (FormatCharProperty &rhs);
 	};
 
 	
@@ -335,17 +304,9 @@ namespace MSWrite
 
 	public:
 		FormatParaPropertyTabulator ();
-		~FormatParaPropertyTabulator ();
+		virtual ~FormatParaPropertyTabulator ();
 
-		FormatParaPropertyTabulator &operator= (const FormatParaPropertyTabulator &rhs)
-		{
-			if (this == &rhs)
-				return *this;
-
-			FormatParaPropertyTabulatorGenerated::operator= (rhs);
-
-			return *this;
-		}
+		FormatParaPropertyTabulator &operator= (const FormatParaPropertyTabulator &rhs);
 		
 		// you can use getType()/setType() if you really want to...
 		bool getIsNormal (void) const	{	return m_type == 0;	}
@@ -411,21 +372,9 @@ namespace MSWrite
 
 	public:
 		FormatParaProperty ();
-		~FormatParaProperty ();
+		virtual ~FormatParaProperty ();
 
-		FormatParaProperty &operator= (const FormatParaProperty &rhs)
-		{
-			if (this == &rhs)
-				return *this;
-
-			FormatParaPropertyGenerated::operator= (rhs);
-			
-			m_afterEndCharByte = rhs.m_afterEndCharByte;
-			m_leftMargin = rhs.m_leftMargin, m_rightMargin = rhs.m_rightMargin;
-			m_numTabulators = rhs.m_numTabulators;
-			
-			return *this;
-		}
+		FormatParaProperty &operator= (const FormatParaProperty &rhs);
 		
 		// convenience functions
 		Byte getAlign (void) const	{	return getAlignment ();	}
@@ -517,17 +466,7 @@ namespace MSWrite
 		}
 
 		// compares if the contents are the same (not if it points to the same place etc. etc.)
-		bool operator== (FormatParaProperty &rhs)
-		{
-			DWord numDataBytes;
-			if ((numDataBytes = getNumDataBytes ()) != rhs.getNumDataBytes ())
-				return false;
-			
-			writeToArray ();
-			rhs.writeToArray ();
-			
-			return memcmp (m_data + sizeof (m_numDataBytes), rhs.m_data + sizeof (m_numDataBytes), numDataBytes) == 0;
-		}
+		bool operator== (FormatParaProperty &rhs);
 	};
 	
 
@@ -558,34 +497,9 @@ namespace MSWrite
 		bool writeToDevice (void);	friend class InternalParser;
 	public:
 		Image ();
-		~Image ();
+		virtual ~Image ();
 
-		Image &operator= (const Image &rhs)
-		{
-			if (this == &rhs)
-				return *this;
-
-			ImageGenerated::operator= (rhs);
-
-			m_externalImageSize = rhs.m_externalImageSize;
-			m_externalImageUpto = rhs.m_externalImageUpto;
-
-			delete [] m_externalImage;
-			m_externalImage = new Byte [m_externalImageSize];
-			if (!m_externalImage)
-				return *this;	// TODO: error check
-
-			if (rhs.m_externalImage)
-				memcpy (m_externalImage, rhs.m_externalImage, m_externalImageUpto);
-
-			m_originalWidth = rhs.m_originalWidth;
-			m_originalHeight = rhs.m_originalHeight;
-
-			m_displayedWidth = rhs.m_displayedWidth;
-			m_displayedHeight = rhs.m_displayedHeight;
-			
-			return *this;
-		}
+		Image &operator= (const Image &rhs);
 		
 		bool getIsWMF (void) const	{	return m_mappingMode != 0xE3;	}
 		bool getIsBMP (void) const	{	return m_mappingMode == 0xE3;	}
@@ -668,28 +582,9 @@ namespace MSWrite
 
 	public:
 		OLE ();
-		~OLE ();
+		virtual ~OLE ();
 
-		OLE &operator= (const OLE &rhs)
-		{
-			if (this == &rhs)
-				return *this;
-
-			OLEGenerated::operator= (rhs);
-
-			m_externalObjectSize = rhs.m_externalObjectSize;
-			m_externalObjectUpto = rhs.m_externalObjectUpto;
-
-			delete [] m_externalObject;
-			m_externalObject = new Byte [m_externalObjectSize];
-			if (!m_externalObject)
-				return *this;	// TODO: error check
-				
-			if (rhs.m_externalObject)
-				memcpy (m_externalObject, rhs.m_externalObject, m_externalObjectUpto);
-
-			return *this;
-		}
+		OLE &operator= (const OLE &rhs);
 
 		Byte *getExternalObject (void) const	{	return m_externalObject;	}
 		DWord getExternalObjectSize (void) const	{	return m_externalObjectSize;	}

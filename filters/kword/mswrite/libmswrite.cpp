@@ -328,6 +328,14 @@ namespace MSWrite
 	}
 
 
+	Generator::Generator ()
+	{
+	}
+
+	Generator::~Generator ()
+	{
+	}
+
 	bool Generator::processText (const Byte *string, bool willReachEndOfParagraph)
 	{
 		//

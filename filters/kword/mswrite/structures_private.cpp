@@ -24,7 +24,7 @@
  *                        - that are hidden/abstracted away from the user
  * This file has ugly reading/writing code that couldn't be generated.
  * It performs some higher-level sanity checks.
- * 
+ *
  * Don't use any of these classes as it would defeat the purpose of LibMSWrite.
  */
 
@@ -33,6 +33,27 @@
 
 namespace MSWrite
 {
+	Header::Header ()
+	{
+	}
+
+	Header::~Header ()
+	{
+	}
+
+	Header &Header::operator= (const Header &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		HeaderGenerated::operator= (rhs);
+
+		m_numCharBytes = rhs.m_numCharBytes;
+		m_pageCharInfo = rhs.m_pageCharInfo;
+
+		return *this;
+	}
+
 	bool Header::readFromDevice (void)
 	{
 	CHECK_DEVICE;
@@ -124,6 +145,44 @@ namespace MSWrite
 		return true;
 	}
 
+
+	SectionDescriptor::SectionDescriptor ()
+	{
+	}
+
+	SectionDescriptor::~SectionDescriptor ()
+	{
+	}
+
+	SectionDescriptor &SectionDescriptor::operator= (const SectionDescriptor &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		SectionDescriptorGenerated::operator= (rhs);
+
+		return *this;
+	}
+
+
+	SectionTable::SectionTable ()
+	{
+	}
+
+	SectionTable::~SectionTable ()
+	{
+	}
+
+	SectionTable &SectionTable::operator= (const SectionTable &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		SectionTableGenerated::operator= (rhs);
+		NeedsHeader::operator= (rhs);
+
+		return *this;
+	}
 
 	// this function really only does some sanity checking
 	// in fact, a SectionTable is quite useless in Write...
@@ -319,7 +378,7 @@ namespace MSWrite
 
 					// let's not cause problems later with uninitialised Font::m_name's
 					m_fontList.erase (it);
-								 
+
 					// better quit just in case (it is better to have fewer fonts than risk errors)
 					break;
 				}
@@ -410,13 +469,13 @@ namespace MSWrite
 	DWord FontTable::findFont (const Font *want) const
 	{
 		DWord code = 0;
-		
+
 		List <Font>::Iterator it;
 		for (it = m_fontList.begin (); it != m_fontList.end (); it++)
 		{
 			if ((*it) == *want)
 				return code;
-			
+
 			code++;
 		}
 
@@ -440,7 +499,7 @@ namespace MSWrite
 		#ifdef DEBUG_FONT
 			m_device->debug ("\t\t\t\tAlready in list, fontCode=", e);
 		#endif
-			
+
 			// return fontCode
 			return e;
 		}
@@ -450,13 +509,31 @@ namespace MSWrite
 		#ifdef DEBUG_FONT
 			m_device->debug ("\t\t\t\tNew font, adding to list\n");
 		#endif
-			
+
 			if (!m_fontList.addToBack (*input))
 				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for next font element\n");
 			return m_fontList.getNumElements () - 1;
 		}
 	}
 
+
+	PagePointer::PagePointer ()
+	{
+	}
+
+	PagePointer::~PagePointer ()
+	{
+	}
+
+	PagePointer &PagePointer::operator= (const PagePointer &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		PagePointerGenerated::operator= (rhs);
+
+		return *this;
+	}
 
 	bool PagePointer::readFromDevice (void)
 	{
@@ -490,6 +567,22 @@ namespace MSWrite
 
 	PageTable::~PageTable ()
 	{
+	}
+
+	PageTable &PageTable::operator= (const PageTable &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		PageTableGenerated::operator= (rhs);
+		NeedsHeader::operator= (rhs);
+
+		m_pagePointerList = rhs.m_pagePointerList;
+		m_pageNumberStart = rhs.m_pageNumberStart;
+
+		m_pageTableIterator = rhs.m_pageTableIterator;
+
+		return *this;
 	}
 
 	bool PageTable::readFromDevice (void)
@@ -615,7 +708,20 @@ namespace MSWrite
 	FormatPointer::~FormatPointer ()
 	{
 	}
-	
+
+	FormatPointer &FormatPointer::operator= (const FormatPointer &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		FormatPointerGenerated::operator= (rhs);
+
+		m_afterEndCharByte = rhs.m_afterEndCharByte;
+		m_formatProperty = rhs.m_formatProperty;
+
+		return *this;
+	}
+
 	bool FormatPointer::readFromDevice (void)
 	{
 	CHECK_DEVICE;
@@ -636,7 +742,7 @@ namespace MSWrite
 	bool FormatPointer::writeToDevice (void)
 	{
 	CHECK_DEVICE;
-	
+
 	#ifdef DEBUG_FORMATINFO
 		m_device->debug ("\t\t\t\tafterEndCharByte: ", m_afterEndCharByte);
 		m_device->debug ("\t\t\t\tformatPropertyOffset: ", m_formatPropertyOffset);
@@ -646,7 +752,7 @@ namespace MSWrite
 
 		if (!FormatPointerGenerated::writeToDevice ())
 			return false;
-			
+
 		return true;
 	}
 
@@ -684,7 +790,7 @@ namespace MSWrite
 		else	// if (m_type == CharType)
 			m_device->debug ("FormatInfoPage::readFromDevice (CharType)\n");
 	#endif
-		
+
 		if (!FormatInfoPageGenerated::readFromDevice ())
 			return false;
 
@@ -694,7 +800,7 @@ namespace MSWrite
 		m_device->debug ("number of FormatPointers on this page: ", FormatInfoPageGenerated::m_numFormatPointers);
 		m_device->debug ("byte number of first character covered by this page: ", m_firstCharByte);
 	#endif
-	
+
 		return true;
 	}
 
@@ -708,7 +814,7 @@ namespace MSWrite
 		else	// if (m_type == CharType)
 			m_device->debug ("FormatInfoPage::writeToDevice (CharType)\n");
 	#endif
-		
+
 		FormatInfoPageGenerated::m_firstCharBytePlus128 = m_firstCharByte + 128;
 
 	#ifdef DEBUG_FORMATINFO
@@ -725,16 +831,16 @@ namespace MSWrite
 	bool FormatInfoPage::writeToArray (void)
 	{
 	CHECK_DEVICE;
-	
+
 	#ifdef DEBUG_FORMATINFO
 		if (m_type == ParaType)
 			m_device->debug ("\tFormatInfoPage::writeToArray (ParaType)\n");
 		else	// if (m_type == CharType)
 			m_device->debug ("\tFormatInfoPage::writeToArray (CharType)\n");
 	#endif
-		
+
 		MemoryDevice memdev;
-		
+
 		m_formatPointerPos = 0;
 		m_formatPropertyPos = 123;
 
@@ -763,7 +869,7 @@ namespace MSWrite
 			if (m_type == ParaType)
 			{
 				FormatParaProperty *prop = &m_formatParaProperty [i];
-					
+
 				m_formatPropertyPos -= (sizeof (Byte) + prop->getNumDataBytes ());
 				memdev.setCache (m_packedStructs + m_formatPropertyPos);
 					prop->setDevice (&memdev);	// device was set to m_device to keep operator== happy in FormatInfoPage::add
@@ -784,10 +890,10 @@ namespace MSWrite
 				m_device->debug ("\t\t\tWrote at Offset=", m_formatPropertyPos);
 			#endif
 		}
-		
+
 		if (!FormatInfoPageGenerated::writeToArray ())
 			return false;
-		
+
 		return true;
 	}
 
@@ -834,7 +940,7 @@ namespace MSWrite
 			m_device->debug ("\tChar FormatPointer #", m_formatPointerUpto);
 	#endif
 
-		
+
 		//
 		// read Format Pointer
 		//
@@ -880,7 +986,7 @@ namespace MSWrite
 			}
 		}
 
-		
+
 		//
 		// read in corresponding Format Property
 		//
@@ -944,7 +1050,7 @@ namespace MSWrite
 
 				m_formatParaProperty->setDevice (m_device);
 				m_formatParaProperty->setMargins (m_leftMargin, m_rightMargin);
-				
+
 				// corresponding paraProperty structure exists?
 				if (currentPropertyOffset != 0xFFFF)
 				{
@@ -983,7 +1089,7 @@ namespace MSWrite
 		// 	This is also true for FormatProperties because m_numFormatPointer >= m_numProperty
 		// 	so MaxElements is also the upper limit on the number of properties
 		const int MaxElements = 123 / FormatPointer::s_size;
-			
+
 	#ifdef DEBUG_FORMATINFO
 		if (m_type == ParaType)
 			m_device->debug (">>>> FormatInfoPage::add (ParaType) <<<<\n");
@@ -1004,7 +1110,7 @@ namespace MSWrite
 		#ifdef DEBUG_FORMATINFO
 			m_device->debug ("\tFIRST CALL!  Allocating memory for FormatPointer[] and FormatProperty[]\n");
 		#endif
-			
+
 			// allocate memory for FormatPointers
 			m_formatPointer = new FormatPointer [MaxElements + 1];	// lazy memory allocation (+1 in case we can merge the last one)
 			if (!m_formatPointer)
@@ -1032,7 +1138,7 @@ namespace MSWrite
 
 			m_numProperty = 0;
 		}
-		
+
 
 		//
 		// Setup pointers
@@ -1040,13 +1146,13 @@ namespace MSWrite
 
 		FormatParaProperty inpp;
 		FormatCharProperty incp;
-		
+
 		if (m_type == ParaType)
 		{
 		#ifdef DEBUG_FORMATINFO
 			m_device->debug ("\tTrying to add ParaProperty, #numDataBytes=", ((FormatParaProperty *) property)->getNumDataBytes ());
 		#endif
-			
+
 			inpp = *((FormatParaProperty *) property);
 			inpp.setDevice (m_device);
 			inpp.setAfterEndCharByte (m_device->tellInternal () - 128);
@@ -1058,7 +1164,7 @@ namespace MSWrite
 		#ifdef DEBUG_FORMATINFO
 			m_device->debug ("\tTrying to add CharProperty, #numDataBytes=", ((FormatCharProperty *) property)->getNumDataBytes ());
 		#endif
-			
+
 			incp = *((FormatCharProperty *) property);
 			incp.setDevice (m_device);
 			incp.setAfterEndCharByte (m_device->tellInternal () - 128);
@@ -1066,15 +1172,15 @@ namespace MSWrite
 			if (!incp.updateFontCode ()) return false;
 		}
 
-		
+
 		//
 		// Attempt to add Property to current page:
-		// 
+		//
 		// Since MS programmers tried so hard to save space, we will do the same :)
 		// This results in having to store variable-length structures and the use of other nasty
 		// tricks such as having multiple FormatPointers pointing to the same FormatProperty.
 		// Details follow in code :)
-		// 
+		//
 
 		// In Write, character formatting blocks can extend across paragraphs
 		// In LibMSWrite they don't (for convenience?) so here we merge FormatPointers that have been split up
@@ -1088,7 +1194,7 @@ namespace MSWrite
 		#ifdef DEBUG_FORMATINFO
 			m_device->debug ("\tIs it the same property as last? ");
 		#endif
-			
+
 			// simply extend last FormatPointer
 			FormatCharProperty *lastProp = (FormatCharProperty *) m_formatPointer [m_numFormatPointers - 1].getFormatProperty ();
 			if (incp == *lastProp)
@@ -1097,9 +1203,9 @@ namespace MSWrite
 				m_device->debug ("Yes, extending FormatPointer #", m_numFormatPointers - 1);
 				m_device->debug ("\t\tFrom ", m_formatPointer [m_numFormatPointers - 1].getAfterEndCharByte ());
 			#endif
-				
+
 				m_formatPointer [m_numFormatPointers - 1].setAfterEndCharByte (incp.getAfterEndCharByte ());
-				
+
 			#ifdef DEBUG_FORMATINFO
 				m_device->debug ("\t\tTo: ", incp.getAfterEndCharByte ());
 			#endif
@@ -1114,7 +1220,7 @@ namespace MSWrite
 		#ifdef DEBUG_FORMATINFO
 			m_device->debug ("\tSame as earlier FormatPointer? ");
 		#endif
-		
+
 		// points to same property as an earlier formatPointer?
 		for (int i = 0; i < m_numFormatPointers - (checkedLastFormatPointer ? 1 : 0); i++)
 		{
@@ -1161,7 +1267,7 @@ namespace MSWrite
 					#endif
 						return false;	// not enough room
 					}
-					
+
 				#ifdef DEBUG_FORMATINFO
 					m_device->debug ("Yes, same property as ", i);
 				#endif
@@ -1178,7 +1284,7 @@ namespace MSWrite
 		#ifdef DEBUG_FORMATINFO
 			m_device->debug ("No, outputting full FormatPointer & Property\n");
 		#endif
-		
+
 		// ok we can't compress, must output a full FormatPointer & FormatProperty
 		if (m_type == ParaType)
 		{
@@ -1251,19 +1357,37 @@ namespace MSWrite
 			return true;
 		}
 	}
-	
-	
+
+
+	BMP_BitmapFileHeader::BMP_BitmapFileHeader ()
+	{
+	}
+
+	BMP_BitmapFileHeader::~BMP_BitmapFileHeader ()
+	{
+	}
+
+	BMP_BitmapFileHeader &BMP_BitmapFileHeader::operator= (const BMP_BitmapFileHeader &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		BMP_BitmapFileHeaderGenerated::operator= (rhs);
+
+		return *this;
+	}
+
 	bool BMP_BitmapFileHeader::readFromDevice (void)
 	{
 	CHECK_DEVICE;
-	
+
 	#ifdef DEBUG_IMAGE
 		m_device->debug ("\n<<<< BMP_BitmapFileHeader::readFromDevice >>>>\n");
 	#endif
-	
+
 		if (!BMP_BitmapFileHeaderGenerated::readFromDevice ())
 			return false;
-		
+
 	#ifdef DEBUG_IMAGE
 		Dump (magic);
 		Dump (totalBytes);
@@ -1271,10 +1395,10 @@ namespace MSWrite
 		Dump (zero [1]);
 		Dump (actualImageOffset);
 	#endif
-		
+
 		return true;
 	}
-	
+
 	bool BMP_BitmapFileHeader::writeToDevice (void)
 	{
 	CHECK_DEVICE;
@@ -1291,14 +1415,32 @@ namespace MSWrite
 	}
 
 
+	BMP_BitmapInfoHeader::BMP_BitmapInfoHeader ()
+	{
+	}
+
+	BMP_BitmapInfoHeader::~BMP_BitmapInfoHeader ()
+	{
+	}
+
+	BMP_BitmapInfoHeader &BMP_BitmapInfoHeader::operator= (const BMP_BitmapInfoHeader &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		BMP_BitmapInfoHeaderGenerated::operator= (rhs);
+
+		return *this;
+	}
+
 	bool BMP_BitmapInfoHeader::readFromDevice (void)
 	{
 	CHECK_DEVICE;
-	
+
 	#ifdef DEBUG_IMAGE
 		m_device->debug ("\n<<<< BMP_BitmapInfoHeader::readFromDevice >>>>\n");
 	#endif
-	
+
 		if (!BMP_BitmapInfoHeaderGenerated::readFromDevice ())
 			return false;
 
@@ -1315,24 +1457,61 @@ namespace MSWrite
 		Dump (coloursUsed);
 		Dump (coloursImportant);
 	#endif
-		
+
 		return true;
 	}
-	
+
 	bool BMP_BitmapInfoHeader::writeToDevice (void)
 	{
 	CHECK_DEVICE;
-	
+
 	#ifdef DEBUG_IMAGE
 		m_device->debug ("\n<<<< BMP_BitmapInfoHeader::writeToDevice >>>>\n");
 	#endif
 
 		if (!BMP_BitmapInfoHeaderGenerated::writeToDevice ())
 			return false;
-			
+
 		return true;
 	}
-	
+
+
+	BMP_BitmapColourIndex::BMP_BitmapColourIndex ()
+	{
+	}
+
+	BMP_BitmapColourIndex::~BMP_BitmapColourIndex ()
+	{
+	}
+
+	BMP_BitmapColourIndex &BMP_BitmapColourIndex::operator= (const BMP_BitmapColourIndex &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		BMP_BitmapColourIndexGenerated::operator= (rhs);
+
+		return *this;
+	}
+
+
+	BitmapHeader::BitmapHeader ()
+	{
+	}
+
+	BitmapHeader::~BitmapHeader ()
+	{
+	}
+
+	BitmapHeader &BitmapHeader::operator= (const BitmapHeader &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		BitmapHeaderGenerated::operator= (rhs);
+
+		return *this;
+	}
 
 	bool BitmapHeader::readFromDevice (void)
 	{
@@ -1354,7 +1533,7 @@ namespace MSWrite
 		Dump (bitsPerPixel);
 		Dump (zero2);
 	#endif
-		
+
 		return true;
 	}
 
@@ -1373,6 +1552,24 @@ namespace MSWrite
 	}
 
 
+	WMFHeader::WMFHeader ()
+	{
+	}
+
+	WMFHeader::~WMFHeader ()
+	{
+	}
+
+	WMFHeader &WMFHeader::operator= (const WMFHeader &rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		WMFHeaderGenerated::operator= (rhs);
+
+		return *this;
+	}
+
 	bool WMFHeader::readFromDevice (void)
 	{
 	CHECK_DEVICE;
@@ -1380,7 +1577,7 @@ namespace MSWrite
 	#ifdef DEBUG_IMAGE
 		m_device->debug ("\n<<<< WMFHeader::readFromDevice >>>>\n");
 	#endif
-		
+
 		if (!WMFHeaderGenerated::readFromDevice ())
 			return false;
 
@@ -1393,7 +1590,7 @@ namespace MSWrite
 		Dump (maxRecordSize);
 		Dump (zero);
 	#endif
-				
+
 		return true;
 	}
 
@@ -1404,7 +1601,7 @@ namespace MSWrite
 	#ifdef DEBUG_IMAGE
 		m_device->debug ("\n>>>> WMFHeader::writeToDevice <<<<\n");
 	#endif
-		
+
 	#ifdef DEBUG_IMAGE
 		Dump (fieldType);
 		Dump (headerSize);

@@ -61,6 +61,10 @@ namespace MSWrite
 			m_data = data;
 		}
 
+		~ListElement ()
+		{
+		}
+
 		dtype &getData (void) const
 		{
 			return m_data;
@@ -120,6 +124,10 @@ namespace MSWrite
 			return *this;
 		}
 
+		~ListIterator ()
+		{
+		}
+		
 		ListIterator <dtype> &operator-- (void)
 		{
 			return prev ();
@@ -185,7 +193,7 @@ namespace MSWrite
 			m_good = true;
 		}
 
-		~List ()
+		virtual ~List ()
 		{
 			killself ();
 		}
