@@ -150,7 +150,7 @@ QString KWFootNoteVariable::text()
 {
     KoVariableNumberFormat * format = dynamic_cast<KoVariableNumberFormat *>( m_varFormat );
     if ( format )
-        return format->convert( m_num );
+        return format->convert( m_num + static_cast<KWVariableSettings*>(m_varColl->variableSetting())->startFootNoteValue() );
     return QString::null;
 }
 

@@ -689,9 +689,9 @@ void KWView::setupActions()
     actionFormatBullet = new KActionMenu( i18n( "Bullet" ),
                                           "unsortedList", actionCollection(), "format_bullet" );
     actionFormatBullet->setDelayed( false );
-    QPtrList<KoParagCounterWidget::StyleRepresenter> stylesList;
-    KoParagCounterWidget::makeCounterRepresenterList( stylesList );
-    QPtrListIterator<KoParagCounterWidget::StyleRepresenter> styleIt( stylesList );
+    QPtrList<KoCounterStyleWidget::StyleRepresenter> stylesList;
+    KoCounterStyleWidget::makeCounterRepresenterList( stylesList );
+    QPtrListIterator<KoCounterStyleWidget::StyleRepresenter> styleIt( stylesList );
     for ( ; styleIt.current() ; ++styleIt ) {
         // Dynamically create toggle-actions for each list style.
         // This approach allows to edit toolbars and extract separate actions from this menu
