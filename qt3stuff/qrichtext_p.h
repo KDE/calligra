@@ -378,6 +378,10 @@ public:
 
     virtual void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected ) = 0;
 
+    virtual void move( int x, int y ) { xpos = x; ypos = y; }
+    int x() const { return xpos; }
+    int y() const { return ypos; }
+
     virtual void adjustToPainter( QPainter* ) { width = 0; }
 
     enum Placement { PlaceInline = 0, PlaceLeft, PlaceRight };
@@ -394,8 +398,6 @@ public:
 
     virtual QString richText() const { return QString::null; }
 
-    int xpos; // used for floating items
-    int ypos; // used for floating items
     int width;
     int height;
 
@@ -422,6 +424,9 @@ public:
 
     QTextParag *paragraph() const { return parag; }
     void setParagraph( QTextParag * p ) { parag = p; }
+protected:
+    int xpos;
+    int ypos;
 private:
     QTextParag *parag;
 };

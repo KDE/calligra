@@ -2453,6 +2453,9 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 	painter->translate( -ir.x(), -ir.y() );
     }
 
+    /* ### To be made optionnal (to be discussed with Reggie)
+       Needed to comment it out in KWord for the "view formatting characters" option,
+       and will also need this out if we go for a document-wide 'parag border'. */
     if ( parag->rect().x() + parag->rect().width() < parag->document()->x() + parag->document()->width() ) {
 	p->fillRect( parag->rect().x() + parag->rect().width(), parag->rect().y(),
 		     ( parag->document()->x() + parag->document()->width() ) -
@@ -3150,7 +3153,7 @@ void QTextParag::invalidate( int chr )
     else
 	invalid = QMIN( invalid, chr );
     for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() )
-	i->ypos = -1;
+	i->move( 0, -1 );
     lm = rm = bm = tm = flm = -1;
 }
 
@@ -3252,7 +3255,7 @@ void QTextParag::move( int &dy )
     changed = TRUE;
     r.moveBy( 0, dy );
     for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() )
-	i->ypos += dy;
+	i->move( i->x(), i->y() + dy );
     if ( p )
 	p->lastInFrame = FALSE;
     movedDown = FALSE;
@@ -3298,9 +3301,10 @@ void QTextParag::format( int start, bool doMove )
  formatAgain:
     if ( doc ) {
 	for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() ) {
-	    i->ypos = r.y();
 	    if ( i->placement() == QTextCustomItem::PlaceRight )
-		i->xpos = r.x() + r.width() - i->width;
+                i->move( r.x() + r.width() - i->width, r.y() );
+            else
+		i->move( 0, r.y() );
 	    doc->flow()->updateHeight( i );
 	}
     }
@@ -4907,6 +4911,8 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	}
 
 	c->x = x;
+        if ( c->isCustom() )
+            c->customItem()->move( x, y );
 	x += ww;
     }
 
@@ -6121,10 +6127,10 @@ void QTextFlow::setWidth( int w )
 int QTextFlow::adjustLMargin( int yp, int, int margin, int space )
 {
     for ( QTextCustomItem* item = leftItems.first(); item; item = leftItems.next() ) {
-	if ( item->ypos == -1 )
+	if ( item->y() == -1 )
 	    continue;
-	if ( yp >= item->ypos && yp < item->ypos + item->height )
-	    margin = QMAX( margin, item->xpos + item->width + space );
+	if ( yp >= item->y() && yp < item->y() + item->height )
+	    margin = QMAX( margin, item->x() + item->width + space );
     }
     return margin;
 }
@@ -6132,10 +6138,10 @@ int QTextFlow::adjustLMargin( int yp, int, int margin, int space )
 int QTextFlow::adjustRMargin( int yp, int, int margin, int space )
 {
     for ( QTextCustomItem* item = rightItems.first(); item; item = rightItems.next() ) {
-	if ( item->ypos == -1 )
+	if ( item->y() == -1 )
 	    continue;
-	if ( yp >= item->ypos && yp < item->ypos + item->height )
-	    margin = QMAX( margin, width - item->xpos - space );
+	if ( yp >= item->y() && yp < item->y() + item->height )
+	    margin = QMAX( margin, width - item->x() - space );
     }
     return margin;
 }
@@ -6179,22 +6185,21 @@ void QTextFlow::drawFloatingItems( QPainter* p, int cx, int cy, int cw, int ch, 
 {
     QTextCustomItem *item;
     for ( item = leftItems.first(); item; item = leftItems.next() ) {
-	if ( item->xpos == -1 || item->ypos == -1 )
+	if ( item->x() == -1 || item->y() == -1 )
 	    continue;
-	item->draw( p, item->xpos, item->ypos, cx, cy, cw, ch, cg, selected );
+	item->draw( p, item->x(), item->y(), cx, cy, cw, ch, cg, selected );
     }
 
     for ( item = rightItems.first(); item; item = rightItems.next() ) {
-	if ( item->xpos == -1 || item->ypos == -1 )
+	if ( item->x() == -1 || item->y() == -1 )
 	    continue;
-	item->draw( p, item->xpos, item->ypos, cx, cy, cw, ch, cg, selected );
+	item->draw( p, item->x(), item->y(), cx, cy, cw, ch, cg, selected );
     }
 }
 
 void QTextFlow::updateHeight( QTextCustomItem *i )
 {
-    qDebug("QTextFlow::updateHeight item=%p currenth=%d item's ypos=%d + item's height=%d", i, height, i->ypos, i->height);
-    height = QMAX( height, i->ypos + i->height );
+    height = QMAX( height, i->y() + i->height );
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
