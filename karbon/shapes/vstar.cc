@@ -60,6 +60,7 @@ VStar::VStar( VObject* parent,
 		int j = (edges % 2 == 0 ) ? ( edges - 2 ) / 2 : ( edges - 1 ) / 2;
 		int k = j - 1;
 		int jumpto = 0;
+		bool discontinueous = ( edges % 4 == 2 );
 		for ( uint i = 1; i < edges + 1; ++i )
 		{
 			double nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto + 0.5 );
@@ -77,6 +78,14 @@ VStar::VStar( VObject* parent,
 			p.setX( outerRadius * cos( nextOuterAngle ) );
 			p.setY( outerRadius * sin( nextOuterAngle ) );
 			lineTo( p );
+			if( discontinueous && i == ( edges / 2 ) )
+			{
+				angle += VGlobal::pi;
+				nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+				p.setX( outerRadius * cos( nextOuterAngle ) );
+				p.setY( outerRadius * sin( nextOuterAngle ) );
+				moveTo( p );
+			}
 		}
 	}
 	else
