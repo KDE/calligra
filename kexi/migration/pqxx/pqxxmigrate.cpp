@@ -22,6 +22,11 @@
 
 #include <qstring.h>
 #include <kdebug.h>
+#include <qstringlist.h>
+
+//I maybe shouldnt use stl?
+#include <string>
+#include <vector>
 
 #include "./kexidb/cursor.h"
 
@@ -41,17 +46,17 @@ KEXIMIGRATE_DRIVER_INFO( pqxxMigrate, pqxx );
 //Constructor
 pqxxMigrate::pqxxMigrate()
 {
-m_res=0;
-m_trans=0;
-m_conn=0;
+    m_res=0;
+    m_trans=0;
+    m_conn=0;
 }
 
 pqxxMigrate::pqxxMigrate(QObject *parent, const char *name, const QStringList &args) :
-  KexiMigrate(parent, name, args)
+        KexiMigrate(parent, name, args)
 {
-m_res=0;
-m_trans=0;
-m_conn=0;
+    m_res=0;
+    m_trans=0;
+    m_conn=0;
 }
 //==================================================================================
 //Destructor
@@ -64,272 +69,272 @@ pqxxMigrate::~pqxxMigrate()
 //helped by reading the 'tables' test program
 bool pqxxMigrate::drv_readTableSchema(const QString table)
 {
-	m_table = new KexiDB::TableSchema(table);
+    m_table = new KexiDB::TableSchema(table);
 
-	//TODO IDEA: ask for user input for captions
-	m_table->setCaption(table + " table");
+    //TODO IDEA: ask for user input for captions
+    m_table->setCaption(table + " table");
 
-	//Perform a query on the table to get some data
-	if (query("select * from " + table + " limit 1"))
-	{
-		//Loop round the fields
-		for (int i = 0; i < m_res->columns(); i++)
-		{
-			m_table->addField( m_f = new KexiDB::Field(m_res->column_name(i), type(m_res->column_type(i))));
-			m_f->setCaption(m_res->column_name(i));
-			m_f->setPrimaryKey(primaryKey(tableOid(table), i));
-			m_f->setUniqueKey(uniqueKey(tableOid(table), i));
-			//f->setLength(m_res->at(0)[i].size());
-			kdDebug() << "Added field [" << m_res->column_name(i) << "] type [" << type(m_res->column_type(i)) << "]" << endl;
-		}
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    //Perform a query on the table to get some data
+    if (query("select * from " + table + " limit 1"))
+    {
+        //Loop round the fields
+        for (int i = 0; i < m_res->columns(); i++)
+        {
+            m_table->addField( m_f = new KexiDB::Field(m_res->column_name(i), type(m_res->column_type(i))));
+            m_f->setCaption(m_res->column_name(i));
+            m_f->setPrimaryKey(primaryKey(tableOid(table), i));
+            m_f->setUniqueKey(uniqueKey(tableOid(table), i));
+            //f->setLength(m_res->at(0)[i].size());
+            kdDebug() << "Added field [" << m_res->column_name(i) << "] type [" << type(m_res->column_type(i)) << "]" << endl;
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 //==================================================================================
 //get a list of tables and put into the supplied string list
 bool pqxxMigrate::drv_tableNames(QStringList& tableNames)
 {
-	//pg_ = standard postgresql tables, pga_ = tables added by pgaccess, sql_ = probably information schemas, kexi__ = existing kexi tables
-	if (query("SELECT relname FROM pg_class WHERE ((relkind = 'r') AND ((relname !~ '^pg_') AND (relname !~ '^pga_') AND (relname !~ '^sql_') AND (relname !~ '^kexi__')))"))
-	{
-		for (pqxx::result::const_iterator c = m_res->begin(); c != m_res->end(); ++c)
-		{
-			// Copy the result into the return list
-			tableNames << QString::fromLatin1 (c[0].c_str());
-		}
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    //pg_ = standard postgresql tables, pga_ = tables added by pgaccess, sql_ = probably information schemas, kexi__ = existing kexi tables
+    if (query("SELECT relname FROM pg_class WHERE ((relkind = 'r') AND ((relname !~ '^pg_') AND (relname !~ '^pga_') AND (relname !~ '^sql_') AND (relname !~ '^kexi__')))"))
+    {
+        for (pqxx::result::const_iterator c = m_res->begin(); c != m_res->end(); ++c)
+        {
+            // Copy the result into the return list
+            tableNames << QString::fromLatin1 (c[0].c_str());
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 //==================================================================================
 //Convert a postgresql type to a kexi type
 KexiDB::Field::Type pqxxMigrate::type(int t)
 {
-	switch(t)
-	{
-	case UNKNOWNOID:
-		return KexiDB::Field::InvalidType;
-	case BOOLOID:
-		return KexiDB::Field::Boolean;
-	case INT2OID:
-		return KexiDB::Field::ShortInteger;
-	case INT4OID:
-		return KexiDB::Field::Integer;
-	case INT8OID:
-		return KexiDB::Field::BigInteger;
-	case FLOAT4OID:
-		return KexiDB::Field::Float;
-	case FLOAT8OID:
-		return KexiDB::Field::Double;
-		//case NUMERICOID:
-		//    return KexiDB::Field::Type::SQLNumeric;
-	case DATEOID:
-		return KexiDB::Field::Date;
-	case TIMEOID:
-		return KexiDB::Field::Time;
-	case TIMESTAMPOID:
-		return KexiDB::Field::DateTime;
-		//case BYTEAOID:
-		//    return KexiDB::Field::Type::SQLVarBinary;
-	case BPCHAROID:
-		return KexiDB::Field::Text;
-	case VARCHAROID:
-		return KexiDB::Field::Text;
-	case TEXTOID:
-		return KexiDB::Field::LongText;
-		//TODO: Binary Types (BLOB)
-	}
+    switch(t)
+    {
+    case UNKNOWNOID:
+        return KexiDB::Field::InvalidType;
+    case BOOLOID:
+        return KexiDB::Field::Boolean;
+    case INT2OID:
+        return KexiDB::Field::ShortInteger;
+    case INT4OID:
+        return KexiDB::Field::Integer;
+    case INT8OID:
+        return KexiDB::Field::BigInteger;
+    case FLOAT4OID:
+        return KexiDB::Field::Float;
+    case FLOAT8OID:
+        return KexiDB::Field::Double;
+        //case NUMERICOID:
+        //    return KexiDB::Field::Type::SQLNumeric;
+    case DATEOID:
+        return KexiDB::Field::Date;
+    case TIMEOID:
+        return KexiDB::Field::Time;
+    case TIMESTAMPOID:
+        return KexiDB::Field::DateTime;
+        //case BYTEAOID:
+        //    return KexiDB::Field::Type::SQLVarBinary;
+    case BPCHAROID:
+        return KexiDB::Field::Text;
+    case VARCHAROID:
+        return KexiDB::Field::Text;
+    case TEXTOID:
+        return KexiDB::Field::LongText;
+        //TODO: Binary Types (BLOB)
+    }
 
-	//Ask the user what to do with this field
-	return userType();
+    //Ask the user what to do with this field
+    return userType();
 }
 
 //==================================================================================
 //Connect to the db backend
 bool pqxxMigrate::drv_connect()
 {
-	kdDebug() << "drv_connect: " << m_dbName << endl;
+    kdDebug() << "drv_connect: " << m_dbName << endl;
 
-	QString conninfo;
-	QString socket;
+    QString conninfo;
+    QString socket;
 
-	//Setup local/remote connection
-	if (m_externalData->hostName.isEmpty())
-	{
-		if (m_externalData->fileName().isEmpty())
-		{
-			socket="/tmp/.s.PGSQL.5432";
-		}
-		else
-		{
-			socket=m_externalData->fileName();
-		}
-	}
-	else
-	{
-		conninfo = "host='" + m_externalData->hostName + "'";
-	}
+    //Setup local/remote connection
+    if (m_externalData->hostName.isEmpty())
+    {
+        if (m_externalData->fileName().isEmpty())
+        {
+            socket="/tmp/.s.PGSQL.5432";
+        }
+        else
+        {
+            socket=m_externalData->fileName();
+        }
+    }
+    else
+    {
+        conninfo = "host='" + m_externalData->hostName + "'";
+    }
 
-	//Build up the connection string
-	if (m_externalData->port == 0)
-		m_externalData->port = 5432;
+    //Build up the connection string
+    if (m_externalData->port == 0)
+        m_externalData->port = 5432;
 
-	conninfo += QString::fromLatin1(" port='%1'").arg(m_externalData->port);
+    conninfo += QString::fromLatin1(" port='%1'").arg(m_externalData->port);
 
-	conninfo += QString::fromLatin1(" dbname='%1'").arg(m_dbName);
+    conninfo += QString::fromLatin1(" dbname='%1'").arg(m_dbName);
 
-	if (!m_externalData->userName.isNull())
-		conninfo += QString::fromLatin1(" user='%1'").arg(m_externalData->userName);
+    if (!m_externalData->userName.isNull())
+        conninfo += QString::fromLatin1(" user='%1'").arg(m_externalData->userName);
 
-	if (!m_externalData->password.isNull())
-		conninfo += QString::fromLatin1(" password='%1'").arg(m_externalData->password);
+    if (!m_externalData->password.isNull())
+        conninfo += QString::fromLatin1(" password='%1'").arg(m_externalData->password);
 
-	try
-	{
-		m_conn = new pqxx::connection( conninfo.latin1() );
-		return true;
-	}
-	catch(const std::exception &e)
-	{
-		kdDebug() << "pqxxImport::drv_connect:exception - " << e.what() << endl;
-	}
-	catch(...)
-	{
-		kdDebug() << "pqxxMigrate::drv_connect:exception(...)??" << endl;
-	}
-	return false;
+    try
+    {
+        m_conn = new pqxx::connection( conninfo.latin1() );
+        return true;
+    }
+    catch(const std::exception &e)
+    {
+        kdDebug() << "pqxxImport::drv_connect:exception - " << e.what() << endl;
+    }
+    catch(...)
+    {
+        kdDebug() << "pqxxMigrate::drv_connect:exception(...)??" << endl;
+    }
+    return false;
 }
 
 //==================================================================================
 //Connect to the db backend
 bool pqxxMigrate::drv_disconnect()
 {
-	if (m_conn)
-	{
-			m_conn->disconnect();
-			delete m_conn;
-	}
-	return true;
+    if (m_conn)
+    {
+        m_conn->disconnect();
+        delete m_conn;
+    }
+    return true;
 }
 //==================================================================================
 //Perform a query on the database and store result in m_res
 bool pqxxMigrate::query (const QString& statement)
 {
-	kdDebug() << "query: " << statement.latin1() << endl;
+    kdDebug() << "query: " << statement.latin1() << endl;
 
-	Q_ASSERT (m_conn);
+    Q_ASSERT (m_conn);
 
-	// Clear the last result information...
-	clearResultInfo ();
+    // Clear the last result information...
+    clearResultInfo ();
 
-	try
-	{
-		//Create a transaction
-		m_trans = new pqxx::nontransaction(*m_conn);
-		//Create a result opject through the transaction
-		m_res = new pqxx::result(m_trans->exec(statement.latin1()));
-		//Commit the transaction
-		m_trans->commit();
-		//If all went well then return true, errors picked up by the catch block
-		return true;
-	}
-	catch (const std::exception &e)
-	{
-		//If an error ocurred then put the error description into _dbError
-		kdDebug() << "pqxxImport::query:exception - " << e.what() << endl;
-		return false;
-	}
-	catch(...)
-	{
-		kdDebug() << "pqxxMigrate::query:exception(...)??" << endl;
-	}
-	return true;
+    try
+    {
+        //Create a transaction
+        m_trans = new pqxx::nontransaction(*m_conn);
+        //Create a result opject through the transaction
+        m_res = new pqxx::result(m_trans->exec(statement.latin1()));
+        //Commit the transaction
+        m_trans->commit();
+        //If all went well then return true, errors picked up by the catch block
+        return true;
+    }
+    catch (const std::exception &e)
+    {
+        //If an error ocurred then put the error description into _dbError
+        kdDebug() << "pqxxImport::query:exception - " << e.what() << endl;
+        return false;
+    }
+    catch(...)
+    {
+        kdDebug() << "pqxxMigrate::query:exception(...)??" << endl;
+    }
+    return true;
 }
 
 //=========================================================================
 //Clears the current result
 void pqxxMigrate::clearResultInfo ()
 {
-	if (m_res)
-	{
-		delete m_res;
-		m_res = 0;
-	}
-	if (m_trans)
-	{
-		delete m_trans;
-		m_trans = 0;
-	}
+    if (m_res)
+    {
+        delete m_res;
+        m_res = 0;
+    }
+    if (m_trans)
+    {
+        delete m_trans;
+        m_trans = 0;
+    }
 }
 
 //=========================================================================
 //Return the OID for a table
 pqxx::oid pqxxMigrate::tableOid(const QString& table)
 {
-	QString statement;
-	static QString otable;
-	static pqxx::oid toid;
+    QString statement;
+    static QString otable;
+    static pqxx::oid toid;
 
-	pqxx::nontransaction* tran;
-	pqxx::result* tmpres;
-	
-	//Some simple result caching
-	if (table == otable)
-	{
-		kdDebug() << "Returning table OID from cache..." << endl;
-		return toid;
-	}
-	else
-	{
-		otable = table;
-	}
-	
-	try
-	{
-		statement = "SELECT relfilenode FROM pg_class WHERE (relname = '";
-		statement += table;
-		statement += "')";
+    pqxx::nontransaction* tran;
+    pqxx::result* tmpres;
 
-		tran = new pqxx::nontransaction(*m_conn, "find_t_oid");
-		tmpres = new pqxx::result(tran->exec(statement.latin1()));
+    //Some simple result caching
+    if (table == otable)
+    {
+        kdDebug() << "Returning table OID from cache..." << endl;
+        return toid;
+    }
+    else
+    {
+        otable = table;
+    }
 
-		tran->commit();
-		if (tmpres->size() > 0)
-		{
-			//We have a key field for this table, lets check if its this column
-			tmpres->at(0).at(0).to(toid);
-		}
-		else
-		{
-			toid = 0;
-		}
-	}
-	catch(const std::exception &e)
-	{
-		kdDebug() << "pqxxSqlDB::tableOid:exception - " << e.what() << endl;
-		kdDebug() << "pqxxSqlDB::tableOid:failed statement - " << statement << endl;
-		toid = 0;
-	}
-	catch(...)
-	{
-		kdDebug() << "pqxxMigrate::tableOid:exception(...)??" << endl;
-	}
-	if (tmpres)
-		delete tmpres;
-	if (tran)
-		delete tran;
+    try
+    {
+        statement = "SELECT relfilenode FROM pg_class WHERE (relname = '";
+        statement += table;
+        statement += "')";
 
-	kdDebug() << "OID for table [" << table << "] is [" << toid << "]" << endl;
-	return toid;
+        tran = new pqxx::nontransaction(*m_conn, "find_t_oid");
+        tmpres = new pqxx::result(tran->exec(statement.latin1()));
+
+        tran->commit();
+        if (tmpres->size() > 0)
+        {
+            //We have a key field for this table, lets check if its this column
+            tmpres->at(0).at(0).to(toid);
+        }
+        else
+        {
+            toid = 0;
+        }
+    }
+    catch(const std::exception &e)
+    {
+        kdDebug() << "pqxxSqlDB::tableOid:exception - " << e.what() << endl;
+        kdDebug() << "pqxxSqlDB::tableOid:failed statement - " << statement << endl;
+        toid = 0;
+    }
+    catch(...)
+    {
+        kdDebug() << "pqxxMigrate::tableOid:exception(...)??" << endl;
+    }
+    if (tmpres)
+        delete tmpres;
+    if (tran)
+        delete tran;
+
+    kdDebug() << "OID for table [" << table << "] is [" << toid << "]" << endl;
+    return toid;
 }
 
 //=========================================================================
@@ -337,60 +342,108 @@ pqxx::oid pqxxMigrate::tableOid(const QString& table)
 //TODO: Add result caching for speed
 bool pqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
 {
-	QString statement;
-	bool pkey;
-	int keyf;
+    QString statement;
+    bool pkey;
+    int keyf;
 
-	pqxx::nontransaction* tran;
-	pqxx::result* tmpres;
+    pqxx::nontransaction* tran;
+    pqxx::result* tmpres;
 
-	try
-	{
-		statement = QString("SELECT indkey FROM pg_index WHERE ((indisprimary = true) AND (indrelid = %1))").arg(table_uid);
+    try
+    {
+        statement = QString("SELECT indkey FROM pg_index WHERE ((indisprimary = true) AND (indrelid = %1))").arg(table_uid);
 
-		tran = new pqxx::nontransaction(*m_conn, "find_pkey");
-		tmpres = new pqxx::result(tran->exec(statement.latin1()));
+        tran = new pqxx::nontransaction(*m_conn, "find_pkey");
+        tmpres = new pqxx::result(tran->exec(statement.latin1()));
 
-		tran->commit();
-		if (tmpres->size() > 0)
-		{
-			//We have a key field for this table, lets check if its this column
-			tmpres->at(0).at(0).to(keyf);
-			if (keyf-1 == col) //-1 because pg counts from 1 and we count from 0
-			{
-				pkey = true;
-				kdDebug() << "Field is pkey" << endl;
-			}
-			else
-			{
-				pkey = false;
-				kdDebug() << "Field is NOT pkey" << endl;
-			}
-		}
-		else
-		{
-			pkey = false;
-			kdDebug() << "Field is NOT pkey" << endl;
-		}
-	}
-	catch(const std::exception &e)
-	{
-		kdDebug() << "pqxxSqlDB::primaryKey:exception - " << e.what() << endl;
-		kdDebug() << "pqxxSqlDB::primaryKey:failed statement - " << statement << endl;
-		pkey = false;
-	}
-	if (tmpres)
-		delete tmpres;
-	if (tran)
-		delete tran;
+        tran->commit();
+        if (tmpres->size() > 0)
+        {
+            //We have a key field for this table, lets check if its this column
+            tmpres->at(0).at(0).to(keyf);
+            if (keyf-1 == col) //-1 because pg counts from 1 and we count from 0
+            {
+                pkey = true;
+                kdDebug() << "Field is pkey" << endl;
+            }
+            else
+            {
+                pkey = false;
+                kdDebug() << "Field is NOT pkey" << endl;
+            }
+        }
+        else
+        {
+            pkey = false;
+            kdDebug() << "Field is NOT pkey" << endl;
+        }
+    }
+    catch(const std::exception &e)
+    {
+        kdDebug() << "pqxxSqlDB::primaryKey:exception - " << e.what() << endl;
+        kdDebug() << "pqxxSqlDB::primaryKey:failed statement - " << statement << endl;
+        pkey = false;
+    }
+    if (tmpres)
+        delete tmpres;
+    if (tran)
+        delete tran;
 
-	return pkey;
+    return pkey;
 }
 
+//=========================================================================
 /*! Copy PostgreSQL table to KexiDB database */
 bool pqxxMigrate::drv_copyTable(const QString& srcTable,
-                                KexiDB::TableSchema* dstTable) {
-	return true;
+                                KexiDB::TableSchema* dstTable)
+{
+    std::vector<std::string> R;
+
+    pqxx::work T(*m_conn, "pqxxMigrate::drv_copyTable");
+
+    pqxx::tablereader stream(T, (srcTable.latin1()));
+
+    //Loop round each row, reading into a vector of strings
+    for (int n=0; (stream >> R); ++n)
+    {
+        QValueList<QVariant> vals = QValueList<QVariant>();
+        for (std::vector<std::string>::const_iterator i = R.begin(); i != R.end(); ++i)
+        {
+	    QVariant var = QVariant((*i).c_str());
+            vals << var;
+        }
+
+        m_kexiDB->insertRecord(*dstTable, vals);
+    }
+
+    stream.complete();
+
+    return true;
+
+
+    //It could be done this way (with some altering):
+    /*
+    if(query("SELECT * FROM " + d->escapeIdentifier(srcTable)))
+      {
+
+          for (pqxx::result::const_iterator c = m_res->begin(); c != m_res->end(); ++c)
+          {
+              int numFields = mysql_num_fields(res);
+              QValueList<QVariant> vals = QValueList<QVariant>();
+              for(int i = 0; i < numFields; i++)
+              {
+                  QVariant var = QVariant(row[i]);
+                  vals << var;
+              }
+              m_kexiDB->insertRecord(*dstTable, vals);
+          }
+          return true;
+      }
+      else
+      {
+          return false;
+      }
+    */
 }
 
 //=========================================================================
@@ -398,54 +451,54 @@ bool pqxxMigrate::drv_copyTable(const QString& srcTable,
 //TODO: Add result caching for speed
 bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
 {
-	QString statement;
-	bool ukey;
-	int keyf;
+    QString statement;
+    bool ukey;
+    int keyf;
 
-	pqxx::nontransaction* tran;
-	pqxx::result* tmpres;
+    pqxx::nontransaction* tran;
+    pqxx::result* tmpres;
 
-	try
-	{
-		statement = QString("SELECT indkey FROM pg_index WHERE ((indisunique = true) AND (indrelid = %1))").arg(table_uid);
+    try
+    {
+        statement = QString("SELECT indkey FROM pg_index WHERE ((indisunique = true) AND (indrelid = %1))").arg(table_uid);
 
-		tran = new pqxx::nontransaction(*m_conn, "find_ukey");
-		tmpres = new pqxx::result(tran->exec(statement.latin1()));
+        tran = new pqxx::nontransaction(*m_conn, "find_ukey");
+        tmpres = new pqxx::result(tran->exec(statement.latin1()));
 
-		tran->commit();
-		if (tmpres->size() > 0)
-		{
-			//We have a key field for this table, lets check if its this column
-			tmpres->at(0).at(0).to(keyf);
-			if (keyf-1 == col) //-1 because pg counts from 1 and we count from 0
-			{
-				ukey = true;
-				kdDebug() << "Field is unique" << endl;
-			}
-			else
-			{
-				ukey = false;
-				kdDebug() << "Field is NOT unique" << endl;
-			}
-		}
-		else
-		{
-			ukey = false;
-			kdDebug() << "Field is NOT unique" << endl;
-		}
-	}
-	catch(const std::exception &e)
-	{
-		kdDebug() << "uniqueKey:exception - " << e.what() << endl;
-		kdDebug() << "uniqueKey:failed statement - " << statement << endl;
-		ukey = false;
-	}
-	if (tmpres)
-		delete tmpres;
-	if (tran)
-		delete tran;
+        tran->commit();
+        if (tmpres->size() > 0)
+        {
+            //We have a key field for this table, lets check if its this column
+            tmpres->at(0).at(0).to(keyf);
+            if (keyf-1 == col) //-1 because pg counts from 1 and we count from 0
+            {
+                ukey = true;
+                kdDebug() << "Field is unique" << endl;
+            }
+            else
+            {
+                ukey = false;
+                kdDebug() << "Field is NOT unique" << endl;
+            }
+        }
+        else
+        {
+            ukey = false;
+            kdDebug() << "Field is NOT unique" << endl;
+        }
+    }
+    catch(const std::exception &e)
+    {
+        kdDebug() << "uniqueKey:exception - " << e.what() << endl;
+        kdDebug() << "uniqueKey:failed statement - " << statement << endl;
+        ukey = false;
+    }
+    if (tmpres)
+        delete tmpres;
+    if (tran)
+        delete tran;
 
-	return ukey;
+    return ukey;
 }
 
 //==================================================================================
@@ -453,7 +506,7 @@ bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
 /*bool pqxxMigrate::drv_getDatabasesList( QStringList &list )
 {
     KexiDBDrvDbg << "pqxxSqlConnection::drv_getDatabaseList" << endl;
-
+ 
     if (executeSQL("SELECT datname FROM pg_database WHERE datallowconn = TRUE"))
     {
         std::string N;
@@ -467,7 +520,7 @@ bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
         }
         return true;
     }
-
+ 
     return false;
 }*/
 

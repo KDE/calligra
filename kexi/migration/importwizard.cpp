@@ -323,7 +323,7 @@ void importWizard::accept()
     import = mmanager.migrateDriver(srcTypeCombo->currentText());
     
     kdDebug() << "Setting import data.." << endl;
-    import->setData(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, dbname, false);
+    import->setData(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, dbname, true);
 
     kdDebug() << "Performing import..." << endl;
     if (import->performImport())

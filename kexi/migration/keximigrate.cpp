@@ -65,8 +65,10 @@ bool KexiMigrate::performImport()
 	bool failure = false;
 	
 	//Step 1 - connect
+	kdDebug() << "MIGRATE TEST CONNECTING..." << endl;
 	if (drv_connect())
 	{
+		kdDebug() << "MIGRATE TEST GETTING TABLENAMES..." << endl;
 		//Step 2 - get table names
 		if (tableNames(tables))
 		{
@@ -125,11 +127,11 @@ bool KexiMigrate::performImport()
 			return false;
 		}
 	}
-else
-{
-	kdDebug() << "Couldnt connect to database server" << endl;
-	return false;
-}
+	else
+	{
+		kdDebug() << "Couldnt connect to database server" << endl;
+		return false;
+	}
 }
 
 bool KexiMigrate::copyData(const QString& table, 
