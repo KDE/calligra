@@ -33,6 +33,7 @@
 #define PREVIEW_WIDTH  270
 #define PREVIEW_BORDER 5
 
+#ifndef USE_QFD
 /**
  * A preview handler for the KFilePreviewDialag that shows
  * a KIllustrator document.
@@ -124,6 +125,7 @@ bool wmfPreviewHandler (const KFileInfo* fInfo, const QString fileName,
   }
   return res;
 }
+
 /**
  * A preview handler for the KFilePreviewDialag that shows
  * a Pixmap object.
@@ -160,3 +162,4 @@ bool pixmapPreviewHandler (const KFileInfo* fInfo, const QString fileName,
   }
   return res;
 }
+#endif
