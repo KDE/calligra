@@ -30,6 +30,9 @@
 
 namespace Kross { namespace KexiDB {
 
+    // Forward declaration.
+    class KexiDBConnection;
+
     class KexiDBParser : public Kross::Api::Class<KexiDBParser>
     {
         public:
@@ -37,7 +40,7 @@ namespace Kross { namespace KexiDB {
             /**
              * Constructor.
              */
-            KexiDBParser(::KexiDB::Parser* parser);
+            KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser);
 
             /**
              * Destructor.
@@ -51,6 +54,7 @@ namespace Kross { namespace KexiDB {
             virtual const QString getDescription() const;
 
         private:
+            KexiDBConnection* m_connection;
             ::KexiDB::Parser* m_parser;
 
             Kross::Api::Object* parse(Kross::Api::List*);

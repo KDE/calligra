@@ -23,6 +23,7 @@
 #include "kexidbfieldlist.h"
 #include "kexidbschema.h"
 #include "kexidbtransaction.h"
+#include "kexidbparser.h"
 #include "../api/exception.h"
 
 //#include <qvaluelist.h>
@@ -202,6 +203,11 @@ KexiDBConnection::KexiDBConnection(KexiDBDriver* driver, ::KexiDB::Connection* c
     addFunction("transactions", &KexiDBConnection::transactions,
         Kross::Api::ArgumentList(),
         i18n("Return list of currently active KexiDBTransaction objects.")
+    );
+
+    addFunction("parser", &KexiDBConnection::parser,
+        Kross::Api::ArgumentList(),
+        i18n("Return a KexiDBParser object.")
     );
 }
 
@@ -499,5 +505,10 @@ Kross::Api::Object* KexiDBConnection::transactions(Kross::Api::List*)
         l.append( new KexiDBTransaction(this, *it) );
     return Kross::Api::List::create(l,
            "Kross::KexiDB::Connection::transactions::List");
+}
+
+Kross::Api::Object* KexiDBConnection::parser(Kross::Api::List*)
+{
+    return new KexiDBParser(this, new ::KexiDB::Parser(connection()));
 }
 

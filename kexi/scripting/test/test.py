@@ -89,6 +89,18 @@ class KexiDBClass:
         #print "dropDatabase databaseExists(%s) = %s" % (dbname,connection.databaseExists(dbname))
         #print "dropDatabase dbname='%s' dbnames='%s'" % (dbname,connection.databaseNames())
 
+    # Test KexiDBParser used to parse SQL-statements.
+    def testParser(self, connection, sqlstatement):
+        parser = connection.parser()
+        if not parser:
+            raise "ERROR in testParser(): Failed to create parser!"
+        print "parser.parse = %s" % parser.parse(sqlstatement)
+        print "parser.statement = %s" % parser.statement()
+        print "parser.operation = %s" % parser.operation()
+        print "parser.table = %s" % parser.table()
+        print "parser.query = %s" % parser.query()
+        print "parser.connection = %s" % parser.connection()
+
     # Execute the sql query statement and print the single string result.
     def printQuerySingleString(self, connection, sqlstatement):
         query = myfileconnection.querySingleString("SELECT * FROM table1", 0)
@@ -132,6 +144,7 @@ if __name__ == '__main__':
 
     myfileconnection = mykexidbclass.connectWithFile(mydriver, "/home/snoopy/New_database.kexi")
     #mykexidbclass.printConnection(myfileconnection)
+    #mykexidbclass.testParser(myfileconnection, "SELECT * from table1")
 
     mykexidbclass.printQuerySingleString(myfileconnection, "SELECT * FROM table1")
     mykexidbclass.printQueryStringList(myfileconnection, "SELECT * FROM table1")

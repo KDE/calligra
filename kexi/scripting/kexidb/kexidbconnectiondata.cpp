@@ -189,16 +189,13 @@ Kross::Api::Object* KexiDBConnectionData::setConnName(Kross::Api::List* args)
 
 Kross::Api::Object* KexiDBConnectionData::description(Kross::Api::List*)
 {
-    /*TODO
     return Kross::Api::Variant::create(m_data->description,
            "Kross::KexiDB::Connection::description::String");
-    */
-    return 0;
 }
 
 Kross::Api::Object* KexiDBConnectionData::setDescription(Kross::Api::List*)
 {
-    //TODO m_data->description = Kross::Api::Variant::toString(args->item(0));
+    m_data->description = Kross::Api::Variant::toString(args->item(0));
     return 0;
 }
 
@@ -277,9 +274,7 @@ Kross::Api::Object* KexiDBConnectionData::fileName(Kross::Api::List*)
 Kross::Api::Object* KexiDBConnectionData::setFileName(Kross::Api::List* args)
 {
     m_data->setFileName( Kross::Api::Variant::toString(args->item(0)) );
-    //TODO return empty object OR true OR new hostname, not null...
-    //return 0;
-    return Kross::Api::Variant::create(true);
+    return 0;
 }
 
 Kross::Api::Object* KexiDBConnectionData::dbPath(Kross::Api::List*)
@@ -296,7 +291,8 @@ Kross::Api::Object* KexiDBConnectionData::dbFileName(Kross::Api::List*)
 
 Kross::Api::Object* KexiDBConnectionData::serverInfoString(Kross::Api::List*)
 {
-    //TODO
-    return 0;
+    //TODO add default argument handling!
+    return Kross::Api::Variant::create(m_data->serverInfoString(args->item(0)),
+           "Kross::KexiDB::Connection::serverInfoString::String");
 }
 

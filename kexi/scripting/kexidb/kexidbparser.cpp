@@ -19,6 +19,7 @@
 
 #include "kexidbparser.h"
 #include "kexidbschema.h"
+#include "kexidbconnection.h"
 #include "../api/variant.h"
 
 #include <klocale.h>
@@ -26,8 +27,9 @@
 
 using namespace Kross::KexiDB;
 
-KexiDBParser::KexiDBParser(::KexiDB::Parser* parser)
+KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser)
     : Kross::Api::Class<KexiDBParser>("KexiDBParser")
+    , m_connection(connection)
     , m_parser(parser)
 {
     addFunction("parse", &KexiDBParser::parse,
@@ -104,10 +106,8 @@ Kross::Api::Object* KexiDBParser::clear(Kross::Api::List*)
 
 Kross::Api::Object* KexiDBParser::operation(Kross::Api::List*)
 {
-    /*TODO
     return Kross::Api::Variant::create(m_parser->operationString(),
            "Kross::Api::KexiDBParser::operation::String");
-    */
     return 0;
 }
 
@@ -127,12 +127,7 @@ Kross::Api::Object* KexiDBParser::query(Kross::Api::List*)
 
 Kross::Api::Object* KexiDBParser::connection(Kross::Api::List*)
 {
-    /*TODO
-    ::KexiDB::Connection* c = m_parser->db();
-    if(! c) return 0;
-    return new KexiDBConnection(c);
-    */
-    return 0;
+    return m_connection;
 }
 
 Kross::Api::Object* KexiDBParser::statement(Kross::Api::List*)

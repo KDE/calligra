@@ -298,6 +298,11 @@ namespace Kross { namespace KexiDB {
              * Wrapper for \a ::KexiDB::Connection::transactions
              */
             Kross::Api::Object* transactions(Kross::Api::List*);
+
+            /**
+             * Return a KexiDBParser object.
+             */
+            Kross::Api::Object* parser(Kross::Api::List*);
     };
 
 }}
