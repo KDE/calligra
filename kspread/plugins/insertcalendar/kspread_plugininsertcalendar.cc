@@ -24,7 +24,10 @@
 
 #include "kspread_plugininsertcalendar.h"
 
+#include "kspread_insertcalendardialog.h"
+
 #include <kaboutdata.h>
+#include <kgenericfactory.h>
 #include <klocale.h>
 #include <kofficeversion.h>
 
@@ -35,16 +38,6 @@ namespace KSpread
 typedef KGenericFactory<PluginInsertCalendar> InsertCalendarFactory;
 K_EXPORT_COMPONENT_FACTORY( libkspreadinsertcalendar,  InsertCalendarFactory("kspread"))
 
-/**
- * \class InsertCalendarSettings kspread_plugininsertcalendar.cc
- * \brief Holds all settings for the insertion (start/end dates, ...).
- * @author Raphael Langerhorst
- */
-class InsertCalendarSettings
-{
-  int start, end;
-};
-
 static const char* description=I18N_NOOP("KOffice Spreadsheet Application");
 
 // Always the same as the KOffice version
@@ -53,7 +46,7 @@ static const char* version=KOFFICE_VERSION_STRING;
 PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const char *name, const QStringList& args )
 : Plugin(parent,name)
 {
-    this->m_pSettings = new InsertCalendarSettings();
+    this->m_dialog = NULL;
     
     (void)new KAction( i18n("Insert Calendar"), KShortcut::null(),
                    this, SLOT( slotShowDialog() ), actionCollection(), "kspreadinsertcalendar");
@@ -78,12 +71,23 @@ void PluginInsertCalendar::slotShowDialog()
 {
   //@todo implement
   kdDebug() << "slotShowDialog..." << endl;
+  
+  if (this->m_dialog == NULL)
+  {
+    this->m_dialog = new InsertCalendarDialog();
+    
+    Q_ASSERT(m_dialog);
+  }
+  
+  m_dialog->hide();
+  m_dialog->show();
+  
 }
 
-void PluginInsertCalendar::slotInsert()
+void PluginInsertCalendar::slotInsertCalendar()
 {
   //@todo implement
-  kdDebug() << "slotInsert..." << endl;
+  kdDebug() << "slotInsert... still to be implemented" << endl;
 }
 
 }

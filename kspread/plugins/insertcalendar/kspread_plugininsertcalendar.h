@@ -26,7 +26,6 @@
 #define KSPREAD_PLUGININSERTCALENDAR_H
  
 #include <kparts/plugin.h>
-#include <kparts/genericfactory.h>
 
 #include <koffice_export.h>
 
@@ -36,7 +35,7 @@ class KAboutData;
 namespace KSpread
 {
 
-class InsertCalendarSettings;
+class InsertCalendarDialog;
 
 /**
  * \class PluginInsertCalender kspread_plugininsertcalendar.h
@@ -55,16 +54,17 @@ class KSPREAD_EXPORT PluginInsertCalendar : public KParts::Plugin
   protected:
   
     /**
-     * All settings that are made in the dialog are stored
-     * here, when inserting a calendar these settings are used.
-     * @see slotInsert
+     * This is the dialog used to select the start/end dates
+     * of the calendar. It is the user interface of this
+     * plugin.
+     * @see InsertCalendarDialog, slotShowDialog, slotInsertCalendar
      */
-    InsertCalendarSettings* m_pSettings;
+    InsertCalendarDialog* m_dialog;
     
   public:
     
     /**
-     * Constructor. This constructor is usable with KParts::GenericFactory.
+     * Constructor. This constructor is usable with KGenericFactory.
      */
     PluginInsertCalendar( QObject *parent, const char *name, const QStringList& args );
     
@@ -91,10 +91,10 @@ class KSPREAD_EXPORT PluginInsertCalendar : public KParts::Plugin
      
      /**
       * This actually inserts the calendar. It reads the configuration
-      * from the settings and builds an calendar in the spreadsheet
-      * accordingly.
+      * from the insert calendar dialog and builds an calendar in the
+      * spreadsheet accordingly.
       */
-     void slotInsert();
+     void slotInsertCalendar();
 };
 
 }

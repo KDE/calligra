@@ -9,11 +9,18 @@
             <x>0</x>
             <y>0</y>
             <width>429</width>
-            <height>230</height>
+            <height>237</height>
         </rect>
     </property>
     <property name="caption">
         <string>Insert Calendar</string>
+    </property>
+    <property name="toolTip" stdset="0">
+        <string></string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>The Insert Calendar dialog lets you set the dates of the calendar you want to insert. When you have choosen the desired dates, simply press the Insert button to insert the calendar into the spreadsheet, starting at the cell you have currently selected.</string>
+        <comment>This what's this help applies for the entire dialog.</comment>
     </property>
     <grid>
         <property name="name">
@@ -23,8 +30,20 @@
             <property name="name">
                 <cstring>m_endDateGroupBox</cstring>
             </property>
+            <property name="frameShape">
+                <enum>GroupBoxPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
             <property name="title">
                 <string>End Date</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Set the end date of the calendar you want to insert.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Here you can choose on which date your calendar should end. The selected date will be the last day of the inserted calendar. You can also choose a date from a calendar dialog by pressing Select Date.</string>
             </property>
             <grid>
                 <property name="name">
@@ -43,7 +62,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Select Date</string>
+                        <string>Date Picker</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Use a graphical date picker to select a date.</string>
                     </property>
                 </widget>
                 <widget class="KDateWidget" row="0" column="0">
@@ -67,6 +89,12 @@
             </property>
             <property name="title">
                 <string>Start Date</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Set the start date of the calendar you want to insert.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Here you can choose on which date your calendar should start. The selected date will be the first day of the inserted calendar. You can also choose a date from a calendar dialog by pressing Select Date.</string>
             </property>
             <grid>
                 <property name="name">
@@ -98,7 +126,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Select Date</string>
+                        <string>Date Picker</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Use a graphical date picker to select a date.</string>
                     </property>
                 </widget>
             </grid>
@@ -135,6 +166,12 @@
             <property name="text">
                 <string>Cancel</string>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Don't insert a calendar.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Quits the dialog and does not insert a calendar. Use this to cancel this operation.</string>
+            </property>
         </widget>
         <widget class="QPushButton" row="3" column="0">
             <property name="name">
@@ -150,6 +187,14 @@
             </property>
             <property name="text">
                 <string>Insert</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Insert the calendar at the currently selected cell.</string>
+                <comment>Tooltip for the insert button of the insert calendar plugin</comment>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>A new calendar will be inserted starting at the currently selected cell.</string>
+                <comment>What's this for the insert button of the insert calendar plugin</comment>
             </property>
         </widget>
     </grid>
