@@ -119,8 +119,6 @@ public:
     void removeTable( KSpreadTable *_t );
     void removeAllTables();
     void changeTable( const QString& _name );
-    enum PType {TXT_COLOR, FRAME_COLOR, BACK_COLOR};
-    QString colorToPixString( QColor c, PType _type );
     void setTextColor(QColor c );
     void setbgColor(QColor c );
     void setActiveTable( KSpreadTable *_t );
