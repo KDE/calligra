@@ -41,6 +41,7 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <kooasiscontext.h>
+#include <koxmlns.h>
 
 #include "kppixmapobject.h"
 #include "kpgradient.h"
@@ -286,50 +287,50 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
 {
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
-    if ( styleStack.hasAttribute( "draw:color-mode" ) &&  ( styleStack.attribute( "draw:color-mode" )=="greyscale" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "color-mode" ) &&  ( styleStack.attributeNS( KoXmlNS::draw, "color-mode" )=="greyscale" ) )
     {
         grayscal = true;
     }
 
-    if ( styleStack.hasAttribute( "draw:contrast" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "contrast" ) )
     {
-        QString str( styleStack.attribute( "draw:contrast" ) );
+        QString str( styleStack.attributeNS( KoXmlNS::draw, "contrast" ) );
         str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CONTRAST;
         val = ( int )( 255.0 *val/100.0 );
         m_ie_par1 = QVariant(val);
     }
-    if ( styleStack.hasAttribute( "draw:red" ) && styleStack.attribute( "draw:red" ) != "0%" )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "red" ) && styleStack.attributeNS( KoXmlNS::draw, "red" ) != "0%" )
     {
-        QString str( styleStack.attribute( "draw:red" ) );
+        QString str( styleStack.attributeNS( KoXmlNS::draw, "red" ) );
         str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CHANNEL_INTENSITY;
         m_ie_par1 = QVariant(val);
         m_ie_par2 = QVariant( ( int )KImageEffect::Red );
     }
-    if ( styleStack.hasAttribute( "draw:green" ) && styleStack.attribute( "draw:green" ) != "0%" )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "green" ) && styleStack.attributeNS( KoXmlNS::draw, "green" ) != "0%" )
     {
-        QString str( styleStack.attribute( "draw:green" ) );
+        QString str( styleStack.attributeNS( KoXmlNS::draw, "green" ) );
         str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CHANNEL_INTENSITY;
         m_ie_par1 = QVariant(val);
         m_ie_par2 = QVariant( ( int )KImageEffect::Green );
     }
-    if ( styleStack.hasAttribute( "draw:blue" ) && styleStack.attribute( "draw:blue" ) != "0%" )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "blue" ) && styleStack.attributeNS( KoXmlNS::draw, "blue" ) != "0%" )
     {
-        QString str( styleStack.attribute( "draw:blue" ) );
+        QString str( styleStack.attributeNS( KoXmlNS::draw, "blue" ) );
         str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CHANNEL_INTENSITY;
         m_ie_par1 = QVariant(val);
         m_ie_par2 = QVariant( ( int )KImageEffect::Blue );
     }
-    if ( styleStack.hasAttribute( "draw:luminance" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "luminance" ) )
     {
-       QString str( styleStack.attribute( "draw:luminance" ) );
+       QString str( styleStack.attributeNS( KoXmlNS::draw, "luminance" ) );
        str = str.remove( '%' );
        bright = str.toInt();
     }
@@ -340,7 +341,7 @@ void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & cont
 {
     KP2DObject::loadOasis( element, context, info );
     loadOasisPictureEffect( context );
-    const QString href( element.attribute("xlink:href") );
+    const QString href( element.attributeNS( KoXmlNS::xlink, "href", QString::null) );
     kdDebug()<<" href: "<<href<<endl;
     if ( !href.isEmpty() && href[0] == '#' )
     {

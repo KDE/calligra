@@ -30,6 +30,7 @@
 #include <kooasiscontext.h>
 #include <math.h>
 #include <koUnit.h>
+#include <koxmlns.h>
 using namespace std;
 
 KPClosedLineObject::KPClosedLineObject()
@@ -297,7 +298,7 @@ void KPClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext &
     kdDebug()<<"void KPClosedLineObject::loadOasis( const QDomElement &element )***********\n";
     KP2DObject::loadOasis( element,context, info );
     //load point.
-    QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
+    QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
 
     QString pt_x, pt_y;
     double tmp_x, tmp_y;

@@ -31,36 +31,41 @@
 #include "kwdrag.h"
 #include "kwformulaframe.h"
 #include "kwbgspellcheck.h"
-#include <koparagcounter.h>
-#include "contents.h"
-#include <koVariableDlgs.h>
-#include "mailmerge.h"
-#include <koAutoFormat.h>
-#include <qclipboard.h>
-#include <qprogressdialog.h>
-#include <qpopupmenu.h>
-#include <kapplication.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kotextobject.h>
-#include <kocommand.h>
-#include <kotextformatter.h>
-#include <krun.h>
-#include <kmessagebox.h>
-#include "kwvariable.h"
-#include <koChangeCaseDia.h>
 #include "KWordTextFrameSetIface.h"
 #include "KWordTextFrameSetEditIface.h"
 #include "KWordFootNoteFrameSetIface.h"
 #include "KWordFrameSetIface.h"
-#include <kooasiscontext.h>
-#include <kdebug.h>
-#include <assert.h>
 #include "kwloadinginfo.h"
+#include "contents.h"
+#include "mailmerge.h"
+#include "kwvariable.h"
+
+#include <koparagcounter.h>
+#include <koVariableDlgs.h>
+#include <koAutoFormat.h>
+#include <kotextobject.h>
+#include <kocommand.h>
+#include <kotextformatter.h>
+#include <koChangeCaseDia.h>
+#include <koxmlns.h>
 #include <koxmlwriter.h>
+#include <kooasiscontext.h>
+
+#include <kapplication.h>
+#include <klocale.h>
+#include <kaction.h>
+#include <krun.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
 #include <ktempfile.h>
+
 #include <qbuffer.h>
 #include <qfile.h>
+#include <qclipboard.h>
+#include <qprogressdialog.h>
+#include <qpopupmenu.h>
+
+#include <assert.h>
 
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY
@@ -111,7 +116,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
 KWTextFrameSet::KWTextFrameSet( KWDocument* doc, const QDomElement& tag, KoOasisContext& /*context*/ )
     : KWFrameSet( doc )
 {
-    m_name = tag.attribute( "draw:name" );
+    m_name = tag.attributeNS( KoXmlNS::draw, "name", QString::null );
     if ( doc->frameSetByName( m_name ) ) // already exists!
         m_name = doc->generateFramesetName( m_name + " %1" );
     init();
@@ -1799,8 +1804,8 @@ KWFrame* KWTextFrameSet::loadOasisTextBox( const QDomElement& frameTag, const QD
     // Hence the framename temporary storage in KWLoadingInfo
 
     KWTextFrameSet* fs = 0;
-    QString frameName = frameTag.attribute( "draw:name" );
-    QString chainNextName = tag.attribute( "draw:chain-next-name" );
+    QString frameName = frameTag.attributeNS( KoXmlNS::draw, "name", QString::null );
+    QString chainNextName = tag.attributeNS( KoXmlNS::draw, "chain-next-name", QString::null );
     if ( !chainNextName.isEmpty() ) { // 'B' in the above example
         kdDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
         // Check if we already loaded that frame (then we need to go 'before' it)
@@ -1851,7 +1856,7 @@ KWFrame* KWTextFrameSet::loadOasis( const QDomElement& frameTag, const QDomEleme
     KWFrame* frame = loadOasisFrame( frameTag, context );
 
     // Load overflow behavior (OASIS 14.27.27, not in OO-1.1 DTD). This is here since it's only for text framesets.
-    const QCString overflowBehavior = context.styleStack().attribute( "style:overflow-behavior" ).latin1();
+    const QString overflowBehavior = context.styleStack().attributeNS( KoXmlNS::style, "overflow-behavior" );
     if ( overflowBehavior == "clip" )
         frame->setFrameBehavior( KWFrame::Ignore );
     else if ( overflowBehavior == "auto-create-new-frame" )

@@ -37,6 +37,7 @@
 #include <koStoreDevice.h>
 #include <kooasiscontext.h>
 #include <koPictureCollection.h>
+#include <koxmlns.h>
 #include <kotextobject.h> // for customItemChar!
 
 #include <kcursor.h>
@@ -572,28 +573,28 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     KoStyleStack& styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
     // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
-    m_paddingLeft = KoUnit::parseValue( styleStack.attribute( "fo:padding", "left" ) );
-    m_paddingRight = KoUnit::parseValue( styleStack.attribute( "fo:padding", "right" ) );
-    m_paddingTop = KoUnit::parseValue( styleStack.attribute( "fo:padding", "top" ) );
-    m_paddingBottom = KoUnit::parseValue( styleStack.attribute( "fo:padding", "bottom" ) );
+    m_paddingLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "left" ) );
+    m_paddingRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "right" ) );
+    m_paddingTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "top" ) );
+    m_paddingBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "bottom" ) );
 
     // margins, i.e. runAroundGap. fo:margin-left/right/top/bottom
 #if 0 // not allowed in the current OASIS spec
     // margins, i.e. runAroundGap. fo:margin for 4 values or padding-left/right/top/bottom
-    m_runAroundLeft = KoUnit::parseValue( styleStack.attribute( "fo:margin", "left" ) );
-    m_runAroundRight = KoUnit::parseValue( styleStack.attribute( "fo:margin", "right" ) );
-    m_runAroundTop = KoUnit::parseValue( styleStack.attribute( "fo:margin", "top" ) );
-    m_runAroundBottom = KoUnit::parseValue( styleStack.attribute( "fo:margin", "bottom" ) );
+    m_runAroundLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "left" ) );
+    m_runAroundRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "right" ) );
+    m_runAroundTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "top" ) );
+    m_runAroundBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "bottom" ) );
 #endif
-    m_runAroundLeft = KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ) );
-    m_runAroundRight = KoUnit::parseValue( styleStack.attribute( "fo:margin-right" ) );
-    m_runAroundTop = KoUnit::parseValue( styleStack.attribute( "fo:margin-top" ) );
-    m_runAroundBottom = KoUnit::parseValue( styleStack.attribute( "fo:margin-bottom" ) );
+    m_runAroundLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ) );
+    m_runAroundRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-right" ) );
+    m_runAroundTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-top" ) );
+    m_runAroundBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-bottom" ) );
 
 
     // background color (3.11.25)
-    if ( styleStack.hasAttribute( "fo:background-color" ) ) {
-        QString color = styleStack.attribute( "fo:background-color" );
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
+        QString color = styleStack.attributeNS( KoXmlNS::fo, "background-color" );
         if ( color == "transparent" )
             m_backgroundColor = QBrush( QColor(), Qt::NoBrush );
         else
@@ -608,14 +609,14 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     // borders (3.11.27)
     // can be none/hidden, solid and double. General form is the XSL/FO "width|style|color"
     {
-        m_borderLeft.loadFoBorder( styleStack.attribute("fo:border", "left") );
-        m_borderRight.loadFoBorder( styleStack.attribute("fo:border", "right") );
-        m_borderTop.loadFoBorder( styleStack.attribute("fo:border", "top") );
-        m_borderBottom.loadFoBorder( styleStack.attribute("fo:border", "bottom") );
+        m_borderLeft.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "left") );
+        m_borderRight.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "right") );
+        m_borderTop.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "top") );
+        m_borderBottom.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "bottom") );
     }
     // TODO more refined border spec for double borders (3.11.28)
 
-    const QCString frameBehaviorOnNewPage = styleStack.attribute( "style:frame-behavior-on-new-page" ).latin1();
+    const QCString frameBehaviorOnNewPage = styleStack.attributeNS( KoXmlNS::style, "frame-behavior-on-new-page" ).latin1();
     if ( frameBehaviorOnNewPage == "followup" )
         m_newFrameBehavior = Reconnect;
     else if ( frameBehaviorOnNewPage == "copy" )
@@ -633,7 +634,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
 
     KWFrame::RunAround runAround = KWFrame::RA_BOUNDINGRECT;
     KWFrame::RunAroundSide runAroundSide = KWFrame::RA_BIGGEST;
-    const QCString oowrap = styleStack.attribute( "style:wrap" ).latin1();
+    const QCString oowrap = styleStack.attributeNS( KoXmlNS::style, "wrap" ).latin1();
     if ( oowrap == "none" )        // 'no wrap' means 'avoid horizontal space'
         runAround = KWFrame::RA_SKIP;
     else if ( oowrap == "left" )
@@ -1717,33 +1718,33 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
     double width = 100;
     if ( tag.hasAttribute( "svg:width" ) ) { // fixed width
         // TODO handle percentage (of enclosing table/frame/page)
-        width = KoUnit::parseValue( tag.attribute( "svg:width" ) );
+        width = KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "width", QString::null ) );
     } else if ( tag.hasAttribute( "fo:min-width" ) ) {
         // min-width is not supported in KWord. Let's use it as a fixed width.
-        width = KoUnit::parseValue( tag.attribute( "fo:min-width" ) );
+        width = KoUnit::parseValue( tag.attributeNS( KoXmlNS::fo, "min-width", QString::null ) );
     } else {
-        kdWarning(32001) << "Error in frame " << tag.tagName() << " " << tag.attribute( "draw:name" ) << " : neither width nor min-width specified!" << endl;
+        kdWarning(32001) << "Error in frame " << tag.tagName() << " " << tag.attributeNS( KoXmlNS::draw, "name", QString::null ) << " : neither width nor min-width specified!" << endl;
     }
     double height = 100;
     bool hasMinHeight = false;
     if ( tag.hasAttribute( "svg:height" ) ) { // fixed height
         // TODO handle percentage (of enclosing table/frame/page)
-        height = KoUnit::parseValue( tag.attribute( "svg:height" ) );
+        height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "height", QString::null ) );
     } else if ( tag.hasAttribute( "fo:min-height" ) ) {
-        height = KoUnit::parseValue( tag.attribute( "fo:min-height" ) );
+        height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::fo, "min-height", QString::null ) );
         hasMinHeight = true;
     } else {
-        kdWarning(32001) << "Error in frame " << tag.tagName() << " " << tag.attribute( "draw:name" ) << " : neither height nor min-height specified!" << endl;
+        kdWarning(32001) << "Error in frame " << tag.tagName() << " " << tag.attributeNS( KoXmlNS::draw, "name", QString::null ) << " : neither height nor min-height specified!" << endl;
     }
     //kdDebug(32001) << k_funcinfo << "width=" << width << " height=" << height << " pt" << endl;
 
     KWFrame * frame = new KWFrame(this,
-                                  KoUnit::parseValue( tag.attribute( "svg:x" ) ),
-                                  KoUnit::parseValue( tag.attribute( "svg:y" ) ),
+                                  KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "x", QString::null ) ),
+                                  KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "y", QString::null ) ),
                                   width, height );
     if ( hasMinHeight )
         frame->setMinFrameHeight( height );
-    frame->setZOrder( tag.attribute( "draw:z-index" ).toInt() );
+    frame->setZOrder( tag.attributeNS( KoXmlNS::draw, "z-index", QString::null ).toInt() );
     // Copy-frames. OASIS extension requested on 29/03/2004.
     // We currently ignore the value of the copy-of attribute. It probably needs to
     // be handled like chain-next-name (kwtextframeset.cc) but for all types of frameset.
@@ -1756,7 +1757,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
     // A frame with protected contents means that the frameset is protected (makes sense)
     // A frame with protected size means that the frameset is size-protected (hmm, kword did it that way)
     // TODO implement position protection
-    QString protectList = context.styleStack().attribute( "style:protect" );
+    QString protectList = context.styleStack().attributeNS( KoXmlNS::style, "protect" );
     if ( protectList.contains( "content" ) )
         setProtectContent( true );
     if ( protectList.contains( "size" ) )
@@ -2080,7 +2081,7 @@ KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
 KWPictureFrameSet::KWPictureFrameSet( KWDocument* doc, const QDomElement& frame, const QDomElement& imageTag, KoOasisContext& context )
     : KWFrameSet( doc ), m_keepAspectRatio( true ), m_finalSize( false )
 {
-    m_name = imageTag.attribute( "draw:name" );
+    m_name = imageTag.attributeNS( KoXmlNS::draw, "name", QString::null );
     if ( doc->frameSetByName( m_name ) ) // already exists!
         m_name = doc->generateFramesetName( m_name + " %1" );
     loadOasis( frame, imageTag, context );
@@ -2254,7 +2255,7 @@ void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& 
     }
     else
     {
-        const QString href( tag.attribute("xlink:href") );
+        const QString href( tag.attributeNS( KoXmlNS::xlink, "href", QString::null) );
         if ( !href.isEmpty() && href[0] == '#' )
         {
             QString strExtension;

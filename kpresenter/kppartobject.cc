@@ -22,6 +22,7 @@
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
 #include "kpgradient.h"
+#include <koxmlns.h>
 #include <kparts/partmanager.h>
 
 #include <qpainter.h>
@@ -87,8 +88,8 @@ void KPPartObject::loadOasis(const QDomElement &element, KoOasisContext&context,
 {
     kdDebug()<<"void KPPartObject::loadOasis(const QDomElement &element)******************\n";
     child->loadOasis( element );
-    if(element.hasAttribute( "draw:name" ))
-        objectName = element.attribute("draw:name");
+    if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
+        objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
 }
 
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,

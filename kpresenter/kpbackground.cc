@@ -41,6 +41,7 @@ using namespace std;
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koGenStyles.h>
+#include <koxmlns.h>
 
 KPBackGround::KPBackGround( KPrPage *_page )
     // : footerHeight( 0 )
@@ -284,22 +285,22 @@ void KPBackGround::loadOasis(KoOasisContext & context )
     KoStyleStack& styleStack = context.styleStack();
     kdDebug()<<"KPBackGround::loadOasis()\n";
     styleStack.setTypeProperties( "drawing-page" );
-    if ( styleStack.hasAttribute( "draw:fill" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
     {
-        const QString fill = styleStack.attribute( "draw:fill" );
+        const QString fill = styleStack.attributeNS( KoXmlNS::draw, "fill" );
         kdDebug()<<"fill page  type :"<<fill<<endl;
         if ( fill == "solid" )
         {
-            setBackColor1(QColor(styleStack.attribute( "draw:fill-color" ) ) );
+            setBackColor1(QColor(styleStack.attributeNS( KoXmlNS::draw, "fill-color" ) ) );
             setBackColorType(BCT_PLAIN);
             setBackType(BT_COLOR);
         }
         else if ( fill == "bitmap" )
         {
-            QString style = styleStack.attribute( "draw:fill-image-name" );
+            QString style = styleStack.attributeNS( KoXmlNS::draw, "fill-image-name" );
             QDomElement* draw =context.oasisStyles().drawStyles()[style];
 
-            const QString href( draw->attribute("xlink:href") );
+            const QString href( draw->attributeNS( KoXmlNS::xlink, "href", QString::null) );
             kdDebug()<<" href: "<<href<<endl;
             if ( !href.isEmpty() && href[0] == '#' )
             {
@@ -324,9 +325,9 @@ void KPBackGround::loadOasis(KoOasisContext & context )
                 pictureCollection()->insertPicture( key, backPicture );
             }
 
-            if ( styleStack.hasAttribute( "style:repeat" ) )
+            if ( styleStack.hasAttributeNS( KoXmlNS::style, "repeat" ) )
             {
-                QString repeat = styleStack.attribute( "style:repeat" );
+                QString repeat = styleStack.attributeNS( KoXmlNS::style, "repeat" );
                 if ( repeat == "stretch" )
                     setBackView( BV_ZOOM );
                 else if ( repeat == "no-repeat" )
@@ -341,19 +342,19 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         }
         else if ( fill == "gradient" )
         {
-            QString style = styleStack.attribute( "draw:fill-gradient-name" );
+            QString style = styleStack.attributeNS( KoXmlNS::draw, "fill-gradient-name" );
             QDomElement *draw = context.oasisStyles().drawStyles()[style];
             if ( draw )
             {
                 //kdDebug()<<" draw style : name :"<<style<<endl;
-                setBackColor1( QColor( draw->attribute( "draw:start-color" ) ) );
-                setBackColor2( QColor( draw->attribute( "draw:end-color" ) ) );
+                setBackColor1( QColor( draw->attributeNS( KoXmlNS::draw, "start-color", QString::null ) ) );
+                setBackColor2( QColor( draw->attributeNS( KoXmlNS::draw, "end-color", QString::null ) ) );
                 setBackColorType( BCT_PLAIN );
                 setBackType(BT_COLOR);
-                QString type = draw->attribute( "draw:style" );
+                QString type = draw->attributeNS( KoXmlNS::draw, "style", QString::null );
                 if ( type == "linear" )
                 {
-                    int angle = draw->attribute( "draw:angle" ).toInt() / 10;
+                    int angle = draw->attributeNS( KoXmlNS::draw, "angle", QString::null ).toInt() / 10;
 
                     // make sure the angle is between 0 and 359
                     angle = abs( angle );
@@ -394,13 +395,13 @@ void KPBackGround::loadOasis(KoOasisContext & context )
                 // Hard to map between x- and y-center settings of ooimpress
                 // and (un-)balanced settings of kpresenter. Let's try it.
                 int x, y;
-                if ( draw->hasAttribute( "draw:cx" ) )
-                    x = draw->attribute( "draw:cx" ).remove( '%' ).toInt();
+                if ( draw->hasAttributeNS( KoXmlNS::draw, "cx" ) )
+                    x = draw->attributeNS( KoXmlNS::draw, "cx", QString::null ).remove( '%' ).toInt();
                 else
                     x = 50;
 
-                if ( draw->hasAttribute( "draw:cy" ) )
-                    y = draw->attribute( "draw:cy" ).remove( '%' ).toInt();
+                if ( draw->hasAttributeNS( KoXmlNS::draw, "cy" ) )
+                    y = draw->attributeNS( KoXmlNS::draw, "cy", QString::null ).remove( '%' ).toInt();
                 else
                     y = 50;
 

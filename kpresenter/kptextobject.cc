@@ -68,6 +68,7 @@
 #include <qclipboard.h>
 #include <koSize.h>
 #include <float.h>
+#include <koxmlns.h>
 using namespace std;
 
 #undef S_NONE // Solaris defines it in sys/signal.h
@@ -264,19 +265,19 @@ void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context
     //todo other attribute
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
-    if( styleStack.hasAttribute( "fo:padding-top" ) )
-        btop = KoUnit::parseValue( styleStack.attribute( "fo:padding-top" ) );
-    if( styleStack.hasAttribute( "fo:padding-bottom" ) )
-        bbottom = KoUnit::parseValue( styleStack.attribute( "fo:padding-bottom" ) );
-    if( styleStack.hasAttribute( "fo:padding-left") )
-        bleft = KoUnit::parseValue( styleStack.attribute( "fo:padding-left" ) );
-    if( styleStack.hasAttribute( "fo:padding-right" ) )
-        bright = KoUnit::parseValue( styleStack.attribute( "fo:padding-right" ) );
+    if( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-top" ) )
+        btop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-top" ) );
+    if( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-bottom" ) )
+        bbottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-bottom" ) );
+    if( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-left") )
+        bleft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-left" ) );
+    if( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-right" ) )
+        bright = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-right" ) );
     kdDebug()<<" KPTextObject::loadOasis : btp :"<<btop<<" bbottom :"<<bbottom<<" bleft :"<<bleft<<" bright :"<<bright<<endl;
     // vertical alignment
-    if ( styleStack.hasAttribute( "draw:textarea-vertical-align" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "textarea-vertical-align" ) )
     {
-        QString alignment = styleStack.attribute( "draw:textarea-vertical-align" );
+        QString alignment = styleStack.attributeNS( KoXmlNS::draw, "textarea-vertical-align" );
         if ( alignment == "top" )
             m_textVertAlign= KP_TOP;
         else if ( alignment == "middle" )

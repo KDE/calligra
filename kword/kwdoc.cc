@@ -61,6 +61,7 @@
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
 #include <koOasisSettings.h>
+#include <koxmlns.h>
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -1094,7 +1095,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // But, hmm, in a doc with only a table there was no reference to the master page at all...
     QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
-    QDomElement *masterPageStyle = masterPage ? oasisStyles.styles()[masterPage->attribute( "style:page-layout-name" )] : 0;
+    QDomElement *masterPageStyle = masterPage ? oasisStyles.styles()[masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
     Q_ASSERT( masterPageStyle );
     if ( masterPageStyle )
     {
@@ -1115,10 +1116,10 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             // style:width="0.018cm" style:distance-before-sep="0.101cm"
             // style:distance-after-sep="0.101cm" style:adjustment="left"
             // style:rel-width="25%" style:color="#000000"
-            QString width = footnoteSep.attribute( "style:width" );
+            QString width = footnoteSep.attributeNS( KoXmlNS::style, "width", QString::null );
 
             m_footNoteSeparatorLineWidth = KoUnit::parseValue( width );
-            QString pageWidth = footnoteSep.attribute( "style:rel-width" );
+            QString pageWidth = footnoteSep.attributeNS( KoXmlNS::style, "rel-width", QString::null );
             if ( pageWidth.endsWith( "%" ) ) {
                 pageWidth.truncate( pageWidth.length() - 1 ); // remove '%'
                 m_iFootNoteSeparatorLineLength = qRound( pageWidth.toDouble() );
@@ -1127,7 +1128,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             // Not in OOo, but in OASIS now: line type of separator (solid, dot, dash etc.)
             // m_footNoteSeparatorLineType = ...  // TODO style:line-style, added in OASIS
 
-            QString pos = footnoteSep.attribute( "style:adjustment" );
+            QString pos = footnoteSep.attributeNS( KoXmlNS::style, "adjustment", QString::null );
             if ( pos =="centered" )
                 m_footNoteSeparatorLinePos = SLP_CENTERED;
             else if ( pos =="right")

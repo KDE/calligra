@@ -27,6 +27,7 @@
 #include <qpainter.h>
 #include <koStyleStack.h>
 #include <kooasiscontext.h>
+#include <koxmlns.h>
 
 KPPointObject::KPPointObject()
     : KPShadowObject(), KPStartEndLine( L_NORMAL, L_NORMAL )
@@ -132,7 +133,7 @@ void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & cont
     //kdDebug()<<"void KPPointObject::loadOasis( const QDomElement &element )*************\n";
     KPShadowObject::loadOasis( element, context, info );
     //load point.
-    QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
+    QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
     QString pt_x, pt_y;
     double tmp_x, tmp_y;
     unsigned int index = 0;

@@ -22,14 +22,16 @@
 #include "kpgradient.h"
 #include "KPRectObjectIface.h"
 
+#include <kozoomhandler.h>
+#include <koUnit.h>
+#include <kooasiscontext.h>
+#include <koxmlns.h>
+
 #include <kdebug.h>
 #include <qregion.h>
 #include <qbitmap.h>
 #include <qdom.h>
 #include <qpainter.h>
-#include <kozoomhandler.h>
-#include <koUnit.h>
-#include <kooasiscontext.h>
 
 KPRectObject::KPRectObject()
     : KP2DObject()
@@ -88,10 +90,10 @@ bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, 
 void KPRectObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPRLoadingInfo *info)
 {
     KP2DObject::loadOasis(element, context, info);
-    if ( element.hasAttribute( "draw:corner-radius" ) )
+    if ( element.hasAttributeNS( KoXmlNS::draw, "corner-radius" ) )
     {
         //todo FIXME, conversion is not good, oo give radius and kpresenter give xRnd and yRnd 0->99
-        int radius = static_cast<int>( KoUnit::parseValue( element.attribute( "draw:corner-radius" ) ) );
+        int radius = static_cast<int>( KoUnit::parseValue( element.attributeNS( KoXmlNS::draw, "corner-radius", QString::null ) ) );
         xRnd = radius;
         yRnd = radius;
         kdDebug()<<" KPRectObject : radius xRnd :"<<xRnd <<" yRnd :"<<yRnd<<endl;

@@ -26,6 +26,7 @@
 #include "kprvariable.h"
 
 #include <kooasiscontext.h>
+#include <koxmlns.h>
 
 KPrTextDocument::KPrTextDocument( KPTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textobj->kPresenterDocument()->zoomHandler(), fc, formatter, true ), m_textobj( textobj )
@@ -50,7 +51,7 @@ bool KPrTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& conte
     {
         if ( tagName == "text:a" )
         {
-            QString href( tag.attribute("xlink:href") );
+            QString href( tag.attributeNS( KoXmlNS::xlink, "href", QString::null) );
             if ( href.startsWith("#") )
             {
                 context.styleStack().save();
@@ -72,12 +73,12 @@ bool KPrTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& conte
                 else {
                     // The save/restore of the stack is done by the caller (KoTextParag::loadOasisSpan)
                     // This allows to use the span's format for the variable.
-                    //kdDebug(32500) << "filling stack with " << spanElem.attribute( "text:style-name" ) << endl;
+                    //kdDebug(32500) << "filling stack with " << spanElem.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
                     context.fillStyleStack( spanElem, "text:style-name" );
                     text = spanElem.text();
                 }
                 textData = '#'; // hyperlink placeholder
-                // unused tag.attribute( "office:name" )
+                // unused tag.attributeNS( KoXmlNS::office, "name", QString::null )
                 KoVariableCollection& coll = context.variableCollection();
                 customItem = new KoLinkVariable( this, text, href,
                                                  coll.formatCollection()->format( "STRING" ),

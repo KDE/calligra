@@ -21,18 +21,19 @@
 
 #include "kwtextframeset.h"
 #include "kwtextdocument.h"
-#include <kovariable.h>
 #include "mailmerge.h"
 #include "kwdoc.h"
 #include "kwcommand.h"
 #include "kwviewmode.h"
+
+#include <kovariable.h>
+#include <koxmlwriter.h>
+#include <koxmlns.h>
 #include <klocale.h>
+
 #include <kdebug.h>
 #include <qdom.h>
 #include <qtimer.h>
-#include <koxmlwriter.h>
-
-
 
 //TODO saving kwvariablesetting into style.xml
 
@@ -222,8 +223,8 @@ void KWFootNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& con
     Q_ASSERT( tagName == "text:note" );
     if ( tagName == "text:note" )
     {
-        m_doc->addFootNoteRequest( elem.attribute( "text:id" ),this );
-        QString str = elem.attribute( "text:note-class" );
+        m_doc->addFootNoteRequest( elem.attributeNS( KoXmlNS::text, "id", QString::null ),this );
+        QString str = elem.attributeNS( KoXmlNS::text, "note-class", QString::null );
         //kdDebug()<<" Foot/EndNote : "<<str<<endl;
         if ( str == "footnote" )
             m_noteType = FootNote;

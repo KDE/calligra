@@ -21,14 +21,17 @@
 #include "kpgradient.h"
 #include "KPPieObjectIface.h"
 
+#include <kozoomhandler.h>
+#include <kooasiscontext.h>
+#include <koStyleStack.h>
+#include <koxmlns.h>
+
+#include <kdebug.h>
+
 #include <qregion.h>
 #include <qpicture.h>
 #include <qdom.h>
 #include <qpainter.h>
-#include <kdebug.h>
-#include <kozoomhandler.h>
-#include <kooasiscontext.h>
-#include <koStyleStack.h>
 using namespace std;
 
 KPPieObject::KPPieObject()
@@ -121,7 +124,7 @@ void KPPieObject::loadOasis(const QDomElement &element, KoOasisContext & context
 {
     kdDebug()<<"void KPPieObject::loadOasis(const QDomElement &element) ***************\n";
     KP2DObject::loadOasis(element, context, info);
-    QString kind = element.attribute( "draw:kind" );
+    QString kind = element.attributeNS( KoXmlNS::draw, "kind", QString::null );
     if ( kind == "section" )
         pieType = PT_PIE;
     else if ( kind == "cut" )
@@ -135,10 +138,10 @@ void KPPieObject::loadOasis(const QDomElement &element, KoOasisContext & context
     }
     kdDebug()<<" type of pie object :"<<( ( pieType == PT_PIE ) ? "pie" : ( pieType == PT_CHORD )?"cut" : "arc" )<<endl;
 
-    int start = (int) ( element.attribute( "draw:start-angle" ).toDouble() );
+    int start = (int) ( element.attributeNS( KoXmlNS::draw, "start-angle", QString::null ).toDouble() );
     p_angle=start*16;
 
-    int end = (int) ( element.attribute( "draw:end-angle" ).toDouble() );
+    int end = (int) ( element.attributeNS( KoXmlNS::draw, "end-angle", QString::null ).toDouble() );
     if ( end < start )
         p_len = ( ( 360 - start + end ) * 16 );
     else
@@ -150,9 +153,9 @@ void KPPieObject::loadOasis(const QDomElement &element, KoOasisContext & context
 
     //fixme !!!!!!
     //we use value use into oo and not style (see kplineobject)
-    if ( styleStack.hasAttribute( "draw:marker-start" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "marker-start" ) )
     {
-        QString type = styleStack.attribute( "draw:marker-start" );
+        QString type = styleStack.attributeNS( KoXmlNS::draw, "marker-start" );
         kdDebug()<<"type arrow start :"<<type<<endl;
         if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
              type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
@@ -168,9 +171,9 @@ void KPPieObject::loadOasis(const QDomElement &element, KoOasisContext & context
         else if ( type == "Double Arrow" )
             lineBegin = L_DOUBLE_LINE_ARROW;
     }
-    if ( styleStack.hasAttribute( "draw:marker-end" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "marker-end" ) )
     {
-        QString type = styleStack.attribute( "draw:marker-end" );
+        QString type = styleStack.attributeNS( KoXmlNS::draw, "marker-end" );
         kdDebug()<<"type arrow end :"<<type<<endl;
         if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
              type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )

@@ -20,6 +20,10 @@
 
 #include "kpresenter_utils.h"
 
+#include <koxmlns.h>
+#include <kozoomhandler.h>
+#include <koPoint.h>
+
 #include <qpainter.h>
 #include <qpointarray.h>
 #include <qpoint.h>
@@ -27,8 +31,6 @@
 #include <qsize.h>
 #include <qbitmap.h>
 #include <qcursor.h>
-#include <kozoomhandler.h>
-#include <koPoint.h>
 #include <qdatetime.h>
 #include <qdom.h>
 
@@ -394,9 +396,9 @@ int loadOasisTimer( const QString & timer )
 
 int readOasisSettingsInt( const QDomElement & element )
 {
-    if ( element.hasAttribute( "config:type" ) )
+    if ( element.hasAttributeNS( KoXmlNS::config, "type" ) )
     {
-        QString type = element.attribute( "config:type" );
+        QString type = element.attributeNS( KoXmlNS::config, "type", QString::null );
         QString str = element.text();
         bool b;
         int value = str.toInt( &b );
@@ -407,9 +409,9 @@ int readOasisSettingsInt( const QDomElement & element )
 
 double readOasisSettingsDouble( const QDomElement & element )
 {
-    if ( element.hasAttribute( "config:type" ) )
+    if ( element.hasAttributeNS( KoXmlNS::config, "type" ) )
     {
-        QString type = element.attribute( "config:type" );
+        QString type = element.attributeNS( KoXmlNS::config, "type", QString::null );
         QString str = element.text();
         bool b;
         double value = str.toDouble( &b );
@@ -420,9 +422,9 @@ double readOasisSettingsDouble( const QDomElement & element )
 
 bool readOasisSettingsBool( const QDomElement & element )
 {
-    if ( element.hasAttribute( "config:type" ) )
+    if ( element.hasAttributeNS( KoXmlNS::config, "type" ) )
     {
-        QString type = element.attribute( "config:type" );
+        QString type = element.attributeNS( KoXmlNS::config, "type", QString::null );
         QString str = element.text();
         return ( str == "true" ? true : false );
     }
@@ -431,9 +433,9 @@ bool readOasisSettingsBool( const QDomElement & element )
 
 QString readOasisSettingsString( const QDomElement & element )
 {
-    if ( element.hasAttribute( "config:type" ) )
+    if ( element.hasAttributeNS( KoXmlNS::config, "type" ) )
     {
-        QString type = element.attribute( "config:type" );
+        QString type = element.attributeNS( KoXmlNS::config, "type", QString::null );
         QString str = element.text();
         return str;
     }

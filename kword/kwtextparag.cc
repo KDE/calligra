@@ -28,6 +28,7 @@
 #include <kovariable.h>
 #include <koparagcounter.h>
 #include <kooasiscontext.h>
+#include <koxmlns.h>
 #include <koOasisStyles.h>
 
 #include <klocale.h>
@@ -792,8 +793,8 @@ void KWTextParag::loadOasis( const QDomElement& paragElement, KoOasisContext& co
 
     KWDocument * doc = kwTextDocument()->textFrameSet()->kWordDocument();
     QString& currentMasterPageRef = doc->loadingInfo()->m_currentMasterPage;
-    QDomElement* paragraphStyle = context.oasisStyles().styles()[paragElement.attribute( "text:style-name" )];
-    QString masterPageName = paragraphStyle ? paragraphStyle->attribute( "style:master-page-name" ) : QString::null;
+    QDomElement* paragraphStyle = context.oasisStyles().styles()[paragElement.attributeNS( KoXmlNS::text, "style-name", QString::null )];
+    QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
     if ( masterPageName.isEmpty() )
         masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
     if ( masterPageName != currentMasterPageRef )

@@ -21,6 +21,8 @@
 #include "KPresenterObjectIface.h"
 
 #include "kpobject.h"
+#include "kpresenter_doc.h"
+#include "kpresenter_utils.h"
 
 #include <qpainter.h>
 #include <qwmatrix.h>
@@ -41,9 +43,8 @@
 #include <koRect.h>
 #include <koSize.h>
 #include <koPoint.h>
+#include <koxmlns.h>
 #include <kdebug.h>
-#include "kpresenter_doc.h"
-#include "kpresenter_utils.h"
 
 const QString &KPObject::tagORIG=KGlobal::staticQString("ORIG");
 const QString &KPObject::attrX=KGlobal::staticQString("x");
@@ -121,7 +122,7 @@ void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QSt
 
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
-    if ( styleStack.hasAttribute( attr ) )
+    if ( styleStack.hasAttribute( attr ) ) // TODO port to hasAttributeNS (what's the namespace?)
     {
         QString style = styleStack.attribute( attr );
         //kdDebug()<<" marker style is  : "<<style<<endl;
@@ -132,9 +133,9 @@ void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QSt
         //kdDebug()<<" marker have oasis style defined :"<<draw<<endl;
         if ( draw )
         {
-            if( draw->hasAttribute( "svg:d" ))
+            if( draw->hasAttributeNS( KoXmlNS::svg, "d" ))
             {
-                QString str = draw->attribute( "svg:d" );
+                QString str = draw->attributeNS( KoXmlNS::svg, "d", QString::null );
                 kdDebug()<<" svg type = "<<str<<endl;
                 if ( str == lineEndBeginSvg( L_ARROW ) )
                     _element = L_ARROW;
@@ -552,18 +553,18 @@ bool KPObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int ob
 
 void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
-    if(element.hasAttribute( "draw:name" ))
-       objectName = element.attribute("draw:name");
-    orig.setX( KoUnit::parseValue( element.attribute( "svg:x" ) ) );
-    orig.setY( KoUnit::parseValue( element.attribute( "svg:y" ) ) );
-    ext.setWidth(KoUnit::parseValue( element.attribute( "svg:width" )) );
-    ext.setHeight(KoUnit::parseValue( element.attribute( "svg:height" ) ) );
+    if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
+       objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
+    orig.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) ) );
+    orig.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
+    ext.setWidth(KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null )) );
+    ext.setHeight(KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) ) );
     //kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "" ); //no type default type
-    if( element.hasAttribute( "draw:transform" ))
+    if( element.hasAttributeNS( KoXmlNS::draw, "transform" ))
         {
-            QString transform = element.attribute( "draw:transform" );
+            QString transform = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
             kdDebug()<<" transform action :"<<transform<<endl;
             if( transform.contains("rotate ("))
                 {
@@ -583,18 +584,18 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         }
     QDomElement *animation = 0L;
     lstAnimation *tmp = 0L;
-    if( element.hasAttribute("draw:id"))
+    if( element.hasAttributeNS( KoXmlNS::draw, "id"))
     {
-        tmp = info->animationShowById(element.attribute("draw:id") );
+        tmp = info->animationShowById(element.attributeNS( KoXmlNS::draw, "id", QString::null) );
         if ( tmp )
             animation = tmp->element;
     }
 
     if( animation)
     {
-        QString effectStr = animation->attribute("presentation:effect");
-        QString dir = animation->attribute("presentation:direction");
-        QString speed = animation->attribute( "presentation:speed" );
+        QString effectStr = animation->attributeNS( KoXmlNS::presentation, "effect", QString::null);
+        QString dir = animation->attributeNS( KoXmlNS::presentation, "direction", QString::null);
+        QString speed = animation->attributeNS( KoXmlNS::presentation, "speed", QString::null );
         appearStep = tmp->order;
         kdDebug()<<" appear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
 
@@ -613,9 +614,9 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         else
             kdDebug()<<" speed argument is not defined :"<<speed<<endl;
 
-        if ( animation->hasAttribute("presentation:animation-delay" ) )
+        if ( animation->hasAttributeNS( KoXmlNS::presentation, "animation-delay" ) )
         {
-            appearTimer = loadOasisTimer(animation->attribute("presentation:animation-delay" ) );
+            appearTimer = loadOasisTimer(animation->attributeNS( KoXmlNS::presentation, "animation-delay", QString::null ) );
         }
         if (effectStr=="fade")
         {
@@ -657,9 +658,9 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         if ( !sound.isNull() )
         {
             kdDebug()<<" object has sound effect \n";
-            if ( sound.hasAttribute( "xlink:href" ) )
+            if ( sound.hasAttributeNS( KoXmlNS::xlink, "href" ) )
             {
-                a_fileName =sound.attribute( "xlink:href" );
+                a_fileName =sound.attributeNS( KoXmlNS::xlink, "href", QString::null );
                 appearSoundEffect = true;
             }
         }
@@ -667,18 +668,18 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
 
     animation = 0L;
     tmp = 0L;
-    if( element.hasAttribute("draw:id"))
+    if( element.hasAttributeNS( KoXmlNS::draw, "id"))
     {
-        tmp = info->animationHideById(element.attribute("draw:id") );
+        tmp = info->animationHideById(element.attributeNS( KoXmlNS::draw, "id", QString::null) );
         if ( tmp )
             animation = tmp->element;
     }
 
     if( animation)
     {
-        QString effectStr = animation->attribute("presentation:effect");
-        QString dir = animation->attribute("presentation:direction");
-        QString speed = animation->attribute( "presentation:speed" );
+        QString effectStr = animation->attributeNS( KoXmlNS::presentation, "effect", QString::null);
+        QString dir = animation->attributeNS( KoXmlNS::presentation, "direction", QString::null);
+        QString speed = animation->attributeNS( KoXmlNS::presentation, "speed", QString::null );
         kdDebug()<<" appear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
         disappearStep = tmp->order;
 
@@ -697,9 +698,9 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         else
             kdDebug()<<" speed argument is not defined :"<<speed<<endl;
 
-        if ( animation->hasAttribute("presentation:animation-delay" ) )
+        if ( animation->hasAttributeNS( KoXmlNS::presentation, "animation-delay" ) )
         {
-            disappearTimer = loadOasisTimer(animation->attribute("presentation:animation-delay" ) );
+            disappearTimer = loadOasisTimer(animation->attributeNS( KoXmlNS::presentation, "animation-delay", QString::null ) );
         }
         if (effectStr=="fade")
         {
@@ -744,9 +745,9 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         if ( !sound.isNull() )
         {
             kdDebug()<<" object has sound effect \n";
-            if ( sound.hasAttribute( "xlink:href" ) )
+            if ( sound.hasAttributeNS( KoXmlNS::xlink, "href" ) )
             {
-                d_fileName =sound.attribute( "xlink:href" );
+                d_fileName =sound.attributeNS( KoXmlNS::xlink, "href", QString::null );
                 disappearSoundEffect = true;
             }
         }
@@ -757,10 +758,10 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
          ( element.hasAttribute( "type" ) && element.attribute( "type" ) == "4" ) )
     {
         kdDebug()<<" text document !!!!!\n";
-        if ( styleStack.hasAttribute( "fo:text-shadow" ) &&
-             styleStack.attribute( "fo:text-shadow" ) != "none" )
+        if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-shadow" ) &&
+             styleStack.attributeNS( KoXmlNS::fo, "text-shadow" ) != "none" )
         {
-            QString distance = styleStack.attribute( "fo:text-shadow" );
+            QString distance = styleStack.attributeNS( KoXmlNS::fo, "text-shadow" );
             distance.truncate( distance.find( ' ' ) );
             shadowDistance = (int)KoUnit::parseValue( distance );
             shadowDirection = SD_RIGHT_BOTTOM;
@@ -772,32 +773,32 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
 // draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:shadow="visible" draw:move-protect="true" draw:size-protect="true"
     //kpresenter doesn't have two attribute for protect move and protect size perhaps create two argument for 1.4
     styleStack.setTypeProperties( "graphic" );
-    if ( styleStack.hasAttribute("draw:move-protect" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "move-protect" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.attribute("draw:move-protect" )<<endl;
-        protect = ( styleStack.attribute("draw:move-protect" ) == "true" );
+        kdDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.attributeNS( KoXmlNS::draw, "move-protect" )<<endl;
+        protect = ( styleStack.attributeNS( KoXmlNS::draw, "move-protect" ) == "true" );
     }
-    if ( styleStack.hasAttribute("draw:size-protect" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "size-protect" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.attribute("draw:size-protect" )<<endl;
-        protect = ( styleStack.attribute("draw:size-protect" ) == "true" );
+        kdDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.attributeNS( KoXmlNS::draw, "size-protect" )<<endl;
+        protect = ( styleStack.attributeNS( KoXmlNS::draw, "size-protect" ) == "true" );
     }
 
     //not supported into kpresenter
-    if ( styleStack.hasAttribute("draw:textarea-vertical-align" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "textarea-vertical-align" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.attribute("draw:textarea-vertical-align" )<<endl;
+        kdDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.attributeNS( KoXmlNS::draw, "textarea-vertical-align" )<<endl;
     }
-    if ( styleStack.hasAttribute("draw:textarea-horizontal-align") )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "textarea-horizontal-align") )
     {
-        kdDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.attribute("draw:textarea-horizontal-align" )<<endl;
+        kdDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.attributeNS( KoXmlNS::draw, "textarea-horizontal-align" )<<endl;
     }
-    if ( styleStack.hasAttribute( "draw:shadow" ) &&
-              styleStack.attribute( "draw:shadow") == "visible" )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "shadow" ) &&
+              styleStack.attributeNS( KoXmlNS::draw, "shadow") == "visible" )
     {
         // use the shadow attribute to indicate an object-shadow
-        double x = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-x" ) );
-        double y = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-y" ) );
+        double x = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::draw, "shadow-offset-x" ) );
+        double y = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::draw, "shadow-offset-y" ) );
         kdDebug()<<" shadow x : "<<x<<" shadow y :"<<y<<endl;
         if ( x < 0 && y < 0 )
         {
@@ -839,8 +840,8 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
             shadowDirection = SD_LEFT;
             shadowDistance = (int) fabs ( x );
         }
-        if ( styleStack.hasAttribute ( "draw:shadow-color" ) )
-            shadowColor= QColor(styleStack.attribute( "draw:shadow-color" ) );
+        if ( styleStack.hasAttributeNS( KoXmlNS::draw, "shadow-color" ) )
+            shadowColor= QColor(styleStack.attributeNS( KoXmlNS::draw, "shadow-color" ) );
         kdDebug()<<" shadow color : "<<shadowColor.name()<<endl;
     }
 }
@@ -1651,15 +1652,15 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
     KPObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
-    if ( styleStack.hasAttribute( "draw:stroke" ))
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "stroke" ))
     {
-        if ( styleStack.attribute( "draw:stroke" ) == "none" )
+        if ( styleStack.attributeNS( KoXmlNS::draw, "stroke" ) == "none" )
             pen.setStyle(Qt::NoPen );
-        else if ( styleStack.attribute( "draw:stroke" ) == "solid" )
+        else if ( styleStack.attributeNS( KoXmlNS::draw, "stroke" ) == "solid" )
             pen.setStyle(Qt::SolidLine );
-        else if ( styleStack.attribute( "draw:stroke" ) == "dash" )
+        else if ( styleStack.attributeNS( KoXmlNS::draw, "stroke" ) == "dash" )
         {
-            QString style = styleStack.attribute( "draw:stroke-dash" );
+            QString style = styleStack.attributeNS( KoXmlNS::draw, "stroke-dash" );
 
             kdDebug()<<" stroke style is  : "<<style<<endl;
             //type not defined by default
@@ -1669,27 +1670,27 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
             if ( draw )
             {
                 //FIXME
-                if ( draw->attribute( "draw:style" )=="rect" )
+                if ( draw->attributeNS( KoXmlNS::draw, "style", QString::null )=="rect" )
                 {
                     if ( draw->attribute( "draw:dots1" )=="1" &&
                          draw->attribute( "draw:dots2" )=="1" &&
                          draw->attribute( "draw:dots1-length" )=="0.508cm" &&
                          draw->attribute( "draw:dots2-length" )=="0.508cm" &&
-                         draw->attribute( "draw:distance" )=="0.508cm" )
+                         draw->attributeNS( KoXmlNS::draw, "distance", QString::null )=="0.508cm" )
                         pen.setStyle( Qt::DashLine );
                     else if ( draw->attribute( "draw:dots1" )=="1" &&
-                              draw->attribute( "draw:distance" )=="0.257cm" )
+                              draw->attributeNS( KoXmlNS::draw, "distance", QString::null )=="0.257cm" )
                         pen.setStyle(Qt::DotLine );
                     else if ( draw->attribute( "draw:dots1" )=="1" &&
                          draw->attribute( "draw:dots2" )=="1" &&
                          draw->attribute( "draw:dots1-length" )=="0.051cm" &&
                          draw->attribute( "draw:dots2-length" )=="0.254cm" &&
-                         draw->attribute( "draw:distance" )=="0.127cm" )
+                         draw->attributeNS( KoXmlNS::draw, "distance", QString::null )=="0.127cm" )
                         pen.setStyle(Qt::DashDotLine );
                     else if ( draw->attribute( "draw:dots1" )=="1" &&
                          draw->attribute( "draw:dots2" )=="2" &&
                          draw->attribute( "draw:dots1-length" )=="0.203cm" &&
-                         draw->attribute( "draw:distance" )=="0.203cm" )
+                         draw->attributeNS( KoXmlNS::draw, "distance", QString::null )=="0.203cm" )
                         pen.setStyle(Qt::DashDotDotLine );
                     else
                     {
@@ -1701,10 +1702,10 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
             }
         }
         //FIXME witdh pen style is not good :(
-        if ( styleStack.hasAttribute( "svg:stroke-width" ) )
-            pen.setWidth( (int) KoUnit::parseValue( styleStack.attribute( "svg:stroke-width" ) ) );
-        if ( styleStack.hasAttribute( "svg:stroke-color" ) )
-            pen.setColor( styleStack.attribute( "svg:stroke-color" ) );
+        if ( styleStack.hasAttributeNS( KoXmlNS::svg, "stroke-width" ) )
+            pen.setWidth( (int) KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::svg, "stroke-width" ) ) );
+        if ( styleStack.hasAttributeNS( KoXmlNS::svg, "stroke-color" ) )
+            pen.setColor( styleStack.attributeNS( KoXmlNS::svg, "stroke-color" ) );
     }
     else
         pen = defaultPen();
@@ -2023,7 +2024,7 @@ QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
     {
         if ( type == "linear" )
         {
-            int angle = draw->attribute( "draw:angle" ).toInt() / 10;
+            int angle = draw->attributeNS( KoXmlNS::draw, "angle", QString::null ).toInt() / 10;
 
             // make sure the angle is between 0 and 359
             angle = abs( angle );
@@ -2064,13 +2065,13 @@ QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
         // Hard to map between x- and y-center settings of ooimpress
         // and (un-)balanced settings of kpresenter. Let's try it.
         int x, y;
-        if ( draw->hasAttribute( "draw:cx" ) )
-            x = draw->attribute( "draw:cx" ).remove( '%' ).toInt();
+        if ( draw->hasAttributeNS( KoXmlNS::draw, "cx" ) )
+            x = draw->attributeNS( KoXmlNS::draw, "cx", QString::null ).remove( '%' ).toInt();
         else
             x = 50;
 
-        if ( draw->hasAttribute( "draw:cy" ) )
-            y = draw->attribute( "draw:cy" ).remove( '%' ).toInt();
+        if ( draw->hasAttributeNS( KoXmlNS::draw, "cy" ) )
+            y = draw->attributeNS( KoXmlNS::draw, "cy", QString::null ).remove( '%' ).toInt();
         else
             y = 50;
 
@@ -2107,19 +2108,19 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
     styleStack.setTypeProperties( "graphic" );
 
 
-    if ( styleStack.hasAttribute( "draw:fill" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
     {
-        const QString fill = styleStack.attribute( "draw:fill" );
+        const QString fill = styleStack.attributeNS( KoXmlNS::draw, "fill" );
         kdDebug()<<" load object gradient fill type :"<<fill<<endl;
 
         if ( fill == "solid" )
         {
             tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
-            if ( styleStack.hasAttribute( "draw:fill-color" ) )
-                tmpBrush.setColor(styleStack.attribute( "draw:fill-color" ) );
-            if ( styleStack.hasAttribute( "draw:transparency" ) )
+            if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill-color" ) )
+                tmpBrush.setColor(styleStack.attributeNS( KoXmlNS::draw, "fill-color" ) );
+            if ( styleStack.hasAttributeNS( KoXmlNS::draw, "transparency" ) )
             {
-                QString transparency = styleStack.attribute( "draw:transparency" );
+                QString transparency = styleStack.attributeNS( KoXmlNS::draw, "transparency" );
                 if ( transparency == "94%" )
                 {
                     tmpBrush.setStyle(Qt::Dense1Pattern);
@@ -2160,7 +2161,7 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
         }
         else if ( fill == "hatch" )
         {
-            QString style = styleStack.attribute( "draw:fill-hatch-name" );
+            QString style = styleStack.attributeNS( KoXmlNS::draw, "fill-hatch-name" );
             kdDebug()<<" hatch style is  : "<<style<<endl;
 
             //type not defined by default
@@ -2170,28 +2171,28 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
             {
                 kdDebug()<<"We have a style\n";
                 int angle = 0;
-                if( draw->hasAttribute( "draw:rotation" ))
+                if( draw->hasAttributeNS( KoXmlNS::draw, "rotation" ))
                 {
-                    angle = (draw->attribute( "draw:rotation" ).toInt())/10;
+                    angle = (draw->attributeNS( KoXmlNS::draw, "rotation", QString::null ).toInt())/10;
                     kdDebug()<<"angle :"<<angle<<endl;
                 }
-                if(draw->hasAttribute( "draw:color" ) )
+                if(draw->hasAttributeNS( KoXmlNS::draw, "color" ) )
                 {
-                    //kdDebug()<<" draw:color :"<<draw->attribute( "draw:color" )<<endl;
-                    tmpBrush.setColor(draw->attribute( "draw:color" ) );
+                    //kdDebug()<<" draw:color :"<<draw->attributeNS( KoXmlNS::draw, "color", QString::null )<<endl;
+                    tmpBrush.setColor(draw->attributeNS( KoXmlNS::draw, "color", QString::null ) );
                 }
-                if( draw->hasAttribute( "draw:distance" ))
+                if( draw->hasAttributeNS( KoXmlNS::draw, "distance" ))
                 {
                     //todo implemente it into kpresenter
                 }
-                if( draw->hasAttribute("draw:display-name"))
+                if( draw->hasAttributeNS( KoXmlNS::draw, "display-name"))
                 {
                     //todo implement it into kpresenter
                 }
-                if( draw->hasAttribute( "draw:style" ))
+                if( draw->hasAttributeNS( KoXmlNS::draw, "style" ))
                 {
                     //todo implemente it into kpresenter
-                    QString styleHash = draw->attribute( "draw:style" );
+                    QString styleHash = draw->attributeNS( KoXmlNS::draw, "style", QString::null );
                     if( styleHash == "single")
                     {
                         switch( angle )
@@ -2255,21 +2256,21 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
             // otherwise the properties dialog for the object won't
             // display the preview for the gradient.
 
-            QString style = styleStack.attribute( "draw:fill-gradient-name" );
+            QString style = styleStack.attributeNS( KoXmlNS::draw, "fill-gradient-name" );
             kdDebug()<<" style gradient name :"<<style<<endl;
             QDomElement* draw = context.oasisStyles().drawStyles()[style];
             kdDebug()<<" draw : "<<draw<<endl;
 
             if ( draw )
             {
-                gColor1 =  draw->attribute( "draw:start-color" );
-                gColor2 = draw->attribute( "draw:end-color" );
+                gColor1 =  draw->attributeNS( KoXmlNS::draw, "start-color", QString::null );
+                gColor2 = draw->attributeNS( KoXmlNS::draw, "end-color", QString::null );
 
-                QString type = draw->attribute( "draw:style" );
+                QString type = draw->attributeNS( KoXmlNS::draw, "style", QString::null );
                 kdDebug()<<" type :"<<type<<endl;
                 if ( type == "linear" )
                 {
-                    int angle = draw->attribute( "draw:angle" ).toInt() / 10;
+                    int angle = draw->attributeNS( KoXmlNS::draw, "angle", QString::null ).toInt() / 10;
 
                     // make sure the angle is between 0 and 359
                     angle = abs( angle );
@@ -2310,13 +2311,13 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
                 // Hard to map between x- and y-center settings of ooimpress
                 // and (un-)balanced settings of kpresenter. Let's try it.
                 int x, y;
-                if ( draw->hasAttribute( "draw:cx" ) )
-                    x = draw->attribute( "draw:cx" ).remove( '%' ).toInt();
+                if ( draw->hasAttributeNS( KoXmlNS::draw, "cx" ) )
+                    x = draw->attributeNS( KoXmlNS::draw, "cx", QString::null ).remove( '%' ).toInt();
                 else
                     x = 50;
 
-                if ( draw->hasAttribute( "draw:cy" ) )
-                    y = draw->attribute( "draw:cy" ).remove( '%' ).toInt();
+                if ( draw->hasAttributeNS( KoXmlNS::draw, "cy" ) )
+                    y = draw->attributeNS( KoXmlNS::draw, "cy", QString::null ).remove( '%' ).toInt();
                 else
                     y = 50;
 

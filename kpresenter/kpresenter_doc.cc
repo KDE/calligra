@@ -99,6 +99,7 @@
 #include "koApplication.h"
 #include <koOasisStyles.h>
 #include <kooasiscontext.h>
+#include <koxmlns.h>
 
 #include "kprloadinginfo.h"
 
@@ -1276,15 +1277,15 @@ void KPresenterDoc::loadOasisPresentationSettings( QDomNode &settingsDoc )
 {
     //kdDebug()<<"presentation:settings ********************************************* \n";
     QDomElement settings( settingsDoc.toElement() );
-    //kdDebug()<<"settings.attribute(presentation:endless) :"<<settings.attribute("presentation:endless")<<endl;
-    if (settings.attribute("presentation:endless")=="true")
+    //kdDebug()<<"settings.attribute(presentation:endless) :"<<settings.attributeNS( KoXmlNS::presentation, "endless", QString::null)<<endl;
+    if (settings.attributeNS( KoXmlNS::presentation, "endless", QString::null)=="true")
         _spInfiniteLoop = true;
 
-    if (settings.attribute("presentation:force-manual")=="true")
+    if (settings.attributeNS( KoXmlNS::presentation, "force-manual", QString::null)=="true")
         _spManualSwitch = true;
-    if ( settings.hasAttribute( "presentation:show" ) )
+    if ( settings.hasAttributeNS( KoXmlNS::presentation, "show" ) )
     {
-        m_presentationName = settings.attribute( "presentation:show" );
+        m_presentationName = settings.attributeNS( KoXmlNS::presentation, "show", QString::null );
         kdDebug()<<" default presentation name :"<<m_presentationName<<endl;
     }
     loadOasisPresentationCustomSlideShow( settingsDoc );
@@ -1298,9 +1299,9 @@ void KPresenterDoc::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc 
 	QCString tagName = e.tagName().latin1();
         if ( tagName == "presentation:show" )
         {
-            //kdDebug()<<" e.attribute(presentation:name) :"<<e.attribute("presentation:name")<< " e.attribute(presentation:pages) :"<<e.attribute("presentation:pages")<<endl;
-            QStringList tmp = QStringList::split( ",", e.attribute("presentation:pages") );
-            m_loadingInfo->m_tmpCustomListMap.insert( e.attribute("presentation:name"), tmp );
+            //kdDebug()<<" e.attribute(presentation:name) :"<<e.attributeNS( KoXmlNS::presentation, "name", QString::null)<< " e.attribute(presentation:pages) :"<<e.attributeNS( KoXmlNS::presentation, "pages", QString::null)<<endl;
+            QStringList tmp = QStringList::split( ",", e.attributeNS( KoXmlNS::presentation, "pages", QString::null) );
+            m_loadingInfo->m_tmpCustomListMap.insert( e.attributeNS( KoXmlNS::presentation, "name", QString::null), tmp );
         }
     }
 }
@@ -1508,7 +1509,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     kdDebug()<<" end load sticky oasis object \n";
 
     Q_ASSERT( master );
-    QDomElement *style =master ? oasisStyles.styles()[master->attribute( "style:page-layout-name" )] : 0;
+    QDomElement *style =master ? oasisStyles.styles()[master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
     QDomElement *backgroundStyle = oasisStyles.styles()[ "Standard-background"];
     kdDebug()<<"Standard background "<<backgroundStyle<<endl;
     // parse all pages
@@ -1555,21 +1556,21 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                     newpage = m_pageList.at(pos);
                 }
             }
-            //m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
+            //m_pageList.at(pos)->insertManualTitle(dp.attributeNS( KoXmlNS::draw, "name", QString::null ));
 
             //necessary to create a unique name for page
-            QString str = dp.attribute( "draw:name" );
-            QString idPage = dp.attribute( "draw:id" );
+            QString str = dp.attributeNS( KoXmlNS::draw, "name", QString::null );
+            QString idPage = dp.attributeNS( KoXmlNS::draw, "id", QString::null );
             if ( str != QString( "page%1" ).arg( idPage ) )
                 newpage->insertManualTitle(str);
             context.styleStack().setTypeProperties( "drawing-page" );
-            if ( context.styleStack().hasAttribute( "draw:fill" )
-                 || context.styleStack().hasAttribute( "presentation:transition-style" ) )
+            if ( context.styleStack().hasAttributeNS( KoXmlNS::draw, "fill" )
+                 || context.styleStack().hasAttributeNS( KoXmlNS::presentation, "transition-style" ) )
             {
                 kdDebug()<<" fill or presentation-style found \n";
                 newpage->loadOasis( context );
             }
-            else if ( !context.styleStack().hasAttribute( "draw:fill" ) && backgroundStyle)
+            else if ( !context.styleStack().hasAttributeNS( KoXmlNS::draw, "fill" ) && backgroundStyle)
             {
                 context.styleStack().save();
                 context.addStyles( backgroundStyle );
@@ -1651,7 +1652,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         else if ( name == "draw:circle" || name == "draw:ellipse" )
         {
             fillStyleStack( o, context );
-            if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
+            if ( o.hasAttributeNS( KoXmlNS::draw, "kind" ) ) // pie, chord or arc
             {
                 KPPieObject *kppieobject = new KPPieObject();
                 kppieobject->loadOasis(o, context, m_loadingInfo);
@@ -1726,7 +1727,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             // parse line we use relative position
             // see http://www.w3.org/TR/SVG/paths.html#PathData
             // see svgpathparser.cc (ksvg)
-            QString pathDefinition = o.attribute("svg:d");
+            QString pathDefinition = o.attributeNS( KoXmlNS::svg, "d", QString::null);
             kdDebug()<<"pathDefinition :"<<pathDefinition<<endl;
             fillStyleStack( o, context );
 
@@ -1838,8 +1839,8 @@ int KPresenterDoc::createPresentationAnimation(const QDomElement& element, int o
 	kdDebug()<<"(createPresentationAnimation) tagName found :"<<tagName<<endl;
         if ( tagName == "presentation:show-shape")
         {
-            Q_ASSERT( e.hasAttribute( "draw:shape-id" ) );
-            QString name = e.attribute( "draw:shape-id" );
+            Q_ASSERT( e.hasAttributeNS( KoXmlNS::draw, "shape-id" ) );
+            QString name = e.attributeNS( KoXmlNS::draw, "shape-id", QString::null );
 	    kdDebug()<<" insert animation show style : name :"<<name<<endl;
             QDomElement* ep = new QDomElement( e );
             lstAnimation *tmp = new lstAnimation;
@@ -1852,8 +1853,8 @@ int KPresenterDoc::createPresentationAnimation(const QDomElement& element, int o
         }
         else if ( tagName == "presentation:hide-shape")
         {
-            Q_ASSERT( e.hasAttribute( "draw:shape-id" ) );
-            QString name = e.attribute( "draw:shape-id" );
+            Q_ASSERT( e.hasAttributeNS( KoXmlNS::draw, "shape-id" ) );
+            QString name = e.attributeNS( KoXmlNS::draw, "shape-id", QString::null );
 	    kdDebug()<<" insert animation hide style : name :"<<name<<endl;
             QDomElement* ep = new QDomElement( e );
             lstAnimation *tmp = new lstAnimation;
@@ -1879,33 +1880,33 @@ int KPresenterDoc::createPresentationAnimation(const QDomElement& element, int o
 void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisContext & context )
 {
     // find all styles associated with an object and push them on the stack
-    if ( object.hasAttribute( "presentation:style-name" ))
+    if ( object.hasAttributeNS( KoXmlNS::presentation, "style-name" ))
     {
         //kdDebug()<<"Add 'presentation:style-name' \n";
-        addStyles( context.oasisStyles().styles()[object.attribute( "presentation:style-name" )], context );
+        addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::presentation, "style-name", QString::null )], context );
     }
-    if ( object.hasAttribute( "draw:style-name" ) )
+    if ( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        //kdDebug()<<"draw:style-name :"<<object.attribute( "draw:style-name" )<<endl;
-        addStyles( context.oasisStyles().styles()[object.attribute( "draw:style-name" )], context);
+        //kdDebug()<<"draw:style-name :"<<object.attributeNS( KoXmlNS::draw, "style-name", QString::null )<<endl;
+        addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "style-name", QString::null )], context);
     }
-    if ( object.hasAttribute( "draw:text-style-name" ) )
+    if ( object.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) )
     {
         //kdDebug()<<"Add 'draw:text-style-name' \n";
-        addStyles( context.oasisStyles().styles()[object.attribute( "draw:text-style-name" )], context );
+        addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "text-style-name", QString::null )], context );
     }
-    if ( object.hasAttribute( "text:style-name" ) )
+    if ( object.hasAttributeNS( KoXmlNS::text, "style-name" ) )
     {
-        //kdDebug()<<"Add 'text:style-name' : "<<object.attribute( "text:style-name" )<<endl;
-        addStyles( context.oasisStyles().styles()[object.attribute( "text:style-name" )], context );
+        //kdDebug()<<"Add 'text:style-name' : "<<object.attributeNS( KoXmlNS::text, "style-name", QString::null )<<endl;
+        addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::text, "style-name", QString::null )], context );
     }
 }
 
 void KPresenterDoc::addStyles( const QDomElement* style, KoOasisContext & context )
 {
     // this function is necessary as parent styles can have parents themself
-    if ( style->hasAttribute( "style:parent-style-name" ) )
-        addStyles( context.oasisStyles().styles()[style->attribute( "style:parent-style-name" )], context );
+    if ( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
+        addStyles( context.oasisStyles().styles()[style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null )], context );
     context.addStyles( style );
 }
 

@@ -31,6 +31,7 @@
 #include <koUnit.h>
 #include <kooasiscontext.h>
 #include <math.h>
+#include <koxmlns.h>
 
 using namespace std;
 
@@ -142,7 +143,7 @@ void KPPolygonObject::loadOasis( const QDomElement &element, KoOasisContext & co
     kdDebug()<<"void KPPolygonObject::loadOasis( const QDomElement &element )***********\n";
     KP2DObject::loadOasis( element,context, info );
     //load point.
-    QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
+    QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
 
     QString pt_x, pt_y;
     double tmp_x, tmp_y;

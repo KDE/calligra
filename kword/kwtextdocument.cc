@@ -27,6 +27,7 @@
 #include "kwanchor.h"
 
 #include <kooasiscontext.h>
+#include <koxmlns.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -159,13 +160,13 @@ void KWTextDocument::appendBookmark( KoTextParag* parag, int pos, KoTextParag* e
 void KWTextDocument::loadOasisFootnote( const QDomElement& tag, KoOasisContext& context,
                                         KoTextCustomItem* & customItem )
 {
-    const QString frameName( tag.attribute("text:id") );
+    const QString frameName( tag.attributeNS( KoXmlNS::text, "id", QString::null) );
     const QString tagName( tag.tagName() );
     QDomElement citationElem = tag.namedItem( tagName + "-citation" ).toElement();
 
     bool endnote = tagName == "text:endnote";
 
-    QString label = citationElem.attribute( "text:label" );
+    QString label = citationElem.attributeNS( KoXmlNS::text, "label", QString::null );
     bool autoNumbered = label.isEmpty();
 
     KWFootNoteFrameSet *fs = m_textfs->insertFootNote(
@@ -193,7 +194,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
     {
         if ( tagName == "text:a" )
         {
-            QString href( tag.attribute("xlink:href") );
+            QString href( tag.attributeNS( KoXmlNS::xlink, "href", QString::null) );
             if ( href.startsWith("#") )
             {
                 context.styleStack().save();
@@ -215,12 +216,12 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 else {
                     // The save/restore of the stack is done by the caller (KoTextParag::loadOasisSpan)
                     // This allows to use the span's format for the variable.
-                    //kdDebug(32500) << "filling stack with " << spanElem.attribute( "text:style-name" ) << endl;
+                    //kdDebug(32500) << "filling stack with " << spanElem.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
                     context.fillStyleStack( spanElem, "text:style-name" );
                     text = spanElem.text();
                 }
                 textData = KoTextObject::customItemChar(); // hyperlink placeholder
-                // unused tag.attribute( "office:name" )
+                // unused tag.attributeNS( KoXmlNS::office, "name", QString::null )
                 KoVariableCollection& coll = context.variableCollection();
                 customItem = new KoLinkVariable( this, text, href,
                                                  coll.formatCollection()->format( "STRING" ),
@@ -232,22 +233,22 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
         {
             // the number of <PARAGRAPH> tags in the frameset element is the parag id
             // (-1 for starting at 0, +1 since not written yet)
-            appendBookmark( parag, pos, parag, pos, tag.attribute( "text:name" ) );
+            appendBookmark( parag, pos, parag, pos, tag.attributeNS( KoXmlNS::text, "name", QString::null ) );
             return true;
         }
         else if ( tagName == "text:bookmark-start" ) {
             KWLoadingInfo* loadingInfo = m_textfs->kWordDocument()->loadingInfo();
-            loadingInfo->m_bookmarkStarts.insert( tag.attribute( "text:name" ),
+            loadingInfo->m_bookmarkStarts.insert( tag.attributeNS( KoXmlNS::text, "name", QString::null ),
                                                   KWLoadingInfo::BookmarkStart( this, parag, pos ) );
             return true;
         }
         else if ( textFoo && tagName == "text:bookmark-end" ) {
             KWLoadingInfo* loadingInfo = m_textfs->kWordDocument()->loadingInfo();
-            QString bkName = tag.attribute( "text:name" );
+            QString bkName = tag.attributeNS( KoXmlNS::text, "name", QString::null );
             KWLoadingInfo::BookmarkStartsMap::iterator it = loadingInfo->m_bookmarkStarts.find( bkName );
             if ( it == loadingInfo->m_bookmarkStarts.end() ) { // bookmark end without start. This seems to happen..
                 // insert simple bookmark then
-                appendBookmark( parag, pos, parag, pos, tag.attribute( "text:name" ) );
+                appendBookmark( parag, pos, parag, pos, tag.attributeNS( KoXmlNS::text, "name", QString::null ) );
             } else {
                 if ( (*it).doc != this ) {
                     // Oh tell me this never happens...
