@@ -37,9 +37,8 @@
 KisShell::KisShell( const char* name )
     : KoMainWindow( KisFactory::global(), name )
 {
-    statusBar()->removeWidget(statusBarLabel());
     m_pMessageLabel = new QLabel(statusBar());
-    statusBar()->addWidget(m_pMessageLabel, true);
+    statusBar()->addWidget(m_pMessageLabel, true); // ?? The 2nd arg is int stretch ! (DF)
     m_pMessageLabel->setText("Krayon Status Bar");     
 
     //statusBarLabel()->setText(i18n("Krayon Status Bar"));
