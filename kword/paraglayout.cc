@@ -182,9 +182,9 @@ QDOM::Element KWParagLayout::save( const QDOM::Document& doc )
 	if ( tab.isNull() )
 	    return tab;
 	tabs.appendChild( tab );
-	tab.setAttribute( "mmpos", tabList.at( i )->mmPos );
-	tab.setAttribute( "ptpos", tabList.at( i )->ptPos );
-	tab.setAttribute( "inchpos", tabList.at( i )->inchPos );
+	tab.setAttribute( "pos-mm", tabList.at( i )->mmPos );
+	tab.setAttribute( "pos-pt", tabList.at( i )->ptPos );
+	tab.setAttribute( "pos-inch", tabList.at( i )->inchPos );
 	tab.setAttribute( "type", (int)tabList.at( i )->type );
     }
 
@@ -262,9 +262,9 @@ bool KWParagLayout::load( QDOM::Element& layout )
     for( ; !tab.isNull(); tab = tab.nextSibling().toElement() )
     {
       KoTabulator *tab = new KoTabulator;
-      tab->mmPos = tab.attribute( "mmpos" ).toInt();
-      tab->ptPos = tab.attribute( "ptpos" ).toInt();
-      tab->inchPos = tab.attribute( "inchpos" ).toInt();
+      tab->mmPos = tab.attribute( "pos-mm" ).toInt();
+      tab->ptPos = tab.attribute( "pos-pt" ).toInt();
+      tab->inchPos = tab.attribute( "pos-inch" ).toInt();
       tab->type = (KoTabulators)tab.attribute( "type" ).toInt();
       tabList.append( tab );
     }
