@@ -134,7 +134,7 @@ KFormulaContainer* KFormulaWidget::getDocument()
 /**
  * Our cursor.
  */
-FormulaCursor* KFormulaWidget::getCursor()
+KFormula::FormulaCursor* KFormulaWidget::getCursor()
 {
     return formulaView.getCursor();
 }
