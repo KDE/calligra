@@ -26,6 +26,8 @@ Cell
            [ ] Currency
            [x] Date
            [x] Time
+           [x] Fraction
+           [x] Scientific
 
 Format
    [x] Font family
