@@ -713,11 +713,11 @@ protected:
 /**
  * Command to change variable setting
  */
-class KPrChangeVariableSettingCommand : public KCommand
+class KPrChangeStartingPageCommand : public KCommand
 {
 public:
-    KPrChangeVariableSettingCommand( const QString &name, KPresenterDoc *_doc, int _oldStartingPage, int _newStartingPage);
-    ~KPrChangeVariableSettingCommand(){}
+    KPrChangeStartingPageCommand( const QString &name, KPresenterDoc *_doc, int _oldStartingPage, int _newStartingPage);
+    ~KPrChangeStartingPageCommand(){}
 
     void execute();
     void unexecute();
@@ -725,6 +725,23 @@ protected:
     KPresenterDoc *m_doc;
     int oldStartingPage;
     int newStartingPage;
+};
+
+/**
+ * Command to display link setting
+ */
+class KPrChangeDisplayLinkCommand : public KCommand
+{
+public:
+    KPrChangeDisplayLinkCommand( const QString &name, KPresenterDoc *_doc, bool _oldDisplay, bool _newDisplay);
+    ~KPrChangeDisplayLinkCommand(){}
+
+    void execute();
+    void unexecute();
+protected:
+    KPresenterDoc *m_doc;
+    bool m_bOldDisplay;
+    bool m_bNewDisplay;
 };
 
 /**
@@ -749,7 +766,7 @@ class KPrChangeCustomVariableValue : public KCommand
 {
  public:
     KPrChangeCustomVariableValue( const QString &name, KPresenterDoc *_doc,const QString & _oldValue, const QString & _newValue, KoCustomVariable *var);
-    
+
     void execute();
     void unexecute();
  protected:

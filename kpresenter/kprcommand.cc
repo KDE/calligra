@@ -1712,7 +1712,7 @@ QTextCursor * KPrPasteTextCommand::unexecute( QTextCursor *c )
 }
 
 
-KPrChangeVariableSettingCommand::KPrChangeVariableSettingCommand( const QString &name, KPresenterDoc *_doc, int _oldStartingPage, int _newStartingPage):
+KPrChangeStartingPageCommand::KPrChangeStartingPageCommand( const QString &name, KPresenterDoc *_doc, int _oldStartingPage, int _newStartingPage):
     KCommand(name),
     m_doc(_doc),
     oldStartingPage(_oldStartingPage),
@@ -1720,16 +1720,36 @@ KPrChangeVariableSettingCommand::KPrChangeVariableSettingCommand( const QString 
 {
 }
 
-void KPrChangeVariableSettingCommand::execute()
+void KPrChangeStartingPageCommand::execute()
 {
     m_doc->getVariableCollection()->variableSetting()->setStartingPage(newStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
 }
 
-void KPrChangeVariableSettingCommand::unexecute()
+void KPrChangeStartingPageCommand::unexecute()
 {
     m_doc->getVariableCollection()->variableSetting()->setStartingPage(oldStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
+}
+
+KPrChangeDisplayLinkCommand::KPrChangeDisplayLinkCommand( const QString &name, KPresenterDoc *_doc, bool _oldDisplay,bool _newDisplay):
+    KCommand(name),
+    m_doc(_doc),
+    m_bOldDisplay(_oldDisplay),
+    m_bNewDisplay(_newDisplay)
+{
+}
+
+void KPrChangeDisplayLinkCommand::execute()
+{
+    m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bNewDisplay);
+    m_doc->recalcVariables( VT_LINK );
+}
+
+void KPrChangeDisplayLinkCommand::unexecute()
+{
+    m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bOldDisplay);
+    m_doc->recalcVariables( VT_LINK );
 }
 
 KPrDeletePageCmd::KPrDeletePageCmd( const QString &_name, int pos,KPrPage *_page, KPresenterDoc *_doc):
@@ -1866,3 +1886,4 @@ void KPrChangeCustomVariableValue::unexecute()
     m_var->setValue(oldValue);
     m_doc->recalcVariables( VT_CUSTOM );
 }
+

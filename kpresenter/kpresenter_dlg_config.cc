@@ -393,15 +393,29 @@ void ConfigureMiscPage::apply()
         doc->setUndoRedoLimit(newUndo);
     }
     int newStartingPage=m_variableNumberOffset->text().toInt();
+    KMacroCommand * macroCmd=0L;
     if(newStartingPage!=m_oldStartingPage)
     {
-        KPrChangeVariableSettingCommand *cmd = new KPrChangeVariableSettingCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
+        macroCmd=new KMacroCommand(i18n("Change starting page number"));
+        KPrChangeStartingPageCommand *cmd = new KPrChangeStartingPageCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
         cmd->execute();
-        doc->addCommand(cmd);
-
+        macroCmd->addCommand(cmd);
     }
-    doc->getVariableCollection()->variableSetting()->setDisplayLink(m_displayLink->isChecked());
-    doc->recalcVariables( VT_LINK );
+    bool b=m_displayLink->isChecked();
+    bool b_new=doc->getVariableCollection()->variableSetting()->displayLink();
+    if(doc->getVariableCollection()->variableSetting()->displayLink()!=b)
+    {
+        if(!macroCmd)
+        {
+            macroCmd=new KMacroCommand(i18n("Change display link command"));
+        }
+
+        KPrChangeDisplayLinkCommand *cmd=new KPrChangeDisplayLinkCommand( i18n("Change display link command"), doc, b_new ,b);
+        cmd->execute();
+        macroCmd->addCommand(cmd);
+    }
+    if(macroCmd)
+        doc->addCommand(macroCmd);
 }
 
 void ConfigureMiscPage::slotDefault()
