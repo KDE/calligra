@@ -137,7 +137,7 @@ bool StarWriterImport::addKWordHeader()
     prolog.append("<ATTRIBUTES standardpage=\"1\" unit=\"mm\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n");
     prolog.append("<FRAMESETS>\n");
 
-    maindoc.prepend( prolog );
+    maindoc.prepend(prolog);
 
     maindoc.append("</FRAMESETS>\n");
     maindoc.append("</DOC>");
@@ -267,11 +267,10 @@ bool StarWriterImport::parseText(QByteArray n)
     if (n[0x00] != 'T') return false;
 
     // Retrieve the paragraph (text-only)
-    len = readU24(n, 0x09) & 0xFFFF;
+    len = readU24(n, 0x09) & 0xFFFF;   // FIXME: is it right?
     s.resize(len);
     for (Q_UINT32 k = 0x00; k < len; k++)
         s[k] = n[0x0B+k];
-
 
     // Write it to the variable
     text = convertToKWordString(s);
@@ -323,10 +322,10 @@ bool StarWriterImport::parseTable(QByteArray n)
             while (n[p] != 'T') p++;
 
             // Get cell text/value
-            len3 = readU24(n, p+0x09) & 0xFFFF;
+            len3 = readU24(n, p+0x09) & 0xFFFF;   // FIXME: is it right?
             s.resize(len3);
             for (Q_UINT32 k = 0x00; k < len3; k++)
-                s[k] = n[0x0B+k];
+                s[k] = n[p+0x0B+k];
             text = convertToKWordString(s);
 
             // FIXME: check this stuff
