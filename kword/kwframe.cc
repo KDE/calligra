@@ -378,21 +378,13 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
     {
         KWFrame *frame = frameIt.current();
         QRect frameRect( m_doc->zoomRect( *frame ) );
-        kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
-
-        // Just an estimate, to see if there is any chance to intersect the rect
-        // Otherwise we have to compute everything first...
         QRect outerRect( frame->outerRect() );
-        kdDebug(32002) << "KWCanvas::drawBorders outerRect: " << DEBUGRECT( outerRect ) << endl;
+        //kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
+        //kdDebug(32002) << "KWCanvas::drawBorders outerRect: " << DEBUGRECT( outerRect ) << endl;
 
         if ( !crect.intersects( outerRect ) )
             continue;
 
-        // Need to extract one :}
-        /*outerRect.rLeft() -= 1;
-        outerRect.rTop() -= 1;
-        outerRect.rRight() += 1;
-        outerRect.rBottom() += 1;*/
         region = region.subtract( outerRect );
 
         // Set the background color from the main frameset (why?)
@@ -456,9 +448,9 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
             w = 1;
         }
         w = ( w + 1 ) / 2;
-        kdDebug() << "KWFrameSet::drawBorders left. w=" << w
-                  << " Drawing line from " << frameRect.x() - w << "," << frameRect.y()
-                  << " to " << frameRect.x() - w << "," << frameRect.bottom() + 1 << endl;
+        //kdDebug() << "KWFrameSet::drawBorders left. w=" << w
+        //          << " Drawing line from " << frameRect.x() - w << "," << frameRect.y()
+        //          << " to " << frameRect.x() - w << "," << frameRect.bottom() + 1 << endl;
         painter->drawLine( frameRect.x() - w, frameRect.y(),
                            frameRect.x() - w, frameRect.bottom() + 1 );
 
