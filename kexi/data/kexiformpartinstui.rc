@@ -6,6 +6,8 @@
    <Separator />
    <Action name="formpart_taborder"/>
    <Action name="formpart_adjust_size"/>
+   <Action name="formpart_pixmap_collection"/>
+   <Action name="formpart_connections"/>
    <!-- Action name="change_style"/ -->
   </Menu>
 </MenuBar>
@@ -15,11 +17,17 @@
    <Action name="pointer"/>
    <Action name="drag_connection"/>
    <Separator/>
-   <Action name="library_widget_QButtonGroup"/>
-   <Action name="library_widget_QTabWidget"/>
+   <Action name="library_widget_QGroupBox"/>
+   <Action name="library_widget_KTabWidget"/>
+   <Separator/>
    <Action name="library_widget_QLabel"/>
+   <Action name="library_widget_MyPicLabel"/>
    <Action name="library_widget_KLineEdit"/>
-   <Action name="library_widget_QPushButton"/>
+   <Action name="library_widget_KIntSpinBox"/>
+   <Action name="library_widget_KPushButton"/>
+   <Action name="library_widget_KComboBox"/>
+   <Action name="library_widget_QRadioButton"/>
+   <Action name="library_widget_QCheckBox"/>
    <Action name="library_widget_Spacer"/>
  <ActionList name="library_widgets" />
 </ToolBar>

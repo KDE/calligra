@@ -36,7 +36,7 @@
 
 #define NO_DSWIZARD
 
-KexiDBForm::KexiDBForm(/*KexiFormPartItem &i,*/ KexiMainWindow *win, QWidget *parent, 
+KexiDBForm::KexiDBForm(/*KexiFormPartItem &i,*/ KexiMainWindow *win, QWidget *parent,
 	const char *name, KexiDB::Connection *conn, bool preview)
  : KexiViewBase(win, parent, name)
 {
@@ -56,10 +56,15 @@ KexiDBForm::KexiDBForm(/*KexiFormPartItem &i,*/ KexiMainWindow *win, QWidget *pa
 	{
 		connect(formPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *)), this, SLOT(managerPropertyChanged(KexiPropertyBuffer *)));
 		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *)), this, SLOT(slotDirty(KFormDesigner::Form *)));
+		plugSharedAction("formpart_taborder", formPart()->manager(), SLOT(editTabOrder()));
+		plugSharedAction("formpart_adjust_size", formPart()->manager(), SLOT(adjustWidgetSize()));
+		plugSharedAction("formpart_pixmap_collection", formPart()->manager(), SLOT(editFormPixmapCollection()));
+		plugSharedAction("formpart_connections", formPart()->manager(), SLOT(editConnections()));
+		plugSharedAction("edit_copy", formPart()->manager(), SLOT(copyWidget()));
+		plugSharedAction("edit_cut", formPart()->manager(), SLOT(cutWidget()));
+		plugSharedAction("edit_paste", formPart()->manager(), SLOT(pasteWidget()));
+		plugSharedAction("edit_delete", formPart()->manager(), SLOT(deleteWidget()));
 	}
-
-	plugSharedAction("formpart_taborder", formPart()->manager(), SLOT(editTabOrder()));
-	plugSharedAction("formpart_adjust_size", formPart()->manager(), SLOT(adjustWidgetSize()));
 
 	initForm();
 }
@@ -184,6 +189,15 @@ KexiDBForm::afterSwitchFrom(int mode, bool &cancelled)
 		formPart()->manager()->deleteForm( prevForm );
 		delete prevForm;
 	}
+
+	setAvailable("formpart_connections", !m_preview);
+	setAvailable("formpart_pixmap_collection", !m_preview);
+	setAvailable("formpart_adjust_size", !m_preview);
+	setAvailable("formpart_taborder", !m_preview);
+	setAvailable("edit_copy", !m_preview);
+	setAvailable("edit_cut", !m_preview);
+	setAvailable("edit_paste", !m_preview);
+	setAvailable("edit_delete", !m_preview);
 
 	return true;
 }

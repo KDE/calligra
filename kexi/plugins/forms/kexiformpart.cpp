@@ -83,6 +83,8 @@ void KexiFormPart::initActions()
 	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode), 0);
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order"), "tab_order", 0, "formpart_taborder");
 	createSharedAction(Kexi::DesignViewMode, i18n("Adjust Size"), "viewmagfit", 0, "formpart_adjust_size");
+	createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), "icons", 0, "formpart_pixmap_collection");
+	createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), "connections", 0, "formpart_connections");
 }
 
 KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
