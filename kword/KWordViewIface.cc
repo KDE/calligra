@@ -20,6 +20,7 @@
 #include "KWordViewIface.h"
 
 #include "kwview.h"
+#include "kwdoc.h"
 
 #include <dcopclient.h>
 
@@ -108,4 +109,42 @@ void KWordViewIface::formatPage()
 void KWordViewIface::toolsPart()
 {
     view->toolsPart();
+}
+
+double KWordViewIface::getZoom()
+{
+    return view->kWordDocument()->zoom();
+}
+
+
+void KWordViewIface::setZoom( int zoom)
+{
+    view->showZoom( zoom ); // share the same zoom
+    view->setZoom( zoom,true);
+    view->kWordDocument()->updateZoomRuler();
+}
+
+void KWordViewIface::editPersonalExpression()
+{
+    view->editPersonalExpr();
+}
+
+void KWordViewIface::insertLink()
+{
+    view->insertLink();
+}
+
+void KWordViewIface::insertFormula()
+{
+    view->insertFormula();
+}
+
+void KWordViewIface::formatFont()
+{
+    view->formatFont();
+}
+
+void KWordViewIface::formatParagraph()
+{
+    view->formatParagraph();
 }

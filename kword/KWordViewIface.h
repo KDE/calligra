@@ -48,8 +48,17 @@ k_dcop:
 
     virtual void insertTable();
     virtual void insertPicture();
-    virtual void formatPage();
     virtual void toolsPart();	
+
+    virtual double getZoom();
+    virtual void setZoom( int zoom);
+    virtual void editPersonalExpression();
+    virtual void insertLink();
+    virtual void insertFormula();
+
+    virtual void formatFont();
+    virtual void formatParagraph();
+    virtual void formatPage();
 
 private:
     KWView *view;

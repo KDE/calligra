@@ -154,3 +154,4 @@ void KWordDocIface::setUndoRedoLimit(int _val)
 {
     doc->setUndoRedoLimit(_val);
 }
+
