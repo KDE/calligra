@@ -294,6 +294,17 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
       obj = doc->findContainingObject (me->x (), me->y ());
       if (obj) { 
 	if (obj->isSelected ()) {
+
+	  //
+	  // a ugly workaround, because cliparts cannot be rotated (WHY NOT ?)
+	  //
+	  if (doc->selectionCount () == 1) {
+	    QListIterator<GObject> iter = doc->getSelection ();
+	    // the selected object is a clipart, so don't show rotation handles
+	    if (iter.current ()->isA ("GClipart"))
+	      return;
+	  }
+
 	  // the object is already selected
 	  if (ctrlFlag)
 	    // remove it from the selection
