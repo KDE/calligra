@@ -1362,18 +1362,18 @@ void RTFImport::parseField( RTFProperty * )
 	if (!fldinst.isEmpty())
 	{
 	    DomNode node;
-	    QStringList list = QStringList::split( ' ', fldinst );
-                kdDebug(30515) << "Field: " << list << endl;
+	    QStringList list ( QStringList::split( ' ', fldinst, false ) );
+            kdDebug(30515) << "Field: " << list << endl;
 	    uint i;
 
-                QString test ( list[0].upper() );
-                test.remove('\\'); // Remove \, especialy leading ones in OOWriter RTF files
+            QString fieldName ( list[0].upper() );
+            fieldName.remove('\\'); // Remove \, especialy leading ones in OOWriter RTF files
 	    node.clear(7);
 
                 bool ok=false;
 	    for (i=0; i < sizeof(fieldTable) /sizeof(fieldTable[0]); i++)
 	    {
-		if (test == fieldTable[i].id)
+		if (fieldName == fieldTable[i].id)
 		{
 		    kdDebug(30515) << "Field found: " << fieldTable[i].id << endl;
 		    ok=true;
@@ -1382,7 +1382,7 @@ void RTFImport::parseField( RTFProperty * )
 	    }
                 if (!ok)
                 {
-                    kdWarning(30515) << "Field not supported:" << test << endl;
+                    kdWarning(30515) << "Field not supported: " << fieldName << endl;
                     return;
                 }
 	    if (fieldTable[i].type == 4)
@@ -1426,7 +1426,7 @@ void RTFImport::parseField( RTFProperty * )
 		node.closeNode( "LINK" );
 		addVariable( node, 9, "STRING", &fldfmt);
 	    }
-	    else if (list[0] == "SYMBOL")
+	    else if (fieldName == "SYMBOL")
 	    {
 		if (list.count() >= 2)
 		{
@@ -1440,7 +1440,7 @@ void RTFImport::parseField( RTFProperty * )
 		    }
 		}
 	    }
-	    else if (list[0] == "TIME" || list[0] == "DATE")
+	    else if (fieldName == "TIME" || fieldName == "DATE")
 	    {
 		QCString key;
 		int type=-1;
