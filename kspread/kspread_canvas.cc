@@ -574,7 +574,7 @@ void KSpreadCanvas::scrollToCell(QPoint location)
   Q_UNUSED(cell);
 
   double unzoomedWidth = doc()->unzoomItX( width() );
-  double unzoomedHeight = doc()->unzoomItX( height() );
+  double unzoomedHeight = doc()->unzoomItY( height() );
 
   double xpos;
   if ( table->isRightToLeft() )
@@ -791,7 +791,7 @@ void KSpreadCanvas::slotMaxColumn( int _max_column )
 void KSpreadCanvas::slotMaxRow( int _max_row )
 {
   double ypos = activeTable()->dblRowPos( QMIN( KS_rowMax, _max_row + 10 ) ) - yOffset();
-  double unzoomHeight = doc()->unzoomItX( height() );
+  double unzoomHeight = doc()->unzoomItY( height() );
 
   //Don't go beyond the maximum row range (KS_rowMax)
   double sizeMaxY = activeTable()->sizeMaxY();
