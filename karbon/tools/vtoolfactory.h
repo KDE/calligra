@@ -33,6 +33,7 @@ class VRoundRectTool;
 class VSinusTool;
 class VSpiralTool;
 class VStarTool;
+class VTextTool;
 
 class VToolFactory
 {
@@ -52,6 +53,7 @@ private:
 	VSinusTool			*m_sinusTool;
 	VSpiralTool			*m_spiralTool;
 	VStarTool			*m_starTool;
+	VTextTool			*m_textTool;
 };
 
 #endif

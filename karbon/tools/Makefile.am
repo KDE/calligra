@@ -25,6 +25,7 @@ noinst_HEADERS = \
 	vsinustool.h \
 	vspiraltool.h \
 	vstartool.h \
+	vtexttool.h \
 	vtoolfactory.h \
 	vtool.h
 
@@ -41,6 +42,7 @@ libkarbontools_la_SOURCES = \
 	vsinustool.cc \
 	vspiraltool.cc \
 	vstartool.cc \
+	vtexttool.cc \
 	vtoolfactory.cc \
 	vtool.cc
 

@@ -116,10 +116,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	dcopObject(); // build it
 
-	// tools:
-	//m_tools.setAutoDelete( true );
-	//m_selectTool = new VSelectTool( this );
-
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
 
@@ -193,7 +189,10 @@ void
 KarbonView::registerTool( VTool *tool )
 {
 	if( !m_toolbox )
+	{
 		m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "toolbox" );
+		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
+	}
 	m_toolbox->registerTool( tool );
 	m_currentTool = tool;
 }
@@ -221,7 +220,8 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			mainWindow()->addDockWindow( m_documentDocker, DockRight );
 			m_toolOptionsDocker = new VToolOptionsDocker( this );
 			m_toolOptionsDocker->show();
-			//selectTool();
+			// set selectTool by default
+			m_toolbox->slotButtonPressed( 0 );
 		}
 
 		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
@@ -576,7 +576,8 @@ KarbonView::objectTrafoShear()
 void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
-	m_currentTool->deactivate();
+	if( m_currentTool )
+		m_currentTool->deactivate();
 
 	m_currentTool = tool;
 

@@ -34,6 +34,7 @@
 #include "vsinustool.h"
 #include "vspiraltool.h"
 #include "vstartool.h"
+#include "vtexttool.h"
 
 VToolFactory::VToolFactory( KarbonView *view ) 
 {
@@ -48,6 +49,7 @@ VToolFactory::VToolFactory( KarbonView *view )
 	m_sinusTool			= new VSinusTool( view );
 	m_spiralTool		= new VSpiralTool( view );
 	m_starTool			= new VStarTool( view );
+	m_textTool			= new VTextTool( view, "" );
 }
 
 VToolFactory::~VToolFactory()
@@ -63,5 +65,6 @@ VToolFactory::~VToolFactory()
 	delete m_sinusTool;
 	delete m_spiralTool;
 	delete m_starTool;
+	delete m_textTool;
 }
 

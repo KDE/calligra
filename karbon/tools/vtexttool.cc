@@ -38,15 +38,16 @@
 
 #include <karbon_view.h>
 #include <karbon_part.h>
+#include <core/vcanvas.h>
 #include <core/vdocument.h>
 #include <core/vglobal.h>
 #include <core/vselection.h>
 #include <core/vfill.h>
+#include <core/vgroup.h>
 #include <core/vstroke.h>
 #include <render/vpainterfactory.h>
 #include <render/vkopainter.h>
 #include "vtexttool.h"
-#include <kgenericfactory.h>
 
 
 static void
@@ -521,10 +522,7 @@ VTextOptionsWidget::shadowDistance()
 	return m_shadow->shadowDistance();
 }
 
-typedef KGenericFactory<VTextTool, KarbonView> TextToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_texttoolplugin, TextToolPluginFactory( "karbontexttoolplugin" ) );
-
-VTextTool::VTextTool( KarbonView* view, const char *name, const QStringList & )
+VTextTool::VTextTool( KarbonView* view, const char* name )
 		: VTool( view, name )
 {
 	m_optionsWidget = new VTextOptionsWidget( this );

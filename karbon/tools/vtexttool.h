@@ -28,6 +28,7 @@
 
 #include "qframe.h"
 #include "qgroupbox.h"
+#include "qcombobox.h"
 
 #include "vcommand.h"
 #include "vtext.h"
@@ -145,7 +146,7 @@ protected:
 class VTextTool : public VTool, public VVisitor
 {
 public:
-	VTextTool( KarbonView* view, const char *, const QStringList & );
+	VTextTool( KarbonView* view, const char* name );
 	~VTextTool();
 
 	virtual QString name() { return i18n( "Text tool" ); }
