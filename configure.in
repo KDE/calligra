@@ -246,6 +246,7 @@ AC_OUTPUT( \
 	kspread/filters/Makefile \
 	kspread/filters/csv/Makefile \
 	kword/Makefile \
+	kword/pics/Makefile \
 	kword/toolbar/Makefile \
 	kword/templates/Makefile \
 	kword/templates/Wordprocessing/Makefile \

@@ -37,7 +37,7 @@ kdelnkdir = $(kde_appsdir)/KOffice
 kdemime_DATA = x-kword.desktop
 kdemimedir = $(kde_mimedir)/application
 
-SUBDIRS = . toolbar templates filters dtd
+SUBDIRS = . toolbar templates filters dtd pics
 
 IDL_FLAGS = --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 
