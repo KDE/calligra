@@ -38,17 +38,12 @@ public:
 
     // Helper method, public for KWTextFrameSet::insertTOC().
     // Remove a toc based on the parag styles
-    //laurent 
-    //return true if TOC exist so we can add page +1 at the beginning
-    static bool removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand *macroCmd );
-
-    void setFirstToc(bool _first){firstTOC=_first;}
+    static void removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand *macroCmd );
 
 protected:
     // Find or create a toc style
     static KWStyle * findOrCreateTOCStyle( KWTextFrameSet *fs, int depth );
-private:
-    bool firstTOC;
+
 };
 
 

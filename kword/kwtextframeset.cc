@@ -819,16 +819,19 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
     iPoint.ry()++; // go under the paragraph
     //kdDebug(32002) << "KWTextFrameSet::eraseAfter parag=" << parag->paragId() << endl;
     KWFrame * frame = internalToNormal( iPoint, nPoint );
-    int frameBottom = kWordDocument()->zoomItY( frame->bottom() );
-    ASSERT( nPoint.y() <= frameBottom );
-    //kdDebug(32002) << " parag bottom=" << nPoint.y()
-    //               << " frameBottom=" << frameBottom
-    //               << " height of fillRect: " << frameBottom - nPoint.y() << endl;
+    if(frame)
+    {
+        int frameBottom = kWordDocument()->zoomItY( frame->bottom() );
+        ASSERT( nPoint.y() <= frameBottom );
+        //kdDebug(32002) << " parag bottom=" << nPoint.y()
+        //               << " frameBottom=" << frameBottom
+        //               << " height of fillRect: " << frameBottom - nPoint.y() << endl;
 
-    p->fillRect( iPoint.x(), iPoint.y(),
-                 kWordDocument()->zoomItX( frame->width() ) /*r.width()*/, // erase the whole width of the frame
-                 frameBottom - nPoint.y(),
-                 /*Qt::blue*/ cg.brush( QColorGroup::Base ) );
+        p->fillRect( iPoint.x(), iPoint.y(),
+                     kWordDocument()->zoomItX( frame->width() ) /*r.width()*/, // erase the whole width of the frame
+                     frameBottom - nPoint.y(),
+                     /*Qt::blue*/ cg.brush( QColorGroup::Base ) );
+    }
 
 }
 
@@ -2685,15 +2688,13 @@ void KWTextFrameSet::insertTOC( QTextCursor * cursor )
 
     // Remove old TOC
 
-    bool exist=KWInsertTOCCommand::removeTOC( this, cursor, macroCmd );
+    KWInsertTOCCommand::removeTOC( this, cursor, macroCmd );
 
     // Insert new TOC
 
     QTextCommand * cmd = new KWInsertTOCCommand( this );
     textdoc->addCommand( cmd );
     macroCmd->addCommand( new KWTextCommand( this, QString::null ) );
-
-    (static_cast<KWInsertTOCCommand *>(cmd))->setFirstToc(exist);
     *cursor = *( cmd->execute( cursor ) );
 
     setLastFormattedParag( textdoc->firstParag() );
