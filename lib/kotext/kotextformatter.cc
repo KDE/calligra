@@ -386,9 +386,11 @@ int KoTextFormatterCore::format()
                     // Instead we go back to where there was most width for it.
                     if ( maxY > -1 && parag->rect().y() + y >= maxY )
                     {
-                        kdDebug(32500) << "Final choice for the line: y=" << y << endl;
+                        kdDebug(32500) << parag->rect().y() + y << " over maxY=" << maxY
+                                       << " -> final choice for the line: y=" << maxAvailableWidth.first << endl;
                         y = maxAvailableWidth.first;
-                        Q_ASSERT( maxAvailableWidth.second != 0 );
+                        if ( availableWidth )
+                            Q_ASSERT( maxAvailableWidth.second != 0 );
                         lineStart->y = y;
                         // In this case we want to actually format the line,
                         // so we don't set emptyLine
@@ -398,12 +400,12 @@ int KoTextFormatterCore::format()
                         // We don't know yet what to do with this line that needs to go down
                         // Ideally KWTextFrameSet would tell us how much we need to move
                         // ("validHeight" idea). For now we keep the old behavior:
-                        y += lineStart->h;
-                        kdDebug(32500) << "Moving down by h=" << lineStart->h << ": y=" << y << endl;
+                        y += tmph;
+                        kdDebug(32500) << "Moving down by h=" << tmph << ": y=" << y << endl;
                         formatLine = false; // line is not ready yet
                     }
                 }
-                if ( formatLine )
+                if ( formatLine && i > 0 )
                 {
                     // (combine lineStart->baseLine/lineStart->h and tmpBaseLine/tmph)
                     int belowBaseLine = QMAX( lineStart->h - lineStart->baseLine, tmph - tmpBaseLine );
@@ -459,7 +461,7 @@ int KoTextFormatterCore::format()
                 // recalc everything for 'i', it might still not be ok where it is...
                 // (e.g. if there's no room at all on this line)
                 // But we don't want to do this forever, so we check against maxY (if known)
-                if ( !c->lineStart && maxY > -1 )
+                if ( maxY > -1 )
                 {
                     if ( parag->rect().y() + y < maxY )
                     {
