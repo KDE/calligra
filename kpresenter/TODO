@@ -60,6 +60,7 @@ Done:
 -> save/load page background image
 -> save/load animation group
 -> save/load sticky object
+-> save/load closed element (defined as polygone into oo spec draw:polygone)
 -> save/load picture effect
 	-> bright
 	-> contrast
@@ -68,7 +69,6 @@ Done:
 
 Todo:
 -> save/load part element (necessary to modify koDocumentChild)
--> save/load close element (into ooimpress it's define as polygone)
 -> save/load cubic/quadric/freehand object (define as svg object)
 -> save/load picture effect
 	-> picture effect (extend oasis format)

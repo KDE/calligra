@@ -1397,14 +1397,24 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kppolylineobject);
         }
-        else if (name=="draw:polygon") { // polygon
+        else if (name=="draw:polygon") { // plcloseobject
             fillStyleStack( o, context );
-            KPPolygonObject *kpPolygonObject = new KPPolygonObject();
-            kpPolygonObject->loadOasis( o, context, m_loadingInfo);
+            KPClosedLineObject *kpClosedObject = new KPClosedLineObject();
+            kpClosedObject->loadOasis( o, context, m_loadingInfo);
             if ( groupObject )
-                groupObject->addObjects( kpPolygonObject );
+                groupObject->addObjects( kpClosedObject );
             else
-                newpage->appendObject(kpPolygonObject);
+                newpage->appendObject(kpClosedObject);
+        }
+        //FIXME wait that it will ok'ed by oo spec
+        else if (name=="draw:regular-polygon") { // kppolygone object
+            fillStyleStack( o, context );
+            KPPolygonObject *kpPolygoneObject = new KPPolygonObject();
+            kpPolygoneObject->loadOasis( o, context, m_loadingInfo);
+            if ( groupObject )
+                groupObject->addObjects( kpPolygoneObject );
+            else
+                newpage->appendObject(kpPolygoneObject);
         }
         else if ( name == "draw:image" ) // image
         {

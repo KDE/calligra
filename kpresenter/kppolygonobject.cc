@@ -78,7 +78,8 @@ DCOPObject* KPPolygonObject::dcopObject()
 
 bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  )
 {
-    xmlWriter.startElement( "draw:polygon" );
+    //FIXME me wait that it will define into oo spec
+    xmlWriter.startElement( "draw:regular-polygon" );
     xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
 
     QString listOfPoint;
