@@ -79,6 +79,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         p = static_cast<KWTextParag *>(p->next());
     }
     // Set a hard frame break after the last TOC parag
+    kdDebug() << "KWInsertTOCCommand::execute setPageBreaking on " << prevTOCParag << " " << prevTOCParag->paragId() << endl;
     prevTOCParag->setPageBreaking( prevTOCParag->pageBreaking() | KWParagLayout::HardFrameBreakAfter );
 
     // Format paragraphs, to take this page break into account and update page numbers
@@ -108,6 +109,8 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         KWTextFormat * newFormat = fs->zoomFormatFont( & tocStyle->format() );
         parag->setFormat( 0, parag->string()->length(), newFormat );
     }
+    // The setParagLayout ruined it, so here it is again :)
+    prevTOCParag->setPageBreaking( prevTOCParag->pageBreaking() | KWParagLayout::HardFrameBreakAfter );
     return c;
 }
 
