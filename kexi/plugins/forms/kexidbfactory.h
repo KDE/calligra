@@ -57,7 +57,7 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 
 	public:
 		KexiDBFactory(QObject *parent, const char *name, const QStringList &args);
-		~KexiDBFactory();
+		virtual ~KexiDBFactory();
 
 		virtual QString	name();
 		virtual KFormDesigner::WidgetInfo::List classes();

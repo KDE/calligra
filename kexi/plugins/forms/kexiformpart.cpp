@@ -45,7 +45,10 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	m_names["instance"] = i18n("Form");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 
-	m_manager = new KFormDesigner::FormManager(this, "manager");
+/* @todo add configuration for supported factory groups */
+	QStringList supportedFactoryGroups;
+	supportedFactoryGroups += "kexi";
+	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, "form_manager");
 }
 
 KexiFormPart::~KexiFormPart()

@@ -386,8 +386,15 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 CCMAIL: dkite@shaw.ca
 
 2004-12-18
+Forms
+- WidgetLibrary: check for duplicated factories added
+- factory groups introduced
+- factories loading splitted for lookup/loading stages
+- added 'override' flag for alternate widget class names
+- minor optimizations
 Form Plugin
-- Fixed showing form's property right after form's window loading
+- fixed showing form's property right after form's window loading
+- record navigator added in data view
 
 2004-12-17
 KPropertyEditor

@@ -103,6 +103,17 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wSubForm->setNamePrefix(i18n("SubForm"));
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
 	m_classes.append(wSubForm);
+
+/* todo
+	KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(this);
+	wLineEdit->setPixmap("lineedit");
+	wLineEdit->setClassName("KexiDBLineEdit");
+	wLineEdit->addAlternateClassName("QLineEdit");
+	wLineEdit->setIncludeFileName("klineedit.h");
+	wLineEdit->setName(i18n("Line Edit"));
+	wLineEdit->setNamePrefix(i18n("Widget name (see above)", "LineEdit"));
+	wLineEdit->setDescription(i18n("A widget to input text"));
+	m_classes.append(wLineEdit); */
 }
 
 QString

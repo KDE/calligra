@@ -4,8 +4,10 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Kexi DB Widgets
+Name[bg]=Графични обекти на Kexi за бази данни
 Name[da]=Kexi DB-kontroller
 Name[es]=Wigdet de BD de Kexi
+Name[et]=Kexi andmebaasividinad
 Name[fr]=Éléments graphiques de base de données Kexi
 Name[pl]=Widżety bazodanowe dla Kexi
 Name[pt]=Elementos de Base de Dados Kexi
@@ -13,6 +15,8 @@ Name[pt_BR]=Widgets de BD do Kexi
 Name[ru]=Виджеты для работы с базами данных Kexi
 Name[sv]=Kexi-databaskomponenter
 Name[ta]=கெக்சி டிபி சாளர உருக்கள்
+Name[tr]=Kexi DB Parçacıkları
 Name[xx]=xxKexi DB Widgetsxx
 
 X-KDE-Library=kexidbwidgets
+X-KFormDesigner-FactoryGroup=kexi
