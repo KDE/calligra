@@ -1,4 +1,4 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
@@ -30,8 +30,8 @@
 class ListInfo
 {
 public:
-    CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
-    bool m_orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
+    CounterData::Style m_typeList; ///< What is the style of the current list (undefined, if we are not in a list)
+    bool m_orderedList; ///< Is the current list ordered or not (undefined, if we are not in a list)
 };
 
 class HtmlWorker : public KWEFBaseWorker
@@ -49,14 +49,16 @@ public:
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doOpenTextFrameSet(void);
     virtual bool doCloseTextFrameSet(void);
-    virtual bool doOpenHead(void); // HTML's <head>
-    virtual bool doCloseHead(void); // HTML's </head>
-    virtual bool doOpenBody(void); // HTML's <body>
-    virtual bool doCloseBody(void); // HTML's </body>
+    virtual bool doOpenHead(void); ///< HTML's \<head\>
+    virtual bool doCloseHead(void); ///< HTML's \</head\>
+    virtual bool doOpenBody(void); ///< HTML's \<body\>
+    virtual bool doCloseBody(void); ///< HTML's \</body\>
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)=0;
-    //QChar::Direction is needed because the text flow can only
-    //be detected from the actual string data
+    /**
+     * \note QChar::Direction is needed because the text flow can only
+     * be detected from the actual string data
+     */
     virtual void openParagraph(const QString& strTag,
         const LayoutData& layout, QChar::Direction direction=QChar::DirL)=0;
     virtual void closeParagraph(const QString& strTag,
@@ -71,9 +73,14 @@ public:
     inline void setCodec(QTextCodec* codec) { m_codec=codec; }
 protected:
     QString escapeHtmlText(const QString& strText) const;
-    // get file name for an additional file (like an image file).
-    // additionalName is the wanted name
-    // returns the path where the file has to be written
+    /**
+     * \brief Get file name for an additional file
+     *
+     * This is used for example for an image file.
+     *
+     * \param additionalName is the wanted name
+     * \return the path where the file has to be written
+     */
     QString getAdditionalFileName(const QString& additionalName);
 private:
     void ProcessParagraphData ( const QString& strTag, const QString &paraText,
@@ -85,12 +92,12 @@ private:
 protected:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
-    QTextCodec* m_codec; // QTextCodec in which the file will be written
+    QTextCodec* m_codec; ///< QTextCodec in which the file will be written
     QString m_strTitle;
-    QString m_fileName; // Name of the output file
-    QString m_strFileDir; // Directory of the output file
-    QString m_strSubDirectoryName; // Name of the sub directory for the additional files
-    QValueStack<ListInfo> m_listStack; // Stack for list information
+    QString m_fileName; ///< Name of the output file
+    QString m_strFileDir; ///< Directory of the output file
+    QString m_strSubDirectoryName; ///< Name of the sub directory for the additional files
+    QValueStack<ListInfo> m_listStack; ///< Stack for list information
     bool m_xml;
 };
 

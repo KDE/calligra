@@ -1,4 +1,4 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project

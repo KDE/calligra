@@ -1,4 +1,4 @@
-// $Header$
+// 
 
 /*
    This file is part of the KDE project
@@ -41,13 +41,13 @@ public:
     HtmlCssWorker(void) { }
     virtual ~HtmlCssWorker(void) { }
 public:
-    virtual bool doOpenStyles(void); // HTML's <style>
-    virtual bool doCloseStyles(void); // HTML's </style>
+    virtual bool doOpenStyles(void); ///< HTML's \<style\>
+    virtual bool doCloseStyles(void); ///< HTML's \</style\>
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doFullPaperFormat(const int format,
         const double width, const double height, const int orientation);
     virtual bool doFullPaperBorders (const double top, const double left,
-        const double bottom, const double right); // Like KWord's <PAPERBORDERS>
+        const double bottom, const double right); ///< Like KWord's \<PAPERBORDERS\>
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     virtual void openParagraph(const QString& strTag, const LayoutData& layout,

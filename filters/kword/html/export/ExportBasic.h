@@ -1,4 +1,4 @@
-// $Header$
+// 
 
 /*
    This file is part of the KDE project
@@ -40,7 +40,7 @@ protected:
         const LayoutData& layout);
     virtual void openSpan(const FormatData& formatOrigin, const FormatData& format);
     virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format);
-    virtual bool doOpenBody(void); // HTML's <body>
+    virtual bool doOpenBody(void); ///< HTML's \<body\>
     virtual void writeDocType(void);
 private:
     void openFormatData(const FormatData& formatOrigin,
