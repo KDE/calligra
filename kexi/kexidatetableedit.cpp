@@ -31,8 +31,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kdatepicker.h>
 
-#include "datepicker.h"
+//#include "datepicker.h"
 
 #include "kexidatetableedit.h"
 
@@ -45,11 +46,12 @@ KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *na
 	setCursor(QCursor(ArrowCursor));
 
 	m_mouseDown = false;
+	m_3dDecore = true;
 	m_datePicker = 0;
 }
 
 void
-KexiDateTableEdit::paintEvent(QPaintEvent *ev)
+KexiDateTableEdit::paintEvent(QPaintEvent *)
 {
 	QPainter p(this);
 
@@ -72,7 +74,26 @@ KexiDateTableEdit::paintEvent(QPaintEvent *ev)
 	}
 
 	p.setBrush(QBrush(cg.button()));
-	p.drawRect(r);
+
+	if(!m_3dDecore)
+	{
+		p.drawRect(r);
+	}
+	else
+	{
+		QColor top = cg.light();
+		int c = top.red();
+		if(m_mouseDown)
+			c = c - 30;
+
+
+		for(int i=0; i < r.height(); i++)
+		{
+			p.setPen(QPen(QColor(c, c, c)));
+			p.drawLine(width() - height(), i, width(), i);
+			c = c - 5;
+		}
+	}
 
 	if(m_mouseDown)
 	{
@@ -106,7 +127,7 @@ KexiDateTableEdit::mousePressEvent(QMouseEvent *ev)
 }
 
 void
-KexiDateTableEdit::mouseMoveEvent(QMouseEvent *ev)
+KexiDateTableEdit::mouseMoveEvent(QMouseEvent *)
 {
 	setCursor(QCursor(ArrowCursor));
 }
@@ -118,11 +139,30 @@ KexiDateTableEdit::mouseReleaseEvent(QMouseEvent *ev)
 	{
 		m_mouseDown = false;
 		repaint();
-		m_datePicker = new DatePicker(this);
+		m_datePicker = new KDatePicker(this, m_data.toDate(), 0, WType_TopLevel | WDestructiveClose | WStyle_Customize | WStyle_StaysOnTop | WStyle_NoBorder);
+		m_datePicker->setCloseButton(true);
 		QPoint global = mapToGlobal(QPoint(width() - height(), height()));
 		m_datePicker->move(global);
 		m_datePicker->show();
+
+		connect(m_datePicker, SIGNAL(dateChanged(QDate)), this, SLOT(slotDateChanged(QDate)));
 	}
+}
+
+void
+KexiDateTableEdit::setDecorated(bool decorated)
+{
+	m_3dDecore = decorated;
+}
+
+void
+KexiDateTableEdit::slotDateChanged(QDate date)
+{
+	m_data = date;
+	m_text = KGlobal::_locale->formatDate(m_data.toDate(), true);
+	setText(m_text);
+
+	repaint();
 }
 
 KexiDateTableEdit::~KexiDateTableEdit()

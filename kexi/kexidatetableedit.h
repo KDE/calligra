@@ -23,12 +23,17 @@
 
 #include <qlineedit.h>
 
+#include <kdatepicker.h>
+
 /*
   this class represents an editor for QVariant::Date
+
+  uhm, thanks to tronical, who added me a second constructor
+  for KDatePicker i dont't have to type so much JIPPIE
+  update (2002-09-02 (00:30))
 */
 
-
-class DatePicker;
+class KDatePicker;
 
 class KexiDateTableEdit : public QLineEdit
 {
@@ -39,6 +44,8 @@ class KexiDateTableEdit : public QLineEdit
 		KexiDateTableEdit(QVariant v=0, QWidget *parent=0, const char *name=0);
 		~KexiDateTableEdit();
 
+		void setDecorated(bool decore);
+
 	protected:
 		void paintEvent(QPaintEvent *ev);
 		void mousePressEvent(QMouseEvent *ev);
@@ -46,12 +53,16 @@ class KexiDateTableEdit : public QLineEdit
 		void mouseMoveEvent(QMouseEvent *ev);
 		/* gruml, we have to overwrite the cursor */
 
-		DatePicker	*m_datePicker;
+		KDatePicker	*m_datePicker;
 
 		QVariant	m_data;
 		QString		m_text;
 
 		bool		m_mouseDown;
+		bool		m_3dDecore;
+
+	protected slots:
+		void		slotDateChanged(QDate);
 };
 
 #endif
