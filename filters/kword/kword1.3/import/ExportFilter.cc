@@ -1855,8 +1855,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
             }
         case LayoutData::LS_MULTIPLE:
             {
-                // ### FIXME: lineSpacing is not an integer anymore
-                const QString mult ( QString::number( qRound( layout.lineSpacing ) * 100 ) );
+                const QString mult ( QString::number( qRound( layout.lineSpacing * 100 ) ) );
                 props += "fo:line-height=\"";
                 props += mult;
                 props += "%\" ";
