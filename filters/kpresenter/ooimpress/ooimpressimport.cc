@@ -100,6 +100,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
     return KoFilter::OK;
 }
 
+// Very related to OoWriterImport::openFile()
 KoFilter::ConversionStatus OoImpressImport::openFile()
 {
     KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
@@ -164,6 +165,7 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
     return KoFilter::OK;
 }
 
+// Very related to OoWriterImport::createDocumentInfo
 void OoImpressImport::createDocumentInfo( QDomDocument &docinfo )
 {
     docinfo.appendChild( docinfo.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -1752,7 +1754,7 @@ void OoImpressImport::addStyles( const QDomElement* style )
     if ( style->hasAttribute( "style:parent-style-name" ) )
         addStyles( m_styles[style->attribute( "style:parent-style-name" )] );
 
-    m_styleStack.push( style );
+    m_styleStack.push( *style );
 }
 
 QString OoImpressImport::storeImage( const QDomElement& object )
@@ -1829,107 +1831,6 @@ void OoImpressImport::storeObjectStyles( const QDomElement& object )
     fillStyleStack( object );
     m_styleStack.setObjectMark();
 }
-
-StyleStack::StyleStack()
-    : m_pageMark( 0 ),
-      m_objectMark( 0 )
-{
-    m_stack.setAutoDelete( false );
-}
-
-StyleStack::~StyleStack()
-{
-}
-
-void StyleStack::clear()
-{
-    m_pageMark = 0;
-    m_objectMark = 0;
-    m_stack.clear();
-}
-
-void StyleStack::clearPageMark()
-{
-    for ( uint index = m_stack.count() - 1; index >= m_pageMark; --index )
-        m_stack.remove( index );
-}
-
-void StyleStack::setPageMark()
-{
-    m_pageMark= m_stack.count();
-}
-
-void StyleStack::clearObjectMark()
-{
-    for ( uint index = m_stack.count() - 1; index >= m_objectMark; --index )
-        m_stack.remove( index );
-}
-
-void StyleStack::setObjectMark()
-{
-    m_objectMark= m_stack.count();
-}
-
-void StyleStack::pop()
-{
-    m_stack.removeLast();
-}
-
-void StyleStack::push( const QDomElement* style )
-{
-    m_stack.append( style );
-}
-
-bool StyleStack::hasAttribute( const QString& name )
-{
-    // TODO: has to be fixed for complex styles like list-styles
-    for ( QDomElement *style = m_stack.last(); style; style = m_stack.prev() )
-    {
-        QDomElement properties = style->namedItem( "style:properties" ).toElement();
-        if ( properties.hasAttribute( name ) )
-            return true;
-    }
-
-    return false;
-}
-
-QString StyleStack::attribute( const QString& name )
-{
-    // TODO: has to be fixed for complex styles like list-styles
-    for ( QDomElement *style = m_stack.last(); style; style = m_stack.prev() )
-    {
-        QDomElement properties = style->namedItem( "style:properties" ).toElement();
-        if ( properties.hasAttribute( name ) )
-            return properties.attribute( name );
-    }
-
-    return QString::null;
-}
-
-bool StyleStack::hasChildNode(const QString & name)
-{
-    for ( QDomElement *style = m_stack.last(); style; style = m_stack.prev() )
-    {
-        QDomElement properties = style->namedItem( "style:properties" ).toElement();
-        if ( !properties.namedItem( name ).isNull() )
-            return true;
-    }
-
-    return false;
-}
-
-QDomNode StyleStack::childNode(const QString & name)
-{
-    for ( QDomElement *style = m_stack.last(); style; style = m_stack.prev() )
-    {
-        QDomElement properties = style->namedItem( "style:properties" ).toElement();
-        if ( !properties.namedItem( name ).isNull() )
-            return properties.namedItem( name );
-    }
-
-    return QDomNode();          // a null node
-}
-
 
 bool OoImpressImport::parseBorder(const QString & tag, double * width, int * style, QColor * color)
 {
