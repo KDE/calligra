@@ -390,8 +390,8 @@ void KivioView::setupActions()
   m_editCopy = KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
   m_editPaste = KStdAction::paste( this, SLOT(pasteStencil()), actionCollection(), "pasteStencil" );
 
-  m_selectAll=KStdAction::selectAll( this, SLOT( selectAllStencils() ), actionCollection(), "selectAllStencils" );
-  m_selectNone=new KAction( i18n("Select None"), CTRL+SHIFT+Key_A, this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils" );
+  m_selectAll = KStdAction::selectAll(this, SLOT(selectAllStencils()), actionCollection(), "selectAllStencils");
+  m_selectNone = KStdAction::deselect(this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils");
 
   KAction *action;
 
