@@ -1,0 +1,31 @@
+#ifndef __kdiagramm_idl__
+#define __kdiagramm_idl__
+
+#include <openparts.idl>
+#include <koffice.idl>
+#include <openparts_ui.idl>
+
+module KImage
+{
+	interface View : KOffice::View
+	{
+		slot void fitToView();
+		slot void fitWithProportions();
+		slot void originalSize();
+		slot void editImage();
+		slot void importImage();
+		slot void exportImage();
+		slot void pageLayout();
+	};
+
+	interface Document : KOffice::Document, KOffice::Print
+	{
+	};
+
+	interface DocumentFactory : KOffice::DocumentFactory
+	{
+	};
+};
+
+#endif
+
