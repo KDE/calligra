@@ -241,7 +241,7 @@ void ProcessAnchorTag ( QDomNode       myNode,
     QString *instance = (QString *) tagData;
 
     QString type;
-    *instance = "";
+    *instance = QString::null;
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "type",     "QString", (void *) &type    )
                        << AttrProcessing ( "instance", "QString", (void *) instance );
@@ -252,7 +252,7 @@ void ProcessAnchorTag ( QDomNode       myNode,
        kdError (30508) << "Unknown ANCHOR type " << type << "!" << endl;
     }
 
-    if ( (*instance).length () == 0 )
+    if ( (*instance).isEmpty () )
     {
         kdError (30508) << "Bad ANCHOR instance name!" << endl;
     }
@@ -545,7 +545,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWE
 #endif
 
 
-    if ( layout->styleName.length () == 0 )
+    if ( layout->styleName.isEmpty () )
     {
         layout->styleName = "Standard";
 
@@ -584,7 +584,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWE
 void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader * )
 {
     QString *tagText = (QString *) tagData;
-
+    
     QDomText myText ( myNode.firstChild ().toText () );
 
     if ( !myText.isNull () )
@@ -593,7 +593,7 @@ void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader
     }
     else
     {
-        *tagText = "";
+        *tagText = QString::null;
     }
 
     AllowNoAttributes (myNode);

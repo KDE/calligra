@@ -193,7 +193,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
     switch ( frameType )
     {
         case 1:
-            if ( grpMgr.length () == 0 )
+            if ( grpMgr.isEmpty () )
             {
                 QValueList<TagProcessing> tagProcessingList;
                 tagProcessingList << TagProcessing ( "FRAME",     NULL,                NULL              )
