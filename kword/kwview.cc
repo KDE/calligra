@@ -345,23 +345,23 @@ void KWView::setupActions()
                                          this, SLOT( toolsEdit() ),
                                          actionCollection(), "tools_edit" );
     actionToolsEdit->setExclusiveGroup( "tools" );
-    actionToolsEditFrames = new KToggleAction( i18n( "Edit &Frames" ), "editframetool", Key_F5,
+    actionToolsEditFrames = new KToggleAction( i18n( "Edit &Frames" ), "frame_text", Key_F5,
                                                this, SLOT( toolsEditFrame() ),
                                                actionCollection(), "tools_editframes" );
     actionToolsEditFrames->setExclusiveGroup( "tools" );
-    actionToolsCreateText = new KToggleAction( i18n( "&Create Text Frame" ), "textframetool", Key_F6,
+    actionToolsCreateText = new KToggleAction( i18n( "&Create Text Frame" ), "frame_text", Key_F6,
                                                this, SLOT( toolsCreateText() ),
                                                actionCollection(), "tools_createtext" );
     actionToolsCreateText->setExclusiveGroup( "tools" );
-    actionToolsCreatePix = new KToggleAction( i18n( "&Create Picture Frame" ), "picframetool", Key_F7,
+    actionToolsCreatePix = new KToggleAction( i18n( "&Create Picture Frame" ), "frame_image", Key_F7,
                                               this, SLOT( toolsCreatePix() ),
                                               actionCollection(), "tools_createpix" );
     actionToolsCreatePix->setExclusiveGroup( "tools" );
-    actionToolsCreateFormula = new KToggleAction( i18n( "&Create Formula Frame" ), "formula", Key_F11,
+    actionToolsCreateFormula = new KToggleAction( i18n( "&Create Formula Frame" ), "frame_formula", Key_F11,
                                                   this, SLOT( toolsFormula() ),
                                                   actionCollection(), "tools_formula" );
     actionToolsCreateFormula->setExclusiveGroup( "tools" );
-    actionToolsCreatePart = new KToggleAction( i18n( "&Create Object Frame" ), "parts", Key_F12,
+    actionToolsCreatePart = new KToggleAction( i18n( "&Create Object Frame" ), "frame_query", Key_F12,
                                                this, SLOT( toolsPart() ),
                                                actionCollection(), "tools_part" );
     actionToolsCreatePart->setExclusiveGroup( "tools" );
