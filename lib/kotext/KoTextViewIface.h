@@ -53,6 +53,13 @@ k_dcop:
     void setTextColor(const QColor &color);
     void setTextBackgroundColor(const QColor &);
     void setAlign(int align);
+    void setAlign(const QString &);
+
+    bool isReadWrite() const ;
+    void setReadWrite( bool b );
+
+    void hideCursor();
+    void showCursor();
 
 private:
     KoTextView *m_textView;

@@ -21,6 +21,7 @@
 #include "kotextview.h"
 #include <kapplication.h>
 #include <dcopclient.h>
+#include <kdebug.h>
 
 KoTextViewIface::KoTextViewIface( KoTextView *_textview )
     : DCOPObject()
@@ -109,3 +110,39 @@ void KoTextViewIface::setAlign(int align)
     m_textView->setAlign(align);
 }
 
+void KoTextViewIface::setAlign(const QString &align)
+{
+    if( align=="AlignLeft")
+        m_textView->setAlign(Qt::AlignLeft);
+    else if (align=="AlignRight")
+        m_textView->setAlign(Qt::AlignRight);
+    else if (align=="AlignCenter")
+        m_textView->setAlign(Qt::AlignCenter);
+    else if (align=="AlignJustify")
+        m_textView->setAlign(Qt::AlignJustify);
+    else
+    {
+        kdDebug()<<"Align value don't recognize...\n";
+        m_textView->setAlign(Qt::AlignLeft);
+    }
+}
+
+bool KoTextViewIface::isReadWrite() const
+{
+    return m_textView->isReadWrite();
+}
+
+void KoTextViewIface::setReadWrite( bool b )
+{
+    m_textView->setReadWrite(b);
+}
+
+void KoTextViewIface::hideCursor()
+{
+    m_textView->hideCursor();
+}
+
+void KoTextViewIface::showCursor()
+{
+    m_textView->showCursor();
+}
