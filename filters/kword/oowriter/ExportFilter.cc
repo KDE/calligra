@@ -189,12 +189,12 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData("pt\" ");
     
     
-    zipWriteData("  \"/>\n");
+    zipWriteData("/>\n");
     zipWriteData("  </style:page-master-name>\n");
     zipWriteData(" </style:automatic-styles>\n");
     
     zipWriteData(" <style:master-styles>\n");
-    zipWriteData("  <style:master-page style:name=\"Standard>\" style:page-master-name=\"pm1\" />\n");
+    zipWriteData("  <style:master-page style:name=\"Standard\" style:page-master-name=\"pm1\" />\n");
     zipWriteData(" </style:master-styles>\n");
         
     zipWriteData( "</office:document-styles>\n" );
