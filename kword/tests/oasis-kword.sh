@@ -90,4 +90,4 @@ diff -urp oasisregtest-orig oasisregtest-final 2>&1 | tee oasisdiff | less
 
 echo "See oasisregtest-oasis for the OASIS xml files."
 echo "For a better diffing mechanism, launch xemacs and paste into a terminal:"
-echo "gnudoit '(ediff-files \"oasisregtest-orig/maindoc.xml\" \"oasisregtest-final/maindoc.xml\")'"
+echo "gnudoit '(ediff-files \"$PWD/oasisregtest-orig/maindoc.xml\" \"$PWD/oasisregtest-final/maindoc.xml\")'"
