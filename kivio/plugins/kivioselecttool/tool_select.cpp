@@ -777,7 +777,7 @@ y <= by+three_pixels
 /**
  * Tests if a point is over a stencils
  */
-int SelectTool::isOverResizeHandle( KivioStencil *pStencil, float x, float y )
+int SelectTool::isOverResizeHandle( KivioStencil *pStencil, const float x, const float y )
 {
     float three_pixels = 4.0;
     float newX, newY, newW, newH;

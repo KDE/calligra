@@ -99,8 +99,8 @@ private:
     void readSmallBlockDepot();
     void readSmallBlockFile();
     void readRootList();
-    void readPPSEntry(int pos, int handle);
-    void createTree(const int handle, short index);
+    void readPPSEntry(int pos, const int handle);
+    void createTree(const int handle, const short index);
     const unsigned char *readBBStream(int start, bool setmaxSblock=false);
     const unsigned char *readSBStream(int start) const;
     int nextBigBlock(int pos) const;

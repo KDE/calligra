@@ -13,7 +13,7 @@ class CSVDialog : public KDialogBase
 public:
     enum Header { TEXT, NUMBER, DATE, CURRENCY };
 
-    CSVDialog(QWidget* parent, QByteArray& fileArray, QString seperator);
+    CSVDialog(QWidget* parent, QByteArray& fileArray, const QString seperator);
     ~CSVDialog();
 
     int getRows();
