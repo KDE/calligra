@@ -1362,7 +1362,7 @@ void KWFrameDia::enableRunAround()
 
 bool KWFrameDia::applyChanges()
 {
-    //kdDebug() << "KWFrameDia::applyChanges"<<endl;
+    kdDebug() << "KWFrameDia::applyChanges"<<endl;
     KWFrame *frameCopy = 0L;
     bool isNewFrame=false;
     if(frame) { // only do undo/redo when we have 1 frame to change for now..
@@ -1372,7 +1372,6 @@ bool KWFrameDia::applyChanges()
     QString name=QString::null;
 
     KMacroCommand * macroCmd=0L;
-
     if ( tab3 ) {
         // Frame/Frameset belonging, and frameset naming
         // We basically have three cases:
@@ -1442,7 +1441,6 @@ bool KWFrameDia::applyChanges()
                 }
             }
         }
-
         if(rNewFrameset->isChecked() || rExistingFrameset->isChecked()) {
             // check if new name is unique
             for (QPtrListIterator<KWFrameSet> fit = doc->framesetsIterator(); fit.current() ; ++fit ) {
@@ -1464,7 +1462,6 @@ bool KWFrameDia::applyChanges()
             }
         }
     }
-
     if ( tab1 ) {
         // Copy
         if(frame)
@@ -1516,7 +1513,6 @@ bool KWFrameDia::applyChanges()
 
             }
         }
-
         // NewFrameBehavior
         bool update=true;
         KWFrame::NewFrameBehavior nfb=KWFrame::Reconnect;
@@ -1566,7 +1562,6 @@ bool KWFrameDia::applyChanges()
             }
         }
     }
-
     if ( tab2 ) {
         // Run around
         KWFrame::RunAround ra=KWFrame::RA_BOUNDINGRECT;
@@ -1612,7 +1607,6 @@ bool KWFrameDia::applyChanges()
             for(KWFrame *f=allFrames.first();f; f=allFrames.next())
                 f->setRunAroundGap(newValue);
     }
-
     if(tab5) {
         QBrush tmpBrush=frameBrushStyle();
         if(frame) {
@@ -1636,7 +1630,7 @@ bool KWFrameDia::applyChanges()
     double uTop = 0.0;
     double uBottom = 0.0;
     double uRight = 0.0;
-    if(tab4) {
+    if(tab4 && frame) {
         px = QMAX(0,KoUnit::ptFromUnit( sx->value(), doc->getUnit() ));
         int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
         py = QMAX(0, KoUnit::ptFromUnit(sy->value(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
@@ -1647,7 +1641,6 @@ bool KWFrameDia::applyChanges()
         uTop=QMAX(0, KoUnit::ptFromUnit( smt->value(), doc->getUnit() ));
         uBottom=QMAX(0, KoUnit::ptFromUnit( smb->value(), doc->getUnit() ));
     }
-
     KoRect rect( px, py, pw, ph );
 
     //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
@@ -1694,8 +1687,7 @@ bool KWFrameDia::applyChanges()
             macroCmd->addCommand(cmd);
         }
     }
-
-    if ( tab4 ) {
+    if ( tab4 && frame) {
         // The floating attribute applies to the whole frameset...
         KWFrameSet * fs = frame->frameSet();
         KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
