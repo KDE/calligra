@@ -100,7 +100,7 @@ KarbonPart::initDoc()
 	KoTemplateChooseDia::ReturnType result;
 
         KoTemplateChooseDia::DialogType dlgtype;
-        //if (KoApplication::isStarting())
+        //if (initDocFlags() != KoDocument::InitDocFileNew)
             dlgtype = KoTemplateChooseDia::Everything;
       //  else
         //    dlgtype = KoTemplateChooseDia::OnlyTemplates;
