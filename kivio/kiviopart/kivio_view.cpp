@@ -1,6 +1,6 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000-2003 theKompany.com & Dave Marotti,
+ * Copyright (C) 2000-2004 theKompany.com & Dave Marotti,
  *                         Peter Simonsson
  *
  * This program is free software; you can redistribute it and/or
@@ -118,6 +118,8 @@
 #include "kiviotextformatdlg.h"
 #include "kiviostencilformatdlg.h"
 #include "kivioarrowheadformatdlg.h"
+
+#include "kolinewidthaction.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -459,25 +461,11 @@ void KivioView::setupActions()
                                             this, SLOT( textSubScript() ),
                                             actionCollection(), "textVAlignSub" );
   m_textVAlignSub->setExclusiveGroup( "valign" );
-
-  QWidget* lineWidthWidget = new QWidget(this, "kde toolbar widget");
-  QLabel* lineWidthLbl = new QLabel(lineWidthWidget, "kde toolbar widget");
-  lineWidthLbl->setPixmap(kapp->iconLoader()->loadIcon("linewidth", KIcon::Toolbar, 22));
-
-  // Hide if readonly!
-  if(!m_pDoc->isReadWrite()) {
-    lineWidthWidget->hide();
-  }
-
-  m_setLineWidth = new KoUnitDoubleSpinBox(lineWidthWidget, 0.0, 1000.0, 0.1, 1.0, m_pDoc->units(), 2, "kde toolbar widget");
-  QHBoxLayout* lwl = new QHBoxLayout(lineWidthWidget);
-  lwl->addWidget(lineWidthLbl);
-  lwl->addWidget(m_setLineWidth);
-  KAction* action = new KWidgetAction(lineWidthWidget, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
-  action->setWhatsThis(i18n("The line width allows setting the width of outlines, either using predefined values or user input"));
-  connect(m_setLineWidth, SIGNAL(valueChanged(double)), SLOT(setLineWidth()));
-  connect(m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setLineWidthUnit(KoUnit::Unit)));
-
+  
+  m_lineWidthAction = new KoLineWidthAction(i18n("Line Width"), "linewidth", this, SLOT(setLineWidth(double)),
+    actionCollection(), "setLineWidth");
+  connect(m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_lineWidthAction, SLOT(setUnit(KoUnit::Unit)));
+  
   m_paperLayout = new KAction( i18n("Page Layout..."), 0, this, SLOT(paperLayoutDlg()), actionCollection(), "paperLayout" );
   m_insertPage = new KAction( i18n("Insert Page"),"item_add", 0, this, SLOT(insertPage()), actionCollection(), "insertPage" );
   m_removePage = new KAction( i18n("Remove Page"), "item_remove",0,this, SLOT(removePage()), actionCollection(), "removePage" );
@@ -947,36 +935,38 @@ void KivioView::setTextColor()
     m_pDoc->updateView(m_pActivePage);
 }
 
-void KivioView::setLineWidth()
+void KivioView::setLineWidth(double width)
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-    if (!pStencil)
-      return;
-    KMacroCommand * macro = new KMacroCommand( i18n("Change Line Width") );
-    bool createMacro = false ;
-    double newValue = KoUnit::ptFromUnit(m_setLineWidth->value(), m_pDoc->units());
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  
+  if (!pStencil)
+    return;
+    
+  KMacroCommand * macro = new KMacroCommand( i18n("Change Line Width") );
+  bool createMacro = false ;
 
-    while( pStencil )
+  while( pStencil )
+  {
+    if ( width != pStencil->lineWidth() )
     {
-        if ( newValue != pStencil->lineWidth() )
-        {
-            KivioChangeLineWidthCommand * cmd = new KivioChangeLineWidthCommand( i18n("Change Line Width"), m_pActivePage, pStencil, pStencil->lineWidth(), newValue );
+      KivioChangeLineWidthCommand * cmd = new KivioChangeLineWidthCommand( i18n("Change Line Width"),
+        m_pActivePage, pStencil, pStencil->lineWidth(), width );
 
-            pStencil->setLineWidth( newValue );
-            macro->addCommand( cmd );
-            createMacro = true;
-        }
-
-        pStencil = m_pActivePage->selectedStencils()->next();
+      pStencil->setLineWidth( width );
+      macro->addCommand( cmd );
+      createMacro = true;
     }
 
-    if ( createMacro ) {
-        m_pDoc->addCommand( macro );
-    } else {
-        delete macro;
-    }
+    pStencil = m_pActivePage->selectedStencils()->next();
+  }
 
-    m_pDoc->updateView(m_pActivePage);
+  if ( createMacro ) {
+    m_pDoc->addCommand( macro );
+  } else {
+    delete macro;
+  }
+
+  m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::groupStencils()
@@ -1017,7 +1007,7 @@ QColor KivioView::bgColor() const
 
 double KivioView::lineWidth() const
 {
-    return KoUnit::ptFromUnit(m_setLineWidth->value(), m_pDoc->units());
+    return m_lineWidthAction->currentWidth();
 }
 
 
@@ -1185,7 +1175,7 @@ void KivioView::updateToolBars()
         m_setBold->setChecked( false );
         m_setItalics->setChecked( false );
         m_setUnderline->setChecked( false );
-        m_setLineWidth->setValue( KoUnit::ptToUnit(1.0, m_pDoc->units()) );
+        m_lineWidthAction->setCurrentWidth(1.0);
         showAlign(Qt::AlignHCenter);
         showVAlign(Qt::AlignVCenter);
 
@@ -1209,7 +1199,7 @@ void KivioView::updateToolBars()
         m_setItalics->setChecked( f.italic() );
         m_setUnderline->setChecked( f.underline() );
 
-        m_setLineWidth->setValue( KoUnit::ptToUnit(pStencil->lineWidth(), m_pDoc->units()) );
+        m_lineWidthAction->setCurrentWidth(pStencil->lineWidth());
 
         m_setFGColor->setActiveColor(pStencil->fgColor());
         m_setBGColor->setActiveColor(pStencil->bgColor());
@@ -1726,11 +1716,6 @@ void KivioView::setRulerPageLayout(const KoPageLayout& l)
   vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
   hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
   m_pStencilGeometryPanel->setPageLayout(l);
-}
-
-void KivioView::setLineWidthUnit(KoUnit::Unit u)
-{
-  m_setLineWidth->setUnit(u);
 }
 
 void KivioView::viewZoom(const QString& s)

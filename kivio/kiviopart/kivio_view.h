@@ -64,6 +64,7 @@ class KoRuler;
 class KoZoomHandler;
 class KoUnitDoubleSpinBox;
 class KStatusBarLabel;
+class KoLineWidthAction;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -211,7 +212,7 @@ class KivioView : public KoView
     void setFontFamily( const QString & );
     void setFontSize( int );
 
-    void setLineWidth();
+    void setLineWidth(double);
 
     void toggleFontBold(bool);
     void toggleFontItalics(bool);
@@ -248,8 +249,6 @@ class KivioView : public KoView
     void setRulerHOffset(int h);
     void setRulerVOffset(int v);
     void rulerChangedUnit(QString u);
-
-    void setLineWidthUnit(KoUnit::Unit u);
 
     void textFormat();
     void stencilFormat();
@@ -345,6 +344,7 @@ class KivioView : public KoView
     KAction* m_stencilToFront;
     KAction* m_stencilToBack;
     KAction* m_alignAndDistribute;
+    KoLineWidthAction* m_lineWidthAction;
 };
 
 #endif
