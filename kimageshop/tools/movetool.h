@@ -52,7 +52,7 @@ public:
   MoveTool( KImageShopDoc *doc );
   ~MoveTool();
 
-  virtual char* toolName() { return CORBA::string_dup( "MoveTool" ); }
+  virtual QCString toolName() { return QCString( "MoveTool" ); }
 
   virtual void mousePress( const KImageShop::MouseEvent& e ); 
   virtual void mouseMove( const KImageShop::MouseEvent& e );

@@ -56,7 +56,7 @@ public:
   virtual void cleanUp();
   virtual void removeView( KImageShopView* _view );
 
-  virtual CORBA::Boolean initDoc();
+  virtual bool initDoc();
   virtual KOffice::MainWindow_ptr createMainWindow();
   
   // Wrapper for @ref #createImageView
@@ -64,13 +64,13 @@ public:
   virtual KImageShopView* createImageView( QWidget* _parent = 0 );
 
   virtual void viewList( OpenParts::Document::ViewList*& _list );
-  virtual char* mimeType();
-  virtual CORBA::Boolean isModified();
+  virtual QCString mimeType();
+  virtual bool isModified();
   virtual int viewCount();
   virtual void setModified( bool _c );
   virtual bool isEmpty();
   virtual void print( QPaintDevice* _dev );
-  virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
+  virtual void draw( QPaintDevice* _dev, long _width, long _height, float _scale );
 
   KoCommandHistory* commandHistory() { return &m_commands; };
 

@@ -29,9 +29,9 @@ Tool::Tool(KImageShopDoc *doc, KImageShopView *view)
 
 Tool::~Tool() {}
 
-char* Tool::toolName()
+QCString Tool::toolName()
 {
-  return CORBA::string_dup("BaseTool");
+  return QCString("BaseTool");
 }
 
 void Tool::optionsDialog()

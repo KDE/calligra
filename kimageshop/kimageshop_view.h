@@ -71,7 +71,7 @@ public:
   float zoomFactor() { return m_ZoomFactor; }
 
   KImageShopDoc* doc();
-  CORBA::Boolean printDlg();
+  bool printDlg();
 
   int xPaintOffset();
   int yPaintOffset();
@@ -126,8 +126,8 @@ public slots:
   void changeUndo( QString, bool);
   void changeRedo( QString, bool);
 
-  void activatedUndoMenu( CORBA::Long );
-  void activatedRedoMenu( CORBA::Long );
+  void activatedUndoMenu( long );
+  void activatedRedoMenu( long );
 
 private:
 
@@ -141,7 +141,7 @@ protected:
   void setupScrollbars();
   void setupRulers();
 
-  virtual bool event( const char* _event, const CORBA::Any& _value );
+  virtual bool event( const QCString &_event, const CORBA::Any& _value );
   virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
   virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
 
@@ -160,19 +160,19 @@ public:
 
 protected:
   OpenPartsUI::Menu_var m_vMenuEdit;
-  CORBA::Long m_idMenuEdit_Undo;
-  CORBA::Long m_idMenuEdit_Redo;
-  CORBA::Long m_idMenuEdit_Cut;
-  CORBA::Long m_idMenuEdit_Copy;
-  CORBA::Long m_idMenuEdit_Paste;
+  long m_idMenuEdit_Undo;
+  long m_idMenuEdit_Redo;
+  long m_idMenuEdit_Cut;
+  long m_idMenuEdit_Copy;
+  long m_idMenuEdit_Paste;
 
   OpenPartsUI::Menu_var m_vMenuView;
-  CORBA::Long m_idMenuView_LayerDialog;
-  CORBA::Long m_idMenuView_ColorDialog;
-  CORBA::Long m_idMenuView_BrushDialog;
-  CORBA::Long m_idMenuView_GradientDialog;
-  CORBA::Long m_idMenuView_GradientEditorDialog;
-  CORBA::Long m_idMenuView_Preferences;
+  long m_idMenuView_LayerDialog;
+  long m_idMenuView_ColorDialog;
+  long m_idMenuView_BrushDialog;
+  long m_idMenuView_GradientDialog;
+  long m_idMenuView_GradientEditorDialog;
+  long m_idMenuView_Preferences;
 
   OpenPartsUI::Menu_var m_vMenuImage;
   OpenPartsUI::Menu_var m_vMenuPlugIns;

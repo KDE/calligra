@@ -35,7 +35,7 @@ public:
   GradientTool( KImageShopDoc *_doc, Gradient *_gradient );
   ~GradientTool();
 
-  virtual char* toolName() { return CORBA::string_dup("GradientTool"); }
+  virtual QCString toolName() { return QCString("GradientTool"); }
 
   virtual void mousePress( const KImageShop::MouseEvent &_event );
   virtual void mouseMove( const KImageShop::MouseEvent &_event );

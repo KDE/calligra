@@ -33,7 +33,7 @@ class Tool : public KImageShop::Tool_skel
   Tool(KImageShopDoc *doc, KImageShopView *view = 0L);
   ~Tool();
 
-  virtual char* toolName();
+  virtual QCString toolName();
   virtual void optionsDialog();
 
   virtual void mousePress(const KImageShop::MouseEvent& e) = 0; 

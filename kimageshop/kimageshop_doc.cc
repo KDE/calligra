@@ -68,7 +68,7 @@ KImageShopDoc::~KImageShopDoc()
 {
 }
 
-CORBA::Boolean KImageShopDoc::initDoc()
+bool KImageShopDoc::initDoc()
 {
   // load some test layers
   QString _image = locate("appdata", "images/cam9b.jpg");	
@@ -146,13 +146,13 @@ void KImageShopDoc::slotUpdateViews(const QRect &area)
 
 void KImageShopDoc::viewList( OpenParts::Document::ViewList*& _list )
 {
-  _list->length( m_lstViews.count() );
+  _list->clear();
 
   int i = 0;
   QListIterator<KImageShopView> it( m_lstViews );
   for( ; it.current(); ++it )
   {
-    (*_list)[i++] = OpenParts::View::_duplicate( it.current() );
+    _list->append(OpenParts::View::_duplicate( it.current() ));
   }
 }
 
@@ -443,8 +443,8 @@ void KImageShopDoc::print( QPaintDevice* _dev )
   */
 }
 
-void KImageShopDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-		      CORBA::Float _scale )
+void KImageShopDoc::draw( QPaintDevice* _dev, long _width, long _height,
+		      float _scale )
 {
   /*
   kdebug( KDEBUG_INFO, 0, "DRAWING w=%li h=%li", _width, _height );
@@ -516,12 +516,12 @@ bool KImageShopDoc::saveDocument( const char *_filename,
 }
 */
 
-char* KImageShopDoc::mimeType()
+QCString KImageShopDoc::mimeType()
 {
-  return CORBA::string_dup( MIME_TYPE );
+  return QCString( MIME_TYPE );
 }
 
-CORBA::Boolean KImageShopDoc::isModified()
+bool KImageShopDoc::isModified()
 {
   return m_bModified;
 }
@@ -571,12 +571,12 @@ void KImageShopDoc::slotUndoRedoChanged( QStringList _undo, QStringList _redo )
 
       for( i = 0; i < _undo.count(); i++ )
       {
-        pView->m_vTBUndoMenu->insertItem7( Q2C( *(_undo.at( i )) ), _undo.count() - i, 0 );
+        pView->m_vTBUndoMenu->insertItem7( *(_undo.at( i )), _undo.count() - i, 0 );
       }
 
       for( i = 0; i < _redo.count(); i++ )
       {
-        pView->m_vTBRedoMenu->insertItem7( Q2C( *(_redo.at( i )) ), _redo.count() - i, 0 );
+        pView->m_vTBRedoMenu->insertItem7( *(_redo.at( i )), _redo.count() - i, 0 );
       }
     }
   }

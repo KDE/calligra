@@ -149,7 +149,7 @@ void KImageShopView::cleanUp()
   KoViewIf::cleanUp();
 }
 
-bool KImageShopView::event( const char* _event, const CORBA::Any& _value )
+bool KImageShopView::event( const QCString &_event, const CORBA::Any& _value )
 {
   EVENT_MAPPER( _event, _value );
 
@@ -179,7 +179,6 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
     return true;
   }
 
-  CORBA::WString_var text;
   OpenPartsUI::Pixmap_var pix;
 
   /*
@@ -192,17 +191,15 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarEdit->setBarPos( OpenPartsUI::Top );
 
   // undo
-  text = Q2C( i18n( "Undo last action." ) );
   pix = OPICON( "undo" );
-  m_vToolBarEdit->insertButton2( pix, TBEDIT_UNDO, SIGNAL( clicked() ), this, "slotEditUndo", true, text, -1 );
+  m_vToolBarEdit->insertButton2( pix, TBEDIT_UNDO, SIGNAL( clicked() ), this, "slotEditUndo", true, i18n( "Undo last action." ), -1 );
   m_vToolBarEdit->setDelayedPopup( TBEDIT_UNDO, m_vTBUndoMenu );
   m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, false );
   m_vTBUndoMenu->connect( "activated", this, "activatedUndoMenu" );
 
   // redo
-  text = Q2C( i18n( "Redo last action." ) );
   pix = OPICON( "redo" );
-  m_vToolBarEdit->insertButton2( pix, TBEDIT_REDO, SIGNAL( clicked() ), this, "slotEditRedo", true, text, -1 );
+  m_vToolBarEdit->insertButton2( pix, TBEDIT_REDO, SIGNAL( clicked() ), this, "slotEditRedo", true, i18n( "Redo last action." ), -1 );
   m_vToolBarEdit->setDelayedPopup( TBEDIT_REDO, m_vTBRedoMenu );
   m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, false );
   m_vTBRedoMenu->connect( "activated", this, "activatedRedoMenu" );
@@ -210,21 +207,18 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarEdit->insertSeparator( -1 );
 
   // cut
-  text = Q2C( i18n( "Cut selected area." ) );
   pix = OPICON( "editcut" );
-  m_vToolBarEdit->insertButton2( pix, TBEDIT_CUT, SIGNAL( clicked() ), this, "slotEditCut", true, text, -1 );
+  m_vToolBarEdit->insertButton2( pix, TBEDIT_CUT, SIGNAL( clicked() ), this, "slotEditCut", true, i18n( "Cut selected area." ), -1 );
   m_vToolBarEdit->setItemEnabled( TBEDIT_CUT, false );
 
   // copy
-  text = Q2C( i18n( "Copy selected area." ) );
   pix = OPICON( "editcopy" );
-  m_vToolBarEdit->insertButton2( pix, TBEDIT_COPY, SIGNAL( clicked() ), this, "slotEditCopy", true, text, -1 );
+  m_vToolBarEdit->insertButton2( pix, TBEDIT_COPY, SIGNAL( clicked() ), this, "slotEditCopy", true, i18n( "Copy selected area." ), -1 );
   m_vToolBarEdit->setItemEnabled( TBEDIT_COPY, false );
 
   // paste
-  text = Q2C( i18n( "Paste clipboard into active layer." ) );
   pix = OPICON( "editpaste" );
-  m_vToolBarEdit->insertButton2( pix, TBEDIT_PASTE, SIGNAL( clicked() ), this, "slotEditPaste", true, text, -1 );
+  m_vToolBarEdit->insertButton2( pix, TBEDIT_PASTE, SIGNAL( clicked() ), this, "slotEditPaste", true, i18n( "Paste clipboard into active layer." ), -1 );
   m_vToolBarEdit->setItemEnabled( TBEDIT_PASTE, false );
 
   /*
@@ -235,34 +229,29 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarDialogs->setFullWidth( false );
 
   // layer dialog
-  text = Q2C( i18n( "Show/hide layer dialog." ) );
   pix = OPICON( "layer_dialog" );
-  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_LAYER, SIGNAL( clicked() ), this, "slotLayerDialog", true, text, -1 );
+  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_LAYER, SIGNAL( clicked() ), this, "slotLayerDialog", true, i18n( "Show/hide layer dialog." ), -1 );
   m_vToolBarDialogs->setToggle( TBDIALOGS_LAYER, true );
   m_vToolBarDialogs->toggleButton( TBDIALOGS_LAYER );
 
   // color dialog
-  text = Q2C( i18n( "Show/hide color dialog." ) );
   pix = OPICON( "color_dialog" );
-  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_COLOR, SIGNAL( clicked() ), this, "slotColorDialog", true, text, -1 );
+  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_COLOR, SIGNAL( clicked() ), this, "slotColorDialog", true, i18n( "Show/hide color dialog." ), -1 );
   m_vToolBarDialogs->setToggle( TBDIALOGS_COLOR, true );
 
   // brush dialog
-  text = Q2C( i18n( "Show/hide brush dialog." ) );
   pix = OPICON( "brush_dialog" );
-  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_BRUSH, SIGNAL( clicked() ), this, "slotBrushDialog", true, text, -1 );
+  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_BRUSH, SIGNAL( clicked() ), this, "slotBrushDialog", true, i18n( "Show/hide brush dialog." ), -1 );
   m_vToolBarDialogs->setToggle( TBDIALOGS_BRUSH, true );
 
   // gradient dialog
-  text = Q2C( i18n( "Show/hide gradient dialog." ) );
   pix = OPICON( "gradient_dialog" );
-  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_GRADIENT, SIGNAL( clicked() ), this, "slotGradientDialog", true, text, -1 );
+  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_GRADIENT, SIGNAL( clicked() ), this, "slotGradientDialog", true, i18n( "Show/hide gradient dialog." ), -1 );
   m_vToolBarDialogs->setToggle( TBDIALOGS_GRADIENT, true );
 
   // gradient editor dialog
-  text = Q2C( i18n( "Show/hide gradient editor dialog." ) );
   pix = OPICON( "gradienteditor_dialog" );
-  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_GRADIENTEDITOR, SIGNAL( clicked() ), this, "slotGradientEditorDialog", true, text, -1 );
+  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_GRADIENTEDITOR, SIGNAL( clicked() ), this, "slotGradientEditorDialog", true, i18n( "Show/hide gradient editor dialog." ), -1 );
   m_vToolBarDialogs->setToggle( TBDIALOGS_GRADIENTEDITOR, true );
 
   /*
@@ -274,31 +263,27 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarTools->setBarPos( OpenPartsUI::Left );
   
   // move tool
-  text = Q2C( i18n( "Move layers and selections." ) );
   pix = OPICON( "move" );
-  m_vToolBarTools->insertButton2( pix, TBTOOLS_MOVETOOL, SIGNAL( clicked() ), this, "slotActivateMoveTool", true, text, -1 );
+  m_vToolBarTools->insertButton2( pix, TBTOOLS_MOVETOOL, SIGNAL( clicked() ), this, "slotActivateMoveTool", true, i18n( "Move layers and selections." ), -1 );
   m_vToolBarTools->setToggle( TBTOOLS_MOVETOOL, true );
   m_vToolBarTools->toggleButton( TBTOOLS_MOVETOOL );
   m_toolButtons.push_back( TBTOOLS_MOVETOOL );
 
   // zoom tool
-  text = Q2C( i18n( "Zoom in/out." ) );
   pix = OPICON( "viewmag" );
-  m_vToolBarTools->insertButton2( pix, TBTOOLS_ZOOMTOOL, SIGNAL(clicked()), this, "slotActivateZoomTool", true, text, -1 );
+  m_vToolBarTools->insertButton2( pix, TBTOOLS_ZOOMTOOL, SIGNAL(clicked()), this, "slotActivateZoomTool", true, i18n( "Zoom in/out." ), -1 );
   m_vToolBarTools->setToggle( TBTOOLS_ZOOMTOOL, true );
   m_toolButtons.push_back( TBTOOLS_ZOOMTOOL );
 
   // paint tool
-  text = Q2C( i18n( "Paint using a brush." ) );
   pix = OPICON( "paintbrush" );
-  m_vToolBarTools->insertButton2( pix, TBTOOLS_BRUSHTOOL, SIGNAL(clicked()), this, "slotActivateBrushTool", true, text, -1 );
+  m_vToolBarTools->insertButton2( pix, TBTOOLS_BRUSHTOOL, SIGNAL(clicked()), this, "slotActivateBrushTool", true, i18n( "Paint using a brush." ), -1 );
   m_vToolBarTools->setToggle( TBTOOLS_BRUSHTOOL, true );
   m_toolButtons.push_back( TBTOOLS_BRUSHTOOL );
 
   // gradient tool
-  text = Q2C( i18n( "Draw a gradient." ) );
   pix = OPICON( "gradient" );
-  m_vToolBarTools->insertButton2( pix, TBTOOLS_GRADIENTTOOL, SIGNAL(clicked()), this, "slotActivateGradientTool", true, text, -1 );
+  m_vToolBarTools->insertButton2( pix, TBTOOLS_GRADIENTTOOL, SIGNAL(clicked()), this, "slotActivateGradientTool", true, i18n( "Draw a gradient." ), -1 );
   m_vToolBarTools->setToggle( TBTOOLS_GRADIENTTOOL, true );
   m_toolButtons.push_back( TBTOOLS_GRADIENTTOOL );
 
@@ -325,79 +310,62 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   KStdAccel stdAccel;
 
   // don't use Q2C directly in arguments to avoid memory leaks!
-  CORBA::WString_var text;
   OpenPartsUI::Pixmap_var pix;
 
   // edit menu
-  text = Q2C( i18n( "&Edit" ) );
-  menubar->insertMenu( text , m_vMenuEdit, -1, -1 );
+  menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
-  text = Q2C( i18n( "&Undo" ) );
   pix = OPICON( "undo" );
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditUndo", stdAccel.undo() );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, i18n( "&Undo" ), this, "slotEditUndo", stdAccel.undo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
 
-  text = Q2C( i18n( "&Redo" ) );
   pix = OPICON( "redo" );
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditRedo", stdAccel.redo() );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, i18n( "&Redo" ), this, "slotEditRedo", stdAccel.redo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Cut" ) );
   pix = OPICON( "editcut" );
-  m_idMenuEdit_Cut = m_vMenuEdit->insertItem3( pix, text, this, "slotEditCut", stdAccel.cut() );
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem3( pix, i18n( "&Cut" ), this, "slotEditCut", stdAccel.cut() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Cut, false );
 
-  text = Q2C( i18n( "&Copy" ) );
   pix = OPICON( "editcopy" );
-  m_idMenuEdit_Copy = m_vMenuEdit->insertItem3( pix, text, this, "slotEditCopy", stdAccel.cut() );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem3( pix, i18n( "&Copy" ), this, "slotEditCopy", stdAccel.cut() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Copy, false );
 
-  text = Q2C( i18n( "&Paste" ) );
   pix = OPICON( "editpaste" );
-  m_idMenuEdit_Paste = m_vMenuEdit->insertItem3( pix, text, this, "slotEditPaste", stdAccel.cut() );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem3( pix, i18n( "&Paste" ), this, "slotEditPaste", stdAccel.cut() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, false );
 
   // view menu
-  text = Q2C( i18n( "&View" ) );
-  menubar->insertMenu( text , m_vMenuView, -1, -1 );
+  menubar->insertMenu( i18n( "&View" ) , m_vMenuView, -1, -1 );
 
-  text = Q2C( i18n( "&Layer dialog" ) );
-  m_idMenuView_LayerDialog = m_vMenuView->insertItem( text, this, "slotLayerDialog", 0 );
+  m_idMenuView_LayerDialog = m_vMenuView->insertItem( i18n( "&Layer dialog" ), this, "slotLayerDialog", 0 );
 
-  text = Q2C( i18n( "&Color dialog" ) );
-  m_idMenuView_ColorDialog = m_vMenuView->insertItem( text, this, "slotColorDialog", 0 );
+  m_idMenuView_ColorDialog = m_vMenuView->insertItem( i18n( "&Color dialog" ), this, "slotColorDialog", 0 );
 
-  text = Q2C( i18n( "&Brushes dialog" ) );
-  m_idMenuView_BrushDialog = m_vMenuView->insertItem( text, this, "slotBrushDialog", 0 );
+  m_idMenuView_BrushDialog = m_vMenuView->insertItem( i18n( "&Brushes dialog" ), this, "slotBrushDialog", 0 );
 
-  text = Q2C( i18n( "&Gradient dialog" ) );
-  m_idMenuView_GradientDialog = m_vMenuView->insertItem( text, this, "slotGradientDialog", 0 );
+  m_idMenuView_GradientDialog = m_vMenuView->insertItem( i18n( "&Gradient dialog" ), this, "slotGradientDialog", 0 );
 
-  text = Q2C( i18n( "Gradient &editor dialog" ) );
-  m_idMenuView_GradientEditorDialog = m_vMenuView->insertItem( text, this, "slotGradientEditorDialog", 0 );
+  m_idMenuView_GradientEditorDialog = m_vMenuView->insertItem( i18n( "Gradient &editor dialog" ), this, "slotGradientEditorDialog", 0 );
 
   m_vMenuView->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Preferences" ) );
-  m_idMenuView_Preferences = m_vMenuView->insertItem( text, this, "slotPreferences", 0 );
+  m_idMenuView_Preferences = m_vMenuView->insertItem( i18n( "&Preferences" ), this, "slotPreferences", 0 );
 
   m_vMenuView->setCheckable( true );
   m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, true );
 
 /*
   // image menu
-  text = Q2C( i18n( "&Image" ) );
-  menubar->insertMenu( text , m_vMenuImage, -1, -1 );
+  menubar->insertMenu( i18n( "&Image" ), m_vMenuImage, -1, -1 );
 
   // plugins menu
-  text = Q2C( i18n( "&Plugins" ) );
-  menubar->insertMenu( text , m_vMenuPlugIns, -1, -1 );
+  menubar->insertMenu( i18n( "&Plugins" ), m_vMenuPlugIns, -1, -1 );
 
   // options menu
-  text = Q2C( i18n( "&Options" ) );
-  menubar->insertMenu( text , m_vMenuOptions, -1, -1 );
+  menubar->insertMenu( i18n( "&Options" ), m_vMenuOptions, -1, -1 );
 */
 
   return true;
@@ -554,7 +522,7 @@ void KImageShopView::helpUsing()
   kapp->invokeHTMLHelp("kimageshop/kimageshop.html", QString::null);
 }
 
-CORBA::Boolean KImageShopView::printDlg()
+bool KImageShopView::printDlg()
 {
   QPrinter prt;
 
@@ -890,12 +858,12 @@ void KImageShopView::redo( int _number )
     m_pDoc->commandHistory()->redo();
 }
 
-void KImageShopView::activatedUndoMenu( CORBA::Long _id )
+void KImageShopView::activatedUndoMenu( long _id )
 {
   undo( _id );
 }
 
-void KImageShopView::activatedRedoMenu( CORBA::Long _id )
+void KImageShopView::activatedRedoMenu( long _id )
 {
   redo( _id );
 }
@@ -1001,21 +969,17 @@ void KImageShopView::changeUndo( QString _text, bool _enable )
 {
   cout << "KImageShopView::changeUndo : " << endl;
 
-  CORBA::WString_var text;
-
   if( _enable )
   {
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, true );
     QString str;
     str.sprintf( i18n( "Undo: %s" ), _text.data() );
-    text = Q2C( str );
-    m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
+    m_vMenuEdit->changeItemText( str, m_idMenuEdit_Undo );
     m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, true );
   }
   else
   {
-    text = Q2C( i18n( "No Undo possible" ) );
-    m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
+    m_vMenuEdit->changeItemText( i18n( "No Undo possible" ), m_idMenuEdit_Undo );
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
     m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, false );
   }
@@ -1025,21 +989,17 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
 {
   cout << "KImageShopView::changeRedo : " << endl;
 
-  CORBA::WString_var text;
-
   if( _enable )
   {
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, true );
     QString str;
     str.sprintf( i18n( "Redo: %s" ), _text.data() );
-    text = Q2C( str );
-    m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
+    m_vMenuEdit->changeItemText( str, m_idMenuEdit_Redo );
     m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, true );
   }
   else
   {
-    text = Q2C( i18n( "No Redo possible" ) );
-    m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
+    m_vMenuEdit->changeItemText( i18n( "No Redo possible" ), m_idMenuEdit_Redo );
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
     m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, false );
   }

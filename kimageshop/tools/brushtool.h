@@ -33,7 +33,7 @@ class BrushTool : public Tool
   BrushTool(KImageShopDoc *doc, const Brush *_brush);
   ~BrushTool();
 
-  virtual char* toolName() { return CORBA::string_dup("BrushTool"); }
+  virtual QCString toolName() { return QCString("BrushTool"); }
 
   virtual void mousePress(const KImageShop::MouseEvent& e);
   virtual void mouseMove(const KImageShop::MouseEvent& e);
