@@ -1066,21 +1066,21 @@ bool RTFWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     if ( !docInfo.title.isEmpty() )
     {
         m_textDocInfo += "{\\title ";
-        m_textDocInfo += docInfo.title;
+        m_textDocInfo += escapeRtfText( docInfo.title );
         m_textDocInfo += "}";
     }
 
     if ( !docInfo.fullName.isEmpty() )
     {
         m_textDocInfo += "{\\author ";
-        m_textDocInfo += docInfo.fullName;
+        m_textDocInfo += escapeRtfText( docInfo.fullName );
         m_textDocInfo += "}";
     }
 
     if ( !docInfo.company.isEmpty() )
     {
         m_textDocInfo += "{\\company ";
-        m_textDocInfo += docInfo.company;
+        m_textDocInfo += escapeRtfText( docInfo.company );
         m_textDocInfo += "}";
     }
 
@@ -1094,7 +1094,7 @@ bool RTFWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     if ( !docInfo.abstract.isEmpty() )
     {
         m_textDocInfo += "{\\doccomm ";
-        m_textDocInfo += docInfo.abstract;
+        m_textDocInfo += escapeRtfText( docInfo.abstract );
         m_textDocInfo += "}";
     }
 
