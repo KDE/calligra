@@ -75,7 +75,7 @@ don't put a </?xml...> at the end of the file!).
             url:            ?
 -->
 <!ELEMENT DOC
-    (PAPER, ATTRIBUTES, FRAMESETS, STYLES)>
+    (PAPER, ATTRIBUTES, FRAMESETS, STYLES)>  <!-- missing: EMBEDDED ->
 <!ATTLIST DOC
     editor CDATA #IMPLIED
     mime CDATA "application/x-kword"
@@ -377,8 +377,10 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT STYLES
     (STYLE*)>
 <!ELEMENT STYLE
-    (NAME|FOLLOWING|FLOW|INDENTS|OFFSETS|COUNTER|LINESPACING|LEFTBORDER|
-        RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT)*>
+    (NAME|FOLLOWING|
+     FLOW|INDENTS|OFFSETS|LINESPACING|
+     LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|
+     COUNTER|FORMAT|TABULATOR)*>
 
 <!--    An anchor describes an object which is anchored.
 
@@ -490,7 +492,7 @@ don't put a </?xml...> at the end of the file!).
         Example: Style H1 has the <following name="body"> tag. When the user is
         finished typing the header tag and presses enter kword switches to the 
         style 'body'
-        the style-name given should be available.
+        The style-name given should be available.
 -->
 <!ELEMENT FOLLOWING
     EMPTY>
@@ -575,9 +577,9 @@ don't put a </?xml...> at the end of the file!).
 <!-- 
         value in points 
 -->
-<!ELEMENT LINESPACE
+<!ELEMENT LINESPACING
     EMPTY>
-<!ATTLIST LINESPACE
+<!ATTLIST LINESPACING
     value CDATA #REQUIRED>
 
 <!--
