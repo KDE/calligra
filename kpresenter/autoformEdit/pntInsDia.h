@@ -23,7 +23,7 @@
 #include <qradiobt.h>
 #include <qbttngrp.h>
 
-#include <kspinbox.h>
+#include <qspinbox.h>
 
 /******************************************************************/
 /* class PntInsDia                                                */
@@ -45,7 +45,7 @@ public:
     QLabel *label1,*label2;
     QRadioButton *radioBefore,*radioAfter;
     QButtonGroup *btnGrp;
-    KNumericSpinBox *spinBox;
+    QSpinBox *spinBox;
     QPushButton *okBut,*cancelBut;
 
 signals:

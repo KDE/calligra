@@ -51,8 +51,7 @@ PntInsDia::PntInsDia( QWidget* parent, const char* name, int points )
     label2->resize(label2->sizeHint());
     label2->move(label1->x(),radioAfter->y()+radioAfter->height()+10);
 
-    spinBox = new KNumericSpinBox(this);
-    spinBox->setRange(1,points);
+    spinBox = new QSpinBox(1, points, 1, this);
     spinBox->setValue(points);
     spinBox->resize(spinBox->sizeHint().width()/4,spinBox->sizeHint().height());
     spinBox->move(label1->x(),label2->y()+label2->height()+10);
@@ -93,7 +92,7 @@ void PntInsDia::insPnt()
 
     if (radioBefore->isChecked()) pos = false;
     else pos = true;
-    index = spinBox->getValue();
+    index = spinBox->value();
 
     emit insPoint(index,pos);
 }
