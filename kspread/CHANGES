@@ -323,9 +323,9 @@ Reduce memory to store condition.
 -----------------------------------------------------
 -Add new functions upper and lower
 -Now "hide table" and "hide grid" are saving
--Improved "kspread_dlg_show" 
+-Improved "kspread_dlg_show"
 -Add shortcut
- 
+
 2000-02-26 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -Add new function "find"
@@ -335,7 +335,7 @@ Reduce memory to store condition.
 -----------------------------------------------------
 -Add new dialog box "Linear Series" =>now you can create linear series
 -Improved kspread_dlg_conditional =>now there is a preview
-But I can't change color because there isn't "setColor" for a QLineEdit 
+But I can't change color because there isn't "setColor" for a QLineEdit
 bug ? perhaps in QT2.2
 Now I use knumvalidator for QLineEdit
 -Bug fix . Fix bug that Michael Koch reported me in kspread_dlg_formula
@@ -359,9 +359,9 @@ thanks
 2000-03-24 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -Bug fix
--Now check spelling works => correct kspell.cpp 
+-Now check spelling works => correct kspell.cpp
 replace void slotModalDone( const char * ) by void slotModalDone( const QString & )
--David also ,bug fix 
+-David also ,bug fix
 thanks.
 
 2000-04-01 -Montel laurent <montell@club-internet.fr>
@@ -386,3 +386,9 @@ So I think that kspread should be the best spread on linux :).
 2000-04-12 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -Now you can put a name to an area.
+
+2000-04-10 -David Faure <faure@kde.org>
+---------------------------------------
+-Improve error handling : don't abort if a cell is invalid
+Still don't know why I get a row = -1 for a cell, but at least it loads.
+

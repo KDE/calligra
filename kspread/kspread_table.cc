@@ -3408,25 +3408,33 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 		needInsert = TRUE;
 	    }
 	    if ( !cell->load( c, _xshift, _yshift, sp, op ) )
-		return FALSE;
-	    if ( needInsert )
+            {
+                if ( needInsert )
+                  delete cell;
+            }
+	    else
+              if ( needInsert )
 		insertCell( cell );
 	}
- else if ( (c.tagName() == "right-most-border")&& ( (sp == Normal) || (sp == Format)) )
+        else if ( (c.tagName() == "right-most-border")&& ( (sp == Normal) || (sp == Format)) )
         {
 	    int row = c.attribute( "row" ).toInt() + _yshift;
 	    int col = c.attribute( "column" ).toInt() + _xshift;
 
-	    bool n = FALSE;
+	    bool needInsert = FALSE;
 	    KSpreadCell* cell = nonDefaultCell( col, row );
 	    if ( !cell )
 	    {
 		cell = new KSpreadCell( this, 0, 0 );
-		n = TRUE;
+		needInsert = TRUE;
 	    }
 	    if ( !cell->loadRightMostBorder( c, _xshift, _yshift ) )
-		return FALSE;
-	    if ( n )
+            {
+                if ( needInsert )
+                  delete cell;
+            }
+	    else
+              if ( needInsert )
 		insertCell( cell );
 	}
 	else if ( (c.tagName() == "bottom-most-border")&& ((sp == Normal) || (sp == Format)))
@@ -3434,17 +3442,21 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    int row = c.attribute( "row" ).toInt() + _yshift;
 	    int col = c.attribute( "column" ).toInt() + _xshift;
 
-	    bool n = FALSE;
+	    bool needInsert = FALSE;
 	    KSpreadCell* cell = nonDefaultCell( col, row );
 	    if ( !cell )
 	    {
 		cell = new KSpreadCell( this, 0, 0 );
-		n = TRUE;
+		needInsert = TRUE;
 	    }
 
             if ( !cell->loadBottomMostBorder( c, _xshift, _yshift ) )
-		return FALSE;
-	    if ( n )
+            {
+              if ( needInsert )
+                delete cell;
+            }
+	    else
+              if ( needInsert )
 		insertCell( cell );
 	}
     }
@@ -3880,17 +3892,15 @@ bool KSpreadTable::loadXML( const QDomElement& table )
   if ( m_strName.isEmpty() )
     return false;
   if(table.hasAttribute("grid"))
-  	{
-  	showGrid = (int)table.attribute("grid").toInt( &ok );
-	 if ( !ok )
-	        return false;
-  	}
+  {
+    showGrid = (int)table.attribute("grid").toInt( &ok );
+    // we just ignore 'ok' - if it didn't work, go on
+  }
   if(table.hasAttribute("hide"))
-  	{
-  	m_tableHide = (int)table.attribute("hide").toInt( &ok );
-	 if ( !ok )
-	        return false;
-  	}
+  {
+    m_tableHide = (int)table.attribute("hide").toInt( &ok );
+    // we just ignore 'ok' - if it didn't work, go on
+  }
 
   QDomNode n = table.firstChild();
   while( !n.isNull() )
@@ -3899,41 +3909,44 @@ bool KSpreadTable::loadXML( const QDomElement& table )
     if ( !e.isNull() && e.tagName() == "cell" )
     {
       KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-      if ( !cell->load( e, 0, 0 ) )
-	return false;
-      insertCell( cell );
+      if ( cell->load( e, 0, 0 ) )
+          insertCell( cell );
+      else
+          delete cell; // Allow error handling: just skip invalid cells
     }
     else if ( !e.isNull() && e.tagName() == "row" )
     {
       RowLayout *rl = new RowLayout( this, 0 );
-      if ( !rl->load( e ) )
-	return false;
-      insertRowLayout( rl );
+      if ( rl->load( e ) )
+          insertRowLayout( rl );
+      else
+          delete rl;
     }
     else if ( !e.isNull() && e.tagName() == "column" )
     {
       ColumnLayout *cl = new ColumnLayout( this, 0 );
-      if ( !cl->load( e ) )
-	return false;
-      insertColumnLayout( cl );
+      if ( cl->load( e ) )
+          insertColumnLayout( cl );
+      else
+          delete cl;
     }
     else if ( !e.isNull() && e.tagName() == "object" )
     {
       KSpreadChild *ch = new KSpreadChild( m_pDoc, this );
-      if ( !ch->load( e ) )
-	return false;
-     insertChild( ch );
-
-
+      if ( ch->load( e ) )
+          insertChild( ch );
+      else
+          delete ch;
     }
     else if ( !e.isNull() && e.tagName() == "chart" )
     {
 	// ############ Torben
 	/*
       ChartChild *ch = new ChartChild( m_pDoc, this );
-      if ( !ch->load( e ) )
-	return false;
-	insertChild( ch ); */
+      if ( ch->load( e ) )
+	insertChild( ch );
+      else
+        delete ch;*/
     }
     n = n.nextSibling();
   }

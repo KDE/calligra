@@ -760,6 +760,7 @@ void KSpreadDoc::enableRedo( bool _b )
 }
 
 // ########## Torben: What is that good for
+// ### The header says 'Needed for the printing extension KOffice::Print' (David)
 void KSpreadDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
 		       float _scale)
 {

@@ -195,6 +195,7 @@ bool KSpreadMap::hasToWriteMultipart()
 }
 
 // ######### Torben: Is that really needed ?
+// ### The header says 'Needed for the printing extension KOffice::Print' (David)
 void KSpreadMap::draw( QPaintDevice* _dev, long int _width, long int _height,
 		       float _scale )
 {
