@@ -635,7 +635,7 @@ void KoColorPopupProxy::slotMoreColors()
 
     QColor newColor;
     QWidget* p = 0;
-    if ( parent() && parent()->inherits( "QWidget" ) )
+    if ( parent() && parent()->isWidgetType() )
         p = static_cast<QWidget*>( parent() );
 
     if ( KColorDialog::getColor( newColor, p ) == QDialog::Accepted ) {
