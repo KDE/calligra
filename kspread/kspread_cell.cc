@@ -4039,17 +4039,18 @@ QDomElement KSpreadCell::saveParameters( QDomDocument& doc ) const
     format.setAttribute( "float", (int)floatFormat(m_iColumn,m_iRow ) );
     format.setAttribute( "floatcolor", (int)floatColor(m_iColumn,m_iRow )  );
     if ( faktor(m_iColumn,m_iRow )!=1.0 )
-	format.setAttribute( "faktor", faktor(m_iColumn,m_iRow ) );
+        format.setAttribute( "faktor", faktor(m_iColumn,m_iRow ) );
     if ( getFormatNumber(m_iColumn,m_iRow )!= Number)
-	format.setAttribute( "format",(int) getFormatNumber(m_iColumn,m_iRow ));
+        format.setAttribute( "format",(int) getFormatNumber(m_iColumn,m_iRow ));
     if ( getAngle(m_iColumn,m_iRow )!=0)
-	format.setAttribute( "angle", getAngle(m_iColumn,m_iRow ) );
+        format.setAttribute( "angle", getAngle(m_iColumn,m_iRow ) );
     if ( getIndent(m_iColumn,m_iRow )!=0 )
-	format.setAttribute( "indent", getIndent(m_iColumn,m_iRow ) );
+        format.setAttribute( "indent", getIndent(m_iColumn,m_iRow ) );
     format.appendChild( createElement( "font", textFont( m_iColumn,m_iRow ), doc ) );
     if ( textPen( m_iColumn,m_iRow).color().isValid())
-	format.appendChild( createElement( "pen", textPen( m_iColumn,m_iRow), doc ) );
-    format.setAttribute( "brushcolor", backGroundBrush(m_iColumn,m_iRow).color().name() );
+        format.appendChild( createElement( "pen", textPen( m_iColumn,m_iRow), doc ) );
+    if ( backGroundBrush(m_iColumn,m_iRow).color().isValid())
+        format.setAttribute( "brushcolor", backGroundBrush(m_iColumn,m_iRow).color().name() );
     format.setAttribute( "brushstyle",(int)backGroundBrush(m_iColumn,m_iRow).style() );
 
     QDomElement left = doc.createElement( "left-border" );
