@@ -288,76 +288,99 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc,int _col, int _row, boo
 {
     QDomElement format = doc.createElement( "format" );
 
-    if ( hasProperty( PAlign ) || force )
+    if ( hasProperty( PAlign ) || hasNoFallBackProperties( PAlign ) || force )
 	format.setAttribute( "align", (int)align(_col,_row) );
-    if ( hasProperty( PAlignY ) || force  )
+    if ( hasProperty( PAlignY ) || hasNoFallBackProperties( PAlignY ) || force  )
 	format.setAttribute( "alignY", (int)alignY(_col,_row) );
-    if ( ( hasProperty( PBackgroundColor ) || force ) && m_bgColor.isValid() )
+    if ( ( hasProperty( PBackgroundColor )
+           || hasNoFallBackProperties( PBackgroundColor)
+           || force )
+         && m_bgColor.isValid() )
 	format.setAttribute( "bgcolor", bgColor(_col,_row).name() );
-    if ( ( hasProperty( PMultiRow ) || force ) && multiRow( _col, _row )  )
+    if ( ( hasProperty( PMultiRow )
+           || hasNoFallBackProperties( PMultiRow )
+           || force )
+         && multiRow( _col, _row )  )
 	format.setAttribute( "multirow", "yes" );
-    if ( ( hasProperty( PVerticalText ) || force ) &&verticalText( _col, _row ) )
+    if ( ( hasProperty( PVerticalText )
+           || hasNoFallBackProperties( PVerticalText )
+           || force )
+         && verticalText( _col, _row ) )
 	format.setAttribute( "verticaltext", "yes" );
-    if ( hasProperty( PPrecision ) || force )
+    if ( hasProperty( PPrecision ) || hasNoFallBackProperties( PPrecision ) || force )
 	format.setAttribute( "precision", precision(_col, _row) );
-    if ( ( hasProperty( PPrefix ) || force ) && !prefix(_col, _row).isEmpty() )
+    if ( ( hasProperty( PPrefix )
+           || hasNoFallBackProperties( PPrefix )
+           || force )
+         && !prefix(_col, _row).isEmpty() )
 	format.setAttribute( "prefix", prefix(_col, _row) );
-    if ( ( hasProperty( PPostfix ) || force ) && !postfix(_col, _row).isEmpty() )
+    if ( ( hasProperty( PPostfix )
+           || hasNoFallBackProperties( PPostfix )
+           || force )
+         && !postfix(_col, _row).isEmpty() )
 	format.setAttribute( "postfix", postfix(_col, _row) );
-    if ( hasProperty( PFloatFormat ) || force )
+    if ( hasProperty( PFloatFormat ) || hasNoFallBackProperties( PFloatFormat ) || force )
 	format.setAttribute( "float", (int)floatFormat(_col, _row) );
-    if ( hasProperty( PFloatColor ) || force )
+    if ( hasProperty( PFloatColor ) || hasNoFallBackProperties( PFloatColor ) || force )
 	format.setAttribute( "floatcolor", (int)floatColor(_col, _row ) );
-    if ( hasProperty( PFactor ) || force )
+    if ( hasProperty( PFactor ) || hasNoFallBackProperties( PFactor ) || force )
 	format.setAttribute( "faktor", factor(_col, _row ) );
-    if ( hasProperty( PFormatType ) || force )
+    if ( hasProperty( PFormatType ) || hasNoFallBackProperties( PFormatType ) || force )
 	format.setAttribute( "format",(int)getFormatType(_col,_row ));
-    if ( hasProperty( PAngle ) || force )
+    if ( hasProperty( PAngle ) || hasNoFallBackProperties( PAngle ) || force )
 	format.setAttribute( "angle", getAngle(_col, _row) );
-    if ( hasProperty( PIndent ) || force )
+    if ( hasProperty( PIndent ) || hasNoFallBackProperties( PIndent ) || force )
 	format.setAttribute( "indent", getIndent(_col, _row) );
-    if( ( hasProperty( PDontPrintText ) || force ) &&getDontprintText(_col,_row))
+    if( ( hasProperty( PDontPrintText )
+          || hasNoFallBackProperties( PDontPrintText )
+          || force )
+        && getDontprintText(_col,_row))
 	format.setAttribute( "dontprinttext", "yes" );
-    if ( hasProperty( PFont ) || force )
+    if ( hasProperty( PFont ) || hasNoFallBackProperties( PFont ) || force )
 	format.appendChild( createElement( "font", textFont( _col, _row ), doc ) );
-    if ( ( hasProperty( PTextPen ) || force ) && textPen(_col, _row ).color().isValid() )
+    if ( ( hasProperty( PTextPen )
+           || hasNoFallBackProperties( PTextPen )
+           || force )
+         && textPen(_col, _row ).color().isValid() )
 	format.appendChild( createElement( "pen", textPen(_col, _row ), doc ) );
-    if ( hasProperty( PBackgroundBrush ) || force )
+    if ( hasProperty( PBackgroundBrush )
+         || hasNoFallBackProperties( PBackgroundBrush )
+         || force )
     {
 	format.setAttribute( "brushcolor", backGroundBrushColor(_col, _row).name() );
 	format.setAttribute( "brushstyle",(int)backGroundBrushStyle(_col, _row) );
     }
-    if ( hasProperty( PLeftBorder ) || force )
+    if ( hasProperty( PLeftBorder ) || hasNoFallBackProperties( PLeftBorder ) || force )
     {
 	QDomElement left = doc.createElement( "left-border" );
 	left.appendChild( createElement( "pen", leftBorderPen(_col, _row), doc ) );
 	format.appendChild( left );
     }
-    if ( hasProperty( PTopBorder ) || force )
+    if ( hasProperty( PTopBorder ) || hasNoFallBackProperties( PTopBorder ) || force )
     {
 	QDomElement top = doc.createElement( "top-border" );
 	top.appendChild( createElement( "pen", topBorderPen(_col, _row), doc ) );
 	format.appendChild( top );
     }
-    if ( hasProperty( PRightBorder ) || force )
+    if ( hasProperty( PRightBorder ) || hasNoFallBackProperties( PRightBorder ) || force )
     {
 	QDomElement right = doc.createElement( "right-border" );
 	right.appendChild( createElement( "pen", rightBorderPen(_col, _row), doc ) );
 	format.appendChild( right );
     }
-    if ( hasProperty( PBottomBorder ) || force )
+    if ( hasProperty( PBottomBorder ) || hasNoFallBackProperties( PBottomBorder ) || force )
     {
 	QDomElement bottom = doc.createElement( "bottom-border" );
 	bottom.appendChild( createElement( "pen", bottomBorderPen(_col, _row), doc ) );
 	format.appendChild( bottom );
     }
-    if ( hasProperty( PFallDiagonal ) || force )
+    if ( hasProperty( PFallDiagonal ) || hasNoFallBackProperties( PFallDiagonal ) || force )
     {
 	QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
 	fallDiagonal.appendChild( createElement( "pen", fallDiagonalPen(_col, _row), doc ) );
 	format.appendChild( fallDiagonal );
     }
-    if ( hasProperty( PGoUpDiagonal ) || force )
+    if ( hasProperty( PGoUpDiagonal ) || hasNoFallBackProperties( PGoUpDiagonal ) || force )
     {
 	QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
 	goUpDiagonal.appendChild( createElement( "pen", goUpDiagonalPen( _col, _row ), doc ) );
@@ -371,78 +394,99 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc, bool force ) const
 {
     QDomElement format = doc.createElement( "format" );
 
-    if ( hasProperty( PAlign ) || force )
+    if ( hasProperty( PAlign ) || hasNoFallBackProperties( PAlign ) || force )
 	format.setAttribute( "align", (int)m_eAlign );
-    if ( hasProperty( PAlignY ) || force  )
+    if ( hasProperty( PAlignY ) || hasNoFallBackProperties( PAlignY ) || force  )
 	format.setAttribute( "alignY", (int)m_eAlignY );
-    if ( ( hasProperty( PBackgroundColor ) || force ) && m_bgColor.isValid() )
+    if ( ( hasProperty( PBackgroundColor )
+           || hasNoFallBackProperties( PBackgroundColor )
+           || force )
+         && m_bgColor.isValid() )
 	format.setAttribute( "bgcolor", m_bgColor.name() );
-    if ( ( hasProperty( PMultiRow ) || force ) && testFlag(Flag_MultiRow) )
+    if ( ( hasProperty( PMultiRow )
+           || hasNoFallBackProperties( PMultiRow )
+           || force )
+         && testFlag(Flag_MultiRow) )
 	format.setAttribute( "multirow", "yes" );
-    if ( ( hasProperty( PVerticalText ) || force ) &&
-         testFlag( Flag_VerticalText) )
+    if ( ( hasProperty( PVerticalText )
+           || hasNoFallBackProperties( PVerticalText )
+           || force )
+         && testFlag( Flag_VerticalText) )
 	format.setAttribute( "verticaltext", "yes" );
-    if ( hasProperty( PPrecision ) || force )
+    if ( hasProperty( PPrecision ) || hasNoFallBackProperties( PPrecision ) || force )
 	format.setAttribute( "precision", m_iPrecision );
-    if ( ( hasProperty( PPrefix ) || force ) && !m_strPrefix.isEmpty() )
+    if ( ( hasProperty( PPrefix )
+           || hasNoFallBackProperties( PPrefix )
+           || force )
+         && !m_strPrefix.isEmpty() )
 	format.setAttribute( "prefix", m_strPrefix );
-    if ( ( hasProperty( PPostfix ) || force ) && !m_strPostfix.isEmpty() )
+    if ( ( hasProperty( PPostfix )
+           || hasNoFallBackProperties( PPostfix )
+           || force )
+         && !m_strPostfix.isEmpty() )
 	format.setAttribute( "postfix", m_strPostfix );
-    if ( hasProperty( PFloatFormat ) || force )
+    if ( hasProperty( PFloatFormat ) || hasNoFallBackProperties( PFloatFormat ) || force )
 	format.setAttribute( "float", (int)m_eFloatFormat );
-    if ( hasProperty( PFloatColor ) || force )
+    if ( hasProperty( PFloatColor ) || hasNoFallBackProperties( PFloatColor ) || force )
 	format.setAttribute( "floatcolor", (int)m_eFloatColor );
-    if ( hasProperty( PFactor ) || force )
+    if ( hasProperty( PFactor ) || hasNoFallBackProperties( PFactor ) || force )
 	format.setAttribute( "faktor", m_dFactor );
-    if ( hasProperty( PFormatType ) || force )
+    if ( hasProperty( PFormatType ) || hasNoFallBackProperties( PFormatType ) || force )
 	format.setAttribute( "format",(int) m_eFormatType);
-    if ( hasProperty( PAngle ) || force )
+    if ( hasProperty( PAngle ) || hasNoFallBackProperties( PAngle ) || force )
 	format.setAttribute( "angle", m_rotateAngle );
-    if ( hasProperty( PIndent ) || force )
+    if ( hasProperty( PIndent ) || hasNoFallBackProperties( PIndent ) || force )
 	format.setAttribute( "indent", m_indent );
-    if( ( hasProperty( PDontPrintText ) || force ) &&
-        testFlag( Flag_DontPrintText))
+    if( ( hasProperty( PDontPrintText )
+          || hasNoFallBackProperties( PDontPrintText )
+          || force )
+        && testFlag( Flag_DontPrintText))
 	format.setAttribute( "dontprinttext", "yes" );
-    if ( hasProperty( PFont ) || force )
+    if ( hasProperty( PFont ) || hasNoFallBackProperties( PFont ) || force )
 	format.appendChild( createElement( "font", m_textFont, doc ) );
-    if ( ( hasProperty( PTextPen ) || force ) && m_textPen.color().isValid() )
+    if ( ( hasProperty( PTextPen )
+           || hasNoFallBackProperties( PTextPen )
+           || force )
+         && m_textPen.color().isValid() )
 	format.appendChild( createElement( "pen", m_textPen, doc ) );
-    if ( hasProperty( PBackgroundBrush ) || force )
+    if ( hasProperty( PBackgroundBrush )
+         || hasNoFallBackProperties( PBackgroundBrush )
+         || force )
     {
 	format.setAttribute( "brushcolor", m_backGroundBrush.color().name() );
 	format.setAttribute( "brushstyle",(int)m_backGroundBrush.style() );
     }
-    if ( hasProperty( PLeftBorder ) || force )
+    if ( hasProperty( PLeftBorder ) || hasNoFallBackProperties( PLeftBorder ) || force )
     {
 	QDomElement left = doc.createElement( "left-border" );
 	left.appendChild( createElement( "pen", m_leftBorderPen, doc ) );
 	format.appendChild( left );
     }
-    if ( hasProperty( PTopBorder ) || force )
+    if ( hasProperty( PTopBorder ) || hasNoFallBackProperties( PTopBorder ) || force )
     {
 	QDomElement top = doc.createElement( "top-border" );
 	top.appendChild( createElement( "pen", m_topBorderPen, doc ) );
 	format.appendChild( top );
     }
-    if ( hasProperty( PRightBorder ) || force )
+    if ( hasProperty( PRightBorder ) || hasNoFallBackProperties( PRightBorder ) || force )
     {
 	QDomElement right = doc.createElement( "right-border" );
 	right.appendChild( createElement( "pen", m_rightBorderPen, doc ) );
 	format.appendChild( right );
     }
-    if ( hasProperty( PBottomBorder ) || force )
+    if ( hasProperty( PBottomBorder ) || hasNoFallBackProperties( PBottomBorder ) || force )
     {
 	QDomElement bottom = doc.createElement( "bottom-border" );
 	bottom.appendChild( createElement( "pen", m_bottomBorderPen, doc ) );
 	format.appendChild( bottom );
     }
-    if ( hasProperty( PFallDiagonal ) || force )
+    if ( hasProperty( PFallDiagonal ) || hasNoFallBackProperties( PFallDiagonal ) || force )
     {
 	QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
 	fallDiagonal.appendChild( createElement( "pen", m_fallDiagonalPen, doc ) );
 	format.appendChild( fallDiagonal );
     }
-    if ( hasProperty( PGoUpDiagonal ) || force )
+    if ( hasProperty( PGoUpDiagonal ) || hasNoFallBackProperties( PGoUpDiagonal ) || force )
     {
 	QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
 	goUpDiagonal.appendChild( createElement( "pen", m_goUpDiagonalPen, doc ) );
