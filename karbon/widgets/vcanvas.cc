@@ -36,7 +36,7 @@ int
 VCanvas::pageOffsetX() const
 {
 	double zoomedWidth = m_part->document().width() * m_view->zoom();
-	if( zoomedWidth < viewport()->width() )
+	if( contentsWidth() < viewport()->width() )
 	{
 		//kdDebug() << "offsetx : " << int( ( viewport()->width() - zoomedWidth ) / 2.0 ) << endl;
 		return int( ( viewport()->width() - zoomedWidth ) / 2.0 );
@@ -49,7 +49,7 @@ int
 VCanvas::pageOffsetY() const
 {
 	double zoomedHeight = m_part->document().height() * m_view->zoom();
-	if( zoomedHeight < viewport()->height() )
+	if( contentsHeight() < viewport()->height() )
 	{
 		//kdDebug() << "offsetx : " << int( ( viewport()->height() - zoomedHeight ) / 2.0 ) << endl;
 		return int( ( viewport()->height() - zoomedHeight ) / 2.0 );
