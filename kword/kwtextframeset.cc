@@ -825,10 +825,8 @@ void KWTextFrameSet::save( QDomElement &parentElem )
         framesetElem.setAttribute( "col", cell->m_col );
         framesetElem.setAttribute( "rows", cell->m_rows );
         framesetElem.setAttribute( "cols", cell->m_cols );
+        framesetElem.setAttribute( "removable", static_cast<int>( removeableHeader ) );
     }
-
-    framesetElem.setAttribute( "removable", static_cast<int>( removeableHeader ) );
-    framesetElem.setAttribute( "visible", static_cast<int>( visible ) );
 
     KWFrameSet::save( framesetElem ); // Save all frames
 

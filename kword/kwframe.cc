@@ -755,6 +755,7 @@ void KWFrameSet::save( QDomElement &parentElem )
     parentElem.setAttribute( "frameType", static_cast<int>( getFrameType() ) );
     parentElem.setAttribute( "frameInfo", static_cast<int>( frameInfo ) );
     parentElem.setAttribute( "name", correctQString( m_name ) );
+    parentElem.setAttribute( "visible", static_cast<int>( visible ) );
 
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
