@@ -48,10 +48,9 @@ private:
 
 	QValueList<VColorStop> m_colorStops;
 
-	// (polar) coordinates:
+	// coordinates:
 	KoPoint m_origin;
-	double  m_angle;
-	double m_length;
+	KoPoint m_vector;
 };
 
 #endif

@@ -7,7 +7,7 @@
 #include "vgradient.h"
 
 VGradient::VGradient( VGradientType type )
-	: m_type( type ), m_angle( 0.0 ), m_length( 0.0 )
+	: m_type( type )
 {
 }
 
