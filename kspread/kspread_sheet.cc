@@ -6335,6 +6335,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
     }
 
     int rowIndex = 1;
+    int indexCol = 1;
     QDomElement *style = 0L;
     QDomNode rowNode = tableElement.firstChild();
     while( !rowNode.isNull() )
@@ -6343,23 +6344,16 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         if( !rowElement.isNull() )
         {
 
-            KoStyleStack styleStack;
-            if ( rowElement.hasAttribute( "table:style-name" ) )
-            {
-                QString str = rowElement.attribute( "table:style-name" );
-                style = oasisStyles.styles()[str];
-                styleStack.push( *style );
-                kdDebug()<<" style :"<<style<<"style name : "<<str<<endl;
-            }
-            rowNode = rowNode.nextSibling();
-            loadRowFormat( rowElement, styleStack, rowIndex, oasisStyles, rowNode.isNull() );
             if ( rowElement.tagName()=="table:table-column" )
             {
                 kdDebug ()<<" table-column found \n";
-                loadColumnFormat( rowElement );
+                loadColumnFormat( rowElement, oasisStyles, indexCol );
+                kdDebug()<<"loadColumnFormatloadColumnFormatloadColumnFormatloadColumnFormatloadColumnFormatloadColumnFormatloadColumnFormat :"<<indexCol<<endl;
             }
             else if( rowElement.tagName() == "table:table-row" )
             {
+                loadRowFormat( rowElement, rowIndex, oasisStyles, rowNode.isNull() );
+
                 rowIndex++;
                 int columnIndex = 0;
                 QDomNode cellNode = rowNode.firstChild();
@@ -6433,23 +6427,79 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
     return true;
 }
 
-bool KSpreadSheet::loadColumnFormat(const QDomElement& row )
+bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, int & indexCol )
 {
+    kdDebug()<<"bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
+
+    bool collapsed = ( column.attribute( "table:visibility" ) == "collapse" );
+    KSpreadFormat layout( this , doc()->styleManager()->defaultStyle() );
+    int number = 1;
+    double width   = 10;//POINT_TO_MM( colWidth ); FIXME
+    if ( column.hasAttribute( "table:number-columns-repeated" ) )
+    {
+        bool ok = true;
+        number = column.attribute( "table:number-columns-repeated" ).toInt( &ok );
+        if ( !ok )
+            number = 1;
+        kdDebug() << "Repeated: " << number << endl;
+    }
+    KoStyleStack styleStack;
+    if ( column.hasAttribute( "table:style-name" ) )
+    {
+        QString str = column.attribute( "table:style-name" );
+        QDomElement *style = oasisStyles.styles()[str];
+        styleStack.push( *style );
+        kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
+    }
+    layout.loadOasisStyleProperties( styleStack, oasisStyles );
+
+    if ( styleStack.hasAttribute( "style:column-width" ) )
+    {
+        width = KoUnit::parseValue( styleStack.attribute( "style:column-width" ) , -1 );
+        kdDebug()<<" properties style:row-height : height :"<<width<<endl;
+    }
+    if ( number>30 )
+        number = 30; //todo fixme !
+
+    for ( int i = 0; i < number; ++i )
+    {
+        kdDebug()<<"index col :"<<indexCol<<endl;
+        ColumnFormat * col = new ColumnFormat( this, indexCol );
+        col->copy( layout );
+        col->setMMWidth( width );
+
+        // if ( insertPageBreak )
+        //   col->setPageBreak( true )
+
+        if ( collapsed )
+            col->setHide( true );
+
+        insertColumnFormat( col );
+        ++indexCol;
+        kdDebug()<<" après !!!!!!!!!!!!!!!!!! :"<<indexCol<<endl;
+    }
     return true;
 }
 
 
-bool KSpreadSheet::loadRowFormat( const QDomElement& row, KoStyleStack & styleStack, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )
+bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )
 {
     double height = -1.0;
     KSpreadFormat layout( this , doc()->styleManager()->defaultStyle() );
-
+    KoStyleStack styleStack;
+    if ( row.hasAttribute( "table:style-name" ) )
+    {
+        QString str = row.attribute( "table:style-name" );
+        QDomElement *style = oasisStyles.styles()[str];
+        styleStack.push( *style );
+        kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
+    }
+    layout.loadOasisStyleProperties( styleStack, oasisStyles );
     if ( styleStack.hasAttribute( "style:row-height" ) )
     {
         height = KoUnit::parseValue( styleStack.attribute( "style:row-height" ) , -1 );
         kdDebug()<<" properties style:row-height : height :"<<height<<endl;
     }
-    layout.loadOasisStyleProperties( styleStack, oasisStyles );
 
     int number = 1;
     if ( row.hasAttribute( "table:number-rows-repeated" ) )

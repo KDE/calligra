@@ -1012,16 +1012,16 @@ void KSpreadFormat::setAlign( Align _align )
 
 void KSpreadFormat::setAlignY( AlignY _alignY)
 {
-  kdDebug() << "Format: AlignY: " << _alignY << endl;
+    //kdDebug() << "Format: AlignY: " << _alignY << endl;
   if ( _alignY == KSpreadFormat::Middle )
   {
-    kdDebug() << "Middle" << endl;
+      //kdDebug() << "Middle" << endl;
     clearProperty( PAlignY );
     setNoFallBackProperties(PAlignY );
   }
   else
   {
-    kdDebug() << "Not middle: " << _alignY << endl;
+      //kdDebug() << "Not middle: " << _alignY << endl;
     setProperty( PAlignY );
     clearNoFallBackProperties( PAlignY );
   }
