@@ -33,6 +33,8 @@
 
 #include "propertyeditorfile.h"
 #include "kexiproperty.h"
+#include "kexipropertybuffer.h"
+#include "pixmapcollection.h"
 
 PropertyEditorFile::PropertyEditorFile(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
@@ -43,13 +45,13 @@ PropertyEditorFile::PropertyEditorFile(QWidget *parent, KexiProperty *property, 
 	m_button = new KPushButton(i18n(" ... "), this);
 	m_button->resize(height(), height()-10);
 	m_button->move(width() - m_button->width() -1, 1);
-	
+
 	m_lineedit->setText(property->value().toString());
 	m_lineedit->show();
 	m_button->show();
-	
+
 	setWidget(m_lineedit);
-	
+
 	connect(m_button, SIGNAL(clicked()), this, SLOT(selectFile()));
 }
 
@@ -118,7 +120,7 @@ PropertyEditorPixmap::PropertyEditorPixmap(QWidget *parent, KexiProperty *proper
 	m_label->setBackgroundMode(Qt::PaletteBase);
 	m_label->show();
 	setWidget(m_label);
-	
+
 	m_button = new KPushButton(i18n(" ... "), this);
 	m_button->resize(height(), height()-8);
 	m_button->move(width() - m_button->width() -1, 0);
@@ -129,7 +131,7 @@ PropertyEditorPixmap::PropertyEditorPixmap(QWidget *parent, KexiProperty *proper
 
 	connect(m_button, SIGNAL(clicked()), this, SLOT(selectFile()));
  }
- 
+
 void
 PropertyEditorPixmap::resizeEvent(QResizeEvent *ev)
 {
@@ -144,7 +146,7 @@ PropertyEditorPixmap::eventFilter(QObject *o, QEvent *ev)
 	{
 		if(ev->type() == QEvent::MouseButtonPress)
 		{
-			if(m_label->pixmap()->size().height() < height()-2 
+			if(m_label->pixmap()->size().height() < height()-2
 			     && m_label->pixmap()->size().width() < width()-20)
 				return false;
 			m_popup->setPixmap(*(m_label->pixmap()));
@@ -186,11 +188,24 @@ PropertyEditorPixmap::setValue(const QVariant &value)
 void
 PropertyEditorPixmap::selectFile()
 {
-	m_url = KFileDialog::getOpenFileName(QString::null, i18n("*.png *.xpm *.bmp *.jpg|Pixmap Files"), 
+	if(m_property->buffer() && m_property->buffer()->collection())
+	{
+		QString name = m_property->buffer()->pixmapName(m_property->name());
+		PixmapCollectionChooser dialog(m_property->buffer()->collection(), name, topLevelWidget());
+		if(dialog.exec() == QDialog::Accepted)
+		{
+			setValue(dialog.pixmap());
+			m_property->buffer()->addCollectionPixmap(m_property, dialog.pixmapName());
+		}
+	}
+	else
+	{
+		m_url = KFileDialog::getOpenFileName(QString::null, i18n("*.png *.xpm *.bmp *.jpg|Pixmap Files"),
 			this, i18n("Choose a file"));
-	if(!m_url.isEmpty())
-		m_label->setPixmap(QPixmap(m_url.path()));
-	emit changed(this);
+		if(!m_url.isEmpty())
+			m_label->setPixmap(QPixmap(m_url.path()));
+		emit changed(this);
+	}
 }
 
 PropertyEditorPixmap::~PropertyEditorPixmap()

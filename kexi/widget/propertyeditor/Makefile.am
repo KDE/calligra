@@ -39,5 +39,5 @@ SUBDIRS = . #test
 
 # set the include path for X, qt and KDE
 INCLUDES= -I$(top_srcdir)/kexi $(LIB_KEXI_KMDI_INCLUDES) \
-	-I$(top_srcdir)/kexi/core \
+	-I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi/widget \
 	$(all_includes)
