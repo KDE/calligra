@@ -1955,7 +1955,7 @@ void KisView::crop()
     if(!img) return;
     
     QRect layerRect(0, 0, cImage.width(), cImage.height());    
-    QString name; name.sprintf("layer %d", img->layerList().count());
+    QString name = i18n( "layer %1" ).arg( img->layerList().count() );
 
     img->addLayer(layerRect, white, true, name);
     uint indx = img->layerList().count() - 1;    
@@ -2275,8 +2275,7 @@ void KisView::insert_layer()
     QRect layerRect(0, 0, 
         pNewLayerDialog->width(), pNewLayerDialog->height());       
 
-    QString name; 
-    name.sprintf("layer %d", img->layerList().count());
+    QString name = i18n( "layer %1" ).arg( img->layerList().count() );
     
     // new layers are currently appended - perhaps they should
     // be prepended so more recent ones are on top in the
@@ -2565,22 +2564,22 @@ void KisView::insert_layer_image(bool newImage, const QString &filename)
             if (bg == bm_White)
 	            newimg->addLayer(QRect(0, 0, 
                     newimg->width(), newimg->height()), 
-                    KisColor::white(), false, "background");
+                    KisColor::white(), false, i18n("background"));
 
             else if (bg == bm_Transparent)
 	            newimg->addLayer(QRect(0, 0, 
                     newimg->width(), newimg->height()), 
-                    KisColor::white(), true, "background");
+                    KisColor::white(), true, i18n("background"));
 
             else if (bg == bm_ForegroundColor)
 	            newimg->addLayer(QRect(0, 0, 
                     newimg->width(), newimg->height()), 
-                    KisColor::white(), false, "background");
+                    KisColor::white(), false, i18n("background"));
 
             else if (bg == bm_BackgroundColor)
 	            newimg->addLayer(QRect(0, 0, 
                     newimg->width(), newimg->height()), 
-                    KisColor::white(), false, "background");
+                    KisColor::white(), false, i18n("background"));
 
             newimg->markDirty(QRect(0, 0, 
                 newimg->width(), newimg->height()));

@@ -100,8 +100,7 @@ bool KisDoc::initDoc()
 KisTimer::start();
 
     bool ok = false;
-    QString name;
-    name.sprintf("image%d", m_Images.count() + 1);
+    QString name = i18n( "image %1" ).arg( m_Images.count() + 1 );
 
     // choose dialog for open mode
     QString templ;
@@ -126,7 +125,7 @@ KisTimer::start();
 
         // add background layer
         img->addLayer(QRect(0, 0, 512, 512), KisColor::white(),
-            false, "background");
+            false, i18n("background"));
         img->markDirty(QRect(0, 0, 512, 512));
 
         // list of images - mdi document
@@ -430,7 +429,7 @@ kdDebug(0) << "bitDepth: " << bd << endl;
     when loading an existing image - for existing document,
     but will do for now */
 
-    img->addLayer( QRect(0, 0, w, h), KisColor::white(), false, "background");
+    img->addLayer( QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
     img->markDirty( QRect(0, 0, w, h) );
     setCurrentImage(img);
 
@@ -1137,7 +1136,7 @@ bool KisDoc::slotNewImage()
     been removed leaving "holes" in name sequence */
 
     do {
-        desiredName.sprintf("image %d", numero);
+        desiredName = i18n( "image %1" ).arg( numero );
         KisImage *currentImg = m_Images.first();
 
         while (currentImg)
@@ -1152,7 +1151,7 @@ bool KisDoc::slotNewImage()
 
     } while(runs < m_Images.count());
 
-    name.sprintf("image %d", numero);
+    name = i18n( "image %1" ).arg( numero );
 
     KisImage *img = newImage(name, w, h, cm, 8);
     if (!img) return false;
@@ -1162,16 +1161,16 @@ bool KisDoc::slotNewImage()
     // add background layer
 
     if (bg == bm_White)
-	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
+	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
 
     else if (bg == bm_Transparent)
-	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), true, "background");
+	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), true, i18n("background"));
 
     else if (bg == bm_ForegroundColor)
-	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
+	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
 
     else if (bg == bm_BackgroundColor)
-	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
+	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
 
     kdDebug() << "KisDoc::slotNewImage: returned from addLayer()" << endl;
 
