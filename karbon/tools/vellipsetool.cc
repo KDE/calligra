@@ -3,6 +3,11 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qcursor.h>
+#include <qlabel.h>
+
+#include <klocale.h>
+
 #include "karbon_view.h"
 #include "vellipsecmd.h"
 #include "vellipsedlg.h"
@@ -12,10 +17,8 @@
 #include "vpath.h"
 
 
-VEllipseTool* VEllipseTool::s_instance = 0L;
-
-VEllipseTool::VEllipseTool( KarbonPart* part )
-	: VShapeTool( part )
+VEllipseTool::VEllipseTool( KarbonView* view )
+	: VShapeTool( view )
 {
 	// create config dialog:
 	m_dialog = new VEllipseDlg();
@@ -28,26 +31,20 @@ VEllipseTool::~VEllipseTool()
 	delete( m_dialog );
 }
 
-VEllipseTool*
-VEllipseTool::instance( KarbonPart* part )
+void
+VEllipseTool::activate()
 {
-	if ( s_instance == 0L )
-	{
-		s_instance = new VEllipseTool( part );
-	}
-
-	s_instance->m_part = part;
-	return s_instance;
+	view()->statusMessage()->setText( i18n( "Insert Ellipse" ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 void
-VEllipseTool::drawTemporaryObject(
-	KarbonView* view, const KoPoint& p, double d1, double d2 )
+VEllipseTool::drawTemporaryObject( const KoPoint& p, double d1, double d2 )
 {
-	VPainter *painter = view->painterFactory()->editpainter();
+	VPainter *painter = view()->painterFactory()->editpainter();
 
 	VEllipseCmd* cmd =
-		new VEllipseCmd( &part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
+		new VEllipseCmd( &view()->part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 
 	VObject* path = cmd->createPath();
 	path->setState( state_edit );
@@ -64,7 +61,7 @@ VEllipseTool::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VEllipseCmd( &part()->document(),
+				new VEllipseCmd( &view()->part()->document(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height() );
@@ -73,7 +70,7 @@ VEllipseTool::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VEllipseCmd( &part()->document(),
+			new VEllipseCmd( &view()->part()->document(),
 				x, y,
 				x + d1,
 				y + d2 );

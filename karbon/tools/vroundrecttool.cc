@@ -3,6 +3,10 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qcursor.h>
+#include <qlabel.h>
+
+#include <klocale.h>
 #include "karbon_view.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
@@ -12,10 +16,8 @@
 #include "vroundrecttool.h"
 
 
-VRoundRectTool* VRoundRectTool::s_instance = 0L;
-
-VRoundRectTool::VRoundRectTool( KarbonPart* part )
-	: VShapeTool( part )
+VRoundRectTool::VRoundRectTool( KarbonView* view )
+	: VShapeTool( view )
 {
 	// create config dialog:
 	m_dialog = new VRoundRectDlg();
@@ -29,26 +31,20 @@ VRoundRectTool::~VRoundRectTool()
 	delete( m_dialog );
 }
 
-VRoundRectTool*
-VRoundRectTool::instance( KarbonPart* part )
+void
+VRoundRectTool::activate()
 {
-	if ( s_instance == 0L )
-	{
-		s_instance = new VRoundRectTool( part );
-	}
-
-	s_instance->m_part = part;
-	return s_instance;
+	view()->statusMessage()->setText( i18n( "Insert Round Rectangle" ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 void
-VRoundRectTool::drawTemporaryObject(
-	KarbonView* view, const KoPoint& p, double d1, double d2 )
+VRoundRectTool::drawTemporaryObject( const KoPoint& p, double d1, double d2 )
 {
-	VPainter *painter = view->painterFactory()->editpainter();
+	VPainter *painter = view()->painterFactory()->editpainter();
 	
 	VRoundRectCmd* cmd =
-		new VRoundRectCmd( &part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2,
+		new VRoundRectCmd( &view()->part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2,
 			m_dialog->round() );
 
 	VObject* path = cmd->createPath();
@@ -66,7 +62,7 @@ VRoundRectTool::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VRoundRectCmd( &part()->document(),
+				new VRoundRectCmd( &view()->part()->document(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height(),
@@ -76,7 +72,7 @@ VRoundRectTool::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VRoundRectCmd( &part()->document(),
+			new VRoundRectCmd( &view()->part()->document(),
 				x, y,
 				x + d1,
 				y + d2,

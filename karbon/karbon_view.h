@@ -22,13 +22,25 @@ class KSelectColorAction;
 class KToggleAction;
 class QPaintEvent;
 class QLabel;
+class TKUFloatSpinBoxAction;
+class VColorDlg;
+class VEllipseTool;
 class VFlattenDlg;
+class VGradientTool;
 class VInsertKnotsDlg;
+class VPolygonTool;
+class VRectangleTool;
+class VRoundRectTool;
+class VRotateTool;
+class VScaleTool;
+class VSelectTool;
+class VShearTool;
+class VSinusTool;
+class VSpiralTool;
+class VStarTool;
 class VTool;
 class VToolContainer;
 class VWhirlPinchDlg;
-class TKUFloatSpinBoxAction;
-class VColorDlg;
 
 
 class KarbonView : public KoView
@@ -47,10 +59,7 @@ public:
 	virtual bool eventFilter( QObject* object, QEvent* event );
 
 	virtual QWidget* canvas() { return m_canvas; }
-	// this is the kword-solution at least:
 	VCanvas* canvasWidget() { return m_canvas; }
-
-	//const double& zoomFactor() { return m_canvas->zoomFactor(); }
 
 	VPainterFactory* painterFactory() { return m_painterFactory; }
 
@@ -62,7 +71,9 @@ public:
 
 	void reorganizeGUI();
 	void setNumberOfRecentFiles( int number );
-    void setLineWidth( double val);
+	void setLineWidth( double val);
+
+	QLabel* statusMessage() const { return m_status; }
 
 public slots:
 	// editing:
@@ -144,6 +155,7 @@ private:
 
 	VTool* m_currentTool;
 
+
 	// tools:
 	KToggleAction* m_ellipseToolAction;
 	KToggleAction* m_polygonToolAction;
@@ -158,6 +170,20 @@ private:
 	KToggleAction* m_starToolAction;
 	KToggleAction* m_textToolAction;
 	KToggleAction* m_gradToolAction;
+
+	VEllipseTool* m_ellipseTool;
+	VPolygonTool* m_polygonTool;
+	VRectangleTool* m_rectangleTool;
+	VRotateTool* m_rotateTool;
+	VRoundRectTool* m_roundRectTool;
+	VScaleTool* m_scaleTool;
+	VSelectTool* m_selectTool;
+	VShearTool* m_shearTool;
+	VSinusTool* m_sinusTool;
+	VSpiralTool* m_spiralTool;
+	VStarTool* m_starTool;
+	VGradientTool* m_gradTool;
+
 
 	// text:
 	KFontAction *m_setFontFamily;

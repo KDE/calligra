@@ -9,30 +9,24 @@
 #include "vtool.h"
 #include "vselection.h"
 
-class KarbonPart;
-class KarbonView;
-
-// A singleton state to scale object(s)
 
 class VShearTool : public VTool
 {
 public:
+	VShearTool( KarbonView* view );
 	virtual ~VShearTool();
-	static VShearTool* instance( KarbonPart* part );
 
-	virtual bool eventFilter( KarbonView* view, QEvent* event );
+	virtual void activate();
+
+	virtual bool eventFilter( QEvent* event );
 
 	// draw the object while it is edited:
-	void drawTemporaryObject( KarbonView* view );
+	void drawTemporaryObject();
 
 protected:
-	VShearTool( KarbonPart* part );
-
-	void setCursor( KarbonView* view, const QPoint & ) const;
+	void setCursor( const QPoint & ) const;
 
 private:
-	static VShearTool* s_instance;
-
 	// input (mouse coordinates):
 	KoPoint m_fp;
 	KoPoint m_lp;

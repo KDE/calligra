@@ -1,9 +1,8 @@
 REAL BUGS:
 -	mirror coordinate-system so origin is bottom-left
--	do we need operator=() everywhere we use pointers as members?
+-	to be save: add operator=() everywhere we use pointers as members
 -	merge vscaletool into vselecttool
 -	introduce polygonizevisitor in vselectool for more precise selection (lenny)
--	rotate/scale/shear tool dont work
 -	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.

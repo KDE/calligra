@@ -8,31 +8,26 @@
 
 #include "vtool.h"
 
-class KarbonPart;
-class KarbonView;
+
 class VGradientDlg;
 
-// A singleton state to scale object(s)
 
 class VGradientTool : public VTool
 {
 public:
+	VGradientTool( KarbonView* view );
 	virtual ~VGradientTool();
-	static VGradientTool* instance( KarbonPart* part );
 
-	virtual bool eventFilter( KarbonView* view, QEvent* event );
+	virtual void activate();
+
+	virtual bool eventFilter( QEvent* event );
 
 	// draw the object while it is edited:
-	void drawTemporaryObject( KarbonView* view );
+	void drawTemporaryObject();
 
 	virtual void showDialog() const;
 
-protected:
-	VGradientTool( KarbonPart* part );
-
 private:
-	static VGradientTool* s_instance;
-
 	VGradientDlg* m_dialog;
 
 	// input (mouse coordinates):

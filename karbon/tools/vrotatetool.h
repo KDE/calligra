@@ -8,30 +8,24 @@
 
 #include "vtool.h"
 
-class KarbonPart;
-class KarbonView;
-
-// A singleton state to rotate object(s)
 
 class VRotateTool : public VTool
 {
 public:
+	VRotateTool( KarbonView* view );
 	virtual ~VRotateTool();
-	static VRotateTool* instance( KarbonPart* part );
 
-	virtual bool eventFilter( KarbonView* view, QEvent* event );
+	virtual void activate();
+
+	virtual bool eventFilter( QEvent* event );
 
 	// draw the object while it is edited:
-	void drawTemporaryObject( KarbonView* view );
+	void drawTemporaryObject();
 
 protected:
-	VRotateTool( KarbonPart* part );
-
-	void setCursor( KarbonView* view, const QPoint & ) const;
+	void setCursor( const QPoint & ) const;
 
 private:
-	static VRotateTool* s_instance;
-
 	// input (mouse coordinates):
 	KoPoint m_fp;
 	KoPoint m_lp;

@@ -6,6 +6,9 @@
 #include <math.h>
 
 #include <qcursor.h>
+#include <qlabel.h>
+
+#include <klocale.h>
 
 #include <koRect.h>
 
@@ -22,10 +25,8 @@
 #include <kdebug.h>
 
 
-VRotateTool* VRotateTool::s_instance = 0L;
-
-VRotateTool::VRotateTool( KarbonPart* part )
-	: VTool( part ), m_isDragging( false )
+VRotateTool::VRotateTool( KarbonView* view )
+	: VTool( view ), m_isDragging( false )
 {
 }
 
@@ -33,66 +34,61 @@ VRotateTool::~VRotateTool()
 {
 }
 
-VRotateTool*
-VRotateTool::instance( KarbonPart* part )
+void
+VRotateTool::activate()
 {
-	if ( s_instance == 0L )
-	{
-		s_instance = new VRotateTool( part );
-	}
-
-	s_instance->m_part = part;
-	return s_instance;
+	view()->statusMessage()->setText( i18n( "Rotate" ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 void
-VRotateTool::setCursor( KarbonView* view, const QPoint &p ) const
+VRotateTool::setCursor( const QPoint &p ) const
 {
-	switch( m_part->document().selection()->node( p ) )
+	switch( view()->part()->document().selection()->node( p ) )
 	{
 		case node_lt:
 		case node_rb:
-			view->canvasWidget()->viewport()->
+			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::SizeFDiagCursor ) );
 			break;
 		case node_rt:
 		case node_lb:
-			view->canvasWidget()->viewport()->
+			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::SizeBDiagCursor ) );
 			break;
 		case node_lm:
 		case node_rm:
-			view->canvasWidget()->viewport()->
+			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::SizeHorCursor ) );
 			break;
 		case node_mt:
 		case node_mb:
-			view->canvasWidget()->viewport()->
+			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::SizeVerCursor ) );
 			break;
 		default:
-			view->canvasWidget()->viewport()->
+			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::arrowCursor ) );
 	}
 }
 
 void
-VRotateTool::drawTemporaryObject( KarbonView* view )
+VRotateTool::drawTemporaryObject()
 {
-	VPainter *painter = view->painterFactory()->editpainter();
+	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	VHandleNode node = part()->document().selection()->node( QPoint( m_lp.x() / view->zoom(), m_lp.y() / view->zoom() ) );
-	if( part()->document().selection()->objects().count() > 0 && node != node_mm )
+	VHandleNode node = view()->part()->document().selection()->node( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
+	if( view()->part()->document().selection()->objects().count() > 0 && node != node_mm )
 	{
-		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
-		KoRect rect = part()->document().selection()->boundingBox();
+		KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
+		KoRect rect = view()->part()->document().selection()->boundingBox();
 
 		m_sp = KoPoint( int( rect.left() + rect.width() / 2 ), int( rect.top() + rect.height() / 2 ) );
 		KoPoint sp(
-			m_sp.x() - view->canvasWidget()->contentsX(),
-			m_sp.y() - view->canvasWidget()->contentsY() );
+			m_sp.x() - view()->canvasWidget()->contentsX(),
+			m_sp.y() - view()->canvasWidget()->contentsY() );
 
 		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
 		if( node == node_lt )
@@ -117,18 +113,18 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 		QWMatrix mat;
 		mat.translate( sp.x(), sp.y() );
 		mat.rotate( m_angle / VGlobal::pi_180 );
-		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ),
-						- ( sp.y() + view->canvasWidget()->contentsY() ) );
+		mat.translate(	- ( sp.x() + view()->canvasWidget()->contentsX() ),
+						- ( sp.y() + view()->canvasWidget()->contentsY() ) );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->document().selection()->objects();
+		VObjectListIterator itr = view()->part()->document().selection()->objects();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )
 		{
 			list.append( itr.current()->clone() );
 		}
-		painter->setZoomFactor( view->zoom() );
+		painter->setZoomFactor( view()->zoom() );
 		VObjectListIterator itr2 = list;
 		for( ; itr2.current() ; ++itr2 )
 		{
@@ -136,7 +132,7 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 			{
 				//path->insertKnots( 5 );
 //				path->convertToCurves();
-//				path->whirlPinch( KoPoint( sp.x() / view->zoom(), sp.y() / view->zoom() ), m_angle / VGlobal::pi_180, 1.0 );
+//				path->whirlPinch( KoPoint( sp.x() / view()->zoom(), sp.y() / view()->zoom() ), m_angle / VGlobal::pi_180, 1.0 );
 			}
 			itr2.current()->transform( mat );
 			itr2.current()->setState( state_edit );
@@ -149,23 +145,23 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 }
 
 bool
-VRotateTool::eventFilter( KarbonView* view, QEvent* event )
+VRotateTool::eventFilter( QEvent* event )
 {
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	setCursor( view, mouse_event->pos() );
+	setCursor( mouse_event->pos() );
 
 	if ( event->type() == QEvent::MouseMove )
 	{
 		if( m_isDragging )
 		{
 			// erase old object:
-			drawTemporaryObject( view );
+			drawTemporaryObject();
 
 			m_lp.setX( mouse_event->pos().x() );
 			m_lp.setY( mouse_event->pos().y() );
 
 			// paint new object:
-			drawTemporaryObject( view );
+			drawTemporaryObject();
 		}
 
 		return true;
@@ -176,8 +172,8 @@ VRotateTool::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		part()->addCommand(
-			new VRotateCmd( &part()->document(), m_sp, m_angle / VGlobal::pi_180 ),
+		view()->part()->addCommand(
+			new VRotateCmd( &view()->part()->document(), m_sp, m_angle / VGlobal::pi_180 ),
 			true );
 
 		m_isDragging = false;
@@ -196,7 +192,7 @@ VRotateTool::eventFilter( KarbonView* view, QEvent* event )
 			m_isDragging = false;
 
 			// erase old object:
-			drawTemporaryObject( view );
+			drawTemporaryObject();
 
 			return true;
 		}
@@ -205,7 +201,7 @@ VRotateTool::eventFilter( KarbonView* view, QEvent* event )
 	// the whole story starts with this event:
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
-		view->painterFactory()->painter()->end();
+		view()->painterFactory()->painter()->end();
 
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
@@ -213,7 +209,7 @@ VRotateTool::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		// draw initial object:
-		drawTemporaryObject( view );
+		drawTemporaryObject();
 		m_isDragging = true;
 
 		return true;

@@ -8,30 +8,25 @@
 
 #include "vshapetool.h"
 
-class KarbonPart;
+
 class VSinusDlg;
 
-// A singleton state to create a sinus
 
 class VSinusTool : public VShapeTool
 {
 public:
+	VSinusTool( KarbonView* view );
 	virtual ~VSinusTool();
-	static VSinusTool* instance( KarbonPart* part );
+
+	virtual void activate();
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
-	virtual void drawTemporaryObject(
-		KarbonView* view, const KoPoint& p, double d1, double d2 );
+	virtual void drawTemporaryObject( const KoPoint& p, double d1, double d2 );
 
 	virtual void showDialog() const;
 
-protected:
-	VSinusTool( KarbonPart* part );
-
 private:
-	static VSinusTool* s_instance;
-
 	VSinusDlg* m_dialog;
 };
 

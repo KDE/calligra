@@ -3,16 +3,15 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "karbon_part.h"
 #include "vtool.h"
 
-VTool::VTool( KarbonPart* part )
-	: m_part( part )
+VTool::VTool( KarbonView* view )
+	: m_view( view )
 {
 }
 
 bool
-VTool::eventFilter( KarbonView* /*view*/, QEvent* /*event*/ )
+VTool::eventFilter( QEvent* /*event*/ )
 {
 	return false;
 }

@@ -8,30 +8,25 @@
 
 #include "vshapetool.h"
 
-class KarbonPart;
+
 class VSpiralDlg;
 
-// A singleton state to create a spiral.
 
 class VSpiralTool : public VShapeTool
 {
 public:
+	VSpiralTool( KarbonView* view );
 	virtual ~VSpiralTool();
-	static VSpiralTool* instance( KarbonPart* part );
+
+	virtual void activate();
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
-	virtual void drawTemporaryObject(
-		KarbonView* view, const KoPoint& p, double d1, double d2 );
+	virtual void drawTemporaryObject( const KoPoint& p, double d1, double d2 );
 
 	virtual void showDialog() const;
 
-protected:
-	VSpiralTool( KarbonPart* part );
-
 private:
-	static VSpiralTool* s_instance;
-
 	VSpiralDlg* m_dialog;
 };
 

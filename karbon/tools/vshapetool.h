@@ -11,29 +11,26 @@
 #include "vglobal.h"
 #include "vtool.h"
 
-class QEvent;
-
-class KarbonPart;
-class KarbonView;
 
 class VShapeTool : public VTool
 {
 public:
-	VShapeTool( KarbonPart* part = 0L, bool polar = false );
-	virtual ~VShapeTool() {}
+	VShapeTool( KarbonView* view, bool polar = false );
 
-	virtual bool eventFilter( KarbonView* view, QEvent* event );
+	virtual bool eventFilter( QEvent* event );
 
 	virtual void showDialog() const {}
 
 protected:
+	// make it "abstract":
+	virtual ~VShapeTool() {}
+
 	// derived tools implement specialised commands. d1, d2 are either
 	// width, height or radius, angle.
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 ) = 0;
 
 	// draw the object while it is edited:
-	virtual void drawTemporaryObject(
-		KarbonView* view, const KoPoint& p, double d1, double d2 ) = 0;
+	virtual void drawTemporaryObject( const KoPoint& p, double d1, double d2 ) = 0;
 
 private:
 	inline void recalcCoords();

@@ -8,28 +8,23 @@
 
 #include "vshapetool.h"
 
-class KarbonPart;
+
 class VEllipseDlg;
 
-// A singleton state to create an ellipse
 
 class VEllipseTool : public VShapeTool
 {
 public:
+	VEllipseTool( KarbonView* view );
 	virtual ~VEllipseTool();
-	static VEllipseTool* instance( KarbonPart* part );
+
+	virtual void activate();
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
-	virtual void drawTemporaryObject(
-		KarbonView* view, const KoPoint& p, double d1, double d2 );
-
-protected:
-	VEllipseTool( KarbonPart* part );
+	virtual void drawTemporaryObject( const KoPoint& p, double d1, double d2 );
 
 private:
-	static VEllipseTool* s_instance;
-
 	VEllipseDlg* m_dialog;
 };
 

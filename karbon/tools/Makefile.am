@@ -11,6 +11,7 @@ noinst_LTLIBRARIES = libkarbontools.la
 
 noinst_HEADERS = \
 	vellipsetool.h \
+	vgradienttool.h \
 	vpolygontool.h \
 	vrectangletool.h \
 	vrotatetool.h \
@@ -22,11 +23,11 @@ noinst_HEADERS = \
 	vsinustool.h \
 	vspiraltool.h \
 	vstartool.h \
-	vgradienttool.h \
 	vtool.h
 
 libkarbontools_la_SOURCES = \
 	vellipsetool.cc \
+	vgradienttool.cc \
 	vpolygontool.cc \
 	vrectangletool.cc \
 	vrotatetool.cc \
@@ -38,7 +39,6 @@ libkarbontools_la_SOURCES = \
 	vsinustool.cc \
 	vspiraltool.cc \
 	vstartool.cc \
-	vgradienttool.cc \
 	vtool.cc
 
 libkarbontools_la_METASOURCES = \

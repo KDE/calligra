@@ -6,7 +6,9 @@
 #include <math.h>
 
 #include <qcursor.h>
+#include <qlabel.h>
 
+#include <klocale.h>
 #include <koPoint.h>
 #include <koRect.h>
 
@@ -18,10 +20,8 @@
 #include "vtransformcmd.h"
 
 
-VScaleTool* VScaleTool::s_instance = 0L;
-
-VScaleTool::VScaleTool( KarbonPart* part )
-	: VTool( part ), m_isDragging( false )
+VScaleTool::VScaleTool( KarbonView* view )
+	: VTool( view ), m_isDragging( false )
 {
 }
 
@@ -29,61 +29,56 @@ VScaleTool::~VScaleTool()
 {
 }
 
-VScaleTool*
-VScaleTool::instance( KarbonPart* part )
+void
+VScaleTool::activate()
 {
-	if ( s_instance == 0L )
-	{
-		s_instance = new VScaleTool( part );
-	}
-
-	s_instance->m_part = part;
-	return s_instance;
+	view()->statusMessage()->setText( i18n( "Scale" ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 void
-VScaleTool::setCursor( KarbonView* view, const QPoint &p ) const
+VScaleTool::setCursor( const QPoint &p ) const
 {
-	switch( m_part->document().selection()->node( p ) )
+	switch( view()->part()->document().selection()->node( p ) )
 	{
 		case node_lt:
 		case node_rb:
-			view->canvasWidget()->viewport()->
+			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::SizeFDiagCursor ) );
 			break;
 		case node_rt:
 		case node_lb:
-			view->canvasWidget()->viewport()->
+			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::SizeBDiagCursor ) );
 			break;
 		case node_lm:
 		case node_rm:
-			view->canvasWidget()->viewport()->
+			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::SizeHorCursor ) );
 			break;
 		case node_mt:
 		case node_mb:
-			view->canvasWidget()->viewport()->
+			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::SizeVerCursor ) );
 			break;
 		default:
-			view->canvasWidget()->viewport()->
+			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::arrowCursor ) );
 	}
 }
 
 void
-VScaleTool::drawTemporaryObject( KarbonView* view )
+VScaleTool::drawTemporaryObject()
 {
-	VPainter *painter = view->painterFactory()->editpainter();
+	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x() / view->zoom(), m_lp.y() / view->zoom() ) );
+	KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
 
-	KoRect rect = part()->document().selection()->boundingBox();
+	KoRect rect = view()->part()->document().selection()->boundingBox();
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( part()->document().selection()->objects().count() > 0 && m_activeNode != node_mm )
+	if( view()->part()->document().selection()->objects().count() > 0 && m_activeNode != node_mm )
 	{
 		// scale operation
 		QWMatrix mat;
@@ -135,21 +130,21 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
-		KoPoint sp = KoPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
+		KoPoint sp = KoPoint( m_sp.x() - view()->canvasWidget()->contentsX(), m_sp.y() - view()->canvasWidget()->contentsY() );
 		mat.translate( sp.x(), sp.y() );
 		mat.scale( m_s1, m_s2 );
-		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ),
-						- ( sp.y() + view->canvasWidget()->contentsY() ) );
+		mat.translate(	- ( sp.x() + view()->canvasWidget()->contentsX() ),
+						- ( sp.y() + view()->canvasWidget()->contentsY() ) );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->document().selection()->objects();
+		VObjectListIterator itr = view()->part()->document().selection()->objects();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )
 		{
 			list.append( itr.current()->clone() );
 		}
-		painter->setZoomFactor( view->zoom() );
+		painter->setZoomFactor( view()->zoom() );
 		VObjectListIterator itr2 = list;
 		for( ; itr2.current() ; ++itr2 )
 		{
@@ -164,23 +159,23 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 }
 
 bool
-VScaleTool::eventFilter( KarbonView* view, QEvent* event )
+VScaleTool::eventFilter( QEvent* event )
 {
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	setCursor( view, mouse_event->pos() );
+	setCursor( mouse_event->pos() );
 
 	if ( event->type() == QEvent::MouseMove )
 	{
 		if( m_isDragging )
 		{
 			// erase old object:
-			drawTemporaryObject( view );
+			drawTemporaryObject();
 
 			m_lp.setX( mouse_event->pos().x() );
 			m_lp.setY( mouse_event->pos().y() );
 
 			// paint new object:
-			drawTemporaryObject( view );
+			drawTemporaryObject();
 		}
 
 		return true;
@@ -188,12 +183,12 @@ VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 
 	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
 	{
-		view->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		part()->addCommand( new VScaleCmd( &part()->document(), m_sp, m_s1, m_s2 ), true );
+		view()->part()->addCommand( new VScaleCmd( &view()->part()->document(), m_sp, m_s1, m_s2 ), true );
 
 		m_isDragging = false;
 
@@ -211,7 +206,7 @@ VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 			m_isDragging = false;
 
 			// erase old object:
-			drawTemporaryObject( view );
+			drawTemporaryObject();
 
 			return true;
 		}
@@ -220,17 +215,17 @@ VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 	// the whole story starts with this event:
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
-		view->painterFactory()->painter()->end();
+		view()->painterFactory()->painter()->end();
 
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 	
-		m_activeNode = m_part->document().selection()->node( mouse_event->pos() );
+		m_activeNode = view()->part()->document().selection()->node( mouse_event->pos() );
 
 		// draw initial object:
-		drawTemporaryObject( view );
+		drawTemporaryObject();
 		m_isDragging = true;
 
 		return true;

@@ -3,6 +3,10 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qcursor.h>
+#include <qlabel.h>
+
+#include <klocale.h>
 #include "karbon_view.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
@@ -12,10 +16,8 @@
 #include "vrectangletool.h"
 
 
-VRectangleTool* VRectangleTool::s_instance = 0L;
-
-VRectangleTool::VRectangleTool( KarbonPart* part )
-	: VShapeTool( part )
+VRectangleTool::VRectangleTool( KarbonView* view )
+	: VShapeTool( view )
 {
 	// create config dialog:
 	m_dialog = new VRectangleDlg();
@@ -28,26 +30,20 @@ VRectangleTool::~VRectangleTool()
 	delete( m_dialog );
 }
 
-VRectangleTool*
-VRectangleTool::instance( KarbonPart* part )
+void
+VRectangleTool::activate()
 {
-	if ( s_instance == 0L )
-	{
-		s_instance = new VRectangleTool( part );
-	}
-
-	s_instance->m_part = part;
-	return s_instance;
+	view()->statusMessage()->setText( i18n( "Insert Rectangle" ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 void
-VRectangleTool::drawTemporaryObject(
-	KarbonView* view, const KoPoint& p, double d1, double d2 )
+VRectangleTool::drawTemporaryObject( const KoPoint& p, double d1, double d2 )
 {
-	VPainter *painter = view->painterFactory()->editpainter();
+	VPainter *painter = view()->painterFactory()->editpainter();
 	
 	VRectangleCmd* cmd =
-		new VRectangleCmd( &part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
+		new VRectangleCmd( &view()->part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 
 	VObject* path = cmd->createPath();
 	path->setState( state_edit );
@@ -64,7 +60,7 @@ VRectangleTool::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VRectangleCmd( &part()->document(),
+				new VRectangleCmd( &view()->part()->document(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height() );
@@ -73,7 +69,7 @@ VRectangleTool::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VRectangleCmd( &part()->document(),
+			new VRectangleCmd( &view()->part()->document(),
 				x, y,
 				x + d1,
 				y + d2 );

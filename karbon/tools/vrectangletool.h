@@ -8,28 +8,23 @@
 
 #include "vshapetool.h"
 
-class KarbonPart;
+
 class VRectangleDlg;
 
-// A singleton state to create a rectangle.
 
 class VRectangleTool : public VShapeTool
 {
 public:
+	VRectangleTool( KarbonView* view );
 	virtual ~VRectangleTool();
-	static VRectangleTool* instance( KarbonPart* part );
+
+	virtual void activate();
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
-	virtual void drawTemporaryObject(
-		KarbonView* view, const KoPoint& p, double d1, double d2 );
-
-protected:
-	VRectangleTool( KarbonPart* part );
+	virtual void drawTemporaryObject( const KoPoint& p, double d1, double d2 );
 
 private:
-	static VRectangleTool* s_instance;
-
 	VRectangleDlg* m_dialog;
 };
 

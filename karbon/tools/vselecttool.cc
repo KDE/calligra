@@ -5,6 +5,10 @@
 
 #include <math.h>
 
+#include <qcursor.h>
+#include <qlabel.h>
+
+#include <klocale.h>
 #include <koRect.h>
 
 #include "karbon_part.h"
@@ -18,10 +22,8 @@
 #include <kdebug.h>
 
 
-VSelectTool* VSelectTool::s_instance = 0L;
-
-VSelectTool::VSelectTool( KarbonPart* part )
-	: VTool( part ), m_state( normal ), m_isDragging( false )
+VSelectTool::VSelectTool( KarbonView* view )
+	: VTool( view ), m_state( normal ), m_isDragging( false )
 {
 }
 
@@ -29,43 +31,38 @@ VSelectTool::~VSelectTool()
 {
 }
 
-VSelectTool*
-VSelectTool::instance( KarbonPart* part )
+void
+VSelectTool::activate()
 {
-	if ( s_instance == 0L )
-	{
-		s_instance = new VSelectTool( part );
-	}
-
-	s_instance->m_part = part;
-	return s_instance;
+	view()->statusMessage()->setText( i18n( "Select" ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 void
-VSelectTool::drawTemporaryObject( KarbonView* view )
+VSelectTool::drawTemporaryObject()
 {
-	VPainter *painter = view->painterFactory()->editpainter();
+	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
+	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 
-	KoRect rect = part()->document().selection()->boundingBox();
+	KoRect rect = view()->part()->document().selection()->boundingBox();
 
 	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
 	if(
-		part()->document().selection()->objects().count() > 0 &&
-		( m_state != normal || rect.contains( fp * ( 1.0 /  view->zoom() ) ) ) )
+		view()->part()->document().selection()->objects().count() > 0 &&
+		( m_state != normal || rect.contains( fp * ( 1.0 /  view()->zoom() ) ) ) )
 	{
 		if( m_state != moving )
 			m_state = moving;
 
 		// move operation
 		QWMatrix mat;
-		mat.translate(	( m_lp.x() - fp.x() ) / view->zoom(),
-						( m_lp.y() - fp.y() ) / view->zoom() );
+		mat.translate(	( m_lp.x() - fp.x() ) / view()->zoom(),
+						( m_lp.y() - fp.y() ) / view()->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->document().selection()->objects();
+		VObjectListIterator itr = view()->part()->document().selection()->objects();
 		VObjectList list;
 		list.setAutoDelete( true );
 		for( ; itr.current() ; ++itr )
@@ -73,7 +70,7 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 			list.append( itr.current()->clone() );
 		}
 		VObjectListIterator itr2 = list;
-		painter->setZoomFactor( view->zoom() );
+		painter->setZoomFactor( view()->zoom() );
 		for( ; itr2.current() ; ++itr2 )
 		{
 			itr2.current()->transform( mat );
@@ -101,19 +98,19 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 }
 
 bool
-VSelectTool::eventFilter( KarbonView* view, QEvent* event )
+VSelectTool::eventFilter( QEvent* event )
 {
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
 	{
 		// erase old object:
-		drawTemporaryObject( view );
+		drawTemporaryObject();
 
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
 		// paint new object:
-		drawTemporaryObject( view );
+		drawTemporaryObject();
 
 		return true;
 	}
@@ -125,27 +122,27 @@ VSelectTool::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		// adjust to real viewport contents instead of raw mouse coords:
-		KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
-		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
+		KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
+		KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
 		if( m_state == moving )
 		{
 			m_state = normal;
-			part()->addCommand(
+			view()->part()->addCommand(
 				new VTranslateCmd(
-					&part()->document(),
-					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view->zoom() ) ),
-					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view->zoom() ) ) ),
+					&view()->part()->document(),
+					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view()->zoom() ) ),
+					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view()->zoom() ) ) ),
 				true );
 
-//			part()->repaintAllViews();
+//			view()->part()->repaintAllViews();
 		}
 		else
 		{
-			fp.setX( fp.x() / view->zoom() );
-			fp.setY( fp.y() / view->zoom() );
-			lp.setX( lp.x() / view->zoom() );
-			lp.setY( lp.y() / view->zoom() );
+			fp.setX( fp.x() / view()->zoom() );
+			fp.setY( fp.y() / view()->zoom() );
+			lp.setX( lp.x() / view()->zoom() );
+			lp.setY( lp.y() / view()->zoom() );
 			if ( (fabs(lp.x()-fp.x()) + fabs(lp.y()-fp.y())) < 3.0 ) {
 				// AK - should take the middle point here
 				fp = lp - KoPoint(8.0, 8.0);
@@ -153,14 +150,14 @@ VSelectTool::eventFilter( KarbonView* view, QEvent* event )
 			}
 
 			// erase old object:
-			drawTemporaryObject( view );
+			drawTemporaryObject();
 
-			part()->document().deselect();
+			view()->part()->document().deselect();
 
-			part()->document().select( KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(), true );
+			view()->part()->document().select( KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(), true );
 
-			//if( part()->selection().count() > 0  )
-				part()->repaintAllViews();
+			//if( view()->part()->selection().count() > 0  )
+				view()->part()->repaintAllViews();
 		}
 
 		m_isDragging = false;
@@ -179,7 +176,7 @@ VSelectTool::eventFilter( KarbonView* view, QEvent* event )
 			m_isDragging = false;
 
 			// erase old object:
-			drawTemporaryObject( view );
+			drawTemporaryObject();
 
 			return true;
 		}
@@ -188,7 +185,7 @@ VSelectTool::eventFilter( KarbonView* view, QEvent* event )
 	// the whole story starts with this event:
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
-		view->painterFactory()->painter()->end();
+		view()->painterFactory()->painter()->end();
 
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
@@ -197,7 +194,7 @@ VSelectTool::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		// draw initial object:
-		drawTemporaryObject( view );
+		drawTemporaryObject();
 		m_isDragging = true;
 
 		return true;

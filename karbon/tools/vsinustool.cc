@@ -3,6 +3,10 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qcursor.h>
+#include <qlabel.h>
+
+#include <klocale.h>
 #include "karbon_view.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
@@ -12,10 +16,8 @@
 #include "vsinustool.h"
 
 
-VSinusTool* VSinusTool::s_instance = 0L;
-
-VSinusTool::VSinusTool( KarbonPart* part )
-	: VShapeTool( part )
+VSinusTool::VSinusTool( KarbonView* view )
+	: VShapeTool( view )
 {
 	// create config dialog:
 	m_dialog = new VSinusDlg();
@@ -29,26 +31,20 @@ VSinusTool::~VSinusTool()
 	delete( m_dialog );
 }
 
-VSinusTool*
-VSinusTool::instance( KarbonPart* part )
+void
+VSinusTool::activate()
 {
-	if ( s_instance == 0L )
-	{
-		s_instance = new VSinusTool( part );
-	}
-
-	s_instance->m_part = part;
-	return s_instance;
+	view()->statusMessage()->setText( i18n( "Insert Sinus" ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 void
-VSinusTool::drawTemporaryObject(
-	KarbonView* view, const KoPoint& p, double d1, double d2 )
+VSinusTool::drawTemporaryObject( const KoPoint& p, double d1, double d2 )
 {
-	VPainter *painter = view->painterFactory()->editpainter();
+	VPainter *painter = view()->painterFactory()->editpainter();
 	
 	VSinusCmd* cmd =
-		new VSinusCmd( &part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2,
+		new VSinusCmd( &view()->part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2,
 			m_dialog->periods() );
 
 	VObject* path = cmd->createPath();
@@ -66,7 +62,7 @@ VSinusTool::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VSinusCmd( &part()->document(),
+				new VSinusCmd( &view()->part()->document(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height(),
@@ -76,7 +72,7 @@ VSinusTool::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VSinusCmd( &part()->document(),
+			new VSinusCmd( &view()->part()->document(),
 				x, y,
 				x + d1,
 				y + d2,
