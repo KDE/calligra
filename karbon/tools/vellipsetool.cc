@@ -62,13 +62,13 @@ VEllipseTool::VEllipseOptionsWidget::height() const
 void
 VEllipseTool::VEllipseOptionsWidget::setWidth( double value )
 {
-	m_width->setValue( value );
+	m_width->changeValue( value );
 }
 
 void
 VEllipseTool::VEllipseOptionsWidget::setHeight( double value )
 {
-	m_height->setValue( value );
+	m_height->changeValue( value );
 }
 
 void

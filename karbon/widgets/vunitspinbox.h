@@ -52,6 +52,9 @@ public:
 	{
 		changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value, unit ), m_unit ) );
 	}
+
+	void setPrecision( unsigned int precision ) { m_precision = precision; };
+
 protected:
 	friend class KoUnitDoubleValidator;
 	KoUnitDoubleValidator *m_validator;
@@ -77,7 +80,6 @@ public:
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
-	void setValue( double value ) { m_value = value; }
 	double value() const { return m_value; }
 
 protected:
@@ -97,7 +99,6 @@ public:
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
-	void setValue( double value ) { m_value = value; }
 	double value() const { return m_value; }
 
 protected:

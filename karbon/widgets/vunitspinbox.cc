@@ -105,8 +105,8 @@ KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, doubl
 void
 KoUnitDoubleLineEdit::changeValue( double value )
 {
-	setValue( value );
-	setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
+	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
+	setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( m_value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
 }
 
 void
@@ -147,8 +147,8 @@ KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, doubl
 void
 KoUnitDoubleComboBox::changeValue( double value )
 {
-	setValue( value );
-	lineEdit()->setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
+	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
+	lineEdit()->setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( m_value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
 }
 
 void
