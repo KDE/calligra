@@ -3399,6 +3399,10 @@ KCommand *KPrPage::rotateObj(float _newAngle)
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't rotate a header/footer
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if ( it.current()->isSelected() ) {
 	    tmp = new RotateCmd::RotateValues;
 	    tmp->angle =it.current()->getAngle();
@@ -3469,6 +3473,10 @@ KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't shadow a header/footer
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if ( it.current()->isSelected() ) {
 	    tmp = new ShadowCmd::ShadowValues;
 	    tmp->shadowDirection = it.current()->getShadowDirection();
