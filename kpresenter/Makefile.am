@@ -6,7 +6,7 @@ LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
 	../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
 	-lop -lkfile -lkfm -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
-	-lkom  -ljpeg $(LIBSOCKET) -ldl
+	-lkom -ljpeg $(LIBSOCKET) -ldl
 
 ####### Files
 
@@ -19,7 +19,6 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc ksearchdialogs.cc \
 	shadowdia.cc presstructview.cc \
-	\
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
 	kppixmapobject.cc \
@@ -27,6 +26,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kppixmapcollection.cc kpgradientcollection.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
+	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc \
 	commandhistory.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
@@ -36,7 +36,6 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h ksearchdialogs.h shadowdia.h presstructview.h \
-		\
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
 		kppixmapobject.h \
@@ -44,6 +43,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kppixmapcollection.h kpgradientcollection.h \
 		command.h movecmd.h resizecmd.h insertcmd.h deletecmd.h \
 		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \
+		effectcmd.h pgconfcmd.h pglayoutcmd.h \
 		commandhistory.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
@@ -52,18 +52,18 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kenumlistdia.moc kcharselect.moc kcharselectdia.moc \
 		optiondia.moc pgconfdia.moc effectdia.moc \
 		rotatedia.moc ksearchdialogs.moc shadowdia.moc presstructview.moc \
-		\
 		kpobject.moc kplineobject.moc kprectobject.moc kpellipseobject.moc \
 		kpautoformobject.moc kpclipartobject.moc kptextobject.moc \
-		kppixmapobject.moc
+		kppixmapobject.moc \
 		kpbackground.moc kppixmap.moc kpclipart.moc kpgradient.moc\
 		kppixmapcollection.moc kpgradientcollection.moc \
 		command.moc movecmd.moc resizecmd.moc insertcmd.moc deletecmd.moc \
 		setoptionscmd.moc chgclipcmd.moc chgpixcmd.moc setbackcmd.moc \
+		effectcmd.moc pgconfcmd.moc pglayoutcmd.moc \
 		commandhistory.moc
 
 idl_DATA =	kpresenter.idl
-idl_HEADERS =    kpresenter.h
+idl_HEADERS =	kpresenter.h
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 
@@ -135,4 +135,7 @@ setoptionscmd.cc: setoptionscmd.moc
 chgclipcmd.cc: chgclipcmd.moc
 chgpixcmd.cc: chgpixcmd.moc
 setbackcmd.cc: setbackcmd.moc
+effectcmd.cc: effectcmd.moc
+pgconfcmd.cc: pgconfcmd.moc
+pglayoutcmd.cc: pglayoutcmd.moc
 commandhistory.cc: commandhistory.moc

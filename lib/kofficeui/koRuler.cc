@@ -417,17 +417,20 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		action = A_BR_RIGHT;
 	      }
 
-	    if (mx > left + ip_first - 5 && mx < left + ip_first + 5 &&
-		my >= 2 && my <= pmFirst.size().height() + 2)
+	    if (flags & F_INDENTS)
 	      {
-		setCursor(ArrowCursor);
-		action = A_FIRST_INDENT;
-	      }
-	    else if (mx > left + ip_left - 5 && mx < left + ip_left + 5 &&
-		     my >=  height() - pmLeft.size().height() - 2 && my <= height() - 2)
-	      {
-		setCursor(ArrowCursor);
-		action = A_LEFT_INDENT;
+		if (mx > left + ip_first - 5 && mx < left + ip_first + 5 &&
+		    my >= 2 && my <= pmFirst.size().height() + 2)
+		  {
+		    setCursor(ArrowCursor);
+		    action = A_FIRST_INDENT;
+		  }
+		else if (mx > left + ip_left - 5 && mx < left + ip_left + 5 &&
+			 my >=  height() - pmLeft.size().height() - 2 && my <= height() - 2)
+		  {
+		    setCursor(ArrowCursor);
+		    action = A_LEFT_INDENT;
+		  }
 	      }
 	  }
 	else

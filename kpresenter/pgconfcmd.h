@@ -10,42 +10,46 @@
 /* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Delete Command (header)                                */
+/* Module: Set PageConfig Command (header)                        */
 /******************************************************************/
 
-#ifndef deletecmd_h
-#define deletecmd_h
-
-#include <qrect.h>
-#include <qpoint.h>
-#include <qsize.h>
-#include <qlist.h>
+#ifndef pgconfcmd_h
+#define pgconfcmd_h
 
 #include "command.h"
-#include "kpobject.h"
+#include "kpbackground.h"
+
+#include "global.h"
 
 class KPresenterDocument_impl;
 
 /******************************************************************/
-/* Class: DeleteCmd                                               */
+/* Class: PgConfCmd                                               */
 /******************************************************************/
 
-class DeleteCmd : public Command
+class PgConfCmd : public Command
 {
   Q_OBJECT
 
 public:
-  DeleteCmd(QString _name,QList<KPObject> &_objects,KPresenterDocument_impl *_doc);
-  ~DeleteCmd();
+  PgConfCmd(QString _name,bool _manualSwitch,bool _infinitLoop,
+	    PageEffect _pageEffect,PresSpeed _presSpeed,
+	    bool _oldManualSwitch,bool _oldInfinitLoop,
+	    PageEffect _oldPageEffect,PresSpeed _oldPresSpeed,
+	    KPresenterDocument_impl *_doc,int _pgNum);
   
   virtual void execute();
   virtual void unexecute();
 
 protected:
-  DeleteCmd()
+  PgConfCmd()
     {;}
 
-  QList<KPObject> objects;
+  bool manualSwitch,oldManualSwitch;
+  bool infinitLoop,oldInfinitLoop;
+  PageEffect pageEffect,oldPageEffect;
+  PresSpeed presSpeed,oldPresSpeed;
+  int pgNum;
   KPresenterDocument_impl *doc;
 
 };

@@ -13,9 +13,9 @@
 /* Module: Effect Dialog                                          */
 /******************************************************************/
 
+#include "kpresenter_view.h"
 #include "effectdia.h"
 #include "effectdia.moc"
-#include "kpresenter_view.h"
 
 /******************************************************************/
 /* class EffectDia                                                */
@@ -130,10 +130,14 @@ EffectDia::~EffectDia()
 /*====================== effect dia ok ===========================*/
 void EffectDia::slotEffectDiaOk()
 {
-  view->KPresenterDoc()->objectList()->at(objNum)->setPresNum(atoi(eNum->text()));
-  view->KPresenterDoc()->objectList()->at(objNum)->setEffect((Effect)cEffect->currentItem());
-  view->KPresenterDoc()->objectList()->at(objNum)->setEffect2((Effect2)cEffect2->currentItem());
-
+  EffectCmd *effectCmd = new EffectCmd(i18n("Assign Object Effects"),atoi(eNum->text()),
+				      (Effect)cEffect->currentItem(),(Effect2)cEffect2->currentItem(),
+				      view->KPresenterDoc()->objectList()->at(objNum)->getPresNum(),
+				      view->KPresenterDoc()->objectList()->at(objNum)->getEffect(),
+				      view->KPresenterDoc()->objectList()->at(objNum)->getEffect2(),
+				      view->KPresenterDoc()->objectList()->at(objNum));
+  effectCmd->execute();
+  view->KPresenterDoc()->commands()->addCommand(effectCmd);
   emit effectDiaOk();
 }
 

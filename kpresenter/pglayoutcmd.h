@@ -10,43 +10,40 @@
 /* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Delete Command (header)                                */
+/* Module: Set PageLayout Command (header)                        */
 /******************************************************************/
 
-#ifndef deletecmd_h
-#define deletecmd_h
+#ifndef pglayoutcmd_h
+#define pglayoutcmd_h
 
-#include <qrect.h>
-#include <qpoint.h>
-#include <qsize.h>
-#include <qlist.h>
+#include <koPageLayoutDia.h>
 
 #include "command.h"
-#include "kpobject.h"
+#include "kpbackground.h"
 
-class KPresenterDocument_impl;
+class KPresenterView_impl;
 
 /******************************************************************/
-/* Class: DeleteCmd                                               */
+/* Class: PgLayoutCmd                                             */
 /******************************************************************/
 
-class DeleteCmd : public Command
+class PgLayoutCmd : public Command
 {
   Q_OBJECT
 
 public:
-  DeleteCmd(QString _name,QList<KPObject> &_objects,KPresenterDocument_impl *_doc);
-  ~DeleteCmd();
-  
+  PgLayoutCmd(QString _name,KoPageLayout _layout,KoPageLayout _oldLayout,
+	      KPresenterView_impl *_view);
+
   virtual void execute();
   virtual void unexecute();
 
 protected:
-  DeleteCmd()
+  PgLayoutCmd()
     {;}
 
-  QList<KPObject> objects;
-  KPresenterDocument_impl *doc;
+  KoPageLayout layout,oldLayout;
+  KPresenterView_impl *view;
 
 };
 

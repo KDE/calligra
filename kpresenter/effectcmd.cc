@@ -10,61 +10,52 @@
 /* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Delete Command                                         */
+/* Module: Set Effect Command                                     */
 /******************************************************************/
 
-#include "kpresenter_doc.h"
-#include "deletecmd.h"
-#include "deletecmd.moc"
+#include "effectcmd.h"
+#include "effectcmd.moc"
 
 /******************************************************************/
-/* Class: DeleteCmd                                               */
+/* Class: EffectCmd                                               */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-DeleteCmd::DeleteCmd(QString _name,QList<KPObject> &_objects,KPresenterDocument_impl *_doc)
-  : Command(_name), objects(_objects)
+EffectCmd::EffectCmd(QString _name,int _presNum,Effect _effect,Effect2 _effect2,
+	    int _oldPresNum,Effect _oldEffect,Effect2 _oldEffect2,
+	    KPObject *_object)
+  : Command(_name)
 {
-  objects.setAutoDelete(false);
-  doc = _doc;
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->incCmdRef();
+  presNum = _presNum;
+  oldPresNum = _oldPresNum;
+  effect = _effect;
+  oldEffect = _oldEffect;
+  effect2 = _effect2;
+  oldEffect2 = _oldEffect2;
+  object = _object;
+
+  object->incCmdRef();
 }
 
 /*======================== destructor ============================*/
-DeleteCmd::~DeleteCmd()
+EffectCmd::~EffectCmd()
 {
-  for (unsigned int i = 0;i < objects.count();i++)
-    objects.at(i)->decCmdRef();
+  object->decCmdRef();
 }
 
-/*======================== execute ===============================*/
-void DeleteCmd::execute()
+/*====================== execute =================================*/
+void EffectCmd::execute()
 {
-  QRect oldRect;
-
-  for (unsigned int i = 0;i < objects.count();i++)
-    {
-      oldRect = objects.at(i)->getBoundingRect(0,0);
-      if (doc->objectList()->findRef(objects.at(i)) != -1)
-	{
-	  doc->objectList()->take(doc->objectList()->findRef(objects.at(i)));
-	  objects.at(i)->removeFromObjList();
-	}
-      doc->repaint(oldRect);
-      doc->repaint(objects.at(i));
-    }
+  object->setPresNum(presNum);
+  object->setEffect(effect);
+  object->setEffect2(effect2);
 }
 
 /*====================== unexecute ===============================*/
-void DeleteCmd::unexecute()
+void EffectCmd::unexecute()
 {
-  for (unsigned int i = 0;i < objects.count();i++)
-    {
-      doc->objectList()->append(objects.at(i));
-      objects.at(i)->addToObjList();
-      doc->repaint(objects.at(i));
-    }
+  object->setPresNum(oldPresNum);
+  object->setEffect(oldEffect);
+  object->setEffect2(oldEffect2);
 }
-
 

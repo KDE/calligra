@@ -1638,19 +1638,19 @@ KPObject* KPresenterDocument_impl::getSelectedObj()
 void KPresenterDocument_impl::deleteObjs()
 {
   KPObject *kpobject = 0;
+  QList<KPObject> _objects;
+  _objects.setAutoDelete(false);
   
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
       if (kpobject->isSelected())
-	{
-	  DeleteCmd *deleteCmd = new DeleteCmd(i18n("Delete object(s)"),kpobject,this);
-	  deleteCmd->execute();
-	  _commands.addCommand(deleteCmd);
-	  i--;
-	}
+	_objects.append(kpobject);
     }
  
+  DeleteCmd *deleteCmd = new DeleteCmd(i18n("Delete object(s)"),_objects,this);
+  deleteCmd->execute();
+  _commands.addCommand(deleteCmd);
   m_bModified = true;
 }
 

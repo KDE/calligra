@@ -5,70 +5,48 @@
 /* E-Mail: reggie@kde.org                                         */
 /* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
 /* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
 /* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
 /* needs OpenParts and Kom (weis@kde.org)                         */
+/* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Effect Dialog (header)                                 */
+/* Module: Set Effect Command (header)                            */
 /******************************************************************/
 
-#ifndef EFFECTDIA_H
-#define EFFECTDIA_H
+#ifndef effectcmd_h
+#define effectcmd_h
 
-class KPresenterView_impl;
-
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <qdialog.h>
-#include <qlabel.h>
-#include <qpushbt.h>
-#include <qbttngrp.h>
-#include <qcombo.h>
-#include <qlabel.h>
-
-#include <krestrictedline.h>
-#include <kapp.h>
-
-#include "effectcmd.h"
+#include "command.h"
 #include "kpobject.h"
 
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#endif
+#include "global.h"
 
 /******************************************************************/
-/* class EffectDia                                                */
+/* Class: EffectCmd                                               */
 /******************************************************************/
 
-class EffectDia : public QDialog
+class EffectCmd : public Command
 {
   Q_OBJECT
 
 public:
-
-  // constructor - destructor
-  EffectDia(QWidget* parent,const char*,int,int,KPresenterView_impl*);
-  ~EffectDia();                                             
+  EffectCmd(QString _name,int _presNum,Effect _effect,Effect2 _effect2,
+	    int _oldPresNum,Effect _oldEffect,Effect2 _oldEffect2,
+	    KPObject *_object);
+  ~EffectCmd();
+  
+  virtual void execute();
+  virtual void unexecute();
 
 protected:
-  QComboBox *cEffect,*cEffect2;
-  QLabel *lEffect,*lEffect2,*lNum;
-  KRestrictedLine *eNum;
-  QPushButton *cancelBut,*okBut;
+  EffectCmd()
+    {;}
 
-  int objNum,pageNum;
-  KPresenterView_impl *view;
-
-public slots:
-  void slotEffectDiaOk();
-
-signals:
-  void effectDiaOk();
+  int presNum,oldPresNum;
+  Effect effect,oldEffect;
+  Effect2 effect2,oldEffect2;
+  KPObject *object;
 
 };
 
-#endif //EFFECTDIA_H
-
-
+#endif

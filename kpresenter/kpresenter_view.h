@@ -78,6 +78,8 @@ class Page;
 #include "shadowdia.h"
 #include "presstructview.h"
 #include "setbackcmd.h"
+#include "pgconfcmd.h"
+#include "pglayoutcmd.h"
 
 #include <X11/Xlib.h>
 #include <signal.h>
@@ -280,6 +282,12 @@ public:
   void setRulerMousePos(int mx,int my)
     { v_ruler->setMousePos(mx,my); h_ruler->setMousePos(mx,my); } 
 
+  // set scrollbar ranges
+  void setRanges();
+
+  KoRuler *getHRuler() { return h_ruler; }
+  KoRuler *getVRuler() { return v_ruler; }
+
 public slots:
 
   // Document signals
@@ -380,9 +388,6 @@ protected:
   void setupAccelerators();
   void setupRulers();
 
-  // set scrollbar ranges
-  void setRanges();
-  
   // create a pixmapstring from a color
   char* colorToPixString(QColor);
   

@@ -526,16 +526,15 @@ void KPresenterView_impl::extraBackground()
 void KPresenterView_impl::extraLayout()
 {
   KoPageLayout pgLayout = m_pKPresenterDoc->pageLayout();
+  KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
   KoHeadFoot hf;
   
   if (KoPageLayoutDia::pageLayout(pgLayout,hf,FORMAT_AND_BORDERS)) 
     {
-      m_pKPresenterDoc->setPageLayout(pgLayout,xOffset,yOffset);
-      h_ruler->setPageLayout(pgLayout);
-      v_ruler->setPageLayout(pgLayout);
+      PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd(i18n("Set Pagelayout"),pgLayout,oldLayout,this);
+      pgLayoutCmd->execute();
+      KPresenterDoc()->commands()->addCommand(pgLayoutCmd);
     }
-
-  setRanges();
 }
 
 /*========================== extra options ======================*/
@@ -1099,10 +1098,11 @@ void KPresenterView_impl::extraAlignObjBottomidl()
 /*===============================================================*/
 void KPresenterView_impl::newPageLayout(KoPageLayout _layout)
 {
-  m_pKPresenterDoc->setPageLayout(_layout,xOffset,yOffset);
-  h_ruler->setPageLayout(_layout);
-  v_ruler->setPageLayout(_layout);
-  setRanges();
+  KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
+
+  PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd(i18n("Set Pagelayout"),_layout,oldLayout,this);
+  pgLayoutCmd->execute();
+  KPresenterDoc()->commands()->addCommand(pgLayoutCmd);
 }
 
 /*======================= set document ==========================*/
@@ -1343,10 +1343,14 @@ void KPresenterView_impl::optionOk()
 /*=================== page configuration ok ======================*/
 void KPresenterView_impl::pgConfOk()
 {
-  KPresenterDoc()->setManualSwitch(pgConfDia->getManualSwitch());
-  KPresenterDoc()->setInfinitLoop(pgConfDia->getInfinitLoop());
-  KPresenterDoc()->setPageEffect(getCurrPgNum() - 1,pgConfDia->getPageEffect());
-  KPresenterDoc()->setPresSpeed(pgConfDia->getPresSpeed());
+  PgConfCmd *pgConfCmd = new PgConfCmd(i18n("Configure Page for Screenpresentations"),
+				       pgConfDia->getManualSwitch(),pgConfDia->getInfinitLoop(),
+				       pgConfDia->getPageEffect(),pgConfDia->getPresSpeed(),
+				       KPresenterDoc()->spInfinitLoop(),KPresenterDoc()->spManualSwitch(),
+				       KPresenterDoc()->backgroundList()->at(getCurrPgNum() - 1)->getPageEffect(),
+				       KPresenterDoc()->getPresSpeed(),KPresenterDoc(),getCurrPgNum() - 1);
+  pgConfCmd->execute();
+  KPresenterDoc()->commands()->addCommand(pgConfCmd);
 }
 
 /*=================== effect dialog ok ===========================*/
