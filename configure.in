@@ -18,7 +18,8 @@ AM_ENABLE_STATIC(no)
 KDE_PROG_LIBTOOL
 AC_PATH_KDE 
 
-KDE_CHECK_MICO
+dnl Check for MICO. The argument is the minimal version required.
+KDE_CHECK_MICO(2.0.6)
 KDE_CHECK_MINI_STL
 
 idldir="\$(includedir)/idl"

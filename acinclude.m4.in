@@ -1785,7 +1785,49 @@ MICO_INCLUDES=-I$kde_micodir/include
 AC_SUBST(MICO_INCLUDES)
 MICO_LDFLAGS=-L$kde_micodir/lib
 AC_SUBST(MICO_LDFLAGS)
-LIBMICO="-lmico2.0.5 -ldl"
+
+AC_MSG_CHECKING([for MICO version])
+AC_CACHE_VAL(kde_cv_mico_version,
+[
+cat >conftest.$ac_ext <<EOF
+#include <mico/version.h>
+int main() { printf("MICO_VERSION=%s\n",MICO_VERSION); return (0); }
+EOF
+ac_compile='${CC-gcc} $CFLAGS $MICO_INCLUDES conftest.$ac_ext -o conftest'
+if AC_TRY_EVAL(ac_compile); then
+  if eval `./conftest 2>&5`; then
+    kde_cv_mico_version=$MICO_VERSION
+  else
+    AC_MSG_ERROR([your system is not able to execute a small application to
+    find MICO version! Check $kde_micodir/include/mico/version.h])
+  fi 
+else
+  AC_MSG_ERROR([your system is not able to compile a small application to
+  find MICO version! Check $kde_micodir/include/mico/version.h])
+fi
+])
+
+dnl installed MICO version
+mico_v_maj=$(echo $kde_cv_mico_version | sed -e 's/^\(.*\)\..*\..*$/\1/')
+mico_v_mid=$(echo $kde_cv_mico_version | sed -e 's/^.*\.\(.*\)\..*$/\1/')
+mico_v_min=$(echo $kde_cv_mico_version | sed -e 's/^.*\..*\.\(.*\)$/\1/')
+
+dnl required MICO version
+req_v_maj=$(echo $1 | sed -e 's/^\(.*\)\..*\..*$/\1/')
+req_v_mid=$(echo $1 | sed -e 's/^.*\.\(.*\)\..*$/\1/')
+req_v_min=$(echo $1 | sed -e 's/^.*\..*\.\(.*\)$/\1/') 
+
+if test $mico_v_maj -lt $req_v_maj || \
+    test $mico_v_mid -lt $req_v_mid || \
+      test $mico_v_min -lt $req_v_min
+then
+  AC_MSG_ERROR([found MICO version $kde_cv_mico_version but version $1 \
+at least is required. You should upgrade MICO.])
+else
+  AC_MSG_RESULT([$kde_cv_mico_version (minimum version $1, ok)])
+fi
+
+LIBMICO="-lmico$kde_cv_mico_version -ldl"
 AC_SUBST(LIBMICO)
 IDL=$kde_micodir/bin/idl
 AC_SUBST(IDL)
