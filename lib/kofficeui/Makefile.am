@@ -11,18 +11,18 @@ SUBDIRS = . pics test
 lib_LTLIBRARIES = libkofficeui.la
 
 libkofficeui_la_SOURCES = koAboutDia.cc koPageLayoutDia.cc \
-	koPartSelectDia.cc koPartSelectDia_data.cc koPrintDia.cc \
+	koPartSelectDia.cc koPartSelectDia_data.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
 	koKoolBar.cc
 
 include_HEADERS = koAboutDia.h koPageLayoutDia.h \
-	koPartSelectDia.h koPartSelectDia_data.h koPrintDia.h \
+	koPartSelectDia.h koPartSelectDia_data.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h
 
 METASOURCES = koAboutDia.moc koPartSelectDia.moc koRuler.moc \
 	  koKoolBar.moc koPartSelectDia_data.moc koTabChooser.moc \
-	  koPageLayoutDia.moc koPrintDia.moc koTemplateChooseDia.moc
+	  koPageLayoutDia.moc koTemplateChooseDia.moc
 
 ####### Implicit rules
 

@@ -45,10 +45,13 @@ class KoComponentEntry
 {
 public:
   KoComponentEntry() { reference = 0; }
+  KoComponentEntry( const KoComponentEntry& );
   /**
    * Releases the @ref #reference.
    */
   virtual ~KoComponentEntry();
+
+  const KoComponentEntry& operator=( const KoComponentEntry& );
 
   QString comment;
   QString name;
@@ -76,7 +79,10 @@ class KoDocumentEntry : public KoComponentEntry
 public:
   KoDocumentEntry() { }
   KoDocumentEntry( const KoComponentEntry& _e );
+  KoDocumentEntry( const KoDocumentEntry& _e );
   ~KoDocumentEntry() { }
+
+  const KoDocumentEntry& operator=( const KoDocumentEntry& );
 
   /**
    * Mimetypes which this document can handle.
@@ -122,6 +128,7 @@ class KoFilterEntry : public KoComponentEntry
 public:
   KoFilterEntry() { }
   KoFilterEntry( const KoComponentEntry& _e );
+  KoFilterEntry( const KoFilterEntry& _e );
   ~KoFilterEntry() { }
 
   /**

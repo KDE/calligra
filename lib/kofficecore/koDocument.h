@@ -264,7 +264,7 @@ public:
 
   /**
    *  Writes the OBJECT tag, but does NOT write the content of the
-   *  embedded documents. Saveing the embedded documents themselves
+   *  embedded documents. Saving the embedded documents themselves
    *  is done in @ref Document_impl. This function just stores information
    *  about the position and id of the embedded document.
    */
@@ -300,7 +300,7 @@ protected:
   QRect m_geometry;
   /**
    *  Holds the source of this object, for example "file:/home/weis/image.gif"
-   *  or "store:/table1/2" if it stored in a koffice store. If this string
+   *  or "store:/table1/2" if it is stored in a koffice store. If this string
    *  is empty then the document was created from scratch and not saved yet.
    *  Those documents are usually stored in a compound document later.
    */

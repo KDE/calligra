@@ -32,6 +32,9 @@
 #include <ktrader.h>
 #include <kactivator.h>
 
+// debug
+#include <stdio.h>
+
 /**
  * Port from KOffice Trader to KTrader/KActivator (kded) by Simon Hausmann
  * (c) 1999 Simon Hausmann <hausmann@kde.org>
@@ -43,9 +46,43 @@
  *
  *******************************************************************/
 
+KoComponentEntry::KoComponentEntry( const KoComponentEntry& e )
+{
+  operator=( e );
+  /* comment = e.comment;
+  name = e.name;
+  exec = e.exec;
+  activationMode = e.activationMode;
+  repoID = e.repoID;
+  miniIcon = e.miniIcon;
+  icon = e.icon;
+
+  if ( e.reference ) 
+    reference = CORBA::Object::_duplicate( e.reference );
+  else
+  reference = 0; */
+}
+
+const KoComponentEntry& KoComponentEntry::operator=( const KoComponentEntry& e )
+{
+  comment = e.comment;
+  name = e.name;
+  exec = e.exec;
+  activationMode = e.activationMode;
+  repoID = e.repoID;
+  miniIcon = e.miniIcon;
+  icon = e.icon;
+
+  if ( e.reference ) 
+    reference = CORBA::Object::_duplicate( e.reference );
+  else
+    reference = 0;
+}
+
 KoComponentEntry::~KoComponentEntry()
 {
-  CORBA::release( reference );
+  if ( reference )
+    CORBA::release( reference );
 }
 
 /*******************************************************************
@@ -84,37 +121,43 @@ static KoComponentEntry koParseComponentProperties( KTrader::ServicePtr service 
  *
  *******************************************************************/
 
-KoDocumentEntry::KoDocumentEntry( const KoComponentEntry& _e )
+KoDocumentEntry::KoDocumentEntry( const KoDocumentEntry& _e ) : KoComponentEntry( _e )
 {
-  comment = _e.comment;
-  name = _e.name;
-  exec = _e.exec;
-  activationMode = _e.activationMode;
-  repoID = _e.repoID;
-  miniIcon = _e.miniIcon;
-  icon = _e.icon;
+  mimeTypes = _e.mimeTypes;
+}
+
+KoDocumentEntry::KoDocumentEntry( const KoComponentEntry& _e ) : KoComponentEntry( _e )
+{
+}
+
+const KoDocumentEntry& KoDocumentEntry::operator=( const KoDocumentEntry& e )
+{
+  KoComponentEntry::operator=( e );
+  mimeTypes = e.mimeTypes;
 }
 
 KOffice::Document_ptr KoDocumentEntry::createDoc()
 {
+  ASSERT( !CORBA::is_nil( reference ) );
+  printf("Narrow factory\n");
   KOffice::DocumentFactory_var factory = KOffice::DocumentFactory::_narrow( reference );
   if( CORBA::is_nil( factory ) )
   {
     QString tmp( i18n("Server %1 does not implement a KOffice factory" ) );
     tmp = tmp.arg( name );
     QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
-    return 0L;
+    return 0;
   }
-
+  printf("Create\n");
   KOffice::Document_ptr doc = factory->create();
   if( CORBA::is_nil( doc ) )
   {
     QString tmp( i18n("Server %1 did not create a document" ) );
     tmp = tmp.arg( name );
     QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
-    return 0L;
+    return 0;
   }
-
+  printf("Create done\n");
   return doc;
 }
 
@@ -199,15 +242,16 @@ static KoFilterEntry koParseFilterProperties( KTrader::ServicePtr service )
  *
  *******************************************************************/
 
-KoFilterEntry::KoFilterEntry( const KoComponentEntry& _e )
+KoFilterEntry::KoFilterEntry( const KoFilterEntry& e ) : KoComponentEntry( e )
 {
-  comment = _e.comment;
-  name = _e.name;
-  exec = _e.exec;
-  activationMode = _e.activationMode;
-  repoID = _e.repoID;
-  miniIcon = _e.miniIcon;
-  icon = _e.icon;
+  import = e.import;
+  importDescription = e.importDescription;
+  export = e.export;
+  exportDescription = e.exportDescription;
+}
+
+KoFilterEntry::KoFilterEntry( const KoComponentEntry& _e ) : KoComponentEntry( _e )
+{
 }
 
 QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_count*/ )
@@ -237,6 +281,7 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
 
     // We need a virtual object reference
     f.reference = activator->activateService( (*it)->name(), repoId, tag );
+    printf("Created %x\n",f.reference);
 
     // Append converted offer
     lst.append( f );
