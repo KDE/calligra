@@ -79,7 +79,7 @@ short hexStrToShort( const char *_buffer )
 {
   short value = 0;
   
-  for( int i = 0; i < 8; i++ )
+  for( int i = 0; i < 2; i++ )
   {
     value <<= 4;
     

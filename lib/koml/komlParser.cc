@@ -405,7 +405,7 @@ void KOMLParser::free( KOMLData* _data )
 
 bool KOMLParser::parseTag( const char *_tag, string& name, vector<KOMLAttrib>& _attribs )
 {
-  _attribs.erase( _attribs.begin(), _attribs.begin() );
+  _attribs.erase( _attribs.begin(), _attribs.end() );
   
   const char *p = _tag;
   int l = 0;
@@ -472,7 +472,7 @@ bool KOMLParser::parseTag( const char *_tag, string& name, vector<KOMLAttrib>& _
       else
       {
 	start2 = p;
-	while( isalnum( *p ) )
+	while( *p != ' ' && *p != '\t' && *p != '\n' && *p != '/' && *p != '>' && *p != 0 )
 	{
 	  p++;
 	  len2++;

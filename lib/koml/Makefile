@@ -15,9 +15,9 @@ SOPATCH =	0
 
 ####### Files
 
-SOURCES =	komlParser.cc komlFeed.cc komlFileFeed.cc komlWriter.cc komlStreamFeed.cc
+SOURCES =	komlParser.cc komlFeed.cc komlFileFeed.cc komlWriter.cc komlStreamFeed.cc torben.cc
 HEADERS =	komlParser.h komlFeed.h komlFileFeed.h komlWriter.h torben.h komlStreamFeed.h
-OBJECTS =	komlParser.o komlFeed.o komlFileFeed.o komlWriter.o komlStreamFeed.o
+OBJECTS =	komlParser.o komlFeed.o komlFileFeed.o komlWriter.o komlStreamFeed.o torben.o
 SRCMETA =	
 TARGET	=	libkoml.so.$(SOMAJOR).$(SOMINOR)
 IDL	=	
@@ -85,3 +85,7 @@ komlFeed.o: komlFeed.h
 komlFileFeed.o: komlFileFeed.h /usr/include/stdio.h /usr/include/libio.h
 komlFileFeed.o: /usr/include/_G_config.h /usr/include/sys/cdefs.h komlFeed.h
 komlWriter.o: komlWriter.h
+komlStreamFeed.o: komlStreamFeed.h komlFeed.h
+torben.o: torben.h /usr/include/ctype.h /usr/include/features.h
+torben.o: /usr/include/sys/cdefs.h /usr/include/endian.h
+torben.o: /usr/include/bytesex.h
