@@ -166,7 +166,7 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 }
 
 int
-FormIO::loadFormData(Form *form, QWidget *container, QByteArray &src)
+FormIO::loadFormData(Form *form, QWidget *container, QByteArray &src, bool preview)
 {
 	QString errMsg;
 	int errLine;
@@ -183,6 +183,8 @@ FormIO::loadFormData(Form *form, QWidget *container, QByteArray &src)
 	}
 
 	loadFormFromDom(form, container, inBuf);
+	if(preview)
+		form->setDesignMode(false);
 	return 1;
 }
 

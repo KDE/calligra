@@ -53,6 +53,7 @@ void
 PropertyCommand::setValue(const QVariant &value)
 {
 	m_value = value;
+	emit m_buffer->manager()->dirty(m_buffer->manager()->activeForm());
 }
 
 void
@@ -153,6 +154,7 @@ void
 GeometryPropertyCommand::setPos(QPoint pos)
 {
 	m_pos = pos;
+	emit m_buffer->manager()->dirty(m_buffer->manager()->activeForm());
 }
 
 QString

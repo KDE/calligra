@@ -69,7 +69,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		/*! \return 0 if faild otherwise 1
 		 * loads widgets on ground and sets properties to ground
 		 */
-		static int loadFormData(Form *form, QWidget *container, QByteArray &src);
+		static int loadFormData(Form *form, QWidget *container, QByteArray &src, bool preview=false);
 
 
 		/*! \return 0 if loading failed, 1 otherwise\n

@@ -57,6 +57,8 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 void
 ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty &prop)
 {
+	if(!m_manager || !m_manager->activeForm() || ! m_manager->activeForm()->objectTree())
+		return;
 	QString property = prop.name();
 	QVariant value = prop.value();
 	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;

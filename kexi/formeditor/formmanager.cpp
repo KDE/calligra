@@ -151,10 +151,10 @@ FormManager::windowChanged(QWidget *w)
 
 //	if(m_forms.count() >= 1)
 //	{
-	if(m_collection && m_collection->action( KStdAction::name(KStdAction::Undo)))
+	/*if(m_collection && m_collection->action( KStdAction::name(KStdAction::Undo)))
 		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Undo) ) );
 	if(m_collection && m_collection->action( KStdAction::name(KStdAction::Redo)))
-		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );
+		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );*/
 //	}
 
 	Form *form;
@@ -166,11 +166,11 @@ FormManager::windowChanged(QWidget *w)
 			if(m_treeview)
 				m_treeview->setForm(form);
 			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
-			if(m_collection)
-				m_collection->addDocCollection(form->actionCollection());
+			//if(m_collection)
+				//m_collection->addDocCollection(form->actionCollection());
 
-			if(m_client)
-				m_client->createGUI(m_client->xmlFile());
+			//if(m_client)
+			//	m_client->createGUI(m_client->xmlFile());
 			/*Actions actions;
 			actions.append(form->actionCollection()->action( KStdAction::name(KStdAction::Undo) ));
 			actions.append(form->actionCollection()->action( KStdAction::name(KStdAction::Redo) ));
@@ -240,19 +240,26 @@ FormManager::createBlankForm(const QString &classname, const char *name, QWidget
 }
 
 void
-FormManager::importForm(QWidget *w, Form *form)
+FormManager::importForm(QWidget *w, Form *form, bool preview)
 {
 	if(!form)
 		form = new Form(this, w->name());
 
-	form->createToplevel(w, w->name());
+	if(!form->toplevelContainer())
+		form->createToplevel(w, w->name());
 	w->setCaption(w->name());
 	w->setIcon(SmallIcon("kexi"));
 	w->resize(350, 300);
 	w->show();
-	w->setFocus();
+	//w->setFocus();
 
-	initForm(form);
+	if(!preview)
+		initForm(form);
+	else
+	{
+		m_preview.append(form);
+		form->setDesignMode(false);
+	}
 }
 
 void
@@ -326,14 +333,18 @@ FormManager::saveFormAs()
 }
 
 void
-FormManager::previewForm(Form *form, QWidget *container)
+FormManager::previewForm(Form *form, QWidget *container, Form *toForm)
 {
 	if(!form || !container || !form->objectTree())
 		return;
 	QDomDocument domDoc;
 	FormIO::saveFormToDom(form, domDoc);
 
-	Form *myform = new Form(this, form->objectTree()->name().latin1());
+	Form *myform;
+	if(!toForm)
+		myform = new Form(this, form->objectTree()->name().latin1());
+	else
+		myform = toForm;
 	myform->createToplevel(container);
 	FormIO::loadFormFromDom(myform, container, domDoc);
 

@@ -61,6 +61,8 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void addPropertyDescription(const char *property, const QString &desc);
 		void addValueDescription(const char *value, const QString &desc);
 
+		FormManager*    manager()  { return m_manager; }
+
 	public slots:
 		/*! Sets the buffer's object to \a widget. The properties are created automatically, and the list view is updated.
 		  checkModifiedProp() is called before doing this.

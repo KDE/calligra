@@ -108,7 +108,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		QWidget *createBlankForm(const QString &classname, const char *name, QWidget *parent=0);
 
 		/*! Adds a existing form w and changes it to a container */
-		void importForm(QWidget *w, Form *form=0);
+		void importForm(QWidget *w, Form *form=0, bool preview=false);
 
 		/*! Deletes the Form \a form and removes it from our list. */
 		void deleteForm(Form *form);
@@ -135,7 +135,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 */
 		void saveFormAs();
 		/*! Previews the Form \a form using the widget \a w as toplevel container for this Form. */
-		void previewForm(Form *form, QWidget *w);
+		void previewForm(Form *form, QWidget *w, Form *toForm=0);
 		/*! Deletes the selected widget in active Form and all of its children. */
 		void deleteWidget();
 		/*! Copies the slected widget and all its children of the active Form using an XML representation. */
@@ -212,6 +212,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		QTimer m_deleteWidgetLater_timer;
 		QPtrList<QWidget> m_deleteWidgetLater_list;
 
+		friend class PropertyCommand;
+		friend class GeometryPropertyCommand;
 		friend class CutWidgetCommand;
 		friend class Form;
 };
