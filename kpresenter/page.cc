@@ -3301,6 +3301,64 @@ void Page::doObjEffects()
                                 xy.at( i )->setWidth( 0 );
                                 xy.at( i )->setHeight( 0 );
                             } break;
+                            case EF3_WIPE_LEFT:
+                            {
+                                if ( subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT &&
+                                     kpobject->getEffect2() == EF2T_PARA )
+                                {
+                                    w_pos1 = _step_width * ( _step - 1 );
+                                    x_pos1 = w_pos1;
+                                    drawObject( kpobject, screen, 0, 0, w_pos1, 0, x_pos1, 0 );
+                                    if ( ( _step_width * ( _steps1 - _step ) ) != 0 ) nothingHappens = false;
+                                    xy.at( i )->setX( x_pos1 );
+                                    xy.at( i )->setY( 0 );
+                                    xy.at( i )->setWidth( w_pos1 );
+                                    xy.at( i )->setHeight( 0 );
+                                }
+                            } break;
+                            case EF3_WIPE_RIGHT:
+                            {
+                                if ( subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT &&
+                                     kpobject->getEffect2() == EF2T_PARA )
+                                {
+                                    w_pos1 = _step_width * ( _step - 1 );
+                                    drawObject( kpobject, screen, 0, 0, w_pos1, 0, 0, 0 );
+                                    if ( ( _step_width * ( _steps1 - _step ) ) != 0 ) nothingHappens = false;
+                                    xy.at( i )->setX( 0 );
+                                    xy.at( i )->setY( 0 );
+                                    xy.at( i )->setWidth( w_pos1 );
+                                    xy.at( i )->setHeight( 0 );
+                                }
+                            } break;
+                            case EF3_WIPE_TOP:
+                            {
+                                if ( subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT &&
+                                     kpobject->getEffect2() == EF2T_PARA )
+                                {
+                                    h_pos1 = _step_height * ( _step - 1 );
+                                    y_pos1 = h_pos1;
+                                    drawObject( kpobject, screen, 0, 0, 0, h_pos1, 0, y_pos1 );
+                                    if ( ( _step_height * ( _steps1 - _step ) ) != 0 ) nothingHappens = false;
+                                    xy.at( i )->setX( 0 );
+                                    xy.at( i )->setY( y_pos1 );
+                                    xy.at( i )->setWidth( 0 );
+                                    xy.at( i )->setHeight( h_pos1 );
+                                }
+                            } break;
+                            case EF3_WIPE_BOTTOM:
+                            {
+                                if ( subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT &&
+                                     kpobject->getEffect2() == EF2T_PARA )
+                                {
+                                    h_pos1 = _step_height * ( _step - 1 );
+                                    drawObject( kpobject, screen, 0, 0, 0, h_pos1, 0, 0 );
+                                    if ( ( _step_height * ( _steps1 - _step ) ) != 0 ) nothingHappens = false;
+                                    xy.at( i )->setX( 0 );
+                                    xy.at( i )->setY( 0 );
+                                    xy.at( i )->setWidth( 0 );
+                                    xy.at( i )->setHeight( h_pos1 );
+                                }
+                            } break;
                             default:
                                 break;
                             }
