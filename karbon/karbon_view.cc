@@ -1070,7 +1070,7 @@ KarbonView::setLineWidth()
 void
 KarbonView::setLineWidth( double val )
 {
-	part()->addCommand( new VStrokeLineWidthCmd( &part()->document(), val ), true );
+	part()->addCommand( new VStrokeCmd( &part()->document(), val ), true );
 }
 
 void
@@ -1282,7 +1282,7 @@ KarbonView::initActions()
 	// view <-----
 
 	// line width
-	m_setLineWidth = new KoUnitDoubleComboBox( this, 0.0, 1000.0, 1.0, KoUnit::U_PT, 1 );
+	m_setLineWidth = new KoUnitDoubleSpinComboBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
 	new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
 	m_setLineWidth->insertItem( 0.5 );
 	m_setLineWidth->insertItem( 1.0 );
