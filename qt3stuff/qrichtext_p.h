@@ -2100,7 +2100,7 @@ inline void QTextParag::setParagId( int i )
 inline int QTextParag::paragId() const
 {
     if ( id == -1 )
-	qWarning( "invalid parag id!!!!!!!! (%p)", this );
+	qWarning( "invalid parag id!!!!!!!! (%p)", (void*)this );
     return id;
 }
 
