@@ -267,8 +267,9 @@ void KoCounterStyleWidget::fillStyleCombo(KoParagCounter::Numbering type) {
 
 void KoCounterStyleWidget::displayStyle( KoParagCounter::Style style )
 {
-    unsigned int i;
-    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != style; i++);
+    unsigned int i = 0;
+    while ( stylesList.count() > i && stylesList.at(i)->style() != style )
+        ++i;
     lstStyle->setCurrentItem(i);
 
     bCustom->setText( m_counter.customBulletCharacter() );
@@ -354,8 +355,9 @@ void KoCounterStyleWidget::makeCounterRepresenterList( QPtrList<StyleRepresenter
 
 
 void KoCounterStyleWidget::selectCustomBullet() {
-    unsigned int i;
-    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != KoParagCounter::STYLE_CUSTOMBULLET; i++);
+    unsigned int i = 0;
+    while ( stylesList.count() > i && stylesList.at(i)->style() != KoParagCounter::STYLE_CUSTOMBULLET )
+        ++i;
     lstStyle->setCurrentItem(i);
 
     QString f = m_counter.customBulletFont();
