@@ -61,12 +61,12 @@ namespace KSpreadCell_LNS
 using namespace KSpreadCell_LNS;
 
 
-// Some variables are placed in CellExtra because normally they're not required 
-// in simple case of cell(s). For example, most plain text cells don't need 
+// Some variables are placed in CellExtra because normally they're not required
+// in simple case of cell(s). For example, most plain text cells don't need
 // to store information about spanned columns and rows, as this is only
 // the case with merged cells.
-// When the cell is getting complex (e.g. merged with other cells, contains 
-// rich text, has validation criteria, etc), this CellExtra is allocated by 
+// When the cell is getting complex (e.g. merged with other cells, contains
+// rich text, has validation criteria, etc), this CellExtra is allocated by
 // CellPrivate and starts to be available. Otherwise, it won't exist at all.
 
 class CellExtra
@@ -163,8 +163,8 @@ public:
     ~CellPrivate();
 
     CellExtra* extra();
-    
-private:    
+
+private:
     // "extra stuff", see explanation for CellExtra
     CellExtra* cellExtra;
 };
@@ -5143,7 +5143,6 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                 setCellText( value ? i18n("True") : i18n("False" ) );
             }
         }
-
         // integer and floating-point value
         else if( valuetype == "float" )
         {
@@ -5151,7 +5150,20 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             double value = element.attribute( "table:value" ).toDouble( &ok );
             if( ok ) setValue( value );
         }
+        else if ( valuetype == "boolean" )
+        {
+            QString value = element.attribute( "table:value" );
 
+            if ( value.isEmpty() )
+                value = element.attribute( "table:boolean-value" );
+
+            kdDebug(30518) << "Type: boolean" << endl;
+            if ( value == "true" )
+                setValue( true );
+            else
+                setValue( false );
+            setFormatType( KSpreadFormat::Custom );
+        }
         // currency value
         else if( valuetype == "currency" )
         {
@@ -5182,7 +5194,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             kdDebug() << "Type: date, value: " << value << endl;
 
             // "1980-10-15"
-            int year, month, day;
+            int year=0, month=0, day=0;
             bool ok = false;
 
             int p1 = value.find( '-' );
