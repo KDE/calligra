@@ -130,7 +130,7 @@ namespace KoPageFormat
     QStringList allFormats();
 
     /**
-     * Try to find the paper format for the given width and height.
+     * Try to find the paper format for the given width and height (in mm).
      * Useful to some import filters.
      */
     KoFormat guessFormat( double width, double height );
