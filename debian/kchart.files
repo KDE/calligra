@@ -7,5 +7,9 @@ usr/share/apps/kchart
 usr/share/icons/hicolor/16x16/apps/kchart.png
 usr/share/icons/hicolor/32x32/apps/kchart.png
 usr/share/icons/hicolor/48x48/apps/kchart.png
+usr/share/doc/kde/HTML/en/kchart/*.bz2
+usr/share/doc/kde/HTML/en/kchart/*.docbook
+usr/share/doc/kde/HTML/en/kchart/*.png
+usr/share/doc/kde/HTML/en/kchart/common
 usr/share/pixmaps/kchart.xpm
 usr/share/lintian/overrides/kchart

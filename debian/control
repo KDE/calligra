@@ -23,6 +23,7 @@ Architecture: any
 Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
+Suggests: khelpcenter, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a chart drawing program for the KDE Office Suite
  KChart is a chart drawing application.
