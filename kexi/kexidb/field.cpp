@@ -23,7 +23,9 @@
 
 #include <kexidb/connection.h>
 #include <kexidb/driver.h>
+#if 0
 #include <kexidb/expression.h>
+#endif
 
 // we use here i18n() but this depends on kde libs: TODO: add #ifdefs
 #include <kdebug.h>
@@ -46,7 +48,7 @@ Field::Field()
 	,m_defaultValue( QVariant(QString::null) )
 	,m_order(-1)
 	,m_width(0)
-	,m_expr(0)
+//	,m_expr(0)
 {
 	setConstraints(NoConstraints);
 }
@@ -62,7 +64,7 @@ Field::Field(TableSchema *tableSchema)
 	,m_defaultValue( QVariant(QString::null) )
 	,m_order(tableSchema->fieldCount())
 	,m_width(0)
-	,m_expr(0)
+//	,m_expr(0)
 {
 	setConstraints(NoConstraints);
 }
@@ -82,7 +84,7 @@ Field::Field(const QString& name, Type ctype,
 	,m_caption(caption)
 	,m_desc(description)
 	,m_width(width)
-	,m_expr(0)
+//	,m_expr(0)
 {
 	setConstraints(cconst);
 	if (m_length==0) {//0 means default length:
@@ -95,16 +97,20 @@ Field::Field(const QString& name, Type ctype,
 Field::Field(const Field& f)
 {
 	(*this) = f;
+#if 0
 	if (f.m_expr) {//deep copy the expresion
 		m_expr = new Expression(*f.m_expr);
 		m_expr->m_field = this;
 	} else
 		m_expr = 0;
+#endif
 }
 
 Field::~Field()
 {
+#if 0
 	delete m_expr;
+#endif
 }
 
 QVariant::Type Field::variantType(uint type)
@@ -528,6 +534,7 @@ QString Field::debugString() const
 	return dbg;
 }
 
+#if 0
 void Field::setExpression(KexiDB::Expression *expr)
 {
 	if (m_expr==expr)
@@ -540,6 +547,7 @@ void Field::setExpression(KexiDB::Expression *expr)
 		m_expr->m_field = this;
 	}
 }
+#endif
 
 //-------------------------------------------------------
 #define ADDTYPE(type, i18, str) this->at(Field::type) = i18; \

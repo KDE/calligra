@@ -33,12 +33,13 @@ indexschema.cpp \
 cursor.cpp \
 fieldlist.cpp \
 global.cpp \
-expression.cpp \
 relationship.cpp \
 roweditbuffer.cpp \
 \
 parser/parser.cpp \
 parser/sqlparser.cpp \
 parser/sqlscanner.cpp
+
+#expression.cpp \
 
 #HEADERS =

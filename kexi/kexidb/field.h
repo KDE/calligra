@@ -396,6 +396,7 @@ class KEXI_DB_EXPORT Field
 		/*! \return string for debugging purposes. */
 		virtual QString debugString() const;
 
+#if 0
 		/*! \return KexiDB::Expression object if the field value is a result
 		 expression.  Unless the expression is set with setExpresion(), it is null.
 		*/
@@ -408,6 +409,7 @@ class KEXI_DB_EXPORT Field
 		 \a expr can be null - then current field's expression is cleared.
 		*/
 		void setExpression(KexiDB::Expression *expr);
+#endif
 //<TMP>
 		/*! \return the hints for enum fields. */
 		QValueVector<QString> enumHints() const { return m_hints; }
@@ -432,7 +434,9 @@ class KEXI_DB_EXPORT Field
 		uint m_width;
 		QValueVector<QString> m_hints;
 
+#if 0
 		Expression *m_expr;
+#endif
 
 		class KEXI_DB_EXPORT FieldTypeNames : public QValueVector<QString> {
 			public:
