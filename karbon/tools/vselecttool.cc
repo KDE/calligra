@@ -52,7 +52,6 @@ VSelectTool::mousePressed( QMouseEvent *mouse_event )
 	m_isDragging = true;
 }
 
-
 void
 VSelectTool::activate()
 {
@@ -213,100 +212,69 @@ VSelectTool::drawTemporaryObject()
 	}
 }
 
+void
+VSelectTool::mouseReleased( QMouseEvent *mouse_event )
+{
+	if( !m_isDragging ) return;
+
+	// adjust to real viewport contents instead of raw mouse coords:
+	KoPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
+	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
+
+	view()->part()->document().selection()->setState( VObject::selected );
+
+	if( m_state == moving )
+	{
+		m_state = normal;
+		view()->part()->addCommand(
+			new VTranslateCmd(
+				&view()->part()->document(),
+				qRound( ( lp.x() - fp.x() ) * ( 1.0 / view()->zoom() ) ),
+				qRound( ( lp.y() - fp.y() ) * ( 1.0 / view()->zoom() ) ) ),
+			true );
+
+//			view()->part()->repaintAllViews();
+	}
+	else if( m_state == scaling )
+	{
+		m_state = normal;
+		view()->part()->addCommand(
+			new VScaleCmd( &view()->part()->document(), m_sp, m_s1, m_s2 ),
+			true );
+	}
+	else
+	{
+		fp.setX( fp.x() / view()->zoom() );
+		fp.setY( fp.y() / view()->zoom() );
+		lp.setX( lp.x() / view()->zoom() );
+		lp.setY( lp.y() / view()->zoom() );
+
+		if ( (fabs(lp.x()-fp.x()) + fabs(lp.y()-fp.y())) < 3.0 )
+		{
+			// AK - should take the middle point here
+			fp = lp - KoPoint(8.0, 8.0);
+			lp = lp + KoPoint(8.0, 8.0);
+		}
+
+		// erase old object:
+		drawTemporaryObject();
+
+		view()->part()->document().selection()->clear();
+		view()->part()->document().selection()->append(
+			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
+
+		view()->selectionChanged();
+		view()->part()->repaintAllViews();
+	}
+
+	m_isDragging = false;
+}
 
 bool
 VSelectTool::eventFilter( QEvent* event )
 {
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	QPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
-	setCursor( lp );
-
-	if ( event->type() == QEvent::MouseMove && m_isDragging )
-	{
-		mouseMoved( static_cast<QMouseEvent *>( event ) );
-		return true;
-	}
-
-	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
-	{
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-
-		// adjust to real viewport contents instead of raw mouse coords:
-		KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
-		KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
-
-		view()->part()->document().selection()->setState( VObject::selected );
-
-		if( m_state == moving )
-		{
-			m_state = normal;
-			view()->part()->addCommand(
-				new VTranslateCmd(
-					&view()->part()->document(),
-					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view()->zoom() ) ),
-					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view()->zoom() ) ) ),
-				true );
-
-//			view()->part()->repaintAllViews();
-		}
-		else if( m_state == scaling )
-		{
-			m_state = normal;
-			view()->part()->addCommand(
-				new VScaleCmd( &view()->part()->document(), m_sp, m_s1, m_s2 ),
-				true );
-		}
-		else
-		{
-			fp.setX( fp.x() / view()->zoom() );
-			fp.setY( fp.y() / view()->zoom() );
-			lp.setX( lp.x() / view()->zoom() );
-			lp.setY( lp.y() / view()->zoom() );
-
-			if ( (fabs(lp.x()-fp.x()) + fabs(lp.y()-fp.y())) < 3.0 )
-			{
-				// AK - should take the middle point here
-				fp = lp - KoPoint(8.0, 8.0);
-				lp = lp + KoPoint(8.0, 8.0);
-			}
-
-			// erase old object:
-			drawTemporaryObject();
-
-			view()->part()->document().selection()->clear();
-			view()->part()->document().selection()->append(
-				KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
-
-			view()->selectionChanged();
-			view()->part()->repaintAllViews();
-		}
-
-		m_isDragging = false;
-
-		return true;
-	}
-
-	// handle pressing of keys:
-	if ( event->type() == QEvent::KeyPress )
-	{
-		QKeyEvent* key_event = static_cast<QKeyEvent*>( event );
-
-		// cancel dragging with ESC-key:
-		if ( key_event->key() == Qt::Key_Escape && m_isDragging )
-		{
-			cancel();
-			return true;
-		}
-	}
-
-	// the whole story starts with this event:
-	if ( event->type() == QEvent::MouseButtonPress )
-	{
-		mousePressed( static_cast<QMouseEvent*>( event ) );
-		return true;
-	}
-
-	return false;
+	setCursor( view()->canvasWidget()->viewportToContents( mouse_event->pos() ) );
+	return VTool::eventFilter( event );
 }
 
