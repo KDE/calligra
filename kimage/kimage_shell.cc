@@ -18,12 +18,11 @@
 */
 
 #include <qmessagebox.h>
-#include <klocale.h>
+
 #include <kfiledialog.h>
-#include <kapp.h>
 #include <klocale.h>
 #include <kstddirs.h>
-#include <kmimemagic.h>
+#include <kimgio.h>
 
 #include <koFilterManager.h>
 
@@ -53,35 +52,26 @@ KoDocument* KImageShell::createDoc()
   return new KImageDocument;
 }
 
-#include <kmimetype.h>
-
-// FIXME: is this really neccassary here to support more then one MimeType ?
 void KImageShell::slotFileOpen()
 {
-/*
-  QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-								nativeFormatMimeType(), nativeFormatPattern(),
-							        nativeFormatName(), TRUE );
-*/
+  QString filter = "*.kim|KImage picture\n" + KImageIO::pattern( KImageIO::Reading );
 
-  QString filter = "*.*|All files (*.*)\n*.kim|KImage (*.kim)\n*.jpg|JPEG (*.jpeg)\n*.bmp|Bitmap (*.bmp)\n*.png|PNG (*.png)\n*.gif|GIF (*.gif)\n*.*|";
+  // TODO: use file preview dialog
+  //QString file = KFilePreviewDialog::getOpenFileName( getenv( "HOME" ), KImageIO::pattern( KImageIO::Reading ), 0 );
 
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
+
   if ( file.isNull() )
     return;
 
-  KMimeType::Ptr result = KMimeType::findByURL( file );
-  if( ( result->mimeType() != "image/jpeg" ) &&
-      ( result->mimeType() != "image/bmp" ) &&
-      ( result->mimeType() != "image/png" ) &&
-      ( result->mimeType() != "image/gif" ) )
+  if( KImageIO::isSupported( KImageIO::mimeType( file ) ) )
   {
     file = KoFilterManager::self()->import( file, nativeFormatMimeType() );
-    if ( file.isNull() )
+    if( file.isNull() )
       return;
   }
 
-  if ( !openDocument( file ) )
+  if( !openDocument( file ) )
   {
     QString tmp;
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
@@ -89,13 +79,13 @@ void KImageShell::slotFileOpen()
   }
 }
 
-// Do I need this ?
-bool KImageShell::openDocument( const char* _url )
-{
-  return ((KImageDocument*) document())->openDocument( _url );
-}
-
 #include "kimage_shell.moc"
+
+
+
+
+
+
 
 
 

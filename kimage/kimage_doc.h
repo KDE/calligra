@@ -20,21 +20,13 @@
 #ifndef __kimage_doc_h__
 #define __kimage_doc_h__
 
-#include <qlist.h>
-#include <qobject.h>
 #include <qstring.h>
 #include <qimage.h>
 
-//#include <koFrame.h>
-#include <koStore.h>
 #include <koDocument.h>
-//#include <koPrintExt.h>
 #include <koPageLayoutDia.h>
 
-//#include "kimage.h"
 #include "kimage_view.h"
-
-#define MIME_TYPE "application/x-kimage"
 
 class KImageDocument : public KoDocument
 {
@@ -44,7 +36,7 @@ public:
   KImageDocument( KoDocument* parent = 0, const char* name = 0 );
   ~KImageDocument();
 
-  bool openDocument( const char* );
+  virtual bool loadFromURL( const QString& );
 
 public:
   // IDL
@@ -86,16 +78,25 @@ public:
   void calcPaperSize();
   QString orientationString();
   QString paperFormatString();
-  bool openDocument( const QString & _filename, const char* _format = 0L );
-  bool saveDocument( const QString & _filename, const char* _format = 0L );
   const QImage& image();
   void transformImage( const QWMatrix& matrix );
+
+  enum DrawMode { OriginalSize, FitToView, FitWithProps, ZoomFactor };
+  enum PositionMode { LeftTop, Center };
+
+  void setDrawMode( DrawMode _mode ) { m_drawMode = _mode; };
+  DrawMode drawMode() { return m_drawMode; };
+  void setPositionMode( PositionMode _mode ) { m_posMode = _mode; };
+  PositionMode positionMode() { return m_posMode; };
+  void setZoomFactor( QPoint _factor ) { m_zoomFactorValue = _factor; };
+  QPoint zoomFactor() { return m_zoomFactorValue; };
   
 signals:
   // Document signals
   void sigUpdateView();
   
 protected:
+
   //virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
   bool m_bEmpty;
   KoOrientation m_orientation;
@@ -113,11 +114,10 @@ protected:
   QString m_footRight;
   QString m_footMid;
 
-  QImage m_image; // the image
-
-// FIXME : make this private
-public:
-  QString m_strImageFormat;
+  QImage       m_image; // the image
+  DrawMode     m_drawMode;
+  PositionMode m_posMode;
+  QPoint       m_zoomFactorValue;
 };
 
 #endif

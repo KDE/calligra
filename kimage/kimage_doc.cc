@@ -23,7 +23,7 @@
 #include <qrect.h>
 
 #include <kstddirs.h>
-
+#include <kmimetype.h>
 #include <kdebug.h>
 
 /*
@@ -56,6 +56,8 @@ KImageDocument::~KImageDocument()
 
 bool KImageDocument::initDoc()
 {
+  cout << "KImageDocument::initDoc"<< endl;
+
   m_bEmpty = true;
 
   m_leftBorder = 20.0;
@@ -88,18 +90,47 @@ Shell* KImageDocument::createShell()
   return shell;
 }
 
-// Why is this method needed ??????
-void KImageDocument::paintContent( QPainter& _painter, const QRect& /* _rect */, bool /* _transparent */ )
+void KImageDocument::paintContent( QPainter& _painter, const QRect& _rect, bool /* _transparent */ )
 {
   // TODO : paint image here
   // draw only the rect given in _rect
 
-  //paintPixmap( &_painter, _rect);
+  //cout << "KImageDocument::paintContent" << endl;
+
+  if( isEmpty() )
+    return;
 
   QPixmap pix;
-  pix.convertFromImage( m_image );
+  //pix.convertFromImage( m_image );
 
-  _painter.drawPixmap( 0, 0, pix );
+  // TODO: zoom image if needed, depends on the draw mode
+  double dh, dw, d;
+	
+  switch ( m_drawMode )
+  {
+    case KImageDocument::OriginalSize:
+      pix.convertFromImage( m_image );
+      break;
+    case KImageDocument::FitToView:
+      pix.convertFromImage( m_image.smoothScale( _rect.width(), _rect.height() ) );
+      break;
+    case KImageDocument::FitWithProps:
+      dh = (double) _rect.height() / (double) m_image.height();
+      dw = (double) _rect.width() / (double) m_image.width();
+      d = ( dh < dw ? dh : dw );
+      pix.convertFromImage( m_image.smoothScale( int( d * m_image.width() ), int ( d * m_image.height() ) ) );
+      break;
+    case KImageDocument::ZoomFactor:
+      dw = (double) m_zoomFactorValue.x() / (double) 100.0;
+      dh = (double) m_zoomFactorValue.y() / (double) 100.0;
+      pix.convertFromImage( m_image.smoothScale( int( dw * m_image.width() ), int ( dh * m_image.height() ) ) );
+      break;
+  }
+
+  if( positionMode() == Center )
+    _painter.drawPixmap( ( _rect.width() - pix.width() ) / 2, ( _rect.height() - pix.height() ) / 2, pix );
+  else
+    _painter.drawPixmap( 0, 0, pix );
 }
 
 QCString KImageDocument::mimeType() const
@@ -112,6 +143,28 @@ QCString KImageDocument::mimeType() const
 QString KImageDocument::configFile() const
 {
     return readConfigFile( locate("data", "kimage/kimage.rc", KImageFactory::global()) );
+}
+
+bool KImageDocument::loadFromURL( const QString& _url )
+{
+  cout << "KImageDocument::loadFromURL" << endl;
+
+  QString mimetype = KMimeType::findByURL( _url )->mimeType();
+
+  if( ( mimetype == "image/png" ) ||
+      ( mimetype == "image/jpeg" ) ||
+      ( mimetype == "image/bmp" ) ||
+      ( mimetype == "image/gif" ) )
+  {
+    if( !m_image.load( _url ) )
+      return false;
+
+    setModified( true );
+    m_bEmpty = false;
+    return true;
+  }
+
+  return KoDocument::loadFromURL( _url );
 }
 
 /*
@@ -567,31 +620,40 @@ void KImageDocument::setPaperLayout( float _leftBorder, float _topBorder, float 
 
   setModified( TRUE );
 }
+*/
 
-QString KImageDocument::completeHeading( const char *_data,
-				    int / * _page * /, const char* / * _table * / )
+QString KImageDocument::completeHeading( const char* _data,
+				    int /* _page */, const char* /* _table */ )
 {
-  / * QString page;
-    page.sprintf( "%i", _page );
-    QString f = m_strFileURL.data();
-    if ( f.isNull() )
-	f = "";
-    QString n = "";
-    if ( f != "" )
-    {
-	KURL u( f.data() );
-	n = u.filename();
-	} * /
+/*
+  QString page;
+
+  page.sprintf( "%i", _page );
+
+  QString f = m_strFileURL.data();
+
+  if ( f.isNull() )
+    f = "";
+
+  QString n = "";
+
+  if ( f != "" )
+  {
+    KURL u( f.data() );
+    n = u.filename();
+  }
+*/
+
     QString t = QTime::currentTime().toString().copy();
     QString d = QDate::currentDate().toString().copy();
 
     QString tmp = _data;
     int pos = 0;
-    //  while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
-    //  tmp.replace( pos, 6, f.data() );/
+    // while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
+    // tmp.replace( pos, 6, f.data() );/
     pos = 0;
-    //  while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
-    /7  tmp.replace( pos, 6, n.data() );
+    // while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
+    //  tmp.replace( pos, 6, n.data() );
     pos = 0;
     while ( ( pos = tmp.find( "<time>", pos ) ) != -1 )
 	tmp.replace( pos, 6, t.data() );
@@ -607,7 +669,6 @@ QString KImageDocument::completeHeading( const char *_data,
 
     return QString( tmp.data() );
 }
-*/
 
 void KImageDocument::calcPaperSize()
 {
@@ -689,6 +750,7 @@ QString KImageDocument::paperFormatString()
   }
   return paperFormatStr;
 }
+*/
 
 QString KImageDocument::orientationString()
 {
@@ -705,36 +767,6 @@ QString KImageDocument::orientationString()
   }
   return orientationStr;
 }
-*/
-
-bool KImageDocument::openDocument( const char* _url )
-{
-  if ( !m_image.load( _url ) )
-    return false;
-
-/*
-  if ( _format )
-    m_strImageFormat = _format;
-  else
-    m_strImageFormat = QImage::imageFormat( _filename );
-*/
-
-  emit sigUpdateView();
-
-  //setModified( true );
-  //m_bEmpty = false;
-
-  return true;
-}
-
-/*
-bool KImageDocument::saveDocument( const QString & _filename, const char* / * _format * / )
-{
-  assert( !isEmpty() );
-
-  return m_image.save( _filename, m_strImageFormat );
-}
-*/
 
 void KImageDocument::transformImage( const QWMatrix& matrix )
 {

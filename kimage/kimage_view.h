@@ -20,9 +20,6 @@
 #ifndef __kimage_gui_h__
 #define __kimage_gui_h__
 
-#include <qpixmap.h>
-#include <qwidget.h>
-
 #include <container.h>
 
 class KAction;
@@ -40,34 +37,31 @@ public:
 
   KImageDocument* doc();
 
+/*
 public slots:
 //void slotDocUpdated();
 //void slotDocUpdated(const QRect&);
+*/
 
+/*
 signals:
   void mousePressed(QMouseEvent *);
   void mouseMoved(QMouseEvent *);
   void mouseReleased(QMouseEvent *);
+*/
 
 protected slots:
 
   // edit action slots
-
   void undo();
   void redo();
-  void copy();
-  void cut();
-  void paste();
 
-/*
   void editImportImage();
   void editExportImage();
-*/
   void editPageLayout();
   void editPreferences();
 
   // view action slots
-
   void viewZoomFactor();
   void viewFitToView();
   void viewFitWithProportions();
@@ -78,7 +72,6 @@ protected slots:
   void viewBackgroundColor();
 
   // transform action slots
-
   void transformRotateRight();
   void transformRotateLeft();
   void transformRotateAngle();
@@ -93,20 +86,19 @@ protected slots:
   void transformZoomMaxAspect();
 
   // help action slots
-
   void helpUsingHelp();
   void helpAboutKImage();
 
 public slots:
+
   // Document signals
   void slotUpdateView();
 
 protected:
-  enum DrawMode { OriginalSize, FitToView, FitWithProps, ZoomFactor };
 
   virtual void paintEvent( QPaintEvent* );
-/*
   virtual void resizeEvent( QResizeEvent* );
+/*
   virtual void mousePressEvent ( QMouseEvent * );
   virtual void mouseReleaseEvent ( QMouseEvent * );
   virtual void mouseMoveEvent ( QMouseEvent * );
@@ -115,7 +107,7 @@ protected:
  private:
 
   // edit menu
-  KAction *m_undo, *m_redo, *m_cut, *m_copy, *m_paste, *m_import, *m_export, *m_pageSetup, *m_preferences;
+  KAction *m_undo, *m_redo, *m_import, *m_export, *m_pageSetup, *m_preferences;
 
   // view menu
   KAction *m_viewFactor, *m_fitToView, *m_fitWithProps, *m_original, *m_center, *m_scrollbars, *m_info, *m_backgroundColor;
@@ -126,11 +118,6 @@ protected:
 
   // help menu
   KAction *m_helpAbout, *m_helpUsing;
-
-  QPoint          m_zoomFactorValue;
-  QPixmap         m_pixmap;
-  DrawMode        m_drawMode;
-  int             m_centerMode;
 };
 
 #endif

@@ -4,9 +4,8 @@
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>  
-  <Action name="cut"/>
-  <Action name="copy"/>
-  <Action name="paste"/>
+  <Action name="editImportImage"/>
+  <Action name="editExportImage"/>
   <Separator/>
   <Action name="editPageLayout"/>
   <Action name="editPreferences"/>

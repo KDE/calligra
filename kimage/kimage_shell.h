@@ -41,11 +41,11 @@ public slots:
   virtual void slotFileOpen();
 
 protected:
-  virtual bool openDocument ( const char* _url );
-
   virtual QString configFile() const;
   virtual KoDocument* createDoc();
 };
 
 #endif
+
+
 
