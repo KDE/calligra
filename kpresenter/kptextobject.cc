@@ -208,7 +208,15 @@ double KPTextObject::load(const QDomElement &element)
         if (e.hasAttribute( "bbottompt"))
             bbottom = e.attribute( "bbottompt").toDouble();
         if ( e.hasAttribute("verticalAlign"))
-            m_textVertAlign =(VerticalAlignmentType)e.attribute("verticalAlign").toInt();
+        {
+            QString str =e.attribute("verticalAlign");
+            if ( str == "bottom" )
+                m_textVertAlign= KP_BOTTOM;
+            else if ( str == "center" )
+                m_textVertAlign= KP_CENTER;
+            else if ( str == "top" )//never
+                m_textVertAlign= KP_TOP;
+        }
         if ( e.hasAttribute( "verticalValue" ))
             alignVertical = e.attribute( "verticalValue" ).toDouble();
 #if 0
@@ -414,7 +422,12 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
         textobj.setAttribute( "bbottompt", bbottom );
     if ( m_textVertAlign != KP_TOP )
     {
-        textobj.setAttribute( "verticalAlign", (int)m_textVertAlign );
+        if ( m_textVertAlign == KP_BOTTOM )
+            textobj.setAttribute( "verticalAlign", "bottom" );
+        else if ( m_textVertAlign == KP_CENTER )
+            textobj.setAttribute( "verticalAlign", "center" );
+        else if ( m_textVertAlign == KP_TOP )//never
+            textobj.setAttribute( "verticalAlign", "top" );
         textobj.setAttribute( "verticalValue",alignVertical );
     }
 #if 0
