@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef _SYMBOLACTION_H_
+#define _SYMBOLACTION_H_
+
 #include <kaction.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
@@ -38,3 +41,5 @@ private:
     QValueList<QFont> m_fonts;
     QMemArray<uchar> m_chars;
 };
+
+#endif // _SYMBOLACTION_H_
