@@ -633,9 +633,9 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 				if ( ( *it ).m_strName == "grpMgr" ) {
                                     KWGroupManager *group = new KWGroupManager( doc );
 	                            group->setName( QString( ( *it ).m_strValue.c_str() ) );
-	                            group->setAnchored( true );
+	                            // floating frame TBD: group->setAnchored( true );
 		                    doc->addGroupManager( group );
-                                    anchor = group;
+                                    // floating frame TBD: anchor = group;
 				}
                                 else {
 			            cerr << "Unknown attrib 'ANCHORS:" << ( *it ).m_strName << "'" << endl;
@@ -754,7 +754,7 @@ KWChar* KWString::copy( KWChar *_data, unsigned int _len )
 	    case ID_KWCharAnchor: {
 		KWGroupManager *attrib = dynamic_cast<KWGroupManager*>( _data[ i ].attrib );
 	        KWGroupManager *a = new KWGroupManager( *attrib );
-		__data[ i ].attrib = a;
+		// floating frame TBD: __data[ i ].attrib = a;
 	    } break;
 	    }
 	}
@@ -807,7 +807,7 @@ KWChar& KWString::copy( KWChar _c )
 	case ID_KWCharAnchor: {
 	    KWGroupManager *attrib = dynamic_cast<KWGroupManager*>( _c.attrib );
 	    KWGroupManager *a = new KWGroupManager( *attrib );
-	    c->attrib = a;
+	    // floating frame TBD: c->attrib = a;
 	} break;
 	}
     }
@@ -1028,11 +1028,11 @@ void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
 	    delete _char.attrib;
 	} break;
 	case ID_KWCharAnchor: {
-            KWCharFootNote *anchor = (KWCharFootNote *)_char.attrib;
+            // floating frame TBD: KWCharFootNote *anchor = (KWCharFootNote *)_char.attrib;
 	    if ( allowRemoveFn ) {
 		cerr << "TBD: implement delete table" << endl;
 	    }
-	    delete _char.attrib;
+	    // floating frame TBD: delete _char.attrib;
 	} break;
 	default: ; //assert( 0 );
 	}
