@@ -29,10 +29,10 @@ xml2latexparser.h xmlparser.h
 # pictureformat.h picturezone.h 
 
 ######## Debug
-check_PROGRAMS = texlauncher
-texlauncher_SOURCES = texlauncher.cc
-texlauncher_LDADD = liblatexexport.la
-texlauncher_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+#check_PROGRAMS = texlauncher
+#texlauncher_SOURCES = texlauncher.cc
+#texlauncher_LDADD = liblatexexport.la
+#texlauncher_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 
 METASOURCES = AUTO
