@@ -32,7 +32,7 @@ static uint calculateValue( QPen const & pen )
 
   n += 1000 * pen.width();
   n += 10000 * (uint) pen.style();
-  
+
   return n;
 }
 
@@ -67,6 +67,11 @@ KSpreadStyle::KSpreadStyle()
   m_bottomBorderPen = pen;
   m_fallDiagonalPen = pen;
   m_goUpDiagonalPen = pen;
+
+  m_leftPenValue    = calculateValue( pen );
+  m_topPenValue     = calculateValue( pen );
+  m_rightPenValue   = calculateValue( pen );
+  m_bottomPenValue  = calculateValue( pen );
 
   m_currency.type   = 0;
 }
@@ -268,7 +273,7 @@ bool KSpreadStyle::loadXML( QDomElement & format )
       m_featuresSet |= SAlignY;
     }
   }
-  
+
   if ( format.hasAttribute( "bgcolor" ) )
   {
     m_bgColor = QColor( format.attribute( "bgcolor" ) );
@@ -1010,7 +1015,7 @@ KSpreadStyle * KSpreadStyle::setRightBorderPen( QPen const & pen )
   m_featuresSet |= SRightBorder;
   return this;
 }
- 
+
 KSpreadStyle * KSpreadStyle::setBottomBorderPen( QPen const & pen )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
@@ -1044,7 +1049,7 @@ KSpreadStyle * KSpreadStyle::setLeftBorderPen( QPen const & pen )
   m_featuresSet |= SLeftBorder;
   return this;
 }
-  
+
 KSpreadStyle * KSpreadStyle::setTopBorderPen( QPen const & pen )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
@@ -1061,7 +1066,7 @@ KSpreadStyle * KSpreadStyle::setTopBorderPen( QPen const & pen )
   m_featuresSet |= STopBorder;
   return this;
 }
-   
+
 KSpreadStyle * KSpreadStyle::setFallDiagonalPen( QPen const & pen )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
@@ -1076,7 +1081,7 @@ KSpreadStyle * KSpreadStyle::setFallDiagonalPen( QPen const & pen )
   m_featuresSet |= SFallDiagonal;
   return this;
 }
-  
+
 KSpreadStyle * KSpreadStyle::setGoUpDiagonalPen( QPen const & pen )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
