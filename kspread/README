@@ -1,13 +1,7 @@
 Compiling
 =========
 
-First you have to compile and install the koffice libraries.
+First you have to compile and install the corba and koffice libraries.
 
- - Copy a Python-1.4 source distribution in the directory with
-   the same name ( NOT 'python'! ).
- - cd python
- - make
- - cd ..
- - make idl
- - make depend
- - make
+In addition you need python1.5 installed. By default it is searched
+in /usr/local. Otherwise you must modify the PATH in the Makefile.
