@@ -958,7 +958,7 @@ void
 
     QString str( _str );
     int n = _str.find( '!' );
-    if ( n != 1 )
+    if ( n != -1 )
     {
       tableName = _str.left( n );
       str = _str.right( len - n - 1 ); // remove the '!'
