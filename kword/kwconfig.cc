@@ -89,15 +89,15 @@ KWConfig::KWConfig( KWView* parent )
 void KWConfig::openPage(int flags)
 {
     if(flags & KW_KSPELL)
-        showPage( 0 );
+        showPage( 2 );
     else if(flags & KP_INTERFACE)
-        showPage(1 );
+        showPage(0 );
     else if(flags & KP_MISC)
-        showPage(2);
-    else if(flags & KP_DOCUMENT)
-        showPage(3 );
-    else if(flags & KP_FORMULA)
         showPage(4);
+    else if(flags & KP_DOCUMENT)
+        showPage(2 );
+    else if(flags & KP_FORMULA)
+        showPage(3);
 }
 
 void KWConfig::slotApply()
