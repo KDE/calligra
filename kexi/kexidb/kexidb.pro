@@ -22,8 +22,8 @@ driver.cpp \
 connectiondata.cpp \
 connection.cpp \
 field.cpp \
-table.cpp \
-query.cpp \
+tableschema.cpp \
+queryschema.cpp \
 transaction.cpp \
 cursor.cpp \
 index.cpp \

@@ -28,9 +28,9 @@
 using namespace KexiDB;
 
 QuerySchema::QuerySchema()
-	: FieldList()
-	, SchemaData()
-	, m_conn(0)
+	: FieldList(false)//fields are not owned by QuerySchema object
+	, SchemaData(KexiDB::QueryObjectType)
+//	, m_conn(0)
 	, m_parent_table(0)
 {
 	m_type = KexiDB::QueryObjectType;
@@ -38,9 +38,9 @@ QuerySchema::QuerySchema()
 }
 
 QuerySchema::QuerySchema(TableSchema* tableSchema)
-	: FieldList()
-	, SchemaData()
-	, m_conn(0)
+	: FieldList(false)
+	, SchemaData(KexiDB::QueryObjectType)
+//	, m_conn(0)
 	, m_parent_table(tableSchema)
 {
 	m_type = KexiDB::QueryObjectType;
@@ -56,6 +56,13 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 	m_caption = m_parent_table->caption();
 }
 
+/*QuerySchema::QuerySchema(Connection *conn)
+	: FieldList(false)
+	, m_conn( conn )
+{
+	assert(conn);
+}*/
+
 QuerySchema::~QuerySchema()
 {
 }
@@ -65,7 +72,7 @@ void QuerySchema::clear()
 	FieldList::clear();
 	SchemaData::clear();
 	m_parent_table = 0;
-	m_conn = 0;
+//	m_conn = 0;
 }
 
 KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
@@ -77,16 +84,9 @@ KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 	return *this;
 }
 
-QuerySchema::QuerySchema(Connection *conn)
-	: FieldList()
-	, m_conn( conn )
-{
-	assert(conn);
-}
-
 Connection* QuerySchema::connection()
 {
-	return m_conn;
+	return m_parent_table ? m_parent_table->connection() : 0;
 }
 
 void QuerySchema::debug() const

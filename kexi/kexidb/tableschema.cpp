@@ -29,32 +29,29 @@
 using namespace KexiDB;
 
 TableSchema::TableSchema(const QString& name)
-	: FieldList()
-	, SchemaData()
+	: FieldList(true)
+	, SchemaData(KexiDB::TableObjectType)
 	, m_conn(0)
 {
-	m_type = KexiDB::TableObjectType;
 	m_name = name;
 	m_indices.setAutoDelete( true );
 }
 
 TableSchema::TableSchema()
-	: FieldList()
-	, SchemaData()
+	: FieldList(true)
+	, SchemaData(KexiDB::TableObjectType)
 	, m_conn(0)
 {
-	m_type = KexiDB::TableObjectType;
 	m_indices.setAutoDelete( true );
 }
 
 // used by Conenction
 TableSchema::TableSchema(Connection *conn, const QString & name)
-	: FieldList()
-	, SchemaData()
+	: FieldList(true)
+	, SchemaData(KexiDB::TableObjectType)
 	, m_conn( conn )
 {
 	assert(conn);
-	m_type = KexiDB::TableObjectType;
 	m_name = name;
 	m_indices.setAutoDelete( true );
 }
@@ -143,20 +140,6 @@ void TableSchema::debug() const
 {
 	KexiDBDbg << "TABLE " << schemaDataDebugString() << endl;
 	FieldList::debug();
-
-/*	QString dbg = "TABLE " + m_name + "\n";
-	Field::ListIterator it( m_fields );
-	Field *field;
-	bool start = true;
-	for (; (field = it.current())!=0; ++it) {
-		if (!start)
-			dbg += ",\n";
-		else
-			start = false;
-		dbg += "  ";
-		dbg += field->debugString();
-	}
-	KexiDBDbg << dbg << endl;*/
 }
 
 //----------------------------------------------------

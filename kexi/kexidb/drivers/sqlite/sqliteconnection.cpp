@@ -201,6 +201,7 @@ bool SQLiteConnection::drv_executeQuery( const QString& statement )
 
 bool SQLiteConnection::drv_executeSQL( const QString& statement )
 {
+	KexiDBDrvDbg << "SQLiteConnection::drv_executeSQL(" << statement << ")" <<endl;
 	QCString st(statement.length()*2);
 	st = escapeString( statement.local8Bit() ); //?
 

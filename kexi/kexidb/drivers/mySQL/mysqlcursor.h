@@ -47,10 +47,10 @@ public:
 
 	//TODO:
 	/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
-	virtual const char ** recordData() { return 0; }
+	virtual const char ** recordData() const { return 0; }
 
 	//TODO:
-	virtual void storeCurrentRecord(RecordData &data) {}
+	virtual void storeCurrentRecord(RecordData &data) const {}
 
 private:
 	MYSQL_RES *m_res;	

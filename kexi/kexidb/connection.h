@@ -35,18 +35,10 @@
 
 namespace KexiDB {
 
+typedef QValueVector<QVariant> RecordData;
+
 class Cursor;
 class Driver;
-
-/*! Object types set like table or query. */
-enum ObjectTypes {
-	UnknownObjectType = -1, //! helper
-	AnyObjectType = 0, //! helper
-	TableObjectType = 1,
-	QueryObjectType = 2
-};
-
-typedef QValueVector<QVariant> RecordData;
 
 /*! This class represents database connection established with given database source.
 */
@@ -188,13 +180,16 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 used database. */
 		QuerySchema* querySchema( const int queryId );
 
-		QString valueToSQL( const Field::Type ftype, QVariant& v );
+		QString valueToSQL( const Field::Type ftype, const QVariant& v ) const;
 
 		/*! Executes \a sql query and stores first record's data inside \a data.
 		 This is convenient method when we need only first recors from query result,
 		 or when we know that query result has only one record.
 		 \return true if query was successfully executed and first record has been found. */
 		bool querySingleRecord(QString sql, KexiDB::RecordData &data);
+
+		//PROTOTYPE:
+		bool insertRecord(KexiDB::TableSchema &tableSchema, const QVariant& c1, const QVariant& c2);
 
 	protected:
 		/*! Used by Driver */

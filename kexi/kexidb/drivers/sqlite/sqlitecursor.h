@@ -56,9 +56,9 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 		/*! [PROTOTYPE] \return internal buffer data. */
 //TODO		virtual const char *** bufferData()
 		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
-		virtual const char ** recordData();
+		virtual const char ** recordData() const;
 
-		virtual void storeCurrentRecord(RecordData &data);
+		virtual void storeCurrentRecord(RecordData &data) const;
 
 	protected:
 		/*! Cursor will operate on \a conn */

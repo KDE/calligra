@@ -23,11 +23,10 @@
 #include <qvaluelist.h>
 #include <qstring.h>
 
+#include <kexidb/global.h>
 #include <kexidb/field.h>
 
 namespace KexiDB {
-
-class Connection;
 
 /*! Container class that stores common kexi object schema's properties like
  id, name, caption, help text.
@@ -47,7 +46,7 @@ class KEXI_DB_EXPORT SchemaData
 		//! returns debug string useful for debugging
 		virtual QString schemaDataDebugString() const;
 	protected:
-		SchemaData();
+		SchemaData(int obj_type = KexiDB::UnknownObjectType);
 		virtual ~SchemaData();
 
 		//! Clears all properties excpet 'type'.

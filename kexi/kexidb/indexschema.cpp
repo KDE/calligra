@@ -43,7 +43,7 @@ IndexSchema::IndexSchema()
 */
 IndexSchema::IndexSchema(TableSchema *tableSchema)
 	: FieldList(false)//fields are not owned by IndexSchema object
-	, SchemaData()
+	, SchemaData(KexiDB::IndexObjectType)
 	, m_tableSchema(tableSchema)
 //	, m_conn( conn )
 	, m_primary( false )

@@ -24,8 +24,8 @@
 
 using namespace KexiDB;
 
-SchemaData::SchemaData()
-	: m_type(KexiDB::UnknownObjectType)
+SchemaData::SchemaData(int obj_type)
+	: m_type(obj_type)
 	, m_id(-1)
 {
 }

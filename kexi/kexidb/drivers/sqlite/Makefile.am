@@ -15,4 +15,4 @@ kde_services_DATA = kexidb_sqlitedriver.desktop
 
 include $(top_srcdir)/kexi/Makefile.global
 
-KDE_CXXFLAGS += -DKEXIDB_SQLITE_DRIVER_EXPORT=
+KDE_CXXFLAGS += -DKEXIDB_SQLITE_DRIVER_EXPORT= -include $(top_srcdir)/kexi/kexidb/global.h

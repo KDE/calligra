@@ -77,6 +77,6 @@ void FieldList::debug() const
 		dbg += "  ";
 		dbg += field->debugString();
 	}
-	KexiDBDbg << dbg;
+	KexiDBDbg << dbg << endl;
 }
 

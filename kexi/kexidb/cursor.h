@@ -69,9 +69,9 @@ class KEXI_DB_EXPORT Cursor: public Object
 		virtual bool close();
 		/*! \retutn logically or'd cursor's options, 
 			selected from Cursor::Options enum. */
-		uint options() { return m_options; }
+		uint options() const { return m_options; }
 		/*! \returns true if cursor is buffered. */
-		bool isBuffered();
+		bool isBuffered() const;
 		/*! Sets this cursor to buffered type or not. See description 
 			of buffered and nonbuffered cursors in class description.
 			This method only works if cursor is not opened (isOpened()==false).
@@ -91,31 +91,31 @@ class KEXI_DB_EXPORT Cursor: public Object
 		/*! Moves current position to the next record and retrieves it. */
 		virtual bool movePrev();
 		/*! \return true if current position is after last record. */
-		bool eof();
+		bool eof() const;
 		/*! \return true if current position is before first record. */
-		bool bof();
+		bool bof() const;
 		/*! \return current internal position of the cursor's query. 
 		 We are counting records from 0.
 		 Value -1 means that cursor does not point to any valid record
 		 (this happens eg. after open(), close(), 
 		 and after moving after last record or before first one. */
-		Q_LLONG at();
-		QString statement() { return m_statement; }
-		bool isOpened() { return m_opened; }
+		Q_LLONG at() const;
+		QString statement() const { return m_statement; }
+		bool isOpened() const { return m_opened; }
 		/*! Closes and then opens again the same cursor. 
 			Cursor must be opened before calling this method. */
 		bool reopen();
 		/*! \return number of fields available for this cursor. */
-		uint fieldCount() { return m_fieldCount; }
+		uint fieldCount() const { return m_fieldCount; }
 		virtual QVariant value(int i) const = 0;
 
 		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
-		virtual const char ** recordData() = 0;
+		virtual const char ** recordData() const = 0;
 		
 		/*! Puts current record's data into \a data (makes a deep copy).
 		 This have unspecified behaviour if the cursor is not at valid record.
 		 Note: For reimplementation in driver's code. */
-		virtual void storeCurrentRecord(RecordData &data) = 0;
+		virtual void storeCurrentRecord(RecordData &data) const = 0;
 
 	protected:
 		/*! Cursor will operate on \a conn */

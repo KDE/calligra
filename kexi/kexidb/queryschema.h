@@ -39,7 +39,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 {
 	public:
 		/*! Creates empty query object (without fields). */
-		QuerySchema(const QString & name);
+		QuerySchema();
 		/*! Creates query schema object that is equivalent to "SELECT * FROM table" 
 		 sql command. Schema of \a table is used to contruct this query.
 		 If \a name is omitted, query will inherit its name from 
@@ -49,9 +49,6 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 in system table, so query connection is set to NULL 
 		 (even if \a tables connection is not NULL), and query id is set to 0. */
 		QuerySchema(TableSchema* tableSchema);
-		
-		/*! Creates empty query object (without fields and name). */
-		QuerySchema();
 		
 		virtual ~QuerySchema();
 		
@@ -79,8 +76,8 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		TableSchema* parentTable() const;
 	
 	protected:
-		/*! Automatically retrieves query schema via connection. */
-		QuerySchema(Connection *conn);
+//		/*! Automatically retrieves query schema via connection. */
+//		QuerySchema(Connection *conn);
 
 	//js	QStringList m_primaryKeys;
 //		Index::List m_indices;
@@ -88,8 +85,8 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 //		int m_id; //! unique identifier used in kexi__objects for this query
 
-		/*! Connection that was used to retrieve this query schema (may be NULL). */
-		Connection *m_conn;
+//		/*! Connection that was used to retrieve this query schema (may be NULL). */
+//js: conn from m_parent_table will be reused		Connection *m_conn; 
 		/*! Parent table of the query. (may be NULL)
 			Any data modifications can be performed if we know parent table.
 			If null, query's records cannot be modified. */

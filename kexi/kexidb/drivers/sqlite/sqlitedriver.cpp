@@ -64,7 +64,7 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 	m_typeNames[Field::Float]="Float";
 	m_typeNames[Field::Double]="Double";
 	m_typeNames[Field::Text]="Text";
-	m_typeNames[Field::LongText]="Text";
+	m_typeNames[Field::LongText]="CLOB";
 	m_typeNames[Field::BLOB]="BLOB";
 }
 

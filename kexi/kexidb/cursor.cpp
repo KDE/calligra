@@ -243,25 +243,25 @@ bool moveNext()
 }
 */
 
-bool Cursor::eof()
+bool Cursor::eof() const
 {
 	return m_afterLast;
 }
 
-bool Cursor::bof()
+bool Cursor::bof() const
 {
 	return m_at==0;
 //	return m_beforeFirst;
 }
 
-Q_LLONG Cursor::at()
+Q_LLONG Cursor::at() const
 {
 	if (m_readAhead)
 		return 0;
 	return m_at - 1;
 }
 
-bool Cursor::isBuffered()
+bool Cursor::isBuffered() const
 {
 	return m_options & Buffered;
 }

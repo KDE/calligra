@@ -306,12 +306,12 @@ const char *** SQLiteCursor::bufferData()
 	return m_records.data();
 }*/
 
-const char ** SQLiteCursor::recordData()
+const char ** SQLiteCursor::recordData() const
 {
 	return m_data->curr_coldata;
 }
 
-void SQLiteCursor::storeCurrentRecord(RecordData &data)
+void SQLiteCursor::storeCurrentRecord(RecordData &data) const
 {
 	if (!m_data)
 		return;

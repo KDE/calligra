@@ -41,7 +41,7 @@ class KEXI_DB_EXPORT FieldList
 		 just points any field that was added. 
 		 \sa isOwner()
 		*/
-		FieldList(bool owner = true);
+		FieldList(bool owner = false);
 		
 		/*! Destroys the list. If the list owns fields (see constructor),
 		 these are also deleted. */

@@ -15,4 +15,4 @@ kde_services_DATA = kexidb_mysqldriver.desktop
 
 include $(top_srcdir)/kexi/Makefile.global
 
-KDE_CXXFLAGS += -DKEXIDB_MYSQL_DRIVER_EXPORT=
+KDE_CXXFLAGS += -DKEXIDB_MYSQL_DRIVER_EXPORT= -include $(top_srcdir)/kexi/kexidb/global.h

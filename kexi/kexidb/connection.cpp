@@ -262,6 +262,9 @@ bool Connection::createDatabase( const QString &dbName )
 	//property="kexidb_major_ver", value=<major_version>
 	//property="kexidb_minor_ver", value=<minor_version>
 	//TODO(js)
+	if (   !insertRecord(t_db, "kexidb_major_ver", KexiDB::majorVersion())
+		|| !insertRecord(t_db, "kexidb_minor_ver", KexiDB::minorVersion()))
+		return false;
 
 	commitTransaction();
 	return true;
@@ -391,7 +394,7 @@ QValueList<int> Connection::objectIds(int objType)
 	return list;*/
 }
 
-QString Connection::valueToSQL( const Field::Type ftype, QVariant& v )
+QString Connection::valueToSQL( const Field::Type ftype, const QVariant& v ) const
 {
 	switch (ftype) {
 		case Field::Byte:
@@ -412,10 +415,11 @@ QString Connection::valueToSQL( const Field::Type ftype, QVariant& v )
 		case Field::Text:
 		case Field::LongText: {
 			QString s = v.toString();
-			return QString("\"")+s.replace( '"', "\\\"" ) + "\"";
+//js: TODO: for sqlite we use single ' chars, what with other engines?
+			return QString("'")+s.replace( '"', "\\\"" ) + "'"; 
 		}case Field::BLOB:
 //TODO: here special encoding method needed
-			return QString("\"")+v.toString()+"\"";
+			return QString("'")+v.toString()+"'";
 		default:
 			return QString::null;
 	}
@@ -451,6 +455,22 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 	sql += ")";
 	return sql;
 }
+
+//todo
+bool Connection::insertRecord(KexiDB::TableSchema &tableSchema, const QVariant& c1, const QVariant& c2)
+{
+	return drv_executeSQL(
+		QString("INSERT INTO ") + tableSchema.name() + " VALUES ("
+		+ valueToSQL( tableSchema.field(0)->type(), c1 ) + ","
+		+ valueToSQL( tableSchema.field(1)->type(), c2 ) +")"
+	);
+}
+
+/*QString Connection::insertIntoStatement( const KexiDB::TableSchema& tableSchema )
+{
+	QString sql = "INSERT INTO " + tableSchema.name() + " (";
+	
+}*/
 
 QString Connection::queryStatement( const KexiDB::QuerySchema& querySchema )
 {
@@ -711,18 +731,19 @@ QuerySchema* Connection::querySchema( const int queryId )
 	if (q)
 		return q;
 	//not found: retrieve schema
-	RecordData data;
+	RecordData queryobject_data, querydata_data;
 
-	if (!querySingleRecord(QString("select * from kexi__objects where o_id='%1'").arg(queryId), data))
+	if (!querySingleRecord(QString("select * from kexi__objects where o_id='%1'").arg(queryId), queryobject_data))
 		return 0;
 
-	q = new QuerySchema( this );
-	if (!setupObjectSchemaData( data, *q )) {
+	q = new QuerySchema();
+	if (!setupObjectSchemaData( queryobject_data, *q )) {
 		delete q;
 		return 0;
 	}
 	
 	//TODO: retrieve rest of query schema............
+//	if (!querySingleRecord(QString("select * from kexi_querydata where q_id='%1'").arg(queryId), data))
 	
 
 //	KexiDB::Cursor *cursor;
