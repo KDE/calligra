@@ -85,7 +85,7 @@ const char* GPart::typeName () {
   return i18n ("Embedded Part");
 }
 
-void GPart::draw (Painter& p, bool withBasePoints, bool outline) {
+void GPart::draw (Painter& p, bool /*withBasePoints*/, bool outline) {
   p.save ();
   QRect r = child->geometry ();
   if (outline) {

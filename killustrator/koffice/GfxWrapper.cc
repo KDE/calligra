@@ -20,8 +20,8 @@ void GfxWrapper::applyFillColor (CORBA::Short r, CORBA::Short g,
   obj->setFillInfo (info);
 }
 
-void GfxWrapper::getFillColor (CORBA::Short& r, CORBA::Short& g,
-			       CORBA::Short& b) {
+void GfxWrapper::getFillColor (CORBA::Short& , CORBA::Short& ,
+			       CORBA::Short& ) {
 }
 
 void GfxWrapper::applyPenColor (CORBA::Short r, CORBA::Short g,
@@ -34,14 +34,14 @@ void GfxWrapper::applyPenColor (CORBA::Short r, CORBA::Short g,
   obj->setOutlineInfo (info);
 }
 
-void GfxWrapper::getPenColor (CORBA::Short& r, CORBA::Short& g,
-			      CORBA::Short& b) {
+void GfxWrapper::getPenColor (CORBA::Short& , CORBA::Short& ,
+			      CORBA::Short& ) {
 }
 
-void GfxWrapper::setPosition (CORBA::Float x, CORBA::Float y) {
+void GfxWrapper::setPosition (CORBA::Float , CORBA::Float ) {
 }
 
-void GfxWrapper::getPosition (CORBA::Float& x, CORBA::Float& y) {
+void GfxWrapper::getPosition (CORBA::Float& , CORBA::Float& ) {
 }
 
 void GfxWrapper::getCenter (CORBA::Float& x, CORBA::Float& y) {
@@ -74,7 +74,7 @@ void GfxWrapper::rotateAround (CORBA::Float angle,
 }
 
 ::KIllustrator::GfxObject::ObjectType GfxWrapper::getObjectType () {
-  ::KIllustrator::GfxObject::ObjectType result = 0;
+    ::KIllustrator::GfxObject::ObjectType result = Polyline;
 
   const char *cname = obj->className ();
   if (::strcmp (cname, "GPolyline") == 0)

@@ -40,7 +40,7 @@ void KChartPiePainter::paintChart( QPainter* painter, table_t* table )
 }
 
 
-bool KChartPiePainter::setupCoords( QPaintDevice* paintdev )
+bool KChartPiePainter::setupCoords( QPaintDevice* /*paintdev*/ )
 {
   // QPaintDeviceMetrics pdm( paintdev );
 

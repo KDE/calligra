@@ -96,7 +96,9 @@ KIllustratorFrame::KIllustratorFrame (KIllustratorView* view,
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 				    KIllustratorDocument* doc) :
-QWidget (parent), KoViewIf (doc), OPViewIf (doc), KIllustrator::View_skel () {
+    QWidget (parent, name), KoViewIf (doc), 
+    OPViewIf (doc), KIllustrator::View_skel () 
+{
   setWidget (this);
   OPPartIf::setFocusPolicy (OpenParts::Part::ClickFocus);
 
@@ -1270,7 +1272,7 @@ void KIllustratorView::zoomSizeSelected (const char* s) {
     canvas->setZoomFactor (value / 100.0);
 }
 
-void KIllustratorView::popupForSelection (int x, int y) {
+void KIllustratorView::popupForSelection (int, int ) {
   objMenu->popup (QCursor::pos ());
 }
 

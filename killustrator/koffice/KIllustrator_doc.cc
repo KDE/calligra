@@ -75,7 +75,7 @@ KIllustratorDocument::~KIllustratorDocument () {
   cleanUp ();
 }
 
-bool KIllustratorDocument::save (ostream& os, const char* fmt) {
+bool KIllustratorDocument::save (ostream& os, const char* ) {
   cout << "save KIllu to stream !!!!!!!!!!!!!!!" << endl;
   return GDocument::saveToXml (os);
 }
@@ -90,7 +90,7 @@ void KIllustratorDocument::cleanUp () {
 }
 
 
-bool KIllustratorDocument::load (istream& in, KOStore::Store_ptr store) {
+bool KIllustratorDocument::load (istream& in, KOStore::Store_ptr ) {
   cout << "load KIllu from stream !!!!!!!!!" << endl;
   if (GDocument::readFromXml (in)) {
 
@@ -229,7 +229,7 @@ void KIllustratorDocument::setModified (bool f) {
 }
 
 void KIllustratorDocument::draw (QPaintDevice* dev,
-				 CORBA::Long w, CORBA::Long h,
+				 CORBA::Long , CORBA::Long ,
 				 CORBA::Float _scale ) {
   Painter painter;
   painter.begin (dev);
@@ -261,11 +261,11 @@ KIllustrator::GfxObjectSeq* KIllustratorDocument::getSelection () {
   return seq;
 }
 
-void KIllustratorDocument::addToSelection (KIllustrator::GfxObject_ptr obj) {
+void KIllustratorDocument::addToSelection (KIllustrator::GfxObject_ptr) {
 }
 
 void
-KIllustratorDocument::removeFromSelection (KIllustrator::GfxObject_ptr obj) {
+KIllustratorDocument::removeFromSelection (KIllustrator::GfxObject_ptr) {
 }
 
 void KIllustratorDocument::groupSelection () {

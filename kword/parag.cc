@@ -84,7 +84,7 @@ KWParag::KWParag( const KWParag& _parag )
     // name of _parag too?
     paragName.sprintf( "%d", ++( document->getNumParags() ) );
 
-    counterData = _parag.counterData;
+    memcpy(counterData,_parag.counterData, sizeof(counterData));
     counterWidth = _parag.counterWidth;
 
     text = _parag.text;

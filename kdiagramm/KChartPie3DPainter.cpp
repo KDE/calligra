@@ -20,7 +20,7 @@ KChartPie3DPainter::~KChartPie3DPainter()
 }
 
 
-bool KChartPie3DPainter::setupCoords( QPaintDevice* paintdev )
+bool KChartPie3DPainter::setupCoords( QPaintDevice* /*paintdev*/ )
 {
   // QPaintDeviceMetrics pdm( paintdev );
 

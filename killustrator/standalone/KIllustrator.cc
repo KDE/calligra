@@ -1484,11 +1484,11 @@ void KIllustrator::updateRecentFiles () {
   }
 }
 
-void KIllustrator::popupForSelection (int x, int y) {
+void KIllustrator::popupForSelection (int , int ) {
   popupMenu->popup (QCursor::pos ());
 }
 
-void KIllustrator::popupForObject (int x, int y, GObject* obj) {
+void KIllustrator::popupForObject (int , int , GObject* ) {
 }
 
 void KIllustrator::resetTools () {

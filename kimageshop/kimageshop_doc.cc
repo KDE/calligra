@@ -179,7 +179,7 @@ bool KImageShopDoc::loadBinary( istream& _stream, bool _randomaccess, KOStore::S
 }
 */
 
-bool KImageShopDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
+bool KImageShopDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr  )
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
 
@@ -574,7 +574,9 @@ void KImageShopDoc::setPaperLayout( float _leftBorder, float _topBorder, float _
   m_bModified = TRUE;
 }
 
-QString KImageShopDoc::completeHeading( const char *_data, int _page, const char *_table )
+QString KImageShopDoc::completeHeading( const char *_data, 
+					int /*_page */, 
+					const char */*_table*/ )
 {
   /* QString page;
     page.sprintf( "%i", _page );
@@ -725,7 +727,8 @@ bool KImageShopDoc::openDocument( const char *_filename, const char *_format )
   return true;
 }
 
-bool KImageShopDoc::saveDocument( const char *_filename, const char *_format )
+bool KImageShopDoc::saveDocument( const char *_filename, 
+				  const char */*_format*/ )
 {
   ASSERT( !isEmpty() );
 

@@ -61,7 +61,7 @@ void MyTool::run( const char* _command, KOM::Base_ptr _sender, const CORBA::Any&
   cerr << "I am called" << endl;
 }
 
-void MyTool::cancel( CORBA::Long _id )
+void MyTool::cancel( CORBA::Long )
 {
 }
 

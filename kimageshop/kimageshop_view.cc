@@ -68,8 +68,9 @@
  *
  *****************************************************************************/
 
-KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopDoc* _doc )
-  : QWidget( _parent )
+KImageShopView::KImageShopView( QWidget* _parent, const char* _name, 
+				KImageShopDoc* _doc )
+  : QWidget( _parent, _name )
   , KoViewIf( _doc )
   , OPViewIf( _doc )
   , KImageShop::View_skel()
@@ -337,7 +338,7 @@ void KImageShopView::slotUpdateView()
   QWidget::update();
 }
 
-void KImageShopView::paintEvent( QPaintEvent *_ev )
+void KImageShopView::paintEvent( QPaintEvent * )
 {
   if( m_pixmap.isNull() )
   {

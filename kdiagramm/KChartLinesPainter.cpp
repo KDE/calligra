@@ -64,8 +64,8 @@ Qt::PenStyle KChartLinesPainter::chooseLineType( int dataset )
 
 
 void KChartLinesPainter::drawLine( QPainter* painter, const QPoint& begin,
-								   const QPoint& end, Qt::PenStyle type,
-								   const QColor& datacolor, table_t* table )
+				   const QPoint& end, Qt::PenStyle type,
+				   const QColor& datacolor, table_t* /*table*/ )
 {
   QPen pen( datacolor, _chart->_linewidth, type );
 

@@ -468,7 +468,7 @@ void KDiagrammDoc::setPaperLayout( float _leftBorder, float _topBorder, float _r
 }
 
 QString KDiagrammDoc::completeHeading( const char *_data, int , 
-				       const char *_table )
+				       const char */*_table*/ )
 {
   /* QString page;
     page.sprintf( "%i", _page );

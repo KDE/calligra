@@ -41,11 +41,11 @@ InsertPartTool::InsertPartTool (CommandHistory* history) : Tool (history) {
   validEntry = false;
 }
 
-void InsertPartTool::activate (GDocument* doc, Canvas* canvas) {
+void InsertPartTool::activate (GDocument* , Canvas* ) {
   x = y = -1;
 }
 
-void InsertPartTool::deactivate (GDocument*, Canvas* canvas) {
+void InsertPartTool::deactivate (GDocument*, Canvas* ) {
   validEntry = false;
 }
 

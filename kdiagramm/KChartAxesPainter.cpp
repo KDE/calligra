@@ -128,7 +128,7 @@ void KChartAxesPainter::setupLegend( QPaintDevice* /*paintdev*/,
 	// compute a number of columns if none is given by the user
 	if ( _chart->_legendcols == -1 )
 	  _chart->_legendcols = (int)rint( width/_chart->_legendelementwidth );
-	_chart->_legendcols = QMIN( _chart->_legendcols, num );
+	_chart->_legendcols = QMIN( _chart->_legendcols, (int)num );
 	
 	_chart->_legendrows = (int)rint( num/_chart->_legendcols) + ( (num % _chart->_legendcols) ?
 	  1 : 0 );
