@@ -443,3 +443,10 @@ changed (idea of jp.martin" <jpmartin@iroise.com>)
 -Now you can give height and width of cells in kspread_dlg_layout
 -Add new function INV => multiply by -1 each value
 -bug fix
+
+2000-05-04 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Change cursor when you want to resize column or row
+I used now good cursor for each type (column or row)
+Bug report by jp.martin <jpmartin@iroise.com> thanks
+-bug fix

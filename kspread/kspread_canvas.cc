@@ -2002,7 +2002,8 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
       row++;
       if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1 )
       {
-        setCursor( sizeAllCursor );
+        //setCursor( sizeAllCursor );
+        setCursor(splitVCursor);
         return;
       }
       y += h;
@@ -2331,7 +2332,8 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
       col++;
       if ( _ev->pos().x() >= x + w - 1 && _ev->pos().x() <= x + w + 1 )
       {
-        setCursor( sizeAllCursor );
+        //setCursor( sizeAllCursor );
+        setCursor(splitHCursor);
         return;
       }
       x += w;

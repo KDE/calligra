@@ -872,8 +872,9 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   size_combo = new QComboBox( true, this, "Size" );
   QStringList lst;
-    for ( unsigned int i = 0; i < 100; ++i )
-	lst.append( QString( "%1" ).arg( i + 1 ) );
+  lst.append("");
+  for ( unsigned int i = 1; i < 100; ++i )
+	lst.append( QString( "%1" ).arg( i ) );
 
   size_combo->insertStringList( lst );
 
