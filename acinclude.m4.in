@@ -1685,12 +1685,11 @@ if test "$ac_cv_header_dl_h" = "no"; then
   ac_cv_have_shload=no
 fi
 
+enable_dlopen=no
 AC_ARG_ENABLE(dlopen,
 [  --disable-dlopen        link staticly [default=no]] ,
 [if test "$enableval" = yes; then
   enable_dlopen=yes
-else
-  enable_dlopen=no
 fi],
 enable_dlopen=yes)
 
@@ -1708,9 +1707,9 @@ if test "$ac_cv_have_shload" = "yes"; then
 fi
 
 if test "$enable_dlopen" = no ; then
-  $1
+  test -n "$1" && eval $1
 else
-  $2
+  test -n "$2" && eval $2
 fi
 
 ])
@@ -1851,19 +1850,25 @@ AC_SUBST(IDL)
 AC_DEFUN(KDE_CHECK_MINI_STL,
 [
 AC_REQUIRE([KDE_CHECK_MICO])
-AC_LANG_CPLUSPLUS
+
 AC_MSG_CHECKING(if we use mico's mini-STL)
 AC_CACHE_VAL(kde_cv_have_mini_stl,
 [
+AC_LANG_CPLUSPLUS
+kde_save_cxxflags="$CXXFLAGS"
+CXXFLAGS="$CXXFLAGS $MICO_INCLUDES"
 AC_TRY_COMPILE(
 [
-#include <CORBA.h>
-#include <mico/template_impl.h>
-#include <algorithm>       
+#include <mico/config.h>
 ],
-[],
-kde_cv_have_mini_stl=no,
-kde_cv_have_mini_stl=yes)
+[
+#ifdef HAVE_MINI_STL
+#error "nothing"
+#endif
+],
+kde_cv_have_mini_stl=yes,
+kde_cv_have_mini_stl=no)
+CXXFLAGS=$kde_save_cxxflags
 ])
 
 
