@@ -1266,7 +1266,7 @@ void KWFrameSet::finalize()
 }
 
 QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
-                                     KWViewMode * viewMode, bool onlyChanged, bool clipFrame )
+                                     KWViewMode * viewMode, bool /*onlyChanged*/, bool clipFrame )
 {
     KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
@@ -1423,10 +1423,10 @@ KWPictureFrameSet::~KWPictureFrameSet() {
 
 KWordFrameSetIface* KWPictureFrameSet::dcopObject()
 {
-    if ( !dcop )
-	dcop = new KWordPictureFrameSetIface( this );
+    if ( !m_dcop )
+	m_dcop = new KWordPictureFrameSetIface( this );
 
-    return dcop;
+    return m_dcop;
 }
 
 
