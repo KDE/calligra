@@ -22,7 +22,7 @@
 #define __VCOMMAND_H__
 
 
-#include <assert.h>
+//#include <assert.h>
 
 #include <qobject.h>
 #include <qptrlist.h>

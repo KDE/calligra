@@ -12,18 +12,14 @@ noinst_HEADERS = \
 	vcommand.h \
 	vdeletecmd.h \
 	vfillcmd.h \
-	vflattencmd.h \
 	vgroupcmd.h \
 	vdeletenodescmd.h \
-	vinsertknotscmd.h \
 	vlayercmd.h \
 	vreplacingcmd.h \
-	vroundcornerscmd.h \
 	vshapecmd.h \
 	vstrokecmd.h \
 	vtransformcmd.h \
 	vungroupcmd.h \
-	vwhirlpinchcmd.h \
 	vzordercmd.h
 
 libkarboncommands_la_SOURCES = \
@@ -32,18 +28,14 @@ libkarboncommands_la_SOURCES = \
 	vcommand.cc \
 	vdeletecmd.cc \
 	vfillcmd.cc \
-	vflattencmd.cc \
 	vgroupcmd.cc \
 	vdeletenodescmd.cc \
-	vinsertknotscmd.cc \
 	vlayercmd.cc \
 	vreplacingcmd.cc \
-	vroundcornerscmd.cc \
 	vshapecmd.cc \
 	vstrokecmd.cc \
 	vtransformcmd.cc \
 	vungroupcmd.cc \
-	vwhirlpinchcmd.cc \
 	vzordercmd.cc
 
 libkarboncommands_la_METASOURCES = \
