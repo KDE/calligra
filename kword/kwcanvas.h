@@ -178,8 +178,6 @@ protected:
     void selectFrame( int mx, int my, bool select );
     void updateFrameFormat();
 
-    bool isOutOfPage( QRect & r, int page ) const;
-
 private slots:
     void frameDiaClosed();
     void slotContentsMoving( int, int );

@@ -120,6 +120,8 @@ public:
     virtual QDomDocument saveXML();
     virtual bool completeSaving( KoStore *_store );
 
+    int getSyntaxVersion( ) const { return syntaxVersion; }
+
     // Called by KWFrame*'s loading code to emit correct progress info
     void progressItemLoaded();
 
@@ -149,19 +151,33 @@ public:
     void addFrameSet( KWFrameSet *f );
     void delFrameSet( KWFrameSet *f, bool deleteit = true );
 
-    unsigned int ptTopBorder() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptTop )); }
-    unsigned int ptBottomBorder() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptBottom )); }
-    unsigned int ptLeftBorder() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptLeft )); }
-    unsigned int ptRightBorder() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptRight )); }
-    unsigned int ptPaperHeight() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptHeight )); }
-    unsigned int ptPaperWidth() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptWidth )); }
-    unsigned int ptColumnWidth() const;
-    unsigned int ptColumnSpacing() const { return static_cast<unsigned int>(zoomIt( m_pageColumns.ptColumnSpacing )); }
+    // Those distances are in _pixels_, i.e. with zoom and resolution applied.
+    unsigned int topBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptTop )); }
+    unsigned int bottomBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptBottom )); }
+    unsigned int leftBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptLeft )); }
+    unsigned int rightBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptRight )); }
+    unsigned int paperHeight() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptHeight )); }
+    unsigned int paperWidth() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptWidth )); }
+    unsigned int columnSpacing() const { return static_cast<unsigned int>(zoomItX( m_pageColumns.ptColumnSpacing )); }
+
+    // Those distances are in _pt_, i.e. the real distances, stored in m_pageLayout
+    double ptTopBorder() const { return m_pageLayout.ptTop; }
+    double ptBottomBorder() const { return m_pageLayout.ptBottom; }
+    double ptLeftBorder() const { return m_pageLayout.ptLeft; }
+    double ptRightBorder() const { return m_pageLayout.ptRight; }
+    double ptPaperHeight() const { return m_pageLayout.ptHeight; }
+    double ptPaperWidth() const { return m_pageLayout.ptWidth; }
+    double ptColumnWidth() const;
+    double ptColumnSpacing() const { return m_pageColumns.ptColumnSpacing; }
 
     unsigned int getColumns() const { return m_pageColumns.columns; }
 
     bool isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsigned int _ypos );
+    // Returns 0-based page number where rect is (in real pt coordinates) (in fact its topleft corner).
+    // Use isOutOfPage to check that the rectangle is fully contained in that page.
     int getPageOfRect( QRect & _rect ) const;
+    // Return true if @p r (in real pt coordinates) is out of the page @p page
+    bool isOutOfPage( QRect & r, int page ) const;
 
     void updateAllViews( KWView *_view, bool _erase = false );
     void updateAllViewportSizes();
@@ -297,21 +313,55 @@ public:
         spellCheck = b;
     }
 
-    void createContents();
-
     bool canRemovePage( int num, KWFrame *f );
 
-    void setZoom( int z ) { zoom = z; }
-    int getZoom() const { return zoom; }
+    /**
+     * Set a new resolution in DPI. Done on startup and when printing.
+     */
+    void setResolution( int dpiX, int dpiY );
+    /**
+     * @return the conversion factor between pt and pixel, that
+     * takes care of the zoom and the DPI setting.
+     * Use zoomIt(pt) instead, though.
+     */
+    double zoomedResolutionX() const { return m_zoomedResolutionX; }
+    double zoomedResolutionY() const { return m_zoomedResolutionY; }
 
-    int zoomIt( int z ) const;
-    unsigned int zoomIt( unsigned int z ) const;
-    double zoomIt( double z ) const;
+    /**
+     * Change the zoom factor to @p z (e.g. 150 for 150%)
+     */
+    void setZoom( int z );
 
-    int getSyntaxVersion( ) const { return syntaxVersion; };
+    int zoom() const { return m_zoom; }
 
-    void updateFrameSizes( int oldZoom );
+    // Input: pt. Output: pixels. Resolution and zoom are applied.
+    int zoomItX( int z ) const {
+        return static_cast<int>(m_zoomedResolutionX * z);
+    }
+    unsigned int zoomItX( unsigned int z ) const {
+        return static_cast<unsigned int>(m_zoomedResolutionX * z);
+    }
+    double zoomItX( double z ) const {
+        return m_zoomedResolutionX * z;
+    }
+    int zoomItY( int z ) const {
+        return static_cast<int>(m_zoomedResolutionY * z);
+    }
+    unsigned int zoomItY( unsigned int z ) const {
+        return static_cast<unsigned int>(m_zoomedResolutionY * z);
+    }
+    double zoomItY( double z ) const {
+        return m_zoomedResolutionY * z;
+    }
 
+    QRect zoomRect( const QRect & r ) const {
+        return QRect( zoomItX( r.x() ), zoomItY( r.y() ), zoomItX( r.width() ), zoomItY( r.height() ) );
+    }
+
+    // somewhat of an ugly hack. KWFrame should have unzoomed and zoomed values instead.
+    //void updateFrameSizes( double factorX, double factorY );
+
+    // useless method
     static QString getAttribute(QDomElement &element, const char *attributeName, const QString &defaultValue)
       {
           return element.attribute( attributeName, defaultValue );
@@ -335,6 +385,10 @@ public:
 	  return defaultValue;
       }
 
+    /**
+     * Insert/update TOC at beginning of document
+     */
+    void createContents();
 
     /**
      * get custom kspell config
@@ -447,7 +501,11 @@ private:
     //KoMainWindow *tmpShell;
     //QRect tmpShellSize;
 
-    int zoom;
+    int m_zoom;
+    double m_resolutionX;
+    double m_resolutionY;
+    double m_zoomedResolutionX;
+    double m_zoomedResolutionY;
 
     // When a document is written out, the syntax version in use will be recorded. When read back
     // in, this variable reflects that value.
@@ -457,27 +515,6 @@ private:
 
     bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
 };
-
-inline int KWDocument::zoomIt( int z ) const
-{
-    if ( zoom == 100 )
-        return z;
-    return ( zoom * z ) / 100;
-}
-
-inline unsigned int KWDocument::zoomIt( unsigned int z ) const
-{
-    if ( zoom == 100 )
-        return z;
-    return ( zoom * z ) / 100;
-}
-
-inline double KWDocument::zoomIt( double z ) const
-{
-    if ( zoom == 100 )
-        return z;
-    return ( (double)zoom * z ) / 100.0;
-}
 
 
 #endif

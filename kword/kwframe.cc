@@ -770,7 +770,7 @@ bool KWFrameSet::isVisible() const
 // It clips to the frame, and clips out any "on top" frame.
 QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect )
 {
-    QRect rc = painter->xForm( *frame );
+    QRect rc = painter->xForm( kWordDocument()->zoomRect( *frame ) );
     rc &= painter->xForm( crect ); // intersect
     //kdDebug() << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame) << " clip region rect=" << DEBUGRECT(rc) << " rc.isEmpty()=" << rc.isEmpty() << endl;
     if ( !rc.isEmpty() )
@@ -779,7 +779,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         QListIterator<KWFrame> fIt( m_framesOnTop );
         for ( ; fIt.current() ; ++fIt )
         {
-            QRect r = painter->xForm( *fIt.current() );
+            QRect r = painter->xForm( kWordDocument()->zoomRect( *fIt.current() ) );
             r = QRect( r.x() - 1, r.y() - 1,  // ### plan for a one-pixel border. Maybe we should use the real border width.
                        r.width() + 2, r.height() + 2 );
             //kdDebug() << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
@@ -869,7 +869,7 @@ void KWPictureFrameSet::load( QDomElement &attributes )
 void KWPictureFrameSet::drawContents( QPainter *painter, const QRect & crect,
                                       QColorGroup &, bool /*onlyChanged*/ )
 {
-    QRect r = *frames.first();
+    QRect r = kWordDocument()->zoomRect( *frames.first() );
 
     if ( r.size() != m_image.image().size() )
         m_image = m_image.scale( r.size() );
@@ -899,7 +899,7 @@ KWPartFrameSet::~KWPartFrameSet()
 {
 }
 
-/*================================================================*/
+#if 0
 QPicture *KWPartFrameSet::getPicture()
 {
     QPainter p( &pic );
@@ -912,6 +912,7 @@ QPicture *KWPartFrameSet::getPicture()
 
     return &pic;
 }
+#endif
 
 void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
                                    QColorGroup &, bool onlyChanged )
@@ -933,7 +934,7 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
             painter->setClipRegion( reg );
             painter->setViewport( frame->x(), frame->y(), r.width(), r.height() );
             // painter->translate( frame->x(), frame->y() ); // messes up the clip regions
-            QRect rframe( 0, 0, frames.first()->width(), frames.first()->height() );
+            QRect rframe( 0, 0, frames.first()->width(), frames.first()->height() ); // Not sure if applying the zoom here works
             child->document()->paintEverything( *painter, rframe, true, 0 );
             painter->setViewport( r );
             painter->restore();
@@ -1042,11 +1043,12 @@ KWFormulaFrameSet::~KWFormulaFrameSet()
         delete formulaEdit;
 }
 
-/*================================================================*/
+#if 0
 QPicture *KWFormulaFrameSet::getPicture()
 {
     return pic;
 }
+#endif
 
 /*================================================================*/
 void KWFormulaFrameSet::setFormat( const QFont &f, const QColor &c )

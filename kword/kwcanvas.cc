@@ -76,7 +76,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 
     connect( doc, SIGNAL( sig_newContentsSize( int, int ) ),
              this, SLOT( resizeContents( int, int ) ) );
-    resizeContents( doc->ptPaperWidth(), doc->ptPaperHeight() * doc->getPages() );
+    resizeContents( doc->paperWidth(), doc->paperHeight() * doc->getPages() );
 
     // Add an action for debugging
     (void) new KAction( "Print richtext debug info" , 0,
@@ -106,15 +106,6 @@ void KWCanvas::repaintAll( bool erase /* = false */ )
     viewport()->repaint( erase );
 }
 
-// Return true if @p r is out of the page @p page
-bool KWCanvas::isOutOfPage( QRect & r, int page ) const
-{
-    return r.x() < 0 ||
-        r.right() > static_cast<int>( doc->ptPaperWidth() ) ||
-        r.y() < page * static_cast<int>( doc->ptPaperHeight() ) ||
-        r.bottom() > ( page + 1 ) * static_cast<int>( doc->ptPaperHeight() );
-}
-
 void KWCanvas::print( QPainter *painter, QPrinter *printer )
 {
     kdDebug(32001) << "KWCanvas::print from=" << printer->fromPage() << " to=" << printer->toPage() << endl;
@@ -134,9 +125,9 @@ void KWCanvas::print( QPainter *painter, QPrinter *printer )
 
         painter->resetXForm();
         int pgNum = i - 1;
-        int yOffset = pgNum * doc->ptPaperHeight();
+        int yOffset = pgNum * doc->paperHeight();
         kdDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
-        QRect pageRect( 0, yOffset, doc->ptPaperWidth(), doc->ptPaperHeight() );
+        QRect pageRect( 0, yOffset, doc->paperWidth(), doc->paperHeight() );
         painter->fillRect( pageRect, white );
 
         painter->translate( 0, -yOffset );
@@ -175,7 +166,7 @@ void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int c
         {
             if ( frameset->isVisible() )
             {
-                QColorGroup gb=QApplication::palette().active();
+                QColorGroup gb = QApplication::palette().active();
                 if ( focus && m_currentFrameSetEdit && frameset == m_currentFrameSetEdit->frameSet() )     // Currently edited frameset
                     m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged );
                 else
@@ -206,6 +197,7 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
             KWFrame * frame = frameIt.current();
             QRect frameRect( frame->x() - 1, frame->y() - 1,
                              frame->width() + 2, frame->height() + 2 );
+            frameRect = doc->zoomRect( frameRect );
             if ( !crect.intersects( frameRect ) )
                 continue;
 
@@ -246,18 +238,18 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
                     if ( drawBack )
                         painter->fillRect( frameRect, frame->getBackgroundColor() );
                     // Always draw right and bottom
-                    painter->drawLine( frame->right() + 1, frame->y() - 1,
-                                       frame->right() + 1, frame->bottom()  + 1 );
-                    painter->drawLine( frame->x() - 1, frame->bottom() + 1,
-                                       frame->right() + 1, frame->bottom() + 1 );
+                    painter->drawLine( frameRect.right() + 1, frameRect.y() - 1,
+                                       frameRect.right() + 1, frameRect.bottom()  + 1 );
+                    painter->drawLine( frameRect.x() - 1, frameRect.bottom() + 1,
+                                       frameRect.right() + 1, frameRect.bottom() + 1 );
                     uint row = frameset->getGroupManager()->getCell( frameset )->row;
                     uint col = frameset->getGroupManager()->getCell( frameset )->col;
                     if ( row == 0 ) // draw top only for 1st row
-                        painter->drawLine( frame->x() - 1, frame->y() - 1,
-                                           frame->right() + 1, frame->y() - 1 );
+                        painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
+                                           frameRect.right() + 1, frameRect.y() - 1 );
                     if ( col == 0 ) // draw left only for 1st column
-                        painter->drawLine( frame->x() - 1, frame->y() - 1,
-                                           frame->x() - 1, frame->bottom() + 1 );
+                        painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
+                                           frameRect.x() - 1, frameRect.bottom() + 1 );
                 }
             }
 
@@ -317,8 +309,8 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
         QRegion pageContentsReg;
 
         for ( int k = 0; k < doc->getPages(); k++ ) {
-            QRect pageRect( 0, ( k * doc->ptPaperHeight() ),
-                            doc->ptPaperWidth(), doc->ptPaperHeight() );
+            QRect pageRect( 0, ( k * doc->paperHeight() ),
+                            doc->paperWidth(), doc->paperHeight() );
             if ( crect.intersects( pageRect ) )
                 painter->drawRect( pageRect );
             // Exclude red border line
@@ -388,13 +380,15 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
 
 void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in edit-frame mode
 {
+    int x = static_cast<int>( mx / doc->zoomedResolutionX() );
+    int y = static_cast<int>( my / doc->zoomedResolutionY() );
     mousePressed = true;
     frameResized = false;
     if ( e ) {
         // only simulate selection - we do real selection below
-        int currentSelection = doc->selectFrame( mx, my, TRUE );
+        int currentSelection = doc->selectFrame( x, y, TRUE );
 
-        KWFrameSet *fs = doc->getFrameSet( mx, my );
+        KWFrameSet *fs = doc->getFrameSet( x, y );
         if ( currentSelection != 0 && ( e->state() & ShiftButton ) && fs->getGroupManager() ) { // is table and we hold shift
             fs->getGroupManager()->selectUntil( fs );
             curTable = fs->getGroupManager();
@@ -403,15 +397,15 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
         } else if ( currentSelection == 1 ) { // 1 selected
             if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
                 selectAllFrames( FALSE );
-            selectFrame( mx, my, TRUE );
+            selectFrame( x, y, TRUE );
             curTable = fs->getGroupManager();
         } else if ( currentSelection == 2 ) { // was already selected
             if ( e->state() & ControlButton || e->state() & ShiftButton ) {
-                selectFrame( mx, my, FALSE );
+                selectFrame( x, y, FALSE );
                 curTable = fs->getGroupManager();
             } else if ( viewport()->cursor().shape() != SizeAllCursor ) {
                 selectAllFrames( FALSE );
-                selectFrame( mx, my, TRUE );
+                selectFrame( x, y, TRUE );
                 curTable = fs->getGroupManager();
             }
         }
@@ -419,7 +413,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
     if( doc->getFirstSelectedFrame()!=0)
         rectOfSizeSelected= doc->getFirstSelectedFrame()->normalize();
 
-    QList<KWFrame> selectedFrames=doc->getSelectedFrames();
+    QList<KWFrame> selectedFrames = doc->getSelectedFrames();
     QList<FrameIndex> frameindexList;
     QList<FrameResizeStruct> frameindexMove;
     KWFrame *frame=0L;
@@ -438,7 +432,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
         cmdMoveFrame =new KWFrameMoveCommand( i18n("Move Frame"),doc,frameindexList, frameindexMove ) ;
 
 
-    viewport()->setCursor( doc->getMouseCursor( mx, my ) );
+    viewport()->setCursor( doc->getMouseCursor( x, y ) );
 
     deleteMovingRect = FALSE;
     mx = ( mx / doc->gridX() ) * doc->gridX();
@@ -453,7 +447,9 @@ void KWCanvas::mpCreate( int mx, int my )
     oldMx = mx;
     my = ( my / doc->gridX() ) * doc->gridY();
     oldMy = my;
-    m_insRect = QRect( mx, my, 0, 0 );
+    int x = static_cast<int>( mx / doc->zoomedResolutionX() );
+    int y = static_cast<int>( my / doc->zoomedResolutionY() );
+    m_insRect = QRect( x, y, 0, 0 );
     deleteMovingRect = FALSE;
 }
 
@@ -465,7 +461,9 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
         oldMx = mx;
         my = ( my / doc->gridX() ) * doc->gridY();
         oldMy = my;
-        m_insRect = QRect( mx, my, 0, 0 );
+        int x = static_cast<int>( mx / doc->zoomedResolutionX() );
+        int y = static_cast<int>( my / doc->zoomedResolutionY() );
+        m_insRect = QRect( x, y, 0, 0 );
         deleteMovingRect = FALSE;
         //doRaster = FALSE;
         QCursor::setPos( viewport()->mapToGlobal( QPoint( mx + _pix.width(), my + _pix.height() ) ) );
@@ -479,11 +477,10 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     int mx = e->pos().x();
     int my = e->pos().y();
 
-
     if ( e->button() == RightButton ) {
         // rmb menu
         switch ( m_mouseMode )
-            {
+        {
             case MM_EDIT:
                 m_gui->getView()->openPopupMenuEditText( QCursor::pos() );
                 break;
@@ -493,25 +490,29 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             case MM_CREATE_TABLE:
             case MM_CREATE_FORMULA:// case MM_CREATE_KSPREAD_TABLE:
             case MM_CREATE_PIX:
+            {
                 // Select the frame first
                 mpEditFrame( e, mx, my );
-                if (!doc->getFrameSet( e->pos().x(), e->pos().y() ))
+                int x = static_cast<int>( mx / doc->zoomedResolutionX() );
+                int y = static_cast<int>( my / doc->zoomedResolutionY() );
+                if (!doc->getFrameSet( x, y ))
                     m_gui->getView()->openPopupMenuChangeAction( QCursor::pos() );
                 else
+                {
+                    //todo create a popupMenu for frame (delete - properties etc...)
+                    KWFrame *frame = doc->getFirstSelectedFrame();
+                    // if a header/footer etc. Dont show the popup.
+                    if((frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY))
                     {
-                        //todo create a popupMenu for frame (delete - properties etc...)
-                        KWFrame *frame=doc->getFirstSelectedFrame();
-                        // if a header/footer etc. Dont show the popup.
-                        if((frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY))
-                            {
-                                mousePressed = false;
-                                return;
-                            }
-                        m_gui->getView()->openPopupMenuEditFrame( QCursor::pos() );
+                        mousePressed = false;
+                        return;
                     }
-                break;
-            default: break;
+                    m_gui->getView()->openPopupMenuEditFrame( QCursor::pos() );
+                }
             }
+            break;
+            default: break;
+        }
         mousePressed = false;
         return;
     }
@@ -522,13 +523,15 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         switch ( m_mouseMode ) {
         case MM_EDIT:
             {
-                KWFrameSet *fs = doc->getFrameSet( mx, my );
+                int x = static_cast<int>( mx / doc->zoomedResolutionX() );
+                int y = static_cast<int>( my / doc->zoomedResolutionY() );
+                KWFrameSet *fs = doc->getFrameSet( x, y );
                 if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
-                    {
-                        // Terminate edition of that frameset
-                        delete m_currentFrameSetEdit;
-                        m_currentFrameSetEdit = 0L;
-                    }
+                {
+                    // Terminate edition of that frameset
+                    delete m_currentFrameSetEdit;
+                    m_currentFrameSetEdit = 0L;
+                }
                 // Edit the frameset under the mouse, if any
                 if ( !m_currentFrameSetEdit && fs )
                     m_currentFrameSetEdit = fs->createFrameSetEdit( this );
@@ -576,12 +579,12 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     int my = mousep.y() + contentsY();
 
     // Apply the grid
-    KWDocument * doc = frame->getFrameSet()->kWordDocument();
     int rastX = doc->gridX();
     int rastY = doc->gridY();
-    mx = ( mx / rastX ) * rastX;
+    mx = ( mx / rastX ) * rastX ;
     my = ( my / rastY ) * rastY;
-    //kdDebug() << "KWCanvas::mmEditFrameResize after raster mx=" << mx << " my=" << my << endl;
+    int x = static_cast<int>( mx / doc->zoomedResolutionX() );
+    int y = static_cast<int>( my / doc->zoomedResolutionY() );
 
     // Calculate new frame coordinates, using minimum sizes, and keeping it in the bounds of the page
     int newLeft = frame->left();
@@ -591,52 +594,52 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
 
     FrameInfo frInfo=frame->getFrameSet()->getFrameInfo();
 
-    if (top && newTop != my) {
+    if (top && newTop != y) {
         bool move=true;
         if (isAFooter(frInfo))
             move=false;
-        if (newBottom-my < (int)(minFrameHeight+5))
-            my=newBottom-minFrameHeight-5;
-        if (my < (int)( frame->getPageNum() * doc->ptPaperHeight()))
-            my = frame->getPageNum() * doc->ptPaperHeight();
+        if (newBottom-y < (int)(minFrameHeight+5))
+            y=newBottom-minFrameHeight-5;
+        if (y < static_cast<int>( frame->getPageNum() * doc->ptPaperHeight()))
+            y = static_cast<int>( frame->getPageNum() * doc->ptPaperHeight() );
 
-        if (move) newTop=my;
-    } else if (bottom && newBottom != my) {
+        if (move) newTop=y;
+    } else if (bottom && newBottom != y) {
         bool move=true;
         if (isAHeader(frInfo))
             move=false;
-        if (my-newTop < (int)(minFrameHeight+5))
-            my=newTop+minFrameHeight+5;
-        if (my >= (int)((frame->getPageNum()+1) * doc->ptPaperHeight()))
+        if (y-newTop < (int)(minFrameHeight+5))
+            y=newTop+minFrameHeight+5;
+        if (y >= static_cast<int>((frame->getPageNum()+1) * doc->ptPaperHeight()))
         {
-            my = (frame->getPageNum()+1) * doc->ptPaperHeight();
+            y = static_cast<int>((frame->getPageNum()+1) * doc->ptPaperHeight());
         }
 
-        if (move) newBottom=my;
+        if (move) newBottom=y;
     }
 
-    if (left && newLeft != mx) {
+    if (left && newLeft != x) {
         bool move=true;
         if (isAHeader(frInfo))
             move=false;
         if (isAFooter(frInfo))
             move=false;
-        if (newRight-mx < (int)minFrameWidth)
-            mx=newRight-minFrameWidth-5;
-        if (mx <= 0)
-            mx=0;
+        if (newRight-x < (int)minFrameWidth)
+            x=newRight-minFrameWidth-5;
+        if (x <= 0)
+            x=0;
         if (move)
-            newLeft=mx;
-    } else if (right && newRight != mx) {
+            newLeft=x;
+    } else if (right && newRight != x) {
         bool move=true;
         if (isAHeader(frInfo)) move=false;
         if (isAFooter(frInfo)) move=false;
-        if (mx-newLeft < (int)minFrameWidth)
-            mx=newLeft+minFrameWidth+5;
-        if (mx >  (int)doc->ptPaperWidth())
-            mx = doc->ptPaperWidth();
+        if (x-newLeft < (int)minFrameWidth)
+            x=newLeft+minFrameWidth+5;
+        if (x > static_cast<int>(doc->ptPaperWidth()))
+            x = static_cast<int>(doc->ptPaperWidth());
 
-        if (move) newRight=mx;
+        if (move) newRight=x;
     }
 
     // Keep copy of old rectangle, for repaint()
@@ -673,6 +676,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     QRect newRect( frame->x() - 1, frame->y() - 1,
                    frame->width() + 2, frame->height() + 2 );
     // Repaing only the changed rects (oldRect U newRect)
+    oldRect = doc->zoomRect(oldRect);
+    newRect = doc->zoomRect(newRect);
     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
 
     oldMy = my;
@@ -707,16 +712,20 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                     } else {
                         QRect oldRect( frame->x() - 1, frame->y() - 1,
                                        frame->width() + 2, frame->height() + 2 );
+                        QRect oldFrame( *frame );
                         int page = doc->getPageOfRect( *frame );
                         // Move the frame
-                        frame->moveBy( mx - oldMx, my - oldMy );
+                        frame->moveBy( static_cast<int>((mx - oldMx) / doc->zoomedResolutionX()),
+                                       static_cast<int>((my - oldMy) / doc->zoomedResolutionY()) );
                         // But not out of the page it was on initially
-                        if ( isOutOfPage( *frame, page ) )
-                            frame->moveBy( oldMx - mx, oldMy - my );
+                        if ( doc->isOutOfPage( *frame, page ) )
+                            frame->setRect( oldFrame.x(), oldFrame.y(), oldFrame.width(), oldFrame.height() );
                         // Calculate new rectangle for this frame
                         QRect newRect( frame->x() - 1, frame->y() - 1,
                                        frame->width() + 2, frame->height() + 2 );
                         // Repaing only the changed rects (oldRect U newRect)
+                        oldRect = doc->zoomRect(oldRect);
+                        newRect = doc->zoomRect(newRect);
                         repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
                     }
                     // Move resize handles to new position
@@ -734,7 +743,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                     QRect oldRect( frame->x() - 1, frame->y() - 1,
                                    frame->width() + 2, frame->height() + 2 );
                     frame->moveBy( mx - oldMx, my - oldMy );
-                    if ( frame->x() < 0 || frame->right() > static_cast<int>( doc->ptPaperWidth() ) || frame->y() < 0 ) {
+                    if ( frame->x() < 0 || frame->right() > static_cast<int>( doc->paperWidth() ) || frame->y() < 0 ) {
                         if ( undos.findRef( grpMgr ) == -1 )
                             undos.append( grpMgr );
                     }
@@ -742,6 +751,8 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                     QRect newRect( frame->x() - 1, frame->y() - 1,
                                    frame->width() + 2, frame->height() + 2 );
                     // Repaing only the changed rects (oldRect U newRect)
+                    oldRect = doc->zoomRect(oldRect);
+                    newRect = doc->zoomRect(newRect);
                     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
                     // Move resize handles to new position
                     frame->updateResizeHandles();
@@ -755,7 +766,8 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         if ( !undos.isEmpty() ) {
             for ( unsigned int i = 0; i < undos.count(); i++ ) {
                 undos.at( i )->drawAllRects( p, contentsX(), contentsY() );
-                undos.at( i )->moveBy( oldMx - mx, oldMy - my );
+                undos.at( i )->moveBy( static_cast<int>((mx - oldMx) / doc->zoomedResolutionX()),
+                                       static_cast<int>((my - oldMy) / doc->zoomedResolutionY()) );
                 undos.at( i )->drawAllRects( p, contentsX(), contentsY() );
             }
         }
@@ -797,22 +809,22 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
 #endif
     }
     // Resize the rectangle
-    m_insRect.setWidth( m_insRect.width() + mx - oldMx );
-    m_insRect.setHeight( m_insRect.height() + my - oldMy );
+    m_insRect.setWidth( m_insRect.width() + (mx - oldMx) / doc->zoomedResolutionX() );
+    m_insRect.setHeight( m_insRect.height() + (my - oldMy) / doc->zoomedResolutionY() );
 
     // But not out of the page
     QRect r = m_insRect.normalize();
-    if ( isOutOfPage( r, doc->getPageOfRect( r ) ) )
+    if ( doc->isOutOfPage( r, doc->getPageOfRect( r ) ) )
     {
-        m_insRect.setWidth( m_insRect.width() - ( mx - oldMx ) );
-        m_insRect.setHeight( m_insRect.height() - ( my - oldMy ) );
+        m_insRect.setWidth( m_insRect.width() - (mx - oldMx) / doc->zoomedResolutionX() );
+        m_insRect.setHeight( m_insRect.height() - (my - oldMy) / doc->zoomedResolutionY() );
     }
 #if 0
     if ( useAnchor ) {
         p.drawLine( anchor->getOrigin(), m_insRect.topLeft() );
     }
 #endif
-    p.drawRect( m_insRect );
+    p.drawRect( doc->zoomRect( m_insRect ) );
     p.end();
     oldMx = mx;
     oldMy = my;
@@ -847,9 +859,11 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
             default: break;
         }
     } else {
+        int x = static_cast<int>( mx / doc->zoomedResolutionX() );
+        int y = static_cast<int>( my / doc->zoomedResolutionY() );
         switch ( m_mouseMode ) {
             case MM_EDIT_FRAME:
-                viewport()->setCursor( doc->getMouseCursor( mx, my ) );
+                viewport()->setCursor( doc->getMouseCursor( x, y ) );
                 break;
             default: break;
         }
@@ -866,7 +880,7 @@ void KWCanvas::mrEditFrame()
     if ( doc->processingType() == KWDocument::DTP )
         setRuler2Frame( frame );
 #endif
-    m_gui->getHorzRuler()->setFrameStart( frame->x() );
+    m_gui->getHorzRuler()->setFrameStart( frame->x() ); // does this need zoomItX() ?
 
     doc->layout();
 
@@ -931,9 +945,8 @@ void KWCanvas::mrEditFrame()
 void KWCanvas::mrCreateText()
 {
     repaintAll();
-    KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
-
     m_insRect = m_insRect.normalize();
+    KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
         KWFrameDia * frameDia = new KWFrameDia( this, frame, doc, FT_TEXT);
         connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
@@ -994,7 +1007,7 @@ void KWCanvas::mrCreateTable()
 
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
-        if ( tcols * minFrameWidth + m_insRect.x() > doc->ptPaperWidth() )
+        if ( tcols * minFrameWidth + m_insRect.x() > doc->paperWidth() )
             {
                 KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there\n"
                                            "is not enough space available."));
@@ -1027,7 +1040,7 @@ void KWCanvas::mrCreateTable()
             for ( unsigned int i = 0; i < trows; i++ ) {
                 for ( unsigned int j = 0; j < tcols; j++ ) {
                     KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
-                    KWFrame *frame = new KWFrame(_frameSet, m_insRect.x(), m_insRect.y(), (doc->ptPaperWidth() - m_insRect.x())/tcols, m_insRect.height() );
+                    KWFrame *frame = new KWFrame(_frameSet, m_insRect.x(), m_insRect.y(), (doc->paperWidth() - m_insRect.x())/tcols, m_insRect.height() );
                     _frameSet->addFrame( frame );
                     frame->setFrameBehaviour(AutoExtendFrame);
                     frame->setNewFrameBehaviour(NoFollowup);
@@ -1766,7 +1779,7 @@ int KWCanvas::getVertRulerPos(int y)
     int pageNum=1;
     if( m_currentFrameSetEdit )
         pageNum=m_currentFrameSetEdit->currentFrame()->getPageNum() + 1;
-    return ( -(y==-1 ? contentsY() : y) + (pageNum - 1) * doc->ptPaperHeight() );
+    return ( -(y==-1 ? contentsY() : y) + (pageNum - 1) * doc->paperHeight() );
 }
 
 /*================================================================*/

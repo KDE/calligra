@@ -959,7 +959,6 @@ void KWParagDia::modifyClicked()
 {
   if(!eTabPos->text().isEmpty() && lTabs->currentItem()!=-1)
     {
-      int pos=lTabs->currentItem();
        _tabList.remove(lTabs->currentItem());
       lTabs->removeItem(lTabs->currentItem());
       addClicked();

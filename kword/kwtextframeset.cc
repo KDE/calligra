@@ -163,8 +163,9 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
         }
 
         QRect r(crect);
+        QRect frameRect( kWordDocument()->zoomRect( *frame ) );
         //kdDebug() << "KWTFS::drawContents frame=" << frame << " cr=" << DEBUGRECT(r) << endl;
-        r = r.intersect( *frame );
+        r = r.intersect( frameRect );
         //kdDebug() << "                    framerect=" << DEBUGRECT(*frame) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
         if ( !r.isEmpty() )
         {
@@ -172,14 +173,14 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
             // ( frame and r are up to here in this system )
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
-            r.moveBy( -frame->left(), -frame->top() + totalHeight );   // portion of the frame to be drawn, in qrt coords
+            r.moveBy( -frameRect.left(), -frameRect.top() + totalHeight );   // portion of the frame to be drawn, in qrt coords
             QRegion reg = frameClipRegion( p, frame, crect );
             if ( !reg.isEmpty() )
             {
                 p->save();
                 p->setClipRegion( reg );
 
-                p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
+                p->translate( frameRect.left(), frameRect.top() - totalHeight ); // translate to qrt coords - after setting the clip region !
 
                 gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
                 QTextParag * lastDrawn = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor );
@@ -192,7 +193,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                 if ( (lastDrawn == text->lastParag() || !m_lastFormatted) && !onlyChanged)
                 {
                     int docHeight = text->height();
-                    QRect blank( 0, docHeight, frame->width(), totalHeight+frame->height() - docHeight );
+                    QRect blank( 0, docHeight, frameRect.width(), totalHeight+frameRect.height() - docHeight );
                     //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
                     p->fillRect( blank, gb.brush( QColorGroup::Base ) );
                     // for debugging :)
@@ -201,7 +202,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                 p->restore();
             }
         }
-        totalHeight += frame->height();
+        totalHeight += frameRect.height();
     }
 }
 
@@ -222,15 +223,16 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         if ( !frame->isValid() )
             continue;
 
+        QRect frameRect( kWordDocument()->zoomRect( *frame ) );
         // The parag is in the qtextdoc coordinates -> first translate frame to qtextdoc coords
-        QRect rf( *frame );
-        rf.moveBy( -frame->left(), -frame->top() + totalHeight );
+        QRect rf( frameRect );
+        rf.moveBy( -frameRect.left(), -frameRect.top() + totalHeight );
         rf = rf.intersect( cursor->topParag()->rect() );
         if ( !rf.isEmpty() )
         {
             QPoint topLeft = cursor->topParag()->rect().topLeft();                                  // in QRT coords
             int h = cursor->parag()->lineHeightOfChar( cursor->index() );                           //
-            QPoint cPoint( topLeft.x() + frame->left(), topLeft.y() + frame->top() - totalHeight ); // from QRT to contents
+            QPoint cPoint( topLeft.x() + frameRect.left(), topLeft.y() + frameRect.top() - totalHeight ); // from QRT to contents
             QRect clip = QRect( cPoint.x() + cursor->x() - 5, cPoint.y() + cursor->y(), 10, h );  // very small clipping around the cursor
 
             //kdDebug(32002) << "KWTextFrameSet::drawCursor topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
@@ -242,7 +244,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
                 p->save();
 
                 p->setClipRegion( reg );
-                p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
+                p->translate( frameRect.left(), frameRect.top() - totalHeight ); // translate to qrt coords - after setting the clip region !
 
                 QPixmap *pix = 0;
                 QColorGroup cg = QApplication::palette().active();
@@ -257,7 +259,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         else
             if ( drawn ) // Ok, we've drawn it, and now we're after it -> exit
                 break;   // Note that we might go into the above block twice, if parag is over two frames.
-        totalHeight += frame->height();
+        totalHeight += frameRect.height();
     }
     // Well this is a no-op currently (we don't use QTextFlow::draw)
     //if ( text->flow() )
@@ -289,13 +291,13 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
     QListIterator<KWFrame> fIt( m_framesOnTop );
     for ( ; fIt.current() ; ++fIt )
     {
-        KWFrame * frame = fIt.current();
-        // Look for intersection between p.y() -- p.y()+h  and frame->top() -- frame->bottom()
-        if ( QMAX( p.y(), frame->top() ) <= QMIN( p.y()+h, frame->bottom() ) &&
-             ( frame->left() - p.x() < middle ) ) // adjust the left margin only
+        QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
+        // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
+        if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) &&
+             ( frameRect.left() - p.x() < middle ) ) // adjust the left margin only
                                                   // for frames which are in the
                                                   // left half
-            newMargin = QMAX( newMargin, ( frame->right() - p.x() ) + space );
+            newMargin = QMAX( newMargin, ( frameRect.right() - p.x() ) + space );
     }
 
     return QTextFlow::adjustLMargin( yp, h, margin + newMargin, space );
@@ -311,13 +313,13 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
     QListIterator<KWFrame> fIt( m_framesOnTop );
     for ( ; fIt.current() ; ++fIt )
     {
-        KWFrame * frame = fIt.current();
-        // Look for intersection between p.y() -- p.y()+h  and frame->top() -- frame->bottom()
-        if ( QMAX( p.y(), frame->top() ) <= QMIN( p.y()+h, frame->bottom() ) &&
-             frame->left() - p.x() >= middle ) // adjust the right margin only
+        QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
+        // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
+        if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) &&
+             frameRect.left() - p.x() >= middle ) // adjust the right margin only
                                                // for frames which are in the
                                                // right half
-                newMargin = QMAX( newMargin, m_width - ( frame->x() - p.x() ) - space );
+                newMargin = QMAX( newMargin, m_width - ( frameRect.x() - p.x() ) - space );
     }
 
     return QTextFlow::adjustRMargin( yp, h, margin + newMargin, space );
@@ -332,10 +334,10 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, bool /*pages*/ )
     // paragraph's y position).
 
 #if 0
-    int topBoder = doc->ptTopBorder();
-    int bottomBoder = doc->ptBottomBorder();
-    int pageHeight = doc->ptPaperHeight() - topBoder - bottomBoder;
-    int paperHeight = doc->ptPaperHeight();
+    int topBoder = doc->topBorder();
+    int bottomBoder = doc->bottomBorder();
+    int pageHeight = doc->paperHeight() - topBoder - bottomBoder;
+    int paperHeight = doc->paperHeight();
 
     int num = yp / paperHeight;
 
@@ -352,32 +354,6 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, bool /*pages*/ )
 
 void KWTextFrameSet::draw( QPainter *, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/ )
 {
-    // ## draws only page margins correctly, no fency frame margins
-    /* Disabled by David, trying to get the old frame stuff working again
-    int topBoder = doc->ptTopBorder();
-    int bottomBoder = doc->ptBottomBorder();
-    int leftBoder = doc->ptLeftBorder();
-    int rightBoder = doc->ptRightBorder();
-    int pageHeight = doc->ptPaperHeight() - topBoder - bottomBoder;
-    int paperHeight = doc->ptPaperHeight();
-    int pageWidth = doc->ptPaperWidth() - leftBoder - rightBoder;
-    int paperWidth = doc->ptPaperWidth();
-
-    int num = cy / paperHeight;
-
-    p->save();
-    p->setClipping( FALSE );
-    while ( TRUE ) {
-	p->setPen( Qt::lightGray );
-	p->drawRect( leftBoder - 2, num * paperHeight + topBoder - 2, pageWidth + 4, pageHeight + 4 );
-	p->setPen( Qt::red );
-	p->drawRect( 0, num * paperHeight, paperWidth, paperHeight );
-	++num;
-	if ( !QRect( cx, cy, cw, ch ).intersects( QRect( 0, num * paperHeight, paperWidth, paperHeight ) ) )
-	    break;
-    }
-    p->restore();
-    */
 }
 
 void KWTextFrameSet::eraseAfter( QTextParag * /*parag*/, QPainter * /*p*/ )
@@ -388,14 +364,14 @@ void KWTextFrameSet::eraseAfter( QTextParag * /*parag*/, QPainter * /*p*/ )
     /*
     // #### this calculation only works for pages yet, not fency frames
     int py = parag->rect().y();
-    int topBoder = doc->ptTopBorder();
-    int bottomBoder = doc->ptBottomBorder();
-    int pageHeight = doc->ptPaperHeight() - topBoder - bottomBoder;
-    int paperHeight = doc->ptPaperHeight();
+    int topBoder = doc->topBorder();
+    int bottomBoder = doc->tottomBorder();
+    int pageHeight = doc->paperHeight() - topBoder - bottomBoder;
+    int paperHeight = doc->paperHeight();
     int num = py / paperHeight;
     int top = num * paperHeight;
     py += parag->rect().height();
-    p->fillRect( doc->ptLeftBorder(), py, doc->ptPaperWidth() - doc->ptLeftBorder() - doc->ptRightBorder(),
+    p->fillRect( doc->leftBorder(), py, doc->paperWidth() - doc->leftBorder() - doc->rightBorder(),
 		 top + topBoder + pageHeight - py, Qt::white );
     */
 }

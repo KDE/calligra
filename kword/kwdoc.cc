@@ -194,9 +194,9 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     spellCheck = FALSE;
     contents = new KWContents( this );
-    //tmpShell = 0;
 
-    zoom = 100;
+    m_zoom = 100;
+    setResolution( QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     syntaxVersion = CURRENT_SYNTAX_VERSION;
 
     m_pKSpellConfig=0;
@@ -205,7 +205,27 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     connect( &history, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 }
 
-/*================================================================*/
+void KWDocument::setResolution( int dpiX, int dpiY )
+{
+    // m_resolution[XY] is in pixel per pt
+    m_resolutionX = POINT_TO_INCH( static_cast<double>(dpiX) );
+    m_resolutionY = POINT_TO_INCH( static_cast<double>(dpiY) );
+    m_zoomedResolutionX = static_cast<double>(m_zoom) * m_resolutionX / 100.0;
+    m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
+    kdDebug() << "KWDocument::setResolution " << dpiX << "," << dpiY
+              << " m_resolutionX=" << m_resolutionX << " m_zoomedResolutionX=" << m_zoomedResolutionX
+              << " m_resolutionY=" << m_resolutionY << " m_zoomedResolutionY=" << m_zoomedResolutionY << endl;
+    updateAllViewportSizes();
+}
+
+void KWDocument::setZoom( int z )
+{
+    m_zoom = z;
+    m_zoomedResolutionX = static_cast<double>(m_zoom) * m_resolutionX / 100.0;
+    m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
+    updateAllViewportSizes();
+}
+
 bool KWDocument::initDoc()
 {
     m_pageLayout.unit = PG_MM;
@@ -307,7 +327,7 @@ void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderF
     updateAllFrames();
 }
 
-unsigned int KWDocument::ptColumnWidth() const
+double KWDocument::ptColumnWidth() const
 {
     return ( ptPaperWidth() - ptLeftBorder() - ptRightBorder() -
              ptColumnSpacing() * ( m_pageColumns.columns - 1 ) )
@@ -325,7 +345,7 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
 
     unsigned int frms = frameset->getNumFrames();
 
-    unsigned int ptColumnWidth = this->ptColumnWidth();
+    double ptColumnWidth = this->ptColumnWidth();
 
     int firstHeadOffset = 0, evenHeadOffset = 0, oddHeadOffset = 0;
     int firstFootOffset = 0, evenFootOffset = 0, oddFootOffset = 0;
@@ -421,7 +441,7 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
                 pages2=QMAX(pages2, fs->getFrame(n)->bottom());
             }
         }
-        pages2=pages2/ptPaperHeight();
+        pages2=static_cast<int>(pages2 / ptPaperHeight());
         //kdDebug() << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << endl;
 
         m_pages=QMAX(pages2, m_pages);
@@ -2738,8 +2758,11 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
     _hf = m_pageHeaderFooter;
 }
 
-void KWDocument::updateFrameSizes( int oldZoom )
+#if 0
+// somewhat of an ugly hack. KWFrame should have unzoomed and zoomed values instead.
+void KWDocument::updateFrameSizes( double factorX, double factorY )
 {
+    kdDebug() << "KWDocument::updateFrameSizes " << factorX << "," << factorY << endl;
     KWFrameSet *fs = frames.first();
     fs = frames.next();
     KWFrame *frm = 0;
@@ -2748,18 +2771,15 @@ void KWDocument::updateFrameSizes( int oldZoom )
             continue;
         for ( unsigned int i = 0; i < fs->getNumFrames(); ++i ) {
             frm = fs->getFrame( i );
-            double x = ( 100.0 * (double)frm->x() ) / (double)oldZoom;
-            double y = ( 100.0 * (double)frm->y() ) / (double)oldZoom;
-            double w = ( 100.0 * (double)frm->width() ) / (double)oldZoom;
-            double h = ( 100.0 * (double)frm->height() ) / (double)oldZoom;
-            x = zoomIt( x );
-            y = zoomIt( y );
-            w = zoomIt( w );
-            h = zoomIt( h );
+            double x = factorX * (double)frm->x();
+            double y = factorY * (double)frm->y();
+            double w = factorX * (double)frm->width();
+            double h = factorY * (double)frm->height();
             frm->setRect( x, y, w, h );
         }
     }
 }
+#endif
 
 void KWDocument::delGroupManager( KWGroupManager *g, bool deleteit )
 {
@@ -2790,8 +2810,17 @@ void KWDocument::delFrameSet( KWFrameSet *f, bool deleteit)
 // Use isOutOfPage to check that the rectangle is fully contained in that page.
 int KWDocument::getPageOfRect( QRect & _rect ) const
 {
-    int page = _rect.y() / ptPaperHeight();
+    int page = static_cast<int>(_rect.y() / ptPaperHeight());
     return QMIN( page, m_pages-1 );
+}
+
+// Return true if @p r is out of the page @p page
+bool KWDocument::isOutOfPage( QRect & r, int page ) const
+{
+    return r.x() < 0 ||
+        r.right() > static_cast<int>( ptPaperWidth() ) ||
+        r.y() < page * static_cast<int>( ptPaperHeight() ) ||
+        r.bottom() > ( page + 1 ) * static_cast<int>( ptPaperHeight() );
 }
 
 bool KWDocument::selection() {

@@ -31,6 +31,8 @@
 #include <kaction.h>
 //#include <qfiledialog.h>
 #include <qregexp.h>
+#include <qobjectlist.h>
+#include <qpaintdevicemetrics.h>
 
 #include "kwview.h"
 #include "kwtextframeset.h"
@@ -93,7 +95,6 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
 {
     doc = 0L;
-    //m_bUnderConstruction = TRUE;
     gui = 0;
     kspell = 0;
     //vertAlign = KWFormat::VA_NORMAL;
@@ -141,11 +142,13 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( gui->canvasWidget() );
 
-    if ( statusBar() )
-    {
-        statusBar()->insertItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
-        // ...
-    }
+    statusBar()->insertItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
+    // Workaround for bug in KDE-2.1[.1]'s KStatusBar (show() not called in insertItem)
+    QObjectList *l = statusBar()->queryList( "QLabel" );
+    QObjectListIt it( *l );
+    for ( ; it.current() ; ++it )
+        static_cast<QLabel *>(it.current())->show();
+    delete l;
 }
 
 /*================================================================*/
@@ -634,13 +637,10 @@ void KWView::showFormulaToolbar( bool show )
 void KWView::updatePageInfo()
 {
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
-    if ( statusBar() && edit )
+    if ( edit )
     {
         int pgNum = edit->currentFrame()->getPageNum() + 1;
         statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(pgNum).arg(doc->getPages())+' ', statusPage );
-    }
-    if(edit)
-    {
         gui->getVertRuler()->setOffset( 0, -gui->canvasWidget()->getVertRulerPos() );
     }
 }
@@ -699,15 +699,18 @@ void KWView::setupPrinter( QPrinter &prt )
 
 void KWView::print( QPrinter &prt )
 {
-    prt.setFullPage( true );
-    setCursor( waitCursor );
-    gui->canvasWidget()->viewport()->setCursor( waitCursor );
+    if (shell()) shell()->setCursor( waitCursor );
 
-    int oldZoom = doc->getZoom();
-    if ( oldZoom != 100 ) {
-        doc->setZoom( 100 );
-        doc->updateFrameSizes( oldZoom );
-    }
+    prt.setFullPage( true );
+
+    int oldZoom = doc->zoom();
+    //double oldZoomedResolutionX = doc->zoomedResolutionX();
+    //double oldZoomedResolutionY = doc->zoomedResolutionY();
+    doc->setZoom( 100 );
+    QPaintDeviceMetrics metrics( &prt );
+    doc->setResolution( metrics.logicalDpiX(), metrics.logicalDpiY() );
+    //doc->updateFrameSizes( doc->zoomedResolutionX() / oldZoomedResolutionX, doc->zoomedResolutionY() / oldZoomedResolutionY );
+    // TODO update font sizes - using doc->zoomedResolutionY() / oldZoomedResolutionY
 
     bool serialLetter = FALSE;
 #if 0
@@ -763,14 +766,14 @@ void KWView::print( QPrinter &prt )
 #endif
     }
 
-    if ( oldZoom != 100 ) {
-        doc->setZoom( oldZoom );
-        doc->updateFrameSizes( 100 );
-    }
+    //doc->updateFrameSizes( oldZoomedResolutionX / doc->zoomedResolutionX(), oldZoomedResolutionY / doc->zoomedResolutionY() );
+    doc->setZoom( oldZoom );
+    doc->setResolution( QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+
     if ( pgLayout.format == PG_SCREEN )
         doc->setPageLayout( oldPGLayout, cl, hf );
 
-    setCursor( arrowCursor );
+    if (shell()) shell()->setCursor( arrowCursor );
     gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
 }
 
@@ -1231,18 +1234,19 @@ void KWView::viewZoom( const QString &s )
     z = z.replace( QRegExp( "%" ), "" );
     z = z.simplifyWhiteSpace();
     int zoom = z.toInt();
-    int oldZoom = doc->getZoom();
-    if ( zoom != doc->getZoom() ) {
-        //KoPageLayout pgLayout = doc->pageLayout();
+    if ( zoom != doc->zoom() ) {
+        //double oldZoomedResolutionX = doc->zoomedResolutionX();
+        //double oldZoomedResolutionY = doc->zoomedResolutionY();
         doc->setZoom( zoom );
-        doc->updateFrameSizes( oldZoom );
-        //newPageLayout( pgLayout );
-        gui->getVertRuler()->setZoom(static_cast<double>(zoom)/100.0);
-        gui->getHorzRuler()->setZoom(static_cast<double>(zoom)/100.0);
+        //doc->updateFrameSizes( doc->zoomedResolutionX() / oldZoomedResolutionX, doc->zoomedResolutionY() / oldZoomedResolutionY );
+        gui->getHorzRuler()->setZoom( doc->zoomedResolutionX() );
+        gui->getVertRuler()->setZoom( doc->zoomedResolutionY() );
+
+        // What's this for ?
         KWFrame *frame=doc->getFirstSelectedFrame();
-        if(frame!=0L && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
+        if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
         {
-            if(doc->processingType()  == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0)&& frame->isSelected())
+            if(doc->processingType() == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0) && frame->isSelected())
                 frame->setSelected(true);
         }
     }
@@ -2817,6 +2821,10 @@ KWGUI::KWGUI( QWidget *parent, bool, KWDocument *_doc, KWView *_view )
     r_vert = new KoRuler( left, canvas->viewport(), Qt::Vertical, layout, 0 );
     connect( r_horz, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
     r_vert->setReadWrite(doc->isReadWrite());
+
+    r_horz->setZoom( doc->zoomedResolutionX() );
+    r_vert->setZoom( doc->zoomedResolutionY() );
+
     connect( r_horz, SIGNAL( newLeftIndent( double ) ), view, SLOT( newLeftIndent( double ) ) );
     connect( r_horz, SIGNAL( newFirstIndent( double ) ), view, SLOT( newFirstIndent( double ) ) );
 

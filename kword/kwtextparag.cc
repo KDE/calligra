@@ -697,37 +697,49 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
 
 int KWTextParag::topMargin() const
 {
-    return static_cast<int>(m_margins[ QStyleSheetItem::MarginTop ].pt()
-                            + m_topBorder.ptWidth); // TODO zoom
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
+        m_margins[ QStyleSheetItem::MarginTop ].pt()
+        + m_topBorder.ptWidth ) );
 }
 
 int KWTextParag::bottomMargin() const
 {
-    return static_cast<int>(m_margins[ QStyleSheetItem::MarginBottom ].pt()
-                            + (int)m_bottomBorder.ptWidth);
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
+        m_margins[ QStyleSheetItem::MarginBottom ].pt()
+        + m_bottomBorder.ptWidth ) );
 }
 
 int KWTextParag::leftMargin() const
 {
-    return static_cast<int>(m_margins[ QStyleSheetItem::MarginLeft ].pt()
-                            + (int)m_leftBorder.ptWidth
-                            + counterWidth());
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
+        m_margins[ QStyleSheetItem::MarginLeft ].pt()
+        + m_leftBorder.ptWidth
+        + counterWidth() ) );
 }
 
 int KWTextParag::rightMargin() const
 {
-    return static_cast<int>(m_margins[ QStyleSheetItem::MarginRight ].pt()
-                            + (int)m_rightBorder.ptWidth);
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
+        m_margins[ QStyleSheetItem::MarginRight ].pt()
+        + m_rightBorder.ptWidth ) );
 }
 
 int KWTextParag::firstLineMargin() const
 {
-    return static_cast<int>(m_margins[ QStyleSheetItem::MarginFirstLine ].pt());
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
+        m_margins[ QStyleSheetItem::MarginFirstLine ].pt() ) );
 }
 
 int KWTextParag::lineSpacing() const
 {
-    return static_cast<int>(m_lineSpacing.pt());
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
+        m_lineSpacing.pt() ) );
 }
 
 // Reimplemented from QTextParag
@@ -749,7 +761,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         //kdDebug() << "KWTextParag::paint bottomY=" << bottomY << endl;
         if ( m_topBorder.ptWidth > 0 )
         {
-            painter.setPen( Border::borderPen( m_topBorder ) );
+            painter.setPen( Border::borderPen( m_topBorder ) ); // ### in theory we should zoomIt(ptWidth)
             painter.drawLine( leftX, topY, rightX, topY );
         }
         if ( m_bottomBorder.ptWidth > 0 )

@@ -60,8 +60,10 @@ class KWFrameSet;
  * A frame is really just a square that is used to place the content
  * of a frameset.
  */
-class KWFrame : public QRect       // Note, if we inherited KoChild, we could get rid of quite some code
-{
+class KWFrame : public QRect
+{   // Note, if we inherited KoChild, we could get rid of quite some code
+    // But KoChild has a QRect instead of using double, for its geometry though.
+    // OTOH graphite's FxRect could be everything we need.
 public:
 
     /**
@@ -454,7 +456,7 @@ public:
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * );
 
-    virtual QPicture *getPicture();
+    //virtual QPicture *getPicture();
 
     void activate( QWidget *_widget );
     void deactivate();
@@ -510,7 +512,7 @@ public:
 
     virtual FrameType getFrameType() { return FT_FORMULA; }
 
-    virtual QPicture *getPicture();
+    //virtual QPicture *getPicture();
 
     virtual void activate( QWidget *_widget );
     virtual void deactivate();
