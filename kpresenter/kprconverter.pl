@@ -7,7 +7,7 @@ $insideParag=0;
 $insideObj=0;
 $currentText="";
 $currentTextType=0;
-while (<>)
+while (<INPUT>)
 {
   if (/<TEXTOBJ/)
     {
