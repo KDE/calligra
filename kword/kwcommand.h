@@ -22,6 +22,7 @@
 
 #include <kcommand.h>
 #include <koGlobal.h>
+#include <koRect.h>
 #include <qdom.h>
 class KWGUI;
 
@@ -209,8 +210,8 @@ protected:
 };
 
 struct FrameResizeStruct {
-    QRect sizeOfBegin;
-    QRect sizeOfEnd;
+    KoRect sizeOfBegin;
+    KoRect sizeOfEnd;
 };
 
 /**

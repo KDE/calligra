@@ -110,14 +110,14 @@ public:
      *
      *  setHeightMode() and setWidthMode() controls the layout process.
      *  setBoundingRect() causes the layout to recalculated.
-     *  boundingRect() returns a QRect which outlines the whole of the table.
+     *  boundingRect() returns a KoRect which outlines the whole of the table.
      */
     KWTblCellSize heightMode() { return m_heightMode; }
     void setHeightMode( KWTblCellSize mode );
     KWTblCellSize widthMode() { return m_widthMode; }
     void setWidthMode( KWTblCellSize mode );
-    QRect boundingRect();
-    void setBoundingRect( QRect rect );
+    KoRect boundingRect();
+    void setBoundingRect( KoRect rect );
 
     /** resize and position all cells */
     void recalcCols();
@@ -142,9 +142,9 @@ public:
     void refreshSelectedCell();
 
     /** move the whole of the table, this is mainly for anchored frames. */
-    void moveBy( int dx, int dy );
+    void moveBy( double dx, double dy );
     /** point the outlines of all the cells */
-    void drawAllRects( QPainter &p, int xOffset, int yOffset );
+    //void drawAllRects( QPainter &p, int xOffset, int yOffset );
 
     /** sets the name of the table, this _must_ be a unique name! */
     void setName( QString _name ) { name = _name; }
@@ -153,7 +153,7 @@ public:
     /** select all frames from the first selected to the argument frameset. */
     void selectUntil( Cell *cell );
     /** convenience method */
-    void selectUntil( int x, int y);
+    void selectUntil( double x, double y);
 
     bool getFirstSelected(unsigned int &row, unsigned int &col );
     /** Return true if exactly one frame is selected. The parameters row
@@ -202,7 +202,7 @@ public:
     void preRender();
 
     /** returns true if we have a cell occupying that position */
-    bool contains( unsigned int mx, unsigned int my );
+    bool contains( double mx, double my );
 
     /** override save so we save in table style.. */
     virtual void save( QDomElement &parentElem );

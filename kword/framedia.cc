@@ -94,7 +94,7 @@ void KWFrameDia::init() {
 
     tab1 = tab2 = tab3 = tab4 = 0;
     if (frame) {
-        QRect r = frame->normalize();
+        KoRect r = frame->normalize();
         frame->setRect( r.x(), r.y(), r.width(), r.height() );
         if(!doc && frame->getFrameSet())
         {
@@ -777,23 +777,18 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     if (doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
                                            ( doc->processingType() == KWDocument::WP &&
                                              doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
-        unsigned int x, y, w, h, _num;
-        doc->getFrameCoords( x, y, w, h, _num );
 
-        oldX = KWUnit::userValue( x, doc->getUnit() );
-        oldY = KWUnit::userValue( y, doc->getUnit() );
-        oldW = KWUnit::userValue( w, doc->getUnit() );
-        oldH = KWUnit::userValue( h, doc->getUnit() );
+        KWFrame * theFrame = doc->getFirstSelectedFrame();
 
-        QString _x = QString::number( oldX );
-        QString _y = QString::number( oldY );
-        QString _w = QString::number( oldW );
-        QString _h = QString::number( oldH );
+        oldX = KWUnit::userValue( theFrame->x(), doc->getUnit() );
+        oldY = KWUnit::userValue( theFrame->y(), doc->getUnit() );
+        oldW = KWUnit::userValue( theFrame->width(), doc->getUnit() );
+        oldH = KWUnit::userValue( theFrame->height(), doc->getUnit() );
 
-        sx->setText( _x );
-        sy->setText( _y );
-        sw->setText( _w );
-        sh->setText( _h );
+        sx->setText( QString::number( oldX ) );
+        sy->setText( QString::number( oldY ) );
+        sw->setText( QString::number( oldW ) );
+        sh->setText( QString::number( oldH ) );
     } else {
         sx->setEnabled( false );
         sy->setEnabled( false );
@@ -995,11 +990,15 @@ bool KWFrameDia::applyChanges()
                                             ( doc->processingType() == KWDocument::WP &&
                                               doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
         if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
-            unsigned int px = static_cast<uint>( KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() ) );
-            unsigned int py = static_cast<uint>( KWUnit::fromUserValue( QMAX( sy->text().toDouble(), 0 ), doc->getUnit() ) );
-            unsigned int pw = static_cast<uint>( KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() ) );
-            unsigned int ph = static_cast<uint>( KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() ) );
-            doc->setFrameCoords( px, py, pw, ph );
+            double px = KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() );
+            double py = KWUnit::fromUserValue( QMAX( sy->text().toDouble(), 0 ), doc->getUnit() );
+            double pw = KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() );
+            double ph = KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() );
+
+            frame->setRect( px, py, pw, ph );
+            // TODO apply page limits
+            // TODO undo-redo support
+            doc->setModified( true );
         }
     }
 

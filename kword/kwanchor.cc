@@ -45,7 +45,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     {
         kdDebug() << "KWAnchor::draw moving frame to [zoomed pos] " << cPoint.x() << "," << cPoint.y() << endl;
         // Move the frame to position x,y.
-        m_frame->moveTopLeft( QPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
+        m_frame->moveTopLeft( KoPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
     }
     QColorGroup cg2( cg );
     // Determine crect in contents coords

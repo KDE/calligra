@@ -1,4 +1,4 @@
- /* This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -1992,10 +1992,7 @@ void KWView::tableJoinCells()
                                 i18n( "Join Cells" ) );
         }
         painter.end();
-        QRect r = table->boundingRect();
-        r = QRect( r.x() - gui->canvasWidget()->contentsX(),
-                   r.y() - gui->canvasWidget()->contentsY(),
-                   r.width(), r.height() );
+        //KoRect r = doc->zoomRect( table->boundingRect() );
         //gui->canvasWidget()->repaintScreen( r, TRUE );
         gui->canvasWidget()->repaintAll();
     }
@@ -2031,10 +2028,7 @@ void KWView::tableSplitCells()
                             i18n("Split Cells") );
     }
     painter.end();
-    QRect r = table->boundingRect();
-    r = QRect( r.x() - gui->canvasWidget()->contentsX(),
-               r.y() - gui->canvasWidget()->contentsY(),
-               r.width(), r.height() );
+    //KoRect r = doc->zoomRect( table->boundingRect() );
     //gui->canvasWidget()->repaintScreen( r, TRUE );
      gui->canvasWidget()->repaintAll();
 
@@ -2060,12 +2054,8 @@ void KWView::tableUngroupTable()
                         i18n("Ungroup Table"), i18n("&Ungroup"));
         if (result == KMessageBox::Continue)
         {
-            QRect r = table->boundingRect();
+            //KoRect r = doc->zoomRect( table->boundingRect() );
             table->ungroup();
-            r = QRect( r.x() - gui->canvasWidget()->contentsX(),
-                       r.y() - gui->canvasWidget()->contentsY(),
-                       r.width(), r.height() );
-
             //gui->canvasWidget()->repaintScreen( r, TRUE );
             doc->delFrameSet(table);
         }

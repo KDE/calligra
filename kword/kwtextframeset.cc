@@ -653,10 +653,10 @@ void KWTextFrameSet::updateFrames()
     frames.setAutoDelete( false );
 
     // sort frames of this frameset into l2 on (page, y coord, x coord)
-    QRect pageRect;
+    KoRect pageRect;
     for ( unsigned int i = 0; i < static_cast<unsigned int>( m_doc->getPages() + 1 ); i++ ) {
         //kdDebug(32002) << "Page " << i << endl;
-        pageRect = QRect( 0, i * m_doc->ptPaperHeight(), m_doc->ptPaperWidth(), m_doc->ptPaperHeight() );
+        pageRect = KoRect( 0, i * m_doc->ptPaperHeight(), m_doc->ptPaperWidth(), m_doc->ptPaperHeight() );
         FrameList *l = new FrameList();
         l->setAutoDelete( false );
         for ( unsigned int j = 0; j < frames.count(); j++ ) {
@@ -1182,10 +1182,18 @@ void KWTextFrameSet::formatMore()
                     if(difference > 0) {
                         KWFrame *theFrame = frames.last();
 
+                        if ( theFrame->getFrameSet()->isAFooter() )
+                        {
+                            theFrame->setTop( theFrame->top() + difference );
+                            updateFrames();
+                            break;
+                        }
+
                         wantedPosition = difference + theFrame->bottom();
-                        double newPosition = QMIN(wantedPosition,
-                            ((double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight()) - m_doc->ptBottomBorder());
-                        theFrame->setBottom((int) newPosition+ 0.5);
+                        double pageBottom = (double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight();
+                        pageBottom -= m_doc->ptBottomBorder();
+                        double newPosition = QMIN(wantedPosition, pageBottom );
+                        theFrame->setBottom(newPosition);
 
                         if(newPosition < wantedPosition && theFrame->getNewFrameBehaviour() == Reconnect) {
                             wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();

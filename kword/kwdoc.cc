@@ -432,7 +432,7 @@ void KWDocument::recalcFrames()
         // Determine number of pages - first from the text frames
         m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) );
         // Then from the existing frames in general
-        int pages2=0;
+        double maxBottom = 0;
         for (int m = getNumFrameSets()-1; m>=0; m--) {
             KWFrameSet *fs=getFrameSet(m);
             if ( fs->isVisible() && !fs->isAHeader() && !fs->isAFooter() )
@@ -440,11 +440,11 @@ void KWDocument::recalcFrames()
                 for (int n = fs->getNumFrames()-1;  n >=0; n--) {
                     //if ( n == fs->getNumFrames()-1 )
                     //    kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
-                    pages2=QMAX(pages2, fs->getFrame(n)->bottom());
+                    maxBottom = QMAX(maxBottom, fs->getFrame(n)->bottom());
                 }
             }
         }
-        pages2=static_cast<int>( ceil( pages2 / ptPaperHeight() ) );
+        int pages2=static_cast<int>( ceil( maxBottom / ptPaperHeight() ) );
         //kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << " ptPaperHeight=" << ptPaperHeight() << endl;
 
         m_pages=QMAX(pages2, m_pages);
@@ -489,7 +489,7 @@ void KWDocument::recalcFrames()
     if ( isHeaderVisible() ) {
         switch ( getHeaderType() ) {
         case HF_SAME: {
-            int h = evenHeader->getFrame( 0 )->height();
+            double h = evenHeader->getFrame( 0 )->height();
             for ( int l = 0; l < m_pages; l++ ) {
                 if ( l < static_cast<int>( evenHeader->getNumFrames() ) )
                     evenHeader->getFrame( l )->setRect( ptLeftBorder(),
@@ -511,8 +511,8 @@ void KWDocument::recalcFrames()
             }
         } break;
         case HF_EO_DIFF: {
-            int h1 = evenHeader->getFrame( 0 )->height();
-            int h2 = oddHeader->getFrame( 0 )->height();
+            double h1 = evenHeader->getFrame( 0 )->height();
+            double h2 = oddHeader->getFrame( 0 )->height();
             evenHeader->setCurrent( 0 );
             oddHeader->setCurrent( 0 );
             int even = 0, odd = 0;
@@ -573,7 +573,7 @@ void KWDocument::recalcFrames()
             }
         } break;
         case HF_FIRST_DIFF: {
-            int h = firstHeader->getFrame( 0 )->height();
+            double h = firstHeader->getFrame( 0 )->height();
             firstHeader->getFrame( 0 )->setRect( ptLeftBorder(), ptTopBorder(),
                                                  ptPaperWidth() - ptLeftBorder() -
                                                  ptRightBorder(), h );
@@ -614,7 +614,7 @@ void KWDocument::recalcFrames()
     if ( isFooterVisible() ) {
         switch ( getFooterType() ) {
         case HF_SAME: {
-            int h = evenFooter->getFrame( 0 )->height();
+            double h = evenFooter->getFrame( 0 )->height();
             for ( int l = 0; l < m_pages; l++ ) {
                 if ( l < static_cast<int>( evenFooter->getNumFrames() ) )
                     evenFooter->getFrame( l )->setRect( ptLeftBorder(), ( l + 1 ) * ptPaperHeight() -
@@ -636,8 +636,8 @@ void KWDocument::recalcFrames()
             }
         } break;
         case HF_EO_DIFF: {
-            int h1 = evenFooter->getFrame( 0 )->height();
-            int h2 = oddFooter->getFrame( 0 )->height();
+            double h1 = evenFooter->getFrame( 0 )->height();
+            double h2 = oddFooter->getFrame( 0 )->height();
             evenFooter->setCurrent( 0 );
             oddFooter->setCurrent( 0 );
             int even = 0, odd = 0;
@@ -701,7 +701,7 @@ void KWDocument::recalcFrames()
             }
         } break;
         case HF_FIRST_DIFF: {
-            int h = firstFooter->getFrame( 0 )->height();
+            double h = firstFooter->getFrame( 0 )->height();
             firstFooter->getFrame( 0 )->setRect( ptLeftBorder(), ptPaperHeight() - ptBottomBorder() - h,
                                                  ptPaperWidth() - ptLeftBorder() - ptRightBorder(), h );
             if ( firstFooter->getNumFrames() > 1 ) {
@@ -1781,14 +1781,14 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
     }
 }
 
-void KWDocument::insertObject( const QRect& rect, KoDocumentEntry& _e )
+void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
 {
 
     KoDocument* doc = _e.createDoc( this );
     if ( !doc || !doc->initDoc() )
         return;
 
-    KWChild* ch = new KWChild( this, rect, doc );
+    KWChild* ch = new KWChild( this, rect.toQRect(), doc );
 
     insertChild( ch );
     setModified( TRUE );
@@ -2017,7 +2017,7 @@ void KWDocument::removePage( int num )
 }
 
 /*================================================================*/
-KWFrameSet * KWDocument::getFrameSet( unsigned int mx, unsigned int my )
+KWFrameSet * KWDocument::getFrameSet( double mx, double my )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( fit.toLast(); fit.current() ; --fit )
@@ -2040,7 +2040,7 @@ KWFrameSet * KWDocument::getFrameSet( unsigned int mx, unsigned int my )
    returns 0 if none was selected, return 1 if selected, return 2
    if the frame was allready selected.
 */
-int KWDocument::selectFrame( unsigned int mx, unsigned int my, bool simulate )
+int KWDocument::selectFrame( double mx, double my, bool simulate )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( fit.toLast(); fit.current() ; --fit )
@@ -2061,7 +2061,7 @@ int KWDocument::selectFrame( unsigned int mx, unsigned int my, bool simulate )
 }
 
 /*================================================================*/
-void KWDocument::deSelectFrame( unsigned int mx, unsigned int my )
+void KWDocument::deSelectFrame( double mx, double my )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( fit.toLast(); fit.current() ; --fit )
@@ -2085,7 +2085,7 @@ void KWDocument::deSelectAllFrames()
 }
 
 /*================================================================*/
-QCursor KWDocument::getMouseCursor( unsigned int mx, unsigned int my )
+QCursor KWDocument::getMouseCursor( double mx, double my )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( fit.toLast(); fit.current() ; --fit )
@@ -2200,56 +2200,6 @@ void KWDocument::setFooterVisible( bool f )
 }
 
 /*================================================================*/
-bool KWDocument::canResize( KWFrameSet *frameset, KWFrame *frame, int page, int diff )
-{
-    if ( diff < 0 ) return FALSE;
-
-    if ( !frameset->getGroupManager() ) {
-        // a normal frame _must_ not leave the page
-        if ( frameset->getFrameInfo() == FI_BODY ) {
-            if ( static_cast<int>( frame->bottom() + diff ) < static_cast<int>( ( page + 1 ) * ptPaperHeight() ) )
-                return TRUE;
-            return FALSE;
-        } else { // headers and footers may always resize - ok this may lead to problems in strange situations, but let's ignore them :- )
-
-            // a footer has to moved a bit to the top before he gets resized
-            if ( frameset->isAFooter() )
-                frame->moveTopLeft( QPoint( 0, frame->y() - diff ) );
-            return TRUE;
-        }
-    } else // tables may _always_ resize, because the group managers can add pages if needed
-        return TRUE;
-
-    return FALSE;
-}
-
-#if 0
-void KWDocument::setRunAround( RunAround _ra )
-{
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-        if ( getFrameSet( i )->hasSelectedFrame() ) {
-            for ( unsigned int j = 0; j < getFrameSet( i )->getNumFrames(); j++ ) {
-                if ( getFrameSet( i )->getFrame( j )->isSelected() )
-                    getFrameSet( i )->getFrame( j )->setRunAround( _ra );
-            }
-        }
-    }
-}
-
-void KWDocument::setRunAroundGap( KWUnit _gap )
-{
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-        if ( getFrameSet( i )->hasSelectedFrame() ) {
-            for ( unsigned int j = 0; j < getFrameSet( i )->getNumFrames(); j++ ) {
-                if ( getFrameSet( i )->getFrame( j )->isSelected() )
-                    getFrameSet( i )->getFrame( j )->setRunAroundGap( _gap );
-            }
-        }
-    }
-}
-#endif
-
-/*================================================================*/
 void KWDocument::getFrameMargins( double &l, double &r, double &t, double &b )
 {
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
@@ -2273,29 +2223,6 @@ bool KWDocument::isOnlyOneFrameSelected() {
 }
 
 /*================================================================*/
-KWFrameSet *KWDocument::getFrameCoords( unsigned int &x, unsigned int &y,
-                                           unsigned int &w, unsigned int &h, unsigned int &num )
-{
-    x = y = w = h = 0;
-
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-        if ( getFrameSet( i )->hasSelectedFrame() ) {
-            for ( unsigned int j = 0; j < getFrameSet( i )->getNumFrames(); j++ ) {
-                if ( getFrameSet( i )->getFrame( j )->isSelected() ) {
-                    x = getFrameSet( i )->getFrame( j )->x();
-                    y = getFrameSet( i )->getFrame( j )->y();
-                    w = getFrameSet( i )->getFrame( j )->width();
-                    h = getFrameSet( i )->getFrame( j )->height();
-                    num = j;
-                    return getFrameSet( i );
-                }
-            }
-        }
-    }
-    return 0L;
-}
-
-/*================================================================*/
 void KWDocument::setFrameMargins( double l, double r, double t, double b )
 {
     // todo, make this more OO, and update the tableheaders as well..
@@ -2313,24 +2240,6 @@ void KWDocument::setFrameMargins( double l, double r, double t, double b )
         }
     }
 
-    setModified(TRUE);
-}
-
-/*================================================================*/
-void KWDocument::setFrameCoords( unsigned int x, unsigned int y, unsigned int w, unsigned int h )
-{
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-        if ( getFrameSet( i )->hasSelectedFrame() ) {
-            for ( unsigned int j = 0; j < getFrameSet( i )->getNumFrames(); j++ ) {
-                if ( getFrameSet( i )->getFrame( j )->isSelected() && x + w < ptPaperWidth() &&
-                     y + h < m_pages * ptPaperHeight() ) {
-                    if ( !getFrameSet( i )->getGroupManager() )
-                        getFrameSet( i )->getFrame( j )->setRect( x, y, w, h );
-                }
-            }
-        }
-    }
-//    updateAllSelections();
     setModified(TRUE);
 }
 
@@ -2473,14 +2382,14 @@ void KWDocument::delFrameSet( KWFrameSet *f, bool deleteit)
 
 // Returns 0-based page number where rect is (in fact its topleft corner).
 // Use isOutOfPage to check that the rectangle is fully contained in that page.
-int KWDocument::getPageOfRect( QRect & _rect ) const
+int KWDocument::getPageOfRect( KoRect & _rect ) const
 {
     int page = static_cast<int>(_rect.y() / ptPaperHeight());
     return QMIN( page, m_pages-1 );
 }
 
 // Return true if @p r is out of the page @p page
-bool KWDocument::isOutOfPage( QRect & r, int page ) const
+bool KWDocument::isOutOfPage( KoRect & r, int page ) const
 {
     return r.x() < 0 ||
         r.right() > ptPaperWidth() ||

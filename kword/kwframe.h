@@ -23,7 +23,7 @@
 #include "defs.h"
 #include "kwimage.h"
 
-#include <qrect.h>
+#include <koRect.h>
 #include <qpicture.h>
 #include <qlist.h>
 
@@ -57,12 +57,9 @@ class QSize;
  * A frame is really just a square that is used to place the content
  * of a frameset.
  */
-class KWFrame : public QRect
-{   // Note, if we inherited KoChild, we could get rid of quite some code
-    // But KoChild has a QRect instead of using double, for its geometry though.
-    // OTOH graphite's FxRect could be everything we need.
+class KWFrame : public KoRect
+{
 public:
-
     /**
      * Constructor
      * @param fs parent frameset
@@ -72,7 +69,8 @@ public:
      * around the frame, or avoiding the frame on the whole horizontal band.
      * @param gap ...
      */
-    KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround ra = RA_BOUNDINGRECT, double gap = MM_TO_POINT( 1.0 ));
+    KWFrame(KWFrameSet *fs, double left, double top, double width, double height,
+            RunAround ra = RA_BOUNDINGRECT, double gap = MM_TO_POINT( 1.0 ));
     /* Destructor */
     virtual ~KWFrame();
 
@@ -124,7 +122,7 @@ public:
 
 #endif
 
-    QCursor getMouseCursor( int mx, int my, bool table );
+    QCursor getMouseCursor( double mx, double my, bool table );
 
     double getRunAroundGap() { return runAroundGap; }
     void setRunAroundGap( double gap ) { runAroundGap = gap; }
@@ -316,7 +314,7 @@ public:
     virtual void delFrame( KWFrame *frm, bool remove = true );
 
     /** retrieve frame from x and y coords (absolute coords) */
-    KWFrame *getFrame( int _x, int _y );
+    KWFrame *getFrame( double _x, double _y );
     KWFrame *getFrame( unsigned int _num );
     virtual const QList<KWFrame> &frameIterator() const { return frames; }
     int getFrameFromPtr( KWFrame *frame );
@@ -363,16 +361,16 @@ public:
     virtual void layout() {}
 
     /** returns true if we have a frame occupying that position */
-    virtual bool contains( unsigned int mx, unsigned int my );
+    virtual bool contains( double mx, double my );
 
     /**
      * Return 1, if a frame gets selected which was not selected before,<br>
      * 2, if a frame gets selected which was already selected<br>
      * Also select the frame if simulate==false.
      */
-    virtual int selectFrame( unsigned int mx, unsigned int my, bool simulate = false );
-    virtual void deSelectFrame( unsigned int mx, unsigned int my );
-    virtual QCursor getMouseCursor( unsigned int mx, unsigned int my );
+    virtual int selectFrame( double mx, double my, bool simulate = false );
+    virtual void deSelectFrame( double mx, double my );
+    virtual QCursor getMouseCursor( double  mx, double my );
 
     /** create XML to describe yourself */
     virtual void save( QDomElement &parentElem );

@@ -38,8 +38,8 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround _ra, double _gap )
-    : QRect( left, top, width, height ),
+KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround _ra, double _gap )
+    : KoRect( left, top, width, height ),
       // Initialize member vars here. This ensures they are all initialized, since it's
       // easier to compare this list with the member vars list (compiler ensures order).
       sheetSide( AnySide ),
@@ -176,7 +176,7 @@ QRegion KWFrame::getEmptyRegion( bool useCached )
 #endif
 
 /*================================================================*/
-QCursor KWFrame::getMouseCursor( int mx, int my, bool table )
+QCursor KWFrame::getMouseCursor( double mx, double my, bool table )
 {
     if ( !table ) {
         if ( mx >= x() && my >= y() && mx <= x() + 6 && my <= y() + 6 )
@@ -529,11 +529,11 @@ void KWFrameSet::deleteAnchors()
         frameIt.current()->deleteAnchor();
 }
 
-KWFrame * KWFrameSet::getFrame( int _x, int _y )
+KWFrame * KWFrameSet::getFrame( double _x, double _y )
 {
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
-        if ( frameIt.current()->contains( QPoint( _x, _y ) ) )
+        if ( frameIt.current()->contains( KoPoint( _x, _y ) ) )
             return frameIt.current();
     return 0L;
 }
@@ -606,10 +606,10 @@ void KWFrameSet::updateFrames()
 }
 
 /*================================================================*/
-bool KWFrameSet::contains( unsigned int mx, unsigned int my )
+bool KWFrameSet::contains( double mx, double my )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
-        if ( frames.at( i )->contains( QPoint( mx, my ) ) )
+        if ( frames.at( i )->contains( KoPoint( mx, my ) ) )
             return true;
     }
 
@@ -621,10 +621,10 @@ bool KWFrameSet::contains( unsigned int mx, unsigned int my )
    returns 0 if none was selected, return 1 if selected, return 2
    if the frame was allready selected.
 */
-int KWFrameSet::selectFrame( unsigned int mx, unsigned int my, bool simulate )
+int KWFrameSet::selectFrame( double mx, double my, bool simulate )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
-        if ( frames.at( i )->contains( QPoint( mx, my ) ) ) {
+        if ( frames.at( i )->contains( KoPoint( mx, my ) ) ) {
             int r = 1;
             if ( frames.at( i )->isSelected() )
                 r = 2;
@@ -637,16 +637,16 @@ int KWFrameSet::selectFrame( unsigned int mx, unsigned int my, bool simulate )
 }
 
 /*================================================================*/
-void KWFrameSet::deSelectFrame( unsigned int mx, unsigned int my )
+void KWFrameSet::deSelectFrame( double mx, double my )
 {
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
-        if ( frameIt.current()->contains( QPoint( mx, my ) ) )
+        if ( frameIt.current()->contains( KoPoint( mx, my ) ) )
             frameIt.current()->setSelected( false );
 }
 
 /*================================================================*/
-QCursor KWFrameSet::getMouseCursor( unsigned int mx, unsigned int my )
+QCursor KWFrameSet::getMouseCursor( double mx, double my )
 {
     KWFrame * frame = getFrame( mx, my );
 
@@ -1088,7 +1088,7 @@ void KWPartFrameSet::updateFrames()
     if ( !m_lock )
     {
         m_lock = true; // setGeometry emits changed() !
-        QRect frect = *frames.first();
+        KoRect frect = *frames.first();
         //kdDebug() << "KWPartFrameSet::updateFrames frames.first()=" << DEBUGRECT(frect)
         //          << " child set to " << DEBUGRECT( kWordDocument()->zoomRect( frect ) ) << endl;
         child->setGeometry( kWordDocument()->zoomRect( frect ) );
@@ -1258,8 +1258,8 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
     width = static_cast<int>( width / kWordDocument()->zoomedResolutionX() ) + 5;
     height = static_cast<int>( height / kWordDocument()->zoomedResolutionY() ) + 5;
 
-    int oldWidth = frames.first()->width();
-    int oldHeight = frames.first()->height();
+    double oldWidth = frames.first()->width();
+    double oldHeight = frames.first()->height();
 
     frames.first()->setWidth( width );
     frames.first()->setHeight( height );

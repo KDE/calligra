@@ -21,6 +21,7 @@
 #define KWCANVAS_H
 
 #include <koprinter.h>
+#include <koRect.h>
 #include <qscrollview.h>
 #include <qstylesheet.h>
 #include <qrichtext_p.h>
@@ -170,7 +171,7 @@ protected:
     virtual void resizeEvent( QResizeEvent *e );
 
     void selectAllFrames( bool select );
-    void selectFrame( int mx, int my, bool select );
+    void selectFrame( double mx, double my, bool select );
 
 signals:
     // Emitted when the current frameset edit changes
@@ -206,10 +207,10 @@ private:
 
     // Frame stuff
     MouseMode m_mouseMode;
-    QRect m_resizedFrameInitialSize; // when resizing a frame
-    QRect m_insRect;  // when creating a new frame
-    QRect m_boundingRect; // when moving frame(s)
-    QPoint m_hotSpot; // when moving frame(s)
+    KoRect m_resizedFrameInitialSize; // when resizing a frame
+    KoRect m_insRect;  // when creating a new frame
+    KoRect m_boundingRect; // when moving frame(s)
+    KoPoint m_hotSpot; // when moving frame(s)
     bool deleteMovingRect, frameMoved, frameResized;
     QString m_PixmapName; // when inserting a pixmap
     KoDocumentEntry m_partEntry; // when inserting a part

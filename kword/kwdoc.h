@@ -44,6 +44,7 @@ class KWVariableFormat;
 
 #include <koDocument.h>
 #include <koGlobal.h>
+#include <koRect.h>
 #include <koDocumentChild.h>
 
 #include "kwimage.h"
@@ -135,7 +136,7 @@ public:
 
     virtual void addShell( KoMainWindow *shell );
 
-    virtual void insertObject( const QRect& _rect, KoDocumentEntry& _e );
+    virtual void insertObject( const KoRect& _rect, KoDocumentEntry& _e );
     void setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf );
 
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
@@ -143,7 +144,7 @@ public:
 
     KWFrameSet *getFrameSet( unsigned int _num )
     { return frames.at( _num ); }
-    KWFrameSet * getFrameSet( unsigned int mx, unsigned int my );
+    KWFrameSet * getFrameSet( double mx, double my );
     unsigned int getNumFrameSets()
     { return frames.count(); }
     // Prefer this over getFrameSet(i), if iterating over all of them
@@ -178,10 +179,10 @@ public:
     // Returns 0-based page number where rect is (in real pt coordinates)
     // (in fact its topleft corner).
     // Use isOutOfPage to check that the rectangle is fully contained in that page.
-    int getPageOfRect( QRect & _rect ) const;
+    int getPageOfRect( KoRect & _rect ) const;
 
     // Return true if @p r (in real pt coordinates) is out of the page @p page
-    bool isOutOfPage( QRect & r, int page ) const;
+    bool isOutOfPage( KoRect & r, int page ) const;
 
     void updateAllViewportSizes();
 
@@ -225,10 +226,10 @@ public:
 
     ProcessingType processingType() { return m_processingType;  }
 
-    int selectFrame( unsigned int mx, unsigned int my, bool simulate = false );
-    void deSelectFrame( unsigned int mx, unsigned int my );
+    int selectFrame( double mx, double my, bool simulate = false );
+    void deSelectFrame( double mx, double my );
     void deSelectAllFrames();
-    QCursor getMouseCursor( unsigned int mx, unsigned int my );
+    QCursor getMouseCursor( double mx, double my );
     QList<KWFrame> getSelectedFrames();
     KWFrame *getFirstSelectedFrame();
     int getFrameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }
@@ -257,19 +258,10 @@ public:
     KoHFType getHeaderType() { return m_pageHeaderFooter.header; }
     KoHFType getFooterType() { return m_pageHeaderFooter.footer; }
 
-    bool canResize( KWFrameSet *frameset, KWFrame *frame, int page, int diff );
-
-    //void enableEmbeddedParts( bool f );
-
-    //void setRunAround( RunAround _ra );
-    //void setRunAroundGap( double _gap );
-
     void getFrameMargins( double &l, double &r, double &t, double &b );
     bool isOnlyOneFrameSelected();
-    KWFrameSet *getFrameCoords( unsigned int &x, unsigned int &y, unsigned int &w, unsigned int &h, unsigned int &num );
-
     void setFrameMargins( double l, double r, double t, double b );
-    void setFrameCoords( unsigned int x, unsigned int y, unsigned int w, unsigned int h );
+    void setFrameCoords( double x, double y, double w, double h );
 
     // The user-chosen global unit
     QString getUnitName() { return KWUnit::unitName( m_unit ); }
@@ -353,8 +345,8 @@ public:
     unsigned int zoomItX( unsigned int z ) const {
         return static_cast<unsigned int>(m_zoomedResolutionX * z);
     }
-    double zoomItX( double z ) const {
-        return m_zoomedResolutionX * z;
+    int zoomItX( double z ) const {
+        return qRound( m_zoomedResolutionX * z );
     }
     int zoomItY( int z ) const {
         return static_cast<int>(m_zoomedResolutionY * z);
@@ -362,14 +354,14 @@ public:
     unsigned int zoomItY( unsigned int z ) const {
         return static_cast<unsigned int>(m_zoomedResolutionY * z);
     }
-    double zoomItY( double z ) const {
-        return m_zoomedResolutionY * z;
+    int zoomItY( double z ) const {
+        return qRound( m_zoomedResolutionY * z );
     }
 
     QPoint zoomPoint( const QPoint & p ) const {
         return QPoint( zoomItX( p.x() ), zoomItY( p.y() ) );
     }
-    QRect zoomRect( const QRect & r ) const {
+    QRect zoomRect( const KoRect & r ) const {
         return QRect( zoomItX( r.x() ), zoomItY( r.y() ),
                       zoomItX( r.width() ), zoomItY( r.height() ) );
     }
