@@ -597,8 +597,8 @@ void CellLayoutDlg::init()
     borderPage = new CellLayoutPageBorder( tab, this );
     tab->addTab( borderPage, i18n("&Border") );
 
-    miscPage = new CellLayoutPageMisc( tab, this );
-    tab->addTab( miscPage, i18n("&Misc") );
+//    miscPage = new CellLayoutPageMisc( tab, this );
+//    tab->addTab( miscPage, i18n("&Misc") );
 
     fontPage = new CellLayoutPageFont( tab, this );
     tab->addTab( fontPage, i18n("&Text") );
@@ -707,13 +707,13 @@ void CellLayoutDlg::slotApply()
 //        table->doc()->undoBuffer()->appendUndo( undo );
         macroUndo->addCommand(undo);
 
-	if( miscPage->getStyle()!=eStyle)
+/*	if( miscPage->getStyle()!=eStyle)
         {
 	    //make undo for style of cell
 	    KSpreadUndoStyleCell *undo3 = new KSpreadUndoStyleCell( table->doc(), table, rect );
 	    //table->doc()->undoBuffer()->appendUndo( undo3 );
             macroUndo->addCommand( undo3 );
-        }
+        }*/
     }
     borderPage->applyOutline();
 
@@ -726,7 +726,7 @@ void CellLayoutDlg::slotApply()
                 if( !obj->isObscuringForced() )
                 {
                     floatPage->apply( obj );
-                    miscPage->apply( obj );
+//                    miscPage->apply( obj );
                     fontPage->apply( obj );
                     positionPage->apply( obj );
                     patternPage->apply(obj);
@@ -769,7 +769,7 @@ void CellLayoutDlg::slotApply()
             positionPage->apply( rw );
             patternPage->apply(rw);
         }
-        miscPage->applyRow( );
+//        miscPage->applyRow( );
         if( int( positionPage->getSizeHeight() ) != int( heigthSize ) )
         {
             if ( !table->doc()->undoBuffer()->isLocked())
@@ -794,7 +794,7 @@ void CellLayoutDlg::slotApply()
             positionPage->apply( cl );
             patternPage->apply(cl);
         }
-        miscPage->applyColumn( );
+//        miscPage->applyColumn( );
 
         if( int( positionPage->getSizeWidth() ) != int( widthSize ) )
         {
