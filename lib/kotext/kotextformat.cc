@@ -233,7 +233,6 @@ static void importTextPosition( const QString& text_position, double fontSize, K
 {
     //OO: <vertical position (% or sub or super)> [<size as %>]
     //Examples: "super" or "super 58%" or "82% 58%" (where 82% is the vertical position)
-    // TODO in kword: vertical positions other than sub/super
     QStringList lst = QStringList::split( ' ', text_position );
     if ( !lst.isEmpty() )
     {
