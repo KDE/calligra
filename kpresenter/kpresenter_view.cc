@@ -4439,9 +4439,7 @@ void KPresenterView::addSideBarItem( int pos )
     if ( sidebar )
     {
         sidebar->blockSignals( TRUE );
-        sidebar->thumbBar()->uptodate = false;
-        sidebar->outline()->rebuildItems();
-        sidebar->thumbBar()->rebuildItems();
+        sidebar->addItem( pos );
         sidebar->blockSignals( FALSE );
     }
 }
@@ -4461,9 +4459,7 @@ void KPresenterView::removeSideBarItem( int pos )
     if ( sidebar )
     {
         sidebar->blockSignals( TRUE );
-        sidebar->thumbBar()->uptodate = false;
-        sidebar->outline()->rebuildItems();
-        sidebar->thumbBar()->rebuildItems();
+        sidebar->removeItem( pos );
         sidebar->blockSignals( FALSE );
     }
 }

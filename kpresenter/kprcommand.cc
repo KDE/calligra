@@ -416,6 +416,8 @@ void DeleteCmd::execute()
     }
     if(textObj)
         doc->updateRuler();
+    int pos=doc->pageList().findRef(m_page);
+    doc->updateSideBarItem(pos);
 }
 
 /*====================== unexecute ===============================*/
@@ -427,6 +429,8 @@ void DeleteCmd::unexecute()
 	objects.at( i )->addToObjList();
 	doc->repaint( objects.at( i ) );
     }
+    int pos=doc->pageList().findRef(m_page);
+    doc->updateSideBarItem(pos);
 }
 
 

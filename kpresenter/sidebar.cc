@@ -242,9 +242,31 @@ void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
         kdWarning() << "Item for page " << pagenr << " not found" << endl;
 }
 
+// add a thumb item without recreating all thumbs
 void ThumbBar::addItem( int pos )
 {
-  kdDebug()<< "ThumbBar::addItem not yet implemented" << endl;
+    kdDebug()<< "ThumbBar::addItem" << endl;
+    int page = 0;
+    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
+        // find page which should move
+        // do stuff because a item can not be insert at the beginning
+        if ( pos == 0 && page == pos ){
+            QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), it, QString::number(2), getSlideThumb(1));
+            item->setDragEnabled(false);  //no dragging for now
+            it->setPixmap(getSlideThumb( 0 ));
+            // move on to next item as we have inserted one
+            it = it->nextItem();
+        }
+        else if ( page == pos ) {
+            QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), it->prevItem(), QString::number(page+1), getSlideThumb(page));
+            item->setDragEnabled(false);  //no dragging for now
+        }
+        // update page numbers
+        if ( page >= pos ) {
+            it->setText( QString::number(page+2) );
+        }
+        page++;
+    }
 }
 
 // moves a item without recreating all pages
@@ -294,7 +316,24 @@ void ThumbBar::moveItem( int oldPos, int newPos )
 
 void ThumbBar::removeItem( int pos )
 {
-  kdDebug()<< "ThumbBar::removeItem not yet implemented" << endl;
+    kdDebug()<< "ThumbBar::removeItem" << endl;
+    int page = 0;
+    bool change = false;
+    QIconViewItem *itemToDelete = 0;
+    
+    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
+        if ( page == pos ) {
+            itemToDelete = it;
+            if ( it = it->nextItem() )
+                change = true;
+        }
+        if ( change ) {
+            it->setText( QString::number( page + 1 ) );
+        }
+        page++;
+    }
+    if ( itemToDelete )
+        delete itemToDelete;
 }
 
 QPixmap ThumbBar::getSlideThumb(int slideNr)
@@ -415,7 +454,9 @@ void Outline::updateItem( int pagenr /* 0-based */)
 
 void Outline::addItem( int pos )
 {
-  kdDebug()<< "Outline::addItem not yet implemented" << endl;
+    kdDebug()<< "Outline::addItem" << endl;
+    // still use rebuildItems as I had no good idea to do it :-) tz
+    rebuildItems();
 }
 
 // move an Outline Item so that not the hole list has to be recerated
@@ -447,7 +488,29 @@ void Outline::moveItem( int oldPos, int newPos )
 
 void Outline::removeItem( int pos )
 {
-  kdDebug()<< "Outline::removeItem not yet implemented" << endl;
+    kdDebug()<< "Outline::removeItem" << endl;
+    int page = 0;
+    bool updatePageNum = false;
+    
+    QListViewItemIterator it( this );
+    for ( ; it.current(); ++it ) {
+        if ( page == pos ) {
+            kdDebug() << "Page " << it.current()->text(0) << " removed" << endl;
+            delete it.current();
+            if ( it.current() )
+                updatePageNum = true;
+        }
+        if ( updatePageNum ) {
+            QString title = doc->pageList().at(page)->pageTitle( i18n( "Slide %1" ).arg( page + 1 ) );
+            if (title.length() > 12) // restrict to a maximum of 12 characters
+                it.current()->setText( 0, title.left(5) + "..." + title.right(4));
+            else
+                it.current()->setText( 0, title );
+
+            it.current()->setText( 1, QString::number( page + 1 ) ); // page number
+        }
+        page++;
+    }
 }
 
 void Outline::itemStateChange( OutlineItem * item, bool state )
