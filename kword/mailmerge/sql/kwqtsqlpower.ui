@@ -12,9 +12,6 @@
             <height>403</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <property name="acceptDrops">
         <bool>false</bool>
     </property>
