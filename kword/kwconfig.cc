@@ -246,8 +246,8 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     pgUpDownMovesCaret->setChecked(oldPgUpDownMovesCaret);
     QWhatsThis::add( pgUpDownMovesCaret, i18n(
                          "If this option is enabled, the PageUp and PageDown keys "
-                         "move the text caret, as do other KDE applications. "
-                         "If it is disabled, they move the scrollbars, as do most other Word Processors." ) );
+                         "move the text caret, similar to other KDE applications. "
+                         "If it is disabled, they move the scrollbars, similar to most other word processors." ) );
 
     recentFiles=new KIntNumInput( oldNbRecentFiles, gbInterfaceGroup );
     recentFiles->setRange(1, 20, 1);

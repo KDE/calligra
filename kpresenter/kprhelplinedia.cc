@@ -119,13 +119,13 @@ KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _p
     setButtonText( KDialogBase::User1, i18n("Remove") );
     setCaption( i18n("Add new help point") );
     QVBox *page = makeVBoxMainWidget();
-    QLabel *lab=new QLabel(i18n("Position ( x ) :(%1)").arg(m_doc->getUnitName()), page);
+    QLabel *lab=new QLabel(i18n("Position (x): (%1)").arg(m_doc->getUnitName()), page);
     positionX = new KLineEdit(page);
     positionX->setText( KoUnit::userValue( posX, m_doc->getUnit() ) );
     positionX->setValidator( new KFloatValidator( limitOfPage.left(), limitOfPage.right() ,true,positionX ) );
 
 
-    lab=new QLabel(i18n("Position ( y ) :(%1)").arg(m_doc->getUnitName()), page);
+    lab=new QLabel(i18n("Position (y): (%1)").arg(m_doc->getUnitName()), page);
     positionY = new KLineEdit(page);
     positionY->setText( KoUnit::userValue( posY, m_doc->getUnit() ) );
     positionY->setValidator( new KFloatValidator( limitOfPage.top(), limitOfPage.bottom() ,true,positionY ) );

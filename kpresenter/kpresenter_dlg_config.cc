@@ -428,7 +428,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
     KoRect rect = doc->stickyPage()->getPageRect();
-    QLabel *lab=new QLabel(i18n("Resolution X :(%1)").arg(doc->getUnitName()),  tmpQGroupBox);
+    QLabel *lab=new QLabel(i18n("Resolution X: (%1)").arg(doc->getUnitName()),  tmpQGroupBox);
     grid->addWidget(lab ,0,0);
 
     resolutionX = new KLineEdit(tmpQGroupBox);
@@ -436,7 +436,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     resolutionX->setValidator( new KFloatValidator( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()) ,true, resolutionX ) );
     grid->addWidget(resolutionX ,1,0);
 
-    lab=new QLabel(i18n("Resolution X :(%1)").arg(doc->getUnitName()), tmpQGroupBox);
+    lab=new QLabel(i18n("Resolution X: (%1)").arg(doc->getUnitName()), tmpQGroupBox);
     grid->addWidget(lab ,2,0);
 
     resolutionY = new KLineEdit(tmpQGroupBox);
