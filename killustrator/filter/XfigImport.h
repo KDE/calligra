@@ -49,6 +49,9 @@ private:
   void parseCompoundObject (istream& fin, GDocument* doc);
   void buildDocument (GDocument *doc);
 
+  void setProperties (GObject* obj, int pen_color, int style, int thickness,
+		      int area_fill, int fill_color);
+
   float fig_resolution;
   int coordinate_system;
   int version;

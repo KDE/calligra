@@ -293,6 +293,10 @@ void XfigImport::parseArc (istream& fin, GDocument* doc) {
   float angle2 = atan (m) * RAD_FACTOR;
 
   obj->setAngles (angle1, angle2);
+
+  // now set the properties
+  setProperties (obj, pen_color, pen_style, thickness, area_fill, fill_color);
+
   objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
@@ -317,6 +321,9 @@ void XfigImport::parseEllipse (istream& fin, GDocument* doc) {
 
   obj->setStartPoint (p1);
   obj->setEndPoint (p2);
+
+  // now set the properties
+  setProperties (obj, pen_color, pen_style, thickness, area_fill, fill_color);
 
   objList.push_back (pair<int, GObject*> (depth, obj));
 }
@@ -382,35 +389,7 @@ void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
   }
 
   // now set the properties
-  if (pen_color >= 0)
-    obj->setOutlineColor (*colorTable[pen_color]);
-
-  if (line_style < 1)
-    obj->setOutlineStyle (SolidLine);
-  else if (line_style == 1)
-    obj->setOutlineStyle (DashLine);
-  else if (line_style == 2)
-    obj->setOutlineStyle (DotLine);
-
-  obj->setOutlineWidth (thickness * 72.0 / 80.0);
-
-  if (area_fill == -1)
-    obj->setFillStyle (NoBrush);
-  else {
-    obj->setFillStyle (SolidPattern);
-    if (fill_color < 1) {
-      // for BALCK or DEFAULT color
-      int val = qRound ((20 - area_fill) * 255.0 / 20.0);
-      obj->setFillColor (QColor (val, val, val));
-    }
-    else if (fill_color == 7) {
-      // for WHITE color
-      int val = qRound ( area_fill * 255.0 / 20.0);
-      obj->setFillColor (QColor (val, val, val));
-    }
-    else
-      obj->setFillColor (*colorTable[fill_color]);
-  }
+  setProperties (obj, pen_color, line_style, thickness, area_fill, fill_color);
 
   // and insert the object
   objList.push_back (pair<int, GObject*> (depth, obj));
@@ -541,3 +520,37 @@ void XfigImport::buildDocument (GDocument *doc) {
     doc->insertObject (obj);
   }
 }
+
+void XfigImport::setProperties (GObject* obj, int pen_color, int style, 
+				int thickness, int area_fill, int fill_color) {
+  if (pen_color >= 0)
+    obj->setOutlineColor (*colorTable[pen_color]);
+
+  if (style < 1)
+    obj->setOutlineStyle (SolidLine);
+  else if (style == 1)
+    obj->setOutlineStyle (DashLine);
+  else if (style == 2)
+    obj->setOutlineStyle (DotLine);
+
+  obj->setOutlineWidth (thickness * 72.0 / 80.0);
+
+  if (area_fill == -1)
+    obj->setFillStyle (NoBrush);
+  else {
+    obj->setFillStyle (SolidPattern);
+    if (fill_color < 1) {
+      // for BALCK or DEFAULT color
+      int val = qRound ((20 - area_fill) * 255.0 / 20.0);
+      obj->setFillColor (QColor (val, val, val));
+    }
+    else if (fill_color == 7) {
+      // for WHITE color
+      int val = qRound ( area_fill * 255.0 / 20.0);
+      obj->setFillColor (QColor (val, val, val));
+    }
+    else
+      obj->setFillColor (*colorTable[fill_color]);
+  }
+}
+
