@@ -387,7 +387,9 @@ Done:
 -> save/load style
 -> save/load cell border attribute
 -> save/load settings (cursor position, active table)
+-> save/load print setup
 
 Fixe todo:
 ----------
 -> after loading cursor position me must update view
+-> fix default value (for printing)

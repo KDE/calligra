@@ -7550,6 +7550,18 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, 
     return true;
 }
 
+void KSpreadSheet::saveOasisPrintStyleLayout( KoGenStyle &style )
+{
+//todo
+    QString printParameter;
+    if ( d->print->printGrid() )
+        printParameter="grid ";
+    if ( d->showFormula )
+        printParameter="formulas ";
+    if ( !printParameter.isEmpty() )
+        style.addProperty( "style:print", printParameter );
+}
+
 QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
 {
     KoGenStyle pageStyle( KSpreadDoc::STYLE_PAGE, "table"/*FIXME I don't know if name is table*/ );

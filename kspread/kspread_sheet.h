@@ -291,6 +291,7 @@ public:
 
     void loadOasisSettings( const KoOasisSettings &settings );
     void saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker );
+    void saveOasisPrintStyleLayout( KoGenStyle &style );
 
     /**
      * Saves a children

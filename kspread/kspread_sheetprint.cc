@@ -92,6 +92,9 @@ QString KSpreadSheetPrint::saveOasisTableStyleLayout( KoGenStyles &mainStyles )
     pageLayout.addPropertyPt( "fo:margin-top", POINT_TO_MM(topBorder() ) );
     pageLayout.addPropertyPt( "fo:margin-right", POINT_TO_MM(rightBorder() ) );
     pageLayout.addPropertyPt( "fo:margin-bottom", POINT_TO_MM(bottomBorder() ) );
+    //necessary for print setup
+    m_pSheet->saveOasisPrintStyleLayout( pageLayout );
+
     return mainStyles.lookup( pageLayout, "pm" );
 }
 
