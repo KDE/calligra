@@ -26,6 +26,7 @@ class QPainter;
 class QRegion;
 class KWTextFrameSet;
 class KWFrameSet;
+class KWCanvas;
 
 /**
  * Abstract base class for KWCanvas's view modes.
@@ -61,6 +62,11 @@ public:
 
     // Size of the contents area
     virtual QSize contentsSize() = 0;
+
+    // "Topleft of current page" - concept used by the rulers.
+    // The default implementation is good enough for any page-based viewmode,
+    // since it calls normalToView. But the textmode has no page concept.
+    virtual QPoint pageCorner( KWCanvas* canvas );
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion ) = 0;
 
@@ -171,6 +177,8 @@ public:
     virtual QPoint normalToView( const QPoint & nPoint );
     virtual QPoint viewToNormal( const QPoint & vPoint );
     virtual QSize contentsSize();
+    // There is no page concept. Keep everything relative to (0,0)
+    virtual QPoint pageCorner( KWCanvas* ) { return QPoint( 0, 0 ); }
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
     virtual const QString type() {return "ModeText";}

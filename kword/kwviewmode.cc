@@ -18,11 +18,12 @@
 */
 
 #include "kwviewmode.h"
-//#include <kotextdocument.h>
+#include "kwcanvas.h"
 #include "kwdoc.h"
+#include "kwtextframeset.h"
+
 #include <kdebug.h>
 #include <kdebugclasses.h>
-#include <kwtextframeset.h>
 
 QSize KWViewModeNormal::contentsSize()
 {
@@ -77,6 +78,27 @@ QRect KWViewMode::drawBottomShadow( QPainter * painter, const QRect & crect, con
         painter->fillRect( shadowRect,
                            QApplication::palette().active().brush( QColorGroup::Shadow ) );
     return shadowRect;
+}
+
+QPoint KWViewMode::pageCorner( KWCanvas* canvas )
+{
+    // Same code as KWView::slotUpdateRuler
+    KWFrame * frame = 0L;
+    // Use the currently edited (fallback: the first selected) frame
+    if( canvas->currentFrameSetEdit() && canvas->currentFrameSetEdit()->currentFrame() )
+        frame = canvas->currentFrameSetEdit()->currentFrame();
+    else
+        frame = m_doc->getFirstSelectedFrame();
+
+    int pageNum = 0;
+    if ( frame )
+        pageNum = frame->pageNum();
+    QPoint nPoint( 0, m_doc->pageTop(pageNum) + 1 );
+    QPoint cPoint( normalToView( nPoint ) );
+    /*kdDebug() << "KWViewMode::pageCorner frame=" << frame << " pagenum=" << pageNum
+              << " nPoint=" << nPoint.x() << "," << nPoint.y()
+              << " cPoint=" << cPoint.x() << "," << cPoint.y() << endl;*/
+    return cPoint;
 }
 
 KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc )
@@ -363,4 +385,3 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
         m_doc->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     painter->restore();
 }
-

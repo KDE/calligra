@@ -4535,9 +4535,10 @@ void KWView::slotUpdateRuler()
     if ( frame )
     {
         QRect r = m_doc->zoomRect( *frame );
-        r = m_gui->canvasWidget()->viewMode()->normalToView( r );
+        KWCanvas* canvas = m_gui->canvasWidget();
+        r = canvas->viewMode()->normalToView( r );
         // Now we need to make those coordinates relative to the page corner
-        QPoint pc = m_gui->canvasWidget()->pageCorner();
+        QPoint pc = canvas->viewMode()->pageCorner( canvas );
         m_gui->getHorzRuler()->setFrameStartEnd( r.left() - pc.x(), r.right() - pc.x() );
         m_gui->getVertRuler()->setFrameStartEnd( r.top() - pc.y(), r.bottom() - pc.y() );
     }

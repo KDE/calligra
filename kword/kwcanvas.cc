@@ -2064,32 +2064,11 @@ void KWCanvas::updateRulerOffsets( int cx, int cy )
     }
     // The offset is usually just the scrollview offset
     // But we also need to offset to the current page, for the graduations
-    QPoint pc = pageCorner();
+    QPoint pc = m_viewMode->pageCorner(this);
     //kdDebug() << "KWCanvas::updateRulerOffsets contentsX=" << cx << ", contentsY=" << cy << endl;
     m_gui->getHorzRuler()->setOffset( cx - pc.x(), 0 );
     m_gui->getVertRuler()->setOffset( 0, cy - pc.y() );
 
-}
-
-QPoint KWCanvas::pageCorner()
-{
-    // Same code as KWView::slotUpdateRuler
-    KWFrame * frame = 0L;
-    // Use the currently edited (fallback: the first selected) frame
-    if( m_currentFrameSetEdit && m_currentFrameSetEdit->currentFrame() )
-        frame = m_currentFrameSetEdit->currentFrame();
-    else
-        frame = m_doc->getFirstSelectedFrame();
-
-    int pageNum = 0;
-    if ( frame )
-        pageNum = frame->pageNum();
-    QPoint nPoint( 0, m_doc->pageTop(pageNum) + 1 );
-    QPoint cPoint( m_viewMode->normalToView( nPoint ) );
-    /*kdDebug() << "KWCanvas::rulerPos frame=" << frame << " pagenum=" << pageNum
-              << " nPoint=" << nPoint.x() << "," << nPoint.y()
-              << " cPoint=" << cPoint.x() << "," << cPoint.y() << endl;*/
-    return cPoint;
 }
 
 bool KWCanvas::eventFilter( QObject *o, QEvent *e )
