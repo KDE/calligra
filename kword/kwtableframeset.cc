@@ -2623,9 +2623,12 @@ void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs, bool eraseSelection )
 
     m_currentFrame = fs->frame( 0 );
     KWTextFrameSetEdit *textframeSetEdit = dynamic_cast<KWTextFrameSetEdit *>(m_currentCell);
-    textframeSetEdit->ensureCursorVisible();
-    //refresh koruler
-    m_canvas->gui()->getView()->slotUpdateRuler();
+    if ( textframeSetEdit )
+    {
+        textframeSetEdit->ensureCursorVisible();
+        //refresh koruler
+        m_canvas->gui()->getView()->slotUpdateRuler();
+    }
 }
 
 KWFrameSetEdit* KWTableFrameSetEdit::currentTextEdit()
