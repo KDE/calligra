@@ -79,8 +79,13 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 
 		virtual bool drv_close();
 //		virtual bool drv_moveFirst();
-		virtual bool drv_getNextRecord();
-		virtual bool drv_getPrevRecord();
+		virtual void drv_getNextRecord();
+//unused		virtual bool drv_getPrevRecord();
+
+		virtual void drv_appendCurrentRecordToBuffer();
+		virtual void drv_bufferMovePointerNext();
+		virtual void drv_bufferMovePointerPrev();
+		virtual void drv_bufferMovePointerTo(Q_LLONG at);
 
 //TODO		virtual void drv_storeCurrentRecord();
 

@@ -177,9 +177,20 @@ TODO: Change "File" menu entry to "Database"
 TODO: add sorting projects information using KexiProjectData::lastOpened
 TODO: also add this info as "Database>Open Recent" menu subentry
 
+2003-10-31
+- KexiDB::Cursor: many code like drv_getNextRecord() moved from SQLiteCursor down 
+  to Cursor class
+
 2003-10-29
+2003-10-30
+- KexiStartupDialog added. Now, although it is project-and-connection-oriented, 
+   it is designed to be still consistent with conventional document-driver startup 
+   dialogs used for other KOffice apps.
 - KexiProjectSelectorWidget introduced
 - KexiProjectData structure added
+- KexiProjectSet structure added
+- Test for new KexiStartupDialog. Code written here will be reused for
+  "fileopen" and "filenew" Kexi actions.
 
 2003-10-28
 - KexiStartupDialog introduced

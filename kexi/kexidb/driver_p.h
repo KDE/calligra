@@ -74,6 +74,10 @@ class DriverBehaviour
 	*/
 	bool USING_DATABASE_REQUIRED_TO_CONNECT : 1;
 
+	/*! True is before we know wherher the fetched result of executed query
+	 is empty or not, we need to fetch first record. Particularly, it's true for SQLite.
+	 The flag is used in Cursor::open(). By default this flag is false. */
+	bool _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY : 1;
 };
 
 }

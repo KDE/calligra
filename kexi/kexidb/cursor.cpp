@@ -17,8 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "cursor.h"
+#include <kexidb/cursor.h>
+
+#include <kexidb/driver.h>
+#include <kexidb/driver_p.h>
+#include <kexidb/error.h>
+
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <assert.h>
 #include <stdlib.h>
@@ -68,6 +74,7 @@ void Cursor::init()
 	m_records_in_buf = 0;
 	m_buffering_completed = false;
 	m_at_buffer = false;
+	m_result = -1;
 }
 
 Cursor::~Cursor()
@@ -106,9 +113,6 @@ bool Cursor::open()
 			return false;
 		}
 	}
-#ifndef Q_WS_WIN
-#warning TODO
-#endif
 	m_opened = drv_open(statement);
 //	m_beforeFirst = true;
 	m_afterLast = false; //we are not @ the end
@@ -116,8 +120,10 @@ bool Cursor::open()
 	if (!m_opened)
 		return false;
 	m_validRecord = false;
-	if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
-		m_readAhead = drv_getNextRecord(); //true if any record in this query
+	
+//	if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
+	if (m_conn->driver()->beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY)
+		m_readAhead = getNextRecord(); //true if any record in this query
 	m_at = 0; //we are still before 1st rec
 	return !error();
 }
@@ -162,7 +168,7 @@ bool Cursor::moveFirst()
 				m_at_buffer = false;
 				m_at = -1;
 				//..and move to next, ie. 1st record
-				m_afterLast = m_afterLast = !drv_getNextRecord();
+				m_afterLast = m_afterLast = !getNextRecord();
 				return !m_beforeFirst;
 			}
 		}
@@ -191,14 +197,14 @@ bool Cursor::moveLast()
 	if (m_afterLast || m_atLast) {
 		return m_validRecord; //we already have valid last record retrieved
 	}
-	if (!drv_getNextRecord()) { //at least next record must be retrieved
+	if (!getNextRecord()) { //at least next record must be retrieved
 //		m_beforeFirst = false;
 		m_afterLast = true;
 		m_validRecord = false;
 		m_atLast = false;
 		return false; //no records
 	}
-	while (drv_getNextRecord()) //move after last rec.
+	while (getNextRecord()) //move after last rec.
 		;
 //	m_beforeFirst = false;
 	m_afterLast = false;
@@ -226,7 +232,7 @@ bool Cursor::moveNext()
 {
 	if (!m_opened || m_afterLast)
 		return false;
-	if (drv_getNextRecord()) {
+	if (getNextRecord()) {
 //		m_validRecord = true;
 		return true;
 	}
@@ -235,49 +241,28 @@ bool Cursor::moveNext()
 
 bool Cursor::movePrev()
 {
-	if (!m_opened || m_beforeFirst)
+	if (!m_opened || m_beforeFirst || !(m_options & Buffered))
 		return false;
-	if (drv_getPrevRecord()) {
-		m_validRecord=true;
-		return true;
+
+	if ((m_at <= 0) || (m_records_in_buf <= 0)) {
+		m_at=-1;
+		m_validRecord=false;
+		m_beforeFirst = true;
+		return false;
 	}
-	return false;
-}
 
-/*
-bool Cursor::open( const QString& statement )
-{
-	if (m_data) {
-		if (!close())
-			return false;
+	m_at--;
+	if (m_at_buffer) {//we already have got a pointer to buffer
+		drv_bufferMovePointerPrev(); //just move to prev record in the buffer
+	} else {//we have no pointer
+		//compute a place in the buffer that contain next record's data
+		drv_bufferMovePointerTo(m_at);
+		m_at_buffer = true; //now current record is stored in the buffer
 	}
-	m_data = m_conn->drv_createCursor( statement );
-	return m_data;
+//		setError( NOT_SUPPORTED,  )
+	m_validRecord=true;
+	return true;
 }
-
-bool Cursor::close()
-{
-	if (!m_data)
-		return true;
-	bool ret = m_conn->drv_deleteCursor( m_data );
-	delete m_data;
-	m_data = 0;
-	return ret;
-}
-
-bool moveFirst()
-{
-	m_conn
-}
-
-bool moveLast()
-{
-}
-
-bool moveNext()
-{
-}
-*/
 
 bool Cursor::eof() const
 {
@@ -313,9 +298,87 @@ void Cursor::setBuffered(bool buffered)
 
 void Cursor::clearBuffer()
 {
-	if ( !isBuffered() )
+	if ( !isBuffered() || !m_fieldCount)
 		return;
+	
 	drv_clearBuffer();
+	
+	m_records_in_buf=0;
+	m_at_buffer=false;
+}
+
+bool Cursor::getNextRecord()
+{
+	m_result = -1; //by default: invalid result of row fetching
+
+	if ((m_options & Buffered)) {//this cursor is buffered:
+		if (m_at < (m_records_in_buf-1)) {//we have next record already buffered:
+			if (m_at_buffer) {//we already have got a pointer to buffer
+				drv_bufferMovePointerNext(); //just move to next record in the buffer
+			} else {//we have no pointer
+				//compute a place in the buffer that contain next record's data
+				drv_bufferMovePointerTo(m_at+1);
+				m_at_buffer = true; //now current record is stored in the buffer
+			}
+		}
+		else {//we are after last retrieved record: we need to physically fetch next record:
+			if (!m_readAhead) {//we have no record that was read ahead
+				if (!m_buffering_completed) {
+					//retrieve record only if we are not after 
+					//the last buffer's item (i.e. when buffer is not fully filled):
+					KexiDBDrvDbg<<"==== (buffered) sqlite_step ===="<<endl;
+					drv_getNextRecord();
+				}
+				if (m_result != FetchOK) {//there is no record
+					m_buffering_completed = true; //no more records for buffer
+					KexiDBDrvDbg<<"m_result != FetchOK ********"<<endl;
+					m_validRecord = false;
+					m_afterLast = true;
+					m_at = -1;
+					if (m_result == FetchEnd) {
+						return false;
+					}
+					setError(ERR_CURSOR_RECORD_FETCHING, i18n("Cannot fetch next record."));
+					return false;
+				}
+				//we have a record: store this record's values in the buffer
+				drv_appendCurrentRecordToBuffer();
+				m_records_in_buf++;
+			}
+			else //we have a record that was read ahead: eat this
+				m_readAhead = false;
+		}
+	}
+	else {//we are after last retrieved record: we need to physically fetch next record:
+		if (!m_readAhead) {//we have no record that was read ahead
+			KexiDBDrvDbg<<"==== sqlite_step ===="<<endl;
+			drv_getNextRecord();
+			if (m_result != FetchOK) {//there is no record
+				KexiDBDrvDbg<<"m_result != FetchOK ********"<<endl;
+				m_validRecord = false;
+				m_afterLast = true;
+				m_at = -1;
+				if (m_result == FetchEnd) {
+					return false;
+				}
+				setError(ERR_CURSOR_RECORD_FETCHING, i18n("Cannot fetch next record."));
+				return false;
+			}
+		}
+		else //we have a record that was read ahead: eat this
+			m_readAhead = false;
+	}
+
+	m_at++;
+	
+//	if (m_data->curr_colname && m_data->curr_coldata)
+//		for (int i=0;i<m_data->curr_cols;i++) {
+//			KexiDBDrvDbg<<i<<": "<< m_data->curr_colname[i]<<" == "<< m_data->curr_coldata[i]<<endl;
+//		}
+	KexiDBDrvDbg<<"m_at == "<<(long)m_at<<endl;
+
+	m_validRecord = true;
+	return true;
 }
 
 void Cursor::debug()

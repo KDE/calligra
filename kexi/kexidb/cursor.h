@@ -131,7 +131,8 @@ class KEXI_DB_EXPORT Cursor: public Object
 		/*! Moves current position to the next record and retrieves it. */
 		virtual bool moveNext();
 
-		/*! Moves current position to the next record and retrieves it. */
+		/*! Moves current position to the next record and retrieves it. 
+		 Currently it's only supported for buffered cursors. */
 		virtual bool movePrev();
 
 		/*! \return true if current position is after last record. */
@@ -163,6 +164,9 @@ class KEXI_DB_EXPORT Cursor: public Object
 		void debug();
 
 	protected:
+		//! posible results of row fetching, used for m_result
+		typedef enum FetchResult { FetchError=0, FetchOK=1, FetchEnd=2 };
+
 		/*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */
 		Cursor(Connection* conn, const QString& statement, uint options = NoOptions );
 
@@ -170,6 +174,10 @@ class KEXI_DB_EXPORT Cursor: public Object
 		Cursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
 
 		void init();
+
+		/*! Internal: cares about proper flag setting depending on result of drv_getNextRecord()
+		 and depending on wherher a cursor is buffered. */
+		bool getNextRecord();
 
 		/* Note for driver developers: this method should initialize engine-specific cursor's
 		 resources using \a statement. It is not required to store \a statement somewhere
@@ -179,8 +187,13 @@ class KEXI_DB_EXPORT Cursor: public Object
 
 		virtual bool drv_close() = 0;
 //		virtual bool drv_moveFirst() = 0;
-		virtual bool drv_getNextRecord() = 0;
-		virtual bool drv_getPrevRecord() = 0;
+		virtual void drv_getNextRecord() = 0;
+//unused		virtual bool drv_getPrevRecord() = 0;
+
+		virtual void drv_appendCurrentRecordToBuffer() = 0;
+		virtual void drv_bufferMovePointerNext() = 0;
+		virtual void drv_bufferMovePointerPrev() = 0;
+		virtual void drv_bufferMovePointerTo(Q_LLONG at) = 0;
 
 		/*DISABLED: ! This is called only once in open(), after successful drv_open().
 			Reimplement this if you need (or not) to do get the first record after drv_open(),
@@ -205,11 +218,12 @@ class KEXI_DB_EXPORT Cursor: public Object
 		bool m_afterLast : 1;
 //		bool m_atLast;
 		bool m_validRecord : 1; //! true if valid record is currently retrieved @ current position
-		bool m_readAhead : 1;
 		Q_LLONG m_at;
 		int m_fieldCount; //! cached field count information
 		uint m_options; //! cursor options that describes its behaviour
 
+		char m_result; //! result of a row fetching
+		
 		//<members related to buffering>
 		uint m_cols_pointers_mem_size; //! size of record's array of pointers to values
 		int m_records_in_buf;          //! number of records currently stored in the buffer
@@ -219,6 +233,8 @@ class KEXI_DB_EXPORT Cursor: public Object
 		//</members related to buffering>
 	
 	private:
+		bool m_readAhead : 1;
+		
 		class Private;
 		Private *d;
 };

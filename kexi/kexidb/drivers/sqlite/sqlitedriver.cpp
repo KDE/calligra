@@ -57,6 +57,7 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 	beh->SPECIAL_AUTO_INCREMENT_DEF = true;
 	beh->AUTO_INCREMENT_FIELD_OPTION = "INTEGER PRIMARY KEY";
 	beh->ROW_ID_FIELD_NAME = "OID";
+	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=true;
 
 	m_typeNames[Field::Byte]="Byte";
 	m_typeNames[Field::ShortInteger]="ShortInteger";
