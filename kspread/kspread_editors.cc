@@ -34,7 +34,8 @@ KSpreadCellEditor::~KSpreadCellEditor()
  ********************************************/
 
 KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent, const char* _name )
-  : KSpreadCellEditor( _cell, _parent, _name )
+  : KSpreadCellEditor( _cell, _parent, _name ),
+    m_sizeUpdate(false)
 {
   m_pEdit = new KLineEdit( this );
   m_pEdit->installEventFilter( this );
@@ -94,6 +95,7 @@ void KSpreadTextEditor::setEditorFont(QFont const & font, bool updateSize)
       mh = height();
     
     setGeometry(x(), y(), mw, mh);
+    m_sizeUpdate = true;
   }
 }
 

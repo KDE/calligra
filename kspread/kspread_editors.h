@@ -58,6 +58,7 @@ public:
     virtual void copy();
     void checkChoose();
     void blockCheckChoose( bool b ) { m_blockCheck = b; }
+    bool sizeUpdate() const { return m_sizeUpdate; }
 
 private slots:
     void slotTextChanged( const QString& text );
@@ -74,6 +75,7 @@ private:
     //QLineEdit* m_pEdit;
     KLineEdit* m_pEdit;
     bool m_blockCheck;
+    bool m_sizeUpdate;
 };
 
 

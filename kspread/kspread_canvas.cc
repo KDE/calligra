@@ -2248,8 +2248,11 @@ void KSpreadCanvas::deleteEditor( bool saveChanges )
   {
       if ( m_pEditor->cell()->height() < m_pEditor->height() )
       {
-          newHeight = m_pEditor->height();
-          row = m_pEditor->cell()->row();
+          if (((KSpreadTextEditor * ) m_pEditor)->sizeUpdate())
+          {
+              newHeight = m_pEditor->height();
+              row = m_pEditor->cell()->row();
+          }
       }
       m_pEditWidget->setEditMode( false );
   }
