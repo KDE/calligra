@@ -133,7 +133,7 @@
                         <cstring>radioEndOfLineLF</cstring>
                     </property>
                     <property name="text">
-                        <string>*&amp;NIX style (recommended; line feed only)</string>
+                        <string>&amp;UNIX style (recommended; line feed only)</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
