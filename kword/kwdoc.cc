@@ -61,6 +61,10 @@
 #include <kglobalsettings.h>
 #include "kocommandhistory.h"
 
+#if HAVE_LIBASPELL
+#include <koSconfig.h>
+#endif
+
 //#define DEBUG_PAGES
 //#define DEBUG_SPEED
 
@@ -289,6 +293,9 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
     m_pKSpellConfig=0;
+#if HAVE_LIBASPELL
+    m_pKOSpellConfig = 0;
+#endif
     m_hasTOC=false;
 
     initConfig();
@@ -370,6 +377,9 @@ KWDocument::~KWDocument()
     delete m_tableStyleColl;
     delete m_tableTemplateColl;
     delete m_pKSpellConfig;
+#if HAVE_LIBASPELL
+    delete m_pKOSpellConfig;
+#endif
     delete m_viewMode;
     delete m_bufPixmap;
 }
@@ -3679,6 +3689,22 @@ void KWDocument::setKSpellConfig(KSpellConfig _kspell)
 
   m_bgSpellCheck->setKSpellConfig(_kspell);;
 }
+
+#if HAVE_LIBASPELL
+void KWDocument::setKOSpellConfig(KOSpellConfig _kspell)
+{
+  if(m_pKOSpellConfig==0)
+    m_pKOSpellConfig=new KOSpellConfig();
+
+  m_pKOSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
+  m_pKOSpellConfig->setRunTogether(_kspell.runTogether ());
+  m_pKOSpellConfig->setDictionary(_kspell.dictionary ());
+  m_pKOSpellConfig->setDictFromList(_kspell.dictFromList());
+  m_pKOSpellConfig->setEncoding(_kspell.encoding());
+  //FIXME
+  //m_bgSpellCheck->setKSpellConfig(_kspell);
+}
+#endif
 
 #ifndef NDEBUG
 void KWDocument::printStyleDebug()

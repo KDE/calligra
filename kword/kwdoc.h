@@ -20,6 +20,10 @@
 #ifndef kwdoc_h
 #define kwdoc_h
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 class KWDocument;
 class KPrinter;
 class KWTextImage;
@@ -60,6 +64,10 @@ class DCOPObject;
 class QFont;
 class QStringList;
 class QRect;
+
+#if HAVE_LIBASPELL
+class KOSpellConfig;
+#endif
 
 namespace KFormula {
     class Document;
@@ -569,6 +577,11 @@ public:
     void setKSpellConfig(KSpellConfig _kspell);
     KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
 
+#if HAVE_LIBASPELL
+    void setKOSpellConfig(KOSpellConfig _kspell);
+    KOSpellConfig * getKOSpellConfig()const {return m_pKOSpellConfig;}
+#endif
+
 #ifndef NDEBUG
     void printStyleDebug();
     void printDebug();
@@ -962,6 +975,9 @@ private:
     KWVariableCollection *m_varColl;
     KWBgSpellCheck *m_bgSpellCheck;
     KSpellConfig *m_pKSpellConfig;
+#if HAVE_LIBASPELL
+    KOSpellConfig *m_pKOSpellConfig;
+#endif
     KoStyleCollection *m_styleColl;
     KWFrameStyleCollection *m_frameStyleColl;
     KWTableStyleCollection *m_tableStyleColl;
