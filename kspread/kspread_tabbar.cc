@@ -69,12 +69,10 @@ public:
     // if this value is 0, that means that no tab is active.
     int activeTab;
 
-    // number of the tab being moved using the mouse.
-    // if no tab is being moved this value is 0.
-    int moveTab;
-
-    // whether a tab is being moved using the mouse and in which direction
-    enum { moveTabNo = 0, moveTabBefore, moveTabAfter } moveTabFlag;
+    // when the user drag the tab (in order to move it)
+    // this is the target position
+    // (it's 0 if no tab is dragged)
+    int targetTab;
 
     // true if autoscroll is active
     bool autoScroll;
@@ -91,6 +89,10 @@ public:
 
     // draw a marker to indicate tab moving
     void drawMoveMarker( QPainter& painter, int x, int y );
+
+    // move tab into another position
+    // handle the active tab as necessary
+    void moveTab( int tab, int target );
 };
 
 
@@ -186,6 +188,26 @@ void TabBarPrivate::drawMoveMarker( QPainter& painter, int x, int y )
     painter.setBrush( oldBrush );
 }
 
+void TabBarPrivate::moveTab( int tab, int target )
+{
+    if( tab < 0 ) return;
+
+    QString tabName = visibleTabs[ tab ];
+    QStringList::Iterator it;
+
+    it = visibleTabs.at( tab );
+    visibleTabs.remove( it );
+
+    if( target > tab ) target--;
+    it = visibleTabs.at( target );
+    if( target == visibleTabs.count() )
+      it = visibleTabs.end();
+    visibleTabs.insert( it, tabName );
+
+    if( activeTab == tab+1 )
+        activeTab = target+1;
+}
+
 // creates a new tabbar
 TabBar::TabBar( KSpreadView *view )
     : QWidget( view )
@@ -196,10 +218,7 @@ TabBar::TabBar( KSpreadView *view )
     d->leftTab = 1;
     d->rightTab = 0;
     d->activeTab = 0;
-
-    d->moveTab = 0;
-    d->moveTabFlag = TabBarPrivate::moveTabNo;
-
+    d->targetTab = 0;
     d->autoScroll = false;
 }
 
@@ -259,35 +278,6 @@ QStringList TabBar::hiddenTabs()
     return d->hiddenTabs;
 }
 
-// moves a tab to another position
-void TabBar::moveTab( int from, int to, bool before )
-{
-    QStringList::Iterator it;
-
-    it = d->visibleTabs.at( from );
-    const QString tabname = *it;
-
-    if ( !before )
-        ++to;
-
-    if ( to > (int)d->visibleTabs.count() )
-    {
-        d->visibleTabs.append( tabname );
-        d->visibleTabs.remove( it );
-    }
-    else if ( from < to )
-    {
-        d->visibleTabs.insert( d->visibleTabs.at( to ), tabname );
-        d->visibleTabs.remove( it );
-    }
-    else
-    {
-        d->visibleTabs.remove( it );
-        d->visibleTabs.insert( d->visibleTabs.at( to ), tabname );
-    }
-
-    update();
-}
 
 bool TabBar::canScrollLeft() const
 {
@@ -438,13 +428,14 @@ void TabBar::paintEvent( QPaintEvent* )
     }
 
     // draw the move marker
-    if( d->moveTab > 0 )
+    if( d->targetTab > 0 )
     {
-        QRect rect = d->tabRects[ d->moveTab-1 ];
+        int p = QMIN( d->targetTab, d->tabRects.count() );
+        QRect rect = d->tabRects[ p-1 ];
         if( !rect.isNull() )
         {
             int x = rect.x();
-            if ( d->moveTabFlag == TabBarPrivate::moveTabAfter )
+            if( d->targetTab > d->tabRects.count() )
               x = rect.right();
             d->drawMoveMarker( painter, x, rect.y() );
         }
@@ -453,9 +444,6 @@ void TabBar::paintEvent( QPaintEvent* )
     painter.end();
     bitBlt( this, 0, 0, &pm );
 }
-
-
-
 
 void TabBar::renameTab( const QString& old_name, const QString& new_name )
 {
@@ -466,7 +454,7 @@ void TabBar::renameTab( const QString& old_name, const QString& new_name )
 }
 
 
-void TabBar::mousePressEvent( QMouseEvent* _ev )
+void TabBar::mousePressEvent( QMouseEvent* ev )
 {
     if ( d->visibleTabs.count() == 0 )
     {
@@ -476,7 +464,7 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
 
     d->layoutTabs();
 
-    int tab = d->tabAt( _ev->pos() ) + 1;
+    int tab = d->tabAt( ev->pos() ) + 1;
     if( ( tab > 0 ) && ( tab != d->activeTab ) )
     {
         d->activeTab = tab;
@@ -484,78 +472,76 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
         emit tabChanged( d->visibleTabs[ d->activeTab-1] );
     }
 
-    if ( _ev->button() == LeftButton )
-    {
-        d->moveTabFlag = TabBarPrivate::moveTabBefore;
-    }
-    else if ( _ev->button() == RightButton )
-    {
-        emit contextMenu( _ev->globalPos() );
-    }
+    if ( ev->button() == RightButton )
+        emit contextMenu( ev->globalPos() );
 }
 
-void TabBar::mouseReleaseEvent( QMouseEvent* _ev )
+void TabBar::mouseReleaseEvent( QMouseEvent* ev )
 {
     if ( !d->view->koDocument()->isReadWrite())
         return;
 
-    if ( _ev->button() == LeftButton && d->moveTab != 0 )
+    d->autoScroll = false;
+
+    if ( ev->button() == LeftButton && d->targetTab != 0 )
     {
-        d->autoScroll = false;
         d->view->doc()->map()->moveTable( (*d->visibleTabs.at( d->activeTab - 1 )),
-                                          (*d->visibleTabs.at( d->moveTab - 1 )),
-                                          d->moveTabFlag == TabBarPrivate::moveTabBefore );
-        moveTab( d->activeTab - 1, d->moveTab - 1, d->moveTabFlag == TabBarPrivate::moveTabBefore );
-
-        d->moveTabFlag = TabBarPrivate::moveTabNo;
-        if ( d->activeTab < d->moveTab && d->moveTabFlag == TabBarPrivate::moveTabBefore )
-            d->moveTab--;
-        d->activeTab = d->moveTab;
-
-        d->moveTab = 0;
+                                          (*d->visibleTabs.at( d->targetTab - 1 )),
+                                          true );
+        d->moveTab( d->activeTab - 1, d->targetTab - 1 );
+        d->targetTab = 0;
         update();
     }
 }
 
-void TabBar::mouseMoveEvent( QMouseEvent* _ev )
+void TabBar::mouseMoveEvent( QMouseEvent* ev )
 {
     if ( !d->view->koDocument()->isReadWrite() )
          return;
 
-    if ( d->moveTabFlag == 0)
-        return;
-
-    int i = d->tabAt( _ev->pos() ) + 1;
-    if( i > 0 )
+    // check if user drags a tab to move it
+    int i = d->tabAt( ev->pos() ) + 1;
+    if( ( i > 0 ) && ( i != d->targetTab ) )
     {
-        if ( ( d->activeTab != i && d->activeTab != i - 1 && d->moveTab != i ) ||
-             d->moveTabFlag == TabBarPrivate::moveTabAfter )
+        if( i == d->activeTab ) i = 0;
+        if( i == d->activeTab+1 ) i = 0;
+
+        if( i != d->targetTab )
         {
-            d->moveTabFlag = TabBarPrivate::moveTabBefore;
-            d->moveTab = i;
-            update();
-        }
-        else if ( (d->moveTab != i && d->moveTab != 0) ||
-                  (d->activeTab == i - 1 && d->moveTab != 0) )
-        {
-            d->moveTab = 0;
-            update();
+           d->targetTab = i;
+           update();
         }
     }
 
-    if ( _ev->pos().x() < 0 && !d->autoScroll  )
+    // drag past the very latest visible tab
+    // e.g move a tab to the last ordering position
+    QRect r = d->tabRects[ d->tabRects.count()-1 ];
+    if( r.isValid() )
+    if( ev->pos().x() > r.right() )
+    if( ev->pos().x() < width() )
+    if( d->targetTab != d->tabRects.count()+1 )
+    {
+        d->targetTab = d->tabRects.count()+1;
+        update();
+    }
+
+    // outside far too left ? activate autoscroll...
+    if ( ev->pos().x() < 0 && !d->autoScroll  )
     {
         d->autoScroll = true;
         autoScrollLeft();
     }
 
-    if ( _ev->pos().x() > width() && !d->autoScroll )
+    // outside far too right ? activate autoscroll...
+    if ( ev->pos().x() > width() && !d->autoScroll )
     {
         d->autoScroll = true;
         autoScrollRight();
     }
 
-    if( rect().contains( _ev->pos() ) ) d->autoScroll = false;
+    // deactivate autoscroll if inside the tab bar again
+    if( rect().contains( ev->pos() ) )
+        d->autoScroll = false;
 }
 
 void TabBar::mouseDoubleClickEvent( QMouseEvent*  )

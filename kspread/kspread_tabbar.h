@@ -96,13 +96,6 @@ public:
     void renameTab( const QString& old_name, const QString& new_name );
 
     /**
-     * Moves the tab with number @param from before tab number @param to
-     * if @param before is true from is inserted before to.
-     * If false it is inserted after.
-     */
-    void moveTab( int from, int to, bool before = true );
-
-    /**
      * Removes all tabs from the bar and repaints the widget.
      */
     void removeAllTabs();
