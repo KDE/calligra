@@ -24,12 +24,8 @@
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qstringlist.h>
-#include <qlistbox.h>
 #include <qrect.h>
-#include <qcheckbox.h>
+
 
 class KSpreadView;
 class KSpreadTable;

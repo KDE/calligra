@@ -25,10 +25,11 @@
 #include "kspread_doc.h"
 #include "kspread_util.h"
 
+#include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
 
-#include <list>
+
 
 KSpreadassistant::KSpreadassistant( KSpreadView* parent, const char* name,QString _formula)
 	: QDialog( 0L, name )
@@ -42,20 +43,28 @@ KSpreadassistant::KSpreadassistant( KSpreadView* parent, const char* name,QStrin
   dy = m_pView->canvasWidget()->markerRow();
 
   setCaption( i18n("Function") );
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  lay1->setMargin( 5 );
+  lay1->setSpacing( 10 );
+  QGridLayout *lay2 = new QGridLayout( lay1,2,2 );
+  lay2->setSpacing( 5 );
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this, "Label_1" );
-  tmpQLabel->setGeometry( 10, 20, 150, 30 );
+
+
+  lay2->addWidget(tmpQLabel,0,0);
   tmpQLabel->setText(formula );
 
   m_pRef = new QLineEdit( this );
-  m_pRef->setGeometry( 10, 50, 150, 30 );
+  lay2->addWidget(m_pRef,1,0);
+
 
   m_pOk = new QPushButton( i18n("Ok"), this );
-  m_pOk->setGeometry( 180, 20, 100, 30 );
 
+  lay2->addWidget(m_pOk,0,1);
   m_pClose = new QPushButton( i18n("Cancel"), this );
-  m_pClose->setGeometry( 180, 60, 100, 30 );
+  lay2->addWidget(m_pClose,1,1);
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );

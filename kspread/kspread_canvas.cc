@@ -167,7 +167,7 @@ KSpreadTable* KSpreadCanvas::findTable( const QString& _name )
   return 0L;
 }
 
-//laurent
+
 QString KSpreadCanvas::editEditor()
 {
 return m_pEditor->text();

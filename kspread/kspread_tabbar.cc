@@ -226,6 +226,10 @@ void KSpreadTabBar::slotRename( )
     renameTab();
 }
 
+void KSpreadTabBar::slotAdd()
+{
+m_pView->insertNewTable();
+}
 
 void KSpreadTabBar::paintEvent( QPaintEvent* )
 {
@@ -342,7 +346,7 @@ void KSpreadTabBar::openPopupMenu( const QPoint &_global )
 
     m_pPopupMenu->insertItem( i18n( "Rename..." ), this, SLOT( slotRename() ) );
     m_pPopupMenu->insertItem( i18n( "Remove" ), this, SLOT( slotRemove() ) );
-
+    m_pPopupMenu->insertItem( i18n( "add" ), this, SLOT( slotAdd() ) );
     m_pPopupMenu->popup( _global );
 }
 

@@ -25,7 +25,6 @@
 #include <qlineedit.h>
 #include <qlistbox.h>
 #include <qcheckbox.h>
-#include <qlabel.h>
 
 class KSpreadView;
 
@@ -49,7 +48,7 @@ protected:
   QPushButton* m_pOk;
   QPushButton* m_pClose;
   QCheckBox *assistant;
-  QLabel *label;
+
 
 };
 

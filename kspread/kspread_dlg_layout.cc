@@ -1216,8 +1216,8 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   family_combo->setGeometry(6*XOFFSET + LABLE_LENGTH
 			    ,8*YOFFSET - COMBO_ADJUST ,4* LABLE_LENGTH,COMBO_BOX_HEIGHT);
-  connect( family_combo, SIGNAL(activated(const char *)),
-	   SLOT(family_chosen_slot(const char *)) );
+  connect( family_combo, SIGNAL(activated(const QString &)),
+	   SLOT(family_chosen_slot(const QString &)) );
   //  QToolTip::add( family_combo, "Select Font Family" );
 
 
@@ -1251,8 +1251,8 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   size_combo->setGeometry(10*XOFFSET + 6*LABLE_LENGTH
 			    ,8*YOFFSET - COMBO_ADJUST
 			  ,2*LABLE_LENGTH + 20,COMBO_BOX_HEIGHT);
-  connect( size_combo, SIGNAL(activated(const char *)),
-	   SLOT(size_chosen_slot(const char *)) );
+  connect( size_combo, SIGNAL(activated(const QString &)),
+	   SLOT(size_chosen_slot(const QString &)) );
   //  QToolTip::add( size_combo, "Select Font Size in Points" );
 
 
@@ -1264,8 +1264,8 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 			    ,19*YOFFSET - COMBO_ADJUST
 			    ,4*LABLE_LENGTH,COMBO_BOX_HEIGHT);
   weight_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  connect( weight_combo, SIGNAL(activated(const char *)),
-	   SLOT(weight_chosen_slot(const char *)) );
+  connect( weight_combo, SIGNAL(activated(const QString &)),
+	   SLOT(weight_chosen_slot(const QString &)) );
   //  QToolTip::add( weight_combo, "Select Font Weight" );
 
   style_combo = new QComboBox( this, "Style" );
@@ -1276,8 +1276,8 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 			    ,19*YOFFSET- COMBO_ADJUST
 			   ,2*LABLE_LENGTH + 20,COMBO_BOX_HEIGHT);
   style_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  connect( style_combo, SIGNAL(activated(const char *)),
-	   SLOT(style_chosen_slot(const char *)) );
+  connect( style_combo, SIGNAL(activated(const QString &)),
+	   SLOT(style_chosen_slot(const QString &)) );
   // QToolTip::add( style_combo, "Select Font Style" );
 
   example_label = new QLabel(this,"examples");
@@ -1311,14 +1311,14 @@ void CellLayoutPageFont::apply( KSpreadCell *_obj )
 	_obj->setTextFontItalic( selFont.italic() );
 }
 
-void CellLayoutPageFont::family_chosen_slot(const char* family)
+void CellLayoutPageFont::family_chosen_slot(const QString & family)
 {
   selFont.setFamily(family);
   //display_example();
   emit fontSelected(selFont);
 }
 
-void CellLayoutPageFont::size_chosen_slot(const char* size)
+void CellLayoutPageFont::size_chosen_slot(const QString & size)
 {
   QString size_string = size;
 
@@ -1327,10 +1327,10 @@ void CellLayoutPageFont::size_chosen_slot(const char* size)
   emit fontSelected(selFont);
 }
 
-void CellLayoutPageFont::weight_chosen_slot(const char* weight)
+void CellLayoutPageFont::weight_chosen_slot(const QString & weight)
 {
   QString weight_string = weight;
-
+  cout <<"bold\n";
   if ( weight_string == QString(i18n("normal")))
     selFont.setBold(false);
   if ( weight_string == QString(i18n("bold")))
@@ -1339,7 +1339,7 @@ void CellLayoutPageFont::weight_chosen_slot(const char* weight)
   emit fontSelected(selFont);
 }
 
-void CellLayoutPageFont::style_chosen_slot(const char* style)
+void CellLayoutPageFont::style_chosen_slot(const QString & style)
 {
   QString style_string = style;
 

@@ -204,6 +204,11 @@ public:
      * Menu Edit->Insert->Image
      */
     void insertImage();
+     /**
+     * Menu Edit->Remove->Table
+     */
+     void RemoveTable();
+
 
     /**
      * Menu Scripts->Edit Global Scripts
@@ -510,6 +515,10 @@ protected:
     CORBA::Long m_idMenuEdit_Insert_Chart;
     CORBA::Long m_idMenuEdit_Insert_Image;
     CORBA::Long m_idMenuEdit_Insert_Object;
+
+    OpenPartsUI::Menu_var m_vMenuEdit_Remove;
+    CORBA::Long m_idMenuEdit_Remove_Table;
+
     OpenPartsUI::Menu_var m_vMenuView;
     CORBA::Long m_idMenuView_NewView;
     CORBA::Long m_idMenuView_ShowPageBorders;

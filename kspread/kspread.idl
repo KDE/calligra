@@ -96,6 +96,7 @@ module KSpread
 		slot void consolidate();
 		slot void TextColor();
 		slot void BackgroundColor();
+		slot void RemoveTable();
 
 		Book book();
 

@@ -86,7 +86,7 @@ signals:
 protected slots:
     void slotRename( );
 	void slotRemove( );
-
+        void slotAdd();
 	void slotAutoScroll( ); 
 
 protected:

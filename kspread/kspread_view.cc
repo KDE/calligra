@@ -765,6 +765,10 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuEdit->insertSeparator( -1 );
 
+  m_vMenuEdit->insertItem8( ( wstr = Q2C( i18n( "Remove" ) ) ), m_vMenuEdit_Remove, -1, -1 );
+  m_idMenuEdit_Remove_Table = m_vMenuEdit_Remove->insertItem( ( wstr = Q2C( i18n( "&Table" ) ) ), this, "RemoveTable", 0 );
+
+  m_vMenuEdit->insertSeparator( -1 );
   m_idMenuEdit_Cell = m_vMenuEdit->insertItem( ( wstr = Q2C( i18n( "C&ell" ) ) ), this, "editCell", CTRL+Key_E );
 	
   m_vMenuEdit->insertSeparator( -1 );
@@ -2042,6 +2046,25 @@ void KSpreadView::zoomPlus()
   m_pHBorderWidget->repaint();
 }
 */
+
+void KSpreadView::RemoveTable()
+{
+   if ( doc()->map()->count() <= 1 )
+    {
+        QApplication::beep();
+        QMessageBox::warning( this, i18n("Remove table"), i18n("You cannot delete the only table of the map."), i18n("OK") ); // FIXME bad english? no english!
+        return;
+    }
+    QApplication::beep();
+    int ret = QMessageBox::warning( this, i18n("Remove table"), i18n("You are going to remove the active table.\nDo you want to continue?"), i18n("Yes"), i18n("No"), QString::null, 1, 1);
+    if ( ret == 0 )
+    {
+        KSpreadTable *tbl = activeTable();
+        doc()->map()->removeTable( tbl );
+		removeTable(tbl);
+        delete tbl;
+    }
+}
 
 void KSpreadView::setText( const QString& _text )
 {

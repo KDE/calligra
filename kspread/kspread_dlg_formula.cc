@@ -51,6 +51,11 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   
   setCaption( i18n("Formula") );
 
+  assistant=new QCheckBox("Assistant",this);
+  assistant->layout();
+  lay1->addWidget(assistant);
+  assistant->setEnabled(false);
+
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("OK") );
@@ -59,12 +64,6 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   bb->layout();
   lay1->addWidget( bb );
 
-  assistant=new QCheckBox("Assistant",this);
-  assistant->setGeometry(20,270,20,20);
-  assistant->setEnabled(false);
-  label=new QLabel(i18n("Assistant"),this);
-  label->setGeometry(50,270,50,20);
-  label->setEnabled(false);
   type_formula->insertItem(i18n("All"));
   type_formula->insertItem(i18n("Statistic"));
   type_formula->insertItem(i18n("Trigonometric"));
@@ -170,12 +169,12 @@ void KSpreaddlgformula::slotselected_formula(const QString & string)
 {
 if(string=="variante" || string =="mult" || string =="average" || string =="sum" || string =="max" || string =="min")
 	{
-	label->setEnabled(true);
+	
 	assistant->setEnabled(true);
 	}
 else
 	{
-	label->setEnabled(false);
+	
 	assistant->setEnabled(false);
 	}
 	
