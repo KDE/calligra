@@ -377,7 +377,7 @@ void KivioView::setupActions()
     "open_stencilset", actionCollection(), "addStencilSet" );
   connect(addSpSet,SIGNAL(activated(const QString&)),SLOT(addStencilSet(const QString&)));
 
-  (void) new KAction( i18n("Align && Distribute..."), ALT+Key_A, this,
+  (void) new KAction( i18n("Align && Distribute..."), CTRL+ALT+Key_A, this,
     SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
 
   KStdAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
