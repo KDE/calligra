@@ -624,6 +624,7 @@ void KWView::setupPrinter( KPrinter &prt )
 {
 #ifdef HAVE_KDEPRINT
     prt.setPageSelection( KPrinter::ApplicationSide );
+    prt.setCurrentPage( currentPage() + 1 );
 #endif
     prt.setMinMax( 1, doc->getPages() );
     bool makeLandscape = FALSE;
@@ -660,7 +661,6 @@ void KWView::setupPrinter( KPrinter &prt )
         prt.setOrientation( KPrinter::Landscape );
     else
         prt.setOrientation( KPrinter::Portrait );
-    prt.setCurrentPage( currentPage() + 1 );
 }
 
 void KWView::print( KPrinter &prt )
