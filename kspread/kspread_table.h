@@ -324,13 +324,13 @@ public:
      * Use @ref #recalc to recaculate dirty values.
      */
     void setCalcDirtyFlag();
-   
+
     /**
      * Calculates all cells in the table with the CalcDirtyFlag.
      * @param m_depend set to false to disable updating the dependencies (why would you want to do that?)
      */
     void calc();
-   
+
     /**
      * Recalculates the current table. If you want to recalculate EVERYTHING, then
      * call @ref Table::setCalcDirtyFlag for all tables in the @ref #m_pMap to make
@@ -399,7 +399,7 @@ public:
 
     void setSelectionVerticalText( const QPoint &_marker,bool _b);
 
-    void setSelectionComment( const QPoint &_marker,QString _comment);
+    void setSelectionComment( const QPoint &_marker,const QString &_comment);
     void setSelectionRemoveComment( const QPoint &_marker);
 
     void setSelectionAngle( const QPoint &_marker,int _value);
@@ -532,7 +532,7 @@ public:
     void borderBottom( const QPoint &_marker,const QColor &_color );
     void borderRight( const QPoint &_marker,const QColor &_color );
 
-    void setConditional( const QRect &_marker, 
+    void setConditional( const QRect &_marker,
 			 QValueList<KSpreadConditional> newConditions );
 
     void setValidity( const QPoint &_marker,KSpreadValidity tmp );
@@ -1057,11 +1057,11 @@ protected:
     SelectionType workOnCells( const QPoint& _marker, CellWorker& worker );
 
 private:
-    bool FillSequenceWithInterval (QPtrList<KSpreadCell>& _srcList, 
-				   QPtrList<KSpreadCell>& _destList, 
+    bool FillSequenceWithInterval (QPtrList<KSpreadCell>& _srcList,
+				   QPtrList<KSpreadCell>& _destList,
 				   QPtrList<AutoFillSequence>& _seqList);
 
-    void FillSequenceWithCopy (QPtrList<KSpreadCell>& _srcList, 
+    void FillSequenceWithCopy (QPtrList<KSpreadCell>& _srcList,
 			       QPtrList<KSpreadCell>& _destList);
 
 };

@@ -1129,7 +1129,7 @@ struct SetSelectionCommentWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::setSelectionComment( const QPoint &_marker, QString _comment)
+void KSpreadTable::setSelectionComment( const QPoint &_marker, const QString &_comment)
 {
     SetSelectionCommentWorker w( _comment );
     workOnCells( _marker, w );
@@ -1316,7 +1316,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
   doc()->emitBeginOperation();
 
   QString cellText;
-    
+
   int x,y; /* just some loop counters */
 
   /* the actual number of columns or rows that the series will span.
@@ -1330,7 +1330,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
        * so when does end = start ^ n ??
        * when n = ln(end) / ln(start)
        */
-      numberOfCells = (int)( (log((double)end) / log((double)start)) + 
+      numberOfCells = (int)( (log((double)end) / log((double)start)) +
 			     DBL_EPSILON) + 1;
     }
 
@@ -1340,13 +1340,13 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
      * be the top left corner of where the series is, but if something in front
      * is obscuring the cell, then it needs to be part of the undo region */
     QRect undoRegion;
-    
+
     undoRegion.setLeft(_marker.x());
     undoRegion.setTop(_marker.y());
-    
+
     /* this whole block is used to find the correct size for the undo region.
-       We're checking for two different things (in these examples, 
-       mode==column): 
+       We're checking for two different things (in these examples,
+       mode==column):
 
        1.  cells are vertically merged.  This means that one value in the
          series will span multiple cells.
@@ -1360,17 +1360,17 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
         for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1); y++ )
         {
 	  cell = cellAt( _marker.x(), y );
-	  
+
 	  if ( cell->isObscuringForced() )
 	  {
 	    /* case 2. */
-	    undoRegion.setLeft(QMIN(undoRegion.left(), 
+	    undoRegion.setLeft(QMIN(undoRegion.left(),
 				    cell->obscuringCellsColumn()));
 	    cell = cellAt( cell->obscuringCellsColumn(),
 			   cell->obscuringCellsRow() );
 	  }
 	  /* case 1.  Add the extra space to numberOfCells and then skip
-	     over the region.  Note that because of the above if block 'cell' 
+	     over the region.  Note that because of the above if block 'cell'
 	     points to the correct cell in the case where both case 1 and 2
 	     are true
 	  */
@@ -1390,7 +1390,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
 
 	  if ( cell->isObscuringForced() )
 	  {
-	    undoRegion.setTop(QMIN(undoRegion.top(), 
+	    undoRegion.setTop(QMIN(undoRegion.top(),
 				   cell->obscuringCellsRow()));
 	    cell = cellAt( cell->obscuringCellsColumn(),
 				    cell->obscuringCellsRow() );
@@ -1404,7 +1404,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoChangeAreaTextCell *undo = new 
+        KSpreadUndoChangeAreaTextCell *undo = new
 	  KSpreadUndoChangeAreaTextCell( m_pDoc, this, undoRegion );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
@@ -1420,7 +1420,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
 
         if(cell->isObscuringForced())
         {
-            cell = cellAt( cell->obscuringCellsColumn(), 
+            cell = cellAt( cell->obscuringCellsColumn(),
 			   cell->obscuringCellsRow());
         }
 
@@ -3658,21 +3658,21 @@ void KSpreadTable::clearValiditySelection( const QPoint &_marker )
 }
 
 
-struct ClearConditionalSelectionWorker : public KSpreadTable::CellWorker 
+struct ClearConditionalSelectionWorker : public KSpreadTable::CellWorker
 {
   ClearConditionalSelectionWorker( ) : KSpreadTable::CellWorker( ) { }
 
-  class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, 
-					     KSpreadTable* table, 
-					     QRect& r ) 
+  class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc,
+					     KSpreadTable* table,
+					     QRect& r )
   {
     return new KSpreadUndoConditional( doc, table, r );
   }
-  bool testCondition( KSpreadCell* cell ) 
+  bool testCondition( KSpreadCell* cell )
   {
     return ( !cell->isObscured() );
   }
-  void doWork( KSpreadCell* cell, bool, int, int ) 
+  void doWork( KSpreadCell* cell, bool, int, int )
   {
     QValueList<KSpreadConditional> emptyList;
     cell->SetConditionList(emptyList);
@@ -3732,26 +3732,26 @@ void KSpreadTable::defaultSelection( const QPoint &_marker )
 }
 
 
-struct SetConditionalWorker : public KSpreadTable::CellWorker 
+struct SetConditionalWorker : public KSpreadTable::CellWorker
 {
   QValueList<KSpreadConditional> conditionList;
-  SetConditionalWorker( QValueList<KSpreadConditional> _tmp ) : 
+  SetConditionalWorker( QValueList<KSpreadConditional> _tmp ) :
     KSpreadTable::CellWorker( ), conditionList( _tmp ) { }
 
-  class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, 
-					     KSpreadTable* table, QRect& r ) 
+  class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc,
+					     KSpreadTable* table, QRect& r )
   {
     return new KSpreadUndoConditional( doc, table, r );
   }
-    
-  bool testCondition( KSpreadCell* ) 
+
+  bool testCondition( KSpreadCell* )
   {
     return true;
   }
-  
-  void doWork( KSpreadCell* cell, bool, int, int ) 
+
+  void doWork( KSpreadCell* cell, bool, int, int )
   {
-    if ( !cell->isObscured() ) 
+    if ( !cell->isObscured() )
     {
       cell->SetConditionList(conditionList);
       cell->setDisplayDirtyFlag();
@@ -5107,9 +5107,9 @@ KSpreadTable* KSpreadTable::findTable( const QString & _name )
 void KSpreadTable::insertCell( KSpreadCell *_cell )
 {
   m_cells.insert( _cell, _cell->column(), _cell->row() );
-  
+
   /* immediately check for cells that are depending on this one.  This can happen if a dependancy range
-   * is given which included cells that were the default cell, but are just now being inserted into the 
+   * is given which included cells that were the default cell, but are just now being inserted into the
    * cell list for real
    */
 

@@ -159,3 +159,73 @@ bool KSpreadTableIface::setTableName( const QString & name)
 {
     return m_table->setTableName( name);
 }
+
+void KSpreadTableIface::setSelectionMoneyFormat( bool b )
+{
+    m_table->setSelectionMoneyFormat(m_table->markerRect().topLeft (),b);
+}
+
+void KSpreadTableIface::setSelectionPrecision( int _delta )
+{
+    m_table->setSelectionPrecision(m_table->markerRect().topLeft (),_delta);
+}
+
+void KSpreadTableIface::setSelectionPercent( bool b )
+{
+    m_table->setSelectionPercent(m_table->markerRect().topLeft (),b);
+}
+
+void KSpreadTableIface::setSelectionMultiRow( bool enable )
+{
+    m_table->setSelectionMultiRow(m_table->markerRect().topLeft (),enable);
+}
+
+void KSpreadTableIface::setSelectionSize(int _size )
+{
+    m_table->setSelectionSize(m_table->markerRect().topLeft (),_size);
+}
+
+void KSpreadTableIface::setSelectionUpperLower( int _type )
+{
+    m_table->setSelectionUpperLower(m_table->markerRect().topLeft (),_type);
+}
+
+void KSpreadTableIface::setSelectionfirstLetterUpper( )
+{
+    m_table->setSelectionfirstLetterUpper(m_table->markerRect().topLeft ());
+}
+
+void KSpreadTableIface::setSelectionVerticalText( bool b)
+{
+    m_table->setSelectionVerticalText(m_table->markerRect().topLeft (),b);
+}
+
+void KSpreadTableIface::setSelectionComment( const QString &_comment)
+{
+    m_table->setSelectionComment(m_table->markerRect().topLeft (),_comment);
+}
+
+void KSpreadTableIface::setSelectionRemoveComment()
+{
+    m_table->setSelectionRemoveComment(m_table->markerRect().topLeft ());
+}
+
+void KSpreadTableIface::setSelectionAngle(int _value)
+{
+    m_table->setSelectionAngle(m_table->markerRect().topLeft (),_value);
+}
+
+void KSpreadTableIface::setSelectionTextColor( const QColor &tbColor )
+{
+    m_table->setSelectionTextColor(m_table->markerRect().topLeft (),tbColor);
+}
+
+void KSpreadTableIface::setSelectionbgColor( const QColor &bg_Color )
+{
+    m_table->setSelectionbgColor(m_table->markerRect().topLeft (),bg_Color);
+}
+
+void KSpreadTableIface::setSelectionBorderColor(const QColor &bd_Color )
+{
+    m_table->setSelectionBorderColor(m_table->markerRect().topLeft (),bd_Color);
+}
