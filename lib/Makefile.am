@@ -8,6 +8,6 @@ messages:
 #	$(MAKE) -C kformula -f Makefile.am symbolnames.cc
 	$(EXTRACTRC) */*.rc */*.ui > parts.cc
 	$(XGETTEXT) parts.cc */*.cc */*.cpp -o $(podir)/koffice.pot
-	rm parts.cc kformula/symbolnames.cc
+	rm -f parts.cc kformula/symbolnames.cc
 
 include ../admin/Doxyfile.am
