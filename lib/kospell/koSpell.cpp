@@ -20,6 +20,10 @@
 #include "koSpell.moc"
 #include "koSconfig.h"
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #ifdef HAVE_LIBASPELL
 #include "koaspell.h"
 #endif
@@ -40,17 +44,24 @@ KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObjec
     int clt = ksc->client();
     kdDebug()<<" client :"<<clt<<endl;
     if( clt == KOS_CLIENT_ISPELL)
+    {
+        kdDebug()<<" KOS_CLIENT_ISPELL :*************\n";
         return new KOISpell(parent, caption,
                             receiver, slot, ksc/*config all other parameter*/ );
+    }
 #ifdef HAVE_LIBASPELL
     else if (clt == KOS_CLIENT_ASPELL)
+    {
+        kdDebug()<<" KOS_CLIENT_ASPELL :**************\n";
         return new KOASpell(parent,caption,ksc,modal,_autocorrect);
+    }
 #endif
 #if 0
     //for the futur :)
     else if( clt == KOS_CLIENT_MYSPELL)
         getAvailDictsMyspell();
 #endif
+    kdDebug()<<" default !!!!!!!!!!!!!!!!!!!!!!!!!\n";
      return new KOISpell(parent, caption,
                             receiver, slot, ksc/*config all other parameter*/ );
 
