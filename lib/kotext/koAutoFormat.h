@@ -149,6 +149,8 @@ public:
 
     void configAutoSuperScript( bool b );
 
+    void configCorrectionWithFormat( bool b);
+
     TypographicQuotes getConfigTypographicSimpleQuotes() const
     { return m_typographicSimpleQuotes; }
 
@@ -214,6 +216,9 @@ public:
 
     bool getConfigAutoSuperScript(  ) const
     { return m_bAutoSuperScript; }
+
+    bool getConfigCorrectionWithFormat() const
+    { return m_bAutoCorrectionWithFormat; }
 
 
     // Add/remove entries, called by the dialog
@@ -314,7 +319,7 @@ private:
     bool m_bAutoFormatActive;
 
     bool m_bAutoSuperScript;
-
+    bool m_bAutoCorrectionWithFormat;
     QChar m_bulletStyle;
 
     TypographicQuotes m_typographicSimpleQuotes;

@@ -51,6 +51,7 @@ KoAutoFormatEntry::KoAutoFormatEntry(const KoAutoFormatEntry& _entry)
     :m_replace(_entry.replace())
 {
     kdDebug()<<" KoAutoFormatEntry::KoAutoFormatEntry(const KoAutoFormatEntry& _entry) :"<<this<<endl;
+    m_formatOptions= 0L;
     if ( _entry.formatEntryContext() )
     {
         m_formatOptions = new KoSearchContext();
@@ -114,6 +115,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_ignoreUpperCase(false),
       m_bAutoFormatActive(true),
       m_bAutoSuperScript( false ),
+      m_bAutoCorrectionWithFormat( false ),
       m_bulletStyle(),
       m_typographicSimpleQuotes(),
       m_typographicDoubleQuotes(),
@@ -155,6 +157,7 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_ignoreUpperCase( format.m_ignoreUpperCase ),
       m_bAutoFormatActive( format.m_bAutoFormatActive ),
       m_bAutoSuperScript( format.m_bAutoSuperScript ),
+      m_bAutoCorrectionWithFormat( format.m_bAutoCorrectionWithFormat),
       m_bulletStyle( format.m_bulletStyle ),
       m_typographicSimpleQuotes( format.m_typographicSimpleQuotes ),
       m_typographicDoubleQuotes( format.m_typographicDoubleQuotes ),
@@ -201,6 +204,7 @@ void KoAutoFormat::readConfig()
     m_includeAbbreviation = config.readBoolEntry( "includeAbbreviation", false );
 
     m_advancedAutoCorrect = config.readBoolEntry( "AdvancedAutocorrect", true );
+    m_bAutoCorrectionWithFormat = config.readBoolEntry( "AutoCorrectionWithFormat",false );
     m_autoDetectUrl = config.readBoolEntry("AutoDetectUrl",false);
     m_ignoreDoubleSpace = config.readBoolEntry("IgnoreDoubleSpace",false);
     m_removeSpaceBeginEndLine = config.readBoolEntry("RemoveSpaceBeginEndLine",false);
@@ -472,6 +476,9 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "TypographicSimpleQuotesEnabled", m_typographicSimpleQuotes.replace );
 
     config.writeEntry( "AdvancedAutocorrect", m_advancedAutoCorrect );
+    config.writeEntry( "AutoCorrectionWithFormat", m_bAutoCorrectionWithFormat );
+
+
     config.writeEntry( "AutoDetectUrl",m_autoDetectUrl);
 
     config.writeEntry( "IgnoreDoubleSpace",m_ignoreDoubleSpace );
@@ -916,7 +923,7 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
             cursor.setIndex( start + length );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
             KCommand *cmd = 0L;
-            if (!it.data().formatEntryContext() )
+            if (!it.data().formatEntryContext() || !m_bAutoCorrectionWithFormat)
                 cmd = txtObj->replaceSelectionCommand( textEditCursor, it.data().replace(),
                                                              KoTextObject::HighlightSelection,
                                                              i18n("Autocorrect word") );
@@ -1689,6 +1696,11 @@ void KoAutoFormat::configIncludeAbbreviation( bool b )
 void KoAutoFormat::configAutoSuperScript( bool b )
 {
     m_bAutoSuperScript = b;
+}
+
+void KoAutoFormat::configCorrectionWithFormat( bool b)
+{
+    m_bAutoCorrectionWithFormat = b;
 }
 
 KCommand *KoAutoFormat::applyAutoFormat( KoTextObject * obj )

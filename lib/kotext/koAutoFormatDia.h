@@ -111,7 +111,7 @@ protected:
     QWidget *tab4;
 
     QCheckBox *cbTypographicSimpleQuotes, *cbTypographicDoubleQuotes,*cbUpperCase, *cbUpperUpper, *cbDetectUrl,
-        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine, *cbUseBulletStyle, *cbAutoChangeFormat, *cbAutoReplaceNumber, *cbUseNumberStyle, *cbAutoSuperScript;
+        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine, *cbUseBulletStyle, *cbAutoChangeFormat, *cbAutoReplaceNumber, *cbUseNumberStyle, *cbAutoSuperScript, *cbAutoCorrectionWithFormat;
     QPushButton *pbDoubleQuote1, *pbDoubleQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDoubleDefault,
                 *pbSpecialChar1, *pbSpecialChar2, *pbBulletStyle, *pbDefaultBulletStyle;
 

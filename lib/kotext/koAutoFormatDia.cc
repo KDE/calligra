@@ -476,11 +476,15 @@ void KoAutoFormatDia::setupTab3()
 
     grid->addMultiCellWidget( cbAdvancedAutoCorrection, 0, 0, 0, 6 );
 
+    cbAutoCorrectionWithFormat = new QCheckBox( tab3 );
+    cbAutoCorrectionWithFormat->setText( i18n("Replace Text With Format") );
+    grid->addMultiCellWidget( cbAutoCorrectionWithFormat, 1, 1, 0, 6 );
+
     lblFind = new QLabel( i18n( "&Find:" ), tab3 );
-    grid->addWidget( lblFind, 1, 0 );
+    grid->addWidget( lblFind, 2, 0 );
 
     m_find = new KoAutoFormatLineEdit( tab3 );
-    grid->addWidget( m_find, 1, 1 );
+    grid->addWidget( m_find, 2, 1 );
 
     lblFind->setBuddy( m_find );
 
@@ -491,15 +495,15 @@ void KoAutoFormatDia::setupTab3()
 
     pbSpecialChar1 = new QPushButton( "...", tab3 );
     pbSpecialChar1->setFixedWidth( 40 );
-    grid->addWidget( pbSpecialChar1, 1, 2 );
+    grid->addWidget( pbSpecialChar1, 2, 2 );
 
     connect(pbSpecialChar1,SIGNAL(clicked()), SLOT(chooseSpecialChar1()));
 
     lblReplace = new QLabel( i18n( "&Replace:" ), tab3 );
-    grid->addWidget( lblReplace, 1, 3 );
+    grid->addWidget( lblReplace, 2, 3 );
 
     m_replace = new KoAutoFormatLineEdit( tab3 );
-    grid->addWidget( m_replace, 1, 4 );
+    grid->addWidget( m_replace, 2, 4 );
 
     lblReplace->setBuddy( m_replace );
 
@@ -510,12 +514,12 @@ void KoAutoFormatDia::setupTab3()
 
     pbSpecialChar2 = new QPushButton( "...", tab3 );
     pbSpecialChar2->setFixedWidth( 40 );
-    grid->addWidget( pbSpecialChar2, 1, 5 );
+    grid->addWidget( pbSpecialChar2, 2, 5 );
 
     connect(pbSpecialChar2,SIGNAL(clicked()), SLOT(chooseSpecialChar2()));
 
     pbAdd = new QPushButton( i18n( "&Add"), tab3  );
-    grid->addWidget( pbAdd, 1, 6 );
+    grid->addWidget( pbAdd, 2, 6 );
 
     connect(pbAdd,SIGNAL(clicked()),this, SLOT(slotAddEntry()));
 
@@ -523,7 +527,7 @@ void KoAutoFormatDia::setupTab3()
     m_pListView->addColumn( i18n( "Find" ) );
     m_pListView->addColumn( i18n( "Replace" ) );
     m_pListView->setAllColumnsShowFocus( true );
-    grid->addMultiCellWidget( m_pListView, 2, 2, 0, 5 );
+    grid->addMultiCellWidget( m_pListView, 3, 3, 0, 5 );
 
     connect(m_pListView, SIGNAL(doubleClicked ( QListViewItem * )),
              SLOT(slotEditEntry()) );
@@ -546,6 +550,7 @@ void KoAutoFormatDia::setupTab3()
 void KoAutoFormatDia::initTab3()
 {
     cbAdvancedAutoCorrection->setChecked(m_autoFormat.getConfigAdvancedAutoCorrect());
+    cbAutoCorrectionWithFormat->setChecked( m_autoFormat.getConfigCorrectionWithFormat());
     m_pListView->clear();
     KoAutoFormatEntryMap::ConstIterator it;
     it = m_autoFormat.firstAutoFormatEntry();
@@ -762,7 +767,7 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->copyListException(abbreviation->getListException());
     m_docAutoFormat->copyListTwoUpperCaseException(twoUpperLetter->getListException());
     m_docAutoFormat->configAdvancedAutocorrect( cbAdvancedAutoCorrection->isChecked() );
-
+    m_docAutoFormat->configCorrectionWithFormat( cbAutoCorrectionWithFormat->isChecked());
 
     m_docAutoFormat->configIncludeTwoUpperUpperLetterException( twoUpperLetter->autoInclude());
     m_docAutoFormat->configIncludeAbbreviation( abbreviation->autoInclude());
