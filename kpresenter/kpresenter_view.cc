@@ -2488,7 +2488,7 @@ void KPresenterView::setupActions()
                                              actionCollection(), "tools_autoform" );
     actionToolsAutoform->setExclusiveGroup( "tools" );
 
-    actionToolsDiagramm = new KToggleAction( i18n( "&Chart" ), "frame_chart", Key_F12,
+    actionToolsDiagramm = new KToggleAction( i18n( "&Chart" ), "frame_chart", 0,
                                              this, SLOT( toolsDiagramm() ),
                                              actionCollection(), "tools_diagramm" );
     actionToolsDiagramm->setExclusiveGroup( "tools" );
@@ -2817,7 +2817,7 @@ void KPresenterView::setupActions()
 
 
     actionScreenStart = new KAction( i18n( "&Start" ),
-                                     "2rightarrow", 0,
+                                     "2rightarrow", Key_F12,
                                      this, SLOT( screenStart() ),
                                      actionCollection(), "screen_start" );
 
