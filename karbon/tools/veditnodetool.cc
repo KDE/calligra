@@ -220,7 +220,7 @@ VEditNodeTool::eventFilter( QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		//m_activeNode = view()->part()->document().selection()->node( lp );
-		view()->part()->document().selection()->clearNodes();
+		//view()->part()->document().selection()->clearNodes();
 
 		// draw initial object:
 		drawTemporaryObject();

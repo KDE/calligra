@@ -626,16 +626,8 @@ VSegment::select( const KoRect& rect )
 
 	if( rect.contains( m_node[2] ) )
 	{
-		m_nodeSelected[2] = true;
+		m_nodeSelected[2] = m_nodeEdited[2] = true;
 		success = true;
-	}
-
-	// reset edited nodes
-	if( success )
-	{
-		m_nodeEdited[0] = false;
-		m_nodeEdited[1] = false;
-		m_nodeEdited[2] = false;
 	}
 
 	return success;
