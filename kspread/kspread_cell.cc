@@ -3509,8 +3509,9 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
     {
       m_content = Text;
 
-      m_value.setValue( KSpreadValue( ctext ) );
       m_strOutText = ctext;
+      m_strText    = ctext;
+      m_value.setValue( KSpreadValue( ctext ) );
 
       setFlag(Flag_LayoutDirty);
       setFlag(Flag_TextFormatDirty);
