@@ -95,21 +95,21 @@ template<class RowT, class ColT, class CellT> class KTablePrivate : public QShar
   void insertColumn( uint _c ) {
     ASSERT( _c <= col_count );
     ++col_count;
-    QValueList<CellT>::Iterator it;
+    typename QValueList<CellT>::Iterator it;
     for( uint i = 0; i < row_count; ++i )
     {
       it = matrix.at( i * col_count + _c );
       matrix.insert( it, CellT() );
     }
 
-    QValueList<ColT>::Iterator it2 = col_list.at( _c );
+    typename QValueList<ColT>::Iterator it2 = col_list.at( _c );
     col_list.insert( it2, ColT() );
   }
 
   void insertRow( uint _r ) {
     ASSERT( _r <= row_count );
     ++row_count;
-    QValueList<CellT>::Iterator it = matrix.at( _r * col_count );
+    typename QValueList<CellT>::Iterator it = matrix.at( _r * col_count );
     for( uint i = 0; i < col_count; ++i )
       matrix.insert( it, CellT() );
 
@@ -120,21 +120,21 @@ template<class RowT, class ColT, class CellT> class KTablePrivate : public QShar
   void removeColumn( uint _c ) {
     ASSERT( _c < col_count );
     --col_count;
-    QValueList<CellT>::Iterator it;
+    typename QValueList<CellT>::Iterator it;
     for( uint i = 0; i < row_count; ++i )
     {
       it = matrix.at( i * col_count + _c );
       matrix.remove( it );
     }
 
-    QValueList<ColT>::Iterator it2 = col_list.at( _c );
+    typename QValueList<ColT>::Iterator it2 = col_list.at( _c );
     col_list.remove( it2 );
   }
 
   void removeRow( uint _r ) {
     ASSERT( _r < row_count );
     --row_count;
-    QValueList<CellT>::Iterator it = matrix.at( _r * col_count );
+    typename QValueList<CellT>::Iterator it = matrix.at( _r * col_count );
     for( uint i = 0; i < col_count; ++i )
       it = matrix.remove( it );
 
@@ -160,14 +160,14 @@ public:
   /**
    * Typedefs
    */
-  typedef QValueList<CellT>::Iterator Iterator;
-  typedef QValueList<CellT>::ConstIterator ConstIterator;
+  typedef typename QValueList<CellT>::Iterator Iterator;
+  typedef typename QValueList<CellT>::ConstIterator ConstIterator;
 
-  typedef QValueList<RowT>::Iterator RowIterator;
-  typedef QValueList<RowT>::ConstIterator ConstRowIterator;
+  typedef typename QValueList<RowT>::Iterator RowIterator;
+  typedef typename QValueList<RowT>::ConstIterator ConstRowIterator;
 
-  typedef QValueList<ColT>::Iterator ColIterator;
-  typedef QValueList<ColT>::ConstIterator ConstColIterator;
+  typedef typename QValueList<ColT>::Iterator ColIterator;
+  typedef typename QValueList<ColT>::ConstIterator ConstColIterator;
 
   /**
    * API
