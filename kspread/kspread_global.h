@@ -52,6 +52,10 @@ class ElapsedTime
 /* Definition of maximal supported columns - please check kspread_util (columnName) and kspread_cluster also */
 #define KS_colMax 0x7FFF
 
+/* Currently used by StyleCluster for the Quad tree - question is, if we can make the spreadsheet this big in general?
+   We need this value to be the smallest number which is a power of 2 and more than both KS_rowMax and KS_colMax*/
+#define KS_Max_Quad 0x8000
+
 /* Definition of maximal supported columns/rows, which can be merged */
 #define KS_spanMax 0xFFF
 

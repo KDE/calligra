@@ -108,6 +108,7 @@ double KSpreadFormat::globalColWidth()
 
 void KSpreadFormat::copy( const KSpreadFormat & _l )
 {
+  // TODO why is the table not copied?
   if ( m_pStyle && m_pStyle->release() )
     delete m_pStyle;
 
@@ -119,7 +120,8 @@ void KSpreadFormat::copy( const KSpreadFormat & _l )
 
   if ( _l.m_strComment )
   {
-    delete m_strComment;
+    if (m_strComment)
+      delete m_strComment;
     m_strComment  = new QString( *_l.m_strComment );
   }
 }
@@ -1664,7 +1666,12 @@ void KSpreadFormat::setBackGroundBrushColor( const QColor & c )
 
 void KSpreadFormat::setTextFont( const QFont & _f )
 {
-  if( _f == KoGlobal::defaultFont() )
+  if( m_pStyle->parent() && _f == m_pStyle->parent()->font())
+  {
+    clearProperty( PFont );
+    setNoFallBackProperties( PFont );
+  }
+  else if( !m_pStyle->parent() && _f == KoGlobal::defaultFont() )
   {
     clearProperty( PFont );
     setNoFallBackProperties( PFont );
