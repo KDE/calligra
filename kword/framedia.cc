@@ -786,6 +786,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     if ( allFrames.count() > 1 ) {
         rNewFrameset->setChecked(false);
         rNewFrameset->setEnabled(false);
+        myGroup->setRadioButtonExclusive( false );
     }
     if(frame && frame->frameSet() == 0) {
         oldFrameSetName = doc->generateFramesetName( i18n( "Text Frameset %1" ) );
