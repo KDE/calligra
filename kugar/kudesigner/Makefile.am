@@ -7,7 +7,7 @@ INCLUDES = -I$(srcdir)/../kudesigner_lib -I$(srcdir)/../lib $(KOFFICE_INCLUDES) 
 lib_LTLIBRARIES = libkudesignercore.la kudesigner.la
 libkudesignercore_la_SOURCES = kudesigner_view.cpp kudesigner_factory.cpp kudesigner_doc.cpp
 libkudesignercore_la_LDFLAGS = -avoid-version -module $(all_libraries) $(KDE_RPATH)
-libkudesignercore_la_LIBADD = $(srcdir)/../kudesigner_lib/libkudesignercommon.la $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
+libkudesignercore_la_LIBADD = ../kudesigner_lib/libkudesignercommon.la $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
 
 ## The part
 kde_module_LTLIBRARIES = libkudesignerpart.la
