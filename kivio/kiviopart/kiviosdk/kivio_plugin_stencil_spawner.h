@@ -22,21 +22,22 @@
 class KivioIntraStencilData;
 class KivioPoint;
 class KivioStencil;
-
+class KivioStencilFactory;
 class QDomDocument;
 
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
 #include <qpixmap.h>
 
-typedef KivioStencil *(*NewStencilFunc)();
-typedef QPixmap *(*GetIconFunc)();
-typedef KivioStencilSpawnerInfo *(*GetSpawnerInfoFunc)();
+//typedef KivioStencil *(*NewStencilFunc)();
+//typedef QPixmap *(*GetIconFunc)();
+//typedef KivioStencilSpawnerInfo *(*GetSpawnerInfoFunc)();
 
 
 class KivioPluginStencilSpawner : public KivioStencilSpawner
 {
 protected:
+	KivioStencilFactory *fac;
     void *m_handle;
     QPixmap *m_pIcon;
     QString m_filename;
@@ -54,6 +55,7 @@ public:
     virtual QDomElement saveXML( QDomDocument & );
 
     virtual KivioStencil *newStencil();
+    virtual KivioStencil *newStencil(const QString &arg);
     virtual KivioStencilSpawnerInfo *info();
 
     virtual QPixmap *icon() { return m_pIcon; }

@@ -22,13 +22,13 @@
 #include <qstring.h>
 #include <qpixmap.h>
 #include <qdom.h>
+#include <qobject.h>
+
 class QPainter;
 class QRect;
 class KivioStencilSpawnerInfo;
 class KivioStencilSpawnerSet;
 class KivioStencil;
-
-
 
 class KivioStencilSpawner
 {
@@ -37,30 +37,31 @@ protected:
     QPixmap m_icon;
     KivioStencilSpawnerSet *m_pSet;
     KivioStencilSpawnerInfo *m_pInfo;
-    
+
     // Default width and height
     float m_defWidth, m_defHeight;
-    
+
 public:
     KivioStencilSpawner( KivioStencilSpawnerSet * );
     virtual ~KivioStencilSpawner();
-    
+
     virtual bool load( const QString & );
     virtual bool loadXML( const QString &, QDomDocument & );
     virtual QDomElement saveXML( QDomDocument & );
 
     virtual KivioStencil *newStencil();
-    
+    virtual KivioStencil *newStencil(const QString& args);
+
     virtual QString fileName() { return m_fileName; }
     virtual KivioStencilSpawnerSet *set() { return m_pSet; }
     virtual KivioStencilSpawnerInfo *info() { return m_pInfo; }
-    
+
     virtual float defWidth() { return m_defWidth; }
     virtual float defHeight() { return m_defHeight; }
 
     virtual QPixmap *icon() { return &m_icon; }
 
-    
+
 //    virtual void drawIcon( QPainter *, QRect *, bool );
 };
 

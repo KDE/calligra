@@ -61,6 +61,11 @@ KivioStencil *KivioStencilSpawner::newStencil()
     return NULL;
 }
 
+KivioStencil *KivioStencilSpawner::newStencil(const QString& name)
+{
+    return NULL;
+}
+
 QDomElement KivioStencilSpawner::saveXML( QDomDocument &doc )
 {
     return doc.createElement("KivioStencilSpawner");

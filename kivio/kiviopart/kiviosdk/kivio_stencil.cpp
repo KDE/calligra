@@ -26,6 +26,7 @@
 #include "kivio_stencil.h"
 
 #include <kozoomhandler.h>
+#include <KIvioStencilIface.h>
 
 KivioStencil::KivioStencil()
     : m_pSpawner(NULL),
@@ -48,6 +49,8 @@ KivioStencil::KivioStencil()
 
   m_type = kstNormal;
   m_connected = false;
+
+  iface = new KivioStencilIface(this);
 }
 
 KivioStencil::~KivioStencil()

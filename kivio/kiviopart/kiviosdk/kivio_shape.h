@@ -31,16 +31,16 @@ protected:
 public:
     KivioShape();
     KivioShape( const KivioShape & );
-    
+
     virtual ~KivioShape();
-    
+
     void copyInto( KivioShape * ) const;
-    
+
     bool loadXML( const QDomElement & );
     QDomElement saveXML( QDomDocument & );
-    
+
     KivioShapeData::KivioShapeType shapeType() { return m_shapeData.shapeType(); }
-    
+
     KivioShapeData *shapeData() { return &m_shapeData; }
 
     static KivioShape *loadShapeArc( const QDomElement & );

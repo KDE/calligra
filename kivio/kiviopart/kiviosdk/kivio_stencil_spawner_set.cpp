@@ -104,7 +104,7 @@ bool KivioStencilSpawnerSet::loadDir( const QString &dirName )
     m_name = readTitle( dirName );
     m_id = readId( dirName );
 
-    d.setNameFilter("*.sml *.ksp *.spy *.shape");
+    d.setNameFilter("*.so, *.sml *.ksp *.spy *.shape");
 
     for( int i=0; i<(int)d.count(); i++ )
     {
@@ -129,6 +129,10 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
         pSpawner = new KivioSMLStencilSpawner(this);
     }
     else if( fileName.contains( ".ksp", false ) )
+    {
+        pSpawner = new KivioPluginStencilSpawner(this);
+    }
+    else if( fileName.contains( ".so", false ) )
     {
         pSpawner = new KivioPluginStencilSpawner(this);
     }

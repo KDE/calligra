@@ -16,18 +16,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <dlfcn.h>
 
 #include <config.h>
 #include "kivio_plugin_stencil_spawner.h"
-
+#include <kparts/part.h>
+#include <kparts/componentfactory.h>
+#include "kiviostencilfactory.h"
 #include "kivio_intra_stencil_data.h"
 #include "kivio_point.h"
 #include "kivio_common.h"
 #include "kivio_stencil.h"
 
 #include <qdom.h>
-
+#include <qfileinfo.h>
 #include <kdebug.h>
 
 KivioPluginStencilSpawner::KivioPluginStencilSpawner( KivioStencilSpawnerSet *pSet )
@@ -39,83 +40,31 @@ KivioPluginStencilSpawner::KivioPluginStencilSpawner( KivioStencilSpawnerSet *pS
 
 KivioPluginStencilSpawner::~KivioPluginStencilSpawner()
 {
-    if( m_handle )
-    {
-        dlclose( m_handle );
-        m_handle = NULL;
-        m_fileName = "";
-    }
 
-
-    pNewStencil = NULL;
 }
-
-#ifndef RTLD_NOW
-#define RTLD_NOW	0
-#endif
-#ifndef RTLD_GLOBAL
-#define RTLD_GLOBAL	0
-#endif
 
 bool KivioPluginStencilSpawner::load( const QString &f )
 {
-    const char *error;
+	QFileInfo lib(f);
+	if( lib.exists())
+	{
+		    m_fileName = lib.baseName();
+	}
+	else
+		return false;
 
-    if ( !( f.right(4) == ".ksp" ) )
-    {
-       kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " is not a KSP file" << endl;
-        return false;
-    }
+	fac= KParts::ComponentFactory::createInstanceFromLibrary<KivioStencilFactory>(m_fileName.latin1());
 
-    m_handle = dlopen( f.ascii(), RTLD_NOW | RTLD_GLOBAL );
-    if( !m_handle )
-    {
-       kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " is not a dll" << endl;
-        return false;
-    }
-
-    pNewStencil = (NewStencilFunc)dlsym( m_handle, "NewStencil" );
-    if (!pNewStencil)
-	pNewStencil = (NewStencilFunc)dlsym( m_handle, "_NewStencil" );
-    if( (error=dlerror())!=NULL )
-    {
-       kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for NewStencil(): " << error << endl;
-        dlclose(m_handle);
-        m_handle = NULL;
-        return false;
-    }
-
-    pGetIcon = (GetIconFunc)dlsym( m_handle, "GetIcon" );
-    if (!pGetIcon)
-	pGetIcon = (GetIconFunc)dlsym( m_handle, "_GetIcon" );
-    if( (error=dlerror())!=NULL )
-    {
-       kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for GetIcon(): " << error << endl;
-        dlclose(m_handle);
-        m_handle = NULL;
-        return false;
-    }
-
-    pGetSpawnerInfo = (GetSpawnerInfoFunc)dlsym( m_handle, "GetSpawnerInfo" );
-    if (!pGetSpawnerInfo)
-	pGetSpawnerInfo = (GetSpawnerInfoFunc)dlsym( m_handle, "_GetSpawnerInfo" );
-    if( (error=dlerror())!=NULL )
-    {
-       kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for GetIcon(): " << error << endl;
-        dlclose(m_handle);
-        m_handle = NULL;
-        return false;
-    }
-
+	 if( !fac)
+	 {
+	 	kdDebug() << "Failed to load: " << m_fileName << endl;
+	 	return false;
+	}
     // Get the icon
-    m_pIcon = pGetIcon();
+    m_pIcon = fac->GetIcon();
 
     // Get the info
-    m_pSInfo = pGetSpawnerInfo();
-
-
-    m_fileName = f;
-    m_filename = f;
+    m_pSInfo = fac->GetSpawnerInfo();
 
     return true;
 }
@@ -131,12 +80,20 @@ QDomElement KivioPluginStencilSpawner::saveXML( QDomDocument &doc )
 
 KivioStencil *KivioPluginStencilSpawner::newStencil()
 {
-    KivioStencil *pStencil = pNewStencil();
+    KivioStencil *pStencil = fac->NewStencil();
 
     pStencil->setSpawner(this);
     return pStencil;
 }
 
+
+KivioStencil *KivioPluginStencilSpawner::newStencil(const QString& arg)
+{
+    KivioStencil *pStencil = fac->NewStencil(arg);
+
+    pStencil->setSpawner(this);
+    return pStencil;
+}
 KivioStencilSpawnerInfo *KivioPluginStencilSpawner::info()
 {
     return m_pSInfo;

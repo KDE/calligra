@@ -36,6 +36,7 @@ class KivioPoint;
 class KivioRect;
 class KivioStencilSpawner;
 class KivioStencil;
+class KivioStencilIface;
 
 // If a custom draggable is clicked, an ID must be returned in the range of kctCustom to MAXINT
 typedef enum
@@ -242,6 +243,8 @@ public:
     virtual double endAHWidth() { return 0.0f; }
     virtual double endAHLength() { return 0.0f; }
 
+    private:
+    	KivioStencilIface *iface;
 };
 
 #endif
