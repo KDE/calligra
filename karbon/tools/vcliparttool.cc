@@ -105,13 +105,10 @@ VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, Karbon
 	m_clipartChooser->setFixedSize( 180, 120 );
 	m_addClipartButton->setIconSet( QPixmap( il.iconPath( "14_clipart_add.png", KIcon::Small ) ) );
 	m_addClipartButton->setTextLabel( i18n( "Add" ) );
-	m_addClipartButton->setTextPosition( QToolButton::Under );
 	m_importClipartButton->setIconSet( QPixmap( il.iconPath( "14_clipart_import.png", KIcon::Small ) ) );
 	m_importClipartButton->setTextLabel( i18n( "Import" ) );
-	m_importClipartButton->setTextPosition( QToolButton::Under );
 	m_deleteClipartButton->setIconSet( QPixmap( il.iconPath( "14_clipart_delete.png", KIcon::Small ) ) );
 	m_deleteClipartButton->setTextLabel( i18n( "Delete" ) );
-	m_deleteClipartButton->setTextPosition( QToolButton::Under );
 
 	m_buttonGroup->setInsideMargin( 3 );
 	m_importClipartButton->setEnabled( false );
