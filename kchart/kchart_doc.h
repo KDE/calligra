@@ -18,7 +18,7 @@ class KChartDocument;
 #include <KChart.h>
 #include <KChartData.h>
 
-#include "../lib/interfaces/chart.h"
+#include "chart.h"
 
 #define MIME_TYPE "application/x-kchart"
 #define KChartRepoID "IDL:KCharter/Document:1.0"

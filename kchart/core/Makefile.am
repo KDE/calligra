@@ -1,4 +1,4 @@
-# $Id: $
+# $Id$
 
 ####### General stuff
 
@@ -13,7 +13,8 @@ libkchartcore_la_SOURCES = \
 	KChartAreaPainter.cpp KChartBarsPainter.cpp KChartPointsPainter.cpp \
 	KChartLinesPainter.cpp KChartLinesPointsPainter.cpp KChartPiePainter.cpp \
 	KChartColorArray.cpp KChartData.cpp KChartPie3DPainter.cpp 
-libkchartcore_la_LIBADD = -lkdecore -lqt
+
+libkchartcore_la_LIBADD = -lkdecore -lqt -lXext -lX11
 libkchartcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0
 include_HEADERS = KChart.h KChartTypes.h KChartColorArray.h KChartData.h
 
@@ -45,12 +46,5 @@ test7_SOURCES = main7.cpp
 test10_SOURCES = main10.cpp
 test11_SOURCES = main11.cpp
 
-test_LDADD = libkchartcore.la -lkdecore -lqt -lXext
-test2_LDADD = libkchartcore.la -lkdecore -lqt -lXext
-test3_LDADD = libkchartcore.la -lkdecore -lqt -lXext
-test4_LDADD = libkchartcore.la -lkdecore -lqt -lXext
-test5_LDADD = libkchartcore.la -lkdecore -lqt -lXext
-test6_LDADD = libkchartcore.la -lkdecore -lqt -lXext
-test7_LDADD = libkchartcore.la -lkdecore -lqt -lXext
-test10_LDADD = libkchartcore.la -lkdecore -lqt -lXext
-test11_LDADD = libkchartcore.la -lkdecore -lqt -lXext
+LDADD = libkchartcore.la -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
+

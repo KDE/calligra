@@ -378,10 +378,10 @@ AC_MSG_CHECKING([if Qt compiles without flags])
 AC_CACHE_VAL(kde_cv_qt_direct,
 [
 ac_LD_LIBRARY_PATH_safe=$LD_LIBRARY_PATH
-ac_LIBRARY_PATH=$LIBRARY_PATH
-ac_cxxflags_safe=$CXXFLAGS
-ac_ldflags_safe=$LDFLAGS
-ac_libs_safe=$LIBS
+ac_LIBRARY_PATH="$LIBRARY_PATH"
+ac_cxxflags_safe="$CXXFLAGS"
+ac_ldflags_safe="$LDFLAGS"
+ac_libs_safe="$LIBS"
 
 CXXFLAGS="$CXXFLAGS -I$qt_includes"
 LDFLAGS="$X_LDFLAGS"
@@ -401,13 +401,13 @@ else
   cat conftest.$ac_ext >&AC_FD_CC
 fi
 rm -f conftest*
-CXXFLAGS=$ac_cxxflags_safe
-LDFLAGS=$ac_ldflags_safe
-LIBS=$ac_libs_safe
+CXXFLAGS="$ac_cxxflags_safe"
+LDFLAGS="$ac_ldflags_safe"
+LIBS="$ac_libs_safe"
 
-LD_LIBRARY_PATH=$ac_LD_LIBRARY_PATH_safe
+LD_LIBRARY_PATH="$ac_LD_LIBRARY_PATH_safe"
 export LD_LIBRARY_PATH
-LIBRARY_PATH=$ac_LIBRARY_PATH
+LIBRARY_PATH="$ac_LIBRARY_PATH"
 export LIBRARY_PATH
 ])
 
@@ -462,7 +462,7 @@ AC_CACHE_VAL(ac_cv_have_qt,
 qt_incdirs="$ac_qt_includes /usr/lib/qt/include /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt $x_includes $QTINC"
 test -n "$QTDIR" && qt_incdirs="$QTDIR/include $QTDIR $qt_incdirs"
 AC_FIND_FILE(qmovie.h, $qt_incdirs, qt_incdir)
-ac_qt_includes=$qt_incdir
+ac_qt_includes="$qt_incdir"
 
 if test ! "$ac_qt_libraries" = "NO"; then
   qt_libdirs="$ac_qt_libraries"
@@ -479,11 +479,11 @@ for dir in $qt_libdirs; do
 done
 
 dnl AC_FIND_FILE(libqt.so libqt.so.1.30 libqt.so.1.31 libqt.so.1 libqt.a libqt.sl, $qt_libdirs, qt_libdir)
-ac_qt_libraries=$qt_libdir
+ac_qt_libraries="$qt_libdir"
 
-ac_cxxflags_safe=$CXXFLAGS
-ac_ldflags_safe=$LDFLAGS
-ac_libs_safe=$LIBS
+ac_cxxflags_safe="$CXXFLAGS"
+ac_ldflags_safe="$LDFLAGS"
+ac_libs_safe="$LIBS"
 
 CXXFLAGS="$CXXFLAGS -I$qt_incdir"
 LDFLAGS="-L$qt_libdir $X_LDFLAGS"
@@ -499,9 +499,9 @@ else
   ac_qt_libraries="NO"
 fi
 rm -f conftest*
-CXXFLAGS=$ac_cxxflags_safe
-LDFLAGS=$ac_ldflags_safe
-LIBS=$ac_libs_safe
+CXXFLAGS="$ac_cxxflags_safe"
+LDFLAGS="$ac_ldflags_safe"
+LIBS="$ac_libs_safe"
 
 if test "$ac_qt_includes" = NO || test "$ac_qt_libraries" = NO; then
   ac_cv_have_qt="have_qt=no"
@@ -534,8 +534,8 @@ else
     ac_qt_includes=$ac_qt_includes ac_qt_libraries=$ac_qt_libraries"
   AC_MSG_RESULT([libraries $ac_qt_libraries, headers $ac_qt_includes])
   
-  qt_libraries=$ac_qt_libraries
-  qt_includes=$ac_qt_includes
+  qt_libraries="$ac_qt_libraries"
+  qt_includes="$ac_qt_includes"
 fi
 
 if test ! "$kde_qt_libs_given" = "yes"; then
@@ -607,7 +607,7 @@ if test -z "$1"; then
 kde_incdirs="$ac_kde_includes /usr/lib/kde/include /usr/local/kde/include /usr/kde/include /usr/include/kde /usr/include /opt/kde/include $x_includes $qt_includes"
 test -n "$KDEDIR" && kde_incdirs="$KDEDIR/include $KDEDIR $kde_incdirs"
 AC_FIND_FILE(ksock.h, $kde_incdirs, kde_incdir)
-ac_kde_includes=$kde_incdir
+ac_kde_includes="$kde_incdir"
 
 if test -n "$ac_kde_includes" && test ! -r "$ac_kde_includes/ksock.h"; then
   AC_MSG_ERROR([
@@ -624,7 +624,7 @@ AC_MSG_ERROR([
 in the prefix, you've chosen, are no kde libraries installed. This will fail.
 So, check this please and use another prefix!])
 fi
-ac_kde_libraries=$kde_libdir
+ac_kde_libraries="$kde_libdir"
 
 if test "$ac_kde_includes" = NO || test "$ac_kde_libraries" = NO; then
   ac_cv_have_kde="have_kde=no"
@@ -644,19 +644,19 @@ eval "$ac_cv_have_kde"
 
 if test "$have_kde" != "yes"; then
  if test "${prefix}" = NONE; then
-  ac_kde_prefix=$ac_default_prefix
+  ac_kde_prefix="$ac_default_prefix"
  else
-  ac_kde_prefix=$prefix
+  ac_kde_prefix="$prefix"
  fi
  if test "$exec_prefix" = NONE; then
-  ac_kde_exec_prefix=$ac_kde_prefix
+  ac_kde_exec_prefix="$ac_kde_prefix"
   AC_MSG_RESULT([will be installed in $ac_kde_prefix])
  else
-  ac_kde_exec_prefix=$exec_prefix
+  ac_kde_exec_prefix="$exec_prefix"
   AC_MSG_RESULT([will be installed in $ac_kde_prefix and $ac_kde_exec_prefix])
  fi
 
- kde_libraries=${ac_kde_exec_prefix}/lib
+ kde_libraries="${ac_kde_exec_prefix}/lib"
  kde_includes=${ac_kde_prefix}/include
 
 else
@@ -664,8 +664,8 @@ else
     ac_kde_includes=$ac_kde_includes ac_kde_libraries=$ac_kde_libraries"
   AC_MSG_RESULT([libraries $ac_kde_libraries, headers $ac_kde_includes])
   
-  kde_libraries=$ac_kde_libraries
-  kde_includes=$ac_kde_includes
+  kde_libraries="$ac_kde_libraries"
+  kde_includes="$ac_kde_includes"
 fi
 AC_SUBST(kde_libraries)
 AC_SUBST(kde_includes)
@@ -689,7 +689,7 @@ AC_SUBST(KDE_INCLUDES)
 
 AC_MSG_CHECKING(for extra includes)
 AC_ARG_WITH(extra-includes, [  --with-extra-includes   adds non standard include paths], 
-  kde_use_extra_includes=$withval,
+  kde_use_extra_includes="$withval",
   kde_use_extra_includes=NONE
 )
 if test -n "$kde_use_extra_includes" && \
@@ -806,7 +806,7 @@ fi
 AC_DEFUN(AC_CHECK_GETDOMAINNAME,
 [
 AC_LANG_CPLUSPLUS
-save_CXXFLAGS=$CXXFLAGS
+save_CXXFLAGS="$CXXFLAGS"
 if test "$GCC" = "yes"; then
 CXXFLAGS="$CXXFLAGS -pedantic-errors"
 fi
@@ -828,13 +828,13 @@ AC_MSG_RESULT($ac_cv_func_getdomainname)
 if eval "test \"`echo `$ac_cv_func_getdomainname\" = yes"; then
   AC_DEFINE(HAVE_GETDOMAINNAME)
 fi
-CXXFLAGS=$save_CXXFLAGS
+CXXFLAGS="$save_CXXFLAGS"
 ])
 
 AC_DEFUN(AC_CHECK_GETHOSTNAME,
 [
 AC_LANG_CPLUSPLUS
-save_CXXFLAGS=$CXXFLAGS
+save_CXXFLAGS="$CXXFLAGS"
 if test "$GCC" = "yes"; then
 CXXFLAGS="$CXXFLAGS -pedantic-errors"
 fi
@@ -857,7 +857,7 @@ AC_MSG_RESULT($ac_cv_func_gethostname)
 if eval "test \"`echo `$ac_cv_func_gethostname\" = yes"; then
   AC_DEFINE(HAVE_GETHOSTNAME)
 fi
-CXXFLAGS=$save_CXXFLAGS
+CXXFLAGS="$save_CXXFLAGS"
 ])
 
 AC_DEFUN(AC_CHECK_USLEEP,
@@ -867,7 +867,7 @@ AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING([for usleep])
 AC_CACHE_VAL(ac_cv_func_usleep,
 [
-ac_libs_safe=$LIBS 
+ac_libs_safe="$LIBS"
 LIBS="$LIBS $LIBUCB"
 AC_TRY_LINK([
 #include <stdlib.h>
@@ -883,7 +883,7 @@ AC_MSG_RESULT($ac_cv_func_usleep)
 if eval "test \"`echo `$ac_cv_func_usleep\" = yes"; then
   AC_DEFINE(HAVE_USLEEP)
 fi
-LIBS=$ac_libs_safe
+LIBS="$ac_libs_safe"
 ])
 
 AC_DEFUN(AC_FIND_GIF,
@@ -966,7 +966,7 @@ In this case copy $KDEDIR/lib/libjpeg* to /usr/lib.
 fi
 ])dnl
 if eval "test ! \"`echo $ac_cv_lib_jpeg`\" = no"; then
-  LIBJPEG=$ac_cv_lib_jpeg
+  LIBJPEG="$ac_cv_lib_jpeg"
   AC_SUBST(LIBJPEG)
   AC_MSG_RESULT($ac_cv_lib_jpeg)
   AC_DEFINE_UNQUOTED(HAVE_LIBJPEG)
@@ -1175,12 +1175,12 @@ AC_REQUIRE([AM_ENABLE_STATIC])
 dnl libtool is only for C, so I must force him
 dnl to find the correct flags for C++
 ac_save_cc=$CC
-ac_save_cflags=$CFLAGS
+ac_save_cflags="$CFLAGS"
 CC=$CXX
-CFLAGS=$CXXFLAGS
+CFLAGS="$CXXFLAGS"
 AM_PROG_LIBTOOL dnl for libraries
 CC=$ac_save_cc
-CFLAGS=$ac_save_cflags
+CFLAGS="$ac_save_cflags"
 ])
 
 AC_DEFUN(KDE_DO_IT_ALL,
@@ -1250,7 +1250,7 @@ getsockname(0,(struct sockaddr*)0, &a);
 ],
 ac_cv_ksize_t=int,
 ac_cv_ksize_t=size_t)
-CXXFLAGS=$ac_safe_cxxflags
+CXXFLAGS="$ac_safe_cxxflags"
 fi
 ])
 
@@ -1455,15 +1455,15 @@ AC_DEFUN(AC_HAVE_XPM,
    AC_CACHE_VAL(ac_cv_have_xpm,
    [
     AC_LANG_C
-    ac_save_ldflags=$LDFLAGS
-    ac_save_cflags=$CFLAGS
+    ac_save_ldflags="$LDFLAGS"
+    ac_save_cflags="$CFLAGS"
     LDFLAGS="$LDFLAGS $XPM_LDFLAGS $X_LDFLAGS $QT_LDFLAGS -lXpm -lX11 -lXext $LIBSOCKET"
     CFLAGS="$CFLAGS $X_INCLUDES"
     test ! -z "$XPM_INCLUDE" && CFLAGS="-I$XPM_INCLUDE $CFLAGS"
     AC_TRY_LINK([#include <X11/xpm.h>],[],
 	ac_cv_have_xpm="yes",ac_cv_have_xpm="no")
-    LDFLAGS=$ac_save_ldflags
-    CFLAGS=$ac_save_cflags
+    LDFLAGS="$ac_save_ldflags"
+    CFLAGS="$ac_save_cflags"
    ])dnl
  
   if test "$ac_cv_have_xpm" = no; then
@@ -1506,15 +1506,15 @@ AC_DEFUN(AC_HAVE_GL,
    AC_CACHE_VAL(ac_cv_have_gl,
    [
     AC_LANG_C
-    ac_save_ldflags=$LDFLAGS
-    ac_save_cflags=$CFLAGS
+    ac_save_ldflags="$LDFLAGS"
+    ac_save_cflags="$CFLAGS"
     LDFLAGS="$LDFLAGS $GL_LDFLAGS $X_LDFLAGS $QT_LDFLAGS -lMesaGL -lMesaGLU -lX11 -lXext -lm $LIBSOCKET"
     CFLAGS="$CFLAGS $X_INCLUDES"
     test ! -z "$GL_INCLUDE" && CFLAGS="-I$GL_INCLUDE $CFLAGS"
     AC_TRY_LINK([],[],
 	ac_cv_have_gl="yes",ac_cv_have_gl="no")
-    LDFLAGS=$ac_save_ldflags
-    CFLAGS=$ac_save_cflags
+    LDFLAGS="$ac_save_ldflags"
+    CFLAGS="$ac_save_cflags"
    ])dnl
  
   if test "$ac_cv_have_gl" = no; then
@@ -1593,7 +1593,7 @@ AC_DEFUN(AC_HAVE_GL,
 AC_DEFUN(AC_PATH_PAM,
  [AC_REQUIRE_CPP()dnl
 
-  kde_save_LIBS=$LIBS
+  kde_save_LIBS="$LIBS"
   LIBS="$LIBS -ldl"
   AC_CHECK_LIB(pam_misc, main, [PAM_MISC_LIB="-lpam_misc"])
   LIBS="$kde_save_LIBS"
@@ -1643,7 +1643,7 @@ AC_DEFUN(AC_PATH_PAM,
    AC_MSG_RESULT(no)
  else
    AC_DEFINE(HAVE_PAM)
-   PAMLIBS=$ac_pam_libs
+   PAMLIBS="$ac_pam_libs"
    test "x$pam_includes" = xNONE && pam_includes=$ac_pam_includes
    test "x$pam_libraries" = xNONE && pam_libraries=$ac_pam_libraries
    AC_MSG_RESULT([libraries $pam_libraries, headers $pam_includes])
@@ -1866,9 +1866,9 @@ AC_TRY_COMPILE(
 #error "nothing"
 #endif
 ],
-kde_cv_have_mini_stl=yes,
-kde_cv_have_mini_stl=no)
-CXXFLAGS=$kde_save_cxxflags
+kde_cv_have_mini_stl=no,
+kde_cv_have_mini_stl=yes)
+CXXFLAGS="$kde_save_cxxflags"
 ])
 
 
@@ -1885,7 +1885,7 @@ AC_DEFUN(KDE_CHECK_PYTHON,
 AC_MSG_CHECKING([for Python1.5])
 
 AC_ARG_WITH(pythondir, 
-[ --with-pythondir=pythondir    use python installed in pythondir ],
+[  --with-pythondir=pythondir   use python installed in pythondir ],
 [
   ac_python_dir=$withval
 ], ac_python_dir=/usr/local

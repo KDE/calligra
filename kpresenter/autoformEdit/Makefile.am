@@ -5,8 +5,8 @@ INCLUDES = $(all_includes) -I$(idldir) $(MICO_INCLUDES) \
 LDFLAGS =  $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD =  ../../lib/kofficeui/libkofficeui.la \
 	../../lib/kofficecore/libkofficecore.la ../../lib/koml/libkoml.la \
-	-lkdecore -lkdeui -lqt -lm -lXext -lX11 -lop -lkom \
-	-lkfile -lkfm $(LIBMICO) $(LIBSOCKET)
+	-lop -lkom -lkfile -lkfm -lkdecore -lkdeui -lqt -lm -lXext -lX11 \
+	$(LIBMICO) $(LIBSOCKET)
 
 bin_PROGRAMS = kautoformEdit
 

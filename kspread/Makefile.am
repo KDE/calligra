@@ -1,5 +1,5 @@
 
-INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) -I../lib/koml -I../lib/kofficecore -I../lib/kofficeui $(all_includes) -I$(idldir)
+INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) -I../lib/koml -I../lib/kofficecore -I../lib/kofficeui -I../lib/interface $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la ../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la -lkfile -lkfm -lop -lkom -lqt -lkdeui -lkdecore $(LIBMICO) $(LIBPYTHON) -lXext -lX11 $(LIBSOCKET)
 
@@ -51,6 +51,8 @@ install-exec-local:
 kspread.h: kspread.idl
 	$(IDL) --query-server-for-narrow -I$(idldir) kspread.idl
 
+chart.h: ../lib/interfaces/chart.idl
+	$(IDL) --query-server-for-narrow -I$(idldir) $<
 
 kspread.cc: kspread.h
 kspread_dlg_layout.cc: kspread_dlg_layout.moc
@@ -60,9 +62,10 @@ kspread_dlg_paper_headings.cc: kspread_dlg_paper_headings.moc
 kspread_dlg_print.cc: kspread_dlg_print.moc
 kspread_dlg_scripts.cc: kspread_dlg_scripts.moc
 kspread_doc.cc: kspread.h kspread_doc.moc
-kspread_main.cc: kspread.h kspread_main.moc
+kspread_main.cc: kspread.h kspread_table.h kspread_main.moc
 kspread_part.cc: kspread.h kspread_part.moc
 kspread_shell.cc: kspread.h kspread_shell.moc
 kspread_tabbar.cc: kspread.h kspread_tabbar.moc
 kspread_table.cc: kspread.h kspread_table.moc
 kspread_view.cc: kspread.h kspread_view.moc
+kspread_table.h: chart.h
