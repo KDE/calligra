@@ -49,7 +49,7 @@
 class KoTemplateCreateDiaPrivate {
 public:
     KoTemplateCreateDiaPrivate( QWidget* parent )
-         : m_parent( parent ), m_tempFile( QString::null, ".png" )
+         : m_tempFile( QString::null, ".png" )
     {
         m_tree=0L;
         m_name=0L;
@@ -76,7 +76,6 @@ public:
     KListView *m_groups;
     QPushButton *m_add, *m_remove;
     bool m_changed;
-    QWidget* m_parent;
     /// Temp file for remote picture file
     KTempFile m_tempFile;
 };
@@ -279,7 +278,7 @@ void KoTemplateCreateDia::slotOk() {
     orig.setPath( m_file );
     dest.setPath(templateDir+file);
     // We copy the file with overwrite
-    KIO::NetAccess::file_copy(orig, dest, -1, true, false, d->m_parent);
+    KIO::NetAccess::file_copy( orig, dest, -1, true, false, this );
 
     // if there's a .directory file, we copy this one, too
     bool ready=false;
@@ -288,10 +287,10 @@ void KoTemplateCreateDia::slotOk() {
         if((*it).contains(dir)==0) {
             orig.setPath( (*it)+".directory" );
             // Check if we can read the file
-            if(KIO::NetAccess::exists( orig, true, d->m_parent )) {
+            if( KIO::NetAccess::exists(orig, true, this) ) {
                 dest.setPath( dir+"/.directory" );
                 // We copy the file with overwrite
-                KIO::NetAccess::file_copy(orig, dest, -1, true, false, d->m_parent );
+                KIO::NetAccess::file_copy( orig, dest, -1, true, false, this );
                 ready=true;
             }
         }
@@ -352,13 +351,13 @@ void KoTemplateCreateDia::slotSelect() {
     else
     {
         QString target ( d->m_tempFile.name() );
-        if ( KIO::NetAccess::download( url, target, d->m_parent ) )
+        if ( KIO::NetAccess::download( url, target, this ) )
         {
             d->m_customFile = target;
         }
         else
         {
-                KMessageBox::sorry( d->m_parent, i18n( "Remote file could not be downloaded."));
+                KMessageBox::sorry( this, i18n( "Remote file could not be downloaded."));
                 return;
         }
     }
