@@ -133,7 +133,15 @@ KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable
     QTextStream str( &buffer, IO_WriteOnly );
     str << doc;
 
+    // This is a terrible hack to store unicode
+    // data in a QCString in a way that
+    // QCString::length() == QCString().size().
+    // This allows us to treat the QCString like a QByteArray later on.
     m_data = buffer.utf8();
+    int len = m_data.length();
+    char tmp = m_data[ len - 1 ]; 
+    m_data.resize( len );
+    *( m_data.data() + len - 1 ) = tmp;
 }
 
 KSpreadUndoRemoveColumn::~KSpreadUndoRemoveColumn()
@@ -229,7 +237,21 @@ KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_tab
     QTextStream str( &buffer, IO_WriteOnly );
     str << doc;
 
+    // This is a terrible hack to store unicode
+    // data in a QCString in a way that
+    // QCString::length() == QCString().size().
+    // This allows us to treat the QCString like a QByteArray later on.
     m_data = buffer.utf8();
+    int len = m_data.length();
+    char tmp = m_data[ len - 1 ]; 
+    m_data.resize( len );
+    *( m_data.data() + len - 1 ) = tmp;
+	
+    // printf("UNDO {{{%s}}}\n", buffer.latin1() );
+    // printf("UNDO2 %i bytes, length %i {{{%s}}}\n", m_data.length(), m_data.size(), (const char*)m_data );
+    // printf("length=%i, size=%i", m_data.length(), m_data.size() );
+    // printf("Last characters are %i %i %i\n", (int)m_data[ m_data.size() - 3 ],
+    // (int)m_data[ m_data.size() - 2 ], (int)m_data[ m_data.size() - 1 ] );
 }
 
 KSpreadUndoRemoveRow::~KSpreadUndoRemoveRow()
@@ -508,7 +530,15 @@ KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable* table, QRe
     QTextStream str( &buffer, IO_WriteOnly );
     str << doc;
 
+    // This is a terrible hack to store unicode
+    // data in a QCString in a way that
+    // QCString::length() == QCString().size().
+    // This allows us to treat the QCString like a QByteArray later on.
     m_data = buffer.utf8();
+    int len = m_data.length();
+    char tmp = m_data[ len - 1 ]; 
+    m_data.resize( len );
+    *( m_data.data() + len - 1 ) = tmp;
 }
 
 KSpreadUndoDelete::~KSpreadUndoDelete()

@@ -3375,14 +3375,23 @@ void KSpreadTable::copySelection( const QPoint &_marker )
     else
 	rct = selectionRect();
 	
-    // Save to buffer
     QDomDocument doc = saveCellRect( rct );
 
+    // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
     str << doc;
 
+    // This is a terrible hack to store unicode
+    // data in a QCString in a way that
+    // QCString::length() == QCString().size().
+    // This allows us to treat the QCString like a QByteArray later on.
     QCString s = buffer.utf8();
+    int len = s.length();
+    char tmp = s[ len - 1 ]; 
+    s.resize( len );
+    *( s.data() + len - 1 ) = tmp;
+    
     buffer = QString::null;
 
     QStoredDrag* data = new QStoredDrag( "application/x-kspread-snippet" );
@@ -4003,9 +4012,9 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 
 	// ##### Inefficient
 	// Save the row layouts if there are any
-	for( int x = _rect.left(); x <= _rect.right(); ++x )
+	for( int y = _rect.top(); y <= _rect.bottom(); ++y )
         {
-	    RowLayout* lay = rowLayout( x );
+	    RowLayout* lay = rowLayout( y );
 	    if ( lay && !lay->isDefault() )
 	    {
 		QDomElement e = lay->save( doc );

@@ -232,16 +232,21 @@ bool KSpreadDoc::save( ostream& out, const char* )
 
   // Save to buffer
   QString buffer;
-  // buffer.open( IO_WriteOnly );
   QTextStream str( &buffer, IO_WriteOnly );
   str << doc;
-  // buffer.close();
 
-  // out.write( buffer.buffer().data(), buffer.buffer().size() );
-
+  // This is a terrible hack to store unicode
+  // data in a QCString in a way that
+  // QCString::length() == QCString().size().
+  // This allows us to treat the QCString like a QByteArray later on.
   QCString s = buffer.utf8();
-  buffer = QString::null;
+  int len = s.length();
+  char tmp = s[ len - 1 ]; 
+  s.resize( len );
+  *( s.data() + len - 1 ) = tmp;
 
+  buffer = QString::null;
+    
   out.write( s.data(), s.size() );
 
   setModified( false );
