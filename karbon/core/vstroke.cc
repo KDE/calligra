@@ -104,7 +104,7 @@ VStroke::load( const QDomElement& element )
 {
 	m_type = none;
 	// load stroke parameters:
-	m_lineWidth = element.attribute( "lineWidth", "0.0" ).toDouble();
+	m_lineWidth = element.attribute( "lineWidth", "1.0" ).toDouble();
 	if( m_lineWidth < 0.0 )
 		m_lineWidth = 0.0;
 
