@@ -10,10 +10,11 @@
 #ifndef __canvas_h__
 #define __canvas_h__
 
-#include <qimage.h>
-#include <qobject.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
+
+#include <qimage.h>
+#include <qobject.h>
 
 #include "layer.h"
 #include "brush.h"
@@ -57,16 +58,25 @@ public:
   Layer* getCurrentLayer()
   { return currentLayer; }
 
+  /**
+   *  Defines the current layedr.
+   */
+  void setCurrentLayer( int _layer );
+
+  void upperLayer( int _layer );
+  void lowerLayer( int _layer );
+  void frontLayer( int _layer );
+  void backgroundLayer( int _layer );
+
   // return size
   int height();
   int width();
 
-  void addRGBLayer( QString file );
-  void compositeImage( QRect r );
-  void setCurrentLayer( int l );
-  Layer* layerPtr( Layer* lay );
-  void setLayerOpacity( uchar o, Layer *lay = 0 );
-  
+  void addRGBLayer( QString _file );
+  void compositeImage( QRect _rect );
+  Layer* layerPtr( Layer *_layer );
+  void setLayerOpacity( uchar _opacity, Layer *_layer = 0 );
+
   void renderLayerIntoTile( QRect tileBoundary, Layer *srcLay, Layer *dstLay, int dstTile );
   void moveLayer( int dx, int dy, Layer *lay = 0 );
   void renderTileQuadrant( Layer *srcLay, int srcTile, Layer *dstLay, int dstTile,

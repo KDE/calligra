@@ -41,6 +41,10 @@ public:
 public slots:
 
   void slotMenuAction( int );
+  void slotAddLayer();
+  void slotRemoveLayer();
+  void slotUpperLayer();
+  void slotLowerLayer();
 
 protected:
 

@@ -9,18 +9,20 @@
 //
 //   For more information see at the file COPYING in this package
 
-#include "layer.h"
-#include "misc.h"
-#include "canvas.h"
 #include <string.h>
 #include <stdio.h>
+#include <iostream.h>
+#include <sys/time.h>
+#include <unistd.h>                                                      
+
 #include <qpainter.h>
 #include <qwidget.h>
 #include <qregexp.h>
 #include <qfileinfo.h>
 
-#include <sys/time.h>
-#include <unistd.h>                                                      
+#include "layer.h"
+#include "misc.h"
+#include "canvas.h"
 
 // #define puts(A)
 // #define showi(A)
@@ -600,6 +602,58 @@ void Canvas::paintBrush(QPoint pt, Brush *brsh)
 	}
       }
     }
+}
+
+void Canvas::upperLayer( int _layer )
+{
+  ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
+
+  if( _layer > 0 )
+  {
+    cerr << "Michael : move layer " << _layer << " to " << _layer - 1 << endl;
+ 
+    Layer *pLayer = layers.take( _layer );
+    layers.insert( _layer - 1, pLayer );
+    compositeImage( QRect() );
+  }
+}
+
+void Canvas::lowerLayer( int _layer )
+{
+  ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
+
+  if( _layer < ( layers.count() - 1 ) )
+  {
+    cerr << "Michael : move layer " << _layer << " to " << _layer + 1 << endl;
+
+    Layer *pLayer = layers.take( _layer );
+    layers.insert( _layer + 1, pLayer );
+    compositeImage( QRect() );
+  }
+}
+
+void Canvas::frontLayer( int _layer )
+{
+  ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
+
+  if( _layer > 0 )
+  {
+    Layer *pLayer = layers.take( _layer );
+    layers.insert( 0, pLayer );
+    compositeImage( QRect() );
+  }
+}
+
+void Canvas::backgroundLayer( int _layer )
+{
+  ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
+
+  if( _layer < ( layers.count() - 1 ) )
+  {
+    Layer *pLayer = layers.take( _layer );
+    layers.append( pLayer );
+    compositeImage( QRect() );
+  }
 }
 
 #include "canvas.moc"

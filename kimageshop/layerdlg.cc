@@ -23,8 +23,8 @@ LayerDialog::LayerDialog(KImageShopDoc* doc, QWidget* _parent, const char* _name
 {
   QGridLayout* layout = new QGridLayout( this, 10, 2, 15, 7 );
 
-  LayerView* layerlist = new LayerView( doc, this, "layerlist" );
-  layout->addMultiCellWidget( layerlist, 0, 9, 0, 0 );
+  LayerView* layerview = new LayerView( doc, this, "layerlist" );
+  layout->addMultiCellWidget( layerview, 0, 9, 0, 0 );
 
   QPushButton* pbAddLayer = new QPushButton( this, "addlayer" );
   pbAddLayer->setText( i18n( "Add layer" ) );
@@ -45,20 +45,22 @@ LayerDialog::LayerDialog(KImageShopDoc* doc, QWidget* _parent, const char* _name
   QPushButton* pbUp = new QPushButton( this, "up" );
   pbUp->setText( i18n( "Up" ) );
   layout->addWidget( pbUp, 4, 1 );
+  connect( pbUp, SIGNAL( clicked() ), layerview, SLOT( slotUpperLayer() ) );
 
   QPushButton* pbDown = new QPushButton( this, "down" );
   pbDown->setText( i18n( "Down" ) );
   layout->addWidget( pbDown, 5, 1 );
+  connect( pbDown, SIGNAL( clicked() ), layerview, SLOT( slotLowerLayer() ) );
 
   QPushButton* pbClose = new QPushButton( this, "closebutton" );
   pbClose->setText( i18n( "Close" ) );
   layout->addWidget( pbClose, 9, 1 );
-  QObject::connect( pbClose, SIGNAL( clicked() ), this, SLOT( hide() ) );
+  connect( pbClose, SIGNAL( clicked() ), this, SLOT( hide() ) );
 
   layout->setRowStretch( 8, 1 );
   layout->setColStretch( 0, 1 );
 
-  layout->addColSpacing( 0, layerlist->sizeHint().width() );
+  layout->addColSpacing( 0, layerview->sizeHint().width() );
 }
 
 #include "layerdlg.moc"

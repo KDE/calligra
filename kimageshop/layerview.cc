@@ -113,10 +113,6 @@ void LayerView::paintCell( QPainter* _painter, int _row, int )
   _painter->drawText( 80, 20, m_doc->layerList().at( _row )->name() );
 }
 
-void LayerView::updateList()
-{
-}
-
 void LayerView::updateTable()
 {
   if( m_doc )
@@ -248,6 +244,30 @@ void LayerView::mousePressEvent( QMouseEvent* _event )
     update_contextmenu( row );
     m_contextmenu->popup( mapToGlobal( _event->pos() ) );
   }
+}
+
+void LayerView::slotAddLayer()
+{
+}
+
+void LayerView::slotRemoveLayer()
+{
+}
+
+void LayerView::slotUpperLayer()
+{
+  m_doc->upperLayer( m_selected );
+  updateCell( m_selected, 0 );
+  if( m_selected > 0 )
+    updateCell( m_selected - 1, 0 );
+}
+
+void LayerView::slotLowerLayer()
+{
+  m_doc->lowerLayer( m_selected );
+    updateCell( m_selected, 0 );
+  if( m_selected < ( m_doc->layerList().count() - 1 ) )
+    updateCell( m_selected + 1, 0 );
 }
 
 #include "layerview.moc"
