@@ -46,14 +46,25 @@ QTabWidget(parent, name)
   setTabShape(Triangular);
 
   QWidget *mPainting = new QWidget(this);
-  QGridLayout *mPaintingLayout = new QGridLayout(mPainting, 3, 2);
+  QGridLayout *mPaintingLayout = new QGridLayout(mPainting, 2, 2);
+
+  QLabel *mPaintingText = new QLabel(i18n("Painting"), mPainting);
   mPaintingBox = new QComboBox(mPainting);
   mPaintingBox->insertItem(i18n("No"));
   mPaintingBox->insertItem(i18n("Color"));
   mPaintingBox->insertItem(i18n("Gradient"));
   mPaintingBox->insertItem(i18n("Pattern"));
   mPaintingBox->setCurrentItem(0);
-  mPaintingLayout->addWidget(mPaintingBox, 1, 1);
+
+  QLabel *mOpacityText = new QLabel(i18n("Opacity"), mPainting);
+  mOpacityBox = new QSpinBox(0, 100, 5, mPainting);
+  mOpacityBox->setSuffix("%");
+
+  mPaintingLayout->addWidget(mPaintingText, 0, 0);
+  mPaintingLayout->addWidget(mPaintingBox, 0, 1);
+  mPaintingLayout->addWidget(mOpacityText, 1, 0);
+  mPaintingLayout->addWidget(mOpacityBox, 1, 1);
+
   insertTab(mPainting, i18n("Painting"));
 
   KoColorChooser *mPaintPanel = new KoColorChooser(this);
@@ -150,8 +161,7 @@ QTabWidget(parent, name)
   /* Join style selection */
   mJoinBox = new QButtonGroup(3, Qt::Horizontal, mOutlineStyle);
   mJoinBox->setFrameStyle(QFrame::NoFrame);
-//  mJoinBox->setMargin(1);
-  mJoinBox->setFixedHeight(22); // remove it
+  mJoinBox->setInsideMargin(0);
   mJoinBox->setExclusive(true);
   QPushButton *mRoundBtn = new QPushButton(mJoinBox);
   mRoundBtn->setToggleButton(true);
@@ -212,7 +222,7 @@ QTabWidget(parent, name)
   /* Cap style selection */
   mCapBox = new QButtonGroup(3, Qt::Horizontal, mOutlineStyle);
   mCapBox->setFrameStyle(QFrame::NoFrame);
-  mCapBox->setFixedHeight(22); // remove it
+  mCapBox->setInsideMargin(0);
   mCapBox->setExclusive(true);
   QPushButton *mCRoundBtn = new QPushButton(mCapBox);
   mCRoundBtn->setToggleButton(true);

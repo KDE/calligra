@@ -24,10 +24,10 @@
 #define __TransformPanel_h__
 
 #include <qdockwindow.h>
-#include <qpushbutton.h>
 
 class QWMatrix;
 class QTabWidget;
+class QSpinBox;
 class QGroupBox;
 class KIntNumInput;
 class GPage;
@@ -51,19 +51,19 @@ signals:
   void changeTransform(KCommand *);
 
 private:
-  QTabWidget   *mTab;
-  KIntNumInput *mHoriz;
-  KIntNumInput *mVert;
-  QGroupBox    *mTranslate;
-  QGroupBox    *mRotate;
-  QGroupBox    *mShear;
-  KIntNumInput *mAngle;
-  KIntNumInput *mShearAngleX;
-  KIntNumInput *mShearAngleY;
-  GPage        *mPage;
-  Handle       *mHandle; // not strictly necessary, so convenience
-  bool         mTRelative : 1;
-  bool         mRRelative : 1;
+  QTabWidget    *mTab;
+  QWidget       *mTranslate;
+  QSpinBox      *mHorizBox;
+  QSpinBox      *mVertBox;
+  QGroupBox     *mRotate;
+  QGroupBox     *mShear;
+  KIntNumInput  *mAngle;
+  KIntNumInput  *mShearAngleX;
+  KIntNumInput  *mShearAngleY;
+  GPage         *mPage;
+  Handle        *mHandle; // not strictly necessary, so convenience
+  bool          mTRelative : 1;
+  bool          mRRelative : 1;
 };
 
 #endif

@@ -28,6 +28,10 @@
 #include "DuplicateCmd.h"
 
 #include <qtabwidget.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qspinbox.h>
 #include <qgroupbox.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
@@ -40,28 +44,37 @@
 
 const double deg2rad = 0.017453292519943295769; // pi/180
 
-TransformPanel::TransformPanel(QWidget *parent, const char *name)
-: QDockWindow(QDockWindow::InDock, parent, name)
+TransformPanel::TransformPanel(QWidget *parent, const char *name):
+QDockWindow(QDockWindow::InDock, parent, name)
 {
   mTab = new QTabWidget(this);
   mTab->setTabShape(QTabWidget::Triangular);
 
+  QGridLayout *mLayout;
+
   /* Translate */
-  mTranslate = new QGroupBox(5, Qt::Vertical, mTab);
-  mHoriz = new KIntNumInput(0, mTranslate);
+  mTranslate = new QWidget(mTab);
+  mLayout = new QGridLayout(mTranslate, 4, 2);
+  QLabel *mHorizText = new QLabel(i18n("Horizontal"), mTranslate);
+  mHorizBox = new QSpinBox(-1000, 1000, 1, mTranslate);
   //connect(mHoriz, SIGNAL(valueChanged(int)), this, SLOT(slotTranslateChanged(int)));
-  mHoriz->setRange(-1000, 1000, 1, false);
-  mHoriz->setLabel(i18n("Horizontal"));
-  mVert  = new KIntNumInput(0, mTranslate);
+  QLabel *mVertText = new QLabel(i18n("Vertical"), mTranslate);
+  mVertBox = new QSpinBox(-1000, 1000, 1, mTranslate);
   //connect(mVert, SIGNAL(valueChanged(int)), this, SLOT(slotTranslateChanged(int)));
-  mVert->setRange(-1000, 1000, 1, false);
-  mVert->setLabel(i18n("Vertical"));
   QCheckBox *mTRelative = new QCheckBox(i18n("Relative"), mTranslate, "T");
   connect(mTRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
-  QPushButton *but = new QPushButton(i18n("Duplicate"), mTranslate);
-  connect(but, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
-  but = new QPushButton(i18n("Apply"), mTranslate);
-  connect(but, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
+  QPushButton *mTDuplicateBtn = new QPushButton(i18n("Duplicate"), mTranslate);
+  connect(mTDuplicateBtn, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
+  QPushButton *mTApplyBtn = new QPushButton(i18n("Apply"), mTranslate);
+  connect(mTApplyBtn, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
+
+  mLayout->addWidget(mHorizText, 0, 0);
+  mLayout->addWidget(mHorizBox, 0, 1);
+  mLayout->addWidget(mVertText, 1, 0);
+  mLayout->addWidget(mVertBox, 1, 1);
+  mLayout->addMultiCellWidget(mTRelative, 2, 2, 0, 1);
+  mLayout->addWidget(mTDuplicateBtn, 3, 0);
+  mLayout->addWidget(mTApplyBtn, 3, 1);
   mTab->insertTab(mTranslate, i18n("T"));
 
   /* Rotate */
@@ -72,7 +85,7 @@ TransformPanel::TransformPanel(QWidget *parent, const char *name)
   mAngle->setLabel(i18n("Angle"));
   QCheckBox *mRRelative = new QCheckBox(i18n("Relative"), mRotate, "R");
   connect(mRRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
-  but = new QPushButton(i18n("Duplicate"), mRotate);
+  QPushButton *but = new QPushButton(i18n("Duplicate"), mRotate);
   connect(but, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
   but = new QPushButton(i18n("Apply"), mRotate);
   connect(but, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
@@ -107,8 +120,8 @@ void TransformPanel::setContext(const QWMatrix &m, GPage *p)
   mHandle = &(p->handle());
   if(!mTRelative)
   {
-    mHoriz->setValue(int(mHandle->rotCenter().x()));
-    mVert->setValue(int(mHandle->rotCenter().y()));
+    mHorizBox->setValue(int(mHandle->rotCenter().x()));
+    mVertBox->setValue(int(mHandle->rotCenter().y()));
   }
 }
 
@@ -119,13 +132,13 @@ void TransformPanel::slotRelativeToggled(bool toggled)
 	mTRelative = toggled;
     if(toggled)
 	{
-	  mHoriz->setValue(0);
-	  mVert->setValue(0);
+	  mHorizBox->setValue(0);
+	  mVertBox->setValue(0);
 	}
 	else
 	{
-	  mHoriz->setValue(int(mHandle->rotCenter().x()));
-	  mVert->setValue(int(mHandle->rotCenter().y()));
+	  mHorizBox->setValue(int(mHandle->rotCenter().x()));
+	  mVertBox->setValue(int(mHandle->rotCenter().y()));
 	}
   }
   else if(mTab->currentPage() == mRotate)
@@ -142,13 +155,13 @@ void TransformPanel::slotDupPressed()
     // Handle only translates that really change the object
     if(mTRelative)
 	{
-	  if(!(mHoriz->value() == 0 && mVert->value() == 0))
-        c->addCommand(new TranslateCmd(mPage->document(), double(mHoriz->value()), double(mVert->value())));
+	  if(!(mHorizBox->value() == 0 && mVertBox->value() == 0))
+        c->addCommand(new TranslateCmd(mPage->document(), double(mHorizBox->value()), double(mVertBox->value())));
 	}
 	else
 	{
-	  if(mHoriz->value() != mHandle->rotCenter().x() || mVert->value() != mHandle->rotCenter().y())
-        c->addCommand(new TranslateCmd(mPage->document(), double(mHoriz->value() - mHandle->rotCenter().x()), double(mVert->value()  - mHandle->rotCenter().y())));
+	  if(mHorizBox->value() != mHandle->rotCenter().x() || mVertBox->value() != mHandle->rotCenter().y())
+        c->addCommand(new TranslateCmd(mPage->document(), double(mHorizBox->value() - mHandle->rotCenter().x()), double(mVertBox->value()  - mHandle->rotCenter().y())));
     }
   else if(mTab->currentPage() == mRotate)
     c->addCommand(new RotateCmd(mPage->document(), mHandle->rotCenter(), mAngle->value()));
@@ -165,14 +178,14 @@ void TransformPanel::slotApplyPressed()
     // Handle only translates that really change the object
     if(mTRelative)
 	{
-	  if(!(mHoriz->value() == 0 && mVert->value() == 0))
-        c = new TranslateCmd(mPage->document(), double(mHoriz->value()), double(mVert->value()));
+	  if(!(mHorizBox->value() == 0 && mVertBox->value() == 0))
+        c = new TranslateCmd(mPage->document(), double(mHorizBox->value()), double(mVertBox->value()));
 	}
 	else
 	{
-	  if(mHoriz->value() != mHandle->rotCenter().x() || mVert->value() != mHandle->rotCenter().y())
-        c = new TranslateCmd(mPage->document(), double(mHoriz->value() - mHandle->rotCenter().x()),
-	                                            double(mVert->value()  - mHandle->rotCenter().y()));
+	  if(mHorizBox->value() != mHandle->rotCenter().x() || mVertBox->value() != mHandle->rotCenter().y())
+        c = new TranslateCmd(mPage->document(), double(mHorizBox->value() - mHandle->rotCenter().x()),
+	                                            double(mVertBox->value()  - mHandle->rotCenter().y()));
     }
   else if(mTab->currentPage() == mRotate)
     c = new RotateCmd(mPage->document(), mHandle->rotCenter(), mAngle->value());

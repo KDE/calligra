@@ -54,8 +54,9 @@ private slots:
   void activate(int f);
 
 private:
-  QComboBox *mPaintingBox;
-  KoColorChooser *mPaintPanel;
+  QComboBox       *mPaintingBox;
+  QSpinBox        *mOpacityBox;
+  KoColorChooser  *mPaintPanel;
 };
 
 class OutlinePanel : public QTabWidget
