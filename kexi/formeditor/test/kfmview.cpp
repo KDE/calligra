@@ -71,7 +71,7 @@ KFMView::KFMView()
 	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), manager, SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
 	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), manager, SLOT(editConnections()), actionCollection(), "form_connections");
 	KStdAction::printPreview(this, SLOT(slotPreviewForm()), actionCollection());
-#if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
+#if KDE_IS_VERSION(3,1,9) //&& !defined(Q_WS_WIN)
 	KStdAction::clear(manager, SLOT(deleteWidget()), actionCollection());
 #else
 	//TODO
