@@ -3817,14 +3817,14 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         setAction( cell.attribute("action") );
 
     // Validation
-    if ( m_iRow < 1 || m_iRow > 0xFFFF )
+    if ( m_iRow < 1 || m_iRow > 0x7FFF )
     {
-        kdDebug(36001) << "Value out of Range Cell:row=" << m_iRow << endl;
+        kdDebug(36001) << "KSpreadCell::load: Value out of Range Cell:row=" << m_iRow << endl;
         return false;
     }
-    if ( m_iColumn < 1 || m_iColumn > 0xFFFF )
+    if ( m_iColumn < 1 || m_iColumn > 0x7FFF )
     {
-        kdDebug(36001) << "Value out of Range Cell:column=" << m_iColumn << endl;
+        kdDebug(36001) << "KSpreadCell::load: Value out of Range Cell:column=" << m_iColumn << endl;
         return false;
     }
 
