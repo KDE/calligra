@@ -468,7 +468,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     KWDocument* doc = m_pView->kWordDocument();
     m_displayLink=new QCheckBox(i18n("Display &links"),gbMiscGroup);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
-    m_underlineLink=new QCheckBox(i18n("Underline link by default"),gbMiscGroup);
+    m_underlineLink=new QCheckBox(i18n("&Underline all links"),gbMiscGroup);
     m_underlineLink->setChecked(doc->getVariableCollection()->variableSetting()->underlineLink());
 
 
