@@ -383,13 +383,15 @@ void KexiMainWindow::invalidateProjectWideActions()
 
 void KexiMainWindow::invalidateViewModeActions()
 {
-	//update toggle action
-	if (d->curDialog->currentViewMode()==Kexi::DataViewMode)
-		d->action_view_data_mode->setChecked( true );
-	else if (d->curDialog->currentViewMode()==Kexi::DesignViewMode) 
-		d->action_view_design_mode->setChecked( true );
-	else if (d->curDialog->currentViewMode()==Kexi::TextViewMode) 
-		d->action_view_text_mode->setChecked( true );
+	if (d->curDialog) {
+		//update toggle action
+		if (d->curDialog->currentViewMode()==Kexi::DataViewMode)
+			d->action_view_data_mode->setChecked( true );
+		else if (d->curDialog->currentViewMode()==Kexi::DesignViewMode) 
+			d->action_view_design_mode->setChecked( true );
+		else if (d->curDialog->currentViewMode()==Kexi::TextViewMode) 
+			d->action_view_text_mode->setChecked( true );
+	}
 }
 
 #if 0
