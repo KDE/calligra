@@ -24,6 +24,7 @@
 #include "kexi_global.h"
 #include <kaboutdata.h>
 #include <config.h>
+#include <kdeversion.h>
 
 static const char *description =
 	I18N_NOOP("Easy database creation for everyone");
@@ -52,7 +53,7 @@ KAboutData *newKexiAboutData()
 	aboutData->addCredit("Kristof Borrey", I18N_NOOP("Icons and UI-Research"), "kristof.borrey@skynet.be");
 	aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\ne-mail"));
 	aboutData->addCredit("Tomas Krassnig", I18N_NOOP("Coffie sponsoring"), "tkrass05@hak1.at");
-#ifdef OOPL_VERSION
+#if defined(OOPL_VERSION) && KDE_IS_VERSION(3,1,1)
 	aboutData->setProgramLogo(KEXI_APP_LOGO);
 #endif
 	return aboutData;
