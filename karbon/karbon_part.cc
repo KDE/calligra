@@ -12,6 +12,8 @@
 #include "karbon_view.h"
 
 
+// TODO: remove these after debugging:
+#include <qwmatrix.h>
 #include "vccmd_ellipse.h"
 #include "vccmd_rectangle.h"
 
@@ -40,19 +42,54 @@ KarbonPart::~KarbonPart()
 bool
 KarbonPart::initDoc()
 {
+// TODO: remove the whole test code:
+/*
 	VCCmdEllipse e( this, 50, 100, 150, 250 );
 	VPath* elly = e.createPath();
+*/
+/*
+	VCCmdRectangle e( this, 50, 100, 100, 350 );
+	VPath* elly = e.createPath();
+	QWMatrix l;
 
+	l.translate(-40,60);
+	l.rotate(-45.0);
+	elly->transform( l );
+*/
+/*
 	VCCmdRectangle r( this, 80, 70, 250, 200 );
 	VPath* rect = r.createPath();
+*/
+
+	VPath* elly = new VPath();
+	elly->moveTo(200,100);
+	elly->lineTo(100,200);
+
+	VPath* rect = new VPath();
+	rect->moveTo(200,200);
+	rect->lineTo(100,100);
+
 
 	insertObject( elly );
 	insertObject( rect );
 
 	VPath* obj = elly->booleanOp( rect, 0 );
-	
+
 	if ( obj )
 	{
+		QWMatrix m;
+		m.translate( 250, 200 );
+		obj->transform( m );
+		insertObject( obj );
+	}
+
+	obj = rect->booleanOp( elly, 0 );
+
+	if ( obj )
+	{
+		QWMatrix m;
+		m.translate( 250, 0 );
+		obj->transform( m );
 		insertObject( obj );
 	}
 

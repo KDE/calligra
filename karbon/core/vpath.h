@@ -22,14 +22,16 @@ public:
 	VPath( const VPath& path );
 	virtual ~VPath();
 
-	virtual void draw( QPainter& painter, const QRect& rect,
-		const double zoomFactor = 1.0 );
-
 	const KoPoint& currentPoint() const;
 
 	// postscript-like commands:
 	VPath& moveTo( const double& x, const double& y );
+	VPath& moveTo( const KoPoint& p )
+		{ return moveTo( p.x(), p.y() ); }
+
 	VPath& lineTo( const double& x, const double& y );
+	VPath& lineTo( const KoPoint& p )
+		{ return lineTo( p.x(), p.y() ); }
 
 	// curveTo():
 	//
@@ -44,6 +46,11 @@ public:
 		const double& x1, const double& y1,
 		const double& x2, const double& y2,
 		const double& x3, const double& y3 );
+	VPath& curveTo(
+		const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+	{
+		return curveTo( p1.x(), p1.y(), p2.x(), p2.y(), p3.x(), p3.y() );
+	}
 
 	// curve1To():
 	//
@@ -57,6 +64,11 @@ public:
 	VPath& curve1To(
 		const double& x2, const double& y2,
 		const double& x3, const double& y3 );
+	VPath& curve1To(
+		const KoPoint& p2, const KoPoint& p3 )
+	{
+		return curve1To( p2.x(), p2.y(), p3.x(), p3.y() );
+	}
 
 	// curve2To():
 	//
@@ -70,12 +82,22 @@ public:
 	VPath& curve2To(
 		const double& x1, const double& y1,
 		const double& x3, const double& y3 );
+	VPath& curve2To(
+		const KoPoint& p1, const KoPoint& p3 )
+	{
+		return curve2To( p1.x(), p1.y(), p3.x(), p3.y() );
+	}
 
 	// this is a convenience function to approximate circular arcs with
-	// beziers
+	// beziers. input: 2 tangent vectors and a radius (like in postscript):
 	VPath& arcTo(
 		const double& x1, const double& y1,
 		const double& x2, const double& y2, const double& r );
+	VPath& arcTo(
+		const KoPoint& p1, const KoPoint& p2, const double& r )
+	{
+		return arcTo( p1.x(), p1.y(), p2.x(), p2.y(), r );
+	}
 
 	VPath& close();
 	bool isClosed() const;
@@ -85,6 +107,12 @@ public:
 
 	// perform a boolean operation (unite(0), intersect(1), substract(2), xor(3)):
 	VPath* booleanOp( const VPath* path, int type = 0 ) const;
+
+
+	virtual void draw( QPainter& painter, const QRect& rect,
+		const double zoomFactor = 1.0 );
+
+	const VSegment* lastSegment() const { return m_segments.getLast(); }
 
 	// apply an affine map:
 	virtual VObject& transform( const QWMatrix& m );

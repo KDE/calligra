@@ -60,7 +60,7 @@ VCCmdEllipse::unexecute()
 VPath*
 VCCmdEllipse::createPath()
 {
-	// first create unity-circle around origin (0,0):
+	// first create (half-)unity circle around origin (0,0):
 	VPath* path = new VPath();
 	path->moveTo( -0.5, 0.0 );
 	path->arcTo( -0.5,  0.5,  0.0,  0.5, 0.5 );
