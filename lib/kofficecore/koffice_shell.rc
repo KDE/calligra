@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KOfficeShell" version="4">
+<kpartgui name="KOfficeShell" version="5">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -17,7 +17,7 @@
   <Action name="file_quit" />
  </Menu>
  <Merge />
- <Menu name="settings"><text>&amp;Settings</text>
+ <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
   <Merge />
   <ActionList name="toolbarlist"/>
   <Separator/>
