@@ -852,6 +852,20 @@ static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText,
         tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
         ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 
+        // Are we still in a list?
+        if (exportFilter->inList)
+        {
+            // We are in a list, so close it!
+            if (exportFilter->orderedList)
+            {
+                outputText+="</ol>\n";
+            }
+            else
+            {
+                outputText+="</ul>\n";
+            }
+            exportFilter->inList=false;
+        }
     }
     //TODO: Treat the other types of frames (frameType)
 }
