@@ -1577,7 +1577,10 @@ KCommand *KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextP
         cursor.setIndex( start + word.length() -1 );
         textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
         newFormat->setVAlign(KoTextFormat::AlignSuperScript);
-        return (txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::VAlign , false,KoTextObject::HighlightSelection  ));
+        KCommand *cmd =txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::VAlign , false,KoTextObject::HighlightSelection  );
+        textdoc->removeSelection( KoTextObject::HighlightSelection );
+
+        return cmd;
     }
     return 0L;
 }
