@@ -24,8 +24,7 @@
 
 #include <qmap.h>
 #include <qdom.h>
-
-#include <koStore.h>
+#include <qvaluelist.h>
 
 #include "koPicture.h"
 

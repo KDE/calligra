@@ -33,7 +33,7 @@ typedef KoImageKey KoClipartKey;
 class KoClipartPrivate;
 
 /**
- * A 'clipart' is a QPicture (for instance WMF or [later] SVG files)
+ * A 'clipart' is a QPicture (for instance WMF or SVG files)
  * Since QPictures aren't shared, KoClipart is an implicitly shared wrapper around a QPicture.
  */
 class KoClipart

@@ -615,7 +615,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
     appIdentification += nativeFormatMimeType();
     appIdentification += '\004'; // Two magic bytes to make the identification
     appIdentification += '\006'; // more reliable (DF)
-    KoStore* store = new KoStore( file, KoStore::Write, appIdentification );
+    KoStore* store = KoStore::createStore( file, KoStore::Write, appIdentification );
     if ( store->bad() )
     {
         d->lastErrorMessage = i18n( "Couldn't open the file for saving" ); // more details needed?
@@ -1005,9 +1005,9 @@ bool KoDocument::loadNativeFormat( const QString & file )
         m_bEmpty = false;
         return res;
     } else
-    { // It's a koffice store (tar.gz)
+    { // It's a koffice store (tar.gz, zip etc.)
         in.close();
-        KoStore * store = new KoStore( file, KoStore::Read );
+        KoStore * store = KoStore::createStore( file, KoStore::Read );
 
         if ( store->bad() )
         {

@@ -516,7 +516,7 @@ void KoFilterChain::storageInit( const QString& file, KoStore::Mode mode, KoStor
         appIdentification += '\004'; // Two magic bytes to make the identification
         appIdentification += '\006'; // more reliable (DF)
     }
-    *storage = new KoStore( file, mode, appIdentification );
+    *storage = KoStore::createStore( file, mode, appIdentification );
 }
 
 KoStoreDevice* KoFilterChain::storageInitEmbedding( const QString& name )
