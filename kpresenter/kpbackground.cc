@@ -40,6 +40,7 @@
 #include <kapp.h>
 
 #include <fstream.h>
+#include <stdlib.h>
 
 /******************************************************************/
 /* Class: KPBackGround                                            */
