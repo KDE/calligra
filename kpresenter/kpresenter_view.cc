@@ -2528,14 +2528,18 @@ void KPresenterView::resizeEvent(QResizeEvent *e)
   {
     horz->show();
     vert->show();
-    h_ruler->show();
-    v_ruler->show();
+    if (h_ruler)
+      h_ruler->show();
+    if (v_ruler)
+      v_ruler->show();
     page->resize(widget()->width() - 36,widget()->height() - 36);
     page->move(20,20);
     vert->setGeometry(widget()->width() - 16,0,16,widget()->height() - 16);
     horz->setGeometry(0,widget()->height() - 16,widget()->width() - 16,16);
-    h_ruler->setGeometry(20,0,page->width(),20);
-    v_ruler->setGeometry(0,20,20,page->height());
+    if (h_ruler)
+      h_ruler->setGeometry(20,0,page->width(),20);
+    if (v_ruler)
+      v_ruler->setGeometry(0,20,20,page->height());
     setRanges();
   }
   else
