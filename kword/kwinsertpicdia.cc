@@ -26,6 +26,7 @@
 #include <qbitmap.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
+#include <qscrollview.h>
 
 #include <kimageio.h>
 #include <kio/netaccess.h>
@@ -39,51 +40,29 @@
  * Not to be confused with KoPictureFilePreview, the one inside the file dialog!
  * (Note: this one has to remain separate, for the day we add options like flipping, rotating, etc.)
  */
-class KWInsertPicPreview : public QFrame
+class KWInsertPicPreview : public QScrollView
 {
 public:
     KWInsertPicPreview( QWidget *parent )
-        : QFrame( parent )
+        : QScrollView( parent )
     {
-        setFrameStyle( WinPanel | Sunken );
+        viewport()->setBackgroundMode( PaletteBase );
         setMinimumSize( 300, 200 );
         m_type = IPD_IMAGE;
     }
 
     virtual ~KWInsertPicPreview() {}
 
-    bool setPixmap( const QString & filename )
-    {
-        m_pixmap.load( filename );
-        if ( m_pixmap.height() > 0 ) // we divide by the height in kwcanvas...
-        {
-            m_type = IPD_IMAGE;
-            //kdDebug() << "setPixmap: m_pixmap is " << m_pixmap.width() << ", " << m_pixmap.height() << endl;
-            const QBitmap nullBitmap;
-            m_pixmap.setMask( nullBitmap );  //don't show transparency
-            repaint(false);
-            return true;
-        }
-        return false;
-    }
+    QSize size() const { return m_size; }
 
-    QSize pixmapSize() const { return m_pixmap.size(); }
-
-    bool setClipart( const QString & filename )
+    bool setPicture( const QString & filename )
     {
-        m_type = IPD_CLIPART;
         KoPicture picture;
         if (picture.loadFromFile( filename ))
         {
-            m_pixmap = QPixmap( 200, 200 );
-            m_pixmap.fill( Qt::white );
-
-            QPainter p;
-            p.begin( &m_pixmap );
-            p.setBackgroundColor( Qt::white );
-
-            picture.draw(p, 0, 0, m_pixmap.width(), m_pixmap.height());
-            p.end();
+            m_size = picture.getOriginalSize();
+            m_picture = picture;
+            resizeContents( m_size.width(), m_size.height() );
             repaint( false );
             return true;
         }
@@ -91,17 +70,18 @@ public:
             return false;
     }
 
-    void drawContents( QPainter *p )
+    void drawContents( QPainter *p, int, int, int, int )
     {
-        QFrame::drawContents( p );
-        p->save();
-        p->translate( contentsRect().x(), contentsRect().y() );
-        p->drawPixmap( QPoint( 0, 0 ), m_pixmap );
-        p->restore();
+        p->setBackgroundColor( Qt::white );
+        // Be sure that the background is white (for transparency)
+        p->fillRect(0, 0, m_size.width(), m_size.height(), QBrush( Qt::white ));
+        m_picture.draw( *p, 0 ,0, m_size.width(), m_size.height());
     }
+
 private:
     enum { IPD_IMAGE, IPD_CLIPART } m_type;
-    QPixmap m_pixmap;
+    KoPicture m_picture;
+    QSize m_size;
 };
 
 //////////////
@@ -160,7 +140,7 @@ void KWInsertPicDia::slotChooseImage()
     }
     if ( result == SelectImage )
     {
-        if ( m_preview->setPixmap( m_filename ) )
+        if ( m_preview->setPicture( m_filename ) )
         {
             m_type = IPD_IMAGE;
             enableButtonOK( true );
@@ -168,7 +148,7 @@ void KWInsertPicDia::slotChooseImage()
         }
     } else if ( result == SelectClipart )
     {
-        if ( m_preview->setClipart( m_filename ) )
+        if ( m_preview->setPicture( m_filename ) )
         {
             m_type = IPD_CLIPART;
             enableButtonOK( true );
@@ -220,7 +200,7 @@ QString KWInsertPicDia::selectPicture( KFileDialog & fd )
 
 QSize KWInsertPicDia::pixmapSize() const
 {
-    return m_preview->pixmapSize();
+    return m_preview->size();
 }
 
 #include "kwinsertpicdia.moc"
