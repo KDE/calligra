@@ -2137,7 +2137,7 @@ char* KPresenterView_impl::colorToPixString(QColor c)
   sprintf(line,"%c 20 20 1 1 %c,\n",34,34);
   strcat(pix,qstrdup(line));
 
-  sprintf(line,"%c c #%2X%2X%2X %c,\n",34,r,g,b,34);
+  sprintf(line,"%c c #%02X%02X%02X %c,\n",34,r,g,b,34);
   strcat(pix,qstrdup(line));
 
   sprintf(line,"%c                    %c,\n",34,34);
