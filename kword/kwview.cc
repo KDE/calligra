@@ -1234,7 +1234,7 @@ void KWView::viewPageMode()
     {
         m_zoomViewModePreview = doc->zoom();
         showZoom( m_zoomViewModeNormal );
-        setZoom( m_zoomViewModeNormal );
+        setZoom( m_zoomViewModeNormal, false );
         gui->canvasWidget()->switchViewMode( new KWViewModeNormal( gui->canvasWidget()) );
     }
     else
@@ -1247,7 +1247,7 @@ void KWView::viewPreviewMode()
     {
         m_zoomViewModeNormal = doc->zoom();
         showZoom( m_zoomViewModePreview );
-        setZoom( m_zoomViewModePreview );
+        setZoom( m_zoomViewModePreview, false );
         gui->canvasWidget()->switchViewMode( new KWViewModePreview( gui->canvasWidget(),doc->getNbPagePerRow() ) );
     }
     else
@@ -1399,23 +1399,24 @@ void KWView::viewZoom( const QString &s )
     showZoom(zoom);
     //apply zoom if zoom!=doc->zoom()
     if(zoom != doc->zoom() )
-        setZoom( zoom );
+    {
+        setZoom( zoom, true );
+
+        doc->updateResizeHandles();
+        KWTextFrameSetEdit * edit = currentTextEdit();
+        if ( edit )
+            edit->ensureCursorVisible();
+    }
 
     gui->canvasWidget()->setFocus();
 
 }
 
-void KWView::setZoom( int zoom )
+void KWView::setZoom( int zoom, bool updateViews )
 {
-    doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), true );
+    doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), updateViews );
     gui->getHorzRuler()->setZoom( doc->zoomedResolutionX() );
     gui->getVertRuler()->setZoom( doc->zoomedResolutionY() );
-
-    doc->updateResizeHandles( );
-    gui->canvasWidget()->repaintAll();
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->ensureCursorVisible();
 }
 
 void KWView::insertPicture()

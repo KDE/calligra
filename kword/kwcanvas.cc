@@ -632,12 +632,14 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     // But not out of the margins
     if ( m_boundingRect.left() < 1 ) // 1 pt margin to avoid drawing problems
     {
-        m_boundingRect.moveBy( 1 - m_boundingRect.left(), 0 );
+        p.setX( 1 );
+        m_boundingRect.moveTopLeft( p );
         adjustPosNeeded = true;
     }
     else if ( m_boundingRect.right() > doc->ptPaperWidth() - 1 )
     {
-        m_boundingRect.moveBy( doc->ptPaperWidth() - 1 - m_boundingRect.right(), 0 );
+        p.setX( doc->ptPaperWidth() - m_boundingRect.width() - 2 );
+        m_boundingRect.moveTopLeft( p );
         adjustPosNeeded = true;
     }
     // Now try Y
@@ -648,12 +650,15 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     // But we still want to limit to 0 - lastPage
     if ( m_boundingRect.top() < 1 ) // 1 pt margin to avoid drawing problems
     {
-        m_boundingRect.moveBy( 0, 1 - m_boundingRect.top() );
+        p.setY( 1 );
+        m_boundingRect.moveTopLeft( p );
         adjustPosNeeded = true;
     }
     else if ( m_boundingRect.bottom() > doc->getPages() * doc->ptPaperHeight() - 1 )
     {
-        m_boundingRect.moveBy( 0, doc->getPages() * doc->ptPaperHeight() - 1 - m_boundingRect.bottom() );
+        kdDebug() << "KWCanvas::mmEditFrameMove limiting to last page" << endl;
+        p.setY( doc->getPages() * doc->ptPaperHeight() - m_boundingRect.height() - 2 );
+        m_boundingRect.moveTopLeft( p );
         adjustPosNeeded = true;
     }
     // Another annoying case is if the top and bottom points are not in the same page....
@@ -662,7 +667,6 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     //kdDebug() << "KWCanvas::mmEditFrameMove topPage=" << topPage << " bottomPage=" << bottomPage << endl;
     if ( topPage != bottomPage )
     {
-        KoPoint p( m_boundingRect.topLeft() );
         // Choose the closest page...
         ASSERT( topPage + 1 == bottomPage ); // Not too sure what to do otherwise
         double topPart = (bottomPage * doc->ptPaperHeight()) - m_boundingRect.top();
@@ -671,7 +675,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
             p.setY( bottomPage * doc->ptPaperHeight() - m_boundingRect.height() - 1 );
         else
             // Moost of the rect is in the bottom page
-            p.setY( bottomPage * doc->ptPaperHeight() + 1 );
+            p.setY( bottomPage * doc->ptPaperHeight() + 5 /* grmbl, resize handles.... */ );
         kdDebug() << "KWCanvas::mmEditFrameMove y set to " << p.y() << endl;
 
         m_boundingRect.moveTopLeft( p );

@@ -87,7 +87,7 @@ public:
     void showStyle( const QString & styleName );
     void showRulerIndent( double _leftMargin, double _firstLine );
     void showZoom( int zoom ); // show a zoom value in the combo
-    void setZoom( int zoom ); // change the zoom value
+    void setZoom( int zoom, bool updateViews ); // change the zoom value
 
 //    virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 

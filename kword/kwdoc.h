@@ -138,7 +138,7 @@ public:
      * Erase the empty space defined by @p emptySpaceRegion.
      * Usually used to clear the space where there is no frame (e.g. page margins).
      */
-    void eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion );
+    void eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush );
 
     virtual void addView( KoView *_view );
     virtual void removeView( KoView *_view );

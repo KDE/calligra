@@ -1751,7 +1751,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     QRegion emptyRegion( rect );
     drawBorders( &painter, rect, emptyRegion, viewMode );
     if (!transparent)
-        eraseEmptySpace( &painter, emptyRegion );
+        eraseEmptySpace( &painter, emptyRegion, QApplication::palette().active().brush( QColorGroup::Base ) );
 
     QColorGroup gb = QApplication::palette().active();
 
@@ -1780,7 +1780,7 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, QRegion & 
     }
 }
 
-void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion )
+void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush )
 {
     painter->save();
     // Translate emptySpaceRegion in device coordinates
@@ -1798,7 +1798,7 @@ void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpace
     painter->setPen( Qt::NoPen );
 
     //kdDebug() << "KWDocument::eraseEmptySpace emptySpaceRegion: " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
-    painter->fillRect( emptySpaceRegion.boundingRect(), QApplication::palette().active().brush( QColorGroup::Base ) );
+    painter->fillRect( emptySpaceRegion.boundingRect(), brush );
     painter->restore();
 }
 
