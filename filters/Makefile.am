@@ -3,10 +3,6 @@ if compile_filter_KARBON
 KARBONDIR = karbon
 endif
 
-if compile_filter_KONTOUR
-KONTOURDIR = kontour
-endif
-
 if include_XSLTFILTERS
 XSLTFILTERDIR = xsltfilter
 endif
@@ -36,4 +32,4 @@ KRITADIR = krita
 endif
 
 
-SUBDIRS = generic_wrapper $(KSPREADDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(KONTOURDIR) $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR) $(KRITADIR)
+SUBDIRS = generic_wrapper $(KSPREADDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR) $(KRITADIR)
