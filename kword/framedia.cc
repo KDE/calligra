@@ -167,6 +167,7 @@ void KWFrameDia::init() {
 
     tab1 = tab2 = tab3 = tab4 = tab5 = 0;
     sw = sh = 0L;
+    cbAspectRatio=0L;
     KWFrameSet *fs=0;
     if(frame) {
         fs = frame->frameSet(); // 0 when creating a frame
@@ -237,7 +238,6 @@ void KWFrameDia::init() {
 void KWFrameDia::setupTab1(){ // TAB Frame Options
     //kdDebug() << "setup tab 1 Frame options"<<endl;
     tab1 = addPage( i18n("Options") );
-    cbAspectRatio=0L;
     int columns = 0;
     if(frameType == FT_FORMULA || frameType == FT_PICTURE)
         columns = 1;
