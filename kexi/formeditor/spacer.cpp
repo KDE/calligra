@@ -73,7 +73,8 @@ Spacer::paintEvent(QPaintEvent *ev)
 		return;
 
 	QPainter p(this);
-	p.eraseRect(0,0,width(), height());
+	if(!ev->erased())
+		p.eraseRect(0,0,width(), height());
 	p.drawLine(0, 0, width()-1, height()-1);
 	p.drawLine(0, height()-1, width()-1, 0);
 }

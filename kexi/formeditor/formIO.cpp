@@ -44,12 +44,12 @@
 
 #include "formIO.h"
 
-typedef QPtrList<QWidget> WidgetList;
+//typedef QPtrList<QWidget> QWidgetList;
 
 namespace KFormDesigner {
 
 // Helper classes for sorting widgets before saving (because Designer is too stupid to put them in the right order)
-class HorWidgetList : public WidgetList
+/*class HorWidgetList : public QWidgetList
 {
 	public:
 	HorWidgetList() {;}
@@ -66,7 +66,7 @@ class HorWidgetList : public WidgetList
 	}
 };
 
-class VerWidgetList : public WidgetList
+class VerWidgetList : public QWidgetList
 {
 	public:
 	VerWidgetList() {;}
@@ -81,7 +81,7 @@ class VerWidgetList : public WidgetList
 			return 1;
 		return 0; // item1 == item2
 	}
-};
+};*/
 
 // FormIO itself
 
@@ -700,7 +700,10 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			tclass.setAttribute("colspan", item->gridColSpan());
 		}
 	}
-	tclass.setAttribute("class", item->widget()->className());
+	if((item->widget()->isA("HBox")) || (item->widget()->isA("VBox")) || (item->widget()->isA("Grid")))
+		tclass.setAttribute("class", "QLayoutWidget");
+	else
+		tclass.setAttribute("class", item->widget()->className());
 	prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
 	prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
 
@@ -773,7 +776,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	}
 	else if(!item->children()->isEmpty())
 	{
-		WidgetList *list;
+		QtWidgetList *list;
 		if(layout.tagName() == "hbox")
 			list = new HorWidgetList();
 		else
@@ -812,6 +815,22 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 
 	if(el.tagName() == "spacer")
 		classname = "Spacer";
+	else if(el.attribute("class") == "QLayoutWidget")
+	{
+		for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+		{
+			QString tagName = n.toElement().tagName();
+			kdDebug() << "Next tag Name read is " << tagName << endl;
+			if(tagName == "property")
+				continue;
+			if(tagName == "hbox")
+				classname = "HBox";
+			else if(tagName == "vbox")
+				classname = "VBox";
+			else if(tagName == "grid")
+				classname = "Grid";
+		}
+	}
 	else
 		classname = lib->checkAlternateName(el.attribute("class"));
 

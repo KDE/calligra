@@ -80,16 +80,19 @@ Form::setDesignMode(bool design)
 	if(!design)
 	{
 		// disable all spacers in this form
-		QObjectList *list = m_toplevel->widget()->queryList("Spacer");
+		/*QObjectList *list = m_toplevel->widget()->queryList("Spacer");
 		QObjectListIt it(*list);
 		QObject *obj;
 		while ((obj = it.current()) != 0)
 		{
 			++it;
 			((Spacer*)obj)->setPreviewMode();
-		}
+		}*/
+		TreeDict dict = *(m_topTree->dict());
+		TreeDictIterator it(dict);
+		for(; it.current(); ++it)
+			m_manager->lib()->previewWidget(it.current()->widget()->className(), it.current()->widget(), m_toplevel);
 
-		delete list;
 		delete m_topTree;
 		m_topTree = 0;
 		delete m_toplevel;

@@ -102,7 +102,7 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
 {
 	p->eraseRect(0,0,w,h);
 	ObjectTreeViewItem *item = (ObjectTreeViewItem*)firstChild();
-	if(!item)
+	if(!item || !item->m_item || !item->m_item->widget())
 		return;
 
 	p->save();
@@ -271,8 +271,8 @@ ObjectTreeView::renameItem(const QString &oldname, const QString &newname)
 void
 ObjectTreeView::setForm(Form *form)
 {
-	if(m_form == form)
-		return;
+	//if(m_form == form)
+	//	return;
 	m_form = form;
 	clear();
 	m_topItem = new ObjectTreeViewItem(this); // Creates the hidden top Item

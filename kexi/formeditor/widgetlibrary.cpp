@@ -48,7 +48,8 @@ WidgetLibrary::addFactory(WidgetFactory *f)
 	{
 		kdDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
 		m_widgets.insert(w->className(), w);
-		m_alternates.insert(w->alternateClassName(), w->className());
+		if(!w->alternateClassName().isEmpty())
+			m_alternates.insert(w->alternateClassName(), w->className());
 	}
 }
 
@@ -149,7 +150,16 @@ WidgetLibrary::startEditing(const QString &classname, QWidget *w, Container *con
 		return ;
 
 	wfactory->factory()->startEditing(classname, w, container);
-	return;
+}
+
+void
+WidgetLibrary::previewWidget(const QString &classname, QWidget *widget, Container *container)
+{
+	Widget *wfactory = m_widgets[classname];
+	if(!wfactory)
+		return ;
+
+	wfactory->factory()->previewWidget(classname, widget, container);
 }
 
 QString

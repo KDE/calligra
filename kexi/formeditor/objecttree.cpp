@@ -138,6 +138,20 @@ ObjectTree::rename(const QString &oldname, const QString &newname)
 	return true;
 }
 
+bool
+ObjectTree::reparent(const QString &name, const QString &newparent)
+{
+	ObjectTreeItem *item = lookup(name);
+	if(!item)   return false;
+	ObjectTreeItem *parent = lookup(newparent);
+	if(!parent)   return false;
+
+	item->parent()->remChild(item);
+	parent->addChild(item);
+	item->setParent(parent);
+	return true;
+}
+
 ObjectTreeItem*
 ObjectTree::lookup(const QString &name)
 {

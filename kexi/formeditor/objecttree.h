@@ -26,6 +26,7 @@
 #include <qdict.h>
 #include <qvariant.h>
 #include <qstring.h>
+#include <qguardedptr.h>
 
 class QWidget;
 
@@ -37,6 +38,7 @@ class Container;
 class EventEater;
 typedef QPtrList<ObjectTreeItem> ObjectTreeC;
 typedef QDict<ObjectTreeItem> TreeDict;
+typedef QDictIterator<ObjectTreeItem> TreeDictIterator;
 typedef QMap<QString, int> Names;
 
 /*! This class holds the properties of a widget (classname, name, parent, children ..).
@@ -87,7 +89,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		Container*	m_container;
 		QMap<QString, QVariant> m_props;
 		ObjectTreeItem* m_parent;
-		QWidget*	m_widget;
+		QGuardedPtr<QWidget>	m_widget;
 		EventEater*     m_eater;
 
 		int m_row, m_col, m_rowspan, m_colspan;
@@ -107,6 +109,7 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 		 * renames a item and returns false if name is doublicated
 		 */
 		virtual bool	rename(const QString &oldname, const QString &newname );
+		bool		reparent(const QString &name, const QString &newparent);
 
 		ObjectTreeItem	*lookup(const QString &name);
 		TreeDict	*dict() { return &m_treeDict; }

@@ -49,6 +49,48 @@ class InsertPageCommand : public KCommand
 		int      m_pageid;
 };
 
+class KFORMEDITOR_EXPORT HBox : public QFrame
+{
+	Q_OBJECT
+
+	public:
+		HBox(QWidget *parent, const char *name);
+		~HBox(){;}
+		void setPreviewMode() {m_preview = true;}
+		void paintEvent(QPaintEvent *ev);
+
+	protected:
+		bool  m_preview;
+};
+
+class KFORMEDITOR_EXPORT VBox : public QFrame
+{
+	Q_OBJECT
+
+	public:
+		VBox(QWidget *parent, const char *name);
+		~VBox(){;}
+		void setPreviewMode() {m_preview = true;}
+		void paintEvent(QPaintEvent *ev);
+
+	protected:
+		bool  m_preview;
+};
+
+class KFORMEDITOR_EXPORT Grid : public QFrame
+{
+	Q_OBJECT
+
+	public:
+		Grid(QWidget *parent, const char *name);
+		~Grid(){;}
+		void setPreviewMode() {m_preview = true;}
+		void paintEvent(QPaintEvent *ev);
+
+	protected:
+		bool  m_preview;
+};
+
 /**
  *
  * Lucijan Busch
@@ -66,8 +108,9 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		virtual QWidget				*create(const QString &, QWidget *, const char *, KFormDesigner::Container *);
 		virtual bool				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
 		virtual void		startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
-		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple) { return !multiple;}
-		virtual void     saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
+		virtual void		previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *container);
+		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
+		virtual void    	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		                        QDomElement &parentNode, QDomDocument &parent);
 		virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item);
 		virtual QStringList     autoSaveProperties(const QString &classname);

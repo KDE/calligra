@@ -24,11 +24,47 @@
 #include <qobject.h>
 #include <qguardedptr.h>
 #include <qptrlist.h>
+#include <qwidget.h>
 
 class QEvent;
 class QWidget;
 class QLayout;
-typedef QPtrList<QWidget> WidgetList;
+typedef QPtrList<QWidget> QtWidgetList;
+
+// Helper classes for sorting widgets before inserting them in the layout
+class HorWidgetList : public QtWidgetList
+{
+	public:
+	HorWidgetList() {;}
+	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+	{
+		QWidget *w1 = static_cast<QWidget*>(item1);
+		QWidget *w2 = static_cast<QWidget*>(item2);
+
+		if(w1->x() < w2->x())
+			return -1;
+		if(w1->x() > w2->x())
+			return 1;
+		return 0; // item1 == item2
+	}
+};
+
+class VerWidgetList : public QtWidgetList
+{
+	public:
+	VerWidgetList() {;}
+	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+	{
+		QWidget *w1 = static_cast<QWidget*>(item1);
+		QWidget *w2 = static_cast<QWidget*>(item2);
+
+		if(w1->y() < w2->y())
+			return -10;
+		if(w1->y() > w2->y())
+			return 1;
+		return 0; // item1 == item2
+	}
+};
 
 namespace KFormDesigner {
 
@@ -129,7 +165,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		/*! Internal function to create a HBoxLayout or VBoxLayout for this container. \a list is a subclass of QObjectList that can sort widgets
 		   following their position (such as HorWidgetList or VerWidgetList).
 		  */
-		void		createBoxLayout(WidgetList *list);
+		void		createBoxLayout(QtWidgetList *list);
 		void		createGridLayout();
 
 	private:

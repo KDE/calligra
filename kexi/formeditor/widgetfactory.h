@@ -165,6 +165,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		   and \a container is the parent container of this widget (to access Form etc.).
 		 */
 		virtual void		startEditing(const QString &classname, QWidget *w, Container *container)=0;
+		virtual void		previewWidget(const QString &classname, QWidget *widget, Container *container)=0;
 
 		virtual void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         QDomElement &parentNode,  QDomDocument &parent)=0;

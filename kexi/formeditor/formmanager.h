@@ -166,11 +166,16 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! Used to delayed widgets' deletion (in Container::deleteItem())
 		void deleteWidgetLater( QWidget *w );
 
+		void layoutHBox();
+		void layoutVBox();
+		void layoutGrid();
+
 	protected slots:
 		void deleteWidgetLaterTimeout();
 
 	protected:
 		void initForm(Form *form);
+		void createLayout(int layoutType);
 
 	signals:
 		/*! this signal is emmited as the property buffer switched */
@@ -196,7 +201,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		bool			m_inserting;
 		QString			m_insertClass;
 
-		KActionCollection	*m_collection;
+		QGuardedPtr<KActionCollection>	m_collection;
 		KMainWindow 		*m_client;
 
 		//! Used to delayed widgets deletion

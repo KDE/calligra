@@ -27,7 +27,7 @@
 
 #include <kcommand.h>
 
-typedef QPtrList<QWidget> WidgetList;
+typedef QPtrList<QWidget> QtWidgetList;
 class QWidget;
 class QRect;
 class QPoint;
@@ -111,6 +111,23 @@ class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
 		QRect  m_insertRect;
 };
 
+class KFORMEDITOR_EXPORT CreateLayoutCommand : public KCommand
+{
+	public:
+		CreateLayoutCommand(int layoutType, QtWidgetList &list, Form *form);
+
+		virtual void execute();
+		virtual void unexecute();
+		virtual QString name() const;
+
+	protected:
+		Form  *m_form;
+		QString  m_containername;
+		QString  m_name;
+		QMap<QString,QRect>  m_pos;
+		int  m_type;
+};
+
 class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 {
 	public:
@@ -131,7 +148,7 @@ class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 class KFORMEDITOR_EXPORT DeleteWidgetCommand : public KCommand
 {
 	public:
-		DeleteWidgetCommand(::WidgetList &list, Form *form);
+		DeleteWidgetCommand(QtWidgetList &list, Form *form);
 
 		virtual void execute();
 		virtual void unexecute();
@@ -147,7 +164,7 @@ class KFORMEDITOR_EXPORT DeleteWidgetCommand : public KCommand
 class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 {
 	public:
-		CutWidgetCommand(WidgetList &list, Form *form);
+		CutWidgetCommand(QtWidgetList &list, Form *form);
 
 		virtual void execute();
 		virtual void unexecute();

@@ -104,6 +104,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		QString  includeFile(const QString &classname);
 
 		void    startEditing(const QString &classname, QWidget *w, Container *container);
+		void    previewWidget(const QString &classname, QWidget *widget, Container *container);
 
 		void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		        QDomElement &parentNode, QDomDocument &parent);

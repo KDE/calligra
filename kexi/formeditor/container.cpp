@@ -42,41 +42,6 @@
 
 namespace KFormDesigner {
 
-// Helper classes for sorting widgets before inserting them in the layout
-class HorWidgetList : public WidgetList
-{
-	public:
-	HorWidgetList() {;}
-	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
-	{
-		QWidget *w1 = static_cast<QWidget*>(item1);
-		QWidget *w2 = static_cast<QWidget*>(item2);
-
-		if(w1->x() < w2->x())
-			return -1;
-		if(w1->x() > w2->x())
-			return 1;
-		return 0; // item1 == item2
-	}
-};
-
-class VerWidgetList : public WidgetList
-{
-	public:
-	VerWidgetList() {;}
-	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
-	{
-		QWidget *w1 = static_cast<QWidget*>(item1);
-		QWidget *w2 = static_cast<QWidget*>(item2);
-
-		if(w1->y() < w2->y())
-			return -10;
-		if(w1->y() > w2->y())
-			return 1;
-		return 0; // item1 == item2
-	}
-};
-
 //// Helper class for event filtering on composed widgets
 
 void installRecursiveEventFilter(QObject *object, QObject *container)
@@ -196,12 +161,18 @@ Container::eventFilter(QObject *s, QEvent *e)
 				else
 					setSelectedWidget(m_moving, true);
 			}
+			else if((mev->button() == RightButton) && (m_selected.count() > 1))
+			{
+				kdDebug() << "Container here " << (m_selected.findRef(m_moving) == -1) << endl;
+				if(m_selected.findRef(m_moving) == -1)
+					setSelectedWidget(m_moving, true);
+			}
 			else
 				setSelectedWidget(m_moving, false);
 
 			m_grab = QPoint(mev->x(), mev->y());
 
-			if(s == m_container && m_form->manager()->inserting())
+			if((s == m_container && m_form->manager()->inserting()) || (!m_toplevel))
 			{
 				int tmpx,tmpy;
 				int gridX = Form::gridX();
@@ -227,7 +198,39 @@ Container::eventFilter(QObject *s, QEvent *e)
 				KCommand *com = new InsertWidgetCommand(this, mev->pos());
 				m_form->addCommand(com, true);
 			}
-			else if(mev->button() == RightButton)
+			else if(s == m_container && !m_toplevel)
+			{
+				m_container->repaint();
+				int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
+				int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
+				int botx = (m_insertBegin.x() > mev->x()) ? m_insertBegin.x() :  mev->x();
+				int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
+				QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
+				if(r.isEmpty())
+					return true;
+
+				QWidget *w=0;
+				QtWidgetList list;
+				/*TreeDict dict = *(m_form->objectTree()->dict());
+				TreeDictIterator it(dict);
+				for(; it.current(); ++it)*/
+				for(ObjectTreeItem *item = m_tree->children()->first(); item; item = m_tree->children()->next())
+				{
+					//w = it.current()->widget();
+					w = item->widget();
+					if(!w) continue;
+					if(w->geometry().intersects(r))
+						list.append(w);
+				}
+
+				//if(list.isEmpty())
+				//	return true;
+				setSelectedWidget(list.first(), false);
+				w = list.first();
+				for(w = list.next(); w; w = list.next())
+					setSelectedWidget(w, true);
+			}
+			if(mev->button() == RightButton)
 			{
 				bool enable = true;
 				if(((QWidget*)s)->isA("QWidget") || ((!m_toplevel) && (s == m_container)))
@@ -268,6 +271,21 @@ Container::eventFilter(QObject *s, QEvent *e)
 					p.setPen(QPen(m_container->paletteForegroundColor(), 2));
 					p.drawRect(m_insertRect);
 				}
+				return true;
+			}
+			else if(s == m_container && !m_toplevel)
+			{
+				int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
+				int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
+				int botx = (m_insertBegin.x() > mev->x()) ? m_insertBegin.x() :  mev->x();
+				int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
+				QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
+
+				QPainter p(m_container);
+				m_container->repaint(); // TODO: find a less cpu consuming solution
+				p.setBrush(QBrush::NoBrush);
+				p.setPen(QPen(blue, 1, Qt::DotLine));
+				p.drawRect(r);
 				return true;
 			}
 			if(mev->state() == Qt::LeftButton)
@@ -437,13 +455,13 @@ Container::setLayout(LayoutType type)
 		}
 		case HBox:
 		{
-			m_layout = (QLayout*) new QHBoxLayout(m_container, 12);
+			m_layout = (QLayout*) new QHBoxLayout(m_container, 6);
 			createBoxLayout(new HorWidgetList());
 			break;
 		}
 		case VBox:
 		{
-			m_layout = (QLayout*) new QVBoxLayout(m_container, 12);
+			m_layout = (QLayout*) new QVBoxLayout(m_container, 6);
 			createBoxLayout(new VerWidgetList());
 			break;
 		}
@@ -469,7 +487,7 @@ Container::reloadLayout()
 }
 
 void
-Container::createBoxLayout(WidgetList *list)
+Container::createBoxLayout(QtWidgetList *list)
 {
 	QBoxLayout *layout = static_cast<QBoxLayout*>(m_layout);
 
@@ -608,7 +626,7 @@ Container::createGridLayout()
 	kdDebug() << "the new grid will have n columns: n == " << cols.size() << endl;
 
 	// We create the layout ..
-	QGridLayout *layout = new QGridLayout(m_container, rows.size(), cols.size(), 10, 2, "grid");
+	QGridLayout *layout = new QGridLayout(m_container, rows.size(), cols.size(), 6, 2, "grid");
 	m_layout = (QLayout*)layout;
 
 	// .. and we fill it with widgets

@@ -29,6 +29,7 @@
 #include <kaction.h>
 #include <kxmlguiclient.h>
 #include <kmainwindow.h>
+#include <kmessagebox.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,1,9)
@@ -66,10 +67,17 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
 	m_popup = new KPopupMenu();
-	m_copyid = m_popup->insertItem( SmallIconSet("editcopy"), i18n("&Copy"), this, SLOT(copyWidget()));
-	m_cutid = m_popup->insertItem( SmallIconSet("editcut"), i18n("Cu&t"), this, SLOT(cutWidget()));
-	m_popup->insertItem( SmallIconSet("editpaste"), i18n("&Paste"), this, SLOT(pasteWidget()));
-	m_deleteid = m_popup->insertItem( SmallIconSet("editdelete"), i18n("&Remove Item"), this, SLOT(deleteWidget()));
+	m_popup->insertItem( SmallIconSet("editcopy"), i18n("&Copy"), this, SLOT(copyWidget()), 0, 201);
+	m_popup->insertItem( SmallIconSet("editcut"), i18n("Cu&t"), this, SLOT(cutWidget()), 0, 202);
+	m_popup->insertItem( SmallIconSet("editpaste"), i18n("&Paste"), this, SLOT(pasteWidget()), 203);
+	m_popup->insertItem( SmallIconSet("editdelete"), i18n("&Remove Item"), this, SLOT(deleteWidget()), 0, 204);
+	m_popup->insertSeparator(205);
+
+	m_popup->insertItem( i18n("&Lay out horizontally"), this, SLOT(layoutHBox()), 0, 301);
+	m_popup->insertItem( i18n("&Lay out vertically"), this, SLOT(layoutVBox()), 0, 302);
+	m_popup->insertItem( i18n("&Lay out grid"), this, SLOT(layoutGrid()), 0, 303);
+	m_popup->insertSeparator(304);
+
 	m_treeview = 0;
 	m_editor = 0;
 
@@ -132,10 +140,13 @@ FormManager::windowChanged(QWidget *w)
 		return;
 	}
 
-	if(m_collection->action( KStdAction::name(KStdAction::Undo)))
+	if(m_forms.count() >= 1)
+	{
+	if(m_collection && m_collection->action( KStdAction::name(KStdAction::Undo)))
 		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Undo) ) );
-	if(m_collection->action( KStdAction::name(KStdAction::Redo)))
+	if(m_collection && m_collection->action( KStdAction::name(KStdAction::Redo)))
 		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );
+	}
 
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
@@ -143,7 +154,8 @@ FormManager::windowChanged(QWidget *w)
 		if(form->toplevelContainer()->widget() == w)
 		{
 			m_active = form;
-			m_treeview->setForm(form);
+			if(m_treeview)
+				m_treeview->setForm(form);
 			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
 			if(m_collection)
 				m_collection->addDocCollection(form->actionCollection());
@@ -422,15 +434,61 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 	else
 		id = m_popup->insertItem(SmallIconSet(m_lib->icon(w->className())), n, p);
 
-	m_popup->setItemEnabled(m_deleteid, enableRemove);
-	m_popup->setItemEnabled(m_cutid, enableRemove);
-	m_popup->setItemEnabled(m_copyid, enableRemove);
+	m_popup->setItemEnabled(204, enableRemove);
+	m_popup->setItemEnabled(202, enableRemove);
+	m_popup->setItemEnabled(201, enableRemove);
+
+	bool enableLayout = false;
+	if(container->form()->selectedWidgets()->count() > 1)
+		enableLayout = true;
+	m_popup->setItemEnabled(301, enableLayout);
+	m_popup->setItemEnabled(302, enableLayout);
+	m_popup->setItemEnabled(303, enableLayout);
 
 	m_insertPoint = container->widget()->mapFromGlobal(QCursor::pos());
 	m_popup->exec(QCursor::pos());
 	m_insertPoint = QPoint();
 
 	m_popup->removeItem(id);
+}
+
+void
+FormManager::layoutHBox()
+{
+	createLayout(Container::HBox);
+}
+
+void
+FormManager::layoutVBox()
+{
+	createLayout(Container::VBox);
+}
+
+void
+FormManager::layoutGrid()
+{
+	createLayout(Container::Grid);
+}
+
+void
+FormManager::createLayout(int layoutType)
+{
+	QtWidgetList *list = m_active->selectedWidgets();
+	QWidget *parent = list->first()->parentWidget();
+	for(QWidget *w = list->first(); w; w = list->next())
+	{
+		kdDebug() << "comparing widget " << w->name() << " whose parent is " << w->parentWidget()->name() << " insteaed of " << parent->name() << endl;
+		if(w->parentWidget() != parent)
+		{
+			KMessageBox::sorry(m_active->toplevelContainer()->widget()->topLevelWidget(), i18n("<b>Cannot create the layout.</b>\n"
+		   "All selected widgets must have the same parent."));
+			kdDebug() << "FormManager::createLayout() widgets don't have the same parent widget" << endl;
+			return;
+		}
+	}
+
+	KCommand *com = new CreateLayoutCommand(layoutType, *list, m_active);
+	m_active->addCommand(com, true);
 }
 
 void

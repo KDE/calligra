@@ -1,5 +1,7 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
+* Allow to select multiple widgets by drawing a rectangle on form
+* Add a "Lay out Vertcally / horizontally " menu item when multiple widgets are selected
 * Handle tab stops (maybe in ObjectTreeView)
 * Create an event editor and manage signals/slots (EventBuffer ?)
 	HOWEVER, SIGNAL/SLOT ISSUES (js):

@@ -321,6 +321,8 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 	{
 		if((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move))
 		{
+			if(!(*this)["geometry"]);
+				return false;
 			if((*this)["geometry"]->value() == o->property("geometry")) // to avoid infinite recursion
 				return false;
 

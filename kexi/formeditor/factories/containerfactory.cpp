@@ -12,11 +12,14 @@
 #include <qframe.h>
 #include <qbuttongroup.h>
 #include <qwidget.h>
+#include <qhbox.h>
+#include <qvbox.h>
 #include <qstring.h>
 #include <qpopupmenu.h>
 #include <qdom.h>
 #include <qevent.h>
 #include <qobjectlist.h>
+#include <qpainter.h>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -86,6 +89,45 @@ class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
 		QGuardedPtr<QObject>   m_container;
 };*/
 
+HBox::HBox(QWidget *parent, const char *name)
+ : QFrame(parent, name), m_preview(false)
+{}
+
+void
+HBox::paintEvent(QPaintEvent *ev)
+{
+	if(m_preview) return;
+	QPainter p(this);
+	p.setPen(QPen(red, 1));
+	p.drawRect(0, 0, width()-1, height() - 1);
+}
+
+VBox::VBox(QWidget *parent, const char *name)
+ : QFrame(parent, name), m_preview(false)
+{}
+
+void
+VBox::paintEvent(QPaintEvent *ev)
+{
+	if(m_preview) return;
+	QPainter p(this);
+	p.setPen(QPen(blue, 1));
+	p.drawRect(0, 0, width()-1, height() - 1);
+}
+
+Grid::Grid(QWidget *parent, const char *name)
+ : QFrame(parent, name), m_preview(false)
+{}
+
+void
+Grid::paintEvent(QPaintEvent *ev)
+{
+	if(m_preview) return;
+	QPainter p(this);
+	p.setPen(QPen(green, 1));
+	p.drawRect(0, 0, width()-1, height() - 1);
+}
+
 ///////  Tab related KCommand (to allow tab creation/deletion undoing)
 
 InsertPageCommand::InsertPageCommand(KFormDesigner::Container *container, QWidget *parent)
@@ -137,7 +179,7 @@ InsertPageCommand::unexecute()
 	QWidget *page = m_form->objectTree()->lookup(m_name)->widget();
 	QWidget *parent = m_form->objectTree()->lookup(m_parentname)->widget();
 
-	WidgetList list;
+	QtWidgetList list;
 	list.append(page);
 	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_form);
 
@@ -185,7 +227,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wTabWidget = new KFormDesigner::Widget(this);
 	wTabWidget->setPixmap("tabwidget");
 	wTabWidget->setClassName("KTabWidget");
-	#if !KDE_IS_VERSION(3,1,9) //TMP
+	#if KDE_IS_VERSION(3,1,9) //TMP
 	wTabWidget->setAlternateClassName("QTabWidget");
 	#endif
 	wTabWidget->setInclude("ktabwidget.h");
@@ -220,6 +262,27 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wWidgetStack->setName(i18n("Widget Stack"));
 	wWidgetStack->setDescription(i18n("A container with multiple pages"));
 	m_classes.append(wWidgetStack);
+
+	KFormDesigner::Widget *wHBox = new KFormDesigner::Widget(this);
+	wHBox->setPixmap("frame");
+	wHBox->setClassName("HBox");
+	wHBox->setName(i18n("HBox"));
+	wHBox->setDescription(i18n("A simple container to group widgets horizontally"));
+	m_classes.append(wHBox);
+
+	KFormDesigner::Widget *wVBox = new KFormDesigner::Widget(this);
+	wVBox->setPixmap("frame");
+	wVBox->setClassName("VBox");
+	wVBox->setName(i18n("VBox"));
+	wVBox->setDescription(i18n("A simple container to group widgets vertically"));
+	m_classes.append(wVBox);
+
+	KFormDesigner::Widget *wGrid = new KFormDesigner::Widget(this);
+	wGrid->setPixmap("frame");
+	wGrid->setClassName("Grid");
+	wGrid->setName(i18n("Grid"));
+	wGrid->setDescription(i18n("A simple container to group widgets in a grid"));
+	m_classes.append(wGrid);
 }
 
 QString
@@ -304,8 +367,44 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		}
 		return stack;
 	}
+	else if(c == "HBox")
+	{
+		HBox *w = new HBox(p, n);
+		new KFormDesigner::Container(container, w, container);
+		return w;
+	}
+	else if(c == "VBox")
+	{
+		VBox *w = new VBox(p, n);
+		new KFormDesigner::Container(container, w, container);
+		return w;
+	}
+	else if(c == "Grid")
+	{
+		Grid *w = new Grid(p, n);
+		new KFormDesigner::Container(container, w, container);
+		return w;
+	}
 
 	return 0;
+}
+
+void
+ContainerFactory::previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *container)
+{
+	if(classname == "WidgetStack")
+	{
+		QWidgetStack *stack = ((QWidgetStack*)widget);
+		KFormDesigner::ObjectTreeItem *tree = container->form()->objectTree()->lookup(widget->name());
+		if(!tree->modifProp()->contains("frameShape"))
+			stack->setFrameStyle(QFrame::NoFrame);
+	}
+	else if(classname == "HBox")
+		((HBox*)widget)->setPreviewMode();
+	else if(classname == "VBox")
+		((VBox*)widget)->setPreviewMode();
+	else if(classname == "Grid")
+		((Grid*)widget)->setPreviewMode();
 }
 
 bool
@@ -419,11 +518,24 @@ ContainerFactory::autoSaveProperties(const QString &classname)
 	return QStringList();
 }
 
+bool
+ContainerFactory::showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple)
+{
+	if((classname == "HBox") || (classname == "VBox") || (classname == "Grid"))
+	{
+		return ((property == "name") || (property == "geometry"));
+	}
+	else
+		return !multiple;
+}
+
 void
 ContainerFactory::changeText(const QString &text)
 {
 	changeProperty("title", text, m_container);
 }
+
+// Widget Specific slots used in menu items
 
 void ContainerFactory::AddTabPage()
 {
@@ -444,7 +556,7 @@ void ContainerFactory::removeTabPage()
 	QTabWidget *tab = (QTabWidget *)m_widget;
 	QWidget *w = tab->currentPage();
 
-	WidgetList list;
+	QtWidgetList list;
 	list.append(w);
 	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
 	tab->removePage(w);
@@ -497,7 +609,7 @@ void ContainerFactory::removeStackPage()
 	QWidgetStack *stack = (QWidgetStack*)m_widget;
 	QWidget *page = stack->visibleWidget();
 
-	WidgetList list;
+	QtWidgetList list;
 	list.append(page);
 	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
 

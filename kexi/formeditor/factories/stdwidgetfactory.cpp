@@ -222,7 +222,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wDate = new KFormDesigner::Widget(this);
 	wDate->setPixmap("lineedit");
 	wDate->setClassName("KDateWidget");
-	#if !KDE_IS_VERSION(3,1,9) //TMP
+	#if KDE_IS_VERSION(3,1,9) //TMP
 	wDate->setAlternateClassName("QDateEdit");
 	wDate->setInclude("kdatewidget.h");
 	#endif
@@ -233,9 +233,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wTime = new KFormDesigner::Widget(this);
 	wTime->setPixmap("lineedit");
 	wTime->setClassName("KTimeWidget");
-	#if !KDE_IS_VERSION(3,1,9) //TMP
+	#if KDE_IS_VERSION(3,1,9) //TMP
 	wTime->setAlternateClassName("QTimeEdit");
-	wTime->setInclude("ktimewidget.h");*
+	wTime->setInclude("ktimewidget.h");
 	#endif
 	wTime->setName(i18n("Time Widget"));
 	wTime->setDescription(i18n("A widget to input or display a time"));
@@ -244,7 +244,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wDateTime = new KFormDesigner::Widget(this);
 	wDateTime->setPixmap("lineedit");
 	wDateTime->setClassName("KDateTimeWidget");
-	#if !KDE_IS_VERSION(3,1,9) //TMP
+	#if KDE_IS_VERSION(3,1,9) //TMP
 	wDateTime->setAlternateClassName("QDateTimeEdit");
 	wDateTime->setInclude("kdatetimewidget.h");
 	#endif
@@ -338,6 +338,12 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	}
 }
 
+void
+StdWidgetFactory::previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *container)
+{
+	if(classname == "Spacer")
+		((Spacer*)widget)->setPreviewMode();
+}
 
 bool
 StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)

@@ -18,6 +18,7 @@
 */
 #include <qdom.h>
 #include <qwidget.h>
+#include <qlayout.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -276,6 +277,124 @@ InsertWidgetCommand::name() const
 		return i18n("Insert widget");
 }
 
+/// CreateLayoutCommand ///////////////
+
+CreateLayoutCommand::CreateLayoutCommand(int layoutType, QtWidgetList &list, Form *form)
+ : m_form(form), m_type(layoutType)
+{
+	QtWidgetList *m_list;
+	switch(layoutType)
+	{
+		case Container::HBox:
+		case Container::Grid:
+			m_list = new HorWidgetList();
+		case Container::VBox:
+			m_list = new VerWidgetList();
+	}
+	for(QWidget *w = list.first(); w; w = list.next())
+		m_list->append(w);
+	m_list->sort();
+
+	for(QWidget *w = m_list->first(); w; w = m_list->next())
+		m_pos.insert(w->name(), w->geometry());
+	ObjectTreeItem *item = form->objectTree()->lookup(m_list->first()->name());
+	if(item && item->parent()->container())
+		m_containername = item->parent()->name();
+	delete m_list;
+}
+
+void
+CreateLayoutCommand::execute()
+{
+	WidgetLibrary *lib = m_form->manager()->lib();
+	if(!lib)  return;
+	Container *container = m_form->objectTree()->lookup(m_containername)->container();
+	if(!container)
+		container = m_form->toplevelContainer();
+
+	QString classname;
+	switch(m_type)
+	{
+		case Container::HBox:
+			classname = "HBox"; break;
+		case Container::VBox:
+			classname = "VBox"; break;
+		case Container::Grid:
+			classname = "Grid"; break;
+		default: break;
+	}
+
+	if(m_name.isEmpty())
+		m_name = m_form->objectTree()->genName(classname);
+	QWidget *w = lib->createWidget(classname, container->widget(), m_name.latin1(), container);
+	ObjectTreeItem *tree = m_form->objectTree()->lookup(w->name());
+	if(!tree)
+		return;
+
+	container->setSelectedWidget(0, false);
+	w->move(m_pos.begin().data().topLeft());
+	w->show();
+
+	for(QMap<QString,QRect>::Iterator it = m_pos.begin(); it != m_pos.end(); ++it)
+	{
+		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
+		if(item && item->widget())
+		{
+			item->widget()->reparent(w, item->widget()->pos(), true);
+			m_form->objectTree()->reparent(item->name(), m_name);
+		}
+	}
+
+	tree->container()->setLayout((Container::LayoutType)m_type);
+	tree->container()->layout()->setMargin(1);
+	tree->widget()->resize(tree->container()->layout()->sizeHint());
+	container->setSelectedWidget(w, false);
+	m_form->manager()->windowChanged(m_form->toplevelContainer()->widget());
+}
+
+void
+CreateLayoutCommand::unexecute()
+{
+	ObjectTreeItem *parent = m_form->objectTree()->lookup(m_containername);
+	if(!parent)
+		parent = m_form->objectTree();
+
+	for(QMap<QString,QRect>::Iterator it = m_pos.begin(); it != m_pos.end(); ++it)
+	{
+		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
+		if(item && item->widget())
+		{
+			kdDebug() << m_form->objectTree()->lookup(m_containername) << endl;
+			item->widget()->reparent(parent->widget(), QPoint(0,0), true);
+			item->widget()->setGeometry(m_pos[it.key()]);
+			m_form->objectTree()->reparent(item->name(), m_containername);
+		}
+	}
+
+	if(!parent->container())
+		return;
+	QWidget *w = m_form->objectTree()->lookup(m_name)->widget();
+	parent->container()->setSelectedWidget(w, false);
+	parent->container()->deleteItem();
+	m_form->manager()->windowChanged(m_form->toplevelContainer()->widget());
+}
+
+QString
+CreateLayoutCommand::name() const
+{
+	switch(m_type)
+	{
+		case Container::HBox:
+			return i18n("Lay out widgets horizontally");
+		case Container::VBox:
+			return i18n("Lay out widgets vertically");
+		case Container::Grid:
+			return i18n("Lay out widgets in a grid");
+		default:
+			return i18n("Create Layout");
+	}
+}
+
 // PasteWidgetCommand
 
 PasteWidgetCommand::PasteWidgetCommand(QDomDocument &domDoc, Container *container, QPoint p)
@@ -315,6 +434,8 @@ PasteWidgetCommand::execute()
 	}
 	else for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
 	{
+		if(n.toElement().tagName() != "widget")
+			continue;
 		QDomElement widg = n.toElement();
 		m_container->form()->pasteWidget(widg, m_container);
 	}
@@ -322,6 +443,8 @@ PasteWidgetCommand::execute()
 	m_names.clear();
 	for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
 	{
+		if(n.toElement().tagName() != "widget")
+			break;
 		for(QDomNode m = n.firstChild(); !m.isNull(); n = m.nextSibling())
 		{
 			if((m.toElement().tagName() == "property") && (m.toElement().attribute("name") == "name"))
@@ -355,7 +478,7 @@ PasteWidgetCommand::name() const
 
 // DeleteWidgetCommand
 
-DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
+DeleteWidgetCommand::DeleteWidgetCommand(QtWidgetList &list, Form *form)
  : KCommand(), m_form(form)
 {
 	m_domDoc = QDomDocument("UI");
@@ -428,7 +551,7 @@ DeleteWidgetCommand::name() const
 
 // CutWidgetCommand
 
-CutWidgetCommand::CutWidgetCommand(WidgetList &list, Form *form)
+CutWidgetCommand::CutWidgetCommand(QtWidgetList &list, Form *form)
  : DeleteWidgetCommand(list, form)
 {}
 

@@ -32,6 +32,7 @@ class QDomElement;
 class KActionCollection;
 class KCommandHistory;
 class KCommand;
+typedef QPtrList<QWidget> QtWidgetList;
 
 namespace KFormDesigner {
 
@@ -74,7 +75,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		//! \return the FormManager parent of this form.
 		FormManager*		manager() const { return m_manager; }
 		//! \return the widget currently selected in this form, or 0 if there is not.
-		QPtrList<QWidget>* selectedWidgets() {return &m_selected;}
+		QtWidgetList* 		selectedWidgets() {return &m_selected;}
 		/*! \return A pointer to the currently active Container, ie the parent Container for a simple widget,
 		    and the widget's Container if it is itself a container.
 		 */
@@ -188,7 +189,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		Container		*m_toplevel;
 		ObjectTree		*m_topTree;
 
-		QPtrList<QWidget>	m_selected;
+		QtWidgetList		m_selected;
 		ResizeHandleSet::Dict m_resizeHandles;
 
 		bool			m_inter;

@@ -19,7 +19,6 @@
 #include <qlayout.h>
 #include <qdialog.h>
 #include <qcursor.h>
-//#include <qobjectlist.h>
 
 #include <keditlistbox.h>
 #include <kstdguiitem.h>
@@ -212,8 +211,6 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 void
 WidgetFactory::disableFilter(QWidget *w, Container *container)
 {
-//	w->removeEventFilter(container);
-//	w->installEventFilter(this);
 	ObjectTreeItem *tree = container->form()->objectTree()->lookup(w->name());
 	if(!tree)
 		return;
@@ -231,25 +228,13 @@ WidgetFactory::disableFilter(QWidget *w, Container *container)
 bool
 WidgetFactory::editList(QWidget *w, QStringList &list)
 {
-	QDialog* dialog = new QDialog(w->topLevelWidget(), "stringlist_dialog", true);
-	QVBoxLayout *vbox = new QVBoxLayout(dialog, 2);
+	KDialogBase* dialog = new KDialogBase(w->topLevelWidget(), "stringlist_dialog", true, i18n("Edit list of items"),
+	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
 
-	KEditListBox *edit = new KEditListBox(dialog, "editlist");
-	vbox->addWidget(edit);
-
-	QHBoxLayout *hbox = new QHBoxLayout(vbox, 6);
-	KPushButton *pbOk = new KPushButton(KStdGuiItem::ok(), dialog);
-	KPushButton *pbCancel = new KPushButton(KStdGuiItem::cancel(), dialog);
-	QSpacerItem *spacer = new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-	connect(pbOk, SIGNAL(clicked()), dialog, SLOT(accept()));
-	connect(pbCancel, SIGNAL(clicked()), dialog, SLOT(reject()));
-
-	hbox->addItem(spacer);
-	hbox->addWidget(pbOk);
-	hbox->addWidget(pbCancel);
-
+	KEditListBox *edit = new KEditListBox(i18n("%1 contents").arg(w->name()), dialog, "editlist");
+	dialog->setMainWidget(edit);
 	edit->insertStringList(list);
+	edit->show();
 
 	if(dialog->exec() == QDialog::Accepted)
 	{
@@ -304,8 +289,6 @@ WidgetFactory::resetEditor()
 {
 	if(!m_editor && m_widget)
 	{
-		//m_widget->removeEventFilter(this);
-		//m_widget->installEventFilter(m_container);
 		ObjectTreeItem *tree = m_container->form()->objectTree()->lookup(m_widget->name());
 		if(!tree)
 		{
