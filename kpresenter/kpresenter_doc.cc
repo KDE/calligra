@@ -1025,6 +1025,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     KoXmlWriter settingsWriter(&contentDev, "office:document-settings");
     settingsWriter.startElement("office:settings");
+
     settingsWriter.startElement("config:config-item-set");
     settingsWriter.addAttribute("config:name", "view-settings");
 
@@ -1038,6 +1039,12 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.endElement(); //config:config-item-map-entry
     settingsWriter.endElement(); //config:config-item-map-indexed
     settingsWriter.endElement(); // config:config-item-set
+
+    settingsWriter.startElement("config:config-item-set");
+    settingsWriter.addAttribute("config:name", "configuration-settings");
+    saveOasisIgnoreList( settingsWriter );
+    settingsWriter.endElement(); // config:config-item-set
+
     settingsWriter.endElement(); // office:settings
     settingsWriter.endElement(); // Root element
     settingsWriter.endDocument();
@@ -1054,6 +1061,30 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     setModified( false );
 
     return true;
+}
+
+void KPresenterDoc::saveOasisIgnoreList( KoXmlWriter &settingsWriter )
+{
+    settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
+}
+
+void KPresenterDoc::loadOasisIgnoreList( const QDomDocument&settingsDoc )
+{
+    //todo
+    if ( settingsDoc.isNull() )
+        return; //not a error some file doesn't have settings.xml
+
+    KoOasisSettings settings( settingsDoc );
+    bool tmp = settings.selectItemSet( "configuration-settings" );
+    kdDebug()<<" settings : configuration-settings :"<<tmp<<endl;
+
+    if ( tmp )
+    {
+        QString ignorelist = settings.parseConfigItemString( "SpellCheckerIgnoreList" );
+        kdDebug()<<" ignorelist :"<<ignorelist<<endl;
+
+        m_spellListIgnoreAll = QStringList::split( ',', ignorelist );
+    }
 }
 
 void KPresenterDoc::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles )
@@ -1529,7 +1560,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
     loadOasisSettings( settingsDoc );
-
+    loadOasisIgnoreList( settingsDoc );
     emit sigProgress( 100 );
     recalcVariables( VT_FIELD );
     emit sigProgress( -1 );
