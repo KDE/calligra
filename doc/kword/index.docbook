@@ -257,12 +257,12 @@ I think it is fair to say that choosing the correct template when you begin your
 <para>Text Edit Mode is most commonly used for the <emphasis>entry of the content</emphasis> of the document.  In Text Edit Mode, you enter text from the keyboard, cut and paste from other applications, build tables for your data, etc.   </para>
 <para>Frame Edit Mode is most commonly used for the <emphasis>layout</emphasis> of the document.  Using Frame Edit mode, you can adjust the width of text, resize pictures, etc.</para>
 <para>This is not to say that you will never enter content from Frame Edit Mode, and never alter layout in the Text edit mode, but most of the time, you can consider the STUFF</para>
-<para>You can enter Text Edit Mode by: <guimenu>Tools</guimenu><guimenuitem>Edit Text</guimenuitem>
+<para>You can enter Text Edit Mode by: <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Text</guimenuitem></menuchoice>
 or by pressing F4 
-or by clicking on the Text Edit toolbar button (<InlineGraphic Fileref="a" Format="png" Align="center"></InlineGraphic>)</para>
-<para>You can enter Frame Edit Mode by: <guimenu>Tools</guimenu><guimenuitem>Edit Frame</guimenuitem>
+or by clicking on the Text Edit toolbar button (<InlineGraphic fileref="pics/textmode" Format="png" Align="center"></InlineGraphic>)</para>
+<para>You can enter Frame Edit Mode by: <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Frame</guimenuitem></menuchoice>
 or by pressing F5 
-or by clicking on the Frame  Edit toolbar button (<InlineGraphic Fileref="a" Format="png" Align="center"></InlineGraphic>)</para>
+or by clicking on the Frame  Edit toolbar button (<InlineGraphic fileref="pics/framemode" Format="png" Align="center"></InlineGraphic>)</para>
 <para> Now that we have discussed the differences between DTP and Wordprocessing templates and introduced the differences between Text Edit Mode and Frame Edit Mode, we can begin the tutorial</para></sect1>
 </chapter>
 <chapter id="Tutorial"><title>Step by Step Tutorial</title>
@@ -270,7 +270,7 @@ or by clicking on the Frame  Edit toolbar button (<InlineGraphic Fileref="a" For
 <note><para>NOTE:  The steps to this tutorial are numbered from 1 thru 21.  Beneath each step, is text in <Emphasis>italics</Emphasis>.  This text will explain what the previous step in the tutorial acomplished.</para>  </note>
 
 <para>When you first start KWord (or <link linkend="File">start a new document</link> after KWord is running), a dialog appears.</para>
-<screenshot><graphic Fileref="ChooseTempDia" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="./pics/ChooseTempDia" Format="png" Align="center"></graphic></screenshot>
 <para>This dialog box is used to:
 <orderedlist numeration="arabic">
 <listitem><para>To select the initial template for your new document</para></listitem>
@@ -281,15 +281,15 @@ or by clicking on the Frame  Edit toolbar button (<InlineGraphic Fileref="a" For
 <para>For your first document: </para>
 
 <para>Step 1: Click on the DTP tab. </para>
-<screenshot><graphic Fileref="Tut1" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut1" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>This will list the Desktop Publishing icons available on your system.</Emphasis></para>
 
 <para>Step 2: Now select the "Simple Layout" icon by clicking once with the left button of your mouse. </para>
-<screenshot><graphic Fileref="Tut2" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut2" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>This is the template we will use for the tutorial</Emphasis></para>
 
 <para>Step 3: Now confirm your selection by clicking on "OK" </para>
-<screenshot><graphic Fileref="Tut3" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut3" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>To complete your selection</Emphasis></para>
 
 <para><Emphasis>KWord will open a new document with 3 frames.  The frames are outlined on the white background, as grey boxes.  Each box is a separate frame.</Emphasis></para>
@@ -297,74 +297,74 @@ or by clicking on the Frame  Edit toolbar button (<InlineGraphic Fileref="a" For
 <sect1 id="FrameSelect"> <title>Selecting a frame and entering text into that frame</title>
 <para><Emphasis>To begin entering text (or adding any sort of data for that matter), to a document, you must first let the computer know which frame to put the data in.</Emphasis></para>
 <para>Step 4: place the mouse cursor over the upper-left frame</para>
-<screenshot><graphic Fileref="Tut4" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut4" Format="png" Align="center"></graphic></screenshot>
 <para>Step 5: Click once with the left mouse button.</para>
 
 <para><Emphasis>This selects frame.  You can tell this is the current frame because a cursor appears in the upper left corner. </Emphasis></para>
 <para>Step 6: Enter the following text into the keyboard: "The KWord Reader".</para>
 
-<screenshot><graphic Fileref="Tut6" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut6" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>This is some sample text for our newsletter.</Emphasis></para>
 <para>Step 7: Select "The KWord Reader" by left clicking and holding down to the left of the text, and draging to the right.  Selected text will be white text on black background.</para>
-<screenshot><graphic Fileref="Tut7" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut7" Format="png" Align="center"></graphic></screenshot>
 
 <para>Step 8: Click inside the text size drop down box.  Change this number to 50.</para>
-<screenshot><graphic Fileref="Tut8" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut8" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>This changes the size of the text to one more appropriate for a title.</Emphasis></para>
 
 </sect1>
 <sect1 id="ResizeFrame"> <title>Changing the size of a frame</title>
 <para><Emphasis>Now that we have entered some text, we can see that the frame is too large for the text. </Emphasis></para>
 <para>Step 9: Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Frame</guimenuitem></menuchoice></para>
-<screenshot><graphic Fileref="Tut9" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut9" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>This will switch us into Frame Edit Mode.</Emphasis></para>
 <para>Step 10: Click once in the upper-left frame</para>
-<screenshot><graphic Fileref="Tut10" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut10" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>This will select this frame for editing.</Emphasis></para>
 <para><Emphasis>You will now notice the frame is outlined in black, with 8 black squares on the outline.  These squares are used for resizing the frame.</Emphasis></para>
 <para>Step 11: Place the mouse cursor over the black square in the lower right corner of the frame. Click with the left mouse button and hold it down. Drage the mouse up and to the left.</para>
-<screenshot><graphic Fileref="Tut11a" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut11a" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>Notice how the frame changes shape.  Adjust the size and shape of the frame until it looks like this:</Emphasis></para>
-<screenshot><graphic Fileref="Tut11b" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut11b" Format="png" Align="center"></graphic></screenshot>
 <para>When it does, release the mouse button.</para>
 </sect1>
 <sect1 id="MoveFrame"> <title>Moving a frame on the page</title>
 <para>Now that we have created a title block, we will center it at the top of the page.</para>
 <para>Step 12: Place the mouse cursor over the frame.</para>
-<screenshot><graphic Fileref="Tut12" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut12" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>The cursor will now change to a "4 way arrow".  This indicates KWord is ready to move the frame on the page.</Emphasis></para>
 <para>Step 13: Click and hold with the left mouse button. Drag the mouse, and the frame will follow it.  Position the frame in the center of the page near the top.</para>
-<screenshot><graphic Fileref="Tut13" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut13" Format="png" Align="center"></graphic></screenshot>
 </sect1>
 <sect1 id="AddFrame"> <title>Adding a new frame/Making text flow between two frames</title>
 <para>Step 14: Begin by selecting <menuchoice><guimenu>Tools</guimenu><guimenuitem>Create Text Frame</guimenuitem></menuchoice></para>
-<screenshot><graphic Fileref="Tut14" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut14" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>The cursor will now change to cross-hairs.  You can now "draw" your new text box.  Start by placing the cursor at one corner.  Click and hold
 the left mouse button.  Drag the mouse diagonally.  An outline will appear which represents your new text frame.  When you have a text frame of reasonable size, release the left mouse button.</Emphasis></para>
-<screenshot><graphic Fileref="Tut14a" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut14a" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>It is not important if your text box does not resemble the example for the purposes of this tutorial.</Emphasis></para>
 <para>When you release the left mouse button, a new dialog box appears.</para>
-<screenshot><graphic Fileref="Tut15" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut15" Format="png" Align="center"></graphic></screenshot>
 <para>This dialog box lists all the current framesets.  The default value is highlighted.  By selecting the default value, you will create a new framset (text will not flow from any other frame into this frame)</para>
 <para>Step 15: For the purposes of this tutorial, select "Frameset 2"</para>
-<screenshot><graphic Fileref="Tut15a" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut15a" Format="png" Align="center"></graphic></screenshot>
 <para>Step 16: Select "OK"</para>
-<screenshot><graphic Fileref="Tut16" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut16" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>What you have just done, is connect frameset 1 to your new text frame.  To test this:</Emphasis></para>
 <para>Step 17: Click once inside the lower left frame.</para>
 <para>Step 18: Begin typing.  You will need to type quite a bit, but keep typing.  When you run out of space in the text frame, you will see your new text is moved immediatly into your new text frame.</para>
-<screenshot><graphic Fileref="Tut18" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut18" Format="png" Align="center"></graphic></screenshot>
 <para></para></sect1>
 <sect1 id="DelFrame"> <title>Deleting a frame</title>
 <para>Now we will delete an unneeded frame. (Yes I know, we just created a new frame).  We will delete the long text frame on the right side of the page.</para>
 <para>Step 19: Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Frame</guimenuitem></menuchoice></para>
-<screenshot><graphic Fileref="Tut19" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut19" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>This will switch us into Frame Edit Mode.</Emphasis></para>
 <para>Step 20: Place the mouse cursor over the right hand text column, and click with the left mouse button.</para>
-<screenshot><graphic Fileref="Tut20" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut20" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>This selects the frame.</Emphasis></para>
 <para>Step 21: Select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete Frame</guimenuitem></menuchoice></para>
-<screenshot><graphic Fileref="Tut21" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/Tut21" Format="png" Align="center"></graphic></screenshot>
 <para><Emphasis>This deletes the frame.</Emphasis></para>
 <para>Hopefully this tutorial has introduced you to the basics of using frames in KWord.</para>
 
@@ -423,9 +423,9 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 <para>When you startup KWord, all the available toolbars are visible.  If you don't think you will need a toolbar, and want to reclaim that desktop space, 
 you "minimize" the toolbar.</para>
 <para>Each toolbar has a stippled area to the left (or on top) of the toolbar buttons.  By clicking on this area, the toolbar will be minimized.</para>
-<screenshot><graphic Fileref="tbmin" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/tbmin" Format="png" Align="center"></graphic></screenshot>
 <para>Once a toolbar is minimized, this stipled area moves up near the menubar.</para>
-<screenshot><graphic Fileref="tbmax" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/tbmax" Format="png" Align="center"></graphic></screenshot>
 <para>Clicking on this area will "Restore" the toolbar to its original size.</para>
 <para>If you left-click on this stippled area, and hold the button down, you can drag the toolbar around the kword screen.  This allows you to move the
 toolbars around to suit your needs.  You can also drag the toolbar off the KWord screen, and the toolbar becomes an independent window.  The toolbar continues to function, but you have an unlimited ability to move the toolbar around to suit your needs.</para>
@@ -434,7 +434,7 @@ toolbars around to suit your needs.  You can also drag the toolbar off the KWord
      
 <para>The Menubar contains all commands available to KWord.  It is divided into 9 general categories.</para>
      
-<screenshot><graphic Fileref="basic" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/basic" Format="png" Align="center"></graphic></screenshot>
      
 <sect2 id="File"><title>File Menu</title>
 
@@ -447,7 +447,7 @@ toolbars around to suit your needs.  You can also drag the toolbar off the KWord
 Allows you to open new files for editing.  For Step by Step instructions see <link linkend="NewDoc">Beginning a New Document</link>.</action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="filenew2" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/filenew2" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuOpen"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -457,7 +457,7 @@ For opening previously created KWord files.  For Step by Step instructions see <
 </action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo>
 or clicking 
- <InlineGraphic Fileref="fileopen" Format="png" Align="center"></InLineGraphic>
+ <InlineGraphic fileref="pics/fileopen" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuSave"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -468,7 +468,7 @@ For more details, see <link linkend="Saving">Saving a Document</link>.
 </action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>S</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="filefloppy" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/filefloppy" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. </para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -484,7 +484,7 @@ Print the file.  For an overview of printing options see <link linkend="Printing
 </action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>P</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="fileprint" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/fileprint" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuClose"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -493,9 +493,7 @@ or clicking
 Close the file you are currently working on. ???Save???
 </action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>W</keycap></keycombo>
-or clicking 
-<InlineGraphic Fileref="close" Format="png" Align="center"></InLineGraphic>
- are equivilent to using the menubar. <anchor id="MenuQuit"></para></listitem></varlistentry>
+is equivilent to using the menubar. <anchor id="MenuQuit"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
 <guimenu>File</guimenu><guimenuitem>Quit</guimenuitem></menuchoice></term>
@@ -504,7 +502,7 @@ Quits <application>KWord</application>
 </action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>q</keycap></keycombo> 
 or clicking 
-<InlineGraphic Fileref="exit" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/exit" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. </para></listitem></varlistentry>
 </variablelist>
 
@@ -522,7 +520,7 @@ Reverses the last action you performed.  Not all actions can be reversed.  If yo
 </para> <para>Typing 
 <keycombo><keycap>Alt</keycap><keycap>BackSpace</keycap></keycombo> 
 or clicking 
-<InlineGraphic Fileref="undo" Format="png" Align="center"></InLineGraphic> 
+<InlineGraphic fileref="pics/undo" Format="png" Align="center"></InLineGraphic> 
  are equivilent to using the menubar. <anchor id="MenuRedo"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -530,7 +528,7 @@ or clicking
 <listitem><para><action>
 Reverses the last Undo performed.  If the Redo option is unavailable, the Toolbar will replace "Redo" with "No Redo Possible".  
 For a more thourough discussion of Undo/Redo, <link linkend="UndoRedo">click here</link>.</action></para> <para>Clicking 
-<InlineGraphic Fileref="redo" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/redo" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuCut"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -540,7 +538,7 @@ Deletes the highlighted text from the document, and places a copy in the clipboa
 Cutting and Pasting, and a full description of the clipboard, <link linkend="Clipboard">click here</link>.</action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="editcut" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/editcut" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuCopy"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -550,7 +548,7 @@ Places a copy of the highlighted text in the clipboard, without changing the tex
 Cutting and Pasting, and a full description of the clipboard, <link linkend="Clipboard">click here</link>.</action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="editcopy" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/editcopy" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuPaste"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -561,7 +559,7 @@ text with the contents of the clipboard.  The clipboard is not altered.  For a m
 Cutting and Pasting, and a full description of the clipboard, <link linkend="Clipboard">click here</link>.</action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="editpaste" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/editpaste" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuFind"></para></listitem></varlistentry>
 
 
@@ -573,7 +571,7 @@ offers a sophisticated Search and Replace feature, which is covered in more deta
 <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="a" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/a" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuSelectAll"></para></listitem></varlistentry>
 
 
@@ -670,7 +668,7 @@ Insert a picture from a file into the current cursor position.  Step by Step ins
 here</link>.STUFF****</action></para> <para>Typing 
 <keycombo><keycap>F2</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="picture" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/picture" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuInsCA"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -680,7 +678,7 @@ Insert a picture from a file into the current cursor position.  Step by Step ins
 here</link>.STUFF****</action></para> <para>Typing 
 <keycombo><keycap>F3</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="clipart" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/clipart" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuInsSC"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -689,7 +687,7 @@ or clicking
 ***STUFF</action></para> <para>Typing 
 <keycombo><keycap>Alt</keycap><keycap>C</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="STUFF" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/inssc" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuInsFB"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -724,7 +722,7 @@ Inserting the Date and Time</link>. (STUFF---Serial Letters???</action></para></
 Switches you to Edit Text Mode.  For more detailed information see <link linkend="Frames">Working with Frames</link>.</action></para> <para>Typing 
 <keycombo><keycap>F4</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="a" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/textmode" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuEditFrame"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -733,7 +731,7 @@ or clicking
 Switches you to Frame Edit Mode.  For more detailed information see <link linkend="Frames">Working with Frames</link>.</action></para> <para>Typing 
 <keycombo><keycap>F5</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="a" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/framemode" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuCrTF"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -745,7 +743,7 @@ frame.  Click on the left mouse button and hold the button down.  Drag the mouse
 subject, see <link linkend="Frames">Working with Frames</link>.</action></para> <para>Typing 
 <keycombo><keycap>F6</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="a" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/tfcreatebut" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuCrPF"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -759,7 +757,7 @@ final size of the picture in your document.  When you are happy with the size of
 </action></para> <para>Typing 
 <keycombo><keycap>F7</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="picture" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/picture" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuCrCaF"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -773,7 +771,7 @@ final size of the picture in your document.  When you are happy with the size of
 STUFF****</action></para> <para>Typing 
 <keycombo><keycap>F8</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="clipart" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/clipart" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuCrTbl"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -783,7 +781,7 @@ This will allow you to create a frame and automatically insert a table within th
 Working with Tables</link>.</action></para> <para>Typing 
 <keycombo><keycap>F9</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="part-kspread" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/part-kspread" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuCrKspread"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -793,7 +791,7 @@ This will allow you to create a frame and automatically insert a Kspread table w
 Inserting a KSpread Table</link>.</action></para> <para>Typing 
 <keycombo><keycap>F10</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="part-kspread" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/part-kspread" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuCrForm"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -803,7 +801,7 @@ Creates a new frame, and places the cursor in the new frame, in Formula Edit Mod
 linkend="Formulas">Formulas</link>.</action></para> <para>Typing 
 <keycombo><keycap>F11</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="part-kformula" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/part-kformula" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. <anchor id="MenuCrPart"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -812,7 +810,7 @@ or clicking
 Creates a new frame, and allows for integrating .........STUFF****</action></para> <para>Typing 
 <keycombo><keycap>F12</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="part-unspecif" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/part-unspecif" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. </para></listitem></varlistentry>
 
 </variablelist></sect2>
@@ -831,7 +829,7 @@ is equivilent to using the menubar. <anchor id="FormatColor"></para></listitem><
 You can select the color of text.  For more details, go to <link linkend="FormatChar">Character Formating</link></action></para> <para>Typing 
 <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>C</keycap></keycombo>
 or clicking 
-<InlineGraphic Fileref="part-unspecif" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/part-unspecif" Format="png" Align="center"></InLineGraphic>
  are equivilent to using the menubar. </para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -860,28 +858,28 @@ or clicking
 <guimenu>Table</guimenu><guimenuitem>Insert Row</guimenuitem></menuchoice></term>
 <listitem><para><action>
 Allows you to insert a row into a table. For more on tables, <link linkend="Tables">click here</link>.</action></para> <para>Clicking 
-<InlineGraphic Fileref="rowin" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/rowin" Format="png" Align="center"></InLineGraphic>
  is equivilent to using the menubar. <anchor id="MenuInsCol"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
 <guimenu>Table</guimenu><guimenuitem>Insert Column</guimenuitem></menuchoice></term>
 <listitem><para><action>
 Allows you to insert a column into a table. For more on tables, <link linkend="Tables">click here</link>.</action></para> <para>Clicking 
-<InlineGraphic Fileref="colin" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/colin" Format="png" Align="center"></InLineGraphic>
  is equivilent to using the menubar. <anchor id="MenuDelRow"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
 <guimenu>Table</guimenu><guimenuitem>Delete Row</guimenuitem></menuchoice></term>
 <listitem><para><action>
 Delete a row from a table. For more on tables, <link linkend="Tables">click here</link>.</action></para> <para>Clicking 
-<InlineGraphic Fileref="rowout" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/rowout" Format="png" Align="center"></InLineGraphic>
  is equivilent to using the menubar. <anchor id="MenuDelCol"></para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
 <guimenu>Table</guimenu><guimenuitem>Delete Column</guimenuitem></menuchoice></term>
 <listitem><para><action>
 Delete a column from a table. For more on tables, <link linkend="Tables">click here</link>.</action></para> <para>Clicking 
-<InlineGraphic Fileref="colout" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/colout" Format="png" Align="center"></InLineGraphic>
  is equivilent to using the menubar. </para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -908,7 +906,7 @@ Delete a column from a table. For more on tables, <link linkend="Tables">click h
 <guimenu>Extra</guimenu><guimenuitem>Spell Checking</guimenuitem></menuchoice></term>
 <listitem><para><action>
 Will <link linkend="SpellCheck">spell check</link> the document.</action></para> <para>Clicking 
-<InlineGraphic Fileref="a" Format="png" Align="center"></InLineGraphic>
+<InlineGraphic fileref="pics/spell" Format="png" Align="center"></InLineGraphic>
  is equivilent to using the menubar. </para></listitem></varlistentry>
 
 <varlistentry><term><menuchoice>
@@ -936,27 +934,27 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 </sect1>
 <sect1 id="FileToolbar"><title>File Toolbar</title>
 <para>The File Toolbar consists of 4 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
-<screenshot><graphic Fileref="filetb" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/filetb" Format="png" Align="center"></graphic></screenshot>
 <informaltable frame=none>
 <tgroup cols=2 align=left>
 <tbody>
 <row><entry>
-<link linkend="MenuNew"><InlineGraphic Fileref="filenew2" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuNew"><InlineGraphic fileref="pics/filenew2" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuNew">Open New File</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuOpen"><InlineGraphic Fileref="fileopen" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuOpen"><InlineGraphic fileref="pics/fileopen" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuOpen">Open Saved File</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuSave"><InlineGraphic Fileref="filefloppy" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuSave"><InlineGraphic fileref="pics/filefloppy" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuSave">Save File</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuPrint"><InlineGraphic Fileref="fileprint" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuPrint"><InlineGraphic fileref="pics/fileprint" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuPrint">Print File</link>
 </entry></row>
@@ -965,42 +963,42 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 </sect1>
 <sect1 id="BasicEditToolbar"><title>Basic Editing Toolbar</title>
 <para>The Basic Editing Toolbar consists of 7 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
-<screenshot><graphic Fileref="edittb" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/edittb" Format="png" Align="center"></graphic></screenshot>
 <informaltable frame=none>
 <tgroup cols=2 align=left>
 <tbody>
 <row><entry>
-<link linkend="MenuUndo"><InlineGraphic Fileref="undo" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuUndo"><InlineGraphic fileref="pics/undo" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuUndo">Undo</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuRedo"><InlineGraphic Fileref="redo" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuRedo"><InlineGraphic fileref="pics/redo" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuRedo">Redo</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuCut"><InlineGraphic Fileref="editcut" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuCut"><InlineGraphic fileref="pics/editcut" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuCut">Cut</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuCopy"><InlineGraphic Fileref="editcopy" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuCopy"><InlineGraphic fileref="pics/editcopy" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuCopy">Copy</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuPaste"><InlineGraphic Fileref="editspace" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuPaste"><InlineGraphic fileref="pics/editspace" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuPaste">Paste</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuSpell"><InlineGraphic Fileref="spell" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuSpell"><InlineGraphic fileref="pics/spell" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuSpell">Spell Check</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuFind"><InlineGraphic Fileref="find" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuFind"><InlineGraphic fileref="pics/find" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuFind">Find and Replace</link>
 </entry></row>
@@ -1009,22 +1007,22 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 </sect1>
 <sect1 id="InsertToolBar"><title>Insert Tool Bar</title>
 <para>The Basic Editing Toolbar consists of 3 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
-<screenshot><graphic Fileref="instb" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/instb" Format="png" Align="center"></graphic></screenshot>
 <informaltable frame=none>
 <tgroup cols=2 align=left>
 <tbody>
 <row><entry>
-<link linkend="MenuInsPict"><InlineGraphic Fileref="picture" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuInsPict"><InlineGraphic fileref="pics/picture" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuInsPict">Insert Picture</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuInsCA"><InlineGraphic Fileref="clipart" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuInsCA"><InlineGraphic fileref="pics/clipart" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuInsCA">Insert Clipart</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuInsSC"><InlineGraphic Fileref="a" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuInsSC"><InlineGraphic fileref="pics/inssc" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuInsSC">Insert Special Character</link>
 </entry></row>
@@ -1034,52 +1032,52 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <sect1 id="FrameCreateToolbar"><title>Frame Edit/Create ToolBar</title>
 <para>The Frame Edit/Create Toolbar consists of 9 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
 
-<screenshot><graphic Fileref="fcrtb" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/fcrtb" Format="png" Align="center"></graphic></screenshot>
 <informaltable frame=none>
 <tgroup cols=2 align=left>
 <tbody>
 <row><entry>
-<link linkend="MenuEditText"><InlineGraphic Fileref="a" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuEditText"><InlineGraphic fileref="pics/textmode" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuEditText">Edit Text</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuEditFrame"><InlineGraphic Fileref="a" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuEditFrame"><InlineGraphic fileref="pics/framemode" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuEditFrame">Edit Frames</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuCrTF"><InlineGraphic Fileref="a" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuCrTF"><InlineGraphic fileref="pics/tfcreatebut" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuCrTF">Create Text Frame</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuCrPF"><InlineGraphic Fileref="picture" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuCrPF"><InlineGraphic fileref="pics/picture" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuCrPF">Create Picture Frame</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuCrCAF"><InlineGraphic Fileref="clipart" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuCrCAF"><InlineGraphic fileref="pics/clipart" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuCrCAF">Create Clipart Frame</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuCrTbl"><InlineGraphic Fileref="part-kspread" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuCrTbl"><InlineGraphic fileref="pics/part-kspread" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuCrTbl">Create Table</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuCrKspread"><InlineGraphic Fileref="part-kspread" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuCrKspread"><InlineGraphic fileref="pics/part-kspread" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuCrKspread">Create Kspread Table Frame</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuCrForm"><InlineGraphic Fileref="part-kformula" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuCrForm"><InlineGraphic fileref="pics/part-kformula" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuCrForm">Create Formula Frame</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuCrPart"><InlineGraphic Fileref="part-unspecif" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuCrPart"><InlineGraphic fileref="pics/part-unspecif" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuCrPart">Create Part Frame</link>
 </entry></row>
@@ -1088,27 +1086,27 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 </sect1>
 <sect1 id="TableEditToolbar"><title>Table Edit ToolBar</title>
 <para>The Table Edit Toolbar consists of 4 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
-<screenshot><graphic Fileref="tedittb" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/tedittb" Format="png" Align="center"></graphic></screenshot>
 <informaltable frame=none>
 <tgroup cols=2 align=left>
 <tbody>
 <row><entry>
-<link linkend="MenuInsRow"><InlineGraphic Fileref="rowin" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuInsRow"><InlineGraphic fileref="pics/rowin" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuInsRow">Insert Row</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuInsCol"><InlineGraphic Fileref="colin" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuInsCol"><InlineGraphic fileref="pics/colin" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuInsCol">Insert Column</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuDelRow"><InlineGraphic Fileref="rowout" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuDelRow"><InlineGraphic fileref="pics/rowout" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuDelRow">Delete Row</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuDelCol"><InlineGraphic Fileref="colout" Format="png" Align="center"></InLineGraphic></link>
+<link linkend="MenuDelCol"><InlineGraphic fileref="pics/colout" Format="png" Align="center"></InLineGraphic></link>
 </entry><entry valign=middle>
 <link linkend="MenuDelCol">Delete Column</link>
 </entry></row>
@@ -1117,27 +1115,34 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 </sect1>
 <sect1 id="CharFormatToolbar"><title>Character Formatting ToolBar</title>
 <para>The Character Formatting Toolbar consists of 23 "elements".  Each "element" performs a task from the menubar.</para>
-<screenshot><graphic Fileref="cftb" Format="png" Align="center"></graphic></screenshot>
+<screenshot><graphic fileref="pics/cftb" Format="png" Align="center"></graphic></screenshot>
 <informaltable frame=none>
 <tgroup cols=2 align=left>
 <tbody>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Select Character Style</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Character Size</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Select Font Face</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Bold Text</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Italics Button</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Underline Button</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Text Color Button</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Right Text Align Button</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Center Text Align Button</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Left Text Align Button</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Justify Text Button</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Select Line Spacing</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Numbered Text paragraphs</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Bulleted Text paragraphs</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Superscript Text Button</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Subscript Text Button</entry></row>
-<row><entry><InlineGraphic Fileref="a" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>paragraph Border Buttons</entry></row>
+<row><entry><InlineGraphic fileref="pics/chstylebut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Select Character Style</entry></row>
+<row><entry><InlineGraphic fileref="pics/chsizebut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Character Size</entry></row>
+<row><entry><InlineGraphic fileref="pics/chfontbut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Select Font Face</entry></row>
+<row><entry><InlineGraphic fileref="pics/bold" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Bold Text</entry></row>
+<row><entry><InlineGraphic fileref="pics/ital" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Italics Button</entry></row>
+<row><entry><InlineGraphic fileref="pics/undl" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Underline Button</entry></row>
+<row><entry><InlineGraphic fileref="pics/chcolorbut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Text Color Button</entry></row>
+<row><entry><InlineGraphic fileref="pics/alignRight" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Right Text Align Button</entry></row>
+<row><entry><InlineGraphic fileref="pics/alignCenter" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Center Text Align Button</entry></row>
+<row><entry><InlineGraphic fileref="pics/alignLeft" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Left Text Align Button</entry></row>
+<row><entry><InlineGraphic fileref="pics/alignBlock" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Justify Text Button</entry></row>
+<row><entry><InlineGraphic fileref="pics/lspcbut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Select Line Spacing</entry></row>
+<row><entry><InlineGraphic fileref="pics/numtxtbut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Numbered Text paragraphs</entry></row>
+<row><entry><InlineGraphic fileref="pics/bultxtbut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Bulleted Text paragraphs</entry></row>
+<row><entry><InlineGraphic fileref="pics/supscbut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Superscript Text Button</entry></row>
+<row><entry><InlineGraphic fileref="pics/subscbut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Subscript Text Button</entry></row>
+<row><entry><InlineGraphic fileref="pics/lbord" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Toggle Left Paragraph Border</entry></row>
+<row><entry><InlineGraphic fileref="pics/rbord" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Toggle Right Paragraph Border</entry></row>
+<row><entry><InlineGraphic fileref="pics/tbord" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Toggle Top Paragraph Border</entry></row>
+<row><entry><InlineGraphic fileref="pics/bbord" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Toggle Bottom Paragraph Border</entry></row>
+<row><entry><InlineGraphic fileref="pics/bord" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Toggle all 4 borders</entry></row>
+<row><entry><InlineGraphic fileref="pics/bdsizebut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Select Border Size</entry></row>
+<row><entry><InlineGraphic fileref="pics/bdselbut" Format="png" Align="right"></InLineGraphic></entry><entry valign=middle>Select Border Style</entry></row>
+
 </tbody></tgroup>
 </informaltable>
 </sect1></chapter>   
