@@ -1605,11 +1605,11 @@ protected:
   bool insertChar(char);
 
   bool sameEffects(TxtObj *to)
-    { return (currFont.operator==(to->font()) && currColor.operator==(to->color())); }
+    {return (currFont.operator==(to->font()) && currColor.operator==(to->color()));}
 
-  void makeCursorVisible();
+  bool makeCursorVisible();
   
-  TxtCursor getCursorPos(int,int,bool set=false,bool redraw=false);
+  TxtCursor getCursorPos(int,int,bool&,bool set=false,bool redraw=false);
 
   QString toHexString(QColor);
 

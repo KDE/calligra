@@ -3867,13 +3867,15 @@ void KTextObject::mousePressEvent(QMouseEvent *e)
     {
     case LeftButton:
       {
+	bool dummy;
 	mousePressed = true;
-	startCursor = getCursorPos(e->x(),e->y(),true,true);
-	stopCursor = getCursorPos(e->x(),e->y(),true,true);
+	startCursor = getCursorPos(e->x(),e->y(),dummy,true,true);
+	stopCursor = getCursorPos(e->x(),e->y(),dummy,true,true);
       } break;
     case MidButton:
       {
-	getCursorPos(e->x(),e->y(),true,true);
+	bool dummy;
+	getCursorPos(e->x(),e->y(),dummy,true,true);
 	mousePressed = false;
 	paste();
       } break;
@@ -3911,8 +3913,9 @@ void KTextObject::mouseReleaseEvent(QMouseEvent *e)
   if (mousePressed)
     {
       mousePressed = false;
-      
-      TxtCursor cursor = getCursorPos(e->x(),e->y(),true,false);
+      bool dummy;
+
+      TxtCursor cursor = getCursorPos(e->x(),e->y(),dummy,true,false);
       if (cursor.positionAbs() > startCursor.positionAbs())
 	stopCursor = cursor;
       else
@@ -3937,8 +3940,11 @@ void KTextObject::mouseMoveEvent(QMouseEvent *e)
     {
       TxtCursor _startCursor = startCursor;
       TxtCursor _stopCursor = stopCursor;
+      TxtCursor cursor;
 
-      TxtCursor cursor = getCursorPos(e->x(),e->y(),true,false);
+      bool dummy;
+      cursor = getCursorPos(e->x(),e->y(),dummy,true,false);
+	
       if (cursor.positionAbs() > startCursor.positionAbs())
 	stopCursor = cursor;
       else
@@ -4438,21 +4444,24 @@ bool KTextObject::insertChar(char c)
 }
 
 /*====================== make cursor  vsisble ====================*/
-void KTextObject::makeCursorVisible()
+bool KTextObject::makeCursorVisible()
 {
   bool _update = false;
 
   if (height() - 16 <= txtCursor->ypos() + txtCursor->height())
     {
-      setYOffset((yOffset() + txtCursor->ypos() < totalHeight() - height() + 16 ? 
-		  yOffset() + txtCursor->ypos() : totalHeight() - height() + 16));
       _update = true;
+      setYOffset((yOffset() + txtCursor->height() < totalHeight() - height() + 16 ?
+		  yOffset() + txtCursor->height() : totalHeight() - height() + 16));
+      if (yOffset() == totalHeight() - height() + 16) _update = false;
     }
 
   if (!_update && txtCursor->ypos() <= 0)
     {
-      setYOffset(yOffset() - txtCursor->height());
       _update = true;
+      setYOffset((yOffset() - txtCursor->height() > 0 ?
+		  yOffset() - txtCursor->height() : 0));
+      if (yOffset() == 0) _update = false;
     }
 
   if (xOffset() + width() - 16 < txtCursor->xpos() || xOffset() > txtCursor->xpos())
@@ -4466,10 +4475,12 @@ void KTextObject::makeCursorVisible()
       updateTableSize();
       updateScrollBars();
     }
+
+  return _update;
 }
 
 /*====================== set cursor psoition ====================*/
-TxtCursor KTextObject::getCursorPos(int _x,int _y,bool set=false,bool redraw=false)
+TxtCursor KTextObject::getCursorPos(int _x,int _y,bool &changed,bool set=false,bool redraw=false)
 {
   QFontMetrics fm(currFont);
   int x = _x + xOffset() - fm.width('x') / 2;
@@ -4540,7 +4551,11 @@ TxtCursor KTextObject::getCursorPos(int _x,int _y,bool set=false,bool redraw=fal
       
       txtCursor->setPositionAbs(absPos);
       cursorChanged = true;
-      
+      if (tableFlags() & Tbl_vScrollBar || tableFlags() & Tbl_hScrollBar)
+	changed = makeCursorVisible();
+      else 
+	changed = false;
+
       if (redraw)
 	{
 	  drawLine = tmpCursor.positionLine();
