@@ -174,7 +174,7 @@ bool PalmDoc::save( const char* filename )
 }
 
 // TODO describe in brief about compression algorithm
-QByteArray PalmDoc::compress( QString text )
+QByteArray PalmDoc::compress( const QString& text )
 {
   QByteArray result;
   unsigned textlen = text.length();

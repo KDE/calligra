@@ -310,7 +310,7 @@ bool PalmDB::save( const char* filename )
   return TRUE;
 }
 
-void PalmDB::setType( QString t )
+void PalmDB::setType( const QString& t )
 {
   m_type = t;
   if( m_type.length() > 4 )
@@ -320,7 +320,7 @@ void PalmDB::setType( QString t )
 }
 
 
-void PalmDB::setCreator( QString c )
+void PalmDB::setCreator( const QString& c )
 {
   m_creator = c;
   if( m_creator.length() > 4 )

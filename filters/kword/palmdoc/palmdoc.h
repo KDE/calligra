@@ -36,7 +36,7 @@ class PalmDoc: public PalmDB
     int result(){ return m_result; }
 
     QString text(){ return m_text; }
-    void setText( QString t){ m_text = t; }
+    void setText( const QString& t){ m_text = t; }
 
     enum { OK, ReadError, InvalidFormat, WriteError };
 
@@ -45,7 +45,7 @@ class PalmDoc: public PalmDB
     int m_result;
     QString m_text;
 
-    QByteArray compress( QString text );
+    QByteArray compress( const QString& text );
     QString uncompress( QByteArray rec );
 };
 

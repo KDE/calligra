@@ -26,10 +26,12 @@
 #include <qregexp.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
+#include <qfont.h>
 
 #include <kdebug.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
+#include <koGlobal.h>
 
 #include <palmdb.h>
 #include <palmdoc.h>
@@ -102,7 +104,11 @@ QString PalmDocImport::processPlainParagraph( QString text )
     QString::number( text.length() )+ "\">\n" );
   formats.append ( "  </FORMAT>\n" );
 
-  // default LAYOUT, hard-coded at Helvetica 11
+  QFont font = KoGlobal::defaultFont();
+  QString fontFamily = font.family();
+  int fontSize = font.pointSize();
+
+  // default LAYOUT
   layout.append( "<LAYOUT>\n" );
   layout.append( "  <NAME value=\"Standard\" />\n" );
   layout.append( "  <FLOW align=\"left\" />\n" );
@@ -116,14 +122,14 @@ QString PalmDocImport::processPlainParagraph( QString text )
   layout.append( "  <PAGEBREAKING />\n" );
   layout.append( "  <COUNTER />\n" );
   layout.append( "  <FORMAT id=\"1\">\n" );
-  layout.append( "    <SIZE value=\"11\" />\n" );
+  layout.append( "    <SIZE value=\"" + QString::number( fontSize ) + "\" />\n" );
   layout.append( "    <WEIGHT value=\"50\" />\n" );
   layout.append( "    <ITALIC value=\"0\" />\n" );
   layout.append( "    <UNDERLINE value=\"0\" />\n" );
   layout.append( "    <STRIKEOUT value=\"0\" />\n" );
   layout.append( "    <CHARSET value=\"0\" />\n" );
   layout.append( "    <VERTALIGN value=\"0\" />\n" );
-  layout.append( "    <FONT name=\"Helvetica\" />\n" );
+  layout.append( "    <FONT name=\"" + fontFamily + "\" />\n" );
   layout.append( "  </FORMAT>\n" );
   layout.append( "</LAYOUT>\n" );
 

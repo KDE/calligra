@@ -56,8 +56,8 @@ class PalmDB
     QString type(){ return m_type; }
     QString creator(){ return m_creator; }
 
-    void setType( QString t );
-    void setCreator( QString c );
+    void setType( const QString& t );
+    void setCreator( const QString& c );
 
     int uniqueIDSeed(){ return m_uniqueIDSeed; }
     void setUniqueIDSeed( int i ){ m_uniqueIDSeed= i; }
