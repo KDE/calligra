@@ -440,7 +440,7 @@ QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
         QRect prevRect( zh->layoutUnitToPixel( prev()->rect() ) );
         if ( rct.top() < prevRect.bottom() + 1 )
         {
-            kdDebug(32500) << "   pixelRect: rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
+            //kdDebug(32500) << "   pixelRect: rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
             rct.setTop( prevRect.bottom() + 1 );
         }
     }
@@ -482,9 +482,12 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         //r.setRight( rect().width() - rightMargin() - 1 );
 
         // New solution: occupy the full width
+        // drawBorders paints outside the give rect, so we need to 'subtract' the border
+        // width on all sides.
         r.setLeft( KoBorder::zoomWidthX( m_layout.leftBorder.width(), zh, 0 ) );
         // ## documentWidth breaks with variable width. Maybe use currentDrawnFrame() ?
-        r.setRight( zh->layoutUnitToPixelX(documentWidth()) - 2 - KoBorder::zoomWidthX( m_layout.rightBorder.width(), zh, 0 ) );
+        // The +1 is because if border is 1 pixel, nothing to subtract. 2 pixels -> subtract 1.
+        r.setRight( zh->layoutUnitToPixelX(documentWidth()) - KoBorder::zoomWidthX( m_layout.rightBorder.width(), zh, 0 ) + 1 );
         r.setTop( zh->layoutUnitToPixelY(lineY( 0 )) );
         int lastLine = lines() - 1;
         r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) ) );
@@ -492,7 +495,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
         if ( m_layout.bottomBorder.width() > 0 )
             r.rBottom() /*-= zh->layoutUnitToPixelY(lineSpacing( lastLine ))*/ + 1;
-        //kdDebug(32500) << "KoTextParag::paint documentWidth=" << documentWidth() << " bordersRect=" << r << endl;
+        //kdDebug(32500) << "KoTextParag::paint documentWidth=" << documentWidth() << " LU (" << zh->layoutUnitToPixelX(documentWidth()) << " pixels) bordersRect=" << r << endl;
         KoBorder::drawBorders( painter, zh, r,
                                m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
                                0, QPen() );
