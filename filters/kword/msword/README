@@ -4,8 +4,8 @@ independent project). To build it you have to:
 1) Get recent wv2 sources via anonymous CVS access. Please check this page for
    details: http://sourceforge.net/cvs/?group_id=10501
    The module name is "wv2"
-2) Install the library by invoking ./autogen.sh, make, and make install (you
-   might want to specify a --prefix when running autogen.sh)
+2) Install the library by invoking ./autogen.sh, configure, make, and
+   make install (you might want to specify a --prefix when running configure)
    If you want to check whether wv2 has been built successfully, you should
    "make check" wv2 and run the tests in wv2/tests. They print a lot of debug
    information, but as long as the exit code is 0 it worked.
