@@ -174,7 +174,8 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 		&& last == (m_rows-1+(m_showInsertRow?1:0)) ) {
 		//show plus sign
 		int pos = ((m_rowHeight*last)-m_offset)+(m_rowHeight-m_plusImg.height())/2;
-		p.drawImage((width()-m_plusImg.width())/2-1, pos, m_plusImg);
+//		p.drawImage((width()-m_plusImg.width())/2-1, pos, m_plusImg);
+		p.drawImage((width()-m_plusImg.width())/2, pos, m_plusImg);
 	}
 }
 
