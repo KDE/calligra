@@ -117,7 +117,7 @@ void KoFontChooser::setupTab2()
 
 
     lab = new QLabel( i18n("StrikeThrough"), grp);
-    grid->addWidget( lab, 2, 1);
+    grid->addWidget( lab, 2, 0);
 
     m_strikeOut = new QComboBox( grp );
     grid->addWidget( m_strikeOut, 3, 0);
@@ -365,6 +365,8 @@ void KoFontChooser::setUnderlineLineStyle(KoTextFormat::LineStyle _t)
 void KoFontChooser::setStrikeOutLineStyle(KoTextFormat::LineStyle _t)
 {
     changeLineStyle(  _t, m_strikeOutType );
+    m_strikeOutType->setEnabled( m_strikeOut->currentItem()!= 0);
+
     m_changedFlags = 0;
 }
 
@@ -386,9 +388,10 @@ void KoFontChooser::slotChangeUnderlineType( int i)
     m_underlineColorButton->setEnabled( i!=0);
 }
 
-void KoFontChooser::slotChangeStrikeOutType( int )
+void KoFontChooser::slotChangeStrikeOutType( int i)
 {
     m_changedFlags |= KoTextFormat::StrikeOut;
+    m_strikeOutType->setEnabled( i!= 0);
 }
 
 KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
@@ -442,8 +445,9 @@ void KoFontDia::slotReset()
 
     m_chooser->setUnderlineNbLineType(m_underlineNbLine);
     m_chooser->setUnderlineLineStyle(m_underlineLineStyle);
-    m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
     m_chooser->setStrikeOutNblineType( m_strikeOutNbLine);
+
+    m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
 }
 
 #include "koFontDia.moc"
