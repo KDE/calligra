@@ -1102,6 +1102,11 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         sy->setEnabled( false );
         sw->setEnabled( false );
         sh->setEnabled( false );
+        lx->setEnabled( false );
+        ly->setEnabled( false );
+        lw->setEnabled( false );
+        lh->setEnabled( false );
+        grp1->setEnabled( false );
         floating->setEnabled( false );
         protectSize->setEnabled( false );
     }
