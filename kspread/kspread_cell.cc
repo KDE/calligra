@@ -315,7 +315,7 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
 
     while ( *p != 0 )
     {
-	if ( *p == '\"' )
+	/*if ( *p == '\"' )
 	{
 	    while ( *p && *p != '\"' )
 	    {
@@ -328,8 +328,8 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
 		}
 	    }
 	    p++;
-	}
-	else if ( *p != '$' && !isalpha( *p ) )
+	}*/
+	/*else*/ if ( *p != '$' && !isalpha( *p ) )
 	{
 	    buf[0] = *p++;
 	    erg += buf;
@@ -430,7 +430,7 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 
     while ( *p != 0 )
     {
-	if ( *p == '\"' )
+	/*if ( *p == '\"' )
 	{
 	    while ( *p && *p != '\"' )
 	    {
@@ -443,7 +443,7 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 		}
 	    }
 	    p++;
-	}
+	}*/
 	if ( *p == '#' || *p == '$' )
 	{
 	    bool fix1 = FALSE;
@@ -1186,7 +1186,6 @@ bool KSpreadCell::calc( bool _makedepend )
   m_bLayoutDirtyFlag= true;
   m_bProgressFlag = true;
   m_bCalcDirtyFlag = false;
-
   if ( _makedepend )
   {
     KSpreadDepend *dep;

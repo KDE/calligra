@@ -389,6 +389,8 @@ public:
     void formulaMatrix();
     void formulaLeftSuper();
     void formulaLeftSub();
+    void formulaSum();
+    void formulaProduct();
 
 
     virtual void cleanUp();
@@ -562,7 +564,8 @@ protected:
     CORBA::Long m_idButtonFormula_Matrix;
     CORBA::Long m_idButtonFormula_LeftSuper;
     CORBA::Long m_idButtonFormula_LeftSub;
-
+    CORBA::Long m_idButtonFormula_Sum;
+    CORBA::Long m_idButtonFormula_Product;
 
     OpenPartsUI::Menu_var m_vMenuEdit;
     CORBA::Long m_idMenuEdit_Undo;

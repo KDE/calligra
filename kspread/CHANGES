@@ -70,3 +70,10 @@ and you click on bold or italic you add <b> </b> or <i> </i>
 and now when you create formula with kformula widget a toolbar appear.
 -Now when you doubleclick on cell you create a new cell with old text
 inside so you can add text in this cell.
+
+1999-09-22 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Bug fix : Now when you insert or remove column or row,there is recalculing
+-Add new button on formula toolbar (SUM and Product)
+-bugfix
+-Now you can copy a function with "

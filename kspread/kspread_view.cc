@@ -760,7 +760,16 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
     m_idButtonFormula_LeftSub = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								  this, "formulaLeftSub",
 								  TRUE, Q2C( i18n( "Left Subscript" ) ), -1 );
+                                                                  pix = OPUIUtils::convertPixmap( BarIcon( "index1" ) );
+    pix = OPUIUtils::convertPixmap( BarIcon( "sum" ) );
+    m_idButtonFormula_Sum = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								  this, "formulaSum",
+								  TRUE, Q2C( i18n( "Sum" ) ), -1 );
 
+    pix = OPUIUtils::convertPixmap( BarIcon( "product" ) );
+    m_idButtonFormula_Product = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								  this, "formulaProduct",
+								  TRUE, Q2C( i18n( "Product" ) ), -1 );								  								
     m_vToolBarFormula->enable( OpenPartsUI::Hide );
 
 
@@ -828,6 +837,18 @@ void KSpreadView::formulaLeftSub()
 {
 canvasWidget()->insertFormulaChar(LSUB );
 }
+
+void KSpreadView::formulaSum()
+{
+canvasWidget()->insertFormulaChar(SUM );
+}
+
+void KSpreadView::formulaProduct()
+{
+canvasWidget()->insertFormulaChar(PRODUCT );
+}
+
+
 
 void KSpreadView::hide_show_formulatools(bool look)
 {
@@ -1091,7 +1112,7 @@ void KSpreadView::deleteColumn()
   if ( !m_pTable )
     return;
   m_pTable->deleteColumn( m_pCanvas->markerColumn() );
-
+   m_pTable->recalc(true);
 }
 
 void KSpreadView::deleteRow()
@@ -1099,6 +1120,7 @@ void KSpreadView::deleteRow()
   if ( !m_pTable )
     return;
   m_pTable->deleteRow( m_pCanvas->markerRow() );
+  m_pTable->recalc(true);
 }
 
 void KSpreadView::insertColumn()
@@ -1106,6 +1128,7 @@ void KSpreadView::insertColumn()
   if ( !m_pTable )
     return;
   m_pTable->insertColumn( m_pCanvas->markerColumn() );
+   m_pTable->recalc(true);
 }
 
 void KSpreadView::insertRow()
@@ -1113,6 +1136,7 @@ void KSpreadView::insertRow()
   if ( !m_pTable )
     return;
   m_pTable->insertRow( m_pCanvas->markerRow() );
+   m_pTable->recalc(true);
 }
 
 void KSpreadView::fontSelected( const CORBA::WChar *_font )
@@ -1196,7 +1220,7 @@ void KSpreadView::bold()
   	{
   	m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, -1, 1 );
  	KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
- 	if ( cell->content()==KSpreadCell::RichText )
+ 	if ( (cell->content()==KSpreadCell::RichText)&&(cell->text().find("!")==0) )
 		    editWidget()->setText( cell->text() );
 	}
   }
@@ -1220,7 +1244,7 @@ void KSpreadView::italic()
  	//refresh EditWidget when you click on bold button
  	//because text changed add <i> </i>
  	KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-	if ( cell->content()==KSpreadCell::RichText )
+	if ( (cell->content()==KSpreadCell::RichText) && (cell->text().find("!")==0) )
 	    editWidget()->setText( cell->text() );
 	}
   }
@@ -1996,12 +2020,13 @@ void KSpreadView::PopupMenuColumn(const QPoint & _point)
 void KSpreadView::slotInsertColumn()
 {
     m_pTable->insertColumn( m_pHBorderWidget->markerColumn() );
+     m_pTable->recalc(true);
 }
 
 void KSpreadView::slotRemoveColumn()
 {
     m_pTable->deleteColumn( m_pHBorderWidget->markerColumn() );
-
+    m_pTable->recalc(true);
 }
 
 void KSpreadView::PopupMenuRow(const QPoint & _point )
@@ -2024,12 +2049,14 @@ void KSpreadView::PopupMenuRow(const QPoint & _point )
 void KSpreadView::slotInsertRow()
 {
 m_pTable->insertRow( m_pVBorderWidget->markerRow() );
+ m_pTable->recalc(true);
 }
 
 void KSpreadView::slotRemoveRow()
 {
 
     m_pTable->deleteRow( m_pVBorderWidget->markerRow() );
+ m_pTable->recalc(true);
 }
 
 void KSpreadView::openPopupMenu( const QPoint & _point )

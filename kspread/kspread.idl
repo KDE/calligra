@@ -115,6 +115,8 @@ module KSpread
     		slot void formulaMatrix();
     		slot void formulaLeftSuper();
     		slot void formulaLeftSub();
+		slot void formulaSum();
+		slot void formulaProduct();
 		slot void RemoveTable();
 
 		Book book();

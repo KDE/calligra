@@ -656,13 +656,17 @@ void KSpreadTable::setCalcDirtyFlag()
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it )
       it.current()->setCalcDirtyFlag();
+	
 }
 
-void KSpreadTable::recalc()
+void KSpreadTable::recalc(bool m_depend)
 {
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it )
-      it.current()->calc();
+      {
+      it.current()->setCalcDirtyFlag();
+      it.current()->calc(m_depend);
+	}
 }
 
 void KSpreadTable::unselect()
@@ -726,7 +730,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	  if ( _italic >= 0 )
 	    	{
 	    	it.current()->setTextFontItalic( !it.current()->textFontItalic() );
-	  	if( it.current()->content()==KSpreadCell::RichText)
+	  	if( (it.current()->content()==KSpreadCell::RichText)&&(it.current()->text().find("!")==0))
 	  		{
 	  		QString tmp;
                 	tmp=setRichTextFond(it.current()->text(),italic);
@@ -736,7 +740,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	  if ( _bold >= 0 )
 	    	{
 	    	it.current()->setTextFontBold( !it.current()->textFontBold() );
-	  	if( it.current()->content()==KSpreadCell::RichText)
+	  	if( (it.current()->content()==KSpreadCell::RichText)&&(it.current()->text().find("!")==0))
 	  		{
 	  		QString tmp;
                 	tmp=setRichTextFond(it.current()->text(),bold);
@@ -768,7 +772,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	  if ( _italic >= 0 )
 	  	{
 	    	it.current()->setTextFontItalic( !it.current()->textFontItalic() );
-	  	if( it.current()->content()==KSpreadCell::RichText)
+	  	if( (it.current()->content()==KSpreadCell::RichText)&&(it.current()->text().find("!")==0))
 	  		{
 	  		QString tmp;
                 	tmp=setRichTextFond(it.current()->text(),italic);
@@ -778,7 +782,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	  if ( _bold >= 0 )
 	  	{
 	    	it.current()->setTextFontBold( !it.current()->textFontBold() );
-	  	if( it.current()->content()==KSpreadCell::RichText)
+	  	if( (it.current()->content()==KSpreadCell::RichText)&&(it.current()->text().find("!")==0))
 	  		{
 	  		QString tmp;
                 	tmp=setRichTextFond(it.current()->text(),bold);
@@ -826,7 +830,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	      if ( _italic >= 0 )
 		{
 		cell->setTextFontItalic( !cell->textFontItalic() );
-	       if( cell->content()==KSpreadCell::RichText)
+	       if( (cell->content()==KSpreadCell::RichText)&&(cell->text().find("!")==0))
                 	{
                 	QString tmp;
                 	tmp=setRichTextFond(cell->text(),italic);
@@ -836,7 +840,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	      if ( _bold >= 0 )
 		{
 		cell->setTextFontBold( !cell->textFontBold() );
-                if( cell->content()==KSpreadCell::RichText)
+                if( (cell->content()==KSpreadCell::RichText)&&(cell->text().find("!")==0))
                 	{
                 	QString tmp;
                 	tmp=setRichTextFond(cell->text(),bold);

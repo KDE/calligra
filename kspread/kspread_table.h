@@ -336,7 +336,7 @@ public:
      * call @ref Table::setCalcDirtyFlag for all tables in the @ref #m_pMap to make
      * shure that no invalid values in other tables make you trouble.
      */
-    void recalc();
+    void recalc(bool mdepend=false);
   
     /**
      * Sets the contents of the cell at row,column to text
