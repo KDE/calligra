@@ -36,11 +36,12 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 {
 	new QLabel( i18n( "Type:" ), this );
 	m_type = new KComboBox( false, this );
-	m_type->insertItem( i18n( "Star outline" ), 0 );
-	m_type->insertItem( i18n( "Spoke" ), 1 );
-	m_type->insertItem( i18n( "Wheel" ), 2 );
-	m_type->insertItem( i18n( "Polygon" ), 3 );
-	m_type->insertItem( i18n( "Framed Star" ), 4 );
+	m_type->insertItem( i18n( "Star outline" ), VStar::star_outline );
+	m_type->insertItem( i18n( "Spoke" ), VStar::spoke );
+	m_type->insertItem( i18n( "Wheel" ), VStar::wheel );
+	m_type->insertItem( i18n( "Polygon" ), VStar::polygon );
+	m_type->insertItem( i18n( "Framed Star" ), VStar::framed_star);
+	m_type->insertItem( i18n( "Star" ), VStar::star );
 	connect( m_type, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
 	// add width/height-input:
@@ -49,8 +50,6 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 
 	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), this );
 	m_innerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 25.0, KoUnit::U_MM );
-
-	typeChanged( 0 );
 
 	refreshUnit();
 
@@ -62,6 +61,8 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 	m_innerAngle = new KIntSpinBox( this );
 	m_innerAngle->setMinValue( 0 );
 	m_innerAngle->setMaxValue( 360 );
+
+	typeChanged( VStar::star_outline );
 
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );

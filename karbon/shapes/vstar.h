@@ -32,7 +32,8 @@ public:
 		spoke,
 		wheel,
 		polygon,
-		framed_star
+		framed_star,
+		star
 	};
 	VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
