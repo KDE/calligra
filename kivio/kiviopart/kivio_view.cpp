@@ -172,6 +172,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
            SIGNAL(tabChanged(const QString&)),
            SLOT( changePage(const QString&)));
   connect( m_pTabBar, SIGNAL( doubleClicked() ), SLOT( renamePage() ) );
+  connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ), 
+      SLOT( popupTabBarMenu( const QPoint& ) ) );
 
   // Scroll Bar
   QScrollBar* vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);
@@ -1667,7 +1669,7 @@ void KivioView::exportPage()
    kdDebug(43000) << "KivioView::exportPage() succeeded\n";
 }
 
-void KivioView::openPopupMenuMenuPage( const QPoint & _point )
+void KivioView::popupTabBarMenu( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;

@@ -101,7 +101,6 @@ class KivioView : public KoView
 
     KoTabBar* tabBar()const { return  m_pTabBar;}
     ToolDockManager* toolDockManager() { return m_pToolDock; }
-    void openPopupMenuMenuPage( const QPoint & _point );
     void updateMenuPage( );
 
     virtual void setupPrinter(KPrinter&);
@@ -204,6 +203,8 @@ class KivioView : public KoView
 
     void setRulerPageLayout(const KoPageLayout& l);
 
+    void popupTabBarMenu( const QPoint& point );
+    
   protected slots:
     void slotAddPage( KivioPage *_page );
     void slotPageRenamed( KivioPage* page, const QString& old_name );
