@@ -92,6 +92,7 @@
 //show property editor
 #define KEXI_PROP_EDITOR 1
 
+//#undef KDOCKWIDGET_P
 #if defined(KDOCKWIDGET_P)
 #include <kdockwidget_private.h>
 #endif
@@ -243,7 +244,9 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	connect(&Kexi::partManager(),SIGNAL(partLoaded(KexiPart::Part*)),this,SLOT(slotPartLoaded(KexiPart::Part*)));
 	connect( m_pMdi, SIGNAL(nowMaximized(bool)), this, SLOT(slotCaptionForCurrentMDIChild(bool)) ); 
 	connect( m_pMdi, SIGNAL(noMaximizedChildFrmLeft(KMdiChildFrm*)), this, SLOT(slotNoMaximizedChildFrmLeft(KMdiChildFrm*)));
-	connect( m_pMdi, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
+//	connect( m_pMdi, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
+	connect( m_pMdi, SIGNAL(lastChildViewClosed()), this, SLOT(slotLastChildViewClosed()));
+	
 	connect( this, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(slotChildViewIsDetachedNow(QWidget*)));
 	connect( this, SIGNAL(mdiModeHasBeenChangedTo(KMdi::MdiMode)), 
 		this, SLOT(slotMdiModeHasBeenChangedTo(KMdi::MdiMode)));
@@ -254,10 +257,11 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	(void) new KexiStatusBar(this, "status_bar");
 
 	d->origAppCaption = caption();
-	initContextHelp();
-	initPropertyEditor();
 
 	restoreSettings();
+
+	initContextHelp();
+	initPropertyEditor();
 
 	{//store menu popups list
 		QObjectList *l = queryList( "QPopupMenu" );
@@ -678,11 +682,14 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 
 	updateAppCaption();
 
-	//make docks visible again
-	if (!d->navToolWindow->wrapperWidget()->isVisible())
-		static_cast<KDockWidget*>(d->navToolWindow->wrapperWidget())->makeDockVisible();
-	if (!d->propEditorToolWindow->wrapperWidget()->isVisible())
-		static_cast<KDockWidget*>(d->propEditorToolWindow->wrapperWidget())->makeDockVisible();
+//js TODO: make visible FOR OTHER MODES if needed
+	if (mdiMode()==KMdi::ChildframeMode) {
+		//make docks visible again
+		if (!d->navToolWindow->wrapperWidget()->isVisible())
+			static_cast<KDockWidget*>(d->navToolWindow->wrapperWidget())->makeDockVisible();
+		if (!d->propEditorToolWindow->wrapperWidget()->isVisible())
+			static_cast<KDockWidget*>(d->propEditorToolWindow->wrapperWidget())->makeDockVisible();
+	}
 	return true;
 }
 
@@ -715,7 +722,7 @@ bool KexiMainWindowImpl::closeProject(bool &cancelled)
 		return true;
 		
 	//close each window, optionally asking if user wants to close (if data changed)
-	while (d->curDialog) {
+	while (!d->curDialog.isNull()) {
 		if (!closeDialog( d->curDialog, cancelled )) {
 			return false;
 		}
@@ -809,11 +816,13 @@ KexiMainWindowImpl::initNavigator()
 void KexiMainWindowImpl::slotLastActions()
 {
 #if defined(KEXI_PROP_EDITOR) && defined(KDOCKWIDGET_P)
-	KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
-	KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-	ds->resize(ds->width()*3, ds->height());
-	ds->setSeparatorPos(30, true);
-	ds->setForcedFixedWidth( dw, 200 );
+	if (mdiMode()==KMdi::ChildframeMode) {
+		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+		ds->resize(ds->width()*3, ds->height());
+		ds->setSeparatorPos(30, true);
+		ds->setForcedFixedWidth( dw, 200 );
+	}
 #endif
 #ifdef Q_WS_WIN
 	showMaximized();//js: workaround for not yet completed layout settings storage on win32
@@ -829,22 +838,23 @@ void KexiMainWindowImpl::initPropertyEditor()
 	d->propEditorToolWindow = addToolWindow(d->propEditor, 
 		KDockWidget::DockRight, getMainDockWidget(), 20);
 
+	if (mdiMode()==KMdi::ChildframeMode) {
 	KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 #if defined(KDOCKWIDGET_P)
-	KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-	ds->show();
-//	ds->resize(400, ds->height());
-	ds->setSeparatorPos(400, true);
-	ds->setForcedFixedWidth( dw, 400 );
-//	ds->resize(400, ds->height());
-//	dw->resize(400, dw->height());
+		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+		ds->show();
+	//	ds->resize(400, ds->height());
+		ds->setSeparatorPos(400, true);
+		ds->setForcedFixedWidth( dw, 400 );
+	//	ds->resize(400, ds->height());
+	//	dw->resize(400, dw->height());
 #endif
-	dw->setMinimumWidth(200);
-//	ds->setMinimumWidth(200);
+		dw->setMinimumWidth(200);
 //	ds->setSeparatorPos(d->propEditor->sizeHint().width(), true);
 
-	if (m_rightContainer) {
-		m_rightContainer->setForcedFixedWidth( 400 );
+		if (m_rightContainer) {
+			m_rightContainer->setForcedFixedWidth( 400 );
+		}
 	}
 #endif
 /*    KMdiToolViewAccessor *tmp=createToolWindow();
@@ -940,7 +950,7 @@ void KexiMainWindowImpl::slotNoMaximizedChildFrmLeft(KMdiChildFrm*)
 	slotCaptionForCurrentMDIChild(false);
 }
 
-void KexiMainWindowImpl::slotLastChildFrmClosed()
+void KexiMainWindowImpl::slotLastChildViewClosed()
 {
 	slotCaptionForCurrentMDIChild(false);
 	activeWindowChanged(0);
@@ -1006,6 +1016,7 @@ KexiMainWindowImpl::restoreSettings()
 		moveDockWindow(m_pTaskBar, DockBottom);
 	}
 
+	d->config->setGroup("MainWindow");
 	int mdimode = d->config->readNumEntry("MDIMode", -1);//KMdi::TabPageMode);
 
 	switch(mdimode)
@@ -1970,6 +1981,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 		return 0;
 	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
 	if (dlg) {
+		dlg->activate();
 		if (dlg->currentViewMode()!=viewMode) {
 			//try to switch
 			bool cancelled;
