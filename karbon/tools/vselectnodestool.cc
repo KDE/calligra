@@ -121,12 +121,14 @@ VSelectNodesTool::setCursor() const
 
 	double tolerance = 2.0 / view()->zoom();
 
-	if( view()->part()->document().selection()->getSegments(
-		KoRect(
-			last().x() - tolerance,
-			last().y() - tolerance,
-			2 * tolerance + 1,
-			2 * tolerance * 1 ) ).count() > 0 )
+	KoRect selrect( last().x() - tolerance, last().y() - tolerance,
+					2 * tolerance + 1.0, 2 * tolerance + 1.0 );
+	QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
+	if( segments.count() > 0 &&
+		( segments.at( 0 )->knotIsSelected() ||
+		  segments.at( 0 )->pointIsSelected( 0 ) ||
+		  segments.at( 0 )->pointIsSelected( 1 ) ||
+		  selrect.contains( segments.at( 0 )->knot() ) ) )
 	{
 		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::CrossCursor ) );
 	}

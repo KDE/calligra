@@ -111,8 +111,8 @@ VTestNodes::visitVPath( VPath& path )
 	while( path.current() )
 	{
 		for( int i = 0; i < path.current()->degree(); i++ )
-			if( m_rect.contains( path.current()->point( i ) ) &&
-				path.current()->pointIsSelected( i ) )
+			if( m_rect.contains( path.current()->point( i ) ) ) //&&
+				//path.current()->pointIsSelected( i ) )
 				{
 					m_segments.append( path.current() );
 					setSuccess();
