@@ -9,7 +9,6 @@
 #include "y.tab.h"
 
 #include <stdio.h>
-#include <string.h>
 
 /*
  * keyword: Take a text string and determine if it is, in fact a valid 

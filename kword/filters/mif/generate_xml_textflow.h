@@ -13,7 +13,7 @@ class TextFlow;
 class generate_xml_textflow
 {
 public:
-	void operator()( const TextFlow* tf );
+	static void generate( const TextFlow* tf );
 };
 
 #endif

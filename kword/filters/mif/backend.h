@@ -8,14 +8,15 @@
 #ifndef _BACKEND_H
 #define _BACKEND_H
 
-#include <string>
 #include <fstream>
+#include <string>
+#include <qstring.h>
 
 extern "C" {
 	void start_file();
 	void end_file();	
-	string fixup_singlequoted_string( const char* );
-	string fixup_id( const char* );
+	QString fixup_singlequoted_string( const char* );
+	QString fixup_id( const char* );
 };
 
 #endif

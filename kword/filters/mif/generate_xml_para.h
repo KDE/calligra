@@ -13,7 +13,7 @@ class ParaElement;
 class generate_xml_para_element
 {
 public:
-	void operator()( const ParaElement* tfe );
+	static void generate( const ParaElement* tfe );
 	static void out_begin();
 	static void out_end();
 };

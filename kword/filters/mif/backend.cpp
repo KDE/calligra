@@ -8,6 +8,8 @@
 #include "backend.h"
 
 #include <fstream>
+#include <string>
+#include <qstring.h>
 
 void start_file()
 {
@@ -21,7 +23,7 @@ void end_file()
  * Yacc somehow includes text from the original source file in the
  * qstring, and we don't want the quotation marks anyway.
  */
-string fixup_singlequoted_string( const char* in )
+QString fixup_singlequoted_string( const char* in )
 {
 	string work = in;
 	int startpos = work.find_first_of( '`' );
@@ -29,16 +31,16 @@ string fixup_singlequoted_string( const char* in )
 
 	string out = work.substr( startpos+1, endpos - startpos - 1 );
 
-	return out;
+	return QString( out.c_str() );
 }
 
 
 /*!
  * Yacc somehow includes the closing '>' in the ID name.
  */
-string fixup_id( const char* in )
+QString fixup_id( const char* in )
 {
 	string work = in;
 	work.replace( work.find( '>' ), 1, "" );
-	return work;
+	return QString( work.c_str() );
 }

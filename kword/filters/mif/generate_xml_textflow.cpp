@@ -18,28 +18,38 @@ extern ofstream xmloutstr;
 class generate_xml_textflow_element
 {
 public:
-	void operator()( const TextFlowElement* tfe );
+	static void generate( const TextFlowElement* tfe );
 	static void out_begin();
 	static void out_end();
 };
 
-void generate_xml_textflow::operator()( const TextFlow* tf )
+void generate_xml_textflow::generate( const TextFlow* tf )
 {
 	generate_xml_textflow_element::out_begin();
-	for_each( tf->elements()->begin(), tf->elements()->end(),
-			  generate_xml_textflow_element() );
+	QListIterator<TextFlowElement> tfei( *tf->elements() );
+	TextFlowElement* tfe = tfei.current();
+	while( tfe ) {
+		++tfei;
+		generate_xml_textflow_element::generate( tfe );
+		tfe = tfei.current();
+	}
 	generate_xml_textflow_element::out_end();
 }
 
 
-void generate_xml_textflow_element::operator()( const TextFlowElement* tfe )
+void generate_xml_textflow_element::generate( const TextFlowElement* tfe )
 {
 	switch( tfe->type() ) {
 	case TextFlowElement::T_Para: {
 		Para* para = tfe->para();
 		generate_xml_para_element::out_begin();
-		for_each( para->elements()->begin(), para->elements()->end(),
-				 generate_xml_para_element() );
+		QListIterator<ParaElement> pei( *para->elements() );
+		ParaElement* pe = pei.current();
+		while( pe ) {
+			++pei;
+			generate_xml_para_element::generate( pe );
+			pe = pei.current();
+		}
 		generate_xml_para_element::out_end();
 		break;
 	}

@@ -41,8 +41,13 @@ void generate_xml( const char* outfile )
 	xmloutstr << " <FRAMESETS>" << endl;
 
 	// Traverse all text flow elements
-	for_each( textflows.begin(), textflows.end(),
-			  generate_xml_textflow() );
+	QListIterator<TextFlow> tfi( textflows );
+	TextFlow* tf = tfi.current();
+	while( tf ) {
+		++tfi;
+		generate_xml_textflow::generate( tf );
+		tf = tfi.current();
+	}
 
 	// write out /framesets tag
 	xmloutstr << " </FRAMESETS>" << endl;

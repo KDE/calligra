@@ -14,39 +14,42 @@
 
 #include <algorithm>
 #include <fstream>
-#include <string>
+#include <qregexp.h>
+#include <qstring.h>
 
 extern ofstream xmloutstr;
 
-static string paratext;
 static bool paragraphOpen = false;
+QString outstring;
 
 class generate_xml_paraline_element
 {
 friend class generate_xml_para_element;
 
 public:
-	void operator()( const ParaLineElement* ple );
+	static void generate( const ParaLineElement* ple );
 	static void out_begin();
 	static void out_end();
 
 private:
-	string find_and_replace( const string& search,
-							 const string& replace,
-							 const string& source );
 	static void openParagraph();
 	static void closeParagraph();
 };
 
-void generate_xml_para_element::operator()( const ParaElement* pe )
+void generate_xml_para_element::generate( const ParaElement* pe )
 {
 	switch( pe->type() ) {
 	case ParaElement::T_ParaLine:
 		{
 			generate_xml_paraline_element::out_begin();
 			ParaLine* pl = pe->paraline();
-			for_each( pl->elements()->begin(), pl->elements()->end(),
-					  generate_xml_paraline_element() );
+			QListIterator<ParaLineElement> plei( *pl->elements() );
+			ParaLineElement* ple = plei.current();
+			while( ple ) {
+				++plei;
+				generate_xml_paraline_element::generate( ple );
+				ple = plei.current();
+			}
 			generate_xml_paraline_element::out_end();
 		}
 		break;
@@ -54,41 +57,27 @@ void generate_xml_para_element::operator()( const ParaElement* pe )
 		// Should not be used by filters.
 		break;
 	default:
-		cerr << "Unsupported ParaElement: " << pe->type() << '\n';
+		cerr << "Unsupported ParaElement: " << pe->type() << endl;
 	}
 }
 
 
 void generate_xml_para_element::out_begin()
 {
-	paratext = "";
+	outstring = "";
 }
 
 
 void generate_xml_para_element::out_end()
 {
-	xmloutstr << "    <TEXT value=\"" << paratext << "\"/>" << endl;
+	xmloutstr << "    <TEXT>" << endl
+			  << outstring.data() << endl
+			  << "    </TEXT>" << endl;
 	generate_xml_paraline_element::closeParagraph();
 }
 
 
-string generate_xml_paraline_element::find_and_replace( const string& search,
-														 const string& replace,
-														 const string& source )
-{
-	string::size_type pos = source.find( search ) ;
-	string retval = source;
-	string retval1;
-	while( pos != string::npos ) {
-		retval1 = retval.replace( pos, search.length(), replace );
-		pos = retval.find( search );
-		retval = retval1;
-	};
-	return retval;
-}
-
-
-void generate_xml_paraline_element::operator()( const ParaLineElement* ple )
+void generate_xml_paraline_element::generate( const ParaLineElement* ple )
 {
 	switch( ple->type() ) {
 	case ParaLineElement::T_String: {
@@ -96,8 +85,13 @@ void generate_xml_paraline_element::operator()( const ParaLineElement* ple )
 			openParagraph();
 		}
 		// Convert some special characters in the string.
-		string outstring = ple->plestring()->value(); 
-		paratext += outstring;
+		QString line = ple->plestring()->value();
+		line = line.replace( QRegExp( "\\\\x8a " ), "ä" );
+		line = line.replace( QRegExp( "\\\\x80 " ), "Ä" );
+		line = line.replace( QRegExp( "\\\\x9a " ), "ö" );
+		line = line.replace( QRegExp( "\\\\x9f " ), "ü" );
+		line = line.replace( QRegExp( "\\\\xa7 " ), "ß" );
+		outstring += line;
 		break;
 	}
 	case ParaLineElement::T_TextRectID:
@@ -110,10 +104,10 @@ void generate_xml_paraline_element::operator()( const ParaLineElement* ple )
 			int textrectid = ple->textrectid()->id();
 			TextRect* textrect = generate_xml_page::find_text_rect( textrectid );
 			BRect* brect = textrect->bRect();
-			xmloutstr << "   <FRAME left=\"" << point2mm( brect->x() )
-					  << "\" top=\"" << point2mm( brect->y() )
-					  << "\" right=\"" << point2mm( brect->x()+brect->width() )
-					  << "\" bottom=\"" << point2mm( brect->y()+brect->height() )
+			xmloutstr << "   <FRAME left=\"" << brect->x()
+					  << "\" top=\"" << brect->y()
+					  << "\" right=\"" << ( brect->x()+brect->width() )
+					  << "\" bottom=\"" << ( brect->y()+brect->height() )
 					  << "\"/>" << endl;
 			openParagraph();
 			break;
@@ -153,3 +147,4 @@ void generate_xml_paraline_element::out_begin()
 void generate_xml_paraline_element::out_end()
 {
 }
+

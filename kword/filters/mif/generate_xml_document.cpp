@@ -16,11 +16,15 @@ static bool findPageSize( DocumentElement* );
 double generate_xml_document::paperWidth()
 {
 	// PENDING(kalle) Replace with hash table.
-	list<DocumentElement*>::iterator iel = find_if( documentelements.begin(), 
-													documentelements.end(),
-													findPageSize );
-	DocumentElement* el = *iel;
-	DocumentPageSize* pagesize = el->pageSize();
+	QListIterator<DocumentElement> dei( documentelements );
+	DocumentElement* de = dei.current();
+	while( de ) {
+		++dei;
+		if( findPageSize( de ) )
+			break;
+		de = dei.current();
+	}
+	DocumentPageSize* pagesize = de->pageSize();
 	// PENDING(kalle) Throw error if 0.
 	return pagesize->width();
 }
@@ -28,11 +32,15 @@ double generate_xml_document::paperWidth()
 double generate_xml_document::paperHeight()
 {
 	// PENDING(kalle) Replace with hash table.
-	list<DocumentElement*>::iterator iel = find_if( documentelements.begin(), 
-													documentelements.end(),
-													findPageSize );
-	DocumentElement* el = *iel;
-	DocumentPageSize* pagesize = el->pageSize();
+	QListIterator<DocumentElement> dei( documentelements );
+	DocumentElement* de = dei.current();
+	while( de ) {
+		++dei;
+		if( findPageSize( de ) )
+			break;
+		de = dei.current();
+	}
+	DocumentPageSize* pagesize = de->pageSize();
 	// PENDING(kalle) Throw error if 0.
 	return pagesize->height();
 }

@@ -1238,13 +1238,13 @@ tag:				tag_aframes
 				|	tag_markertypecatalog
 				|	tag_miffile
 				|	tag_page
-					{ pages.push_front( $1 ); }
+					{ pages.insert( 0, $1 ); }
 				|	tag_pgfcatalog
 				|	tag_rulingcatalog
 				|	tag_tblcatalog
 				|	tag_tbls
 				|	tag_textflow
-					{ textflows.push_front( $1 ); }
+					{ textflows.insert( 0, $1 ); }
 				|	tag_units
 				|	tag_variableformats	
 				|	tag_views
@@ -1384,9 +1384,9 @@ tag_pgf:			'<' PGF pgf_elements '>'
 /* Elements of a Pgf tag */
 pgf_elements:		pgf_element
 					{	PgfElementList* list = new PgfElementList;
-						list->push_front( $1 ); $$ = list; }
+						list->insert( 0, $1 ); $$ = list; }
 				|	pgf_element pgf_elements
-					{	$2->push_front( $1 ); $$ = $2; }
+					{	$2->insert( 0, $1 ); $$ = $2; }
 				;
 
 pgf_element:			tag_pgftag
@@ -1735,9 +1735,9 @@ tag_pgfnumstring:		'<' PGFNUMSTRING SQSTRING '>'
 
 pgffontelements:		pgffontelement
 						{ PgfFontElementList* list = new PgfFontElementList; 
-						  list->push_front( $1 ); $$ = list; }				
+						  list->insert( 0, $1 ); $$ = list; }				
 				|		pgffontelement pgffontelements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 						;
 
 pgffontelement:			tag_ftag
@@ -1911,9 +1911,9 @@ tag_tabstop:	'<' TABSTOP tabstop_elements '>'
 
 tabstop_elements:		tabstop_element
 						{ TabStopElementList* list = new TabStopElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 					|	tabstop_element tabstop_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 						;
 
 tabstop_element:		tag_tsx
@@ -1967,9 +1967,9 @@ tag_font:			'<' FONT font_elements '>'
 /* Elements of a Font tag */
 font_elements:		font_element
 					{ FontElementList* list = new FontElementList;
-					  list->push_front( $1 ); $$ = list; }
+					  list->insert( 0, $1 ); $$ = list; }
 				|	font_element font_elements
-					{ $2->push_front( $1 ); $$ = $2; }
+					{ $2->insert( 0, $1 ); $$ = $2; }
 				;
 
 font_element:			tag_ftag
@@ -2430,9 +2430,9 @@ tag_xref:		'<' XREF xref_elements '>'
 
 xref_elements:	xref_element
 				{ XRefElementList* list = new XRefElementList;
-				  list->push_front( $1 ); $$ = list; }
+				  list->insert( 0, $1 ); $$ = list; }
 		|		xref_element xref_elements
-				{ $2->push_front( $1 ); $$ = $2; }
+				{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 xref_element:	tag_xrefname
@@ -2476,11 +2476,11 @@ tag_document:	'<' DOCUMENT document_elements '>'
 
 document_elements:		document_element
 						{ 
-							documentelements.push_front( $1 );
+							documentelements.insert( 0, $1 );
 						}
 					|	document_element document_elements
 						{
-							documentelements.push_front( $1 );
+							documentelements.insert( 0, $1 );
 						}			 
 					;
 
@@ -3305,6 +3305,7 @@ tag_aframes:	'<' AFRAMES aframes_elements '>'
 
 aframes_elements:		aframes_element
 					|	aframes_elements aframes_element
+|   /* can be null */
 ;
 
 
@@ -3317,9 +3318,9 @@ tag_frame:		'<' FRAME frame_elements '>'
 
 frame_elements:	frame_element
 				{ FrameElementList* list = new FrameElementList;
-				  list->push_front( $1 ); $$ = list; }
+				  list->insert( 0, $1 ); $$ = list; }
 		|		frame_element frame_elements
-				{ $2->push_front( $1 ); $$ = $2; }
+				{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 
@@ -3409,9 +3410,9 @@ tag_dashedpattern:		'<' DASHEDPATTERN dashedpattern_elements '>'
 
 dashedpattern_elements: dashedpattern_element
 						{ DashedPatternElementList* list = new DashedPatternElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 					|	dashedpattern_element dashedpattern_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 dashedpattern_element:	tag_dashedstyle
@@ -3483,9 +3484,9 @@ tag_importobject:		'<' IMPORTOBJECT importobject_elements '>'
 
 importobject_elements:	importobject_element
 						{ ImportObjectElementList* list = new ImportObjectElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 				|		importobject_element importobject_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 importobject_element:	tag_unique
@@ -3542,9 +3543,9 @@ tag_math:		'<' MATH math_elements '>'
 
 math_elements:	math_element
 				{ MathElementList* list = new MathElementList;
-				  list->push_front( $1 ); $$ = list; }
+				  list->insert( 0, $1 ); $$ = list; }
 				| math_element math_elements
-				{ $2->push_front( $1 ); $$ = $2;  }
+				{ $2->insert( 0, $1 ); $$ = $2;  }
 ;
 
 math_element:	tag_unique
@@ -3740,9 +3741,9 @@ tag_notes:		'<' NOTES notes_elements '>'
 
 notes_elements:	notes_element
 				{ NotesElementList* list = new NotesElementList;
-				  list->push_front( $1 ); $$ = list; }
+				  list->insert( 0, $1 ); $$ = list; }
 		|		notes_element notes_elements
-				{ $2->push_front( $1 ); $$ = $2; }
+				{ $2->insert( 0, $1 ); $$ = $2; }
 		|		/* nothing */
 				{ NotesElementList* list = new NotesElementList;
 				  $$ = list; }
@@ -3758,9 +3759,9 @@ tag_fnote:		'<' FNOTE fnote_elements '>'
 
 fnote_elements:	fnote_element
 				{ FNoteElementList* list = new FNoteElementList;
-				  list->push_front( $1 ); $$ = list; }
+				  list->insert( 0, $1 ); $$ = list; }
 			|	fnote_element fnote_elements
-				{ $2->push_front( $1 ); $$ = $2; }
+				{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 fnote_element:	tag_frameid
@@ -3779,9 +3780,9 @@ tag_para:		'<' PARA para_elements '>'
 
 para_elements:	para_element
 				{	ParaElementList* list = new ParaElementList;
-					list->push_front( $1 ); $$ = list; }
+					list->insert( 0, $1 ); $$ = list; }
 		|		para_element para_elements
-				{	$2->push_front( $1 ); $$ = $2; }
+				{	$2->insert( 0, $1 ); $$ = $2; }
 ;
 
 para_element:	tag_unique
@@ -3802,9 +3803,9 @@ tag_paraline:	'<' PARALINE paraline_elements '>'
 
 paraline_elements:	paraline_element
 					{ ParaLineElementList* list = new ParaLineElementList;
-					  list->push_front( $1 ); $$ = list; }
+					  list->insert( 0, $1 ); $$ = list; }
 		|			paraline_element paraline_elements;
-					{ $2->push_front( $1 ); $$ = $2; }
+					{ $2->insert( 0, $1 ); $$ = $2; }
 
 paraline_element:		tag_string
 						{ $$ = new ParaLineElement( $1 ); }
@@ -3850,9 +3851,9 @@ tag_variable:	'<' VARIABLE variable_elements '>'
 
 variable_elements:		variable_element
 						{ VariableElementList* list = new VariableElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 				|		variable_element variable_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 variable_element:		tag_variablename
@@ -3887,9 +3888,9 @@ tag_page:		'<' PAGE page_elements '>'
 
 page_elements:	page_element
 				{ PageElementList* list = new PageElementList;
-				  list->push_front( $1 ); $$ = list; }
+				  list->insert( 0, $1 ); $$ = list; }
 		|		page_element page_elements
-				{ $2->push_front( $1 ); $$ = $2; }
+				{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 page_element:	tag_unique
@@ -3966,9 +3967,9 @@ tag_rectangle:	'<' RECTANGLE rectangle_elements '>'
 
 rectangle_elements:		rectangle_element
 						{ RectangleElementList* list = new RectangleElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 				|		rectangle_element rectangle_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 rectangle_element:		tag_unique
@@ -4003,9 +4004,9 @@ tag_textrect:	'<'	TEXTRECT textrect_elements '>'
 
 textrect_elements:		textrect_element
 						{ TextRectElementList* list = new TextRectElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 				|		textrect_element textrect_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 textrect_element:		tag_frameid
@@ -4084,9 +4085,9 @@ tag_textline:	'<' TEXTLINE textline_elements '>'
 
 textline_elements:		textline_element
 						{ TextLineElementList* list = new TextLineElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 				|		textline_element textline_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 textline_element:		tag_unique
@@ -4127,9 +4128,9 @@ tag_polyline:	'<' POLYLINE polyline_elements '>'
 
 polyline_elements:		polyline_element
 						{ PolyLineElementList* list = new PolyLineElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 				|		polyline_element polyline_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 polyline_element:		tag_unique
@@ -4176,9 +4177,9 @@ tag_arrowstyle:	'<' ARROWSTYLE arrowstyle_elements '>'
 
 arrowstyle_elements:	arrowstyle_element
 						{ ArrowStyleElementList* list = new ArrowStyleElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 				|		arrowstyle_element arrowstyle_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 arrowstyle_element:		tag_tipangle
@@ -4233,9 +4234,9 @@ tag_polygon:	'<' POLYGON polygon_elements '>'
 
 polygon_elements:		polygon_element
 						{ PolygonElementList* list = new PolygonElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 				|		polygon_element polygon_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 polygon_element:		tag_unique
@@ -4271,9 +4272,9 @@ tag_ellipse:	'<' ELLIPSE ellipse_elements '>'
 
 ellipse_elements:		ellipse_element
 						{ EllipseElementList* list = new EllipseElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 				|		ellipse_element ellipse_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 ellipse_element:		tag_unique
@@ -4306,9 +4307,9 @@ tag_group:		'<' GROUP group_elements '>'
 
 group_elements:	group_element
 				{ GroupElementList* list = new GroupElementList;
-				  list->push_front( $1 ); $$ = list; }
+				  list->insert( 0, $1 ); $$ = list; }
 			|	group_element group_elements
-				{ $2->push_front( $1 ); $$ = $2; }
+				{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 group_element:	tag_frameid
@@ -4333,9 +4334,9 @@ tag_textflow:	'<' TEXTFLOW textflow_elements '>'
 
 textflow_elements:		textflow_element
 						{ TextFlowElementList* list = new TextFlowElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 					|	textflow_element textflow_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 textflow_element:		tag_notes
@@ -4384,9 +4385,9 @@ tag_marker:		'<' MARKER marker_elements '>'
 
 marker_elements:		marker_element
 						{ MarkerElementList* list = new MarkerElementList;
-						  list->push_front( $1 ); $$ = list; }
+						  list->insert( 0, $1 ); $$ = list; }
 				|		marker_element marker_elements
-						{ $2->push_front( $1 ); $$ = $2; }
+						{ $2->insert( 0, $1 ); $$ = $2; }
 ;
 
 marker_element:	tag_mtype
