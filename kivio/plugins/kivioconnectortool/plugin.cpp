@@ -48,7 +48,7 @@ ConnectorToolFactory::~ConnectorToolFactory()
   delete s_global;
 }
 
-QObject* ConnectorToolFactory::createObject( QObject* parent, const char* name, const char*, const QStringList& )
+QObject* ConnectorToolFactory::createObject( QObject* parent, const char*, const char*, const QStringList& )
 {
   if ( !parent->inherits("KivioView") )
     return 0;

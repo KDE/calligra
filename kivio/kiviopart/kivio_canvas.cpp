@@ -221,7 +221,7 @@ void KivioCanvas::wheelEvent( QWheelEvent* ev )
     zoomOut(p);
   }
 */
-  QPoint p = ev->pos();
+  //QPoint p = ev->pos();
   if( (ev->delta()>0))
   {
      m_pVertScrollBar->subtractPage();
