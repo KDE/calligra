@@ -729,7 +729,8 @@ KWTextFrameSet::~KWTextFrameSet()
     delete format;
     format = 0L;
 
-    if(doc) doc->delFrameSet(this);
+    // don't let us delete ourselves
+    if(doc) doc->delFrameSet(this, false);
     doc=0L;
 }
 

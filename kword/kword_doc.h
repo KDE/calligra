@@ -138,8 +138,13 @@ public:
     { return frames.count(); }
     void addFrameSet( KWFrameSet *f )
     { frames.append(f); updateAllFrames(); setModified( true ); /*updateAllViews(0L);*/ }
-    void delFrameSet( KWFrameSet *f )
-    { frames.remove( f ); setModified( true ); }
+    void delFrameSet( KWFrameSet *f, bool deleteit = true ) {
+      if (deleteit)
+        frames.remove( f ); 
+      else
+        frames.take( frames.find(f) ); 
+      setModified( true ); 
+    }
 
     KWParag *getFirstParag( unsigned int _num ) {
         if ( frames.at( _num )->getFrameType() == FT_TEXT )
