@@ -959,3 +959,10 @@ Montel laurent <montell@club-internet.fr>
 * Now I reduce the numbre of refreshing of cell merged
 * Now when you accross a merged cell it works
 * fix others small fixes
+
+Summary 2000-08-30 -> 2000-09-03
+Montel laurent <montell@club-internet.fr>
+-----------------------------------------
+-Fix some bugs with cell merged when you used kspread_dlg_format
+-Now "special paste" -> "without border" works again
+-other some bugs
