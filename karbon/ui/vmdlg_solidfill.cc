@@ -51,7 +51,7 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 
 	mOldColor->setColor( color );
 	mColorPreview->setColor( color );
-	connect (mColorPreview, SIGNAL( colorChanged( color )), this, SLOT (slotUpdate( color )));
+	connect (mColorPreview, SIGNAL( colorChanged( QColor* )), this, SLOT (slotUpdate( QColor* )));
 	mainLayout->addWidget( groupbox, 0, 2);
 
 	//Components

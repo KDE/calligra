@@ -39,7 +39,7 @@ private slots:
 	void slotUpdateFromRGBSpinBoxes();
 	void slotUpdateFromHSVSpinBoxes();
 	void slotApplyButtonPressed();
-	void slotUpdate(QColor* color = 0L);
+	void slotUpdate(QColor *color = 0L);
 };
 
 #endif
