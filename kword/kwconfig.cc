@@ -91,10 +91,10 @@ configureSpellPage::configureSpellPage( KWView *_view, QWidget *parent , char *n
   _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kWordDocument()->getKSpellConfig(), false );
   grid1->addWidget(_spellConfig,0,0);
 #ifdef KSPELL_HAS_IGNORE_UPPER_WORD
-  _dontCheckUpperWord= new QCheckBox(i18n("Don't check a Upper word"),tmpQGroupBox);
+  _dontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),tmpQGroupBox);
   grid1->addWidget(_dontCheckUpperWord,1,0);
 
-  _dontCheckTilteCase= new QCheckBox(i18n("Don't check Title case"),tmpQGroupBox);
+  _dontCheckTilteCase= new QCheckBox(i18n("Ignore title case words"),tmpQGroupBox);
   grid1->addWidget(_dontCheckTilteCase,2,0);
 
   if( config->hasGroup("KSpell kword") )
