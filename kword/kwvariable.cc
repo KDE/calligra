@@ -52,7 +52,7 @@ void KWVariableSettings::changeEndNoteCounter( KoParagCounter _c )
     m_endNoteCounter = _c;
 }
 
-void KWVariableSettings::saveOasis( KoXmlWriter& writer ) const
+void KWVariableSettings::saveNoteConfiguration( KoXmlWriter& writer ) const
 {
     writer.startElement( "text:notes-configuration" );
     writer.addAttribute( "text:note-class", "footnote" );
@@ -69,7 +69,7 @@ void KWVariableSettings::saveOasis( KoXmlWriter& writer ) const
     writer.endElement();
 }
 
-void KWVariableSettings::loadOasis( const QDomElement& parent )
+void KWVariableSettings::loadNoteConfiguration( const QDomElement& parent )
 {
     QDomElement e;
     forEachElement( e, parent )

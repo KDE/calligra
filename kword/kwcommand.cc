@@ -258,9 +258,6 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
 
     QBuffer buffer( m_data );
 
-    // Old code before using a KoStore in memory:
-    //QXmlInputSource source( &buffer );
-
     KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
     if ( store->bad() || !store->hasFile( "content.xml" ) )
     {
@@ -278,6 +275,7 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, errorMessage );
     if ( !ok ) {
         kdError(32001) << "Error parsing content.xml: " << errorMessage << endl;
+        delete store;
         return c;
     }
 
@@ -291,9 +289,10 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
 
     QDomElement content = contentDoc.documentElement();
 
-    QDomElement body ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    QDomElement body( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( body.isNull() ) {
         kdError(32001) << "No office:body found!" << endl;
+        delete store;
         return c;
     }
     // We then want to use whichever element is the child of <office:body>,
@@ -304,6 +303,7 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     }
     if ( realBody.isNull() ) {
         kdError(32001) << "No element found inside office:body!" << endl;
+        delete store;
         return c;
     }
 
@@ -315,8 +315,8 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     *c = textFs->textObject()->pasteOasisText( realBody, context, cursor, doc->styleCollection() );
 
     textFs->textObject()->setNeedSpellCheck( true );
-    // In case loadFormatting queued any image request
 
+    // In case loadFormatting queued any image request
     //kdDebug() << "KWOasisPasteCommand::execute calling doc->pasteFrames" << endl;
     doc->completePasting();
 

@@ -37,10 +37,7 @@
 #include "kwviewmode.h"
 #include "mailmerge.h"
 #include "kwloadinginfo.h"
-
-#include <qfileinfo.h>
-#include <qregexp.h>
-#include <qtimer.h>
+#include "kwdrag.h"
 
 #include <koPictureCollection.h>
 #include <koTemplateChooseDia.h>
@@ -58,6 +55,7 @@
 #include <kocommandhistory.h>
 #include <koGenStyles.h>
 #include <koStore.h>
+#include <koStoreDrag.h>
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
 #include <koOasisStore.h>
@@ -69,10 +67,16 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klibloader.h>
+#include <kmultipledrag.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kspell.h>
 #include <kstandarddirs.h>
+
+#include <qfileinfo.h>
+#include <qregexp.h>
+#include <qtimer.h>
+#include <qbuffer.h>
 
 #include <unistd.h>
 #include <math.h>
@@ -1155,7 +1159,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // Load all styles before the corresponding paragraphs try to use them!
     m_styleColl->loadOasisStyleTemplates( context );
     static_cast<KWVariableSettings *>( m_varColl->variableSetting() )
-        ->loadOasis( oasisStyles.officeStyle() );
+        ->loadNoteConfiguration( oasisStyles.officeStyle() );
 
     // TODO framestyles and tablestyles
 
@@ -2606,6 +2610,14 @@ void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroComm
 
 bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
+    return saveOasis( store, manifestWriter, SaveAll );
+}
+
+// can't be const due to recalcVariables()
+// TODO: rename to saveOasisHelper
+bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
+                            QString* plainText, KoPicture* picture, KWTextFrameSet* fs )
+{
     m_pictureCollection->assignUniqueIds();
 
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
@@ -2614,6 +2626,10 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoXmlWriter* contentWriter = oasisStore.contentWriter();
     if ( !contentWriter )
         return false;
+
+    QValueList<KoPictureKey> pictureList;
+    if ( saveFlag == SaveAll )
+        pictureList = savePictureList();
 
     m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
     recalcVariables( VT_DATE );
@@ -2627,19 +2643,22 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
     savingContext.setStyleNameMap( map );
 
-    // Save visual info for the first view, such as the active frameset and cursor position
-    // It looks like a hack, but reopening a document creates only one view anyway (David)
-    KWView * view = static_cast<KWView*>(views().getFirst());
-    if ( view ) // no view if embedded document
+    if ( saveFlag == SaveAll )
     {
-        KWFrameSetEdit* edit = view->getGUI()->canvasWidget()->currentFrameSetEdit();
-        if ( edit )
+        // Save visual info for the first view, such as the active frameset and cursor position
+        // It looks like a hack, but reopening a document creates only one view anyway (David)
+        KWView * view = static_cast<KWView*>(views().getFirst());
+        if ( view ) // no view if embedded document
         {
-            KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
-            if ( textedit && textedit->cursor() ) {
-                KoTextCursor* cursor = textedit->cursor();
-                savingContext.setCursorPosition( cursor->parag(),
-                                                 cursor->index() );
+            KWFrameSetEdit* edit = view->getGUI()->canvasWidget()->currentFrameSetEdit();
+            if ( edit )
+            {
+                KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
+                if ( textedit && textedit->cursor() ) {
+                    KoTextCursor* cursor = textedit->cursor();
+                    savingContext.setCursorPosition( cursor->parag(),
+                                                     cursor->index() );
+                }
             }
         }
     }
@@ -2648,9 +2667,27 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( "office:text" );
 
-    // save the body into bodyWriter
-    saveOasisBody( *bodyWriter, savingContext );
-    // TODO save embedded objects
+    if ( saveFlag == SaveAll )
+    {
+        // save the body into bodyWriter
+        saveOasisBody( *bodyWriter, savingContext );
+        // TODO save embedded objects
+    }
+    else // SaveSelected
+    {
+        // In theory we should pass a view to this method, in order to
+        // copy what is currently selected in that view only. But selection
+        // is currently part of the KoTextParag data, so it's shared between views.
+        if ( fs )
+            *plainText = fs->textDocument()->copySelection( *bodyWriter, savingContext, KoTextDocument::Standard );
+        // TODO add keys of inline pictures to pictureList (inside copySelection).
+
+        // write selected (non-inline) frames
+        QString newText;
+        // TODO add keys of non-inline pictures to pictureList (inside saveSelectedFrames).
+        saveSelectedFrames( *bodyWriter, store, savingContext, &newText, picture );
+        *plainText += newText;
+    }
 
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
@@ -2661,108 +2698,238 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     // Done with content.xml, now prepare things for styles.xml
 
-    KoGenStyle pageLayout = m_pageLayout.saveOasis();
-    pageLayout.addAttribute( "style:page-usage", "all" ); // needed?
-
-//<style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="right" style:rel-width="1%" style:color="#000000"/>
-
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-    KoXmlWriter noteTmpWriter( &buffer );  // TODO pass indentation level
-    noteTmpWriter.startElement( "style:footnote-sep" );
-    QString tmp;
-    switch( m_footNoteSeparatorLinePos )
+    if ( saveFlag == SaveAll )
     {
-    case SLP_CENTERED:
-        tmp = "centered";
-        break;
-    case SLP_RIGHT:
-        tmp = "right";
-        break;
-    case SLP_LEFT:
-        tmp = "left";
-        break;
+        KoGenStyle pageLayout = m_pageLayout.saveOasis();
+        pageLayout.addAttribute( "style:page-usage", "all" ); // needed?
+
+        //<style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="right" style:rel-width="1%" style:color="#000000"/>
+
+        QBuffer buffer;
+        buffer.open( IO_WriteOnly );
+        KoXmlWriter noteTmpWriter( &buffer );  // TODO pass indentation level
+        noteTmpWriter.startElement( "style:footnote-sep" );
+        QString tmp;
+        switch( m_footNoteSeparatorLinePos )
+        {
+        case SLP_CENTERED:
+            tmp = "centered";
+            break;
+        case SLP_RIGHT:
+            tmp = "right";
+            break;
+        case SLP_LEFT:
+            tmp = "left";
+            break;
+        }
+
+        noteTmpWriter.addAttribute( "style:adjustment", tmp );
+        noteTmpWriter.addAttributePt( "style:width", m_footNoteSeparatorLineWidth);
+        noteTmpWriter.addAttribute( "style:rel-width", QString::number( footNoteSeparatorLineLength() ) + "%" );
+        switch( m_footNoteSeparatorLineType )
+        {
+        case SLT_SOLID:
+            tmp = "solid";
+            break;
+        case SLT_DASH:
+            tmp = "dash";
+            break;
+        case SLT_DOT:
+            tmp = "dotted";
+            break;
+        case SLT_DASH_DOT:
+            tmp = "dot-dash";
+            break;
+        case SLT_DASH_DOT_DOT:
+            tmp = "dot-dot-dash";
+            break;
+        }
+
+        noteTmpWriter.addAttribute( "style:line-style", tmp );
+
+        noteTmpWriter.endElement();
+        QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+        pageLayout.addChildElement( "separator", elementContents );
+
+
+
+        // TODO (from variablesettings I guess) pageLayout.addAttribute( "style:first-page-number", ... );
+        /*QString pageLayoutStyleName =*/ mainStyles.lookup( pageLayout, "pm" );
     }
-
-    noteTmpWriter.addAttribute( "style:adjustment", tmp );
-
-    noteTmpWriter.addAttributePt( "style:width", m_footNoteSeparatorLineWidth);
-
-    tmp = QString( "%1%" ).arg( footNoteSeparatorLineLength() );
-    noteTmpWriter.addAttribute( "style:rel-width", tmp );
-    switch( m_footNoteSeparatorLineType )
-    {
-    case SLT_SOLID:
-        tmp = "solid";
-        break;
-    case SLT_DASH:
-        tmp = "dash";
-        break;
-    case SLT_DOT:
-        tmp = "dotted";
-        break;
-    case SLT_DASH_DOT:
-        tmp = "dot-dash";
-        break;
-    case SLT_DASH_DOT_DOT:
-        tmp = "dot-dot-dash";
-        break;
-    }
-
-    noteTmpWriter.addAttribute( "style:line-style", tmp );
-
-    noteTmpWriter.endElement();
-    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    pageLayout.addChildElement( "separator", elementContents );
-
-
-
-    // TODO (from variablesettings I guess) pageLayout.addAttribute( "style:first-page-number", ... );
-    /*QString pageLayoutStyleName =*/ mainStyles.lookup( pageLayout, "pm" );
 
     if ( !store->open( "styles.xml" ) )
         return false;
     manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-    saveOasisDocumentStyles( store, mainStyles );
+    saveOasisDocumentStyles( store, mainStyles, saveFlag );
     if ( !store->close() ) // done with styles.xml
         return false;
 
-    m_pictureCollection->saveOasisToStore( store, savePictureList(), manifestWriter);
+    m_pictureCollection->saveOasisToStore( store, pictureList, manifestWriter );
+    if ( saveFlag == SaveAll )
+    {
 
-    if(!store->open("settings.xml"))
-        return false;
+        if(!store->open("settings.xml"))
+            return false;
 
-    KoStoreDevice contentDev( store );
-    KoXmlWriter& settingsWriter = *createOasisXmlWriter(&contentDev, "office:document-settings");
-    settingsWriter.startElement("office:settings");
-    settingsWriter.startElement("config:config-item-set");
+        KoStoreDevice contentDev( store );
+        KoXmlWriter& settingsWriter = *createOasisXmlWriter(&contentDev, "office:document-settings");
+        settingsWriter.startElement("office:settings");
+        settingsWriter.startElement("config:config-item-set");
 
-    settingsWriter.addAttribute("config:name", "view-settings");
+        settingsWriter.addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOasis(&settingsWriter, m_unit);
-    saveOasisSettings( settingsWriter );
+        KoUnit::saveOasis(&settingsWriter, m_unit);
+        saveOasisSettings( settingsWriter );
 
-    settingsWriter.endElement(); // config:config-item-set
+        settingsWriter.endElement(); // config:config-item-set
 
-    settingsWriter.startElement("config:config-item-set");
-    settingsWriter.addAttribute("config:name", "configuration-settings");
-    settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
-    settingsWriter.endElement(); // config:config-item-set
+        settingsWriter.startElement("config:config-item-set");
+        settingsWriter.addAttribute("config:name", "configuration-settings");
+        settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
+        settingsWriter.endElement(); // config:config-item-set
 
-    m_varColl->variableSetting()->saveOasis( settingsWriter );
+        m_varColl->variableSetting()->saveOasis( settingsWriter );
 
-    settingsWriter.endElement(); // office:settings
-    settingsWriter.endElement(); // Root element
-    settingsWriter.endDocument();
+        settingsWriter.endElement(); // office:settings
+        settingsWriter.endElement(); // Root element
+        settingsWriter.endDocument();
 
-    delete &settingsWriter;
+        delete &settingsWriter;
 
-    if(!store->close())
-        return false;
+        if(!store->close())
+            return false;
 
-    manifestWriter->addManifestEntry("settings.xml", "text/xml");
-
+        manifestWriter->addManifestEntry("settings.xml", "text/xml");
+    }
     return true;
+}
+
+// can't be const due to recalcVariables()
+QDragObject* KWDocument::dragSelected( QWidget* parent, KWTextFrameSet* fs )
+{
+    // We'll create a store (ZIP format) in memory
+    QBuffer buffer;
+    QCString mimeType = KWTextDrag::selectionMimeType();
+    KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
+    Q_ASSERT( store );
+    Q_ASSERT( !store->bad() );
+    KoOasisStore oasisStore( store );
+
+    KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
+
+    QString plainText;
+    KoPicture picture;
+    if ( !saveOasis( store, manifestWriter, KWDocument::SaveSelected, &plainText, &picture, fs )
+         || !oasisStore.closeManifestWriter() )
+    {
+        delete store;
+        return 0;
+    }
+
+    delete store;
+
+    KMultipleDrag* multiDrag = new KMultipleDrag( parent );
+    if ( !plainText.isEmpty() )
+        multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
+    if ( !picture.isNull() )
+        multiDrag->addDragObject( picture.dragObject( 0 ) );
+    KoStoreDrag* storeDrag = new KoStoreDrag( KWTextDrag::selectionMimeType(), 0 );
+    kdDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
+    storeDrag->setEncodedData( buffer.buffer() );
+    multiDrag->addDragObject( storeDrag );
+    return multiDrag;
+}
+
+void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoSavingContext& savingContext, QString* plainText, KoPicture* picture ) const
+{
+    QPtrList<KoDocumentChild> embeddedObjects;
+
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit ) {
+        KWFrameSet * fs = fit.current();
+        if ( fs->isVisible() && fs->type() == FT_PART
+             && fs->frameIterator().getFirst()->isSelected() ) {
+            embeddedObjects.append( static_cast<KWPartFrameSet *>(fs)->getChild() );
+        }
+    }
+
+    // The old coment said:
+    // "Save internal embedded objects first, since it might change their URL"
+    // Not sure this is still the case.
+    QPtrListIterator<KoDocumentChild> chl( embeddedObjects );
+    int i = 0;
+    for( ; chl.current(); ++chl ) {
+        KoDocument* childDoc = chl.current()->document();
+        if ( childDoc && !childDoc->isStoredExtern() )
+            (void) childDoc->saveToStore( store, QString::number( i++ ) );
+    }
+
+    QValueList<KoPictureKey> savePictures;
+    fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWFrameSet * fs = fit.current();
+        if ( fs->isVisible() )
+        {
+            bool isTable = ( fs->type() == FT_TABLE );
+            if ( fs->type() == FT_PART )
+                continue;
+            QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
+            KWFrame * firstFrame = frameIt.current();
+            for ( ; frameIt.current(); ++frameIt )
+            {
+                KWFrame * frame = frameIt.current();
+                if ( frame->isSelected() )
+                {
+                    // Two cases to be distinguished here
+                    // If it's the first frame of a frameset, then copy the frameset contents and the frame itself
+                    // Otherwise copy only the frame information
+                    if ( frame == firstFrame || isTable )
+                    {
+                        // TODO pass plainText to KWFrame::saveOasis, as well as bool saveFrames, probably
+                        fs->saveOasis( bodyWriter, savingContext /*, isTable ? true : false - was toXML's saveFrames parameter*/ );
+                    }
+                    else if ( !isTable )
+                    {
+#if 0
+                        // Save the frame information
+                        QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
+                        parentElem.appendChild( frameElem );
+                        frame->save( frameElem );
+                        if ( frame != firstFrame )
+                        {
+                            // Frame saved alone -> remember which frameset it's part of
+                            frameElem.setAttribute( "parentFrameset", fs->getName() );
+                        }
+#endif
+                        if ( fs->type() == FT_PICTURE ) {
+                            KoPictureKey key = static_cast<KWPictureFrameSet *>( fs )->key();
+                            if ( !savePictures.contains( key ) )
+                                savePictures.append( key );
+                        }
+                    }
+                    if ( isTable ) // Copy tables only once, even if they have many cells selected
+                        break;
+                }
+            }
+        }
+    }
+
+#if 0 // TODO embedded objects (port or remove)
+    if ( !embeddedObjects.isEmpty() )
+        m_doc->saveEmbeddedObjects( topElem, embeddedObjects );
+#endif
+    if ( !savePictures.isEmpty() ) {
+#if 0 // can't do that here.
+        // Save the actual picture data into the store
+        m_pictureCollection->saveOasisToStore( store, savePictures, manifestWriter );
+#endif
+        // Single image -> return it
+        if ( picture && savePictures.count() == 1 )
+        {
+            *picture = m_pictureCollection->findPicture( savePictures.first() );
+        }
+    }
 }
 
 void KWDocument::loadOasisIgnoreList( const KoOasisSettings& settings )
@@ -2816,7 +2983,7 @@ void KWDocument::saveOasisSettings( KoXmlWriter &/*settingsWriter*/ ) const
     // TODO: any settings to save here?
 }
 
-void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
+void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, SaveFlag saveFlag ) const
 {
     QString pageLayoutName;
     KoStoreDevice stylesDev( store );
@@ -2834,26 +3001,29 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         (*it).style->writeStyle( stylesWriter, mainStyles, "text:list-style", (*it).name, 0 );
     }
     m_styleColl->saveOasisOutlineStyles( *stylesWriter );
-    static_cast<KWVariableSettings *>( m_varColl->variableSetting() )->saveOasis( *stylesWriter );
+    if ( saveFlag == SaveAll )
+        static_cast<KWVariableSettings *>( m_varColl->variableSetting() )->saveNoteConfiguration( *stylesWriter );
     stylesWriter->endElement(); // office:styles
 
-    stylesWriter->startElement( "office:automatic-styles" );
+    if ( saveFlag == SaveAll )
+    {
+        stylesWriter->startElement( "office:automatic-styles" );
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
-    Q_ASSERT( styles.count() == 1 );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
-        //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
-        // which only works as long as we have only one page master
-        stylesWriter->endElement();
-        Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
-        pageLayoutName = (*it).name;
+        styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
+        Q_ASSERT( styles.count() == 1 );
+        it = styles.begin();
+        for ( ; it != styles.end() ; ++it ) {
+            (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+            //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
+            // which only works as long as we have only one page master
+            stylesWriter->endElement();
+            Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
+            pageLayoutName = (*it).name;
+        }
+        stylesWriter->endElement(); // office:automatic-styles
+
     }
 
-
-
-    stylesWriter->endElement(); // office:automatic-styles
 
     stylesWriter->startElement( "office:master-styles" );
     stylesWriter->startElement( "style:master-page" );
@@ -3982,6 +4152,7 @@ KWDocument::TableToSelectPosition KWDocument::positionToSelectRowcolTable(const 
 
 
 // TODO pass viewmode for isVisible
+// TODO use QValueList
 QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
     QPtrList<KWFrame> frames;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();

@@ -185,7 +185,7 @@ void KoCommandHistory::addCommand(KCommand *command, bool execute) {
         clipCommands();
     }
     else { // either this is the first time we add a Command or something has gone wrong
-        kdDebug(230) << "Initializing the Command History" << endl;
+        kdDebug(230) << "KoCommandHistory: Initializing the Command History" << endl;
         m_commands.clear();
         m_commands.append(command);
         d->m_present=command;

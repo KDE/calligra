@@ -2219,7 +2219,7 @@ void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context
     if( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
     KWFrame* frame = frames.getFirst();
-    frame->startOasisFrame( writer, context.mainStyles() );
+    frame->startOasisFrame( writer, context.mainStyles() ); // draw:frame
     writer.startElement( "draw:image" );
     writer.addAttribute( "xlink:type", "simple" );
     writer.addAttribute( "xlink:show", "embed" );

@@ -27,30 +27,39 @@
 #include <kdebug.h>
 #include <qxml.h>
 #include <klocale.h>
+#include "koxmlns.h"
+#include <qbuffer.h>
 
 KoOasisStore::KoOasisStore( KoStore* store )
     : m_store( store ),
-      m_storeDevice( 0 ), m_contentWriter( 0 ), m_bodyWriter( 0 ),
+      m_storeDevice( 0 ),
+      m_contentWriter( 0 ),
+      m_bodyWriter( 0 ),
+      m_manifestWriter( 0 ),
       m_contentTmpFile( 0 )
 {
 }
 
 KoOasisStore::~KoOasisStore()
 {
-    // If both close methods were called, nothing should recontent
+    // If all the right close methods were called, nothing should remain,
+    // so those deletes are really just in case.
     Q_ASSERT( !m_contentWriter );
-    Q_ASSERT( !m_bodyWriter );
-    Q_ASSERT( !m_storeDevice );
-    Q_ASSERT( !m_contentTmpFile );
     delete m_contentWriter;
+    Q_ASSERT( !m_bodyWriter );
     delete m_bodyWriter;
+    Q_ASSERT( !m_storeDevice );
     delete m_storeDevice;
+    Q_ASSERT( !m_contentTmpFile );
     delete m_contentTmpFile;
+    Q_ASSERT( !m_manifestWriter );
+    delete m_manifestWriter;
 }
 
 KoXmlWriter* KoOasisStore::contentWriter()
 {
-    if ( !m_contentWriter ) {
+    if ( !m_contentWriter )
+    {
         if ( !m_store->open( "content.xml" ) )
             return 0;
         m_storeDevice = new KoStoreDevice( m_store );
@@ -61,7 +70,8 @@ KoXmlWriter* KoOasisStore::contentWriter()
 
 KoXmlWriter* KoOasisStore::bodyWriter()
 {
-    if ( !m_bodyWriter ) {
+    if ( !m_bodyWriter )
+    {
         Q_ASSERT( !m_contentTmpFile );
         m_contentTmpFile = new KTempFile;
         m_contentTmpFile->setAutoDelete( true );
@@ -91,6 +101,38 @@ bool KoOasisStore::closeContentWriter()
     if ( !m_store->close() ) // done with content.xml
         return false;
     return true;
+}
+
+KoXmlWriter* KoOasisStore::manifestWriter( const char* mimeType )
+{
+    if ( !m_manifestWriter )
+    {
+        // the pointer to the buffer is already stored in the KoXmlWriter, no need to store it here as well
+        QBuffer *manifestBuffer = new QBuffer;
+        manifestBuffer->open( IO_WriteOnly );
+        m_manifestWriter = new KoXmlWriter( manifestBuffer );
+        m_manifestWriter->startDocument( "manifest:manifest" );
+        m_manifestWriter->startElement( "manifest:manifest" );
+        m_manifestWriter->addAttribute( "xmlns:manifest", KoXmlNS::manifest );
+        m_manifestWriter->addManifestEntry( "/", mimeType );
+    }
+    return m_manifestWriter;
+}
+
+bool KoOasisStore::closeManifestWriter()
+{
+    m_manifestWriter->endElement();
+    m_manifestWriter->endDocument();
+    QBuffer* buffer = static_cast<QBuffer *>( m_manifestWriter->device() );
+    delete m_manifestWriter; m_manifestWriter = 0;
+    bool ok = false;
+    if ( m_store->open( "META-INF/manifest.xml" ) )
+    {
+        Q_LONG written = m_store->write( buffer->buffer() );
+        ok = ( written == (Q_LONG)buffer->buffer().size() && m_store->close() );
+    }
+    delete buffer;
+    return ok;
 }
 
 bool KoOasisStore::loadAndParse( const QString& fileName, QDomDocument& doc, QString& errorMessage )

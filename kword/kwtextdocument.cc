@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2001-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -130,6 +130,7 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
                                        KoTextParag* nextParagraph )
 {
     const QString localName( tag.localName() );
+    // Non-inline frame (i.e. anchored to page)
     if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
     {
         KWFrame* frame = loadFrame( tag, context );

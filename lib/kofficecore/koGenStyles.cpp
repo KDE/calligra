@@ -126,7 +126,7 @@ static int compareMap( const QMap<QString, QString>& map1, const QMap<QString, Q
 
 void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
-    kdDebug(30003) << "writing out style " << name << " " << m_attributes["style:display-name"] << " " << m_familyName << endl;
+    //kdDebug(30003) << "writing out style " << name << " " << m_attributes["style:display-name"] << " " << m_familyName << endl;
     writer->startElement( elementName );
     if ( !drawElement )
         writer->addAttribute( "style:name", name );
@@ -147,8 +147,8 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
         const_cast<KoGenStyle *>( this )->
             addAttribute( "style:family", QString::fromLatin1( m_familyName ) );
     else {
-        if ( qstrcmp( elementName, "style:style" ) )
-            kdWarning(30003) << "User style " << name << " is without family - invalid" << endl;
+        if ( qstrcmp( elementName, "style:style" ) == 0 )
+            kdWarning(30003) << "User style " << name << " is without family - invalid. m_type=" << m_type << endl;
     }
 
 #if 0 // #ifndef NDEBUG

@@ -46,8 +46,8 @@ class KWVariableSettings : public KoVariableSettings
     virtual ~KWVariableSettings() {}
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
-    void saveOasis( KoXmlWriter& writer ) const;
-    void loadOasis( const QDomElement& parent );
+    void saveNoteConfiguration( KoXmlWriter& writer ) const;
+    void loadNoteConfiguration( const QDomElement& parent );
     void changeFootNoteCounter( KoParagCounter _c );
     void changeEndNoteCounter( KoParagCounter _c );
     KoParagCounter endNoteCounter() const { return m_endNoteCounter;}

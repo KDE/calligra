@@ -49,20 +49,14 @@
 #include <koxmlns.h>
 #include <koxmlwriter.h>
 #include <kooasiscontext.h>
-#include <koOasisStore.h>
 #include <koStore.h>
-#include <koStoreDrag.h>
 
 #include <kapplication.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <krun.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <kmultipledrag.h>
-#include <ktempfile.h>
 
-#include <qbuffer.h>
 #include <qclipboard.h>
 #include <qcursor.h>
 #include <qfile.h>
@@ -1770,6 +1764,7 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
 
     writer.endElement(); // draw:frame
     // TODO: save other frames using chaining
+    // ......... but not when called from KWDocument::saveSelectedFrames
 }
 
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
@@ -3187,64 +3182,7 @@ void KWTextFrameSetEdit::startDrag()
 QDragObject * KWTextFrameSetEdit::newDrag( QWidget * parent )
 {
     KWTextFrameSet* fs = textFrameSet();
-#if 0 // old koffice-1.3 format
-    QDomDocument domDoc( "PARAGRAPHS" );
-    QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
-    domDoc.appendChild( elem );
-    const QString plainText = fs->copyTextParag( elem, KoTextDocument::Standard );
-    const QCString cstr = domDoc.toCString();
-    KWTextDrag *kd = new KWTextDrag( parent );
-    kd->setPlain( plainText );
-    kd->setFrameSetNumber( fs->kWordDocument()->numberOfTextFrameSet( fs, false ) );
-    kd->setKWord( cstr );
-    kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << cstr << endl;
-    return kd;
-#else // oasis format
-
-    // We'll create a store (ZIP format) in memory
-    QBuffer buffer;
-    KoStore* store = KoStore::createStore( &buffer, KoStore::Write, KWTextDrag::selectionMimeType() );
-    Q_ASSERT( store );
-    Q_ASSERT( !store->bad() );
-
-    KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles );
-
-    // Save user styles as KoGenStyle objects - useful when pasting into another document
-    KWDocument * doc = frameSet()->kWordDocument();
-    KoSavingContext::StyleNameMap map = doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
-    savingContext.setStyleNameMap( map );
-
-    KoOasisStore oasisStore( store );
-
-    // TODO manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-    KoXmlWriter* contentWriter = oasisStore.contentWriter();
-    if ( !contentWriter ) {
-        delete store;
-        return 0;
-    }
-    KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
-    bodyWriter->startElement( "office:body" );
-    bodyWriter->startElement( "office:text" );
-
-    const QString plainText = fs->textDocument()->copySelection( *bodyWriter, savingContext, KoTextDocument::Standard );
-
-    bodyWriter->endElement(); // office:text
-    bodyWriter->endElement(); // office:body
-
-    KWDocument::writeAutomaticStyles( *contentWriter, mainStyles );
-
-    oasisStore.closeContentWriter();
-    delete store;
-
-    KMultipleDrag* multiDrag = new KMultipleDrag( parent );
-    multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
-    KoStoreDrag* storeDrag = new KoStoreDrag( KWTextDrag::selectionMimeType(), 0 );
-    kdDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
-    storeDrag->setEncodedData( buffer.buffer() );
-    multiDrag->addDragObject( storeDrag );
-    return multiDrag;
-#endif
+    return fs->kWordDocument()->dragSelected( parent, fs );
 }
 
 void KWTextFrameSetEdit::ensureCursorVisible()

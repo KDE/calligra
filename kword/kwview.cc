@@ -2274,13 +2274,12 @@ void KWView::editCut()
 
 void KWView::editCopy()
 {
-    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-    kdDebug() << "KWView::editCopy edit=" << edit << endl;
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->copy();
-    else
-    {
-        m_gui->canvasWidget()->copySelectedFrames();
+    else {
+        QDragObject *drag = m_doc->dragSelected( 0 );
+        QApplication::clipboard()->setData( drag );
     }
 }
 

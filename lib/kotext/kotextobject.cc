@@ -27,6 +27,7 @@
 #include "kovariable.h"
 #include "koAutoFormat.h"
 #include <koxmlns.h>
+#include <kodom.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -1961,13 +1962,14 @@ void KoTextObject::loadOasisContent( const QDomElement &bodyElem, KoOasisContext
     setLastFormattedParag( textDocument()->firstParag() );
 }
 
-KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextCursor& cursor, KoStyleCollection * styleColl )
+KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisContext& context,
+                                           KoTextCursor& cursor, KoStyleCollection * styleColl )
 {
     KoTextCursor resultCursor( cursor );
     KoTextParag* lastParagraph = cursor.parag();
     bool removeNewline = false;
     uint pos = cursor.index();
-    if ( pos == 0 ) {
+    if ( pos == 0 && lastParagraph->length() <= 1 ) {
         // Pasting on an empty paragraph -> respect <text:h> in selected text etc.
         lastParagraph = lastParagraph->prev();
         lastParagraph = textDocument()->loadOasisText( bodyElem, context, lastParagraph, styleColl, cursor.parag() );
@@ -1975,19 +1977,37 @@ KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisC
         resultCursor.setIndex( lastParagraph->length() - 1 );
         removeNewline = true;
     } else {
-        // Pasting inside a non-empty paragraph -> append text to it.
+        // Pasting inside a non-empty paragraph -> insert/append text to it.
         // This loop looks for the *FIRST* paragraph only.
         for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
         {
             QDomElement tag = text.toElement();
             if ( tag.isNull() ) continue;
             context.styleStack().save();
-            // We mostly ignore tag.tagName() here, unless it's not even a paragraph
-            context.fillStyleStack( tag, KoXmlNS::text, "style-name" );
-            lastParagraph->loadOasis( tag, context, styleColl, pos );
-            context.styleStack().restore();
-            // Done with first parag, remove it and exit loop
-            const_cast<QDomElement &>( bodyElem ).removeChild( tag ); // somewhat hackish
+            // The first tag could be a text:p, text:h, text:numbered-paragraph, but also
+            // a frame (anchored to page), a TOC, etc. For those, don't try to concat-with-existing-paragraph.
+            // For text:numbered-paragraph, find the text:p or text:h inside it.
+            QDomElement tagToLoad = tag;
+            if ( tag.localName() == "numbered-paragraph" ) {
+                QDomElement npchild;
+                forEachElement( npchild, tag )
+                {
+                    if ( npchild.localName() == "p" || npchild.localName() == "h" ) {
+                        tagToLoad = npchild;
+                        break;
+                    }
+                }
+
+            }
+            if ( tagToLoad.localName() == "p" || tagToLoad.localName() == "h" ) {
+                context.fillStyleStack( tagToLoad, KoXmlNS::text, "style-name" );
+                lastParagraph->loadOasisSpan( tagToLoad, context, pos );
+                lastParagraph->setChanged( true );
+                lastParagraph->invalidate( 0 );
+                context.styleStack().restore();
+                // Done with first parag, remove it and exit loop
+                const_cast<QDomElement &>( bodyElem ).removeChild( tag ); // somewhat hackish
+            }
             break;
         }
         resultCursor.setParag( lastParagraph );

@@ -70,7 +70,13 @@ public:
     /// close contents.xml.
     bool closeContentWriter();
 
-    /// For other files in the store, use open/addManifestEntry/KoStoreDevice/createOasisXmlWriter/close
+    // For other files in the store, use open/addManifestEntry/KoStoreDevice/createOasisXmlWriter/close
+
+    /// Create and return a manifest writer. It will write to a memory buffer.
+    KoXmlWriter* manifestWriter( const char* mimeType );
+
+    /// Close the manifest writer, writing its contents to manifest.xml
+    bool closeManifestWriter();
 
     /// A completely unrelated method, for loading a file from an oasis store
     bool loadAndParse( const QString& fileName, QDomDocument& doc, QString& errorMessage );
@@ -80,6 +86,7 @@ private:
     KoStoreDevice* m_storeDevice;
     KoXmlWriter* m_contentWriter;
     KoXmlWriter* m_bodyWriter;
+    KoXmlWriter* m_manifestWriter;
     KTempFile* m_contentTmpFile;
 };
 

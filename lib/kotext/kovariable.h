@@ -85,7 +85,7 @@ class KOTEXT_EXPORT KoVariableSettings
     QDateTime modificationDate() const;
     void setModificationDate( const QDateTime & _date);
 
-    virtual void saveOasis( KoXmlWriter &settingsWriter );
+    virtual void saveOasis( KoXmlWriter &settingsWriter ) const;
     virtual void loadOasis(const KoOasisSettings&settingsDoc);
 
 
@@ -312,7 +312,7 @@ public:
     KoVariable *selectedVariable()const {return m_varSelected;}
 
     /// List of KActions to put into the popupmenu on a variable
-    QPtrList<KAction> popupActionList();
+    QPtrList<KAction> popupActionList() const;
 
  signals:
     void repaintVariable();
@@ -407,7 +407,7 @@ public:
     virtual int typeId() const { return 4; }
 
     /// List of available subtypes (translated). Use variableSubType() to map index to ID
-    virtual QStringList subTypeText();
+    virtual QStringList subTypeList();
 
     /// Set this variable's subtype.
     virtual void setVariableSubType( short int /*subtype*/ ) {}
@@ -460,7 +460,7 @@ public:
     virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
-    virtual QStringList subTypeText();
+    virtual QStringList subTypeList();
     /// Set this variable's subtype.
     virtual void setVariableSubType( short int subtype )
         { m_subtype = subtype; }
@@ -505,7 +505,7 @@ public:
     virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
-    virtual QStringList subTypeText();
+    virtual QStringList subTypeList();
     virtual void setVariableSubType( short int subtype )
         { m_subtype = subtype; }
     virtual short int subType() const { return m_subtype; }
@@ -599,7 +599,7 @@ public:
      */
     static FieldSubType fieldSubType( short int menuNumber);
 
-    virtual QStringList subTypeText();
+    virtual QStringList subTypeList();
     virtual void setVariableSubType( short int subtype )
         { m_subtype = subtype; }
     virtual short int subType() const { return m_subtype; }
@@ -648,7 +648,7 @@ public:
     static QStringList actionTexts();
     virtual QString fieldCode();
 
-    virtual QStringList subTypeText();
+    virtual QStringList subTypeList();
 
     virtual void setVariableSubType( short int subtype );
 
@@ -742,7 +742,7 @@ public:
     { return VT_STATISTIC; }
     static QStringList actionTexts();
 
-    virtual QStringList subTypeText();
+    virtual QStringList subTypeList();
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );

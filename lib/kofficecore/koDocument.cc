@@ -949,15 +949,8 @@ bool KoDocument::saveNativeFormat( const QString & file )
         kdDebug(30003) << "Saving to OASIS format" << endl;
         // Tell KoStore not to touch the file names
         store->disallowNameExpansion();
-        // Prepare manifest file - in memory
-        QByteArray manifestData;
-        QBuffer manifestBuffer( manifestData );
-        manifestBuffer.open( IO_WriteOnly );
-        KoXmlWriter* manifestWriter = new KoXmlWriter( &manifestBuffer );
-        manifestWriter->startDocument( "manifest:manifest" );
-        manifestWriter->startElement( "manifest:manifest" );
-        manifestWriter->addAttribute( "xmlns:manifest", KoXmlNS::manifest );
-        manifestWriter->addManifestEntry( "/", mimeType );
+        KoOasisStore oasisStore( store );
+        KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
 
         if ( !saveOasis( store, manifestWriter ) )
         {
@@ -998,23 +991,10 @@ bool KoDocument::saveNativeFormat( const QString & file )
             return false;
         }
 
-
         // Write out manifest file
-        manifestWriter->endElement();
-        manifestWriter->endDocument();
-        delete manifestWriter;
-        if ( store->open( "META-INF/manifest.xml" ) )
+        if ( !oasisStore.closeManifestWriter() )
         {
-            Q_LONG ret = store->write( manifestData );
-            if ( ret != (Q_LONG)manifestData.size() || !store->close() ) {
-                d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?" ).arg( "META-INF/manifest.xml" );
-                delete store;
-                return false;
-            }
-        }
-        else
-        {
-            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "META-INF/manifest.xml" );
+            d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?" ).arg( "META-INF/manifest.xml" );
             delete store;
             return false;
         }
@@ -1583,8 +1563,9 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, QDomDo
         kdError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
-        d->lastErrorMessage = i18n( "Parsing error in the main document at line %1, column %2\nError message: %3" )
-                              .arg( errorLine ).arg( errorColumn ).arg( i18n ( "QXml", errorMsg.utf8() ) );
+        d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4" )
+                              .arg( filename ).arg( errorLine ).arg( errorColumn )
+                              .arg( i18n ( "QXml", errorMsg.utf8() ) );
         store->close();
         return false;
     }

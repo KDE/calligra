@@ -110,7 +110,7 @@ void KoVariableSettings::setModificationDate( const QDateTime & _date)
     d->m_modificationDate = _date;
 }
 
-void KoVariableSettings::saveOasis( KoXmlWriter &settingsWriter )
+void KoVariableSettings::saveOasis( KoXmlWriter &settingsWriter ) const
 {
     settingsWriter.startElement("config:config-item-set");
     settingsWriter.addAttribute("config:name", "configuration-variable-settings");
@@ -577,13 +577,15 @@ void KoVariableCollection::setVariableSelected(KoVariable * var)
     m_varSelected=var;
 }
 
-QPtrList<KAction> KoVariableCollection::popupActionList()
+// TODO change to QValueList<KAction *>, but only once plugActionList takes that
+QPtrList<KAction> KoVariableCollection::popupActionList() const
 {
     QPtrList<KAction> listAction;
     // Insert list of actions that change the subtype
-    QStringList list = m_varSelected->subTypeText();
-    QStringList::ConstIterator it = list.begin();
-    for ( int i = 0; it != list.end() ; ++it, ++i )
+    const QStringList subTypeList = m_varSelected->subTypeList();
+    kdDebug() << k_funcinfo << "current subtype=" << m_varSelected->subType() << endl;
+    QStringList::ConstIterator it = subTypeList.begin();
+    for ( int i = 0; it != subTypeList.end() ; ++it, ++i )
     {
         if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
         {
@@ -601,7 +603,7 @@ QPtrList<KAction> KoVariableCollection::popupActionList()
     KoVariableFormat* format = m_varSelected->variableFormat();
     QString currentFormat = format->formatProperties();
 
-    list = format->formatPropsList();
+    const QStringList list = format->formatPropsList();
     it = list.begin();
     for ( int i = 0; it != list.end() ; ++it, ++i )
     {
@@ -870,7 +872,7 @@ KoVariable::~KoVariable()
     //delete d;
 }
 
-QStringList KoVariable::subTypeText()
+QStringList KoVariable::subTypeList()
 {
     return QStringList();
 }
@@ -1348,7 +1350,7 @@ QStringList KoDateVariable::actionTexts()
     return lst;
 }
 
-QStringList KoDateVariable::subTypeText()
+QStringList KoDateVariable::subTypeList()
 {
     return KoDateVariable::actionTexts();
 }
@@ -1561,7 +1563,7 @@ QStringList KoTimeVariable::actionTexts()
     return lst;
 }
 
-QStringList KoTimeVariable::subTypeText()
+QStringList KoTimeVariable::subTypeList()
 {
     return KoTimeVariable::actionTexts();
 }
@@ -1919,7 +1921,7 @@ QStringList KoPageVariable::actionTexts()
     return lst;
 }
 
-QStringList KoPageVariable::subTypeText()
+QStringList KoPageVariable::subTypeList()
 {
     return KoPageVariable::actionTexts();
 }
@@ -2377,7 +2379,7 @@ KoFieldVariable::FieldSubType KoFieldVariable::fieldSubType(short int menuNumber
     return v;
 }
 
-QStringList KoFieldVariable::subTypeText()
+QStringList KoFieldVariable::subTypeList()
 {
     return KoFieldVariable::actionTexts();
 }
@@ -2639,7 +2641,7 @@ void KoStatisticVariable::setVariableSubType( short int subtype )
     setVariableFormat(fc->format("NUMBER") );
 }
 
-QStringList KoStatisticVariable::subTypeText()
+QStringList KoStatisticVariable::subTypeList()
 {
     return KoStatisticVariable::actionTexts();
 }

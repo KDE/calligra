@@ -34,8 +34,15 @@ void KoOasisContext::fillStyleStack( const QDomElement& object, const char* nsUR
 {
     // find all styles associated with an object and push them on the stack
     // OoImpressImport has more tests here, but I don't think they're relevant to OoWriterImport
-    if ( object.hasAttributeNS( nsURI, attrName ) )
-        addStyles( m_styles.styles()[object.attributeNS( nsURI, attrName, QString::null )] );
+    // ### TODO check the above comment, now that things are in kotext...
+    if ( object.hasAttributeNS( nsURI, attrName ) ) {
+        const QString styleName = object.attributeNS( nsURI, attrName, QString::null );
+        const QDomElement* style = m_styles.styles()[styleName];
+        if ( style )
+            addStyles( style );
+        else
+            kdWarning(32500) << "fillStyleStack: no style named " << styleName << " found." << endl;
+    }
 }
 
 void KoOasisContext::addStyles( const QDomElement* style )

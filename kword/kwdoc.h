@@ -24,6 +24,7 @@
 #include <config.h>
 #endif
 
+class QDragObject;
 class KoSavingContext;
 class KoGenStyles;
 class KWDocument;
@@ -63,6 +64,7 @@ class KWTableTemplateCollection;
 class KWFootNoteVariable;
 class DCOPObject;
 class KWLoadingInfo;
+class KoPicture;
 class KoPictureCollection;
 class KWChild;
 
@@ -158,6 +160,31 @@ public:
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store );
     enum {  STYLE_FRAME = 20 };
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+
+    enum SaveFlag { SaveAll, SaveSelected }; // kpresenter will also have SavePage
+
+    /**
+     * Save the whole document, or just the selection, into OASIS format
+     * When saving the selection, also return the data as plain text and/or plain picture,
+     * which are used to insert into the KMultipleDrag drag object.
+     *
+     * @param store the KoStore to save into
+     * @param manifestWriter pointer to a koxmlwriter to add entries to the manifest
+     * @param saveFlag either the whole document, or only the selected text/objects.
+     * @param plainText must be set when saveFlag==SaveSelected.
+     *        It returns the plain text format of the saved data, when available.
+     * @param picture must be set when saveFlag==SaveSelected.
+     *        It returns the selected picture, when exactly one picture was selected.
+     * @param fs the text frameset, which must be set when saveFlag==SaveSelected.
+     */
+    bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
+                    QString* plainText = 0, KoPicture* picture = 0, KWTextFrameSet* fs = 0 );
+
+    /**
+     * Return a drag object with the selected data
+     */
+    QDragObject* dragSelected( QWidget* parent, KWTextFrameSet* fs = 0 );
+
     virtual bool loadXML( QIODevice *, const QDomDocument & dom );
     virtual bool loadChildren( KoStore *_store );
     virtual QDomDocument saveXML();
@@ -855,13 +882,15 @@ protected:
     void loadDefaultTableTemplates();
 
     void loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisContext& context );
-    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
+    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, SaveFlag saveFlag ) const;
     void saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const;
     void loadOasisSettings( const QDomDocument&settingsDoc );
 
     QValueList<KoPictureKey> savePictureList();
 
     void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
+    void saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
+                             KoSavingContext& savingContext, QString* plainText, KoPicture* picture ) const;
 
     void loadOasisIgnoreList( const KoOasisSettings& settings );
 
