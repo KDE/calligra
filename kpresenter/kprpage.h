@@ -91,15 +91,15 @@ public:
     /**
      * take object object from m_objectList
      */
-    void takeObject(KPObject *_obj);
+    int takeObject( KPObject *object );
     /**
      * delete selected objects from m_objectList
      */
     KCommand * deleteSelectedObjects();
 #if 0 //not used 
     void removeObject( int pos);
-    void insertObject(KPObject *_obj,int pos);
 #endif    
+    void insertObject( KPObject *object, int pos );
     void completeLoading( bool _clean, int lastObj );
     /**
      * Create a uniq name for a object.

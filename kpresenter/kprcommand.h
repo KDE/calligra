@@ -284,9 +284,9 @@ public:
 
 protected:
 
-    QPtrList<KPObject> objects;
-    KPresenterDoc *doc;
-    KPGroupObject *grpObj;
+    QPtrList<KPObject> m_groupedObjects;
+    KPGroupObject *m_groupObject;
+    KPresenterDoc *m_doc;
     KPrPage *m_page;
 };
 

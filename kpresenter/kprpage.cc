@@ -325,9 +325,11 @@ void KPrPage::appendObject(KPObject *_obj)
     m_objectList.append(_obj);
 }
 
-void KPrPage::takeObject(KPObject *_obj)
+int KPrPage::takeObject( KPObject *object )
 {
-    m_objectList.take( m_objectList.findRef( _obj ) );
+    int pos = m_objectList.findRef( object );
+    m_objectList.take( pos );
+    return pos;
 }
 
 void KPrPage::replaceObject( KPObject *oldObject, KPObject *newObject )
@@ -343,12 +345,13 @@ void KPrPage::removeObject( int pos)
 {
     m_objectList.remove(pos);
 }
-
-void KPrPage::insertObject(KPObject *_obj,int pos)
-{
-    m_objectList.insert(pos,_obj);
-}
 #endif
+
+void KPrPage::insertObject( KPObject *object, int pos )
+{
+    unifyObjectName( object );
+    m_objectList.insert( pos, object );
+}
 
 KCommand * KPrPage::deleteSelectedObjects()
 {

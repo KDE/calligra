@@ -12,6 +12,10 @@ Fixes:
 - Fixed copy and paste when one pic is in the copied objects
 
 Changes:
+- Group objects: The grouped object is now in the z-order of the upperst
+  object grouped and no longer on the top.
+- Ungroup object: The objects are now in the z-order where the group object 
+  was and no longer on top.
 - If a page is shown more than once during a presentation add the time for 
   the duration instead of showing only the last duration.
 - Use kspell2
