@@ -58,7 +58,7 @@ void DriverPrivate::initInternalProperties()
 	properties["is_file_database"] = QVariant(isFileDriver, 1);
 	propertyCaptions["is_file_database"] = i18n("File-based database driver");
 	if (isFileDriver) {
-		properties["file_database_mimetype"] = fileDBDriverMime;
+		properties["file_database_mimetype"] = fileDBDriverMimeType;
 		propertyCaptions["file_database_mimetype"] = i18n("File-based database's MIME type");
 	}
 	QString str;
@@ -149,8 +149,17 @@ const QPtrList<Connection> Driver::connectionsList() const
 	return clist; 
 }
 
-QString Driver::fileDBDriverMime() const 
-{ return d->fileDBDriverMime; }
+QString Driver::fileDBDriverMimeType() const 
+{ return d->fileDBDriverMimeType; }
+
+QString Driver::defaultFileBasedDriverMimeType()
+{ return QString::fromLatin1("application/x-kexiproject-sqlite3"); }
+
+QString Driver::defaultFileBasedDriverName()
+{
+	DriverManager dm;
+	return dm.lookupByMime(Driver::defaultFileBasedDriverMimeType()).lower();
+}
 
 const KService* Driver::service() const 
 { return d->service; }

@@ -19,6 +19,8 @@
 
 #include "KexiStartupFileDialog.h"
 
+#include <kexidb/driver.h>
+
 #include <qlayout.h>
 #include <qobjectlist.h>
 #include <qpushbutton.h>
@@ -72,7 +74,7 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
 	
 	if (m_mode == KexiStartupFileDialog::Opening 
 		|| m_mode == KexiStartupFileDialog::SavingFileBasedDB) {
-		mime = KMimeType::mimeType("application/x-kexiproject-sqlite");
+		mime = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() );
 		if (mime) {
 			filter += mime->patterns().join(" ") + "|" + mime->comment() + " ("+mime->patterns().join(" ")+")\n";
 			allfilters += mime->patterns().join(" ");

@@ -42,6 +42,9 @@ using namespace KexiDB;
 SQLiteConnectionInternal::SQLiteConnectionInternal()
 	: data(0),errmsg_p(0),res(SQLITE_OK)
 	, temp_st(0x10000) //
+#ifdef SQLITE3
+	, result_name(0)
+#endif
 {
 }
 
@@ -61,8 +64,11 @@ void SQLiteConnectionInternal::storeResult()
 {
 	if (errmsg_p) {
 		errmsg = errmsg_p;
-		sqlite_freemem(errmsg_p);
+		sqlite_free(errmsg_p);
 		errmsg_p = 0;
+#ifdef SQLITE3
+		result_name = sqlite3_errmsg(data);
+#endif
 	}
 }
 
@@ -102,20 +108,30 @@ bool SQLiteConnection::drv_getDatabasesList( QStringList &list )
 	return true;
 }
 
-bool SQLiteConnection::drv_createDatabase( const QString &/*dbName*/ )
+bool SQLiteConnection::drv_createDatabase( const QString &dbName )
 {
+	return drv_useDatabase(dbName);
+#if 0
 	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
 		&d->errmsg_p );
 	d->storeResult();
 	return d->data != 0;
+#endif
 }
 
 bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 {
+#ifdef SQLITE2
 	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
 		&d->errmsg_p );
 	d->storeResult();
 	return d->data != 0;
+#else //SQLITE3
+//TODO: perhaps allow to use sqlite3_open16() as well ?
+	d->res = sqlite3_open( QFile::encodeName( m_data->fileName() ), &d->data );
+	d->storeResult();
+	return d->res == SQLITE_OK;
+#endif
 }
 
 bool SQLiteConnection::drv_closeDatabase()
@@ -180,7 +196,11 @@ int SQLiteConnection::serverResult()
 
 QString SQLiteConnection::serverResultName()
 {
+#ifdef SQLITE2
 	return QString::fromLatin1( sqlite_error_string(d->res) );
+#else //SQLITE3
+	return QString::fromLatin1( d->result_name );
+#endif
 }
 
 void SQLiteConnection::drv_clearServerResult()

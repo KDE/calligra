@@ -120,6 +120,12 @@ TODO: add possibility in cursor: "Operating in-place on data returned by sqlite_
 
 TODO: for import data from native-sqlite databases: use "pragma table_info"
 TODO: maybe also use "pragma table_info" for sanity checking, or more in kexidb driver??
+TODO: add custom collation using sqlite3_create_collation() for:
+  - non-latin1 characters
+  - non-latin1 characters with NOCASE option
+TODO: add option for use ":memory:" special file. 
+  - Allow to use it also e.g. for migration, etc.
+  - Allow to attach it as special portion of db
 </SQLITE>
 
 <RENAME_PROPOSALS>
@@ -318,12 +324,36 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 - remove --password option, add CLI password entering mode
 
 === 2004 LT TODO ===
-KexiDB Drivers
-- use SQLITE3 (later it will be harder to do)
--....
+-improve sql parser
+-improve sql gui designer
+--criteria
+--totals (sum, avg)
+-make forms db aware
+--add record navigator
+--disable non-sqlite drivers (on compile-time)
+-simple docs
 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
+2004-10-09
+Kexi Startup
+- ksqlite2to3 script added for unices. It's used instead of two QProcesses.
+- ksqlite2:  -verbose-dump added for ksqlite2to3
+
+2004-10-06
+3rd Party
+- kexisql migrated to SQLite 3.0.7 (new kexisql3/ directory added);
+  former libkexisql is now libkexisql2 (updated to 2.8.15, by the way)
+KexiDB Drivers
+- "SQLite3" driver introduced. "SQLite" driver is now removed; 
+  use "SQLite2" driver for comaptibility.
+KexiDB
+- static QString Driver::defaultFileBasedDriverMimeType()
+  and static QString Driver::defaultFileBasedDriverName() added,
+	so let's don't compare driver names against "sqlite" string when looking for default.
+Startup
+- sqlite version is now autodetected on startup
+- sqlite2 to sqlite3 format autoconversion added (with progress dialog)
 
 2004-10-04
 - command line options added: --user (-u), --port, 

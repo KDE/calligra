@@ -59,7 +59,9 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 		const KexiDB::Driver::InfoMap driversInfo();
 
 		/*! \return information about driver's named with \a name.
-			The name is case insensitive. */
+			The name is case insensitive. 
+			You can check if driver information is not found calling 
+			Info::name.isEmpty(). */
 		KexiDB::Driver::Info driverInfo(const QString &name);
 
 		/*! \return service information about driver's named with \a name.

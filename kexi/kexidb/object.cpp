@@ -34,13 +34,17 @@ Object::Object()
 	clearError();
 }
 
+#define STORE_PREV_ERR \
+	m_previousServerResultNum = m_previousServerResultNum2; \
+	m_previousServerResultName = m_previousServerResultName2; \
+	m_previousServerResultNum2 = serverResult(); \
+	m_previousServerResultName2 = serverResultName(); \
+	KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " \
+		<< m_previousServerResultName2 <<endl
+
 void Object::setError( int code, const QString &msg )
 {
-	m_previousServerResultNum = m_previousServerResultNum2;
-	m_previousServerResultName = m_previousServerResultName2;
-	m_previousServerResultNum2 = serverResult();
-	m_previousServerResultName2 = serverResultName();
-	KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " << m_previousServerResultName2 <<endl;
+	STORE_PREV_ERR;
 
 	m_errno=code;
 	if (m_errno==ERR_OTHER && msg.isEmpty())
@@ -52,11 +56,7 @@ void Object::setError( int code, const QString &msg )
 
 void Object::setError( const QString &msg )
 {
-	m_previousServerResultNum = m_previousServerResultNum2;
-	m_previousServerResultName = m_previousServerResultName2;
-	m_previousServerResultNum2 = serverResult();
-	m_previousServerResultName2 = serverResultName();
-	KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " << m_previousServerResultName2 <<endl;
+	STORE_PREV_ERR;
 
 	m_errno=ERR_OTHER;
 	m_errMsg = msg;
@@ -65,11 +65,7 @@ void Object::setError( const QString &msg )
 
 void Object::setError( KexiDB::Object *obj )
 {
-	m_previousServerResultNum = m_previousServerResultNum2;
-	m_previousServerResultName = m_previousServerResultName2;
-	m_previousServerResultNum2 = serverResult();
-	m_previousServerResultName2 = serverResultName();
-	KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " << m_previousServerResultName2 <<endl;
+	STORE_PREV_ERR;
 
 	if (obj) {
 		m_errno = obj->errorNum();

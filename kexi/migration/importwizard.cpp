@@ -187,7 +187,8 @@ bool importWizard::checkUserInput()
         problem = true;
         finishtxt = i18n("Source type was not PostgreSQL Database.");
     }
-    if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text() == "") && dstTypeCombo->currentText() == "SQLite")
+    if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text() == "") 
+		&& dstTypeCombo->currentText().lower() == KexiDB::Driver::defaultFileBasedDriverName())
     {
         problem = true;
         finishtxt = finishtxt + i18n("\nNo new database name was entered.");
@@ -235,12 +236,12 @@ void importWizard::accept()
         dbname = dstNewDBName->text();
         
     }
-    else if (dstTypeCombo->currentText() == "SQLite") 
+    else if (dstTypeCombo->currentText().lower() == KexiDB::Driver::defaultFileBasedDriverName()) 
     {
         //file-based project
         cdata = new KexiDB::ConnectionData;
         cdata->connName = dstNewDBName->text();
-        cdata->driverName = "sqlite";
+        cdata->driverName = KexiDB::Driver::defaultFileBasedDriverName();
         cdata->setFileName( dstConn->m_fileDlg->currentFileName() );
         dbname = dstConn->m_fileDlg->currentFileName();
     }

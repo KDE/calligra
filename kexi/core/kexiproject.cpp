@@ -220,8 +220,10 @@ KexiProject::initProject()
 //	emit dbAvailable();
 	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
 	
-	if (!Kexi::partManager().checkProject(m_connection))
+	if (!Kexi::partManager().checkProject(m_connection)) {
+		setError(&Kexi::partManager());
 		return false;
+	}
 
 	//TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
 	KexiDB::RowData data;
@@ -257,7 +259,7 @@ KexiProject::items(KexiPart::Info *i)
 	//retrieve:
 	KexiDB::Cursor *cursor = m_connection->executeQuery(
 		"SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = " 
-		+ QString::number(i->projectPartID()), KexiDB::Cursor::Buffered);
+		+ QString::number(i->projectPartID()));//, KexiDB::Cursor::Buffered);
 	kdDebug() << "KexiProject::items(): cursor handle is:" << cursor << endl;
 	if(!cursor)
 		return 0;

@@ -116,7 +116,7 @@ public:
 	{
 		result = 0;
 		QString none, iconname;
-		iconname = KMimeType::mimeType("application/x-kexiproject-sqlite")->icon(none,0);
+		iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
 		kexi_sqlite_icon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
 		iconname = KMimeType::mimeType("application/x-kexiproject-shortcut")->icon(none,0);
 		kexi_shortcut_icon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );

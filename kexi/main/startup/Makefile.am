@@ -9,7 +9,7 @@ libkeximainstartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.
 	KexiConnSelector.cpp KexiProjectSelector.cpp \
 	KexiStartupDialog.cpp \
 	KexiXMLStorage.cpp KexiStartupFileDialog.cpp KexiNewProjectWizard.cpp \
-	KexiStartup.cpp
+	KexiStartup.cpp KexiStartup_p.cpp
 
 libkeximainstartup_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkeximainstartup_la_LIBADD =

@@ -103,7 +103,7 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(
 {
 	d->showProjectNameColumn = showProjectNameColumn;
 	d->showConnectionColumns = showConnectionColumns;
-	QString none, iconname = KMimeType::mimeType("application/x-kexiproject-sqlite")->icon(none,0);
+	QString none, iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
 	d->fileicon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
 	setIcon( d->fileicon );
 	d->dbicon = SmallIcon("db",16);

@@ -54,13 +54,34 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 			, records_in_buf(0)
 			, buffering_completed(false)
 			, at_buffer(false)*/
+//#ifdef SQLITE3
+//			, rowDataReadyToFetch(false)
+//#endif
 		{
 		}
 
+/*#ifdef SQLITE3
+		void fetchRowDataIfNeeded()
+		{
+			if (!rowDataReadyToFetch)
+				return true;
+			rowDataReadyToFetch = false;
+			m_fieldCount = sqlite3_data_count(data);
+			for (int i=0; i<m_fieldCount; i++) {
+				
+			}
+		}
+#endif*/
+
 		QCString st;
 		//for sqlite:
-		sqlite *data; //! taken from SQLiteConnection
-		sqlite_vm *vm;
+		sqlite_struct *data; //! taken from SQLiteConnection
+#ifdef SQLITE2
+		sqlite_vm *prepared_st_handle; //vm
+#else //SQLITE3
+		sqlite3_stmt *prepared_st_handle;
+#endif
+		
 		char *utail;
 		
 //		QString errmsg; //<! server-specific message of last operation
@@ -90,6 +111,48 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 		
 		uint cols_pointers_mem_size; //! size of record's array of pointers to values
 		QPtrVector<const char*> records;//! buffer data
+//#ifdef SQLITE3
+//		bool rowDataReadyToFetch : 1;
+//#endif
+
+#ifdef SQLITE3
+	inline QVariant getValue(KexiDB::Field *f, int i)
+	{
+		int type = sqlite3_column_type(prepared_st_handle, i);
+		if (type==SQLITE_NULL) {
+			return QVariant();
+		}
+		else if (!f || type==SQLITE_TEXT) {
+//TODO: support for UTF-16
+			if (!f || f->isTextType())
+				return QString::fromUtf8( (const char*)sqlite3_column_text(prepared_st_handle, i) );
+			else
+				return QVariant(); //TODO
+		}
+		else if (type==SQLITE_INTEGER) {
+			if (f->isIntegerType())
+				return QVariant( sqlite3_column_int(prepared_st_handle, i) );
+			else
+				return QVariant(); //TODO
+		}
+		else if (type==SQLITE_FLOAT) {
+			if (f->isFPNumericType())
+				return QVariant( sqlite3_column_double(prepared_st_handle, i) );
+			else
+				return QVariant(); //TODO
+		}
+		else if (type==SQLITE_BLOB) {
+			if (f->type()==KexiDB::Field::BLOB) {
+				QByteArray ba;
+				ba.setRawData((const char*)sqlite3_column_blob(prepared_st_handle, i),
+					sqlite3_column_bytes(prepared_st_handle, i));
+				return ba;
+			} else
+				return QVariant(); //TODO
+		}
+		return QVariant();
+	}
+#endif //SQLITE3
 };
 
 
@@ -118,19 +181,30 @@ bool SQLiteCursor::drv_open(const QString& statement)
 {
 //	d->st.resize(statement.length()*2);
 	//TODO: decode
-	d->st = statement.local8Bit();
+//	d->st = statement.local8Bit();
 //	d->st = m_conn->driver()->escapeString( statement.local8Bit() );
 
+#ifdef SQLITE2
+	d->st = statement.local8Bit();
 	d->res = sqlite_compile(
 		d->data,
 		d->st.data(),
 		(const char**)&d->utail,
-		&d->vm,
+		&d->prepared_st_handle,
 		&d->errmsg_p );
 	d->storeResult();
-	if (d->res!=SQLITE_OK) {
+#else //SQLITE3
+	d->st = statement.utf8();
+	d->res = sqlite3_prepare(
+		d->data,            /* Database handle */
+		d->st.data(),       /* SQL statement, UTF-8 encoded */
+		d->st.length(),             /* Length of zSql in bytes. */
+		&d->prepared_st_handle,  /* OUT: Statement handle */
+		0/*const char **pzTail*/     /* OUT: Pointer to unused portion of zSql */
+	);
+#endif
+	if (d->res!=SQLITE_OK)
 		return false;
-	}
 //cursor is automatically @ first record
 //	m_beforeFirst = true;
 
@@ -155,7 +229,11 @@ bool SQLiteCursor::drv_open(const QString& statement)
 
 bool SQLiteCursor::drv_close()
 {
-	d->res = sqlite_finalize( d->vm, &d->errmsg_p );
+#ifdef SQLITE2
+	d->res = sqlite_finalize( d->prepared_st_handle, &d->errmsg_p );
+#else //SQLITE3
+	d->res = sqlite3_finalize( d->prepared_st_handle );
+#endif
 	d->storeResult();
 	if (d->res!=SQLITE_OK) {
 		return false;
@@ -166,17 +244,34 @@ bool SQLiteCursor::drv_close()
 void SQLiteCursor::drv_getNextRecord()
 {
 	static int _fieldCount;
-	if ((d->res = sqlite_step(
-	 d->vm,
+#ifdef SQLITE2
+	d->res = sqlite_step(
+	 d->prepared_st_handle,
 	 &_fieldCount,
 	 &d->curr_coldata,
-	 &d->curr_colname))==SQLITE_ROW) {
+	 &d->curr_colname);
+#else //SQLITE3
+	d->res = sqlite3_step( d->prepared_st_handle );
+#endif
+	if (d->res == SQLITE_ROW) {
 		m_result = FetchOK;
+#ifdef SQLITE2
 		m_fieldCount = (uint)_fieldCount;
-	} else if (d->res==SQLITE_DONE)
-		m_result = FetchEnd;
-	else
-		m_result = FetchError;
+#else
+		m_fieldCount = sqlite3_data_count(d->prepared_st_handle);
+//#else //for SQLITE3 data fetching is delayed. Now we even do not take field count information
+//      // -- just set a flag that we've a data not fetched but available
+//		d->rowDataReadyToFetch = true;
+#endif
+	} else {
+//#ifdef SQLITE3
+//		d->rowDataReadyToFetch = false;
+//#endif
+		if (d->res==SQLITE_DONE)
+			m_result = FetchEnd;
+		else
+			m_result = FetchError;
+	}
 	
 	//debug
 /*
@@ -222,121 +317,6 @@ void SQLiteCursor::drv_bufferMovePointerTo(Q_LLONG at)
 {
 	d->curr_coldata = d->records.at(at);
 }
-
-
-#if 0 //old impl.
-bool SQLiteCursor::drv_getNextRecord()
-{
-	m_data->res = -1;
-
-	if ((m_options & Buffered) && (m_at < (m_records_in_buf-1)) ) {
-		//this cursor is buffered:
-		//-we have next record already buffered:
-		if (m_at_buffer) {//we already have got a pointer to buffer
-			m_data->curr_coldata++; //just move to next record in the buffer
-		} else {//we have no pointer
-			//compute a place in the buffer that contain next record's data
-			m_data->curr_coldata = m_records.at(m_at+1);
-			m_at_buffer = true; //now current record is stored in the buffer
-		}
-	}
-	else {//we are after last retrieved record: we need to physically fetch a record:
-		if (!m_readAhead) {//we have no record that was read ahead
-			if (!m_buffering_completed) {
-				//for buffered cursor: only retrieve record 
-				//if we are not at after last buffer's item when buffer is fully filled
-				KexiDBDrvDbg<<"==== sqlite_step ===="<<endl;
-				m_data->res = sqlite_step(
-					m_data->vm,
-//					&m_data->curr_cols,
-					&m_fieldCount,
-					&m_data->curr_coldata,
-					&m_data->curr_colname);
-			}
-			if (m_data->res!=SQLITE_ROW) {//there is no record
-				if (m_options & Buffered) {
-					m_buffering_completed = true; //no more records to buffer
-				}
-				KexiDBDrvDbg<<"res!=SQLITE_ROW ********"<<endl;
-				m_validRecord = false;
-				m_afterLast = true;
-				m_at = -1;
-				if (m_data->res==SQLITE_DONE) {
-					return false;
-				}
-				//SQLITE_ERROR:
-				setError(ERR_CURSOR_RECORD_FETCHING, I18N_NOOP("Cannot fetch a record with a cursor"));
-				return false;
-			}
-			
-			//we have a record
-			if (m_data->curr_coldata) {
-				for (int i=0;i<m_fieldCount;i++) {
-					KexiDBDrvDbg<<"col."<< i<<": "<< m_data->curr_colname[i]<<" "<< m_data->curr_colname[m_fieldCount+i]
-					<< " = " << (m_data->curr_coldata[i] ? QString::fromLocal8Bit(m_data->curr_coldata[i]) : "(NULL)") <<endl;
-				}
-			}
-			if (m_options & Buffered) {
-				//store this record's values in the buffer
-				if (!m_cols_pointers_mem_size)
-					m_cols_pointers_mem_size = m_fieldCount * sizeof(char*);
-//						m_data->cols_pointers_mem_size = m_data->curr_cols * sizeof(char*);
-				const char **record = (const char**)malloc(m_cols_pointers_mem_size);
-				const char **src_col = m_data->curr_coldata;
-				const char **dest_col = record;
-//					for (int i=0; i<m_data->curr_cols; i++,src_col++,dest_col++) {
-				for (int i=0; i<m_fieldCount; i++,src_col++,dest_col++) {
-					*dest_col = strdup(*src_col);
-				}
-				m_records.insert(m_records_in_buf++,record);
-			}
-		}
-		else //we have a record that was read ahead: eat this
-			m_readAhead = false;
-	}
-
-	m_at++;
-
-	
-//	if (m_data->curr_colname && m_data->curr_coldata)
-//		for (int i=0;i<m_data->curr_cols;i++) {
-//			KexiDBDrvDbg<<i<<": "<< m_data->curr_colname[i]<<" == "<< m_data->curr_coldata[i]<<endl;
-//		}
-	KexiDBDrvDbg<<"m_at == "<<(long)m_at<<endl;
-
-	
-	m_validRecord = true;
-	return true;
-}
-
-bool SQLiteCursor::drv_getPrevRecord()
-{
-#ifndef Q_WS_WIN
-#warning todo
-#endif
-
-		
-	if (m_options & Buffered) {
-		if ((m_at <= 0) || (m_records_in_buf <= 0)) {
-			m_at=-1;
-			m_beforeFirst = true;
-			return false;
-		}
-
-		m_at--;
-		if (m_at_buffer) {//we already have got a pointer to buffer
-			m_data->curr_coldata--; //just move to prev record in the buffer
-		} else {//we have no pointer
-			//compute a place in the buffer that contain next record's data
-			m_data->curr_coldata = m_records.at(m_at);
-			m_at_buffer = true; //now current record is stored in the buffer
-		}
-		return true;
-	}
-//		setError( NOT_SUPPORTED,  )
-	return false;
-}
-#endif
 
 void SQLiteCursor::drv_clearBuffer()
 {
@@ -394,19 +374,26 @@ const char ** SQLiteCursor::rowData() const
 
 void SQLiteCursor::storeCurrentRow(RowData &data) const
 {
+#ifdef SQLITE2
 	const char **col = d->curr_coldata;
+#endif
 	data.reserve(m_fieldCount);
-	if (!m_fieldsExpanded) {//simply version: without types
-		for( uint i=0; i<m_fieldCount; i++, col++ ) {
+	if (!m_fieldsExpanded) {//simple version: without types
+		for( uint i=0; i<m_fieldCount; i++ ) {
+#ifdef SQLITE2
 			data[i] = QVariant( *col );
+			col++;
+#else //SQLITE3
+			data[i] = QString::fromUtf8( (const char*)sqlite3_column_text(d->prepared_st_handle, i) );
+#endif
 		}
 		return;
 	}
 
 	const uint fieldsExpandedCount = m_fieldsExpanded->count();
-	for( uint i=0, j=0; i<m_fieldCount; i++, col++, j++ ) {
+	for( uint i=0, j=0; i<m_fieldCount; i++, j++ ) {
 //		while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isColumnVisible(j))
-			//j++;
+//			j++;
 		while (j < fieldsExpandedCount && !m_fieldsExpanded->at(j)->visible)
 			j++;
 		if (j >= fieldsExpandedCount) {
@@ -415,16 +402,17 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 		}
 //		KexiDB::Field *f = m_fieldsExpanded->at(j);
 		KexiDB::Field *f = m_fieldsExpanded->at(j)->field;
-		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0) << endl;
+//		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0) << endl;
 
+#ifdef SQLITE2
 		if (!*col)
 			data[i] = QVariant();
 		else if (f->isTextType())
-#ifdef SQLITE_UTF8
+# ifdef SQLITE_UTF8
 			data[i] = QString::fromUtf8( *col );
-#else
+# else
 			data[i] = QVariant( *col ); //only latin1
-#endif
+# endif
 		else if (f->isIntegerType())
 			data[i] = QVariant( QCString(*col).toInt() );
 		else if (f->isFPNumericType())
@@ -433,6 +421,43 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 			data[i] = QVariant( QCString(*col).toInt()==0, 0 );
 		else
 			data[i] = QVariant( *col ); //default
+
+		col++;
+#else //SQLITE3
+		data[i] = d->getValue(f, i);
+/*		int type = sqlite3_column_type(d->prepared_st_handle, i);
+		if (type==SQLITE_NULL) {
+			data[i] = QVariant();
+		}
+		else if (type==SQLITE_INTEGER) {
+			if (f->isIntegerType())
+				data[i] = QVariant( sqlite3_column_int(d->prepared_st_handle, i) );
+			else
+				data[i] = QVariant(); //TODO
+		}
+		else if (type==SQLITE_FLOAT) {
+			if (f->isFPNumericType())
+				data[i] = QVariant( sqlite3_column_double(d->prepared_st_handle, i) );
+			else
+				data[i] = QVariant(); //TODO
+		}
+		else if (type==SQLITE_TEXT) {
+//TODO: support for UTF-16
+			if (f->isTextType())
+				data[i] = QString::fromUtf8( (const char*)sqlite3_column_text(d->prepared_st_handle, i) );
+			else
+				data[i] = QVariant(); //TODO
+		}
+		else if (type==SQLITE_BLOB) {
+			if (f->type()==KexiDB::Field::BLOB) {
+				QByteArray ba;
+				ba.setRawData((const char*)sqlite3_column_blob(d->prepared_st_handle, i),
+					sqlite3_column_bytes(d->prepared_st_handle, i));
+				data[i] = ba;
+			} else
+				data[i] = QVariant(); //TODO
+		}*/
+#endif
 	}
 }
 
@@ -443,6 +468,7 @@ QVariant SQLiteCursor::value(uint i)
 //TODO: allow disable range checking! - performance reasons
 //	const KexiDB::Field *f = m_query ? m_query->field(i) : 0;
 	KexiDB::Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
+#ifdef SQLITE2
 	//from most to least frequently used types:
 	if (!f || f->isTextType())
 		return QVariant( d->curr_coldata[i] );
@@ -452,6 +478,9 @@ QVariant SQLiteCursor::value(uint i)
 		return QVariant( QCString(d->curr_coldata[i]).toDouble() );
 
 	return QVariant( d->curr_coldata[i] ); //default
+#else
+	return d->getValue(f, i);
+#endif
 }
 
 /*! Stores string value taken from field number \a i to \a str.
@@ -471,7 +500,11 @@ int SQLiteCursor::serverResult()
 
 QString SQLiteCursor::serverResultName()
 {
+#ifdef SQLITE2
 	return QString::fromLatin1( sqlite_error_string(d->res) );
+#else //SQLITE3
+	return QString::fromLatin1( d->result_name );
+#endif
 }
 
 QString SQLiteCursor::serverErrorMsg()

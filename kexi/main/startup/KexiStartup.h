@@ -37,31 +37,43 @@ namespace KexiDB {
 class KEXIMAIN_EXPORT KexiStartupHandler 
 	: public QObject, public KexiStartupData, public Kexi::ObjectStatus
 {
-	public:
+public:
 	
-		KexiStartupHandler();
-		virtual ~KexiStartupHandler();
+	KexiStartupHandler();
+	virtual ~KexiStartupHandler();
 
-		virtual bool init(int argc, char **argv);
-		
-		/*! Used for opening existing projects. 
-		 Detects project file type by mime type and returns project data, if it can be detected,
-		 otherwise - NULL. \a parent is passed as parent for potential error message boxes.
-		 Also uses \a cdata connection data for server-based projects.
-		 cdata.driverName is adjusted, if a file-based project has been detected.
-		*/
-		static KexiProjectData* detectProjectData( 
-			KexiDB::ConnectionData& cdata, const QString &dbname, QWidget *parent);
+	virtual bool init(int argc, char **argv);
+	
+#if 0
+	/*! Used for opening existing projects. 
+	 Detects project file type by mime type and returns project data, if it can be detected,
+	 otherwise - NULL. \a parent is passed as parent for potential error message boxes.
+	 Also uses \a cdata connection data for server-based projects.
+	 cdata.driverName is adjusted, if a file-based project has been detected.
+	*/
+	static KexiProjectData* detectProjectData( 
+		KexiDB::ConnectionData& cdata, const QString &dbname, QWidget *parent);
+#endif
 
-		/*! Allows user to select a project with KexiProjectSelectorDialog.
-			\return selected project's data or NULL if dialog was cancelled.
-		*/
-		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, QWidget *parent = 0);
+	/*! Used for opening existing file-based projects. 
+	 Detects project file type by mime type and returns driver name suitable for it
+	 -- if it can be detected, otherwise - NULL. 
+	 \a parent is passed as a parent for potential error message boxes.
+	 \a driverName is a preferred driver name. For 
+	 cdata.driverName is adjusted, if a file-based project has been detected.
+	*/
+	static QString detectDriverForFile( const QString& driverName, 
+		const QString &dbFileName, QWidget *parent = 0 );
 
-	protected:
-		bool getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name);
+	/*! Allows user to select a project with KexiProjectSelectorDialog.
+		\return selected project's data or NULL if dialog was cancelled.
+	*/
+	KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, QWidget *parent = 0);
 
-		KexiStartupHandlerPrivate *d;
+protected:
+	bool getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name);
+
+	KexiStartupHandlerPrivate *d;
 };
 
 namespace Kexi

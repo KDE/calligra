@@ -197,13 +197,19 @@ Manager::info(const QCString &mime)
 bool
 Manager::checkProject(KexiDB::Connection *conn)
 {
-//TODO: catch errors!
-	if(!conn->isDatabaseUsed())
-		return false;
+//	QString errmsg = i18n("Invalid project contents.");
 
-	KexiDB::Cursor *cursor = conn->executeQuery("SELECT * FROM kexi__parts", KexiDB::Cursor::Buffered);
-	if(!cursor)
+//TODO: catch errors!
+	if(!conn->isDatabaseUsed()) {
+		setError(conn);
 		return false;
+	}
+
+	KexiDB::Cursor *cursor = conn->executeQuery("SELECT * FROM kexi__parts");//, KexiDB::Cursor::Buffered);
+	if(!cursor) {
+		setError(conn);
+		return false;
+	}
 
 	int id=0;
 //	QStringList parts_found;

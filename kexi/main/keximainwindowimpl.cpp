@@ -1075,11 +1075,10 @@ KexiMainWindowImpl::queryClose()
 {
 //	storeSettings();
 	const tristate res = closeProject();
-	if (~res) {
-		//todo: error message
-		return true;
-	}
-	if (! ~res)
+	if (~res)
+		return false;
+	
+	if (res)
 		storeSettings();
 
 	return ! ~res;
@@ -1514,7 +1513,7 @@ KexiMainWindowImpl::createBlankProject()
 		//file-based project
 		KexiDB::ConnectionData cdata;
 		cdata.connName = wiz.projectCaption();
-		cdata.driverName = "sqlite";
+		cdata.driverName = KexiDB::Driver::defaultFileBasedDriverName();
 		cdata.setFileName( wiz.projectDBName() );
 		new_data = new KexiProjectData( cdata, wiz.projectDBName(), wiz.projectCaption() );
 	}
@@ -1632,7 +1631,10 @@ KexiMainWindowImpl::slotProjectOpen()
 			kdDebug() << "Project File: " << selFile << endl;
 			KexiDB::ConnectionData cdata;
 			cdata.setFileName( selFile );
-			projectData = KexiStartupHandler::detectProjectData( cdata, selFile, this );
+			cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName, selFile, this );
+			if (cdata.driverName.isEmpty())
+				return;
+			projectData = new KexiProjectData(cdata, selFile);
 		}
 	}
 
@@ -2034,7 +2036,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 
 	if (remove_on_closing) {
 		//we won't save this object, and it was never saved -remove it
-		if (!removeObject( dlg->partItem(), false )) {
+		if (!removeObject( dlg->partItem(), true )) {
 			//msg?
 			//TODO: ask if we'd continue and return true/false
 			d->insideCloseDialog = false;

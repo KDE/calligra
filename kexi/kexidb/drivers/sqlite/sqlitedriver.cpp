@@ -25,6 +25,7 @@
 #include "sqlite.h"
 #include "sqlitedriver.h"
 #include "sqliteconnection.h"
+#include "sqliteconnection_p.h"
 
 #include <qfile.h>
 #include <qdir.h>
@@ -32,11 +33,13 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-//K_EXPORT_COMPONENT_FACTORY(kexidb_sqlitedriver, KGenericFactory<KexiDB::SQLiteDriver>( "kexidb_sqlitedriver" ));
-
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite, "sqlite" );
+#ifdef SQLITE2
+KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite2, "sqlite2" );
+#else
+KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite3, "sqlite3" );
+#endif
 
 //! driver specific private data
 class KexiDB::SQLiteDriverPrivate 
@@ -65,7 +68,12 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 
 	//predefined properties
 	d->properties["client_library_version"] = sqlite_libversion();
-	d->properties["default_server_encoding"] = sqlite_libencoding();
+	d->properties["default_server_encoding"] = 
+#ifdef SQLITE2
+		sqlite_libencoding();
+#else //SQLITE3
+		"UTF8"; //OK?
+#endif
 
 	d->typeNames[Field::Byte]="Byte";
 	d->typeNames[Field::ShortInteger]="ShortInteger";

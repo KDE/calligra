@@ -120,7 +120,7 @@ class DriverPrivate
 		/*! Name of MIME type of files handled by this driver 
 		 if it is a file-based database's driver 
 		 (equal X-Kexi-FileDBDriverMime service property) */
-		QString fileDBDriverMime;
+		QString fileDBDriverMimeType;
 
 		/*! Info about the driver as a service. */
 		KService *service;

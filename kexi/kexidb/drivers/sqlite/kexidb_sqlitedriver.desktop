@@ -1,10 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
+Hidden=true
 Name=SQLite
 Name[sv]=Sqlite
 Name[xx]=xxSQLitexx
 Comment=SQLite is default Kexi embedded SQL engine
-Comment[bg]=SQLite е малка и бърза СУБД, която е вградена в Kexi.
+Comment[bg]=SQLite е малка и бърза СУБД, която е вградена в Kexi
 Comment[ca]=SQLite és el motor SQL encastat i per defecte de Kexi
 Comment[cy]=Y peiriant SQL mewnadeiledig rhagosod Kexi yw SQLite
 Comment[da]=SQLite er en standard Kexi-indlejret SQL-motor

@@ -924,9 +924,8 @@ FormManager::editConnections()
 	if(!activeForm())
 		return;
 
-	ConnectionDialog *dialog = new ConnectionDialog(activeForm()->widget()->topLevelWidget());
-	dialog->exec(activeForm());
-	delete dialog;
+	ConnectionDialog dialog(activeForm()->widget()->topLevelWidget());
+	dialog.exec(activeForm());
 }
 
 void
@@ -1082,6 +1081,7 @@ FormManager::deleteWidgetLaterTimeout()
 FormManager::~FormManager()
 {
 	delete m_popup;
+	delete m_connection;
 }
 
 #include "formmanager.moc"

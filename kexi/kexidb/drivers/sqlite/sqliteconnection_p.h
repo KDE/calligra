@@ -22,6 +22,23 @@
 
 #include "sqlite.h"
 
+//for compatibility
+#ifdef _SQLITE3_H_
+# define SQLITE3
+  typedef sqlite3 sqlite_struct;
+# define sqlite_free sqlite3_free
+# define sqlite_close sqlite3_close
+# define sqlite_exec sqlite3_exec
+# define sqlite_last_insert_rowid sqlite3_last_insert_rowid
+# define sqlite_error_string sqlite3_last_insert_row_id
+# define sqlite_libversion sqlite3_libversion
+# define sqlite_libencoding sqlite3_libencoding
+#else
+# define SQLITE2
+  typedef struct sqlite sqlite_struct;
+# define sqlite_free sqlite_freemem
+#endif
+
 namespace KexiDB
 {
 
@@ -35,12 +52,15 @@ class SQLiteConnectionInternal
 		//! stores last result's message
 		void storeResult();
 
-		sqlite *data;
+		sqlite_struct *data;
 		QString errmsg; //<! server-specific message of last operation
 		char *errmsg_p; //<! temporary: server-specific message of last operation
 		int res; //<! result code of last operation on server
 
 		QCString temp_st;
+#ifdef SQLITE3
+		const char *result_name;
+#endif
 };
 
 }

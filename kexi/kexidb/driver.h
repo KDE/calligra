@@ -49,9 +49,11 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 	public:
 		/*! Helpful for retrieving info about driver from using 
 		 KexiDB::DriverManager::driversInfo() without loading driver libraries. */
-		typedef struct Info {
+		class Info {
+			public:
+			Info() : fileBased(false) {}
 			QString name, caption, comment, fileDBMimeType;
-			bool fileBased;
+			bool fileBased : 1;
 		};
 		typedef QMap<QString,Info> InfoMap;
 		
@@ -101,7 +103,14 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 (equal X-Kexi-FileDBDriverMime service property)
 		 otherwise returns null string. \sa isFileDriver()
 		*/
-		QString fileDBDriverMime() const;
+		QString fileDBDriverMimeType() const;
+
+		/*! \return default file-based driver mime type 
+		 (typically something like "application/x-kexiproject-sqlite") */
+		static QString defaultFileBasedDriverMimeType();
+
+		/*! \return default file-based driver name (currently, "sqlite3"). */
+		static QString defaultFileBasedDriverName();
 
 		/*! Info about the driver as a service. */
 		const KService* service() const;
@@ -154,7 +163,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 
 		/*! used when we do not have Driver instance yet */
 		static QString defaultSQLTypeName(int id_t);
-		
+
 		/*! \return true if this driver's implementation is valid.
 		 Just few constriants are checked to ensure that driver 
 		 developer didn't forget about something. 

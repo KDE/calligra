@@ -139,7 +139,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 	clearError();
 	KexiDBDbg << "DriverManager::driver(): loading " << name << endl;
 
-	Driver *drv = m_drivers.find(name.latin1());
+	Driver *drv = name.isEmpty() ? 0 : m_drivers.find(name.latin1());
 	if (drv)
 		return drv; //cached
 
@@ -173,7 +173,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 
 //	drv->setName(srv_name.latin1());
 	drv->d->service = ptr; //store info
-	drv->d->fileDBDriverMime = ptr->property("X-Kexi-FileDBDriverMime").toString();
+	drv->d->fileDBDriverMimeType = ptr->property("X-Kexi-FileDBDriverMime").toString();
 	drv->d->initInternalProperties();
 	m_drivers.insert(name.latin1(), drv); //cache it
 	return drv;

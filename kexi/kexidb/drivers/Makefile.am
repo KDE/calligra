@@ -7,5 +7,5 @@ if compile_pgsql_plugin
 pgsql_dir=pqxx
 endif
 
-SUBDIRS =  sqlite $(pgsql_dir) $(mysql_dir)
+SUBDIRS =  sqlite sqlite2 $(pgsql_dir) $(mysql_dir)
 

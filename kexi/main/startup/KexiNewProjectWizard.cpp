@@ -87,7 +87,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	d->lv_types = new KIconView(m_prjtype_sel, "types");
 	QString none;
 	d->lvi_file = new KIconViewItem( d->lv_types, i18n("New project stored in a file"),
-		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType("application/x-kexiproject-sqlite")->icon(none,0), KIcon::Desktop ) );
+		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), KIcon::Desktop ) );
 	d->lvi_server = new KIconViewItem( d->lv_types, i18n("New project stored on a database server"), DesktopIcon("socket") );
 	d->lv_types->setFocus();
 	QString txt_dns = i18n("Don't show me this question again.");

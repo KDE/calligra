@@ -84,7 +84,7 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( const KexiDBConnectionSet& conn_
 	,m_conn_set(&conn_set)
 	,d(new KexiConnSelectorWidgetPrivate())
 {
-	QString none, iconname = KMimeType::mimeType("application/x-kexiproject-sqlite")->icon(none,0);
+	QString none, iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
 	const QPixmap &icon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
 	setIcon( icon );
 	

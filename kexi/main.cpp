@@ -85,9 +85,10 @@ static KCmdLineOptions options[] =
   { "drv", 0, 0 },
   { "dbdriver <name>", I18N_NOOP(
 	"Database driver to be used\n"
-	"for connecting to a database project.\n"
+	"for connecting to a database project\n"
+	"(SQLite by default).\n"
 	"Ignored if a shortcut filename\n"
-	"is provided."), "SQLite" },
+	"is provided."), 0 },
   { "u", 0, 0 },
   { "user <name>", I18N_NOOP(
 	"User name to be used\n"
@@ -123,10 +124,6 @@ static KCmdLineOptions options[] =
   // INSERT YOUR COMMANDLINE OPTIONS HERE
   KCmdLineLastOption
 };
-
-#ifdef Q_WS_WIN //temp. workaround
-# define kdemain main
-#endif
 
 extern "C" int kdemain(int argc, char *argv[])
 {

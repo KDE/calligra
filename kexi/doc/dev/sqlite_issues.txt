@@ -91,3 +91,110 @@ once with information about that column, including the
 column name, data type, whether or not the column can be NULL, 
 and the default value for the column.
 
+
+---------------------------------------------------------------
+OPTIMIZATION:
+
+Re: [sqlite] Questions about sqlite's join translation
+Od:
+D. Richard Hipp <drh-X1OJI8nnyKUAvxtiuMwx3w@public.gmane.org>
+Odpowiedz do:
+sqlite-users-CzDROfG0BjIdnm+yROfE0A@public.gmane.org
+Data:
+sobota 9 pa¼dziernika 2004 02:59:06
+Grupy:
+gmane.comp.db.sqlite.general
+Nawi±zania: 1
+
+Keith Herold wrote:
+> The swiki says that making JOINs into a where clause is more efficient,
+> since sqlite translates the join condition into a where clause. 
+
+When SQLite sees this:
+
+    SELECT * FROM a JOIN b ON a.x=b.y;
+
+It translate it into the following before compiling it:
+
+    SELECT * FROM a, b WHERE a.x=b.y;
+
+Neither form is more efficient that the other.  Both will generate
+identical code.  (There are subtle differences on an LEFT OUTER
+JOIN, but those details can be ignored when you are looking at
+things at a high level, as we are.)
+
+ > It also
+> says that you make queries more effiecient by minimizing the number of
+> rows returned in the FROM clause as far to the left as possible in the
+> join.  Does the latter matter if you are translating everything into a
+> where  clause anyway?
+> 
+
+SQLite implements joins using nested loops with the outer
+loop formed by the first table in the join and the inner loop
+formed by the last table in the join.  So for the example
+above you would have:
+
+    For each row in a:
+      For each row in b such that b.y=a.x:
+        Return the row
+
+If you reverse the order of the tables in the FROM clause like
+this:
+
+    SELECT * FROM b, a WHERE a.x=b.y;
+
+You should get an equivalent result on output, but SQLite will
+implement the query differently.  Specifically it does this:
+
+    For each row in b:
+      For each row in a such that a.x=b.y:
+        Return the row
+
+The trick is that you want to arrange the order of tables so that
+the "such that" clause on the inner loop is able to use an index
+to jump right to the appropriate row instead of having to do a
+full table scan.  Suppose, for example, that you have an index
+on a(x) but not on b(y).  Then if you do this:
+
+    SELECT * FROM a, b WHERE a.x=b.y;
+
+    For each row in a:
+      For each row in b such that b.y=a.x:
+        Return the row
+
+For each row in a, you have to do a full scan of table b.  So
+the time complexity will be O(N^2).  But if you reverse the order
+of the tables in the FROM clause, like this:
+
+    SELECT * FROM b, a WHERE b.y=a.x;
+
+    For each row in b:
+      For each row in a such that a.x=b.y
+        Return the row
+
+No the inner loop is able to use an index to jump directly to the
+rows in a that it needs and does not need to do a full scan of the
+table.  The time complexity drops to O(NlogN).
+
+So the rule should be:  For every table other than the first, make
+sure there is a term in the WHERE clause (or the ON or USING clause
+if that is your preference) that lets the search jump directly to
+the relavant rows in that table based on the results from tables to
+the left.
+
+Other database engines with more complex query optimizers will
+typically attempt to reorder the tables in the FROM clause in order
+to give you the best result.  SQLite is more simple-minded - it
+codes whatever you tell it to code.
+
+Before you ask, I'll point out that it makes no different whether
+you say "a.x=b.y" or "b.y=a.x".  They are equivalent.  All of the
+following generate the same code:
+
+      ON a.x=b.y
+      ON b.y=a.x
+      WHERE a.x=b.y
+      WHERE b.y=a.x
+---------------------------------------------------------------
+
