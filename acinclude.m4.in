@@ -1280,9 +1280,15 @@ AC_DEFUN(AM_KDE_WITH_NLS,
     if test "$USE_NLS" = "yes"; then
       AC_DEFINE(ENABLE_NLS)
 
-      AM_PATH_PROG_WITH_TEST_KDE(MSGFMT, msgfmt,
-	[test -z "`$ac_dir/$ac_word -h 2>&1 | grep 'dv '`"], msgfmt)
+      AM_PATH_PROG_WITH_TEST_KDE(MSGFMT, msgfmt, 
+         [test -n "`$ac_dir/$ac_word --version 2>&1 | grep '(GNU gettext)'`"], msgfmt)
       AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
+
+      if test -z "`$MSGFMT 2>&1 | grep 'GNU gettext'`"; then
+        AC_MSG_RESULT([found msgfmt program is not GNU msgfmt; ignore it])
+        msgfmt=":"
+      fi
+
       AM_PATH_PROG_WITH_TEST_KDE(XGETTEXT, xgettext,
 	[test -z "`$ac_dir/$ac_word -h 2>&1 | grep '(HELP)'`"], :)
       AC_SUBST(MSGFMT)
@@ -1840,7 +1846,7 @@ else
   AC_MSG_RESULT([$kde_cv_mico_version (minimum version $1, ok)])
 fi
 
-LIBMICO="-lmico$kde_cv_mico_version -ldl"
+LIBMICO="-lmico$kde_cv_mico_version $LIBDL"
 AC_SUBST(LIBMICO)
 IDL=$kde_micodir/bin/idl
 AC_SUBST(IDL)
@@ -1916,6 +1922,7 @@ LIBPYTHON=-lpython$version
 
 AC_MSG_RESULT(header $python_incdir library $python_libdir)
 
+dnl Note: this test is very weak
 AC_MSG_CHECKING(if Python needs thread lib to compile)
 AC_CACHE_VAL(kde_cv_python_pthread,
 [
