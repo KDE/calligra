@@ -921,17 +921,6 @@ using the menubar. </para>
 </varlistentry>
 
 <varlistentry>
-<term id="menu-insert-hline">
-<menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Horizontal Line...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>This option will insert a horizontal line to separate paragraphs at the cursor position.</action> More information can be
-found at <link linkend="hline">Horizontal lines</link> section.</para></listitem>
-</varlistentry>
-
-<varlistentry>
 <term id="menu-insert-page">
 <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Page</guimenuitem>

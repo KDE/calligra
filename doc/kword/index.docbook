@@ -39,7 +39,6 @@
   <!ENTITY bookmarks SYSTEM "bookmarks.docbook">
   <!ENTITY migrating SYSTEM "migrating.docbook">
   <!ENTITY chapnumb SYSTEM "chapnumb.docbook">
-  <!ENTITY hline SYSTEM "horizline.docbook">
 
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
@@ -474,7 +473,6 @@ information (email address, telephone numbers and physical address).</para>
 If any document variables were changed, &kword; will update their values throughout the document.</para>
 </sect1>
 &graphics;
-&hline;
 &toc;
 &variables;
 &expressions;
