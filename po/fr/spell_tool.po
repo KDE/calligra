@@ -1,0 +1,22 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: spell_tool\n"
+"POT-Creation-Date: 1999-01-29 02:45+0100\n"
+"PO-Revision-Date: 1999-02-26 22:30+0100"
+"Last-Translator: Francois-Xavier Duranceau <Francois-Xavier.Duranceau@loria.fr>\n"
+"Language-Team: Français <fr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: main.cc:73 main.cc:91
+msgid "Spell Checker"
+msgstr "Correcteur orthographique"
+
+#: main.cc:91
+msgid "The text is spelled correctly"
+msgstr "Le texte est correctement orthographié."
