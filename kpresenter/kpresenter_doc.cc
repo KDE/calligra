@@ -116,7 +116,7 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       _gradientCollection(), _clipartCollection(), _hasHeader( false ),
-      _hasFooter( false ),  m_unit( KoUnit::U_MM ),urlIntern()
+      _hasFooter( false ), m_unit( KoUnit::U_MM )
 {
     //fCollection = new KTextEditFormatCollection;
     setInstance( KPresenterFactory::global() );

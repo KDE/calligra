@@ -71,6 +71,7 @@ public:
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
     void draw( QPainter *_painter, int _diffx, int _diffy,
                bool onlyChanged, QTextCursor* cursor, bool resetChanged );
+    void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, Page* /*page*/ );
 
     virtual void zoom( float _fakt );
     virtual void zoomOrig();

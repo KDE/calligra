@@ -885,6 +885,40 @@ void KPTextObject::drawParags( QPainter */*p*/, int /*from*/, int /*to*/ )
 #endif
 }
 
+void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, Page* page )
+{
+    p->translate( orig.x(), orig.y() );
+    Qt3::QTextParag* parag = cursor->parag();
+
+    QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
+    int lineY;
+    // Cursor height, in pixels
+    int cursorHeight = m_doc->zoomHandler()->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
+    QPoint iPoint( topLeft.x() - cursor->totalOffsetX() + cursor->x(),
+                   topLeft.y() - cursor->totalOffsetY() + lineY );
+    iPoint = m_doc->zoomHandler()->layoutUnitToPixel( iPoint );
+
+    QPoint vPoint( iPoint.x() + orig.x(), iPoint.y() + orig.y() );
+    int xadj = parag->at( cursor->index() )->pixelxadj;
+    iPoint.rx() += xadj;
+    vPoint.rx() += xadj;
+    // very small clipping around the cursor
+    QRect clip( vPoint.x() - 5, vPoint.y() - page->getView()->getDiffY(), 10, cursorHeight );
+    setupClipRegion( p, clip );
+
+    QPixmap *pix = 0;
+    QColorGroup cg = QApplication::palette().active();
+
+    bool wasChanged = parag->hasChanged();
+    parag->setChanged( TRUE );      // To force the drawing to happen
+    textDocument()->drawParagWYSIWYG(
+        p, parag,
+        iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
+        pix, cg, m_doc->zoomHandler(),
+        cursorVisible, cursor, false /*m_doc->viewFormattingChars()*/ );
+    parag->setChanged( wasChanged );      // Maybe we have more changes to draw!
+}
+
 KoTextDocument * KPTextObject::textDocument() const
 {
     return m_textobj->textDocument();
@@ -1137,7 +1171,15 @@ void KPTextView::drawCursor( bool b )
 
     // We repaint the whole object.
     // TODO a kword-like painting method (many changes required though)
-    kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
+    //kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
+
+    QPainter painter( m_page );
+    //painter.translate( -m_page->contentsX(), -m_page->contentsY() );
+    //painter.setBrushOrigin( -m_page->contentsX(), -m_page->contentsY() );
+    painter.translate( -m_page->getView()->getDiffX(), -m_page->getView()->getDiffY() );
+    //painter.setBrushOrigin( -m_page->contentsX(), -m_page->contentsY() );
+
+    kpTextObject()->drawCursor( &painter, cursor(), b, m_page );
 }
 
 void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &_pos)
