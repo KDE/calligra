@@ -347,6 +347,15 @@ int BackDia::getBackYFactor() const
     return yfactor->value();
 }
 
+KPBackGround::Settings BackDia::getBackGround() const
+{
+    return KPBackGround::Settings( getBackType(), getBackColor1(),
+                                   getBackColor2(), getBackColorType(),
+                                   getBackUnbalanced(), getBackXFactor(),
+                                   getBackYFactor(), getBackPicture().getKey(),
+                                   getBackView() );
+}
+
 void BackDia::selectPic()
 {
     QStringList mimetypes;

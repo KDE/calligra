@@ -715,3 +715,25 @@ KPGradientCollection * KPBackGround::gradientCollection() const
 {
     return m_page->kPresenterDoc()->gradientCollection();
 }
+
+void KPBackGround::setBackGround( const struct Settings &settings )
+{
+    backType = settings.m_backType;
+    backColor1 = settings.m_backColor1;
+    backColor2 = settings.m_backColor2;
+    bcType = settings.m_bcType;
+    unbalanced = settings.m_unbalanced;
+    xfactor = settings.m_xfactor;
+    yfactor = settings.m_yfactor;
+    removeGradient();
+    setBackPicture( settings.m_backPictureKey );
+    backView = settings.m_backView;
+
+}
+
+struct KPBackGround::Settings KPBackGround::getBackGround() const
+{
+    return Settings( backType, backColor1, backColor2,
+                     bcType, unbalanced, xfactor, yfactor,
+                     backPicture.getKey(), backView);
+}

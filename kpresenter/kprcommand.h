@@ -38,6 +38,7 @@
 #include <koSize.h>
 #include <qvariant.h>
 #include <qvaluevector.h>
+#include "kpbackground.h"
 #include "kprvariable.h"
 
 class KPresenterDoc;
@@ -109,37 +110,19 @@ protected:
 class SetBackCmd : public KNamedCommand
 {
 public:
-    SetBackCmd( const QString &_name, const QColor &_backColor1, const QColor &_backColor2, BCType _bcType,
-                bool _backUnbalanced, int _backXFactor, int _backYFactor,
-                const KoPictureKey & _backPix,
-                BackView _backView, BackType _backType,
-                const QColor &_oldBackColor1, const QColor &_oldBackColor2, BCType _oldBcType,
-                bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
-                const KoPictureKey & _oldBackPix,
-                BackView _oldBackView, BackType _oldBackType,
-                bool _takeGlobal, KPresenterDoc *_doc, KPrPage *_page );
+    SetBackCmd( const QString &name, const KPBackGround::Settings &settings,
+                const KPBackGround::Settings &oldSettings,
+                bool takeGlobal, KPresenterDoc *doc, KPrPage *page );
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
 
-    QColor backColor1, backColor2;
-    bool unbalanced;
-    int xfactor, yfactor;
-    KoPictureKey backPix;
-    BCType bcType;
-    BackView backView;
-    BackType backType;
-    QColor oldBackColor1, oldBackColor2;
-    bool oldUnbalanced;
-    int oldXFactor, oldYFactor;
-    KoPictureKey oldBackPix;
-    BCType oldBcType;
-    BackView oldBackView;
-    BackType oldBackType;
-    bool takeGlobal;
-    KPresenterDoc *doc;
+    KPBackGround::Settings m_settings;
+    KPBackGround::Settings m_oldSettings;
+    bool m_takeGlobal;
+    KPresenterDoc *m_doc;
     KPrPage *m_page;
 };
 

@@ -260,7 +260,7 @@ public:
 
     void enableEmbeddedParts( bool f );
 
-    KPBackGround *background() const { return m_kpbackground;}
+    KPBackGround *background() { return m_kpbackground; }
 
     void makeUsedPixmapList();
 

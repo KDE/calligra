@@ -3280,21 +3280,9 @@ void KPresenterView::objectSelectedChanged()
 void KPresenterView::backOk( BackDia* backDia, bool takeGlobal )
 {
     KPrPage *page=m_canvas->activePage();
-    SetBackCmd *setBackCmd = new SetBackCmd( i18n( "Set Background" ), backDia->getBackColor1(),
-                                             backDia->getBackColor2(), backDia->getBackColorType(),
-                                             backDia->getBackUnbalanced(),
-                                             backDia->getBackXFactor(), backDia->getBackYFactor(),
-                                             backDia->getBackPicture().getKey(),
-                                             backDia->getBackView(), backDia->getBackType(),
-                                             page->getBackColor1(  ),
-                                             page->getBackColor2(  ),
-                                             page->getBackColorType(  ),
-                                             page->getBackUnbalanced( ),
-                                             page->getBackXFactor(  ),
-                                             page->getBackYFactor(  ),
-                                             page->getBackPictureKey(  ),
-                                             page->getBackView(  ),
-                                             page->getBackType(  ),
+    SetBackCmd *setBackCmd = new SetBackCmd( i18n( "Set Background" ),
+                                             backDia->getBackGround(), 
+                                             page->background()->getBackGround(),
                                              takeGlobal, m_pKPresenterDoc,page);
     setBackCmd->execute();
     m_pKPresenterDoc->addCommand( setBackCmd );

@@ -153,95 +153,68 @@ void SetOptionsCmd::unexecute()
     doc->repaint( false );
 }
 
-SetBackCmd::SetBackCmd( const QString &_name, const QColor &_backColor1, const QColor &_backColor2, BCType _bcType,
-                        bool _backUnbalanced, int _backXFactor, int _backYFactor,
-                        const KoPictureKey & _backPix, BackView _backView, BackType _backType,
-                        const QColor &_oldBackColor1, const QColor &_oldBackColor2, BCType _oldBcType,
-                        bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
-                        const KoPictureKey & _oldBackPix, BackView _oldBackView, BackType _oldBackType,
-                        bool _takeGlobal, KPresenterDoc *_doc, KPrPage *_page )
-    : KNamedCommand( _name ), backColor1( _backColor1 ), backColor2( _backColor2 ), unbalanced( _backUnbalanced ),
-      xfactor( _backXFactor ), yfactor( _backYFactor ), backPix( _backPix ),
-      oldBackColor1( _oldBackColor1 ), oldBackColor2( _oldBackColor2 ), oldUnbalanced( _oldBackUnbalanced ),
-      oldXFactor( _oldBackXFactor ), oldYFactor( _oldBackYFactor ), oldBackPix( _oldBackPix )
+SetBackCmd::SetBackCmd( const QString &name, const KPBackGround::Settings &settings,
+                        const KPBackGround::Settings &oldSettings,
+                        bool takeGlobal, KPresenterDoc *doc, KPrPage *page )
+: KNamedCommand( name )
+, m_settings( settings )
+, m_oldSettings( oldSettings )
+, m_takeGlobal( takeGlobal )    
+, m_doc( doc )   
+, m_page( page )    
 {
-    bcType = _bcType;
-    backView = _backView;
-    backType = _backType;
-    oldBcType = _oldBcType;
-    oldBackView = _oldBackView;
-    oldBackType = _oldBackType;
-    takeGlobal = _takeGlobal;
-    doc = _doc;
-    m_page=_page;
 }
 
 void SetBackCmd::execute()
 {
-    if ( !takeGlobal ) {
-        m_page->setBackColor( backColor1, backColor2, bcType,
-                              unbalanced, xfactor, yfactor );
-        m_page->setBackType( backType );
-        m_page->setBackView( backView );
-        m_page->setBackPicture( backPix );
-        doc->restoreBackground( m_page );
+    if ( !m_takeGlobal ) {
+        m_page->background()->setBackGround( m_settings );
+        m_doc->restoreBackground( m_page );
     } else {
-        QPtrListIterator<KPrPage> it( doc->getPageList() );
+        QPtrListIterator<KPrPage> it( m_doc->getPageList() );
         for ( ; it.current() ; ++it )
         {
-            it.current()->setBackColor( backColor1, backColor2, bcType,
-                                        unbalanced, xfactor, yfactor );
-            it.current()->setBackType( backType );
-            it.current()->setBackView( backView );
-            it.current()->setBackPicture( backPix );
-            doc->restoreBackground(it.current());
+            it.current()->background()->setBackGround( m_settings );
+            m_doc->restoreBackground(it.current());
         }
 
     }
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    if ( takeGlobal ) {
-        QPtrListIterator<KPrPage> it( doc->getPageList() );
+    if ( m_takeGlobal ) {
+        QPtrListIterator<KPrPage> it( m_doc->getPageList() );
         for ( int pos = 0; it.current(); ++it, ++pos ) {
-            doc->updateSideBarItem( it.current() );
+            m_doc->updateSideBarItem( it.current() );
         }
     }
     else {
-        doc->updateSideBarItem( m_page );
+        m_doc->updateSideBarItem( m_page );
     }
 }
 
 void SetBackCmd::unexecute()
 {
-    if ( !takeGlobal ) {
-        m_page->setBackColor( oldBackColor1, oldBackColor2, oldBcType,
-                              oldUnbalanced, oldXFactor, oldYFactor );
-        m_page->setBackType( oldBackType );
-        m_page->setBackView( oldBackView );
-        m_page->setBackPicture( oldBackPix );
-        doc->restoreBackground( m_page );
+    if ( !m_takeGlobal ) {
+        m_page->background()->setBackGround( m_oldSettings );
+        m_doc->restoreBackground( m_page );
     } else {
-        QPtrListIterator<KPrPage> it( doc->getPageList() );
+        QPtrListIterator<KPrPage> it( m_doc->getPageList() );
         for ( ; it.current() ; ++it )
         {
-            it.current()->setBackColor( oldBackColor1, oldBackColor2, oldBcType,
-                                        oldUnbalanced, oldXFactor, oldYFactor );
-            it.current()->setBackType( oldBackType );
-            it.current()->setBackView( oldBackView );
-            it.current()->setBackPicture( oldBackPix );
-            doc->restoreBackground(it.current());
+            it.current()->background()->setBackGround( m_oldSettings );
+            m_doc->restoreBackground(it.current());
         }
     }
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    if ( takeGlobal ) {
-        QPtrListIterator<KPrPage> it( doc->getPageList() );
+    if ( m_takeGlobal ) {
+        QPtrListIterator<KPrPage> it( m_doc->getPageList() );
         for ( int pos = 0; it.current(); ++it, ++pos ) {
-            doc->updateSideBarItem( it.current() );
+            m_doc->updateSideBarItem( it.current() );
         }
     }
     else {
-        doc->updateSideBarItem( m_page );
+        m_doc->updateSideBarItem( m_page );
     }
 }
 

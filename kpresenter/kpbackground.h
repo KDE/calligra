@@ -48,6 +48,35 @@ class KoGenStyle;
 class KPBackGround
 {
 public:
+    struct Settings
+    {
+        Settings( const BackType backType, const QColor backColor1, const QColor backColor2,
+                  const BCType bcType, const bool unbalanced, const int xfactor, const int yfactor, 
+                  const KoPictureKey &key, const BackView backView )
+        : m_backType( backType )
+        , m_backColor1( backColor1 )
+        , m_backColor2( backColor2 )
+        , m_bcType( bcType )
+        , m_unbalanced( unbalanced )
+        , m_xfactor( xfactor )
+        , m_yfactor( yfactor )
+        , m_backPictureKey( key )
+        , m_backView( backView ) 
+        {}
+
+        BackType m_backType;
+        QColor m_backColor1;
+        QColor m_backColor2;
+        // Gradient setting
+        BCType m_bcType;
+        bool m_unbalanced;
+        // Gradient factors
+        int m_xfactor, m_yfactor;
+
+        KoPictureKey m_backPictureKey;
+        BackView m_backView;
+    };
+
     KPBackGround( KPrPage *_page );
     ~KPBackGround() {}
 
@@ -74,16 +103,9 @@ public:
     /// set the back picture to a new KoPicture
     void setBackPicture( const KoPicture& picture );
     void setBackPicture ( const KoPictureKey& key );
-#if 0
-    void setPageEffect( PageEffect _pageEffect )
-        { pageEffect = _pageEffect; }
-    void setPageTimer( int _pageTimer )
-        { pageTimer = _pageTimer; }
-    void setPageSoundEffect( bool _soundEffect )
-        { soundEffect = _soundEffect; }
-    void setPageSoundFileName( const QString &_soundFileName )
-        { soundFileName = _soundFileName; }
-#endif
+    void setBackGround( const struct Settings &settings );
+    struct Settings getBackGround() const;
+    
     KoPicture picture() const { return backPicture;}
 
     BackType getBackType() const

@@ -26,6 +26,7 @@
 #include <qdatetime.h>
 
 #include "global.h"
+#include "kpbackground.h"
 
 #include <koPicture.h>
 
@@ -39,6 +40,7 @@ class QCheckBox;
 class QTabWidget;
 class KPrPage;
 class KSqueezedTextLabel;
+
 
 class BackPreview : public QFrame
 {
@@ -81,6 +83,7 @@ public:
     bool getBackUnbalanced() const;
     int getBackXFactor() const;
     int getBackYFactor() const;
+    KPBackGround::Settings getBackGround() const;
 
 protected:
     void showEvent( QShowEvent *e );
