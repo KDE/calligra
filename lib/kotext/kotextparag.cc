@@ -619,7 +619,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 			{
 				painter.drawPoint(
 					startX + zigzag_x,
-					h - 3 + zigzag_line );
+					lastY + h - 3 + zigzag_line );
 			}
 		}
 
@@ -628,7 +628,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 		{
 			painter.drawPoint(
 				startX + zigzag_x,
-				h - 2 );
+				lastY + h - 2 );
 		}
 
 		painter.restore();
