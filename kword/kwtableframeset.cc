@@ -255,7 +255,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
 }
 
 void KWTableFrameSet::recalcRows(int _col, int _row) {
-    //kdDebug() << "KWTableFrameSet::recalcRows" << endl;
+    kdDebug() << "KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
     //for(unsigned int i=0; i < m_rowPositions.count() ; i++) kdDebug() << "row: " << i << " = " << m_rowPositions[i] << endl;
 
     if(m_cells.isEmpty()) return; // assertion
@@ -372,43 +372,65 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     unsigned int fromRow=m_rows; // possible reposition rows starting with this one, default to no repositioning
     unsigned int untilRow=0;     // possible reposition rows ending with this one
     if(difference!=0) {
-        untilRow=m_rows;
-        unsigned int adjustment=0;
         QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
-        while(pageBound != m_pageBoundaries.end() && (*pageBound) <= row) {
-            adjustment++;
-            pageBound++;
-        }
-        double last=row==0?0:m_rowPositions[row-1];
-        for(unsigned int i=row+adjustment; i <= m_rowPositions.count(); i++) {
-            double &rowPos = m_rowPositions[i];
-            rowPos = rowPos + difference;
-            if(rowPos-last < minFrameHeight) { // Never make it smaller then allowed!
-                difference += minFrameHeight - rowPos;
-                rowPos = minFrameHeight + last;
+        QValueList<double>::iterator j = m_rowPositions.begin();
+        double last=0.0;
+        int lineNumber=-1;
+        while(++j!=m_rowPositions.end()) {
+            lineNumber++;
+            if(pageBound!=m_pageBoundaries.end()) {
+                if((*pageBound) <= row)
+                    ++pageBound;
+                if( lineNumber >= row && static_cast<int>(*(pageBound)) == lineNumber) { // then delete line j.
+                    difference-=*(j)-last;
+                    j=m_rowPositions.remove(j);
+                    j--;
+                    QValueList<unsigned int>::iterator tmp = pageBound;
+                    ++pageBound;
+                    m_pageBoundaries.remove(tmp);
+                    continue;
+                }
             }
-            if(*pageBound == i) {
-                untilRow=QMIN(untilRow, *pageBound);
-                break;              // stop at pageBreak.
-            }
-            last=rowPos;
+            if(lineNumber+1 < row) continue;
+            if(*(j)-last < minFrameHeight) // Never make it smaller then allowed!
+                difference += minFrameHeight - *(j) + last;
+            last=*(j);
+            (*j) = (*j) + difference; // move line.
         }
         fromRow=row;
         if(row>0) fromRow--;
     } else {
         row=0;
     }
-
+// debugging stuff below... ThomasZ
+/*{ QValueList<unsigned int>::iterator pb = m_pageBoundaries.begin();
+  unsigned int i=0;
+  double last=0;
+  do {
+      double cur=m_rowPositions[i];
+      if(pb!=m_pageBoundaries.end() && *(pb)==i) {
+        kdDebug() << "row: " << i << ": " << cur << " *" << (last>cur?" (ALERT)":"") << endl;
+        ++pb;
+      } else
+        kdDebug() << "row: " << i << ": " << cur << (last>cur?" (ALERT)":"") << endl;
+      last=cur;
+      i++;
+  } while( i<m_rowPositions.count());
+} */
 
     double pageHeight = m_doc->ptPaperHeight() - m_doc->ptBottomBorder() - m_doc->ptTopBorder();
     unsigned int pageNumber=getCell(0,0)->frame(0)->pageNum() +1;
-    unsigned int rowNumber=0;
+    unsigned int lineNumber=0;
     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
     QValueList<double>::iterator j = m_rowPositions.begin();
 
+    double diff=0.0;
     double pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
+kdDebug() << "pageBottom; " << pageBottom << endl;
     while(++j!=m_rowPositions.end()) { // stuff for multipage tables.
-        if(pageBound!=m_pageBoundaries.end() && *pageBound == rowNumber ) {
+kdDebug() << "line: " << lineNumber+1 << " " << *(j) << endl;
+        /*if(pageBound!=m_pageBoundaries.end() && *pageBound == lineNumber ) {
+kdDebug() << "      is pageboundary" << endl;
             if(*j > pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder() ) { // next page marker exists, and is accurate...
                 pageNumber++;
                 pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
@@ -428,13 +450,14 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                 }
                 // TODO remove headers and  m_hasTmpHeaders = false;
             }
-        }
+        }*/
 
         if((*j) > pageBottom) { // a row falls off the page.
+kdDebug() << "row falls off of page"<< endl;
             untilRow=m_rows;
             bool hugeRow = false;
-            unsigned int breakRow = rowNumber;
-            for(unsigned int i=0; i < getCols() ; i++) {
+            unsigned int breakRow = lineNumber;
+           /* for(unsigned int i=0; i < getCols() ; i++) {
                 if(getCell(breakRow,i)->m_row < breakRow) {
                     breakRow = getCell(breakRow,i)->m_row;
                     i=0;
@@ -444,38 +467,40 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             for(unsigned int i=0; i < getCols() ; i++) {
                 if(getCell(breakRow+1,i) && getCell(breakRow+1,i)->frame(0)->height() > pageHeight)
                     hugeRow=true;
+            }*/
+            //if((*pageBound) != breakRow) {
+                // voeg top in in rowPositions
+
+            double topOfPage = m_doc->ptPaperHeight() * pageNumber + m_doc->ptTopBorder();
+            QValueList<double>::iterator tmp = j;
+            tmp--;
+            diff = diff + topOfPage - (*tmp); // diff between bottom of last row on page and top of new page
+            m_rowPositions.insert(j, topOfPage);
+
+            /*tmp=j;
+            while(++tmp!=m_rowPositions.end()) { // move all succesive rows
+                (*tmp) = (*tmp) + diff;
+            }*/
+
+            // voeg nieuwe pageBound toe.
+            pageBound = m_pageBoundaries.insert(pageBound, breakRow);
+            pageBound++;
+            if(!hugeRow) {
+                // add header-rij toe. (en zet bool) TODO
+                //j++;
+                //lineNumber++;
+                // m_hasTmpHeaders = true;
             }
-            if((*pageBound) != breakRow) {
-                // voeg bottom in in rowPositions
-
-                double topOfPage = m_doc->ptPaperHeight() * pageNumber + m_doc->ptTopBorder();
-                QValueList<double>::iterator tmp = j;
-                tmp--;
-                double diff = topOfPage - (*tmp); // diff between bottom of last row on page and top of new page
-                j=m_rowPositions.insert(j, topOfPage);
-
-                tmp=j;
-                while(++tmp!=m_rowPositions.end()) { // move all succesive rows
-                    (*tmp) = (*tmp) + diff;
-                }
-
-                // voeg nieuwe pageBound toe.
-                pageBound = m_pageBoundaries.insert(pageBound, breakRow);
-                pageBound++;
-                if(!hugeRow) {
-                    // add header-rij toe. (en zet bool) TODO
-                    //j++;
-                    //rowNumber++;
-                    // m_hasTmpHeaders = true;
-                }
-            }
+            //}
             pageNumber++;
             pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
+            if(pageNumber > m_doc->getPages()) m_doc->appendPage();
         }
-        if ( *j >= m_doc->ptPaperHeight() * m_doc->getPages() )
-            m_doc->appendPage();
+if(diff > 0)  kdDebug() << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
+        if(diff > 0) 
+            (*j) = (*j) + diff;
 
-        rowNumber++;
+        lineNumber++;
     }
 
     //kdDebug () << "Repositioning from row : " << fromRow << " until: " << untilRow << endl;
@@ -536,7 +561,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             position(cell);
     }
     redrawFromCol=getCols();
-    //kdDebug() << "KWTableFrameSet::recalcRows done" << endl;
+    kdDebug() << "KWTableFrameSet::recalcRows done" << endl;
 }
 
 void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize heightMode ) {
