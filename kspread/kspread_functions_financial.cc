@@ -281,3 +281,31 @@ bool kspreadfunc_nominal( KSContext& context )
 
   return true;
 }
+
+// Function: SLN
+/* straight-line depreciation for a single period */
+bool kspreadfunc_sln( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "SLN", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+
+  double cost = args[0]->doubleValue();
+  double salvage_value = args[1]->doubleValue();
+  double life = args[2]->doubleValue();
+
+  // sentinel check
+  if( life <= 0.0 ) return false;
+
+  context.setValue( new KSValue( (cost - salvage_value) / life ) );
+
+  return true;
+}

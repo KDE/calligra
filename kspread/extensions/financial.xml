@@ -227,5 +227,29 @@
 	<Example>level_coupon(1000;.13;2;4;.1) equals 1096.95</Example>
       </Help>
     </Function>
+
+    <Function>
+      <Name>SLN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cost</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Salvage</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Life</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The SLN() function will determine the straight line depreciation of an asset for a single period. The amount you paid for the asset is the cost, the value of the asset at the end of the period is salvage, and life
+is the number of periods over which the asset is depreciated. SLN
+divides the cost evenly over the life of an asset.</Text>
+	<Syntax>SLN(cost; salvage value; life)</Syntax>
+	<Example>SLN(10000;700;10) equals 930</Example>
+      </Help>
+
   </Group>
 </KSpreadFunctions>

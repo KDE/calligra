@@ -179,6 +179,7 @@ bool kspreadfunc_effective( KSContext& context );
 bool kspreadfunc_zero_coupon( KSContext& context );
 bool kspreadfunc_level_coupon( KSContext& context );
 bool kspreadfunc_nominal( KSContext& context );
+bool kspreadfunc_sln( KSContext& context );
 
 // defined in kspread_functions_statistical.cc
 bool kspreadfunc_arrang( KSContext& context );
@@ -617,6 +618,8 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "NUM2STRING", new KSValue( new KSBuiltinFunction( module, "NUM2STRING", kspreadfunc_NumberToString) ) );
   module->addObject( "BOOL2INT", new KSValue( new KSBuiltinFunction( module, "BOOL2INT", kspreadfunc_booltoint) ) );
   module->addObject( "INT2BOOL", new KSValue( new KSBuiltinFunction( module, "INT2BOOL", kspreadfunc_inttobool) ) );
+
+  module->addObject( "SLN", new KSValue( new KSBuiltinFunction( module, "SLN", kspreadfunc_sln) ) );
 
   return module;
 }
