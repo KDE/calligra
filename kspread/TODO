@@ -66,7 +66,18 @@ note from Raphael: I didn't check if these are reported bugs.
   reported by: a couple of people, Raphael
   taken by:
   
+- repeated rows and columns don't work if they don't start from row/column 1
+  Also it is not possible to enter just one row/column into the dialog, it
+  alays has to be a range (2:3).
+  * Make repeated rows/cols work with ranges that don't start at 1
+  * Make it possible to enter just one row/column into GUI, don't force a range.
+  
+  reported by: Raphael
+  taken by:
+  
 - Make OASIS filter as complete as possible
+
+  taken by: Laurent Montel, others welcome :)
 
 
 
