@@ -106,118 +106,90 @@ Filter bugs
 
 
 
+Things not in bugzilla
+----------------------
 
 
 
-Please put your name in "(...)" to the bug/feature you work on or you
-want to work on.  For bugs: look into the KBugBuster if somebody else
-is working on it.
-
-If you find a bug in KBugBuster for bugs listed here, please add the
-bug number.
-
-
-Things to be done BEFORE KOFFICE 1.4:
-
-note from Raphael: I didn't check if these are reported bugs.
-
-- KSpread has really some issues on printouts with borders... hidden 
-  cells, cells with longer text, etc.
+* Printing
+  + printouts with zoom other than 100% (it's a missing feature, but  2 ----
+    the GUI is there... - page layout, options, Scale Printout )
   
-  This ONLY happens when text is longer than the current cell
-  (has sth to do with automerge).
+  + make print range work over more than 1 page			      2 ----
+  + Make it possible to print embedded objects.			      1 ----
+  + Repeated rows and columns don't work if they don't start from     2 ----
+    row/column 1.   Also it is not possible to enter just one
+    row/column into the dialog, it alays has to be a range (2:3).
+    - Make repeated rows/cols work with ranges that don't start at 1  2 --
+    - Make it possible to enter just one row/column into GUI, don't   2 --
+      force a range.
+
+
+* Features
+  + Add text frames and picture frames. It's currently not easy to    2 ----
+    insert pictures!
   
-  reported by: Raphael
-  taken by: Inge
-
-- printouts with zoom other than 100% (it's a missing feature, but the 
-  GUI is there... - page layout, options, Scale Printout )
-  
-  reported by: Raphael
-  taken by:
-
-- make print range work over more than 1 page
-
-  reported by: Raphael
-  taken by:
-
-- Replace the calendar templates with 2005 and 2006 (and 2007?)
-  note: there is a insert clander plugin that might be useful
-  
-  reported by: Ariya, Raphael
-  taken by:
-  
-- Add text frames and picture frames, it's currently not easy to insert pictures!
-
-  reported by: Raphael
-  taken by:
-  
-- Make it possible to print embedded objects!!!
-
-  reported by: a couple of people, Raphael
-  taken by:
-  
-- repeated rows and columns don't work if they don't start from row/column 1
-  Also it is not possible to enter just one row/column into the dialog, it
-  alays has to be a range (2:3).
-  * Make repeated rows/cols work with ranges that don't start at 1
-  * Make it possible to enter just one row/column into GUI, don't force a range.
-  
-  reported by: Raphael
-  taken by:
+* Plugins
+  + Replace the calendar templates with 2005 and 2006 (and 2007?)
+    NOTE: there is a insert calendar plugin that might be useful.
 
 
-Bugs for after 1.4.0 (if time permits can be fixed before 1.4 as well, of course):
-  
-- Make OASIS filter as complete as possible
 
-  taken by: Laurent Montel, others welcome :)
+Things to do after the release of KOffice 1.4
+=============================================
 
-- Avoid printing empty pages (if the style of last row/col has borders!!)
+* OASIS file format
+  + Read OASIS							      1 LAUR
+  + Write OASIS							      1 LAUR
 
-  reported by: Raphael
-  taken by:
+* Internals (See also DESIGN.html)
+  + Use the new StyleCluster.					      1 RAPH
+    This would dramatically reduce memory consumption and allows 
+    styles for empty cells.
+    - Use new StyleCluster
+    - Remove old KSpreadFormat
 
-- If possible use the new StyleCluster
-  This would dramatically reduce memory consumption and allows styles for
-  empty cells.
-  Note: the KSpreadFormat class seems to be deprecated, get rid of it.
+  + Speed up selection.						      1 RAPH
+    (probably improved with StyleCluster?)
+  + Non-continguous selection					      1 ----
 
-  reported by: Raphael
-  taken by:
+  + Rich text in cells.						      1 ----
+	Use KoText.
 
-- Speed up selection... (probably improved with StyleCluster?)
-  (maybe not really a must for 1.4, there are more important things)
-
-  reported by: Raphael
-  taken by:
+* GUI
+  + Sheet layout:						      2 ----
+    - Move sheet properties to separate dialog.
+      They are currently part of KSpread config dialog.
 
 
-Others bugs not in BT system (Report by - taken by):
+* General features
+  + Insert manual page break					      2 ----
+  + Split view							      1 ----
+  + Matrix operations
+
+* Major features (big effort)
+  + Script, Script-Editor (like VBA in Excel)			      2 ----
+  + Tools->Auditing:						      2 ----
+    - Trace Precedents						      2 --
+    - Trace Dependants						      2 --
+    - Trace Error						      2 --
+    - Remove all arrows						      2 --
+  + Pivot tables						      3 ----
 
 Other things: (please add the things you are working on!)
+(I don't understand these.  Please enter them under the correct heading /Inge)
 
-- Speed up selecting many cells!
-- general speed up!
-- WYSIWYG (use kotext)
-- insert manual page break
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
         scrollbars, it works, but not very nice (not committed (Norbert))
-- AutoFormat (already exists in a very limited way: Format -> table style)
-- Script, Script-Editor (like VBA in Excel)
-- Tools->Auditing:
-	Trace Precedents
-	Trace Dependants
-	Trace Error
-	Remove all arrows
-- Sheet layout:
-        - Move sheet properties to seperate dialog (they are currently part of KSpread config dialog)
 - Scenerios
+
+
+Not yet sorted (will be entered into categories above)
+
 - Locked areas (for formulas with a matrix as result)
 - Multible Operations (in Excel: "Data"->"Table") (Norbert)
 - Pivot tables
 - more chart types
-- multible Selections
 - background spell check (necessary to use kotext)
 - links to cells in other kspread files
 - much more formulas (financial, database...)
