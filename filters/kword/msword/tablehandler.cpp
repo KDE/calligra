@@ -169,7 +169,7 @@ void KWordTableHandler::tableCellStart()
         m_tap->rgtc[ m_column - 1 ].brcRight
         : tc.brcLeft;
     const wvWare::Word97::BRC& brcRight =
-      ( tc.brcRight.ico == 255 && tc.brcRight.dptLineWidth == 255 && m_column < nbCells ) ?
+      ( tc.brcRight.ico == 255 && tc.brcRight.dptLineWidth == 255 && m_column < nbCells - 1 ) ?
         m_tap->rgtc[ m_column + 1 ].brcLeft
         : tc.brcRight;
 
