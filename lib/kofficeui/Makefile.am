@@ -9,7 +9,7 @@ SUBDIRS = . pics
 
 lib_LTLIBRARIES = libkofficeui.la
 
-libkofficeui_la_SOURCES = koGlobal.cc koUnit.cc koFind.cc koReplace.cc \
+libkofficeui_la_SOURCES = koFind.cc koReplace.cc \
         koPageLayoutDia.cc \
 	koPartSelectDia.cc koPartSelectAction.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
@@ -21,7 +21,7 @@ libkofficeui_la_SOURCES = koGlobal.cc koUnit.cc koFind.cc koReplace.cc \
 libkofficeui_la_LDFLAGS	= -version-info 2:0:0 -no-undefined $(all_libraries)
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE)
 
-include_HEADERS = koGlobal.h koUnit.h koFind.h koReplace.h \
+include_HEADERS = koFind.h koReplace.h \
 	koPageLayoutDia.h \
 	koPartSelectDia.h koPartSelectAction.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
