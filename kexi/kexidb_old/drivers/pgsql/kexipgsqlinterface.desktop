@@ -1,0 +1,12 @@
+[Desktop Entry]
+Comment=An advanced open source object relation database management system (ORDBMS).
+Encoding=UTF-8
+Icon=
+InitialPreference=8
+MimeType=text/plain
+Name=PostgreSQL
+ServiceTypes=KexiDB/Interface
+Type=Service
+X-KDE-Library=kexipgsqlinterface
+X-Kexi-DriverName=pgsql
+X-Kexi-Location=RemoteDB
