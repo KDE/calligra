@@ -160,13 +160,13 @@ suite. The components of &koffice; are:
 &killustrator; - a vector drawing application.
 </para>
 </listitem>
-
+<!-- 
 <listitem>
 <para>
 &krayon; - a bitmap drawing application.
 </para>
 </listitem>
-<!-- 
+
 <listitem><para>
 Katabase - a database application.
 </para></listitem>
