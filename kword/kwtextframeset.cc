@@ -449,11 +449,11 @@ void KWTextFrameSet::invalidate()
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
-bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, 
+bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
     ulong & sentences, ulong & syllables )
 {
     // parts of words for better counting of syllables:
-    QStringList subs_syl; 
+    QStringList subs_syl;
     subs_syl << "cial" << "tia" << "cius" << "cious" << "giu" << "ion" << "iou" << "sia$" << "ely$";
     QStringList add_syl;
     add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii" << "[aeiouym]bl$" << "[aeiou]{3}"
@@ -512,7 +512,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
             if ( word.length() == 1 )
 	        word_syllables++;
             word_syllables += syls.count();
-	    if ( word_syllables == 0 ) 
+	    if ( word_syllables == 0 )
                 word_syllables = 1;
 	    syllables += word_syllables;
 	}
@@ -1605,7 +1605,7 @@ void KWTextFrameSet::formatMore()
             {
                 case KWFrame::AutoExtendFrame:
                 {
-                    double difference = bottom - m_availableHeight;
+                    int difference = bottom - m_availableHeight;
 #ifdef DEBUG_FORMAT_MORE
                     kdDebug(32002) << "AutoExtendFrame bottom=" << bottom << " m_availableHeight=" << m_availableHeight
                               << " => difference = " << difference << endl;
