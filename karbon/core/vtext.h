@@ -44,7 +44,7 @@ private:
 
 	QString m_text;
 	VObjectList m_glyphs;
-	KarbonView *m_view;
+	const KarbonView *m_view;
 	QFont m_font;
 };
 

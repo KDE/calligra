@@ -195,6 +195,14 @@ VText::save( QDomElement& element ) const
 	if( state() != state_deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "TEXT" );
+
+		// save font properties
+		me.setAttribute( "text", m_text );
+		me.setAttribute( "family", m_font.family() );
+		me.setAttribute( "size", m_font.pointSize() );
+		me.setAttribute( "italic", m_font.italic() );
+		me.setAttribute( "bold", m_font.bold() );
+
 		element.appendChild( me );
 
 		// save all glyphs / paths
@@ -208,6 +216,14 @@ void
 VText::load( const QDomElement& element )
 {
 	m_glyphs.clear();
+
+	m_font.setFamily( element.attribute( "family", "Times" ) );
+	m_font.setPointSize( element.attribute( "size", "12" ).toInt() );
+	m_font.setItalic( element.attribute( "italic" ) == 0 ? false : true );
+	m_font.setWeight( QFont::Normal );
+	m_font.setBold( element.attribute( "bold" ) == 0 ? false : true );
+
+	m_text = element.attribute( "text", "" );
 
     // load text gluphs:
 	QDomNodeList list = element.childNodes();
