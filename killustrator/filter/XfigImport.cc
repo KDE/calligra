@@ -328,6 +328,11 @@ void XfigImport::parseArc (istream& fin, GDocument* ) {
   float dy = y1 - center_y;
   float radius = sqrt (dx * dx + dy * dy);
 
+  if (radius==0) {
+    delete obj;
+    return;
+  }
+
   Coord p1 ((center_x - radius) / fig_resolution,
 	    (center_y - radius) / fig_resolution);
   Coord p2 ((center_x + radius) / fig_resolution,
@@ -342,15 +347,44 @@ void XfigImport::parseArc (istream& fin, GDocument* ) {
       obj->setOutlineShape (GObject::OutlineInfo::ArcShape);
 
   p1 = Coord (center_x / fig_resolution, center_y /fig_resolution);
+  float m;
+
+  float angle1;
   p2 = Coord (x1 / fig_resolution, y1 /fig_resolution);
-  float m = ((p2.y () - p1.y ()) / (p2.x () - p1.x ()));
-  float angle1 = atan (m) * RAD_FACTOR;
+  if (p2.x () == p1.x ()) {
+    if (p2.y () > p1.y ()) 
+      angle1 = 90;
+    else
+      angle1 = -90;
+  }
+  else {
+    m = ((p2.y () - p1.y ()) / (p2.x () - p1.x ()));
+    if ( p2.x () > p1.x ())
+      angle1 = atan (m) * RAD_FACTOR;
+    else
+      angle1 = 180 + atan (m) * RAD_FACTOR;
+  }
 
+  float angle2;
   p2 = Coord (x3 / fig_resolution, y3 /fig_resolution);
-  m = ((p2.y () - p1.y ()) / (p2.x () - p1.x ()));
-  float angle2 = atan (m) * RAD_FACTOR;
+  if (p2.x () == p1.x ()) {
+    if (p2.y () > p1.y ()) 
+      angle2 = 90;
+    else
+      angle2 = -90;
+  }
+  else {
+    m = ((p2.y () - p1.y ()) / (p2.x () - p1.x ()));
+    if ( p2.x () > p1.x ())
+      angle2 = atan (m) * RAD_FACTOR;
+    else
+      angle2 = 180 + atan (m) * RAD_FACTOR;
+  }
 
-  obj->setAngles (angle1, angle2);
+  if (direction==0) // clockwise
+    obj->setAngles (angle2, angle1);
+  else if (direction==1) // counterclockwise 
+    obj->setAngles (angle1, angle2);
 
   // now set the properties
   setProperties (obj, pen_color, pen_style, thickness, area_fill, fill_color);
