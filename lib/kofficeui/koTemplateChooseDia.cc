@@ -50,6 +50,7 @@
 #include <kmessagebox.h>
 #include <qapplication.h>
 #include <qtooltip.h>
+#include <kapplication.h>
 
 class MyFileDialog : public KFileDialog
 {
@@ -233,6 +234,10 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, Q
     }
 
     delete dlg;
+    if ( rt == Cancel && dialogType == Everything )
+        // The button says quit, so let's quit
+        kapp->quit();
+
     return rt;
 }
 
