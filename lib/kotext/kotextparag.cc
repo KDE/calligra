@@ -591,7 +591,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    painter.restore();
 #endif
 	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSuperScript ) {
-            int posY =baseLine - ( painter.fontMetrics().height() / 2 )-lastFormat->offsetFromBaseLine();
+            int posY =lastY + baseLine - ( painter.fontMetrics().height() / 2 )-lastFormat->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
             if ( shadowY( zh ) < 0)
