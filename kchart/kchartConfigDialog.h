@@ -26,7 +26,10 @@ class KChartConfigDialog : public QTabDialog
 
 public:
     KChartConfigDialog( KChartParameters* params,
-			QWidget*	parent );
+						QWidget* parent );
+
+signals:
+	void dataChanged();
 
 protected:
     KChartParameters* _params;

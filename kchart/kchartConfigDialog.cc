@@ -87,9 +87,12 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
     defaults();
 
     // setup buttons
+	setOKButton( i18n( "OK" ) );
+	setApplyButton( i18n( "Apply" ) );
     setDefaultButton( i18n( "Defaults" ) );
     setCancelButton( i18n( "Cancel" ) );
 
+	connect( this, SIGNAL( okButtonPressed() ), this, SLOT( apply() ) );
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( apply() ) );
     connect( this, SIGNAL( defaultButtonPressed() ), this, SLOT( defaults() ) );
 }
@@ -97,6 +100,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 
 void KChartConfigDialog::apply()
 {
+  qDebug( "***KChartConfig::apply()" );
     // Copy application data from dialog into parameter structure that is also
     // being used by the application.
 
@@ -133,6 +137,9 @@ void KChartConfigDialog::apply()
 	  _hlcChart->apply();
 	
 	_backgroundpixpage->apply();
+
+	// data in the params struct has changed; notify application
+	emit dataChanged();
 
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );

@@ -26,7 +26,7 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 
-KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParameters* params, QWidget * parent )
+KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParameters* params, QWidget* parent )
   : QWidget( parent, "KChartBackgroundPixmapConfigPage" ),
 	_params( params )
 {

@@ -33,6 +33,8 @@ protected slots:
       void barsChart();
       void lineChart();
       void areasChart();
+	  void slotRepaint();
+
 protected:
     void paintEvent( QPaintEvent* );
 
