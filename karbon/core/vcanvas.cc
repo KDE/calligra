@@ -162,6 +162,9 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		p->clear( rect, QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
 		setYMirroring( p );
+		// TRICK : slightly adjust the matrix so libart AA looks better
+		QWMatrix mat = p->worldMatrix();
+		p->setWorldMatrix( mat.translate( -.5, -.5 ) );
 
 		// set up clippath
 		p->newPath();
@@ -234,6 +237,9 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect& rect, bool drawVObje
 		p->clear( QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
 		setYMirroring( p );
+		// TRICK : slightly adjust the matrix so libart AA looks better
+		QWMatrix mat = p->worldMatrix();
+		p->setWorldMatrix( mat.translate( -.5, -.5 ) );
 
 		m_part->document().drawPage( p );
 		m_part->document().draw( p, &rect );
