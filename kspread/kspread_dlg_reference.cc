@@ -101,15 +101,14 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   resize( 250, 200 );
 }
 
-void KSpreadreference::slotHighlighted(QListBoxItem * )
+void KSpreadreference::displayAreaValues(QString const & areaName)
 {
-  QString tmp = m_list->text(m_list->currentItem());
   QString tmpName;
   QValueList<Reference>::Iterator it;
-  QValueList<Reference> area(m_pView->doc()->listArea());
+  QValueList<Reference> area( m_pView->doc()->listArea() );
   for ( it = area.begin(); it != area.end(); ++it )
   {
-    if ((*it).ref_name == tmp)
+    if ((*it).ref_name == areaName)
     {
       if (!m_pView->doc()->map()->findTable( (*it).table_name))
         kdDebug(36001) << "(*it).table_name '" << (*it).table_name
@@ -123,6 +122,12 @@ void KSpreadreference::slotHighlighted(QListBoxItem * )
 
   tmpName = i18n("Area: %1").arg(tmpName);
   m_rangeName->setText(tmpName);
+}
+
+void KSpreadreference::slotHighlighted(QListBoxItem * )
+{
+  QString tmp = m_list->text(m_list->currentItem());
+  displayAreaValues(tmp);
 }
 
 void KSpreadreference::slotDoubleClicked(QListBoxItem *)
@@ -182,6 +187,16 @@ void KSpreadreference::slotEdit()
     return;
   KSpreadEditAreaName editDlg( m_pView, "EditArea", name );
   editDlg.exec();
+
+  m_rangeName->setText(i18n("Area: %1").arg(""));  
+  QString tmp = m_list->text(m_list->currentItem());
+  if (tmp.length() > 0)
+  {
+    displayAreaValues( tmp );
+  }
+  else
+  {
+  }    
 }
 
 void KSpreadreference::slotOk()

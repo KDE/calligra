@@ -54,6 +54,9 @@ protected:
   QPushButton * m_pEdit;
   QPushButton * m_pRemove;
   QLabel      * m_rangeName;
+
+private:
+  void displayAreaValues(QString const & areaName);
 };
 
 class KSpreadEditAreaName : public QDialog
