@@ -55,7 +55,7 @@ public:
     // the text along with any relevant attributes.
 
     void parse();
-    virtual void gotError(const QString &text) = 0;
+    virtual void gotError(const QString &text);
     virtual void gotParagraph(const QString &text, PAP &style);
     virtual void gotHeadingParagraph(const QString &text, PAP &style);
     virtual void gotListParagraph(const QString &text, PAP &style);
@@ -83,7 +83,7 @@ public:
         U8 grpprlBytes;
         U8 *grpprl;
     } CHPXFKP;
-    static unsigned read(unsigned nFib, const U8 *in, CHPXFKP *out);
+    unsigned read(const U8 *in, CHPXFKP *out);
 
     typedef struct PAPXFKP
     {
@@ -91,7 +91,7 @@ public:
         U16 grpprlBytes;
         U8 *grpprl;
     } PAPXFKP;
-    static unsigned read(unsigned nFib, const U8 *in, PAPXFKP *out);
+    unsigned read(const U8 *in, PAPXFKP *out);
 
     // STyle Definition (STD)
     typedef struct STD
@@ -143,12 +143,12 @@ public:
         //
         const U8 *grupx;
     } __attribute__ ((packed)) STD;
-    static unsigned read(U16 lid, const U8 *in, unsigned baseInFile, STD *out, unsigned count=1);
+    unsigned read(U16 lid, const U8 *in, unsigned baseInFile, STD *out, unsigned count=1);
 
     static unsigned read(const U8 *in, FIB *out, unsigned count=1);
-    static unsigned read(unsigned nFib, const U8 *in, BTE *out);
-    static unsigned read(unsigned nFib, const U8 *in, PCD *out);
-    static unsigned read(unsigned nFib, const U8 *in, PHE *out);
+    unsigned read(const U8 *in, BTE *out);
+    unsigned read(const U8 *in, PCD *out);
+    unsigned read(const U8 *in, PHE *out);
 
     // Some fundamental data structures. We keep pointers to our streams,
     // and a copy of the FIB.
@@ -183,7 +183,7 @@ public:
         //
         // Plex(bool (*callback)(unsigned start, unsigned end, const <T>&
 
-        Plex(FIB &fib);
+        Plex(MsWord *document);
 
         // We would like to define the iterator as a proper friend class with a
         // constructor like this:
@@ -196,7 +196,7 @@ public:
         void startIteration(const U8 *plex, const U32 byteCount);
         bool getNext(U32 *startFc, U32 *endFc, T *data);
     protected:
-        FIB &m_fib;
+        MsWord *m_document;
         const U8 *m_plex;
         U32 m_byteCount;
         unsigned m_crun;
@@ -220,7 +220,7 @@ public:
         //
         // Fkp(bool (*callback)(unsigned start, unsigned end, const <T>&
 
-        Fkp(FIB &fib);
+        Fkp(MsWord *document);
 
         // We would like to define the iterator as a proper friend class with a
         // constructor like this:
@@ -233,7 +233,7 @@ public:
         void startIteration(const U8 *fkp);
         bool getNext(U32 *startFc, U32 *endFc, U8 *rgb, T1 *data1, T2 *data2);
     protected:
-        const FIB &m_fib;
+        MsWord *m_document;
         const U8 *m_fkp;
         U8 m_crun;
         const U8 *m_fcNext;
@@ -255,8 +255,15 @@ private:
     void getCHPXFKP();
     void getCHPX(const U8 *fkp);
 
-    void getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode);
-    void getPAPX(
+    // The text stream contains body text, header, footers, endnotes, footnotes
+    // and so on. These routines help walk the text stream.
+
+    unsigned m_currentTextStreamPosition;
+    void getParagraphsFromBtes(
+        const U8 *textStartFc,
+        U32 textLength,
+        bool unicode);
+    void getParagraphsFromPapxs(
         const U8 *fkp,
         const U8 *textStartFc,
         U32 textLength,

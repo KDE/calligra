@@ -18,8 +18,8 @@
     Boston, MA 02111-1307, USA.
 
     The code in this file is mostly derived from the Microsoft specifications,
-    but some of the workarounds for the broken specifications etc. come from
-    the pioneering work on the "wvWare" library by Caolan McNamara (see
+    but some of the algorithms to workaround broken specifications etc. come
+    from the pioneering work on the "wvWare" library by Caolan McNamara (see
     http://www.wvWare.com).
 */
 
@@ -357,8 +357,8 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
 }
 
 template <class T1, class T2>
-MsWord::Fkp<T1, T2>::Fkp(FIB &fib) :
-    m_fib(fib)
+MsWord::Fkp<T1, T2>::Fkp(MsWord *document) :
+    m_document(document)
 {
 };
 
@@ -390,7 +390,7 @@ bool MsWord::Fkp<T1, T2>::getNext(
 
     m_dataNext += MsWordGenerated::read(m_dataNext, rgb);
     if (data1)
-        m_dataNext += read(m_fib.nFib, m_dataNext, data1);
+        m_dataNext += m_document->read(m_dataNext, data1);
 
     if (!(*rgb))
     {
@@ -400,7 +400,7 @@ bool MsWord::Fkp<T1, T2>::getNext(
     else
     {
         // Get the second piece of data.
-        MsWord::read(m_fib.nFib, m_fkp + (2 * (*rgb)), data2);
+        m_document->read(m_fkp + (2 * (*rgb)), data2);
     }
     return (m_i++ < m_crun);
 }
@@ -423,7 +423,7 @@ void MsWord::getCHPXFKP()
 {
     // A bin table is a plex of BTEs.
 
-    Plex<BTE, 2> btes = Plex<BTE, 2>(m_fib);
+    Plex<BTE, 2> btes = Plex<BTE, 2>(this);
     U32 startFc;
     U32 endFc;
     BTE data;
@@ -441,7 +441,7 @@ void MsWord::getCHPX(const U8 *fkp)
 {
     // A CHPX FKP contains no extra data, specify a dummy PHE for the template.
 
-    Fkp<PHE, CHPXFKP> chpx = Fkp<PHE, CHPXFKP>(m_fib);
+    Fkp<PHE, CHPXFKP> chpx = Fkp<PHE, CHPXFKP>(this);
 
     U32 startFc;
     U32 endFc;
@@ -455,11 +455,12 @@ void MsWord::getCHPX(const U8 *fkp)
     }
 }
 
-void MsWord::getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode)
+// Walk a FKP of BTEs outputting text.
+void MsWord::getParagraphsFromBtes(const U8 *textStartFc, U32 textLength, bool unicode)
 {
     // A bin table is a plex of BTEs.
 
-    Plex<BTE, 2> btes = Plex<BTE, 2>(m_fib);
+    Plex<BTE, 2> btes = Plex<BTE, 2>(this);
     U32 startFc;
     U32 endFc;
     BTE data;
@@ -469,7 +470,7 @@ void MsWord::getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode)
     btes.startIteration(m_tableStream + m_fib.fcPlcfbtePapx, m_fib.lcbPlcfbtePapx);
     while (btes.getNext(&startFc, &endFc, &data))
     {
-        getPAPX(
+        getParagraphsFromPapxs(
             m_mainStream + (data.pn * 512),
             textStartFc,
             textLength,
@@ -477,7 +478,8 @@ void MsWord::getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode)
     }
 }
 
-void MsWord::getPAPX(
+// Walk a FKP of PAPXs outputting text.
+void MsWord::getParagraphsFromPapxs(
     const U8 *fkp,
     const U8 *textStartFc,
     U32 textLength,
@@ -485,7 +487,7 @@ void MsWord::getPAPX(
 {
     // A PAPX FKP contains PHEs.
 
-    Fkp<PHE, PAPXFKP> papx = Fkp<PHE, PAPXFKP>(m_fib);
+    Fkp<PHE, PAPXFKP> papx = Fkp<PHE, PAPXFKP>(this);
 
     U32 startFc;
     U32 endFc;
@@ -493,15 +495,55 @@ void MsWord::getPAPX(
     PHE layout;
     PAPXFKP style;
 
-    papx.startIteration(fkp);
-    while (papx.getNext(&startFc, &endFc, &rgb, &layout, &style))
+    // Decode main body text.
+//        kdDebug(s_area) << "text at: " << m_currentTextStreamPosition << " < " <<  (m_fib.ccpText - 1) * 2 << endl;
+//    if (m_currentTextStreamPosition < (m_fib.ccpText - 1) * 2)
+//        kdDebug(s_area) << "text at: " << m_currentTextStreamPosition << " <= " <<  (m_fib.ccpText) << endl;
+//    if (m_currentTextStreamPosition <= (m_fib.ccpText))
     {
-        QString text;
+//        kdDebug(s_area) << "body text from: " << m_currentTextStreamPosition << ".." << m_currentTextStreamPosition+textLength<< endl;
+        papx.startIteration(fkp);
+        while (papx.getNext(&startFc, &endFc, &rgb, &layout, &style))
+        {
+            QString text;
 
-        //kdDebug(s_area) << "pap from: " << startFc << ".." << endFc << ": rgb: " << rgb << endl;
-        read(m_fib.lid, m_mainStream + startFc, &text, endFc - startFc, unicode);
-        decodeParagraph(text, layout, style);
+            //kdDebug(s_area) << "pap from: " << startFc << ".." << endFc << ": rgb: " << rgb << endl;
+            read(m_fib.lid, m_mainStream + startFc, &text, endFc - startFc, unicode);
+            decodeParagraph(text, layout, style);
+        }
     }
+//    else
+//        kdDebug(s_area) << "ignore non-body text from: " << m_currentTextStreamPosition << ".." << m_currentTextStreamPosition+textLength<< endl;
+/*
+    else
+    if (m_currentTextStreamPosition < m_fib.ccpFtn)
+        kdDebug(s_area) << "output footnotes to: " << m_currentTextStreamPosition << endl;
+    else
+    if (m_currentTextStreamPosition < m_fib.ccpHdd)
+        kdDebug(s_area) << "output headers to: " << m_currentTextStreamPosition << endl;
+    else
+    if (m_currentTextStreamPosition < m_fib.ccpAtn)
+        kdDebug(s_area) << "output annotations to: " << m_currentTextStreamPosition << endl;
+    else
+    if (m_currentTextStreamPosition < m_fib.ccpEdn)
+        kdDebug(s_area) << "output endnotes to: " << m_currentTextStreamPosition << endl;
+    else
+    if (m_currentTextStreamPosition < m_fib.ccpTxbx)
+        kdDebug(s_area) << "output textbox to: " << m_currentTextStreamPosition << endl;
+    else
+    if (m_currentTextStreamPosition < m_fib.ccpHdrTxbx)
+        kdDebug(s_area) << "output header textbox to: " << m_currentTextStreamPosition << endl;
+*/
+
+//    if (unicode)
+//        m_currentTextStreamPosition += textLength / 2;
+//    else
+        m_currentTextStreamPosition += textLength;
+
+    // If the string ends in a CR, strip it off.
+
+//    if (!unicode && (char8 == '\r'))
+//        out->truncate(count - 1);
 }
 
 // Create a cache of information about lists.
@@ -642,6 +684,11 @@ void MsWord::getStyles()
     }
 }
 
+void MsWord::gotError(const QString &text)
+{
+    kdError(s_area) << text << endl;
+}
+
 void MsWord::gotParagraph(const QString &text, PAP &style)
 {
     kdDebug(s_area) << "MsWord::gotParagraph: normal" << endl;
@@ -700,7 +747,22 @@ MsWord::MsWord(
     // being present until we are destroyed.
 
     m_mainStream = mainStream;
-    m_tableStream = m_fib.fWhichTblStm ? table1Stream : table0Stream;
+    if (table0Stream && table1Stream)
+    {
+        // If and only if both table streams are present, the FIB tells us which
+        // we should use.
+
+        m_tableStream = m_fib.fWhichTblStm ? table1Stream : table0Stream;
+    }
+    else
+    if (table0Stream)
+    {
+        m_tableStream = table0Stream;
+    }
+    else
+    {
+        m_tableStream = table1Stream;
+    }
     m_dataStream = dataStream;
     if (!m_tableStream)
     {
@@ -733,9 +795,10 @@ void MsWord::parse()
        return;
     }
 
-    // Fill the style cache.
+    // Initialise the parse state.
 
     m_wasInTable = false;
+    m_currentTextStreamPosition = 0;
 
     // Note that we test for the presence of complex structure, rather than
     // m_fib.fComplex. This allows us to treat newer files which always seem
@@ -822,7 +885,7 @@ void MsWord::parse()
 
         // Locate the piece table in a complex document.
 
-        Plex<PCD, 8> *pieceTable = new Plex<PCD, 8>(m_fib);
+        Plex<PCD, 8> *pieceTable = new Plex<PCD, 8>(this);
 
         U32 startFc;
         U32 endFc;
@@ -830,6 +893,8 @@ void MsWord::parse()
         const U32 codepage1252mask = 0x40000000;
         bool unicode;
 
+        kdDebug(s_area) << "text stream from: " << m_fib.fcMin << ".." << m_fib.fcMac << endl;
+        kdDebug(s_area) << "body from: " << m_fib.fcMin << ".." << m_fib.fcMin + m_fib.ccpText << endl;
         pieceTable->startIteration(textPlex.ptr, textPlex.byteCount);
         while (pieceTable->getNext(&startFc, &endFc, &data))
         {
@@ -841,12 +906,12 @@ void MsWord::parse()
                 data.fc &= ~ codepage1252mask;
                 data.fc /= 2;
             }
-            getPAPXFKP(m_mainStream + data.fc, endFc - startFc, unicode);
+            getParagraphsFromBtes(m_mainStream + data.fc, endFc - startFc, unicode);
         }
     }
     else
     {
-        getPAPXFKP(
+        getParagraphsFromBtes(
             m_mainStream + m_fib.fcMin,
             m_fib.fcMac - m_fib.fcMin,
             false);
@@ -854,8 +919,8 @@ void MsWord::parse()
 }
 
 template <class T, int word6Size>
-MsWord::Plex<T, word6Size>::Plex(FIB &fib) :
-    m_fib(fib)
+MsWord::Plex<T, word6Size>::Plex(MsWord *document) :
+    m_document(document)
 {
 };
 
@@ -870,7 +935,7 @@ bool MsWord::Plex<T, word6Size>::getNext(U32 *startFc, U32 *endFc, T *data)
     }
     m_fcNext += MsWordGenerated::read(m_fcNext, startFc);
     MsWordGenerated::read(m_fcNext, endFc);
-    m_dataNext += MsWord::read(m_fib.nFib, m_dataNext, data);
+    m_dataNext += m_document->read(m_dataNext, data);
     m_i++;
     return true;
 }
@@ -885,11 +950,11 @@ void MsWord::Plex<T, word6Size>::startIteration(const U8 *plex, const U32 byteCo
 
     // Calculate the number of entries in the plex.
 
-    if (m_fib.nFib > s_maxWord6Version)
+    if (m_document->m_fib.nFib > s_maxWord6Version)
         m_crun = (m_byteCount - sizeof(startFc)) / (sizeof(T) + sizeof(startFc));
     else
         m_crun = (m_byteCount - sizeof(startFc)) / (word6Size + sizeof(startFc));
-    kdDebug(s_area) << "MsWord::Plex::startIteration: " << m_crun << endl;
+    //kdDebug(s_area) << "MsWord::Plex::startIteration: " << m_crun << endl;
     m_fcNext = m_plex;
     m_dataNext = m_plex + ((m_crun + 1) * sizeof(startFc));
     m_i = 0;
@@ -919,18 +984,13 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
             *out += QChar(char2unicode(lid, char8));
         }
     }
-
-    // If the string ends in a CR, strip it off.
-
-    if (!unicode && (char8 == '\r'))
-        out->truncate(count - 1);
     return bytes;
 }
 
 //
 // Read a CHPX as stored in a FKP.
 //
-unsigned MsWord::read(unsigned nFib, const U8 *in, CHPXFKP *out)
+unsigned MsWord::read(const U8 *in, CHPXFKP *out)
 {
     unsigned bytes = 0;
 
@@ -943,13 +1003,13 @@ unsigned MsWord::read(unsigned nFib, const U8 *in, CHPXFKP *out)
 //
 // Read a PAPX as stored in a FKP.
 //
-unsigned MsWord::read(unsigned nFib, const U8 *in, PAPXFKP *out)
+unsigned MsWord::read(const U8 *in, PAPXFKP *out)
 {
     unsigned bytes = 0;
     U8 cw;
 
     bytes += MsWordGenerated::read(in + bytes, &cw);
-    if (nFib > s_maxWord6Version)
+    if (m_fib.nFib > s_maxWord6Version)
     {
         if (!cw)
         {
@@ -1117,13 +1177,13 @@ unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
     return bytes;
 } // FIB
 
-unsigned MsWord::read(unsigned nFib, const U8 *in, BTE *out)
+unsigned MsWord::read(const U8 *in, BTE *out)
 {
     U8 *ptr = (U8 *)out;
     unsigned bytes = 0;
     U16 tmp;
 
-    if (nFib > s_maxWord6Version)
+    if (m_fib.nFib > s_maxWord6Version)
     {
         bytes = MsWordGenerated::read(in, out);
     }
@@ -1135,7 +1195,7 @@ unsigned MsWord::read(unsigned nFib, const U8 *in, BTE *out)
     return bytes;
 } // BTE
 
-unsigned MsWord::read(unsigned nFib, const U8 *in, PCD *out)
+unsigned MsWord::read(const U8 *in, PCD *out)
 {
     U8 *ptr = (U8 *)out;
     unsigned bytes = 0;
@@ -1144,13 +1204,13 @@ unsigned MsWord::read(unsigned nFib, const U8 *in, PCD *out)
     return bytes;
 } // PCD
 
-unsigned MsWord::read(unsigned nFib, const U8 *in, PHE *out)
+unsigned MsWord::read(const U8 *in, PHE *out)
 {
     U8 *ptr = (U8 *)out;
     unsigned bytes = 0;
     U16 tmp;
 
-    if (nFib > s_maxWord6Version)
+    if (m_fib.nFib > s_maxWord6Version)
     {
         bytes = MsWordGenerated::read(in, out);
     }
