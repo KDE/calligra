@@ -53,7 +53,7 @@ VSelectTool::draw()
 	painter->setRasterOp( Qt::NotROP );
 
 	KoPoint current = m_current;
-	current.setY( -current.y() + view()->canvasWidget()->contentsHeight() );
+	//current.setY( -current.y() + view()->canvasWidget()->contentsHeight() );
 
 	KoRect rect = view()->part()->document().selection()->boundingBox();
 
