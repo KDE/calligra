@@ -189,6 +189,14 @@ void KPTResourceGroup::insertId(const QString &id) {
         m_project->insertResourceGroupId(id, this);
 }
 
+KPTAppointment KPTResourceGroup::appointmentIntervals() const {
+    KPTAppointment a;
+    QPtrListIterator<KPTResource> it = m_resources;
+    for (; it.current(); ++it) {
+        a += it.current()->appointmentIntervals();
+    }
+    return a;
+}
 
 KPTResource::KPTResource(KPTProject *project) : m_project(project), m_appointments(), m_workingHours(), m_overbooked(false) {
     m_type = Type_Work;

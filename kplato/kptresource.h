@@ -143,6 +143,8 @@ class KPTResourceGroup {
           bool removeId(const QString &id);
           void insertId(const QString &id);
 
+          KPTAppointment appointmentIntervals() const;
+
 #ifndef NDEBUG
         void printDebug(QString ident);
 #endif
