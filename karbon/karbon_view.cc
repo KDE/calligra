@@ -527,7 +527,8 @@ KarbonView::solidFillClicked()
 	if( shell()->rootView() == this )
 	{
 		VFillDlg* dialog = new VFillDlg( m_part );
-		dialog->show();
+		dialog->exec();
+                delete dialog;
 	}
 }
 
@@ -537,7 +538,8 @@ KarbonView::strokeClicked()
 	if( shell()->rootView() == this )
 	{
 		VStrokeDlg* dialog = new VStrokeDlg( m_part );
-		dialog->show();
+		dialog->exec();
+                delete dialog;
 	}
 }
 
@@ -570,8 +572,8 @@ KarbonView::slotFillColorChanged( const QColor &c )
 void
 KarbonView::viewColorManager()
 {
-	VColorDlg* dialog = new VColorDlg( this );
-	dialog->show();
+	VColorDlg dialog( this );
+	dialog.show();
 }
 
 void
@@ -699,7 +701,7 @@ KarbonView::initActions()
 	m_setFontSize = new KFontSizeAction(
 		i18n( "Set Font Size" ), 0, actionCollection(), "setFontSize" );
 	m_setFontSize->setCurrentItem( 0 );
-	
+
 	//connect( m_setFontSize,
 	//	SIGNAL( activated( const QString& ) ),
 	//	SLOT( setFontSize( const QString& ) ) );
