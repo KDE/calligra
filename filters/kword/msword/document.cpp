@@ -136,6 +136,8 @@ bool Document::parse()
 
 void Document::sectionStart()
 {
+    wvWare::SharedPtr<const wvWare::Word97::SEP> sep = m_parser->currentSep();
+
     m_sectionNumber++;
 
     kdDebug() << k_funcinfo << m_sectionNumber << " dmOrientPage=" << m_parser->currentSep()->dmOrientPage << endl;
@@ -144,8 +146,6 @@ void Document::sectionStart()
         // KWord doesn't support a different paper format per section.
         // So we use the paper format of the first section,
         // and we apply it to the whole document.
-
-        wvWare::SharedPtr<const wvWare::Word97::SEP> sep = m_parser->currentSep();
 
         QDomElement elementDoc = m_mainDocument.documentElement();
         // TODO: other paper formats
@@ -176,6 +176,14 @@ void Document::sectionStart()
 
         // TODO apply brcTop/brcLeft etc. to the main FRAME
         // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
+    }
+    else
+    {
+        // Not the first section. Check for a page break
+        if ( sep->bkc >= 1 ) // 1=new column, 2=new page, 3=even page, 4=odd page
+        {
+            pageBreak();
+        }
     }
 }
 
@@ -514,6 +522,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
             const wvWare::Word97::TabDescriptor &td = pap->rgdxaTab[i];
             QDomElement tabElement = m_mainDocument.createElement( "TABULATOR" );
             tabElement.setAttribute( "ptpos", (double)td.rgdxaTab / 20.0 );
+            kdDebug() << "ptpos=" << (double)td.rgdxaTab / 20.0 << endl;
             // Wow, lucky here. The type enum matches. Only, MSWord has 4=bar,
             // which kword doesn't support. We map it to 0 with a clever '%4' :)
             tabElement.setAttribute( "type", td.rgtbd.jc % 4 );
