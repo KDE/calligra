@@ -351,14 +351,17 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
 
     QDomElement* masterPage = m_masterPages[ masterPageName ];
     Q_ASSERT( masterPage );
+    kdDebug(30518) << "page-master-name: " << masterPage->attribute( "style:page-master-name" ) << endl;
     QDomElement *style = masterPage ? m_styles[masterPage->attribute( "style:page-master-name" )] : 0;
     Q_ASSERT( style );
     if ( style )
     {
         QDomElement properties( style->namedItem( "style:properties" ).toElement() );
+        Q_ASSERT( !properties.isNull() );
         orientation = ( (properties.attribute("style:print-orientation") != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
         width = KoUnit::parseValue(properties.attribute("fo:page-width"));
         height = KoUnit::parseValue(properties.attribute("fo:page-height"));
+        kdDebug(30518) << "width=" << width << " height=" << height << endl;
         // guessFormat takes millimeters
         if ( orientation == PG_LANDSCAPE )
             paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(height), POINT_TO_MM(width) );
@@ -416,6 +419,7 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
     else
     {
         // We have no master page! We need defaults.
+        kdWarning(30518) << "NO MASTER PAGE" << endl;
         orientation=PG_PORTRAIT;
         paperFormat=PG_DIN_A4;
         width=MM_TO_POINT(KoPageFormat::width(paperFormat, orientation));
@@ -1116,6 +1120,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
                    || tagName == "text:modification-date"
                    || tagName == "text:time"
                    || tagName == "text:page-number"
+                   || tagName == "text:chapter"
                    || tagName == "text:file-name"
                    || tagName == "text:author-name"
                    || tagName == "text:author-initials"
@@ -1124,7 +1129,9 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
                    || tagName == "text:description"
                    || tagName == "text:variable-set"
                    || tagName == "text:page-variable-get"
-                   || tagName == "text:user-defined" ) )
+                   || tagName == "text:user-defined"
+                   || tagName.startsWith( "text:sender-")
+                      ) )
             // TODO in kword: text:printed-by, initial-creator
         {
             textData = "#";     // field placeholder
@@ -2059,14 +2066,21 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
                 subtype = 3;    // VST_PGNUM_PREVIOUS
             else if (select == "next")
                 subtype = 4;    // VST_PGNUM_NEXT
-            else
-                subtype = 0;    // VST_PGNUM_CURRENT
         }
 
         QDomElement pgnumElement ( doc.createElement("PGNUM") );
         pgnumElement.setAttribute("subtype", subtype);
         pgnumElement.setAttribute("value", object.text());
         appendKWordVariable(doc, outputFormats, object, pos, "NUMBER", 4, pgnumElement);
+    }
+    else if (tagName == "text:chapter")
+    {
+        const QString display = object.attribute( "text:display" );
+        // display can be name, number, number-and-name, plain-number-and-name, plain-number
+        QDomElement pgnumElement ( doc.createElement("PGNUM") );
+        pgnumElement.setAttribute("subtype", 2); // VST_CURRENT_SECTION
+        pgnumElement.setAttribute("value", object.text());
+        appendKWordVariable(doc, outputFormats, object, pos, "STRING", 4, pgnumElement);
     }
     else if (tagName == "text:file-name")
     {
@@ -2113,6 +2127,46 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         authorElem.setAttribute("subtype", subtype);
         authorElem.setAttribute("value", object.text());
         appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, authorElem);
+    }
+    else if ( tagName.startsWith( "text:sender-" ) )
+    {
+        int subtype = -1;
+        const QCString afterText( tagName.latin1() + 5 );
+        if ( afterText == "sender-company" )
+            subtype = 4; //VST_COMPANYNAME;
+        else if ( afterText == "sender-firstname" )
+            ; // ## This is different from author-name, but the notion of 'sender' is unclear...
+        else if ( afterText == "sender-lastname" )
+            ; // ## This is different from author-name, but the notion of 'sender' is unclear...
+        else if ( afterText == "sender-initials" )
+            ; // ## This is different from author-initials, but the notion of 'sender' is unclear...
+        else if ( afterText == "sender-street" )
+            subtype = 14; // VST_STREET;
+        else if ( afterText == "sender-country" )
+            subtype = 9; // VST_COUNTRY;
+        else if ( afterText == "sender-postal-code" )
+            subtype = 12; //VST_POSTAL_CODE;
+        else if ( afterText == "sender-city" )
+            subtype = 13; // VST_CITY;
+        else if ( afterText == "sender-title" )
+            subtype = 15; // VST_AUTHORTITLE; // Small hack (it's supposed to be about the sender, not about the author)
+        else if ( afterText == "sender-position" )
+            subtype = 15; // VST_AUTHORTITLE; // TODO separate variable
+        else if ( afterText == "sender-phone-private" )
+            subtype = 7; // VST_TELEPHONE;
+        else if ( afterText == "sender-phone-work" )
+            subtype = 7; // VST_TELEPHONE; // ### TODO separate type
+        else if ( afterText == "sender-fax" )
+            subtype = 8; // VST_FAX;
+        else if ( afterText == "sender-email" )
+            subtype = 3; // VST_EMAIL;
+        if ( subtype != -1 )
+        {
+            QDomElement fieldElem = doc.createElement("FIELD");
+            fieldElem.setAttribute("subtype", subtype);
+            fieldElem.setAttribute("value", object.text());
+            appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, fieldElem);
+        }
     }
     else if ( tagName == "text:variable-set"
               || tagName == "text:user-defined" )
