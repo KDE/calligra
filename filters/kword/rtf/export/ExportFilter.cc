@@ -630,7 +630,16 @@ void RTFWorker::writeFontData(void)
             *m_streamOut << "\\ftech";
         else if ( (strLower.find("script")>-1) )
             *m_streamOut << "\\fscript";
+
+#if 1
         else
+        {
+            // We do not know the font type that we have and we cannot even tell if it is TrueType
+            *m_streamOut << "\\fnil";
+        }
+#else
+        else
+        // QFontInfo:styleHint() does not guess anything, it just returns what is in the QFont. Nothing put in, nothing gets out.
         {
             switch (info.styleHint())
             {
@@ -657,6 +666,7 @@ void RTFWorker::writeFontData(void)
                 }
             }
         }
+#endif
         *m_streamOut << "\\fcharset0\\fprq" << (info.fixedPitch()?1:2) << " "; // font definition
         *m_streamOut << escapeRtfText(info.family()); // ### TODO: does RTF allows brackets in the font names?
         *m_streamOut <<  ";}" << m_eol; // end font table entry
