@@ -595,6 +595,8 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     else if ( e->button() == RightButton ) {
         if(!m_doc->isReadWrite()) // The popups are not available in readonly mode, since the GUI isn't built...
             return;
+        if ( m_deleteMovingRect )
+            deleteMovingRect();
         // rmb menu
         switch ( m_mouseMode )
         {
@@ -626,7 +628,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         case MM_CREATE_TABLE:
         case MM_CREATE_FORMULA:
         case MM_CREATE_PIX:
-            deleteMovingRect();
             setMouseMode( MM_EDIT );
         default: break;
         }
