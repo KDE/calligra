@@ -2391,6 +2391,11 @@ void KPrHideShowHeaderFooter::execute()
         m_doc->setHeader( newValue );
     else
         kdDebug(33001)<<"Error in void KPrHideShowHeaderFooter::execute()\n";
+    if ( m_doc->refreshSideBar())
+    {
+        int pos=m_doc->pageList().findRef(m_doc->stickyPage());
+        m_doc->updateSideBarItem(pos,  true/*sticky page*/ );
+    }
 }
 
 void KPrHideShowHeaderFooter::unexecute()
@@ -2401,7 +2406,11 @@ void KPrHideShowHeaderFooter::unexecute()
         m_doc->setHeader( !newValue );
     else
         kdDebug(33001)<<"Error in void KPrHideShowHeaderFooter::unexecute()\n";
-
+    if ( m_doc->refreshSideBar())
+    {
+        int pos=m_doc->pageList().findRef(m_doc->stickyPage());
+        m_doc->updateSideBarItem(pos,  true/*sticky page*/ );
+    }
 }
 
 
