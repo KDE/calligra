@@ -75,7 +75,7 @@ public:
 	};
 
 
-	VSegment( unsigned short degree = 3 );
+	VSegment( unsigned short deg = 3 );
 
 	VSegment( const VSegment& segment );
 
@@ -94,7 +94,7 @@ public:
 	 * Sets the segment's degree and thus resizes the array of node data. All old node data
 	 * are lost. You will have to backup them on your own.
 	 */
-	void setDegree( unsigned short degree );
+	void setDegree( unsigned short deg );
 
 
 	/**
@@ -331,10 +331,15 @@ public:
 		const KoPoint& b1 );
 
 	/**
-	 * Tests whether this segment and the line A0A1 intersect.
+	 * Returns true if this segment intersects the line A0A1.
 	 */
-	bool intersects( const KoPoint &, const KoPoint &) const;
-	bool intersects( const VSegment & ) const;
+	bool intersects( const KoPoint& a0, const KoPoint& a1 ) const;
+
+	/**
+	 * Returns true, if this segment intersects the other segment.
+	 */
+	bool intersects( const VSegment& segment ) const;
+
 
 	/**
 	 * Calculates the bounding box.

@@ -59,12 +59,12 @@ height(
 }
 
 
-VSegment::VSegment( unsigned short degree )
+VSegment::VSegment( unsigned short deg )
 {
-	m_degree = degree;
+	m_degree = deg;
 
-	m_nodes = new VNodeData[ m_degree ];
-	for( unsigned short i = 0; i < m_degree; ++i )
+	m_nodes = new VNodeData[ degree() ];
+	for( unsigned short i = 0; i < degree(); ++i )
 		selectPoint( i );
 
 	m_state = normal;
@@ -75,9 +75,9 @@ VSegment::VSegment( unsigned short degree )
 
 VSegment::VSegment( const VSegment& segment )
 {
-	m_degree = segment.m_degree;
+	m_degree = segment.degree();
 
-	m_nodes = new VNodeData[ m_degree ];
+	m_nodes = new VNodeData[ degree() ];
 
 	m_state = segment.m_state;
 
@@ -100,10 +100,10 @@ VSegment::~VSegment()
 }
 
 void
-VSegment::setDegree( unsigned short degree )
+VSegment::setDegree( unsigned short deg )
 {
 	// Do nothing if old and new degrees are identical.
-	if( m_degree == degree )
+	if( degree() == deg )
 		return;
 
 	KoPoint oldknot = knot();
@@ -111,9 +111,9 @@ VSegment::setDegree( unsigned short degree )
 	delete[]( m_nodes );
 
 	// Allocate new node data.
-	m_nodes = new VNodeData[ degree ];
+	m_nodes = new VNodeData[ deg ];
 
-	m_degree = degree;
+	m_degree = deg;
 
 	setKnot( oldknot );
 }
@@ -142,10 +142,11 @@ VSegment::draw( VPainter* painter ) const
 bool
 VSegment::isFlat( double flatness ) const
 {
-	if( !prev() || m_degree == 1 )
+	if( !prev() || degree() == 1 )
 	{
 		return true;
 	}
+
 
 	bool flat = false;
 
@@ -160,8 +161,6 @@ VSegment::isFlat( double flatness ) const
 	}
 
 	return flat;
-
-	return false;
 }
 
 KoPoint
@@ -182,7 +181,7 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 		return;
 
 
-	// Lines.
+	// Optimise the line case.
 	if( degree() == 1 )
 	{
 		const KoPoint diff = knot() - prev()->knot();
@@ -299,69 +298,65 @@ VSegment::length( double t ) const
 	}
 
 
-	// Length of a line.
+	// Optimise the line case.
 	if( degree() == 1 )
 	{
 		return
 			t * chordLength();
 	}
 
-	// Length of a bezier.
-	else if( degree() > 1 )
+
+	/* The idea for this algortihm is by Jens Gravesen <gravesen@mat.dth.dk>.
+	 * We calculate the chord length "chord"=|P0P3| and the length of the control point
+	 * polygon "poly"=|P0P1|+|P1P2|+|P2P3|. The approximation for the bezier length is
+	 * 0.5 * poly + 0.5 * chord. "poly - chord" is a measure for the error.
+	 * We subdivide each segment until the error is smaller than a given tolerance
+	 * and add up the subresults.
+	 */
+
+	// "Copy segment" splitted at t into a path.
+	VPath path( 0L );
+	path.moveTo( prev()->knot() );
+
+	// Optimize a bit: most of the time we'll need the
+	// length of the whole segment.
+	if( t == 1.0 )
+		path.append( this->clone() );
+	else
 	{
-		/* The idea for this algortihm is by Jens Gravesen <gravesen@mat.dth.dk>.
-		 * We calculate the chord length "chord"=|P0P3| and the length of the control point
-		 * polygon "poly"=|P0P1|+|P1P2|+|P2P3|. The approximation for the bezier length is
-		 * 0.5 * poly + 0.5 * chord. "poly - chord" is a measure for the error.
-		 * We subdivide each segment until the error is smaller than a given tolerance
-		 * and add up the subresults.
-		 */
+		VSegment* copy = this->clone();
+		path.append( copy->splitAt( t ) );
+		delete copy;
+	}
 
-		// "Copy segment" splitted at t into a path.
-		VPath path( 0L );
-		path.moveTo( prev()->knot() );
 
-		// Optimize a bit: most of the time we'll need the
-		// length of the whole segment.
-		if( t == 1.0 )
-			path.append( this->clone() );
+	double chord;
+	double poly;
+
+	double length = 0.0;
+
+	while( path.current() )
+	{
+		chord = path.current()->chordLength();
+		poly = path.current()->polyLength();
+
+		if(
+			poly &&
+			( poly - chord ) / poly > VGlobal::lengthTolerance )
+		{
+			// Split at midpoint.
+			path.insert(
+				path.current()->splitAt( 0.5 ) );
+		}
 		else
 		{
-			VSegment* copy = this->clone();
-			path.append( copy->splitAt( t ) );
-			delete copy;
+			length += 0.5 * poly + 0.5 * chord;
+			path.next();
 		}
-
-
-		double chord;
-		double poly;
-
-		double length = 0.0;
-
-		while( path.current() )
-		{
-			chord = path.current()->chordLength();
-			poly = path.current()->polyLength();
-
-			if(
-				poly &&
-				( poly - chord ) / poly > VGlobal::lengthTolerance )
-			{
-				// Split at midpoint.
-				path.insert(
-					path.current()->splitAt( 0.5 ) );
-			}
-			else
-			{
-				length += 0.5 * poly + 0.5 * chord;
-				path.next();
-			}
-		}
-
-		return length;
 	}
-	else
-		return 0.0;
+
+
+	return length;
 }
 
 double
@@ -369,6 +364,7 @@ VSegment::chordLength() const
 {
 	if( !prev() )
 		return 0.0;
+
 
 	KoPoint d = knot() - prev()->knot();
 
@@ -380,6 +376,7 @@ VSegment::polyLength() const
 {
 	if( !prev() )
 		return 0.0;
+
 
 	// Start with distance |first point - previous knot|.
 	KoPoint d = point( 0 ) - prev()->knot();
@@ -401,45 +398,41 @@ double
 VSegment::lengthParam( double len ) const
 {
 	if(
-		len == 0.0 ||		// We divide by len below.
-		!prev() )
+		!prev() ||
+		len == 0.0 )		// We divide by len below.
 	{
 		return 0.0;
 	}
 
 
-	// Line.
+	// Optimise the line case.
 	if( degree() == 1 )
 	{
 		return
 			len / chordLength();
 	}
-	// Bezier.
-	else
+
+
+	// Perform a successive interval bisection.
+	double param1 = 0.0;
+	double paramMid = 0.5;
+	double param2 = 1.0;
+
+	double lengthMid = length( paramMid );
+
+	while( QABS( lengthMid - len ) / len > VGlobal::paramLengthTolerance )
 	{
-		// Perform a successive interval bisection.
-		double param1 = 0.0;
-		double paramMid = 0.5;
-		double param2 = 1.0;
+		if( lengthMid < len )
+			param1 = paramMid;
+		else
+			param2 = paramMid;
 
-		double lengthMid = length( paramMid );
+		paramMid = 0.5 * ( param2 + param1 );
 
-		while( QABS( lengthMid - len ) / len > VGlobal::paramLengthTolerance )
-		{
-			if( lengthMid < len )
-				param1 = paramMid;
-			else
-				param2 = paramMid;
-
-			paramMid = 0.5 * ( param2 + param1 );
-
-			lengthMid = length( paramMid );
-		}
-
-		return paramMid;
+		lengthMid = length( paramMid );
 	}
 
-	return 0.0;
+	return paramMid;
 }
 
 double
@@ -748,7 +741,7 @@ VSegment::splitAt( double t )
 
 
 	// Create new segment.
-	VSegment* segment = new VSegment( m_degree );
+	VSegment* segment = new VSegment( degree() );
 
 	// Set segment type.
 	segment->m_state = m_state;
@@ -804,25 +797,6 @@ VSegment::splitAt( double t )
 }
 
 bool
-VSegment::intersects( const KoPoint& a0, const KoPoint& a1 ) const
-{
-	if( !prev() )	// just a point
-		return false;
-	else
-		return linesIntersect( a0, a1, prev()->knot(), knot() );
-}
-
-bool
-VSegment::intersects( const VSegment& segment ) const
-{
-	// FIXME: this just dumbs down beziers to lines!
-	if( !segment.prev() )	// just a point
-		return false;
-	else
-		return intersects( segment.prev()->knot(), segment.knot() );
-}
-
-bool
 VSegment::linesIntersect(
 	const KoPoint& a0,
 	const KoPoint& a1,
@@ -851,6 +825,32 @@ VSegment::linesIntersect(
 	return true;
 }
 
+bool
+VSegment::intersects( const KoPoint& a0, const KoPoint& a1 ) const
+{
+	if( !prev() )
+	{
+		return false;
+	}
+
+	return linesIntersect( a0, a1, prev()->knot(), knot() );
+}
+
+bool
+VSegment::intersects( const VSegment& segment ) const
+{
+	if(
+		!prev() ||
+		!segment.prev() )
+	{
+		return false;
+	}
+
+
+	// FIXME: this just dumbs down beziers to lines!
+	return intersects( segment.prev()->knot(), segment.knot() );
+}
+
 // TODO: Move this function into "userland"
 uint
 VSegment::nodeNear( const KoPoint& p, double isNearRange ) const
@@ -876,7 +876,7 @@ VSegment::revert() const
 		return 0L;
 
 	// Create new segment.
-	VSegment* segment = new VSegment( m_degree );
+	VSegment* segment = new VSegment( degree() );
 
 	segment->m_state = m_state;
 
@@ -932,8 +932,6 @@ VSegment::transform( const QWMatrix& m )
 void
 VSegment::load( const QDomElement& element )
 {
-	// TOD save control point fixing?
-
 	if( element.tagName() == "CURVE" )
 	{
 		setDegree( 3 );
