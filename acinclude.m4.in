@@ -446,9 +446,12 @@ AC_ARG_WITH(qt-includes,
        ac_qt_includes="$withval"
     ])
     
+kde_qt_libs_given=no
+
 AC_ARG_WITH(qt-libraries,
     [  --with-qt-libraries     where the qt library is installed.],
     [  ac_qt_libraries="$withval"
+       kde_qt_libs_given=yes
     ])
 
 if test "$ac_qt_includes" = NO || test "$ac_qt_libraries" = NO; then
@@ -535,7 +538,9 @@ else
   qt_includes=$ac_qt_includes
 fi
 
+if test ! "$kde_qt_libs_given" = "yes"; then
 KDE_CHECK_QT_DIRECT(qt_libraries= ,[])
+fi
 
 AC_SUBST(qt_libraries)
 AC_SUBST(qt_includes)
@@ -1789,10 +1794,15 @@ AC_SUBST(MICO_LDFLAGS)
 AC_MSG_CHECKING([for MICO version])
 AC_CACHE_VAL(kde_cv_mico_version,
 [
+AC_LANG_C
 cat >conftest.$ac_ext <<EOF
 #include <stdio.h>
 #include <mico/version.h>
-int main() { printf("MICO_VERSION=%s\n",MICO_VERSION); return (0); }
+int main() { 
+    
+   printf("MICO_VERSION=%s\n",MICO_VERSION); 
+   return (0); 
+}
 EOF
 ac_compile='${CC-gcc} $CFLAGS $MICO_INCLUDES conftest.$ac_ext -o conftest'
 if AC_TRY_EVAL(ac_compile); then
