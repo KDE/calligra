@@ -2104,8 +2104,15 @@ void KWPage::formatChanged(KWFormat &_format,bool _redraw = true)
 
       doc->setSelection(false);
       doc->setFormat(format);
-      recalcCursor(false,-1,doc->getSelStart());
-      recalcCursor(false,-1,doc->getSelEnd());
+
+      KWFormatContext fc1(doc,doc->getSelStart()->getFrameSet() - 1),fc2(doc,doc->getSelEnd()->getFrameSet() - 1);
+      fc1 = *doc->getSelStart();
+      fc2 = *doc->getSelEnd();
+      recalcCursor(false,-1,&fc1);
+      recalcCursor(false,-1,&fc2);
+      doc->setSelStart(fc1);
+      doc->setSelEnd(fc2);
+
       recalcCursor();
       doc->setSelection(true);
 

@@ -1582,7 +1582,8 @@ void KWordDocument::setFormat(KWFormat &_format)
       parag = tmpFC1.getParag()->getNext();
       while (parag && parag != tmpFC2.getParag())
 	{
-	  parag->setFormat(0,parag->getTextLen(),_format);
+	  if (parag->getTextLen() > 0)
+	    parag->setFormat(0,parag->getTextLen(),_format);
 	  parag = parag->getNext();
 	}
       tmpFC2.getParag()->setFormat(0,tmpFC2.getTextPos(),_format);
