@@ -212,6 +212,8 @@ public:
   bool setPieSettings(PieType,int,int);
   bool setRectSettings(int,int);
   void setPageEffect(unsigned int,PageEffect);
+  bool setPenColor(QColor,bool);
+  bool setBrushColor(QColor,bool);
   BackType getBackType(unsigned int);
   BackView getBackView(unsigned int);
   QString getBackPixFilename(unsigned int);
@@ -380,7 +382,7 @@ protected:
   void saveBackground(ostream&);
   void saveObjects(ostream&);
   void loadBackground(KOMLParser&,vector<KOMLAttrib>&);
-  void loadObjects(KOMLParser&,vector<KOMLAttrib>&);
+  void loadObjects(KOMLParser&,vector<KOMLAttrib>&,bool _paste = false);
 
   // ************ variables ************
 

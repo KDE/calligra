@@ -591,7 +591,7 @@ void KPresenterDoc::loadBackground(KOMLParser& parser,vector<KOMLAttrib>& lst)
 }
 
 /*========================= load objects =========================*/
-void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst)
+void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool _paste = false)
 {
   string tag;
   string name;
@@ -618,50 +618,114 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	      {
 		KPLineObject *kplineobject = new KPLineObject();
 		kplineobject->load(parser,lst);
-		_objectList->append(kplineobject);
+		
+		if (_paste)
+		  {
+		    InsertCmd *insertCmd = new InsertCmd(i18n("Insert Line"),kplineobject,this);
+		    insertCmd->execute();
+		    _commands.addCommand(insertCmd);
+		  }
+		else		   
+		  _objectList->append(kplineobject);
 	      } break;
 	    case OT_RECT:
 	      {
 		KPRectObject *kprectobject = new KPRectObject();
 		kprectobject->setRnds(_xRnd,_yRnd);
 		kprectobject->load(parser,lst);
-		_objectList->append(kprectobject);
+		
+		if (_paste)
+		  {
+		    InsertCmd *insertCmd = new InsertCmd(i18n("Insert Rectangle"),kprectobject,this);
+		    insertCmd->execute();
+		    _commands.addCommand(insertCmd);
+		  }
+		else		   
+		  _objectList->append(kprectobject);
 	      } break;
 	    case OT_ELLIPSE:
 	      {
 		KPEllipseObject *kpellipseobject = new KPEllipseObject();
 		kpellipseobject->load(parser,lst);
-		_objectList->append(kpellipseobject);
+		
+		if (_paste)
+		  {
+		    InsertCmd *insertCmd = new InsertCmd(i18n("Insert Ellipse"),kpellipseobject,this);
+		    insertCmd->execute();
+		    _commands.addCommand(insertCmd);
+		  }
+		else		   
+		  _objectList->append(kpellipseobject);
 	      } break;
 	    case OT_PIE:
 	      {
 		KPPieObject *kppieobject = new KPPieObject();
 		kppieobject->load(parser,lst);
-		_objectList->append(kppieobject);
+		
+		if (_paste)
+		  {
+		    InsertCmd *insertCmd = new InsertCmd(i18n("Insert Pie/Arc/Chors"),kppieobject,this);
+		    insertCmd->execute();
+		    _commands.addCommand(insertCmd);
+		  }
+		else		   
+		  _objectList->append(kppieobject);
 	      } break;
 	    case OT_AUTOFORM:
 	      {
 		KPAutoformObject *kpautoformobject = new KPAutoformObject();
 		kpautoformobject->load(parser,lst);
-		_objectList->append(kpautoformobject);
+		
+		if (_paste)
+		  {
+		    InsertCmd *insertCmd = new InsertCmd(i18n("Insert Autoform"),kpautoformobject,this);
+		    insertCmd->execute();
+		    _commands.addCommand(insertCmd);
+		  }
+		else		   
+		  _objectList->append(kpautoformobject);
 	      } break;
 	    case OT_CLIPART:
 	      {
 		KPClipartObject *kpclipartobject = new KPClipartObject();
 		kpclipartobject->load(parser,lst);
-		_objectList->append(kpclipartobject);
+		
+		if (_paste)
+		  {
+		    InsertCmd *insertCmd = new InsertCmd(i18n("Insert Clipart"),kpclipartobject,this);
+		    insertCmd->execute();
+		    _commands.addCommand(insertCmd);
+		  }
+		else		   
+		  _objectList->append(kpclipartobject);
 	      } break;
 	    case OT_TEXT:
 	      {
 		KPTextObject *kptextobject = new KPTextObject();
 		kptextobject->load(parser,lst);
-		_objectList->append(kptextobject);
+		
+		if (_paste)
+		  {
+		    InsertCmd *insertCmd = new InsertCmd(i18n("Insert Text"),kptextobject,this);
+		    insertCmd->execute();
+		    _commands.addCommand(insertCmd);
+		  }
+		else		   
+		  _objectList->append(kptextobject);
 	      } break;
 	    case OT_PICTURE:
 	      {
 		KPPixmapObject *kppixmapobject = new KPPixmapObject(&_pixmapCollection);
 		kppixmapobject->load(parser,lst);
-		_objectList->append(kppixmapobject);
+		
+		if (_paste)
+		  {
+		    InsertCmd *insertCmd = new InsertCmd(i18n("Insert Picture"),kppixmapobject,this);
+		    insertCmd->execute();
+		    _commands.addCommand(insertCmd);
+		  }
+		else		   
+		  _objectList->append(kppixmapobject);
 	      } break;
 	    default: break;
 	    }
@@ -1165,6 +1229,179 @@ bool KPresenterDoc::setRectSettings(int _rx,int _ry)
     {
       _oldValues.setAutoDelete(true);
       _oldValues.clear();
+    }
+
+  m_bModified = true;
+  return ret;
+}
+
+/*================================================================*/
+bool KPresenterDoc::setPenColor(QColor c,bool fill)
+{
+  KPObject *kpobject = 0;
+  bool ret = false;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  switch (kpobject->getType())
+	    {
+	    case OT_LINE:
+	      {
+		QPen pen = dynamic_cast<KPLineObject*>(kpobject)->getPen();
+		if (pen.style() == NoPen) pen.setStyle(SolidLine);
+		pen.setColor(c);
+		if (!fill) pen = NoPen;
+		dynamic_cast<KPLineObject*>(kpobject)->setPen(pen);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_RECT:
+	      {
+		QPen pen = dynamic_cast<KPRectObject*>(kpobject)->getPen();
+		if (pen.style() == NoPen) pen.setStyle(SolidLine);
+		pen.setColor(c);
+		if (!fill) pen = NoPen;
+		dynamic_cast<KPRectObject*>(kpobject)->setPen(pen);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_ELLIPSE:
+	      {
+		QPen pen = dynamic_cast<KPEllipseObject*>(kpobject)->getPen();
+		if (pen.style() == NoPen) pen.setStyle(SolidLine);
+		pen.setColor(c);
+		if (!fill) pen = NoPen;
+		dynamic_cast<KPEllipseObject*>(kpobject)->setPen(pen);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_AUTOFORM:
+	      {
+		QPen pen = dynamic_cast<KPAutoformObject*>(kpobject)->getPen();
+		if (pen.style() == NoPen) pen.setStyle(SolidLine);
+		pen.setColor(c);
+		if (!fill) pen = NoPen;
+		dynamic_cast<KPAutoformObject*>(kpobject)->setPen(pen);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_PIE:
+	      {
+		QPen pen = dynamic_cast<KPPieObject*>(kpobject)->getPen();
+		if (pen.style() == NoPen) pen.setStyle(SolidLine);
+		pen.setColor(c);
+		if (!fill) pen = NoPen;
+		dynamic_cast<KPPieObject*>(kpobject)->setPen(pen);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_PART:
+	      {
+		QPen pen = dynamic_cast<KPPartObject*>(kpobject)->getPen();
+		if (pen.style() == NoPen) pen.setStyle(SolidLine);
+		pen.setColor(c);
+		if (!fill) pen = NoPen;
+		dynamic_cast<KPPartObject*>(kpobject)->setPen(pen);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_TEXT:
+	      {
+		if (fill)
+		  dynamic_cast<KPTextObject*>(kpobject)->getKTextObject()->setColorToAll(c);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    default: break;
+	    }
+	}
+    }
+
+  m_bModified = true;
+  return ret;
+}
+
+/*================================================================*/
+bool KPresenterDoc::setBrushColor(QColor c,bool fill)
+{
+  KPObject *kpobject = 0;
+  bool ret = false;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  switch (kpobject->getType())
+	    {
+	    case OT_RECT:
+	      {
+		QBrush brush = dynamic_cast<KPRectObject*>(kpobject)->getBrush();
+		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
+		brush.setColor(c);
+		if (!fill) brush = NoBrush;
+		dynamic_cast<KPRectObject*>(kpobject)->setFillType(FT_BRUSH);
+		dynamic_cast<KPRectObject*>(kpobject)->setBrush(brush);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_ELLIPSE:
+	      {
+		QBrush brush = dynamic_cast<KPEllipseObject*>(kpobject)->getBrush();
+		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
+		brush.setColor(c);
+		if (!fill) brush = NoBrush;
+		dynamic_cast<KPEllipseObject*>(kpobject)->setFillType(FT_BRUSH);
+		dynamic_cast<KPEllipseObject*>(kpobject)->setBrush(brush);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_AUTOFORM:
+	      {
+		QBrush brush = dynamic_cast<KPAutoformObject*>(kpobject)->getBrush();
+		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
+		brush.setColor(c);
+		if (!fill) brush = NoBrush;
+		dynamic_cast<KPAutoformObject*>(kpobject)->setFillType(FT_BRUSH);
+		dynamic_cast<KPAutoformObject*>(kpobject)->setBrush(brush);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_PIE:
+	      {
+		QBrush brush = dynamic_cast<KPPieObject*>(kpobject)->getBrush();
+		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
+		brush.setColor(c);
+		if (!fill) brush = NoBrush;
+		dynamic_cast<KPPieObject*>(kpobject)->setFillType(FT_BRUSH);
+		dynamic_cast<KPPieObject*>(kpobject)->setBrush(brush);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_PART:
+	      {
+		QBrush brush = dynamic_cast<KPPartObject*>(kpobject)->getBrush();
+		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
+		brush.setColor(c);
+		if (!fill) brush = NoBrush;
+		dynamic_cast<KPPartObject*>(kpobject)->setFillType(FT_BRUSH);
+		dynamic_cast<KPPartObject*>(kpobject)->setBrush(brush);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_TEXT:
+	      {
+		if (fill)
+		  dynamic_cast<KPTextObject*>(kpobject)->getKTextObject()->setColorToAll(c);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    default: break;
+	    }
+	}
     }
 
   m_bModified = true;
@@ -2255,7 +2492,7 @@ void KPresenterDoc::loadStream(istream &in)
 	}
     }
     
-  loadObjects(parser,lst);
+  loadObjects(parser,lst,true);
 
   repaint(false);
   m_bModified = true;

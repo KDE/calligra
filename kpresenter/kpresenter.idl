@@ -105,6 +105,9 @@ module KPresenter
       slot void textDepthPlus();
       slot void textDepthMinus();
       slot void textSpacing();
+
+      slot void setPenColor(in long id);
+      slot void setFillColor(in long id);
     };
   
   interface KPresenterDocument : KOffice::Document, KOffice::Print

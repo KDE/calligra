@@ -97,6 +97,7 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
   exitPres = false;
   rndX = 0;
   rndY = 0;
+  m_vColorBar = 0;
 
   m_pKPresenterDoc = _doc;
   m_bKPresenterModified = true;
@@ -1380,6 +1381,42 @@ void KPresenterView::textSpacing()
       spacingDia->setCaption(i18n("KPresenter - Spacings"));
       QObject::connect(spacingDia,SIGNAL(spacingDiaOk(int,int,int)),this,SLOT(spacingOk(int,int,int)));
       spacingDia->show();
+    }
+}
+
+/*===============================================================*/
+void KPresenterView::setPenColor(CORBA::Long id)
+{
+  CORBA::Short red,green,blue;
+  CORBA::Boolean fill;
+
+  if(!m_vColorBar->getRgbColor(id,red,green,blue,fill))
+    return;
+
+  if (!m_pKPresenterDoc->setPenColor(QColor(red,green,blue),fill))
+    {
+      if (fill)
+	pen.setColor(QColor(red,green,blue));
+      else
+	pen = NoPen;
+    }
+}
+
+/*===============================================================*/
+void KPresenterView::setFillColor(CORBA::Long id)
+{
+  CORBA::Short red,green,blue;
+  CORBA::Boolean fill;
+
+  if(!m_vColorBar->getRgbColor(id,red,green,blue,fill))
+    return;
+
+  if (!m_pKPresenterDoc->setBrushColor(QColor(red,green,blue),fill))
+    {
+      if (fill)
+	brush.setColor(QColor(red,green,blue));
+      else
+	brush = NoBrush;
     }
 }
 
@@ -3416,6 +3453,33 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarScreen->enable( OpenPartsUI::Show );
 
   setTool(TEM_MOUSE);
+
+  /*
+   * ColorBar
+   */
+  
+  m_vColorBar = _factory->createColorBar(OpenPartsUI::ToolBarFactory::Transient);
+  m_vColorBar->setFullWidth(false);
+  
+  int i = 0;
+  const QColor cpalette[] = {white,red,green,blue,cyan,magenta,yellow,
+			     darkRed,darkGreen,darkBlue,darkCyan,
+			     darkMagenta,darkYellow,white,lightGray,
+			     gray,darkGray,black};
+
+  for (i = 0;i < 18;i++)
+    m_vColorBar->insertRgbColor(i,cpalette[i].red(),
+				cpalette[i].green(),
+				cpalette[i].blue(),
+				i != 0);
+
+  m_vColorBar->addConnection(SIGNAL(fgColorSelected(int)),this, 
+			     "setPenColor");
+  m_vColorBar->addConnection(SIGNAL(bgColorSelected(int)),this, 
+			     "setFillColor");
+
+  m_vColorBar->setBarPos(OpenPartsUI::Right);
+  m_vColorBar->enable(OpenPartsUI::Show);
 
   return true;
 }

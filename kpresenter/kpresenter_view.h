@@ -249,6 +249,10 @@ public:
   virtual void textDepthMinus();
   virtual void textSpacing();
   
+  // color bar
+  virtual void setPenColor(CORBA::Long id);
+  virtual void setFillColor(CORBA::Long id);
+
   // ------ C++ ------
 
   // create GUI - construct
@@ -633,6 +637,9 @@ protected:
   CORBA::Long m_idButtonScreen_Effect;
   CORBA::Long m_idButtonScreen_Full;
   CORBA::Long m_idButtonScreen_Pen;
+
+  // color bar
+  OpenPartsUI::ColorBar_var m_vColorBar;
 
   // scrollbars
   QScrollBar *vert,*horz;
