@@ -455,6 +455,12 @@ public:
   // zoom text
   void zoom(float);
 
+  // add paragraph
+  TxtParagraph* addParagraph();
+
+  // clear
+  void clear();
+
 signals:
 
   // sent current effects

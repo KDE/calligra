@@ -57,6 +57,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   afChoose = 0;
   styleDia = 0;
   optionDia = 0;
+  pgConfDia = 0;
   xOffset = 0;
   yOffset = 0;
   pen.operator=(QPen(black,1,SolidLine));
@@ -342,6 +343,20 @@ void KPresenterView_impl::extraOptions()
 /*========================== screen config pages ================*/
 void KPresenterView_impl::screenConfigPages()
 {
+  if (pgConfDia)
+    {
+      QObject::disconnect(pgConfDia,SIGNAL(pgConfDiaOk()),this,SLOT(pgConfOk()));
+      pgConfDia->close();
+      delete pgConfDia;
+      pgConfDia = 0;
+    }
+  pgConfDia = new PgConfDia(0,"PageConfig",KPresenterDoc()->spInfinitLoop(),
+			    KPresenterDoc()->spManualSwitch());
+  pgConfDia->setMaximumSize(pgConfDia->width(),pgConfDia->height());
+  pgConfDia->setMinimumSize(pgConfDia->width(),pgConfDia->height());
+  pgConfDia->setCaption("KPresenter - Page Configuration for Screenpresentations");
+  QObject::connect(pgConfDia,SIGNAL(pgConfDiaOk()),this,SLOT(pgConfOk()));
+  pgConfDia->show();
 }
 
 /*========================== screen assign effect ===============*/
@@ -908,6 +923,13 @@ void KPresenterView_impl::optionOk()
   KPresenterDoc()->repaint(false);
 }
 
+/*=================== page configuration ok =====================*/
+void KPresenterView_impl::pgConfOk()
+{
+  KPresenterDoc()->setManualSwitch(pgConfDia->getManualSwitch());
+  KPresenterDoc()->setInfinitLoop(pgConfDia->getInfinitLoop());
+}
+
 /*================== scroll horizontal ===========================*/
 void KPresenterView_impl::scrollH(int _value)
 {
@@ -1398,25 +1420,25 @@ void KPresenterView_impl::setupMenu()
       tmp += "/kpresenter/toolbar/first.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_First = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						     CORBA::string_dup(klocale->translate("&First page")),m_idMenuScreen,
+						     CORBA::string_dup(klocale->translate("&Go to start")),m_idMenuScreen,
 						     this,CORBA::string_dup("screenFirst"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/prev.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Prev = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Previous page")),m_idMenuScreen,
+						    CORBA::string_dup(klocale->translate("&Previous steo")),m_idMenuScreen,
 						    this,CORBA::string_dup("screenPrev"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/next.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Next = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Next page")),m_idMenuScreen,
+						    CORBA::string_dup(klocale->translate("&Next step")),m_idMenuScreen,
 						    this,CORBA::string_dup("screenNext"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/last.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Last = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Last page")),m_idMenuScreen,
+						    CORBA::string_dup(klocale->translate("&Go to end")),m_idMenuScreen,
 						    this,CORBA::string_dup("screenLast"));
       m_idMenuScreen_Skip = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("Skip &to page")),m_idMenuScreen,
 						   this,CORBA::string_dup("screenSkip"));

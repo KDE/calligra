@@ -16,18 +16,20 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc kpresenter_view.cc
 	kpresenter_shell.cc kpresenter.cc graphobj.cc \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
 	jpeg.cc formats.cc qwmf.cc kenumlistdia.cc kcharselect.cc \
-	kcharselectdia.cc optiondia.cc
+	kcharselectdia.cc optiondia.cc pgconfdia.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter_shell.h kpresenter.h graphobj.h \
 		backdia.h page.h ktextobject.h styledia.h \
 		jpeg.h formats.h qwmf.h global.h \
-		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h
+		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h \
+		pgconfdia.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc graphobj.moc moc \
 		page.moc ktextobject.mocbackdia.moc styledia.moc \
-		kenumlistdia.moc kcharselect.moc kcharselectdia.moc optiondia.moc
+		kenumlistdia.moc kcharselect.moc kcharselectdia.moc optiondia.moc \
+		pgconfdia.moc
 
 idl_DATA =	kpresenter.idl
 idl_HEADER =    kpresenter.h
@@ -52,7 +54,6 @@ install-exec-local:
 kpresenter.h: kpresenter.idl
 	$(IDL) --query-server-for-narrow -I$(idldir) kpresenter.idl
 
-
 kpresenter.cc: kpresenter.h
 kpresenter_doc.cc: kpresenter_doc.moc
 kpresenter_main.cc: kpresenter.h kpresenter_main.moc
@@ -67,3 +68,6 @@ kenumlistdia.cc: kenumlistdia.moc
 kcharselect.cc: kcharselect.moc
 kcharselectdia.cc: kcharselectdia.moc
 optiondia.cc: optiondia.moc
+pgconfdia.cc: pgconfdia.moc
+
+

@@ -971,6 +971,36 @@ void KTextObject::zoom(float _fakt)
   repaint(false);
 }
 
+/*========================= add paragraph ========================*/
+TxtParagraph* KTextObject::addParagraph()
+{
+  TxtParagraph *para;
+  para = new TxtParagraph(false);
+  paragraphList.append(para);
+
+  wh = new CellWidthHeight;
+  wh->wh = 0;
+  cellHeights.append(wh);
+  setNumRows(numRows()+1);
+
+  return para;
+}
+
+/*======================== clear =================================*/
+void KTextObject::clear()
+{
+  paragraphList.clear();
+  cellWidths.clear();
+  cellHeights.clear();
+  setNumRows(0);
+  setNumCols(1);
+
+  CellWidthHeight *wh = new CellWidthHeight;
+  wh->wh = width();
+  cellWidths.append(wh);
+  setNumCols(1);
+}
+
 /*====================== paint cell ==============================*/
 void KTextObject::paintCell(class QPainter* p,int row,int)
 {

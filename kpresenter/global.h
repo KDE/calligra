@@ -15,6 +15,7 @@
 
 #include <qpixmap.h>
 #include <qpicture.h>
+#include <qlist.h>
 
 class BackPic;
 class GraphObj;
@@ -35,12 +36,6 @@ enum LineType {LT_HORZ,LT_VERT,LT_LU_RD,LT_LD_RU};
 enum RectType {RT_NORM,RT_ROUND};
 enum ModifyType {MT_NONE,MT_MOVE,MT_RESIZE_UP,MT_RESIZE_DN,MT_RESIZE_LF,MT_RESIZE_RT,MT_RESIZE_LU,MT_RESIZE_LD,MT_RESIZE_RU,MT_RESIZE_RD};
 
-// page configuration for screenpresentations
-struct SpPageConfiguration                 
-{
-  int time;
-};
-
 // page background
 enum BCType {BCT_PLAIN = 0,BCT_GHORZ = 1,BCT_GVERT = 2};
 
@@ -58,6 +53,7 @@ struct Background
   QPixmap obackPix;
   BackPic *pic;
   QPixmap *cPix;
+  QList<int> timeParts;
 };
 
 // page object
@@ -71,6 +67,7 @@ struct PageObjects
   KTextObject *textObj;
   GraphObj* graphObj;
   QPicture *objPic;
+  unsigned int presNum;
 };
 
 #endif //GLOBAL_H

@@ -257,7 +257,8 @@ public:
   // get values for screenpresentations
   bool spInfinitLoop() {return _spInfinitLoop;}
   bool spManualSwitch() {return _spManualSwitch;}
-  QList<SpPageConfiguration> *spPageConfig() {return &_spPageConfig;}
+  void setInfinitLoop(bool il) {_spInfinitLoop = il;}
+  void setManualSwitch(bool ms) {_spManualSwitch = ms;}
 
   // size of page
   QRect getPageSize(unsigned int,int,int,float fakt=1.0);
@@ -294,6 +295,7 @@ protected:
   void saveTxtObj(ostream&,KTextObject*);
   void loadBackground(KOMLParser&,vector<KOMLAttrib>&);
   void loadObjects(KOMLParser&,vector<KOMLAttrib>&);
+  void loadTxtObj(KOMLParser&,vector<KOMLAttrib>&,KTextObject*);
   void replaceObjs();
   
   // ************ variables ************
@@ -318,7 +320,6 @@ protected:
   unsigned int _objNums;
 
   // screenpresentations
-  QList<SpPageConfiguration> _spPageConfig;
   bool _spInfinitLoop,_spManualSwitch;
 
   // options
@@ -332,7 +333,6 @@ protected:
   // pointers
   PageObjects *objPtr;
   Background *pagePtr;
-  SpPageConfiguration *spPCPtr;
   
   // url
   QString m_strFileURL;

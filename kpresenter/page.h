@@ -62,12 +62,6 @@ class Page : public QWidget
 
 public:
 
-  // structure for page-configuration for screenpresentations
-  struct spPageConfiguration                   
-  {
-    int time;
-  };
-
   // constructor - destructor
   Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0);
   ~Page(); 
@@ -138,7 +132,6 @@ protected:
   QColor txtSelCol() {return view->KPresenterDoc()->txtSelCol();}
   bool spInfinitLoop() {return view->KPresenterDoc()->spInfinitLoop();}
   bool spManualSwitch() {return view->KPresenterDoc()->spManualSwitch();}
-  QList<SpPageConfiguration> *spPageConfig() {return view->KPresenterDoc()->spPageConfig();}
   QRect getPageSize(unsigned int p,float fakt=1.0) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt);}
   unsigned int pageNums() {return view->KPresenterDoc()->getPageNums();}
 
@@ -159,7 +152,6 @@ protected:
   unsigned int resizeObjNum,editNum;
   bool drawBack;                  
   GraphObj *graphPtr;
-  SpPageConfiguration *spPCPtr;
   KPresenterView_impl *view;
   bool editMode;
   unsigned int currPresPage;

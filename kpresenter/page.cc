@@ -1069,6 +1069,11 @@ void Page::startScreenPresentation()
       objPtr->oy = (int)((float)objPtr->oy * _presFakt);
       objPtr->ow = (int)((float)objPtr->ow * _presFakt);
       objPtr->oh = (int)((float)objPtr->oh * _presFakt);
+
+      // correct calculated zoom-values
+      if (objPtr->ox + objPtr->ow > getPageSize(0,_presFakt).x()+diffx() + getPageSize(0,_presFakt).width())
+	objPtr->ow -= ((objPtr->ox + objPtr->ow) - (getPageSize(0,_presFakt).x()+diffx() + getPageSize(0,_presFakt).width()));
+
       if (objPtr->objType != OT_TEXT)
 	objPtr->graphObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
       else
@@ -1119,6 +1124,8 @@ void Page::stopScreenPresentation()
 	}
       if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_CENTER)
 	pagePtr->backPix.operator=(pagePtr->obackPix);
+      pagePtr->cPix->resize(getPageSize(pagePtr->pageNum,_presFakt).width(),
+			    getPageSize(pagePtr->pageNum,_presFakt).height());
       restoreBackColor(i);
     }
 
@@ -1286,8 +1293,8 @@ void Page::restoreBackColor(unsigned int pgNum)
   p->begin(pageList()->at(pgNum)->cPix);
   drawBackColor(pageList()->at(pgNum)->backColor1,pageList()->at(pgNum)->backColor2,
    		pageList()->at(pgNum)->bcType,
-   		p,QSize((int)((float)pageList()->at(pgNum)->cPix->width()*_presFakt),
-  			(int)((float)pageList()->at(pgNum)->cPix->height()*_presFakt)));
+   		p,QSize((int)((float)pageList()->at(pgNum)->cPix->width()),
+  			(int)((float)pageList()->at(pgNum)->cPix->height())));
   p->end();
   delete p;
 }

@@ -87,7 +87,6 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   _pageNums = 0;
   _spInfinitLoop = false;
   _spManualSwitch = true;
-  _spPageConfig.setAutoDelete(true);
   _rastX = 10;
   _rastY = 10;
   _xRnd = 20;
@@ -123,7 +122,6 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   _pageNums = 0;
   _spInfinitLoop = false;
   _spManualSwitch = true;
-  _spPageConfig.setAutoDelete(true);
   _rastX = 20;
   _rastY = 20;
   _xRnd = 20;
@@ -220,6 +218,9 @@ bool KPresenterDocument_impl::save(ostream& out)
   saveObjects(out);
   out << etag << "</OBJECTS>" << endl;
 
+  out << indent << "<INFINITLOOP value=\"" << _spInfinitLoop << "\"/>" << endl; 
+  out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl; 
+
   out << etag << "</DOC>" << endl;
     
   setModified(false);
@@ -244,6 +245,10 @@ void KPresenterDocument_impl::saveBackground(ostream& out)
 	out << indent << "<BACKPIC value=\"" << pagePtr->backPic << "\"/>" << endl; 
       if (pagePtr->backClip)
 	out << indent << "<BACKCLIP value=\"" << pagePtr->backClip << "\"/>" << endl; 
+      out << otag << "<TIMEPARTS>" << endl;
+      for (unsigned int i = 0;i < pagePtr->timeParts.count();i++)
+	  out << indent << "<PART time=\"" << (int)pagePtr->timeParts.at(i) << "\"/>" << endl;
+      out << etag << "</TIMEPARTS>" << endl;
       out << etag << "</PAGE>" << endl;
     }
 }
@@ -259,6 +264,7 @@ void KPresenterDocument_impl::saveObjects(ostream& out)
       out << indent << "<OBJNUM value=\"" << objPtr->objNum << "\"/>" << endl; 
       out << indent << "<COORDINATES x=\"" << objPtr->ox << "\" y=\"" << objPtr->oy
 	  << "\" w=\"" << objPtr->ow << "\" h=\"" << objPtr->oh << "\"/>" << endl; 
+      out << indent << "<PRESNUM value=\"" << objPtr->presNum << "\"/>" << endl; 
       
       if (objPtr->objType == OT_TEXT)
 	saveTxtObj(out,objPtr->textObj);
@@ -282,7 +288,7 @@ void KPresenterDocument_impl::saveTxtObj(ostream& out,KTextObject *txtPtr)
   unsigned int i,j,k;
   QFont font;
 
-  out << otag << "<TEXTOBJ objType=\"" << txtPtr->objType() << "\"/>" << endl;
+  out << otag << "<TEXTOBJ objType=\"" << txtPtr->objType() << "\">" << endl;
   out << indent << "<ENUMLISTTYPE type=\"" << txtPtr->enumListType().type << "\" before=\""
       << txtPtr->enumListType().before << "\" after=\"" << txtPtr->enumListType().after
       << "\" start=\"" << txtPtr->enumListType().start << "\" family=\"" 
@@ -303,7 +309,7 @@ void KPresenterDocument_impl::saveTxtObj(ostream& out,KTextObject *txtPtr)
     {
       txtParagraph = txtPtr->paragraphAt(i);
 
-      out << otag << "<PARAGRAPH horzAlign=\"" << txtParagraph->horzAlign() << "\"/>" << endl; 
+      out << otag << "<PARAGRAPH horzAlign=\"" << txtParagraph->horzAlign() << "\">" << endl; 
 
       for (j = 0;j < txtParagraph->lines();j++)
 	{
@@ -528,6 +534,28 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	  loadObjects(parser,lst);
 	}
 
+      else if (name == "INFINITLOOP")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		_spInfinitLoop = (bool)atoi((*it).m_strValue.c_str());
+	    }
+	}
+
+      else if (name == "MANUALSWITCH")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		_spManualSwitch = (bool)atoi((*it).m_strValue.c_str());
+	    }
+	}
+
       else
 	cerr << "Unknown tag '" << tag << "' in PRESENTATION" << endl;    
 	
@@ -561,13 +589,43 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
 
 	  unsigned int _num = _pageList.count();
 	  pagePtr = _pageList.last();
-	  
+
 	  while (parser.open(0L,tag))
 	    {
 	      KOMLParser::parseTag(tag.c_str(),name,lst);
 	      
+	      // time parts
+	      if (name == "TIMEPARTS")
+		{
+		  pagePtr = _pageList.last();
+		  pagePtr->timeParts.clear();
+		  while (parser.open(0L,tag))
+		    {
+		      KOMLParser::parseTag(tag.c_str(),name,lst);
+		      
+		      // part
+		      if (name == "PART")
+			{
+			  pagePtr = _pageList.last();
+			  KOMLParser::parseTag(tag.c_str(),name,lst);
+			  vector<KOMLAttrib>::const_iterator it = lst.begin();
+			  for(;it != lst.end();it++)
+			    {
+			      if ((*it).m_strName == "time")
+				pagePtr->timeParts.append((int*)atoi((*it).m_strValue.c_str()));
+			    }
+			}
+
+		      if (!parser.close(tag))
+			{
+			  cerr << "ERR: Closing Child" << endl;
+			  return;
+			}
+		    }
+		}
+ 
 	      // backtype
-	      if (name == "BACKTYPE")
+	      else if (name == "BACKTYPE")
 		{
 		  pagePtr = _pageList.last();
 		  KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -763,6 +821,18 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 		    }
 		}
 
+	      // presNum
+	      else if (name == "PRESNUM")
+		{
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			objPtr->presNum = atoi((*it).m_strValue.c_str());
+		    }
+		}
+
 	      // coordinates
 	      else if (name == "COORDINATES")
 		{
@@ -787,7 +857,30 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
  		  objPtr->graphObj = new GraphObj(0,"graphObj",objPtr->objType);
  		  objPtr->graphObj->load(parser,lst);
  		  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+		  if (objPtr->objType == OT_PICTURE)
+		    objPtr->graphObj->loadPixmap();
+		  if (objPtr->objType == OT_CLIPART)
+		    objPtr->graphObj->loadClipart();
  		}
+
+	      // text object
+ 	      else if (name == "TEXTOBJ")
+ 		{
+ 		  objPtr->textObj = new KTextObject(0,"textObj",KTextObject::PLAIN);
+		  objPtr->textObj->clear();
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "objType")
+			objPtr->textObj->setObjType((KTextObject::ObjType)atoi((*it).m_strValue.c_str()));
+		      else
+			cerr << "Unknown attrib TEXTOBJ:'" << (*it).m_strName << "'" << endl;
+		    }
+ 		  loadTxtObj(parser,lst,objPtr->textObj);
+ 		  objPtr->textObj->resize(objPtr->ow,objPtr->oh);
+		  objPtr->textObj->setShowCursor(false);
+		}
 
 	      else
 		cerr << "Unknown tag '" << tag << "' in OBJECT" << endl;    
@@ -801,6 +894,247 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 	}
       else
 	cerr << "Unknown tag '" << tag << "' in OBJECTS" << endl;    
+      
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
+}
+
+/*========================= load textobject ======================*/
+void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& lst,KTextObject *txtPtr)
+{
+  string tag;
+  string name;
+
+  KTextObject::EnumListType elt;
+  KTextObject::UnsortListType ult;
+  QFont font;
+  QColor color;
+  int r = 0,g = 0,b = 0;
+  TxtParagraph *txtParagraph;
+  TxtObj *objPtr;
+  
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+      
+      // enumListType
+      if (name == "ENUMLISTTYPE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "type")
+		elt.type = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "before")
+		elt.before = (*it).m_strValue.c_str();
+	      if ((*it).m_strName == "after")
+		elt.after = (*it).m_strValue.c_str();
+	      if ((*it).m_strName == "start")
+		elt.start = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "family")
+		font.setFamily((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "pointSize")
+		font.setPointSize(atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "bold")
+		font.setBold((bool)atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "italic")
+		font.setItalic((bool)atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "underline")
+		font.setUnderline((bool)atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "red")
+		r = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "green")
+		g = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "blue")
+		b = atoi((*it).m_strValue.c_str());
+	    }
+	  color.setRgb(r,g,b);
+	  elt.font.operator=(font);
+	  elt.color.operator=(color);
+	  txtPtr->setEnumListType(elt);
+	}
+      
+      // unsortListType
+      if (name == "UNSORTEDLISTTYPE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "chr")
+		ult.chr = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "family")
+		font.setFamily((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "pointSize")
+		font.setPointSize(atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "bold")
+		font.setBold((bool)atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "italic")
+		font.setItalic((bool)atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "underline")
+		font.setUnderline((bool)atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "red")
+		r = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "green")
+		g = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "blue")
+		b = atoi((*it).m_strValue.c_str());
+	    }
+	  color.setRgb(r,g,b);
+	  ult.font.operator=(font);
+	  ult.color.operator=(color);
+	  txtPtr->setUnsortListType(ult);
+	}
+
+      // paragraph
+      if (name == "PARAGRAPH")
+	{
+	  txtParagraph = txtPtr->addParagraph();
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "horzAlign")
+		txtParagraph->setHorzAlign((TxtParagraph::HorzAlign)atoi((*it).m_strValue.c_str()));
+	    }
+
+	  while (parser.open(0L,tag))
+	    {
+	      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      
+	      // line
+	      if (name == "LINE")
+		{
+		  while (parser.open(0L,tag))
+		    {
+		      KOMLParser::parseTag(tag.c_str(),name,lst);
+		      
+		      // object
+		      if (name == "OBJ")
+			{
+			  objPtr = new TxtObj();
+
+			  while (parser.open(0L,tag))
+			    {
+			      KOMLParser::parseTag(tag.c_str(),name,lst);
+			      
+			      // type
+			      if (name == "TYPE")
+				{
+				  KOMLParser::parseTag(tag.c_str(),name,lst);
+				  vector<KOMLAttrib>::const_iterator it = lst.begin();
+				  for(;it != lst.end();it++)
+				    {
+				      if ((*it).m_strName == "value")
+					objPtr->setType((TxtObj::ObjType)atoi((*it).m_strValue.c_str()));
+				    }
+				}
+
+			      // font
+			      if (name == "FONT")
+				{
+				  KOMLParser::parseTag(tag.c_str(),name,lst);
+				  vector<KOMLAttrib>::const_iterator it = lst.begin();
+				  for(;it != lst.end();it++)
+				    {
+				      if ((*it).m_strName == "family")
+					font.setFamily((*it).m_strValue.c_str());
+				      if ((*it).m_strName == "pointSize")
+					font.setPointSize(atoi((*it).m_strValue.c_str()));
+				      if ((*it).m_strName == "bold")
+					font.setBold((bool)atoi((*it).m_strValue.c_str()));
+				      if ((*it).m_strName == "italic")
+					font.setItalic((bool)atoi((*it).m_strValue.c_str()));
+				      if ((*it).m_strName == "underline")
+					font.setUnderline((bool)atoi((*it).m_strValue.c_str()));
+				    }
+				  objPtr->setFont(font);
+				}
+
+			      // color
+			      if (name == "COLOR")
+				{
+				  KOMLParser::parseTag(tag.c_str(),name,lst);
+				  vector<KOMLAttrib>::const_iterator it = lst.begin();
+				  for(;it != lst.end();it++)
+				    {
+				      if ((*it).m_strName == "red")
+					r = atoi((*it).m_strValue.c_str());
+				      if ((*it).m_strName == "green")
+					g = atoi((*it).m_strValue.c_str());
+				      if ((*it).m_strName == "blue")
+					b = atoi((*it).m_strValue.c_str());
+				    }
+				  color.setRgb(r,g,b);
+				  objPtr->setColor(color);
+				}
+
+			      // vertical align
+			      if (name == "VERTALIGN")
+				{
+				  KOMLParser::parseTag(tag.c_str(),name,lst);
+				  vector<KOMLAttrib>::const_iterator it = lst.begin();
+				  for(;it != lst.end();it++)
+				    {
+				      if ((*it).m_strName == "value")
+					objPtr->setVertAlign((TxtObj::VertAlign)atoi((*it).m_strValue.c_str()));
+				    }
+				}
+
+			      // text
+			      if (name == "TEXT")
+				{
+				  KOMLParser::parseTag(tag.c_str(),name,lst);
+				  vector<KOMLAttrib>::const_iterator it = lst.begin();
+				  for(;it != lst.end();it++)
+				    {
+				      if ((*it).m_strName == "value")
+					objPtr->append((*it).m_strValue.c_str());
+				    }
+				}
+
+			      else
+				cerr << "Unknown tag '" << tag << "' in OBJ" << endl;    
+			      
+			      if (!parser.close(tag))
+				{
+				  cerr << "ERR: Closing Child" << endl;
+				  return;
+				}
+
+			    }
+			  txtParagraph->append(objPtr);
+			}
+		      
+		      else
+			cerr << "Unknown tag '" << tag << "' in LINE" << endl;    
+		      
+		      if (!parser.close(tag))
+			{
+			  cerr << "ERR: Closing Child" << endl;
+			  return;
+			}
+		    }
+		}
+
+	      else
+		cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;    
+	      
+	      if (!parser.close(tag))
+		{
+		  cerr << "ERR: Closing Child" << endl;
+		  return;
+		}
+	    }
+	}
+	  
+      else
+	cerr << "Unknown tag '" << tag << "' in TEXTOBJ" << endl;    
       
       if (!parser.close(tag))
 	{
@@ -949,11 +1283,9 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
   pagePtr->bcType = BCT_PLAIN;
   pagePtr->cPix = new QPixmap(getPageSize(pagePtr->pageNum,diffx,diffy).width(),
 			      getPageSize(pagePtr->pageNum,diffx,diffy).height()); 
+  pagePtr->timeParts.setAutoDelete(false);
+  pagePtr->timeParts.append((int*)10);
   _pageList.append(pagePtr);
-
-  spPCPtr = new SpPageConfiguration;
-  spPCPtr->time = 0;
-  _spPageConfig.append(spPCPtr);
 
   emit restoreBackColor(_pageNums-1);
   repaint(true);
@@ -1231,6 +1563,7 @@ void KPresenterDocument_impl::insertPicture(const char *filename,int diffx,int d
 	  objPtr->graphObj = new GraphObj(0,"graphObj",OT_PICTURE,QString(filename));
 	  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
 	  objPtr->graphObj->loadPixmap();
+	  objPtr->presNum = 0;
 	  _objList.append(objPtr);
 	  repaint(objPtr->ox,objPtr->oy,
 		  objPtr->ow,objPtr->oh,false);
@@ -1258,6 +1591,7 @@ void KPresenterDocument_impl::insertClipart(const char *filename,int diffx,int d
       objPtr->graphObj = new GraphObj(0,"graphObj",OT_CLIPART,QString(filename));
       objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
       objPtr->graphObj->loadClipart();
+      objPtr->presNum = 0;
       _objList.append(objPtr);
       repaint(objPtr->ox,objPtr->oy,
 	      objPtr->ow,objPtr->oh,false);
@@ -1355,6 +1689,7 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineType lt,int diffx,int diff
   objPtr->graphObj->setObjPen(pen);
   objPtr->graphObj->setLineType(lt);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+  objPtr->presNum = 0;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1378,6 +1713,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   objPtr->graphObj->setRectType(rt);
   objPtr->graphObj->setRnds(_xRnd,_yRnd);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+  objPtr->presNum = 0;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1399,6 +1735,7 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   objPtr->graphObj->setObjPen(pen);
   objPtr->graphObj->setObjBrush(brush);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+  objPtr->presNum = 0;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1421,6 +1758,7 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   //objPtr->textObj->breakLines(objPtr->ow);
   objPtr->textObj->resize(objPtr->ow,objPtr->oh);
   objPtr->textObj->setShowCursor(false);
+  objPtr->presNum = 0;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1441,6 +1779,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,const char *f
   objPtr->graphObj = new GraphObj(0,"graphObj",OT_AUTOFORM,QString(fileName));
   objPtr->graphObj->setObjPen(pen);
   objPtr->graphObj->setObjBrush(brush);
+  objPtr->presNum = 0;
   _objList.append(objPtr);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   repaint(objPtr->ox,objPtr->oy,
