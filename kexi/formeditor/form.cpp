@@ -117,18 +117,20 @@ Form::commonParentContainer(QtWidgetList *wlist)
 	ObjectTreeItem *item = 0;
 	QtWidgetList *list = new QtWidgetList();
 
+	// Creates a list of all widget parents
 	for(QWidget *w = wlist->first(); w; w = wlist->next())
 	{
 		if(list->findRef(w->parentWidget()) == -1)
 			list->append(w->parentWidget());
 	}
 
+	// For each widget in the list, we check if it is parent of one of the other widget, which we can remove then
 	for(QWidget *w = list->first(); w; w = list->next())
 	{
 		QWidget *widg;
 		for(widg = list->first(); widg; widg = list->next())
 		{
-			if((w != widg) && (w->child(widg->name())))
+			if((w != widg) && (w->child(widg->name()))) // == widg is a child of w
 			{
 				kdDebug() << "Removing the widget " << widg->name() << "which is a child of " << w->name() << endl;
 				list->remove(widg);
@@ -140,9 +142,10 @@ Form::commonParentContainer(QtWidgetList *wlist)
 			widg = list->next();
 	}
 
+	// one widget remains == the container we are looking for
 	if(list->count() == 1)
 		item = m_topTree->lookup(list->first()->name());
-	else
+	else // we need to go one level up
 		item =  commonParentContainer(list);
 
 	delete list;
@@ -284,7 +287,7 @@ Form::changeName(const QString &oldname, const QString &newname)
 {
 	if(oldname == newname)
 		return;
-	if(!m_topTree->rename(oldname, newname))
+	if(!m_topTree->rename(oldname, newname)) // rename failed
 	{
 		KMessageBox::sorry(m_toplevel->widget()->topLevelWidget(),
 		i18n("A widget with this name already exists. "
@@ -331,6 +334,7 @@ Form::slotCommandExecuted()
 {
 	emit m_manager->dirty(this, true);
 	m_dirty = true;
+	// because actions text is changed after the commandExecuted() signal is emitted
 	QTimer::singleShot(10, this, SLOT(emitUndoEnabled()));
 	QTimer::singleShot(10, this, SLOT(emitRedoEnabled()));
 }

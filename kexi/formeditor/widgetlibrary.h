@@ -35,10 +35,6 @@ class QDomDocument;
 class QDomElement;
 
 namespace KFormDesigner {
-/**
- *
- * Lucijan Busch
- **/
 
 class Widget;
 class WidgetFactory;
@@ -49,9 +45,9 @@ typedef QDict<Widget> Widgets;
 typedef QPtrList<KAction> Actions;
 
 /**
- * This class searches for factories and provides KActions for widgetselection
- * every widget can be located using this library.
- * calles won't borther with factories directly than, but with the Library
+ * This class searches for factories and provides KActions for widget creation.
+ * Every widget can be located using this library.
+ * You call WidgetLibrary functions instead of calling directly factories.
  * See WidgetFactory for a description of the functions.
  */
 
@@ -74,6 +70,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 * like 'kexi|containers' in that case only factory containing 'kexi' or containers will be loaded.
 		 * this is useful if you want to embedd formeditor and provide e.g. a LineEdit with special features
 		 * but don't want to confuse the user... are you confused now?
+		 * NB: not implemented yet
 		 */
 		void	setFilter(const QRegExp &expr);
 

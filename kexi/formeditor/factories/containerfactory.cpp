@@ -330,6 +330,7 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		        container->form()->manager()->lib()->displayName(c), n, tab, container));
 		m_manager = container->form()->manager();
 
+		// if we are loading, don't add this tab
 		if(container->form()->interactiveMode())
 		{
 			m_widget=tab;
@@ -422,22 +423,14 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 	m_widget = w;
 	m_container = container;
 
-	if(classname == "KTabWidget")
+	if((classname == "KTabWidget") || (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
 	{
-		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
-		menuIds->append(id);
-		id = menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
-		menuIds->append(id);
-		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
-		menuIds->append(id);
-		if( ((KTabWidget*)w)->count() == 1)
-			menu->setItemEnabled(id, false);
-		return true;
-	}
-	else if(w->parentWidget()->parentWidget()->inherits("QTabWidget"))
-	{
-		m_widget = w->parentWidget()->parentWidget();
-		m_container = m_container->toplevel();
+		if(w->parentWidget()->parentWidget()->inherits("QTabWidget"))
+		{
+			m_widget = w->parentWidget()->parentWidget();
+			m_container = m_container->toplevel();
+		}
+
 		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
 		menuIds->append(id);
 		id = menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
@@ -641,6 +634,7 @@ void ContainerFactory::removeStackPage()
 	list.append(page);
 	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
 
+	// raise prev widget
 	int id = stack->id(page) - 1;
 	while(!stack->widget(id))
 		id--;

@@ -33,6 +33,7 @@ class QDomText;
 class QVariant;
 class QLabel;
 
+//! A blank widget displayed when class is not supported
 class KFORMEDITOR_EXPORT CustomWidget : public QWidget
 {
 	Q_OBJECT

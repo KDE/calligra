@@ -93,6 +93,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		  to show only properties common to all the widgets.
 		 */
 		void    addWidget(QWidget *w);
+		/*! Resets the buffer, ie empty it and reset all members. */
 		void    resetBuffer();
 
 

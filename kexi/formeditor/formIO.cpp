@@ -70,7 +70,6 @@ CustomWidget::paintEvent(QPaintEvent *)
 namespace KFormDesigner {
 
 QDict<QLabel>  *FormIO::m_buddies = 0;
-//QWidgdet  *FormIO::m_currentWidget = 0;
 ObjectTreeItem   *FormIO::m_currentItem = 0;
 Form    *FormIO::m_currentForm = 0;
 bool    FormIO::m_savePixmapsInline = false;
@@ -110,7 +109,6 @@ FormIO::saveForm(Form *form, const QString &filename)
 		file.close();
 	}
 
-	kdDebug() << domDoc.toString(2) << endl;
 	return 1;
 }
 
@@ -264,7 +262,6 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 	int i = 0;
 	for(QDomNode n = tabStops.firstChild(); !n.isNull(); n = n.nextSibling(), i++)
 	{
-		kdDebug() << "i== " << i << endl;
 		QString name = n.toElement().text();
 		ObjectTreeItem *item = form->objectTree()->lookup(name);
 		if(!item)
@@ -286,7 +283,6 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 	form->connectionBuffer()->load(ui.namedItem("connections"));
 
 	m_currentForm = 0;
-	//m_currentWidget = 0;
 	m_currentItem = 0;
 
 	return 1;
@@ -296,10 +292,10 @@ void
 FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, const QVariant &value, QWidget *w, WidgetLibrary *lib)
 {
 	// Widget specific properties and attributes ///////////////
-	kdDebug() << "FormIO::prop()  saving the property " << name << endl;
+	kdDebug() << "FormIO::prop()  Saving the property: " << name << endl;
 	if(w->metaObject()->findProperty(name, true) == -1)
 	{
-		kdDebug() << "the object doesn't have this property" << endl;
+		kdDebug() << "FormIO::prop()  The object doesn't have this property. Let's try the WidgetLibrary." << endl;
 		if(lib)
 			lib->saveSpecialProperty(w->className(), name, value, w, parentNode, parent);
 		return;
@@ -745,15 +741,10 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	{
 		if(m_savePixmapsInline || !m_currentForm || !m_currentItem || !m_currentForm->pixmapCollection()->contains(text))
 			return loadImage(tag.ownerDocument(), text);
-		else// if(m_currentForm)
+		else
 		{
-			//if(m_currentItem)
 			m_currentItem->addPixmapName(name, text);
 			return m_currentForm->pixmapCollection()->getPixmap(text);
-			/*if(pix.isNull()) // pixmap not in collection
-				return loadImage(tag.ownerDocument(), text);
-			else
-				return pix;*/
 		}
 		return QVariant(QPixmap());
 	}
@@ -1216,6 +1207,8 @@ FormIO::addIncludeFile(const QString &include, QDomDocument &domDoc)
 	includeHint.appendChild(includeText);
 }
 
+////////  Qt Designer code: these two functions were copied (and adapted) from Qt Designer for compatibility ////////
+
 QString
 FormIO::saveImage(QDomDocument &domDoc, const QPixmap &pixmap)
 {
@@ -1329,6 +1322,8 @@ FormIO::loadImage(QDomDocument domDoc, QString name)
 
 	return pix;
 }
+
+//////// End of Qt Designer code ////////////////////////////////////////////////////////
 
 void FormIO::setCurrentForm(Form *form)
 {

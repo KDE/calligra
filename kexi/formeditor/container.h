@@ -134,16 +134,22 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		static QString  layoutTypeToString(int type);
 		//! \return the LayoutType (an int) for a given layout name.
 		static LayoutType stringToLayoutType(const QString &name);
+		//! \return the margin of this Container.
 		int             layoutMargin() { return m_margin; }
+		//! \return the spacing of this Container.
 		int             layoutSpacing() { return m_spacing; }
 		/*! Sets this Container to use \a type of layout. The widget are inserted automatically in the layout
 		  following their positions.
+		  \sa createBoxLayout(), createGridLayout()
 		 */
 		void            setLayout(LayoutType type);
+		//! Sets the spacing of this Container.
 		void            setLayoutSpacing(int spacing) { m_spacing = spacing;}
+		//! Sets the margin of this Container.
 		void            setLayoutMargin(int margin) { m_margin = margin;}
 
-		void            stopInlineEditing() {/* m_inlineEditing = false;*/ m_state = DoingNothing; }
+		/*! Stops the inline editing of the current widget (as when you click on another widget or press Esc). */
+		void            stopInlineEditing() { m_state = DoingNothing; }
 
 		/*! This is the main function of Container, which filters the event sent to the watched widget.\n
 		   It takes care of drawing the background and the insert rect, of creating the new child widgets, of moving the widgets and
@@ -161,15 +167,15 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		//! \return The form this Container belongs to.
 		Form		*form() const { return m_form; }
 
-		/*! Deletes the selected child item of this Container, and remove it from ObjectTree. */
-		//void		deleteItem();
-
 		/*! Sets \a selected to be the selected widget of this container (and so of the Form). If \a add is true, the formerly selected widget
-		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget.
+		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget. If \a dontRaise is true, then
+		  the widget \a selected (and its parent) won't be raised (eg when you select widget in ObjectTreeView).
+		  \sa Form::setSelectedWidget()
 		 */
 		void		setSelectedWidget(QWidget *selected, bool add, bool dontRaise=false);
-		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandles are removed. */
+		/*! Unselects the widget \a w. The widget is removed from the Form's list and its resizeHandles are removed. */
 		void		unSelectWidget(QWidget *w);
+		/*! Deletes the widget \a w. Removes it from ObjectTree, and sets selection to Container's widget. */
 		void		deleteWidget(QWidget *w);
 
 		/*! Recreates the Container layout. Calls this when a widget has been moved or added to update the layout. */
@@ -206,7 +212,6 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QPoint		m_initialPos;
 		QGuardedPtr<QWidget>	m_moving;
 		QRect		m_copyRect;
-		//bool		m_move;
 
 		//inserting
 		QPoint		m_insertBegin;
@@ -214,7 +219,6 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		ObjectTreeItem	*m_tree;
 
 		QGuardedPtr<Form> m_form;
-		//bool		m_inlineEditing;
 
 		friend class InsertWidgetCommand;
 		friend class PasteWidgetCommand;

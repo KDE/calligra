@@ -49,6 +49,7 @@ class KFORMEDITOR_EXPORT Line : public QFrame
 		Orientation  orientation() const;
 };
 
+//! Factory for all basic widgets, including Spring (not containers)
 class StdWidgetFactory : public KFormDesigner::WidgetFactory
 {
 	Q_OBJECT

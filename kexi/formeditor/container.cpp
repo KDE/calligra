@@ -121,8 +121,6 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 	m_toplevel = toplevel;
 
 	m_moving = 0;
-	//m_move = false;
-	//m_inlineEditing = false;
 	m_tree = 0;
 	m_form = toplevel ? toplevel->form() : 0;
 	m_layout = 0;
@@ -131,7 +129,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 	QString classname = container->className();
 	if((classname == "HBox") || (classname == "Grid") || (classname == "VBox"))
-		m_margin = 2;
+		m_margin = 2; // those containers don't have frames, so little margin
 	else
 		m_margin = m_form ? m_form->defaultMargin() : 0;
 	m_spacing = m_form ? m_form->defaultSpacing() : 0;
@@ -347,22 +345,13 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_form->setInteractiveMode(true);
 
 				m_initialPos = QPoint();
-				//m_state = DoingNothing;
 			}
 			else if(/*m_move*/m_state == MovingWidget) // one widget has been moved, so we need to update the layout
 			{
 				reloadLayout();
-				//m_move = false;
 				m_initialPos = QPoint();
 			}
 			// cancel copying as user released Ctrl before releasing mouse button
-			/*else if(m_state == CopyingWidget)
-			{
-				m_state = DoingNothing;
-				m_copyRect = QRect();
-				if(m_form->formWidget())
-					m_form->formWidget()->clearRect();
-			}*/
 
 			m_copyRect = QRect();
 			m_insertRect = QRect();
@@ -398,7 +387,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 				int botx = (m_insertBegin.x() > tmpx) ? m_insertBegin.x() : tmpx;
 				int boty = (m_insertBegin.y() > tmpy) ? m_insertBegin.y() : tmpy;
 				m_insertRect = QRect(QPoint(topx, topy), QPoint(botx, boty));
-				//m_insertRect = QRect(((QWidget*)s)->mapTo(m_container, QPoint(topx, topy)), ((QWidget*)s)->mapTo(m_container, QPoint(botx, boty)));
 
 				if(m_insertRect.x() < 0)
 					m_insertRect.setX(0);
@@ -427,9 +415,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(!tree || !tree->widget())
 					return true;
 
-				//QPoint p = m_container->mapTo(m_form->toplevelContainer()->widget(), mev->pos());
 				if(m_form->formWidget() && (tree->widget() != s))
-					m_form->formWidget()->highlightWidgets(tree->widget(), ((QWidget*)s)/*, p*/);
+					m_form->formWidget()->highlightWidgets(tree->widget(), ((QWidget*)s));
 			}
 			else if(s == m_container && !m_toplevel && (mev->state() != ControlButton) && !m_form->manager()->draggingConnection()) // draw the selection rect
 			{
@@ -529,21 +516,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 					if((tmpx != w->x()) || (tmpy != w->y()))
 						w->move(tmpx,tmpy);
 				}
-				/*int tmpx = (((m_moving->x()+mev->x()-m_grab.x()))/gridX)*gridX;
-				int tmpy = (((m_moving->y()+mev->y()-m_grab.y()))/gridY)*gridY;
-				if((tmpx!=m_moving->x()) ||(tmpy!=m_moving->y()))
-					m_moving->move(tmpx,tmpy);*/
-				//m_move = true;
 				m_state = MovingWidget;
 			}
-			// cancel copying as user released Ctrl
-			/*else if((m_state == CopyingWidget) && (mev->state() == Qt::LeftButton))
-			{
-				//m_state = DoingNothing;
-				m_copyRect = QRect();
-				if(m_form->formWidget())
-					m_form->formWidget()->clearRect();
-			}*/
 
 			return true; // eat
 		}
@@ -555,7 +529,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 			int gridY = m_form->gridY();
 
 			QPainter p(m_container);
-//			p.setPen( QPen(m_container->paletteForegroundColor(), 1) );
 			p.setPen(QPen(white, 2));
 			p.setRasterOp(XorROP);
 			int cols = m_container->width() / gridX;
@@ -574,8 +547,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::Resize: // we are resizing a widget, so we set m_move to true -> the layout will be reloaded when releasing mouse
 		{
 			if(m_form->interactiveMode())
-				//m_move = true;
-				m_state = MovingWidget;
+			m_state = MovingWidget;
 			break;
 		}
 		case QEvent::KeyPress:
@@ -586,6 +558,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_state = InlineEditing;
 				QWidget *w;
 
+				// try to find the widget which was clicked last and should be edited
 				if(m_form->selectedWidgets()->count() == 1)
 					w = m_form->selectedWidgets()->first();
 				else if(m_form->selectedWidgets()->findRef(m_moving) != -1)
@@ -642,8 +615,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::Leave:
 		case QEvent::FocusIn:
 		case QEvent::FocusOut:
-		//case QEvent::KeyPress:
-		//case QEvent::KeyRelease:
 			return true; // eat them
 
 		default:
@@ -701,7 +672,6 @@ void
 Container::widgetDeleted()
 {
 	m_container = 0;
-	//delete this;
 	deleteLater();
 }
 
@@ -767,8 +737,6 @@ Container::createBoxLayout(QtWidgetList *list)
 		layout->addWidget(obj);
 	delete list;
 
-//	if(!m_container->parentWidget()->inherits("QWidgetStack"))
-//		m_container->resize(layout->sizeHint());
 	layout->activate();
 }
 

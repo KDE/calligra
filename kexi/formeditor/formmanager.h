@@ -63,7 +63,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		virtual ~FormManager();
 
 		/*! Creates all the KAction related to widget insertion, and plug them into the KActionCollection \a parent.
-		  These actions are automatically connected to insertWidget() slot.
+		  These actions are automatically connected to \ref insertWidget() slot.
 		  \return a QPtrList of the created actions.
 		 */
 		Actions createActions(KActionCollection *parent);
@@ -77,16 +77,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		WidgetLibrary*    lib() const { return m_lib; }
 		//! \return A pointer to the ObjectPropertyBuffer owned by this Manager.
 		ObjectPropertyBuffer*  buffer() const { return m_buffer; }
-		/*! \return true if one of the insert buttons was pressed and the forms are ready to create a widget.
-		 \return false otherwise.
-		 */
+		/*! \return true if one of the insert buttons was pressed and the forms are ready to create a widget. */
 		bool              inserting() const { return m_inserting; }
 		/*! \return The name of the class being inserted, corresponding to the menu item or the toolbar button clicked.
 		 */
 		QString           insertClass() const { return m_insertClass; }
 
 		/*! \return The popup menu to be shown when right-clicking on the form. Each container adds a widget-specific part
-		  to this one before showing it. This menu contains Copy/cut/paste/remove.
+		  to this one before showing it. This menu contains Copy/cut/paste/remove/delete and custom actions.
 		 */
 		KPopupMenu*       popupMenu() const { return m_popup; }
 		/*! The Container use this function to indicate the exec point of the contextual menu, which is used to position the
@@ -94,15 +92,22 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 */
 		void              setInsertPoint(const QPoint &p);
 
+		//! \return If we are creating a Connection by drag-and-drop or not.
 		bool              draggingConnection() { return m_drawingSlot; }
+		//! \return the \ref Connection being created.
 		Connection*       createdConnection() { return m_connection; }
+		/*! Resets the Connection being created. We stay in Connection creation mode, but we start a new connection (when the user clicks
+		 outside of signals/slots menu). */
 		void              resetCreatedConnection();
+		//! Creates and display a menu with all the signals of widget \a w.
 		void              createSignalMenu(QWidget *w);
+		//! Creates and display a menu with all the slots of widget \a w.
 		void              createSlotMenu(QWidget *w);
 
 		/*! \return The Form actually active and focused.
 		 */
 		Form*             activeForm() const;
+		//! \return the Form whose toplevel widget is \a w, or 0 if there is not or the Form is in preview mode.
 		Form*             formForWidget(QWidget *w);
 		/*! \return true if \a w is a toplevel widget, ie it is the main widget of a Form (so it should have a caption ,
 		 an icon ...)
@@ -112,9 +117,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		//! \return A pointer to the KexiPropertyEditor we use.
 		KexiPropertyEditor* editor() const { return m_editor; }
-
-		/*! Creates a new blank Form, whose toplevel widget inherits \a classname. The Form is automatically shown. */
-		//QWidget *createBlankForm(const QString &classname, const char *name, QWidget *parent=0);
 
 		/*! Adds a existing form w and changes it to a container */
 		void importForm(Form *form=0, bool preview=false);
@@ -128,27 +130,13 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		    the widget specific part is added (menu from the factory and buddy selection). */
 		void  createContextMenu(QWidget *w, Container *container/*, bool enableRemove*/);
 
+		//! Emits the signal \ref createFormSlot(). Used by \ref ObjectPropertyBuffer.
 		void  emitCreateSlot(const QString &widget, const QString &value) { emit createFormSlot(m_active, widget, value); }
 
+		//! \return If we align widgets to grid or not.
 		bool  snapWidgetsToGrid();
 
 	public slots:
-		/*! Creates a new blank Form with default class top widget (ie QWidget). The new Form is shown and becomes
-		   the active Form.
-		  */
-		//void createBlankForm();
-		/*! Loads a Form from a UI file. A "Open File" dialog is shown to select the file. The loaded Form is shown and becomes
-		   the active Form.
-		  */
-		//void loadForm(bool preview=false, const QString &filename=QString::null);
-		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, but the former name
-		  is used if there is one (using Form::filename()).
-		 */
-		//void saveForm();
-		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, even if the Form has
-		    already been saved.
-		 */
-		//void saveFormAs();
 		/*! Previews the Form \a form using the widget \a w as toplevel container for this Form. */
 		void previewForm(Form *form, QWidget *w, Form *toForm=0);
 		/*! Deletes the selected widget in active Form and all of its children. */
@@ -169,13 +157,18 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void editTabOrder();
 		/*! Adjusts the size of the selected widget, ie resize it to its size hint. */
 		void adjustWidgetSize();
-		/*! Creates a dialog to edit the current Form's PixmapCollection. */
+		/*! Creates a dialog to edit the \ref activeForm() PixmapCollection. */
 		void editFormPixmapCollection();
+		/*! Creates a dialog to edit the Connection of \ref activeForm(). */
 		void editConnections();
 
+		//! Lay out selected widgets using HBox layout (calls \ref CreateLayoutCommand).
 		void layoutHBox();
+		//! Lay out selected widgets using VBox layout.
 		void layoutVBox();
+		//! Lay out selected widgets using Grid layout.
 		void layoutGrid();
+		//! Breaks selected layout(calls \ref BreakLayoutCommand).
 		void breakLayout();
 
 		void alignWidgetsToLeft();
@@ -185,9 +178,13 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void alignWidgetsToGrid();
 
 		void adjustSizeToGrid();
+		//! Resize all selected widgets to the width of the narrowest widget.
 		void adjustWidthToSmall();
+		//! Resize all selected widgets to the width of the widest widget.
 		void adjustWidthToBig();
+		//! Resize all selected widgets to the height of the shortest widget.
 		void adjustHeightToSmall();
+		//! Resize all selected widgets to the height of the tallest widget.
 		void adjustHeightToBig();
 
 		void bringWidgetToFront();
@@ -199,15 +196,16 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void insertWidget(const QString &classname);
 		/*! Stopts the current widget insertion (ie unset the cursor ...). */
 		void stopInsert();
+		//! Slot called when the user presses 'Pointer' icon. Switch to Default mode.
 		void slotPointerClicked();
 
+		//! Enter the Connection creation mode.
 		void startDraggingConnection();
+		//! Leave the Connection creation mode.
 		void stopDraggingConnection();
 
 		/*! Print to the command line the ObjectTree of the active Form (ie a line for each widget, with parent and name). */
 		void debugTree();
-		/*! Sets \a w as the selected widget in the active Form. (called by ObjectTreeView) */
-		//void setSelectedWidget(QWidget *w);
 
 		/*! Calls this slot when the window activated changes (eg connect to QWorkspace::windowActivated(QWidget*)). You <b>need</b> to connect
 		   to this slot, it will crash otherwise.
@@ -221,15 +219,21 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void deleteWidgetLaterTimeout();
 		/*! Slot called when a buddy is choosed in the buddy list. Sets the label buddy. */
 		void buddyChoosed(int id);
+		/*! Slot called when the user chooses an item in signal (or slot) menu. The \ref createdConnection() is updated, and the connection created
+		 (for the signal menu). */
 		void menuSignalChoosed(int id);
+		/*! Slot called when the user changes current style using combbox in toolbar or menu. */
 		void slotStyle();
 
 		void slotConnectionCreated(Form*, Connection&);
 
 	protected:
+		/*! Inits the Form, adds it to m_forms, and conects slots. */
 		void initForm(Form *form);
-		/*! Slot called by the "Lay out in..." menu items. It creates a layout from the currently selected widgets (that must have the same parent). */
+		/*! Function called by the "Lay out in..." menu items. It creates a layout from the currently selected widgets (that must have the same parent).
+		  Calls \ref CreateLayoutCommand. */
 		void createLayout(int layoutType);
+		/*! Function called by all other AlignWidgets*() function. Calls \ref AlignWidgetsCommand. */
 		void alignWidgets(int type);
 
 	signals:
@@ -238,14 +242,25 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! This signal is emitted when any change is made to the Form \a form, so it will need to be saved. */
 		void dirty(KFormDesigner::Form *form, bool isDirty=true);
 
+		/*! Signal emitted when a normal widget is selected inside \a form (ie not form widget). If \a multiple is true,
+		  then more than one widget is selected. Use this to update actions state. */
 		void widgetSelected(Form *form, bool multiple);
+		/*! Signal emitted when the form widget is selected inside \a form. Use this to update actions state. */
 		void formWidgetSelected(Form *form);
+		/*! Signal emitted when no form (or a preview form) is selected. Use this to update actions state. */
 		void noFormSelected();
+		/*! Signal emitted when undo action activation changes. \a text is the full text of the action (including command name). */
 		void undoEnabled(bool enabled, const QString &text = QString::null);
+		/*! Signal emitted when redo action activation changes. \a text is the full text of the action (including command name). */
 		void redoEnabled(bool enabled, const QString &text = QString::null);
 
+		/*! Signal emitted when the user choose a signal in 'Events' menu in context menu, or in 'Events' in property editor.
+		  The code editor should then create the slot connected to this signal. */
 		void createFormSlot(Form *form, const QString &widget, const QString &signal);
+		/*! Signal emitted when the Connection creation by drag-and-drop ends. \a connection is the created Connection. You should copy it,
+		  because it is deleted just after the signal is emitted. */
 		void connectionCreated(Form *form, Connection &connection);
+		/*! Signal emitted when the Connection creation by drag-and-drop is aborted by user. */
 		void connectionAborted(Form *form);
 
 	private:

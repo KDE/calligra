@@ -40,21 +40,28 @@ namespace KFormDesigner {
 class Container;
 class ObjectPropertyBuffer;
 class FormManager;
-//class ResizeHandleSet;
 class ObjectTree;
 class ObjectTreeItem;
 class ConnectionBuffer;
 typedef QPtrList<ObjectTreeItem> ObjectTreeC;
 
 //! Base (virtual) class for all form widgets
+/*! You need to inherit this class, and implement the drawing functions. This is necessary because you cannot inherit QWidget twice,
+ and we want form widgets to be any widget. See FormWidgetBase in test/kfd_part.cpp and just copy functions here. */
 class KFORMEDITOR_EXPORT FormWidget
 {
 	public:
 		FormWidget() {;}
+		/*! This function draws the rect \a r in the Form, above of all widgets, using double-buffering.
+		 \a type can be 1 (selection rect) or 2 (insert rect, dotted). */
 		virtual void drawRect(const QRect& r, int type) = 0;
+		/*! This function inits the buffer used for double-buffering. Called before drawing rect. */
 		virtual void initRect() = 0;
+		/*! Clears the form, ie pastes the whole buffer to repaint the Form. */
 		virtual void clearRect() = 0;
-		virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;//, const QPoint &p) = 0;
+		/*! This function highlights two widgets (to is optional), which are sender and receiver, and draws a link
+		 between them. */
+		virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;
 };
 
 /*!
@@ -104,10 +111,13 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		QtWidgetList* 		selectedWidgets() {return &m_selected;}
 		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandle is removed. */
 		void			unSelectWidget(QWidget *w);
+		/*! Resets the form selection, ie set form widget as unique selected widget. */
 		void			resetSelection();
+		/*! Emits the action signals, and optionaly the undo/redo related signals if \a withUndoAction == true. See \a FormManager for signals
+		 description. */
 		void			emitActionSignals(bool withUndoAction=true);
 
-		/*! Sets the Form interactivity mode. If is used when pasting widgets, or loading a Form.
+		/*! Sets the Form interactivity mode. Form is not interactive when pasting widgets, or loading a Form.
 		 */
 		void			setInteractiveMode(bool interactive) { m_inter = interactive; }
 		/*! \return true if the Form is being updated by the user, ie the created widget were drawn on the Form.
@@ -151,7 +161,6 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void			setFilename(const QString &file) { m_filename = file; }
 
 		KCommandHistory*	commandHistory() { return m_history; }
-		//KActionCollection*	actionCollection() { return m_collection; }
 		ConnectionBuffer*	connectionBuffer() { return m_connBuffer; }
 		PixmapCollection*	pixmapCollection() { return m_pixcollection; }
 
@@ -180,6 +189,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void			changeName(const QString &oldname, const QString &newname);
 		/*! Sets \a selected to be the selected widget of this Form. If \a add is true, the formerly selected widget
 		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget.
+		  The form widget is always selected alone.
 		 */
 		void		setSelectedWidget(QWidget *selected, bool add=false, bool dontRaise=false);
 
@@ -188,9 +198,12 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		  at the same time.
 		 */
 		void			formDeleted();
+		/*! This slot is called when a command is executed. The undo/redo signals are emitted to update actions. */
 		void			slotCommandExecuted();
 		void			emitUndoEnabled();
 		void			emitRedoEnabled();
+		/*! This slot is called when form is restored, ie when the user has undone all actions. The form modified flag is updated, and
+		\ref FormManager::dirty() is called. */
 		void			slotFormRestored();
 
 	signals:
@@ -227,6 +240,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 */
 		void  fixNames(QDomElement el);
 
+		/*! \return The \ref Container which is a parent of all widgets in \a wlist. Used by \ref activeContainer(), and to find where
+		 to paste widgets when multiple widgets are selected. */
 		ObjectTreeItem*   commonParentContainer(QtWidgetList *wlist);
 
 	private:

@@ -38,6 +38,10 @@ class KexiPropertyEditor;
 
 namespace KFormDesigner {
 
+//! A dialog to edit the contents of a listvuew (KListView or QListView)
+/*! The dialog contains two pages, one to edit columns and one to edit ist items. KexiPropertyEditor is used in columns to edit column properties
+  (there are two properties not supported by Qt Designer: 'width' and 'resizable'). The user can enter list contents inside the list
+  using KListViewItem::setRenameable(). Pixmaps are not yet supported. */
 class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 {
 	Q_OBJECT
@@ -66,6 +70,8 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 		void MoveRowDown();
 
 	protected:
+		/*! Loads all child items of \a item into \a listview (may be different from the \a items 's listview) as child of \a parent item.
+		This is used to copy the contents of a listview into another listview. */
 		void loadChildNodes(QListView *listview, QListViewItem *item, QListViewItem *parent);
 
 	protected:

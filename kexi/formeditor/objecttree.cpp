@@ -216,7 +216,8 @@ ObjectTree::removeChild(const QString &name)
 QString
 ObjectTree::genName(const QString &c)
 {
-	/*int appendix = m_names[c] + 1;
+	/* old way of naming widgets
+	int appendix = m_names[c] + 1;
 	QString name(c);
 	name.append(QString::number(appendix));
 	m_names[c] = appendix;*/

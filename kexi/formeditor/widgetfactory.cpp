@@ -121,7 +121,7 @@ WidgetFactory::editList(QWidget *w, QStringList &list)
 	KDialogBase dialog(w->topLevelWidget(), "stringlist_dialog", true, i18n("Edit List of Items"),
 	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
 
-	KEditListBox *edit = new KEditListBox(i18n("%1 Contents").arg(w->name()), &dialog, "editlist");
+	KEditListBox *edit = new KEditListBox(i18n("Contents of %1").arg(w->name()), &dialog, "editlist");
 	dialog.setMainWidget(edit);
 	edit->insertStringList(list);
 //	edit->show();
@@ -189,7 +189,10 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 	else if(ev->type() == QEvent::ContextMenu)
 		return true;
 
-	return false;
+	if(obj == m_widget)
+		return m_container->eventFilter(obj, ev);
+	else
+		return false;
 }
 
 void

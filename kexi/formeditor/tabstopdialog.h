@@ -33,6 +33,9 @@ namespace KFormDesigner {
 class Form;
 class ObjectTreeView;
 
+//! A dialog to edit Form tab stops
+/*! The user can change the order by dragging list items or using buttons at the right.
+  The tab stops can be arranged automatically (see \ref Form::autoAssignTabStops()). */
 class KFORMEDITOR_EXPORT TabStopDialog : public KDialogBase
 {
 	Q_OBJECT

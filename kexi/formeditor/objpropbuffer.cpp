@@ -489,43 +489,55 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 	QStringList list;
 	QString value;
 	QStringList keys = QStringList::fromStrList( meta->valueToKeys(obj->property("alignment").toInt()) );
-	kdDebug() << "keys is " << keys.join("|") << endl;
+
+	QStrList *enumKeys = new QStrList(meta->enumKeys());
+	QStringList possibleValues = QStringList::fromStrList(*enumKeys);
+	delete enumKeys;
+
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(obj->name());
 
-	// Create the hor alignment property
-	if(!keys.grep("AlignHCenter").empty())
-		value = "AlignHCenter";
-	else if(!keys.grep("AlignRight").empty())
-		value = "AlignRight";
-	else if(!keys.grep("AlignLeft").empty())
-		value = "AlignLeft";
-	else if(!keys.grep("AlignJustify").empty())
-		value = "AlignJustify";
-	else
-		value = "AlignAuto";
-	kdDebug() << "Hor value is " << value << endl;
+	kdDebug() << "dddddddddddddddddddddddddddddddddddddddddddddddd  " << possibleValues.join("|") << endl;
+	if(!possibleValues.grep("AlignHCenter").empty())
+	{
+		// Create the horizontal alignment property
+		if(!keys.grep("AlignHCenter").empty())
+			value = "AlignHCenter";
+		else if(!keys.grep("AlignRight").empty())
+			value = "AlignRight";
+		else if(!keys.grep("AlignLeft").empty())
+			value = "AlignLeft";
+		else if(!keys.grep("AlignJustify").empty())
+			value = "AlignJustify";
+		else
+			value = "AlignAuto";
 
-	list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
-	add(new KexiProperty("hAlign", value, list, descList(list), i18n("Horizontal alignment")));
-	updateOldValue(tree, "hAlign");
-	list.clear();
+		list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
+		add(new KexiProperty("hAlign", value, list, descList(list), i18n("Horizontal Alignment")));
+		updateOldValue(tree, "hAlign");
+		list.clear();
+	}
 
-	// Create the ver alignment property
-	if(!keys.grep("AlignTop").empty())
-		value = "AlignTop";
-	else if(!keys.grep("AlignBottom").empty())
-		value = "AlignBottom";
-	else
-		value = "AlignVCenter";
-	kdDebug() << "Vet value is " << value << endl;
+	if(!possibleValues.grep("AlignTop").empty())
+	{
+		// Create the ver alignment property
+		if(!keys.grep("AlignTop").empty())
+			value = "AlignTop";
+		else if(!keys.grep("AlignBottom").empty())
+			value = "AlignBottom";
+		else
+			value = "AlignVCenter";
 
-	list << "AlignTop" << "AlignVCenter" << "AlignBottom";
-	add(new KexiProperty("vAlign", value, list, descList(list), i18n("Vertical Alignment")));
-	updateOldValue(tree, "vAlign");
+		list << "AlignTop" << "AlignVCenter" << "AlignBottom";
+		add(new KexiProperty("vAlign", value, list, descList(list), i18n("Vertical Alignment")));
+		updateOldValue(tree, "vAlign");
+	}
 
-	// Create the wordbreak property
-	add(new KexiProperty("wordbreak", QVariant(false, 3), i18n("Word Break")));
-	updateOldValue(tree, "wordbreak");
+	if(!possibleValues.grep("WordBreak").empty())
+	{
+		// Create the wordbreak property
+		add(new KexiProperty("wordbreak", QVariant(false, 3), i18n("Word Break")));
+		updateOldValue(tree, "wordbreak");
+	}
 }
 
 void
@@ -533,10 +545,13 @@ ObjectPropertyBuffer::saveAlignProperty(const QString &property)
 {
 	if (!m_manager->activeForm())
 		return;
+
 	QStrList list;
-	list.append( (*this)["hAlign"].value().toString().latin1() );
-	list.append( (*this)["vAlign"].value().toString().latin1() );
-	if( (*this)["wordbreak"].value().toBool() )
+	if( (*this)["hAlign"] )
+		list.append( (*this)["hAlign"].value().toString().latin1() );
+	if( (*this)["vAlign"] )
+		list.append( (*this)["vAlign"].value().toString().latin1() );
+	if( (*this)["wordbreak"] && (*this)["wordbreak"].value().toBool() )
 		list.append("WordBreak");
 
 	int count = m_widgets.first()->metaObject()->findProperty("alignment", true);
@@ -613,7 +628,7 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &va
 		}
 
 		cont->setLayout(type);
-		bool show = !(type == Container::NoLayout);
+		bool show = type != Container::NoLayout;
 		if(show != (*this)["layoutMargin"].isVisible())
 		{
 			(*this)["layoutMargin"].setVisible(show);

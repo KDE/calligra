@@ -180,14 +180,14 @@ KFormDesignerPart::setupActions()
 	new KAction(i18n("Bring Widget to Front"), "raise", KShortcut(0), m_manager, SLOT(bringWidgetToFront()), actionCollection(), "format_raise");
 	new KAction(i18n("Send Widget to Back"), "lower", KShortcut(0), m_manager, SLOT(sendWidgetToBack()), actionCollection(), "format_lower");
 
-	KActionMenu *alignMenu = new KActionMenu(i18n("Align Widgets position"), "aopos2grid", actionCollection(), "align_menu");
+	KActionMenu *alignMenu = new KActionMenu(i18n("Align Widgets Position"), "aopos2grid", actionCollection(), "align_menu");
 	alignMenu->insert( new KAction(i18n("To Left"), "aoleft", KShortcut(0), m_manager, SLOT(alignWidgetsToLeft()), actionCollection(), "align_to_left") );
 	alignMenu->insert( new KAction(i18n("To Right"), "aoright", KShortcut(0), m_manager, SLOT(alignWidgetsToRight()), actionCollection(), "align_to_right") );
 	alignMenu->insert( new KAction(i18n("To Top"), "aotop", KShortcut(0), m_manager, SLOT(alignWidgetsToTop()), actionCollection(), "align_to_top") );
 	alignMenu->insert( new KAction(i18n("To Bottom"), "aobottom", KShortcut(0), m_manager, SLOT(alignWidgetsToBottom()), actionCollection(), "align_to_bottom") );
 	alignMenu->insert( new KAction(i18n("To Grid"), "aopos2grid", KShortcut(0), m_manager, SLOT(alignWidgetsToGrid()), actionCollection(), "align_to_grid") );
 
-	KActionMenu *sizeMenu = new KActionMenu(i18n("Adjust Widgets size"), "aogrid", actionCollection(), "adjust_size_menu");
+	KActionMenu *sizeMenu = new KActionMenu(i18n("Adjust Widgets Size"), "aogrid", actionCollection(), "adjust_size_menu");
 	sizeMenu->insert( new KAction(i18n("To Fit"), "aofit", KShortcut(0), m_manager, SLOT(adjustWidgetSize()), actionCollection(), "adjust_to_fit") );
 	sizeMenu->insert( new KAction(i18n("To Grid"), "aogrid", KShortcut(0), m_manager, SLOT(adjustSizeToGrid()), actionCollection(), "adjust_size_grid") );
 	sizeMenu->insert( new KAction(i18n("To Shortest"), "aoshortest", KShortcut(0), m_manager, SLOT(adjustHeightToSmall()), actionCollection(), "adjust_height_small") );
@@ -566,11 +566,6 @@ FormWidgetBase::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &po
 		QPixmap pix1 = QPixmap::grabWidget(from);
 		QPixmap pix2 = QPixmap::grabWidget(to);
 
-		/*if(from == this)
-			p.drawLine( point, mapFrom(to->parentWidget(), to->geometry().center()) );
-		else if(to == this)
-			p.drawLine( mapFrom(from->parentWidget(), from->geometry().center()), point);
-		else*/
 		if((from != this) && (to != this))
 			p.drawLine( from->parentWidget()->mapTo(this, from->geometry().center()), to->parentWidget()->mapTo(this, to->geometry().center()) );
 
@@ -609,7 +604,7 @@ void
 FormWidgetBase::closeEvent(QCloseEvent *ev)
 {
 	Form *form = m_part->manager()->formForWidget(this);
-	if(!form || !form->isModified() || !form->objectTree())
+	if(!form || !form->isModified() || !form->objectTree()) // == preview form
 		ev->accept();
 	else
 	{

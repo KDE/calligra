@@ -64,14 +64,12 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 	int margin = listView()->itemMargin();
 	if(column == 1)
 	{
-		//if(depth()==0)
 		if(!m_item)
 			return;
 		KListViewItem::paintCell(p, cg, column, width, align);
 	}
 	else
 	{
-		//if(depth()==0)
 		if(!m_item)
 			return;
 
@@ -130,18 +128,8 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
 			p->fillRect(0,0,w, item->height(), QBrush(cg.highlight()));
 			p->fillRect(-150,0,150, item->height(), QBrush(cg.highlight()));
 		}
-		/*if(item->firstChild())
-		{
-		p->drawRect(2, item->height()/2 -4, 9, 9);
-		p->drawLine(4, item->height()/2, 8, item->height()/2);
-		if(!item->isOpen())
-			p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
-		}*/
-		QString iconName;
-		if(depth() == 0)
-			iconName = "form";
-		else
-			iconName = ((ObjectTreeView*)listView())->pixmapForClass(item->m_item->widget()->className());
+
+		QString iconName = ((ObjectTreeView*)listView())->pixmapForClass(item->m_item->widget()->className());
 		p->drawPixmap((w - IconSize(KIcon::Small))/2, (item->height() - IconSize(KIcon::Small))/2 , SmallIcon(iconName));
 
 		p->translate(0, item->totalHeight());
@@ -154,7 +142,6 @@ void
 ObjectTreeViewItem::setup()
 {
 	KListViewItem::setup();
-	//if(depth()==0)
 	if(!m_item)
 		setHeight(0);
 }

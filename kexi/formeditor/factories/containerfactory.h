@@ -49,6 +49,7 @@ class InsertPageCommand : public KCommand
 		int      m_pageid;
 };
 
+//! Helper widget (used when using 'Lay out horizontally')
 class KFORMEDITOR_EXPORT HBox : public QFrame
 {
 	Q_OBJECT
@@ -63,6 +64,7 @@ class KFORMEDITOR_EXPORT HBox : public QFrame
 		bool  m_preview;
 };
 
+//! Helper widget (used when using 'Lay out vertically')
 class KFORMEDITOR_EXPORT VBox : public QFrame
 {
 	Q_OBJECT
@@ -77,6 +79,7 @@ class KFORMEDITOR_EXPORT VBox : public QFrame
 		bool  m_preview;
 };
 
+//! Helper widget (used when using 'Lay out in a grid')
 class KFORMEDITOR_EXPORT Grid : public QFrame
 {
 	Q_OBJECT
@@ -91,10 +94,7 @@ class KFORMEDITOR_EXPORT Grid : public QFrame
 		bool  m_preview;
 };
 
-/**
- *
- * Lucijan Busch
- **/
+//! Standard Factory for all container widgets
 class ContainerFactory : public KFormDesigner::WidgetFactory
 {
 	Q_OBJECT

@@ -107,11 +107,40 @@ typedef QPtrList<Widget> WidgetList;
 /*! This helper function install an event filter on \a object and all of its children, directed to \a container.
   This is necessary to filter events for composed widgets. */
 void KFORMEDITOR_EXPORT installRecursiveEventFilter(QObject *object, QObject *container);
-/**
- * this is a poor virtual class, used for making widgets
- * avaible to the WidgetLibrary.
- * you can either make a KPart module out of it or call @ref WidgetLibrary::addFactory()
- */
+
+
+//! The base class for all widget Factories
+/*! This is the class you need to inherit to create a new Factory. There are few virtuals you need to implement, and some other functions
+ to implement if you want more features.\n \n
+
+  <b>Widget Creation</b>\n
+  To be able to create widgets, you need to implement the \ref create() function, and \ref classes(), which should return all the widgets supported by this factory.
+  The \ref name() function also need to be inplemented.\n \n
+
+  <b>GUI Integration</b>\n
+  The following functions allow you to customize even more the look-n-feel of your widgets inside KFormDesigner. You can use \ref createMenuActions() to add custom items
+  in widget's context menu. The \ref previewWidget() is called when the Form gets in Preview mode, and and you have a last opportunity to remove all editing-related stuff (see
+  eg \ref Spring class).\n
+  You can also choose which properties to show in the Property Editor. By default, all properties are shown, but you can hide some using \ref showProperty(). To add
+  new properties, just define new Q_PROPERTY in widget class definition.\n \n
+
+  <b>Inline editing</b>\n
+  KFormDesigner allow you to edit the widget's contents inside Form, without using a dialog. You can of course customize the behaviour of your widgets,
+  using \ref startEditing(). There are some editing modes already implemented in WidgetFactroy, but you can create your own if you want:
+  \li Editing using a line edit (\ref createEditor()): a line edit is created on top of widget, where the user inputs text. As the text changes, \ref changeText() is called
+  (where you should set your widget's text and resize widget to fit the text if needed) and \ref resizeEditor() to update editor's position when widget is moved/resized.\n
+  \li Editing by disabling event filter: if you call \ref disableFilter(), the event filter on the object is temporaryly disabled, so the widget behaves as usual. This
+  can be used for more complex widgets, such as spinbox, date/time edit, etc.
+  \li Other modes: there are 3 other modes, to edit a string list: \ref editList() (for combo box, listbox), to edit rich text: \ref editRichText() (for labels, etc.)
+  and to edit a listview: \ref editListView(). \n \n
+
+  <b>Widget saving/loading</b>\n
+  You can also control how your widget are saved/loaded. You can choose which properties to save (see \ref autoSaveProperties()), and save/load custom properties, ie
+  properties that are not Q_PORPERTY but you want to save in the UI file. This is used eg to save combo box or listview contents (see \ref saveSpecialProperty() and
+  \ref readSpecialProperty()). \n \n
+
+  See the standard factories in formeditor/factories for an example of factories, and how to deal with complex widgets (eg tabwidget).
+  */
 class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 {
 	Q_OBJECT
@@ -120,26 +149,28 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		virtual ~WidgetFactory();
 
 		/**
-		 * returns the name of the factory
+		 * \return the name of the factory
 		 */
 		virtual QString		name()=0;
 
 		/**
-		 * retruns all classes, which are provided by this factory
+		 * \return all classes which are provided by this factory
 		 */
 		virtual	WidgetList	classes()=0;
 
-		/**
-		 * creates a widget (and if needed a container)
-		 * @returns the created widgets
-		 * @param classname the classname of the widget, which should get created
-		 * @param parent the parent for the created widgets
-		 * @param name the name of the created widget
-		 * @param toplevel the toplevelcontainer (if a container should get created)
+		/*!
+		 * Creates a widget (and if needed a \ref Container)
+		 * \return the created widget
+		 * \param classname the classname of the widget, which should get created
+		 * \param parent the parent for the created widget
+		 * \param name the name of the created widget
+		 * \param toplevel the toplevel Container (if a container should get created)
 		 */
 		virtual QWidget*	create(const QString &classname, QWidget *parent, const char *name,
 					 KFormDesigner::Container *container)=0;
 
+		/*! This function can be used to add custom items in widget \a w context menu \a menu. You must add the id of the
+		 created menu items to \a menuIds, so they get deleted later. */
 		virtual bool		createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
 		    KFormDesigner::Container *container, QValueVector<int> *menuIds)=0;
 
@@ -209,7 +240,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 	protected slots:
 		/*! You have to implement this function for editing inside the Form to work. This slot is called when the line edit text changes,
-		  and you have to make it really change the good property of the widget using changeProperty() (text, or title, etc.).
+		  and you have to make it really change the good property of the widget using \ref changeProperty() (text, or title, etc.).
 		 */
 		virtual void  changeText(const QString &newText);
 		/*! This slot is called when the editor has lost focus or the user pressed Enter. It destroys the editor or installs

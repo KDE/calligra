@@ -29,6 +29,8 @@ class KColorCombo;
 
 namespace KFormDesigner {
 
+//! A simple dialog to edit rich text
+/*! It allows to change font name, style and color, alignment. */
 class KFORMEDITOR_EXPORT RichTextDialog : public KDialogBase
 {
 	Q_OBJECT

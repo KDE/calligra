@@ -83,6 +83,8 @@ class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
 		QPoint m_pos;
 };
 
+/*! This command is used when an item in 'Align Widgets position' is selected. You just need to give the list of widget names (the selected ones), and the
+  type of alignment (see the enum for possible values). */
 class KFORMEDITOR_EXPORT AlignWidgetsCommand : public KCommand
 {
 	public:
@@ -100,6 +102,8 @@ class KFORMEDITOR_EXPORT AlignWidgetsCommand : public KCommand
 		QMap<QString, QPoint>  m_pos;
 };
 
+/*! This command is used when an item in 'Adjust Widgets Size' is selected. You just need to give the list of widget names (the selected ones), and the
+  type of size modification (see the enum for possible values). */
 class KFORMEDITOR_EXPORT AdjustSizeCommand : public KCommand
 {
 	public:
@@ -173,6 +177,7 @@ class KFORMEDITOR_EXPORT CreateLayoutCommand : public KCommand
 		int  m_type;
 };
 
+/*! This command is used when the 'Break Layout' menu item is selected. It does exactly the opposite of CreateLayoutCommand. */
 class KFORMEDITOR_EXPORT BreakLayoutCommand : public CreateLayoutCommand
 {
 	public:
@@ -181,13 +186,6 @@ class KFORMEDITOR_EXPORT BreakLayoutCommand : public CreateLayoutCommand
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
-
-	/*protected:
-		Form  *m_form;
-		QString  m_containername;
-		QString  m_name;
-		QMap<QString,QRect>  m_pos;
-		int  m_type;*/
 };
 
 /*! This command is used when pasting widgets. You need to give the QDomDocument containing te widget(s) to paste, and optionnally the point where to paste widgets. */

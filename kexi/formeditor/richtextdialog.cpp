@@ -161,9 +161,6 @@ RichTextDialog::buttonToggled(int id)
 void
 RichTextDialog::cursorPositionChanged(int, int)
 {
-//	if (m_edit->hasSelectedText())
-//		return;
-
 	m_fcombo->setCurrentFont(m_edit->currentFont().family());
 	m_colCombo->setColor(m_edit->color());
 	m_toolbar->setButton(TBBold, m_edit->bold());

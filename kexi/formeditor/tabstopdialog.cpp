@@ -80,8 +80,6 @@ int TabStopDialog::exec(Form *form)
 	m_treeview->clear();
 	m_treeview->m_form = form;
 
-	//ObjectTreeViewItem *topItem = new ObjectTreeViewItem(m_treeview);
-	//topItem->setOpen(true);
 	if(form->autoTabStops())
 		form->autoAssignTabStops();
 	for(ObjectTreeItem *it = form->tabStops()->last(); it; it = form->tabStops()->prev())
@@ -100,7 +98,8 @@ int TabStopDialog::exec(Form *form)
 		}
 
 		form->tabStops()->clear();
-		//ObjectTreeViewItem *item = (ObjectTreeViewItem*)topItem->itemBelow();
+
+		// we add items in the list order
 		ObjectTreeViewItem *item = (ObjectTreeViewItem*)m_treeview->firstChild();
 		while(item)
 		{

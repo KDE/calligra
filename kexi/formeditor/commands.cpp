@@ -69,7 +69,7 @@ PropertyCommand::execute()
 	{
 		QWidget *widg = m_buffer->m_manager->activeForm()->objectTree()->lookup(it.key())->widget();
 		m_buffer->m_manager->activeForm()->setSelectedWidget(widg, true);
-		m_buffer->setSelectedWidget(widg, true);
+		//m_buffer->setSelectedWidget(widg, true);
 	}
 
 	(*m_buffer)[m_property] = m_value;
@@ -90,7 +90,7 @@ PropertyCommand::unexecute()
 	{
 		QWidget *widg = m_buffer->m_manager->activeForm()->objectTree()->lookup(it.key())->widget();
 		m_buffer->m_manager->activeForm()->setSelectedWidget(widg, true);
-		m_buffer->setSelectedWidget(widg, true);
+		//m_buffer->setSelectedWidget(widg, true);
 		widg->setProperty(m_property, it.data());
 	}
 }
@@ -539,9 +539,8 @@ InsertWidgetCommand::execute()
 		return;
 	}
 
-	//m_container->m_insertRect = m_insertRect;
 	// if the insertRect is invalid (ie only one point), we use widget' size hint
-	if/*(!m_container->m_insertRect.isValid() || */(( (m_insertRect.width() < 21) && (m_insertRect.height() < 21))) //|| (w->inherits("QLabel")))
+	if(( (m_insertRect.width() < 21) && (m_insertRect.height() < 21)))
 	{
 		QSize s = w->sizeHint();
 
@@ -561,12 +560,11 @@ InsertWidgetCommand::execute()
 		m_insertRect = QRect(x, y, s.width(), s.height());
 	}
 	w->move(m_insertRect.x(), m_insertRect.y());
-	w->resize(m_insertRect.width()-1, m_insertRect.height()-1);
+	w->resize(m_insertRect.width()-1, m_insertRect.height()-1); // -1 is not to hide dots
 	w->setStyle(&(m_container->widget()->style()));
 	w->setBackgroundOrigin(QWidget::ParentOrigin);
 	w->show();
 
-	//m_container->m_insertRect = QRect();
 	m_container->form()->manager()->stopInsert();
 
 	if (!m_container->form()->objectTree()->lookup(m_name))
