@@ -850,11 +850,13 @@ void KPresenterView::extraLineEnd()
 /*===============================================================*/
 void KPresenterView::extraGroup()
 {
+    m_pKPresenterDoc->groupObjects();
 }
 
 /*===============================================================*/
 void KPresenterView::extraUnGroup()
 {
+    m_pKPresenterDoc->ungroupObjects();
 }
 
 /*========================== screen config pages ================*/

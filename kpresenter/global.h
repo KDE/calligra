@@ -76,7 +76,8 @@ enum ObjType {
     OT_CLIPART = 6,
     OT_UNDEFINED = 7,
     OT_PIE = 8,
-    OT_PART
+    OT_PART = 9,
+    OT_GROUP = 10
 };
 enum LineType {
     LT_HORZ = 0,

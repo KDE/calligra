@@ -316,6 +316,9 @@ public:
 	return (KPresenterView*)nextView();
     }
     
+    void groupObjects();
+    void ungroupObjects();
+
 signals:
 
     // document modified

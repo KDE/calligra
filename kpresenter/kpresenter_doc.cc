@@ -3805,3 +3805,13 @@ QStringList KPresenterDoc::getRecentryOpenedList()
     config->setGroup( "Global" );
     return config->readListEntry( "recently opened" );
 }
+
+/*================================================================*/
+void KPresenterDoc::groupObjects()
+{
+}
+
+/*================================================================*/
+void KPresenterDoc::ungroupObjects()
+{
+}

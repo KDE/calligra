@@ -17,8 +17,8 @@ kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc \
 	confpiedia.cc spacingdia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
-	kppixmapobject.cc kppieobject.cc kppartobject.cc \
-	kpbackground.cc kpclipartcollection.cc kpgradient.cc\
+	kppixmapobject.cc kppieobject.cc kppartobject.cc kpgroupobject.cc \
+	kpbackground.cc kpclipartcollection.cc kpgradient.cc \
 	kppixmapcollection.cc kpgradientcollection.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
@@ -29,7 +29,7 @@ kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc \
 	KPresenterDocIface.skel KPresenterDocIface.cc \
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
-	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc 
+	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc
 
 noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		backdia.h page.h ktextobject.h styledia.h \
@@ -40,7 +40,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		delpagedia.h inspagedia.h confpiedia.h spacingdia.h confrectdia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
-		kppixmapobject.h kppieobject.h kppartobject.h \
+		kppixmapobject.h kppieobject.h kppartobject.h kpgroupobject.h \
 		kpbackground.h kpclipartcollection.h kpgradient.h \
 		kppixmapcollection.h kpgradientcollection.h \
 		command.h movecmd.h resizecmd.h insertcmd.h deletecmd.h \
