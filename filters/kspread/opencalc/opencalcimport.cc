@@ -625,7 +625,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
           kdDebug(30518) << "Type: date, value: " << value << endl;
 
           // "1980-10-15"
-          int year, month, day;
+          int year=0, month=0, day=0;
           ok = false;
 
           int p1 = value.find( '-' );
@@ -662,7 +662,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
 
           kdDebug(30518) << "Type: time: " << value << endl;
           // "PT15H10M12S"
-          int hours, minutes, seconds;
+          int hours=0, minutes=0, seconds=0;
           int l = value.length();
           QString num;
 
@@ -2718,6 +2718,17 @@ int OpenCalcImport::readMetaData()
   if ( !e.isNull() && !e.text().isEmpty() )
     aboutPage->setAbstract( e.text() );
 
+  e = KoDom::namedItemNS( office, KoXmlNS::dc, "subject" );
+  if ( !e.isNull() && !e.text().isEmpty() )
+    aboutPage->setSubject( e.text() );
+
+  e= KoDom::namedItemNS( office, KoXmlNS::meta, "keywords" );
+  if ( !e.isNull() )
+  {
+      e = KoDom::namedItemNS( e,  KoXmlNS::meta, "keyword" );
+      if ( !e.isNull() && !e.text().isEmpty() )
+          aboutPage->setKeywords( e.text() );
+  }
   /*
    * TODO:
    *
