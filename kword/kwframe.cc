@@ -463,10 +463,10 @@ int KWFrameSet::selectFrame( unsigned int mx, unsigned int my, bool simulate )
 /*================================================================*/
 void KWFrameSet::deSelectFrame( unsigned int mx, unsigned int my )
 {
-    for ( unsigned int i = 0; i < frames.count(); i++ ) {
-        if ( frames.at( i )->contains( QPoint( mx, my ) ) )
-            frames.at( i )->setSelected( false );
-    }
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+        if ( frameIt.current()->contains( QPoint( mx, my ) ) )
+            frameIt.current()->setSelected( false );
 }
 
 /*================================================================*/

@@ -1757,63 +1757,7 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 /*================================================================*/
 void KWDocument::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/ )
 {
-//     // Autsch.... that's an ugly hack!
-//     if ( !tmpShell ) {
-//      tmpShell = new KWordShell;
-//      tmpShell->hide();
-//      tmpShell->setRootPart( this );
-//     }
-
-//     if ( tmpShellSize.isNull() || tmpShellSize != rect ) {
-//      tmpShellSize = rect;
-//      tmpShell->resize( rect.width(), rect.height() );
-//     }
-//     tmpShell->resize( 1000, 1000 );
-
-//     KWView *view = (KWView*)tmpShell->rootView();
-//     KWCanvas *canvas = view->getGUI()->canvasWidget();
-
-//     page->calcVisiblePages();
-
-//     painter.save();
-//     painter.eraseRect( rect );
-//     QRect rr( rect );
-//     rr.moveBy( painter.worldMatrix().dx(), painter.worldMatrix().dy() );
-//     painter.setClipRect( rr );
-
-//     QRegion r;
-//     page->drawBorders( painter, rect, TRUE, &r );
-
-//     int cf = page->currFrameSet == -1 ? page->fc->getFrameSet() - 1 : page->currFrameSet;
-
-//     QPaintEvent e( rect, TRUE );
-//     KWFormatContext *paintfc = new KWFormatContext( this, 1 );
-//     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-//      if ( page->redrawOnlyCurrFrameset && (int)i != cf )
-//          continue;
-
-//      switch ( getFrameSet( i )->getFrameType() ) {
-//      case FT_PICTURE:
-//          page->paintPicture( painter, i );
-//          break;
-//      case FT_PART:
-//          page->paintPart( painter, i );
-//          break;
-//      case FT_FORMULA:
-//          page->paintFormula( painter, i );
-//          break;
-//      case FT_TEXT:
-//          page->paintText( painter, paintfc, i, &e );
-//          break;
-//      default: break;
-//      }
-//     }
-//     delete paintfc;
-
-//     page->finishPainting( &e, painter );
-
-//     setPageLayoutChanged( FALSE );
-//     painter.restore();
+    // TODO !
 }
 
 /*================================================================*/
