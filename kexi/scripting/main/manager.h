@@ -29,7 +29,7 @@ namespace Kross { namespace Api {
 
     class Interpreter;
 
-    class Manager
+    class KROSS_MAIN_EXPORT Manager
     {
         public:
             Manager();

@@ -6,11 +6,11 @@
 //
 #if defined( _MSC_VER )
 
-#  if _MSC_VER <= 1200
+//#  if _MSC_VER <= 1200
 #    define STANDARD_LIBRARY_HAS_ITERATOR_TRAITS 0
-#  else
-#    define STANDARD_LIBRARY_HAS_ITERATOR_TRAITS 1
-#  endif
+//#  else
+//#    define STANDARD_LIBRARY_HAS_ITERATOR_TRAITS 1
+//#  endif
 
 #elif defined( __GNUC__ )
 #  if __GNUC__ >= 3

@@ -79,7 +79,7 @@ bool PythonInterpreter::execute(const QString& execstring)
     }
 
     // Execute the string.
-    PyRun_SimpleString(execstring.latin1());
+    PyRun_SimpleString((char*)execstring.latin1());
 
     // Explicit free the modules.
     for(QMap<QString, PythonModule*>::Iterator it = m_pythonmodules.begin(); it != m_pythonmodules.end(); ++it) {
