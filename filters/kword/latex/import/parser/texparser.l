@@ -41,7 +41,7 @@ math \$
 b_env \\begin\{{word}\}
 e_env \\end\{{word}\}
 
-commande \\[a-zA-Z]+
+command \\[a-zA-Z]+
 
 display \$\$
 
@@ -50,11 +50,12 @@ comments \%.*\n
 ws [ \n\t]
 space ({ws}|\~|\\space)
 
-texte [^\\\n\$\%\{\}\[\]\(\)]+
+text [^\\\n\$\%\{\}\[\]\(\)\,]+
+word ({alphanum}|\*)+
 
 symbol ("$"("\\"{atoz}+|.)"$"|"\\#"|"\\$"|"\\%"|"\\ref")
 letter [A-Za-z]
-word {letter}+
+alphanum [A-Za-z0-9]
 
 %%
 <*>"{" return(LEFTBRACE);
@@ -62,11 +63,11 @@ word {letter}+
 <*>"(" return(LEFTPARENTHESIS);
 <*>")" return(RIGHTPARENTHESIS);
 <*>"[" return(LEFTBRACKET);
-<*>"]" return(RIGHTBRACKET);
+<*>"]" { printf("]"); return(RIGHTBRACKET); }
 <*>"=" return(EQUAL);
-<*>"," return(COMMA);
+<*>"," { printf(","); return(COMMA); }
 
-<*>{commande} {
+<*>{command} {
 	printf("COMMAND ");
 
 	//yylval.yyelement = new Command(yytext);
@@ -116,26 +117,28 @@ word {letter}+
 	return COMMENT;
 }
 
-<*>{texte} {
-	printf("TEXT ");
+<*>{text} {
+	printf("TEXT (%s)", yytext);
 	yylval.yystring = strdup(yytext);
 	return TEXT;
 }
-
-
 %%
+/**/
+
 /*
-<<EOF>> {
-	printf("EOF\n");
-	//yyterminate();
-	return EOF;
+<*>{space} {
+	printf(" ");
+	yylval.yystring = strdup(yytext);
+	return SPACES;
 }
 
+
 <*>{word} {
-	printf("WORD");
+	printf("WORD (%s)", yytext);
 	yylval.yystring = strdup(yytext);
 	return WORD;
 }
+
 <MATHMODE>{texte} {
 	printf("MATH TEXT");
 	yylval.yystring = strdup(yytext);
@@ -157,7 +160,7 @@ void setParseFile(QString filename)
 int yyerror(const char* s)
 {
 	//yynerrs++;
-  printf("line  %s\n",  s);
+  printf("\nline  %s\n",  s);
 	//return 0;
 }
 

@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <qstring.h>
-#include <qpair.h>
-#include <qmap.h>
+/*#include <qpair.h>
+#include <qmap.h>*/
+#include "param.h"
 #include "element.h"
 #include "comment.h"
 #include "env.h"
@@ -20,21 +21,22 @@ QPtrList<Element>* _root;
 %union
 {
 	Element* yyelement;
-	QPair<QString,QString>* yypair;
+	Param* yyparam;
 	char* yystring;
-	QPtrList<QPair<QString,QString> >* yyparams;
+	QPtrList<Param>* yyparams;
+	QPtrList<QPtrList<Param> >* yylistparams;
 	QPtrList<Element>* yylistelements;
 	QPtrList<QPtrList<Element> >* yylistlistelements;
 };
 
-%token COMMA EQUAL LEFTBRACE RIGHTBRACE LEFTBRACKET RIGHTBRACKET LEFTPARENTHESIS RIGHTPARENTHESIS 
+%token COMMA EQUAL LEFTBRACE RIGHTBRACE LEFTBRACKET RIGHTBRACKET LEFTPARENTHESIS RIGHTPARENTHESIS SPACES
 %token <yystring>WORD
 %token <yystring>COMMAND
 %token <yystring>TEXT <yystring>TEXTMATH
 %token <yystring>B_ENV <yystring>E_ENV
 %token <yystring>COMMENT
 %token <yystring>B_MATH <yystring>E_MATH <yystring>MATH
-%token EOF
+//%token EOF
 
 %start document
 %%
@@ -42,7 +44,6 @@ QPtrList<Element>* _root;
 document:
 	Expressions
 	{
-		printf("document");
 		_root = $<yylistelements>1;
 	}
 	;
@@ -50,19 +51,19 @@ document:
 Expressions:
 	/* Empty */ 
 	{
-		printf("no exp\n");
 		$<yylistelements>$ = NULL;
 	}
 	| Expressions Expression
 	{
 		printf("des expressions.\n");
 		if($<yylistelements>1 == NULL)
+		{
 			$<yylistelements>$ = new QPtrList<Element>();
+			$<yylistelements>$->setAutoDelete(true);
+		}
 		else
 			$<yylistelements>$ = $<yylistelements>1;
 		$<yylistelements>$->append($<yyelement>2);
-		if($<yyelement>2->getType() == ELT_ENV)
-			printf("exp : env %s\n", ((Env*) $<yyelement>2)->getName().latin1()); 
 	}
 	;
 	
@@ -71,7 +72,7 @@ Expression:
 	{
 		$<yyelement>$ = $<yyelement>1;
 	}
-	| TEXT
+	| Text
 	{
 		printf("text: %s\n", $<yystring>1);
 		Text* text = new Text($<yystring>1);
@@ -95,16 +96,18 @@ Expression:
 	;
 
 Command:
-	COMMAND ListParams LEFTBRACKET Params RIGHTBRACKET Groups
+	COMMAND ListParams LEFTBRACKET ListParams2 RIGHTBRACKET Groups
 	{
 		printf("command : %s\n", $<yystring>1);
-		Command* command = new Command($<yystring>1, $<yyparams>3, $<yyparams>6, $<yylistlistelements>8);
+		Command* command = new Command($<yystring>1, $<yylistparams>2, $<yyparams>4,
+									$<yylistlistelements>6);
 		$<yyelement>$ = command;
 	}
 	| COMMAND ListParams Groups
 	{
 		printf("command : %s\n", $<yystring>1);
-		Command* command = new Command($<yystring>1, $<yyparams>3, $<yylistlistelements>5);
+		//printf("param 1 : %s\n", $<yyparams>2->first()->getKey());
+		Command* command = new Command($<yystring>1, $<yylistparams>2, $<yylistlistelements>3);
 		$<yyelement>$ = command;
 	}
 
@@ -138,38 +141,56 @@ Command:
 ListParams:
 	/* Empty */
 	{
-		$<yyparams>$ = NULL;
+		$<yylistparams>$ = NULL;
 	}
-	| ListParams LEFTPARENTHESIS Params RIGHTPARENTHESIS
-	;
+	| ListParams LEFTPARENTHESIS ListParams2 RIGHTPARENTHESIS
+	{
+		if($<yylistparams>1 == NULL)
+		{
+			$<yylistparams>$ = new QPtrList<QPtrList<Param> >();
+			$<yylistparams>$->setAutoDelete(true);
+		}
+		else
+			$<yylistparams>$ = $<yylistparams>1;
+		$<yylistparams>$->append($<yyparams>3);
+	};
 
-Params:
+ListParams2:
 	/* Empty */
 	{
 		$<yyparams>$ = NULL;
 	}
-	| Param
-	{
-		$<yyparams>$ = new QPtrList<QPair<QString,QString> >();
-		$<yyparams>$->append($<yypair>1);
-	}
-	| Params COMMA Param
+	| Params
 	{
 		$<yyparams>$ = $<yyparams>1;
-		$<yyparams>$->append($<yypair>1);
+	};
+
+Params:
+	Params COMMA Param
+	{
+		$<yyparams>$ = $<yyparams>1;
+		$<yyparams>$->append($<yyparam>3);
+	}
+	| Param
+	{
+		$<yyparams>$ = new QPtrList<Param>();
+		$<yyparams>$->setAutoDelete(true);
+		$<yyparams>$->append($<yyparam>1);
 	}
 	;
 
 Param:
-		WORD EQUAL WORD
+		TEXT EQUAL TEXT
 		{
-			QPair<QString,QString>* pair = new QPair<QString,QString>(QString($<yystring>1), QString($<yystring>3));
-			$<yypair>$ = pair;
+			//QPair<QString,QString>* pair = new QPair<QString,QString>(QString($<yystring>1), QString($<yystring>3));
+			Param* param = new Param(QString($<yystring>1), QString($<yystring>3));
+			$<yyparam>$ = param;
 		}
-		| WORD
+		| TEXT
 		{
-			QPair<QString,QString>* pair = new QPair<QString,QString>(QString("SIMPLE_VALUE"), QString($<yystring>1));
-			$<yypair>$ = pair;
+			//QPair<QString,QString>* pair = new QPair<QString,QString>(QString("SIMPLE_VALUE"), QString($<yystring>1));
+			Param* param = new Param($<yystring>1, "");
+			$<yyparam>$ = param;
 		}
 		;
 
@@ -181,19 +202,21 @@ Groups:
 	| Groups Group
 	{
 		if($<yylistlistelements>1 == NULL)
+		{
 			$<yylistlistelements>$ = new QPtrList<QPtrList<Element> >();
+			$<yylistlistelements>$->setAutoDelete(true);
+		}
 		else
 			$<yylistlistelements>$ = $<yylistlistelements>1;
 		$<yylistlistelements>$->append($<yylistelements>2);
-	}
-	;
+	};
 
 Group:
 	LEFTBRACE Expressions RIGHTBRACE
 	{
+		printf("Group\n");
 	 	$<yylistelements>$ = $<yylistelements>2;
-	}
-	;
+	};
 
 Environment:
 	B_ENV Expressions E_ENV
@@ -202,8 +225,7 @@ Environment:
 		Env* env = new Env($<yystring>1);
 		env->setChildren($<yylistelements>2);
 		$<yyelement>$ = env;
-	}
-	;
+	};
 	
 Math_Env:
 	MATH MathExpressions MATH
@@ -213,8 +235,7 @@ Math_Env:
 	| B_MATH MathExpressions E_MATH
 	{
 		printf("Math. env.");
-	}
-	;
+	};
 	
 MathExpressions:
 	/* Empty */
@@ -223,8 +244,7 @@ MathExpressions:
 		/*QPtrList<Element>* grpList = new QPtrList<Element>(*$<yylistelements>1);
 		grpList->append($<yyelement>2);
 		$<yylistelements>$ = grpList;*/
-	}
-	;
+	};
 
 MathExpression:
 	Command
@@ -245,9 +265,29 @@ MathExpression:
 	| Environment
 	{
 		/*$<yyelement>$ = $<yyelement>1;*/
-	}
-	;
-	
+	};
+
+Text:
+		TEXT
+		{
+			$<yystring>$ = $<yystring>1;
+		}
+		| Text TEXT
+		{
+		 	printf("%s", $<yystring>2);
+		 	$<yystring>$ = strcat($<yystring>1, $<yystring>2);
+
+		}
+		| Text COMMA
+		{
+		 	printf(",");
+		 	$<yystring>$ = strcat($<yystring>1, ",");
+		}
+		| Text SPACES
+		{
+			 printf(" ");
+		 	$<yystring>$ = strcat($<yystring>1, " ");
+		};
 %%
 
 bool texparse(QString filename)
