@@ -239,7 +239,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
         QRect blank( 0, docHeight, frameRect.width(), totalHeight+frameRect.height() - docHeight );
         //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
         bool printing = painter->device()->devType() == QInternal::Printer;
-        painter->fillRect( blank, printing ? Qt::white : cg.brush( QColorGroup::Base ) );
+        painter->fillRect( blank, cg.brush( QColorGroup::Base ) );
         // for debugging :)
         //painter->setPen( QPen(Qt::blue, 1, DashLine) );  painter->drawRect( blank );
     }
