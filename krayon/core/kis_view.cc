@@ -45,7 +45,7 @@
 #include <kfiledialog.h>
 #include <kiconloader.h>
 #include <kimageeffect.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kmimetype.h>
 
 // Grmbl, X headers.....
@@ -1042,14 +1042,14 @@ void KisView::slotDocUpdated()
 {
 	kdDebug() << "slotDocUpdated()" << endl;
 
-	/* 
+	/*
 	 * clear the entire canvas area - especially needed when
 	 * the new current image is smaller than the former to remove
 	 * artifacts of the former image from the canvas.  This is very
 	 * fast, even if the image is quite large, because only the
 	 * canvas pixmap, which is no bigger than the visible viewport,
-	 * is cleared. 
-	 */ 
+	 * is cleared.
+	 */
 
 	QPainter p;
 	QRect ur(0, 0, m_pCanvas -> width(), m_pCanvas -> height());
@@ -1058,15 +1058,15 @@ void KisView::slotDocUpdated()
 	p.eraseRect(ur);
 	p.end();
 
-	/* 
+	/*
 	 * repaint contents of view. There is already a new or
 	 * different current Image.  It is not changed, but the contents
-	 * of the image are displayed on the fresh canvas 
+	 * of the image are displayed on the fresh canvas
 	 */
 
 	m_pCanvas -> repaint();
 
-	/* 
+	/*
 	 * reset shells to show scrollbars. This is always necessary
 	 * to get the scrollbars to show correctly when the new current image
 	 * has a different size from the former one.  Loading a different
@@ -1074,15 +1074,15 @@ void KisView::slotDocUpdated()
 	 * shell to resize of its own initative. The view is a viewport in
 	 * the shell window and size is absorbed by scrolling unless the
 	 * shell window size is explicitly changed by the user with the
-	 * mouse, etc., or in this manner with code 
-	 */ 
+	 * mouse, etc., or in this manner with code
+	 */
 
 	m_pDoc -> resetShells();
 
-	/* 
+	/*
 	 * reset and resize the KisPainter pixmap (paint device).
 	 * The pixmap could be too small for the new image, causing
-	 * a crash,  or too large, causing inefficent use of memory 
+	 * a crash,  or too large, causing inefficent use of memory
 	 */
 
 	slotRefreshPainter();
@@ -1102,13 +1102,13 @@ void KisView::slotDocUpdated(const QRect& rect)
 	QPainter p;
 	int xt;
 	int yt;
-       
+
 	if (!(img = m_pDoc -> current()))
 		return;
 
 	QRect ur = rect;
 
-	
+
 	ur = ur.intersect(img->imageExtents());
 	ur.setBottom(ur.bottom() + 1);
 	ur.setRight(ur.right() + 1);
@@ -1388,7 +1388,7 @@ void KisView::canvasGotLeaveEvent ( QEvent *e )
 {
 	// clear artifacts from tools which paint on canvas
 	// this does not affect the image or layer
-	if (m_pTool && m_pTool -> shouldRepaint()) 
+	if (m_pTool && m_pTool -> shouldRepaint())
 		m_pCanvas -> repaint();
 
 	QEvent ev(*e);
@@ -1408,7 +1408,7 @@ void KisView::canvasGotMouseWheelEvent( QWheelEvent *e )
 */
 void KisView::activateTool(KisTool* t)
 {
-	if (!t) 
+	if (!t)
 		return;
 
 	// remove the selection outline, if any
@@ -1428,7 +1428,7 @@ void KisView::activateTool(KisTool* t)
 	QObject::connect(this, SIGNAL(canvasMouseMoveEvent(QMouseEvent*)), m_pTool, SLOT(mouseMove(QMouseEvent*)));
 	QObject::connect(this, SIGNAL(canvasMouseReleaseEvent(QMouseEvent*)), m_pTool, SLOT(mouseRelease(QMouseEvent*)));
 
-	if (m_pCanvas) 
+	if (m_pCanvas)
 		m_pCanvas -> setCursor(m_pTool -> cursor());
 }
 
@@ -2120,7 +2120,7 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 
 	if (url.isEmpty())
 		return -1;
-	
+
 	if (!fileImage.load(url.path())) {
 		KMimeType::Ptr mt = KMimeType::findByURL(url, 0, true);
 
@@ -2163,7 +2163,7 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 	// establish a rectangle the same size as the QImage loaded
 	// from file. This will be used to set the size of the new
 	// KisLayer for the picture and/or a new KisImage
-	if (newImage) 
+	if (newImage)
 		appendToDocImgList(fileImage, url);
 	else
 		addHasNewLayer(fileImage, url);
@@ -2172,9 +2172,9 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 	// a new image or just a new layer was created for it above.
 	if (!m_pDoc -> QtImageToLayer(&fileImage, this)) {
 		kdDebug(0) << "inset_layer_image: " << "Can't load image into layer." << endl;
-		
+
 		// remove empty image
-		if(newImage) 
+		if(newImage)
 			remove_current_image_tab();
 	}
 	else {
