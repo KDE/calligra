@@ -21,8 +21,9 @@
 #define PNGEXPORTDIA_H
 
 class QCheckBox;
-class QLineEdit;
 class QString;
+class KIntNumInput;
+class KDoubleNumInput;
 
 namespace KFormula {
     class Container;
@@ -39,7 +40,7 @@ class PNGExportDia : public KDialogBase
     Q_OBJECT
 
 public:
-    PNGExportDia( QDomDocument dom, QString outFile, QWidget *parent=0L, const char *name=0L );
+    PNGExportDia( const QDomDocument &dom, const QString &outFile, QWidget *parent=0L, const char *name=0L );
     ~PNGExportDia();
 
 public slots:
@@ -47,10 +48,10 @@ public slots:
 
 protected slots:
 
-    void widthChanged( const QString& text );
-    void heightChanged( const QString& text );
-    void percentWidthChanged( const QString& text );
-    void percentHeightChanged( const QString& text );
+    void widthChanged( int  );
+    void heightChanged( int );
+    void percentWidthChanged( double );
+    void percentHeightChanged( double );
 
     void proportionalClicked();
 
@@ -71,10 +72,10 @@ private:
     KFormula::Container* formula;
 
     QCheckBox* proportional;
-    QLineEdit* widthEdit;
-    QLineEdit* heightEdit;
-    QLineEdit* percWidthEdit;
-    QLineEdit* percHeightEdit;
+    KIntNumInput* widthEdit;
+    KIntNumInput* heightEdit;
+    KDoubleNumInput* percWidthEdit;
+    KDoubleNumInput* percHeightEdit;
 };
 
 #endif // PNGEXPORTDIA_H

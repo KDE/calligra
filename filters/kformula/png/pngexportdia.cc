@@ -37,9 +37,9 @@
 #include <kformulamimesource.h>
 
 #include "pngexportdia.h"
+#include <knuminput.h>
 
-
-PNGExportDia::PNGExportDia( QDomDocument dom, QString outFile, QWidget *parent, const char *name )
+PNGExportDia::PNGExportDia( const QDomDocument &dom, const QString &outFile, QWidget *parent, const char *name )
     : KDialogBase( parent, name, true, i18n("PNG Export Filter Parameters" ), Ok|Cancel ),
       _fileOut( outFile )
 {
@@ -54,10 +54,12 @@ PNGExportDia::PNGExportDia( QDomDocument dom, QString outFile, QWidget *parent, 
     setupGUI();
 
     QRect rect = formula->boundingRect();
-    widthEdit->setText( QString::number( realWidth = rect.width() ) );
-    heightEdit->setText( QString::number( realHeight = rect.height() ) );
-    percWidthEdit->setText( "100" );
-    percHeightEdit->setText( "100" );
+    realWidth = rect.width();
+   realHeight = rect.height();
+    widthEdit->setValue(  realWidth );
+    heightEdit->setValue(  realHeight  );
+    percWidthEdit->setValue( 100 );
+    percHeightEdit->setValue( 100 );
 
     connectAll();
     connect( proportional, SIGNAL( clicked() ),
@@ -72,101 +74,85 @@ PNGExportDia::~PNGExportDia()
 
 void PNGExportDia::connectAll()
 {
-    connect( widthEdit, SIGNAL( textChanged( const QString& ) ),
-             this, SLOT( widthChanged( const QString& ) ) );
-    connect( heightEdit, SIGNAL( textChanged( const QString& ) ),
-             this, SLOT( heightChanged( const QString& ) ) );
-    connect( percWidthEdit, SIGNAL( textChanged( const QString& ) ),
-             this, SLOT( percentWidthChanged( const QString& ) ) );
-    connect( percHeightEdit, SIGNAL( textChanged( const QString& ) ),
-             this, SLOT( percentHeightChanged( const QString& ) ) );
+    connect( widthEdit, SIGNAL( valueChanged(int) ),
+             this, SLOT( widthChanged( int ) ) );
+    connect( heightEdit, SIGNAL( valueChanged(int) ),
+             this, SLOT( heightChanged( int ) ) );
+    connect( percWidthEdit, SIGNAL( valueChanged(double) ),
+             this, SLOT( percentWidthChanged( double ) ) );
+    connect( percHeightEdit, SIGNAL( valueChanged(double) ),
+             this, SLOT( percentHeightChanged(double ) ) );
 }
 
 void PNGExportDia::disconnectAll()
 {
-    disconnect( widthEdit, SIGNAL( textChanged( const QString& ) ),
-                this, SLOT( widthChanged( const QString& ) ) );
-    disconnect( heightEdit, SIGNAL( textChanged( const QString& ) ),
-                this, SLOT( heightChanged( const QString& ) ) );
-    disconnect( percWidthEdit, SIGNAL( textChanged( const QString& ) ),
-                this, SLOT( percentWidthChanged( const QString& ) ) );
-    disconnect( percHeightEdit, SIGNAL( textChanged( const QString& ) ),
-                this, SLOT( percentHeightChanged( const QString& ) ) );
+    disconnect( widthEdit, SIGNAL( valueChanged(int) ),
+             this, SLOT( widthChanged( int ) ) );
+    disconnect( heightEdit, SIGNAL( valueChanged(int) ),
+             this, SLOT( heightChanged( int ) ) );
+    disconnect( percWidthEdit, SIGNAL( valueChanged(double) ),
+             this, SLOT( percentWidthChanged( double ) ) );
+    disconnect( percHeightEdit, SIGNAL( valueChanged(double) ),
+             this, SLOT( percentHeightChanged(double ) ) );
 }
 
-void PNGExportDia::widthChanged( const QString& text )
+void PNGExportDia::widthChanged( int width )
 {
     disconnectAll();
-    bool success;
-    int width = text.toInt( &success );
-    if ( success ) {
-        width = QMIN( width, realWidth*10 );
-        width = QMAX( width, realWidth/10 );
-        double percent = 100.*static_cast<double>( width )/static_cast<double>( realWidth );
-        percWidthEdit->setText( QString::number( percent ) );
-        if ( proportional->isChecked() ) {
-            percHeightEdit->setText( QString::number( percent ) );
-            int height = static_cast<int>( realHeight*percent/100. );
-            heightEdit->setText( QString::number( height ) );
-        }
-    }
-    connectAll();
-}
-
-void PNGExportDia::heightChanged( const QString& text )
-{
-    disconnectAll();
-    bool success;
-    int height = text.toInt( &success );
-    if ( success ) {
-        height = QMIN( height, realHeight*10 );
-        height = QMAX( height, realHeight/10 );
-        double percent = 100.*static_cast<double>( height )/static_cast<double>( realHeight );
-        percHeightEdit->setText( QString::number( percent ) );
-        if ( proportional->isChecked() ) {
-            percWidthEdit->setText( QString::number( percent ) );
-            int width = static_cast<int>( realWidth*percent/100. );
-            widthEdit->setText( QString::number( width ) );
-        }
-    }
-    connectAll();
-}
-
-void PNGExportDia::percentWidthChanged( const QString& text )
-{
-    disconnectAll();
-    bool success;
-    double percent = text.toDouble( &success );
-    if ( success ) {
-        percent = QMIN( percent, 1000 );
-        percent = QMAX( percent, 10 );
-        int width = static_cast<int>( realWidth*percent/100. );
-        widthEdit->setText( QString::number( width ) );
-        if ( proportional->isChecked() ) {
-            int height = static_cast<int>( realHeight*percent/100. );
-            heightEdit->setText( QString::number( height ) );
-            percHeightEdit->setText( QString::number( percent ) );
-        }
-    }
-    connectAll();
-}
-
-void PNGExportDia::percentHeightChanged( const QString& text )
-{
-    disconnectAll();
-    bool success;
-    double percent = text.toDouble( &success );
-    if ( success ) {
-        percent = QMIN( percent, 1000 );
-        percent = QMAX( percent, 10 );
-        if ( proportional->isChecked() ) {
-            int width = static_cast<int>( realWidth*percent/100. );
-            widthEdit->setText( QString::number( width ) );
-            percWidthEdit->setText( QString::number( percent ) );
-        }
+    width = QMIN( width, realWidth*10 );
+    width = QMAX( width, realWidth/10 );
+    double percent = 100.*static_cast<double>( width )/static_cast<double>( realWidth );
+    percWidthEdit->setValue(  percent  );
+    if ( proportional->isChecked() ) {
+        percHeightEdit->setValue( percent );
         int height = static_cast<int>( realHeight*percent/100. );
-        heightEdit->setText( QString::number( height ) );
+        heightEdit->setValue(  height );
     }
+    connectAll();
+}
+
+void PNGExportDia::heightChanged( int height )
+{
+    disconnectAll();
+    height = QMIN( height, realHeight*10 );
+    height = QMAX( height, realHeight/10 );
+    double percent = 100.*static_cast<double>( height )/static_cast<double>( realHeight );
+    percHeightEdit->setValue(  percent  );
+    if ( proportional->isChecked() ) {
+        percWidthEdit->setValue(  percent  );
+        int width = static_cast<int>( realWidth*percent/100. );
+        widthEdit->setValue( width );
+    }
+    connectAll();
+}
+
+void PNGExportDia::percentWidthChanged( double percent )
+{
+    disconnectAll();
+    percent = QMIN( percent, 1000 );
+    percent = QMAX( percent, 10 );
+    int width = static_cast<int>( realWidth*percent/100. );
+    widthEdit->setValue(  width  );
+    if ( proportional->isChecked() ) {
+        int height = static_cast<int>( realHeight*percent/100. );
+        heightEdit->setValue(  height  );
+        percHeightEdit->setValue(  percent );
+    }
+    connectAll();
+}
+
+void PNGExportDia::percentHeightChanged( double percent )
+{
+    disconnectAll();
+    percent = QMIN( percent, 1000 );
+    percent = QMAX( percent, 10 );
+    if ( proportional->isChecked() ) {
+        int width = static_cast<int>( realWidth*percent/100. );
+        widthEdit->setValue(  width  );
+        percWidthEdit->setValue(  percent  );
+    }
+    int height = static_cast<int>( realHeight*percent/100. );
+    heightEdit->setValue(  height  );
     connectAll();
 }
 
@@ -174,16 +160,13 @@ void PNGExportDia::proportionalClicked()
 {
     if ( proportional->isChecked() ) {
         disconnectAll();
-        bool success;
-        int width = widthEdit->text().toInt( &success );
-        if ( success ) {
-            width = QMIN( width, realWidth*10 );
-            width = QMAX( width, realWidth/10 );
-            double percent = 100.*static_cast<double>( width )/static_cast<double>( realWidth );
-            percHeightEdit->setText( QString::number( percent ) );
-            int height = static_cast<int>( realHeight*percent/100. );
-            heightEdit->setText( QString::number( height ) );
-        }
+        int width = widthEdit->value( );
+        width = QMIN( width, realWidth*10 );
+        width = QMAX( width, realWidth/10 );
+        double percent = 100.*static_cast<double>( width )/static_cast<double>( realWidth );
+        percHeightEdit->setValue(  percent  );
+        int height = static_cast<int>( realHeight*percent/100. );
+        heightEdit->setValue(  height  );
         connectAll();
     }
 }
@@ -203,10 +186,10 @@ void PNGExportDia::setupGUI()
 
     QLabel* height = new QLabel( page, "Height" );
     height->setText( i18n( "Height" ) );
-    widthEdit = new QLineEdit( page, "widthEdit" );
+    widthEdit = new KIntNumInput( page, "widthEdit" );
     QLabel* width = new QLabel( page, "Width" );
     width->setText( i18n( "Width" ) );
-    heightEdit = new QLineEdit( page, "heightEdit" );
+    heightEdit = new KIntNumInput( page, "heightEdit" );
 
     QGridLayout* layout1 = new QGridLayout;
     layout1->addWidget( height, 1, 0 );
@@ -220,8 +203,8 @@ void PNGExportDia::setupGUI()
     percentHeight->setText( i18n( "Height (%)" ) );
     QLabel* percentWidth = new QLabel( page, "PercentWidth" );
     percentWidth->setText( i18n( "Width (%)" ) );
-    percWidthEdit = new QLineEdit( page, "percWidthEdit" );
-    percHeightEdit = new QLineEdit( page, "percHeightEdit" );
+    percWidthEdit = new KDoubleNumInput( page, "percWidthEdit" );
+    percHeightEdit = new KDoubleNumInput( page, "percHeightEdit" );
 
     QGridLayout* layout2 = new QGridLayout;
     layout2->addWidget( percWidthEdit, 0, 1 );
@@ -243,20 +226,10 @@ void PNGExportDia::slotOk()
     //doc->setZoomAndResolution( 100, 600, 600 );
     //doc->setZoomAndResolution( 1000, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     //doc->newZoomAndResolution( false, false );
-    bool w_success;
-    bool h_success;
-    int width = widthEdit->text().toInt( &w_success );
-    int height = heightEdit->text().toInt( &h_success );
-    if ( !w_success || !h_success ) {
-        width = realWidth;
-        height = realHeight;
-    }
-    else {
-        width = QMIN( width, realWidth*10 );
-        width = QMAX( width, realWidth/10 );
-        height = QMIN( height, realHeight*10 );
-        height = QMAX( height, realHeight/10 );
-    }
+    int width = widthEdit->value();
+    int height = heightEdit->value();
+    width = realWidth;
+    height = realHeight;
     QImage image = formula->drawImage( width, height );
     if ( !image.save( _fileOut, "PNG" ) ) {
         KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "PNG Export Error" ) );
