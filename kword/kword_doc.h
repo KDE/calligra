@@ -298,7 +298,7 @@ public:
   void copySelectedText();
   void setFormat(KWFormat &_format);
 
-  void paste(KWFormatContext *_fc,QString _string,KWPage *_page);
+  void paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWFormat *_format = 0L);
 
   void appendPage(unsigned int _page,QPainter &_painter);
 

@@ -581,12 +581,12 @@ void KWSearchDia::searchFirst()
   QString expr = eSearch->text();
   if (expr.isEmpty()) return;
 
-  page->removeSelection();
+  bool addlen = true;
 
   if (!cRev->isChecked())
-    page->find(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked());
+    page->find(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),cWildcard->isChecked(),addlen);
   else
-    page->findRev(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked());
+    page->findRev(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),cWildcard->isChecked(),addlen);
 }
 
 /*================================================================*/
@@ -595,12 +595,12 @@ void KWSearchDia::searchNext()
   QString expr = eSearch->text();
   if (expr.isEmpty()) return;
 
-  page->removeSelection();
+  bool addlen = true;
 
   if (!cRev->isChecked())
-    page->find(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked());
+    page->find(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),cWildcard->isChecked(),addlen);
   else
-    page->findRev(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked());
+    page->findRev(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),cWildcard->isChecked(),addlen);
 }
 
 /*================================================================*/
@@ -613,7 +613,11 @@ void KWSearchDia::slotCheckFamily()
       cmFamily->setEnabled(true);
       slotFamily(cmFamily->currentText());
     }
-  else cmFamily->setEnabled(false);
+  else 
+    {
+      cmFamily->setEnabled(false);
+      eSearch->setFont(kapp->generalFont);
+    }
 }
 
 /*================================================================*/
@@ -699,6 +703,10 @@ void KWSearchDia::slotFamily(const char* family)
 {
   searchEntry->family = qstrdup(family);
   view->setSearchEntry(searchEntry);
+  
+  QFont f = QFont(kapp->generalFont);
+  f.setFamily(qstrdup(family));
+  eSearch->setFont(f);
 }
 
 /*================================================================*/
@@ -778,12 +786,18 @@ void KWSearchDia::replaceFirst()
   QString expr = eSearch->text();
   if (expr.isEmpty()) return;
 
-  page->removeSelection();
+  bool addlen = false;
+  bool replace = false;
 
   if (!cRev->isChecked())
-    page->find(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),false,false);
+    replace = page->find(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),
+			 cWildcard->isChecked(),addlen,false);
   else
-    page->findRev(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),false,false);
+    replace = page->findRev(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),
+			    cWildcard->isChecked(),addlen,false);
+
+  if (replace)
+    page->replace(eReplace->text(),replaceEntry,addlen);
 }
 
 /*================================================================*/
@@ -792,12 +806,18 @@ void KWSearchDia::replaceNext()
   QString expr = eSearch->text();
   if (expr.isEmpty()) return;
 
-  page->removeSelection();
-
+  bool addlen = false;
+  bool replace = false;
+  
   if (!cRev->isChecked())
-    page->find(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),false,false);
+    replace = page->find(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),
+			 cWildcard->isChecked(),addlen,false);
   else
-    page->findRev(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),false,false);
+    replace = page->findRev(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),
+			    cWildcard->isChecked(),addlen,false);
+
+  if (replace)
+    page->replace(eReplace->text(),replaceEntry,addlen);
 }
 
 /*================================================================*/
@@ -815,7 +835,11 @@ void KWSearchDia::rslotCheckFamily()
       rcmFamily->setEnabled(true);
       rslotFamily(rcmFamily->currentText());
     }
-  else rcmFamily->setEnabled(false);
+  else 
+    {
+      rcmFamily->setEnabled(false);
+      eReplace->setFont(kapp->generalFont);
+    }
 }
 
 /*================================================================*/
@@ -901,6 +925,10 @@ void KWSearchDia::rslotFamily(const char* family)
 {
   replaceEntry->family = qstrdup(family);
   view->setReplaceEntry(replaceEntry);
+
+  QFont f = QFont(kapp->generalFont);
+  f.setFamily(qstrdup(family));
+  eReplace->setFont(f);
 }
 
 /*================================================================*/

@@ -628,3 +628,8 @@ Reggie, 8.1.1999:
 Reggie, 9.1.1999:
 -----------------
 - Some more work on replacing text
+
+Reggie, 10.1.1999:
+------------------
+- Fixed some memory leak producing code
+- Find&Replacing works (with formats)

@@ -2971,8 +2971,8 @@ void KWPage::tabListChanged(QList<KoTabulator> *_tablist)
 }
 
 /*================================================================*/
-bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false,
-		  bool _regexp = false,bool _wildcard = false,bool _select = true,bool _addlen = true)
+bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first,bool _cs,bool _whole,
+		  bool _regexp,bool _wildcard,bool &_addlen,bool _select = true)
 {
   if (_first || !currFindParag)
     {
@@ -3002,10 +3002,10 @@ bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first 
 
       if (currFindPos >= 0)
 	{
-	  if (_select)
-	    selectText(currFindPos,currFindLen,currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag);
+	  selectText(currFindPos,currFindLen,currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag,_select);
 	  if (_addlen)
 	    currFindPos += currFindLen;
+	  _addlen = !_addlen;
 	  return true;
 	}
       else
@@ -3041,9 +3041,10 @@ bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first 
 }
 
 /*================================================================*/
-bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false,
-		     bool _regexp = false,bool _wildcard = false,bool _select = true,bool _addlen = true)
+bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first,bool _cs,bool _whole,
+		     bool _regexp,bool _wildcard,bool &_addlen,bool _select = true)
 {
+  _addlen = false;
   if (_first || !currFindParag)
     {
       for (unsigned int i = doc->getNumFrameSets() - 1;i >= 0;i--)
@@ -3072,8 +3073,7 @@ bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _fir
 
       if (currFindPos >= 0)
 	{
-	  if (_select)
-	    selectText(currFindPos,currFindLen,currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag);
+	  selectText(currFindPos,currFindLen,currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag,_select);
 	  if (currFindPos > 0) currFindPos--;
 	  return true;
 	}
@@ -3113,8 +3113,48 @@ bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _fir
 }
 
 /*================================================================*/
-void KWPage::selectText(int _pos,int _len,int _frameSetNum,KWTextFrameSet *_frameset,KWParag *_parag)
+void KWPage::replace(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _addlen)
 {
+  QPainter p;
+  p.begin(this);
+
+  KWFormat *format = new KWFormat(doc);
+  *format = *(dynamic_cast<KWCharFormat*>(currFindParag->getKWString()->data()[fc->getTextPos()].attrib)->getFormat());
+
+  if (_format->checkFamily && _format->family != format->getUserFont()->getFontName())
+    format->setUserFont(doc->findUserFont(_format->family));
+  if (_format->checkColor && _format->color != format->getColor())
+    format->setColor(_format->color);
+  if (_format->checkSize && _format->size != format->getPTFontSize())
+    format->setPTFontSize(_format->size);
+  if (_format->checkBold && _format->bold != (format->getWeight() == QFont::Bold))
+    format->setWeight(_format->bold ? QFont::Bold : QFont::Normal);
+  if (_format->checkItalic && _format->italic != format->getItalic())
+    format->setItalic(_format->italic);
+  if (_format->checkUnderline && _format->underline != format->getUnderline())
+    format->setUnderline(_format->underline);
+  if (_format->checkVertAlign && _format->vertAlign != format->getVertAlign())
+    format->setVertAlign(_format->vertAlign);
+
+  doc->deleteSelectedText(fc,p);
+  p.end();
+
+  // NOTE: KWordDoc::paste() deletes the format, so it _MUST_NOT_ be deleted here!
+  doc->paste(fc,_expr,this,format);
+
+  if (_addlen) currFindPos += currFindLen;
+
+  buffer.fill(white);
+  doc->setSelection(false);
+  recalcText();
+  recalcCursor();
+}
+
+/*================================================================*/
+void KWPage::selectText(int _pos,int _len,int _frameSetNum,KWTextFrameSet *_frameset,KWParag *_parag,bool _select = true)
+{
+  removeSelection();
+
   QPainter p;
   p.begin(this);
 
@@ -3137,8 +3177,12 @@ void KWPage::selectText(int _pos,int _len,int _frameSetNum,KWTextFrameSet *_fram
 
   doc->setSelStart(fc1);
   doc->setSelEnd(fc2);
-  doc->setSelection(true);
-  doc->drawSelection(p,xOffset,yOffset);
+
+  if (_select)
+    {
+      doc->setSelection(true);
+      doc->drawSelection(p,xOffset,yOffset);
+    }
 
   p.end();
   scrollToCursor(*fc);

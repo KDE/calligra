@@ -60,6 +60,7 @@ class KWPage : public QWidget
   
 public:
   KWPage(QWidget *parent,KWordDocument *_doc,KWordGUI *_gui);
+  ~KWPage() { delete fc; }
 
   void setDocument(KWordDocument *_doc)
     { doc = _doc; }
@@ -173,10 +174,11 @@ public:
 
   void clear() { buffer.fill(white); drawBuffer(); }
 
-  bool find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false,
-	    bool _regexp = false,bool _wildcard = false,bool _select = true,bool _addlen = true);
-  bool findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false,
-	       bool _regexp = false,bool _wildcard = false,bool _select = true,bool _addlen = true);
+  bool find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first,bool _cs,bool _whole,
+	    bool _regexp,bool _wildcard,bool &_addlen,bool _select = true);
+  bool findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first,bool _cs,bool _whole,
+	       bool _regexp,bool _wildcard,bool &_addlen,bool _select = true);
+  void replace(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _addlen);
   
   void removeSelection();
 
@@ -241,7 +243,7 @@ protected:
   void setupMenus();
   void mmUncheckAll();
 
-  void selectText(int _pos,int _len,int _frameSetNum,KWTextFrameSet *_frameset,KWParag *_parag);
+  void selectText(int _pos,int _len,int _frameSetNum,KWTextFrameSet *_frameset,KWParag *_parag,bool _select = true);
 
   KWordDocument *doc;
   bool markerIsVisible;

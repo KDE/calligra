@@ -2129,7 +2129,7 @@ void KWordDocument::setFormat(KWFormat &_format)
 }
 
 /*================================================================*/
-void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page)
+void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWFormat *_format = 0L)
 {
   QStrList strList;
   int index;
@@ -2156,8 +2156,12 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page)
 	{
 	  QString str;
 	  unsigned int len;
-	  KWFormat *format = new KWFormat(this);
-	  format->setDefaults(this);
+	  KWFormat *format = _format;
+	  if (!format)
+	    {
+	      format = new KWFormat(this);
+	      format->setDefaults(this);
+	    }
 	  str = QString(strList.at(0));
 	  len = str.length();
 	  _fc->getParag()->insertText(_fc->getTextPos(),str);
@@ -2167,13 +2171,18 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page)
 	  for (unsigned int j = 0;j < len;j++)
 	    _fc->cursorGotoRight(painter);
 	  painter.end();
+	  delete format;
 	}
       else if (strList.count() == 2)
 	{
 	  QString str;
 	  unsigned int len;
-	  KWFormat *format = new KWFormat(this);
-	  format->setDefaults(this);
+	  KWFormat *format = _format;
+	  if (!format)
+	    {
+	      format = new KWFormat(this);
+	      format->setDefaults(this);
+	    }
 	  str = QString(strList.at(0));
 	  len = str.length();
 	  _fc->getParag()->insertText(_fc->getTextPos(),str);
@@ -2196,13 +2205,18 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page)
 	  for (unsigned int j = 0;j < len;j++)
 	    _fc->cursorGotoRight(painter);
 	  painter.end();
+	  delete format;
 	}
       else
 	{
 	  QString str;
 	  unsigned int len;
-	  KWFormat *format = new KWFormat(this);
-	  format->setDefaults(this);
+	  KWFormat *format = _format;
+	  if (!format)
+	    {
+	      format = new KWFormat(this);
+	      format->setDefaults(this);
+	    }
 	  str = QString(strList.at(0));
 	  len = str.length();
 	  _fc->getParag()->insertText(_fc->getTextPos(),str);
@@ -2232,6 +2246,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page)
 	    }
 	  p->setNext(next);
 	  if (next) next->setPrev(p);
+	  delete format;
 	}
     }
 }
