@@ -435,6 +435,9 @@ public:
 
     void setLcMode(bool _lcMode) {m_bLcMode=_lcMode;}
 
+    bool getShowColumnNumber() {return m_bShowColumnNumber;}
+
+    void setShowColumnNumber(bool _showColumnNumber) {m_bShowColumnNumber=_showColumnNumber;}
 
     // ########### Nameing error
     QString Currency(){return currency;}
@@ -768,6 +771,7 @@ protected:
     bool m_bShowGrid;
     bool m_bShowFormular;
     bool m_bLcMode;
+    bool m_bShowColumnNumber;
 };
 
 #endif

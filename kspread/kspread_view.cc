@@ -268,7 +268,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_showFormular, SIGNAL( toggled( bool ) ), this, SLOT( toggleFormular( bool ) ) );
     m_LcMode = new KToggleAction( i18n("LC mode"), 0, actionCollection(), "LcMode");
     connect( m_LcMode, SIGNAL( toggled( bool ) ), this, SLOT( toggleLcMode( bool ) ) );
-
+    m_showColumnNumber = new KToggleAction( i18n("Show column number"), 0, actionCollection(), "columnNumber");
+    connect( m_showColumnNumber, SIGNAL( toggled( bool ) ), this, SLOT( toggleColumnNumber( bool ) ) );
     m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
 				       actionCollection(), "editGlobalScripts" );
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
@@ -399,6 +400,7 @@ void KSpreadView::initialPosition()
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
     m_showFormular->setChecked(m_pTable->getShowFormular());
     m_LcMode->setChecked(m_pTable->getLcMode());
+    m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
     /*recalc all dependent after loading*/
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
@@ -1456,6 +1458,7 @@ void KSpreadView::addTable( KSpreadTable *_t )
     	m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
     	m_showFormular->setChecked(m_pTable->getShowFormular());
     	m_LcMode->setChecked(m_pTable->getLcMode());
+	m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
     	}
 }
 
@@ -1530,6 +1533,7 @@ void KSpreadView::changeTable( const QString& _name )
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
     m_showFormular->setChecked(m_pTable->getShowFormular());
     m_LcMode->setChecked(m_pTable->getLcMode());
+    m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
 
 }
 
@@ -1809,6 +1813,15 @@ void KSpreadView::toggleLcMode( bool mode)
        return;
   m_pTable->setLcMode(mode);
   m_pCanvas->repaint();
+  slotUpdateHBorder(activeTable());
+}
+
+void KSpreadView::toggleColumnNumber(bool mode)
+{
+ if ( !m_pTable )
+       return;
+  m_pTable->setShowColumnNumber(mode);
+  slotUpdateHBorder(activeTable());
 }
 
 void KSpreadView::editCell()

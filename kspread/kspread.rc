@@ -70,6 +70,7 @@
   <Action name="showArea"/>
   <Action name="showFormular"/>
   <Action name="LcMode"/>
+  <Action name="columnNumber"/>
  </Menu>
  <Menu name="Data"><text>Data</text>
   <Action name="sort"/>

@@ -482,3 +482,8 @@ lo22-action-lower.png lo22-action-resizecol.png lo22-action-resizerow.png
 icons created by jp.martin <jpmartin@iroise.com> thanks
 bug fix
 Replace all QMessageBox by KMessageBox
+
+2000-05-08 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can show column number
+=>replace A B C ... by 1 2 3 ... 

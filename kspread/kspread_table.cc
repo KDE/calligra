@@ -232,6 +232,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_bShowGrid=true;
   m_bShowFormular=false;
   m_bLcMode=false;
+  m_bShowColumnNumber=false;
   //init currency
   currency = KGlobal::locale()->currencySymbol();
   // Get a unique name so that we can offer scripting
@@ -4221,6 +4222,7 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
   table.setAttribute( "formular", (int)m_bShowFormular);
   table.setAttribute( "borders", (int)m_bShowPageBorders);
   table.setAttribute( "lcmode", (int)m_bLcMode);
+  table.setAttribute( "columnnumber", (int)m_bShowColumnNumber);
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )
@@ -4306,6 +4308,11 @@ bool KSpreadTable::loadXML( const QDomElement& table )
   if(table.hasAttribute("lcmode"))
   {
     m_bLcMode = (int)table.attribute("lcmode").toInt( &ok );
+    // we just ignore 'ok' - if it didn't work, go on
+  }
+  if(table.hasAttribute("columnnumber"))
+  {
+    m_bShowColumnNumber = (int)table.attribute("columnnumber").toInt( &ok );
     // we just ignore 'ok' - if it didn't work, go on
   }
 

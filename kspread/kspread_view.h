@@ -178,6 +178,7 @@ public slots:
     void toggleGrid( bool );
     void toggleFormular( bool);
     void toggleLcMode( bool);
+    void toggleColumnNumber(bool);
     void gotoCell();
     void replace();
     void conditional();
@@ -453,6 +454,7 @@ private:
     KAction* m_fontSizeDown;
     KAction* m_upper;
     KAction* m_lower;
+    KToggleAction* m_showColumnNumber;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

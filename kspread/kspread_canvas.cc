@@ -2452,12 +2452,23 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
       painter.setPen( white );
     else
       painter.setPen( colorGroup().text() );
-
-    painter.drawText( xpos + ( col_lay->width( m_pCanvas ) - len ) / 2,
+    if(!m_pView->activeTable()->getShowColumnNumber())
+    	{
+    	int len = painter.fontMetrics().width( table->columnLabel(x) );
+    	painter.drawText( xpos + ( col_lay->width( m_pCanvas ) - len ) / 2,
                       ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
                         painter.fontMetrics().descent() ) / 2,
                       table->columnLabel(x) );
-
+        }
+    else
+	{
+	QString tmp;
+	int len = painter.fontMetrics().width( tmp.setNum(x) );
+	painter.drawText( xpos + ( col_lay->width( m_pCanvas ) - len ) / 2,
+                      ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
+                        painter.fontMetrics().descent() ) / 2,
+                      tmp.setNum(x) );
+        }
     xpos += col_lay->width( m_pCanvas );
   }
 
