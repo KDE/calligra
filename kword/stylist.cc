@@ -319,19 +319,23 @@ void KWStyleManager::addStyle() {
 void KWStyleManager::deleteStyle() {
 
     save();
-
     unsigned int cur = getStyleByName(m_stylesList->currentText());
     KWStyle *s = m_changedStyles.at(cur);
     m_changedStyles.remove(cur);
     m_changedStyles.insert(cur,0L);
     delete s;
 
+    noSignals=true;
+
     m_stylesList->removeItem(cur);
     m_styleCombo->removeItem(cur);
-    if(cur > m_stylesList->count()) cur--;
-    m_stylesList->setCurrentItem(cur);
+    if(cur > m_stylesList->count())
+        cur--;
 
     numStyles--;
+    m_stylesList->setCurrentItem(cur);
+
+    noSignals=false;
 
     updateGUI();
 }
