@@ -130,6 +130,8 @@ public:
     void updatePopupMenuChangeAction();
     void changeNbOfRecentFiles(int _nb);
 
+    void changeZoomMenu( int zoom=-1);
+
 public slots:
     void fileStatistics();
     void editCut();

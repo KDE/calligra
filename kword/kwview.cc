@@ -31,6 +31,8 @@
 #include <qregexp.h>
 #include <qobjectlist.h>
 #include <qpaintdevicemetrics.h>
+#include <qtl.h>
+
 
 #include "kwview.h"
 #include "kwviewmode.h"
@@ -58,7 +60,7 @@
 #include "kwcommand.h"
 #include "fontdia.h"
 #include "counter.h"
-
+#include "kwzoomdia.h"
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -328,20 +330,8 @@ void KWView::setupActions()
                                         actionCollection(), "view_zoom" );
     connect( actionViewZoom, SIGNAL( activated( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );
-    QStringList lst;
-    lst << "33%";
-    lst << "50%";
-    lst << "75%";
-    lst << "100%";
-    lst << "125%";
-    lst << "150%";
-    lst << "200%";
-    lst << "250%";
-    lst << "350%";
-    lst << "400%";
-    lst << "450%";
-    lst << "500%";
-    actionViewZoom->setItems( lst );
+
+    changeZoomMenu( );
 
     // -------------- Insert menu
     (void) new KAction( i18n( "&Table" ), "inline_table", 0,
@@ -518,7 +508,8 @@ void KWView::setupActions()
                             0,  actionCollection(), "border_style" );
     connect( actionBorderStyle, SIGNAL( activated( const QString & ) ),
              this, SLOT( borderStyle( const QString & ) ) );
-    lst.clear();
+
+    QStringList lst;
     lst << Border::getStyle( Border::SOLID );
     lst << Border::getStyle( Border::DASH );
     lst << Border::getStyle( Border::DOT );
@@ -1263,6 +1254,50 @@ void KWView::viewPreviewMode()
         actionViewPreviewMode->setChecked( true ); // always one has to be checked !
 }
 
+void KWView::changeZoomMenu( int zoom )
+{
+    QStringList lst;
+    if(zoom>0)
+    {
+        QValueList<int> list;
+        QString z;
+        QStringList itemsList = actionViewZoom->items();
+        //remove item "other..."
+        itemsList.remove(itemsList.last());
+        for (QStringList::Iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
+        {
+            z = (*it).replace( QRegExp( "%" ), "" );
+            z = z.simplifyWhiteSpace();
+            list.append( z.toInt() );
+        }
+        //don't add value which exists
+        if(list.contains(zoom)==0)
+            list.append(zoom);
+
+        qHeapSort( list );
+
+        for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
+            lst.append( (QString::number(*it)+'%') );
+    }
+    else
+    {
+          lst << "33%";
+          lst << "50%";
+          lst << "75%";
+          lst << "100%";
+          lst << "125%";
+          lst << "150%";
+          lst << "200%";
+          lst << "250%";
+          lst << "350%";
+          lst << "400%";
+          lst << "450%";
+          lst << "500%";
+    }
+    lst << i18n("other...");
+    actionViewZoom->setItems( lst );
+}
+
 void KWView::showZoom( int zoom )
 {
     QStringList list = actionViewZoom->items();
@@ -1349,11 +1384,24 @@ void KWView::setNoteType( KWFootNoteManager::NoteType nt, bool change)
 void KWView::viewZoom( const QString &s )
 {
     QString z( s );
-    z = z.replace( QRegExp( "%" ), "" );
-    z = z.simplifyWhiteSpace();
-    int zoom = z.toInt();
-    if ( zoom != doc->zoom() ) {
-        setZoom( zoom );
+    if(z== i18n("other..."))
+    {
+        int val=0;
+        if(KWZoomDia::selectZoom( val))
+        {
+            changeZoomMenu( val );
+            showZoom( val );
+            setZoom( val );
+        }
+    }
+    else
+    {
+        z = z.replace( QRegExp( "%" ), "" );
+        z = z.simplifyWhiteSpace();
+        int zoom = z.toInt();
+        if ( zoom != doc->zoom() ) {
+            setZoom( zoom );
+        }
     }
     gui->canvasWidget()->setFocus();
 
