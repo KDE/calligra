@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 #include <kdebug.h>
 
 #include <kexidbresult.h>
+#include <kexidberror.h>
 
 #include "mysqldb.h"
 #include "mysqlresult.h"
@@ -48,18 +49,22 @@ MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &) : KexiD
 KexiDBRecord*
 MySqlDB::queryRecord(QString querystatement, bool buffer)
 {
-	if(query(querystatement))
+	kdDebug() << "MySqlDB::queryRecord()" << endl;
+	try
 	{
+		query(querystatement);
 		MYSQL_RES *res = mysql_use_result(m_mysql);
 		if(res)
 		{
 			MySqlRecord *rec = new MySqlRecord(res, this, false);
 			return rec;
 		}
-		
-		return 0;
 	}
-	return 0;
+	catch(KexiDBError *err)
+	{
+		kdDebug() << "MySqlDB::queryRecord(): abroating..." << endl;
+		throw err;
+	}
 }
 
 bool
@@ -195,12 +200,8 @@ MySqlDB::query(QString statement)
 		if(mysql_errno(m_mysql) == 0)
 			return true;
 	}
-	else
-	{
-		kdDebug() << "MySqlDB::query() error: " << mysql_error(m_mysql) << endl;
-		return false;
-	}
-	return false;
+	throw new KexiDBError(0, mysql_error(m_mysql));
+//	return false;
 }
 
 KexiDBResult*

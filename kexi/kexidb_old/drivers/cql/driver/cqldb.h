@@ -30,7 +30,17 @@ class CqlDB : public KexiDB
 	CqlDB(QObject *parent=0, const char *name="cql", const QStringList &args=QStringList());
 	~CqlDB();
 
+	QString		driverName();
 
+	bool		connect(QString file);
+
+	QStringList	tables();
+
+	//we should drop that!!!
+	QString		error();
+
+	bool		query(QString statement);
+	
 };
 
 #endif
