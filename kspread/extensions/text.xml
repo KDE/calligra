@@ -566,7 +566,58 @@
         <Syntax>VALUE(text)</Syntax>
         <Example>VALUE("14.03") returns 14.03</Example>
       </Help> 
+    </Function>
+
     <Function>
+      <Name>REGEXP</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Searched text</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Regular expression</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Default value (optional)</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Back-reference (optional)</Comment>
+        <Type range="false">Number</Type>
+      </Parameter>
+      <Help>  
+        <Text>Returns a part of the string that matches a regular expression. If the string doesn't match the given regular expression, value specified as default is returned.</Text> 
+        <Text>If a back-reference is provided, then the value of that back-reference is returned.</Text>
+        <Text>If no default value is given, an empty string is assumed. If no back-reference is given, 0 is assumed (so that entire matching part is returned).</Text>
+        <Syntax>REGEXP(text, regexp, default, backref)</Syntax>
+        <Example>REGEXP("Number is   15.";"[0-9]+") = "15" </Example>
+        <Example>REGEXP("15, 20, 26, 41";"([0-9]+), *[0-9]+$";"";1) = "26" </Example>
+      </Help> 
+    </Function>
+
+    <Function>
+      <Name>REGEXPRE</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Searched text</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Regular expression</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Replacement</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Help>  
+        <Text>Replaces all matches of a regular expression with the replacement text</Text> 
+        <Syntax>REGEXPRE(text, regexp, replacement)</Syntax>
+        <Example>REGEXPRE("14 and 15 and 16";"[0-9]+";"num") returns "num and num and num"</Example>
+      </Help> 
+    </Function>
 
 
   </Group>

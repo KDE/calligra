@@ -55,6 +55,7 @@ bool kspreadfunc_lower( KSContext& context );
 bool kspreadfunc_mid( KSContext& context );
 bool kspreadfunc_proper(KSContext & context);
 bool kspreadfunc_regexp(KSContext & context);
+bool kspreadfunc_regexpre(KSContext & context);
 bool kspreadfunc_replace( KSContext& context );
 bool kspreadfunc_rept( KSContext& context );
 bool kspreadfunc_rot( KSContext& context );
@@ -89,6 +90,7 @@ void KSpreadRegisterTextFunctions()
   repo->registerFunction( "MID",         kspreadfunc_mid );
   repo->registerFunction( "PROPER",      kspreadfunc_proper );
   repo->registerFunction( "REGEXP",      kspreadfunc_regexp );
+  repo->registerFunction( "REGEXPRE",    kspreadfunc_regexpre );
   repo->registerFunction( "REPLACE",     kspreadfunc_replace );
   repo->registerFunction( "REPT",        kspreadfunc_rept );
   repo->registerFunction( "ROT",         kspreadfunc_rot ); // KSpread-specific, like OpenOffice's ROT13
@@ -541,6 +543,47 @@ bool kspreadfunc_proper(KSContext & context)
 
 // Function: REGEXP
 bool kspreadfunc_regexp(KSContext & context)
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  int ac = args.count ();
+  if ((ac < 2) || (ac > 4))
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+    return false;
+  if ( (ac >= 3) && ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) ))
+    return false;
+  if ( (ac == 4) && (!KSUtil::checkType( context, args[3], KSValue::IntType, true ) ) )
+    return false;
+
+  QRegExp exp( args[1]->stringValue() );
+  if ( !exp.isValid() )
+    return false;
+
+  QString s( args[0]->stringValue() );
+  QString defText( (ac >= 3) ? args[2]->stringValue() : QString::null );
+
+  int bkref = (ac == 4) ? args[3]->intValue() : 0;
+  if (bkref < 0)
+    return false;  //strange back-reference
+  
+  QString returnValue;
+  
+  int pos = exp.search( s );
+  if (pos == -1)
+    returnValue = defText;
+  else
+    returnValue = exp.cap (bkref);
+
+  context.setValue( new KSValue( returnValue ) );
+  return true;
+}
+
+// Function: REGEXPRE
+bool kspreadfunc_regexpre(KSContext & context)
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
