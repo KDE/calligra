@@ -300,8 +300,8 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "lGreen", leftBorder().color.green() );
         frameElem.setAttribute( "lBlue", leftBorder().color.blue() );
     }
-    if(leftBorder().style != KoBorder::SOLID)
-        frameElem.setAttribute( "lStyle", static_cast<int>( leftBorder().style ) );
+    if(leftBorder().getStyle() != KoBorder::SOLID)
+        frameElem.setAttribute( "lStyle", static_cast<int>( leftBorder().getStyle()) );
 
     if(rightBorder().penWidth()!=0)
         frameElem.setAttribute( "rWidth", rightBorder().penWidth() );
@@ -312,8 +312,8 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "rGreen", rightBorder().color.green() );
         frameElem.setAttribute( "rBlue", rightBorder().color.blue() );
     }
-    if(rightBorder().style != KoBorder::SOLID)
-        frameElem.setAttribute( "rStyle", static_cast<int>( rightBorder().style ) );
+    if(rightBorder().getStyle() != KoBorder::SOLID)
+        frameElem.setAttribute( "rStyle", static_cast<int>( rightBorder().getStyle() ) );
 
     if(topBorder().penWidth()!=0)
         frameElem.setAttribute( "tWidth", topBorder().penWidth() );
@@ -324,8 +324,8 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "tGreen", topBorder().color.green() );
         frameElem.setAttribute( "tBlue", topBorder().color.blue() );
     }
-    if(topBorder().style != KoBorder::SOLID)
-        frameElem.setAttribute( "tStyle", static_cast<int>( topBorder().style ) );
+    if(topBorder().getStyle() != KoBorder::SOLID)
+        frameElem.setAttribute( "tStyle", static_cast<int>( topBorder().getStyle() ) );
 
     if(bottomBorder().penWidth()!=0) {
         frameElem.setAttribute( "bWidth", bottomBorder().penWidth() );
@@ -335,8 +335,8 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "bGreen", bottomBorder().color.green() );
         frameElem.setAttribute( "bBlue", bottomBorder().color.blue() );
     }
-    if(bottomBorder().style != KoBorder::SOLID)
-        frameElem.setAttribute( "bStyle", static_cast<int>( bottomBorder().style ) );
+    if(bottomBorder().getStyle() != KoBorder::SOLID)
+        frameElem.setAttribute( "bStyle", static_cast<int>( bottomBorder().getStyle() ) );
 
     if(backgroundColor().color().isValid())
     {
@@ -409,10 +409,10 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
             KWDocument::getAttribute( frameElem, "bRed", 0 ),
             KWDocument::getAttribute( frameElem, "bGreen", 0 ),
             KWDocument::getAttribute( frameElem, "bBlue", 0 ) );
-    l.style = static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "lStyle", KoBorder::SOLID ) );
-    r.style = static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", KoBorder::SOLID ) );
-    t.style = static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", KoBorder::SOLID ) );
-    b.style = static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "bStyle", KoBorder::SOLID ) );
+    l.setStyle(static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "lStyle", KoBorder::SOLID ) ));
+    r.setStyle(static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", KoBorder::SOLID ) ));
+    t.setStyle(static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", KoBorder::SOLID ) ));
+    b.setStyle( static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "bStyle", KoBorder::SOLID ) ));
     QColor c;
     if ( frameElem.hasAttribute("bkRed") )
         c.setRgb(
@@ -422,13 +422,13 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
 
     if ( syntaxVersion < 2 ) // Activate old "white border == no border" conversion
     {
-        if(c==l.color && l.penWidth()==1 && l.style==0 )
+        if(c==l.color && l.penWidth()==1 && l.getStyle()==0 )
             l.setPenWidth(0);
-        if(c==r.color  && r.penWidth()==1 && r.style==0)
+        if(c==r.color  && r.penWidth()==1 && r.getStyle()==0)
             r.setPenWidth(0);
-        if(c==t.color && t.penWidth()==1 && t.style==0 )
+        if(c==t.color && t.penWidth()==1 && t.getStyle()==0 )
             t.setPenWidth(0);
-        if(c==b.color && b.penWidth()==1 && b.style==0 )
+        if(c==b.color && b.penWidth()==1 && b.getStyle()==0 )
             b.setPenWidth(0);
     }
     brd_left = l;

@@ -104,13 +104,13 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     fsInline=0L;
     m_spell.kspell = 0;
     m_border.left.color = white;
-    m_border.left.style = KoBorder::SOLID;
+    m_border.left.setStyle (KoBorder::SOLID);
     m_border.left.setPenWidth( 0);
     m_border.right = m_border.left;
     m_border.top = m_border.left;
     m_border.bottom = m_border.left;
     m_border.common.color = black;
-    m_border.common.style = KoBorder::SOLID;
+    m_border.common.setStyle(KoBorder::SOLID);
     m_border.common.setPenWidth( 1);
     m_currentPage = 0;
     m_specialCharDlg=0L;
@@ -3939,11 +3939,11 @@ void KWView::borderWidth( const QString &width )
 
 void KWView::borderStyle( const QString &style )
 {
-    m_border.common.style = KoBorder::getStyle( style );
-    m_border.left.style = m_border.common.style;
-    m_border.right.style = m_border.common.style;
-    m_border.top.style = m_border.common.style;
-    m_border.bottom.style = m_border.common.style;
+    m_border.common.setStyle(KoBorder::getStyle( style ));
+    m_border.left.setStyle( m_border.common.getStyle());
+    m_border.right.setStyle( m_border.common.getStyle());
+    m_border.top.setStyle( m_border.common.getStyle());
+    m_border.bottom.setStyle( m_border.common.getStyle());
     borderSet();
     m_gui->canvasWidget()->setFocus();
 }
@@ -4054,7 +4054,7 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 void KWView::borderShowValues()
 {
     actionBorderWidth->setCurrentItem( (int)m_border.common.penWidth() - 1 );
-    actionBorderStyle->setCurrentItem( (int)m_border.common.style );
+    actionBorderStyle->setCurrentItem( (int)m_border.common.getStyle() );
 }
 
 void KWView::tabListChanged( const KoTabulatorList & tabList )
