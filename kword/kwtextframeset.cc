@@ -1928,7 +1928,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                     if ( resized )
                     {
                         frameResized( theFrame, true );
-                        abort = false;
+                        *abort = false;
                     }
                     break;
                 }
