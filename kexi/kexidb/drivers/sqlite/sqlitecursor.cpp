@@ -139,7 +139,7 @@ bool SQLiteCursor::drv_getNextRecord()
 		for (int i=0;i<m_data->curr_cols;i++) {
 //			kdDebug()<<i<<": "<< m_data->curr_colname[i]<<" == "<< m_data->curr_coldata[i]<<endl;
 		}
-	kdDebug()<<"m_at == "<<m_at<<endl;
+	kdDebug()<<"m_at == "<<(long)m_at<<endl;
 	m_validRecord = true;
 	return true;
 }

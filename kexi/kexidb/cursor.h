@@ -30,8 +30,14 @@ namespace KexiDB {
 
 //class CursorData;
 
-/*! 
+/*! Provides database cursor functionality.
 
+	You can move cursor to next record with moveNext() and move back with movePrev().
+	The cursor is always positioned on record, not between records, with exception that 
+	ofter open() it is positioned before first record (if any) -- then bof() equals true,
+	and can be positioned after the last record (if any) with moveNext() -- then eof() equals true,
+	For example, if you have four records 1, 2, 3, 4, then after calling moveNext(), 
+	moveNext(), moveNext(), movePrev() you are going through records: 1, 2, 3, 2.
 */
 class KEXI_DB_EXPORT Cursor: public Object
 {
@@ -64,14 +70,14 @@ class KEXI_DB_EXPORT Cursor: public Object
 		 Value -1 means that cursor does not point to any valid record
 		 (this happens eg. after open(), close(), 
 		 and after moving after last record or before first one. */
-		int at();
+		Q_LLONG at();
 		QString statement() { return m_statement; }
 		bool isOpened() { return m_opened; }
 		/*! Closes and then opens again the same cursor. 
 			Cursor must be opened before calling this method. */
 		bool reopen();
 		/*! \return number of fields available for this cursor. */
-		int fieldCount() { return m_fieldCount; }
+		uint fieldCount() { return m_fieldCount; }
 		virtual QVariant value(int i) = 0;
 
 	protected:
@@ -93,8 +99,8 @@ class KEXI_DB_EXPORT Cursor: public Object
 //		bool m_atLast;
 		bool m_validRecord; //! true if valid record is currently retrieved @ current position
 		bool m_readAhead;
-		int m_at;
-		int m_fieldCount;
+		Q_LLONG m_at;
+		uint m_fieldCount;
 	private:
 		class Private;
 		Private *d;

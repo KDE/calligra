@@ -233,7 +233,7 @@ bool Cursor::bof()
 //	return m_beforeFirst;
 }
 
-int Cursor::at()
+Q_LLONG Cursor::at()
 {
 	if (m_readAhead)
 		return 0;
