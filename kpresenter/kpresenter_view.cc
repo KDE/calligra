@@ -5303,7 +5303,6 @@ void KPresenterView::showZoom( int zoom )
 {
     QStringList list = actionViewZoom->items();
     QString zoomStr = QString::number( zoom ) + '%';
-    kdDebug()<<" list.findIndex(zoomStr)  "<<list.findIndex(zoomStr)<<endl;
     actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 }
 
@@ -5341,11 +5340,9 @@ void KPresenterView::viewZoom( const QString &s )
     if( zoom != zoomHandler()->zoom() )
     {
         setZoom( zoom, true );
-#if 0
-        KWTextFrameSetEdit * edit = currentTextEdit();
+        KPTextView *edit=m_canvas->currentTextObjectView();
         if ( edit )
             edit->ensureCursorVisible();
-#endif
     }
 
     m_canvas->setFocus();
