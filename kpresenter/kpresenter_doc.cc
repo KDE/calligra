@@ -3566,7 +3566,9 @@ int KPresenterDoc::getPenBrushFlags()
                     flags = flags | StyleDia::SdEndBeginLine;
                     break;
                 case OT_PIE:
-                    flags=flags | StyleDia::SdPen | StyleDia::SdBrush;
+                    flags=flags | StyleDia::SdPen;
+                    if((static_cast<KPPieObject*>(kpobject)->getPieType())!=PT_ARC)
+                        flags=flags |StyleDia::SdBrush;
                     break;
                 case OT_RECT: case OT_PART:  case OT_ELLIPSE:
                 case OT_TEXT: case OT_PICTURE: case OT_CLIPART: {
