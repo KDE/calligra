@@ -4,7 +4,7 @@ LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 FILTER_LIBS = ./../filter/libfilter.a
 XML_LIBS = ./../xmlutils/libxml.a
 KSHARE_LIBS = ./../share/libkillu.a
-LDADD = $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) $(LIB_KOFFICEUI)
+LDADD = $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) $(LIB_KOFFICEUI) $(LIB_KIMGIO)
 
 ####### Files
 
@@ -55,7 +55,5 @@ KIllustrator.h: KIllustrator.idl
 
 
 KIllustrator.cc: KIllustrator.h
-KIllustrator_main.cc: KIllustrator.h
-KIllustrator_doc.cc: KIllustrator.h
-KIllustrator_shell.cc: KIllustrator.h
-KIllustrator_view.cc: KIllustrator.h
+BUILT_SOURCES = KIllustrator.cc
+
