@@ -20,6 +20,8 @@
 #include "vselectiondesc.h"
 #include "vselection.h"
 #include "vgroup.h"
+#include "vtext.h"
+#include "vimage.h"
 #include "vcomposite.h"
 #include <kdebug.h>
 #include <klocale.h>
@@ -44,20 +46,20 @@ void
 VSelectionDescription::visitVGroup( VGroup &group )
 {
 	m_desc = i18n( QString( "1 group, containing %1 objects" ).arg( group.objects().count() ).latin1() );
-	m_shortdesc = i18n( "group" );
+	m_shortdesc = !group.name().isEmpty() ? group.name() : i18n( "group" );
 }
 
 void
-VSelectionDescription::visitVText( VText& )
+VSelectionDescription::visitVText( VText &text )
 {
 	m_desc = QString( i18n( "1 text object" ) );
-	m_shortdesc = QString( i18n( "text" ) );
+	m_shortdesc = !text.name().isEmpty() ? text.name() : QString( i18n( "text" ) );
 }
 
 void
-VSelectionDescription::visitVImage( VImage& )
+VSelectionDescription::visitVImage( VImage &img )
 {
 	m_desc = QString( i18n( "1 image object" ) );
-	m_shortdesc = QString( i18n( "image" ) );
+	m_shortdesc = !img.name().isEmpty() ? img.name() : QString( i18n( "image" ) );
 }
 

@@ -157,6 +157,8 @@ VGroup::save( QDomElement& element ) const
 
 	for ( ; itr.current(); ++itr )
 		itr.current()->save( me );
+
+	VObject::save( me );
 }
 
 void
@@ -165,6 +167,8 @@ VGroup::load( const QDomElement& element )
 	m_objects.setAutoDelete( true );
 	m_objects.clear();
 	m_objects.setAutoDelete( false );
+
+	VObject::load( element );
 
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
