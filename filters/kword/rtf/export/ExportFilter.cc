@@ -123,7 +123,7 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
 {
     QString textBody; // Text to be returned
     textBody += m_prefix;
-
+    m_prefix = QString::null;
     QString rowText;
 
     int rowCurrent = 0;
@@ -185,10 +185,10 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
     }
 
     textBody += writeRow( textCellHeader, rowText, firstFrameData);
-    textBody += "\\row";  // delimit last row
+    textBody += "\\row\\pard";  // delimit last row
     textBody += m_eol;
     m_inTable = oldInTable;
-    m_prefix = QString::null;
+//    m_prefix = QString::null;
 
     return textBody;
 }
@@ -368,30 +368,141 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
     const LayoutData& layout, const ValueListFormatData &paraFormatDataList)
 {
     QString str;
-
+    QString content;
+    QString markup;
     // open paragraph
-    str += "\\pard";
-    str += "\\plain";
+    markup += "\\pard";
+    markup += "\\plain";
     if (m_inTable)
-        str += "\\intbl";
+        markup += "\\intbl";
+
+//lists
+    if (layout.counter.style)
+    {
+        markup += "{\\pntext ";
+        markup += layout.counter.text;
+        markup += " }{\\*\\pn";
+        if (layout.counter.style > 5)
+        {
+            markup += "\\pnlvlblt ";
+            markup += "{\\pntxtb ";
+            if (!layout.counter.lefttext.isEmpty())
+	    {
+		markup += layout.counter.lefttext;
+	    }
+            if (layout.counter.style==6)
+            {
+	        //custom bullets (one char)
+	        //TODO: use correct character/sign for bullet
+                markup += layout.counter.customCharacter;
+
+            }
+            if (layout.counter.style==7)
+            {
+	        //custom bullets (complex)
+                markup += layout.counter.text;
+            }
+            if (layout.counter.style==8)
+            {
+	        //circle bullets
+	        //TODO: use correct character/sign for bullet
+                markup += "\\u-2002";
+            }
+            if (layout.counter.style==9)
+            {
+	        //square bullets
+	        //TODO: use correct character/sign for bullet
+                markup += layout.counter.text;
+            }
+            if (layout.counter.style==10)
+            {
+	        //disc bullets
+	        //TODO: make work in OO
+                markup += "\\bullet";
+            }
+            if (layout.counter.style==11)
+            {
+	        //disc bullets
+	        //TODO: use correct character/sign for bullet
+                markup += layout.counter.text;
+            }
+                markup += "}";
+        }
+	else
+        {
+        if (layout.counter.numbering!=0)
+	{
+	    markup += "\\pnlvl";
+	    markup += QString::number(layout.counter.depth + 1);
+	    markup += "\\pnprev";
+            markup += "\\pndec";
+	}
+	else if (layout.counter.style==1)
+	{
+	    markup += "\\pnlvlbody";
+	}
+	else
+	{
+	    markup += "\\pnlvl";
+	    markup += QString::number(11 - layout.counter.style);
+	}
+	if (layout.counter.style==1)
+        {
+            markup += "\\pndec";
+        }
+        else if (layout.counter.style==2)
+        {
+            markup += "\\pnlcltr";
+        }
+        else if (layout.counter.style==3)
+        {
+            markup += "\\pnucltr";
+        }
+        else if (layout.counter.style==4)
+        {
+            markup += "\\pnlcrm";
+        }
+        else if (layout.counter.style==5)
+        {
+            markup += "\\pnucrm";
+        }
+        }
+        markup += "{\\pntxta ";
+	markup += layout.counter.righttext;  
+	markup += " }";
+        if (layout.counter.start!=0)
+	{
+            markup += "\\pnstart";
+	    markup += QString::number(layout.counter.start);
+	}
+	else
+	{
+	    markup += "\\pnstart1";
+	}
+	markup += "\\pnindent0";
+        markup += "}";
+    }
 
     LayoutData styleLayout;
-    str += lookupStyle(layout.styleName, styleLayout);
-    str += layoutToRtf(styleLayout,layout,true);
+    markup += lookupStyle(layout.styleName, styleLayout);
+    markup += layoutToRtf(styleLayout,layout,true);
 
     if ( 1==layout.formatData.text.verticalAlignment )
     {
-        str += "\\sub"; //Subscript
+        markup += "\\sub"; //Subscript
     }
     else if ( 2==layout.formatData.text.verticalAlignment )
     {
-        str += "\\super"; //Superscript
+        markup += "\\super"; //Superscript
     }
 
-    str += " {";
 
     if (layout.pageBreakBefore)
-        str += "\\page ";
+        content += "\\page ";
+
+
+
+
 
     if (!paraText.isEmpty())
     {
@@ -410,8 +521,8 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
             {
                 //Retrieve text
                 partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-                str +=formatTextParagraph(partialText, formatRef, *paraFormatDataIt);
-            }
+                content +=formatTextParagraph(partialText, formatRef, *paraFormatDataIt);
+	    }
             else if (4==(*paraFormatDataIt).id)
             {
                 // ### TODO: put dtae/time fields into own method.
@@ -419,11 +530,11 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     || (2==(*paraFormatDataIt).variable.m_type) ) // time
                 {
                     // ### TODO: fixed/variable date
-                    str += "{\\field{\\*\\fldinst ";
+                    content += "{\\field{\\*\\fldinst ";
                     if (0==(*paraFormatDataIt).variable.m_type)
-                        str += "DATE ";
+                        content += "DATE ";
                     else
-                        str += "TIME ";
+                        content += "TIME ";
                     QString key((*paraFormatDataIt).variable.m_key.mid(4));
                     kdDebug(30515) << "Time format: " << key << endl;
                     if (key.startsWith("locale"))
@@ -471,33 +582,33 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                         key.replace("PPPP","MMMM");
                         key.replace("zzz","000"); // replace microseconds by 000
                         kdDebug(30515) << "New format:  " << key << endl;
-                        str += "\\@ \"";
-                        str += key;
-                        str += "\" ";
+                        content += "\\@ \"";
+                        content += key;
+                        content += "\" ";
                     }
-                    str += "\\* MERGEFORMAT }{\\fldrslt ";
-                    str += escapeRtfText((*paraFormatDataIt).variable.m_text);
-                    str += "}}";
+                    content += "\\* MERGEFORMAT }{\\fldrslt ";
+                    content += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                    content += "}}";
                 }
                 else if (4==(*paraFormatDataIt).variable.m_type)
                 {
                     QString strFieldType;
                     if ((*paraFormatDataIt).variable.isPageNumber())
                     {
-                        str += "{\\field{\\*\\fldinst PAGE \\* MERGEFORMAT }{\\fldrslt ";
-                        str += escapeRtfText((*paraFormatDataIt).variable.m_text);
-                        str += "}}";
+                        content += "{\\field{\\*\\fldinst PAGE \\* MERGEFORMAT }{\\fldrslt ";
+                        content += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                        content += "}}";
                     }
                     else if ((*paraFormatDataIt).variable.isPageCount())
                     {
-                        str += "{\\field{\\*\\fldinst NUMPAGES \\* MERGEFORMAT }{\\fldrslt ";
-                        str += escapeRtfText((*paraFormatDataIt).variable.m_text);
-                        str += "}}";
+                        content += "{\\field{\\*\\fldinst NUMPAGES \\* MERGEFORMAT }{\\fldrslt ";
+                        content += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                        content += "}}";
                     }
                     else
                     {
                         // Unknown subtype, therefore write out the result
-                        str += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                        content += escapeRtfText((*paraFormatDataIt).variable.m_text);
                     }
                 }
                 else if (8==(*paraFormatDataIt).variable.m_type)
@@ -509,30 +620,30 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 
                     if( rtfField.isEmpty() )
                         // Couldn't map field name, just write out the value
-                        str += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                        content += escapeRtfText((*paraFormatDataIt).variable.m_text);
                     else
                     {
-                        str += "{\\field";
-                        str += "{\\*\\fldinst ";
-                        str +=  rtfField;
-                        str += "  \\* MERGEFORMAT }";
-                        str += "{\\fldrslt {";
-                        str += value;
-                        str += "}}}";
+                        content += "{\\field";
+                        content += "{\\*\\fldinst ";
+                        content +=  rtfField;
+                        content += "  \\* MERGEFORMAT }";
+                        content += "{\\fldrslt {";
+                        content += value;
+                        content += "}}}";
                     }
                 }
                 else if (9==(*paraFormatDataIt).variable.m_type)
                 {
                     // A link
-                    str += "{\\field";
-                    str += "{\\*\\fldinst HYPERLINK ";
-                    str +=  escapeRtfText((*paraFormatDataIt).variable.getHrefName());
-                    str += "}";
-                    str += "{\\fldrslt ";
-                    str += "{\\ul";   // underline, ### TODO: use style Hyperlink
-                    str += lookupColor("\\cf",QColor(0,0,255));// blue
-                    str += escapeRtfText((*paraFormatDataIt).variable.getLinkName());
-                    str += "}}}";
+                    content += "{\\field";
+                    content += "{\\*\\fldinst HYPERLINK ";
+                    content +=  escapeRtfText((*paraFormatDataIt).variable.getHrefName());
+                    content += "}";
+                    content += "{\\fldrslt ";
+                    content += "{\\ul";   // underline, ### TODO: use style Hyperlink
+                    content += lookupColor("\\cf",QColor(0,0,255));// blue
+                    content += escapeRtfText((*paraFormatDataIt).variable.getLinkName());
+                    content += "}}}";
                 }
                 else if (11==(*paraFormatDataIt).variable.m_type)
                 {
@@ -546,21 +657,21 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                         QValueList<ParaData>::ConstIterator it;
                         for (it=paraList->begin();it!=paraList->end();it++)
                             fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
-                        str += "{\\super ";
-                        str += automatic ? "\\chftn " : value;
-                        str += "{\\footnote ";
-                        str += "{\\super ";
-                        str += automatic ? "\\chftn " : value;
-                        str += fstr;
-                        str += " }";
-                        str += " }";
-                        str += " }";
+                        content += "{\\super ";
+                        content += automatic ? "\\chftn " : value;
+                        content += "{\\footnote ";
+                        content += "{\\super ";
+                        content += automatic ? "\\chftn " : value;
+                        content += fstr;
+                        content += " }";
+                        content += " }";
+                        content += " }";
                     }
                 }
                 else
                 {
                     // Generic variable
-                    str += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                    content += escapeRtfText((*paraFormatDataIt).variable.m_text);
                 }
             }
             else if (6==(*paraFormatDataIt).id)
@@ -568,36 +679,59 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 kdDebug(30515) << "Found an anchor of type: " << (*paraFormatDataIt).frameAnchor.type << endl;
                 // We have an image, a clipart or a table
 
-                // make sure to close the paragraph
-                str += "}";
-                str += m_eol;
-
+                if (!content.isEmpty())
+		{
+		str += m_prefix;
+		str += markup;
+		str += " {";
+		str += content;
+		str += "}";
+		str += m_eol;
+		content="";
+		if (!m_inTable)
+		{
+		    m_prefix="\\par";
+		}
+		} 
+		
                 if (6==(*paraFormatDataIt).frameAnchor.type)
                 {
-                    str += makeTable((*paraFormatDataIt).frameAnchor);
-                }
+
+		    str += makeTable((*paraFormatDataIt).frameAnchor);
+		}
                 else if (2==(*paraFormatDataIt).frameAnchor.type)
                 {
                     str += makeImage((*paraFormatDataIt).frameAnchor);
+                
                 }
-                else
-                {
-                    kdWarning(30515) << "Unknown anchor type: "
-                        << (*paraFormatDataIt).frameAnchor.type << endl;
-                }
-
-                // open the paragraph again
-                str += " {"; // ### TODO: not enough!
-            }
+	    }
         }
     }
 
     if (layout.pageBreakAfter)
-        str += "\\page";
+        content += "\\page";
 
-    // close paragraph
-    str += "}";
-
+    if (!content.isEmpty())
+    {
+        str += m_prefix;
+	str += markup;
+	str += " {";
+	str += content;
+	str += "}";
+	str += m_eol;
+	if (m_inTable==false)
+	{
+	   m_prefix = "\\par";
+        }
+    } 
+    if (str.isEmpty())
+    {
+     str ="\\par\\pard\\plain";
+    if (m_inTable==false)
+    {
+       m_prefix = "\\par";
+    }
+    }
     return str;
 }
 
@@ -605,69 +739,77 @@ bool RTFWorker::doFullParagraph(const QString& paraText,
     const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
     kdDebug(30515) << "Entering RTFWorker::doFullParagraph" << endl << paraText << endl;
-
-    m_textBody += m_prefix;
-
     QString par = ProcessParagraphData( paraText, layout, paraFormatDataList);
-
     m_textBody += par;
-    m_textBody += m_eol;
-
-    m_prefix = "\\par";
-
     kdDebug(30515) << "Quiting RTFWorker::doFullParagraph" << endl;
     return true;
 }
 
 bool RTFWorker::doHeader(const HeaderData& header)
 {
+    QString str;
+    QString content;
     if( header.page == HeaderData::PAGE_ODD )
-        m_textBody += "\\facingp{\\headerr";
+        str = "\\facingp{\\headerr";
     else if( header.page == HeaderData::PAGE_EVEN )
-        m_textBody += "\\facingp{\\headerl";
+        str = "\\facingp{\\headerl";
     else if( header.page == HeaderData::PAGE_FIRST )
-        m_textBody += "\\facingp{\\headerl";
+        str = "\\facingp{\\headerl";
     else if( header.page == HeaderData::PAGE_ALL )
-        m_textBody += "{\\header";
+        str = "{\\header";
     else
         return false;
 
-    m_textBody += " {";
+    str += " {";
 
     QValueList<ParaData>::ConstIterator it;
     for (it=header.para.begin();it!=header.para.end();it++)
-        m_textBody += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList) + m_eol;
+        content += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
 
-    m_textBody += "}";
+    if (content!="\\par\\pard\\plain")
+    {
+    str += content;
+    str += "}";
 
-    m_textBody += "}";
-
+    str += "}";
+    
+    m_textBody += str;
+    }
+    m_prefix=QString::null;
     return true;
 }
 
 bool RTFWorker::doFooter(const FooterData& footer)
 {
+    QString str;
+    QString content;
     if( footer.page == FooterData::PAGE_ODD )
-        m_textBody += "\\facingp{\\footerr";
+        str = "\\facingp{\\footerr";
     else if( footer.page == FooterData::PAGE_EVEN )
-        m_textBody += "\\facingp{\\footerl";
+        str = "\\facingp{\\footerl";
     else if( footer.page == FooterData::PAGE_FIRST )
-        m_textBody += "\\facingp{\\headerl";
+        str = "\\facingp{\\headerl";
     else if( footer.page == FooterData::PAGE_ALL )
-        m_textBody += "{\\footer";
+        str = "{\\footer";
     else
         return false;
 
-    m_textBody += " {";
+    str += " {";
 
     QValueList<ParaData>::ConstIterator it;
     for (it=footer.para.begin();it!=footer.para.end();it++)
-        m_textBody += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList) + m_eol;
+        content += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
 
-    m_textBody += "}";
+    if (content!="\\par\\pard\\plain")
+    {
+    str += content;
+    str += "}";
 
-    m_textBody += "}";
-
+    str += "}";
+    
+    m_textBody += str;
+    }
+    m_prefix=QString::null;
     return true;
 }
 
