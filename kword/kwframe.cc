@@ -73,19 +73,22 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       bright( 0 ),
       btop( 0 ),
       bbottom( 0 ),
+      m_minFrameHeight( 0 ),
+      m_internalY( 0 ),
+      m_zOrder( 0 ),
       m_bCopy( false ),
       selected( false ),
-      m_internalY( 0 ),
       m_backgroundColor( QBrush( QColor() ) ), // valid brush with invalid color ( default )
       brd_left( QColor(), KoBorder::SOLID, 0 ),
       brd_right( QColor(), KoBorder::SOLID, 0 ),
       brd_top( QColor(), KoBorder::SOLID, 0 ),
       brd_bottom( QColor(), KoBorder::SOLID, 0 ),
+      handles(),
+      m_framesOnTop(),
       m_frameSet( fs )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     handles.setAutoDelete(true);
-    m_minFrameHeight=0;
 }
 
 KWFrame::~KWFrame()
@@ -154,29 +157,28 @@ KWFrame *KWFrame::getCopy() {
 
 void KWFrame::copySettings(KWFrame *frm)
 {
-    //necessary to reapply these parameters
-    setFrameSet( frm->frameSet() );
     setRect(frm->x(), frm->y(), frm->width(), frm->height());
-    setRunAroundGap( frm->runAroundGap());
-    setRunAround( frm->runAround());
-
-    //
-    setBackgroundColor( frm->backgroundColor() );
+    // Keep order identical as member var order (and init in ctor)
+    setSheetSide(frm->sheetSide());
+    setRunAround(frm->runAround());
     setFrameBehavior(frm->frameBehavior());
     setNewFrameBehavior(frm->newFrameBehavior());
-    setSheetSide(frm->sheetSide());
-    setLeftBorder(frm->leftBorder());
-    setRightBorder(frm->rightBorder());
-    setTopBorder(frm->topBorder());
-    setBottomBorder(frm->bottomBorder());
+    setRunAroundGap(frm->runAroundGap());
     setBLeft(frm->bLeft());
     setBRight(frm->bRight());
     setBTop(frm->bTop());
     setBBottom(frm->bBottom());
+    setMinFrameHeight(frm->minFrameHeight());
+    m_internalY = 0; // internal Y is recalculated
+    setZOrder(frm->zOrder());
     setCopy(frm->isCopy());
-    selected = false; // don't copy this attribute
-    /*if(frm->anchor())
-        setAnchor(frm->anchor());*/
+    selected = false; // don't copy this attribute [shouldn't be an attribute of KWFrame]
+    setBackgroundColor( frm->backgroundColor() );
+    setLeftBorder(frm->leftBorder());
+    setRightBorder(frm->rightBorder());
+    setTopBorder(frm->topBorder());
+    setBottomBorder(frm->bottomBorder());
+    setFrameSet( frm->frameSet() );
 }
 
 // Insert all resize handles
@@ -446,29 +448,30 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
 /* Class: KWFrameSet                                              */
 /******************************************************************/
 KWFrameSet::KWFrameSet( KWDocument *doc )
-    : m_doc( doc ), frames(), m_framesOnTop(), m_info( FI_BODY ),
+    : m_doc( doc ), frames(), m_framesInPage(), m_firstPage( 0 ), m_emptyList(),
+      m_info( FI_BODY ),
       m_current( 0 ), grpMgr( 0L ), m_removeableHeader( false ), m_visible( true ),
-      m_anchorTextFs( 0L ), m_currentDrawnCanvas( 0L )
+      m_anchorTextFs( 0L ), m_currentDrawnCanvas( 0L ), m_dcop( 0L )
 {
     // Send our "repaintChanged" signals to the document.
     connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
              doc, SLOT( slotRepaintChanged( KWFrameSet * ) ) );
     frames.setAutoDelete( true );
-    dcop=0L;
+    m_framesInPage.setAutoDelete( true ); // autodelete the lists in the array (not the frames;)
 }
 
 KWordFrameSetIface* KWFrameSet::dcopObject()
 {
-    if ( !dcop )
-	dcop = new KWordFrameSetIface( this );
+    if ( !m_dcop )
+	m_dcop = new KWordFrameSetIface( this );
 
-    return dcop;
+    return m_dcop;
 }
 
 
 KWFrameSet::~KWFrameSet()
 {
-    delete dcop;
+    delete m_dcop;
 }
 
 void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
@@ -829,7 +832,8 @@ KWFrame * KWFrameSet::settingsFrame(KWFrame* frame)
 
 void KWFrameSet::updateFrames()
 {
-    m_framesOnTop.clear();
+    if ( frames.isEmpty() )
+        return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
 
     // hack: table cells are not handled here, since they're not in the doc's frameset list.
     // ( so 'this' will never be found, and the whole method is useless )
@@ -843,6 +847,37 @@ void KWFrameSet::updateFrames()
         return;
 
     //kdDebug() << "KWFrameSet::updateFrames " << this << " " << getName() << endl;
+
+    // For each of our frames, clear old list of frames on top, and grab min/max page nums
+    m_firstPage = frames.first()->pageNum(); // we know frames is not empty here
+    int lastPage = m_firstPage;
+    QPtrListIterator<KWFrame> fIt( frameIterator() );
+    for ( ; fIt.current(); ++fIt ) {
+        fIt.current()->clearFramesOnTop();
+        int pg = fIt.current()->pageNum();
+        m_firstPage = QMIN( m_firstPage, pg );
+        lastPage = QMAX( lastPage, pg );
+    }
+
+    // Prepare the m_framesInPage structure
+    int oldSize = m_framesInPage.size();
+    m_framesInPage.resize( lastPage - m_firstPage + 1 );
+    // Clear the old elements
+    int oldElements = QMIN( oldSize, (int)m_framesInPage.size() );
+    for ( int i = 0 ; i < oldElements ; ++i )
+        m_framesInPage[i]->clear();
+    // Initialize the new elements.
+    for ( int i = oldElements ; i < (int)m_framesInPage.size() ; ++i )
+        m_framesInPage.insert( i, new QPtrList<KWFrame>() );
+
+    // Iterate over frames again, to fill the m_framesInPage array
+    fIt.toFirst();
+    for ( ; fIt.current(); ++fIt ) {
+        int pg = fIt.current()->pageNum();
+        Q_ASSERT( pg <= lastPage );
+        m_framesInPage[pg - m_firstPage]->append( fIt.current() );
+    }
+
     // Iterate over ALL framesets, to find those which have frames on top of us.
     // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
     // So we want it cached.
@@ -851,14 +886,10 @@ void KWFrameSet::updateFrames()
     for (; framesetIt.current(); ++framesetIt )
     {
         KWFrameSet *frameSet = framesetIt.current();
-
         if ( frameSet == this )
-        {
             foundThis = true;
-            continue;
-        }
 
-        if ( !foundThis || !frameSet->isVisible() )
+        if ( !frameSet->isVisible() )
             continue;
 
         // Floating frames are not "on top", they are "inside".
@@ -870,23 +901,34 @@ void KWFrameSet::updateFrames()
         QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
-            KWFrame *frameOnTop = frameIt.current();
+            KWFrame *frameMaybeOnTop = frameIt.current();
             // Is this frame over any of our frames ?
             QPtrListIterator<KWFrame> fIt( frameIterator() );
             for ( ; fIt.current(); ++fIt )
             {
-                KoRect intersect = fIt.current()->intersect( frameOnTop->outerKoRect() );
-                if( !intersect.isEmpty() )
+                if ( fIt.current() != frameMaybeOnTop ) // Skip identity case ;)
                 {
-                    //kdDebug() << "KWFrameSet::updateFrames adding frame on top " << DEBUGRECT(intersect)
-                    //          << " (zoomed: " << DEBUGRECT( kWordDocument()->zoomRect( intersect ) ) << endl;
-                    m_framesOnTop.append( FrameOnTop( intersect, frameOnTop ) );
+                    // Handle case of z-order equality the same way as the old code worked:
+                    // the order in the main frameset list is what counts.
+                    if ( ( fIt.current()->zOrder() == frameMaybeOnTop->zOrder() && foundThis )
+                         || fIt.current()->zOrder() < frameMaybeOnTop->zOrder() )
+                    {
+                        KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
+                        if( !intersect.isEmpty() )
+                        {
+                            kdDebug(32002)
+                                << "KWFrameSet::updateFrames adding frame "
+                                << frameMaybeOnTop << " (zorder: " << frameMaybeOnTop->zOrder() << ")"
+                                << " on top of frame " << fIt.current() << " (zorder: " << fIt.current()->zOrder() << ")"
+                                << "\n   intersect: " << DEBUGRECT(intersect)
+                                << " (zoomed: " << DEBUGRECT( m_doc->zoomRect( intersect ) ) << endl;
+                            fIt.current()->addFrameOnTop( frameMaybeOnTop );
+                        }
+                    }
                 }
             }
         }
     }
-    //kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
-    //               << m_framesOnTop.count() << endl;
 
     if ( isFloating() )
     {
@@ -903,6 +945,20 @@ void KWFrameSet::updateFrames()
                 anchor->resize();
         }
     }
+}
+
+const QPtrList<KWFrame> & KWFrameSet::framesInPage( int pageNum ) const
+{
+    if ( pageNum < m_firstPage || pageNum >= (int)m_framesInPage.size() + m_firstPage )
+    {
+#ifdef DEBUG_DTI
+        kdWarning() << getName() << " framesInPage called for pageNum=" << pageNum << ". "
+                    << " Min value: " << m_firstPage
+                    << " Max value: " << m_framesInPage.size() + m_firstPage - 1 << endl;
+#endif
+        return m_emptyList; // QPtrList<KWFrame>() doesn't work, it's a temporary
+    }
+    return * m_framesInPage[pageNum - m_firstPage];
 }
 
 void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg,
@@ -942,17 +998,18 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             int offsetX = normalFrameRect.left();
             int offsetY = normalFrameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
 
-            QRect icrect = viewMode->viewToNormal( r );
-            //kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << DEBUGRECT( icrect )  << endl;
+            QRect fcrect = viewMode->viewToNormal( r );
+            //kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << DEBUGRECT( fcrect )  << endl;
             // y=-1 means all (in QRT), so let's not go there !
-            //QPoint tl( QMAX( 0, icrect.left() - offsetX ), QMAX( 0, icrect.top() - offsetY ) );
-            //icrect.moveTopLeft( tl );
-            icrect.moveBy( -offsetX, -offsetY );
-            Q_ASSERT( icrect.x() >= 0 );
-            Q_ASSERT( icrect.y() >= 0 );
+            //QPoint tl( QMAX( 0, fcrect.left() - offsetX ), QMAX( 0, fcrect.top() - offsetY ) );
+            //fcrect.moveTopLeft( tl );
+            fcrect.moveBy( -offsetX, -offsetY );
+            Q_ASSERT( fcrect.x() >= 0 );
+            Q_ASSERT( fcrect.y() >= 0 );
 
-            // icrect is now the portion of the frame to be drawn, in qrt coords
-            //kdDebug() << "KWFrameSet::drawContents in internal coords:" << DEBUGRECT( icrect ) << endl;
+            // fcrect is now the portion of the frame to be drawn,
+            // in the frame's coordinates and in pixels
+            //kdDebug() << "KWFrameSet::drawContents in internal coords:" << DEBUGRECT( fcrect ) << endl;
 
             // The settings come from this frame
             KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
@@ -962,14 +1019,14 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             {
                 p->save();
                 p->setClipRegion( reg );
-                p->translate( r.x() - icrect.x(), r.y() - icrect.y() ); // This assume that viewToNormal() is only a translation
-                p->setBrushOrigin( p->brushOrigin() + r.topLeft() - icrect.topLeft() );
+                p->translate( r.x() - fcrect.x(), r.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
+                p->setBrushOrigin( p->brushOrigin() + r.topLeft() - fcrect.topLeft() );
 
                 QBrush bgBrush( settingsFrame->backgroundColor() );
                 bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
                 cg.setBrush( QColorGroup::Base, bgBrush );
 
-                drawFrame( frame, p, icrect, cg, onlyChanged, resetChanged, edit );
+                drawFrame( frame, p, fcrect, cg, onlyChanged, resetChanged, edit );
 
                 p->restore();
             }
@@ -981,7 +1038,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             {
                 // Now draw the frame border
                 // Clip frames on top if onlyChanged, but don't clip to the frame
-                QRegion reg = frameClipRegion( p, 0L, r, viewMode, onlyChanged );
+                QRegion reg = frameClipRegion( p, frame, r, viewMode, onlyChanged, false );
                 if ( !reg.isEmpty() )
                 {
                     p->save();
@@ -1207,14 +1264,13 @@ void KWFrameSet::finalize()
     zoom( false );
 }
 
-// This determines where to clip the painter to draw the contents of a given frame
-// It clips to the frame, and clips out any "on top" frame if onlyChanged=true.
 QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
-                                     KWViewMode * viewMode, bool onlyChanged )
+                                     KWViewMode * viewMode, bool onlyChanged, bool clipFrame )
 {
     KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
-    if ( frame )
+    Q_ASSERT( frame );
+    if ( clipFrame )
     {
         //kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << DEBUGRECT(rc) << endl;
         rc &= painter->xForm( viewMode->normalToView( doc->zoomRect( *frame ) ) ); // intersect
@@ -1225,12 +1281,14 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     if ( !rc.isEmpty() )
     {
         QRegion reg( rc );
-        if ( onlyChanged )
+        // This breaks when a frame is under another one, it still appears if !onlyChanged.
+        // cvs log says this is about frame borders... hmm.
+        /// ### if ( onlyChanged )
         {
-            QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
-            for ( ; fIt != m_framesOnTop.end() ; ++fIt )
+            QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
+            for ( ; fIt.current() ; ++fIt )
             {
-                QRect r = painter->xForm( viewMode->normalToView( (*fIt).frame->outerRect() ) );
+                QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect() ) );
                 //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
                 reg -= r; // subtract
             }
@@ -1303,7 +1361,6 @@ void KWFrameSet::printDebug()
     kdDebug() << " |  Type: " << typeFrameset[ type() ] << endl;
     kdDebug() << " |  Info: " << infoFrameset[ frameSetInfo() ] << endl;
     kdDebug() << " |  Floating: " << isFloating() << endl;
-    kdDebug() << " |  Number of frames on top: " << m_framesOnTop.count() << endl;
 
     QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {
@@ -1318,6 +1375,8 @@ void KWFrameSet::printDebug()
         QColor col = frame->backgroundColor().color();
         kdDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name().latin1() : "(default)" ) << endl;
         kdDebug() << "     SheetSide "<< frame->sheetSide() << endl;
+        kdDebug() << "     Z Order: " << frame->zOrder() << endl;
+        kdDebug() << "     Number of frames on top: " << frame->framesOnTop().count() << endl;
         kdDebug() << "     minFrameHeight "<< frame->minFrameHeight() << endl;
         if(frame->isSelected())
             kdDebug() << " *   Page "<< frame->pageNum() << endl;
@@ -1767,10 +1826,10 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
 
 KWordFrameSetIface* KWFormulaFrameSet::dcopObject()
 {
-    if ( !dcop )
-	dcop = new KWordFormulaFrameSetIface( this );
+    if ( !m_dcop )
+	m_dcop = new KWordFormulaFrameSetIface( this );
 
-    return dcop;
+    return m_dcop;
 }
 
 KWFormulaFrameSet::~KWFormulaFrameSet()

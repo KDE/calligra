@@ -122,7 +122,7 @@ void KWDocument::clearUndoRedoInfos()
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       m_unit( KoUnit::U_MM ), // footNoteManager( this ),
-      urlIntern()
+      m_urlIntern()
 {
     dcop = 0;
     m_lstViews.setAutoDelete( false );
@@ -130,7 +130,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_styleList.setAutoDelete( false );
     m_deletedStyles.setAutoDelete( true );
 //    varFormats.setAutoDelete(true);
-    frames.setAutoDelete( true );
+    m_lstFrameSet.setAutoDelete( true );
 
     setInstance( KWFactory::global(), false );
 
@@ -150,7 +150,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bDontCheckTitleCase = false;
     //m_onlineSpellCheck = false;
 
-    m_lastModeView="ModeNormal";
+    m_lastViewMode="ModeNormal";
 
     m_autoFormat = new KoAutoFormat(this);
 
@@ -235,7 +235,7 @@ KWDocument::~KWDocument()
     if(isReadWrite())
         saveConfig();
     // formula frames have to be deleted before m_formulaDocument
-    frames.clear();
+    m_lstFrameSet.clear();
     delete m_autoFormat;
     delete m_formulaDocument;
     delete m_commandHistory;
@@ -281,7 +281,7 @@ void KWDocument::initConfig()
 
       m_zoom = config->readNumEntry( "Zoom", 100 );
       m_bShowDocStruct = config->readBoolEntry("showDocStruct",true);
-      m_lastModeView= config->readEntry( "viewmode","ModeNormal");
+      m_lastViewMode= config->readEntry( "viewmode","ModeNormal");
   }
   else
       m_zoom = 100;
@@ -308,7 +308,7 @@ void KWDocument::saveConfig()
     config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
     config->writeEntry( "Zoom", m_zoom );
     config->writeEntry( "showDocStruct",m_bShowDocStruct);
-    config->writeEntry( "viewmode",m_lastModeView);
+    config->writeEntry( "viewmode",m_lastViewMode);
 }
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
@@ -318,7 +318,7 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
         m_formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY );
 }
 
-KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num)
+KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num ) const
 {
     unsigned int i=0;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
@@ -331,7 +331,7 @@ KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num)
             i++;
         }
     }
-    return static_cast<KWTextFrameSet*>(frames.at(0));
+    return static_cast<KWTextFrameSet*>(m_lstFrameSet.getFirst());
 }
 
 void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
@@ -473,10 +473,10 @@ double KWDocument::ptColumnWidth() const
 void KWDocument::recalcFrames()
 {
     kdDebug(32002) << "KWDocument::recalcFrames" << endl;
-    if ( frames.isEmpty() )
+    if ( m_lstFrameSet.isEmpty() )
         return;
 
-    KWFrameSet *frameset = frames.at( 0 );
+    KWFrameSet *frameset = m_lstFrameSet.getFirst();
 
     double ptColumnWidth = this->ptColumnWidth();
 
@@ -1074,7 +1074,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     value = KWDocument::getAttribute( word, "url", QString::null );
     if ( value != QString::null )
     {
-        urlIntern = KURL( value ).path();
+        m_urlIntern = KURL( value ).path();
     }
 
     emit sigProgress(5);
@@ -1264,7 +1264,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
     }
 
     if ( !_even_header ) {
@@ -1275,7 +1275,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
     }
 
     if ( !_odd_header ) {
@@ -1286,7 +1286,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
     }
 
     if ( !_first_footer ) {
@@ -1298,7 +1298,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
     }
 
     if ( !_even_footer ) {
@@ -1310,7 +1310,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
     }
 
     if ( !_odd_footer ) {
@@ -1322,7 +1322,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
     }
 
     if ( !_footnotes ) {
@@ -1336,7 +1336,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             frame->setFrameBehavior(KWFrame::AutoExtendFrame);
             fs->addFrame( frame );
         }
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
         fs->setVisible( FALSE );
     }
 
@@ -1347,7 +1347,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         QRect r = ch->geometry();
         KWFrame *frame = new KWFrame(frameset, r.x(), r.y(), r.width(), r.height() );
         frameset->addFrame( frame );
-        frames.append( frameset );
+        m_lstFrameSet.append( frameset );
         emit sig_insertObject( ch, frameset );
     }
 #endif
@@ -1357,7 +1357,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrameSet *fs = frameSet(i);
         if(!fs) {
             kdWarning() << "frameset " << i << " is NULL!!" << endl;
-            frames.remove(i);
+            m_lstFrameSet.remove(i);
         } else if( fs->type()==FT_TABLE) {
             static_cast<KWTableFrameSet *>( fs )->validate();
         } else if(!fs->getNumFrames()) {
@@ -1409,7 +1409,7 @@ void KWDocument::loadEmbedded( QDomElement embedded )
         if ( !settings.isNull() )
             name = settings.attribute( "name" );
         KWPartFrameSet *fs = new KWPartFrameSet( this, ch, name );
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
         if ( !settings.isNull() )
         {
             kdDebug(32001) << "KWDocument::loadXML loading embedded object" << endl;
@@ -1565,7 +1565,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
             // No such table yet -> create
             if ( !table ) {
                 table = new KWTableFrameSet( this, tableName );
-                frames.append( table );
+                m_lstFrameSet.append( table );
             }
             // Load the cell
             return table->loadCell( framesetElem );
@@ -1574,7 +1574,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
         {
             KWTextFrameSet *fs = new KWTextFrameSet( this, fsname );
             fs->load( framesetElem, loadFrames );
-            frames.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
+            m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
 
             // Old file format had autoCreateNewFrame as a frameset attribute
             if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
@@ -1590,19 +1590,19 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
     case FT_PICTURE: {
         KWPictureFrameSet *fs = new KWPictureFrameSet( this, fsname );
         fs->load( framesetElem, loadFrames );
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
         return fs;
     } break;
     case FT_CLIPART: {
         KWClipartFrameSet *fs = new KWClipartFrameSet( this, fsname );
         fs->load( framesetElem, loadFrames );
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
         return fs;
     } break;
     case FT_FORMULA: {
         KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
         fs->load( framesetElem, loadFrames );
-        frames.append( fs );
+        m_lstFrameSet.append( fs );
         return fs;
     } break;
     // Note that FT_PART cannot happen when loading from a file (part frames are saved into the SETTINGS tag)
@@ -1623,7 +1623,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
 bool KWDocument::completeLoading( KoStore *_store )
 {
     if ( _store ) {
-        QString prefix = urlIntern.isEmpty() ? url().path() : urlIntern;
+        QString prefix = m_urlIntern.isEmpty() ? url().path() : m_urlIntern;
         prefix += '/';
         if ( m_pixmapMap ) {
             m_imageCollection.readFromStore( _store, *m_pixmapMap, prefix );
@@ -1648,6 +1648,8 @@ bool KWDocument::completeLoading( KoStore *_store )
     for ( ; fit.current() ; ++fit )
         fit.current()->finalize();
 
+    // Save memory
+    m_urlIntern = QString::null;
     return TRUE;
 }
 
@@ -1738,7 +1740,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
                 KWTableFrameSet *table = new KWTableFrameSet( this, newName );
                 table->fromXML( elem, true, false /*don't apply names*/ );
                 table->moveBy( 20.0, 20.0 );
-                frames.append( table );
+                m_lstFrameSet.append( table );
                 if ( macroCmd )
                     macroCmd->addCommand( new KWCreateTableCommand( QString::null, table ) );
                 fs = table;
@@ -2421,16 +2423,13 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
     return ibeamCursor;
 }
 
-QPtrList<KWFrame> KWDocument::getSelectedFrames() {
+QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
     QPtrList<KWFrame> frames;
-    frames.setAutoDelete( FALSE );
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameSet = fit.current();
-        if ( !frameSet->isVisible() )
-            continue;
-        if ( frameSet->isRemoveableHeader() )
+        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
             continue;
         QPtrListIterator<KWFrame> frameIt = frameSet->frameIterator();
         for ( ; frameIt.current(); ++frameIt )
@@ -2441,16 +2440,30 @@ QPtrList<KWFrame> KWDocument::getSelectedFrames() {
     return frames;
 }
 
-KWFrame *KWDocument::getFirstSelectedFrame()
+QPtrList<KWFrame> KWDocument::framesInPage( int pageNum ) const {
+    QPtrList<KWFrame> frames;
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWFrameSet *frameSet = fit.current();
+        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
+            continue;
+        // Append all frames from frameSet in page pageNum
+        QPtrListIterator<KWFrame> it( frameSet->framesInPage( pageNum ) );
+        for ( ; it.current() ; ++it )
+            frames.append( it.current() );
+    }
+    return frames;
+}
+
+KWFrame *KWDocument::getFirstSelectedFrame() const
 {
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameSet = fit.current();
         for ( unsigned int j = 0; j < frameSet->getNumFrames(); j++ ) {
-            if ( !frameSet->isVisible() )
-                continue;
-            if ( frameSet->isRemoveableHeader() )
+            if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
                 continue;
             if ( frameSet->frame( j )->isSelected() )
                 return frameSet->frame( j );
@@ -2461,7 +2474,7 @@ KWFrame *KWDocument::getFirstSelectedFrame()
 
 void KWDocument::updateAllFrames()
 {
-    //kdDebug(32002) << "KWDocument::updateAllFrames " << frames.count() << " framesets." << endl;
+    //kdDebug(32002) << "KWDocument::updateAllFrames " << m_lstFrameSet.count() << " framesets." << endl;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->updateFrames();
@@ -2652,7 +2665,7 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
 
 void KWDocument::addFrameSet( KWFrameSet *f, bool finalize /*= true*/ )
 {
-    frames.append(f);
+    m_lstFrameSet.append(f);
     if ( finalize )
         f->finalize();
     setModified( true );
@@ -2661,7 +2674,7 @@ void KWDocument::addFrameSet( KWFrameSet *f, bool finalize /*= true*/ )
 void KWDocument::removeFrameSet( KWFrameSet *f )
 {
     emit sig_terminateEditing( f );
-    frames.take( frames.find(f) );
+    m_lstFrameSet.take( m_lstFrameSet.find(f) );
     setModified( true );
 }
 
@@ -2730,7 +2743,8 @@ void KWDocument::printDebug()
         KWFrameSet * frameset = fit.current();
         kdDebug() << "Frameset " << iFrameset << ": '" <<
             frameset->getName() << "' (" << frameset << ")" <<endl;
-        frameset->printDebug();
+        if ( frameset->isVisible() )
+            frameset->printDebug();
     }
     /*
     kdDebug() << "# Images: " << getImageCollection()->iterator().count() <<endl;

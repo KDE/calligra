@@ -164,10 +164,10 @@ public:
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
     KoPageLayout pageLayout() const { return m_pageLayout; }
 
-    KWTextFrameSet * textFrameSet ( unsigned int _num);
+    KWTextFrameSet * textFrameSet ( unsigned int _num ) const;
     // Return the frameset number @p _num
     KWFrameSet *frameSet( unsigned int _num )
-    { return frames.at( _num ); }
+    { return m_lstFrameSet.at( _num ); }
 
     // Return the frameset with a given name
     KWFrameSet * frameSetByName( const QString & name );
@@ -178,13 +178,13 @@ public:
 
     // Return the total number of framesets
     unsigned int getNumFrameSets()
-    { return frames.count(); }
+    { return m_lstFrameSet.count(); }
 
     // Generate a new name for a frameset. @p templateName must contain a %1 [for a number].
     QString generateFramesetName( const QString & templateName );
 
     // Prefer this over frameSet(i), if iterating over all of them
-    QPtrListIterator<KWFrameSet> framesetsIterator() const { return QPtrListIterator<KWFrameSet>(frames); }
+    QPtrListIterator<KWFrameSet> framesetsIterator() const { return QPtrListIterator<KWFrameSet>(m_lstFrameSet); }
 
     QPtrList<KoTextObject> frameTextObject() const;
 
@@ -273,9 +273,10 @@ public:
     ProcessingType processingType() { return m_processingType;  }
 
     QCursor getMouseCursor( const QPoint& nPoint, bool controlPressed );
-    QPtrList<KWFrame> getSelectedFrames();
-    KWFrame *getFirstSelectedFrame();
-    int frameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }
+    QPtrList<KWFrame> getSelectedFrames() const;
+    KWFrame *getFirstSelectedFrame() const;
+    QPtrList<KWFrame> framesInPage( int pageNum ) const;
+    int frameSetNum( KWFrameSet* fs ) { return m_lstFrameSet.findRef( fs ); }
 
     void updateAllFrames();
 
@@ -439,8 +440,8 @@ public:
     int maxRecentFiles() const { return m_maxRecentFiles; }
 
 
-    void setChangeLastModeView(const QString &_mode){ m_lastModeView=_mode;}
-    const QString & ChangeLastModeView() {return m_lastModeView;}
+    void setLastViewMode(const QString &_mode){ m_lastViewMode = _mode;}
+    QString lastViewMode() const { return m_lastViewMode; }
 
     // in pt
     double defaultColumnSpacing(){ return m_defaultColumnSpacing ;}
@@ -547,16 +548,13 @@ private:
     QPtrList<KWView> m_lstViews;
     QPtrList<KWChild> m_lstChildren;
 
-    unsigned int m_itemsLoaded;
-    unsigned int m_nrItemsToLoad;
-
     KoPageLayout m_pageLayout;
     KoColumns m_pageColumns;
     KoKWHeaderFooter m_pageHeaderFooter;
 
     KWImageCollection m_imageCollection;
     KoClipartCollection m_clipartCollection;
-    QPtrList<KWFrameSet> frames;
+    QPtrList<KWFrameSet> m_lstFrameSet;
     QPtrList<KWStyle> m_styleList;
     QPtrList<KWStyle> m_deletedStyles;
 
@@ -564,11 +562,11 @@ private:
     KWStyle *m_lastStyle;
 
     int m_pages;
+    unsigned int m_itemsLoaded;
+    unsigned int m_nrItemsToLoad;
 
     ProcessingType m_processingType;
     double m_gridX, m_gridY;
-
-    //int styleMask;
 
     KoUnit::Unit m_unit;
 
@@ -576,7 +574,8 @@ private:
 //    KWFootNoteManager footNoteManager;
     KoAutoFormat * m_autoFormat;
 
-    QString urlIntern;
+    // Shared between loadXML and loadComplete
+    QString m_urlIntern;
 
     QMap<KoImageKey, QString> * m_pixmapMap;
     QMap<KoClipartKey, QString> * m_clipartMap;
@@ -607,6 +606,7 @@ private:
     bool m_bDontCheckTitleCase;
     bool m_bShowDocStruct;
     //bool m_onlineSpellCheck;
+    bool m_hasTOC;
 
     // The document that is used by all formulas
     KFormula::Document* m_formulaDocument;
@@ -617,9 +617,7 @@ private:
     int m_iNbPagePerRow;
     int m_maxRecentFiles;
 
-    bool m_hasTOC;
-
-    QString m_lastModeView;
+    QString m_lastViewMode;
     KWVariableCollection *m_varColl;
 };
 

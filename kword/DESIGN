@@ -2,9 +2,6 @@ Overall design
 ==============
 
 * The document (KWDocument) has a list of framesets (KWFrameSet)
-Currently the order of the framesets in the list defines the z-order (which frameset
-is on top of which one), but this ought to be changed after 1.1 (with an int in the 
-frameset for instance)
 
 * Framesets include: text frameset, picture/clipart frameset, table frameset etc.
 
@@ -36,6 +33,10 @@ cell, we contain the cells in their own KWTextFrameset.
         |                        |
         + ---> KWTextFrameSet    |
                    +-> KWFrame <-+
+
+* The z-order of the frames (i.e. which one is on top of which)
+is defined by m_zOrder in KWFrame. This number is relative to the other
+frames *on the same page*.
 
 Editing
 =======

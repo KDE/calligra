@@ -96,8 +96,6 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     setName( m_name.utf8() ); // store name in the QObject, for DCOP users
     m_currentViewMode = 0L;
     m_currentDrawnFrame = 0L;
-    m_framesInPage.setAutoDelete( true );
-    m_firstPage = 0;
     // Create the text document to set in the text object
     KWTextDocument* textdoc = new KWTextDocument( this,
         new KoTextFormatCollection( _doc->defaultFont() ), new KWTextFormatter( this ) );
@@ -127,10 +125,10 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
 
 KWordFrameSetIface* KWTextFrameSet::dcopObject()
 {
-    if ( !dcop )
-	dcop = new KWordTextFrameSetIface( this );
+    if ( !m_dcop )
+	m_dcop = new KWordTextFrameSetIface( this );
 
-    return dcop;
+    return m_dcop;
 }
 
 KWFrameSetEdit * KWTextFrameSet::createFrameSetEdit( KWCanvas * canvas )
@@ -755,12 +753,12 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #endif
     // Principle: for every frame on top at this height, we'll move from and to
     // towards each other. The text flows between 'from' and 'to'
-    QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
-    for ( ; fIt != m_framesOnTop.end() && from < to ; ++fIt )
+    QPtrListIterator<KWFrame> fIt( theFrame->framesOnTop() );
+    for ( ; fIt.current() && from < to ; ++fIt )
     {
-        if ( (*fIt).frame->runAround() == KWFrame::RA_BOUNDINGRECT )
+        if ( (*fIt)->runAround() == KWFrame::RA_BOUNDINGRECT )
         {
-            KoRect rectOnTop = (*fIt).intersection;
+            KoRect rectOnTop = theFrame->intersect( (*fIt)->outerKoRect() );
 #ifdef DEBUG_MARGINS
             kdDebugBody(32002) << "   getMargins found rect-on-top at (normal coords) " << DEBUGRECT(rectOnTop) << endl;
 #endif
@@ -1031,23 +1029,28 @@ int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
     }
 
     // Another case for a vertical break is frames with the RA_SKIP flag
-    QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
-    for ( ; fIt != m_framesOnTop.end() ; ++fIt )
+    // Currently looking at all frames on top of all of our frames... maybe optimize better
+    frameIt.toFirst();
+    for ( ; frameIt.current(); ++frameIt )
     {
-        if ( (*fIt).frame->runAround() == KWFrame::RA_SKIP )
+        QPtrListIterator<KWFrame> fIt( frameIt.current()->framesOnTop() );
+        for ( ; fIt.current() ; ++fIt )
         {
-            KoRect rectOnTop = (*fIt).intersection;
-            QPoint iTop, iBottom; // top and bottom in internal coordinates
-            if ( documentToInternal( rectOnTop.topLeft(), iTop ) &&
-                 iTop.y() <= yp + hp &&
-                 documentToInternal( rectOnTop.bottomLeft(), iBottom ) &&
-                 checkVerticalBreak( yp, hp, parag, linesTogether,
-                                     iTop.y(), iBottom.y() ) )
+            if ( (*fIt)->runAround() == KWFrame::RA_SKIP )
             {
-                kdDebug(32002) << "KWTextFrameSet::formatVertically breaking around RA_SKIP frame yp="<<yp<<" hp=" << hp << endl;
-                // We don't "break;" here because there could be another such frame below the first one
-                // We assume that the frames on top are in order ( top to bottom ), btw.
-                // They should be, since updateFrames reorders before updating frames-on-top
+                KoRect rectOnTop = frameIt.current()->intersect( (*fIt)->outerKoRect() );
+                QPoint iTop, iBottom; // top and bottom in internal coordinates
+                if ( documentToInternal( rectOnTop.topLeft(), iTop ) &&
+                     iTop.y() <= yp + hp &&
+                     documentToInternal( rectOnTop.bottomLeft(), iBottom ) &&
+                     checkVerticalBreak( yp, hp, parag, linesTogether,
+                                         iTop.y(), iBottom.y() ) )
+                {
+                    kdDebug(32002) << "KWTextFrameSet::formatVertically breaking around RA_SKIP frame yp="<<yp<<" hp=" << hp << endl;
+                    // We don't "break;" here because there could be another such frame below the first one
+                    // We assume that the frames on top are in order ( top to bottom ), btw.
+                    // They should be, since updateFrames reorders before updating frames-on-top
+                }
             }
         }
     }
@@ -1170,21 +1173,7 @@ void KWTextFrameSet::updateFrames()
 
     qHeapSort( sortedFrames );
 
-    // Prepare the m_framesInPage structure
-    m_firstPage = sortedFrames.first().frame->pageNum();
-    int lastPage = sortedFrames.last().frame->pageNum();
-    int oldSize = m_framesInPage.size();
-    m_framesInPage.resize( lastPage - m_firstPage + 1 );
-    // Clear the old elements
-    int oldElements = QMIN( oldSize, (int)m_framesInPage.size() );
-    for ( int i = 0 ; i < oldElements ; ++i )
-        m_framesInPage[i]->clear();
-    // Initialize the new elements.
-    for ( int i = oldElements ; i < (int)m_framesInPage.size() ; ++i )
-        m_framesInPage.insert( i, new QPtrList<KWFrame>() );
-
-    // Re-fill the frames list with the frames in the right order,
-    // and re-fill m_framesInPage at the same time.
+    // Re-fill the frames list with the frames in the right order
     frames.setAutoDelete( false );
     frames.clear();
     int availHeight = 0;
@@ -1195,9 +1184,6 @@ void KWTextFrameSet::updateFrames()
     {
         KWFrame * theFrame = (*it).frame;
         frames.append( theFrame );
-
-        Q_ASSERT( theFrame->pageNum() <= lastPage );
-        m_framesInPage[theFrame->pageNum() - m_firstPage]->append( theFrame );
 
         if ( !theFrame->isCopy() )
             internalY += lastRealFrameHeight;
@@ -1222,20 +1208,6 @@ void KWTextFrameSet::updateFrames()
 int KWTextFrameSet::availableHeight() const
 {
     return m_textobj->availableHeight();
-}
-
-const QPtrList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
-{
-    if ( pageNum < m_firstPage || pageNum >= (int)m_framesInPage.size() + m_firstPage )
-    {
-#ifdef DEBUG_DTI
-        kdWarning() << getName() << " framesInPage called for pageNum=" << pageNum << ". "
-                    << " Min value: " << m_firstPage
-                    << " Max value: " << m_framesInPage.size() + m_firstPage - 1 << endl;
-#endif
-        return m_emptyList; // QPtrList<KWFrame>() doesn't work, it's a temporary
-    }
-    return * m_framesInPage[pageNum - m_firstPage];
 }
 
 KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPoint ) const

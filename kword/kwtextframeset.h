@@ -219,7 +219,6 @@ protected slots:
 protected:
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, int paragLeftMargin = 0 );
     bool checkVerticalBreak( int & yp, int & h, Qt3::QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
-    const QPtrList<KWFrame> & framesInPage( int pageNum ) const;
     void frameResized( KWFrame *theFrame );
     double footerHeaderSizeMax( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
@@ -231,14 +230,6 @@ private:
     KWViewMode * m_currentViewMode;
     /** The frame currently being drawn. */
     KWFrame * m_currentDrawnFrame;
-
-    // Cached info for optimization
-    /** This array provides a direct access to the frames on page N */
-    QPtrVector< QPtrList<KWFrame> > m_framesInPage;
-    /** always equal to m_framesInPage[0].first()->pageNum() :) */
-    int m_firstPage;
-    /** always empty, for convenience in @ref framesInPage */
-    QPtrList<KWFrame> m_emptyList;
 };
 
 /**

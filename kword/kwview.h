@@ -305,6 +305,8 @@ public slots:
 
     void configureHeaderFooter();
     void inlineFrame();
+    void raiseFrame();
+    void lowerFrame();
     void openLink();
     void changeLink();
     void showDocStructure();
@@ -354,6 +356,8 @@ private:
     KAction *actionEditPaste;
     KAction *actionEditSelectAll;
     KAction *actionEditDelFrame;
+    KAction *actionRaiseFrame;
+    KAction *actionLowerFrame;
     KAction *actionEditCustomVars;
     KAction *actionEditFind;
     KAction *actionEditReplace;
@@ -403,7 +407,7 @@ private:
 
     KAction *actionFontSizeIncrease;
     KAction *actionFontSizeDecrease;
-    
+
     KFontSizeAction *actionFormatFontSize;
     KFontAction *actionFormatFontFamily;
     KSelectAction *actionFormatStyle;

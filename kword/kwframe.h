@@ -130,14 +130,25 @@ public:
     bool isCopy() { return m_bCopy; }
     void setCopy( bool copy ) { m_bCopy = copy; }
 
-    /* Data stucture methods */
+    /** Data stucture methods */
     KWFrameSet *frameSet() const { return m_frameSet; }
     void setFrameSet( KWFrameSet *fs ) { m_frameSet = fs; }
 
-    /* The page on which this frame is (0 based)*/
+    /** The page on which this frame is (0 based)*/
     int pageNum() const;
 
-    /* All borders can be custom drawn with their own colors etc. */
+    /** The z-order of the frame, relative to the other frames on the same page */
+    void setZOrder( int z ) { m_zOrder = z; }
+    int zOrder() const { return m_zOrder; }
+
+    /** For KWFrameSet::updateFrames only. Clear list of frames on top of this one. */
+    void clearFramesOnTop() { m_framesOnTop.clear(); }
+    /** For KWFrameSet::updateFrames only. Add a frame on top of this one.
+     * Note that order doesn't matter in that list, it's for clipping only. */
+    void addFrameOnTop( KWFrame* fot ) { m_framesOnTop.append( fot ); }
+    const QPtrList<KWFrame>& framesOnTop() const { return m_framesOnTop; }
+
+    /** All borders can be custom drawn with their own colors etc. */
     const KoBorder &leftBorder() const { return brd_left; }
     const KoBorder &rightBorder() const { return brd_right; }
     const KoBorder &topBorder() const { return brd_top; }
@@ -209,16 +220,18 @@ private:
     NewFrameBehavior m_newFrameBehavior;
     double m_runAroundGap;
     double bleft, bright, btop, bbottom; // margins
+    double m_minFrameHeight;
 
+    int m_internalY; // for text frames only
+    int m_zOrder;
     bool m_bCopy;
     bool selected;
-    int m_internalY; // for text frames only
-    double m_minFrameHeight;
 
     QBrush m_backgroundColor;
     KoBorder brd_left, brd_right, brd_top, brd_bottom;
 
     QPtrList<KWResizeHandle> handles;
+    QPtrList<KWFrame> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
     KWFrameSet *m_frameSet;
 
     // Prevent operator= and copy constructor
@@ -440,6 +453,10 @@ public:
      */
     virtual void updateFrames();
 
+    /** Return list of frames in page @p pageNum.
+     * This is fast since it uses the m_framesInPage array.*/
+    const QPtrList<KWFrame> & framesInPage( int pageNum ) const;
+
     /** relayout text in frames, so that it flows correctly around other frames */
     virtual void layout() {}
     virtual void invalidate() {}
@@ -582,10 +599,13 @@ protected:
     /** save the common attributes for the frameset */
     void saveCommon( QDomElement &parentElem, bool saveFrames );
 
-    // Determine the clipping rectangle for drawing the contents of @p frame with @p painter
-    // in the rectangle delimited by @p crect.
+    /**Determine the clipping rectangle for drawing the contents of @p frame with @p painter
+     * in the rectangle delimited by @p crect.
+     * This determines where to clip the painter to draw the contents of a given frame
+     * It clips to the frame if clipFrame=true, and clips out any "on top" frame if onlyChanged=true.
+     */
     QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
-                             KWViewMode * viewMode, bool onlyChanged );
+                             KWViewMode * viewMode, bool onlyChanged, bool clipFrame = true );
 
     void deleteAnchor( KWAnchor * anchor );
     virtual void deleteAnchors();
@@ -593,14 +613,14 @@ protected:
 
     KWDocument *m_doc;            // Document
     QPtrList<KWFrame> frames;        // Our frames
-    struct FrameOnTop {
-        FrameOnTop() {} // for QValueList
-        FrameOnTop( const KoRect & r, KWFrame * f )
-            : intersection( r ), frame( f ) {}
-        KoRect intersection;
-        KWFrame * frame;
-    };
-    QValueList<FrameOnTop> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
+
+    // Cached info for optimization
+    /** This array provides a direct access to the frames on page N */
+    QPtrVector< QPtrList<KWFrame> > m_framesInPage;
+    /** always equal to m_framesInPage[0].first()->pageNum() :) */
+    int m_firstPage;
+    /** always empty, for convenience in @ref framesInPage */
+    QPtrList<KWFrame> m_emptyList; // ## make static pointer to save memory ?
 
     Info m_info;
     int m_current; // used for headers and footers, not too sure what it means
@@ -609,7 +629,7 @@ protected:
     QString m_name;
     KWTextFrameSet * m_anchorTextFs;
     KWCanvas * m_currentDrawnCanvas;           // The canvas currently being drawn.
-    KWordFrameSetIface *dcop;
+    KWordFrameSetIface *m_dcop;
 };
 
 /******************************************************************/

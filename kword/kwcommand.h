@@ -169,10 +169,15 @@ protected:
  * (e.g. using frame dialog).
  * In the long run, KWFrameBackGroundColorCommand, KWFrameBorderCommand etc.
  * could be removed and KWFramePropertiesCommand could be used instead.
+ * #### This solution is memory eating though, since all settings of the frame
+ * are copied. TODO: evaluate using graphite's GenericCommand instead.
  */
 class KWFramePropertiesCommand : public KNamedCommand
 {
 public:
+    /** A copy of frameAfter is done internally.
+     * But make sure frameBefore is already a copy, its ownership is moved to the command.
+     */
     KWFramePropertiesCommand( const QString &name, KWFrame *_frameBefore,  KWFrame *_frameAfter );
     ~KWFramePropertiesCommand();
     void execute();

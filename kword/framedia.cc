@@ -651,7 +651,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
             continue;
         if ( fs->getGroupManager() )
             continue;
-        if ( fs->getNumFrames() == 0 ) // deleted frameset
+        if ( fs->isDeleted() )
             continue;
         QListViewItem *item = new QListViewItem( lFrameSList );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
@@ -879,7 +879,8 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sw->setText( KoUnit::userValue( frame->width(), doc->getUnit() ) );
         sh->setText( KoUnit::userValue( frame->height(), doc->getUnit() ) );
 
-        // userValue leads to some rounding !
+        // userValue leads to some rounding -> store old values from the ones
+        // displayed, so that the "change detection" in apply() works.
         oldX = sx->text().toDouble();
         oldY = sy->text().toDouble();
         oldW = sw->text().toDouble();
