@@ -256,7 +256,7 @@
 		type	0=normal, 1=bullet-list, 2=enum-list
 		depth	list depth
 -->
-<!ELEMENT P  (TEXT|COUNTER|INDENTS|OFFSETS|LINESPACING|LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|TABULATOR)*>
+<!ELEMENT P  (TEXT|COUNTER|INDENTS|OFFSETS|LINESPACING|LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|TABULATOR|SHADOW)*>
 <!ATTLIST P
 		align	NMTOKEN #REQUIRED
 		type	NMTOKEN #REQUIRED
@@ -412,6 +412,31 @@
             1 = Subscript 
             2 = Superscript
 -->
+
+<!--    Defines the position of a tabulation
+        Attributes:
+
+            distance:           Shadow distance in pt
+
+            direction:          Direction of the shadow
+                                1 = SD_LEFT_UP
+                                2 = SD_UP
+                                3 = SD_RIGHT_UP
+                                4 = SD_RIGHT
+                                5 = SD_RIGHT_BOTTOM
+                                6 = SD_BOTTOM
+                                7 = SD_LEFT_BOTTOM
+                                8 = SD_LEFT
+            red, green ,blue:   color of shadow
+
+-->
+<!ATTLIST SHADOW
+    distance CDATA #REQUIRED
+    direction CDATA #REQUIRED
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED>
+
 
 <!ELEMENT PEN EMPTY>
 <!ATTLIST PEN	color   CDATA	#REQUIRED

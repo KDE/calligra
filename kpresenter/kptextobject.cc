@@ -679,6 +679,21 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
     }
     layout.setTabList( tabList );
 
+
+    element = parentElem.namedItem( "SHADOW" ).toElement();
+    if ( !element.isNull() )
+    {
+        layout.shadowDistance=element.attribute("distance").toInt();
+        layout.shadowDirection=element.attribute("direction").toInt();
+        if ( element.hasAttribute("red") )
+        {
+            int r = element.attribute("red").toInt();
+            int g = element.attribute("green").toInt();
+            int b = element.attribute("blue").toInt();
+            layout.shadowColor.setRgb( r, g, b );
+        }
+    }
+
     return layout;
 }
 
@@ -765,6 +780,20 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
         parentElem.appendChild( element );
         element.setAttribute( "type", (*it).type );
         element.setAttribute( "ptpos", (*it).ptPos );
+    }
+
+    if(layout.shadowDistance!=0 || layout.shadowDirection!=KoParagLayout::SD_RIGHT_BOTTOM)
+    {
+        element = doc.createElement( "SHADOW" );
+        parentElem.appendChild( element );
+        element.setAttribute( "distance", layout.shadowDistance );
+        element.setAttribute( "direction", layout.shadowDirection );
+        if (layout.shadowColor.isValid())
+        {
+            element.setAttribute("red", layout.shadowColor.red());
+            element.setAttribute("green", layout.shadowColor.green());
+            element.setAttribute("blue", layout.shadowColor.blue());
+        }
     }
 }
 
