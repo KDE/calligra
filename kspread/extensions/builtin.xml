@@ -14,7 +14,7 @@
 	<Text>The cos() function returns the cosine of x, where x is given in radians.</Text>
 	<Syntax>cos(Float)</Syntax>
 	<Example>cos(0) equals 1.0</Example>
-	<Example>cos(PI/2) equals 0.0</Example>
+	<Example>cos(PI()/2) equals 0</Example>
       </Help>
     </Function>
 
@@ -29,7 +29,7 @@
 	<Text>The sin() function returns the sine of x, where x is given in radians.</Text>
 	<Syntax>sin(Float)</Syntax>
 	<Example>sin(0) equals 0</Example>
-	<Example>sin(PI/2) equals 1</Example>
+	<Example>sin(PI()/2) equals 1</Example>
       </Help>
     </Function>
 
@@ -252,8 +252,8 @@
       <Help>
         <Text>The BOOL2STRING() function returns a string value for a given boolean value. This method is intended for using a boolean in methods which require a string</Text>
         <Syntax>BOOL2STRING(value)</Syntax>
-        <Example>BOOL2STRING(True) returns "True"</Example>
-        <Example>BOOL2STRING(False) returns "False"</Example>
+	<Example>BOOL2STRING(true) returns "True"</Example>
+	<Example>BOOL2STRING(false) returns "False"</Example>
         <Example>upper(BOOL2STRING(find("nan";"banana"))) returns TRUE</Example>
       </Help>
     </Function>
@@ -564,8 +564,8 @@
       <Help>
 	<Text>The POLA() function returns the angle (in radians) corresponding to the position of a point in a cartesian landmark.</Text>
 	<Syntax>POLA(X;Y)</Syntax>
-	<Example>POLA(12;12) returns 16.9705</Example>
-	<Example>POLA(12;0) returns 0.7853</Example>
+	<Example>POLA(12;12) returns 0.78539816</Example>
+	<Example>POLA(12;0) returns 0</Example>
             <Example>POLA(0;12) returns 1.5707</Example>
       </Help>
     </Function>
@@ -584,7 +584,7 @@
       <Help>
 	<Text>The CARX() function returns the X position corresponding to the position of a point in a polar landmark.</Text>
 	<Syntax>CARX(Radius;Angle)</Syntax>
-	<Example>CARX(12;1.5707) returns 0</Example>
+	<Example>CARX(12;1.5707) returns 0.00115592</Example>
 	<Example>CARX(12;0) returns 12</Example>
       </Help>
     </Function>
@@ -1092,7 +1092,7 @@
       </Parameter>
       <Help>
 	<Text>The find() function searches a substring. This function returns True if this substring exists. Otherwise, it returns False.</Text>
-	<Syntax>find(needle,haystack)</Syntax>
+	<Syntax>find(needle;haystack)</Syntax>
 	<Example>find("KOf";"KOffice") returns True</Example>
 	<Example>find("KSpread";"KOffice") returns False</Example>
       </Help>
