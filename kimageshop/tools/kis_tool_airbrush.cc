@@ -44,6 +44,8 @@ void AirBrushTool::setBrush(const KisBrush *_brush)
 
 void AirBrushTool::mousePress(QMouseEvent *e)
 {
+  if ( m_pDoc->isEmpty() )
+    return;
   if (e->button() != QMouseEvent::LeftButton)
     return;
 
@@ -62,6 +64,9 @@ void AirBrushTool::mousePress(QMouseEvent *e)
 
 bool AirBrushTool::paint(QPoint pos)
 {
+  if ( m_pDoc->isEmpty() )
+    return false;
+
   if (!m_pBrush)
     return false;
 
@@ -135,6 +140,9 @@ bool AirBrushTool::paint(QPoint pos)
 
 void AirBrushTool::mouseMove(QMouseEvent *e)
 {
+  if ( m_pDoc->isEmpty() )
+    return;
+
   int spacing = m_pBrush->spacing();
 
   if (spacing <= 0) spacing = 1;

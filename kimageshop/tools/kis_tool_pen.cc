@@ -42,6 +42,9 @@ void PenTool::setBrush(const KisBrush *_brush)
 
 void PenTool::mousePress(QMouseEvent *e)
 {
+  if ( m_pDoc->isEmpty() )
+    return;
+
   if (e->button() != QMouseEvent::LeftButton)
     return;
 
@@ -59,6 +62,9 @@ void PenTool::mousePress(QMouseEvent *e)
 
 bool PenTool::paint(QPoint pos)
 {
+  if ( m_pDoc->isEmpty() )
+    return false;
+
   if (!m_pBrush)
     return false;
 
@@ -122,6 +128,9 @@ bool PenTool::paint(QPoint pos)
 
 void PenTool::mouseMove(QMouseEvent *e)
 {
+  if ( m_pDoc->isEmpty() )
+    return;
+
   int spacing = m_pBrush->spacing();
 
   if (spacing <= 0) spacing = 1;

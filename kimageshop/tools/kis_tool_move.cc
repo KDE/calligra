@@ -86,6 +86,9 @@ MoveTool::~MoveTool()
 
 void MoveTool::mousePress( QMouseEvent *e )
 {
+  if ( m_pDoc->isEmpty() )
+    return;
+
   if( e->button() != LeftButton )
     return;
 
@@ -104,6 +107,9 @@ void MoveTool::mousePress( QMouseEvent *e )
 
 void MoveTool::mouseMove( QMouseEvent *e )
 {
+  if ( m_pDoc->isEmpty() )
+    return;
+
   if( m_dragging )
   {
     m_dragPosition = e->pos() - m_dragStart;

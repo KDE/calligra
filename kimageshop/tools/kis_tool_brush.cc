@@ -44,6 +44,9 @@ void BrushTool::setBrush(const KisBrush *_brush)
 
 void BrushTool::mousePress(QMouseEvent *e)
 {
+  if ( m_pDoc->isEmpty() )
+    return;
+
   if (e->button() != QMouseEvent::LeftButton)
     return;
 
@@ -136,6 +139,9 @@ bool BrushTool::paint(QPoint pos)
 
 void BrushTool::mouseMove(QMouseEvent *e)
 {
+  if ( m_pDoc->isEmpty() )
+    return;
+
   int spacing = m_pBrush->spacing();
 
   if (spacing <= 0) spacing = 1;

@@ -107,6 +107,8 @@ public:
     QString currentImage();
 
     void setCurrentImage(KisImage *img);
+
+    bool isEmpty();
     
 
     QStringList images();

@@ -147,6 +147,13 @@ QStringList KisDoc::images()
   return lst;  
 }
 
+bool KisDoc::isEmpty()
+{
+  if (m_pCurrent)
+    return false;
+  return true;
+}
+
 QString KisDoc::currentImage()
 {
   if (m_pCurrent)

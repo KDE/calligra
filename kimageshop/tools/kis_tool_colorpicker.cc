@@ -47,6 +47,9 @@ KisColor ColorPicker::pick(int x, int y)
 
 void ColorPicker::mousePress(QMouseEvent *e)
 {
+  if ( m_pDoc->isEmpty() )
+    return;
+
   if (e->button() != QMouseEvent::LeftButton
       && e->button() != QMouseEvent::RightButton)
     return;
@@ -67,6 +70,9 @@ void ColorPicker::mousePress(QMouseEvent *e)
 
 void ColorPicker::mouseMove(QMouseEvent *e)
 {
+  if ( m_pDoc->isEmpty() )
+    return;
+
   if(m_dragging)
     {
       if( !m_pDoc->getCurrentLayer()->isVisible() )

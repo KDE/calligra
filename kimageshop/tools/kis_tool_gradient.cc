@@ -34,6 +34,9 @@ GradientTool::~GradientTool()
 
 void GradientTool::mousePress(QMouseEvent *e)
 {
+  if ( m_pDoc->isEmpty() )
+    return;
+
   m_dragging = true;
   m_dragStart = e->pos();
 }
