@@ -475,18 +475,22 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
     // parse the paragraph-properties
     QDomElement *style = m_styles[paragraph.attribute( "text:style-name" )];
-    QDomElement properties = style->namedItem( "style:properties" ).toElement();
+    QDomElement properties;
+    
+    if (style) {
+	properties = style->namedItem( "style:properties" ).toElement();
 
-    if ( properties.hasAttribute( "fo:text-align" ) )
-    {
-        if ( properties.attribute( "fo:text-align" ) == "center" )
-            p.setAttribute( "align", 4 );
-        else if ( properties.attribute( "fo:text-align" ) == "justify" )
-            p.setAttribute( "align", 8 );
-        else if ( properties.attribute( "fo:text-align" ) == "start" )
-            p.setAttribute( "align", 0 );
-        else if ( properties.attribute( "fo:text-align" ) == "end" )
-            p.setAttribute( "align", 2 );
+        if ( properties.hasAttribute( "fo:text-align" ) )
+	{
+    	    if ( properties.attribute( "fo:text-align" ) == "center" )
+        	p.setAttribute( "align", 4 );
+            else if ( properties.attribute( "fo:text-align" ) == "justify" )
+	        p.setAttribute( "align", 8 );
+    	    else if ( properties.attribute( "fo:text-align" ) == "start" )
+        	p.setAttribute( "align", 0 );
+            else if ( properties.attribute( "fo:text-align" ) == "end" )
+	        p.setAttribute( "align", 2 );
+        }
     }
     else
         p.setAttribute( "align", 0 ); // use left aligned as default
