@@ -297,6 +297,7 @@ public:
     RTFTableCell emptyCell;
     KWFormat kwFormat;
     QAsciiDict<RTFProperty> properties;
+    QAsciiDict<RTFProperty> destinationProperties;
     uint table;
     uint pictureNumber; // Picture number; increse *before* use!
 

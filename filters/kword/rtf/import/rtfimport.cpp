@@ -43,14 +43,12 @@ K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "rtfimport" ) )
 #define MEMBER(a,b,c,d,e)	PROP(a,b,c,offsetof(RTFImport,d),e)
 
 
-static RTFProperty propertyTable[] =
+static RTFProperty destinationPropertyTable[] =
     {
 //		only-valid-in	control word	function		offset, value
-	PROP(	"Text",		"\n",		insertParagraph,	0L, 0 ),
-	PROP(	"Text",		"\r",		insertParagraph,	0L, 0 ),
-	PROP(	0L,		"\'",		insertHexSymbol,	0L, 0 ),
 	PROP(	0L,		"@*",		skipGroup,		0L, false ),
 	MEMBER(	"@info",	"@author",	parsePlainText,		author, false ),
+	PROP(	"@pict",	"@blipuid",	parseBlipUid,	0, 0 ),
 	PROP(	"@rtf",		"@colortbl",	parseColorTable,	0L, true ),
 	MEMBER(	"@info",	"@company",	parsePlainText,		company, false ),
 	MEMBER(	"@info",	"@doccomm",	parsePlainText,		doccomm, false ),
@@ -75,9 +73,15 @@ static RTFProperty propertyTable[] =
 	PROP(	"Text",		"@shppict",	parseGroup,		0L, false ),
 	PROP(	"@rtf",		"@stylesheet",	parseStyleSheet,	0L, true ),
 	MEMBER(	"@info",	"@title",	parsePlainText,		title, false ),
+};
 
+static RTFProperty propertyTable[] =
     // Alphabetical order
-
+    {
+//		only-valid-in	control word	function		offset, value
+	PROP(	"Text",		"\n",		insertParagraph,	0L, 0 ),
+	PROP(	"Text",		"\r",		insertParagraph,	0L, 0 ),
+	PROP(	0L,		"\'",		insertHexSymbol,	0L, 0 ),
 	PROP(	0L,		"\\",		insertSymbol,		0L, '\\' ),
 	PROP(	0L,		"_",		insertSymbol,		0L, 0x2011 ),
 	PROP(	0L,		"{",		insertSymbol,		0L, '{' ),
@@ -90,7 +94,6 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"ansicpg",	setCodepage,		0L, 0 ),
 	MEMBER(	0L,		"b",		setToggleProperty,	state.format.bold, 0 ),
         // \bin is handled in the tokenizer
-	PROP(	"@pict",	"@blipuid",	parseBlipUid,	0, 0 ),
 	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	blue, 0 ),
 	MEMBER(	0L,		"box",		setEnumProperty,	state.layout.border, 0 ),
 	MEMBER(	0L,		"brdrb",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[3]) ),
@@ -282,12 +285,24 @@ static const char *borderN[4]	= { "LEFTBORDER", "RIGHTBORDER", "TOPBORDER", "BOT
 
 
 RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
-    : KoFilter(), textCodec(0), utf8TextCodec(0)
+    : KoFilter(), properties(181), destinationProperties(29), textCodec(0), utf8TextCodec(0)
 {
-    for (uint i=0; i < sizeof(propertyTable) /sizeof(propertyTable[0]); i++)
+    for (uint i=0; i < sizeof(propertyTable) / sizeof(propertyTable[0]); i++)
     {
-	properties.insert( propertyTable[i].name, &propertyTable[i] );
+        properties.insert( propertyTable[i].name, &propertyTable[i] );
     }
+    for (uint i=0; i < sizeof(destinationPropertyTable) / sizeof(destinationPropertyTable[0]); i++)
+    {
+        destinationProperties.insert( destinationPropertyTable[i].name, &destinationPropertyTable[i] );
+    }
+    // DEBUG START
+    // Check the hash size (see QDict doc)
+    kdDebug(30515) << properties.count() << " normal and " << destinationProperties.count() << " destination keywords loaded" << endl;
+    if (properties.size() < properties.count())
+        kdWarning(30515) << "Hash size of properties too small: " << properties.size() << ". It should be at least " << properties.count() << " and be a prime number"<< endl;
+    if (destinationProperties.size() < destinationProperties.count())
+        kdWarning(30515) << "Hash size of destinationProperties too small: " << destinationProperties.size() << ". It should be at least " << destinationProperties.count() << " and be a prime number"<< endl;
+    // DEBUG END
     fnnum=0;
 }
 
@@ -376,7 +391,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     doccomm.clear();
 
     stateStack.push( state );
-    changeDestination( properties["@rtf"] );
+    changeDestination( destinationProperties["@rtf"] );
 
     flddst = -1;
     emptyCell = state.tableCell;
@@ -448,7 +463,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	    {
 		// Possible destination change
 		*(--token.text) = '@';
-		property = properties[token.text];
+		property = destinationProperties[token.text];
 
 		if ((property != 0L) &&
 		    (property->onlyValidIn == 0L ||
@@ -461,7 +476,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 		else if (ignoreUnknown)
 		{
 		    // Skip unknown {\* ...} destination
-		    changeDestination( properties["@*"] );
+		    changeDestination( destinationProperties["@*"] );
 		    debugUnknownKeywords[token.text]++;
 		}
 	    }
