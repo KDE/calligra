@@ -102,7 +102,7 @@ void KSpreadShell::setDocument( KSpreadDoc *_doc )
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
   }
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
@@ -123,6 +123,7 @@ bool KSpreadShell::newDocument()
   m_pDoc = new KSpreadDoc;
   if ( !m_pDoc->init() )
   {
+    releaseDocument();
     cerr << "ERROR: Could not initialize document" << endl;
     return false;
   }
@@ -141,8 +142,8 @@ bool KSpreadShell::newDocument()
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
-  }
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
+ }
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
@@ -172,8 +173,7 @@ bool KSpreadShell::openDocument( const char *_url, const char *_format )
   m_pDoc = new KSpreadDoc;
   if ( !m_pDoc->loadFromURL( _url, _format ) )
   {
-    delete m_pDoc;
-    m_pDoc = 0L;
+    releaseDocument();
     return false;
   }
   
@@ -190,7 +190,7 @@ bool KSpreadShell::openDocument( const char *_url, const char *_format )
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
   }
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
@@ -277,14 +277,17 @@ void KSpreadShell::releaseDocument()
     views = m_pDoc->viewCount();
   cerr << "############## VIEWS=" << views << " #####################" << endl;
   
-  cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  if ( m_pView )
+    cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   setRootPart( 0 );
 
-  cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  if ( m_pView )
+    cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   interface()->setActivePart( 0 );
 
+  // if ( m_pView )
   // cerr << "-3) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   
   if ( m_pView )
@@ -293,18 +296,32 @@ void KSpreadShell::releaseDocument()
   /* if ( m_pView )
     m_pView->cleanUp(); */
 
+  // if ( m_pView )
   // cerr << "-4) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   if ( m_pDoc && views <= 1 )
     m_pDoc->cleanUp();
+  // if ( m_pView )
   // cerr << "-5) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   // if ( m_pView )
   // CORBA::release( m_pView );
+  // if ( m_pView )
   // cerr << "-6) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   if ( m_pDoc )
     CORBA::release( m_pDoc );
   // cerr << "-7) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   m_pView = 0L;
   m_pDoc = 0L;
+
+  if( m_pFileMenu )
+  {
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Save, false );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, false );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
+  }
+  
+  opToolBar()->setItemEnabled( TOOLBAR_PRINT, false );
+  opToolBar()->setItemEnabled( TOOLBAR_SAVE, false );
 }
 
 void KSpreadShell::slotFileNew()
@@ -367,17 +384,11 @@ void KSpreadShell::slotFileSaveAs()
 
 void KSpreadShell::slotFileClose()
 {
-  if ( documentCount() <= 1 )
-  {
-    slotFileQuit();
-    return;
-  }
-  
   if ( isModified() )
     if ( !requestClose() )
       return;
   
-  delete this;
+  releaseDocument();
 }
 
 void KSpreadShell::slotFilePrint()
