@@ -1023,10 +1023,11 @@ QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) c
 #endif
 }
 
-bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table )
+bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table, int firstRowNumber )
 {
+#ifdef ALLOW_TABLE
     *m_streamOut << "<table:table-row>\n";
-    int rowCurrent = 0;
+    int rowCurrent = firstRowNumber;
 
     ulong cellNumber = 0L;
 
@@ -1098,13 +1099,17 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
 
     *m_streamOut << "</table:table-row>\n";
     return true;
+#else
+    return false;
+#endif
 }
 
-static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray )
+#ifdef ALLOW_TABLE
+static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray, int firstRowNumber )
 {
     bool uniqueColumns = true; // We have not found any horizontally spanned cells yet.
     uint currentColumn = 0;
-    int tryingRow = 0; // We are trying the first row  // ### FIXME: not always correct, e.g. RTF import filter
+    int tryingRow = firstRowNumber; // We are trying the first row
     QValueList<TableCell>::ConstIterator itCell;
 
     for ( itCell = table.cellList.begin();
@@ -1148,8 +1153,10 @@ static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray )
     // If we are here, the table is either empty or there is not any row without horizontally spanned cells
     return 0;
 }
+#endif
 
-static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widthArray )
+#ifdef ALLOW_TABLE
+static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widthArray, int firstRowNumber )
 // Get the column widths only by the first row.
 // This is used when all table rows have horizontally spanned cells.
 {
@@ -1160,7 +1167,7 @@ static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widt
         itCell != table.cellList.end(); ++itCell )
     {
         kdDebug(30520) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
-        if ( (*itCell).row ) // ### FIXME: not always correct, e.g. RTF import filter
+        if ( (*itCell).row != firstRowNumber )
             break; // We have finished the first row
 
         int cols = (*itCell).m_cols;
@@ -1181,6 +1188,7 @@ static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widt
     }
     return currentColumn;
 }
+#endif
 
 bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
@@ -1191,15 +1199,25 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
     kdDebug(30520) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
+    const QValueList<TableCell>::ConstIterator firstCell ( anchor.table.cellList.begin() );
+
+    if ( firstCell == anchor.table.cellList.end() )
+    {
+        kdError(30520) << "Table has not any cell!" << endl;
+        return false;
+    }
+
+    const int firstRowNumber = (*firstCell).row;
+
     QMemArray<double> widthArray(4);
 
-    uint numberColumns = getColumnWidths( anchor.table, widthArray );
+    uint numberColumns = getColumnWidths( anchor.table, widthArray, firstRowNumber );
 
     if ( numberColumns <= 0 )
     {
         kdDebug(30520) << "Could not get correct column widths, so approximate" << endl;
         // There was a problem, the width array cannot be trusted, so try to do a column width array with the first row
-        numberColumns = getFirstRowColumnWidths( anchor.table, widthArray );
+        numberColumns = getFirstRowColumnWidths( anchor.table, widthArray, firstRowNumber );
         if ( numberColumns <=0 )
         {
             // Still not right? Then it is an error!
@@ -1263,7 +1281,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
             << "\" table:number-columns-repeated=\"1\"/>\n";
     }
 
-    makeTableRows( tableName, anchor.table );
+    makeTableRows( tableName, anchor.table, firstRowNumber );
 
     *m_streamOut << "</table:table>\n";
     *m_streamOut << "<text:p text:style-name=\"Standard\">\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
