@@ -553,7 +553,6 @@ static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWor
         << AttrProcessing ( "width",   "double", &tabulator.m_width   )
         ;
     ProcessAttributes (myNode, attrProcessingList);
-
     tabulatorList->append(tabulator);
 
     AllowNoSubtags (myNode, leader);

@@ -297,6 +297,17 @@ public:
 class TabulatorData
 {
 public:
+    
+    enum 
+    {
+        TF_NONE       = 0, 
+        TF_DOT        = 1, 
+        TF_LINE       = 2, 
+        TF_DASH       = 3,  
+        TF_DASHDOT    = 4,  
+        TF_DASHDOTDOT = 5 
+    };
+
     TabulatorData() : m_type(0), m_ptpos(0.0), m_filling(0), m_width(0.0) {}
 public:
     bool operator == (const TabulatorData& other) const;
