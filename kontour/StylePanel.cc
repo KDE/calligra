@@ -373,6 +373,8 @@ void PaintPanel::slotUpdate()
   }
   else
   {
+    int f = mView->activeDocument()->activePage()->getSelection().first()->style()->filled();
+    mPaintingBox->setCurrentItem(f);
   }
 }
 

@@ -84,7 +84,7 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
 
   buffer = new QPixmap();
 
-  setBackgroundMode (NoBackground);
+  setBackgroundMode(NoBackground);
 }
 
 Canvas::~Canvas()
