@@ -3,6 +3,7 @@
  <Menu name="file" noMerge="1"><text>&amp;File</text>
         <Separator/>
         <Action name="paperLayout"/>
+	<Action name="printpreview"/>	
  </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="undo"/>

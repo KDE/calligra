@@ -35,6 +35,7 @@
 #include <qscrollbar.h>
 #include <qbutton.h>
 #include <qpopupmenu.h>
+#include <qdir.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -48,12 +49,16 @@
 #include <kcoloractions.h>
 #include <kaction.h>
 
+#include <kprocess.h> 
+
 #include <dcopclient.h>
 #include <dcopref.h>
 
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
 #include <koMainWindow.h>
+
+
 
 #include "kspread_map.h"
 #include "kspread_table.h"
@@ -299,6 +304,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
     m_redo->setEnabled( FALSE );
     m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
+
+    m_preview = new KAction( i18n("Preview..."), 0, this, SLOT( printPreview() ), actionCollection(), "printpreview" );
+
     m_insertTable = new KAction( i18n("Insert Table"),"inserttable", 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
     m_removeTable = new KAction( i18n("Remove Table"), "delete_table",0,this, SLOT( removeTable() ), actionCollection(), "removeTable" );
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
@@ -1609,8 +1617,22 @@ void KSpreadView::sort()
 
 void KSpreadView::insertHyperlink()
 {
-    KSpreadLinkDlg dlg( this, "Create Hyperlink" );
-    dlg.exec();
+  KSpreadLinkDlg dlg( this, "Create Hyperlink" );
+  dlg.exec();
+}
+
+void KSpreadView::printPreview()
+{
+  QPrinter prt;
+  QString fileDir=QDir::homeDirPath();
+  fileDir+="/tmp/preview.ps";
+  prt.setOutputFileName(fileDir);
+  print(prt);
+  KShellProcess *process = new KShellProcess();
+  *process << "ghostview";
+  *process << fileDir;
+  process->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+
 }
 
 void KSpreadView::print( QPrinter &prt )

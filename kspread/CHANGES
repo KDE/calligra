@@ -1126,3 +1126,8 @@ an area:
 	min
 	max
 you can configure it in "Configure dialogBox" -> misc
+
+2000-12-27-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now you can see what you print with "Preview"
+I used ghostview.

@@ -303,6 +303,8 @@ public slots:
     void nextTable();
     void previousTable();
 
+    void printPreview();
+
 protected slots:
     /**
      * Popup menu
@@ -526,6 +528,7 @@ private:
     KAction* m_gotoCell;
     KAction* m_increaseIndent;
     KAction* m_decreaseIndent;
+    KAction* m_preview;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.
