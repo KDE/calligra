@@ -1,8 +1,8 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -121,7 +121,7 @@ QString HtmlWorker::getAdditionalFileName(const QString& additionalName)
 
 bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 {
-    QString strImageName(getAdditionalFileName(anchor.picture.koStoreName));
+    const QString strImageName(getAdditionalFileName(anchor.picture.koStoreName));
 
     QString strImagePath(m_strFileDir);
     strImagePath+='/';
@@ -133,89 +133,95 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
     if (loadSubFile(anchor.picture.koStoreName,image))
     {
-        QFile file(strImagePath);
+        bool writePicture = false;
 
-        if ( !file.open (IO_WriteOnly) )
+        const double height = anchor.frame.bottom - anchor.frame.top;
+        const double width  = anchor.frame.right  - anchor.frame.left;
+                
+        const int pos = anchor.picture.koStoreName.findRev( '.' );
+        QString extension;
+        if ( pos > -1 )
+            extension = anchor.picture.koStoreName.mid( pos+1 ).lower();
+
+        if ( extension == "png" || extension == "jpeg" || extension == "jpg" || extension == "gif"
+            || extension == "bmp" ) // A few file types known by all HTML user agents
         {
-            kdError(30503) << "Unable to open image output file!" << endl;
+            *m_streamOut << "<img "; // This is an empty element!
+            *m_streamOut << "src=\"" << escapeHtmlText(strImageName) << "\" ";
+            *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key.filename()) << "\"";
+            *m_streamOut << (isXML()?"/>":">");
+            writePicture = true;
+        }
+        else if ( extension == "svg" )
+        {
+            // Save picture as SVG
+            *m_streamOut << "<object data=\"" << escapeHtmlText(strImageName) << "\"";
+            *m_streamOut << " type=\"image/svg+xml\"";
+            *m_streamOut << " height=\"" << height << "\" width=\"" << width << "\">\n";
+            *m_streamOut << "</object>"; // <object> is *not* an empty element in HTML!
+            writePicture = true;
+        }
+        else if ( extension == "qpic" )
+        {
+            
+            QPicture picture;
+            
+            QIODevice* io=getSubFileDevice(anchor.picture.koStoreName);
+            if (!io)
+            {
+                // NO message error, as there must be already one
+                return false;
+            }
+            
+            // TODO: if we have alreasy SVG, do *not* go through QPicture!
+            if (picture.load(io))
+            {
+            
+                // Save picture as SVG
+                *m_streamOut << "<object data=\"" << escapeHtmlText(strImageName) << "\"";
+                *m_streamOut << " type=\"image/svg+xml\"";
+                *m_streamOut << " height=\"" << height << "\" width=\"" << width << "\">\n";
+                *m_streamOut << "</object>"; // <object> is *not* an empty element in HTML!
+                // TODO: other props for image
+            
+                kdDebug(30506) << "Trying to save clipart to " << strImageName << endl;
+                if (!picture.save(strImagePath,"svg"))
+                {
+                    kdError(30506) << "Could not save clipart: "  << anchor.picture.koStoreName
+                        << " to " << strImageName << endl;
+                    return false;
+                }
+            
+            }
+        }
+        else
+        {
+            kdWarning(30503) << "Picture format not supported by HTML export filter!" << endl;
             return false;
         }
-
-        file.writeBlock(image);
-        file.close();
-
-        *m_streamOut << "<img "; // This is an empty element!
-        *m_streamOut << "src=\"" << escapeHtmlText(strImageName) << "\" ";
-        *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key.filename()) << "\"";
-        *m_streamOut << (isXML()?"/>":">");
-        kdDebug(30503) << "Image written" << endl;
+        
+        // Do we still need to write the original picture?
+        if ( writePicture )
+        {
+            QFile file(strImagePath);
+    
+            if ( !file.open (IO_WriteOnly) )
+            {
+                kdError(30503) << "Unable to open image output file!" << endl;
+                return false;
+            }
+    
+            file.writeBlock(image);
+            file.close();
+        }
     }
     else
     {
-        kdWarning(30503) << "Unable to load image " << anchor.picture.koStoreName << endl;
+        kdWarning(30503) << "Unable to load picture " << anchor.picture.koStoreName << endl;
     }
 
     return true;
 }
-
-bool HtmlWorker::makeClipart(const FrameAnchor& anchor)
-{
-    kdDebug(30506) << "New clipart: " << anchor.picture.koStoreName
-        << " , " << anchor.picture.key.toString() <<endl;
-
-    QString strAdditionalName(anchor.picture.koStoreName);
-    if (!strAdditionalName.endsWith(".svg"))
-    {
-        // TODO: remove the extension of the KoStore name (could it make duplicated files?)
-        strAdditionalName+=".svg";
-    }
-
-    QString strImageName(getAdditionalFileName(strAdditionalName));
-
-    QString strImagePath(m_strFileDir);
-    strImagePath+='/';
-    strImagePath+=strImageName;
-
-    const double height = anchor.frame.bottom - anchor.frame.top;
-    const double width  = anchor.frame.right  - anchor.frame.left;
-
-    QPicture picture;
-
-    QIODevice* io=getSubFileDevice(anchor.picture.koStoreName);
-    if (!io)
-    {
-        // NO message error, as there must be already one
-        return false;
-    }
-
-    // TODO: if we have alreasy SVG, do *not* go through QPicture!
-    if (picture.load(io))
-    {
-
-        // Save picture as SVG
-        *m_streamOut << "<object data=\"" << escapeHtmlText(strImageName) << "\"";
-        *m_streamOut << " type=\"image/svg+xml\"";
-        *m_streamOut << " height=\"" << height << "\" width=\"" << width << "\">\n";
-        *m_streamOut << "</object>"; // <object> is *not* an empty element in HTML!
-        // TODO: other props for image
-
-        kdDebug(30506) << "Trying to save clipart to " << strImageName << endl;
-        if (!picture.save(strImagePath,"svg"))
-        {
-            kdError(30506) << "Could not save clipart: "  << anchor.picture.koStoreName
-                << " to " << strImageName << endl;
-            return false;
-        }
-
-    }
-    else
-    {
-        kdWarning(30506) << "Unable to load clipart: " << anchor.picture.koStoreName << endl;
-        return false;
-    }
-    return true;
-}
-
 
 void HtmlWorker::formatTextParagraph(const QString& strText,
  const FormatData& formatOrigin, const FormatData& format)
@@ -340,12 +346,7 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
                         openParagraph( strTag, layout,partialText.ref(0). direction() );
                         paragraphNotOpened=false;
                     }
-                    // ### FIXME: picture is still assumed to be only an image
-#if 1
                     makeImage((*paraFormatDataIt).frameAnchor);
-#else
-                    makeClipart((*paraFormatDataIt).frameAnchor);
-#endif
                 }
                 else
                 {
