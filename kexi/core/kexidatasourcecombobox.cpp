@@ -44,12 +44,11 @@ void KexiDataSourceComboBox::fillList(KexiProject *proj,
 	for (KexiProjectHandler *h=l.first();h;h=l.next()) {
 		QString sname=h->name()+"/%1";
 		QString mime=h->mime();
-		QString smime=mime+"/%1";
 		QPixmap pixmap=h->itemPixmap();
 		for(KexiProjectHandler::ItemIterator it(*h->items()); it.current(); ++it)
 		{
 			list.append(Item(sname.arg((*it)->name()),
-			smime.arg((*it)->identifier()),mime,(*it)->identifier(),pixmap));
+			(*it)->identifier(),mime,(*it)->shortIdentifier(),pixmap));
 		}
 	}
 
