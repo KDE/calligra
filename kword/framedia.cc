@@ -704,6 +704,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     if ( disable )
     {
+        grp2->hide( );
         sx->setEnabled( false );
         sy->setEnabled( false );
         sw->setEnabled( false );
