@@ -625,16 +625,51 @@ bool Connection::insertRecord(KexiDB::TableSchema &tableSchema, QValueList<QVari
 	);
 }
 
-QString Connection::queryStatement( KexiDB::QuerySchema& querySchema ) const
+QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 {
-	//todo
-	return QString::null;
+	if (querySchema.fieldCount()<1)
+		return QString::null;
+
+	QString sql;
+	Field::List *fields = querySchema.fields();
+	for (Field *f = fields->first(); f; f = fields->next()) {
+		if (sql.isEmpty())
+			sql = "SELECT ";
+		else
+			sql += ", ";
+		if (f->isQueryAsterisk()) {
+			if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) //single-table *
+				sql += (f->table()->name() + ".*");
+			else //all-tables *
+				sql += "*";
+		}
+		else {
+			if (!f->table()) //sanity check
+				return QString::null;
+			sql += (f->table()->name() + "." + f->name());
+		}
+	}
+	sql += " FROM ";
+	TableSchema::List* tables = querySchema.tables();
+	if (!tables || tables->isEmpty()) //sanity check
+		return QString::null;
+	
+	QString s_from;
+	for (TableSchema *table = tables->first(); table; table = tables->next()) {
+		if (!s_from.isEmpty())
+			sql += ", ";
+		s_from += table->name();
+	}
+	sql += s_from;
+
+//! \todo (js) add WHERE and other sql parts
+
+	return sql;
 }
 
-QString Connection::queryStatement( KexiDB::TableSchema& tableSchema ) const
+QString Connection::selectStatement( KexiDB::TableSchema& tableSchema ) const
 {
-	QuerySchema qs( &tableSchema );
-	return queryStatement( qs );
+	return selectStatement( *tableSchema.query() );
 }
 
 #define createTable_ERR \

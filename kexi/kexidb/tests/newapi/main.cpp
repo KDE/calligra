@@ -145,7 +145,7 @@ int main(int argc, char** argv)
 	}
 	kdDebug()<< test_name << " TEST: " << (r==0?"PASSED":"ERROR") << endl;
 
-	if (app)
+	if (app && r==0)
 		app->exec();
 
 	r = conn ? (conn->disconnect() ? 0 : 1) : 0;

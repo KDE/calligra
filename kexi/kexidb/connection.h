@@ -436,7 +436,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: The statement string can be specific for this connection's driver database, 
 		 and thus not reusable in general.
 		*/
-		QString queryStatement( KexiDB::QuerySchema& querySchema ) const;
+		QString selectStatement( KexiDB::QuerySchema& querySchema ) const;
 
 		/*! returns "SELECT ..." statement's string needed for executing query 
 		 defined by "select * from <table_name>" where <table_name> is \a tableSchema's name.
@@ -445,7 +445,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: The statement string can be specific for this connection's driver database, 
 		 and thus not reusable in general.
 		*/
-		QString queryStatement( KexiDB::TableSchema& tableSchema ) const;
+		QString selectStatement( KexiDB::TableSchema& tableSchema ) const;
 
 		/*! Creates table using \a tableSchema information.
 		 \return true on success. Default implementation 

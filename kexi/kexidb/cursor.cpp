@@ -100,7 +100,7 @@ bool Cursor::open()
 			KexiDBDbg << "Cursor::open(): no query statement (or schema) defined!" << endl;
 			return false;
 		}
-		statement = m_conn->queryStatement( *m_query );
+		statement = m_conn->selectStatement( *m_query );
 		if (statement.isEmpty()) {
 			KexiDBDbg << "Cursor::open(): empty statement!" << endl;
 			return false;
@@ -322,12 +322,14 @@ void Cursor::debug()
 {
 	QString dbg = "CURSOR( ";
 	if (!m_query) {
-		dbg += "RAW STATEMENT: ";
+		dbg += "RAW STATEMENT: '";
 		dbg += m_rawStatement;
+		dbg += "'";
 	}
 	else {
-		dbg += "QuerySchema: ";
-		dbg += m_conn->queryStatement( *m_query );
+		dbg += "QuerySchema: '";
+		dbg += m_conn->selectStatement( *m_query );
+		dbg += "'";
 	}
 	dbg += " )";
 	KexiDBDbg << dbg << endl;

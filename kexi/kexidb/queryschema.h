@@ -45,13 +45,15 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		QuerySchema();
 
 		/*! Creates query schema object that is equivalent to "SELECT * FROM table" 
-		 sql command. Schema of \a table is used to contruct this query.
-		 If \a name is omitted, query will inherit its name from 
-		 \a table name.
+		 sql command. Schema of \a table is used to contruct this query -- 
+		 it is defined just by defining "all-tables query asterisk" (see QueryAsterisk)
+		 item. Properties such as the name and caption of the query are inherited 
+		 from table schema.
 
-		 We consider that query schema based on \a table is not (yet) stored 
-		 in system table, so query connection is set to NULL 
-		 (even if \a tables connection is not NULL), and query id is set to 0. */
+		 We consider that query schema based on \a table is not (a least yet) stored 
+		 in a system table, so query connection is set to NULL
+		 (even if \a tableSchema's connection is not NULL).
+		 Id of the created query is set to 0. */
 		QuerySchema(TableSchema* tableSchema);
 		
 		virtual ~QuerySchema();
@@ -137,8 +139,21 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return list of QueryAsterisk objects defined for this query */
 		Field::List* asterisks() { return &m_asterisks; }
 
+		/*! QuerySchema::fields() returns list of fields used in query, but 
+		 in a case when there are asterisks defined for the query, it return
+		 does not expand QueryAsterisk objects to field lists but return asterisk as-is.
+		 This could be inconvenient when you need just full expanede list of fields,
+		 so this method does the work for you. 
+
+		 Note: You should not permanently store a pointer to returned field list. 
+		 Make a deep copy if the list if you need.
+		*/
+		Field::List* fieldsExpanded();
+
 	protected:
-//		/*! Automatically retrieves query schema via connection. */
+		void init();
+
+	//		/*! Automatically retrieves query schema via connection. */
 //		QuerySchema(Connection *conn);
 
 	//js	QStringList m_primaryKeys;
@@ -162,6 +177,9 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		
 		/*! List of asterisks defined for this query  */
 		Field::List m_asterisks;
+
+		/*! Temporary field list for using in fieldsExpanded() */
+		Field::List m_fieldsExpanded;
 
 	friend class Connection;
 };
@@ -211,7 +229,7 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		/*! \return table schema for this asterisk 
 		 if it has "single-table" type (1st type) 
 		 or NULL if it has "all-tables" type (2nd type) defined. */
-		TableSchema* table() const { return m_table; }
+		virtual TableSchema* table() const { return m_table; }
 
 		/*! This is convenience method that returns true 
 		 if the asterisk has "all-tables" type (2nd type).*/
@@ -227,6 +245,8 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 	protected:
 		/*! Table schema for this asterisk */
 		TableSchema* m_table;
+
+	friend class QuerySchema;
 };
 
 } //namespace KexiDB

@@ -33,9 +33,7 @@ QuerySchema::QuerySchema()
 //	, m_conn(0)
 	, m_parent_table(0)
 {
-	m_type = KexiDB::QueryObjectType;
-	m_tables.setAutoDelete(false);
-	m_asterisks.setAutoDelete(true);
+	init();
 }
 
 QuerySchema::QuerySchema(TableSchema* tableSchema)
@@ -44,26 +42,32 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 //	, m_conn(0)
 	, m_parent_table(tableSchema)
 {
-	m_type = KexiDB::QueryObjectType;
-	m_tables.setAutoDelete(false);
-	m_asterisks.setAutoDelete(true);
+	init();
 	assert(m_parent_table);
 	if (!m_parent_table) {
 		m_name = QString::null;
 		return;
 	}
+	addTable(m_parent_table);
 	//defaults:
 	//inherit name from a table
 	m_name = m_parent_table->name();
 	//inherit caption from a table
 	m_caption = m_parent_table->caption();
-
-	//TODO - add fields
-
+	//add all fields of the table as asterisk:
+	addField( new QueryAsterisk(this) );
 }
 
 QuerySchema::~QuerySchema()
 {
+}
+
+void QuerySchema::init()
+{
+	m_type = KexiDB::QueryObjectType;
+	m_tables.setAutoDelete(false);
+	m_asterisks.setAutoDelete(true);
+	m_fieldsExpanded.setAutoDelete(false); //it is temporary
 }
 
 void QuerySchema::clear()
@@ -110,7 +114,7 @@ void QuerySchema::debug()
 	FieldList::debug();
 	TableSchema *table;
 	QString table_names;
-    for ( table = m_tables.first(); table; table = m_tables.next() ) {
+	for ( table = m_tables.first(); table; table = m_tables.next() ) {
 		if (!table_names.isEmpty())
 			table_names += ", ";
 		table_names += table->name();
@@ -162,6 +166,35 @@ void QuerySchema::setAlias(Field *field, const QString& alias)
 	m_aliases[field] = alias;
 }
 
+Field::List* QuerySchema::fieldsExpanded()
+{
+	m_fieldsExpanded.clear();
+	for (Field *f = m_fields.first(); f; f = m_fields.next()) {
+		if (f->isQueryAsterisk()) {
+			if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) {
+				Field::List *ast_fields = static_cast<QueryAsterisk*>(f)->table()->fields();
+				for (Field *ast_f = ast_fields->first(); ast_f; ast_f=ast_fields->next()) {
+					m_fieldsExpanded.append(ast_f);
+				}
+			}
+			else {//all-tables asterisk: itereate through table list
+				for (TableSchema *table = m_tables.first(); table; table = m_tables.next()) {
+					//add all fields from this table
+					Field::List *tab_fields = table->fields();
+					for (Field *tab_f = tab_fields->first(); tab_f; tab_f = tab_fields->next()) {
+//! \todo (js): perhaps not all fields should be appended here
+						m_fieldsExpanded.append(tab_f);
+					}
+				}
+			}
+		}
+		else {
+			m_fieldsExpanded.append(f);
+		}
+	}
+	return &m_fieldsExpanded;
+}
+
 //---------------------------------------------------
 
 QueryAsterisk::QueryAsterisk( QuerySchema *query, TableSchema *table )
@@ -185,7 +218,7 @@ QString QueryAsterisk::debugString() const
 		TableSchema *table;
 		QString table_names;
 		TableSchema::List *tables = query()->tables();
-    	for ( table = tables->first(); table; table = tables->next() ) {
+		for ( table = tables->first(); table; table = tables->next() ) {
 			if (!table_names.isEmpty())
 				table_names += ", ";
 			table_names += table->name();
@@ -197,3 +230,4 @@ QString QueryAsterisk::debugString() const
 	}
 	return dbg;
 }
+
