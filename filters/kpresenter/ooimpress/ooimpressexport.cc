@@ -23,6 +23,7 @@
 
 #include <qdom.h>
 #include <qfile.h>
+#include <qdatetime.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>

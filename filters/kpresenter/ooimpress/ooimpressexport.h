@@ -27,7 +27,7 @@
 #include <koFilter.h>
 
 class QDomElement;
-
+class KoStore;
 class OoImpressExport : public KoFilter
 {
     Q_OBJECT
