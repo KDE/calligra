@@ -20,6 +20,7 @@
 
 #include <qheader.h>
 #include <qpoint.h>
+#include <qpixmapcache.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -29,6 +30,7 @@
 #include <klistview.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
+#include <kimageeffect.h>
 
 #include "kexi.h"
 #include "kexipart.h"
@@ -47,6 +49,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  : KexiViewBase(mainWin, mainWin, "KexiBrowser")
  , m_baseItems(199, false)
  , m_normalItems(199)
+ , m_prevSelectedPart(0)
 {
 	QVBoxLayout *lyr = new QVBoxLayout(this);
 	m_toolbar = new KToolBar(this, "kexibrowser_toolbar", false);
@@ -101,6 +104,24 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 		SLOT(slotDesignObject()), this, "design_object");
 	m_designAction->plug(m_itemPopup);
 	m_designAction->plug(m_toolbar);
+	m_newObjectAction = new KAction("", "filenew", 0, this, SLOT(slotNewObject()), this, "new_object");
+
+/*	QImage img = SmallIcon("table").convertToImage();
+	QImage img2 = SmallIcon("new_sign").convertToImage();
+
+	bitBlt( &img, 0, 0, &img2, 0, 0, img2.width(), img2.height(), 0);
+
+	QPixmap pix;
+	pix.convertFromImage(img);
+//	m_newObjectAction->setIconSet( pix );
+//$kico_kexi_32_0:1:notrans_0
+	QPixmapCache::insert("$kico_table_newobj_16_0:1:notrans_0", pix);*/
+//	m_newObjectAction->setIconSet( SmallIcon("table_newobj") );
+
+	m_newObjectAction->plug(m_itemPopup);
+	m_newObjectToolbarAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
+	m_toolbar->insertSeparator();
+	m_newObjectToolbarAction->plug(m_toolbar);
 	m_itemPopup->insertSeparator();
 	plugSharedAction("edit_cut", m_itemPopup);
 	plugSharedAction("edit_copy", m_itemPopup);
@@ -112,7 +133,6 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 
 	m_partPopup = new KPopupMenu(this, "partPopup");
 	m_partPopupTitle_id = m_partPopup->insertTitle("");
-	m_newObjectAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
 	m_newObjectAction->plug(m_partPopup);
 	m_partPopup->insertSeparator();
 	plugSharedAction("edit_paste", m_partPopup);
@@ -200,12 +220,12 @@ KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPo
 		pm = m_partPopup;
 		QString title_text = bit->text(0).stripWhiteSpace();
 		pm->changeTitle(m_partPopupTitle_id, *bit->pixmap(0), title_text);
-		KexiPart::Part* part = Kexi::partManager().part(bit->info());
+/*		KexiPart::Part* part = Kexi::partManager().part(bit->info());
 		if (part)
 			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceName() ));
 		else
 			m_newObjectAction->setText(i18n("&Create Object..."));
-		m_newObjectAction->setIconSet( SmallIconSet(bit->info()->itemIcon()) );
+		m_newObjectAction->setIconSet( SmallIconSet(bit->info()->itemIcon()) );*/
 		m_list->setCurrentItem(item);
 		m_list->repaintItem(item);
 	}
@@ -237,6 +257,28 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	m_openAction->setEnabled(gotitem);
 	m_designAction->setEnabled(gotitem);
 	m_renameObjectAction->setEnabled(gotitem);
+
+	KexiPart::Part* part = Kexi::partManager().part(it->info());
+	if (!part) {
+		it = static_cast<KexiBrowserItem*>(it->parent());
+		if (it) {
+			part = Kexi::partManager().part(it->info());
+		}
+	}
+
+	if (m_prevSelectedPart != part) {
+		m_prevSelectedPart = part;
+		if (part) {
+			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceName() ));
+			m_newObjectAction->setIcon( part->info()->createItemIcon() );
+			m_newObjectToolbarAction->setIcon( part->info()->createItemIcon() );
+			m_newObjectToolbarAction->setText(m_newObjectAction->text());
+		} else {
+			m_newObjectAction->setText(i18n("&Create Object..."));
+			m_newObjectToolbarAction->setIconSet( SmallIconSet("filenew") );
+			m_newObjectToolbarAction->setText(m_newObjectAction->text());
+		}
+	}
 }
 
 void KexiBrowser::installEventFilter ( const QObject * filterObj )

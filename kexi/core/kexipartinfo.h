@@ -60,6 +60,11 @@ class KEXICORE_EXPORT Info
 		inline QString itemIcon() const { return m_itemIcon; }
 
 		/**
+		 * @return the icon for a item
+		 */
+		inline QString createItemIcon() const { return m_itemIcon+"_newobj"; }
+
+		/**
 		 * @return the object name associated with this part (e.g. "table")
 		 */
 		inline QString objectName() const { return m_objectName; }

@@ -278,12 +278,6 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
-
-=== BETA 4 HOT TODO ===
-- make query GUI designer working reasonable
-- make SQL text designer working again
-- implement query storage
-
 HOT TODO:
 -combobox tv: fix row highlighting for 'related table data' model
 
@@ -313,6 +307,12 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 - add clever query relatins parsing 
       (needed for switching back to GUI editor from texdt mode)
 - remove single-char token names with chars (more readable + more effective)
+
+2004-07-22
+Main
+- Kexi Browser: "create new" action added to browser's mini-toolbar;
+  icons for particular "create" actions are generated in a funny way
+- "project_new" and "project_open" actions removed from the main toolbar
 
 2004-07-20..21
 Kexi Browser

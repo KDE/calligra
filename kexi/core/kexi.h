@@ -103,9 +103,13 @@ namespace Kexi
 			QGuardedPtr<KexiDB::Driver> m_drv;
 	};
 
+	/*! Sets "wait" cursor with 1 second delay. */
 	KEXICORE_EXPORT void setWaitCursor();
+	/*! Remove "wait" cursor previously set with \a setWaitCursor(), 
+	 even if it's not yet visible. */
 	KEXICORE_EXPORT void removeWaitCursor();
 
+	/*! Helper class for storing object status. */
 	class KEXICORE_EXPORT ObjectStatus
 	{
 		public:
@@ -118,6 +122,18 @@ namespace Kexi
 
 			QString message, description;
 	};
+
+	/*! Generates an icons set created by bitblt-ing a small "star" icon 
+	 over icon pointed by \a origIconName. Resulted icon is added to application 
+	 pixmap cache and thus is available using SmallIcon( \a newIconName ), 
+	 and similar functions (from kiconloader.h). 
+	 
+	 Note: SmallIconSet() seems to not work for this.
+	 
+	 It's used for automatic creating icons for actions of creating new objects 
+	 for particular Kexi parts. */
+	KEXICORE_EXPORT void generateIconSetWithStar(
+		const QString& origIconName, const QString& newIconName);
 
 }//namespace Kexi
 

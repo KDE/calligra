@@ -22,11 +22,16 @@
 #include "kexi_utils.h"
 
 #include <qtimer.h>
-#include <qapplication.h>
+#include <qimage.h>
+#include <qpixmap.h>
+#include <qpixmapcache.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcursor.h>
+#include <kapplication.h>
+#include <kiconloader.h>
+#include <kiconeffect.h>
 
 using namespace Kexi;
 
@@ -162,6 +167,7 @@ KexiValidator::Result KexiDBObjectNameValidator::internalCheck(
 
 //--------------------------------------------------------------------------------
 
+/*! @internal */
 DelayedCursorHandler::DelayedCursorHandler() {
 	connect(&timer, SIGNAL(timeout()), this, SLOT(show()));
 }
@@ -218,6 +224,34 @@ void ObjectStatus::clearStatus()
 	description=QString::null;
 }
 
+
+//--------------------------------------------------------------------------------
+
+#define UPD_SINGLE_CACHE(size, state) \
+	img = loader->loadIcon(origIconName, size, 0, state).convertToImage(); \
+	img2 = loader->loadIcon("new_sign", size, 0, state).convertToImage(); \
+	bitBlt( &img, 0, 0, &img2, 0, 0, img2.width(), img2.height(), 0); \
+	pix.convertFromImage(img); \
+	QPixmapCache::insert(key.arg(IconSize(size)).arg(ie->fingerprint( size, state )), pix)
+
+#define UPD_CACHE(size) \
+	UPD_SINGLE_CACHE(size, KIcon::DefaultState); \
+	UPD_SINGLE_CACHE(size, KIcon::ActiveState); \
+	UPD_SINGLE_CACHE(size, KIcon::DisabledState)
+
+void Kexi::generateIconSetWithStar(const QString& origIconName, const QString& newIconName)
+{
+//eg: $kico_query_newobj_16_2:0.3:notrans:#ffffff_0
+	KIconLoader *loader = kapp->iconLoader();
+	KIconEffect *ie = loader->iconEffect();
+	QString key = QString("$kico_") + newIconName + "_%1_%2_0";
+	QPixmap pix;
+	QImage img, img2;
+
+	UPD_CACHE(KIcon::Small);
+	UPD_CACHE(KIcon::Toolbar);
+	UPD_CACHE(KIcon::Desktop);
+}
 
 //--------------------------------------------------------------------------------
 

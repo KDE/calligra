@@ -385,8 +385,9 @@ KexiMainWindowImpl::initActions()
 	d->action_open_recent_more_id = d->action_open_recent->popupMenu()
 		->insertItem(i18n("&More Projects..."), this, SLOT(slotProjectOpenRecentMore()), 0, 1000);
 
-	d->action_save = new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save),
-		this, SLOT(slotProjectSave()), actionCollection(), "project_save");
+	d->action_save = KStdAction::save( this, SLOT( slotProjectSave() ), actionCollection(), "project_save" );
+//	d->action_save = new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save),
+//		this, SLOT(slotProjectSave()), actionCollection(), "project_save");
 	d->action_save->setToolTip(i18n("Save object changes"));
 	d->action_save->setWhatsThis(i18n("Saves object changes from currently selected window."));
 

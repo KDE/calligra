@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="119">
+<kpartgui name="kexi" version="120">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -119,8 +119,6 @@
 
 <ToolBar name="mainToolBar" noMerge="1" fullWidth="false">
   <text>Main Toolbar</text>
-  <Action name="project_new"/>
-  <Action name="project_open"/>
   <Action name="project_save"/>
   <Separator/>
   <Action name="edit_undo"/>
