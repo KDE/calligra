@@ -39,7 +39,7 @@
     <entry key="219" number="0x21D4" name="\Leftrightarrow" class="ORDINARY"/>
     <entry key="218" number="0x2228" name="\vee" class="BINOP"/>
     <entry key="217" number="0x2227" name="\wedge" class="BINOP"/>
-    <entry key="216" number="" name="\neg" class="ORDINARY"/>
+    <entry key="216" number="0x00AC" name="\neg" class="ORDINARY"/>
     <entry key="215" number="0x2219" name="\cdot" class="BINOP"/>
     <entry key="214" number="0x221A" name="\surd" class="ORDINARY"/>
     <entry key="213" number="0x220F" name="\prod" class="ORDINARY"/>
@@ -61,39 +61,39 @@
     <entry key="197" number="0x2295" name="\oplus" class="BINOP"/>
     <entry key="196" number="0x2297" name="\otimes" class="BINOP"/>
     <entry key="195" number="" name="\wp" class="ORDINARY"/>
-    <entry key="194" number="" name="\Re" class="ORDINARY"/>
-    <entry key="193" number="" name="\Im" class="ORDINARY"/>
+    <entry key="194" number="0x1D579" name="\Re" class="ORDINARY"/>
+    <entry key="193" number="0x1D574" name="\Im" class="ORDINARY"/>
     <entry key="192" number="" name="\aleph" class="ORDINARY"/>
     <entry key="191" number="0x21B5" name="" class="ORDINARY"/>
     <entry key="190" number="" name="" class="ORDINARY"/>
     <entry key="189" number="" name="\mid" class="RELATION"/>
-    <entry key="188" number="" name="\ldots" class="ORDINARY"/>
+    <entry key="188" number="0x2026" name="\ldots" class="ORDINARY"/>
     <entry key="187" number="0x2248" name="\approx" class="RELATION"/>
     <entry key="186" number="0x2261" name="\equiv" class="RELATION"/>
     <entry key="185" number="0x2260" name="\neq" class="RELATION"/>
-    <entry key="184" number="" name="\div" class="BINOP"/>
-    <entry key="183" number="0x2219" name="\bullet" class="BINOP"/>
+    <entry key="184" number="0x00F7" name="\div" class="BINOP"/>
+    <entry key="183" number="0x00B7" name="\bullet" class="BINOP"/>
     <entry key="182" number="0x2202" name="\partial" class="ORDINARY"/>
     <entry key="181" number="0x221D" name="\propto" class="RELATION"/>
-    <entry key="180" number="" name="\times" class="BINOP"/>
+    <entry key="180" number="0x00D7" name="\times" class="BINOP"/>
     <entry key="179" number="0x2265" name="\geq" class="RELATION"/>
     <entry key="178" number="" name="" class="ORDINARY"/>
-    <entry key="177" number="" name="\pm" class="BINOP"/>
-    <entry key="176" number="" name="" class="ORDINARY"/>
+    <entry key="177" number="0x00B1" name="\pm" class="BINOP"/>
+    <entry key="176" number="0x00B0" name="" class="ORDINARY"/>
     <entry key="175" number="0x2193" name="\downarrow" class="ORDINARY"/>
     <entry key="174" number="0x2192" name="\rightarrow" class="ORDINARY"/>
     <entry key="173" number="0x2191" name="\uparrow" class="ORDINARY"/>
     <entry key="172" number="0x2190" name="\leftarrow" class="ORDINARY"/>
     <entry key="171" number="0x2194" name="\leftrightarrow" class="ORDINARY"/>
-    <entry key="170" number="" name="\spadesuit" class="ORDINARY"/>
-    <entry key="169" number="" name="\heartsuit" class="ORDINARY"/>
-    <entry key="168" number="" name="\diamondsuit" class="ORDINARY"/>
-    <entry key="167" number="" name="\clubsuit" class="ORDINARY"/>
+    <entry key="170" number="0x2660" name="\spadesuit" class="ORDINARY"/>
+    <entry key="169" number="0x2665" name="\heartsuit" class="ORDINARY"/>
+    <entry key="168" number="0x2666" name="\diamondsuit" class="ORDINARY"/>
+    <entry key="167" number="0x2663" name="\clubsuit" class="ORDINARY"/>
     <entry key="166" number="" name="" class="ORDINARY"/>
     <entry key="165" number="0x221E" name="\infty" class="ORDINARY"/>
     <entry key="164" number="0x2215" name="" class="ORDINARY"/>
     <entry key="163" number="0x2264" name="\leq" class="RELATION"/>
-    <entry key="162" number="" name="" class="ORDINARY"/>
+    <entry key="162" number="0x00B4" name="" class="ORDINARY"/>
     <entry key="161" number="0x03D2" name="\Upsilon" class="ORDINARY"/>
     <entry key="160" number="" name="" class="ORDINARY"/>
     <entry key="159" number="" name="" class="ORDINARY"/>
@@ -210,10 +210,10 @@
     <entry key="48" number="" name="" class="ORDINARY"/>
     <entry key="47" number="" name="" class="ORDINARY"/>
     <entry key="46" number="" name="" class="PUNCTUATION"/>
-    <entry key="45" number="0x2212" name="" class="BINOP"/>
+    <entry key="45" number="" name="" class="BINOP"/>
     <entry key="44" number="" name="" class="PUNCTUATION"/>
     <entry key="43" number="" name="" class="BINOP"/>
-    <entry key="42" number="0x2217" name="" class="BINOP"/>
+    <entry key="42" number="" name="" class="BINOP"/>
     <entry key="41" number="" name="" class="ORDINARY"/>
     <entry key="40" number="" name="" class="ORDINARY"/>
     <entry key="39" number="0x220B" name="\ni" class="RELATION"/>
