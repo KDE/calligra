@@ -157,6 +157,9 @@ public:
     int diffx() const;
     int diffy() const;
 
+    //for KPTextView
+    void dragStarted() { mousePressed = false; }
+
 public slots:
     void exitEditMode();
 

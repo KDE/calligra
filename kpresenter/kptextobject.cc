@@ -1104,7 +1104,7 @@ void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int inde
 void KPTextView::startDrag()
 {
     textView()->dragStarted();
-    //m_canvas->dragStarted();
+    m_page->dragStarted();
     KPrTextDrag *drag = newDrag( m_page );
     if ( !kpTextObject()->kPresenterDocument()->isReadWrite() )
         drag->dragCopy();

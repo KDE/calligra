@@ -842,6 +842,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
             m_currentTextObjectView->mouseMoveEvent( e, pos);
             return;
         }
+        return;
     }
 
     if ( editMode ) {
