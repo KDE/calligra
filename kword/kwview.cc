@@ -1693,18 +1693,18 @@ void KWView::insertPicture()
     }
     KWInsertPicDia dia( this );
     if ( dia.exec() == QDialog::Accepted && !dia.filename().isEmpty() )
-        insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline(), dia.pixmapSize() );
+        insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline(), dia.pixmapSize(),dia.keepRatio() );
     else
         setTool( KWCanvas::MM_EDIT );
 }
 
 void KWView::slotEmbedImage( const QString &filename )
 {
-    insertPicture( filename, false, false, QSize() );
+    insertPicture( filename, false, false, QSize(),true );
 }
 
 void KWView::insertPicture( const QString &filename, bool isClipart,
-                            bool makeInline, QSize pixmapSize )
+                            bool makeInline, QSize pixmapSize, bool _keepRatio )
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit && makeInline )
@@ -1716,6 +1716,7 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
         {
             KWClipartFrameSet *frameset = new KWClipartFrameSet( m_doc, QString::null );
             frameset->loadClipart( filename );
+            //frameset->setKeepAspectRatio( _keepRatio);
             fs = frameset;
             // Set an initial size
             width = m_doc->zoomItX( 100 );
@@ -1736,6 +1737,7 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
 
             KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
             frameset->loadImage( filename, QSize( width, height ) );
+            frameset->setKeepAspectRatio( _keepRatio);
             fs = frameset;
         }
         m_doc->addFrameSet( fs, false ); // done first since the frame number is stored in the undo/redo
@@ -1748,7 +1750,7 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
     }
     else
     {
-        m_gui->canvasWidget()->insertPicture( filename, isClipart, pixmapSize );
+        m_gui->canvasWidget()->insertPicture( filename, isClipart, pixmapSize,_keepRatio );
     }
 }
 

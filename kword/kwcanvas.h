@@ -125,7 +125,7 @@ public:
     void setMouseMode( MouseMode _mm );
     MouseMode mouseMode() { return m_mouseMode; }
 
-    void insertPicture( const QString &filename, bool isClipart, QSize pixmapSize );
+    void insertPicture( const QString &filename, bool isClipart, QSize pixmapSize, bool _keepRatio );
     void insertPart( const KoDocumentEntry &entry );
 
     void updateCurrentFormat();
@@ -254,6 +254,7 @@ private:
     bool m_isClipart; // when inserting a picture
     QString m_pictureFilename; // when inserting a picture
     QSize m_pixmapSize; // when inserting a picture (pixmaps only)
+    bool m_keepRatio;//when inserting a picture
     KoDocumentEntry m_partEntry; // when inserting a part
 
     // Table creation support.

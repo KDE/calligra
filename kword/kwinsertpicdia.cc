@@ -97,7 +97,7 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, const char *name )
     setInitialSize( QSize(400, 300) );
 
     QWidget *page = plainPage();
-    QGridLayout *grid = new QGridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( page, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QPushButton *pbImage = new QPushButton( i18n( "Choose &Image" ), page );
     grid->addWidget( pbImage, 0, 0 );
@@ -110,22 +110,32 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, const char *name )
     m_cbInline = new QCheckBox( i18n( "Insert Picture Inline" ), page );
     grid->addWidget( m_cbInline, 2, 0 );
 
+    m_cbKeepRatio= new QCheckBox( i18n("Retain original aspect ratio"),page);
+    grid->addWidget( m_cbKeepRatio,3,0);
+
     m_preview = new KWInsertPicPreview( page );
-    grid->addMultiCellWidget( m_preview, 0, 3, 1, 1 );
+    grid->addMultiCellWidget( m_preview, 0, 4, 1, 1 );
 
     // Stretch the buttons and checkboxes a little, but stretch the preview much more
     grid->setRowStretch( 0, 1 );
     grid->setRowStretch( 1, 1 );
     grid->setRowStretch( 2, 1 );
-    grid->setRowStretch( 3, 10 );
+    grid->setRowStretch( 3, 1 );
+    grid->setRowStretch( 4, 10);
     grid->setColStretch( 0, 1 );
     grid->setColStretch( 1, 10 );
+    m_cbKeepRatio->setChecked(true);
     enableButtonOK( false );
 }
 
 bool KWInsertPicDia::makeInline() const
 {
     return m_cbInline->isChecked();
+}
+
+bool KWInsertPicDia::keepRatio() const
+{
+    return m_cbKeepRatio->isChecked();
 }
 
 void KWInsertPicDia::slotChooseImage()

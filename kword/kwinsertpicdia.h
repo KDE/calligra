@@ -41,6 +41,8 @@ public:
     // For pixmaps only
     QSize pixmapSize() const;
 
+    bool keepRatio() const;
+
 protected slots:
     void slotChooseImage();
     void slotChooseClipart();
@@ -51,7 +53,7 @@ protected:
 private:
     int m_type;
     QString m_filename;
-    QCheckBox *m_cbInline;
+    QCheckBox *m_cbInline, *m_cbKeepRatio;
     KWInsertPicPreview *m_preview;
 };
 

@@ -1093,12 +1093,14 @@ void KWCanvas::mrCreatePixmap()
         {
             KWClipartFrameSet *frameset = new KWClipartFrameSet( m_doc, QString::null /*automatic name*/ );
             frameset->loadClipart( m_pictureFilename );
+            //frameset->setKeepAspectRatio( m_keepRatio);
             fs = frameset;
         }
         else
         {
             KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
             frameset->loadImage( m_pictureFilename, m_doc->zoomRect( m_insRect ).size() );
+            frameset->setKeepAspectRatio( m_keepRatio);
             fs = frameset;
         }
         m_insRect = m_insRect.normalize();
@@ -1779,12 +1781,13 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
     }
 }
 
-void KWCanvas::insertPicture( const QString & filename, bool isClipart, QSize pixmapSize )
+void KWCanvas::insertPicture( const QString & filename, bool isClipart, QSize pixmapSize, bool _keepRatio )
 {
     setMouseMode( MM_CREATE_PIX );
     m_pictureFilename = filename;
     m_isClipart = isClipart;
     m_pixmapSize = pixmapSize;
+    m_keepRatio = _keepRatio;
 }
 
 void KWCanvas::insertPart( const KoDocumentEntry &entry )
