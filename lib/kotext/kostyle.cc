@@ -18,10 +18,11 @@
 */
 
 #include "kostyle.h"
+#include "kooasiscontext.h"
+#include "koparagcounter.h"
 #include <kdebug.h>
 #include <klocale.h>
 #include <qdom.h>
-#include <koparagcounter.h>
 
 //necessary to create unique shortcut
 int KoStyleCollection::styleNumber = 0;
@@ -242,7 +243,22 @@ void KoStyle::loadStyle( QDomElement & parentElem, int docVersion )
     m_bOutline = parentElem.attribute( "outline" ) == "true";
 }
 
+void KoStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
+{
+    context.m_styleStack.push( styleElem );
+    KoParagLayout layout;
+    KoParagLayout::loadOasisParagLayout( layout, context );
 
+    // This way, KoTextParag::setParagLayout also sets the style pointer, to this style
+    layout.style = this;
+    m_paragLayout = layout;
+
+    // Load name
+    m_name = styleElem.attribute( "style:name" );
+
+    m_bOutline = styleElem.attribute( "outline" ) == "true";
+    context.m_styleStack.pop();
+}
 
 const KoParagLayout & KoStyle::paragLayout() const
 {

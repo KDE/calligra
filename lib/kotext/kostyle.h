@@ -26,6 +26,7 @@
 #include <qptrlist.h>
 
 class KoStyle;
+class KoOasisContext;
 
 struct StyleChangeDef {
     StyleChangeDef() {
@@ -130,10 +131,15 @@ public:
     KoStyle *followingStyle() const { return m_followingStyle; }
     void setFollowingStyle( KoStyle *fst ) { m_followingStyle = fst; }
 
-    // Saves the name, layout, the following style and the outline bool. Not the format.
+    /// Saves the name, layout, the following style and the outline bool. Not the format.
+    /// @deprecated
     void saveStyle( QDomElement & parentElem );
-    // Loads the name, layout and the outline bool. Not the "following style" nor the format.
+    /// Loads the name, layout and the outline bool. Not the "following style" nor the format.
+    /// @deprecated
     void loadStyle( QDomElement & parentElem, int docVersion = 2 );
+
+    /// Load the style from OASIS
+    void loadStyle( QDomElement & styleElem, KoOasisContext& context );
 
     static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue)
       {
