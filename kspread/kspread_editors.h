@@ -47,6 +47,7 @@ public:
     KSpreadCell* cell()const { return m_pCell; }
 
     virtual void handleKeyPressEvent( QKeyEvent* _ev ) = 0;
+    virtual void handleIMEvent( QIMEvent * _ev ) = 0;
     virtual void setEditorFont(QFont const & font, bool updateSize) = 0;
     virtual QString text() const = 0;
     virtual void setText(QString text) = 0;
@@ -72,6 +73,7 @@ public:
     ~KSpreadTextEditor();
 
     virtual void handleKeyPressEvent( QKeyEvent* _ev );
+    virtual void handleIMEvent( QIMEvent * _ev );
     virtual void setEditorFont(QFont const & font, bool updateSize);
     virtual QString text() const;
     virtual void setText(QString text);

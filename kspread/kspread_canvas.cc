@@ -141,6 +141,15 @@ bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
       keyPressEvent ( keyev );
       return true;
     }
+    break;
+  }
+  case QEvent::IMStart:
+  case QEvent::IMCompose:
+  case QEvent::IMEnd:
+  {
+      QIMEvent * imev = static_cast<QIMEvent *>(e);
+      processIMEvent( imev );
+      break;
   }
   default:
     break;
@@ -2352,6 +2361,31 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   // (after some move operations)
   m_pDoc->emitEndOperation( table->visibleRect( this ) );
   return;
+}
+
+void KSpreadCanvas::processIMEvent( QIMEvent * event )
+{
+  m_pDoc->emitBeginOperation( false );
+  if ( !m_pEditor && !m_bChoose )
+  {
+    // Switch to editing mode
+    createEditor( CellEditor );
+    m_pEditor->handleIMEvent( event );
+  }
+  
+  QPoint cursor;
+  
+  if ( m_bChoose )
+  {
+    cursor = selectionInfo()->getChooseCursor();
+    /* if the cursor is unset, pretend we're starting at the regular cursor */
+    if (cursor.x() == 0 || cursor.y() == 0)
+      cursor = selectionInfo()->cursorPosition();
+  }
+  else
+    cursor = selectionInfo()->cursorPosition();
+ 
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
 }
 
 bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )

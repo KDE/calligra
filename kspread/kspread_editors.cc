@@ -277,8 +277,14 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
     return;
   }
 
-  // Send the key event to the QLineEdit
+  // Send the key event to the KLineEdit
   QApplication::sendEvent( m_pEdit, _ev );
+}
+
+void KSpreadTextEditor::handleIMEvent( QIMEvent * _ev )
+{
+    // send the IM event to the KLineEdit
+    QApplication::sendEvent( m_pEdit, _ev );
 }
 
 QString KSpreadTextEditor::text() const
@@ -316,7 +322,7 @@ void KSpreadTextEditor::insertFormulaChar(int /*c*/)
 
 bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 {
-    // Only interested in QLineEdit
+    // Only interested in KLineEdit
     if ( o != m_pEdit )
         return FALSE;
     if ( e->type() == QEvent::FocusOut )

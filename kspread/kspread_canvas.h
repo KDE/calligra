@@ -501,6 +501,8 @@ private:
   void processOtherKey(QKeyEvent *event);
   bool processControlArrowKey(QKeyEvent *event);
 
+  void processIMEvent( QIMEvent * event );
+
   void updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor);
 
   /**
