@@ -143,6 +143,8 @@ private:
 
     double toPoint( QString value, double defaultVal = 0.0 );
     bool parseBorder(const QString & tag, double * width, int * style, QColor * color);
+    QDomElement saveHelper(const QString &tmpText, QDomDocument &doc);
+    QString expandWhitespace(const QDomElement& tag);
 
     QString storeImage( const QDomElement& object );
     QDomElement parseTextBox( QDomDocument& doc, const QDomElement& textBox );

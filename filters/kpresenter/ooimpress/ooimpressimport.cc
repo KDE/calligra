@@ -1134,9 +1134,13 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
     {
         QString textData;
         QDomText t = n.toText();
-        if ( t.isNull() ) // no textnode, so maybe it's a text:span
+
+        if (n.toElement().tagName() == "text:s")
+            textData = expandWhitespace(n.toElement());
+        else if ( t.isNull() ) // no textnode, so maybe it's a text:span
         {
             QDomElement ts = n.toElement();
+
             if ( ts.tagName() != "text:span" ) // TODO: are there any other possible
                 continue;                      // elements or even nested test:spans?
 
@@ -1202,7 +1206,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                     indent.setAttribute( "left", marginLeft );
                 if( marginRight != 0 )
                     indent.setAttribute( "right", marginRight );
-                if( first != 0.0 )
+                if( first != 0 )
                     indent.setAttribute( "first", first);
                 p.appendChild( indent );
             }
@@ -1236,8 +1240,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         }
         //else if (m_styleStack.hasAttribute("style:line-spacing") //TODO
 
-        QDomElement text = doc.createElement( "TEXT" );
-        text.appendChild( doc.createTextNode( textData ) );
+        QDomElement text = saveHelper(textData, doc);
 
         //kdDebug() << k_funcinfo << "Para text is: " << paragraph.text() << endl;
 
@@ -1699,6 +1702,29 @@ bool OoImpressImport::parseBorder(const QString & tag, double * width, int * sty
         *color = QColor(_color);
 
     return true;
+}
+
+QString OoImpressImport::expandWhitespace(const QDomElement& tag)
+{
+    //tags like <text:s text:c="4">
+
+    int howmany=1;
+    if (tag.hasAttribute("text:c"))
+        howmany = tag.attribute("text:c").toInt();
+
+    QString result;
+    return result.fill(32, howmany);
+}
+
+QDomElement OoImpressImport::saveHelper(const QString &tmpText, QDomDocument &doc)
+{
+    QDomElement element=doc.createElement("TEXT");
+
+    if(tmpText.stripWhiteSpace().isEmpty())
+        // working around a bug in QDom
+        element.setAttribute("whitespace", tmpText.length());
+    element.appendChild(doc.createTextNode(tmpText));
+    return element;
 }
 
 #include "ooimpressimport.moc"
