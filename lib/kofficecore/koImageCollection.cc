@@ -23,7 +23,7 @@ KoImage KoImageCollection::insertImage( const KoImage::Key &key, const QImage &i
     // prevent double insertion
     KoImage koImg = KoImageCollection::image( key );
 
-    if ( !koImg.isValid() )
+    if ( !koImg.isNull() )
     {
         koImg = KoImage( key, image );
 

@@ -8,55 +8,113 @@
 
 class KoImagePrivate;
 
+/**
+ * KoImage is a container class for holding a QImage, a cached QPixmap version
+ * of it, right together associated with a Key (for storage in a
+ * @ref KoImageCollection . While KoImage itself is implicitly shared, note
+ * that the contained QImage is explicitly shared, as documented in the
+ * Qt documentation.
+ */
 class KoImage
 {
 public:
+    /**
+     * A simple Key structure for holding a 'unique' filename and timestamp
+     * for a image
+     */
     struct Key
     {
         Key() {}
 
-        Key( const QString &filename, const QDateTime &timestamp = QDateTime() )
-            : m_filename( filename ), m_timestamp( timestamp ) {}
+        Key( const QString &_filename, const QDateTime &_timestamp = QDateTime() )
+            : fileName( _filename ), timestamp( _timestamp ) {}
 
         bool operator==( const Key &other ) const
-            { return m_filename == other.m_filename && m_timestamp == other.m_timestamp; }
+            { return fileName == other.fileName && timestamp == other.timestamp; }
 
         bool operator<( const Key &other ) const
             {
-                register bool res = m_filename < other.m_filename;
-                if ( m_timestamp.isValid() && other.m_timestamp.isValid() )
-                    res &= m_timestamp < other.m_timestamp;
+                register bool res = fileName < other.fileName;
+                if ( timestamp.isValid() && other.timestamp.isValid() )
+                    res &= timestamp < other.timestamp;
                 return res;
             }
 
-        QString m_filename;
-        QDateTime m_timestamp;
+        QString fileName;
+        QDateTime timestamp;
     };
 
+    /**
+     * Default constructor. Creates a null image.
+     */
     KoImage();
 
+    /**
+     * Constructs a KoImage object from the given key and
+     * QImage. Note that KoImage will create a copy of the
+     * provided QImage.
+     */
     KoImage( const Key &key, const QImage &image );
 
+    /**
+     * Copy constructor.
+     */
     KoImage( const KoImage &other );
 
+    /**
+     * Destructor.
+     */
     ~KoImage();
 
+    /**
+     * Assignment operator.
+     */
     KoImage &operator=( const KoImage &other );
 
+    /**
+     * Retrieve the stored QImage object.
+     */
     QImage image() const;
 
+    /**
+     * Retrieve a pixmap representation of the stored image.
+     * (Note that the pixmap is cached internally, so the (slow) conversion
+     *  is not done for each call)
+     */
     QPixmap pixmap() const;
 
+    /**
+     * Retrieve the Key structure describing the image in a unique way.
+     */
     Key key() const;
 
-    bool isValid() const;
+    /**
+     * Convenience method for retrieving the image's filename. Alias for
+     * key().fileName
+     */
+    QString fileName() const; //convenience
 
+    /**
+     * Returns true if the image is null. A null image is created using the
+     * default constructor.
+     */
+    bool isNull() const;
+
+    /**
+     * Scales the image's width and height to the specified size and returns
+     * a new KoImage object for it.
+     * Note that KoImage is intelligent enough to always scale from the
+     * very original image, to provide best scaling quality.
+     */
     KoImage scale( const QSize &size ) const;
 
 private:
     KoImagePrivate *d;
 };
 
+/**
+ * @internal
+ */
 class KoImagePrivate : public QShared
 {
 public:
@@ -94,7 +152,12 @@ inline KoImage::Key KoImage::key() const
     return d->m_key;
 }
 
-inline bool KoImage::isValid() const
+inline QString KoImage::fileName() const
+{
+    return key().fileName;
+}
+
+inline bool KoImage::isNull() const
 {
     return d != 0;
 }

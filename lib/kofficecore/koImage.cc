@@ -48,7 +48,7 @@ KoImage KoImage::scale( const QSize &size ) const
 
     KoImage originalImage;
 
-    if ( d->m_originalImage.isValid() )
+    if ( d->m_originalImage.isNull() )
         originalImage = d->m_originalImage;
     else
         originalImage = *this;
