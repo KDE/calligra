@@ -47,6 +47,7 @@
 
 #include "koApplication.h"
 #include "kexi_global.h"
+#include "kexi_utils.h"
 
 #undef JoWenn_VERY_EXPERIMENTAL
 
@@ -178,10 +179,10 @@ bool KexiProject::initDoc()
 KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )
 {
 	kdDebug() << "KoView* KexiProject::createViewInstance()" << endl;
-  KexiView *v= new KexiView( KexiView::MDIWindowMode,this, parent, name );
-  for(KexiProjectHandler *part = m_parts->first(); part; part = m_parts->next())
-	  part->hookIntoView(v);
-  v->finalizeInit();
+	KexiView *v= new KexiView( KexiView::MDIWindowMode,this, parent, name );
+	for(KexiProjectHandler *part = m_parts->first(); part; part = m_parts->next())
+		part->hookIntoView(v);
+	v->finalizeInit();
 	return v;
 }
 
@@ -486,5 +487,9 @@ void KexiProject::loadHandlers()
 
 void KexiProject::slotImportData()
 {
+#ifndef KEXI_NO_UNFINISHED
 	m_filterManager->import(KexiFilterManager::AllEntries);
+#else
+	KEXI_UNFINISHED(i18n("Import Data"));
+#endif
 }

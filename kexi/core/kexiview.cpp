@@ -33,10 +33,8 @@
 #include <kstdguiitem.h>
 #include <kcmdlineargs.h>
 #include <kparts/event.h>
-
-#ifndef KEXI_NO_PRINT
+#include <komainwindow.h>
 #include <kprinter.h>
-#endif
 
 #include "kexiview.h"
 #include "kexisettings.h"
@@ -53,6 +51,7 @@
 #include "kexicontexthelp.h"
 #include "kexi_factory.h"
 #include "kexi_global.h"
+#include "kexi_utils.h"
 
 KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, const char *name )
 : KoView(part,parent,name)
@@ -165,7 +164,8 @@ void KexiView::initActions()
 	//standard actions
 	(void*) KStdAction::preferences(this, SLOT(slotSettings()), actionCollection());
 
-	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "project_props", Key_F7,
+//	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "project_props", Key_F7,
+	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "", Key_F7,
 	 actionCollection(), "project_props");
 	connect(actionProjectProps, SIGNAL(activated()), this, SLOT(slotShowProjectProps()));
 
@@ -187,8 +187,36 @@ void KexiView::initActions()
 
 	connect(m_project, SIGNAL(dbAvaible()), this, SLOT(slotDBAvaible()));
 	
-	//TODO: disable some actions:
-//	KAction *act = actionCollection()->action("file_import_file");
+	//disable some actions:
+#ifdef KEXI_NO_UNFINISHED
+	KActionCollection *parentCollection = shell()->actionCollection();
+  for (int i=0;i<parentCollection->count();i++)
+    kdDebug() << parentCollection->action(i)->name() << endl;
+//	parentCollection->action("file_import_file")->setEnabled(false);
+#define INIT_UNF(act_name) \
+	{ KAction *act = parentCollection->action(act_name); \
+		if (act) connect(act, SIGNAL(activated()), this, SLOT(slotInfoUnfinished())); \
+	}
+	INIT_UNF("file_print");
+	INIT_UNF("file_print_preview");
+	INIT_UNF("file_import_file");
+	INIT_UNF("file_export_file");
+	INIT_UNF("file_send_file");
+	INIT_UNF("help_contents");
+#undef INIT_UNF
+#endif
+}
+
+void KexiView::slotInfoUnfinished()
+{
+#ifdef KEXI_NO_UNFINISHED
+	if (sender() && sender()->isA("KAction")) {
+		const KAction *act = dynamic_cast<const KAction*>(sender());
+		QString txt = act->plainText();
+		txt.replace( '.', QString::null );
+		KEXI_UNFINISHED(txt);
+	}
+#endif
 }
 
 void KexiView::slotActiveWindowChanged(QWidget *w)
@@ -304,10 +332,10 @@ void KexiView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     KoView::guiActivateEvent( ev );
 }
 
-#ifndef KEXI_NO_PRINT
 void
 KexiView::setupPrinter(KPrinter &printer)
 {
+#ifndef KEXI_NO_PRINT
 	//FIXME: we really shouldn't do it here!!!
 	printer.setPageSelection(KPrinter::ApplicationSide);
 	printer.setCurrentPage(1);
@@ -318,12 +346,15 @@ KexiView::setupPrinter(KPrinter &printer)
 	KexiDialogBase  *active = dynamic_cast<KexiWorkspace*>(m_workspace)->activeDocumentView();
 	if (active)
 		active->setupPrinter(printer);
+#else
+	KEXI_UNFINISHED(i18n("Setup printer"));
+#endif //!KEXI_NO_PRINT
 }
 
 void
 KexiView::print(KPrinter &printer)
 {
-
+#ifndef KEXI_NO_PRINT
 	KexiDialogBase *active = dynamic_cast<KexiWorkspace*>(m_workspace)->activeDocumentView();
 	kdDebug() << "KexiView::print: " << active << endl;
 
@@ -335,8 +366,10 @@ KexiView::print(KPrinter &printer)
 	p.drawLine(60,60,120,120);
 	p.end();
 */
-}
+#else
+	KEXI_UNFINISHED(i18n("Print"));
 #endif //!KEXI_NO_PRINT
+}
 
 bool
 KexiView::activateWindow(const QString &id)

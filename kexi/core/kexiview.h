@@ -73,12 +73,10 @@ public:
 
     virtual void updateReadWrite( bool readwrite );
 
-#ifndef KEXI_NO_PRINT
     //printing
     virtual void setupPrinter(KPrinter &printer);
     virtual void print(KPrinter &printer);
-#endif
-    void addQDockWindow(QDockWindow *w);
+	void addQDockWindow(QDockWindow *w);
     void removeQDockWindow(QDockWindow * w);
 
     bool activateWindow(const QString &id);
@@ -130,6 +128,7 @@ protected slots:
 
 	void			slotProjectModified();
 	void			slotDBAvaible();
+	void slotInfoUnfinished();
 
 private:
 	KexiProject *m_project;
