@@ -117,7 +117,7 @@ static void scanDirectory( Trader *_trader, const char* _path,
 static void scanEntry( Trader *_trader, const char* _file, CORBA::ImplRepository_ptr _imr )
 {
   KSimpleConfig config( _file, true );
-  config.setGroup( "KDE Desktop Entry" );
+  config.setDesktopGroup();
   
   // Is it really one of the kdelnk files we want to see ?
   QString type = config.readEntry( "Type" );

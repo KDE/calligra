@@ -756,7 +756,7 @@ void KoHTMLView::addBookmark()
 
   KSimpleConfig c(p, true);
 
-  c.setGroup("KDE Desktop Entry");
+  c.setDesktopGroup();
   c.writeEntry("Type", "Link");
   c.writeEntry("URL", url.in());
   c.writeEntry("Icon", icon.fileName());
@@ -921,7 +921,7 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
       else
       {
 	KSimpleConfig cfg( file, true );
-	cfg.setGroup( "KDE Desktop Entry" );
+	cfg.setDesktopGroup();
 	QString type = cfg.readEntry( "Type" );	
 	if ( type == "Link" )
 	{
