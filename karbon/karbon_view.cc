@@ -43,7 +43,6 @@
 
 #include <kdebug.h>
 #include <koMainWindow.h>
-#include <koFontDia.h>
 
 #include "karbon_view_iface.h"
 
@@ -276,28 +275,15 @@ void
 KarbonView::textTool()
 {
     kdDebug() << "KarbonView::textTool()" << endl;
-	QFont *f = new QFont;
+	QFont f;
 
-	/*KoFontDia *fontDia = new KoFontDia( this, "", f, false, false, Qt::black, Qt::white, false );
-	fontDia->exec();
-	int flags = fontDia->changedFlags();
-	//kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
-	if( flags )
-	{
-		f = fontDia->getNewFont();
-		//fontDia->getSubScript(), fontDia->getSuperScript(),
-		//fontDia->color(),fontDia->backGroundColor(), flags);
-	}
-
-	delete fontDia;*/
-
-	f->setFamily( m_setFontFamily->font() );
-	f->setPointSize( m_setFontSize->fontSize() );
-	f->setBold( m_setFontBold->isChecked() );
-	f->setItalic( m_setFontItalic->isChecked() );
+	f.setFamily( m_setFontFamily->font() );
+	f.setPointSize( m_setFontSize->fontSize() );
+	f.setBold( m_setFontBold->isChecked() );
+	f.setItalic( m_setFontItalic->isChecked() );
 
 	// TODO : find a way to edit the text, no predefined strings
-	m_part->addCommand( new VCCmdText( m_part, *f, "KARBON" ), true );
+	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ), true );
 }
 
 void
