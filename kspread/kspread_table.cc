@@ -6350,6 +6350,34 @@ void KSpreadTable::dissociateCell( const QPoint &_marker,bool makeUndo)
     emit sig_updateView( this, selection );
 }
 
+bool KSpreadTable::testListChoose(const QPoint &_marker)
+{
+   QRect selection( selectionRect() );
+   if(selection.left()==0)
+     selection.setCoords(_marker.x(),_marker.y(),_marker.x(),_marker.y());
+
+   KSpreadCell* c = firstCell();
+   for( ;c  ; c = c->nextCell() )
+     {
+       int col = c->column();
+       if ( selection.left() <= col && selection.right() >= col
+	    &&!c->isObscuringForced())
+	 {
+	   if(!c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
+	      && !c->isTime() &&!c->isDate()
+	      && c->content() != KSpreadCell::VisualFormula)
+	     {
+	       return true;
+	     }
+	   
+	 }
+     }
+   return false;
+}
+
+
+
+
 void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 {
     kdDebug(36001)<<"PRINTING ...."<<endl;

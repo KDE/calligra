@@ -731,6 +731,14 @@ public:
      */
     void deleteCells( const QRect& rect );
 
+
+    /**
+     * Return TRUE if there are text value in cell
+     * so you can create list selection
+     */
+    bool testListChoose(const QPoint &_marker);
+
+
     /**
      * Assume that the retangle 'src' was already selected. Then the user clicked on the
      * lower right corner of the marker and resized the area ( left mouse button ).

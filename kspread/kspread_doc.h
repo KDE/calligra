@@ -314,7 +314,13 @@ public:
   bool getShowTabBar() { return  m_bShowTabBar;}
   
   void changeDefaultGridPenColor( QColor &_col){m_defaultGridPen.setColor(_col);}
-
+  
+  /**
+   * show/hide comment indicator
+   */
+  void setShowCommentIndicator(bool _indic) {  m_bShowCommentIndicator=_indic;}
+  bool getShowCommentIndicator() { return  m_bShowCommentIndicator;}
+  
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -554,6 +560,9 @@ protected:
   MethodOfCalc m_EMethodOfCalc;
 
   bool m_bShowTabBar;
+
+  bool m_bShowCommentIndicator;
+
 };
 
 #endif

@@ -95,6 +95,7 @@ protected:
   QComboBox *typeCalc;
   QComboBox *typeOfMove;
   QCheckBox *msgError;
+  QCheckBox *commentIndicator;
 } ;
 
 class colorParameters : public QWidget

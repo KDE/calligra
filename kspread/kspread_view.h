@@ -174,8 +174,6 @@ public:
      */
     void resultOfCalc();
 
-    bool testListChoose();
-
 public slots:
     void initialPosition();
     /**

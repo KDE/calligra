@@ -333,11 +333,13 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
   config = KSpreadFactory::global()->config();
   int _indent=10;
   bool m_bMsgError=true;
+  bool m_bCommentIndicator=true;
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
         _indent=config->readNumEntry( "Indent" ,10) ;
         m_bMsgError=config->readBoolEntry( "Msg error" ,true) ;
+	m_bCommentIndicator=config->readBoolEntry( "Comment Indicator",true);
         }
 
   QLabel *label=new QLabel(tmpQGroupBox);
@@ -391,7 +393,9 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
   typeCalc->insertStringList(listTypeCalc);
   typeCalc->setCurrentItem(0);
   lay1->addWidget(typeCalc);
-
+  commentIndicator=new QCheckBox(i18n("Show comment indicator"),tmpQGroupBox);
+  commentIndicator->setChecked(m_bCommentIndicator); 
+  lay1->addWidget(commentIndicator);
 
   initComboBox();
   box->addWidget( tmpQGroupBox);
@@ -471,6 +475,7 @@ typeCompletion->setCurrentItem(3);
 typeOfMove->setCurrentItem(0);
 msgError->setChecked(true);
 typeCalc->setCurrentItem(0);
+commentIndicator->setChecked(true);
 }
 
 
@@ -565,6 +570,11 @@ if(msgError->isChecked()!=m_pView->doc()->getShowMessageError())
         m_pView->doc()->setShowMessageError( msgError->isChecked());
         config->writeEntry( "Msg error" ,(int)msgError->isChecked()) ;
         }
+ if(commentIndicator->isChecked()!=m_pView->doc()->getShowCommentIndicator())
+   {
+     m_pView->doc()->setShowCommentIndicator( commentIndicator->isChecked());
+     config->writeEntry( "Comment Indicator" ,(int)commentIndicator->isChecked()) ;
+   }
 }
 
 

@@ -489,6 +489,7 @@ if( config->hasGroup("Parameters" ))
 	QColor _col(Qt::lightGray);
 	_col= config->readColorEntry("GridColor",&_col);
 	m_pDoc->changeDefaultGridPenColor(_col);
+	m_pDoc->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
 	}
 }
 
@@ -2251,31 +2252,6 @@ void KSpreadView::slotItemSelected( int id)
   cell->setCellText( tmp, true );
   editWidget()->setText( tmp );
 }
-bool KSpreadView::testListChoose()
-{
-   QRect selection( m_pTable->selectionRect() );
-   if(selection.left()==0)
-     selection.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
-		       m_pCanvas->markerColumn(),m_pCanvas->markerRow());
-
-   KSpreadCell* c = m_pTable->firstCell();
-   for( ;c  ; c = c->nextCell() )
-     {
-       int col = c->column();
-       if ( selection.left() <= col && selection.right() >= col
-	    &&!c->isObscuringForced())
-	 {
-	   if(!c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
-	      && !c->isTime() &&!c->isDate()
-	      && c->content() != KSpreadCell::VisualFormula)
-	     {
-	       return true;
-	     }
-	   
-	 }
-     }
-   return false;
-}
 
 void KSpreadView::openPopupMenu( const QPoint & _point )
 {
@@ -2322,7 +2298,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     }
 
     
-    if(testListChoose())
+    if(activeTable()->testListChoose(QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow())))
       {
 	m_pPopupMenu->insertSeparator();
 	m_pPopupMenu->insertItem( i18n("Selection list..."), this, SLOT( slotListChoosePopupMenu() ) );
