@@ -3262,21 +3262,27 @@ void KPresenterView::objectSelectedChanged()
 {
     bool state=m_canvas->isOneObjectSelected();
     bool headerfooterselected=false;
-    //bool rw = koDocument()->isReadWrite();
+    bool state2=false;
 
-    if(m_canvas->numberOfObjectSelected()==1)
+    if (m_canvas->numberOfObjectSelected()==1)
     {
         KPObject *obj=m_canvas->getSelectedObj();
         //disable this action when we select a header/footer
-        if(obj==m_pKPresenterDoc->header() || obj==m_pKPresenterDoc->footer())
+        if (obj==m_pKPresenterDoc->header() || obj==m_pKPresenterDoc->footer())
             headerfooterselected=true;
         else
             headerfooterselected=false;
-    }
-    actionScreenAssignEffect->setEnabled(state&&!headerfooterselected);
-    actionEditDelete->setEnabled(state&&!headerfooterselected);
-    actionEditCut->setEnabled(state&&!headerfooterselected);
 
+        ObjType objtype = obj->getType();
+        if (objtype == OT_RECT || objtype == OT_ELLIPSE || objtype == OT_TEXT
+            || objtype == OT_AUTOFORM || objtype == OT_PIE || objtype == OT_CLOSED_LINE)
+            state2=true;
+    }
+    actionScreenAssignEffect->setEnabled(state && !headerfooterselected);
+    actionEditDelete->setEnabled(state && !headerfooterselected);
+    actionEditCut->setEnabled(state && !headerfooterselected);
+
+    actionBrushColor->setEnabled(state && state2); // no brush button for objects that don't support it
     actionExtraPenBrush->setEnabled(state && !headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
     actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
@@ -3306,7 +3312,6 @@ void KPresenterView::objectSelectedChanged()
     actionExtraSendBackward->setEnabled(state);
 
     //actionExtraConfigPicture->setEnabled( state && m_canvas->haveASelectedPixmapObj() );
-    //actionBrushColor->setEnabled(state);
     //actionPenColor->setEnabled(state);
     //actionExtraPenStyle->setEnabled(state);
     //actionExtraPenWidth->setEnabled(state);
@@ -6629,9 +6634,6 @@ void KPresenterView::slotObjectEditChanged()
     actionTextInsertPageNum->setEnabled(val);
     if ( edit )
         actionBrushColor->setEnabled(val);
-    else
-        actionBrushColor->setEnabled(true);
-
 
     bool hasSelection = false ;
     if(edit)
