@@ -35,7 +35,7 @@ KAboutData * newKivioAboutData()
     aboutData->addAuthor("Dave Marotti", I18N_NOOP("Initial idea, development and basic stencil sets."),"lndshark@speakeasy.net");
     aboutData->addAuthor("The Kompany.com - \"Where Open Source is at Home\"(TM)", I18N_NOOP("Development and additional stencil sets."), "info@thekompany.com");
     aboutData->addAuthor("Peter Simonsson", I18N_NOOP("Development"), "psn@linux.se");
-    aboutData->addAuthor("Laurent Montel", I18N_NOOP("Development"), "lmontel@mandrakesoft.com");
+    aboutData->addAuthor("Laurent Montel", I18N_NOOP("Development"), "montel@kde.org");
     return aboutData;
 }
 
