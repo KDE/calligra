@@ -28,6 +28,7 @@
 #include <koDocument.h>
 #include <koDocumentChild.h>
 
+#include <GDocument.h>
 #include <qcstring.h>
 
 class KIllustratorDocument;
@@ -58,7 +59,7 @@ public:
     // Overloaded methods from KoDocument
 
     virtual bool saveChildren (KoStore* _store, const char *_path);
-    virtual QDomDocument saveXML ();
+    virtual QDomDocument saveXML() { return m_gdocument->saveToXml(); }
     //virtual bool save() { return KParts::ReadWritePart::save(); }
 
     //bool completeSaving (KoStore* store); // not needed? - what about embedded wmf files?

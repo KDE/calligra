@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -49,8 +49,8 @@ public:
     enum { Font = 1, Align = 2 };
     unsigned int mask;
     QFont font;
-    enum Alignment { 
-      AlignLeft, AlignCenter, AlignRight 
+    enum Alignment {
+      AlignLeft, AlignCenter, AlignRight
     } align;
   };
 
@@ -58,10 +58,10 @@ public:
   static TextInfo getDefaultTextInfo ();
 
   GText ();
-  GText (const list<XmlAttribute>& attribs);
+  GText (const QDomElement &element);
   GText (const GText& obj);
   ~GText ();
-  
+
   virtual void draw (QPainter& p, bool withBasePoints = false,
 		     bool outline = false);
 
@@ -76,16 +76,16 @@ public:
   void deleteBackward ();
   void showCursor (bool flag);
   void updateCursor (const Coord& p);
-  
+
   void setCursor (int x, int y);
   int cursorX () const { return cursx; }
   int cursorY () const { return cursy; }
-  
+
   int lines () const { return text.size (); }
   const QString& line (int n) { return text[n]; }
   void setText (const QString& s);
   QString getText () const;
-  
+
   const QFont& getFont () const { return textInfo.font; }
   void setFont (const QFont& f);
 
@@ -98,16 +98,16 @@ public:
   virtual void restoreState (GOState* state);
 
   virtual GObject* copy ();
-  virtual GObject* clone (const list<XmlAttribute>& attribs);
+  virtual GObject* clone (const QDomElement &element);
 
-  virtual void writeToXml (XmlWriter&);
+  virtual QDomElement writeToXml(QDomDocument &document);
 
   bool isEmpty () const;
 
 public slots:
   void updateMatricesForPath ();
   void deletePathObject ();
-  
+
 protected:
   void calcBoundingBox ();
 

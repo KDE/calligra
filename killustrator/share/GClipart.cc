@@ -6,7 +6,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -14,16 +14,16 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include "GClipart.h"
-#include "GClipart.moc"
-#include "qwmf.h"
+#include <GClipart.h>
+#include <qwmf.h>
+#include <qdom.h>
 
 #include <klocale.h>
 #include <kapp.h>
@@ -32,35 +32,23 @@ GClipart::GClipart () {
   pic = 0L;
 }
 
-GClipart::GClipart (const list<XmlAttribute>& attribs) : GObject (attribs) {
-  list<XmlAttribute>::const_iterator first = attribs.begin ();
-	
-  while (first != attribs.end ()) {
-    const string& attr = (*first).name ();
-    if (attr == "src") {
-      QWinMetaFile wmf;
-      
-      url = (*first).stringValue ().c_str ();
-      if (url.isLocalFile () && wmf.load (url.path ())) {
+GClipart::GClipart (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
+
+    url=element.attribute("src");
+    QWinMetaFile wmf;
+    if (url.isLocalFile () && wmf.load (url.path ())) {
 	QRect r = wmf.bbox ();
-	
 	width = (r.right () - r.left ()) * 72.0 / wmf.dpi ();
 	height = (r.bottom () - r.top ()) * 72.0 / wmf.dpi ();
 	pic = new QPicture ();
 	wmf.paint (pic);
-      }
-      else {
+    }
+    else
 	// construct a malformed url
 	url = KURL ();
-      }
-    }
-    else if (attr == "width") 
-      width = (*first).floatValue ();
-    else if (attr == "height") 
-      height = (*first).floatValue ();
-    first++;
-  }
-  calcBoundingBox ();
+    width=element.attribute("width").toFloat();
+    height=element.attribute("height").toFloat();
+    calcBoundingBox ();
 }
 
 GClipart::GClipart (QWinMetaFile& wmf, const char* name) : url (name) {
@@ -121,15 +109,19 @@ GObject* GClipart::copy () {
   return new GClipart (*this);
 }
 
-GObject* GClipart::clone (const list<XmlAttribute>& attribs) {
-  return new GClipart (attribs);
+GObject* GClipart::clone (const QDomElement &element) {
+  return new GClipart (element);
 }
 
-void GClipart::writeToXml (XmlWriter& xml) {
-  xml.startTag ("clipart", false);
-  writePropertiesToXml (xml);
-  xml.addAttribute ("src", (const char *) url.url ());
-  xml.addAttribute ("width", width);
-  xml.addAttribute ("height", height);
-  xml.closeTag (true);
+QDomElement GClipart::writeToXml (QDomDocument &document) {
+
+    // FIXME (Werner): Make this store internal/external depening on the user's wish
+    QDomElement element=document.createElement("clipart");
+    element.setAttribute ("src", (const char *) url.url ());
+    element.setAttribute ("width", width);
+    element.setAttribute ("height", height);
+    element.appendChild(GObject::writeToXml(document));
+    return element;
 }
+
+#include <GClipart.moc>

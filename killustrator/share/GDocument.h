@@ -138,7 +138,7 @@ public:
   bool findContainingObjects (int x, int y, QList<GObject>& olist);
   bool findObjectsContainedIn (const Rect& r, QList<GObject>& olist);
 	
-  QDomDocument saveToXml ();
+  QDomDocument saveToXml();
   bool readFromXml (const QDomDocument &document);
   bool insertFromXml (const QDomDocument &document, list<GObject*>& newObjs);
 
@@ -170,7 +170,7 @@ public:
 
 protected:
   void updateHandle ();
-  bool parseBody (const QDomDocument &document, std::list<GObject*>& newObjs, bool markNew);
+  bool parseBody (const QDomElement &element, std::list<GObject*>& newObjs, bool markNew);
 
 public slots:
   void objectChanged ();

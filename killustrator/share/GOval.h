@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -41,14 +41,14 @@ class GOval : public GObject {
   Q_OBJECT
 public:
   GOval (bool cFlag = false);
-  GOval (const std::list<XmlAttribute>& attribs, bool cFlag = false);
+  GOval (const QDomElement &element, bool cFlag = false);
   GOval (const GOval& obj);
   ~GOval () {}
-  
+
   virtual void draw (QPainter& p, bool withBasePoints = false,
 		     bool outline = false);
   virtual bool contains (const Coord& p);
-  
+
   void setStartPoint (const Coord& p);
   void setEndPoint (const Coord& p);
 
@@ -61,9 +61,9 @@ public:
   virtual bool isValid ();
 
   virtual GObject* copy ();
-  virtual GObject* clone (const std::list<XmlAttribute>& attribs);
+  virtual GObject* clone (const QDomElement &element);
 
-  virtual void writeToXml (XmlWriter&);
+  virtual QDomElement writeToXml(QDomDocument &document);
 
   virtual int getNeighbourPoint (const Coord& p);
   virtual void movePoint (int idx, float dx, float dy);
@@ -86,4 +86,3 @@ private:
 };
 
 #endif
-

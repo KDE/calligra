@@ -22,13 +22,14 @@
 
 */
 
-#include "GPart.h"
+#include <GPart.h>
 
+#include <qdom.h>
 #include <klocale.h>
 #include <kapp.h>
 
-#include "KIllustrator_view.h"
-#include "KIllustrator_doc.h"
+#include <KIllustrator_view.h>
+#include <KIllustrator_doc.h>
 
 GPart::GPart () {
   child = 0L;
@@ -40,36 +41,26 @@ GPart::GPart (KIllustratorChild *c) {
   calcBoundingBox ();
 }
 
-GPart::GPart (const list<XmlAttribute>& attribs) : GObject (attribs) {
-  int x = 0, y = 0, w = 0, h = 0;
-  string url, mime;
+GPart::GPart (const QDomElement &element) :
+    GObject (element.namedItem("gobject").toElement()) {
 
-  list<XmlAttribute>::const_iterator first = attribs.begin ();
-  while (first != attribs.end ()) {
-    const string& attr = (*first).name ();
-    if (attr == "x")
-      x = (*first).intValue ();
-    else if (attr == "y")
-      y = (*first).intValue ();
-    else if (attr == "width")
-      w = (*first).intValue ();
-    else if (attr == "height")
-      h = (*first).intValue ();
-    else if (attr == "url")
-      url = (*first).stringValue ();
-    else if (attr == "mime")
-      mime = (*first).stringValue ();
+    int x = 0, y = 0, w = 0, h = 0;
+    string url, mime;
 
-    first++;
-  }
-  initialGeom = QRect (x, y, w, h);
+    x = element.attribute("x").toInt();
+    y = element.attribute("y").toInt();
+    w = element.attribute("width").toInt();
+    h = element.attribute("height").toInt();
+    url = element.attribute("url");
+    mime = element.attribute("mime");
+    initialGeom = QRect (x, y, w, h);
 
   // ####### Torben
   /* child = new KIllustratorChild ();
   child->setURL (url.c_str ());
   child->setMimeType (mime.c_str ());
-  child->setGeometry (initialGeom); */
-  calcBoundingBox ();
+  child->setGeometry (initialGeom);  */
+    calcBoundingBox ();
 }
 
 GPart::GPart (const GPart& obj) : GObject (obj) {
@@ -107,38 +98,38 @@ void GPart::draw (Painter& p, bool /*withBasePoints*/, bool outline) {
 }
 
 void GPart::calcBoundingBox () {
-  QRect r = tmpMatrix.map (initialGeom);
-  if (r != oldGeom) {
-    cout << "UPDATE CHILD GEOMETRY !!!!!!!!!!!!" << endl;
-    oldGeom = r;
-    child->setGeometry (r);
-    cout << "new part geometry: " << r.x () << ", " << r.y ()
-	 << " - " << r.width () << ", " << r.height () << endl;
-  }
-  updateBoundingBox (Coord (r.x (), r.y ()),
-		     Coord (r.right (), r.bottom ()));
+
+    QRect r = tmpMatrix.map (initialGeom);
+    if (r != oldGeom) {
+	cout << "UPDATE CHILD GEOMETRY !!!!!!!!!!!!" << endl;
+	oldGeom = r;
+	child->setGeometry (r);
+	cout << "new part geometry: " << r.x () << ", " << r.y ()
+	     << " - " << r.width () << ", " << r.height () << endl;
+    }
+    updateBoundingBox (Coord (r.x (), r.y ()),
+		       Coord (r.right (), r.bottom ()));
 }
 
 GObject* GPart::copy () {
   return new GPart (*this);
 }
 
-GObject* GPart::clone (const list<XmlAttribute>& attribs) {
-  return new GPart (attribs);
+GObject* GPart::clone (const QDomElement &element) {
+  return new GPart (element);
 }
 
-void GPart::writeToXml (XmlWriter& xml) {
-  xml.startTag ("object", false);
-  writePropertiesToXml (xml);
-  xml.addAttribute ("x", oldGeom.x ());
-  xml.addAttribute ("y", oldGeom.y ());
-  xml.addAttribute ("width", oldGeom.width ());
-  xml.addAttribute ("height", oldGeom.height ());
-  xml.addAttribute ("url", child->url().url().latin1() );
-  xml.addAttribute ("mime", child->document()->mimeType ());
-  xml.closeTag (true);
+QDomElement GPart::writeToXml (QDomDocument &document) {
 
-  //  child->save (xml.stream ());
+    QDomElement element=document.createElement("object");
+    element.setAttribute ("x", oldGeom.x ());
+    element.setAttribute ("y", oldGeom.y ());
+    element.setAttribute ("width", oldGeom.width ());
+    element.setAttribute ("height", oldGeom.height ());
+    element.setAttribute ("url", child->url().url() );
+    element.setAttribute ("mime", child->document()->mimeType ());
+    element.appendChild(GObject::writeToXml(document));
+    return element;
 }
 
-#include "GPart.moc"
+#include <GPart.moc>

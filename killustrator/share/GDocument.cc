@@ -53,8 +53,8 @@
 #include <vector>
 #include <algorithm>
 
-#include "xmlutils/XmlWriter.h"
-#include "xmlutils/XmlReader.h"
+//#include "xmlutils/XmlWriter.h"
+//#include "xmlutils/XmlReader.h"
 
 #include "units.h"
 #include <klocale.h>
@@ -503,385 +503,373 @@ void GDocument::objectChanged (const Rect& r) {
 }
 
 QDomDocument GDocument::saveToXml () {
-  static const char* formats[] = {
-    "a3", "a4", "a5", "us_letter", "us_legal", "screen", "custom"
-  };
-  static const char* orientations[] = {
-    "portrait", "landscape"
-  };
 
-  QDomDocument document("killustator");
-  document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  QDomElement killustaror=document.createElement("killustaror");
-  killustaror.setAttribute("editor", "KIllustrator");
-  killustrator.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
-  killustrator.setAttribute ("comment",(const char *)comment);
-  killustrator.setAttribute ("keywords",(const char *)keywords);
-  document.appendChild(killustrator);
+    static const char* formats[] = {
+	"a3", "a4", "a5", "us_letter", "us_legal", "screen", "custom"
+	    };
+    static const char* orientations[] = {
+	"portrait", "landscape"
+	    };
 
-  QDomElement head=document.createElement("head");
-  document.appendChild(head);
+    QDomDocument document("killustator");
+    document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    QDomElement killustrator=document.createElement("killustaror");
+    killustrator.setAttribute("editor", "KIllustrator");
+    killustrator.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+    killustrator.setAttribute ("comment",(const char *)comment);
+    killustrator.setAttribute ("keywords",(const char *)keywords);
+    document.appendChild(killustrator);
 
-  QDomElement layout=document.createElement("layout");
-  layout.setAttribute ("format", formats[pLayout.format]);
-  layout.setAttribute ("orientation", orientations[pLayout.orientation]);
-  layout.setAttribute ("width", pLayout.mmWidth);
-  layout.setAttribute ("height", pLayout.mmHeight);
-  layout.setAttribute ("lmargin", pLayout.mmLeft);
-  layout.setAttribute ("tmargin", pLayout.mmTop);
-  layout.setAttribute ("rmargin", pLayout.mmRight);
-  layout.setAttribute ("bmargin", pLayout.mmBottom);
-  head.appendChild(layout);
+    QDomElement head=document.createElement("head");
+    killustrator.appendChild(head);
 
-  QDomElement grid=document.createElement("grid");
-  grid.setAttribute ("dx", gridx);
-  grid.setAttribute ("dy", gridy);
-  grid.setAttribute ("align", snapToGrid ? 1 : 0);
-  head.appendChild(grid);
+    QDomElement layout=document.createElement("layout");
+    layout.setAttribute ("format", formats[pLayout.format]);
+    layout.setAttribute ("orientation", orientations[pLayout.orientation]);
+    layout.setAttribute ("width", pLayout.mmWidth);
+    layout.setAttribute ("height", pLayout.mmHeight);
+    layout.setAttribute ("lmargin", pLayout.mmLeft);
+    layout.setAttribute ("tmargin", pLayout.mmTop);
+    layout.setAttribute ("rmargin", pLayout.mmRight);
+    layout.setAttribute ("bmargin", pLayout.mmBottom);
+    head.appendChild(layout);
 
-  QDomElement helplines=document.createElement("helplines");
-  helplines.setAttribute ("align", snapToHelplines ? 1 : 0);
-  vector<float>::iterator hi;
-  for (hi = hHelplines.begin (); hi != hHelplines.end (); hi++) {
-    QDomElement hl=document.createElement("hl");
-    hl.setAttribute ("pos", *hi);
-    helplines.appendChild(hl);
-  }
-  for (hi = vHelplines.begin (); hi != vHelplines.end (); hi++) {
-    QDomElement vl=document.createElement("vl");
-    vl.setAttribute ("pos", *hi);
-    helplines.appendChild(vl);
-  }
-  gird.appendChild(helplines);
+    QDomElement grid=document.createElement("grid");
+    grid.setAttribute ("dx", gridx);
+    grid.setAttribute ("dy", gridy);
+    grid.setAttribute ("align", snapToGrid ? 1 : 0);
+    head.appendChild(grid);
 
-  bool save_layer_info = (layers.size () > 2);
-  for (vector<GLayer*>::iterator li = layers.begin ();
-       li != layers.end (); li++) {
-    if ((*li)->isInternal ())
-      continue;
-
-    if (save_layer_info) {
-      int flags = ((*li)->isVisible () ? LAYER_VISIBLE : 0) +
-	  ((*li)->isPrintable () ? LAYER_PRINTABLE : 0) +
-	  ((*li)->isEditable () ? LAYER_EDITABLE : 0);
-      QDomElement layer=document.createElement("layer");
-      layer.setAttribute ("id", (*li)->name ());
-      layer.setAttribute ("flags", flags);
-      killustrator.appendChild(layer);
+    QDomElement helplines=document.createElement("helplines");
+    helplines.setAttribute ("align", snapToHelplines ? 1 : 0);
+    vector<float>::iterator hi;
+    for (hi = hHelplines.begin (); hi != hHelplines.end (); hi++) {
+	QDomElement hl=document.createElement("hl");
+	hl.setAttribute ("pos", *hi);
+	helplines.appendChild(hl);
     }
-    list<GObject*>& contents = (*li)->objects ();
-    for (list<GObject*>::iterator oi = contents.begin ();
-	 oi != contents.end (); oi++)
-      layer.appendChild((*oi)->writeToXml (document));
-  }
+    for (hi = vHelplines.begin (); hi != vHelplines.end (); hi++) {
+	QDomElement vl=document.createElement("vl");
+	vl.setAttribute ("pos", *hi);
+	helplines.appendChild(vl);
+    }
+    grid.appendChild(helplines);
 
-  setModified (false);
-  return true;
+    bool save_layer_info = (layers.size () > 2);
+    for (vector<GLayer*>::iterator li = layers.begin ();
+	 li != layers.end (); li++) {
+	if ((*li)->isInternal ())
+	    continue;
+
+	QDomElement layer;
+	if (save_layer_info) {
+	    int flags = ((*li)->isVisible () ? LAYER_VISIBLE : 0) +
+			((*li)->isPrintable () ? LAYER_PRINTABLE : 0) +
+			((*li)->isEditable () ? LAYER_EDITABLE : 0);
+	    layer=document.createElement("layer");
+	    layer.setAttribute ("id", (*li)->name ());
+	    layer.setAttribute ("flags", flags);
+	    killustrator.appendChild(layer);
+	}
+	list<GObject*>& contents = (*li)->objects ();
+	for (list<GObject*>::iterator oi = contents.begin ();
+	     oi != contents.end (); oi++)
+	    layer.appendChild((*oi)->writeToXml (document));
+    }
+
+    setModified (false);
+    return document;
 }
 
 bool GDocument::insertFromXml (const QDomDocument &document, list<GObject*>& newObjs) {
 
-    /*XmlReader xml (is);
-  XmlElement elem;
+    if ( document.doctype().name() != "doc" )
+	return false;
+    QDomElement doc = document.documentElement();
 
-  if (! xml.validHeader ())
-    return false;
+    if ( doc.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
+	return false;
+    return parseBody (doc, newObjs, true);
+}
 
-  if (! xml.readElement (elem) || (elem.tag () != "doc"))
-    return false;
+bool parseBody (const QDomElement &element, std::list<GObject*>& newObjs, bool markNew) {
 
-  // check mime type
-  list<XmlAttribute>::const_iterator first =  elem.attributes ().begin ();
-  while (first != elem.attributes ().end ()) {
-      if ((*first).name () == "mime") {
-	  const string& v = (*first).stringValue ();
-	  if (v != KILLUSTRATOR_MIMETYPE)
-	      return false;
-      }
-      first++;
-  }
-  return parseBody (xml, newObjs, true);
+    /*
+    GObject* obj = 0L;
+    stack<GGroup*, vector<GGroup*> > groups;
+    bool finished = false;
+    bool endOfBody = false;
+    map<string, GObject*> idtable;
+
+    do {
+	if (! xml.readElement (elem))
+	    break;
+	if (elem.tag () == "kiml" || elem.tag () == "doc") {
+	    if (! elem.isEndTag ())
+		break;
+	    else
+		endOfBody = true;
+	}
+	else if (elem.isEndTag ()) {
+	    finished = true;
+	    if (elem.tag () == "group") {
+		// group object is finished -> recalculate bbox
+		groups.top ()->calcBoundingBox ();
+		groups.pop ();
+	    }
+	}
+	else {
+	    finished = elem.isClosed () && elem.tag () != "point";
+
+	    if (elem.tag () == "layer") {
+		if (layers.size () == 1 && active_layer->objectCount () == 0)
+		    // add objects to the current layer
+		    ;
+		else
+		    active_layer = addLayer ();
+		list<XmlAttribute>::const_iterator first =
+		    elem.attributes ().begin ();
+		while (first != elem.attributes ().end ()) {
+		    const string& attr = (*first).name ();
+		    if (attr == "id")
+			active_layer->setName ((*first).stringValue ().c_str ());
+		    else if (attr == "flags") {
+			int flags = (*first).intValue ();
+			active_layer->setVisible (flags & LAYER_VISIBLE);
+			active_layer->setPrintable (flags & LAYER_EDITABLE);
+			active_layer->setEditable (flags & LAYER_PRINTABLE);
+		    }
+		    first++;
+		}
+	    }
+	    else if (elem.tag () == "polyline")
+		obj = new GPolyline (elem.attributes ());
+	    else if (elem.tag () == "ellipse")
+		obj = new GOval (elem.attributes ());
+	    else if (elem.tag () == "bezier")
+		obj = new GBezier (elem.attributes ());
+	    else if (elem.tag () == "rectangle")
+		obj = new GPolygon (elem.attributes (), GPolygon::PK_Rectangle);
+	    else if (elem.tag () == "polygon")
+		obj = new GPolygon (elem.attributes ());
+	    else if (elem.tag () == "clipart")
+		obj = new GClipart (elem.attributes ());
+	    else if (elem.tag () == "pixmap")
+		obj = new GPixmap (elem.attributes ());
+	    else if (elem.tag () == "curve") {
+		obj = new GCurve (elem.attributes ());
+		finished = false;
+		if (! xml.readElement (elem))
+		    // something goes wrong
+		    return false;
+
+		do {
+		    GSegment::Kind kind = GSegment::sk_Line;
+		    if (elem.tag () != "seg")
+			return false;
+
+		    list<XmlAttribute>::const_iterator first =
+			elem.attributes ().begin ();
+		    while (first != elem.attributes ().end ()) {
+			const string& attr = (*first).name ();
+			if (attr == "kind")
+			    kind = (GSegment::Kind) (*first).intValue ();
+			first++;
+		    }
+		    GSegment seg (kind);
+		    if (kind == GSegment::sk_Line) {
+			for (int i = 0; i < 2; i++) {
+			    Coord p;
+			    if (! xml.readElement (elem) || elem.tag () != "point")
+				return false;
+			    first = elem.attributes ().begin ();
+	
+			    while (first != elem.attributes ().end ()) {
+				if ((*first).name () == "x")
+				    p.x ((*first).floatValue ());
+				else if ((*first).name () == "y")
+				    p.y ((*first).floatValue ());
+				first++;
+			    }
+			    seg.setPoint (i, p);
+			}
+		    }
+		    else {
+			for (int i = 0; i < 4; i++) {
+			    Coord p;
+			    if (! xml.readElement (elem) || elem.tag () != "point")
+				return false;
+			    first = elem.attributes ().begin ();
+	
+			    while (first != elem.attributes ().end ()) {
+				if ((*first).name () == "x")
+				    p.x ((*first).floatValue ());
+				else if ((*first).name () == "y")
+				    p.y ((*first).floatValue ());
+				first++;
+			    }
+			    seg.setPoint (i, p);
+			}
+		    }
+		    if (! xml.readElement (elem) || elem.tag () != "seg" ||
+			! elem.isEndTag ())
+			return false;
+		    ((GCurve *) obj)->addSegment (seg);
+
+		    if (! xml.readElement (elem))
+			return false;
+		    // end of element
+		    if (elem.tag () == "curve" && elem.isEndTag ())
+			finished = true;
+		} while (! finished);
+	    }
+	    else if (elem.tag () == "text") {
+		obj = new GText (elem.attributes ());
+		// read font attributes
+		if (! xml.readElement (elem) || elem.tag () != "font")
+		    break;
+
+		list<XmlAttribute>::const_iterator first = elem.attributes ().begin ();
+		QFont font = QFont::defaultFont ();
+
+		while (first != elem.attributes ().end ()) {
+		    const string& attr = (*first).name ();
+		    if (attr == "face")
+			font.setFamily ((*first).stringValue ().c_str ());
+		    else if (attr == "point-size")
+			font.setPointSize ((*first).intValue ());
+		    else if (attr == "weight")
+			font.setWeight ((*first).intValue ());
+		    else if (attr == "italic")
+			font.setItalic ((*first).intValue () != 0);
+		    first++;
+		}
+		((GText *)obj)->setFont (font);
+
+		// and the text
+		finished = false;
+		QString text_str;
+		do {
+		    if (! xml.readElement (elem))
+			// something goes wrong
+			break;
+		    if (elem.tag () == "#PCDATA")
+			text_str += xml.getText ().c_str ();
+		    else if (elem.tag () == "font" && elem.isEndTag ())
+			// end of font tag - ignore it
+			;
+		    else if (elem.tag () == "br")
+			// newline
+			text_str += "\n";
+
+		    // end of element
+		    if (elem.tag () == "text" && elem.isEndTag ()) {
+			((GText *) obj)->setText (text_str);
+			finished = true;
+		    }
+		} while (! finished);
+	    }
+	    else if (elem.tag () == "group") {
+		GGroup* group = new GGroup (elem.attributes ());
+		group->setLayer (active_layer);
+		//	group->ref ();
+
+		if (!groups.empty ()) {
+		    groups.top ()->addObject (group);
+		}
+		else {
+		    if (markNew)
+			newObjs.push_back (group);
+		    insertObject (group);
+		}
+		groups.push (group);
+	    }
+	    else if (elem.tag () == "point") {
+		// add a point to the object
+		list<XmlAttribute>::const_iterator first = elem.attributes ().begin ();
+		Coord point;
+	
+		while (first != elem.attributes ().end ()) {
+		    if ((*first).name () == "x")
+			point.x ((*first).floatValue ());
+		    else if ((*first).name () == "y")
+			point.y ((*first).floatValue ());
+		    first++;
+		}
+		assert (obj != 0L);
+		if (obj->inherits ("GPolyline")) {
+		    GPolyline* poly = (GPolyline *) obj;
+		    poly->_addPoint (poly->numOfPoints (), point);
+		}
+	    }
+	    else {
+		GObject *proto = GObject::lookupPrototype (elem.tag ().c_str ());
+		if (proto != 0L) {
+		    obj = proto->clone (elem.attributes ());
+		}
+		else
+		    cout << "invalid object type: " << elem.tag () << endl;
+	    }
+	}
+	if (finished) {
+	    if (obj) {
+		if (!groups.empty ()) {
+		    obj->setLayer (active_layer);
+		    groups.top ()->addObject (obj);
+		}
+		else {
+		    if (markNew)
+			newObjs.push_back (obj);
+		    if (obj->hasId ())
+			idtable[obj->getId ()] =  obj;
+	
+		    insertObject (obj);
+		}
+		obj = 0L;
+	    }
+	    finished = false;
+	}
+    } while (! endOfBody);
+
+    // update object connections
+    vector<GLayer*>::iterator i = layers.begin ();
+    for (; i != layers.end (); i++) {
+	GLayer* layer = *i;
+	list<GObject*>& contents = layer->objects ();
+	for (list<GObject*>::iterator oi = contents.begin ();
+	     oi != contents.end (); oi++) {
+	    // this should be more general !!
+	    if ((*oi)->hasRefId () && (*oi)->isA ("GText")) {
+		const char* id = (*oi)->getRefId ();
+		map<string, GObject*>::iterator mi = idtable.find (id);
+		if (mi != idtable.end ()) {
+		    GText *tobj = (GText *) *oi;
+		    tobj->setPathObject (mi->second);
+		}
+	    }
+	}
+    }
+
+    setAutoUpdate (true);
     */
     return true;
 }
 
-bool parseBody (const QDomDocument &document, std::list<GObject*>& newObjs, bool markNew) {
-    /*
-    GObject* obj = 0L;
-    stack<GGroup*, vector<GGroup*> > groups;
-  bool finished = false;
-  XmlElement elem;
-  bool endOfBody = false;
-  map<string, GObject*> idtable;
-
-  do {
-    if (! xml.readElement (elem))
-      break;
-    if (elem.tag () == "kiml" || elem.tag () == "doc") {
-      if (! elem.isEndTag ())
-        break;
-      else
-        endOfBody = true;
-    }
-    else if (elem.isEndTag ()) {
-      finished = true;
-      if (elem.tag () == "group") {
-	  // group object is finished -> recalculate bbox
-	groups.top ()->calcBoundingBox ();
-	groups.pop ();
-      }
-    }
-    else {
-      finished = elem.isClosed () && elem.tag () != "point";
-
-      if (elem.tag () == "layer") {
-	  if (layers.size () == 1 && active_layer->objectCount () == 0)
-	      // add objects to the current layer
-	      ;
-	  else
-	      active_layer = addLayer ();
-	  list<XmlAttribute>::const_iterator first =
-	      elem.attributes ().begin ();
-	  while (first != elem.attributes ().end ()) {
-	      const string& attr = (*first).name ();
-	      if (attr == "id")
-		  active_layer->setName ((*first).stringValue ().c_str ());
-	      else if (attr == "flags") {
-		  int flags = (*first).intValue ();
-		  active_layer->setVisible (flags & LAYER_VISIBLE);
-		  active_layer->setPrintable (flags & LAYER_EDITABLE);
-		  active_layer->setEditable (flags & LAYER_PRINTABLE);
-	      }
-	      first++;
-	  }
-      }
-      else if (elem.tag () == "polyline")
-	obj = new GPolyline (elem.attributes ());
-      else if (elem.tag () == "ellipse")
-	obj = new GOval (elem.attributes ());
-      else if (elem.tag () == "bezier")
-	obj = new GBezier (elem.attributes ());
-      else if (elem.tag () == "rectangle")
-	obj = new GPolygon (elem.attributes (), GPolygon::PK_Rectangle);
-      else if (elem.tag () == "polygon")
-	obj = new GPolygon (elem.attributes ());
-      else if (elem.tag () == "clipart")
-	obj = new GClipart (elem.attributes ());
-      else if (elem.tag () == "pixmap")
-	obj = new GPixmap (elem.attributes ());
-      else if (elem.tag () == "curve") {
-	obj = new GCurve (elem.attributes ());
-	finished = false;
-	if (! xml.readElement (elem))
-	  // something goes wrong
-	  return false;
-
-	do {
-	  GSegment::Kind kind = GSegment::sk_Line;
-	  if (elem.tag () != "seg")
-	    return false;
-
-	  list<XmlAttribute>::const_iterator first =
-	    elem.attributes ().begin ();
-	  while (first != elem.attributes ().end ()) {
-	    const string& attr = (*first).name ();
-	    if (attr == "kind")
-	      kind = (GSegment::Kind) (*first).intValue ();
-	    first++;
-	  }
-	  GSegment seg (kind);
-	  if (kind == GSegment::sk_Line) {
-	    for (int i = 0; i < 2; i++) {
-	      Coord p;
-	      if (! xml.readElement (elem) || elem.tag () != "point")
-		return false;
-	      first = elem.attributes ().begin ();
-	
-	      while (first != elem.attributes ().end ()) {
-		if ((*first).name () == "x")
-		  p.x ((*first).floatValue ());
-		else if ((*first).name () == "y")
-		  p.y ((*first).floatValue ());
-		first++;
-	      }
-	      seg.setPoint (i, p);
-	    }
-	  }
-	  else {
-	    for (int i = 0; i < 4; i++) {
-	      Coord p;
-	      if (! xml.readElement (elem) || elem.tag () != "point")
-		return false;
-	      first = elem.attributes ().begin ();
-	
-	      while (first != elem.attributes ().end ()) {
-		if ((*first).name () == "x")
-		  p.x ((*first).floatValue ());
-		else if ((*first).name () == "y")
-		  p.y ((*first).floatValue ());
-		first++;
-	      }
-	      seg.setPoint (i, p);
-	    }
-	  }
-	  if (! xml.readElement (elem) || elem.tag () != "seg" ||
-	      ! elem.isEndTag ())
-	    return false;
-	  ((GCurve *) obj)->addSegment (seg);
-
-	  if (! xml.readElement (elem))
-	    return false;
-	  // end of element
-	  if (elem.tag () == "curve" && elem.isEndTag ())
-	    finished = true;
-	} while (! finished);
-      }
-      else if (elem.tag () == "text") {
-	obj = new GText (elem.attributes ());
-	// read font attributes
-	if (! xml.readElement (elem) || elem.tag () != "font")
-	  break;
-
-	list<XmlAttribute>::const_iterator first = elem.attributes ().begin ();
-	QFont font = QFont::defaultFont ();
-
-	while (first != elem.attributes ().end ()) {
-	  const string& attr = (*first).name ();
-	  if (attr == "face")
-	    font.setFamily ((*first).stringValue ().c_str ());
-	  else if (attr == "point-size")
-	    font.setPointSize ((*first).intValue ());
-	  else if (attr == "weight")
-	    font.setWeight ((*first).intValue ());
-	  else if (attr == "italic")
-	    font.setItalic ((*first).intValue () != 0);
-	  first++;
-	}
-	((GText *)obj)->setFont (font);
-
-	// and the text
-	finished = false;
-	QString text_str;
-	do {
-	  if (! xml.readElement (elem))
-	    // something goes wrong
-	    break;
-	  if (elem.tag () == "#PCDATA")
-	    text_str += xml.getText ().c_str ();
-	  else if (elem.tag () == "font" && elem.isEndTag ())
-	    // end of font tag - ignore it
-	    ;
-	  else if (elem.tag () == "br")
-	    // newline
-	    text_str += "\n";
-
-	  // end of element
-	  if (elem.tag () == "text" && elem.isEndTag ()) {
-	    ((GText *) obj)->setText (text_str);
-	    finished = true;
-	  }
-	} while (! finished);
-      }
-      else if (elem.tag () == "group") {
-	GGroup* group = new GGroup (elem.attributes ());
-	group->setLayer (active_layer);
-	//	group->ref ();
-
-	if (!groups.empty ()) {
-	  groups.top ()->addObject (group);
-	}
-	else {
-	    if (markNew)
-		newObjs.push_back (group);
-	  insertObject (group);
-	}
-	groups.push (group);
-      }
-      else if (elem.tag () == "point") {
-	// add a point to the object
-	list<XmlAttribute>::const_iterator first = elem.attributes ().begin ();
-	Coord point;
-	
-	while (first != elem.attributes ().end ()) {
-	  if ((*first).name () == "x")
-	    point.x ((*first).floatValue ());
-	  else if ((*first).name () == "y")
-	    point.y ((*first).floatValue ());
-	  first++;
-	}
-	assert (obj != 0L);
-	if (obj->inherits ("GPolyline")) {
-	  GPolyline* poly = (GPolyline *) obj;
-	  poly->_addPoint (poly->numOfPoints (), point);
-	}
-      }
-      else {
-	GObject *proto = GObject::lookupPrototype (elem.tag ().c_str ());
-	if (proto != 0L) {
-	  obj = proto->clone (elem.attributes ());
-	}
-	else
-	  cout << "invalid object type: " << elem.tag () << endl;
-      }
-    }
-    if (finished) {
-      if (obj) {
-        if (!groups.empty ()) {
-	  obj->setLayer (active_layer);
- 	  groups.top ()->addObject (obj);
-        }
-        else {
-	  if (markNew)
-	    newObjs.push_back (obj);
-	  if (obj->hasId ())
-	    idtable[obj->getId ()] =  obj;
-	
-	  insertObject (obj);
-	}
-        obj = 0L;
-      }
-      finished = false;
-    }
-  } while (! endOfBody);
-
-  // update object connections
-  vector<GLayer*>::iterator i = layers.begin ();
-  for (; i != layers.end (); i++) {
-    GLayer* layer = *i;
-    list<GObject*>& contents = layer->objects ();
-    for (list<GObject*>::iterator oi = contents.begin ();
-	 oi != contents.end (); oi++) {
-      // this should be more general !!
-      if ((*oi)->hasRefId () && (*oi)->isA ("GText")) {
-	const char* id = (*oi)->getRefId ();
-	map<string, GObject*>::iterator mi = idtable.find (id);
-	if (mi != idtable.end ()) {
-	  GText *tobj = (GText *) *oi;
-	  tobj->setPathObject (mi->second);
-	}
-      }
-    }
-  }
-
-  setAutoUpdate (true);
-    */
-  return true;
-}
-
 bool GDocument::readFromXml (const  QDomDocument &document) {
 
+    /*
   bool endOfHeader = false;
 
   XmlReader xml (is);
   if (! xml.validHeader ()) {
     return false;
   }
-  /*
+
   if (xml.doctype () != XML_DOCTYPE || xml.dtd () != XML_DTD) {
     cout << "Wrong doctype !" << endl;
     return false;
   }
-  */
+
   XmlElement elem;
   if (! xml.readElement (elem) ||
       (elem.tag () != "kiml" && // for backward compatibility
@@ -1025,6 +1013,8 @@ bool GDocument::readFromXml (const  QDomDocument &document) {
   setModified (false);
   emit gridChanged ();
   return result;
+  */
+  return true;
 }
 
 unsigned int GDocument::findIndexOfObject (GObject *obj) {

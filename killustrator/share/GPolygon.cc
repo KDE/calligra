@@ -31,6 +31,7 @@
 #include "GCurve.h"
 
 #include <qpointarray.h>
+#include <qdom.h>
 #include <klocale.h>
 #include <kapp.h>
 
@@ -97,33 +98,24 @@ GPolygon::GPolygon (GPolygon::Kind pkind) : GPolyline () {
 }
 
 GPolygon::GPolygon (const QDomElement &element, Kind pkind)
-  : GPolyline (element.childToElement("polyline")) {
-  points.setAutoDelete (true);
-  kind = pkind;
-  if (kind != PK_Polygon) {
-    list<XmlAttribute>::const_iterator first = attribs.begin ();
-    float x = 0, y = 0, w = 0, h = 0;
+  : GPolyline (element.namedItem("polyline").toElement()) {
 
-    while (first != attribs.end ()) {
-      const string& attr = (*first).name ();
-      if (attr == "x")
-	x = (*first).floatValue ();
-      else if (attr == "y")
-	y = (*first).floatValue ();
-      else if (attr == "width")
-	w = (*first).floatValue ();
-      else if (attr == "height")
-	h = (*first).floatValue ();
-      else if (attr == "rounding")
-	Roundness = (*first).floatValue ();
-      first++;
-    }
-    points.append (new Coord (x, y));
-    points.append (new Coord (x + w, y));
-    points.append (new Coord (x + w, y + h));
-    points.append (new Coord (x, y + h));
-  }
-  calcBoundingBox ();
+      points.setAutoDelete (true);
+      kind = pkind;
+      if (kind != PK_Polygon) {
+	  float x = 0, y = 0, w = 0, h = 0;
+
+	  x = element.attribute("x").toFloat();
+	  y = element.attribute("y").toFloat();
+	  w = element.attribute("width").toFloat();
+	  h = element.attribute("height").toFloat();
+	  Roundness = element.attribute("rounding").toFloat();
+	  points.append (new Coord (x, y));
+	  points.append (new Coord (x + w, y));
+	  points.append (new Coord (x + w, y + h));
+	  points.append (new Coord (x, y + h));
+      }
+      calcBoundingBox ();
 }
 
 GPolygon::GPolygon (const GPolygon& obj) : GPolyline (obj) {

@@ -25,9 +25,9 @@
 #include <stdlib.h>
 #include <iostream.h>
 #include <math.h>
-#include "GPolyline.h"
-#include "GPolyline.moc"
-#include "GCurve.h"
+#include <GPolyline.h>
+#include <GCurve.h>
+#include <qdom.h>
 
 #include <klocale.h>
 #include <kapp.h>
@@ -42,7 +42,7 @@ GPolyline::GPolyline () {
   edx = edy = 0;
 }
 
-GPolyline::GPolyline (const QDomElement &element) : GObject (element) {
+GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
 
     connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
 	     SLOT(updateProperties (GObject::Property, int)));
@@ -50,14 +50,8 @@ GPolyline::GPolyline (const QDomElement &element) : GObject (element) {
     sArrow = eArrow = 0L;
     sAngle = eAngle = 0;
 
-    while (first != attribs.end ()) {
-	const string& attr = (*first).name ();
-	if (attr == "arrow1")
-	    outlineInfo.startArrowId = (*first).intValue ();
-	else if (attr == "arrow2")
-	    outlineInfo.endArrowId = (*first).intValue ();
-	first++;
-    }
+    outlineInfo.startArrowId = element.attribute("arrow1").toInt();
+    outlineInfo.endArrowId = element.attribute("arrow2").toInt();
     sArrow = (outlineInfo.startArrowId > 0 ?
 	      Arrow::getArrow (outlineInfo.startArrowId) : 0L);
     eArrow = (outlineInfo.endArrowId > 0 ?
@@ -66,15 +60,15 @@ GPolyline::GPolyline (const QDomElement &element) : GObject (element) {
 }
 
 GPolyline::GPolyline (const GPolyline& obj) : GObject (obj) {
-  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
-           SLOT(updateProperties (GObject::Property, int)));
-  points.setAutoDelete (true);
-  QListIterator<Coord> it (obj.points);
-  for (; it.current (); ++it)
-    points.append (new Coord (* (it.current ())));
-  sArrow = obj.sArrow;
-  eArrow = obj.eArrow;
-  calcBoundingBox ();
+    connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
+	     SLOT(updateProperties (GObject::Property, int)));
+    points.setAutoDelete (true);
+    QListIterator<Coord> it (obj.points);
+    for (; it.current (); ++it)
+	points.append (new Coord (* (it.current ())));
+    sArrow = obj.sArrow;
+    eArrow = obj.eArrow;
+    calcBoundingBox ();
 }
 
 float GPolyline::calcArrowAngle (const Coord& p1, const Coord& p2,
@@ -529,3 +523,5 @@ GCurve* GPolyline::convertToCurve () const {
   }
   return curve;
 }
+
+#include <GPolyline.moc>

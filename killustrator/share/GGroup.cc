@@ -6,7 +6,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -14,7 +14,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -29,6 +29,7 @@
 
 #include <algorithm>
 
+#include <qdom.h>
 #include <klocale.h>
 #include <kapp.h>
 
@@ -41,12 +42,12 @@ struct release_obj {
 };
 
 GGroup::GGroup () {
-  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
+  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
            SLOT(propagateProperties (GObject::Property, int)));
 }
 
-GGroup::GGroup (const list<XmlAttribute>& attribs) : GObject (attribs) {
-  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
+GGroup::GGroup (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
+  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
            SLOT(propagateProperties (GObject::Property, int)));
 }
 
@@ -98,8 +99,8 @@ GObject* GGroup::copy () {
   return new GGroup (*this);
 }
 
-GObject* GGroup::clone (const list<XmlAttribute>& attribs) {
-  return new GGroup (attribs);
+GObject* GGroup::clone (const QDomElement &element) {
+  return new GGroup (element);
 }
 
 void GGroup::calcBoundingBox () {
@@ -133,13 +134,13 @@ void GGroup::calcBoundingBox () {
 
   updateBoundingBox (mr);
 }
-    
+
 void GGroup::propagateProperties (GObject::Property prop, int mask) {
     list<GObject*>::iterator i = members.begin ();
     for (; i != members.end (); i++) {
       if (prop == GObject::Prop_Outline) {
 	  // don't update the custom info (shape etc.)
-	  outlineInfo.mask = mask & (GObject::OutlineInfo::Color | 
+	  outlineInfo.mask = mask & (GObject::OutlineInfo::Color |
 				     GObject::OutlineInfo::Style |
 				     GObject::OutlineInfo::Width);
 	  (*i)->setOutlineInfo (outlineInfo);
@@ -151,17 +152,15 @@ void GGroup::propagateProperties (GObject::Property prop, int mask) {
     }
 }
 
-void GGroup::writeToXml (XmlWriter& xml) {
-  xml.startTag ("group", false);
+QDomElement GGroup::writeToXml (QDomDocument &document) {
 
-  writePropertiesToXml (xml);
-  xml.closeTag (false);
+    QDomElement element=document.createElement("group");
+    element.appendChild(GObject::writeToXml(document));
 
     list<GObject*>::iterator i = members.begin ();
     for (; i != members.end (); i++)
-	(*i)->writeToXml (xml);
-
-  xml.endTag ();
+	element.appendChild((*i)->writeToXml (document));
+    return element;
 }
 
 void GGroup::printInfo () {

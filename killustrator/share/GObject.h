@@ -47,6 +47,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <list>
 #include <math.h>
 
 using std::vector;

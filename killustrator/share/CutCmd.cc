@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -34,7 +34,7 @@
 
 using namespace std;
 
-CutCmd::CutCmd (GDocument* doc) 
+CutCmd::CutCmd (GDocument* doc)
   : Command(i18n("Cut"))
 {
   document = doc;
@@ -55,23 +55,18 @@ CutCmd::~CutCmd () {
 }
 
 void CutCmd::execute () {
-  ostrstream os;
-  XmlWriter xs (os);
 
-  xs.startTag ("doc", false);
-  xs.addAttribute ("mime", KILLUSTRATOR_MIMETYPE);
-  xs.closeTag ();
+    QDomDocument docu("doc");
+    QDomElement doc=docu.createElement("doc");
+    doc.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+    docu.appendChild(doc);
 
-  for (list<pair<int, GObject*> >::iterator it = objects.begin ();
-       it != objects.end (); it++) {
-      it->second->writeToXml (xs);
-      document->deleteObject (it->second);
-  }
-
-  xs.endTag (); // </doc>
-
-  os << ends;
-  QApplication::clipboard ()->setText (os.str ());
+    for (list<pair<int, GObject*> >::iterator it = objects.begin ();
+	 it != objects.end (); it++) {
+	doc.appendChild(it->second->writeToXml(docu));
+	document->deleteObject (it->second);
+    }
+    QApplication::clipboard ()->setText (docu.toCString());
 }
 
 void CutCmd::unexecute () {

@@ -66,33 +66,26 @@ GText::GText () {
   pathObj = 0L;
 }
 
-GText::GText (const list<XmlAttribute>& attribs) : GObject (attribs) {
-  textInfo = defaultTextInfo;
-  fm = new QFontMetrics (textInfo.font);
-  cursx = cursy = 0;
-  max_width = 0;
-  cursorActive = false;
-  text.push_back (QString (""));
-  pathObj = 0L;
-  float x = 0, y = 0;
+GText::GText (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
 
-  list<XmlAttribute>::const_iterator first = attribs.begin ();
-	
-  while (first != attribs.end ()) {
-    const string& attr = (*first).name ();
-    if (attr == "x")
-      x = (*first).floatValue ();
-    else if (attr == "y")
-      y = (*first).floatValue ();
-    else if (attr == "align")
-      textInfo.align = (TextInfo::Alignment) ((*first).intValue ());
-    first++;
-  }
-  if (x != 0.0 || y != 0.0) {
-    tMatrix.translate (x, y);
-    iMatrix = tMatrix.invert ();
-    initTmpMatrix ();
-  }
+    textInfo = defaultTextInfo;
+    fm = new QFontMetrics (textInfo.font);
+    cursx = cursy = 0;
+    max_width = 0;
+    cursorActive = false;
+    text.push_back (QString (""));
+    pathObj = 0L;
+    float x = 0, y = 0;
+
+    x=element.attribute("x").toFloat();
+    y=element.attribute("y").toFloat();
+    textInfo.align=(TextInfo::Alignment)element.attribute("align").toInt();
+
+    if (x != 0.0 || y != 0.0) {
+	tMatrix.translate (x, y);
+	iMatrix = tMatrix.invert ();
+	initTmpMatrix ();
+    }
 }
 
 GText::GText (const GText& obj) : GObject (obj) {
@@ -462,40 +455,31 @@ GObject* GText::copy () {
   return new GText (*this);
 }
 
-GObject* GText::clone (const list<XmlAttribute>& attribs) {
-  return new GText (attribs);
+GObject* GText::clone (const QDomElement &element) {
+  return new GText (element);
 }
 
-void GText::writeToXml (XmlWriter& xml) {
-  xml.startTag ("text", false);
-  writePropertiesToXml (xml);
-  xml.addAttribute ("align", (int) textInfo.align);
-  if (pathObj)
-    xml.addAttribute ("ref", pathObj->getId ());
-  xml.closeTag (false);
+QDomElement GText::writeToXml (QDomDocument &document) {
 
-  xml.startTag ("font", false);
-#if QT_VERSION >= 199
-  xml.addAttribute ("face", textInfo.font.family ().latin1 ());
-#else
-  xml.addAttribute ("face", textInfo.font.family ());
-#endif
-  xml.addAttribute ("point-size", textInfo.font.pointSize ());
-  xml.addAttribute ("weight", textInfo.font.weight ());
-  if (textInfo.font.italic ())
-    xml.addAttribute ("italic", 1);
-  xml.closeTag (false);
+    QDomElement element=document.createElement("text");
+    element.setAttribute ("align", (int) textInfo.align);
+    if (pathObj)
+	element.setAttribute ("ref", pathObj->getId ());
 
-  int i = 0;
-  for (vector<QString>::iterator it = text.begin (); it != text.end ();
-       it++, i++) {
-    xml.writeText ((const char *) *it);
-    if (i < lines () - 1)
-      xml.writeTag ("br/");
-  }
+    QDomElement font=document.createElement("font");
+    font.setAttribute ("face", textInfo.font.family());
+    font.setAttribute ("point-size", textInfo.font.pointSize());
+    font.setAttribute ("weight", textInfo.font.weight());
+    if (textInfo.font.italic())
+	font.setAttribute("italic", 1);
+    element.appendChild(font);
 
-  xml.endTag ();
-  xml.endTag ();
+    int i = 0;
+    for (vector<QString>::iterator it = text.begin (); it != text.end ();
+	 it++, i++)
+	element.appendChild(document.createTextNode(*it));
+    element.appendChild(GObject::writeToXml(document));
+    return element;
 }
 
 void GText::updateMatricesForPath () {

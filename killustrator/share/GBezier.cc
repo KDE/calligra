@@ -34,9 +34,10 @@
 #include "GBezier.moc"
 #include "GCurve.h"
 
+#include <qdom.h>
 #include <qpointarray.h>
 #include <klocale.h>
-#include <kapp.h>
+ #include <kapp.h>
 
 #define DELTA 0.05
 
@@ -132,17 +133,10 @@ GBezier::GBezier () : GPolyline () {
   wSegment = 0; closed = false;
 }
 
-GBezier::GBezier (const QDomElement &element) : GPolyline (element) {
-  wSegment = -1;
+GBezier::GBezier (const QDomElement &element) : GPolyline (element.namedItem("polyline").toElement()) {
 
-  list<XmlAttribute>::const_iterator first = attribs.begin ();
-	
-  while (first != attribs.end ()) {
-    const string& attr = (*first).name ();
-    if (attr == "closed")
-      closed = ((*first).intValue () == 1);
-    first++;
-  }
+    wSegment = -1;
+    closed=(element.attribute("closed").toInt()==1);
 }
 
 GBezier::GBezier (const GBezier& obj) : GPolyline (obj) {
@@ -539,7 +533,7 @@ int GBezier::cPoint (int idx) {
     return idx + (isEndPoint (idx + 1) ? 2 : -2);
 }
 
-void QDomElement GBezier::writeToXml (QDomDocument &document) {
+QDomElement GBezier::writeToXml (QDomDocument &document) {
 
     QDomElement berzier=document.createElement("bezier");
     berzier.setAttribute ("closed", (int) closed);

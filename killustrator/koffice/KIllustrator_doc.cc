@@ -67,14 +67,6 @@ KIllustratorDocument::~KIllustratorDocument()
     delete m_gdocument;
 }
 
-/*
-bool KIllustratorDocument::save (ostream& os, const char* )
-{
-    cout << "save KIllu to stream !!!!!!!!!!!!!!!" << endl;
-    return m_gdocument->saveToXml (os);
-}
-*/
-
 bool KIllustratorDocument::loadXML (const QDomDocument &doc)
 {
   cout << "load KIllu from stream !!!!!!!!!" << endl;
@@ -118,12 +110,13 @@ bool KIllustratorDocument::saveChildren (KoStore* _store, const char *_path)
   for( ; it.current(); ++it )
   {
     QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
-    if ( !((KoDocumentChild*)it.current())->document()->saveToStore( _store, "", path ) )
+    if ( !((KoDocumentChild*)it.current())->document()->saveToStore( _store, path ) )
       return false;
   }
   return true;
 }
 
+// I admire that piece of art, so I didn't touch it... (Werner)
 /*
 bool KIllustratorDocument::completeSaving (KoStore* store)
 {
@@ -203,7 +196,7 @@ GDocument* KIllustratorDocument::gdoc()
     return m_gdocument;
 }
 
-bool KIllustratorDocument::insertNewTemplate (int, int, bool clean) {
+bool KIllustratorDocument::insertNewTemplate (int, int, bool) {
   QString templ;
   KoTemplateChooseDia::ReturnType ret;
 
@@ -233,4 +226,4 @@ bool KIllustratorDocument::insertNewTemplate (int, int, bool clean) {
     return false;
 }
 
-#include "KIllustrator_doc.moc"
+#include <KIllustrator_doc.moc>

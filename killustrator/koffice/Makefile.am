@@ -1,4 +1,4 @@
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I$(top_srcdir)/killustrator/share -I$(top_srcdir)/killustrator/filter -I$(top_srcdir)/killustrator
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) -I$(top_srcdir)/killustrator/share -I$(top_srcdir)/killustrator/filter -I$(top_srcdir)/killustrator $(all_includes)
 
 ####### Files
 
@@ -9,7 +9,7 @@ libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
 	KIllustrator_shell.cc KIllustrator_view.cc \
 	InsertPartTool.cc GPart.cc KIllustrator_factory.cc
 libkillustratorpart_la_LDFLAGS = -avoid-version -module -no-undefined
-libkillustratorpart_la_LIBADD = $(all_libraries) $(top_builddir)/killustrator/share/libkillu.la $(top_builddir)/killustrator/xmlutils/libxml.la $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
+libkillustratorpart_la_LIBADD = $(all_libraries) $(top_builddir)/killustrator/share/libkillu.la $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
 
 killustrator_la_SOURCES = main.cc
 killustrator_la_LDFLAGS = $(all_libraries) -avoid-version -module

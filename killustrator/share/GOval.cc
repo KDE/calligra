@@ -6,7 +6,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -14,7 +14,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -29,6 +29,8 @@
 #include "GPolyline.h"
 #include "GCurve.h"
 
+#include <qdom.h>
+#include <qstring.h>
 #include <klocale.h>
 #include <kapp.h>
 
@@ -36,42 +38,30 @@ GOval::GOval (bool cFlag) : circleFlag (cFlag) {
   sAngle = eAngle = 270;
 }
 
-GOval::GOval (const list<XmlAttribute>& attribs, bool cFlag) 
-  : GObject (attribs) {
-  list<XmlAttribute>::const_iterator first = attribs.begin ();
-  float x = 0, y = 0, rx = 0, ry = 0;
+GOval::GOval (const QDomElement &element, bool cFlag)
+  : GObject (element) {
 
-  sAngle = eAngle = 270;
+      float x = 0, y = 0, rx = 0, ry = 0;
+      sAngle = eAngle = 270;
 
-  while (first != attribs.end ()) {
-    const string& attr = (*first).name ();
-    if (attr == "x")
-      x = (*first).floatValue ();
-    else if (attr == "y")
-      y = (*first).floatValue ();
-    else if (attr == "rx")
-      rx = (*first).floatValue ();
-    else if (attr == "ry")
-      ry = (*first).floatValue ();
-    else if (attr == "angle1")
-      sAngle = (*first).floatValue ();
-    else if (attr == "angle2")
-      eAngle = (*first).floatValue ();
-    else if (attr == "kind") {
-      const string& v = (*first).stringValue ();
-      if (v == "arc") 
-	outlineInfo.shape = GObject::OutlineInfo::ArcShape;
-      else if (v == "pie") 
-	outlineInfo.shape = GObject::OutlineInfo::PieShape;
+      x=element.attribute("x").toFloat();
+      y=element.attribute("y").toFloat();
+      rx=element.attribute("rx").toFloat();
+      ry=element.attribute("ry").toFloat();
+      sAngle=element.attribute("angle1").toFloat();
+      eAngle=element.attribute("angle2").toFloat();
+      QString v=element.attribute("kind");
+      if (v == "arc")
+	  outlineInfo.shape = GObject::OutlineInfo::ArcShape;
+      else if (v == "pie")
+	  outlineInfo.shape = GObject::OutlineInfo::PieShape;
       else
-	outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
-    }
-    first++;
-  }
-  sPoint.x (x - rx); sPoint.y (y - ry);
-  ePoint.x (x + rx); ePoint.y (y + ry);
-  circleFlag = cFlag;
-  calcBoundingBox ();
+	  outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
+
+      sPoint.x (x - rx); sPoint.y (y - ry);
+      ePoint.x (x + rx); ePoint.y (y + ry);
+      circleFlag = cFlag;
+      calcBoundingBox ();
 }
 
 GOval::GOval (const GOval& obj) : GObject (obj) {
@@ -103,7 +93,7 @@ void GOval::draw (QPainter& p, bool withBasePoints, bool outline) {
   if (! workInProgress () && ! outline) {
     initBrush (brush);
     p.setBrush (brush);
-    if (gradientFill () && 
+    if (gradientFill () &&
 	outlineInfo.shape != GObject::OutlineInfo::ArcShape) {
       if (! gShape.valid ())
 	updateGradientShape (p);
@@ -114,20 +104,20 @@ void GOval::draw (QPainter& p, bool withBasePoints, bool outline) {
   switch (outlineInfo.shape) {
   case GObject::OutlineInfo::DefaultShape:
     Painter::drawEllipse (p, sPoint.x (), sPoint.y (),
-			  ePoint.x () - sPoint.x (), 
+			  ePoint.x () - sPoint.x (),
 			  ePoint.y () - sPoint.y ());
     break;
   case GObject::OutlineInfo::PieShape:
     alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
     Painter::drawPie (p, sPoint.x (), sPoint.y (),
-		      ePoint.x () - sPoint.x (), 
+		      ePoint.x () - sPoint.x (),
 		      ePoint.y () - sPoint.y (),
 		      -eAngle * 16, -alen * 16);
     break;
   case GObject::OutlineInfo::ArcShape:
     alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
     Painter::drawArc (p, sPoint.x (), sPoint.y (),
-		      ePoint.x () - sPoint.x (), 
+		      ePoint.x () - sPoint.x (),
 		      ePoint.y () - sPoint.y (),
 		      -eAngle * 16, -alen * 16);
     break;
@@ -219,8 +209,8 @@ GObject* GOval::copy () {
   return new GOval (*this);
 }
 
-GObject* GOval::clone (const list<XmlAttribute>& attribs) {
-  return new GOval (attribs);
+GObject* GOval::clone (const QDomElement &element) {
+  return new GOval (element);
 }
 
 int GOval::getNeighbourPoint (const Coord& p) {
@@ -320,27 +310,27 @@ void GOval::update_segments () {
 
 }
 
-void GOval::writeToXml (XmlWriter& xml) {
+QDomElement GOval::writeToXml (QDomDocument &document) {
   static const char* kind[] = { "full", "arc", "pie" };
 
   Rect r (sPoint, ePoint);
   Rect nr = r.normalize ();
   float w2 = nr.width () / 2.0, h2 = nr.height () / 2.0;
 
-  xml.startTag ("ellipse", false);
-  writePropertiesToXml (xml);
-  xml.addAttribute ("x", nr.left () + w2);
-  xml.addAttribute ("y", nr.top () + h2);
-  xml.addAttribute ("rx", w2);
-  xml.addAttribute ("ry", h2);
-  xml.addAttribute ("angle1", sAngle);
-  xml.addAttribute ("angle2", eAngle);
-  xml.addAttribute ("kind", kind[outlineInfo.shape]);
-  xml.closeTag (true);
+  QDomElement element=document.createElement("ellipse");
+  element.setAttribute ("x", nr.left () + w2);
+  element.setAttribute ("y", nr.top () + h2);
+  element.setAttribute ("rx", w2);
+  element.setAttribute ("ry", h2);
+  element.setAttribute ("angle1", sAngle);
+  element.setAttribute ("angle2", eAngle);
+  element.setAttribute ("kind", kind[outlineInfo.shape]);
+  element.appendChild(GObject::writeToXml(document));
+  return element;
 }
 
 void GOval::updateGradientShape (QPainter& p) {
-  // define the rectangular box for the gradient pixmap 
+  // define the rectangular box for the gradient pixmap
   // (in object coordinate system)
   gShape.setBox (Rect (sPoint, ePoint));
 
@@ -353,7 +343,7 @@ void GOval::updateGradientShape (QPainter& p) {
   case GObject::OutlineInfo::DefaultShape:
       {
 	  QPointArray pnts;
-	  pnts.makeEllipse (rect.x (), rect.y (), 
+	  pnts.makeEllipse (rect.x (), rect.y (),
 			    rect.width (), rect.height ());
 	  gShape.setRegion (QRegion (matrix.map (pnts)));
 	  break;
@@ -361,16 +351,16 @@ void GOval::updateGradientShape (QPainter& p) {
   case GObject::OutlineInfo::PieShape:
     {
 	QPointArray epnts;
-	epnts.makeEllipse (rect.x (), rect.y (), 
+	epnts.makeEllipse (rect.x (), rect.y (),
 			   rect.width (), rect.height ());
 	QRegion region (matrix.map (epnts));
 
       float a = fabs (sAngle - eAngle);
-      
+
       // polygon for clipping
       QPointArray pnts (5);
       float x, y;
-      
+
       // center
       Rect r (sPoint, ePoint);
       r = r.normalize ();
@@ -379,10 +369,10 @@ void GOval::updateGradientShape (QPainter& p) {
       // point #0: center
       pnts.setPoint (0, QPoint (qRound (m.x ()), qRound (m.y ())));
       // point #1: segPoint[0]
-      pnts.setPoint (1, QPoint (qRound (segPoint[0].x ()), 
+      pnts.setPoint (1, QPoint (qRound (segPoint[0].x ()),
 				qRound (segPoint[0].y ())));
       // point #4: segPoint[1]
-      pnts.setPoint (4, QPoint (qRound (segPoint[1].x ()), 
+      pnts.setPoint (4, QPoint (qRound (segPoint[1].x ()),
 				qRound (segPoint[1].y ())));
 
       if ((sAngle >= eAngle && a >= 180) || (sAngle < eAngle && a <= 180)) {
@@ -470,15 +460,15 @@ void GOval::getPath (vector<Coord>& path) {
   // we should reimplement this !!
   QPointArray parray;
   if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
-    parray.makeArc (sPoint.x (), sPoint.y (), 
-		    ePoint.x () - sPoint.x (), 
+    parray.makeArc (sPoint.x (), sPoint.y (),
+		    ePoint.x () - sPoint.x (),
 		    ePoint.y () - sPoint.y (),
 		    -180 * 16, -360 * 16);
   else {
     float alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
-    parray.makeArc (sPoint.x (), sPoint.y (), 
-		    ePoint.x () - sPoint.x (), 
-		    ePoint.y () - sPoint.y (), -eAngle * 16, 
+    parray.makeArc (sPoint.x (), sPoint.y (),
+		    ePoint.x () - sPoint.x (),
+		    ePoint.y () - sPoint.y (), -eAngle * 16,
 		    -alen * 16);
   }
   unsigned int num = parray.size ();
@@ -495,15 +485,15 @@ GCurve* GOval::convertToCurve () const {
   // we should reimplement this !!
   QPointArray parray;
   if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
-    parray.makeArc (sPoint.x (), sPoint.y (), 
-		    ePoint.x () - sPoint.x (), 
+    parray.makeArc (sPoint.x (), sPoint.y (),
+		    ePoint.x () - sPoint.x (),
 		    ePoint.y () - sPoint.y (),
 		    -180 * 16, -360 * 16);
   else {
     float alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
-    parray.makeArc (sPoint.x (), sPoint.y (), 
-		    ePoint.x () - sPoint.x (), 
-		    ePoint.y () - sPoint.y (), -eAngle * 16, 
+    parray.makeArc (sPoint.x (), sPoint.y (),
+		    ePoint.x () - sPoint.x (),
+		    ePoint.y () - sPoint.y (), -eAngle * 16,
 		    -alen * 16);
   }
   unsigned int num = parray.size ();
@@ -526,6 +516,6 @@ GCurve* GOval::convertToCurve () const {
 }
 
 bool GOval::isValid () {
-  return (fabs (sPoint.x () - ePoint.x ()) > 1 || 
+  return (fabs (sPoint.x () - ePoint.x ()) > 1 ||
 	  fabs (sPoint.y () - ePoint.y ()) > 1);
 }

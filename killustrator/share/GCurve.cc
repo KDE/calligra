@@ -29,6 +29,7 @@
 #include <kapp.h>
 #include <cassert>
 #include <klocale.h>
+#include <qdom.h>
 #include "version.h"
 
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
@@ -114,19 +115,19 @@ void GSegment::setPoint (int i, const Coord& c) {
   }
 }
 
-void GSegment::writeToXml (XmlWriter& xml) {
-  xml.startTag ("seg", false);
-  xml.addAttribute ("kind", (skind == sk_Line ? 0 : 1));
-  xml.closeTag (false);
+QDomElement GSegment::writeToXml (QDomDocument &document) {
 
-  int num = (skind == sk_Line ? 2 : 4);
-  for (int i = 0; i < num; i++) {
-    xml.startTag ("point", false);
-    xml.addAttribute ("x", points[i].x ());
-    xml.addAttribute ("y", points[i].y ());
-    xml.closeTag (true);
-  }
-  xml.endTag ();
+    QDomElement element=document.createElement("seg");
+    element.setAttribute ("kind", (skind == sk_Line ? 0 : 1));
+
+    int num = (skind == sk_Line ? 2 : 4);
+    for (int i = 0; i < num; i++) {
+	QDomElement point=document.createElement("point");
+	point.setAttribute ("x", points[i].x ());
+	point.setAttribute ("y", points[i].y ());
+	element.appendChild(point);
+    }
+    return element;
 }
 
 bool GSegment::contains (const Coord& p) {
@@ -256,18 +257,11 @@ GCurve::GCurve () : GObject () {
   closed = false;
 }
 
-GCurve::GCurve (const list<XmlAttribute>& attribs) : GObject (attribs) {
-  list<XmlAttribute>::const_iterator first = attribs.begin ();
-	
-  while (first != attribs.end ()) {
-    const string& attr = (*first).name ();
-    if (attr == "closed")
-      closed = ((*first).intValue () == 1);
+GCurve::GCurve (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
 
-    first++;
-  }
-  if (closed)
-    updatePath ();
+    closed=(element.attribute("closed").toInt()==1);
+    if (closed)
+	updatePath ();
 }
 
 GCurve::GCurve (const GCurve& obj) : GObject (obj) {
@@ -387,20 +381,20 @@ GObject* GCurve::copy () {
   return new GCurve (*this);
 }
 
-GObject* GCurve::clone (const list<XmlAttribute>& attribs) {
-  return new GCurve (attribs);
+GObject* GCurve::clone (const QDomElement &element) {
+  return new GCurve(element);
 }
 
-void GCurve::writeToXml (XmlWriter& xml) {
-  xml.startTag ("curve", false);
-  writePropertiesToXml (xml);
-  xml.addAttribute ("closed", (int) closed);
-  xml.closeTag (false);
+QDomElement GCurve::writeToXml (QDomDocument &document) {
 
-  list<GSegment>::iterator i;
-  for (i = segments.begin (); i != segments.end (); i++)
-    i->writeToXml (xml);
-  xml.endTag ();
+    QDomElement element=document.createElement("curve");
+    element.setAttribute ("closed", (int) closed);
+
+    list<GSegment>::iterator i;
+    for (i = segments.begin (); i != segments.end (); i++)
+	element.appendChild(i->writeToXml (document));
+    element.appendChild(GObject::writeToXml(document));
+    return element;
 }
 
 void GCurve::getPath (vector<Coord>& ) {

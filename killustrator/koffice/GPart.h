@@ -45,7 +45,7 @@ class GPart : public GObject {
 public:
   GPart ();
   GPart (KIllustratorChild *c);
-  GPart (const list<XmlAttribute>& attribs);
+  GPart (const QDomElement &element);
   GPart (const GPart& p);
 
   ~GPart ();
@@ -56,9 +56,9 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const list<XmlAttribute>& attribs);
+  virtual GObject* clone (const QDomElement &element);
 
-  virtual void writeToXml (XmlWriter&);
+  virtual QDomElement writeToXml (QDomDocument &document);
 
   KIllustratorChild *getChild () { return child; }
 

@@ -95,63 +95,45 @@ GObject::GObject () {
 
 GObject::GObject (const QDomElement &element) {
 
-    /*
-    //list<XmlAttribute>::const_iterator first = attribs.begin ();
-    //layer = 0L;
-    //inWork = false;
-    //wrapper = 0L;
+    layer = 0L;
+    inWork = false;
+    wrapper = 0L;
 
     outlineInfo.mask = 0;
     fillInfo.mask = 0;
-    const string& attr = (*first).name ();
-    if (attr == "matrix") {
-	tMatrix = (*first).matrixValue ();
-	iMatrix = tMatrix.invert ();
-	tmpMatrix = tMatrix;
-    }
-    else if (attr == "strokecolor") {
-	outlineInfo.color = (*first).colorValue ();
-	outlineInfo.mask |= OutlineInfo::Color;
-    }
-    else if (attr == "strokestyle") {
-	outlineInfo.style = (QT_PRFX::PenStyle) (*first).intValue ();
-	outlineInfo.mask |= OutlineInfo::Style;
-    }
-    else if (attr == "linewidth") {
-	outlineInfo.width = (*first).floatValue ();
-	outlineInfo.mask |= OutlineInfo::Width;
-    }
-    else if (attr == "fillstyle") {
-	fillInfo.fstyle = (FillInfo::Style) (*first).intValue ();
-	fillInfo.mask |= FillInfo::FillStyle;
-    }
-    else if (attr == "fillcolor") {
-	fillInfo.color = (*first).colorValue ();
-	fillInfo.mask |= FillInfo::Color;
-    }
-    else if (attr == "fillpattern") {
-	fillInfo.pattern = (QT_PRFX::BrushStyle) (*first).intValue ();
-	fillInfo.mask |= FillInfo::Pattern;
-    }
-    else if (attr == "gradcolor1") {
-	fillInfo.gradient.setColor1 ((*first).colorValue ());
-	fillInfo.mask |= FillInfo::GradientInfo;
-    }
-    else if (attr == "gradcolor2") {
-	fillInfo.gradient.setColor2 ((*first).colorValue ());
-	fillInfo.mask |= FillInfo::GradientInfo;
-    }
-    else if (attr == "gradstyle") {
-	fillInfo.gradient.setStyle ((Gradient::Style) (*first).intValue ());
-	fillInfo.mask |= FillInfo::GradientInfo;
-    }
-    else if (attr == "id")
-	id = (*first).stringValue ().c_str ();
-    else if (attr == "ref")
-	refid = (*first).stringValue ().c_str ();
+    tMatrix=KIllustrator::toMatrix(element.namedItem("matrix").toElement());
+    iMatrix = tMatrix.invert ();
+    tmpMatrix = tMatrix;
 
-    first++;
-    */
+    outlineInfo.color = QColor(element.attribute("strokecolor"));
+    outlineInfo.mask |= OutlineInfo::Color;
+
+    outlineInfo.style = (QT_PRFX::PenStyle) element.attribute("strokestyle").toInt();
+    outlineInfo.mask |= OutlineInfo::Style;
+
+    outlineInfo.width = element.attribute("linewidth").toFloat();
+    outlineInfo.mask |= OutlineInfo::Width;
+
+    fillInfo.fstyle = (FillInfo::Style) element.attribute("fillstyle").toInt();
+    fillInfo.mask |= FillInfo::FillStyle;
+
+    fillInfo.color = QColor(element.attribute("fillcolor"));
+    fillInfo.mask |= FillInfo::Color;
+
+    fillInfo.pattern = (QT_PRFX::BrushStyle) element.attribute("fillpattern").toInt();
+    fillInfo.mask |= FillInfo::Pattern;
+
+    fillInfo.gradient.setColor1 (QColor(element.attribute("gradcolor1")));
+    fillInfo.mask |= FillInfo::GradientInfo;
+
+    fillInfo.gradient.setColor2 (QColor(element.attribute("gradcolor2")));
+    fillInfo.mask |= FillInfo::GradientInfo;
+
+    fillInfo.gradient.setStyle ((Gradient::Style) element.attribute("gradstyle").toInt());
+    fillInfo.mask |= FillInfo::GradientInfo;
+
+    id = (const char*)element.attribute("id");
+    refid = (const char*)element.attribute("ref");
 }
 
 GObject::GObject (const GObject& obj) : QObject()
@@ -436,9 +418,9 @@ void GObject::initPen (QPen& pen) {
   pen.setStyle (inWork ? SolidLine : outlineInfo.style);
 }
 
-virtual QDomElement GObject::writeToXml (QDomDocument &document) {
+QDomElement GObject::writeToXml (QDomDocument &document) {
 
-    QDomElement element=document.createElement("object");
+    QDomElement element=document.createElement("gobject");
     if (hasId ())
 	element.setAttribute ("id", (const char *) id);
     element.setAttribute ("strokecolor", outlineInfo.color.name());
@@ -463,7 +445,7 @@ virtual QDomElement GObject::writeToXml (QDomDocument &document) {
 	// nothing more
 	break;
     }
-    element.appendChild(createMatrixElement("matrix", tMatrix, document));
+    element.appendChild(KIllustrator::createMatrixElement("matrix", tMatrix, document));
     return element;
 }
 
