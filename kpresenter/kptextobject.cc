@@ -1187,6 +1187,18 @@ void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int inde
         autoFormat->doAutoFormat( cursor, parag, index, ch, textObject());
 }
 
+bool KPTextView::doIgnoreDoubleSpace(KoTextParag * parag,
+        int index,QChar ch )
+{
+    KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
+    if( autoFormat )
+    {
+        return autoFormat->doIgnoreDoubleSpace( parag, index,ch );
+    }
+    return false;
+
+}
+
 void KPTextView::startDrag()
 {
     textView()->dragStarted();

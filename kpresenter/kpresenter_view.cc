@@ -3046,7 +3046,8 @@ void KPresenterView::objectSelectedChanged()
     }
 
     KPTextView *edit=m_canvas->currentTextObjectView();
-    bool val=edit && isText;
+
+    bool val=(edit!=0) && isText;
     actionInsertSpecialChar->setEnabled(val);
     actionInsertLink->setEnabled(val);
     actionFormatParag->setEnabled(val);
@@ -5292,6 +5293,7 @@ void KPresenterView::showZoom( int zoom )
 {
     QStringList list = actionViewZoom->items();
     QString zoomStr = QString::number( zoom ) + '%';
+    kdDebug()<<" list.findIndex(zoomStr)  "<<list.findIndex(zoomStr)<<endl;
     actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 }
 
