@@ -105,8 +105,12 @@ void KexiComboBoxTableEdit::init(const QString& add)
 	if (add.isEmpty()) {
 		const int row = m_origValue.toInt();
 		m_lineedit->setText( m_field->enumHint(row) );
-		if (m_popup)
-			m_popup->tableView()->selectRow(m_origValue.toInt());
+		if (m_popup) {
+			if (m_origValue.isNull())
+				m_popup->tableView()->clearSelection();
+			else
+				m_popup->tableView()->selectRow(m_origValue.toInt());
+		}
 	}
 	else {
 		m_lineedit->setText( add );
@@ -238,7 +242,11 @@ void KexiComboBoxTableEdit::showPopup()
 		m_popup->setFocusProxy( m_lineedit );
 		m_popup->tableView()->setFocusProxy( m_lineedit );
 
-		m_popup->tableView()->selectRow(m_origValue.toInt());//update selection
+//		m_popup->tableView()->selectRow(m_origValue.toInt());//update selection
+		if (m_origValue.isNull())
+			m_popup->tableView()->clearSelection();
+		else
+			m_popup->tableView()->selectRow(m_origValue.toInt());
 	}
 	if (!m_lineedit->isVisible())
 		emit editRequested();
@@ -286,20 +294,28 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 		return true;
 	}
 	else if (editorActive && k==Key_Up) {
-		m_popup->tableView()->selectPrevRow();
-		return true;
+		if (m_popup && m_popup->isVisible()) {
+			m_popup->tableView()->selectPrevRow();
+			return true;
+		}
 	}
 	else if (editorActive && k==Key_Down) {
-		m_popup->tableView()->selectNextRow();
-		return true;
+		if (m_popup && m_popup->isVisible()) {
+			m_popup->tableView()->selectNextRow();
+			return true;
+		}
 	}
 	else if (editorActive && k==Key_PageUp) {
-		m_popup->tableView()->selectPrevPage();
-		return true;
+		if (m_popup && m_popup->isVisible()) {
+			m_popup->tableView()->selectPrevPage();
+			return true;
+		}
 	}
 	else if (editorActive && k==Key_PageDown) {
-		m_popup->tableView()->selectNextPage();
-		return true;
+		if (m_popup && m_popup->isVisible()) {
+			m_popup->tableView()->selectNextPage();
+			return true;
+		}
 	}
 	return false;
 }
@@ -313,7 +329,13 @@ void KexiComboBoxTableEdit::slotItemSelected(KexiTableItem*)
 
 void KexiComboBoxTableEdit::slotLineEditTextChanged(const QString &newtext)
 {
-	//todo
+	if (newtext.isEmpty()) {
+		if (m_popup) {
+			m_popup->tableView()->clearSelection();
+		}
+		return;
+	}
+	//todo: select matching row for given prefix
 }
 
 int KexiComboBoxTableEdit::widthForValue( QVariant &val, QFontMetrics &fm )

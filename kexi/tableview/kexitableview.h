@@ -96,7 +96,12 @@ public:
 	 */
 	void clearColumns(bool repaint = true);
 
+	/*! \return string displayed for column's header \a colNum */
 	QString columnCaption(int colNum) const;
+
+	/*! Convenience function. 
+	 \return field object that define column \a colNum or NULL if there is no such column */
+	KexiDB::Field* KexiTableView::field(int colNum) const;
 
 	/*! Adjusts column's width to its (current) contents. */
 	void adjustColumnWidthToContents(int colNum);
@@ -325,6 +330,9 @@ public slots:
 	 If forceSet is true, cursor position is updated even if \a row and \a col doesn't 
 	 differ from actual position. */
 	void setCursor(int row, int col = -1, bool forceSet = false);
+
+	/*! Clears current selection. */
+	void clearSelection();
 
 	void selectRow(int row);
 	void selectNextRow();

@@ -328,14 +328,21 @@ void KexiTableView::setupNavigator()
 
 void KexiTableView::setNavRowNumber(int newrow)
 {
-	const QString & n = QString::number(newrow);
-	if (d->navRowNumber->text().length() != n.length()) {//resize
-		d->navRowNumber->setFixedWidth(
-			d->nav1DigitWidth*QMAX( QMAX(n.length(),2)+1,d->navRowCount->text().length()+1)+6 
-		);
+	QString n;
+	if (newrow>=0) {
+		n = QString::number(newrow+1);
+		if (d->navRowNumber->text().length() != n.length()) {//resize
+			d->navRowNumber->setFixedWidth(
+				d->nav1DigitWidth*QMAX( QMAX(n.length(),2)+1,d->navRowCount->text().length()+1)+6 
+			);
+		}
 	}
 	d->navRowNumber->setText(n);
 	d->navRowCount->deselect();
+	d->navBtnPrev->setEnabled(newrow>0);
+	d->navBtnFirst->setEnabled(newrow>0);
+	d->navBtnNext->setEnabled(newrow<(rows()-1+(isInsertingEnabled()?1:0)));
+	d->navBtnLast->setEnabled(newrow!=(rows()-1));
 }
 
 void KexiTableView::setNavRowCount(int newrows)
@@ -1708,6 +1715,17 @@ void KexiTableView::boolToggled()
 	emit itemChanged(d->pCurrentItem, d->curRow, d->curCol);
 }
 
+void KexiTableView::clearSelection()
+{
+//	selectRow( -1 );
+	int oldRow = d->curRow;
+	int oldCol = d->curCol;
+	d->curRow = -1;
+	d->curCol = -1;
+	updateRow( oldRow );
+	setNavRowNumber(-1);
+}
+
 void KexiTableView::selectNextRow()
 {
 	selectRow( QMIN( rows() - 1 +(isInsertingEnabled()?1:0), d->curRow + 1 ) );
@@ -2251,12 +2269,11 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 		}
 
 		if (d->curRow != newrow) {//update current row info
-			setNavRowNumber(newrow+1);
-//			d->navRowNumber->setText(QString::number(newrow+1));
-			d->navBtnPrev->setEnabled(newrow>0);
-			d->navBtnFirst->setEnabled(newrow>0);
-			d->navBtnNext->setEnabled(newrow<(rows()-1+(isInsertingEnabled()?1:0)));
-			d->navBtnLast->setEnabled(newrow!=(rows()-1));
+			setNavRowNumber(newrow);
+//			d->navBtnPrev->setEnabled(newrow>0);
+//			d->navBtnFirst->setEnabled(newrow>0);
+//			d->navBtnNext->setEnabled(newrow<(rows()-1+(isInsertingEnabled()?1:0)));
+//			d->navBtnLast->setEnabled(newrow!=(rows()-1));
 		}
 
 		// cursor moved to other row: end of row editing
@@ -2750,6 +2767,13 @@ QString KexiTableView::columnCaption(int colNum) const
 	return d->pTopHeader->label(colNum);
 }
 
+KexiDB::Field* KexiTableView::field(int colNum) const
+{
+	if (!m_data || !m_data->column(colNum))
+		return 0;
+	return m_data->column(colNum)->field;
+}
+
 void KexiTableView::adjustColumnWidthToContents(int colNum)
 {
 	if (columns()<=colNum)
@@ -3005,7 +3029,7 @@ void KexiTableView::navRowNumber_ReturnPressed(const QString& text)
 void KexiTableView::navRowNumber_lostFocus()
 {
 	int r = validRowNumber(d->navRowNumber->text());
-	setNavRowNumber(r+1);
+	setNavRowNumber(r);
 //	d->navRowNumber->setText( QString::number( r+1 ) );
 	selectRow( r );
 }
