@@ -270,7 +270,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
 
-    m_commandHistory = new KoCommandHistory( actionCollection(),  false ) ;
+    m_commandHistory = new KoCommandHistory( actionCollection(),  true ) ;
     initConfig();
 
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
