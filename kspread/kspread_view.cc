@@ -4224,8 +4224,17 @@ void KSpreadView::adjustActions( bool mode )
   m_recalc_worksheet->setEnabled( mode );
   m_adjust->setEnabled( mode );
   m_editCell->setEnabled( mode );
-  m_undo->setEnabled( mode );
-  m_redo->setEnabled( mode );
+  if( !mode )
+  {
+      m_undo->setEnabled( false );
+      m_redo->setEnabled( false );
+  }
+  else
+  {
+      m_undo->setEnabled( m_pDoc->undoBuffer()->hasUndoActions() );
+      m_redo->setEnabled( m_pDoc->undoBuffer()->hasRedoActions() );
+  }
+
   m_paperLayout->setEnabled( mode );
   m_styleDialog->setEnabled( mode );
   m_definePrintRange->setEnabled( mode );
