@@ -2385,22 +2385,22 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
                         cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
                 else if ( cell->isObscured() && cell->isObscuringForced() )
                 {
-                        int moveX=cell->obscuringCellsColumn();
-                        int moveY=cell->obscuringCellsRow();
-                        KSpreadCell *cell2 = table->cellAt( moveX, moveY );
-                        if(cell2->extraXCells()>1 && cell2->extraYCells()>1)
-                        {
-                        QRect area;
-                        area.setCoords(moveX+1,moveY+1,moveX+cell2->extraXCells()-1,moveY+cell2->extraYCells()-1);
-                        if(!area.contains(x,y))
-                                cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
-                        }
-                        else
-                                cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
-                  
+		    int moveX=cell->obscuringCellsColumn();
+		    int moveY=cell->obscuringCellsRow();
+		    KSpreadCell *cell2 = table->cellAt( moveX, moveY );
+		    if(cell2->extraXCells()>1 && cell2->extraYCells()>1)
+			{
+			    QRect area;
+			    area.setCoords(moveX+1,moveY+1,moveX+cell2->extraXCells()-1,moveY+cell2->extraYCells()-1);
+			    if(!area.contains(x,y))
+				cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
+			}
+		    else
+			cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
+		    
                 }
                 else
-                        cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
+		    cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
             }
 
             xpos += col_lay->width();

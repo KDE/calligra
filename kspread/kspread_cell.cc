@@ -2297,7 +2297,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         m_bLayoutDirtyFlag = FALSE;
         return;
     }
-
+   
     // Need to recalculate ?
     if ( /*m_bCalcDirtyFlag*/calcDirtyFlag() && !override_obscured )
         calc();
@@ -2327,7 +2327,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     // Tell our caller where we painted.
     // ## Torben: Where is this used ?
     if ( _prect )
-        _prect->setRect( _tx, _ty, w, h );
+        _prect->setRect( _tx, _ty, w2, h2 );
 
     // is the cell selected ?
     bool selected = m_pTable->selectionRect().contains( QPoint( _col, _row ) );
@@ -2355,15 +2355,19 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     && (moveX!=m.left() || moveY!=m.top()))
         _painter.setBackgroundColor( defaultColorGroup.highlight() );
     else
-    {
+      {
         QColor bg = bgColor( _col, _row );
+	
         // if ( m_pObscuringCell )
         // bg = m_pObscuringCell->bgColor( m_pObscuringCell->column(),
         // m_pObscuringCell->row() );
         if (! _painter.device()->isExtDev() )
                 {
                 if ( bg.isValid() )
+		  {
                         _painter.setBackgroundColor( bg );
+		   
+		  }
                 else
                         _painter.setBackgroundColor( defaultColorGroup.base() );
                 }
@@ -2374,7 +2378,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 if( bg.isValid())
                         {
                         QBrush bb( bg );
-                        _painter.fillRect( _tx , _ty ,w ,h , bb );
+                        _painter.fillRect( _tx , _ty ,w2 ,h2 , bb );
                         }
                 }
     }
@@ -2397,8 +2401,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     // Erase the background of the cell.
     if ( !_painter.device()->isExtDev() )
         _painter.eraseRect( _tx + left_offset, _ty + top_offset,
-                            w - left_offset - right_offset,
-                            h - top_offset - bottom_offset );
+                            w2 - left_offset - right_offset,
+                            h2 - top_offset - bottom_offset );
     //
     // First draw the default borders so that they dont
     // overwrite any other border.
@@ -2832,6 +2836,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     }
 
  drawmarker:
+    if ( _painter.device()->isExtDev() )
+      return;
     //
     // Draw the marker
     //
@@ -3204,10 +3210,10 @@ const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
     if ( m_pObscuringCell )
     {
         // Ask the obscuring cell for a right border
-        if ( m_pObscuringCell->hasProperty( PBackgroundBrush ) )
+      //if ( m_pObscuringCell->hasProperty( PBackgroundBrush ) )
             return m_pObscuringCell->backGroundBrush( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
-        return m_pTable->emptyBrush();
+	    //return m_pTable->emptyBrush();
     }
 
     return KSpreadLayout::backGroundBrush( _col, _row );
@@ -3216,13 +3222,16 @@ const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
 const QColor& KSpreadCell::bgColor( int _col, int _row ) const
 {
     if ( m_pObscuringCell )
-    {
+      {
         // Ask the obscuring cell for a right border
-        if ( m_pObscuringCell->hasProperty( PBackgroundColor ) )
+	//        if ( m_pObscuringCell->hasProperty( PBackgroundColor ) )
+	  {
             return m_pObscuringCell->bgColor( m_pObscuringCell->column(), m_pObscuringCell->row() );
+	  }
 
-        return m_pTable->emptyColor();
-    }
+       
+	  //return m_pTable->emptyColor();
+      }
 
     return KSpreadLayout::bgColor( _col, _row );
 }
@@ -3276,7 +3285,7 @@ const QPen& KSpreadCell::rightBorderPen( int _col, int _row ) const
     {
         // Is this cell at the right border of the "big" joined cell ?
         // If not then there is no right border.
-        if ( _col != m_pObscuringCell->column() + m_pObscuringCell->extraXCells() )
+        if ( _col != (m_pObscuringCell->column() + m_pObscuringCell->extraXCells()) )
             return m_pTable->emptyPen();
 
         // Ask the obscuring cell for a rigth border
