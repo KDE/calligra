@@ -652,7 +652,7 @@ public:
     void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
     void insertChild( const QRect& _geometry, KoDocumentEntry& );
     void changeChildGeometry( KSpreadChild *_child, const QRect& _geometry );
-    QListIterator<KSpreadChild> childIterator();
+    // QListIterator<KSpreadChild> childIterator();
 
     void update();
 
@@ -805,7 +805,7 @@ protected:
     /**
      * List of all embedded objects.
      */
-    QList<KSpreadChild> m_lstChildren;
+    // QList<KSpreadChild> m_lstChildren;
 
     int m_id;
 

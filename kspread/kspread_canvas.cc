@@ -1549,7 +1549,6 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     // Calculate some value which are needed later
     QRect new_sel = table->selectionRect();
     QRect new_marker = table->marker();
-    // QRect new_marker_rect = table->markerRect();
 
     QRect old_sel = _old_sel;
     QRect old_marker_outer;
@@ -1565,7 +1564,6 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     // New selection was empty -> Just use the marker
     if ( new_sel.left() == 0 )
 	new_sel = table->markerRect();
-	// new_sel = QRect( new_marker, new_marker );
 
     // Which cells were not marked, but were located next to some
     // selection? They may need repainting, too.
@@ -1611,8 +1609,6 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     //
     // Clip away children
     //
-    
-    // painter.save();
 
     QRegion rgn = painter.clipRegion();
     if ( rgn.isEmpty() )
@@ -1625,7 +1621,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
 	    rgn -= it.current()->region( painter.worldMatrix() );
     }
     painter.setClipRegion( rgn );
-        
+
     QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );
@@ -1809,26 +1805,6 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
 	ypos += row_lay->height();
     }
 
-    //
-    // Draw the children
-    //
-    /* painter.restore();
-
-    // Draw children
-    it.toFirst();
-    for( ; it.current(); ++it )
-    {
-	if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
-	     !m_pView->hasDocumentInWindow( it.current()->document() ) )
-        {
-	    // #### todo: paint only if child is visible inside rect
-	    painter.save();
-	    m_pDoc->paintChild( it.current(), painter, m_pView );
-	    painter.restore();
-	}
-    }
-    */
-    
     painter.end();
 }
 

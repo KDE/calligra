@@ -58,32 +58,6 @@
 
 #include "../kchart/kchart_part.h"
 
-/* include the kauto_array class here since this is the only place
- * where it is used */
-template <class X>
-class kauto_array {
-  X *ptr;
-
-public:
-  typedef X element_type;
-  explicit kauto_array(size_t n) { ptr = new X[n]; }
-  ~kauto_array() { delete [] ptr; }
-
-  X& operator[](int n) { return ptr[n]; }
-  operator X*() { return ptr; }
-  X* operator +(int offset) { return ptr + offset; }
-
-private:
-  kauto_array& operator=(const kauto_array& a);
-  kauto_array(const kauto_array& a);
-};
-
-
-/* ############ Torben
-   There is this m_lstChildren in KSpreadTable. Make sure to keep in addition
-   the m_lstChildren of ContainerPart up to date.
-*/
-
 /*****************************************************************************
  *
  * CellBinding
@@ -210,7 +184,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
 
   m_strName = _name;
 
-  m_lstChildren.setAutoDelete( true );
+  // m_lstChildren.setAutoDelete( true );
 
   m_cells.setAutoDelete( true );
   m_rows.setAutoDelete( true );
@@ -2326,7 +2300,7 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-    
+
     KSpreadUndoCellLayout *undo;
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -3790,15 +3764,15 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	if ( i > cell_range.bottom() )
 	    cell_range.setBottom( i );
     }
-    
-    
+
+
     //
     // Find out how many pages need printing
     // and which cells to print on which page.
     //
     QValueList<QRect> page_list;
     QValueList<QRect> page_frame_list;
-    
+
     // How much space is on every page for table content ?
     QRect rect;
     rect.setCoords( 0, 0, (int)( MM_TO_POINT ( m_pDoc->printableWidth() )),
@@ -3856,7 +3830,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	    //
 	    // Test wether there is anything on the page at all.
 	    //
-	    
+	
 	    // Look at the cells
 	    bool empty = TRUE;
 	    for( int r = page_range.top(); r <= page_range.bottom(); ++r )
@@ -3875,7 +3849,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 		if ( bound.intersects( view ) )
 		    empty = FALSE;
 	    }
-	    
+	
 	    if ( !empty )
 	    {
 		page_list.append( page_range );
@@ -3893,7 +3867,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
     //
     // Print all pages in the list
     //
-        
+
     QValueList<QRect>::Iterator it = page_list.begin();
     QValueList<QRect>::Iterator fit = page_frame_list.begin();
     for( ; it != page_list.end(); ++it, ++fit, ++pagenr )
@@ -3947,7 +3921,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	if ( pagenr < page_list.count() )
 	    _printer->newPage();
     }
-    
+
     // Restore the grid pen
     m_pDoc->setDefaultGridPen( gridPen );
 }
@@ -3973,7 +3947,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 	    KSpreadCell *cell = cellAt( x, y );
 	    QRect r( 0, 0, view.width(), view.height() );
 	    cell->paintCell( r, _painter, xpos, ypos, x, y, col_lay, row_lay );
-	    
+	
 	    xpos += col_lay->width();
 	}
 
@@ -3998,7 +3972,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
         {
 	    _painter.save();
 	    _painter.translate( -view.left(), -view.top() );
-	    
+	
 	    it.current()->transform( _painter );
 	    it.current()->document()->paintEverything( _painter,
 						       it.current()->contentRect(),
@@ -4116,68 +4090,71 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 
 QDomElement KSpreadTable::save( QDomDocument& doc )
 {
-  QDomElement table = doc.createElement( "table" );
-  table.setAttribute( "name", m_strName );
-  table.setAttribute( "grid", (int)m_bShowGrid);
-  table.setAttribute( "hide", (int)m_bTableHide);
-  table.setAttribute( "formular", (int)m_bShowFormular);
-  table.setAttribute( "borders", (int)m_bShowPageBorders);
-  table.setAttribute( "lcmode", (int)m_bLcMode);
-  table.setAttribute( "columnnumber", (int)m_bShowColumnNumber);
-  // Save all cells.
-  KSpreadCell* c = m_cells.firstCell();
-  for( ;c; c = c->nextCell() )
-  {
-    if ( !c->isDefault() )
+    QDomElement table = doc.createElement( "table" );
+    table.setAttribute( "name", m_strName );
+    table.setAttribute( "grid", (int)m_bShowGrid);
+    table.setAttribute( "hide", (int)m_bTableHide);
+    table.setAttribute( "formular", (int)m_bShowFormular);
+    table.setAttribute( "borders", (int)m_bShowPageBorders);
+    table.setAttribute( "lcmode", (int)m_bLcMode);
+    table.setAttribute( "columnnumber", (int)m_bShowColumnNumber);
+    // Save all cells.
+    KSpreadCell* c = m_cells.firstCell();
+    for( ;c; c = c->nextCell() )
     {
-      QDomElement e = c->save( doc );
-      if ( e.isNull() )
-	return QDomElement();
-      table.appendChild( e );
+	if ( !c->isDefault() )
+        {
+	    QDomElement e = c->save( doc );
+	    if ( e.isNull() )
+		return QDomElement();
+	    table.appendChild( e );
+	}
     }
-  }
 
-  // Save all RowLayout objects.
-  RowLayout* rl = m_rows.first();
-  for( ; rl; rl = rl->next() )
-  {
-    if ( !rl->isDefault() )
+    // Save all RowLayout objects.
+    RowLayout* rl = m_rows.first();
+    for( ; rl; rl = rl->next() )
     {
-      QDomElement e = rl->save( doc );
-      if ( e.isNull() )
-	return QDomElement();
-      table.appendChild( e );
+	if ( !rl->isDefault() )
+        {
+	    QDomElement e = rl->save( doc );
+	    if ( e.isNull() )
+		return QDomElement();
+	    table.appendChild( e );
+	}
     }
-  }
 
-  // Save all ColumnLayout objects.
-  ColumnLayout* cl = m_columns.first();
-  for( ; cl; cl = cl->next() )
-  {
-    if ( !cl->isDefault() )
+    // Save all ColumnLayout objects.
+    ColumnLayout* cl = m_columns.first();
+    for( ; cl; cl = cl->next() )
     {
-      QDomElement e = cl->save( doc );
-      if ( e.isNull() )
-	return QDomElement();
-      table.appendChild( e );
+	if ( !cl->isDefault() )
+        {
+	    QDomElement e = cl->save( doc );
+	    if ( e.isNull() )
+		return QDomElement();
+	    table.appendChild( e );
+	}
     }
-  }
 
-  QListIterator<KSpreadChild> chl( m_lstChildren );
-  for( ; chl.current(); ++chl )
-  {
-    QDomElement e = chl.current()->save( doc );
-    if ( e.isNull() )
-      return QDomElement();
-    table.appendChild( e );
-  }
+    QListIterator<KoDocumentChild> chl( m_pDoc->children() );
+    for( ; chl.current(); ++chl )
+    {
+	if ( ((KSpreadChild*)chl.current())->table() == this )
+        {
+	    QDomElement e = chl.current()->save( doc );
+	    if ( e.isNull() )
+		return QDomElement();
+	    table.appendChild( e );
+	}
+    }
 
-  return table;
+    return table;
 }
 
 bool KSpreadTable::isLoading()
 {
-  return m_pDoc->isLoading();
+    return m_pDoc->isLoading();
 }
 
 bool KSpreadTable::loadXML( const QDomElement& table )
@@ -4284,12 +4261,19 @@ void KSpreadTable::update()
 
 bool KSpreadTable::loadChildren( KoStore* _store )
 {
-  QListIterator<KSpreadChild> it( m_lstChildren );
-  for( ; it.current(); ++it )
-    if ( !it.current()->loadDocument( _store ) )
-      return false;
+    qDebug("============ LOAD CHILREN ============");
+    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+    for( ; it.current(); ++it )
+    {
+	if ( ((KSpreadChild*)it.current())->table() == this )
+        {
+	    qDebug("------------- CHILD --------------");
+	    if ( !it.current()->loadDocument( _store ) )
+		return false;
+	}
+    }
 
-  return true;
+    return true;
 }
 
 void KSpreadTable::setShowPageBorders( bool b )
@@ -4476,17 +4460,17 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 	// Error message is already displayed, so just return
 	return;
 
-   kdDebug(36001) << "NOW FETCHING INTERFACE" << endl;
+    kdDebug(36001) << "NOW FETCHING INTERFACE" << endl;
 
-   if ( !doc->initDoc() )
-     return;
+    if ( !doc->initDoc() )
+	return;
 
-   ChartChild* ch = new ChartChild( m_pDoc, this, doc, _rect );
-   ch->setDataArea( _data );
-   ch->update();
+    ChartChild* ch = new ChartChild( m_pDoc, this, doc, _rect );
+    ch->setDataArea( _data );
+    ch->update();
 
-   m_pDoc->insertChild( ch );
-   insertChild( ch );
+    // m_pDoc->insertChild( ch );
+    insertChild( ch );
 }
 
 void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
@@ -4495,43 +4479,47 @@ void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
     doc->initDoc();
 
     KSpreadChild* ch = new KSpreadChild( m_pDoc, this, doc, _rect );
-    // m_lstChildren.append( _child );
-    m_pDoc->insertChild( ch );
 
     insertChild( ch );
 }
 
 void KSpreadTable::insertChild( KSpreadChild *_child )
 {
-  m_lstChildren.append( _child );
+    // m_lstChildren.append( _child );
+    m_pDoc->insertChild( _child );
 
-  emit sig_polygonInvalidated( _child->framePointArray() );
+    emit sig_polygonInvalidated( _child->framePointArray() );
 }
 
 void KSpreadTable::changeChildGeometry( KSpreadChild *_child, const QRect& _rect )
 {
-  _child->setGeometry( _rect );
+    _child->setGeometry( _rect );
 
-  emit sig_updateChildGeometry( _child );
+    emit sig_updateChildGeometry( _child );
 }
 
+/*
 QListIterator<KSpreadChild> KSpreadTable::childIterator()
 {
   return QListIterator<KSpreadChild> ( m_lstChildren );
 }
+*/
 
 bool KSpreadTable::saveChildren( KoStore* _store, const char *_path )
 {
-  int i = 0;
+    int i = 0;
 
-  QListIterator<KSpreadChild> it( m_lstChildren );
-  for( ; it.current(); ++it )
-  {
-    QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
-    if ( !it.current()->document()->saveToStore( _store, path ) )
-      return false;
-  }
-  return true;
+    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+    for( ; it.current(); ++it )
+    {
+	if ( ((KSpreadChild*)it.current())->table() == this )
+        {
+	    QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
+	    if ( !it.current()->document()->saveToStore( _store, path ) )
+		return false;
+	}
+    }
+    return true;
 }
 
 KSpreadTable::~KSpreadTable()
