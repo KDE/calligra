@@ -43,9 +43,11 @@
 
 #include <koGlobal.h>
 
-#include <TagProcessing.h>
 #include <KWEFStructures.h>
+#include <TagProcessing.h>
 #include <KWEFBaseClass.h>
+#include <ProcessDocument.h>
+
 
 #include "kqiodevicegzip.h"
 
@@ -86,6 +88,8 @@ public:
     ClassExportFilterBase(void) {}
     virtual ~ClassExportFilterBase(void) {}
 };
+
+#if 0
 
 static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
 {
@@ -523,6 +527,8 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFBase
     AllowNoSubtags (myNode);
 }
 
+#endif /* 0 */
+
 static QString EscapeText(const QString& strIn)
 {
     QString strReturn;
@@ -569,6 +575,111 @@ static QString EscapeText(const QString& strIn)
     return strReturn;
 }
 
+static QString FormatDataToAbiProps(FormatData& formatData)
+{
+    QString strElement; // TODO: rename this variable
+
+    // Font name
+    QString fontName = formatData.fontName;
+    if ( !fontName.isEmpty() )
+    {
+        strElement+="font-family: ";
+        strElement+=fontName; // TODO: add alternative font names
+        strElement+="; ";
+    }
+
+    // Font style
+    strElement+="font-style: ";
+    if ( formatData.italic )
+    {
+        strElement+="italic";
+    }
+    else
+    {
+        strElement+="normal";
+    }
+    strElement+="; ";
+
+    strElement+="font-weight: ";
+    if ( formatData.weight >= 75 )
+    {
+        strElement+="bold";
+    }
+    else
+    {
+        strElement+="normal";
+    }
+    strElement+="; ";
+
+    const int size=formatData.fontSize;
+    if (size>0)
+    {
+        // We use absolute font sizes.
+        strElement+="font-size: ";
+        strElement+=QString::number(size,10);
+        strElement+="pt; ";
+    }
+
+    if ( formatData.colour.isValid() )
+    {
+        // Give colour
+        strElement+="color: ";
+
+        // No trailing # (unlike CSS2)
+        //We must have two hex digits for each colour channel!
+        const int red=formatData.colour.red();
+        strElement += QString::number((red&0xf0)>>4,16);
+        strElement += QString::number(red&0x0f,16);
+
+        const int green=formatData.colour.green();
+        strElement += QString::number((green&0xf0)>>4,16);
+        strElement += QString::number(green&0x0f,16);
+
+        const int blue=formatData.colour.blue();
+        strElement += QString::number((blue&0xf0)>>4,16);
+        strElement += QString::number(blue&0x0f,16);
+
+        strElement+="; ";
+    }
+    if ( formatData.textbackgroundColour.isValid() )
+    {
+        // Give background colour
+        strElement+="bgcolor: ";
+
+        // No trailing # (unlike CSS2)
+        //We must have two hex digits for each colour channel!
+        const int red=formatData.colour.red();
+        strElement += QString::number((red&0xf0)>>4,16);
+        strElement += QString::number(red&0x0f,16);
+
+        const int green=formatData.colour.green();
+        strElement += QString::number((green&0xf0)>>4,16);
+        strElement += QString::number(green&0x0f,16);
+
+        const int blue=formatData.colour.blue();
+        strElement += QString::number((blue&0xf0)>>4,16);
+        strElement += QString::number(blue&0x0f,16);
+
+        strElement+="; ";
+    }
+
+    strElement+="text-decoration: ";
+    if ( formatData.underline )
+    {
+        strElement+="underline";
+    }
+    else if ( formatData.strikeout )
+    {
+        strElement+="line-through";
+    }
+    else
+    {
+        strElement+="none";
+    }
+    strElement+="; ";
+    return strElement;
+}
+
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
@@ -593,7 +704,7 @@ static void ProcessParagraphData ( QString &paraText,
             partialText=EscapeText(
                 paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
 
-            if ((*paraFormatDataIt).abiprops.isEmpty())
+            if ((*paraFormatDataIt).missing)
             {
                 // It's just normal text, so we do not need a <c> element!
                 outputText += partialText;
@@ -601,7 +712,7 @@ static void ProcessParagraphData ( QString &paraText,
             else
             { // Text with properties, so use a <c> element!
 
-                QString abiprops=(*paraFormatDataIt).abiprops;
+                QString abiprops=FormatDataToAbiProps(*paraFormatDataIt);
 
                 // Erase the last semi-comma (as in CSS2, semi-commas only separate instructions and do not terminate them)
                 const int result=abiprops.findRev(";");
@@ -705,7 +816,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
 
 
     // Add all AbiWord properties collected in the <FORMAT> element
-    props += paraLayout.abiprops;
+    props += FormatDataToAbiProps(paraLayout.formatData);
 
     outputText += "<p";
     if (!style.isEmpty())
@@ -790,27 +901,15 @@ static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText,
 
 static void ProcessStyleTag (QDomNode myNode, void *, QString   &strStyles, KWEFBaseClass* exportFilter )
 {
+    kdDebug(30506) << "Entering ProcessStyleTag" << endl;
+
     AllowNoAttributes (myNode);
 
     LayoutData *layout = new LayoutData (); // TODO: memory error recovery
-    FormatData formatData(-1,-1);
-    QString strDummy;
 
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "NAME",          ProcessLayoutNameTag,   (void *) layout ) );
-    tagProcessingList.append ( TagProcessing ( "FOLLOWING",     NULL, NULL ) );
-    tagProcessingList.append ( TagProcessing ( "FLOW",          ProcessLayoutFlowTag,   (void *) layout ) );
-    tagProcessingList.append ( TagProcessing ( "OFFSETS",          ProcessLayoutOffsetTag,   (void *) layout ) );
-    tagProcessingList.append ( TagProcessing ( "INDENTS",       ProcessIndentsTag,      (void *) layout ) );
-    tagProcessingList.append ( TagProcessing ( "COUNTER",       ProcessCounterTag,      (void *) &layout->counter ) );
-    tagProcessingList.append ( TagProcessing ( "LINESPACING",   ProcessLayoutLineSpacingTag, (void *) layout ) );
-    tagProcessingList.append ( TagProcessing ( "LEFTBORDER",    NULL, NULL ) );
-    tagProcessingList.append ( TagProcessing ( "RIGHTBORDER",   NULL, NULL ) );
-    tagProcessingList.append ( TagProcessing ( "TOPBORDER",     NULL, NULL ) );
-    tagProcessingList.append ( TagProcessing ( "BOTTOMBORDER",  NULL, NULL ) );
-    tagProcessingList.append ( TagProcessing ( "FORMAT",        ProcessSingleFormatTag, (void *) &formatData ) );
-    tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",  ProcessLineBreakingTag, (void *) layout ) );
-    ProcessSubtags (myNode, tagProcessingList, strDummy,exportFilter);
+    QString dummy;
+
+    ProcessLayoutTag(myNode, layout, dummy, exportFilter);
 
     strStyles+="<s name=\"";
     strStyles+=layout->styleName; // TODO: cook the style name to the standard style names in AbiWord
@@ -822,17 +921,25 @@ static void ProcessStyleTag (QDomNode myNode, void *, QString   &strStyles, KWEF
         strStyles+="\"";
     }
 
-    const int result=formatData.abiprops.findRev(";");
+    // Add all AbiWord properties collected in the <FORMAT> element
+    QString abiprops = FormatDataToAbiProps(layout->formatData);
+
+    const int result=abiprops.findRev(";");
     if (result>=0)
     {
         // Remove the last semi-comma and the space thereafter
-        formatData.abiprops.remove(result,2);
+        abiprops.remove(result,2);
     }
+
+    //TODO: other layout things
+
     strStyles+=" props=\"";
-    strStyles+=formatData.abiprops;  // Be careful that layout->abiprops is empty!
+    strStyles+=abiprops;  // Be careful that layout->abiprops might be empty!
     strStyles+="\"/>\n";
 
     delete layout;
+
+    kdDebug(30506) << "Exiting ProcessStyleTag" << endl;
 }
 
 static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFBaseClass* exportFilter )

@@ -1,10 +1,10 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../libexport $(all_includes)
 libasciiimport_la_LDFLAGS	= -module -avoid-version -no-undefined
 libasciiimport_la_LIBADD = $(KOFFICE_LIBS)
 libasciiexport_la_LDFLAGS	= -module -avoid-version -no-undefined
-libasciiexport_la_LIBADD = $(KOFFICE_LIBS)
+libasciiexport_la_LIBADD = $(KOFFICE_LIBS) ../libexport/libkwordexportfilters.la
 
 ####### Files
 

@@ -59,15 +59,14 @@ class FormatData
         int  weight;
         int  fontSize;
         QColor colour;
+        QColor textbackgroundColour;
         int  verticalAlignment;
 
         bool italic;
         bool underline;
         bool strikeout;
 
-        bool missing;
-        QString abiprops; // Value of the "props" attribute
-                          // of Abiword's "<c>" tag (TODO: get rid of it!)
+        bool missing; // true if the FormatData does not correspond to a real <FORMAT> element
     private:
         void init()
         {

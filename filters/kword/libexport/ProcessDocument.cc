@@ -296,6 +296,21 @@ static void ProcessColorTag (QDomNode myNode, void* formatDataPtr , QString&, KW
     formatData->colour.setRgb(red, green, blue);
 }
 
+static void ProcessTextBackGroundColorTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFBaseClass*)
+{
+    FormatData* formatData = (FormatData*) formatDataPtr;
+
+    int red,green,blue;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("red"   , "int", (void *)&red   ) );
+    attrProcessingList.append ( AttrProcessing ("green" , "int", (void *)&green ) );
+    attrProcessingList.append ( AttrProcessing ("blue"  , "int", (void *)&blue  ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    formatData->textbackgroundColour.setRgb(red, green, blue);
+}
+
 static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFBaseClass*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
@@ -353,6 +368,8 @@ void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, KWEFBase
     tagProcessingList.append ( TagProcessing ( "FONT",      ProcessFontTag,     (void*) formatData ) );
     tagProcessingList.append ( TagProcessing ( "COLOR",     ProcessColorTag,    (void*) formatData ) );
     tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,(void*) formatData ) );
+    tagProcessingList.append ( TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessTextBackGroundColorTag,NULL ) );
+    tagProcessingList.append ( TagProcessing ( "LINK",      NULL,               NULL));
 
     QString strDummy;
 
@@ -372,7 +389,10 @@ void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&, KWEFBaseClass
 }
 
 void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFBaseClass* exportFilter )
+// Processes <LAYOUT> and <STYLE>
 {
+    kdDebug(-1) << "Entering ProcessLayoutTag" << endl;
+
     LayoutData *layout = (LayoutData *) tagData;
 
     AllowNoAttributes (myNode);
@@ -388,7 +408,13 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWE
     tagProcessingList.append ( TagProcessing ( "OFFSETS",     ProcessLayoutOffsetTag,   (void*) layout  ) );
     tagProcessingList.append ( TagProcessing ( "LINESPACING", ProcessLayoutLineSpacingTag,(void*) layout ) );
     tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",ProcessLineBreakingTag,   (void*) layout  ) );
+    tagProcessingList.append ( TagProcessing ( "LEFTBORDER",    NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "RIGHTBORDER",   NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "TOPBORDER",     NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "BOTTOMBORDER",  NULL, NULL ) );
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+
+    kdDebug(-1) << "Exiting ProcessLayoutTag" << endl;
 }
 
 static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & outputText, KWEFBaseClass* exportFilter)
