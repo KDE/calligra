@@ -3856,6 +3856,8 @@ KWGUI::KWGUI( QWidget *parent, KWView *_view )
     r_horz->setZoom( doc->zoomedResolutionX() );
     r_vert->setZoom( doc->zoomedResolutionY() );
 
+    r_horz->setGridSize(doc->gridX());
+
     connect( r_horz, SIGNAL( newLeftIndent( double ) ), view, SLOT( newLeftIndent( double ) ) );
     connect( r_horz, SIGNAL( newFirstIndent( double ) ), view, SLOT( newFirstIndent( double ) ) );
     connect( r_horz, SIGNAL( newRightIndent( double ) ), view, SLOT( newRightIndent( double ) ) );
