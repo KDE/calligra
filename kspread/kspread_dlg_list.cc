@@ -240,6 +240,7 @@ void KSpreadList::slotOk()
     {
         QStringList result;
         result.append("\\");
+
         //don't save the two first line
         for(unsigned int i=2;i<list->count();i++)
         {
@@ -281,6 +282,7 @@ void KSpreadList::slotModify()
 
 
       entryList->setText("");
+      m_bChanged=true;
 
     }
   entryList->setEnabled(false);
