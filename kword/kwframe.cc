@@ -1136,7 +1136,7 @@ void KWFormulaFrameSet::deactivate()
 /*================================================================*/
 void KWFormulaFrameSet::create( QWidget */*parent*/ )
 {
-    if ( formula ) {
+    if (formula != 0) {
         updateFrames();
         return;
     }
@@ -1198,62 +1198,41 @@ void KWFormulaFrameSet::updateFrames()
 }
 
 /*================================================================*/
-void KWFormulaFrameSet::save( QDomElement& /*parentElem*/ )
+void KWFormulaFrameSet::save(QDomElement& parentElem)
 {
-#if 0
-    out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() ) << "\" frameInfo=\""
-        << static_cast<int>( frameInfo ) << "\">" << endl;
+    QDomElement framesetElem = parentElem.ownerDocument().createElement("FRAMESET");
+    parentElem.appendChild(framesetElem);
 
-    KWFrameSet::save( out );
+    framesetElem.setAttribute("frameType", static_cast<int>(getFrameType()));
+    framesetElem.setAttribute("frameInfo", static_cast<int>(frameInfo));
 
-    out << otag << "<FORMULA>" << endl;
-    out << formulaEdit->text() << endl;
-    out << etag << "</FORMULA>" << endl;
+    KWFrameSet::save(framesetElem); // Save all frames
 
-    out << otag << "<FORMAT>" << endl;
-    getFormat()->save( out );
-    out << etag << "</FORMAT>" << endl;
-
-    out << etag << "</FRAMESET>" << endl;
-#endif
+    QDomElement formulaElem = parentElem.ownerDocument().createElement("FORMULA");
+    framesetElem.appendChild(formulaElem);
+    formula->save(formulaElem);
 }
 
 /*================================================================*/
-void KWFormulaFrameSet::load( QDomElement &/*attributes*/ )
+void KWFormulaFrameSet::load(QDomElement& attributes)
 {
-#if 0
-    KWFrameSet::load( attributes );
+    KWFrameSet::load(attributes);
 
-    QString tag;
-    QString name;
-    //QString tmp;
-
-    while ( parser.open( QString::null, tag ) ) {
-        parser.parseTag( tag, name, lst );
-
-        if ( name == "FORMULA" ) {
-            parser.parseTag( tag, name, lst );
-            parser.readText( text );
-            text = text.stripWhiteSpace();
-        } if ( name == "FORMAT" ) {
-            KWFormat f( doc );
-            f.load( parser, lst, doc );
-            font = QFont( f.getUserFont()->getFontName() );
-            font.setPointSize( f.ptFontSize() );
-            font.setWeight( f.getWeight() );
-            font.setUnderline( f.getUnderline() );
-            font.setItalic( f.getItalic() );
-            color = f.getColor();
+    // <IMAGE>
+    QDomElement formulaElem = attributes.namedItem("FORMULA").toElement();
+    if (!formulaElem.isNull()) {
+        if (formula == 0) {
+            formula = doc->getFormulaDocument()->createFormula();
+            connect(formula, SIGNAL(formulaChanged(int, int)),
+                    this, SLOT(slotFormulaChanged(int, int)));
         }
-        } else
-            kdError(32001) << "Unknown tag '" << name << "' in FRAMESET" << endl;
-
-        if ( !parser.close( tag ) ) {
-            kdError(32001) << "Closing " << tag << endl;
-            return;
+        if (!formula->load(formulaElem)) {
+            kdError(32001) << "Error loading formula" << endl;
         }
     }
-#endif
+    else {
+        kdError(32001) << "Missing FORMULA tag in FRAMESET" << endl;
+    }
 }
 
 
