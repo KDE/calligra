@@ -7,7 +7,6 @@ class KFormulaDoc;
 
 #include <koView.h>
 
-#include "kformula.h"
 #include <qlist.h>
 
 class BasicElement;
