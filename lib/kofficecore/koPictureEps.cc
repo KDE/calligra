@@ -259,7 +259,6 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
 }
 
 bool KoPictureEps::extractPostScriptStream( void )
-// Note: it changes m_rawData, we cannot do anything of the preview.
 {
     kdDebug(30003) << "KoPictureEps::extractPostScriptStream" << endl;
     QDataStream data( m_rawData, IO_ReadOnly );
@@ -278,9 +277,8 @@ bool KoPictureEps::extractPostScriptStream( void )
         kdError(30003) << "Data stream of the EPSF file is longer than file: " << offset << "+" << length << ">" << m_rawData.size() << endl;
         return false;
     }
-    QByteArray ps;
-    ps.duplicate( m_rawData.data()+offset, length );
-    m_rawData=ps;
+    m_psStreamStart = offset;
+    m_psStreamLength = length;
     return true;
 }
 
@@ -346,9 +344,6 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
         // We have a so-called "MS-DOS EPS file", we have to extract the PostScript stream
         if (!extractPostScriptStream()) // Changes m_rawData
             return false;
-        // ### TODO
-        m_psStreamStart = 0;
-        m_psStreamLength = m_rawData.size();
     }
     else
     {
@@ -359,7 +354,7 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
     QString lineBox;
 #if 1
     bool lastWasCr = false;
-    uint pos = 0;
+    uint pos = m_psStreamStart;
     QString line( readLine( m_rawData, m_psStreamStart, m_psStreamLength, pos, lastWasCr ) );
     kdDebug(30003) << "Pos: " << pos << endl;
 #else    

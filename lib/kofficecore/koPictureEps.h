@@ -103,7 +103,6 @@ private:
 private:
     /**
      * Copy of the loaded EPS file
-     * @note For MS-DOS EPS files only the Postscript stream is kept, not any preview
      */
     QByteArray m_rawData;
     QPixmap m_cachedPixmap; ///< Cached pixmap
