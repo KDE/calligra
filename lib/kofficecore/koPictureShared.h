@@ -177,13 +177,14 @@ public:
      * especially if the application somehow caches the KoPicture too.
      */
     void clearCache(void);
-    
+
     QString uniquePictureId() const;
+    void assignPictureId( uint _id);
 
 protected:
     /**
      * @internal
-     * Load a WMF file 
+     * Load a WMF file
      * \note In %KOffice 1.1, a .wmf file was a QPicture file
      */
     bool loadWmf(QIODevice* io);
@@ -197,7 +198,7 @@ protected:
     /**
      * @internal
      * Loads a compressed file
-     * 
+     *
      * @warning risk of endless recurision, be careful when it is called from @see load
      *
      * @param io QIODevice of the compressed file/strea,
@@ -210,7 +211,6 @@ protected:
     KoPictureBase* m_base;
     QString m_extension;
     uint m_pictureId;
-    static uint s_uniqueValue;
 };
 
 #endif /* __koPictureShared_h__ */

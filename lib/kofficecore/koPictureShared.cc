@@ -34,11 +34,14 @@
 #include "koPictureWmf.h"
 #include "koPictureShared.h"
 
-uint KoPictureShared::s_uniqueValue = 0;
 
 KoPictureShared::KoPictureShared(void) : m_base(NULL)
 {
-    m_pictureId=s_uniqueValue++;
+}
+
+void KoPictureShared::assignPictureId( uint _id)
+{
+    m_pictureId = _id;
 }
 
 QString KoPictureShared::uniquePictureId() const

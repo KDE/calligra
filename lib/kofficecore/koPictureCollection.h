@@ -158,6 +158,11 @@ public:
      */
     QString getOasisFileName(KoPicture& picture);
 
+    /**
+     * Call it before to save Oasis file
+     */
+    void assignUniqueIds();
+
 
 private:
     /**

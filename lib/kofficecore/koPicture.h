@@ -171,7 +171,7 @@ public:
 
     /**
      * Download and set the key for a possibly remote file.
-     * 
+     *
      * @param url the url to download from
      * @param window the parent widget for the download. You can pass
      *               NULL (0) if you absolutely cannot find a parent
@@ -214,6 +214,8 @@ public:
     void clearCache(void);
 
     QString uniquePictureId() const;
+    void assignPictureId( uint _id);
+
 protected:
     /**
      * @internal

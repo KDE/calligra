@@ -45,6 +45,12 @@ KoPicture::KoPicture(const KoPicture &other)
     (*this)=other;
 }
 
+void KoPicture::assignPictureId( uint _id)
+{
+    if ( m_sharedData )
+        m_sharedData->assignPictureId(_id);
+}
+
 QString KoPicture::uniquePictureId() const
 {
     if ( m_sharedData )

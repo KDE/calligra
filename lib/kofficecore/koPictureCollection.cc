@@ -48,6 +48,7 @@ KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
     return *it;
 }
 
+
 KoPicture KoPictureCollection::insertPicture(const KoPictureKey& key, const KoPicture& picture)
 {
 #ifdef DEBUG_PICTURES
@@ -381,4 +382,14 @@ KoPicture KoPictureCollection::findOrLoad(const QString& fileName, const QDateTi
         return loadPicture( fileName );
     }
     return *it;
+}
+
+void KoPictureCollection::assignUniqueIds()
+{
+    uint idx = 0;
+    Iterator it;
+    for ( it = begin(); it != end(); ++it, ++idx )
+    {
+        it.data().assignPictureId(idx);
+    }
 }
