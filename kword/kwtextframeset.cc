@@ -2179,22 +2179,26 @@ void KWTextFrameSet::renumberFootNotes()
     }
     lst.sort();
     short int varNumber = 1;
+    short int varNb = 1;
     bool needRepaint = false;
     QPtrListIterator< KWFootNoteVariable > vit( lst );
-    for ( ; vit.current() ; ++vit )
+    for ( ; vit.current() ; ++vit, ++varNumber )
     {
         KWFootNoteVariable* var = vit.current();
-        if ( var->numberingType()==KWFootNoteVariable::Auto && varNumber != var->num() )
+        if ( varNumber != var->num() )
         {
             var->setNum( varNumber );
+            if ( var->numberingType()==KWFootNoteVariable::Auto )
+            {
+                var->setValue( varNb );
+                varNb++;
+            }
             var->frameSet()->setName( i18n("Footnote %1").arg( varNumber ) );
             ++varNumber;
+            var->paragraph()->invalidate(0);
+            var->paragraph()->setChanged( true );
+            needRepaint = true;
         }
-        else
-            var->frameSet()->setName( i18n("Footnote %1").arg( var->manualString() ) );
-        var->paragraph()->invalidate(0);
-        var->paragraph()->setChanged( true );
-        needRepaint = true;
     }
     if ( needRepaint )
         m_doc->slotRepaintChanged( this );
