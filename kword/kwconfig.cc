@@ -436,24 +436,46 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     listUnit << KoUnit::unitDescription( KoUnit::U_MM );
     listUnit << KoUnit::unitDescription( KoUnit::U_INCH );
     listUnit << KoUnit::unitDescription( KoUnit::U_PT );
+    listUnit << KoUnit::unitDescription( KoUnit::U_CM );
+    listUnit << KoUnit::unitDescription( KoUnit::U_DM );
+    listUnit << KoUnit::unitDescription( KoUnit::U_PI );
+    listUnit << KoUnit::unitDescription( KoUnit::U_DD );
+    listUnit << KoUnit::unitDescription( KoUnit::U_CC );
+
+
     m_unit = new QComboBox( lay );
     m_unit->insertStringList(listUnit);
     m_oldUnit=0;
     switch (KoUnit::unit( unitType ) )
     {
-        case KoUnit::U_MM:
-            m_oldUnit=0;
-            break;
-        case KoUnit::U_INCH:
-            m_oldUnit=1;
-            break;
-        case KoUnit::U_PT:
-        default:
-            m_oldUnit=2;
+    case KoUnit::U_MM:
+        m_oldUnit=0;
+        break;
+    case KoUnit::U_INCH:
+        m_oldUnit=1;
+        break;
+    case KoUnit::U_PT:
+        m_oldUnit = 2;
+        break;
+    case KoUnit::U_CM:
+        m_oldUnit = 3;
+        break;
+    case KoUnit::U_DM:
+        m_oldUnit = 4;
+        break;
+    case KoUnit::U_PI:
+        m_oldUnit = 5;
+        break;
+    case KoUnit::U_DD:
+        m_oldUnit = 6;
+        break;
+    case KoUnit::U_CC:
+    default:
+        m_oldUnit = 7;
     }
     m_unit->setCurrentItem(m_oldUnit);
     QString unitHelp = i18n("Select the unit type used every time a distance or width/height "
-                "is displayed or entered. This one setting is for the whole of KWord");
+                            "is displayed or entered. This one setting is for the whole of KWord");
     QWhatsThis::add( unitLabel, unitHelp);
     QWhatsThis::add( m_unit, unitHelp);
 
@@ -461,7 +483,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
     m_undoRedoLimit->setRange(1, 100, 1);
     QWhatsThis::add( m_undoRedoLimit, i18n("Limit the amount of undo/redo actions remembered to save "
-                "memory") );
+                                           "memory") );
 
     KWDocument* doc = m_pView->kWordDocument();
     m_displayLink=new QCheckBox(i18n("Display &links"),gbMiscGroup);
@@ -524,11 +546,30 @@ KCommand *ConfigureMiscPage::apply()
                 doc->setUnit( KoUnit::U_INCH );
                 break;
             case 2:
-            default:
                 doc->setUnit( KoUnit::U_PT );
                 unitName=KoUnit::unitName(KoUnit::U_PT );
+                break;
+            case 3:
+                doc->setUnit( KoUnit::U_CM );
+                unitName=KoUnit::unitName(KoUnit::U_CM );
+                break;
+            case 4:
+                doc->setUnit( KoUnit::U_DM );
+                unitName=KoUnit::unitName(KoUnit::U_DM );
+                break;
+            case 5:
+                doc->setUnit( KoUnit::U_PI );
+                unitName=KoUnit::unitName(KoUnit::U_PI );
+                break;
+        case 6:
+                doc->setUnit( KoUnit::U_DD );
+                unitName=KoUnit::unitName(KoUnit::U_DD );
+                break;
+            case 7:
+        default:
+                doc->setUnit( KoUnit::U_CC );
+                unitName=KoUnit::unitName(KoUnit::U_CC );
         }
-
         config->writeEntry("Units",unitName);
     }
     int newUndo=m_undoRedoLimit->value();

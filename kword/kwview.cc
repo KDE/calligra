@@ -134,9 +134,10 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     dcopObject(); // build it
     m_personalShortCut=0L;
     fsInline=0L;
-    m_spell.kspell = 0;
 #ifdef HAVE_LIBASPELL
     m_spell.kospell = 0;
+#else
+    m_spell.kspell = 0;
 #endif
     m_border.left.color = white;
     m_border.left.setStyle (KoBorder::SOLID);
