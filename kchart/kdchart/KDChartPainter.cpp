@@ -122,10 +122,8 @@ throw ( KDChartUnknownTypeException )
             break;
         case KDChartParams::HiLo:
             return new KDChartHiLoPainter( params );
-#if KDCHART_VERSION >= 200
 	case KDChartParams::Polar:
 	  return new KDChartPolarPainter( params );
-#endif
         case KDChartParams::NoType:
         default:
 #ifdef USE_EXCEPTIONS
