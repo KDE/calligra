@@ -865,18 +865,12 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
-/*	new KAction(
-		i18n( "&Layers Manager" ), "layersman", 0, this,
-		SLOT( viewLayersDocker() ), actionCollection(), "view_layers_manager" );*/
 	new KAction(
 		i18n( "&Tool Options" ), "tooloptions", 0, this,
 		SLOT( viewToolOptions() ), actionCollection(), "view_tool_options" );
 	new KAction(
 		i18n( "&Stroke" ), "strokedocker", 0, this,
 		SLOT( viewStrokeDocker() ), actionCollection(), "view_stroke_docker" );
-/*	new KAction(
-		i18n( "H&istory" ), "historydocker", 0, this,
-		SLOT( viewHistory() ), actionCollection(), "view_history_docker" );*/
 	// view <-----
 
 	// line width

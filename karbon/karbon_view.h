@@ -29,12 +29,9 @@
 #include <ksharedptr.h>
 #include <kxmlguibuilder.h>
 #include <koUnit.h>
-#include <koPoint.h>
 
 class DCOPObject;
-class QDockArea;
 class QLabel;
-class QPaintEvent;
 
 class KAction;
 class KarbonPart;
@@ -46,6 +43,7 @@ class KToggleAction;
 class KoContextHelpAction;
 
 class KoUnitDoubleSpinComboBox;
+class KoPoint;
 
 class VColorDocker;
 class VDocumentDocker;
@@ -53,7 +51,6 @@ class VToolOptionsDocker;
 
 class VFill;
 class VPainterFactory;
-class VScaleTool;
 class VSelectToolBar;
 class VStateButton;
 class VStroke;
@@ -95,24 +92,15 @@ public:
 	virtual void setupPrinter( KPrinter &printer );
 	virtual void print( KPrinter& printer );
 
-	KoContextHelpAction* contextHelpAction() const
-	{
-		return m_contextHelpAction;
-	}
+	KoContextHelpAction* contextHelpAction() const { return m_contextHelpAction; }
 
-	VToolOptionsDocker* toolOptionsDocker() const
-	{
-		return m_toolOptionsDocker;
-	}
+	VToolOptionsDocker* toolOptionsDocker() const { return m_toolOptionsDocker; }
 
 	void reorganizeGUI();
 	void setNumberOfRecentFiles( int number );
 	void setLineWidth( double val );
 
-	QLabel* statusMessage() const
-	{
-		return m_status;
-	}
+	QLabel* statusMessage() const { return m_status; }
 
 	void setUnit( KoUnit::Unit _unit );
 
@@ -160,10 +148,8 @@ protected slots:
 	void viewModeChanged();
 	void zoomChanged();
 	void viewColorManager();
-//	void viewLayersDocker();
 	void viewToolOptions();
 	void viewStrokeDocker();
-//	void viewHistory();
 
 	// Toolbox dialogs.
 	void slotStrokeChanged( const VStroke& );
@@ -178,7 +164,7 @@ protected:
 	virtual void updateReadWrite( bool rw );
 	virtual void resizeEvent( QResizeEvent* event );
 	void dragEnterEvent( QDragEnterEvent *e );
-	void dropEvent ( QDropEvent *e );
+	void dropEvent( QDropEvent *e );
 
 	//KXMLGUIBuilder
 	virtual QWidget *createContainer( QWidget *parent, int index, const QDomElement &element, int &id );
@@ -188,59 +174,48 @@ protected:
 private:
 	void initActions();
 
-	VCanvas* m_canvas;
+	VCanvas					*m_canvas;
 
-	VPainterFactory* m_painterFactory;
+	VPainterFactory			*m_painterFactory;
+	VStrokeFillPreview		*m_strokeFillPreview;
 
-	VTool* m_currentTool;
+	VToolBox				*m_toolbox;
+	VToolFactory			*m_toolFactory;
+	VTool					*m_currentTool;
 
-	// text:
-	KFontAction *m_setFontFamily;
-	KFontSizeAction *m_setFontSize;
-	KToggleAction *m_setFontBold;
-	KToggleAction *m_setFontItalic;
-	KToggleAction *m_setUnderline;
-	KAction *m_groupObjects;
-	KAction *m_ungroupObjects;
-	//KSelectColorAction *m_setTextColor;
+	KFontAction				*m_setFontFamily;
+	KFontSizeAction			*m_setFontSize;
+	KToggleAction			*m_setFontBold;
+	KToggleAction			*m_setFontItalic;
+	KToggleAction			*m_setUnderline;
+	KAction					*m_groupObjects;
+	KAction					*m_ungroupObjects;
+	//KSelectColorAction 	*m_setTextColor;
 
-	// view:
-	KSelectAction* m_zoomAction;
-	KSelectAction* m_viewAction;
-
+	// actions:
+	KSelectAction			*m_zoomAction;
+	KSelectAction			*m_viewAction;
+	KAction					*m_configureAction;
+	KoContextHelpAction		*m_contextHelpAction;
 	// line width
 	KoUnitDoubleSpinComboBox *m_setLineWidth;
 
-	// line join style
-	VStateButton *m_joinStyle;
-	VStateButton *m_capStyle;
-
-	// settings:
-	KAction* m_configureAction;
-	
-	KoContextHelpAction* m_contextHelpAction;
-
 	//dockers
-	VColorDocker* m_ColorManager;
-	VDocumentDocker* m_documentDocker;
-	VStrokeDocker* m_strokeDocker;
-	VToolOptionsDocker* m_toolOptionsDocker;
-	VTransformDocker* m_TransformDocker;
+	VColorDocker			*m_ColorManager;
+	VDocumentDocker			*m_documentDocker;
+	VStrokeDocker			*m_strokeDocker;
+	VToolOptionsDocker		*m_toolOptionsDocker;
+	VTransformDocker		*m_TransformDocker;
 
-	//toolbox
-	DCOPObject* m_dcop;
+	// line join style
+	VStateButton 			*m_joinStyle;
+	VStateButton 			*m_capStyle;
 
-	VToolBox *m_toolbox;
+	VSelectToolBar			*m_selectToolBar;
+	QLabel					*m_status;
 
-	//toolbars
-	VSelectToolBar* m_selectToolBar;
-
-	//status bar message
-	QLabel* m_status;
-
-	VStrokeFillPreview *m_strokeFillPreview;
-
-	VToolFactory	*m_toolFactory;
+	// dcop
+	DCOPObject				*m_dcop;
 };
 
 #endif
