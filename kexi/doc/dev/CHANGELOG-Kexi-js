@@ -346,6 +346,7 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 - add kexi__toremove table, and use it to remove objects on begin connection
 
 === KexiDB Parser TODO ===
+- add a method for replacing a single given table name in the statement (useful on table renames)
 - add clever query relatins parsing 
       (needed for switching back to GUI editor from text mode)
 - add flexible support for date/time constants
@@ -411,6 +412,8 @@ KexiDB
 Core
 - Kexi::setWaitCursor(), Kexi::removeWaitCursor() do nothing for non-GUI-aware apps.
 - KexiGUIMessageHandler now calls Kexi::removeWaitCursor()
+Main
+- "Open in Text View" added to the Browser
 
 2004-11-03
 KexiSQLite 2, 3

@@ -109,6 +109,10 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 		SLOT(slotDesignObject()), this, "design_object");
 	m_designAction->plug(m_itemPopup);
 	m_designAction->plug(m_toolbar);
+	m_editTextAction = new KAction(i18n("Open in &Text View"), "", 0, this, 
+		SLOT(slotEditTextObject()), this, "editText_object");
+	m_editTextAction->plug(m_itemPopup);
+	m_editTextAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 	m_newObjectAction = new KAction("", "filenew", 0, this, SLOT(slotNewObject()), this, "new_object");
 
 /*	QImage img = SmallIcon("table").convertToImage();
@@ -273,6 +277,8 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 		}
 	}
 
+	m_itemPopup->setItemVisible(m_editTextAction_id, part && (part->supportedViewModes() & Kexi::TextViewMode));
+
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;
 		if (part) {
@@ -333,7 +339,6 @@ void KexiBrowser::slotNewObject()
 
 void KexiBrowser::slotOpenObject()
 {
-//	kdDebug() << "KexiBrowser::slotOpenObject()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->item())
 		return;
@@ -342,11 +347,18 @@ void KexiBrowser::slotOpenObject()
 
 void KexiBrowser::slotDesignObject()
 {
-//	kdDebug() << "KexiBrowser::slotDesignObject()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->item())
 		return;
 	emit openItem( it->item(), Kexi::DesignViewMode );
+}
+
+void KexiBrowser::slotEditTextObject()
+{
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+	if (!it || !it->item())
+		return;
+	emit openItem( it->item(), Kexi::TextViewMode );
 }
 
 void KexiBrowser::slotCut()

@@ -54,6 +54,15 @@ class KEXICORE_EXPORT Part : public QObject
 		Part(QObject *parent, const char *name, const QStringList &);
 		virtual ~Part();
 
+		/*! \return supported modes for dialogs created by this part, ie. a combination
+		 of Kexi::ViewMode enum elements.
+		 Set this member in your KexiPart subclass' ctor, if you need to override the default value
+		 that equals Kexi::DataViewMode | Kexi::DesignViewMode.
+		 This information is used to set supported view modes for every 
+		 KexiDialogBase derived object created by this KexiPart.
+		 Default flag combination is Kexi::DataViewMode | Kexi::DesignViewMode. */
+		inline int supportedViewModes() const { return m_supportedViewModes; }
+
 		/*! "Opens" an instance that the part provides, pointed by \a item in a mode \a viewMode. 
 		 \a viewMode is one of Kexi::ViewMode enum. */
 		KexiDialogBase* openInstance(KexiMainWindow *win, KexiPart::Item &item, 
@@ -196,12 +205,7 @@ class KEXICORE_EXPORT Part : public QObject
 		QMap<QString,QString> m_names;
 
 		/*! Supported modes for dialogs created by this part.
-		 \a modes are one of Kexi::ViewMode enum elements.
-		 Set this member in your KexiPart subclass' ctor, if you need to override the default value
-		 that equals Kexi::DataViewMode | Kexi::DesignViewMode.
-		 Theis member is used to set supported view modes for every KexiDialogBase derived object
-		 created by this KexiPart.
-		 Default flag combination is Kexi::DataViewMode | Kexi::DesignViewMode. */
+		 @see supportedViewModes() */
 		int m_supportedViewModes;
 
 		Info *m_info;
