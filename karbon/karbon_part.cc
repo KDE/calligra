@@ -16,7 +16,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
 	// create a layer. we need at least one:
-	m_layers.append( new VLayer() );
+	layers().append( new VLayer() );
 
 
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -39,39 +39,15 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	x2 = 200.0; y2 = 100.0;
 	path->arcTo(x1,y1,x2,y2,100.0);
 	path->close();
-	m_layers.last()->m_objects.append( path );
-
-
-	path = new VPath();
-	x1 = 200.0; y1 = 100.0;
-	path->moveTo(x1,y1);
-
-	x1 = 300.0; y1 = 100.0;
-	x2 = 300.0; y2 = 200.0;
-	path->arcTo(x1,y1,x2,y2,100.0);
-	x1 = 300.0; y1 = 300.0;
-	x2 = 200.0; y2 = 300.0;
-	path->arcTo(x1,y1,x2,y2,100.0);
-	x1 = 100.0; y1 = 300.0;
-	x2 = 100.0; y2 = 200.0;
-	path->arcTo(x1,y1,x2,y2,100.0);
-	x1 = 100.0; y1 = 100.0;
-	x2 = 200.0; y2 = 100.0;
-	path->arcTo(x1,y1,x2,y2,100.0);
-
-	path->shear( 0.5, 0.0 );
-	path->rotate( -45.0 );
-	path->scale( 0.5, 0.5 );
-	path->translate( 100.0, 100.0 );
-
-	m_layers.last()->m_objects.append( path );
+	path->scale( 2.0, 1.0 );
+	layers().last()->objects().append( path );
 
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 
 KarbonPart::~KarbonPart()
 {
-	for ( VLayer* layer=m_layers.first(); layer!=0L; layer=m_layers.next() )
+	for ( VLayer* layer = layers().first(); layer != 0L; layer = layers().next() )
 	{
 		delete( layer );
 	}

@@ -17,7 +17,7 @@ class VPoint
 {
 public:
 	VPoint();
-	VPoint( const VPoint& p );
+	VPoint( const VPoint& point );
 	VPoint( const double& x, const double& y );
 
 	// convert to QPoint and recalculate if necessary:

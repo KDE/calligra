@@ -12,8 +12,8 @@ VPoint::VPoint()
 {
 }
 
-VPoint::VPoint( const VPoint& p )
-	: m_x( p.m_x ), m_y( p.m_y ), m_refCount( 1 )
+VPoint::VPoint( const VPoint& point )
+	: m_x( point.m_x ), m_y( point.m_y ), m_refCount( 1 )
 {
 }
 

@@ -11,8 +11,11 @@ VLayer::VLayer()
 
 VLayer::~VLayer()
 {
-	for ( VObject* object=m_objects.first(); object!=0L; object=m_objects.next() )
-	{
+	for (
+		VObject* object = objects().first();
+		object != 0L;
+		object = objects().next() )
+ 	{
 		delete( object );
 	}
 }
@@ -20,7 +23,7 @@ VLayer::~VLayer()
 void
 VLayer::draw( QPainter& painter, const QRect& rect, const double& zoomFactor )
 {
-	QListIterator<VObject> i = m_objects;
+	QListIterator<VObject> i = objects();
 	for ( ; i.current() ; ++i )
 	{
 		i.current()->draw( painter, rect, zoomFactor );

@@ -240,7 +240,7 @@ VPath::arcTo( const double& x1, const double& y1,
 		double rsq = r*r;
 		double fract;
 
-// TODO: make this nicer?
+// TODO: make this nicer? check the exact meaning of this formula
 
 		if ( distsq >= rsq * VPoint::s_fractScale ) // r is very small
 			fract = 0.0; // dist==r==0
@@ -263,6 +263,8 @@ VPath::arcTo( const double& x1, const double& y1,
 void
 VPath::close()
 {
+	if ( isClosed() ) return;
+
 // TODO: dont "close" a single line
 	// draw a line if last point differs from first point
 	if ( *(m_segments.getFirst()->p3) != *(m_segments.getLast()->p3) )
@@ -284,95 +286,72 @@ VPath::close()
 void
 VPath::translate( const double& dx, const double& dy )
 {
-	// we dont' use an affine map, because that's overkill here
-
-	Segment* segment = m_segments.first();	// first segment
-
-	// only do things with first point if path isnt closed:
-	if ( !isClosed() && segment->p3 )
-		segment->p3->rmoveTo( dx, dy );
-
-	for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() )
-	{
-		if ( segment->p1 )
-			segment->p1->rmoveTo( dx, dy );
-		if ( segment->p2 )
-			segment->p2->rmoveTo( dx, dy );
-		if ( segment->p3 )
-			segment->p3->rmoveTo( dx, dy );
-	}
+	VAffineMap affmap;
+	affmap.translate( dx, dy );
+	apply( affmap );
 }
 
 void
 VPath::rotate( const double& ang )
 {
-	VAffineMap map;
-	map.rotate( ang );
+	VAffineMap affmap;
+	affmap.rotate( ang );
+	apply( affmap );
+}
 
-	Segment* segment = m_segments.first();	// first segment
-
-	// only do things with first point if path isnt closed:
-	if ( !isClosed() && segment->p3 )
-		*(segment->p3) = map.applyTo( *(segment->p3) );
-
-	for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() )
-	{
-		if ( segment->p1 )
-			*(segment->p1) = map.applyTo( *(segment->p1) );
-		if ( segment->p2 )
-			*(segment->p2) = map.applyTo( *(segment->p2) );
-		if ( segment->p3 )
-			*(segment->p3) = map.applyTo( *(segment->p3) );
-	}
+void
+VPath::mirror( const bool horiz, const bool verti )
+{
+	VAffineMap affmap;
+	affmap.mirror( horiz, verti );
+	apply( affmap );
 }
 
 void
 VPath::scale( const double& sx, const double& sy )
 {
-	VAffineMap map;
-	map.scale( sx, sy );
-
-	Segment* segment = m_segments.first();	// first segment
-
-	// only do things with first point if path isnt closed:
-	if ( !isClosed() && segment->p3 )
-		*(segment->p3) = map.applyTo( *(segment->p3) );
-
-	for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() )
-	{
-		if ( segment->p1 )
-			*(segment->p1) = map.applyTo( *(segment->p1) );
-		if ( segment->p2 )
-			*(segment->p2) = map.applyTo( *(segment->p2) );
-		if ( segment->p3 )
-			*(segment->p3) = map.applyTo( *(segment->p3) );
-	}
+	VAffineMap affmap;
+	affmap.scale( sx, sy );
+	apply( affmap );
 }
 
 void
 VPath::shear( const double& sh, const double& sv )
 {
-	VAffineMap map;
-	map.shear( sh, sv );
+	VAffineMap affmap;
+	affmap.shear( sh, sv );
+	apply( affmap );
+}
 
+void
+VPath::skew( const double& ang )
+{
+	VAffineMap affmap;
+	affmap.skew( ang );
+	apply( affmap );
+}
+
+void
+VPath::apply( const VAffineMap& affmap )
+{
 	Segment* segment = m_segments.first();	// first segment
 
-	// only do things with first point if path isnt closed:
+	// only apply map to first point if path isnt closed:
 	if ( !isClosed() && segment->p3 )
-		*(segment->p3) = map.applyTo( *(segment->p3) );
+		*(segment->p3) = affmap.map( *(segment->p3) );
 
 	for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() )
 	{
 		if ( segment->p1 )
-			*(segment->p1) = map.applyTo( *(segment->p1) );
+			*(segment->p1) = affmap.map( *(segment->p1) );
 		if ( segment->p2 )
-			*(segment->p2) = map.applyTo( *(segment->p2) );
+			*(segment->p2) = affmap.map( *(segment->p2) );
 		if ( segment->p3 )
-			*(segment->p3) = map.applyTo( *(segment->p3) );
+			*(segment->p3) = affmap.map( *(segment->p3) );
 	}
 }
 
-const QRect&
+const VRect&
 VPath::boundingBox() const
 {
 	return m_boundingBox;

@@ -13,9 +13,6 @@
 
 class VLayer
 {
-// TODO: add wrapper functions to access objects and remove this friendship
-	friend class KarbonPart;	// im lazy for now
-
 public:
 	VLayer();
 	~VLayer();
@@ -24,6 +21,8 @@ public:
 
 	const bool& isVisible() const { return m_isVisible; }
 	const bool& isReadOnly() const { return m_isReadOnly; }
+
+	QList<VObject>& objects() { return m_objects; }
 
 private:
 	QList<VObject> m_objects;

@@ -5,9 +5,11 @@
 #ifndef __VOBJECT_H__
 #define __VOBJECT_H__
 
-#include <qrect.h>
+#include "vrect.h"
 
 class QPainter;
+
+class VAffineMap;
 
 // The base class for all karbon objects.
 
@@ -21,15 +23,18 @@ public:
 
 	virtual void translate( const double& dx, const double& dy ) = 0;
 	virtual void rotate( const double& ang ) = 0;
+	virtual void mirror( const bool horiz = false, const bool verti = false ) = 0;
 	virtual void scale( const double& sx, const double& sy ) = 0;
 	virtual void shear( const double& sh, const double& sv ) = 0;
+	virtual void skew( const double& ang ) = 0;
+	virtual void apply( const VAffineMap& affmap ) = 0;
 
-	virtual const QRect& boundingBox() const = 0;
+	virtual const VRect& boundingBox() const = 0;
 
 protected:
 	// QRect as boundingBox is sufficent since it's not used for calculating
 	// intersections
-	QRect m_boundingBox;
+	VRect m_boundingBox;
 };
 
 #endif
