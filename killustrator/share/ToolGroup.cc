@@ -53,6 +53,21 @@ void ToolGroup::rightMouseButtonPressed () {
   }
 }
 
+void ToolGroup::selectTool (int id) {
+  for (unsigned int i = 0; i < buttons.size (); i++) {
+    if (i == (unsigned int) id) {
+      buttons[i]->setOn (true);
+      emit toolSelected (i);
+    }
+    else {
+      ToolButton *bt = buttons[i];
+      if (bt->isOn ())
+	bt->setOn (false);
+    }
+  }
+  current_id = id;
+}
+
 void ToolGroup::buttonPressed () {
   ToolButton* button = (ToolButton *) sender ();
   unsigned int i;

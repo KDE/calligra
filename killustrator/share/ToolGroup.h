@@ -38,6 +38,9 @@ public:
   
   void insertButton (int id, ToolButton* button);
 
+public slots:
+  void selectTool (int id);
+
 signals:
   void toolSelected (int id);
   void toolConfigActivated (int id);
