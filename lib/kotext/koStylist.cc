@@ -287,7 +287,12 @@ void KoStyleManager::save() {
         for ( ; it.current() ; ++it )
             it.current()->save();
 
-        m_currentStyle->setName( m_nameString->text() );
+	// Rename the style - only if it's actually been renamed.
+	// Take care of not renaming a style from its English name to its translated name by mistake,
+	// this would break the TOC stuff.
+        if ( m_currentStyle->name() != m_nameString->text() &&
+            m_currentStyle->translatedName() != m_nameString->text() )
+            m_currentStyle->setName( m_nameString->text() );
 
         int indexNextStyle = styleIndex( m_styleCombo->currentItem() );
         m_currentStyle->setFollowingStyle( m_changedStyles.at( indexNextStyle ) );
