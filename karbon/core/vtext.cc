@@ -33,7 +33,7 @@ int traceMoveto( FT_Vector *to, VPath *path )
 
     QString add = "M" + QString::number(tox) + "," + QString::number(toy) + " ";
     kdDebug() << add.latin1() << endl;
-	path->moveTo( tox, toy );
+	path->moveTo( KoPoint( tox, toy ) );
 }
 
 int traceLineto( FT_Vector *to, VPath *path )
@@ -44,7 +44,7 @@ int traceLineto( FT_Vector *to, VPath *path )
     QString add = "L" + QString::number(tox) + "," + QString::number(toy) + " ";
     kdDebug() << add.latin1() << endl;
 
-	path->lineTo( tox, toy );
+	path->lineTo( KoPoint( tox, toy ) );
 };
 
 int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VPath *path )
@@ -57,7 +57,7 @@ int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VPath *path )
     QString add = "Q" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + " ";
     kdDebug() << add.latin1() << endl;
 	//path->curveTo( x1, y1, x1, y1, x2, y2 );
-	path->curve2To( x1, y1, x2, y2 );
+	path->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
 };
 
 int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VPath *path )
@@ -72,7 +72,7 @@ int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VPath *path )
 	QString add = "C" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + "," + QString::number(x3) + "," + QString::number(y3);
 	kdDebug() << add.latin1() << endl;
 
-	path->curveTo( x1, y1, x2, y2, x3, y3 );
+	path->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
 };
 
 FT_Outline_Funcs OutlineMethods =
