@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexitablepart" version="1">
+<kpartgui name="kexitablepart" version="2">
 
 <MenuBar>
-	<Menu name="widgets">
-		<text>&amp;Create</text>
+	<Menu name="create">
+		<!-- text>&amp;Create</text -->
 		<Action name="tablepart_create"/>
 	</Menu>
 </MenuBar>
