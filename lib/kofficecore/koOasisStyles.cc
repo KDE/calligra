@@ -15,13 +15,11 @@ KoOasisStyles::~KoOasisStyles()
 void KoOasisStyles::createStyleMap( const QDomDocument& doc )
 {
     QDomElement docElement  = doc.documentElement();
-    QDomNode docStyles   = docElement.namedItem( "office:document-styles" );
     // We used to have the office:version check here, but better let the apps do that
     QDomNode fontStyles = docElement.namedItem( "office:font-decls" );
 
     if ( !fontStyles.isNull() ) {
         //kdDebug(30003) << "Starting reading in font-decl..." << endl;
-
         insertStyles( fontStyles.toElement() );
     }// else
     //   kdDebug(30003) << "No items found" << endl;
@@ -47,6 +45,7 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
                 //kdDebug(30003) << "Master style: '" << name << "' loaded " << endl;
                 m_masterPages.insert( name, new QDomElement( master ) );
             } else
+                // OASIS docu mentions style:handout-master and draw:layer-set here
                 kdWarning(30003) << "Unknown tag " << master.tagName() << " in office:master-styles" << endl;
         }
     }
@@ -58,8 +57,7 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
 
     if ( !officeStyle.isNull() ) {
         m_officeStyle = officeStyle;
-        insertStyles( m_officeStyle );
-        insertDrawStyles( m_officeStyle );
+        insertOfficeStyles( m_officeStyle );
 
     }
 
@@ -77,18 +75,28 @@ QValueVector<QDomElement> KoOasisStyles::userStyles() const
     return vec;
 }
 
-void KoOasisStyles::insertDrawStyles( const QDomElement& styles )
+void KoOasisStyles::insertOfficeStyles( const QDomElement& styles )
 {
     for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
-        QString tagName = e.tagName();
-        if ( e.hasAttribute( "draw:name" ) )
+        QCString tagName = e.tagName().latin1();
+        if ( tagName == "draw:gradient"
+             || tagName == "svg:linearGradient"
+             || tagName == "svg:radialGradient"
+             || tagName == "draw:hatch"
+             || tagName == "draw:fill-image"
+             || tagName == "draw:marker"
+             || tagName == "draw:stroke-dash"
+             || tagName == "draw:opacity" )
         {
-            QString name = e.attribute( "style:name" );
+            Q_ASSERT( e.hasAttribute( "draw:name" ) );
+            QString name = e.attribute( "draw:name" );
             QDomElement* ep = new QDomElement( e );
             m_drawStyles.insert( name, ep );
         }
+        else
+            insertStyle( e );
     }
 }
 
@@ -98,31 +106,44 @@ void KoOasisStyles::insertStyles( const QDomElement& styles )
     //kdDebug(30003) << "Inserting styles from " << styles.tagName() << endl;
     for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        QDomElement e = n.toElement();
-        QString tagName = e.tagName();
-
-        QString name = e.attribute( "style:name" );
-        if ( tagName == "style:style"
-             || tagName == "style:page-master"
-             || tagName == "style:font-decl" )
-        {
-            QDomElement* ep = new QDomElement( e );
-            m_styles.insert( name, ep );
-            //kdDebug(30003) << "Style: '" << name << "' loaded " << endl;
-        } else if ( tagName == "style:default-style" ) {
-            m_defaultStyle = e;
-        } else if ( tagName == "text:list-style" ) {
-            QDomElement* ep = new QDomElement( e );
-            m_listStyles.insert( name, ep );
-            //kdDebug(30003) << "List style: '" << name << "' loaded " << endl;
-        } else if ( tagName == "number:number-style" ) {
-            // TODO
-        } else if ( tagName == "number:date-style"
-                    || tagName == "number:time-style" ) {
-            importDateTimeStyle( e );
-        }
-        // The rest (*-configuration and outline-style) is to be done by the apps.
+        insertStyle( n.toElement() );
     }
+}
+
+void KoOasisStyles::insertStyle( const QDomElement& e )
+{
+    QCString tagName = e.tagName().latin1();
+
+    QString name = e.attribute( "style:name" );
+    if ( tagName == "style:style"
+         || tagName == "style:page-master"
+         || tagName == "style:font-decl"
+         || tagName == "style:presentation-page-layout" )
+    {
+        QDomElement* ep = new QDomElement( e );
+        m_styles.insert( name, ep );
+        //kdDebug(30003) << "Style: '" << name << "' loaded " << endl;
+    } else if ( tagName == "style:default-style" ) {
+        m_defaultStyle = e;
+    } else if ( tagName == "text:list-style" ) {
+        QDomElement* ep = new QDomElement( e );
+        m_listStyles.insert( name, ep );
+        //kdDebug(30003) << "List style: '" << name << "' loaded " << endl;
+    } else if ( tagName == "number:number-style" ) {
+        // TODO
+    } else if ( tagName == "number:currency-style" ) {
+        // TODO
+    } else if ( tagName == "number:percentage-style" ) {
+        // TODO
+    } else if ( tagName == "number:boolean-style" ) {
+        // TODO
+    } else if ( tagName == "number:text-style" ) {
+        // TODO
+    } else if ( tagName == "number:date-style"
+                || tagName == "number:time-style" ) {
+        importDateTimeStyle( e );
+    }
+    // The rest (text:*-configuration and text:outline-style) is to be done by the apps.
 }
 
 // OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html

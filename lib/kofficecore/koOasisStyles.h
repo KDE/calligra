@@ -48,9 +48,10 @@ public:
 protected:
     /// Add styles to styles map
     void insertStyles( const QDomElement& styles );
-    void insertDrawStyles( const QDomElement& styles );
 
 private:
+    void insertOfficeStyles( const QDomElement& styles );
+    void insertStyle( const QDomElement& style );
     void importDateTimeStyle( const QDomElement& parent );
 
     KoOasisStyles( const KoOasisStyles & ); // forbidden
