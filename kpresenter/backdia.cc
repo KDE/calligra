@@ -330,7 +330,7 @@ void BackDia::selectClip()
   radioColor->setChecked(false);
   radioPic->setChecked(false);
 
-  QString file = KFileDialog::getOpenFileName(0,i18n("*.wmf *.WMF|Windows Metafiles"),0);
+  QString file = KFileDialog::getOpenFileName(0,i18n("*.WMF *.wmf|Windows Metafiles"),0);
   if (!file.isEmpty()) openClip((const char*)file);
 }
 

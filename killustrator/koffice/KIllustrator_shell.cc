@@ -61,7 +61,7 @@ void KIllustratorShell::enableMenuBar () {
   m_idMenuFile = m_rMenuBar->insertMenu (CORBA::string_dup (i18n ("&File")));
   
   m_idMenuFile_New = 
-    m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Ne&w...")), 
+    m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&New...")), 
 			    m_idMenuFile, this, CORBA::string_dup ("fileNew"));
   m_idMenuFile_Open = 
     m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Open...")), 

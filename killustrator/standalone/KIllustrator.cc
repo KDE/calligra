@@ -370,7 +370,7 @@ void KIllustrator::initMenu () {
   help = new QPopupMenu ();
   openRecent = new QPopupMenu ();
   
-  file->insertItem (i18n ("Ne&w..."), ID_FILE_NEW);
+  file->insertItem (i18n ("&New..."), ID_FILE_NEW);
   file->setAccel (CTRL + Key_N, ID_FILE_NEW);
   file->insertItem (i18n ("&Open..."), ID_FILE_OPEN);
   file->setAccel (CTRL + Key_O, ID_FILE_OPEN);

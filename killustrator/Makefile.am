@@ -8,4 +8,4 @@ AUTOMAKE_OPTIONS = foreign
 EXTRA_DIST = README sample.wmf sample2.wmf arrow01.wmf
 
 messages:
-	$(XGETTEXT) -C -ktranslate -ki18n -x$(includedir)/kde.pot src/*/*.cc && mv messages.po ../po/killustrator.pot
+	$(XGETTEXT) -C -ktranslate -ki18n -x$(includedir)/kde.pot */*.cc && mv messages.po ../po/killustrator.pot
