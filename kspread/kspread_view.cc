@@ -1317,7 +1317,7 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pCancelButton->setGeometry( 60, 2, 26, 26 );
     m_pOkButton->setGeometry( 90, 2, 26, 26 );
     m_pEditWidget->setGeometry( 125, 2, 200, 26 );
-
+	
     m_pTabBarFirst->setGeometry( 0, height() - 20, 20, 20 );
     m_pTabBarFirst->show();
     m_pTabBarLeft->setGeometry( 20, height() - 20, 20, 20 );
@@ -1328,23 +1328,24 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pTabBarLast->show();
     m_pTabBar->setGeometry( 80, height() - 20, width() / 2 - 80, 20 );
     m_pTabBar->show();
-
+	
     m_pHorzScrollBar->setGeometry( width() / 2, height() - 20, width() / 2 - 20, 20 );
     m_pHorzScrollBar->show();
     m_pVertScrollBar->setGeometry( width() - 20, top , 20, height() - 20 - top );
     m_pVertScrollBar->show();
 
-    m_pFrame->setGeometry( 0, top, width() - 20, height() - 20 - top );
+    
+	m_pFrame->setGeometry( 0, top, width() - 20, height() - 20 - top );
     m_pFrame->show();
 
     m_pCanvasWidget->setGeometry( YBORDER_WIDTH, XBORDER_HEIGHT,
-				  m_pFrame->width() - YBORDER_WIDTH, m_pFrame->height() - XBORDER_HEIGHT );
-
+								  m_pFrame->width() - YBORDER_WIDTH, m_pFrame->height() - XBORDER_HEIGHT );
+   
     m_pHBorderWidget->setGeometry( YBORDER_WIDTH, 0, m_pFrame->width() - YBORDER_WIDTH, XBORDER_HEIGHT );
     m_pHBorderWidget->show();
 
     m_pVBorderWidget->setGeometry( 0, XBORDER_HEIGHT, YBORDER_WIDTH,
-				   m_pFrame->height() - XBORDER_HEIGHT );
+								   m_pFrame->height() - XBORDER_HEIGHT );
     m_pVBorderWidget->show();
   }
   else
@@ -3117,7 +3118,10 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
   painter.eraseRect( _ev->rect() );
 
-  QFontMetrics fm = painter.fontMetrics();
+  //QFontMetrics fm = painter.fontMetrics();
+  // Matthias Elter: This causes a SEGFAULT in ~QPainter!
+  // Only god and the trolls know why ;-)
+  // bah...took me quite some time to track this one down...
 
   painter.setClipRect( _ev->rect() );
 
@@ -3155,7 +3159,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     else
       painter.setPen( black );
 
-    painter.drawText( 3, ypos + ( row_lay->height( m_pView ) + fm.ascent() - fm.descent() ) / 2, buffer );
+    painter.drawText( 3, ypos + ( row_lay->height( m_pView ) + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
 
     ypos += row_lay->height( m_pView );
   }
@@ -3325,7 +3329,9 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
 void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 {
   KSpreadTable *table = m_pView->activeTable();
-  assert( table );
+  
+  if (!table )
+	return;
 
   QPainter painter;
   painter.begin( this );
@@ -3335,8 +3341,11 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   painter.setBackgroundColor( white );
 
   painter.eraseRect( _ev->rect() );
-
-  QFontMetrics fm = painter.fontMetrics();
+  
+  //QFontMetrics fm = painter.fontMetrics();
+  // Matthias Elter: This causes a SEGFAULT in ~QPainter!
+  // Only god and the trolls know why ;-)
+  // bah...took me quite some time to track this one down...
 
   int xpos;
   int left_col = table->leftColumn( _ev->rect().x(), xpos, m_pView );
@@ -3364,7 +3373,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
       qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pView ), XBORDER_HEIGHT, g, FALSE, 1, &fill );
     }
 
-    int len = fm.width( table->columnLabel(x) );
+    int len = painter.fontMetrics().width( table->columnLabel(x) );
 
     if ( selected )
       painter.setPen( white );
@@ -3372,11 +3381,11 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
       painter.setPen( black );
 	
     painter.drawText( xpos + ( col_lay->width( m_pView ) - len ) / 2,
-		      ( XBORDER_HEIGHT + fm.ascent() - fm.descent() ) / 2,
+		      ( XBORDER_HEIGHT + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2,
 		      table->columnLabel(x) );
 
     xpos += col_lay->width( m_pView );
-  }
+	}
 
   painter.end();
 }
