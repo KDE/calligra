@@ -1106,25 +1106,15 @@ void KPWebPresentationCreateDialog::saveConfig()
     else
         filename = QString::null;
 
-    KURL url = KFileDialog::getOpenURL( filename, i18n("*.kpweb|KPresenter Web-Presentation (*.kpweb)") );
+    KFileDialog fd (filename, i18n("*.kpweb|KPresenter Web-Presentation (*.kpweb)"),
+                    0/*parent*/, 0/*name*/, true/*modal*/);
+    fd.setCaption (i18n ("Save Web Presentation Configuration"));
+    fd.setOperationMode (KFileDialog::Saving);
+    fd.setMode (KFile::File | KFile::LocalOnly);
 
-    if( url.isEmpty() )
-        return;
-
-    // ### TODO: use KIO::NetAccess for remote files (floppy: is remote!)
-    if( !url.isLocalFile() )
+    if (fd.exec ())
     {
-        KMessageBox::sorry( 0L, i18n( "Only local files are currently supported." ) );
-        return;
-    }
-
-    filename = url.path();
-
-    if ( !filename.isEmpty() ) {
-        if (filename.endsWith(".kpweb"))
-            webPres.setConfig( filename );
-        else
-            webPres.setConfig( filename + ".kpweb" );
+        webPres.setConfig( fd.selectedFile () );
         webPres.saveConfig();
     }
 }
