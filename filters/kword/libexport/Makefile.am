@@ -1,0 +1,17 @@
+####### General stuff
+
+INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+
+libkwordexportfilters_la_LDFLAGS = $(all_libraries) -version-info 0:0:0 -no-undefined
+
+libkwordexportfilters_la_LIBADD = $(KOFFICE_LIBS)
+
+####### Files
+
+lib_LTLIBRARIES = libkwordexportfilters.la
+
+libkwordexportfilters_la_SOURCES = TagProcessing.cc KWEFStructures.cc
+
+noinst_HEADERS = TagProcessing.h KWEFStructures.h
+
+METASOURCES = AUTO
