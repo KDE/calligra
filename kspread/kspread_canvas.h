@@ -22,6 +22,7 @@ class KSpreadCellEditor;
 class KSpreadCell;
 class QWidget;
 class QTimer;
+class QButton;
 
 class QPainter;
 class QLabel;
