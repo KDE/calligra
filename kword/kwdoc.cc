@@ -135,6 +135,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 {
     dcop = 0;
     m_pages = 1;
+    m_loadingInfo = 0L;
     m_tabStop = MM_TO_POINT( 15.0 );
     m_processingType = WP;
 
