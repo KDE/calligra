@@ -41,8 +41,8 @@ public:
 
 	   p1          p2
 	    O   ____   O
-	    | _/    \_ |
-	    |/        \|
+	    : _/    \_ :
+	    :/        \:
 	    x          x
 	currP          p3
 	*/
@@ -61,8 +61,8 @@ public:
 
 	               p2
 	         ____  O
-	      __/    \ |
-	     /        \|
+	      __/    \ :
+	     /        \:
 	    x          x
 	currP          p3
 	*/
@@ -80,8 +80,8 @@ public:
 
 	   p1
 	    O  ____
-	    | /    \__
-	    |/        \
+	    : /    \__
+	    :/        \
 	    x          x
 	currP          p3
 	*/
@@ -135,7 +135,7 @@ public:
 	virtual void load( const QDomElement& element );
 
 private:
-	QPtrList<VSegmentList> m_segmentLists;		// list of segmentLists
+	QPtrList<VSegmentList> m_segmentLists;		// list of segmentList
 };
 
 #endif

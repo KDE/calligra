@@ -18,9 +18,10 @@ VSegmentList::VSegmentList()
 }
 
 VSegmentList::VSegmentList( const VSegmentList& list )
-	: m_isClosed( false )
 {
 	setAutoDelete( true );
+
+	m_isClosed = list.m_isClosed;
 
 	VSegmentListIterator itr( list );
 	for( ; itr.current() ; ++itr )
@@ -76,8 +77,9 @@ VSegmentList::save( QDomElement& element ) const
 void
 VSegmentList::load( const QDomElement& element )
 {
-	clear();
-	m_isClosed   = element.attribute( "isClosed" ) == 0 ? false : true;
+	clear();	// we already have a "begin".
+
+	m_isClosed = element.attribute( "isClosed" ) == 0 ? false : true;
 
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
@@ -91,5 +93,9 @@ VSegmentList::load( const QDomElement& element )
 			append( s );
 		}
 	}
+
+	// "end"s do not get saved:
+	if( m_isClosed )
+		close();
 }
 

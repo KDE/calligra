@@ -1,2 +1,2 @@
-SUBDIRS = ai eps 
+SUBDIRS = eps ai
 
