@@ -141,6 +141,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		/*! Receives signals on \a prop property change from buffer \a buf. */
 		void slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &prop);
 
+		/*! Called when current buffer is about to be destroyed. */
+		void slotBufferDestroying();
 	protected:
 		/*! Creates an editor for the list item \a i in the rect \a geometry, and displays revert button 
 		    if property is modified (ie KexiPropertyEditorItem::modified() == true).
@@ -156,7 +158,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		QGuardedPtr<KexiPropertySubEditor> m_currentEditor;
 		KexiPropertyEditorItem *m_editItem;
 		KexiPropertyEditorItem *m_topItem; //The top item is used to control the drawing of every branches.
-		KexiPropertyBuffer *m_buffer;
+		QGuardedPtr<KexiPropertyBuffer> m_buffer;
 		KPushButton *m_defaults; // "Revert to defaults" button
 		KexiPropertyEditorItem::Dict m_items;
 		bool m_sync : 1;

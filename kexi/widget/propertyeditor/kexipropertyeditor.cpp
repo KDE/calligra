@@ -408,7 +408,14 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b)
 		//receive property changes
 		connect(m_buffer,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
 			this,SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
+		connect(m_buffer,SIGNAL(destroying()), this, SLOT(slotBufferDestroying()));
 	}
+	fill(); 
+}
+
+void KexiPropertyEditor::slotBufferDestroying()
+{
+	m_buffer = 0;
 	fill(); 
 }
 
@@ -503,7 +510,7 @@ KexiPropertyEditor::resizeEvent(QResizeEvent *ev)
 void
 KexiPropertyEditor::slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &prop)
 {
-	if (m_buffer!=&buf)
+	if (static_cast<KexiPropertyBuffer*>(m_buffer)!=&buf)
 		return;
 	KexiPropertyEditorItem* item = m_items[prop.name()];
 	item->updateValue();
