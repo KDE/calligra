@@ -361,9 +361,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                              actionCollection(), "sortDec" );
     m_sortInc = new KAction( i18n("Sort increasing"), "sort_incr", 0, this, SLOT( sortInc() ),
                              actionCollection(), "sortInc" );
-    m_textColor = new KColorAction( i18n("Text color"), KColorAction::TextColor, 0, this, SLOT( changeTextColor() ),
+    m_textColor = new KSelectColorAction( i18n("Text color"), KColorAction::TextColor, 0, this, SLOT( changeTextColor() ),
 			       actionCollection(), "textColor" );
-    m_bgColor = new KColorAction( i18n("Background color"), KColorAction::BackgroundColor, 0, this, SLOT( changeBackgroundColor() ),
+    m_bgColor = new KSelectColorAction( i18n("Background color"), KColorAction::BackgroundColor, 0, this, SLOT( changeBackgroundColor() ),
 			       actionCollection(), "backgroundColor" );
     m_function = new KAction( i18n("Function"), "funct", 0, this, SLOT( funct() ), actionCollection(), "function" );
     m_borderLeft = new KAction( i18n("Border left"), "border_left", 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
@@ -373,7 +373,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_borderAll = new KAction( i18n("All borders"), "border_all", 0, this, SLOT( borderAll() ), actionCollection(), "borderAll" );
     m_borderRemove = new KAction( i18n("Remove Borders"), "border_remove", 0, this, SLOT( borderRemove() ), actionCollection(), "borderRemove" );
     m_borderOutline = new KAction( i18n("Border Outline"), ("border_outline"), 0, this, SLOT( borderOutline() ), actionCollection(), "borderOutline" );
-    m_borderColor = new KColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
+    m_borderColor = new KSelectColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
 			       actionCollection(), "borderColor" );
     m_tableFormat = new KAction( i18n("Table Style..."), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
     m_oszi = new KAction( i18n("Osciloscope..."), 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
@@ -705,8 +705,6 @@ void KSpreadView::updateEditWidget()
     m_italic->setChecked( cell->textFontItalic() );
     m_underline->setChecked( cell->textFontUnderline() );
     m_strikeOut->setChecked( cell->textFontStrike() );
-    m_textColor->setColor( cell->textColor() );
-    m_bgColor->setColor( cell->bgColor() );
 
     if ( cell->align() == KSpreadLayout::Left )
 	m_alignLeft->setChecked( TRUE );
@@ -953,48 +951,26 @@ void KSpreadView::oszilloscope()
 
 void KSpreadView::changeTextColor()
 {
-    if ( m_pTable != 0L )
-    {
-	QColor color;
-	KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-	if ( cell )
-	    color = cell->textColor();
-	if ( KColorDialog::getColor( color ) )
-	{
-	    m_textColor->setColor( color );
-	    m_pTable->setSelectionTextColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), color );
-	}
-    }
+  if ( m_pTable != 0L )
+  {
+    m_pTable->setSelectionTextColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), m_textColor->color() );
+  }
 }
 
 void KSpreadView::changeBackgroundColor()
 {
-    if ( m_pTable != 0L )
-    {
-	QColor color;
-	KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-	if ( cell )
-	    color = cell->bgColor();
-
-	if ( KColorDialog::getColor( color ) )
-	{
-	    m_bgColor->setColor( color );
-	    m_pTable->setSelectionbgColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), color );
-	}
-    }
+  if ( m_pTable != 0L )
+  {
+    m_pTable->setSelectionbgColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), m_bgColor->color() );
+  }
 }
 
 void KSpreadView::changeBorderColor()
 {
-    if ( m_pTable != 0L )
-    {
-	QColor color;
-	if ( KColorDialog::getColor( color ) )
-	{
-	    m_borderColor->setColor( color );
-	    m_pTable->setSelectionBorderColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), color );
-	}
-    }
+  if ( m_pTable != 0L )
+  {
+    m_pTable->setSelectionBorderColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), m_borderColor->color() );
+  }
 }
 
 void KSpreadView::helpUsing()

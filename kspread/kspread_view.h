@@ -42,7 +42,7 @@ class KSpreadCell;
 
 class KoDocumentEntry;
 
-class KColorAction;
+class KSelectColorAction;
 
 class KAction;
 class KSelectAction;
@@ -426,8 +426,8 @@ private:
     KSelectAction* m_formulaSelection;
     KAction* m_sortDec;
     KAction* m_sortInc;
-    KColorAction* m_textColor;
-    KColorAction* m_bgColor;
+    KSelectColorAction* m_textColor;
+    KSelectColorAction* m_bgColor;
     KAction* m_function;
     KAction* m_cellLayout;
     KAction* m_hideTable;
@@ -439,7 +439,7 @@ private:
     KAction* m_borderAll;
     KAction* m_borderOutline;
     KAction* m_borderRemove;
-    KColorAction* m_borderColor;
+    KSelectColorAction* m_borderColor;
     KAction* m_tableFormat;
     KAction* m_oszi;
     KAction* m_autoSum;
