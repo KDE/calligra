@@ -3,6 +3,7 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#define QMIN(a, b)      ((a) < (b) ? (a) : (b))
 
 #include <klocale.h>
 
@@ -19,7 +20,7 @@ VRoundRect::VRoundRect( VObject* parent,
 	// catch case, when radius is larger than width or height:
 	double minimum;
 
-	if( edgeRadius  > ( minimum = QMIN( width, height * 0.5 ) )
+	if( edgeRadius  > ( minimum = QMIN( width, height * 0.5 ) ) )
 	{
  		edgeRadius = minimum;
 	}

@@ -9,7 +9,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) \
 	-I$(srcdir)/widgets \
 	$(all_includes)
 
-SUBDIRS = core widgets dialogs commands tools render visitors . data pics
+SUBDIRS = core shapes widgets dialogs commands tools render visitors . data pics
 
 bin_PROGRAMS = karbon
 
@@ -28,14 +28,14 @@ libkarbonpart_la_SOURCES = \
 
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) \
-	shapes/libkarbonshapes.la \
 	tools/libkarbontools.la \
+	dialogs/libkarbondialogs.la \
+	widgets/libkarbonwidgets.la \
 	commands/libkarboncommands.la \
 	visitors/libkarbonvisitors.la \
 	render/libvpainter.la \
-	core/libkarboncore.la \
-	dialogs/libkarbondialogs.la \
-	widgets/libkarbonwidgets.la
+	shapes/libkarbonshapes.la \
+	core/libkarboncore.la 
 
 libkarbonpart_la_METASOURCES = AUTO
 
