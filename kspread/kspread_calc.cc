@@ -347,7 +347,9 @@ void parseCell2( const char *_str, int* _x, int* _y, void** _table )
 
   *_table = findTable( p );
   // TODO: check wether this table really exists
-
+  assert( _table );
+  p = p2;
+  
   if ( *p == '$' )
     p++;
   
@@ -441,6 +443,8 @@ double cellValue( void *_table, int _x, int _y )
     return obj->valueDouble();
 
   // setError( ERR_NOT_A_NUMERIC_VALUE, "" );
+  
+  cerr << "No value at " << t->name() << " (" << _x << "|" << _y << ")" << endl;
   
   return 0.0;
 }

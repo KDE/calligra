@@ -22,11 +22,20 @@
 
 #include "kspread.h"
 
+#include <qstring.h>
+#include <qrect.h>
+
 class KSpreadMap;
+class KSpreadTable;
 
 KSpread::Cell util_parseCell( const char *_str );
 KSpread::Cell util_parseCell( const char *_str, KSpreadMap* _map );
 KSpread::Range util_parseRange( const char *_str );
 KSpread::Range util_parseRange2( const char *_str, KSpreadMap* _map );
+
+QString util_cellName( int _col, int _row );
+QString util_rangeName( QRect _area );
+QString util_rangeName( KSpreadTable *_table, QRect _area );
+QString util_columnLabel( int column );
 
 #endif

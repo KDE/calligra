@@ -530,7 +530,7 @@ KSpreadTable* KSpreadDoc::createTable()
 {
   char buffer[ 128 ];
   
-  sprintf( buffer, i18n( "Table %i" ), m_iTableId++ );
+  sprintf( buffer, i18n( "Table%i" ), m_iTableId++ );
   KSpreadTable *t = new KSpreadTable( this, buffer );
   t->setMap( m_pMap );
   return t;

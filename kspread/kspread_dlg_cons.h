@@ -27,8 +27,11 @@
 #include <qcombobox.h>
 #include <qstrlist.h>
 #include <qlistbox.h>
+#include <qrect.h>
+#include <qcheckbox.h>
 
 class KSpreadView;
+class KSpreadTable;
 
 class KSpreadConsolidate : public QDialog
 {
@@ -43,6 +46,9 @@ public slots:
   void slotClose();
   void slotAdd();
   void slotRemove();
+
+  void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
+  void slotReturnPressed();
   
 protected:
   KSpreadView* m_pView;
@@ -54,8 +60,12 @@ protected:
   QPushButton* m_pClose;
   QPushButton* m_pAdd;
   QPushButton* m_pRemove;
-
+  QCheckBox* m_pRow;
+  QCheckBox* m_pCol;
+  QCheckBox* m_pCopy;
+  
   int m_idSumme;
+  int m_idAverage;
 };
 
 #endif

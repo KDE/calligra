@@ -19,6 +19,50 @@
 
 #include "kspread_util.h"
 #include "kspread_map.h"
+#include "kspread_table.h"
+
+QString util_columnLabel( int column )
+{
+  char buffer[ 100 ];
+  
+  if ( column <= 26 )
+    sprintf( buffer, "%c", 'A' + column - 1 );
+  else if ( column <= 26 * 26 )
+    sprintf( buffer, "%c%c",'A'+((column-1)/26)-1,'A'+((column-1)%26));
+  else
+    strcpy( buffer,"@@@");
+
+  return QString( buffer );
+}                           
+
+QString util_cellName( int _col, int _row )
+{
+  QString label( util_columnLabel( _col ) );
+  
+  char buffer[ 20 ];
+  sprintf( buffer, "%s%d", label.data(), _row );
+
+  return QString( buffer );
+}
+
+QString util_rangeName( QRect _area )
+{
+  QString result;
+  result = util_cellName( _area.left(), _area.top() );
+  result += ":";
+  result += util_cellName( _area.right(), _area.bottom() );
+  
+  return result;
+}
+
+QString util_rangeName( KSpreadTable *_table, QRect _area )
+{
+  QString result( _table->name() );
+  result += "!";
+  result += util_rangeName( _area );
+  
+  return result;
+}
 
 KSpread::Cell util_parseCell( const char *_str )
 {
@@ -150,6 +194,7 @@ KSpread::Range util_parseRange2( const char *_str, KSpreadMap* _map )
       delete []p;
       mico_throw( exc );
     }
+    r.table = CORBA::string_dup( p );
   }
   else
   {
@@ -158,10 +203,16 @@ KSpread::Range util_parseRange2( const char *_str, KSpreadMap* _map )
   }
   
   char *p3 = strchr( p2, ':' );
+  if ( !p3 )
+  {
+    KSpread::MalformedExpression exc;
+    exc.expr = CORBA::string_dup( _str );
+    mico_throw( exc );
+  }
   *p3++ = 0;
 
-  KSpread::Cell c1 = util_parseCell( p );
-  KSpread::Cell c2 = util_parseCell( p2 );
+  KSpread::Cell c1 = util_parseCell( p2 );
+  KSpread::Cell c2 = util_parseCell( p3 );
 
   delete []p;
 
@@ -172,3 +223,4 @@ KSpread::Range util_parseRange2( const char *_str, KSpreadMap* _map )
 
   return r;
 }
+

@@ -641,6 +641,9 @@ public slots:
     virtual CORBA::ULong topGUISize();
     virtual CORBA::ULong bottomGUISize();
 
+signals:
+    void sig_selectionChanged( KSpreadTable* _table, const QRect& _selection );
+  
 protected:
     // C++
     virtual void init();
