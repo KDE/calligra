@@ -91,7 +91,7 @@ bool KPTPart::initDoc() {
 
 	result = true;
     }
-
+    setAutoSave(0); // disable
     setModified(false);
     return result;
 }
