@@ -589,6 +589,24 @@ void OoDrawImport::storeObjectStyles( const QDomElement& object )
 void
 OoDrawImport::appendPoints(VComposite &path, const QDomElement& object)
 {
+	double x = KoUnit::parseValue( object.attribute( "svg:x" ) );
+	double y = KoUnit::parseValue( object.attribute( "svg:y" ) );
+	double w = KoUnit::parseValue( object.attribute( "svg:width" ) );
+	double h = KoUnit::parseValue( object.attribute( "svg:height" ) );
+
+	KoRect rect;
+	if( !object.attribute( "svg:viewBox" ).isEmpty() )
+	{
+		// allow for viewbox def with ',' or whitespace
+		QString viewbox( object.attribute( "svg:viewBox" ) );
+		QStringList points = QStringList::split( ' ', viewbox.replace( QRegExp(","), " ").simplifyWhiteSpace() );
+
+		rect.setX( x + points[0].toFloat() );
+		rect.setY( y + points[1].toFloat() );
+		rect.setWidth( points[2].toFloat() );
+		rect.setHeight( points[3].toFloat() );
+		kdDebug() << rect << endl;
+	}
 	QStringList ptList = QStringList::split( ' ', object.attribute( "draw:points" ) );
 
 	QString pt_x, pt_y;
@@ -597,17 +615,11 @@ OoDrawImport::appendPoints(VComposite &path, const QDomElement& object)
 	bool bFirst = true;
 	for( QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it )
 	{
-		tmp_x = (*it).section( ',', 0, 0 ).toInt() / 100;
-		tmp_y = (*it).section( ',', 1, 1 ).toInt() / 100;
+		tmp_x = rect.x() + ( (*it).section( ',', 0, 0 ).toInt() * w ) / rect.width();
+		tmp_y = rect.y() + ( (*it).section( ',', 1, 1 ).toInt() * h ) / rect.height();
 
-		pt_x.setNum( tmp_x );
-		pt_x += "mm";
-
-		pt_y.setNum( tmp_y );
-		pt_y += "mm";
-
-		point.setX( KoUnit::parseValue( pt_x ) );
-		point.setY( ymirror( KoUnit::parseValue( pt_y ) ) );
+		point.setX( tmp_x );
+		point.setY( ymirror( tmp_y ) );
 		if( bFirst )
 		{
 			path.moveTo( point );
