@@ -43,14 +43,15 @@ void ValueTester::check( const char* msg, const T& result, const T& expected )
   testCount++;
   if( result != expected )
   {
-    QString msg;
-    QTextStream ts( &msg, IO_WriteOnly );
-    ts << "Result:";
+    QString message;
+    QTextStream ts( &message, IO_WriteOnly );
+    ts << msg;
+    ts << "  Result:";
     ts << result;
     ts << ", ";
     ts << "Expected:";
     ts << expected;
-    fail( __FILE__, __LINE__, msg );
+    fail( __FILE__, __LINE__, message );
   }
 }
 
@@ -59,14 +60,15 @@ void ValueTester::check( const char* msg, bool result, bool expected )
   testCount++;
   if( result != expected )
   {
-    QString msg;
-    QTextStream ts( &msg, IO_WriteOnly );
-    ts << "Result: ";
+    QString message;
+    QTextStream ts( &message, IO_WriteOnly );
+    ts << msg;
+    ts << "  Result: ";
     if( result ) ts << "True"; else "False";
     ts << ", ";
     ts << "Expected: ";
     if( expected ) ts << "True"; else "False";
-    fail( __FILE__, __LINE__, msg );
+    fail( __FILE__, __LINE__, message );
   }
 }
 
