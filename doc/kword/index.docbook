@@ -1094,7 +1094,7 @@ supported.</para>
 are nearly complete.</para>
 
 <para>Many other features (headers, footers, embedded objects, etc) are not supported.</para>
-<para>&kword; cannot write &Microsoft; Word 97/200 files.</para>
+<para>&kword; cannot write &Microsoft; Word 97/2000 files.</para>
 
 <para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/msword97.phtml">&Microsoft; Word 97/2000 filter table</ulink></para>
