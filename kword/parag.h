@@ -160,6 +160,7 @@ public:
     void insertText( unsigned int _pos, KWString *_text );
     void insertVariable( unsigned int _pos, KWVariable *_var );
     void insertFootNote( unsigned int _pos, KWFootNote *_fn );
+    void insertAnchor( unsigned int _pos, KWCharAnchor *_anchor );
     void insertPictureAsChar( unsigned int _pos, QString _filename );
     void insertTab( unsigned int _pos );
     void appendText( KWChar *_text, unsigned int _len );

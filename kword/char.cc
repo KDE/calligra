@@ -49,6 +49,14 @@ KWCharAnchor::KWCharAnchor() :
     origin = QPoint( 0, 0 );
 }
 
+KWCharAnchor::KWCharAnchor(const KWCharAnchor &original) :
+    KWCharAttribute()
+{
+    classId = ID_KWCharAnchor;
+    anchored = original.anchored;
+    origin = original.origin;
+}
+
 /*================================================================*/
 void KWCharAnchor::setAnchored( bool _anchored )
 {
@@ -62,10 +70,11 @@ void KWCharAnchor::setOrigin( QPoint _origin )
     // signal the derived object to move!
     if ( anchored )
     {
-        unsigned int dx = _origin.x() - origin.x();
-        unsigned int dy = _origin.y() - origin.y();
+        int dx = _origin.x() - origin.x();
+        int dy = _origin.y() - origin.y();
 
-        moveBy( dx, dy );
+        if ((dx != 0) || (dy != 0))
+            moveBy( dx, dy );
     }
     origin = _origin;
 }
@@ -73,7 +82,9 @@ void KWCharAnchor::setOrigin( QPoint _origin )
 /*================================================================*/
 void KWCharAnchor::save( ostream &out )
 {
-    out << indent << "<ANCHORS " << correctQString( anchorFor() ).latin1() << "/>" << endl;
+    out << indent << "<ANCHOR type=\"" << correctQString( anchorType() ).latin1() <<
+        "\" instance=\"" << correctQString( anchorInstance() ).latin1() <<
+        "\"/>" << endl;
 }
 
 /******************************************************************/
@@ -621,26 +632,47 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 		    doc->getFootNoteManager().insertFootNoteInternal( fn );
 		} break;
 		case ID_KWCharAnchor: {
+                    string attribute = "";
+                    string type = "";
+                    string instance = "";
                     KWCharAnchor *anchor = NULL;
 
 		    while ( parser.open( 0L, tag ) ) {
 			KOMLParser::parseTag( tag.c_str(), name, lst );
 
-			if ( name == "ANCHORS" ) {
+			if ( name == "ANCHOR" ) {
 			    KOMLParser::parseTag( tag.c_str(), name, lst );
 			    vector<KOMLAttrib>::const_iterator it = lst.begin();
 			    for ( ; it != lst.end(); it++ ) {
-				if ( ( *it ).m_strName == "grpMgr" ) {
-                                    KWGroupManager *group = new KWGroupManager( doc );
-	                            group->setName( QString( ( *it ).m_strValue.c_str() ) );
-	                            // floating frame TBD: group->setAnchored( true );
-		                    doc->addGroupManager( group );
-                                    // floating frame TBD: anchor = group;
+				attribute = it->m_strName;
+				if ( attribute == "type" ) {
+	                            type = it->m_strValue;
+				}
+                                else if ( attribute == "instance" ) {
+	                            instance = it->m_strValue;
 				}
                                 else {
-			            cerr << "Unknown attrib 'ANCHORS:" << ( *it ).m_strName << "'" << endl;
-				}
+                                    cerr << "Unknown attrib 'ANCHOR: " << attribute << "'" << endl;
+                                }
 		            }
+
+                            // Create an anchor object of the right type.
+
+                            if ( type == "grpMgr" ) {
+                                if ( instance != "" ) {
+                                    KWGroupManager *group = new KWGroupManager( doc );
+	                            group->setName( QString( instance.c_str() ) );
+	                            group->setAnchored( true );
+		                    doc->addGroupManager( group );
+                                    anchor = group;
+                                }
+                                else {
+                                    cerr << "Missing attrib 'ANCHOR: instance" << endl;
+                                }
+                            }
+                            else {
+                                cerr << "Unknown attrib value 'ANCHOR: type=" << type << "'" << endl;
+                            }
 		        }
 		        else {
 		            cerr << "Unknown tag '" << tag << "' in FORMAT" << endl;
@@ -754,7 +786,7 @@ KWChar* KWString::copy( KWChar *_data, unsigned int _len )
 	    case ID_KWCharAnchor: {
 		KWGroupManager *attrib = dynamic_cast<KWGroupManager*>( _data[ i ].attrib );
 	        KWGroupManager *a = new KWGroupManager( *attrib );
-		// floating frame TBD: __data[ i ].attrib = a;
+		__data[ i ].attrib = a;
 	    } break;
 	    }
 	}
@@ -807,7 +839,7 @@ KWChar& KWString::copy( KWChar _c )
 	case ID_KWCharAnchor: {
 	    KWGroupManager *attrib = dynamic_cast<KWGroupManager*>( _c.attrib );
 	    KWGroupManager *a = new KWGroupManager( *attrib );
-	    // floating frame TBD: c->attrib = a;
+	    c->attrib = a;
 	} break;
 	}
     }
@@ -1028,11 +1060,11 @@ void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
 	    delete _char.attrib;
 	} break;
 	case ID_KWCharAnchor: {
-            // floating frame TBD: KWCharFootNote *anchor = (KWCharFootNote *)_char.attrib;
+            KWCharFootNote *anchor = (KWCharFootNote *)_char.attrib;
 	    if ( allowRemoveFn ) {
 		cerr << "TBD: implement delete table" << endl;
 	    }
-	    // floating frame TBD: delete _char.attrib;
+	    delete _char.attrib;
 	} break;
 	default: ; //assert( 0 );
 	}

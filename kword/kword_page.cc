@@ -605,8 +605,24 @@ void KWPage::vmmCreate( int mx, int my )
     p.setPen( black );
     p.setBrush( NoBrush );
 
-    if ( deleteMovingRect )
+    if ( deleteMovingRect ) {
+        if ( useAnchor ) {
+	    p.drawLine( anchor->getOrigin(), insRect.topLeft() );
+        };
 	p.drawRect( insRect );
+    }
+    else {
+        if ( useAnchor ) {
+	    KWGroupManager *grpMgr;
+
+            grpMgr = new KWGroupManager( doc );
+	    QString _name;
+	    _name.sprintf( "grpmgr_%d", doc->getNumGroupManagers() );
+	    grpMgr->setName( _name );
+            insertAnchor( grpMgr );
+	    anchor = grpMgr;
+        };
+    }
     insRect.setWidth( insRect.width() + mx - oldMx );
     insRect.setHeight( insRect.height() + my - oldMy );
 
@@ -627,6 +643,9 @@ void KWPage::vmmCreate( int mx, int my )
 	insRect.setHeight( insRect.height() - ( my - oldMy ) );
     }
 
+    if ( useAnchor ) {
+        p.drawLine( anchor->getOrigin(), insRect.topLeft() );
+    }
     p.drawRect( insRect );
     p.end();
     oldMx = mx;
@@ -1127,10 +1146,17 @@ void KWPage::vmrCreateTable()
 					   "is not enough space available."));
 	    }
 	else {
-	    KWGroupManager *grpMgr = new KWGroupManager( doc );
-	    QString _name;
-	    _name.sprintf( "grpmgr_%d", doc->getNumGroupManagers() );
-	    grpMgr->setName( _name );
+	    KWGroupManager *grpMgr;
+
+            if ( useAnchor ) {
+	        grpMgr = static_cast<KWGroupManager *>(anchor);
+            }
+            else {
+	        grpMgr = new KWGroupManager( doc );
+	        QString _name;
+	        _name.sprintf( "grpmgr_%d", doc->getNumGroupManagers() );
+	        grpMgr->setName( _name );
+            }
 	    doc->addGroupManager( grpMgr );
 	    for ( unsigned int i = 0; i < trows; i++ ) {
 		for ( unsigned int j = 0; j < tcols; j++ ) {
@@ -1149,6 +1175,7 @@ void KWPage::vmrCreateTable()
 	recalcWholeText( TRUE );
     }
     mmEdit();
+    useAnchor = false;
 }
 
 /*================================================================*/
@@ -4375,6 +4402,23 @@ void KWPage::repaintTableHeaders( KWGroupManager *grpMgr )
     delete paintfc;
 
     painter.end();
+}
+
+/*================================================================*/
+/* Add an anchor at the current cursor position.                  */
+/*================================================================*/
+void KWPage::insertAnchor( KWCharAnchor *_anchor )
+{
+    // Note the origin of the anchor. This allows the drawing logic
+    // to point to the anchor is required.
+
+    _anchor->setOrigin( QPoint( fc->getPTPos(), fc->getPTY() ) );
+    fc->getParag()->insertAnchor( fc->getTextPos(), _anchor );
+
+    // TBD: is this required?
+    recalcPage( 0L );
+    recalcCursor( TRUE );
+    doc->setModified( TRUE );
 }
 
 /*================================================================*/

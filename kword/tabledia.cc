@@ -137,6 +137,12 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
     preview->setBackgroundColor( white );
     grid->addMultiCellWidget( preview, 0, 8, 1, 1 );
 
+    // Checkbox for floating/fixed location. The default is floating.
+    cbIsFloating = new QCheckBox( i18n( "The table is floating" ), tab1 );
+    cbIsFloating->resize( cbIsFloating->sizeHint() );
+    cbIsFloating->setChecked( false );
+    grid->addMultiCellWidget( cbIsFloating, 9, 9, 0, 2 );
+
     grid->addRowSpacing( 0, lRows->height() );
     grid->addRowSpacing( 1, nRows->height() );
     grid->addRowSpacing( 2, lCols->height() );
@@ -146,6 +152,7 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
     grid->addRowSpacing( 6, lWid->height() );
     grid->addRowSpacing( 7, cWid->height() );
     grid->addRowSpacing( 8, 150 - ( lRows->height() + nRows->height() + lCols->height() + nCols->height() ) );
+    grid->addRowSpacing( 9, cbIsFloating->height() );
     grid->setRowStretch( 0, 0 );
     grid->setRowStretch( 1, 0 );
     grid->setRowStretch( 2, 0 );
@@ -155,6 +162,7 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
     grid->setRowStretch( 6, 0 );
     grid->setRowStretch( 7, 0 );
     grid->setRowStretch( 8, 1 );
+    grid->setRowStretch( 9, 0 );
 
     grid->addColSpacing( 0, lRows->width() );
     grid->addColSpacing( 0, nRows->width() );
@@ -247,7 +255,8 @@ bool KWTableDia::insertTable()
 {
     page->setTableConfig( nRows->value(), nCols->value(),
 			  (KWTblCellSize)cWid->currentItem(),
-			  (KWTblCellSize)cHei->currentItem() );
+			  (KWTblCellSize)cHei->currentItem(),
+                          false ); // TBD: enable floating tables: cbIsFloating->isChecked() );
     page->mmTable();
     return true;
 }

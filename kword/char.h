@@ -36,8 +36,19 @@
 class KWordDocument;
 class KWTextFrameSet;
 
-enum ClassIDs { ID_KWCharNone = 0, ID_KWCharFormat = 1, ID_KWCharImage = 2, ID_KWCharTab = 3,
-		ID_KWCharVariable = 4, ID_KWCharFootNote = 5, ID_KWCharAnchor = 6};
+// All char attributes have an explicit type selected from this enumeration.
+enum ClassIDs
+{
+    ID_KWCharNone = 0,
+    ID_KWCharFormat = 1,
+    ID_KWCharImage = 2,
+    ID_KWCharTab = 3,
+    ID_KWCharVariable = 4,
+    ID_KWCharFootNote = 5,
+    // Represents a zero width character used as an anchor for a
+    // floating frame.
+    ID_KWCharAnchor = 6
+};
 
 /******************************************************************/
 /* Class: KWCharAttribute                                         */
@@ -182,14 +193,13 @@ protected:
 /* object. In practice, the object is derived from this class in  */
 /* order to provide implementations for the pure virtual logic    */
 /* required.                                                      */
-/*                                                                */
-/* The anchor is enabled by a call to setAnchored().              */
 /******************************************************************/
 
 class KWCharAnchor : public KWCharAttribute
 {
 public:
     KWCharAnchor();
+    KWCharAnchor(const KWCharAnchor &original);
     virtual ~KWCharAnchor() {}
 
     // Is the anchoring logic enabled at this time?
@@ -207,11 +217,15 @@ public:
 
     // Override this function with logic to move the anchored object
     // when the origin of the anchor is changed.
-    virtual void moveBy( unsigned int dx, unsigned int dy ) = 0;
+    virtual void moveBy( int dx, int dy ) = 0;
 
-    // Override this function to return the text required to identify
-    // the anchored object.
-    virtual QString anchorFor() = 0;
+    // Override these functions to return the text required to identify
+    // the type and instance of the anchored object.
+    virtual QString anchorType() = 0;
+    virtual QString anchorInstance() = 0;
+
+    // Override this function to draw the formatting for the anchored object.
+    virtual void viewFormatting( QPainter &painter, int zoom ) = 0;
 
 protected:
     QPoint origin;

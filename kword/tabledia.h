@@ -81,6 +81,7 @@ protected:
     QLabel *lRows, *lCols, *lWid, *lHei;
     QSpinBox *nRows, *nCols;
     KWTablePreview *preview;
+    QCheckBox *cbIsFloating;
 
     QWidget *tab2;
     QWidget *preview2;

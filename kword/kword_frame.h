@@ -424,9 +424,15 @@ protected:
 
 /******************************************************************/
 /* Class: KWGroupManager                                          */
+/*                                                                */
+/* This class implements tables by acting as the manager for a    */
+/* the frame(set)s which share a common grpMgr attribute.         */
+/*                                                                */
+/* A table can be anchored, in which case its frame(set)s are     */
+/* located relative to the Y position of the anchor.              */
 /******************************************************************/
 
-class KWGroupManager
+class KWGroupManager: public KWCharAnchor
 {
 public:
     struct Cell
@@ -436,8 +442,8 @@ public:
         unsigned int rows, cols;
     };
 
-    KWGroupManager( KWordDocument *_doc ) : showHeaderOnAllPages( true ), hasTmpHeaders( false ), active( true )
-    { doc = _doc; cells.setAutoDelete( true ); rows = 0; cols = 0; };
+    KWGroupManager( KWordDocument *_doc );
+    KWGroupManager( const KWGroupManager &original );
 
     void addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int col );
     KWFrameSet *getFrameSet( unsigned int row, unsigned int col );
@@ -463,7 +469,7 @@ public:
 
     bool hasSelectedFrame();
 
-    void moveBy( unsigned int dx, unsigned int dy );
+    void moveBy( int dx, int dy );
     void drawAllRects( QPainter &p, int xOffset, int yOffset );
 
     void deselectAll();
@@ -495,6 +501,10 @@ public:
     bool joinCells();
     bool splitCell();
 
+    QString anchorType();
+    QString anchorInstance();
+    void viewFormatting( QPainter &painter, int zoom );
+
 protected:
     QList<Cell> cells;
     unsigned int rows, cols;
@@ -502,7 +512,6 @@ protected:
     QString name;
     bool showHeaderOnAllPages, hasTmpHeaders;
     bool active;
-
 };
 
 bool isAHeader( FrameInfo fi );

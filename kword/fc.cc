@@ -691,6 +691,9 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos )
 		ptPos += displayFont->getPTWidth( fn->getText() );
 		pos++;
 	    } break;
+	    case ID_KWCharAnchor: {
+                pos++;
+	    } break;
 	    case ID_KWCharTab: {
 		unsigned int tabPos = 0;
 		KoTabulators tabType;
@@ -876,6 +879,9 @@ int KWFormatContext::cursorGotoNextChar()
 	    ptPos += displayFont->getPTWidth( fn->getText() );
 	    pos++;
 	} break;
+        case ID_KWCharAnchor: {
+            pos++;
+        } break;
 	case ID_KWCharTab: {
 	    unsigned int tabPos = 0;
 	    KoTabulators tabType;
@@ -1193,6 +1199,10 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 		ptPos += w;
 		tmpPTWidth += w;
 		textPos++;
+	    } break;
+	    case ID_KWCharAnchor: {
+                // An anchor does not consume any display width.
+                textPos++;
 	    } break;
 	    case ID_KWCharTab: {
 		unsigned int tabPos = 0;

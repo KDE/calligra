@@ -203,7 +203,9 @@ public:
     void addLen() { currFindPos += currFindLen; }
 
     void setTableConfig( unsigned int rows, unsigned int cols,
-			 KWTblCellSize wid, KWTblCellSize hei ) {
+			 KWTblCellSize wid, KWTblCellSize hei,
+			 bool isFloating) {
+        useAnchor = isFloating;
 	trows = rows; tcols = cols;
 	twid = wid; thei = hei;
     }
@@ -218,6 +220,7 @@ public:
     KWGroupManager *getCurrentTable()
     { return curTable; }
 
+    void insertAnchor( KWCharAnchor *_anchor );
     void insertVariable( VariableType type );
     void insertFootNote( KWFootNote *fn );
 
@@ -422,6 +425,9 @@ protected:
     int mm_edit, mm_edit_frame, mm_create_text, mm_create_pix, mm_create_clipart, mm_create_table,
 	mm_create_formula, mm_create_part, mm_create_kspread_table;
 
+    // Anchor support.
+    bool useAnchor;
+    KWCharAnchor *anchor;
     int oldMx, oldMy;
     bool deleteMovingRect;
 
@@ -440,6 +446,8 @@ protected:
     int currFindPos, currFindLen;
     int currFindFS;
     int selectedFrameSet, selectedFrame;
+
+    // Table creation support.
     unsigned int tcols, trows;
     KWTblCellSize twid, thei;
 

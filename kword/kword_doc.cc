@@ -2095,7 +2095,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	counterfm.apply( lay->getFormat() );
 	if ( _fc.getParag()->getParagLayout()->getCounterType() == KWParagLayout::CT_BULLET )
 	    counterfm.setUserFont( findUserFont( _fc.getParag()->getParagLayout()->getBulletFont() ) );
-	
+
 	QFont f( *counterfm.loadFont( this ) );
 	if ( zoom != 100 )
 	    f.setPointSize( zoomIt( f.pointSize() ) );
@@ -2137,7 +2137,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 
 	QChar c = text[ _fc.getTextPos() ].c;
 	buffer += c;
-	
+
 	if ( c == KWSpecialChar ) {
 	    _painter.drawText( tmpPTPos - xOffset,
 			       _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() -
@@ -2225,6 +2225,33 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 		    _painter.drawLine( lastPTPos - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset,
 				       _fc.getPTPos() - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset );
 		_painter.setPen( _pen );
+	    } break;
+	    case ID_KWCharAnchor: {
+                int x = _fc.getPTPos();
+                int y = _fc.getPTY();
+                KWCharAnchor *a = ( KWCharAnchor* )text[ _fc.getTextPos() ].attrib;
+
+                // We might have moved. Signal this fact to the anchor.
+kdDebug(32001) << "new x=" << x <<", new y="<<y<<endl;
+                a->setOrigin( QPoint( x, y ) );
+
+                // An anchor needs to be a zero-width object. We draw it as a
+                // thin "T" shape, then allow the subclass to draw anything it
+                // wants in addition.
+                lastPTPos = x;
+                _fc.cursorGotoNextChar();
+                if ( _viewFormattingChars )
+                {
+                    QPen _pen = QPen( _painter.pen() );
+
+                    _painter.setPen( QPen( blue, 1, SolidLine ) );
+                    _painter.drawLine( x, y,
+                                       x, y + _fc.getPTMaxAscender() + _fc.getPTMaxDescender() );
+                    _painter.drawLine( x - 5, y,
+                                       x + 5, y );
+                    a->viewFormatting( _painter, zoom );
+                    _painter.setPen( _pen );
+                }
 	    } break;
 	    }
 	    buffer = QString::null;

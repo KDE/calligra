@@ -259,6 +259,16 @@ void KWParag::insertFootNote( unsigned int _pos, KWFootNote *_fn )
 }
 
 /*================================================================*/
+void KWParag::insertAnchor( unsigned int _pos, KWCharAnchor *_anchor )
+{
+    text.insert( _pos, _anchor );
+
+    // The whole point of an anchor is that something else refers to it...thus
+    // we update the anchored state. 
+    _anchor->setAnchored( true );
+}
+
+/*================================================================*/
 void KWParag::insertPictureAsChar( unsigned int _pos, QString _filename )
 {
     KWImage _image = KWImage( document, _filename );

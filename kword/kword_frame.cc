@@ -1982,6 +1982,33 @@ void KWFormulaFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 /******************************************************************/
 
 /*================================================================*/
+KWGroupManager::KWGroupManager( KWordDocument *_doc ) :
+    KWCharAnchor(), showHeaderOnAllPages( true ), hasTmpHeaders( false ), active( true )
+{
+    doc = _doc;
+    cells.setAutoDelete( true );
+    rows = 0;
+    cols = 0;
+    name = QString::null;
+}
+
+/*================================================================*/
+KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
+    KWCharAnchor(original)
+{
+    kdDebug(32001) << "TBD: implement deep copy table" << endl;
+    showHeaderOnAllPages = original.showHeaderOnAllPages;
+    hasTmpHeaders = original.hasTmpHeaders;
+    active = original.active;
+    doc = original.doc;
+    cells = original.cells;
+    cells.setAutoDelete( true );
+    rows = original.rows;
+    cols = original.cols;
+    name = original.name;
+}
+
+/*================================================================*/
 void KWGroupManager::addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int col )
 {
     unsigned int sum = row * 10 + col;
@@ -1993,6 +2020,11 @@ void KWGroupManager::addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int
     for ( i = 0; i < cells.count(); i++ ) {
 	if ( cells.at( i )->row * 10 + cells.at( i )->col > sum )
 	    break;
+    }
+
+    // If the group is anchored, we must adjust the incoming frameset.
+    if ( anchored ) {
+        fs->getFrame( 0 )->moveBy( origin.x(), origin.y() );
     }
 
     Cell *cell = new Cell;
@@ -2306,8 +2338,11 @@ bool KWGroupManager::hasSelectedFrame()
 }
 
 /*================================================================*/
-void KWGroupManager::moveBy( unsigned int dx, unsigned int dy )
+void KWGroupManager::moveBy( int dx, int dy )
 {
+    kdDebug(32001) << "KWGroupManager::moveBy(" << dx << ", " << dy << ");" << endl;
+    // Ignore the x-offset.
+    dx = 0;
     for ( unsigned int i = 0; i < cells.count(); i++ )
 	cells.at( i )->frameSet->getFrame( 0 )->moveBy( dx, dy );
 }
@@ -2414,6 +2449,12 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
 	KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 	_frameSet->setGroupManager( this );
 	_frameSet->setIsRemoveableHeader( _removeable );
+    
+        // If the group is anchored, we must avoid double-application of
+        // the anchor offset.
+        if ( anchored ) {
+            _frameSet->getFrame( 0 )->moveBy( -origin.x(), -origin.y() );
+        }
 	addFrameSet( _frameSet, _idx, i );
 
 	KWFrame *frame = new KWFrame(_frameSet, r.x() + ww, r.y(), *w.at( i ), doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10 );
@@ -2462,6 +2503,12 @@ void KWGroupManager::insertCol( unsigned int _idx )
     for ( i = 0; i < getRows(); i++ ) {
 	KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 	_frameSet->setGroupManager( this );
+
+        // If the group is anchored, we must avoid double-application of
+        // the anchor offset.
+        if ( anchored ) {
+            _frameSet->getFrame( 0 )->moveBy( -origin.x(), -origin.y() );
+        }
 	addFrameSet( _frameSet, i, _idx );
 
 	KWFrame *frame = new KWFrame(_frameSet, r.x(), r.y() + hh, 60, *h.at( i ) );
@@ -2712,6 +2759,27 @@ bool KWGroupManager::splitCell()
     }
 
     return false;
+}
+
+/*================================================================*/
+QString KWGroupManager::anchorType()
+{
+    return "grpMgr";
+}
+
+QString KWGroupManager::anchorInstance()
+{
+    return name;
+}
+
+/*================================================================*/
+void KWGroupManager::viewFormatting( QPainter &painter, int zoom )
+{
+    KWFrame *topLeftFrame;
+
+    // Draw a line from the origin to the top left corner.
+    topLeftFrame = cells.at( 0 )->frameSet->getFrame( 0 );
+    painter.drawLine( origin.x(), origin.y(), topLeftFrame->x(), topLeftFrame->y());
 }
 
 /*================================================================*/
