@@ -36,6 +36,6 @@ uninstall-local:
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/koshell.pot
 
-# koshell.h: koshell.idl
+# koshell.h: koshell.idl $(micodir)/include/CORBA.h
 #	$(IDL) $(IDL_FLAGS) koshell.idl
 

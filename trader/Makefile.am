@@ -39,10 +39,10 @@ bin_SCRIPTS = kotrader
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kotrader.pot
 
-#trader.h: trader.idl
+#trader.h: trader.idl $(micodir)/include/CORBA.h
 #	$(IDL) $(IDL_FLAGS) trader.idl
 #
-#typerepo.h: typerepo.idl
+#typerepo.h: typerepo.idl $(micodir)/include/CORBA.h
 #	$(IDL) $(IDL_FLAGS) typerepo.idl
 #
 #tarder.cc: trader.h

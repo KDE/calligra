@@ -76,10 +76,10 @@ uninstall-local:
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kdiagramm.pot
 
-kdiagramm.h: kdiagramm.idl
+kdiagramm.h: kdiagramm.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(srcdir)/kdiagramm.idl
 
-chart.h: $(interfacedir)/chart.idl
+chart.h: $(interfacedir)/chart.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(interfacedir)/chart.idl
 
 BUILT_SOURCES = kdiagramm.h chart.h

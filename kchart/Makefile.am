@@ -38,12 +38,12 @@ install-exec-local:
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc */*.cpp && mv messages.po ../po/kchart.pot
 
-kchart.h: kchart.idl
+kchart.h: kchart.idl $(micodir)/include/CORBA.h
 	@echo $(IDL) --query-server-for-narrow $(IDL_INCLUDES) kchart.idl ;\
 	rm -f kchart.h kchart.cc ;\
 	$(IDL) --relative-paths --query-server-for-narrow $(IDL_INCLUDES) $(srcdir)/kchart.idl
 
-chart.h: $(interfacedir)/chart.idl
+chart.h: $(interfacedir)/chart.idl $(micodir)/include/CORBA.h
 	$(IDL) --query-server-for-narrow -I$(idldir) $(interfacedir)/chart.idl
 
 kchart.cc: kchart.h

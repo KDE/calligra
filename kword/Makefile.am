@@ -54,7 +54,7 @@ uninstall-local:
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kword.pot
 
-kword.h: kword.idl
+kword.h: kword.idl $(micodir)/include/CORBA.h
 	rm -f kword.h
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kword.idl
 

@@ -47,7 +47,7 @@ uninstall-local:
 install-exec-local:
 	$(INSTALL_SCRIPT) $(srcdir)/kformula $(bindir)/kformula
 
-kformula.h: kformula.idl
+kformula.h: kformula.idl $(micodir)/include/CORBA.h
 	rm -f kformula.h
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kformula.idl
 

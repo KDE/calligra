@@ -65,7 +65,7 @@ uninstall-local:
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kimage.pot
 
-kimage.h: kimage.idl
+kimage.h: kimage.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(srcdir)/kimage.idl
 
 kimage.cc: kimage.h
