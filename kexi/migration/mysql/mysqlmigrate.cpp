@@ -60,13 +60,7 @@ MySQLMigrate::~MySQLMigrate() {
 /* ************************************************************************** */
 /*! Connect to the db backend */
 bool MySQLMigrate::drv_connect() {
-	KexiDB::ConnectionData *m_data = m_externalData;
-  if(d->db_connect(
-		m_data->hostName.local8Bit(), 
-		m_data->userName.local8Bit(),
-		m_data->password.local8Bit(),
-		m_data->port,
-		m_data->localSocketFileName)) {
+  if(d->db_connect(*m_externalData)) {
 		return d->useDatabase(m_dbName);
 	} else {
 	  return false;
