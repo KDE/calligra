@@ -60,6 +60,7 @@ signals:
    */
   void drawHelpline(int x, int y, bool orientationHoriz);
   void addHelpline (int x, int y, bool orientationHoriz);
+  void rmbPressed();
 
 protected:
   void paintEvent  (QPaintEvent *e);

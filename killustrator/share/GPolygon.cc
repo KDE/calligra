@@ -387,10 +387,6 @@ GObject* GPolygon::copy () {
   return new GPolygon (*this);
 }
 
-/*GObject* GPolygon::clone (const QDomElement &element) {
-  return new GPolygon (element);
-}*/
-
 void GPolygon::calcBoundingBox () {
   GPolyline::calcBoundingBox ();
   update_rpoints ();

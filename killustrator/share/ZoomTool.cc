@@ -61,7 +61,7 @@ void ZoomTool::activate (GDocument *_doc, Canvas *_canvas)
    state = S_Init;
    doc = _doc;
    canvas = _canvas;
-   canvas->setCursor(Qt::pointingHandCursor);
+   canvas->setCursor(Qt::arrowCursor);
    m_toolController->emitModeSelected (m_id,i18n ("Zoom in and out"));
 }
 

@@ -579,8 +579,14 @@ void Ruler::hide () {
   QWidget::hide ();
 }
 
-void Ruler::mousePressEvent ( QMouseEvent * ){
-  isMousePressed = true;
+void Ruler::mousePressEvent ( QMouseEvent * e)
+{
+   if (e==0) return;
+
+   if (e->button()==Qt::LeftButton)
+      isMousePressed = true;
+   else if (e->button()==Qt::RightButton)
+      emit rmbPressed();
 }
 
 void Ruler::mouseMoveEvent ( QMouseEvent * me){
@@ -589,14 +595,15 @@ void Ruler::mouseMoveEvent ( QMouseEvent * me){
       - if it is outside remove the XOR'd helpline
       - if the mouse it over the page view, set the helpline
        (different place: update the helpline position in the status bar)*/
-   if (isMousePressed) {
-     emit drawHelpline (me->x () +
-                       (orientation == Horizontal ? zeroPoint : 0) -
-                       RULER_SIZE,
-                       me->y () +
-                       (orientation == Vertical ? zeroPoint : 0) -
-                       RULER_SIZE,
-                       (orientation==Horizontal) ? true : false );
+   if (isMousePressed)
+   {
+      emit drawHelpline (me->x () +
+                         (orientation == Horizontal ? zeroPoint : 0) -
+                         RULER_SIZE,
+                         me->y () +
+                         (orientation == Vertical ? zeroPoint : 0) -
+                         RULER_SIZE,
+                         (orientation==Horizontal) ? true : false );
    }
 }
 

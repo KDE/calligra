@@ -182,24 +182,28 @@ void GOval::setStartPoint (const Coord& p) {
   updateRegion ();
 }
 
-void GOval::setEndPoint (const Coord& p) {
-  if (circleFlag && ePoint.x () != 0 && ePoint.y () != 0) {
-    float dx = (float) fabs (p.x () - sPoint.x ());
-    float dy = (float) fabs (p.y () - sPoint.y ());
-    float xoff = p.x () - sPoint.x ();
-    float yoff = p.y () - sPoint.y ();
-    if (dx > dy) {
-      ePoint.x (p.x ());
-      ePoint.y (sPoint.y () + xoff);
-    }
-    else {
-      ePoint.x (sPoint.x () + yoff);
-      ePoint.y (p.y ());
-    }
-  }
-  else
-    ePoint = p;
-  updateRegion ();
+void GOval::setEndPoint (const Coord& p)
+{
+   if (circleFlag && ePoint.x () != 0 && ePoint.y () != 0)
+   {
+      float dx = (float) fabs (p.x () - sPoint.x ());
+      float dy = (float) fabs (p.y () - sPoint.y ());
+      float xoff = p.x () - sPoint.x ();
+      float yoff = p.y () - sPoint.y ();
+      if (dx > dy)
+      {
+         ePoint.x (p.x ());
+         ePoint.y (sPoint.y () + xoff);
+      }
+      else
+      {
+         ePoint.x (sPoint.x () + yoff);
+         ePoint.y (p.y ());
+      }
+   }
+   else
+      ePoint = p;
+   updateRegion ();
 }
 
 void GOval::calcBoundingBox ()
@@ -214,18 +218,15 @@ GObject* GOval::copy () {
   return new GOval (*this);
 }
 
-/*GObject* GOval::create (GDocument *doc,const QDomElement &element)
+int GOval::getNeighbourPoint (const Coord& p)
 {
-  return new GOval (doc, element);
-}*/
-
-int GOval::getNeighbourPoint (const Coord& p) {
-  for (int i = 1; i >= 0; i--) {
-    Coord c = segPoint[i].transform (tMatrix);
-    if (c.isNear (p, NEAR_DISTANCE))
-      return i;
-  }
-  return -1;
+   for (int i = 1; i >= 0; i--)
+   {
+      Coord c = segPoint[i].transform (tMatrix);
+      if (c.isNear (p, NEAR_DISTANCE))
+         return i;
+   }
+   return -1;
 }
 
 void GOval::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {

@@ -53,98 +53,106 @@ OvalTool::OvalTool (CommandHistory *history) : Tool (history)
 
 void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 {
-  if (e->type () == QEvent::MouseButtonPress) {
-    QMouseEvent *me = (QMouseEvent *) e;
-    float xpos = me->x (), ypos = me->y ();
-    canvas->snapPositionToGrid (xpos, ypos);
+   if (e->type () == QEvent::MouseButtonPress)
+   {
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      canvas->snapPositionToGrid (xpos, ypos);
 
-    pos = Coord (xpos, ypos);
-    bool flag = me->state () & Qt::ControlButton;
-    oval = new GOval (doc, flag);
-    oval->setStartPoint (pos);
-    oval->setEndPoint (pos);
-    doc->insertObject (oval);
-    m_toolController->emitModeSelected (m_id,flag?i18n("Create Circle"):i18n("Create Ellipse"));
-  }
-  else if (e->type () == QEvent::MouseMove) {
-    if (oval == 0L)
-      return;
-    QMouseEvent *me = (QMouseEvent *) e;
-    float xpos = me->x (), ypos = me->y ();
+      pos = Coord (xpos, ypos);
+      bool flag = me->state () & Qt::ControlButton;
+      oval = new GOval (doc, flag);
+      oval->setStartPoint (pos);
+      oval->setEndPoint (pos);
+      doc->insertObject (oval);
+      m_toolController->emitModeSelected (m_id,flag?i18n("Create Circle"):i18n("Create Ellipse"));
+   }
+   else if (e->type () == QEvent::MouseMove)
+   {
+      if (oval == 0L)
+         return;
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
 
-    canvas->snapPositionToGrid (xpos, ypos);
+      canvas->snapPositionToGrid (xpos, ypos);
 
-    if (useFixedCenter) {
-      float dx = fabs (xpos - pos.x ()),
-        dy = fabs (ypos - pos.y ());
-      Coord ps, pe;
-      if (oval->isCircle ()) {
-        float off = qRound ((dx > dy ? dx : dy) / 2.0);
-        ps = Coord (pos.x () - off, pos.y () - off);
-        pe = Coord (pos.x () + off, pos.y () + off);
+      if (useFixedCenter)
+      {
+         float dx = fabs (xpos - pos.x ()),
+         dy = fabs (ypos - pos.y ());
+         Coord ps, pe;
+         if (oval->isCircle ())
+         {
+            float off = qRound ((dx > dy ? dx : dy) / 2.0);
+            ps = Coord (pos.x () - off, pos.y () - off);
+            pe = Coord (pos.x () + off, pos.y () + off);
+         }
+         else
+         {
+            ps = Coord (pos.x () - qRound (dx / 2.0),
+                        pos.y () - qRound (dy / 2.0));
+            pe = Coord (pos.x () + qRound (dx / 2.0),
+                        pos.y () + qRound (dy / 2.0));
+         }
+         oval->setStartPoint (ps);
+         oval->setEndPoint (pe);
       }
-      else {
-        ps = Coord (pos.x () - qRound (dx / 2.0),
-                    pos.y () - qRound (dy / 2.0));
-        pe = Coord (pos.x () + qRound (dx / 2.0),
-                    pos.y () + qRound (dy / 2.0));
+      else oval->setEndPoint (Coord (xpos, ypos));
+
+      Rect r = oval->boundingBox ();
+      MeasurementUnit unit =
+         PStateManager::instance ()->defaultMeasurementUnit ();
+      QString u = unitToString (unit);
+      float xval, yval, wval, hval;
+      xval = cvtPtToUnit (unit, r.x ());
+      yval = cvtPtToUnit (unit, r.y ());
+      wval = cvtPtToUnit (unit, r.width ());
+      hval = cvtPtToUnit (unit, r.height ());
+
+      msgbuf=oval->isCircle () ? i18n("Create Circle") : i18n("Create Ellipse");
+      msgbuf+=" [";
+      msgbuf+=QString::number(xval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(yval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(wval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(hval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString("]");
+      m_toolController->emitModeSelected (m_id,msgbuf);
+   }
+   else if (e->type () == QEvent::MouseButtonRelease)
+   {
+      if (oval == 0L)
+         return;
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      canvas->snapPositionToGrid (xpos, ypos);
+
+      if (useFixedCenter)
+      {
       }
-      oval->setStartPoint (ps);
-      oval->setEndPoint (pe);
-    }
-    else
-      oval->setEndPoint (Coord (xpos, ypos));
+      else
+         oval->setEndPoint (Coord (xpos, ypos));
+      doc->unselectAllObjects ();
 
-    Rect r = oval->boundingBox ();
-    MeasurementUnit unit =
-      PStateManager::instance ()->defaultMeasurementUnit ();
-    QString u = unitToString (unit);
-    float xval, yval, wval, hval;
-    xval = cvtPtToUnit (unit, r.x ());
-    yval = cvtPtToUnit (unit, r.y ());
-    wval = cvtPtToUnit (unit, r.width ());
-    hval = cvtPtToUnit (unit, r.height ());
+      if (! oval->isValid ())
+         doc->deleteObject (oval);
+      else
+      {
+         doc->setLastObject (oval);
 
-    msgbuf=oval->isCircle () ? i18n("Create Circle") : i18n("Create Ellipse");
-    msgbuf+=" [";
-    msgbuf+=QString::number(xval, 'f', 3);
-    msgbuf+=QString(" ") + u + QString(", ");
-    msgbuf+=QString::number(yval, 'f', 3);
-    msgbuf+=QString(" ") + u + QString(", ");
-    msgbuf+=QString::number(wval, 'f', 3);
-    msgbuf+=QString(" ") + u + QString(", ");
-    msgbuf+=QString::number(hval, 'f', 3);
-    msgbuf+=QString(" ") + u + QString("]");
-    m_toolController->emitModeSelected (m_id,msgbuf);
-  }
-  else if (e->type () == QEvent::MouseButtonRelease) {
-    if (oval == 0L)
-      return;
-    QMouseEvent *me = (QMouseEvent *) e;
-    float xpos = me->x (), ypos = me->y ();
-    canvas->snapPositionToGrid (xpos, ypos);
-
-    if (useFixedCenter) {
-    }
-    else
-      oval->setEndPoint (Coord (xpos, ypos));
-    doc->unselectAllObjects ();
-
-    if (! oval->isValid ())
-      doc->deleteObject (oval);
-    else {
-      doc->setLastObject (oval);
-
-      CreateOvalCmd *cmd = new CreateOvalCmd (doc, oval);
-      history->addCommand (cmd);
-    }
-    oval = 0L;
-  }
-  else if (e->type () == QEvent::KeyPress) {
-    QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Qt::Key_Escape)
-      m_toolController->emitOperationDone (m_id);
-  }
+         CreateOvalCmd *cmd = new CreateOvalCmd (doc, oval);
+         history->addCommand (cmd);
+      }
+      oval = 0L;
+   }
+   else if (e->type () == QEvent::KeyPress)
+   {
+      QKeyEvent *ke = (QKeyEvent *) e;
+      if (ke->key () == Qt::Key_Escape)
+         m_toolController->emitOperationDone (m_id);
+   }
 }
 
 void OvalTool::activate (GDocument* , Canvas* canvas)
