@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002-2004 Laurent MONTEL <montel@kde.org>
+   Copyright (C) 2004 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,16 +75,14 @@ typedef QMap<int, QPtrList<listAnimation> > lstMap;
 
 
 KPrPage::KPrPage(KPresenterDoc *_doc )
+: m_doc( _doc )
+, m_dcop( 0 )
+, m_selectedSlides( true )
 {
     kdDebug(33001)<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )"<<this<<endl;
-    m_doc=_doc;
-    dcop=0;
-    kpbackground= new KPBackGround( this );
-    //create object list for each page.
     m_objectList.setAutoDelete( false );
-    m_manualTitle=QString::null;
-    m_noteText=QString::null;
-    m_selectedSlides=true;
+    
+    m_kpbackground= new KPBackGround( this );
 
     //don't create dcopobject by default
     //dcopObject();
@@ -95,16 +94,16 @@ KPrPage::~KPrPage()
     //delete object list.
     m_objectList.setAutoDelete( true );
     m_objectList.clear();
-    delete kpbackground;
-    delete dcop;
+    delete m_kpbackground;
+    delete m_dcop;
 }
 
 DCOPObject* KPrPage::dcopObject()
 {
-    if ( !dcop )
-        dcop = new KPresenterPageIface( this );
+    if ( !m_dcop )
+        m_dcop = new KPresenterPageIface( this );
 
-    return dcop;
+    return m_dcop;
 }
 
 bool KPrPage::saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const
@@ -240,7 +239,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     xmlWriter.addAttribute( "draw:id", posPage );
     xmlWriter.addAttribute( "draw:master-page-name", "Standard"); //by default name of page is Standard
 
-    QString styleName = kpbackground->saveOasisBackgroundPageStyle( store, xmlWriter, context.mainStyles() );
+    QString styleName = m_kpbackground->saveOasisBackgroundPageStyle( store, xmlWriter, context.mainStyles() );
     kdDebug()<<" styleName :"<<styleName<<endl;
     if ( !styleName.isEmpty() )
         xmlWriter.addAttribute( "draw:style-name", styleName );
@@ -1845,117 +1844,117 @@ void KPrPage::enableEmbeddedParts( bool f )
 void KPrPage::setBackColor(const  QColor &backColor1, const QColor &backColor2, BCType bcType,
                            bool unbalanced, int xfactor, int yfactor )
 {
-    kpbackground->setBackColor1( backColor1 );
-    kpbackground->setBackColor2( backColor2 );
-    kpbackground->setBackColorType( bcType );
-    kpbackground->setBackUnbalanced( unbalanced );
-    kpbackground->setBackXFactor( xfactor );
-    kpbackground->setBackYFactor( yfactor );
+    m_kpbackground->setBackColor1( backColor1 );
+    m_kpbackground->setBackColor2( backColor2 );
+    m_kpbackground->setBackColorType( bcType );
+    m_kpbackground->setBackUnbalanced( unbalanced );
+    m_kpbackground->setBackXFactor( xfactor );
+    m_kpbackground->setBackYFactor( yfactor );
 }
 
 void KPrPage::setBackPicture( const KoPictureKey & key )
 {
-    kpbackground->setBackPicture( key );
+    m_kpbackground->setBackPicture( key );
 }
 
 bool KPrPage::getBackUnbalanced() const
 {
-    return kpbackground->getBackUnbalanced();
+    return m_kpbackground->getBackUnbalanced();
 }
 
 void KPrPage::setBackView( BackView backView )
 {
-    kpbackground->setBackView( backView );
+    m_kpbackground->setBackView( backView );
 }
 
 void KPrPage::setBackType( BackType backType )
 {
-    kpbackground->setBackType( backType );
+    m_kpbackground->setBackType( backType );
 }
 
 void KPrPage::setPageEffect( PageEffect pageEffect )
 {
-    kpbackground->setPageEffect( pageEffect );
+    m_kpbackground->setPageEffect( pageEffect );
 }
 
 void KPrPage::setPageTimer( int pageTimer )
 {
-    kpbackground->setPageTimer( pageTimer );
+    m_kpbackground->setPageTimer( pageTimer );
 }
 
 void KPrPage::setPageSoundEffect( bool soundEffect )
 {
-    kpbackground->setPageSoundEffect( soundEffect );
+    m_kpbackground->setPageSoundEffect( soundEffect );
 }
 
 void KPrPage::setPageSoundFileName( const QString &fileName )
 {
-    kpbackground->setPageSoundFileName( fileName );
+    m_kpbackground->setPageSoundFileName( fileName );
 }
 
 BackType KPrPage::getBackType() const
 {
-    return kpbackground->getBackType();
+    return m_kpbackground->getBackType();
 }
 
 BackView KPrPage::getBackView() const
 {
-    return kpbackground->getBackView();
+    return m_kpbackground->getBackView();
 }
 
 KoPictureKey KPrPage::getBackPictureKey() const
 {
-    return kpbackground->getBackPictureKey();
+    return m_kpbackground->getBackPictureKey();
 }
 
 KoPicture KPrPage::getBackPicture() const
 {
-    return kpbackground->getBackPicture();
+    return m_kpbackground->getBackPicture();
 }
 
 QColor KPrPage::getBackColor1() const
 {
-    return kpbackground->getBackColor1();
+    return m_kpbackground->getBackColor1();
 }
 
 QColor KPrPage::getBackColor2() const
 {
-    return kpbackground->getBackColor2();
+    return m_kpbackground->getBackColor2();
 }
 
 int KPrPage::getBackXFactor() const
 {
-    return kpbackground->getBackXFactor();
+    return m_kpbackground->getBackXFactor();
 }
 
 int KPrPage::getBackYFactor() const
 {
-    return kpbackground->getBackYFactor();
+    return m_kpbackground->getBackYFactor();
 }
 
 BCType KPrPage::getBackColorType() const
 {
-    return kpbackground->getBackColorType();
+    return m_kpbackground->getBackColorType();
 }
 
 PageEffect KPrPage::getPageEffect() const
 {
-    return kpbackground->getPageEffect();
+    return m_kpbackground->getPageEffect();
 }
 
 int KPrPage::getPageTimer() const
 {
-    return kpbackground->getPageTimer();
+    return m_kpbackground->getPageTimer();
 }
 
 bool KPrPage::getPageSoundEffect() const
 {
-    return kpbackground->getPageSoundEffect();
+    return m_kpbackground->getPageSoundEffect();
 }
 
 QString KPrPage::getPageSoundFileName() const
 {
-    return kpbackground->getPageSoundFileName();
+    return m_kpbackground->getPageSoundFileName();
 }
 
 KoRect KPrPage::getPageRect() const
@@ -1994,7 +1993,7 @@ void KPrPage::completeLoading( bool _clean, int lastObj )
         else if ( it.current()->getType() == OT_GROUP )
             completeLoadingForGroupObject( it.current() );
     }
-    kpbackground->reload();
+    m_kpbackground->reload();
 }
 
 void KPrPage::completeLoadingForGroupObject( KPObject *_obj )
@@ -2121,8 +2120,8 @@ void KPrPage::makeUsedPixmapList()
             makeUsedPixmapListForGroupObject( it.current() );
     }
 
-    if( kpbackground->getBackType()==BT_PICTURE || kpbackground->getBackType()==BT_CLIPART)
-        m_doc->insertPixmapKey(kpbackground->getBackPictureKey());
+    if( m_kpbackground->getBackType()==BT_PICTURE || m_kpbackground->getBackType()==BT_CLIPART)
+        m_doc->insertPixmapKey(m_kpbackground->getBackPictureKey());
 }
 
 void KPrPage::makeUsedPixmapListForGroupObject( KPObject *_obj )

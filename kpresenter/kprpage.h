@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
+   Copyright (C) 2004 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -251,7 +252,7 @@ public:
 
     void enableEmbeddedParts( bool f );
 
-    KPBackGround *background() const { return kpbackground;}
+    KPBackGround *background() const { return m_kpbackground;}
 
     void makeUsedPixmapList();
 
@@ -363,10 +364,10 @@ private:
     // list of objects
     QPtrList<KPObject> m_objectList;
     KPresenterDoc *m_doc;
-    KPBackGround *kpbackground;
+    KPBackGround *m_kpbackground;
     QString m_manualTitle;
     QString m_noteText;
-    DCOPObject *dcop;
+    DCOPObject *m_dcop;
     bool m_selectedSlides;
 
     QString m_pictureFile;
