@@ -1082,18 +1082,18 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 void KPresenterDoc::saveOasisHeaderFooter( KoXmlWriter & stickyTmpWriter , KoSavingContext& context )
 {
-    if ( m_bHasHeader )
-    {
-        stickyTmpWriter.startElement( "style:header" );
-        header()->textObject()->saveOasisContent( stickyTmpWriter, context );
-        stickyTmpWriter.endElement();
-    }
-    if ( m_bHasFooter )
-    {
-        stickyTmpWriter.startElement( "style:footer" );
-        footer()->textObject()->saveOasisContent( stickyTmpWriter, context );
-        stickyTmpWriter.endElement();
-    }
+    stickyTmpWriter.startElement( "style:header" );
+    header()->textObject()->saveOasisContent( stickyTmpWriter, context );
+    stickyTmpWriter.endElement();
+
+    stickyTmpWriter.startElement( "style:footer" );
+    footer()->textObject()->saveOasisContent( stickyTmpWriter, context );
+    stickyTmpWriter.endElement();
+}
+
+void KPresenterDoc::loadOasisHeaderFooter()
+{
+    //todo
 }
 
 void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
@@ -1144,7 +1144,8 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 
     //not define into oo spec
     settingsWriter.addConfigItem( "SnapLineIsVisible", showHelplines() );
-
+    settingsWriter.addConfigItem( "ShowHeader", hasHeader() );
+    settingsWriter.addConfigItem( "ShowFooter", hasFooter() );
 }
 
 void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
@@ -1169,6 +1170,10 @@ void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
             int valy = settings.parseConfigItemInt( "GridFineHeight" );
             m_gridY = MM_TO_POINT( valy / 100.0 );
             setUnit(KoUnit::unit(settings.parseConfigItemString("unit")));
+
+
+            setFooter( settings.parseConfigItemBool( "ShowFooter" ) );
+            setHeader( settings.parseConfigItemBool( "ShowHeader" ) );
         }
     }
 }

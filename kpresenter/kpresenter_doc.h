@@ -553,6 +553,7 @@ protected:
     void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
     void saveOasisPresentationCustionSlideShow( KoXmlWriter &contentTmpWriter );
     void saveOasisHeaderFooter( KoXmlWriter &stickyTmpWriter , KoSavingContext& context );
+    void loadOasisHeaderFooter();
 
     void saveOasisSettings( KoXmlWriter &contentTmpWriter );
     void loadOasisSettings( const QDomDocument&settingsDoc );
