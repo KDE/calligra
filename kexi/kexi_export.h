@@ -20,8 +20,8 @@
 #ifndef _KEXI_EXPORT_H_
 #define _KEXI_EXPORT_H_
 
+#include <kdeversion.h> //this will also include <kdelibs_export.h>, if available
 //TODO: #include <koffice_export.h>
-#include <kdelibs_export.h>
 
 #ifdef MAKE_KEXICORE_LIB
 # define KEXICORE_EXPORT KDE_EXPORT
