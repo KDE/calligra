@@ -645,7 +645,7 @@
 <!ATTLIST Point point_x NMTOKEN #REQUIRED
                 point_y NMTOKEN #REQUIRED>
 
-<!ELEMENT HELPLINES (Vertical+, Horizontal+, HelpPoint+) >
+<!ELEMENT HELPLINES (Vertical | Horizontal | HelpPoint)* >
 <!ATTLIST HELPLINES show NMTOKEN #REQUIRED >
 <!ELEMENT Vertical EMPTY>
 <!ATTLIST Vertical value NMTOKEN #REQUIRED >
