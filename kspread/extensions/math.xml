@@ -1,0 +1,1008 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Math</GroupName>
+
+    <Function>
+      <Name>LCM</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>First number</Comment>
+        <Type range="true">FLOAT</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Second Number</Comment>
+        <Type range="true">FLOAT</Type>
+      </Parameter>
+      <Help>
+	<Text>The LCM() function returns the lowest common multiple for two or more float values</Text>
+	<Syntax>LCM(value; value)</Syntax>
+	<Example>LCM(6;4) returns 12</Example>
+	<Example>LCM(1.5;2.25) returns 4.5</Example>
+	<Example>LCM(2;3;4) returns 12</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LCD</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>First number</Comment>
+        <Type range="true">Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Second Number</Comment>
+        <Type range="true">Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Third Number</Comment>
+        <Type range="true">Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The LCD() function returns the largest common denominator for two or more integer values.</Text>
+	<Syntax>LCM(value; value)</Syntax>
+	<Example>LCM(6;4) returns 2</Example>
+	<Example>LCM(10;20) returns 10</Example>
+	<Example>LCM(20;15;10) returns 5</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>eps</Name>
+      <Type>Float</Type>
+      <Help>
+	<Text>eps() returns the machine epsilon; this is the difference between 1 and the next largest floating-point number. Because computers use a finite number of digits, roundoff error is inherent (but usually insignificant) in all calculations.</Text>
+	<Syntax>eps()</Syntax>
+	<Example>On most systems, this returns 2^-52=2.2204460492503131e-16</Example>
+	<Example>0.5*eps() returns the "unit round"; this value is interesting because it is the largest number x where (1+x)-1=0 (due to roundoff errors).</Example>
+	<Example>eps() is so small that KSpread displays 1+eps() as 1</Example>
+	<Example>Pick a number x between 0 and eps(). Observe that 1+x rounds x to either 0 or eps() by using the equation (1+x)-1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>pow</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The pow(x,y) function returns the value of x raised to the power of y.</Text>
+	<Syntax>pow(value;value)</Syntax>
+	<Example>pow(1.2;3.4) equals 1.8572</Example>
+	<Example>pow(2;3) equals 8</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DELTA</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The DELTA() function returns 1 if x equals y, otherwise returns 0.</Text>
+	<Syntax>DELTA(value;value)</Syntax>
+	<Example>DELTA(1.2;3.4) returns 0</Example>
+	<Example>DELTA(3;3) returns 1</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>EVEN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The EVEN() function returns the number rounded up to the nearest even integer.</Text>
+	<Syntax>EVEN(value)</Syntax>
+	<Example>EVEN(1.2) returns 2</Example>
+	<Example>EVEN(2) returns 2</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ODD</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ODD() function returns the number rounded up to the nearest odd integer.</Text>
+	<Syntax>ODD(value)</Syntax>
+	<Example>ODD(1.2) returns 3</Example>
+	<Example>ODD(2) returns 3</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>MOD</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The MOD() function returns the remainder after division. If the second parameter is null the function returns #DIV/0.</Text>
+	<Syntax>MOD(value;value)</Syntax>
+	<Example>MOD(12;5) returns 2</Example>
+	<Example>MOD(5;5) returns 0</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>sign</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>This function returns -1 if the number is negative, 0 if the number is null and 1 if the number is positive.</Text>
+	<Syntax>sign(value)</Syntax>
+	<Example>sign(5) equals 1</Example>
+	<Example>sign(0) equals 0</Example>
+	<Example>sign(-5) equals -1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>INV</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>This function multiplies each value by -1.</Text>
+	<Syntax>INV(value)</Syntax>
+	<Example>INV(-5) equals 5</Example>
+	<Example>INV(5) equals -5</Example>
+	<Example>INV(0) equals 0</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>count</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>This function returns the count of integer or floating arguments passed. You can count using a range: count(A1:B5) or using a list of values like: count(12;5;12.5).</Text>
+	<Syntax>count(value;value;value...)</Syntax>
+	<Example>count(-5;"KSpread";2) returns 2</Example>
+	<Example>count(5) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>fact</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The fact() function calculates the factorial of the parameter. The mathematical expression is (value)!.</Text>
+	<Syntax>fact(Float)</Syntax>
+	<Example>fact(10) returns 3628800</Example>
+	<Example>fact(0) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>sum</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The sum() function calculates the sum of all the values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5).</Text>
+	<Syntax>sum(value;value;...)</Syntax>
+	<Example>sum(12;5;7) equals 24</Example>
+	<Example>sum(12.5;2) equals 14.5</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PRODUCT</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The PRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range: PRODUCT(A1:B5) or a list of values like product(12;5;12.5).</Text>
+	<Syntax>PRODUCT(value;value;...)</Syntax>
+	<Example>PRODUCT(3;5;7) equals 105</Example>
+	<Example>PRODUCT(12.5;2) equals 25</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DIV</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The DIV() function divides the first value by the other values in turn. You can calculate using a range: DIV(A1:B5) or a list of values like DIV(12;5;12.5).</Text>
+	<Syntax>DIV(value;value;...)</Syntax>
+	<Example>DIV(20;2;2) returns 5</Example>
+	<Example>DIV(25;2.5) returns 10</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>sumsq</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The sumsq() function calculates the sum of all the squares of values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5).</Text>
+	<Syntax>sumsq(value;value;...)</Syntax>
+	<Example>sumsq(12;5;7) equals 218</Example>
+	<Example>sumsq(12.5;2) equals 173</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>max</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The max() function returns the largest value given in the parameters.</Text>
+	<Syntax>max(value;value;...)</Syntax>
+	<Example>max(12;5;7) returns 12</Example>
+	<Example>max(12.5;2) returns 12.5</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>min</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The min() function returns the smallest value given in the parameters.</Text>
+	<Syntax>min(value;value;...)</Syntax>
+	<Example>min(12;5;7) returns 5</Example>
+	<Example>min(12.5;2) returns 2</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>multiply</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The multiply() function multiplies all the values given in the parameters. You can multiply values given by a range multiply(A1:B5) or a list of values like multiply(12;5;12.5).</Text>
+	<Syntax>multiply(value;value;...)</Syntax>
+	<Example>multiply(12;5;7) equals 420</Example>
+	<Example>multiply(12.5;2) equals 25</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>sqrt</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The sqrt() function returns the non-negative square root of x. If x is negative, "NaN" is returned.</Text>
+	<Syntax>sqrt(x)</Syntax>
+	<Example>sqrt(9) equals 3</Example>
+	<Example>sqrt(-9) equals "NaN"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ln</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ln() function returns the natural logarithm of x.</Text>
+	<Syntax>ln(x)</Syntax>
+	<Example>ln(0.8) equals -0.22314355</Example>
+	<Example>ln(0) equals -inf</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LOGn</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Base</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The LOGn() function returns the base n logarithm of x.</Text>
+	<Syntax>LOGn(value;base)</Syntax>
+	<Example>LOGn(12;10) equals 1.07918125</Example>
+	<Example>LOGn(12;2) equals 3.5849625</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SQRTn</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The SQRTn() function returns the non-negative nth root of x.</Text>
+	<Syntax>SQRTn(x,n)</Syntax>
+	<Example>SQRTn(9;2) equals 3</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CUR</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The CUR() function returns the non-negative cube root of x.</Text>
+	<Syntax>CUR(x)</Syntax>
+	<Example>CUR(27) equals 3</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>log</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The log() function returns the base-10 logarithm of x.</Text>
+	<Syntax>log(x)</Syntax>
+	<Example>log(0.8) equals -0.09691001</Example>
+	<Example>log(0) equals -inf.</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>exp</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The exp() function returns the value of e (the base of natural logarithms) raised to the power of x.</Text>
+	<Syntax>exp(x)</Syntax>
+	<Example>exp(9) equals 8 103.08392758</Example>
+	<Example>exp(-9) equals 0.00012341</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ceil</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ceil() function rounds x up to the nearest integer, returning that value as a double.</Text>
+	<Syntax>ceil(x)</Syntax>
+	<Example>ceil(12.5) equals 13</Example>
+	<Example>ceil(-12.5) equals -12</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>floor</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The floor() function rounds x down to the nearest integer, returning that value as a double.</Text>
+	<Syntax>floor(x)</Syntax>
+	<Example>floor(12.5) equals 12</Example>
+	<Example>floor(-12.5) equals -13</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>abs</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The abs() function returns the absolute value of the floating-point number x.</Text>
+	<Syntax>abs(x)</Syntax>
+	<Example>abs(12.5) equals 12.5</Example>
+	<Example>abs(-12.5) equals 12.5</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>INT</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The INT() function returns the integer part of the value.</Text>
+	<Syntax>INT(x)</Syntax>
+	<Example>INT(12.55) equals 12</Example>
+	<Example>INT(15) equals 15</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>rand</Name>
+      <Type>Float</Type>
+      <Help>
+	<Text>The rand() function returns a pseudo-random number between 0 and 1.</Text>
+	<Syntax>rand()</Syntax>
+	<Example>rand() equals for example 0.78309922...</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>RANDBETWEEN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Bottom value</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Top value</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The RANDBETWEEN() function returns a pseudo-random number between bottom and top value. If bottom > top this function returns Err.</Text>
+	<Syntax>RANDBETWEEN(bottom;top)</Syntax>
+	<Example>RANDBETWEEN(12;78) equals for example 61.0811...</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>ROUNDUP</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Digits</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The ROUNDUP(value;[digits]) function returns value rounded up. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded up to the nearest integer.</Text>
+	<Syntax>ROUNDUP(value;[digits])</Syntax>
+	<Example>ROUNDUP(1.252;2) equals 1.26</Example>
+	<Example>ROUNDUP(-1.252;2) equals -1.25</Example>
+                <Example>ROUNDUP(-1.252) equals -1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ROUNDDOWN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Digits</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The ROUNDDOWN(value;[digits]) function returns value rounded down. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded down to the nearest integer.</Text>
+	<Syntax>ROUNDDOWN(value;[digits])</Syntax>
+	<Example>ROUNDDOWN(1.252;2) equals 1.25</Example>
+	<Example>ROUNDDOWN(-1.252;2) equals -1.26</Example>
+	<Example>ROUNDDOWN(-1.252) equals -2</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COMPLEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Real coefficient</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Imaginary coefficient</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The COMPLEX(real,imag) returns a complex number of form x+yi.</Text>
+	<Syntax>COMPLEX(real;imag)</Syntax>
+	<Example>COMPLEX(1.2;3.4) returns "1.2+3.4i"</Example>
+	<Example>COMPLEX(0;-1) returns "-i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMAGINARY</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMAGINARY(string) returns the imaginary coefficient of a complex.</Text>
+	<Syntax>IMAGINARY(string)</Syntax>
+	<Example>IMAGINARY("1.2+3.4i") returns 3.4</Example>
+	<Example>IMAGINARY("1.2") returns 0 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMREAL</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMREAL(string) returns the real coefficient of a complex.</Text>
+	<Syntax>IMREAL(string)</Syntax>
+	<Example>IMREAL("1.2+3.4i") returns 1.2</Example>
+	<Example>IMREAL("1.2i") returns 0 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMCOS</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMCOS(string) returns the cosine of a complex number.</Text>
+	<Syntax>IMCOS(string)</Syntax>
+	<Example>IMCOS("1+i") returns "0.83373-0.988898i"</Example>
+	<Example>IMCOS("12i") returns 81 377.4 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMSIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSIN(string) function returns the sine of a complex number.</Text>
+	<Syntax>IMSIN(string)</Syntax>
+	<Example>IMSIN("1+i") returns "1.29846+0.634964i"</Example>
+	<Example>IMSIN("1.2") returns -0.536573 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMEXP</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMEXP(string) returns the exponential of a complex number.</Text>
+	<Syntax>IMEXP(string)</Syntax>
+	<Example>IMEXP("2-i") returns "3.99232-6.21768i"</Example>
+	<Example>IMEXP("12i") returns "0.843854-0.536573i" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMLN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMLN(string) returns the natural logarithm of a complex number.</Text>
+	<Syntax>IMLN(string)</Syntax>
+	<Example>IMLN("3-i") returns "1.15129-0.321751i"</Example>
+	<Example>IMLN("12") returns 2.48491 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMSQRT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSQRT(string) returns the square root of a complex number.</Text>
+	<Syntax>IMSQRT(string)</Syntax>
+	<Example>IMSQRT("1+i") returns "1.09868+0.45509i"</Example>
+	<Example>IMSQRT("1.2i") returns "0.774597+0.774597i" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMPOWER</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Power</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMPOWER(string) returns a complex number raised to a power.</Text>
+	<Syntax>IMPOWER(string)</Syntax>
+	<Example>IMPOWER("4-i";2) returns "15-8i"</Example>
+	<Example>IMPOWER("1.2";2) returns 1.44 </Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>IMSUM</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSUM() returns the sum of several complex numbers of form x+yi.</Text>
+	<Syntax>IMSUM(value;value;...)</Syntax>
+	<Example>IMSUM(1.2;"3.4+5i") returns "4.6+5i"</Example>
+	<Example>IMSUM(1.2;"1i") returns "1.2+i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMDIV</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMDIV() returns the division of several complex numbers of form x+yi.</Text>
+	<Syntax>IMDIV(value;value;...)</Syntax>
+	<Example>IMDIV(1.2;"3.4+5i") returns "0.111597-0.164114i"</Example>
+	<Example>IMDIV("12+i";"12-i") returns "0.986207+0.16551i"</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>IMSUB</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSUB() returns the difference of several complex numbers of form x+yi.</Text>
+	<Syntax>IMSUB(value;value;...)</Syntax>
+	<Example>IMSUB(1.2;"3.4+5i") returns "-2.2-5i"</Example>
+	<Example>IMSUB(1.2;"1i") returns "1.2-i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMPRODUCT</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMPRODUCT() returns the product of several complex numbers of form x+yi.</Text>
+	<Syntax>IMPRODUCT(value;value;...)</Syntax>
+	<Example>IMPRODUCT(1.2;"3.4+5i") returns "4.08+6i"</Example>
+	<Example>IMPRODUCT(1.2;"1i") returns "+1.2i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMCONJUGATE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMCONJUGATE(complex number) returns the conjugate of a complex number of form x+yi.</Text>
+	<Syntax>IMCONJUGATE(complex number)</Syntax>
+	<Example>IMCONJUGATE("1.2+5i") returns "1.2-5i"</Example>
+	<Example>IMCONJUGATE("-i") returns "i"</Example>
+                <Example>IMCONJUGATE("12") returns "12"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMARGUMENT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMARGUMENT(complex number) returns the argument of a complex number of form x+yi.</Text>
+	<Syntax>IMARGUMENT(complex number)</Syntax>
+	<Example>IMARGUMENT("1.2+5i") returns 0.6072</Example>
+	<Example>IMARGUMENT("-i") returns -1.57079633 </Example>
+        <Example>IMARGUMENT("12") returns "#Div/0"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMABS</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMABS(complex number) returns the norm of a complex number of form x+yi.</Text>
+	<Syntax>IMABS(complex number)</Syntax>
+	<Example>IMABS("1.2+5i") returns 5.1419</Example>
+	<Example>IMABS("-i") returns 1</Example>
+                <Example>IMABS("12") returns 12</Example>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

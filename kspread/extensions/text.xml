@@ -1,0 +1,324 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Text</GroupName>
+
+    <Function>
+      <Name>PROPER</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The PROPER() function converts the first letter of each word to uppercase and the rest of the letters to lowercase.</Text>
+	<Syntax>PROPER(string)</Syntax>
+	<Example>PROPER("this is a title") returns "This Is A Title"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COMPARE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String to compare with</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Compare case-sensitve (true/false)?</Comment>
+	<Type>Boolean</Type>
+      </Parameter>
+      <Help>
+	      <Text>The COMPARE() function returns 0 if the two strings are equal; -1 if the first one is lower in value than the second one; otherwise it returns 1.</Text>
+	<Syntax>COMPARE(string1; string2; true|false)</Syntax>
+	<Example>COMPARE("KOffice"; "KOffice", true) returns 0</Example>
+        <Example>COMPARE("koffice"; "KOffice", true) returns 1</Example>
+        <Example>COMPARE("kspread"; "KOffice", false) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>EXACT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The EXACT() function returns True if these two strings are equal. Otherwise, it returns False.</Text>
+	<Syntax>EXACT(string1;string2)</Syntax>
+	<Example>EXACT("KOffice";"KOffice") returns True</Example>
+        <Example>EXACT("KSpread";"KOffice") returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>REPLACE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>String in which something should be replaced</Comment>
+	<Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String to replace</Comment>
+	<Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>New string part</Comment>
+	<Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>TRUE if replacement should be case sensitive, FALSE otherwise.</Comment>
+	<Type range="false">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The REPLACE() function replaces a string s1 in the string s with string s2.</Text>
+	<Syntax>REPLACE(string; string1; string2; boolean)</Syntax>
+	<Example>REPLACE("KOffice"; "Office"; "Spread"; TRUE) returns "KSpread"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>find</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Needle</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Haystack</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The find() function searches a substring. This function returns True if this substring exists. Otherwise, it returns False.</Text>
+	<Syntax>find(needle;haystack)</Syntax>
+	<Example>find("KOf";"KOffice") returns True</Example>
+	<Example>find("KSpread";"KOffice") returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>mid</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Position</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Length</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The mid() function returns a substring that contains 'length' characters of the string, starting at 'position' index.</Text>
+	<Syntax>mid(text;position;length)</Syntax>
+	<Syntax>mid(text;position)</Syntax>
+	<Example>mid("KOffice";2;3) returns "ffi"</Example>
+	<Example>mid("KOffice";2) returns "ffice"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>len</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The len() function returns the length of the string.</Text>
+	<Syntax>len(text)</Syntax>
+	<Example>len("hello") returns 5</Example>
+	<Example>len("KSpread") returns 7</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>trim</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The trim() function returns text with only single spaces between words.</Text>
+	<Syntax>trim(text)</Syntax>
+	<Example>trim(" hello    KSpread   ") returns hello KSpread</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>join</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The join() function returns a string which is the concatenation of the strings passed as parameters.</Text>
+	<Syntax>join(value;value;...)</Syntax>
+	<Example>join("KSpread";"KOffice";"KDE") returns "KSpreadKOfficeKDE"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>right</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Amount of characters</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The right() function returns a substring that contains the 'length' rightmost characters of the string. The whole string is returned if 'length' exceeds the length of the string.</Text>
+	<Syntax>right(text;length)</Syntax>
+	<Example>right("hello";2) returns "lo"</Example>
+	<Example>right("KSpread";10) returns "KSpread"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>left</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Amount of characters</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The left() function returns a substring that contains the 'length' leftmost characters of the string. The whole string is returned if 'length' exceeds the length of the string.</Text>
+	<Syntax>left(text;length)</Syntax>
+	<Example>left("hello";2) returns "he"</Example>
+	<Example>left("KSpread";10) returns "KSpread"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>REPT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Count of repetitions</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The REPT() function repeats the first parameter as often as told by the second parameter.</Text>
+	<Syntax>REPT(text;count)</Syntax>
+	<Example>REPT("KSpread";3) returns "KSpreadKSpreadKSpread"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TOGGLE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The TOGGLE() function changes lowercase characters to uppercase and uppercase characters to lowercase.</Text>
+	<Syntax>TOGGLE(text)</Syntax>
+	<Example>TOGGLE("hello") returns "HELLO"</Example>
+	<Example>TOGGLE("HELLO") returns "hello"</Example>
+	<Example>TOGGLE("HeLlO") returns "hElLo"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CLEAN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The CLEAN() function removes every non-printable character from the string</Text>
+	<Syntax>CLEAN(text)</Syntax>
+	<Example>CLEAN(AsciiToChar(7) + "HELLO") returns "HELLO"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SLEEK</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The SLEEK() function removes all spaces from the string.</Text>
+	<Syntax>SLEEK(text)</Syntax>
+	<Example>SLEEK("This is   some  text ") returns "Thisissometext"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>upper</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The upper() function converts a string to upper case.</Text>
+	<Syntax>upper(text)</Syntax>
+	<Example>upper("hello") returns "HELLO"</Example>
+	<Example>upper("HELLO") returns "HELLO"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>lower</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The lower() function converts a string to lower case.</Text>
+	<Syntax>lower(text)</Syntax>
+	<Example>lower("hello") returns "hello"</Example>
+	<Example>lower("HELLO") returns "hello"</Example>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

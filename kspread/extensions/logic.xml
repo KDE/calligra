@@ -1,0 +1,290 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Logic</GroupName>
+
+    <Function>
+      <Name>AND</Name>
+      <Type>Boolean</Type>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The AND() function returns True if all the values are true. Otherwise it returns False.</Text>
+	<Syntax>AND(value;value;...)</Syntax>
+	<Example>AND(True;True;True) returns True</Example>
+	<Example>AND(True;False) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OR</Name>
+      <Type>Boolean</Type>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The OR() function returns True if at least one of the values is true. Otherwise it returns False.</Text>
+	<Syntax>OR(value;value;...)</Syntax>
+	<Example>OR(False;False;False) returns False</Example>
+	<Example>OR(True;False) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NAND</Name>
+      <Type>Boolean</Type>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The NAND() function returns True if at least one value is not true. Otherwise it returns False.</Text>
+	<Syntax>NAND(value;value;...)</Syntax>
+	<Example>NAND(True;False;False) returns True</Example>
+	<Example>NAND(True;True) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NOR</Name>
+      <Type>Boolean</Type>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The NOR() function returns True if all the values given as parameters are of boolean type and have the value false. Otherwise it returns False.</Text>
+	<Syntax>NOR(value;value;...)</Syntax>
+	<Example>NOR(True;False;False) returns False</Example>
+	<Example>NOR(False;False) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NOT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Boolean value</Comment>
+	<Type>Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The NOT() function returns True if the value is False and returns False if the value is True.</Text>
+	<Syntax>NOT(bool)</Syntax>
+	<Example>NOT(False) returns True</Example>
+	<Example>NOT(True) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IF</Name>
+      <Type>Any</Type>
+      <Parameter>
+	<Comment>Condition</Comment>
+	<Type>Boolean</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>If true</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>If false</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The IF() function is a conditional function. This function returns the second parameter if the condition is True. Otherwise it returns the third parameter.</Text>
+	<Syntax>IF(condition;if_true;if_false)</Syntax>
+	<Example>A1=4;A2=6;IF(A1>A2;5;3) returns 3</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISLOGIC</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISLOGIC() function returns True if the parameter is a boolean value. Otherwise it returns False.</Text>
+	<Syntax>ISLOGIC(x)</Syntax>
+	<Example>ISLOGIC(A1>A2) returns True</Example>
+	<Example>ISLOGIC(12) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISNUM</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNUM() function returns True if the parameter is a numerical value. Otherwise it returns False.</Text>
+	<Syntax>ISNUM(x)</Syntax>
+	<Example>ISNUM(12) returns True</Example>
+	<Example>ISNUM(hello) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISTIME</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISTIME() function returns True if the parameter is a time value. Otherwise it returns False.</Text>
+	<Syntax>ISTIME(x)</Syntax>
+	<Example>ISTIME("12:05") returns True</Example>
+	<Example>ISTIME(hello) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISDATE</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISDATE() function returns True if the parameter is a date value. Otherwise it returns False</Text>
+	<Syntax>ISDATE(x)</Syntax>
+	<Example>ISDATE("2000-2-2") returns True</Example>
+	<Example>ISDATE(hello) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISTEXT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISTEXT() function returns True if the parameter is a string. Otherwise it returns False</Text>
+	<Syntax>ISTEXT(x)</Syntax>
+	<Example>ISTEXT(12) returns False</Example>
+	<Example>ISTEXT("hello") returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISNOTTEXT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNOTTEXT() function returns True if the parameter is not a string. Otherwise it returns False</Text>
+	<Syntax>ISNOTTEXT(x)</Syntax>
+	<Example>ISNOTTEXT(12) returns True</Example>
+	<Example>ISNOTTEXT("hello") returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISODD</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISODD() function returns True if the number is odd. Otherwise returns False.</Text>
+	<Syntax>ISODD(x)</Syntax>
+	<Example>ISODD(12) returns False</Example>
+	<Example>ISODD(-7) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISEVEN</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISEVEN() function returns True if the number is even. Otherwise returns False.</Text>
+	<Syntax>ISEVEN(x)</Syntax>
+	<Example>ISEVEN(12) returns True</Example>
+	<Example>ISEVEN(-7) returns False</Example>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

@@ -1,0 +1,413 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Conversion</GroupName>
+
+    <Function>
+      <Name>BOOL2STRING</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Bool value to convert</Comment>
+        <Type range="false">Boolean</Type>
+      </Parameter>
+      <Help>
+        <Text>The BOOL2STRING() function returns a string value for a given boolean value. This method is intended for using a boolean in methods which require a string</Text>
+        <Syntax>BOOL2STRING(value)</Syntax>
+	<Example>BOOL2STRING(true) returns "True"</Example>
+	<Example>BOOL2STRING(false) returns "False"</Example>
+        <Example>upper(BOOL2STRING(find("nan";"banana"))) returns TRUE</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>INT2BOOL</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+        <Comment>Integer value to convert</Comment>
+        <Type range="false">Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The INT2BOOL() function returns a boolean value for a given integer number. This method is intended for using an integer in methods which require a boolean. It only accepts 0 or 1. If any other value is given, false is returned.</Text>
+        <Syntax>INT2BOOL(value)</Syntax>
+        <Example>INT2BOOL(1) returns true</Example>
+        <Example>INT2BOOL(0) returns false</Example>
+        <Example>OR(INT2BOOL(1), false) returns true</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BOOL2INT</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>Bool value to convert</Comment>
+        <Type range="false">Boolean</Type>
+      </Parameter>
+      <Help>
+        <Text>The BOOL2INT() function returns an integer value for a given boolean value. This method is intended for using a boolean value in methods which require an integer.</Text>
+        <Syntax>BOOL2INT(value)</Syntax>
+        <Example>BOOL2INT(True) returns 1</Example>
+        <Example>BOOL2INT(False) returns 0</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NUM2STRING</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>number to convert into string</Comment>
+        <Type range="false">Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The NUM2STRING() function returns a string value for a given number. This method is intended for using a number in methods which require a string</Text>
+        <Syntax>NUM2STRING(value)</Syntax>
+        <Example>NUM2STRING(10) returns "10"</Example>
+        <Example>NUM2STRING(2.05) returns "2.05"</Example>
+        <Example>=find("101";NUM2STRING(A1)) (A1 = 2.010102) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CharToAscii</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>A one character string to convert</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Help>
+        <Text>The CharToAscii() function returns the ASCII code for the given character.</Text>
+        <Syntax>CharToAscii(value)</Syntax>
+        <Example>CharToAscii("v") returns 118</Example>
+        <Example>CharToAscii(r) is an error. The character must be in quotes.</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>AsciiToChar</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>The ASCII value(s) to convert</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The AsciiToChar() function returns the character for each given ASCII code</Text>
+        <Syntax>AsciiToChar(value)</Syntax>
+        <Example>AsciiToChar(118) returns "v"</Example>
+        <Example>AsciiToChar(75; 68; 69) returns "KDE"</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>DEC2BIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DEC2BIN() function returns the value formatted as a binary number.</Text>
+	<Syntax>DEC2BIN(value)</Syntax>
+	<Example>DEC2BIN(12) returns "1100"</Example>
+	<Example>DEC2BIN(55) returns "110111"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DEC2HEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DEC2HEX() function returns the value formatted as a hexadecimal number.</Text>
+	<Syntax>DEC2HEX(value)</Syntax>
+	<Example>DEC2HEX(12) returns "c"</Example>
+	<Example>DEC2HEX(55) returns "37"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DEC2OCT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DEC2OCT() function returns the value formatted as an octal number.</Text>
+	<Syntax>DEC2OCT(value)</Syntax>
+	<Example>DEC2OCT(12) returns "14"</Example>
+	<Example>DEC2OCT(55) returns "67"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OCT2BIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The OCT2BIN() function returns the value formatted as a binary number.</Text>
+	<Syntax>OCT2BIN(value)</Syntax>
+	<Example>OCT2BIN("12") returns "1010"</Example>
+	<Example>OCT2BIN("55") returns "101101"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OCT2DEC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The OCT2DEC() function returns the value formatted as a decimal number.</Text>
+	<Syntax>OCT2DEC(value)</Syntax>
+	<Example>OCT2DEC("12") returns 10 </Example>
+	<Example>OCT2DEC("55") returns 45 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OCT2HEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The OCT2HEX() function returns the value formatted as a hexadecimal number.</Text>
+	<Syntax>OCT2HEX(value)</Syntax>
+	<Example>OCT2HEX("12") returns "a"</Example>
+	<Example>OCT2HEX("55") returns "2d"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BIN2DEC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The BIN2DEC() function returns the value formatted as a decimal number.</Text>
+	<Syntax>BIN2DEC(value)</Syntax>
+	<Example>BIN2DEC("1010") returns 10 </Example>
+	<Example>BIN2DEC("11111") returns 31 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BIN2OCT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The BIN2OCT() function returns the value formatted as an octal number.</Text>
+	<Syntax>BIN2OCT(value)</Syntax>
+	<Example>BIN2OCT("1010") returns "12" </Example>
+	<Example>BIN2OCT("11111") returns "37" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BIN2HEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The BIN2HEX() function returns the value formatted as a hexadecimal number.</Text>
+	<Syntax>BIN2HEX(value)</Syntax>
+	<Example>BIN2HEX("1010") returns "a"</Example>
+	<Example>BIN2HEX("11111") returns "1f"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HEX2DEC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The HEX2DEC() function returns the value formatted as a decimal number.</Text>
+	<Syntax>HEX2DEC(value)</Syntax>
+	<Example>HEX2DEC("a") returns 10 </Example>
+	<Example>HEX2DEC("37") returns 55 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HEX2OCT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The HEX2OCT() function returns the value formatted as an octal number.</Text>
+	<Syntax>HEX2OCT(value)</Syntax>
+	<Example>HEX2OCT("a") returns "12" </Example>
+	<Example>HEX2OCT("37") returns "67" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HEX2BIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The HEX2BIN() function returns the value formatted as a binary number.</Text>
+	<Syntax>HEX2BIN(value)</Syntax>
+	<Example>HEX2BIN("a") returns "1010"</Example>
+	<Example>HEX2BIN("37") returns "110111"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>POLR</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Value in X</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value in Y</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The POLR() function returns the radius corresponding to the position of a point in a cartesian landmark.</Text>
+	<Syntax>POLR(X;Y)</Syntax>
+	<Example>POLR(12;12) returns 16.9705</Example>
+	<Example>POLR(12;0) returns 12</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>POLA</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Value in X</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value in Y</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The POLA() function returns the angle (in radians) corresponding to the position of a point in a cartesian landmark.</Text>
+	<Syntax>POLA(X;Y)</Syntax>
+	<Example>POLA(12;12) returns 0.78539816</Example>
+	<Example>POLA(12;0) returns 0</Example>
+            <Example>POLA(0;12) returns 1.5707</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CARX</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Radius</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The CARX() function returns the X position corresponding to the position of a point in a polar landmark.</Text>
+	<Syntax>CARX(Radius;Angle)</Syntax>
+	<Example>CARX(12;1.5707) returns 0.00115592</Example>
+	<Example>CARX(12;0) returns 12</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DECSEX</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Value</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+        <Text>The DECSEX() function converts a double value to a time value.</Text>
+        <Syntax>DECSEX(double)</Syntax>
+        <Example>DECSEX(1.6668) returns 1:40 </Example>
+        <Example>DECSEX(7.8) returns 7:47</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SEXDEC</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Hours</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Minutes</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Seconds</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The SEXDEC() function returns a decimal value. You can also supply a time value.</Text>
+        <Syntax>SEXDEC(time value) or SEXDEC(hours,minutes,seconds)</Syntax>
+        <Example>SEXDEC(1;5;7) returns 1.0852778 </Example>
+        <Example>DECSEX("8:05") returns 8.08333333</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CARY</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Radius</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+        <Text>The CARY() function returns the Y position corresponding to the position of a point in a polar landmark.</Text>
+        <Syntax>CARY(Radius;Angle)</Syntax>
+        <Example>CARY(12;1.5707) returns 12</Example>
+        <Example>CARY(12;0) returns 0</Example>
+      </Help>
+    </Function>
+
+ <Function>
+      <Name>ROMAN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The ROMAN() function returns the number in roman format. Number should be positive and entire.</Text>
+        <Syntax>ROMAN(Number)</Syntax>
+        <Example>ROMAN(99) returns "XCIX"</Example>
+        <Example>ROMAN(-55) returns "Err"</Example>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>
