@@ -43,7 +43,7 @@ Some parts of code copyright	: (C) 1999 by Mutiny Bay Software (info@mutinybayso
 Some parts of code copyright	: (C) 2002 Alexander Dymo (cloudtemple@mksat.net)
 */
 
-MDatabaseReportEngine::MDatabaseReportEngine(QWidget *parent, const char *name) 
+MDatabaseReportEngine::MDatabaseReportEngine(QWidget *parent, const char *name)
 	: QObject(parent, name), m_strIndent( "    " )
 {
 	details.setAutoDelete( true );
@@ -247,7 +247,7 @@ void MDatabaseReportEngine::initDatabase()
 	// create the database object
     QSqlDatabase* db = QSqlDatabase::addDatabase( m_strDriverType );
     if ( !db ) {
-		//QMessageBox::warning( 0, tr( "Database connection Error" ), tr( "Could not open driver database." ) );	
+		//QMessageBox::warning( 0, tr( "Database connection Error" ), tr( "Could not open driver database." ) );
 		qWarning( "Could not open driver database." );
 		return;
     }
@@ -258,9 +258,9 @@ void MDatabaseReportEngine::initDatabase()
     db->setPort( m_strPort.toInt() );
     // open the new connection
 	if ( !db->open() ) {
-		QString strError = 
-			"Failed to open database: " + 
-			db->lastError().driverText() + 
+		QString strError =
+			"Failed to open database: " +
+			db->lastError().driverText() +
 			db->lastError().databaseText() ;
 		//QMessageBox::critical( this, tr("Database connection Error"), strError );
 		qWarning( "%s", strError.local8Bit().data() );
@@ -283,17 +283,92 @@ bool MDatabaseReportEngine::createReportDataFile( QIODevice* dev, const QString&
 		return false;
 	}
 
-	m_strDataBuffer.setDevice( dev );
+	m_strDataBuffer = new QTextStream(dev);
 	initDatabase();
 	setHeaderDataFile();
 	setSQLQuery();
 	setBufferFromDatabase( templateFile );
+    delete m_strDataBuffer;
     return true;
 }
 
+/** merge database data with existing report data file (it is represented as QIODevice *dev)*/
+QString MDatabaseReportEngine::mergeReportDataFile( QIODevice* dev)
+{
+    QDomDocument dom;
+    dom.setContent(dev);
+
+    QString result = dom.toString(4);
+
+    QDomElement docElem = dom.documentElement();
+    QString templateFile = docElem.attribute("Template");
+    if (templateFile.isEmpty())
+        return result;
+
+    QFile ft( templateFile );
+
+    if (ft.open(IO_ReadOnly)) {
+        if (!setReportTemplate(&ft)){
+            qWarning( "Invalid template file: %s", templateFile.latin1() );
+            return result;
+        }
+        ft.close();
+    } else {
+        qWarning( "Unable to open template file: %s", templateFile.latin1() );
+        return result;
+    }
+
+    QString data;
+    m_strDataBuffer = new QTextStream(&data, IO_ReadWrite);
+
+    initDatabase();
+//    setHeaderDataFile();
+    setSQLQuery();
+    setBufferFromDatabase( templateFile, true );
+
+    // perform merging with existing data in the data file
+    QDomNode *formerDataSource = 0;
+    QDomNode n = dom.documentElement().firstChild();
+    while ( !n.isNull() ) {
+        if ( n.isElement() ) {
+            QDomElement e = n.toElement();
+            if ( e.tagName() == "DataSource" );
+            {
+                formerDataSource = &e;
+                break;
+            }
+        }
+        n = n.nextSibling();
+    }
+    if (!formerDataSource)
+        return result;
+
+    QDomDocument d;
+    d.setContent("<temp>" + data + "</temp>");
+    qWarning("temp dom is: %s", d.toString(4).latin1());
+    n = d.documentElement().lastChild();
+    while ( !n.isNull() ) {
+        if ( n.isElement() ) {
+            QDomNode n2 = n.cloneNode();
+            docElem.insertAfter(n2, *formerDataSource);
+        }
+        n = n.previousSibling();
+    }
+
+    qWarning("DOM (before): %s", dom.toString(4).latin1());
+
+    dom.documentElement().removeChild(*formerDataSource);
+
+    qWarning("DOM: %s", dom.toString(4).latin1());
+
+    delete m_strDataBuffer;
+
+    return dom.toString(4);
+}
+
 /** set buffer data from database recordset */
-bool MDatabaseReportEngine::setBufferFromDatabase( const QString& strTemplateFile )
-{	
+bool MDatabaseReportEngine::setBufferFromDatabase( const QString& strTemplateFile, bool merge )
+{
 	Q_ASSERT( !m_strSql.isEmpty() || !m_strSql.isNull() );
 	Q_ASSERT( !m_strSql.isEmpty() || !m_strSql.isNull() );
 	Q_ASSERT( QSqlDatabase::contains() );
@@ -305,21 +380,24 @@ bool MDatabaseReportEngine::setBufferFromDatabase( const QString& strTemplateFil
 		return false;
 	}
 
-	// fill the row attribut list with the field name of recordset
-	for ( uint i = 0; i < cursor->count(); ++i ) {
-			m_strDataBuffer << cursor->fieldName(i);
-			m_strDataBuffer << " CDATA #IMPLIED" ;
-			// we put 2 indents for all the field
-			if ( i < (cursor->count()-1) )
-				m_strDataBuffer << endl << m_strIndent << m_strIndent;
-			// for the last one we close the attribut list
-			else if ( i == (cursor->count()-1) )
-				m_strDataBuffer <<  ">" << endl;
-	}
-	m_strDataBuffer << "]>" << endl << endl;
-	m_strDataBuffer << "<KugarData Template=\"";
-	m_strDataBuffer << strTemplateFile;
-	m_strDataBuffer << "\">" << endl << m_strIndent;
+    if (!merge)
+    {
+        // fill the row attribut list with the field name of recordset
+        for ( uint i = 0; i < cursor->count(); ++i ) {
+                *m_strDataBuffer << cursor->fieldName(i);
+                *m_strDataBuffer << " CDATA #IMPLIED" ;
+                // we put 2 indents for all the field
+                if ( i < (cursor->count()-1) )
+                    *m_strDataBuffer << endl << m_strIndent << m_strIndent;
+                // for the last one we close the attribut list
+                else if ( i == (cursor->count()-1) )
+                    *m_strDataBuffer <<  ">" << endl;
+        }
+        *m_strDataBuffer << "]>" << endl << endl;
+        *m_strDataBuffer << "<KugarData Template=\"";
+        *m_strDataBuffer << strTemplateFile;
+        *m_strDataBuffer << "\">" << endl << m_strIndent;
+    }
 
 	// load data buffer from the recordset
 	while (cursor->next() ) {
@@ -332,40 +410,41 @@ bool MDatabaseReportEngine::setBufferFromDatabase( const QString& strTemplateFil
 				// set the old value as current value
 				m_mapOldValue[i].setOldValue( cursor->value( fieldName ) );
 				addDataRow( i, detail, cursor);
-			} else if ( i == ( m_mapOldValue.count() - 1 ) ) {	
+			} else if ( i == ( m_mapOldValue.count() - 1 ) ) {
 				// we create the row with the last level number if we have the same data value
 				addDataRow( i, detail, cursor);
 			}
 		}
 	}
-	m_strDataBuffer << "</KugarData>" << endl;
+    if (!merge)
+        *m_strDataBuffer << "</KugarData>" << endl;
 	delete cursor;
 	return true;
 }
 /** add data row in the string data buffer with XML format */
 void MDatabaseReportEngine::addDataRow( int level, QStringList* detail, CSqlCursor* cursor)
 {
-	m_strDataBuffer << "<Row level=\"" 
-				<< QString::number( level ) // for info level == m_mapOldValue[i].level()  
-				<< "\" "; 
+	*m_strDataBuffer << "<Row level=\""
+				<< QString::number( level ) // for info level == m_mapOldValue[i].level()
+				<< "\" ";
 	for ( QStringList::Iterator it = detail->begin(); it != detail->end(); ++it ) {
-		m_strDataBuffer << cursor->getXMLValue( *it );
+		*m_strDataBuffer << cursor->getXMLValue( *it );
 	}
-	m_strDataBuffer << "/>" << endl	<< m_strIndent;
+	*m_strDataBuffer << "/>" << endl	<< m_strIndent;
 
 }
 /** set header data file */
 void MDatabaseReportEngine::setHeaderDataFile()
 {
-    m_strDataBuffer << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl << endl;
-    m_strDataBuffer << "<!DOCTYPE KugarData [" << endl << m_strIndent;
-    m_strDataBuffer << "<!ELEMENT KugarData (Row* )>" << endl << m_strIndent;
-    m_strDataBuffer << "<!ATTLIST KugarData" << endl << m_strIndent << m_strIndent;
-	m_strDataBuffer << "Template CDATA #REQUIRED>" << endl << endl << m_strIndent;
+    *m_strDataBuffer << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl << endl;
+    *m_strDataBuffer << "<!DOCTYPE KugarData [" << endl << m_strIndent;
+    *m_strDataBuffer << "<!ELEMENT KugarData (Row* )>" << endl << m_strIndent;
+    *m_strDataBuffer << "<!ATTLIST KugarData" << endl << m_strIndent << m_strIndent;
+	*m_strDataBuffer << "Template CDATA #REQUIRED>" << endl << endl << m_strIndent;
 
-	m_strDataBuffer << "<!ELEMENT Row EMPTY>" << endl << m_strIndent;
-    m_strDataBuffer << "<!ATTLIST Row" << endl << m_strIndent << m_strIndent;
-    m_strDataBuffer << "level CDATA #REQUIRED" << endl << m_strIndent << m_strIndent;
+	*m_strDataBuffer << "<!ELEMENT Row EMPTY>" << endl << m_strIndent;
+    *m_strDataBuffer << "<!ATTLIST Row" << endl << m_strIndent << m_strIndent;
+    *m_strDataBuffer << "level CDATA #REQUIRED" << endl << m_strIndent << m_strIndent;
 }
 /** pop up a dialog to ask the user for create a database connection */
 void MDatabaseReportEngine::initDatabaseDlg()
@@ -393,3 +472,7 @@ void MDatabaseReportEngine::setSQLQuery()
 	qDebug("The SQL Query executed : %s", m_strSql.latin1());
 #endif
 }
+
+#ifndef PURE_QT
+#include "mdatabasereportengine.moc"
+#endif

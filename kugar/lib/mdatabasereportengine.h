@@ -56,7 +56,7 @@ public:
     void setLevel( int nLevel ) { m_nLevel = nLevel; }
 
 private:
-    QString m_strFieldName;	// the field name recordset 
+    QString m_strFieldName;	// the field name recordset
     QVariant m_OldValue;	// the old value of the field name
     int m_nLevel;		// level number from kugar
 };
@@ -80,6 +80,7 @@ public:
 	bool setReportTemplate( QIODevice* );
 	void initDatabase();
 	bool createReportDataFile( QIODevice* dev, const QString& templateFile );
+	QString mergeReportDataFile( QIODevice* dev );
 
 private:
 	/** Report data document */
@@ -97,7 +98,7 @@ private:
 	QString m_strPort;
 
 	QString m_strIndent;
-	QTextStream m_strDataBuffer;
+	QTextStream *m_strDataBuffer;
 	typedef QMap<int, CLinkFieldLevel> OldValueMap;
 	OldValueMap m_mapOldValue;
 
@@ -111,7 +112,7 @@ private:
 	void setGroupByAttributes(QDomNode* report);
 	void setSqlOrderByAttributes(QDomNode* report);
 	void setDetailAttributes(QDomNode* report);
-	bool setBufferFromDatabase( const QString& strTemplateFile = "" );
+	bool setBufferFromDatabase( const QString& strTemplateFile = "", bool merge = false );
 	void addDataRow( int level, QStringList* detail, CSqlCursor* cursor);
 	void setHeaderDataFile();
 	void setSQLQuery();
