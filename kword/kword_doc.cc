@@ -184,7 +184,7 @@ bool KWordDocument::initDoc()
         url.setPath( _template);
 	ok = openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
-	QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
+	QString fileName( locate( "kword_template", "Wordprocessing/.source/PlainText.kwt" , KWordFactory::global() ) );
 	resetURL();
 	ok = loadNativeFormat( fileName );
     }
@@ -212,7 +212,7 @@ void KWordDocument::initEmpty()
     pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
 
-    QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
+    QString fileName( locate( "kword_template", "Wordprocessing/.source/PlainText.kwt" , KWordFactory::global() ) );
     /*bool ok = */loadNativeFormat( fileName );
     resetURL();
     setModified( FALSE );
