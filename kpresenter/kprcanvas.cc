@@ -4493,16 +4493,10 @@ void KPrCanvas::picViewOrigHelper(int x, int y)
   KoSize origSize;
   KoSize currentSize;
 
+  obj=m_activePage->picViewOrigHelper();
+  if( !obj)
+      obj=m_view->kPresenterDoc()->stickyPage()->picViewOrigHelper();
 
-  QPtrListIterator<KPObject> it( getObjectList() );
-  for ( ; it.current() ; ++it )
-  {
-      if ( it.current()->isSelected()&& it.current()->getType()==OT_PICTURE )
-      {
-          obj=(KPPixmapObject*)it.current();
-          break;
-      }
-  }
 
   if ( obj && !getPixmapOrigAndCurrentSize( obj, &origSize, &currentSize ) )
       return;

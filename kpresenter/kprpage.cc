@@ -3518,3 +3518,18 @@ KPObject* KPrPage::getObjectAt( const KoPoint&pos )
 
   return obj;
 }
+
+KPPixmapObject * KPrPage::picViewOrigHelper( )
+{
+  KPPixmapObject *obj=0L;
+  QPtrListIterator<KPObject> it( m_objectList );
+  for ( ; it.current() ; ++it )
+  {
+      if ( it.current()->isSelected()&& it.current()->getType()==OT_PICTURE )
+      {
+          obj=(KPPixmapObject*)it.current();
+          break;
+      }
+  }
+  return obj;
+}

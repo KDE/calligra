@@ -39,7 +39,7 @@ class KoPointArray;
 class DCOPObject;
 class KPTextObject;
 class KoTextObject;
-
+class KPPixmapObject;
 class KPrPage
 {
 public:
@@ -242,6 +242,7 @@ public:
     KPObject * getObjectResized(const KoPoint &pos, ModifyType modType, bool &desel, bool &_over, bool &_resize );
     KPObject * getEditObj(const KoPoint & pos);
     KPObject* getObjectAt( const KoPoint&pos );
+    KPPixmapObject * picViewOrigHelper();
 
 protected:
 
