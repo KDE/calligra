@@ -1534,6 +1534,20 @@ void KWTableFrameSet::finalize( ) {
     KWFrameSet::finalize();
 }
 
+bool KWTableFrameSet::canRemovePage( int num ) {
+    /*  This one is a lot simpler then the one it overrides, we simply don't have 
+        to check if the frame contains something, the simple existence of a frame
+        is enough
+    */
+    QListIterator<KWFrame> frameIt( frameIterator() );
+    for ( ; frameIt.current(); ++frameIt ) {
+        if ( frameIt.current()->pageNum() == num ) {
+            return false;
+        }
+    }
+    return true;
+}
+
 #ifndef NDEBUG
 void KWTableFrameSet::printDebug( KWFrame * frame )
 {

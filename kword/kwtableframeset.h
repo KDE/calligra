@@ -221,6 +221,8 @@ public:
     /** Store command for deleting an anchored object */
     virtual KCommand * anchoredObjectDeleteCommand( int frameNum );
 
+    virtual bool canRemovePage( int num );
+
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );
     virtual void printDebug();
