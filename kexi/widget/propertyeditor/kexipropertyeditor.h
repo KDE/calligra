@@ -194,6 +194,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		bool setBufferLater_set : 1;
 		bool preservePrevSelection_preservePrevSelection : 1;
 		bool doNotSetFocusOnSelection : 1;
+		//! Used in setFocus() to prevent scrolling to previously selected item on mouse click
+		bool justClickedItem : 1;
 		//! Helper for setBuffer()
 		KexiPropertyBuffer* setBufferLater_buffer;
 

@@ -46,6 +46,7 @@
 KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const char *name)
  : KListView(parent, name)
  , m_items(101, false)
+ , justClickedItem(false)
 {
 	m_items.setAutoDelete(false);
 
@@ -107,6 +108,8 @@ KexiPropertyEditor::slotClicked(QListViewItem *item)
 //		QRect g(columnWidth(0), y, columnWidth(1), item->height());
 	KexiPropertyEditorItem *i = static_cast<KexiPropertyEditorItem *>(item);
 	createEditor(i);//, g);
+
+	justClickedItem = true;
 }
 
 void
@@ -572,7 +575,9 @@ KexiPropertyEditor::setFocus()
 {
 	KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem *>(selectedItem());
 	if (item) {
-		ensureItemVisible(item);
+		if (!justClickedItem)
+			ensureItemVisible(item);
+		justClickedItem = false;
 	}
 	else {
 		//select an item before focusing
