@@ -83,7 +83,7 @@ public:
     void setFollowingStyle( KoStyle *fst ) { m_followingStyle = fst; }
 
     void save( QDomElement parentElem, KoZoomHandler* zh );
-    static void saveStyle( const KoParagLayout& layout,KoStyle *sty, QDomElement & parentElem );
+    void saveStyle( QDomElement & parentElem );
     static KoParagLayout loadStyle( QDomElement & parentElem, int docVersion=2 );
 
     static int getAttribute(QDomElement &element, const char *attributeName, int defaultValue)

@@ -107,103 +107,100 @@ QString KoStyle::translatedName() const
     return i18n( "Style name", name().utf8() );
 }
 
-void KoStyle::saveStyle( const KoParagLayout& layout,KoStyle *sty, QDomElement & parentElem )
+void KoStyle::saveStyle( QDomElement & parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement element = doc.createElement( "NAME" );
     parentElem.appendChild( element );
-    if ( layout.style )
-        element.setAttribute( "value", layout.style->name() );
-    else
-        kdWarning() << "KoStyle::saveParagLayout: style==0L!" << endl;
+    element.setAttribute( "value", name() );
 
     element = doc.createElement( "FLOW" );
     parentElem.appendChild( element );
-    int a = layout.alignment;
+    int a = m_paragLayout.alignment;
     element.setAttribute( "align", a==Qt::AlignRight ? "right" : a==Qt::AlignCenter ? "center" : a==Qt::AlignJustify ? "justify" : "left" );
 
-    if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
-         layout.margins[QStyleSheetItem::MarginLeft] != 0 ||
-         layout.margins[QStyleSheetItem::MarginRight] != 0 )
+    if ( m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
+         m_paragLayout.margins[QStyleSheetItem::MarginLeft] != 0 ||
+         m_paragLayout.margins[QStyleSheetItem::MarginRight] != 0 )
     {
         element = doc.createElement( "INDENTS" );
         parentElem.appendChild( element );
-        if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 )
-            element.setAttribute( "first", layout.margins[QStyleSheetItem::MarginFirstLine] );
-        if ( layout.margins[QStyleSheetItem::MarginLeft] != 0 )
-            element.setAttribute( "left", layout.margins[QStyleSheetItem::MarginLeft] );
-        if ( layout.margins[QStyleSheetItem::MarginRight] != 0 )
-            element.setAttribute( "right", layout.margins[QStyleSheetItem::MarginRight] );
+        if ( m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != 0 )
+            element.setAttribute( "first", m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] );
+        if ( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != 0 )
+            element.setAttribute( "left", m_paragLayout.margins[QStyleSheetItem::MarginLeft] );
+        if ( m_paragLayout.margins[QStyleSheetItem::MarginRight] != 0 )
+            element.setAttribute( "right", m_paragLayout.margins[QStyleSheetItem::MarginRight] );
     }
 
-    if ( layout.margins[QStyleSheetItem::MarginTop] != 0 ||
-         layout.margins[QStyleSheetItem::MarginBottom] != 0 )
+    if ( m_paragLayout.margins[QStyleSheetItem::MarginTop] != 0 ||
+         m_paragLayout.margins[QStyleSheetItem::MarginBottom] != 0 )
     {
         element = doc.createElement( "OFFSETS" );
         parentElem.appendChild( element );
-        if ( layout.margins[QStyleSheetItem::MarginTop] != 0 )
-            element.setAttribute( "before", layout.margins[QStyleSheetItem::MarginTop] );
-        if ( layout.margins[QStyleSheetItem::MarginBottom] != 0 )
-            element.setAttribute( "after", layout.margins[QStyleSheetItem::MarginBottom] );
+        if ( m_paragLayout.margins[QStyleSheetItem::MarginTop] != 0 )
+            element.setAttribute( "before", m_paragLayout.margins[QStyleSheetItem::MarginTop] );
+        if ( m_paragLayout.margins[QStyleSheetItem::MarginBottom] != 0 )
+            element.setAttribute( "after", m_paragLayout.margins[QStyleSheetItem::MarginBottom] );
     }
 
-    if ( layout.lineSpacing != 0 )
+    if ( m_paragLayout.lineSpacing != 0 )
     {
         element = doc.createElement( "LINESPACING" );
         parentElem.appendChild( element );
-        if ( layout.lineSpacing == KoParagLayout::LS_ONEANDHALF )
+        if ( m_paragLayout.lineSpacing == KoParagLayout::LS_ONEANDHALF )
             element.setAttribute( "value", "oneandhalf" );
-        else if ( layout.lineSpacing == KoParagLayout::LS_DOUBLE )
+        else if ( m_paragLayout.lineSpacing == KoParagLayout::LS_DOUBLE )
             element.setAttribute( "value", "double" );
         else
-            element.setAttribute( "value", layout.lineSpacing );
+            element.setAttribute( "value", m_paragLayout.lineSpacing );
     }
 
-    if ( layout.pageBreaking != 0 )
+    if ( m_paragLayout.pageBreaking != 0 )
     {
         element = doc.createElement( "PAGEBREAKING" );
         parentElem.appendChild( element );
-        if ( layout.pageBreaking & KoParagLayout::KeepLinesTogether )
+        if ( m_paragLayout.pageBreaking & KoParagLayout::KeepLinesTogether )
             element.setAttribute( "linesTogether",  "true" );
-        if ( layout.pageBreaking & KoParagLayout::HardFrameBreakBefore )
+        if ( m_paragLayout.pageBreaking & KoParagLayout::HardFrameBreakBefore )
             element.setAttribute( "hardFrameBreak", "true" );
-        if ( layout.pageBreaking & KoParagLayout::HardFrameBreakAfter )
+        if ( m_paragLayout.pageBreaking & KoParagLayout::HardFrameBreakAfter )
             element.setAttribute( "hardFrameBreakAfter", "true" );
     }
 
-    if ( layout.leftBorder.ptWidth > 0 )
+    if ( m_paragLayout.leftBorder.ptWidth > 0 )
     {
         element = doc.createElement( "LEFTBORDER" );
         parentElem.appendChild( element );
-        layout.leftBorder.save( element );
+        m_paragLayout.leftBorder.save( element );
     }
-    if ( layout.rightBorder.ptWidth > 0 )
+    if ( m_paragLayout.rightBorder.ptWidth > 0 )
     {
         element = doc.createElement( "RIGHTBORDER" );
         parentElem.appendChild( element );
-        layout.rightBorder.save( element );
+        m_paragLayout.rightBorder.save( element );
     }
-    if ( layout.topBorder.ptWidth > 0 )
+    if ( m_paragLayout.topBorder.ptWidth > 0 )
     {
         element = doc.createElement( "TOPBORDER" );
         parentElem.appendChild( element );
-        layout.topBorder.save( element );
+        m_paragLayout.topBorder.save( element );
     }
-    if ( layout.bottomBorder.ptWidth > 0 )
+    if ( m_paragLayout.bottomBorder.ptWidth > 0 )
     {
         element = doc.createElement( "BOTTOMBORDER" );
         parentElem.appendChild( element );
-        layout.bottomBorder.save( element );
+        m_paragLayout.bottomBorder.save( element );
     }
-    if ( layout.counter && layout.counter->numbering() != KoParagCounter::NUM_NONE )
+    if ( m_paragLayout.counter && m_paragLayout.counter->numbering() != KoParagCounter::NUM_NONE )
     {
         element = doc.createElement( "COUNTER" );
         parentElem.appendChild( element );
-        if ( layout.counter )
-            layout.counter->save( element );
+        if ( m_paragLayout.counter )
+            m_paragLayout.counter->save( element );
     }
 
-    KoTabulatorList tabList = layout.tabList();
+    KoTabulatorList tabList = m_paragLayout.tabList();
     KoTabulatorList::Iterator it = tabList.begin();
     for ( ; it != tabList.end() ; it++ )
     {
@@ -214,25 +211,25 @@ void KoStyle::saveStyle( const KoParagLayout& layout,KoStyle *sty, QDomElement &
         element.setAttribute( "filling", (*it).filling );
         element.setAttribute( "width", (*it).ptWidth );
     }
-    if(layout.shadowDistance!=0 || layout.shadowDirection!=KoParagLayout::SD_RIGHT_BOTTOM)
+    if(m_paragLayout.shadowDistance!=0 || m_paragLayout.shadowDirection!=KoParagLayout::SD_RIGHT_BOTTOM)
     {
         element = doc.createElement( "SHADOW" );
         parentElem.appendChild( element );
-        element.setAttribute( "distance", layout.shadowDistance );
-        element.setAttribute( "direction", layout.shadowDirection );
-        if (layout.shadowColor.isValid())
+        element.setAttribute( "distance", m_paragLayout.shadowDistance );
+        element.setAttribute( "direction", m_paragLayout.shadowDirection );
+        if (m_paragLayout.shadowColor.isValid())
         {
-            element.setAttribute("red", layout.shadowColor.red());
-            element.setAttribute("green", layout.shadowColor.green());
-            element.setAttribute("blue", layout.shadowColor.blue());
+            element.setAttribute("red", m_paragLayout.shadowColor.red());
+            element.setAttribute("green", m_paragLayout.shadowColor.green());
+            element.setAttribute("blue", m_paragLayout.shadowColor.blue());
         }
     }
 
-    if ( sty->followingStyle() )
+    if ( followingStyle() )
     {
         QDomElement element = doc.createElement( "FOLLOWING" );
         parentElem.appendChild( element );
-        element.setAttribute( "name", sty->followingStyle()->name() );
+        element.setAttribute( "name", followingStyle()->name() );
     }
 
 }
