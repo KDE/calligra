@@ -24,6 +24,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qiodevice.h>
+#include <qvaluestack.h>
 
 class QBuffer;
 class KTar;
@@ -161,6 +162,18 @@ public:
    */
   QString currentPath() const;
 
+  /**
+   * Stacks the current directory. Restore the current path using
+   * @ref popDirectory .
+   */
+  void pushDirectory();
+
+  /**
+   * Restores the previously pushed directory. No-op if the stack is
+   * empty.
+   */
+  void popDirectory();
+
   // See QIODevice
   bool at( QIODevice::Offset pos );
   QIODevice::Offset at() const;
@@ -184,8 +197,14 @@ private:
    * see specification (koffice/lib/store/SPEC) for details.
    */
   QString toExternalNaming( const QString & _internalNaming );
+
+  // Expands a full path name for a stream (directories+filename)
   QString expandEncodedPath( QString intern );
+
+  // Expans only directory names(!)
+  // Needed for the path handling code, as we only operate on internal names
   QString expandEncodedDirectory( QString intern );
+
   enum
   {
       NAMING_VERSION_2_1,
@@ -194,6 +213,8 @@ private:
 
   void init( Mode _mode );
 
+  // Enter *one* single directory. Nothing like foo/bar/bleh allowed.
+  // Performs some checking when in Read mode
   bool enterDirectoryInternal( const QString& directory );
 
   Mode m_mode;
@@ -203,9 +224,14 @@ private:
 
   // The "current directory" (path)
   QStringList m_currentPath;
+
   // In "Read" mode this pointer is pointing to the
   // current directory in the archive to speed up the verification process
   const KArchiveDirectory* m_currentDir;
+
+  // Used to push/pop directories to make it easy to save/restore
+  // the state
+  QValueStack<QString> m_directoryStack;
 
   // Current filename (between an open() and a close())
   QString m_sName;

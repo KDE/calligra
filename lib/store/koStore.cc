@@ -400,6 +400,18 @@ QString KoStore::currentPath() const
   return path;
 }
 
+void KoStore::pushDirectory()
+{
+  m_directoryStack.push( currentPath() );
+}
+
+void KoStore::popDirectory()
+{
+  m_currentPath.clear();
+  m_currentDir = 0;
+  enterDirectory( m_directoryStack.pop() );
+}
+
 bool KoStore::at( QIODevice::Offset pos )
 {
   return m_stream->at( pos );
@@ -434,11 +446,10 @@ QString KoStore::expandEncodedPath( QString intern )
 {
   QString result;
   int pos;
-  while ( ( pos = intern.find( '/' ) ) != -1 ) {
-    if ( QChar(intern.at(0)).isDigit() )
-      result += "part";
-    result += intern.left( pos + 1 ); // copy numbers (or "pictures") + "/"
-    intern = intern.mid( pos + 1 ); // remove the dir we just processed
+
+  if ( ( pos = intern.findRev( '/', -1 ) ) != -1 ) {
+    result = expandEncodedDirectory( intern.left( pos ) ) + '/';
+    intern = intern.mid( pos + 1 );
   }
 
   // Now process the filename. If the first character is numeric, we have
