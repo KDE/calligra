@@ -322,7 +322,7 @@ void KWordShell::releaseDocument()
   if ( m_pView )
     cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
-  setRootPart((OpenParts::Id)0);
+  setRootPart((long unsigned int)(OpenParts::Id)0);
 
   if ( m_pView )
     cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
