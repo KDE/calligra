@@ -277,7 +277,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_firstLetterUpper = new KAction( i18n("Convert first letter to upper case"),"first_letter_upper" ,0, this, SLOT( firstLetterUpper() ), actionCollection(), "firstletterupper" );
     m_verticalText = new KToggleAction( i18n("Vertical text"),"vertical_text" ,0 ,actionCollection(), "verticaltext" );
     connect( m_verticalText, SIGNAL( toggled( bool ) ), this, SLOT( verticalText( bool ) ) );
-    m_changeAngle = new KAction( i18n("Change Angle..."), 0, this, SLOT( changeAngle() ), actionCollection(), "changeangle" );
+    m_changeAngle = new KAction( i18n("Change Angle ..."), 0, this, SLOT( changeAngle() ), actionCollection(), "changeangle" );
     m_addModifyComment = new KAction( i18n("&amp;Add/modify comment..."),"comment", 0, this, SLOT( addModifyComment() ), actionCollection(), "addmodifycomment" );
     //m_showComment = new KAction( i18n("Show comment"), 0, this, SLOT( showComment() ), actionCollection(), "showcomment" );
     m_removeComment = new KAction( i18n("&amp;Remove comment"),"removecomment", 0, this, SLOT( removeComment() ), actionCollection(), "removecomment" );

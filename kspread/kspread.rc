@@ -24,6 +24,7 @@
   <Action name="strikeout"/>
   <Action name="selectFont"/>
   <Action name="selectFontSize"/>
+  <Action name="changeangle"/>
   <Separator/>
   <Action name="percent"/>
   <Action name="precplus"/>
@@ -76,11 +77,8 @@
   <Action name="removeTable"/>
   <Action name="hideTable"/>
   <Action name="showTable"/>
-  <Action name="changeangle"/>
   <Separator/>
   <Action name="showArea"/>
-  <Separator/>
-  <Action name="preference"/>
  </Menu>
  <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>
@@ -104,6 +102,9 @@
   <Action name="editGlobalScripts"/>
   <Action name="editLocalScripts"/>
   <Action name="reloadScripts"/>
+ </Menu>
+ <Menu name="Settings"><text>&amp;Settings</text>
+  <Action name="preference"/>
  </Menu>
 </MenuBar>
 <ToolBar name="editAndColumnAndSortAndPartToolBar"><Text>Edit</Text>
