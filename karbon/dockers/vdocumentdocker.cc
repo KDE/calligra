@@ -29,6 +29,7 @@
 #include <qtabwidget.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
+#include <qcursor.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -58,6 +59,8 @@ VDocumentPreview::VDocumentPreview( KarbonView* view, QWidget* parent )
 	update();
 	installEventFilter( this );
 	setBackgroundMode( Qt::NoBackground );
+	setMouseTracking( true );
+	m_dragging = false;
 } // VDocumentPreview::VDocumentPreview
   
 VDocumentPreview::~VDocumentPreview()
@@ -67,33 +70,64 @@ VDocumentPreview::~VDocumentPreview()
 bool
 VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 {
+	double scaleFactor;
+	double xoffset = 0.;
+	double yoffset = 0.;
+	if ( ( height() - 4 ) / m_document->height() > ( width() - 4 ) / m_document->width() )
+	{
+		scaleFactor = ( width() - 4 ) / m_document->width();
+		yoffset = ( ( height() - 4 ) / scaleFactor - m_document->height() ) / 2;
+	}
+	else
+	{
+		scaleFactor = ( height() - 4 ) / m_document->height();
+		xoffset = ( ( width() - 4 ) / scaleFactor - m_document->width() ) / 2;
+	}
+	KoPoint p1( 0, 0 );
+	p1 = m_view->canvasWidget()->toContents( p1 );
+	KoPoint p2( m_view->canvasWidget()->width(), m_view->canvasWidget()->height() );
+	p2 = m_view->canvasWidget()->toContents( p2 );
+	KoRect rect( p1, p2 );
+	rect = rect.normalize();
+
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
 	if( event->type() == QEvent::MouseButtonPress )
 	{
 		m_firstPoint.setX( mouseEvent->pos().x() );
 		m_firstPoint.setY( mouseEvent->pos().y() );
 		m_lastPoint = m_firstPoint;
+		KoPoint p3( m_firstPoint.x() / scaleFactor - xoffset,
+					( height() - m_firstPoint.y() ) / scaleFactor - yoffset );
+		m_dragging = rect.contains( p3 );
 	}
 	else if( event->type() == QEvent::MouseButtonRelease )
 	{
-		m_lastPoint.setX( mouseEvent->pos().x() );
-		m_lastPoint.setY( mouseEvent->pos().y() );
-		double dx = m_lastPoint.x() - m_firstPoint.x();
-		double dy = m_lastPoint.y() - m_firstPoint.y();
-		double scaleFactor;
-		if ( ( height() - 4 ) / m_document->height() > ( width() - 4 ) / m_document->width() )
-			scaleFactor = ( width() - 4 ) / m_document->width();
-		else
-			scaleFactor = ( height() - 4 ) / m_document->height();
-		scaleFactor /= m_view->zoom();
-		m_view->canvasWidget()->scrollBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
-		m_firstPoint = m_lastPoint;
+		if( m_dragging )
+		{
+			m_lastPoint.setX( mouseEvent->pos().x() );
+			m_lastPoint.setY( mouseEvent->pos().y() );
+			double dx = m_lastPoint.x() - m_firstPoint.x();
+			double dy = m_lastPoint.y() - m_firstPoint.y();
+			scaleFactor /= m_view->zoom();
+			m_view->canvasWidget()->scrollBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
+			m_firstPoint = m_lastPoint;
+			m_dragging = false;
+		}
 	}
 	else if( event->type() == QEvent::MouseMove )
 	{
-		m_lastPoint.setX( mouseEvent->pos().x() );
-		m_lastPoint.setY( mouseEvent->pos().y() );
-		update();
+		if( m_dragging )
+		{
+			m_lastPoint.setX( mouseEvent->pos().x() );
+			m_lastPoint.setY( mouseEvent->pos().y() );
+			update();
+		}
+		else
+		{
+			KoPoint p3( mouseEvent->pos().x() / scaleFactor - xoffset,
+						( height() - mouseEvent->pos().y() ) / scaleFactor - yoffset );
+			setCursor( rect.contains( p3 ) ? QCursor::SizeAllCursor : QCursor( Qt::arrowCursor ) );
+		}
 	}
 
 	QWidget::eventFilter( object, event );

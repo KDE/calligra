@@ -56,6 +56,7 @@ class VDocumentPreview : public QWidget
 		KarbonView* m_view;
 		KoPoint m_firstPoint;
 		KoPoint m_lastPoint;
+		bool m_dragging;
 }; // VDocumentPreview
 
 class VDocumentTab : public QWidget
