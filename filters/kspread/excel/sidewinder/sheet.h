@@ -97,10 +97,10 @@ public:
   
   unsigned index() const;
   
-  // width of column, in mm
+  // width of column, in pt
   double width() const;
   
-  // set the width of column, in mm
+  // set the width of column, in pt
   void setWidth( double w );
   
   const Format& format() const;
@@ -132,10 +132,10 @@ public:
   
   unsigned index() const;
   
-  // height of row, in mm
+  // height of row, in pt
   double height() const;
   
-  // set the height of row, in mm
+  // set the height of row, in pt
   void setHeight( double w );
   
   const Format& format() const;
