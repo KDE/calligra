@@ -43,12 +43,16 @@ public:
 
     bool keepRatio() const;
 
+    static bool selectClipartDia( QString &filename);
+
+    static bool selectPictureDia( QString &filename);
+
 protected slots:
     void slotChooseImage();
     void slotChooseClipart();
 
 protected:
-    QString selectPicture( KFileDialog & fd );
+    static QString selectPicture( KFileDialog & fd );
 
 private:
     int m_type;

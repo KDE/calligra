@@ -95,9 +95,6 @@
 #include <kparts/event.h>
 #include <kformuladocument.h>
 
-#include <kimageio.h>
-#include <kio/netaccess.h>
-
 #include <stdlib.h>
 
 #include "preview.h"
@@ -3478,10 +3475,8 @@ void KWView::canvasAddChild( KoViewChild *child )
 
 void KWView::changePicture()
 {
-    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
-    fd.setCaption(i18n("Change Picture"));
-    QString file = selectPicture( fd );
-    if ( !file.isEmpty() )
+    QString file;
+    if ( KWInsertPicDia::selectPictureDia(file ) )
     {
         KWFrame * frame = m_doc->getFirstSelectedFrame();
         KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->getFrameSet());
@@ -3496,10 +3491,8 @@ void KWView::changePicture()
 
 void KWView::changeClipart()
 {
-    KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
-    fd.setCaption(i18n("Change Clipart"));
-    QString file = selectPicture( fd );
-    if ( !file.isEmpty() )
+    QString file;
+    if ( KWInsertPicDia::selectClipartDia(file ) )
     {
         KWFrame * frame = m_doc->getFirstSelectedFrame();
 
@@ -3511,21 +3504,6 @@ void KWView::changeClipart()
         m_doc->frameChanged( frame );
         m_doc->addCommand(cmd);
     }
-}
-
-QString KWView::selectPicture( KFileDialog & fd )
-{
-    KURL url;
-    if ( fd.exec() == QDialog::Accepted )
-        url = fd.selectedURL();
-
-    if( url.isEmpty() )
-      return QString::null;
-
-    QString chosen = QString::null;
-    if (!KIO::NetAccess::download( url, chosen ))
-        return QString::null;
-    return chosen;
 }
 
 /******************************************************************/

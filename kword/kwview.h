@@ -58,7 +58,6 @@ class KoPartSelectAction;
 class KCharSelectDia;
 class KWTextFrameset;
 class KMacroCommand;
-class KFileDialog;
 
 namespace Qt3 {
 class QTextFormat;
@@ -311,7 +310,6 @@ protected:
     void tableSplitCells(int col, int row);
 
     void startKSpell();
-    QString selectPicture( KFileDialog & fd );
 
 private:
     KWDocument *m_doc;
