@@ -45,3 +45,18 @@ void StyleDataMap::defineNewStyle(const QString& strName, const int level,
     styleData.m_props+=strProps;
     styleData.m_props+=";"; // Security if other properties are appended later
 }
+
+StyleDataMap::Iterator StyleDataMap::useOrCreateStyle(const QString& strName)
+{
+    // We are using a style but we ar enot sure if it is defined
+    StyleDataMap::Iterator it=find(strName);
+    if (it==end())
+    {
+        // The style is not yet defined!
+        StyleData data;
+        data.m_level=-1;
+        data.m_props=QString::null;
+        it=insert(strName,data);
+    }
+    return it;
+}

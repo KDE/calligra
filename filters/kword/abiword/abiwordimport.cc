@@ -90,7 +90,7 @@ bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttr
     {
 
         AbiPropsMap abiPropsMap;
-        PopulateProperties(stackItem,attributes,abiPropsMap,true);
+        PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
 
         stackItem->elementType=ElementTypeContent;
         stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
@@ -139,9 +139,20 @@ bool EndElementC (StackItem* stackItem, StackItem* stackCurrent)
 
 // Element <p>
 
-bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& mainDocument,
- QDomElement& mainFramesetElement, const QXmlAttributes& attributes)
+bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
+    QDomDocument& mainDocument, QDomElement& mainFramesetElement,
+    StyleDataMap& styleDataMap, const QXmlAttributes& attributes)
 {
+    // We must prepare the style
+    QString strStyle=attributes.value("style");
+
+    if (strStyle.isEmpty())
+    {
+        strStyle="Normal";
+    }
+
+    StyleDataMap::ConstIterator it=styleDataMap.useOrCreateStyle(strStyle);
+
     QDomElement elementText=stackCurrent->stackElementText;
     //We use mainFramesetElement here not to be dependant that <section> has happened before
     QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
@@ -152,7 +163,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
     paragraphElementOut.appendChild(formatsPluralElementOut);
 
     AbiPropsMap abiPropsMap;
-    PopulateProperties(stackItem,attributes,abiPropsMap,false);
+    PopulateProperties(stackItem,it.data().m_props,attributes,abiPropsMap,false);
 
     stackItem->elementType=ElementTypeParagraph;
     stackItem->stackElementParagraph=paragraphElementOut; // <PARAGRAPH>
@@ -318,7 +329,7 @@ bool StartElementField(StackItem* stackItem, StackItem* stackCurrent, const QXml
         QString strType=attributes.value("type").stripWhiteSpace();
         kdDebug()<<"field type ****************************:"<<strType<<endl;
         AbiPropsMap abiPropsMap;
-        PopulateProperties(stackItem,attributes,abiPropsMap,true);
+        PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
 
         stackItem->elementType=ElementTypeField;
         stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
@@ -637,7 +648,8 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     }
     else if ((name=="p")||(name=="P"))
     {
-        success=StartElementP(stackItem,structureStack.current(),mainDocument,mainFramesetElement,attributes);
+        success=StartElementP(stackItem,structureStack.current(),mainDocument,
+            mainFramesetElement,styleDataMap,attributes);
     }
     else if ((name=="section")||(name=="SECTION"))
     {//Not really needed, as it is the default behaviour for now!

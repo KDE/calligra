@@ -22,6 +22,7 @@
 #ifndef _IMPORT_STYLE_H
 #define _IMPORT_STYLE_H
 
+#include <qvaluelist.h>
 #include <qstring.h>
 #include <qmap.h>
 
@@ -40,6 +41,7 @@ public:
     StyleDataMap(void);
 public:
     void defineNewStyle(const QString& strName, const int level, const QString& strProps);
+    StyleDataMap::Iterator useOrCreateStyle(const QString& strName);
 };
 
 #endif // _IMPORT_STYLE_H

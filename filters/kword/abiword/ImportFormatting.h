@@ -78,7 +78,7 @@ public:
         virtual ~StackItemStack(void) { }
 };
 
-void PopulateProperties(StackItem* stackItem,
+void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
     const QXmlAttributes& attributes, AbiPropsMap& abiPropsMap,
     const bool allowInit);
 void AddFormat(QDomElement& formatElementOut, StackItem* stackItem,

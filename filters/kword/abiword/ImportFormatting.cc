@@ -33,7 +33,7 @@ StackItem::~StackItem()
 {
 }
 
-void PopulateProperties(StackItem* stackItem,
+void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
     const QXmlAttributes& attributes, AbiPropsMap& abiPropsMap,
     const bool allowInit)
 // TODO: find a better name for this function
@@ -62,6 +62,8 @@ void PopulateProperties(StackItem* stackItem,
     }
 
     kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
+    // Style goes first
+    abiPropsMap.splitAndAddAbiProps(strStyleProps);
     // Treat the props attributes in the two available flavors: lower case and upper case.
     abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
     abiPropsMap.splitAndAddAbiProps(attributes.value("PROPS")); // PROPS is deprecated
