@@ -757,6 +757,15 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     autoSave->setSpecialValueText(i18n("No autosave"));
     autoSave->setSuffix(i18n(" min"));
 
+    m_oldBackupFile = true;
+    if( config->hasGroup("Interface") )
+    {
+        config->setGroup( "Interface" );
+        m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
+    }
+
+    m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings);
+    m_createBackupFile->setChecked( m_oldBackupFile );
 
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
 
@@ -803,7 +812,15 @@ KCommand *ConfigureDefaultDocPage::apply()
         oldAutoSaveValue=autoSaveVal;
     }
 
-    bool state = m_cursorInProtectedArea->isChecked();
+    bool state =m_createBackupFile->isChecked();
+    if(state!=m_oldBackupFile)
+    {
+        config->writeEntry( "BackupFile", state );
+        doc->setBackupFile( state);
+        m_oldBackupFile=state;
+    }
+
+    state = m_cursorInProtectedArea->isChecked();
     if ( state != doc->cursorInProtectedArea() )
     {
         config->writeEntry( "cursorInProtectArea", state );
@@ -844,6 +861,7 @@ void ConfigureDefaultDocPage::slotDefault()
    m_variableNumberOffset->setValue(1);
    m_cursorInProtectedArea->setChecked(true);
    m_tabStopWidth->setValue(KoUnit::ptToUnit( MM_TO_POINT(15), m_pView->kWordDocument()->getUnit()));
+   m_createBackupFile->setChecked( true );
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {

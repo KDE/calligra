@@ -118,9 +118,11 @@ private:
     double m_oldTabStopWidth;
 
     int m_oldStartingPage;
+    bool m_oldBackupFile;
     KIntNumInput* m_variableNumberOffset;
     KDoubleNumInput *m_tabStopWidth;
     QCheckBox *m_cursorInProtectedArea;
+    QCheckBox *m_createBackupFile;
 };
 
 class ConfigurePathPage : public QObject
