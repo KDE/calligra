@@ -1137,3 +1137,9 @@ I used ghostview.
 -Now you can change default grid color
 -Undo works when you change type of cell (combobox, button, normal)
 -Add "Selection List"
+
+
+2001-01-02-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now you can "don't print a text"
+used "cell layout" dialogbox -> misc -> "don't print text"

@@ -141,6 +141,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
     setMultiRow( o->multiRow( _column, _row ) );
     setVerticalText( o->verticalText( _column, _row ) );
     setStyle( o->style());
+    setDontPrintText(o->getDontprintText(_column, _row ) );
 
     KSpreadConditional *tmpCondition;
     if( o->getFirstCondition(0) )
@@ -2627,7 +2628,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     /**
      * QML ?
      */
-    if ( m_pQML )
+    if ( m_pQML && (!_painter.device()->isExtDev()||(_painter.device()->isExtDev() && !getDontprintText(_col,_row)) ))
     {
         _painter.save();
         m_pQML->draw( &_painter, _tx, _ty, QRegion( QRect( _tx, _ty, w, h ) ), defaultColorGroup, 0 );
@@ -2636,7 +2637,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     /**
      * Visual Formula ?
      */
-    else if ( m_pVisualFormula )
+    else if ( m_pVisualFormula && (!_painter.device()->isExtDev()||(_painter.device()->isExtDev() && !getDontprintText(_col,_row)) ))
     {
         _painter.save();
         _painter.setPen( textPen(_col,_row)/*.color()??*/ );
@@ -2651,7 +2652,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     /**
      * Usual Text
      */
-    else if ( !m_strOutText.isEmpty() )
+    else if ( !m_strOutText.isEmpty() && (!_painter.device()->isExtDev()||(_painter.device()->isExtDev() && !getDontprintText(_col,_row)) ))
     {
         QPen tmpPen(textPen(_col,_row));
         if ( selected && ( _col != m.left() || _row != m.top() )  )
@@ -4250,6 +4251,9 @@ QDomElement KSpreadCell::saveParameters( QDomDocument& doc ) const
         format.setAttribute( "angle", getAngle(m_iColumn,m_iRow ) );
     if ( getIndent(m_iColumn,m_iRow )!=0 )
         format.setAttribute( "indent", getIndent(m_iColumn,m_iRow ) );
+    if( getDontprintText(m_iColumn,m_iRow)  )
+	format.setAttribute( "dontprinttext", "yes" );
+  
     format.appendChild( createElement( "font", textFont( m_iColumn,m_iRow ), doc ) );
     if ( textPen( m_iColumn,m_iRow).color().isValid())
         format.appendChild( createElement( "pen", textPen( m_iColumn,m_iRow), doc ) );

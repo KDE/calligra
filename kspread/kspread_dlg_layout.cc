@@ -160,6 +160,8 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     bUnderline = TRUE;
     bTextRotation = TRUE;
     bFormatNumber = TRUE;
+    bDontprintText = TRUE;
+
     if( left == right )
         oneCol = TRUE;
     else
@@ -271,7 +273,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 
     bMultiRow = obj->multiRow( _left, _top );
     bVerticalText=obj->verticalText( _left, _top );
-
+    bDontprintText=obj->getDontprintText( _left, _top );
     textRotation = obj->getAngle(_left, _top);
     formatNumber = obj->getFormatNumber(_left, _top);
 
@@ -670,6 +672,8 @@ void CellLayoutDlg::initParameters(KSpreadLayout *obj,int x,int y)
                 bMultiRow = FALSE;
         if( bVerticalText!=obj->verticalText( left, top ) )
                 bVerticalText = FALSE;
+	if(  bDontprintText!=obj->getDontprintText( left, top ) )
+	  bDontprintText= FALSE;
 }
 
 void CellLayoutDlg::init()
@@ -1963,6 +1967,15 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
 
     layout->addWidget(box,0,0);
 
+    box = new QGroupBox( this, "Box1");
+    grid = new QGridLayout(box,4,1,7,7);
+    dontPrintText= new QCheckBox(i18n("Don't print text"),box);
+    dontPrintText->setChecked(dlg->bDontprintText);
+
+    grid->addWidget(dontPrintText,0,0);
+    layout->addWidget(box,1,0);
+
+
     this->resize( 400, 400 );
 }
 
@@ -2022,6 +2035,8 @@ void CellLayoutPageMisc::applyLayout( KSpreadCell *_obj )
       _obj->setStyle( KSpreadCell::ST_Select );
     if ( actionText->isEnabled() )
       _obj->setAction( actionText->text() );
+    if( dlg->bDontprintText!=dontPrintText->isChecked())
+      _obj->setDontPrintText(dontPrintText->isChecked());
 }
 
 void CellLayoutPageMisc::slotStyle( int _i )

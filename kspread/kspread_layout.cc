@@ -32,6 +32,7 @@
 #include <kglobalsettings.h>
 #include <kcharsets.h>
 #include <koGlobal.h>
+#include <iostream.h>
 
 using namespace std;
 
@@ -69,6 +70,8 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_rotateAngle=0;
     m_strComment="";
     m_indent=0;
+    m_bDontPrintText=false;
+
     QFont font = KGlobalSettings::generalFont();
     KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
     m_textFont = font;
@@ -101,6 +104,7 @@ void KSpreadLayout::defaultStyleLayout()
   setAngle(0);
   setFormatNumber(Number);
   setComment("");
+  setDontPrintText(false);
 }
 
 void KSpreadLayout::copy( KSpreadLayout &_l )
@@ -131,6 +135,7 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
     m_rotateAngle = _l.m_rotateAngle;
     m_strComment = _l.m_strComment;
     m_indent=_l.m_indent;
+    m_bDontPrintText=_l.m_bDontPrintText;
 }
 
 void KSpreadLayout::clearProperties()
@@ -298,6 +303,8 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc ) const
 	format.setAttribute( "angle", m_rotateAngle );
     if ( hasProperty( PIndent ) )
 	format.setAttribute( "indent", m_indent );
+    if( hasProperty( PDontPrintText )  && m_bDontPrintText)
+	format.setAttribute( "dontprinttext", "yes" );
     if ( hasProperty( PFont ) )
 	format.appendChild( createElement( "font", m_textFont, doc ) );
     if ( hasProperty( PTextPen ) && m_textPen.color().isValid())
@@ -453,6 +460,9 @@ bool KSpreadLayout::loadLayout( const QDomElement& f,PasteMode pm )
 	    if ( !ok )
 		return false;
     }
+    if(f.hasAttribute( "dontprinttext" ) )
+      setDontPrintText(true);
+    
     if ( f.hasAttribute( "brushcolor" ) )
 	setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
 
@@ -1122,6 +1132,23 @@ void KSpreadLayout::setComment( const QString& _comment )
     layoutChanged();
 }
 
+void KSpreadLayout::setDontPrintText( bool _b )
+{
+    if ( _b == false )
+        {
+        clearProperty( PDontPrintText );
+        setNoFallBackProperties(PDontPrintText);
+        }
+    else
+        {
+        setProperty(  PDontPrintText);
+        clearNoFallBackProperties( PDontPrintText);
+        }
+
+    m_bDontPrintText = _b;
+    layoutChanged();
+}
+
 
 /////////////
 //
@@ -1546,6 +1573,19 @@ int KSpreadLayout::getIndent( int col, int row ) const
 
     return m_indent;
 }
+
+bool KSpreadLayout::getDontprintText( int col, int row ) const
+{
+    if ( !hasProperty( PDontPrintText )&& !hasNoFallBackProperties( PDontPrintText ))
+    {
+	const KSpreadLayout* l = fallbackLayout( col, row );
+	if ( l )
+	    return l->getDontprintText( col, row );
+    }
+
+    return m_bDontPrintText;
+}
+
 
 
 /////////////

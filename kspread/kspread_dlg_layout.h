@@ -176,6 +176,8 @@ public:
     void applyRow();
     void applyLayout( KSpreadCell *_obj );
     KSpreadCell::Style getStyle();
+    bool getDontPrintTextValue(){return dontPrintText->isChecked();}
+
 public slots:
     void slotStyle( int );
 protected:
@@ -186,6 +188,7 @@ protected:
     int idStyleSelect;
 
     QLineEdit* actionText;
+    QCheckBox *dontPrintText;
     CellLayoutDlg *dlg;
 };
 
@@ -562,6 +565,7 @@ public:
 
     bool bMultiRow;
     bool bVerticalText;
+    bool bDontprintText;
 
     int heigthSize;
     int widthSize;

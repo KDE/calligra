@@ -76,7 +76,8 @@ public:
                      PFormatNumber = 0x100000,
                      PAngle = 0x200000,
                      PComment = 0x400000,
-                     PIndent = 0x800000};
+                     PIndent = 0x800000,
+		     PDontPrintText = 0x1000000};
 
     KSpreadLayout( KSpreadTable *_table );
     virtual ~KSpreadLayout();
@@ -187,6 +188,7 @@ public:
 
     virtual void setIndent( int _indent );
 
+    virtual void setDontPrintText ( bool _b);
     ////////////////////////////////
     //
     // Methods for querying layout stuff.
@@ -286,6 +288,8 @@ public:
     virtual QString comment(int col, int row) const;
 
     virtual int getIndent(int col, int row) const;
+
+    virtual bool getDontprintText( int col, int row) const;
 
     KSpreadTable* table() { return m_pTable; }
     const KSpreadTable* table() const { return m_pTable; }
@@ -444,6 +448,10 @@ protected:
     * Give indent
     */
     int m_indent;
+    /** 
+     * Don't print text
+     */
+    bool m_bDontPrintText;
 
 private:
     void setProperty( Properties p );
