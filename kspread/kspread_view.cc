@@ -345,7 +345,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QObject::connect( m_pTabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
     QObject::connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ),
       this, SLOT( popupTabBarMenu( const QPoint& ) ) );
-      
+    QObject::connect( m_pTabBar, SIGNAL( doubleClicked() ),
+      this, SLOT( slotRename() ) );
+
     // Paper and Border widgets
     m_pFrame = new QWidget( this );
     m_pFrame->raise();
