@@ -585,12 +585,6 @@ protected:
      * This method animates the objects in the presentation.
      */
     void doObjEffects();
-    
-    /**
-     * Draw object to screen.
-     * This method is used by doObjEffects for animating a object.
-     */
-    void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
     KPPartObject *insertObject( const QRect& );
     void insertAutoform( const QRect&, bool );
@@ -788,11 +782,6 @@ private:
     ToolEditMode toolEditMode;
     QRect insRect;
     KoDocumentEntry partEntry;
-    /**
-     * List of objects to draw, from the previous step in the presentation
-     * (those that remain on screen between two steps)
-     */
-    QPtrList <KPObject> tmpObjs;
     QString autoform;
     QPixmap buffer;
 

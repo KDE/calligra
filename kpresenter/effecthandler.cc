@@ -175,7 +175,6 @@ bool EffectHandler::doEffect()
 #else        
         bitBlt( m_dst, 0, 0, &m_paint);
 #endif
-        kapp->flush();
 
         m_lastRepaintRects = m_repaintRects;
         QPtrListIterator<QRect> it3(m_removeRects);
@@ -248,7 +247,6 @@ void EffectHandler::finish()
         }
     }
     bitBlt( m_dst, 0, 0, m_src );
-    kapp->flush();
 
     if ( !m_view->kPresenterDoc()->spManualSwitch() && m_objectTimer > 0 )
     {

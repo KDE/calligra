@@ -1605,17 +1605,8 @@ void KPresenterView::screenPrev()
         QRect desk = QApplication::desktop()->screenGeometry(this);
 #endif
         if ( m_canvas->pPrev( true ) ) {
-#if 0 // TODO currentPage-- instead
-            QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, m_canvas->presFakt(), false );
-            yOffset = ( m_canvas->presPage() - 1 ) * pgRect.height();
-            if ( m_canvas->height() > pgRect.height() )
-                yOffset -= ( m_canvas->height() - pgRect.height() ) / 2;
-#endif
-            m_canvas->resize( desk.width(), desk.height() );
-            m_canvas->repaint( false );
             m_canvas->setFocus();
         } else {
-            m_canvas->resize( desk.width(), desk.height() );
             m_canvas->setFocus();
         }
     }
@@ -1635,13 +1626,6 @@ void KPresenterView::screenNext()
         QRect desk = QApplication::desktop()->screenGeometry(this);
 #endif
         if ( m_canvas->pNext( true ) ) {
-#if 0 // TODO currentPage-- instead
-            QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, m_canvas->presFakt(), false );
-            yOffset = ( m_canvas->presPage() - 1 ) * pgRect.height();
-            if ( m_canvas->height() > pgRect.height() )
-                yOffset -= ( m_canvas->height() - pgRect.height() ) / 2;
-#endif
-            m_canvas->resize( desk.width(), desk.height() );
             m_canvas->setFocus();
 
             if ( !kPresenterDoc()->spManualSwitch() ) {
@@ -1649,7 +1633,6 @@ void KPresenterView::screenNext()
                 m_canvas->setNextPageTimer( true );
             }
         } else {
-            m_canvas->resize( desk.width(), desk.height() );
             m_canvas->setFocus();
         }
     } else {

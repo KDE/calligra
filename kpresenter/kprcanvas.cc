@@ -131,7 +131,6 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         drawRubber = false;
         m_zoomRubberDraw = false;
         toolEditMode = TEM_MOUSE;
-        tmpObjs.setAutoDelete( false );
         setAcceptDrops( true );
         m_ratio = 0.0;
         m_keepRatio = false;
@@ -327,7 +326,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             {
                 bufPainter.save();
                 bufPainter.setPen( m_view->kPresenterDoc()->presPen() );
-                for ( int i = 0; i < m_drawModeLines.count(); ++i )
+                for ( unsigned int i = 0; i < m_drawModeLines.count(); ++i )
                 {
                   bufPainter.drawPolyline( m_drawModeLines[i] );
                 }
@@ -3072,7 +3071,6 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
     m_presMenu->setItemChecked( PM_DM, false );
 
     setCursor( waitCursor );
-    tmpObjs.clear();
 
     exitEditMode();
 
@@ -3116,10 +3114,6 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
             break;
         }
 
-    QPtrListIterator<KPObject> oIt(doc->pageList().at( slide-1 )->objectList());
-    for (; oIt.current(); ++oIt )
-        tmpObjs.append( oIt.current() );
-
     setCursor( blankCursor );
 
     m_step.m_pageNumber = (unsigned int) -1; // force gotoPage to do something
@@ -3144,14 +3138,11 @@ void KPrCanvas::stopScreenPresentation()
     m_drawMode = false;
     repaint( false );
     setToolEditMode( toolEditMode );
-    tmpObjs.clear();
     setWFlags( WResizeNoErase );
 }
 
 bool KPrCanvas::pNext( bool )
 {
-    //bool clearSubPres = false;
-
     goingBack = false;
 
     // clear drawed lines
@@ -3222,21 +3213,16 @@ bool KPrCanvas::pNext( bool )
 #endif
         QPixmap _pix1( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix1 );
-
+        
         m_view->setPageDuration( m_step.m_pageNumber );
 
         m_step.m_pageNumber = *( ++m_presentationSlidesIterator ) - 1;
         m_step.m_subStep = 0;
         //kdDebug(33001) << "Page::pNext going to page " << m_step.m_pageNumber << endl;
 
-        tmpObjs.clear();
-
         doc->displayActivePage( doc->pageList().at( m_step.m_pageNumber ) );
 
         setActivePage(doc->pageList().at( m_step.m_pageNumber ));
-        QPtrListIterator<KPObject> oIt( getObjectList() );
-        for (; oIt.current(); ++oIt )
-            tmpObjs.append(oIt.current());
 
         m_pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
         m_step.m_step = *m_pageEffectSteps.begin();
@@ -3246,12 +3232,6 @@ bool KPrCanvas::pNext( bool )
 #else
         QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
 #endif
-        /* not used
-        int pageHeight = doc->pageList().at( m_step.m_pageNumber )->getZoomPageRect().height();
-        int yOffset = ( presPage() - 1 ) * pageHeight;
-        if ( height() > pageHeight )
-            yOffset -= ( height() - pageHeight ) / 2;
-        */
         drawCurrentPageInPix( _pix2 );
 
         QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
@@ -3283,6 +3263,7 @@ bool KPrCanvas::pNext( bool )
 
     //kdDebug(33001) << "Page::pNext last slide -> End of presentation" << endl;
 
+    finishObjectEffects();
     // When we are in manual mode or in automatic mode with no infinite loop
     // we display the 'End of presentation' slide.
     if ( ( spManualSwitch() || !spInfiniteLoop() ) && !showingLastSlide )
@@ -3331,7 +3312,7 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
     if ( m_step.m_step > *m_pageEffectSteps.begin() ) {
         QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
         m_step.m_step = *( --it );
-        //hopefully there are never more thean 1000 sub steps :-)
+        //hopefully there are never more than 1000 sub steps :-)
         m_step.m_subStep = 1000;
         repaint( false );
         return false;
@@ -3348,17 +3329,14 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
 
         m_step.m_pageNumber = *( --m_presentationSlidesIterator ) - 1;
 
-        tmpObjs.clear();
         KPresenterDoc * doc = m_view->kPresenterDoc();
         doc->displayActivePage( doc->pageList().at( m_step.m_pageNumber ) );
 
         //change active page.
         setActivePage(doc->pageList().at( m_step.m_pageNumber ) );
-        QPtrListIterator<KPObject> oIt( getObjectList() );
-        for (; oIt.current(); ++oIt )
-            tmpObjs.append(oIt.current());
         m_pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
         m_step.m_step = *( --m_pageEffectSteps.end() );
+        repaint( false );
 
         return true;
     }
@@ -3538,11 +3516,7 @@ void KPrCanvas::doObjEffects()
         m_effectHandler = 0;
     }
     
-    /// ### Note: this is for full-screen mode only.
-    /// ### There should be NO use of diffx(), diffy() anywhere in this method!
-
     QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );
-    bool drawn = false;
 
     // YABADABADOOOOOOO.... That's a hack :-)
     if ( m_step.m_subStep == 0 )
@@ -3555,24 +3529,12 @@ void KPrCanvas::doObjEffects()
         PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, true, true );
         drawPresPage( &p, desktopRect ,step );
         p.end();
-        bitBlt( this, 0, 0, &screen_orig, 0, 0, screen_orig.width(), screen_orig.height() );
-        drawn = true;
+        bitBlt( this, 0, 0, &screen_orig );
     }
-
-
-    QPtrList<KPObject> _objList;
-    QTime _time;
-    int _step = 0, _steps1 = 0, _steps2 = 0, x_pos1 = 0, y_pos1 = 0;
-    int x_pos2 = kapp->desktop()->width(), y_pos2 = kapp->desktop()->height(), _step_width = 0, _step_height = 0;
-    int w_pos1 = 0, h_pos1;
-    bool effects = false;
-    bool nothingHappens = false;
-    int timer = 0;
-    bool _soundEffect = false;
-    QString _soundFileName = QString::null;
-    if ( !drawn )
-        bitBlt( &screen_orig, 0, 0, this, 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
-    //QPixmap *screen = new QPixmap( screen_orig );
+    else
+    {
+        bitBlt( &screen_orig, 0, 0, this );
+    }
 
     QPtrList<KPObject> allObjects( m_activePage->objectList() );
     
@@ -3584,7 +3546,6 @@ void KPrCanvas::doObjEffects()
             allObjects.append( it.current() );
     }
 
-    //m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, objectList(), m_view );
     m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, allObjects, m_view );
     if ( m_effectHandler->doEffect() )
     {
@@ -3597,671 +3558,6 @@ void KPrCanvas::doObjEffects()
         m_effectTimer.start( 50, true );
     }
 
-#if 0
-    QPtrListIterator<KPObject> oit(getObjectList());
-    for ( int i = 0 ; oit.current(); ++oit, ++i )
-    {
-        KPObject *kpobject = oit.current();
-        if (  kpobject->getAppearStep() == static_cast<int>( m_step.m_step ) )
-        {
-            if ( !spManualSwitch() )
-                timer = kpobject->getAppearTimer();
-
-            if ( kpobject->getEffect() != EF_NONE )
-            {
-                _soundEffect = kpobject->getAppearSoundEffect();
-                _soundFileName = kpobject->getAppearSoundEffectFileName();
-                _objList.append( kpobject );
-
-                QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
-                int x = br.x();
-                int y = br.y();
-                int w = br.width();
-                int h = br.height();
-
-                switch ( kpobject->getEffect() )
-                {
-                case EF_COME_LEFT:
-                    x_pos1 = QMAX( x_pos1, x - diffx() + w );
-                    break;
-                case EF_COME_TOP:
-                    y_pos1 = QMAX( y_pos1, y - diffy() + h );
-                    break;
-                case EF_COME_RIGHT:
-                    x_pos2 = QMIN( x_pos2, x - diffx() );
-                    break;
-                case EF_COME_BOTTOM:
-                    y_pos2 = QMIN( y_pos2, y - diffy() );
-                    break;
-                case EF_COME_LEFT_TOP:
-                {
-                    x_pos1 = QMAX( x_pos1, x - diffx() + w );
-                    y_pos1 = QMAX( y_pos1, y - diffy() + h );
-                } break;
-                case EF_COME_LEFT_BOTTOM:
-                {
-                    x_pos1 = QMAX( x_pos1, x - diffx() + w );
-                    y_pos2 = QMIN( y_pos2, y - diffy() );
-                } break;
-                case EF_COME_RIGHT_TOP:
-                {
-                    x_pos2 = QMIN( x_pos2, x - diffx() );
-                    y_pos1 = QMAX( y_pos1, y - diffy() + h );
-                } break;
-                case EF_COME_RIGHT_BOTTOM:
-                {
-                    x_pos2 = QMIN( x_pos2, x - diffx() );
-                    y_pos2 = QMIN( y_pos2, y - diffy() );
-                } break;
-                case EF_WIPE_LEFT:
-                    x_pos1 = QMAX( x_pos1, w );
-                    break;
-                case EF_WIPE_RIGHT:
-                    x_pos1 = QMAX( x_pos1, w );
-                    break;
-                case EF_WIPE_TOP:
-                    y_pos1 = QMAX( y_pos1, h );
-                    break;
-                case EF_WIPE_BOTTOM:
-                    y_pos1 = QMAX( y_pos1, h );
-                    break;
-                default: break;
-                }
-                effects = true;
-            }
-        }
-        else if (  kpobject->getDisappear() && kpobject->getDisappearStep() == static_cast<int>( m_step.m_step ) )
-        {
-            if ( !spManualSwitch() )
-                timer = kpobject->getDisappearTimer();
-
-            if ( kpobject->getEffect3() != EF3_NONE )
-            {
-                _soundEffect = kpobject->getDisappearSoundEffect();
-                _soundFileName = kpobject->getDisappearSoundEffectFileName();
-
-                _objList.append( kpobject );
-
-                int x = 0, y = 0, w = 0, h = 0;
-                QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
-                x = br.x(); y = br.y(); w = br.width(); h = br.height();
-
-                switch ( kpobject->getEffect3() )
-                {
-                case EF3_GO_LEFT:
-                    x_pos1 = QMAX( x_pos1, x - diffx() + w );
-                    break;
-                case EF3_GO_TOP:
-                    y_pos1 = QMAX( y_pos1, y - diffy() + h );
-                    break;
-                case EF3_GO_RIGHT:
-                    x_pos2 = QMIN( x_pos2, x - diffx() );
-                    break;
-                case EF3_GO_BOTTOM:
-                    y_pos2 = QMIN( y_pos2, y - diffy() );
-                    break;
-                case EF3_GO_LEFT_TOP:
-                {
-                    x_pos1 = QMAX( x_pos1, x - diffx() + w );
-                    y_pos1 = QMAX( y_pos1, y - diffy() + h );
-                } break;
-                case EF3_GO_LEFT_BOTTOM:
-                {
-                    x_pos1 = QMAX( x_pos1, x - diffx() + w );
-                    y_pos2 = QMIN( y_pos2, y - diffy() );
-                } break;
-                case EF3_GO_RIGHT_TOP:
-                {
-                    x_pos2 = QMIN( x_pos2, x - diffx() );
-                    y_pos1 = QMAX( y_pos1, y - diffy() + h );
-                } break;
-                case EF3_GO_RIGHT_BOTTOM:
-                {
-                    x_pos2 = QMIN( x_pos2, x - diffx() );
-                    y_pos2 = QMIN( y_pos2, y - diffy() );
-                } break;
-                case EF3_WIPE_LEFT:
-                    x_pos1 = QMAX( x_pos1, w );
-                    break;
-                case EF3_WIPE_RIGHT:
-                    x_pos1 = QMAX( x_pos1, w );
-                    break;
-                case EF3_WIPE_TOP:
-                    y_pos1 = QMAX( y_pos1, h );
-                    break;
-                case EF3_WIPE_BOTTOM:
-                    y_pos1 = QMAX( y_pos1, h );
-                    break;
-                default: break;
-                }
-                effects = true;
-            }
-        }
-    }
-
-    if ( effects )
-    {
-        if ( !spManualSwitch() && timer > 0 )
-            m_view->stopAutoPresTimer();
-
-        if ( _soundEffect && !_soundFileName.isEmpty() ) {
-            stopSound();
-            playSound( _soundFileName );
-        }
-
-        _step_width = static_cast<int>( ( static_cast<float>( kapp->desktop()->width() ) / objSpeedFakt() ) );
-        _step_height = static_cast<int>( ( static_cast<float>( kapp->desktop()->height() ) / objSpeedFakt() ) );
-        _steps1 = x_pos1 > y_pos1 ? x_pos1 / _step_width : y_pos1 / _step_height;
-        _steps2 = kapp->desktop()->width() - x_pos2 > kapp->desktop()->height() - y_pos2 ?
-                  ( kapp->desktop()->width() - x_pos2 ) / _step_width : ( kapp->desktop()->height() - y_pos2 ) / _step_height;
-        _time.start();
-
-        QPtrList<QRect> xy;
-        xy.setAutoDelete( true );
-
-        for ( ; ; )
-        {
-            kapp->processEvents();
-            if ( nothingHappens ) break; // || _step >= _steps1 && _step >= _steps2 ) break;
-
-            QPtrList<QRect> changes;
-            changes.setAutoDelete( true );
-
-            if ( _time.elapsed() >= 1 )
-            {
-                nothingHappens = true;
-                _step++;
-
-                changes.clear();
-
-                for ( int i = 0; i < static_cast<int>( _objList.count() ); i++ )
-                {
-                    KPObject * kpobject = _objList.at( i );
-                    // Origin of the object, in pixels
-                    QPoint objectOrig = m_view->zoomHandler()->zoomPoint( kpobject->getOrig() );
-                    // Distance from object to bottom right position of the screen...
-                    int _w =  kapp->desktop()->width() - ( objectOrig.x() /*- diffx()*/ );
-                    int _h =  kapp->desktop()->height() - ( objectOrig.y() /*- diffy()*/ );
-                    QRect objectRect = m_view->zoomHandler()->zoomRect( kpobject->getRect() );
-                    int ox = objectRect.x();
-                    int oy = objectRect.y();
-                    int ow = objectRect.width();
-                    int oh = objectRect.height();
-
-                    QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
-                    int bx = br.x();
-                    int by = br.y();
-                    int bw = br.width();
-                    int bh = br.height();
-
-                    QRect oldRect;
-                    QRect newRect;
-
-                    if ( static_cast<int>( xy.count() - 1 ) < i )
-                    {
-                        xy.append( new QRect( 0, 0, 0, 0 ) );
-                        oldRect.setRect( bx - diffx(), by - diffy(), bw, bh );
-                    }
-                    else
-                        oldRect.setRect( bx - ( diffx() - xy.at( i )->x() ), by - ( diffy() - xy.at( i )->y() ),
-                                         bw - xy.at( i )->width(), bh - xy.at( i )->height() );
-
-                    ObjType objectType = kpobject->getType();
-                    Effect2 effect2 = kpobject->getEffect2();
-
-                    if ( !kpobject->getDisappear() || kpobject->getDisappear()
-                         && kpobject->getDisappearStep() != static_cast<int>( m_step.m_step ) )
-                    {
-                        switch ( kpobject->getEffect() )
-                        {
-                        case EF_NONE:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                                drawObject( kpobject, screen, ox, oy, 0, 0, 0, 0 );
-                        } break;
-                        case EF_COME_LEFT:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                x_pos1 = _step_width * _step < ox - diffx() + ow ?
-                                         ox - diffx() + ow - _step_width * _step : 0;
-                                y_pos1 = 0;
-                                drawObject( kpobject, screen, -x_pos1, y_pos1, 0, 0, 0, 0 );
-                                if ( x_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( -x_pos1 );
-                                xy.at( i )->setY( y_pos1 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            }
-                        } break;
-                        case EF_COME_TOP:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                y_pos1 = _step_height * _step < oy - diffy() + oh ?
-                                         oy - diffy() + oh - _step_height * _step : 0;
-                                x_pos1 = 0;
-                                drawObject( kpobject, screen, x_pos1, -y_pos1, 0, 0, 0, 0 );
-                                if ( y_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( x_pos1 );
-                                xy.at( i )->setY( -y_pos1 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            }
-                        } break;
-                        case EF_COME_RIGHT:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                x_pos2 = _w - ( _step_width * _step ) + ( ox - diffx() ) > ox - diffx() ?
-                                         _w - ( _step_width * _step ) : 0;
-                                y_pos2 = 0;
-                                drawObject( kpobject, screen, x_pos2, y_pos2, 0, 0, 0, 0 );
-                                if ( x_pos2 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( x_pos2 );
-                                xy.at( i )->setY( y_pos2 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            }
-                        } break;
-                        case EF_COME_BOTTOM:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                y_pos2 = _h - ( _step_height * _step ) + ( oy - diffy() ) > oy - diffy() ?
-                                         _h - ( _step_height * _step ) : 0;
-                                x_pos2 = 0;
-                                drawObject( kpobject, screen, x_pos2, y_pos2, 0, 0, 0, 0 );
-                                if ( y_pos2 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( x_pos2 );
-                                xy.at( i )->setY( y_pos2 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            }
-                        } break;
-                        case EF_COME_LEFT_TOP:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0
-                                 && objectType == OT_TEXT && effect2 == EF2T_PARA )
-                            {
-                                x_pos1 = _step_width * _step < ox - diffx() + ow ?
-                                         ox - diffx() + ow - _step_width * _step : 0;
-                                y_pos1 = _step_height * _step < oy - diffy() + oh ?
-                                         oy - diffy() + oh - _step_height * _step : 0;
-                                drawObject( kpobject, screen, -x_pos1, -y_pos1, 0, 0, 0, 0 );
-                                if ( x_pos1 != 0 || y_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( -x_pos1 );
-                                xy.at( i )->setY( -y_pos1 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            }
-                        } break;
-                        case EF_COME_LEFT_BOTTOM:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                x_pos1 = _step_width * _step < ox - diffx() + ow ?
-                                         ox - diffx() + ow - _step_width * _step : 0;
-                                y_pos2 = _h - ( _step_height * _step ) + ( oy - diffy() ) > oy - diffy() ?
-                                         _h - ( _step_height * _step ) : 0;
-                                drawObject( kpobject, screen, -x_pos1, y_pos2, 0, 0, 0, 0 );
-                                if ( x_pos1 != 0 || y_pos2 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( -x_pos1 );
-                                xy.at( i )->setY( y_pos2 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            }
-                        } break;
-                        case EF_COME_RIGHT_TOP:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                x_pos2 = _w - ( _step_width * _step ) + ( ox - diffx() ) > ox - diffx() ?
-                                         _w - ( _step_width * _step ) : 0;
-                                y_pos1 = _step_height * _step < oy - diffy() + oh ?
-                                         oy - diffy() + oh - _step_height * _step : 0;
-                                drawObject( kpobject, screen, x_pos2, -y_pos1, 0, 0, 0, 0 );
-                                if ( x_pos2 != 0 || y_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( x_pos2 );
-                                xy.at( i )->setY( -y_pos1 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            }
-                        } break;
-                        case EF_COME_RIGHT_BOTTOM:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                x_pos2 = _w - ( _step_width * _step ) + ( ox - diffx() ) > ox - diffx() ?
-                                         _w - ( _step_width * _step ) : 0;
-                                y_pos2 = _h - ( _step_height * _step ) + ( oy - diffy() ) > oy - diffy() ?
-                                         _h - ( _step_height * _step ) : 0;
-                                drawObject( kpobject, screen, x_pos2, y_pos2, 0, 0, 0, 0 );
-                                if ( x_pos2 != 0 || y_pos2 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( x_pos2 );
-                                xy.at( i )->setY( y_pos2 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            }
-                        } break;
-                        case EF_WIPE_LEFT:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                w_pos1 = _step_width * ( _steps1 - _step ) > 0 ? _step_width * ( _steps1 - _step ) : 0;
-                                drawObject( kpobject, screen, 0, 0, w_pos1, 0, 0, 0 );
-                                if ( w_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( 0 );
-                                xy.at( i )->setY( 0 );
-                                xy.at( i )->setWidth( w_pos1 );
-                                xy.at( i )->setHeight( 0 );
-                            }
-                        } break;
-                        case EF_WIPE_RIGHT:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                w_pos1 = _step_width * ( _steps1 - _step ) > 0 ? _step_width * ( _steps1 - _step ) : 0;
-                                x_pos1 = w_pos1;
-                                drawObject( kpobject, screen, 0, 0, w_pos1, 0, x_pos1, 0 );
-                                if ( w_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( x_pos1 );
-                                xy.at( i )->setY( 0 );
-                                xy.at( i )->setWidth( w_pos1 );
-                                xy.at( i )->setHeight( 0 );
-                            }
-                        } break;
-                        case EF_WIPE_TOP:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                h_pos1 = _step_height * ( _steps1 - _step ) > 0 ? _step_height * ( _steps1 - _step ) : 0;
-                                drawObject( kpobject, screen, 0, 0, 0, h_pos1, 0, 0 );
-                                if ( h_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( 0 );
-                                xy.at( i )->setY( 0 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( h_pos1 );
-                            }
-                        } break;
-                        case EF_WIPE_BOTTOM:
-                        {
-                            if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT
-                                 && effect2 == EF2T_PARA )
-                            {
-                                h_pos1 = _step_height * ( _steps1 - _step ) > 0 ? _step_height * ( _steps1 - _step ) : 0;
-                                y_pos1 = h_pos1;
-                                drawObject( kpobject, screen, 0, 0, 0, h_pos1, 0, y_pos1 );
-                                if ( h_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( 0 );
-                                xy.at( i )->setY( y_pos1 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( h_pos1 );
-                            }
-                        } break;
-                        default: break;
-                        }
-                    }
-                    else
-                    {
-                        if ( m_step.m_subStep == 0 )
-                        {
-                            switch ( kpobject->getEffect3() )
-                            {
-                            case EF3_NONE:
-                                //drawObject( kpobject, screen, ox, oy, 0, 0, 0, 0 );
-                                break;
-                            case EF3_GO_LEFT:
-                            {
-                                x_pos1 = _step_width * _step < ox - diffx() + ow ?
-                                         ox - diffx() + ow - _step_width * _step : 0;
-                                y_pos1 = 0;
-                                drawObject( kpobject, screen, -( ox + ow - x_pos1 ), y_pos1, 0, 0, 0, 0 );
-                                if ( x_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( -( ox + ow - x_pos1 ) );
-                                xy.at( i )->setY( y_pos1 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            } break;
-                            case EF3_GO_TOP:
-                            {
-                                y_pos1 = _step_height * _step < oy - diffy() + oh ?
-                                         oy - diffy() + oh - _step_height * _step : 0;
-                                x_pos1 = 0;
-                                drawObject( kpobject, screen, x_pos1, -( ( oy - diffy() ) + oh - y_pos1 ), 0, 0, 0, 0 );
-                                if ( y_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( x_pos1 );
-                                xy.at( i )->setY( -( ( oy - diffy() ) + oh - y_pos1 ) );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            } break;
-                            case EF3_GO_RIGHT:
-                            {
-                                x_pos2 = _w - ( _step_width * _step ) + ( ox - diffx() ) > ox - diffx() ?
-                                         _w - ( _step_width * _step ) : 0;
-                                y_pos2 = 0;
-                                int __w = kapp->desktop()->width() - ox;
-                                drawObject( kpobject, screen, __w - x_pos2, y_pos2, 0, 0, 0, 0 );
-                                if ( x_pos2 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( __w - x_pos2 );
-                                xy.at( i )->setY( y_pos2 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            } break;
-                            case EF3_GO_BOTTOM:
-                            {
-                                y_pos2 = _h - ( _step_height * _step ) + ( oy - diffy() ) > oy - diffy() ?
-                                         _h - ( _step_height * _step ) : 0;
-                                x_pos2 = 0;
-                                int __h = kapp->desktop()->height() - ( oy - diffy() );
-                                drawObject( kpobject, screen, x_pos2, __h - y_pos2, 0, 0, 0, 0 );
-                                if ( y_pos2 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( x_pos2 );
-                                xy.at( i )->setY( __h - y_pos2 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            } break;
-                            case EF3_GO_LEFT_TOP:
-                            {
-                                x_pos1 = _step_width * _step < ox - diffx() + ow ?
-                                         ox - diffx() + ow - _step_width * _step : 0;
-                                y_pos1 = _step_height * _step < oy - diffy() + oh ?
-                                         oy - diffy() + oh - _step_height * _step : 0;
-                                drawObject( kpobject, screen, -( ox + ow - x_pos1 ), -( ( oy - diffy() ) + oh - y_pos1 ), 0, 0, 0, 0 );
-                                if ( x_pos1 != 0 || y_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( -( ox + ow - x_pos1 ) );
-                                xy.at( i )->setY( -( ( oy - diffy() ) + oh - y_pos1 ) );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            } break;
-                            case EF3_GO_LEFT_BOTTOM:
-                            {
-                                x_pos1 = _step_width * _step < ox - diffx() + ow ?
-                                         ox - diffx() + ow - _step_width * _step : 0;
-                                y_pos2 = _h - ( _step_height * _step ) + ( oy - diffy() ) > oy - diffy() ?
-                                         _h - ( _step_height * _step ) : 0;
-                                int __h = kapp->desktop()->height() - ( oy - diffy() );
-                                drawObject( kpobject, screen, -( ox + ow - x_pos1 ), __h -  y_pos2, 0, 0, 0, 0 );
-                                if ( x_pos1 != 0 || y_pos2 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( -( ox + ow - x_pos1 ) );
-                                xy.at( i )->setY( __h - y_pos2 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            } break;
-                            case EF3_GO_RIGHT_TOP:
-                            {
-                                x_pos2 = _w - ( _step_width * _step ) + ( ox - diffx() ) > ox - diffx() ?
-                                         _w - ( _step_width * _step ) : 0;
-                                y_pos1 = _step_height * _step < oy - diffy() + oh ?
-                                         oy - diffy() + oh - _step_height * _step : 0;
-                                int __w = kapp->desktop()->width() - ox;
-                                drawObject( kpobject, screen, __w - x_pos2, -( ( oy - diffy() ) + oh - y_pos1 ), 0, 0, 0, 0 );
-                                if ( x_pos2 != 0 || y_pos1 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( __w - x_pos2 );
-                                xy.at( i )->setY( -( ( oy - diffy() ) + oh - y_pos1 ) );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            } break;
-                            case EF3_GO_RIGHT_BOTTOM:
-                            {
-                                x_pos2 = _w - ( _step_width * _step ) + ( ox - diffx() ) > ox - diffx() ?
-                                         _w - ( _step_width * _step ) : 0;
-                                y_pos2 = _h - ( _step_height * _step ) + ( oy - diffy() ) > oy - diffy() ?
-                                         _h - ( _step_height * _step ) : 0;
-                                int __w = kapp->desktop()->width() - ox;
-                                int __h = kapp->desktop()->height() - ( oy - diffy() );
-                                drawObject( kpobject, screen, __w - x_pos2, __h - y_pos2, 0, 0, 0, 0 );
-                                if ( x_pos2 != 0 || y_pos2 != 0 ) nothingHappens = false;
-                                xy.at( i )->setX( __w - x_pos2 );
-                                xy.at( i )->setY( __h - y_pos2 );
-                                xy.at( i )->setWidth( 0 );
-                                xy.at( i )->setHeight( 0 );
-                            } break;
-                            case EF3_WIPE_LEFT:
-                            {
-                                if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT &&
-                                     effect2 == EF2T_PARA )
-                                {
-                                    w_pos1 = _step_width * ( _step - 1 );
-                                    x_pos1 = w_pos1;
-                                    drawObject( kpobject, screen, 0, 0, w_pos1, 0, x_pos1, 0 );
-                                    if ( ( _step_width * ( _steps1 - _step ) ) != 0 ) nothingHappens = false;
-                                    xy.at( i )->setX( x_pos1 );
-                                    xy.at( i )->setY( 0 );
-                                    xy.at( i )->setWidth( w_pos1 );
-                                    xy.at( i )->setHeight( 0 );
-                                }
-                            } break;
-                            case EF3_WIPE_RIGHT:
-                            {
-                                if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT &&
-                                     effect2 == EF2T_PARA )
-                                {
-                                    w_pos1 = _step_width * ( _step - 1 );
-                                    drawObject( kpobject, screen, 0, 0, w_pos1, 0, 0, 0 );
-                                    if ( ( _step_width * ( _steps1 - _step ) ) != 0 ) nothingHappens = false;
-                                    xy.at( i )->setX( 0 );
-                                    xy.at( i )->setY( 0 );
-                                    xy.at( i )->setWidth( w_pos1 );
-                                    xy.at( i )->setHeight( 0 );
-                                }
-                            } break;
-                            case EF3_WIPE_TOP:
-                            {
-                                if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT &&
-                                     effect2 == EF2T_PARA )
-                                {
-                                    h_pos1 = _step_height * ( _step - 1 );
-                                    y_pos1 = h_pos1;
-                                    drawObject( kpobject, screen, 0, 0, 0, h_pos1, 0, y_pos1 );
-                                    if ( ( _step_height * ( _steps1 - _step ) ) != 0 ) nothingHappens = false;
-                                    xy.at( i )->setX( 0 );
-                                    xy.at( i )->setY( y_pos1 );
-                                    xy.at( i )->setWidth( 0 );
-                                    xy.at( i )->setHeight( h_pos1 );
-                                }
-                            } break;
-                            case EF3_WIPE_BOTTOM:
-                            {
-                                if ( m_step.m_subStep == 0 || m_step.m_subStep != 0 && objectType == OT_TEXT &&
-                                     effect2 == EF2T_PARA )
-                                {
-                                    h_pos1 = _step_height * ( _step - 1 );
-                                    drawObject( kpobject, screen, 0, 0, 0, h_pos1, 0, 0 );
-                                    if ( ( _step_height * ( _steps1 - _step ) ) != 0 ) nothingHappens = false;
-                                    xy.at( i )->setX( 0 );
-                                    xy.at( i )->setY( 0 );
-                                    xy.at( i )->setWidth( 0 );
-                                    xy.at( i )->setHeight( h_pos1 );
-                                }
-                            } break;
-                            default:
-                                break;
-                            }
-                        }
-                    }
-                    newRect.setRect( bx - ( diffx() - xy.at( i )->x() ), by - ( diffy() - xy.at( i )->y() ),
-                                     bw - xy.at( i )->width(), bh - xy.at( i )->height() );
-                    newRect = newRect.unite( oldRect );
-
-                    bool append = true;
-                    for ( unsigned j = 0; j < changes.count(); j++ )
-                    {
-                        if ( changes.at( j )->intersects( newRect ) )
-                        {
-                            QRect r = changes.at( j )->intersect( newRect );
-                            int s1 = r.width() * r.height();
-                            int s2 = newRect.width() * newRect.height();
-                            int s3 = changes.at( j )->width() * changes.at( j )->height();
-
-                            if ( s1 > ( s2 / 100 ) * 50 || s1 > ( s3 / 100 ) * 50 )
-                            {
-                                QRect rr = changes.at( j )->unite( newRect );
-                                changes.at( j )->setRect( rr.x(), rr.y(), rr.width(), rr.height() );
-                                append = false;
-                            }
-
-                            break;
-                        }
-                    }
-
-                    if ( append )
-                        changes.append( new QRect( newRect ) );
-                }
-
-                QRect *changed;
-                for ( int i = 0; i < static_cast<int>( changes.count() ); i++ )
-                {
-                    changed = changes.at( i );
-                    bitBlt( this, changed->x(), changed->y(), screen, changed->x(), changed->y(),
-                            changed->width(), changed->height() );
-                }
-
-                delete screen;
-                screen = new QPixmap( screen_orig );
-
-                _time.restart();
-            }
-        }
-    }
-
-    if ( !effects )
-    {
-        //kdDebug(33001) << "KPrCanvas::doObjEffects no effects" << endl;
-        QPainter p;
-        p.begin( this );
-        p.drawPixmap( 0, 0, screen_orig );
-        PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, !goingBack );
-        drawPresPage( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ), step );
-        p.end();
-    }
-    else
-    {
-        //kdDebug(33001) << "KPrCanvas::doObjEffects effects" << endl;
-        QPainter p;
-        p.begin( screen );
-        PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, !goingBack );
-        drawPresPage( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ), step );
-        p.end();
-        bitBlt( this, 0, 0, screen );
-    }
-
-    if ( !spManualSwitch() && timer > 0 )
-        m_view->setAutoPresTimer( timer );
-
-    delete screen;
-#endif
 }
 
 void KPrCanvas::slotDoEffect()
@@ -4292,54 +3588,6 @@ void KPrCanvas::finishObjectEffects()
     }
 }
 
-
-void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int _w, int _h,
-                            int _cx, int _cy )
-{
-    if ( kpobject->getDisappear() &&
-         kpobject->getDisappearStep() < static_cast<int>( m_step.m_step ) )
-        return;
-    int ox, oy, ow, oh;
-    KoRect br = kpobject->getBoundingRect();
-    QRect brpix = m_view->zoomHandler()->zoomRect( br );
-    ox = brpix.x(); oy = brpix.y(); ow = brpix.width(); oh = brpix.height();
-    bool ownClipping = true;
-
-    QPainter p;
-    p.begin( screen );
-
-    if ( _w != 0 || _h != 0 )
-    {
-        p.setClipping( true );
-        p.setClipRect( ox + _cx, oy + _cy, ow - _w, oh - _h, QPainter::CoordPainter );
-        ownClipping = false;
-    }
-
-    if ( !editMode && static_cast<int>( m_step.m_step ) == kpobject->getAppearStep() && !goingBack )
-    {
-        kpobject->setSubPresStep( m_step.m_subStep );
-        kpobject->doSpecificEffects( true );
-        kpobject->setOwnClipping( ownClipping );
-    }
-    p.translate(_x,_y);
-    kpobject->draw( &p, m_view->zoomHandler(), SM_NONE,
-                    ( kpobject->isSelected()) && drawContour );
-    kpobject->setSubPresStep( 0 );
-    kpobject->doSpecificEffects( false );
-    kpobject->setOwnClipping( true );
-
-    p.translate(-_x,-_y);
-
-    KPObject *obj = 0;
-    for ( unsigned int i = tmpObjs.findRef( kpobject ) +1 ; i < tmpObjs.count(); i++ ) {
-        obj = tmpObjs.at( i );
-        if ( kpobject->getBoundingRect().intersects( obj->getBoundingRect() )
-             && obj->getAppearStep() < static_cast<int>( m_step.m_step ) )
-            obj->draw( &p, m_view->zoomHandler(), SM_NONE, (obj->isSelected()) && drawContour);
-    }
-
-    p.end();
-}
 
 void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin*/, float /*top_margin*/ )
 {
