@@ -75,10 +75,12 @@ typedef QMap<int, QPtrList<listAnimation> > lstMap;
 
 
 KPrPage::KPrPage(KPresenterDoc *_doc, KPrPage *masterPage )
-: m_doc( _doc )
-, m_masterPage( masterPage )
-, m_dcop( 0 )
-, m_selectedSlides( true )
+    : m_doc( _doc )
+    , m_masterPage( masterPage )
+    , m_dcop( 0 )
+    , m_selectedSlides( true )
+    , m_bHasHeader( true ), m_bHasFooter( true )
+
 {
     kdDebug(33001)<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )"<<this<<endl;
     m_objectList.setAutoDelete( false );
@@ -2909,3 +2911,16 @@ KCommand * KPrPage::setImageEffect(ImageEffect eff, QVariant param1, QVariant pa
 
     return imageEffectCmd;
 }
+
+void KPrPage::setHeader( bool b )
+{
+    m_bHasHeader = b;
+    m_doc->setHeader(b);
+}
+
+void KPrPage::setFooter( bool b )
+{
+    m_bHasFooter = b;
+    m_doc->setFooter( b );
+}
+

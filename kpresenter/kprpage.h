@@ -361,6 +361,11 @@ public:
     bool saveOasisNote( KoXmlWriter &xmlWriter ) const;
     bool saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
 
+    bool hasHeader()const { return m_bHasHeader; }
+    bool hasFooter()const { return m_bHasFooter; }
+    void setHeader( bool b );
+    void setFooter( bool b );
+
 private:
     void makeUsedPixmapListForGroupObject( KPObject *_obj );
     void completeLoadingForGroupObject( KPObject *_obj );
@@ -379,5 +384,6 @@ private:
     bool m_selectedSlides;
 
     QString m_pictureFile;
+    bool m_bHasHeader, m_bHasFooter;
 };
 #endif //KPRPAGE_H

@@ -90,6 +90,7 @@
 
 #define MASTERPAGE 0
 
+#define HEADERFOOTERBYPAGE 0
 
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase ), buffer( size() )
@@ -5378,9 +5379,15 @@ void KPrCanvas::setActivePage( KPrPage* active )
 
 bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj) const
 {
+#if HEADERFOOTERBYPAGE
+    if (( m_view->kPresenterDoc()->isHeader(obj) && !m_activePage->hasHeader() )
+        || ( m_view->kPresenterDoc()->isFooter(obj) && !m_activePage->hasFooter() ) )
+        return true;
+#else
     if (( m_view->kPresenterDoc()->isHeader(obj) && !m_view->kPresenterDoc()->hasHeader() )
         || ( m_view->kPresenterDoc()->isFooter(obj) && !m_view->kPresenterDoc()->hasFooter() ) )
         return true;
+#endif
     return false;
 }
 
