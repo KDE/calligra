@@ -41,8 +41,21 @@
 #include "ImportDialog.h"
 
 
-typedef KGenericFactory <MSWRITEImport, KoFilter> MSWRITEImportFactory;
-K_EXPORT_COMPONENT_FACTORY (libmswriteimport, MSWRITEImportFactory ("mswriteimport"));
+class MSWRITEImportFactory : KGenericFactory <MSWRITEImport, KoFilter>
+{
+public:
+	MSWRITEImportFactory (void) : KGenericFactory <MSWRITEImport, KoFilter> ("kwordmswriteimport")
+	{
+	}
+	
+protected:
+	virtual void setupTranslations (void)
+	{
+		KGlobal::locale()->insertCatalogue ("kwordmswritefilter");
+	}
+};
+
+K_EXPORT_COMPONENT_FACTORY (libmswriteimport, MSWRITEImportFactory ());
 
 
 // kdDebug type functions

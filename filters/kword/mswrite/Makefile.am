@@ -16,6 +16,5 @@ METASOURCES = AUTO
 service_DATA = kword_mswrite_import.desktop
 servicedir = $(kde_servicesdir)
 
-# ???
 messages: rc.cpp
-	        $(XGETTEXT) *.cc *.cpp -o $(podir)/mswriteimport.pot
+	        $(XGETTEXT) *.cc *.cpp -o $(podir)/kwordmswritefilter.pot 
