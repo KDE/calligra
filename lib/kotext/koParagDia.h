@@ -225,6 +225,7 @@ public:
     void fillStyleCombo(KoParagCounter::Numbering type = KoParagCounter::NUM_LIST);
     void display( const KoParagLayout & lay );
     void changeKWSpinboxType(KoParagCounter::Style st);
+    const KoParagCounter & counter() const { return m_counter; }
 public slots:
     void numTypeChanged( int nType );
 signals:
