@@ -55,7 +55,7 @@ Item								   Prio Status
   + Printing: The chart is of thumbnail size, and wrongly placed.     2	KSPR
   + Labels are no longer generated correctly.			      1	DONE
 
-* Other fixes
+* Miscellaneous fixes
   + Make setting of line width nicer / more well-placed		     S1 ----
   + Tooltips & What's this help all over the program?		     S1 ----
   + Remove the predefined bar chart?				      2 ----
@@ -65,7 +65,6 @@ Item								   Prio Status
   + Make the settings in Edit->"Page Layout" clearer?		      2 DONE
   + Singular or plural for tooltips, not both.			     S1 DONE
 
-  + Fix ChangeLog re: bug titles.					DONE
   + Grep for FIXME and fix the urgent ones.			      2 DONE
     - kchart_part.h:106:    //FIXME: To be deprecated:		      2 done
     - kchartDataEditor.cc:275  // FIXME: Remove			      2 done
@@ -74,6 +73,7 @@ Item								   Prio Status
     - kchartDataEditor.cc:345  // FIXME: Remove			      2 done
   + Remove include of kchartDataEditor in a lot of .h files	      2 DONE
   + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 DONE
+  + Save position of Actions toolbar in config.			      1 ----
 
 * Toolbars
   + Separate toolbar for chart types (separate from config, etc).     2 DONE
@@ -127,7 +127,7 @@ Item								   Prio Status
 * Wizard
   + New data page?						     S1 ----
   + "Select Chart Type" page: Reorder like the toolbar			DONE
-  + Make Help button work or disable it.			      1 ----
+  + Make Help button work or disable it.			      1 DONE
   + The Back button should be in the same place on all pages.	      3 ----
   + Subtype page should have icons for subtypes like config dialog.   2 ----
   + Enable Finish button for all pages.				      1 DONE
