@@ -1,4 +1,4 @@
-// $Header$
+//
 
 /* This file is part of the KDE project
    Copyright (C) 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
@@ -40,6 +40,8 @@
 #include <kdebug.h>
 #include <kzip.h>
 
+#include <config.h> // For VERSION
+
 #include <koGlobal.h>
 #include <koPictureKey.h>
 
@@ -52,7 +54,7 @@
 
 OOWriterWorker::OOWriterWorker(void) : m_streamOut(NULL),
     m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
-    m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL)
+    m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0)
 {
 }
 
@@ -158,7 +160,7 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
     zipWriteData(" xmlns:style=\"http://openoffice.org/2000/style\"");
     zipWriteData(" xmlns:text=\"http://openoffice.org/2000/text\"");
     zipWriteData(" xmlns:table=\"http://openoffice.org/2000/table\"");
-    // zipWriteData(" xmlns:draw=\"http://openoffice.org/2000/drawing\"");
+    zipWriteData(" xmlns:draw=\"http://openoffice.org/2000/drawing\"");
     zipWriteData(" xmlns:fo=\"http://www.w3.org/1999/XSL/Format\"");
     zipWriteData(" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
     //zipWriteData(" xmlns:number=\"http://openoffice.org/2000/datastyle\"");
@@ -166,8 +168,8 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
     //zipWriteData(" xmlns:chart=\"http://openoffice.org/2000/chart\"");
     //zipWriteData(" xmlns:dr3d=\"http://openoffice.org/2000/dr3d\"");
     //zipWriteData(" xmlns:math=\"http://www.w3.org/1998/Math/MathML"");
-    zipWriteData(" xmlns:form=\"http://openoffice.org/2000/form\"");
-    zipWriteData(" xmlns:script=\"http://openoffice.org/2000/script\"");
+    //zipWriteData(" xmlns:form=\"http://openoffice.org/2000/form\"");
+    //zipWriteData(" xmlns:script=\"http://openoffice.org/2000/script\"");
 
     zipWriteData(" office:class=\"text\" office:version=\"1.0\"");
 
@@ -256,17 +258,15 @@ void OOWriterWorker::writeContentXml(void)
         zipWriteData(escapeOOText(*it));
         zipWriteData("\" fo:font-family=\"");
         zipWriteData(escapeOOText(*it));
-        // ### TODO: pitch
-        zipWriteData("\" />\n");
+        // ### TODO: correct font pitch pitch
+        zipWriteData("\" style:font-pitch=\"variable\" />\n");
     }
     zipWriteData(" </office:font-decls>\n");
-    
-    zipWriteData(m_styles);
-    
+
     zipWriteData(m_contentBody);
-    
+
     zipWriteData( "</office:document-content>\n" );
-    
+
     zipDoneWriting();
 }
 
@@ -279,7 +279,7 @@ bool OOWriterWorker::doCloseFile(void)
         writeStylesXml();
         m_zip->close();
     }
-        
+
     delete m_zip;
     m_zip=NULL;
     return true;
@@ -312,8 +312,9 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
     if ( !fontName.isEmpty()
         && (force || (formatOrigin.fontName!=formatData.fontName)))
     {
-        strElement+="fo:font-family=\"";
-        strElement+= escapeOOText(fontName); // TODO: add alternative font names
+        //strElement+="fo:font-family=\"";
+        strElement+="style:font-name=\"";
+        strElement+= escapeOOText(fontName);
         strElement+="\" ";
     }
 
@@ -416,7 +417,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
         itCell!=anchor.table.cellList.end(); itCell++)
     {
         // ### TODO: rowspan, colspan
-       
+
         // AbiWord seems to work by attaching to the cell borders
         *m_streamOut << "<abiword:cell props=\"";
         *m_streamOut << "left-attach:" << (*itCell).col << "; ";
@@ -424,12 +425,12 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
         *m_streamOut << "top-attach:" << (*itCell).row << "; ";
         *m_streamOut << "bot-attach:" << (*itCell).row + 1;
         *m_streamOut << "\">\n";
-        
+
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
             return false;
         }
-        
+
         *m_streamOut << "</abiword:cell>\n";
     }
 
@@ -448,7 +449,7 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
         << " , " << anchor.picture.key.toString() << endl;
 
     QString koStoreName(anchor.picture.koStoreName);
-        
+
     QByteArray image;
 
     QString strExtension(koStoreName.lower());
@@ -481,31 +482,43 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
         kdWarning(30518) << "Unable to load picture: " << koStoreName << endl;
         return true;
     }
-    
+
+    kdDebug(30518) << "Picture loaded: " << koStoreName << endl;
+
     const double height=anchor.bottom - anchor.top;
     const double width =anchor.right  - anchor.left;
 
-    QString ooName("Picture/");
+    QString ooName("Pictures/");
     QString number("00000000000000000000000000000000"); // 32 zeros
     number += QString::number(++m_pictureNumber,16); // in hex
     ooName += number.right(32);
     ooName+='.';
     ooName+=strExtension;
-    
+
+    kdDebug(30518) << "Picture " << koStoreName << " => " << ooName << endl;
+
     // TODO: we are only using the filename, not the rest of the key
     // TODO:  (bad if there are two images of the same name, but of a different key)
     *m_streamOut << "<draw:image draw:name=\"" << anchor.picture.key.filename() << "\"";
+    // ### TODO: missing draw:style-name (with an automatic "graphic" style name)
     *m_streamOut << " text:anchor-type=\"paragraph\"";
     *m_streamOut << " svg:height=\"" << height << "pt\" svg:width=\"" << width << "pt\"";
     *m_streamOut << " draw:z-index=\"0\" xlink:href=\"#" << ooName << "\"";
     *m_streamOut << " xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"";
     *m_streamOut << "/>"; // NO end of line!
-    
+
     if (m_zip)
     {
+#if 0
+        // Why is the following line not working? (It makes unzip not seeing meta.xml)
         m_zip->writeFile(ooName,QString::null, QString::null, image.size(), image.data());
+#else
+        zipPrepareWriting(ooName);
+        zipWriteData( image );
+        zipDoneWriting();
+#endif
     }
-    
+
     return true;
 }
 
@@ -525,18 +538,18 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
     int pos;
     while ((pos=partialText.find(QChar(10)))>-1)
     {
-        partialText.replace(pos,1,"<test:line-break/>");
+        partialText.replace(pos,1,"<text:line-break/>");
     }
 
     if (formatData.text.missing)
     {
-        // It's just normal text, so we do not need a <c> element!
+        // It's just normal text, so we do not need a <text:span> element!
         *m_streamOut << partialText;
     }
     else
     { // Text with properties, so use a <c> element!
         *m_streamOut << "<text:span";
-        writeAbiProps(formatLayout,formatData.text);
+        // writeAbiProps(formatLayout,formatData.text); // ### TODO
         *m_streamOut << ">" << partialText << "</text:span>";
     }
 }
@@ -666,14 +679,14 @@ void OOWriterWorker::processParagraphData ( const QString &paraText,
     }
 }
 
-QString OOWriterWorker::layoutToCss(const LayoutData& layoutOrigin,
+QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
     const LayoutData& layout, const bool force)
 {
-    QString props;
+    QString props ("   <style:properties ");
 
     if (force || (layoutOrigin.alignment!=layout.alignment))
     {
-        // Check if the current alignment is a valid one for AbiWord.
+        // Check if the current alignment is a valid one for OOWriter.
         if ((layout.alignment == "left") || (layout.alignment == "right")
             || (layout.alignment == "center")  || (layout.alignment == "justify"))
         {
@@ -691,34 +704,6 @@ QString OOWriterWorker::layoutToCss(const LayoutData& layoutOrigin,
             kdWarning(30518) << "Unknown alignment: " << layout.alignment << endl;
         }
     }
-
-#if 0
-    // TODO/FIXME: what if all tabulators must be erased?
-    if (!layout.tabulatorList.isEmpty()
-        && (force || (layoutOrigin.tabulatorList!=layout.tabulatorList) ))
-    {
-        props += "<style:tabstops>";
-        TabulatorList::ConstIterator it;
-        for (it=layout.tabulatorList.begin();it!=layout.tabulatorList.end();it++)
-        {
-            props+="<style:tabstop style:position=\"";
-            props += QString::number((*it).m_ptpos);
-            props += "pt\"";
-
-            switch ((*it).m_type)
-            {
-                case 0:  props += " style:type=\"left\""; break;
-                case 1:  props += " style:type=\"center\""; break;
-                case 2:  props += " style:type=\"right\""; break;
-                //case 3:  props += "/D"; break;
-                default: props += " style:type=\"left\""; break;
-            }
-            props +="/>"
-
-        }
-        props += "</style:tabstops>";
-    }
-#endif
 
     if ((layout.indentLeft>=0.0)
         && (force || (layoutOrigin.indentLeft!=layout.indentLeft)))
@@ -751,6 +736,7 @@ QString OOWriterWorker::layoutToCss(const LayoutData& layoutOrigin,
        props += QString("fo:margin-top=\"%1pt\" ").arg(layout.marginTop);
     }
 
+    // ### TODO: add support of at least
     if (!force
         && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
         && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
@@ -764,11 +750,11 @@ QString OOWriterWorker::layoutToCss(const LayoutData& layoutOrigin,
     }
     else if ( 15==layout.lineSpacingType  )
     {
-        props += "fo:line-height=\"1.5\" "; // One-and-half
+        props += "fo:line-height=\"150%\" "; // One-and-half
     }
     else if ( 20==layout.lineSpacingType  )
     {
-        props += "fo:line-height=\"2.0\" "; // Two
+        props += "fo:line-height=\"200%\" "; // Two
     }
     else if ( layout.lineSpacingType!=10  )
     {
@@ -778,24 +764,56 @@ QString OOWriterWorker::layoutToCss(const LayoutData& layoutOrigin,
     // Add all AbiWord properties collected in the <FORMAT> element
     props += textFormatToAbiProps(layoutOrigin.formatData.text,layout.formatData.text,force);
 
+    props += ">";
+
+    // ### TODO/FIXME: what if all tabulators must be erased?
+    if (!layout.tabulatorList.isEmpty()
+        && (force || (layoutOrigin.tabulatorList!=layout.tabulatorList) ))
+    {
+        props += "\n    <style:tab-stops>\n";
+        TabulatorList::ConstIterator it;
+        for (it=layout.tabulatorList.begin();it!=layout.tabulatorList.end();it++)
+        {
+            props+="     <style:tab-stop style:position=\"";
+            props += QString::number((*it).m_ptpos);
+            props += "pt\"";
+            switch ((*it).m_type)
+            {
+                case 0:  props += " style:type=\"left\""; break;
+                case 1:  props += " style:type=\"center\""; break;
+                case 2:  props += " style:type=\"right\""; break;
+                case 3:  props += " style:type=\"decimal\""; break;  // ### TODO: check spelling of "decimal"
+                default: props += " style:type=\"left\""; break;
+            }
+            props += "/>\n";
+        }
+        props += "    </style:tab-stops>\n   ";
+    }
+
+    props += "</style:properties>\n";
     return props;
 }
 
 bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
     const ValueListFormatData& paraFormatDataList)
 {
+    // ### TODO: OOWriter works with automatic styles, not with extra style: or fo: attributes (unlike AbiWord)
+
+
     QString style=layout.styleName;
-
-    const LayoutData& styleLayout=m_styleMap[style];
-
-    QString props=layoutToCss(styleLayout,layout,false);
 
     *m_streamOut << "  <text:p ";
     if (!style.isEmpty())
     {
         *m_streamOut << "text:style-name=\"" << EscapeXmlText(style,true,true) << "\" ";
     }
+
+#if 0
+    const LayoutData& styleLayout=m_styleMap[style];
+
+    QString props=layoutToCss(styleLayout,layout,false);
     *m_streamOut << props;
+
     if (layout.pageBreakBefore)
     {
         // We have a page break before the paragraph
@@ -806,6 +824,8 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
         // We have a page break after the paragraph
         *m_streamOut << "fo:page-break-after=\"page\" ";
     }
+#endif
+
     *m_streamOut << ">";
 
 
@@ -833,7 +853,7 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
     m_styles += " style:name=\"" + EscapeXmlText(layout.styleName,true,true) + "\"";
     m_styles += " style:next-style-name=\"" + EscapeXmlText(layout.styleFollowing,true,true) + "\"";
     m_styles += " style:family=\"paragraph\" style:class=\"text\"";
-    m_styles += ">";
+    m_styles += ">\n";
 #if 0
     if ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
         && (layout.counter.depth<10) )
@@ -843,13 +863,9 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
         m_styles += << "\">";
     }
 #endif
-    m_styles += "<style:properties ";
-     
-    m_styles += layoutToCss(layout,layout,true);
+    m_styles += layoutToParagraphStyle(layout,layout,true);
 
-    m_styles += "/>";
-
-    m_styles += "</style:style>\n";
+    m_styles += "  </style:style>\n";
 
     return true;
 }
@@ -885,8 +901,8 @@ bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
     if (!m_zip)
         return true;
-    
-        
+
+
     m_docInfo=docInfo;
 
     zipPrepareWriting("meta.xml");
@@ -896,12 +912,9 @@ bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     zipWriteData(" <office:meta>\n");
 
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
-    zipWriteData("  <meta:generator>KWord Export Filter");
+    zipWriteData("  <meta:generator>KWord Export Filter ");
 
-    QString strVersion("$Revision$");
-    // Remove the dollar signs
-    //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
-    zipWriteData(strVersion.mid(10).remove('$'));
+    zipWriteData(escapeOOText(VERSION)); // escape the version string in case it would contain such character one day.
 
     zipWriteData("</meta:generator>\n");
 

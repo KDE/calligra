@@ -1,4 +1,4 @@
-// $Header$
+//
 
 /* This file is part of the KDE project
    Copyright (C) 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
@@ -84,7 +84,7 @@ private:
         const FormatData& formatData);
     QString textFormatToAbiProps(const TextFormatting& formatOrigin,
         const TextFormatting& formatData, const bool force);
-    QString layoutToCss(const LayoutData& layoutOrigin,
+    QString layoutToParagraphStyle(const LayoutData& layoutOrigin,
         const LayoutData& layout, const bool force);
     QString escapeOOText(const QString& strText) const;
     bool makeTable(const FrameAnchor& anchor);
