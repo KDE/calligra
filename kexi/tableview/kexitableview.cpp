@@ -43,6 +43,7 @@
 
 #ifndef KEXI_NO_PRINT
 # include <kprinter.h>
+# include <kdeprint/driver.h>
 #endif
 //#endif
 
@@ -1397,7 +1398,7 @@ KexiTableView::print(KPrinter &printer)
 
 	int leftMargin = printer.margins().width() + 2 + m_rowHeight;
 	int topMargin = printer.margins().height() + 2;
-	int bottomMargin = topMargin + printer.realDrawableArea().height();
+	int bottomMargin = topMargin + printer.realPageSize()->pageHeight();
 	kdDebug() << "KexiTableView::print: bottom = " << bottomMargin << endl;
 
 	QPainter p(&printer);
