@@ -15,7 +15,7 @@ noinst_HEADERS = kptchartview.h \
 
 lib_LTLIBRARIES = 
 kde_module_LTLIBRARIES = libkptchart.la
-libkptchart_la_LDFLAGS = -module -avoid-version $(KDE_LDFLAGS)
+libkptchart_la_LDFLAGS = -avoid-version $(KDE_LDFLAGS)
 libkptchart_la_LIBADD = 
 libkptchart_la_METASOURCES = AUTO
 
