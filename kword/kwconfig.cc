@@ -436,6 +436,7 @@ void ConfigureMiscPage::apply()
 void ConfigureMiscPage::slotDefault()
 {
    m_undoRedoLimit->setValue(30);
+   m_variableNumberOffset->setText(QString::number(1));
 }
 
 ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name )
