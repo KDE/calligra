@@ -323,21 +323,29 @@ KoDocumentChild *KoDocument::child( KoDocument *doc )
 
 void KoDocument::setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states )
 {
+  return;
+  
   if ( d->m_views.find( view ) == -1 )
     return;
 
   uint viewIdx = d->m_views.at();
 
   if ( d->m_viewContainerStates.count() == viewIdx )
+  {
     d->m_viewContainerStates.append( states );
+  }
   else if ( d->m_viewContainerStates.count() > viewIdx )
+  {
     d->m_viewContainerStates[ viewIdx ] = states;
+  }
 }
 
 QMap<QString,QByteArray> KoDocument::viewContainerStates( KoView *view )
 {
   QMap<QString,QByteArray> res;
 
+  return res;
+  
   if ( d->m_views.find( view ) == -1 )
     return res;
 
