@@ -267,6 +267,10 @@ void WinWordDoc::encode(QString &text)
 
     text.replace(QRegExp("\""), "&quot;");
     text.replace(QRegExp("'"), "&apos;");
+
+    // Replace ASCII 12 with a page break.
+    text.replace(QRegExp("\14"), "</TEXT>\n<LAYOUT>\n<PAGEBREAKING hardFrameBreakAfter=\"true\" /></LAYOUT>\n</PARAGRAPH>\n<PARAGRAPH>\n<TEXT>");
+
 }
 
 QString WinWordDoc::generateBorder(
