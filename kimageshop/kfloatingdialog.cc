@@ -35,31 +35,31 @@
 
 KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(parent, name)
 {
-	setFocusPolicy(QWidget::StrongFocus);
-	setMouseTracking(true);
-	setFrameStyle(QFrame::Panel | QFrame::Raised);
-	setLineWidth(FRAMEBORDER);
-	
-	m_pParent = parent;
-	m_shaded = false;
-	m_dragging = false;
-	m_resizing = false;
-	m_cursor = false;
-	
-	m_pBase = 0L;
-	
-	if (m_pParent)
-	{
-		m_docked = true;
-		m_dockedPos = pos();
-	}
-	else
-	{
-		m_docked = false;
-		m_dockedPos = QPoint(0,0);
-	}
-	
-	// setup title buttons
+  setFocusPolicy(QWidget::StrongFocus);
+  setMouseTracking(true);
+  setFrameStyle(QFrame::Panel | QFrame::Raised);
+  setLineWidth(FRAMEBORDER);
+  
+  m_pParent = parent;
+  m_shaded = false;
+  m_dragging = false;
+  m_resizing = false;
+  m_cursor = false;
+  
+  m_pBase = 0L;
+  
+  if (m_pParent)
+    {
+      m_docked = true;
+      m_dockedPos = pos();
+    }
+  else
+    {
+      m_docked = false;
+      m_dockedPos = QPoint(0,0);
+    }
+  
+  // setup title buttons
 	m_pCloseButton = new QPushButton(this);
 	QPixmap close_pm(locate("appdata", "pics/close.png"));
 	m_pCloseButton->setPixmap(close_pm);
@@ -227,34 +227,34 @@ void KFloatingDialog::focusOutEvent( QFocusEvent *e )
 
 void KFloatingDialog::paintEvent(QPaintEvent *e)
 {
-	if (!isVisible())
-		return;
-	
-	QRect r(FRAMEBORDER, FRAMEBORDER, _width(), GRADIENT_HEIGHT);
-
-	QPainter p;
-	
-	p.begin(this);
-	p.setClipRect(r);
-	p.setClipping(true);
-	
-	// pixmap
-	if (m_titleLook == pixmap)
+  if (!isVisible())
+    return;
+  
+  QRect r(FRAMEBORDER, FRAMEBORDER, _width(), GRADIENT_HEIGHT);
+  
+  QPainter p;
+  
+  p.begin(this);
+  p.setClipRect(r);
+  p.setClipping(true);
+  
+  // pixmap
+  if (m_titleLook == pixmap)
     {
-		QPixmap *pm = hasFocus() ? m_pActivePm : m_pInactivePm;
-		
-		for (int x = r.x(); x < r.x() + r.width(); x+=pm->width())
-			p.drawPixmap(x, r.y(), *pm);
+      QPixmap *pm = hasFocus() ? m_pActivePm : m_pInactivePm;
+      
+      for (int x = r.x(); x < r.x() + r.width(); x+=pm->width())
+	p.drawPixmap(x, r.y(), *pm);
     }
-	// gradient
-	else if (m_titleLook == gradient)
+  // gradient
+  else if (m_titleLook == gradient)
     {
-		QPixmap* pm = 0;
-		
-		if (hasFocus())
-		{
-			if (m_activeShadePm.size() != r.size())
-			{
+      QPixmap* pm = 0;
+      
+      if (hasFocus())
+	{
+	  if (m_activeShadePm.size() != r.size())
+	    {
 				m_activeShadePm.resize(r.width(), r.height());
 				KPixmapEffect::gradient(m_activeShadePm, kapp->activeTitleColor(),
 										m_activeBlend, m_gradientType);

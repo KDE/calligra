@@ -1,7 +1,7 @@
 /*
  *  colordialog.h - part of KImageShop
  *
- *  Copyright (c) 1999 The KImageShop team (see file AUTHORS)
+ *  Copyright (c) 1999 Matthias Elter
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #ifndef __colordialog_h__
 #define __colordialog_h__
 
+#include "kcolor.h"
 #include "kfloatingdialog.h"
 
 class KDualColorButton;
@@ -29,6 +30,7 @@ class QFrame;
 class QSpinBox;
 class RGBWidget;
 class GradientFrame;
+class ColorChooserWidget;
 
 class ColorDialog : public KFloatingDialog
 {
@@ -38,15 +40,27 @@ class ColorDialog : public KFloatingDialog
   ColorDialog(QWidget *parent = 0L);
   ~ColorDialog();
 
+private:
+  ColorChooserWidget   *m_pBase;
+};
+
+class ColorChooserWidget : public QWidget
+{
+  Q_OBJECT
+ 
+ public:
+  ColorChooserWidget(QWidget *parent = 0L);
+  ~ColorChooserWidget();
+
  protected:
   virtual void resizeEvent(QResizeEvent *);
 
  private:
-  QWidget          *m_pBase;
   QPushButton      *m_pGrayButton, *m_pRGBButton, *m_pHSBButton, *m_pCMYKButton, *m_pLABButton;
   GradientFrame    *m_pGradient;
   RGBWidget        *m_pRGBWidget;
   KDualColorButton *m_pColorButton;
+  KColor            m_fg, m_bg;
 
 };
 

@@ -27,46 +27,50 @@
 #include "kdualcolorbtn.h"
 #include "colordialog.h"
 
-
 ColorDialog::ColorDialog(QWidget *parent) : KFloatingDialog(parent)
 {
-  setCaption( i18n( "Color chooser" ) );
-
-  m_pBase = new QWidget(this);
+  setCaption(i18n("Color chooser"));
   resize(280, 190);
   setFixedWidth(280);
   setFixedHeight(190);
-
-  m_pRGBWidget = new RGBWidget(m_pBase);
-  m_pRGBWidget->setBackgroundColor(blue);
-  m_pGradient = new GradientFrame(m_pBase);
-  m_pGradient->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  m_pGradient->setBackgroundColor(white);
-  m_pColorButton = new KDualColorButton(m_pBase);
-
-  m_pGrayButton = new QPushButton("Gray", m_pBase);
-  m_pRGBButton = new QPushButton("RGB", m_pBase);
-  m_pHSBButton = new QPushButton("HSB", m_pBase);
-  m_pCMYKButton = new QPushButton("CMYK", m_pBase);
-  m_pLABButton = new QPushButton("LAB", m_pBase);
+  m_pBase = new ColorChooserWidget(this);
+  setBaseWidget(m_pBase);
 }
 
-ColorDialog::~ColorDialog() {}
-
-void ColorDialog::resizeEvent(QResizeEvent *e)
+ColorDialog::~ColorDialog()
 {
-  KFloatingDialog::resizeEvent(e);
-  m_pBase->setGeometry(_left(), _top(), _width(), _height());
+  delete m_pBase;
+}
 
+ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)
+{
+  m_pRGBWidget = new RGBWidget(this);
+  m_pRGBWidget->setBackgroundColor(blue);
+  m_pGradient = new GradientFrame(this);
+  m_pGradient->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  m_pGradient->setBackgroundColor(white);
+  m_pColorButton = new KDualColorButton(this);
+  
+  m_pGrayButton = new QPushButton("Gray", this);
+  m_pRGBButton = new QPushButton("RGB", this);
+  m_pHSBButton = new QPushButton("HSB", this);
+  m_pCMYKButton = new QPushButton("CMYK", this);
+  m_pLABButton = new QPushButton("LAB", this);
+}
+
+ColorChooserWidget::~ColorChooserWidget() {}
+
+void ColorChooserWidget::resizeEvent(QResizeEvent *e)
+{
   // color model buttons
-  int w = m_pBase->width();
-  int h = m_pBase->height();
+  int w = width();
+  int h = height();
   m_pLABButton->setGeometry(w-32, 1, 30, 18);
   m_pCMYKButton->setGeometry(w-72, 1, 40, 18);
   m_pHSBButton->setGeometry(w-102, 1, 30, 18);
   m_pRGBButton->setGeometry(w-132, 1, 30, 18);
   m_pGrayButton->setGeometry(w-162, 1, 30, 18);
-
+  
   m_pColorButton->setGeometry(2, 5, 40, 40);
   m_pGradient->setGeometry(2, h-24, w-4, 22);
   m_pRGBWidget->setGeometry(44,22,w-46,h-48);
