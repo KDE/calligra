@@ -854,25 +854,16 @@ namespace KOffice {
         }
     }
 
-    /*
-     * As all edges (=filters) are required to have a positive weight
-     * we can use Dijkstra's shortest path algorithm from Cormen's
-     * "Introduction to Algorithms" (p. 527)
-     *
-     * Note: I did some adaptions as our data structures are slightly
-     * different from the ones used in the book. Further we simply stop
-     * the algorithm is we don't find any node with a weight != Infinity
-     * (==UINT_MAX), as this means that the remaining nodes in the queue
-     * aren't connected anyway.
-     *
-     * Note 2: for KOffice 1.4, the idea of inifity is a little changed here to avoid
-     * absurd filters (see the constant weightThreshold)
-     */
-    
+    // As all edges (=filters) are required to have a positive weight
+    // we can use Dijkstra's shortest path algorithm from Cormen's
+    // "Introduction to Algorithms" (p. 527)
+    // Note: I did some adaptions as our data structures are slightly
+    // different from the ones used in the book. Further we simply stop
+    // the algorithm is we don't find any node with a weight != Infinity
+    // (==UINT_MAX), as this means that the remaining nodes in the queue
+    // aren't connected anyway.
     void Graph::shortestPaths()
     {
-        const uint weightThreshold = UINT_MAX; // 100;
-        
         // Is the requested start mime type valid?
         Vertex* from = m_vertices[ m_from ];
         if ( !from )
@@ -887,7 +878,7 @@ namespace KOffice {
         while ( !queue.isEmpty() ) {
             Vertex *min = queue.extractMinimum();
             // Did we already relax all connected vertices?
-            if ( min->key() >= weightThreshold )
+            if ( min->key() == UINT_MAX )
                 break;
             min->relaxVertices( queue );
         }
