@@ -6468,6 +6468,42 @@ bool KSpreadTable::loadXML( const QDomElement& table )
         m_pDoc->setErrorMessage( i18n("Invalid document. Table name is empty") );
         return false;
     }
+
+    /* older versions of KSpread allowed all sorts of characters that
+       the parser won't actually understand.  Replace these with '_'
+       Also, the initial character cannot be a space.
+    */
+    if (m_strName[0] == ' ')
+    {
+      m_strName.remove(0,1);
+    }
+    for (unsigned int i=0; i < m_strName.length(); i++)
+    {
+      if ( !(m_strName[i].isLetterOrNumber() ||
+             m_strName[i] == ' ' || m_strName[i] == '.' ||
+             m_strName[i] == '_'))
+        {
+        m_strName[i] = '_';
+      }
+    }
+
+    /* make sure there are no name collisions with the altered name */
+    QString testName;
+    QString baseName;
+    int nameSuffix = 0;
+
+    testName = m_strName;
+    baseName = m_strName;
+
+    /* so we don't panic over finding ourself in the follwing test*/
+    m_strName = "";
+    while (m_pMap->findTable(testName) != NULL)
+    {
+      nameSuffix++;
+      testName = baseName + '_' + QString::number(nameSuffix);
+    }
+    m_strName = testName;
+
     if( table.hasAttribute( "grid" ) )
     {
         m_bShowGrid = (int)table.attribute("grid").toInt( &ok );

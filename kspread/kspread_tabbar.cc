@@ -358,8 +358,7 @@ void KSpreadTabBar::slotRename()
     // Have a different name ?
     if ( ok ) // User pushed an OK button.
     {
-        while ( newName[0] == ' ' || newName.find('-') != -1 
-                || newName.find('!') != -1 || newName.find('$') != -1 )
+        while (!util_validateTableName(newName))
         {
             KNotifyClient::beep();
 
@@ -378,7 +377,7 @@ void KSpreadTabBar::slotRename()
               newName[n] = '_';
 
             newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Enter name:"), newName, &ok, this );
-          
+
             if (!ok)
               return;
         }

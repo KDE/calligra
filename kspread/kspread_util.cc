@@ -566,7 +566,7 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
 
     int p = 0;
     int p2 = _str.find('!');
-    if (p2 != -1) 
+    if (p2 != -1)
     {
       tableName = _str.left(p2++);
       while ( true )
@@ -620,4 +620,22 @@ bool util_isColumnSelected(const QRect &selection)
 bool util_isRowSelected(const QRect &selection)
 {
   return ( (selection.left() == 1) && (selection.right() == KS_colMax) );
+}
+
+bool util_validateTableName(QString name)
+{
+  if (name[0] == ' ')
+  {
+    return false;
+  }
+  for (unsigned int i = 0; i < name.length(); i++)
+  {
+    if ( !(name[i].isLetterOrNumber() ||
+           name[i] == ' ' || name[i] == '.' ||
+           name[i] == '_'))
+    {
+      return false;
+    }
+  }
+  return true;
 }

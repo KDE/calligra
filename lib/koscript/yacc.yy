@@ -284,6 +284,7 @@ main
             $$ = new KSParseNode( func_dcl, $3, $6 );
             $$->setIdent( "main" );
           }
+        ;
 
 /* A usual identifier that may start with "::". For example "MyClass" or "::MyModule" */
 scoped_name

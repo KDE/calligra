@@ -134,4 +134,7 @@ double util_fact( double val, double end );
 
 bool util_isColumnSelected(const QRect &selection);
 bool util_isRowSelected(const QRect &selection);
+
+bool util_validateTableName(QString name);
+
 #endif
