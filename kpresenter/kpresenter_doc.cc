@@ -2883,9 +2883,19 @@ KPrPage * KPresenterDoc::stickyPage() const
     return m_stickyPage;
 }
 
+bool KPresenterDoc::isHeader(const KPObject *obj) const
+{
+    return (obj==_header);
+}
+
+bool KPresenterDoc::isFooter(const KPObject *obj) const
+{
+    return (obj==_footer);
+}
+
 bool KPresenterDoc::isHeaderFooter(const KPObject *obj) const
 {
-    return (obj==_header || obj==_footer);
+    return (obj==_header)||(obj==_footer);
 }
 
 void KPresenterDoc::updateRulerPageLayout()

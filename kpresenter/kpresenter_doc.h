@@ -253,6 +253,8 @@ public:
     void setHeader( bool b );
     void setFooter( bool b );
 
+    bool isHeader(const KPObject *obj)const;
+    bool isFooter(const KPObject *obj)const;
     bool isHeaderFooter(const KPObject *obj)const;
 
     // Returns true if the slide pgNum (0 based)

@@ -97,7 +97,7 @@ class OutlineObjectItem: public KListViewItem
 public:
    
     OutlineObjectItem( OutlineSlideItem * parent, KPObject* object, 
-       int num, bool sticky );
+       int num, bool sticky, const QString& name = QString::null );
        
     KPObject* object(){ return m_object; }
     
@@ -554,15 +554,15 @@ void OutlineSlideItem::update()
 
 
 OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _object,
-    int num, bool sticky )
+    int num, bool sticky, const QString& name )
     : KListViewItem( parent ), m_object( _object )
 {
     setObject( m_object );
     
-    QString name = m_object->getTypeString();
-    if( num > 0 ) name += QString(" (%1)").arg( num );
-    if( sticky ) name += i18n(" (Sticky)" );    
-    setText( 0, name );
+    QString objectName = name.isEmpty() ? m_object->getTypeString() : name;
+    if( num > 0 ) objectName += QString(" (%1)").arg( num );
+    if( sticky ) objectName += i18n(" (Sticky)" );    
+    setText( 0, objectName );
 }
 
 void OutlineObjectItem::setObject( KPObject* object )
@@ -687,9 +687,13 @@ void Outline::rebuildItems()
         for ( ; it.current() ; ++it )
         {
             KPObject* object = it.current();
-            new OutlineObjectItem( item, object, 0, true );
-        }
+            QString name = QString::null;
 
+            if( doc->hasHeader() && doc->isHeader( object ) ) name = i18n( "Header" );
+            if( doc->hasFooter() && doc->isFooter( object ) ) name = i18n( "Footer" );
+
+            new OutlineObjectItem( item, object, 0, true, name );
+        }
 
     }
 }
