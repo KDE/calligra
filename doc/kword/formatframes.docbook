@@ -422,7 +422,7 @@ select the &kword; file using the <link linkend="file-dialog">file selection dia
 <tip><para>If &kword; encounters a duplicate framestyle name in the selected file, it will append a number to the end of the 
 framestyle name to identify the imported style.</para>
 <para>As an example, if you import the <emphasis>Plain</emphasis> framestyle from another &kword; file, &kword; will change
-the name to <emphasis>Plain- 1</emphasis>.</para></tip>
+the name to <emphasis>Plain-1</emphasis>.</para></tip>
 <para>Select <emphasis>all</emphasis> the framestyles you want to import.  Then click
 <guibutton>OK</guibutton>.</para>
 <para>The framestyles will now appear at the bottom of your list of framestyles.  Click <guibutton>OK</guibutton> 

@@ -323,35 +323,38 @@ are specific to the document.  You can insert these variables by selecting
 </thead>
 <tbody>
 <row><entry>Filename</entry><entry>Resume.kwd</entry><entry>Inserts the file name of the document.</entry></row>
+<row><entry>Author Name</entry><entry>Mike McBride</entry><entry>The name of the author as specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>City</entry><entry>Philadelphia</entry><entry>The postal code specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Company Name</entry><entry>KDE</entry><entry>The company name specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Country</entry><entry>United States</entry><entry>The country name specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Directory Name</entry><entry>/home/mmcbride/kword</entry><entry>This is the directory name for
 the document. The filename is not included in the directory name variable.</entry></row>
-<row><entry>Author Name</entry><entry>Mike McBride</entry><entry>The name of the author as specified in the
+<row><entry>Directory and Filename</entry><entry>/home/mmcbride/kword/Resume.kwd</entry><entry>The directory
+and filename of the current file.</entry></row>
+<row><entry>Document Abstract</entry><entry>This is a current resume.</entry>
+<entry>The document abstract specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Document Title</entry><entry>My Resume</entry><entry>The document title specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Email</entry><entry>mpmcbride7@yahoo.com</entry><entry>The email address
 of the author as specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Company Name</entry><entry>KDE</entry><entry>The company name specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Directory and Filename</entry><entry>/home/mmcbride/kword/Resume.kwd</entry><entry>The directory
-and filename of the current file.</entry></row>
-<row><entry>Filename without extension</entry><entry>Resume</entry><entry>This removes the file name
-suffix (usually .kwd) from the filename.</entry></row>
-<row><entry>Telephone</entry><entry>Any valid telephone number</entry><entry>The telephone number specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Fax</entry><entry>Any valid telephone number</entry><entry>The fax machine number specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Country</entry><entry>United States</entry><entry>The country name specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Document Title</entry><entry>My Resume</entry><entry>The document title specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Document Abstract</entry><entry>This is a current resume.</entry>
-<entry>The document abstract specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Filename</entry><entry>Resume.kwd</entry><entry>The complete name of the file.</entry></row>
+<row><entry>Filename without extension</entry><entry>Resume</entry><entry>This removes the file name
+suffix (usually .kwd) from the filename.</entry></row>
 <row><entry>Postal code</entry><entry>Any valid postal code</entry><entry>The postal code specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>City</entry><entry>Philadelphia</entry><entry>The postal code specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Street</entry><entry>123 Main St.</entry><entry>The street address specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Telephone</entry><entry>Any valid telephone number</entry><entry>The telephone number specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Title</entry><entry>Director of Information Systems</entry><entry>The title specified in the authors section of the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
 </tbody></tgroup></informaltable></para>
 <note><para>Uninitialized variables will appear as &lt;none&gt;, until you define their
@@ -381,8 +384,8 @@ place in your document.</para>
 <para>In order for variables to be useful, you need to be able to give them a value, and be able to
 change that value easily.  To change the value of a variable (or give it an initial value):</para>
 <para>Select <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Custom</guimenuitem>
-<guimenuitem>Custom Variables</guimenuitem></menuchoice> from the menubar.
+<guimenu>Tools</guimenu>
+<guimenuitem>Custom Variables...</guimenuitem></menuchoice> from the menubar.
 This will bring up a dialog box.</para>
 <para>Each custom variable has a line in this table.  The first column is the name of the variable, and
 the second column is the value.</para>

@@ -1,3 +1,104 @@
 <sect1 id="endnotes-and-footnotes"><title>Footnotes</title>
+<para>&kword; has a complete set of tools to create and manage footnotes.  When you assign a footnote, &kword; automatically 
+places the footnote at the bottom of the correct page.  If the footnote reference point is moved to a new page, the footnote automatically 
+follows. </para>
+<para>You have the option of having &kword; control the numbering of your footnotes.  Alternativly, you can manually specify each footnote.</para>
+<para>There are multiple automatic numbering schemes and your footnotes can be seperated from the text with a dividing line. </para>
+
+<sect2 id="fn-add">
+<title>Add a new footnote</title>
+<para>To add a new footnote, place your cursor at the end of the text you want to footnote.  Then select 
+<menuchoice><guimenu>Insert</guimenu><guimenuitem>Footnote...</guimenuitem></menuchoice>
+from the menubar.  This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="footdlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>If you want &kword; to automatically number your footnotes for you, make sure that <guilabel>Automatic</guilabel> is selected.
+If you want to manually enter all footnotes in, then select <guilabel>Manual</guilabel> and enter the footnote entry in
+the text box to the right.</para>
+<tip><para>If at all possible, try to allow &kword; to automatically number the footnotes for you.  If &kword; controls the numbering, and you 
+insert, delete or move footnotes, &kword; will automatically renumber or reorder the footnotes for you.</para></tip>
+<para>The next section of the dialog, shows that a footnote will be created.</para>
+<note><para>Currently, &kword; does not support endnotes.  This will change in future editions of &kword;.</para></note>
+
+<para>Click <guibutton>Configure</guibutton> to <link linkend="fn-config">change the look</link> of your footnotes.</para>
+<para>Click <guibutton>Cancel</guibutton> to return to your document without inserting a footnote.</para>
+
+<para>Click <guibutton>Insert</guibutton> to insert the footnote, and enter your reference information.  &kword; will create the footnote
+entry, and place the cursor at the beginning of the entry for you to enter the desired reference information.</para>
+<para>When you have finished entering your footnote reference information, simply move back up the page, and you can return to editing your document.</para>
+</sect2>
+
+<sect2 id="fn-edit">
+<title>Change reference of footnote</title>
+<para>There are two ways to change reference information for a footnote:</para>
+<itemizedlist>
+<listitem><para>Place the mouse pointer over the footnote you want to change, and click once with the &RMB;.  
+A submenu will appear.  Select <guimenuitem>Edit Footnote</guimenuitem>.  &kword; will immediatly move your 
+cursor to the appropriate footnote reference.</para></listitem>
+<listitem><para>Simply move to the bottom of the page.  Locate the footnote reference, and click once with the &LMB;.</para></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="fn-delete">
+<title>Delete a footnote</title>
+<para>To delete a footnote, simply delete the footnote number.  &kword; will remove the reference information and resize the footnote frame.</para>
+</sect2>
+
+<sect2 id="fn-config">
+<title>Change the look of footnotes</title>
+<para>To configure the appearance of footnotes, select <menuchoice> <guimenu>Format</guimenu>
+<guimenuitem>Footnotes and Endnotes...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
+
+<sect3 id="fn-config-fn">
+<title>Change the appearance of footnote entries</title>
 <para></para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="footcfg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>There are 5 predefined numbering methods for footnotes.  Those methods are listed in the left 
+side of the dialog box. Begin by selecting the numbering method you want by clicking once with the &LMB;.</para>
+<para>In the text box labeled <guilabel>Prefix text:</guilabel>, you can enter any characters you want to
+appear <emphasis>before</emphasis> the footnote number.</para>
+<para>In the text box labeled <guilabel>Suffix text:</guilabel>, you can enter any characters you want to
+appear <emphasis>before</emphasis> the footnote number.</para>
+<para></para>
+<para></para>
+<para></para>
+</sect3>
+<sect3 id="fn-config-en">
+<title>Change the appearance of endnote entries</title>
+<para>&kword; does not currently support endnotes, but this feature will be implemented in future versions.  This tab should be ignored.</para>
+
+<para></para>
+</sect3>
+<sect3 id="fn-config-line">
+<title>Change the appearance of seperator line</title>
+<para></para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="footcfg3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para></para>
+</sect3>
+
+
+</sect2>
+
+
+
+
+
 </sect1>
