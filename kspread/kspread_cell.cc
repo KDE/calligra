@@ -4540,7 +4540,7 @@ KSpreadCell::DataType KSpreadCell::stringToDataType( const QString& str ) const
     return StringData;
 }
 
-QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operation op )
+QString KSpreadCell::pasteOperation( const QString &new_text, const QString &old_text, Operation op )
 {
     if ( op == OverWrite )
         return new_text;
@@ -4561,7 +4561,7 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
     if ( old_text.isEmpty() && ( op == Add || op == Mul
                                  || op == Sub || op == Div ) )
     {
-      old_text = "=0";
+      old = "=0";
     }
 
     if( !old_text.isEmpty() && old_text[0] == '=' )
@@ -4638,12 +4638,12 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
         return tmp_op;
     }
 
-    new_text = decodeFormula( new_text, m_iColumn, m_iRow );
+    tmp = decodeFormula( new_text, m_iColumn, m_iRow );
     setFlag(Flag_LayoutDirty);
     clearAllErrors();
     m_content = Formula;
 
-    return new_text;
+    return tmp;
 }
 
 void KSpreadCell::setStyle( Style _s )
@@ -4703,6 +4703,7 @@ KSpreadCell::~KSpreadCell()
     delete m_pPrivate;
     delete m_pQML;
     delete m_Validity;
+    delete m_pCode;
 
     // Unobscure cells.
     for( int x = 0; x <= m_iExtraXCells; ++x )

@@ -606,7 +606,7 @@ public:
      *
      * @return the merged text.
      */
-    QString pasteOperation( QString new_text, QString old_text, Operation op );
+    QString pasteOperation( const QString &new_text, const QString &old_text, Operation op );
 
     /**
      * @return TRUE if the cell contains a formula that could not
