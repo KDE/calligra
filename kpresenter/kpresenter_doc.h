@@ -549,7 +549,7 @@ private:
     double oldGridX;
     double oldGridY;
 
-    KPresenterView *m_kpresenterView;;
+    KPresenterView *m_kpresenterView;
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;
     KPrPage *m_stickyPage;
