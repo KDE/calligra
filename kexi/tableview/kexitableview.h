@@ -395,11 +395,6 @@ public:
 
 	KexiTableItem *highlightedItem() const;
 
-
-	/*! @internal Changes bottom margin settings, in pixels. 
-	 At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
-	void setBottomMarginInternal(int pixels);
-
 public slots:
 	/*! Sets data for this table view. if \a owner is true, the table view will own 
 	 \a data and therefore will destoy when required, else: \a data is (possibly) shared and
@@ -679,6 +674,7 @@ protected:
 	// event handling
 	virtual void contentsMousePressEvent(QMouseEvent*);
 	virtual void contentsMouseReleaseEvent(QMouseEvent*);
+	bool handleContentsMousePressOrRelease(QMouseEvent* e, bool release);
 	virtual void contentsMouseMoveEvent(QMouseEvent*);
 	virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 	virtual void keyPressEvent(QKeyEvent*);
@@ -756,6 +752,10 @@ protected:
 
 	//! Internal: updated sched fonts for painting.
 	void updateFonts(bool repaint = false);
+
+	/*! @internal Changes bottom margin settings, in pixels. 
+	 At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
+	void setBottomMarginInternal(int pixels);
 
 //	//! Called to repaint contents after a row is deleted.
 //	void repaintAfterDelete();

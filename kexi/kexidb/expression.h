@@ -46,6 +46,12 @@ namespace KexiDB {
 KEXI_DB_EXPORT QString exprClassName(int c);
 
 class ParseInfo;
+class NArgExpr;
+class UnaryExpr;
+class BinaryExpr;
+class ConstExpr;
+class VariableExpr;
+class FunctionExpr;
 
 //! A base class for all expressions
 class KEXI_DB_EXPORT BaseExpr
@@ -71,6 +77,14 @@ public:
 
 	int exprClass() const { return m_cl; }
 
+	/*! Convenience type casts. */
+	NArgExpr* toNArg();
+	UnaryExpr* toUnary();
+	BinaryExpr* toBinary();
+	ConstExpr* toConst();
+	VariableExpr* toVariable();
+	FunctionExpr* toFunction();
+
 protected:
 	int m_cl; //!< class
 	BaseExpr *m_par; //!< parent expression
@@ -94,16 +108,18 @@ public:
 };
 
 //! An unary argument operation: + - NOT (or !) ~ "IS NULL" "IS NOT NULL" 
-class KEXI_DB_EXPORT UnaryExpr : public NArgExpr
+class KEXI_DB_EXPORT UnaryExpr : public BaseExpr
 {
 public:
-	UnaryExpr(int token, BaseExpr *n);
+	UnaryExpr(int token, BaseExpr *arg);
 	virtual ~UnaryExpr();
 	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString();
-	BaseExpr *arg() { return NArgExpr::arg(0); }
+	BaseExpr *arg() const { return m_arg; }
 	virtual bool validate(ParseInfo& parseInfo);
+
+	BaseExpr *m_arg;
 };
 
 /*! A base class for binary operation
@@ -114,7 +130,7 @@ public:
     * e.g. "f1 f2" : token == 0
     * e.g. "f1 AS f2" : token == AS
 */
-class KEXI_DB_EXPORT BinaryExpr : public NArgExpr
+class KEXI_DB_EXPORT BinaryExpr : public BaseExpr
 {
 public:
 	BinaryExpr(int aClass, BaseExpr *left_expr, int token, BaseExpr *right_expr);
@@ -122,9 +138,12 @@ public:
 	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString();
-	BaseExpr *left();
-	BaseExpr *right();
+	BaseExpr *left() const { return m_larg; }
+	BaseExpr *right() const { return m_rarg; }
 	virtual bool validate(ParseInfo& parseInfo);
+
+	BaseExpr *m_larg;
+	BaseExpr *m_rarg;
 };
 
 /*! String, integer, float constants also includes NULL value.

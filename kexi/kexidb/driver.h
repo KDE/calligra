@@ -201,6 +201,9 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		virtual QCString escapeString( const QCString& str ) const = 0;
 		
+//todo enum EscapeType { EscapeDriver = 0x00, EscapeKexi = 0x01};
+//todo enum EscapePolicy { EscapeAsNecessary = 0x00, EscapeAlways = 0x02 };
+
 		enum EscapeType { EscapeDriver = 0x01, EscapeKexi = 0x02};
 		enum EscapePolicy { EscapeAsNecessary = 0x04, EscapeAlways = 0x08 };
 		//! Driver-specific identifier escaping (e.g. for a table name, db name, etc.)
@@ -209,8 +212,8 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		   \a options is the union of the EscapeType and EscapePolicy types.
 		   If no escaping options are given, defaults to driver escaping as
 		   necessary. */
-		QString escapeIdentifier( const QString& str, int options = 0x05) const;
-		QCString escapeIdentifier( const QCString& str, int options = 0x05) const;
+		QString escapeIdentifier( const QString& str, int options = EscapeDriver|EscapeAsNecessary) const;
+		QCString escapeIdentifier( const QCString& str, int options = EscapeDriver|EscapeAsNecessary) const;
 
 		
 		QVariant propertyValue( const QCString& propName ) const;

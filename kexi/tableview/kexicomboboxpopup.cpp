@@ -20,6 +20,7 @@
 #include "kexicomboboxpopup.h"
 
 #include "kexitableview.h"
+#include "kexitableview_p.h"
 #include "kexitableitem.h"
 #include "kexitableedit.h"
 
@@ -43,6 +44,40 @@ class KexiComboBoxPopupPrivate
 		KexiTableView *tv;
 		KexiDB::Field *int_f; //TODO: remove this -temporary
 		int max_rows;
+};
+
+//========================================
+
+/*! @internal
+ Helper for KexiComboBoxPopup. */
+class KexiComboBoxPopup_KexiTableView : public KexiTableView
+{
+	public:
+		KexiComboBoxPopup_KexiTableView(QWidget* parent=0)
+		 : KexiTableView(0, parent, "KexiComboBoxPopup_tv")
+		{
+			setReadOnly( true );
+			setLineWidth( 0 );
+			d->moveCursorOnMouseRelease = true;
+		//	setBackgroundAltering( false ); 
+			KexiTableView::Appearance a(appearance());
+			a.navigatorEnabled = false;
+			a.backgroundAltering = false; //TODO add option??
+			a.fullRowSelection = true;
+			a.rowHighlightingEnabled = true;
+			a.rowHighlightingColor = colorGroup().highlight();
+			a.rowHighlightingTextColor = colorGroup().highlightedText();
+			setAppearance(a);
+			setInsertingEnabled( false );
+			setSortingEnabled( false );
+			setVerticalHeaderVisible( false );
+			setHorizontalHeaderVisible( false );
+			setColumnStretchEnabled( true, -1 );
+			setContextMenuEnabled( false );
+			setScrollbarToolTipsEnabled( false );
+			installEventFilter(this);
+			setBottomMarginInternal( - horizontalScrollBar()->sizeHint().height() );
+		}
 };
 
 //========================================
@@ -79,27 +114,7 @@ void KexiComboBoxPopup::init()
 	setFrameStyle( Box | Plain );
 	
 //	QVBoxLayout *lyr = new QVBoxLayout(this, 1);
-	d->tv = new KexiTableView(0, this, "KexiComboBoxPopup_tv");
-	d->tv->setReadOnly( true );
-	d->tv->setLineWidth( 0 );
-//	d->tv->setBackgroundAltering( false ); 
-	KexiTableView::Appearance a(d->tv->appearance());
-	a.navigatorEnabled = false;
-	a.backgroundAltering = false; //TODO add option??
-	a.fullRowSelection = true;
-	a.rowHighlightingEnabled = true;
-	a.rowHighlightingColor = colorGroup().highlight();
-	a.rowHighlightingTextColor = colorGroup().highlightedText();
-	d->tv->setAppearance(a);
-	d->tv->setInsertingEnabled( false );
-	d->tv->setSortingEnabled( false );
-	d->tv->setVerticalHeaderVisible( false );
-	d->tv->setHorizontalHeaderVisible( false );
-	d->tv->setColumnStretchEnabled( true, -1 );
-	d->tv->setContextMenuEnabled( false );
-	d->tv->setScrollbarToolTipsEnabled( false );
-	d->tv->installEventFilter(this);
-	d->tv->setBottomMarginInternal( - d->tv->horizontalScrollBar()->sizeHint().height() );
+	d->tv = new KexiComboBoxPopup_KexiTableView(this);
 	installEventFilter(this);
 	
 	connect(d->tv, SIGNAL(itemReturnPressed(KexiTableItem*,int,int)),
@@ -218,7 +233,7 @@ bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 		if (e->type()==QEvent::KeyPress) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 			const int k = ke->key();
-			if (k==Key_Escape || k==Key_F4) {
+			if (ke->state()==NoButton && (k==Key_Escape || k==Key_F4)) {
 				hide();
 				emit cancelled();
 				return true;

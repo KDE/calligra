@@ -234,7 +234,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 		return false;
 	}
 
-	VariableExpr *v_e = dynamic_cast<VariableExpr*>(columnExpr);
+	VariableExpr *v_e = columnExpr->toVariable();
 	if (columnExpr->exprClass() == KexiDBExpr_Variable && v_e) {
 		//it's a variable:
 		if (v_e->name=="*") {//all tables asterisk
@@ -418,16 +418,16 @@ QuerySchema* parseSelect(
 			VariableExpr* t_e = 0;
 			QCString aliasString;
 			if (e->exprClass() == KexiDBExpr_SpecialBinary) {
-				BinaryExpr* t_with_alias = dynamic_cast<BinaryExpr*>(e);
+				BinaryExpr* t_with_alias = e->toBinary();
 				assert(t_with_alias);
 				assert(t_with_alias->left()->exprClass() == KexiDBExpr_Variable);
 				assert(t_with_alias->right()->exprClass() == KexiDBExpr_Variable
 					&& (t_with_alias->token()==AS || t_with_alias->token()==0));
-				t_e = dynamic_cast<VariableExpr*>(t_with_alias->left());
-				aliasString = dynamic_cast<VariableExpr*>(t_with_alias->right())->name.latin1();
+				t_e = t_with_alias->left()->toVariable();
+				aliasString = t_with_alias->right()->toVariable()->name.latin1();
 			}
 			else {
-				t_e = dynamic_cast<VariableExpr*>(e);
+				t_e = e->toVariable();
 			}
 			assert(t_e);
 			QCString tname = t_e->name.latin1();
@@ -497,13 +497,13 @@ QuerySchema* parseSelect(
 			bool moveNext = true; //used to avoid ++it when an item is taken from the list
 			BaseExpr *columnExpr = e;
 			VariableExpr* aliasVariable = 0;
-			if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
+			if (e->exprClass() == KexiDBExpr_SpecialBinary && e->toBinary()
 				&& (e->token()==AS || e->token()==0))
 			{
 				//KexiDBExpr_SpecialBinary: with alias
-				columnExpr = dynamic_cast<BinaryExpr*>(e)->left();
+				columnExpr = e->toBinary()->left();
 	//			isFieldWithAlias = true;
-				aliasVariable = dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
+				aliasVariable = e->toBinary()->right()->toVariable();
 				if (!aliasVariable) {
 					setError(i18n("Invalid alias definition for column \"%1\"")
 						.arg(columnExpr->toString())); //ok?
@@ -535,7 +535,7 @@ KexiDBDbg << 	it.atFirst () << endl;
 			}
 			else if (aliasVariable) {
 				//take first (left) argument of the special binary expr, will be owned, do not destroy
-				dynamic_cast<BinaryExpr*>(e)->list.take(0);
+				e->toBinary()->m_larg = 0;
 			}
 			else {
 				setError(i18n("Invalid \"%1\" column definition").arg(e->toString())); //ok?

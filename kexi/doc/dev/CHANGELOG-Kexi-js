@@ -401,6 +401,24 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+2004-11-15
+Main Window
+- close_project action's shortcut removed 
+  (to avoid conflict with KMDI's 'close current child window')
+- CTRL+F4 key closes child window on win32
+Table View
+- KexiComboBoxPopup: selection is changed on mouse release event, 
+  not on press, to avoid weird effect when selection is dragged
+- dropdown button placement fixed after clicking for KexiComboBoxTableEdit
+- fixed race condition in GUI on fast row inserting 
+  (due to QApplication::precessEvents())
+- fixed vheader offset on row inserting
+Query Designer
+- user is warned about empty 'column' item while 'table' item is not empty
+- simple criterias are loaded to GUI
+KexiDB
+- expression classes optimized for space and speed (NArgExpr is not used)
+
 2004-11-13
 Property Editor
 - fixed moving selection (esp. using Home key) 
@@ -417,7 +435,6 @@ Main Window
   E.g. this fixes column widths in query designer's view.
 Table View
 - sorting settings are cleared on setData()
-
 
 2004-11-12
 Kexi
@@ -455,7 +472,7 @@ Main
 
 2004-11-09
 Main
-- fix conflict of CTRL+Tab with tabbed/ideal mode
+- fix conflict of CTRL+Tab with tabbed/ideal mode on win32
 Query Designer
 - 'check query' action is now avaialble under Key_F9 (was CTRL+Key_Enter) 
    to avoid conflict with editor

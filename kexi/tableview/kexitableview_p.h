@@ -177,6 +177,11 @@ class KexiTableViewPrivate
 	 @see KexiTableView::setSpreadSheetMode() */
 	bool spreadSheetMode : 1;
 
+	/*! true if cursor should be moved on mouse release evenr rather than mouse press 
+	 in handleContentsMousePressOrRelease().
+	 False by default. Used by KeixComboBoxPopup. */
+	bool moveCursorOnMouseRelease : 1;
+
 	/*! 1 if table view is readOnly, 0 if not; 
 	 otherwise (-1 means "dont know") the 'readOnly' flag from table views' 
 	 internal data structure (KexiTableViewData *KexiTableView::m_data) is reused. 

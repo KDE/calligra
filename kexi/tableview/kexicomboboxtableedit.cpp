@@ -253,7 +253,8 @@ void KexiComboBoxTableEdit::resize(int w, int h)
 	m_rightMargin = d->parentRightMargin + d->button->width();
 //	int xx = m_scrollView->contentsX();
 	QRect r( pos().x(), pos().y(), w+1, h+1 );
-	r.moveBy(m_scrollView->contentsX(),0);
+//	r.moveBy(m_scrollView->contentsX(),0);
+	r.moveBy(m_scrollView->contentsX(),m_scrollView->contentsY());
 	updateFocus( r );
 	if (d->popup) {
 //		KexiTableView *tv = static_cast<KexiTableView*>(m_scrollView);
@@ -502,7 +503,7 @@ void KexiComboBoxTableEdit::slotRowAccepted(KexiTableItem * item, int /*row*/)
 bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 {
 	const int k = ke->key();
-	if (k==Key_F4) {//show popup
+	if (ke->state()==NoButton && k==Key_F4) {//show popup
 		slotButtonClicked();
 		return true;
 	}

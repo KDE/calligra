@@ -131,6 +131,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 	spreadSheetMode = false;
 	internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height()/2;
 	highlightedRow = -1;
+	moveCursorOnMouseRelease = false;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()

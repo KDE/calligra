@@ -102,6 +102,13 @@ QString BaseExpr::tokenToString()
 	return QString(safe_tname(m_token));
 }
 
+NArgExpr* BaseExpr::toNArg() { return dynamic_cast<NArgExpr*>(this); }
+UnaryExpr* BaseExpr::toUnary() { return dynamic_cast<UnaryExpr*>(this); }
+BinaryExpr* BaseExpr::toBinary() { return dynamic_cast<BinaryExpr*>(this); }
+ConstExpr* BaseExpr::toConst() { return dynamic_cast<ConstExpr*>(this); }
+VariableExpr* BaseExpr::toVariable() { return dynamic_cast<VariableExpr*>(this); }
+FunctionExpr* BaseExpr::toFunction() { return dynamic_cast<FunctionExpr*>(this); }
+
 //=========================================
 
 NArgExpr::NArgExpr(int aClass, int token)
@@ -147,11 +154,13 @@ BaseExpr* NArgExpr::arg(int nr)
 void NArgExpr::add(BaseExpr *expr)
 {
 	list.append(expr);
+	expr->setParent(this);
 }
 
 void NArgExpr::prepend(BaseExpr *expr)
 {
 	list.prepend(expr);
+	expr->setParent(this);
 }
 
 int NArgExpr::args()
@@ -172,39 +181,41 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
 }
 
 //=========================================
-UnaryExpr::UnaryExpr(int token, BaseExpr *n)
- : NArgExpr(KexiDBExpr_Unary, token)
+UnaryExpr::UnaryExpr(int token, BaseExpr *arg)
+ : BaseExpr(token)
+ , m_arg(arg)
 {
-	list.append(n);
+	m_cl = KexiDBExpr_Unary;
 	//ustaw ojca
-	n->setParent(this);
+	m_arg->setParent(this);
 }
 
 UnaryExpr::~UnaryExpr()
 {
+	delete m_arg;
 }
 
 QString UnaryExpr::debugString()
 {
 	return "UnaryExpr('" 
 		+ tokenToString() + "', "
-		+ (arg() ? arg()->debugString() : QString("<NONE>")) 
+		+ (m_arg ? m_arg->debugString() : QString("<NONE>")) 
 		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
 QString UnaryExpr::toString()
 {
 	if (m_token=='(') //parentheses (special case)
-		return "(" + arg()->toString() + ")";
+		return "(" + (m_arg ? m_arg->toString() : "<NULL>") + ")";
 	if (m_token < 255 && isprint(m_token))
-		return tokenToString() + arg()->toString();
+		return tokenToString() + (m_arg ? m_arg->toString() : "<NULL>");
 	if (m_token==NOT)
-		return "NOT " + arg()->toString();
+		return "NOT " + (m_arg ? m_arg->toString() : "<NULL>");
 	if (m_token==SQL_IS_NULL)
-		return arg()->toString() + " IS NULL";
+		return (m_arg ? m_arg->toString() : "<NULL>") + " IS NULL";
 	if (m_token==SQL_IS_NOT_NULL)
-		return arg()->toString() + " IS NOT NULL";
-	return QString("{INVALID_OPERATOR#%1} ").arg(m_token) + arg()->toString();
+		return (m_arg ? m_arg->toString() : "<NULL>") + " IS NOT NULL";
+	return QString("{INVALID_OPERATOR#%1} ").arg(m_token) + (m_arg ? m_arg->toString() : "<NULL>");
 }
 
 Field::Type UnaryExpr::type()
@@ -216,7 +227,7 @@ Field::Type UnaryExpr::type()
 	case SQL_IS_NOT_NULL:
 		return Field::Boolean;
 	}
-	const Field::Type t = arg()->type();
+	const Field::Type t = m_arg->type();
 	if (t==Field::Null)
 		return Field::Null;
 	if (m_token==NOT)
@@ -227,7 +238,10 @@ Field::Type UnaryExpr::type()
 
 bool UnaryExpr::validate(ParseInfo& parseInfo)
 {
-	if (!NArgExpr::validate(parseInfo))
+	if (!BaseExpr::validate(parseInfo))
+		return false;
+
+	if (!m_arg->validate(parseInfo))
 		return false;
 
 	return true;
@@ -257,33 +271,31 @@ bool UnaryExpr::validate(ParseInfo& parseInfo)
 }
 	
 //=========================================
-BinaryExpr::BinaryExpr(int aClass, BaseExpr *l_n, int token, BaseExpr *r_n)
- : NArgExpr(aClass, token)
+BinaryExpr::BinaryExpr(int aClass, BaseExpr *left_expr, int token, BaseExpr *right_expr)
+ : BaseExpr(token)
+ , m_larg(left_expr)
+ , m_rarg(right_expr)
 {
-	list.append(l_n);
-	list.append(r_n);
+	m_cl = aClass;
 	//ustaw ojca
-	l_n->setParent(this);
-	r_n->setParent(this);
+	m_larg->setParent(this);
+	m_rarg->setParent(this);
 }
 
 BinaryExpr::~BinaryExpr()
 {
-}
-
-BaseExpr *BinaryExpr::left()
-{
-	return arg(0);
-}
-
-BaseExpr *BinaryExpr::right()
-{
-	return arg(1);
+	delete m_larg;
+	delete m_rarg;
 }
 
 bool BinaryExpr::validate(ParseInfo& parseInfo)
 {
-	if (!NArgExpr::validate(parseInfo))
+	if (!BaseExpr::validate(parseInfo))
+		return false;
+
+	if (!m_larg->validate(parseInfo))
+		return false;
+	if (!m_rarg->validate(parseInfo))
 		return false;
 
 	return true;
@@ -291,7 +303,7 @@ bool BinaryExpr::validate(ParseInfo& parseInfo)
 
 Field::Type BinaryExpr::type()
 {
-	const Field::Type lt = left()->type(), rt = right()->type();
+	const Field::Type lt = m_larg->type(), rt = m_rarg->type();
 	if (lt==Field::Null || rt == Field::Null) {
 		if (m_token!=OR) //note that NULL OR something   != NULL
 			return Field::Null;
@@ -317,16 +329,16 @@ QString BinaryExpr::debugString()
 {
 	return QString("BinaryExpr(")
 		+ "class=" + exprClassName(m_cl)
-		+ "," + (left() ? left()->debugString() : QString("<NONE>")) 
+		+ "," + (m_larg ? m_larg->debugString() : QString("<NONE>")) 
 		+ ",'" + tokenToString() + "',"
-		+ (right() ? right()->debugString() : QString("<NONE>")) 
+		+ (m_rarg ? m_rarg->debugString() : QString("<NONE>")) 
 		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
 QString BinaryExpr::toString()
 {
 #define INFIX(a) \
-		left()->toString() + " " + a + " " + right()->toString()
+		(m_larg ? m_larg->toString() : "<NULL>") + " " + a + " " + (m_rarg ? m_rarg->toString() : "<NULL>")
 
 	if (m_token < 255 && isprint(m_token))
 		return INFIX(tokenToString());

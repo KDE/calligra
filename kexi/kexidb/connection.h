@@ -575,7 +575,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: The statement string can be specific for this connection's driver database, 
 		 and thus not reusable in general.
 		*/
-		QString selectStatement( QuerySchema& querySchema, int drvEscaping = 0x05 ) const;
+		QString selectStatement( QuerySchema& querySchema, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const;
 
 		/*! \return sql string of actually executed SQL statement,
 		 usually using drv_executeSQL(). If there was error during executing SQL statement, 
@@ -908,7 +908,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 - we assume these are valid identifiers for all drivers.
 		*/
 		inline QString escapeIdentifier(const QString& id, 
-		    int drvEscaping = 0x05) const {
+		    int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const {
 			return m_driver->escapeIdentifier(id, drvEscaping);
 		}
 		

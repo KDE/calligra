@@ -329,7 +329,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
 	// Connect header, table and scrollbars
 	connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), d->pTopHeader, SLOT(setOffset(int)));
-	connect(verticalScrollBar(), SIGNAL(valueChanged(int)),	d->pVerticalHeader, SLOT(setOffset(int)));
+	connect(verticalScrollBar(), SIGNAL(valueChanged(int)), d->pVerticalHeader, SLOT(setOffset(int)));
 	connect(d->pTopHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnWidthChanged(int, int, int)));
 	connect(d->pTopHeader, SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotSectionHandleDoubleClicked(int)));
 	connect(d->pTopHeader, SIGNAL(clicked(int)), this, SLOT(sortColumnInternal(int)));
@@ -1781,43 +1781,10 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 //	if (!d->contentsMousePressEvent_enabled)
 //		return;
 //	d->contentsMousePressEvent_enabled=false;
-	
-	// remember old focus cell
-	int oldRow = d->curRow;
-	int oldCol = d->curCol;
-	kdDebug(44021) << "oldRow=" << oldRow <<" oldCol=" << oldCol <<endl;
-	bool onInsertItem = false;
 
-	int newrow, newcol;
-	//compute clicked row nr
-	if (isInsertingEnabled()) {
-		if (rowAt(e->pos().y())==-1) {
-			newrow = rowAt(e->pos().y() - d->rowHeight);
-			if (newrow==-1 && m_data->count()>0) {
-				QScrollView::contentsMousePressEvent( e );
-				return;
-			}
-			newrow++;
-			kdDebug(44021) << "Clicked just on 'insert' row." << endl;
-			onInsertItem=true;
-		}
-		else {
-			// get new focus cell
-			newrow = rowAt(e->pos().y());
-		}
-	}
-	else {
-		if (rowAt(e->pos().y())==-1 || columnAt(e->pos().x())==-1) {
-			QScrollView::contentsMousePressEvent( e );
-			return; //clicked outside a grid
-		}
-		// get new focus cell
-		newrow = rowAt(e->pos().y());
-	}
-	newcol = columnAt(e->pos().x());
-
-	if(e->button() != NoButton) {
-		setCursor(newrow,newcol);
+	if (!d->moveCursorOnMouseRelease) {
+		if (!handleContentsMousePressOrRelease(e, false))
+			return;
 	}
 
 //	kdDebug(44021)<<"void KexiTableView::contentsMousePressEvent( QMouseEvent* e ) by now the current items should be set, if not -> error + crash"<<endl;
@@ -1847,14 +1814,67 @@ void KexiTableView::contentsMouseReleaseEvent( QMouseEvent* e )
 	if(m_data->count()==0 && !isInsertingEnabled())
 		return;
 
+	if (d->moveCursorOnMouseRelease)
+		handleContentsMousePressOrRelease(e, true);
+
 	int col = columnAt(e->pos().x());
 	int row = rowAt(e->pos().y());
+
 	if (!d->pCurrentItem || col==-1 || row==-1 || col!=d->curCol || row!=d->curRow)//outside a current cell
 		return;
 
 	QScrollView::contentsMouseReleaseEvent( e );
 
 	emit itemMouseReleased(d->pCurrentItem, d->curRow, d->curCol);
+}
+
+//! @internal called by contentsMouseOrEvent() contentsMouseReleaseEvent() to move cursor
+bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool release)
+{
+	// remember old focus cell
+	int oldRow = d->curRow;
+	int oldCol = d->curCol;
+	kdDebug(44021) << "oldRow=" << oldRow <<" oldCol=" << oldCol <<endl;
+	bool onInsertItem = false;
+
+	int newrow, newcol;
+	//compute clicked row nr
+	if (isInsertingEnabled()) {
+		if (rowAt(e->pos().y())==-1) {
+			newrow = rowAt(e->pos().y() - d->rowHeight);
+			if (newrow==-1 && m_data->count()>0) {
+				if (release)
+					QScrollView::contentsMouseReleaseEvent( e );
+				else
+					QScrollView::contentsMousePressEvent( e );
+				return false;
+			}
+			newrow++;
+			kdDebug(44021) << "Clicked just on 'insert' row." << endl;
+			onInsertItem=true;
+		}
+		else {
+			// get new focus cell
+			newrow = rowAt(e->pos().y());
+		}
+	}
+	else {
+		if (rowAt(e->pos().y())==-1 || columnAt(e->pos().x())==-1) {
+			if (release)
+				QScrollView::contentsMouseReleaseEvent( e );
+			else
+				QScrollView::contentsMousePressEvent( e );
+			return false; //clicked outside a grid
+		}
+		// get new focus cell
+		newrow = rowAt(e->pos().y());
+	}
+	newcol = columnAt(e->pos().x());
+
+	if(e->button() != NoButton) {
+		setCursor(newrow,newcol);
+	}
+	return true;
 }
 
 KPopupMenu* KexiTableView::popup() const
@@ -2503,8 +2523,10 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			//refr. current and next row
 			updateContents(columnPos(0), rowPos(row), viewport()->width(), d->rowHeight*2);
 //			updateContents(columnPos(0), rowPos(row+1), viewport()->width(), d->rowHeight);
-			qApp->processEvents(500);
+//js: warning this breaks behaviour (cursor is skipping, etc.): qApp->processEvents(500);
 			ensureVisible(columnPos(d->curCol), rowPos(row+1)+d->rowHeight-1, columnWidth(d->curCol), d->rowHeight);
+
+			d->pVerticalHeader->setOffset(contentsY());
 		}
 	}	
 //	else {//just reinit

@@ -348,6 +348,15 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	KexiTableViewData::Iterator it(d->data->iterator());
 	bool fieldsFound = false;
 	for (int i=0; i<(int)d->buffers->size(); ++it, i++) {
+		if (!it.current()->at(1).isNull() && it.current()->at(0).isNull()) {
+			//show message about missing field name, and set focus to that cell
+			kexipluginsdbg << "no field provided!" << endl;
+			d->dataTable->tableView()->setCursor(i,0);
+			if (errMsg)
+				*errMsg = i18n("Select column for table \"%1\"").arg(it.current()->at(1).toString());
+			return false;
+		}
+
 		KexiPropertyBuffer *buf = d->buffers->at(i);
 		if (buf) {
 			QString tableName = (*buf)["table"].value().toString().stripWhiteSpace();
@@ -409,10 +418,6 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 		}
 		else {//!buf
 			kexipluginsdbg << it.current()->at(1).toString() << endl;
-			if (!it.current()->at(1).isNull() && it.current()->at(0).isNull()) {
-				kexipluginsdbg << "no field provided!" << endl;
-//TODO: show message about missing field name, and set focus to that cell
-			}
 		}
 	}
 	if (!fieldsFound) {
@@ -435,13 +440,17 @@ tristate
 KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 {
 	kexipluginsdbg << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode << endl;
+
+	if (!d->dataTable->tableView()->acceptRowEdit())
+		return cancelled;
+
 	if (mode==Kexi::DesignViewMode) {
 		//todo
 		return true;
 	}
 	else if (mode==Kexi::DataViewMode) {
-		if (!d->dataTable->tableView()->acceptRowEdit())
-			return cancelled;
+//		if (!d->dataTable->tableView()->acceptRowEdit())
+	//		return cancelled;
 
 		if (!dirty() && parentDialog()->neverSaved()) {
 			KMessageBox::information(this, msgCannotSwitch_EmptyDesign());
@@ -586,16 +595,51 @@ void KexiQueryDesignerGuiEditor::showTablesAndConnectionsForQuery(KexiDB::QueryS
 	updateColumnsData();
 }
 
+
+/*static bool containsANDChain(KexiDB::BaseExpr* e)
+{
+	if (!e)
+		return false;
+	while (e->toBinary() && e->toBinary()->token()==AND)
+		e = e->toBinary()->right();
+	return false;
+}*/
+
 void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 {
 	const bool was_dirty = dirty();
-	
+
+	QDict<KexiDB::BinaryExpr> criterias(101, false);
+	//collect information about criterias:
+	//--this must be top level chain of AND's
+	KexiDB::BaseExpr* e = query->whereExpression();
+	KexiDB::BaseExpr* eItem = 0;
+	while (e) {
+		if (e->toBinary() && e->toBinary()->token()==AND) {
+			eItem = e->toBinary()->left();
+			e = e->toBinary()->right();
+		}
+		else {
+			eItem = e;
+			e = 0;
+		}
+		kexidbg << eItem->toString() << endl;
+		if (eItem->toBinary() && eItem->exprClass()==KexiDBExpr_Relational 
+			&& eItem->toBinary()->left()->toVariable())
+		{
+			//this is: variable , op , argument
+			//store:
+			criterias.insert(eItem->toBinary()->left()->toVariable()->name, eItem->toBinary());
+		}
+	}
+
 	//add fields
 	uint row_num = 0;
 	KexiDB::Field *field;
 	for (KexiDB::Field::ListIterator it(*query->fields()); (field = it.current()); ++it, row_num++) {
 		//add row
-		QString tableName, fieldName, columnAlias;
+		QString tableName, fieldName, columnAlias, criteriaString;
+		KexiDB::BinaryExpr *criteriaExpr = 0;
 		if (field->isQueryAsterisk()) {
 			if (field->table()) {//single-table asterisk
 				tableName = field->table()->name();
@@ -617,15 +661,26 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 			else {
 				tableName = field->table()->name();
 				fieldName = field->name();
+				criteriaExpr = criterias[fieldName];
 			}
 		}
 		KexiTableItem *newItem = createNewRow(tableName, fieldName); //, columnAlias);
+		if (criteriaExpr) {
+//TODO: fix for !INFIX operators
+			if (criteriaExpr->token()=='=')
+				criteriaString = criteriaExpr->right()->toString();
+			else
+				criteriaString = criteriaExpr->tokenToString() + " " + criteriaExpr->right()->toString();
+			(*newItem)[4] = criteriaString;
+		}
 		d->dataTable->tableView()->insertItem(newItem, row_num);
 		//create buffer
 		KexiPropertyBuffer &buf = *createPropertyBuffer( row_num, tableName, fieldName, true/*new one*/ );
 		if (!columnAlias.isEmpty()) {//add alias
 			buf["alias"].setValue(columnAlias, false);
 		}
+		if (!criteriaString.isEmpty())
+			buf["criteria"].setValue( criteriaString, false );
 	}
 	propertyBufferSwitched();
 
