@@ -1,3 +1,7 @@
+22.09.2002	kudesigner	porting to KoDocument/KoFactory/KoView/KoAcclication started
+20.09.2002	lib		transparency for labels/fields/specials/calcfields added (!without property!)
+
+
 *************************
 VERSION 1.2
 *************************

@@ -42,8 +42,8 @@ Current features:
 
 DOCUMENTATION:
 
-The first draft of the user documentation can be found in ./docs.
-
+Included in docbook-xml format among with the koffice package.
+Docs include tutorial, user documentation and developer documentation.
 
 REQUIREMENTS:
 

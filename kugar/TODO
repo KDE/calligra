@@ -31,3 +31,4 @@
     displayed until Konqueror is re-sized.
 14. Improve the error reporting - particularly about bad XML.
 15. Make kudesigner a real koffice application.
+16. Create new application and mime icons for the kudesigner.
