@@ -296,8 +296,8 @@ SvgImport::parseGradient( const QDomElement &e )
 	{
 		if( gradhelper.bbox )
 		{
-			gradhelper.gradient.setOrigin( KoPoint( toPercentage( e.attribute( "x1" ) ), toPercentage( e.attribute( "y1" ) ) ) );
-			gradhelper.gradient.setVector( KoPoint( toPercentage( e.attribute( "x2" ) ), toPercentage( e.attribute( "y2" ) ) ) );
+			gradhelper.gradient.setOrigin( KoPoint( toPercentage( e.attribute( "x1", "0%" ) ), toPercentage( e.attribute( "y1", "0%" ) ) ) );
+			gradhelper.gradient.setVector( KoPoint( toPercentage( e.attribute( "x2", "100%" ) ), toPercentage( e.attribute( "y2", "0%" ) ) ) );
 		}
 		else
 		{
