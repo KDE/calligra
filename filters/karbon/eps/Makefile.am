@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = \
 
 libkarbonepsexport_la_SOURCES = \
 	epsexport.cc \
-	epsexportdlg.cc 
+	epsexportdlg.cc
 
 libkarbonepsexport_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonepsexport_la_LIBADD  = $(LIB_KOFFICEUI) ../../../karbon/libkarbonpart.la
@@ -35,6 +35,3 @@ noinst_HEADERS = \
 	pscommentlexer.h
 
 METASOURCES = AUTO
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/karbonepsfilter.pot

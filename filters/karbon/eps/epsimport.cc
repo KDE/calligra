@@ -42,7 +42,7 @@ public:
 protected:
 	virtual void setupTranslations( void )
 	{
-		KGlobal::locale()->insertCatalogue( "karbonepsfilter" );
+		KGlobal::locale()->insertCatalogue( "kofficefilters" );
 	}
 };
 
@@ -97,7 +97,7 @@ EpsImport::convert( const QCString& from, const QCString& to )
 
 	// Build ghostscript call to convert ps/eps -> ai:
 	QString command(
-		"gs -q -dBATCH -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps "); 
+		"gs -q -dBATCH -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps ");
 	command += KProcess::quote(input);
 	command += " | ";
 	command += sedFilter;

@@ -74,7 +74,7 @@ public:
 protected:
 	virtual void setupTranslations( void )
 	{
-		KGlobal::locale()->insertCatalogue( "karbonepsfilter" );
+		KGlobal::locale()->insertCatalogue( "kofficefilters" );
 	}
 };
 
@@ -328,7 +328,7 @@ EpsExport::getStroke( const VStroke& stroke )
 	{
 		if( m_psLevel == 3 )
 		{
-			
+
 		}
 	}
 }
