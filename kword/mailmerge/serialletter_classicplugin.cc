@@ -464,13 +464,12 @@ void KWClassicMailMergeEditor::changeRecord( int i )
 
 void KWClassicMailMergeEditor::addEntry()
 {
-//    KWVariableNameDia
-//        *dia = new KWVariableNameDia( this );
     bool ok;
     QString value=KLineEditDlg::getText(i18n("Enter entry name:"),QString::null,&ok,this);
-    if ((ok) && (value!=QString::null) && (value!="")) {
-//    if ( dia->exec() == QDialog::Accepted ) {
-        if ( db->getNumRecords() == 0 ) {
+    if ((ok) && !value.isEmpty())
+    {
+        if ( db->getNumRecords() == 0 )
+        {
             first->setEnabled(true);
             back_->setEnabled(true);
             forward->setEnabled(true);
@@ -482,13 +481,11 @@ void KWClassicMailMergeEditor::addEntry()
             addRecord();
         }
         dbList->clear();
-//        db->addEntry( dia->getName() );
         db->addEntry( value );
         changeRecord( records->value() );
         dbList->updateItems();
     }
     updateButton();
-//    delete dia;
 }
 
 void KWClassicMailMergeEditor::addRecord()
@@ -502,7 +499,15 @@ void KWClassicMailMergeEditor::addRecord()
 
 void KWClassicMailMergeEditor::removeEntry()
 {
-
+    QListViewItem * item = dbList->selectedItem ();
+    if ( item )
+    {
+        db->removeEntry( item->text(0) );
+        dbList->clear();
+        changeRecord( records->value() );
+        dbList->updateItems();
+        updateButton();
+    }
 #warning reimplement
 /*
     if ( db->getNumRecords() == 0 )
