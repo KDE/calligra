@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kpttask.h"
+
 KPTTask::KPTTask() : KPTNode() {
         m_nodeType=TASK;
 }

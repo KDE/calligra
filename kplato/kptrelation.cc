@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include "kptrelation.h"
 
 KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, timingRelation tr, QTime lag) {
     m_parent=parent;

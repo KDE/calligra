@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include "kptresource.h"
 
 KPTResource::KPTResource() : m_appointments(), m_workingHours() {
 }
@@ -75,10 +76,12 @@ void KPTAppointment::deleteAppointmentFromRepeatList(QTime time) {
 void KPTAppointment::addAppointmentToRepeatList(QTime time) {
 }
 
+
 KPTRisk::KPTRisk(KPTNode *n, KPTResource *r, RiskType rt) {
     m_node=n;
     m_resource=r;
     m_riskType=rt;
 }
 
-KPTRisk::~KPTRisk();
+KPTRisk::~KPTRisk() {
+}

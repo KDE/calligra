@@ -36,8 +36,12 @@ class KPTMilestone : KPTNode {
         ~KPTMilestone();
 
         // no children permitted.
-        virtual void addChildNode( KPTNode *node) {}
-        virtual void addResource( KPTResource *resource ) {}
+        void addChildNode( KPTNode *node) {}
+        void addResource( KPTResource *resource ) {}
+        void insertChildNode( unsigned int index, KPTNode *node) {}
+        void insertRisk( unsigned int index, KPTRisk *risk ) {}
+        void addDependNode( KPTNode *node, TimingType t=START_ON_DATE, ParentRelation p=FINISH_START) {}
+        void insertDependNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, ParentRelation p=FINISH_START) {}
 
 
         /** The expected Duration is the expected time to complete a Task, Project, etc. For an 

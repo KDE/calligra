@@ -58,6 +58,7 @@ class KPTNode {
         const QList<KPTNode> &childNodeIterator() const { return m_nodes; }
         int numChildren() const { return m_nodes.count(); }
         virtual void addChildNode( KPTNode *node);
+        virtual void insertChildNode( unsigned int index, KPTNode *node);
         void delChildNode( KPTNode *node, bool remove=true);
         void delChildNode( int number, bool remove=true);
         KPTNode *getChildNode( int number) { return m_nodes.at(number); }
@@ -68,6 +69,7 @@ class KPTNode {
          */
         const QList<KPTRisk> &riskIterator() const { return m_risks; }
         virtual void addRisk( KPTRisk *risk );
+        virtual void insertRisk( unsigned int index, KPTRisk *risk );
         void removeRisk( KPTRisk *risk );
         void removeRisk( int number );
 
@@ -87,7 +89,8 @@ class KPTNode {
 
         const QList<KPTNode> &dependNodeIterator() const { return m_dependNodes; }
         int numDependNodes() const { return m_dependNodes.count(); }
-        void addDependNode( KPTNode *node, TimingType t=START_ON_DATE, ParentRelation p=FINISH_START);
+        virtual void addDependNode( KPTNode *node, TimingType t=START_ON_DATE, ParentRelation p=FINISH_START);
+        virtual void insertDependNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, ParentRelation p=FINISH_START);
         void delDependNode( KPTNode *node, bool remove=false);
         void delDependNode( int number, bool remove=false);
         KPTNode *getDependNode( int number) { return m_dependNodes.at(number); }

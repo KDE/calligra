@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kptmilestone.h"
+
 KPTMilestone::KPTMilestone() : KPTNode() {
         m_nodeType=POINT_IN_TIME;
 }

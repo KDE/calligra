@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include "kptnode.h"
 
 KPTNode::KPTNode() m_nodes(), m_dependChildNodes(), m_dependParentNodes(), m_risk() {
         m_name=new QString("");
@@ -56,4 +57,12 @@ void KPTNode::delDependNode( KPTNode *node, bool remove) {
 void KPTNode::delDependNode( int number, bool remove) {
 }
 
+void KPTNode::insertDependNode( unsigned int index, KPTNode *node, TimingType t, ParentRelation p) {
+}
+
+void KPTNode::insertRisk( unsigned int index, KPTRisk *risk ) {
+}
+
+void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
+}
 
