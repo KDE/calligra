@@ -16,7 +16,6 @@
   <Action name="edit_reconnect"/>
   <Separator/>
   <Action name="edit_customvars"/>
-  <Action name="edit_sldatabase"/>
  </Menu>
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
@@ -51,8 +50,6 @@
    <Action name="insert_var_pgnum"/>
    <Separator/>
    <Action name="insert_var_custom"/>
-   <Separator/>
-   <Action name="insert_var_serialletter"/>
   </Menu>
  </Menu>
  <Menu name="Tools"><text>&amp;Tools</text>
