@@ -252,6 +252,12 @@ void KexiViewBase::setFocus()
 	m_mainWin->invalidateSharedActions(this);
 }
 
+KAction* KexiViewBase::sharedAction( const char *name ) const
+{
+	if (!part() || !part()->actionCollectionForMode( viewMode() ))
+		return 0;
+	return part()->actionCollectionForMode( viewMode() )->action( name );
+}
 
 #include "kexiviewbase.moc"
 

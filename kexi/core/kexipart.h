@@ -82,6 +82,7 @@ class KEXICORE_EXPORT Part : public QObject
 		 */
 		virtual DataSource *dataSource() { return 0; }
 
+		KActionCollection* actionCollectionForMode(int viewMode) const;
 		
 	signals: 
 		void newObjectRequest( KexiPart::Info *info );
@@ -121,13 +122,18 @@ class KEXICORE_EXPORT Part : public QObject
 
 		virtual void initActions() {};
 
+		/*! Creates shared action for action collection declared 
+		 for 'instance actions' of this part.
+		 See KexiSharedActionHost::createSharedAction() for details.
+		 Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
+		 that subclass allocated instead just KAction (what is the default). */
 		KAction* createSharedAction(int mode, const QString &text, 
-			const QString &pix_name, const KShortcut &cut, const char *name);
+			const QString &pix_name, const KShortcut &cut, const char *name, 
+			const char *subclassName = 0);
 
 		KAction* createSharedPartAction(const QString &text, 
-			const QString &pix_name, const KShortcut &cut, const char *name);
-
-		KActionCollection* actionCollectionForMode(int viewMode);
+			const QString &pix_name, const KShortcut &cut, const char *name,
+			const char *subclassName = 0);
 
 		void setActionAvailable(const char *action_name, bool avail);
 

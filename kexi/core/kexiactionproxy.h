@@ -99,7 +99,7 @@ class KEXICORE_EXPORT KexiActionProxy
 		KAction* plugSharedAction(const char *action_name, const QString& alternativeText, QWidget* w);
 
 		/*! \return action named with \a name or NULL if there is no such action. */
-		KAction* sharedAction(const char* name);
+		virtual KAction* sharedAction(const char* name);
 
 		inline QObject *receiver() const { return m_receiver; }
 

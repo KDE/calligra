@@ -78,7 +78,8 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		/*! Sets this host as default shared actions host. */
 		void setAsDefaultHost();
 
-		/*! \return default shared actions host, used when no host is explicity specified for shared actions.
+		/*! \return default shared actions host, used when no host 
+		 is explicity specified for shared actions.
 		 There can be exactly one deault shared actions host. */
 		static KexiSharedActionHost& defaultHost();
 
@@ -89,7 +90,8 @@ class KEXICORE_EXPORT KexiSharedActionHost
 
 		/*! Invalidates all shared actions declared using createSharedAction().
 		 Any shared action will be enabled if \a o (typically: a child window or a dock window)
-		 has this action plugged _and_ it is available (i.e. enabled). Otherwise the action is disabled.
+		 has this action plugged _and_ it is available (i.e. enabled). 
+		 Otherwise the action is disabled.
 
 		 Call this method when it is known that some actions need invalidation 
 		 (e.g. when new window is activated). See how it is used in KexiMainWindow.
@@ -108,15 +110,23 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		/*! \return main window that acts for which this host is defined. */
 		KMainWindow* mainWindow() const;
 
-		/*! Creates shared action. Action's data is owned by the main window. */
+		/*! Creates shared action using \a text, \a pix_name pixmap, shortcut \a cut,
+		 optional \a name. You can pass your own action collection as \a col. 
+		 If \a col action collection is null, main window's action will be used.
+		 Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
+		 that subclass allocated instead just KAction (what is the default).
+		 Created action's data is owned by the main window. */
 		KAction* createSharedAction(const QString &text, const QString &pix_name, 
-			const KShortcut &cut, const char *name, KActionCollection* col = 0);
+			const KShortcut &cut, const char *name, KActionCollection* col = 0,
+			const char *subclassName = 0);
 
 		/*! Like above - creates shared action, but from standard action identified by \a id. 
 		 Action's data is owned by the main window. */
-		KAction* createSharedAction( KStdAction::StdAction id, const char *name, KActionCollection* col = 0);
+		KAction* createSharedAction( KStdAction::StdAction id, const char *name, 
+			KActionCollection* col = 0);
 
-		/*! \return action proxy for object \a o, or NULL if this object has no plugged shared actions. */
+		/*! \return action proxy for object \a o, or NULL if this object has 
+		 no plugged shared actions. */
 		KexiActionProxy* actionProxyFor(QObject *o) const;
 
 		/*! Like actionProxyFor(), but takes the proxy from the host completely.

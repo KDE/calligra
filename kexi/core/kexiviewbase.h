@@ -87,7 +87,9 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		virtual bool dirty() const { return m_dirty; }
 
 		/*! \return the view mode for this view. */
-		int viewMode() { return m_viewMode; }
+		int viewMode() const { return m_viewMode; }
+
+		virtual KAction* sharedAction( const char *name ) const;
 
 	public slots:
 		virtual void setFocus();

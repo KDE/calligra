@@ -193,13 +193,21 @@ KAction* KexiSharedActionHost::createSharedActionInternal( KAction *action )
 };*/
 
 KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &pix_name, 
-	const KShortcut &cut, const char *name, KActionCollection* col)
+	const KShortcut &cut, const char *name, KActionCollection* col, const char *subclassName)
 {
-	return createSharedActionInternal( 
-//		new KAction(text, (pix_name.isEmpty() ? QIconSet() : SmallIconSet(pix_name)),
-		new KAction(text, pix_name,
-		cut, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection(), name)
-	);
+	if (subclassName==0)
+		return createSharedActionInternal( 
+			new KAction(text, pix_name,
+			cut, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection(), name)
+		);
+	else if (qstricmp(subclassName,"KToggleAction")==0)
+		return createSharedActionInternal( 
+			new KToggleAction(text, pix_name,
+			cut, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection(), name)
+		);
+//TODO: more KAction subclasses
+
+	return 0;
 }
 
 KAction* KexiSharedActionHost::createSharedAction( KStdAction::StdAction id, const char *name, 

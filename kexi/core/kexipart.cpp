@@ -87,30 +87,51 @@ void Part::createGUIClients(KexiMainWindow *win)
 	}
 }
 
-KActionCollection* Part::actionCollectionForMode(int viewMode)
+KActionCollection* Part::actionCollectionForMode(int viewMode) const
 {
 	KXMLGUIClient *cli = m_instanceGuiClients[viewMode];
 	return cli ? cli->actionCollection() : 0;
 }
 
 KAction* Part::createSharedAction(int mode, const QString &text, 
-	const QString &pix_name, const KShortcut &cut, const char *name)
+	const QString &pix_name, const KShortcut &cut, const char *name,
+	const char *subclassName)
 {
 	GUIClient *instanceGuiClient = m_instanceGuiClients[mode];
 	if (!instanceGuiClient) {
 		kdDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
 		return 0;
 	}
-	return m_mainWin->createSharedAction(text, pix_name, cut, name, instanceGuiClient->actionCollection());
+	return m_mainWin->createSharedAction(text, pix_name, cut, name, 
+		instanceGuiClient->actionCollection(), subclassName);
 }
 
 KAction* Part::createSharedPartAction(const QString &text, 
-	const QString &pix_name, const KShortcut &cut, const char *name)
+	const QString &pix_name, const KShortcut &cut, const char *name,
+	const char *subclassName)
 {
 	if (!m_guiClient)
 		return 0;
-	return m_mainWin->createSharedAction(text, pix_name, cut, name, m_guiClient->actionCollection());
+	return m_mainWin->createSharedAction(text, pix_name, cut, name, 
+		m_guiClient->actionCollection(), subclassName);
 }
+
+/*KAction* Part::sharedAction(int mode, const char* name, const char *classname)
+{
+	GUIClient *instanceGuiClient = m_instanceGuiClients[mode];
+	if (!instanceGuiClient) {
+		kdDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
+		return 0;
+	}
+	return instanceGuiClient->actionCollection()->action(name, classname);
+}
+
+KAction* Part::sharedPartAction(int mode, const char* name, const char *classname)
+{
+	if (!m_guiClient)
+		return 0;
+	return m_guiClient->actionCollection()->action(name, classname);
+}*/
 
 void Part::setActionAvailable(const char *action_name, bool avail)
 {
