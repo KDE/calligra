@@ -217,7 +217,7 @@ void KPWebPresentation::loadConfig()
     backColor = cfg.readColorEntry( "BackColor", &backColor );
     titleColor = cfg.readColorEntry( "TitleColor", &titleColor );
     textColor = cfg.readColorEntry( "TextColor", &textColor );
-    path = cfg.readEntry( "Path", path );
+    path = cfg.readPathEntry( "Path", path );
     xml = cfg.readBoolEntry( "XML", xml );
     zoom = cfg.readNumEntry( "Zoom", zoom );
     m_encoding = cfg.readEntry( "Encoding", m_encoding );
@@ -239,7 +239,11 @@ void KPWebPresentation::saveConfig()
     cfg.writeEntry( "BackColor", backColor );
     cfg.writeEntry( "TitleColor", titleColor );
     cfg.writeEntry( "TextColor", textColor );
+#if KDE_IS_VERSION(3,1,3)
+    cfg.writePathEntry( "Path", path );
+#else
     cfg.writeEntry( "Path", path );
+#endif
     cfg.writeEntry( "XML", xml );
     cfg.writeEntry( "Zoom", zoom );
     cfg.writeEntry( "Encoding", m_encoding );

@@ -58,7 +58,7 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QCString &format, QWidget* pare
 	QString value;
 	while(i < 10)
 	{
-		value = _config->readEntry( QString("Recent%1").arg(i) );
+		value = _config->readPathEntry( QString("Recent%1").arg(i) );
 		kdDebug() << "recent : " << value << endl;
 		if(!value.isEmpty())
 		{
@@ -222,7 +222,11 @@ void XSLTImportDia::okSlot()
 		while(_recentList.size() > 0)
 		{
 			kdDebug() << "save : " << _recentList.first() << endl;
+#if KDE_IS_VERSION(3,1,3)
+			_config->writePathEntry( QString("Recent%1").arg(i), _recentList.first());
+#else
 			_config->writeEntry( QString("Recent%1").arg(i), _recentList.first());
+#endif
 			_recentList.pop_front();
 			i = i + 1;
 		}

@@ -265,7 +265,7 @@ void KoTemplateTree::readTemplates() {
                         if(hidden_str.lower()=="true")
                             hidden=true;
                         //kdDebug() << "hidden: " << hidden_str << endl;
-                        templatePath=config.readEntry("URL");
+                        templatePath=config.readPathEntry("URL");
                         //kdDebug() << "Link to : " << templatePath << endl;
                         if(templatePath[0]!='/') {
                             if(templatePath.left(6)=="file:/") // I doubt this will happen
@@ -305,7 +305,11 @@ void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
     KSimpleConfig config(KoTemplates::stripWhiteSpace(localDir+group->name()+'/'+t->name()+".desktop"));
     config.setDesktopGroup();
     config.writeEntry("Type", "Link");
+#if KDE_IS_VERSION(3,1,3)
+    config.writePathEntry("URL", t->file());
+#else
     config.writeEntry("URL", t->file());
+#endif
     config.writeEntry("Name", t->name());
     config.writeEntry("Icon", t->picture());
     config.writeEntry("X-KDE-Hidden", t->isHidden());

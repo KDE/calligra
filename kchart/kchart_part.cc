@@ -319,7 +319,7 @@ void KChartPart::loadConfig( KConfig *conf )
     _params->setChartType( (KDChartParams::ChartType)conf->readNumEntry( "type", _params->chartType() ) );
     //   other_threshold = conf->readNumEntry("other_threshold", other_threshold);
 
-    //   backgroundPixmapName = conf->readEntry( "backgroundPixmapName", QString::null );
+    //   backgroundPixmapName = conf->readPathEntry( "backgroundPixmapName" );
     //   if( !backgroundPixmapName.isNull() ) {
     //     backgroundPixmap.load( locate( "wallpaper", backgroundPixmapName ));
     //     backgroundPixmapIsDirty = true;
@@ -410,7 +410,7 @@ void KChartPart::saveConfig( KConfig *conf )
 
     // background pixmap stuff
     //   if( !backgroundPixmapName.isNull() )
-    // 	conf->writeEntry( "backgroundPixmapName", backgroundPixmapName );
+    // 	conf->writePathEntry( "backgroundPixmapName", backgroundPixmapName );
     //   conf->writeEntry( "backgroundPixmapIsDirty", backgroundPixmapIsDirty );
     //   conf->writeEntry( "backgroundPixmapScaled", backgroundPixmapScaled );
     //   conf->writeEntry( "backgroundPixmapCentered", backgroundPixmapCentered );

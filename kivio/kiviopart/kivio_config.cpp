@@ -30,6 +30,7 @@
 
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <kstandarddirs.h>
 #include <koPageLayoutDia.h>
 #include <koUnit.h>
@@ -190,7 +191,7 @@ KivioConfig::KivioConfig( const QString &fileName )
 
     QColor *defColor = new QColor(0x4BD2FF/* 154, 250, 154 */);
     m_stencilBGType  = (KivioConfig::StencilBGType)readNumEntry( "StencilBackgroundType", (int)sbgtColor );
-    m_stencilBGFile  = readEntry( "StencilBackgroundFile", "" );
+    m_stencilBGFile  = readPathEntry( "StencilBackgroundFile" );
     m_stencilBGColor = readColorEntry( "StencilBackgroundColor", defColor );
     delete defColor;
 
@@ -265,7 +266,11 @@ KivioConfig::~KivioConfig()
 void KivioConfig::writeConfig()
 {
     writeEntry( "StencilBackgroundType", QString::number((int)m_stencilBGType) );
+#if KDE_IS_VERSION(3,1,3)
+    writePathEntry( "StencilBackgroundFile", m_stencilBGFile );
+#else
     writeEntry( "StencilBackgroundFile", m_stencilBGFile );
+#endif
     writeEntry( "StencilBackgroundColor", m_stencilBGColor.name() );
 
     sync();

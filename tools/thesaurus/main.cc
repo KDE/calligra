@@ -45,6 +45,7 @@ NOT TODO:
 #include <qtoolbutton.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
+#include <kdeversion.h>
 
 /***************************************************
  *
@@ -70,7 +71,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_dialog->resize(600, 400);
 
     m_config = new KConfig("kthesaurusrc");
-    m_data_file = m_config->readEntry("datafile");
+    m_data_file = m_config->readPathEntry("datafile");
     if( ! m_data_file ) {
         m_data_file = KGlobal::dirs()->findResourceDir("data", "thesaurus/")
            + "thesaurus/thesaurus.txt";
@@ -217,7 +218,11 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
 Thesaurus::~Thesaurus()
 {
+#if KDE_IS_VERSION(3,1,3)
+    m_config->writePathEntry("datafile", m_data_file);
+#else
     m_config->writeEntry("datafile", m_data_file);
+#endif
     m_config->sync();
     delete m_config;
     // FIXME?: this hopefully fixes the problem of a wrong cursor

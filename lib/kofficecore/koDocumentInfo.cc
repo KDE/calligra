@@ -218,12 +218,12 @@ void KoDocumentInfoAuthor::initParameters()
       KConfig config( "kofficerc" );
       if ( config.hasGroup( "Author" ) ) {
         config.setGroup( "Author" );
-        m_telephone=config.readEntry( "telephone", "" );
-        m_fax=config.readEntry( "fax", "" );
-        m_country=config.readEntry( "country", "" );
-        m_postalCode=config.readEntry( "postal-code", "" );
-        m_city=config.readEntry( "city", "" );
-        m_street=config.readEntry( "street", "" );
+        m_telephone=config.readEntry( "telephone" );
+        m_fax=config.readEntry( "fax" );
+        m_country=config.readEntry( "country" );
+        m_postalCode=config.readEntry( "postal-code" );
+        m_city=config.readEntry( "city" );
+        m_street=config.readEntry( "street" );
       }
 #if KDE_IS_VERSION( 3, 1, 90 )
     } else {

@@ -71,7 +71,7 @@ KWordLatexExportDia::KWordLatexExportDia(KoStore* in, QWidget* parent,
 	QString value;
 	while(i < 10)
 	{
-		/*value = _config->readEntry( QString("Recent%1").arg(i) );
+		/*value = _config->readPathEntry( QString("Recent%1").arg(i) );
 		kdDebug() << "recent : " << value << endl;
 		if(!value.isEmpty())
 		{

@@ -1037,7 +1037,11 @@ void ConfigurePathPage::apply()
         {
             config->setGroup( "Kword Path" );
             m_pView->kWordDocument()->setPicturePath( res );
+#if KDE_IS_VERSION(3,1,3)
+            config->writePathEntry( "picture path",res );
+#else
             config->writeEntry( "picture path",res );
+#endif
         }
     }
     item = m_pPathView->findItem(i18n("Backup Path"), 0);
@@ -1048,7 +1052,11 @@ void ConfigurePathPage::apply()
         {
             config->setGroup( "Kword Path" );
             m_pView->kWordDocument()->setBackupPath( res );
+#if KDE_IS_VERSION(3,1,3)
+            config->writePathEntry( "backup path",res );
+#else
             config->writeEntry( "backup path",res );
+#endif
         }
     }
 

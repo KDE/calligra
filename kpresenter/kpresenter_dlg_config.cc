@@ -969,7 +969,11 @@ void configurePathPage::apply()
         {
             config->setGroup( "Kpresenter Path" );
             m_pView->kPresenterDoc()->setBackupPath( res );
+#if KDE_IS_VERSION(3,1,3)
+            config->writePathEntry( "backup path",res );
+#else
             config->writeEntry( "backup path",res );
+#endif
         }
     }
     item = m_pPathView->findItem(i18n("Picture Path"), 0);
@@ -980,7 +984,11 @@ void configurePathPage::apply()
         {
             config->setGroup( "Kpresenter Path" );
             m_pView->kPresenterDoc()->setPicturePath( res );
+#if KDE_IS_VERSION(3,1,3)
+            config->writePathEntry( "picture path",res );
+#else
             config->writeEntry( "picture path",res );
+#endif
         }
     }
 }

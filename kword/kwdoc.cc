@@ -491,8 +491,8 @@ void KWDocument::initConfig()
       if ( config->hasKey( "horizontal line path" ) )
           m_horizontalLinePath = config->readListEntry( "horizontal line path" );
       if ( config->hasKey( "picture path" ) )
-          m_picturePath = config->readEntry( "picture path" );
-      setBackupPath(config->readEntry( "backup path", QString::null ));
+          m_picturePath = config->readPathEntry( "picture path" );
+      setBackupPath(config->readPathEntry( "backup path" ));
   }
 }
 
