@@ -46,16 +46,17 @@ KWFrame::KWFrame()
   runAroundGap = 1;
   mostRight = false;
 
-  brd_left.color = getBackgroundColor();
+  backgroundColor = QBrush(white);
+  brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
-  brd_right.color = getBackgroundColor();
+  brd_right.color = getBackgroundColor().color();
   brd_right.style = KWParagLayout::SOLID;
   brd_right.ptWidth = 1;
-  brd_top.color = getBackgroundColor();
+  brd_top.color = getBackgroundColor().color();
   brd_top.style = KWParagLayout::SOLID;
   brd_top.ptWidth = 1;
-  brd_bottom.color = getBackgroundColor();
+  brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
 }
@@ -71,16 +72,17 @@ KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
   runAroundGap = 1;
   mostRight = false;
 
-  brd_left.color = getBackgroundColor();
+  backgroundColor = QBrush(white);
+  brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
-  brd_right.color = getBackgroundColor();
+  brd_right.color = getBackgroundColor().color();
   brd_right.style = KWParagLayout::SOLID;
   brd_right.ptWidth = 1;
-  brd_top.color = getBackgroundColor();
+  brd_top.color = getBackgroundColor().color();
   brd_top.style = KWParagLayout::SOLID;
   brd_top.ptWidth = 1;
-  brd_bottom.color = getBackgroundColor();
+  brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
 } 
@@ -96,16 +98,17 @@ KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
   runAroundGap = 1;
   mostRight = false;
 
-  brd_left.color = getBackgroundColor();
+  backgroundColor = QBrush(white);
+  brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
-  brd_right.color = getBackgroundColor();
+  brd_right.color = getBackgroundColor().color();
   brd_right.style = KWParagLayout::SOLID;
   brd_right.ptWidth = 1;
-  brd_top.color = getBackgroundColor();
+  brd_top.color = getBackgroundColor().color();
   brd_top.style = KWParagLayout::SOLID;
   brd_top.ptWidth = 1;
-  brd_bottom.color = getBackgroundColor();
+  brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
 }    
@@ -121,16 +124,17 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   runAroundGap = 1;
   mostRight = false;
 
-  brd_left.color = getBackgroundColor();
+  backgroundColor = QBrush(white);
+  brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
-  brd_right.color = getBackgroundColor();
+  brd_right.color = getBackgroundColor().color();
   brd_right.style = KWParagLayout::SOLID;
   brd_right.ptWidth = 1;
-  brd_top.color = getBackgroundColor();
+  brd_top.color = getBackgroundColor().color();
   brd_top.style = KWParagLayout::SOLID;
   brd_top.ptWidth = 1;
-  brd_bottom.color = getBackgroundColor();
+  brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
 }
@@ -146,16 +150,17 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap)
   runAroundGap = _gap;
   mostRight = false;
 
-  brd_left.color = getBackgroundColor();
+  backgroundColor = QBrush(white);
+  brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
-  brd_right.color = getBackgroundColor();
+  brd_right.color = getBackgroundColor().color();
   brd_right.style = KWParagLayout::SOLID;
   brd_right.ptWidth = 1;
-  brd_top.color = getBackgroundColor();
+  brd_top.color = getBackgroundColor().color();
   brd_top.style = KWParagLayout::SOLID;
   brd_top.ptWidth = 1;
-  brd_bottom.color = getBackgroundColor();
+  brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
 }
@@ -171,16 +176,17 @@ KWFrame::KWFrame(const QRect &_rect)
   runAroundGap = 1;
   mostRight = false;
 
-  brd_left.color = getBackgroundColor();
+  backgroundColor = QBrush(white);
+  brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
-  brd_right.color = getBackgroundColor();
+  brd_right.color = getBackgroundColor().color();
   brd_right.style = KWParagLayout::SOLID;
   brd_right.ptWidth = 1;
-  brd_top.color = getBackgroundColor();
+  brd_top.color = getBackgroundColor().color();
   brd_top.style = KWParagLayout::SOLID;
   brd_top.ptWidth = 1;
-  brd_bottom.color = getBackgroundColor();
+  brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
 }
@@ -778,16 +784,16 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  KWFrame rect;
 	  KWParagLayout::Border l,r,t,b;
 	  
-	  l.color = rect.getBackgroundColor();
+	  l.color = rect.getBackgroundColor().color();
 	  l.style = KWParagLayout::SOLID;
 	  l.ptWidth = 1;
-	  r.color = rect.getBackgroundColor();
+	  r.color = rect.getBackgroundColor().color();
 	  r.style = KWParagLayout::SOLID;
 	  r.ptWidth = 1;
-	  t.color = rect.getBackgroundColor();
+	  t.color = rect.getBackgroundColor().color();
 	  t.style = KWParagLayout::SOLID;
 	  t.ptWidth = 1;
-	  b.color = rect.getBackgroundColor();
+	  b.color = rect.getBackgroundColor().color();
 	  b.style = KWParagLayout::SOLID;
 	  b.ptWidth = 1;
 	  

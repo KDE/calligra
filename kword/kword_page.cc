@@ -81,6 +81,12 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   currFindPos = 0;
   currFindFS = 0;
   currFindLen = 0;
+
+  painter.begin(this);
+  fc->init(fc->getParag(),painter,true,true);
+  painter.end();
+  recalcWholeText(false);
+  recalcCursor(false,0,fc);
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
@@ -2543,28 +2549,28 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 	    }
 	  
 	  tmp = frameset->getFrame(j);
-	  if (tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor())
+	  if (tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(doc->setBorderPen(tmp->getLeftBorder()));
  	      _painter.setPen(p);
  	      _painter.drawLine(frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.y(),
  				frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.bottom() + 1); 
 	    }
-	  if (tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor())
+	  if (tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(doc->setBorderPen(tmp->getRightBorder()));
  	      _painter.setPen(p);
 	      _painter.drawLine(frame.right() - tmp->getRightBorder().ptWidth / 2,frame.y(),
 				frame.right() - tmp->getRightBorder().ptWidth / 2,frame.bottom() + 1); 
 	    }
-	  if (tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor())
+	  if (tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(doc->setBorderPen(tmp->getTopBorder()));
  	      _painter.setPen(p);
 	      _painter.drawLine(frame.x(),frame.y() + tmp->getTopBorder().ptWidth / 2,
 				frame.right() + 1,frame.y() + tmp->getTopBorder().ptWidth / 2);
 	    }
-	  if (tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor())
+	  if (tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(doc->setBorderPen(tmp->getBottomBorder()));
  	      _painter.setPen(p);
@@ -3431,7 +3437,7 @@ void KWPage::setLeftFrameBorder(KWParagLayout::Border _brd,bool _enable)
 	      if (!_enable) 
 		{
 		  _brd.ptWidth = 1;
-		  _brd.color = frame->getBackgroundColor();
+		  _brd.color = frame->getBackgroundColor().color();
 		}
 	      frame->setLeftBorder(_brd);
 	    }
@@ -3457,7 +3463,7 @@ void KWPage::setRightFrameBorder(KWParagLayout::Border _brd,bool _enable)
 	      if (!_enable) 
 		{
 		  _brd.ptWidth = 1;
-		  _brd.color = frame->getBackgroundColor();
+		  _brd.color = frame->getBackgroundColor().color();
 		}
 	      frame->setRightBorder(_brd);
 	    }
@@ -3483,7 +3489,7 @@ void KWPage::setTopFrameBorder(KWParagLayout::Border _brd,bool _enable)
 	      if (!_enable) 
 		{
 		  _brd.ptWidth = 1;
-		  _brd.color = frame->getBackgroundColor();
+		  _brd.color = frame->getBackgroundColor().color();
 		}
 	      frame->setTopBorder(_brd);
 	    }
@@ -3509,7 +3515,7 @@ void KWPage::setBottomFrameBorder(KWParagLayout::Border _brd,bool _enable)
 	      if (!_enable) 
 		{
 		  _brd.ptWidth = 1;
-		  _brd.color = frame->getBackgroundColor();
+		  _brd.color = frame->getBackgroundColor().color();
 		}
 	      frame->setBottomBorder(_brd);
 	    }

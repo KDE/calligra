@@ -681,3 +681,8 @@ Reggie, 17.1.1999:
 - It's possible to configure borders (color, width and style) for frames now => table cells can have these borders too
 - Implemented loading/saving frame borders
 - Implemented printing frame borders
+
+Reggie, 18.1.1999:
+------------------
+- Some formatting fixes
+- Preperations for more formatting and settings of frames and tables

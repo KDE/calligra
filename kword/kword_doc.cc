@@ -1780,28 +1780,28 @@ void KWordDocument::printBorders(QPainter &_painter,int xOffset,int yOffset,int 
 	  if (!frame.intersects(KRect(xOffset,yOffset,_w,_h))) continue;
 
 	  tmp = frameset->getFrame(j);
-	  if (tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor())
+	  if (tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(setBorderPen(tmp->getLeftBorder()));
  	      _painter.setPen(p);
  	      _painter.drawLine(frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.y(),
  				frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.bottom() + 1); 
 	    }
-	  if (tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor())
+	  if (tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(setBorderPen(tmp->getRightBorder()));
  	      _painter.setPen(p);
 	      _painter.drawLine(frame.right() - tmp->getRightBorder().ptWidth / 2,frame.y(),
 				frame.right() - tmp->getRightBorder().ptWidth / 2,frame.bottom() + 1); 
 	    }
-	  if (tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor())
+	  if (tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(setBorderPen(tmp->getTopBorder()));
  	      _painter.setPen(p);
 	      _painter.drawLine(frame.x(),frame.y() + tmp->getTopBorder().ptWidth / 2,
 				frame.right() + 1,frame.y() + tmp->getTopBorder().ptWidth / 2);
 	    }
-	  if (tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor())
+	  if (tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(setBorderPen(tmp->getBottomBorder()));
  	      _painter.setPen(p);

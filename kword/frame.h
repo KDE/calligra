@@ -105,7 +105,7 @@ public:
 
   QRegion getEmptyRegion();
 
-  QColor getBackgroundColor() { return white; }
+  QBrush getBackgroundColor() { return backgroundColor; }
 
   QString leftBrd2String();
   QString rightBrd2String();
@@ -122,6 +122,7 @@ protected:
   QList<KRect> intersections,oldIntersects;
 
   KWParagLayout::Border brd_left,brd_right,brd_top,brd_bottom;
+  QBrush backgroundColor;
 
 private:
   KWFrame &operator=(KWFrame &_frame)
