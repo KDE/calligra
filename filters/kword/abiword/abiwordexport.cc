@@ -616,6 +616,8 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
     *m_streamOut << " props=\"" << abiprops << "\"";
     
     *m_streamOut << "/>\n";
+    
+    return true;
 }
 
 bool AbiWordWorker::doFullPaperFormat(const int format,

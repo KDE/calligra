@@ -212,6 +212,8 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
     *m_streamOut << "</tr>\n";
     *m_streamOut << "</tbody>\n";
     *m_streamOut << "</table>\n";
+    
+    return true;
 }
 
 bool HtmlWorker::makeImage(const FrameAnchor& anchor)
@@ -852,6 +854,7 @@ bool HtmlWorker::doFullDefineStyle(LayoutData& layout)
     kdDebug(30503) << "Class: " << escapeCssIdentifier(layout.styleName) << endl;
     *m_streamOut << "\n{\n " << layoutToCss(layout) << "\n}\n";
 
+    return true;
 }
 
 bool HtmlWorker::doCloseStyles(void)
