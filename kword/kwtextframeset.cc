@@ -1085,10 +1085,13 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
         if ( parag->next() )
             paragLayout = static_cast<KWTextParag *>( parag->next() )->paragLayout();
         copyCharFormatting( ch, undoRedoInfo.text.length()-1, true );
-	if ( cursor->remove() )
-        {
+
+
+        QTextParag *old = cursor->parag();
+        if ( cursor->remove() ) {
+            if ( old != cursor->parag() && m_lastFormatted == old ) // 'old' has been deleted
+                m_lastFormatted = cursor->parag() ? cursor->parag()->prev() : 0;
 	    undoRedoInfo.text += "\n";
-            kdDebug() << "KWTextFrameSet::doKeyboardAction ActionDelete adding paraglayout" << endl;
             undoRedoInfo.oldParagLayouts << paragLayout;
         }
     } break;
