@@ -57,7 +57,7 @@ OOWriterWorker::OOWriterWorker(void) : m_streamOut(NULL),
     m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
     m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0),
     m_automaticParagraphStyleNumber(0), m_automaticTextStyleNumber(0),
-    m_footnoteNumber(0)
+    m_footnoteNumber(0), m_tableNumber(0), m_textBoxNumber( 0 )
 {
 }
 
@@ -490,6 +490,29 @@ void OOWriterWorker::writeMetaXml(void)
         zipWriteData("</meta:print-date>\n");
     }
 
+    zipWriteData( "  <meta:document-statistic" );
+
+// ### TODO: m_numPages is not given to the Worker
+#if 0
+    // KWord files coming from import filters mostly do not have no page count
+    if ( m_numPages > 0 )
+    {
+        zipWriteData( " meta:page-count=\"" );
+        zipWriteData( QString::number ( m_numPages ) );
+        zipWriteData( "\"" );
+    }
+#endif
+
+    zipWriteData( " meta:image-count=\"" ); // This is not specified in the OO specification section 2.1.19
+    zipWriteData( QString::number ( m_pictureNumber ) );
+    zipWriteData( "\"" );
+
+    zipWriteData( " meta:table-count=\"" );
+    zipWriteData( QString::number ( m_tableNumber ) );
+    zipWriteData( "\"" );
+
+    zipWriteData( "/>\n" ); // meta:document-statistic
+    
     zipWriteData(" </office:meta>\n");
     zipWriteData("</office:document-meta>\n");
 
@@ -814,7 +837,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }
 
-#undef ALLOW_TABLE
+#define ALLOW_TABLE
 
 QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const
 {
