@@ -239,8 +239,7 @@ bool KWDocument::initDoc()
         resetURL();
         ok = loadNativeFormat( fileName );
     } else if ( ret == KoTemplateChooseDia::File ) {
-        KURL url;
-        url.setPath( _template);
+        KURL url( _template);
         ok = openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
         QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
