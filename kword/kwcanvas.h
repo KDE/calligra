@@ -104,7 +104,7 @@ public:
     // Mouse move
     void mmEditFrameResize( bool top, bool bottom, bool left, bool right, bool noGrid );
     void mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed );
-    void mmCreate( const QPoint& normalPoint );
+    void mmCreate( const QPoint& normalPoint, bool shiftPressed );
     // Mouse release
     void mrEditFrame( QMouseEvent *e, const QPoint &nPoint );
     void mrCreateText();

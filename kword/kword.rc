@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="19">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="20">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -121,9 +121,6 @@
   <Action name="table_delcol"/>
 </ToolBar>
 <ToolBar name="insert_toolbar" position="left"><Text>Insert</Text>
-  <Action name="tools_edit"/>
-  <Action name="tools_editframes"/>
-  <Separator/>
   <Action name="insert_table"/>
   <Action name="insert_picture"/>
   <!-- Action name="insert_clipart"/>

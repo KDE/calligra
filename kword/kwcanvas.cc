@@ -870,7 +870,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     m_gui->getView()->updateFrameStatusBarItem();
 }
 
-void KWCanvas::mmCreate( const QPoint& normalPoint ) // Mouse move when creating a frame
+void KWCanvas::mmCreate( const QPoint& normalPoint, bool shiftPressed ) // Mouse move when creating a frame
 {
     QPainter p;
     p.begin( viewport() );
@@ -887,7 +887,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint ) // Mouse move when creating
 
     // Resize the rectangle
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
-    if ( m_mouseMode != MM_CREATE_PIX )
+    if ( m_mouseMode != MM_CREATE_PIX && !shiftPressed )
         applyGrid( docPoint );
 
     m_insRect.setRight( docPoint.x() );
@@ -964,7 +964,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
             } break;
             case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART:
             case MM_CREATE_TABLE: case MM_CREATE_FORMULA:
-                mmCreate( normalPoint );
+                mmCreate( normalPoint, e->state() & ShiftButton );
             default: break;
         }
     } else {
