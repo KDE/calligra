@@ -580,6 +580,13 @@ public:
 
     void changeBgSpellCheckingState( bool b );
 
+    // To position the cursor when opening a document
+    QString initialFrameSet() const; // can be empty for "unset"
+    int initialCursorParag() const;
+    int initialCursorIndex() const;
+    // Once we're done with this info, get rid of it
+    void deleteInitialEditingInfo();
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -735,6 +742,9 @@ private:
     double m_tabStop;
     QStringList m_spellListIgnoreAll;
     KWFrameSet * bgFrameSpellChecked;
+
+    class InitialEditing;
+    InitialEditing *m_initialEditing;
 };
 
 

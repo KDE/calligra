@@ -197,9 +197,15 @@ don't put a </?xml...> at the end of the file!).
                                 mm...
                                 pt...
                                 inch...
+
             hasTOC:         0...the document has no TOC
                             1...the document has TOC
+
             tabStopValue:   tabstop value
+
+            activeFrameset: the name of the frameset that was edited when saving the document
+            cursorParagraph:if activeFrameset is a text frameset, the paragraph ID of the cursor
+            cursorIndex:    if activeFrameset is a text frameset, the character index of the cursor
 -->
 <!ELEMENT ATTRIBUTES
     EMPTY>
@@ -210,7 +216,10 @@ don't put a </?xml...> at the end of the file!).
     hasFooter CDATA #IMPLIED
     unit CDATA #IMPLIED
     hasTOC CDATA #IMPLIED
-    tabStopValue CDATA #IMPLIED>
+    tabStopValue CDATA #IMPLIED
+    activeFrameset CDATA #IMPLIED
+    cursorParagraph CDATA #IMPLIED
+    cursorIndex CDATA #IMPLIED>
 
 
 <!--    Contains general attributes variables. Has no children.

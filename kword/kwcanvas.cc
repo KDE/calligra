@@ -102,11 +102,30 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
 
     m_mouseMode = MM_EDIT; // avoid UMR in setMouseMode
     setMouseMode( MM_EDIT );
+
     // Create the current frameset-edit last, to have everything ready for it
-    KWFrameSet * fs = m_doc->frameSet( 0 );
+    KWFrameSet * fs = 0L;
+    QString fsName = m_doc->initialFrameSet();
+    if ( !fsName.isEmpty() )
+        fs = m_doc->frameSetByName( fsName );
+    if ( !fs )
+        fs = m_doc->frameSet( 0 );
     Q_ASSERT( fs );
-    if ( fs && fs->isVisible( m_viewMode ) )
+    if ( fs && fs->isVisible( m_viewMode ) ) {
         m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+
+        KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
+        if ( textedit ) {
+            int paragId = m_doc->initialCursorParag();
+            int index = m_doc->initialCursorIndex();
+            if ( paragId != 0 || index != 0 ) {
+                KoTextParag* parag = textedit->textDocument()->paragAt( paragId );
+                if ( parag )
+                    textedit->setCursor( parag, index );
+            }
+        }
+    }
+    m_doc->deleteInitialEditingInfo();
 }
 
 KWCanvas::~KWCanvas()

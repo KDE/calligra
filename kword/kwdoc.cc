@@ -116,6 +116,16 @@ void KWDocument::clearUndoRedoInfos()
     }
 }
 
+/**
+ * Temporary storage for the initial edition info
+ * (activeFrameset, cursorParagraph and cursorIndex attributes of the XML
+ */
+struct KWDocument::InitialEditing {
+    QString m_initialFrameSet;
+    int m_initialCursorParag;
+    int m_initialCursorIndex;
+};
+
 /******************************************************************/
 /* Class: KWDocument                                              */
 /******************************************************************/
@@ -194,6 +204,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_pixmapMap = 0L;
     m_clipartMap = 0L;
     m_pasteFramesetsMap = 0L;
+    m_initialEditing = 0L;
     m_varFormatCollection = new KoVariableFormatCollection;
     m_varColl=new KWVariableCollection(new KWVariableSettings() );
 
@@ -960,12 +971,20 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         m_footerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
         unitName = KWDocument::getAttribute( attributes, "unit", "pt" );
         m_hasTOC =  static_cast<bool>(KWDocument::getAttribute( attributes,"hasTOC", 0 ) );
-        m_tabStop = KWDocument::getAttribute( attributes, "tabStopValue", MM_TO_POINT( 15) );
+        m_tabStop = KWDocument::getAttribute( attributes, "tabStopValue", MM_TO_POINT(15) );
+        m_initialEditing = new InitialEditing();
+        m_initialEditing->m_initialFrameSet = attributes.attribute( "activeFrameset" );
+        m_initialEditing->m_initialCursorParag = attributes.attribute( "cursorParagraph" ).toInt();
+        m_initialEditing->m_initialCursorIndex = attributes.attribute( "cursorIndex" ).toInt();
     } else {
         m_processingType = WP;
         m_headerVisible = false;
         m_footerVisible = false;
         unitName = "pt";
+        m_hasTOC = false;
+        m_tabStop = MM_TO_POINT(15);
+        delete m_initialEditing;
+        m_initialEditing = 0L;
     }
     m_unit = KoUnit::unit( unitName );
 
@@ -1703,6 +1722,24 @@ QDomDocument KWDocument::saveXML()
     docattrs.setAttribute( "hasTOC", static_cast<int>(m_hasTOC));
     docattrs.setAttribute( "tabStopValue", m_tabStop );
 
+    // Save visual info for the first view, such as active table and active cell
+    // It looks like a hack, but reopening a document creates only one view anyway (David)
+    KWView * view = static_cast<KWView*>(views().getFirst());
+    if ( view ) // no view if embedded document
+    {
+        KWFrameSetEdit* edit = view->getGUI()->canvasWidget()->currentFrameSetEdit();
+        if ( edit )
+        {
+            docattrs.setAttribute( "activeFrameset", edit->frameSet()->getName() );
+            KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
+            if ( textedit && textedit->cursor() ) {
+                KoTextCursor* cursor = textedit->cursor();
+                docattrs.setAttribute( "cursorParagraph", cursor->parag()->paragId() );
+                docattrs.setAttribute( "cursorIndex", cursor->index() );
+            }
+        }
+    }
+
     getVariableCollection()->variableSetting()->save(kwdoc );
 
     QDomElement framesets = doc.createElement( "FRAMESETS" );
@@ -2052,9 +2089,8 @@ void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 {
     //kdDebug(32001) << "KWDocument::repaintAllViewsExcept" << endl;
     for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-        if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
-            if ( viewPtr != _view )
-                viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
+        if ( viewPtr != _view /*&& viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget()*/ ) {
+            viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
         }
     }
 }
@@ -3543,6 +3579,27 @@ void KWDocument::changeBgSpellCheckingState( bool b )
     KConfig *config = KWFactory::global()->config();
     config->setGroup("KSpell kword" );
     config->writeEntry( "SpellCheck", (int)b );
+}
+
+QString KWDocument::initialFrameSet() const
+{
+    return m_initialEditing ? m_initialEditing->m_initialFrameSet : 0L;
+}
+
+int KWDocument::initialCursorParag() const
+{
+    return m_initialEditing ? m_initialEditing->m_initialCursorParag : 0;
+}
+
+int KWDocument::initialCursorIndex() const
+{
+    return m_initialEditing ? m_initialEditing->m_initialCursorIndex : 0;
+}
+
+void KWDocument::deleteInitialEditingInfo()
+{
+    delete m_initialEditing;
+    m_initialEditing = 0L;
 }
 
 #include "kwdoc.moc"

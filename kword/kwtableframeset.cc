@@ -443,7 +443,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 }
 #endif
 
-    double pageHeight = m_doc->ptPaperHeight() - m_doc->ptBottomBorder() - m_doc->ptTopBorder();
+    //double pageHeight = m_doc->ptPaperHeight() - m_doc->ptBottomBorder() - m_doc->ptTopBorder();
     unsigned int pageNumber=getCell(0,0)->frame(0)->pageNum() +1;
     unsigned int lineNumber=1;
     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();

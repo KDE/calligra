@@ -211,6 +211,14 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     m_gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( m_gui->canvasWidget() );
 
+    // Determine initial scroll position
+    KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
+    if ( textedit )
+        textedit->ensureCursorVisible();
+    else
+        m_gui->canvasWidget()->setContentsPos( 0, 0 );
+
+
     KStatusBar * sb = statusBar();
     m_sbPageLabel = 0L;
     if ( sb ) // No statusbar in e.g. konqueror
@@ -5319,8 +5327,6 @@ KWGUI::KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *_view )
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
     setFocusPolicy( QWidget::NoFocus );
-
-    canvas->setContentsPos( 0, 0 );
 }
 
 void KWGUI::showGUI()
