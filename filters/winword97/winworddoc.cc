@@ -6,14 +6,11 @@ WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
 
     success=true;
     fib=0L;
-
     readFIB();
 
     kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((int)fib->wIdent));
     kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMin));
     kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMac));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number(read32(main.data+24)));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number(read32(main.data+28)));
 
     if(fib->fWhichTblStm==0) {
         kdebug(KDEBUG_INFO, 31000, "Table 0");
@@ -42,16 +39,14 @@ WinWordDoc::~WinWordDoc() {
         data.data=0L;
     }
     if(fib) {
-        char *tmp=(char*)fib;
-        delete [] tmp;
+        delete fib;
         fib=0L;
     }
 }
 
 void WinWordDoc::readFIB() {
 
-    char *tmp=new char[898];
-    fib=(FIB*)tmp;
+    fib=new FIB;
     unsigned short *tmpS;
     unsigned long *tmpL;
     int i;
@@ -76,27 +71,20 @@ void WinWordDoc::readFIB() {
 
     fib->fcMin=read32(main.data+24);
     fib->fcMac=read32(main.data+28);
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMac));
 
     fib->csw=read16(main.data+32);
 
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMac));
-
-    tmpS=(unsigned short*)fib->wMagicCreated;
+    tmpS=(unsigned short*)&fib->wMagicCreated;
     for(i=0; i<15; ++i, ++tmpS)
         *tmpS=read16(main.data+34+2*i);
 
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMac));
-
-    tmpL=(unsigned long*)fib->cbMac;
+    tmpL=(unsigned long*)&fib->cbMac;
     for(i=0; i<22; ++i, ++tmpL)
         *tmpL=read32(main.data+64+4*i);
 
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMac));
-
     fib->cfclcb=read16(main.data+152);
 
-    tmpL=(unsigned long*)fib->fcStshfOrig;
+    tmpL=(unsigned long*)&fib->fcStshfOrig;
     for(i=0; i<186; ++i, ++tmpL)
         *tmpL=read32(main.data+154+4*i);
 }
