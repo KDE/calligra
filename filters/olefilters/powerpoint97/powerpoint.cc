@@ -682,6 +682,10 @@ void Powerpoint::opPersistPtrIncrementalBlock(
     {
         unsigned i;
 
+	// Walk references numbered between:
+	//
+	//    offsetNumber..offsetNumber + offsetCount - 1
+	//
         operands >> data.header.info;
         length += sizeof(data.header.info);
         for (i = 0; i < data.header.fields.offsetCount; i++)
@@ -694,9 +698,9 @@ void Powerpoint::opPersistPtrIncrementalBlock(
 
                 // Create a record of this persistent reference.
 
-                kdDebug(s_area) << "persistent reference: " << i << ": " <<
+                kdDebug(s_area) << "persistent reference: " << data.header.fields.offsetNumber + i << ": " <<
                     data.offset << endl;
-                m_persistentReferences.insert(i, data.offset);
+                m_persistentReferences.insert(data.header.fields.offsetNumber + i, data.offset);
                 break;
             case PASS_GET_SLIDE_CONTENTS:
                 break;
@@ -951,8 +955,8 @@ void Powerpoint::opTxSIStyleAtom(
 }
 
 //
-// This routine is where the parse actually gets going. It should be the first structure
-// encoutered in the main OLE stream.
+// This routine is where the parse actually gets going. It should be the first
+// structure encoutered in the main OLE stream.
 //
 void Powerpoint::opUserEditAtom(
     Header & /* op */,
@@ -982,10 +986,7 @@ void Powerpoint::opUserEditAtom(
         // references which we then use to look up our document.
 
         walkRecord(data.offsetPersistDirectory);
-
-        // TBD: why do I need to subtract 1 here?
-
-        walkReference(data.documentRef - 1);
+        walkReference(data.documentRef);
 
         // Now recursively walk the main OLE stream parsing previous edits.
 
