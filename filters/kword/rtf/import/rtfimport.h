@@ -262,6 +262,7 @@ public:
     void addLayout( DomNode &node, QCString &name, RTFLayout &layout, bool frameBreak );
     void addParagraph( DomNode &node, bool frameBreak );
     void addVariable(DomNode& spec, int type, QCString key, RTFFormat* fmt=0);
+    void addImportedPicture( const QString& rawFileName );
     void finishTable();
     void writeOutPart( const char *name, QByteArray &array );
 
@@ -289,7 +290,8 @@ public:
     RTFTableCell emptyCell;
     KWFormat kwFormat;
     QAsciiDict<RTFProperty> properties;
-    uint table, pictureNumber;
+    uint table;
+    uint pictureNumber; // Picture number; increse *before* use!
 
     // Color table and document-formatting properties
     int red, green, blue;

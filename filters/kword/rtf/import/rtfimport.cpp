@@ -20,6 +20,8 @@
 #include <qcstring.h>
 #include <qstringlist.h>
 
+#include <koPicture.h>
+
 #include "rtfimport.h"
 #include "rtfimport.moc"
 
@@ -250,7 +252,8 @@ static RTFField fieldTable[] =
 	{ "TIME",	-1,   -1,	0 },
 	{ "DATE",	-1,   -1,	0 },
 	{ "HYPERLINK",	 9,   -1,	0 },
-	{ "SYMBOL",	-1,   -1,	0 }
+	{ "SYMBOL",	-1,   -1,	0 },
+	{ "IMPORT",	-1,   -1,	0 }
 };
 
 
@@ -1308,7 +1311,7 @@ void RTFImport::parsePicture( RTFProperty * )
             ext = "png";
             break;
         }
-        int id = pictureNumber++;
+        const int id = ++pictureNumber;
         sprintf( pictName, "pictures/picture%d.%s", id, ext );
         sprintf( frameName, "Picture %d", id );
 
@@ -1338,6 +1341,62 @@ void RTFImport::parsePicture( RTFProperty * )
         frameSets.closeNode( "PICTURE" );
         frameSets.closeNode( "FRAMESET" );
     }
+}
+
+void RTFImport::addImportedPicture( const QString& rawFileName )
+{
+    kdDebug(30515) << "Import field: reading " << rawFileName << endl;
+
+    KURL url;
+    url.setPath(rawFileName); // ### TODO: relative to document
+
+    KoPicture pic;
+    pic.setKeyAndDownloadPicture(url);
+    if (pic.isNull())
+    {
+        kdError(30515) << "Import field: file is empty: " << rawFileName << endl;
+        return;
+    }
+
+    const uint id = ++pictureNumber;
+
+    QString pictName("pictures/picture");
+    pictName += QString::number(id);
+    pictName += '.';
+    pictName += pic.getExtension();
+
+    QCString frameName;
+    frameName.setNum(id);
+    frameName.prepend("Picture ");
+
+
+    kdDebug(30515) << "Imported picture: " << pictName << " Frame: " << frameName << endl;
+
+    // Store picture
+    KoStoreDevice* dev = m_chain->storageFile( pictName, KoStore::Write );
+    if ( dev )
+        pic.save(dev);
+    else
+        kdError(30515) << "Could not save: " << pictName << endl;
+
+    // Add anchor to rich text destination
+    addAnchor( frameName );
+
+    // It is safe, as we call currentDateTime only once for each picture
+    const QDateTime dt( pic.getKey().lastModified() );
+
+    // Add picture key
+    pictures.addKey( dt, rawFileName.utf8(), pictName.utf8() );
+
+    // Add picture frameset
+    const QSize size ( pic.getOriginalSize() );
+    frameSets.addFrameSet( frameName, 2, 0 );
+    frameSets.addFrame( 0, 0, size.width(), size.height(), 0, 1, 0 );
+    frameSets.closeNode( "FRAME" );
+    frameSets.addNode( "PICTURE" );
+    frameSets.addKey( dt, rawFileName.utf8() );
+    frameSets.closeNode( "PICTURE" );
+    frameSets.closeNode( "FRAMESET" );
 }
 
 /**
@@ -1539,6 +1598,10 @@ void RTFImport::parseField( RTFProperty * )
 		    addVariable( node, type, key, &fldfmt );
 		}
 	    }
+            else if (fieldName == "IMPORT")
+            {
+                addImportedPicture( list[1] );
+            }
 
 	    fldinst = "";
 	}
@@ -2348,5 +2411,7 @@ void RTFImport::writeOutPart( const char *name, QByteArray &array )
 {
     KoStoreDevice* dev = m_chain->storageFile( name, KoStore::Write );
     if ( dev )
-	dev->writeBlock( array.data(), array.size() );
+        dev->writeBlock( array.data(), array.size() );
+    else
+        kdError(30515) << "Could not write part " << name << endl;
 }
