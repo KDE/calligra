@@ -3003,38 +3003,33 @@ void KPresenterView::increaseFontSize()
 void KPresenterView::objectSelectedChanged()
 {
     bool state=m_canvas->isOneObjectSelected();
+    bool headerfooterselected=false;
     if(m_canvas->numberOfObjectSelected()==1)
     {
         KPObject *obj=m_canvas->getSelectedObj();
         //disable this action when we select a header/footer
         if(obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
         {
-            actionScreenAssignEffect->setEnabled(false);
-            actionExtraRotate->setEnabled(false);
-            actionExtraShadow->setEnabled(false);
+            headerfooterselected=true;
         }
         else
         {
-            actionScreenAssignEffect->setEnabled(true);
-            actionExtraRotate->setEnabled(true);
-            actionExtraShadow->setEnabled(true);
+            headerfooterselected=false;
         }
     }
-    else
-    {
-        actionScreenAssignEffect->setEnabled(state);
-        actionExtraRotate->setEnabled(state);
-        actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPictureObj() && !m_canvas->haveASelectedPartObj());
-    }
-    actionExtraAlignObjs->setEnabled(state);
+    actionScreenAssignEffect->setEnabled(state&&!headerfooterselected);
+    actionExtraRotate->setEnabled(state && !headerfooterselected);
+    actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPictureObj() && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
+
+    actionExtraAlignObjs->setEnabled(state && !headerfooterselected);
     actionExtraGroup->setEnabled(state && m_canvas->numberOfObjectSelected()>1);
     actionExtraUnGroup->setEnabled(state);
-    actionExtraAlignObjLeft->setEnabled(state);
-    actionExtraAlignObjCenterH->setEnabled(state);
-    actionExtraAlignObjRight->setEnabled(state);
-    actionExtraAlignObjTop->setEnabled(state);
-    actionExtraAlignObjCenterV->setEnabled(state);
-    actionExtraAlignObjBottom->setEnabled(state);
+    actionExtraAlignObjLeft->setEnabled(state &&  !headerfooterselected);
+    actionExtraAlignObjCenterH->setEnabled(state &&  !headerfooterselected);
+    actionExtraAlignObjRight->setEnabled(state &&  !headerfooterselected);
+    actionExtraAlignObjTop->setEnabled(state && !headerfooterselected);
+    actionExtraAlignObjCenterV->setEnabled(state &&  !headerfooterselected);
+    actionExtraAlignObjBottom->setEnabled(state &&  !headerfooterselected);
     actionEditDelete->setEnabled(state);
     actionExtraRaise->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
     actionExtraLower->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
