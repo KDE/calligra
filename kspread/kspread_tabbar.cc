@@ -358,6 +358,31 @@ void KSpreadTabBar::slotRename()
     // Have a different name ?
     if ( ok ) // User pushed an OK button.
     {
+        while ( newName[0] == ' ' || newName.find('-') != -1 
+                || newName.find('!') != -1 || newName.find('$') != -1 )
+        {
+            KNotifyClient::beep();
+
+            newName = newName.simplifyWhiteSpace();
+
+            int n = newName.find('-');
+            if ( n > -1 )
+              newName[n] = '_';
+
+            n = newName.find('!');
+            if ( n > -1 )
+              newName[n] = '_';
+
+            n = newName.find('$');
+            if ( n > -1 )
+              newName[n] = '_';
+
+            newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Enter name:"), newName, &ok, this );
+          
+            if (!ok)
+              return;
+        }
+
         if ( (newName.stripWhiteSpace()).isEmpty() ) // Table name is empty.
         {
             KNotifyClient::beep();
