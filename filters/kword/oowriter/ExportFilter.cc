@@ -57,7 +57,8 @@ OOWriterWorker::OOWriterWorker(void) : m_streamOut(NULL),
     m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
     m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0),
     m_automaticParagraphStyleNumber(0), m_automaticTextStyleNumber(0),
-    m_footnoteNumber(0), m_tableNumber(0), m_textBoxNumber( 0 ), m_columns( 1 )
+    m_footnoteNumber(0), m_tableNumber(0), m_textBoxNumber( 0 ),
+    m_columnspacing( 36.0 ), m_columns( 1 )
 {
 }
 
@@ -373,6 +374,7 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData("  <style:page-master style:name=\"pm1\">\n"); // ### TODO: verify if style name is unique
 
     zipWriteData("   <style:properties ");
+    zipWriteData( " style:page-usage=\"all\"" ); // ### TODO: check
 
     zipWriteData(" fo:page-width=\"");
     zipWriteData(QString::number(m_paperWidth));
@@ -400,7 +402,26 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData(QString::number(m_paperBorderRight));
     zipWriteData("pt\" style:first-page-number=\"");
     zipWriteData(QString::number(m_varSet.startingPageNumber));
-    zipWriteData("\"/>\n");
+    zipWriteData( "\">\n" );
+
+    if ( m_columns > 1 )
+    {
+        zipWriteData( "    <style:columns" );
+        zipWriteData( " fo:column-count=\"" );
+        zipWriteData( QString::number( m_columns ) );
+        zipWriteData( "\" fo:column-gap=\"" );
+        zipWriteData( QString::number( m_columnspacing ) );
+        zipWriteData( "pt\">\n" );
+
+        for (int i=0; i < m_columns; ++i)
+        {
+            zipWriteData( "     <style:column style:rel-width=\"1*\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\"/>\n" );
+        }
+
+        zipWriteData( "    </style:columns>\n" );
+    }
+
+    zipWriteData("   </style:properties>\n");
 
     zipWriteData("  </style:page-master>\n");
     zipWriteData(" </office:automatic-styles>\n");
@@ -547,6 +568,33 @@ bool OOWriterWorker::doOpenDocument(void)
 bool OOWriterWorker::doCloseDocument(void)
 {
     *m_streamOut << " </office:body>\n";
+    return true;
+}
+
+bool OOWriterWorker::doOpenBody(void)
+{
+    QValueList<FrameAnchor>::Iterator it;
+
+    // We have to process all non-inline pictures
+    kdDebug(30520) << "=== Processing non-inlined pictures ===" << endl;
+    for ( it = m_nonInlinedPictureAnchors.begin(); it != m_nonInlinedPictureAnchors.end(); ++it )
+    {
+        *m_streamOut << "  ";
+        makePicture( *it, AnchorNonInlined );
+        *m_streamOut << "\n";
+    }
+    kdDebug(30520) << "=== Non-inlined pictures processed ===" << endl;
+
+    // We have to process all non-inline tables
+    kdDebug(30520) << "=== Processing non-inlined tables ===" << endl;
+    for ( it = m_nonInlinedTableAnchors.begin(); it != m_nonInlinedTableAnchors.end(); ++it )
+    {
+        *m_streamOut << "  ";
+        makeTable( *it, AnchorNonInlined );
+        *m_streamOut << "\n";
+    }
+    kdDebug(30520) << "=== Non-inlined tables processed ===" << endl;
+
     return true;
 }
 

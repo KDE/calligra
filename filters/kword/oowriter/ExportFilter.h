@@ -81,7 +81,7 @@ public:
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doVariableSettings(const VariableSettingsData& vs);
-    //virtual bool doOpenBody (void);
+    virtual bool doOpenBody (void);
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,
@@ -160,6 +160,7 @@ private:
     QMap<QString,QString> m_mapParaStyleKeys; ///< Map of keys to automatic paragraph styles
     VariableSettingsData m_varSet; ///< KWord's \<VARIABLESETTINGS\>
 private: // Variable that would need a link/glue from libexport
+    double m_columnspacing; ///< Spacing between columns \todo: connection to libexport
     int m_columns; ///< Number of columns \todo: connection to libexport
     QValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors  \todo: connection to libexport
     QValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables  \todo: connection to libexport
