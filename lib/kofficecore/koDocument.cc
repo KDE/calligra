@@ -908,7 +908,7 @@ bool KoDocument::openURL( const KURL & _url )
     bool ret = KParts::ReadWritePart::openURL( url );
 
     if ( autosaveOpened )
-        m_url = KURL(); // Force save to act like 'Save As'
+        resetURL(); // Force save to act like 'Save As'
     else
     {
         // We have no koffice shell when we are being embedded as a readonly part.
@@ -1007,7 +1007,7 @@ bool KoDocument::openFile()
         // Set document URL to empty - we don't want to save in /tmp !
         // But only if in readwrite mode (no saving problem otherwise)
         if ( isReadWrite() )
-            m_url = KURL();
+            resetURL();
         // and remove temp file - uncomment this to debug import filters
         if(!importedFile.isEmpty())
             unlink( QFile::encodeName(importedFile) );

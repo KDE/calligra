@@ -583,7 +583,7 @@ protected:
      * After using loadNativeFormat on a template, one wants
      * to set the url to KURL()
      */
-    void resetURL() { m_url = KURL(); }
+    void resetURL() { m_url = KURL(); m_file = QString::null; }
 
     /**
      * Inserts the new child in the list of children and emits the
