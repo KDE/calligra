@@ -23,6 +23,7 @@
 #include "kptprojectdialog.h"
 #include "kptduration.h"
 #include "kptresource.h"
+#include "kptdatetime.h"
 
 #include <qdom.h>
 #include <qstring.h>
@@ -756,23 +757,6 @@ void KPTProject::printDebug(bool children, QCString indent) {
         it.current()->printDebug(indent);
 
     KPTNode::printDebug(children, indent);
-
-/*    kdDebug()<<"--------------"<<endl;
-    KPTDateTime curr(QDateTime::currentDateTime());
-    KPTDateTime dt(QDateTime::currentDateTime());
-    kdDebug()<<indent<<"+ Test KPTDateTime: zero duration="<<KPTDuration::zeroDuration.toString()<<endl;
-    kdDebug()<<indent<<"+ Test KPTDateTime: current="<<dt.toString()<<endl;
-    KPTDuration dur(26,30);
-    dt.add(dur);
-    KPTDateTime kk(dt);
-    kdDebug()<<indent<<"+ Test KPTDateTime: current+26 timer, 30 min="<<dt.toString()<<endl;
-    KPTDuration aa(curr.duration(kk));
-    KPTDuration bb(kk.duration(curr)); // negativ
-    kdDebug()<<indent<<"+ Test KPTDateTime: duration="<<aa.toString()<<" ): days="<<(KPTDuration::zeroDuration.dateTime().daysTo(aa.dateTime()))<<" mins="<<(KPTDuration::zeroDuration.dateTime().secsTo(aa.dateTime())/60)<<" duration(secs)="<<aa.duration()<<endl;
-    kdDebug()<<indent<<"+ Test KPTDateTime: negativ="<<bb.toString()<<" ): days="<<(KPTDuration::zeroDuration.dateTime().daysTo(aa.dateTime()))<<" mins="<<(KPTDuration::zeroDuration.dateTime().secsTo(bb.dateTime())/60)<<" duration(secs)="<<bb.duration()<<endl;
-    dt.subtract(dur);
-    kdDebug()<<indent<<"+ Test KPTDateTime: træk fra igen="<<dt.toString()<<endl;
-
-    kdDebug()<<indent<<"+ Test KPTDateTime: 95400 sec="<<KPTDuration(95400).toString()<<" from zero="<<(KPTDuration::zeroDuration.dateTime().secsTo(KPTDuration(95400).dateTime()))<<endl;*/
 }
+
 #endif
