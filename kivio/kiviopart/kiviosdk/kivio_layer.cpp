@@ -285,9 +285,12 @@ QDomElement KivioLayer::saveXML( QDomDocument &doc )
     return e;
 }
 
-void KivioLayer::saveOasis(KoStore* store, KoXmlWriter* docWriter)
+void KivioLayer::saveOasis(KoXmlWriter* layerWriter)
 {
-  // TODO OASIS: Implement saving of a layer
+  layerWriter->startElement("draw:layer");
+  layerWriter->addAttribute("draw:name", m_name);
+  // TODO OASIS Save flags
+  layerWriter->endElement(); // draw:layer
 }
 
 void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool, QPoint, 

@@ -305,14 +305,22 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
   
   KoXmlWriter styleWriter(&storeDev, "office:document-styles");
   
+  styleWriter.startElement("office:automatic-styles");
+
   QValueList<KoGenStyles::NamedStyle> styleList = styles.styles(KoGenStyle::STYLE_PAGELAYOUT);
   QValueList<KoGenStyles::NamedStyle>::const_iterator it = styleList.begin();
-  styleWriter.startElement("office:automatic-styles");
-  
+    
   for ( ; it != styleList.end(); ++it) {
     (*it).style->writeStyle(&styleWriter, styles, "style:page-layout", (*it).name, "style:page-layout-properties");
   }
+
+  styleList = styles.styles(Kivio::STYLE_PAGE);
+  it = styleList.begin();
   
+  for ( ; it != styleList.end(); ++it) {
+    (*it).style->writeStyle(&styleWriter, styles, "style:style", (*it).name, "style:properties");
+  }
+    
   styleWriter.endElement(); // office:automatic-styles
   
   styleList = styles.styles(KoGenStyle::STYLE_MASTER);

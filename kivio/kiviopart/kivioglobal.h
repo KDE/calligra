@@ -31,6 +31,10 @@ class KoGenStyle;
 
 namespace Kivio
 {
+  enum {
+    STYLE_PAGE = 20
+  };
+  
   /**
    * Save a page layout to a QDomElement
    */

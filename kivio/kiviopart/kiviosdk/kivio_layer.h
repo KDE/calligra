@@ -80,7 +80,7 @@ public:
 
     bool loadXML( const QDomElement & );
     QDomElement saveXML( QDomDocument & );
-    void saveOasis(KoStore* store, KoXmlWriter* docWriter);
+    void saveOasis(KoXmlWriter* layerWriter);
 
     KivioStencil *checkForStencil( KoPoint *, int *, float, bool );
 

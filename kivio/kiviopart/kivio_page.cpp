@@ -38,6 +38,7 @@
 #include <qmime.h>
 #include <qsortedlist.h>
 #include <qvaluelist.h>
+#include <qbuffer.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -201,13 +202,25 @@ void KivioPage::saveOasis(KoStore* store, KoXmlWriter* docWriter, KoGenStyles* s
   
   // TODO OASIS: Save guidelines!
 
-  // Iterate through all layers saving them as child elements
+  QBuffer layerBuffer;
+  layerBuffer.open(IO_WriteOnly);
+  KoXmlWriter layerWriter(&layerBuffer);
+  layerWriter.startElement("draw:layer-set");
+  
+  // Iterate through all layers
   KivioLayer* layer = m_lstLayers.first();
   
   while(layer) {
-    layer->saveOasis(store, docWriter);
+    layer->saveOasis(&layerWriter);
     layer = m_lstLayers.next();
   }
+  
+  layerWriter.endElement(); // draw:layer-set
+  QString layerSet = QString::fromUtf8(layerBuffer.buffer(), layerBuffer.buffer().size());
+  KoGenStyle pageStyle(Kivio::STYLE_PAGE, "drawing-page");
+  pageStyle.addChildElement("draw:layer-set", layerSet);
+  QString styleName = styles->lookup(pageStyle, "PS");
+  docWriter->addAttribute("draw:style-name", styleName);
   
   docWriter->endElement(); // draw:page
 }
