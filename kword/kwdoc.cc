@@ -627,7 +627,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Even ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Odd ) );
+                                             oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 break;
         }
     }
@@ -664,7 +664,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
                                              evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Even ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             oddFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 break;
         }

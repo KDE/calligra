@@ -147,8 +147,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 Q_ASSERT ( fs->isFootEndNote() );
 
                 //KWFrame::FrameBehavior fnFrameBehavior = KWFrame::AutoExtendFrame;
-                KWFootNoteFrameSet* fnfs = static_cast<KWFootNoteFrameSet *>( fs );
-
+                //KWFootNoteFrameSet* fnfs = static_cast<KWFootNoteFrameSet *>( fs );
                 //KWFootNoteVariable* fnvar = fnfs->footNoteVariable();
                 // The varY() call here is what depends on the maintextframe size
                 /*double minY = fnvar->varY() + it.current()->m_spacing */ /* some spacing */;
