@@ -78,6 +78,15 @@ KSpreadTableIface::~KSpreadTableIface()
 
 DCOPRef KSpreadTableIface::cell( int x, int y )
 {
+    // if someone calls us with either x or y 0 he _most_ most likely doesn't
+    // know that the cell counting starts with 1 (Simon)
+    // P.S.: I did that mistake for weeks and already started looking for the
+    // "bug" in kspread ;-)
+    if ( x == 0 )
+        x = 1;
+    if ( y == 0 )
+        y = 1;
+
     QCString str = objId();
     str += '/';
     str += util_cellName( x, y ).latin1();
