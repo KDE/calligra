@@ -58,6 +58,13 @@ static KCmdLineOptions options[] =
 	"Drop (remove) a project using specified\n"
 	"database driver and database name.\n"
 	"You will be asked for confirmation."), 0 },
+  { "drv", 0, 0 },
+  { "dbdriver <name>", I18N_NOOP(
+	"Database driver to be used\n"
+	"for connecting to a database project\n"
+	"(SQLite by default).\n"
+	"Ignored if a shortcut filename\n"
+	"is provided."), 0 },
 
   { ":", I18N_NOOP("Options related to opening objects within a project:"), 0 },
   { "open [<object_type>:]<object_name>", I18N_NOOP(
@@ -80,21 +87,17 @@ static KCmdLineOptions options[] =
 	"be opened in Text Mode, if one is available"), 0 },
   { "new <object_type>", I18N_NOOP(
 	"Start new object design of type <object_type>"), 0 },
+#ifdef KEXI_SHOW_UNIMPLEMENTED
   { "final-mode", I18N_NOOP(
 	"Start project in the Final Mode, regardless \n"
 	"of the project settings"), 0 },
   { "design-mode", I18N_NOOP(
 	"Start project in the Design Mode, regardless \n"
 	"of the project settings"), 0 },
+#endif
 
+#ifdef KEXI_SERVER_SUPPORT
   { ":", I18N_NOOP("Options related to database servers:"), 0 },
-  { "drv", 0, 0 },
-  { "dbdriver <name>", I18N_NOOP(
-	"Database driver to be used\n"
-	"for connecting to a database project\n"
-	"(SQLite by default).\n"
-	"Ignored if a shortcut filename\n"
-	"is provided."), 0 },
   { "u", 0, 0 },
   { "user <name>", I18N_NOOP(
 	"User name to be used\n"
@@ -122,6 +125,7 @@ static KCmdLineOptions options[] =
 	"to be used for connecting to a database\n"
 	"project. Ignored if a shortcut filename\n"
 	"is provided."), 0 },
+#endif //KEXI_SERVER_SUPPORT
 
   { "+[database-name]", I18N_NOOP(
 	"Database project filename\n"

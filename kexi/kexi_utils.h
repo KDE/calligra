@@ -22,6 +22,8 @@
 
 #include <qstring.h>
 #include <qobjectlist.h>
+#include <qvariant.h>
+#include <qdatetime.h>
 
 #include <kmessagebox.h>
 #include <kaction.h>
@@ -86,7 +88,16 @@ namespace Kexi
 		return static_cast<type*>(it.current());
 	}
 
-} //namespace
+	//! QDateTime - a hack needed because QVariant(QTime) has broken isNull()
+	QDateTime stringToHackedQTime(const QString& s)
+	{
+		if (s.isEmpty())
+			return QDateTime();
+//		kdDebug() << QDateTime( QDate(0,1,2), QTime::fromString( s, Qt::ISODate ) ).toString(Qt::ISODate) << endl;;
+		return QDateTime( QDate(0,1,2), QTime::fromString( s, Qt::ISODate ) );
+	}
+
+} //namespace Kexi
 
 #endif
 
