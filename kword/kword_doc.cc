@@ -112,6 +112,8 @@ CORBA::Boolean KWordDocument_impl::init()
 //       p->setFormat(0,strlen("Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen."),*format);
 //     }
 
+//   debug("insert text");
+
 //   for (int i = 0;i < 50;i++)
 //     {
 //       p = new KWParag( this, p, 0L, defaultParagLayout );
@@ -402,15 +404,22 @@ KWParag* KWordDocument_impl::findFirstParagOfPage(unsigned int _page)
 }
 
 /*================================================================*/
-void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset )
+void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h )
 {
   _painter.save();
 
   unsigned int xShift = getPTLeftBorder() + ( _fc.getColumn() - 1 ) * ( getPTColumnWidth() + getPTColumnSpacing() );
   QRegion cr = QRegion(xShift - xOffset,_fc.getPTY() - yOffset,getPTColumnWidth(),_fc.getLineHeight());
+  QRegion visible(0,0,_w,_h);
 
   if (_painter.hasClipping())
     cr = _painter.clipRegion().intersect(cr);
+
+  if (cr.intersect(visible).isEmpty())
+    {
+      _painter.restore();
+      return;
+    }
 
   _painter.setClipRegion(cr);
 
@@ -909,12 +918,12 @@ void KWordDocument_impl::paste(KWFormatContext *_fc,QString _string,KWPage *_pag
       index = _string.find('\n',0);
       if (index == -1) break;
       
-      if (index > 0)
+      if (index > 0 && !_string.left(index).simplifyWhiteSpace().isEmpty())
 	strList.append(QString(_string.left(index)));
       _string.remove(0,index + 1);
     }
   
-  if (!_string.isEmpty())
+  if (!_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty())
     strList.append(QString(_string));
 
   if (!strList.isEmpty())
@@ -983,11 +992,11 @@ void KWordDocument_impl::paste(KWFormatContext *_fc,QString _string,KWPage *_pag
 	  QKeyEvent ev(Event_KeyPress,Key_Return,13,0);
 	  _page->keyPressEvent(&ev);
 	  
-	  KWParag *p = _fc->getParag()->getPrev(),*next = _fc->getParag();//->getNext();
 	  painter.begin(_page);
 	  _fc->cursorGotoLeft(painter);
 	  _fc->cursorGotoLeft(painter);
 	  painter.end();
+	  KWParag *p = _fc->getParag(),*next = _fc->getParag()->getNext();
 
 	  for (unsigned int i = 1;i < strList.count();i++)
 	    {
@@ -996,7 +1005,6 @@ void KWordDocument_impl::paste(KWFormatContext *_fc,QString _string,KWPage *_pag
 	      p = new KWParag(this,p,0L,defaultParagLayout);
 	      p->insertText(0,str);
 	      p->setFormat(0,len,*format);
-	      //debug("%d",i);
 	    }
 	  p->setNext(next);
 	  if (next) next->setPrev(p);

@@ -466,7 +466,8 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
     //char buffer[_textpos + 2];
     unsigned int pos = lineStartPos;
     ptPos = ptStartPos;
-    *((KWFormat*)this) = lineStartFormat;
+    //*((KWFormat*)this) = lineStartFormat;
+    apply(lineStartFormat);
 
     // test this to avoid crashes!!
     if (_textpos > parag->getKWString()->size())
@@ -756,8 +757,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	  assert( text[ textPos ].attrib->getClassId() == ID_KWCharFormat );
 	  KWCharFormat *f = (KWCharFormat*)text[ textPos ].attrib;
 	  apply( *f->getFormat() );
-	  if (textPos == lineStartPos)
-	    lineStartFormat = *this;
+ 	  if (textPos == lineStartPos)
+ 	    lineStartFormat = *this;
 	}
 	
 	// if we will not fit into the line anymore, let us leave the loop

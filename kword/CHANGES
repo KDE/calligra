@@ -1,4 +1,4 @@
-eggie, 9.9.1998:
+Reggie, 9.9.1998:
 -----------------
 - Attributes for writing text can be set with the
   toolbar now. So it's possible to write with defferent
@@ -193,3 +193,12 @@ Reggie, 6.10.1998:
 Reggie, 7.10.1998:
 ------------------
 - Worked a lot on speed. Now editing documents and pasting is _much_ faster.
+
+Reggie, 8.10.1998:
+------------------
+- Fixed paint-methode to paint really all visible paragraphs
+- Fixed a redraw bug with multiple columns
+- Only draw visible lines now
+- Fixed a bug in KWFormatContext::cursorGotoPos(...)
+- Bugfix in paste
+- Fixed another redraw bug

@@ -51,6 +51,9 @@ KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
   setCursor(ibeamCursor);
   mousePressed = false;
   setMouseTracking(true);
+
+//   recalcText();
+//   debug("recalc text");
 }
 
 // these methods are implemented here, because it didn't compile for
@@ -86,7 +89,8 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 	  fc->getPTY() != doc->getSelStart()->getPTY())
 	{
 	  _painter.begin(this);
-	  doc->drawSelection(_painter,xOffset,yOffset);
+	  if (doc->has_selection())
+	    doc->drawSelection(_painter,xOffset,yOffset);
 	  doc->setSelEnd(*fc);
 	  doc->setSelection(false);
 	  _painter.end();
@@ -274,7 +278,25 @@ void KWPage::editPaste(QString _string)
   doc->paste(fc,_string,this);
   buffer.fill(white);
   doc->setSelection(false);
+  recalcText();
   recalcCursor();
+}
+
+/*================================================================*/
+void KWPage::recalcText()
+{
+  QPainter painter;
+  painter.begin(this);
+
+  KWFormatContext _fc(doc);
+  _fc.init(doc->getFirstParag(),painter,true);
+
+  bool bend = false;
+
+  while (!bend)
+    bend = !_fc.makeNextLineLayout(painter);
+
+  painter.end();
 }
 
 /*================================================================*/
@@ -326,17 +348,18 @@ void KWPage::paintEvent(QPaintEvent* e)
   KWParag *p = doc->findFirstParagOfPage(firstVisiblePage);
   if (p)
     {
+      if (p->getPrev()) p = p->getPrev();
       KWFormatContext *paintfc = new KWFormatContext(doc);
       paintfc->init(p,painter);
 
       bool bend = false;
       while (!bend)
 	{
-	  doc->printLine(*paintfc,painter,xOffset,yOffset);
+	  doc->printLine(*paintfc,painter,xOffset,yOffset,width(),height());
 	  bend = !paintfc->makeNextLineLayout(painter);
 	  if (paintfc->getPage() > lastVisiblePage || 
-	      (int)paintfc->getPTY() + (int)paintfc->getLineHeight() - (int)yOffset > 
-	      height() + (int)paintfc->getLineHeight())
+	      ((int)paintfc->getPTY() + (int)paintfc->getLineHeight() - (int)yOffset > 
+	       height() + (int)paintfc->getLineHeight() && paintfc->getColumn() == doc->getColumns()))
 	    bend = true; 
 	}
       
@@ -653,11 +676,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     paintfc.getPTWidth(),
 			     paintfc.getLineHeight(),
 			     QBrush(white));
-	    doc->printLine(paintfc,painter,xOffset,yOffset);
+	    doc->printLine(paintfc,painter,xOffset,yOffset,width(),height());
 	    bend = !paintfc.makeNextLineLayout(painter);
 	    if (paintfc.getPage() > lastVisiblePage || 
-		(int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset > 
-		height() + (int)paintfc.getLineHeight())
+		((int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset > 
+		 height() + (int)paintfc.getLineHeight() && paintfc.getColumn() == doc->getColumns()))
 	      bend = true; 
 	  }
 
@@ -668,6 +691,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     _y,paintfc.getPTWidth(),
 			     height() - _y,
 			     QBrush(white));
+	    drawBorders(painter);
 	  }
 
 	if (goNext)
@@ -759,11 +783,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     paintfc.getPTWidth(),
 			     paintfc.getLineHeight(),
 			     QBrush(white));
-	    doc->printLine(paintfc,painter,xOffset,yOffset);
+	    doc->printLine(paintfc,painter,xOffset,yOffset,width(),height());
 	    bend = !paintfc.makeNextLineLayout(painter);
 	    if (paintfc.getPage() > lastVisiblePage || 
-		(int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset > 
-		height() + (int)paintfc.getLineHeight())
+		((int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset > 
+		 height() + (int)paintfc.getLineHeight() && paintfc.getColumn() == doc->getColumns()))
 	      bend = true; 
 	  }
 
@@ -774,6 +798,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     _y,paintfc.getPTWidth(),
 			     height() - _y,
 			     QBrush(white));
+	    drawBorders(painter);
 	  }
 
 	if (goNext)
@@ -843,11 +868,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 				 paintfc.getPTWidth(),
 				 paintfc.getLineHeight(),
 				 QBrush(white));
-		doc->printLine(paintfc,painter,xOffset,yOffset);
+		doc->printLine(paintfc,painter,xOffset,yOffset,width(),height());
 		bend = !paintfc.makeNextLineLayout(painter);
 		if (paintfc.getPage() > lastVisiblePage || 
-		    (int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset > 
-		    height() + (int)paintfc.getLineHeight())
+		    ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset > 
+		     height() + (int)paintfc.getLineHeight() && paintfc.getColumn() == doc->getColumns()))
 		  bend = true; 
 	      }
 	    
@@ -1061,4 +1086,40 @@ void KWPage::copyBuffer()
 {
   bitBlt(&buffer,0,0,this,0,0,width(),height());
   has_to_copy = false;
+}
+
+/*================================================================*/
+void KWPage::drawBorders(QPainter &_painter)
+{
+  _painter.save();
+  _painter.setBrush(NoBrush);
+
+  for (unsigned int i = firstVisiblePage - 1;i < lastVisiblePage;i++)
+    {
+      _painter.setPen(lightGray);
+      _painter.drawRect(-xOffset + ZOOM(ptLeftBorder()) - 1,
+			-yOffset + i * ZOOM(ptPaperHeight()) + ZOOM(ptTopBorder()) - 1,
+			ZOOM(ptPaperWidth()) - ZOOM(ptLeftBorder()) - ZOOM(ptRightBorder()) + 2,
+			ZOOM(ptPaperHeight()) - ZOOM(ptTopBorder()) - ZOOM(ptBottomBorder()) + 2);
+
+      for (unsigned int j = 1;j < doc->getColumns();j++)
+	{
+	  int x = -xOffset + ZOOM(ptLeftBorder() + j * ptColumnWidth() + (j - 1) * ptColumnSpacing()) + 1;
+	  _painter.drawLine(x,-yOffset + ZOOM(i * ptPaperHeight() + ptTopBorder()),
+			    x, -yOffset + ZOOM( (i + 1) * ptPaperHeight() - ptBottomBorder()));
+	    
+	  x = -xOffset + ZOOM(ptLeftBorder() + j * ptColumnWidth() + j * ptColumnSpacing()) - 1;
+	  _painter.drawLine(x,-yOffset + ZOOM(i * ptPaperHeight() + ptTopBorder()),
+			    x, -yOffset + ZOOM((i + 1) * ptPaperHeight() - ptBottomBorder()));
+	}
+
+      if (i + 1 < lastVisiblePage)
+	{
+	  _painter.setPen(red);
+	  _painter.drawLine(0,(i + 1) * ZOOM(ptPaperHeight()) - yOffset,
+			    width(),(i + 1) * ZOOM(ptPaperHeight()) - yOffset);
+	}
+    }
+  
+  _painter.restore();
 }

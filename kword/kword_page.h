@@ -119,6 +119,8 @@ public:
   void editCopy();
   void editPaste(QString _string);
 
+  void recalcText();
+
 public slots:
   void newLeftIndent(int _left)
     { setLeftIndent(static_cast<float>(_left)); }
@@ -139,6 +141,8 @@ protected:
     { setFocus(); }
   void focusInEvent(QFocusEvent *) {}
   void focusOutEvent(QFocusEvent *) {}
+
+  void drawBorders(QPainter &_painter);
 
   /**
    * Looks at 'yOffset' and 'paperHeight' and calculates the first and

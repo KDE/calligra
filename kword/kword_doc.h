@@ -217,7 +217,7 @@ public:
    */
   bool isPTYIn(unsigned int _page,unsigned int _ypos);
   
-  void printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset);
+  void printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h);
   
   void drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset);
 
