@@ -525,6 +525,62 @@ void KPresenterView_impl::mtextFont()
     }
 }
 
+/*====================== enumerated list ========================*/
+void KPresenterView_impl::textEnumList()
+{
+  if (page->kTxtObj())
+    {
+      int _type = page->kTxtObj()->enumListType().type;
+      QFont _font = page->kTxtObj()->enumListType().font;
+      QColor _color = page->kTxtObj()->enumListType().color;
+      QString _before = page->kTxtObj()->enumListType().before;
+      QString _after = page->kTxtObj()->enumListType().after;
+      int _start = page->kTxtObj()->enumListType().start;
+      
+      if (KEnumListDia::enumListDia(_type,_font,_color,_before,_after,_start))
+	{
+	  KTextObject::EnumListType elt;
+	  elt.type = _type;
+	  elt.font = _font;
+	  elt.color = _color;
+	  elt.before = _before;
+	  elt.after = _after;
+	  elt.start = _start;
+	  page->kTxtObj()->setEnumListType(elt);
+	}
+      
+      page->kTxtObj()->setObjType(KTextObject::ENUM_LIST);
+    }
+}
+
+/*====================== unsorted list ==========================*/
+void KPresenterView_impl::textUnsortList()
+{
+  if (page->kTxtObj())
+    {
+      QFont _font = page->kTxtObj()->unsortListType().font;
+      QColor _color = page->kTxtObj()->unsortListType().color;
+      int _c = page->kTxtObj()->unsortListType().chr;
+      
+      if (KCharSelectDia::selectChar(_font,_color,_c))
+	{
+	  KTextObject::UnsortListType ult;
+	  ult.font = _font;
+	  ult.color = _color;
+	  ult.chr = _c;
+	  page->kTxtObj()->setUnsortListType(ult);
+	}
+      
+      page->kTxtObj()->setObjType(KTextObject::UNSORT_LIST);
+    }
+}
+
+/*====================== normal text ============================*/
+void KPresenterView_impl::textNormalText()
+{
+  if (page->kTxtObj()) page->kTxtObj()->setObjType(KTextObject::PLAIN);
+}
+
 /*======================= set document ==========================*/
 void KPresenterView_impl::setDocument(KPresenterDocument_impl *_doc)
 {
@@ -1060,11 +1116,11 @@ void KPresenterView_impl::setupMenu()
 
       // extra menu
       m_idMenuExtra = m_rMenuBar->insertMenu(CORBA::string_dup(klocale->translate("&Extra")));
-      m_idMenuExtra_Font = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("&Font...")),m_idMenuExtra,
-						  this,CORBA::string_dup("mtextFont"));
+      m_idMenuExtra_TFont = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("&Font...")),m_idMenuExtra,
+						   this,CORBA::string_dup("mtextFont"));
       m_idMenuExtra_TColor = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("Text &Color...")),m_idMenuExtra,
 						    this,CORBA::string_dup("textColor"));
-      m_idMenuExtra_TAlign = m_rMenuBar->insertSubMenu(CORBA::string_dup(klocale->translate("&Text Alignment")),m_idMenuExtra);
+      m_idMenuExtra_TAlign = m_rMenuBar->insertSubMenu(CORBA::string_dup(klocale->translate("Text &Alignment")),m_idMenuExtra);
 
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/alignLeft.xpm";
@@ -1089,6 +1145,32 @@ void KPresenterView_impl::setupMenu()
 							   CORBA::string_dup(klocale->translate("Align &Right")),m_idMenuExtra_TAlign,
 							   this,CORBA::string_dup("mtextAlignRight"));
       m_rMenuBar->setCheckable(m_idMenuExtra_TAlign_Right,true);
+
+      m_idMenuExtra_TType = m_rMenuBar->insertSubMenu(CORBA::string_dup(klocale->translate("Text &Type")),m_idMenuExtra);
+
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/enumList.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_TType_EnumList = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+							     CORBA::string_dup(klocale->translate("&Enumerated List")),
+							     m_idMenuExtra_TType,
+							     this,CORBA::string_dup("textEnumList"));
+
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/unsortedList.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_TType_UnsortList = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+							       CORBA::string_dup(klocale->translate("&Unsorted List")),
+							       m_idMenuExtra_TType,
+							       this,CORBA::string_dup("textUnsortList"));
+
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/normalText.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_TType_NormalText = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+							       CORBA::string_dup(klocale->translate("&Normal Text")),
+							       m_idMenuExtra_TType,
+							       this,CORBA::string_dup("textNormalText"));
 
       m_rMenuBar->insertSeparator(m_idMenuExtra);
       tmp = kapp->kde_datadir().copy();
@@ -1371,7 +1453,7 @@ void KPresenterView_impl::setupTextToolbar()
       m_rToolBarText = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(klocale->translate("Text")));
  
       // size combobox
-      m_idComboText_FontSize = m_rToolBarText->insertCombo(false,CORBA::string_dup(klocale->translate("Font Size")),0,
+      m_idComboText_FontSize = m_rToolBarText->insertCombo(false,CORBA::string_dup(klocale->translate("Font Size")),60,
 							   this,CORBA::string_dup("sizeSelected"));
       for(unsigned int i = 4;i <= 100;i++)
 	{
@@ -1383,9 +1465,8 @@ void KPresenterView_impl::setupTextToolbar()
       tbFont.setPointSize(20);
 
       // fonts combobox
-      //kapp->getKDEFonts(&fontList);
       getFonts();
-      m_idComboText_FontList = m_rToolBarText->insertCombo(false,CORBA::string_dup(klocale->translate("Font List")),0,
+      m_idComboText_FontList = m_rToolBarText->insertCombo(false,CORBA::string_dup(klocale->translate("Font List")),200,
 							   this,CORBA::string_dup("fontSelected"));
       for(unsigned int i = 0;i <= fontList.count()-1;i++)
  	m_rToolBarText->insertComboItem(m_idComboText_FontList,CORBA::string_dup(fontList.at(i)),-1);
@@ -1459,6 +1540,31 @@ void KPresenterView_impl::setupTextToolbar()
 							   this,CORBA::string_dup("textAlignRight"));
       m_rToolBarText->setToggle(m_idButtonText_ARight,true);
       m_rToolBarText->setButton(m_idButtonText_ARight,false);
+      m_rToolBarText->insertSeparator();
+
+      // enum list
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/enumList.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonText_EnumList = m_rToolBarText->insertButton(CORBA::string_dup(pix),
+							     CORBA::string_dup(klocale->translate("Enumerated List")),
+							     this,CORBA::string_dup("textEnumList"));
+
+      // unsorted list
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/unsortedList.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonText_EnumList = m_rToolBarText->insertButton(CORBA::string_dup(pix),
+							     CORBA::string_dup(klocale->translate("Unsorted List")),
+							     this,CORBA::string_dup("textUnsortList"));
+
+      // normal text
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/normalText.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonText_EnumList = m_rToolBarText->insertButton(CORBA::string_dup(pix),
+							     CORBA::string_dup(klocale->translate("Normal Text")),
+							     this,CORBA::string_dup("textNormalText"));
     }
 }      
 

@@ -226,6 +226,13 @@ TxtCursor* TxtCursor::minCursor(TxtCursor *c)
   else return this;
 }
 
+/*============ get maximum of two cursors ========================*/
+TxtCursor* TxtCursor::maxCursor(TxtCursor *c)
+{
+  if (c->absPos > absPos) return c;
+  else return this;
+}
+
 /******************************************************************/
 /* class TxtObj - Text Object                                     */
 /******************************************************************/
@@ -818,30 +825,45 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   // init the objects
   setFocusPolicy(QWidget::StrongFocus);
   setBackgroundColor(white);
-  setObjType(ot);
-  objEnumListType = ARABIC;
+
+  objEnumListType.type = NUMBER;
+  objEnumListType.before = "";
+  objEnumListType.after = ".";
+  objEnumListType.start = 1;
+  objEnumListType.font = QFont("times",12);
+  objEnumListType.color = black;
+
   objUnsortListType.font = QFont("times",12);
   objUnsortListType.color = black;
-  objUnsortListType.chr = '*';
+  objUnsortListType.chr = '-';
   paragraphList.setAutoDelete(true);
+
   cellWidths.setAutoDelete(true);
   cellHeights.setAutoDelete(true);
   objRow = r;
   objCol = c;
+
   sCursor = true;
   txtCursor = new TxtCursor((KTextObject*)this);
+  cursorChanged = true;
+  setCursor(ibeamCursor);
+
   setFocusPolicy(StrongFocus);
+
   drawLine = -1;
   drawParagraph = -1;
   drawBelow = false;
+
   currFont = QFont("times",12);
   currColor = black;
-  cursorChanged = true;
-  setCursor(ibeamCursor);
+
   setMouseTracking(true);
   mousePressed = false;
   drawPic = false;
   ystart = 0;
+  drawSelection = false;
+
+  selectionColor = lightGray;
   
   TxtParagraph *para;
   para = new TxtParagraph(true);
@@ -859,17 +881,15 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
 
   setShowCursor(true);
 
-  recalc();
+  setObjType(ot);
 }
 
 /*===================== set objecttype ===========================*/
 void KTextObject::setObjType(ObjType ot)
 {
   obType = ot;
-  switch (ot)
-    {
-    case PLAIN: xstart = 0; break;
-    }
+  recalc();
+  repaint(true);
 }
 
 /*================= get length of the text =======================*/
@@ -933,6 +953,7 @@ void KTextObject::paintCell(class QPainter* p,int row,int)
   QPoint c1,c2;
   unsigned int scrBar = 0;
   if (tableFlags() & Tbl_vScrollBar) scrBar = 16;
+  char chr[11];
 
   // get pointer to the paragraph, which should be drwan
   paragraphPtr = paragraphList.at(row);
@@ -940,6 +961,44 @@ void KTextObject::paintCell(class QPainter* p,int row,int)
   // if the paragraph exists, draw it
   if (paragraphPtr)
     {      
+
+      if (!drawPic)
+	{
+	  p->setPen(NoPen);
+	  p->setBrush(backgroundColor());
+	  p->drawRect(0,0,xstart,h);
+	}
+	 
+      // object type
+      switch (obType)
+	{
+	case PLAIN: case TABLE: break;
+	case ENUM_LIST:
+	  {
+	    if (objEnumListType.type == NUMBER)
+	      sprintf(chr,"%s%d%s ",(const char*)objEnumListType.before,row+objEnumListType.start,
+		      (const char*)objEnumListType.after);
+	    else
+	      sprintf(chr,"%s%c%s ",(const char*)objEnumListType.before,row+objEnumListType.start,
+		      (const char*)objEnumListType.after);	      
+	    p->setFont(objEnumListType.font);
+	    p->setPen(objEnumListType.color);
+	    p->drawText(0,y+paragraphPtr->lineAt(0)->ascent()-p->fontMetrics().ascent(),
+			xstart,p->fontMetrics().height(),
+			AlignRight,(const char*)&chr);	    
+	  } break;
+	case UNSORT_LIST:
+	  {
+	    p->setFont(objUnsortListType.font);
+	    p->setPen(objUnsortListType.color);
+	    sprintf(chr,"%c ",objUnsortListType.chr);
+	    p->drawText(0,y+paragraphPtr->lineAt(0)->ascent()-p->fontMetrics().ascent(),
+			xstart,p->fontMetrics().height(),
+			AlignRight,(const char*)&chr);
+	  } break;
+	}
+
+      // draw lines
       for (i = 0;i < paragraphPtr->lines();i++)
 	{
 	  linePtr = paragraphPtr->lineAt(i);
@@ -955,8 +1014,10 @@ void KTextObject::paintCell(class QPainter* p,int row,int)
 		{
 		  p->setPen(NoPen);
 		  p->setBrush(backgroundColor());
-		  p->drawRect(0,y,w,linePtr->height());
+		  p->drawRect(x,y,w,linePtr->height());
 		}
+
+	      // alignment
 	      switch (paragraphPtr->horzAlign())
 		{
 		case TxtParagraph::LEFT: w -= scrBar; break;
@@ -971,6 +1032,19 @@ void KTextObject::paintCell(class QPainter* p,int row,int)
 		  len = objPtr->textLength();
 		  p->setFont(objPtr->font());
 		  
+		  // check, if a selection should be drawn
+// 		  if ((mousePressed || drawSelection) && showCursor() &&
+// 		      startCursor->positionParagraph() == row && startCursor->positionLine() == i)
+// 		    {
+// 		      unsigned int inLine = startCursor->positionInLine();
+// 		      if (linePtr->getInObj(inLine) == j || linePtr->getBeforeObj(inLine) == j)
+// 			{
+// 			  p->setPen(QPen(selectionColor));
+// 			  p->setBrush(QBrush(selectionColor));
+// 			  p->drawRect(x,y,objPtr->width(),linePtr->height());
+// 			}
+// 		    }
+
 		  // check, if cursor should be drawn - if yes calculate it
 		  if (drawCursor = showCursor() && txtCursor->positionParagraph() == row && 
 		      txtCursor->positionLine() == i && txtCursor->positionInLine() >= chars && 
@@ -1087,7 +1161,13 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
   if (showCursor())
     {
       unsigned int i;
+      bool drawAbove = false;
       
+      // ***************************
+      // ** redraw needed here!!!!!!
+      // ***************************
+      drawSelection = false;
+
       // always update the maximal cursor position when a key is pressed
       txtCursor->setMaxPosition(textLength());
       
@@ -1105,6 +1185,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	  {
 	    splitParagraph();
 	    drawBelow = true;
+	    drawAbove = true;
 	    cursorChanged = true;
 	  } break;
 	case Key_Backspace:
@@ -1163,13 +1244,45 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	  drawLine = oldCursor->positionLine();
 	  for (i = drawParagraph;i < paragraphs();i++)
 	    updateCell(i,0,false);
+	  i = drawParagraph;
 	  drawLine = -1;
 	  drawParagraph = -1;
 	  drawBelow = false;
 	}
       
+      if (drawAbove)
+	{
+	  drawLine = -1;
+	  drawParagraph = -1;
+	  updateCell(i,0,false);
+	}
+
       if (tableFlags() & Tbl_vScrollBar) makeCursorVisible();
     }
+}
+
+/*====================== mouse press event ========================*/
+void KTextObject::mousePressEvent(QMouseEvent *e)
+{
+  mousePressed = true;
+  drawSelection = false;
+  startCursor = getCursorPos(e->x(),e->y(),true);
+
+  // ugly - but for testing ok
+  //repaint(true);
+}
+
+/*====================== mouse release event ======================*/
+void KTextObject::mouseReleaseEvent(QMouseEvent *e)
+{
+  mousePressed = false;
+  stopCursor = getCursorPos(e->x(),e->y(),true);
+
+  if (stopCursor->positionAbs() != startCursor->positionAbs())
+    drawSelection = true;
+
+  // ugly - but for testing ok
+  //repaint(true);
 }
 
 /*====================== mouse move event =========================*/
@@ -1177,91 +1290,39 @@ void KTextObject::mouseMoveEvent(QMouseEvent *e)
 {
   if (mousePressed)
     {
-      unsigned int x = e->x();
-      unsigned int y = e->y() + yOffset(),i,h = 0,w = 0,para,line,objPos,pos,absPos = 0;
-      
-      para = paragraphs() - 1;
-      for (i = 0;i < paragraphs();i++)
-	{
-	  if (y >= h && y <= h + paragraphAt(i)->height())
-	    {
-	      para = i;
-	      break;
-	    }
-	  h += paragraphAt(i)->height();
-	}
-      
-      line = paragraphAt(para)->lines() - 1;
-      for (i = 0;i < paragraphAt(para)->lines();i++)
-	{
-	  if (y >= h && y <= h + paragraphAt(para)->lineAt(i)->height())
-	    {
-	      line = i;
-	      break;
-	    }
-	  h += paragraphAt(para)->lineAt(i)->height();
-	}
-      
-      paragraphPtr = paragraphAt(para);
-      linePtr = paragraphPtr->lineAt(line);
-      unsigned int scrBar = 0;
-      if (tableFlags() & Tbl_vScrollBar) scrBar = 16;
-      x -= xstart;
-      switch (paragraphPtr->horzAlign())
-	{
-	case TxtParagraph::LEFT: break;
-	case TxtParagraph::CENTER: x -= (cellWidth(0) - linePtr->width()) / 2 - scrBar / 2; break;
-	case TxtParagraph::RIGHT: x -= cellWidth(0) - linePtr->width() - scrBar; break;
-	}
+      stopCursor = getCursorPos(e->x(),e->y(),true);
+      TxtCursor *c1 = startCursor->maxCursor(stopCursor);
+      TxtCursor *c2 = startCursor->minCursor(stopCursor);
+      startCursor = c1;
+      stopCursor = c2;
 
-      objPos = paragraphAt(para)->lineAt(line)->items() - 1;
-      for (i = 0;i < paragraphAt(para)->lineAt(line)->items();i++)
-	{
-	  if (x >= w && x <= w + paragraphAt(para)->lineAt(line)->itemAt(i)->width())
-	    {
-	      objPos = i;
-	      break;
-	    }
-	  w += paragraphAt(para)->lineAt(line)->itemAt(i)->width();
-	}
-      
-      pos = paragraphAt(para)->lineAt(line)->itemAt(objPos)->getPos(x - w);
-      if (pos == -1) pos = paragraphAt(para)->lineAt(line)->itemAt(objPos)->textLength()-1;
-      else pos++;
-      
-
-      for (i = 0;i < para;i++)
-	absPos += paragraphAt(i)->paragraphLength();
-      for (i = 0;i < line;i++)
-	absPos += paragraphAt(para)->lineAt(i)->lineLength();
-      for (i = 0;i < objPos;i++)
-	absPos += paragraphAt(para)->lineAt(line)->itemAt(i)->textLength();
-      absPos += pos;
-      
-      TxtCursor *oldCursor = new TxtCursor((KTextObject*)this);
-      oldCursor->setPositionAbs(txtCursor->positionAbs());
-      
-      txtCursor->setPositionAbs(absPos);
-      
-      drawLine = oldCursor->positionLine();
-      drawParagraph = oldCursor->positionParagraph();
-      updateCell(drawParagraph,0,false);
-      drawLine = txtCursor->positionLine();
-      drawParagraph = txtCursor->positionParagraph();
-      updateCell(drawParagraph,0,false);
-      drawParagraph = -1;
-      drawLine = -1;
+      // ugly - but for testing ok
+      //repaint(true);
     }
 }
 
 /*=================== recalcualte everything =====================*/
 void KTextObject::recalc()
 {
-  // set the width of all cells depending on the object type
-  // ************** has to be implemented!!!!!!!!!!!!!!!!!!
-  // ************** xstart has to be calculated first!!!!!!
+  switch (obType)
+    {
+    case PLAIN: xstart = 0; break;
+    case ENUM_LIST:
+      {
+	QFontMetrics fm(objEnumListType.font);
+	char chr[12];
+	sprintf(chr,"%s99 %s ",(const char*)objEnumListType.before,(const char*)objEnumListType.after);
+	xstart = fm.width(chr);
+      } break;
+    case UNSORT_LIST:
+      {
+	QFontMetrics fm(objUnsortListType.font);
+	xstart = fm.width(objUnsortListType.chr) + fm.width(" ");
+      } break;
+    }
+  
   cellWidths.at(0)->wh = width()-xstart;
-  if (tableFlags() & Tbl_vScrollBar) cellWidths.at(0)->wh -= 16; 
+  if (tableFlags() & Tbl_vScrollBar) cellWidths.at(0)->wh -= verticalScrollBar()->width(); 
   
   for (paragraphPtr = paragraphList.first();paragraphPtr != 0;paragraphPtr = paragraphList.next())
     {
@@ -1661,5 +1722,92 @@ void KTextObject::makeCursorVisible()
 //       updateScrollBars();
       setOffset(0,h,true);
     }
+}
+
+/*====================== set cursor psoition ====================*/
+TxtCursor* KTextObject::getCursorPos(int _x,int _y,bool set=false)
+{
+  unsigned int x = (unsigned int)_x;
+  unsigned int y = (unsigned int)_y,i,h = 0,w = 0,para,line,objPos,pos,absPos = 0;;
+      
+  para = paragraphs() - 1;
+  for (i = 0;i < paragraphs();i++)
+    {
+      if (y >= h && y <= h + paragraphAt(i)->height())
+	{
+	  para = i;
+	  break;
+	}
+      h += paragraphAt(i)->height();
+    }
+  
+  line = paragraphAt(para)->lines() - 1;
+  for (i = 0;i < paragraphAt(para)->lines();i++)
+    {
+      if (y >= h && y <= h + paragraphAt(para)->lineAt(i)->height())
+	{
+	  line = i;
+	  break;
+	}
+      h += paragraphAt(para)->lineAt(i)->height();
+    }
+  
+  paragraphPtr = paragraphAt(para);
+  linePtr = paragraphPtr->lineAt(line);
+  unsigned int scrBar = 0;
+  if (tableFlags() & Tbl_vScrollBar) scrBar = 16;
+  x -= xstart;
+  switch (paragraphPtr->horzAlign())
+    {
+    case TxtParagraph::LEFT: break;
+    case TxtParagraph::CENTER: x -= (cellWidth(0) - linePtr->width()) / 2 - scrBar / 2; break;
+    case TxtParagraph::RIGHT: x -= cellWidth(0) - linePtr->width() - scrBar; break;
+    }
+  
+  objPos = paragraphAt(para)->lineAt(line)->items() - 1;
+  for (i = 0;i < paragraphAt(para)->lineAt(line)->items();i++)
+    {
+      if (x >= w && x <= w + paragraphAt(para)->lineAt(line)->itemAt(i)->width())
+	{
+	  objPos = i;
+	  break;
+	}
+      w += paragraphAt(para)->lineAt(line)->itemAt(i)->width();
+    }
+  
+  pos = paragraphAt(para)->lineAt(line)->itemAt(objPos)->getPos(x - w);
+  if (pos == -1) pos = paragraphAt(para)->lineAt(line)->itemAt(objPos)->textLength()-1;
+  else pos++;
+  
+  
+  for (i = 0;i < para;i++)
+    absPos += paragraphAt(i)->paragraphLength();
+  for (i = 0;i < line;i++)
+    absPos += paragraphAt(para)->lineAt(i)->lineLength();
+  for (i = 0;i < objPos;i++)
+    absPos += paragraphAt(para)->lineAt(line)->itemAt(i)->textLength();
+  absPos += pos;
+  
+  TxtCursor *_cursor = new TxtCursor((KTextObject*)this);
+  _cursor->setPositionAbs(absPos);
+
+  if (set)
+    {
+      TxtCursor *oldCursor = new TxtCursor((KTextObject*)this);
+      oldCursor->setPositionAbs(txtCursor->positionAbs());
+      
+      txtCursor->setPositionAbs(absPos);
+      
+      drawLine = oldCursor->positionLine();
+      drawParagraph = oldCursor->positionParagraph();
+      updateCell(drawParagraph,0,false);
+      drawLine = txtCursor->positionLine();
+      drawParagraph = txtCursor->positionParagraph();
+      updateCell(drawParagraph,0,false);
+      drawParagraph = -1;
+      drawLine = -1;
+    }
+
+  return _cursor;
 }
 

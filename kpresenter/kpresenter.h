@@ -111,6 +111,9 @@ class KPresenterView :
     virtual void mtextAlignCenter() = 0;
     virtual void mtextAlignRight() = 0;
     virtual void mtextFont() = 0;
+    virtual void textEnumList() = 0;
+    virtual void textUnsortList() = 0;
+    virtual void textNormalText() = 0;
   protected:
     KPresenterView() {};
   private:
@@ -182,6 +185,9 @@ class KPresenterView_stub : virtual public KPresenterView,
     void mtextAlignCenter();
     void mtextAlignRight();
     void mtextFont();
+    void textEnumList();
+    void textUnsortList();
+    void textNormalText();
   private:
     void operator=( const KPresenterView_stub& );
 };

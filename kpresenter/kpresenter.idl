@@ -70,6 +70,9 @@ module KPresenter
       oneway void mtextAlignCenter();
       oneway void mtextAlignRight();
       oneway void mtextFont();
+      oneway void textEnumList();
+      oneway void textUnsortList();
+      oneway void textNormalText();
     };
   
   interface KPresenterDocument : OPParts::Document

@@ -13,6 +13,8 @@
 #ifndef KTEXTOBJECT_H
 #define KTEXTOBJECT_H
 
+#include <stdio.h>
+
 #include <qkeycode.h>
 #include <qtablevw.h>
 #include <qcolor.h>
@@ -27,6 +29,9 @@
 #include <qevent.h>
 #include <qcursor.h>
 #include <qpicture.h>
+#include <qscrbar.h>
+
+#include <kapp.h>
 
 #ifndef min
 #define min(a,b) ((a)<(b)?(a):(b))
@@ -96,8 +101,9 @@ public:
   // calculate the position of the cursor
   void calcPos();
 
-  // get minimum of two cursors
+  // get minimum/maximum of two cursors
   TxtCursor* minCursor(TxtCursor*);
+  TxtCursor* maxCursor(TxtCursor*);
 
 protected:
 
@@ -363,7 +369,21 @@ public:
   {
     QFont font;
     QColor color;
-    char chr;
+    int chr;
+  };
+
+  // structure for enum list
+  const int NUMBER = 1;
+  const int ALPHABETH = 2;
+
+  struct EnumListType
+  {
+    int type;
+    QString before;
+    QString after;
+    int start;
+    QFont font;
+    QColor color;
   };
 
   // structure for cell width/height
@@ -374,10 +394,7 @@ public:
 
   // type of the textobject
   enum ObjType {PLAIN,ENUM_LIST,UNSORT_LIST,TABLE};
-
-  // type of ENUM_LIST
-  enum EnumListType {ARABIC,ROMAN,ALPHABETHIC};
-  
+ 
   // constructor - destructor
   KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,unsigned int c=0,unsigned int r=0);
   ~KTextObject() {};                                            
@@ -387,11 +404,11 @@ public:
   ObjType objType() {return obType;}
 
   // set and get the type of an enumerated list
-  void setEnumListType(EnumListType t) {objEnumListType = t;}
+  void setEnumListType(EnumListType t) {objEnumListType = t; repaint(true);}
   EnumListType enumListType() {return objEnumListType;}
 
   // set and get font, char and color of an unsorted list
-  void setUnsortListType(UnsortListType t) {objUnsortListType = t;}
+  void setUnsortListType(UnsortListType t) {objUnsortListType = t; repaint(true);}
   UnsortListType unsortListType() {return objUnsortListType;}
 
   // set and get row/column
@@ -463,8 +480,8 @@ protected:
   void keyPressEvent(QKeyEvent*);
 
   // mouse events
-  void mousePressEvent(QMouseEvent *e) {mousePressed = true; mouseMoveEvent(e);}
-  void mouseReleaseEvent(QMouseEvent *e) {mousePressed = false; mouseMoveEvent(e);}
+  void mousePressEvent(QMouseEvent*);
+  void mouseReleaseEvent(QMouseEvent*);
   void mouseMoveEvent(QMouseEvent*);
 
   // recalcualate everything
@@ -487,11 +504,14 @@ protected:
 
   void makeCursorVisible();
   
+  TxtCursor* getCursorPos(int,int,bool set=false);
+
   //*********** variables ***********
 
   // text cursor and flag of it
   TxtCursor *txtCursor;
   bool sCursor;
+  bool drawSelection;
 
   // object Type
   ObjType obType;
@@ -543,6 +563,8 @@ protected:
   TxtLine *linePtr;
   TxtObj *objPtr;
   QPicture pic;
+  TxtCursor *startCursor,*stopCursor;
+  QColor selectionColor;
 
 };
 #endif //KTEXTOBJECT_H

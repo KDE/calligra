@@ -11,18 +11,22 @@ MOC		=	/usr/bin/moc
 SOURCES	=	kpresenter_main.cc kpresenter_doc.cc kpresenter_view.cc \
 		kpresenter.cc kpresenter_shell.cc graphobj.cc atfinterpreter.cc\
 		backdia.cc page.cc ktextobject.cc afchoose.cc styledia.cc \
-		jpeg.cc formats.cc qwmf.cc 
+		jpeg.cc formats.cc qwmf.cc \
+		kenumlistdia.cc kcharselect.cc kcharselectdia.cc 
 HEADERS =	kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter.h kpresenter_shell.h graphobj.h atfinterpreter.h \
 		backdia.h page.h ktextobject.h afchoose.h styledia.h \
-		jpeg.h formats.h qwmf.h global.h
+		jpeg.h formats.h qwmf.h global.h \
+		kenumlistdia.h kcharselect.h kcharselectdia.h 
 OBJECTS =	kpresenter_main.o kpresenter_doc.o kpresenter_view.o \
 		kpresenter.o kpresenter_shell.o graphobj.o atfinterpreter.o \
 		backdia.o page.o ktextobject.o afchoose.o styledia.o \
-		jpeg.o formats.o qwmf.o
+		jpeg.o formats.o qwmf.o \
+		kenumlistdia.o kcharselect.o kcharselectdia.o 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc graphobj.moc atfinterpreter.moc page.moc ktextobject.moc\
-		backdia.moc afchoose.moc styledia.moc
+		backdia.moc afchoose.moc styledia.moc \
+		kenumlistdia.moc kcharselect.moc kcharselectdia.moc 
 TARGET	=	kpresenter
 IDL	=	kpresenter.idl
 IDLH	=	kpresenter.h
@@ -203,7 +207,9 @@ kpresenter_main.o: ktextobject.h graphobj.h atfinterpreter.h
 kpresenter_main.o: /usr/lib/qt/include/qstack.h kpresenter_shell.h
 kpresenter_main.o: /usr/local/kde/include/default_shell_impl.h
 kpresenter_main.o: /usr/local/kde/include/default_shell.h formats.h
-kpresenter_main.o: /usr/lib/qt/include/qimage.h
+kpresenter_main.o: /usr/lib/qt/include/qimage.h kpresenter_main.moc
+kpresenter_main.o: /usr/lib/qt/include/qmetaobj.h
+kpresenter_main.o: /usr/lib/qt/include/qconnect.h
 kpresenter_doc.o: kpresenter_doc.h /usr/local/kde/include/document_impl.h
 kpresenter_doc.o: /usr/local/kde/include/parts.h /opt/kde/idl/kom.h
 kpresenter_doc.o: /usr/local/kde/include/controls.h
@@ -282,11 +288,12 @@ kpresenter_doc.o: /usr/lib/qt/include/qbutton.h
 kpresenter_doc.o: /usr/local/kde/include/kcombo.h
 kpresenter_doc.o: /usr/local/kde/include/klined.h
 kpresenter_doc.o: /usr/local/kde/include/kstatusbar.h
+kpresenter_doc.o: /usr/lib/qt/include/qtimer.h
 kpresenter_doc.o: /usr/local/kde/include/toolbar_impl.h
 kpresenter_doc.o: /usr/lib/qt/include/qpushbt.h
 kpresenter_doc.o: /usr/local/kde/include/op_app.h
 kpresenter_doc.o: /usr/local/kde/include/kom_app.h
-kpresenter_doc.o: /usr/lib/qt/include/qsocknot.h /usr/lib/qt/include/qtimer.h
+kpresenter_doc.o: /usr/lib/qt/include/qsocknot.h
 kpresenter_doc.o: /usr/local/kde/include/topwidget_impl.h
 kpresenter_doc.o: /usr/local/kde/include/utils.h
 kpresenter_doc.o: /usr/lib/qt/include/qmsgbox.h
@@ -317,7 +324,9 @@ kpresenter_doc.o: /usr/lib/qt/include/qbuffer.h backdia.h qwmf.h afchoose.h
 kpresenter_doc.o: /usr/local/kde/include/kiconloaderdialog.h
 kpresenter_doc.o: /usr/local/kde/include/kiconloader.h styledia.h
 kpresenter_doc.o: ktextobject.h graphobj.h atfinterpreter.h
-kpresenter_doc.o: /usr/lib/qt/include/qstack.h
+kpresenter_doc.o: /usr/lib/qt/include/qstack.h kpresenter_doc.moc
+kpresenter_doc.o: /usr/lib/qt/include/qmetaobj.h
+kpresenter_doc.o: /usr/lib/qt/include/qconnect.h
 kpresenter_view.o: /usr/local/kde/include/kfiledialog.h
 kpresenter_view.o: /usr/lib/qt/include/qdialog.h
 kpresenter_view.o: /usr/lib/qt/include/qwidget.h
@@ -394,13 +403,12 @@ kpresenter_view.o: /usr/lib/qt/include/qcombo.h
 kpresenter_view.o: /usr/local/kde/include/klined.h
 kpresenter_view.o: /usr/lib/qt/include/qlined.h
 kpresenter_view.o: /usr/local/kde/include/kstatusbar.h
-kpresenter_view.o: /usr/lib/qt/include/qlabel.h
+kpresenter_view.o: /usr/lib/qt/include/qtimer.h /usr/lib/qt/include/qlabel.h
 kpresenter_view.o: /usr/local/kde/include/toolbar_impl.h
 kpresenter_view.o: /usr/lib/qt/include/qpushbt.h
 kpresenter_view.o: /usr/local/kde/include/op_app.h
 kpresenter_view.o: /usr/local/kde/include/kom_app.h
 kpresenter_view.o: /usr/lib/qt/include/qsocknot.h
-kpresenter_view.o: /usr/lib/qt/include/qtimer.h
 kpresenter_view.o: /usr/local/kde/include/topwidget_impl.h
 kpresenter_view.o: /usr/local/kde/include/utils.h
 kpresenter_view.o: /usr/lib/qt/include/qpainter.h
@@ -441,7 +449,9 @@ kpresenter_view.o: /usr/local/kde/include/default_shell_impl.h
 kpresenter_view.o: /usr/local/kde/include/default_shell.h formats.h
 kpresenter_view.o: /usr/lib/qt/include/qimage.h backdia.h afchoose.h
 kpresenter_view.o: /usr/local/kde/include/kiconloaderdialog.h
-kpresenter_view.o: /usr/local/kde/include/kiconloader.h styledia.h page.h
+kpresenter_view.o: /usr/local/kde/include/kiconloader.h styledia.h
+kpresenter_view.o: kpresenter_view.moc /usr/lib/qt/include/qmetaobj.h
+kpresenter_view.o: /usr/lib/qt/include/qconnect.h page.h
 kpresenter.o: kpresenter.h /usr/local/kde/idl/kom.h
 kpresenter.o: /usr/local/kde/idl/controls.h /usr/local/kde/idl/parts.h
 kpresenter_shell.o: kpresenter_shell.h
@@ -492,7 +502,7 @@ kpresenter_shell.o: /usr/lib/qt/include/qlined.h
 kpresenter_shell.o: /usr/local/kde/include/kmenubar.h
 kpresenter_shell.o: /usr/lib/qt/include/qmenubar.h
 kpresenter_shell.o: /usr/local/kde/include/kstatusbar.h
-kpresenter_shell.o: /usr/lib/qt/include/qlabel.h
+kpresenter_shell.o: /usr/lib/qt/include/qtimer.h /usr/lib/qt/include/qlabel.h
 kpresenter_shell.o: /usr/local/kde/include/kconfig.h
 kpresenter_shell.o: /usr/local/kde/include/kconfigbase.h
 kpresenter_shell.o: /usr/lib/qt/include/qstrlist.h
@@ -545,7 +555,6 @@ kpresenter_shell.o: /usr/local/kde/include/part_frame_impl.h
 kpresenter_shell.o: /usr/local/kde/include/op_app.h
 kpresenter_shell.o: /usr/local/kde/include/kom_app.h
 kpresenter_shell.o: /usr/lib/qt/include/qsocknot.h
-kpresenter_shell.o: /usr/lib/qt/include/qtimer.h
 kpresenter_shell.o: /usr/local/kde/include/utils.h
 kpresenter_shell.o: /usr/lib/qt/include/qmsgbox.h
 kpresenter_shell.o: /usr/lib/qt/include/qkeycode.h
@@ -570,7 +579,9 @@ kpresenter_shell.o: /usr/lib/qt/include/qbuffer.h backdia.h qwmf.h afchoose.h
 kpresenter_shell.o: /usr/local/kde/include/kiconloaderdialog.h
 kpresenter_shell.o: /usr/local/kde/include/kiconloader.h styledia.h
 kpresenter_shell.o: ktextobject.h graphobj.h atfinterpreter.h
-kpresenter_shell.o: /usr/lib/qt/include/qstack.h
+kpresenter_shell.o: /usr/lib/qt/include/qstack.h kpresenter_shell.moc
+kpresenter_shell.o: /usr/lib/qt/include/qmetaobj.h
+kpresenter_shell.o: /usr/lib/qt/include/qconnect.h
 graphobj.o: graphobj.h /usr/lib/qt/include/qwidget.h
 graphobj.o: /usr/lib/qt/include/qwindefs.h /usr/lib/qt/include/qobjdefs.h
 graphobj.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qobject.h
@@ -600,7 +611,8 @@ graphobj.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
 graphobj.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qdatetm.h
 graphobj.o: atfinterpreter.h /usr/lib/qt/include/qstack.h
 graphobj.o: /usr/lib/qt/include/qstrlist.h /usr/lib/qt/include/qdstream.h
-graphobj.o: qwmf.h global.h
+graphobj.o: qwmf.h global.h graphobj.moc /usr/lib/qt/include/qmetaobj.h
+graphobj.o: /usr/lib/qt/include/qconnect.h
 atfinterpreter.o: atfinterpreter.h /usr/lib/qt/include/qobject.h
 atfinterpreter.o: /usr/lib/qt/include/qobjdefs.h
 atfinterpreter.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qstring.h
@@ -621,7 +633,9 @@ atfinterpreter.o: /usr/include/_G_config.h /usr/include/gnu/types.h
 atfinterpreter.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
 atfinterpreter.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
 atfinterpreter.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qstrlist.h
-atfinterpreter.o: /usr/lib/qt/include/qdstream.h
+atfinterpreter.o: /usr/lib/qt/include/qdstream.h atfinterpreter.moc
+atfinterpreter.o: /usr/lib/qt/include/qmetaobj.h
+atfinterpreter.o: /usr/lib/qt/include/qconnect.h
 backdia.o: /usr/local/kde/include/kfiledialog.h /usr/lib/qt/include/qdialog.h
 backdia.o: /usr/lib/qt/include/qwidget.h /usr/lib/qt/include/qwindefs.h
 backdia.o: /usr/lib/qt/include/qobjdefs.h /usr/lib/qt/include/qglobal.h
@@ -657,7 +671,8 @@ backdia.o: /usr/lib/qt/include/qpen.h /usr/lib/qt/include/qbrush.h
 backdia.o: /usr/local/kde/include/kcolordlg.h /usr/lib/qt/include/qtablevw.h
 backdia.o: /usr/lib/qt/include/qrangect.h /usr/lib/qt/include/qlined.h
 backdia.o: /usr/lib/qt/include/qcombo.h /usr/local/kde/include/kselect.h
-backdia.o: qwmf.h global.h
+backdia.o: qwmf.h global.h backdia.moc /usr/lib/qt/include/qmetaobj.h
+backdia.o: /usr/lib/qt/include/qconnect.h
 page.o: page.h kpresenter_view.h /usr/include/stdlib.h
 page.o: /usr/include/features.h /usr/include/sys/cdefs.h
 page.o: /usr/include/gnu/stubs.h
@@ -708,10 +723,10 @@ page.o: /usr/lib/qt/include/qmenubar.h /usr/local/kde/include/ktopwidget.h
 page.o: /usr/local/kde/include/ktoolbar.h /usr/lib/qt/include/qbutton.h
 page.o: /usr/local/kde/include/kcombo.h /usr/lib/qt/include/qcombo.h
 page.o: /usr/local/kde/include/klined.h /usr/lib/qt/include/qlined.h
-page.o: /usr/local/kde/include/kstatusbar.h /usr/lib/qt/include/qlabel.h
-page.o: /usr/local/kde/include/toolbar_impl.h /usr/lib/qt/include/qpushbt.h
-page.o: /usr/local/kde/include/op_app.h /usr/local/kde/include/kom_app.h
-page.o: /usr/lib/qt/include/qsocknot.h /usr/lib/qt/include/qtimer.h
+page.o: /usr/local/kde/include/kstatusbar.h /usr/lib/qt/include/qtimer.h
+page.o: /usr/lib/qt/include/qlabel.h /usr/local/kde/include/toolbar_impl.h
+page.o: /usr/lib/qt/include/qpushbt.h /usr/local/kde/include/op_app.h
+page.o: /usr/local/kde/include/kom_app.h /usr/lib/qt/include/qsocknot.h
 page.o: /usr/local/kde/include/topwidget_impl.h
 page.o: /usr/local/kde/include/utils.h /usr/lib/qt/include/qpainter.h
 page.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
@@ -740,7 +755,8 @@ page.o: /usr/local/kde/include/default_shell_impl.h
 page.o: /usr/local/kde/include/default_shell.h formats.h
 page.o: /usr/lib/qt/include/qimage.h backdia.h afchoose.h
 page.o: /usr/local/kde/include/kiconloaderdialog.h
-page.o: /usr/local/kde/include/kiconloader.h styledia.h
+page.o: /usr/local/kde/include/kiconloader.h styledia.h page.moc
+page.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
 ktextobject.o: ktextobject.h /usr/lib/qt/include/qkeycode.h
 ktextobject.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qtablevw.h
 ktextobject.o: /usr/lib/qt/include/qframe.h /usr/lib/qt/include/qwidget.h
@@ -762,7 +778,8 @@ ktextobject.o: /usr/lib/qt/include/qbrush.h /usr/lib/qt/include/qpntarry.h
 ktextobject.o: /usr/lib/qt/include/qwmatrix.h /usr/lib/qt/include/qlist.h
 ktextobject.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
 ktextobject.o: /usr/lib/qt/include/qpicture.h /usr/lib/qt/include/qbuffer.h
-ktextobject.o: /usr/lib/qt/include/qiodev.h
+ktextobject.o: /usr/lib/qt/include/qiodev.h ktextobject.moc
+ktextobject.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
 afchoose.o: afchoose.h /usr/lib/qt/include/qtabdlg.h
 afchoose.o: /usr/lib/qt/include/qdialog.h /usr/lib/qt/include/qwidget.h
 afchoose.o: /usr/lib/qt/include/qwindefs.h /usr/lib/qt/include/qobjdefs.h
@@ -802,7 +819,8 @@ afchoose.o: /usr/local/kde/include/kdebug.h /usr/local/kde/include/klocale.h
 afchoose.o: /usr/lib/qt/include/qintdict.h /usr/local/kde/include/drag.h
 afchoose.o: /usr/include/X11/X.h /usr/lib/qt/include/qpopmenu.h
 afchoose.o: /usr/lib/qt/include/qmenudta.h
-afchoose.o: /usr/local/kde/include/kiconloader.h
+afchoose.o: /usr/local/kde/include/kiconloader.h afchoose.moc
+afchoose.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
 styledia.o: styledia.h /usr/include/stdlib.h /usr/include/features.h
 styledia.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
 styledia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
@@ -830,7 +848,8 @@ styledia.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpntarry.h
 styledia.o: /usr/lib/qt/include/qwmatrix.h /usr/local/kde/include/kcolordlg.h
 styledia.o: /usr/lib/qt/include/qtablevw.h /usr/lib/qt/include/qrangect.h
 styledia.o: /usr/lib/qt/include/qlined.h /usr/lib/qt/include/qpixmap.h
-styledia.o: /usr/local/kde/include/kselect.h
+styledia.o: /usr/local/kde/include/kselect.h styledia.moc
+styledia.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
 jpeg.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/features.h
 jpeg.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
 jpeg.o: /usr/include/_G_config.h /usr/include/gnu/types.h
@@ -893,3 +912,143 @@ qwmf.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qpalette.h
 qwmf.o: /usr/lib/qt/include/qcursor.h /usr/include/endian.h
 qwmf.o: /usr/include/bytesex.h qwmf.h /usr/lib/qt/include/qpicture.h
 qwmf.o: /usr/lib/qt/include/qbuffer.h wmfstruct.h metafuncs.h
+kenumlistdia.o: kenumlistdia.h /usr/include/stdio.h /usr/include/libio.h
+kenumlistdia.o: /usr/include/features.h /usr/include/sys/cdefs.h
+kenumlistdia.o: /usr/include/gnu/stubs.h /usr/include/_G_config.h
+kenumlistdia.o: /usr/include/gnu/types.h
+kenumlistdia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
+kenumlistdia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
+kenumlistdia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
+kenumlistdia.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qdialog.h
+kenumlistdia.o: /usr/lib/qt/include/qwidget.h /usr/lib/qt/include/qwindefs.h
+kenumlistdia.o: /usr/lib/qt/include/qobjdefs.h /usr/lib/qt/include/qglobal.h
+kenumlistdia.o: /usr/lib/qt/include/qobject.h /usr/lib/qt/include/qstring.h
+kenumlistdia.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
+kenumlistdia.o: /usr/lib/qt/include/qshared.h /usr/lib/qt/include/qgeneric.h
+kenumlistdia.o: /usr/include/string.h /usr/lib/qt/include/qevent.h
+kenumlistdia.o: /usr/lib/qt/include/qrect.h /usr/lib/qt/include/qsize.h
+kenumlistdia.o: /usr/lib/qt/include/qpoint.h /usr/lib/qt/include/qpaintd.h
+kenumlistdia.o: /usr/lib/qt/include/qpalette.h /usr/lib/qt/include/qcolor.h
+kenumlistdia.o: /usr/lib/qt/include/qcursor.h /usr/lib/qt/include/qfont.h
+kenumlistdia.o: /usr/lib/qt/include/qfontmet.h /usr/lib/qt/include/qfontinf.h
+kenumlistdia.o: /usr/lib/qt/include/qlabel.h /usr/lib/qt/include/qframe.h
+kenumlistdia.o: /usr/lib/qt/include/qpushbt.h /usr/lib/qt/include/qbutton.h
+kenumlistdia.o: /usr/lib/qt/include/qlayout.h /usr/lib/qt/include/qgmanagr.h
+kenumlistdia.o: /usr/lib/qt/include/qintdict.h /usr/lib/qt/include/qgdict.h
+kenumlistdia.o: /usr/lib/qt/include/qcollect.h /usr/lib/qt/include/qlist.h
+kenumlistdia.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcombo.h
+kenumlistdia.o: /usr/lib/qt/include/qstrlist.h /usr/lib/qt/include/qdstream.h
+kenumlistdia.o: /usr/lib/qt/include/qiodev.h /usr/lib/qt/include/qchkbox.h
+kenumlistdia.o: /usr/lib/qt/include/qlined.h /usr/lib/qt/include/qradiobt.h
+kenumlistdia.o: /usr/local/kde/include/kapp.h
+kenumlistdia.o: /usr/local/kde/include/kconfig.h
+kenumlistdia.o: /usr/local/kde/include/kconfigbase.h
+kenumlistdia.o: /usr/local/kde/include/kconfigdata.h
+kenumlistdia.o: /usr/lib/qt/include/qdict.h /usr/lib/qt/include/qtstream.h
+kenumlistdia.o: /usr/lib/qt/include/qfile.h /usr/local/kde/include/kdebug.h
+kenumlistdia.o: /usr/local/kde/include/klocale.h
+kenumlistdia.o: /usr/local/kde/include/drag.h /usr/lib/qt/include/qapp.h
+kenumlistdia.o: /usr/lib/qt/include/qpixmap.h /usr/include/X11/X.h
+kenumlistdia.o: /usr/lib/qt/include/qpopmenu.h /usr/lib/qt/include/qtablevw.h
+kenumlistdia.o: /usr/lib/qt/include/qmenudta.h
+kenumlistdia.o: /usr/local/kde/include/kbuttonbox.h
+kenumlistdia.o: /usr/local/kde/include/kcolorbtn.h /usr/include/X11/Xlib.h
+kenumlistdia.o: /usr/include/sys/types.h /usr/include/time.h
+kenumlistdia.o: /usr/include/endian.h /usr/include/bytesex.h
+kenumlistdia.o: /usr/include/sys/select.h /usr/include/selectbits.h
+kenumlistdia.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
+kenumlistdia.o: kenumlistdia.moc /usr/lib/qt/include/qmetaobj.h
+kenumlistdia.o: /usr/lib/qt/include/qconnect.h
+kcharselect.o: kcharselect.h /usr/include/stdio.h /usr/include/libio.h
+kcharselect.o: /usr/include/features.h /usr/include/sys/cdefs.h
+kcharselect.o: /usr/include/gnu/stubs.h /usr/include/_G_config.h
+kcharselect.o: /usr/include/gnu/types.h
+kcharselect.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
+kcharselect.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
+kcharselect.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
+kcharselect.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qwidget.h
+kcharselect.o: /usr/lib/qt/include/qwindefs.h /usr/lib/qt/include/qobjdefs.h
+kcharselect.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qobject.h
+kcharselect.o: /usr/lib/qt/include/qstring.h /usr/lib/qt/include/qarray.h
+kcharselect.o: /usr/lib/qt/include/qgarray.h /usr/lib/qt/include/qshared.h
+kcharselect.o: /usr/lib/qt/include/qgeneric.h /usr/include/string.h
+kcharselect.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qrect.h
+kcharselect.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
+kcharselect.o: /usr/lib/qt/include/qpaintd.h /usr/lib/qt/include/qpalette.h
+kcharselect.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qcursor.h
+kcharselect.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qfontmet.h
+kcharselect.o: /usr/lib/qt/include/qfontinf.h /usr/lib/qt/include/qtablevw.h
+kcharselect.o: /usr/lib/qt/include/qframe.h /usr/lib/qt/include/qpainter.h
+kcharselect.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
+kcharselect.o: /usr/lib/qt/include/qbrush.h /usr/lib/qt/include/qpntarry.h
+kcharselect.o: /usr/lib/qt/include/qwmatrix.h /usr/local/kde/include/kapp.h
+kcharselect.o: /usr/local/kde/include/kconfig.h
+kcharselect.o: /usr/local/kde/include/kconfigbase.h
+kcharselect.o: /usr/lib/qt/include/qstrlist.h /usr/lib/qt/include/qlist.h
+kcharselect.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
+kcharselect.o: /usr/lib/qt/include/qdstream.h /usr/lib/qt/include/qiodev.h
+kcharselect.o: /usr/local/kde/include/kconfigdata.h
+kcharselect.o: /usr/lib/qt/include/qdict.h /usr/lib/qt/include/qgdict.h
+kcharselect.o: /usr/lib/qt/include/qtstream.h /usr/lib/qt/include/qfile.h
+kcharselect.o: /usr/local/kde/include/kdebug.h
+kcharselect.o: /usr/local/kde/include/klocale.h
+kcharselect.o: /usr/lib/qt/include/qintdict.h /usr/local/kde/include/drag.h
+kcharselect.o: /usr/lib/qt/include/qapp.h /usr/lib/qt/include/qpixmap.h
+kcharselect.o: /usr/include/X11/X.h /usr/lib/qt/include/qpopmenu.h
+kcharselect.o: /usr/lib/qt/include/qmenudta.h kcharselect.moc
+kcharselect.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
+kcharselectdia.o: kcharselectdia.h /usr/include/stdio.h /usr/include/libio.h
+kcharselectdia.o: /usr/include/features.h /usr/include/sys/cdefs.h
+kcharselectdia.o: /usr/include/gnu/stubs.h /usr/include/_G_config.h
+kcharselectdia.o: /usr/include/gnu/types.h
+kcharselectdia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
+kcharselectdia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
+kcharselectdia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
+kcharselectdia.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qdialog.h
+kcharselectdia.o: /usr/lib/qt/include/qwidget.h
+kcharselectdia.o: /usr/lib/qt/include/qwindefs.h
+kcharselectdia.o: /usr/lib/qt/include/qobjdefs.h
+kcharselectdia.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qobject.h
+kcharselectdia.o: /usr/lib/qt/include/qstring.h /usr/lib/qt/include/qarray.h
+kcharselectdia.o: /usr/lib/qt/include/qgarray.h /usr/lib/qt/include/qshared.h
+kcharselectdia.o: /usr/lib/qt/include/qgeneric.h /usr/include/string.h
+kcharselectdia.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qrect.h
+kcharselectdia.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
+kcharselectdia.o: /usr/lib/qt/include/qpaintd.h
+kcharselectdia.o: /usr/lib/qt/include/qpalette.h /usr/lib/qt/include/qcolor.h
+kcharselectdia.o: /usr/lib/qt/include/qcursor.h /usr/lib/qt/include/qfont.h
+kcharselectdia.o: /usr/lib/qt/include/qfontmet.h
+kcharselectdia.o: /usr/lib/qt/include/qfontinf.h /usr/lib/qt/include/qlabel.h
+kcharselectdia.o: /usr/lib/qt/include/qframe.h /usr/lib/qt/include/qpushbt.h
+kcharselectdia.o: /usr/lib/qt/include/qbutton.h /usr/lib/qt/include/qlayout.h
+kcharselectdia.o: /usr/lib/qt/include/qgmanagr.h
+kcharselectdia.o: /usr/lib/qt/include/qintdict.h /usr/lib/qt/include/qgdict.h
+kcharselectdia.o: /usr/lib/qt/include/qcollect.h /usr/lib/qt/include/qlist.h
+kcharselectdia.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcombo.h
+kcharselectdia.o: /usr/lib/qt/include/qstrlist.h
+kcharselectdia.o: /usr/lib/qt/include/qdstream.h /usr/lib/qt/include/qiodev.h
+kcharselectdia.o: /usr/lib/qt/include/qchkbox.h
+kcharselectdia.o: /usr/local/kde/include/kbuttonbox.h
+kcharselectdia.o: /usr/local/kde/include/kapp.h
+kcharselectdia.o: /usr/local/kde/include/kconfig.h
+kcharselectdia.o: /usr/local/kde/include/kconfigbase.h
+kcharselectdia.o: /usr/local/kde/include/kconfigdata.h
+kcharselectdia.o: /usr/lib/qt/include/qdict.h /usr/lib/qt/include/qtstream.h
+kcharselectdia.o: /usr/lib/qt/include/qfile.h /usr/local/kde/include/kdebug.h
+kcharselectdia.o: /usr/local/kde/include/klocale.h
+kcharselectdia.o: /usr/local/kde/include/drag.h /usr/lib/qt/include/qapp.h
+kcharselectdia.o: /usr/lib/qt/include/qpixmap.h /usr/include/X11/X.h
+kcharselectdia.o: /usr/lib/qt/include/qpopmenu.h
+kcharselectdia.o: /usr/lib/qt/include/qtablevw.h
+kcharselectdia.o: /usr/lib/qt/include/qmenudta.h
+kcharselectdia.o: /usr/local/kde/include/kcolorbtn.h /usr/include/X11/Xlib.h
+kcharselectdia.o: /usr/include/sys/types.h /usr/include/time.h
+kcharselectdia.o: /usr/include/endian.h /usr/include/bytesex.h
+kcharselectdia.o: /usr/include/sys/select.h /usr/include/selectbits.h
+kcharselectdia.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
+kcharselectdia.o: kcharselect.h /usr/lib/qt/include/qpainter.h
+kcharselectdia.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
+kcharselectdia.o: /usr/lib/qt/include/qbrush.h /usr/lib/qt/include/qpntarry.h
+kcharselectdia.o: /usr/lib/qt/include/qwmatrix.h kcharselectdia.moc
+kcharselectdia.o: /usr/lib/qt/include/qmetaobj.h
+kcharselectdia.o: /usr/lib/qt/include/qconnect.h

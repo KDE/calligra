@@ -63,6 +63,8 @@ class Page;
 #include "afchoose.h"
 #include "styledia.h"
 #include "ktextobject.h"
+#include "kcharselectdia.h"
+#include "kenumlistdia.h"
 
 /******************************************************************/
 /* class KPresenterFrame                                          */
@@ -182,7 +184,10 @@ public:
   virtual void mtextAlignCenter();
   virtual void mtextAlignRight();
   virtual void mtextFont();
-
+  virtual void textEnumList();
+  virtual void textUnsortList();
+  virtual void textNormalText();
+  
   // ------ C++ ------
   // set document
   virtual void setDocument(KPresenterDocument_impl *_doc);
@@ -314,12 +319,16 @@ protected:
  
   // extra menu
   CORBA::Long m_idMenuExtra;
-  CORBA::Long m_idMenuExtra_Font;
+  CORBA::Long m_idMenuExtra_TFont;
   CORBA::Long m_idMenuExtra_TColor;
   CORBA::Long m_idMenuExtra_TAlign;
   CORBA::Long m_idMenuExtra_TAlign_Left;
   CORBA::Long m_idMenuExtra_TAlign_Center;
   CORBA::Long m_idMenuExtra_TAlign_Right;
+  CORBA::Long m_idMenuExtra_TType;
+  CORBA::Long m_idMenuExtra_TType_EnumList;
+  CORBA::Long m_idMenuExtra_TType_UnsortList;
+  CORBA::Long m_idMenuExtra_TType_NormalText;
   CORBA::Long m_idMenuExtra_PenBrush;
   CORBA::Long m_idMenuExtra_Raise;
   CORBA::Long m_idMenuExtra_Lower;
@@ -385,6 +394,9 @@ protected:
   CORBA::Long m_idButtonText_ARight;
   CORBA::Long m_idButtonText_ACenter;
   CORBA::Long m_idButtonText_ALeft;
+  CORBA::Long m_idButtonText_EnumList;
+  CORBA::Long m_idButtonText_UnsortList;
+  CORBA::Long m_idButtonText_NormalText;
 
   // extra toolbar
   ToolBar_ref m_rToolBarExtra;

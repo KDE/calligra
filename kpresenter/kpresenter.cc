@@ -911,6 +911,51 @@ void KPresenter::KPresenterView_stub::mtextFont()
 }
 
 
+void KPresenter::KPresenterView_stub::textEnumList()
+{
+  CORBA::Request_var _req = this->_request( "textEnumList" );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->send_oneway();
+  #ifdef HAVE_EXCEPTIONS
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    mico_throw( *_ex );
+  #else
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    CORBA::Exception::_throw_failed( _ex );
+  #endif
+}
+
+
+void KPresenter::KPresenterView_stub::textUnsortList()
+{
+  CORBA::Request_var _req = this->_request( "textUnsortList" );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->send_oneway();
+  #ifdef HAVE_EXCEPTIONS
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    mico_throw( *_ex );
+  #else
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    CORBA::Exception::_throw_failed( _ex );
+  #endif
+}
+
+
+void KPresenter::KPresenterView_stub::textNormalText()
+{
+  CORBA::Request_var _req = this->_request( "textNormalText" );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->send_oneway();
+  #ifdef HAVE_EXCEPTIONS
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    mico_throw( *_ex );
+  #else
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    CORBA::Exception::_throw_failed( _ex );
+  #endif
+}
+
+
 struct _global_init_KPresenter_KPresenterView {
   _global_init_KPresenter_KPresenterView()
   {
@@ -1591,6 +1636,33 @@ bool KPresenter::KPresenterView_skel::dispatch( CORBA::ServerRequest_ptr _req, C
     _req->params( _args );
 
     mtextFont();
+    return true;
+  }
+  if( strcmp( _req->op_name(), "textEnumList" ) == 0 ) {
+    CORBA::NVList_ptr _args;
+    _orb()->create_list( 0, _args );
+
+    _req->params( _args );
+
+    textEnumList();
+    return true;
+  }
+  if( strcmp( _req->op_name(), "textUnsortList" ) == 0 ) {
+    CORBA::NVList_ptr _args;
+    _orb()->create_list( 0, _args );
+
+    _req->params( _args );
+
+    textUnsortList();
+    return true;
+  }
+  if( strcmp( _req->op_name(), "textNormalText" ) == 0 ) {
+    CORBA::NVList_ptr _args;
+    _orb()->create_list( 0, _args );
+
+    _req->params( _args );
+
+    textNormalText();
     return true;
   }
   return false;

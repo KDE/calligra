@@ -193,7 +193,6 @@ void AEditWin::setupToolbar1()
   toolbar1->insertCombo(&comboList,99,false,
 			SIGNAL(activated(int)),this,
 			SLOT(setPenWidth(int)),true,"Set pen width for the autoform viewer",70);
-  toolbar1->getCombo(99)->resize(70,24);
   toolbar1->setBarPos(KToolBar::Top);
   toolbar1->setFullWidth(true);
   addToolBar(toolbar1);

@@ -71,6 +71,7 @@ public:
   void setTextFont(QFont*);
   void setTextColor(QColor*);
   void setTextAlign(TxtParagraph::HorzAlign);
+  KTextObject* kTxtObj() {return txtPtr;}
 
 public slots:
 
