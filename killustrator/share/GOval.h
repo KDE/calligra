@@ -67,6 +67,7 @@ public:
 
 protected:
   void calcBoundingBox ();
+
   void update_segments ();
 
 private:

@@ -64,12 +64,12 @@ public:
   void setWorkingSegment (int seg);
 
 protected:
+  void calcBoundingBox ();
+
   int cPoint (int idx);
   void drawHelpLines (Painter& p);
   void drawHelpLinesForWorkingSegment (Painter& p);
   void updateBasePoint (int idx);
-
-  void calcBoundingBox ();
 
 private:
   int wSegment;

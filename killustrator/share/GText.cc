@@ -174,6 +174,7 @@ void GText::setCursor (int x, int y) {
 
 void GText::setOrigin (const Coord& p) {
   opos = p;
+  calcBoundingBox ();
   emit changed ();
 }
 

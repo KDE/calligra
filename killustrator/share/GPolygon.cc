@@ -59,6 +59,7 @@ static bool intersects (const Coord& p11, const Coord& p12,
     x21 = p22.x (); y21 = p22.y ();
     x22 = p21.x (); y22 = p21.y ();
   }
+
   // compute ascent of first line
   m1 = (y12 - y11) / (x12 - x11);
   n1 = y11 - m1 * x11;
@@ -66,6 +67,15 @@ static bool intersects (const Coord& p11, const Coord& p12,
   // compute ascent of second line
   m2 = (y22 - y21) / (x22 - x21);
   n2 = y21 - m2 * x12;
+
+  // special case: first line is perpendicular (Greetings to DP ;-))
+  if (x12 == x11) {
+    yp = m2 * x12 + n2;
+    if ((y11 <= yp && yp <= y12 || y12 <= yp && yp <= y11) &&
+        (x21 <= x11 && x11 <= x22 || x22 <= x11 && x11 <= x21)) {
+      return true;
+    }
+  }
 
   // now compute the intersection point...
   xp = (n2 - n1) / (m1 - m2);
@@ -370,7 +380,6 @@ bool GPolygon::inside_polygon (const Coord& p) {
       p1 = p2;
     }
   }
-
   return counter & 1;
 }
 

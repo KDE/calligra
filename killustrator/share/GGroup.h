@@ -60,12 +60,11 @@ public:
   QListIterator<GObject> getMembers() { 
     return QListIterator<GObject> (members); }
 
+  void calcBoundingBox ();
+    
 protected slots:
   void propagateProperties ();
 
-protected:
-  void calcBoundingBox ();
-    
 private:
   QList<GObject> members;
 };

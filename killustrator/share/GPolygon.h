@@ -72,6 +72,7 @@ public:
 
 protected:
   void calcBoundingBox ();
+
   bool inside_polygon (const Coord& p);
   void update_rpoints ();
 

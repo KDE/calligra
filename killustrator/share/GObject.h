@@ -62,7 +62,7 @@ protected:
 public:
   struct OutlineInfo {
     enum { 
-      Color = 1, Style = 2, Width = 4, Custom = 8 
+      Color = 1, Style = 2, Width = 4, Custom = 8, All = 15
     };
     unsigned int mask;   // indicates the valid fields of the structure
     QColor color;        // outline color
@@ -76,27 +76,10 @@ public:
     Shape shape;         // shape of ellipse 
     int startArrowId,    // arrow heads (for lines and bezier curves)
       endArrowId;
-#if 0
-    // custom properties (depend on object type)
-    enum {
-      Custom_None, Custom_Line, Custom_Rectangle, Custom_Ellipse
-    } ckind;
-    enum Shape { EK_Default, EK_Arc, EK_Pie };           
-    union {              
-      // arrow heads (only used for lines and bezier curves)
-      struct {
-	int startId, endId;  
-      } arrow;
-      // roundness for rectangles
-      float roundness;     
-      // shape of ellipse 
-      Shape shape;           
-    } custom;
-#endif
   };
 
   struct FillInfo {
-    enum { Color = 1, Style = 2 };
+    enum { Color = 1, Style = 2, All = 3 };
     unsigned int mask; // indicates the valid fields of the structure
     QColor color;      // fill color
     BrushStyle style;  // fill style
