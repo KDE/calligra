@@ -154,12 +154,14 @@ KSpreadValue ValueConverter::asFloat (const KSpreadValue &value,
 KSpreadValue ValueConverter::asString (const KSpreadValue &value,
     KLocale *locale) const
 {
-  //TODO: eventually move to ValueFormatter, so that only a call to it
-  //remains here
-  //then in ValueFormatter, we can use its more advanced formatting methods
+  // This is a simpler version of ValueFormatter... We cannot use that one,
+  // as we sometimes want to generate the string differently ...
 
   KSpreadValue val;
+  QString s;
   KSpreadValue::Format fmt;
+  QChar decimal_point;
+  int pos;
   switch (value.type()) {
     case KSpreadValue::Empty:
       val = QString::null;
@@ -172,9 +174,7 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value,
     {
       fmt = value.format();
       if (fmt == KSpreadValue::fmt_Percent)
-        val = locale->formatLong (value.asInteger() * 100) + "%";
-      else if (fmt == KSpreadValue::fmt_Money)
-        val = locale->formatMoney (value.asInteger());
+        val = QString::number (value.asInteger() * 100) + " %";
       else if (fmt == KSpreadValue::fmt_DateTime)
         val = locale->formatDateTime (value.asDateTime());
       else if (fmt == KSpreadValue::fmt_Date)
@@ -182,23 +182,28 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value,
       else if (fmt == KSpreadValue::fmt_Time)
         val = locale->formatTime (value.asTime());
       else
-        val = locale->formatLong (value.asInteger());
+        val = QString::number (value.asInteger());
     }
     break;
     case KSpreadValue::Float:
       fmt = value.format();
-      if (fmt == KSpreadValue::fmt_Percent)
-        val = locale->formatNumber (value.asFloat() * 100) + "%";
-      else if (fmt == KSpreadValue::fmt_Money)
-        val = locale->formatMoney (value.asFloat());
-      else if (fmt == KSpreadValue::fmt_DateTime)
+      if (fmt == KSpreadValue::fmt_DateTime)
         val = locale->formatDateTime (value.asDateTime());
       else if (fmt == KSpreadValue::fmt_Date)
         val = locale->formatDate (value.asDate(), true);
       else if (fmt == KSpreadValue::fmt_Time)
         val = locale->formatTime (value.asTime());
       else
-        val = locale->formatNumber (value.asFloat());
+      {
+        //convert the number, change decimal point from English to local
+        s = QString::number (value.asFloat());
+        decimal_point = locale->decimalSymbol()[0];
+        if (decimal_point && ((pos = s.find ('.')) != -1))
+          s = s.replace (pos, 1, decimal_point);
+        if (fmt == KSpreadValue::fmt_Percent)
+          s += " %";
+        val.setValue (s);
+      }
     break;
     case KSpreadValue::String:
       val = value;

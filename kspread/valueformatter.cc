@@ -96,35 +96,8 @@ QString ValueFormatter::formatText (KSpreadCell *cell, FormatType fmtType)
 
     // Remove trailing zeros and the decimal point if necessary
     // unless the number has no decimal point
-    if (precision == -1 && localizedNumber.find (decimal_point) >= 0 )
-    {
-      int start = 0;
-      if (localizedNumber.find ('%') != -1)
-        start = 2;
-      else if (localizedNumber.find (cell->locale()->currencySymbol()) ==
-          ((int) (localizedNumber.length() -
-          cell->locale()->currencySymbol().length())))
-        start = cell->locale()->currencySymbol().length() + 1;
-      else if ((start = localizedNumber.find ('E')) != -1)
-        start = localizedNumber.length() - start;
-      else
-        start = 0;
-
-      int i = localizedNumber.length() - start;
-      bool bFinished = FALSE;
-      while ( !bFinished && i > 0 )
-      {
-        QChar ch = localizedNumber[i - 1];
-        if (ch == '0')
-          localizedNumber.remove (--i,1);
-        else
-        {
-          bFinished = TRUE;
-          if (ch == decimal_point)
-            localizedNumber.remove (--i, 1);
-        }
-      }
-    }
+    if (precision == -1)
+      removeTrailingZeros (localizedNumber, cell->locale(), decimal_point);
     
     // Start building the output string with prefix and postfix
     str = QString::null;
@@ -151,6 +124,41 @@ QString ValueFormatter::formatText (KSpreadCell *cell, FormatType fmtType)
     str = cell->value().asString();
     
   return str;
+}
+
+void ValueFormatter::removeTrailingZeros (QString &str, KLocale *locale,
+    QChar decimal_point)
+{
+  if (str.find (decimal_point) < 0)
+    //no decimal point -> nothing to do
+    return;
+  
+  int start = 0;
+  if (str.find ('%') != -1)
+    start = 2;
+  else if (str.find (locale->currencySymbol()) ==
+      ((int) (str.length() -
+      locale->currencySymbol().length())))
+    start = locale->currencySymbol().length() + 1;
+  else if ((start = str.find ('E')) != -1)
+    start = str.length() - start;
+  else
+    start = 0;
+
+  int i = str.length() - start;
+  bool bFinished = FALSE;
+  while ( !bFinished && i > 0 )
+  {
+    QChar ch = str[i - 1];
+    if (ch == '0')
+      str.remove (--i,1);
+    else
+    {
+      bFinished = TRUE;
+      if (ch == decimal_point)
+        str.remove (--i, 1);
+    }
+  }
 }
 
 QString ValueFormatter::createNumberFormat (KLocale *locale,

@@ -62,6 +62,10 @@ class ValueFormatter {
   
   QString errorFormat (KSpreadCell *cell);
 
+  /** Remove trailing zeros and the decimal point if necessary
+  unless the number has no decimal point */
+  void removeTrailingZeros (QString &str, KLocale *locale,
+      QChar decimal_point);
  protected:
   ValueFormatter ();
   static ValueFormatter *_self;
