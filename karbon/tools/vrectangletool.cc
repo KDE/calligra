@@ -49,32 +49,32 @@ VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*par
 double
 VRectangleTool::VRectangleOptionsWidget::width() const
 {
-	return KoUnit::ptFromUnit( m_width->value(), m_part->getUnit() );
+	return KoUnit::ptFromUnit( m_width->value(), m_part->unit() );
 }
 
 double
 VRectangleTool::VRectangleOptionsWidget::height() const
 {
-	return KoUnit::ptFromUnit( m_height->value(), m_part->getUnit() );
+	return KoUnit::ptFromUnit( m_height->value(), m_part->unit() );
 }
 
 void
 VRectangleTool::VRectangleOptionsWidget::setWidth( double value )
 {
-	m_width->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+	m_width->setValue( KoUnit::ptToUnit( value, m_part->unit() ) );
 }
 
 void
 VRectangleTool::VRectangleOptionsWidget::setHeight( double value )
 {
-	m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+	m_height->setValue( KoUnit::ptToUnit( value, m_part->unit() ) );
 }
 
 void
 VRectangleTool::VRectangleOptionsWidget::refreshUnit()
 {
-	m_width->setUnit( m_part->getUnit() );
-	m_height->setUnit( m_part->getUnit() );
+	m_width->setUnit( m_part->unit() );
+	m_height->setUnit( m_part->unit() );
 }
 
 VRectangleTool::VRectangleTool( KarbonView* view )

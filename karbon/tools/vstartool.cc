@@ -52,8 +52,8 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 
 void VStarTool::VStarOptionsWidget::refreshUnit()
 {
-	m_outerR->setUnit( m_part->getUnit() );
-	m_innerR->setUnit( m_part->getUnit() );
+	m_outerR->setUnit( m_part->unit() );
+	m_innerR->setUnit( m_part->unit() );
 }
 
 VStarTool::VStarTool( KarbonView* view )
@@ -61,8 +61,8 @@ VStarTool::VStarTool( KarbonView* view )
 {
 	// create config dialog:
 	m_optionsWidget = new VStarOptionsWidget( view->part() );
-	m_optionsWidget->m_outerR->setValue( KoUnit::ptToUnit( 100.0, view->part()->getUnit() ) );
-	m_optionsWidget->m_innerR->setValue( KoUnit::ptToUnit( 50.0, view->part()->getUnit() ) );
+	m_optionsWidget->m_outerR->setValue( KoUnit::ptToUnit( 100.0, view->part()->unit() ) );
+	m_optionsWidget->m_innerR->setValue( KoUnit::ptToUnit( 50.0, view->part()->unit() ) );
 	m_optionsWidget->m_edges->setValue( 5 );
 }
 
@@ -85,8 +85,8 @@ VStarTool::shape( bool interactive ) const
 			new VStar(
 				0L,
 				m_p,
-				KoUnit::ptFromUnit( m_optionsWidget->m_outerR->value(), view()->part()->getUnit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->m_innerR->value(), view()->part()->getUnit() ),
+				KoUnit::ptFromUnit( m_optionsWidget->m_outerR->value(), view()->part()->unit() ),
+				KoUnit::ptFromUnit( m_optionsWidget->m_innerR->value(), view()->part()->unit() ),
 				m_optionsWidget->m_edges->value() );
 	}
 	else
@@ -95,8 +95,8 @@ VStarTool::shape( bool interactive ) const
 				0L,
 				m_p,
 				m_d1,
-				KoUnit::ptFromUnit( m_optionsWidget->m_innerR->value(), view()->part()->getUnit() ) * m_d1 /
-				KoUnit::ptFromUnit( m_optionsWidget->m_outerR->value(), view()->part()->getUnit() ),
+				KoUnit::ptFromUnit( m_optionsWidget->m_innerR->value(), view()->part()->unit() ) * m_d1 /
+				KoUnit::ptFromUnit( m_optionsWidget->m_outerR->value(), view()->part()->unit() ),
 				m_optionsWidget->m_edges->value(),
 				m_d2 );
 }

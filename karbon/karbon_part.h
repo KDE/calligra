@@ -106,12 +106,12 @@ public:
 		return m_maxRecentFiles;
 	}
 
-	QString getUnitName() const
+	QString unitName() const
 	{
 		return KoUnit::unitName( m_unit );
 	}
 
-	KoUnit::Unit getUnit() const
+	KoUnit::Unit unit() const
 	{
 		return m_unit;
 	}

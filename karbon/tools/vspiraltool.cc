@@ -104,7 +104,7 @@ VSpiralTool::VSpiralOptionsWidget::setClockwise( bool value )
 void
 VSpiralTool::VSpiralOptionsWidget::refreshUnit()
 {
-	m_radius->setUnit( m_part->getUnit() );
+	m_radius->setUnit( m_part->unit() );
 }
 
 VSpiralTool::VSpiralTool( KarbonView* view )

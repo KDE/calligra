@@ -73,7 +73,7 @@ void KarbonPartIface::clearHistory()
 
 QString KarbonPartIface::unitName() const
 {
-	return m_part->getUnitName();
+	return m_part->unitName();
 }
 
 int KarbonPartIface::nbLayer() const

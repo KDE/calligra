@@ -47,26 +47,26 @@
 
 
 VConfigureDlg::VConfigureDlg( KarbonView* parent )
-	: KDialogBase( KDialogBase::IconList,i18n( "Configure" ),
-		KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
-		KDialogBase::Ok)
+		: KDialogBase( KDialogBase::IconList, i18n( "Configure" ),
+					   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel | KDialogBase::Default,
+					   KDialogBase::Ok )
 
 {
-	QVBox* page = addVBoxPage(
-		i18n( "Interface" ), i18n( "Interface" ),
-		BarIcon( "misc", KIcon::SizeMedium ) );
+	QVBox * page = addVBoxPage(
+					   i18n( "Interface" ), i18n( "Interface" ),
+					   BarIcon( "misc", KIcon::SizeMedium ) );
 
 	m_interfacePage = new VConfigInterfacePage( parent, page );
 
 	page = addVBoxPage(
-		i18n( "Misc" ), i18n( "Misc" ),
-		BarIcon( "misc", KIcon::SizeMedium ) );
+			   i18n( "Misc" ), i18n( "Misc" ),
+			   BarIcon( "misc", KIcon::SizeMedium ) );
 
 	m_miscPage = new VConfigMiscPage( parent, page );
 
 	page = addVBoxPage(
-		i18n( "Document" ), i18n( "Document Settings" ),
-		BarIcon( "document", KIcon::SizeMedium ) );
+			   i18n( "Document" ), i18n( "Document Settings" ),
+			   BarIcon( "document", KIcon::SizeMedium ) );
 
 	m_defaultDocPage = new VConfigDefaultPage( parent, page );
 
@@ -87,12 +87,15 @@ void VConfigureDlg::slotDefault()
 		case 0:
 			m_interfacePage->slotDefault();
 			break;
+
 		case 1:
-		   m_miscPage->slotDefault();
+			m_miscPage->slotDefault();
 			break;
+
 		case 2:
 			m_defaultDocPage->slotDefault();
 			break;
+
 		default:
 			break;
 	}
@@ -100,7 +103,7 @@ void VConfigureDlg::slotDefault()
 
 
 VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
-	QWidget* parent, char* name )
+		QWidget* parent, char* name )
 		: QWidget( parent, name )
 {
 	m_view = view;
@@ -125,10 +128,10 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 		m_config->setGroup( "Interface" );
 
 		m_oldRecentFiles = m_config->readNumEntry(
-			"NbRecentFile", m_oldRecentFiles );
+							   "NbRecentFile", m_oldRecentFiles );
 
 		oldShowStatusBar = m_config->readBoolEntry(
-			"ShowStatusBar" , true );
+							   "ShowStatusBar" , true );
 	}
 
 	m_showStatusBar = new QCheckBox( i18n( "Show status bar" ), tmpQGroupBox );
@@ -184,120 +187,134 @@ void VConfigInterfacePage::slotDefault()
 
 
 VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
-	: QObject( box->parent(), name )
+		: QObject( box->parent(), name )
 {
-    m_view = view;
-    m_config = KarbonFactory::instance()->config();
+	m_view = view;
+	m_config = KarbonFactory::instance()->config();
 
-    KoUnit::Unit unit = view->part()->getUnit();
+	KoUnit::Unit unit = view->part()->unit();
 
-    QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-    tmpQGroupBox->setTitle( i18n( "Misc" ) );
+	QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
+	tmpQGroupBox->setTitle( i18n( "Misc" ) );
 
-    QGridLayout* grid = new QGridLayout(
-        tmpQGroupBox, 8, 1, KDialog::marginHint() + 7, KDialog::spacingHint() );
+	QGridLayout* grid = new QGridLayout(
+							tmpQGroupBox, 8, 1, KDialog::marginHint() + 7, KDialog::spacingHint() );
 
-    m_oldUndoRedo = 30;
+	m_oldUndoRedo = 30;
 
-    QString unitType = KoUnit::unitName( unit );
-    //#################"laurent
-    //don't load unitType from config file because unit is
-    //depend from kword file => unit can be different from config file
-    if( m_config->hasGroup( "Misc" ) )
-    {
-        m_config->setGroup( "Misc" );
-        m_oldUndoRedo = m_config->readNumEntry( "UndoRedo", m_oldUndoRedo );
-    }
+	QString unitType = KoUnit::unitName( unit );
+	//#################"laurent
+	//don't load unitType from config file because unit is
+	//depend from kword file => unit can be different from config file
 
-    m_undoRedo = new KIntNumInput( m_oldUndoRedo, tmpQGroupBox );
-    m_undoRedo->setLabel( i18n( "Undo/redo limit:" ) );
-    m_undoRedo->setRange( 10, 60, 1 );
+	if( m_config->hasGroup( "Misc" ) )
+	{
+		m_config->setGroup( "Misc" );
+		m_oldUndoRedo = m_config->readNumEntry( "UndoRedo", m_oldUndoRedo );
+	}
 
-    grid->addWidget( m_undoRedo, 0, 0 );
+	m_undoRedo = new KIntNumInput( m_oldUndoRedo, tmpQGroupBox );
+	m_undoRedo->setLabel( i18n( "Undo/redo limit:" ) );
+	m_undoRedo->setRange( 10, 60, 1 );
+
+	grid->addWidget( m_undoRedo, 0, 0 );
 
 
-    QHBox *lay = new QHBox( box );
-    lay->setSpacing( KDialog::spacingHint() );
-    /*QLabel *unitLabel =*/ new QLabel( i18n( "Units:" ), lay );
+	QHBox *lay = new QHBox( box );
+	lay->setSpacing( KDialog::spacingHint() );
+	/*QLabel *unitLabel =*/
+	new QLabel(  i18n(  "Units:" ),  lay );
 
-    QStringList listUnit;
-    listUnit << KoUnit::unitDescription( KoUnit::U_MM );
-    listUnit << KoUnit::unitDescription( KoUnit::U_CM );
-    listUnit << KoUnit::unitDescription( KoUnit::U_INCH );
-    listUnit << KoUnit::unitDescription( KoUnit::U_PT );
-    m_unit = new QComboBox( lay );
-    m_unit->insertStringList(listUnit);
-    m_oldUnit = 0;
-    switch( KoUnit::unit( unitType ) )
-    {
-    case KoUnit::U_MM:
-        m_oldUnit = 0;
-        break;
-    case KoUnit::U_CM:
-        m_oldUnit = 1;
-        break;
-    case KoUnit::U_INCH:
-        m_oldUnit = 2;
-        break;
-    case KoUnit::U_PT:
-    default:
-        m_oldUnit = 3;
-    }
-    m_unit->setCurrentItem( m_oldUnit );
+	QStringList listUnit;
+	listUnit << KoUnit::unitDescription( KoUnit::U_MM );
+	listUnit << KoUnit::unitDescription( KoUnit::U_CM );
+	listUnit << KoUnit::unitDescription( KoUnit::U_INCH );
+	listUnit << KoUnit::unitDescription( KoUnit::U_PT );
+	m_unit = new QComboBox( lay );
+	m_unit->insertStringList( listUnit );
+	m_oldUnit = 0;
 
+	switch( KoUnit::unit( unitType ) )
+	{
+
+		case KoUnit::U_MM:
+			m_oldUnit = 0;
+			break;
+
+		case KoUnit::U_CM:
+			m_oldUnit = 1;
+			break;
+
+		case KoUnit::U_INCH:
+			m_oldUnit = 2;
+			break;
+
+		case KoUnit::U_PT:
+
+		default:
+			m_oldUnit = 3;
+	}
+
+	m_unit->setCurrentItem( m_oldUnit );
 }
 
 void VConfigMiscPage::apply()
 {
-    KarbonPart* part = m_view->part();
+	KarbonPart * part = m_view->part();
 
-    m_config->setGroup( "Misc" );
-    if( m_oldUnit != m_unit->currentItem() )
-    {
-        QString unitName;
-        m_oldUnit = m_unit->currentItem();
-        switch( m_oldUnit )
-        {
-        case 0:
-            unitName = KoUnit::unitName( KoUnit::U_MM );
-            part->setUnit( KoUnit::U_MM );
-            break;
-        case 1:
-            unitName = KoUnit::unitName( KoUnit::U_CM );
-            part->setUnit( KoUnit::U_CM );
-            break;
-        case 2:
-            unitName = KoUnit::unitName( KoUnit::U_INCH );
-            part->setUnit( KoUnit::U_INCH );
-            break;
-        case 3:
-        default:
-            unitName = KoUnit::unitName( KoUnit::U_PT );
-            part->setUnit( KoUnit::U_PT );
-        }
+	m_config->setGroup( "Misc" );
 
-        m_config->writeEntry( "Units", unitName );
-    }
+	if( m_oldUnit != m_unit->currentItem() )
+	{
+		QString unitName;
+		m_oldUnit = m_unit->currentItem();
 
-    int newUndo = m_undoRedo->value();
+		switch( m_oldUnit )
+		{
 
-    if( newUndo != m_oldUndoRedo )
-    {
-        m_config->writeEntry( "UndoRedo", newUndo );
-        part->setUndoRedoLimit( newUndo );
-        m_oldUndoRedo = newUndo;
-    }
+			case 0:
+				unitName = KoUnit::unitName( KoUnit::U_MM );
+				part->setUnit( KoUnit::U_MM );
+				break;
+
+			case 1:
+				unitName = KoUnit::unitName( KoUnit::U_CM );
+				part->setUnit( KoUnit::U_CM );
+				break;
+
+			case 2:
+				unitName = KoUnit::unitName( KoUnit::U_INCH );
+				part->setUnit( KoUnit::U_INCH );
+				break;
+
+			case 3:
+
+			default:
+				unitName = KoUnit::unitName( KoUnit::U_PT );
+				part->setUnit( KoUnit::U_PT );
+		}
+
+		m_config->writeEntry( "Units", unitName );
+	}
+
+	int newUndo = m_undoRedo->value();
+
+	if( newUndo != m_oldUndoRedo )
+	{
+		m_config->writeEntry( "UndoRedo", newUndo );
+		part->setUndoRedoLimit( newUndo );
+		m_oldUndoRedo = newUndo;
+	}
 }
 
 void VConfigMiscPage::slotDefault()
 {
 	m_undoRedo->setValue( 30 );
 	m_unit->setCurrentItem( 0 );
-
 }
 
 VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
-	QVBox* box, char* name )
+										QVBox* box, char* name )
 		: QObject( box->parent(), name )
 {
 	m_view = view;
@@ -305,13 +322,14 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 	m_config = KarbonFactory::instance()->config();
 
 	QVGroupBox* gbDocumentSettings = new QVGroupBox(
-		i18n( "Document Settings" ), box );
+										 i18n( "Document Settings" ), box );
 	gbDocumentSettings->setMargin( 10 );
 	gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
 	m_oldAutoSave = m_view->part()->defaultAutoSave() / 60;
 
 	m_oldBackupFile = true;
+
 	if( m_config->hasGroup( "Interface" ) )
 	{
 		m_config->setGroup( "Interface" );
@@ -345,6 +363,7 @@ void VConfigDefaultPage::apply()
 	}
 
 	bool state = m_createBackupFile->isChecked();
+
 	if( state != m_oldBackupFile )
 	{
 		m_config->writeEntry( "BackupFile", state );

@@ -20,17 +20,17 @@
 #ifndef __VCONFIGUREDLG_H__
 #define __VCONFIGUREDLG_H__
 
+
 #include <kdialogbase.h>
 
-class QCheckBox;
-
+class KarbonView;
 class KColorButton;
 class KConfig;
 class KIntNumInput;
 class KLineEdit;
 class KSpellConfig;
+class QCheckBox;
 class QComboBox;
-class KarbonView;
 
 
 class VConfigInterfacePage : public QWidget
@@ -76,8 +76,8 @@ private:
 
 	KIntNumInput* m_undoRedo;
 	int m_oldUndoRedo;
-    int m_oldUnit;
-    QComboBox *m_unit;
+	int m_oldUnit;
+	QComboBox *m_unit;
 };
 
 
@@ -100,8 +100,8 @@ private:
 
 	KIntNumInput* m_autoSave;
 	int m_oldAutoSave;
-    QCheckBox *m_createBackupFile;
-    bool m_oldBackupFile;
+	QCheckBox *m_createBackupFile;
+	bool m_oldBackupFile;
 };
 
 
