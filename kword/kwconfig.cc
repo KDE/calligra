@@ -514,8 +514,8 @@ void ConfigureMiscPage::apply()
         {
             macroCmd=new KMacroCommand(i18n("Change display link command"));
         }
+        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayLink() ,b, KWChangeVariableSettingsCommand::VS_DISPLAYLINK);
 
-        KWChangeDisplayLinkCommand *cmd=new KWChangeDisplayLinkCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayLink() ,b, KWChangeDisplayLinkCommand::PL_DISPLAY);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
@@ -526,20 +526,25 @@ void ConfigureMiscPage::apply()
         {
             macroCmd=new KMacroCommand(i18n("Change display link command"));
         }
-        KWChangeDisplayLinkCommand *cmd=new KWChangeDisplayLinkCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayLink() ,b, KWChangeDisplayLinkCommand::PL_UNDERLINE);
+        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->underlineLink() ,b, KWChangeVariableSettingsCommand::VS_UNDERLINELINK);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
 
-    if(macroCmd)
-        doc->addCommand(macroCmd);
-
     b=m_displayComment->isChecked();
     if(doc->getVariableCollection()->variableSetting()->displayComment()!=b)
     {
-        doc->getVariableCollection()->variableSetting()->setDisplayComment(b);
-        doc->recalcVariables( VT_NOTE );
+        if(!macroCmd)
+        {
+            macroCmd=new KMacroCommand(i18n("Change display link command"));
+        }
+        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayComment() ,b, KWChangeVariableSettingsCommand::VS_DISPLAYCOMMENT);
+        cmd->execute();
+        macroCmd->addCommand(cmd);
     }
+    if(macroCmd)
+        doc->addCommand(macroCmd);
+
 }
 
 void ConfigureMiscPage::slotDefault()

@@ -1185,41 +1185,42 @@ void KWChangeStartingPageCommand::unexecute()
     m_doc->recalcVariables( VT_PGNUM );
 }
 
-KWChangeDisplayLinkCommand::KWChangeDisplayLinkCommand( const QString &name, KWDocument *_doc, bool _oldDisplay,bool _newDisplay, PropertiesLink _type):
+KWChangeVariableSettingsCommand::KWChangeVariableSettingsCommand( const QString &name, KWDocument *_doc, bool _oldValue, bool _newValue, VariableProperties _type):
     KNamedCommand(name),
     m_doc(_doc),
     type(_type),
-    m_bOldDisplay(_oldDisplay),
-    m_bNewDisplay(_newDisplay)
+    m_bOldValue(_oldValue),
+    m_bNewValue(_newValue)
 {
 }
 
-void KWChangeDisplayLinkCommand::execute()
+void KWChangeVariableSettingsCommand::changeValue( bool b )
 {
     switch(type)
     {
-    case PL_DISPLAY:
-        m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bNewDisplay);
+    case VS_DISPLAYLINK:
+        m_doc->getVariableCollection()->variableSetting()->setDisplayLink(b);
+        m_doc->recalcVariables( VT_LINK );
         break;
-    case  PL_UNDERLINE:
-        m_doc->getVariableCollection()->variableSetting()->setUnderlineLink(m_bNewDisplay);
+    case  VS_UNDERLINELINK:
+        m_doc->getVariableCollection()->variableSetting()->setUnderlineLink(b);
+        m_doc->recalcVariables( VT_LINK );
+        break;
+    case VS_DISPLAYCOMMENT:
+        m_doc->getVariableCollection()->variableSetting()->setDisplayComment(b);
+        m_doc->recalcVariables( VT_NOTE );
         break;
     }
-    m_doc->recalcVariables( VT_LINK );
 }
 
-void KWChangeDisplayLinkCommand::unexecute()
+void KWChangeVariableSettingsCommand::execute()
 {
-    switch(type)
-    {
-    case PL_DISPLAY:
-        m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bOldDisplay);
-        break;
-    case  PL_UNDERLINE:
-        m_doc->getVariableCollection()->variableSetting()->setUnderlineLink(m_bOldDisplay);
-        break;
-    }
-    m_doc->recalcVariables( VT_LINK );
+    changeValue(m_bNewValue);
+}
+
+void KWChangeVariableSettingsCommand::unexecute()
+{
+    changeValue(m_bOldValue);
 }
 
 KWChangeCustomVariableValue::KWChangeCustomVariableValue( const QString &name, KWDocument *_doc,const QString & _oldValue, const QString & _newValue,KoCustomVariable *var):
