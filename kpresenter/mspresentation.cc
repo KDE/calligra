@@ -348,6 +348,11 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
     colourGroup->setHidden( true );
 
     QHBox *buttonLayout = new QHBox( this );
+    KPushButton *helpButton = new KPushButton( KStdGuiItem::help(), buttonLayout );
+    QWhatsThis::add( helpButton,
+                     i18n( "Selecting this button will take you to the KPresenter "
+                           "documentation that provides more information on how "
+                           "to use the Memory Stick export function. ") );
     KPushButton *createButton = new KPushButton( KStdGuiItem::ok(), buttonLayout );
     QWhatsThis::add( createButton,
                      i18n( "Selecting this button will proceed to generating "
@@ -369,6 +374,7 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
     mainLayout->setResizeMode( QLayout::Fixed );
     mainLayout->setGeometry( QRect( 0, 0, 300, 220 ) );
 
+    connect( helpButton, SIGNAL( clicked() ), this, SLOT ( helpMe() ) );
     connect( cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( createButton, SIGNAL( clicked() ), this, SLOT( finish() ) );
 }
@@ -395,6 +401,11 @@ void KPMSPresentationSetup::showColourGroup(bool on)
         colourGroup->setHidden( true );
         mainLayout->setGeometry( QRect(0, 0, 300, 320 ) );
     }
+}
+
+void KPMSPresentationSetup::helpMe()
+{
+    kapp->invokeHelp("ms-export");
 }
 
 void KPMSPresentationSetup::finish()

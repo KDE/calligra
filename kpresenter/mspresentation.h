@@ -121,6 +121,7 @@ protected:
 protected slots:
     void slotChoosePath(const QString &);
     virtual void finish();
+    virtual void helpMe();
     void showColourGroup(bool on);
 };
 
