@@ -1,0 +1,108 @@
+Index: GHash.cc
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GHash.cc,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -u -p -r1.2 -r1.3
+--- GHash.cc	13 Jan 2003 14:51:16 -0000	1.2
++++ GHash.cc	10 Oct 2004 21:37:09 -0000	1.3
+@@ -8,9 +8,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma implementation
+-#endif
+ 
+ #include "gmem.h"
+ #include "GString.h"
+Index: GHash.h
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GHash.h,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -u -p -r1.2 -r1.3
+--- GHash.h	13 Jan 2003 14:51:16 -0000	1.2
++++ GHash.h	10 Oct 2004 21:37:09 -0000	1.3
+@@ -11,9 +11,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma interface
+-#endif
+ 
+ #include "gtypes.h"
+ 
+Index: GList.cc
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GList.cc,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -u -p -r1.1 -r1.2
+--- GList.cc	23 Nov 2002 14:15:14 -0000	1.1
++++ GList.cc	10 Oct 2004 21:37:09 -0000	1.2
+@@ -8,9 +8,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma implementation
+-#endif
+ 
+ #include <string.h>
+ #include "gmem.h"
+Index: GList.h
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GList.h,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -u -p -r1.1 -r1.2
+--- GList.h	23 Nov 2002 14:15:14 -0000	1.1
++++ GList.h	10 Oct 2004 21:37:09 -0000	1.2
+@@ -11,9 +11,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma interface
+-#endif
+ 
+ #include "gtypes.h"
+ 
+Index: GString.cc
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GString.cc,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -u -p -r1.1 -r1.2
+--- GString.cc	23 Nov 2002 14:15:14 -0000	1.1
++++ GString.cc	10 Oct 2004 21:37:09 -0000	1.2
+@@ -10,9 +10,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma implementation
+-#endif
+ 
+ #include <stdlib.h>
+ #include <stddef.h>
+Index: GString.h
+===================================================================
+RCS file: /home/kde/koffice/filters/kword/pdf/xpdf/goo/GString.h,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -u -p -r1.2 -r1.3
+--- GString.h	13 Jan 2003 14:51:16 -0000	1.2
++++ GString.h	10 Oct 2004 21:37:09 -0000	1.3
+@@ -13,9 +13,6 @@
+ 
+ #include <aconf.h>
+ 
+-#ifdef USE_GCC_PRAGMAS
+-#pragma interface
+-#endif
+ 
+ #include <string.h>
+ 
