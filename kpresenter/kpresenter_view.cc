@@ -285,6 +285,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     connect( this, SIGNAL( currentPageChanged(int) ), this, SLOT( pageNumChanged()) );
     connect( m_canvas, SIGNAL( objectSelectedChanged() ), this, SLOT( updateObjectStatusBarItem() ));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateRuler()));
+    connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateScrollBarRanges()));
 
     //change table active.
     connect( m_pKPresenterDoc, SIGNAL( sig_changeActivePage( KPrPage* ) ), m_canvas, SLOT( slotSetActivePage( KPrPage* ) ) );
@@ -4834,6 +4835,13 @@ void KPresenterView::setZoom( int zoom, bool updateViews )
     // Also set the zoom in KoView (for embedded views)
     //kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
     KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
+    //update ranges
+    setRanges();
+}
+
+void KPresenterView::slotUpdateScrollBarRanges()
+{
+    setRanges();
 }
 
 KoZoomHandler *KPresenterView::zoomHandler()

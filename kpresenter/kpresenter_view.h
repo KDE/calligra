@@ -506,6 +506,7 @@ protected slots:
     void updateRuler();
 
     void refreshAllVariable();
+    void slotUpdateScrollBarRanges();
 
 // end of protected slots
 protected:
