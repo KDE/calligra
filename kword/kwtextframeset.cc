@@ -3035,21 +3035,21 @@ QPtrList<KAction> KWTextFrameSetEdit::dataToolActionList()
         return QPtrList<KAction>();
 
     // Any tool that works on plain text is relevant
-    QValueList<KoDataToolInfo> tools = KoDataToolInfo::query( "QString", "text/plain", doc );
+    QValueList<KoDataToolInfo> tools = KoDataToolInfo::query( "QString", "text/plain", doc->instance() );
 
     // Add tools that work on a single word if that is the case
     if ( m_singleWord )
-        tools += KoDataToolInfo::query( "QString", "application/x-singleword", doc );
+        tools += KoDataToolInfo::query( "QString", "application/x-singleword", doc->instance() );
 
     // Maybe one day we'll have tools that link to kwordpart (later: qt3), to act on formatted text
-    tools += KoDataToolInfo::query( "QTextString", "application/x-qrichtext", doc );
+    tools += KoDataToolInfo::query( "QTextString", "application/x-qrichtext", doc->instance() );
 
     return KoDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KoDataToolInfo &, const QString & ) ) );
 }
 
 void KWTextFrameSetEdit::slotToolActivated( const KoDataToolInfo & info, const QString & command )
 {
-    KoDataTool* tool = info.createTool( frameSet()->kWordDocument() );
+    KoDataTool* tool = info.createTool( frameSet()->kWordDocument()->instance() );
     if ( !tool )
     {
         kdWarning() << "Could not create Tool !" << endl;
