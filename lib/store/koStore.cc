@@ -299,9 +299,12 @@ Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
   return nwritten;
 }
 
-bool KoStore::embed( const QString &dest, KoStore *store, const QString &src )
+bool KoStore::embed( const QString &/*dest*/, KoStore */*store*/, const QString &/*src*/ )
 {
+#ifdef __GNUC__
 #warning TODO: implement or remove
+#endif
+
 #if 0
 
   if ( dest == ROOTPART )
