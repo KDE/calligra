@@ -70,6 +70,8 @@ private:
     QDomNode getBaseNode(const QDomDocument &doc) const;
     void makeMimeTypeInfo(const QString& mimeType);
     QString stringFromNode(QDomNode node, QString name);
+    void getEditingTime(KFileMetaInfoGroup group1, const char *, QString & txt);
+    void getDateTime(KFileMetaInfoGroup group1, const char *, QString & txt);
 };
 
 #endif
