@@ -1005,7 +1005,6 @@ void KWView::print( KPrinter &prt )
         if ( fit.current()->type() == FT_PART )
             doZoom = false;
 
-
     int oldZoom = m_doc->zoom();
     // We don't get valid metrics from the printer - and we want a better resolution
     // anyway (it's the PS driver that takes care of the printer resolution).
@@ -1371,7 +1370,7 @@ void KWView::editDeleteFrame()
     deleteFrame();
 }
 
-void KWView::deleteFrame(bool _warning)
+void KWView::deleteFrame( bool _warning )
 {
     QList<KWFrame> frames=m_doc->getSelectedFrames();
     ASSERT( frames.count() == 1 ); // the action isn't enabled otherwise.
@@ -1386,18 +1385,20 @@ void KWView::deleteFrame(bool _warning)
         return;
 
     // frame is part of a table?
-    if ( fs->getGroupManager() ) {
-        if(_warning)
-        {
-            int result;
-
-            result = KMessageBox::warningContinueCancel(this,
-                                                        i18n( "You are about to delete a table.\n"
-                                                              "Doing so will delete all the text in the table.\n"
-                                                              "Are you sure you want to do that?"), i18n("Delete Table"), i18n("&Delete"));
-            if (result != KMessageBox::Continue)
-                return;
-        }
+    if ( fs->getGroupManager() )
+    {
+        int result = KMessageBox::warningContinueCancel(
+            this,
+            i18n( "You are about to delete a table.\n"
+                  "Doing so will delete all the text in the table.\n"
+                  "Are you sure you want to do that?"),
+            i18n("Delete Table"), i18n("&Delete"),
+#if KDE_VERSION >= 220
+            "DeleteTableConfirmation",
+#endif
+            true );
+        if (result != KMessageBox::Continue)
+            return;
         m_doc->deleteTable( fs->getGroupManager() );
         m_gui->canvasWidget()->emitFrameSelectedChanged();
         return;
@@ -1413,20 +1414,23 @@ void KWView::deleteFrame(bool _warning)
 
         QTextDocument * textdoc = textfs->textDocument();
         QTextParag * parag = textdoc->firstParag();
-        if ( parag && parag->string()->length() > 0 ) {
-            if(_warning)
-            {
-                int result = KMessageBox::warningContinueCancel(this,
-                                                                i18n( "You are about to delete the last Frame of the\n"
-                                                                      "Frameset '%1'.\n"
-                                                                      "The contents of this Frameset will not appear\n"
-                                                                      "anymore!\n\n"
-                                                                      "Are you sure you want to do that?").arg(fs->getName()),
-                                                                i18n("Delete Frame"), i18n("&Delete"));
+        if ( parag && parag->string()->length() > 0 )
+        {
+            int result = KMessageBox::warningContinueCancel(
+                this,
+                i18n( "You are about to delete the last Frame of the\n"
+                      "Frameset '%1'.\n"
+                      "The contents of this Frameset will not appear\n"
+                      "anymore!\n\n"
+                      "Are you sure you want to do that?").arg(fs->getName()),
+                i18n("Delete Frame"), i18n("&Delete"),
+#if KDE_VERSION >= 220
+                "DeleteLastFrameConfirmation",
+#endif
+                true );
 
-                if (result != KMessageBox::Continue)
-                    return;
-            }
+            if (result != KMessageBox::Continue)
+                return;
 
             m_doc->deleteFrame( theFrame );
             m_gui->canvasWidget()->emitFrameSelectedChanged();
@@ -1437,10 +1441,15 @@ void KWView::deleteFrame(bool _warning)
 
     if(_warning)
     {
-        int result = KMessageBox::warningContinueCancel(this,
-                                                        i18n("Do you want to delete this frame?"),
-                                                        i18n("Delete Frame"),
-                                                        i18n("&Delete"));
+        int result = KMessageBox::warningContinueCancel(
+            this,
+            i18n("Do you want to delete this frame?"),
+            i18n("Delete Frame"),
+            i18n("&Delete"),
+#if KDE_VERSION >= 220
+            "DeleteLastFrameConfirmation",
+#endif
+            true );
         if (result != KMessageBox::Continue)
             return;
     }
