@@ -544,6 +544,8 @@ protected:
     void fillStyleStack( const QDomElement& object, KoOasisContext & context );
     void createPresentationAnimation(const QDomElement& element);
 
+    void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
+
     // ************ variables ************
 
     // screenpresentations

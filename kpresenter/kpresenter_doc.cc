@@ -930,6 +930,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     {
         m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ),mainStyles, indexObj );
     }
+    saveOasisPresentationSettings( contentTmpWriter );
     contentTmpWriter.endElement(); //office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
@@ -1003,6 +1004,15 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     return true;
 }
 
+void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter )
+{
+    //todo don't save when is not value by default (check with oo)
+    //FIXME
+    contentTmpWriter.startElement( "presentation:settings" );
+    contentTmpWriter.addAttribute( "presentation:endless",  ( _spInfiniteLoop ? "true" : "false" ) );
+    contentTmpWriter.addAttribute( "presentation:force-manual",  ( _spManualSwitch ? "true" : "false" ) );
+    contentTmpWriter.endElement();
+}
 
 void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
 {
@@ -1080,6 +1090,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QDomElement settings = body.namedItem("presentation:settings").toElement();
     if (!settings.isNull() && !_clean /*don't load settings when we copy/paste a page*/)
     {
+        kdDebug()<<"presentation:settings ********************************************* \n";
         if (settings.attribute("presentation:endless")=="true")
             _spInfiniteLoop = true;
 
