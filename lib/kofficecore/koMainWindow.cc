@@ -1148,12 +1148,14 @@ DCOPObject * KoMainWindow::dcopObject()
 
 void KoMainWindow::slotEmailFile()
 {
+   saveDocument();
    // Subject = Document file name
    // Attachment = The current file
    // Message Body = The current document in HTML export? <-- This may be an option.
    QString fileURL = d->m_rootDoc->url().url();
    QString theSubject = d->m_rootDoc->url().fileName(false);
    kdDebug(30003) << "(" << fileURL <<")" << endl;
+
    if (!fileURL.isEmpty())
        kapp->invokeMailer("mailto:?subject=" + theSubject +
                           "&attach=" + fileURL);
