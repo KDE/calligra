@@ -30,6 +30,7 @@
 #include "vvisitor.h"
 #include "vsegment.h"
 #include "vgroup.h"
+#include "vpainter.h"
 
 #ifdef HAVE_KARBONTEXT
 

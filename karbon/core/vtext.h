@@ -30,7 +30,6 @@
 
 #include "vpath.h"
 #include "vcomposite.h"
-#include "vpainter.h"
 
 class VGroup;
 
@@ -45,7 +44,7 @@ public:
 		On,
 		Under
 	};
-	
+
 	enum Alignment {
 		Left,
 		Center,
@@ -74,8 +73,8 @@ public:
 	virtual bool translucentShadow() { return m_translucentShadow; }
 	virtual int shadowAngle() { return m_shadowAngle; }
 	virtual int shadowDistance() { return m_shadowDistance; }
-	
-	virtual void draw( VPainter* painter, const KoRect* rect = 0L ) const;
+
+	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
 
 	virtual void transform( const QWMatrix& m );
 
@@ -88,9 +87,9 @@ public:
 	virtual VGroup* toVGroup() const;
 
 	virtual void setState( const VState state );
-	
+
 	virtual void accept( VVisitor& visitor );
-	
+
 #ifdef HAVE_KARBONTEXT
 	void traceText();
 
