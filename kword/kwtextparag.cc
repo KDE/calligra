@@ -39,7 +39,7 @@
 KoTextParag::KoTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
     : QTextParag( d, pr, nx, updateIds )
 {
-    //kdDebug() << "KoTextParag::KoTextParag " << this << endl;
+    kdDebug() << "KoTextParag::KoTextParag " << this << endl;
     m_item = 0L;
 }
 
@@ -47,7 +47,7 @@ KoTextParag::~KoTextParag()
 {
     if ( !textDocument()->isDestroying() )
         invalidateCounters();
-    //kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
+    kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
     delete m_item;
 }
 
@@ -400,30 +400,27 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
             painter.save();
             QPen pen( cg.color( QColorGroup::Highlight ) ); // ## maybe make configurable ?
             painter.setPen( pen );
-            //draw hardframebreak (string) if it is the last line
-            //in paragraph before we draw "frame Break"
-            //several time.
-            if ( hardFrameBreakAfter()&& lineY( lines()-1 )==lastY)
+            //kdDebug() << "KoTextParag::drawParagString start=" << start << " len=" << len << " length=" << length() << endl;
+            if ( start + len == length() ) // last block of text in this paragraph
             {
-                QTextFormat format = *lastFormat;
-                format.setColor( pen.color() );
-                // keep in sync with KWTextFrameSet::adjustFlow
-                QString str = i18n( "--- Frame Break ---" );
-                int width = 0;
-                for ( int i = 0 ; i < (int)str.length() ; ++i )
-                    width += lastFormat->width( str, i );
-                QColorGroup cg2( cg );
-                cg2.setColor( QColorGroup::Base, Qt::green );
-                int last = length() - 1;
-                QTextParag::drawParagString( painter, str, 0, str.length(), at( last )->x,
-                                             lastY, at( last )->ascent(), width, lastFormat->height(),
-                                             drawSelections, &format, last, selectionStarts,
-                                             selectionEnds, cg2, rightToLeft );
-            }
-            else
-            {
-                //kdDebug() << "KoTextParag::drawParagString start=" << start << " len=" << len << " length=" << length() << endl;
-                if ( start + len == length() )
+                if ( hardFrameBreakAfter() )
+                {
+                    QTextFormat format = *lastFormat;
+                    format.setColor( pen.color() );
+                    // keep in sync with KWTextFrameSet::adjustFlow
+                    QString str = i18n( "--- Frame Break ---" );
+                    int width = 0;
+                    for ( int i = 0 ; i < (int)str.length() ; ++i )
+                        width += lastFormat->width( str, i );
+                    QColorGroup cg2( cg );
+                    cg2.setColor( QColorGroup::Base, Qt::green );
+                    int last = length() - 1;
+                    QTextParag::drawParagString( painter, str, 0, str.length(), at( last )->x,
+                                                 lastY, at( last )->ascent(), width, lastFormat->height(),
+                                                 drawSelections, &format, last, selectionStarts,
+                                                 selectionEnds, cg2, rightToLeft );
+                }
+                else
                 {
                     // drawing the end of the parag
                     QTextFormat * format = at( length() - 1 )->format();
@@ -440,35 +437,35 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
                     painter.drawLine( x - size, y, x - size + arrowsize, y - arrowsize );
                     painter.drawLine( x - size, y, x - size + arrowsize, y + arrowsize );
                 }
-                // Now draw spaces and tabs
-                int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
-                for ( int i = start ; i < end ; ++i )
+            }
+            // Now draw spaces and tabs
+            int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
+            for ( int i = start ; i < end ; ++i )
+            {
+                QTextStringChar &ch = string()->at(i);
+                if ( ch.isCustom() )
+                    continue;
+                if ( ch.c == ' ' )
                 {
-                    QTextStringChar &ch = string()->at(i);
-                    if ( ch.isCustom() )
-                        continue;
-                    if ( ch.c == ' ' )
-                    {
-                        int w = string()->width(i);
-                        int height = ch.ascent();
-                        int size = QMAX( 2, QMIN( w/2, height/3 ) ); // Enfore that it's a square, and that it's visible
-                        painter.drawRect( ch.x + (w - size) / 2, lastY + baseLine - (height - size) / 2, size, size );
-                    }
-                    else if ( ch.c == '\t' )
-                    {
-                        QTextStringChar &nextch = string()->at(i+1);
-                        int nextx = (nextch.x > ch.x) ? nextch.x : rect().width();
-                        //kdDebug() << "tab x=" << ch.x << " nextch.x=" << nextch.x
-                        //          << " nextx=" << nextx << " startX=" << startX << " bw=" << bw << endl;
-                        int availWidth = nextx - ch.x - 1;
-                        int x = ch.x + availWidth / 2;
-                        int size = QMIN( availWidth, ch.format()->width('W') ) / 2; // actually the half size
-                        int y = lastY + baseLine - ch.ascent()/2;
-                        int arrowsize = textDocument()->zoomHandler()->zoomItY( 2 );
-                        painter.drawLine( x + size, y, x - size, y );
-                        painter.drawLine( x + size, y, x + size - arrowsize, y - arrowsize );
-                        painter.drawLine( x + size, y, x + size - arrowsize, y + arrowsize );
-                    }
+                    int w = string()->width(i);
+                    int height = ch.ascent();
+                    int size = QMAX( 2, QMIN( w/2, height/3 ) ); // Enfore that it's a square, and that it's visible
+                    painter.drawRect( ch.x + (w - size) / 2, lastY + baseLine - (height - size) / 2, size, size );
+                }
+                else if ( ch.c == '\t' )
+                {
+                    QTextStringChar &nextch = string()->at(i+1);
+                    int nextx = (nextch.x > ch.x) ? nextch.x : rect().width();
+                    //kdDebug() << "tab x=" << ch.x << " nextch.x=" << nextch.x
+                    //          << " nextx=" << nextx << " startX=" << startX << " bw=" << bw << endl;
+                    int availWidth = nextx - ch.x - 1;
+                    int x = ch.x + availWidth / 2;
+                    int size = QMIN( availWidth, ch.format()->width('W') ) / 2; // actually the half size
+                    int y = lastY + baseLine - ch.ascent()/2;
+                    int arrowsize = textDocument()->zoomHandler()->zoomItY( 2 );
+                    painter.drawLine( x + size, y, x - size, y );
+                    painter.drawLine( x + size, y, x + size - arrowsize, y - arrowsize );
+                    painter.drawLine( x + size, y, x + size - arrowsize, y + arrowsize );
                 }
             }
             painter.restore();
