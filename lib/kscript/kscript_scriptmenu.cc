@@ -5,7 +5,7 @@
 #include "kscript_scriptmenu.h"
 #include "kscript.h"
 
-#include <qpopupmenu.h>
+#include <kpopupmenu.h>
 #include <qmessagebox.h>
 
 KScriptMenu::KScriptMenu( const DCOPRef& ref, KInstance* instance, const QString& text, QObject* parent, const char* name )
