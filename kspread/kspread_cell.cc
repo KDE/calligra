@@ -2015,8 +2015,14 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x(), corner.y() + dt, corner.x(),
-                      corner.y() + height - db - dt);
+    painter.drawLine( corner.x(), corner.y() + dt, 
+                      corner.x(), corner.y() + height - db - dt );
+    
+    if ( painter.device()->isExtDev() ) //On printout we draw even the right line, to get the last line on a page
+    {
+      painter.drawLine( corner.x() + width, corner.y() + dt, 
+                        corner.x() + width, corner.y() + height - db - dt );
+    }
   }
 
   if (paintTop)
@@ -2034,8 +2040,14 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
         dr = r.width() / 2;
     }
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x() + dl, corner.y(), corner.x() + width - dr - dl,
-                      corner.y() );
+    painter.drawLine( corner.x() + dl,              corner.y(), 
+                      corner.x() + width - dr - dl, corner.y() );
+
+    if ( painter.device()->isExtDev() ) //On printout we draw even the bottom line, to get the last line on a page
+    {
+      painter.drawLine( corner.x() + dl,              corner.y() + height, 
+                        corner.x() + width - dr - dl, corner.y() + height );
+    }
   }
 }
 
