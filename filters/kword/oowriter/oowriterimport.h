@@ -60,11 +60,12 @@ private:
     void parseBodyOrSimilar( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement );
     KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
     KoFilter::ConversionStatus openFile();
-    bool createStyleMap( const QDomDocument & styles );
-    void insertStyles( const QDomElement& element );
+    bool createStyleMap( const QDomDocument & styles, QDomDocument& doc );
+    void insertStyles( const QDomElement& element, QDomDocument& doc );
     void importDateTimeStyle( const QDomElement& parent );
     void fillStyleStack( const QDomElement& object, const QString& attrName );
     void addStyles( const QDomElement* style );
+    void importFootnotesConfiguration( QDomDocument& doc, const QDomElement& elem, bool endnote );
     void importFootnote( QDomDocument& doc, const QDomElement& object, QDomElement& formats, uint pos, const QString& tagName );
     QString appendPicture( QDomDocument& doc, const QDomElement& object );
     QString appendTextBox( QDomDocument& doc, const QDomElement& object );

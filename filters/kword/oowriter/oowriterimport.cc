@@ -107,6 +107,13 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     QDomElement framesetsElem;
     prepareDocument( mainDocument, framesetsElem );
 
+    // Load styles from style.xml
+    if ( !createStyleMap( m_stylesDoc, mainDocument ) )
+        return KoFilter::UserCancelled;
+    // Also load styles from content.xml
+    if ( !createStyleMap( m_content, mainDocument ) )
+        return KoFilter::UserCancelled;
+
     // Create main frameset
     QDomElement mainFramesetElement = mainDocument.createElement("FRAMESET");
     mainFramesetElement.setAttribute("frameType",1);
@@ -296,6 +303,7 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
     QDomElement docElement = mainDocument.documentElement();
 
     kdDebug(30518) << "writePageLayout " << masterPageName << endl;
+    QDomElement elementPaper = mainDocument.createElement("PAPER");
     KoOrientation orientation;
     double width, height;
     KoFormat paperFormat;
@@ -321,6 +329,23 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
         marginTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
         marginRight = KoUnit::parseValue(properties.attribute("fo:margin-right"));
         marginBottom = KoUnit::parseValue(properties.attribute("fo:margin-bottom"));
+
+        QDomElement footnoteSep = properties.namedItem( "style:footnote-sep" ).toElement();
+        if ( !footnoteSep.isNull() ) {
+            // style:width="0.018cm" style:distance-before-sep="0.101cm"
+            // style:distance-after-sep="0.101cm" style:adjustment="left"
+            // style:rel-width="25%" style:color="#000000"
+            QString width = footnoteSep.attribute( "style:width" );
+            elementPaper.setAttribute( "slFootNoteWidth", KoUnit::parseValue( width ) );
+            QString pageWidth = footnoteSep.attribute( "style:rel-width" );
+            if ( pageWidth.endsWith( "%" ) ) {
+                pageWidth.truncate( pageWidth.length() - 1 ); // remove '%'
+                elementPaper.setAttribute( "slFootNoteLenth", pageWidth );
+            }
+            elementPaper.setAttribute( "slFootNotePosition", footnoteSep.attribute( "style:adjustment" ) );
+            // Not in KWord: color, distance before and after separator
+            // Not in OOo: line type of separator (solid, dot, dash etc.)
+        }
     }
     else
     {
@@ -336,17 +361,16 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
         marginBottom=MM_TO_POINT(15.0);
     }
 
-    QDomElement elementPaper = mainDocument.createElement("PAPER");
     elementPaper.setAttribute("orientation", int(orientation) );
     elementPaper.setAttribute("width", width);
     elementPaper.setAttribute("height", height);
-    elementPaper.setAttribute("format",paperFormat);
-    elementPaper.setAttribute("columns",1);
-    elementPaper.setAttribute("columnspacing",2);
+    elementPaper.setAttribute("format", paperFormat);
+    elementPaper.setAttribute("columns",1); // TODO
+    elementPaper.setAttribute("columnspacing",2); // TODO
     elementPaper.setAttribute("hType",0);
     elementPaper.setAttribute("fType",0);
-    elementPaper.setAttribute("spHeadBody",9);
-    elementPaper.setAttribute("spFootBody",9);
+    elementPaper.setAttribute("spHeadBody",9); // where is this in OOo?
+    elementPaper.setAttribute("spFootBody",9); // ?
     elementPaper.setAttribute("zoom",100);
     docElement.appendChild(elementPaper);
 
@@ -476,13 +500,6 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
 
     emit sigProgress( 10 );
 
-    // Load styles from style.xml
-    if ( !createStyleMap( m_stylesDoc ) )
-        return KoFilter::UserCancelled;
-    // Also load styles from content.xml
-    if ( !createStyleMap( m_content ) )
-        return KoFilter::UserCancelled;
-
     return KoFilter::OK;
 }
 
@@ -532,7 +549,9 @@ void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
     //kdDebug(30518)<<" meta-info :"<<m_meta.toCString()<<endl;
 }
 
-bool OoWriterImport::createStyleMap( const QDomDocument & styles )
+// This mainly fills member variables with the styles.
+// The 'doc' argument is only for footnotes-configuration.
+bool OoWriterImport::createStyleMap( const QDomDocument & styles, QDomDocument& doc )
 {
   QDomElement docElement  = styles.documentElement();
   QDomNode docStyles   = docElement.namedItem( "office:document-styles" );
@@ -561,7 +580,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
   {
     kdDebug(30518) << "Starting reading in font-decl..." << endl;
 
-    insertStyles( fontStyles.toElement() );
+    insertStyles( fontStyles.toElement(), doc );
   }
   else
     kdDebug(30518) << "No items found" << endl;
@@ -571,7 +590,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
   QDomNode autoStyles = docElement.namedItem( "office:automatic-styles" );
   if ( !autoStyles.isNull() )
   {
-      insertStyles( autoStyles.toElement() );
+      insertStyles( autoStyles.toElement(), doc );
   }
   else
     kdDebug(30518) << "No items found" << endl;
@@ -602,15 +621,15 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
   QDomNode fixedStyles = docElement.namedItem( "office:styles" );
 
   if ( !fixedStyles.isNull() )
-    insertStyles( fixedStyles.toElement() );
+    insertStyles( fixedStyles.toElement(), doc );
 
   kdDebug(30518) << "Styles read in." << endl;
 
   return true;
 }
 
-// Perfect copy of OoImpressImport::insertStyles
-void OoWriterImport::insertStyles( const QDomElement& styles )
+// started as a copy of OoImpressImport::insertStyles
+void OoWriterImport::insertStyles( const QDomElement& styles, QDomDocument& doc )
 {
     //kdDebug(30518) << "Inserting styles from " << styles.tagName() << endl;
     for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -635,9 +654,9 @@ void OoWriterImport::insertStyles( const QDomElement& styles )
         } else if ( tagName == "text:outline-style" ) {
             m_outlineStyle = e;
         } else if ( tagName == "text:footnotes-configuration" ) {
-            // TODO
+            importFootnotesConfiguration( doc, e, false );
         } else if ( tagName == "text:endnotes-configuration" ) {
-            // TODO
+            importFootnotesConfiguration( doc, e, true );
         } else if ( tagName == "text:linenumbering-configuration" ) {
             // Not implemented in KWord
         } else if ( tagName == "number:number-style" ) {
@@ -1674,6 +1693,7 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& obje
     return frameName;
 }
 
+// OOo SPEC: 3.6.3 p149
 void OoWriterImport::importFootnote( QDomDocument& doc, const QDomElement& object, QDomElement& formats, uint pos, const QString& tagName )
 {
     const QString frameName( object.attribute("text:id") );
@@ -2234,6 +2254,30 @@ void OoWriterImport::appendBookmark( QDomDocument& doc, int paragId, int pos, in
     bkItem.setAttribute( "endparag", endParagId );
     bkItem.setAttribute( "cursorIndexEnd", endPos );
     bookmarks.appendChild( bkItem );
+}
+
+// OOo SPEC: 3.6.1 p146
+void OoWriterImport::importFootnotesConfiguration( QDomDocument& doc, const QDomElement& elem, bool endnote )
+{
+    QDomElement docElement( doc.documentElement() );
+    // can we really be called more than once?
+    QString elemName = endnote ? "ENDNOTESETTING" : "FOOTNOTESETTING";
+    Q_ASSERT( docElement.namedItem( elemName ).isNull() );
+    QDomElement settings = doc.createElement( elemName );
+    docElement.appendChild( settings );
+
+    // BUG in OO (both 1.0.1 and 1.1). It saves it with an off-by-one (reported to xml@).
+    // So instead of working around it (which would break with the next version, possibly)
+    // let's ignore this for now.
+#if 0
+    if ( elem.hasAttribute( "text:start-value" ) ) {
+        int startValue = elem.attribute( "text:start-value" ).toInt();
+        settings.setAttribute( "start", startValue );
+    }
+#endif
+    settings.setAttribute( "type", Conversion::importCounterType( elem.attribute( "style:num-format" ) ) );
+    settings.setAttribute( "lefttext", elem.attribute( "style:num-prefix" ) );
+    settings.setAttribute( "righttext", elem.attribute( "style:num-suffix" ) );
 }
 
 #include "oowriterimport.moc"
