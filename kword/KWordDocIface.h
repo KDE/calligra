@@ -34,6 +34,7 @@ public:
     KWordDocIface(  KWDocument *doc_ );
 
 k_dcop:
+    virtual DCOPRef getTextFrameSet( int num );
     virtual int getNumPages();
     virtual int getNumFrameSets();
     virtual unsigned int getColumns();

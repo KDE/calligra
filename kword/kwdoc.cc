@@ -313,6 +313,22 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
         m_formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY );
 }
 
+KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num)
+{
+    int i=0;
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        if(fit.current()->type()==FT_TEXT)
+        {
+            if(i==_num)
+                return static_cast<KWTextFrameSet*>(fit.current());
+            i++;
+        }
+    }
+    return static_cast<KWTextFrameSet*>(frames.at(0));
+}
+
 void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
 {
     if ( m_formulaDocument )

@@ -23,6 +23,7 @@
 class KWDocument;
 class KPrinter;
 class KWTextImage;
+class KWTextFrameSet;
 class KWPictureFrameSet;
 class KWClipartFrameSet;
 class KWSerialLetterDataBase;
@@ -163,6 +164,7 @@ public:
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
     KoPageLayout pageLayout() const { return m_pageLayout; }
 
+    KWTextFrameSet * textFrameSet ( unsigned int _num);
     // Return the frameset number @p _num
     KWFrameSet *frameSet( unsigned int _num )
     { return frames.at( _num ); }

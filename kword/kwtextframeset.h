@@ -28,6 +28,7 @@
 class KWStyle;
 class KWTextDrag;
 class KWDocument;
+class DCOPObject;
 #ifndef KWTextFormat
 #define KWTextFormat KoTextFormat
 #endif
@@ -53,7 +54,9 @@ public:
     /** destructor */
     ~KWTextFrameSet();
 
-    /** The type of frameset. Use this to differentiate between different instantiations of
+    virtual DCOPObject* dcopObject();
+
+/** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_TEXT; }
@@ -235,6 +238,7 @@ private:
     int m_firstPage;
     /** always empty, for convenience in @ref framesInPage */
     QPtrList<KWFrame> m_emptyList;
+    DCOPObject *dcop;
 };
 
 /**

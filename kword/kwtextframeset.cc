@@ -48,6 +48,7 @@
 #include <kmessagebox.h>
 #include "variable.h"
 #include <koChangeCaseDia.h>
+#include "KWordFrameTextIface.h"
 
 #include <kdebug.h>
 #include <assert.h>
@@ -89,6 +90,10 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
         m_name = _doc->generateFramesetName( i18n( "Text Frameset %1" ) );
     else
         m_name = name;
+
+    dcop = 0;
+    //dcopObject(); // build it
+
     setName( m_name.utf8() ); // store name in the QObject, for DCOP users
     m_currentViewMode = 0L;
     m_currentDrawnFrame = 0L;
@@ -119,6 +124,14 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
        QString text = QString::fromUtf8( array.data() );
        textdoc->setText( text, QString::null );
     }*/
+}
+
+DCOPObject* KWTextFrameSet::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KWordFrameTextIface( this );
+
+    return dcop;
 }
 
 KWFrameSetEdit * KWTextFrameSet::createFrameSetEdit( KWCanvas * canvas )
@@ -1102,6 +1115,7 @@ KWTextFrameSet::~KWTextFrameSet()
     textDocument()->takeFlow();
     //kdDebug(32001) << "KWTextFrameSet::~KWTextFrameSet" << endl;
     m_doc = 0L;
+    delete dcop;
 }
 
 // This struct is used for sorting frames.
