@@ -3587,8 +3587,7 @@ void KSpreadView::popupChildMenu( KoChild* child, const QPoint& global_pos )
     if ( !child )
 	return;
 
-    if ( m_popupChild != 0 )
-	delete m_popupChild;
+    delete m_popupChild;
 
     m_popupChildObject = static_cast<KSpreadChild*>(child);
 
@@ -3618,8 +3617,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     if ( !koDocument()->isReadWrite() )
       return;
 
-    if (m_pPopupColumn != 0L )
-        delete m_pPopupColumn ;
+    delete m_pPopupColumn ;
 
     m_pPopupColumn = new QPopupMenu( this );
 

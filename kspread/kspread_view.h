@@ -89,7 +89,6 @@ public:
     QScrollBar* horzScrollBar()const { return m_pHorzScrollBar; }
     QScrollBar* vertScrollBar()const { return m_pVertScrollBar; }
     KSpreadEditWidget* editWidget()const { return m_pEditWidget; }
-    //QLabel* posWidget() { return m_pPosWidget; }
     KSpreadLocationEditWidget* posWidget()const { return m_pPosWidget; }
 
     KSpreadDoc* doc()const { return m_pDoc; }
@@ -187,7 +186,7 @@ public:
     void insertTable( KSpreadTable* table );
     QColor borderColor() const;
 
-  KSpreadSelection* selectionInfo() { return m_selectionInfo; }
+  KSpreadSelection* selectionInfo()const { return m_selectionInfo; }
   QRect selection() { return selectionInfo()->selection(); }
   QPoint marker() { return selectionInfo()->marker(); }
 public slots:
@@ -467,7 +466,6 @@ private:
     QButton *m_pOkButton;
     QButton *m_pCancelButton;
     KSpreadTabBar *m_pTabBar;
-    //QLabel *m_pPosWidget;
     KSpreadLocationEditWidget *m_pPosWidget;
 
     KToggleAction* m_bold;

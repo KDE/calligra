@@ -1688,8 +1688,8 @@ bool KSpreadCell::calc(bool delay)
   }
   else
   {
-    if ( m_pQML )
       delete m_pQML;
+
     m_pQML = 0;
     clearAllErrors();
     m_dataType = StringData;
@@ -2537,7 +2537,7 @@ void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( left_pen );
-    painter.drawLine( corner.x(), corner.y() - top, 
+    painter.drawLine( corner.x(), corner.y() - top,
                       corner.x(), corner.y() + height + bottom );
 
     left_offset = left_pen.width() - ( left_pen.width() / 2 );
@@ -2564,7 +2564,7 @@ void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* view,
   if ( top_pen.style() != Qt::NoPen && paintTop)
   {
     painter.setPen( top_pen );
-    painter.drawLine( corner.x(), corner.y(), 
+    painter.drawLine( corner.x(), corner.y(),
                       corner.x() + width, corner.y() );
 
     top_offset = top_pen.width() - ( top_pen.width() / 2 );
@@ -2626,7 +2626,7 @@ void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* view,
     if ( view != NULL && view->zoom() != 1.0 )
         bottom = 0;
     painter.setPen( vert_pen );
-    painter.drawLine( corner.x(), corner.y(), 
+    painter.drawLine( corner.x(), corner.y(),
                       corner.x(), corner.y() + bottom );
   }
   // Fix the borders which meet at the top right corner
@@ -2660,7 +2660,7 @@ void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* view,
       if ( view != NULL && view->zoom() != 1.0 )
           bottom = 0;
       painter.setPen( vert_pen );
-      painter.drawLine( corner.x(), corner.y() + height - bottom, 
+      painter.drawLine( corner.x(), corner.y() + height - bottom,
                         corner.x(), corner.y() + height );
     }
 
@@ -3224,11 +3224,8 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
   m_strText = _text;
 
   // Free all content data
-  if ( m_pQML )
-  {
-    delete m_pQML;
-    m_pQML = NULL;
-  }
+  delete m_pQML;
+  m_pQML = 0L;
 
   clearFormula();
 
@@ -4584,8 +4581,7 @@ void KSpreadCell::setStyle( Style _s )
   m_style = _s;
   setFlag(Flag_LayoutDirty);
 
-  if ( m_pPrivate )
-    delete m_pPrivate;
+  delete m_pPrivate;
   m_pPrivate = 0;
 
   if ( _s != ST_Select )
