@@ -40,6 +40,8 @@ class KWEFKWordLeader
     public:
         KoFilter::ConversionStatus convert( KoFilterChain* chain,
             const QCString& from, const QCString& to);
+    public:
+        void createBookmarkFormatData( ParaData& paraData );
     protected:
         bool loadSubFile(const QString& fileName, QByteArray& array);
         QIODevice* getSubFileDevice(const QString& fileName) const;
@@ -98,6 +100,8 @@ class KWEFKWordLeader
         QString m_currentFramesetName;
         /// Number of paragraph in each frameset (for bookmarks)
         QMap<QString,uint> m_paraCountMap;
+        /// List of bookmarks
+        QValueList<Bookmark> m_bookmarkList;
 
     private:
         KoFilterChain* m_chain;

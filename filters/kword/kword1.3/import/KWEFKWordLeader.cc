@@ -104,6 +104,28 @@ static void ProcessHardBrkTag ( QDomNode myNode, void* tagData, KWEFKWordLeader*
         kdDebug(30520) << "<HARDBRK frame=\"1\"> found" << endl;
 }
 
+void KWEFKWordLeader::createBookmarkFormatData( ParaData& paraData )
+{
+    const uint paraCount = m_paraCountMap[ m_currentFramesetName ];
+    
+    QValueList<Bookmark>::ConstIterator it;
+    for (it = m_bookmarkList.begin(); it != m_bookmarkList.end(); ++it )
+    {
+        if ( (*(it)).m_frameset != m_currentFramesetName )
+        {
+            continue;
+        }
+        if ( (*(it)).m_startparag == paraCount )
+        {
+            kdDebug(30520) << "Paragraph: " << paraCount << " begin: " << (*(it)).m_name << endl;
+        }
+        else if ( (*(it)).m_endparag == paraCount )
+        {
+            kdDebug(30520) << "Paragraph: " << paraCount << " end: " << (*(it)).m_name << endl;
+        }
+    }
+}
+
 static void ProcessParagraphTag ( QDomNode         myNode,
                                   void            *tagData,
                                   KWEFKWordLeader *leader )
@@ -136,6 +158,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     }
     ProcessSubtags (myNode, tagProcessingList, leader);
 
+    leader->createBookmarkFormatData( paraData ); // ### TODO
     CreateMissingFormatData (paraData.text, paraData.formattingList);
 
     // TODO/FIXME: why !paraData.text.isEmpty()
@@ -916,7 +939,6 @@ static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *l
         ProcessFootnoteFramesetsTag(nodeFramesets, &footnotes, leader );
 
     // Process all framesets and pictures
-    QValueList<Bookmark> bookmarkList;
     QValueList<TagProcessing> tagProcessingList;
     QValueList<ParaData> paraList;
 
@@ -929,7 +951,7 @@ static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *l
         << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "CLIPARTS",    ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "EMBEDDED",    NULL,                   NULL      )
-        << TagProcessing ( "BOOKMARKS",   ProcessBookmarksTag,    &bookmarkList )
+        << TagProcessing ( "BOOKMARKS",   ProcessBookmarksTag,    &leader->m_bookmarkList )
         ;
 
     // TODO: why are the followings used by KWord 1.2 but are not in its DTD?
