@@ -861,9 +861,9 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
             layout->lineSpacingType = LayoutData::LS_DOUBLE;
         else
         {
-            const double size = oldValue.toDouble ();
-            // ### TODO: is this check right? The user might have wanted lines "glued" together
-            if ( size >= 1.0 )
+            bool ok = false;
+            const double size = oldValue.toDouble( &ok );
+            if ( ok && ( size >= 0.0 ) ) // 0 is allowed but negative values are not
             {
                 // We have a valid size
                 layout->lineSpacingType = LayoutData::LS_CUSTOM; // set to custom
