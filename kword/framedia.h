@@ -28,6 +28,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qevent.h>
+#include <qlistbox.h>
 
 #include <kapp.h>
 #include <krestrictedline.h>
@@ -35,6 +36,13 @@
 class KWFrame;
 class KWFrameSet;
 class KWTextFrameSet;
+class KWordDocument;
+class KWPage;
+
+static const int FD_FRAME_SET      = 1;
+static const int FD_FRAME          = 2;
+static const int FD_FRAME_CONNECT  = 4;
+static const int FD_PLUS_NEW_FRAME = 8;
 
 /******************************************************************/
 /* Class: KWFrameDia                                              */
@@ -45,22 +53,28 @@ class KWFrameDia : public QTabDialog
   Q_OBJECT
 
 public:
-  KWFrameDia(QWidget *parent,const char *name,KWFrameSet *_frameset,KWFrame *_frame);
+  KWFrameDia(QWidget *parent,const char *name,KWFrameSet *_frameset,KWFrame *_frame,KWordDocument *_doc,KWPage *_page,int _flags);
 
 protected:
   void setupTab1TextFrameSet();
   void setupTab2TextFrame();
+  void setupTab3ConnectTextFrames();
   void uncheckAllRuns();
 
-  QWidget *tab1,*tab2;
-  QGridLayout *grid1,*grid2,*runGrid;
+  QWidget *tab1,*tab2,*tab3;
+  QGridLayout *grid1,*grid2,*grid3,*runGrid;
   QGroupBox *runGroup;
   QRadioButton *rRunNo,*rRunBounding,*rRunContur;
   QCheckBox *cAutoCreateFrame;
-  QLabel *lRunNo,*lRunBounding,*lRunContur,*lRGap;
+  QLabel *lRunNo,*lRunBounding,*lRunContur,*lRGap,*lFrameSet;
+  QListBox *lFrameSList;
+  
   KWFrameSet *frameset;
   KWFrame *frame;
   KRestrictedLine *eRGap;
+  int flags;
+  KWordDocument *doc;
+  KWPage *page;
 
   void closeEvent(QCloseEvent *e)
     { emit frameDiaClosed(); e->accept(); }
@@ -73,6 +87,7 @@ protected slots:
   void runBoundingClicked();
   void runConturClicked();
   void applyChanges();
+  void connectListSelected(int);
 
 };
 

@@ -307,3 +307,7 @@ Reggie, 2.11.1998:
 ------------------
 - Fixed a bug when loading files with more than one framesets
 - Some fixes in the toolbars
+
+Reggie, 3.11.1998:
+------------------
+- Started implementing creating textframes with the mouse. It already works somehow.

@@ -13,6 +13,8 @@
 /* Module: Frame Dialog                                           */
 /******************************************************************/
 
+#include "kword_doc.h"
+#include "kword_page.h"
 #include "frame.h"
 #include "framedia.h"
 #include "framedia.moc"
@@ -22,18 +24,24 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFrameDia::KWFrameDia(QWidget* parent,const char* name,KWFrameSet *_frameset,KWFrame *_frame)
+KWFrameDia::KWFrameDia(QWidget* parent,const char* name,KWFrameSet *_frameset,KWFrame *_frame,KWordDocument *_doc,KWPage *_page,int _flags)
   : QTabDialog(parent,name,true)
 {
   frameset = _frameset;
   frame = _frame;
+  flags = _flags;
+  doc = _doc;
+  page = _page;
+  
+  if (flags & FD_FRAME_CONNECT && doc)
+    setupTab3ConnectTextFrames();
 
-  if (frameset->getFrameType() == FT_TEXT)
-    {
-      setupTab1TextFrameSet();
-      setupTab2TextFrame();
-    }
-
+  if ((flags & FD_FRAME_SET) && frameset && frameset->getFrameType() == FT_TEXT)
+    setupTab1TextFrameSet();
+  
+  if ((flags & FD_FRAME && frame && (!frameset || frameset && frameset->getFrameType() == FT_TEXT)))
+    setupTab2TextFrame();
+    
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
 
@@ -156,7 +164,7 @@ void KWFrameDia::setupTab2TextFrame()
 
   grid2->activate();
 
-  addTab(tab2,i18n("Frame"));
+  addTab(tab2,i18n("Text Frame"));
 
   uncheckAllRuns();
   switch (frame->getRunAround())
@@ -171,6 +179,47 @@ void KWFrameDia::setupTab2TextFrame()
   QString str;
   str.sprintf("%d",frame->getRunAroundGap());
   eRGap->setText(str.data());
+}
+
+/*================================================================*/
+void KWFrameDia::setupTab3ConnectTextFrames()
+{
+  tab3 = new QWidget(this);
+
+  grid3 = new QGridLayout(tab3,2,1,15,7);
+
+  lFrameSet = new QLabel(i18n("Choose a frameset to which the current frame should be connected:"),tab3);
+  lFrameSet->resize(lFrameSet->sizeHint());
+  grid3->addWidget(lFrameSet,0,0);
+
+  lFrameSList = new QListBox(tab3);
+
+  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+    {
+      if (i == 0 && doc->getProcessingType() == KWordDocument::WP) continue;
+      QString str;
+      str.sprintf("Frameset Nr. %d",i);
+      lFrameSList->insertItem(str,-1);
+    }
+
+  if (flags & FD_PLUS_NEW_FRAME)
+    lFrameSList->insertItem(i18n("Create a new Frameset with this frame"),-1);
+      
+  connect(lFrameSList,SIGNAL(highlighted(int)),this,SLOT(connectListSelected(int)));
+  grid3->addWidget(lFrameSList,1,0);
+
+  grid3->addColSpacing(1,lFrameSet->width());
+  grid3->setColStretch(1,1);
+
+  grid3->addRowSpacing(0,lFrameSet->height());
+  grid3->addRowSpacing(1,lFrameSet->height());
+  grid3->setRowStretch(1,1);
+
+  grid3->activate();
+
+  addTab(tab3,i18n("Connect Text Frames"));
+
+  lFrameSList->setSelected(0,true);
 }
 
 /*================================================================*/
@@ -205,9 +254,11 @@ void KWFrameDia::runConturClicked()
 /*================================================================*/
 void KWFrameDia::applyChanges()
 {
-  if (frameset->getFrameType() == FT_TEXT)
+  if ((flags & FD_FRAME_SET) && frameset && frameset->getFrameType() == FT_TEXT)
+    dynamic_cast<KWTextFrameSet*>(frameset)->setAutoCreateNewFrame(cAutoCreateFrame->isChecked());
+
+  if ((flags & FD_FRAME && frame && (!frameset || frameset && frameset->getFrameType() == FT_TEXT)))
     {
-      dynamic_cast<KWTextFrameSet*>(frameset)->setAutoCreateNewFrame(cAutoCreateFrame->isChecked());
       if (rRunNo->isChecked())
 	frame->setRunAround(RA_NO);
       else if (rRunBounding->isChecked())
@@ -216,4 +267,29 @@ void KWFrameDia::applyChanges()
 	frame->setRunAround(RA_CONTUR);
       frame->setRunAroundGap(atoi(eRGap->text()));
     }
+
+  if (flags & FD_FRAME_CONNECT && doc)
+    {
+      unsigned int _num = static_cast<unsigned int>(lFrameSList->currentItem());
+      if (doc->getProcessingType() == KWordDocument::WP) _num++;
+      if (static_cast<unsigned int>(_num) < doc->getNumFrameSets())
+	doc->getFrameSet(_num)->addFrame(frame);
+      else
+	{
+	  KWTextFrameSet *_frameSet = new KWTextFrameSet(doc);
+	  _frameSet->addFrame(frame);
+	  doc->addFrameSet(_frameSet);
+	}
+    }
+}
+
+/*================================================================*/
+void KWFrameDia::connectListSelected(int _num)
+{
+  if (doc->getProcessingType() == KWordDocument::WP) _num++;
+
+  if (static_cast<unsigned int>(_num) < doc->getNumFrameSets())
+    page->setHilitFrameSet(_num);
+  else
+    page->setHilitFrameSet(-1);
 }

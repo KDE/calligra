@@ -144,6 +144,8 @@ public:
   void setRuler2Frame(unsigned int _frameset,unsigned int _frame);
   void setMouseMode(MouseMode _mm);
   int getPageOfRect(QRect _rect);
+  void setHilitFrameSet(int _f)
+    { hiliteFrameSet = _f; repaint(false); }
   
 public slots:
   void newLeftIndent(int _left); 
@@ -160,8 +162,7 @@ public slots:
   void femProps();
 
 protected slots:
-  void frameDiaClosed()
-    { hiliteFrameSet = -1; recalcAll = true; recalcText(); recalcCursor(); recalcAll = false; }
+  void frameDiaClosed();
 
 protected:
   unsigned int ptLeftBorder();
@@ -244,6 +245,7 @@ protected:
   int hiliteFrameSet;
 
   KWFrameDia *frameDia;
+  QRect insRect;
 
 };
 

@@ -392,6 +392,43 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 	    deleteMovingRect = true;
 	    oldMx = mx; oldMy = my;
 	  } break;
+	case MM_CREATE_TEXT: case MM_CREATE_PIX:
+	  {
+	    int mx = e->x() + xOffset;
+	    int my = e->y() + yOffset;
+	    mx = (mx / doc->getRastX()) * doc->getRastX();
+	    my = (my / doc->getRastY()) * doc->getRastY();
+
+	    QPainter p;
+	    p.begin(this);
+	    p.setRasterOp(NotROP);
+	    p.setPen(black);
+	    p.setBrush(NoBrush);
+	    
+	    if (deleteMovingRect)
+	      p.drawRect(insRect);
+	    insRect.setWidth(insRect.width() + mx - oldMx);
+	    insRect.setHeight(insRect.height() + my - oldMy);
+
+	    if (insRect.normalize().x() + static_cast<int>(xOffset) < 0 || insRect.normalize().y() + static_cast<int>(yOffset) < 
+		getPageOfRect(QRect(insRect.normalize().x() + static_cast<int>(xOffset),insRect.normalize().y() + static_cast<int>(yOffset),
+				    insRect.normalize().width(),insRect.normalize().height())) * static_cast<int>(ptPaperHeight()) ||
+		insRect.normalize().right() + static_cast<int>(xOffset) > static_cast<int>(ptPaperWidth()) ||
+		insRect.normalize().bottom() + static_cast<int>(yOffset) > (getPageOfRect(QRect(insRect.normalize().x() + 
+												static_cast<int>(xOffset),
+									      insRect.normalize().y() + static_cast<int>(yOffset),
+									      insRect.normalize().width(),insRect.normalize().height())) + 1) *
+		static_cast<int>(ptPaperHeight()))
+	      {
+		insRect.setWidth(insRect.width() - (mx - oldMx));
+		insRect.setHeight(insRect.height() - (my - oldMy));
+	      }
+	    
+	    p.drawRect(insRect);
+	    p.end();
+	    oldMx = mx; oldMy = my;
+	    deleteMovingRect = true;
+	  } break;
 	default: break;
 	}
     }
@@ -515,11 +552,14 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	      my = (my / doc->getRastX()) * doc->getRastY();
 	      oldMy = my;
 	    } break;
-	  case MM_CREATE_TEXT:
+	  case MM_CREATE_TEXT: case MM_CREATE_PIX:
 	    {
-	    } break;
-	  case MM_CREATE_PIX:
-	    {
+	      mx = (mx / doc->getRastX()) * doc->getRastX();
+	      oldMx = mx;
+	      my = (my / doc->getRastX()) * doc->getRastY();
+	      oldMy = my;
+	      insRect = QRect(mx,my,0,0);
+	      deleteMovingRect = false;
 	    } break;
 	  default: break;
 	  }
@@ -587,6 +627,39 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	recalcText();
 	recalcCursor();
 	recalcAll = false;
+      } break;
+    case MM_CREATE_TEXT:
+      {
+	repaint(false);
+	KWFrame *frame = new KWFrame(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
+
+	if (insRect.width() != 0 && insRect.height() != 0)
+	  {
+	    if (frameDia)
+	      {
+		frameDia->close();
+		disconnect(frameDia,SIGNAL(frameDiaClosed()),this,SLOT(frameDiaClosed()));
+		disconnect(frameDia,SIGNAL(applyButtonPressed()),this,SLOT(frameDiaClosed()));
+		disconnect(frameDia,SIGNAL(cancelButtonPressed()),this,SLOT(frameDiaClosed()));
+		disconnect(frameDia,SIGNAL(defaultButtonPressed()),this,SLOT(frameDiaClosed()));
+		delete frameDia;
+		frameDia = 0;
+	      }
+	    
+	    frameDia = new KWFrameDia(0,"",0L,frame,doc,this,FD_FRAME_CONNECT | FD_FRAME | FD_PLUS_NEW_FRAME);
+	    connect(frameDia,SIGNAL(frameDiaClosed()),this,SLOT(frameDiaClosed()));
+	    connect(frameDia,SIGNAL(applyButtonPressed()),this,SLOT(frameDiaClosed()));
+	    connect(frameDia,SIGNAL(cancelButtonPressed()),this,SLOT(frameDiaClosed()));
+	    connect(frameDia,SIGNAL(defaultButtonPressed()),this,SLOT(frameDiaClosed()));
+	    frameDia->setCaption(i18n("KWord - Frame settings"));
+	    frameDia->show();
+	  }
+      } break;
+    case MM_CREATE_PIX:
+      {
+	if (insRect.width() != 0 && insRect.height() != 0)
+	  debug("insert pix");
+	repaint(false);
       } break;
     default: break;
     }
@@ -1891,7 +1964,8 @@ void KWPage::femProps()
 
   hiliteFrameSet = doc->getFrameSet(mx,my);
   repaint(false);
-  frameDia = new KWFrameDia(0,"",doc->getFrameSet(doc->getFrameSet(mx,my)),doc->getFirstSelectedFrame());
+  frameDia = new KWFrameDia(0,"",doc->getFrameSet(doc->getFrameSet(mx,my)),doc->getFirstSelectedFrame(),
+			    doc,this,FD_FRAME_SET | FD_FRAME);
   connect(frameDia,SIGNAL(frameDiaClosed()),this,SLOT(frameDiaClosed()));
   connect(frameDia,SIGNAL(applyButtonPressed()),this,SLOT(frameDiaClosed()));
   connect(frameDia,SIGNAL(cancelButtonPressed()),this,SLOT(frameDiaClosed()));
@@ -1916,3 +1990,12 @@ void KWPage::newFirstIndent(int _first)
   gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
 }
 
+/*================================================================*/
+void KWPage::frameDiaClosed()
+{ 
+  hiliteFrameSet = -1; 
+  recalcAll = true; 
+  recalcText(); 
+  recalcCursor(); 
+  recalcAll = false; 
+}

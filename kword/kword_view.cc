@@ -403,18 +403,16 @@ bool KWordView::event( const char* _event, const CORBA::Any& _value )
 /*===============================================================*/
 void KWordView::uncheckAllTools()
 {
-  if (m_vMenuTools && m_vToolBarTools)
+  if (m_vMenuTools)
     {
       m_vMenuTools->setItemChecked(m_idMenuTools_Edit,false);
       m_vMenuTools->setItemChecked(m_idMenuTools_EditFrame,false);
       m_vMenuTools->setItemChecked(m_idMenuTools_CreateText,false);
       m_vMenuTools->setItemChecked(m_idMenuTools_CreatePix,false);
-      
-      m_vToolBarTools->setToggle(ID_TOOL_EDIT,true);
-      m_vToolBarTools->setToggle(ID_TOOL_EDIT_FRAME,true);
-      m_vToolBarTools->setToggle(ID_TOOL_CREATE_TEXT,true);
-      m_vToolBarTools->setToggle(ID_TOOL_CREATE_PIX,true);
-      
+    }
+
+  if (m_vToolBarTools)
+    {
       m_vToolBarTools->setButton(ID_TOOL_EDIT,false);
       m_vToolBarTools->setButton(ID_TOOL_EDIT_FRAME,false);
       m_vToolBarTools->setButton(ID_TOOL_CREATE_TEXT,false);
@@ -425,30 +423,41 @@ void KWordView::uncheckAllTools()
 /*===============================================================*/
 void KWordView::setTool(MouseMode _mouseMode)
 {
-  if (m_vMenuTools && m_vToolBarTools)
+  if (m_vMenuTools)
     {
       switch (_mouseMode)
 	{
 	case MM_EDIT: 
-	  {
-	    m_vMenuTools->setItemChecked(m_idMenuTools_Edit,true);
-	    m_vToolBarTools->setButton(ID_TOOL_EDIT,true);
-	  } break;
+	  m_vMenuTools->setItemChecked(m_idMenuTools_Edit,true);
+	  break;
 	case MM_EDIT_FRAME: 
-	  {
-	    m_vMenuTools->setItemChecked(m_idMenuTools_EditFrame,true);
-	    m_vToolBarTools->setButton(ID_TOOL_EDIT_FRAME,true);
-	  } break;
+	  m_vMenuTools->setItemChecked(m_idMenuTools_EditFrame,true);
+	  break;
 	case MM_CREATE_TEXT:
-	  {
-	    m_vMenuTools->setItemChecked(m_idMenuTools_CreateText,true);
-	    m_vToolBarTools->setButton(ID_TOOL_CREATE_TEXT,true);
-	  } break;
+	  m_vMenuTools->setItemChecked(m_idMenuTools_CreateText,true);
+	  break;
 	case MM_CREATE_PIX:
-	  {
-	    m_vMenuTools->setItemChecked(m_idMenuTools_CreatePix,true);
-	    m_vToolBarTools->setButton(ID_TOOL_CREATE_PIX,true);
-	  } break;
+	  m_vMenuTools->setItemChecked(m_idMenuTools_CreatePix,true);
+	  break;
+	}
+    }
+
+  if (m_vToolBarTools)
+    {
+      switch (_mouseMode)
+	{
+	case MM_EDIT: 
+	  m_vToolBarTools->setButton(ID_TOOL_EDIT,true);
+	  break;
+	case MM_EDIT_FRAME: 
+	  m_vToolBarTools->setButton(ID_TOOL_EDIT_FRAME,true);
+	  break;
+	case MM_CREATE_TEXT:
+	  m_vToolBarTools->setButton(ID_TOOL_CREATE_TEXT,true);
+	  break;
+	case MM_CREATE_PIX:
+	  m_vToolBarTools->setButton(ID_TOOL_CREATE_PIX,true);
+	  break;
 	}
     }
 }
@@ -1444,8 +1453,8 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   }
   tmpBrd.ptWidth = 1;
   m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, false, SIGNAL( activated( const char* ) ),
-						     this, "textBorderWidth", true, i18n("Border Width"),
-						     60, -1, OpenPartsUI::AtBottom );
+							   this, "textBorderWidth", true, i18n("Border Width"),
+							   60, -1, OpenPartsUI::AtBottom );
 
   // border style combobox
   stylelist.length( 5 );
@@ -1455,8 +1464,8 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   stylelist[3] = CORBA::string_dup( i18n("dash dot line (-*-*)") );
   stylelist[4] = CORBA::string_dup( i18n("dash dot dot line (-**-)") );
   m_idComboText_BorderStyle = m_vToolBarText->insertCombo( stylelist,ID_BRD_STYLE, false, SIGNAL( activated( const char* ) ),
-						     this, "textBorderStyle", true, i18n("Border Style"),
-						     150, -1, OpenPartsUI::AtBottom );
+							   this, "textBorderStyle", true, i18n("Border Style"),
+							   150, -1, OpenPartsUI::AtBottom );
   tmpBrd.style = KWParagLayout::SOLID;
 
   m_vToolBarText->enable( OpenPartsUI::Show );

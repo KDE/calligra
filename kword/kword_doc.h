@@ -151,6 +151,9 @@ public:
     { return frames.at(_num); }
   unsigned int getNumFrameSets()
     { return frames.count(); }
+  void addFrameSet(KWFrameSet *f)
+    { frames.append(f); updateAllRanges(); updateAllFrames(); updateAllViews(0L); }
+
 
   /**
    * Returns the first parag of the frameset <i>_num</i>.
