@@ -1,5 +1,11 @@
 2005-02-24    <inge@lysator.liu.se>
 
+	Fix bug 99999:
+	* kchartWizardLabelsLegendPage.{h,cc}: Remove everything that has
+	to do with second Y axis.
+	* kchartWizardSetupAxesPage.{h,cc}: Remove everything that has to
+	do with second Y axis.
+
 	Fix part of 99997:
 	* kchartColorConfigPage.{h,cc]: Remove everything that has to do
 	with the second Y Axis.

@@ -165,7 +165,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     //     ycolor=_chart->params()->YLabelColor;
     ylabelColor->setColor( ycolor );
 
-
+#if 0
     tmpLabel=new QLabel(tmpQGroupBox);
     tmpLabel->setText(i18n("Y-label 2 format:"));
     grid2->addWidget(tmpLabel,2,0);
@@ -177,6 +177,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 //         int len=_chart->params()->ylabel2_fmt.length();
 //         ylabel2_fmt->setText(_chart->params()->ylabel2_fmt.right(len-3));
 //     }
+#endif
     tmpQGroupBox->setEnabled(false);
     grid1->addWidget(tmpQGroupBox,1,1);
 

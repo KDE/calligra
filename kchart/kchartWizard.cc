@@ -102,11 +102,13 @@ void KChartWizard::subType(int _type)
         _axespage->chart3d = false;
     }
 
+#if 0				// No second Y axis so far /ingwa
     if( _chart->params()->axisVisible( KDChartAxisParams::AxisPosRight ) ) {
         _labelslegendpage->ytitle2=true;
     } else {
         _labelslegendpage->ytitle2=false;
     }
+#endif
 }
 
 

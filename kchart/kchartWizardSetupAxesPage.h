@@ -42,7 +42,9 @@ private:
   QLineEdit *y_max;
   QLineEdit *y_min;
   QLineEdit *ylabel_fmt;
+#if 0
   QLineEdit *ylabel2_fmt;
+#endif
   QSpinBox *angle;
   QSpinBox *depth;
   QSpinBox *barWidth;

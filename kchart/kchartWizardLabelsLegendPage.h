@@ -22,19 +22,25 @@ public:
   KChartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart );
   ~KChartWizardLabelsLegendPage();
 
+#if 0
   bool ytitle2;
+#endif
 public slots:
   void apply();
   void changeXLabelFont();
   void changeYLabelFont();
-  void changeY2LabelFont();
+#if 0
+  //void changeY2LabelFont();
+#endif
   void changeTitleFont();
   void changeLegendTitleFont();
   void changeLegendTextFont();
   void changeXLabelColor(const QColor &);
   void changeYLabelColor(const QColor &);
   void changeTitleColor(const QColor &);
-  void changeYTitle2Color(const QColor &);
+#if 0
+  //void changeYTitle2Color(const QColor &);
+#endif
   void changeLegendTitleColor(const QColor &);
   void changeLegendTextColor(const QColor &);
 
@@ -47,15 +53,21 @@ private:
   QLineEdit* _xlabelED;
   QLineEdit* _ylabelED;
   QLineEdit* _titleED;
+#if 0
   QLineEdit* _ylabel2ED;
+#endif
   QPushButton *xtitlefont;
   QPushButton *ytitlefont;
   QPushButton *titlefont;
+#if 0
   QPushButton *ytitle2font;
+#endif
   KColorButton *xtitlecolor;
   KColorButton *ytitlecolor;
   KColorButton *titlecolor;
+#if 0
   KColorButton *ytitle2color;
+#endif
 
   QLineEdit *_legendTitleText;
 
@@ -67,11 +79,15 @@ private:
 
   QFont xlabel;
   QFont ylabel;
+#if 0
   QFont ylabel2;
+#endif
   QFont title;
   QColor x_color;
   QColor y_color;
+#if 0
   QColor y_color2;
+#endif
   QColor title_color;
 
   QColor _legendTextColor;
