@@ -627,7 +627,6 @@ public:
      */
     void setConditionList(const QValueList<KSpreadConditional> &newList);
 
-    void verifyValidity();
     KSpreadValidity * getValidity(int newStruct=-1)
     	{
     	if((m_Validity==0)&&(newStruct==-1))

@@ -1373,6 +1373,8 @@ struct SetSelectionRemoveCommentWorker : public KSpreadTable::CellWorker {
 
 void KSpreadTable::setSelectionRemoveComment( KSpreadSelection* selectionInfo )
 {
+    if(areaIsEmpty(selectionInfo->selection(), Comment))
+        return;
     SetSelectionRemoveCommentWorker w;
     workOnCells( selectionInfo, w );
 }
@@ -4153,41 +4155,73 @@ void KSpreadTable::refreshPreference()
 }
 
 
-bool KSpreadTable::areaIsEmpty(QRect area)
+bool KSpreadTable::areaIsEmpty(const QRect &area, TestType _type)
 {
-  // Complete rows selected ?
-  if ( util_isRowSelected(area) )
-  {
-    for ( int row = area.top(); row <= area.bottom(); ++row )
+    // Complete rows selected ?
+    if ( util_isRowSelected(area) )
     {
-      KSpreadCell * c = getFirstCellRow( row );
-      while ( c )
-      {
-        if ( !c->isObscuringForced() && !c->text().isEmpty())
+        for ( int row = area.top(); row <= area.bottom(); ++row )
         {
-          return false;
-        }
+            KSpreadCell * c = getFirstCellRow( row );
+            while ( c )
+            {
+                if ( !c->isObscuringForced())
+                {
+                    switch( _type )
+                    {
+                    case Text :
+                        if ( !c->text().isEmpty())
+                            return false;
+                        break;
+                    case Validity:
+                        if ( c->getValidity(0))
+                            return false;
+                        break;
+                    case Comment:
+                        if ( !c->comment(c->column(), row).isEmpty())
+                            return false;
+                        break;
+                    case ConditionalCellAttribute:
+                        break;
+                    }
+                }
 
-        c = getNextCellRight( c->column(), row );
-      }
-    }
+                c = getNextCellRight( c->column(), row );
+            }
+        }
     }
     // Complete columns selected ?
     else if ( util_isColumnSelected(area) )
     {
-      for ( int col = area.left(); col <= area.right(); ++col )
-      {
-        KSpreadCell * c = getFirstCellColumn( col );
-        while ( c )
+        for ( int col = area.left(); col <= area.right(); ++col )
         {
-         if ( !c->isObscuringForced() && !c->text().isEmpty() )
-         {
-           return false;
-         }
+            KSpreadCell * c = getFirstCellColumn( col );
+            while ( c )
+            {
+                if ( !c->isObscuringForced() )
+                {
+                    switch( _type )
+                    {
+                    case Text :
+                        if ( !c->text().isEmpty())
+                            return false;
+                        break;
+                    case Validity:
+                        if ( c->getValidity(0))
+                            return false;
+                        break;
+                    case Comment:
+                        if ( !c->comment(col, c->row()).isEmpty())
+                            return false;
+                        break;
+                    case ConditionalCellAttribute:
+                        break;
+                    }
+                }
 
-          c = getNextCellDown( col, c->row() );
+                c = getNextCellDown( col, c->row() );
+            }
         }
-      }
     }
     else
     {
@@ -4196,14 +4230,30 @@ bool KSpreadTable::areaIsEmpty(QRect area)
         int right  = area.right();
         int bottom = area.bottom();
         for ( int x = area.left(); x <= right; ++x )
-          for ( int y = area.top(); y <= bottom; ++y )
-          {
-            cell = cellAt( x, y );
-            if (!cell->isObscuringForced() && !cell->text().isEmpty())
+            for ( int y = area.top(); y <= bottom; ++y )
             {
-              return false;
+                cell = cellAt( x, y );
+                if (!cell->isObscuringForced() )
+                {
+                    switch( _type )
+                    {
+                    case Text :
+                        if ( !cell->text().isEmpty())
+                            return false;
+                        break;
+                    case Validity:
+                        if ( cell->getValidity(0))
+                            return false;
+                        break;
+                    case Comment:
+                        if ( !cell->comment(x, y).isEmpty())
+                            return false;
+                        break;
+                    case ConditionalCellAttribute:
+                        break;
+                    }
+                }
             }
-          }
     }
     return true;
 }
@@ -4730,6 +4780,9 @@ struct ClearValiditySelectionWorker : public KSpreadTable::CellWorker {
 
 void KSpreadTable::clearValiditySelection( KSpreadSelection* selectionInfo )
 {
+    if(areaIsEmpty(selectionInfo->selection(), Validity))
+        return;
+
   ClearValiditySelectionWorker w;
   workOnCells( selectionInfo, w );
 }

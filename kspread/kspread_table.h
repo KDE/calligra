@@ -226,6 +226,7 @@ class KSpreadTable : public QObject
 public:
     enum SortingOrder{ Increase, Decrease };
     enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
+    enum TestType { Text, Validity, Comment, ConditionalCellAttribute };
 
     KSpreadTable( KSpreadMap *_map, const QString &tableName, const char *_name=0L );
     ~KSpreadTable();
@@ -670,7 +671,7 @@ public:
     void increaseIndent( KSpreadSelection* selectionInfo );
     void decreaseIndent( KSpreadSelection* selectionInfo );
 
-    bool areaIsEmpty(QRect area) ;
+    bool areaIsEmpty(const QRect &area, TestType _type = Text) ;
 
     void refreshPreference() ;
 
@@ -1617,7 +1618,6 @@ public:
 
 protected:
     typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
-
     SelectionType workOnCells( KSpreadSelection* selectionInfo,
                                CellWorker& worker );
 
