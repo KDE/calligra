@@ -3253,7 +3253,8 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
         painter->resetXForm();
         kapp->processEvents();
 
-        view->setDiffY( i * ( getPageRect( 1, 1.0, false ).height() ) - MM_TO_POINT( top_margin ) );
+        view->setDiffY( i * ( getPageRect( 1, 1.0, false ).height() )
+                        - static_cast<int>( MM_TO_POINT( top_margin ) ) );
     }
 
     NoteBar *noteBar = view->getNoteBar();
@@ -3923,13 +3924,15 @@ void Page::exitEditMode()
 }
 
 /*================================================================*/
-QSize Page::getPixmapOrigSize( KPPixmapObject *&obj )
+bool Page::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, QSize *origSize, QSize *currentSize )
 {
     obj = 0;
     KPObject *kpobject = 0;
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
         kpobject = objectList()->at( i );
         if ( kpobject->isSelected() && kpobject->getType() == OT_PICTURE ) {
+            *currentSize = kpobject->getSize();
+
             KPPixmapObject *o = (KPPixmapObject*)kpobject;
             /*
             QImage *img = view->kPresenterDoc()->getPixmapCollection()->
@@ -3944,12 +3947,16 @@ QSize Page::getPixmapOrigSize( KPPixmapObject *&obj )
             if ( !img.isNull() )
             {
                 obj = o;
-                return img.size();
+                *origSize = img.size();
+                return true;
             }
         }
     }
 
-    return QSize( -1, -1 );
+    *origSize = QSize( -1, -1 );
+    *currentSize = QSize( -1, -1 );
+
+    return false;
 }
 
 /*================================================================*/
@@ -3985,13 +3992,16 @@ void Page::picViewOrig1600x1200()
 void Page::picViewOrigHelper(int x, int y)
 {
   KPPixmapObject *obj = 0;
-  QSize origSize = getPixmapOrigSize( obj );
+
+  QSize origSize;
+  QSize currentSize;
+  if ( !getPixmapOrigAndCurrentSize( obj, &origSize, &currentSize ) || !obj )
+      return;
+
   QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
   QSize presSize( x, y );
-  if ( origSize == QSize( -1, -1 ) || !obj )
-    return;
 
-  scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+  scalePixmapToBeOrigIn( origSize, currentSize, pgSize, presSize, obj );
 }
 
 /*================================================================*/
@@ -4000,15 +4010,16 @@ void Page::picViewOrigFactor()
 }
 
 /*================================================================*/
-void Page::scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize,
-                                  const QSize &presSize, KPPixmapObject *obj )
+void Page::scalePixmapToBeOrigIn( const QSize &/*origSize*/, const QSize &currentSize,
+                                  const QSize &pgSize, const QSize &presSize, KPPixmapObject *obj )
 {
-    float fakt = (float)pgSize.width() / (float)presSize.width();
-    int w = (int)( (float)origSize.width() * fakt );
-    int h = (int)( (float)origSize.height() * fakt );
+    double faktX = (double)presSize.width() / (double)QApplication::desktop()->width();
+    double faktY = (double)presSize.height() / (double)QApplication::desktop()->height();
+    int w = (int)( (double)pgSize.width() * faktX );
+    int h = (int)( (double)pgSize.height() * faktY );
 
     ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to be shown 1:1 in presentation mode" ),
-                                          QPoint( 0, 0 ), QSize( w - origSize.width(), h - origSize.height() ),
+                                          QPoint( 0, 0 ), QSize( w - currentSize.width(), h - currentSize.height() ),
                                           obj, view->kPresenterDoc() );
     resizeCmd->execute();
     view->kPresenterDoc()->addCommand( resizeCmd );

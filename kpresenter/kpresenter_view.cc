@@ -1156,6 +1156,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
     page->setToolEditMode( TEM_MOUSE );
 
     if ( page && !presStarted ) {
+        /*  dos not work.
 	// disable screensaver
 	QString pidFile = QDir::homeDirPath();
 	pidFile += "/.kss.pid";
@@ -1165,6 +1166,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 	    fclose( fp );
 	    kill( screensaver_pid, SIGSTOP );
 	}
+        */
 
 	page->deSelectAllObj();
 	presStarted = true;
@@ -1251,6 +1253,8 @@ void KPresenterView::screenStop()
 	m_bShowGUI = true;
 	page->setMouseTracking( true );
 	page->setBackgroundColor( white );
+
+        /* dos not work.
 	// start screensaver again
 	QString pidFile = QDir::homeDirPath();
 	pidFile += "/.kss.pid";
@@ -1260,6 +1264,8 @@ void KPresenterView::screenStop()
 	    fclose( fp );
 	    kill( screensaver_pid, SIGCONT );
 	}
+        */
+
 	actionScreenStart->setEnabled( true );
 	actionScreenViewPage->setEnabled( true );
 	pageBase->resizeEvent( 0 );
