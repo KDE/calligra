@@ -30,9 +30,12 @@
 #include <applixgraphicimport.h>
 #include <applixgraphicimport.moc>
 #include <kdebug.h>
+#include <koFilterChain.h>
+#include <kgenericfactory.h>
 #include <math.h>
 
-
+typedef KGenericFactory<APPLIXGRAPHICImport, KoFilter> APPLIXGRAPHICImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libapplixgraphicimport, APPLIXGRAPHICImportFactory( "applixgraphicimport" ) );
 
 
 /******************************************************************************
@@ -116,8 +119,8 @@ applixGraphicsRect::applixGraphicsRect() : applixGraphicsLine()
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-APPLIXGRAPHICImport::APPLIXGRAPHICImport (KoFilter *parent, const char *name) :
-                     KoFilter (parent, name)
+APPLIXGRAPHICImport::APPLIXGRAPHICImport (KoFilter *, const char *, const QStringList&) :
+                     KoFilter ()
 {
 
 }
@@ -134,25 +137,20 @@ APPLIXGRAPHICImport::APPLIXGRAPHICImport (KoFilter *parent, const char *name) :
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-bool
-APPLIXGRAPHICImport::filter (const QString &fileIn,
-                             const QString &fileOut,
-                             const QString &from,
-                             const QString &to,
-                             const QString &)
+KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, const QCString& to )
 {
 
     // Check MIME Types
     if (to!="application/x-kontour" || from!="application/x-applixgraphic")
-        return false;
+        return KoFilter::NotImplemented;
 
     // Open Inputfile
-    QFile in (fileIn);
+    QFile in (m_chain->inputFile());
     if (!in.open (IO_ReadOnly) )
     {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close ();
-        return false;
+        return KoFilter::FileNotFound;
     }
 
     QString str;
@@ -199,7 +197,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 				    "Comma");
 
       // i18n( "What is the separator used in this file ? First line is \n%1" ).arg(firstLine),
-      return false;
+      return KoFilter::StupidError;
     }
 
     while (!stream.atEnd ())
@@ -241,7 +239,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 	    {
               printf ("LINE tag not correkt \n");
               printf ("LINE: <%s>\n", (const char *) mystr.latin1());
-              return false;
+              return KoFilter::StupidError;
 	    }
 
             do
@@ -338,7 +336,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 	    {
               printf ("RPOL tag not correkt \n");
               printf ("RPOL: <%s>\n", (const char *) mystr.latin1());
-              return false;
+              return KoFilter::StupidError;
 	    }
 
             do
@@ -792,21 +790,17 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 
     printf ("Text %s\n", (const char *) str.utf8());
 
-    KoStore out=KoStore(QString(fileOut), KoStore::Write);
-
-    if (!out.open("root"))
+    KoStoreDevice* out= m_chain->storageFile( "root", KoStore::Write );
+    if (!out)
     {
       kdError(38000/*30502*/) << "Unable to open output file!" << endl;
         in.close  ();
-        out.close ();
-        return false;
+        return KoFilter::StorageCreationError;
     }
 
     QCString cstring = str.utf8();
-    out.write ( (const char*)cstring, cstring.length() );
+    out->writeBlock ( (const char*)cstring, cstring.length() );
 
-    out.close ();
     in.close  ();
-    return true;
+    return KoFilter::OK;
 }
-

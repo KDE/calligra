@@ -7,9 +7,9 @@ libapplixgraphicimport_la_LDFLAGS	= -module -avoid-version -no-undefined
 
 kde_module_LTLIBRARIES = libapplixgraphicimport.la
 
-libapplixgraphicimport_la_SOURCES = applixgraphicimport.cc applixgraphicimport_factory.cc
+libapplixgraphicimport_la_SOURCES = applixgraphicimport.cc
 libapplixgraphicimport_la_LIBADD = $(KOFFICE_LIBS)
-noinst_HEADERS = applixgraphicimport.h applixgraphicimport_factory.h
+noinst_HEADERS = applixgraphicimport.h
 
 METASOURCES = AUTO
 

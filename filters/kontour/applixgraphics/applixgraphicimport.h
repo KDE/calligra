@@ -33,12 +33,10 @@ class APPLIXGRAPHICImport : public KoFilter {
     Q_OBJECT
 
 public:
-    APPLIXGRAPHICImport (KoFilter *parent, const char *name);
+    APPLIXGRAPHICImport (KoFilter *parent, const char *name, const QStringList&);
     virtual ~APPLIXGRAPHICImport() {}
-    /** filtering :) */
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
-                        const QString &config=QString::null);
+
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 };
 
 
