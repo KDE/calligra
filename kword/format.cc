@@ -59,11 +59,6 @@ KWFormat::KWFormat( KWordDocument *_doc )
 }
 
 /*================================================================*/
-KWFormat::KWFormat( const KWFormat& )
-{
-}
-
-/*================================================================*/
 KWFormat::KWFormat( KWordDocument *_doc, const KWFormat &_format )
 {
     userFont = _format.getUserFont();
