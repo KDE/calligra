@@ -11,6 +11,10 @@
 #include "vmtool_select.h"
 #include "vmcmd_transform.h"
 
+#include <math.h>
+
+const double deg2rad = 0.017453292519943295769;    // pi/180
+
 VMToolSelect* VMToolSelect::s_instance = 0L;
 
 VMToolSelect::VMToolSelect( KarbonPart* part )
@@ -50,7 +54,10 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 
 		// move operation
 		QWMatrix mat;
-		mat.translate( m_lp.x() - m_fp.x(), m_lp.y() - m_fp.y() );
+		//mat.translate( m_lp.x() - m_fp.x(), m_lp.y() - m_fp.y() );
+		mat.translate( m_fp.x(), m_fp.y() );
+		mat.rotate( atan2( m_lp.y() - m_fp.y(), m_lp.x() - m_fp.x() ) / deg2rad );
+		mat.translate( - m_fp.x(), - m_fp.y() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -117,12 +124,18 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 		{
 			m_state = normal;
 			part()->addCommand(
+				new VMCmdRotate(
+					part(),
+					part()->selection(), m_fp,
+					atan2( m_lp.y() - m_fp.y(), m_lp.x() - m_fp.x() ) / deg2rad ),
+				true );
+			/*part()->addCommand(
 				new VMCmdTranslate(
 					part(),
 					part()->selection(),
 					qRound( view->zoomFactor() * lp.x() - fp.x() ),
 					qRound( view->zoomFactor() * lp.y() - fp.y() ) ),
-				true );
+				true );*/
 
 //			part()->repaintAllViews();
 		}
@@ -130,6 +143,8 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 		{
 			// erase old object:
 			drawTemporaryObject( view );
+
+			part()->deselectAllObjects();
 
 			part()->selectObjectsWithinRect(
 				QRect(

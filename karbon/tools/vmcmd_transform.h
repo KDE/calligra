@@ -41,4 +41,10 @@ public:
 	VMCmdScale( KarbonPart* part, QPtrList<VObject> objects, const QPoint &p, double s1, double s2 );
 };
 
+class VMCmdRotate : public VMCmdTransform
+{
+public:
+	VMCmdRotate( KarbonPart* part, QPtrList<VObject> objects, const QPoint &p, double angle );
+};
+
 #endif

@@ -51,3 +51,11 @@ VMCmdScale::VMCmdScale( KarbonPart* part, QPtrList<VObject> objects, const QPoin
 	m_mat.translate( -p.x(), -p.y() );
 }
 
+VMCmdRotate::VMCmdRotate( KarbonPart* part, QPtrList<VObject> objects, const QPoint &p, double angle )
+	: VMCmdTransform( part, objects, i18n( "Rotate Objects" ) )
+{
+	m_mat.translate( p.x(), p.y() );
+	m_mat.rotate( angle );
+	m_mat.translate( -p.x(), -p.y() );
+}
+
