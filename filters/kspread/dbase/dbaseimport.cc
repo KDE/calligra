@@ -25,6 +25,7 @@
 #endif
 
 #include <dbaseimport.h>
+#include <dbaseimport.moc>
 #include <dbase.h>
 
 #include <qfile.h>
