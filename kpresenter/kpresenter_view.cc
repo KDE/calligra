@@ -2622,7 +2622,7 @@ void KPresenterView::setupActions()
     addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
 
     actionInsertVariable->popupMenu()->insertSeparator();
-    actionRefreshAllVariable = new KAction( i18n( "&Refresh all variable" ), 0,
+    actionRefreshAllVariable = new KAction( i18n( "&Refresh all variables" ), 0,
                                     this, SLOT( refreshAllVariable() ),
                                     actionCollection(), "refresh_all_variable" );
     actionInsertVariable->insert(actionRefreshAllVariable);
