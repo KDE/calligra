@@ -284,8 +284,8 @@ Detailed TODO for Beta3:
 -use one and multi-key relations from kexidb
 
 === Table View TODO ====
--move validation code (performed on cell accepting and row accepting) somewhere to Validator (KEXIDB?),
- so LATER this may be also used for forms
+-add a function for inserting an empty row above the cursor
+-add a function for moving rows
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -304,10 +304,27 @@ Detailed TODO for Beta3:
 
 2004-02-24
 Table View:
--KexiTableViewData is now QObject-derived
--signals like aboutToChangeCell() or rowChanged() moved from KexiTableView
- to KexiTableViewData, so it'll be easier to reuse KexiTableViewData 
- with a forms, and easier to share common data object between views.
+	-KexiTableViewData is now QObject-derived
+	-signals like aboutToChangeCell() or rowChanged() moved from KexiTableView
+	 to KexiTableViewData, so it'll be easier to reuse KexiTableViewData 
+	 with a forms, and easier to share common data object between views.
+	-It's now allowed to call acceptRowEdit() from inside of cell-accept handlers
+		e.g.: KexiTableViewData::aboutToChangeCell() signal
+	 (no infinite recursion is preformed but instead: the row is saved after
+		cell's acception).
+KexiDB:
+	-ResultInfo introduced
+	-getHTMLErrorMesage() utility method introduced
+	-Cursor: now pointer to connection is guarded
+	-Connection, Cursor: error status is cleared before performing update/delete/insert
+	-Connection::recentSQLString() added (useful for debugging and on-screen 
+		error messages
+	-Connection: further error message fixes
+Alter Table Dialog:
+	-after 'name' field is entered, 'type' column as automatically filled
+	-"newrow" property is added for each new buffer to indicate for later processing
+	 that these buffers are for newly added fields
+Properties are now indexed using case insensitive names.
 
 2004-02-22
 KexiDB:
@@ -350,6 +367,7 @@ Table View:
 -on a table cell edit accepting: violating of the following:
 --NOT NULL or NOT EMPTY constraints
 --validation rules (using attached KexiValidator)
+ so LATER this may be also used for forms
 --from-editor value getting errors (d->pEditor->value())
 ..is now signaled using message box
 Alter Table Dialog:
