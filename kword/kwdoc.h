@@ -734,7 +734,6 @@ public:
     void loadImagesFromStore( KoStore *_store );
     void loadPictureMap ( QDomElement& domElement );
 
-    void configureSpellChecker();
     void testAndCloseAllFrameSetProtectedContent();
     void updateRulerInProtectContentMode();
 

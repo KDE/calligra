@@ -5260,15 +5260,6 @@ void KWDocument::maybeDeleteDoubleBufferPixmap()
     }
 }
 
-void KWDocument::configureSpellChecker()
-{
-    KWView * view = static_cast<KWView*>(views().getFirst());
-    if ( view ) // no view if embedded document
-    {
-        view->configureSpellChecker();
-    }
-}
-
 void KWDocument::setPersonalExpressionPath( const QStringList & lst)
 {
     m_personalExpressionPath = lst;

@@ -5474,16 +5474,6 @@ void KWView::spellCheckerFinished()
 #endif
 }
 
-void KWView::configureSpellChecker()
-{
-    KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
-                                  "Please make sure you have ISpell properly configured and in your PATH."));
-
-    KWConfig configDia( this );
-    configDia.openPage( KWConfig::KW_KSPELL);
-    configDia.exec();
-}
-
 void KWView::spellAddAutoCorrect (const QString & originalword, const QString & newword)
 {
     m_doc->getAutoFormat()->addAutoFormatEntry( originalword, newword );

@@ -199,7 +199,6 @@ public:
     void switchModeView();
     void changeFootNoteMenuItem( bool b);
     void insertFile(const KURL& _url);
-    void configureSpellChecker();
     void testAndCloseAllFrameSetProtectedContent();
     void updateBgSpellCheckingState();
     void updateRulerInProtectContentMode();
