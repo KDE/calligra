@@ -493,7 +493,6 @@ void Thesaurus::findTermWordnet(const QString &term)
             "You can get WordNet at <a href=\"http://www.cogsci.princeton.edu/~wn/\">"
             "http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet only supports "
             "the English language."));
-        m_edit->setEnabled(false);
         m_combobox->setEnabled(false);
         QApplication::restoreOverrideCursor();
         return;
