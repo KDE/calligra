@@ -357,6 +357,7 @@ public:
   KWGroupManager *getGroupManager(int i) { return grpMgrs.at(i); }
 
   QPen setBorderPen(KWParagLayout::Border _brd);
+  void enableEmbeddedParts(bool f);
 
 signals:
   void sig_imageModified();

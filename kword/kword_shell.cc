@@ -17,6 +17,7 @@
 #include "kword_shell.h"
 #include "kword_doc.h"
 #include "kword_view.h"
+#include "kword_page.h"
 
 #include <koAboutDia.h>
 #include <kfiledialog.h>
@@ -351,6 +352,8 @@ void KWordShell::slotFileSave()
 {
   assert( m_pDoc != 0L );
   
+  m_pDoc->enableEmbeddedParts(false);
+
   CORBA::String_var url = m_pDoc->url();
   if ( strlen( url.in() ) == 0 )
   {
@@ -364,10 +367,15 @@ void KWordShell::slotFileSave()
     tmp.sprintf( i18n( "Could not save\n%s" ), url.in() );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
   }
+
+  m_pDoc->enableEmbeddedParts(true);
+  m_pView->getGUI()->getPaperWidget()->repaint(false);
 }
 
 void KWordShell::slotFileSaveAs()
 {
+  m_pDoc->enableEmbeddedParts(false);
+
   QString _url = "";
   if (m_pDoc)
     {
@@ -382,6 +390,9 @@ void KWordShell::slotFileSaveAs()
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
     if (m_pDoc) m_pDoc->setURL(_url);
   }
+
+  m_pDoc->enableEmbeddedParts(true);
+  m_pView->getGUI()->getPaperWidget()->repaint(false);
 }
 
 void KWordShell::slotFileClose()

@@ -686,3 +686,11 @@ Reggie, 18.1.1999:
 ------------------
 - Some formatting fixes
 - Preperations for more formatting and settings of frames and tables
+
+Reggie, 19.1.1999:
+------------------
+- Code cleanups
+- Internal work for background colors of frames
+- Fixes when moving around frames to avoid crashes
+- Fixed (or worked around :-) the strange bug when saving embedded objects
+

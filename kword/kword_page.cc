@@ -228,19 +228,21 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 				    {
 				      if (updates.findRef(frameset->getGroupManager()) == -1)
 					updates.append(frameset->getGroupManager());
-				      continue;
 				    }
-				  if (deleteMovingRect)
-				    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
-				  frame->moveBy(mx - oldMx,my - oldMy);
-				  if (frame->x() < 0 || 
-				      frame->y() < getPageOfRect(KRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
-				      static_cast<int>(ptPaperHeight()) ||
-				      frame->right() > static_cast<int>(ptPaperWidth()) || 
-				      frame->bottom() > (getPageOfRect(KRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
-				      static_cast<int>(ptPaperHeight()))
-				    frame->moveBy(oldMx - mx,oldMy - my);
-				  p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+				  else
+				    {
+				      if (deleteMovingRect)
+					p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+				      frame->moveBy(mx - oldMx,my - oldMy);
+				      if (frame->x() < 0 || 
+					  frame->y() < getPageOfRect(KRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+					  static_cast<int>(ptPaperHeight()) ||
+					  frame->right() > static_cast<int>(ptPaperWidth()) || 
+					  frame->bottom() > (getPageOfRect(KRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
+					  static_cast<int>(ptPaperHeight()))
+					frame->moveBy(oldMx - mx,oldMy - my);
+				      p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+				    }				
 				}
 			    }
 			}
@@ -256,15 +258,10 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 				  if (deleteMovingRect)
 				    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
 				  frame->moveBy(mx - oldMx,my - oldMy);
-				  if (frame->x() < 0 || frame->right() > static_cast<int>(ptPaperWidth()))
+				  if (frame->x() < 0 || frame->right() > static_cast<int>(ptPaperWidth()) || frame->y() < 0)
 				    {
-				      if (frameset->getGroupManager())
-					{
-					  if (undos.findRef(frameset->getGroupManager()) == -1)
-					    undos.append(frameset->getGroupManager());
-					}
-				      else
-					frame->moveBy(oldMx - mx,oldMy - my);
+				      if (undos.findRef(grpMgr) == -1)
+					undos.append(grpMgr);
 				    }
 				  p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
 				}
@@ -682,6 +679,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	      
 	      if (r != 0 && (e->state() & ShiftButton) && doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager())
 		{
+		  doc->deSelectAllFrames();
 		  doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager()->selectUntil(doc->getFrameSet(doc->getFrameSet(mx,my)));
 		  goon = false;
 		}
@@ -818,8 +816,8 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	p.begin(this);
 	for (unsigned int i = 0;i < doc->getNumGroupManagers();i++)
 	  {
-	    doc->getGroupManager(i)->recalcRows(p);
 	    doc->getGroupManager(i)->recalcCols();
+	    doc->getGroupManager(i)->recalcRows(p);
 	  }
 	p.end();
 
@@ -1288,7 +1286,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 	    painter.save();
 	    KRect r = painter.viewport();
 	    painter.setViewport(frame->x() - xOffset,frame->y() - yOffset,r.width(),r.height());
- 	    painter.drawPicture(*pic);
+ 	    if (pic) painter.drawPicture(*pic);
 	    painter.setViewport(r);
 	    painter.restore();
 	  } break;
@@ -1405,7 +1403,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 		   _fc.getPTY() - yOffset,
 		   _wid - frameSet->getFrame(_fc.getFrame() - 1)->getLeftIndent(_fc.getPTY(),_fc.getLineHeight()) -
 		   frameSet->getFrame(_fc.getFrame() - 1)->getRightIndent(_fc.getPTY(),_fc.getLineHeight()),
-		   _fc.getLineHeight(),QBrush(white));
+		   _fc.getLineHeight(),QBrush(frameSet->getFrame(_fc.getFrame() - 1)->getBackgroundColor()));
   doc->printLine(_fc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars());
 
   if (doc->has_selection()) doc->drawSelection(painter,xOffset,yOffset);
@@ -1831,7 +1829,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     paintfc.getPTY() - yOffset,
 			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
-			     paintfc.getLineHeight(),QBrush(white));
+			     paintfc.getLineHeight(),QBrush(frameSet->getFrame(paintfc.getFrame() - 1)->getBackgroundColor()));
 	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars()))
 	      {
 		drawBuffer(QRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
@@ -1862,7 +1860,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
 	    unsigned int _hei = frameSet->getFrame(paintfc.getFrame() - 1)->height() - 
 	      (_y - frameSet->getFrame(paintfc.getFrame() - 1)->y());
-	    painter.fillRect(_x,_y,_wid,_hei,QBrush(white));
+	    painter.fillRect(_x,_y,_wid,_hei,QBrush(frameSet->getFrame(paintfc.getFrame() - 1)->getBackgroundColor()));
 	    drawBuffer(KRect(_x,_y,_wid,_hei));
 	    painter.restore();
 	  }
@@ -1983,7 +1981,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     paintfc.getPTY() - yOffset,
 			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
-			     paintfc.getLineHeight(),QBrush(white));
+			     paintfc.getLineHeight(),
+			     doc->getFrameSet(paintfc.getFrameSet() - 1)->getFrame(paintfc.getFrame() - 1)->getBackgroundColor());
 	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars()))
 	      {
 		drawBuffer(QRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
@@ -2014,7 +2013,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
 	    unsigned int _hei = frameSet->getFrame(paintfc.getFrame() - 1)->height() - 
 	      (_y - frameSet->getFrame(paintfc.getFrame() - 1)->y());
-	    painter.fillRect(_x,_y,_wid,_hei,QBrush(white));
+	    painter.fillRect(_x,_y,_wid,_hei,
+			     doc->getFrameSet(paintfc.getFrameSet() - 1)->getFrame(paintfc.getFrame() - 1)->getBackgroundColor());
 	    drawBuffer(KRect(_x,_y,_wid,_hei));
 	    painter.restore();
 	  }
@@ -2087,7 +2087,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     paintfc.getPTY() - yOffset,
 			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
-			     paintfc.getLineHeight(),QBrush(white));
+			     paintfc.getLineHeight(),
+			     doc->getFrameSet(paintfc.getFrameSet() - 1)->getFrame(paintfc.getFrame() - 1)->getBackgroundColor());
 	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars()))
 	      {
 		drawBuffer(KRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
@@ -2165,7 +2166,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 				 paintfc.getPTY() - yOffset,
 				 _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 				 frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
-				 paintfc.getLineHeight(),QBrush(white));
+				 paintfc.getLineHeight(),
+				 doc->getFrameSet(paintfc.getFrameSet() - 1)->getFrame(paintfc.getFrame() - 1)->getBackgroundColor());
 		if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars()))
 		  {
 		    drawBuffer(KRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
@@ -2506,13 +2508,15 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
       for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	{
 	  tmp = frameset->getFrame(j);
+	  _painter.setBrush(tmp->getBackgroundColor());
 	  frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
 	  
 	  if (v_area.intersects(frame) && should_draw && !frameset->getGroupManager())
 	    _painter.drawRect(frame);
+	  _painter.setBrush(NoBrush);
 	  if (v_area.intersects(frame) && frameset->getGroupManager())
 	    {
-	      _painter.fillRect(frame,white);
+	      _painter.fillRect(frame,tmp->getBackgroundColor());
 	      _painter.drawLine(tmp->right() - xOffset + 1,tmp->y() - yOffset - 1,tmp->right() - xOffset + 1,tmp->bottom() - yOffset + 1);
 	      _painter.drawLine(tmp->x() - xOffset - 1,tmp->bottom() - yOffset + 1,tmp->right() - xOffset + 1,tmp->bottom() - yOffset + 1);
 	      unsigned int row = 0,col = 0;

@@ -112,6 +112,8 @@ public:
   QString topBrd2String();
   QString bottomBrd2String();
 
+  unsigned int getNextFreeYPos(unsigned int _y,unsigned int _h);
+
 protected:
   RunAround runAround;
   bool selected;
@@ -302,7 +304,7 @@ class KWPartFrameSet : public KWFrameSet
 public:
   KWPartFrameSet(KWordDocument *_doc,KWordChild *_child)
     : KWFrameSet(_doc) 
-    { child = _child; }
+    { child = _child; _enableDrawing = true; }
   virtual ~KWPartFrameSet() 
     {;}
 
@@ -324,11 +326,14 @@ public:
 
   virtual void update();
 
+  void enableDrawing(bool f) { _enableDrawing = f; }
+
 protected:
   KWordFrame *view;
   KWordChild *child;
   KOffice::MainWindow_var mainWindow;
   OpenParts::Id parentID;
+  bool _enableDrawing;
 
 };
 

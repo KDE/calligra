@@ -259,6 +259,13 @@ int KWFrame::getRightIndent(int _y,int _h)
 }
 
 /*================================================================*/
+unsigned int KWFrame::getNextFreeYPos(unsigned int _y,unsigned int _h)
+{
+  // *** TODO
+  return 0;
+}
+
+/*================================================================*/
 QRegion KWFrame::getEmptyRegion()
 {
   QRegion region(x(),y(),width(),height());
@@ -1129,6 +1136,8 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 /*================================================================*/
 QPicture *KWPartFrameSet::getPicture() 
 { 
+  if (!_enableDrawing) return 0L;
+
   return child->draw(1.0,true); 
 }
 

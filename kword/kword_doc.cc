@@ -1211,6 +1211,18 @@ bool KWordDocument::save( ostream &out, const char* /* _format */ )
 }
 
 /*================================================================*/
+void KWordDocument::enableEmbeddedParts(bool f)
+{
+  KWFrameSet *frameSet = 0L;
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      frameSet = getFrameSet(i);
+      if (frameSet->getFrameType() == FT_PART)
+	dynamic_cast<KWPartFrameSet*>(frameSet)->enableDrawing(f);
+    }
+}
+
+/*================================================================*/
 void KWordDocument::makeChildListIntern( KOffice::Document_ptr _doc,const char *_path)
 {
   cerr << "void KWordDocument::makeChildList( OPParts::Document_ptr _doc, const char *_path )" << endl;
@@ -2617,7 +2629,7 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 		painter->save();
 		KRect r = painter->viewport();
 		painter->setViewport(frame->x(),frame->y() - i * getPTPaperHeight(),r.width(),r.height());
-		painter->drawPicture(*pic);
+		if (pic) painter->drawPicture(*pic);
 		painter->setViewport(r);
 		painter->restore();
 	      } break;
