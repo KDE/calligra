@@ -2469,9 +2469,7 @@ void KSpreadView::updateEditWidgetOnPress()
         editWidget()->setText( "" );
         return;
     }
-    if ( cell->content() == KSpreadCell::VisualFormula )
-        editWidget()->setText( "" );
-    else if ( d->activeSheet->isProtected() && cell->isHideFormula( column, row ) )
+    if ( d->activeSheet->isProtected() && cell->isHideFormula( column, row ) )
         editWidget()->setText( cell->strOutText() );
     else if ( d->activeSheet->isProtected() && cell->isHideAll( column, row ) )
         editWidget()->setText( "" );
@@ -2508,9 +2506,7 @@ void KSpreadView::updateEditWidget()
         return;
     }
 
-    if ( cell->content() == KSpreadCell::VisualFormula )
-        editWidget()->setText( "" );
-    else if ( d->activeSheet->isProtected() && cell->isHideFormula( column, row ) )
+    if ( d->activeSheet->isProtected() && cell->isHideFormula( column, row ) )
         editWidget()->setText( cell->strOutText() );
     else if ( d->activeSheet->isProtected() && cell->isHideAll( column, row ) )
         editWidget()->setText( "" );
@@ -4328,8 +4324,7 @@ void KSpreadView::insertHyperlink()
             if ( ret == 4 ) return;
         }
 
-        LinkCommand* command = new LinkCommand( cell, dlg.text(), dlg.link(), 
-            dlg.bold(), dlg.italic() );
+        LinkCommand* command = new LinkCommand( cell, dlg.text(), dlg.link() );
         d->doc->addCommand( command );
         command->execute();
         
