@@ -714,12 +714,11 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
     setTextFontFamily( font.attribute( "fo:font-family" ) );
   if ( font.hasAttribute( "fo:color" ) )
     setTextColor( QColor( font.attribute( "fo:color" ) ) );
-#if 0 //fixme
-  if ( font.hasAttribute( "fo:size" ) )
-    setTextFontSize( getFontSize( font.attribute( "fo:size" ) ) );
+  if ( font.hasAttribute( "fo:font-size" ) )
+      setTextFontSize( KoUnit::parseValue( font.attribute( "fo:font-size" ),10.0 ) );
   else
     setTextFontSize( 10 );
-#endif
+
   if ( font.hasAttribute( "fo:font-style" ) )
   {
     kdDebug(30518) << "italic" << endl;
