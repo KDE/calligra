@@ -40,10 +40,11 @@ static const KCmdLineOptions options[]=
 bool convert( const KURL & uIn, const QString & inputFormat, const KURL & uOut, const QString & outputFormat )
 {
     QString constr = "'";
-    constr += inputFormat;
-    constr += "' in Import and '";
     constr += outputFormat;
-    constr += "' in Export and Implemented=='file'"; // can only do file conversions here, no kodoc
+    constr += "' in [X-KDE-Export] and '";
+    constr += inputFormat;
+    constr += "' in [X-KDE-Import]";
+    constr += " and Implemented=='file'"; // can only do file conversions here, no kodoc
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
