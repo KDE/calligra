@@ -42,7 +42,7 @@ KexiDBDriverManager::KexiDBDriverManager()
 {
     addFunction("driverNames", &KexiDBDriverManager::driverNames,
         Kross::Api::ArgumentList(),
-        i18n("Returns a stringlist of all avaible drivernames.")
+        i18n("Returns a stringlist of all available drivernames.")
     );
     addFunction("driver", &KexiDBDriverManager::driver,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),

@@ -74,7 +74,7 @@ KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parse
     );
     addFunction("errorAt", &KexiDBParser::errorAt,
         Kross::Api::ArgumentList(),
-        i18n("Return the position where the last error occured.")
+        i18n("Return the position where the last error occurred.")
     );
 }
 

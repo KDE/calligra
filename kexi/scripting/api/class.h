@@ -141,9 +141,9 @@ namespace Kross { namespace Api {
 
                 // check the number of parameters passed.
                 if(arglist.size() < fmin)
-                    throw AttributeException(i18n("To less parameters for method '%1'.").arg(name));
+                    throw AttributeException(i18n("Too few parameters for method '%1'.").arg(name));
                 if(arglist.size() > fmax)
-                    throw AttributeException(i18n("To much parameters for method '%1'.").arg(name));
+                    throw AttributeException(i18n("Too many parameters for method '%1'.").arg(name));
 
                 // check type of passed parameters.
                 QValueList<Argument> farglist = f->arglist.getArguments();

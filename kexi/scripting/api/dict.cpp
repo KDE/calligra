@@ -39,6 +39,6 @@ const QString Dict::getClassName() const
 
 const QString Dict::getDescription() const
 {
-    return i18n("Object to handle QMap's.");
+    return i18n("Object to handle QMaps.");
 }
 

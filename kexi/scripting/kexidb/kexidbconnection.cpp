@@ -91,7 +91,7 @@ KexiDBConnection::KexiDBConnection(KexiDBDriver* driver, ::KexiDB::Connection* c
 
     addFunction("tableNames", &KexiDBConnection::disconnect,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", Kross::Api::Variant::create(QVariant(true))),
-        i18n("Return names of all table schemas stored in currently "
+        i18n("Return names of all table schemata stored in currently "
              "used database. If the as argument passed boolean value "
              "is true, internal KexiDB system table names (kexi__*) "
              "are also returned.")
@@ -193,7 +193,7 @@ KexiDBConnection::KexiDBConnection(KexiDBDriver* driver, ::KexiDB::Connection* c
     );
     addFunction("commitTransaction", &KexiDBConnection::commitTransaction,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"),
-        i18n("Commits the as rgument passed KexiDBTransaction object.")
+        i18n("Commits the as argument passed KexiDBTransaction object.")
     );
     addFunction("rollbackTransaction", &KexiDBConnection::rollbackTransaction,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"),

@@ -149,7 +149,7 @@ KexiDBField::KexiDBField(::KexiDB::Field* field)
     );
     addFunction("setLength", &KexiDBField::setLength,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"),
-        i18n("Sets lenght for this field. Only works for Text Type (even not LongText!).")
+        i18n("Sets the length for this field. Only works for Text Type (even not LongText).")
     );
     addFunction("precision", &KexiDBField::precision,
         Kross::Api::ArgumentList(),
