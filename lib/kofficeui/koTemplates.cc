@@ -25,6 +25,7 @@
 #include <kdesktopfile.h>
 #include <ksimpleconfig.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <kinstance.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
