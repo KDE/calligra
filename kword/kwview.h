@@ -249,6 +249,8 @@ public slots:
 
     void renameButtonTOC(const QString & _name);
 
+    void changeCaseOfText();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
@@ -371,6 +373,8 @@ private:
 
     KAction *actionExtraSpellCheck;
     KAction *actionExtraCreateTemplate;
+
+    KAction * actionChangeCase;
 
     KAction *actionConfigure;
 

@@ -60,6 +60,7 @@
 #include "kwcommand.h"
 #include "fontdia.h"
 #include "counter.h"
+#include "kwChangeCaseDia.h"
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -387,6 +388,10 @@ void KWView::setupActions()
     actionInsertExpression = new KActionMenu( i18n( "&Expression" ),
                                             actionCollection(), "insert_expression" );
     loadexpressionActions( actionInsertExpression);
+
+    actionChangeCase=new KAction( i18n( "Change case ..." ), 0,
+                                     this, SLOT( changeCaseOfText() ),
+                                     actionCollection(), "change_case" );
 
     // ------------------------- Format menu
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
@@ -2177,6 +2182,19 @@ void KWView::textSubScript()
         edit->setTextSubScript(actionFormatSub->isChecked());
 }
 
+void KWView::changeCaseOfText()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if(!edit)
+        return;
+    KWChangeCaseDia *caseDia=new KWChangeCaseDia( this,"change case" );
+    if(caseDia->exec())
+    {
+        edit->changeCaseOfText(caseDia->getTypeOfCase());
+    }
+    delete caseDia;
+}
+
 void KWView::textIncreaseIndent()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2716,6 +2734,7 @@ void KWView::docStructChanged(TypeStructDocItem _type)
     if(m_pDocStruct)
         m_pDocStruct->getDocStructTree()->refreshTree(_type);
 }
+
 
 bool KWView::doubleClickActivation() const
 {

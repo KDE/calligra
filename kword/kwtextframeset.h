@@ -380,6 +380,8 @@ public:
 
     QList<KAction> dataToolActionList();
 
+    void changeCaseOfText(TypeOfCase _type);
+
 public slots:
     void updateUI( bool updateFormat, bool force = false );
     void ensureCursorVisible();

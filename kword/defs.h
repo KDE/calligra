@@ -97,4 +97,6 @@ enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HE
                  FI_FOOTNOTE = 7 };
 
 
+enum TypeOfCase { UpperCase =0, LowerCase=1, TitleCase=2};
+
 #endif

@@ -93,6 +93,7 @@
   <Separator/>
   <Action name="edit_customvars"/>
   <Action name="extra_autocorrection"/>
+  <Action name="change_case"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="configure" group="settings_configure"/>

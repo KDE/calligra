@@ -3695,4 +3695,31 @@ void KWTextFrameSetEdit::slotToolActivated( const KoDataToolInfo & info, const Q
     delete tool;
 }
 
+void KWTextFrameSetEdit::changeCaseOfText(TypeOfCase _type)
+{
+    QString text;
+    if ( textFrameSet()->hasSelection() )
+        text = textFrameSet()->selectedText().stripWhiteSpace ();
+    if(!text.isEmpty())
+    {
+        switch(_type)
+        {
+            case UpperCase:
+                text=text.upper();
+                break;
+            case LowerCase:
+                text=text.lower();
+                break;
+            case TitleCase:
+                text=text.at(0).upper()+text.right(text.length()-1);
+                break;
+            default:
+                kdDebug()<<"Error in changeCaseOfText !\n";
+                break;
+        }
+        textFrameSet()->replaceSelection( cursor, text, QTextDocument::Standard, i18n("Change case") );
+
+    }
+}
+
 #include "kwtextframeset.moc"
