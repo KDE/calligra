@@ -3385,11 +3385,6 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
 
     if ( m_currentFrame )
     {
-//       if ( m_canvas->kWordDocument()->getVariableCollection()->variableSetting()->displayLink() && m_canvas->kWordDocument()->getVariableCollection()->variableSetting()->underlineLink() && isLinkVariable(dPoint, true ) && e->button() == Qt::LeftButton )
-//       {
-// 	m_canvas->gui()->getView()->openLink();
-// 	return;
-//       }
         // Let KoTextView handle the mousepress event - but don't let it start
         // a drag if clicking on the left of the text (out of the frame itself)
         bool addParag = textView()->handleMousePressEvent( e, iPoint, relPos != KWTextFrameSet::LeftOfFrame, frameSet()->kWordDocument()->insertDirectCursor() );
@@ -3429,12 +3424,10 @@ bool KWTextFrameSetEdit::isLinkVariable(const KoPoint & dPoint, bool setUrl )
   QPoint iPoint;
   KWTextFrameSet::RelativePosition relPos;
   textFrameSet()->documentToInternalMouseSelection( dPoint, iPoint, relPos );
-  KoTextCursor temp = *cursor();
   placeTempCursor(iPoint);
   bool const result = linkVariable();
   if (setUrl && result && textView()->linkVariable() )
     setRefLink(textView()->linkVariable()->url() );
-  KoTextView::setCursor(&temp);
   return result;
 }
 
