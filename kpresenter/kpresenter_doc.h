@@ -69,6 +69,7 @@ class KPresenterView_impl;
 #include "insertcmd.h"
 #include "deletecmd.h"
 #include "setoptionscmd.h"
+#include "chgclipcmd.h"
 #include "commandhistory.h"
 
 #include <komlParser.h>

@@ -1316,8 +1316,10 @@ void KPresenterDocument_impl::changeClipart(QString filename,int diffx,int diffy
       kpobject = objectList()->at(i);
       if (kpobject->isSelected() && kpobject->getType() == OT_CLIPART)
 	{
-	  dynamic_cast<KPClipartObject*>(kpobject)->setFileName(filename);
-	  repaint(false);
+	  ChgClipCmd *chgClipCmd = new ChgClipCmd(i18n("Change clipart"),dynamic_cast<KPClipartObject*>(kpobject),
+						  dynamic_cast<KPClipartObject*>(kpobject)->getFileName(),filename,this);
+	  chgClipCmd->execute();
+	  _commands.addCommand(chgClipCmd);
 	  break;
 	}
     }
