@@ -1,0 +1,20 @@
+####### General stuff
+
+INCLUDES=	-I$(srcdir) $(all_includes) $(MICO_INCLUDES)
+LDFLAGS	=	$(all_libraries) -version-info 1:0:0
+
+####### Files
+
+lib_LTLIBRARIES = libfilterbase.la libklaola.la libktar.la \
+libqtext.la
+
+libfilterbase_la_SOURCES = filterbase.cc
+libfilterbase_la_METASOURCES = filterbase.moc
+
+libklaola_la_SOURCES = klaola.cc
+
+libktar_la_SOURCES = ktar.cc
+
+libqtext_la_SOURCES = qdom.cc qxml.cc
+
+noinst_HEADERS = filterbase.h klaola.h ktar.h qdom.h qxml.h

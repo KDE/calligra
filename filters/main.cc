@@ -105,7 +105,7 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         buffer[i] = static_cast<unsigned char>(data[i]);
     buffer[len] = 0;
 
-    QString nameOut="/tmp/testOLE.kwd.tgz";
+    QString nameOut="/tmp/testOLE.kwd";
     docFile.data=buffer;   // see myfile.h
     docFile.length=len;
     myOLEFilter=new OLEFilter(docFile, nameOut, in, out);

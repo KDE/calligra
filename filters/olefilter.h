@@ -10,6 +10,7 @@
 #include <ktar.h>
 #include <filterbase.h>
 #include <wordfilter.h>
+#include <excelfilter.h>
 #include <myfile.h>
 
 

@@ -74,9 +74,10 @@ void OLEFilter::slotSavePic(const char *data, const char *type,
     if(type[0]!='.')
         name+='.';
     name+=type;
-    *nameOUT=new char[name.length()+1];
-    strncpy(*nameOUT, (const char*)name, name.length());
-    *nameOUT[name.length()]='\0';
+    int len=name.length();
+    *nameOUT=new char[len+1];
+    strncpy(*nameOUT, (const char*)name, len);
+    *nameOUT[len]='\0';
     name.prepend(dir);
     fileOut->writeFile(name, "", "", size, data);
 }
@@ -184,8 +185,13 @@ void OLEFilter::convert(const QString &dirname) {
             else if(node->name=="Workbook") {
                 // Excel
                 kdebug(KDEBUG_INFO, 31000, "Excel");
-                myFilter=new FilterBase();
-                // connect SIGNALs&SLOTs
+
+                myFile workbook;
+                workbook.data=0L;
+
+                workbook=docfile->stream(node->handle);
+
+                myFilter=new ExcelFilter(workbook);
                 connectCommon(&myFilter);
             }
             else if(node->name=="PowerPoint Document") {
@@ -223,8 +229,10 @@ void OLEFilter::convert(const QString &dirname) {
         QString file=myFilter->part();
         char *tmp=0L;
         slotPart(dirname, myFilter->extension(), &tmp);
-        fileOut->writeFile(tmp, "", "", file.length(), (const char*)file.utf8());
+        QString f=QString(tmp);
         delete [] tmp;
+        f.prepend(dir);
+        fileOut->writeFile(f, "", "", file.length(), (const char*)file.utf8());
         delete myFilter;
     }
 }
