@@ -6,6 +6,8 @@
 		KSpread's author Torben Weis <weis@kde.org>.
 
 		Please report all bugs to Kalle and Torben at the above addresses.
+
+		Note that all tags are in fact lowercase.
 -->
 
 
@@ -20,13 +22,13 @@
 		editor:		The program this file was written with
 		mime:		The MIME type (must always have the value application/x-kspread
 -->
-<!ELEMENT DOC (PAPER, MAP)>
+<!ELEMENT DOC (PAPER, MAP)>  <!-- MISSING: locale, areaname -->
 <!ATTLIST DOC   author CDATA #IMPLIED
                 email  CDATA #IMPLIED
                 editor CDATA #IMPLIED
                 mime   CDATA "application/x-kspread">
 
-<!--	Describes the page format. Can have no or one PAPERBORDERS child that
+<!--	Describes the page format. Can have no or one BORDERS child that
 		describes the margins.
 
 		Attributes:
@@ -38,7 +40,7 @@
 		columns:		the number of columns (only in wordprocessing mode)
 		columnspacing:	the gap between the columns (only in wordprocessing mode)
 -->
-<!ELEMENT PAPER (PAPERBORDERS|HEAD|FOOT)*>
+<!ELEMENT PAPER (BORDERS|HEAD|FOOT)*>
 <!ATTLIST PAPER format CDATA #REQUIRED
                 orientation CDATA #REQUIRED>
 
@@ -53,11 +55,11 @@
 		top:			top margin in pixels
 		bottom:			bottom margin in pixels
 -->
-<!ELEMENT PAPERBORDERS EMPTY>
-<!ATTLIST PAPERBORDERS  left   CDATA #REQUIRED
-                        right  CDATA #REQUIRED
-                        top    CDATA #REQUIRED
-                        bottom CDATA #REQUIRED>
+<!ELEMENT BORDERS EMPTY>
+<!ATTLIST BORDERS  left   CDATA #REQUIRED
+                   right  CDATA #REQUIRED
+                   top    CDATA #REQUIRED
+                   bottom CDATA #REQUIRED>
 
 
 <!--	Describes the page header.
