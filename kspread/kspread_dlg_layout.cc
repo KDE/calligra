@@ -711,14 +711,14 @@ if(number->isChecked())
 else if(percent->isChecked())
         {
         listFormat->setEnabled(false);
-        if(dlg->precision==-1)
-                precision->setValue(2);
+        /*if(dlg->precision==-1)
+                precision->setValue(2);*/
         }
 else if(money->isChecked())
         {
         listFormat->setEnabled(false);
-        if(dlg->precision==-1)
-                precision->setValue(2);
+        /*if(dlg->precision==-1)
+                precision->setValue(2);*/
         }
 else if(scientific->isChecked())
         listFormat->setEnabled(false);

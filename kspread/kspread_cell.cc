@@ -978,7 +978,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             int start=0;
             if(localizedNumber.find('%')!=-1)
                 start=2;
-            else if(localizedNumber.find(decimal_point)==(localizedNumber.length()-1))
+            else if(localizedNumber.find(KGlobal::locale()->currencySymbol())==(localizedNumber.length()-1))
                 start=2;
             else if((start=localizedNumber.find('E'))!=-1)
                 start=localizedNumber.length()-start;
@@ -3007,7 +3007,16 @@ void KSpreadCell::incPrecision()
       m_iPrecision = 1;
     else
     {
-      m_iPrecision = m_strOutText.length() - pos;
+      int start=0;
+      if(m_strOutText.find('%')!=-1)
+        start=2;
+      else if(m_strOutText.find(KGlobal::locale()->currencySymbol())==(m_strOutText.length()-1))
+        start=2;
+      else if((start=m_strOutText.find('E'))!=-1)
+        start=m_strOutText.length()-start;
+      else
+        start=0;
+      m_iPrecision = m_strOutText.length() - pos-start;
       if ( m_iPrecision < 0 )
         m_iPrecision = 0;
     }
@@ -3028,9 +3037,18 @@ void KSpreadCell::decPrecision()
   if ( m_iPrecision == -1 )
   {
     int pos = m_strOutText.find(decimal_point);
+    int start=0;
+    if(m_strOutText.find('%')!=-1)
+        start=2;
+    else if(m_strOutText.find(KGlobal::locale()->currencySymbol())==(m_strOutText.length()-1))
+        start=2;
+    else if((start=m_strOutText.find('E'))!=-1)
+        start=m_strOutText.length()-start;
+    else
+        start=0;
     if ( pos == -1 )
       return;
-    m_iPrecision = m_strOutText.length() - pos - 2;
+    m_iPrecision = m_strOutText.length() - pos - 2-start;
     if ( m_iPrecision < 0 )
       m_iPrecision = 0;
     m_bLayoutDirtyFlag = TRUE;
