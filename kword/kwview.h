@@ -242,12 +242,12 @@ public slots:
     void textAlignCenter();
     void textAlignRight();
     void textAlignBlock();
-    void textList();
     void textSuperScript();
     void textSubScript();
     void textIncreaseIndent();
     void textDecreaseIndent();
     void textDefaultFormat();
+    void slotCounterStyleSelected();
 
     // Text and Frame borders.
     void borderOutline();
@@ -448,7 +448,8 @@ private:
     KAction *actionFormatFrameSet;
     KAction *actionFormatIncreaseIndent;
     KAction *actionFormatDecreaseIndent;
-    KToggleAction *actionFormatList;
+    KActionMenu *actionFormatBullet;
+    KActionMenu *actionFormatNumber;
     KToggleAction *actionFormatSuper;
     KToggleAction *actionFormatSub;
     KAction* actionInsertSpecialChar;

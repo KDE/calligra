@@ -373,17 +373,6 @@ void KWView::setupActions()
     actionLowerFrame->setToolTip( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it" ) );
     actionLowerFrame->setWhatsThis( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it. If multiple frames are selected they are all lowered in turn." ) );
 
-    /*
-    actionToolsEdit = new KToggleAction( i18n( "Edit &Text" ), "edittool", Key_F4,
-                                         this, SLOT( toolsEdit() ),
-                                         actionCollection(), "tools_edit" );
-    actionToolsEdit->setExclusiveGroup( "tools" );
-    actionToolsEditFrames = new KToggleAction( i18n( "Edit &Frames" ),"frame_edit", Key_F5,
-                                               this, SLOT( toolsEditFrame() ),
-                                               actionCollection(), "tools_editframes" );
-    actionToolsEditFrames->setExclusiveGroup( "tools" );
-    */
-
     // -------------- View menu
     actionViewTextMode = new KToggleAction( i18n( "Text mode" ), 0,
                                             this, SLOT( viewTextMode() ),
@@ -583,7 +572,7 @@ void KWView::setupActions()
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
     actionFormatParag->setToolTip( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc." ) );
-    actionFormatParag->setWhatsThis( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc.<p>Select text in multiple paragraphs to change the formating of all selected paragraphs.<p>If no text is selected, the paragraph with the cursor will be changed." ) );
+    actionFormatParag->setWhatsThis( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph with the cursor will be changed." ) );
 
     actionFormatFrameSet = new KAction( i18n( "F&rame/Frameset..." ), 0,
                                      this, SLOT( formatFrameSet() ),
@@ -629,6 +618,8 @@ void KWView::setupActions()
     actionFormatDefault->setToolTip( i18n( "Change font and paragraph attributes to their default values." ) );
     actionFormatDefault->setWhatsThis( i18n( "Change font and paragraph attributes to their default values." ) );
 
+    // ----------------------- More format actions, for the toolbar only
+
     actionFormatBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
                                            this, SLOT( textBold() ),
                                            actionCollection(), "format_bold" );
@@ -659,10 +650,7 @@ void KWView::setupActions()
                                         this, SLOT( textAlignBlock() ),
                                         actionCollection(), "format_alignblock" );
     actionFormatAlignBlock->setExclusiveGroup( "align" );
-    actionFormatList = new KToggleAction( i18n( "List" ), "enumList", 0,
-                                              this, SLOT( textList() ),
-                                              actionCollection(), "format_list" );
-    actionFormatList->setExclusiveGroup( "style" );
+
     actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
                                               this, SLOT( textSuperScript() ),
                                               actionCollection(), "format_super" );
@@ -684,6 +672,38 @@ void KWView::setupActions()
                                      this, SLOT( textColor() ),
                                      actionCollection(), "format_color",true );
     actionFormatColor->setDefaultColor(QColor());
+
+
+    //actionFormatList = new KToggleAction( i18n( "List" ), "enumList", 0,
+    //                                          this, SLOT( textList() ),
+    //                                          actionCollection(), "format_list" );
+    //actionFormatList->setExclusiveGroup( "style" );
+
+    actionFormatNumber = new KActionMenu( i18n( "Number" ),
+                                          "enumList", actionCollection(), "format_number" );
+    actionFormatNumber->setDelayed( false );
+    actionFormatBullet = new KActionMenu( i18n( "Bullet" ),
+                                          "unsortedList", actionCollection(), "format_bullet" );
+    actionFormatBullet->setDelayed( false );
+    QPtrList<KoParagCounterWidget::StyleRepresenter> stylesList;
+    KoParagCounterWidget::makeCounterRepresenterList( stylesList );
+    QPtrListIterator<KoParagCounterWidget::StyleRepresenter> styleIt( stylesList );
+    for ( ; styleIt.current() ; ++styleIt ) {
+        // Dynamically create toggle-actions for each list style.
+        // This approach allows to edit toolbars and extract separate actions from this menu
+        KToggleAction* act = new KToggleAction( styleIt.current()->name(), /*TODO icon,*/
+                                                0, this, SLOT( slotCounterStyleSelected() ),
+                                                actionCollection(), QString("counterstyle_%1").arg( styleIt.current()->style() ).latin1() );
+        act->setExclusiveGroup( "counterstyle" );
+        // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
+        if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
+            actionFormatBullet->insert( act );
+            actionFormatNumber->insert( act );
+        } else if ( styleIt.current()->isBullet() )
+            actionFormatBullet->insert( act );
+        else
+            actionFormatNumber->insert( act );
+    }
 
     // ---------------------------- frame toolbar actions
 
@@ -847,9 +867,10 @@ void KWView::setupActions()
     KAction* actAutoComplete = new KAction( i18n( "AutoComplete" ), KStdAccel::shortcut(KStdAccel::TextCompletion),this, SLOT( slotAutoComplete() ), actionCollection(), "auto_complete" );
 
     // Necessary for the actions that are not plugged anywhere
+    // ----- is it still necessary? The current kaction/kaccel stuff is supposed to do this automatically.
     KAccel * accel = new KAccel( this );
-    actNbsp ->plugAccel( accel );
-    accel = new KAccel( this ); // needed ?
+    actNbsp->plugAccel( accel );
+    // HUH? accel = new KAccel( this ); // needed ?
     actSoftHyphen->plugAccel( accel );
     actLineBreak->plugAccel( accel );
     actAutoComplete->plugAccel( accel );
@@ -1420,7 +1441,13 @@ void KWView::showAlign( int align ) {
 
 void KWView::showCounter( KoParagCounter &c )
 {
-    actionFormatList->setChecked( c.numbering() == KoParagCounter::NUM_LIST );
+    QString styleStr("counterstyle_");
+    styleStr += QString::number( c.style() );
+    //kdDebug() << "KWView::showCounter styleStr=" << styleStr << endl;
+    KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr.latin1() ) );
+    Q_ASSERT( act );
+    if ( act )
+        act->setChecked( true );
 }
 
 void KWView::showFrameBorders( const KoBorder& _left, const KoBorder& _right,
@@ -3436,36 +3463,45 @@ void KWView::textAlignBlock()
         actionFormatAlignBlock->setChecked( true );
 }
 
-void KWView::textList()
+void KWView::slotCounterStyleSelected()
 {
-    KoParagCounter c;
-    if ( actionFormatList->isChecked() )
+    QString actionName = QString::fromLatin1(sender()->name());
+    if ( actionName.startsWith( "counterstyle_" ) )
     {
-        c.setNumbering( KoParagCounter::NUM_LIST );
-        c.setStyle( KoParagCounter::STYLE_NUM );
-    }
-    else
-    {
-        c.setNumbering( KoParagCounter::NUM_NONE );
-    }
+        QString styleStr = actionName.mid(13);
+        //kdDebug() << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
+        KoParagCounter::Style style = (KoParagCounter::Style)(styleStr.toInt());
+        KoParagCounter c;
+        if ( style == KoParagCounter::STYLE_NONE )
+            c.setNumbering( KoParagCounter::NUM_NONE );
+        else {
+            c.setNumbering( KoParagCounter::NUM_LIST );
+            c.setStyle( style );
+            if ( c.isBullet() )
+                c.setSuffix( QString::null );
+            // else the suffix remains the default, '.'
+            // TODO save this setting, to use the last one selected in the dialog?
+            // (same for custom bullet char etc.)
+        }
 
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
-    QPtrListIterator<KoTextFormatInterface> it( lst );
-    bool createmacro=false;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change list type") );
-    for ( ; it.current() ; ++it )
-    {
-        KCommand *cmd = it.current()->setCounterCommand( c );
-        if ( cmd )
+        QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+        QPtrListIterator<KoTextFormatInterface> it( lst );
+        bool createmacro=false;
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change list type") );
+        for ( ; it.current() ; ++it )
         {
-            createmacro=true;
-            macroCmd->addCommand( cmd );
+            KCommand *cmd = it.current()->setCounterCommand( c );
+            if ( cmd )
+            {
+                createmacro=true;
+                macroCmd->addCommand( cmd );
+            }
         }
-        }
-    if( createmacro)
-        m_doc->addCommand( macroCmd );
-    else
-        delete macroCmd;
+        if( createmacro)
+            m_doc->addCommand( macroCmd );
+        else
+            delete macroCmd;
+    }
 }
 
 void KWView::textSuperScript()
@@ -4196,7 +4232,8 @@ void KWView::slotFrameSetEditChanged()
 
     actionFormatDecreaseIndent->setEnabled(goodleftMargin && state);
 
-    actionFormatList->setEnabled(rw);
+    actionFormatBullet->setEnabled(rw);
+    actionFormatNumber->setEnabled(rw);
     actionFormatSuper->setEnabled(rw);
     actionFormatSub->setEnabled(rw);
     actionFormatParag->setEnabled(state);
@@ -4333,14 +4370,11 @@ void KWView::frameSelectedChanged()
     showFormat(format );
 
     const KoParagLayout * paragLayout=lst.first()->currentParagLayoutFormat();
+    KoParagCounter counter;
     if(paragLayout->counter)
-    {
-        KoParagCounter counter=*(paragLayout->counter);
-        showCounter( counter );
-    }
-    else
-        actionFormatList->setChecked( false );
-    showAlign(  paragLayout->alignment );
+        counter = *(paragLayout->counter);
+    showCounter( counter );
+    showAlign( paragLayout->alignment );
 }
 
 void KWView::docStructChanged(int _type)

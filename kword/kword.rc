@@ -160,7 +160,8 @@
   <Action name="format_alignright"/>
   <Action name="format_alignblock"/>
   <Separator/>
-  <Action name="format_list"/>
+  <Action name="format_number"/>
+  <Action name="format_bullet"/>
   <Separator/>
   <Action name="format_decreaseindent"/>
   <Action name="format_increaseindent"/>

@@ -399,6 +399,7 @@ public:
     KSpellConfig * getKSpellConfig() {return m_pKSpellConfig;}
 
 #ifndef NDEBUG
+    void printStyleDebug();
     void printDebug();
 #endif
 

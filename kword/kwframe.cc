@@ -2026,7 +2026,7 @@ int KWFormulaFrameSet::floatingFrameBaseline( int /*frameNum*/ )
 {
     if ( !frames.isEmpty() )
     {
-        return formula->baseline();
+        return m_doc->ptToLayoutUnitPixY( formula->baseline() );
     }
     return -1;
 }
