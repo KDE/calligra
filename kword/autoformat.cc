@@ -91,22 +91,46 @@ void KWAutoFormat::readConfig()
       if(doc.doctype().name() != "autocorrection") {
         //return;
       }
-      QDomElement de = doc.documentElement();
-      QDomNodeList nl = de.childNodes();
-      m_maxFindLength=nl.count();
-      for(uint i = 0; i < m_maxFindLength; i++) {
-          m_entries.insert( nl.item(i).toElement().attribute("find"), KWAutoFormatEntry(nl.item(i).toElement().attribute("replace")) );
+      QDomElement de=doc.documentElement();
+      QDomElement item = de.namedItem( "items" ).toElement();
+      if(!item.isNull())
+      {
+          QDomNodeList nl = item.childNodes();
+          m_maxFindLength=nl.count();
+          for(uint i = 0; i < m_maxFindLength; i++) {
+              m_entries.insert( nl.item(i).toElement().attribute("find"), KWAutoFormatEntry(nl.item(i).toElement().attribute("replace")) );
+          }
+      }
+
+      QDomElement upper = de.namedItem( "UpperCaseExceptions" ).toElement();
+      if(!upper.isNull())
+      {
+          QDomNodeList nl = upper.childNodes();
+          for(uint i = 0; i < nl.count(); i++)
+          {
+              upperCaseExceptions+= nl.item(i).toElement().attribute("exception");
+          }
+      }
+
+      QDomElement twoUpper = de.namedItem( "TwoUpperLetterExceptions" ).toElement();
+      if(!twoUpper.isNull())
+      {
+          QDomNodeList nl = twoUpper.childNodes();
+          for(uint i = 0; i < nl.count(); i++)
+          {
+              twoUpperLetterException+= nl.item(i).toElement().attribute("exception");
+          }
       }
     }
     xmlFile.close();
 
     buildMaxLen();
-
+    //compatibility with kword1.1
     if(config->hasKey( "UpperCaseExceptions" ) )
-        upperCaseExceptions=config->readListEntry( "UpperCaseExceptions" );
+        upperCaseExceptions+=config->readListEntry( "UpperCaseExceptions" );
 
     if(config->hasKey( "TwoUpperLetterExceptions"))
-        twoUpperLetterException=config->readListEntry( "TwoUpperLetterExceptions" );
+        twoUpperLetterException+=config->readListEntry( "TwoUpperLetterExceptions" );
     m_configRead = true;
 }
 
@@ -127,6 +151,10 @@ void KWAutoFormat::saveConfig()
     m_maxFindLength=0;
 
     QDomDocument doc("autocorrection");
+
+    QDomElement begin = doc.createElement( "Word" );
+    doc.appendChild( begin );
+
     QDomElement items;
     items = doc.createElement("items");
     QDomElement data;
@@ -139,7 +167,29 @@ void KWAutoFormat::saveConfig()
 
         m_maxFindLength=QMAX(m_maxFindLength,it.key().length());
     }
-    doc.appendChild(items);
+    begin.appendChild(items);
+
+    QDomElement upper;
+    upper = doc.createElement("UpperCaseExceptions");
+    for ( QStringList::Iterator it = upperCaseExceptions.begin(); it != upperCaseExceptions.end();++it )
+    {
+	data = doc.createElement("word");
+	data.setAttribute("exception",(*it) );
+	upper.appendChild(data);
+    }
+    begin.appendChild(upper);
+
+    QDomElement twoUpper;
+    twoUpper = doc.createElement("TwoUpperLetterExceptions");
+
+    for ( QStringList::Iterator it = twoUpperLetterException.begin(); it != twoUpperLetterException.end();++it )
+    {
+	data = doc.createElement("word");
+	data.setAttribute("exception",(*it) );
+	twoUpper.appendChild(data);
+    }
+    begin.appendChild(twoUpper);
+
     QFile f(locateLocal("data", "kword/autocorrect/"+klocale.languageList().front() + ".xml"));
     if(!f.open(IO_WriteOnly)) {
         kdDebug()<<"Error during saving...........\n";
@@ -150,9 +200,9 @@ void KWAutoFormat::saveConfig()
     f.close();
 
 
-    config->writeEntry( "UpperCaseExceptions",upperCaseExceptions );
+    //config->writeEntry( "UpperCaseExceptions",upperCaseExceptions );
 
-    config->writeEntry( "TwoUpperLetterExceptions",twoUpperLetterException);
+    //config->writeEntry( "TwoUpperLetterExceptions",twoUpperLetterException);
 
     config->sync();
 }

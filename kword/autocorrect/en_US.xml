@@ -1,4 +1,5 @@
 <!DOCTYPE autocorrection>
+<Word>
 <items>
  <item find="(C)" replace="©" />
  <item find="(R)" replace="®" />
@@ -1045,3 +1046,4 @@
  <item find="ytou" replace="you" />
  <item find="yuo" replace="you" />
 </items>
+</Word>
