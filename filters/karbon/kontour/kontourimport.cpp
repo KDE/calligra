@@ -85,15 +85,27 @@ void KontourImport::convert()
 	for( ; !b.isNull(); b = b.nextSibling().toElement() )
 	{       
 		if ( b.tagName() == "rectangle" )
-			{
-				int x = b.attribute( "x" ).toInt();
-				int y = b.attribute( "y" ).toInt();
-				int width = b.attribute( "width" ).toInt();
-				int height = b.attribute( "height" ).toInt();
-				m_document.append( new VRectangle( 0L, KoPoint( x, y ) , width, height ) );
-			}
-        }
-	
+		{
+			int x = b.attribute( "x" ).toInt();
+			int y = b.attribute( "y" ).toInt();
+			int width = b.attribute( "width" ).toInt();
+			int height = b.attribute( "height" ).toInt();
+			m_document.append( new VRectangle( 0L, KoPoint( x, y ) , width, height ) );
+		}
+		else
+		if ( b.tagName() == "ellipse" )
+		{
+			QDomElement object = b.namedItem( "gobject" ).toElement();
+			QDomElement matrix = object.namedItem( "matrix" ).toElement();
+			double left = ( b.attribute( "x" ).toDouble() + matrix.attribute( "dx" ).toInt() ) - ( b.attribute( "rx" ).toDouble() / 2 );
+			double right = left + b.attribute( "rx" ).toDouble();
+			double top = ( b.attribute( "y" ).toDouble() + matrix.attribute( "dy" ).toInt() ) - ( b.attribute( "ry" ).toDouble() / 2 );
+			double bottom = top + b.attribute( "ry" ).toDouble();
+			double height =  top - bottom;
+			double width = right - left; // Needs a check (sven)
+			m_document.append( new VEllipse( 0L, KoPoint( left, top ),  width, height ) );
+		}
+	}
 	
 	m_document.saveXML( outdoc );
 }
