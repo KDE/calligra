@@ -1470,7 +1470,7 @@ void KWCanvas::deleteTable( KWTableFrameSet *table )
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
-
+    emit currentFrameSetEditChanged();
     emit docStructChanged(Tables);
 }
 

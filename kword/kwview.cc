@@ -2664,6 +2664,7 @@ void KWView::updateButtons()
     actionTableDelCol->setEnabled( table );
     actionTableDelete->setEnabled( table );
     actionTableUngroup->setEnabled( table );
+    frameSelectedChanged();
 
 }
 
