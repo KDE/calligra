@@ -77,7 +77,6 @@ void MSWordImport::prepareDocument( QDomDocument& mainDocument, QDomElement& mai
     elementDoc=mainDocument.createElement("DOC");
     elementDoc.setAttribute("editor","KWord's MS Word Import Filter");
     elementDoc.setAttribute("mime","application/x-kword");
-    // TODO: We claim to be syntax version 2, but we should verify that it is also true.
     elementDoc.setAttribute("syntaxVersion",2);
     mainDocument.appendChild(elementDoc);
 

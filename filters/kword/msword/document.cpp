@@ -138,6 +138,7 @@ void Document::sectionStart()
 {
     m_sectionNumber++;
 
+    kdDebug() << k_funcinfo << m_sectionNumber << " dmOrientPage=" << m_parser->currentSep()->dmOrientPage << endl;
     if ( m_sectionNumber == 1 )
     {
         // KWord doesn't support a different paper format per section.
@@ -156,7 +157,7 @@ void Document::sectionStart()
         //elementPaper.setAttribute("height",KoPageFormat::height(paperFormat,paperOrientation) * 72.0 / 25.4);
         elementPaper.setAttribute("width", (double)sep->xaPage / 20.0);
         elementPaper.setAttribute("height", (double)sep->yaPage / 20.0);
-        elementPaper.setAttribute("orientation", sep->dmOrientPage == 1 ? PG_LANDSCAPE : PG_PORTRAIT );
+        elementPaper.setAttribute("orientation", sep->dmOrientPage == 2 ? PG_LANDSCAPE : PG_PORTRAIT );
         elementPaper.setAttribute("columns",1); // TODO
         elementPaper.setAttribute("columnspacing", (double)sep->dxaColumns / 20.0);
         elementPaper.setAttribute("hType",0); // TODO
