@@ -28,6 +28,7 @@
 #include "footnote.h"
 #include "font.h"
 
+#include <kdebug.h>
 #include <komlMime.h>
 
 #include <strstream>
@@ -264,7 +265,7 @@ void KWParag::insertAnchor( unsigned int _pos, KWCharAnchor *_anchor )
     text.insert( _pos, _anchor );
 
     // The whole point of an anchor is that something else refers to it...thus
-    // we update the anchored state. 
+    // we update the anchored state.
     _anchor->setAnchored( true );
 }
 
@@ -331,7 +332,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 	    }
 	    continue;
 	}
-	
+
 	KWFormat *format = 0;
 	if ( flags == KWFormat::All )
 	    format = document->getFormatCollection()->getFormat( _format );
@@ -442,10 +443,11 @@ void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    }
 	    paragLayout->load( parser, lst );
 	} else
-	    cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;
+	    kdError(32001) << "Unknown tag '" << tag.c_str() <<
+			"' in PARAGRAPH" << endl;
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return;
 	}
     }
@@ -497,7 +499,7 @@ void KWParag::applyStyle( QString _style )
 
 	for ( unsigned int i = 0; i < getTextLen(); i++ ) {
 	    f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		
+
 	    f = nf;
 	    bool forgetIt = FALSE;
 	    if ( f2->getUserFont()->getFontName() != of.getUserFont()->getFontName() ) {
@@ -524,7 +526,7 @@ void KWParag::applyStyle( QString _style )
 		f.setVertAlign( f2->getVertAlign() );
 	    if ( f2->getItalic() != of.getItalic() )
 		f.setItalic( f2->getItalic() );
-		
+
 	    freeChar( text.data()[ i ], document );
 	    KWFormat *format = document->getFormatCollection()->getFormat( f );
 	    KWCharFormat *fm = new KWCharFormat( format );
@@ -684,7 +686,7 @@ void KWParag::correctFormat( KWParag *newParag, KWParag *oldParag )
 	    continue;
 	} else
 	    f = dynamic_cast<KWCharFormat*>( c.attrib )->getFormat();
-	
+
 	if ( f ) {
 	    nf = *f;
 	    if ( f->getColor() == pfOld.getColor() )

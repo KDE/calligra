@@ -26,6 +26,7 @@
 #include <string.h>
 #include <assert.h>
 
+#include <kdebug.h>
 #include <komlMime.h>
 #include <koStream.h>
 #include <kword_utils.h>
@@ -349,7 +350,7 @@ bool KWString::remove( unsigned int _pos, unsigned int _len )
 	resize( _len_ - _len, false );
 
 	cache.remove( _pos, _len );
-	
+
 	return true;
     }
     return false;
@@ -373,7 +374,7 @@ KWChar* KWString::split( unsigned int _pos )
 
 /*================================================================*/
 QString KWString::toString( bool cached )
-{	
+{
     if ( cached )
 	return cache;
     return toString( 0, size() );
@@ -499,7 +500,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 		else if ( ( *it ).m_strName == "len" )
 		    __len = atoi( ( *it ).m_strValue.c_str() );
 	    }
-	
+
 	    if ( _load ) {
 		switch ( _id ) {
 		case ID_KWCharFormat: {
@@ -594,9 +595,8 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 			    if ( var )
 				var->load( name, tag, lst );
 			}
-
 			if ( !parser.close( tag ) ) {
-			    cerr << "ERR: Closing Child" << endl;
+			    kdError(32001) << "Closing " << tag.c_str() << endl;
 			    return;
 			}
 		    }
@@ -622,9 +622,8 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 			    if ( fn )
 				fn->load( name, tag, parser, lst );
 			}
-
 			if ( !parser.close( tag ) ) {
-			    cerr << "ERR: Closing Child" << endl;
+			    kdError(32001) << "Closing " << tag.c_str() << endl;
 			    return;
 			}
 		    }
@@ -632,78 +631,77 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 		    doc->getFootNoteManager().insertFootNoteInternal( fn );
 		} break;
 		case ID_KWCharAnchor: {
-                    string attribute = "";
-                    string type = "";
-                    string instance = "";
-                    KWCharAnchor *anchor = NULL;
+		    string attribute = "";
+		    string type = "";
+		    string instance = "";
+		    KWCharAnchor *anchor = NULL;
 
 		    while ( parser.open( 0L, tag ) ) {
-			KOMLParser::parseTag( tag.c_str(), name, lst );
-
-			if ( name == "ANCHOR" ) {
+		    	KOMLParser::parseTag( tag.c_str(), name, lst );
+		    	if ( name == "ANCHOR" ) {
 			    KOMLParser::parseTag( tag.c_str(), name, lst );
 			    vector<KOMLAttrib>::const_iterator it = lst.begin();
 			    for ( ; it != lst.end(); it++ ) {
 				attribute = it->m_strName;
 				if ( attribute == "type" ) {
-	                            type = it->m_strValue;
+				    type = it->m_strValue;
 				}
-                                else if ( attribute == "instance" ) {
-	                            instance = it->m_strValue;
+				else if ( attribute == "instance" ) {
+				    instance = it->m_strValue;
 				}
-                                else {
-                                    cerr << "Unknown attrib 'ANCHOR: " << attribute << "'" << endl;
-                                }
-		            }
+				else {
+				    kdError(32001) << "Unknown " << name.c_str() <<
+						" attrib '" << attribute.c_str() << "'" << endl;
+				}
+			    }
 
-                            // Create an anchor object of the right type.
-
-                            if ( type == "grpMgr" ) {
-                                if ( instance != "" ) {
-                                    KWGroupManager *group = new KWGroupManager( doc );
-	                            group->setName( QString( instance.c_str() ) );
-	                            group->setAnchored( true );
-		                    doc->addGroupManager( group );
-                                    anchor = group;
-                                }
-                                else {
-                                    cerr << "Missing attrib 'ANCHOR: instance" << endl;
-                                }
-                            }
-                            else {
-                                cerr << "Unknown attrib value 'ANCHOR: type=" << type << "'" << endl;
-                            }
-		        }
-		        else {
-		            cerr << "Unknown tag '" << tag << "' in FORMAT" << endl;
-		        }
-
+			    // Create an anchor object of the right type.
+			    if ( type == "grpMgr" ) {
+			    	if ( instance != "" ) {
+			    	    KWGroupManager *group = new KWGroupManager( doc );
+			    	    group->setName( QString( instance.c_str() ) );
+			    	    group->setAnchored( true );
+			    	    doc->addGroupManager( group );
+			    	    anchor = group;
+			    	}
+			    	else {
+			    	    kdError(32001) << "Missing " << name.c_str() <<
+			    			" attrib: instance" << endl;
+			    	}
+			    }
+			    else {
+			        kdError(32001) << "Unknown " << name.c_str() <<
+			    		" attrib value type=" << type.c_str() << endl;
+			    }
+			}
+			else {
+			    kdError(32001) << "Unknown tag '" << name.c_str() <<
+					"' in " << tag.c_str() << endl;
+			}
 			if ( !parser.close( tag ) ) {
-			    cerr << "ERR: Closing Child" << endl;
+			    kdError(32001) << "Closing " << tag.c_str() << endl;
 			    return;
 			}
-		    }
+			}
 
-                    // If we managed to find a valid anchor, store it.
-                    if ( anchor )
-                    {
-		        freeChar( _data_[ __pos ], doc, allowRemoveFn );
-		        _data_[ __pos ].c = KWSpecialChar;
-		        _data_[ __pos ].attrib = anchor;
-                    }
+			// If we managed to find a valid anchor, store it.
+			if ( anchor ) {
+			    freeChar( _data_[ __pos ], doc, allowRemoveFn );
+			    _data_[ __pos ].c = KWSpecialChar;
+			    _data_[ __pos ].attrib = anchor;
+			}
 		} break;
 		default: break;
 		}
 		_load = false;
 	    }
-	}
+    	}
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return;
 	}
     }
-
     // build cache
     toString( FALSE );
 }
@@ -1016,7 +1014,7 @@ QString KWString::decoded()
     // When encoding the run-time form of text to its stored form,
     // be sure to do the conversion for "&amp;" to "&" first to avoid
     // accidentally converting user text into one of the other escape
-    // sequences. 
+    // sequences.
     //
     // Note that the conversion for "&amp;" allows for coexistance
     // with QDom-based input filters.
@@ -1060,9 +1058,9 @@ void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
 	    delete _char.attrib;
 	} break;
 	case ID_KWCharAnchor: {
-            KWCharFootNote *anchor = (KWCharFootNote *)_char.attrib;
+		KWCharFootNote *anchor = (KWCharFootNote *)_char.attrib;
 	    if ( allowRemoveFn ) {
-		cerr << "TBD: implement delete table" << endl;
+		kdError(32001) << "TBD: implement delete table" << endl;
 	    }
 	    delete _char.attrib;
 	} break;

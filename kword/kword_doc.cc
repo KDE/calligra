@@ -27,6 +27,7 @@
 #include <qpixmap.h>
 #include <qfileinfo.h>
 
+#include <kdebug.h>
 #include <komlMime.h>
 #include <koStream.h>
 #include <komlParser.h>
@@ -825,7 +826,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 
     // DOC
     if ( !parser.open( "DOC", tag ) ) {
-	cerr << "Missing DOC" << endl;
+	kdError(32001) << "Missing DOC" << endl;
 	return FALSE;
     }
 
@@ -834,7 +835,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     for( ; it != lst.end(); it++ ) {
 	if ( ( *it ).m_strName == "mime" ) {
 	    if ( ( *it ).m_strValue != "application/x-kword" ) {
-		cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
+	        kdError(32001) << "Unknown mime type " << ( *it ).m_strValue.c_str() << endl;
 		return FALSE;
 	    }
 	} else if ( ( *it ).m_strName == "url" ) {
@@ -877,10 +878,10 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 		    }
 		    fs->load( parser, lst );
 		} else
-		    cerr << "Unknown tag '" << tag << "' in EMBEDDED" << endl;
+	            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in EMBEDDED" << endl;
 
 		if ( !parser.close( tag ) ) {
-		    cerr << "ERR: Closing Child" << endl;
+		    kdError(32001) << "Closing " << tag.c_str() << endl;
 		    return FALSE;
 		}
 	    }
@@ -949,7 +950,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 		else if ( ( *it ).m_strName == "inchColumnspc" )
 		    __columns.inchColumnSpacing = atof( ( *it ).m_strValue.c_str() );
 		else
-		    cerr << "Unknown attrib PAPER:'" << ( *it ).m_strName << "'" << endl;
+                    kdError(32001) << "Unknown attrib 'PAPER:" << ( *it ).m_strName.c_str() << "'" << endl;
 	    }
 
 	    // PAPERBORDERS, HEAD, FOOT
@@ -1000,14 +1001,14 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 			else if ( ( *it ).m_strName == "mmBottom" )
 			    __pgLayout.mmBottom = atof( ( *it ).m_strValue.c_str() );
 			else
-			    cerr << "Unknown attrib 'PAPERBORDERS:" << ( *it ).m_strName << "'" << endl;
+	                    kdError(32001) << "Unknown attrib 'PAPERBORDERS:" << ( *it ).m_strName.c_str() << "'" << endl;
 		    }
 		}
 		else
-		    cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
+	            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in PAPER" << endl;
 
 		if ( !parser.close( tag ) ) {
-		    cerr << "ERR: Closing Child" << endl;
+		    kdError(32001) << "Closing " << tag.c_str() << endl;
 		    return FALSE;
 		}
 	    }
@@ -1072,7 +1073,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	    while ( parser.open( 0L, tag ) ) {
 		QString key;
 		QString n = QString::null;
-		
+
 		KOMLParser::parseTag( tag.c_str(), name, lst );
 		if ( name == "KEY" ) {
 		    KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -1083,15 +1084,15 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 			else if ( ( *it ).m_strName == "name" )
 			    n = ( *it ).m_strValue.c_str();
 			else
-			    cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
+	                    kdError(32001) << "Unknown attrib 'KEY:" << ( *it ).m_strName.c_str() << "'" << endl;
 		    }
 		    pixmapNames.append( n );
 		    pixmapKeys.append( key );
 		} else
-		    cerr << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
+	            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in PIXMAPS" << endl;
 
 		if ( !parser.close( tag ) ) {
-		    cerr << "ERR: Closing Child" << endl;
+		    kdError(32001) << "Closing " << tag.c_str() << endl;
 		    return FALSE;
 		}
 	    }
@@ -1113,20 +1114,20 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 			    contents->addParagName( ( *it ).m_strValue.c_str() );
 		    }
 		} else
-		    cerr << "Unknown tag '" << tag << "' in CPARAGS" << endl;
+	            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in CPARAGS" << endl;
 
 		if ( !parser.close( tag ) ) {
-		    cerr << "ERR: Closing Child" << endl;
+		    kdError(32001) << "Closing " << tag.c_str() << endl;
 		    return FALSE;
 		}
 	    }
 	}
 
 	else
-	    cerr << "Unknown tag '" << tag << "' in the DOCUMENT" << endl;
+	    kdError(32001) << "Unknown tag '" << tag.c_str() << "' in the DOCUMENT" << endl;
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return FALSE;
 	}
     }
@@ -1329,10 +1330,10 @@ void KWordDocument::loadStyleTemplates( KOMLParser& parser, vector<KOMLAttrib>& 
 	    pl->load( parser, lst );
 	    addStyleTemplate( pl );
 	} else
-	    cerr << "Unknown tag '" << tag << "' in STYLES" << endl;
+	    kdError(32001) << "Unknown tag '" << tag.c_str() << "' in STYLES" << endl;
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return;
 	}
     }
@@ -1445,10 +1446,10 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    default: break;
 	    }
 	} else
-	    cerr << "Unknown tag '" << tag << "' in FRAMESETS" << endl;
+	    kdError(32001) << "Unknown tag '" << tag.c_str() << "' in FRAMESETS" << endl;
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return;
 	}
     }
@@ -1618,7 +1619,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 	out << otag << "<EMBEDDED>" << endl;
 
 	KWordChild* curr = (KWordChild*)chl.current();
-	
+
 	curr->save( out );
 
 	out << otag << "<SETTINGS>" << endl;
@@ -1663,7 +1664,7 @@ bool KWordDocument::completeSaving( KoStore *_store )
 	QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
         if ( !isStoredExtern() )
           u2.prepend( url().url() + "/" );
-	
+
 	if ( _store->open( u2 ) ) {
 	    ostorestream out( _store );
 	    writeImageToStream( out, *it.current(), format );
@@ -2981,7 +2982,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 	string name;
 
 	if ( !parser.open( "PARAGRAPHS", tag ) ) {
-	    cerr << "Missing PARAGRAPHS" << endl;
+	    kdError(32001) << "Missing PARAGRAPHS" << endl;
 	    return;
 	}
 
@@ -2997,9 +2998,9 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 		parag2 = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ),
 				      this, 0L, 0L, defaultParagLayout, FALSE );
 		parag2->load( parser, lst );
-		
+
 		KWParag::correctFormat( _fc->getParag(), parag2 );
-		
+
 		if ( !firstParag )
 		    firstParag = parag2;
 		parag2->setPrev( parag );
@@ -4118,7 +4119,7 @@ bool KWordDocument::canRemovePage( int num, KWFrame *f )
 		return FALSE;
 	}
     }
-	
+
     return TRUE;
 }
 
@@ -4147,7 +4148,7 @@ void KWordDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHe
 	_layout.inchRight = zoomIt( _layout.inchRight );
 	_layout.inchTop = zoomIt( _layout.inchTop );
 	_layout.inchBottom = zoomIt( _layout.inchBottom );
-	
+
 	_cl.ptColumnSpacing = zoomIt( _cl.ptColumnSpacing );
 	_cl.mmColumnSpacing = zoomIt( _cl.mmColumnSpacing );
 	_cl.inchColumnSpacing = zoomIt( _cl.inchColumnSpacing );

@@ -28,6 +28,7 @@
 #include "format.h"
 #include "font.h"
 
+#include <kdebug.h>
 #include <komlMime.h>
 #include <koPageLayoutDia.h>
 
@@ -1130,10 +1131,10 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    _frame->setNewFrameBehaviour( newFrameBehaviour);
 	    frames.append( _frame );
 	} else
-	    cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
+            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in FRAMESET" << endl;
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return;
 	}
     }
@@ -1484,10 +1485,10 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
 	    frames.append( _frame );
 	} else
-	    cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
+            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in FRAMESET" << endl;
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return;
 	}
     }
@@ -1695,10 +1696,10 @@ void KWPartFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
 	    frames.append( _frame );
 	} else
-	    cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
+            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in FRAMESET" << endl;
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return;
 	}
     }
@@ -2022,10 +2023,10 @@ void KWFormulaFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
 	    frames.append( _frame );
 	} else
-	    cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
+            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in FRAMESET" << endl;
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return;
 	}
     }
