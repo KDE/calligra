@@ -82,6 +82,11 @@ public:
 	KoPoint derive( double t ) const;
 
 	/**
+	 * The same as derive() but normalized.
+	 */
+	KoPoint tangent( double t ) const;
+
+	/**
 	 * In case you need the point and the derivative at the same time
 	 * for 0 <= t <= 1, use this function since it is more efficient.
 	 * First KoPoint is the point, the second KoPoint is the derivative.

@@ -155,6 +155,17 @@ VSegment::derive( double t ) const
 	return 3 * q[0];
 }
 
+KoPoint
+VSegment::tangent( double t ) const
+{
+	KoPoint p( derive( t ) );
+
+	const double norm =
+		sqrt( p.x() * p.x() + p.y() * p.y() );
+
+	return norm ? p * ( 1.0 / norm ) : KoPoint( 0.0, 0.0 );
+}
+
 void
 VSegment::pointAndDerive( double t, KoPoint& p, KoPoint& der ) const
 {

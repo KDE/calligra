@@ -30,13 +30,6 @@ private:
 	 */
 	double parameter( const VSegment& segment ) const;
 
-	/**
-	 * Rounds the corner of the two segments "*segmentList.current()" and "next".
-	 * The result is appended to newList.
-	 */
-	void roundCorner(
-		VSegmentList& segmentList, const VSegment& next, VSegmentList& newList ) const;
-
 	/// The "radius" of the round corners.
 	double m_radius;
 };
