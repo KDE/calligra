@@ -7158,8 +7158,8 @@ void KPresenterView::testAndCloseAllTextObjectProtectedContent()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit && edit->kpTextObject()->isProtectContent())
     {
-        kdDebug()<<" KPresenterView::testAndCloseAllTextObjectProtectedContent()\n";
-        m_pKPresenterDoc->terminateEditing( edit->kpTextObject());
+        m_canvas->setToolEditMode( TEM_MOUSE );
+        m_canvas->deSelectAllObj();
     }
 
 }
