@@ -606,7 +606,10 @@ bool KPresenterDocIface::moveHorizontalHelpLine( int index, double newPos)
 {
     if ( index >= doc->horizHelplines().count() )
         return false;
-    doc->updateHorizHelpline( index, newPos);
+    if( newPos < 0 )
+        doc->removeHorizHelpline( index );
+    else
+        doc->updateHorizHelpline( index, newPos);
     doc->repaint( false );
     return true;
 }
@@ -615,7 +618,10 @@ bool KPresenterDocIface::moveVerticalHelpLine( int index, double newPos)
 {
     if ( index >= doc->vertHelplines().count() )
         return false;
-    doc->updateVertHelpline( index, newPos);
+    if( newPos < 0 )
+        doc->removeVertHelpline( index );
+    else
+        doc->updateVertHelpline( index, newPos);
     doc->repaint( false );
     return true;
 }
