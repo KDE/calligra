@@ -14,7 +14,7 @@
 VCToolRoundRect* VCToolRoundRect::s_instance = 0L;
 
 VCToolRoundRect::VCToolRoundRect( KarbonPart* part )
-	: VTool( part )
+	: VShapeTool( part )
 {
 	// create config dialog:
 	m_dialog = new VCDlgRoundRect();

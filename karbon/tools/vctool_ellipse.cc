@@ -14,7 +14,7 @@
 VCToolEllipse* VCToolEllipse::s_instance = 0L;
 
 VCToolEllipse::VCToolEllipse( KarbonPart* part )
-	: VTool( part )
+	: VShapeTool( part )
 {
 	// create config dialog:
 	m_dialog = new VCDlgEllipse();

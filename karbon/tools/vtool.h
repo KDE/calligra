@@ -36,7 +36,7 @@ public:
 	KarbonPart* part() const { return m_part; }
 
 protected:
-	inline void recalcCoords();
+	virtual inline void recalcCoords();
 
 	// states:
 	bool m_isDragging;
@@ -60,7 +60,8 @@ private:
 	KarbonPart* m_part;
 };
 
-inline void
+
+void
 VTool::recalcCoords()
 {
 	// calculate radius and angle:
@@ -111,5 +112,4 @@ VTool::recalcCoords()
 		}
 	}
 }
-
 #endif

@@ -14,7 +14,7 @@
 VCToolPolygon* VCToolPolygon::s_instance = 0L;
 
 VCToolPolygon::VCToolPolygon( KarbonPart* part )
-	: VTool( part, true )
+	: VShapeTool( part, true )
 {
 	// create config dialog:
 	m_dialog = new VCDlgPolygon();

@@ -14,7 +14,7 @@
 VCToolSinus* VCToolSinus::s_instance = 0L;
 
 VCToolSinus::VCToolSinus( KarbonPart* part )
-	: VTool( part )
+	: VShapeTool( part )
 {
 	// create config dialog:
 	m_dialog = new VCDlgSinus();

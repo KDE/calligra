@@ -5,14 +5,14 @@
 #ifndef __VCTOOLPOLYGON_H__
 #define __VCTOOLPOLYGON_H__
 
-#include "vtool.h"
+#include "vshapetool.h"
 
 class KarbonPart;
 class VCDlgPolygon;
 
 // A singleton state to create a polygon.
 
-class VCToolPolygon : public VTool
+class VCToolPolygon : public VShapeTool
 {
 public:
 	virtual ~VCToolPolygon();

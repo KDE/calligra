@@ -14,7 +14,7 @@
 VCToolStar* VCToolStar::s_instance = 0L;
 
 VCToolStar::VCToolStar( KarbonPart* part )
-	: VTool( part, true )
+	: VShapeTool( part, true )
 {
 	// create config dialog:
 	m_dialog = new VCDlgStar();

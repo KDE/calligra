@@ -6,14 +6,14 @@
 #ifndef __VCTOOLRECTANGLE_H__
 #define __VCTOOLRECTANGLE_H__
 
-#include "vtool.h"
+#include "vshapetool.h"
 
 class KarbonPart;
 class VCDlgRectangle;
 
 // A singleton state to create a rectangle.
 
-class VCToolRectangle : public VTool
+class VCToolRectangle : public VShapeTool
 {
 public:
 	virtual ~VCToolRectangle();

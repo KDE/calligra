@@ -44,8 +44,8 @@ VMToolSelect::drawTemporaryObject(
 	painter.setRasterOp( Qt::NotROP );
    // already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty()
-		&& part()->selection().getFirst()->boundingBox( view->zoomFactor() ).contains( p )
-	) // && ( m_TransformState != NoTransform ||
+		&& ( m_TransformState != NoTransform ||
+			part()->selection().getFirst()->boundingBox( view->zoomFactor() ).contains( p ) ) )
 //		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
 	{
 		if( m_TransformState != Moving )
@@ -108,8 +108,8 @@ VMToolSelect::createCmd( double x, double y, double d1, double d2 )
 			QRect(
 				qRound( m_view->zoomFactor() * x ),
 				qRound( m_view->zoomFactor() * y ),
-				qRound( m_view->zoomFactor() * ( x + d1) ),
-				qRound( m_view->zoomFactor() * ( y + d2 ) ) ).normalize(),
+				qRound( m_view->zoomFactor() * ( d1) ),
+				qRound( m_view->zoomFactor() * ( d2 ) ) ).normalize(),
 			m_view->zoomFactor(),
 			true );
 	}

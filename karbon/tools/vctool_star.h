@@ -6,14 +6,14 @@
 #ifndef __VCTOOLSTAR_H__
 #define __VCTOOLSTAR_H__
 
-#include "vtool.h"
+#include "vshapetool.h"
 
 class KarbonPart;
 class VCDlgStar;
 
 // A singleton state to create a star
 
-class VCToolStar : public VTool
+class VCToolStar : public VShapeTool
 {
 public:
 	virtual ~VCToolStar();

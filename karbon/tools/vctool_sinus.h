@@ -6,14 +6,14 @@
 #ifndef __VCTOOLSINUS_H__
 #define __VCTOOLSINUS_H__
 
-#include "vtool.h"
+#include "vshapetool.h"
 
 class KarbonPart;
 class VCDlgSinus;
 
 // A singleton state to create a sinus
 
-class VCToolSinus : public VTool
+class VCToolSinus : public VShapeTool
 {
 public:
 	virtual ~VCToolSinus();

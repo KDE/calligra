@@ -6,14 +6,14 @@
 #ifndef __VCTOOLROUNDRECT_H__
 #define __VCTOOLROUNDRECT_H__
 
-#include "vtool.h"
+#include "vshapetool.h"
 
 class KarbonPart;
 class VCDlgRoundRect;
 
 // A singleton state to create a rectangle.
 
-class VCToolRoundRect : public VTool
+class VCToolRoundRect : public VShapeTool
 {
 public:
 	virtual ~VCToolRoundRect();

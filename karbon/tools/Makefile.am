@@ -28,7 +28,8 @@ noinst_HEADERS = \
 	vmcmd_transform.h \
 	vmtool_handle.h \
 	vmtool_select.h \
-	vtool.h 
+	vtool.h \
+	vshapetool.h 
 
 libkarbontools_la_SOURCES = \
 	vccmd_ellipse.cc \
@@ -51,7 +52,8 @@ libkarbontools_la_SOURCES = \
 	vmcmd_transform.cc \
 	vmtool_handle.cc \
 	vmtool_select.cc \
-	vtool.cc 
+	vtool.cc \
+	vshapetool.cc 
 
 libkarbontools_la_LIBADD = \
 	../ui/libkarbonui.la

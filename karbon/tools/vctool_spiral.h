@@ -6,14 +6,14 @@
 #ifndef __VCTOOLSPIRAL_H__
 #define __VCTOOLSPIRAL_H__
 
-#include "vtool.h"
+#include "vshapetool.h"
 
 class KarbonPart;
 class VCDlgSpiral;
 
 // A singleton state to create a spiral.
 
-class VCToolSpiral : public VTool
+class VCToolSpiral : public VShapeTool
 {
 public:
 	virtual ~VCToolSpiral();

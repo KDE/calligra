@@ -6,14 +6,14 @@
 #ifndef __VCTOOLELLIPSE_H__
 #define __VCTOOLELLIPSE_H__
 
-#include "vtool.h"
+#include "vshapetool.h"
 
 class KarbonPart;
 class VCDlgEllipse;
 
 // A singleton state to create an ellipse
 
-class VCToolEllipse : public VTool
+class VCToolEllipse : public VShapeTool
 {
 public:
 	virtual ~VCToolEllipse();

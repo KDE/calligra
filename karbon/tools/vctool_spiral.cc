@@ -14,7 +14,7 @@
 VCToolSpiral* VCToolSpiral::s_instance = 0L;
 
 VCToolSpiral::VCToolSpiral( KarbonPart* part )
-	: VTool( part, true )
+	: VShapeTool( part, true )
 {
 	// create config dialog:
 	m_dialog = new VCDlgSpiral();

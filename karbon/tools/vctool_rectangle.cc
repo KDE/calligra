@@ -14,7 +14,7 @@
 VCToolRectangle* VCToolRectangle::s_instance = 0L;
 
 VCToolRectangle::VCToolRectangle( KarbonPart* part )
-	: VTool( part )
+	: VShapeTool( part )
 {
 	// create config dialog:
 	m_dialog = new VCDlgRectangle();
