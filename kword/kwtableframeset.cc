@@ -1093,7 +1093,6 @@ void KWTableFrameSet::deleteRow( unsigned int row, RemovedRow &rr, bool _recalc)
     removeRowVector(row); 
     m_rows -= rowspan;
     m_rowArray.resize( m_rows );
-    printArrayDebug();
     validate();
     
     if ( _recalc )
@@ -1190,8 +1189,6 @@ void KWTableFrameSet::insertNewRow( uint idx, bool recalc, bool _removeable)
             break;              // stop at pageBreak.
         }
     }
-
-//    printArrayDebug();
 
     for ( MarkedIterator cell(this); cell; ++cell) {
         if ( cell->firstRow() >= idx ) { // move all cells beneath the new row.
@@ -1291,7 +1288,6 @@ void KWTableFrameSet::deleteCol(uint col, RemovedColumn &rc)
     m_cols--; 
     rc.m_initialized = true;
 
-    printArrayDebug();
     validate();
     recalcCols();
     recalcRows();
@@ -1308,8 +1304,6 @@ void KWTableFrameSet::reInsertCol(RemovedColumn &rc)
         tmp++;
     }
 
-    printArrayDebug();
-
     // if a cell starts after the column we are inserting, it 
     // must be moved to the right, except if it is going to 
     // occury the reinserted column also.
@@ -1322,8 +1316,6 @@ void KWTableFrameSet::reInsertCol(RemovedColumn &rc)
     }
     insertEmptyColumn(rc.m_index);
     m_cols++;
-
-    printArrayDebug();
 
     for(uint i = 0; i < m_rows; ++i) {
         bool removed = rc.m_removed[i];
@@ -1340,8 +1332,6 @@ void KWTableFrameSet::reInsertCol(RemovedColumn &rc)
             addCell(cell);
         }
     }
-
-   printArrayDebug();
 
     validate();
     finalize();
@@ -1499,8 +1489,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
             return 0L;
     }
 
-    printArrayDebug();
-
     Cell *cell=getCell(row,col);
     int rowsDiff = intoRows - cell->rowSpan();
     int colsDiff = ((int) intoCols) - cell->colSpan();
@@ -1550,8 +1538,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
         //m_cols += colsDiff;
     }
 
-    printArrayDebug();
-
     // adjust cellspan and rowspan on other cells.
     for (CheckedIter i(this); i ; ++i) {
         if(cell == i) continue;
@@ -1576,8 +1562,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
         if ( rowsDiff > 0 || colsDiff > 0 ) // something changed?
             addCell( i ); // update arrays
     }
-
-    printArrayDebug();
 
     int i=0;
     KWFrame *firstFrame = cell->frame(0);
@@ -1634,11 +1618,8 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     if(c < 1)  c=1;
     cell->setColSpan(c);
 
-    printArrayDebug();
-
     position(cell);
     addCell(cell);
-    printArrayDebug();
     validate();
     firstFrame->setSelected(true);
     firstFrame->createResizeHandles();
@@ -1671,7 +1652,7 @@ void KWTableFrameSet::validate()
                       kdDebug(32004) << "at row:  "<< i << " col: "<< j << " cell: "<<  str << endl;
                       kdDebug(32004) << cell->firstRow() << " " << cell->firstCol() << " " << cell->rowSpan()
                            << " " << cell->colSpan() << endl;
-                      printArrayDebug();
+                      //printArrayDebug();
                   } 
              }
         }
