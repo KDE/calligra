@@ -194,72 +194,68 @@ void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleS
     ext.setHeight(KoUnit::parseValue( element.attribute( "svg:height" ) ) );
     kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
     if( animation)
+    {
+        kdDebug()<<" load animation style **************************************\n";
+        QString effectStr = animation->attribute("presentation:effect");
+        QString dir = animation->attribute("presentation:direction");
+        int effVal=0;
+
+        kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
+        if (effectStr=="fade")
         {
-            kdDebug()<<" load animation style **************************************\n";
-            QString effect = animation->attribute("presentation:effect");
-            QString dir = animation->attribute("presentation:direction");
-            int effVal=0;
-
-            kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
-            if (effect=="fade")
-                {
-                    if (dir=="from-right")
-                        effVal=10;          // EF_WIPE_RIGHT
-                    else if (dir=="from-left")
-                        effVal=9;           // EF_WIPE_LEFT
-                    else if (dir=="from-top")
-                        effVal=11;          // EF_WIPE_TOP
-                    else if (dir=="from-bottom")
-                        effVal=12;          // EF_WIPE_BOTTOM
-                    else
-                        return;
-                }
-            else if (effect=="move")
-                {
-                    if (dir=="from-right")
-                        effVal=1;           // EF_COME_RIGHT
-                    else if (dir=="from-left")
-                        effVal=2;           // EF_COME_LEFT
-                    else if (dir=="from-top")
-                        effVal=3;           // EF_COME_TOP
-                    else if (dir=="from-bottom")
-                        effVal=4;           // EF_COME_BOTTOM
-                    else if (dir=="from-upper-right")
-                        effVal=5;           // EF_COME_RIGHT_TOP
-                    else if (dir=="from-lower-right")
-                        effVal=6;           // EF_COME_RIGHT_BOTTOM
-                    else if (dir=="from-upper-left")
-                        effVal=7;           // EF_COME_LEFT_TOP
-                    else if (dir=="from-lower-left")
-                        effVal=8;           // EF_COME_LEFT_BOTTOM
-                    else
-                        return;
-                }
+            if (dir=="from-right")
+                effect = EF_WIPE_RIGHT;
+            else if (dir=="from-left")
+                effect = EF_WIPE_LEFT;
+            else if (dir=="from-top")
+                effect=  EF_WIPE_TOP;
+            else if (dir=="from-bottom")
+                effect = EF_WIPE_BOTTOM;
             else
-                return;                 // sorry, no more supported effects :(
-
-
-            effect=static_cast<Effect>(effVal); //todo fixme
-
-#if 0
-            // sound effect
-            QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
-            if (!origSoundEff.isNull())
-                {
-                    QString soundUrl = storeSound(origSoundEff, sound, doc);
-
-                    if (!soundUrl.isNull())
-                        {
-                            QDomElement pseElem = doc.createElement("APPEARSOUNDEFFECT");
-                            pseElem.setAttribute("appearSoundEffect", 1);
-                            pseElem.setAttribute("appearSoundFileName", soundUrl);
-                            
-                            e.appendChild(pseElem);
-                        }
-                }
-            
-#endif       
+                kdDebug()<<" not supported :"<<effectStr<<endl;
         }
+        else if (effectStr=="move")
+        {
+            if (dir=="from-right")
+                effect = EF_COME_RIGHT;
+            else if (dir=="from-left")
+                effect = EF_COME_LEFT;
+            else if (dir=="from-top")
+                effect = EF_COME_TOP;
+            else if (dir=="from-bottom")
+                effect = EF_COME_BOTTOM;
+            else if (dir=="from-upper-right")
+                effect = EF_COME_RIGHT_TOP;
+            else if (dir=="from-lower-right")
+                effect = EF_COME_RIGHT_BOTTOM;
+            else if (dir=="from-upper-left")
+                effect = EF_COME_LEFT_TOP;
+            else if (dir=="from-lower-left")
+                effect = EF_COME_LEFT_BOTTOM;
+            else
+                kdDebug ()<<" not supported :"<<effectStr<<endl;
+        }
+        else
+            kdDebug()<<" not supported :"<<effectStr<<endl;
+#if 0
+        // sound effect
+        QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
+        if (!origSoundEff.isNull())
+        {
+            QString soundUrl = storeSound(origSoundEff, sound, doc);
+
+            if (!soundUrl.isNull())
+            {
+                QDomElement pseElem = doc.createElement("APPEARSOUNDEFFECT");
+                pseElem.setAttribute("appearSoundEffect", 1);
+                pseElem.setAttribute("appearSoundFileName", soundUrl);
+
+                e.appendChild(pseElem);
+            }
+        }
+
+#endif
+    }
 }
 
 double KPObject::load(const QDomElement &element) {
