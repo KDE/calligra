@@ -1165,16 +1165,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
     for ( int i = 0; i < static_cast<int>( _backgroundList.count() ); i++ )
         _backgroundList.at( i )->setBgSize( r.size() );
 
-    QString unit;
-    switch ( _pageLayout.unit ) {
-    case KoUnit::U_MM: unit = "mm";
-	break;
-    case KoUnit::U_PT: unit = "pt";
-	break;
-    case KoUnit::U_INCH: unit = "inch";
-	break;
-    }
-    setUnit(  KoUnit::unit( unit) );
+    setUnit(  _pageLayout.unit );
 
     repaint( false );
     // don't setModified(true) here, since this is called on startup
