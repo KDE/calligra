@@ -330,6 +330,8 @@ void KWPgNumVariable::recalc()
     if ( m_subtype == VST_PGNUM_CURRENT )
     {
         KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
+        if ( !parag ) // too early
+            return;
         KWTextFrameSet * fs = parag->textDocument()->textFrameSet();
         QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
         QPoint cPoint;

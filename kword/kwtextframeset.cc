@@ -3090,8 +3090,8 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
         textFrameSet()->insert( cursor, m_currentFormat, QChar('&') /*whatever*/,
                                 false, false, i18n("Insert Variable"),
                                 customItemsMap );
-        // Recalc the var (e.g. if it depends on its position, like "Page Number")
         var->recalc();
+        cursor->parag()->invalidate(0);
         cursor->parag()->setChanged( true );
         frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
     }
