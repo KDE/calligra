@@ -295,9 +295,11 @@ void MsWord::getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode)
 
     // Walk the BTEs.
 
+    kdDebug(s_area) << "walk BTEs" << endl;
     btes.startIteration();
     while (btes.getNext(&startFc, &endFc, &data))
     {
+        kdDebug(s_area) << "found BTE" << endl;
         getPAPX(
             m_mainStream + (data.pn * 512),
             textStartFc,
@@ -343,6 +345,15 @@ void MsWord::getListStyles()
     const U8 *ptr2;
     U16 lstfCount;
 
+    // Failsafe for simple documents.
+
+    m_listStyles = NULL;
+    if (!m_fib.lcbPlcfLst)
+    {
+        kdDebug(s_area) << "MsWord::getListStyles: no data " << endl;
+        return;
+    }
+
     // Find the number of LSTFs.
 
     ptr += MsWordGenerated::read(ptr, &lstfCount);
@@ -356,6 +367,7 @@ void MsWord::getListStyles()
         LSTF data;
         unsigned levelCount;
 
+        kdDebug(s_area) << "MsWord::getListStyles: LSTF begins: " << (unsigned long)ptr << endl;
         ptr += MsWordGenerated::read(ptr, &data);
         if (data.fSimpleList)
             levelCount = 1;
@@ -375,13 +387,104 @@ void MsWord::getListStyles()
             U16 numberTextLength;
             QString numberText;
 
+            kdDebug(s_area) << "MsWord::getListStyles: LVLF" << j << " begins: " << (unsigned long)ptr2 << endl;
             ptr2 += MsWordGenerated::read(ptr2, &level);
             ptr2 += level.cbGrpprlPapx;
             ptr2 += level.cbGrpprlChpx;
             ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
+            kdDebug(s_area) << "MsWord::getListStyles: LVLF" << j << " numberTextLength: " << numberTextLength << endl;
             ptr2 += read(ptr2, &numberText, numberTextLength, true);
         }
     }
+}
+
+// Locate the piece table in a complex document.
+
+void MsWord::getPieces()
+{
+    // Start with the grpprl and PCD.
+    //
+    // For the grpprl array, we store the offset to the
+    // byte count preceeding the first entry, and the number of entries.
+    //
+    // For the text plex, we store the start and size of the plex in the table
+
+    typedef enum
+    {
+        clxtGrpprl = 1,
+        clxtPlcfpcd = 2
+    };
+
+    struct
+    {
+        U32 byteCountOffset;
+        U32 count;
+    } grpprls;
+
+    struct
+    {
+        const U8 *ptr;
+        U32 byteCount;
+    } textPlex;
+
+    unsigned count = 0;
+    const U8 *ptr;
+    const U8 *end;
+    U8 clxt = 0;
+    U16 cb;
+    U32 lcb;
+
+    // Failsafe for simple documents.
+
+    m_pieceTable = NULL;
+    if (!m_fib.fComplex && !m_fib.lcbClx)
+    {
+        kdDebug(s_area) << "MsWord::getPieces: no data " << endl;
+        return;
+    }
+
+    // First skip the grpprls.
+
+    ptr = m_tableStream + m_fib.fcClx;
+    end = ptr + m_fib.lcbClx;
+    grpprls.byteCountOffset = (ptr + 1) - m_tableStream;
+    grpprls.count = 0;
+    while (ptr < end)
+    {
+        ptr += MsWordGenerated::read(ptr, &clxt);
+        if (clxt != clxtGrpprl)
+        {
+            ptr--;
+            break;
+        }
+        grpprls.count++;
+        ptr += MsWordGenerated::read(ptr, &cb);
+        ptr += cb;
+    }
+
+    // Now locate the piece table.
+
+    while (ptr < end)
+    {
+        ptr += MsWordGenerated::read(ptr, &clxt);
+        if (clxt != clxtPlcfpcd)
+        {
+            ptr--;
+            break;
+        }
+        count++;
+        ptr += MsWordGenerated::read(ptr, &lcb);
+        textPlex.byteCount = lcb;
+        textPlex.ptr = ptr;
+        ptr += lcb;
+    }
+    if ((clxt != clxtPlcfpcd) ||
+        (count != 1))
+    {
+        constructionError(__LINE__, "cannot locate the piece table");
+        return;
+    };
+    m_pieceTable = new Plex<PCD>(this, textPlex.ptr, textPlex.byteCount);
 }
 
 // Create a cache of information about built-in styles.
@@ -389,7 +492,7 @@ void MsWord::getListStyles()
 // The cache consists of:
 //
 //    m_styles: an array of fully-decoded PAPs for each built in style
-//    indexed by istd.   
+//    indexed by istd.
 
 void MsWord::getStyles()
 {
@@ -397,9 +500,19 @@ void MsWord::getStyles()
     U16 cbStshi;
     STSHI stshi;
 
+    // Failsafe for simple documents.
+
+    m_styles = NULL;
+    if (!m_fib.lcbStshf)
+    {
+        kdError(s_area) << "MsWord::getListStyles: no data " << endl;
+        return;
+    }
+
     // Fetch the STSHI.
 
     ptr += MsWordGenerated::read(ptr, &cbStshi);
+    kdDebug(s_area) << "MsWord::getStyles: max STSHI size " << sizeof(stshi) << ", actual " << cbStshi << endl;
     if (cbStshi > sizeof(stshi))
     {
         kdError(s_area) << "MsWord::getStyles: unsupported STSHI size " << cbStshi << endl;
@@ -407,8 +520,9 @@ void MsWord::getStyles()
     }
 
     // We know that older/smaller STSHIs can simply be zero extended into our STSHI.
-    // So, we overwrite anything thatis not valid with zeros.
+    // So, we overwrite anything that is not valid with zeros.
 
+    kdDebug(s_area) << "MsWord::getStyles: STSHI begins: " << (unsigned long)ptr << endl;
     ptr += MsWordGenerated::read(ptr, &stshi);
     memset(((char *)&stshi) + cbStshi, 0, sizeof(stshi) - cbStshi);
     ptr -= sizeof(stshi) - cbStshi;
@@ -421,10 +535,11 @@ void MsWord::getStyles()
         U16 cbStd;
         STD std;
 
+        kdDebug(s_area) << "MsWord::getStyles: STD begins: " << (unsigned long)ptr << endl;
         ptr += MsWordGenerated::read(ptr, &cbStd);
         if (cbStd)
         {
-            read(ptr, &std);
+            read(ptr, stshi.cbSTDBaseInFile, &std);
             kdDebug(s_area) << "MsWord::getStyles: style: " << std.xstzName <<
                 ", types: " << std.cupx <<
                 endl;
@@ -497,6 +612,7 @@ MsWord::MsWord(
         constructionError(__LINE__, "the document is encrypted");
         return;
     }
+    kdDebug(s_area) << "MsWord::MsWord: nFib: " << m_fib.nFib << endl;
 
     // Store away the streams for future use. Note that we do not
     // copy the contents of the streams, and that we rely on the storage
@@ -507,71 +623,21 @@ MsWord::MsWord(
     m_dataStream = dataStream;
     if (!m_tableStream)
     {
-        constructionError(__LINE__, "the tableStream is missing");
-        return;
+        // Older versions of Word had no separate table stream.
+
+        kdDebug(s_area) << "MsWord::MsWord: no table stream" << endl;
+        m_tableStream = m_mainStream;
     }
-
-    // Start with the grpprl and PCD.
-
-    typedef enum
+    if (!m_dataStream)
     {
-        clxtGrpprl = 1,
-        clxtPlcfpcd = 2
-    };
+        // Older versions of Word had no separate data stream.
 
-    const U8 *ptr;
-    const U8 *end;
-    U8 clxt = 0;
-    U16 cb;
-    U32 lcb;
-
-    ptr = m_tableStream + m_fib.fcClx;
-    end = ptr + m_fib.lcbClx;
-    m_grpprls.byteCountOffset = (ptr + 1) - m_tableStream;
-    m_grpprls.count = 0;
-    while (ptr < end)
-    {
-        ptr += MsWordGenerated::read(ptr, &clxt);
-        if (clxt != clxtGrpprl)
-        {
-            ptr--;
-            break;
-        }
-        m_grpprls.count++;
-        ptr += MsWordGenerated::read(ptr, &cb);
-        ptr += cb;
+        kdDebug(s_area) << "MsWord::MsWord: no data stream" << endl;
+        m_dataStream = m_mainStream;
     }
-
-    // For the text plex, we store the start and size of the plex in the table
-
-    struct
-    {
-        const U8 *ptr;
-        U32 byteCount;
-    } m_textPlex;
-    unsigned count = 0;
-
-    while (ptr < end)
-    {
-        ptr += MsWordGenerated::read(ptr, &clxt);
-        if (clxt != clxtPlcfpcd)
-        {
-            ptr--;
-            break;
-        }
-        count++;
-        ptr += MsWordGenerated::read(ptr, &lcb);
-        m_textPlex.byteCount = lcb;
-        m_textPlex.ptr = ptr;
-        ptr += lcb;
-    }
-    if ((clxt != clxtPlcfpcd) ||
-        (count != 1))
-    {
-        constructionError(__LINE__, "cannot locate the piece table");
-        return;
-    };
-    m_pcd = new Plex<PCD>(this, m_textPlex.ptr, m_textPlex.byteCount);
+    getPieces();
+    getStyles();
+    getListStyles();
 }
 
 MsWord::~MsWord()
@@ -882,8 +948,6 @@ void MsWord::parse()
 
     // Fill the style cache.
 
-    getStyles();
-    getListStyles();
     m_wasInTable = false;
 
     // Note that we test for the presence of complex structure, rather than
@@ -893,7 +957,7 @@ void MsWord::parse()
     // There is also the implication that without the complex structures, the
     // text cannot be in unicode form.
 
-    if (m_fib.lcbClx)
+    if (m_pieceTable)
     {
         U32 startFc;
         U32 endFc;
@@ -901,8 +965,8 @@ void MsWord::parse()
         const U32 codepage1252mask = 0x40000000;
         bool unicode;
 
-        m_pcd->startIteration();
-        while (m_pcd->getNext(&startFc, &endFc, &data))
+        m_pieceTable->startIteration();
+        while (m_pieceTable->getNext(&startFc, &endFc, &data))
         {
             unicode = ((data.fc & codepage1252mask) != codepage1252mask);
             if (!unicode)
@@ -1017,22 +1081,40 @@ unsigned MsWord::read(const U8 *in, PAPXFKP *out, unsigned count)
     return bytes;
 }
 
-unsigned MsWord::read(const U8 *in, STD *out, unsigned count)
+unsigned MsWord::read(const U8 *in, unsigned baseInFile, STD *out, unsigned count)
 {
     U8 *ptr = (U8 *)out;
     unsigned bytes = 0;
 
     for (unsigned i = 0; i < count; i++)
     {
-        U16 nameLength;
-        U16 terminator;
         U8 offset;
 
         offset = 0;
         offset += MsWordGenerated::read(in + offset, (U16 *)(ptr + bytes), 5);
-        offset += MsWordGenerated::read(in + offset, &nameLength);
-        offset += read(in + offset, &out->xstzName, nameLength, true);
-        offset += MsWordGenerated::read(in + offset, &terminator);
+        memset((ptr + bytes) + baseInFile, 0, 10 - baseInFile);
+        offset -= 10 - baseInFile;
+
+        // If the baseInFile is less than 10, then the style name is not stored in unicode!
+
+        if (baseInFile < 10)
+        {
+            U8 nameLength;
+            U8 terminator;
+
+            offset += MsWordGenerated::read(in + offset, &nameLength);
+            offset += read(in + offset, &out->xstzName, nameLength, false);
+            offset += MsWordGenerated::read(in + offset, &terminator);
+        }
+        else
+        {
+            U16 nameLength;
+            U16 terminator;
+
+            offset += MsWordGenerated::read(in + offset, &nameLength);
+            offset += read(in + offset, &out->xstzName, nameLength, true);
+            offset += MsWordGenerated::read(in + offset, &terminator);
+        }
         out->grupx = in + offset;
         if ((int)out->grupx & 1)
             out->grupx++;

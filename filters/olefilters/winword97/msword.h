@@ -130,7 +130,7 @@ public:
         //
         const U8 *grupx;
     } __attribute__ ((packed)) STD;
-    static unsigned read(const U8 *in, STD *out, unsigned count=1);
+    static unsigned read(const U8 *in, unsigned baseInFile, STD *out, unsigned count=1);
 
     static unsigned read(const U8 *in, FIB *out, unsigned count=1);
 
@@ -151,15 +151,6 @@ public:
     // PAPs - that will help performance with lots of paragraphs.
 
     LVLF ***m_listStyles;
-
-    // For the grpprl array, we store the offset to the
-    // byte count preceeding the first entry, and the number of entries.
-
-    struct
-    {
-        U32 byteCountOffset;
-        U32 count;
-    } m_grpprls;
 
     // This class allows standardised treatment of plexes of different types.
     // It is designed to be instantiated locally, once for each plex we are
@@ -243,7 +234,7 @@ private:
     void constructionError(unsigned line, const char *reason);
     static const unsigned s_minWordVersion = 100;
 
-    Plex<PCD> *m_pcd;
+    Plex<PCD> *m_pieceTable;
     void getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode);
     void getPAPX(
         const U8 *fkp,
@@ -276,6 +267,10 @@ private:
     void paragraphStyleModify(PAP *pap, PAPXFKP &style);
     void paragraphStyleModify(PAP *pap, PHE &layout);
     void paragraphStyleModify(PAP *pap, STD &style);
+
+    // Fetch the piece table.
+
+    void getPieces();
 
     // Fetch the styles in the style sheet.
 

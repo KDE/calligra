@@ -45,14 +45,13 @@ unsigned MsWordGenerated::read(const U8 *in, U16 *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, U32 *out, unsigned count)
 {
-    U8 *ptr = (U8 *)out;
-    unsigned bytes = 0;
-
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
+        *out = (U32)((*(in + 3) << 24) + (*(in + 2) << 16) + (*(in + 1) << 8) + (*in));
+        out++;
+        in += 4;
     }
-    return bytes;
+    return count + count + count + count;
 }
 
 unsigned MsWordGenerated::read(const U8 *in, DTTM *out, unsigned count)
