@@ -235,8 +235,9 @@ KLaola::NodeList KLaola::parseCurrentDir() {
             node->deadDir = (node->dirHandle==-1 && node->isDirectory());
             // this is a strange situation :)
             if (node->deadDir)
-                kdWarning(s_area) << "KLaola::parseCurrentDir(): ######## dead dirHandle ahead ########" << endl;
-            nodeList.append(node);
+                kdDebug(s_area) << "ignoring: " << node->describe() << " is empty" << endl;
+            else
+                nodeList.append(node);
         }
     }
     return nodeList;
