@@ -63,10 +63,10 @@ public:
     { removeGradient(); xfactor = _xfactor; }
     void setBackYFactor( int _yfactor )
     { removeGradient(); yfactor = _yfactor; }
-    void setBackPixmap( const QString &_filename, QDateTime _lastModified );
+    void setBackPixmap( const QString &_filename, const QDateTime &_lastModified );
     /// set the back pixmap to a new KoPicture
     void setBackPixmap( const KoPicture& pixmap );
-    void setBackClipart(  const QString &_filename, QDateTime _lastModified );
+    void setBackClipart(  const QString &_filename, const QDateTime &_lastModified );
     /// set the back clipart to a new KoPicture
     void setBackClipart( const KoPicture& clipart );
     void setPageEffect( PageEffect _pageEffect )

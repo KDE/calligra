@@ -60,7 +60,7 @@ KPBackGround::KPBackGround( KPrPage *_page )
     m_page=_page;
 }
 
-void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModified )
+void KPBackGround::setBackPixmap( const QString &_filename, const QDateTime &_lastModified )
 {
     if ( backType != BT_PICTURE )
         return;
@@ -88,7 +88,7 @@ void KPBackGround::setBackPixmap( const KoPicture& pixmap )
     backImage = imageCollection()->insertPicture(pixmap);
 }
 
-void KPBackGround::setBackClipart( const QString &_filename, QDateTime _lastModified )
+void KPBackGround::setBackClipart( const QString &_filename, const QDateTime &_lastModified )
 {
     if ( backType != BT_CLIPART )
         return;
