@@ -618,13 +618,16 @@ const QDomElement Helper::getFormat(Q_UINT16 xf)
 	return format;
 }
 
-void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refColumn, Q_UINT16 biff, bool shared)
+void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refColumn, Q_UINT16 biff, bool shared, QString &rowSign, QString &colSign)
 {
 	if(biff == BIFF_8)
 	{
+		colSign = (refColumn & 0x8000) ? "#" : "$";
+		rowSign = (refColumn & 0x4000) ? "#" : "$";
+
 		if((refColumn & 0x8000) && !shared)
 			refRow -= row;
-
+		
 		if(refColumn & 0x4000)
 		{
 			if(!shared)
@@ -639,6 +642,10 @@ void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refCo
 	else
 	{
 		// TODO: Test this part!
+	
+		rowSign = (refRow & 0x8000) ? "#" : "$";
+		colSign = (refRow & 0x4000) ? "#" : "$";
+
 		refRow &= 0x3fff;
 
 		if(refRow & 0x8000)
@@ -657,6 +664,13 @@ void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refCo
 				refColumn = (Q_INT8) refColumn;
 		}
 	}
+
+	// Correct positions in absolute mode
+	// TODO: Also in BIFF != 8 mode ??
+	if(colSign == "$")
+		refColumn++;
+	if(rowSign == "$")
+		refRow++;
 }
 
 struct sExcelFunction
@@ -909,23 +923,6 @@ static const sExcelFunction *ExcelFunction(Q_UINT16 nIndex)
 		if(ExcelFunctions[i].index == nIndex)
 			return &ExcelFunctions[i];
 	}
-
-	/* EEK
-    int first = 0;
-    int last = (sizeof(ExcelFunctions) / sizeof(ExcelFunctions[0])) - 1;
-	
-    while(first <= last)
-    {
-		int curr = first + (last - first) / 2;
-        const sExcelFunction *pCurr = ExcelFunctions + curr;
-        if(pCurr->index > nIndex)
-            last = curr - 1;
-        else if(pCurr->index < nIndex)
-            first = curr + 1;
-        else
-            return pCurr;
-    }
-	*/
 	
     return 0;
 }
@@ -985,6 +982,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 	Q_UINT8 byte, ptg, count;
 	Q_UINT16 integer;
 	Q_INT16 refRow, refColumn, refRowLast, refColumnLast;
+	QString rowSign1, rowSign2, colSign1, colSign2;
 	QString str, newop;
 	QStringList parsedFormula;
 	bool found;
@@ -1004,9 +1002,6 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 			case 0x01:  // ptgExpr
 				Q_UINT16 tlrow, tlcol;
 				rgce >> tlrow >> tlcol;
-
-				kdDebug(30511) << "WARNING: ptgExpr requested in Row " << row << " Col " << column << " !" << endl;
-				kdDebug(30511) << "HASH Table: top-Left-Row " << tlrow << ", top-Left-Col " << tlcol << endl;
 
 				found = false;
 				
@@ -1182,10 +1177,10 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					rgce >> byte;
 					refColumn = byte;
 				}
+	
+				getReference(row, column, refRow, refColumn, biff, shared, rowSign1, colSign1);
 				
-				getReference(row, column, refRow, refColumn, biff, shared);
-
-				str = QString("#%1#%2#").arg(refColumn).arg(refRow);
+				str = QString("%1%2%3%4#").arg(colSign1).arg(refColumn).arg(rowSign1).arg(refRow);
 				parsedFormula.append(str);
 				break;
 			case 0x25:  // ptgArea
@@ -1202,10 +1197,11 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					refColumnLast = byte;
 				}
 
-				getReference(row, column, refRow, refColumn, biff, shared);
-				getReference(row, column, refRowLast, refColumnLast, biff, shared);
+				getReference(row, column, refRow, refColumn, biff, shared, rowSign1, colSign1);
+				getReference(row, column, refRowLast, refColumnLast, biff, shared, rowSign2, colSign2);
 
-				str = QString("#%1#%2#:#%3#%4#").arg(refColumn).arg(refRow).arg(refColumnLast).arg(refRowLast);
+				str = QString("%1%2%3%4#:%5%6%7%8#").arg(colSign1).arg(refColumn).arg(rowSign1).arg(refRow).arg(colSign2).arg(refColumnLast).arg(rowSign2).arg(refRowLast);
+				kdDebug() << "STR " << str << endl;
 				parsedFormula.append(str);
 				break;
 			case 0x26:  // ptgMemArea
@@ -1235,7 +1231,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					Q_UINT16 sheetNumber;
 					rgce >> sheetNumber >> refRow >> refColumn;
 	
-					getReference(row, column, refRow, refColumn, biff, shared);
+					getReference(row, column, refRow, refColumn, biff, shared, rowSign1, colSign1);
 					
 					QDomElement *sheet = m_tables->at(sheetNumber);
 
@@ -1244,7 +1240,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					else
 						str = "Unknown_Sheet";
 
-					str = QString("%1!#%2#%3#").arg(str).arg(refColumn).arg(refRow);
+					str = QString("%1!%2%3%4%5#").arg(str).arg(colSign1).arg(refColumn).arg(rowSign1).arg(refRow);
 					parsedFormula.append(str);
 				}
 				else
@@ -1259,21 +1255,19 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				{
 					Q_UINT16 sheetNumber;
 					rgce >> sheetNumber;
-				        rgce >> refRow >> refRowLast;
+			        rgce >> refRow >> refRowLast;
 					rgce >> refColumn >> refRowLast;
 	
-					getReference(row, column, refRow, refColumn, biff, shared);
-					
 					QDomElement *sheet = m_tables->at(sheetNumber);
 					if (sheet)
 						str = sheet->attribute("name");
 					else
 						str = "Unknown_Sheet";
 
-					getReference(row, column, refRow, refColumn, biff, shared);
-					getReference(row, column, refRowLast, refColumnLast, biff, shared);
+					getReference(row, column, refRow, refColumn, biff, shared, rowSign1, colSign1);
+					getReference(row, column, refRowLast, refColumnLast, biff, shared, rowSign2, colSign2);
 
-					str = QString("%1!#%2#%3#:#%4#%5#").arg(str).arg(refColumn).arg(refRow).arg(refColumnLast).arg(refRowLast);
+					str = QString("%1!%2%3%4%5#:%6%7%8%9#").arg(str).arg(colSign1).arg(refColumn).arg(rowSign1).arg(refRow).arg(colSign2).arg(refColumnLast).arg(rowSign2).arg(refRowLast);
 					parsedFormula.append(str);					
 				}
 				else
