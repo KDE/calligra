@@ -5332,11 +5332,19 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
     QDomElement error = element.namedItem( "table:error-message" ).toElement();
     if ( !error.isNull() )
     {
-        if ( error.hasAttribute( "table:condition" ) )
-            kdDebug()<<"element.attribute( table:condition ) "<<element.attribute( "table:condition" )<<endl;
+        if ( error.hasAttribute( "table:title" ) )
+            d->extra()->validity->title = error.attribute( "table:title" );
+        if ( error.hasAttribute( "table:message-type" ) )
+        {
+            QString str = error.attribute( "table:message-type" );
+            if ( str == "warning" )
+                d->extra()->validity->m_action = Warning;
+            kdDebug()<<" str :"<<str<<endl;
+        }
+
         QDomElement attrText = error.namedItem( "text:p" ).toElement();
         if ( !attrText.isNull() )
-            kdDebug()<<"attrText.text() :"<<attrText.text()<<endl;
+            d->extra()->validity->message = attrText.text();
     }
 }
 
