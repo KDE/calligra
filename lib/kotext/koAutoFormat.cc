@@ -555,9 +555,10 @@ void KoAutoFormat::saveConfig()
 {
     KConfig* config = KoGlobal::kofficeConfig();
     KLocale klocale(m_doc->instance()->instanceName());
+
     KConfigGroupSaver cgs( config, "AutoFormat" );
     config->writeEntry( "ConvertUpperCase", m_convertUpperCase );
-    config->writeEntry( "formatLanguage", m_autoFormatLanguage);
+    config->writeEntry( "formatLanguage", m_autoFormatLanguage=="all_languages" ? klocale.languageList().front() : m_autoFormatLanguage);
 
     config->writeEntry( "ConvertUpperUpper", m_convertUpperUpper );
     config->writeEntry( "includeTwoLetterException", m_includeTwoUpperLetterException );
