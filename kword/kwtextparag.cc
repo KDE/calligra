@@ -645,6 +645,20 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                     custom->load( formatElem );
                     break;
                 }
+                case 3: // Tabulator
+                {
+                    len = 1; // it was missing from old 1.0 files
+
+                    // We have to replace the # or QChar(1) by a tabulator
+                    KoTextStringChar& ch = string()->at(index);
+                    ch.c='\t';
+
+                    // I assume that we need the same treatment as for id == 1
+                    KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphenation() );
+                    //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
+                    setFormat( index, len, document()->formatCollection()->format( &f ) );
+                    break;
+                }
                 case 4: // Variable
                 {
                     QDomElement varElem = formatElem.namedItem( "VARIABLE" ).toElement();
@@ -708,7 +722,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                     break;
                 }
                 default:
-                    kdWarning() << "KWTextParag::loadFormat id=" << id << " not supported" << endl;
+                    kdWarning() << "KWTextParag::loadFormatting id=" << id << " not supported" << endl;
                     break;
                 }
             }
