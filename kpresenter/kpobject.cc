@@ -329,7 +329,7 @@ KoRect KPObject::getBoundingRect( KoZoomHandler *_zoomHandler ) const
 	return rotateRectObject(_zoomHandler );
 }
 
-KoRect KPObject::rotateRectObject(KoZoomHandler *_zoomHandler ) const
+KoRect KPObject::rotateRectObject(KoZoomHandler */*_zoomHandler*/ ) const
 {
     KoRect br = KoRect( 0,0, ext.width(), ext.height() );
     double pw = br.width();
