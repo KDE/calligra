@@ -23,7 +23,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 			if( !curveTo(
 				itr.current()->point( 1 ),
 				itr.current()->point( 2 ),
-				itr.current()->point( 3 ) ) )
+				itr.current()->point( 3 ), *itr.current() ) )
 			{
 				return false;
 			}
@@ -31,7 +31,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		else if( itr.current()->type() == VSegment::line )
 		{
 			if( !lineTo(
-				itr.current()->point( 3 ) ) )
+				itr.current()->point( 3 ), *itr.current() ) )
 			{
 				return false;
 			}
@@ -40,7 +40,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		{
 			if( !curve1To(
 				itr.current()->point( 2 ),
-				itr.current()->point( 3 ) ) )
+				itr.current()->point( 3 ), *itr.current() ) )
 			{
 				return false;
 			}
@@ -49,7 +49,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		{
 			if( !curve2To(
 				itr.current()->point( 1 ),
-				itr.current()->point( 3 ) ) )
+				itr.current()->point( 3 ), *itr.current() ) )
 			{
 				return false;
 			}
@@ -57,7 +57,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		else if( itr.current()->type() == VSegment::begin )
 		{
 			if( !begin(
-				itr.current()->point( 3 ) ) )
+				itr.current()->point( 3 ), *itr.current() ) )
 			{
 				return false;
 			}
@@ -66,7 +66,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		else
 		{
 			if( !lineTo(
-				itr.current()->point( 3 ) ) )
+				itr.current()->point( 3 ), *itr.current() ) )
 			{
 				return false;
 			}

@@ -26,13 +26,20 @@ public:
 
 	bool traverse( const VSegmentList& list );
 
-	// if one of these operations should fail, it returns false:
-	virtual bool begin( const KoPoint& p ) = 0;
-	virtual bool curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 ) = 0;
-	virtual bool curve1To( const KoPoint& p2, const KoPoint& p3 ) = 0;
-	virtual bool curve2To( const KoPoint& p1, const KoPoint& p3 ) = 0;
-	virtual bool lineTo( const KoPoint& p ) = 0;
-	virtual bool end( const KoPoint& p ) = 0;
+	// if one of these operations should fail, it returns false. segemnt provides direct
+	// access to the refered to segment if necessary (e.g. by intersection traverser).
+	virtual bool begin( const KoPoint& p,
+		const VSegment& segment ) = 0;
+	virtual bool curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3,
+		const VSegment& segment ) = 0;
+	virtual bool curve1To( const KoPoint& p2, const KoPoint& p3,
+		const VSegment& segment ) = 0;
+	virtual bool curve2To( const KoPoint& p1, const KoPoint& p3,
+		const VSegment& segment  ) = 0;
+	virtual bool lineTo( const KoPoint& p,
+		const VSegment& segment ) = 0;
+	virtual bool end( const KoPoint& p,
+		const VSegment& segment ) = 0;
 
 	const KoPoint& previousPoint() const { return m_previousPoint; }
 	void setPreviousPoint( const KoPoint& p ) { m_previousPoint = p; }

@@ -72,7 +72,8 @@ VPathBounding::intersects( const QRect& rect, const double zoomFactor, const VSe
 }
 
 bool
-VPathBounding::begin( const KoPoint& p )
+VPathBounding::begin( const KoPoint& p,
+	const VSegment& segment )
 {
 	if( m_quick )
 	{
@@ -93,7 +94,8 @@ VPathBounding::begin( const KoPoint& p )
 }
 
 bool
-VPathBounding::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+VPathBounding::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3,
+	const VSegment& segment )
 {
 	if( m_quick )
 	{
@@ -161,7 +163,8 @@ VPathBounding::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 
 }
 
 bool
-VPathBounding::lineTo( const KoPoint& p )
+VPathBounding::lineTo( const KoPoint& p,
+	const VSegment& segment )
 {
 	if( m_quick )
 	{

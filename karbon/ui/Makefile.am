@@ -11,7 +11,8 @@ noinst_HEADERS = \
 	vcdlg_roundrect.h \
 	vcdlg_sinus.h \
 	vcdlg_spiral.h \
-	vcdlg_star.h
+	vcdlg_star.h \
+	vtoolcontainer.h
 
 libkarbonui_la_SOURCES = \
 	dummy.cc \
@@ -21,9 +22,12 @@ libkarbonui_la_SOURCES = \
 	vcdlg_roundrect.cc \
 	vcdlg_sinus.cc \
 	vcdlg_spiral.cc \
-	vcdlg_star.cc
+	vcdlg_star.cc \
+	vtoolcontainer.cc
 
-METASOURCES = AUTO
+
+libkarbonui_la_METASOURCES = \
+	AUTO
 
 DISTCLEANFILES = \
 	dummy.cc

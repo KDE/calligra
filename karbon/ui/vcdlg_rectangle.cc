@@ -26,8 +26,7 @@ VCDlgRectangle::VCDlgRectangle()
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
 	// add input fields on the left:
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this
- );
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
  	outerbox->addWidget( group );
 
 	// add width/height-input:

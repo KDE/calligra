@@ -32,7 +32,11 @@ namespace VSegmentTools
 		const KoPoint& b1 );
 
 	KoRect boundingBox( const KoPoint& previous, const VSegment& segment );
-
+/*
+	void findIntersections( const double t0, const double t1,
+	const VSegment* segB, const double u0, const double u1,
+	QValueList<double>& paramsA, QValueList<double>& paramsB ) const;
+*/
 	void polygonize(
 		const KoPoint& p0,
 		const KoPoint& p1,

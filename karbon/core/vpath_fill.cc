@@ -45,7 +45,8 @@ VPathFill::end_draw()
 }
 
 bool
-VPathFill::begin( const KoPoint& p )
+VPathFill::begin( const KoPoint& p,
+	const VSegment& segment )
 {
 	m_pa.resize( m_pa.size() + 1 );
 	m_pa.setPoint(
@@ -59,7 +60,8 @@ VPathFill::begin( const KoPoint& p )
 }
 
 bool
-VPathFill::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+VPathFill::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3,
+	const VSegment& segment )
 {
 	QPointArray pa( 4 );
 	pa.setPoint(
@@ -90,7 +92,8 @@ VPathFill::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 }
 
 bool
-VPathFill::lineTo( const KoPoint& p )
+VPathFill::lineTo( const KoPoint& p,
+	const VSegment& segment )
 {
 	m_pa.resize( m_pa.size() + 1 );
 	m_pa.setPoint( m_pa.size() - 1,

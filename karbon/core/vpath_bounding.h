@@ -24,15 +24,21 @@ public:
 	// check for intersection with zoomFactor-dependent polyline approximation:
 	bool intersects( const QRect& rect, const double zoomFactor, const VSegmentList& list );
 
-	virtual bool begin( const KoPoint& p );
-	virtual bool curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 );
-	virtual bool curve1To( const KoPoint& p2, const KoPoint& p3 )
-		{ return curveTo( p2, p2, p3 ); }
-	virtual bool curve2To( const KoPoint& p1, const KoPoint& p3 )
-		{ return curveTo( p1, p3, p3 ); }
-	virtual bool lineTo( const KoPoint& p );
-	virtual bool end( const KoPoint& p )
-		{ return lineTo( p ); }
+	virtual bool begin( const KoPoint& p,
+		const VSegment& segment );
+	virtual bool curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3,
+		const VSegment& segment );
+	virtual bool curve1To( const KoPoint& p2, const KoPoint& p3,
+		const VSegment& segment )
+			{ return curveTo( p2, p2, p3, segment ); }
+	virtual bool curve2To( const KoPoint& p1, const KoPoint& p3,
+		const VSegment& segment )
+			{ return curveTo( p1, p3, p3, segment ); }
+	virtual bool lineTo( const KoPoint& p,
+		const VSegment& segment );
+	virtual bool end( const KoPoint& p,
+		const VSegment& segment )
+			{ return lineTo( p, segment ); }
 
 private:
 	double m_zoomFactor;

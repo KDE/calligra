@@ -26,8 +26,8 @@
 #include "vmtool_select.h"
 #include "vmtool_rotate.h"
 #include "vmtool_scale.h"
-
 #include "vmcmd_delete.h"
+#include "vtoolcontainer.h"
 
 #include <kdebug.h>
 
@@ -256,7 +256,7 @@ KarbonView::initActions()
 		i18n( "&Select Objects" ), "select", 0, this,
 		SLOT( selectTool() ), actionCollection(), "tool_select" );
 	m_rotateToolAction = new KToggleAction(
-		i18n( "&Rotate Objects" ), "star", 0, this,
+		i18n( "&Rotate Objects" ), "rotate", 0, this,
 		SLOT( rotateTool() ), actionCollection(), "tool_rotate" );
 	m_scaleToolAction = new KToggleAction(
 		i18n( "&Scale Objects" ), "star", 0, this,
@@ -298,6 +298,8 @@ KarbonView::initActions()
 	m_zoomAction->setCurrentItem( 2 );
 	m_zoomAction->setEditable( true );
 	// zoom <-----
+
+	new VToolContainer( i18n( "Tools" ), actionCollection(), "tool_container" );
 }
 
 void

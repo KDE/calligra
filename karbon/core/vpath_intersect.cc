@@ -13,7 +13,7 @@ VPathIntersect::VPathIntersect()
 {
 }
 
-VPath*
+VSegmentList*
 VPathIntersect::intersect( const VSegmentList& list1, const VSegmentList& list2 )
 {
 	m_list2 = const_cast<VSegmentList*>( &list2 );
@@ -25,14 +25,17 @@ VPathIntersect::intersect( const VSegmentList& list1, const VSegmentList& list2 
 }
 
 bool
-VPathIntersect::begin( const KoPoint& p )
+VPathIntersect::begin( const KoPoint& p,
+	const VSegment& segment )
 {
 	if( m_isList1 )
 	{
+		m_segment1 = 0L;
 		setPreviousPoint( p );
 	}
 	else
 	{
+		m_segment2 = 0L;
 		setPreviousPoint2( p );
 	}
 
@@ -40,7 +43,32 @@ VPathIntersect::begin( const KoPoint& p )
 }
 
 bool
-VPathIntersect::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+VPathIntersect::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3,
+	const VSegment& segment )
+{
+	if( m_isList1 )
+	{
+		m_segment1 = &segment;
+
+		m_isList1 = false;
+		traverse( *m_list2 );
+		m_isList1 = true;
+
+		setPreviousPoint( p3 );
+	}
+	else
+	{
+		m_segment2 = &segment;
+
+		setPreviousPoint2( p3 );
+	}
+
+	return true;
+}
+
+bool
+VPathIntersect::curve1To( const KoPoint& p2, const KoPoint& p3,
+	const VSegment& segment )
 {
 	if( m_isList1 )
 	{
@@ -59,7 +87,49 @@ VPathIntersect::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3
 }
 
 bool
-VPathIntersect::lineTo( const KoPoint& p )
+VPathIntersect::curve2To( const KoPoint& p1, const KoPoint& p3,
+	const VSegment& segment )
+{
+	if( m_isList1 )
+	{
+		m_isList1 = false;
+		traverse( *m_list2 );
+		m_isList1 = true;
+
+		setPreviousPoint( p3 );
+	}
+	else
+	{
+		setPreviousPoint2( p3 );
+	}
+
+	return true;
+}
+
+
+bool
+VPathIntersect::lineTo( const KoPoint& p,
+	const VSegment& segment )
+{
+	if( m_isList1 )
+	{
+		m_isList1 = false;
+		traverse( *m_list2 );
+		m_isList1 = true;
+
+		setPreviousPoint( p );
+	}
+	else
+	{
+		setPreviousPoint2( p );
+	}
+
+	return true;
+}
+
+bool
+VPathIntersect::end( const KoPoint& p,
+	const VSegment& segment )
 {
 	if( m_isList1 )
 	{

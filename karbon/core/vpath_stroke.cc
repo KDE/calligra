@@ -56,7 +56,8 @@ VPathStroke::draw( QPainter& painter, const double zoomFactor, const VSegmentLis
 }
 
 bool
-VPathStroke::begin( const KoPoint& p )
+VPathStroke::begin( const KoPoint& p,
+	const VSegment& segment )
 {
 	m_pa.resize( 1 );
 	m_pa.setPoint(
@@ -70,7 +71,8 @@ VPathStroke::begin( const KoPoint& p )
 }
 
 bool
-VPathStroke::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+VPathStroke::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3,
+	const VSegment& segment )
 {
 	QPointArray pa( 4 );
 	pa.setPoint(
@@ -101,7 +103,8 @@ VPathStroke::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 }
 
 bool
-VPathStroke::lineTo( const KoPoint& p )
+VPathStroke::lineTo( const KoPoint& p,
+	const VSegment& segment )
 {
 	m_pa.resize( m_pa.size() + 1 );
 	m_pa.setPoint( m_pa.size() - 1,
