@@ -29,7 +29,7 @@
   void insertLayer( int i, KivioLayer *l ) { page->insertLayer(i,l); }
   KivioLayer *layerAt( int i ) { return page->layerAt(i); }
 
-  bool addStencil( KivioStencil *s ) { page->addStencil(s); }
+  bool addStencil( KivioStencil *s ) { page->addStencil(s); return TRUE; }
 
   void deleteSelectedStencils() { page->deleteSelectedStencils(); }
   void groupSelectedStencils() { page->groupSelectedStencils(); }
