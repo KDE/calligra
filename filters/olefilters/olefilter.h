@@ -54,7 +54,8 @@ public:
     virtual ~OLEFilter();
 
     virtual const bool filter(const QCString &fileIn, const QCString &fileOut,
-                              const QCString& from, const QCString& to);
+                              const QCString &from, const QCString &to,
+                              const QString &config=QString::null);
     
 protected slots:
     // [TODO] This slot creates a name for a Picture which should be

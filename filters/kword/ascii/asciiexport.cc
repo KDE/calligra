@@ -26,7 +26,8 @@ ASCIIExport::ASCIIExport(KoFilter *parent, QString name) :
 }
 
 const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
-                               const QCString& from, const QCString& to) {
+                               const QCString& from, const QCString& to,
+                               const QString &) {
 
     if(to!="text/plain" || from!="application/x-kword")
         return false;

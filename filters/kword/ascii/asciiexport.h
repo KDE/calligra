@@ -38,7 +38,7 @@ public:
     virtual ~ASCIIExport() {}
     /** filtering :) */
     virtual const bool filter(const QCString &fileIn, const QCString &fileOut,
-                              const QCString& from, const QCString& to);
-
+                              const QCString &from, const QCString &to,
+                              const QString &config=QString::null);
 };
 #endif // ASCIIEXPORT_H

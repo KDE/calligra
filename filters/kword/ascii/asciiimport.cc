@@ -26,7 +26,8 @@ ASCIIImport::ASCIIImport(KoFilter *parent, QString name) :
 }
 
 const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
-                             const QCString& from, const QCString& to) {
+                               const QCString& from, const QCString& to,
+                               const QString &) {
 
     if(to!="application/x-kword" || from!="text/plain")
         return false;
