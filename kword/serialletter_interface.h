@@ -38,7 +38,7 @@ class KWSerialLetterDataSource
 {
     public:
     KWSerialLetterDataSource(/*KWSerialLetterDataBase *kwsldb*/){;}
-    ~KWSerialLetterDataSource(){;}
+    virtual ~KWSerialLetterDataSource(){;}
     virtual class QString getValue( const class QString &name, int record = -1 ) const=0;
 
     const class QMap< QString, QString > &getRecordEntries() const {
