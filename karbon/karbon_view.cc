@@ -129,23 +129,22 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_dcop = 0;
 	dcopObject(); // build it
 
-	m_toolbox = 0L;
+	if( shell() )
+	{
+		// dialogs:
+		m_insertKnotsDlg = new VInsertKnotsDlg();
 
-	// dialogs:
-	m_insertKnotsDlg = new VInsertKnotsDlg();
+		m_flattenDlg = new VFlattenDlg();
+		m_flattenDlg->setFlatness( 5.0 );
 
-	m_flattenDlg = new VFlattenDlg();
-	m_flattenDlg->setFlatness( 5.0 );
+		m_roundCornersDlg = new VRoundCornersDlg();
+		m_roundCornersDlg->setRadius( 10.0 );
 
-	m_roundCornersDlg = new VRoundCornersDlg();
-	m_roundCornersDlg->setRadius( 10.0 );
-
-	m_whirlPinchDlg = new VWhirlPinchDlg();
-	m_whirlPinchDlg->setAngle( 20.0 );
-	m_whirlPinchDlg->setPinch( 0.0 );
-	m_whirlPinchDlg->setRadius( 100.0 );
-
-	m_layersDocker = 0L;
+		m_whirlPinchDlg = new VWhirlPinchDlg();
+		m_whirlPinchDlg->setAngle( 20.0 );
+		m_whirlPinchDlg->setPinch( 0.0 );
+		m_whirlPinchDlg->setRadius( 100.0 );
+	}
 
 	// tools:
 	m_selectTool = new VSelectTool( this );
@@ -177,9 +176,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	initActions();
 
-	m_strokeFillPreview = 0L;
-	m_ColorManager = 0L;
-	m_strokeDocker = 0L;
+	m_toolbox			= 0L;
+	m_layersDocker		= 0L;
+	m_strokeFillPreview	= 0L;
+	m_ColorManager		= 0L;
+	m_strokeDocker		= 0L;
 
 	if( shell() )
 	{
@@ -216,29 +217,35 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 KarbonView::~KarbonView()
 {
 	// dialogs:
-	delete( m_insertKnotsDlg );
-	delete( m_flattenDlg );
-	delete( m_roundCornersDlg );
-	delete( m_whirlPinchDlg );
-	delete( m_ColorManager );
-	delete( m_TransformDlg );
+	if( shell() )
+	{
+		delete( m_insertKnotsDlg );
+		delete( m_flattenDlg );
+		delete( m_roundCornersDlg );
+		delete( m_whirlPinchDlg );
+		delete( m_ColorManager );
+		delete( m_TransformDlg );
 
-	delete( m_strokeDocker );
+		delete( m_strokeDocker );
+	}
 
 	// tools:
-	delete( m_ellipseTool );
-	delete( m_gradTool );
-	delete( m_polygonTool );
-	delete( m_rectangleTool );
-	delete( m_rotateTool );
-	delete( m_roundRectTool );
 	delete( m_selectTool );
-	delete( m_shearTool );
-	delete( m_sinusTool );
-	delete( m_spiralTool );
-	delete( m_starTool );
-	delete( m_polylineTool );
-	delete( m_clipartTool );
+	if( shell() )
+	{
+		delete( m_ellipseTool );
+		delete( m_gradTool );
+		delete( m_polygonTool );
+		delete( m_rectangleTool );
+		delete( m_rotateTool );
+		delete( m_roundRectTool );
+		delete( m_shearTool );
+		delete( m_sinusTool );
+		delete( m_spiralTool );
+		delete( m_starTool );
+		delete( m_polylineTool );
+		delete( m_clipartTool );
+	}
 #ifdef HAVE_KARBONTEXT
 	delete( m_textTool );
 #endif
