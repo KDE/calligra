@@ -102,12 +102,12 @@ void NoteBar::slotCopyAvailable( bool yes )
 
 void NoteBar::slotUndoAvailable( bool yes )
 {
-    kdDebug(33001) << "slotUndoAvailable( " << yes << " )" << endl;
+    //kdDebug(33001) << "slotUndoAvailable( " << yes << " )" << endl;
 }
 
 void NoteBar::slotRedoAvailable( bool yes )
 {
-    kdDebug(33001) << "slotRedoAvailable( " << yes << " )" << endl;
+    //kdDebug(33001) << "slotRedoAvailable( " << yes << " )" << endl;
 }
 
 void NoteBar::printNote( QPainter *_painter, KPrinter *_printer )
