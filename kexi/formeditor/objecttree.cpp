@@ -61,6 +61,7 @@ ObjectTreeItem::~ObjectTreeItem()
 void
 ObjectTreeItem::addChild(ObjectTreeItem *c)
 {
+	kdDebug() << "ObjectTreeItem::addChild()" << endl;
 	m_children.append(c);
 }
 
@@ -133,6 +134,7 @@ ObjectTree::lookup(const QString &name)
 void
 ObjectTree::addChild(ObjectTreeItem *parent, ObjectTreeItem *c)
 {
+	kdDebug() << "ObjectTree::addChild()" << endl;
 	m_treeDict.insert(c->name(), c);
 	if(!parent)
 	{

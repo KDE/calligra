@@ -301,10 +301,10 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 	{
 		if((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move))
 		{
-			if((*this)["geometry"]->value() == o->property("geometry")) // to avoid infinite recursion
-				return false;
+//luci11			if((*this)["geometry"]->value() == o->property("geometry")) // to avoid infinite recursion
+//				return false;
 
-			(*this)["geometry"]->setValue(((QWidget*)o)->geometry());
+//luci11			(*this)["geometry"]->setValue(((QWidget*)o)->geometry());
 		}
 	}
 	else if(m_multiple && ev->type() == QEvent::Move)

@@ -138,8 +138,11 @@ FormManager::windowChanged(QWidget *w)
 			m_active = form;
 			m_treeview->setForm(form);
 			kdDebug() << "***************active form is " << form->objectTree()->name() << endl;
+			if(m_collection)
 			m_collection->addDocCollection(form->actionCollection());
-			m_client->createGUI(m_client->xmlFile());
+
+			if(m_client)
+				m_client->createGUI(m_client->xmlFile());
 			/*Actions actions;
 			actions.append(form->actionCollection()->action( KStdAction::name(KStdAction::Undo) ));
 			actions.append(form->actionCollection()->action( KStdAction::name(KStdAction::Redo) ));
@@ -206,10 +209,11 @@ FormManager::createBlankForm(const QString &classname, const char *name, QWidget
 }
 
 void
-FormManager::importForm(QWidget *w)
+FormManager::importForm(QWidget *w, Form *form)
 {
-	Form *form = new Form(this, w->name());
-	//form->createToplevel(w, w->className());
+	if(!form)
+		form = new Form(this, w->name());
+
 	form->createToplevel(w, w->name());
 	w->setCaption(w->name());
 	w->setIcon(SmallIcon("kexi"));

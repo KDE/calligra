@@ -105,7 +105,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		QWidget *createBlankForm(const QString &classname, const char *name, QWidget *parent=0);
 
 		/*! Adds a existing form w and changes it to a container */
-		void importForm(QWidget *w);
+		void importForm(QWidget *w, Form *from=0);
 
 		/*! Deletes the Form \a form and removes it from our list. */
 		void deleteForm(Form *form);
