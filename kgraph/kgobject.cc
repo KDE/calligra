@@ -23,6 +23,7 @@
 
 
 KGObject::~KGObject() {
+    // (TODO) remove this object from all groups!
 }
 
 QDomElement KGObject::save(const QDomDocument &/*doc*/) const {

@@ -22,11 +22,12 @@
 
 int KGGroup::ID=0;
 
-KGGroup::KGGroup() : m_id(++ID), m_active(true) {
+KGGroup::KGGroup() : m_id(++ID), m_active(true), m_exclusive(true),
+		     m_exclCache(false) {
 }
 
-KGGroup::KGGroup(const QDomElement &element) {
-
+KGGroup::KGGroup(const QDomElement &element) : m_exclusive(true),
+					       m_exclCache(false) {
     bool ok;
     m_id=element.attribute("id").toInt(&ok);
     if(!ok)
@@ -43,6 +44,22 @@ KGGroup::~KGGroup() {
     members.clear();
 }
 
+const bool KGGroup::isExclusive() {
+    
+    if(m_exclCache)
+	return m_exclusive;
+    
+    m_exclusive=true;
+    m_exclCache=true;
+    const char *firstName=members.first()->className();
+    for(KGObject *tmp=members.next(); tmp!=0L && m_exclusive==true; tmp=members.next()) {
+	if(strcmp(firstName, tmp->className())!=0) {
+	    m_exclusive=false;
+	}
+    }   
+    return m_exclusive;
+}
+
 const QDomElement KGGroup::save(QDomDocument &document) {
 
     QDomElement element=document.createElement("group");
@@ -52,10 +69,38 @@ const QDomElement KGGroup::save(QDomDocument &document) {
 }
 
 void KGGroup::addMember(KGObject *member) {
-    if(!members.findRef(member))
+    
+    if(!members.findRef(member)) {
 	members.append(member);
+	m_exclCache=false;
+    }
 }
 
 void KGGroup::removeMember(KGObject *member) {
     members.removeRef(member);
+}
+
+const bool KGGroup::changeProperty(const char *property, const QVariant &value,
+				   const KGObject *object) {
+    if(!m_active)
+	return false;
+    
+    bool ok=false;
+    
+    // propagate it to all objects (if possible)
+    if(object==0L) {    
+	for(KGObject *tmp=members.first(); tmp!=0L; tmp=members.next()) {
+	    if(tmp->setProperty(property, value))
+		ok=true;  // at least one successful change
+	}
+    }
+    // propagate it only to one type of objects (e.g. KGPolygon)
+    else {
+	const char *name=object->className();
+	for(KGObject *tmp=members.first(); tmp!=0L; tmp=members.next()) {
+	    if(strcmp(name, tmp->className())==0 && tmp->setProperty(property, value))
+		ok=true;  // at least one successful change
+	}
+    }
+    return ok;
 }
