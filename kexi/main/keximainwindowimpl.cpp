@@ -77,8 +77,9 @@
 
 //Extreme verbose debug
 #if defined(Q_WS_WIN)
-# define KexiVDebug kdDebug()
-#else
+//# define KexiVDebug kdDebug()
+#endif
+#if !defined(KexiVDebug)
 # define KexiVDebug if (0) kdDebug()
 #endif
 
@@ -133,7 +134,9 @@ class KexiMainWindowImpl::Private
 
 		//! edit menu
 		KAction *action_edit_delete, *action_edit_delete_row,
-			*action_edit_cut, *action_edit_copy, *action_edit_paste;
+			*action_edit_cut, *action_edit_copy, *action_edit_paste,
+			*action_edit_insert_empty_row;
+
 		// view menu
 		KAction *action_view_nav, *action_view_propeditor;
 		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
@@ -384,6 +387,9 @@ KexiMainWindowImpl::initActions()
 	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", SHIFT | Key_Return, "data_save_row");
 	d->action_data_save_row->setToolTip(i18n("Save currently selected table row's data"));
 	d->action_data_save_row->setWhatsThis(i18n("Saves currently selected table row's data."));
+
+	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "", SHIFT | CTRL | Key_Insert, "edit_insert_empty_row");
+	d->action_edit_insert_empty_row->setToolTip(i18n("Inserts one empty row above currently selected table row"));
 
 	//SETTINGS MENU
 	setStandardToolBarMenuEnabled( true );
@@ -1540,6 +1546,7 @@ void KexiMainWindowImpl::slotViewDataMode()
 		// js TODO error...
 		return;
 	}
+	invalidateSharedActions();
 }
 
 void KexiMainWindowImpl::slotViewDesignMode()
@@ -1554,6 +1561,7 @@ void KexiMainWindowImpl::slotViewDesignMode()
 		// js TODO error...
 		return;
 	}
+	invalidateSharedActions();
 }
 
 void KexiMainWindowImpl::slotViewTextMode()
@@ -1568,6 +1576,7 @@ void KexiMainWindowImpl::slotViewTextMode()
 		// js TODO error...
 		return;
 	}
+	invalidateSharedActions();
 }
 
 void

@@ -183,7 +183,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/*! Shows dialog for creating new blank database,
 		 ans creates one. Dialog is not shown if option for automatic creation 
 		 is checkekd.
-		 \return true is database was created, false on error or when cancel pressed
+		 \return true if database was created, false on error or when cancel pressed
 		*/
 		bool createBlankDatabase();
 
