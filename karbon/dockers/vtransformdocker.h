@@ -21,17 +21,18 @@
 #ifndef __VTRANSFORMDOCKER_H__
 #define __VTRANSFORMDOCKER_H__
 
-#include <qdockwindow.h>
+#include <vdocker.h>
 
 class QCheckBox;
 class QTabWidget;
 class QVButtonGroup;
 
 class KoMainWindow;
-class KoView;
-
-class KarbonPart;
 class KoUnitDoubleSpinBox;
+
+class KarbonView;
+class KarbonPart;
+
 class VReference;
 
 enum ButtonChoice { tr_Duplicate, tr_Apply };
@@ -95,12 +96,12 @@ private:
 };
 
 // The docker ...
-class VTransformDocker : public QDockWindow
+class VTransformDocker : public VDocker
 {
 	Q_OBJECT
 
 public:
-	VTransformDocker( KarbonPart* part, KoView* parent = 0L, const char* name = 0L );
+	VTransformDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
 	void setTab( TabChoice m_tabChoice );
   
 private:
@@ -110,6 +111,7 @@ private:
 	VShearWidget* mShearWidget;
 	VScaleWidget* mScaleWidget;
 	KarbonPart *m_part;
+	KarbonView *m_view;
 };
 
 #endif

@@ -28,11 +28,11 @@
 
 #include <klocale.h>
 #include <koMainWindow.h>
-#include <koView.h>
 
 #include "koUnitWidgets.h"
 
 #include "karbon_part.h"
+#include "karbon_view.h"
 #include "vreference.h"
 
 #include "vtransformdocker.h"
@@ -157,8 +157,8 @@ VScaleWidget::VScaleWidget( QWidget* parent ) : QWidget ( parent )
 }
 
 // The Dialog...
-VTransformDocker::VTransformDocker( KarbonPart* part, KoView* parent, const char* /*name*/ )
-	: QDockWindow( QDockWindow::OutsideDock, parent->shell() ), m_part ( part )
+VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
+	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
 {
 	setCaption( i18n( "Transform" ) );
 	setCloseMode( QDockWindow::Always );
