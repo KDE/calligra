@@ -80,44 +80,33 @@ public:
     void push( const QDomElement& style );
 
     /**
-     * Check if any of the styles on the stack has an attribute called 'name'.
-     */
-    bool hasAttribute( const QString& name ) const;
-
-    /**
-     * Search for the attribute called 'name', starting on top of the stack,
-     * and return it.
-     */
-    QString attribute( const QString& name ) const;
-
-    /**
      * Check if any of the styles on the stack has an attribute called 'name'-'detail'
      * where detail is e.g. left, right, top or bottom.
      * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
      */
-    bool hasAttribute( const QString& name, const QString& detail ) const;
+    bool hasAttribute( const QString& name, const QString& detail=QString::null, const QString &typeProperties=QString::null ) const;
 
     /**
      * Search for the attribute called 'name', starting on top of the stack,
      * and return it.
      */
-    QString attribute( const QString& name, const QString& detail ) const;
+    QString attribute( const QString& name, const QString& detail=QString::null, const QString &typeProperties=QString::null ) const;
 
     /**
      * Check if any of the styles on the stack has a child node called 'name'.
      */
-    bool hasChildNode(const QString & name) const;
+    bool hasChildNode(const QString & name, const QString &typeProperties=QString::null) const;
 
     /**
      * Search for a child node called 'name', starting on top of the stack,
      * and return it.
      */
-    QDomNode childNode(const QString & name) const;
+    QDomNode childNode(const QString & name, const QString &typeProperties=QString::null) const;
 
     /**
      * Special case for the current font size, due to special handling of fo:font-size="115%".
      */
-    double fontSize() const;
+    double fontSize(const QString &typeProperties=QString::null) const;
 
     /**
      * Return the name of the style specified by the user,
