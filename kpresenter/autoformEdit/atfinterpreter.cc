@@ -436,26 +436,26 @@ void ATFInterpreter::interpret()
 			{
 			  coordPtr->pntX = value;
 			  pntPtr->x = coord;
-			  coord.a = 0;
-			  coord.b = 0;
-			  coord.c = 0;
-			  coord.d = 0;
-			  coord.e = 0;
-			  coord.f = 0;
-			  coord.result = 0;
+			  coord.a = QString::null;
+			  coord.b = QString::null;
+			  coord.c = QString::null;
+			  coord.d = QString::null;
+			  coord.e = QString::null;
+			  coord.f = QString::null;
+			  coord.result = QString::null;
 			} break;
 		      case LEVEL_Y:
 			{
 			  coordPtr->pntY = value;
 			  pntPtr->y = coord;
-			  coord.a = 0;
-			  coord.a = 0;
-			  coord.b = 0;
-			  coord.c = 0;
-			  coord.d = 0;
-			  coord.e = 0;
-			  coord.f = 0;
-			  coord.result = 0;
+			  coord.a = QString::null;
+			  coord.a = QString::null;
+			  coord.b = QString::null;
+			  coord.c = QString::null;
+			  coord.d = QString::null;
+			  coord.e = QString::null;
+			  coord.f = QString::null;
+			  coord.result = QString::null;
 			} break;
 		      case LEVEL_ATTR:
 			{
@@ -464,7 +464,7 @@ void ATFInterpreter::interpret()
 			  pw = 1;
 			  v = false;
 			  pntPtr->attrib = attrib;
-			  attrib.isVariable = 0;
+			  attrib.isVariable = QString::null;
 			  attrib.pwDiv = 1;
 			} break;
 		      }

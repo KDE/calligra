@@ -164,7 +164,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   picPreview->setGeometry(10,picChoose->y()+picChoose->height()+20,picChoose->width(),180);
   if (backPic) openPic(qstrdup(backPic));
   if (backPic) chosenPic = qstrdup(backPic);
-  else chosenPic = 0;
+  else chosenPic = QString::null;
 
   lPicName = new QLabel(grp2,"picname");
   if (backPic) lPicName->setText(qstrdup(backPic));
@@ -194,7 +194,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   clipPreview->resize(grp3->width()-20,grp3->width()-20);
   if (backClip) openClip(qstrdup(backClip));
   if (backClip) chosenClip = qstrdup(backClip);
-  else chosenClip = 0;
+  else chosenClip = QString::null;
 
   lClipName = new QLabel(grp3,"clipname");
   if (backClip) lClipName->setText(qstrdup(backClip));
