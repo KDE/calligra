@@ -364,19 +364,26 @@ void KLaola::readPPSEntry(int pos, const int handle) {
     if (nameSize)
     {
         int i;
-        Node *node = new Node();
+        Node *node = new Node(this);
 
-        // The first character of the name often seems to be an unprintable
-        // character. We don't know the significance of this, but for now,
-        // convert any such crap we see.
+        // The first character of the name can be a prefix.
+        node->m_prefix = static_cast<Prefix>(read16(pos));
+        if (node->m_prefix <= RESERVED_LAST)
+        {
+            i = 1;
+        }
+        else
+        {
+            node->m_prefix = NONE;
+            i = 0;
+        }
 
-        for (i = 0; i < (nameSize / 2) - 1; ++i)
+        // Get the rest of the name.
+        for (; i < (nameSize / 2) - 1; ++i)
         {
             QChar tmp;
 
             tmp = read16(pos + 2 * i);
-            if (!tmp.isPrint())
-                tmp = '.';
             node->m_name += tmp;
         }
         node->m_handle = handle;
@@ -441,6 +448,8 @@ void KLaola::testIt(QString prefix)
 QString KLaola::Node::describe() const
 {
     QString description;
+    myFile file;
+    unsigned i;
 
     description = QString::number(m_handle) + " " +
                     m_name + "(" +
@@ -448,5 +457,98 @@ QString KLaola::Node::describe() const
                     QString::number(size) + " bytes)";
     if (isDirectory())
         description += ", directory";
+    switch (m_prefix)
+    {
+    case OLE_MANAGED_0:
+        description += ", OLE_0";
+        break;
+    case CLSID:
+        description += ", CLSID=";
+        description += readClassStream();
+        file = m_laola->stream(this);
+        description += ", ";
+        for (i = 16; i < file.length; i++)
+        {
+            description += QString::number((file.data[i] >> 4) & 0xf, 16);
+            description += QString::number(file.data[i] & 0xf, 16);
+        }
+        description += ", ";
+        for (i = 16; i < file.length; i++)
+        {
+            QChar tmp = file.data[i];
+
+            if (tmp.isPrint())
+                description += tmp;
+            else
+                description += '.';
+        }
+        break;
+    case OLE_MANAGED_2:
+        description += ", OLE_2";
+        break;
+    case PARENT_MANAGED:
+        description += ", parent managed";
+        break;
+    case STRUCTURED_STORAGE:
+        description += ", reserved 0x" + QString::number(m_prefix, 16);
+        break;
+    case NONE:
+        break;
+    default:
+        description += ", reserved 0x" + QString::number(m_prefix, 16);
+        break;
+    }
     return description;
+}
+
+QString KLaola::Node::name() const
+{
+    return m_name;
+}
+
+// See "Associating Code with Storage" in Inside OLE.
+QString KLaola::Node::readClassStream() const
+{
+    if (isDirectory())
+        return QString::null;
+    if (m_prefix == CLSID)
+    {
+        myFile file;
+        unsigned i;
+        QString clsid;
+
+        // CLSID format is: 00020900-0000-0000-C000-000000000046
+        file = m_laola->stream(this);
+        for (i = 0; i < 4; i++)
+        {
+            clsid += QString::number((file.data[i] >> 4) & 0xf, 16);
+            clsid += QString::number(file.data[i] & 0xf, 16);
+        }
+        clsid += '-';
+        for (; i < 6; i++)
+        {
+            clsid += QString::number((file.data[i] >> 4) & 0xf, 16);
+            clsid += QString::number(file.data[i] & 0xf, 16);
+        }
+        clsid += '-';
+        for (; i < 8; i++)
+        {
+            clsid += QString::number((file.data[i] >> 4) & 0xf, 16);
+            clsid += QString::number(file.data[i] & 0xf, 16);
+        }
+        clsid += '-';
+        for (; i < 10; i++)
+        {
+            clsid += QString::number((file.data[i] >> 4) & 0xf, 16);
+            clsid += QString::number(file.data[i] & 0xf, 16);
+        }
+        clsid += '-';
+        for (; i < 16; i++)
+        {
+            clsid += QString::number((file.data[i] >> 4) & 0xf, 16);
+            clsid += QString::number(file.data[i] & 0xf, 16);
+        }
+        return clsid;
+    }
+    return QString::null;
 }

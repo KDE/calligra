@@ -47,7 +47,21 @@ public:
         virtual ~OLENode() {};
         virtual unsigned handle() const = 0;
         virtual QString name() const = 0;
+
+        // Does the node represent a stream datum, or a storage container
+        // of data?
         virtual bool isDirectory() const = 0;
+
+        // If isDirectory() is true, return the CLSID associated with
+        // any child CompObj node. If the Node is a CompObj, return
+        // its CLSID. Otherwise return QString::null.
+        //
+        // The CLSID is returned in the form:
+        //
+        //  00020900-0000-0000-C000-000000000046
+        //
+        virtual QString readClassStream() const = 0;
+
         // Return a human-readable description of a stream.
         virtual QString describe() const = 0;
     protected:
@@ -103,15 +117,34 @@ private:
         ROOT_ENTRY = 5
     } NodeType;
 
+    // If the first part of an on-disk name is less than 32, it is a prefix.
+    typedef enum
+    {
+        OLE_MANAGED_0,
+        CLSID,
+        OLE_MANAGED_2,
+        PARENT_MANAGED,         // Marks an element as owned by the code that
+                                // manages the parent storage of that element.
+        STRUCTURED_STORAGE,     // For the exclusive use of the Structured Storage
+                                // implementation.
+        RESERVED_FIRST,
+        RESERVED_LAST = 31,
+        NONE = 32
+    } Prefix;
+
     class Node: public OLENode {
     public:
+        Node(KLaola *laola) { m_laola = laola; }
         ~Node() {}
         unsigned handle() const { return  m_handle; }
-        QString name() const { return m_name; }
+        QString name() const;
         bool isDirectory() const { return (type == DIRECTORY) || (type == ROOT_ENTRY); }
+        QString readClassStream() const;
         QString describe() const;
 
+        KLaola *m_laola;
         unsigned m_handle;       // PPS entry number
+        Prefix m_prefix;
         QString m_name;
         NodeType type;
         int prevHandle;   // Last pps
