@@ -31,6 +31,7 @@ class KFDMainWindow : public KParts::MainWindow
 		~KFDMainWindow() {;}
 
 		void loadUIFile(const QString &filename);
+		virtual bool queryClose();
 
 	private:
 		void setupActions();

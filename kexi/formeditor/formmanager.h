@@ -103,6 +103,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! \return The Form actually active and focused.
 		 */
 		Form*             activeForm() const;
+		Form*             formForWidget(QWidget *w);
 		/*! \return true if \a w is a toplevel widget, ie it is the main widget of a Form (so it should have a caption ,
 		 an icon ...)
 		*/
@@ -113,10 +114,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		KexiPropertyEditor* editor() const { return m_editor; }
 
 		/*! Creates a new blank Form, whose toplevel widget inherits \a classname. The Form is automatically shown. */
-		QWidget *createBlankForm(const QString &classname, const char *name, QWidget *parent=0);
+		//QWidget *createBlankForm(const QString &classname, const char *name, QWidget *parent=0);
 
 		/*! Adds a existing form w and changes it to a container */
-		void importForm(QWidget *w, Form *form=0, bool preview=false);
+		void importForm(Form *form=0, bool preview=false);
 
 		/*! Deletes the Form \a form and removes it from our list. */
 		void deleteForm(Form *form);
@@ -135,19 +136,19 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Creates a new blank Form with default class top widget (ie QWidget). The new Form is shown and becomes
 		   the active Form.
 		  */
-		void createBlankForm();
+		//void createBlankForm();
 		/*! Loads a Form from a UI file. A "Open File" dialog is shown to select the file. The loaded Form is shown and becomes
 		   the active Form.
 		  */
-		void loadForm(bool preview=false, const QString &filename=QString::null);
+		//void loadForm(bool preview=false, const QString &filename=QString::null);
 		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, but the former name
 		  is used if there is one (using Form::filename()).
 		 */
-		void saveForm();
+		//void saveForm();
 		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, even if the Form has
 		    already been saved.
 		 */
-		void saveFormAs();
+		//void saveFormAs();
 		/*! Previews the Form \a form using the widget \a w as toplevel container for this Form. */
 		void previewForm(Form *form, QWidget *w, Form *toForm=0);
 		/*! Deletes the selected widget in active Form and all of its children. */
@@ -229,16 +230,19 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void initForm(Form *form);
 		/*! Slot called by the "Lay out in..." menu items. It creates a layout from the currently selected widgets (that must have the same parent). */
 		void createLayout(int layoutType);
+		void alignWidgets(int type);
 
 	signals:
 		/*! this signal is emmited as the property buffer switched */
 		void bufferSwitched(KexiPropertyBuffer *buff);
 		/*! This signal is emitted when any change is made to the Form \a form, so it will need to be saved. */
-		void dirty(KFormDesigner::Form *form);
+		void dirty(KFormDesigner::Form *form, bool isDirty=true);
 
 		void widgetSelected(Form *form, bool multiple);
 		void formWidgetSelected(Form *form);
 		void noFormSelected();
+		void undoEnabled(bool enabled, const QString &text = QString::null);
+		void redoEnabled(bool enabled, const QString &text = QString::null);
 
 		void createFormSlot(Form *form, const QString &widget, const QString &signal);
 		void connectionCreated(Form *form, Connection &connection);
@@ -255,7 +259,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		// Forms
 		QPtrList<Form>		m_forms;
 		QPtrList<Form>		m_preview;
-		int			m_count;
 		QGuardedPtr<Form>	m_active;
 		QWidget			*m_parent;
 

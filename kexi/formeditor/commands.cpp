@@ -155,6 +155,322 @@ GeometryPropertyCommand::name() const
 	return i18n("Move multiple widgets");
 }
 
+/////////////////  AlignWidgetsCommand  ////////
+
+AlignWidgetsCommand::AlignWidgetsCommand(int type, QtWidgetList &list, Form *form)
+: KCommand(), m_form(form), m_type(type)
+{
+	for(QWidget *w = list.first(); w; w = list.next())
+		m_pos.insert(w->name(), w->pos());
+}
+
+void
+AlignWidgetsCommand::execute()
+{
+	// To avoid creation of GeometryPropertyCommand
+	m_form->resetSelection();
+
+	int gridX = m_form->gridX();
+	int gridY = m_form->gridY();
+	QWidget *parentWidget = m_form->selectedWidgets()->first()->parentWidget();
+	int tmpx, tmpy;
+
+	QtWidgetList list;
+	for(QMap<QString, QPoint>::Iterator it = m_pos.begin(); it != m_pos.end(); ++it)
+	{
+		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
+		if(item && item->widget())
+			list.append(item->widget());
+	}
+
+	switch(m_type)
+	{
+		case AlignToGrid:
+		{
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				tmpx = int( (float)w->x() / ((float)gridX) + 0.5 ) * gridX;
+				tmpy = int( (float)w->y() / ((float)gridY) + 0.5 ) * gridY;
+
+				if((tmpx != w->x()) || (tmpy != w->y()))
+					w->move(tmpx, tmpy);
+			}
+			break;
+		}
+
+		case AlignToLeft:
+		{
+			tmpx = parentWidget->width();
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if(w->x() < tmpx)
+					tmpx = w->x();
+			}
+
+			for(QWidget *w = list.first(); w; w = list.next())
+				w->move(tmpx, w->y());
+			break;
+		}
+
+		case AlignToRight:
+		{
+			tmpx = 0;
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if(w->x() + w->width() > tmpx)
+					tmpx = w->x() + w->width();
+			}
+
+			for(QWidget *w = list.first(); w; w = list.next())
+				w->move(tmpx - w->width(), w->y());
+			break;
+		}
+
+		case AlignToTop:
+		{
+			tmpy = parentWidget->height();
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if(w->y() < tmpy)
+					tmpy = w->y();
+			}
+
+			for(QWidget *w = list.first(); w; w = list.next())
+				w->move(w->x(), tmpy);
+			break;
+		}
+
+		case AlignToBottom:
+		{
+			tmpy = 0;
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if(w->y() + w->height() > tmpy)
+					tmpy = w->y() + w->height();
+			}
+
+			for(QWidget *w = list.first(); w; w = list.next())
+				w->move(w->x(), tmpy - w->height());
+			break;
+		}
+
+		default:
+			return;
+	}
+
+	// We restore selection
+	for(QWidget *w = list.first(); w; w = list.next())
+		m_form->setSelectedWidget(w, true);
+}
+
+void
+AlignWidgetsCommand::unexecute()
+{
+	// To avoid creation of GeometryPropertyCommand
+	m_form->resetSelection();
+	// We move widgets to their original pos
+	for(QMap<QString, QPoint>::Iterator it = m_pos.begin(); it != m_pos.end(); ++it)
+	{
+		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
+		if(item && item->widget())
+			item->widget()->move( m_pos[item->widget()->name()] );
+		m_form->setSelectedWidget(item->widget(), true); // We restore selection
+	}
+}
+
+QString
+AlignWidgetsCommand::name() const
+{
+	switch(m_type)
+	{
+		case AlignToGrid:
+			return i18n("Align Widgets To Grid");
+		case AlignToLeft:
+			return i18n("Align Widgets To Left");
+		case AlignToRight:
+			return i18n("Align Widgets To Right");
+		case AlignToTop:
+			return i18n("Align Widgets To Top");
+		case AlignToBottom:
+			return i18n("Align Widgets To Bottom");
+		default:
+			return QString::null;
+	}
+}
+
+///// AdjustSizeCommand ///////////
+
+AdjustSizeCommand::AdjustSizeCommand(int type, QtWidgetList &list, Form *form)
+: KCommand(), m_form(form), m_type(type)
+{
+	for(QWidget *w = list.first(); w; w = list.next())
+	{
+		m_sizes.insert(w->name(), w->size());
+		if(m_type == SizeToGrid) // SizeToGrid also move widgets
+			m_pos.insert(w->name(), w->pos());
+	}
+}
+
+void
+AdjustSizeCommand::execute()
+{
+	// To avoid creation of GeometryPropertyCommand
+	m_form->resetSelection();
+
+	int gridX = m_form->gridX();
+	int gridY = m_form->gridY();
+	int tmpw=0, tmph=0;
+
+	QtWidgetList list;
+	for(QMap<QString, QSize>::Iterator it = m_sizes.begin(); it != m_sizes.end(); ++it)
+	{
+		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
+		if(item && item->widget())
+			list.append(item->widget());
+	}
+
+	switch(m_type)
+	{
+		case SizeToGrid:
+		{
+			int tmpx=0, tmpy=0;
+			// same as in 'Align to Grid' + for the size
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				tmpx = int( (float)w->x() / ((float)gridX) + 0.5 ) * gridX;
+				tmpy = int( (float)w->y() / ((float)gridY) + 0.5 ) * gridY;
+				tmpw = int( (float)w->width() / ((float)gridX) + 0.5 ) * gridX;
+				tmph = int( (float)w->height() / ((float)gridY) + 0.5 ) * gridY;
+
+				if((tmpx != w->x()) || (tmpy != w->y()))
+					w->move(tmpx, tmpy);
+				if((tmpw != w->width()) || (tmph != w->height()))
+					w->resize(tmpw, tmph);
+			}
+			break;
+		}
+
+		case SizeToFit:
+		{
+			for(QWidget *w = list.first(); w; w = list.next())
+				w->resize(w->sizeHint());
+			break;
+		}
+
+		case SizeToSmallWidth:
+		{
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if((tmpw == 0) || (w->width() < tmpw))
+					tmpw = w->width();
+			}
+
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if(tmpw != w->width())
+					w->resize(tmpw, w->height());
+			}
+			break;
+		}
+
+		case SizeToBigWidth:
+		{
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if(w->width() > tmpw)
+					tmpw = w->width();
+			}
+
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if(tmpw != w->width())
+					w->resize(tmpw, w->height());
+			}
+			break;
+		}
+
+		case SizeToSmallHeight:
+		{
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if((tmph == 0) || (w->height() < tmph))
+					tmph = w->height();
+			}
+
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if(tmph != w->height())
+					w->resize(w->width(), tmph);
+			}
+			break;
+		}
+
+		case SizeToBigHeight:
+		{
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if(w->height() > tmph)
+					tmph = w->height();
+			}
+
+			for(QWidget *w = list.first(); w; w = list.next())
+			{
+				if(tmph != w->height())
+					w->resize(w->width(), tmph);
+			}
+			break;
+		}
+
+		default:
+			break;
+	}
+
+	// We restore selection
+	for(QWidget *w = list.first(); w; w = list.next())
+		m_form->setSelectedWidget(w, true);
+}
+
+void
+AdjustSizeCommand::unexecute()
+{
+	// To avoid creation of GeometryPropertyCommand
+	m_form->resetSelection();
+	// We resize widgets to their original size
+	for(QMap<QString, QSize>::Iterator it = m_sizes.begin(); it != m_sizes.end(); ++it)
+	{
+		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
+		if(item && item->widget())
+		{
+			item->widget()->resize(  m_sizes[item->widget()->name()] );
+			if(m_type == SizeToGrid)
+				item->widget()->move( m_pos[item->widget()->name()] );
+			m_form->setSelectedWidget(item->widget(), true); // We restore selection
+		}
+	}
+}
+
+QString
+AdjustSizeCommand::name() const
+{
+	switch(m_type)
+	{
+		case SizeToGrid:
+			return i18n("Resize Widgets To Grid");
+		case SizeToFit:
+			return i18n("Resize Widgets To Fit Contents");
+		case SizeToSmallWidth:
+			return i18n("Resize Widgets To Narrowest");
+		case SizeToBigWidth:
+			return i18n("Resize Widgets To Widest");
+		case SizeToSmallHeight:
+			return i18n("Resize Widgets To Shortest");
+		case SizeToBigHeight:
+			return i18n("Resize Widgets To Tallest");
+		default:
+			return QString::null;
+	}
+}
+
 // LayoutPropertyCommand
 
 LayoutPropertyCommand::LayoutPropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue, const QVariant &value)
@@ -206,6 +522,7 @@ InsertWidgetCommand::InsertWidgetCommand(Container *container/*, QPoint p*/)
 	m_class = container->form()->manager()->insertClass();
 	m_insertRect = container->m_insertRect;
 	m_point = container->m_insertBegin;
+	m_name = container->form()->objectTree()->genName(container->form()->manager()->lib()->namePrefix(m_class));
 }
 
 void
@@ -214,9 +531,6 @@ InsertWidgetCommand::execute()
 	if (!m_form->objectTree())
 		return;
 	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
-	if(m_name.isEmpty()) // we have to use the same name every time, so we don't recreate it if we already have one
-		m_name = m_container->form()->objectTree()->genName(m_container->form()->manager()->lib()->namePrefix(m_class));
-
 	QWidget *w = m_container->form()->manager()->lib()->createWidget(m_class, m_container->m_container, m_name.latin1(), m_container);
 
 	if(!w)

@@ -20,17 +20,18 @@
 #ifndef KFORMDESIGNER_PART_H
 #define KFORMDESIGNER_PART_H
 
+#include <qwidget.h>
+#include <qpixmap.h>
+
 #include <kparts/part.h>
 #include <kparts/factory.h>
+
+#include "form.h"
 
 class KAboutData;
 class KInstance;
 class QWorkspace;
-
-namespace KFormDesigner {
-	class FormManager;
-	class Form;
-}
+class QCloseEvent;
 
 using KFormDesigner::Form;
 
@@ -60,15 +61,31 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 		KFormDesignerPart(QWidget *parent, const char *name, bool readOnly=true);
 		virtual ~KFormDesignerPart();
 
+		KFormDesigner::FormManager*   manager()  { return m_manager; }
+		void      setUniqueFormMode(bool enable)  { m_uniqueFormMode = enable; }
+
+		bool   closeForm(Form *form);
+		bool   closeForms();
+
+		virtual bool closeURL();
+
 	public slots:
+		/*! Creates a new blank Form. The new Form is shown and become the active Form. */
+		void createBlankForm();
+		/*! Loads a Form from a UI file. A "Open File" dialog is shown to select the file. The loaded Form is shown and becomes
+		   the active Form. */
+		void open();
 		void slotPreviewForm();
+		void saveAs();
 		//void slotCreateFormSlot(Form *form, const QString &widget, const QString &signal);
 
 	protected slots:
 		void slotWidgetSelected(Form *form, bool multiple);
 		void slotFormWidgetSelected(Form *form);
 		void slotNoFormSelected();
-		void slotFormModified();
+		void slotFormModified(KFormDesigner::Form *form, bool isDirty);
+		void setUndoEnabled(bool enabled, const QString &text);
+		void setRedoEnabled(bool enabled, const QString &text);
 
 	protected:
 		virtual bool openFile();
@@ -80,6 +97,36 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 	private:
 		KFormDesigner::FormManager  *m_manager;
 		QWorkspace  *m_workspace;
+		int  m_count;
+		bool   m_uniqueFormMode;
+		bool   m_openingFile;
+};
+
+//! Helper: this widget is used to create form's surface
+class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public KFormDesigner::FormWidget
+{
+	Q_OBJECT
+
+	public:
+		FormWidgetBase(KFormDesignerPart *part, QWidget *parent = 0, const char *name = 0, int WFlags = WDestructiveClose)
+		: QWidget(parent, name, WFlags), m_part(part) {}
+		~FormWidgetBase() {;}
+
+		void drawRect(const QRect& r, int type);
+		void initRect();
+		void clearRect();
+		void highlightWidgets(QWidget *from, QWidget *to);//, const QPoint &p);
+
+	protected:
+		void closeEvent(QCloseEvent *ev);
+
+	signals:
+		void formWidgetClosed(bool &accept);
+
+	private:
+		QPixmap buffer; //!< stores grabbed entire form's area for redraw
+		QRect prev_rect; //!< previously selected rectangle
+		KFormDesignerPart  *m_part;
 };
 
 #endif

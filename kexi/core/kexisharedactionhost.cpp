@@ -182,38 +182,42 @@ KAction* KexiSharedActionHost::createSharedActionInternal( KAction *action )
 /*class KexiAction : public KAction
 {
 	public:
-		KexiAction(const QString &text, const QIconSet &pix, 
-			const KShortcut &cut, const QObject *receiver, 
+		KexiAction(const QString &text, const QIconSet &pix,
+			const KShortcut &cut, const QObject *receiver,
 			const char *slot, KActionCollection *parent, const char *name)
 		 : KAction(text,pix,cut,receiver,slot,parent,name)
 		{
 		}
-	
+
 	QPtrDict<QWidget> unplugged;
 };*/
 
-KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &pix_name, 
+KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &pix_name,
 	const KShortcut &cut, const char *name, KActionCollection* col, const char *subclassName)
 {
 	if (subclassName==0)
-		return createSharedActionInternal( 
+		return createSharedActionInternal(
 			new KAction(text, pix_name,
 			cut, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection(), name)
 		);
 	else if (qstricmp(subclassName,"KToggleAction")==0)
-		return createSharedActionInternal( 
+		return createSharedActionInternal(
 			new KToggleAction(text, pix_name,
 			cut, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection(), name)
+		);
+	else if (qstricmp(subclassName,"KActionMenu")==0)
+		return createSharedActionInternal(
+			new KActionMenu(text, pix_name, col ? col : d->mainWin->actionCollection(), name)
 		);
 //TODO: more KAction subclasses
 
 	return 0;
 }
 
-KAction* KexiSharedActionHost::createSharedAction( KStdAction::StdAction id, const char *name, 
+KAction* KexiSharedActionHost::createSharedAction( KStdAction::StdAction id, const char *name,
 	KActionCollection* col)
 {
-	return createSharedActionInternal( 
+	return createSharedActionInternal(
 		KStdAction::create( id, name, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection() )
 	);
 }

@@ -33,11 +33,7 @@ namespace KexiDB
 	class Connection;
 }
 
-namespace KFormDesigner
-{
-	class FormManager;
-	class Form;
-}
+using KFormDesigner::Form;
 
 /**
  * this class is a data-aware form
@@ -65,14 +61,17 @@ class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 		void clearRect();
 		void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
 
-		void setUndoEnabled(bool enabled);
-		void setRedoEnabled(bool enabled);
-
 		virtual QSize sizeHint() const;
 
 	protected slots:
 		void managerPropertyChanged(KexiPropertyBuffer *b);
-		void slotDirty(KFormDesigner::Form *f);
+		void slotDirty(KFormDesigner::Form *f, bool isDirty);
+
+		void slotWidgetSelected(Form *form, bool multiple);
+		void slotFormWidgetSelected(Form *form);
+		void slotNoFormSelected();
+		void setUndoEnabled(bool enabled);
+		void setRedoEnabled(bool enabled);
 
 	protected:
 		virtual KexiPropertyBuffer *propertyBuffer() { return m_buffer; }
@@ -89,6 +88,9 @@ class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 
 		KFormDesigner::Form* form() const;
 		void setForm(KFormDesigner::Form *f);
+
+		void disableWidgetActions();
+		void enableFormActions();
 
 	private:
 		QString m_ds;

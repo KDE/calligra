@@ -118,7 +118,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 
 	protected:
 		virtual void  changeText(const QString &newText);
-		virtual void   resizeEditor(QWidget *widget, const QString classname);
+		virtual void   resizeEditor(QWidget *widget, const QString &classname);
 
 	public slots:
 		void AddTabPage();

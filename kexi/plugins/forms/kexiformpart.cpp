@@ -79,9 +79,34 @@ void KexiFormPart::initActions()
 {
 	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode));
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order"), "tab_order", 0, "formpart_taborder");
-	createSharedAction(Kexi::DesignViewMode, i18n("Adjust Size"), "viewmagfit", 0, "formpart_adjust_size");
+	//createSharedAction(Kexi::DesignViewMode, i18n("Adjust Size"), "viewmagfit", 0, "formpart_adjust_size");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), "icons", 0, "formpart_pixmap_collection");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), "connections", 0, "formpart_connections");
+
+	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Horizontally"), QString::null, 0, "formpart_layout_hbox");
+	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Vertically"), QString::null, 0, "formpart_layout_vbox");
+	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets in &Grid"), QString::null, 0, "formpart_layout_grid");
+	createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString::null, 0, "formpart_break_layout");
+
+	createSharedAction(Kexi::DesignViewMode, i18n("Bring Widget to Front"), "raise", 0, "formpart_format_raise");
+	createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), "lower", 0, "formpart_format_lower");
+
+	KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets position"), "aopos2grid", 0, "formpart_align_menu", "KActionMenu");
+	KActionMenu *menu = static_cast<KActionMenu*>(action);
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Left"), "aoleft", 0, "formpart_align_to_left") );
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Right"), "aoright", 0, "formpart_align_to_right") );
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Top"), "aotop", 0, "formpart_align_to_top") );
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Bottom"), "aobottom", 0, "formpart_align_to_bottom") );
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Grid"), "aopos2grid", 0, "formpart_align_to_grid") );
+
+	action = createSharedAction(Kexi::DesignViewMode, i18n("Adjust Widgets size"), "aogrid", 0, "formpart_adjust_size_menu", "KActionMenu");
+	menu = static_cast<KActionMenu*>(action);
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Fit"), "aofit", 0, "formpart_adjust_to_fit") );
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Grid"), "aogrid", 0, "formpart_adjust_size_grid") );
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Shortest"), "aoshortest", 0, "formpart_adjust_height_small") );
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Tallest"), "aotallest", 0, "formpart_adjust_height_big") );
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Narrowest"), "aonarrowest", 0, "formpart_adjust_width_small") );
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Widest"), "aowidest", 0, "formpart_adjust_width_big") );
 }
 
 KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,

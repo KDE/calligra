@@ -113,10 +113,6 @@ void ResizeHandle::mousePressEvent(QMouseEvent *ev)
 
 void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 {
-#ifndef Q_WS_WIN
-		#warning FIXME
-#endif
-
 	int gridX = m_set->m_form->gridX();
 	int gridY = m_set->m_form->gridY();
 
@@ -235,7 +231,7 @@ void ResizeHandle::mouseReleaseEvent(QMouseEvent *)
 	m_dragging = false;
 }
 
-void ResizeHandle::paintEvent( QPaintEvent *ev )
+void ResizeHandle::paintEvent( QPaintEvent * )
 {
 	//draw XORed background
 
@@ -284,7 +280,6 @@ ResizeHandleSet::setWidget(QWidget *modify, bool editing)
 		for(int i = 0; i < 8; i++)
 			delete m_handles[i];
 
-	QWidget *parent = modify->parentWidget();
 	m_widget = modify;
 
 	m_handles[0] = new ResizeHandle(this, ResizeHandle::TopLeft, editing);

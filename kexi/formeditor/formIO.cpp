@@ -33,6 +33,7 @@
 
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kcommand.h>
 
 #include "form.h"
 #include "container.h"
@@ -149,6 +150,8 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 	form->pixmapCollection()->save(uiElement);
 	// Save the Form connections
 	form->connectionBuffer()->save(uiElement);
+
+	form->commandHistory()->documentSaved();
 
 	m_currentForm = 0;
 	m_currentItem = 0;

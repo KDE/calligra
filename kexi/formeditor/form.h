@@ -22,11 +22,8 @@
 #ifndef KFORMDESIGNERFORM_H
 #define KFORMDESIGNERFORM_H
 
-#include <qwidget.h>
 #include <qobject.h>
 #include <qptrlist.h>
-#include <qpixmap.h>
-#include <qpoint.h>
 
 #include "resizehandle.h"
 
@@ -58,35 +55,7 @@ class KFORMEDITOR_EXPORT FormWidget
 		virtual void initRect() = 0;
 		virtual void clearRect() = 0;
 		virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;//, const QPoint &p) = 0;
-
-		virtual void setUndoEnabled(bool enabled) = 0;
-		virtual void setRedoEnabled(bool enabled) = 0;
 };
-
-//! Helper: this widget is used to create form's surface
-class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public FormWidget
-{
-	Q_OBJECT
-
-	public:
-		FormWidgetBase(KActionCollection *collection, QWidget *parent = 0, const char *name = 0, int WFlags = WDestructiveClose)
-		: QWidget(parent, name, WFlags) , m_collection(collection) {}
-		~FormWidgetBase() {;}
-
-		void drawRect(const QRect& r, int type);
-		void initRect();
-		void clearRect();
-		void highlightWidgets(QWidget *from, QWidget *to);//, const QPoint &p);
-
-		void setUndoEnabled(bool enabled);
-		void setRedoEnabled(bool enabled);
-
-	private:
-		QPixmap buffer; //!< stores grabbed entire form's area for redraw
-		QRect prev_rect; //!< previously selected rectangle
-		KActionCollection  *m_collection;
-};
-
 
 /*!
   This class represents one form and holds the corresponding ObjectTree and Containers.
@@ -136,7 +105,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandle is removed. */
 		void			unSelectWidget(QWidget *w);
 		void			resetSelection();
-		void			emitActionSignals();
+		void			emitActionSignals(bool withUndoAction=true);
 
 		/*! Sets the Form interactivity mode. If is used when pasting widgets, or loading a Form.
 		 */
@@ -152,6 +121,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void			setDesignMode(bool design);
 		//! \return The actual mode of the Form.
 		bool			designMode() { return m_design; }
+
+		bool			isModified() { return m_dirty; }
 
 		//! \return the x distance between two dots in the background.
 		int		gridX() { return 10;}
@@ -217,8 +188,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		  at the same time.
 		 */
 		void			formDeleted();
-		void			slotUndoActionActivated(bool);
-		void			slotRedoActionActivated(bool);
+		void			slotCommandExecuted();
+		void			emitUndoEnabled();
+		void			emitRedoEnabled();
+		void			slotFormRestored();
 
 	signals:
 		/*! This signal is emitted when user selects a new widget, to update both Property Editor and ObjectTreeView.
@@ -264,6 +237,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		QtWidgetList		m_selected;
 		ResizeHandleSet::Dict m_resizeHandles;
 
+		bool			m_dirty;
 		bool			m_inter;
 		bool			m_design;
 		QString			m_filename;

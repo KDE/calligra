@@ -167,7 +167,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		  If \a multiple is true, then multiple widgets of the same class are selected, and you should only show properties shared by widgets
 		  (eg font, color). By default, all properties are shown if multiple == true, and none if multiple == false.
 		*/
-		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple) { return !multiple; }
+		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
 		/*! You need to return here a list of the properties that should automatically be saved for a widget belonging to \a classname,
 		 and your custom properties (eg "text" for label or button, "contents" for combobox...). */
 		virtual QStringList     autoSaveProperties(const QString &classname)=0;
@@ -200,7 +200,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		*/
 		virtual void  changeProperty(const char *name, const QVariant &value, Container *container);
 		/*! This function is called when the widget is resized, and the editor size needs to be updated. */
-		virtual void   resizeEditor(QWidget *widget, const QString classname) {;}
+		virtual void   resizeEditor(QWidget *widget, const QString &classname);
 
 		/*! Adds the i18n'ed description of a property, which will be shown in PropertyEditor. */
 		virtual void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
@@ -211,7 +211,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/*! You have to implement this function for editing inside the Form to work. This slot is called when the line edit text changes,
 		  and you have to make it really change the good property of the widget using changeProperty() (text, or title, etc.).
 		 */
-		virtual void  changeText(const QString &newText){;}
+		virtual void  changeText(const QString &newText);
 		/*! This slot is called when the editor has lost focus or the user pressed Enter. It destroys the editor or installs
 		 again the event filter on the widget. */
 		virtual void  resetEditor();

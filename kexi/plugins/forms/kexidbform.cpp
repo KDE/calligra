@@ -31,6 +31,7 @@
 #include <formIO.h>
 #include <formmanager.h>
 #include <objecttree.h>
+#include <container.h>
 
 #include "kexidbform.h"
 
@@ -55,18 +56,51 @@ KexiDBForm::KexiDBForm(/*KexiFormPartItem &i,*/ KexiMainWindow *win, QWidget *pa
 	if(!preview)
 	{
 		connect(formPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *)), this, SLOT(managerPropertyChanged(KexiPropertyBuffer *)));
-		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *)), this, SLOT(slotDirty(KFormDesigner::Form *)));
+		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)), this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
+
+		// action stuff
+		connect(formPart()->manager(), SIGNAL(widgetSelected(Form*, bool)), SLOT(slotWidgetSelected(Form*, bool)));
+		connect(formPart()->manager(), SIGNAL(formWidgetSelected(Form*)), SLOT(slotFormWidgetSelected(Form*)));
+		connect(formPart()->manager(), SIGNAL(undoEnabled(bool, const QString&)), this, SLOT(setUndoEnabled(bool)));
+		connect(formPart()->manager(), SIGNAL(redoEnabled(bool, const QString&)), this, SLOT(setRedoEnabled(bool)));
+
 		plugSharedAction("formpart_taborder", formPart()->manager(), SLOT(editTabOrder()));
 		plugSharedAction("formpart_adjust_size", formPart()->manager(), SLOT(adjustWidgetSize()));
 		plugSharedAction("formpart_pixmap_collection", formPart()->manager(), SLOT(editFormPixmapCollection()));
 		plugSharedAction("formpart_connections", formPart()->manager(), SLOT(editConnections()));
+
 		plugSharedAction("edit_copy", formPart()->manager(), SLOT(copyWidget()));
 		plugSharedAction("edit_cut", formPart()->manager(), SLOT(cutWidget()));
 		plugSharedAction("edit_paste", formPart()->manager(), SLOT(pasteWidget()));
 		plugSharedAction("edit_delete", formPart()->manager(), SLOT(deleteWidget()));
 		plugSharedAction("edit_undo", formPart()->manager(), SLOT(undo()));
 		plugSharedAction("edit_redo", formPart()->manager(), SLOT(redo()));
+
+		plugSharedAction("formpart_layout_hbox", formPart()->manager(), SLOT(layoutHBox()) );
+		plugSharedAction("formpart_layout_vbox", formPart()->manager(), SLOT(layoutVBox()) );
+		plugSharedAction("formpart_layout_grid", formPart()->manager(), SLOT(layoutGrid()) );
+		plugSharedAction("formpart_break_layout", formPart()->manager(), SLOT(breakLayout()) );
+
+		plugSharedAction("formpart_format_raise", formPart()->manager(), SLOT(bringWidgetToFront()) );
+		plugSharedAction("formpart_format_lower", formPart()->manager(), SLOT(sendWidgetToBack()) );
+
+		plugSharedAction("formpart_align_menu", formPart()->manager(), 0 );
+		plugSharedAction("formpart_align_to_left", formPart()->manager(),SLOT(alignWidgetsToLeft()) );
+		plugSharedAction("formpart_align_to_right", formPart()->manager(), SLOT(alignWidgetsToRight()) );
+		plugSharedAction("formpart_align_to_top", formPart()->manager(), SLOT(alignWidgetsToTop()) );
+		plugSharedAction("formpart_align_to_bottom", formPart()->manager(), SLOT(alignWidgetsToBottom()) );
+		plugSharedAction("formpart_align_to_grid", formPart()->manager(), SLOT(alignWidgetsToGrid()) );
+
+		plugSharedAction("formpart_adjust_size_menu", formPart()->manager(), 0 );
+		plugSharedAction("formpart_adjust_to_fit", formPart()->manager(), SLOT(adjustWidgetSize()) );
+		plugSharedAction("formpart_adjust_size_grid", formPart()->manager(), SLOT(adjustSizeToGrid()) );
+		plugSharedAction("formpart_adjust_height_small", formPart()->manager(),  SLOT(adjustHeightToSmall()) );
+		plugSharedAction("formpart_adjust_height_big", formPart()->manager(), SLOT(adjustHeightToBig()) );
+		plugSharedAction("formpart_adjust_width_small", formPart()->manager(), SLOT(adjustWidthToSmall()) );
+		plugSharedAction("formpart_adjust_width_big", formPart()->manager(), SLOT(adjustWidthToBig()) );
 	}
+	else
+		connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
 
 	initForm();
 }
@@ -131,7 +165,7 @@ KexiDBForm::initForm()
 	else
 		loadForm();
 
-	formPart()->manager()->importForm(this, form(), m_preview);
+	formPart()->manager()->importForm(form(), m_preview);
 }
 
 void
@@ -163,7 +197,7 @@ KexiDBForm::managerPropertyChanged(KexiPropertyBuffer *b)
 }
 
 bool
-KexiDBForm::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
+KexiDBForm::beforeSwitchTo(int mode, bool &, bool &dontStore)
 {
 	// we don't store on db, but in our TempData
 	dontStore = true;
@@ -177,7 +211,7 @@ KexiDBForm::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 }
 
 bool
-KexiDBForm::afterSwitchFrom(int mode, bool &cancelled)
+KexiDBForm::afterSwitchFrom(int mode, bool &)
 {
 	if((mode == Kexi::DesignViewMode) && m_preview) //aka !preview
 	{
@@ -188,32 +222,24 @@ KexiDBForm::afterSwitchFrom(int mode, bool &cancelled)
 		setForm( new KFormDesigner::Form(formPart()->manager()) );
 		form()->createToplevel(m_preview);
 		loadForm();
-		formPart()->manager()->importForm(m_preview, form(), true);
+		formPart()->manager()->importForm(form(), true);
 		m_preview->show();
 		if (!layout())
 			(void)new QHBoxLayout(this);
 		layout()->add(m_preview);
 		formPart()->manager()->deleteForm( prevForm );
+		slotNoFormSelected();
 		delete prevForm;
 	}
-
-	setAvailable("formpart_connections", !m_preview);
-	setAvailable("formpart_pixmap_collection", !m_preview);
-	setAvailable("formpart_adjust_size", !m_preview);
-	setAvailable("formpart_taborder", !m_preview);
-	setAvailable("edit_copy", !m_preview);
-	setAvailable("edit_cut", !m_preview);
-	setAvailable("edit_paste", !m_preview);
-	setAvailable("edit_delete", !m_preview);
 
 	return true;
 }
 
 void
-KexiDBForm::slotDirty(KFormDesigner::Form *dirtyForm)
+KexiDBForm::slotDirty(KFormDesigner::Form *dirtyForm, bool isDirty)
 {
 	if(dirtyForm == form())
-		KexiViewBase::setDirty(true);
+		KexiViewBase::setDirty(isDirty);
 }
 
 KexiDB::SchemaData*
@@ -227,7 +253,7 @@ KexiDBForm::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 }
 
 bool
-KexiDBForm::storeData(bool &cancel)
+KexiDBForm::storeData(bool &)
 {
 	kdDebug(44000) << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 	QByteArray data;
@@ -236,6 +262,124 @@ KexiDBForm::storeData(bool &cancel)
 	tempData()->tempForm = QByteArray();
 
 	return true;
+}
+
+void
+KexiDBForm::slotWidgetSelected(KFormDesigner::Form *f, bool multiple)
+{
+	if(f != form())
+		return;
+
+	enableFormActions();
+	// Enable edit actions
+	setAvailable("edit_copy", true);
+	setAvailable("edit_cut", true);
+	setAvailable("edit_clear", true);
+
+	// 'Align Widgets' menu
+	setAvailable("formpart_align_menu", multiple);
+	setAvailable("formpart_align_to_left", multiple);
+	setAvailable("formpart_align_to_right", multiple);
+	setAvailable("formpart_align_to_top", multiple);
+	setAvailable("formpart_align_to_bottom", multiple);
+
+	setAvailable("formpart_adjust_size_menu", true);
+	setAvailable("formpart_adjust_width_small", multiple);
+	setAvailable("formpart_adjust_width_big", multiple);
+	setAvailable("formpart_adjust_height_small", multiple);
+	setAvailable("formpart_adjust_height_big", multiple);
+
+	setAvailable("formpart_format_raise", true);
+	setAvailable("formpart_format_lower", true);
+
+	// If the widgets selected is a container, we enable layout actions
+	if(!multiple)
+	{
+		KFormDesigner::ObjectTreeItem *item = f->objectTree()->lookup( f->selectedWidgets()->first()->name() );
+		if(item && item->container())
+			multiple = true;
+	}
+	// Layout actions
+	setAvailable("formpart_layout_hbox", multiple);
+	setAvailable("formpart_layout_vbox", multiple);
+	setAvailable("formpart_layout_grid", multiple);
+
+	KFormDesigner::Container *container = f->activeContainer();
+	setAvailable("formpart_break_layout", (container->layoutType() != KFormDesigner::Container::NoLayout));
+}
+
+void
+KexiDBForm::slotFormWidgetSelected(KFormDesigner::Form *f)
+{
+	if(f != form())
+		return;
+
+	disableWidgetActions();
+	enableFormActions();
+
+	// Layout actions
+	setAvailable("formpart_layout_hbox", true);
+	setAvailable("formpart_layout_vbox", true);
+	setAvailable("formpart_layout_grid", true);
+	setAvailable("formpart_break_layout", (f->toplevelContainer()->layoutType() != KFormDesigner::Container::NoLayout));
+}
+
+void
+KexiDBForm::slotNoFormSelected() // == form in preview mode
+{
+	disableWidgetActions();
+
+	// Disable paste action
+	setAvailable("edit_paste", false);
+	setAvailable("edit_undo", false);
+	setAvailable("edit_redo", false);
+
+	// Disable 'Tools' actions
+	setAvailable("formpart_pixmap_collection", false);
+	setAvailable("formpart_connections", false);
+	setAvailable("formpart_taborder", false);
+	setAvailable("formpart_change_style", false);
+}
+
+void
+KexiDBForm::enableFormActions()
+{
+	// Enable 'Tools' actions
+	setAvailable("formpart_pixmap_collection", true);
+	setAvailable("formpart_connections", true);
+	setAvailable("formpart_taborder", true);
+
+	setAvailable("edit_paste", formPart()->manager()->isPasteEnabled());
+}
+
+void
+KexiDBForm::disableWidgetActions()
+{
+	// Disable edit actions
+	setAvailable("edit_copy", false);
+	setAvailable("edit_cut", false);
+	setAvailable("edit_clear", false);
+
+	// Disable format functions
+	setAvailable("formpart_align_menu", false);
+	setAvailable("formpart_align_to_left", false);
+	setAvailable("formpart_align_to_right", false);
+	setAvailable("formpart_align_to_top", false);
+	setAvailable("formpart_align_to_bottom", false);
+
+	setAvailable("formpart_adjust_size_menu", false);
+	setAvailable("formpart_adjust_width_small", false);
+	setAvailable("formpart_adjust_width_big", false);
+	setAvailable("formpart_adjust_height_small", false);
+	setAvailable("formpart_adjust_height_big", false);
+
+	setAvailable("formpart_format_raise", false);
+	setAvailable("formpart_format_lower", false);
+
+	setAvailable("formpart_layout_hbox", false);
+	setAvailable("formpart_layout_vbox", false);
+	setAvailable("formpart_layout_grid", false);
+	setAvailable("formpart_break_layout", false);
 }
 
 //repaint all children widgets

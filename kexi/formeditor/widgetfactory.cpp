@@ -284,6 +284,20 @@ WidgetFactory::addValueDescription(Container *container, const char *value, cons
 	buff->addValueDescription(value, desc);
 }
 
+bool
+WidgetFactory::showProperty(const QString&, QWidget*, const QString&, bool multiple)
+{
+	return !multiple;
+}
+
+void
+WidgetFactory::resizeEditor(QWidget *, const QString&)
+{}
+
+void
+WidgetFactory::changeText(const QString&)
+{}
+
 WidgetFactory::~WidgetFactory()
 {
 }

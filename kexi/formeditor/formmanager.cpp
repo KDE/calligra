@@ -76,7 +76,6 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_active = 0;
 	m_inserting = false;
 	m_drawingSlot = false;
-	m_count = 0;
 	m_collection = 0;
 	m_connection = 0;
 
@@ -398,6 +397,7 @@ FormManager::windowChanged(QWidget *w)
 
 			m_active = form;
 
+			emit  dirty(form, form->isModified());
 			if(!m_active->objectTree()) // ie preview form
 				emit noFormSelected();
 			else
@@ -412,6 +412,17 @@ Form*
 FormManager::activeForm() const
 {
 	return m_active;
+}
+
+Form*
+FormManager::formForWidget(QWidget *w)
+{
+	for(Form *form = m_forms.first(); form; form = m_forms.next())
+	{
+		if(form->toplevelContainer() && form->toplevelContainer()->widget() == w)
+			return form;
+	}
+	return 0; // not one of toplevel widgets
 }
 
 void
@@ -429,82 +440,10 @@ FormManager::deleteForm(Form *form)
 		showPropertyBuffer(0);
 	}
 }
-/*
-void
-FormManager::setSelectedWidget(QWidget *w)
-{
-	if(activeForm())
-		activeForm()->setSelectedWidget(w);
-}*/
 
 void
-FormManager::createBlankForm()
+FormManager::importForm(Form *form, bool preview)
 {
-	createBlankForm("QWidget",0);
-}
-
-QWidget *
-FormManager::createBlankForm(const QString &classname, const char *name, QWidget *parent)
-{
-	if(!parent)
-		parent = m_parent;
-
-	Form *form = new Form(this, name);
-
-	QString n;
-
-	n = i18n("Form") + QString::number(m_count + 1);
-	FormWidgetBase *w = new FormWidgetBase(m_collection, parent, n.latin1(), Qt::WDestructiveClose);
-
-	form->createToplevel(w, w, classname);
-	w->setCaption(n);
-	w->setIcon(SmallIcon("form"));
-	w->resize(350, 300);
-	w->show();
-	w->setFocus();
-	initForm(form);
-
-	return 0;
-}
-
-void
-FormManager::importForm(QWidget *w, Form *form, bool preview)
-{
-	if(!form)
-		form = new Form(this, w->name());
-
-	if(!form->toplevelContainer())
-		form->createToplevel(w, 0, w->name());
-	w->setCaption(w->name());
-	w->setIcon(SmallIcon("kexi"));
-	w->resize(350, 300);
-	w->show();
-	//w->setFocus();
-
-	if(!preview)
-		initForm(form);
-	else
-	{
-		m_preview.append(form);
-		form->setDesignMode(false);
-	}
-}
-
-void
-FormManager::loadForm(bool preview, const QString &filename)
-{
-//	QString n = "Form" + QString::number(m_count + 1);
-	Form *form = new Form(this);//, n.latin1());
-	//QWidget *w = new QWidget(m_parent, 0, Qt::WDestructiveClose);
-	FormWidgetBase *w = new FormWidgetBase(m_collection, m_parent, 0, Qt::WDestructiveClose);
-	form->createToplevel(w, w);
-	if(!FormIO::loadForm(form, w, filename))
-	{
-		delete form;
-		return;
-	}
-	w->show();
-
 	if(!preview)
 		initForm(form);
 	else
@@ -523,7 +462,6 @@ FormManager::initForm(Form *form)
 		m_treeview->setForm(form);
 
 	m_active = form;
-	m_count++;
 
 	//m_buffer->setSelectedWidget(form->toplevelContainer()->widget());
 
@@ -538,28 +476,6 @@ FormManager::initForm(Form *form)
 
 	form->setSelectedWidget(form->objectTree()->widget());
 	windowChanged(form->toplevelContainer()->widget());
-}
-
-
-void
-FormManager::saveForm()
-{
-	m_buffer->checkModifiedProp();
-	if (activeForm())
-	{
-		if(!activeForm()->filename().isNull())
-			FormIO::saveForm(activeForm(), activeForm()->filename());
-		else
-			FormIO::saveForm(activeForm());
-	}
-}
-
-void
-FormManager::saveFormAs()
-{
-	m_buffer->checkModifiedProp();
-	if (activeForm())
-		FormIO::saveForm(activeForm());
 }
 
 void
@@ -1032,103 +948,48 @@ FormManager::editConnections()
 }
 
 void
-FormManager::alignWidgetsToLeft()
+FormManager::alignWidgets(int type)
 {
 	if(!activeForm() || (activeForm()->selectedWidgets()->count() < 2))
 		return;
 
 	QWidget *parentWidget = activeForm()->selectedWidgets()->first()->parentWidget();
-	int tmpx = parentWidget->width();
 
 	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
 	{
 		if(w->parentWidget() != parentWidget)
 		{
-			kdDebug() << "FormManager::alignWidgetsToLeft() widgets don't have the same parent widget" << endl;
+			kdDebug() << "FormManager::alignWidgets() type ==" << type <<  " widgets don't have the same parent widget" << endl;
 			return;
 		}
-
-		if(w->x() < tmpx)
-			tmpx = w->x();
 	}
 
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-		w->move(tmpx, w->y());
+	KCommand *com = new AlignWidgetsCommand(type, *(activeForm()->selectedWidgets()), activeForm());
+	activeForm()->addCommand(com, true);
+}
+
+void
+FormManager::alignWidgetsToLeft()
+{
+	alignWidgets(AlignWidgetsCommand::AlignToLeft);
 }
 
 void
 FormManager::alignWidgetsToRight()
 {
-	if(!activeForm() || (activeForm()->selectedWidgets()->count() < 2))
-		return;
-
-	QWidget *parentWidget = activeForm()->selectedWidgets()->first()->parentWidget();
-	int tmpx = 0;
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if(w->parentWidget() != parentWidget)
-		{
-			kdDebug() << "FormManager::alignWidgetsToRight() widgets don't have the same parent widget" << endl;
-			return;
-		}
-
-		if(w->x() + w->width() > tmpx)
-			tmpx = w->x() + w->width();
-	}
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-		w->move(tmpx - w->width(), w->y());
+	alignWidgets(AlignWidgetsCommand::AlignToRight);
 }
 
 void
 FormManager::alignWidgetsToTop()
 {
-	if(!activeForm() || (activeForm()->selectedWidgets()->count() < 2))
-		return;
-
-	QWidget *parentWidget = activeForm()->selectedWidgets()->first()->parentWidget();
-	int tmpy = parentWidget->height();
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if(w->parentWidget() != parentWidget)
-		{
-			kdDebug() << "FormManager::alignWidgetsToLeft() widgets don't have the same parent widget" << endl;
-			return;
-		}
-
-		if(w->y() < tmpy)
-			tmpy = w->y();
-	}
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-		w->move(w->x(), tmpy);
+	alignWidgets(AlignWidgetsCommand::AlignToTop);
 }
 
 void
 FormManager::alignWidgetsToBottom()
 {
-	if(!activeForm() || (activeForm()->selectedWidgets()->count() < 2))
-		return;
-
-	QWidget *parentWidget = activeForm()->selectedWidgets()->first()->parentWidget();
-	int tmpy = 0;
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if(w->parentWidget() != parentWidget)
-		{
-			kdDebug() << "FormManager::alignWidgetsToRight() widgets don't have the same parent widget" << endl;
-			return;
-		}
-
-		if(w->y() + w->height() > tmpy)
-			tmpy = w->y() + w->height();
-	}
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-		w->move(w->x(), tmpy - w->height());
+	alignWidgets(AlignWidgetsCommand::AlignToBottom);
 }
 
 void
@@ -1137,8 +998,8 @@ FormManager::adjustWidgetSize()
 	if(!m_active)
 		return;
 
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-		w->resize(w->sizeHint());
+	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToFit, *(activeForm()->selectedWidgets()), activeForm());
+	activeForm()->addCommand(com, true);
 }
 
 void
@@ -1147,18 +1008,8 @@ FormManager::alignWidgetsToGrid()
 	if(!activeForm())
 		return;
 
-	int gridX = activeForm()->gridX();
-	int gridY = activeForm()->gridY();
-	int tmpx, tmpy;
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		tmpx = int( (float)w->x() / ((float)gridX) + 0.5 ) * gridX;
-		tmpy = int( (float)w->y() / ((float)gridY) + 0.5 ) * gridY;
-
-		if((tmpx != w->x()) || (tmpy != w->y()))
-			w->move(tmpx, tmpy);
-	}
+	KCommand *com = new AlignWidgetsCommand(AlignWidgetsCommand::AlignToGrid, *(activeForm()->selectedWidgets()), activeForm());
+	activeForm()->addCommand(com, true);
 }
 
 void
@@ -1167,20 +1018,8 @@ FormManager::adjustSizeToGrid()
 	if(!activeForm())
 		return;
 
-	alignWidgetsToGrid();
-
-	int gridX = activeForm()->gridX();
-	int gridY = activeForm()->gridY();
-	int tmpw, tmph;
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		tmpw = int( (float)w->width() / ((float)gridX) + 0.5 ) * gridX;
-		tmph = int( (float)w->height() / ((float)gridY) + 0.5 ) * gridY;
-
-		if((tmpw != w->width()) || (tmph != w->height()))
-			w->resize(tmpw, tmph);
-	}
+	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToGrid, *(activeForm()->selectedWidgets()), activeForm());
+	activeForm()->addCommand(com, true);
 }
 
 void
@@ -1189,18 +1028,8 @@ FormManager::adjustWidthToSmall()
 	if(!activeForm())
 		return;
 
-	int tmpw=0;
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if((tmpw == 0) || (w->width() < tmpw))
-			tmpw = w->width();
-	}
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if(tmpw != w->width())
-			w->resize(tmpw, w->height());
-	}
+	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToSmallWidth, *(activeForm()->selectedWidgets()), activeForm());
+	activeForm()->addCommand(com, true);
 }
 
 void
@@ -1209,18 +1038,8 @@ FormManager::adjustWidthToBig()
 	if(!activeForm())
 		return;
 
-	int tmpw=0;
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if(w->width() > tmpw)
-			tmpw = w->width();
-	}
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if(tmpw != w->width())
-			w->resize(tmpw, w->height());
-	}
+	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToBigWidth, *(activeForm()->selectedWidgets()), activeForm());
+	activeForm()->addCommand(com, true);
 }
 
 void
@@ -1229,18 +1048,8 @@ FormManager::adjustHeightToSmall()
 	if(!activeForm())
 		return;
 
-	int tmph=0;
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if((tmph == 0) || (w->height() < tmph))
-			tmph = w->height();
-	}
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if(tmph != w->height())
-			w->resize(w->width(), tmph);
-	}
+	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToSmallHeight, *(activeForm()->selectedWidgets()), activeForm());
+	activeForm()->addCommand(com, true);
 }
 
 void
@@ -1249,18 +1058,8 @@ FormManager::adjustHeightToBig()
 	if(!activeForm())
 		return;
 
-	int tmph=0;
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if(w->height() > tmph)
-			tmph = w->height();
-	}
-
-	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-	{
-		if(tmph != w->height())
-			w->resize(w->width(), tmph);
-	}
+	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToBigHeight, *(activeForm()->selectedWidgets()), activeForm());
+	activeForm()->addCommand(com, true);
 }
 
 void

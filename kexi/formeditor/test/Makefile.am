@@ -11,17 +11,13 @@ INCLUDES = -I$(top_srcdir)/kexi/formeditor -I$(top_srcdir)/kexi/widget/propertye
 
 kformdesigner_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
-kformdesigner_LDADD = $(top_builddir)/kexi/formeditor/libkformeditor.la
+kformdesigner_LDADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la
 
 kformdesigner_SOURCES = main.cpp kfd_mainwindow.cpp
 
 # client stuff
 
 METASOURCES = AUTO
-
-messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/kformdesigner.pot
-
 KDE_ICON = kformdesigner
 
 kdelnkdir = $(kde_appsdir)/Utilities
@@ -32,17 +28,17 @@ rc_DATA = kfd_mainwindow.rc
 
 
 # KFormDesigner KPart
-kde_module_LTLIBRARIES = libkfd_part.la
+kde_module_LTLIBRARIES = libkformdesigner_part.la
 
-libkfd_part_la_SOURCES = kfd_part.cpp
-libkfd_part_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
-libkfd_part_la_LIBADD  = $(top_builddir)/kexi/formeditor/libkformeditor.la $(LIB_KFILE)
+libkformdesigner_part_la_SOURCES = kfd_part.cpp
+libkformdesigner_part_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+libkformdesigner_part_la_LIBADD  = $(top_builddir)/kexi/formeditor/libkformdesigner.la $(LIB_KFILE)
 
 # this is where the desktop file will go
 partdesktopdir   = $(kde_servicesdir)
-partdesktop_DATA = libkfd_part.desktop
+partdesktop_DATA = kformdesigner_part.desktop
 
 # this is where the part's XML-GUI resource file goes
-partrcdir   = $(kde_datadir)/kfd_part
+partrcdir   = $(kde_datadir)/kformdesigner_part
 partrc_DATA = kfd_part.rc
 

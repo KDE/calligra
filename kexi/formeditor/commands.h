@@ -83,6 +83,41 @@ class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
 		QPoint m_pos;
 };
 
+class KFORMEDITOR_EXPORT AlignWidgetsCommand : public KCommand
+{
+	public:
+		AlignWidgetsCommand(int type, QtWidgetList &list, Form *form);
+
+		virtual void execute();
+		virtual void unexecute();
+		virtual QString name() const;
+
+		enum { AlignToGrid = 100, AlignToLeft, AlignToRight, AlignToTop, AlignToBottom };
+
+	protected:
+		Form  *m_form;
+		int    m_type;
+		QMap<QString, QPoint>  m_pos;
+};
+
+class KFORMEDITOR_EXPORT AdjustSizeCommand : public KCommand
+{
+	public:
+		AdjustSizeCommand(int type, QtWidgetList &list, Form *form);
+
+		virtual void execute();
+		virtual void unexecute();
+		virtual QString name() const;
+
+		enum { SizeToGrid = 200, SizeToFit, SizeToSmallWidth, SizeToBigWidth, SizeToSmallHeight, SizeToBigHeight };
+
+	protected:
+		Form  *m_form;
+		int    m_type;
+		QMap<QString, QPoint>  m_pos;
+		QMap<QString, QSize>  m_sizes;
+};
+
 /*! This command is used when switching the layout of a Container. It remembers the old pos of every widget inside the Container. */
 class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 {

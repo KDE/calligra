@@ -10,6 +10,21 @@
    <Action name="formpart_connections"/>
    <!-- Action name="change_style"/ -->
   </Menu>
+  <Menu name="format" noMerge="1">
+  <text>&amp;Format</text>
+   <Action name="snap_to_grid"/>
+   <Separator/>
+   <Action name="formpart_layout_hbox"/>
+   <Action name="formpart_layout_vbox"/>
+   <Action name="formpart_layout_grid"/>
+   <Action name="formpart_break_layout"/>
+   <Separator/>
+   <Action name="formpart_align_menu"/>
+   <Action name="formpart_adjust_size_menu"/>
+   <Separator/>
+   <Action name="formpart_format_raise"/>
+   <Action name="formpart_format_lower"/>
+  </Menu>
 </MenuBar>
 
 <ToolBar name="widgets" fullWidth="false">
@@ -30,6 +45,11 @@
    <Action name="library_widget_QCheckBox"/>
    <Action name="library_widget_Spacer"/>
  <ActionList name="library_widgets" />
+</ToolBar>
+<ToolBar name="format" fullWidth="false" noMerge="1">
+<text>Format Toolbar</text>
+   <Action name="formpart_align_menu"/>
+   <Action name="formpart_adjust_size_menu"/>
 </ToolBar>
 <!-- ToolBar name="tools" fullWidth="false">
    <Action name="change_style"/>

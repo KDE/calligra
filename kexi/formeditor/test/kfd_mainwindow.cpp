@@ -35,10 +35,10 @@ KFDMainWindow::KFDMainWindow()
 	setupActions();
 	//statusBar()->show();
 
-	KLibFactory *factory = KLibLoader::self()->factory("libkfd_part");
+	KLibFactory *factory = KLibLoader::self()->factory("libkformdesigner_part");
 	if (factory)
 	{
-		m_part = static_cast<KParts::ReadWritePart *>( factory->create(this, "kfd_part", "KParts::ReadWritePart") );
+		m_part = static_cast<KParts::ReadWritePart *>( factory->create(this, "kformdesigner_part", "KParts::ReadWritePart", QStringList("multipleMode")) );
 
 		if(m_part)
 		{
@@ -66,6 +66,15 @@ void
 KFDMainWindow::setupActions()
 {
 	KStdAction::quit(kapp, SLOT(quit()), actionCollection());
+}
+
+bool
+KFDMainWindow::queryClose()
+{
+	if(!m_part)
+		return true;
+
+	return m_part->closeURL();
 }
 
 #include "kfd_mainwindow.moc"

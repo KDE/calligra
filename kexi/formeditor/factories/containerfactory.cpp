@@ -558,7 +558,7 @@ ContainerFactory::changeText(const QString &text)
 }
 
 void
-ContainerFactory::resizeEditor(QWidget *widget, const QString classname)
+ContainerFactory::resizeEditor(QWidget *widget, const QString &)
 {
 	QSize s = widget->size();
 	m_editor->move(widget->x() + 2, widget->y() - 5);

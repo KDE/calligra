@@ -20,20 +20,14 @@
 */
 
 #include <qwidget.h>
-#include <qobjectlist.h>
-#include <qtabwidget.h>
-#include <qpainter.h>
 #include <qlabel.h>
+#include <qobjectlist.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcommand.h>
 #include <kaction.h>
 #include <kmessagebox.h>
-#include <kpixmap.h>
-#include <kpixmapeffect.h>
-#include <kpixmapio.h>
-#include <kimageeffect.h>
 
 #include "container.h"
 #include "objecttree.h"
@@ -57,6 +51,7 @@ Form::Form(FormManager *manager, const char *name)
 	m_cursors = 0;
 	m_manager = manager;
 	m_resizeHandles.setAutoDelete(true);
+	m_dirty = false;
 	m_inter = true;
 	m_design = true;
 	m_autoTabstops = false;
@@ -66,17 +61,15 @@ Form::Form(FormManager *manager, const char *name)
 	// Init actions
 	m_collection = new KActionCollection(0, this);
 	m_history = new KCommandHistory(m_collection, true);
-	KAction *m_undoAction = m_collection->action("edit_undo");
-	KAction *m_redoAction = m_collection->action("edit_redo");
-	connect(m_undoAction, SIGNAL(enabled(bool)), this, SLOT(slotUndoActionActivated(bool)) );
-	connect(m_redoAction, SIGNAL(enabled(bool)), this, SLOT(slotRedoActionActivated(bool)) );
+	connect(m_history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
+	connect(m_history, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
 }
 
 
 //////////////// Container -related functions ///////////////////////
 
 void
-Form::createToplevel(QWidget *container, FormWidget *formWidget, const QString &classname)
+Form::createToplevel(QWidget *container, FormWidget *formWidget, const QString &)
 {
 	kdDebug() << "Form::createToplevel() container= "<< (container ? container->name() : "<NULL>")
 		<< " formWidget=" << formWidget << "className=" << name() << endl;
@@ -209,9 +202,6 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 
 	//raise selected widget and all possible parents
 	QWidget *wtmp = w;
-	//wtmp->raise();
-	//while (wtmp && wtmp->parentWidget() && static_cast<QObject*>(wtmp)!=m_form && !wtmp->inherits("KFormDesigner::FormWidget")
-	//	&& static_cast<QObject*>(wtmp->parentWidget())!=this && static_cast<QObject*>(wtmp->parentWidget())!=m_form)
 	while(!dontRaise && wtmp && wtmp->parentWidget() && (wtmp != m_topTree->widget()))
 	{
 		wtmp->raise();
@@ -230,7 +220,7 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 	}
 	m_selected.append(w);
 	emit selectionChanged(w, add);
-	emitActionSignals();
+	emitActionSignals(false);
 
 	// WidgetStack and TabWidget pages widgets shouldn't have resize handles, but their parent
 	if(!m_manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
@@ -254,14 +244,11 @@ Form::unSelectWidget(QWidget *w)
 void
 Form::resetSelection()
 {
-	//m_selected.clear();
-	//m_resizeHandles.clear();
-	//emit selectionChanged(0, false);
 	setSelectedWidget(m_topTree->widget(), false);
 }
 
 void
-Form::emitActionSignals()
+Form::emitActionSignals(bool withUndoAction)
 {
 	// Update menu and toolbar items
 	if(m_selected.count() > 1)
@@ -271,13 +258,16 @@ Form::emitActionSignals()
 	else
 		emit m_manager->formWidgetSelected(this);
 
+	if(!withUndoAction)
+		return;
+
 	KAction *undoAction = m_collection->action("edit_undo");
-	if(undoAction && m_formWidget)
-		m_formWidget->setUndoEnabled(undoAction->isEnabled());
+	if(undoAction)
+		emit m_manager->undoEnabled(undoAction->isEnabled(), undoAction->text());
 
 	KAction *redoAction = m_collection->action("edit_redo");
-	if(redoAction && m_formWidget)
-		m_formWidget->setRedoEnabled(redoAction->isEnabled());
+	if(redoAction)
+		emit m_manager->redoEnabled(redoAction->isEnabled(), redoAction->text());
 }
 
 ///////////////////////////  Various slots and signals /////////////////////
@@ -329,23 +319,45 @@ Form::emitChildRemoved(ObjectTreeItem *item)
 void
 Form::addCommand(KCommand *command, bool execute)
 {
-	emit m_manager->dirty(this);
+	emit m_manager->dirty(this, true);
+	m_dirty = true;
 	m_history->addCommand(command, execute);
+	if(!execute) // simulate command to activate 'undo' menu
+		slotCommandExecuted();
 }
 
 void
-Form::slotUndoActionActivated(bool enabled)
+Form::slotCommandExecuted()
 {
-	if(m_formWidget)
-		m_formWidget->setUndoEnabled(enabled);
+	emit m_manager->dirty(this, true);
+	m_dirty = true;
+	QTimer::singleShot(10, this, SLOT(emitUndoEnabled()));
+	QTimer::singleShot(10, this, SLOT(emitRedoEnabled()));
 }
 
 void
-Form::slotRedoActionActivated(bool enabled)
+Form::emitUndoEnabled()
 {
-	if(m_formWidget)
-		m_formWidget->setRedoEnabled(enabled);
+	KAction *undoAction = m_collection->action("edit_undo");
+	if(undoAction)
+		emit m_manager->undoEnabled(undoAction->isEnabled(), undoAction->text());
 }
+
+void
+Form::emitRedoEnabled()
+{
+	KAction *redoAction = m_collection->action("edit_redo");
+	if(redoAction)
+		emit m_manager->redoEnabled(redoAction->isEnabled(), redoAction->text());
+}
+
+void
+Form::slotFormRestored()
+{
+	emit m_manager->dirty(this, false);
+	m_dirty = false;
+}
+
 
 ///////////////////////////  Tab stops ////////////////////////
 
@@ -560,159 +572,6 @@ Form::~Form()
 	delete m_connBuffer;
 	m_connBuffer = 0;
 	m_resizeHandles.setAutoDelete(false); // otherwise, it tries to delete widgets which doesn't exist anymore
-}
-
-//////  FormWidgetBase : helper widget to draw rects on top of widgets
-
-//repaint all children widgets
-static void repaintAll(QWidget *w)
-{
-	QObjectList *list = w->queryList("QWidget");
-	QObjectListIt it(*list);
-	for (QObject *obj; (obj=it.current()); ++it ) {
-		static_cast<QWidget*>(obj)->repaint();
-	}
-	delete list;
-}
-
-void
-FormWidgetBase::drawRect(const QRect& r, int type)
-{
-	QPainter p;
-	p.begin(this, true);
-	bool unclipped = testWFlags( WPaintUnclipped );
-	setWFlags( WPaintUnclipped );
-
-	if (prev_rect.isValid()) {
-		//redraw prev. selection's rectangle
-		p.drawPixmap( QPoint(prev_rect.x()-2, prev_rect.y()-2), buffer, QRect(prev_rect.x()-2, prev_rect.y()-2, prev_rect.width()+4, prev_rect.height()+4));
-	}
-	p.setBrush(QBrush::NoBrush);
-	if(type == 1) // selection rect
-		p.setPen(QPen(white, 1, Qt::DotLine));
-	else if(type == 2) // insert rect
-		p.setPen(QPen(white, 2));
-	p.setRasterOp(XorROP);
-	p.drawRect(r);
-	prev_rect = r;
-
-	if (!unclipped)
-		clearWFlags( WPaintUnclipped );
-	p.end();
-}
-
-void
-FormWidgetBase::initRect()
-{
-	repaintAll(this);
-	buffer.resize( width(), height() );
-	buffer = QPixmap::grabWindow( winId() );
-	prev_rect = QRect();
-}
-
-void
-FormWidgetBase::clearRect()
-{
-	QPainter p;
-	p.begin(this, true);
-	bool unclipped = testWFlags( WPaintUnclipped );
-	setWFlags( WPaintUnclipped );
-
-	//redraw entire form surface
-	p.drawPixmap( QPoint(0,0), buffer, QRect(0,0,buffer.width(), buffer.height()) );
-
-	if (!unclipped)
-		clearWFlags( WPaintUnclipped );
-	p.end();
-
-	repaintAll(this);
-}
-
-void
-FormWidgetBase::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
-{
-	QPoint fromPoint, toPoint;
-	if(from && from->parentWidget() && (from != this))
-		fromPoint = from->parentWidget()->mapTo(this, from->pos());
-	if(to && to->parentWidget() && (to != this))
-		toPoint = to->parentWidget()->mapTo(this, to->pos());
-
-	QPainter p;
-	p.begin(this, true);
-	bool unclipped = testWFlags( WPaintUnclipped );
-	setWFlags( WPaintUnclipped );
-
-	if (prev_rect.isValid()) {
-		//redraw prev. selection's rectangle
-		p.drawPixmap( QPoint(prev_rect.x(), prev_rect.y()), buffer, QRect(prev_rect.x(), prev_rect.y(), prev_rect.width(), prev_rect.height()));
-	}
-
-	p.setPen( QPen(Qt::red, 2) );
-
-	if(to)
-	{
-		QPixmap pix1 = QPixmap::grabWidget(from);
-		QPixmap pix2 = QPixmap::grabWidget(to);
-
-		/*if(from == this)
-			p.drawLine( point, mapFrom(to->parentWidget(), to->geometry().center()) );
-		else if(to == this)
-			p.drawLine( mapFrom(from->parentWidget(), from->geometry().center()), point);
-		else*/
-		if((from != this) && (to != this))
-			p.drawLine( from->parentWidget()->mapTo(this, from->geometry().center()), to->parentWidget()->mapTo(this, to->geometry().center()) );
-
-		p.drawPixmap(fromPoint.x(), fromPoint.y(), pix1);
-		p.drawPixmap(toPoint.x(), toPoint.y(), pix2);
-
-		if(to == this)
-			p.drawRoundRect(2, 2, width()-4, height()-4, 4, 4);
-		else
-			p.drawRoundRect(toPoint.x(), toPoint.y(), to->width(), to->height(), 5, 5);
-	}
-
-	if(from == this)
-		p.drawRoundRect(2, 2, width()-4, height()-4, 4, 4);
-	else
-		p.drawRoundRect(fromPoint.x(),  fromPoint.y(), from->width(), from->height(), 5, 5);
-
-	if((to == this) || (from == this))
-		prev_rect = QRect(0, 0, buffer.width(), buffer.height());
-	else if(to)
-	{
-		prev_rect.setX( (fromPoint.x() < toPoint.x()) ? (fromPoint.x() - 5) : (toPoint.x() - 5) );
-		prev_rect.setY( (fromPoint.y() < toPoint.y()) ? (fromPoint.y() - 5) : (toPoint.y() - 5) );
-		prev_rect.setRight( (fromPoint.x() < toPoint.x()) ? (toPoint.x() + to->width() + 10) : (fromPoint.x() + from->width() + 10) );
-		prev_rect.setBottom( (fromPoint.y() < toPoint.y()) ? (toPoint.y() + to->height() + 10) : (fromPoint.y() + from->height() + 10) ) ;
-	}
-	else
-		prev_rect = QRect(fromPoint.x()- 5,  fromPoint.y() -5, from->width() + 10, from->height() + 10);
-
-	if (!unclipped)
-		clearWFlags( WPaintUnclipped );
-	p.end();
-}
-
-void
-FormWidgetBase::setUndoEnabled(bool enabled)
-{
-	if(m_collection)
-	{
-		KAction *undoAction = m_collection->action("edit_undo");
-		if(undoAction)
-			undoAction->setEnabled(enabled);
-	}
-}
-
-void
-FormWidgetBase::setRedoEnabled(bool enabled)
-{
-	if(m_collection)
-	{
-		KAction *redoAction = m_collection->action("edit_redo");
-		if(redoAction)
-			redoAction->setEnabled(enabled);
-	}
 }
 
 #include "form.moc"
