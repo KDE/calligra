@@ -33,7 +33,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char **argv)
 {
     KAboutData about("kformdesigner", I18N_NOOP("KFormDesigner"), version, description,
-                     KAboutData::License_LGPL, "(C) 2003 Lucijan Busch", 0, 0, "lucijan@kde.org");
+                     KAboutData::License_LGPL, "(C) 2003-2004 Kexi Team", 0, 0);
     about.addAuthor( "Lucijan Busch", 0, "lucijan@kde.org" );
     about.addAuthor( "Cedric Pasteur", 0, "cedric.pasteur@free.fr");
     KCmdLineArgs::init(argc, argv, &about);
