@@ -168,37 +168,37 @@ list_date_time+="currentTime";
 list_date_time+="currentDateTime";
 list_date_time+="dayOfYear";
 
-if(string== "Statistic" )
+if(string== i18n("Statistic") )
 	{
 	formula->clear();
 	formula->insertStringList(list_stat);
 	}
-if (string =="Trigonometric")
+if (string ==i18n("Trigonometric"))
 	{
 	formula->clear();
 	formula->insertStringList(list_trig);
 	}
-if (string =="Analytic")
+if (string ==i18n("Analytic"))
 	{
 	formula->clear();
 	formula->insertStringList(list_anal);
 	}
-if(string== "Logic" )
+if(string== i18n("Logic") )
 	{
 	formula->clear();
 	formula->insertStringList(list_logic);
 	}
-if(string== "Text" )
+if(string== i18n("Text") )
 	{
 	formula->clear();
 	formula->insertStringList(list_text);
 	}
-if(string== "Time and Date" )
+if(string== i18n("Time and Date") )
 	{
 	formula->clear();
 	formula->insertStringList(list_date_time);
 	}
-if(string == "All")
+if(string == i18n("All"))
 	{
 	formula->clear();
 	formula->insertStringList(list_stat);

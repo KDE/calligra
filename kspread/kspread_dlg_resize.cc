@@ -82,7 +82,7 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
   bb->layout();
   lay1->addWidget( bb );
 
-
+  m_pSize->setFocus();
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
 

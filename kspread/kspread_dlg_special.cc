@@ -52,7 +52,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
     rb4 = new QRadioButton( i18n("Everything without border"), grp );
     rb1->setChecked(true);
 
-    grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Operation",this);
+    grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Operation"),this);
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     lay1->addWidget(grp);
@@ -68,7 +68,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
     // cb = new QCheckBox(i18n("Transpose"),this);
     // cb->layout();
     // lay1->addWidget(cb);
-    
+
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
     m_pOk = bb->addButton( i18n("OK") );
@@ -86,7 +86,7 @@ void KSpreadspecial::slotOk()
 {
     PasteMode sp = Normal;
     Operation op = OverWrite;
-    
+
     /* if( rb1->isChecked() )
 	sp = cb->isChecked() ? NormalAndTranspose : Normal;
     else if( rb2->isChecked() )

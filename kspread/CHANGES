@@ -260,3 +260,8 @@ in a QPushButton (use color of theme).
 installing in new cell when you choose Text or NoBorder parameter)
 -Clean up in code
 -Add setFocus in different dialog box
+
+1999-12-30 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add i18n where I forgot to install it
+-Now you can validate MultiRow in "Cell Layout"

@@ -43,7 +43,7 @@ KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
   QGridLayout *lay2 = new QGridLayout( lay1,3,2 );
   lay2->setSpacing( 15 );
 
-  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Sort by",this);
+  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Sort by"),this);
   grp->setRadioButtonExclusive( TRUE );
   grp->layout();
   lay2->addWidget(grp,0,0);

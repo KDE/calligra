@@ -43,7 +43,7 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
 
-  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Insert",this);
+  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Insert"),this);
   grp->setRadioButtonExclusive( TRUE );
   grp->layout();
   lay1->addWidget(grp);
@@ -57,7 +57,8 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint
   	}
   else if(insRem==Remove)
   	{
-  	rb1 = new QRadioButton( i18n("Move towards left"), grp );
+        grp->setTitle(i18n("Remove"));
+        rb1 = new QRadioButton( i18n("Move towards left"), grp );
   	rb2 = new QRadioButton( i18n("Move towards top"), grp );
  	rb3 = new QRadioButton( i18n("Remove row"), grp );
   	rb4 = new QRadioButton( i18n("Remove column"), grp );

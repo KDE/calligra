@@ -180,6 +180,9 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 
     brushColor = obj->backGroundBrushColor(_left,_top);
     brushStyle = obj->backGroundBrushStyle(_left,_top);
+
+    bMultiRow = obj->multiRow();
+
     // We assume, that all other objects have the same values
     bLeftBorderStyle = TRUE;
     bLeftBorderColor = TRUE;
@@ -1118,14 +1121,14 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     QVBoxLayout *lay1 = new QVBoxLayout( this );
     lay1->setMargin( 5 );
     lay1->setSpacing( 10 );
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Horizontal",this);
+    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Horizontal"),this);
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     lay1->addWidget(grp);
     left = new QRadioButton( i18n("Left"), grp );
     center = new QRadioButton( i18n("Center"), grp );
     right = new QRadioButton( i18n("Right"), grp );
-    setCaption( i18n("Horizontal") );
+
 
     if(dlg->alignX==KSpreadCell::Left)
         left->setChecked(true);
@@ -1135,7 +1138,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
         right->setChecked(true);
 
 
-    grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Vertical",this);
+    grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Vertical"),this);
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     lay1->addWidget(grp);
@@ -1143,7 +1146,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     middle = new QRadioButton( i18n("Middle"), grp );
     bottom = new QRadioButton( i18n("Bottom"), grp );
 
-    setCaption( i18n("Vertical") );
+
     if(dlg->alignY==KSpreadCell::Top)
         top->setChecked(true);
     else if(dlg->alignY==KSpreadCell::Middle)
@@ -1151,6 +1154,12 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     else if(dlg->alignY==KSpreadCell::Bottom)
         bottom->setChecked(true);
 
+    grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Multi Row"),this);
+    grp->setRadioButtonExclusive( TRUE );
+    grp->layout();
+    lay1->addWidget(grp);
+    multi = new QRadioButton( i18n("Goto line automatically"), grp );
+    multi->setChecked(dlg->bMultiRow);
     this->resize( 400, 400 );
 }
 
@@ -1169,6 +1178,7 @@ else if(right->isChecked())
         _obj->setAlign(KSpreadCell::Right);
 else if(center->isChecked())
         _obj->setAlign(KSpreadCell::Center);
+_obj->setMultiRow(multi->isChecked());
 }
 
 

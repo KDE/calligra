@@ -222,6 +222,7 @@ protected:
     QRadioButton *left;
     QRadioButton *right;
     QRadioButton *center;
+    QRadioButton *multi;
     CellLayoutDlg *dlg;
 };
 
@@ -473,6 +474,8 @@ public:
     QString actionText;
     KSpreadCell::Align alignX;
     KSpreadCell::AlignY alignY;
+
+    bool bMultiRow;
 
     static QPixmap* formatOnlyNegSignedPixmap;
     static QPixmap* formatRedOnlyNegSignedPixmap;

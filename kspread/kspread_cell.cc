@@ -2344,7 +2344,7 @@ void KSpreadCell::setText( const QString& _text )
   {
     // Find out what it is
     checkValue();
-		
+
     m_bLayoutDirtyFlag = true;
     m_content = Text;
   }
@@ -2918,7 +2918,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	if ( t[0] == '=' )
 	    t = decodeFormular( t, m_iColumn, m_iRow );
 
-	setText( pasteOperation( t, m_strText, op ) );
+        setText( pasteOperation( t, m_strText, op ) );
     }
 
     if ( !f.isNull() && f.hasAttribute( "style" ) )
