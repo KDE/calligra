@@ -463,6 +463,9 @@ bool GDocument::readFromXml (const char* fname) {
       return false;
   } while (! endOfHeader);
 
+  // update page layout
+  setPageLayout (pLayout);
+
   GObject* obj = 0L;
   stack<GGroup*, vector<GGroup*> > groups;
   bool finished = false;
