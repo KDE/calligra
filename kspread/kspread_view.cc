@@ -2426,15 +2426,12 @@ void KSpreadView::insertMathExpr()
     if ( m_pTable == 0L )
         return;
 
-    m_pDoc->emitBeginOperation(false);
-    KSpreadDlgFormula *dlg=new KSpreadDlgFormula( this, "Function" );
+    KSpreadDlgFormula *dlg = new KSpreadDlgFormula( this, "Function" );
     dlg->show();
 
     /* TODO - because I search on 'TODO's :-) */
     // #### Is the dialog deleted when it's closed ? (David)
     // Torben thinks that not.
-
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::formulaSelection( const QString &_math )
@@ -3682,20 +3679,18 @@ void KSpreadView::preference()
 void KSpreadView::addModifyComment()
 {
   if ( !m_pTable )
-       return;
+    return;
 
-  m_pDoc->emitBeginOperation(false);
-
-  KSpreadComment dlg( this, "comment",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-  if(dlg.exec())
-        updateEditWidget();
-
-  m_pDoc->emitEndOperation();
+  KSpreadComment dlg( this, "comment", 
+                      QPoint( m_pCanvas->markerColumn(), 
+                              m_pCanvas->markerRow() ) );
+  if( dlg.exec() )
+    updateEditWidget();
 }
 
 void KSpreadView::setSelectionComment(QString comment)
 {
-  if (m_pTable != NULL)
+  if( m_pTable != NULL )
   {
     m_pDoc->emitBeginOperation(false);
 

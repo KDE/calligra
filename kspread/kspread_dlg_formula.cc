@@ -276,6 +276,8 @@ bool KSpreadDlgFormula::eventFilter( QObject* obj, QEvent* ev )
 
 void KSpreadDlgFormula::slotOk()
 {
+    m_pView->doc()->emitBeginOperation( false );
+
     m_pView->canvasWidget()->endChoose();
     // Switch back to the old table
     if( m_pView->activeTable()->tableName() !=  m_tableName )
@@ -303,12 +305,15 @@ void KSpreadDlgFormula::slotOk()
         m_pView->canvasWidget()->editor()->setCursorPosition( pos );
     }
 
+    m_pView->doc()->emitEndOperation();
     accept();
     delete this;
 }
 
 void KSpreadDlgFormula::slotClose()
 {
+    m_pView->doc()->emitBeginOperation( false );
+
     m_pView->canvasWidget()->endChoose();
 
     // Switch back to the old table
@@ -333,6 +338,8 @@ void KSpreadDlgFormula::slotClose()
         m_pView->canvasWidget()->editor()->setText( m_oldText );
         m_pView->canvasWidget()->editor()->setFocus();
     }
+
+    m_pView->doc()->emitEndOperation();
     reject();
     //laurent 2002-01-03 comment this line otherwise kspread crash
     //but dialog box is not deleted => not good
