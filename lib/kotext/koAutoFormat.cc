@@ -790,15 +790,15 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
 
         detectStartOfLink(lastWord);
         //kdDebug() << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
-        KMacroCommand *macro =new KMacroCommand(i18n("Autocorrection"));
-        bool cmdCreate=false;
+        KMacroCommand *macro = 0L;
         int newPos = index;
-        KCommand *cmd = doAutoCorrect( textEditCursor, parag, newPos , txtObj );
+        KCommand *cmd = doAutoCorrect( textEditCursor, parag, newPos, txtObj );
 
         if( cmd )
         {
+            if (!macro)
+                macro = new KMacroCommand(i18n("Autocorrection"));
             macro->addCommand( cmd );
-            cmdCreate = true;
         }
 
         if ( !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
@@ -807,36 +807,35 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
             cmd = doUpperCase( textEditCursor, parag, newPos, lastWord, txtObj );
             if( cmd )
             {
+                if (!macro)
+                    macro = new KMacroCommand(i18n("Autocorrection"));
                 macro->addCommand( cmd );
-                cmdCreate = true;
             }
         }
 
-        if ( cmdCreate )
+        if ( macro )
             txtObj->emitNewCommand( macro );
-        else
-            delete macro;
 
         if( m_bAutoSuperScript && m_superScriptEntries.count()>0)
         {
-            KCommand * cmd =doAutoSuperScript( textEditCursor, parag, newPos, lastWord, txtObj  );
+            KCommand * cmd = doAutoSuperScript( textEditCursor, parag, newPos, lastWord, txtObj  );
             if ( cmd )
-                txtObj->emitNewCommand( cmd);
+                txtObj->emitNewCommand( cmd );
         }
 
 
     }
     if ( ch == '"' && m_typographicDoubleQuotes.replace )
     {
-        KCommand *cmd =doTypographicQuotes( textEditCursor, parag, index,txtObj, true /*double quote*/ );
+        KCommand *cmd = doTypographicQuotes( textEditCursor, parag, index, txtObj, true /*double quote*/ );
         if ( cmd )
-            txtObj->emitNewCommand( cmd);
+            txtObj->emitNewCommand( cmd );
     }
     else if ( ch == '\'' && m_typographicDoubleQuotes.replace )
     {
-        KCommand *cmd =doTypographicQuotes( textEditCursor, parag, index,txtObj, false /* simple quote*/ );
+        KCommand *cmd = doTypographicQuotes( textEditCursor, parag, index, txtObj, false /* simple quote*/ );
         if ( cmd )
-            txtObj->emitNewCommand( cmd);
+            txtObj->emitNewCommand( cmd );
     }
 }
 
