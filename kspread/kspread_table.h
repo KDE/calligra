@@ -507,9 +507,9 @@ public:
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
-    void paste( QRect pasteArea, bool makeUndo=true, PasteMode=Normal,
+    void paste( const QRect &pasteArea, bool makeUndo=true, PasteMode=Normal,
                 Operation=OverWrite,bool insert=false,int insertTo=0 );
-    void paste( const QByteArray& data, QRect pasteArea,
+    void paste( const QByteArray& data, const QRect &pasteArea,
                 bool makeUndo=false, PasteMode=Normal, Operation=OverWrite,
                 bool insert=false, int insertTo=0 );
     void defaultSelection( KSpreadSelection* selectionInfo );
@@ -825,7 +825,7 @@ public:
     * insertTo used just for insert/paste an area
      * @see #paste
      */
-    bool loadSelection( const QDomDocument& doc, QRect pasteArea, int _xshift, int _yshift,bool makeUndo,PasteMode = Normal, Operation = OverWrite,bool insert=false,int insertTo=0 );
+    bool loadSelection( const QDomDocument& doc, const QRect &pasteArea, int _xshift, int _yshift,bool makeUndo,PasteMode = Normal, Operation = OverWrite,bool insert=false,int insertTo=0 );
 
     void loadSelectionUndo( const QDomDocument & doc, QRect loadArea,
                             int _xshift, int _yshift,bool insert,int insertTo);
@@ -1633,6 +1633,7 @@ private:
 
     void convertObscuringBorders();
     void checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret);
+    int adjustColumnHelper( KSpreadCell * c, int _col, int _row );
 
 };
 

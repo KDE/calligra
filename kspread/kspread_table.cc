@@ -4547,10 +4547,34 @@ void KSpreadTable::decreaseIndent( KSpreadSelection* selectionInfo )
 }
 
 
+int KSpreadTable::adjustColumnHelper( KSpreadCell * c, int _col, int _row )
+{
+    int long_max = 0;
+    c->conditionAlign( painter(), _col, _row );
+    if ( c->textWidth() > long_max )
+    {
+        int indent = 0;
+        int a = c->align( c->column(), c->row() );
+        if ( a == KSpreadCell::Undefined )
+        {
+            if ( c->isNumeric() || c->isDate() || c->isTime())
+                a = KSpreadCell::Right;
+            else
+                a = KSpreadCell::Left;
+        }
+
+        if ( a == KSpreadCell::Left )
+            indent = c->getIndent( c->column(), c->row() );
+        long_max = indent + c->textWidth()
+                   + c->leftBorderWidth( c->column(), c->row() )
+                   + c->rightBorderWidth( c->column(), c->row() );
+    }
+    return long_max;
+}
+
 int KSpreadTable::adjustColumn( KSpreadSelection* selectionInfo, int _col )
 {
   QRect selection(selectionInfo->selection());
-
   int long_max = 0;
   if ( _col == -1 )
   {
@@ -4563,25 +4587,7 @@ int KSpreadTable::adjustColumn( KSpreadSelection* selectionInfo, int _col )
         {
           if ( !c->isEmpty() && !c->isObscured() )
           {
-            c->conditionAlign( painter(), col, c->row() );
-            if ( c->textWidth() > long_max )
-            {
-              int indent = 0;
-              int a = c->align( c->column(), c->row() );
-              if ( a == KSpreadCell::Undefined )
-              {
-                if ( c->isNumeric() || c->isDate() || c->isTime())
-                  a = KSpreadCell::Right;
-                else
-                  a = KSpreadCell::Left;
-              }
-
-              if ( a == KSpreadCell::Left )
-                indent = c->getIndent( c->column(), c->row() );
-              long_max = indent + c->textWidth()
-                + c->leftBorderWidth( c->column(), c->row() )
-                + c->rightBorderWidth( c->column(), c->row() );
-            }
+              long_max = adjustColumnHelper( c,col, c->row() );
           } // if !isEmpty...
           c = getNextCellDown( col, c->row() );
         }
@@ -4599,25 +4605,7 @@ int KSpreadTable::adjustColumn( KSpreadSelection* selectionInfo, int _col )
         {
           if ( !c->isEmpty() && !c->isObscured())
           {
-            c->conditionAlign( painter(), col, c->row() );
-            if ( c->textWidth() > long_max )
-            {
-              int indent = 0;
-              int a = c->align( c->column(), c->row() );
-              if ( a == KSpreadCell::Undefined )
-              {
-                if ( c->isNumeric() || c->isDate() || c->isTime())
-                  a = KSpreadCell::Right;
-                else
-                  a = KSpreadCell::Left;
-              }
-
-              if ( a == KSpreadCell::Left )
-                indent = c->getIndent( c->column(), c->row() );
-              long_max = indent + c->textWidth()
-                + c->leftBorderWidth( c->column(), c->row() )
-                + c->rightBorderWidth( c->column(), c->row() );
-            }
+              long_max = adjustColumnHelper( c,col, c->row() );
           }
           c = getNextCellDown( col, c->row() );
         } // end while
@@ -4633,27 +4621,7 @@ int KSpreadTable::adjustColumn( KSpreadSelection* selectionInfo, int _col )
         if ( cell != m_pDefaultCell && !cell->isEmpty()
              && !cell->isObscured() )
         {
-          cell->conditionAlign( painter(), x, y );
-          if ( cell->textWidth() > long_max )
-          {
-            int indent = 0;
-
-            int a = cell->align(x, y);
-            if ( a == KSpreadCell::Undefined )
-            {
-              if ( cell->isNumeric() || cell->isDate() || cell->isTime())
-                a = KSpreadCell::Right;
-              else
-                a = KSpreadCell::Left;
-            }
-
-            if ( a == KSpreadCell::Left )
-              indent=cell->getIndent( x, y );
-
-            long_max = indent + cell->textWidth()
-              + cell->leftBorderWidth( cell->column(), cell->row() )
-              + cell->rightBorderWidth( cell->column(), cell->row() );
-          }
+            long_max = adjustColumnHelper( cell, x, y );
         }
       } // for top...bottom
     } // not column selected
@@ -5133,7 +5101,7 @@ void KSpreadTable::cutSelection( KSpreadSelection* selectionInfo )
     deleteSelection( selectionInfo );
 }
 
-void KSpreadTable::paste( QRect pasteArea, bool makeUndo,
+void KSpreadTable::paste( const QRect &pasteArea, bool makeUndo,
                           PasteMode sp, Operation op, bool insert, int insertTo )
 {
     QMimeSource* mime = QApplication::clipboard()->data();
@@ -5237,7 +5205,7 @@ void KSpreadTable::pasteTextPlain( QString &_text, QRect pasteArea)
   emit sig_updateVBorder( this );
 }
 
-void KSpreadTable::paste( const QByteArray& b, QRect pasteArea, bool makeUndo,
+void KSpreadTable::paste( const QByteArray& b, const QRect &pasteArea, bool makeUndo,
                           PasteMode sp, Operation op, bool insert, int insertTo )
 {
     kdDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
@@ -5257,7 +5225,7 @@ void KSpreadTable::paste( const QByteArray& b, QRect pasteArea, bool makeUndo,
                    insertTo );
 }
 
-bool KSpreadTable::loadSelection( const QDomDocument& doc, QRect pasteArea,
+bool KSpreadTable::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
                                   int _xshift, int _yshift, bool makeUndo,
                                   PasteMode sp, Operation op, bool insert,
                                   int insertTo)
