@@ -6350,6 +6350,19 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, KoOasisStyles& oa
         rowNode = rowNode.nextSibling();
     }
 
+    if ( tableElement.hasAttribute( "table:protected" ) )
+    {
+      QCString passwd( "" );
+      if ( tableElement.hasAttribute( "table:protection-key" ) )
+      {
+        QString p = tableElement.attribute( "table:protection-key" );
+        QCString str( p.latin1() );
+        kdDebug(30518) << "Decoding password: " << str << endl;
+        passwd = KCodecs::base64Decode( str );
+      }
+      kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
+      m_strPassword = passwd;
+    }
     return true;
 }
 
