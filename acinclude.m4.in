@@ -1819,18 +1819,18 @@ fi
 ])
 
 dnl installed MICO version
-mico_v_maj=$(echo $kde_cv_mico_version | sed -e 's/^\(.*\)\..*\..*$/\1/')
-mico_v_mid=$(echo $kde_cv_mico_version | sed -e 's/^.*\.\(.*\)\..*$/\1/')
-mico_v_min=$(echo $kde_cv_mico_version | sed -e 's/^.*\..*\.\(.*\)$/\1/')
+mico_v_maj=`echo $kde_cv_mico_version | sed -e 's/^\(.*\)\..*\..*$/\1/'`
+mico_v_mid=`echo $kde_cv_mico_version | sed -e 's/^.*\.\(.*\)\..*$/\1/'`
+mico_v_min=`echo $kde_cv_mico_version | sed -e 's/^.*\..*\.\(.*\)$/\1/'`
 
 dnl required MICO version
-req_v_maj=$(echo $1 | sed -e 's/^\(.*\)\..*\..*$/\1/')
-req_v_mid=$(echo $1 | sed -e 's/^.*\.\(.*\)\..*$/\1/')
-req_v_min=$(echo $1 | sed -e 's/^.*\..*\.\(.*\)$/\1/') 
+req_v_maj=`echo $1 | sed -e 's/^\(.*\)\..*\..*$/\1/'`
+req_v_mid=`echo $1 | sed -e 's/^.*\.\(.*\)\..*$/\1/'`
+req_v_min=`echo $1 | sed -e 's/^.*\..*\.\(.*\)$/\1/'` 
 
-if test $mico_v_maj -lt $req_v_maj || \
-    test $mico_v_mid -lt $req_v_mid || \
-      test $mico_v_min -lt $req_v_min
+if test "$mico_v_maj" -lt "$req_v_maj" || \
+    test "$mico_v_mid" -lt "$req_v_mid" || \
+      test "$mico_v_min" -lt "$req_v_min"
 then
   AC_MSG_ERROR([found MICO version $kde_cv_mico_version but version $1 \
 at least is required. You should upgrade MICO.])
