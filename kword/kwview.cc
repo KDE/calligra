@@ -528,8 +528,8 @@ void KWView::setupActions()
 
     actionFormatColor = new TKSelectColorAction( i18n( "Text Color..." ), TKSelectColorAction::TextColor,
                                      this, SLOT( textColor() ),
-                                     actionCollection(), "format_color" );
-
+                                     actionCollection(), "format_color",true );
+    actionFormatColor->setDefaultColor(QColor());
 #if KDE_VERSION < 220
     // Necessary with kdelibs-2.1.x, because those actions are only in the toolbar
     KAccel * accel = new KAccel( this );
