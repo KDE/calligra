@@ -46,10 +46,8 @@
 #include "kexibrowseritem.h"
 #include "kexiworkspaceMDI.h"
 #include "kexicreateproject.h"
-#include "kexiformbase.h"
 #include "kexiprojectproperties.h"
 #include "kexiproject.h"
-#include "kexirelationdialog.h"
 #include "KexiViewIface.h"
 
 KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, const char *name ) : KoView(part,parent,name)

@@ -35,12 +35,11 @@
 
 #include "kexiview.h"
 #include "kexibrowser.h"
-#include "kexiformbase.h"
 #include "kexiworkspace.h"
 #include "kexibrowseritem.h"
 //#include "kexidatatable.h"
 #include "kexialtertable.h"
-#include "kexiquerydesigner.h"
+//#include "kexiquerydesigner.h"
 //#include "kexikugarwrapper.h"
 #include "kexiproject.h"
 #include "kexiprojecthandler.h"
