@@ -268,6 +268,9 @@ public:
      */
     bool hasInterval(const KPTDateTime &start, const KPTDateTime &end) const;
     
+    KPTDateTime availableAfter(const KPTDateTime &time);
+    KPTDateTime availableBefore(const KPTDateTime &time);
+
 protected:
     const KPTCalendar &copy(KPTCalendar &calendar);
     void init();

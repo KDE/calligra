@@ -370,10 +370,18 @@ KPTDateTime KPTTask::calculateForward(int use) {
         earliestStart = summarytaskEarliestStart();
         m_durationForward = summarytaskDurationForward(earliestStart);
     } else if (type() == KPTNode::Type_Task) {
+        // Adjust duration to when resource(s) can start work
+        if (m_requests) {
+            earliestStart = m_requests->availableAfter(earliestStart);
+        }
         if (m_visitedBackward && (latestFinish - m_durationBackward) == earliestStart) {
             m_durationForward = m_durationBackward;
         } else {
             m_durationForward = duration(earliestStart, use, false);
+        }
+        if (m_requests) {
+            // Adjust duration to when resource(s) can do (end) work
+            m_durationForward = m_requests->availableBefore(earliestStart + m_durationForward) - earliestStart;
         }
     } else if (type() == KPTNode::Type_Milestone) {
         m_durationForward = KPTDuration::zeroDuration;
@@ -410,10 +418,18 @@ KPTDateTime KPTTask::calculateBackward(int use) {
         latestFinish = summarytaskLatestFinish();
         m_durationBackward = summarytaskDurationBackward(latestFinish);
     } else if (type() == KPTNode::Type_Task) {
+        if (m_requests) {
+            // Move to when resource(s) can do (end) work
+            latestFinish = m_requests->availableBefore(latestFinish);
+        }
         if (m_visitedForward && (earliestStart + m_durationForward) == latestFinish) {
             m_durationBackward = m_durationForward;
         } else {
-            m_durationBackward = duration(latestFinish, use, true);
+            m_durationBackward = duration(latestFinish, use, true);            
+        }
+        if (m_requests) {
+            // Adjust duration to when resource(s) can start work
+            m_durationBackward = latestFinish - m_requests->availableAfter(latestFinish - m_durationBackward);
         }
     } else if (type() == KPTNode::Type_Milestone) {
         m_durationBackward = KPTDuration::zeroDuration;
@@ -678,12 +694,15 @@ KPTDateTime KPTTask::summarytaskLatestFinish() {
     return time;
 }
 
-KPTDuration KPTTask::workbasedDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward) {
+KPTDuration KPTTask::calcDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward) {
+    //kdDebug()<<"calcDuration "<<m_name<<endl;
     if (!m_requests) {
         m_resourceError = true;
         return effort;
     }
-    return m_requests->duration(time, effort, backward);
+    KPTDuration dur = m_requests->duration(time, effort, backward);
+    //kdDebug()<<"calcDuration "<<m_name<<": "<<time.toString()<<" to "<<(time+dur).toString()<<" = "<<dur.toString()<<endl;
+    return dur;
 }
 
 #ifndef NDEBUG

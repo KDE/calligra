@@ -316,17 +316,16 @@ public:
     // Reimplement this
     virtual KPTDateTime summarytaskLatestFinish() 
         { return KPTDateTime(); }
-    // Reimplement this
-    virtual KPTDuration workbasedDuration(const KPTDateTime &/*time*/, const KPTDuration &/*effort*/, bool /*backward*/) { return KPTDuration::zeroDuration;}
+    // Returns the (previously) calculated duration
+    const KPTDuration &duration() { return m_duration; }
     /**
      * Calculates and returns the duration of the node.
      * Uses the correct expected-, optimistic- or pessimistic effort
-     * dependent on @param use. If the effort type is Type_Workbased,
-     * the duration is calculated, else the effort is returned.
+     * dependent on @param use. 
      */
     KPTDuration duration(const KPTDateTime &time, int use, bool backward);
-    // Returns the (previously) calculated duration
-    const KPTDuration &duration() { return m_duration; }
+    // Reimplement this
+    virtual KPTDuration calcDuration(const KPTDateTime &/*time*/, const KPTDuration &/*effort*/, bool /*backward*/) { return KPTDuration::zeroDuration;}
 
 protected:
     QPtrList<KPTNode> m_nodes;

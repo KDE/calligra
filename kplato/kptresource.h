@@ -210,7 +210,7 @@ class KPTResource {
         void setFixedCost(double value) { cost.fixed = value; }
 
         /**
-         * Return availbale units in percent
+         * Return available units in percent
          */
         int units() const { return m_units; }
         /**
@@ -234,6 +234,9 @@ class KPTResource {
         
         KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
 
+        KPTDateTime availableAfter(const KPTDateTime &time);
+        KPTDateTime availableBefore(const KPTDateTime &time);
+        
     private:
         KPTProject *m_project;
         QPtrList<KPTAppointment> m_appointments; // TODO: Move appointments to KPTProject ????
@@ -430,6 +433,9 @@ class KPTResourceGroupRequest {
          */
         KPTDuration duration(const KPTDateTime &start, const KPTDuration &effort, bool backward=false);
         
+        KPTDateTime availableAfter(const KPTDateTime &time);
+        KPTDateTime availableBefore(const KPTDateTime &time);
+        
         /**
          * Makes appointments for task @param task to the 
          * requested resources for the duration found in @ref duration().
@@ -486,7 +492,10 @@ public:
     * starting at @param time.
     */
     KPTDuration duration(const KPTDateTime &time, const KPTDuration &effort, bool backward=false);
-        
+    
+    KPTDateTime availableAfter(const KPTDateTime &time);
+    KPTDateTime availableBefore(const KPTDateTime &time);
+    
     /**
     * Makes appointments for the task @param task to the requested resources.
     * Assumes that @ref duration() has been run.

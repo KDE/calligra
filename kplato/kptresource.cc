@@ -341,6 +341,20 @@ KPTDuration KPTResource::effort(const KPTDateTime &start, const KPTDuration &dur
     return e;
 }
 
+KPTDateTime KPTResource::availableAfter(const KPTDateTime &time) {
+    KPTDateTime t;
+    if (m_calendar)
+        t = m_calendar->availableAfter(time);
+    return t;
+}
+
+KPTDateTime KPTResource::availableBefore(const KPTDateTime &time) {
+    KPTDateTime t;
+    if (m_calendar)
+        t = m_calendar->availableBefore(time);
+    return t;
+}
+
 KPTAppointment::KPTAppointment(KPTDateTime startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode) :m_extraRepeats(), m_skipRepeats() {
     m_startTime=startTime;
     m_duration=duration;
@@ -583,9 +597,8 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPT
         }
         //kdDebug()<<k_funcinfo<<"now e["<<i<<"]: "<<e.toString()<<" match: "<<effort.toString()<<endl;
         // TODO: we need to make this smarter
-        if (e.isCloseTo(effort)) {
-            match = true;
-        } else {
+        match = e.isCloseTo(effort);
+        if (!match) {
             if (e > effort) {
                 dur -= down;
                 //kdDebug()<<k_funcinfo<<"down["<<i<<"]: "<<down.toString(KPTDuration::Format_Day)<<" new dur: "<<dur.toString(KPTDuration::Format_Day)<<endl;
@@ -601,6 +614,32 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPT
         kdError()<<k_funcinfo<<"Could not match effort."<<" Want: "<<effort.toString(KPTDuration::Format_Day)<<" got: "<<e.toString(KPTDuration::Format_Day)<<endl;
     }
     return dur;   
+}
+
+KPTDateTime KPTResourceGroupRequest::availableAfter(const KPTDateTime &time) {
+    KPTDateTime start;
+    QPtrListIterator<KPTResourceRequest> it = m_resourceRequests;
+    for (; it.current(); ++it) {
+        KPTDateTime t = it.current()->resource()->availableAfter(time);
+        if (!start.isValid() || start > t)
+            start = t;
+    }
+    if (!start.isValid() || start < time)
+        start = time;
+    return start;
+}
+
+KPTDateTime KPTResourceGroupRequest::availableBefore(const KPTDateTime &time) {
+    KPTDateTime end;
+    QPtrListIterator<KPTResourceRequest> it = m_resourceRequests;
+    for (; it.current(); ++it) {
+        KPTDateTime t = it.current()->resource()->availableBefore(time);
+        if (!end.isValid() || end > t)
+            end = t;
+    }
+    if (!end.isValid() || end > time)
+        end = time;
+    return end;
 }
 
 void KPTResourceGroupRequest::makeAppointments(KPTTask *task) {
@@ -704,6 +743,33 @@ KPTDuration KPTResourceRequestCollection::duration(const KPTDateTime &time, cons
     }
     return dur;
 }
+
+KPTDateTime KPTResourceRequestCollection::availableAfter(const KPTDateTime &time) {
+    KPTDateTime start;
+    QPtrListIterator<KPTResourceGroupRequest> it = m_requests;
+    for (; it.current(); ++it) {
+        KPTDateTime t = it.current()->availableAfter(time);
+        if (!start.isValid() || start > t)
+            start = t;
+    }
+    if (!start.isValid() || start < time)
+        start = time;
+    return start;
+}
+
+KPTDateTime KPTResourceRequestCollection::availableBefore(const KPTDateTime &time) {
+    KPTDateTime end;
+    QPtrListIterator<KPTResourceGroupRequest> it = m_requests;
+    for (; it.current(); ++it) {
+        KPTDateTime t = it.current()->availableBefore(time);
+        if (!end.isValid() || end > t)
+            end = t;
+    }
+    if (!end.isValid() || end > time)
+        end = time;
+    return end;
+}
+
 
 void KPTResourceRequestCollection::makeAppointments(KPTTask *task) {
     //kdDebug()<<k_funcinfo<<endl;

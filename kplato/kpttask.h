@@ -163,7 +163,7 @@ public:
     /**
      * Return the duration calculated on bases of the requested resources
      */
-    virtual KPTDuration workbasedDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward);
+    KPTDuration calcDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward);
 
 private:
     QPtrList<KPTResourceGroup> m_resource;

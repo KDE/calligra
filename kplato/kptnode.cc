@@ -305,13 +305,12 @@ KPTDuration KPTNode::duration(const KPTDateTime &time, int use, bool backward) {
         return KPTDuration::zeroDuration;
     }
     KPTDuration dur = effort; // use effort as default duration
-    if (m_effort->type() == KPTEffort::Type_WorkBased) {
-        dur = workbasedDuration(time, effort, backward);
-    } else if (m_effort->type() == KPTEffort::Type_FixedDuration) {
-        // The amount of resources doesn't matter
+    if (m_effort->type() == KPTEffort::Type_WorkBased ||
+        m_effort->type() == KPTEffort::Type_FixedDuration) {
+        dur = calcDuration(time, effort, backward);
     } else {
         // error
-        kdError()<<k_funcinfo<<"Unsupported effort type"<<endl;
+        kdError()<<k_funcinfo<<"Unsupported effort type: "<<m_effort->type()<<endl;
     }
     // TODO: handle risc
 

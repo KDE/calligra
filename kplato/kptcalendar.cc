@@ -712,6 +712,38 @@ bool KPTCalendar::hasInterval(const KPTDateTime &start, const KPTDateTime &end) 
     return false;
 }
 
+KPTDateTime KPTCalendar::availableAfter(const KPTDateTime &time) {
+    //kdDebug()<<k_funcinfo<<time.toString()<<endl;
+    KPTDateTime start = time;
+    KPTDateTime end(time.date(), QTime(23,59,59));
+    KPTDateTime t = time;
+    int i=28;
+    for (; i > 0 && !hasInterval(start, end); --i) { //FIXME
+        end = end.addDays(1);
+        start = KPTDateTime(end.date(), QTime());
+    }
+    if (i > 0)
+        t = interval(start, end).first;
+    //kdDebug()<<k_funcinfo<<t.toString()<<endl;
+    return t;
+}
+
+KPTDateTime KPTCalendar::availableBefore(const KPTDateTime &time) {
+    //kdDebug()<<k_funcinfo<<time.toString()<<endl;
+    KPTDateTime start(time.date(), QTime());
+    KPTDateTime end = time;
+    KPTDateTime t = time;
+    int i=28;
+    for (; i > 0 && !hasInterval(start, end); --i) { //FIXME
+        start = start.addDays(-1);
+        end = KPTDateTime(start.date(), QTime(23,59,59));
+    }
+    if (i > 0)
+        t = interval(start, end).second;
+    //kdDebug()<<k_funcinfo<<t.toString()<<endl;
+    return t;
+}
+
 /////////////
 KPTStandardWorktime::KPTStandardWorktime() {
     init();
