@@ -21,9 +21,11 @@
 #include <kdebug.h>
 #include <qdom.h>
 
+#include <stdlib.h>
+#include <time.h>
 
-KoCryptExport::KoCrypExport(KoFilter *parent, const char *name) :
-                            KoFilter(parent, name) {
+KoCryptExport::KoCryptExport(KoFilter *parent, const char *name) :
+                             KoFilter(parent, name) {
 }
 
 
@@ -34,20 +36,66 @@ bool KoCryptExport::filter(const QString  &filenameIn,
                            const QString  &         )
 {
 int ftype = -1;
+QFile inf(filenameIn);
+QFile outf(filenameOut);
+
+    srand(time(NULL));
 
     if (to == "application/x-kword-crypt" && from == "application/x-kword")
     {
-       ftype = 1;
+       ftype = APPID_KWORD;
     } else
     if (to == "application/x-kspread-crypt" && from == "application/x-kspread")
     {
-       ftype = 2;
+       ftype = APPID_KSPREAD;
     } else {
         return false;
     }
 
-    
+    // obtain the password and ensure that we can use it.
 
+    // create the output file, open the input file.
+    outf.open(IO_WriteOnly);
+    inf.open(IO_ReadOnly);
+
+    // write the header out to the output file.
+    char p[5120];
+    p[0] = FID_FIRST;
+    p[1] = FID_SECOND;
+    p[2] = FID_THIRD;
+    p[3] = ftype;
+
+    outf.writeBlock(p, 4);
+
+    // write out the file format version number, and select the
+    // original 16 rounds blowfish with CBC.  (0x00000000)
+    p[0] = FID_FVER;
+    p[1] = 0;
+    p[2] = 0;
+    p[3] = 0;
+    p[4] = 0;
+
+    outf.writeBlock(p, 5);
+
+    // write the data
+    int randlen = rand() % 0x10000;
+
+    for (char *t = p+2; t-p < randlen+2; t += sizeof(int)) {
+       ((int *)t) = rand();
+    }
+
+    p[0] = randlen & 0x00ff;
+    p[1] = randlen & 0xff00;
+
+    unsigned int filelen = inf.size();
+
+    p[randlen+2] = filelen & 0x000000ff;
+    p[randlen+3] = filelen & 0x0000ff00;
+    p[randlen+4] = filelen & 0x00ff0000;
+    p[randlen+5] = filelen & 0xff000000;
+
+    // FIXME: write out the encrypted data
+    
     return true;
 }
 

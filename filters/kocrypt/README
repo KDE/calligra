@@ -7,3 +7,39 @@ kdelibs.  Please don't change it's structure without contacting:
 George Staikos <staikos@kde.org>
 
 
+
+
+FILE FORMAT:
+
+Header [1 pseudo-block]:
+    0x0d
+    0x1a
+    0x27
+    [1 byte - App ID]
+                Application     ID
+		KWord		0x01
+		KSpread		0x02
+		KPresenter	0x03
+    [1 byte - Crypto Version]
+                File Format Version Number
+		Current Version Number 0x00
+    [1 little-endian 32-bit ulong - Crypto cipher implementation]
+		Value		Crypto
+		0x00000000	16 rounds blowfish v1.0 + CBC
+		
+
+Payload [exactly n blocks]:
+    PreDataBlocks:
+       - A random 16 bit unsigned little-endian integer.
+       - Random data of length (previous_rand % 5*1024) bytes
+       - 32 bit unsigned little endian - The length of the file in bytes
+             - yes this makes it not compatible with largefiles.  This will
+               be implemented in file format version 0x01 if needed.
+               (are your documents really that big?!?)
+    - Random data is _not_ padded to the nearest blocksize.  
+      The file data will start immediately after the final "size" byte.
+    - File is padded with random data at the end of the file.
+
+
+
+
