@@ -44,11 +44,11 @@ KivioLayerPanel::KivioLayerPanel(KivioView* view, QWidget* parent, const char* n
 : KivioLayerPanelBase(parent, name), m_pView(view)
 {
   list->header()->hide();
-  list->addColumn("view",15);
-  list->addColumn("print",15);
-  list->addColumn("editable",15);
-  list->addColumn("connect",15);
-  list->addColumn("name",-1);
+  list->addColumn(i18n("view"),15);
+  list->addColumn(i18n("print"),15);
+  list->addColumn(i18n("editable"),15);
+  list->addColumn(i18n("connect"),15);
+  list->addColumn(i18n("name"),-1);
   list->setSorting(5,true);
   list->installEventFilter(this);
 
@@ -93,7 +93,7 @@ void KivioLayerPanel::addItem()
 
   // Set the layer name to something a bit different. This isn't
   // guaranteed to be unique, but it's better than "Untitled"
-  layer->setName(QString("Layer %1").arg(id));
+  layer->setName(i18n("Layer %1").arg(id));
   page->addLayer(layer);
   page->setCurLayer(layer);
 

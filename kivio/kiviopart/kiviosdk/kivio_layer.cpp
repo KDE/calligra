@@ -38,7 +38,7 @@ KivioLayer::KivioLayer( KivioPage *pPage )
     : m_pStencilList(NULL)
 {
     m_pPage = pPage;
-    m_name = "Untitled Layer";
+    m_name = i18n("Untitled Layer");
 
     m_pStencilList = new QList<KivioStencil>;
     m_pStencilList->setAutoDelete(true);
