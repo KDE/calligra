@@ -3536,7 +3536,6 @@ void QTextParag::format( int start, bool doMove )
                 goto formatAgain;
             }
 	}
-
     }
 
     if ( n && doMove && n->invalid == -1 && r.y() + r.height() != n->r.y() ) {
@@ -5423,6 +5422,9 @@ void QTextFormatCollection::debug()
     qDebug( "------------ QTextFormatCollection: debug --------------- BEGIN" );
     QDictIterator<QTextFormat> it( cKey );
     for ( ; it.current(); ++it ) {
+         ASSERT(it.currentKey() == it.current()->key());
+         if(it.currentKey() != it.current()->key())
+             qDebug("**** MISMATCH key=%s (see line below for format)", it.currentKey().latin1());
 	qDebug( "format '%s' (%p): refcount: %d", it.current()->key().latin1(),
 		it.current(), it.current()->ref );
     }
