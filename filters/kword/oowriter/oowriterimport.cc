@@ -1373,6 +1373,8 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
     elementFormat.setAttribute("len",1);
     formatsPluralElementOut.appendChild(elementFormat);
 
+    // ### FIXME: we have no <LAYOUT> element!
+
     QDomElement elementAnchor(doc.createElement("ANCHOR"));
     elementAnchor.setAttribute("type","frameset");
     elementAnchor.setAttribute("instance",tableName);
@@ -1381,11 +1383,12 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
 
     const QDomNodeList columnStyles ( parent.elementsByTagName( "table:table-column" ));
 
-    // Left position of the cell (similar to RTF's \cellx). The last one defined (no, not the 1024th) is the right position of the last cell
-    QMemArray<double> columnLefts(1024); // ### FIXME: size is PROVISORY!!!
+    // Left position of the cell/column (similar to RTF's \cellx). The last one defined is the right position of the last cell/column
+    QMemArray<double> columnLefts(4);
+    int maxColumns=columnLefts.size();
 
     uint col=0;
-    columnLefts[0]=0; // Initialize left of first cell
+    columnLefts[0]=0.0; // Initialize left of first cell
     for (uint i=0; i<columnStyles.length(); i++)
     {
         const QDomElement elem ( columnStyles.item(i).toElement() );
@@ -1410,7 +1413,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
         else
             kdWarning(30518) << "Could not find table column style!" << endl;
 
-        if (width < 1.0) // Soemthing is wrong with the width
+        if (width < 1.0) // Something is wrong with the width
         {
             kdWarning(30518) << "Table column width ridiculous, assuming 1 inch!" << endl;
             width=72.0;
@@ -1420,9 +1423,15 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
 
         for (uint j=0; j<repeat; j++)
         {
-            columnLefts.at(col+1) = width + columnLefts.at(col);
-            kdDebug(30518) << "Cell column " << col << " left " << columnLefts.at(col) << " right " << columnLefts.at(col+1) << endl;
             ++col;
+            if (col>=maxColumns)
+            {
+                // We need more columns
+                maxColumns+=4;
+                columnLefts.resize(maxColumns, QGArray::SpeedOptim);
+            }
+            columnLefts.at(col) = width + columnLefts.at(col-1);
+            kdDebug(30518) << "Cell column " << col-1 << " left " << columnLefts.at(col-1) << " right " << columnLefts.at(col) << endl;
         }
     }
 
