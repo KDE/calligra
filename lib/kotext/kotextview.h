@@ -82,7 +82,7 @@ public:
     void setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex=-1);
 
     /** Implement the KoTextFormatInterface */
-    virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont );
+    virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont);
 
     // -- Paragraph settings --
     KCommand * setCounterCommand( const KoParagCounter & counter );

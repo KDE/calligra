@@ -1665,6 +1665,10 @@ void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont
     textdoc->removeSelection( QTextDocument::Temp );
     if (cmd)
         emit newCommand( cmd );
+
+    KoTextFormat format = *currentFormat();
+    format.setPointSize( docFontSize( currentFormat() ) ); // "unzoom" the font size
+    emit showFormatObject(format);
 }
 
 void KoTextFormatInterface::setBold(bool on) {

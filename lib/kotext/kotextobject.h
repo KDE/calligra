@@ -298,6 +298,8 @@ signals:
     void ensureCursorVisible();
     /** Tell the views that the selection changed (for cut/copy...) */
     void selectionChanged( bool hasSelection );
+    
+    void showFormatObject(const KoTextFormat &);
 
 public slots:
     void formatMore();

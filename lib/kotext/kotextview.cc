@@ -665,7 +665,7 @@ void KoTextView::focusOutEvent()
     hideCursor();
 }
 
-void KoTextView::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont )
+void KoTextView::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont)
 {
     textObject()->setFormat( m_cursor, m_currentFormat, newFormat, flags, zoomFont );
 }
