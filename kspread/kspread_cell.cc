@@ -1164,11 +1164,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
         m_iOutTextHeight *= lines;
 
-	if( lines != 1 )
-	    m_nbLines = lines - 1;
-	else
-	    m_nbLines = lines;
-
+        m_nbLines = lines;
 	m_iTextX = 0;
 
 	// Calculate the maximum width
@@ -1250,7 +1246,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	    }
 	}
     }
-
     m_bLayoutDirtyFlag = FALSE;
 }
 
@@ -1557,21 +1552,26 @@ void KSpreadCell::offsetAlign( int _col,int _row )
 	    if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
 		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
 	    else
+                {
 		if( m_rotateAngle < 0 )
 		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
 		else
 		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                }
 	}
 	else if( m_bMultiRow )
         {
+            int tmpline=m_nbLines;
+            if(m_nbLines>1)
+                tmpline=m_nbLines-1;
 	    if((h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row ))>0)
-		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row );
+		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight*tmpline- bottomBorderWidth( _col, _row );
 	    else
 		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-	}
+        }
 	else
 	    if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
-		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
+		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+m_fmAscent;
 	    else
 		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
 	break;
@@ -1579,23 +1579,27 @@ void KSpreadCell::offsetAlign( int _col,int _row )
 	if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
 	    m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
 	else if( m_rotateAngle != 0 )
+        {
 	    if( ( h - m_iOutTextHeight ) > 0 )
 		m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
 	    else
-		if( m_rotateAngle < 0 )
+                {
+                if( m_rotateAngle < 0 )
 		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
 		else
 		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
-                else if(m_bMultiRow)
-		    if(( h - m_iOutTextHeight*m_nbLines )>0)
-			m_iTextY = ( h - m_iOutTextHeight*m_nbLines ) / 2 +m_fmAscent;
-		    else
-			m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-         else if( m_bMultiRow )
-	    if(( h - m_iOutTextHeight*m_nbLines )>0)
-		m_iTextY = ( h - m_iOutTextHeight*m_nbLines ) / 2 +m_fmAscent;
+                }
+        }
+        else if( m_bMultiRow )
+        {
+            int tmpline=m_nbLines;
+            if(m_nbLines==0)
+                tmpline=1;
+	    if(( h - m_iOutTextHeight*tmpline )>0)
+		m_iTextY = ( h - m_iOutTextHeight*tmpline ) / 2 +m_fmAscent;
 	    else
 		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+        }
         else
 	    if(( h - m_iOutTextHeight )>0)
 		m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
@@ -2482,7 +2486,6 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 		case KSpreadCell::Center:
 		    m_iTextX = ( w2 - fm.width( t ) ) / 2;
 		}
-
 		_painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
 		dy += fm.descent() + fm.ascent();
 	    }
