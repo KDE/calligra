@@ -86,16 +86,16 @@ void ColorSlider::slotSetValue(int value)
   m_value = value;
 
   int range = m_max - m_min +1;
-  kdebug(KDEBUG_INFO, 0, "range: %d", range);
+  //kdebug(KDEBUG_INFO, 0, "range: %d", range);
   float v = value;
    if (m_min < 0)
 	v += -m_min;
 
-   kdebug(KDEBUG_INFO, 0, "value: %f", v);
+   //kdebug(KDEBUG_INFO, 0, "value: %f", v);
   
   float factor = v /range;
   int x = static_cast<int>(factor * m_pColorFrame->contentsWidth());
-  kdebug(KDEBUG_INFO, 0, "x: %d", x);
+  //kdebug(KDEBUG_INFO, 0, "x: %d", x);
 
   m_pSlider->move(QPoint(x , height()-16));
 }
