@@ -380,7 +380,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             pageBound++;
         }
         double last=row==0?0:m_rowPositions[row-1];
-        for(unsigned int i=row+adjustment; i < m_rowPositions.count(); i++) {
+        for(unsigned int i=row+adjustment; i <= m_rowPositions.count(); i++) {
             double &rowPos = m_rowPositions[i];
             rowPos = rowPos + difference;
             if(rowPos-last < minFrameHeight) { // Never make it smaller then allowed!
@@ -1759,6 +1759,12 @@ void KWTableFrameSet::printDebug( KWFrame * theFrame )
 
 void KWTableFrameSet::printDebug() {
     kdDebug() << " |  Table size (" << m_rows << "x" << getCols() << ")" << endl;
+    kdDebug() << " |  col  " << 0 << ": " << m_colPositions[0] << endl;
+    for(unsigned int i=1;i<m_colPositions.count();
+        kdDebug() << " |    |  " << i++ << ": " << m_colPositions[i] << endl);
+    kdDebug() << " |  row  " << 0 << ": " << m_rowPositions[0] << endl;
+    for(unsigned int i=1;i<m_rowPositions.count();
+        kdDebug() << " |    |  " << i++ << ": " << m_rowPositions[i] << endl);
     KWFrameSet::printDebug();
 }
 
@@ -1934,7 +1940,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
         if(textdoc->hasSelection( QTextDocument::Standard ))
             moveToOtherCell=false;
     }
-    KWFrameSet *fs = 0L;
+    KWTableFrameSet::Cell *fs = 0L;
 
     if(moveToOtherCell)
     {
@@ -1944,12 +1950,23 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor()->parag()->prev())
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
-                    if ( cell->m_col > 0 )
-                        fs = tableFrame->getCell(  cell->m_row, cell->m_col - 1 );
-                    else if ( cell->m_row > 0 )
-                        fs = tableFrame->getCell(  cell->m_row - 1,tableFrame->getCols() - 1 );
-                    else
-                        fs = tableFrame->getCell( tableFrame->getRows() - 1,tableFrame->getCols() - 1 );
+                    int row=cell->m_row;
+                    int col=cell->m_col-1;
+                    do {
+                        if(col < 0) {
+                            col=tableFrame->getCols()-1;
+                            row--;
+                        }
+                        if(row < 0) {
+                            col=tableFrame->getCols()-1;
+                            row=tableFrame->getRows()-1;
+                        }
+                        fs=tableFrame->getCell(row,col);
+                        if(fs && fs->m_row != row) {
+                            col=fs->m_col -1;
+                            fs=0;
+                        }
+                    } while(fs==0);
                 }
             }
             break;
@@ -1958,12 +1975,23 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor()->parag()->next())
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
-                    if ( cell->m_col+cell->m_cols < tableFrame->getCols()  )
-                        fs = tableFrame->getCell( cell->m_row+cell->m_rows-1, cell->m_col + cell->m_cols );
-                    else if ( cell->m_row+cell->m_rows < tableFrame->getRows() )
-                        fs = tableFrame->getCell( cell->m_row + cell->m_rows, 0 );
-                    else
-                        fs = tableFrame->getCell( 0, 0 );
+                    unsigned int row=cell->m_row;
+                    unsigned int col=cell->m_col+cell->m_cols;
+                    do {
+                        if(col >= tableFrame->getCols()) {
+                            col=0;
+                            row++;
+                        }
+                        if(row >= tableFrame->getRows()) {
+                            col=0;
+                            row=0;
+                        }
+                        fs=tableFrame->getCell(row,col);
+                        if(fs && fs->m_row != row) {
+                            col+=fs->m_cols-1;
+                            fs=0;
+                        }
+                    } while(fs==0);
                 }
             }
             break;
