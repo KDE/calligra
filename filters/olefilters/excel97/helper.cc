@@ -1111,7 +1111,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 			case 0x1d:  // ptgBool
 				rgce >> byte;
-				parsedFormula.append(byte ? "True" : "False");
+				parsedFormula.append(byte ? "true" : "false");
 				break;
 			case 0x1e:  // ptgInt
 				rgce >> integer;
