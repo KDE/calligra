@@ -270,11 +270,15 @@ void TxtCursor::paragraphBackward()
 /*======================== cursor pos1 ===========================*/
 void TxtCursor::pos1()
 {
+    setPositionAbs( 0 );
 }
 
 /*========================== cursor end ==========================*/
 void TxtCursor::end()
 {
+    if ( txtObj )
+        setMaxPosition( txtObj->textLength() );
+    setPositionAbs( objMaxPos - 1 );
 }
 
 /*=================== set absolute position ======================*/
@@ -4144,6 +4148,31 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 	    if ( e->state() & ShiftButton )
 		selectText( oldCursor, C_DOWN );
 
+	    cursorChanged = true;
+	} break;
+	case Key_Home: {
+	    if ( e->state() & ControlButton )
+	    {
+	        // TODO if ( e->state() & ShiftButton )
+		txtCursor->pos1();
+	    } else
+	    {
+		// TODO if ( e->state() & ShiftButton )
+		txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 0 );
+	    }
+	    cursorChanged = true;
+	} break;
+	case Key_End: {
+	    if ( e->state() & ControlButton )
+	    {
+	        // TODO if ( e->state() & ShiftButton )
+		txtCursor->end();
+	    } else
+	    {
+		// TODO if ( e->state() & ShiftButton )
+		txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 
+                   paragraphAt( txtCursor->positionParagraph() )->lineAt( txtCursor->positionLine() )->lineLength()-1  );
+	    }
 	    cursorChanged = true;
 	} break;
 	case Key_Return: case Key_Enter: {
