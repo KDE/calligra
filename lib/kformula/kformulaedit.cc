@@ -33,7 +33,7 @@ template class QArray<charinfo>;
 template class QArray<_cursorInfo>;
 
 //initialize the static clipboard
-QString KFormulaEdit::clipText;
+QString *KFormulaEdit::clipText=0L;
 
 //cursor blink interval:
 #define BLINK 500
@@ -61,7 +61,7 @@ QString KFormulaEdit::clipText;
 //Plain vanilla constructor--just initialization
 
 KFormulaEdit::KFormulaEdit(QWidget * parent, const char *name,
-			   WFlags flags, bool r) :
+                           WFlags flags, bool r) :
   QWidget(parent, name, flags)
 {
   restricted = r;
@@ -81,7 +81,9 @@ KFormulaEdit::KFormulaEdit(QWidget * parent, const char *name,
   QFont f("utopia", DEFAULT_FONT_SIZE);
 
   setFont(f); //just default
-  clipText = "";
+  if(clipText==0L)
+      clipText=new QString;
+  *clipText = "";
 
   formText = "";
 
@@ -128,10 +130,10 @@ KFormulaEdit::~KFormulaEdit()
 QSize KFormulaEdit::sizeHint() const
 {
   return QSize(
-	       QMAX(form->size().width(), 350),
-	       QMAX(form->size().height(), 200)
-	       );
-	
+               QMAX(form->size().width(), 350),
+               QMAX(form->size().height(), 200)
+               );
+
 }
 
 //---------------------------SIZE POLICY--------------------------
@@ -162,7 +164,7 @@ void KFormulaEdit::resizeEvent(QResizeEvent *)
 
   //clear the pixmap
   p.fillRect(0, 0, pm.width(), pm.height(), getFormula()->getBackColor() ?
-	     *getFormula()->getBackColor() : backgroundColor());
+             *getFormula()->getBackColor() : backgroundColor());
 
   cacheState = ALL_DIRTY;
   redraw();
@@ -187,7 +189,7 @@ void KFormulaEdit::redraw(int all)
   //kdDebug(0) << uglyForm() << endl;
 
   pm.fill( getFormula()->getBackColor() ?
-	   *getFormula()->getBackColor() : backgroundColor());
+           *getFormula()->getBackColor() : backgroundColor());
 
   p.begin(&pm);
   p.setFont(font());
@@ -210,40 +212,40 @@ void KFormulaEdit::redraw(int all)
     //but it works.
 
     for(i = QMIN(cursorPos, selectStart);
-	i <= QMAX(cursorPos, selectStart); i++) {
+        i <= QMAX(cursorPos, selectStart); i++) {
 
       if(isInString(i, KFormula::delim() + QChar(SQRT) + QChar(DIVIDE)) ||
-	 (IS_REFERENCE(info[i].where->getType()) &&
-	  i > QMIN(cursorPos, selectStart))) {
-	if(tmp.isNull()) {
-	  tmp = info[i].where->getLastRect();
-	}
-	else {
-	  tmp = tmp.unite(info[i].where->getLastRect());
-	}
+         (IS_REFERENCE(info[i].where->getType()) &&
+          i > QMIN(cursorPos, selectStart))) {
+        if(tmp.isNull()) {
+          tmp = info[i].where->getLastRect();
+        }
+        else {
+          tmp = tmp.unite(info[i].where->getLastRect());
+        }
       }
       else {
-	if(tmp.isNull()) {
-	  tmp = getCursorPos(i);
-	}
-	else {
-	  tmp = tmp.unite(getCursorPos(i));
-	}
-	if(i < QMAX(cursorPos, selectStart) && //actually inside the selection
-	   (isInString(i, QString(QChar(SLASH))) ||
-	   formText[i].unicode() >= SYMBOL_ABOVE)) {
-	  //we need its height
-	  box *b = info[i].where;
+        if(tmp.isNull()) {
+          tmp = getCursorPos(i);
+        }
+        else {
+          tmp = tmp.unite(getCursorPos(i));
+        }
+        if(i < QMAX(cursorPos, selectStart) && //actually inside the selection
+           (isInString(i, QString(QChar(SLASH))) ||
+           formText[i].unicode() >= SYMBOL_ABOVE)) {
+          //we need its height
+          box *b = info[i].where;
 
-	  if(formText[i].unicode() < SYMBOL_ABOVE) // if slash
-	    while(b->getType() != SLASH) {
-	      if(b->getParent() != NULL) b = b->getParent();
-	      else break;
-	    }
-	
-	  tmp = tmp.unite(QRect(tmp.x(), b->getLastRect().y(),
-				1, b->getLastRect().height()));
-	}
+          if(formText[i].unicode() < SYMBOL_ABOVE) // if slash
+            while(b->getType() != SLASH) {
+              if(b->getParent() != NULL) b = b->getParent();
+              else break;
+            }
+
+          tmp = tmp.unite(QRect(tmp.x(), b->getLastRect().y(),
+                                1, b->getLastRect().height()));
+        }
       }
     }
 
@@ -264,7 +266,7 @@ void KFormulaEdit::redraw(int all)
 QString KFormulaEdit::uglyForm() const
 {
     if (!restricted)
-	kdWarning() << "Called uglyForm on a formula that's not restricted.  God knows what might happen." << endl;
+        kdWarning() << "Called uglyForm on a formula that's not restricted.  God knows what might happen." << endl;
 
   return KFormula::toUgly(formText);
 }
@@ -331,7 +333,7 @@ void KFormulaEdit::paintEvent(QPaintEvent *)
     r = getCursorPos(cursorPos);
 
     if ( getFormula()->getForeColor() )
-	p.setPen( *getFormula()->getForeColor() );
+        p.setPen( *getFormula()->getForeColor() );
 
     p.drawLine(r.left(), r.top(), r.left(), r.bottom());
     p.drawLine(r.left() - 2, r.top(), r.left() + 2, r.top());
@@ -398,16 +400,16 @@ int KFormulaEdit::isValidCursorPos(int pos)
      isInString(pos + 4, QChar(MATRIX))) return 0;
 
   if(formText[pos] == L_GROUP && isInString(pos - 1, KFormula::delim() +
-					    QChar(ABOVE) + QChar(BELOW) +
-					    QChar(POWER) + QChar(SQRT) +
-					    QChar(SUB) +
-					    QChar(DIVIDE))) return 0;
+                                            QChar(ABOVE) + QChar(BELOW) +
+                                            QChar(POWER) + QChar(SQRT) +
+                                            QChar(SUB) +
+                                            QChar(DIVIDE))) return 0;
 
   if(formText[pos - 1] == R_GROUP && isInString(pos, KFormula::delim() +
-						QChar(SQRT) + QChar(ABOVE) +
-						QChar(BELOW) + QChar(LSUP) +
-						QChar(LSUB) +
-						QChar(DIVIDE))) return 0;
+                                                QChar(SQRT) + QChar(ABOVE) +
+                                                QChar(BELOW) + QChar(LSUP) +
+                                                QChar(LSUB) +
+                                                QChar(DIVIDE))) return 0;
 
   if(formText[pos] == R_GROUP && isInString(pos + 1, KFormula::delim()))
     return 0;
@@ -432,8 +434,8 @@ int KFormulaEdit::deleteAtCursor()
 
   //If we are just deleting part of a literal (or +-*), do it and go away.
   if(!isInString(cursorPos, KFormula::delim() +
-		 KFormula::loc() + L_GROUP + R_GROUP +
-		 QChar(DIVIDE) + QChar(SQRT))) {
+                 KFormula::loc() + L_GROUP + R_GROUP +
+                 QChar(DIVIDE) + QChar(SQRT))) {
     formText.remove(cursorPos, 1);
     return 1;
   }
@@ -452,14 +454,14 @@ int KFormulaEdit::deleteAtCursor()
   //this may be an invalid cursor position but that doesn't matter.
   if(cursorPos > 1 && formText[cursorPos] == R_GROUP &&
      isInString(cursorPos - 2, KFormula::delim() + QChar(ABOVE) +
-		     QChar(BELOW) + QChar(SUB) + QChar(POWER) +
-		QChar(SQRT) + QChar(DIVIDE)))
+                     QChar(BELOW) + QChar(SUB) + QChar(POWER) +
+                QChar(SQRT) + QChar(DIVIDE)))
     ncpos -= 2;
   else if(cursorPos > 0 && cursorPos <= maxpos &&
-	  IS_LGROUP(formText[cursorPos]) &&
-	  isInString(cursorPos - 1, KFormula::delim() + QChar(ABOVE) +
-		     QChar(BELOW) + QChar(SUB) + QChar(POWER) +
-		     QChar(SQRT) + QChar(DIVIDE)))
+          IS_LGROUP(formText[cursorPos]) &&
+          isInString(cursorPos - 1, KFormula::delim() + QChar(ABOVE) +
+                     QChar(BELOW) + QChar(SUB) + QChar(POWER) +
+                     QChar(SQRT) + QChar(DIVIDE)))
     ncpos--;
   //the else shifts from "{}/${}" to "{}$/{}".  Even though the
   //former is an invalid cursor position, it may still happen
@@ -503,13 +505,13 @@ int KFormulaEdit::deleteAtCursor()
       ncpos += 2;
     }
   else if(ncpos > 0 && ncpos < maxpos &&
-	  IS_RGROUP(formText[ncpos]) &&
-	  (formText[ncpos + 1] == QChar(ABOVE) ||
-	   formText[ncpos + 1] == QChar(BELOW) ||
-	   formText[ncpos + 1] == QChar(LSUP) ||
-	   formText[ncpos + 1] == QChar(LSUB) ||
-	   formText[ncpos + 1] == QChar(SQRT) ||
-	   formText[ncpos + 1] == QChar(DIVIDE)))
+          IS_RGROUP(formText[ncpos]) &&
+          (formText[ncpos + 1] == QChar(ABOVE) ||
+           formText[ncpos + 1] == QChar(BELOW) ||
+           formText[ncpos + 1] == QChar(LSUP) ||
+           formText[ncpos + 1] == QChar(LSUB) ||
+           formText[ncpos + 1] == QChar(SQRT) ||
+           formText[ncpos + 1] == QChar(DIVIDE)))
     ncpos++;
 
   //The following removes the division operator and leaves the
@@ -527,14 +529,14 @@ int KFormulaEdit::deleteAtCursor()
       //now find the curly brace which marks the start of the numerator,
       //remove it, and go away.
       for(i = ncpos - 1; i >= 0; i--) {
-	if(IS_RGROUP(formText[i])) level++;
-	if(IS_LGROUP(formText[i])) level--;
-	if(level < 0) {
-	  formText.remove(i, 1); //removes the curly brace.
-	  ncpos--;
-	  cursorPos = ncpos;
-	  return 1;
-	}
+        if(IS_RGROUP(formText[i])) level++;
+        if(IS_LGROUP(formText[i])) level--;
+        if(level < 0) {
+          formText.remove(i, 1); //removes the curly brace.
+          ncpos--;
+          cursorPos = ncpos;
+          return 1;
+        }
       }
     }
 
@@ -545,14 +547,14 @@ int KFormulaEdit::deleteAtCursor()
       ncpos--;
       formText.remove(ncpos, 4);
       for(i = ncpos - 1; i >= 0; i--) {
-	if(IS_RGROUP(formText[i])) level++;
-	if(IS_LGROUP(formText[i])) level--;
-	formText.remove(i, 1); //remove everything including the curly brace.
-	ncpos--;
-	if(level < 0) {
-	  cursorPos = ncpos;
-	  return 1;
-	}
+        if(IS_RGROUP(formText[i])) level++;
+        if(IS_LGROUP(formText[i])) level--;
+        formText.remove(i, 1); //remove everything including the curly brace.
+        ncpos--;
+        if(level < 0) {
+          cursorPos = ncpos;
+          return 1;
+        }
       }
     }
   }
@@ -677,16 +679,16 @@ void KFormulaEdit::expandSelection()
     //expand to the right until level is 0.  If level is negative,
     //expand selection to the left.
     while(i <= (int)formText.length() &&
-	  (i < cursorPos || level != 0 || !isValidCursorPos(i))) {
+          (i < cursorPos || level != 0 || !isValidCursorPos(i))) {
       if(i < (int)formText.length() && IS_LGROUP(formText[i])) level++;
       if(i < (int)formText.length() && IS_RGROUP(formText[i])) level--;
       if(level == -1) {
-	while(selectStart > 0 &&
-	      (level < 0 || !isValidCursorPos(selectStart))) {
-	  selectStart--;
-	  if(IS_LGROUP(formText[selectStart])) level++;
-	  if(IS_RGROUP(formText[selectStart])) level--;
-	}
+        while(selectStart > 0 &&
+              (level < 0 || !isValidCursorPos(selectStart))) {
+          selectStart--;
+          if(IS_LGROUP(formText[selectStart])) level++;
+          if(IS_RGROUP(formText[selectStart])) level--;
+        }
       }
       i++;
     }
@@ -694,19 +696,19 @@ void KFormulaEdit::expandSelection()
 
   if(dir == -1) {
     while(i > 0 &&
-	  (i > cursorPos || level != 0 || !isValidCursorPos(i))) {
+          (i > cursorPos || level != 0 || !isValidCursorPos(i))) {
       i--;
       if(IS_LGROUP(formText[i])) level--;
       if(IS_RGROUP(formText[i])) level++;
       if(level == -1) {
-	while(selectStart <= (int)formText.length() &&
-	      (level < 0 || !isValidCursorPos(selectStart))) {
-	  if(selectStart < (int)formText.length() &&
-	     IS_LGROUP(formText[selectStart])) level--;
-	  if(selectStart < (int)formText.length() &&
-	     IS_RGROUP(formText[selectStart])) level++;
-	  selectStart++;
-	}
+        while(selectStart <= (int)formText.length() &&
+              (level < 0 || !isValidCursorPos(selectStart))) {
+          if(selectStart < (int)formText.length() &&
+             IS_LGROUP(formText[selectStart])) level--;
+          if(selectStart < (int)formText.length() &&
+             IS_RGROUP(formText[selectStart])) level++;
+          selectStart++;
+        }
       }
     }
   }
@@ -759,7 +761,7 @@ void KFormulaEdit::toggleCursor()
 //cache, adds an undo step, and removes all redo.
 #define MODIFIED { form->parse(formText, &info); CURSOR_RESET \
   cacheState = ALL_DIRTY; undo_stack.push( &((new QString(oldText))-> \
-				     insert(oldc, QChar(CURSOR))) ); \
+                                     insert(oldc, QChar(CURSOR))) ); \
   while(redo_stack.remove()); }
 #define UPDATE_SIZE if ( sendSizeHint ) { emit sizeHint( form->size() );  if(restricted) emit formulaChanged( uglyForm() ); }
 
@@ -784,27 +786,27 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
       int level = 0;
 
       if(cursorPos + 5 < (int)formText.length() &&
-	 formText[cursorPos + 5] == QChar(MATRIX)) {
-	//skip the matrix inside the current cell
+         formText[cursorPos + 5] == QChar(MATRIX)) {
+        //skip the matrix inside the current cell
 
-	cursorPos += 6; // move to the matrix body
+        cursorPos += 6; // move to the matrix body
 
-	do { // find the end of the matrix body
-	  if(formText[cursorPos] == L_GROUP) level++;
-	  if(formText[cursorPos] == R_GROUP) level--;
+        do { // find the end of the matrix body
+          if(formText[cursorPos] == L_GROUP) level++;
+          if(formText[cursorPos] == R_GROUP) level--;
 
-	  cursorPos++;
-	} while(level);
+          cursorPos++;
+        } while(level);
 
-	continue;
+        continue;
       }
 
       cursorPos++;
 
       if(formText[cursorPos - 1] == QChar(SEPARATOR)) break;
-	
+
     }
-	
+
     cursorPos++; // move to a valid position at the start of the cell
 
     if(cursorPos != oldc) {
@@ -832,30 +834,30 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
       int level = 0;
 
       if(formText[cursorPos] == R_GROUP &&
-	 formText[cursorPos - 1] == QChar(SEPARATOR)) {
-	// if we have a matrix inside the cell, skip it:
+         formText[cursorPos - 1] == QChar(SEPARATOR)) {
+        // if we have a matrix inside the cell, skip it:
 
-	do {
-	  if(formText[cursorPos] == R_GROUP) level++;
-	  if(formText[cursorPos] == L_GROUP) level--;
+        do {
+          if(formText[cursorPos] == R_GROUP) level++;
+          if(formText[cursorPos] == L_GROUP) level--;
 
-	  cursorPos--;
+          cursorPos--;
 
-	  if(formText[cursorPos] == QChar(MATRIX)) { // we need to go
-	                                             // from {w&h}$#{{}&...
-                                        	     // to ${w&h}#{...
-	    cursorPos -= 5;
-	  }
+          if(formText[cursorPos] == QChar(MATRIX)) { // we need to go
+                                                     // from {w&h}$#{{}&...
+                                                     // to ${w&h}#{...
+            cursorPos -= 5;
+          }
 
-	} while(level);
+        } while(level);
 
-	continue;
+        continue;
       }
 
       cursorPos--;
 
       if(formText[cursorPos + 1] == QChar(SEPARATOR)) {
-	break;
+        break;
       }
     }
 
@@ -880,66 +882,66 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
       if(m && formText[cursorPos - 1] != L_GROUP) m = 0;
 
       if(!m) {
-	//move left to the next valid cursor position.
-	while(cursorPos > 0 && !isValidCursorPos(--cursorPos));
+        //move left to the next valid cursor position.
+        while(cursorPos > 0 && !isValidCursorPos(--cursorPos));
       }
       else { // move to previous matrix cell
-	int i;
-	int level = 0;
+        int i;
+        int level = 0;
 
-	//since the cells are ordered by columns, to get to the cell
-	//on the left, we need to skip as many cells as there are rows.
-	for(i = 0; i < formText[m - 2].unicode(); i++) {
-	  if(!isInMatrix()) break;
-	
-	  while(cursorPos > m) { //stop if we leave matrix.  break inside!
-	    cursorPos--;
+        //since the cells are ordered by columns, to get to the cell
+        //on the left, we need to skip as many cells as there are rows.
+        for(i = 0; i < formText[m - 2].unicode(); i++) {
+          if(!isInMatrix()) break;
 
-	    if(formText[cursorPos] == R_GROUP) level++;
-	    if(formText[cursorPos] == L_GROUP) level--;
-	
-	    // level==-1 insures we only count the cells of the current
-	    //matrix, not of any nested ones inside the current one.
+          while(cursorPos > m) { //stop if we leave matrix.  break inside!
+            cursorPos--;
 
-	    if(level == -1 && formText[cursorPos] == QChar(SEPARATOR)) {
-	      cursorPos--;
-	      level++;
-	      break;
-	    }
-	  }
+            if(formText[cursorPos] == R_GROUP) level++;
+            if(formText[cursorPos] == L_GROUP) level--;
 
-	  if(cursorPos <= m) { // we left the matrix
-	    cursorPos = m - 5; // start of matrix
-	    break;
-	  }
-	}
+            // level==-1 insures we only count the cells of the current
+            //matrix, not of any nested ones inside the current one.
+
+            if(level == -1 && formText[cursorPos] == QChar(SEPARATOR)) {
+              cursorPos--;
+              level++;
+              break;
+            }
+          }
+
+          if(cursorPos <= m) { // we left the matrix
+            cursorPos = m - 5; // start of matrix
+            break;
+          }
+        }
       }
 
       if(oldc != cursorPos) {
-	CURSOR_RESET
+        CURSOR_RESET
       }
 
       if(shift && !textSelected) { //start selection.
-	textSelected = 1;
-	selectStartOrig = selectStart = oldc;
+        textSelected = 1;
+        selectStartOrig = selectStart = oldc;
       }
 
       if(textSelected) {
-	if(cursorPos <= selectStart) { //we expand the selection
-	  expandSelection();
-	}
-	else { //we shrink it
-	  int tmppos;
+        if(cursorPos <= selectStart) { //we expand the selection
+          expandSelection();
+        }
+        else { //we shrink it
+          int tmppos;
 
-	  for(tmppos = cursorPos; tmppos >= selectStart; tmppos--) {
-	    if(!isValidCursorPos(tmppos)) continue;
-	    cursorPos = tmppos;
-	    expandSelection();
-	    if(cursorPos < oldc) break;
-	  }
-	}
+          for(tmppos = cursorPos; tmppos >= selectStart; tmppos--) {
+            if(!isValidCursorPos(tmppos)) continue;
+            cursorPos = tmppos;
+            expandSelection();
+            if(cursorPos < oldc) break;
+          }
+        }
 
-	redraw();
+        redraw();
 
       }
       else if(oldc != cursorPos) redraw(0);
@@ -963,64 +965,64 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
       if(m && formText[cursorPos] != R_GROUP) m = 0;
 
       if(!m) {
-	//move right to the next valid cursor position.
-	while(cursorPos < (int)formText.length() &&
-	      !isValidCursorPos(++cursorPos));
+        //move right to the next valid cursor position.
+        while(cursorPos < (int)formText.length() &&
+              !isValidCursorPos(++cursorPos));
       }
       else { //move to next matrix cell
-	int i;
-	int level = 0;
+        int i;
+        int level = 0;
 
-	//skip as many cells as there are rows.
-	for(i = 0; i < formText[m - 2].unicode(); i++) {
-	  if(!isInMatrix()) break;
+        //skip as many cells as there are rows.
+        for(i = 0; i < formText[m - 2].unicode(); i++) {
+          if(!isInMatrix()) break;
 
-	  while(1) {
-	    if(formText[cursorPos] == L_GROUP) level++;
-	    if(formText[cursorPos] == R_GROUP) level--;
+          while(1) {
+            if(formText[cursorPos] == L_GROUP) level++;
+            if(formText[cursorPos] == R_GROUP) level--;
 
-	    //count only cells of the current (not any nested) matrix
-	    if(level == -1 &&
-	       formText[cursorPos] == QChar(SEPARATOR)) {
-	      cursorPos += 2;
-	      level++;
-	      break;
-	    }
+            //count only cells of the current (not any nested) matrix
+            if(level == -1 &&
+               formText[cursorPos] == QChar(SEPARATOR)) {
+              cursorPos += 2;
+              level++;
+              break;
+            }
 
-	    cursorPos++;
-	  }
-	  if(formText[cursorPos - 1] == R_GROUP) { // we left the matrix
-	    break;
-	  }
-	}
+            cursorPos++;
+          }
+          if(formText[cursorPos - 1] == R_GROUP) { // we left the matrix
+            break;
+          }
+        }
       }
-	
+
 
       if(oldc != cursorPos) {
-	CURSOR_RESET
+        CURSOR_RESET
       }
 
       if(shift && !textSelected) { //start selection.
-	textSelected = 1;
-	selectStartOrig = selectStart = oldc;
+        textSelected = 1;
+        selectStartOrig = selectStart = oldc;
       }
 
       if(textSelected) {
-	if(cursorPos >= selectStart) { //we expand the selection
-	  expandSelection();
-	}
-	else { //we shrink it
-	  int tmppos;
+        if(cursorPos >= selectStart) { //we expand the selection
+          expandSelection();
+        }
+        else { //we shrink it
+          int tmppos;
 
-	  for(tmppos = cursorPos; tmppos <= selectStart; tmppos++) {
-	    if(!isValidCursorPos(tmppos)) continue;
-	    cursorPos = tmppos;
-	    expandSelection();
-	    if(cursorPos > oldc) break;
-	  }
-	}
+          for(tmppos = cursorPos; tmppos <= selectStart; tmppos++) {
+            if(!isValidCursorPos(tmppos)) continue;
+            cursorPos = tmppos;
+            expandSelection();
+            if(cursorPos > oldc) break;
+          }
+        }
 
-	redraw();
+        redraw();
 
       }
       else if(oldc != cursorPos) redraw(0);
@@ -1040,19 +1042,19 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
      (e->state() & ControlButton && e->key() == Key_A)) {
     if(cursorPos != 0) {
       if(shift && !textSelected) {
-	textSelected = 1;
-	selectStartOrig = selectStart = cursorPos;
+        textSelected = 1;
+        selectStartOrig = selectStart = cursorPos;
       }
       cursorPos = 0;
       CURSOR_RESET
     }
     if(textSelected) {
       if(!shift) {
-	textSelected = 0;
-	CURSOR_RESET;
+        textSelected = 0;
+        CURSOR_RESET;
       }
       else {
-	expandSelection();
+        expandSelection();
       }
       redraw();
     }
@@ -1066,19 +1068,19 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
      (e->state() & ControlButton && e->key() == Key_E)) {
     if(cursorPos < (int)formText.length()) {
       if(shift && !textSelected) {
-	textSelected = 1;
-	selectStartOrig = selectStart = cursorPos;
+        textSelected = 1;
+        selectStartOrig = selectStart = cursorPos;
       }
       cursorPos = formText.length();
       CURSOR_RESET
     }
     if(textSelected) {
       if(!shift) {
-	textSelected = 0;
-	CURSOR_RESET;
+        textSelected = 0;
+        CURSOR_RESET;
       }
       else {
-	expandSelection();
+        expandSelection();
       }
       redraw();
     }
@@ -1091,7 +1093,7 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
   if(e->key() == Key_Backspace) {
     if(textSelected) { //if there's text selected, kill it.
       formText.remove(QMIN(selectStart, cursorPos),
-		      QMAX(selectStart - cursorPos, cursorPos - selectStart));
+                      QMAX(selectStart - cursorPos, cursorPos - selectStart));
       cursorPos = QMIN(selectStart, cursorPos);
       textSelected = 0;
       MODIFIED
@@ -1120,7 +1122,7 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
   if(e->key() == Key_Delete) {
     if(textSelected) {
       formText.remove(QMIN(selectStart, cursorPos),
-		      QMAX(selectStart - cursorPos, cursorPos - selectStart));
+                      QMAX(selectStart - cursorPos, cursorPos - selectStart));
       cursorPos = QMIN(selectStart, cursorPos);
       textSelected = 0;
       MODIFIED
@@ -1174,7 +1176,7 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
 
     if(e->key() == Key_R) { // redo
       do_redo(oldText, oldc);
-      return;	
+      return;
     }
   }
   //NORMAL KEY:
@@ -1268,10 +1270,10 @@ void KFormulaEdit::do_undo(QString oldText, int oldc)
   if(!undo_stack.isEmpty()) {
     if(textSelected) textSelected = 0;
     redo_stack.push(&((new QString(oldText))->
-		insert(oldc, QChar(CURSOR))));
+                insert(oldc, QChar(CURSOR))));
     formText = *undo_stack.top(); //we don't want it deleted
-	                        //until a shallow copy is made--
-	                        //so we don't pop right away.
+                                //until a shallow copy is made--
+                                //so we don't pop right away.
     undo_stack.pop();
 
     //now extract the cursor:
@@ -1295,7 +1297,7 @@ void KFormulaEdit::do_redo(QString oldText, int oldc)
     if(textSelected) textSelected = 0;
 
     undo_stack.push(&((new QString(oldText))->
-		insert(oldc, QChar(CURSOR))));
+                insert(oldc, QChar(CURSOR))));
 
     formText = *redo_stack.top();
 
@@ -1318,13 +1320,13 @@ void KFormulaEdit::do_redo(QString oldText, int oldc)
 void KFormulaEdit::do_cut(QString oldText, int oldc)
 {
   if(textSelected) {
-    clipText =
+    *clipText =
       QString(formText.mid(QMIN(selectStart, cursorPos),
-			   QMAX(selectStart - cursorPos + 1, \
-				cursorPos - selectStart + 1) - 1));
+                           QMAX(selectStart - cursorPos + 1, \
+                                cursorPos - selectStart + 1) - 1));
     formText.remove(QMIN(selectStart, cursorPos),
-		    QMAX(selectStart - cursorPos, \
-			 cursorPos - selectStart));
+                    QMAX(selectStart - cursorPos, \
+                         cursorPos - selectStart));
     cursorPos = QMIN(selectStart, cursorPos);
     textSelected = 0;
     MODIFIED
@@ -1339,26 +1341,26 @@ void KFormulaEdit::do_cut(QString oldText, int oldc)
 void KFormulaEdit::do_copy(QString , int )
 {
   if(textSelected) {
-    clipText =
+    *clipText =
       QString(formText.mid(QMIN(selectStart, cursorPos),
-			   QMAX(selectStart - cursorPos + 1, \
-				cursorPos - selectStart + 1) - 1));
+                           QMAX(selectStart - cursorPos + 1, \
+                                cursorPos - selectStart + 1) - 1));
   }
   return;
 }
 
 void KFormulaEdit::do_paste(QString oldText, int oldc)
 {
-  if(clipText.length() > 0) {
+  if(clipText->length() > 0) {
     if(textSelected) {
       formText.remove(QMIN(selectStart, cursorPos),
-		      QMAX(selectStart - cursorPos, \
-			   cursorPos - selectStart));
+                      QMAX(selectStart - cursorPos, \
+                           cursorPos - selectStart));
       cursorPos = QMIN(selectStart, cursorPos);
       textSelected = 0;
     }
-    formText.insert(cursorPos, clipText);
-    cursorPos += clipText.length();
+    formText.insert(cursorPos, *clipText);
+    cursorPos += clipText->length();
     MODIFIED
     redraw();
     UPDATE_SIZE
@@ -1387,8 +1389,8 @@ void KFormulaEdit::insertChar(QChar c)
 
     if(textSelected) {
       formText.remove(QMIN(selectStart, cursorPos),
-		      QMAX(selectStart - cursorPos, \
-			   cursorPos - selectStart));
+                      QMAX(selectStart - cursorPos, \
+                           cursorPos - selectStart));
       cursorPos = QMIN(selectStart, cursorPos);
       textSelected = 0;
     }
@@ -1404,49 +1406,49 @@ void KFormulaEdit::insertChar(QChar c)
       MatrixDialog m(this);
 
       if(m.exec()) {
-	int i, newcpos;
+        int i, newcpos;
 
-	if(textSelected) { //remove selected text
-	  formText.remove(QMIN(selectStart, cursorPos),
-			  QMAX(selectStart - cursorPos, \
-			       cursorPos - selectStart));
-	  cursorPos = QMIN(selectStart, cursorPos);
-	  textSelected = 0;
-	}
+        if(textSelected) { //remove selected text
+          formText.remove(QMIN(selectStart, cursorPos),
+                          QMAX(selectStart - cursorPos, \
+                               cursorPos - selectStart));
+          cursorPos = QMIN(selectStart, cursorPos);
+          textSelected = 0;
+        }
 
-	// insert {w&h}#{{}&{}&{}&...{}&}
+        // insert {w&h}#{{}&{}&{}&...{}&}
 
-	formText.insert(cursorPos++, L_GROUP);
-	formText.insert(cursorPos++, QChar(m.w));
-	formText.insert(cursorPos++, QChar(SEPARATOR));
-	formText.insert(cursorPos++, QChar(m.h));
-	formText.insert(cursorPos++, R_GROUP);
-	formText.insert(cursorPos++, QChar(MATRIX));
-	formText.insert(cursorPos++, L_GROUP);
+        formText.insert(cursorPos++, L_GROUP);
+        formText.insert(cursorPos++, QChar(m.w));
+        formText.insert(cursorPos++, QChar(SEPARATOR));
+        formText.insert(cursorPos++, QChar(m.h));
+        formText.insert(cursorPos++, R_GROUP);
+        formText.insert(cursorPos++, QChar(MATRIX));
+        formText.insert(cursorPos++, L_GROUP);
 
-	newcpos = cursorPos + 1;
+        newcpos = cursorPos + 1;
 
-	for(i = 0; i < m.w * m.h; i++) {
-	  formText.insert(cursorPos++, L_GROUP);
-	  if(m.zeroFill) formText.insert(cursorPos++, '0');
-	  formText.insert(cursorPos++, R_GROUP);
-	  formText.insert(cursorPos++, QChar(SEPARATOR));
-	}
+        for(i = 0; i < m.w * m.h; i++) {
+          formText.insert(cursorPos++, L_GROUP);
+          if(m.zeroFill) formText.insert(cursorPos++, '0');
+          formText.insert(cursorPos++, R_GROUP);
+          formText.insert(cursorPos++, QChar(SEPARATOR));
+        }
 
-	formText.insert(cursorPos++, R_GROUP);
+        formText.insert(cursorPos++, R_GROUP);
 
-	cursorPos = newcpos;
+        cursorPos = newcpos;
 
       }
     }
 
     if(KFormula::bigop().contains(c)) { // we need to add limits
       if(textSelected) {
-	formText.remove(QMIN(selectStart, cursorPos),
-			QMAX(selectStart - cursorPos, \
-			     cursorPos - selectStart));
-	cursorPos = QMIN(selectStart, cursorPos);
-	textSelected = 0;
+        formText.remove(QMIN(selectStart, cursorPos),
+                        QMAX(selectStart - cursorPos, \
+                             cursorPos - selectStart));
+        cursorPos = QMIN(selectStart, cursorPos);
+        textSelected = 0;
       }
       //insert "{{c}]{$}}[{}#"
       formText.insert(cursorPos++, L_GROUP);
@@ -1469,9 +1471,9 @@ void KFormulaEdit::insertChar(QChar c)
       //if there is selected text, put curly braces around that so
       //that the entire selection is the numerator:
       if(textSelected) {
-	formText.insert(QMAX(selectStart, cursorPos), R_GROUP);
-	formText.insert(QMIN(selectStart, cursorPos), L_GROUP);
-	cursorPos = QMAX(selectStart, cursorPos) + 2;
+        formText.insert(QMAX(selectStart, cursorPos), R_GROUP);
+        formText.insert(QMIN(selectStart, cursorPos), L_GROUP);
+        cursorPos = QMAX(selectStart, cursorPos) + 2;
       }
 
       formText.insert(cursorPos, c); //insert the slash or whatever
@@ -1483,24 +1485,24 @@ void KFormulaEdit::insertChar(QChar c)
 
       //if there is no selection we identify the numerator:
       if(!textSelected) {
-	formText.insert(cursorPos - 2, R_GROUP);
-	
-	level = 0;
-	
-	for(i = cursorPos - 3; i >= 0; i--) {
-	  if(formText[i] == R_GROUP) level++;
-	  if(formText[i] == L_GROUP) level--;
-	  if(level < 0) break;
-	  //figure out how to do precedence for bigop!
-	  if(level == 0 && isInString(i, KFormula::intext())) break;
-	  //the "+-#=<>" are all operators with lower precedence than
-	  //the divide.  if they are encoundered, they don't end up in
-	  //the numerator (unless they are selected but then we wouldn't
-	  //be here).
-	}
-	formText.insert(i + 1, L_GROUP);
-	
-	cursorPos += 2;
+        formText.insert(cursorPos - 2, R_GROUP);
+
+        level = 0;
+
+        for(i = cursorPos - 3; i >= 0; i--) {
+          if(formText[i] == R_GROUP) level++;
+          if(formText[i] == L_GROUP) level--;
+          if(level < 0) break;
+          //figure out how to do precedence for bigop!
+          if(level == 0 && isInString(i, KFormula::intext())) break;
+          //the "+-#=<>" are all operators with lower precedence than
+          //the divide.  if they are encoundered, they don't end up in
+          //the numerator (unless they are selected but then we wouldn't
+          //be here).
+        }
+        formText.insert(i + 1, L_GROUP);
+
+        cursorPos += 2;
       }
       textSelected = 0;
 
@@ -1510,7 +1512,7 @@ void KFormulaEdit::insertChar(QChar c)
     //these just need a pair of curly braces after the operator.
     if(c == QChar(POWER) || c == QChar(SUB)) { // "x$" -> "x^{$}"
       if(textSelected) {
-	cursorPos = QMAX(cursorPos, selectStart);
+        cursorPos = QMAX(cursorPos, selectStart);
       }
       textSelected = 0;
       formText.insert(cursorPos, c);
@@ -1525,7 +1527,7 @@ void KFormulaEdit::insertChar(QChar c)
     //these just need a pair of curly braces before the operator.
     if(c == QChar(LSUP) || c == QChar(LSUB)) { // "$x" -> "{$}%x"
       if(textSelected) {
-	cursorPos = QMIN(cursorPos, selectStart);
+        cursorPos = QMIN(cursorPos, selectStart);
       }
       textSelected = 0;
       formText.insert(cursorPos, c);
@@ -1542,24 +1544,24 @@ void KFormulaEdit::insertChar(QChar c)
     //So: "x+$" -> "x+{}({$}"
     if((KFormula::delim() + QChar(SQRT)).contains(c)) {
       if(!textSelected) {
-	formText.insert(cursorPos, c);
-	cursorPos++;
-	formText.insert(cursorPos - 1, L_GROUP);
-	cursorPos++;
-	formText.insert(cursorPos - 1, R_GROUP);
-	cursorPos++;
-	formText.insert(cursorPos, L_GROUP);
-	cursorPos++;
-	formText.insert(cursorPos, R_GROUP);
+        formText.insert(cursorPos, c);
+        cursorPos++;
+        formText.insert(cursorPos - 1, L_GROUP);
+        cursorPos++;
+        formText.insert(cursorPos - 1, R_GROUP);
+        cursorPos++;
+        formText.insert(cursorPos, L_GROUP);
+        cursorPos++;
+        formText.insert(cursorPos, R_GROUP);
       }
       else { //the entire selection ends up as the right operand.
-	formText.insert(QMAX(cursorPos, selectStart), R_GROUP);
-	formText.insert(QMIN(cursorPos, selectStart), L_GROUP);
-	formText.insert(QMIN(cursorPos, selectStart), c);
-	formText.insert(QMIN(cursorPos, selectStart), R_GROUP);
-	formText.insert(QMIN(cursorPos, selectStart), L_GROUP);
-	cursorPos = QMAX(cursorPos, selectStart) + 5;
-	textSelected = 0;
+        formText.insert(QMAX(cursorPos, selectStart), R_GROUP);
+        formText.insert(QMIN(cursorPos, selectStart), L_GROUP);
+        formText.insert(QMIN(cursorPos, selectStart), c);
+        formText.insert(QMIN(cursorPos, selectStart), R_GROUP);
+        formText.insert(QMIN(cursorPos, selectStart), L_GROUP);
+        cursorPos = QMAX(cursorPos, selectStart) + 5;
+        textSelected = 0;
       }
     }
   }

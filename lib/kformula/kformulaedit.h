@@ -78,7 +78,7 @@ public:
   void redraw(int all = 1);
   KFormula *getFormula() const { return form; }
   QString uglyForm() const;
-  void setUglyForm(QString ugly); // try to convert an ugly form to be less so. 
+  void setUglyForm(QString ugly); // try to convert an ugly form to be less so.
 
   virtual QSize sizeHint() const;
   virtual QSizePolicy sizePolicy() const;
@@ -105,7 +105,7 @@ private:
   QPixmap pm;       //double buffering
   KFormula *form;
   QString formText; //the text that gets converted into the formula
-  static QString clipText; //clipboard
+  static QString *clipText; //clipboard
   int cursorPos;
   QArray<charinfo> info; //where each character of formText
                          //ends up in the formula
