@@ -198,6 +198,7 @@ private:
 	bool _defaultrowheight(Q_UINT32 size, QDataStream &body);
 	bool _defcolwidth(Q_UINT32 size, QDataStream &body);
 	bool _dimensions(Q_UINT32 size, QDataStream &body);
+	bool _dsf(Q_UINT32 size, QDataStream &body);
 	bool _eof(Q_UINT32 size, QDataStream &body);
 	bool _externcount(Q_UINT32 size, QDataStream &body);
 	bool _externname(Q_UINT32 size, QDataStream &body);
@@ -226,6 +227,7 @@ private:
 	bool _name(Q_UINT32 size, QDataStream &body);
 	bool _note(Q_UINT32 size, QDataStream &body);
 	bool _number(Q_UINT32 size, QDataStream &body);
+	bool _objproj(Q_UINT32 size, QDataStream &body);
 	bool _pane(Q_UINT32 size, QDataStream &body);
 	bool _paramqry(Q_UINT32 size, QDataStream &body);
 	bool _password(Q_UINT32 size, QDataStream &body);

@@ -1205,7 +1205,7 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
 		{ "DEFCOLWIDTH",    0x0055, &XMLTree::_defcolwidth },
 		{ "DELTA",          0x0010, 0 /* &XMLTree::_delta */ },
 		{ "DOCROUTE",       0x00b8, 0 /* &XMLTree::_docroute */ },
-		{ "DSF",            0x0061, 0 /* &XMLTree::_dsf */ },
+		{ "DSF",            0x0061, &XMLTree::_dsf },
 		{ "COLWIDTH",       0x0024, 0 /* &XMLTree::_colwidth */ },
 		{ "COLUMNDEFAULT",  0x0020, 0 /* &XMLTree::_coldefault */ },
 		{ "DIMENSIONS",     0x0000, &XMLTree::_dimensions },
@@ -1258,7 +1258,7 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
 		{ "NOTE",           0x001c, &XMLTree::_note },
 		{ "NUMBER",         0x0003, &XMLTree::_number },
 		{ "OBJ",            0x005d, 0 /* &XMLTree::_obj */ },
-		{ "OBJPROJ",        0x00d3, 0 /* &XMLTree::_objproj */ },
+		{ "OBJPROJ",        0x00d3, &XMLTree::_objproj },
 		{ "OBJPROTECT",     0x0063, 0 /* &XMLTree::_objprotect */ },
 		{ "OLESIZE",        0x00de, 0 /* &XMLTree::_olesize */ },
 		{ "PALETTEINFO",    0x0092, 0 /* &XMLTree::_paletteinfo */ },
@@ -2272,6 +2272,11 @@ bool XMLTree::_defcolwidth(Q_UINT32, QDataStream &)
 	return true;
 }
 
+bool XMLTree::_dsf(Q_UINT32, QDataStream &)
+{
+	return true;
+}
+
 bool XMLTree::_dimensions(Q_UINT32, QDataStream &)
 {
 	return true;
@@ -2620,6 +2625,13 @@ bool XMLTree::_mulblank(Q_UINT32 size, QDataStream &body)
 bool XMLTree::_mulrk(Q_UINT32 size, QDataStream &body)
 {
 
+	if(size <= 6)
+	{
+		kdWarning(s_area) << "Invalid RK array!" << endl;
+		return true;
+	}
+
+	char *store = new char[size];
 	double value = 0;
 
 	QString s;
@@ -2748,6 +2760,11 @@ bool XMLTree::_number(Q_UINT32, QDataStream &body)
 	e.appendChild(text);
 	table->appendChild(e);
 
+	return true;
+}
+
+bool XMLTree::_objproj(Q_UINT32, QDataStream &body)
+{
 	return true;
 }
 
