@@ -21,12 +21,30 @@
 #include <koDocument.h>
 #include <koMainWindow.h>
 #include <koQueryTypes.h>
-
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <klocale.h>
 #include <dcopclient.h>
+
+static const char* description=I18N_NOOP("KOffice Illustrator Program");
+static const char* version="0.1";
+
+static const KCmdLineOptions options[]=
+{
+	{"+[file]", I18N_NOOP("File To Open"),0},
+	{0,0,0}
+};
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "killustrator" );
+    KAboutData aboutData( "killustrator", I18N_NOOP("KIllustrator"),
+        version, description, KAboutData::License_GPL,
+        "(c) 1998-2000, Kai-Uwe Sattler");
+    aboutData.addAuthor("Kai-Uwe Sattler",0, "kus@iti.cs.uni-magdeburg.de");
+    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::addCmdLineOptions( options );
+
+    KoApplication app;
 
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "killustrator" );
