@@ -136,9 +136,9 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
             table->setText( row + 1, col + 1, text, false, true );
             cell = table->cellAt( col + 1, row + 1, false );
 
-            cell->calculateTextParameters( table->painter(), col + 1, row + 1 );
-            if ( text.length() * width > widths[col] )
-              widths[col] = text.length() * width;
+            double len = (double) text.length() * width;
+            if ( len > widths[col] )
+              widths[col] = len;
 
             switch (dialog->getHeader(col))
             {
@@ -161,7 +161,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     emit sigProgress( 98 );
     for ( i = 0; i < numCols; ++i )
     {
-      ColumnFormat * c  = table->nonDefaultColumnFormat( i );
+      ColumnFormat * c  = table->nonDefaultColumnFormat( i + 1 );
       c->setDblWidth( widths[i] );
     }
 

@@ -350,17 +350,11 @@ QString CSVDialog::getText(int row, int col)
 
 void CSVDialog::setText(int row, int col, const QString& text)
 {
-  kdDebug() << endl << "Row: " << row << ", Col: " << col << " - Text: " << text << endl;
-  kdDebug() << "EndRow: " << m_endRow << ", m_startRow: " << m_startRow 
-            << ", EndCol: " << m_endCol << ", m_startCol: " << m_startCol << endl;
-
     if ( row < 1 || col < 1 ) // skipped by the user
         return;
 
     if ( ( row > ( m_endRow - m_startRow ) && m_endRow > 0 ) || ( col > ( m_endCol - m_startCol ) && m_endCol > 0 ) )
       return;
-
-    kdDebug() << "Rows: " << m_dialog->m_table->numRows() << ", Cols: " << m_dialog->m_table->numCols() << endl;
 
     if ( m_dialog->m_table->numRows() < row ) 
     {
@@ -370,7 +364,6 @@ void CSVDialog::setText(int row, int col, const QString& text)
 
     if ( m_dialog->m_table->numCols() < col )
     {
-      kdDebug() << "Updating columns" << endl;
         m_dialog->m_table->setNumCols( col );
         m_adjustCols = true;
     }
@@ -397,15 +390,12 @@ void CSVDialog::adjustCols(int iCols)
         m_dialog->m_table->setNumCols( iCols );
         m_adjustCols = false;
 
-        kdDebug() << "adjustCols: " << m_endCol << endl;
-
         if ( m_endCol == -1 )
         {
           if ( iCols > ( m_endCol - m_startCol ) )
             iCols = m_endCol - m_startCol;
 
           m_dialog->m_table->setNumCols( iCols );
-          kdDebug() << "Cols: " << iCols << endl;
         }
     }
 }
