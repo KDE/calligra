@@ -53,6 +53,7 @@ class OpenCalcExport : public KoFilter
   bool exportDocInfo( KoStore * store, const KSpreadDoc * ksdoc );
   bool exportStyles ( KoStore * store, const KSpreadDoc * ksdoc );
   bool exportContent( KoStore * store, const KSpreadDoc * ksdoc );
+    bool exportSettings( KoStore * store, const KSpreadDoc * ksdoc );
 
   bool exportBody( QDomDocument & doc, QDomElement & content, const KSpreadDoc * ksdoc );
   void exportSheet( QDomDocument & doc, QDomElement & tabElem,

@@ -151,6 +151,11 @@ bool OpenCalcExport::writeFile( const KSpreadDoc * const ksdoc )
   else
     filesWritten |= stylesXML;
 
+  if ( !exportSettings( store, ksdoc ) )
+    STOPEXPORT;
+  else
+    filesWritten |= settingsXML;
+
   if ( !writeMetaFile( store, filesWritten ) )
     STOPEXPORT;
 
@@ -228,6 +233,36 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const KSpreadDoc* ksdoc )
   kdDebug(30518) << "Meta: " << doc << endl;
 
   store->write( doc, doc.length() );
+
+  if ( !store->close() )
+    return false;
+
+  return true;
+}
+
+bool OpenCalcExport::exportSettings( KoStore * store, const KSpreadDoc * ksdoc )
+{
+  if ( !store->open( "settings.xml" ) )
+    return false;
+
+  QDomDocument doc;
+  doc.appendChild( doc.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+  QDomElement settings = doc.createElement( "office:document-settings" );
+  settings.setAttribute( "xmlns:office", "http://openoffice.org/2000/office");
+  settings.setAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
+  settings.setAttribute( "xmlns:config", "http://openoffice.org/2001/config" );
+  settings.setAttribute( "office:version", "1.0" );
+
+  QDomElement data = doc.createElement( "office:settings" );
+  settings.appendChild( data );
+
+  doc.appendChild( settings );
+
+  QCString f( doc.toCString() );
+  kdDebug(30518) << "Settings: " << (char const * ) f << endl;
+
+  store->write( f, f.length() );
 
   if ( !store->close() )
     return false;
@@ -1172,6 +1207,7 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
 
 bool OpenCalcExport::writeMetaFile( KoStore * store, uint filesWritten )
 {
+    store->enterDirectory( "META-INF" );
   if ( !store->open( "manifest.xml" ) )
     return false;
 
