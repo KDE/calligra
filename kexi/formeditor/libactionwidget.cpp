@@ -26,7 +26,7 @@ namespace KFormDesigner
 {
 
 LibActionWidget::LibActionWidget(Widget *w, KActionCollection *c)
- : KAction(w->name(), w->pixmap(), Key_F5, 0, SLOT(slotWidget()), c, QString("library_widget_" + w->className()).latin1())
+ : KAction(w->name(), w->pixmap(), 0/*Key_F5*/, 0, SLOT(slotWidget()), c, QString("library_widget_" + w->className()).latin1())
 {
 	kdDebug() << "LibActionWidget::LibActionWidget(): " << QString("library_widget_" + w->className()).latin1() << endl;
 	m_className = w->className();
