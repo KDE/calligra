@@ -1794,11 +1794,10 @@ void KWView::doFindReplace()
     bool aborted = findReplace->aborted();
     while(!aborted )
     {
-        int ret=KMessageBox::questionYesNo(this,
-                                           i18n("Do you want to restart search at the beginning?"));
-        if( ret != KMessageBox::Yes )
+        // this can ask the user whether to restart
+        if ( !findReplace->shouldRestart() )
             break;
-        m_findReplace->changeListObject( m_gui->canvasWidget()->kWordDocument()->frameTextObject() );
+        findReplace->changeListObject( m_gui->canvasWidget()->kWordDocument()->frameTextObject() );
         findReplace->proceed();
         aborted = findReplace->aborted();
     }
