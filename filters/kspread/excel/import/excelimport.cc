@@ -70,6 +70,29 @@ static QString convertColor( const Sidewinder::Color& color )
   return c;
 }
 
+static QDomElement convertPen( QDomDocument& doc, const Sidewinder::Pen& pen )
+{
+  QDomElement penElement = doc.createElement( "pen" );
+
+  unsigned style = 0;
+  switch( pen.style )
+  {
+    case Sidewinder::Pen::NoLine:         style = 0; break;
+    case Sidewinder::Pen::SolidLine:      style = 1; break;
+    case Sidewinder::Pen::DashLine:       style = 2; break;
+    case Sidewinder::Pen::DotLine:        style = 3; break;
+    case Sidewinder::Pen::DashDotLine:    style = 4; break;
+    case Sidewinder::Pen::DashDotDotLine: style = 5; break;
+    default: style = 1; break; // fallback, solid line
+  }
+
+  penElement.setAttribute( "style", style );
+  penElement.setAttribute( "width", pen.width );
+  penElement.setAttribute( "color", convertColor( pen.color ) );
+
+  return penElement;
+}
+
 QDomElement convertFormat( QDomDocument& doc, const Sidewinder::Format& format )
 {
   QDomElement e = doc.createElement( "format" );
@@ -103,6 +126,27 @@ QDomElement convertFormat( QDomDocument& doc, const Sidewinder::Format& format )
   penElement.setAttribute( "style", 1 );
   penElement.setAttribute( "color", convertColor( font.color() ) );
   e.appendChild( penElement );
+
+
+  // cell borders
+
+  const Sidewinder::FormatBorders& borders = format.borders();
+
+  QDomElement leftBorderElement = doc.createElement( "left-border" );
+  leftBorderElement.appendChild( convertPen( doc, borders.leftBorder() ) );
+  e.appendChild( leftBorderElement );
+
+  QDomElement rightBorderElement = doc.createElement( "right-border" );
+  rightBorderElement.appendChild( convertPen( doc, borders.rightBorder() ) );
+  e.appendChild( rightBorderElement );
+
+  QDomElement topBorderElement = doc.createElement( "top-border" );
+  topBorderElement.appendChild( convertPen( doc, borders.topBorder() ) );
+  e.appendChild( topBorderElement );
+
+  QDomElement bottomBorderElement = doc.createElement( "bottom-border" );
+  bottomBorderElement.appendChild( convertPen( doc, borders.bottomBorder() ) );
+  e.appendChild( bottomBorderElement );
 
   return e;
 }
