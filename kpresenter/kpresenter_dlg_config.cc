@@ -44,6 +44,7 @@
 #include <kprcommand.h>
 #include <qvgroupbox.h>
 #include <kfontdialog.h>
+#include <klineedit.h>
 
 
 KPConfig::KPConfig( KPresenterView* parent )
@@ -443,7 +444,26 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
     grid->addWidget(m_displayComment,4,0);
 
+    tmpQGroupBox = new QGroupBox( box, "GroupBox" );
+    tmpQGroupBox->setTitle(i18n("Grid"));
 
+    grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
+
+    QLabel *lab=new QLabel(i18n("Resolution X :(%1)").arg(doc->getUnitName()),  tmpQGroupBox);
+    grid->addWidget(lab ,0,0);
+
+    resolutionX = new KLineEdit(tmpQGroupBox);
+    resolutionX->setText( KoUnit::userValue( doc->getGridX(), doc->getUnit() ) );
+    resolutionX->setValidator( new KFloatValidator( 1, 100 ,true, resolutionX ) );
+    grid->addWidget(resolutionX ,1,0);
+
+    lab=new QLabel(i18n("Resolution X :(%1)").arg(doc->getUnitName()), tmpQGroupBox);
+    grid->addWidget(lab ,2,0);
+
+    resolutionY = new KLineEdit(tmpQGroupBox);
+    resolutionY->setText( KoUnit::userValue( doc->getGridY(), doc->getUnit() ) );
+    resolutionY->setValidator( new KFloatValidator( 1, 100 ,true, resolutionY ) );
+    grid->addWidget(resolutionY , 2,0);
 }
 
 void ConfigureMiscPage::apply()
@@ -490,6 +510,9 @@ void ConfigureMiscPage::apply()
         doc->recalcVariables( VT_NOTE );
     }
 
+    doc->setGridX( KoUnit::fromUserValue( resolutionX->text(), doc->getUnit() ));
+    doc->setGridY( KoUnit::fromUserValue( resolutionY->text(), doc->getUnit() ));
+    doc->repaint( false );
 }
 
 void ConfigureMiscPage::slotDefault()
@@ -498,6 +521,11 @@ void ConfigureMiscPage::slotDefault()
    m_variableNumberOffset->setText(QString::number(1));
    m_displayLink->setChecked(true);
    m_displayComment->setChecked(true);
+   KPresenterDoc* doc = m_pView->kPresenterDoc();
+
+   resolutionY->setText( KoUnit::userValue( 10.0, doc->getUnit() ) );
+   resolutionX->setText( KoUnit::userValue( 10.0, doc->getUnit() ) );
+
 }
 
 

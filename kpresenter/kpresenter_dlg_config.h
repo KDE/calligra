@@ -28,6 +28,7 @@ class KColorButton;
 class KConfig;
 class KSpellConfig;
 class QCheckBox;
+class KLineEdit;
 
 class configureInterfacePage : public QWidget
 {
@@ -96,6 +97,7 @@ private:
     int m_oldStartingPage;
     QLineEdit* m_variableNumberOffset;
     QCheckBox* m_displayLink, *m_displayComment;
+    KLineEdit * resolutionY, * resolutionX;
 };
 
 class ConfigureDefaultDocPage : public QObject
