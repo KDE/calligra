@@ -9,9 +9,14 @@
    version 2 of the License, or (at your option) any later version.
 */
 
-#include <qdatetime.h>
 #include <stdio.h>
 #include <string.h>
+
+#include <qdatetime.h>
+#include <qtextcodec.h>
+
+#include <kdebug.h>
+
 #include "rtfimport_dom.h"
 
 
@@ -70,36 +75,25 @@ void DomNode::addNode( const char *name )
  * Adds a text node.
  * @param text the text to write into the document node
  */
-void DomNode::addTextNode( const char *text )
+void DomNode::addTextNode( const char *text, QTextCodec* codec )
 {
     closeTag( false );
 
-    if (text == 0)
+    if (!codec)
     {
-	text = "";
+        kdError(30515) << "No QTextCodec! Caller should have done it! (in DomNode::addTextNode)" << endl;
+        return;
     }
-    char *amp = strchr( text, '&' );
-    char *lt = strchr( text, '<' );
 
-    // Escape &amp; and &lt;
-    while (amp || lt)
-    {
-	if (amp && (!lt || amp < lt))
-	{
-	    writeBlock( text, (amp - text) );
-	    writeBlock( "&amp;", 5 );
-	    text = (amp + 1);
-	    amp = strchr( text, '&' );
-	}
-	else
-	{
-	    writeBlock( text, (lt - text) );
-	    writeBlock( "&lt;", 4 );
-	    text = (lt + 1);
-	    lt = strchr( text, '<' );
-	}
-    }
-    writeBlock( text, strlen( text ) );
+    QString unicode(codec->toUnicode(text));
+
+    unicode.replace('&',"&amp;")
+        .replace('<',"&lt;")
+        .replace('>',"&gt;");  // Needed for the sequence ]]>
+
+    QCString cstr(unicode.utf8());
+
+    writeBlock( cstr, cstr.length() );
 }
 
 /**

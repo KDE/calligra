@@ -1045,7 +1045,12 @@ void RTFImport::insertUTF8( int ch )
     }
     *text++ = 0;
 
+    QTextCodec* oldCodec=textCodec;
+    textCodec=QTextCodec::codecForName("UTF-8");
+
     (this->*destination.destproc)(0L);
+
+    textCodec=oldCodec;
     token.text = tk;
 }
 
@@ -1654,7 +1659,6 @@ void RTFImport::parseRichText( RTFProperty * )
 	// Ignore hidden text
 	if (!state.format.hidden)
 	{
-	    // Token contains UTF8 character or ASCII string
 	    int len = (token.text[0] < 0) ? 1 : strlen( token.text );
 
 	    // Check and store format changes
@@ -1674,7 +1678,12 @@ void RTFImport::parseRichText( RTFProperty * )
 		textState->formats.last().len += len;
 	    }
 	    textState->length += len;
-	    textState->text.addTextNode( token.text );
+                if(!textCodec)
+                {
+                    kdWarning(30515) << "No code page selected, assuming CP 1252! (in RTFImport::parsePlainText)" << endl;
+                    textCodec = QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
+                }
+	    textState->text.addTextNode( token.text, textCodec );
 	}
     }
     else if (token.type == RTFTokenizer::CloseGroup)
@@ -1700,7 +1709,12 @@ void RTFImport::parsePlainText( RTFProperty * )
     }
     else if (token.type == RTFTokenizer::PlainText)
     {
-	((DomNode *)destination.target)->addTextNode( token.text );
+        if(!textCodec)
+        {
+            kdWarning(30515) << "No code page selected, assuming CP 1252! (in RTFImport::parseRichText)" << endl;
+            textCodec = QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
+        }
+        ((DomNode *)destination.target)->addTextNode( token.text, textCodec );
     }
 }
 

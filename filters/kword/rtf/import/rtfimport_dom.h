@@ -17,6 +17,8 @@
 #include <qcstring.h>
 #include <qdatetime.h>
 
+class QTextCodec;
+
 class DomNode : public QBuffer
 {
 public:
@@ -25,7 +27,7 @@ public:
 
     void clear( int level=0 );
     void addNode( const char *name );
-    void addTextNode( const char *text );
+    void addTextNode( const char *text, QTextCodec* codec );
     void addBorder( int id, QColor &color, int style, double width );
     void addColor( QColor &color );
     void addRect( int left, int top, int right, int bottom );
