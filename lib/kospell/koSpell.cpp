@@ -333,14 +333,21 @@ void KOSpell::nextWord()
         {
             QString text=word[0]+word.right(word.length()-1).lower();
             if(text==word)
+            {
+                //clear search word
                 searchAgain = true;
+                word ="";
+            }
         }
 
         //We don't take advantage of ispell's ignore function because
         //we can't interrupt ispell's output (when checking a large
         //buffer) to add a word to _it's_ ignore-list.
         if (ignorelist.findIndex(word.lower())!=-1)
+        {
+            word ="";
             searchAgain = true;
+        }
     }
     while ( (word.isEmpty() || searchAgain) && (lastpos < origbuffer.length()-1));
 
