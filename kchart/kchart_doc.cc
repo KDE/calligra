@@ -27,7 +27,6 @@
 #include <komlMime.h>
 
 #include <fstream>
-#include <string>
 
 #include <unistd.h>
 #include <kapp.h>
@@ -90,7 +89,7 @@ KDiagrammDoc::KDiagrammDoc()
   m_lstViews.setAutoDelete( false );
 }
 
-CORBA::Boolean KDiagrammDoc::initDoc()
+bool KDiagrammDoc::initDoc()
 {
   return true;
 }
@@ -135,15 +134,14 @@ OpenParts::View_ptr KDiagrammDoc::createView()
   return OpenParts::View::_duplicate( createDiagrammView() );
 }
 
-void KDiagrammDoc::viewList( OpenParts::Document::ViewList*& _list )
+void KDiagrammDoc::viewList( OpenParts::Document::ViewList & _list )
 {
-  (*_list).length( m_lstViews.count() );
+  _list.clear();
 
-  int i = 0;
   QListIterator<KDiagrammView> it( m_lstViews );
   for( ; it.current(); ++it )
   {
-    (*_list)[i++] = OpenParts::View::_duplicate( it.current() );
+    _list.append ( OpenParts::View::_duplicate( it.current() ) );
   }
 }
 
@@ -222,17 +220,17 @@ void KDiagrammDoc::fill( const Chart::Range& range, const Chart::Matrix& matrix 
   cerr << "1" << endl;
 
   m_table.yDesc.clear();
-  int l = matrix.rowDescription.length();
+  int l = matrix.rowDescription.count();
   for ( int i = 0; i < l; i++ )
   {
-    m_table.yDesc.append( matrix.rowDescription[i].in() );
+    m_table.yDesc.append( matrix.rowDescription[i] );
   }
 
   m_table.xDesc.clear();
-  l = matrix.columnDescription.length();
+  l = matrix.columnDescription.count();
   for ( int i = 0; i < l; i++ )
   {
-    m_table.xDesc.append( matrix.columnDescription[i].in() );
+    m_table.xDesc.append( matrix.columnDescription[i] );
   }
 
   cerr << "2" << endl;
@@ -382,8 +380,8 @@ void KDiagrammDoc::print( QPaintDevice* _dev )
   painter.end();
 }
 
-void KDiagrammDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-			 CORBA::Float _scale )
+void KDiagrammDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
+			 float _scale )
 {
   cerr << "DRAWING w=" << _width << " h=" << _height << endl;
 

@@ -123,24 +123,24 @@ bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _facto
     return true;
   }
 
-  CORBA::WString_var toolTip;
+  QString toolTip;
 
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon( "lines" ) );
-  toolTip = Q2C( i18n( "Lines" ) );
+  toolTip = i18n( "Lines" );
   m_idButtonEdit_Lines = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "modeLines", true, toolTip, -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon( "areas" ) );
-  toolTip = Q2C( i18n( "Areas" ) );
+  toolTip = i18n( "Areas" );
   m_idButtonEdit_Areas = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "modeAreas", true, toolTip, -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon( "bars" ) );
-  toolTip = Q2C( i18n( "3D-Bars" ) );
+  toolTip = i18n( "3D-Bars" );
   m_idButtonEdit_Bars = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeBars", true, toolTip, -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon( "cakes" ) );
-  toolTip = Q2C( i18n( "Cakes" ) );
+  toolTip = i18n( "Cakes" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeCakes", true, toolTip, -1 );
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
@@ -161,39 +161,39 @@ bool KDiagrammView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     return true;
   }
 
-  CORBA::WString_var text;
+  QString text;
 
   // Edit
-  text = Q2C( i18n( "&Edit" ) );
+  text = i18n( "&Edit" );
   _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
 
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon( "lines" ) );
-  text = Q2C( i18n("&Lines") );
+  text = i18n("&Lines");
   m_idMenuEdit_Lines = m_vMenuEdit->insertItem6( pix, text, this, "modeLines", CTRL + Key_L, -1, -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon( "areas" ) );
-  text = Q2C( i18n("&Areas") );
+  text = i18n("&Areas");
   m_idMenuEdit_Areas = m_vMenuEdit->insertItem6( pix, text, this, "modeAreas", CTRL + Key_A, -1, -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon( "bars" ) );
-  text = Q2C( i18n("&Bars") );
+  text = i18n("&Bars");
   m_idMenuEdit_Bars = m_vMenuEdit->insertItem6( pix, text, this, "modeBars", CTRL + Key_B, -1, -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon( "cakes" ) );
-  text = Q2C( i18n("&Cakes") );
+  text = i18n("&Cakes");
   m_idMenuEdit_Cakes = m_vMenuEdit->insertItem6( pix, text, this, "modeCakes", CTRL + Key_C, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  text = Q2C( i18n("&Edit Data...") );
+  text = i18n("&Edit Data...");
   m_idMenuEdit_Data = m_vMenuEdit->insertItem( text, this, "editData", CTRL + Key_E );
 
-  text = Q2C( i18n(" C&onfigure Chart..." ) );
+  text = i18n(" C&onfigure Chart..." );
   m_idMenuConfig_Chart = m_vMenuEdit->insertItem( text, this, "configChart", CTRL + Key_O );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  text = Q2C( i18n("&Page Layout") );
+  text = i18n("&Page Layout") ;
   m_idMenuEdit_Page = m_vMenuEdit->insertItem( text, this, "pageLayout", CTRL + Key_L );
 
   return true;
@@ -216,7 +216,7 @@ void KDiagrammView::helpUsing()
   kapp->invokeHTMLHelp( "kdiagramm/kdiagramm.html", QString::null );
 }
 
-CORBA::Boolean KDiagrammView::printDlg()
+bool KDiagrammView::printDlg()
 {
   QPrinter prt;
   if ( QPrintDialog::getPrinterSetup( &prt ) )

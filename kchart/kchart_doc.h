@@ -76,18 +76,18 @@ public:
   virtual KDiagrammView* createDiagrammView(QWidget *_parent = 0);
 
   // IDL
-  virtual CORBA::Boolean initDoc();
+  virtual bool initDoc();
 
   /**
    * Wrapper for @ref #createDiagrammView
    */
   virtual OpenParts::View_ptr createView();
 
-  virtual void viewList( OpenParts::Document::ViewList*& _list );
+  virtual void viewList( OpenParts::Document::ViewList & _list );
 
-  virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
+  virtual QCString mimeType() { return MIME_TYPE; }
 
-  virtual CORBA::Boolean isModified() { return m_bModified; }
+  virtual bool isModified() { return m_bModified; }
 
   virtual bool hasToWriteMultipart() { return false; }
 
@@ -115,8 +115,8 @@ public:
 
   // C++
   virtual void print( QPaintDevice* _dev );
-  virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-		     CORBA::Float _scale );
+  virtual void draw( QPaintDevice* _dev, long int _width, long int _height,
+		     float _scale );
 
   // C++
   void paperLayoutDlg();

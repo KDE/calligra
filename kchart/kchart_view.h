@@ -87,7 +87,7 @@ public:
 
     virtual void cleanUp();
 
-    CORBA::Boolean printDlg();
+    bool printDlg();
 
 public slots:
     // Document signals
@@ -107,23 +107,23 @@ protected:
     virtual void helpUsing();
 
     OpenPartsUI::ToolBar_var m_vToolBarEdit;
-    CORBA::Long m_idButtonEdit_Lines;
-    CORBA::Long m_idButtonEdit_Areas;
-    CORBA::Long m_idButtonEdit_Bars;
-    CORBA::Long m_idButtonEdit_Cakes;
+    long int m_idButtonEdit_Lines;
+    long int m_idButtonEdit_Areas;
+    long int m_idButtonEdit_Bars;
+    long int m_idButtonEdit_Cakes;
 
     OpenPartsUI::Menu_var m_vMenuEdit;
-    CORBA::Long m_idMenuEdit_Lines;
-    CORBA::Long m_idMenuEdit_Areas;
-    CORBA::Long m_idMenuEdit_Bars;
-    CORBA::Long m_idMenuEdit_Cakes;
-    CORBA::Long m_idMenuEdit_Data;
-    CORBA::Long m_idMenuEdit_Page;
-    CORBA::Long m_idMenuConfig_Chart;
+    long int m_idMenuEdit_Lines;
+    long int m_idMenuEdit_Areas;
+    long int m_idMenuEdit_Bars;
+    long int m_idMenuEdit_Cakes;
+    long int m_idMenuEdit_Data;
+    long int m_idMenuEdit_Page;
+    long int m_idMenuConfig_Chart;
 
     OpenPartsUI::Menu_var m_vMenuHelp;
-    CORBA::Long m_idMenuHelp_About;
-    CORBA::Long m_idMenuHelp_Using;
+    long int m_idMenuHelp_About;
+    long int m_idMenuHelp_Using;
 
     KDiagrammDoc *m_pDoc;
 };
