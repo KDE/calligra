@@ -101,6 +101,7 @@ KoView* KChartPart::createViewInstance( QWidget* parent, const char* name )
 KoMainWindow* KChartPart::createShell()
 {
     KoMainWindow* shell = new KChartShell();
+    shell->setRootDocument( this );
     shell->show();
 
     return shell;
@@ -195,7 +196,7 @@ void KChartPart::saveConfig( KConfig *conf ) {
     _params->saveConfig(conf);
 }
 
-bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
+QDomDocument KChartPart::saveXML() {
   kdDebug(35001) << "save kchart called!" << endl;
   QDomDocument doc( "chart" );
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -390,24 +391,11 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
 
 
   kdDebug(35001) << "Ok, till here!!!" << endl;
-  QBuffer buffer;
-  buffer.open( IO_WriteOnly );
-  QTextStream str( &buffer );
-  str << doc;
-  buffer.close();
-
-  out.write( buffer.buffer().data(), buffer.buffer().size() );
-
   //  setModified( false );
-  return true;
+  return doc;
 };
 
-bool KChartPart::loadChildren( KoStore* /*_store*/ ) {
-  kdDebug(35001) << "kchart loadChildren called" << endl;
-  return true;
-};
-
-bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
+bool KChartPart::loadXML( const QDomDocument& doc ) {
   kdDebug(35001) << "kchart loadXML called" << endl;
   // <spreadsheet>
   //  m_bLoading = true;
@@ -862,39 +850,6 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
   return true;
 };
 
-bool KChartPart::load( istream& in, KoStore* store )
-{
-  kdDebug(35001) << "kchart load called" << endl;
-  m_bLoading = true;
-  _params = new KChartParameters;
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-
-    char buf[ 4096 ];
-    int anz;
-    do
-    {
-	in.read( buf, 4096 );
-	anz = in.gcount();
-	buffer.writeBlock( buf, anz );
-    } while( anz > 0 );
-
-    buffer.close();
-
-    buffer.open( IO_ReadOnly );
-    QDomDocument doc;
-    doc.setContent( &buffer );
-
-    bool b = loadXML( doc, store );
-    //bool b = true;
-    //initDoc();
-
-    buffer.close();
-    // init the parameters
-    m_bLoading = false;
-    return b;
-};
-
 QDomElement KChartPart::createElement(const QString &tagName, const QFont &font, QDomDocument &doc) const {
 
     QDomElement e=doc.createElement( tagName );
@@ -934,6 +889,9 @@ QFont KChartPart::toFont(QDomElement &element) const {
 
 /**
  * $Log$
+ * Revision 1.39  2000/07/13 11:48:08  faure
+ * Don't do setRootDocument twice
+ *
  * Revision 1.38  2000/06/20 06:40:24  wtrobin
  * - removed the createDoc implementation of all the childs
  *   and implemented The Right Solution(tm) in koMainWindow.cc
