@@ -13,6 +13,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 noinst_LTLIBRARIES = libkarbontools.la
 
 noinst_HEADERS = \
+	vcurvefit.h \
 	vrotatetool.h \
 	vselectnodestool.h \
 	vselecttool.h \
@@ -20,6 +21,7 @@ noinst_HEADERS = \
 	vellipsetool.h \
 	vgradienttool.h \
 	vpatterntool.h \
+	vpenciltool.h \
 	vpolygontool.h \
 	vpolylinetool.h \
 	vrectangletool.h \
@@ -33,6 +35,7 @@ noinst_HEADERS = \
 	vtool.h
 
 libkarbontools_la_SOURCES = \
+	vcurvefit.cc \
 	vrotatetool.cc \
 	vselectnodestool.cc \
 	vselecttool.cc \
@@ -40,6 +43,7 @@ libkarbontools_la_SOURCES = \
 	vellipsetool.cc \
 	vgradienttool.cc \
 	vpatterntool.cc \
+	vpenciltool.cc \
 	vpolygontool.cc \
 	vpolylinetool.cc \
 	vrectangletool.cc \

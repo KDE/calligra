@@ -35,6 +35,7 @@ class VShearTool;
 class VEllipseTool;
 class VGradientTool;
 class VPatternTool;
+class VPencilTool;
 class VPolygonTool;
 class VPolylineTool;
 class VRectangleTool;
@@ -77,6 +78,7 @@ private:
 	VEllipseTool		*m_ellipseTool;
 	VGradientTool		*m_gradientTool;
 	VPatternTool		*m_patternTool;
+	VPencilTool			*m_pencilTool;
 	VPolygonTool		*m_polygonTool;
 	VPolylineTool		*m_polylineTool;
 	VRectangleTool		*m_rectangleTool;

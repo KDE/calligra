@@ -27,6 +27,7 @@
 #include "vellipsetool.h"
 #include "vgradienttool.h"
 #include "vpatterntool.h"
+#include "vpenciltool.h"
 #include "vpolygontool.h"
 #include "vpolylinetool.h"
 #include "vrectangletool.h"
@@ -52,6 +53,7 @@ VToolController::init()
 	m_ellipseTool		= new VEllipseTool( m_part );
 	m_gradientTool		= new VGradientTool( m_part, "" );
 	m_patternTool		= new VPatternTool( m_part, "" );
+	m_pencilTool		= new VPencilTool( m_part, "" );
 	m_polygonTool		= new VPolygonTool( m_part );
 	m_polylineTool		= new VPolylineTool( m_part, "" );
 	m_rectangleTool		= new VRectangleTool( m_part );
@@ -72,6 +74,7 @@ VToolController::~VToolController()
 	delete m_ellipseTool;
 	delete m_gradientTool;
 	delete m_patternTool;
+	delete m_pencilTool;
 	delete m_polygonTool;
 	delete m_polylineTool;
 	delete m_rectangleTool;
