@@ -441,25 +441,15 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
     painter->save();
     painter->setPen( _pen );
     QRect pageRect=activePage()->getZoomPageRect();
-    int offsetX = m_view->zoomHandler()->zoomItX( doc->getGridX() );
-    int offsetY = m_view->zoomHandler()->zoomItY( doc->getGridY() );
 
-    int i = offsetX;
-    int j = offsetY;
-    do
-    {
-        do
-        {
-            if( rect2.contains(  i, j ))
-                painter->drawPoint( i , j );
-            j+=offsetY;
-        }
-        while ( j < pageRect.height() );
-        i+= offsetX;
-        j = offsetY;
-    }
-    while( i < pageRect.width() );
+    int zoomedX,  zoomedY;
+    double offsetX = doc->getGridX();
+    double offsetY = doc->getGridY();
 
+    for ( double i = offsetX; ( zoomedX = m_view->zoomHandler()->zoomItX( i ) ) < pageRect.width(); i += offsetX )
+        for ( double j = offsetY; ( zoomedY = m_view->zoomHandler()->zoomItY( j ) ) < pageRect.height(); j += offsetY )
+            if( rect2.contains(  zoomedX, zoomedY ) )
+                painter->drawPoint( zoomedX, zoomedY );
 
     painter->restore();
 }
@@ -6890,8 +6880,8 @@ QPoint KPrCanvas::applyGrid( const QPoint &pos,bool offset )
         newPos = m_view->kPresenterDoc()->zoomHandler()->unzoomPoint( pos+QPoint(diffx(),diffy()) );
     else
         newPos = m_view->kPresenterDoc()->zoomHandler()->unzoomPoint( pos );
-    newPos.setX( static_cast<int>(( newPos.x() / gridX ) * gridX - m_view->kPresenterDoc()->zoomHandler()->unzoomItX(diffx())));
-    newPos.setY( static_cast<int>(( newPos.y() / gridY ) * gridY - m_view->kPresenterDoc()->zoomHandler()->unzoomItY(diffy())));
+    newPos.setX( static_cast<int>( newPos.x() / gridX ) * gridX );
+    newPos.setY( static_cast<int>( newPos.y() / gridY ) * gridY );
     return m_view->kPresenterDoc()->zoomHandler()->zoomPoint( newPos );
 }
 
