@@ -2104,7 +2104,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       return false;
     }
 
-    if ( cell->isDefault() )
+    if ( cell->isDefault() || (cell->isObscured() && cell->isObscuringForced()))
       context.setValue( new KSValue( 0.0 ) );
     else if ( cell->isValue() )
       context.setValue( new KSValue( cell->valueDouble() ) );
@@ -2169,8 +2169,8 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
           c = new KSValue( 0.0 );
         else
           c = new KSValue( cell->valueString() );
-
-        l->listValue().append( c );
+        if ( !(cell->isObscured() && cell->isObscuringForced()) )
+                l->listValue().append( c );
       }
       v->listValue().append( l );
     }

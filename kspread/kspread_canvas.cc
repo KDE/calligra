@@ -543,8 +543,20 @@ void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool 
   KSpreadCell* cell = table->cellAt( x, y );
   if ( cell->isObscured() && cell->isObscuringForced() )
   {
-    y = cell->obscuringCellsRow();
-    x = cell->obscuringCellsColumn();
+    int moveX=cell->obscuringCellsColumn();
+    int moveY=cell->obscuringCellsRow();
+    cell = table->cellAt( moveX, moveY );
+    QRect extraCell;
+    extraCell.setCoords(moveX,moveY,moveX+cell->extraXCells(),moveY+cell->extraYCells());
+    if( (x-chooseMarkerColumn())!=0 && extraCell.contains(chooseMarker()))
+        x=cell->extraXCells()+x;
+    else if((y-chooseMarkerRow())!=0 && extraCell.contains(chooseMarker()))
+        y=cell->extraYCells()+y;
+    else
+        {
+        y = moveY;
+        x = moveX;
+        }
   }
 
   int xpos = table->columnPos( x, this );
