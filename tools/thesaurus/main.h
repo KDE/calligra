@@ -20,14 +20,23 @@
 #ifndef __main_h__
 #define __main_h__
 
+#include <qlayout.h>
+#include <qstring.h>
+#include <qlistbox.h>
+#include <qcombobox.h>
 #include <qobject.h>
+#include <qregexp.h>
+#include <qwidget.h>
 #include <qvbox.h>
 
-#include <kdialogbase.h>
-#include <kdatatool.h>
-#include <klibloader.h>
-#include <kprocess.h>
 #include <kcombobox.h>
+#include <kdatatool.h>
+#include <kdebug.h>
+#include <kdialogbase.h>
+#include <klibloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kprocess.h>
 
 class Thesaurus : public KDataTool
 {

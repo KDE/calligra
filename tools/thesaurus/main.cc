@@ -33,26 +33,6 @@ FIXME:
 
 #include "main.h"
 
-#include <stdio.h>
-
-#include <qwidget.h>
-#include <qlayout.h>
-#include <qstring.h>
-#include <qlistbox.h>
-#include <qcombobox.h>
-#include <qvbox.h>
-#include <qregexp.h>
-
-#include <kdatatool.h>
-#include <kdialogbase.h>
-#include <kmessagebox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kinstance.h>
-#include <kconfig.h>
-#include <kcombobox.h>
-#include <kprocess.h>
-
 /***************************************************
  *
  * Factory
@@ -134,6 +114,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name)
     indent = "   ";
 }
 
+
 Thesaurus::~Thesaurus()
 {
     if( dialog ) {
@@ -144,6 +125,7 @@ Thesaurus::~Thesaurus()
     }
     // TODO: can we ignore the others because they are children of layout?
 }
+
 
 bool Thesaurus::run(const QString& command, void* data, const QString& datatype, const QString& mimetype)
 {
