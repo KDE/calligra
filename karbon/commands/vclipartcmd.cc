@@ -44,6 +44,8 @@ VClipartCmd::execute()
 	}
 
 	m_executed = true;
+
+	setSuccess( true );
 }
 
 void
@@ -57,5 +59,7 @@ VClipartCmd::unexecute()
 	m_clipart->setState( VObject::deleted );
 
 	m_executed = false;
+
+	setSuccess( false );
 }
 
