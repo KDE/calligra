@@ -42,10 +42,19 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     m_pView = parent;
     setCaption( name );
 
+    KSpreadCell* cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),
+        m_pView->canvasWidget()->markerRow() );
+
     if ( !m_pView->canvasWidget()->editor() )
     {
         m_pView->canvasWidget()->createEditor( KSpreadCanvas::CellEditor );
-        m_pView->canvasWidget()->editor()->setText( "=" );
+        if(cell->text().isEmpty())
+                m_pView->canvasWidget()->editor()->setText( "=" );
+        else
+                if(cell->text().at(0)!='=')
+                        m_pView->canvasWidget()->editor()->setText( "="+cell->text()+"+" );
+                else
+                        m_pView->canvasWidget()->editor()->setText( cell->text()+"+" );
     }
 
     ASSERT( m_pView->canvasWidget()->editor() );
@@ -165,7 +174,10 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     if(m_oldText.isEmpty())
         result->setText("=");
     else
-        result->setText(m_oldText);
+        if( m_oldText.at(0)!='=')
+                result->setText("="+m_oldText);
+        else
+                result->setText(m_oldText);
 
     m_pView->canvasWidget()->startChoose();
 
