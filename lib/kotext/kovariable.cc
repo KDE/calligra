@@ -1202,6 +1202,7 @@ QCString KoDateVariable::formatStr(int & correct)
     }
     else
     {
+        delete dialog;
         return 0;
     }
     config->setGroup("Date format history");
@@ -1398,6 +1399,7 @@ QCString KoTimeVariable::formatStr(int & _correct)
     }
     else
     {
+        delete dialog;
         return 0;
     }
     config->setGroup("Time format history");
