@@ -2170,7 +2170,7 @@ KCommand* KPrPage::setPieSettings( PieType pieType, int angle, int len, int flag
 
     if ( !_objects.isEmpty() ) {
 	pieValueCmd = new PieValueCmd( i18n( "Change Pie/Arc/Chord Values" ),
-						    _oldValues, _newValues, _objects, m_doc, flags );
+						    _oldValues, _newValues, _objects, m_doc,  this, flags );
 	pieValueCmd->execute();
     } else {
 	_oldValues.setAutoDelete( true );
@@ -2219,7 +2219,7 @@ KCommand* KPrPage::setRectSettings( int _rx, int _ry, int flags )
 
     if ( !_objects.isEmpty() && changed ) {
 	rectValueCmd = new RectValueCmd( i18n( "Change Rectangle values" ), _oldValues,
-						       _newValues, _objects, m_doc, flags );
+						       _newValues, _objects, m_doc, this, flags );
 	rectValueCmd->execute();
     } else {
 	_oldValues.setAutoDelete( true );
@@ -2268,7 +2268,7 @@ KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersVa
 
     if ( !_objects.isEmpty() && changed ) {
         polygonSettingCmd = new PolygonSettingCmd( i18n( "Change Polygon Settings" ), _oldSettings,
-                                                   _newSettings, _objects, m_doc, flags );
+                                                   _newSettings, _objects, m_doc, this, flags );
         polygonSettingCmd->execute();
     }
     else {

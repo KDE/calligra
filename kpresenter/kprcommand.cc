@@ -1473,12 +1473,13 @@ void PgLayoutCmd::unexecute()
 
 /*======================== constructor ===========================*/
 PieValueCmd::PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
-                          QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )
+                          QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags )
     : KNamedCommand( _name ), oldValues( _oldValues ), objects( _objects ), flags(_flags)
 {
     objects.setAutoDelete( false );
     oldValues.setAutoDelete( false );
     doc = _doc;
+    m_page = _page;
     newValues = _newValues;
 
     QPtrListIterator<KPObject> it( objects );
@@ -1514,6 +1515,12 @@ void PieValueCmd::execute()
 	}
     }
   doc->repaint( false );
+  if ( doc->refreshSideBar()) //for redo
+  {
+      int pos=doc->pageList().findRef(m_page);
+      doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+  }
+
 }
 
 /*====================== unexecute ===============================*/
@@ -1530,6 +1537,12 @@ void PieValueCmd::unexecute()
 	}
     }
     doc->repaint( false );
+    if ( doc->refreshSideBar()) //for redo
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
+
 }
 
 /******************************************************************/
@@ -1538,12 +1551,13 @@ void PieValueCmd::unexecute()
 
 /*======================== constructor ===========================*/
 PolygonSettingCmd::PolygonSettingCmd( const QString &_name, QPtrList<PolygonSettings> &_oldSettings,
-                                      PolygonSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )
+                                      PolygonSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags )
     : KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects ), flags(_flags)
 {
     objects.setAutoDelete( false );
     oldSettings.setAutoDelete( false );
     doc = _doc;
+    m_page = _page;
     newSettings = _newSettings;
 
     QPtrListIterator<KPObject> it( objects );
@@ -1579,6 +1593,12 @@ void PolygonSettingCmd::execute()
 	}
     }
     doc->repaint( false );
+    if ( doc->refreshSideBar()) //for redo
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
+
 }
 
 /*====================== unexecute ===============================*/
@@ -1595,6 +1615,12 @@ void PolygonSettingCmd::unexecute()
 	}
     }
     doc->repaint( false );
+    if ( doc->refreshSideBar()) //for redo
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
+
 }
 
 /******************************************************************/
@@ -1665,12 +1691,13 @@ void PictureSettingCmd::unexecute()
 
 /*======================== constructor ===========================*/
 RectValueCmd::RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
-                            QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )
+                            QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags )
     : KNamedCommand( _name ), oldValues( _oldValues ), objects( _objects ), flags(_flags)
 {
     objects.setAutoDelete( false );
     oldValues.setAutoDelete( false );
     doc = _doc;
+    m_page = _page;
     newValues = _newValues;
 
     QPtrListIterator<KPObject> it( objects );
@@ -1715,6 +1742,12 @@ void RectValueCmd::execute()
         }
     }
     doc->repaint( false );
+    if ( doc->refreshSideBar()) //for redo
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
+
 }
 
 /*====================== unexecute ===============================*/
@@ -1730,6 +1763,12 @@ void RectValueCmd::unexecute()
 	}
     }
     doc->repaint( false );
+    if ( doc->refreshSideBar()) //for redo
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
+
 }
 
 /******************************************************************/

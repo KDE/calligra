@@ -589,7 +589,7 @@ public:
     };
 
     PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
-                 QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = All );
+                 QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags = All );
     ~PieValueCmd();
 
     virtual void execute();
@@ -598,6 +598,7 @@ public:
 protected:
 
     KPresenterDoc *doc;
+    KPrPage *m_page;
     QPtrList<PieValues> oldValues;
     QPtrList<KPObject> objects;
     PieValues newValues;
@@ -627,7 +628,7 @@ public:
     };
 
     PolygonSettingCmd( const QString &_name, QPtrList<PolygonSettings> &_oldSettings,
-                       PolygonSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = All );
+                       PolygonSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc,  KPrPage *_page, int _flags = All );
     ~PolygonSettingCmd();
 
     virtual void execute();
@@ -636,6 +637,7 @@ public:
 protected:
 
     KPresenterDoc *doc;
+    KPrPage *m_page;
     QPtrList<PolygonSettings> oldSettings;
     QPtrList<KPObject> objects;
     PolygonSettings newSettings;
@@ -693,7 +695,7 @@ public:
     };
 
     RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
-                  QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = All );
+                  QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags = All );
     ~RectValueCmd();
 
     virtual void execute();
@@ -702,6 +704,7 @@ public:
 protected:
 
     KPresenterDoc *doc;
+    KPrPage *m_page;
     QPtrList<RectValues> oldValues;
     QPtrList<KPObject> objects;
     RectValues newValues;
