@@ -26,6 +26,8 @@ using namespace std;
 
 #define KOAPP ((KoApplication *)KApplication::kApplication())
 
+class KoApplicationIface;
+
 /**
  *  Base class for all KOffice apps
  *
@@ -71,6 +73,9 @@ public:
      * have to process your command line parameters by yourself.
      */
     virtual bool start();
+
+private:
+    KoApplicationIface *m_appIface;  // to avoid a leak
 };
 
 #endif

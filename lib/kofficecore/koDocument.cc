@@ -167,6 +167,11 @@ KoDocument::~KoDocument()
   delete d->m_dcopObject;
   delete d;
   s_documentList->removeRef(this);
+  // last one?
+  if(s_documentList->count()==0) {
+      delete s_documentList;
+      s_documentList=0;
+  }
 }
 
 bool KoDocument::isSingleViewMode() const

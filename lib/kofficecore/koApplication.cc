@@ -50,7 +50,8 @@ KoApplication::KoApplication()
     connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
 
     // Prepare a DCOP interface
-    dcopClient()->setDefaultObject( (new KoApplicationIface())->objId() );
+    m_appIface=new KoApplicationIface();  // avoid the leak
+    dcopClient()->setDefaultObject( m_appIface->objId() );
 }
 
 bool KoApplication::start()
@@ -127,6 +128,7 @@ bool KoApplication::start()
 
 KoApplication::~KoApplication()
 {
+    delete m_appIface;
 }
 
 #include <koApplication.moc>
