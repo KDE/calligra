@@ -91,7 +91,7 @@ protected slots:
 	void slotConnectionItemExecuted(QListViewItem *item);
 
 protected:
-	const KexiDBConnectionSet *m_conn_set;
+	QGuardedPtr<const KexiDBConnectionSet> m_conn_set;
 	
 	KexiConnSelectorWidgetPrivate *d;
 	

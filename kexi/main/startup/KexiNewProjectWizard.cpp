@@ -51,13 +51,13 @@ class KexiNewProjectWizardPrivate
 	{
 		le_dbname_txtchanged_disable = false;
 		le_dbname_autofill = true;
-		conndata_to_show = 0;
-		project_set_to_show = 0;
+//		conndata_to_show = 0;
+//		project_set_to_show = 0;
 	}
 	~KexiNewProjectWizardPrivate()
 	{
-		delete conndata_to_show;
-		delete project_set_to_show;
+//		delete conndata_to_show;
+//		delete project_set_to_show;
 	}
 	KIconView *lv_types;
 	KIconViewItem *lvi_file, *lvi_server;
@@ -66,7 +66,7 @@ class KexiNewProjectWizardPrivate
 	QString server_db_name_dblist_lbl_txt; //!< helper
 
 	//for displaying db list of the selected conn.
-	KexiDB::ConnectionData *conndata_to_show;
+	QGuardedPtr<KexiDB::ConnectionData> conndata_to_show;
 	KexiProjectSet *project_set_to_show;
 
 	bool le_dbname_txtchanged_disable : 1;
@@ -237,10 +237,10 @@ void KexiNewProjectWizard::showPage(QWidget *page)
 		}
 	} else if (page==m_server_db_name) {
 		if (m_conn_sel->selectedConnectionData()
-		 && (d->conndata_to_show != m_conn_sel->selectedConnectionData())) {
+		 && (static_cast<KexiDB::ConnectionData*>(d->conndata_to_show) != m_conn_sel->selectedConnectionData())) {
 			d->conndata_to_show = m_conn_sel->selectedConnectionData();
 			m_project_selector->setProjectSet(0);
-			delete d->project_set_to_show;
+//			delete d->project_set_to_show;
 			d->project_set_to_show = new KexiProjectSet(*d->conndata_to_show);
 			//-refresh projects list
 			m_project_selector->setProjectSet( d->project_set_to_show );

@@ -34,7 +34,8 @@ public:
 };
 
 KexiDBConnectionSet::KexiDBConnectionSet()
-: d(new KexiDBConnectionSetPrivate())
+: QObject()
+, d(new KexiDBConnectionSetPrivate())
 {
 }
 

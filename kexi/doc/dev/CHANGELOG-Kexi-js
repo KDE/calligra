@@ -323,6 +323,8 @@ CC_MAIL: dkite@shaw.ca
 Kexi Main Window
 - Dialog dictionary is properly cleared on project close (fixed possible crash)
 - Not stored dialogs are properly removed from a dictionary
+Kexi Startup
+- fixed possible crash due to deleting not owned connection data, deep copy is now performed
 
 2004-05-01
 KexiDB

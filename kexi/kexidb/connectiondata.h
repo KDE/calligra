@@ -132,8 +132,10 @@ class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
 		ConnectionData();
 
 		ConnectionData(const ConnectionData&);
-		
+
 		~ConnectionData();
+
+		ConnectionData& operator=(const ConnectionData& cd);
 
 		/*!
 		\brief Set the filename used by the connection

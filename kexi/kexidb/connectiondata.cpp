@@ -50,16 +50,25 @@ ConnectionData::ConnectionData(const ConnectionData& cd)
 : QObject()
 , ConnectionDataBase()
 {
-	if (&cd != this) {
+	static_cast<ConnectionData&>(*this) = static_cast<const ConnectionData&>(cd);//copy data members
+/*	if (&cd != this) {
 		static_cast<ConnectionDataBase&>(*this) = static_cast<const ConnectionDataBase&>(cd);//copy data members
 	}
-	priv = new ConnectionData::Private();
+	priv = new ConnectionData::Private();*/
 //todo: copy priv contents if not empty	*d = *cd.d;
 }
 
 ConnectionData::~ConnectionData()
 {
 	delete priv;
+}
+
+ConnectionData& ConnectionData::operator=(const ConnectionData& cd)
+{
+	static_cast<ConnectionDataBase&>(*this) = static_cast<const ConnectionDataBase&>(cd);//copy data members
+	priv = new ConnectionData::Private();
+	*priv = *cd.priv;
+	return *this;
 }
 
 void ConnectionData::setFileName( const QString& fn )
