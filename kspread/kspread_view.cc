@@ -2199,7 +2199,7 @@ void KSpreadView::slotListChoosePopupMenu( )
      if ( selection.left() <= col && selection.right() >= col
 	  &&!c->isObscuringForced()&& !(col==m_pCanvas->markerColumn()&& c->row()==m_pCanvas->markerRow()))
        {
-	 if(c->isString() && c->text()!=tmp)
+	 if(c->isString() && c->text()!=tmp && !c->text().isEmpty())
 	   {
 	     if(itemList.findIndex(c->text())==-1)
                  itemList.append(c->text());
