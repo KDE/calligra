@@ -870,6 +870,7 @@ void ConfigureDefaultDocPage::slotDefault()
    m_cursorInProtectedArea->setChecked(true);
    m_tabStopWidth->setValue(KoUnit::ptToUnit( MM_TO_POINT(15), m_pView->kWordDocument()->getUnit()));
    m_createBackupFile->setChecked( true );
+   m_directInsertCursor->setChecked( true );
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {

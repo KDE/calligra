@@ -222,6 +222,10 @@ k_dcop:
     void setBackupFile( bool _b );
     bool backupFile()const;
 
+    bool insertDirectCursor() const;
+    void setInsertDirectCursor(bool _b);
+
+
 private:
     KWDocument *doc;
 

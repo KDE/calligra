@@ -788,3 +788,13 @@ bool KWordDocIface::backupFile()const
 {
     return doc->backupFile();
 }
+
+bool KWordDocIface::insertDirectCursor() const
+{
+    return doc->insertDirectCursor();
+}
+
+void KWordDocIface::setInsertDirectCursor(bool _b)
+{
+    doc->setInsertDirectCursor( _b );
+}
