@@ -62,7 +62,7 @@ CalcFactory::~CalcFactory()
 {
 }
 
-QObject* CalcFactory::create( QObject* parent, const char* name, const char* classname )
+QObject* CalcFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     if ( !parent->inherits("KSpreadView") )
     {
