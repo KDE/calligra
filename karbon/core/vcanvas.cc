@@ -72,7 +72,11 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 
 	// draw handle:
 	QPainter qpainter( p->device() );
-	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
+	// Y mirroring
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( -contentsX(), contentsX() - viewport()->height() );
+	qpainter.setWorldMatrix( mat );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
 	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );
@@ -108,7 +112,11 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 
 	// draw handle:
 	QPainter qpainter( p->device() );
-	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
+	// Y mirroring
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( -contentsX(), contentsX() - viewport()->height() );
+	qpainter.setWorldMatrix( mat );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
 	bitBlt( viewport(), 0, 0, p->device(), 0, 0, width(), height() );

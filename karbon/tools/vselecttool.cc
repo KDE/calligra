@@ -361,6 +361,9 @@ VSelectTool::recalc()
 	{
 		// Build affine matrix:
 		QWMatrix mat;
+		// Y mirroring
+		mat.scale( 1, -1 );
+		mat.translate( 0, -view()->canvasWidget()->viewport()->height() );
 		mat.translate( last().x() - first().x(), last().y() - first().y() );
 
 
