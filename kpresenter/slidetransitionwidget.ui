@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>SlideTransitionWidget</class>
 <widget class="QWidget">
     <property name="name">
@@ -61,9 +61,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Preview</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+P</string>
                     </property>
                 </widget>
             </vbox>
@@ -162,9 +159,6 @@
                             </property>
                             <property name="text">
                                 <string>So&amp;und Effect</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+U</string>
                             </property>
                         </widget>
                         <widget class="KURLRequester" row="1" column="1">

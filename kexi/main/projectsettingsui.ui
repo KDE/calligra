@@ -477,9 +477,6 @@
                         <property name="text">
                             <string>&amp;New Action</string>
                         </property>
-                        <property name="accel">
-                            <string>Alt+N</string>
-                        </property>
                     </widget>
                     <widget class="QPushButton" row="3" column="0">
                         <property name="name">
@@ -487,9 +484,6 @@
                         </property>
                         <property name="text">
                             <string>&amp;Delete Action</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+D</string>
                         </property>
                     </widget>
                     <widget class="QButtonGroup" row="0" column="1">
@@ -740,9 +734,6 @@
             <property name="text">
                 <string>&amp;Cancel</string>
             </property>
-            <property name="accel">
-                <string>Alt+C</string>
-            </property>
         </widget>
         <widget class="QPushButton" row="1" column="2">
             <property name="name">
@@ -751,9 +742,6 @@
             <property name="text">
                 <string>&amp;Apply</string>
             </property>
-            <property name="accel">
-                <string>Alt+A</string>
-            </property>
         </widget>
         <widget class="QPushButton" row="1" column="1">
             <property name="name">
@@ -761,9 +749,6 @@
             </property>
             <property name="text">
                 <string>&amp;Ok</string>
-            </property>
-            <property name="accel">
-                <string>Alt+O</string>
             </property>
         </widget>
         <spacer row="1" column="0">

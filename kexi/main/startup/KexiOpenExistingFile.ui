@@ -12,9 +12,6 @@
             <height>108</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KexiOpenExistingFile</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -117,9 +114,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Advanced </string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
                     </property>
                 </widget>
             </grid>
