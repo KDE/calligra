@@ -12,7 +12,7 @@
 #ifndef _UUID_UUID_H
 #define _UUID_UUID_H
 
-//(js)
+/*(js)*/
 #ifndef KEXIUUID_EXPORT
 # define KEXIUUID_EXPORT
 #endif

@@ -12,7 +12,8 @@
 #include <sys/types.h>
 /*jowenn: #include <uuid/uuid_types.h>*/
 
-#ifdef _WIN32 //(js)
+/*js*/
+#ifdef _WIN32
 //..
 #define longlong __int64
 #else
