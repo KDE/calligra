@@ -75,6 +75,13 @@
 # include <kuser.h>
 #endif
 
+//Extreme verbose debug
+#if defined(Q_WS_WIN)
+# define KexiVDebug kdDebug()
+#else
+# define KexiVDebug if (0) kdDebug()
+#endif
+
 //first fix the geometry
 #define KEXI_NO_CTXT_HELP 1
 
@@ -1813,31 +1820,31 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 {
 //	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
 	if (e->type()==QEvent::KeyPress) {
-		kdDebug() << "KEY EVENT" << endl;
+		KexiVDebug << "KEY EVENT" << endl;
 	}
 	if (e->type()==QEvent::AccelOverride) {
-		kdDebug() << "AccelOverride EVENT" << endl;
+		KexiVDebug << "AccelOverride EVENT" << endl;
 	}
 	if (e->type()==QEvent::Close) {
-		kdDebug() << "Close EVENT" << endl;
+		KexiVDebug << "Close EVENT" << endl;
 	}
 	if (e->type()==QEvent::Resize) {
-		kdDebug() << "Resize EVENT" << endl;
+		KexiVDebug << "Resize EVENT" << endl;
 	}
 	if (e->type()==QEvent::ShowMaximized) {
-		kdDebug() << "ShowMaximized EVENT" << endl;
+		KexiVDebug << "ShowMaximized EVENT" << endl;
 	}
 	QWidget *focus_w = 0;
 	QWidget *w = findWindow(static_cast<QWidget*>(obj));
 	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {
 		focus_w = focusWindow();
-		kdDebug() << "Focus EVENT" << endl;
-		kdDebug() << (focus_w ? focus_w->name() : "" )  << endl;
-		kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name() <<endl;
+		KexiVDebug << "Focus EVENT" << endl;
+		KexiVDebug << (focus_w ? focus_w->name() : "" )  << endl;
+		KexiVDebug << "eventFilter: " <<e->type() << " " <<obj->name() <<endl;
 	}
 	if (e->type()==QEvent::WindowActivate) {
-		kdDebug() << "WindowActivate EVENT" << endl;
-		kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
+		KexiVDebug << "WindowActivate EVENT" << endl;
+		KexiVDebug << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
 	}
 /*	if (e->type()==QEvent::FocusOut) {//after leaving focus from the menu, put it on prev. focused widget
 		if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup && !obj->inherits("QMenuBar")) {
