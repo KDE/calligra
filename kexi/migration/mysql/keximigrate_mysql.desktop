@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MySQL Migration Driver for Kexi
+X-KDE-Library=keximigrate_mysql
+ServiceTypes=Kexi/MigrationDriver
+Type=Service
+InitialPreference=8
+X-Kexi-MigrationDriverName=MySQL
+X-Kexi-MigrationDriverType=Network
