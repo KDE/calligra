@@ -472,7 +472,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     grid->addWidget(m_displayLink,3,0);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
 
-    m_underlineLink=new QCheckBox(i18n("Underline link by default"),tmpQGroupBox);
+    m_underlineLink=new QCheckBox(i18n("&Underline all links"),tmpQGroupBox);
     m_underlineLink->setChecked(doc->getVariableCollection()->variableSetting()->underlineLink());
     grid->addWidget(m_underlineLink,4,0);
 
