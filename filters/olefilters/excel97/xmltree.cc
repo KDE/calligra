@@ -315,6 +315,8 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
     QString s;
     QDomElement format = root->createElement("format");
 
+    if(!xfs[xf])
+	return format;
     Q_UINT16 fontid = xfs[xf]->ifnt;
 
     if (fontid > 3)
@@ -1552,6 +1554,12 @@ bool XMLTree::_format(Q_UINT32, QDataStream &body)
 
 bool XMLTree::_formula(Q_UINT32 size, QDataStream &body)
 {
+  if(size <= 22)
+  {
+    kdWarning(s_area) << "Formula size broken!" << endl;
+    return true;
+  }
+   
   char *store = new char[size];
   Q_UINT16 row, column, xf, skip;
   QByteArray a;
