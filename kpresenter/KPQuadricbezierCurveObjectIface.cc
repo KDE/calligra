@@ -19,6 +19,7 @@
 
 #include "KPQuadricbezierCurveObjectIface.h"
 #include "kpquadricbeziercurveobject.h"
+#include "kpresenter_utils.h"
 #include "kpobject.h"
 #include <kdebug.h>
 
@@ -34,67 +35,25 @@ KPQuadricBezierCurveObjectIface::KPQuadricBezierCurveObjectIface( KPQuadricBezie
 
 void KPQuadricBezierCurveObjectIface::setLineBegin( const QString & type)
 {
-    if(type=="NORMAL")
-        obj->setLineBegin(L_NORMAL );
-    else if(type=="ARROW")
-        obj->setLineBegin(L_ARROW );
-    else if(type=="SQUARE")
-        obj->setLineBegin(L_SQUARE );
-    else if(type=="CIRCLE")
-        obj->setLineBegin(L_CIRCLE );
-    else
-        kdDebug()<<"Error in KPQuadricBezierCurveObjectIface::setLineBegin\n";
 
+    obj->setLineBegin(lineEndBeginFromString( type ));
 }
 
 void KPQuadricBezierCurveObjectIface::setLineEnd( const QString & type)
 {
-    if(type=="NORMAL")
-        obj->setLineEnd(L_NORMAL );
-    else if(type=="ARROW")
-        obj->setLineEnd(L_ARROW );
-    else if(type=="SQUARE")
-        obj->setLineEnd(L_SQUARE );
-    else if(type=="CIRCLE")
-        obj->setLineEnd(L_CIRCLE );
-    else
-        kdDebug()<<"Error in KPQuadricBezierCurveObjectIface::setLineEnd\n";
-
+    obj->setLineEnd(lineEndBeginFromString( type ));
 }
 
 QString KPQuadricBezierCurveObjectIface::lineBegin()const
 {
     LineEnd type=obj->getLineBegin();
-    switch(type)
-    {
-    case L_NORMAL:
-        return QString("NORMAL");
-    case L_ARROW:
-        return QString("ARROW");
-    case L_SQUARE:
-        return QString("SQUARE");
-    case L_CIRCLE:
-        return QString("CIRCLE");
-    }
-    return QString::null;
+    return lineEndBeginName( type );
 }
 
 QString KPQuadricBezierCurveObjectIface::lineEnd() const
 {
     LineEnd type=obj->getLineEnd();
-    switch(type)
-    {
-    case L_NORMAL:
-        return QString("NORMAL");
-    case L_ARROW:
-        return QString("ARROW");
-    case L_SQUARE:
-        return QString("SQUARE");
-    case L_CIRCLE:
-        return QString("CIRCLE");
-    }
-    return QString::null;
-
+    return lineEndBeginName( type );
 }
 
 void KPQuadricBezierCurveObjectIface::horizontalFlips()

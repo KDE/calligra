@@ -19,6 +19,7 @@
 
 #include "KPFreehandObjectIface.h"
 #include "kpfreehandobject.h"
+#include "kpresenter_utils.h"
 #include <kdebug.h>
 
 #include <kapplication.h>
@@ -33,67 +34,25 @@ KPFreehandObjectIface::KPFreehandObjectIface( KPFreehandObject *_obj )
 
 void KPFreehandObjectIface::setLineBegin( const QString & type)
 {
-    if(type=="NORMAL")
-        obj->setLineBegin(L_NORMAL );
-    else if(type=="ARROW")
-        obj->setLineBegin(L_ARROW );
-    else if(type=="SQUARE")
-        obj->setLineBegin(L_SQUARE );
-    else if(type=="CIRCLE")
-        obj->setLineBegin(L_CIRCLE );
-    else
-        kdDebug()<<"Error in KPFreehandObjectIface::setLineBegin\n";
-
+    obj->setLineBegin(lineEndBeginFromString( type ));
 }
 
 void KPFreehandObjectIface::setLineEnd( const QString & type)
 {
-    if(type=="NORMAL")
-        obj->setLineEnd(L_NORMAL );
-    else if(type=="ARROW")
-        obj->setLineEnd(L_ARROW );
-    else if(type=="SQUARE")
-        obj->setLineEnd(L_SQUARE );
-    else if(type=="CIRCLE")
-        obj->setLineEnd(L_CIRCLE );
-    else
-        kdDebug()<<"Error in KPFreehandObjectIface::setLineEnd\n";
-
+    obj->setLineEnd(lineEndBeginFromString( type ));
 }
 
 QString KPFreehandObjectIface::lineBegin()const
 {
     LineEnd type=obj->getLineBegin();
-    switch(type)
-    {
-    case L_NORMAL:
-        return QString("NORMAL");
-    case L_ARROW:
-        return QString("ARROW");
-    case L_SQUARE:
-        return QString("SQUARE");
-    case L_CIRCLE:
-        return QString("CIRCLE");
-    }
-    return QString::null;
+    return lineEndBeginName( type );
+
 }
 
 QString KPFreehandObjectIface::lineEnd() const
 {
     LineEnd type=obj->getLineEnd();
-    switch(type)
-    {
-    case L_NORMAL:
-        return QString("NORMAL");
-    case L_ARROW:
-        return QString("ARROW");
-    case L_SQUARE:
-        return QString("SQUARE");
-    case L_CIRCLE:
-        return QString("CIRCLE");
-    }
-    return QString::null;
-
+    return lineEndBeginName( type );
 }
 
 void KPFreehandObjectIface::horizontalFlips()

@@ -66,6 +66,18 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         painter->setBrush( color );
         painter->drawPolygon( pArray );
     } break;
+    case L_LINE_ARROW:
+    {
+        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
+        painter->setPen( QPen(color , _zoomHandler->zoomItX( _w )) );
+        painter->rotate( angle );
+        painter->scale( 1, 1 );
+        QPoint p1( _zoomHandler->zoomItX(-5 - _w / 2), _zoomHandler->zoomItY(-3 - _w / 2) );
+        QPoint p2( _zoomHandler->zoomItX(5 + _w / 2), _zoomHandler->zoomItY(0) );
+        QPoint p3( _zoomHandler->zoomItX(-5 - _w / 2), _zoomHandler->zoomItY(3 + _w / 2) );
+        painter->drawLine( p2, p1);
+        painter->drawLine( p2, p3);
+    }break;
     default: break;
     }
     painter->restore();
@@ -88,8 +100,46 @@ KoSize getBoundingSize( LineEnd figure, int _w, KoZoomHandler*_zoomHandler )
     case L_ARROW:
         return KoSize( _zoomHandler->zoomItX( 14 + _w),_zoomHandler->zoomItY( 14 + _w) );
         break;
+    case L_LINE_ARROW:
+        return KoSize( _zoomHandler->zoomItX( 14 + _w),_zoomHandler->zoomItY( 14 + _w) );
+        break;
     default: break;
     }
 
     return KoSize( 0, 0 );
+}
+
+QString lineEndBeginName( LineEnd type )
+{
+    switch(type)
+    {
+    case L_NORMAL:
+        return QString("NORMAL");
+    case L_ARROW:
+        return QString("ARROW");
+    case L_SQUARE:
+        return QString("SQUARE");
+    case L_CIRCLE:
+        return QString("CIRCLE");
+    case L_LINE_ARROW:
+        return QString("LINE_ARROW");
+    }
+    return QString::null;
+}
+
+LineEnd lineEndBeginFromString( const QString & type )
+{
+    if(type=="NORMAL")
+        return L_NORMAL;
+    else if(type=="ARROW")
+        return L_ARROW;
+    else if(type=="SQUARE")
+        return L_SQUARE;
+    else if(type=="CIRCLE")
+        return L_CIRCLE;
+    else if(type=="LINE_ARROW")
+        return L_LINE_ARROW;
+    else
+        kdDebug()<<"Error in LineEnd lineEndBeginFromString( const QString & name )\n";
+    return L_NORMAL;
 }
