@@ -730,7 +730,6 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
 
 Outline::~Outline()
 {
-    delete m_outlineTip;
 }
 
 void Outline::rebuildItems()

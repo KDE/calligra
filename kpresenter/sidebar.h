@@ -36,7 +36,6 @@ class Outline;
 class OutlineSlideItem;
 class ThumbBar;
 class ThumbToolTip;
-class OutlineToolTip;
 class KPrPage;
 
 class ThumbBar : public KIconView
@@ -115,7 +114,6 @@ private:
     KPresenterDoc *m_doc;
     KPresenterView *m_view;
     QListViewItem *m_movedItem, *m_movedAfter;
-    OutlineToolTip *m_outlineTip;
 };
 
 class SideBar: public QTabWidget
