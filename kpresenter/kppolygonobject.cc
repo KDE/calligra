@@ -105,10 +105,10 @@ QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPPolygonObject::loadOasis( const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation )
+void KPPolygonObject::loadOasis( const QDomElement &element, const KoStyleStack & styleStack,KoOasisStyles&oasisStyles, QDomElement *animation )
 {
     kdDebug()<<"void KPPolygonObject::loadOasis( const QDomElement &element )***********\n";
-    KP2DObject::loadOasis( element,styleStack, animation );
+    KP2DObject::loadOasis( element,styleStack,oasisStyles, animation );
     //load point.
     QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
 

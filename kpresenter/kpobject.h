@@ -35,6 +35,7 @@
 #include <koRect.h>
 #include "kpobject.h"
 #include <koStyleStack.h>
+#include <koOasisStyles.h>
 class QPainter;
 class DCOPObject;
 class QDomDocumentFragment;
@@ -122,7 +123,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation);
+    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack, KoOasisStyles&oasisStyles,  QDomElement *animation);
 
     virtual void flip(bool horizontal );
 
@@ -348,7 +349,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation);
+    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack, KoOasisStyles&oasisStyles, QDomElement *animation);
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );
 protected:
@@ -416,7 +417,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation);
+    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack, KoOasisStyles&oasisStyles, QDomElement *animation);
 
     virtual void flip(bool horizontal );
 

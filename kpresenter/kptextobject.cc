@@ -203,9 +203,9 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPTextObject::loadOasis(const QDomElement &element,  const KoStyleStack &styleStack, QDomElement *animation )
+void KPTextObject::loadOasis(const QDomElement &element,  const KoStyleStack &styleStack, KoOasisStyles&oasisStyles, QDomElement *animation )
 {
-    KP2DObject::loadOasis(element, styleStack, animation);
+    KP2DObject::loadOasis(element, styleStack, oasisStyles, animation);
     //todo other attribute
     if( styleStack.hasAttribute( "fo:padding-top" ) )
         btop = KoUnit::parseValue( styleStack.attribute( "fo:padding-top" ) );

@@ -186,7 +186,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation)
+void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, KoOasisStyles&/*oasisStyles*/, QDomElement *animation)
 {
     if(element.hasAttribute( "draw:name" ))
        objectName = element.attribute("draw:name");
@@ -1044,10 +1044,10 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation)
+void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack,  KoOasisStyles&oasisStyles, QDomElement *animation)
 {
     kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
-    KPObject::loadOasis(element, styleStack, animation);
+    KPObject::loadOasis(element, styleStack,oasisStyles, animation);
 
     if ( styleStack.hasAttribute( "draw:stroke" ))
     {
@@ -1107,27 +1107,27 @@ void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & 
                 tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 14 ) );
             else
                 kdDebug()<<" hatch style not supported !!!!!!!!!!!!\n";
-            setBrush( tmpBrush );
-#if 0
-            QDomElement* draw = m_draws[style];
+
+            QDomElement* draw = oasisStyles.drawStyles()[style];
+            //fixme !!!!
+            kdDebug()<<" draw :"<<draw<<endl;
             if ( draw && draw->hasAttribute( "draw:color" ) )
-                brush.setAttribute( "color", draw->attribute( "draw:color" ) );
-            e.appendChild( brush );
-#endif
+                tmpBrush.setColor(draw->attribute( "draw:color" ) );
+            setBrush( tmpBrush );
         }
         else if ( fill == "gradient" )
         {
-#if 0
             // We have to set a brush with brushstyle != no background fill
             // otherwise the properties dialog for the object won't
             // display the preview for the gradient.
 
             tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
             setBrush( tmpBrush );
-
-            QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
+#if 0
+            QString style = styleStack.attribute( "draw:fill-gradient-name" );
             kdDebug()<<" style gradient name :"<<style<<endl;
-            QDomElement* draw = m_draws[style];
+            QDomElement* draw = oasisStyles.drawStyles()[style];
+            kdDebug()<<" draw : "<<draw<<endl;
             if ( draw )
             {
                 gradient.setAttribute( "color1", draw->attribute( "draw:start-color" ) );
@@ -1200,11 +1200,8 @@ void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & 
                     gradient.setAttribute( "yfactor", 4 * y - 200 );
                 }
             }
-            e.appendChild( gradient );
 
-            QDomElement fillType = doc.createElement( "FILLTYPE" );
             fillType.setAttribute( "value", 1 );
-            e.appendChild( fillType );
 #endif
         }
     }
@@ -1333,11 +1330,11 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation)
+void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack,  KoOasisStyles&oasisStyles, QDomElement *animation)
 {
     kdDebug()<<"void KP2DObject::loadOasis(const QDomElement &element)\n";
 
-    KPShadowObject::loadOasis(element, styleStack,animation);
+    KPShadowObject::loadOasis(element, styleStack, oasisStyles, animation);
 }
 
 double KP2DObject::load(const QDomElement &element)

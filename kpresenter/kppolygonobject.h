@@ -69,7 +69,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );
-    virtual void loadOasis( const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation );
+    virtual void loadOasis( const QDomElement &element, const KoStyleStack & styleStack, KoOasisStyles&oasisStyles,QDomElement *animation );
 
     virtual void flip( bool horizontal );
     virtual KoSize getRealSize() const;
