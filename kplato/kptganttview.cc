@@ -91,13 +91,17 @@ void KPTGanttView::clear()
 void KPTGanttView::draw(KPTProject &project)
 {
     //kdDebug()<<k_funcinfo<<endl;
-	m_gantt->setUpdateEnabled(false);
+    m_gantt->setUpdateEnabled(false);
 
-	clear();
-	drawChildren(NULL, project);
-	drawRelations();
-
-	m_gantt->setUpdateEnabled(true);
+    clear();
+    drawChildren(NULL, project);
+    drawRelations();
+    
+    m_currentItem = m_gantt->firstChild();
+    if (m_currentItem)
+        m_gantt->setSelected(m_currentItem, true);
+    
+    m_gantt->setUpdateEnabled(true);
 }
 
 
