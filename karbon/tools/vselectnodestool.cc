@@ -41,8 +41,8 @@
 
 #include <kdebug.h>
 
-VSelectNodesTool::VSelectNodesTool( KarbonView* view, const char* name )
-	: VTool( view, name ), m_state( normal )
+VSelectNodesTool::VSelectNodesTool( KarbonPart* part, const char* name )
+	: VTool( part, name ), m_state( normal )
 {
 	registerTool( this );
 }

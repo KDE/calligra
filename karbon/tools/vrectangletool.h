@@ -33,7 +33,7 @@ class KoUnitDoubleSpinBox;
 class VRectangleTool : public VShapeTool
 {
 public:
-	VRectangleTool( KarbonView* view );
+	VRectangleTool( KarbonPart *part );
 	virtual ~VRectangleTool();
 
 	virtual QString name() { return i18n( "Rectangle Tool" ); }

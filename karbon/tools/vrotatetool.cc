@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,8 +35,8 @@
 
 #include <kdebug.h>
 
-VRotateTool::VRotateTool( KarbonView* view, const char* name )
-	: VTool( view, name )
+VRotateTool::VRotateTool( KarbonPart *part, const char* name )
+	: VTool( part, name )
 {
 	m_objects.setAutoDelete( true );
 	registerTool( this );

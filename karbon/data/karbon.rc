@@ -101,7 +101,4 @@
 	<ToolBar name="Tools" position="left">
 		<Text>Toolbox</Text>
 	</ToolBar>
-	<ToolBar name="selecttoolbar" fullwidth="false">
-		<Text>Object Properties</Text>
-	</ToolBar>
 </kpartgui>

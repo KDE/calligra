@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <koPoint.h>
 
+class KarbonPart;
 class KarbonView;
 class QEvent;
 class QWidget;
@@ -32,7 +33,7 @@ class VPainter;
 class VTool
 {
 public:
-	VTool( KarbonView *view, const char* name );
+	VTool( KarbonPart *part, const char* name );
 	// Make VTool "abstract":
 	virtual ~VTool();
 
@@ -171,7 +172,8 @@ protected:
 	 */
 	virtual void accept() {}
 
-	KarbonView* view() const { return m_view; }
+	KarbonPart* part() const { return m_part; }
+	KarbonView* view() const;
 
 	/**
 	 * Most tools need to know the first mouse coordinate.
@@ -190,7 +192,7 @@ private:
 	/**
 	 * The view the tool acts upon.
 	 */
-	KarbonView* m_view;
+	KarbonPart *m_part;
 
 	/**
 	 * First input mouse coordinate.

@@ -34,7 +34,7 @@ class KarbonPart;
 class VSpiralTool : public VShapeTool
 {
 public:
-	VSpiralTool( KarbonView *view );
+	VSpiralTool( KarbonPart *part );
 	virtual ~VSpiralTool();
 
 	virtual bool showDialog() const;

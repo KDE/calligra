@@ -159,11 +159,11 @@ VStarOptionsWidget::typeChanged( int type )
 		m_innerR->setValue( VStar::getOptimalInnerRadius( edges(), outerRadius(), innerAngle() ) );
 }
 
-VStarTool::VStarTool( KarbonView* view )
-	: VShapeTool( view, i18n( "Insert Star" ), true )
+VStarTool::VStarTool( KarbonPart *part )
+	: VShapeTool( part, i18n( "Insert Star" ), true )
 {
 	// create config dialog:
-	m_optionsWidget = new VStarOptionsWidget( view->part() );
+	m_optionsWidget = new VStarOptionsWidget( part );
 	m_optionsWidget->setEdges( 5 );
 	registerTool( this );
 }

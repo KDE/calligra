@@ -57,7 +57,6 @@ class VTransformDocker;
 class VCanvas;
 
 class VTool;
-class VToolFactory;
 class VToolBox;
 
 class KarbonView : public KarbonViewBase, public KXMLGUIBuilder
@@ -98,9 +97,6 @@ public:
 	QLabel* statusMessage() const { return m_status; }
 
 	void setUnit( KoUnit::Unit _unit );
-
-	// manage tools
-	virtual void registerTool( VTool * );
 
 	void setCursor( const QCursor & );
 
@@ -198,8 +194,6 @@ private:
 	VStrokeFillPreview		*m_strokeFillPreview;
 
 	VToolBox				*m_toolbox;
-	VToolFactory			*m_toolFactory;
-	VTool					*m_currentTool;
 
 	KAction					*m_groupObjects;
 	KAction					*m_ungroupObjects;

@@ -95,11 +95,11 @@ VRoundRectTool::VRoundRectOptionsWidget::refreshUnit ()
 	m_round->setUnit( m_part->unit() );
 }
 
-VRoundRectTool::VRoundRectTool( KarbonView* view )
-		: VShapeTool( view, i18n( "Insert Round Rectangle" ) )
+VRoundRectTool::VRoundRectTool( KarbonPart *part )
+		: VShapeTool( part, i18n( "Insert Round Rectangle" ) )
 {
 	// Create config dialog:
-	m_optionsWidget = new VRoundRectOptionsWidget( view->part() );
+	m_optionsWidget = new VRoundRectOptionsWidget( part );
 	registerTool( this );
 }
 

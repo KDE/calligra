@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -100,11 +99,11 @@ VSinusTool::VSinusOptionsWidget::refreshUnit ()
 	m_height->setUnit( m_part->unit() );
 }
 
-VSinusTool::VSinusTool( KarbonView* view )
-	: VShapeTool( view, i18n( "Insert Sinus" ) )
+VSinusTool::VSinusTool( KarbonPart *part )
+	: VShapeTool( part, i18n( "Insert Sinus" ) )
 {
 	// create config widget:
-	m_optionsWidget = new VSinusOptionsWidget(view->part());
+	m_optionsWidget = new VSinusOptionsWidget( part );
 	m_optionsWidget->setPeriods( 1 );
 	registerTool( this );
 }

@@ -35,7 +35,6 @@
 #include "vtext.h"
 #include "vtool.h"
 
-class KarbonView;
 class KFontCombo;
 class KIntNumInput;
 class QCheckBox;
@@ -147,7 +146,7 @@ protected:
 class VTextTool : public VTool, public VVisitor
 {
 public:
-	VTextTool( KarbonView* view, const char* name );
+	VTextTool( KarbonPart *part, const char* name );
 	~VTextTool();
 
 	virtual QString name() { return i18n( "Text Tool" ); }
@@ -226,7 +225,6 @@ private:
 			bool newTranslucentShadow;
 		};
 
-		KarbonView* m_view;
 		VText* m_text;
 		bool m_executed;
 		VTextModifPrivate* m_textModifications;

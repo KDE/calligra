@@ -129,11 +129,11 @@ VEllipseOptionsWidget::refreshUnit ()
 	m_height->setUnit( m_part->unit() );
 }
 
-VEllipseTool::VEllipseTool( KarbonView* view )
-	: VShapeTool( view, i18n( "Insert Ellipse" ) )
+VEllipseTool::VEllipseTool( KarbonPart *part )
+	: VShapeTool( part, i18n( "Insert Ellipse" ) )
 {
 	// create config dialog:
-	m_optionsWidget = new VEllipseOptionsWidget( view->part() );
+	m_optionsWidget = new VEllipseOptionsWidget( part );
 	registerTool( this );
 
 	m_startAngle = m_endAngle = 0;

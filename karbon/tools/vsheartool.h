@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +25,7 @@
 class VShearTool : public VTool
 {
 public:
-	VShearTool( KarbonView* view, const char* name );
+	VShearTool( KarbonPart *part, const char* name );
 	virtual ~VShearTool();
 
 	virtual void activate();

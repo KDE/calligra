@@ -42,7 +42,7 @@ class VClipartWidget : public KDialogBase
 	Q_OBJECT
 
 public:
-	VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonView* view, QWidget* parent = 0L );
+	VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonPart *part, QWidget* parent = 0L );
 	~VClipartWidget();
 
 	VClipartIconItem* selectedClipart();
@@ -59,7 +59,7 @@ private:
 	QHButtonGroup* m_buttonGroup;
 	QToolButton* m_importClipartButton;
 	QToolButton* m_deleteClipartButton;
-	KarbonView* m_view;
+	KarbonPart* m_part;
 	VClipartIconItem* m_clipartItem;
 	VClipartIconItem* m_selectedItem;
 };
@@ -67,7 +67,7 @@ private:
 class VClipartTool : public VTool
 {
 public:
-	VClipartTool( KarbonView* view, const char * );
+	VClipartTool( KarbonPart *part, const char * );
 	~VClipartTool();
 
 	virtual void activate();

@@ -123,11 +123,11 @@ VSpiralTool::VSpiralOptionsWidget::refreshUnit()
 	m_radius->setUnit( m_part->unit() );
 }
 
-VSpiralTool::VSpiralTool( KarbonView* view )
-	: VShapeTool( view, i18n( "Insert Spiral" ), true )
+VSpiralTool::VSpiralTool( KarbonPart *part )
+	: VShapeTool( part, i18n( "Insert Spiral" ), true )
 {
 	// create config dialog:
-	m_optionsWidget = new VSpiralOptionsWidget( view->part() );
+	m_optionsWidget = new VSpiralOptionsWidget( part );
 	m_optionsWidget->setSegments( 8 );
 	m_optionsWidget->setFade( 0.8 );
 	m_optionsWidget->setClockwise( true );

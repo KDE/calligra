@@ -522,10 +522,10 @@ VTextOptionsWidget::shadowDistance()
 	return m_shadow->shadowDistance();
 }
 
-VTextTool::VTextTool( KarbonView* view, const char* name )
-		: VTool( view, name )
+VTextTool::VTextTool( KarbonPart *part, const char* name )
+		: VTool( part, name )
 {
-	m_optionsWidget = new VTextOptionsWidget( this, view );
+	m_optionsWidget = new VTextOptionsWidget( this, 0L );
 	m_text = 0L;
 	m_editedText = 0L;
 	registerTool( this );

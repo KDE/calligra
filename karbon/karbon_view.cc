@@ -67,7 +67,7 @@
 #include "karbon_view_iface.h"
 #include "vselection.h"
 #include "vtool.h"
-#include "vtoolfactory.h"
+#include "vtoolcontroller.h"
 #include "vgroup.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
@@ -86,11 +86,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		: KarbonViewBase( p, parent, name ), KXMLGUIBuilder( shell() )
 {
 	m_toolbox = 0L;
-	m_currentTool = 0L;
 	m_documentDocker = 0L;
-	m_toolFactory = 0L;
 
-	setInstance( KarbonFactory::instance() );
+	setInstance( KarbonFactory::instance(), true );
 
 	setAcceptDrops( true );
 
@@ -119,6 +117,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_strokeFillPreview = 0L;
 	m_ColorManager = 0L;
 	m_strokeDocker = 0L;
+
+	// set selectTool by default
+	//m_toolbox->slotPressButton( 0 );
 
 	if( shell() )
 	{
@@ -162,8 +163,6 @@ KarbonView::~KarbonView()
 {
 	if( shell() )
 	{
-		delete m_toolFactory;
-		m_toolFactory = 0L;
 		delete( m_ColorManager );
 		delete( m_strokeDocker );
 		delete( m_TransformDocker );
@@ -182,36 +181,21 @@ KarbonView::~KarbonView()
 	//delete( m_toolbox );
 }
 
-void
-KarbonView::registerTool( VTool *tool )
-{
-	if( !shell() ) return;
-	if( !m_toolbox )
-	{
-		m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "Tools" );
-		if( !m_toolFactory )
-			m_toolFactory = new VToolFactory( this );
-	}
-	m_toolbox->registerTool( tool );
-	m_currentTool = tool;
-}
-
 QWidget *
 KarbonView::createContainer( QWidget *parent, int index, const QDomElement &element, int &id )
 {
 	if( element.attribute( "name" ) == "Tools" )
 	{
 		if( !m_toolbox )
-		{
 			m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "Tools" );
-			if( !m_toolFactory )
-				m_toolFactory = new VToolFactory( this );
-		}
 		else
+		{
 			m_toolbox = dynamic_cast<VToolBox *>( shell()->toolBar( "Tools" ) );
+			mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
+			return m_toolbox;
+		}
 
 		m_toolbox->setupTools();
-		m_currentTool = 0L;
 		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 
 		if( shell() )
@@ -225,16 +209,15 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			selectionChanged();
 
 			//create toolbars
-			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
-			mainWindow()->addToolBar( m_selectToolBar );
+			//m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
+			//mainWindow()->addToolBar( m_selectToolBar );
 
 			m_documentDocker = new VDocumentDocker( this );
 			mainWindow()->addDockWindow( m_documentDocker, DockRight );
-			// set selectTool by default
-			m_toolbox->slotPressButton( 0 );
 		}
 
 		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
+		part()->toolController()->setActiveView( this );
 		return m_toolbox;
 	}
 
@@ -251,11 +234,10 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 	if( shell() && container == m_toolbox )
 	{
 		delete m_toolbox;
-		delete m_documentDocker;
 		m_toolbox = 0L;
-		delete m_toolFactory;
-		m_toolFactory = 0L;
-		m_currentTool = 0L;
+		//delete m_selectToolBar;
+		//m_selectToolBar = 0L;
+		delete m_documentDocker;
 	}
 	else
 		KXMLGUIBuilder::removeContainer( container, parent, element, id );
@@ -630,17 +612,7 @@ KarbonView::objectTrafoShear()
 void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
-	if( m_currentTool )
-		m_currentTool->deactivate();
-
-	if( m_currentTool == tool )
-		m_currentTool->showDialog();
-	else
-	{
-		m_currentTool = tool;
-		m_currentTool->activateAll();
-	}
-
+	part()->toolController()->setActiveTool( tool );
 	m_canvas->repaintAll();
 }
 
@@ -971,8 +943,8 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 		m_vertRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
 		m_cursorCoords->setText( QString( "%1, %2" ).arg( p.x(), 0, 'f', 2 ).arg( p.y(), 0, 'f', 2 ) );
 	}
-	if( m_currentTool )
-		return m_currentTool->mouseEvent( event, p );
+	if( part()->toolController() )
+		return part()->toolController()->mouseEvent( event, p );
 	else
 		return false;
 }
@@ -980,8 +952,8 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 bool
 KarbonView::keyEvent( QEvent* event )
 {
-	if( m_currentTool )
-		return m_currentTool->keyEvent( event );
+	if( part()->toolController() )
+		return part()->toolController()->keyEvent( event );
 	else
 		return false;
 }
@@ -1146,8 +1118,8 @@ KarbonView::setViewportRect( const KoRect &rect )
 void
 KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
 {
-	if( m_currentTool )
-		m_currentTool->refreshUnit();
+	if( part()->toolController()->activeTool() )
+		part()->toolController()->activeTool()->refreshUnit();
 }
 
 #include "karbon_view.moc"

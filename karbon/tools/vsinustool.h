@@ -31,7 +31,7 @@ class QLabel;
 class VSinusTool : public VShapeTool
 {
 public:
-	VSinusTool( KarbonView *view );
+	VSinusTool( KarbonPart *part );
 	virtual ~VSinusTool();
 
 	virtual bool showDialog() const;

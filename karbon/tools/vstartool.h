@@ -67,7 +67,7 @@ private:
 class VStarTool : public VShapeTool
 {
 public:
-	VStarTool( KarbonView* view );
+	VStarTool( KarbonPart *part );
 	virtual ~VStarTool();
 
 	virtual bool showDialog() const;

@@ -33,7 +33,7 @@ class KoUnitDoubleSpinBox;
 class VRoundRectTool : public VShapeTool
 {
 public:
-	VRoundRectTool( KarbonView* view );
+	VRoundRectTool( KarbonPart *part );
 	virtual ~VRoundRectTool();
 
 	virtual bool showDialog() const;

@@ -81,11 +81,11 @@ VRectangleTool::VRectangleOptionsWidget::refreshUnit()
 	m_height->setUnit( m_part->unit() );
 }
 
-VRectangleTool::VRectangleTool( KarbonView* view )
-	: VShapeTool( view, i18n( "Insert Rectangle" ) )
+VRectangleTool::VRectangleTool( KarbonPart *part )
+	: VShapeTool( part, i18n( "Insert Rectangle" ) )
 {
 	// Create config dialog:
-	m_optionWidget = new VRectangleOptionsWidget( view->part() );
+	m_optionWidget = new VRectangleOptionsWidget( part );
 	registerTool( this );
 }
 

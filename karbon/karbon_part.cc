@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +40,7 @@
 #include "vcanvas.h"
 #include "vlayer.h"
 #include "vdocumentdocker.h"
+#include "vtoolcontroller.h"
 
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
@@ -50,6 +50,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 						QObject* parent, const char* name, bool singleViewMode )
 		: KarbonPartBase( parentWidget, widgetName, parent, name, singleViewMode )
 {
+	m_toolController = new VToolController( const_cast<KarbonPart *>( this ) );
+	m_toolController->init();
 	setInstance( KarbonFactory::instance(), false );
 	m_bShowStatusBar = true;
 	m_maxRecentFiles = VGlobal::maxRecentFiles;
@@ -62,6 +64,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	initConfig();
 
 	m_merge = false;
+
 
 	if( name )
 		dcopObject();
@@ -135,7 +138,9 @@ KarbonPart::initDoc()
 KoView*
 KarbonPart::createViewInstance( QWidget* parent, const char* name )
 {
-	return new KarbonView( this, parent, name );
+	KarbonView *result = new KarbonView( this, parent, name );
+	toolController()->setActiveView( result );
+	return result;
 }
 
 void

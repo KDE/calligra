@@ -36,6 +36,7 @@
 #include "karbon_view.h"
 #include "karbon_factory.h"
 #include "vtool.h"
+#include "vtoolcontroller.h"
 
 #include "vtoolbox.h"
 #include "vstrokefillpreview.h"
@@ -44,7 +45,7 @@
 #include <config.h>
 #endif
 
-VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) : KToolBar( mainWin, name, false, false )
+VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) : KToolBar( mainWin, name, false, false ), m_part( part )
 {
 	setFullSize( false );
 	buttonGroup = new QButtonGroup( 0L );
@@ -100,6 +101,7 @@ VToolBox::slotButtonPressed( int id )
 void
 VToolBox::registerTool( VTool *tool )
 {
+	kdDebug() << "VToolBox::registerTool : " << tool->name() << endl;
 	uint prio = tool->priority();
 	if( tool->category() == "shapecreation" )
 		m_shapetools.insert( ( prio == 0 ) ? m_shapetools.count() : prio - 1, tool );
@@ -112,6 +114,11 @@ VToolBox::registerTool( VTool *tool )
 void
 VToolBox::setupTools()
 {
+	QPtrListIterator<VTool> itr( m_part->toolController()->tools() );
+	kdDebug() << "count : " << m_part->toolController()->tools().count() << endl;
+	for( ; itr.current() ; ++itr )
+		registerTool( itr.current() );
+
 	int id = 0;
 	for( uint i = 0; i < m_manipulationtools.count() ; i++ )
 	{
@@ -138,6 +145,7 @@ VToolBox::setupTools()
 QToolButton *
 VToolBox::addButton( const char* iconName, QString tooltip, int id )
 {
+	kdDebug() << "Adding : " << iconName << endl;
 	QToolButton *button = new QToolButton( insertLeft ? left : right );
 	if( iconName != "" )
 	{

@@ -25,11 +25,12 @@
 
 #include "karbon_view.h"
 #include "karbon_part.h"
+#include "vtoolcontroller.h"
 #include "kocontexthelp.h"
 #include "vtool.h"
 
 
-VTool::VTool( KarbonView *view, const char* ) : m_view( view )
+VTool::VTool( KarbonPart *part, const char* ) : m_part( part )
 {
 	m_mouseButtonIsDown	= false;
 	m_isDragging		= false;
@@ -46,7 +47,13 @@ VTool::~VTool()
 void
 VTool::registerTool( VTool *tool )
 {
-	m_view->registerTool( tool );
+	part()->toolController()->registerTool( tool );
+}
+
+KarbonView *
+VTool::view() const
+{
+	return part()->toolController()->activeView();
 }
 
 void VTool::activateAll()

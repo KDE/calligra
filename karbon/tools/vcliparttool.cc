@@ -41,8 +41,8 @@
 #include <render/vpainterfactory.h>
 #include <render/vpainter.h>
 
-VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonView* view, QWidget* parent )
-	: KDialogBase( parent, "", true, i18n( "Insert Clipart" ), Ok | Cancel ), m_view( view )
+VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonPart *part, QWidget* parent )
+	: KDialogBase( parent, "", true, i18n( "Insert Clipart" ), Ok | Cancel ), m_part( part )
 {
 	KIconLoader il;
 
@@ -111,7 +111,7 @@ void
 VClipartWidget::addClipart()
 {
 	VObject* clipart = 0L;
-	VSelection* selection = m_view->part()->document().selection();
+	VSelection* selection = m_part->document().selection();
 
 	if( selection->objects().count() == 1 )
 		clipart = selection->objects().getFirst()->clone();
@@ -186,10 +186,10 @@ VClipartWidget::slotButtonClicked( int id )
 	}
 }
 
-VClipartTool::VClipartTool( KarbonView* view, const char *name )
-		: VTool( view, name )
+VClipartTool::VClipartTool( KarbonPart *part, const char *name )
+		: VTool( part, name )
 {
-	m_optionsWidget = new VClipartWidget( KarbonFactory::rServer()->cliparts(), view );
+	m_optionsWidget = new VClipartWidget( KarbonFactory::rServer()->cliparts(), part );
 	registerTool( this );
 }
 

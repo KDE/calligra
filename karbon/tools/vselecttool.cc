@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,8 +38,8 @@
 #include <commands/vtransformcmd.h>
 #include <visitors/vselectiondesc.h>
 
-VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
-	: KDialogBase( 0L, "", true, i18n( "Insert star" ), Ok | Cancel ), m_view( view )
+VSelectOptionsWidget::VSelectOptionsWidget( KarbonPart *part )
+	: KDialogBase( 0L, "", true, i18n( "Insert star" ), Ok | Cancel ), m_part( part )
 {
 	QButtonGroup *group = new QButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ), this );
 
@@ -49,7 +48,7 @@ VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
 	new QRadioButton( i18n( "Select in selected layers" ), group );
 	
 	group->setRadioButtonExclusive( true );
-	group->setButton( m_view->part()->document().selectionMode() );
+	group->setButton( part->document().selectionMode() );
 	
 	connect( group, SIGNAL( clicked( int ) ), this, SLOT( modeChange( int ) ) );
 
@@ -62,15 +61,15 @@ VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
 
 void VSelectOptionsWidget::modeChange( int mode )
 {
-	m_view->part()->document().setSelectionMode( (VDocument::VSelectionMode)mode );
+	m_part->document().setSelectionMode( (VDocument::VSelectionMode)mode );
 } // VSelectOptionsWidget::modeChanged
 
-VSelectTool::VSelectTool( KarbonView* view, const char* name )
-	: VTool( view, name ), m_state( normal )
+VSelectTool::VSelectTool( KarbonPart *part, const char* name )
+	: VTool( part, name ), m_state( normal )
 {
 	m_lock = false;
 	m_objects.setAutoDelete( true );
-	m_optionsWidget = new VSelectOptionsWidget( view );
+	m_optionsWidget = new VSelectOptionsWidget( part );
 	registerTool( this );
 }
 

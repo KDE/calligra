@@ -32,19 +32,19 @@ class VSelectOptionsWidget : public KDialogBase
 Q_OBJECT
 
 public:
-	VSelectOptionsWidget( KarbonView* view );
+	VSelectOptionsWidget( KarbonPart* part );
 
 public slots:
 	void modeChange( int mode );
 
 private:
-	KarbonView*     m_view;
+	KarbonPart*     m_part;
 }; // VSelectOptionsWidget
 
 class VSelectTool : public VTool
 {
 public:
-	VSelectTool( KarbonView* view, const char* name );
+	VSelectTool( KarbonPart *part, const char* name );
 	virtual ~VSelectTool();
 
 	virtual void activate();

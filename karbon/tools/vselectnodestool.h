@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 class VSelectNodesTool : public VTool
 {
 public:
-	VSelectNodesTool( KarbonView* view, const char* name );
+	VSelectNodesTool( KarbonPart *part, const char* name );
 	virtual ~VSelectNodesTool();
 
 	virtual void activate();

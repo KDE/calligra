@@ -27,7 +27,6 @@
 
 class QHButtonGroup;
 class QToolButton;
-class KarbonView;
 class KoIconChooser;
 
 class VPatternWidget : public KDialogBase
@@ -60,7 +59,7 @@ private:
 class VPatternTool : public VTool
 {
 public:
-	VPatternTool( KarbonView* view, const char * );
+	VPatternTool( KarbonPart *part, const char * );
 	virtual ~VPatternTool();
 
 	virtual void activate();

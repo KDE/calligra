@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,8 +31,8 @@
 #include "vshapetool.h"
 #include "vselection.h"
 
-VShapeTool::VShapeTool( KarbonView* view, const QString& name, bool polar )
-	: VTool( view, name.latin1() ), m_name( name )
+VShapeTool::VShapeTool( KarbonPart *part, const QString& name, bool polar )
+	: VTool( part, name.latin1() ), m_name( name )
 {
 	m_isPolar = polar;
 	m_isSquare   = false;

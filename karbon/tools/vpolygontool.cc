@@ -79,11 +79,11 @@ VPolygonTool::VPolygonOptionsWidget::refreshUnit()
 	m_radius->setUnit( m_part->unit() );
 }
 
-VPolygonTool::VPolygonTool( KarbonView* view )
-	: VShapeTool( view, i18n( "Insert Polygon" ), true )
+VPolygonTool::VPolygonTool( KarbonPart *part )
+	: VShapeTool( part, i18n( "Insert Polygon" ), true )
 {
 	// create config dialog:
-	m_optionsWidget = new VPolygonOptionsWidget( view->part() );
+	m_optionsWidget = new VPolygonOptionsWidget( part );
 	m_optionsWidget->setEdges( 5 );
 	registerTool( this );
 }

@@ -64,7 +64,7 @@ private:
 class VEllipseTool : public VShapeTool
 {
 public:
-	VEllipseTool( KarbonView *view );
+	VEllipseTool( KarbonPart *part );
 	virtual ~VEllipseTool();
 
 	virtual QString name() { return i18n( "Ellipse Tool" ); }
