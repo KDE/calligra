@@ -120,10 +120,10 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 
   KivioPainter *painter = pData->painter;
 
-  newX = zoomHandler->zoomItX(m_x);
-  newY = zoomHandler->zoomItY(m_y);
-  newW = zoomHandler->zoomItX(m_w);
-  newH = zoomHandler->zoomItY(m_h);
+  newX = zoomHandler->zoomItX(m_x - qRound(lineWidth() / 2));
+  newY = zoomHandler->zoomItY(m_y - qRound(lineWidth() / 2));
+  newW = zoomHandler->zoomItX(m_w + lineWidth() + 1);
+  newH = zoomHandler->zoomItY(m_h + lineWidth() + 1);
 
   painter->saveState();
   painter->setTranslation(newX, newY);
