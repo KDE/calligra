@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,44 +23,28 @@
 
 */
 
-#ifndef GridDialog_h
-#define GridDialog_h
+#ifndef __RectTool_h__
+#define __RectTool_h__
 
-#include <kdialogbase.h>
+#include "Tool.h"
+#include <qpoint.h>
+#include <qrect.h>
 
-class QCheckBox;
-class Canvas;
-class UnitBox;
-class KColorButton;
-class QColor;
-
-class GridDialog : public KDialogBase {
-
-    Q_OBJECT
-
+class RectTool : public Tool
+{
+  Q_OBJECT
 public:
-    GridDialog(QWidget* parent = 0L, const char* name = 0L);
-
-    float horizontalDistance();
-    float verticalDistance();
-    bool showGrid();
-    bool snapToGrid();
-    QColor gridColor();
-
-    void setDistances(float h, float v);
-    void setSnapToGridOn(bool flag);
-    void setShowGridOn(bool flag);
-    void setGridColor(QColor color);
-
-    static void setupGrid(Canvas* canvas);
-
-protected:
-    void createGridWidget(QWidget* parent);
+  RectTool(QString aId, ToolController *tc);
+  
+  void activate();
+  void deactivate();
+  void processEvent(QEvent *e);
 
 private:
-    QCheckBox *gbutton, *sbutton;
-    UnitBox *hspinbox, *vspinbox;
-    KColorButton *cbutton;
+  enum State{S_Init, S_Resize};
+  State state;
+  QPoint p1;
+  QRect r;
 };
 
 #endif

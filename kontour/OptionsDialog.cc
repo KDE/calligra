@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)  
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,6 +23,8 @@
 
 */
 
+#include "OptionsDialog.h"
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qvgroupbox.h>
@@ -32,18 +35,20 @@
 
 #include <klocale.h>
 
-#include <UnitBox.h>
-#include <PStateManager.h>
-
-#include "OptionDialog.h"
+#include "kontour_view.h"
 #include "GDocument.h"
 #include "GPage.h"
+#include "Canvas.h"
+#include "UnitBox.h"
 
-OptionDialog::OptionDialog (GDocument *adoc,QWidget* parent, const char* name) :
-    KDialogBase(KDialogBase::TreeList, i18n("Option"),
-                Ok|Apply|Cancel, Ok,
-                parent, name, true),doc(adoc),modified(false)
+OptionsDialog::OptionsDialog(KontourView *aView, GDocument *aGDoc, QWidget *parent, const char *name):
+KDialogBase(KDialogBase::TreeList, i18n("Option"), Ok|Apply|Cancel, Ok, parent, name, true)
 {
+  mView = aView;
+  mGDoc = aGDoc;
+  mDocModified = false;
+  mViewUpdate = false;
+
   QStringList list;
   createGeneralWidget(addPage(i18n("General")));
   createEditWidget(addPage(i18n("Edit")));
@@ -60,35 +65,41 @@ OptionDialog::OptionDialog (GDocument *adoc,QWidget* parent, const char* name) :
   list << i18n("Document") << i18n("Helplines") << i18n("Horizontal");
   createHorizLineWidget(addPage(list));
   list.clear();
+  list << i18n("Plugins");
 
-  horizLines = doc->horizHelplines();
-  vertLines = doc->vertHelplines();
+  horizLines = mGDoc->horizHelplines();
+  vertLines = mGDoc->vertHelplines();
   initHelplinesLists();
 }
 
-void OptionDialog::createGeneralWidget (QWidget* parent)
+void OptionsDialog::createGeneralWidget(QWidget *parent)
 {
+  QGridLayout *layout = new QGridLayout(parent, 3, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
+  
+  QLabel *mUnitLabel = new QLabel(i18n("Unit:"), parent);
+  layout->addWidget(mUnitLabel, 0, 0);
+  unit = new QComboBox(parent);
+  unit->insertItem(unitToString(UnitPoint));
+  unit->insertItem(unitToString(UnitMillimeter));
+  unit->insertItem(unitToString(UnitInch));
+  unit->insertItem(unitToString(UnitPica));
+  unit->insertItem(unitToString(UnitCentimeter));
+  unit->insertItem(unitToString(UnitDidot));
+  unit->insertItem(unitToString(UnitCicero));
+  layout->addWidget(unit, 0, 1);
+  unit->setCurrentItem((int)mView->unit());
 
-    QGridLayout *layout=new QGridLayout(parent, 2, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
-    QLabel *label = new QLabel(i18n("Unit:"), parent);
-    layout->addWidget(label, 0, 0);
+  QLabel *mWSColorLabel = new QLabel(i18n("Workspace color:"), parent);
+  mWSColorButton = new KColorButton(parent);
+  mWSColorButton->setColor(mView->workSpaceColor());
+  connect(mWSColorButton, SIGNAL(changed(const QColor&)), this, SLOT(slotSetViewUpdate()));
+  layout->addWidget(mWSColorLabel, 1, 0);
+  layout->addWidget(mWSColorButton, 1, 1);
 
-    unit = new QComboBox (parent);
-    unit->insertItem (unitToString (UnitPoint));
-    unit->insertItem (unitToString (UnitMillimeter));
-    unit->insertItem (unitToString (UnitInch));
-    unit->insertItem (unitToString (UnitPica));
-    unit->insertItem (unitToString (UnitCentimeter));
-    unit->insertItem (unitToString (UnitDidot));
-    unit->insertItem (unitToString (UnitCicero));
-    layout->addWidget(unit, 0, 1);
-    layout->setRowStretch(1, 1);
-
-    unit->setCurrentItem ((int)
-                          PStateManager::instance ()->defaultMeasurementUnit ());
+  layout->setRowStretch(2, 1);
 }
 
-void OptionDialog::createEditWidget (QWidget* parent)
+void OptionsDialog::createEditWidget (QWidget* parent)
 {
 
     QBoxLayout *layout=new QVBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
@@ -102,18 +113,16 @@ void OptionDialog::createEditWidget (QWidget* parent)
     grid->addWidget(label, 0, 0);
 
     horiz = new UnitBox(box);
-    horiz->setRange (-1000.0, 1000.0);
-    horiz->setStep (0.1);
-    horiz->setEditable (true);
+    horiz->setRange(-1000.0, 1000.0);
+    horiz->setStep(0.1);
     grid->addWidget(horiz, 0, 1);
 
     label = new QLabel(i18n("Vertical:"), box);
     grid->addWidget(label, 1, 0);
 
     vert = new UnitBox(box);
-    vert->setRange (-1000.0, 1000.0);
-    vert->setStep (0.1);
-    vert->setEditable (true);
+    vert->setRange(-1000.0, 1000.0);
+    vert->setStep(0.1);
     grid->addWidget(vert, 1, 1);
 
     box = new QGroupBox(i18n("Step Distance"), parent);
@@ -126,42 +135,41 @@ void OptionDialog::createEditWidget (QWidget* parent)
     grid->addWidget(label, 0, 0);
 
     smallStep = new UnitBox(box);
-    smallStep->setRange (-1000.0, 1000.0);
-    smallStep->setStep (0.1);
-    smallStep->setEditable (true);
+    smallStep->setRange(-1000.0, 1000.0);
+    smallStep->setStep(0.1);
     grid->addWidget(smallStep, 0, 1);
 
     label = new QLabel(i18n("Big step:"), box);
     grid->addWidget(label, 1, 0);
 
     bigStep = new UnitBox(box);
-    bigStep->setRange (-1000.0, 1000.0);
-    bigStep->setStep (0.1);
-    bigStep->setEditable (true);
+    bigStep->setRange(-1000.0, 1000.0);
+    bigStep->setStep(0.1);
     grid->addWidget(bigStep, 1, 1);
 
-    PStateManager *psm = PStateManager::instance ();
+/*    PStateManager *psm = PStateManager::instance ();
     horiz->setValue (psm->duplicateXOffset ());
     vert->setValue (psm->duplicateYOffset ());
     smallStep->setValue (psm->smallStepSize ());
-    bigStep->setValue (psm->bigStepSize ());
+    bigStep->setValue (psm->bigStepSize ());*/
 }
 
 /*Background*/
-void OptionDialog::createBGWidget(QWidget* parent)
+void OptionsDialog::createBGWidget(QWidget* parent)
 {
   QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
   QLabel* clabel = new QLabel(i18n("Background Color"), parent);
   bgbutton = new KColorButton(parent);
-  connect (bgbutton, SIGNAL(changed (const QColor&)), this, SLOT(slotSetModified()));
-  bgbutton->setColor(doc->activePage()->bgColor());
+  connect(bgbutton, SIGNAL(changed(const QColor&)), this, SLOT(slotSetDocModified()));
+  connect(bgbutton, SIGNAL(changed(const QColor&)), this, SLOT(slotSetViewUpdate()));
+  bgbutton->setColor(mGDoc->activePage()->bgColor());
   layout->addWidget(clabel);
   layout->addWidget(bgbutton);
 }
 
 /*Grid*/
 
-void OptionDialog::createGridWidget (QWidget* parent)
+void OptionsDialog::createGridWidget (QWidget* parent)
 {
   QGridLayout *layout=new QGridLayout(parent, 3, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
@@ -175,54 +183,55 @@ void OptionDialog::createGridWidget (QWidget* parent)
   grid->addWidget(label, 0, 0);
 
   hspinbox = new UnitBox(box);
-  hspinbox->setFormatString ("%-3.3f");
-  hspinbox->setEditable (true);
-  hspinbox->setRange (0, 1000);
-  connect (hspinbox, SIGNAL(valueChanged (float)), this, SLOT(slotSetModified()));
+  hspinbox->setFormatString("%-3.3f");
+  hspinbox->setRange(0, 1000);
+  connect(hspinbox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDocModified()));
+  connect(hspinbox, SIGNAL(valueChanged(double)), this, SLOT(slotSetViewUpdate()));
   grid->addWidget(hspinbox, 0, 1);
 
   label = new QLabel(i18n("Vertically"), box);
   grid->addWidget(label, 1, 0);
 
-  vspinbox = new UnitBox (box);
-  vspinbox->setFormatString ("%-3.3f");
-  vspinbox->setEditable (true);
-  vspinbox->setRange (0, 1000);
-  connect (vspinbox, SIGNAL(valueChanged (float)), this, SLOT(slotSetModified()));
+  vspinbox = new UnitBox(box);
+  vspinbox->setFormatString("%-3.3f");
+  vspinbox->setRange(0, 1000);
+  connect(vspinbox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDocModified()));
+  connect(vspinbox, SIGNAL(valueChanged(double)), this, SLOT(slotSetViewUpdate()));
   grid->addWidget(vspinbox, 1, 1);
 
-  hspinbox->setValue(doc->horizGridDistance());
-  vspinbox->setValue(doc->vertGridDistance());
+  hspinbox->setValue(mGDoc->xGrid());
+  vspinbox->setValue(mGDoc->yGrid());
 
   gbutton = new QCheckBox(i18n("Snap To Grid"), parent);
-  gbutton->setDown(doc->snapToGrid());
-  connect (gbutton, SIGNAL(stateChanged (int)), this, SLOT(slotSetModified()));
+  gbutton->setDown(mGDoc->snapToGrid());
+  connect(gbutton, SIGNAL(stateChanged(int)), this, SLOT(slotSetDocModified()));
   layout->addWidget(gbutton, 1, 0);
 
   sbutton = new QCheckBox(i18n("Show Grid"), parent);
-  sbutton->setDown(doc->showGrid());
-  connect (sbutton, SIGNAL(stateChanged (int)), this, SLOT(slotSetModified()));
+  sbutton->setDown(mGDoc->showGrid());
+  connect(sbutton, SIGNAL(stateChanged(int)), this, SLOT(slotSetDocModified()));
+  connect(sbutton, SIGNAL(stateChanged(int)), this, SLOT(slotSetViewUpdate()));
   layout->addWidget(sbutton, 1, 1);
 
   cbutton = new KColorButton(parent);
-  cbutton->setColor(doc->gridColor());
+  cbutton->setColor(mGDoc->gridColor());
   QLabel* clabel = new QLabel(i18n("Grid Color"), parent);
-  connect (cbutton, SIGNAL(changed (const QColor&)), this, SLOT(slotSetModified()));
+  connect(cbutton, SIGNAL(changed(const QColor&)), this, SLOT(slotSetDocModified()));
+  connect(cbutton, SIGNAL(changed(const QColor&)), this, SLOT(slotSetViewUpdate()));
   layout->addWidget(cbutton, 2, 1);
   layout->addWidget(clabel, 2, 0);
 }
 
 /*Helplines*/
-void OptionDialog::createHorizLineWidget(QWidget* parent)
+void OptionsDialog::createHorizLineWidget(QWidget* parent)
 {
 
     QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
     QBoxLayout *left=new QVBoxLayout(layout);
 
     horizValue = new UnitBox (parent);
-    horizValue->setRange (-1000.0, 1000.0);
-    horizValue->setStep (0.1);
-    horizValue->setEditable (true);
+    horizValue->setRange(-1000.0, 1000.0);
+    horizValue->setStep(0.1);
     horizValue->setValue(0.0);
     left->addWidget(horizValue);
 
@@ -248,45 +257,43 @@ void OptionDialog::createHorizLineWidget(QWidget* parent)
     right->addStretch();
 }
 
-void OptionDialog::createVertLineWidget(QWidget* parent)
+void OptionsDialog::createVertLineWidget(QWidget *parent)
 {
-    QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
-    QBoxLayout *left=new QVBoxLayout(layout);
+  QBoxLayout *layout = new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+  QBoxLayout *left = new QVBoxLayout(layout);
 
-    vertValue = new UnitBox (parent);
-    vertValue->setRange (-1000.0, 1000.0);
-    vertValue->setStep (0.1);
-    vertValue->setEditable (true);
-    vertValue->setValue(0.0);
-    left->addWidget(vertValue);
+  vertValue = new UnitBox(parent);
+  vertValue->setRange(-1000.0, 1000.0);
+  vertValue->setStep(0.1);
+  vertValue->setValue(0.0);
+  left->addWidget(vertValue);
 
-    vertList = new QListBox(parent);
-    vertList->setMultiSelection (false);
-    connect (vertList, SIGNAL(highlighted (int)),
-             this, SLOT(vertLineSelected(int)));
-    left->addWidget(vertList);
-    layout->addSpacing(KDialogBase::spacingHint() * 2);
+  vertList = new QListBox(parent);
+  vertList->setMultiSelection(false);
+  connect(vertList, SIGNAL(highlighted(int)), this, SLOT(vertLineSelected(int)));
+  left->addWidget(vertList);
+  layout->addSpacing(KDialogBase::spacingHint() * 2);
 
-    QBoxLayout *right=new QVBoxLayout(layout);
-    addVertHelpLine = new QPushButton(i18n("Add"), parent);
-    connect (addVertHelpLine, SIGNAL(clicked ()), this, SLOT(addVertLine ()));
-    right->addWidget(addVertHelpLine);
+  QBoxLayout *right = new QVBoxLayout(layout);
+  addVertHelpLine = new QPushButton(i18n("Add"), parent);
+  connect(addVertHelpLine, SIGNAL(clicked()), this, SLOT(addVertLine()));
+  right->addWidget(addVertHelpLine);
 
-    updateVertHelpLine = new QPushButton(i18n("Update"), parent);
-    connect (updateVertHelpLine, SIGNAL(clicked ()), this, SLOT(updateVertLine ()));
-    right->addWidget(updateVertHelpLine);
+  updateVertHelpLine = new QPushButton(i18n("Update"), parent);
+  connect(updateVertHelpLine, SIGNAL(clicked()), this, SLOT(updateVertLine()));
+  right->addWidget(updateVertHelpLine);
 
-    delVertHelpLine = new QPushButton(i18n("Delete"), parent);
-    connect (delVertHelpLine, SIGNAL(clicked ()), this, SLOT(deleteVertLine ()));
-    right->addWidget(delVertHelpLine);
-    right->addStretch();
+  delVertHelpLine = new QPushButton(i18n("Delete"), parent);
+  connect(delVertHelpLine, SIGNAL(clicked()), this, SLOT(deleteVertLine()));
+  right->addWidget(delVertHelpLine);
+  right->addStretch();
 }
 
-void OptionDialog::initHelplinesLists()
+void OptionsDialog::initHelplinesLists()
 {
-  QValueList<float>::Iterator i;
+  QValueList<double>::Iterator i;
   QString buf;
-  MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+  MeasurementUnit unit;// = PStateManager::instance ()->defaultMeasurementUnit ();
 
   for (i = horizLines.begin (); i != horizLines.end (); ++i)
   {
@@ -319,29 +326,29 @@ void OptionDialog::initHelplinesLists()
   }
 }
 
-void OptionDialog::addHorizLine()
+void OptionsDialog::addHorizLine()
 {
-  float value = horizValue->getValue ();
+  double value = horizValue->getValue ();
   horizLines.append(value);
-  MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+  MeasurementUnit unit;// = PStateManager::instance ()->defaultMeasurementUnit ();
   QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
   buf+=" ";
   buf+=unitToString (unit);
   horizList->insertItem (buf);
   updateHorizHelpLine->setEnabled(true);
   delHorizHelpLine->setEnabled(true);
-  modified = true;
+  mDocModified = true;
 }
 
-void OptionDialog::updateHorizLine()
+void OptionsDialog::updateHorizLine()
 {
   if(horizLines.isEmpty())
     return;
   int idx = horizList->currentItem ();
   if (idx != -1)
   {
-    float value = horizValue->getValue ();
-    MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+    double value = horizValue->getValue ();
+    MeasurementUnit unit;// = PStateManager::instance ()->defaultMeasurementUnit ();
     QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
     buf+=" ";
     buf+=unitToString (unit);
@@ -352,7 +359,7 @@ void OptionDialog::updateHorizLine()
   }
 }
 
-void OptionDialog::deleteHorizLine()
+void OptionsDialog::deleteHorizLine()
 {
   if(horizLines.isEmpty())
     return;
@@ -361,7 +368,7 @@ void OptionDialog::deleteHorizLine()
   {
     horizLines.remove(horizLines.at(idx));
     horizList->removeItem(idx);
-    modified = true;
+    mDocModified = true;
     if(horizLines.isEmpty())
     {
         updateHorizHelpLine->setEnabled(false);
@@ -371,29 +378,29 @@ void OptionDialog::deleteHorizLine()
 
 }
 
-void OptionDialog::addVertLine()
+void OptionsDialog::addVertLine()
 {
-  float value = vertValue->getValue ();
+  double value = vertValue->getValue ();
   vertLines.append(value);
-  MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+  MeasurementUnit unit;// = PStateManager::instance ()->defaultMeasurementUnit ();
   QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
   buf+=" ";
   buf+=unitToString (unit);
   vertList->insertItem (buf);
   delVertHelpLine->setEnabled(true);
   updateVertHelpLine->setEnabled(true);
-  modified = true;
+  mDocModified = true;
 }
 
-void OptionDialog::updateVertLine()
+void OptionsDialog::updateVertLine()
 {
   if(vertLines.isEmpty())
     return;
   int idx = vertList->currentItem ();
   if (idx != -1)
   {
-    float value = vertValue->getValue ();
-    MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+    double value = vertValue->getValue ();
+    MeasurementUnit unit;// = PStateManager::instance ()->defaultMeasurementUnit ();
     QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
     buf+=" ";
     buf+=unitToString (unit);
@@ -404,7 +411,7 @@ void OptionDialog::updateVertLine()
   }
 }
 
-void OptionDialog::deleteVertLine()
+void OptionsDialog::deleteVertLine()
 {
   if(vertLines.isEmpty())
     return;
@@ -413,103 +420,98 @@ void OptionDialog::deleteVertLine()
   {
     vertLines.remove(vertLines.at(idx));
     vertList->removeItem (idx);
-    modified = true;
+    mDocModified = true;
     if(vertLines.isEmpty())
     {
-          delVertHelpLine->setEnabled(false);
-          updateVertHelpLine->setEnabled(false);
+      delVertHelpLine->setEnabled(false);
+      updateVertHelpLine->setEnabled(false);
     }
   }
 }
 
-void OptionDialog::horizLineSelected(int idx)
+void OptionsDialog::horizLineSelected(int idx)
 {
   if(!horizLines.isEmpty())
     horizValue->setValue(*horizLines.at(idx));
 }
 
-void OptionDialog::vertLineSelected(int idx)
+void OptionsDialog::vertLineSelected(int idx)
 {
   if(!vertLines.isEmpty())
     vertValue->setValue (*vertLines.at(idx));
 }
 
 /**/
-void OptionDialog::slotSetModified()
+void OptionsDialog::slotSetDocModified()
 {
-  modified = true;
+  mDocModified = true;
 }
 
-void OptionDialog::slotApply()
+void OptionsDialog::slotSetViewUpdate()
 {
+  mViewUpdate = true;
+}
+
+void OptionsDialog::slotApply()
+{
+  /* Units settings */
+  int u = unit->currentItem();
+  switch(u)
+  {
+  case 0:
+    mView->unit(UnitPoint);
+    break;
+  case 1:
+    mView->unit(UnitMillimeter);
+    break;
+  case 2:
+    mView->unit(UnitInch);
+    break;
+  case 3:
+    mView->unit(UnitPica);
+    break;
+  case 4:
+    mView->unit(UnitCentimeter);
+    break;
+  case 5:
+    mView->unit(UnitDidot);
+    break;
+  case 6:
+    mView->unit(UnitCicero);
+    break;
+  }
+
+  mView->workSpaceColor(mWSColorButton->color());
+  
+  if(mViewUpdate)
+    mView->canvas()->repaint();
+
   /*Document settings*/
 
   /*Background*/
-  doc->activePage()->bgColor(bgbutton->color());
+  mGDoc->activePage()->bgColor(bgbutton->color());
   /*Grid*/
-  doc->setGridDistance(hspinbox->getValue(), vspinbox->getValue());
-  doc->showGrid(sbutton->isOn());
-  doc->snapToGrid(gbutton->isOn());
-  doc->gridColor(cbutton->color());
+  mGDoc->setGridDistance(hspinbox->getValue(), vspinbox->getValue());
+  mGDoc->showGrid(sbutton->isOn());
+  mGDoc->snapToGrid(gbutton->isOn());
+  mGDoc->gridColor(cbutton->color());
   /*Helplines*/
-  doc->setHorizHelplines(horizLines);
-  doc->setVertHelplines(vertLines);
+  mGDoc->horizHelplines(horizLines);
+  mGDoc->vertHelplines(vertLines);
 
-  if(modified)
+  if(mDocModified)
   {
-    doc->setModified();
-    modified = false;
+    mGDoc->setModified();
+    mDocModified = false;
   }
 
-  doc->emitChanged();
+//  mGDoc->emitChanged();
 }
 
-void OptionDialog::slotOk()
+void OptionsDialog::slotOk()
 {
   slotApply();
   KDialogBase::slotOk();
 }
 
-int OptionDialog::setup (GDocument *adoc)
-{
-
-   OptionDialog dialog (adoc, 0L, "Options");
-
-   int res=dialog.exec();
-   if(res == QDialog::Accepted)
-   {
-      int selection = dialog.unit->currentItem ();
-      PStateManager* psm = PStateManager::instance ();
-      switch (selection)
-      {
-      case 0:
-         psm->setDefaultMeasurementUnit (UnitPoint);
-         break;
-      case 1:
-         psm->setDefaultMeasurementUnit (UnitMillimeter);
-         break;
-      case 2:
-         psm->setDefaultMeasurementUnit (UnitInch);
-                break;
-      case 3:
-         psm->setDefaultMeasurementUnit (UnitPica);
-         break;
-      case 4:
-         psm->setDefaultMeasurementUnit (UnitCentimeter);
-         break;
-      case 5:
-         psm->setDefaultMeasurementUnit (UnitDidot);
-         break;
-      case 6:
-         psm->setDefaultMeasurementUnit (UnitCicero);
-         break;
-      default:
-         break;
-      }
-      psm->setStepSizes (dialog.smallStep->getValue (),dialog.bigStep->getValue ());
-      psm->setDuplicateOffsets (dialog.horiz->getValue (),dialog.vert->getValue ());
-   }
-   return res;
-}
-
-#include <OptionDialog.moc>
+#include "OptionsDialog.moc"

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,8 +23,8 @@
 
 */
 
-#ifndef OptionDialog_h_
-#define OptionDialog_h_
+#ifndef __OptionDialog_h__
+#define __OptionDialog_h__
 
 #include <kdialogbase.h>
 
@@ -32,23 +33,21 @@ class QColor;
 class KColorButton;
 class QCheckBox;
 class UnitBox;
+class KontourView;
 class GDocument;
 
-class OptionDialog : public KDialogBase
+class OptionsDialog : public KDialogBase
 {
   Q_OBJECT
 public:
-  OptionDialog (GDocument *adoc, QWidget* parent = 0L, const char* name = 0L);
-
-  static int setup (GDocument *adoc);
-
+  OptionsDialog(KontourView *aView, GDocument *aGDoc, QWidget* parent = 0L, const char* name = 0L);
 protected:
-  void createGeneralWidget (QWidget* parent);
-  void createEditWidget (QWidget* parent);
-  void createBGWidget (QWidget* parent);
-  void createGridWidget (QWidget* parent);
-  void createHorizLineWidget (QWidget* parent);
-  void createVertLineWidget (QWidget* parent);
+  void createGeneralWidget(QWidget *parent);
+  void createEditWidget(QWidget *parent);
+  void createBGWidget(QWidget *parent);
+  void createGridWidget(QWidget *parent);
+  void createHorizLineWidget(QWidget *parent);
+  void createVertLineWidget(QWidget *parent);
 
   void initHelplinesLists();
 
@@ -56,24 +55,29 @@ protected slots:
   void slotApply();
   void slotOk();
 
-  void slotSetModified();
+  void slotSetDocModified();
+  void slotSetViewUpdate();
 
-  void addHorizLine ();
-  void updateHorizLine ();
-  void deleteHorizLine ();
-  void horizLineSelected (int idx);
+  void addHorizLine();
+  void updateHorizLine();
+  void deleteHorizLine();
+  void horizLineSelected(int idx);
 
-  void addVertLine ();
-  void updateVertLine ();
-  void deleteVertLine ();
-  void vertLineSelected (int idx);
+  void addVertLine();
+  void updateVertLine();
+  void deleteVertLine();
+  void vertLineSelected(int idx);
 
 private:
-  GDocument *doc;
-  bool modified;
+  KontourView *mView;
+  GDocument *mGDoc;
+  bool mDocModified;
+  bool mViewUpdate;
 
   /*General*/
-  QComboBox* unit;
+  QComboBox *unit;
+  KColorButton *mWSColorButton;
+
   UnitBox *horiz, *vert;
   UnitBox *smallStep, *bigStep;
 
@@ -81,11 +85,14 @@ private:
   KColorButton *bgbutton;
 
   /*Helplines*/
-  UnitBox *horizValue, *vertValue;
-  QListBox *horizList, *vertList;
-  QValueList<float> horizLines, vertLines;
-    QPushButton *addHorizHelpLine,*updateHorizHelpLine,*delHorizHelpLine;
-    QPushButton *delVertHelpLine, *updateVertHelpLine,*addVertHelpLine;
+  UnitBox *horizValue;
+  UnitBox *vertValue;
+  QListBox *horizList;
+  QListBox *vertList;
+  QValueList<double> horizLines;
+  QValueList<double> vertLines;
+  QPushButton *addHorizHelpLine,*updateHorizHelpLine,*delHorizHelpLine;
+  QPushButton *delVertHelpLine, *updateVertHelpLine,*addVertHelpLine;
 
   /*Grid*/
   QCheckBox *gbutton, *sbutton;
