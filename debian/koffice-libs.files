@@ -21,6 +21,7 @@ usr/lib/kde2/*filter*
 usr/lib/kde2/libkprkword.*
 usr/lib/kde2/libkspelltool.*
 usr/share/apps/koffice/*
+usr/share/mimelnk/application/x-quattropro.desktop
 usr/share/mimelnk/image/x-msod.desktop
 usr/share/mimelnk/image/x-wmf.desktop
 usr/share/mimelnk/image/x-xfig.desktop
