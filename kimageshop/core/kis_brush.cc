@@ -22,25 +22,53 @@
 #include <qsize.h>
 #include <qimage.h>
 #include <qpixmap.h>
+#include <qfileinfo.h>
 
 #include <kimageeffect.h>
+#include <ksimpleconfig.h>
 
 #include "kis_brush.h"
 
 KisBrush::KisBrush(QString file)
   : IconItem()
 {
+  // set defaults
   m_valid    = false;
   m_spacing  = 3;
+
+  // load the brush image data
   loadViaQImage(file);
 
-  // default hotSpot in the centre
+  // default hotspot
   m_hotSpot = QPoint( width()/2, height()/2 );
+
+  // search and load the brushinfo file
+  QFileInfo fi(file);
+  file = fi.dirPath() + "/" + fi.baseName() + ".brushinfo";
+  qDebug("%s", file.latin1());
+  fi.setFile(file);
+  if (fi.exists() && fi.isFile())
+    readBrushInfo(file);
 }
 
 KisBrush::~KisBrush()
 {
   delete [] m_pData;
+}
+
+void KisBrush::readBrushInfo(QString file)
+{
+  KSimpleConfig config(file, true);
+
+  config.setGroup("General");
+  int spacing = config.readNumEntry("Spacing", m_spacing);
+  int hotspotX = config.readNumEntry("hotspotX", m_hotSpot.x());
+  int hotspotY = config.readNumEntry("hotspotY", m_hotSpot.y());
+
+  if (spacing > 0)
+    m_spacing = spacing;
+  m_hotSpot = QPoint(hotspotX, hotspotY);
+  qDebug("blaaaaaahhhhhhhhhhh");
 }
 
 void KisBrush::loadViaQImage(QString file)
@@ -72,12 +100,14 @@ void KisBrush::loadViaQImage(QString file)
     {
       p = (QRgb*)img.scanLine(h);
       for (int w = 0; w < m_w; w++)
-	  m_pData[m_w * h + w] = 255 - qGray(*(p+w));
+	{
+	  // no need to use qGray here, we have converted the image to grayscale already 
+	  m_pData[m_w * h + w] = 255 - qRed(*(p+w));
+	}      
     }
  
   m_valid = true;
   qDebug("Loading brush: %s",file.latin1());
-  qDebug("-> width = %d; height = %d", m_w, m_h);
 }
 
 QPixmap& KisBrush::pixmap(){

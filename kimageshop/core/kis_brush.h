@@ -52,6 +52,7 @@ class KisBrush : public IconItem
 
  private:
   void      loadViaQImage(QString file);
+  void      readBrushInfo(QString file);
 
   bool      m_valid;
   int       m_spacing;
