@@ -89,8 +89,8 @@ protected:
                                       KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                       const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft );
 
-    static QString lineTypeToString( KoTextFormat::LineType _lineType );
-    static KoTextFormat::LineType stringToLineType( const QString & _str );
+    static QString lineStyleToString( KoTextFormat::LineStyle _lineType );
+    static KoTextFormat::LineStyle stringToLineStyle( const QString & _str );
 };
 
 #endif

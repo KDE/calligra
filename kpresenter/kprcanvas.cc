@@ -2486,7 +2486,7 @@ void KPrCanvas::chClip()
     stickyPage()->chClip(m_view);
 }
 
-void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::NbLine nblineType, KoTextFormat::LineType underlineType, KoTextFormat::LineType strikeOutType , int flags)
+void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::NbLine nblineType, KoTextFormat::LineStyle underlineType, KoTextFormat::LineStyle strikeOutType , int flags)
 
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();

@@ -258,7 +258,8 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
     }
     if( !refFormat || curFormat->underline() != refFormat->underline()
         || curFormat->nbLineType() != refFormat->nbLineType()
-        || curFormat->textUnderlineColor() !=refFormat->textUnderlineColor())
+        || curFormat->textUnderlineColor() !=refFormat->textUnderlineColor()
+        || curFormat->underlineLineStyle() !=refFormat->underlineLineStyle())
     {
         elem = doc.createElement( "UNDERLINE" );
         formatElem.appendChild( elem );
@@ -266,17 +267,18 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "value", "double" );
         else
             elem.setAttribute( "value", static_cast<int>(curFormat->underline()) );
-        QString strLineType=lineTypeToString( curFormat->lineType() );
+        QString strLineType=lineStyleToString( curFormat->underlineLineStyle() );
         elem.setAttribute( "styleline", strLineType );
         if ( curFormat->textUnderlineColor().isValid() )
             elem.setAttribute( "underlinecolor", curFormat->textUnderlineColor().name() );
     }
-    if( !refFormat || curFormat->font().strikeOut() != refFormat->font().strikeOut() || curFormat->strikeOutType()!= refFormat->strikeOutType())
+    if( !refFormat || curFormat->font().strikeOut() != refFormat->font().strikeOut()
+        || curFormat->strikeOutLineStyle()!= refFormat->strikeOutLineStyle())
     {
         elem = doc.createElement( "STRIKEOUT" );
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().strikeOut()) );
-        QString strLineType=lineTypeToString( curFormat->strikeOutType() );
+        QString strLineType=lineStyleToString( curFormat->strikeOutLineStyle() );
         elem.setAttribute( "styleline", strLineType );
     }
     // ######## Not needed in 3.0?
@@ -469,7 +471,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
-            format.setLineType( stringToLineType( strLineType ));
+            format.setUnderlineLineStyle( stringToLineStyle( strLineType ));
         }
         if ( elem.hasAttribute("underlinecolor"))
         {
@@ -484,7 +486,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
-            format.setStrikeOutType( stringToLineType( strLineType ));
+            format.setStrikeOutLineStyle( stringToLineStyle( strLineType ));
         }
 
     }
@@ -611,7 +613,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                         kdDebug() << "Replacing QChar(1) (in KWTextParag::loadFormatting)" << endl;
                         ch.c='#';
                     }
-                    
+
                     KWTextImage * custom = new KWTextImage( kwTextDocument(), QString::null );
                     kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
                     paragFormat()->addRef();
@@ -1018,7 +1020,7 @@ void KWTextParag::join( KoTextParag *parag )
     KoTextParag::join( parag );
 }
 
-QString KWTextParag::lineTypeToString( KoTextFormat::LineType _lineType )
+QString KWTextParag::lineStyleToString( KoTextFormat::LineStyle _lineType )
 {
     QString strLineType;
     switch ( _lineType )
@@ -1042,7 +1044,7 @@ QString KWTextParag::lineTypeToString( KoTextFormat::LineType _lineType )
     return strLineType;
 }
 
-KoTextFormat::LineType KWTextParag::stringToLineType( const QString & _str )
+KoTextFormat::LineStyle KWTextParag::stringToLineStyle( const QString & _str )
 {
     if ( _str =="solid")
         return KoTextFormat::SOLID;

@@ -460,7 +460,7 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
         element.setAttribute(attrUnderline, "double");
     else if(tmpUnderline)
         element.setAttribute(attrUnderline, tmpUnderline);
-    QString strLineType=lineTypeToString( lastFormat->lineType() );
+    QString strLineType=lineStyleToString( lastFormat->underlineLineStyle() );
     element.setAttribute( "underlinestyleline", strLineType );
     if ( lastFormat->textUnderlineColor().isValid() )
     {
@@ -469,7 +469,7 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
     if(tmpStrikeOut)
     {
         element.setAttribute(attrStrikeOut, tmpStrikeOut);
-        QString strLineType=lineTypeToString( lastFormat->strikeOutType() );
+        QString strLineType=lineStyleToString( lastFormat->strikeOutLineStyle() );
         element.setAttribute( "strikeoutstyleline", strLineType );
     }
     element.setAttribute(attrColor, tmpColor);
@@ -695,7 +695,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     }
     if (n.hasAttribute("underlinestyleline") )
     {
-        format.setLineType( stringToLineType( n.attribute("underlinestyleline") ));
+        format.setUnderlineLineStyle( stringToLineStyle( n.attribute("underlinestyleline") ));
     }
     if (n.hasAttribute("underlinecolor"))
     {
@@ -707,7 +707,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     if (n.hasAttribute("strikeoutstyleline"))
     {
         QString strLineType = n.attribute("strikeoutstyleline");
-        format.setStrikeOutType( stringToLineType( strLineType ));
+        format.setStrikeOutLineStyle( stringToLineStyle( strLineType ));
     }
 
     QString color = n.attribute( attrColor );
@@ -735,7 +735,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     return format;
 }
 
-QString KPTextObject::lineTypeToString( KoTextFormat::LineType _lineType )
+QString KPTextObject::lineStyleToString( KoTextFormat::LineStyle _lineType )
 {
     QString strLineType;
     switch ( _lineType )
@@ -759,7 +759,7 @@ QString KPTextObject::lineTypeToString( KoTextFormat::LineType _lineType )
     return strLineType;
 }
 
-KoTextFormat::LineType KPTextObject::stringToLineType( const QString & _str )
+KoTextFormat::LineStyle KPTextObject::stringToLineStyle( const QString & _str )
 {
     if ( _str =="solid")
         return KoTextFormat::SOLID;

@@ -176,8 +176,8 @@ protected:
     void drawParags( QPainter *p, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to );
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
     void invalidate();
-    static QString lineTypeToString( KoTextFormat::LineType _lineType );
-    static KoTextFormat::LineType stringToLineType( const QString & _str );
+    static QString lineStyleToString( KoTextFormat::LineStyle _lineType );
+    static KoTextFormat::LineStyle stringToLineStyle( const QString & _str );
 protected slots:
     void slotNewCommand( KCommand *cmd );
     void slotAvailableHeightNeeded();
