@@ -837,7 +837,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
     kdDebug(30518) << "New column: " << column << endl;
 
     int number     = 1;
-    double width   = POINT_TO_MM( colWidth );
+    double width   = colWidth;
     bool collapsed = ( e.attribute( "table:visibility" ) == "collapse" );
     bool insertPageBreak = false;
     KSpreadFormat styleLayout( table, table->doc()->styleManager()->defaultStyle() );
@@ -937,7 +937,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
 
       ColumnFormat * col = new ColumnFormat( table, column );
       col->copy( styleLayout );
-      col->setMMWidth( width );
+      col->setWidth( width );
 
       // if ( insertPageBreak )
       //   col->setPageBreak( true )
