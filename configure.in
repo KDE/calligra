@@ -122,6 +122,9 @@ AC_OUTPUT( \
 	Makefile \
 	katabase/Makefile \
 	katabase/lib/Makefile \
+	katabase/lib/kdb/Makefile \
+	katabase/lib/kdb/kdbcore/Makefile \
+	katabase/lib/kdb/kdbpgsql/Makefile \
 	katabase/lib/katabasecore/Makefile \
 	katabase/lib/katabaseui/Makefile \
 	katabase/kdb/Makefile \
