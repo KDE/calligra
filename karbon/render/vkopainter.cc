@@ -652,6 +652,7 @@ VKoPainter::applyPattern( ArtSVP *svp, bool fill )
 
 	if( render )
 		art_render_invoke( render );
+	art_free( pattern );
 }
 
 void
@@ -705,7 +706,10 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 			art_render_svp( render, svp );
 			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
 			art_karbon_render_gradient_linear( render, linear, ART_FILTER_NEAREST );
+			art_render_invoke( render );
 		}
+		art_free( linear->stops );
+		art_free( linear );
 	}
 	else if( gradient.type() == VGradient::radial )
 	{
@@ -756,7 +760,10 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 			art_render_svp( render, svp );
 			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
 			art_karbon_render_gradient_radial( render, radial, ART_FILTER_NEAREST );
+			art_render_invoke( render );
 		}
+		art_free( radial->stops );
+		art_free( radial );
 	}
 	else if( gradient.type() == VGradient::conic )
 	{
@@ -793,10 +800,11 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 			art_render_svp( render, svp );
 			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
 			art_karbon_render_gradient_conical( render, conical, ART_FILTER_NEAREST );
+			art_render_invoke( render );
 		}
+		art_free( conical->stops );
+		art_free( conical );
 	}
-	if( render )
-		art_render_invoke( render );
 }
 
 ArtGradientStop *
