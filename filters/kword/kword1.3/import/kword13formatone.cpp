@@ -33,6 +33,15 @@ QString KWord13FormatOne::key( void ) const
     strKey += QString::number( m_properties.count(), 16 );
     strKey += ':';
   
-    // ### TODO
+    // use the worst key: the whole QMap (### FIXME)
+    for ( QMap<QString,QString>::const_iterator it = m_properties.constBegin() ;
+        it != m_properties.constEnd(); ++it )
+    {
+        strKey += it.key();
+        strKey += '=';
+        strKey += it.data();
+        strKey += ';';
+    }
       
+    return strKey;
 }

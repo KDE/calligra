@@ -39,15 +39,24 @@ QString KWord13Layout::key( void ) const
     strKey += QString::number( m_layoutProperties.count(), 16 );
     strKey += ':';
     
-    
     if ( m_outline )
         strKey += "O1,";
     else
         strKey += "O0,";
     
-    // ### TODO
+    // use the worst key: the whole QMap (### FIXME)
+    for ( QMap<QString,QString>::const_iterator it = m_layoutProperties.constBegin() ;
+        it != m_layoutProperties.constEnd(); ++it )
+    {
+        strKey += it.key();
+        strKey += '=';
+        strKey += it.data();
+        strKey += ';';
+    }
     
     strKey += '@';
     // At the end, the key from the <FORMAT id="1">
     strKey += m_format.key();
+    
+    return strKey;
 }
