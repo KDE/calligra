@@ -299,6 +299,49 @@ void KPTPertCanvas::clear()
     }
 }
 
+void KPTPertCanvas::contentsMousePressEvent ( QMouseEvent * e )
+{
+    kdDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
+    switch (e->button())
+    {
+        case QEvent::LeftButton:
+        {
+            break;
+        }
+        case QEvent::RightButton:
+        {
+            KPTPertNodeItem *item = selectedItem();
+            if (item)
+                item->setSelected(false);
+            canvas()->update();
+            
+            QCanvasItemList l = canvas()->collisions(e->pos());
+            for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+            {
+                if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
+                     (*it)->rtti() == KPTPertTaskItem::RTTI  ||
+                     (*it)->rtti() == KPTPertMilestoneItem::RTTI )
+                {
+                    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
+                    {
+                        item->setSelected(true);
+                        canvas()->update();
+                        emit rightButtonPressed(&(item->node()), e->globalPos());
+                        item->setSelected(false);
+                        canvas()->update();
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        case QEvent::MidButton:
+            break;
+        default:
+            break;
+    }
+}
+
 void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 {
     //kdDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
@@ -306,6 +349,7 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
     {
         case QEvent::LeftButton:
         {
+            bool hit = false;
             QCanvasItemList l = canvas()->collisions(e->pos());
             for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
 		    {
@@ -313,6 +357,7 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 	                 (*it)->rtti() == KPTPertTaskItem::RTTI  ||
 	                 (*it)->rtti() == KPTPertMilestoneItem::RTTI )
 				{
+                    hit = true;
 				    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
 					KPTPertNodeItem *par = selectedItem();
 					if ( !par)
@@ -341,25 +386,15 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 					break;
 				}
 			}
+            if (!hit) {
+                KPTPertNodeItem *i = selectedItem();
+                if (i) i->setSelected(false);
+            }
             canvas()->update();
             break;
         }
         case QEvent::RightButton:
         {
-            QCanvasItemList l = canvas()->collisions(e->pos());
-            for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
-		    {
-	            if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
-	                 (*it)->rtti() == KPTPertTaskItem::RTTI  ||
-	                 (*it)->rtti() == KPTPertMilestoneItem::RTTI )
-				{
-				    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
-					{
-					    emit rightButtonPressed(&(item->node()), e->globalPos());
-						break;
-					}
-				}
-			}
             break;
         }
         case QEvent::MidButton:

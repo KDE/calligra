@@ -68,6 +68,7 @@ protected:
     void createChildItems(KPTPertNodeItem *node);
     KPTPertNodeItem *createNodeItem(KPTNode *node);
 
+    void contentsMousePressEvent ( QMouseEvent * e );
     void contentsMouseReleaseEvent ( QMouseEvent * e );
 
 signals:

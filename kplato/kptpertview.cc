@@ -76,11 +76,25 @@ void KPTPertView::slotRMBPressed(KPTNode *node, const QPoint & point)
 {
     //kdDebug()<<k_funcinfo<<" node: "<<node->name()<<endl;
     m_node = node;
-    QPopupMenu *menu = m_mainview->popupMenu("node_popup");
-    if (menu)
-    {
-        int id = menu->exec(point);
+    if (node && (node->type() == KPTNode::Type_Task || node->type() == KPTNode::Type_Milestone)) {
+        QPopupMenu *menu = m_mainview->popupMenu("task_popup");
+        if (menu)
+        {
+            /*int id =*/ menu->exec(point);
+            //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+        }
+        return;
     }
+    if (node && node->type() == KPTNode::Type_Summarytask) {
+        QPopupMenu *menu = m_mainview->popupMenu("node_popup");
+        if (menu)
+        {
+            /*int id =*/ menu->exec(point);
+            //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+        }
+        return;
+    }
+    //TODO: Other nodetypes
 }
 
 void KPTPertView::slotAddRelation(KPTNode* par, KPTNode* child)
