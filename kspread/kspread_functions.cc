@@ -75,6 +75,9 @@ KSpreadFunctionParameter::KSpreadFunctionParameter( const KSpreadFunctionParamet
 
 KSpreadFunctionParameter::KSpreadFunctionParameter( const QDomElement& element )
 {
+    m_type  = KSpread_Float;
+    m_range = FALSE;
+
     QDomNode n = element.firstChild();
     for( ; !n.isNull(); n = n.nextSibling() )
     {
@@ -86,8 +89,11 @@ KSpreadFunctionParameter::KSpreadFunctionParameter( const QDomElement& element )
 	    else if ( e.tagName() == "Type" )
 	    {
 		m_type = toType( e.text() );
-		if ( e.hasAttribute( "range" ) && e.attribute("range") == "true" )
+		if ( e.hasAttribute( "range" ))
+		{ 
+		  if (e.attribute("range").lower() == "true")
 		    m_range = TRUE;
+		}
 	    }
 	}
     }

@@ -243,6 +243,70 @@
     <GroupName>Conversion</GroupName>
 
     <Function>
+      <Name>BOOL2STRING</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Bool value to convert</Comment>
+        <Type range="false">Boolean</Type>
+      </Parameter>
+      <Help>
+        <Text>The BOOL2STRING() function returns a string value for a given bool value. This method is intended for using a bool in methods which require a string</Text>
+        <Syntax>BOOL2STRING(value)</Syntax>
+        <Example>BOOL2STRING(True) returns "True"</Example>
+        <Example>BOOL2STRING(False) returns "False"</Example>
+        <Example>upper(BOOL2STRING(find("nan";"banane"))) returns TRUE</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BOOL2INT</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+        <Comment>Bool value to convert</Comment>
+        <Type range="false">Boolean</Type>
+      </Parameter>
+      <Help>
+        <Text>The BOOL2INT() function returns a integer value for a
+given bool value. This method is intended for using a bool in methods
+which require an int or float</Text>
+        <Syntax>BOOL2INT(value)</Syntax>
+        <Example>BOOL2INT(True) returns 1</Example>
+        <Example>BOOL2INT(False) returns 0</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NUM2STRING</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>number to convert into string</Comment>
+        <Type range="false">Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The NUM2STRING() function returns a string value for a given bool number. This method is intended for using a number in methods which require a string</Text>
+        <Syntax>NUM2STRING(value)</Syntax>
+        <Example>NUM2STRING(10) returns "10"</Example>
+        <Example>NUM2STRING(2.05) returns "2.05"</Example>
+        <Example>=find("101";NUM2STRING(A1)) (A1 = 2.010102) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CharToAscii</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>A one character string to convert</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Help>
+        <Text>The CharToAscii() function returns the ASCII code for the given character.</Text>
+        <Syntax>CharToAscii(value)</Syntax>
+        <Example>CharToAscii("v") returns 118</Example>
+        <Example>CharToAscii(r) is an error. The character must be in quotes.</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>CharToAscii</Name>
       <Type>Int</Type>
       <Parameter>
@@ -830,6 +894,21 @@
     <GroupName>Text</GroupName>
 
     <Function>
+      <Name>PROPER</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The PROPER() function converts the first letter of each
+word to uppercase and turns the rest to lowercase.</Text>
+	<Syntax>PROPER(string)</Syntax>
+	<Example>PROPER("this is a title") returns "This Is A Title"</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>EXACT</Name>
       <Type>Boolean</Type>
       <Parameter>
@@ -845,6 +924,32 @@
 	<Syntax>EXACT(string1;string2)</Syntax>
 	<Example>EXACT("KOffice";"KOffice") returns True</Example>
         <Example>EXACT("KSpread";"KOffice") returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>REPLACE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>String in which something should be replaced</Comment>
+	<Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String to replace</Comment>
+	<Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>New string part</Comment>
+	<Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>TRUE if replacement should be case sensitive, FALSE otherwise.</Comment>
+	<Type range="false">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The REPLACE() function replace a string s1 in the string s with string2.</Text>
+	<Syntax>REPLACE(string; string1; string2; boolean)</Syntax>
+	<Example>REPLACE("KOffice"; "Office"; "KSpread", TRUE) returns "KSpread"</Example>
       </Help>
     </Function>
 
@@ -1041,6 +1146,45 @@
     <GroupName>Analytic</GroupName>
 
     <Function>
+      <Name>LCM</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>First number</Comment>
+        <Type range="true">FLOAT</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Second Number</Comment>
+        <Type range="true">FLOAT</Type>
+      </Parameter>
+      <Help>
+	<Text>The LCM() function returns the lowest common multiple for two or more float values</Text>
+	<Syntax>LCM(value; value)</Syntax>
+	<Example>LCM(6;4) returns 12</Example>
+	<Example>LCM(1.5;2.25) returns 4.5</Example>
+	<Example>LCM(2;3;4) returns 12</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>GCD</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>First number</Comment>
+        <Type range="true">FLOAT</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Second Number</Comment>
+        <Type range="true">FLOAT</Type>
+      </Parameter>
+      <Help>
+	<Text>The GCD() function returns the greatest common denominator for two or more float values</Text>
+	<Syntax>LCM(value; value)</Syntax>
+	<Example>LCM(6;4) returns 2</Example>
+	<Example>LCM(16;12) returns 4</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>eps</Name>
       <Type>Float</Type>
       <Help>
@@ -1198,7 +1342,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>This function returns the count of integer or floating arguments passed.</Text>
+	<Text>This function returns the count of integer or floating arguments passed. You can count using a range: count(A1:B5) or using a list of values like: count(12;5;12.5).</Text>
 	<Syntax>count(value;value;value...)</Syntax>
 	<Example>count(-5;"KSpread";2) returns 2</Example>
 	<Example>count(5) returns 1</Example>
@@ -1248,6 +1392,37 @@
 	<Syntax>sum(value;value;...)</Syntax>
 	<Example>sum(12;5;7) equals 24</Example>
 	<Example>sum(12.5;2) equals 14.5</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PRODUCT</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The PRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range sum(A1:B5) or a list of values like product(12;5;12.5).</Text>
+	<Syntax>PRODUCT(value;value;...)</Syntax>
+	<Example>PRODUCT(3;5;7) equals 105</Example>
+	<Example>PRODUCT(12.5;2) equals 25</Example>
       </Help>
     </Function>
 
@@ -3171,6 +3346,5 @@
 	<Example>level_coupon(1000;.13;2;4;.1) equals 1096.95</Example>
       </Help>
     </Function>
-
   </Group>
 </KSpreadFunctions>

@@ -427,13 +427,19 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
 	    // Does the text start with quotes?
 	    if ( _text[0] == '"' )
 	    {
-		text = "\"";
+  	        text = "\\"; // changed: was "\""
 
 		// Escape quotes
 		QString tmp = _text;
 		int pos;
-		while( ( pos = tmp.find( '"', 1 ) ) != -1 )
+		int start = 1;
+		while( ( pos = tmp.find( '"', start ) ) != -1 )
+		{
+		  if (tmp[pos - 1] != '\\')
 		    tmp.replace( pos, 1, "\\\"" );
+		  else
+		    start = pos + 1;
+		}
 
 		text += tmp;
 		text += "\"";
@@ -442,6 +448,7 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
 	    {
 		KSpreadPoint p = KSpreadPoint( _text, m_pView->doc()->map() );
 		KSpreadRange r = KSpreadRange( _text, m_pView->doc()->map() );
+
 		if( !p.isValid() && !r.isValid() )
 		{
 		    text = "\"";
@@ -449,8 +456,14 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
 		    // Escape quotes
 		    QString tmp = _text;
 		    int pos;
-		    while( ( pos = tmp.find( '"', 1 ) ) != -1 )
-			tmp.replace( pos, 1, "\\\"" );
+		    int start = 1;
+		    while( ( pos = tmp.find( '"', start ) ) != -1 )
+		    {
+  		        if (tmp[pos - 1] != '\\')
+			  tmp.replace( pos, 1, "\\\"" );
+			else
+			  start = pos + 1;
+		    }
 
 		    text += tmp;
 		    text += "\"";

@@ -661,6 +661,42 @@ static bool kspreadfunc_sum( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_product_helper( KSContext & context, 
+                                        QValueList<KSValue::Ptr> & args, 
+                                        double & result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_product_helper( context, (*it)->listValue(), result ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      result *= (*it)->doubleValue();
+    }
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_product( KSContext& context )
+{
+  double result = 1.0;
+  bool b = kspreadfunc_product_helper( context, 
+                                       context.value()->listValue(), 
+                                       result );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
 static bool kspreadfunc_sumsq_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -737,6 +773,109 @@ static bool kspreadfunc_max( KSContext& context )
     context.setValue( new KSValue( result ) );
 
   return b;
+}
+
+static bool kspreadfunc_lcm_helper( KSContext & context, 
+				    QValueList<KSValue::Ptr> & args,
+				    double & result,
+				    double & max,
+				    double & inter,
+				    int & signs)
+{
+  // calculating the LCM:
+  // algorithm: choose the biggest value in the list
+  // take this as interval for increasing the numbers you check with
+  // go through the list, check every value if your proposal is a multiple
+  // if not, increase your proposal value and start again.
+
+  // when you have found your LCM: check if it has the right sign:
+  // if the number of (-) signs in the list is , the result is positive
+  // otherwise negative.
+
+  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  // first loop: check for the biggest value
+  // and count number of (-) signs:
+  for (; it != end; ++it)
+  {
+    if (KSUtil::checkType(context, *it, KSValue::ListType, false))
+    {
+      if (!kspreadfunc_lcm_helper(context, (*it)->listValue(), result, max, inter, signs))
+        return false;
+    }
+    else if (KSUtil::checkType(context, *it, KSValue::DoubleType, true))
+    {
+      double d = (double) (*it)->doubleValue();
+      
+      if (d < 0)
+	++signs;
+
+      if (result < d)
+	result = d;
+    }
+  }
+
+  inter = result;
+  it    = args.begin();
+
+  while (true)
+  {
+    if (KSUtil::checkType(context, *it, KSValue::ListType, false))
+    {
+      if (!kspreadfunc_lcm_helper( context, (*it)->listValue(), result, max, inter, signs))
+	return false;
+    }
+    else if (KSUtil::checkType(context, *it, KSValue::DoubleType, true))
+    {
+      double d = inter / (*it)->doubleValue();
+
+      // if it is not a multiple, increase you proposal value and start again
+      if (!approx_equal(d, floor(d)))
+      {
+	inter += result;
+
+	it = args.begin();
+	continue;
+      } 
+    } // end else if
+
+    // ... otherwise check the next value if any
+    ++it;
+
+    if (it == end)
+      break;
+  }
+
+  result = inter;
+
+  // check if we have the correct sign (-/+)
+  if (signs > 0)
+  {
+    if ((result < 0) && (signs % 2 == 0))
+      result *= -1;
+    else if ((result > 0) && (signs % 2 != 0))
+      result *= -1;
+  }
+
+  return true;  
+}
+
+static bool kspreadfunc_lcm( KSContext & context )
+{
+  double result = 0.0;
+  double max    = 1.0;
+  double inter  = 0.0;
+  int    signs  = 0;
+
+  bool b = kspreadfunc_lcm_helper(context, context.value()->listValue(), 
+				  result, max, inter, signs);
+
+  if (b) 
+    context.setValue(new KSValue(result));
+
+  return b;
+  
 }
 
 static bool kspreadfunc_min_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,int& inter)
@@ -1230,6 +1369,52 @@ static bool kspreadfunc_upper( KSContext& context )
     return true;
 }
 
+static bool kspreadfunc_proper(KSContext & context)
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if (args.count() != 1)
+    return false;
+
+  QString str;
+
+  if (KSUtil::checkType(context, args[0],
+                        KSValue::StringType, true))
+  {
+    unsigned int i;
+    str = args[0]->stringValue().lower();
+    QString f;
+    bool    first = true;
+
+    for (i = 0; i < str.length(); ++i)
+    {
+      if (first)
+      {
+        bool ok;
+        f = str[i];
+        f.toInt( &ok, 10 );
+
+        if (ok)
+          continue;
+
+        f = f.upper();
+
+        str[i] = f[0];
+        first = false;
+
+        continue;
+      }
+
+      if (str[i] == ' ')
+        first = true;
+    }
+  }
+
+  context.setValue(new KSValue(str));
+
+  return true;
+}
+
 static bool kspreadfunc_lower( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1418,6 +1603,62 @@ static bool kspreadfunc_randbetween( KSContext& context )
     return true;
 }
 
+static bool kspreadfunc_replace( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QString s;
+  QString s1;
+  QString s2;
+
+  if ( !KSUtil::checkArgumentsCount( context, 4, "REPLACE", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+  {
+    if (!KSUtil::checkType( context, args[0], KSValue::BoolType, true))
+      return false;
+
+    s = args[0]->boolValue() ? "True" : "False";
+  }
+  else
+    s = args[0]->stringValue();
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+  {
+    if (!KSUtil::checkType( context, args[1], KSValue::BoolType, true))
+      return false;
+
+    s1 = args[1]->boolValue() ? "True" : "False";
+  }
+  else
+    s1 = args[1]->stringValue();
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
+  {
+    if (!KSUtil::checkType( context, args[2], KSValue::BoolType, true))
+      return false;
+
+    s2 = args[2]->boolValue() ? "True" : "False";
+  }
+  else
+    s2 = args[2]->stringValue();
+
+  if ( !KSUtil::checkType( context, args[3], KSValue::BoolType, true ) )
+    return false;
+
+  bool    b = args[3]->boolValue();
+
+  int p = s.find(s1, 0, b);
+  while (p != -1)
+  {
+    s.replace(p, s1.length(), s2);
+    p = s.find(s1, 0, b);
+  }
+
+  context.setValue( new KSValue(s) );
+
+  return true;
+}
 
 static bool kspreadfunc_REPT( KSContext& context )
 {
@@ -5132,6 +5373,65 @@ static bool kspreadfunc_CharToAscii( KSContext& context )
   return false;
 }
 
+static bool kspreadfunc_booltoint( KSContext & context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if (args.count() == 1)
+  {
+    if (KSUtil::checkType(context, args[0],
+                          KSValue::BoolType, true))
+    {
+      int val = (args[0]->boolValue() ? 1 : 0);
+
+      context.setValue( new KSValue(val));
+      
+      return true;
+    }
+  }
+
+  return false;
+}
+
+static bool kspreadfunc_BoolToString( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if (args.count() == 1)
+  {
+    if ( KSUtil::checkType( context, args.first(), KSValue::BoolType, false ) )
+    {
+      QString val((args[0]->boolValue() ? "True" : "False"));
+
+      context.setValue( new KSValue(val));
+	
+      return true;
+    }
+  }
+
+  return false;
+}
+
+static bool kspreadfunc_NumberToString( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if (args.count() == 1)
+  {
+    if ( KSUtil::checkType( context, args.first(), KSValue::DoubleType, false ) )
+    {
+      QString val;
+      val.setNum(args[0]->doubleValue(), 'g', 8);
+
+      context.setValue( new KSValue(val));
+	
+      return true;
+    }
+  }
+
+  return false;
+}
+
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kspread" );
@@ -5139,6 +5439,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "cos", new KSValue( new KSBuiltinFunction( module, "cos", kspreadfunc_cos ) ) );
   module->addObject( "sin", new KSValue( new KSBuiltinFunction( module, "sin", kspreadfunc_sin ) ) );
   module->addObject( "sum", new KSValue( new KSBuiltinFunction( module, "sum", kspreadfunc_sum ) ) );
+  module->addObject( "PRODUCT", new KSValue( new KSBuiltinFunction( module, "PRODUCT", kspreadfunc_product ) ) );
   module->addObject( "sumsq", new KSValue( new KSBuiltinFunction( module, "sumsq", kspreadfunc_sumsq ) ) );
   module->addObject( "sqrt", new KSValue( new KSBuiltinFunction( module, "sqrt", kspreadfunc_sqrt ) ) );
   module->addObject( "fabs", new KSValue( new KSBuiltinFunction( module, "fabs", kspreadfunc_fabs ) ) );
@@ -5153,6 +5454,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "acos", new KSValue( new KSBuiltinFunction( module, "acos", kspreadfunc_acos ) ) );
   module->addObject( "log", new KSValue( new KSBuiltinFunction( module, "log", kspreadfunc_log ) ) );
   module->addObject( "max", new KSValue( new KSBuiltinFunction( module, "max", kspreadfunc_max ) ) );
+  module->addObject( "LCM", new KSValue( new KSBuiltinFunction( module, "LCM", kspreadfunc_lcm ) ) );
   module->addObject( "min", new KSValue( new KSBuiltinFunction( module, "min", kspreadfunc_min ) ) );
   module->addObject( "cosh", new KSValue( new KSBuiltinFunction( module, "cosh", kspreadfunc_cosh ) ) );
   module->addObject( "sinh", new KSValue( new KSBuiltinFunction( module, "sinh", kspreadfunc_sinh ) ) );
@@ -5184,12 +5486,14 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", kspreadfunc_mid) ) );
   module->addObject( "len", new KSValue( new KSBuiltinFunction( module, "len", kspreadfunc_len) ) );
   module->addObject( "EXACT", new KSValue( new KSBuiltinFunction( module, "EXACT", kspreadfunc_EXACT) ) );
+  module->addObject( "PROPER", new KSValue( new KSBuiltinFunction( module, "PROPER", kspreadfunc_proper) ) );
   module->addObject( "INT", new KSValue( new KSBuiltinFunction( module, "INT",kspreadfunc_INT) ) );
   //compatibility with kspread1.0
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_INT) ) );
   module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
   module->addObject( "eps", new KSValue( new KSBuiltinFunction( module, "eps",kspreadfunc_eps) ) );
   module->addObject( "rand", new KSValue( new KSBuiltinFunction( module, "rand",kspreadfunc_rand) ) );
+  module->addObject( "REPLACE", new KSValue( new KSBuiltinFunction( module, "REPLACE",kspreadfunc_replace) ) );
   module->addObject( "REPT", new KSValue( new KSBuiltinFunction( module, "REPT",kspreadfunc_REPT) ) );
 
   module->addObject( "ISLOGIC", new KSValue( new KSBuiltinFunction( module,"ISLOGIC",kspreadfunc_islogic) ) );
@@ -5324,6 +5628,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "CHIDIST", new KSValue( new KSBuiltinFunction( module, "CHIDIST", kspreadfunc_chidist) ) );
   module->addObject( "CharToAscii", new KSValue( new KSBuiltinFunction( module, "CharToAscii", kspreadfunc_CharToAscii) ) );
   module->addObject( "AsciiToChar", new KSValue( new KSBuiltinFunction( module, "AsciiToChar", kspreadfunc_AsciiToChar) ) );
+  module->addObject( "BOOL2STRING", new KSValue( new KSBuiltinFunction( module, "BOOL2STRING", kspreadfunc_BoolToString) ) );
+  module->addObject( "NUM2STRING", new KSValue( new KSBuiltinFunction( module, "NUM2STRING", kspreadfunc_NumberToString) ) );
+  module->addObject( "BOOL2INT", new KSValue( new KSBuiltinFunction( module, "BOOL2INT", kspreadfunc_booltoint) ) );
 
   return module;
 }
