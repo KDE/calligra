@@ -59,12 +59,15 @@ Field::Field(Table *table)
 }
 
 Field::Field(const QString& name, enum Type ctype,
-	int cconst,int length, int precision, int options,
-	QVariant defaultValue)
-	: m_name(name),m_type(ctype),
-	m_options(options),
-	m_length(length),m_precision(precision),
-	m_defaultValue(defaultValue)
+ int cconst,int length, int precision, int options,
+ QVariant defaultValue)
+	: m_table(0)
+	,m_name(name)
+	,m_type(ctype)
+	,m_options(options)
+	,m_length(length)
+	,m_precision(precision)
+	,m_defaultValue(defaultValue)
 {
 	setConstraints(cconst);
 	if (m_length==0) {//0 means default length:
@@ -505,7 +508,7 @@ QString Field::debugString() const
 	QString dbg = m_name + " ";
 	if (m_options & Field::Unsigned)
 		dbg += " UNSIGNED ";
-	dbg += conn ? conn->driver()->sqlTypeName(m_type) : Driver::defaultSQLTypeName(m_type);
+	dbg += (conn && conn->driver()) ? conn->driver()->sqlTypeName(m_type) : Driver::defaultSQLTypeName(m_type);
 	if (m_length > 0)
 		dbg += "(" + QString::number(m_length) + ")";
 	if (m_precision > 0)
