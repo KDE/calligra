@@ -612,8 +612,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			setupTransform( b );
 			double rx		= parseUnit( b.attribute( "rx" ) );
 			double ry		= parseUnit( b.attribute( "ry" ) );
-			double left		= parseUnit( b.attribute( "cx" ) ) - ( rx / 2.0 );
-			double top		= parseUnit( b.attribute( "cy" ) ) + ( ry / 2.0 );
+			double left		= parseUnit( b.attribute( "cx" ) ) - rx;
+			double top		= parseUnit( b.attribute( "cy" ) ) + ry;
 			// Append the ellipse to the document
 			obj = new VEllipse( 0L, KoPoint( left, top ), rx * 2.0, ry * 2.0 );
 		}
@@ -622,8 +622,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			addGraphicContext();
 			setupTransform( b );
 			double r		= parseUnit( b.attribute( "r" ) );
-			double left		= parseUnit( b.attribute( "cx" ) ) - ( r / 2.0 );
-			double top		= parseUnit( b.attribute( "cy" ) ) + ( r / 2.0 );
+			double left		= parseUnit( b.attribute( "cx" ) ) - r;
+			double top		= parseUnit( b.attribute( "cy" ) ) + r;
 			// Append the ellipse to the document
 			obj = new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
 		}
