@@ -414,7 +414,7 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
         double w = _origSize.width();
         w *= ext.width();
         // QCursor::pos() is not right.  What is right?
-#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
 #else
         QRect desk = QApplication::desktop()->screenGeometry();

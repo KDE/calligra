@@ -1444,7 +1444,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 
         deSelectAllObjects();
         presStarted = true;
-#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
 #else
         QRect desk = QApplication::desktop()->screenGeometry(this);
@@ -1598,7 +1598,7 @@ void KPresenterView::screenPrev()
             setCurrentTimer( 1 );
             m_canvas->setNextPageTimer( true );
         }
-#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
 #else
         QRect desk = QApplication::desktop()->screenGeometry(this);
@@ -1628,7 +1628,7 @@ void KPresenterView::screenNext()
         return;
     if ( presStarted ) {
 
-#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
 #else
         QRect desk = QApplication::desktop()->screenGeometry(this);

@@ -2385,7 +2385,7 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
     if ( editMode )
         QWidget::resizeEvent( e );
     else
-#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+#if KDE_IS_VERSION(3,1,90)
         QWidget::resizeEvent( new QResizeEvent( KGlobalSettings::desktopGeometry(this).size(),
                                                 e->oldSize() ) );
 #else
@@ -3217,7 +3217,7 @@ bool KPrCanvas::pNext( bool )
             return false;
         }
 
-#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
 #else
         QRect desk = QApplication::desktop()->screenGeometry(this);
@@ -3240,7 +3240,7 @@ bool KPrCanvas::pNext( bool )
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1 );
         currPresStep = *presStepList.begin();
 
-#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+#if KDE_IS_VERSION(3,1,90)
         QPixmap _pix2( desk.width(), desk.height() );
 #else
         QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
@@ -3287,7 +3287,7 @@ bool KPrCanvas::pNext( bool )
     {
         m_view->setPresentationDuration( currPresPage - 1 );
 
-#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
 #else
         QRect desk = QApplication::desktop()->screenGeometry(this);
@@ -4947,7 +4947,7 @@ void KPrCanvas::gotoPage( int pg )
         //recalculate the page numbers
         m_view->kPresenterDoc()->recalcPageNum();
 
-#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
         resize( desk.width(), desk.height() );
 #else
@@ -5320,7 +5320,7 @@ void KPrCanvas::picViewOrigFactor()
 void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &pgSize,
                                        const QSize &presSize, KPPixmapObject *obj )
 {
-#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+#if KDE_IS_VERSION(3,1,90)
     QRect desk = KGlobalSettings::desktopGeometry(this);
     double faktX = (double)presSize.width() / (double)desk.width();
     double faktY = (double)presSize.height() / (double)desk.height();
