@@ -62,7 +62,7 @@ public:
 
     /**
      * Import a file by applying a filter
-     * @return the file name, either _url (error) or a /tmp file (success)
+     * @return the file name, either "" (error), _url (no conversion) or a /tmp file (conversion)
      */
     const QString import( const QString &_url, const char *_native_format );
     /**

@@ -67,7 +67,7 @@ public:
      * The pattern of the native file format, for example "*.ksp".
      */
     virtual QString nativeFormatPattern() const = 0;
-    
+
     /**
      * The name of the native file format. Usually the name of
      * your component, for example "KSpread" or "KWord".
@@ -93,7 +93,7 @@ public:
      *  has this toolbar per default.
      */
     KToolBar *fileToolBar() { return fileTools; }
-    
+
 public slots:
 
     /**
@@ -162,10 +162,11 @@ protected:
     /**
      * Load the desired document and show it.
      * @param url the URL to open
+     * @param isTempFile true if the file is the result of an import filter
      *
      * @return TRUE on success.
      */
-    virtual bool openDocument( const KURL & url );
+    virtual bool openDocument( const KURL & url, bool isTempFile );
 
     /**
      * Saves the document, asking for a filename if necessary.

@@ -86,7 +86,7 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::chooseTemplate( const QStri
 
     dlg->resize( 500, 400 );
     dlg->setCaption( i18n( "Choose a Template" ) );
-    
+
     if ( dlg->exec() == QDialog::Accepted ) {
 	res = TRUE;
 	_template = dlg->getFullTemplate();
@@ -255,7 +255,12 @@ void KoTemplateChooseDia::chosen()
 	QString fileName = lFile->text();
 		
 	if ( !m_strMimeType.isEmpty() )
-	    fileName = KoFilterManager::self()->import( fileName, m_strMimeType );
+        {
+	    QString importedFile = KoFilterManager::self()->import( fileName, m_strMimeType );
+            if ( !importedFile.isEmpty() && importedFile != fileName )
+                returnType = TempFile; // importedFile points to a temporary file
+            fileName = importedFile; // open the imported file
+        }
 
 	fullTemplateName = templateName = fileName;
 	accept();

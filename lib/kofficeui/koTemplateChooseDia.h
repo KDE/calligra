@@ -78,7 +78,7 @@ class KoTemplateChooseDia : public QDialog
     Q_OBJECT
 
 public:
-    enum ReturnType {Cancel, Template, File, Empty};
+    enum ReturnType {Cancel, Template, File, TempFile, Empty};
 
     KoTemplateChooseDia( QWidget *parent, const char *name, const QString& template_type,
 			 KInstance* global, bool _hasCancel, bool _onlyTemplates,
@@ -125,7 +125,7 @@ private:
     QString m_strMimeType;
     KInstance* global;
     bool firstTime;
-    
+
 private slots:
     void nameChanged( const QString & );
     void chosen();

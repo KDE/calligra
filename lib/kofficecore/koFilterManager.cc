@@ -160,12 +160,12 @@ const QString KoFilterManager::import( const QString & _url, const char *_native
         QString tmp;
         tmp.sprintf( i18n("Could not import file of type\n%s"), t->mimeType().ascii() );
         QMessageBox::critical( 0L, i18n("Missing import filter"), tmp, i18n("OK") );
-        return _url;
+        return "";
     }
 
     KTempFile tempFile; // create with default file prefix, extension and mode
     if (tempFile.status() != 0)
-        return _url;
+        return "";
     QString tempfname = tempFile.name();
 
     unsigned int i=0;
@@ -177,7 +177,7 @@ const QString KoFilterManager::import( const QString & _url, const char *_native
         delete filter;
         ++i;
     }
-    return tempfname;
+    return ok ? tempfname : QString("");
 }
 
 const QString KoFilterManager::prepareExport( const QString & _url, const char *_native_format )
@@ -242,6 +242,6 @@ const bool KoFilterManager::export_() {
         ++i;
     }
     // Done, remove temporary file
-    unlink( tmpFile.local8Bit() );
+    unlink( tmpFile.ascii() );
     return true;
 }

@@ -106,7 +106,7 @@ KoMainWindow* KoMainWindow::nextMainWindow()
     return s_lstMainWindows->next();
 }
 
-bool KoMainWindow::openDocument( const KURL & url )
+bool KoMainWindow::openDocument( const KURL & url, bool isTempFile )
 {
     KoDocument* doc = document();
 	
@@ -114,23 +114,36 @@ bool KoMainWindow::openDocument( const KURL & url )
     if ( !newdoc->loadFromURL( url ) )
     {
 	delete newdoc;
+        if ( isTempFile )
+            unlink( url.path().ascii() );
 	return FALSE;
     }
 
     if ( doc && doc->isEmpty() )
     {
+        // Replace current empty document
 	setRootPart( newdoc );
 	delete doc;
-	return TRUE;
     }
     else if ( doc && !doc->isEmpty() )
     {
+        // Open in a new shell
         Shell *s = newdoc->createShell();
         s->show();
-	return TRUE;
     }
-
-    setRootPart( newdoc );
+    else
+    {
+        // We had no document, set the new one
+        setRootPart( newdoc );
+    }
+    if ( isTempFile )
+    {
+        // We opened a temporary file (result of an import filter)
+        // Set document URL to empty - we don't want to save in /tmp !
+        newdoc->setURL(KURL());
+        // and remove temp file
+        unlink( url.path().ascii() );
+    }
     return TRUE;
 }
 
@@ -277,16 +290,16 @@ void KoMainWindow::slotFileOpen()
     if ( file.isNull() )
 	return;
 
-    file = KoFilterManager::self()->import( file, nativeFormatMimeType() );
-    if ( file.isNull() )
+    QString importedFile = KoFilterManager::self()->import( file, nativeFormatMimeType() );
+    if ( importedFile.isEmpty() )
 	return;
 
-    if ( !openDocument( file ) )
+    bool isTempFile = ( importedFile != file );
+    if ( !openDocument( importedFile, isTempFile ) )
     {
-        QString tmp;
-        tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
-        QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+        KMessageBox::error( this, i18n( "Could not open\n%1" ).arg(importedFile) );
     }
+
 }
 
 void KoMainWindow::slotFileSave()
