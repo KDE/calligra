@@ -1,0 +1,483 @@
+# Norwegian translations for KOFFICE, koffice
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Hans Petter Bieker <zerium@webindex.no>, 1999.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: KOFFICE/koffice\n"
+"POT-Creation-Date: 1998-12-20 02:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Hans Petter Bieker <zerium@webindex.no>\n"
+"Language-Team: no <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO_8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: kofficecore/koDocument.cc:427 kofficecore/koDocument.cc:472
+#: kofficeui/koPrintDia.cc:31
+msgid "KOffice Error"
+msgstr "KOffice-feil"
+
+#: kofficecore/koDocument.cc:427
+msgid "Can not save to remote URL\n"
+msgstr "Kan ikke lagre til fjern-URL\n"
+
+#: kofficecore/koDocument.cc:469
+msgid "Could not write to\n"
+msgstr "Kunne ikke skrive til\n"
+
+#: kofficecore/koFilterManager.cc:64
+msgid "All files (*.*)"
+msgstr "Alle filer (*.*)"
+
+#: kofficecore/koIMR.cc:174
+#, c-format
+msgid "Could not start server %s"
+msgstr "Kunne ikke starte tjener %s"
+
+#: kofficecore/koIMR.cc:175 kofficecore/koIMR.cc:186 kofficecore/koIMR.cc:197
+msgid "KSpread Error"
+msgstr "KSpread-feil"
+
+#: kofficecore/koIMR.cc:185
+#, c-format
+msgid "Server %s does not implement a KOffice factory"
+msgstr "Tjener %s implementerer ikke en KOffice-fabrikk"
+
+#: kofficecore/koIMR.cc:186 kofficecore/koIMR.cc:197
+msgid "Ok"
+msgstr "Ok"
+
+#: kofficecore/koIMR.cc:196
+#, c-format
+msgid "Server %s did not create a document"
+msgstr "Tjener %s lagde ikke et dokument"
+
+#: kofficecore/koMainWindow.cc:38
+msgid "New"
+msgstr "Ny"
+
+#: kofficecore/koMainWindow.cc:40
+msgid "Open File"
+msgstr "Åpne fil"
+
+#: kofficecore/koMainWindow.cc:42
+msgid "Save File"
+msgstr "Lagre fil"
+
+#: kofficecore/koMainWindow.cc:120
+msgid "&New"
+msgstr "&Ny"
+
+#: kofficecore/koMainWindow.cc:126
+msgid "&Save as..."
+msgstr "&Lagre som..."
+
+#: kofficecore/koMainWindow.cc:164
+msgid "&About KOffice"
+msgstr "&Om KOffice"
+
+#: kofficecore/koScanParts.cc:35
+#, c-format
+msgid ""
+"The OpenParts config file\n"
+"%s\n"
+"does not conatain a %s=... entry"
+msgstr ""
+
+#: kofficecore/koScanPlugins.cc:43
+#, c-format
+msgid ""
+"The plugins config file\n"
+"%s\n"
+"does not conatain a %s=... entry"
+msgstr ""
+
+#: kofficecore/koScanPlugins.cc:359
+#, c-format
+msgid "Could not activate plugin %s"
+msgstr "Kunne ikke aktivere plugin %s"
+
+#: kofficecore/koScanPlugins.cc:360 kofficecore/koScanPlugins.cc:369
+#: kofficecore/koScanPlugins.cc:379
+msgid "Error in plugin"
+msgstr "Feil i plugin"
+
+#: kofficecore/koScanPlugins.cc:368
+#, c-format
+msgid "%s is not a plugin"
+msgstr "%s er ikke en plugin"
+
+#: kofficecore/koScanPlugins.cc:378
+#, c-format
+msgid "Could not create plugin of type %s"
+msgstr ""
+
+#: kofficecore/koScanTools.cc:37
+#, c-format
+msgid ""
+"The DataTools config file\n"
+"%s\n"
+"does not conatain a %s=... entry"
+msgstr ""
+
+#: kofficeui/koAboutDia.cc:32
+msgid "KPresenter - About"
+msgstr "KPresenter - Om"
+
+#: kofficeui/koAboutDia.cc:36
+msgid "WMF Clipart Support (c) by Stefan Taferner <taferner@kde.org>"
+msgstr "WMF Clipart Support (c) av Stefan Taferner <taferner@kde.org>"
+
+#: kofficeui/koAboutDia.cc:40
+msgid "KSpread - About"
+msgstr "KSpread - Om"
+
+#: kofficeui/koAboutDia.cc:48
+msgid "KCharts - About"
+msgstr "KCharts - Om"
+
+#: kofficeui/koAboutDia.cc:56
+msgid "KImage - About"
+msgstr "KImage - Om"
+
+#: kofficeui/koAboutDia.cc:64
+msgid "KAutoformEdit - About"
+msgstr "KAutoformEdit - Om"
+
+#: kofficeui/koAboutDia.cc:72
+msgid "KOffice - About"
+msgstr "KOffice - Om"
+
+#: kofficeui/koAboutDia.cc:74
+msgid "the KOffice Team"
+msgstr "KOffice-laget"
+
+#: kofficeui/koAboutDia.cc:75
+msgid "<koffice@kde.org>"
+msgstr "<koffice@kde.org>"
+
+#: kofficeui/koAboutDia.cc:92
+#, c-format
+msgid ""
+"Version: %s\n"
+"\n"
+"(c) by %s 1997 - 1998\n"
+"\n"
+"E-mail: %s \n"
+"\n"
+"The KOffice is under GNU GPL"
+msgstr ""
+"Versjon: %s\n"
+"\n"
+"(c) ved %s 1997 - 1998\n"
+"\n"
+"Epost: %s \n"
+"\n"
+"KOffice er under GNU GPL"
+
+#: kofficeui/koAboutDia.cc:143
+msgid "About KDE"
+msgstr "Om KDE"
+
+#: kofficeui/koAboutDia.cc:144
+msgid ""
+"\n"
+"The KDE Desktop Environment was written by the KDE Team,\n"
+"a world-wide network of software engineers committed to\n"
+"free software development.\n"
+"\n"
+"Visit http://www.kde.org for more information on the KDE\n"
+"Project. Please consider joining and supporting KDE.\n"
+"\n"
+"Please report bugs at http://buglist.kde.org.\n"
+msgstr ""
+"\n"
+"The KDE Desktop Environment ble skrevet av the KDE Team,\n"
+"et verdensomspenndene nettverk av programvareteknikere\n"
+"som utvikler gratis programvare.\n"
+"\n"
+"Besøk http://www.kde.org for mer informasjon om the KDE\n"
+"Project. Vennligst vurder å slutte deg til og støtte KDE.\n"
+"\n"
+"Vennligst rapporter feil med http://buglist.kde.org.\n"
+
+#: kofficeui/koPageLayoutDia.cc:28
+msgid "Page Preview"
+msgstr "Forhåndsvis side"
+
+#: kofficeui/koPageLayoutDia.cc:122 kofficeui/koPageLayoutDia.cc:153
+msgid "Page Layout"
+msgstr "Sideutseende"
+
+#: kofficeui/koPageLayoutDia.cc:278
+msgid "Unit:"
+msgstr "Enhet:"
+
+#: kofficeui/koPageLayoutDia.cc:285
+msgid "Millimeters (mm)"
+msgstr "Millimeter (mm)"
+
+#: kofficeui/koPageLayoutDia.cc:286
+msgid "Centimeters (cm)"
+msgstr "Centimeter (cm)"
+
+#: kofficeui/koPageLayoutDia.cc:287
+msgid "Inches (in)"
+msgstr "Tommer (in)"
+
+#: kofficeui/koPageLayoutDia.cc:293
+msgid "Page Format"
+msgstr "Sideformat"
+
+#: kofficeui/koPageLayoutDia.cc:297
+msgid ""
+"\n"
+"Format:"
+msgstr ""
+"\n"
+"Format:"
+
+#: kofficeui/koPageLayoutDia.cc:302
+msgid ""
+"\n"
+"Orientation:"
+msgstr ""
+"\n"
+"Orientering:"
+
+#: kofficeui/koPageLayoutDia.cc:309
+msgid "DIN A3"
+msgstr "DIN A3"
+
+#: kofficeui/koPageLayoutDia.cc:310
+msgid "DIN A4"
+msgstr "DIN A4"
+
+#: kofficeui/koPageLayoutDia.cc:311
+msgid "DIN A5"
+msgstr "DIN A5"
+
+#: kofficeui/koPageLayoutDia.cc:312
+msgid "US Letter"
+msgstr "US Letter"
+
+#: kofficeui/koPageLayoutDia.cc:313
+msgid "US Legal"
+msgstr "US Legal"
+
+#: kofficeui/koPageLayoutDia.cc:314
+msgid "Screen"
+msgstr "Skjerm"
+
+#: kofficeui/koPageLayoutDia.cc:315
+msgid "Custom"
+msgstr "Egendefinert"
+
+#: kofficeui/koPageLayoutDia.cc:316
+msgid "DIN B5"
+msgstr "DIN B5"
+
+#: kofficeui/koPageLayoutDia.cc:317
+msgid "US Executive"
+msgstr "US Executive"
+
+#: kofficeui/koPageLayoutDia.cc:325
+msgid "Portrait"
+msgstr "Stående"
+
+#: kofficeui/koPageLayoutDia.cc:326
+msgid "Landscape"
+msgstr "Liggende"
+
+#: kofficeui/koPageLayoutDia.cc:332
+msgid "Width:"
+msgstr "Bredde:"
+
+#: kofficeui/koPageLayoutDia.cc:351
+msgid "Height:"
+msgstr "Høyde:"
+
+#: kofficeui/koPageLayoutDia.cc:395
+msgid "Page Borders"
+msgstr "Sidekanter"
+
+#: kofficeui/koPageLayoutDia.cc:399
+msgid ""
+"\n"
+"Left:"
+msgstr ""
+"\n"
+"Venstre:"
+
+#: kofficeui/koPageLayoutDia.cc:417
+msgid ""
+"\n"
+"Right:"
+msgstr ""
+"\n"
+"Høyre:"
+
+#: kofficeui/koPageLayoutDia.cc:435
+msgid "Top:"
+msgstr "Topp:"
+
+#: kofficeui/koPageLayoutDia.cc:453
+msgid "Bottom:"
+msgstr "Bunn:"
+
+#: kofficeui/koPageLayoutDia.cc:517
+msgid "Format and Borders"
+msgstr "Format og kanter"
+
+#: kofficeui/koPageLayoutDia.cc:572
+msgid "Head line:"
+msgstr "Overskrift:"
+
+#: kofficeui/koPageLayoutDia.cc:576 kofficeui/koPageLayoutDia.cc:608
+msgid "Left:"
+msgstr "Venstre"
+
+#: kofficeui/koPageLayoutDia.cc:585 kofficeui/koPageLayoutDia.cc:617
+msgid "Mid:"
+msgstr "Midt:"
+
+#: kofficeui/koPageLayoutDia.cc:594 kofficeui/koPageLayoutDia.cc:626
+msgid "Right:"
+msgstr "Høyre:"
+
+#: kofficeui/koPageLayoutDia.cc:604
+msgid ""
+"\n"
+"Foot line:"
+msgstr ""
+"\n"
+"Fotlinje:"
+
+#: kofficeui/koPageLayoutDia.cc:636
+msgid ""
+"\n"
+"Macros:"
+msgstr ""
+"\n"
+"Makroer:"
+
+#: kofficeui/koPageLayoutDia.cc:681 kofficeui/koPageLayoutDia.cc:877
+msgid "Header and Footer"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:691
+msgid "Columns:"
+msgstr "Kolonner:"
+
+#: kofficeui/koPageLayoutDia.cc:704
+msgid "Columns Spacing (mm):"
+msgstr "Kolonnemellomrom (mm):"
+
+#: kofficeui/koPageLayoutDia.cc:737
+msgid "Columns"
+msgstr "Kolonner"
+
+#: kofficeui/koPageLayoutDia.cc:748
+msgid "Header"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:752
+msgid "Same header for all pages"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:758
+msgid "Different header for the first page"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:764
+msgid "Different header for even and odd pages"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:770
+msgid "Spacing between header and body (in pt):"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:807
+msgid "Footer"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:811
+msgid "Same footer for all pages"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:817
+msgid "Different footer for the first page"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:823
+msgid "Different footer for even and odd pages"
+msgstr ""
+
+#: kofficeui/koPageLayoutDia.cc:829
+msgid "Spacing between footer and body (in pt):"
+msgstr ""
+
+#: kofficeui/koPartSelectDia.cc:51
+msgid "Insert Object"
+msgstr "Sett inn objekt"
+
+#: kofficeui/koPartSelectDia_data.cc:36
+msgid "Select an component"
+msgstr "Velg komponent"
+
+#: kofficeui/koPrintDia.cc:23 kofficeui/koPrintDia.cc:72
+msgid "UNIX Printer"
+msgstr "UNIX-skriver"
+
+#: kofficeui/koPrintDia.cc:31
+msgid "Could not open\n"
+msgstr "Kunne ikke åpne\n"
+
+#: kofficeui/koPrintDia.cc:58
+msgid "Print Dialog"
+msgstr "Utskriftsdialog"
+
+#: kofficeui/koPrintDia.cc:187
+msgid "Print To:"
+msgstr "Skriv til:"
+
+#: kofficeui/koPrintDia.cc:196
+msgid "File Name:"
+msgstr "Filnavn:"
+
+#: kofficeui/koPrintDia.cc:208
+msgid "Print Command:"
+msgstr "Utskriftkommando:"
+
+#: kofficeui/koPrintDia.cc:230
+msgid "Copies:"
+msgstr "Kopier:"
+
+#: kofficeui/koPrintDia.cc:243
+msgid "Page Setup..."
+msgstr "Sideoppsett..."
+
+#: kofficeui/koPrintDia.cc:247
+msgid "Printer Name:"
+msgstr "Skrivernavn:"
+
+#: kofficeui/koTabChooser.cc:141
+msgid "Tabulator &Left"
+msgstr "&Venstretabulator"
+
+#: kofficeui/koTabChooser.cc:142
+msgid "Tabulator &Center"
+msgstr "&Sentertabulator"
+
+#: kofficeui/koTabChooser.cc:143
+msgid "Tabulator &Right"
+msgstr "&Høyretabulator"
+
+#: kofficeui/koTabChooser.cc:144
+msgid "Tabulator &Decimal Point"
+msgstr "Desimalpekertabualtor"
+
+#: kofficeui/koTemplateChooseDia.cc:46
+msgid "Choose a Template"
+msgstr "Velg mal"
