@@ -41,7 +41,7 @@ public:
     HtmlExportDialog(QWidget* parent=NULL);
     ~HtmlExportDialog(void);
     bool isXHtml(void) const;
-    bool isEncodingUTF8(void) const;
+    QTextCodec* getCodec(void) const;
 private:
     ExportDialogUI* m_dialog;
 };

@@ -20,6 +20,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qtextcodec.h>
+
 #include <kapp.h>
 #include <klocale.h>
 
@@ -53,18 +55,19 @@ bool HtmlExportDialog::isXHtml(void) const
     return true;
 }
 
-bool HtmlExportDialog::isEncodingUTF8(void) const
+QTextCodec* HtmlExportDialog::getCodec(void) const
 {
-    bool result;
+    QTextCodec* codec;
 
     if(m_dialog->radioEncodingUTF8==m_dialog->buttonGroupEncoding->selected())
-        result = true;
+        codec=QTextCodec::codecForName("UTF-8");
     else if(m_dialog->radioEncodingLocal==m_dialog->buttonGroupEncoding->selected())
-        result = false;
+        codec=QTextCodec::codecForLocale();
     else
-        result = true;
+        // Default: UTF-8
+        codec=QTextCodec::codecForName("UTF-8");
 
-    return result;
+    return codec;
 }
 
 #include <ExportDialog.moc>

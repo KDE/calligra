@@ -49,9 +49,9 @@ public:
     virtual bool doFullDefineStyle(LayoutData& layout);
 public:
     inline bool isXML  (void) const { return m_xml; }
-    inline bool isUTF8 (void) const { return m_utf8; }
     inline void setXML (const bool flag ) { m_xml=flag; }
-    inline void setUTF8 (const bool flag ) { m_utf8=flag; }
+    inline QTextCodec* getCodec(void) const { return m_codec; }
+    inline void setCodec(QTextCodec* codec) { m_codec=codec; }
 private:
     QString escapeHtmlText(const QString& strText) const;
     QString escapeCssIdentifier(const QString& strText) const;
@@ -72,7 +72,6 @@ private:
     CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
     bool m_inList; // Are we currently in a list?
     bool m_orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
-    bool m_utf8;
     bool m_xml;
 };
 

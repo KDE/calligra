@@ -20,6 +20,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qtextcodec.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 
@@ -47,20 +48,20 @@ AsciiExportDialog :: ~AsciiExportDialog(void)
     kapp->setOverrideCursor(Qt::waitCursor);
 }
 
-bool AsciiExportDialog::isEncodingUTF8(void) const
+QTextCodec* AsciiExportDialog::getCodec(void) const
 {
-    bool result;
+    QTextCodec* codec;
 
     if(m_dialog->radioEncodingUTF8==m_dialog->buttonGroupEncoding->selected())
-        result = true;
+        codec=QTextCodec::codecForName("UTF-8");
     else if(m_dialog->radioEncodingLocal==m_dialog->buttonGroupEncoding->selected())
-        result = false;
+        codec=QTextCodec::codecForLocale();
     else
-        result = true;
+        // Default: UTF-8
+        codec=QTextCodec::codecForName("UTF-8");
 
-    return result;
+    return codec;
 }
-
 QString AsciiExportDialog::getEndOfLine(void) const
 {
     QString strReturn;

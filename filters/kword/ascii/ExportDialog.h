@@ -36,8 +36,8 @@ public:
 
     AsciiExportDialog(QWidget* parent=NULL);
     ~AsciiExportDialog(void);
-    bool isEncodingUTF8(void) const;
     QString getEndOfLine(void) const;
+    QTextCodec* getCodec(void) const;
 private:
     ExportDialogUI* m_dialog;
 };

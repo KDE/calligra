@@ -38,7 +38,7 @@ QString HtmlWorker::escapeHtmlText(const QString& strText) const
 {
     // Escape quotes (needed in attributes)
     // Do not escape apostrophs (only allowed in XHTML!)
-    return KWEFUtil::EscapeSgmlText(m_codec,strText,true,false);
+    return KWEFUtil::EscapeSgmlText(getCodec(),strText,true,false);
 }
 
 
@@ -73,7 +73,7 @@ QString HtmlWorker::escapeCssIdentifier(const QString& strText) const
                 strReturn+=ch;
             }
         }
-        else if ((ch>=QChar(161)) && (m_codec->canEncode(ch)))
+        else if ((ch>=QChar(161)) && (getCodec()->canEncode(ch)))
         {
             // Any Unicode character greater or egual to 161 is allowed too, even at start.
             // Except if the encoding cannot write the character
@@ -503,6 +503,7 @@ QString HtmlWorker::layoutToCss(const LayoutData& layout) const
        strLayout += QString("margin-top:%1pt; ").arg(layout.marginTop);
     }
 
+    // TODO: Konqueror/KHTML does not support "line-height"
     if ( !layout.lineSpacingType )
     {
         // We have a custom line spacing (in points)
@@ -521,6 +522,7 @@ QString HtmlWorker::layoutToCss(const LayoutData& layout) const
         kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 
+    // TODO: Konqueror/KHTML does not support "text-shadow"
     strLayout += "text-shadow:";
     if ((!layout.shadowDirection) || (!layout.shadowDistance))
     {
@@ -732,25 +734,15 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& to)
         return false;
     }
 
-    // Find out IANA/mime charset name
-    if ( isUTF8() )
-    {
-        m_codec=QTextCodec::codecForName("UTF-8");
-    }
-    else
-    {
-        m_codec=QTextCodec::codecForLocale();
-    }
+    kdDebug(30503) << "Charset used: " << getCodec()->name() << endl;
 
-    kdDebug(30501) << "Charset used: " << m_codec->name() << endl;
-
-    if (!m_codec)
+    if (!getCodec())
     {
         kdError(30503) << "Could not create QTextCodec! Aborting" << endl;
         return false;
     }
 
-    m_streamOut->setCodec( m_codec );
+    m_streamOut->setCodec( getCodec() );
 
     // Make the default title
     const int result=filenameOut.findRev("/");
@@ -782,7 +774,7 @@ bool HtmlWorker::doOpenDocument(void)
     if (isXML())
     {   //Write out the XML declaration
         *m_streamOut << "<?xml version=\"1.0\" encoding=\""
-            << m_codec->mimeName() << "\"?>" << endl;
+            << getCodec()->mimeName() << "\"?>" << endl;
     }
 
     // write <!DOCTYPE
@@ -830,7 +822,7 @@ bool HtmlWorker::doOpenHead(void)
 
     // Declare what charset we are using
     *m_streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
-    *m_streamOut << m_codec->mimeName() << '"';
+    *m_streamOut << getCodec()->mimeName() << '"';
     *m_streamOut << (isXML()?" /":"") << ">\n" ;
 
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!

@@ -87,7 +87,7 @@ bool HTMLExport::filter(const QString  &filenameIn,
     }
 
     worker->setXML(dialog->isXHtml());
-    worker->setUTF8(dialog->isEncodingUTF8());
+    worker->setCodec(dialog->getCodec());
 
     delete dialog;
 

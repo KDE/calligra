@@ -23,6 +23,7 @@
 */
 
 #include <qiodevice.h>
+#include <qtextcodec.h>
 #include <qtextstream.h>
 
 #include <kdebug.h>
@@ -53,21 +54,21 @@ public:
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
         const ValueListFormatData& paraFormatDataList);
 public:
-    inline bool isUTF8 (void) const { return m_utf8; }
-    inline void setUTF8 (const bool flag ) { m_utf8=flag; }
     inline QString getEndOfLine(void) const {return m_eol;}
     inline void setEndOfLine(const QString& str) {m_eol=str;}
+    inline QTextCodec* getCodec(void) const { return m_codec; }
+    inline void setCodec(QTextCodec* codec) { m_codec=codec; }
 private:
     void ProcessParagraphData (const QString& paraText, const ValueListFormatData& paraFormatDataList);
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
+    QTextCodec* m_codec; // QTextCodec in which the file will be written
     QString m_eol; // End of line character(s)
     CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
     bool m_inList; // Are we currently in a list?
     bool m_orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
     int  m_counterList; // Counter for te lists
-    bool m_utf8;
 };
 
 bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& to)
@@ -94,14 +95,15 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& to)
         return false;
     }
 
-    if (isUTF8())
+    kdDebug(30502) << "Charset used: " << getCodec()->name() << endl;
+
+    if (!getCodec())
     {
-        m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
+        kdError(30502) << "Could not create QTextCodec! Aborting" << endl;
+        return false;
     }
-    else
-    {
-        m_streamOut->setEncoding( QTextStream::Locale );
-    }
+
+    m_streamOut->setCodec( getCodec() );
 
     return true;
 }
@@ -330,7 +332,7 @@ bool ASCIIExport::filter(const QString  &filenameIn,
         return false;
     }
 
-    worker->setUTF8(dialog->isEncodingUTF8());
+    worker->setCodec(dialog->getCodec());
     worker->setEndOfLine(dialog->getEndOfLine());
 
     delete dialog;
