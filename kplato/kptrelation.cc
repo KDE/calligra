@@ -20,7 +20,6 @@
 #include "defs.h"
 
 #include "kptnode.h"
-#include "kpttimescale.h"
 #include "kptcanvasitem.h"
 
 #include <qcanvas.h>

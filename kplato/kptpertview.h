@@ -23,11 +23,7 @@
 #include <qsplitter.h>
 
 class KPTView;
-class KPTProjectList;
-class KPTTimeScale;
-class KPTGanttCanvas;
 class KPTPertCanvas;
-class KPTNodeItem;
 class KPTNode;
 class QLayout;
 class QListViewItem;

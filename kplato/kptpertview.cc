@@ -21,7 +21,6 @@
 
 #include "kptview.h"
 #include "kptpertcanvas.h"
-#include "kptnodeitem.h"
 #include "kptpart.h"
 #include "kptproject.h"
 

@@ -217,7 +217,6 @@ public:
     const KPTDuration& pessimisticDuration(const KPTDuration &start);
     const KPTDuration& expectedDuration(const KPTDuration &start);
 
-    virtual void drawGanttBar(QCanvas*, KPTTimeScale*, int , int) {;}
     virtual void drawPert(KPTPertCanvas * /*view */, QCanvas*, KPTNode * /*parent*/ = 0) {;}
     virtual void drawPertRelations(QCanvas*) {;}
     

@@ -23,10 +23,6 @@
 #include <KDGanttView.h>
 
 class KPTView;
-class KPTProjectList;
-class KPTTimeScale;
-class KPTGanttCanvas;
-class KPTNodeItem;
 class KPTNode;
 class QLayout;
 class QListViewItem;

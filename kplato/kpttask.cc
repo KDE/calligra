@@ -21,9 +21,7 @@
 #include "kptproject.h"
 #include "kpttaskdialog.h"
 #include "kptduration.h"
-#include "kptcanvasview.h"
 #include "kptpertcanvas.h"
-#include "kpttimescale.h"
 #include "kptrelation.h"
 #include "kptcanvasitem.h"
 
@@ -250,49 +248,6 @@ bool KPTTask::openDialog() {
     bool ret = dialog->exec();
     delete dialog;
     return ret;
-}
-
-void KPTTask::drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h) {
-    QBrush brush(Qt::yellow);
-    m_y = y;
-    m_h = h;
-    int x=0, w=0;
-    KPTDuration *start = getStartTime();
-    KPTDuration *dur = getExpectedDuration();
-    if (numChildren() > 0) {
-        brush.setColor(Qt::darkGray);
-        x = ts->getX(start);
-        w = ts->getWidth(dur);
-        QPointArray a(7);
-        a.setPoint(0, x, y);
-        a.setPoint(1, x, y+h);
-        a.setPoint(2, x+2, y+h/2);
-        a.setPoint(3, x+w-2, y+h/2);
-        a.setPoint(4, x+w, y+h);
-        a.setPoint(5, x+w, y);
-        a.setPoint(6, x, y);
-        QCanvasPolygon *p = new QCanvasPolygon( canvas );
-        p->setPoints(a);
-        p->setBrush( brush );
-        p->setZ(50);
-        p->show();
-    } else {
-        // Draw slack
-        QCanvasLine *l = new QCanvasLine(canvas);
-        l->setPoints(ts->getX(&earliestStart),y+h/2,ts->getX(&latestFinish)-2,y+h/2);
-        l->setPen( QPen(Qt::blue) );
-        l->setZ(40);
-        l->show();
-        // Draw bar
-        w = ts->getWidth(dur);
-        x = ts->getX(start);
-        QCanvasRectangle *r = new QCanvasRectangle( x,y,w,h,canvas );
-        r->setBrush( brush );
-        r->setZ(50);
-        r->show();
-    }
-    delete start;
-    delete dur;
 }
 
 void KPTTask::drawPert(KPTPertCanvas *view, QCanvas* canvas, KPTNode *parent) {

@@ -19,13 +19,9 @@
  
 #include "kptganttview.h"
 
-#include "kpttimescale.h"
-#include "kptprojectlist.h"
 #include "kptview.h"
-#include "kptganttcanvas.h"
 #include "kptcanvasitem.h"
 #include "kptnode.h"
-#include "kptnodeitem.h"
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kpttask.h"

@@ -71,7 +71,6 @@ protected slots:
     void slotConfigure();
 
     void slotOpenNode();
-    void slotOpen(QListViewItem *item);
 
     void slotConnectNode();
 	void slotChanged(QWidget *);

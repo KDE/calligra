@@ -26,7 +26,6 @@
 #include "defs.h"
 
 class KPTResource;
-class KPTTimeScale;
 class KPTPertCanvas;
 class QCanvas;
 
@@ -93,7 +92,6 @@ public:
 
     virtual bool openDialog();
  
-    virtual void drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h);
     virtual void drawPert(KPTPertCanvas *view, QCanvas* canvas, KPTNode *parent = 0);
     virtual void drawPertRelations(QCanvas* canvas);
    

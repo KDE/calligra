@@ -21,7 +21,6 @@
 #include "kptfactory.h"
 #include "kptpart.h"
 #include "kptproject.h"
-#include "kptnodeitem.h"
 #include "kpttask.h"
 #include "kptmilestone.h"
 #include "kptganttview.h"
@@ -276,13 +275,6 @@ void KPTView::slotOpenNode() {
 	    m_pertview->currentNode()->openDialog();
 		return;
 	}
-}
-
-void KPTView::slotOpen(QListViewItem *item) {
-    if (item)
-    {
-        static_cast<KPTNodeItem *>(item)->openDialog();
-    }
 }
 
 void KPTView::updateReadWrite(bool /*readwrite*/) {

@@ -22,9 +22,7 @@
 #include "kptmilestone.h"
 #include "kptprojectdialog.h"
 #include "kptduration.h"
-#include "kptcanvasview.h"
 #include "kptpertcanvas.h"
-#include "kpttimescale.h"
 
 #include <qdom.h>
 #include <qstring.h>
@@ -391,32 +389,6 @@ void KPTProject::setStartTime(KPTDuration startTime) {
     m_startTime = startTime;
     if ( m_constraint == KPTNode::MustStartOn )
         earliestStart = startTime;
-}
-
-void KPTProject::drawGanttBar(QCanvas* canvas, KPTTimeScale *ts, int y, int h) {
-    kdDebug()<<k_funcinfo<<endl;
-    m_y = y;
-    m_h = h;
-    QBrush brush(Qt::black);
-    KPTDuration *start = getStartTime();
-    KPTDuration *dur = getExpectedDuration();    
-    int x = ts->getX(start);
-    int w = ts->getWidth(getExpectedDuration());
-    QPointArray a(7);
-    a.setPoint(0, x, y);
-    a.setPoint(1, x, y+h);
-    a.setPoint(2, x+2, y+h/2);
-    a.setPoint(3, x+w-2, y+h/2);
-    a.setPoint(4, x+w, y+h);
-    a.setPoint(5, x+w, y);
-    a.setPoint(6, x, y);
-    QCanvasPolygon *r = new QCanvasPolygon( canvas );
-    r->setPoints(a);
-    r->setBrush( brush );
-    r->setZ(50);
-    r->show();
-    delete start;
-    delete dur;
 }
 
 void KPTProject::drawPert(KPTPertCanvas *view, QCanvas* canvas, KPTNode *parent) {

@@ -27,7 +27,6 @@
 
 class KPTNode;
 class KPTProject;
-class KPTTimeScale;
 class QCanvas;
 class QDomElement;
 

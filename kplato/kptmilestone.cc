@@ -19,7 +19,6 @@
 
 #include "kptmilestone.h"
 #include "kptmilestonedialog.h"
-#include "kpttimescale.h"
 #include "kptpertcanvas.h"
 #include "kptcanvasitem.h"
 
@@ -85,34 +84,6 @@ bool KPTMilestone::openDialog() {
     return ret;
 }
 
-void KPTMilestone::drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h) {
-    kdDebug()<<k_funcinfo<<endl;
-    m_y = y;
-    m_h = h;
-        
-    // Draw slack
-    QCanvasLine *l = new QCanvasLine(canvas);
-    l->setPoints(ts->getX(&earliestStart),y+h/2,ts->getX(&latestFinish),y+h/2);
-    l->setPen( QPen(Qt::blue) );
-    l->setZ(40);
-    l->show();
-    // Draw bar
-    QBrush brush(Qt::black);
-    KPTDuration *start = getStartTime();
-    int x = ts->getX(start);
-    QPointArray a(5);
-    a.setPoint(0, x, y+h/2);
-    a.setPoint(1, x+h/2, y);
-    a.setPoint(2, x+h, y+h/2);
-    a.setPoint(3, x+h/2, y+h);
-    a.setPoint(4, a.point(0));
-    QCanvasPolygon *p = new QCanvasPolygon(canvas);
-    p->setPoints(a);
-    p->setBrush( brush );
-    p->setZ(50);
-    p->show();
-    delete start;
-}
 void KPTMilestone::drawPert(KPTPertCanvas *view, QCanvas* canvas, KPTNode *parent) {
 	if (!m_drawn) {
 		if (!allParentsDrawn()) {

@@ -19,7 +19,6 @@
 
 #include "kptpertcanvas.h"
 #include "kptnode.h"
-#include "kptnodeitem.h"
 #include "kptrelation.h"
 #include "kptrelationdialog.h"
 #include "kptcanvasitem.h"

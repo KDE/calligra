@@ -27,10 +27,8 @@
 #include <qmemarray.h>
 
 class KPTProjectList;
-class KPTTimeScale;
 class QTimer;
 class QPainter;
-class QListViewItem;
 class QPoint;
 class QSize;
 
