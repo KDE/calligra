@@ -61,6 +61,8 @@
 		<Action name="view_zoom_out"/>
 		<Action name="view_zoom"/>
         <Action name="view_mode"/>
+	<Separator/>
+	<Action name="view_color_manager"/>
 	</Menu>
 	</MenuBar>
 	<ToolBar name="view_toolbar" fullWidth="false">
