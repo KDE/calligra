@@ -4,7 +4,7 @@
     begin            : 2001-12-22
     copyright        : (C) 2001 by Daniel Naber
     email            : daniel.naber@t-online.de
-	$Id $
+	$Id: $
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,8 +36,8 @@ int main(int argc, char **argv)
 {
 
 	KAboutData aboutData("kthesaurus", I18N_NOOP("KThesaurus"), "1.0",
-		I18N_NOOP( "KWrite - Leightweight Kate" ), KAboutData::License_GPL,
-		I18N_NOOP( "(c) 2001 Daniel Naber" ), 0, "fixme");
+		I18N_NOOP( "KThesaurus - List synonyms" ), KAboutData::License_GPL,
+		I18N_NOOP( "(c) 2001 Daniel Naber" ) );
 
 	KCmdLineArgs::init(argc, argv, &aboutData);
 	KCmdLineArgs::addCmdLineOptions(options);
