@@ -55,11 +55,13 @@ public:
     void setUnderlineColor( const QColor & col );
 
 
-    KoTextFormat::NbLine getNblineType();
+    KoTextFormat::NbLine getUnderlineNbLineType();
     KoTextFormat::LineStyle getUnderlineLineStyle();
+    KoTextFormat::NbLine getStrikeOutNbLineType();
     KoTextFormat::LineStyle getStrikeOutLineStyle();
 
-    void setNblineType(KoTextFormat::NbLine nb);
+    void setUnderlineNbLineType(KoTextFormat::NbLine nb);
+    void setStrikeOutNblineType(KoTextFormat::NbLine nb);
     void setUnderlineLineStyle(KoTextFormat::LineStyle _t);
     void setStrikeOutLineStyle(KoTextFormat::LineStyle _t);
 
@@ -68,11 +70,13 @@ public:
     void setupTab2();
 protected:
     KoTextFormat::LineStyle getTypeOfLine( int val);
-
+    void changeNbLineType( KoTextFormat::NbLine _nb, QComboBox * combo);
+    void changeLineStyle( KoTextFormat::LineStyle _t, QComboBox *combo );
+    KoTextFormat::NbLine getNbLineType( QComboBox * combo );
 protected slots:
     void slotSuperScriptClicked();
     void slotSubScriptClicked();
-    void slotStrikeOutClicked();
+    void slotStrikeOutTypeChanged( int );
     void slotFontChanged(const QFont &);
     void slotChangeColor();
     void slotChangeBackGroundColor();
@@ -83,7 +87,7 @@ private:
     KFontChooser *m_chooseFont;
     QCheckBox *m_superScript;
     QCheckBox *m_subScript;
-    QCheckBox *m_strikeOut;
+    QComboBox *m_strikeOut;
 
     QComboBox *m_underlining;
     QComboBox *m_underlineType;
@@ -113,6 +117,7 @@ public:
                KoTextFormat::NbLine _nbLine,
                KoTextFormat::LineStyle _underlineType,
                KoTextFormat::LineStyle _strikeOutType,
+               KoTextFormat::NbLine _strikeOutNbLine,
                bool _withSubSuperScript=true );
 
     bool getSuperScript() const { return m_chooser->getSuperScript(); }
@@ -121,7 +126,9 @@ public:
     QColor color() const { return m_chooser->color(); }
     QColor backGroundColor() const {return m_chooser->backGroundColor();}
     QColor underlineColor() const { return m_chooser->underlineColor() ; }
-    KoTextFormat::NbLine getNblineType() const { return m_chooser->getNblineType();}
+    KoTextFormat::NbLine getUnderlineNbLineType() const { return m_chooser->getUnderlineNbLineType();}
+    KoTextFormat::NbLine getStrikeOutNbLineType() const { return m_chooser->getStrikeOutNbLineType();}
+
     KoTextFormat::LineStyle getUnderlineLineStyle() const { return m_chooser->getUnderlineLineStyle();}
     KoTextFormat::LineStyle getStrikeOutLineStyle() const { return m_chooser->getStrikeOutLineStyle();}
 
@@ -143,9 +150,10 @@ private:
     QColor m_color;
     QColor m_backGroundColor;
     QColor m_underlineColor;
-    KoTextFormat::NbLine m_nbLine;
+    KoTextFormat::NbLine m_underlineNbLine;
     KoTextFormat::LineStyle m_underlineLineStyle;
     KoTextFormat::LineStyle m_strikeOutLineStyle;
+    KoTextFormat::NbLine m_strikeOutNbLine;
 };
 
 #endif

@@ -387,7 +387,7 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     if ( m_replaceContext->m_optionsMask & KoSearchContext::Underline)
     {
         flags |= KoTextFormat::ExtendUnderLine;
-        newFormat->setNbLineType( m_replaceContext->m_underline );
+        newFormat->setUnderlineNbLineType( m_replaceContext->m_underline );
 
     }
     if ( m_replaceContext->m_optionsMask & KoSearchContext::VertAlign)
@@ -398,7 +398,7 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     if ( m_replaceContext->m_optionsMask & KoSearchContext::StrikeOut)
     {
         flags |= KoTextFormat::StrikeOut;
-        newFormat->setStrikeOut( (bool)(m_replaceContext->m_options & KoSearchContext::StrikeOut));
+        newFormat->setStrikeOutNbLineType( m_replaceContext->m_strikeOut);
     }
 
     KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
@@ -489,12 +489,12 @@ bool KoTextFind::validateMatch( const QString &/*text*/, int index, int matchedl
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::Underline)
         {
-            if ( format->nbLineType()!= m_searchContext->m_underline)
+            if ( format->underlineNbLineType()!= m_searchContext->m_underline)
                 return false;
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::StrikeOut)
         {
-            if ( (!format->font().strikeOut() && (m_searchContext->m_options & KoSearchContext::StrikeOut)) || (format->font().strikeOut() && ((m_searchContext->m_options & KoSearchContext::StrikeOut)==0)))
+            if ( format->strikeOutNbLineType()!= m_searchContext->m_strikeOut )
                 return false;
         }
 
@@ -563,12 +563,12 @@ bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int match
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::Underline)
         {
-            if ( format->nbLineType() != m_searchContext->m_underline )
+            if ( format->underlineNbLineType() != m_searchContext->m_underline )
                 return false;
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::StrikeOut)
         {
-            if ( (!format->font().strikeOut() && (m_searchContext->m_options & KoSearchContext::StrikeOut)) || (format->font().strikeOut() && ((m_searchContext->m_options & KoSearchContext::StrikeOut)==0)))
+            if ( format->strikeOutNbLineType() != m_searchContext->m_strikeOut )
                 return false;
         }
 
@@ -608,7 +608,13 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_underlineItem->insertItem( i18n( "Double" ), -1 );
     m_underlineItem->setCurrentItem( (int)m_ctx->m_underline );
 
-    m_checkStrikeOut = new QCheckBox( i18n( "Strikeout:" ), page);
+    m_checkStrikeOut= new QCheckBox( i18n( "Strikeout:" ), page);
+
+    m_strikeOutItem = new QComboBox( page );
+    m_strikeOutItem->insertItem( i18n( "Without" ), -1 );
+    m_strikeOutItem->insertItem( i18n( "Simple" ), -1 );
+    m_strikeOutItem->insertItem( i18n( "Double" ), -1 );
+    m_strikeOutItem->setCurrentItem( (int)m_ctx->m_strikeOut );
 
 
     m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment:" ), page );
@@ -639,12 +645,6 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_italicYes=new QRadioButton( i18n("Yes"), grpItalic );
     m_italicNo=new QRadioButton( i18n("No"), grpItalic );
 
-    QButtonGroup *grpStrikeOut = new QButtonGroup( 1, QGroupBox::Vertical, page );
-    grpStrikeOut->setRadioButtonExclusive( TRUE );
-    grpStrikeOut->layout();
-    m_strikeOutYes=new QRadioButton( i18n("Yes"), grpStrikeOut );
-    m_strikeOutNo=new QRadioButton( i18n("No"), grpStrikeOut );
-
 
     m_vertAlignItem = new QComboBox( false, page );
     m_vertAlignItem->insertItem( i18n( "Normal" ), -1 );
@@ -669,7 +669,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_grid->addWidget( grpBold, 5, 1 );
     m_grid->addWidget( grpItalic, 6, 1 );
 
-    m_grid->addWidget( grpStrikeOut, 7, 1 );
+    m_grid->addWidget( m_strikeOutItem, 7, 1 );
     m_grid->addWidget( m_underlineItem, 8, 1 );
 
     m_grid->addWidget( m_vertAlignItem, 9, 1 );
@@ -685,11 +685,10 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
 
     QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldYes, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicYes, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutYes, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutItem, SLOT( setEnabled( bool ) ) );
 
     QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldNo, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicNo, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutNo, SLOT( setEnabled( bool ) ) );
 
 
     QObject::connect( m_checkVertAlign, SIGNAL( toggled( bool ) ), m_vertAlignItem, SLOT( setEnabled( bool ) ) );
@@ -719,8 +718,7 @@ void KoFormatDia::slotReset()
     m_boldNo->setEnabled(m_checkBold->isChecked());
 
     m_checkStrikeOut->setChecked( m_ctx->m_optionsMask & KoSearchContext::StrikeOut );
-    m_strikeOutYes->setEnabled( m_checkStrikeOut->isChecked());
-    m_strikeOutNo->setEnabled( m_checkStrikeOut->isChecked());
+    m_strikeOutItem->setEnabled( m_checkStrikeOut->isChecked());
 
 
     m_checkItalic->setChecked( m_ctx->m_optionsMask & KoSearchContext::Italic );
@@ -742,10 +740,6 @@ void KoFormatDia::slotReset()
         m_italicYes->setChecked( true );
     else
         m_italicNo->setChecked( true );
-    if (m_ctx->m_options & KoSearchContext::StrikeOut )
-        m_strikeOutYes->setChecked( true);
-    else
-        m_strikeOutNo->setChecked( true );
 }
 
 void KoFormatDia::ctxOptions( )
@@ -776,8 +770,6 @@ void KoFormatDia::ctxOptions( )
         options |= KoSearchContext::Bold;
     if ( m_italicYes->isChecked() )
         options |= KoSearchContext::Italic;
-    if ( m_strikeOutYes->isChecked() )
-        options |= KoSearchContext::StrikeOut;
 
 
     m_ctx->m_optionsMask = optionsMask;
@@ -787,7 +779,7 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_backGroungColor = m_bgColorItem->color();
     m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
     m_ctx->m_underline = (KoTextFormat::NbLine)m_underlineItem->currentItem();
-
+    m_ctx->m_strikeOut = (KoTextFormat::NbLine)m_strikeOutItem->currentItem();
     m_ctx->m_options = options;
 }
 

@@ -256,8 +256,8 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().italic()) );
     }
-    if( !refFormat || curFormat->underline() != refFormat->underline()
-        || curFormat->nbLineType() != refFormat->nbLineType()
+    if( !refFormat
+        || curFormat->underlineNbLineType() != refFormat->underlineNbLineType()
         || curFormat->textUnderlineColor() !=refFormat->textUnderlineColor()
         || curFormat->underlineLineStyle() !=refFormat->underlineLineStyle())
     {
@@ -272,12 +272,16 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         if ( curFormat->textUnderlineColor().isValid() )
             elem.setAttribute( "underlinecolor", curFormat->textUnderlineColor().name() );
     }
-    if( !refFormat || curFormat->font().strikeOut() != refFormat->font().strikeOut()
+    if( !refFormat
+        || curFormat->strikeOutNbLineType() != refFormat->strikeOutNbLineType()
         || curFormat->strikeOutLineStyle()!= refFormat->strikeOutLineStyle())
     {
         elem = doc.createElement( "STRIKEOUT" );
         formatElem.appendChild( elem );
-        elem.setAttribute( "value", static_cast<int>(curFormat->font().strikeOut()) );
+        if ( curFormat->doubleStrikeOut() )
+            elem.setAttribute( "value", "double" );
+        else
+            elem.setAttribute( "value", static_cast<int>(curFormat->strikeOut()) );
         QString strLineType=lineStyleToString( curFormat->strikeOutLineStyle() );
         elem.setAttribute( "styleline", strLineType );
     }
@@ -463,11 +467,11 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     if ( !elem.isNull() ) {
         QString value = elem.attribute("value");
         if ( value == "0" || value == "1" )
-            format.setNbLineType( (value.toInt() == 1)?KoTextFormat::SIMPLE: KoTextFormat::NONE );
+            format.setUnderlineNbLineType( (value.toInt() == 1)?KoTextFormat::SIMPLE: KoTextFormat::NONE );
         else if ( value == "single" ) // value never used when saving, but why not support it? ;)
-            format.setNbLineType ( KoTextFormat::SIMPLE);
+            format.setUnderlineNbLineType ( KoTextFormat::SIMPLE);
         else if ( value == "double" )
-            format.setNbLineType ( KoTextFormat::DOUBLE);
+            format.setUnderlineNbLineType ( KoTextFormat::DOUBLE);
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
@@ -482,7 +486,13 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     elem = formatElem.namedItem( "STRIKEOUT" ).toElement();
     if ( !elem.isNull() )
     {
-        font.setStrikeOut( elem.attribute("value").toInt() == 1 );
+        QString value = elem.attribute("value");
+        if ( value == "0" || value == "1" )
+            format.setStrikeOutNbLineType( (value.toInt() == 1)?KoTextFormat::SIMPLE: KoTextFormat::NONE );
+        else if ( value == "single" ) // value never used when saving, but why not support it? ;)
+            format.setStrikeOutNbLineType ( KoTextFormat::SIMPLE);
+        else if ( value == "double" )
+            format.setStrikeOutNbLineType ( KoTextFormat::DOUBLE);
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");

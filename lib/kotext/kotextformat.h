@@ -70,7 +70,13 @@ public:
      * default for the color scheme is' */
     static QColor defaultTextColor( QPainter * painter );
 
-    void setStrikeOut(bool);
+    void setStrikeOutNbLineType (NbLine _type);
+    NbLine strikeOutNbLineType()const {return m_strikeOutNbLine;}
+
+
+    void setStrikeOutLineStyle( LineStyle _type );
+    LineStyle strikeOutLineStyle()const {return m_strikeOutLineStyle;}
+
 
     void setTextBackgroundColor(const QColor &);
     QColor textBackgroundColor()const {return m_textBackColor;}
@@ -78,18 +84,16 @@ public:
     void setTextUnderlineColor(const QColor &);
     QColor textUnderlineColor()const {return m_textUnderlineColor;}
 
-    void setNbLineType (NbLine _type);
-    NbLine nbLineType()const {return m_nbLine;}
+    void setUnderlineNbLineType (NbLine _type);
+    NbLine underlineNbLineType()const {return m_underlineNbLine;}
 
     void setUnderlineLineStyle (LineStyle _type);
     LineStyle underlineLineStyle()const {return m_underlineLineStyle;}
 
-    void setStrikeOutLineStyle( LineStyle _type );
-    LineStyle strikeOutLineStyle()const {return m_strikeOutLineStyle;}
-
-    bool doubleUnderline() const { return (m_nbLine==DOUBLE ); }
-    bool underline() const { return (m_nbLine==SIMPLE ); }
-
+    bool doubleUnderline() const { return (m_underlineNbLine==DOUBLE ); }
+    bool underline() const { return (m_underlineNbLine==SIMPLE ); }
+    bool strikeOut() const { return (m_strikeOutNbLine==SIMPLE ); }
+    bool doubleStrikeOut() const { return (m_strikeOutNbLine==DOUBLE ); }
     /**
      * @return the point size to use on screen, given @p zh
      * This method takes care of superscript and subscript (smaller font).
@@ -138,7 +142,8 @@ public:
 protected:
     QColor m_textBackColor;
     QColor m_textUnderlineColor;
-    NbLine m_nbLine;
+    NbLine m_underlineNbLine;
+    NbLine m_strikeOutNbLine;
     LineStyle m_underlineLineStyle;
     LineStyle m_strikeOutLineStyle;
     class KoTextFormatPrivate;

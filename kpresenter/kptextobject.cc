@@ -443,7 +443,7 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
     tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
     tmpItalic=static_cast<unsigned int>(lastFormat->font().italic());
     tmpUnderline=static_cast<unsigned int>(lastFormat->underline());
-    tmpStrikeOut=static_cast<unsigned int>(lastFormat->font().strikeOut());
+    tmpStrikeOut=static_cast<unsigned int>(lastFormat->strikeOut());
     tmpColor=lastFormat->color().name();
     tmpVerticalAlign=static_cast<unsigned int>(lastFormat->vAlign());
     if(lastFormat->textBackgroundColor().isValid())
@@ -466,12 +466,19 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
     {
         element.setAttribute( "underlinecolor", lastFormat->textUnderlineColor().name() );
     }
-    if(tmpStrikeOut)
+    if ( lastFormat->doubleStrikeOut() )
+    {
+        element.setAttribute(attrStrikeOut, "double");
+        QString strLineType=lineStyleToString( lastFormat->strikeOutLineStyle() );
+        element.setAttribute( "strikeoutstyleline", strLineType );
+    }
+    else if(tmpStrikeOut)
     {
         element.setAttribute(attrStrikeOut, tmpStrikeOut);
         QString strLineType=lineStyleToString( lastFormat->strikeOutLineStyle() );
         element.setAttribute( "strikeoutstyleline", strLineType );
     }
+
     element.setAttribute(attrColor, tmpColor);
 
     if(!tmpTextBackColor.isEmpty())
@@ -687,11 +694,11 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     {
         QString value = n.attribute( attrUnderline );
         if ( value == "double" )
-            format.setNbLineType ( KoTextFormat::DOUBLE);
+            format.setUnderlineNbLineType ( KoTextFormat::DOUBLE);
         else if ( value == "single" )
-            format.setNbLineType ( KoTextFormat::SIMPLE);
+            format.setUnderlineNbLineType ( KoTextFormat::SIMPLE);
         else
-            format.setNbLineType ( (bool)value.toInt() ? KoTextFormat::SIMPLE :KoTextFormat::NONE);
+            format.setUnderlineNbLineType ( (bool)value.toInt() ? KoTextFormat::SIMPLE :KoTextFormat::NONE);
     }
     if (n.hasAttribute("underlinestyleline") )
     {
@@ -703,7 +710,15 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     }
     bool strikeOut=false;
     if(n.hasAttribute(attrStrikeOut))
-        strikeOut = (bool)n.attribute( attrStrikeOut ).toInt();
+    {
+        QString value = n.attribute( attrStrikeOut );
+        if ( value == "double" )
+            format.setStrikeOutNbLineType ( KoTextFormat::DOUBLE);
+        else if ( value == "single" )
+            format.setStrikeOutNbLineType ( KoTextFormat::SIMPLE);
+        else
+            format.setStrikeOutNbLineType ( (bool)value.toInt() ? KoTextFormat::SIMPLE :KoTextFormat::NONE);
+    }
     if (n.hasAttribute("strikeoutstyleline"))
     {
         QString strLineType = n.attribute("strikeoutstyleline");

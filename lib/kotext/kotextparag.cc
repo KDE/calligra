@@ -1135,7 +1135,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         p->setFont( font );
     }
 
-    if ( font.strikeOut() )
+    if ( format->strikeOutNbLineType() == KoTextFormat::SIMPLE )
     {
 
         p->save();
@@ -1167,4 +1167,38 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         font.setStrikeOut( FALSE );
         p->setFont( font );
     }
+    else if ( format->strikeOutNbLineType() == KoTextFormat::DOUBLE )
+    {
+        p->save();
+        switch( format->strikeOutLineStyle() )
+        {
+        case KoTextFormat::SOLID:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+            break;
+        case KoTextFormat::DASH:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashLine ) );
+            break;
+        case KoTextFormat::DOT:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            break;
+        case KoTextFormat::DASH_DOT:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            break;
+        case KoTextFormat::DASH_DOT_DOT:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotDotLine ) );
+
+            break;
+        default:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        }
+
+        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+        p->drawLine( startX, y - h/2 + 2 -KoBorder::zoomWidthY( 1, zh, 0 ) , startX + bw, y- h/2 +2 -KoBorder::zoomWidthY( 1, zh, 0 ));
+        p->drawLine( startX, y - h/2 + 2 + KoBorder::zoomWidthY( 1, zh, 0 ) , startX + bw, y- h/2 +2 +KoBorder::zoomWidthY( 1, zh, 0 ));
+
+        p->restore();
+        font.setStrikeOut( FALSE );
+        p->setFont( font );
+    }
+
 }

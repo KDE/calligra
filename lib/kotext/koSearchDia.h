@@ -75,6 +75,8 @@ public:
     int m_size;
     KoTextFormat::VerticalAlignment m_vertAlign;
     KoTextFormat::NbLine m_underline;
+    KoTextFormat::NbLine m_strikeOut;
+
     QStringList m_strings; // history
     long m_optionsMask;
     long m_options;
@@ -267,11 +269,10 @@ private:
     QRadioButton *m_boldNo;
     QRadioButton *m_italicYes;
     QRadioButton *m_italicNo;
-    QRadioButton *m_strikeOutYes;
-    QRadioButton *m_strikeOutNo;
 
     QComboBox *m_vertAlignItem;
     QComboBox *m_underlineItem;
+    QComboBox *m_strikeOutItem;
 
     KoSearchContext *m_ctx;
 };

@@ -1688,9 +1688,10 @@ void KPresenterView::mtextFont()
                                textIface->textColor(),
                                col,
                                textIface->textUnderlineColor(),
-                               textIface->nbLineType(),
+                               textIface->underlineNbLineType(),
                                textIface->underlineLineStyle(),
-                               textIface->strikeOutLineStyle());
+                               textIface->strikeOutLineStyle(),
+                               textIface->strikeOutNbLineType());
 
     connect( m_fontDlg, SIGNAL( apply() ),
              this, SLOT( slotApplyFont() ) );
@@ -1712,9 +1713,10 @@ void KPresenterView::slotApplyFont()
                           m_fontDlg->color(),
                           m_fontDlg->backGroundColor(),
                           m_fontDlg->underlineColor(),
-                          m_fontDlg->getNblineType(),
+                          m_fontDlg->getUnderlineNbLineType(),
                           m_fontDlg->getUnderlineLineStyle(),
                           m_fontDlg->getStrikeOutLineStyle(),
+                          m_fontDlg->getStrikeOutNbLineType(),
                           flags);
     }
 }
@@ -4624,7 +4626,7 @@ void KPresenterView::showFormat( const KoTextFormat &currentFormat )
     actionTextBold->setChecked( currentFormat.font().bold());
     actionTextItalic->setChecked( currentFormat.font().italic() );
     actionTextUnderline->setChecked( currentFormat.underline());
-    actionFormatStrikeOut->setChecked( currentFormat.font().strikeOut());
+    actionFormatStrikeOut->setChecked( currentFormat.strikeOut());
 
     QColor col=currentFormat.textBackgroundColor();
     actionBrushColor->setEnabled(true);

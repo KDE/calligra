@@ -6057,15 +6057,15 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
     //    fn.setPointSizeFloat( nf.font().pointSizeFloat() );
     if ( flags & KoTextFormat::StrikeOut )
     {
-        fn.setStrikeOut( nf.font().strikeOut() );
         setStrikeOutLineStyle( nf.strikeOutLineStyle() );
+        setStrikeOutNbLineType (nf.strikeOutNbLineType());
     }
     if( flags & KoTextFormat::TextBackgroundColor)
         setTextBackgroundColor(nf.textBackgroundColor());
     if( flags & KoTextFormat::ExtendUnderLine)
     {
         setTextUnderlineColor(nf.textUnderlineColor());
-        setNbLineType (nf.nbLineType());
+        setUnderlineNbLineType (nf.underlineNbLineType());
         setUnderlineLineStyle (nf.underlineLineStyle());
     }
 
