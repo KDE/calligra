@@ -1,13 +1,13 @@
 SUBDIRS = toolbar pics templates
 
-INCLUDES = -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES = -I$(srcdir)/../kudesigner_lib -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
 
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = libkudesignercore.la kudesigner.la
-libkudesignercore_la_SOURCES = canvbox.cpp creportitem.cpp ccalcfield.cpp cspecialfield.cpp mycanvas.cpp cfield.cpp cv.cpp clabel.cpp cline.cpp property.cpp propertyeditor.cpp propertywidgets.cpp kudesigner_view.cpp kudesigner_factory.cpp kudesigner_doc.cpp plugin.cpp kudesigner_command.cpp canvsection.cpp canvband.cpp canvkutemplate.cpp canvreportheader.cpp canvreportfooter.cpp canvpageheader.cpp canvpagefooter.cpp canvdetail.cpp canvdetailheader.cpp canvdetailfooter.cpp canvdefs.cpp
-libkudesignercore_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -avoid-version
-libkudesignercore_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
+libkudesignercore_la_SOURCES = kudesigner_view.cpp kudesigner_factory.cpp kudesigner_doc.cpp
+libkudesignercore_la_LDFLAGS = -avoid-version -module $(all_libraries) $(KDE_RPATH)
+libkudesignercore_la_LIBADD = $(srcdir)/../kudesigner_lib/libkudesignercommon.la $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
 
 ## The part
 kde_module_LTLIBRARIES = libkudesignerpart.la
@@ -38,24 +38,10 @@ rcdir = $(kde_datadir)/kudesigner
 rc_DATA = kudesignerui.rc kudesigner_readonly.rc
 
 EXTRA_DIST = \
-	report.h \
-	canvbox.h \
-	clabel.h \
-	cv.h \
-	mycanvas.h \
-	canvdefs.h \
-	cline.h \
 	kudesigner_aboutdata.h \
-	ccalcfield.h \
-	creportitem.h \
 	kudesigner_factory.h \
 	kudesigner_part.h \
-	cfield.h \
-	cspecialfield.h \
 	kudesigner_view.h \
-	property.h \
-	propertyeditor.h \
-	propertywidgets.h \
 	$(rc_DATA) \
 	$(apps_DATA)
 

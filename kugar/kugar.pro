@@ -2,12 +2,17 @@
 # ------------------------------------------- 
 # Subdir relative project main directory: .
 # Target is a subdirs project 
- 
-TEMPLATE=subdirs
+
+TEMPLATE = subdirs
+CONFIG += release \
+warn_on
+OBJECTS_DIR = .obj
+UI_DIR = .ui
+MOC_DIR = .moc
+MAKEFILE = Makefile.qt
 SUBDIRS += lib \
-  kudesigner_qt \
-  shell_qt 
-MOC_DIR = moc
-OBJECTS_DIR = obj
-UI_DIR = ui
-MAKEFILE=Makefile.qt
+           kudesigner_qt \
+           kudesigner_qt2 \
+           kudesigner_lib \
+           shell_qt \
+           shell_qt2 
