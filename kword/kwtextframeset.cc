@@ -2881,7 +2881,6 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
         }
         }
     }
-    kdDebug()<<" ddddddddddddddddddddddddddddddddddddd\n";
     textView()->handleKeyPressEvent( e );
 }
 
