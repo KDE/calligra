@@ -433,3 +433,13 @@ void KWordDocIface::setConfigUseBulletStyle( bool _ubs)
 {
     doc->getAutoFormat()->configUseBulletStyle(_ubs);
 }
+
+bool KWordDocIface::configAutoChangeFormat() const
+{
+    return doc->getAutoFormat()->getConfigAutoChangeFormat();
+}
+
+void KWordDocIface::setConfigAutoChangeFormat( bool _auto)
+{
+    doc->getAutoFormat()->configAutoChangeFormat(_auto);
+}
