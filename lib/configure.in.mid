@@ -1,0 +1,38 @@
+AC_MSG_CHECKING([whetever kopainter should be compiled])
+
+if test -s $srcdir/inst-apps ; then
+    SUBDIRLIST=`cat $srcdir/inst-apps`
+else
+    SUBDIRLIST=`cat $srcdir/subdirs`
+fi
+
+# fallback (KDE_CREATE_SUBDIRLIST has this fallback, so I have put it here too.)
+if test -z "$SUBDIRLIST" ; then
+    SUBDIRLIST=`ls -1 $srcdir`
+fi
+
+# first check which main apllication we could compile
+for args in $SUBDIRLIST ; do
+    case $args in
+        kontour) COMPILE_LIB_FOR_KONTOUR="$args " ;;
+        karbon) COMPILE_LIB_FOR_KARBON="$args " ;;
+    esac
+done
+
+# now remove the applications the user has asked not to compile
+for args in $DO_NOT_COMPILE ; do
+    case $args in
+        kontour) COMPILE_LIB_FOR_KONTOUR= ;;
+        karbon) COMPILE_LIB_FOR_KARBON= ;;
+    esac
+done
+
+if test -n "$COMPILE_FILTER_KONTOUR$COMPILE_FILTER_KARBON" ; then
+    USERFEEDBACKCOMPILELIB="yes"
+else
+    USERFEEDBACKCOMPILELIB="no"
+fi
+
+AC_MSG_RESULT([$USERFEEDBACKCOMPILELIB])
+
+AM_CONDITIONAL(compile_lib_KOPAINTER, test "$USERFEEDBACKCOMPILELIB" = "yes" )
