@@ -1482,6 +1482,11 @@ void KWParagDia::setParagLayout( const KWParagLayout & lay )
     setSpaceAfterParag( lay.margins[QStyleSheetItem::MarginBottom] );
     if ( lay.counter )
         setCounter( *lay.counter );
+    else
+    {
+        numTypeChanged( Counter::NUM_NONE );
+        gNumbering->setButton(Counter::NUM_NONE );
+    }
     setLineSpacing( lay.lineSpacing );
     setLeftBorder( lay.leftBorder );
     setRightBorder( lay.rightBorder );
