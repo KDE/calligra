@@ -68,17 +68,16 @@ const bool WinWordDoc::convert() {
     if(!checkBinTables())
         return false;
 
-    // read & process the DOP, TODO
-    // process the XCHARs and create the 'Section' objs
+    // Read & process the DOP [TODO],...
 
-    //if(m_fib->fComplex==0) {
-    //}
-    //else {
-    //}
-
+    if(m_fib->fComplex==0) {
+        convertSimple();
+    }
+    else {
+        convertComplex();
+    }
     m_ready=true;
-    m_success=false;  // only now :)
-    return true;
+    return m_success;
 }
 
 const QDomDocument * const WinWordDoc::part() {
@@ -176,7 +175,7 @@ void WinWordDoc::FIBInfo() {
     kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib->fcMac))));
     kdebug(KDEBUG_INFO, 31000, "T-e-x-t-------------------");
 
-    char *str=new char[m_fib->fcMac - m_fib->fcMin];
+    /*char *str=new char[m_fib->fcMac - m_fib->fcMin];
     int i, j;
 
     for(i=m_fib->fcMin, j=0;i<m_fib->fcMac;++i, ++j)
@@ -185,6 +184,7 @@ void WinWordDoc::FIBInfo() {
     kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(str));
     delete [] str;
     kdebug(KDEBUG_INFO, 31000, "WinWordDoc::FIBInfo() - end -----------------");
+    */
 }
 
 void WinWordDoc::readFIB() {
@@ -232,6 +232,14 @@ void WinWordDoc::readFIB() {
         *tmpL=read32(m_main.data+154+4*i);
 }
 
+void WinWordDoc::convertSimple() {
+    m_success=false;
+}
+
+void WinWordDoc::convertComplex() {
+    m_success=false;
+}
+
 const PCD WinWordDoc::readPCD(const long &pos) {
 
     PCD ret;
@@ -274,7 +282,7 @@ const bool WinWordDoc::locatePieceTbl() {
             found=false;
         }
         m_ptCount=static_cast<long>((m_ptSize-4)/12);
-        m_ptPCDBase=m_ptCount*4+4+m_ptCPBase;
+        m_ptPCDBase=(m_ptCount+1)*4+m_ptCPBase;
     }
     else {
         m_success=false;

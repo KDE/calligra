@@ -36,13 +36,6 @@ struct STYLE {
     unsigned short lenCHPX;       // length
 };
 
-struct STD {                      // used in QMap (for efficiency)
-    unsigned short istd;
-    unsigned short istdBase;
-    QString name;
-    STYLE style;
-};
-
 class StyleSheet {
 
 public:
@@ -58,6 +51,13 @@ private:
     const StyleSheet &operator=(const StyleSheet &);
 
     const bool chain_rec(const unsigned short &istd);            // recursively walks back to the NULL-Style
+
+    struct STD {                   
+        unsigned short istd;
+        unsigned short istdBase;
+        QString name;
+        STYLE style;
+    };
     
     myFile table;
     const FIB * const fib;

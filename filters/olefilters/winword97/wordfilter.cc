@@ -43,5 +43,5 @@ const bool WordFilter::filter() {
 
     m_success=myDoc->convert();
     m_ready=true;
-    return m_success;
+    return true;
 }

@@ -43,6 +43,9 @@ public:
     const bool convert();
     const QString section() const { return m_section; }
 
+    void newParagraph(const QString &text);
+    void addText(const QString &text);
+
 private:
     Section(const Section &);
     const Section &operator=(const Section &);

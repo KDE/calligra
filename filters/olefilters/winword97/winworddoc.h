@@ -55,6 +55,9 @@ private:
     void FIBInfo();
     void readFIB();
 
+    void convertSimple();
+    void convertComplex();
+
     const bool locatePieceTbl();
     const bool checkBinTables();
     bool m_success, m_ready;

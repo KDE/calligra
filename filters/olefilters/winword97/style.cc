@@ -21,7 +21,7 @@
 
 // Size codes for the CHPX and PAPX sprm records
 // Note: 0...variable length!
-const unsigned char SPRM_Size[]= { 1, 1, 2, 4, 2, 2, 0, 3 };
+// const unsigned char SPRM_Size[]= { 1, 1, 2, 4, 2, 2, 0, 3 };
 
 //////////////////////////////////////////////////////////////////////////////
 // CStyle - creates everything between <FORMAT> and </FORMAT>
