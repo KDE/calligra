@@ -44,7 +44,7 @@
 #include <libart_lgpl/art_pathcode.h>
 #include <libart_lgpl/art_vpath_dash.h>
 #include <libart_lgpl/art_rgb_affine.h>
-#include <libart_lgpl/art_render_gradient.h>
+#include "art_render_misc.h"
 #include <libart_lgpl/art_render_svp.h>
 
 #include "art_rgb_svp.h"
@@ -642,7 +642,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
 			if(m_aa)
 				art_render_svp( render, svp );
-			art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
+			art_karbon_render_gradient_linear( render, linear, ART_FILTER_HYPER );
 		}
 	}
 	else if( gradient.type() == VGradient::radial )
@@ -650,6 +650,14 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
 		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
 		ArtGradientRadial *radial = new ArtGradientRadial();
+
+		// TODO : make variable
+		if( gradient.repeatMethod() == VGradient::none )
+			radial->spread = ART_GRADIENT_PAD;
+		else if( gradient.repeatMethod() == VGradient::repeat )
+			radial->spread = ART_GRADIENT_REPEAT;
+		else if( gradient.repeatMethod() == VGradient::reflect )
+			radial->spread = ART_GRADIENT_REFLECT;
 
 		radial->affine[0] = m_matrix.m11();
 		radial->affine[1] = m_matrix.m12();
@@ -685,7 +693,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
 			art_render_svp( render, svp );
-			art_render_gradient_radial( render, radial, ART_FILTER_HYPER );
+			art_karbon_render_gradient_radial( render, radial, ART_FILTER_HYPER );
 		}
 	}
 	if( render )
