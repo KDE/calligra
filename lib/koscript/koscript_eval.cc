@@ -480,7 +480,7 @@ bool KSEval_t_solidus( KSParseNode* node, KSContext& context )
     case KSValue::IntType:
       {
 	// If the devision has a "rest" then we have to convert to doubles
-	if ( ( l.value()->intValue() % r.value()->intValue() ) == 0 )
+	if ( r.value()->intValue()!=0 && ( l.value()->intValue() % r.value()->intValue() ) == 0 )
 	{
 	  KScript::Long result = l.value()->intValue() / r.value()->intValue();
 	  FILL_VALUE( context, l, r );
@@ -520,9 +520,18 @@ bool KSEval_t_percent_sign( KSParseNode* node, KSContext& context )
   if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
     return false;
 
-  KScript::Long result = l.value()->intValue() % r.value()->intValue();
-  FILL_VALUE( context, l, r );
-  context.value()->setValue( result );
+  if(r.value()->intValue()!=0)
+        {
+        KScript::Long result = l.value()->intValue() % r.value()->intValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        }
+  else
+        {
+        KScript::Double result = (double)l.value()->intValue() / (double)r.value()->intValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        }
   return true;
 }
 
