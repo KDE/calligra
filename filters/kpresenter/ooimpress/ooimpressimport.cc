@@ -1145,7 +1145,21 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         }
         else
             textData = t.data();
-
+        if( m_styleStack.hasAttribute("fo:margin-top") ||
+            m_styleStack.hasAttribute("fo:margin-bottom"))
+        {
+            double mtop = toPoint( m_styleStack.attribute( "fo:margin-top"));
+            double mbottom = toPoint( m_styleStack.attribute("fo:margin-bottom"));
+            if( mtop != 0 || mbottom!=0 )
+            {
+                QDomElement offset = doc.createElement( "OFFSETS" );
+                if( mtop!= 0)
+                    offset.setAttribute("before", mtop);
+                if( mbottom!=0)
+                    offset.setAttribute("after",mbottom);
+                p.appendChild( offset );
+            }
+        }
         // take care of indentation
         if ( m_styleStack.hasAttribute( "fo:margin-left" ) ||
             m_styleStack.hasAttribute( "fo:margin-right" ) ||
