@@ -183,6 +183,7 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->setToggle( h_aright, true );
 
     htool2->setMaximumHeight(tool1->maximumHeight());
+    htool2->setMinimumHeight(tool1->maximumHeight());
 
     connect( doc->header()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( headerFontChanged( QFont* ) ) );
     connect( doc->header()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( headerColorChanged( QColor* ) ) );
@@ -296,6 +297,7 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2->setToggle( f_aright, true );
 
     ftool2->setMaximumHeight(tool1->maximumHeight());
+    ftool2->setMinimumHeight(tool1->maximumHeight());
 
     connect( doc->footer()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( footerFontChanged( QFont* ) ) );
     connect( doc->footer()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( footerColorChanged( QColor* ) ) );
