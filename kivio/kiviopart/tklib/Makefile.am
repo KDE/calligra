@@ -5,9 +5,7 @@
 
 noinst_LTLIBRARIES =libtklib.la
 
-
-
-INCLUDES = $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 CXXFLAGS = -O2 -Wall 
 DEFS = -I. -I$(srcdir) -I$(top_srcdir)
 libtklib_la_METASOURCES = AUTO
