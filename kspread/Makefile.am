@@ -23,7 +23,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_area.cc kspread_dlg_resize2.cc kspread_dlg_preference.cc\
 	kspread_dlg_special.cc kspread_dlg_replace.cc \
 	kspread_dlg_sort.cc kspread_dlg_anchor.cc kspread_dlg_conditional.cc\
-	kspread_dlg_resize.cc kspread_factory.cc kspread_handler.cc \
+	kspread_factory.cc kspread_handler.cc \
 	kspread_events.cc kspread_dlg_show.cc kspread_dlg_series.cc \
                 kspread_dlg_validity.cc \
 	kspread_dlg_insert.cc kspread_dlg_pasteinsert.cc KSpreadDocIface.skel KSpreadMapIface.skel \
@@ -61,7 +61,7 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h \
 	kspread_dlg_special.h kspread_dlg_replace.h kspread_dlg_goto.h \
 	kspread_dlg_sort.h kspread_dlg_anchor.h kspread_dlg_series.h \
 	kspread_dlg_preference.h kspread_dlg_angle.h \
-	kspread_dlg_resize.h kspread_factory.h kspread_handler.h \
+	kspread_factory.h kspread_handler.h \
                 kspread_dlg_validity.h \
                 kspread_events.h kspread_global.h  \
 	kspread_dlg_show.h kspread_dlg_insert.h kspread_dlg_pasteinsert.h KSpreadViewIface.h \

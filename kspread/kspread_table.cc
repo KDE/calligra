@@ -5912,7 +5912,6 @@ bool KSpreadTable::testAreaPasteInsert()
     buffer.close();
 
     QDomElement e = doc.documentElement();
-    QRect rect;
     if ( !e.namedItem( "columns" ).toElement().isNull() )
         return false;
 

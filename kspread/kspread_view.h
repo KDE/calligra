@@ -301,8 +301,6 @@ protected slots:
     /**
      * Border popup menu
      */
-    void slotPopupResizeColumn();
-    void slotPopupResizeRow();
     void slotPopupAdjustColumn();
     void slotPopupAdjustRow();
     void slotPopupInsertRow();

@@ -69,7 +69,6 @@
 #include "kspread_dlg_replace.h"
 #include "kspread_dlg_sort.h"
 #include "kspread_dlg_anchor.h"
-#include "kspread_dlg_resize.h"
 #include "kspread_dlg_layout.h"
 #include "kspread_dlg_show.h"
 #include "kspread_dlg_insert.h"
@@ -1880,8 +1879,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_pPopupColumn->insertSeparator();
     m_default->plug( m_pPopupColumn );
     m_areaName->plug( m_pPopupColumn );
-
-    m_pPopupColumn->insertItem( KSBarIcon("resizecol"),i18n("Resize..."), this, SLOT( slotPopupResizeColumn() ) );
+    m_resizeColumn->plug( m_pPopupColumn );
     m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
     m_pPopupColumn->insertSeparator();
     m_pPopupColumn->insertItem( KSBarIcon("insert_table_col"),i18n("Insert Column(s)"), this, SLOT( slotPopupInsertColumn() ) );
@@ -1899,14 +1897,6 @@ void KSpreadView::slotPopupAdjustColumn()
     QRect selection( m_pTable->selectionRect() );
     for(int i=selection.left();i<=selection.right();i++)
         canvasWidget()->hBorderWidget()->adjustColumn(i);
-}
-
-void KSpreadView::slotPopupResizeColumn()
-{
-    if ( !m_pTable )
-        return;
-    KSpreadresize* dlg = new KSpreadresize( this, "Resize column",KSpreadresize::resize_column );
-    dlg->show();
 }
 
 void KSpreadView::slotPopupInsertColumn()
@@ -1945,8 +1935,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_default->plug( m_pPopupRow );
     m_areaName->plug( m_pPopupRow );
 
-
-    m_pPopupRow->insertItem( KSBarIcon("resizerow"),i18n("Resize..."), this, SLOT( slotPopupResizeRow() ) );
+    m_resizeRow->plug( m_pPopupRow );
     m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
     m_pPopupRow->insertSeparator();
     m_pPopupRow->insertItem( KSBarIcon("insert_table_row"),i18n("Insert Row(s)"), this, SLOT( slotPopupInsertRow() ) );
@@ -1963,14 +1952,6 @@ void KSpreadView::slotPopupAdjustRow()
     QRect selection( m_pTable->selectionRect() );
     for(int i=selection.top();i<=selection.bottom();i++)
         canvasWidget()->vBorderWidget()->adjustRow(i);
-}
-
-void KSpreadView::slotPopupResizeRow()
-{
-    if ( !m_pTable )
-       return;
-    KSpreadresize* dlg = new KSpreadresize( this, "Resize row",KSpreadresize::resize_row );
-    dlg->show();
 }
 
 void KSpreadView::slotPopupInsertRow()
