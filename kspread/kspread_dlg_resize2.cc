@@ -61,7 +61,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 			if(size!=m_pView->activeTable()->rowLayout(i)->height(m_pView->canvasWidget()))
 			equals=false;
 		label=i18n("Height (%1)").arg(m_pView->doc()->getUnitName());
-                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit(  20 , m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
+                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit( static_cast<int>( heightOfRow ), m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
 		break;
 	case resize_column:
 		setCaption( i18n("Resize Column") );
@@ -72,7 +72,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
                     equals=false;
 
 		label=i18n("Width (%1)").arg(m_pView->doc()->getUnitName());
-                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit(  60 , m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
+                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit(  static_cast<int>( colWidth ) , m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
 		break;
 	default :
 	        kdDebug(36001) <<"Err in type_resize" << endl;
@@ -84,10 +84,10 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   	switch(type)
 	{
 	case resize_row:
-          size=(int)KoUnit::ptToUnit(  20 , m_pView->doc()->getUnit() );
+          size=(int)KoUnit::ptToUnit(  static_cast<int>( heightOfRow ), m_pView->doc()->getUnit() );
           break;
 	case resize_column:
-          size=(int)KoUnit::ptToUnit(  60 , m_pView->doc()->getUnit() );
+          size=(int)KoUnit::ptToUnit(  static_cast<int>( colWidth ), m_pView->doc()->getUnit() );
           break;
 	}
 
@@ -119,7 +119,7 @@ void KSpreadresize2::slotOk()
 {
     QRect selection( m_pView->activeTable()->selection() );
 
-    int new_size=KoUnit::ptFromUnit( m_pSize2->value(), m_pView->doc()->getUnit() );
+    int new_size = (int) KoUnit::ptFromUnit( m_pSize2->value(), m_pView->doc()->getUnit() );
     if ( !m_pView->doc()->undoBuffer()->isLocked() )
       {
         KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(),m_pView->activeTable() , selection );
@@ -130,7 +130,7 @@ void KSpreadresize2::slotOk()
       case resize_row:
 	if(m_pDefault->isChecked())
 	  for(int i=selection.top();i<=selection.bottom();i++) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-	    m_pView->vBorderWidget()->resizeRow( 20, i, false );
+	    m_pView->vBorderWidget()->resizeRow( static_cast<int>( heightOfRow ), i, false );
 	else
 	  for(int i=selection.top();i<=selection.bottom();i++) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
 	    m_pView->vBorderWidget()->resizeRow(new_size,i,false );
@@ -138,7 +138,7 @@ void KSpreadresize2::slotOk()
       case resize_column:
 	if(m_pDefault->isChecked())
 	  for(int i=selection.left();i<=selection.right();i++) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
-	    m_pView->hBorderWidget()->resizeColumn( 60, i, false );
+	    m_pView->hBorderWidget()->resizeColumn( static_cast<int>( colWidth ), i, false );
 	else
 	  for(int i=selection.left();i<=selection.right();i++) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
 	    m_pView->hBorderWidget()->resizeColumn(new_size,i,false );
