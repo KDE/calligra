@@ -34,6 +34,10 @@
   <Action name="transformZoomMax"/>
   <Action name="transformZoomMaxAspect"/>
  </Menu>
+ <Menu name="Help">
+  <Action name="helpUsingHelp"/>
+  <Action name="helpAboutKImage"/> 
+ </Menu>
 </MenuBar>
 <ToolBars>
  <ToolBar>
@@ -45,20 +49,9 @@
   <Action name="paste"/>
  </ToolBar>
  <ToolBar>
-  <Action name="fit_to_view"/>
-  <Action name="fit_with_props"/>
-  <Action name="originalsize"/>
+  <Action name="viewFitToView"/>
+  <Action name="viewFitWithProportions"/>
+  <Action name="viewOriginalSize"/>
  </ToolBar>
 </ToolBars>
 </QConfig>
-
-
-
-
-
-
-
-
-
-
-
