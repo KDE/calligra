@@ -22,6 +22,7 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qpopupmenu.h>
 
 #include <ktoolbar.h>
 #include <kiconloader.h>
@@ -63,7 +64,8 @@ int TKAction::plug(QWidget* widget, int index)
       instance = KGlobal::instance();
 
     TKToolBarButton* b = new TKToolBarButton(icon(),plainText(),bar,name(),instance);
-    connect(b,SIGNAL(clicked()),SLOT(slotActivated()));
+    // we don't need clicked() and buttonClicked(), do we?
+    // connect(b,SIGNAL(clicked()),SLOT(slotActivated()));
     b->setIconMode(m_imode);
     initToolBarButton(b);
 

@@ -196,7 +196,12 @@ protected:
 
   void makeDefaultPixmap();
   void makeDisabledPixmap();
-
+  bool arrowPressed( const QPoint& pos ) {
+	int x = pos.x();
+	int y = pos.y();
+	return (x > width() - 12 && x <= width() && y > 0 && y < height());
+  }
+	
 private:
   QPixmap defaultPixmap;
   QPixmap activePixmap;

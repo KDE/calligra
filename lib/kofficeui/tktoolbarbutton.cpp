@@ -49,6 +49,7 @@ public:
     m_isOn         = false;
     m_isRaised     = false;
     m_autoRaised   = true;
+    ignoreNextMousePress = false;
 
     m_text         = QString::null;
     m_iconName     = QString::null;
@@ -74,6 +75,7 @@ public:
   bool    m_isRaised;
   bool    m_autoRaised;
   bool    m_arrowPressed;
+  bool    ignoreNextMousePress;
 
   QString m_text;
   QString m_iconName;
@@ -312,8 +314,7 @@ bool TKToolBarButton::eventFilter(QObject *o, QEvent *ev)
   if ( o == this )
     if (ev->type() == QEvent::MouseButtonPress && d->m_popup && d->m_isPopup ) {
       if (!d->m_isToggle) {
-        int x = mapFromGlobal(QCursor::pos()).x();
-        d->m_arrowPressed = x > width() - 12;
+        d->m_arrowPressed = arrowPressed( mapFromGlobal(QCursor::pos()) );
       } else {
         d->m_delayTimer->start(POPUP_DELAY);
       }
@@ -332,6 +333,11 @@ bool TKToolBarButton::eventFilter(QObject *o, QEvent *ev)
           leaveEvent(0L);
         return false;
         break;
+      case QEvent::MouseButtonPress: {
+        d->m_arrowPressed = arrowPressed( mapFromGlobal(QCursor::pos()) );
+        d->ignoreNextMousePress = d->m_arrowPressed;
+        break;
+      }
       default:
         break;
     }
@@ -461,6 +467,11 @@ void TKToolBarButton::slotDelayTimeout()
 
 void TKToolBarButton::slotClicked()
 {
+  if ( d->ignoreNextMousePress ) {
+    d->ignoreNextMousePress=false;
+    return;
+  }
+
   if (d->m_popup && !d->m_isPopup)
     showMenu();
   else
@@ -469,16 +480,17 @@ void TKToolBarButton::slotClicked()
 
 void TKToolBarButton::slotPressed()
 {
+  if ( d->ignoreNextMousePress )
+    return;
+
   if (d->m_popup) {
-    if (d->m_isPopup) {
-      if (d->m_arrowPressed)
-        showMenu();
-    } else {
+    if (!d->m_isPopup || d->m_isPopup && d->m_arrowPressed)
       showMenu();
-    }
-  } else {
-    emit buttonPressed();
   }
+  else
+    emit buttonPressed();
+
+  d->ignoreNextMousePress = false;
 }
 
 void TKToolBarButton::slotReleased()
