@@ -53,20 +53,17 @@
     <text>&amp;Create</text>
   </Menu>
 
+  <Menu name="import">
+    <text>&amp;Import</text>
+    <Action name="import_file" />
+    <Action name="import_server" />
+  </Menu>
+
   <Menu name="window" noMerge="1">
     <text>&amp;Window</text>
     <DefineGroup name="window_operations"/>
     <Merge/>
   </Menu>
-  <!-- Menu name="window">
-    <text>&amp;Window</text>
-    <Separator/>
-    <Action name="window_next"/>
-    <Action name="window_previous"/>
-    <Action name="window_switchto"/>
-    <Separator/>
-    <DefineGroup name="window_list"/>
-  </Menu -->
   
   <Menu name="settings" noMerge="1">
     <text>&amp;Settings</text>

@@ -134,6 +134,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 * Creates navigator, lookups items for current project and fills the nav. with not-opened items
 		 */
 		void		initNavigator();
+		void		initContextHelp();
 
 		/**
 		 * this slot is called if a window changes

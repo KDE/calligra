@@ -56,7 +56,7 @@
 #include "startup/KexiProjectSet.h"
 #include "startup/KexiNewProjectWizard.h"
 #include "startup/KexiStartup.h"
-
+#include "kexicontexthelp.h"
 #include <unistd.h>
 
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
@@ -65,10 +65,11 @@ class KexiMainWindow::Private
 {
 	public:
 		KexiProject	*prj;
+		KexiContextHelp *ctxH;
 		KexiBrowser	*nav;
 		KexiDialogDict	dialogs;
 		KXMLGUIClient   *curDialogGUIClient;
-
+		KexiDialogBase	*curDialog;
 		//! project menu
 		KAction *action_save, *action_save_as, *action_close,
 		 *action_project_properties;
@@ -90,6 +91,7 @@ class KexiMainWindow::Private
 		navToolWindow=0;
 		prj = 0;
 		curDialogGUIClient=0;
+		curDialog=0;
 		block_KMdiMainFrm_eventFilter=false;
 	}
 };
@@ -112,6 +114,9 @@ KexiMainWindow::KexiMainWindow()
 	initActions();
 	createShellGUI(true);
 	(void) new KexiStatusBar(this, "status_bar");
+
+	initContextHelp();
+	
 
 //	initBrowser();
 	//TODO:new KexiProject();
@@ -397,6 +402,16 @@ bool KexiMainWindow::closeProject()
 	return true;
 }
 
+void KexiMainWindow::initContextHelp() {
+	d->ctxH=new KexiContextHelp(this,this);
+	d->ctxH->setContextHelp(i18n("Welcome"),i18n("The <B>KEXI team</B> wishes you a lot of productive work, "
+		"with this product. <BR><HR><BR>If you have found a <B>bug</B> or have a <B>feature</B> request, please don't "
+		"hesitate to report it at our <A href=\"http://www.kexi-project.org/cgi-bin/bug.pl\"> issue "
+		"tracking system </A>.<BR><HR><BR>If you would like to <B>join</B> our effort, the <B>development</B> documentation "
+		"at <A href=\"http://www.kexi-project.org\">www.kexi-project.org</A> is a good starting point."),0);
+	addToolWindow(d->ctxH,KDockWidget::DockRight,getMainDockWidget(),20);
+}
+
 void
 KexiMainWindow::initNavigator()
 {
@@ -552,20 +567,36 @@ KexiMainWindow::registerChild(KexiDialogBase *dlg)
 void
 KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 {
-	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
-	if (!dlg || !dlg->isRegistered())
-		return;
-	KXMLGUIClient *client=dlg->guiClient();
-	if (client==d->curDialogGUIClient)
-		return;
+       kdDebug() << "KexiMainWindow::activeWindowChanged()" << endl;
+        KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
+       kdDebug() << "KexiMainWindow::activeWindowChanged(): dlg = " << dlg << endl;
 
-	kdDebug() << "KexiMainWindow::activeWindowChanged(): from = " << d->curDialogGUIClient << endl;
-	kdDebug() << "KexiMainWindow::activeWindowChanged(): to = " << dlg->guiClient() << endl;
-	if (d->curDialogGUIClient)
-		guiFactory()->removeClient(d->curDialogGUIClient);
-	if (client)
-		guiFactory()->addClient(client);
-	d->curDialogGUIClient=client;
+
+       KXMLGUIClient *client;
+
+       if (!dlg) client=0;
+       else if ( !dlg->isRegistered()) return;
+       else client=dlg->guiClient();
+
+       if (client!=d->curDialogGUIClient) {
+	       kdDebug()<<"KexiMainWindow::activeWindowChanged(): old gui client:"<<d->curDialogGUIClient<<" new gui client: "
+			<<client<<endl;
+               if (d->curDialogGUIClient) {
+			guiFactory()->removeClient(d->curDialogGUIClient);
+			d->curDialog->detachFromGUIClient();
+		}
+               if (client) {
+			guiFactory()->addClient(client);
+			dlg->attachToGUIClient();
+		}
+       } else {
+	 if (d->curDialog!=dlg) {
+		if (d->curDialog) d->curDialog->detachFromGUIClient();
+		if (dlg) dlg->attachToGUIClient();
+	 }
+       }
+       d->curDialogGUIClient=client;
+       d->curDialog=dlg;
 }
 
 bool

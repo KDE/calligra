@@ -68,10 +68,12 @@ KexiDataTable::~KexiDataTable()
 void
 KexiDataTable::initActions()
 {
+#warning FIXME Move this to the table part
+/*
 	kdDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
 	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
 	setXMLFile("kexidatatableui.rc");
-
+*/
 }
 
 void

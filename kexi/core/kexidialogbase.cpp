@@ -25,14 +25,18 @@
 #include <kapplication.h>
 
 KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
- : KMdiChildView(caption, parent, "KexiDialogBase"), KXMLGUIClient(),m_isRegistered(false)
+ : KMdiChildView(caption, parent, "KexiDialogBase"),m_isRegistered(false)
 {
 	m_contextHelpInfo=new KexiContextHelpInfo();
 	m_parentWindow=parent;
-	setInstance(parent->instance());
+	m_instance=parent->instance();
 	m_docID = -1;
 }
 
+
+KInstance *KexiDialogBase::instance() {
+	return m_instance;
+}
 
 KexiDialogBase::~KexiDialogBase()
 {
@@ -52,8 +56,16 @@ bool KexiDialogBase::isRegistered(){
 }
 
 KXMLGUIClient *KexiDialogBase::guiClient() {
-	return this;
+	return 0;
 }
+
+void KexiDialogBase::attachToGUIClient() {
+
+}
+
+void KexiDialogBase::detachFromGUIClient() {
+}
+
 
 void
 KexiDialogBase::setDocID(int id)

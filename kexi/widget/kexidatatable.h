@@ -52,6 +52,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		virtual QSize minimumSizeHint() const;
 		virtual QSize sizeHint() const;
 
+
 	protected:
 		void init();
 		void initActions();

@@ -30,7 +30,7 @@ namespace KexiPart {
 	class Part;
 }
 
-class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KXMLGUIClient
+class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView
 {
 	Q_OBJECT
 
@@ -39,6 +39,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KXMLGUIClien
 		~KexiDialogBase();
 		bool isRegistered();
 		virtual KXMLGUIClient* guiClient();
+		virtual void attachToGUIClient(); //JOWENN: make that protected perhaps
+		virtual void detachFromGUIClient(); //JOWENN: make that protected perhaps
 		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 
 		/*! \return main (top level) widget inside this dialog.
@@ -52,7 +54,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KXMLGUIClien
 
 		void	setDocID(int id);
 		int	docID() { return m_docID; }
-
+		KInstance *instance();
 	public slots:
 
 	signals:
@@ -66,6 +68,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KXMLGUIClien
 		bool m_isRegistered;
 		KexiContextHelpInfo *m_contextHelpInfo;
 		int m_docID;
+		KInstance *m_instance;
 };
 
 #endif
