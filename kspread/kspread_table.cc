@@ -3712,7 +3712,7 @@ void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
   KSpreadCell * sourceCell = cellAt( x1, y1 );
   KSpreadCell * targetCell = cellAt( x2, y2 );
 
-  //  kdDebug() << "Source: (" << x1 << ", " << y1 << ") " << sourceCell->text() << endl;
+//    kdDebug() << "Source: (" << x1 << ", " << y1 << ") " << sourceCell->text() << endl;
 
   if ( sourceCell->isDefault() )
   {
@@ -3723,7 +3723,7 @@ void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
     }
     else // overwrite target with defaultcell
     {
-      targetCell = nonDefaultCell( x2, y2 );
+      targetCell = new KSpreadCell( this, x2, y2 );
       insertCell( targetCell );
       return;
     }
@@ -3735,18 +3735,18 @@ void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
     insertCell( targetCell );
   }
 
-
+  
   // TODO: check if this enough
   targetCell->copyContent( sourceCell );
-  //  kdDebug() << "Target: (" << x2 << ", " << y2 << ") " << sourceCell->text() << endl;
+//    kdDebug() << "Target: (" << x2 << ", " << y2 << ") " << sourceCell->text() << endl;
 
   /*
-    if ( !sourceCell->isFormula() )
-    {
+  if ( !sourceCell->isFormula() )
+  {
     targetCell->copyContent( sourceCell );
-    }
-    else
-    {
+  }
+  else
+  {
     targetCell->setCellText( targetCell->decodeFormula( sourceCell->encodeFormula() ) );
     targetCell->setCalcDirtyFlag();
     targetCell->calc(false);
@@ -4970,19 +4970,21 @@ void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Ope
     QByteArray b;
 
     if ( mime->provides( KSpreadTextDrag::selectionMimeType() ) )
+    {
         b = mime->encodedData( KSpreadTextDrag::selectionMimeType() );
+    }
     else if( mime->provides( "text/plain" ) )
-      {
+    {
         // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
         // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
 	QString _text = QApplication::clipboard()->text();
 	pasteTextPlain( _text, _marker);
 	return;
-      }
+    }
     else
         return;
 
-    paste( b, _marker,makeUndo, sp, op,insert, insertTo );
+    paste( b, _marker, makeUndo, sp, op, insert, insertTo );
 }
 
 void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
@@ -4992,20 +4994,22 @@ void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
   if( _text.isEmpty() )
     return;
 
-  QString tmp =_text;
+  QString tmp = _text;
   int i;
   int mx   = _marker.x();
   int my   = _marker.y();
   int rows = 1;
   int len  = tmp.length();
-  for (i = 0; i < len; ++i)
+  
+  //count the numbers of lines in text
+  for ( i = 0; i < len; ++i )
   {
-    if (tmp[i] == '\n')
+    if ( tmp[i] == '\n' )
       ++rows;
   }
 
   KSpreadCell * cell = cellAt( mx, my );
-  if (rows == 1)
+  if ( rows == 1 )
   {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -5023,7 +5027,7 @@ void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
   i = 0;
   QString rowtext;
 
-  while (i < rows)
+  while ( i < rows )
   {
     int p = 0;
 
@@ -5039,7 +5043,6 @@ void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
       cell = new KSpreadCell( this, mx, my + i );
       insertCell( cell );
     }
-
     cell->setCellText( rowtext );
     cell->updateChart();
 
@@ -5062,7 +5065,7 @@ void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
   emit sig_updateVBorder( this );
 }
 
-void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker,bool makeUndo, PasteMode sp, Operation op,bool insert, int insertTo )
+void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker, bool makeUndo, PasteMode sp, Operation op, bool insert, int insertTo )
 {
     kdDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
@@ -5088,7 +5091,7 @@ void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker,bool makeUn
     loadSelection( doc, mx - 1, my - 1, makeUndo, sp, op, insert, insertTo );
 }
 
-bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo, PasteMode sp, Operation op,bool insert,int insertTo )
+bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift, bool makeUndo, PasteMode sp, Operation op, bool insert, int insertTo )
 {
     QDomElement e = doc.documentElement();
 
@@ -5175,6 +5178,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 
     KSpreadCell* refreshCell = 0;
     KSpreadCell *cell;
+    KSpreadCell *cellLoad;
     QDomElement c = e.firstChild().toElement();
     for( ; !c.isNull(); c = c.nextSibling().toElement() )
     {
@@ -5193,26 +5197,37 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 
                     bool needInsert = FALSE;
                     cell = cellAt( col + coff, row + roff );
-                    if ( cell->isDefault() )
+
+                    if ( ( cell->isDefault() ) || ( op == OverWrite && sp == Normal ) ) //we will generate a new or replace the existing cell
                     {
-                        cell = new KSpreadCell( this, 0, 0 );
-                        needInsert = TRUE;
+                        // Don't use insertCell with the cell itself, it will be deleted!
+                        // Therefore we need a temporary cell cellLoad, where we first load the data and then use this
+                        // to replace the existing one.
+
+                        cellLoad = new KSpreadCell( this, col + coff, row + roff );
+                    
+                        if ( !cellLoad->load( c, _xshift + coff, _yshift + roff, sp, op ) )
+                        {
+                            delete cell; //is this correct? Do we really delete the existing cell on failure?
+                            delete cellLoad; //Failure->we don't replace->actively delete the temporary cell
+                        }
+                        else
+                        {
+                            insertCell( cellLoad );
+                        }
+                    }
+                    else // we simply load into the existing one
+                    {
+                        if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op ) )
+                        {
+                            delete cell; //is this correct? Do we really delete the existing cell on failure?
+                        }
                     }
 
-                    if ( op == OverWrite && sp == Normal )
+                    cell = cellAt( col + coff, row + roff );
+                    if( !refreshCell && cell->updateChart( false ) )
                     {
-                        needInsert = TRUE;
-                    }
-                    if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op ) )
-                    {
-                        if ( needInsert )
-                            delete cell;
-                    }
-                    else {
-                        if ( needInsert )
-                            insertCell( cell );
-                        if( !refreshCell && cell->updateChart( false ) )
-                            refreshCell = cell;
+                        refreshCell = cell;
                     }
                 }
             }
