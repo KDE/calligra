@@ -652,14 +652,14 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                         // But not out of the page it was on initially
                         if ( isOutOfPage( *frame, page ) )
                             frame->moveBy( oldMx - mx, oldMy - my );
-                        // Move resize handles to new position
-                        frame->updateResizeHandles();
                         // Calculate new rectangle for this frame
                         QRect newRect( frame->x() - 1, frame->y() - 1,
                                        frame->width() + 2, frame->height() + 2 );
                         // Repaing only the changed rects (oldRect U newRect)
                         repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
                     }
+                    // Move resize handles to new position
+                    frame->updateResizeHandles();
                 }
             }
         }
