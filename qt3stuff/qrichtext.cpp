@@ -1026,7 +1026,7 @@ void QTextCursor::gotoWordLeft()
     tmpIndex = -1;
     QTextString *s = string->string();
     bool allowSame = FALSE;
-    for ( int i = idx - 1; i >= 0; --i ) {
+    for ( int i = idx; i >= 0; --i ) {
 	if ( s->at( i ).c.isSpace() || s->at( i ).c == '\t' || s->at( i ).c == '.' ||
 	     s->at( i ).c == ',' || s->at( i ).c == ':' || s->at( i ).c == ';' ) {
 	    if ( !allowSame )
@@ -1047,7 +1047,7 @@ void QTextCursor::gotoWordRight()
     tmpIndex = -1;
     QTextString *s = string->string();
     bool allowSame = FALSE;
-    for ( int i = idx + 1; i < (int)s->length(); ++i ) {
+    for ( int i = idx; i < (int)s->length(); ++i ) {
 	if ( s->at( i ).c.isSpace() || s->at( i ).c == '\t' || s->at( i ).c == '.' ||
 	     s->at( i ).c == ',' || s->at( i ).c == ':' || s->at( i ).c == ';' ) {
 	    if ( !allowSame )
