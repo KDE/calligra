@@ -118,22 +118,41 @@ KSpreadStyle::~KSpreadStyle()
 
 void KSpreadStyle::saveOasisStyle( KoGenStyle &style )
 {
-#if 0
     if ( featureSet( SAlignX ) && alignX() != KSpreadFormat::Undefined )
-        format.setAttribute( "alignX", (int) m_alignX );
+    {
+        QString value ="start";
+        switch( alignX() )
+        {
+        case KSpreadFormat::Center:
+            value = "center";
+            break;
+        case KSpreadFormat::Right:
+            value = "end";
+            break;
+        case KSpreadFormat::Left:
+            value = "start";
+            break;
+        }
+        style.addProperty( "fo:text-align", value );
+    }
 
     if ( featureSet( SAlignY ) && alignY() != KSpreadFormat::Middle )
-        format.setAttribute( "alignY", (int) m_alignY );
+    {
+        style.addProperty( "fo:vertical-align", ( alignY() == KSpreadFormat::Bottom ? "bottom" : "top" ) );
+    }
 
     if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
-        format.setAttribute( "bgcolor", m_bgColor.name() );
+        style.addProperty( "fo:background-color", m_bgColor.name() );
 
     if ( featureSet( SMultiRow ) && hasProperty( PMultiRow ) )
-        format.setAttribute( "multirow", "yes" );
+        style.addProperty( "fo:wrap-option", "wrap" );
 
     if ( featureSet( SVerticalText ) && hasProperty( PVerticalText ) )
-        format.setAttribute( "verticaltext", "yes" );
-
+    {
+        style.addProperty( "fo:direction", "ttb" );
+        style.addProperty( "style:rotation-angle", "0" );
+    }
+#if 0
     if ( featureSet( SPrecision ) )
         format.setAttribute( "precision", m_precision );
 
@@ -163,25 +182,51 @@ void KSpreadStyle::saveOasisStyle( KoGenStyle &style )
         format.setAttribute( "type", (int) m_currency.type );
         format.setAttribute( "symbol", m_currency.symbol );
     }
-
+#endif
     if ( featureSet( SAngle ) )
-        format.setAttribute( "angle", m_rotateAngle );
+        style.addProperty( "style:rotation-angle", QString::number( -1.0 *m_rotateAngle  ) );
 
     if ( featureSet( SIndent ) )
-        format.setAttribute( "indent", m_indent );
-
+    {
+         style.addPropertyPt("fo:margin-left", m_indent );
+         //FIXME
+         //if ( a == KSpreadFormat::Undefined )
+         //currentCellStyle.addProperty("fo:text-align", "start" );
+    }
     if ( featureSet( SDontPrintText ) && hasProperty( PDontPrintText ) )
-        format.setAttribute( "dontprinttext", "yes" );
+        style.addProperty( "style:print-content", "false");
+
+    bool hideAll = false;
+    bool hideFormula = false;
+    bool isNotProtected = false;
 
     if ( featureSet( SNotProtected ) && hasProperty( PNotProtected ) )
-        format.setAttribute( "noprotection", "yes" );
+        isNotProtected = true;
 
     if ( featureSet( SHideAll ) && hasProperty( PHideAll ) )
-        format.setAttribute( "hideall", "yes" );
+        hideAll=true;
 
     if ( featureSet( SHideFormula ) && hasProperty( PHideFormula ) )
-        format.setAttribute( "hideformula", "yes" );
+        hideFormula = true;
 
+    if ( hideAll )
+        style.addProperty( "style:cell-protect", "hidden-and-protected" );
+    else
+    {
+        if ( isNotProtected && !hideFormula )
+            style.addProperty( "style:cell-protect", "none" );
+        else
+        {
+            if ( isNotProtected && hideFormula )
+                style.addProperty( "style:cell-protect", "formula-hidden" );
+            else if ( hideFormula )
+                style.addProperty( "style:cell-protect", "protected formula-hidden" );
+            else if ( !isNotProtected )
+                style.addProperty( "style:cell-protect", "protected" );
+        }
+    }
+
+#if 0
     if ( featureSet( SFontFamily ) )
         format.setAttribute( "font-family", m_fontFamily );
     if ( featureSet( SFontSize ) )
