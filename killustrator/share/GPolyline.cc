@@ -30,7 +30,6 @@
 #include <qdom.h>
 
 #include <klocale.h>
-#include <kdebug.h>
 
 GPolyline::GPolyline () {
   connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
@@ -45,7 +44,7 @@ GPolyline::GPolyline () {
 GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
 
     connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
-	     SLOT(updateProperties (GObject::Property, int)));
+             SLOT(updateProperties (GObject::Property, int)));
     points.setAutoDelete (true);
     sArrow = eArrow = 0L;
     sAngle = eAngle = 0;
@@ -53,38 +52,38 @@ GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("
     outlineInfo.startArrowId = element.attribute("arrow1").toInt();
     outlineInfo.endArrowId = element.attribute("arrow2").toInt();
     sArrow = (outlineInfo.startArrowId > 0 ?
-	      Arrow::getArrow (outlineInfo.startArrowId) : 0L);
+              Arrow::getArrow (outlineInfo.startArrowId) : 0L);
     eArrow = (outlineInfo.endArrowId > 0 ?
-	      Arrow::getArrow (outlineInfo.endArrowId) : 0L);
+              Arrow::getArrow (outlineInfo.endArrowId) : 0L);
 
     QDomElement p = element.firstChild().toElement();
     Coord point;
     int i=0;
     for( ; !p.isNull(); p = p.nextSibling().toElement() ) {
-	if(p.tagName()=="point") {
-	    point.x(p.attribute("x").toFloat());
-	    point.y(p.attribute("y").toFloat());
-	    addPoint(i, point);
-	    ++i;
-	}
+        if(p.tagName()=="point") {
+            point.x(p.attribute("x").toFloat());
+            point.y(p.attribute("y").toFloat());
+            addPoint(i, point);
+            ++i;
+        }
     }
     calcBoundingBox ();
 }
 
 GPolyline::GPolyline (const GPolyline& obj) : GObject (obj) {
     connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
-	     SLOT(updateProperties (GObject::Property, int)));
+             SLOT(updateProperties (GObject::Property, int)));
     points.setAutoDelete (true);
     QListIterator<Coord> it (obj.points);
     for (; it.current (); ++it)
-	points.append (new Coord (* (it.current ())));
+        points.append (new Coord (* (it.current ())));
     sArrow = obj.sArrow;
     eArrow = obj.eArrow;
     calcBoundingBox ();
 }
 
 float GPolyline::calcArrowAngle (const Coord& p1, const Coord& p2,
-				 int direction) {
+                                 int direction) {
   float angle = 0.0;
 
   if (p1.x () == p2.x ()) {
@@ -108,15 +107,15 @@ float GPolyline::calcArrowAngle (const Coord& p1, const Coord& p2,
     angle = atan (m) * RAD_FACTOR;
     if (p1.x () < p2.x ()) {
       if (direction == 0)
-	angle = 180.0 - angle;
+        angle = 180.0 - angle;
       else
-	angle = -angle;
+        angle = -angle;
     }
     else {
       if (direction == 1)
-	angle = 180.0 - angle;
+        angle = 180.0 - angle;
       else
-	angle = -angle;
+        angle = -angle;
     }
   }
   return angle;
@@ -140,9 +139,9 @@ void GPolyline::draw (QPainter& p, bool withBasePoints, bool /*outline*/) {
   unsigned int num = points.count ();
   for (i = 1; i < num; i++) {
     Painter::drawLine (p, points.at (i - 1)->x () + ((i==1) ? sdx : 0),
-		       points.at (i - 1)->y () + ((i==1) ? sdy : 0),
-		       points.at (i)->x () - ((i==num-1) ? edx : 0),
-		       points.at (i)->y () - ((i==num-1) ? edy : 0));
+                       points.at (i - 1)->y () + ((i==1) ? sdy : 0),
+                       points.at (i)->x () - ((i==num-1) ? edx : 0),
+                       points.at (i)->y () - ((i==num-1) ? edy : 0));
   }
 
   p.restore ();
@@ -195,7 +194,6 @@ void GPolyline::insertPoint (int idx, const Coord& p, bool update) {
 
 void GPolyline::addPoint (int idx, const Coord& p, bool update) {
   Coord np = p.transform (iMatrix);
-
   points.insert (idx, new Coord (np));
 
   if (update)
@@ -318,7 +316,7 @@ void GPolyline::calcBoundingBox () {
     r = r.unite (er);
 
     float angle = calcArrowAngle (*(points.at (num - 2)),
-				  *(points.at (num - 1)), 0);
+                                  *(points.at (num - 1)), 0);
     angle = 1.0 / (RAD_FACTOR / angle);
     edx = w * eArrow->length () * cos (angle);
     edy = w * eArrow->length () * sin (angle);
@@ -332,15 +330,15 @@ void GPolyline::calcBoundingBox () {
 
 void GPolyline::updateProperties (GObject::Property prop, int /*mask*/) {
     if (prop == GObject::Prop_Fill)
-	return;
+        return;
   if ((sArrow == 0L && outlineInfo.startArrowId > 0) ||
       (sArrow && sArrow->arrowID () != outlineInfo.startArrowId) ||
       (eArrow == 0L && outlineInfo.endArrowId > 0) ||
       (eArrow && eArrow->arrowID () != outlineInfo.endArrowId)) {
     sArrow = (outlineInfo.startArrowId > 0 ?
-	      Arrow::getArrow (outlineInfo.startArrowId) : 0L);
+              Arrow::getArrow (outlineInfo.startArrowId) : 0L);
     eArrow = (outlineInfo.endArrowId > 0 ?
-	      Arrow::getArrow (outlineInfo.endArrowId) : 0L);
+              Arrow::getArrow (outlineInfo.endArrowId) : 0L);
     updateRegion ();
   }
 }
@@ -352,17 +350,17 @@ QDomElement GPolyline::writeToXml (QDomDocument &document) {
     polyline.setAttribute ("arrow2", QString::number(outlineInfo.endArrowId));
 
     for (QListIterator<Coord> it (points); it.current (); ++it) {
-	QDomElement point=document.createElement("point");
-	point.setAttribute ("x", it.current ()->x ());
-	point.setAttribute ("y", it.current ()->y ());
-	polyline.appendChild(point);
+        QDomElement point=document.createElement("point");
+        point.setAttribute ("x", it.current ()->x ());
+        point.setAttribute ("y", it.current ()->y ());
+        polyline.appendChild(point);
     }
     polyline.appendChild(GObject::writeToXml(document));
     return polyline;
 }
 
 bool GPolyline::findNearestPoint (const Coord& p, float max_dist,
-				  float& dist, int& pidx, bool all) {
+                                  float& dist, int& pidx, bool all) {
   float dx, dy, min_dist = max_dist + 1, d;
   pidx = -1;
 
@@ -450,31 +448,31 @@ int GPolyline::containingSegment (float xpos, float ypos) {
         if (abs (int (x1 - x2)) < 5) {
           if ((y1 <= pp.y () && pp.y () <= y2) ||
               (y2 <= pp.y () && pp.y () <= y1)) {
-	    seg = i - 1;
-	    break;
-	  }
+            seg = i - 1;
+            break;
+          }
         }
         else {
           // y = m * x + n;
           m = (y2 - y1) / (x2 - x1);
           n = y1 - m * x1;
 
-	  if (m > 1) {
-	    xp = ((float) pp.y () - n) / m;
-	    if (xp - 5 <= pp.x () && pp.x () <= xp + 5) {
-	      seg = i - 1;
-	      break;
-	    }
-	  }
-	  else {
-	    yp = m * pp.x () + n;
-	
-	    if (yp - 5 <= pp.y () && pp.y () <= yp + 5) {
-	      seg = i - 1;
-	      break;
-	    }
-	  }
-	}
+          if (m > 1) {
+            xp = ((float) pp.y () - n) / m;
+            if (xp - 5 <= pp.x () && pp.x () <= xp + 5) {
+              seg = i - 1;
+              break;
+            }
+          }
+          else {
+            yp = m * pp.x () + n;
+
+            if (yp - 5 <= pp.y () && pp.y () <= yp + 5) {
+              seg = i - 1;
+              break;
+            }
+          }
+        }
       }
     }
   }
@@ -491,7 +489,7 @@ bool GPolyline::isValid () {
     for (unsigned int i = 1; i < points.count (); i++) {
       const Coord& p = *points.at (i);
       if (fabs (p.x () - p0.x ()) > 1 || fabs (p.y () - p0.y ()) > 1)
-	return true;
+        return true;
     }
   }
   return false;

@@ -629,7 +629,8 @@ bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& /*ne
                 }
                 if (child.tagName() == "group")
                     ((GGroup*)obj)->setLayer (active_layer);
-                refDict.insert(obj->getId(), obj);
+                if(obj->hasId())
+                    refDict.insert(obj->getId(), obj);
                 insertObject(obj);
                 cn=cn.nextSibling();
             }

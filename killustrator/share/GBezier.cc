@@ -21,10 +21,6 @@
 
 */
 
-//#include <stdlib.h>
-//#include <iostream.h>
-//#include <math.h>
-//#include <assert.h>
 #include <float.h>
 #include <values.h>
 #include <GBezier.h>
@@ -33,13 +29,12 @@
 #include <qdom.h>
 #include <qpointarray.h>
 #include <klocale.h>
-//#include <kapp.h>
 
 #define DELTA 0.05
 
 
 static bool bezier_segment_part_contains (int x0, int y0, int x1,int y1,
-					  const Coord& pp) {
+                                          const Coord& pp) {
   float  m, n, yp, xp;
   int xh, yh;
 
@@ -58,29 +53,29 @@ static bool bezier_segment_part_contains (int x0, int y0, int x1,int y1,
 
     if (x0 - 5 <= pp.x () && pp.x () <= x1 + 5) {
       if (abs (int (x0 - x1)) < 5) {
-	if ((y0 <= pp.y () && pp.y () <= y1) ||
-	    (y1 <= pp.y () && pp.y () <= y0)) {
-	  return true;
-	}
+        if ((y0 <= pp.y () && pp.y () <= y1) ||
+            (y1 <= pp.y () && pp.y () <= y0)) {
+          return true;
+        }
       }
       else {
-	// y = m * x + n;
-	m = (float)(y1 - y0) / (float)(x1 - x0);
-	n = (float)y0 - m * (float)x0;
-	
-	if (m > 1) {
-	  xp = ((float) pp.y () - n) / m;
-	  if (xp - 5 <= pp.x () && pp.x () <= xp + 5) {
-	    return true;
-	
-	  }
-	}
-	else {
-	  yp = m * (float) pp.x () + n;
-	  if (yp - 5 <= pp.y () && pp.y () <= yp + 5) {
-	    return true;
-	  }
-	}
+        // y = m * x + n;
+        m = (float)(y1 - y0) / (float)(x1 - x0);
+        n = (float)y0 - m * (float)x0;
+
+        if (m > 1) {
+          xp = ((float) pp.y () - n) / m;
+          if (xp - 5 <= pp.x () && pp.x () <= xp + 5) {
+            return true;
+
+          }
+        }
+        else {
+          yp = m * (float) pp.x () + n;
+          if (yp - 5 <= pp.y () && pp.y () <= yp + 5) {
+            return true;
+          }
+        }
       }
     }
   }
@@ -88,8 +83,8 @@ static bool bezier_segment_part_contains (int x0, int y0, int x1,int y1,
 }
 
 bool GBezier::bezier_segment_contains (const Coord& p0, const Coord& p1,
-				       const Coord& p2, const Coord& p3,
-				       const Coord& c)
+                                       const Coord& p2, const Coord& p3,
+                                       const Coord& c)
 {
   /** every bezier_segment contains 1/DELTA lines, we have to compute the
       lines
@@ -112,13 +107,13 @@ bool GBezier::bezier_segment_contains (const Coord& p0, const Coord& p1,
     th2 = th*th;
     th3 = th2*th;
     x1 = (int) (th3*  p0.x() +
-		3*t*th2*p1.x() +
-		3*t2*th*p2.x() +
-		t3*p3.x());
+                3*t*th2*p1.x() +
+                3*t2*th*p2.x() +
+                t3*p3.x());
     y1 = (int) (th3* p0.y() +
-		3*t*th2*p1.y() +
-		3*t2*th*p2.y() +
-		t3*p3.y());
+                3*t*th2*p1.y() +
+                3*t2*th*p2.y() +
+                t3*p3.y());
     if (bezier_segment_part_contains(x0, y0, x1, y1, c)) return true;
   }
 
@@ -133,6 +128,7 @@ GBezier::GBezier (const QDomElement &element) : GPolyline (element.namedItem("po
 
     wSegment = -1;
     closed=(element.attribute("closed").toInt()==1);
+    computePPoints();
 }
 
 GBezier::GBezier (const GBezier& obj) : GPolyline (obj) {
@@ -236,9 +232,9 @@ void GBezier::draw (QPainter& p, bool withBasePoints, bool outline) {
 #if 0
   for (unsigned int i = 1; i + 3 < num; i += 3) {
     if (points.at (i + 1)->x () == FLT_MAX ||
-	points.at (i + 2)->x () == FLT_MAX) {
+        points.at (i + 2)->x () == FLT_MAX) {
       p.drawLine (points.at (i)->x (), points.at (i)->y (),
-		  points.at (i + 3)->x (), points.at (i + 3)->y ());
+                  points.at (i + 3)->x (), points.at (i + 3)->y ());
     }
     else {
       p.drawBezier (points,i);
@@ -248,39 +244,39 @@ void GBezier::draw (QPainter& p, bool withBasePoints, bool outline) {
   if (num > 3) {
     if (closed) {
       if (! workInProgress () && !outline) {
-	initBrush (brush);
-	p.setBrush (brush);
+        initBrush (brush);
+        p.setBrush (brush);
 
-	if (gradientFill ()) {
-	  if (! gShape.valid ())
-	    updateGradientShape (p);
-	  gShape.draw (p);
-	}
+        if (gradientFill ()) {
+          if (! gShape.valid ())
+            updateGradientShape (p);
+          gShape.draw (p);
+        }
       }
       p.drawPolygon (ppoints);
     }
     else {
       //      p.drawPolyline (ppoints);
       for (unsigned int i = 1; i + 3 < num; i += 3) {
-      	if (points.at (i + 1)->x () == FLT_MAX ||
-	          points.at (i + 2)->x () == FLT_MAX) {
-	        p.drawLine (points.at (i)->x () + ((i==1) ? sdx : 0),
-	                    points.at (i)->y () + ((i==1) ? sdy : 0), 		
-	                    points.at (i + 3)->x () + ((i==num-2) ? edx : 0),
-	                    points.at (i + 3)->y () + ((i==num-2) ? edy : 0));
- 	      }
-	      else {
-	        QPointArray bpoints (4);
+        if (points.at (i + 1)->x () == FLT_MAX ||
+                  points.at (i + 2)->x () == FLT_MAX) {
+                p.drawLine (points.at (i)->x () + ((i==1) ? sdx : 0),
+                            points.at (i)->y () + ((i==1) ? sdy : 0),
+                            points.at (i + 3)->x () + ((i==num-2) ? edx : 0),
+                            points.at (i + 3)->y () + ((i==num-2) ? edy : 0));
+              }
+              else {
+                QPointArray bpoints (4);
           bpoints.setPoint (0, qRound (points.at (i)->x () + ((i==1) ? sdx : 0)),
-		                           qRound (points.at (i)->y () + ((i==1) ? sdy : 0)));
+                                           qRound (points.at (i)->y () + ((i==1) ? sdy : 0)));
           bpoints.setPoint (1, qRound (points.at (i + 1)->x ()),
-		                           qRound (points.at (i + 1)->y ()));
+                                           qRound (points.at (i + 1)->y ()));
           bpoints.setPoint (2, qRound (points.at (i + 2)->x ()),
-		                           qRound (points.at (i + 2)->y ()));
+                                           qRound (points.at (i + 2)->y ()));
           bpoints.setPoint (3, qRound (points.at (i + 3)->x () + ((i==num-5) ? edx : 0)),
-		                           qRound (points.at (i + 3)->y () + ((i==num-5) ? edy : 0)));
-	        p.drawQuadBezier (bpoints);
-	      }
+                                           qRound (points.at (i + 3)->y () + ((i==num-5) ? edy : 0)));
+                p.drawQuadBezier (bpoints);
+              }
       }
     }
   }
@@ -290,12 +286,12 @@ void GBezier::draw (QPainter& p, bool withBasePoints, bool outline) {
   if (sArrow != 0L) {
     Coord pp = points.at (1)->transform (tmpMatrix);
     sArrow->draw (p, pp, outlineInfo.color,
-		  outlineInfo.width, sAngle);
+                  outlineInfo.width, sAngle);
   }
   if (eArrow != 0L) {
     Coord pp = points.at (num - 2)->transform (tmpMatrix);
     eArrow->draw (p, pp, outlineInfo.color,
-		  outlineInfo.width, eAngle);
+                  outlineInfo.width, eAngle);
   }
   if (withBasePoints)
     drawHelpLines (p);
@@ -320,7 +316,7 @@ void GBezier::drawHelpLines (QPainter& p) {
   p.setPen (pen);
   for (i = 0; i + 2 < num; i += 3) {
     if (points.at (i)->x () == FLT_MAX ||
-	points.at (i + 2)->x () == FLT_MAX)
+        points.at (i + 2)->x () == FLT_MAX)
       continue;
 
     Coord c1 = points.at (i)->transform (tmpMatrix);
@@ -338,8 +334,8 @@ void GBezier::drawHelpLinesForWorkingSegment (QPainter& p) {
 
   for (int i = wSegment * 3; i <= (wSegment + 1) * 3; i += 3) {
     if (i + 2 >= (int) points.count () ||
-	points.at (i)->x () == FLT_MAX ||
-	points.at (i + 2)->x () == FLT_MAX) {
+        points.at (i)->x () == FLT_MAX ||
+        points.at (i + 2)->x () == FLT_MAX) {
       return;
     }
 
@@ -368,17 +364,17 @@ bool GBezier::contains (const Coord& p) {
       r.bottom (p.y ());
 
       for (unsigned int j = i + 1; j < i + 4; j++) {
-	Coord pn = *(points.at (j));
-	r.left (QMIN(pn.x (), r.left ()));
-	r.top (QMIN(pn.y (), r.top ()));
-	r.right (QMAX(pn.x (), r.right ()));
-	r.bottom (QMAX(pn.y (), r.bottom ()));
+        Coord pn = *(points.at (j));
+        r.left (QMIN(pn.x (), r.left ()));
+        r.top (QMIN(pn.y (), r.top ()));
+        r.right (QMAX(pn.x (), r.right ()));
+        r.bottom (QMAX(pn.y (), r.bottom ()));
       }
       if (r.contains (pc)) {
-       	if (bezier_segment_contains (*(points.at (i)), *(points.at (i + 1)),
-				     *(points.at (i + 2)),
-				     *(points.at (i + 3)), pc))
-	return true;
+        if (bezier_segment_contains (*(points.at (i)), *(points.at (i + 1)),
+                                     *(points.at (i + 2)),
+                                     *(points.at (i + 3)), pc))
+        return true;
       }
     }
   }
@@ -512,9 +508,9 @@ int GBezier::containingSegment (float xpos, float ypos) {
     }
     if (r.contains (pc)) {
       if (bezier_segment_contains (*(points.at (i)), *(points.at (i + 1)),
-				   *(points.at (i + 2)),
-				   *(points.at (i + 3)), pc)) {
-	return seg;
+                                   *(points.at (i + 2)),
+                                   *(points.at (i + 3)), pc)) {
+        return seg;
       }
     }
     seg++;
@@ -538,7 +534,7 @@ QDomElement GBezier::writeToXml (QDomDocument &document) {
 }
 
 bool GBezier::findNearestPoint (const Coord& p, float max_dist,
-				float& dist, int& pidx, bool all) {
+                                float& dist, int& pidx, bool all) {
   float dx, dy, min_dist = max_dist + 1, d;
   pidx = -1;
 
@@ -572,9 +568,9 @@ void GBezier::computePPoints () {
   ppoints.resize (num);
   for (i = 1; i + 3 < num; i += 3) {
     if (points.at (i + 1)->x () == FLT_MAX ||
-	points.at (i + 2)->x () == FLT_MAX) {
+        points.at (i + 2)->x () == FLT_MAX) {
       if (ppoints.size () < idx + 2)
-	ppoints.resize (ppoints.size () + 2);
+        ppoints.resize (ppoints.size () + 2);
       ppoints.setPoint (idx++, points.at (i)->x (), points.at (i)->y ());
       ppoints.setPoint (idx++, points.at (i+3)->x (), points.at (i+3)->y ());
     }
@@ -674,9 +670,9 @@ bool GBezier::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
       other->removeAllPoints ();
       unsigned int i, num = points.count ();
       for (i = idx - 1; i < num; i++)
-	other->points.append (new Coord (*points.at (i)));
+        other->points.append (new Coord (*points.at (i)));
       for (i = 0; i <= idx + 1; i++)
-	other->points.append (new Coord (*points.at (i)));
+        other->points.append (new Coord (*points.at (i)));
       other->calcBoundingBox ();
       result = true;
       obj1 = other;
@@ -686,12 +682,12 @@ bool GBezier::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
       GBezier* other1 = (GBezier *) this->copy ();
       unsigned int i, num = points.count ();
       for (i = idx + 2; i < num; i++)
-	other1->points.remove (idx + 2);
+        other1->points.remove (idx + 2);
       other1->calcBoundingBox ();
 
       GBezier* other2 = (GBezier *) this->copy ();
       for (i = 0; i < idx - 1; i++)
-	other2->points.remove ((unsigned int) 0);
+        other2->points.remove ((unsigned int) 0);
       other2->calcBoundingBox ();
       result = true;
       obj1 = other1;

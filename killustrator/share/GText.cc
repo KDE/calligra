@@ -76,6 +76,7 @@ GText::GText (const QDomElement &element) : GObject (element.namedItem("gobject"
     pathObj = 0L;
     float x = 0, y = 0;
 
+    refid=element.attribute("ref");
     x=element.attribute("x").toFloat();
     y=element.attribute("y").toFloat();
     textInfo.align=(TextInfo::Alignment)element.attribute("align").toInt();
@@ -90,9 +91,9 @@ GText::GText (const QDomElement &element) : GObject (element.namedItem("gobject"
     setText (element.text()); // Did I already say that I love QDom? :)
 
     if (x != 0.0 || y != 0.0) {
-	tMatrix.translate (x, y);
-	iMatrix = tMatrix.invert ();
-	initTmpMatrix ();
+        tMatrix.translate (x, y);
+        iMatrix = tMatrix.invert ();
+        initTmpMatrix ();
     }
 }
 
@@ -234,7 +235,7 @@ void GText::setCursor (int x, int y) {
 
 void GText::setOrigin (const Coord& p) {
   tMatrix.translate (p.x () - tMatrix.dx (),
-		     p.y () - tMatrix.dy ());
+                     p.y () - tMatrix.dy ());
   iMatrix = tMatrix.invert ();
   initTmpMatrix ();
   updateRegion ();
@@ -253,7 +254,7 @@ void GText::setText (const QString& s) {
     }
     else {
       if (s.length () - pos1 == 0)
-	break;
+        break;
 
       QString sub = s.mid (pos1, s.length () - pos1);
       text.push_back (sub);
@@ -355,11 +356,11 @@ void GText::updateCursor (const Coord& p) {
       int n = ::strlen (s);
       int width = 0;
       for (int i = 0; i < n; i++) {
-	width += fm->width (s[i]);
-	if (x <= width) {
-	  cursx = i;
-	  break;
-	}
+        width += fm->width (s[i]);
+        if (x <= width) {
+          cursx = i;
+          break;
+        }
       }
     }
   }
@@ -384,21 +385,21 @@ void GText::calcBoundingBox () {
       int slen = strlen (s);
       for (int i = 0; i < slen; i++) {
 #if QT_VERSION >= 199
-	QRect r = fm->boundingRect (QChar (s[i]));
+        QRect r = fm->boundingRect (QChar (s[i]));
 #else
-	QRect r = fm->boundingRect (s[i]);
+        QRect r = fm->boundingRect (s[i]);
 #endif
-	r = cmatrices[idx].map (r);
-	r = tmpMatrix.map (r);
-	if (idx == 0)
-	  rect = r;
-	else
-	  rect = rect.unite (r);
-	idx++;
+        r = cmatrices[idx].map (r);
+        r = tmpMatrix.map (r);
+        if (idx == 0)
+          rect = r;
+        else
+          rect = rect.unite (r);
+        idx++;
       }
     }
     updateBoundingBox (Rect (rect.left () - 1, rect.top () - 1,
-			     rect.width () + 2, rect.height () + 2));
+                             rect.width () + 2, rect.height () + 2));
   }
   else {
     int width = 0, height = 0;
@@ -420,10 +421,10 @@ void GText::calcBoundingBox () {
       xp = -max_width;
     width += xp;
     calcUntransformedBoundingBox (Coord (xp, 0),
-				  Coord (width, cursorActive ? -1 : 0),
-				  Coord (width,
-					 height + (cursorActive ? 2 : 0)),
-				  Coord (xp, height + (cursorActive ? 2 : 0)));
+                                  Coord (width, cursorActive ? -1 : 0),
+                                  Coord (width,
+                                         height + (cursorActive ? 2 : 0)),
+                                  Coord (xp, height + (cursorActive ? 2 : 0)));
   }
 }
 
@@ -472,22 +473,22 @@ QDomElement GText::writeToXml (QDomDocument &document) {
     QDomElement element=document.createElement("text");
     element.setAttribute ("align", (int) textInfo.align);
     if (pathObj)
-	element.setAttribute ("ref", pathObj->getId ());
+        element.setAttribute ("ref", pathObj->getId ());
 
     QDomElement font=document.createElement("font");
     font.setAttribute ("face", textInfo.font.family());
     font.setAttribute ("point-size", textInfo.font.pointSize());
     font.setAttribute ("weight", textInfo.font.weight());
     if (textInfo.font.italic())
-	font.setAttribute("italic", 1);
+        font.setAttribute("italic", 1);
     element.appendChild(font);
 
     int i = 0;
     // temporary solution to make it work before we get rid of the STL
     QString t;
     for (vector<QString>::iterator it = text.begin (); it != text.end ();
-	 it++, i++)
-	t+=(*it) + '\n';
+         it++, i++)
+        t+=(*it) + '\n';
     element.appendChild(document.createCDATASection(t));
     element.appendChild(GObject::writeToXml(document));
     return element;
@@ -512,7 +513,7 @@ void GText::updateMatricesForPath () {
 
       // map path from world coordinates to object coordinates
       for (i = 0; i < (int) path.size (); i++)
-	path[i] = path[i].transform (iMatrix);
+        path[i] = path[i].transform (iMatrix);
 
       // now compute character matrices according the path
       float len, angle;
@@ -523,44 +524,44 @@ void GText::updateMatricesForPath () {
       len = seg_length (path[s_pos], path[e_pos]);
       angle = seg_angle (path[s_pos], path[e_pos]);
       if (path[e_pos].x () - path[s_pos].x () < 0)
-	angle += 180;
+        angle += 180;
 
       for (it = text.begin (); it != text.end (); it++) {
-	const char *s = (const char *) *it;
-	int slen = strlen (s);
-	i = 0;
-	while (i < slen) {
-	  int cwidth = fm->width (s[i]);
-	  if (e_pos < max_pos && lpos + cwidth > len) {
-	    e_pos += 1;
-	    float nlen = seg_length (path[e_pos - 1], path[e_pos]);
-	    angle = seg_angle (path[s_pos], path[e_pos]);
-	    if (path[e_pos].x () - path[s_pos].x () < 0)
-	      angle += 180;
-	    len += nlen;
-	  }
-	  else {
-	    if (e_pos - s_pos > 1) {
-	      lpos = 0;
-	      int pidx = (e_pos + s_pos) / 2;
-	      cmatrices[i].translate (path[pidx].x (), path[pidx].y ());
-	      cmatrices[i].rotate (angle);
-	      cmatrices[i].translate (-cwidth/2, 0);
-	      s_pos = e_pos - 1;
-	      len = seg_length (path[s_pos], path[e_pos]);
-	      angle = seg_angle (path[s_pos], path[e_pos]);
-	      if (path[e_pos].x () - path[s_pos].x () < 0)
-		angle += 180;
-	    }
-	    else {
-	      cmatrices[i].translate (path[s_pos].x (), path[s_pos].y ());
-	      cmatrices[i].rotate (angle);
-	      cmatrices[i].translate (lpos, 0);
-	      lpos += cwidth;
-	    }
-	    i++;
-	  }
-	}
+        const char *s = (const char *) *it;
+        int slen = strlen (s);
+        i = 0;
+        while (i < slen) {
+          int cwidth = fm->width (s[i]);
+          if (e_pos < max_pos && lpos + cwidth > len) {
+            e_pos += 1;
+            float nlen = seg_length (path[e_pos - 1], path[e_pos]);
+            angle = seg_angle (path[s_pos], path[e_pos]);
+            if (path[e_pos].x () - path[s_pos].x () < 0)
+              angle += 180;
+            len += nlen;
+          }
+          else {
+            if (e_pos - s_pos > 1) {
+              lpos = 0;
+              int pidx = (e_pos + s_pos) / 2;
+              cmatrices[i].translate (path[pidx].x (), path[pidx].y ());
+              cmatrices[i].rotate (angle);
+              cmatrices[i].translate (-cwidth/2, 0);
+              s_pos = e_pos - 1;
+              len = seg_length (path[s_pos], path[e_pos]);
+              angle = seg_angle (path[s_pos], path[e_pos]);
+              if (path[e_pos].x () - path[s_pos].x () < 0)
+                angle += 180;
+            }
+            else {
+              cmatrices[i].translate (path[s_pos].x (), path[s_pos].y ());
+              cmatrices[i].rotate (angle);
+              cmatrices[i].translate (lpos, 0);
+              lpos += cwidth;
+            }
+            i++;
+          }
+        }
       }
     }
     updateRegion ();
@@ -574,9 +575,9 @@ void GText::deletePathObject () {
 void GText::setPathObject (GObject* obj) {
   if (pathObj != 0L) {
     disconnect (pathObj, SIGNAL(changed(const Rect&)),
-		this, SLOT(updateMatricesForPath ()));
+                this, SLOT(updateMatricesForPath ()));
     disconnect (pathObj, SIGNAL(deleted ()),
-		this, SLOT(deletePathObject ()));
+                this, SLOT(deletePathObject ()));
     pathObj->unref ();
   }
   pathObj = obj;
@@ -586,9 +587,9 @@ void GText::setPathObject (GObject* obj) {
     (void) pathObj->getId ();
 
     connect (obj, SIGNAL(changed (const Rect&)),
-	     this, SLOT(updateMatricesForPath ()));
+             this, SLOT(updateMatricesForPath ()));
     connect (obj, SIGNAL(deleted ()),
-	     this, SLOT(deletePathObject ()));
+             this, SLOT(deletePathObject ()));
     updateMatricesForPath ();
   }
   else {

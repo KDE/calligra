@@ -102,7 +102,6 @@ GObject::GObject () {
 
 GObject::GObject (const QDomElement &element) {
 
-    kdDebug() << "entering GObject() - element: " << element.tagName() << endl;
     layer = 0L;
     inWork = false;
     wrapper = 0L;
@@ -110,9 +109,7 @@ GObject::GObject (const QDomElement &element) {
     outlineInfo.mask = 0;
     fillInfo.mask = 0;
     id = (const char*)element.attribute("id");
-    refid = (const char*)element.attribute("ref");
-    kdDebug() << "id: " << id << endl;
-    kdDebug() << "refId: " << refid << endl;
+    refid = (const char*)element.attribute("ref");  // Done by the child itself!
 
     outlineInfo.color = QColor(element.attribute("strokecolor"));
     outlineInfo.mask |= OutlineInfo::Color;
@@ -144,7 +141,6 @@ GObject::GObject (const QDomElement &element) {
     tMatrix=KIllustrator::toMatrix(element.namedItem("matrix").toElement());
     iMatrix = tMatrix.invert ();
     tmpMatrix = tMatrix;
-    kdDebug() << "leaving GObject()" << endl;
 }
 
 GObject::GObject (const GObject& obj) : QObject()
@@ -432,7 +428,9 @@ void GObject::initPen (QPen& pen) {
 QDomElement GObject::writeToXml (QDomDocument &document) {
 
     QDomElement element=document.createElement("gobject");
-    element.setAttribute ("id", (const char *) id);
+    if(hasId())
+        element.setAttribute ("id", (const char *) id);
+    // This is strange, because it's done by the child class itself... I'll clean up later (Werner)
     if(hasRefId())
         element.setAttribute("ref", getRefId());
     element.setAttribute ("strokecolor", outlineInfo.color.name());
