@@ -3425,6 +3425,7 @@ void KPresenterView::styleOk()
     // stick has to be done before the object name is set,
     // so that the name is set in the right page
     bool bSticky=styleDia->isSticky();
+#if !MASTERPAGE    
     if ( !styleDia->stickyNoChange())
     {
         bSticky=styleDia->isSticky();
@@ -3441,6 +3442,7 @@ void KPresenterView::styleOk()
             macro->addCommand(cmd);
         }
     }
+#endif
 
     if ( styleDia->isOneObject())
     {
