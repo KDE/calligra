@@ -159,8 +159,6 @@ void KPObject::zoom(float _fakt)
 
   zoomed = true;
 
-  if (getType() == OT_PART) return;
-
   oldOrig = orig;
   oldExt = ext;
 
@@ -169,7 +167,7 @@ void KPObject::zoom(float _fakt)
   ext.setWidth(static_cast<int>(static_cast<float>(ext.width()) * presFakt));
   ext.setHeight(static_cast<int>(static_cast<float>(ext.height()) * presFakt));
 
-  setSize(ext);
+  if (getType() != OT_PART) setSize(ext);
   setOrig(orig);
 }
 
@@ -177,7 +175,6 @@ void KPObject::zoom(float _fakt)
 void KPObject::zoomOrig()
 {
   zoomed = false;
-  if (getType() == OT_PART) return;
 
   orig = oldOrig;
   ext = oldExt;
