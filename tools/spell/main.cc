@@ -44,9 +44,9 @@ MyTool::MyTool( CORBA::Object_ptr _obj ) : DataTools::Tool_skel( _obj )
 {
 }
 
-void MyTool::run( const char* _command, KOM::Base_ptr _sender, const CORBA::Any& _value, const CORBA::Any& _id )
+void MyTool::run( const QCString & _command, KOM::Base_ptr _sender, const CORBA::Any& _value, const CORBA::Any& _id )
 {
-  if ( strcmp( _command, "spellcheck" ) != 0L )
+  if ( strcmp( _command.data(), "spellcheck" ) != 0L )
   {
     DataTools::UnknownCommand exc;
     exc.command = CORBA::string_dup( _command );
@@ -65,7 +65,7 @@ void MyTool::cancel( CORBA::Long )
 {
 }
 
-SpellChecker::SpellChecker( const char *_buffer, KOM::Base_ptr _sender, const CORBA::Any& _id )
+SpellChecker::SpellChecker( const QCString &_buffer, KOM::Base_ptr _sender, const CORBA::Any& _id )
 {
   m_id = _id;
   m_vSender = KOM::Base::_duplicate( _sender );

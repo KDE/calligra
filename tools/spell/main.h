@@ -32,7 +32,7 @@ class SpellChecker : public QObject
 {
   Q_OBJECT
 public:
-  SpellChecker( const char *_buffer, KOM::Base_ptr _sender, const CORBA::Any& _id );
+  SpellChecker( const QCString &_buffer, KOM::Base_ptr _sender, const CORBA::Any& _id );
 
 public slots:
   void slotReady();
@@ -51,7 +51,7 @@ public:
   MyTool( const CORBA::ORB::ObjectTag &_tag );
   MyTool( CORBA::Object_ptr _obj );
   
-  virtual void run( const char* _command, KOM::Base_ptr _sender, const CORBA::Any& _value, const CORBA::Any& _id );
+  virtual void run( const QCString & _command, KOM::Base_ptr _sender, const CORBA::Any& _value, const CORBA::Any& _id );
   virtual void cancel( CORBA::Long _id );
 };
 
