@@ -80,7 +80,7 @@ don't put a </?xml...> at the end of the file!).
                             KWord can read all previous versions, but always saves in the latest.
 -->
 <!ELEMENT DOC
-    (PAPER, ATTRIBUTES, VARIABLESETTINGS, FRAMESETS, STYLES, PIXMAPS, CLIPARTS, SERIALL, (EMBEDDED*))>
+    (PAPER, ATTRIBUTES, VARIABLESETTINGS, FRAMESETS, STYLES, PIXMAPS, CLIPARTS, SERIALL, (EMBEDDED*), SPELLCHECKIGNORELIST)>
 <!ATTLIST DOC
     editor CDATA #IMPLIED
     mime CDATA #FIXED "application/x-kword"
@@ -897,6 +897,11 @@ don't put a </?xml...> at the end of the file!).
 <!-- TODO: document! -->
 <!ELEMENT SERIALL
     EMPTY>
+
+<!ELEMENT SPELLCHECKIGNORELIST ( SPELLCHECKIGNOREWORD+ )>
+<!ATTLIST SPELLCHECKIGNORELIST #EMPTY>
+<!ELEMENT SPELLCHECKIGNOREWORD word NMTOKEN #REQUIRED >
+
 
 <!--
         The key mapping to one pixmap.
