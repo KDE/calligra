@@ -6603,7 +6603,7 @@ bool KSpreadTable::loadXML( const QDomElement& table )
         {
             KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
             if ( cell->load( e, 0, 0 ) )
-                insertCell( cell, false /* don't update depending cells */ );
+                insertCell( cell );
             else
                 delete cell; // Allow error handling: just skip invalid cells
         }
@@ -6740,45 +6740,11 @@ KSpreadTable* KSpreadTable::findTable( const QString & _name )
 }
 
 // ###### Torben: Use this one instead of m_cells.insert()
-void KSpreadTable::insertCell( KSpreadCell *_cell, bool _updateDepend )
+void KSpreadTable::insertCell( KSpreadCell *_cell )
 {
-  // First store the existing dependency list, before the old cell is deleted
-//  QPtrList<KSpreadDependency> _cellsDependOnMe = cellAt( _cell->column(), _cell->row() )->cellsDependOnMe();
-  if ( _updateDepend )
-  {
-    //Then set the existing dependency list to a new empty on, so the link to the list doesn't get deleted
-//    _cell->setCellsDependOnMe( QPtrList<KSpreadDependency>() );
-  }
-
+  
   m_cells.insert( _cell, _cell->column(), _cell->row() );
 
-  /* immediately check for cells that are depending on this one.  This can happen if a dependancy range
-   * is given which included cells that were the default cell, but are just now being inserted into the
-   * cell list for real
-   */
-
-  /* a full scan of all the tables isn't fun, but that was already happening every time a cell is updated
-     anyway.  So this isn't any worse than what we've had */
-  if ( _updateDepend )
-  {
-//    cellAt( _cell->column(), _cell->row() )->setCellsDependOnMe( _cellsDependOnMe );
-
-
-    QPtrListIterator<KSpreadTable> it( map()->tableList() );
-    KSpreadCell* c;
-    for( ; it.current(); ++it )
-    {
-        c = it.current()->firstCell();
-        for( ; c; c = c->nextCell() )
-	{
-	  if ( c->cellDependsOn(this, _cell->column(), _cell->row()) )
-	  {
-	    _cell->NotifyDepending( c->column(), c->row(), it.current(), true);
-	  }
-	}
-    }
-
-  }
   if ( m_bScrollbarUpdates )
   {
     checkRangeHBorder ( _cell->column() );
