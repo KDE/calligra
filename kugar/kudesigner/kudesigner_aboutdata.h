@@ -33,7 +33,7 @@ KAboutData * newKudesignerAboutData()
     // It is very important, it's what's used for many things, like the subdir in share/apps, etc.
     // It must also match the name of the application's .desktop file.
     KAboutData * aboutData=new KAboutData( "kudesigner", I18N_NOOP("Kugar Report Designer"),
-                                           version, description, KAboutData::License_GPL,
+                                           version, description, KAboutData::License_LGPL,
                                            "(c) 2002, Alexander Dymo");
     aboutData->addAuthor("Alexander Dymo",
         I18N_NOOP("Maintainer, Report Designer, Kugar library enhancements"), "cloudtemple@mksat.net",
