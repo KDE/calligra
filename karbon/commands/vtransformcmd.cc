@@ -12,9 +12,7 @@
 VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
 		: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat )
 {
-	m_selection = m_doc->selection()
-		? new VSelection( *m_doc->selection() )
-		: new VSelection();
+	m_selection = m_doc->selection()->clone();
 
 	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Transform Object" ) );

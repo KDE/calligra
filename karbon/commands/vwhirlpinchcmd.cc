@@ -13,9 +13,7 @@ VWhirlPinchCmd::VWhirlPinchCmd( VDocument* doc,
 	double angle, double pinch, double radius )
 		: VCommand( doc, i18n( "Whirl Pinch" ) )
 {
-	m_selection = m_doc->selection()
-		? new VSelection( *m_doc->selection() )
-		: new VSelection();
+	m_selection = m_doc->selection()->clone();
 
 	m_angle = angle;
 	m_pinch = pinch;

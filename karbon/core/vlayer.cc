@@ -181,7 +181,7 @@ VLayer::load( const QDomElement& element )
 }
 
 
-VObject*
+VLayer*
 VLayer::clone() const
 {
 	return new VLayer( *this );

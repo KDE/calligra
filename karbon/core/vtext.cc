@@ -174,7 +174,7 @@ VText::isInside( const KoRect& rect ) const
 	return false;
 }
 
-VObject*
+VText*
 VText::clone()
 {
 	return new VText( *this );

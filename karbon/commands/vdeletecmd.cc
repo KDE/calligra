@@ -12,9 +12,7 @@
 VDeleteCmd::VDeleteCmd( VDocument *doc )
 	: VCommand( doc, i18n( "Delete Objects" ) )
 {
-	m_selection = m_doc->selection()
-		? new VSelection( *m_doc->selection() )
-		: new VSelection();
+	m_selection = m_doc->selection()->clone();
 
 	m_doc->deselect();
 

@@ -50,7 +50,7 @@ public:
 
 	virtual const KoRect& boundingBox() const;
 
-	virtual VObject* clone() const;
+	virtual VSegmentList* clone() const;
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );

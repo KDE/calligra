@@ -34,7 +34,7 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
-	virtual VObject* clone() const;
+	virtual VLayer* clone() const;
 
 
 	void bringToFront( const VObject& object );

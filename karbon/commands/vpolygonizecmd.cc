@@ -12,9 +12,7 @@
 VPolygonizeCmd::VPolygonizeCmd( VDocument *doc, double flatness )
 		: VCommand( doc, i18n( "Polygonize" ) )
 {
-	m_selection = m_doc->selection()
-		? new VSelection( *m_doc->selection() )
-		: new VSelection();
+	m_selection = m_doc->selection()->clone();
 
 	m_flatness = flatness > 0.0 ? flatness : 1.0;
 }

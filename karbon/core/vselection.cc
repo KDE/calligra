@@ -28,6 +28,12 @@ VSelection::~VSelection()
 	delete( m_qrect );
 }
 
+VSelection*
+VSelection::clone() const
+{
+	return new VSelection( *this );
+}
+
 void
 VSelection::draw( QPainter* painter, double zoomFactor ) const
 {

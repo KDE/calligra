@@ -46,7 +46,7 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
-	virtual VObject* clone() const;
+	virtual VGroup* clone() const;
 
 	virtual void accept( VVisitor& visitor );
 

@@ -27,6 +27,8 @@ public:
 
 	virtual ~VSelection();
 
+	virtual VSelection* clone() const;
+
 	void draw( QPainter* painter, double zoomFactor ) const;
 
 private:

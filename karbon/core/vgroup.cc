@@ -95,7 +95,7 @@ VGroup::isInside( const KoRect& rect ) const
 	return false;
 }
 
-VObject*
+VGroup*
 VGroup::clone() const
 {
 	return new VGroup( *this );

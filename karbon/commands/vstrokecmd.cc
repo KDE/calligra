@@ -13,9 +13,7 @@
 VStrokeCmd::VStrokeCmd( VDocument *doc, const VColor& color, float opacity )
 	: VCommand( doc, i18n( "Stroke Objects" ) ), m_color( color ), m_opacity( opacity )
 {
-	m_selection = m_doc->selection()
-		? new VSelection( *m_doc->selection() )
-		: new VSelection();
+	m_selection = m_doc->selection()->clone();
 
 	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Stroke Object" ) );

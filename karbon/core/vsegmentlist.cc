@@ -335,7 +335,7 @@ VSegmentList::boundingBox() const
 	return m_boundingBox;
 }
 
-VObject*
+VSegmentList*
 VSegmentList::clone() const
 {
 	return new VSegmentList( *this );

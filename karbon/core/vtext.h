@@ -35,7 +35,7 @@ public:
 
 	virtual bool isInside( const KoRect& rect ) const;
 
-	virtual VObject* clone();
+	virtual VText* clone();
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );

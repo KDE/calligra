@@ -42,7 +42,7 @@ public:
 	// TODO
 	virtual void transform( const QWMatrix& ) {}
 
-	virtual VObject* clone() const;
+	virtual VDocument* clone() const;
 
 	const QString& mime() { return m_mime; }
 	void setMime( const QString& mime ) { m_mime = mime; }

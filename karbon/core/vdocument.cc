@@ -31,6 +31,7 @@ VDocument::VDocument()
 }
 
 VDocument::VDocument( const VDocument& document )
+	: VObject( document )
 {
 	m_selection = new VSelection( this );
 // TODO
@@ -106,7 +107,7 @@ VDocument::saveXML( QDomDocument& doc ) const
 }
 
 
-VObject*
+VDocument*
 VDocument::clone() const
 {
 	return new VDocument( *this );
