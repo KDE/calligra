@@ -19,7 +19,7 @@ void StyleStack::clear()
 
 void StyleStack::clearPageMark()
 {
-    for ( uint index = m_stack.count() - 1; index >= m_pageMark; --index )
+    for ( int index = m_stack.count() - 1; index >= (int)m_pageMark; --index )
         m_stack.pop_back();
 }
 
@@ -30,7 +30,7 @@ void StyleStack::setPageMark()
 
 void StyleStack::clearObjectMark()
 {
-    for ( uint index = m_stack.count() - 1; index >= m_objectMark; --index )
+    for ( int index = m_stack.count() - 1; index >= (int)m_objectMark; --index )
         m_stack.pop_back();
 }
 
