@@ -1647,11 +1647,20 @@ bool Worker::op_standardwidth(Q_UINT32, QDataStream &body)
 
 bool Worker::op_string(Q_UINT32 bytes, QDataStream &body)
 {
-	char *store = new char[bytes+1];
-	body.readRawBytes(store, bytes);
-	
-	kdDebug(30511) << " op_string:" << store <<endl;
+	Q_UINT8 temp;
+	Q_UINT16 length;
+	body >> length;
+	body >> temp; // Skip first '0'
 
+	QString result;
+	for(int i = 0; i < length; i++)
+	{
+		body >> temp;
+		result += QChar(temp);		
+	}
+
+	kdDebug() << "RESULT " << result << endl;
+	
 	return true;
 }
 
