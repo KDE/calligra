@@ -6842,12 +6842,12 @@ void KPrCanvas::layout()
     QPtrListIterator<KPObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_TEXT )
-            m_view->kPresenterDoc()->layout( it.current());
+            static_cast<KPTextObject *>( it.current() )->layout();
     }
     it=stickyPage()->objectList();
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_TEXT )
-            m_view->kPresenterDoc()->layout( it.current());
+            static_cast<KPTextObject *>( it.current() )->layout();
     }
 }
 

@@ -404,8 +404,8 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
         drawingFlags |= KoTextDocument::DrawMisspelledLine;
     if ( !editMode )
         drawingFlags |=KoTextDocument::DontDrawNoteVariable;
-    //if ( m_doc->viewFormattingChars() )
-    //    drawingFlags |= KoTextDocument::DrawFormattingChars;
+    if ( m_doc->viewFormattingChars() && editMode )
+        drawingFlags |= KoTextDocument::DrawFormattingChars;
 
     if ( specEffects )
     {
@@ -1218,9 +1218,11 @@ void KPTextObject::invalidate()
 {
     //kdDebug(33001) << "KWTextFrameSet::invalidate " << getName() << endl;
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
+    textDocument()->formatter()->setViewFormattingChars( m_doc->viewFormattingChars() );
     textDocument()->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
+// For the "paragraph after paragraph" effect
 void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to )
 {
     // The fast and difficult way would be to call drawParagWYSIWYG

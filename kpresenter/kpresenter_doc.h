@@ -360,6 +360,11 @@ class KPresenterDoc : public KoDocument
     bool allowAutoFormat() const { return m_bAllowAutoFormat; }
     void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
 
+    // This setting has to be here [instead of the view] because we need to
+    // format paragraphs slightly differently (to add room for the CR char)
+    bool viewFormattingChars() const { return m_bViewFormattingChars; }
+    void setViewFormattingChars(bool _b) { m_bViewFormattingChars=_b; }
+
 
     bool showHelplines() const {return m_bShowHelplines; }
     void setShowHelplines(bool b);
@@ -573,6 +578,7 @@ protected:
     bool m_bShowStatusBar;
     bool m_bAllowAutoFormat;
     bool m_bShowHelplines;
+    bool m_bViewFormattingChars;
 
     bool m_bHelplinesToFront;
 

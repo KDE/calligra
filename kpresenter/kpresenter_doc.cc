@@ -200,6 +200,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bShowRuler=true;
     m_bAllowAutoFormat = true;
 
+    m_bViewFormattingChars = false;
     m_bShowHelplines = false;
     m_bHelplinesToFront = false;
     m_bShowGrid = false;
@@ -311,6 +312,7 @@ void KPresenterDoc::saveConfig()
     config->setGroup( "Interface" );
     config->writeEntry( "Zoom", m_zoomHandler->zoom() );
     config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
+    config->writeEntry( "ViewFormattingChars", m_bViewFormattingChars );
     config->writeEntry( "ShowGrid" , m_bShowGrid );
     config->writeEntry( "GridToFront" , m_bGridToFont );
     config->writeEntry( "SnapToGrid" , m_bSnapToGrid );
@@ -337,6 +339,7 @@ void KPresenterDoc::initConfig()
         zoom = config->readNumEntry( "Zoom", 100 );
         setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
         setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
+        setViewFormattingChars( config->readBoolEntry( "ViewFormattingChars", false ) );
         setShowGrid( config->readBoolEntry( "ShowGrid" , false ));
         setGridToFront(  config->readBoolEntry( "GridToFront" , false ));
         setSnapToGrid( config->readBoolEntry( "SnapToGrid", true ));

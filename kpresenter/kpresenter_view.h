@@ -659,6 +659,7 @@ protected slots:
     void updateRuler();
 
     void refreshAllVariable();
+    void slotViewFormattingChars();
     void slotUpdateScrollBarRanges();
     void drawTmpHelpLine( const QPoint & pos, bool _horizontal);
     void addHelpline(const QPoint & pos, bool _horizontal);
@@ -823,6 +824,7 @@ private:
 
     KToggleAction *actionViewShowHelpLine;
 
+    KToggleAction *actionViewFormattingChars;
     KToggleAction *actionViewShowGrid;
     KToggleAction *actionViewSnapToGrid;
     KToggleAction *actionViewGridToFront;

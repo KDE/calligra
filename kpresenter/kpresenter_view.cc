@@ -2381,6 +2381,7 @@ void KPresenterView::initGui()
     updateHeaderFooterButton();
 
     actionAllowAutoFormat->setChecked( m_pKPresenterDoc->allowAutoFormat() );
+    actionViewFormattingChars->setChecked( m_pKPresenterDoc->viewFormattingChars() );
 
     updateHelpLineButton();
 
@@ -2450,6 +2451,12 @@ void KPresenterView::setupActions()
                                                    actionCollection(), "view_shownotebar" );
         actionViewShowNoteBar->setChecked(true);
     }
+
+    actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
+                                                   this, SLOT( slotViewFormattingChars() ),
+                                                   actionCollection(), "view_formattingchars" );
+    actionViewFormattingChars->setToolTip( i18n( "Toggle the display of non-printing characters." ) );
+    actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters." ) );
 
     actionViewHeader = new KToggleAction( i18n( "Show &Header" ), 0,
                                           this, SLOT( viewHeader() ),
@@ -3998,7 +4005,9 @@ void KPresenterView::updateReadWrite( bool readwrite )
 
     if ( !readwrite )
     {
+        // Readonly -> re-enable a few harmless actions
         refreshPageButton();
+        actionViewFormattingChars->setEnabled( true );
         actionViewZoom->setEnabled( true );
         actionEditFind->setEnabled( true );
         actionEditFindNext->setEnabled( true );
@@ -5952,6 +5961,13 @@ void KPresenterView::slotUpdateScrollBarRanges()
 KoZoomHandler *KPresenterView::zoomHandler() const
 {
     return m_pKPresenterDoc->zoomHandler();
+}
+
+void KPresenterView::slotViewFormattingChars()
+{
+    m_pKPresenterDoc->setViewFormattingChars(actionViewFormattingChars->isChecked());
+    m_pKPresenterDoc->layout(); // Due to the different formatting when this option is activated
+    m_pKPresenterDoc->repaint(false);
 }
 
 int KPresenterView::getPresentationDuration() const

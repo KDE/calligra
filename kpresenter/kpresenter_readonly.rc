@@ -1,5 +1,9 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="4">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="5">
 <MenuBar>
+ <Menu name="view"><text>&amp;View</text>
+  <Action name="view_formattingchars"/>
+  <Action name="view_zoom"/>
+ </Menu>
  <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_copy"/>
   <Separator/>
