@@ -182,6 +182,8 @@ protected:
 
 	const KoPoint& last() const { return m_lastPoint; }
 
+	bool shiftPressed() const { return m_shiftPressed; }
+
 private:
 	/**
 	 * The view the tool acts upon.
@@ -207,6 +209,11 @@ private:
 	 * A tool state.
 	 */
 	bool m_isDragging;
+
+	/**
+	 * Indicates if shift is pressed.
+	 */
+	bool m_shiftPressed;
 };
 
 #endif

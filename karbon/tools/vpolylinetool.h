@@ -102,11 +102,6 @@ class VPolylineTool : public VTool
 		KoPoint m_lastVectorEnd;
 
 		/**
-		 * Indicates if shift is pressed.
-		 */
-		bool m_shiftPressed;
-
-		/**
 		 * Indicates if ctrl is pressed.
 		 */
 		bool m_ctrlPressed;
