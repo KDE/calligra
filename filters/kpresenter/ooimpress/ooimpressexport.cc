@@ -1055,7 +1055,9 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
     float y1 = orig.attribute( "y" ).toFloat();
     float x2 = size.attribute( "width" ).toFloat();
     float y2 = size.attribute( "height" ).toFloat();
-    float type = linetype.attribute( "value" ).toInt();
+    int type = 0;
+    if ( !linetype.isNull() )
+        type = linetype.attribute( "value" ).toInt();
     y1 -= m_pageHeight * ( m_currentPage - 1 );
     x2 += x1;
     y2 += y1;
@@ -1063,7 +1065,12 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
     target.setAttribute( "draw:id",  QString::number( m_objectIndex ) );
     target.setAttribute( "svg:x1", StyleFactory::toCM( orig.attribute( "x" ) ) );
     target.setAttribute( "svg:x2", QString( "%1cm" ).arg( KoUnit::toCM( x2 ) ) );
-    if ( type == 3 ) // from left bottom to right top
+    if ( type == 0 )
+    {
+        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y2/2.0 ) ) );
+        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2/2.0 ) ) );
+    }
+    else if ( type == 3 ) // from left bottom to right top
     {
         target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y2 ) ) );
         target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y1 ) ) );
