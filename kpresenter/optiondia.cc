@@ -92,16 +92,8 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
     w = max(objects->width(),general->width());
     h = max(objects->height(),general->height());
 
-    general->resize( w, h );
-    general->setMinimumSize( general->width(), general->height() );
-    general->setMaximumSize( general->width(), general->height() );
 
-    objects->resize( w, h );
-    objects->setMinimumSize( objects->width(), objects->height() );
-    objects->setMaximumSize( objects->width(), objects->height() );
-
-    resize(max(general->width() + 10,objects->width() + 10),
-           max(general->height() + bBackCol->height() + 40,objects->height() + bBackCol->height() + 40));
+    resize( 300, 200 );
 
     /* build dialog */
     addTab( general, i18n( "General" ) );

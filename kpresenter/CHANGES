@@ -316,3 +316,12 @@ Reggie, 15.6.1999:
   and not always in BMP => redruces file size if you
   use compressed image formats and keeps transparency 
   e.g. for XPMs.
+
+Reggie, 17.6.1999:
+------------------
+- tell dialogs about their parent, so that the window manager
+  can do some optimations
+- Tell QPopupMenus about their parent to avoid memory leaks
+- Cleanups
+- Fixes in dialog layouts
+

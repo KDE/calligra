@@ -216,7 +216,7 @@ void Page::mousePressEvent( QMouseEvent *e )
 
     if ( e->state() & ControlButton )
         keepRatio = true;
-    
+
     view->sendFocusEvent();
 
     KPObject *kpobject = 0;
@@ -435,7 +435,7 @@ void Page::mousePressEvent( QMouseEvent *e )
     if ( modType != MT_NONE && modType != MT_MOVE )
     {
         KPObject *kpobject = objectList()->at( resizeObjNum );
-        if ( kpobject ) 
+        if ( kpobject )
         {
             ratio = static_cast<double>( static_cast<double>( kpobject->getSize().width() ) /
                                          static_cast<double>( kpobject->getSize().height() ) );
@@ -448,7 +448,7 @@ void Page::mousePressEvent( QMouseEvent *e )
 /*=================== handle mouse released ======================*/
 void Page::mouseReleaseEvent( QMouseEvent *e )
 {
-    if ( e->button() != LeftButton ) 
+    if ( e->button() != LeftButton )
     {
         ratio = 0;
         keepRatio = false;
@@ -474,7 +474,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
     {
         kpobject = objectList()->at( resizeObjNum );
         if ( kpobject )
-        {   
+        {
             mv = QPoint( kpobject->getOrig().x() - oldRect.x(),
                          kpobject->getOrig().y() - oldRect.y() );
             sz = QSize( kpobject->getSize().width() - oldRect.width(),
@@ -871,7 +871,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                     p.end();
                 }
                 else if ( modType != MT_NONE && resizeObjNum != -1 )
-                {                    
+                {
                     QPainter p;
                     p.begin( this );
 
@@ -883,7 +883,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 
                     int dx = mx - oldMx;
                     int dy = my - oldMy;
-                        
+
                     switch ( modType )
                     {
                     case MT_RESIZE_LU:
@@ -905,7 +905,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                     } break;
                     case MT_RESIZE_LD:
                     {
-                        if ( keepRatio && ratio != 0.0 ) 
+                        if ( keepRatio && ratio != 0.0 )
                             //if ( !calcRatio( dx, dy, kpobject, ratio ) )
                                 break;
                         kpobject->moveBy( QPoint( dx, 0 ) );
@@ -3959,7 +3959,7 @@ bool Page::calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio )
         dx = static_cast<int>( static_cast<double>( dy ) * ratio );
     else
         dy = static_cast<int>( static_cast<double>( dx ) / ratio );
-    if ( kpobject->getSize().width() + dx < 20 || 
+    if ( kpobject->getSize().width() + dx < 20 ||
          kpobject->getSize().height() + dy < 20 )
         return false;
     return true;

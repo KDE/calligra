@@ -262,16 +262,7 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
     else
         brushFrame->hide();
 
-    penFrame->setMinimumSize( penPrev->x() + penPrev->width() + 40, penPrev->y() + penPrev->height() + 40 );
-    penFrame->setMaximumSize( penPrev->x() + penPrev->width() + 40, penPrev->y() + penPrev->height() + 40 );
-    penFrame->resize( penPrev->x() + penPrev->width() + 40, penPrev->y() + penPrev->height() + 40 );
-
-    brushFrame->setMinimumSize( gPrev->x() + gPrev->width() + 40, gPrev->y() + gPrev->height() + 40 );
-    brushFrame->setMaximumSize( gPrev->x() + gPrev->width() + 40, gPrev->y() + gPrev->height() + 40 );
-    brushFrame->resize( gPrev->x() + gPrev->width() + 40, gPrev->y() + gPrev->height() + 40 );
-
-    resize(max(penFrame->size().width() + 30,brushFrame->size().width() + 30),
-           max(penFrame->size().height() + 60 + chooseBCol->height(),brushFrame->size().height() + 60 + chooseBCol->height()));
+    resize( 400, 400 );
 
     setCancelButton( i18n( "Cancel" ) );
     setOKButton( i18n( "OK" ) );

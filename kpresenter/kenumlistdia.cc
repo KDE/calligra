@@ -183,48 +183,6 @@ KEnumListDia::KEnumListDia( QWidget* parent, const char* name, int __type, QFont
     connect( bCancel, SIGNAL( clicked() ), SLOT( reject() ) );
     bbox->layout();
     grid->addWidget( bbox, 7, 4 );
-
-//   grid->addColSpacing( 0, lFont->width() );
-//   grid->addColSpacing( 0, fontCombo->width()/3 );
-//   grid->addColSpacing( 0, bold->width() );
-//   grid->addColSpacing( 0, lBefore->width() );
-//   grid->addColSpacing( 1, fontCombo->width()/3 );
-//   grid->addColSpacing( 1, italic->width() );
-//   grid->addColSpacing( 1, lAfter->width() );
-//   grid->addColSpacing( 2, fontCombo->width()/3 );
-//   grid->addColSpacing( 2, underl->width() );
-//   grid->addColSpacing( 2, lStart->width() );
-//   grid->addColSpacing( 3, lSize->width() );
-//   grid->addColSpacing( 3, sizeCombo->width() );
-//   grid->addColSpacing( 4, lColor->width() );
-//   grid->addColSpacing( 4, colorButton->width() );
-//   grid->addColSpacing( 4, number->width() );
-//   grid->addColSpacing( 4, alphabeth->width() );
-
-//   grid->addRowSpacing( 0, lFont->height() );
-//   grid->addRowSpacing( 0, lSize->height() );
-//   grid->addRowSpacing( 0, lColor->height() );
-//   grid->addRowSpacing( 1, fontCombo->height() );
-//   grid->addRowSpacing( 1, sizeCombo->height() );
-//   grid->addRowSpacing( 1, colorButton->height() );
-//   grid->addRowSpacing( 2, lAttrib->height() );
-//   grid->addRowSpacing( 3, bold->height() );
-//   grid->addRowSpacing( 3, italic->height() );
-//   grid->addRowSpacing( 3, underl->height() );
-//   grid->addRowSpacing( 4, lBefore->height() );
-//   grid->addRowSpacing( 4, lAfter->height() );
-//   grid->addRowSpacing( 4, lStart->height() );
-//   grid->addRowSpacing( 4, number->height() );
-//   grid->addRowSpacing( 5, eBefore->height() );
-//   grid->addRowSpacing( 5, eAfter->height() );
-//   grid->addRowSpacing( 5, eStart->height() );
-//   grid->addRowSpacing( 5, alphabeth->height() );
-//   grid->addRowSpacing( 6, 10 );
-//   grid->activate();
-
-//   resize( 0, 0 );
-//   setMaximumSize( size() );
-//   setMinimumSize( size() );
 }
 
 /*========================= destructor ===========================*/

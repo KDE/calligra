@@ -413,14 +413,14 @@ void KPresenterView::editDelPage()
 
     if ( m_pKPresenterDoc->getPageNums() < 2 )
     {
-        QMessageBox::critical( ( QWidget* )0L, i18n( "KPresenter Error" ),
+        QMessageBox::critical( this, i18n( "KPresenter Error" ),
                                i18n( "Every document has to have at least one page. Because this document \n"
                                      "has not more that one page you can't delete this one." ),
                                i18n( "OK" ) );
     }
     else
     {
-        delPageDia = new DelPageDia( 0, "", m_pKPresenterDoc, getCurrPgNum() );
+        delPageDia = new DelPageDia( this, "", m_pKPresenterDoc, getCurrPgNum() );
         delPageDia->setCaption( i18n( "KPresenter - Delete Page" ) );
         //delPageDia->resize(delPageDia->minimumSize());
         QObject::connect( delPageDia, SIGNAL( deletePage( int, DelPageMode ) ), this, SLOT( delPageOk( int, DelPageMode ) ) );
@@ -443,7 +443,7 @@ void KPresenterView::editFind()
 
     if ( page->kTxtObj() )
     {
-        searchDia = new KSearchDialog( 0, "SearchDia" );
+        searchDia = new KSearchDialog( this, "SearchDia" );
         searchDia->setMaximumSize( searchDia->width(), searchDia->height() );
         searchDia->setMinimumSize( searchDia->width(), searchDia->height() );
         QObject::connect( searchDia, SIGNAL( doSearch( QString, bool, bool ) ), this, SLOT( search( QString, bool, bool ) ) );
@@ -469,7 +469,7 @@ void KPresenterView::editFindReplace()
 
     if ( page->kTxtObj() )
     {
-        replaceDia = new KSearchReplaceDialog( 0, "ReplaceDia" );
+        replaceDia = new KSearchReplaceDialog( this, "ReplaceDia" );
         replaceDia->setMaximumSize( replaceDia->width(), replaceDia->height() );
         replaceDia->setMinimumSize( replaceDia->width(), replaceDia->height() );
         QObject::connect( replaceDia, SIGNAL( doSearchReplace( QString, QString, bool, bool ) ), this, SLOT( replace( QString, QString, bool, bool ) ) );
@@ -514,7 +514,7 @@ void KPresenterView::insertPage()
         insPageDia = 0;
     }
 
-    insPageDia = new InsPageDia( 0, "", m_pKPresenterDoc, getCurrPgNum() );
+    insPageDia = new InsPageDia( this, "", m_pKPresenterDoc, getCurrPgNum() );
     insPageDia->setCaption( i18n( "KPresenter - Insert Page" ) );
     //insPageDia->resize(insPageDia->minimumSize());
     QObject::connect( insPageDia, SIGNAL( insertPage( int, InsPageMode, InsertPos ) ), this, SLOT( insPageOk( int, InsPageMode, InsertPos ) ) );
@@ -628,7 +628,7 @@ void KPresenterView::toolsDiagramm()
     if ( vec.size() == 0 )
     {
         cout << "Got no results" << endl;
-        QMessageBox::critical( 0L, i18n( "Error" ), i18n( "Sorry, no charting component registered" ), i18n( "Ok" ) );
+        QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no charting component registered" ), i18n( "Ok" ) );
         return;
     }
 
@@ -648,7 +648,7 @@ void KPresenterView::toolsTable()
     if ( vec.size() == 0 )
     {
         cout << "Got no results" << endl;
-        QMessageBox::critical( 0L, i18n( "Error" ), i18n( "Sorry, no table component registered" ), i18n( "Ok" ) );
+        QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no table component registered" ), i18n( "Ok" ) );
         return;
     }
 
@@ -668,7 +668,7 @@ void KPresenterView::toolsFormula()
     if ( vec.size() == 0 )
     {
         cout << "Got no results" << endl;
-        QMessageBox::critical( 0L, i18n( "Error" ), i18n( "Sorry, no formula component registered" ), i18n( "Ok" ) );
+        QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no formula component registered" ), i18n( "Ok" ) );
         return;
     }
 
@@ -699,7 +699,7 @@ void KPresenterView::toolsAutoform()
         delete afChoose;
         afChoose = 0;
     }
-    afChoose = new AFChoose( 0, i18n( "Autoform-Choose" ) );
+    afChoose = new AFChoose( this, i18n( "Autoform-Choose" ) );
     afChoose->resize( 400, 300 );
     afChoose->setCaption( i18n( "KPresenter - Insert an Autoform" ) );
 //   afChoose->setMaximumSize( afChoose->width(), afChoose->height() );
@@ -736,9 +736,7 @@ void KPresenterView::extraPenBrush()
         delete styleDia;
         styleDia = 0;
     }
-    styleDia = new StyleDia( 0, "StyleDia", m_pKPresenterDoc->getPenBrushFlags() );
-    styleDia->setMaximumSize( styleDia->width(), styleDia->height() );
-    styleDia->setMinimumSize( styleDia->width(), styleDia->height() );
+    styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc->getPenBrushFlags() );
     styleDia->setPen( m_pKPresenterDoc->getPen( pen ) );
     styleDia->setBrush( m_pKPresenterDoc->getBrush( brush ) );
     styleDia->setLineBegin( m_pKPresenterDoc->getLineBegin( lineBegin ) );
@@ -766,7 +764,7 @@ void KPresenterView::extraConfigPie()
         confPieDia = 0;
     }
 
-    confPieDia = new ConfPieDia( 0, "ConfPageDia" );
+    confPieDia = new ConfPieDia( this, "ConfPageDia" );
     confPieDia->setMaximumSize( confPieDia->width(), confPieDia->height() );
     confPieDia->setMinimumSize( confPieDia->width(), confPieDia->height() );
     confPieDia->setType( m_pKPresenterDoc->getPieType( pieType ) );
@@ -792,7 +790,7 @@ void KPresenterView::extraConfigRect()
         confRectDia = 0;
     }
 
-    confRectDia = new ConfRectDia( 0, "ConfRectDia" );
+    confRectDia = new ConfRectDia( this, "ConfRectDia" );
     confRectDia->setMaximumSize( confRectDia->width(), confRectDia->height() );
     confRectDia->setMinimumSize( confRectDia->width(), confRectDia->height() );
     confRectDia->setRnds( m_pKPresenterDoc->getRndX( rndX ), m_pKPresenterDoc->getRndY( rndY ) );
@@ -835,7 +833,7 @@ void KPresenterView::extraRotate()
 
     if ( m_pKPresenterDoc->numSelected() > 0 )
     {
-        rotateDia = new RotateDia( 0, "Rotate" );
+        rotateDia = new RotateDia( this, "Rotate" );
         rotateDia->setMaximumSize( rotateDia->width(), rotateDia->height() );
         rotateDia->setMinimumSize( rotateDia->width(), rotateDia->height() );
         rotateDia->setCaption( i18n( "KPresenter - Rotate" ) );
@@ -861,7 +859,7 @@ void KPresenterView::extraShadow()
 
     if ( m_pKPresenterDoc->numSelected() > 0 )
     {
-        shadowDia = new ShadowDia( 0, "Shadow" );
+        shadowDia = new ShadowDia( this, "Shadow" );
         shadowDia->setMaximumSize( shadowDia->width(), shadowDia->height() );
         shadowDia->setMinimumSize( shadowDia->width(), shadowDia->height() );
         shadowDia->setCaption( i18n( "KPresenter - Shadow" ) );
@@ -904,7 +902,7 @@ void KPresenterView::extraBackground()
         delete backDia;
         backDia = 0;
     }
-    backDia = new BackDia( 0, "InfoDia", m_pKPresenterDoc->getBackType( getCurrPgNum() - 1 ),
+    backDia = new BackDia( this, "InfoDia", m_pKPresenterDoc->getBackType( getCurrPgNum() - 1 ),
                            m_pKPresenterDoc->getBackColor1( getCurrPgNum() - 1 ),
                            m_pKPresenterDoc->getBackColor2( getCurrPgNum() - 1 ),
                            m_pKPresenterDoc->getBackColorType( getCurrPgNum() - 1 ),
@@ -947,10 +945,8 @@ void KPresenterView::extraOptions()
         delete optionDia;
         optionDia = 0;
     }
-    optionDia = new OptionDia( 0, "OptionDia" );
+    optionDia = new OptionDia( this, "OptionDia" );
     optionDia->setCaption( i18n( "KPresenter - Options" ) );
-    optionDia->setMaximumSize( optionDia->size() );
-    optionDia->setMinimumSize( optionDia->size() );
     QObject::connect( optionDia, SIGNAL( applyButtonPressed() ), this, SLOT( optionOk() ) );
     optionDia->setRastX( kPresenterDoc()->getRastX() );
     optionDia->setRastY( kPresenterDoc()->getRastY() );
@@ -970,7 +966,7 @@ void KPresenterView::extraWebPres()
     m_vMenuExtra->setItemEnabled( m_idMenuExtra_WepPres, false );
 
     QString config = QString::null;
-    if ( QMessageBox::information( ( QWidget* )0L, i18n( "Create Web-Presentation" ),
+    if ( QMessageBox::information( this, i18n( "Create Web-Presentation" ),
                                    i18n( "Do you want to load a configuration which should be used for this\n"
                                          "Web-Presentation, which you have already saved earlier?" ),
                                    i18n( "&Yes" ), i18n( "&No" ), QString::null, 1, 1 ) == 0 )
@@ -1025,7 +1021,7 @@ void KPresenterView::screenConfigPages()
         delete pgConfDia;
         pgConfDia = 0;
     }
-    pgConfDia = new PgConfDia( 0L, kPresenterDoc(), "PageConfig", kPresenterDoc()->spInfinitLoop(),
+    pgConfDia = new PgConfDia( this, kPresenterDoc(), "PageConfig", kPresenterDoc()->spInfinitLoop(),
                                kPresenterDoc()->spManualSwitch(), getCurrPgNum(),
                                kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageEffect(),
                                kPresenterDoc()->getPresSpeed(), kPresenterDoc()->getPresentSlides(),
@@ -1045,7 +1041,7 @@ void KPresenterView::screenPresStructView()
         page->deSelectAllObj();
         page->setToolEditMode( TEM_MOUSE );
 
-        presStructView = new PresStructViewer( 0, "", kPresenterDoc(), this );
+        presStructView = new PresStructViewer( this, "", kPresenterDoc(), this );
         presStructView->setCaption( i18n( "KPresenter - Presentation structure viewer" ) );
         QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
         presStructView->show();
@@ -1069,7 +1065,7 @@ void KPresenterView::screenAssignEffect()
 
     if ( page->canAssignEffect( _pNum, _oNum ) && _pNum >= 1 )
     {
-        effectDia = new EffectDia( 0, "Effect", _pNum, _oNum, ( KPresenterView* )this );
+        effectDia = new EffectDia( this, "Effect", _pNum, _oNum, ( KPresenterView* )this );
         effectDia->setCaption( i18n( "KPresenter - Assign effects" ) );
         QObject::connect( effectDia, SIGNAL( effectDiaOk() ), this, SLOT( effectOk() ) );
         effectDia->show();
@@ -1078,7 +1074,7 @@ void KPresenterView::screenAssignEffect()
         page->selectObj( _oNum );
     }
     else
-        QMessageBox::critical( ( QWidget* )0L, i18n( "KPresenter Error" ),
+        QMessageBox::critical( this, i18n( "KPresenter Error" ),
                                i18n( "I can't assign an effect. You have to select EXACTLY one object!" ),
                                i18n( "OK" ) );
 
@@ -1090,7 +1086,7 @@ void KPresenterView::screenStart()
 {
     bool fullScreen = true; //m_rToolBarScreen->isButtonOn( m_idButtonScreen_Full );
     int curPg = getCurrPgNum();
-    
+
     if ( page && !presStarted )
     {
         // disable screensaver
@@ -1150,7 +1146,7 @@ void KPresenterView::screenStart()
         yOffset = ( page->presPage() - 1 ) * kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
         if ( page->height() > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() )
             yOffset -= ( page->height() - kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
-        
+
         if ( fullScreen )
         {
             page->recreate( ( QWidget* )0L, WStyle_Customize | WStyle_NoBorder | WType_Popup, QPoint( 0, 0 ), true );
@@ -1616,7 +1612,7 @@ void KPresenterView::textSpacing()
             spacingDia = 0;
         }
 
-        spacingDia = new SpacingDia( 0, obj->getLineSpacing(), obj->getDistBefore(), obj->getDistAfter() );
+        spacingDia = new SpacingDia( this, obj->getLineSpacing(), obj->getDistBefore(), obj->getDistAfter() );
         spacingDia->setMaximumSize( spacingDia->width(), spacingDia->height() );
         spacingDia->setMinimumSize( spacingDia->width(), spacingDia->height() );
         spacingDia->setCaption( i18n( "KPresenter - Spacings" ) );
@@ -2054,7 +2050,7 @@ void KPresenterView::pgConfOk()
                                           pgConfDia->getPresentSlides(), pgConfDia->getSelectedSlides(),
                                           kPresenterDoc()->spManualSwitch(), kPresenterDoc()->spInfinitLoop(),
                                           kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageEffect(),
-                                          kPresenterDoc()->getPresSpeed(), 
+                                          kPresenterDoc()->getPresSpeed(),
                                           kPresenterDoc()->getPresentSlides(), kPresenterDoc()->getSelectedSlides(),
                                           kPresenterDoc(), getCurrPgNum() - 1 );
     pgConfCmd->execute();
@@ -4187,7 +4183,7 @@ void KPresenterView::restartPresStructView()
     presStructView = 0;
     page->deSelectAllObj();
 
-    presStructView = new PresStructViewer( 0, "", kPresenterDoc(), this );
+    presStructView = new PresStructViewer( this, "", kPresenterDoc(), this );
     presStructView->setCaption( i18n( "KPresenter - Presentation structure viewer" ) );
     QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
     presStructView->show();

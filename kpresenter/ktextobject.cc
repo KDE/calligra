@@ -6399,10 +6399,10 @@ QSize KTextObject::neededSize()
 {
     int y;
     rowYPos( numRows() - 1, &y );
-    
+
     unsigned int w = 0;
     for ( unsigned int i = 0; i < paragraphList.count(); i++ )
         w = QMAX( w, paragraphList.at( i )->width() );
-        
-    return QSize( w, y + cellHeight( numRows() - 1 ) ); 
+
+    return QSize( w, y + cellHeight( numRows() - 1 ) );
 }
