@@ -69,11 +69,11 @@ private slots:
 private:
     QPixmap getSlideThumb(int slideNr) const;
 
-    KPresenterDoc *doc;
-    KPresenterView *view;
-    ThumbToolTip *thumbTip;
-    int offsetX;
-    int offsetY;
+    KPresenterDoc *m_doc;
+    KPresenterView *m_view;
+    ThumbToolTip *m_thumbTip;
+    int m_offsetX;
+    int m_offsetY;
 };
 
 class Outline: public KListView
@@ -112,11 +112,10 @@ private slots:
     void doMoveItems();
 
 private:
-    int delPageId;
-    KPresenterDoc *doc;
-    KPresenterView *view;
-    QListViewItem *movedItem, *movedAfter;
-    OutlineToolTip *outlineTip;
+    KPresenterDoc *m_doc;
+    KPresenterView *m_view;
+    QListViewItem *m_movedItem, *m_movedAfter;
+    OutlineToolTip *m_outlineTip;
 };
 
 class SideBar: public QTabWidget
@@ -126,8 +125,8 @@ class SideBar: public QTabWidget
 public:
     SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
     void setCurrentPage( int pg ) {
-        _outline->setCurrentPage(pg);
-        _thb->setCurrentPage(pg);
+        m_outline->setCurrentPage(pg);
+        m_thb->setCurrentPage(pg);
     };
     void setOn( int , bool ) { };
     //QSize sizeHint() const { return QSize( 120, QTabWidget::sizeHint().height() ); };
@@ -136,8 +135,8 @@ public:
     void moveItem( int oldPos, int newPos );
     void removeItem( int pos );
 
-    Outline *outline() const { return _outline; };
-    ThumbBar *thumbBar() const { return _thb; };
+    Outline *outline() const { return m_outline; };
+    ThumbBar *thumbBar() const { return m_thb; };
 
 signals: // all page numbers 0-based
     void showPage( int i );
@@ -145,16 +144,16 @@ signals: // all page numbers 0-based
     void selectPage( int i, bool );
 
 public slots:
-    //void rebuildItems() { _outline->rebuildItems(); _thb->rebuildItems();};
-    void renamePageTitle() { _outline->renamePageTitle(); };
+    //void rebuildItems() { m_outline->rebuildItems(); m_thb->rebuildItems();};
+    void renamePageTitle() { m_outline->renamePageTitle(); };
     void currentChanged(QWidget *tab);
 
 private:
-    Outline *_outline;
-    ThumbBar *_thb;
+    Outline *m_outline;
+    ThumbBar *m_thb;
 
-    KPresenterDoc *doc;
-    KPresenterView *view;
+    KPresenterDoc *m_doc;
+    KPresenterView *m_view;
 };
 
 #endif

@@ -131,29 +131,29 @@ private:
 };
 
 SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
-    :QTabWidget(parent), doc(d), view(v)
+    :QTabWidget(parent), m_doc(d), m_view(v)
 {
     setTabPosition(QTabWidget::Top);
     setTabShape(QTabWidget::Triangular);
 
-    _outline = new Outline(this, doc, view);
-    addTab(_outline, i18n("Outline"));
+    m_outline = new Outline(this, m_doc, m_view);
+    addTab(m_outline, i18n("Outline"));
 
-    _thb = new ThumbBar(this, doc, view);
-    addTab(_thb,i18n("Preview"));
+    m_thb = new ThumbBar(this, m_doc, m_view);
+    addTab(m_thb,i18n("Preview"));
 
 
     //TODO find a better way
-    connect(_outline, SIGNAL(showPage(int)),
+    connect(m_outline, SIGNAL(showPage(int)),
             this, SIGNAL(showPage(int)));
 
-    connect(_thb, SIGNAL(showPage(int)),
+    connect(m_thb, SIGNAL(showPage(int)),
             this, SIGNAL(showPage(int)));
 
-    connect(_outline, SIGNAL(movePage(int,int)),
+    connect(m_outline, SIGNAL(movePage(int,int)),
             this, SIGNAL(movePage(int,int)));
 
-    connect(_outline, SIGNAL(selectPage(int,bool)),
+    connect(m_outline, SIGNAL(selectPage(int,bool)),
             this, SIGNAL(selectPage(int,bool)));
 
     connect(this, SIGNAL(currentChanged(QWidget *)),
@@ -163,44 +163,44 @@ SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
 
 void SideBar::currentChanged(QWidget *tab)
 {
-    if (tab == _thb) {
-        if (!_thb->uptodate && _thb->isVisible())
-            _thb->rebuildItems();
+    if (tab == m_thb) {
+        if (!m_thb->uptodate && m_thb->isVisible())
+            m_thb->rebuildItems();
         else
-            _thb->refreshItems();
+            m_thb->refreshItems();
     }
 }
 
 void SideBar::addItem( int pos )
 {
-    _outline->addItem( pos );
-    _thb->addItem( pos );
+    m_outline->addItem( pos );
+    m_thb->addItem( pos );
 }
 
 void SideBar::moveItem( int oldPos, int newPos )
 {
-    _outline->moveItem( oldPos, newPos );
-    _thb->moveItem( oldPos, newPos );
+    m_outline->moveItem( oldPos, newPos );
+    m_thb->moveItem( oldPos, newPos );
 }
 
 void SideBar::removeItem( int pos )
 {
-    _outline->removeItem( pos );
-    _thb->removeItem( pos );
+    m_outline->removeItem( pos );
+    m_thb->removeItem( pos );
 }
 
 void SideBar::updateItem( int pos, bool sticky )
 {
-    _outline->updateItem( pos, sticky );
-    _thb->updateItem( pos, sticky );
+    m_outline->updateItem( pos, sticky );
+    m_thb->updateItem( pos, sticky );
 }
 
 ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
-    :KIconView(parent), doc(d), view(v)
+    :KIconView(parent), m_doc(d), m_view(v)
 {
     uptodate = false;
-    offsetX = 0;
-    offsetY = 0;
+    m_offsetX = 0;
+    m_offsetY = 0;
 
     setArrangement(QIconView::LeftToRight);
     setAutoArrange(true);
@@ -208,7 +208,7 @@ ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
     setItemsMovable(false);
     setResizeMode(QIconView::Adjust);
 
-    thumbTip = new ThumbToolTip(this);
+    m_thumbTip = new ThumbToolTip(this);
 
     connect(this, SIGNAL(currentChanged(QIconViewItem *)),
             this, SLOT(itemClicked(QIconViewItem *)));
@@ -218,7 +218,7 @@ ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
 
 ThumbBar::~ThumbBar()
 {
-    delete thumbTip;
+    delete m_thumbTip;
 }
 
 void ThumbBar::setCurrentPage( int pg )
@@ -244,7 +244,7 @@ QRect ThumbBar::tip(const QPoint &pos, QString &title)
         return QRect(0, 0, -1, -1);
 
     int pagenr =  item->index();
-    title = doc->pageList().at(pagenr)->pageTitle();
+    title = m_doc->pageList().at(pagenr)->pageTitle();
 
     QRect r = item->pixmapRect(FALSE);
     r = QRect(contentsToViewport(QPoint(r.x(), r.y())), QSize(r.width(), r.height()));
@@ -260,9 +260,9 @@ void ThumbBar::rebuildItems()
     QApplication::setOverrideCursor( Qt::waitCursor );
 
     clear();
-    for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
+    for ( unsigned int i = 0; i < m_doc->getPageNums(); i++ ) {
         // calculate the size of the thumb
-        QRect rect = view->kPresenterDoc()->pageList().at(i)->getZoomPageRect( );
+        QRect rect = m_doc->pageList().at(i)->getZoomPageRect( );
 
         int w = rect.width();
         int h = rect.height();
@@ -315,7 +315,7 @@ void ThumbBar::refreshItems(bool offset)
 {
     QRect vRect = visibleRect();
     if ( offset )
-        vRect.moveBy( offsetX, offsetY );
+        vRect.moveBy( m_offsetX, m_offsetY );
     else
         vRect.moveBy( contentsX(), contentsY() );
 
@@ -334,8 +334,8 @@ void ThumbBar::refreshItems(bool offset)
         it = it->nextItem();
     }
 
-    offsetX = 0;
-    offsetY = 0;
+    m_offsetX = 0;
+    m_offsetY = 0;
 }
 
 void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
@@ -482,7 +482,7 @@ QPixmap ThumbBar::getSlideThumb(int slideNr) const
     //kdDebug(33001) << "ThumbBar::getSlideThumb: " << slideNr << endl;
     QPixmap pix( 10, 10 );
 
-    view->getCanvas()->drawPageInPix( pix, slideNr, 60 );
+    m_view->getCanvas()->drawPageInPix( pix, slideNr, 60 );
 
     int w = pix.width();
     int h = pix.height();
@@ -520,8 +520,8 @@ void ThumbBar::itemClicked(QIconViewItem *i)
 
 void ThumbBar::slotContentsMoving(int x, int y)
 {
-    offsetX = x;
-    offsetY = y;
+    m_offsetX = x;
+    m_offsetY = y;
     kdDebug(33001) << "offset x,y = " << x << ", " << y << endl;
     refreshItems( true );
 }
@@ -557,9 +557,10 @@ void OutlineSlideItem::setPage( KPrPage* p )
 void OutlineSlideItem::update()
 {
     if( !m_page ) return;
-    int index = m_page->kPresenterDoc()->pageList().findRef( m_page );
+    KPresenterDoc *doc = m_page->kPresenterDoc();
+    int index = doc->pageList().findRef( m_page );
     QString title = m_page->pageTitle();
-    if ( !m_page->kPresenterDoc()->isSlideSelected( index ) )
+    if ( !doc->isSlideSelected( index ) )
         title = i18n( "(%1)" ).arg( title );
     setText( 0, title );
 
@@ -584,7 +585,6 @@ void OutlineSlideItem::update()
     KPObject* header = 0;
     KPObject* footer = 0;
 
-    KPresenterDoc *doc = m_page->kPresenterDoc();
     // add sticky objects, exclude header and footer
     it = doc->masterPage()->objectList();
     for ( ; it.current() ; ++it )
@@ -702,7 +702,7 @@ void OutlineObjectItem::setObject( KPObject* object )
 }
 
 Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
-    : KListView( parent ), doc( d ), view( v )
+    : KListView( parent ), m_doc( d ), m_view( v )
 {
     rebuildItems();
     setSorting( -1 );
@@ -710,7 +710,7 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     addColumn( i18n( "Slide" ) );
     setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
-    outlineTip = new OutlineToolTip(this);
+    m_outlineTip = new OutlineToolTip(this);
 
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
     connect( this, SIGNAL( moved( QListViewItem *, QListViewItem *, QListViewItem * ) ),
@@ -729,7 +729,7 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
 
 Outline::~Outline()
 {
-    delete outlineTip;
+    delete m_outlineTip;
 }
 
 void Outline::rebuildItems()
@@ -737,8 +737,8 @@ void Outline::rebuildItems()
     clear();
 
     // Rebuild all the items
-    for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
-        KPrPage *page=doc->pageList().at( i );
+    for ( int i = m_doc->getPageNums() - 1; i >= 0; --i ) {
+        KPrPage *page=m_doc->pageList().at( i );
         new OutlineSlideItem( this, page );
     }
 }
@@ -779,7 +779,7 @@ void Outline::addItem( int pos )
 {
     kdDebug(33001)<< "Outline::addItem" << endl;
 
-    KPrPage *page=doc->pageList().at( pos );
+    KPrPage *page=m_doc->pageList().at( pos );
     OutlineSlideItem *item;
     if ( pos == 0 ) {
         item = new OutlineSlideItem( this, page );
@@ -806,7 +806,7 @@ void Outline::moveItem( int oldPos, int newPos )
     int page = lowPage;
     OutlineSlideItem* item = slideItem( page );
     for( ; item ; ++page ) {
-        KPrPage* newPage = doc->pageList().at( page );
+        KPrPage* newPage = m_doc->pageList().at( page );
         item->setPage( newPage );
         item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() );
         if ( page == highPage ) break;
@@ -824,7 +824,7 @@ void Outline::removeItem( int pos )
     delete item;
 
     for( item = temp; item; ++pos ) {
-        KPrPage* newPage = doc->pageList().at( pos );
+        KPrPage* newPage = m_doc->pageList().at( pos );
         item->setPage( newPage );
         item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() );
     }
@@ -854,7 +854,7 @@ void Outline::itemClicked( QListViewItem *item )
     {
         KPrPage* page = slideItem->page();
         if( !page ) return;
-        emit showPage( page->kPresenterDoc()->pageList().findRef( page ) );
+        emit showPage( m_doc->pageList().findRef( page ) );
     }
 
     // check if we need to show chosen object
@@ -866,23 +866,23 @@ void Outline::itemClicked( QListViewItem *item )
 
         // ensure the owner slide is shown first
         OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(objectItem->parent());
-        if( slideItem && doc->activePage() != slideItem->page() )
+        if( slideItem && m_doc->activePage() != slideItem->page() )
         {
             KPrPage* page = slideItem->page();
             if( !page ) return;
-            emit showPage( page->kPresenterDoc()->pageList().findRef( page ) );
+            emit showPage( m_doc->pageList().findRef( page ) );
         }
 
         // select the object, make sure it's visible
-        doc->deSelectAllObj();
-        view->getCanvas()->selectObj( object );
-        QRect rect( doc->zoomHandler()->zoomRect( object->getBoundingRect() ) );
+        m_doc->deSelectAllObj();
+        m_view->getCanvas()->selectObj( object );
+        QRect rect( m_doc->zoomHandler()->zoomRect( object->getBoundingRect() ) );
         rect.setLeft( rect.left() - 20 );
         rect.setTop( rect.top() - 20 );
         rect.setRight( rect.right() + 20 );
         rect.setBottom( rect.bottom() + 20 );
-        view->makeRectVisible( rect );
-        doc->repaint( false );
+        m_view->makeRectVisible( rect );
+        m_doc->repaint( false );
     }
 }
 
@@ -918,34 +918,34 @@ void Outline::movableDropEvent( QListViewItem* parent, QListViewItem* target )
 
 void Outline::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newAfter )
 {
-    movedItem = i;
-    movedAfter = newAfter;
+    m_movedItem = i;
+    m_movedAfter = newAfter;
     QTimer::singleShot( 300, this, SLOT( doMoveItems() ) );
 }
 
 void Outline::doMoveItems()
 {
-    OutlineSlideItem* srcItem = dynamic_cast<OutlineSlideItem*>(movedItem);
+    OutlineSlideItem* srcItem = dynamic_cast<OutlineSlideItem*>(m_movedItem);
     if( !srcItem ) return;
 
-    int num = doc->pageList().findRef( srcItem->page() );
+    int num = m_doc->pageList().findRef( srcItem->page() );
 
-    OutlineSlideItem* dstItem = dynamic_cast<OutlineSlideItem*>(movedAfter);
-    if( movedAfter && !dstItem ) return;
+    OutlineSlideItem* dstItem = dynamic_cast<OutlineSlideItem*>(m_movedAfter);
+    if( m_movedAfter && !dstItem ) return;
 
-    int numNow = movedAfter ? doc->pageList().findRef( dstItem->page() ) : -1;
+    int numNow = m_movedAfter ? m_doc->pageList().findRef( dstItem->page() ) : -1;
     if ( numNow < num ) numNow++;
 
     if(num!=numNow) {
         emit movePage( num, numNow );
         // this has to be done because moving a page is take + insert the page
-        setSelected( movedItem, true );
+        setSelected( m_movedItem, true );
     }
 }
 
 void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
 {
-    if ( !doc->isReadWrite()) return;
+    if ( !m_doc->isReadWrite()) return;
 
     QListViewItem *item = QListView::selectedItem();
     if( !item ) return;
@@ -953,7 +953,7 @@ void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
     OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
     if( !slideItem ) return;
 
-    view->openPopupMenuSideBar(pnt);
+    m_view->openPopupMenuSideBar(pnt);
 }
 
 void Outline::renamePageTitle()
@@ -977,11 +977,10 @@ void Outline::renamePageTitle()
     // Have a different name ?
     if ( ok ) { // User pushed an OK button.
         if ( newTitle != activeTitle ) { // Title changed.
-            KPresenterDoc *doc=view->kPresenterDoc();
             KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Slide"),
-                                                                                  doc, activeTitle, newTitle, page  );
+                                                                                  m_doc, activeTitle, newTitle, page  );
             cmd->execute();
-            doc->addCommand(cmd);
+            m_doc->addCommand(cmd);
         }
     }
 }
