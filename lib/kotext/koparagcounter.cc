@@ -499,9 +499,9 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
         return m_cache.text;
 
     // If necessary, grab the text of the preceeding levels.
-    if ( m_displayLevels > 1 && parent( paragraph ) )
+    if ( m_displayLevels > 1 )
     {
-        KoTextParag* p = m_cache.parent; // calculated by parent() above
+        KoTextParag* p = parent( paragraph );
         int displayLevels = QMIN( m_displayLevels, m_depth+1 ); // can't be >depth+1
         for ( int level = 1 ; level < displayLevels ; ++level )  {
             //kdDebug() << "additional level=" << level << "/" << displayLevels-1 << endl;
@@ -528,7 +528,12 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
             }
             else // toplevel parents are missing
             {
-                m_cache.text.prepend( "0." );
+                // Special case for one-paragraph-documents like preview widgets
+                KoTextDocument* textdoc = paragraph->textDocument();
+                if ( paragraph == textdoc->firstParag() && paragraph == textdoc->lastParag() )
+                    m_cache.text.prepend( "1." );
+                else
+                    m_cache.text.prepend( "0." );
             }
         }
 
