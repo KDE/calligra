@@ -93,6 +93,7 @@ private:
     bool makePicture(const FrameAnchor& anchor);
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void declareFont(const QString& fontName);
+    void writeFontDeclaration(void);
     void writeContentXml(void);
     void writeStylesXml(void);
     void writeMetaXml(void);

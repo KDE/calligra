@@ -281,6 +281,33 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
     zipWriteData(">\n");
 }
 
+void OOWriterWorker::writeFontDeclaration(void)
+{
+    zipWriteData( " <office:font-decls>\n");
+    for (QMap<QString,QString>::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
+    {
+        const bool space=(it.key().find(' ')>=0); // Does the font has at least a space in its name
+        const QString fontName(escapeOOText(it.key()));
+        zipWriteData("  <style:font-decl style:name=\"");
+        zipWriteData(fontName);
+        zipWriteData("\" fo:font-family=\"");
+        if (space)
+        { // It has a space, so (simple) quote it
+            zipWriteData("&apos;");
+            zipWriteData(fontName);
+            zipWriteData("&apos;");
+        }
+        else
+        { // The font has no space in its name, so it can be written normally.
+            zipWriteData(fontName);
+        }
+        zipWriteData("\" ");
+        zipWriteData(it.data()); // already in XML, so do not escape
+        zipWriteData(" />\n");
+    }
+    zipWriteData(" </office:font-decls>\n");
+}
+
 void OOWriterWorker::writeStylesXml(void)
 {
     if (!m_zip)
@@ -290,18 +317,7 @@ void OOWriterWorker::writeStylesXml(void)
 
     writeStartOfFile("styles");
 
-    zipWriteData( " <office:font-decls>\n");
-    for (QMap<QString,QString>::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
-    {
-        zipWriteData("  <style:font-decl style:name=\"");
-        zipWriteData(escapeOOText(it.key()));
-        zipWriteData("\" fo:font-family=\"");
-        zipWriteData(escapeOOText(it.key()));
-        zipWriteData("\" ");
-        zipWriteData(it.data()); // already in XML, so do not escape
-        zipWriteData(" />\n");
-    }
-    zipWriteData(" </office:font-decls>\n");
+    writeFontDeclaration();
 
     zipWriteData(m_styles);
 
@@ -359,18 +375,7 @@ void OOWriterWorker::writeContentXml(void)
 
     writeStartOfFile("content");
 
-    zipWriteData( " <office:font-decls>\n");
-    for (QMap<QString,QString>::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
-    {
-        zipWriteData("  <style:font-decl style:name=\"");
-        zipWriteData(escapeOOText(it.key()));
-        zipWriteData("\" fo:font-family=\"");
-        zipWriteData(escapeOOText(it.key()));
-        zipWriteData("\" ");
-        zipWriteData(it.data()); // already in XML, so do not escape
-        zipWriteData(" />\n");
-    }
-    zipWriteData(" </office:font-decls>\n");
+    writeFontDeclaration();
 
     zipWriteData(" <office:automatic-styles>\n");
     zipWriteData(m_contentAutomaticStyles);
