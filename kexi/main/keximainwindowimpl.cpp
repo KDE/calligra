@@ -693,7 +693,7 @@ KexiMainWindowImpl::initNavigator()
 void KexiMainWindowImpl::initPropertyEditor()
 {
 //TODO: FIX LAYOUT PROBLEMS
-#ifdef KEXI_PROP_EDIOR
+#ifdef KEXI_PROP_EDITOR
 	d->propEditor = new KexiPropertyEditorView(this);
 	d->propEditor->installEventFilter(this);
 	d->propEditorToolWindow = addToolWindow(d->propEditor, 
