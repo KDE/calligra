@@ -1667,15 +1667,17 @@ void KPresenterView::mtextFont()
     KoFontDia *fontDia = new KoFontDia( this, "", textIface->textFont(),
                                         actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
                                         textIface->textColor(), col );
-    fontDia->exec();
-    int flags = fontDia->changedFlags();
-    if ( flags )
+    if ( fontDia->exec() )
     {
-        // The "change all the format" call
-        m_canvas->setFont(fontDia->getNewFont(),
-                      fontDia->getSubScript(), fontDia->getSuperScript(),
-                      fontDia->color(), fontDia->backGroundColor(),
-                      flags);
+        int flags = fontDia->changedFlags();
+        if ( flags )
+        {
+            // The "change all the format" call
+            m_canvas->setFont(fontDia->getNewFont(),
+                              fontDia->getSubScript(), fontDia->getSuperScript(),
+                              fontDia->color(), fontDia->backGroundColor(),
+                              flags);
+        }
     }
 
     delete fontDia;
