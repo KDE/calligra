@@ -38,7 +38,7 @@ int main( int argc, char **argv )
   aboutData->addAuthor("Sven Lüppken", I18N_NOOP("Current Maintainer"), "sven@kde.org");
   aboutData->addAuthor("Torben Weis", 0, "weis@kde.org");
   aboutData->addAuthor("David Faure", 0, "david@mandrakesoft.com");
-
+  
   KCmdLineArgs::init( argc, argv, aboutData );
   //KCmdLineArgs::addCmdLineOptions( options );
 

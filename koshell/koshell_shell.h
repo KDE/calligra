@@ -57,7 +57,7 @@ protected slots:
   virtual void slotFileClose();
   virtual void slotFileOpen();
   void slotKoolBar( int _grp, int _item );
-  void slotHideKoolbar();
+  void slotShowSidebar();
   void slotKSLoadCompleted();
   void slotKSLoadCanceled (const QString &);
 

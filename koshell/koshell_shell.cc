@@ -103,8 +103,8 @@ void KoShellWindow::setupActions()
   	actionCollection()->action("view_split")->setEnabled(false);
   	actionCollection()->action("view_splitter_orientation")->setEnabled(false);
 	
-	(void)new KToggleAction(i18n("Show / Hide Koolbar"), "view_choose", this, SLOT( slotHideKoolbar() ),
-                      actionCollection(), "hide_koolbar");
+	(void)new KToggleAction(i18n("Show Sidebar"), "view_choose", this, SLOT( slotShowSidebar() ),
+                      actionCollection(), "show_sidebar");
 }
 
 KoShellWindow::~KoShellWindow()
@@ -337,7 +337,7 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
   }
 }
 
-void KoShellWindow::slotHideKoolbar()
+void KoShellWindow::slotShowSidebar()
 {
 	if( m_pKoolBar->isShown() )
 		m_pKoolBar->hide();

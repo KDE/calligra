@@ -1,5 +1,8 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="koshell">
-<ToolBar name="koolbar" position="top"><Text>Koolbar options</Text>
-	<Action name="hide_koolbar"/>
-</ToolBar>
+<kpartgui name="koshell" version="1">
+<MenuBar>
+  <Menu name="settings"><Text>&amp;Settings</Text>
+     <Action name="show_sidebar"/>
+  </Menu>
+</MenuBar>
+</kpartgui>
