@@ -24,9 +24,10 @@
 
 
 class KListView;
-class QListViewItem;
 
 class KPTPart;
+class KPTNode;
+class KPTNodeItem;
 
 
 class KPTView : public KoView {
@@ -35,18 +36,28 @@ class KPTView : public KoView {
 public:
     KPTView(KPTPart* part, QWidget* parent=0, const char* name=0);
 
+    /**
+     * Support zooming.
+     */
+    virtual void setZoom(double zoom);
+
 protected slots:
     void slotEditProject();
     void slotAddSubProject();
     void slotAddTask();
     void slotAddMilestone();
-    void slotSelectionChanged(QListViewItem *);
+    void slotSelectionChanged();
 
 protected:
     virtual void updateReadWrite(bool readwrite);
 
 private:
-    KListView *listview;
+    void displayProject();
+    void displayChildren(const KPTNode &node, KPTNodeItem *item);
+
+    KListView *m_listview;
+
+    int m_defaultFontSize;
 };
 
 #endif

@@ -20,6 +20,10 @@
 #include "kptview.h"
 #include "kptfactory.h"
 #include "kptpart.h"
+#include "kptproject.h"
+#include "kptnodeitem.h"
+#include "kpttask.h"
+#include "kpttaskdialog.h"
 
 #include <qpainter.h>
 #include <qiconset.h>
@@ -29,6 +33,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <klistview.h>
+
 
 KPTView::KPTView(KPTPart* part, QWidget* parent, const char* name)
     : KoView(part, parent, name)
@@ -40,14 +45,14 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* name)
     l->setAutoAdd(true);
 
     // The main project view
-    listview = new KListView(this);
-    listview->addColumn(i18n("Project"));
-    KListViewItem *i = new KListViewItem(listview, i18n("item 1"));
-    i->setOpen(true);
-    new KListViewItem(i, i18n("item 2"));
+    m_listview = new KListView(this);
+    m_listview->setSelectionModeExt(KListView::Extended);
+    m_listview->addColumn(i18n("Project"));
+    m_listview->addColumn(i18n("Leader"));
+    m_listview->addColumn(i18n("Description"));
 
-    connect(listview, SIGNAL(selectionChanged(QListViewItem *)),
-	    this, SLOT(slotSelectionChanged(QListViewItem *)));
+    connect(m_listview, SIGNAL(selectionChanged()), this,
+	    SLOT(slotSelectionChanged()));
 
     // The menu items
     new KAction(i18n("Edit Main Project..."), "edit_project", 0, this,
@@ -59,11 +64,54 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* name)
 		SLOT(slotAddTask()), actionCollection(), "add_task");
     new KAction(i18n("Add Milestone..."), "add_milestone", 0, this,
 		SLOT(slotAddMilestone()), actionCollection(), "add_milestone");
+
+    // Show the project
+    displayProject();
+
+    // Save the un-zoomed font size
+    m_defaultFontSize = m_listview->font().pointSize();
+}
+
+
+void KPTView::setZoom(double zoom) {
+    QFont f = m_listview->font();
+    f.setPointSize(qRound(m_defaultFontSize * zoom));
+    m_listview->setFont(f);
+}
+
+
+void KPTView::displayProject() {
+    // Clean old project display
+    m_listview->clear();
+
+    // Add the top level project and select it
+    KPTProject &project = ((KPTPart *)koDocument())->getProject();
+    KPTNodeItem *i = new KPTNodeItem(m_listview, project);
+    i->setOpen(true);
+    m_listview->setSelected(i, true);
+
+    // Now recursively add all subitems
+    displayChildren(project, i);
+}
+
+
+void KPTView::displayChildren(const KPTNode &node, KPTNodeItem *item) {
+    // Add all children of node to the view, and add all their children too
+    for (int i=0; i<node.numChildren(); i++) {
+	// First add the child
+	KPTNode &n = node.getChildNode(i);
+	KPTNodeItem *i = new KPTNodeItem(item, n);
+	i->setOpen(true);
+
+	// Now add all it's children
+	displayChildren(n, i);
+    }
 }
 
 
 void KPTView::slotEditProject() {
     ((KPTPart *)koDocument())->editProject();
+    displayProject();
 }
 
 
@@ -72,14 +120,30 @@ void KPTView::slotAddSubProject() {
 
 
 void KPTView::slotAddTask() {
+    KPTTask *task = new KPTTask();
+    KPTTaskDialog *dialog = new KPTTaskDialog(*task, this);
+
+    // Execute the dialog
+    if (dialog->exec()) {
+	KPTNode &node = ((KPTNodeItem *)m_listview->selectedItem())->getNode();
+	cerr << "Adding child to " << node.name().latin1() << endl;
+	node.addChildNode(task);
+	
+	displayProject();
+    } else
+	delete task;
+
+    delete dialog;
 }
 
 
 void KPTView::slotAddMilestone() {
+    KPTTask *task = 0;
+    task->addChildNode(0);
 }
 
 
-void KPTView::slotSelectionChanged(QListViewItem *item) {
+void KPTView::slotSelectionChanged() {
     // TODO: Set available menu items according to the type of selected item
 }
 
