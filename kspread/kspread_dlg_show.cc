@@ -23,6 +23,7 @@
 #include "kspread_dlg_show.h"
 #include "kspread_view.h"
 #include "kspread_doc.h"
+#include "kspread_map.h"
 #include "kspread_tabbar.h"
 #include <qlayout.h>
 #include <klocale.h>
@@ -46,7 +47,7 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
   list->setSelectionMode(QListBox::Multi);
   QString text;
   QStringList::Iterator it;
-  QStringList tabsList=m_pView->tabBar()->hiddenTabs();
+  QStringList tabsList=m_pView->doc()->map()->hiddenSheets();
   for ( it = tabsList.begin(); it != tabsList.end(); ++it )
     	{
     	text=*it;

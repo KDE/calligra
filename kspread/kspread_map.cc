@@ -296,3 +296,35 @@ void KSpreadMap::insertTable( KSpreadSheet * table )
         m_lstDeletedTables.take( pos );
     m_lstTables.append(table);
 }
+
+// FIXME cache this for faster operation
+QStringList KSpreadMap::visibleSheets() const
+{
+    QStringList result;
+
+    QPtrListIterator<KSpreadSheet> it( m_lstTables );
+    for( ; it; ++it )
+    {
+        KSpreadSheet* sheet = it.current();
+        if( !sheet->isHidden() )
+            result.append( sheet->tableName() );
+    }
+
+    return result;
+}
+
+// FIXME cache this for faster operation
+QStringList KSpreadMap::hiddenSheets() const
+{
+    QStringList result;
+
+    QPtrListIterator<KSpreadSheet> it( m_lstTables );
+    for( ; it; ++it )
+    {
+        KSpreadSheet* sheet = it.current();
+        if( sheet->isHidden() )
+            result.append( sheet->tableName() );
+    }
+
+    return result;
+}

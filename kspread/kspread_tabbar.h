@@ -129,16 +129,6 @@ public:
     void displayTable(const QString& _text);
 
     /**
-     * @return the name of all visible tables.
-     */
-    QStringList visibleTabs();
-
-    /**
-     * @return the name of all hidden tables.
-     */
-    QStringList hiddenTabs();
-
-    /**
      * Sets the tab bar to be read only. This means, no dragging
      * for reordering the tabs is possible.
      * Signal contextMenu and doubleClicked would not be emitted.

@@ -443,7 +443,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     else
     {
       //activate first table which is not hiding
-      tbl = m_pDoc->map()->findTable(m_pTabBar->visibleTabs().first());
+      tbl = m_pDoc->map()->findTable( m_pDoc->map()->visibleSheets().first());
       if ( !tbl )
       {
         tbl = m_pDoc->map()->firstTable();
@@ -3074,8 +3074,8 @@ void KSpreadView::slotTableRemoved( KSpreadSheet *_t )
 
   QString m_tableName=_t->tableName();
   m_pTabBar->removeTab( _t->tableName() );
-  if (m_pDoc->map()->findTable( m_pTabBar->visibleTabs().first()))
-    setActiveTable( m_pDoc->map()->findTable( m_pTabBar->visibleTabs().first() ));
+  if (m_pDoc->map()->findTable( m_pDoc->map()->visibleSheets().first()))
+    setActiveTable( m_pDoc->map()->findTable( m_pDoc->map()->visibleSheets().first() ));
   else
     m_pTable = 0L;
 
@@ -3242,7 +3242,7 @@ void KSpreadView::insertTable()
   m_pDoc->undoBuffer()->appendUndo( undo );
   setActiveTable( t );
 
-  if ( m_pTabBar->visibleTabs().count() > 1 )
+  if ( m_pDoc->map()->visibleSheets().count() > 1 )
   {
     m_removeTable->setEnabled( true );
     m_hideTable->setEnabled( true );
@@ -4105,11 +4105,11 @@ void KSpreadView::adjustMapActions( bool mode )
   {
     if ( m_pTable && !m_pTable->isProtected() )
     {
-      bool state = ( m_pTabBar->visibleTabs().count() > 1 );
+      bool state = ( m_pDoc->map()->visibleSheets().count() > 1 );
       m_removeTable->setEnabled( state );
       m_hideTable->setEnabled( state );
     }
-    m_showTable->setEnabled( m_pTabBar->hiddenTabs().count() > 0 );
+    m_showTable->setEnabled( m_pDoc->map()->hiddenSheets().count() > 0 );
     if ( m_pTable->isProtected() )
       m_renameTable->setEnabled( false );
     else
@@ -5922,7 +5922,7 @@ void KSpreadView::zoomPlus()
 
 void KSpreadView::removeTable()
 {
-  if ( doc()->map()->count() <= 1 || ( m_pTabBar->visibleTabs().count() <= 1 ) )
+  if ( doc()->map()->count() <= 1 || ( doc()->map()->visibleSheets().count() <= 1 ) )
   {
     KNotifyClient::beep();
     KMessageBox::sorry( this, i18n("You cannot delete the only sheet."), i18n("Remove Sheet") ); // FIXME bad english? no english!
@@ -6494,7 +6494,7 @@ void KSpreadView::popupTabBarMenu( const QPoint & _point )
     return;
   if ( m_pTabBar )
   {
-    bool state = ( m_pTabBar->visibleTabs().count() > 1 );
+    bool state = ( m_pDoc->map()->visibleSheets().count() > 1 );
     if ( m_pTable && m_pTable->isProtected() )
     {
       m_removeTable->setEnabled( false );
@@ -6530,9 +6530,9 @@ void KSpreadView::removeTable( KSpreadSheet *_t )
   m_pDoc->emitBeginOperation(false);
   QString m_tablName=_t->tableName();
   m_pTabBar->removeTab( m_tablName );
-  setActiveTable( m_pDoc->map()->findTable( m_pTabBar->visibleTabs().first() ));
+  setActiveTable( m_pDoc->map()->findTable( m_pDoc->map()->visibleSheets().first() ));
 
-  bool state = m_pTabBar->visibleTabs().count() > 1;
+  bool state = m_pDoc->map()->visibleSheets().count() > 1;
   m_removeTable->setEnabled( state );
   m_hideTable->setEnabled( state );
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
@@ -6550,7 +6550,7 @@ void KSpreadView::insertTable( KSpreadSheet* table )
   {
     m_pTabBar->addHiddenTab( tabName );
   }
-  bool state = ( m_pTabBar->visibleTabs().count() > 1 );
+  bool state = ( m_pDoc->map()->visibleSheets().count() > 1 );
   m_removeTable->setEnabled( state );
   m_hideTable->setEnabled( state );
   m_pDoc->emitEndOperation( table->visibleRect( m_pCanvas ) );
@@ -6567,7 +6567,7 @@ void KSpreadView::updateShowTableMenu()
   if ( m_pTable->isProtected() )
     m_showTable->setEnabled( false );
   else
-    m_showTable->setEnabled( m_pTabBar->hiddenTabs().count() > 0 );
+    m_showTable->setEnabled( m_pDoc->map()->hiddenSheets().count() > 0 );
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
 

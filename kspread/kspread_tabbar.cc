@@ -377,18 +377,6 @@ void TabBar::removeAllTabs()
     update();
 }
 
-// returns list of visible tabs
-QStringList TabBar::visibleTabs()
-{
-    return d->visibleTabs;
-}
-
-// returns list of hidden tabs
-QStringList TabBar::hiddenTabs()
-{
-    return d->hiddenTabs;
-}
-
 bool TabBar::readOnly() const
 {
     return d->readOnly;

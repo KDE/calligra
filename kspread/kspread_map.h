@@ -34,6 +34,7 @@ class QDomDocument;
 #include <qcstring.h>
 #include <qptrlist.h>
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qintdict.h>
 #include <qobject.h>
 
@@ -131,6 +132,9 @@ public:
 
   void takeTable( KSpreadSheet * table );
   void insertTable( KSpreadSheet * table );
+
+  QStringList visibleSheets() const;
+  QStringList hiddenSheets() const;
 
 
 private:
