@@ -19,6 +19,7 @@
 
 #include "kpresenter_factory.h"
 #include "kpresenter_doc.h"
+#include "kpresenter_aboutdata.h"
 #include "preview.h"
 
 #include <kimageio.h>
@@ -30,10 +31,6 @@
 #include <qstringlist.h>
 #include <klocale.h>
 #include <kiconloader.h>
-
-
-static const char* description=I18N_NOOP("KOffice Presentation Tool");
-static const char* version="1.1";
 
 extern "C"
 {
@@ -50,21 +47,15 @@ KAboutData* KPresenterFactory::s_aboutData = 0;
 KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
-    global();
+    (void)global();
 }
 
 KPresenterFactory::~KPresenterFactory()
 {
-    if ( s_aboutData )
-    {
-        delete s_aboutData;
-        s_aboutData=0;
-    }
-    if ( s_global )
-    {
-      delete s_global;
-      s_global = 0L;
-    }
+    delete s_aboutData;
+    s_aboutData=0;
+    delete s_global;
+    s_global=0;
 }
 
 KParts::Part* KPresenterFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
@@ -83,12 +74,7 @@ KParts::Part* KPresenterFactory::createPart( QWidget *parentWidget, const char *
 KAboutData* KPresenterFactory::aboutData()
 {
     if( !s_aboutData )
-    {
-      s_aboutData= new KAboutData( "kpresenter", I18N_NOOP("KPresenter"),
-                                   version, description, KAboutData::License_GPL,
-                                   "(c) 1998-2000, Reginald Stadlbauer");
-      s_aboutData->addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
-    }
+        s_aboutData=newKPresenterAboutData();
     return s_aboutData;
 }
 

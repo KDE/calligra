@@ -17,33 +17,17 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_aboutdata.h"
-#include "kpresenter_doc.h"
-
-#include <koApplication.h>
-
-#include <dcopclient.h>
-#include <kcmdlineargs.h>
+#include <kaboutdata.h>
 #include <klocale.h>
 
+static const char* description=I18N_NOOP("KOffice Presentation Tool");
+static const char* version="1.1";
 
-static const KCmdLineOptions options[]=
+KAboutData * newKPresenterAboutData()
 {
-	{"+[file]", I18N_NOOP("File To Open"),0},
-	{0,0,0}
-};
-
-int main( int argc, char **argv )
-{
-    KCmdLineArgs::init( argc, argv, newKPresenterAboutData() );
-    KCmdLineArgs::addCmdLineOptions( options );
-
-    KoApplication app;
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "kpresenter" );
-
-    if (!app.start())
-	return 1;
-
-    return app.exec();
+    KAboutData * aboutData=new KAboutData( "kpresenter", I18N_NOOP("KPresenter"),
+                                           version, description, KAboutData::License_GPL,
+                                           "(c) 1998-2000, Reginald Stadlbauer");
+    aboutData->addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
+    return aboutData;
 }
