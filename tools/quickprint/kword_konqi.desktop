@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+ServiceTypes=application/x-kword
+Actions=Print
+
+[Desktop Action Print]
+Name=Print...
+Exec=kword --print %U
+Icon=filequickprint
