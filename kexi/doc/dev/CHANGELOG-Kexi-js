@@ -294,13 +294,12 @@ Detailed TODO for Beta3:
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
   (2 methods: 1) in additional dock 2) in property editor
--enable "Delete row" action, renamed to "Delete field". 
--rename "Do you want to remove row.." message to "Do you want to remove field %1"
 -add all missing properties (even when most are not working)
 -add "key" information icon @ the left hand of line with primary key(s)
 -add "index" information icon @ the left hand of line with key(s) that is/are indexed
--KexiProperty: make it really shared (using QShared?)
--allow to remove a field-row by clearing field name
+-add "insert empty row" action (to "Data" menu)
+-save schema changes before switching to "view mode"
+
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -308,6 +307,7 @@ Detailed TODO for Beta3:
 - add a hint for propertybuffer to allow properties to be displayed side-by-side
   e.g. width, height properties ca be displayed this way. See also property editor 
 	at http://freshmeat.net/screenshots/41728/
+-KexiProperty: make it really shared (using QShared?)
 
 TODO: fix lucijan's hack, with part loading (29 feb)
 --- koffice/kexi/core/kexipartinfo.h  #1.9:1.10
@@ -321,9 +321,29 @@ TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 CC_MAIL: dkite@shaw.ca
 
 2004-03-12
-Table View:
-	-Combo box editor: cursorAtEnd() and cursorAtStart() are just used from KexiInputTableEdit
-Some debug disabled.
+Table View
+	-Combo box editor: cursorAtEnd() and cursorAtStart() are just used 
+	 from KexiInputTableEdit
+	-Some debug disabled
+	-setColumnWidth() added
+Alter Table Dialog
+	-now KexiDataTable is inherited instead of using KexiTableView internally.
+	 Thus we have actions like 'row deleting' available.
+	-on table schema saving: checking for duplicated field names is now case insensitive
+	-convenient width set for 'type' column
+Kexi Data Table widget
+	-Added ctor for not-db-aware version; docs updated
+Kexi Core
+	-string2identifier(): fixed bug for strings started from not alphanumeric char
+	-New validator added: KexiDBObjectNameValidator for checking 
+	 for 'kexi__' name violations
+	-KexiMultiValidator added
+Main Window
+	-KexiNameWidget now uses multivalidator, so it's easy to add additional validations
+	-above is used with KexiDBObjectNameValidator to check for violating 'kexidb__' names
+KexiDB
+	-Driver::isKexiDBSystemObjectName() static function added; isSystemObjectName() 
+	 uses this now by default
 
 2004-03-11
 Main Window
