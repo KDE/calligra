@@ -27,7 +27,7 @@
 #include <kcommand.h>
 
 KoTextViewIface::KoTextViewIface( KoTextView *_textview )
-    : DCOPObject()
+    : DCOPObject( /*TODO name*/ )
 {
    m_textView = _textview;
 }

@@ -28,7 +28,7 @@
 #include <qrichtext_p.h>
 class KoTextView;
 
-class KoTextViewIface :  virtual public DCOPObject
+class KoTextViewIface :  public DCOPObject
 {
     K_DCOP
 public:
