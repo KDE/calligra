@@ -822,10 +822,13 @@ void Canvas::drawGrid (QPainter& p)
    float vd = vGridDistance * zoomFactor;
    QPen pen1 (mGridColor, 0);
 
-
    p.save ();
    p.setPen (pen1);
-   h = ((width() - m_paperArea.right())/2 - hBar->value()) % (int)hd;
+   //correct grid, aleXXX
+   int tmp=m_visibleArea.left()/(int)hd;
+   if (m_visibleArea.left()>0) tmp++;
+   h=tmp*int(vd)-m_visibleArea.left();
+
    //cerr<<"grid x: ";
    for (; h < width(); h += hd)
    {
@@ -834,8 +837,17 @@ void Canvas::drawGrid (QPainter& p)
       //cerr<<h<<" ";
    }
    //cerr<<endl;
-   v = ((height() - m_paperArea.bottom())/2 - vBar->value()) % (int)vd;
+   /* example:   vd = 20
+    top = 49
+    -> v=11 = 60 -49
+
+    top=-49
+    -> v=9 = -40- (-49)  */
   
+   tmp=m_visibleArea.top()/(int)vd;
+   if (m_visibleArea.top()>0) tmp++;
+   v=tmp*int(vd)-m_visibleArea.top();
+
    for (; v < height() ; v += vd)
    {
       int vi = qRound (v);

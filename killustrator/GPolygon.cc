@@ -205,14 +205,14 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline)
    }
    else
    {
-      float xcorr = 0, ycorr = 0;
+      //float xcorr = 0, ycorr = 0;
       /*
        * Qt draws a rectangle from xpos to (xpos + width - 1). This seems
        * to be a bug, because a rectangle from position (20, 20) with a
        * witdh of 20 doesn't align to a 20pt grid. Therefore we correct
        * the width and height values...
        */
-      const QWMatrix& m = p.worldMatrix ();
+      /*const QWMatrix& m = p.worldMatrix ();
 
       if (m.m11()!=0)
          xcorr = 1.0 / m.m11 ();
@@ -223,19 +223,19 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline)
          ycorr = 1.0 / m.m22 ();
       else
          ycorr = 0;
-      kdDebug()<<"xcorr: "<<xcorr<<"  ycorr: "<<ycorr<<endl;
+      kdDebug()<<"xcorr: "<<xcorr<<"  ycorr: "<<ycorr<<endl;*/
       const Coord& p1 = *(points.at (0));
       const Coord& p2 = *(points.at (2));
       if (Roundness != 0)
          p.drawRoundRect (p1.x (), p1.y (),
-                          qRound (p2.x () - p1.x () + xcorr),
-                          qRound (p2.y () - p1.y () + ycorr),
+                          qRound (p2.x () - p1.x ()/* + xcorr*/),
+                          qRound (p2.y () - p1.y () /*+ ycorr*/),
                           Roundness, Roundness);
       else
       {
          Painter::drawRect (p, p1.x (), p1.y (),
-                            qRound (p2.x () - p1.x () + xcorr),
-                            qRound (p2.y () - p1.y () + ycorr));
+                            qRound (p2.x () - p1.x ()/* + xcorr*/),
+                            qRound (p2.y () - p1.y () /*+ ycorr*/));
          kdDebug()<<"( "<<p1.x()<<" | "<<p1.y()<<" )    ( "<<p2.x()<<" | "<<p2.y()<<" )"<<endl;
       };
    }

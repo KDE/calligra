@@ -162,7 +162,7 @@ void Ruler::updatePointer (int x, int y)
       //kdDebug()<<"Ruler::updatePointer ( "<<x<<" | "<<y<<" ) zoom is "<<zoom<<endl;
       if (currentPosition != -1)
       {
-         pos=currentPosition-MARKER_WIDTH/2;
+         pos=currentPosition-MARKER_WIDTH/2-2;
 
          r1=QRect(pos,1,MARKER_WIDTH, MARKER_HEIGHT);
          bitBlt (buffer, pos, 1, bg, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
@@ -170,7 +170,7 @@ void Ruler::updatePointer (int x, int y)
       }
       if (x != -1)
       {
-         pos=x-MARKER_WIDTH/2;
+         pos=x-MARKER_WIDTH/2-2;
          r2=QRect(pos,1,MARKER_WIDTH,MARKER_HEIGHT);
 
          bitBlt (bg, 0, 0, buffer, pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
@@ -183,13 +183,13 @@ void Ruler::updatePointer (int x, int y)
    {
       if (currentPosition != -1)
       {
-         pos=currentPosition-MARKER_HEIGHT/2;
+         pos=currentPosition-MARKER_HEIGHT/2-2;
          r1 = QRect (1, pos, MARKER_HEIGHT, MARKER_WIDTH);
          bitBlt (buffer, 1, pos, bg, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
       }
       if (y != -1)
       {
-         pos=y-MARKER_HEIGHT/2;
+         pos=y-MARKER_HEIGHT/2-2;
          r2 = QRect (1, pos,MARKER_HEIGHT, MARKER_WIDTH);
          bitBlt (bg, 0, 0, buffer, 1, pos, MARKER_HEIGHT, MARKER_WIDTH);
          bitBlt (buffer, 1, pos, marker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
