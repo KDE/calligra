@@ -129,7 +129,7 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
             }
             else // fixed value (use KoUnit::parseValue to get it in pt)
             {
-                kdWarning() << "Unhandled value for fo:line-height: " << value << endl;
+                kdWarning(30519) << "Unhandled value for fo:line-height: " << value << endl;
             }
             parentElement.appendChild( lineSpacing );
         }
@@ -141,7 +141,7 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
         // kotext has "at least" but that's for the linespacing, not for the entire line height!
         // Strange. kotext also has "at least" for the whole line height....
         // Did we make the wrong choice in kotext?
-        //kdWarning() << "Unimplemented support for style:line-height-at-least: " << value << endl;
+        //kdWarning(30519) << "Unimplemented support for style:line-height-at-least: " << value << endl;
         // Well let's see if this makes a big difference.
         QDomElement lineSpacing = parentElement.ownerDocument().createElement("LINESPACING");
         lineSpacing.setAttribute("type", "atleast");
@@ -359,7 +359,7 @@ void OoUtils::importUnderline( const QString& in, QString& underline, QString& s
         styleline = "solid";
     }
     else
-        kdWarning() << k_funcinfo << " unsupported text-underline value: " << in << endl;
+        kdWarning(30519) << k_funcinfo << " unsupported text-underline value: " << in << endl;
 }
 
 void OoUtils::importTextPosition( const QString& text_position, QString& value, QString& relativetextsize )
@@ -376,7 +376,7 @@ void OoUtils::importTextPosition( const QString& text_position, QString& value, 
         if ( !lst.isEmpty() )
             textSize = lst.front().stripWhiteSpace();
         if ( !lst.isEmpty() )
-            kdWarning(30518) << "Strange text position: " << text_position << endl;
+            kdWarning(30519) << "Strange text position: " << text_position << endl;
         bool super = textPos == "super";
         bool sub = textPos == "sub";
         if ( textPos.endsWith("%") )
@@ -452,35 +452,35 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
 
 KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, QDomDocument& doc, KZip * m_zip)
 {
-    kdDebug(30518) << "Trying to open " << filename << endl;
+    kdDebug(30519) << "Trying to open " << filename << endl;
 
     if (!m_zip)
     {
-        kdError(30518) << "No ZIP file!" << endl;
+        kdError(30519) << "No ZIP file!" << endl;
         return KoFilter::CreationError; // Should not happen
     }
 
     const KArchiveEntry* entry = m_zip->directory()->entry( filename );
     if (!entry)
     {
-        kdWarning(30518) << "Entry " << filename << " not found!" << endl;
+        kdWarning(30519) << "Entry " << filename << " not found!" << endl;
         return KoFilter::FileNotFound;
     }
     if (entry->isDirectory())
     {
-        kdWarning(30518) << "Entry " << filename << " is a directory!" << endl;
+        kdWarning(30519) << "Entry " << filename << " is a directory!" << endl;
         return KoFilter::WrongFormat;
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
     QIODevice* io=f->device();
-    kdDebug(30518) << "Entry " << filename << " has size " << f->size() << endl;
+    kdDebug(30519) << "Entry " << filename << " has size " << f->size() << endl;
 
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
     if ( !doc.setContent( io, &errorMsg, &errorLine, &errorColumn ) )
     {
-        kdError(30518) << "Parsing error in " << filename << "! Aborting!" << endl
+        kdError(30519) << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
         delete io;
@@ -488,7 +488,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, QDomDo
     }
     delete io;
 
-    kdDebug(30518) << "File " << filename << " loaded and parsed!" << endl;
+    kdDebug(30519) << "File " << filename << " loaded and parsed!" << endl;
 
     return KoFilter::OK;
 }
@@ -496,32 +496,32 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, QDomDo
 KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_zip )
 {
     const QString filename( "Thumbnails/thumbnail.png" );
-    kdDebug(30518) << "Trying to open thumbnail " << filename << endl;
+    kdDebug(30519) << "Trying to open thumbnail " << filename << endl;
 
     if (!m_zip)
     {
-        kdError(30518) << "No ZIP file!" << endl;
+        kdError(30519) << "No ZIP file!" << endl;
         return KoFilter::CreationError; // Should not happen
     }
 
     const KArchiveEntry* entry = m_zip->directory()->entry( filename );
     if (!entry)
     {
-        kdWarning(30518) << "Entry " << filename << " not found!" << endl;
+        kdWarning(30519) << "Entry " << filename << " not found!" << endl;
         return KoFilter::FileNotFound;
     }
     if (entry->isDirectory())
     {
-        kdWarning(30518) << "Entry " << filename << " is a directory!" << endl;
+        kdWarning(30519) << "Entry " << filename << " is a directory!" << endl;
         return KoFilter::WrongFormat;
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
     QIODevice* io=f->device();
-    kdDebug(30518) << "Entry " << filename << " has size " << f->size() << endl;
+    kdDebug(30519) << "Entry " << filename << " has size " << f->size() << endl;
 
     if ( ! io->open( IO_ReadOnly ) )
     {
-        kdWarning(30518) << "Thumbnail could not be opened!" <<endl;
+        kdWarning(30519) << "Thumbnail could not be opened!" <<endl;
         delete io;
         return KoFilter::StupidError;
     }
@@ -529,7 +529,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
     QImageIO imageIO( io, "PNG" );
     if ( ! imageIO.read() )
     {
-        kdWarning(30518) << "Thumbnail could not be read!" <<endl;
+        kdWarning(30519) << "Thumbnail could not be read!" <<endl;
         delete io;
         return KoFilter::StupidError;
     }
@@ -540,14 +540,14 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
 
     if ( thumbnail.isNull() )
     {
-        kdWarning(30518) << "Read thumbnail is null!" <<endl;
+        kdWarning(30519) << "Read thumbnail is null!" <<endl;
         delete io;
         return KoFilter::StupidError;
     }
         
     delete io;
 
-    kdDebug(30518) << "File " << filename << " loaded!" << endl;
+    kdDebug(30519) << "File " << filename << " loaded!" << endl;
 
     return KoFilter::OK;
 }

@@ -77,7 +77,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     wrapper->document( doc );
     KFormula::Container* formula = doc->createFormula();
     if ( !doc->loadXML( dom ) ) {
-        kdError() << "Failed." << endl;
+        kdError(30522) << "Failed." << endl;
     }
 
     QTextStream stream(&f);
