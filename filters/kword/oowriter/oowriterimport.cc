@@ -830,28 +830,28 @@ void OoWriterImport::writeCounter( QDomDocument& doc, QDomElement& layoutElement
 #endif
             // Reverse engineering, I found those codes:
             switch( bulletChar[0].unicode() ) {
-            case 8226: // small disc
+            case 0x2022: // small disc
                 counter.setAttribute( "type", 10 ); // a disc bullet
                 break;
-            case 9679: // large disc
+            case 0x25CF: // large disc
                 counter.setAttribute( "type", 10 ); // a disc bullet
                 break;
-            case 57356: // losange - TODO in KWord
+            case 0xE00C: // losange - TODO in KWord. Not in OASIS either (reserved Unicode area!)
                 counter.setAttribute( "type", 10 ); // a disc bullet
                 break;
-            case 57354: // square
+            case 0xE00A: // square. Not in OASIS (reserved Unicode area!)
                 counter.setAttribute( "type", 9 );
                 break;
-            case 10132: // arrow
-            case 10146: // two-colors right-pointing triangle (TODO)
+            case 0x2794: // arrow
+            case 0x27A2: // two-colors right-pointing triangle (TODO)
                 counter.setAttribute( "bullet", 206 ); // simpler arrow symbol
                 counter.setAttribute( "bulletfont", "symbol" );
                 break;
-            case 10007: // cross
+            case 0x2717: // cross
                 counter.setAttribute( "bullet", 212 ); // simpler cross symbol
                 counter.setAttribute( "bulletfont", "symbol" );
                 break;
-            case 10004: // checkmark
+            case 0x2714: // checkmark
                 counter.setAttribute( "bullet", 246 ); // hmm that's sqrt
                 counter.setAttribute( "bulletfont", "symbol" );
                 break;

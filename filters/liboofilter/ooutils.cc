@@ -374,7 +374,8 @@ void OoUtils::importTextPosition( const QString& text_position, QString& value, 
         lst.pop_front();
         if ( !lst.isEmpty() )
             textSize = lst.front().stripWhiteSpace();
-        Q_ASSERT( lst.isEmpty() );
+        if ( !lst.isEmpty() )
+            kdWarning(30518) << "Strange text position: " << text_position << endl;
         bool super = textPos == "super";
         bool sub = textPos == "sub";
         if ( textPos.endsWith("%") )
