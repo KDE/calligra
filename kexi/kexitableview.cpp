@@ -65,8 +65,8 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 	m_pEditor = 0;
 	m_numRows = 0;
 	m_numCols = 0;
-	m_curRow = 0;
-	m_curCol = 0;
+	m_curRow = -1;
+	m_curCol = -1;
 	m_pCurrentItem = 0;
 
 	m_rowHeight = fontMetrics().lineSpacing();
@@ -637,6 +637,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 {
 	if(m_numRows == 0)
 		return;
+		
 
 	// get rid of editor
 	if (m_pEditor)
