@@ -5335,6 +5335,18 @@ QString KSpreadCell::convertFormulaToOasisFormat( const QString & formula ) cons
     return s;
 }
 
+void KSpreadCell::loadOasisConditional( QDomElement * style )
+{
+    kdDebug()<<"void KSpreadCell::loadOasisConditional( QDomElement * style )********************\n";
+    if ( style )//safe
+    {
+        delete d->extra()->conditions;
+        d->extra()->conditions = new KSpreadConditions( this );
+        d->extra()->conditions->loadOasisConditions( *style );
+        d->extra()->conditions->checkMatches();
+    }
+}
+
 bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )
 {
     QString text;
@@ -5348,6 +5360,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         styleStack.push( *style );
         styleStack.setTypeProperties( "cell" );
         loadOasisStyleProperties( styleStack, oasisStyles );
+        loadOasisConditional( style );
     }
     QDomElement textP = element.namedItem( "text:p" ).toElement();
     if ( !textP.isNull() )

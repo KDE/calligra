@@ -368,6 +368,19 @@ QDomElement KSpreadConditions::saveConditions( QDomDocument & doc ) const
 
 void KSpreadConditions::loadOasisConditions( const QDomElement & element )
 {
+    kdDebug()<<"void KSpreadConditions::loadOasisConditions( const QDomElement & element )\n";
+    QDomElement elementItem = element.firstChild().toElement();
+    elementItem = elementItem.firstChild().toElement();
+
+    while ( !elementItem.isNull() )
+    {
+        kdDebug()<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
+        if ( elementItem.tagName()== "style:map"  )
+        {
+            kdDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attribute("style:condition" )<<endl;
+        }
+        elementItem = elementItem.nextSibling().toElement();
+    }
 }
 
 void KSpreadConditions::loadConditions( const QDomElement & element )

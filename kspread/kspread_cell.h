@@ -871,6 +871,7 @@ protected:
 
     void loadOasisValidationCondition( QString &valExpression );
     void saveOasisAnnotation( KoXmlWriter &xmlwriter );
+    void loadOasisConditional( QDomElement * style );
 
 private:
 
