@@ -49,6 +49,9 @@ public:
     virtual void slotRepaintChanged(KoTextObject *obj)=0;
 
     virtual KoTextObject* nextTextObject( KoTextObject *obj )=0;
+
+    virtual void configurateSpellChecker()=0;
+
     void addIgnoreWordAll( const QString & word);
     void clearIgnoreWordAll( );
     void addIgnoreWordAllList( const QStringList & list);

@@ -290,6 +290,7 @@ void KoBgSpellCheck::spellCheckerFinished()
     {
         // KSpell badly configured... what to do?
         kdWarning() << "ISpell/ASpell not configured correctly." << endl;
+        configurateSpellChecker();
         return;
     }
     else if (status == KoSpell::Crashed)
