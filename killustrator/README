@@ -1,18 +1,18 @@
-		KIllustrator - Release 0.6.5
-		============================
+		KIllustrator - Release 0.7
+		==========================
 
 1. Introduction
 ---------------
 
-Welcome to release 0.6.3 of KIllustrator - the vector
-drawing program for the K Desktop Environment. The aim of the
-KIllustrator project is the development of a freely available
-vector-based drawing application similiar to Corel Draw or Adobe
-Illustrator. I have started this project because I am tired of
-switching to Windows in order to design illustrations for papers or
-slides with a modern drawing tool. Now, for the Linux operating system
-and of course for other Unixes the Qt toolkit and the KDE project
-provide a perfect foundation for this kind of application.
+Welcome to release 0.7 of KIllustrator - the vector drawing program
+for the K Desktop Environment. The aim of the KIllustrator project is
+the development of a freely available vector-based drawing application
+similiar to Corel Draw or Adobe Illustrator. I have started this
+project because I am tired of switching to Windows in order to design
+illustrations for papers or slides with a modern drawing tool. Now,
+for the Linux operating system and of course for other Unixes the Qt
+toolkit and the KDE project provide a perfect foundation for this kind
+of application.
 
 2. Installation
 ---------------
@@ -22,17 +22,17 @@ package for yourself. But the configuration and compilation conforms
 to the usual GNU autoconf procedure.
 
 After downloading the archive, unpack the distribution with
-	gunzip -c killustrator-0.6.3.tar.gz | tar xvof -
+	gunzip -c killustrator-0.7.tar.gz | tar xvof -
 Next, change into the distribution directory 
-	cd killustrator-0.6.3
+	cd killustrator-0.7
 and invoke
 	./configure
 
 The installation requires a working K Desktop Environment (1.1 or
-better) as well as QT-1.41 or better. The current release is tested on
-Linux and Solaris 2.6 with gcc-2.8 and egcs-1.0. For image export
-(JPEG and PNG) the Qt Image I/O Extension (qimgio) is
-required. Otherwise only XPM, PPM and GIF is supported.
+better) as well as QT-1.44. The current release is tested on Linux and
+Solaris 2.6 with gcc-2.8 and egcs-1.1. For image export (JPEG and PNG)
+the Qt Image I/O Extension (qimgio) is required. Otherwise only XPM,
+PPM and GIF is supported.
 
 After the successfull configuration compile the project
 	make
@@ -77,12 +77,14 @@ Here is a short description of currently implemented features:
 - XML-based file format
 - Support for different measurement units: inches, millimeter, points
 - Alignment of text to path. Supported pathes are polylines, bezier curves,
-  polygons and ellipses.
-- An outline mode.
+  polygons and ellipses
+- An outline mode
+- Blending of objects
 - Configuring of tools by double click.
 - Inserting and deleting of points in polylines and curves.
-- KDE session management.
-- Help lines.
+- KDE session management
+- Help lines
+- Online documentation
 - A rudimentary Xfig import filter:
   * Support for 3.1 and 3.2 files
   * Splines not implemented
@@ -148,5 +150,7 @@ and it's mirrors:
 I am interested to know if you find KIllustrator useful. If you would
 like to contribute to the development, send bug reports or
 suggestions, please feel free to contact me at
-kus@iti.cs.uni-magdeburg.de.
+kus@iti.cs.uni-magdeburg.de. In addition, there is a mailing list for
+discussion about KIllustrator. Please look at 
+	http://www.egroups.com/list/killustrator/
 

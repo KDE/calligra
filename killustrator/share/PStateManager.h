@@ -53,6 +53,8 @@ public:
   float duplicateYOffset ();
   void setDuplicateOffsets (float x, float y);
 
+  bool showSplashScreen ();
+
 signals:
   void recentFilesChanged ();
   void settingsChanged ();
@@ -66,6 +68,7 @@ private:
   MeasurementUnit defaultUnit;
   float dupXOff, dupYOff;
   float smallStep, bigStep;
+  bool showSplash;
 };
 
 #endif

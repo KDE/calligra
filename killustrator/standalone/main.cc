@@ -37,21 +37,28 @@
 
 #include <kapp.h>
 #include "version.h"
-#if NEW_KDE
+#if NEWKDE
 #include <kio_job.h>
+#include <kstddirs.h>
 #endif
 #include "KIllustrator.h"
 #include "PStateManager.h"
+#include "StartupScreen.h"
 
 #ifndef KDEMAXPATHLEN
 #define KDEMAXPATHLEN 4095
 #endif
 
 int main (int argc, char** argv) {
+
 #ifdef __FreeBSD__
   fpsetmask (fpgetmask() & ~(FP_X_DZ|FP_X_INV));
 #endif
   KApplication* app = new KApplication (argc, argv, APP_NAME);
+
+  if (PStateManager::instance ()->showSplashScreen ())
+    new StartupScreen (kapp->kde_datadir() + 
+		       "/killustrator/pics/killustrator-intro.gif", 5);
 
   QObject::connect (app, SIGNAL(saveYourself ()),
 		    PStateManager::instance (), SLOT(saveDefaultSettings ()));

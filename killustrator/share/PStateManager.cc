@@ -64,6 +64,8 @@ void PStateManager::readDefaultSettings () {
   dupXOff = config->readDoubleNumEntry ("DuplicateXOffset", 10.0);
   dupYOff = config->readDoubleNumEntry ("DuplicateYOffset", 10.0);
 
+  showSplash = config->readBoolEntry ("ShowSplash", true);
+
   config->setGroup ("DefaultObjectProperties");
 
   GObject::OutlineInfo oInfo;
@@ -164,6 +166,10 @@ void PStateManager::setDuplicateOffsets (float x, float y) {
   dupXOff = x;
   dupYOff = y;
   emit settingsChanged ();
+}
+
+bool PStateManager::showSplashScreen () {
+  return showSplash;
 }
 
 void PStateManager::saveDefaultSettings () {
