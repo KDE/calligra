@@ -93,8 +93,39 @@ Along the way we will also discuss the user interface at length
 so you will learn about many details of the component.
 </para>
 <para>
-Start &kchart; with the default settings and you will see the main
-user interface of &kchart;
+When you start &kchart; as a standalone application you get
+the usual startup dialog where you can choose between different
+templates or load existing chart documents.
+</para>
+<screenshot>
+<screeninfo>KChart Startup Dialog</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-startupdialog.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+You can choose between various ways to startup &kchart;. At the top
+of the dialog you see three option pages. The first is for creating a
+new chart from various templates, the second for opening an existing
+chart with a file dialog and the last page lets you choose between
+recently opened charts.
+</para>
+<para>
+For now we will start with the default template. Select the
+<guimenu>Create Document</guimenu> page, then select
+<guimenu>Charts</guimenu> in the left area and finally select
+<guimenu>Bar chart</guimenu> in the main template area. Normally
+this template should already be selected when you launch &kchart;.
+</para>
+<para>
+If you decide to start &kchart; with a selected template as defult
+you can also select this option at the bottom of the dialog.
+</para>
+<para>
+Now click on the <guimenu>OK</guimenu> button to start with
+a bar chart.
 </para>
 <screenshot>
 <screeninfo>KChart User Interface</screeninfo>
