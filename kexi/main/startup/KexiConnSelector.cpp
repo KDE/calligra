@@ -33,6 +33,8 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kurlcombobox.h>
+#include <ktoolbar.h>
+#include <kactionclasses.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -90,7 +92,6 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( const KexiDBConnectionSet& conn_
 		
 	addWidget(m_file);
 	connect(m_file->btn_advanced,SIGNAL(clicked()),this,SLOT(showAdvancedConn()));
-
 	m_remote = new KexiConnSelectorBase(this,"conn_sel");
 	m_remote->icon->setPixmap( DesktopIcon("socket") );
 	m_remote->btn_back->setIconSet( SmallIconSet("1uparrow") );
@@ -118,6 +119,14 @@ void KexiConnSelectorWidget::showAdvancedConn()
 {
 	if (!d->conn_sel_shown) {
 		d->conn_sel_shown=true;
+		//setup
+//TODO 
+		KToolBar *tbar = new KToolBar(m_remote->frm_change);
+		KActionMenu * act_change = new KActionMenu(i18n("Change"), this, "change");
+		act_change->insert( new KAction("Add connection", KShortcut(), 0, 0, 0) );
+		act_change->plug( tbar );
+//TODO
+		
 		//show connections (on demand):
 		KexiDB::DriverManager manager;
 		KexiDB::ConnectionData::List connlist = m_conn_set->list();

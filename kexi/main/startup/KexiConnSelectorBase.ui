@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KexiConnSelectorBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>494</width>
-            <height>378</height>
+            <height>386</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -19,6 +19,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>KexiConnSelectorBase</string>
     </property>
     <grid>
         <property name="name">
@@ -46,37 +49,28 @@
                 <set>AlignTop</set>
             </property>
         </widget>
-        <spacer row="3" column="2">
+        <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>spacer21</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QPushButton" row="4" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>btn_back</cstring>
+                <cstring>label</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>&amp;Back</string>
+                <string>&lt;b&gt;Select existing database server's connection from the list below and click "OK".&lt;/b&gt;
+&lt;p&gt;You will see existing Kexi projects available for the selected connection. Here you may also add, edit or remove connections from the list.
+</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+            <property name="indent">
+                <number>6</number>
             </property>
         </widget>
         <widget class="QListView" row="1" column="0" rowspan="1" colspan="3">
@@ -137,33 +131,9 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>label</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>1</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;Select existing database server's connection from the list below and click "OK".&lt;/b&gt;
-&lt;p&gt;You will see existing Kexi projects available for the selected connection. Here you may also add, edit or remove connections from the list.
-</string>
-            </property>
-            <property name="alignment">
-                <set>WordBreak|AlignTop</set>
-            </property>
-            <property name="indent">
-                <number>6</number>
-            </property>
-        </widget>
         <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>layout4</cstring>
+                <cstring>layout2</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -181,11 +151,22 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>90</width>
+                            <width>130</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
+                <widget class="QFrame">
+                    <property name="name">
+                        <cstring>frm_change</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                </widget>
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>btn_add</cstring>
@@ -200,6 +181,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;Add</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -236,6 +220,23 @@
                 </widget>
             </hbox>
         </widget>
+        <spacer row="3" column="2">
+            <property name="name">
+                <cstring>spacer21</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
         <widget class="QLabel" row="4" column="2">
             <property name="name">
                 <cstring>label_back</cstring>
@@ -258,7 +259,23 @@
                 <number>7</number>
             </property>
         </widget>
-        <spacer row="7" column="2">
+        <widget class="QPushButton" row="4" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>btn_back</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&amp;Back</string>
+            </property>
+        </widget>
+        <spacer row="5" column="2">
             <property name="name">
                 <cstring>spacer9_2</cstring>
             </property>
@@ -271,7 +288,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>6</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
