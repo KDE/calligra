@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="3">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="4">
 <MenuBar>
  <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_copy"/>
@@ -33,5 +33,45 @@
  <Separator/>
  <Action name="zoom_selected_object"/>
  <Action name="zoom_all_object"/>
+</Menu>
+<Menu name="menupage_popup">
+</Menu>
+<Menu name="textobject_popup">
+</Menu>
+<Menu name="partobject_popup">
+</Menu>
+<Menu name="rectangleobject_popup">
+</Menu>
+<Menu name="graphmenu_popup">
+</Menu>
+<Menu name="flip_popup">
+</Menu>
+<Menu name="closed_popup">
+</Menu>
+<Menu name="piemenu_popup">
+</Menu>
+<Menu name="clipmenu_popup">
+</Menu>
+<Menu name="picmenu_popup">
+</Menu>
+<Menu name="sidebarmenu_popup">
+</Menu>
+<Menu name="variable_popup">
+</Menu>
+<Menu name="text_popup">
+</Menu>
+<Menu name="custom_var_popup">
+</Menu>
+<Menu name="text_popup_link">
+</Menu>
+<Menu name="note_popup">
+</Menu>
+<Menu name="polygonobject_popup">
+</Menu>
+<Menu name="helpline_popup">
+</Menu>
+<Menu name="helppoint_popup">
+</Menu>
+<Menu name="zoom_popup">
 </Menu>
 </kpartgui>
