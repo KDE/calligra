@@ -217,10 +217,11 @@ void KSpreadFormat::setNoFallBackProperties( Properties p )
 
 void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
 {
+    kdDebug()<<"void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )***************\n";
 
     //FIXME fallback ????
     KSpreadFormat::Align a = KSpreadFormat::Undefined;
-    if ( hasProperty( PFont ) || !hasNoFallBackProperties( PFont ) )
+    if ( hasProperty( PFont,true ) || hasNoFallBackProperties( PFont ) )
     {
         //fo:font-size="13pt" fo:font-style="italic" style:text-underline="single" style:text-underline-color="font-color" fo:font-weight="bold"
         saveOasisFontCellStyle( currentCellStyle, m_pStyle->font() );
@@ -247,7 +248,7 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
             currentCellStyle.addProperty( "fo:vertical-align", ( align == KSpreadFormat::Middle ? "middle" : "top" ) );
     }
 
-    if ( hasProperty( KSpreadFormat::PIndent ) || !hasNoFallBackProperties( KSpreadFormat::PIndent ) )
+    if ( hasProperty( KSpreadFormat::PIndent,true ) || hasNoFallBackProperties( KSpreadFormat::PIndent ) )
     {
         double indent = m_pStyle->indent(  );
         if ( indent > 0.0 )
@@ -258,36 +259,36 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
         }
     }
 
-    if ( hasProperty( KSpreadFormat::PAngle ) || !hasNoFallBackProperties( KSpreadFormat::PAngle ) )
+    if ( hasProperty( KSpreadFormat::PAngle,true ) || hasNoFallBackProperties( KSpreadFormat::PAngle ) )
     {
         currentCellStyle.addProperty( "style:rotation-angle", QString::number( -1.0 * m_pStyle->rotateAngle() ) );
     }
 
-    if ( ( hasProperty( KSpreadFormat::PMultiRow ) || !hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
+    if ( ( hasProperty( KSpreadFormat::PMultiRow,true ) || hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
          && m_pStyle->hasProperty( KSpreadStyle::PMultiRow ) )
     {
         currentCellStyle.addProperty( "fo:wrap-option", "wrap" );
     }
-    if ((  hasProperty( KSpreadFormat::PVerticalText ) || !hasNoFallBackProperties( KSpreadFormat::PVerticalText ) )&& m_pStyle->hasProperty( KSpreadStyle::PVerticalText ) )
+    if ((  hasProperty( KSpreadFormat::PVerticalText,true ) || hasNoFallBackProperties( KSpreadFormat::PVerticalText ) )&& m_pStyle->hasProperty( KSpreadStyle::PVerticalText ) )
     {
         currentCellStyle.addProperty( "fo:direction", "ttb" );
         currentCellStyle.addProperty( "style:rotation-angle", "0" );
     }
-    if ( ( hasProperty( KSpreadFormat::PDontPrintText ) || !hasNoFallBackProperties( KSpreadFormat::PDontPrintText ) ) && m_pStyle->hasProperty( KSpreadStyle::PDontPrintText ) )
+    if ( ( hasProperty( KSpreadFormat::PDontPrintText,true ) || hasNoFallBackProperties( KSpreadFormat::PDontPrintText ) ) && m_pStyle->hasProperty( KSpreadStyle::PDontPrintText ) )
     {
         currentCellStyle.addProperty( "style:print-content", "false");
     }
     bool hideAll = false;
     bool hideFormula = false;
     bool isNotProtected = false;
-    if ( ( hasProperty( KSpreadFormat::PHideAll ) || !hasNoFallBackProperties( KSpreadFormat::PHideAll ) )
+    if ( ( hasProperty( KSpreadFormat::PHideAll,true ) || hasNoFallBackProperties( KSpreadFormat::PHideAll ) )
          && m_pStyle->hasProperty( KSpreadStyle::PHideAll ) )
         hideAll = true;
 
-    if ( ( hasProperty( KSpreadFormat::PHideFormula ) || !hasNoFallBackProperties( KSpreadFormat::PHideFormula ) )
-         && m_pStyle->hasProperty( KSpreadStyle::PHideFormula ) )
+    if ( ( hasProperty( KSpreadFormat::PHideFormula,true ) || hasNoFallBackProperties( KSpreadFormat::PHideFormula ) )
+         && m_pStyle->hasProperty( KSpreadStyle::PHideFormula )/*fixme*/ )
         hideFormula = true;
-    if ( ( hasProperty( KSpreadFormat::PNotProtected ) || !hasNoFallBackProperties( KSpreadFormat::PNotProtected ) )
+    if ( ( hasProperty( KSpreadFormat::PNotProtected,true ) || hasNoFallBackProperties( KSpreadFormat::PNotProtected ) )
          && m_pStyle->hasProperty( KSpreadStyle::PHideFormula ) )
         isNotProtected = true;
 
@@ -307,7 +308,7 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
                 currentCellStyle.addProperty( "style:cell-protect", "protected" );
         }
     }
-    if ( ( hasProperty( KSpreadFormat::PBackgroundColor ) || !hasNoFallBackProperties( KSpreadFormat::PBackgroundColor ) ) )
+    if ( ( hasProperty( KSpreadFormat::PBackgroundColor,true ) || hasNoFallBackProperties( KSpreadFormat::PBackgroundColor ) ) )
         currentCellStyle.addProperty( "fo:background-color", m_pStyle->bgColor().name() );
 
     QPen leftBorder;
@@ -315,13 +316,13 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
     QPen topBorder;
     QPen bottomBorder;
 
-    if ( hasProperty( KSpreadFormat::PLeftBorder ) || !hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
+    if ( hasProperty( KSpreadFormat::PLeftBorder,true ) || hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
         leftBorder = m_pStyle->leftBorderPen();
-    if ( hasProperty( KSpreadFormat::PRightBorder ) || !hasNoFallBackProperties( KSpreadFormat::PRightBorder ) )
+    if ( hasProperty( KSpreadFormat::PRightBorder,true ) || hasNoFallBackProperties( KSpreadFormat::PRightBorder ) )
         rightBorder = m_pStyle->rightBorderPen();
-    if ( hasProperty( KSpreadFormat::PTopBorder ) || !hasNoFallBackProperties( KSpreadFormat::PTopBorder ) )
+    if ( hasProperty( KSpreadFormat::PTopBorder,true ) || hasNoFallBackProperties( KSpreadFormat::PTopBorder ) )
         topBorder = m_pStyle->topBorderPen();
-    if ( hasProperty( KSpreadFormat::PBottomBorder ) || !hasNoFallBackProperties( KSpreadFormat::PBottomBorder ) )
+    if ( hasProperty( KSpreadFormat::PBottomBorder,true ) || hasNoFallBackProperties( KSpreadFormat::PBottomBorder ) )
         bottomBorder = m_pStyle->bottomBorderPen();
     if ( ( leftBorder == rightBorder ) &&
          ( leftBorder == topBorder ) &&
@@ -345,13 +346,13 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
             currentCellStyle.addProperty( "fo:border-bottom", convertOasisPenToString( bottomBorder ) );
     }
 
-    if ( hasProperty( KSpreadFormat::PFallDiagonal ) || !hasNoFallBackProperties( PFallDiagonal ) )
+    if ( hasProperty( KSpreadFormat::PFallDiagonal,true ) || hasNoFallBackProperties( PFallDiagonal ) )
     {
         QPen pen( m_pStyle->fallDiagonalPen() );
         if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
             currentCellStyle.addProperty( "style:diagonal-tl-br", convertOasisPenToString( pen ) );
     }
-    if ( hasProperty( KSpreadFormat::PGoUpDiagonal ) || hasNoFallBackProperties( PGoUpDiagonal ) )
+    if ( hasProperty( KSpreadFormat::PGoUpDiagonal,true ) || hasNoFallBackProperties( PGoUpDiagonal ) )
     {
         QPen pen( m_pStyle->goUpDiagonalPen() );
         if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
