@@ -26,6 +26,9 @@
 #ifndef QTCALC_H
 #define QTCALC_H
 
+#include <queue>
+using std::queue;
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -187,6 +190,7 @@ typedef struct _DefStruct{
   int style;
   bool fixed;
   bool beep;
+    QFont font;
 }DefStruct;
 
 class Calculator;
@@ -206,6 +210,7 @@ public:
     void readSettings();
     void set_precision();
     void set_style();
+    void set_display_font();
     void temp_stack_next();
     void temp_stack_prev();
     void ComputeMean();
@@ -308,7 +313,7 @@ public slots:
     void EEtoggled(bool myboolean);
     void pbinvtoggled(bool myboolean);
     void pbMRtoggled(bool myboolean);
-    void pbAtoggled(bool myboolean);	
+    void pbAtoggled(bool myboolean);
     void pbSintoggled(bool myboolean);
     void pbplusminustoggled(bool myboolean);
     void pbMplusminustoggled(bool myboolean);
@@ -360,6 +365,7 @@ public:
      DefStruct kcalcdefaults;
 
 private:
+    void updateGeometry();
 
     QTimer* selection_timer;
     QLabel* statusINVLabel;
@@ -417,15 +423,13 @@ private:
     QPushButton* 	pbnegate;
     QPushButton* 	pbmod;
 
+    QPtrList<QPushButton> mNumButtonList;
+    QPtrList<QPushButton> mFunctionButtonList;
+    QPtrList<QPushButton> mHexButtonList;
+    QPtrList<QPushButton> mMemButtonList;
+    QPtrList<QPushButton> mOperationButtonList;
+
     bool		key_pressed;
-    int 		buttonxmargin;
-    int			myxmargin, myymargin, bigbuttonwidth, smallbuttonwidth;
-    int		        bigbuttonheight, smallbuttonheight;
-    int 		anglegroupheight, anglegroupwidth;
-    int			basegroupheight, basegroupwidth;
-    int			helpbuttonwidth, helpbuttonheight;
-    int			displaywidth, displayheight;
-    int 		radiobuttonwidth, radiobuttonheight;
     KStats		stats;
     QListBox            *paper;
     QTimer		*status_timer;
@@ -433,7 +437,9 @@ private:
     QRect               table_range;
     QString             table_name;
     Calculator*         corba;
-
+    QWidget *mSmallPage;
+    QWidget *mLargePage;
+    int				mInternalSpacing;
 };
 
 #endif  //QTCLAC_H

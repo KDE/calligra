@@ -26,6 +26,10 @@
 #include <klocale.h>
 #include <knotifyclient.h>
 #include <qlayout.h>
+#include <qobjectlist.h>
+#include <qpushbutton.h>
+#include <kapplication.h>
+#include <qstyle.h>
 
 // What's that?!? (Werner)
 //#define i18n( x ) x
@@ -46,134 +50,90 @@ QPtrList<CALCAMNT>       temp_stack;
 QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *name )
   : QDialog( parent, name )
 {
-  int u = 0;
 
-  corba = _corba;
+    corba = _corba;
+    mInternalSpacing=4;
+    key_pressed = false;
+    selection_timer = new QTimer;
+    status_timer = new QTimer;
 
-  myxmargin             = 9;
-  myymargin             = 9;
-  bigbuttonwidth        = 30;
-  bigbuttonheight       = 23;
-  smallbuttonwidth      = 30;
-  smallbuttonheight     = 20;
-  anglegroupheight      = 36;
-  anglegroupwidth       = 144;
-  basegroupwidth        = 189;
-  basegroupheight       = anglegroupheight;
-  helpbuttonwidth       = 100;
-  helpbuttonheight      = 25;
-  displaywidth          = 233;
-  displayheight         = helpbuttonheight;
-  radiobuttonwidth      = 37;
-  radiobuttonheight             = 15;
+    connect(status_timer,SIGNAL(timeout()),this,SLOT(clear_status_label()));
+    connect(selection_timer,SIGNAL(timeout()),this,SLOT(selection_timed_out()));
 
-  int x,y;
-  key_pressed = false;
-  selection_timer = new QTimer;
-  status_timer = new QTimer;
+    readSettings();
 
-  connect(status_timer,SIGNAL(timeout()),this,SLOT(clear_status_label()));
-  connect(selection_timer,SIGNAL(timeout()),this,SLOT(selection_timed_out()));
+    QFont buttonfont( "Helvetica", 12, QFont::Normal );
+    buttonfont.setStyleStrategy( QFont::PreferAntialias );
 
-  readSettings();
+    // Set the window caption/title
 
-  QFont buttonfont( "Helvetica", 12, QFont::Normal );
-  buttonfont.setStyleStrategy( QFont::PreferAntialias );
+    // connect(kapp,SIGNAL(kdisplayPaletteChanged()),this,SLOT(set_colors()));
+    // setCaption( kapp->caption() );
 
-  // Set the window caption/title
+    // create help button
 
-  // connect(kapp,SIGNAL(kdisplayPaletteChanged()),this,SLOT(set_colors()));
-  // setCaption( kapp->caption() );
+    QPushButton *pb;
 
-  // create help button
+    pb = new QPushButton( this, "helpbutton" );
+    pb->setText( "kCalc" );
+    pb->setFont( QFont("times",12,QFont::Bold,FALSE) );
+    QToolTip::add( pb, i18n("KCalc Setup/Help") );
 
-  QPushButton *pb;
+    connect( pb, SIGNAL(clicked()), SLOT(configclicked()) );
 
-  pb = new QPushButton( this, "helpbutton" );
-  pb->setText( "kCalc" );
-  pb->setGeometry(myxmargin,myymargin, helpbuttonwidth,helpbuttonheight );
-  pb->setFont( QFont("times",12,QFont::Bold,FALSE) );
-  QToolTip::add( pb, i18n("KCalc Setup/Help") );
+    // Create the display
+    calc_display = new DLabel( this, "display" );
+    calc_display->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
+    calc_display->setAlignment( AlignRight|AlignVCenter );
+    calc_display->setFocus();
+    calc_display->setFocusPolicy( QWidget::StrongFocus );
 
-  connect( pb, SIGNAL(clicked()), SLOT(configclicked()) );
+    connect(calc_display,SIGNAL(clicked()),this,SLOT(display_selected()));
 
-  // Create the display
+    statusINVLabel = new QLabel( this, "INV" );
+    Q_CHECK_PTR( statusINVLabel );
+    statusINVLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    statusINVLabel->setAlignment( AlignCenter );
+    statusINVLabel->setText("NORM");
 
-  calc_display = new DLabel( this, "display" );
-  calc_display->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
-  calc_display->setAlignment( AlignRight|AlignVCenter );
-  calc_display->setGeometry( myxmargin + helpbuttonwidth + myxmargin ,
-                             myymargin , displaywidth ,displayheight );
-  calc_display->setFocus();
-  calc_display->setFocusPolicy( QWidget::StrongFocus );
-  calc_display->setFont( QFont( "Helvetica", 16, QFont::Bold ) );
+    statusHYPLabel = new QLabel( this, "HYP" );
+    Q_CHECK_PTR( statusHYPLabel );
+    statusHYPLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    statusHYPLabel->setAlignment( AlignCenter );
 
-  connect(calc_display,SIGNAL(clicked()),this,SLOT(display_selected()));
+    statusERRORLabel = new QLabel( this, "ERROR" );
+    Q_CHECK_PTR( statusERRORLabel );
+    statusERRORLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    statusERRORLabel->setAlignment( AlignLeft|AlignVCenter );
 
-  statusINVLabel = new QLabel( this, "INV" );
-  Q_CHECK_PTR( statusINVLabel );
-  statusINVLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-  statusINVLabel->setAlignment( AlignCenter );
-  statusINVLabel->setGeometry(8,218,50 -1 , 20);
-  statusINVLabel->setText("NORM");
-  statusINVLabel->setFont(buttonfont);
-
-  statusHYPLabel = new QLabel( this, "HYP" );
-  Q_CHECK_PTR( statusHYPLabel );
-  statusHYPLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-  statusHYPLabel->setAlignment( AlignCenter );
-  statusHYPLabel->setGeometry(58 ,218,50 -1, 20);
-  statusHYPLabel->setFont(buttonfont);
-
-  statusERRORLabel = new QLabel( this, "ERROR" );
-  Q_CHECK_PTR( statusERRORLabel );
-  statusERRORLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-  statusERRORLabel->setAlignment( AlignLeft|AlignVCenter );
-  statusERRORLabel->setGeometry(108 ,218,9 + 100 + 9 + 233 + 9 - 100 - 16, 20);
-  statusERRORLabel->setFont(QFont("Hevetica",12));
-
-  // create angle button group
-
-  x = myxmargin + basegroupwidth + myxmargin;
-  y = myymargin + displayheight + myymargin/2;
+    // create angle button group
 
 
-  QAccel *accel = new QAccel( this );
-  accel->connectItem( accel->insertItem(Key_Q+ALT),this,SLOT(quitCalc()) );
-  accel->connectItem( accel->insertItem(Key_X+ALT),this,SLOT(quitCalc()) );
+    QAccel *accel = new QAccel( this );
+    accel->connectItem( accel->insertItem(Key_Q+ALT),this,SLOT(quitCalc()) );
+    accel->connectItem( accel->insertItem(Key_X+ALT),this,SLOT(quitCalc()) );
 
 
-  QButtonGroup *angle_group = new QButtonGroup( this, "AngleButtons" );
-  angle_group->setFont(buttonfont);
+    QButtonGroup *angle_group = new QButtonGroup( 3, Horizontal,this, "AngleButtons" );
+    angle_group->setTitle(i18n( "Angle") );
 
-  angle_group->setTitle(i18n( "Angle") );
-
-  anglebutton[0] = new QRadioButton( angle_group );
-  anglebutton[0]->setText( "&Deg" )   ;
-  anglebutton[0]->setGeometry( 10,anglegroupheight/2 -2,
-                               radiobuttonwidth,radiobuttonheight);
-  anglebutton[0]->setChecked(   TRUE);
-  accel->connectItem( accel->insertItem(Key_D + ALT), this ,
+    anglebutton[0] = new QRadioButton( angle_group );
+    anglebutton[0]->setText( "&Deg" )   ;
+    anglebutton[0]->setChecked(   TRUE);
+    accel->connectItem( accel->insertItem(Key_D + ALT), this ,
                         SLOT(Deg_Selected()) );
 
-  anglebutton[1] = new QRadioButton( angle_group );
-  anglebutton[1]->setText( "&Rad" );
-  anglebutton[1]->setGeometry( 10  + radiobuttonwidth+ 8,anglegroupheight/2 - 2,
-                               radiobuttonwidth,radiobuttonheight );
-  accel->connectItem( accel->insertItem(Key_R + ALT), this ,
+    anglebutton[1] = new QRadioButton( angle_group );
+    anglebutton[1]->setText( "&Rad" );
+    accel->connectItem( accel->insertItem(Key_R + ALT), this ,
                         SLOT(Rad_Selected()) );
 
-  anglebutton[2] = new QRadioButton( angle_group );
-  anglebutton[2]->setText( "&Gra" );
-  anglebutton[2]->setGeometry( 10 +2* radiobuttonwidth+ 16 ,anglegroupheight/2 -2,
-                               radiobuttonwidth, radiobuttonheight );
-  accel->connectItem( accel->insertItem(Key_G + ALT), this ,
+    anglebutton[2] = new QRadioButton( angle_group );
+    anglebutton[2]->setText( "&Gra" );
+    accel->connectItem( accel->insertItem(Key_G + ALT), this ,
                         SLOT(Gra_Selected()) );
 
-  for(u = 0;u <3;u++) anglebutton[u]->setFont(buttonfont);
-
-  angle_group->setGeometry( x, y, anglegroupwidth, anglegroupheight );
-  connect( angle_group, SIGNAL(clicked(int)), SLOT(angle_selected(int)) );
+    connect( angle_group, SIGNAL(clicked(int)), SLOT(angle_selected(int)) );
 
 
 //////////////////////////////////////////////////////////////////////
@@ -183,44 +143,30 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
 
 
-    QButtonGroup *base_group = new QButtonGroup( this, "BaseButtons" );
-    base_group->setFont(buttonfont);
-
+    QButtonGroup *base_group = new QButtonGroup( 4, Horizontal,this, "BaseButtons" );
     base_group->setTitle( i18n("Base") );
 
     basebutton[0] = new QRadioButton( base_group );
     basebutton[0]->setText( "&Hex" );
-    basebutton[0]->setGeometry( 10 , basegroupheight/2 -2,
-                                radiobuttonwidth, radiobuttonheight );
     accel->connectItem( accel->insertItem(Key_H + ALT), this ,
-                SLOT(Hex_Selected()) );
+                        SLOT(Hex_Selected()) );
 
     basebutton[1] = new QRadioButton( base_group );
     basebutton[1]->setText( "D&ec" );
-    basebutton[1]->setGeometry( 10 + radiobuttonwidth +8 , basegroupheight/2 -2,
-                        radiobuttonwidth, radiobuttonheight );
     basebutton[1]->setChecked(TRUE);
     accel->connectItem( accel->insertItem(Key_E + ALT), this ,
                         SLOT(Dec_Selected()) );
 
     basebutton[2] = new QRadioButton( base_group );
     basebutton[2]->setText( "&Oct" );
-    basebutton[2]->setGeometry( 10 + 2*radiobuttonwidth + 16, basegroupheight/2 -2,
-                        radiobuttonwidth, radiobuttonheight );
     accel->connectItem( accel->insertItem(Key_O + ALT), this ,
                         SLOT(Oct_Selected()) );
 
     basebutton[3] = new QRadioButton( base_group);
     basebutton[3]->setText( "&Bin" );
-    basebutton[3]->setGeometry( 10 + 3*radiobuttonwidth + 24, basegroupheight/2 -2,
-                        radiobuttonwidth, radiobuttonheight );
     accel->connectItem( accel->insertItem(Key_B + ALT), this ,
                         SLOT(Bin_Selected()) );
 
-    for(u = 0;u <4;u++) basebutton[u]->setFont(buttonfont);
-
-    myxmargin = 9;
-    base_group->setGeometry( myxmargin,y, basegroupwidth,basegroupheight );
     connect( base_group, SIGNAL(clicked(int)), SLOT(base_selected(int)) );
 
 ////////////////////////////////////////////////////////////////////////
@@ -228,461 +174,379 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 //  Create Calculator Buttons
 //
 
-    buttonxmargin = 9;
-    y = myymargin + displayheight + myymargin/2 + basegroupheight + myymargin/2;
 
-    myymargin = 6;
+    // First the widgets that are the parents of the buttons
+    mSmallPage = new QWidget(this);
+    mLargePage = new QWidget(this);
 
-
-    pbhyp = new QPushButton( this, "hypbutton" );
-    pbhyp->setText( "Hyp" );
-    pbhyp->setGeometry(buttonxmargin,y, smallbuttonwidth,smallbuttonheight );
+    pbhyp = new QPushButton("Hyp", mSmallPage, "hypbutton" );
     connect( pbhyp, SIGNAL(toggled(bool)), SLOT(pbhyptoggled(bool)));
     pbhyp->setToggleButton(TRUE);
-    pbhyp->setFont(buttonfont);
 
-
-    pbinv = new QPushButton( this, "InverseButton" );
-    pbinv->setText( "Inv" );
-    pbinv->setGeometry(buttonxmargin + buttonxmargin + smallbuttonwidth
-                       ,y, smallbuttonwidth,smallbuttonheight );
+    pbinv = new QPushButton( "Inv", mSmallPage, "InverseButton" );
     connect( pbinv, SIGNAL(toggled(bool)), SLOT(pbinvtoggled(bool)));
     pbinv->setToggleButton(TRUE);
-    pbinv->setFont(buttonfont);
 
-    pbA = new QPushButton( this, "Abutton" );
-    pbA->setText( "A" );
-    pbA->setGeometry(buttonxmargin + buttonxmargin + buttonxmargin  + 2*smallbuttonwidth
-                     ,y, smallbuttonwidth,smallbuttonheight );
+    pbA = new QPushButton("A",mSmallPage, "Abutton" );
     connect( pbA, SIGNAL(toggled(bool)), SLOT(pbAtoggled(bool)));
     pbA->setToggleButton(TRUE);
-    pbA->setFont(buttonfont);
 
-    y = y + myymargin/2 + smallbuttonheight;
-
-    pbSin = new QPushButton( this, "Sinbutton" );
-    pbSin->setText( "Sin" );
-    pbSin->setGeometry(buttonxmargin,y, smallbuttonwidth,smallbuttonheight );
+    pbSin = new QPushButton("Sin",mSmallPage, "Sinbutton" );
     connect( pbSin, SIGNAL(toggled(bool)), SLOT(pbSintoggled(bool)));
     pbSin->setToggleButton(TRUE);
-    pbSin->setFont(buttonfont);
 
-
-    pbplusminus = new QPushButton( this, "plusminusbutton" );
-    pbplusminus->setText( "+/-" );
-    pbplusminus->setGeometry(buttonxmargin + buttonxmargin + smallbuttonwidth
-                             ,y, smallbuttonwidth,smallbuttonheight );
+    pbplusminus = new QPushButton( "+/-", mSmallPage, "plusminusbutton" );
     connect( pbplusminus, SIGNAL(toggled(bool)), SLOT(pbplusminustoggled(bool)));
     pbplusminus->setToggleButton(TRUE);
     pbplusminus->setFont(buttonfont);
 
-    pbB = new QPushButton( this, "Bbutton" );
-    pbB->setText( "B" );
-    pbB->setGeometry(buttonxmargin + buttonxmargin + buttonxmargin  + 2*smallbuttonwidth
-                     ,y, smallbuttonwidth,smallbuttonheight );
+    pbB = new QPushButton("B", mSmallPage, "Bbutton" );
     connect( pbB, SIGNAL(toggled(bool)), SLOT(pbBtoggled(bool)));
     pbB->setToggleButton(TRUE);
-    pbB->setFont(buttonfont);
 
-
-    y = y + myymargin/2 + smallbuttonheight;
-
-    pbCos = new QPushButton( this, "Cosbutton" );
+    pbCos = new QPushButton("Cos",mSmallPage, "Cosbutton" );
     pbCos->setText( "Cos" );
-    pbCos->setGeometry(buttonxmargin,y, smallbuttonwidth,smallbuttonheight );
     connect( pbCos, SIGNAL(toggled(bool)), SLOT(pbCostoggled(bool)));
     pbCos->setToggleButton(TRUE);
-    pbCos->setFont(buttonfont);
 
 
-    pbreci = new QPushButton( this, "recibutton" );
-    pbreci->setText( "1/x" );
-    pbreci->setGeometry(buttonxmargin + buttonxmargin + smallbuttonwidth
-                           ,y, smallbuttonwidth,smallbuttonheight );
+    pbreci = new QPushButton("1/x",mSmallPage, "recibutton" );
     connect( pbreci, SIGNAL(toggled(bool)), SLOT(pbrecitoggled(bool)));
     pbreci->setToggleButton(TRUE);
-    pbreci->setFont(buttonfont);
 
-    pbC = new QPushButton( this, "Cbutton" );
-    pbC->setText( "C" );
-    pbC->setGeometry(buttonxmargin + buttonxmargin + buttonxmargin + 2*smallbuttonwidth
-                     ,y, smallbuttonwidth,smallbuttonheight );
+    pbC = new QPushButton( "C", mSmallPage, "Cbutton" );
     connect( pbC, SIGNAL(toggled(bool)), SLOT(pbCtoggled(bool)));
     pbC->setToggleButton(TRUE);
-    pbC->setFont(buttonfont);
 
-
-    y = y + myymargin/2 + smallbuttonheight;
-
-    pbTan = new QPushButton( this, "Tanbutton" );
-    pbTan->setText( "Tan" );
-    pbTan->setGeometry(buttonxmargin,y, smallbuttonwidth,smallbuttonheight );
+    pbTan = new QPushButton("Tan" ,mSmallPage,  "Tanbutton" );
     connect( pbTan, SIGNAL(toggled(bool)), SLOT(pbTantoggled(bool)));
     pbTan->setToggleButton(TRUE);
-    pbTan->setFont(buttonfont);
 
-    pbfactorial = new QPushButton( this, "factorialbutton" );
-    pbfactorial->setText( "x!" );
-    pbfactorial->setGeometry(buttonxmargin + buttonxmargin + smallbuttonwidth
-                             ,y, smallbuttonwidth,smallbuttonheight );
+    pbfactorial = new QPushButton("x!",mSmallPage, "factorialbutton" );
     connect( pbfactorial, SIGNAL(toggled(bool)), SLOT(pbfactorialtoggled(bool)));
     pbfactorial->setToggleButton(TRUE);
-    pbfactorial->setFont(buttonfont);
 
-
-    pbD = new QPushButton( this, "Dbutton" );
-    pbD->setText( "D" );
-    pbD->setGeometry(buttonxmargin + buttonxmargin + buttonxmargin  + 2*smallbuttonwidth
-                     ,y, smallbuttonwidth,smallbuttonheight );
+    pbD = new QPushButton("D",mSmallPage,  "Dbutton" );
     connect( pbD, SIGNAL(toggled(bool)), SLOT(pbDtoggled(bool)));
     pbD->setToggleButton(TRUE);
-    pbD->setFont(buttonfont);
 
-    y = y + myymargin/2 + smallbuttonheight;
-
-    pblog = new QPushButton( this, "logbutton" );
-    pblog->setText( "Log" );
-    pblog->setGeometry(buttonxmargin ,y, smallbuttonwidth,smallbuttonheight );
+    pblog = new QPushButton("Log",mSmallPage, "logbutton" );
     connect( pblog, SIGNAL(toggled(bool)), SLOT(pblogtoggled(bool)));
     pblog->setToggleButton(TRUE);
-    pblog->setFont(buttonfont);
 
-    pbsquare = new QPushButton( this, "squarebutton" );
-    pbsquare->setText( "x^2" );
-    pbsquare->setGeometry(buttonxmargin  + buttonxmargin + smallbuttonwidth
-                          ,y, smallbuttonwidth,smallbuttonheight );
+    pbsquare = new QPushButton( "x^2", mSmallPage,  "squarebutton" );
     connect( pbsquare, SIGNAL(toggled(bool)), SLOT(pbsquaretoggled(bool)));
     pbsquare->setToggleButton(TRUE);
-    pbsquare->setFont(buttonfont);
 
-    pbE = new QPushButton( this, "Ebutton" );
-    pbE->setText( "E" );
-    pbE->setGeometry(buttonxmargin + buttonxmargin + buttonxmargin  + 2*smallbuttonwidth
-                     ,y, smallbuttonwidth,smallbuttonheight );
+    pbE = new QPushButton("E",mSmallPage, "Ebutton" );
     connect( pbE, SIGNAL(toggled(bool)), SLOT(pbEtoggled(bool)));
     pbE->setToggleButton(TRUE);
-    pbE->setFont(buttonfont);
-
-    y = y + myymargin/2 + smallbuttonheight;
 
 
-    pbln = new QPushButton( this, "lnbutton" );
-    pbln->setText( "Ln" );
-    pbln->setGeometry(buttonxmargin,y, smallbuttonwidth,smallbuttonheight );
+    pbln = new QPushButton( "Ln", mSmallPage, "lnbutton" );
     connect( pbln, SIGNAL(toggled(bool)), SLOT(pblntoggled(bool)));
     pbln->setToggleButton(TRUE);
-    pbln->setFont(buttonfont);
 
-    pbpower = new QPushButton( this, "powerbutton" );
-    pbpower->setText( "x^y" );
-    pbpower->setGeometry(buttonxmargin  + buttonxmargin + smallbuttonwidth
-                     ,y, smallbuttonwidth,smallbuttonheight );
+    pbpower = new QPushButton("x^y",mSmallPage,  "powerbutton" );
     connect( pbpower, SIGNAL(toggled(bool)), SLOT(pbpowertoggled(bool)));
     pbpower->setToggleButton(TRUE);
-    pbpower->setFont(buttonfont);
 
-    pbF = new QPushButton( this, "Fbutton" );
-    pbF->setText( "F" );
-    pbF->setGeometry(buttonxmargin + buttonxmargin +buttonxmargin  + 2*smallbuttonwidth
-                              ,y, smallbuttonwidth,smallbuttonheight );
+    pbF = new QPushButton("F",mSmallPage, "Fbutton" );
     connect( pbF, SIGNAL(toggled(bool)), SLOT(pbFtoggled(bool)));
     pbF->setToggleButton(TRUE);
-    pbF->setFont(buttonfont);
 
-/////////////////////////////////////////////////////////////////////
-//
-//
-
-    myymargin = 9;
-
-    y = myymargin + displayheight + myymargin/2 + basegroupheight + myymargin/2;
-    x = buttonxmargin + buttonxmargin +buttonxmargin  + 3*smallbuttonwidth + buttonxmargin;
-
-    myymargin = 10;
-
-    pbEE = new QPushButton( this, "EEbutton" );
-    pbEE->setText( "EE" );
-    pbEE->setGeometry( x
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbEE = new QPushButton("EE",mLargePage,  "EEbutton" );
     pbEE->setToggleButton(TRUE);
     connect( pbEE, SIGNAL(toggled(bool)), SLOT(EEtoggled(bool)));
-    pbEE->setFont(buttonfont);
 
-    pbMR = new QPushButton( this, "MRbutton" );
-    pbMR->setText( "MR" );
-    pbMR->setGeometry( x + bigbuttonwidth + buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbMR = new QPushButton("MR",mLargePage,  "MRbutton" );
     connect( pbMR, SIGNAL(toggled(bool)), SLOT(pbMRtoggled(bool)));
     pbMR->setToggleButton(TRUE);
     pbMR->setFont(buttonfont);
 
-    pbMplusminus = new QPushButton( this, "Mplusminusbutton" );
-    pbMplusminus->setText( "M+-" );
-    pbMplusminus->setGeometry(x + 2*bigbuttonwidth + 2*buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbMplusminus = new QPushButton("M+-",mLargePage,  "Mplusminusbutton" );
     connect( pbMplusminus, SIGNAL(toggled(bool)), SLOT(pbMplusminustoggled(bool)));
     pbMplusminus->setToggleButton(TRUE);
-    pbMplusminus->setFont(buttonfont);
 
-    pbMC = new QPushButton( this, "MCbutton" );
-    pbMC->setText( "MC" );
-    pbMC->setGeometry(x + 3*bigbuttonwidth + 3*buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbMC = new QPushButton("MC",mLargePage,  "MCbutton" );
     connect( pbMC, SIGNAL(toggled(bool)), SLOT(pbMCtoggled(bool)));
     pbMC->setToggleButton(TRUE);
-    pbMC->setFont(buttonfont);
 
-    pbClear = new QPushButton( this, "Clearbutton" );
-    pbClear->setText( "C" );
-    pbClear->setGeometry(x + 4*bigbuttonwidth + 4* buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbClear = new QPushButton("C",mLargePage,  "Clearbutton" );
     connect( pbClear, SIGNAL(toggled(bool)), SLOT(pbCleartoggled(bool)));
     pbClear->setToggleButton(TRUE);
-    pbClear->setFont(buttonfont);
 
-    pbAC = new QPushButton( this, "ACbutton" );
-    pbAC->setText( "AC" );
-    pbAC->setGeometry(x + 5 * bigbuttonwidth + 5 * buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbAC = new QPushButton("AC", mLargePage,  "ACbutton" );
     connect( pbAC, SIGNAL(toggled(bool)), SLOT(pbACtoggled(bool)));
     pbAC->setToggleButton(TRUE);
-    pbAC->setFont(buttonfont);
 
-
-//////////////////////////////////////////////////////////////////////
-//
-//
-
-    y = y + myymargin/2 + bigbuttonheight;
-    x = buttonxmargin + buttonxmargin +buttonxmargin  + 3*smallbuttonwidth + buttonxmargin;
-
-    pb7 = new QPushButton( this, "7button" );
-    pb7->setText( "7" );
-    pb7->setGeometry(x
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pb7 = new QPushButton("7",mLargePage, "7button" );
     connect( pb7, SIGNAL(toggled(bool)), SLOT(pb7toggled(bool)));
     pb7->setToggleButton(TRUE);
-    pb7->setFont(buttonfont);
 
-    pb8 = new QPushButton( this, "8button" );
-    pb8->setText( "8" );
-    pb8->setGeometry(x + bigbuttonwidth + buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pb8 = new QPushButton("8",mLargePage, "8button" );
     connect( pb8, SIGNAL(toggled(bool)), SLOT(pb8toggled(bool)));
     pb8->setToggleButton(TRUE);
-    pb8->setFont(buttonfont);
 
-    pb9 = new QPushButton( this, "9button" );
-    pb9->setText( "9" );
-    pb9->setGeometry(x + 2*bigbuttonwidth + 2 * buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pb9 = new QPushButton("9",mLargePage,"9button" );
     connect( pb9, SIGNAL(toggled(bool)), SLOT(pb9toggled(bool)));
     pb9->setToggleButton(TRUE);
-    pb9->setFont(buttonfont);
 
-    pbparenopen = new QPushButton( this, "parenopenbutton" );
-    pbparenopen->setText( "(" );
-    pbparenopen->setGeometry(x + 3 * bigbuttonwidth + 3 * buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbparenopen = new QPushButton("(",mLargePage,  "parenopenbutton" );
     connect( pbparenopen, SIGNAL(toggled(bool)), SLOT(pbparenopentoggled(bool)));
     pbparenopen->setToggleButton(TRUE);
-    pbparenopen->setFont(buttonfont);
 
-    pbparenclose = new QPushButton( this, "parenclosebutton" );
-    pbparenclose->setText( ")" );
-    pbparenclose->setGeometry(x + 4* bigbuttonwidth + 4 * buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbparenclose = new QPushButton(")",mLargePage, "parenclosebutton" );
     connect( pbparenclose, SIGNAL(toggled(bool)), SLOT(pbparenclosetoggled(bool)));
     pbparenclose->setToggleButton(TRUE);
-    pbparenclose->setFont(buttonfont);
 
-    pband = new QPushButton( this, "andbutton" );
-    pband->setText( "And" );
-    pband->setGeometry(x + 5 * bigbuttonwidth + 5 * buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pband = new QPushButton("And",mLargePage, "andbutton" );
     connect( pband, SIGNAL(toggled(bool)), SLOT(pbandtoggled(bool)));
     pband->setToggleButton(TRUE);
     pband->setFont(buttonfont);
 
-//////////////////////////////////////////////////////////////////////
-//
-//
-
-
-    y = y + myymargin/2 + bigbuttonheight ;
-    x = buttonxmargin + buttonxmargin +buttonxmargin  + 3*smallbuttonwidth + buttonxmargin;
-
-    pb4 = new QPushButton( this, "4button" );
-    pb4->setText( "4" );
-    pb4->setGeometry(x
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pb4 = new QPushButton("4",mLargePage,  "4button" );
     connect( pb4, SIGNAL(toggled(bool)), SLOT(pb4toggled(bool)));
     pb4->setToggleButton(TRUE);
-    pb4->setFont(buttonfont);
 
-    pb5 = new QPushButton( this, "5button" );
-    pb5->setText( "5" );
-    pb5->setGeometry(x + bigbuttonwidth + buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pb5 = new QPushButton("5",mLargePage,  "5button" );
     connect( pb5, SIGNAL(toggled(bool)), SLOT(pb5toggled(bool)));
     pb5->setToggleButton(TRUE);
-    pb5->setFont(buttonfont);
 
-    pb6 = new QPushButton( this, "6button" );
-    pb6->setText( "6" );
-    pb6->setGeometry(x + 2*bigbuttonwidth + 2*buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pb6 = new QPushButton("6",mLargePage,  "6button" );
     connect( pb6, SIGNAL(toggled(bool)), SLOT(pb6toggled(bool)));
     pb6->setToggleButton(TRUE);
-    pb6->setFont(buttonfont);
 
-    pbX = new QPushButton( this, "Multiplybutton" );
-    pbX->setText( "X" );
-    pbX->setGeometry(x + 3*bigbuttonwidth + 3*buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbX = new QPushButton("X",mLargePage, "Multiplybutton" );
     connect( pbX, SIGNAL(toggled(bool)), SLOT(pbXtoggled(bool)));
     pbX->setToggleButton(TRUE);
-    pbX->setFont(buttonfont);
 
-    pbdivision = new QPushButton( this, "divisionbutton" );
-    pbdivision->setText( "/" );
-    pbdivision->setGeometry(x + 4*bigbuttonwidth + 4 * buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbdivision = new QPushButton("/",mLargePage,  "divisionbutton" );
     connect( pbdivision, SIGNAL(toggled(bool)), SLOT(pbdivisiontoggled(bool)));
     pbdivision->setToggleButton(TRUE);
-    pbdivision->setFont(buttonfont);
 
-    pbor = new QPushButton( this, "orbutton" );
-    pbor->setText( "Or" );
-    pbor->setGeometry(x + 5 * bigbuttonwidth + 5 *buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbor = new QPushButton("Or",mLargePage,  "orbutton" );
     connect( pbor, SIGNAL(toggled(bool)), SLOT(pbortoggled(bool)));
     pbor->setToggleButton(TRUE);
-    pbor->setFont(buttonfont);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-
-
-    y = y + myymargin/2 + bigbuttonheight ;
-    x = buttonxmargin + buttonxmargin +buttonxmargin  + 3*smallbuttonwidth + buttonxmargin;
-
-    pb1 = new QPushButton( this, "1button" );
-    pb1->setText( "1" );
-    pb1->setGeometry(x
-                     ,y, bigbuttonwidth,bigbuttonheight );
-    //connect( pb1, SIGNAL(clicked()), SLOT(button1()) );
+    pb1 = new QPushButton("1",mLargePage,  "1button" );
     connect( pb1, SIGNAL(toggled(bool)), SLOT(pb1toggled(bool)));
     pb1->setToggleButton(TRUE);
-    pb1->setFont(buttonfont);
 
-    pb2 = new QPushButton( this, "2button" );
-    pb2->setText( "2" );
-    pb2->setGeometry(x + bigbuttonwidth + buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pb2 = new QPushButton("2",mLargePage,  "2button" );
 
     connect( pb2, SIGNAL(toggled(bool)), SLOT(pb2toggled(bool)));
     pb2->setToggleButton(TRUE);
-    pb2->setFont(buttonfont);
 
-    pb3 = new QPushButton( this, "3button" );
-    pb3->setText( "3" );
-    pb3->setGeometry(x + 2* bigbuttonwidth + 2* buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pb3 = new QPushButton("3",mLargePage,  "3button" );
     connect( pb3, SIGNAL(toggled(bool)), SLOT(pb3toggled(bool)));
     pb3->setToggleButton(TRUE);
-    pb3->setFont(buttonfont);
 
-    pbplus = new QPushButton( this, "plusbutton" );
-    pbplus->setText( "+" );
-    pbplus->setGeometry(x + 3* bigbuttonwidth + 3* buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbplus = new QPushButton("+",mLargePage, "plusbutton" );
     connect( pbplus, SIGNAL(toggled(bool)), SLOT(pbplustoggled(bool)));
     pbplus->setToggleButton(TRUE);
-    pbplus->setFont(buttonfont);
 
 
-    pbminus = new QPushButton( this, "minusbutton" );
-    pbminus->setText( "-" );
-    pbminus->setGeometry(x + 4* bigbuttonwidth + 4* buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbminus = new QPushButton("-",mLargePage,  "minusbutton" );
     connect( pbminus, SIGNAL(toggled(bool)), SLOT(pbminustoggled(bool)));
     pbminus->setToggleButton(TRUE);
-    pbminus->setFont(buttonfont);
 
-    pbshift = new QPushButton( this, "shiftbutton" );
-    pbshift->setText( "Lsh" );
-    pbshift->setGeometry(x + 5* bigbuttonwidth + 5* buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbshift = new QPushButton("Lsh",mLargePage, "shiftbutton" );
     connect( pbshift, SIGNAL(toggled(bool)), SLOT(pbshifttoggled(bool)));
     pbshift->setToggleButton(TRUE);
-    pbshift->setFont(buttonfont);
 
-///////////////////////////////////////////////////////////////////////////
-//
-//
-
-    y = y + myymargin/2 + bigbuttonheight ;
-    x = buttonxmargin + buttonxmargin +buttonxmargin  + 3*smallbuttonwidth + buttonxmargin;
-
-    pbperiod = new QPushButton( this, "periodbutton" );
-    pbperiod->setText( "." );
-    pbperiod->setGeometry(x
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbperiod = new QPushButton(".",mLargePage,  "periodbutton" );
     connect( pbperiod, SIGNAL(toggled(bool)), SLOT(pbperiodtoggled(bool)));
     pbperiod->setToggleButton(TRUE);
-    pbperiod->setFont(buttonfont);
 
-    pb0 = new QPushButton( this, "0button" );
-    pb0->setText( "0" );
-    pb0->setGeometry(x + 1* bigbuttonwidth + 1* buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pb0 = new QPushButton("0",mLargePage,  "0button" );
     connect( pb0, SIGNAL(toggled(bool)), SLOT(pb0toggled(bool)));
     pb0->setToggleButton(TRUE);
-    pb0->setFont(buttonfont);
 
-    pbequal = new QPushButton( this, "equalbutton" );
-    pbequal->setText( "=" );
-    pbequal->setGeometry(x + 2* bigbuttonwidth + 2* buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbequal = new QPushButton("=",mLargePage,  "equalbutton" );
     connect( pbequal, SIGNAL(toggled(bool)), SLOT(pbequaltoggled(bool)));
     pbequal->setToggleButton(TRUE);
-    pbequal->setFont(buttonfont);
 
-    pbpercent = new QPushButton( this, "percentbutton" );
-    pbpercent->setText( "%" );
-    pbpercent->setGeometry(x + 3* bigbuttonwidth + 3* buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbpercent = new QPushButton("%",mLargePage, "percentbutton" );
     connect( pbpercent, SIGNAL(toggled(bool)), SLOT(pbpercenttoggled(bool)));
     pbpercent->setToggleButton(TRUE);
-    pbpercent->setFont(buttonfont);
 
-
-    pbnegate = new QPushButton( this, "OneComplementbutton" );
-    pbnegate->setText( "Cmp" );
-    pbnegate->setGeometry(x  + 4* bigbuttonwidth + 4* buttonxmargin
-                              ,y, bigbuttonwidth, bigbuttonheight );
+    pbnegate = new QPushButton("Cmp",mLargePage,  "OneComplementbutton" );
     connect( pbnegate, SIGNAL(toggled(bool)), SLOT(pbnegatetoggled(bool)));
     pbnegate->setToggleButton(TRUE);
-    pbnegate->setFont(buttonfont);
 
-    pbmod = new QPushButton( this, "modbutton" );
-    pbmod->setText( "Mod" );
-    pbmod->setGeometry(x + 5* bigbuttonwidth + 5* buttonxmargin
-                     ,y, bigbuttonwidth,bigbuttonheight );
+    pbmod = new QPushButton("Mod",mLargePage,  "modbutton" );
     connect( pbmod, SIGNAL(toggled(bool)), SLOT(pbmodtoggled(bool)));
     pbmod->setToggleButton(TRUE);
-    pbmod->setFont(buttonfont);
 
+    QGridLayout *smallBtnLayout = new QGridLayout(mSmallPage, 6, 3, 0,
+                                                  mInternalSpacing);
+    QGridLayout *largeBtnLayout = new QGridLayout(mLargePage, 5, 6, 0,
+                                                  mInternalSpacing);
+
+    QHBoxLayout *topLayout		= new QHBoxLayout();
+    QHBoxLayout *radioLayout	= new QHBoxLayout();
+    QHBoxLayout *btnLayout		= new QHBoxLayout();
+    QHBoxLayout *statusLayout	= new QHBoxLayout();
+
+    // bring them all together
+    QVBoxLayout *mainLayout = new QVBoxLayout(this, mInternalSpacing,
+                                              mInternalSpacing );
+
+    mainLayout->addLayout(topLayout );
+    mainLayout->addLayout(radioLayout, 1);
+    mainLayout->addLayout(btnLayout);
+    mainLayout->addLayout(statusLayout);
+
+    // button layout
+    btnLayout->addWidget(mSmallPage,0,AlignTop);
+    btnLayout->addSpacing(mInternalSpacing);
+    btnLayout->addWidget(mLargePage,0,AlignTop);
+
+    // small button layout
+    smallBtnLayout->addWidget(pbhyp, 0, 0);
+    smallBtnLayout->addWidget(pbinv, 0, 1);
+    smallBtnLayout->addWidget(pbA, 0, 2);
+
+    smallBtnLayout->addWidget(pbSin, 1, 0);
+    smallBtnLayout->addWidget(pbplusminus, 1, 1);
+    smallBtnLayout->addWidget(pbB, 1, 2);
+
+    smallBtnLayout->addWidget(pbCos, 2, 0);
+    smallBtnLayout->addWidget(pbreci, 2, 1);
+    smallBtnLayout->addWidget(pbC, 2, 2);
+
+    smallBtnLayout->addWidget(pbTan, 3, 0);
+    smallBtnLayout->addWidget(pbfactorial, 3, 1);
+    smallBtnLayout->addWidget(pbD, 3, 2);
+
+    smallBtnLayout->addWidget(pblog, 4, 0);
+    smallBtnLayout->addWidget(pbsquare, 4, 1);
+    smallBtnLayout->addWidget(pbE, 4, 2);
+
+    smallBtnLayout->addWidget(pbln, 5, 0);
+    smallBtnLayout->addWidget(pbpower, 5, 1);
+    smallBtnLayout->addWidget(pbF, 5, 2);
+
+    smallBtnLayout->setRowStretch(0, 0);
+    smallBtnLayout->setRowStretch(1, 0);
+    smallBtnLayout->setRowStretch(2, 0);
+    smallBtnLayout->setRowStretch(3, 0);
+    smallBtnLayout->setRowStretch(4, 0);
+    smallBtnLayout->setRowStretch(5, 0);
+
+    // large button layout
+    largeBtnLayout->addWidget(pbEE, 0, 0);
+    largeBtnLayout->addWidget(pbMR, 0, 1);
+    largeBtnLayout->addWidget(pbMplusminus, 0, 2);
+    largeBtnLayout->addWidget(pbMC, 0, 3);
+    largeBtnLayout->addWidget(pbClear, 0, 4);
+    largeBtnLayout->addWidget(pbAC, 0, 5);
+
+    largeBtnLayout->addWidget(pb7, 1, 0);
+    largeBtnLayout->addWidget(pb8, 1, 1);
+    largeBtnLayout->addWidget(pb9, 1, 2);
+    largeBtnLayout->addWidget(pbparenopen, 1, 3);
+    largeBtnLayout->addWidget(pbparenclose, 1, 4);
+    largeBtnLayout->addWidget(pband, 1, 5);
+
+    largeBtnLayout->addWidget(pb4, 2, 0);
+    largeBtnLayout->addWidget(pb5, 2, 1);
+    largeBtnLayout->addWidget(pb6, 2, 2);
+    largeBtnLayout->addWidget(pbX, 2, 3);
+    largeBtnLayout->addWidget(pbdivision, 2, 4);
+    largeBtnLayout->addWidget(pbor, 2, 5);
+
+    largeBtnLayout->addWidget(pb1, 3, 0);
+    largeBtnLayout->addWidget(pb2, 3, 1);
+    largeBtnLayout->addWidget(pb3, 3, 2);
+    largeBtnLayout->addWidget(pbplus, 3, 3);
+    largeBtnLayout->addWidget(pbminus, 3, 4);
+    largeBtnLayout->addWidget(pbshift, 3, 5);
+
+    largeBtnLayout->addWidget(pbperiod, 4, 0);
+    largeBtnLayout->addWidget(pb0, 4, 1);
+    largeBtnLayout->addWidget(pbequal, 4, 2);
+    largeBtnLayout->addWidget(pbpercent, 4, 3);
+    largeBtnLayout->addWidget(pbnegate, 4, 4);
+    largeBtnLayout->addWidget(pbmod, 4, 5);
+
+    largeBtnLayout->addColSpacing(0,10);
+    largeBtnLayout->addColSpacing(1,10);
+    largeBtnLayout->addColSpacing(2,10);
+    largeBtnLayout->addColSpacing(3,10);
+    largeBtnLayout->addColSpacing(4,10);
+    topLayout->addWidget(pb);
+    topLayout->addWidget(calc_display, 10);
+
+
+    // radiobutton layout
+    radioLayout->addWidget(base_group);
+    radioLayout->addWidget(angle_group);
+
+    // status layout
+    statusLayout->addWidget(statusINVLabel);
+    statusLayout->addWidget(statusHYPLabel);
+    statusLayout->addWidget(statusERRORLabel, 10);
+
+    mNumButtonList.append(pb0);
+    mNumButtonList.append(pb1);
+    mNumButtonList.append(pb2);
+    mNumButtonList.append(pb3);
+    mNumButtonList.append(pb4);
+    mNumButtonList.append(pb5);
+    mNumButtonList.append(pb6);
+    mNumButtonList.append(pb7);
+    mNumButtonList.append(pb8);
+    mNumButtonList.append(pb9);
+
+    mFunctionButtonList.append(pbhyp);
+    mFunctionButtonList.append(pbinv);
+    mFunctionButtonList.append(pbSin);
+    mFunctionButtonList.append(pbplusminus);
+    mFunctionButtonList.append(pbCos);
+    mFunctionButtonList.append(pbreci);
+    mFunctionButtonList.append(pbTan);
+    mFunctionButtonList.append(pbfactorial);
+    mFunctionButtonList.append(pblog);
+    mFunctionButtonList.append(pbsquare);
+    mFunctionButtonList.append(pbln);
+    mFunctionButtonList.append(pbpower);
+
+    mHexButtonList.append(pbA);
+    mHexButtonList.append(pbB);
+    mHexButtonList.append(pbC);
+    mHexButtonList.append(pbD);
+    mHexButtonList.append(pbE);
+    mHexButtonList.append(pbF);
+
+    mMemButtonList.append(pbEE);
+    mMemButtonList.append(pbMR);
+    mMemButtonList.append(pbMplusminus);
+    mMemButtonList.append(pbMC);
+    mMemButtonList.append(pbClear);
+    mMemButtonList.append(pbAC);
+
+    mOperationButtonList.append(pbX);
+    mOperationButtonList.append(pbparenopen);
+    mOperationButtonList.append(pbparenclose);
+    mOperationButtonList.append(pband);
+    mOperationButtonList.append(pbdivision);
+    mOperationButtonList.append(pbor);
+    mOperationButtonList.append(pbplus);
+    mOperationButtonList.append(pbminus);
+    mOperationButtonList.append(pbshift);
+    mOperationButtonList.append(pbperiod);
+    mOperationButtonList.append(pbequal);
+    mOperationButtonList.append(pbpercent);
+    mOperationButtonList.append(pbnegate);
+    mOperationButtonList.append(pbmod);
 
     set_colors();
     set_precision();
     set_style();
-
-    /*    paper = new QListBox(0,"paper");
-    paper->resize(200,400);
-    paper->show();*/
+    updateGeometry();
+    setFixedHeight(minimumHeight());
     InitializeCalculator();
 }
 
@@ -691,6 +555,81 @@ QtCalculator::~QtCalculator()
     delete selection_timer;
     delete status_timer;
 
+}
+
+void QtCalculator::set_display_font()
+{
+    calc_display->setFont(kcalcdefaults.font);
+}
+
+void QtCalculator::updateGeometry()
+{
+    QObjectList *l;
+    QSize s;
+    int margin;
+
+    //
+    // Uppermost bar
+    //
+    calc_display->setMinimumWidth(calc_display->fontMetrics().maxWidth() * 15);
+
+    //
+    // Button groups (base and angle)
+    //
+    //QButtonGroup *g;
+    //g = (QButtonGroup*)(anglebutton[0]->parentWidget());
+    //g = (QButtonGroup*)(basebutton[0]->parentWidget());
+
+    //
+    // Calculator buttons
+    //
+    s.setWidth(mSmallPage->fontMetrics().width("MMM"));
+    s.setHeight(mSmallPage->fontMetrics().lineSpacing());
+
+    l = (QObjectList*)mSmallPage->children(); // silence please
+
+    for(uint i=0; i < l->count(); i++)
+    {
+        QObject *o = l->at(i);
+        if( o->isWidgetType() )
+        {
+            margin = QApplication::style().
+                pixelMetric(QStyle::PM_ButtonMargin, ((QWidget *)o))*2;
+            ((QWidget*)o)->setMinimumSize(s.width()+margin, s.height()+margin);
+            ((QWidget*)o)->installEventFilter( this );
+            ((QWidget*)o)->setAcceptDrops(true);
+        }
+    }
+
+    l = (QObjectList*)mLargePage->children(); // silence please
+
+    int h1 = pbF->minimumSize().height();
+    int h2 = (int)((((float)h1 + 4.0) / 5.0));
+    s.setWidth(mLargePage->fontMetrics().width("MMM") +
+               QApplication::style().
+               pixelMetric(QStyle::PM_ButtonMargin, pbF)*2);
+    s.setHeight(h1 + h2);
+
+    for(uint i = 0; i < l->count(); i++)
+    {
+        QObject *o = l->at(i);
+        if(o->isWidgetType())
+        {
+            ((QWidget*)o)->setFixedSize(s);
+            ((QWidget*)o)->installEventFilter(this);
+            ((QWidget*)o)->setAcceptDrops(true);
+        }
+    }
+
+    //
+    // The status bar
+    //
+    s.setWidth( statusINVLabel->fontMetrics().width("NORM") +
+                statusINVLabel->frameWidth() * 2 + 10);
+    statusINVLabel->setMinimumWidth(s.width());
+    statusHYPLabel->setMinimumWidth(s.width());
+
+    //setFixedSize(minimumSize());
 }
 
 void QtCalculator::exit()
@@ -1605,8 +1544,10 @@ void QtCalculator::configclicked(){
     set_colors();
     set_precision();
     set_style();
+    updateGeometry();
+    resize(minimumSize());
   }
-
+  delete configdlg;
 }
 
 
