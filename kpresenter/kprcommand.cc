@@ -1208,7 +1208,7 @@ void BrushCmd::execute()
     if ( doc->refreshSideBar()) //for redo
     {
         int pos=doc->pageList().findRef(m_page);
-        doc->updateSideBarItem(pos);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
 
 }
@@ -1366,7 +1366,7 @@ void BrushCmd::unexecute()
     if ( doc->refreshSideBar()) //for redo
     {
         int pos=doc->pageList().findRef(m_page);
-        doc->updateSideBarItem(pos);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
 
 }
