@@ -3992,6 +3992,8 @@ void KSpreadTable::copyAsText( const QPoint &_marker )
       }
     }
 
+    ++max;
+
     for (y = m_rctSelection.top(); y <= m_rctSelection.bottom(); ++y)
     {
       for (x = m_rctSelection.left(); x <= m_rctSelection.right(); ++x)
@@ -4000,8 +4002,9 @@ void KSpreadTable::copyAsText( const QPoint &_marker )
         if( !cell->isDefault() )
         {
             int l = max - cell->strOutText().length();
-            for ( int i = 0; i < l; ++i )
-              result += " ";
+            if (x > m_rctSelection.left())
+              for ( int i = 0; i < l; ++i )
+                result += " ";
             result += cell->strOutText();
         }
         else
