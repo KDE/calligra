@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <kprinter.h>
+#include <koprinter.h>
 #include <qpainter.h>
 #include <qglobal.h>
 #include "GDocument.h"

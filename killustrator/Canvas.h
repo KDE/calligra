@@ -29,6 +29,7 @@
 #include <qwidget.h>
 #include <qvaluelist.h>
 #include <qscrollview.h>
+#include <koprinter.h>
 
 #include "Coord.h"
 

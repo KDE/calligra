@@ -1,5 +1,5 @@
 
-INCLUDES= -I$(srcdir)/../share -I$(srcdir)/.. -I$(srcdir)/../../lib/kofficeui  $(all_includes)
+INCLUDES= -I$(srcdir)/../share -I$(srcdir)/.. $(KOFFICE_INCLUDES)  $(all_includes)
 
 noinst_LTLIBRARIES = libfilter.la
 

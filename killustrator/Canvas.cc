@@ -32,7 +32,7 @@
 #include <math.h>
 
 #include <qpainter.h>
-#include <kprinter.h>
+#include <koprinter.h>
 #include <qprintdialog.h>
 #include <qcolor.h>
 #include <qdatetime.h>
