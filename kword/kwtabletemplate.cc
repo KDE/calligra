@@ -42,6 +42,8 @@ KWTableTemplateCollection::KWTableTemplateCollection()
 KWTableTemplateCollection::~KWTableTemplateCollection()
 {
     //kdDebug() << "KWTableTemplateCollection::destructor" << endl;
+    m_templateList.setAutoDelete( true );
+    m_templateList.clear();
 
     m_deletedTemplates.clear();
 }
@@ -123,13 +125,13 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
     m_topLeftCorner = 0L;
     m_bottomRightCorner = 0L;
     m_bottomLeftCorner = 0L;
-    
+
     QDomElement element = parentElem.namedItem( "NAME" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("value") ) )
         m_name = element.attribute( "value" );
-    
+
     element = parentElem.namedItem( "BODYCELL" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) 
+    if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
          && ( _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) ) ) )
         m_bodyCell = _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) );
     else {
@@ -153,7 +155,7 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
                 _doc->frameStyleCollection()->addFrameStyleTemplate( standardFrameStyle );
                 ts->setFrameStyle( fs );
             }
-        
+
             if ( s )
                 ts->setStyle( s );
             else {
@@ -166,25 +168,25 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
         }
     }
     element = parentElem.namedItem( "FIRSTROW" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) 
+    if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
          && ( _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) ) ) )
     {
         m_firstRow = _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) );
-    
+
         if ( element.hasAttribute("topleftcorner") )
             m_topLeftCorner = m_firstRow;
         if ( element.hasAttribute("toprightcorner") )
-            m_topRightCorner = m_firstRow;    
+            m_topRightCorner = m_firstRow;
     }
     else
         m_firstRow = m_bodyCell;
-    
+
     element = parentElem.namedItem( "FIRSTCOL" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) 
+    if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
          && ( _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) ) ) )
     {
         m_firstCol = _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) );
-    
+
         if ( element.hasAttribute("topleftcorner") )
             m_topLeftCorner = m_firstCol;
         if ( element.hasAttribute("bottomleftcorner") )
@@ -192,13 +194,13 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
     }
     else
         m_firstCol = m_bodyCell;
-        
+
     element = parentElem.namedItem( "LASTROW" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) 
+    if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
          && ( _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) ) ) )
-    {    
+    {
         m_lastRow = _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) );
-    
+
         if ( ( !element.isNull() ) && ( element.hasAttribute("bottomrightcorner") ) )
             m_bottomRightCorner = m_lastRow;
         if ( ( !element.isNull() ) && ( element.hasAttribute("bottomleftcorner") ) )
@@ -206,13 +208,13 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
     }
     else
         m_lastRow = m_bodyCell;
-    
+
     element = parentElem.namedItem( "LASTCOL" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) 
+    if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
          && ( _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) ) ) )
-    {    
+    {
         m_lastCol = _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) );
-    
+
         if ( element.hasAttribute("toprightcorner") )
             m_topRightCorner = m_lastCol;
         if ( element.hasAttribute("bottomrightcorner") )
@@ -220,7 +222,7 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
     }
     else
         m_lastCol = m_bodyCell;
-        
+
     if (!m_topRightCorner) m_topRightCorner = m_bodyCell;
     if (!m_topLeftCorner) m_topLeftCorner = m_bodyCell;
     if (!m_bottomRightCorner) m_bottomRightCorner = m_bodyCell;
