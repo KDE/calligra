@@ -166,7 +166,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_zoomHandler = new KoZoomHandler;
 
     m_varFormatCollection = new KoVariableFormatCollection;
-    m_varColl=new KPrVariableCollection;
+    m_varColl=new KPrVariableCollection( new KoVariableSettings());
     m_bgSpellCheck = new KPrBgSpellCheck(this);
 
     dcop = 0;

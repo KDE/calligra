@@ -29,11 +29,12 @@ class KPresenterDoc;
 class KoVariable;
 class KoPgNumVariable;
 class KoTextFormat;
+class KoVariableSettings;
 
 class KPrVariableCollection : public KoVariableCollection
 {
  public:
-    KPrVariableCollection();
+    KPrVariableCollection(KoVariableSettings *_setting);
     virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc );
 };
 

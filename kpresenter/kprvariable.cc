@@ -25,8 +25,8 @@
 #include <kdebug.h>
 
 
-KPrVariableCollection::KPrVariableCollection()
-    : KoVariableCollection()
+KPrVariableCollection::KPrVariableCollection(KoVariableSettings *_setting)
+    : KoVariableCollection(_setting)
 {
 }
 
