@@ -947,6 +947,47 @@ else
 				
 return tmp;
 }
+
+int KSpreadTable::ajustColumn()
+{
+int long_max=0;
+
+if ( m_rctSelection.left() != 0 && m_rctSelection.bottom() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      	{
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+		{
+	        /*if(it.current()->isForceExtraCells())
+	  		{*/
+	  		if(it.current()->content()==KSpreadCell::RichText)
+	  			{
+	  			//cout <<"Richtext :"<< it.current()->richTextWidth()<<endl;
+	  			if(it.current()->richTextWidth()>long_max)
+	  				long_max=it.current()->richTextWidth();
+	  			}
+	  		else
+	  			{
+	  			//cout <<"text :"<< it.current()->textWidth()<<endl;
+	  			if(it.current()->textWidth()>long_max)
+	  				long_max=it.current()->textWidth();
+	  			
+	  			}
+	  		//}
+		}
+      	}
+    }
+//add 4 because long_max is the long of the text
+//but column has borders
+if(long_max==0)
+	return -1;
+else
+	return (long_max+5);
+}
+
 void KSpreadTable::setSelectionTextColor( const QPoint &_marker, QColor tb_Color )
 {
 m_pDoc->setModified( true );
@@ -2299,7 +2340,7 @@ void KSpreadTable::copySelection( const QPoint &_marker )
 
   QClipboard *clip = QApplication::clipboard();
   clip->setText( data.c_str() );
-  //cout <<" copy : " <<data.c_str()<<endl;
+  cout <<" copy : " <<data.c_str()<<endl;
 }
 
 void KSpreadTable::cutSelection( const QPoint &_marker )
@@ -2366,6 +2407,12 @@ bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, Specia
   		break;
   	case Link_trans:
   		sp_cell= KSpreadCell::Link_trans;
+  		break;
+  	case Value_trans:
+  		sp_cell=KSpreadCell::Value_trans;
+  		break;
+  	case Value :
+  		sp_cell=KSpreadCell::Value;
   		break;
   	default:
   		sp_cell=KSpreadCell::ALL;

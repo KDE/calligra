@@ -1654,6 +1654,7 @@ else
 	KSpreadresize* dlg = new KSpreadresize( this, "Resize column",KSpreadresize::resize_column,0 );
 	dlg->show();
 	}
+canvasWidget()->hBorderWidget()->ajustColumn();
 }
 
 void KSpreadView::renametable()
@@ -2099,11 +2100,18 @@ void KSpreadView::PopupMenuColumn(const QPoint & _point)
     m_pPopupColumn->insertItem( i18n("Insert Column"), this, SLOT( slotInsertColumn() ) );
     m_pPopupColumn->insertItem( i18n("Remove Column"), this, SLOT( slotRemoveColumn() ) );
     m_pPopupColumn->insertItem( i18n("Resize"), this, SLOT( slotResizeColumn() ) );
-
+    m_pPopupColumn->insertItem( i18n("Ajust"), this, SLOT( slotAjustColumn() ) );
     QObject::connect( m_pPopupColumn, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     m_pPopupColumn->popup( _point );
 }
 
+
+void KSpreadView::slotAjustColumn()
+{
+if ( !m_pTable )
+       return;
+canvasWidget()->hBorderWidget()->ajustColumn();
+}
 void KSpreadView::slotResizeColumn()
 {
 if ( !m_pTable )

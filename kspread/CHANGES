@@ -97,5 +97,8 @@ inside so you can add text in this cell.
          format->table->show
 and it's saving.
 
-
- 
+1999-09-26 -Montel laurent<montell@club-internet.fr>
+-----------------------------------------------------
+-Improved Special paste now you can paste only value.
+-You can ajust column when it's text (for the moment Virtual formual
+and QML don't work)

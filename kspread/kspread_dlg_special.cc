@@ -48,6 +48,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name)
   rb2 = new QRadioButton( i18n("Formula"), grp );
   rb3 = new QRadioButton( i18n("Format"), grp );
   rb4 = new QRadioButton( i18n("All without border"), grp );
+  rb10 = new QRadioButton( i18n("Only value"),grp);
   rb1->setChecked(true);
 
   grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Operation",this);
@@ -109,6 +110,18 @@ if(rb2->isChecked())
 		sp=KSpreadTable::Formula;
 		}
 	}
+if(rb10->isChecked())
+	{
+	if(cb->isChecked())
+		{
+		sp=KSpreadTable::Value_trans;
+		}
+	else
+		{
+		sp=KSpreadTable::Value;
+		}
+	}
+
 if(rb3->isChecked())
 	{
 	if(cb->isChecked())

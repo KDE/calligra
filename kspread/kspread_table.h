@@ -365,7 +365,7 @@ public:
     void deleteSelection( const QPoint &_marker );
     void copySelection( const QPoint &_marker );
     void cutSelection( const QPoint &_marker );
-    enum Special_paste { ALL,Formula,Format,Wborder,Link,ALL_trans,Formula_trans,Format_trans,Wborder_trans,Link_trans};
+    enum Special_paste { ALL,Formula,Format,Wborder,Link,ALL_trans,Formula_trans,Format_trans,Wborder_trans,Link_trans,Value,Value_trans};
     enum Operation {Any,Add,Mul,Sub,Div};
     enum Mode_sort{ Increase,Decrease};
     enum Type_font {bold,italic};
@@ -383,6 +383,9 @@ public:
     void setSort(bool sort) { _sort=sort;}
     bool isHide(){return table_hide;}
     void setHide(bool _table_hide){table_hide=_table_hide;}
+
+    int ajustColumn();
+
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */

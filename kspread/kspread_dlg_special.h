@@ -58,6 +58,7 @@ protected:
   QRadioButton *rb7;
   QRadioButton *rb8;
   QRadioButton *rb9;
+  QRadioButton *rb10;
   QCheckBox *cb;
 };
 

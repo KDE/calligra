@@ -2303,6 +2303,20 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset,QString name 
   	else
   		out << indent << "<FORMULA formula=\"" << m_strText.utf8() <<"\"/>"<<endl;
   	}
+
+  if(isBool())
+  	{
+  	out << indent << "<ONLYVALUE val=\"" << valueString().utf8() <<"\"/>"<<endl;
+  	}
+  else if(isFormular()&&isValue())
+  	{
+  	out << indent << "<ONLYVALUE val=\"" << valueDouble() <<"\"/>"<<endl;
+  	}
+  else if(isFormular())
+  	{
+  	out << indent << "<ONLYVALUE val=\"" << valueString().utf8() <<"\"/>"<<endl;
+  	}
+  	
   if ( !m_strText.isEmpty() )
   {
     if ( isFormular() )
@@ -2378,6 +2392,8 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   QString name_table;
   QString text_old_cell;
   QString formula;
+  QString onlyvalue;
+
   KSpreadCell * cell1 =  m_pTable->cellAt(m_iColumn,m_iRow );
   text_old_cell=cell1->text();
   // FORMAT, LEFTBORDER, TOPBORDER, FONT, PEN
@@ -2673,6 +2689,21 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   		}
 	//cout <<"Formule reelle : "<<formula.ascii()<<endl;
 	}
+	else if (name == "ONLYVALUE"&&(sp==Value||sp==Value_trans))
+	{
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
+	  {
+	    if ( (*it).m_strName == "val" )
+	    {
+	    onlyvalue=(*it).m_strValue.c_str();
+	    }
+	    else
+	    {
+	    cout <<"Err in ONLYVALUE\n";
+	    }
+	  }
+	}
 	else
 	  cerr << "Unknown tag '" << tag << "' in CELL" << endl;
 	
@@ -2707,6 +2738,17 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   setText( t );
 
   }
+  if(sp==Value||sp==Value_trans)
+  	{
+  	if(!onlyvalue.isEmpty())
+  		{
+  		setText(onlyvalue);
+  		}
+  	else
+  		{
+  		setText(t);
+  		}
+  	}
   return true;
 }
 

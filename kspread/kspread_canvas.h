@@ -189,6 +189,8 @@ public:
     void gotoLocation( const KSpreadPoint& _cell );
     enum type_editor{type_cell,type_formula};
     void create_editor(type_editor=type_cell);
+
+
 public slots:  
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
@@ -340,6 +342,7 @@ public:
     KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view  );
     int markerColumn(){return  m_iSelectionAnchor;}
     void resizeColumn(int resize,int nb=-1);
+    void ajustColumn();
 protected:
     virtual void paintEvent ( QPaintEvent* _ev ); 
     virtual void mousePressEvent( QMouseEvent* _ev );

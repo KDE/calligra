@@ -99,7 +99,7 @@ class KSpreadCell : public KSpreadLayout
 public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
-    enum Special_paste { ALL,FORMULA,Format,Wborder,Link,ALL_trans,FORMULA_trans,Format_trans,Wborder_trans,Link_trans};
+    enum Special_paste { ALL,FORMULA,Format,Wborder,Link,ALL_trans,FORMULA_trans,Format_trans,Wborder_trans,Link_trans,Value,Value_trans};
     enum Operation {Any,Add,Mul,Sub,Div};
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
@@ -451,6 +451,16 @@ public:
      * @return the amount of obscured cells in the vertical direction
      */
     int extraYCells() { return m_iExtraYCells; }
+
+    /* return size of the text*/
+    int textWidth() {return m_iOutTextWidth; }
+    int textHeight() {return m_iOutTextHeight; }
+    int richTextWidth() {return m_iExtraWidth; }
+    int richTextHeight() {return m_iExtraHeight;}
+
+
+
+
 
     bool isFormular() { return m_content == Formula; }
 

@@ -1974,6 +1974,23 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
 }
 
+void KSpreadHBorder::ajustColumn()
+{
+int ajust=m_pCanvas->activeTable()->ajustColumn();
+if(ajust!=-1)
+	{
+	KSpreadTable *table = m_pCanvas->activeTable();
+	assert( table );
+	ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
+	//number of column
+	int x = table->columnPos( m_iSelectionAnchor, m_pCanvas );
+	if ( ( m_pCanvas->zoom() * (float)(ajust) ) < 20.0 )
+		cl->setWidth( 20, m_pCanvas );	
+	else
+		cl->setWidth( ajust, m_pCanvas );
+	}
+}
+
 void KSpreadHBorder::resizeColumn(int resize,int nb )
 {
 KSpreadTable *table = m_pCanvas->activeTable();
@@ -2016,8 +2033,6 @@ else
 		}
 	}
 	
-
-
 }
 
 void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
