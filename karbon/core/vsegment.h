@@ -79,6 +79,11 @@ public:
 	void setKnot( const KoPoint& p )
 		{ m_point[2] = p; }
 
+	/**
+	 * Returns a reverted version of this segment.
+	 */
+	VSegment* revert() const;
+
 	void transform( const QWMatrix& m );
 
 	/**

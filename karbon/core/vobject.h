@@ -92,7 +92,7 @@ public:
 	}
 
 	void setParent( VObject* parent ) { m_parent = parent; }
-	VObject* parent() { return m_parent; }
+	VObject* parent() const { return m_parent; }
 
 	/**
 	 * Get the state the shape is in.

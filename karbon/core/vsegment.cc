@@ -483,6 +483,32 @@ VSegment::linesIntersect(
 	return true;
 }
 
+VSegment*
+VSegment::revert() const
+{
+	if( !m_prev )
+		return 0L;
+
+	VSegment* segment = new VSegment();
+
+	segment->m_type = m_type;
+
+	// Swap points:
+	segment->m_point[0] = m_point[1];
+	segment->m_point[1] = m_point[0];
+	segment->m_point[2] = m_prev->m_point[2];
+
+	// Swap control point fixing:
+	if( m_ctrlPointFixing == first )
+		segment->m_ctrlPointFixing = second;
+	else if( m_ctrlPointFixing == second )
+		segment->m_ctrlPointFixing = first;
+
+	segment->m_smooth = m_prev->m_smooth;
+
+	return segment;
+}
+
 void
 VSegment::transform( const QWMatrix& m )
 {

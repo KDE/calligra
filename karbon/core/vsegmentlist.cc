@@ -415,6 +415,25 @@ VSegmentList::counterClockwise() const
 		( current->knot().x() - current->prev()->knot().x() ) < 0.0;
 }
 
+void
+VSegmentList::revert()
+{
+	VSegmentList list( parent() );
+
+	list.moveTo( m_last->knot() );
+
+	VSegment* segment = m_last;
+	while( segment->m_prev )
+	{
+		list.append( segment->revert() );
+		segment = segment->m_prev;
+	}
+
+	list.m_isClosed = m_isClosed;
+
+	*this = list;
+}
+
 const KoRect&
 VSegmentList::boundingBox() const
 {
@@ -507,7 +526,7 @@ VSegmentList::accept( VVisitor& visitor )
 VSegmentList&
 VSegmentList::operator=( const VSegmentList& list )
 {
-	if( &list == this )
+	if( this == &list )
 		return *this;
 
 	m_isClosed = list.m_isClosed;

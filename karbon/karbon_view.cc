@@ -391,13 +391,14 @@ kdDebug() << "***" << s.counterClockwise() << endl;
 
 	VSegmentList t( 0L );
 	t.moveTo( KoPoint(100,100) );
-	t.lineTo( KoPoint(400,100) );
-	t.lineTo( KoPoint(400,300) );
 	t.lineTo( KoPoint(100,300) );
+	t.lineTo( KoPoint(400,300) );
+	t.lineTo( KoPoint(400,100) );
 	t.close();
 
-kdDebug() << "***" << t.counterClockwise() << endl;
+	t.revert();
 
+kdDebug() << "***" << t.counterClockwise() << endl;
 
 //	m_part->document().append( p );
 

@@ -47,9 +47,15 @@ public:
 	void close();
 
 	/**
-	 *  Return false if segmentlist is oriented clockwise.
+	 * Returns false if segmentlist is oriented clockwise.
 	 */
 	bool counterClockwise() const;
+
+	/**
+	 * Reverts the winding orientation.
+	 */
+	void revert();
+
 
 	virtual void draw( VPainter*, const KoRect& ) {}
 
