@@ -903,13 +903,15 @@ void KWView::setupActions()
     KAction* actComplete = new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),this, SLOT( slotCompletion() ), actionCollection(), "completition" );
 
     // Necessary for the actions that are not plugged anywhere
-    // ----- is it still necessary? The current kaction/kaccel stuff is supposed to do this automatically.
+    // Deprecated with KDE-3.1.
+    // Note entirely sure it's necessary for 3.0, please test and report.
+#if KDE_VERSION < 305
     KAccel * accel = new KAccel( this );
     actNbsp->plugAccel( accel );
-    // HUH? accel = new KAccel( this ); // needed ?
     actSoftHyphen->plugAccel( accel );
     actLineBreak->plugAccel( accel );
     actComplete->plugAccel( accel );
+#endif
 
     actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
                                         this, SLOT( editCustomVars() ),
