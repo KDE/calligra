@@ -5240,7 +5240,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     KSpreadSheet *table = m_canvas->activeTable();
     if ( !table )
         return;
-
+        
     // Over which cell is the mouse ?
     double ypos, xpos;
     double dwidth = m_canvas->doc()->unzoomItX( m_canvas->width() );
@@ -5259,29 +5259,47 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     KSpreadCell* cell = table->visibleCellAt( col, row );
     if ( !cell )
         return;
-
-    // Get the comment
-    QString comment = cell->comment( col, row );
-
-    //If the cell is too short, get the content
-    QString content;
-    if ( cell->testFlag( KSpreadCell::Flag_CellTooShortX ) ||
-        cell->testFlag( KSpreadCell::Flag_CellTooShortY ) )
-        content = cell->strOutText();
-
-    if ( content.isEmpty() && comment.isEmpty() )
+        
+    // Quick cut  
+    if( cell->strOutText().isEmpty() )
         return;
 
-    //Append the content text
-    if ( !content.isEmpty() )
+    // displayed tool tip, which has the following priorities:
+    //  - cell content if the cell dimension is too small    
+    //  - cell comment
+    //  - hyperlink
+    QString tipText;   
+    
+    // If cell is too small, show the content
+    if ( cell->testFlag( KSpreadCell::Flag_CellTooShortX ) ||
+         cell->testFlag( KSpreadCell::Flag_CellTooShortY ) )
     {
+        tipText = cell->strOutText();
+        
         //Add 2 extra lines and a text, when both should be in the tooltip
+        QString comment = cell->comment( col, row );
         if ( !comment.isEmpty() )
             comment = "\n\n" + i18n("Comment:") + "\n" + comment;
+            
+        tipText += comment;    
+    }    
 
-        comment = content + comment;
+    // Show comment, if any
+    if( tipText.isEmpty() )
+    {
+        tipText = cell->comment( col, row );
     }
-
+    
+    // Show hyperlink, if any
+    if( tipText.isEmpty() )
+    {
+        tipText = cell->link();
+    }
+    
+    // Nothing to display, bail out
+    if( tipText.isEmpty() )
+      return;
+            
     // Determine position and width of the current cell.
     cell = table->cellAt( col, row );
     double u = cell->dblWidth( col );
@@ -5312,7 +5330,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
       QRect marker( m_canvas->doc()->zoomRect( unzoomedMarker ) );
       if ( marker.contains( p ) )
       {
-          tip( marker, comment );
+          tip( marker, tipText );
       }
     }
     else
@@ -5325,7 +5343,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
       QRect marker( m_canvas->doc()->zoomRect( unzoomedMarker ) );
       if ( marker.contains( p ) )
       {
-          tip( marker, comment );
+          tip( marker, tipText );
       }
     }
 }
