@@ -78,7 +78,7 @@ static FrameAnchor *findAnchor ( QString              &name,
 static void ProcessParagraphTag ( QDomNode         myNode,
                                   void            *tagData,
                                   QString         &outputText,
-                                  KWEFKWordLeader *exportFilter )
+                                  KWEFKWordLeader *leader )
 {
 #if 0
     kdError (30508) << "ProcessParagraphTag () - Begin" << endl;
@@ -94,7 +94,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     tagProcessingList << TagProcessing ( "TEXT",    ProcessTextTag,    (void *) &paraData.text           )
                       << TagProcessing ( "FORMATS", ProcessFormatsTag, (void *) &paraData.formattingList )
                       << TagProcessing ( "LAYOUT",  ProcessLayoutTag,  (void *) &paraData.layout         );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 
     CreateMissingFormatData (paraData.text, paraData.formattingList);
 
@@ -123,7 +123,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
 static void ProcessImageKeyTag ( QDomNode         myNode,
                                  void            *tagData,
                                  QString         &,
-                                 KWEFKWordLeader *exportFilter )
+                                 KWEFKWordLeader *leader )
 {
     QString *key = (QString *) tagData;   // the name where the picture came from used as the identifier
 
@@ -145,7 +145,7 @@ static void ProcessImageKeyTag ( QDomNode         myNode,
 static void ProcessImageTag ( QDomNode         myNode,
                               void            *tagData,
                               QString         &outputText,
-                              KWEFKWordLeader *exportFilter )
+                              KWEFKWordLeader *leader )
 {
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL );
@@ -153,14 +153,14 @@ static void ProcessImageTag ( QDomNode         myNode,
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "KEY", ProcessImageKeyTag, tagData );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 }
 
 
 static void ProcessFramesetTag ( QDomNode        myNode,
                                 void            *tagData,
                                 QString         &outputText,
-                                KWEFKWordLeader *exportFilter )
+                                KWEFKWordLeader *leader )
 {
 #if 0
     kdError (30508) << "ProcessFramesetTag () - Begin" << endl;
@@ -198,7 +198,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 QValueList<TagProcessing> tagProcessingList;
                 tagProcessingList << TagProcessing ( "FRAME",     NULL,                NULL              )
                                   << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) paraList );
-                ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+                ProcessSubtags (myNode, tagProcessingList, outputText, leader);
             }
             else
             {
@@ -222,7 +222,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                             QValueList<TagProcessing> tagProcessingList;
                             tagProcessingList << TagProcessing ( "FRAME",     NULL,                NULL                   )
                                               << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &cellParaList );
-                            ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+                            ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 
                             frameAnchor->table.addCell (col, row, cellParaList);
                         }
@@ -262,7 +262,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 QValueList<TagProcessing> tagProcessingList;
                 tagProcessingList << TagProcessing ( "FRAME", NULL,            NULL                                  )
                                   << TagProcessing ( "IMAGE", ProcessImageTag, (void *) &frameAnchor->picture.key );
-                ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+                ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 
 #if 0
                 kdError (30508) << "DEBUG: FRAMESET IMAGE KEY filename of picture is " << frameAnchor->picture.key << endl;
@@ -291,43 +291,43 @@ static void ProcessFramesetTag ( QDomNode        myNode,
 static void ProcessFramesetsTag ( QDomNode        myNode,
                                   void            *tagData,
                                   QString         &outputText,
-                                  KWEFKWordLeader *exportFilter )
+                                  KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "FRAMESET", ProcessFramesetTag, tagData );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 }
 
 
-static void ProcessStyleTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader *exportFilter )
+static void ProcessStyleTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
 
     LayoutData layout;
 
-    ProcessLayoutTag (myNode, &layout, outputText, exportFilter);
+    ProcessLayoutTag (myNode, &layout, outputText, leader);
 
-    exportFilter->doFullDefineStyle (layout);
+    leader->doFullDefineStyle (layout);
 }
 
 
-static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader *exportFilter )
+static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
 
-    exportFilter->doOpenStyles ();
+    leader->doOpenStyles ();
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "STYLE", ProcessStyleTag, NULL );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
     
-    exportFilter->doCloseStyles ();
+    leader->doCloseStyles ();
 }
 
 
-static void ProcessPaperTag (QDomNode myNode, void *, QString &, KWEFKWordLeader *exportFilter)
+static void ProcessPaperTag (QDomNode myNode, void *, QString &, KWEFKWordLeader *leader)
 {
 
     int format      = -1;
@@ -350,14 +350,14 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString &, KWEFKWordLeader
 
     AllowNoSubtags (myNode);
 
-    exportFilter->doFullPaperFormat (format, width, height, orientation);
+    leader->doFullPaperFormat (format, width, height, orientation);
 }
 
 
 static void ProcessPixmapsKeyTag ( QDomNode         myNode,
                                    void            *tagData,
                                    QString         &,
-                                   KWEFKWordLeader *exportFilter )
+                                   KWEFKWordLeader *leader )
 {
     QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
 
@@ -400,13 +400,13 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
 static void ProcessPixmapsTag ( QDomNode         myNode,
                                 void            *tagData,
                                 QString         &outputText,
-                                KWEFKWordLeader *exportFilter )
+                                KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "KEY", ProcessPixmapsKeyTag, tagData );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 }
 
 
@@ -449,7 +449,7 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
 static void ProcessDocTag ( QDomNode         myNode,
                             void             *tagData,
                             QString          &outputText,
-                            KWEFKWordLeader  *exportFilter )
+                            KWEFKWordLeader  *leader )
 {
 #if 0
     kdError (30508) << "ProcessDocTag () - Begin" << endl;
@@ -476,9 +476,9 @@ static void ProcessDocTag ( QDomNode         myNode,
                       << TagProcessing ( "CLIPARTS",    NULL,                   NULL               )
                       << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      (void *) &paraList )
                       << TagProcessing ( "FRAMESETS",   ProcessFramesetsTag,    (void *) &paraList );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 
-    exportFilter->doFullDocument (paraList, filterData->storeFileName, filterData->exportFileName);
+    leader->doFullDocument (paraList, filterData->storeFileName, filterData->exportFileName);
 
     FreeCellParaLists (paraList);
 
@@ -579,7 +579,7 @@ bool KWEFKWordLeader::doFullDefineStyle ( LayoutData &layout )
 static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
                                void            (*processor) (QDomNode, void *, QString &, KWEFKWordLeader *),
                                FilterData       &filterData,
-                               KWEFKWordLeader  *exportFilter )
+                               KWEFKWordLeader  *leader )
 {
     QString stringBufIn = QString::fromUtf8 ( (const char *) byteArrayIn, byteArrayIn.size () );
 
@@ -600,7 +600,7 @@ static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
     QDomNode docNode = qDomDocumentIn.documentElement ();
 
     QString stringBufOut; // Dummy!  TODO: should be removed
-    processor (docNode, &filterData, stringBufOut, exportFilter);
+    processor (docNode, &filterData, stringBufOut, leader);
 
     return true;
 }

@@ -70,7 +70,7 @@ class TagProcessing
 void ProcessSubtags     ( QDomNode                   parentNode,
                           QValueList<TagProcessing>  &tagProcessingList,
                           QString                    &outputText,
-                          KWEFKWordLeader      *exportFilter);
+                          KWEFKWordLeader            *leader);
 
 void AllowNoSubtags ( QDomNode  myNode );
 

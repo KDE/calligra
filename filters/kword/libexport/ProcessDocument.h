@@ -27,10 +27,10 @@
 
 class KWEFKWordLeader;
 
-void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader* exportFilter );
-void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader* exportFilter );
-void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader*);
-void ProcessDocumentInfoTag ( QDomNode myNode,  void *tagData, QString &, KWEFKWordLeader *exportFilter );
+void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader* leader );
+void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader* leader );
+void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader* leader);
+void ProcessDocumentInfoTag ( QDomNode myNode,  void *tagData, QString &, KWEFKWordLeader *leader );
 
 #endif /* PROCESS_DOCUMENT_H */
 

@@ -53,7 +53,7 @@
 static void ProcessAboutTag ( QDomNode         myNode,
                               void            *tagData,
                               QString         &outputText,
-                              KWEFKWordLeader *exportFilter )
+                              KWEFKWordLeader *leader )
 {
     KWEFDocumentInfo *docInfo = (KWEFDocumentInfo *) tagData;
 
@@ -62,14 +62,14 @@ static void ProcessAboutTag ( QDomNode         myNode,
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "title",    ProcessTextTag, (void *) &(*docInfo).title    ) );
     tagProcessingList.append ( TagProcessing ( "abstract", ProcessTextTag, (void *) &(*docInfo).abstract ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 }
 
 
 static void ProcessAuthorTag ( QDomNode         myNode,
                                void            *tagData,
                                QString         &outputText,
-                               KWEFKWordLeader *exportFilter )
+                               KWEFKWordLeader *leader )
 {
     KWEFDocumentInfo *docInfo = (KWEFDocumentInfo *) tagData;
 
@@ -86,14 +86,14 @@ static void ProcessAuthorTag ( QDomNode         myNode,
     tagProcessingList.append ( TagProcessing ( "postal-code", ProcessTextTag, (void *) &(*docInfo).postalCode ) );
     tagProcessingList.append ( TagProcessing ( "city",        ProcessTextTag, (void *) &(*docInfo).city       ) );
     tagProcessingList.append ( TagProcessing ( "street",      ProcessTextTag, (void *) &(*docInfo).street     ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 }
 
 
 void ProcessDocumentInfoTag ( QDomNode         myNode,
                               void            *,
                               QString         &outputText,
-                              KWEFKWordLeader *exportFilter )
+                              KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
 
@@ -103,9 +103,9 @@ void ProcessDocumentInfoTag ( QDomNode         myNode,
     tagProcessingList.append ( TagProcessing ( "log",    NULL,             NULL              ) );
     tagProcessingList.append ( TagProcessing ( "author", ProcessAuthorTag, (void *) &docInfo ) );
     tagProcessingList.append ( TagProcessing ( "about",  ProcessAboutTag,  (void *) &docInfo ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 
-    exportFilter->doFullDocumentInfo (docInfo);
+    leader->doFullDocumentInfo (docInfo);
 }
 
 
@@ -284,7 +284,7 @@ static void ProcessLinkTag (QDomNode myNode, void *tagData, QString &, KWEFKWord
 }
 
 
-static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader *exportFilter)
+static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader *leader)
 {
     ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
@@ -326,7 +326,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &outputTex
                                   << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     (void *) &verticalAlignment )
                                   << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    (void *) &bgColor           )
                                   << TagProcessing ( "LINK",                ProcessLinkTag,         (void *) &linkData          );
-                ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+                ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 
                 (*formatDataList) << FormatData ( formatPos, formatLen,
                                                   TextFormatting ( fontName, italic, underline, strikeout,
@@ -353,7 +353,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &outputTex
                //       FONT is just the first that we've come across so far
                tagProcessingList << TagProcessing ( "FONT",   NULL,             NULL               )
                                  << TagProcessing ( "ANCHOR", ProcessAnchorTag, (void *) &instance );
-               ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+               ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 
 #if 0
                kdError (30508) << "DEBUG: Adding frame anchor " << instance << endl;
@@ -379,7 +379,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &outputTex
 }
 
 
-void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader *exportFilter )
+void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader *leader )
 {
     ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
@@ -388,7 +388,7 @@ void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KW
     (*formatDataList).clear ();
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "FORMAT", ProcessFormatTag, (void *) formatDataList );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 }
 
 
@@ -500,7 +500,7 @@ static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString &, 
 }
 
 
-void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader *exportFilter )
+void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader *leader )
 // Processes <LAYOUT> and <STYLE>
 {
     LayoutData *layout = (LayoutData *) tagData;
@@ -525,7 +525,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWE
     tagProcessingList << TagProcessing ( "RIGHTBORDER",  NULL,                        NULL                         );
     tagProcessingList << TagProcessing ( "TOPBORDER",    NULL,                        NULL                         );
     tagProcessingList << TagProcessing ( "BOTTOMBORDER", NULL,                        NULL                         );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
 
 
     if ( formatDataList.count () )
