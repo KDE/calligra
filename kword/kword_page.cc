@@ -60,8 +60,11 @@
 #include <math.h>
 
 /******************************************************************/
-/* Class: KWPage                                                  */
-/******************************************************************/
+/* Class: KWPage
+ * This class is responsible for the rendering of the frames to
+ * the screen as well as the interaction with the user via mouse
+ * and keyboard.
+ ******************************************************************/
 
 /*================================================================*/
 KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
@@ -462,7 +465,6 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
 /*================================================================*/
 void KWPage::vmmCreate( int mx, int my )
 {
-kdDebug() << "KWPage::vmmCreate" << endl;
     mx -= contentsX();
     my -= contentsY();
 
@@ -495,7 +497,6 @@ kdDebug() << "KWPage::vmmCreate" << endl;
     insRect.setWidth( insRect.width() + mx - oldMx );
     insRect.setHeight( insRect.height() + my - oldMy );
 
-    // The person who coded the next if statement should burn for live!! (its 13 lines for *&$ sake!)
     if ( insRect.normalize().x() + static_cast<int>( contentsX() ) < 0 || insRect.normalize().y()
          + static_cast<int>( contentsY() ) <
          getPageOfRect( QRect( insRect.normalize().x() + static_cast<int>( contentsX() ), insRect.normalize().y()
@@ -576,7 +577,6 @@ void KWPage::viewportMouseMoveEvent( QMouseEvent *e )
 /*================================================================*/
 bool KWPage::vmpEdit( int mx, int my )
 {
-kdDebug() << "KWPage::vmpEdit" << endl;
     showCursor(false);
 
     int frameset = doc->getFrameSet( mx, my );
@@ -938,7 +938,6 @@ void KWPage::vmrEditFrame( int /*mx*/, int /*my*/ )
 /*================================================================*/
 void KWPage::vmrCreateText()
 {
-kdDebug() << "KWPage::vmrCreateText\n";
     repaintScreen( FALSE );
     KWFrame *frame = new KWFrame(0L, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
 
@@ -1059,6 +1058,7 @@ void KWPage::vmrCreateTable()
             grpMgr->recalcRows();
         }
         recalcWholeText( TRUE );
+        doc->updateAllFrames();
     }
     mmEdit();
     useAnchor = false;
@@ -3657,14 +3657,13 @@ void KWPage::newFirstIndent( double _first )
 /*================================================================*/
 void KWPage::frameDiaClosed()
 {
-kdDebug() << "KWPage::frameDiaClosed" << endl;
     hiliteFrameSet = -1;
     recalcAll = TRUE;
     recalcText();
     recalcCursor();
     recalcAll = FALSE;
     repaintScreen (true);
-kdDebug() << "KWPage::frameDiaClosed end" << endl;
+    doc->updateAllFrames();
 }
 
 /*================================================================*/

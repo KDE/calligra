@@ -236,7 +236,7 @@ public:
     void save( QTextStream&out );
 
     // Move by will move the anchor according to the positioning variables (check below)
-    void moveBy( int dx, int dy );
+    virtual void moveBy( int dx, int dy );
 
     // Override these functions to return the text required to identify
     // the type and instance of the anchored object.

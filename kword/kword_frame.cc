@@ -2334,9 +2334,9 @@ void KWGroupManager::recalcCols()
                 }
                 if(cell) {
                     // rescale this cell with the calculated difference
-                    int newWidth=cell->frameSet->getFrame(0)->width() + difference;
+                    unsigned int newWidth=cell->frameSet->getFrame(0)->width() + difference;
                     if(newWidth<minFrameWidth) {
-                        if(minFrameWidth-newWidth > postAdjust)
+                        if(static_cast<int>(minFrameWidth-newWidth) > postAdjust)
                             postAdjust = minFrameWidth-newWidth;
                     }
                     cell->frameSet->getFrame(0)->setWidth(newWidth);
@@ -2381,10 +2381,10 @@ void KWGroupManager::recalcCols()
                 for ( unsigned int i = 0; i < rows; i++) {
                     Cell *cell = getCell(i,col);
                     if(cell != activeCell && cell->row == i) {
-                        int newWidth= cell->frameSet->getFrame(0)->width() +
+                        unsigned int newWidth= cell->frameSet->getFrame(0)->width() +
                             activeCell->frameSet->getFrame(0)->right() - coordinate;
                         if(newWidth<minFrameWidth) {
-                            if(minFrameWidth-newWidth > postAdjust)
+                            if(static_cast<int> (minFrameWidth-newWidth) > postAdjust)
                                 postAdjust = minFrameWidth-newWidth;
                         }
                         cell->frameSet->getFrame(0)->setWidth(newWidth);
@@ -2464,9 +2464,9 @@ void KWGroupManager::recalcRows()
                         cell=0;
                 }
                 if(cell) {
-                    int newHeight= cell->frameSet->getFrame(0)->height() + difference;
+                    unsigned int newHeight= cell->frameSet->getFrame(0)->height() + difference;
                     if(newHeight<minFrameHeight) {
-                        if(minFrameHeight-newHeight > postAdjust)
+                        if(static_cast<int> (minFrameHeight-newHeight) > postAdjust)
                             postAdjust = minFrameHeight-newHeight;
                     }
                     cell->frameSet->getFrame(0)->setHeight(newHeight);
@@ -2502,10 +2502,10 @@ void KWGroupManager::recalcRows()
                 for ( unsigned int i = 0; i < cols; i++) {
                     cell = getCell(row,i);
                     if(cell != activeCell && cell->col == i) {
-                        int newHeight= cell->frameSet->getFrame(0)->height() +
+                        unsigned int newHeight= cell->frameSet->getFrame(0)->height() +
                             activeCell->frameSet->getFrame(0)->bottom() - coordinate;
                         if(newHeight<minFrameHeight) {
-                            if(minFrameHeight-newHeight > postAdjust)
+                            if(static_cast<int> (minFrameHeight-newHeight) > postAdjust)
                                 postAdjust = minFrameHeight-newHeight;
                         }
                         cell->frameSet->getFrame(0)->setHeight(newHeight);
@@ -2615,8 +2615,13 @@ void KWGroupManager::moveBy( int dx, int dy )
 {
     dx = 0; // Ignore the x-offset.
     if(dy==0) return;
+    int tmp = getCell(0,0)->frameSet->getFrame(0)->top();
     for ( unsigned int i = 0; i < cells.count(); i++ )
         cells.at( i )->frameSet->getFrame( 0 )->moveBy( dx, dy );
+
+    doc->updateAllFrames();
+    recalcRows();
+    recalcCols();
 }
 
 /*================================================================*/

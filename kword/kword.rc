@@ -61,7 +61,6 @@
   <Separator/>
   <Action name="tools_createtext"/>
   <Action name="tools_createpix"/>
-  <Action name="tools_createclip"/>
   <Action name="tools_table"/>
   <Action name="tools_kspreadtable"/>
   <Action name="tools_formula"/>
@@ -120,7 +119,6 @@
   <Separator/>
   <Action name="tools_createtext"/>
   <Action name="tools_createpix"/>
-  <Action name="tools_createclip"/>
   <Action name="tools_table"/>
   <Action name="tools_kspreadtable"/>
   <Action name="tools_formula"/>

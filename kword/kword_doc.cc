@@ -3676,7 +3676,7 @@ void KWordDocument::updateAllFrames()
     KWFrame *frame1, *frame2;
     KWFrame *framePtr = 0L;
 
-    for ( i = 0; i < frames.count(); i++ ) {
+    for ( i = 0; i < frames.count(); i++ ) {// loop over all known frameSets
         frameset = frames.at( i );
         if ( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) || !frameset->isVisible() )
             continue;
