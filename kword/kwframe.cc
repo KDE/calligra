@@ -994,7 +994,7 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
         QRegion reg = frameClipRegion( painter, frame, crect );
         if ( !reg.isEmpty() )
         {
-            kdDebug() << "KWPartFrameSet::drawContents clipregion=" << DEBUGRECT(reg.boundingRect()) << endl;
+            //kdDebug() << "KWPartFrameSet::drawContents clipregion=" << DEBUGRECT(reg.boundingRect()) << endl;
             painter->save();
             QRect r = painter->viewport();
             painter->setClipRegion( reg );
@@ -1003,7 +1003,8 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
             // painter->translate( frame->x(), frame->y() ); // messes up the clip regions
             QRect rframe( 0, 0, kWordDocument()->zoomItX( frames.first()->width() ),
                           kWordDocument()->zoomItY( frames.first()->height() ) ); // Not sure if applying the zoom here works
-            child->document()->paintEverything( *painter, rframe, true, 0 );
+            child->document()->paintEverything( *painter, rframe, true, 0L,
+                                                kWordDocument()->zoomedResolutionX(), kWordDocument()->zoomedResolutionY() );
             painter->setViewport( r );
             painter->restore();
         } else kdDebug() << "KWPartFrameSet::drawContents " << this << " no intersection" << endl;
@@ -1016,12 +1017,15 @@ void KWPartFrameSet::updateFrames()
     if(frames.isEmpty() ) // Deleted frameset -> don't refresh
         return;
 
-    m_lock = true; // setGeometry emits changed() !
-    QRect frect = *frames.first();
-    kdDebug() << "KWPartFrameSet::updateFrames frames.first()=" << DEBUGRECT(frect)
-              << " child set to " << DEBUGRECT( kWordDocument()->zoomRect( frect ) ) << endl;
-    child->setGeometry( kWordDocument()->zoomRect( frect ) );
-    m_lock = false;
+    if ( !m_lock )
+    {
+        m_lock = true; // setGeometry emits changed() !
+        QRect frect = *frames.first();
+        kdDebug() << "KWPartFrameSet::updateFrames frames.first()=" << DEBUGRECT(frect)
+                  << " child set to " << DEBUGRECT( kWordDocument()->zoomRect( frect ) ) << endl;
+        child->setGeometry( kWordDocument()->zoomRect( frect ) );
+        m_lock = false;
+    }
     KWFrameSet::updateFrames();
 }
 
@@ -1047,9 +1051,13 @@ void KWPartFrameSet::slotChildChanged()
     {
         QRect r = getChild()->geometry();
         // Make "frame" follow the child's geometry (but frame is unzoomed)
+        //kdDebug() << "KWPartFrameSet::slotChildChanged child's geometry " << DEBUGRECT( r ) << endl;
         frame->setCoords( r.left() / kWordDocument()->zoomedResolutionX(), r.top() / kWordDocument()->zoomedResolutionY(),
                           r.right() / kWordDocument()->zoomedResolutionX(), r.bottom() / kWordDocument()->zoomedResolutionY() );
-        kWordDocument()->frameChanged( frame );
+        //kdDebug() << "KWPartFrameSet::slotChildChanged frame set to " << DEBUGRECT( *frame ) << endl;
+        m_lock = true;
+        kWordDocument()->frameChanged( frame ); // this triggers updateFrames
+        m_lock = false;
     }
 }
 
