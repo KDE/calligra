@@ -557,7 +557,7 @@ private:
     double m_gridY;
     double oldGridX;
     double oldGridY;
-
+    int m_insertFilePage;
     KPresenterView *m_kpresenterView;
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;

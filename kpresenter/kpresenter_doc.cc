@@ -142,7 +142,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     bgObjSpellChecked = 0L;
     m_tabStop = MM_TO_POINT( 15.0 );
     m_styleColl=new KoStyleCollection();
-
+    m_insertFilePage = 0;
     KoStyle* m_standardStyle = new KoStyle( "Standard" );
     m_styleColl->addStyleTemplate( m_standardStyle );
 
@@ -1251,7 +1251,7 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
 {
     kdDebug(33001) << "KPresenterDoc::loadBackground" << endl;
     QDomElement page=element.firstChild().toElement();
-    int i=0;
+    int i=0+m_insertFilePage;
     while(!page.isNull()) {
         if(m_pageWhereLoadObject)
             m_pageWhereLoadObject->background()->load(page);
@@ -1676,7 +1676,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
 void KPresenterDoc::loadTitle( const QDomElement &element )
 {
     QDomElement title=element.firstChild().toElement();
-    int i=0;
+    int i=0+m_insertFilePage;
     while ( !title.isNull() ) {
         if ( title.tagName()=="Title" )
         {
@@ -1700,7 +1700,7 @@ void KPresenterDoc::loadTitle( const QDomElement &element )
 void KPresenterDoc::loadNote( const QDomElement &element )
 {
     QDomElement note=element.firstChild().toElement();
-    int i=0;
+    int i=0+m_insertFilePage;
     while ( !note.isNull() ) {
         if ( note.tagName()=="Note" )
         {
@@ -1803,7 +1803,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 
 void KPresenterDoc::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list )
 {
-    int i = 0;
+    int i = 0+m_insertFilePage;
     QStringList::Iterator it = _list.begin();
     for ( ; it != _list.end(); ++it ) {
         QString soundFile = *it;
@@ -2644,8 +2644,8 @@ void KPresenterDoc::recalcPageNum()
 
 void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
 {
-    int page = (int)(offset/__pgLayout.ptHeight);
-    int newPos=(int)(offset-page*__pgLayout.ptHeight);
+    int page = (int)(offset/__pgLayout.ptHeight)+m_insertFilePage;
+    int newPos=(int)((offset+m_insertFilePage*__pgLayout.ptHeight)-page*__pgLayout.ptHeight);
     if ( page > ( (int)m_pageList.count()-1 ) )
     {
         for (int i=(m_pageList.count()-1); i<page;i++)
@@ -3158,13 +3158,38 @@ void KPresenterDoc::setCursorInProtectedArea( bool b )
 
 void KPresenterDoc::insertFile(const QString & file )
 {
+    m_insertFilePage = m_pageList.count();
+
     objStartY = 0;
-    _clean = true;
-    KURL url;
-    url.setPath( QString("/home/test/toto.kpr") );
+    bool clean = _clean;
+    _clean = false;
     bool ok = loadNativeFormat(QString("/home/test/toto.kpr") );
-    kdDebug()<<" ok "<<ok<<endl;
-    //return ok;
+    if ( !ok )
+    {
+        KMessageBox::error(0L,
+                           i18n("Error during Insert File"),
+                           i18n("Insert File"));
+        return;
+    }
+    KMacroCommand *macro = new KMacroCommand( i18n("Insert File"));
+    bool createMacro = false;
+    for ( int i = m_insertFilePage; i<m_pageList.count();i++)
+    {
+        createMacro = true;
+        KPrInsertPageCmd * cmd = new KPrInsertPageCmd( i18n("Insert File"),i, m_pageList.at(i), this ) ;
+        macro->addCommand(cmd );
+    }
+    if ( createMacro )
+        addCommand( macro );
+    else
+        delete macro;
+    m_insertFilePage = 0;
+    // Update the views
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->updateSideBar();
+
+    _clean = clean;
 }
 
 #include <kpresenter_doc.moc>
