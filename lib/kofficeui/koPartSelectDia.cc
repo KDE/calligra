@@ -57,21 +57,6 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
 	item->setPixmap( 0, ( *it ).miniIcon );
     }
 
-    okButton = 0;
-
-#ifdef __GNUC__
-#warning "After KRASH the KDialogBase API has to be opened a bit. It´s unacceptable"
-#warning "that one cannot access the buttons (Ok, Cancel, etc.) without a hack!"
-#endif
-    QObjectList *lst = queryList( "QPushButton" );
-    if ( lst && lst->first() ) {
-	for ( QPushButton *b = (QPushButton*)lst->first(); b; b = (QPushButton*)lst->next() ) {
-	    if ( b->text() == i18n( "&OK" ) ) {
-		okButton = b;
-		break;
-	    }
-	}
-    }
     selectionChanged( 0 );
 
     resize( listview->sizeHint().width() + 20, 300 );
@@ -79,8 +64,7 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
 
 void KoPartSelectDia::selectionChanged( QListViewItem *item )
 {
-    if ( okButton )
-	okButton->setEnabled( item != 0 );
+    enableButtonOK( item != 0 );
 }
 
 KoDocumentEntry KoPartSelectDia::entry()

@@ -66,8 +66,6 @@ private slots:
 private:
     QValueList<KoDocumentEntry> m_lstEntries;
     QListView *listview;
-    QPushButton *okButton;
-
 };
 
 #endif
