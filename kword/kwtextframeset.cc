@@ -2801,7 +2801,7 @@ void KWTextFrameSetEdit::insertLink(const QString &_linkName, const QString & hr
     KoTextFormat format=*currentFormat();
     format.setAnchorName(_linkName);
     format.setAnchorHref( hrefName);
-    textObject()->insert( cursor(), &format, _linkName , false , true, i18n("Insert Link") );
+    textObject()->insert( cursor(), &format, _linkName+" " , false , true, i18n("Insert Link") );
 }
 
 void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName )
