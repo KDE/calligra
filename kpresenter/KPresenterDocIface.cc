@@ -420,3 +420,13 @@ void KPresenterDocIface::setConfigAutoChangeFormat( bool _auto)
 {
     doc->getAutoFormat()->configAutoChangeFormat(_auto);
 }
+
+bool KPresenterDocIface::configAutoReplaceNumber() const
+{
+    return doc->getAutoFormat()->getConfigAutoReplaceNumber();
+}
+
+void KPresenterDocIface::setConfigAutoReplaceNumber( bool b )
+{
+    doc->getAutoFormat()->configAutoReplaceNumber(b);
+}

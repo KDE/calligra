@@ -125,6 +125,8 @@ k_dcop:
     virtual bool configAutoChangeFormat() const;
     virtual void setConfigAutoChangeFormat( bool _auto);
 
+    virtual bool configAutoReplaceNumber() const;
+    virtual void setConfigAutoReplaceNumber( bool b );
 
 private:
     KPresenterDoc *doc;

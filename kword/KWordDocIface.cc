@@ -443,3 +443,13 @@ void KWordDocIface::setConfigAutoChangeFormat( bool _auto)
 {
     doc->getAutoFormat()->configAutoChangeFormat(_auto);
 }
+
+bool KWordDocIface::configAutoReplaceNumber() const
+{
+    return doc->getAutoFormat()->getConfigAutoReplaceNumber();
+}
+
+void KWordDocIface::setConfigAutoReplaceNumber( bool b )
+{
+    doc->getAutoFormat()->configAutoReplaceNumber(b);
+}
