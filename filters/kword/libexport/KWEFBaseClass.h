@@ -20,28 +20,25 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef EXPORTFILTERBASE_H
-#define EXPORTFILTERBASE_H
+#ifndef KWEF_BASECLASS_H
+#define KWEF_BASECLASS_H
 
 #include <qvaluelist.h>
 #include <qstring.h>
 #include <qdom.h>
 
 #include <KWEFStructures.h>
-#include <KWEFBaseClass.h>
 
-// ClassExportFilterBase is the most important class for the HTML export filter
-
-class ClassExportFilterBase : public KWEFBaseClass
+class KWEFBaseClass
 {
     public:
-        ClassExportFilterBase(void) {}
-        virtual ~ClassExportFilterBase(void) {}
+        KWEFBaseClass(void) : inList(false) {}
+        virtual ~KWEFBaseClass(void) {}
     public: //Non-virtual
     public: //virtual
+        virtual bool filter(const QString &filenameIn, const QString &filenameOut);
         virtual QString escapeText(const QString& str) const;
         virtual QString getHtmlOpeningTagExtraAttributes(void) const;
-        virtual bool filter(const QString  &filenameIn, const QString  &filenameOut);
         virtual bool isXML(void) const;
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const = 0;
@@ -54,6 +51,12 @@ class ClassExportFilterBase : public KWEFBaseClass
         virtual void processStyleTag (QDomNode myNode, void * tagData, QString &strStyles);
     protected:
         virtual void helpStyleProcessing(QDomNode myNode,LayoutData* layout);
+    public: // Public variables
+        bool inList; // Are we currently in a list?
+        bool orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
+        CounterData::Style typeList; // What is the style of the current list (undefined, if we are not in a list)
+    protected:
+        QDomDocument qDomDocumentIn;
 };
 
-#endif
+#endif /* KWEF_BASECLASS_H */
