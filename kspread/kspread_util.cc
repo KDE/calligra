@@ -387,7 +387,7 @@ void
 
     //get the colomn number for the character between actual position and the first non text charakter
     if (result != -1)
-	x = util_decodeColumnText( _str.mid( p, result ) ); // x is defined now
+	x = util_decodeColumnLabelText( _str.mid( p, result ) ); // x is defined now
 
     p += result;
 
