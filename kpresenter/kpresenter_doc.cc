@@ -998,7 +998,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( !store->open( "styles.xml" ) )
         return false;
 
-    manifestWriter->addManifestEntry( "style.xml", "text/xml" );
+    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
 
     saveOasisDocumentStyles( store, mainStyles );
 
