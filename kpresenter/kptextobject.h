@@ -56,9 +56,9 @@ public:
   virtual KTextObject* getKTextObject()
     { return &ktextobject; }
   virtual QPen getPen()
-    { return pen; } 
+    { return pen; }
   virtual QBrush getBrush()
-    { return brush; } 
+    { return brush; }
   virtual FillType getFillType()
     { return fillType; }
   virtual QColor getGColor1()
@@ -83,6 +83,8 @@ protected:
   virtual void saveKTextObject(ostream& out);
   virtual void loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst);
 
+  QString decode(const QString &_str);
+  
   KTextObject ktextobject;
 
   QPen pen;

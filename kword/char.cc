@@ -12,6 +12,7 @@
 #include "kword_doc.h"
 #include "frame.h"
 
+/*================================================================*/
 KWString::KWString(QString _str,KWordDocument *_doc)
 {
   if (_str == 0L)
@@ -34,6 +35,7 @@ KWString::KWString(QString _str,KWordDocument *_doc)
   doc = _doc;
 }
 
+/*================================================================*/
 KWString::KWString(const KWString &_string)
 {
   _data_ = copy(_string._data_,_string._len_);
@@ -42,16 +44,18 @@ KWString::KWString(const KWString &_string)
   doc = _string.doc;
 }
 
+/*================================================================*/
 KWString &KWString::operator=(const KWString &_string)
 {
   _data_ = copy(_string._data_,_string._len_);
   _len_ = _string._len_;
   _max_ = _string._max_;
   doc = _string.doc;
-  
+
   return *this;
 }
 
+/*================================================================*/
 KWChar* KWString::alloc(unsigned int _len)
 {
   KWChar *c = new KWChar[_len];
@@ -67,12 +71,14 @@ KWChar* KWString::alloc(unsigned int _len)
   return c;
 }
 
+/*================================================================*/
 void KWString::free(KWChar* _data,unsigned int _len)
 {
   for(unsigned int i = 0;i < _len;++i)
     freeChar(_data[i],doc);
 }
 
+/*================================================================*/
 void KWString::append(KWChar *_text,unsigned int _len)
 {
   unsigned int oldlen = _len_;
@@ -86,6 +92,7 @@ void KWString::append(KWChar *_text,unsigned int _len)
     }
 }
 
+/*================================================================*/
 void KWString::insert(unsigned int _pos,QString _text)
 {
   assert(_pos <= _len_);
@@ -106,6 +113,7 @@ void KWString::insert(unsigned int _pos,QString _text)
     }
 }
 
+/*================================================================*/
 void KWString::insert(unsigned int _pos,KWString *_text)
 {
   assert(_pos <= _len_);
@@ -126,6 +134,7 @@ void KWString::insert(unsigned int _pos,KWString *_text)
     }
 }
 
+/*================================================================*/
 void KWString::insert(unsigned int _pos,const char _c)
 {
   assert(_pos <= _len_);
@@ -141,6 +150,7 @@ void KWString::insert(unsigned int _pos,const char _c)
   _data_[_pos].attrib = 0L;
 }
 
+/*================================================================*/
 void KWString::insert(unsigned int _pos,KWCharImage *_image)
 {
   assert(_pos <= _len_);
@@ -156,6 +166,7 @@ void KWString::insert(unsigned int _pos,KWCharImage *_image)
   _data_[ _pos ].attrib = _image;
 }
 
+/*================================================================*/
 void KWString::insert(unsigned int _pos,KWCharTab *_tab)
 {
   assert(_pos <= _len_);
@@ -171,6 +182,7 @@ void KWString::insert(unsigned int _pos,KWCharTab *_tab)
   _data_[ _pos ].attrib = _tab;
 }
 
+/*================================================================*/
 void KWString::insert(unsigned int _pos,KWCharVariable *_var)
 {
   assert(_pos <= _len_);
@@ -186,6 +198,7 @@ void KWString::insert(unsigned int _pos,KWCharVariable *_var)
   _data_[ _pos ].attrib = _var;
 }
 
+/*================================================================*/
 void KWString::insert(unsigned int _pos,KWCharFootNote *_fn)
 {
   assert(_pos <= _len_);
@@ -201,6 +214,7 @@ void KWString::insert(unsigned int _pos,KWCharFootNote *_fn)
   _data_[ _pos ].attrib = _fn;
 }
 
+/*================================================================*/
 bool KWString::remove(unsigned int _pos,unsigned int _len = 1)
 {
   if (_pos + _len <= _len_ && (int)_pos >= 0)
@@ -216,6 +230,7 @@ bool KWString::remove(unsigned int _pos,unsigned int _len = 1)
   return false;
 }
 
+/*================================================================*/
 KWChar* KWString::split(unsigned int _pos)
 {
   KWChar *_data,*__data;
@@ -231,6 +246,7 @@ KWChar* KWString::split(unsigned int _pos)
   return __data;
 }
 
+/*================================================================*/
 QString KWString::toString(unsigned int _pos,unsigned int _len)
 {
   QString str = "";
@@ -251,6 +267,7 @@ QString KWString::toString(unsigned int _pos,unsigned int _len)
   return QString(str);
 }
 
+/*================================================================*/
 void KWString::saveFormat(ostream &out)
 {
   unsigned int start = 0;
@@ -312,6 +329,7 @@ void KWString::saveFormat(ostream &out)
     }
 }
 
+/*================================================================*/
 void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_doc,KWTextFrameSet *_frameset)
 {
   string tag;
@@ -470,6 +488,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
     }
 }
 
+/*================================================================*/
 void KWString::resize(unsigned int _size,bool del = true)
 {
   if (_size == _len_)
@@ -503,6 +522,7 @@ void KWString::resize(unsigned int _size,bool del = true)
   _max_ = _size + 10;
 }
 
+/*================================================================*/
 KWChar* KWString::copy(KWChar *_data,unsigned int _len)
 {
   KWChar *__data;
@@ -559,6 +579,7 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
   return __data;
 }
 
+/*================================================================*/
 int KWString::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole)
 {
   QString str = toString(0,size());
@@ -615,6 +636,7 @@ int KWString::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,
   else return -1;
 }
 
+/*================================================================*/
 int KWString::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false)
 {
   QString str = toString(0,size());
@@ -655,6 +677,7 @@ int KWString::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _inde
   else return -1;
 }
 
+/*================================================================*/
 int KWString::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole)
 {
   QString str = toString(0,size());
@@ -711,11 +734,24 @@ int KWString::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _ind
   else return -1;
 }
 
+/*================================================================*/
 int KWString::findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false)
 {
   return -1;
 }
 
+/*================================================================*/
+QString KWString::decoded()
+{
+  QString str = toString(0,size());
+  
+  str.replace(QRegExp("<"),"&lt;");
+  str.replace(QRegExp(">"),"&gt;");
+  
+  return QString(str);
+}
+
+/*================================================================*/
 void freeChar(KWChar& _char,KWordDocument *_doc)
 {	
   if (_char.attrib)
@@ -739,6 +775,7 @@ void freeChar(KWChar& _char,KWordDocument *_doc)
     }
 }
 
+/*================================================================*/
 ostream& operator<<(ostream &out,KWString &_string)
 {
   char c = 1;

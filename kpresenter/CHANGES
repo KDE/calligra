@@ -72,6 +72,10 @@ Reggie, 6.4.1999:
     with the dropped picture is inserted into the presentation
   - If a text is dropped into a KPresenter Page, a text object
     with the dropped text is inserted into the presentation
-  - If a url (list of urls) is dropped into a KPresenter page, 
+  - If a url (list of urls) is dropped into a KPresenter page,
     KPresenter tries to open the urls (image/* mimetypes are opened
     as pixmap objects, all others are opened as textobjects at the moment)
+
+Reggie, 8.4.1999:
+-----------------
+- When saving text '>' and '<' are converted to &gt; and &lt;

@@ -1051,3 +1051,7 @@ Reggie, 7.4.1999:
 - When dropping an url(list) into a KWord page the url(s) are opened ("image/*" is inserted as
   picture frame and other mime types are inserted as text for now)
 - More work on footnotes
+
+Reggie, 8.4.1999:
+-----------------
+- When saving text '>' and '<' are converted to &gt; and &lt;

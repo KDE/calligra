@@ -185,6 +185,8 @@ public:
   int findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false);
 
   KWordDocument *getDocument() { return doc; }
+
+  QString decoded();
   
 protected:
   KWChar* alloc(unsigned int _size);
@@ -195,7 +197,7 @@ protected:
   unsigned int _max_;
   KWChar* _data_;
   KWordDocument *doc;
-  
+
 };
 
 void freeChar(KWChar& _char,KWordDocument *_doc);

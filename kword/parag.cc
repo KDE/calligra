@@ -73,7 +73,7 @@ KWParag::KWParag(const KWParag& _parag)
   counterWidth = _parag.counterWidth;
 
   text = _parag.text;
-  
+
   info = _parag.info;
 }
 
@@ -272,7 +272,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 
 void KWParag::save(ostream &out)
 {
-  out << indent << "<TEXT>" << text << "</TEXT>" << endl;
+  out << indent << "<TEXT>" << text.decoded().ascii() << "</TEXT>" << endl;
   out << indent << "<HARDBRK frame=\"" << static_cast<int>(hardBreak) << "\"/>" << endl;
   out << otag << "<FORMATS>" << endl;
   text.saveFormat(out);

@@ -604,7 +604,7 @@ void KPTextObject::saveKTextObject(ostream& out)
 	      out << indent << "<COLOR red=\"" << txtObj->color().red() << "\" green=\""
 		  << txtObj->color().green() << "\" blue=\"" << txtObj->color().blue() << "\"/>" << endl;
 	      out << indent << "<VERTALIGN value=\"" << static_cast<int>(txtObj->vertAlign()) << "\"/>" << endl;
-	      out << indent << "<TEXT value=\"" << txtObj->text() << "\"/>" << endl;
+	      out << indent << "<TEXT value=\"" << decode(txtObj->text()) << "\"/>" << endl;
 	      out << etag << "</OBJ>" << endl;
 	    }
 
@@ -888,3 +888,18 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
   ktextobject.setUnsortListType(ult);
 }
 
+/*================================================================*/
+QString KPTextObject::decode(const QString &_str)
+{
+  QString str(_str);
+  
+  // HACK
+  str.append("_");
+  
+  str.replace(QRegExp("<"),"&lt;");
+  str.replace(QRegExp(">"),"&gt;");
+  
+  str.remove(str.length() - 1,1);
+  
+  return QString(str);
+}
