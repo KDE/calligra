@@ -32,10 +32,13 @@
 #include <koApplication.h>
 
 #include "kexirelationview.h"
+#include "kexirelation.h"
 
-KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
+KexiRelationView::KexiRelationView(QWidget *parent, const char *name,KexiRelation *relation)
  : QScrollView(parent, name)
 {
+	m_relation=relation;
+	m_relation->incUsageCount();
 	m_readOnly=false;
 	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 
@@ -266,7 +269,7 @@ KexiRelationView::slotTableScrolling(QString table)
 }
 
 void
-KexiRelationView::addConnection(SourceConnection connection)
+KexiRelationView::addConnection(SourceConnection connection, bool interactive)
 {
 	SourceConnection *conn = &connection;
 	bool add=true;
@@ -288,6 +291,7 @@ KexiRelationView::addConnection(SourceConnection connection)
 	recalculateConnectionRect(conn);
 
 	if (add) m_connections.append((*conn));
+	if (interactive) m_relation->updateRelationList(this,m_connections);
 
 	updateContents((*conn).geometry);
 	kdDebug() << "KexiRelationView::addConnection(): rect: " << (*conn).geometry.x() << ", " << (*conn).geometry.y() << endl;
@@ -312,6 +316,7 @@ void KexiRelationView::setReadOnly(bool b)
 
 KexiRelationView::~KexiRelationView()
 {
+	m_relation->decUsageCount();
 }
 
 #include "kexirelationview.moc"

@@ -36,6 +36,7 @@
 class QFrame;
 
 class KexiRelationViewTable;
+class KexiRelation;
 
 typedef struct RelationSource
 {
@@ -51,11 +52,11 @@ class KexiRelationView : public QScrollView
 	Q_OBJECT
 
 	public:
-		KexiRelationView(QWidget *parent, const char *name=0);
+		KexiRelationView(QWidget *parent, const char *name=0,KexiRelation* =0);
 		~KexiRelationView();
 
 		void		addTable(const QString &table, QStringList columns);
-		void		addConnection(SourceConnection con);
+		void		addConnection(SourceConnection con,bool interactive=true);
 
 		RelationList	getConnections()const { return m_connections; };
 		void setReadOnly(bool);
@@ -83,6 +84,7 @@ class KexiRelationView : public QScrollView
 		TableList	m_tables;
 		RelationList	m_connections;
 		bool		m_readOnly;
+		KexiRelation    *m_relation;
 };
 
 #endif

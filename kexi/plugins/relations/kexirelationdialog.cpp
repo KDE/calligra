@@ -54,7 +54,7 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 	btnAdd->show();
 	connect(btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
-	m_view = new KexiRelationView(this);
+	m_view = new KexiRelationView(this,0,kexiProject()->relationManager());
 	m_view->show();
 
 	connect(kexiProject(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
@@ -68,7 +68,7 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 			m_tableCombo->setCurrentText((*it).rcvTable);
 			slotAddTable();
 
-			m_view->addConnection((*it));
+			m_view->addConnection((*it),false);
 		}
 	}
 	QVBoxLayout *g = new QVBoxLayout(this);
