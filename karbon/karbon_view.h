@@ -45,7 +45,7 @@ class KSelectAction;
 class KSelectColorAction;
 class KToggleAction;
 
-class TKUFloatSpinBoxAction;
+class KoUnitDoubleSpinBox;
 
 class VColorDocker;
 class VLayersDocker;
@@ -287,7 +287,7 @@ private:
 	KSelectAction* m_viewAction;
 
 	// line width
-	TKUFloatSpinBoxAction *m_setLineWidth;
+	KoUnitDoubleSpinBox *m_setLineWidth;
 
 	// line join style
 	VStateButton *m_joinStyle;

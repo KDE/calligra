@@ -105,10 +105,9 @@
 #include "vstatebutton.h"
 #include <kdeversion.h>
 
-#include <tkfloatspinboxaction.h>
-
 #include <kdebug.h>
 
+#include "vunitspinbox.h"
 
 // TODO: only for testing
 #include "vsegment.h"
@@ -1247,14 +1246,11 @@ KarbonView::initActions()
 	// view <-----
 
 	// line width
-
-	m_setLineWidth = new TKUFloatSpinBoxAction( i18n( "Set Line Width" ), "linewidth", 0, actionCollection(), "setLineWidth" );
-	m_setLineWidth->setIconMode( TK::IconOnly );
-	m_setLineWidth->setDecimals( 1 );
-	m_setLineWidth->setMinValue( 0.0 );
-	m_setLineWidth->setLineStep( 0.5 );
-	connect( m_setLineWidth, SIGNAL( activated() ), this, SLOT( setLineWidth() ) );
-	//connect( m_pDoc, SIGNAL( unitsChanged(int) ), m_setLineWidth, SLOT( setUnit(int) ) );
+	m_setLineWidth = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
+#if KDE_VERSION >= 305
+	new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
+	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( setLineWidth() ) );
+#endif
 
 	// set up join style widget
 	m_joinStyle = new VStateButton( this );

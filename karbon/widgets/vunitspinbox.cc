@@ -74,6 +74,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, double lower, double 
 	m_validator = new KoUnitDoubleValidator( this, this );
 	QSpinBox::setValidator( m_validator );
 	setAcceptLocalizedNumbers( true );
+	setUnit( unit );
 }
 
 void
