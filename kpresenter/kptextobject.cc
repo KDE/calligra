@@ -541,7 +541,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                         lastParag->remove( 0, 1 ); // Remove current trailing space
                         firstTextTag = false;
                     }
-                    KoTextFormat fm = loadFormat( n );
+                    KoTextFormat fm = loadFormat( n, lastParag->paragraphFormat(), m_doc->defaultFont() );
 
                     QString txt = n.firstChild().toText().data();
                     if(n.hasAttribute(attrWhitespace)) {
@@ -576,7 +576,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                         var->load( varElem );
                         varDef tmp;
                         tmp.pos = index;
-                        tmp.format = loadFormat( n );
+                        tmp.format = loadFormat( n, lastParag->paragraphFormat(), m_doc->defaultFont() );
 
                         varMap.insert( var, tmp );
                     }
@@ -609,10 +609,31 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     }
 }
 
-KoTextFormat KPTextObject::loadFormat( QDomElement &n )
+KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont )
 {
     KoTextFormat format;
-    QString family = n.attribute( attrFamily );
+    QFont fn;
+    if ( refFormat )
+    {
+        format = *refFormat;
+        format.setCollection( 0 ); // Out of collection copy
+        fn = format.font();
+    }
+    else
+    {
+        fn = defaultFont;
+    }
+
+    if ( !n.isNull() )
+    {
+        fn.setFamily( n.attribute( attrFamily ) );
+    }
+    else if ( !refFormat )
+    {   // No reference format and no FONT tag -> use default font
+        fn = defaultFont;
+    }
+
+
     int size = n.attribute( attrPointSize ).toInt();
     bool bold=false;
     if(n.hasAttribute(attrBold))
@@ -636,7 +657,6 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n )
         strikeOut = (bool)n.attribute( attrStrikeOut ).toInt();
 
     QString color = n.attribute( attrColor );
-    QFont fn( family );
     fn.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( size ) );
     fn.setBold( bold );
     fn.setItalic( italic );

@@ -116,7 +116,7 @@ public:
 			int to /* default length()-2 */ );
     KoParagLayout loadParagLayout( QDomElement & parentElem, KPresenterDoc *doc, bool useRefStyle);
 
-    KoTextFormat loadFormat( QDomElement &n );
+    KoTextFormat loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont );
 
     void setEditingTextObj( bool _edit ) { editingTextObj = _edit; }
 
