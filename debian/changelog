@@ -1,3 +1,11 @@
+koffice (1:1.1.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * Removed debconf warning for pre-1.1-final releases.
+  * Upped standards-version to 3.5.6.
+
+ -- Ben Burton <benb@acm.org>  Sun,  5 Aug 2001 23:45:23 +1000
+
 koffice (1:1.1-rc1-1) unstable; urgency=low
 
   * New upstream release.

@@ -85,17 +85,6 @@ install-stamp: build
 	mv $(tmp)/usr/bin/kprconverter.pl.new $(tmp)/usr/bin/kprconverter.pl
 	chmod 755 $(tmp)/usr/bin/kprconverter.pl
 
-	# Move the gnumeric export/import libraries to the correct directory.
-	mv $(tmp)/usr/lib/libgnumeric* $(tmp)/usr/lib/kde2
-	
-	# Move the kontour plugins to the correct directory.
-	mv $(tmp)/usr/share/apps/killustrator/kpartplugins \
-		$(tmp)/usr/share/apps/kontour
-	
-	# Move the kontour docs to the correct directory.
-	mv $(tmp)/usr/share/doc/kde/HTML/en/killustrator \
-		$(tmp)/usr/share/doc/kde/HTML/en/kontour
-
 	# Sort out this mess where kivio wants to installed a shared library
 	# in /usr/share with the wrong extension.
 	# We'll put a symlink in kivio.links.

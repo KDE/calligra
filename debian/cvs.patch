@@ -159,14 +159,6 @@
  kontour_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- kontour/kontour.desktop
-+++ kontour/kontour.desktop
-@@ -36,4 +36,4 @@
- ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
- X-KDE-NativeMimeType=application/x-kontour
- MapNotify=true
--DocPath=killustrator/index.html
-+DocPath=kontour/index.html
 --- koshell/Makefile.am
 +++ koshell/Makefile.am
 @@ -4,7 +4,7 @@
