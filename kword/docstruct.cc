@@ -199,7 +199,7 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, 
         } break;
         case Cliparts: {
             setText( 0, i18n( "Cliparts" ) );
-            setPixmap( 0, KWBarIcon( "frame_clipart" ) );
+            setPixmap( 0, KWBarIcon( "clipart" ) );
         } break;
         case Embedded: {
             setText( 0, i18n( "Embedded Objects" ) );
