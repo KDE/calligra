@@ -56,7 +56,7 @@ void KPTDuration::add(const KPTDuration &delta) {
 void KPTDuration::add(Q_INT64 delta) {
     Q_INT64 tmp = m_ms + delta;
     if (tmp < 0) {
-        kdDebug()<<k_funcinfo<<"Underflow"<<delta<<" from "<<this->toString()<<endl;
+        kdDebug()<<k_funcinfo<<"Underflow"<<(long int)delta<<" from "<<this->toString()<<endl;
         m_ms = 0;
         return;
     }
@@ -97,7 +97,6 @@ KPTDuration KPTDuration::operator/(int unit) const {
 bool KPTDuration::isCloseTo(const KPTDuration &d) const {
     Q_INT64 limit = 30000;
     Q_INT64 delta = m_ms - d.m_ms;
-   
     return (delta >= 0) ? (delta < limit) : (-delta < limit);
 }
 
