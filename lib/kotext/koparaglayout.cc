@@ -408,7 +408,8 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
     if ( static_cast<QChar::Direction>(layout.direction) == QChar::DirR )
         element.setAttribute( "dir", "R" );
     else
-        element.setAttribute( "dir", "L" );
+	if ( static_cast<QChar::Direction>(layout.direction) == QChar::DirL )
+            element.setAttribute( "dir", "L" );
 
     if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
          layout.margins[QStyleSheetItem::MarginLeft] != 0 ||
