@@ -1095,6 +1095,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
                 automaticScreenPresTime.start();
                 automaticScreenPresWaitTime = 0;
                 automaticScreenPresSpeed.start( kPresenterDoc()->getPresSpeed()*1000 );
+                automaticScreenPresFirstTimer = false;
             }
             else
                 autoScreenPresReStartTimer();
