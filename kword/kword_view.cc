@@ -2880,88 +2880,84 @@ void KWordView::newPageLayout( KoPageLayout _layout )
 /*================================================================*/
 void KWordView::spellCheckerReady()
 {
-    if ( !currParag && currFrameSetNum == -1 )
-    {
-	QObject::connect( kspell, SIGNAL( misspelling( char*, WStrList*, unsigned ) ),
-			  this, SLOT( spellCheckerMisspelling( char*, WStrList*, unsigned ) ) );
-	QObject::connect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ),
-			  this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
-	QObject::connect( kspell, SIGNAL( done( char* ) ), this, SLOT( spellCheckerDone( char* ) ) );
+    if ( !currParag && currFrameSetNum == -1 ) {
+	QObject::connect( kspell, SIGNAL( misspelling( QString, QStrList*, unsigned ) ),
+			  this, SLOT( spellCheckerMisspelling( QString, QStrList*, unsigned ) ) );
+	QObject::connect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
+			  this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
+	QObject::connect( kspell, SIGNAL( done( const char* ) ), this, SLOT( spellCheckerDone( const char* ) ) );
 	currParag = 0L;
-	for ( unsigned int i = 0; i < m_pKWordDoc->getNumFrameSets(); i++ )
-	{
+	for ( unsigned int i = 0; i < m_pKWordDoc->getNumFrameSets(); i++ ) {
 	    KWFrameSet *frameset = m_pKWordDoc->getFrameSet( i );
 	    if ( frameset->getFrameType() != FT_TEXT ) continue;
 	    currFrameSetNum = i;
 	    currParag = dynamic_cast<KWTextFrameSet*>( frameset )->getFirstParag();
 	    break;
 	}
-	if ( !currParag )
-	{
+	
+	if ( !currParag ) {
 	    kspell->cleanUp();
-	    QObject::disconnect( kspell, SIGNAL( misspelling( char*, WStrList*, unsigned ) ), this,
-				 SLOT( spellCheckerMisspelling( char*, WStrList*, unsigned ) ) );
-	    QObject::disconnect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ),
-				 this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
-	    QObject::disconnect( kspell, SIGNAL( done( char* ) ), this, SLOT( spellCheckerDone( char* ) ) );
+	    QObject::disconnect( kspell, SIGNAL( misspelling( QString, QStrList*, unsigned ) ), this,
+				 SLOT( spellCheckerMisspelling( QString, QStrList*, unsigned ) ) );
+	    QObject::disconnect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
+				 this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
+	    QObject::disconnect( kspell, SIGNAL( done( const char* ) ), this, SLOT( spellCheckerDone( const char* ) ) );
 	    delete kspell;
 	    return;
 	}
-    }
-    else currParag = currParag->getNext();
+    }  else currParag = currParag->getNext();
 
-    if ( !currParag )
-    {
+    if ( !currParag ) {
 	currFrameSetNum++;
-	if ( currFrameSetNum >= static_cast<int>( m_pKWordDoc->getNumFrameSets() ) )
-	{
+	if ( currFrameSetNum >= static_cast<int>( m_pKWordDoc->getNumFrameSets() ) ) {
 	    kspell->cleanUp();
-	    QObject::disconnect( kspell, SIGNAL( misspelling( char*, WStrList*, unsigned ) ), this,
-				 SLOT( spellCheckerMisspelling( char*, WStrList*, unsigned ) ) );
-	    QObject::disconnect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ),
-				 this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
-	    QObject::disconnect( kspell, SIGNAL( done( char* ) ), this, SLOT( spellCheckerDone( char* ) ) );
+	    QObject::disconnect( kspell, SIGNAL( misspelling( QString, QStrList*, unsigned ) ), this,
+				 SLOT( spellCheckerMisspelling( QString, QStrList*, unsigned ) ) );
+	    QObject::disconnect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
+				 this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
+	    QObject::disconnect( kspell, SIGNAL( done( const char* ) ), this, SLOT( spellCheckerDone( const char* ) ) );
 	    delete kspell;
 	    return;
 	}
+	
 	currParag = 0L;
-	for ( unsigned int i = currFrameSetNum; i < m_pKWordDoc->getNumFrameSets(); i++ )
-	{
+	for ( unsigned int i = currFrameSetNum; i < m_pKWordDoc->getNumFrameSets(); i++ ) {
 	    KWFrameSet *frameset = m_pKWordDoc->getFrameSet( i );
 	    if ( frameset->getFrameType() != FT_TEXT ) continue;
 	    currFrameSetNum = i;
 	    currParag = dynamic_cast<KWTextFrameSet*>( frameset )->getFirstParag();
 	    break;
 	}
-	if ( !currParag )
-	{
+	
+	if ( !currParag ) {
 	    kspell->cleanUp();
-	    QObject::disconnect( kspell, SIGNAL( misspelling( char*, WStrList*, unsigned ) ), this,
-				 SLOT( spellCheckerMisspelling( char*, WStrList*, unsigned ) ) );
-	    QObject::disconnect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ),
-				 this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
-	    QObject::disconnect( kspell, SIGNAL( done( char* ) ), this, SLOT( spellCheckerDone( char* ) ) );
+	    QObject::disconnect( kspell, SIGNAL( misspelling( QString, QStrList*, unsigned ) ), this,
+				 SLOT( spellCheckerMisspelling( QString, QStrList*, unsigned ) ) );
+	    QObject::disconnect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
+				 this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
+	    QObject::disconnect( kspell, SIGNAL( done( const char* ) ), this, SLOT( spellCheckerDone( const char* ) ) );
 	    delete kspell;
 	    return;
 	}
     }
 
     QString text = currParag->getKWString()->toString( 0, currParag->getTextLen() );
-    kspell->check( text.data() );
+    qDebug( "check: %s", text.latin1() );
+    kspell->check( text );
 }
 
 /*================================================================*/
-void KWordView::spellCheckerMisspelling( char* , QStringList , unsigned )
+void KWordView::spellCheckerMisspelling( QString , QStrList* , unsigned )
 {
 }
 
 /*================================================================*/
-void KWordView::spellCheckerCorrected( char* , char* , unsigned )
+void KWordView::spellCheckerCorrected( QString , QString , unsigned )
 {
 }
 
 /*================================================================*/
-void KWordView::spellCheckerDone( char* )
+void KWordView::spellCheckerDone( const char* )
 {
     spellCheckerReady();
 }
