@@ -83,6 +83,8 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
 
   m_nbLines=0;
   m_Validity=0;
+
+  clearAllErrors();
 }
 
 int KSpreadCell::row() const
@@ -794,135 +796,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         return;
     }
 
-    // Apply text format
-    // (this is the only format that dictates the datatype, it's usually the other way round)
-    if ( formatType() == Text_format )
-        m_dataType = StringData;
-
-    /**
-     * A usual numeric, boolean, date, time or string value.
-     */
-    ///// What's this ??? (David)
-    //QPen tmpPen;
-    //tmpPen.setColor( textColor( _col, _row ) );
-    //setTextPen(tmpPen);
-
-
-    //    m_conditionIsTrue = false;
-
-
-    //tmpPen = textPen(_col,_row);
-    //// Warning: if you re-enable the line above, apply the textColorPrint
-    // stuff. Never call QPainter::setPen with an invalid pen ! (David)
-    //
-    // Turn the stored value in a string
-    //
-
-    if ( isFormula() && m_pTable->getShowFormula() )
-    {
-        m_strOutText = m_strText;
-    }
-    else if ( m_style == ST_Select )
-    {
-        // If this is a select box, find out about the selected item
-        // in the KSpreadPrivate data struct
-        SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-        m_strOutText = s->text();
-    }
-    else if ( isBool() )
-    {
-      m_strOutText = (valueBool()) ? i18n("True") : i18n("False");
-    }
-    else if( isDate() )
-    {
-        m_strOutText=util_dateFormat( locale(), valueDate(), formatType() );
-    }
-    else if( isTime() )
-    {
-        m_strOutText=util_timeFormat( locale(), valueTime(), formatType() );
-    }
-    else if ( isNumeric() )
-    {
-        // First get some locale information
-        if (!decimal_point)
-        { // (decimal_point is static)
-            decimal_point = locale()->decimalSymbol()[0];
-            kdDebug(36001) << "decimal_point is '" << decimal_point.unicode() << "'" << endl;
-
-            if ( decimal_point.isNull() )
-                decimal_point = '.';
-        }
-
-        // Scale the value as desired by the user.
-        double v = valueDouble() * factor(column(),row());
-
-        // Always unsigned ?
-        if ( floatFormat( _col, _row ) == KSpreadCell::AlwaysUnsigned && v < 0.0)
-            v *= -1.0;
-
-        // Make a string out of it.
-        QString localizedNumber = createFormat( v, _col, _row );
-
-        // Remove trailing zeros and the decimal point if necessary
-        // unless the number has no decimal point
-        if ( precision( _col, _row)== -1 && localizedNumber.find(decimal_point) >= 0 )
-        {
-            int start=0;
-            if(localizedNumber.find('%')!=-1)
-                start=2;
-            else if(localizedNumber.find( locale()->currencySymbol())==((int)(localizedNumber.length()-locale()->currencySymbol().length())))
-                start=locale()->currencySymbol().length()+1;
-            else if((start=localizedNumber.find('E'))!=-1)
-                start=localizedNumber.length()-start;
-            else
-                start=0;
-
-            int i = localizedNumber.length()-start;
-            bool bFinished = FALSE;
-            while ( !bFinished && i > 0 )
-            {
-                QChar ch = localizedNumber[ i - 1 ];
-                if ( ch == '0' )
-                    localizedNumber.remove(--i,1);
-                else
-                {
-                    bFinished = TRUE;
-                    if ( ch == decimal_point )
-                        localizedNumber.remove(--i,1);
-                }
-            }
-        }
-
-        // Start building the output string with prefix and postfix
-        m_strOutText = "";
-        if( !prefix( _col, _row ).isEmpty())
-                m_strOutText += prefix( _col, _row )+" ";
-
-        m_strOutText += localizedNumber;
-
-        if( !postfix( _col, _row ).isEmpty())
-                m_strOutText += " "+postfix( _col, _row );
-
-
-	// This method only calculates the text, and its width.
-	// No need to bother about the color (David)
-    }
-    else if ( isFormula() )
-    {
-        m_strOutText = m_strFormulaOut;
-    }
-    else if( isString() )
-    {
-        if (!m_strText.isEmpty() && m_strText[0]=='\'' )
-            m_strOutText = m_strText.right(m_strText.length()-1);
-        else
-            m_strOutText = m_strText;
-    }
-    else // When does this happen ?
-    {
-        kdDebug(36001) << "Please report: final case of makeLayout ... m_dataType=" << m_dataType << " m_strText=" << m_strText << endl;
-        m_strOutText = m_strText;
-    }
+    setOutputText();
 
     // Empty text?
     if ( m_strOutText.isEmpty() )
@@ -1141,6 +1015,158 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     clearFlag(Flag_LayoutDirty);
 
     return;
+}
+
+void KSpreadCell::setOutputText()
+{
+  if (isDefault())
+  {
+    m_strOutText = QString::null;
+    return;
+  }
+  if (hasError())
+  {
+    if (testFlag(Flag_ParseError))
+    {
+      m_strOutText = "####Parse";
+    }
+    else if (testFlag(Flag_CircularCalculation))
+    {
+      m_strOutText = "####Circle";
+    }
+    else if (testFlag(Flag_DependancyError))
+    {
+      m_strOutText = "####Depend";
+    }
+    else
+    {
+      m_strOutText = "####";
+      kdDebug(36001) << "Unhandled error type." << endl;
+    }
+    return;
+  }
+
+
+
+// Apply text format
+  // (this is the only format that dictates the datatype, it's usually the other way round)
+  if ( formatType() == Text_format )
+    m_dataType = StringData;
+
+  /**
+   * A usual numeric, boolean, date, time or string value.
+   */
+
+  //
+  // Turn the stored value in a string
+  //
+
+  if ( isFormula() && m_pTable->getShowFormula() )
+  {
+    m_strOutText = m_strText;
+  }
+  else if ( m_style == ST_Select )
+  {
+    // If this is a select box, find out about the selected item
+    // in the KSpreadPrivate data struct
+    SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+    m_strOutText = s->text();
+  }
+  else if ( isBool() )
+  {
+    m_strOutText = (valueBool()) ? i18n("True") : i18n("False");
+  }
+  else if( isDate() )
+  {
+    m_strOutText=util_dateFormat( locale(), valueDate(), formatType() );
+  }
+  else if( isTime() )
+  {
+    m_strOutText=util_timeFormat( locale(), valueTime(), formatType() );
+  }
+  else if ( isNumeric() )
+  {
+    // First get some locale information
+    if (!decimal_point)
+    { // (decimal_point is static)
+      decimal_point = locale()->decimalSymbol()[0];
+      kdDebug(36001) << "decimal_point is '" << decimal_point.unicode() << "'" << endl;
+
+      if ( decimal_point.isNull() )
+        decimal_point = '.';
+    }
+
+    // Scale the value as desired by the user.
+    double v = valueDouble() * factor(column(),row());
+
+    // Always unsigned ?
+    if ( floatFormat( column(), row() ) == KSpreadCell::AlwaysUnsigned &&
+         v < 0.0)
+      v *= -1.0;
+
+    // Make a string out of it.
+    QString localizedNumber = createFormat( v, column(), row() );
+
+    // Remove trailing zeros and the decimal point if necessary
+    // unless the number has no decimal point
+    if ( precision( column(), row())== -1 && localizedNumber.find(decimal_point) >= 0 )
+    {
+      int start=0;
+      if(localizedNumber.find('%')!=-1)
+        start=2;
+      else if(localizedNumber.find( locale()->currencySymbol())==((int)(localizedNumber.length()-locale()->currencySymbol().length())))
+        start=locale()->currencySymbol().length()+1;
+      else if((start=localizedNumber.find('E'))!=-1)
+        start=localizedNumber.length()-start;
+      else
+        start=0;
+
+      int i = localizedNumber.length()-start;
+      bool bFinished = FALSE;
+      while ( !bFinished && i > 0 )
+      {
+        QChar ch = localizedNumber[ i - 1 ];
+        if ( ch == '0' )
+          localizedNumber.remove(--i,1);
+        else
+        {
+          bFinished = TRUE;
+          if ( ch == decimal_point )
+            localizedNumber.remove(--i,1);
+        }
+      }
+    }
+
+    // Start building the output string with prefix and postfix
+    m_strOutText = "";
+    if( !prefix( column(), row() ).isEmpty())
+      m_strOutText += prefix( column(), row() )+" ";
+
+    m_strOutText += localizedNumber;
+
+    if( !postfix( column(), row() ).isEmpty())
+      m_strOutText += " "+postfix( column(), row() );
+
+
+    // This method only calculates the text, and its width.
+    // No need to bother about the color (David)
+  }
+  else if ( isFormula() )
+  {
+    m_strOutText = m_strFormulaOut;
+  }
+  else if( isString() )
+  {
+    if (!m_strText.isEmpty() && m_strText[0]=='\'' )
+      m_strOutText = m_strText.right(m_strText.length()-1);
+    else
+      m_strOutText = m_strText;
+  }
+  else // When does this happen ?
+  {
+    kdDebug(36001) << "Please report: final case of makeLayout ... m_dataType=" << m_dataType << " m_strText=" << m_strText << endl;
+    m_strOutText = m_strText;
+  }
 }
 
 QString KSpreadCell::createFormat( double value, int _col, int _row )

@@ -982,6 +982,11 @@ private:
                             QPoint cellRef);
 
 
+  /* helper functions to the makeLayout(...) function */
+  /* (more to come) */
+  void setOutputText();
+
+
   /* helper functions to the load/save routines */
   bool loadCellData(QDomElement text, Operation op);
   bool saveCellResult( QDomDocument& doc, QDomElement& result,
