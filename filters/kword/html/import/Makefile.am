@@ -22,4 +22,4 @@ service_DATA = kword_html_import.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordhtmlimportfilter.pot
+	$(XGETTEXT) *.cpp -o $(podir)/kwordhtmlimportfilter.pot
