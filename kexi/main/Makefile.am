@@ -5,7 +5,9 @@ libkeximain_la_SOURCES = \
 	keximainwindowimpl.cpp \
 	kexibrowser.cpp kexibrowseritem.cpp \
 	kexistatusbar.cpp \
-	createitemui.ui kexicreateitemdlg.cpp
+	createitemui.ui kexicreateitemdlg.cpp \
+	kexinamewidget.cpp kexinamedialog.cpp
+
 
 # kexiprojectconnectiondata.cpp
 
