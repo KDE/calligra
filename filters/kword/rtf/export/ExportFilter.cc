@@ -743,7 +743,7 @@ if (layout.counter.style)
 		    } 
 		    str += makeTable((*paraFormatDataIt).frameAnchor);
 		}
-                else if (2==(*paraFormatDataIt).frameAnchor.type)
+                else if ((2==(*paraFormatDataIt).frameAnchor.type) || (5==(*paraFormatDataIt).frameAnchor.type))
                 {
                     content += makeImage((*paraFormatDataIt).frameAnchor);
                 
