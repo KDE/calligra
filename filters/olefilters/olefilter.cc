@@ -149,7 +149,7 @@ void OLEFilter::slotSavePart(
         m_nextPart++;
         partMap.insert(key, id);
         mimeMap.insert(key, mimeType);
-        if (store->embed(id, storedPart))
+        if (!store->embed(id, storedPart))
             kdError(s_area) << "OLEFilter::slotSavePart(): Could not embed in KoStore!" << endl;
         unlink(result.local8Bit());
     }
