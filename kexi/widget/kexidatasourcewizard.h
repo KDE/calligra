@@ -94,8 +94,8 @@ class KexiDataSourceWizard : public KWizard
 		KexiMainWindow *m_win;
 		KexiDB::FieldList *m_fields;
 		DSInfo m_ds;
-		bool m_finishNext;
-		bool m_used;
+		bool m_finishNext : 1;
+		bool m_used : 1;
 };
 
 class KexiDSPixmap : public QLabel

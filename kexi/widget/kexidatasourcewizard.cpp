@@ -25,7 +25,15 @@
 #include "kexidssource.h"
 #include "kexidatasourcewizard.h"
 
-QPixmap pic;
+class KexiDataSourceWizard_Pixmap
+{
+	public:
+	KexiDataSourceWizard_Pixmap() { pic=0; }
+	~KexiDataSourceWizard_Pixmap() { delete pic; }
+	QPixmap *pic; 
+};
+
+static KexiDataSourceWizard_Pixmap KexiDataSourceWizard_pic;
 
 KexiDataSourceWizard::KexiDataSourceWizard(KexiMainWindow *win, QWidget *parent, const char *name)
  : KWizard(parent, name)
@@ -35,7 +43,8 @@ KexiDataSourceWizard::KexiDataSourceWizard(KexiMainWindow *win, QWidget *parent,
 	m_fields = 0;
 	m_used = true;
 
-	pic = QPixmap(locate("data","kexi/pics/cp-wiz.png"));
+	if (KexiDataSourceWizard_pic.pic)
+		KexiDataSourceWizard_pic.pic = new QPixmap(locate("data","kexi/pics/cp-wiz.png"));
 
 	addPage(new KexiDSWelcome(this), "Form Wizard");
 	QWidget *wds = new KexiDSSource(win, this);
@@ -48,7 +57,7 @@ KexiDataSourceWizard::KexiDataSourceWizard(KexiMainWindow *win, QWidget *parent,
 QPixmap &
 KexiDataSourceWizard::pixmap()
 {
-	return pic;
+	return *KexiDataSourceWizard_pic.pic;
 }
 
 void
