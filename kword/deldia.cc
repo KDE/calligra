@@ -62,7 +62,13 @@ void KWDeleteDia::setupTab1()
 
     value = new QSpinBox( 1, type == ROW ? table->getRows() : table->getCols(), 1, tab1 );
     value->resize( value->sizeHint() );
-    value->setValue( type == ROW ? table->getRows() : table->getCols() );
+    unsigned int rowSelected;
+    unsigned int colSelected;
+    bool ret = table->getFirstSelected(rowSelected, colSelected );
+    if ( !ret )
+        value->setValue( type == ROW ? table->getRows() : table->getCols() );
+    else
+        value->setValue( type == ROW ? (rowSelected+1) : (colSelected+1) );
     grid1->addWidget( value, 2, 0 );
 
     grid1->addRowSpacing( 1, rc->height() );
