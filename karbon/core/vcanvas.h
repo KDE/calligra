@@ -28,7 +28,7 @@ class KarbonPart;
 class KarbonView;
 class KoRect;
 class KoPoint;
-
+class VPainter;
 
 // The canvas is a QScrollView.
 
@@ -60,7 +60,7 @@ protected:
 	virtual bool eventFilter( QObject* object, QEvent* event );
 
 	KoPoint toContents( const KoPoint & ) const;
-	void setYMirroring( bool edit );
+	void setYMirroring( VPainter * );
 
 private slots:
 	void slotContentsMoving( int , int );

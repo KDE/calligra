@@ -104,15 +104,9 @@ VCanvas::toContents( const KoPoint &p ) const
 }
 
 void
-VCanvas::setYMirroring( bool edit )
+VCanvas::setYMirroring( VPainter *p )
 {
-	VPainter *p;
 	QWMatrix mat;
-
-	if( edit )
-		p = m_view->painterFactory()->editpainter();
-	else
-		p = m_view->painterFactory()->painter();
 
 	mat.scale( 1, -1 );
 	mat.translate( PAGE_OFFSETX, PAGE_OFFSETY );
@@ -128,8 +122,7 @@ VCanvas::setYMirroring( bool edit )
 void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
-	setYMirroring( true );
-
+	setYMirroring( m_view->painterFactory()->editpainter() );
 	kdDebug() << "viewp e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
 	viewport()->setUpdatesEnabled( false );
 	KoRect rect( e->rect().x() - 1, e->rect().y() - 2, e->rect().width() + 2, e->rect().height() + 4 );
@@ -141,7 +134,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		p->begin();
 		p->clear( rect, QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
-		setYMirroring( false );
+		setYMirroring( p );
 
 		// set up clippath
 		p->newPath();
@@ -163,15 +156,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 
 	// draw handle:
 	VQPainter qpainter( p->device() );
-	// Y mirroring
-	QWMatrix mat;
-	mat.scale( 1, -1 );
-	mat.translate( PAGE_OFFSETX, PAGE_OFFSETY );
-	if( contentsHeight() > height() )
-		mat.translate( -contentsX(), contentsY() - contentsHeight() );
-	else
-		mat.translate( 0, -height() );
-	qpainter.setWorldMatrix( mat );
+	setYMirroring( &qpainter );
 	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
@@ -190,8 +175,7 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 void
 VCanvas::drawDocument( QPainter* /*painter*/, const KoRect& rect, bool drawVObjects )
 {
-	setYMirroring( true );
-
+	setYMirroring( m_view->painterFactory()->editpainter() );
 	//kdDebug() << "drawDoc rect : " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
 	VPainter* p = m_view->painterFactory()->painter();
 	if( drawVObjects )
@@ -199,7 +183,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect& rect, bool drawVObje
 		p->begin();
 		p->clear( QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
-		setYMirroring( false );
+		setYMirroring( p );
 
 		m_part->document().drawPage( p );
 		m_part->document().draw( p, &rect );
@@ -209,15 +193,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect& rect, bool drawVObje
 
 	// draw handle:
 	VQPainter qpainter( p->device() );
-	// Y mirroring
-	QWMatrix mat;
-	mat.scale( 1, -1 );
-	mat.translate( PAGE_OFFSETX, PAGE_OFFSETY );
-	if( contentsHeight() > height() )
-		mat.translate( -contentsX(), contentsY() - contentsHeight() );
-	else
-		mat.translate( 0, -height() );
-	qpainter.setWorldMatrix( mat );
+	setYMirroring( &qpainter );
 	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
@@ -246,15 +222,7 @@ VCanvas::repaintAll( const KoRect & )
 
 	// draw handle:
 	VQPainter qpainter( p->device() );
-	// Y mirroring
-	QWMatrix mat;
-	mat.scale( 1, -1 );
-	mat.translate( PAGE_OFFSETX, PAGE_OFFSETY );
-	if( contentsHeight() > height() )
-		mat.translate( -contentsX(), contentsY() - contentsHeight() );
-	else
-		mat.translate( 0, -height() );
-	qpainter.setWorldMatrix( mat );
+	setYMirroring( &qpainter );
 	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
