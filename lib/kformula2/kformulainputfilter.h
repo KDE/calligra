@@ -18,45 +18,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KFORMULAMATHMLREAD_H
-#define __KFORMULAMATHMLREAD_H
+#ifndef __KFORMULAINPUTFILTER_H
+#define __KFORMULAINPUTFILTER_H
 
 #include <qobject.h>
 #include <qdom.h>
-#include "kformulainputfilter.h"
 
-/**
- This class converts MathML to KFormula XML.
- Right now is implemented only the PresentationMarkup.
-*/
 
-class MathMl2KFormula : public KFInputFilter
+class KFInputFilter : public QObject
 {
 Q_OBJECT    
-    public:
-	/**
-	 * Build a MathML 2 KFormula converter.
-	 * call @startConversion to convert and wait for 
-	 * a @conversionFinished signal, than call
-	 * @getKFormulaDom to get the converted DOM
-	 */
-	MathMl2KFormula(QDomDocument *mmldoc);
-	
+    public:	
 	/*
 	 * Get the just created DOM.
 	 */
-	virtual QDomDocument getKFormulaDom();
+	virtual QDomDocument getKFormulaDom() =0;
     
+	bool isDone() {return done; }
+	
 
     public slots:
-	virtual void startConversion();
+	virtual void startConversion() =0;
 
-    private:
+    signals:
+	void conversionFinished();
 
-	bool processElement(QDomNode *node,QDomDocument *doc,QDomNode *docnode);
+    protected:
 
-	QDomDocument *origdoc;
-	QDomDocument formuladoc;
+	bool done;
+	bool conversion;
 };
 
-#endif // __KFORMULAMATHMLREAD_H
+#endif //

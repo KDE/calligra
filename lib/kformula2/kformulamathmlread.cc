@@ -22,214 +22,326 @@
 #include <qstring.h>
 #include "kformulamathmlread.h"
 
-MathMl2KFormula::MathMl2KFormula(QDomDocument *mmldoc)
+
+
+
+MathMl2KFormula::MathMl2KFormula(QDomDocument * mmldoc)
 {
-    done=false;
-    origdoc=mmldoc;
+    done = false;
+    origdoc = mmldoc;
 }
-	
+
 QDomDocument MathMl2KFormula::getKFormulaDom()
 {
-return formuladoc;
+    return formuladoc;
 }
-    
-bool MathMl2KFormula::isDone()
-{
-    return done;
-}
-	
+
+
 
 void MathMl2KFormula::startConversion()
 {
     //TODO:let it be async
-    done=false;
-    formuladoc=QDomDocument("KFORMULA");
-    QDomElement formula=formuladoc.createElement("FORMULA");
+    done = false;
+    formuladoc = QDomDocument("KFORMULA");
+    QDomElement formula = formuladoc.createElement("FORMULA");
     processElement(origdoc,&formuladoc,&formula);
     formuladoc.appendChild(formula);
     cerr << formuladoc.toCString() << endl;
-    done=true;
+    done = true;
 }
 
-bool MathMl2KFormula::processElement(QDomNode *node,QDomDocument *doc,QDomNode *docnode)
+bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
+				     QDomNode * docnode)
 {
-    cerr << " called " <<endl;
-    
+
     QDomElement *element;
-    int type=1;  //1=unknown,2=Token,3=general layout,4=script and limit,5=tables,5=ee
-    
-    if(node->isElement()) {
+    int type = 1;		//1=unknown,2=Token,3=general layout,4=script and limit,5=tables,5=ee
+
+    if (node->isElement()) {
 	QDomElement e = node->toElement();
 	element = &e;
-	
-        QString tag=element->tagName().lower();
-        QString text=element->text();
-	cerr << "process " << tag.utf8() <<endl;
-	if(tag=="mi") {
-	    text=text.stripWhiteSpace();	
-            type=2;
-        for(unsigned int i=0;i<text.length();i++)
-                {
-                QDomElement textelement=doc->createElement("TEXT");
-        	textelement.setAttribute("CHAR",QString(text.at(i)));
-        	cerr << "text element created" << endl;
+
+	QString tag = element->tagName().lower();
+	QString text = element->text();
+	if (tag == "mi") {
+	    text = text.stripWhiteSpace();
+	    type = 2;
+	    for (unsigned int i = 0; i < text.length(); i++) {
+		QDomElement textelement = doc->createElement("TEXT");
+		textelement.setAttribute("CHAR",QString(text.at(i)));
 		docnode->appendChild(textelement);
-            }
-
-        }
-        else if(tag=="mo") {
-	    text=text.stripWhiteSpace();	
-
-            type=2;
-    	    for(unsigned int i=0;i<text.length();i++)
-                {
-            	    QDomElement textelement=doc->createElement("TEXT"); //OPERATOR
-        	    textelement.setAttribute("CHAR",QString(text.at(i)));
-        	    docnode->appendChild(textelement);
-        	}
-	    }
-        else if(tag=="mn") {
-	    text=text.stripWhiteSpace();	
-            type=2;
-            for(unsigned int i=0;i<text.length();i++){
-    	    	QDomElement textelement=doc->createElement("TEXT"); //NUMBER
-                textelement.setAttribute("CHAR",QString(text.at(i)));
-                docnode->appendChild(textelement);
-    	    }
-	}
-        else if(tag=="mtext") {
-            type=2;
-            for(unsigned int i=0;i<text.length();i++) {
-                QDomElement textelement=doc->createElement("TEXT");
-                textelement.setAttribute("CHAR",QString(text.at(i)));
-                docnode->appendChild(textelement);
-            }
-	}    
-        else if(tag=="ms") {
-	    type=2;
-            for(unsigned int i=0;i<text.length();i++) {
-                QDomElement textelement=doc->createElement("TEXT");
-	        textelement.setAttribute("CHAR",QString(text.at(i)));
-        	docnode->appendChild(textelement);
-            }
-        }
-	else if(tag=="mrow") {
-            type=3;
-            QDomNode n=element->firstChild();
-            while (!n.isNull()) {
-               if (n.isElement()) {
-                   QDomElement e = n.toElement();
-                   processElement(&e,doc,docnode); //We do not allow sequence inside sequence
-               }
-               n = n.nextSibling();
-            }
-        }
-	else if(tag=="mfrac") {
-            type=3;
-        QDomNode n=element->firstChild();
-        QDomElement fraction=doc->createElement("FRACTION");
-
-        int i=0;
-        while (!n.isNull() && i<2) {
-                if (n.isElement()) {
-                i++;
-            if(i==1) {  //first is numerator
-		cerr << "Numerator" << endl;
-                QDomElement numerator=doc->createElement("NUMERATOR");
-                QDomElement sequence=doc->createElement("SEQUENCE");
-                numerator.appendChild(sequence);
-                QDomElement e = n.toElement();
-                processElement(&e,doc,&sequence);
-                fraction.appendChild(numerator);
-        	cerr << "Numerator done" << endl;
-                
-	    } else
-            {
-		cerr << "denominator" << endl;
-                QDomElement denominator=doc->createElement("DENOMINATOR");
-                QDomElement sequence=doc->createElement("SEQUENCE");
-                denominator.appendChild(sequence);
-                QDomElement e = n.toElement();
-                processElement(&e,doc,&sequence);
-                fraction.appendChild(denominator);
-
-            }
-            }
-                n = n.nextSibling();
-            }
-	  docnode->appendChild(fraction);    
-	}    
-        else if(tag=="mroot") {
-            type=3;
-        QDomNode n=element->firstChild();
-        int i=0;
-        QDomElement root=doc->createElement("ROOT");
-
-        while (!n.isNull() && i<2) {
-                if (n.isElement()) {
-                i++;
-            if(i==1) {  //first is content
-                QDomElement content=doc->createElement("CONTENT");
-                QDomElement sequence=doc->createElement("SEQUENCE");
-                content.appendChild(sequence);
-                QDomElement e = n.toElement();
-                processElement(&e,doc,&sequence);
-                
-		root.appendChild(content);
-            } else
-            {
-                QDomElement index=doc->createElement("INDEX");
-                QDomElement sequence=doc->createElement("SEQUENCE");
-                index.appendChild(sequence);
-                QDomElement e = n.toElement();
-                processElement(&e,doc,&sequence);
-                root.appendChild(index);
-
-            }
-            }
-                n = n.nextSibling();
-            }
-	  docnode->appendChild(root);    
-	}
-        else if(tag=="msqrt") {
-            type=3;
-        QDomNode n=element->firstChild();
-        QDomElement root=doc->createElement("ROOT");
-
-        int i=0;
-        while (!n.isNull() && i<1) {
-                if (n.isElement()) {
-                i++;
-		cerr << "content" << endl;
-                QDomElement content=doc->createElement("CONTENT");
-                QDomElement sequence=doc->createElement("SEQUENCE");
-                content.appendChild(sequence);
-                QDomElement e = n.toElement();
-                processElement(&e,doc,&sequence);
-                root.appendChild(content);
-        	cerr << "content done" << endl;
-                
-	       }
-                n = n.nextSibling();
-        	cerr << "next1" << endl;
-        
 	    }
 
-          docnode->appendChild(root);    
 	}
+	else if (tag == "mo") {
+	    text = text.stripWhiteSpace();
+
+	    type = 2;
+	    for (unsigned int i = 0; i < text.length(); i++) {
+		QDomElement textelement = doc->createElement("TEXT");	//OPERATOR
+		textelement.setAttribute("CHAR",QString(text.at(i)));
+		docnode->appendChild(textelement);
+	    }
+	}
+	else if (tag == "mn") {
+	    text = text.stripWhiteSpace();
+	    type = 2;
+	    for (unsigned int i = 0; i < text.length(); i++) {
+		QDomElement textelement = doc->createElement("TEXT");	//NUMBER
+		textelement.setAttribute("CHAR",QString(text.at(i)));
+		docnode->appendChild(textelement);
+	    }
+	}
+	else if (tag == "mtext") {
+	    type = 2;
+	    for (unsigned int i = 0; i < text.length(); i++) {
+		QDomElement textelement = doc->createElement("TEXT");
+		textelement.setAttribute("CHAR",QString(text.at(i)));
+		docnode->appendChild(textelement);
+	    }
+	}
+	else if (tag == "ms") {
+	    type = 2;
+	    for (unsigned int i = 0; i < text.length(); i++) {
+		QDomElement textelement = doc->createElement("TEXT");
+		textelement.setAttribute("CHAR",QString(text.at(i)));
+		docnode->appendChild(textelement);
+	    }
+	}
+	else if (tag == "mrow") {
+	    type = 3;
+	    QDomNode n = element->firstChild();
+	    while (!n.isNull()) {
+		if (n.isElement()) {
+		    QDomElement e = n.toElement();
+		    processElement(&e,doc,docnode);	//We do not allow sequence inside sequence
+		}
+		n = n.nextSibling();
+	    }
+	}
+	else if (tag == "mfrac") {
+	    type = 3;
+	    QDomNode n = element->firstChild();
+	    QDomElement fraction = doc->createElement("FRACTION");
+
+	    int i = 0;
+	    while (!n.isNull() && i < 2) {
+		if (n.isElement()) {
+		    i++;
+		    if (i == 1) {	//first is numerator
+			QDomElement numerator =
+			    doc->createElement("NUMERATOR");
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			numerator.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+			fraction.appendChild(numerator);
+
+		    }
+		    else {
+			QDomElement denominator =
+			    doc->createElement("DENOMINATOR");
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			denominator.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+			fraction.appendChild(denominator);
+
+		    }
+		}
+		n = n.nextSibling();
+	    }
+	    docnode->appendChild(fraction);
+	}
+	else if (tag == "mroot") {
+	    type = 3;
+	    QDomNode n = element->firstChild();
+	    int i = 0;
+	    QDomElement root = doc->createElement("ROOT");
+
+	    while (!n.isNull() && i < 2) {
+		if (n.isElement()) {
+		    i++;
+		    if (i == 1) {	//first is content
+			QDomElement content = doc->createElement("CONTENT");
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			content.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+
+			root.appendChild(content);
+		    }
+		    else {
+			QDomElement index = doc->createElement("INDEX");
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			index.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+			root.appendChild(index);
+
+		    }
+		}
+		n = n.nextSibling();
+	    }
+	    docnode->appendChild(root);
+	}
+	else if (tag == "msqrt") {
+	    type = 3;
+	    QDomNode n = element->firstChild();
+	    QDomElement root = doc->createElement("ROOT");
+
+	    int i = 0;
+	    while (!n.isNull() && i < 1) {
+		if (n.isElement()) {
+		    i++;
+		    QDomElement content = doc->createElement("CONTENT");
+		    QDomElement sequence = doc->createElement("SEQUENCE");
+		    content.appendChild(sequence);
+		    QDomElement e = n.toElement();
+		    processElement(&e,doc,&sequence);
+		    root.appendChild(content);
+
+		}
+		n = n.nextSibling();
+
+	    }
+
+	    docnode->appendChild(root);
+	}
+	else if (tag == "msup" || tag == "msub") {
+	    type = 3;
+	    QDomNode n = element->firstChild();
+	    int i = 0;
+	    QDomElement root = doc->createElement("INDEX");
+
+	    while (!n.isNull() && i < 2) {
+		if (n.isElement()) {
+		    i++;
+		    if (i == 1) {	//first is content
+			QDomElement content = doc->createElement("CONTENT");
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			content.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+
+			root.appendChild(content);
+		    }
+		    else {
+
+			QDomElement index;
+			if (tag == "msup")
+			    index = doc->createElement("UPPERRIGHT");
+			else
+			    index = doc->createElement("LOWERRIGHT");
+
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			index.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+			root.appendChild(index);
+
+		    }
+		}
+		n = n.nextSibling();
+	    }
+	    docnode->appendChild(root);
+	}
+	else if (tag == "munder" || tag == "mover") {
+	    type = 3;
+	    QDomNode n = element->firstChild();
+	    int i = 0;
+	    QDomElement root = doc->createElement("INDEX");
+
+	    while (!n.isNull() && i < 2) {
+		if (n.isElement()) {
+		    i++;
+		    if (i == 1) {	//first is content
+			QDomElement content = doc->createElement("CONTENT");
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			content.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+
+			root.appendChild(content);
+		    }
+		    else {
+
+			QDomElement index;
+			if (tag == "mover")
+			    index = doc->createElement("UPPERMIDDLE");
+			else
+			    index = doc->createElement("LOWERMIDDLE");
+
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			index.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+			root.appendChild(index);
+
+		    }
+		}
+		n = n.nextSibling();
+	    }
+	    docnode->appendChild(root);
+	}
+	else if (tag == "msubsup") {
+	    type = 3;
+	    QDomNode n = element->firstChild();
+	    int i = 0;
+	    QDomElement root = doc->createElement("INDEX");
+
+	    while (!n.isNull() && i < 2) {
+		if (n.isElement()) {
+		    i++;
+		    if (i == 1) {	//first is content
+			QDomElement content = doc->createElement("CONTENT");
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			content.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+
+			root.appendChild(content);
+		    }
+		    else if (i == 2) {
+
+			QDomElement index;
+			index = doc->createElement("LOWERRIGHT");
+
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			index.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+			root.appendChild(index);
+		    }
+		    else {
+			QDomElement index;
+			index = doc->createElement("UPPERRIGHT");
+
+			QDomElement sequence = doc->createElement("SEQUENCE");
+			index.appendChild(sequence);
+			QDomElement e = n.toElement();
+			processElement(&e,doc,&sequence);
+			root.appendChild(index);
+		    }
+
+		}
+		n = n.nextSibling();
+	    }
+	    docnode->appendChild(root);
+	}
+
     }
-    
-    if(type==1) {  //Unknown
-	QDomNode n=node->firstChild();
+
+    if (type == 1) {		//Unknown
+	QDomNode n = node->firstChild();
 	while (!n.isNull()) {
 	    processElement(&n,doc,docnode);
-	    cerr << "next " << endl;
-    	    n = n.nextSibling();
-        
-        }
+	    n = n.nextSibling();
+
+	}
 
     }
- 
+
 }
 
 #include "kformulamathmlread.moc"

@@ -5,8 +5,11 @@
    <mfrac> 
     <mi> y </mi>
      <mroot>
-        <mi> 4 </mi>	
-    	<mn> a </mn>
+    	<munder>
+	  <mi> lim </mi>
+	  <mtext>x->0</mtext>
+	</munder>
+        <mn> 4 </mn>	
      </mroot>	 	  
   </mfrac>	
   </mrow>

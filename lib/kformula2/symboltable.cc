@@ -63,7 +63,7 @@ SymbolTable::SymbolTable()
     addEntry("max");
 
     // symbols
-    addEntry("alpha", 'a');
+    addEntry("\alpha", 'a');
     addEntry("beta", 'b');
     addEntry("gamma", 'g');
     addEntry("delta", 'd');
