@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2000 David Faure <faure@kde.org>
    Copyright (C) 2000 Norbert Andres <nandres@web.de>
+   Copyright (C) 2005 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -216,14 +217,12 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const KSpreadDoc* ksdoc )
   data.appendChild( dataItem );
   officeMeta.appendChild( data );
 
-  data = meta.createElement( "meta:user-defined" );
-  data.setAttribute( "meta:name", "Info 1" );
+  data = meta.createElement( "dc:title" );
   data.appendChild( meta.createTextNode( aboutPage->title() ) );
   officeMeta.appendChild( data );
 
-  data = meta.createElement( "meta:user-defined" );
-  data.setAttribute( "meta:name", "Info 2" );
-  data.appendChild( meta.createTextNode( aboutPage->abstract() ) );
+  data = meta.createElement( "dc:subject" );
+  data.appendChild( meta.createTextNode( aboutPage->subject() ) );
   officeMeta.appendChild( data );
 
   const QDateTime dt ( QDateTime::currentDateTime() );
