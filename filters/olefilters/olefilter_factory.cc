@@ -46,7 +46,7 @@ OLEFilterFactory::~OLEFilterFactory()
     s_global = 0L;
 }
 
-QObject* OLEFilterFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* OLEFilterFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -54,7 +54,6 @@ QObject* OLEFilterFactory::create( QObject* parent, const char* name, const char
 	    return 0L;
     }
     OLEFilter *f = new OLEFilter( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 
