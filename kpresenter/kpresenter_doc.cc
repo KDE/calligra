@@ -722,9 +722,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         return false;
     }
 
-    if(!document.hasAttribute("mime") || document.attribute("mime")!="application/x-kpresenter") {
+    if(!document.hasAttribute("mime") ||  (
+                document.attribute("mime")!="application/x-kpresenter" && document.attribute("mime")!="application/vnd.kde.kpresenter" ) ) {
         kdError() << "Unknown mime type " << document.attribute("mime") << endl;
-        setErrorMessage( i18n("Invalid document, expected mimetype application/x-kpresenter, got %1").arg(document.attribute("mime")) );
+        setErrorMessage( i18n("Invalid document, expected mimetype application/x-kpresenter or application/vnd.kde.kpresenter, got %1").arg(document.attribute("mime")) );
         return false;
     }
     if(document.hasAttribute("url"))
