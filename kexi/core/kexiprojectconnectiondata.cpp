@@ -258,7 +258,7 @@ KexiProjectConnectionData::clean()
 const QString &
 KexiProjectConnectionData::generateTmpName()
 {
-
+	return QString::null;
 }
 
 KexiProjectConnectionData::~KexiProjectConnectionData()
