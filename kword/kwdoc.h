@@ -546,6 +546,8 @@ public:
     void clearIgnoreWordAll( );
     void updateTextFrameSetEdit();
     void switchModeView();
+    void changeFootNoteConfig();
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 

@@ -3348,4 +3348,24 @@ void KWDocument::switchModeView()
 
 }
 
+void KWDocument::changeFootNoteConfig()
+{
+    QPtrListIterator<KoVariable> it( m_varColl->getVariables() );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->type() == VT_FOOTNOTE )
+        {
+            static_cast<KWFootNoteVariable *>(it.current())->formatedNote();
+            static_cast<KWFootNoteVariable *>(it.current())->resize();
+            KoTextParag * parag = it.current()->paragraph();
+            if ( parag )
+            {
+                parag->invalidate( 0 );
+                parag->setChanged( true );
+            }
+        }
+    }
+    slotRepaintVariable();
+}
+
 #include "kwdoc.moc"
