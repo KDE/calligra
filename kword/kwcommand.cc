@@ -575,7 +575,7 @@ void KWPageLayoutCommand::unexecute()
 }
 
 
-KWTextFrameSetCommand::KWTextFrameSetCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex):
+KWTextFrameCommand::KWTextFrameCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex):
     KCommand(name),
     m_pDoc(_doc),
     frameIndex(_frameIndex)
@@ -583,6 +583,33 @@ KWTextFrameSetCommand::KWTextFrameSetCommand( const QString &name,KWDocument *_d
     KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
     KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
     copyFrame=frame->getCopy();
+}
+
+void KWTextFrameCommand::execute()
+{
+    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
+    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
+    frame->getFrameSet()->delFrame( frameIndex.m_iFrameIndex );
+    m_pDoc->repaintAllViews();
+}
+
+void KWTextFrameCommand::unexecute()
+{
+    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
+    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
+    copyFrame->setFrameSet(frameSet);
+    frame->getFrameSet()->addFrame( copyFrame );
+    m_pDoc->repaintAllViews();
+}
+
+
+
+KWTextFrameSetCommand::KWTextFrameSetCommand( const QString &name,KWDocument *_doc,const QDomDocument &_saveParam,FrameIndex _frameIndex):
+    KCommand(name),
+    m_pDoc(_doc),
+    frameIndex(_frameIndex),
+    saveFrameParag(_saveParam)
+{
 }
 
 void KWTextFrameSetCommand::execute()
@@ -595,9 +622,10 @@ void KWTextFrameSetCommand::execute()
 
 void KWTextFrameSetCommand::unexecute()
 {
+    QDomElement saveParam=saveFrameParag.documentElement();
     KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
-    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
-    copyFrame->setFrameSet(frameSet);
-    frame->getFrameSet()->addFrame( copyFrame );
+    KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameSet) ;
+    tmpParag->load(saveParam );
+    tmpParag->formatMore();
     m_pDoc->repaintAllViews();
 }

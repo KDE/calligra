@@ -22,6 +22,7 @@
 
 #include <kcommand.h>
 #include <koGlobal.h>
+#include <qdom.h>
 class KWGUI;
 
 namespace Qt3 {
@@ -277,11 +278,11 @@ protected:
 /**
  * Command created when you delete a textframeset
  */
-class KWTextFrameSetCommand : public KCommand
+class KWTextFrameCommand : public KCommand
 {
 public:
-    KWTextFrameSetCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex) ;
-    ~KWTextFrameSetCommand() {}
+    KWTextFrameCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex) ;
+    ~KWTextFrameCommand() {}
 
     void execute();
     void unexecute();
@@ -289,5 +290,22 @@ protected:
     KWDocument *m_pDoc;
     FrameIndex frameIndex;
     KWFrame *copyFrame;
+};
+
+/**
+ * Command created when you delete a textframeset
+ */
+class KWTextFrameSetCommand : public KCommand
+{
+public:
+    KWTextFrameSetCommand( const QString &name,KWDocument *_doc,const QDomDocument& _saveFrameParag,FrameIndex _frameIndex) ;
+    ~KWTextFrameSetCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWDocument *m_pDoc;
+    FrameIndex frameIndex;
+    QDomDocument saveFrameParag;
 };
 #endif

@@ -1607,14 +1607,31 @@ void KWCanvas::deleteFrame()
             FrameIndex index;
             index.m_iFrameIndex=theFrame->getFrameSet()->getFrameFromPtr(theFrame);
             index.m_iFrameSetIndex=doc->getFrameSetNum(theFrame->getFrameSet());
-            KWTextFrameSetCommand *cmd = new KWTextFrameSetCommand(i18n("Delete text frame"),doc,index);
+            KWTextFrameCommand *cmd = new KWTextFrameCommand(i18n("Delete text frame"),doc,index);
             doc->addCommand(cmd);
         }
         theFrame->getFrameSet()->delFrame( theFrame );
     }
     else
-        doc->delFrameSet( theFrame->getFrameSet() );
+    {
+        if(theFrame->getFrameSet()->getFrameType() == FT_TEXT)
+        {
+            FrameIndex index;
+            index.m_iFrameIndex=theFrame->getFrameSet()->getFrameFromPtr(theFrame);
+            index.m_iFrameSetIndex=doc->getFrameSetNum(theFrame->getFrameSet());
+            QDomDocument domDoc( "PARAGRAPHS" );
+            QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
+            domDoc.appendChild( elem );
+            theFrame->getFrameSet()->save(elem);
 
+            KWTextFrameSetCommand *cmd = new KWTextFrameSetCommand(i18n("Delete text frame"),doc,domDoc,index);
+            doc->addCommand(cmd);
+        }
+        theFrame->getFrameSet()->delFrame( theFrame );
+        //don't remove frameset Otherwise undo/redo text doesn't work
+        //as discuted with david faure
+        //doc->delFrameSet( theFrame->getFrameSet() );
+    }
 #if 0
     // set FC to new frameset
     fc->setFrameSet( 1 );
