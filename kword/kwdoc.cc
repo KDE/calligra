@@ -60,7 +60,7 @@
 //#define DEBUG_PAGES
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
-static const char * CURRENT_DTD_VERSION = "1.1";
+static const char * CURRENT_DTD_VERSION = "1.2";
 
 /******************************************************************/
 /* Class: KWChild                                              */
