@@ -283,13 +283,16 @@ class KSpreadSpell : public KSpell
 class ViewActions
 {
 public:
+
+    // cell formatting
+    KAction* cellLayout;
+    KAction* defaultFormat;
+    KSelectAction* selectStyle;
     KToggleAction* bold;
     KToggleAction* italic;
     KToggleAction* underline;
     KToggleAction* strikeOut;
     KToggleAction* percent;
-    KSelectAction* selectStyle;
-    KAction* createStyle;
     KAction* precplus;
     KAction* precminus;
     KToggleAction* money;
@@ -299,82 +302,20 @@ public:
     KToggleAction* alignTop;
     KToggleAction* alignMiddle;
     KToggleAction* alignBottom;
-    KAction* insertSeries;
-    KAction* insertLink;
-    KAction* insertFunction;
-    KAction* insertSpecialChar;
-    KAction* transform;
-    KAction* copy;
-    KAction* findAction;
-    KAction* replaceAction;
-    KAction* paste;
-    KAction* cut;
-    KAction* specialPaste;
-    KAction* del;
-    KAction* clearText;
-    KAction* clearComment;
-    KAction* clearValidity;
-    KAction* clearConditional;
-    KAction* fillRight;
-    KAction* fillLeft;
-    KAction* fillUp;
-    KAction* fillDown;
-    KAction* recalc_workbook;
-    KAction* recalc_worksheet;
-    KAction* adjust;
-    KAction* editCell;
-    KAction* undo;
-    KAction* redo;
-    KAction* paperLayout;
-    KAction* styleDialog;
-    KAction* definePrintRange;
-    KAction* resetPrintRange;
-    KAction* insertFromDatabase;
-    KAction* insertFromTextfile;
-    KAction* insertFromClipboard;
-    KAction* insertTable;
-    KAction* menuInsertTable;
-    KAction* removeTable;
-    KAction* renameTable;
-    KAction* nextTable;
-    KAction* prevTable;
-    KAction* firstTable;
-    KAction* lastTable;
-    KAction* editGlobalScripts;
-    KAction* editLocalScripts;
-    KAction* reloadScripts;
-    KAction* conditional;
-    KAction* validity;
-    KAction* sort;
-    KAction* goalSeek;
-    KAction* subTotals;
-    KAction* multipleOperations;
-    KAction* textToColumns;
-    KAction* consolidate;
-    KAction* help;
-    KAction* insertCellCopy;
     KToggleAction* multiRow;
     KFontAction* selectFont;
     KFontSizeAction* selectFontSize;
-    KAction* deleteColumn;
-    KAction* hideColumn;
-    KAction* showColumn;
-    KAction* showSelColumns;
-    KAction* insertColumn;
-    KAction* deleteRow;
-    KAction* insertRow;
-    KAction* hideRow;
-    KAction* showRow;
-    KAction* showSelRows;
-    KSelectAction* formulaSelection;
-    KSelectAction* viewZoom;
-    KAction* sortDec;
-    KAction* sortInc;
+    KToggleAction* verticalText;
+    KAction* increaseIndent;
+    KAction* decreaseIndent;
+    KAction* fontSizeUp;
+    KAction* fontSizeDown;
+    KAction* upper;
+    KAction* lower;
+    KAction* firstLetterUpper;
+    KAction* changeAngle;
     TKSelectColorAction* textColor;
     TKSelectColorAction* bgColor;
-    KAction* cellLayout;
-    KAction* hideTable;
-    KAction* showTable;
     KAction* borderLeft;
     KAction* borderRight;
     KAction* borderTop;
@@ -383,51 +324,112 @@ public:
     KAction* borderOutline;
     KAction* borderRemove;
     TKSelectColorAction* borderColor;
-    KAction* tableFormat;
-    KAction* autoSum;
-    KToggleAction* showPageBorders;
-    KActionMenu* scripts;
-    KAction* defaultFormat;
-    KAction* areaName;
-    KAction* showArea;
-    KAction* resizeRow;
-    KAction* resizeColumn;
-    KAction* fontSizeUp;
-    KAction* fontSizeDown;
-    KAction* upper;
-    KAction* lower;
-    KAction* equalizeRow;
-    KAction* equalizeColumn;
-    KAction* preference;
-    KAction* firstLetterUpper;
-    KToggleAction* verticalText;
-    KAction* addModifyComment;
-    KAction* removeComment;
+
+    // cell operations
+    KAction* editCell;
     KAction* insertCell;
     KAction* removeCell;
-    KAction* changeAngle;
     KAction* mergeCell;
     KAction* dissociateCell;
-    KAction* gotoCell;
-    KAction* increaseIndent;
-    KAction* decreaseIndent;
-    KAction* sortList;
-    KAction* spellChecking;
+    KAction* clearText;
+    KAction* conditional;
+    KAction* clearConditional;
+    KAction* validity;
+    KAction* clearValidity;
+    KAction* addModifyComment;
+    KAction* removeComment;
+    KAction* clearComment;
+    KAction* createStyle;
 
-    KAction* createTemplate;
+    // column & row operations
+    KAction* resizeColumn;
+    KAction* insertColumn;
+    KAction* deleteColumn;
+    KAction* hideColumn;
+    KAction* showColumn;
+    KAction* equalizeColumn;
+    KAction* showSelColumns;
+    KAction* resizeRow;
+    KAction* insertRow;
+    KAction* deleteRow;
+    KAction* hideRow;
+    KAction* showRow;
+    KAction* equalizeRow;
+    KAction* showSelRows;
+    KAction* adjust;
 
-    KAction* insertChartFrame;
-
+    // sheet/workbook operations
+    KAction* insertTable;
+    KAction* menuInsertTable;
+    KAction* removeTable;
+    KAction* renameTable;
+    KAction* hideTable;
+    KAction* showTable;
+    KAction* tableFormat;
+    KAction* areaName;
+    KAction* showArea;
+    KAction* insertSeries;
+    KAction* insertFunction;
+    KAction* insertSpecialChar;
+    KAction* insertFromDatabase;
+    KAction* insertFromTextfile;
+    KAction* insertFromClipboard;
+    KAction* transform;
+    KAction* sortDec;
+    KAction* sortInc;
+    KAction* fillRight;
+    KAction* fillLeft;
+    KAction* fillUp;
+    KAction* fillDown;
+    KAction* paperLayout;
+    KAction* definePrintRange;
+    KAction* resetPrintRange;
+    KToggleAction* showPageBorders;
+    KAction* recalc_worksheet;
+    KAction* recalc_workbook;
     KToggleAction* protectSheet;
     KToggleAction* protectDoc;
 
-    KToggleAction* recordChanges;
-    KToggleAction* protectChanges;
-    KAction* filterChanges;
-    KAction* acceptRejectChanges;
-    KAction* commentChanges;
-    KAction* mergeDocument;
+    // general editing
+    KAction* cut;
+    KAction* copy;
+    KAction* paste;
+    KAction* del;
+    KAction* specialPaste;
+    KAction* insertCellCopy;
+    KAction* undo;
+    KAction* redo;
+    KAction* findAction;
+    KAction* replaceAction;
 
+    // navigation
+    KAction* gotoCell;
+    KAction* nextTable;
+    KAction* prevTable;
+    KAction* firstTable;
+    KAction* lastTable;
+
+    // misc
+    KAction* styleDialog;
+    KAction* autoSum;
+    KSelectAction* formulaSelection;
+    KAction* insertLink;
+    KSelectAction* viewZoom;
+    KAction* sort;
+    KAction* consolidate;
+    KAction* goalSeek;
+    KAction* subTotals;
+    KAction* textToColumns;
+    KAction* multipleOperations;
+    KAction* createTemplate;
+    KoPartSelectAction *insertPart;
+    KAction* insertChartFrame;
+    KAction* sortList;
+    KAction* spellChecking;
+    KAction* preference;
+    KAction* help;
+
+    // running calculation
     KToggleAction* menuCalcMin;
     KToggleAction* menuCalcMax;
     KToggleAction* menuCalcAverage;
@@ -435,7 +437,20 @@ public:
     KToggleAction* menuCalcSum;
     KToggleAction* menuCalcNone;
 
-    KoPartSelectAction *insertPart;
+    // scripts
+    KActionMenu* scripts;
+    KAction* editGlobalScripts;
+    KAction* editLocalScripts;
+    KAction* reloadScripts;
+
+    // revision control
+    KToggleAction* recordChanges;
+    KToggleAction* protectChanges;
+    KAction* filterChanges;
+    KAction* acceptRejectChanges;
+    KAction* commentChanges;
+    KAction* mergeDocument;
+
 };
 
 class ViewPrivate
