@@ -88,7 +88,7 @@ KoHyphenator::KoHyphenator()
 
 KoHyphenator::~KoHyphenator()
 {
-    for (QMap<QString, HyphenDict*>::iterator it = dicts.begin(); it != dicts.end(); it++)
+    for (QMap<QString, HyphenDict*>::iterator it = dicts.begin(); it != dicts.end(); ++it)
     {
         if ((*it) != 0)
             hnj_hyphen_free((*it));
