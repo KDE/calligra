@@ -42,8 +42,8 @@
 #include <koStore.h>
 
 KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu,
-				      KoDocument* doc,
-				      const QRect& rect )
+                                      KoDocument* doc,
+                                      const QRect& rect )
   : KoDocumentChild ( killu, doc, rect )
 {
 }
@@ -77,11 +77,11 @@ bool KIllustratorDocument::loadXML (QIODevice *, const QDomDocument &doc)
       GLayer* layer = *i;
       list<GObject*>& contents = layer->objects ();
       for (list<GObject*>::iterator oi = contents.begin ();
-	   oi != contents.end (); oi++) {
-	if ((*oi)->isA ("GPart")) {
-	  GPart *part = (GPart *) *oi;
-	  insertChild (part->getChild ());
-	}
+           oi != contents.end (); oi++) {
+        if ((*oi)->isA ("GPart")) {
+          GPart *part = (GPart *) *oi;
+          insertChild (part->getChild ());
+        }
       }
     }
     return true;
@@ -102,7 +102,7 @@ bool KIllustratorDocument::loadChildren (KoStore* store)
 
 bool KIllustratorDocument::saveChildren (KoStore* _store, const char *_path)
 {
-  cerr << "void KIllustratorDocument::saveChildren( KOStore::Store _store, const char *_path )" << endl;
+  kdDebug() << "void KIllustratorDocument::saveChildren( KOStore::Store _store, const char *_path )" << endl;
   int i = 0;
   QListIterator<KoDocumentChild> it ( children() );
   for( ; it.current(); ++it )
@@ -127,16 +127,16 @@ bool KIllustratorDocument::completeSaving (KoStore* store)
 
 void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
 {
-  cout << "KIllustrator: insetPart !!!!!!!!!!!!!!!!!!!!!" << endl;
+    kdDebug() << "KIllustrator: insetPart !!!!!!!!!!!!!!!!!!!!!" << endl;
     KoDocument* doc = e.createDoc();
     if ( !doc )
-	return;
+        return;
 
     if (! doc->initDoc() )
     {
-	QMessageBox::critical ((QWidget *) 0L, i18n ("KIllustrator Error"),
-			       i18n ("Could not insert document"), i18n ("OK"));
-	return;
+        QMessageBox::critical ((QWidget *) 0L, i18n ("KIllustrator Error"),
+                               i18n ("Could not insert document"), i18n ("OK"));
+        return;
     }
 
     KIllustratorChild *child = new KIllustratorChild (this, doc, rect );
@@ -185,7 +185,7 @@ void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, b
     Rect r( (float)rect.x(), (float)rect.y(), (float)rect.width(), (float)rect.height() );
 
     if ( !transparent )
-	painter.fillRect( rect, white );
+        painter.fillRect( rect, white );
     m_gdocument->drawContentsInRegion( painter, r );
 }
 
@@ -199,15 +199,15 @@ bool KIllustratorDocument::insertNewTemplate (int, int, bool) {
   KoTemplateChooseDia::ReturnType ret;
 
   ret = KoTemplateChooseDia::choose (KIllustratorFactory::global(),
-				     templ,
-				     "application/x-killustrator", "*.kil",
-				     "KIllustrator",
-				     KoTemplateChooseDia::Everything,
-				     "killustrator_template");
+                                     templ,
+                                     "application/x-killustrator", "*.kil",
+                                     "KIllustrator",
+                                     KoTemplateChooseDia::Everything,
+                                     "killustrator_template");
   if (ret == KoTemplateChooseDia::Template) {
     QFileInfo fileInfo (templ);
     QString fileName (fileInfo.dirPath (true) + "/" +
-		      fileInfo.baseName () + ".kil");
+                      fileInfo.baseName () + ".kil");
     // load it
     bool ok = loadNativeFormat (fileName);
     setModified (true);

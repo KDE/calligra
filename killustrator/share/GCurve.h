@@ -26,10 +26,6 @@
 #define GCurve_h_
 
 #include <qobject.h>
-//#include <qcolor.h>
-//#include <qfont.h>
-//#include <qwmatrix.h>
-//#include <qpainter.h>
 #include <list>
 
 #include <Coord.h>
@@ -72,7 +68,7 @@ public:
   ~GCurve () {}
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-		     bool outline = false);
+                     bool outline = false);
   virtual bool contains (const Coord& p);
   virtual QString typeName () const;
 
@@ -91,7 +87,7 @@ public:
 
   void addLineSegment (const Coord& p1, const Coord& p2);
   void addBezierSegment (const Coord& p1, const Coord& p2,
-			 const Coord& p3, const Coord& p4);
+                         const Coord& p3, const Coord& p4);
   void addSegment (const GSegment& s);
   const GSegment& getSegment (int idx);
   int numOfSegments () const { return segments.size (); }
@@ -103,7 +99,7 @@ public:
 
 protected:
   static QColor blendColors (const QColor& c1, const QColor& c2,
-			     int step, int num);
+                             int step, int num);
 
   void calcBoundingBox ();
   void updateGradientShape (QPainter& p);

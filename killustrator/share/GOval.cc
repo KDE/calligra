@@ -31,14 +31,13 @@
 #include <qdom.h>
 #include <qstring.h>
 #include <klocale.h>
-//#include <kapp.h>
 
 GOval::GOval (bool cFlag) : circleFlag (cFlag) {
   sAngle = eAngle = 270;
 }
 
 GOval::GOval (const QDomElement &element, bool cFlag)
-  : GObject (element) {
+  : GObject (element.namedItem("gobject").toElement()) {
 
       float x = 0, y = 0, rx = 0, ry = 0;
       sAngle = eAngle = 270;
@@ -51,11 +50,11 @@ GOval::GOval (const QDomElement &element, bool cFlag)
       eAngle=element.attribute("angle2").toFloat();
       QString v=element.attribute("kind");
       if (v == "arc")
-	  outlineInfo.shape = GObject::OutlineInfo::ArcShape;
+          outlineInfo.shape = GObject::OutlineInfo::ArcShape;
       else if (v == "pie")
-	  outlineInfo.shape = GObject::OutlineInfo::PieShape;
+          outlineInfo.shape = GObject::OutlineInfo::PieShape;
       else
-	  outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
+          outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
 
       sPoint.x (x - rx); sPoint.y (y - ry);
       ePoint.x (x + rx); ePoint.y (y + ry);
@@ -93,9 +92,9 @@ void GOval::draw (QPainter& p, bool withBasePoints, bool outline) {
     initBrush (brush);
     p.setBrush (brush);
     if (gradientFill () &&
-	outlineInfo.shape != GObject::OutlineInfo::ArcShape) {
+        outlineInfo.shape != GObject::OutlineInfo::ArcShape) {
       if (! gShape.valid ())
-	updateGradientShape (p);
+        updateGradientShape (p);
       gShape.draw (p);
     }
   }
@@ -103,22 +102,22 @@ void GOval::draw (QPainter& p, bool withBasePoints, bool outline) {
   switch (outlineInfo.shape) {
   case GObject::OutlineInfo::DefaultShape:
     Painter::drawEllipse (p, sPoint.x (), sPoint.y (),
-			  ePoint.x () - sPoint.x (),
-			  ePoint.y () - sPoint.y ());
+                          ePoint.x () - sPoint.x (),
+                          ePoint.y () - sPoint.y ());
     break;
   case GObject::OutlineInfo::PieShape:
     alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
     Painter::drawPie (p, sPoint.x (), sPoint.y (),
-		      ePoint.x () - sPoint.x (),
-		      ePoint.y () - sPoint.y (),
-		      -eAngle * 16, -alen * 16);
+                      ePoint.x () - sPoint.x (),
+                      ePoint.y () - sPoint.y (),
+                      -eAngle * 16, -alen * 16);
     break;
   case GObject::OutlineInfo::ArcShape:
     alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
     Painter::drawArc (p, sPoint.x (), sPoint.y (),
-		      ePoint.x () - sPoint.x (),
-		      ePoint.y () - sPoint.y (),
-		      -eAngle * 16, -alen * 16);
+                      ePoint.x () - sPoint.x (),
+                      ePoint.y () - sPoint.y (),
+                      -eAngle * 16, -alen * 16);
     break;
   }
   p.restore ();
@@ -160,7 +159,7 @@ bool GOval::contains (const Coord& p) {
     if (x1 <= x && x <= x2) {
       sqr = sqrt ((1 - ((x-mx)*(x-mx)) / (a*a)) * (b*b));
       if (my - sqr <= pp.y () && pp.y () <= my + sqr)
-	return true;
+        return true;
     }
   }
   return false;
@@ -199,8 +198,8 @@ void GOval::setEndPoint (const Coord& p) {
 
 void GOval::calcBoundingBox () {
   calcUntransformedBoundingBox (sPoint, Coord (ePoint.x (), sPoint.y ()),
-				ePoint,
-				Coord (sPoint.x (), ePoint.y ()));
+                                ePoint,
+                                Coord (sPoint.x (), ePoint.y ()));
   update_segments ();
 }
 
@@ -258,9 +257,9 @@ void GOval::movePoint (int idx, float dx, float dy) {
     angle = asin (y / b) * RAD_FACTOR;
     if (segPoint[idx].y () < r.center ().y ()) {
       if (segPoint[idx].x () > r.center ().x ())
-	angle += 360;
+        angle += 360;
       else
-	angle = 180 - angle;;
+        angle = 180 - angle;;
     }
     else if (segPoint[idx].x () < r.center ().x ())
       angle = 180 - angle;
@@ -336,23 +335,23 @@ void GOval::updateGradientShape (QPainter& p) {
   // define the clipping region
   QWMatrix matrix = p.worldMatrix ();
   QRect rect (qRound (sPoint.x ()), qRound (sPoint.y ()),
-	      qRound (ePoint.x () - sPoint.x ()),
-	      qRound (ePoint.y () - sPoint.y ()));
+              qRound (ePoint.x () - sPoint.x ()),
+              qRound (ePoint.y () - sPoint.y ()));
   switch (outlineInfo.shape) {
   case GObject::OutlineInfo::DefaultShape:
       {
-	  QPointArray pnts;
-	  pnts.makeEllipse (rect.x (), rect.y (),
-			    rect.width (), rect.height ());
-	  gShape.setRegion (QRegion (matrix.map (pnts)));
-	  break;
+          QPointArray pnts;
+          pnts.makeEllipse (rect.x (), rect.y (),
+                            rect.width (), rect.height ());
+          gShape.setRegion (QRegion (matrix.map (pnts)));
+          break;
       }
   case GObject::OutlineInfo::PieShape:
     {
-	QPointArray epnts;
-	epnts.makeEllipse (rect.x (), rect.y (),
-			   rect.width (), rect.height ());
-	QRegion region (matrix.map (epnts));
+        QPointArray epnts;
+        epnts.makeEllipse (rect.x (), rect.y (),
+                           rect.width (), rect.height ());
+        QRegion region (matrix.map (epnts));
 
       float a = fabs (sAngle - eAngle);
 
@@ -364,80 +363,80 @@ void GOval::updateGradientShape (QPainter& p) {
       Rect r (sPoint, ePoint);
       r = r.normalize ();
       Coord m = r.center ();
-	
+
       // point #0: center
       pnts.setPoint (0, QPoint (qRound (m.x ()), qRound (m.y ())));
       // point #1: segPoint[0]
       pnts.setPoint (1, QPoint (qRound (segPoint[0].x ()),
-				qRound (segPoint[0].y ())));
+                                qRound (segPoint[0].y ())));
       // point #4: segPoint[1]
       pnts.setPoint (4, QPoint (qRound (segPoint[1].x ()),
-				qRound (segPoint[1].y ())));
+                                qRound (segPoint[1].y ())));
 
       if ((sAngle >= eAngle && a >= 180) || (sAngle < eAngle && a <= 180)) {
 #define WINKEL 90.0
-	// point #2
-	float x1 = m.x () - segPoint[0].x ();
-	float y1 = m.y () - segPoint[0].y ();
-	
-	// x = x1 * cos (-WINKEL) - y1 * sin (-WINKEL);
-	// y = x1 * sin (-WINKEL) + y1 * cos (-WINKEL);
-	x = y1; y = -x1;
+        // point #2
+        float x1 = m.x () - segPoint[0].x ();
+        float y1 = m.y () - segPoint[0].y ();
 
-	x *= 1.5; y *= 1.5;
+        // x = x1 * cos (-WINKEL) - y1 * sin (-WINKEL);
+        // y = x1 * sin (-WINKEL) + y1 * cos (-WINKEL);
+        x = y1; y = -x1;
 
-	x += segPoint[0].x ();
-	y += segPoint[0].y ();
+        x *= 1.5; y *= 1.5;
 
-	pnts.setPoint (2, QPoint (qRound (x), qRound (y)));
+        x += segPoint[0].x ();
+        y += segPoint[0].y ();
 
-	// point #3
-	x1 = m.x () - segPoint[1].x ();
-	y1 = m.y () - segPoint[1].y ();
-	
-	x = x1 * cos (WINKEL) - y1 * sin (WINKEL);
-	y = x1 * sin (WINKEL) + y1 * cos (WINKEL);
-	
-	x *= 1.5; y *= 1.5;
+        pnts.setPoint (2, QPoint (qRound (x), qRound (y)));
 
-	x += segPoint[1].x ();
-	y += segPoint[1].y ();
+        // point #3
+        x1 = m.x () - segPoint[1].x ();
+        y1 = m.y () - segPoint[1].y ();
 
-	pnts.setPoint (3, QPoint (qRound (x), qRound (y)));
+        x = x1 * cos (WINKEL) - y1 * sin (WINKEL);
+        y = x1 * sin (WINKEL) + y1 * cos (WINKEL);
 
-	region = region.subtract (QRegion (matrix.map (pnts)));
+        x *= 1.5; y *= 1.5;
+
+        x += segPoint[1].x ();
+        y += segPoint[1].y ();
+
+        pnts.setPoint (3, QPoint (qRound (x), qRound (y)));
+
+        region = region.subtract (QRegion (matrix.map (pnts)));
       }
       else {
-	// point #2
-	float x1 = m.x () - segPoint[0].x ();
-	float y1 = m.y () - segPoint[0].y ();
-	
-	// x = x1 * cos (WINKEL) - y1 * sin (WINKEL);
-	// y = x1 * sin (WINKEL) + y1 * cos (WINKEL);
-	x = -y1;
-	y = x1;
+        // point #2
+        float x1 = m.x () - segPoint[0].x ();
+        float y1 = m.y () - segPoint[0].y ();
 
-	x *= 1.5; y *= 1.5;
+        // x = x1 * cos (WINKEL) - y1 * sin (WINKEL);
+        // y = x1 * sin (WINKEL) + y1 * cos (WINKEL);
+        x = -y1;
+        y = x1;
 
-	x += segPoint[0].x ();
-	y += segPoint[0].y ();
+        x *= 1.5; y *= 1.5;
 
-	pnts.setPoint (2, QPoint (qRound (x), qRound (y)));
+        x += segPoint[0].x ();
+        y += segPoint[0].y ();
 
-	// point #3
-	x1 = m.x () - segPoint[1].x ();
-	y1 = m.y () - segPoint[1].y ();
-	
-	x = x1 * cos (-WINKEL) - y1 * sin (-WINKEL);
-	y = x1 * sin (-WINKEL) + y1 * cos (-WINKEL);
-	
-	x *= 1.5; y *= 1.5;
+        pnts.setPoint (2, QPoint (qRound (x), qRound (y)));
 
-	x += segPoint[1].x ();
-	y += segPoint[1].y ();
+        // point #3
+        x1 = m.x () - segPoint[1].x ();
+        y1 = m.y () - segPoint[1].y ();
 
-	pnts.setPoint (3, QPoint (qRound (x), qRound (y)));
-	region = region.intersect (QRegion (matrix.map (pnts)));
+        x = x1 * cos (-WINKEL) - y1 * sin (-WINKEL);
+        y = x1 * sin (-WINKEL) + y1 * cos (-WINKEL);
+
+        x *= 1.5; y *= 1.5;
+
+        x += segPoint[1].x ();
+        y += segPoint[1].y ();
+
+        pnts.setPoint (3, QPoint (qRound (x), qRound (y)));
+        region = region.intersect (QRegion (matrix.map (pnts)));
       }
       gShape.setRegion (region);
       break;
@@ -460,15 +459,15 @@ void GOval::getPath (vector<Coord>& path) {
   QPointArray parray;
   if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
     parray.makeArc (sPoint.x (), sPoint.y (),
-		    ePoint.x () - sPoint.x (),
-		    ePoint.y () - sPoint.y (),
-		    -180 * 16, -360 * 16);
+                    ePoint.x () - sPoint.x (),
+                    ePoint.y () - sPoint.y (),
+                    -180 * 16, -360 * 16);
   else {
     float alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
     parray.makeArc (sPoint.x (), sPoint.y (),
-		    ePoint.x () - sPoint.x (),
-		    ePoint.y () - sPoint.y (), -eAngle * 16,
-		    -alen * 16);
+                    ePoint.x () - sPoint.x (),
+                    ePoint.y () - sPoint.y (), -eAngle * 16,
+                    -alen * 16);
   }
   unsigned int num = parray.size ();
   path.resize (num);
@@ -485,15 +484,15 @@ GCurve* GOval::convertToCurve () const {
   QPointArray parray;
   if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
     parray.makeArc (sPoint.x (), sPoint.y (),
-		    ePoint.x () - sPoint.x (),
-		    ePoint.y () - sPoint.y (),
-		    -180 * 16, -360 * 16);
+                    ePoint.x () - sPoint.x (),
+                    ePoint.y () - sPoint.y (),
+                    -180 * 16, -360 * 16);
   else {
     float alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
     parray.makeArc (sPoint.x (), sPoint.y (),
-		    ePoint.x () - sPoint.x (),
-		    ePoint.y () - sPoint.y (), -eAngle * 16,
-		    -alen * 16);
+                    ePoint.x () - sPoint.x (),
+                    ePoint.y () - sPoint.y (), -eAngle * 16,
+                    -alen * 16);
   }
   unsigned int num = parray.size ();
   GCurve* curve = new GCurve ();
@@ -516,7 +515,7 @@ GCurve* GOval::convertToCurve () const {
 
 bool GOval::isValid () {
   return (fabs (sPoint.x () - ePoint.x ()) > 1 ||
-	  fabs (sPoint.y () - ePoint.y ()) > 1);
+          fabs (sPoint.y () - ePoint.y ()) > 1);
 }
 
 #include <GOval.moc>

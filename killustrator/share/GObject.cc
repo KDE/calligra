@@ -432,8 +432,7 @@ void GObject::initPen (QPen& pen) {
 QDomElement GObject::writeToXml (QDomDocument &document) {
 
     QDomElement element=document.createElement("gobject");
-    if (hasId ())
-        element.setAttribute ("id", (const char *) id);
+    element.setAttribute ("id", (const char *) id);
     if(hasRefId())
         element.setAttribute("ref", getRefId());
     element.setAttribute ("strokecolor", outlineInfo.color.name());

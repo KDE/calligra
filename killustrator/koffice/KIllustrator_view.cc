@@ -80,11 +80,7 @@
 #include <klocale.h>
 #include <kapp.h>
 #include <kurl.h>
-#ifdef USE_QFD
-#include <qfiledialog.h>
-#else
 #include <kfiledialog.h>
-#endif
 #include <kglobal.h>
 #include <qmessagebox.h>
 #include <qlayout.h>
@@ -94,11 +90,12 @@
 #include <koPartSelectDia.h>
 #include <kaction.h>
 #include <kstdaction.h>
+#include <kdebug.h>
 #include <kcoloractions.h>
 #include <kmessagebox.h>
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
-				    KIllustratorDocument* doc) :
+                                    KIllustratorDocument* doc) :
     KoView( doc, parent, name )
 {
   setInstance( KIllustratorFactory::global() );
@@ -114,22 +111,22 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
   // restore default settings
   PStateManager::instance ();
 
-  cout << "connect doc" << endl;
+  kdDebug() << "connect doc" << endl;
   /*
   QObject::connect (m_pDoc,
-		    SIGNAL (partInserted (KIllustratorChild *, GPart *)),
-		    this,
-		    SLOT (insertPartSlot (KIllustratorChild *, GPart *)));
+                    SIGNAL (partInserted (KIllustratorChild *, GPart *)),
+                    this,
+                    SLOT (insertPartSlot (KIllustratorChild *, GPart *)));
   QObject::connect (m_pDoc,
-		    SIGNAL (childGeometryChanged (KIllustratorChild *)),
-		   this, SLOT(changeChildGeometrySlot (KIllustratorChild *)));
+                    SIGNAL (childGeometryChanged (KIllustratorChild *)),
+                   this, SLOT(changeChildGeometrySlot (KIllustratorChild *)));
   */
   createGUI ();
 }
 
 KIllustratorView::~KIllustratorView()
 {
-  cout << "~KIllustratorView ()" << endl;
+  kdDebug() << "~KIllustratorView ()" << endl;
 }
 
 void KIllustratorView::createGUI()
@@ -140,7 +137,7 @@ void KIllustratorView::createGUI()
     m_import = new KAction( i18n("&Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
     m_export = new KAction( i18n("&Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
     //    m_docInfo = new KAction( i18n("Document Info..."), 0, this, SLOT( slotDocumentInfo() ), actionCollection(), "documentInfo" );
-	
+
     // Insert menu
     m_insertBitmap = new KAction( i18n("Insert &Bitmap..."), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
     m_insertClipart = new KAction( i18n("Insert &Clipart..."), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
@@ -155,7 +152,7 @@ void KIllustratorView::createGUI()
     m_delete = new KAction( i18n("&Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
     m_selectAll = new KAction( i18n("&Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
-	
+
     // View menu
     m_outline = new KToggleAction( i18n("Ou&tline"), 0, actionCollection(), "outline" );
     m_outline->setExclusiveGroup( "Outline" );
@@ -179,7 +176,7 @@ void KIllustratorView::createGUI()
     connect( m_alignToGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToGrid( bool ) ) );
     m_alignToHelplines = new KToggleAction( i18n("Align &To Helplines"), 0, actionCollection(), "alignToHelplines" );
     connect( m_alignToHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToHelplines( bool ) ) );
-	
+
     // Transform menu
     m_transformPosition = new KAction( i18n("&Position ..."), 0, this, SLOT( slotTransformPosition() ), actionCollection(), "transformPosition" );
     m_transformDimension = new KAction( i18n("&Dimension ..."), 0, this, SLOT( slotTransformDimension() ), actionCollection(), "transformDimension" );
@@ -206,7 +203,7 @@ void KIllustratorView::createGUI()
 
     //
     m_viewZoom = new KSelectAction (i18n ("&Zoom"), 0, actionCollection (),
-				    "view_zoom");
+                                    "view_zoom");
     QStringList zooms;
     zooms << "50%";
     zooms << "100%";
@@ -219,23 +216,23 @@ void KIllustratorView::createGUI()
 
     ((KSelectAction *) m_viewZoom)->setItems (zooms);
     connect (((KSelectAction *) m_viewZoom),
-	     SIGNAL(activated(const QString &)),
+             SIGNAL(activated(const QString &)),
              this, SLOT(slotViewZoom(const QString &)));
     ((KSelectAction *) m_viewZoom)->setCurrentItem (2);
     // Colorbar action
 
     QValueList<QColor> colorList;
     colorList << white << red << green << blue << cyan << magenta << yellow
-	      << darkRed << darkGreen << darkBlue << darkCyan
-	      << darkMagenta << darkYellow << white << lightGray
-	      << gray << darkGray << black;
+              << darkRed << darkGreen << darkBlue << darkCyan
+              << darkMagenta << darkYellow << white << lightGray
+              << gray << darkGray << black;
 
     m_colorBar = new KColorBarAction( i18n( "&Colorbar" ), 0,
-				      this,
-				      SLOT( slotBrushChosen( const QColor & ) ),
-				      SLOT( slotPenChosen( const QColor & ) ),
-				      colorList,
-				      actionCollection(), "colorbar" );
+                                      this,
+                                      SLOT( slotBrushChosen( const QColor & ) ),
+                                      SLOT( slotPenChosen( const QColor & ) ),
+                                      colorList,
+                                      actionCollection(), "colorbar" );
 
     // Tools
     m_selectTool = new KToggleAction( i18n("Select Tool"), "selecttool", 0, actionCollection(), "selectTool" );
@@ -295,7 +292,7 @@ void KIllustratorView::createGUI()
     setupPopups ();
     setUndoStatus (false, false);
     QObject::connect (&cmdHistory, SIGNAL(changed(bool, bool)),
-		      SLOT(setUndoStatus(bool, bool)));
+                      SLOT(setUndoStatus(bool, bool)));
 }
 
 void KIllustratorView::setupPopups()
@@ -334,24 +331,24 @@ void KIllustratorView::setupCanvas()
   QObject::connect (canvas, SIGNAL(sizeChanged ()),
            viewport, SLOT(resizeScrollBars ()));
   QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
-	   hRuler, SLOT(updateVisibleArea (int, int)));
+           hRuler, SLOT(updateVisibleArea (int, int)));
   QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
-	   vRuler, SLOT(updateVisibleArea (int, int)));
+           vRuler, SLOT(updateVisibleArea (int, int)));
 
   QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
-	   hRuler, SLOT(setZoomFactor (float)));
+           hRuler, SLOT(setZoomFactor (float)));
   QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
-	   vRuler, SLOT(setZoomFactor (float)));
+           vRuler, SLOT(setZoomFactor (float)));
   //  QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
-  //	   this, SLOT(updateZoomFactor (float)));
+  //       this, SLOT(updateZoomFactor (float)));
   //  QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
-  //	   this, SLOT(showCursorPosition(int, int)));
+  //       this, SLOT(showCursorPosition(int, int)));
   QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
-	   hRuler, SLOT(updatePointer(int, int)));
+           hRuler, SLOT(updatePointer(int, int)));
   QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
-	   vRuler, SLOT(updatePointer(int, int)));
+           vRuler, SLOT(updatePointer(int, int)));
   QObject::connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
-	   this, SLOT(popupForSelection (int, int)));
+           this, SLOT(popupForSelection (int, int)));
 
   // helpline creation
   connect (hRuler, SIGNAL (drawHelpline(int, int, bool)),
@@ -374,59 +371,59 @@ void KIllustratorView::setupCanvas()
 
   SelectionTool* selTool;
   tcontroller->registerTool (ID_TOOL_SELECT,
-			     selTool = new SelectionTool (&cmdHistory));
+                             selTool = new SelectionTool (&cmdHistory));
   QObject::connect (selTool, SIGNAL(modeSelected(const char*)),
-		    this, SLOT(showCurrentMode(const char*)));
+                    this, SLOT(showCurrentMode(const char*)));
   //  QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
-  //		    this, SLOT(activatePart(GObject*)));
+  //                this, SLOT(activatePart(GObject*)));
   tcontroller->registerTool (ID_TOOL_EDITPOINT,
-			     editPointTool = new EditPointTool (&cmdHistory));
+                             editPointTool = new EditPointTool (&cmdHistory));
   QObject::connect (editPointTool, SIGNAL(modeSelected(const char*)),
-		    this, SLOT(showCurrentMode(const char*)));
+                    this, SLOT(showCurrentMode(const char*)));
   Tool* tool;
   tcontroller->registerTool (ID_TOOL_FREEHAND,
-			     tool = new FreeHandTool (&cmdHistory));
+                             tool = new FreeHandTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-		    this, SLOT(showCurrentMode(const char*)));
+                    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_LINE,
-			     tool = new PolylineTool (&cmdHistory));
+                             tool = new PolylineTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-		    this, SLOT(showCurrentMode(const char*)));
+                    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_BEZIER,
-			     tool = new BezierTool (&cmdHistory));
+                             tool = new BezierTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-		    this, SLOT(showCurrentMode(const char*)));
+                    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_RECTANGLE,
-			     tool = new RectangleTool (&cmdHistory));
+                             tool = new RectangleTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-		    this, SLOT(showCurrentMode(const char*)));
+                    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_POLYGON,
-			     tool = new PolygonTool (&cmdHistory));
+                             tool = new PolygonTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-		    this, SLOT(showCurrentMode(const char*)));
+                    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_ELLIPSE,
-			     tool = new OvalTool (&cmdHistory));
+                             tool = new OvalTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-		    this, SLOT(showCurrentMode(const char*)));
+                    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_TEXT,
-			     tool = new TextTool (&cmdHistory));
+                             tool = new TextTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-		    this, SLOT(showCurrentMode(const char*)));
+                    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_ZOOM,
-			     tool = new ZoomTool (&cmdHistory));
+                             tool = new ZoomTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-		    this, SLOT(showCurrentMode(const char*)));
+                    this, SLOT(showCurrentMode(const char*)));
 
   tcontroller->registerTool (ID_TOOL_PATHTEXT,
-			     tool = new PathTextTool (&cmdHistory));
+                             tool = new PathTextTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(operationDone ()),
-		    this, SLOT (resetTools ()));
+                    this, SLOT (resetTools ()));
 
   tcontroller->registerTool (ID_TOOL_INSERTPART,
-			     insertPartTool =
-			     new InsertPartTool (&cmdHistory));
+                             insertPartTool =
+                             new InsertPartTool (&cmdHistory));
   QObject::connect (insertPartTool, SIGNAL(operationDone ()),
-		    this, SLOT (resetTools ()));
+                    this, SLOT (resetTools ()));
 
   tcontroller->toolSelected( ID_TOOL_SELECT );
   // m_idActiveTool = ID_TOOL_SELECT;
@@ -470,23 +467,23 @@ void KIllustratorView::resizeEvent (QResizeEvent* )
   {
       mainWidget->resize( width(), height() );
       /* if ((KoViewIf::hasFocus () || mode () == KOffice::View::RootMode) &&
-	 m_bShowGUI) */
+         m_bShowGUI) */
       {
-	  if (m_bShowRulers)
+          if (m_bShowRulers)
           {
-	      // draw rulers
-	      hRuler->show ();
-	      vRuler->show ();
-	  }
-	  viewport->showScrollBars ();
+              // draw rulers
+              hRuler->show ();
+              vRuler->show ();
+          }
+          viewport->showScrollBars ();
       }
       /*      else
       {
-	  hRuler->hide ();
-	  vRuler->hide ();
-	  viewport->hideScrollBars ();
-	  grid->activate ();
-	  } */
+          hRuler->hide ();
+          vRuler->hide ();
+          viewport->hideScrollBars ();
+          grid->activate ();
+          } */
   }
 }
 
@@ -501,7 +498,7 @@ void KIllustratorView::showTransformationDialog( int id )
 {
     TransformationDialog *transformationDialog = new TransformationDialog (&cmdHistory);
     QObject::connect (m_pDoc, SIGNAL (selectionChanged ()),
-		      transformationDialog, SLOT (update ()));
+                      transformationDialog, SLOT (update ()));
     transformationDialog->setDocument ( m_pDoc->gdoc() );
     transformationDialog->showTab (id);
 }
@@ -519,7 +516,7 @@ void KIllustratorView::editInsertObject ()
     m_pDoc->gdoc()->unselectAllObjects();
     KoDocumentEntry docEntry = KoPartSelectDia::selectPart ();
     if (docEntry.name.isEmpty ())
-	return;
+        return;
 
     insertPartTool->setPartEntry (docEntry);
     // ####### Torben
@@ -550,10 +547,10 @@ void KIllustratorView::setPenColor (long int id) {
   else {
     int result =
       QMessageBox::warning (this, i18n("Warning"),
-			    i18n ("This action will set the default\n"
-				  "properties for new objects !\n"
-				  "Would you like to do it ?"),
-			    i18n ("Yes"), i18n ("No"));
+                            i18n ("This action will set the default\n"
+                                  "properties for new objects !\n"
+                                  "Would you like to do it ?"),
+                            i18n ("Yes"), i18n ("No"));
     if (result == 0)
       GObject::setDefaultOutlineInfo (oInfo);
   }
@@ -583,10 +580,10 @@ void KIllustratorView::setFillColor (long int id) {
   else {
     int result =
       QMessageBox::warning(this, i18n("Warning"),
-			   i18n ("This action will set the default\n"
-				 "properties for new objects !\n"
-				 "Would you like to do it ?"),
-			   i18n ("Yes"), i18n ("No"));
+                           i18n ("This action will set the default\n"
+                                 "properties for new objects !\n"
+                                 "Would you like to do it ?"),
+                           i18n ("Yes"), i18n ("No"));
     if (result == 0)
       GObject::setDefaultFillInfo (fInfo);
   }
@@ -668,12 +665,12 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
     QString extension;
 
     if (! lastExport.isEmpty ()) {
-	int pos = lastExport.findRev ('.', -1, false);
-	if (pos != -1) {
-	    extension =
-		lastExport.right (lastExport.length () - pos - 1);
-	    defaultExt = (const char *) extension;
-	}
+        int pos = lastExport.findRev ('.', -1, false);
+        if (pos != -1) {
+            extension =
+                lastExport.right (lastExport.length () - pos - 1);
+            defaultExt = (const char *) extension;
+        }
     }
     QString filter = filterMgr->exportFilters (defaultExt);
 
@@ -681,11 +678,11 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
     QString filename = QFileDialog::getSaveFileName( QString::null, filter, this );
 #else
     KFileDialog *dlg = new KFileDialog (lastExportDir,
-					filter, this,
-					"file dia", true);
+                                        filter, this,
+                                        "file dia", true);
     dlg->setCaption (i18n ("Save As"));
     if (! lastExport.isEmpty ()) {
-	dlg->setSelection (lastExport);
+        dlg->setSelection (lastExport);
     }
     QString filename;
 
@@ -720,28 +717,28 @@ void KIllustratorView::slotImport()
 #endif
     if (! fname.isEmpty ())
     {
-	QFileInfo finfo ((const char *) fname);
-	if (!finfo.isFile () || !finfo.isReadable ())
-	    return;
+        QFileInfo finfo ((const char *) fname);
+        if (!finfo.isFile () || !finfo.isReadable ())
+            return;
 
-	lastImportDir = finfo.dirPath ();
-	FilterInfo* filterInfo = filterMgr->findFilter (fname,
-							FilterInfo::FKind_Import);
-	if (filterInfo)
+        lastImportDir = finfo.dirPath ();
+        FilterInfo* filterInfo = filterMgr->findFilter (fname,
+                                                        FilterInfo::FKind_Import);
+        if (filterInfo)
         {
-	    ImportFilter* filter = filterInfo->importFilter ();
-	    if (filter->setup (m_pDoc->gdoc(), filterInfo->extension ()))
-	    {
-		filter->setInputFileName (fname);
-		filter->importFromFile (m_pDoc->gdoc());
-	    }
-	    else
-		QMessageBox::critical (this, i18n ("KIllustrator Error"),
-				       i18n ("Cannot import from file"), i18n ("OK"));
-	}
-	else
-	    QMessageBox::critical (this, i18n ("KIllustrator Error"),
-				   i18n ("Unknown import format"), i18n ("OK"));
+            ImportFilter* filter = filterInfo->importFilter ();
+            if (filter->setup (m_pDoc->gdoc(), filterInfo->extension ()))
+            {
+                filter->setInputFileName (fname);
+                filter->importFromFile (m_pDoc->gdoc());
+            }
+            else
+                QMessageBox::critical (this, i18n ("KIllustrator Error"),
+                                       i18n ("Cannot import from file"), i18n ("OK"));
+        }
+        else
+            QMessageBox::critical (this, i18n ("KIllustrator Error"),
+                                   i18n ("Unknown import format"), i18n ("OK"));
     }
 
     resetTools ();
@@ -756,25 +753,25 @@ void KIllustratorView::slotExport()
 
     if (! fname.isEmpty ())
     {
-	FilterInfo* filterInfo = filterMgr->findFilter (fname,
-							FilterInfo::FKind_Export);
+        FilterInfo* filterInfo = filterMgr->findFilter (fname,
+                                                        FilterInfo::FKind_Export);
 
-	if (filterInfo)
+        if (filterInfo)
         {
-	    ExportFilter* filter = filterInfo->exportFilter ();
-	    if (filter->setup (m_pDoc->gdoc(), filterInfo->extension ()))
-	    {
-		filter->setOutputFileName (fname);
-		filter->exportToFile (m_pDoc->gdoc());
-		lastExport = fname;
-	    }
-	    else
-		QMessageBox::critical (this, i18n ("KIllustrator Error"),
-				       i18n ("Cannot export to file"), i18n ("OK"));
-	}
-	else
-	    QMessageBox::critical (this, i18n ("KIllustrator Error"),
-				   i18n ("Unknown export format"), i18n ("OK"));
+            ExportFilter* filter = filterInfo->exportFilter ();
+            if (filter->setup (m_pDoc->gdoc(), filterInfo->extension ()))
+            {
+                filter->setOutputFileName (fname);
+                filter->exportToFile (m_pDoc->gdoc());
+                lastExport = fname;
+            }
+            else
+                QMessageBox::critical (this, i18n ("KIllustrator Error"),
+                                       i18n ("Cannot export to file"), i18n ("OK"));
+        }
+        else
+            QMessageBox::critical (this, i18n ("KIllustrator Error"),
+                                   i18n ("Unknown export format"), i18n ("OK"));
     }
     resetTools ();
 }
@@ -791,22 +788,22 @@ void KIllustratorView::slotInsertBitmap()
              this);
 #else
     KURL url = KFileDialog::getOpenURL
-		    (lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
-							"*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
-							"*.png | PNG Images\n"
-							"*.xbm | X11 Bitmaps\n"
-							"*.xpm | X11 Pixmaps"),
-		     this);
+                    (lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
+                                                        "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
+                                                        "*.png | PNG Images\n"
+                                                        "*.xbm | X11 Bitmaps\n"
+                                                        "*.xpm | X11 Pixmaps"),
+                     this);
   if (!url.isLocalFile())
       KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
   QString fname = url.path();
 #endif
     if (! fname.isEmpty ()) {
-	QFileInfo finfo (fname);
-	lastBitmapDir = finfo.dirPath ();
-	InsertPixmapCmd *cmd = new InsertPixmapCmd (m_pDoc->gdoc(),
-						    (const char *) fname);
-	 cmdHistory.addCommand (cmd, true);
+        QFileInfo finfo (fname);
+        lastBitmapDir = finfo.dirPath ();
+        InsertPixmapCmd *cmd = new InsertPixmapCmd (m_pDoc->gdoc(),
+                                                    (const char *) fname);
+         cmdHistory.addCommand (cmd, true);
     }
 }
 
@@ -827,9 +824,9 @@ void KIllustratorView::slotInsertClipart()
     {
         QFileInfo finfo (fname);
         lastClipartDir = finfo.dirPath ();
-	InsertClipartCmd *cmd = new InsertClipartCmd (m_pDoc->gdoc(),
-						      (const char *) fname);
-	cmdHistory.addCommand (cmd, true);
+        InsertClipartCmd *cmd = new InsertClipartCmd (m_pDoc->gdoc(),
+                                                      (const char *) fname);
+        cmdHistory.addCommand (cmd, true);
     }
 }
 
@@ -881,14 +878,14 @@ void KIllustratorView::slotProperties()
 
     if (m_pDoc->gdoc()->selectionIsEmpty ())
     {
-	result = QMessageBox::warning (this, i18n("Warning"),
-				       i18n ("This action will set the default\n"
-					     "properties for new objects !\n"
-					     "Would you like to do it ?"),
-				       i18n ("Yes"), i18n ("No"));
+        result = QMessageBox::warning (this, i18n("Warning"),
+                                       i18n ("This action will set the default\n"
+                                             "properties for new objects !\n"
+                                             "Would you like to do it ?"),
+                                       i18n ("Yes"), i18n ("No"));
     }
     if (result == 0)
-	PropertyEditor::edit( &cmdHistory, m_pDoc->gdoc() );
+        PropertyEditor::edit( &cmdHistory, m_pDoc->gdoc() );
 }
 
 void KIllustratorView::slotOutline( bool )
@@ -907,13 +904,13 @@ void KIllustratorView::slotShowRuler( bool b )
 
     if (m_bShowRulers)
     {
-	hRuler->show ();
-	vRuler->show ();
+        hRuler->show ();
+        vRuler->show ();
     }
     else
     {
-	hRuler->hide ();
-	vRuler->hide ();
+        hRuler->hide ();
+        vRuler->hide ();
     }
     // recalculate layout
     grid->activate ();
@@ -936,7 +933,7 @@ void KIllustratorView::slotPage()
     KoHeadFoot header;
 
     if (KoPageLayoutDia::pageLayout (pLayout, header, FORMAT_AND_BORDERS))
-	m_pDoc->gdoc()->setPageLayout (pLayout);
+        m_pDoc->gdoc()->setPageLayout (pLayout);
 }
 
 void KIllustratorView::slotGrid()
@@ -1022,16 +1019,16 @@ void KIllustratorView::slotTextAlongPath()
 void KIllustratorView::slotConvertToCurve()
 {
     if ( !m_pDoc->gdoc()->selectionIsEmpty() )
-	cmdHistory.addCommand (new ToCurveCmd (m_pDoc->gdoc()), true);
+        cmdHistory.addCommand (new ToCurveCmd (m_pDoc->gdoc()), true);
 }
 
 void KIllustratorView::slotBlend()
 {
     if ( m_pDoc->gdoc()->selectionCount () == 2)
     {
-	int steps = BlendDialog::getNumOfSteps ();
-	if (steps > 0)
-	    cmdHistory.addCommand (new BlendCmd (m_pDoc->gdoc(), steps), true);
+        int steps = BlendDialog::getNumOfSteps ();
+        if (steps > 0)
+            cmdHistory.addCommand (new BlendCmd (m_pDoc->gdoc(), steps), true);
     }
 }
 
@@ -1052,22 +1049,22 @@ void KIllustratorView::slotBrushChosen( const QColor & c )
     fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
     fInfo.color = c;
     fInfo.fstyle = fill ? GObject::FillInfo::SolidFill :
-	GObject::FillInfo::NoFill;
+        GObject::FillInfo::NoFill;
 
     if ( !m_pDoc->gdoc()->selectionIsEmpty () )
     {
-	SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc->gdoc(), oInfo, fInfo);
-	cmdHistory.addCommand (cmd, true);
+        SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc->gdoc(), oInfo, fInfo);
+        cmdHistory.addCommand (cmd, true);
     }
     else
     {
-	int result = QMessageBox::warning(this, i18n("Warning"),
-					  i18n ("This action will set the default\n"
-						"properties for new objects !\n"
-						"Would you like to do it ?"),
-					  i18n ("Yes"), i18n ("No"));
-	if (result == 0)
-	    GObject::setDefaultFillInfo (fInfo);
+        int result = QMessageBox::warning(this, i18n("Warning"),
+                                          i18n ("This action will set the default\n"
+                                                "properties for new objects !\n"
+                                                "Would you like to do it ?"),
+                                          i18n ("Yes"), i18n ("No"));
+        if (result == 0)
+            GObject::setDefaultFillInfo (fInfo);
     }
 }
 
@@ -1086,25 +1083,25 @@ void KIllustratorView::slotPenChosen( const QColor & c  )
 
     if (! m_pDoc->gdoc()->selectionIsEmpty () )
     {
-	SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc->gdoc(), oInfo, fInfo);
-	cmdHistory.addCommand (cmd, true);
+        SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc->gdoc(), oInfo, fInfo);
+        cmdHistory.addCommand (cmd, true);
     }
     else
     {
-	int result = QMessageBox::warning (this, i18n("Warning"),
-					   i18n ("This action will set the default\n"
-						 "properties for new objects !\n"
-						 "Would you like to do it ?"),
-					   i18n ("Yes"), i18n ("No"));
-	if (result == 0)
-	    GObject::setDefaultOutlineInfo (oInfo);
+        int result = QMessageBox::warning (this, i18n("Warning"),
+                                           i18n ("This action will set the default\n"
+                                                 "properties for new objects !\n"
+                                                 "Would you like to do it ?"),
+                                           i18n ("Yes"), i18n ("No"));
+        if (result == 0)
+            GObject::setDefaultOutlineInfo (oInfo);
     }
 }
 
 void KIllustratorView::slotSelectTool( bool b )
 {
     if ( b )
-	tcontroller->toolSelected( ID_TOOL_SELECT );
+        tcontroller->toolSelected( ID_TOOL_SELECT );
 }
 
 void KIllustratorView::slotPointTool( bool b )
@@ -1115,7 +1112,7 @@ void KIllustratorView::slotPointTool( bool b )
     m_splitLine->setEnabled( b );
 
     if ( b )
-	slotMoveNode( TRUE );
+        slotMoveNode( TRUE );
 
     tcontroller->toolSelected( ID_TOOL_EDITPOINT );
 }
@@ -1123,67 +1120,67 @@ void KIllustratorView::slotPointTool( bool b )
 void KIllustratorView::slotFreehandTool( bool b )
 {
     if ( b )
-	tcontroller->toolSelected( ID_TOOL_FREEHAND );
+        tcontroller->toolSelected( ID_TOOL_FREEHAND );
 }
 
 void KIllustratorView::slotLineTool( bool b )
 {
     if ( b )
-	tcontroller->toolSelected( ID_TOOL_LINE);
+        tcontroller->toolSelected( ID_TOOL_LINE);
 }
 
 void KIllustratorView::slotBezierTool( bool b )
 {
     if ( b )
-	tcontroller->toolSelected( ID_TOOL_BEZIER);
+        tcontroller->toolSelected( ID_TOOL_BEZIER);
 }
 
 void KIllustratorView::slotRectTool( bool b )
 {
     if ( b )
-	tcontroller->toolSelected( ID_TOOL_RECTANGLE );
+        tcontroller->toolSelected( ID_TOOL_RECTANGLE );
 }
 
 void KIllustratorView::slotPolygonTool( bool b )
 {
     if ( b )
-	tcontroller->toolSelected( ID_TOOL_POLYGON );
+        tcontroller->toolSelected( ID_TOOL_POLYGON );
 }
 
 void KIllustratorView::slotEllipseTool( bool b )
 {
     if ( b )
-	tcontroller->toolSelected( ID_TOOL_ELLIPSE );
+        tcontroller->toolSelected( ID_TOOL_ELLIPSE );
 }
 
 void KIllustratorView::slotTextTool( bool b )
 {
     if ( b )
-	tcontroller->toolSelected( ID_TOOL_TEXT );
+        tcontroller->toolSelected( ID_TOOL_TEXT );
 }
 
 void KIllustratorView::slotZoomTool( bool b  )
 {
     if ( b )
-	tcontroller->toolSelected( ID_TOOL_ZOOM );
+        tcontroller->toolSelected( ID_TOOL_ZOOM );
 }
 
 void KIllustratorView::slotMoveNode( bool b )
 {
     if ( b )
-	editPointTool->setMode (EditPointTool::MovePoint);
+        editPointTool->setMode (EditPointTool::MovePoint);
 }
 
 void KIllustratorView::slotNewNode( bool b )
 {
     if ( b )
-	editPointTool->setMode (EditPointTool::InsertPoint);
+        editPointTool->setMode (EditPointTool::InsertPoint);
 }
 
 void KIllustratorView::slotDeleteNode( bool b )
 {
     if ( b )
-	editPointTool->setMode (EditPointTool::RemovePoint);
+        editPointTool->setMode (EditPointTool::RemovePoint);
 }
 
 void KIllustratorView::slotSplitLine( bool b )
@@ -1195,7 +1192,7 @@ void KIllustratorView::slotSplitLine( bool b )
 void KIllustratorView::slotLayers()
 {
     if (!layerDialog)
-	layerDialog = new LayerDialog ();
+        layerDialog = new LayerDialog ();
     layerDialog->manageDocument (m_pDoc->gdoc());
     layerDialog->show ();
 }
