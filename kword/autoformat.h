@@ -18,6 +18,8 @@
 
 #include <qstring.h>
 #include <qcolor.h>
+#include <qmap.h>
+#include <qvaluelist.h>
 
 #include "format.h"
 
@@ -134,6 +136,18 @@ public:
     static bool isLower( const QChar &c );
     static bool isMark( const QChar &c );
 
+    void addAutoFormatEntry( KWAutoFormatEntry *entry ) { 
+        if ( !entry )
+            return;
+        entries.insert( entry->getFind(), *entry );
+        begins.append( entry->getFind()[ 0 ] );
+    }
+
+    void removeAutoFormatEntry( const QString &key ) { 
+        if ( entries.contains( key ) )
+            entries.remove( key );
+    }
+    
 protected:
     KWordDocument *doc;
     TypographicQuotes typographicQuotes;
@@ -141,7 +155,9 @@ protected:
     KWString *tmpBuffer;
     bool lastWasDotSpace, convertUpperCase;
     bool lastWasUpper, convertUpperUpper;
-
+    QMap< QString, KWAutoFormatEntry > entries;
+    QValueList< QChar > begins;
+    
 };
 
 #endif

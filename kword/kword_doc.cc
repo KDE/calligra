@@ -1183,6 +1183,28 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         emit sig_insertObject( ch, frameset );
     }
 
+    KWAutoFormatEntry *entry;
+
+    entry = new KWAutoFormatEntry;
+    entry->setFind( "(C)" );
+    entry->setReplace( "©" );
+    autoFormat.addAutoFormatEntry( entry );
+    
+    entry = new KWAutoFormatEntry;
+    entry->setFind( "(c)" );
+    entry->setReplace( "©" );
+    autoFormat.addAutoFormatEntry( entry );
+
+    entry = new KWAutoFormatEntry;
+    entry->setFind( "(R)" );
+    entry->setReplace( "®" );
+    autoFormat.addAutoFormatEntry( entry );
+    
+    entry = new KWAutoFormatEntry;
+    entry->setFind( "(r)" );
+    entry->setReplace( "®" );
+    autoFormat.addAutoFormatEntry( entry );
+
     return true;
 }
 

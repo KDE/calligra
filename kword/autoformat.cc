@@ -259,18 +259,39 @@ bool KWAutoFormat::doAutoFormat( KWParag *parag, KWFormatContext *fc )
     if ( !enabled )
         return false;
 
-    if ( parag->getKWString()->data()[ fc->getTextPos() ].c == QChar( '(' ) ||
+    if ( begins.contains( parag->getKWString()->data()[ fc->getTextPos() ].c ) ||
          tmpBuffer->size() > 0 )
         tmpBuffer->append( parag->getKWString()->data()[ fc->getTextPos() ] );
-
-    if ( tmpBuffer->toString() == QString( "(c)" ) )
+    else
+        return false;
+    
+    QMap< QString, KWAutoFormatEntry >::Iterator it = entries.find( tmpBuffer->toString() );
+    
+    if ( it != entries.end()  )
     {
+        unsigned int len = it.key().length();
         KWFormat format;
         format = *( dynamic_cast<KWCharFormat*>( parag->getKWString()->data()[ fc->getTextPos() ].attrib )->getFormat() );
-        parag->getKWString()->remove( fc->getTextPos() - 2, 3 );
-        parag->insertText( fc->getTextPos() - 2, " © " );
-        parag->setFormat( fc->getTextPos() - 2, 3, format );
+        parag->getKWString()->remove( fc->getTextPos() - ( len - 1 ), len );
+        
+        QString txt = it.data().getReplace();
+        if ( len > txt.length() )
+        {
+            bool before = false;
+            while ( txt.length() < len )
+            {
+                before = !before;
+                if ( before )
+                    txt.prepend( " " );
+                else
+                    txt.append( " " );
+            }
+        }
+        parag->insertText( fc->getTextPos() - ( len - 1 ), txt );
+        parag->setFormat( fc->getTextPos() - ( len - 1 ), txt.length(), format );
         tmpBuffer->clear();
+        
+        return true;
     }
 
     return false;
@@ -314,11 +335,11 @@ bool KWAutoFormat::doTypographicQuotes( KWParag *parag, KWFormatContext *fc )
         {
             if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
                 delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
-    
+
             AutoformatInfo *info = new AutoformatInfo;
             info->c = QChar( '\"' );
             info->type = AT_TypographicQuotes;
-    
+
             parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
 
             parag->getKWString()->data()[ fc->getTextPos() ].c = typographicQuotes.begin;
@@ -327,11 +348,11 @@ bool KWAutoFormat::doTypographicQuotes( KWParag *parag, KWFormatContext *fc )
         {
             if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
                 delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
-    
+
             AutoformatInfo *info = new AutoformatInfo;
             info->c = QChar( '\"' );
             info->type = AT_TypographicQuotes;
-    
+
             parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
 
             parag->getKWString()->data()[ fc->getTextPos() ].c = typographicQuotes.end;
@@ -360,11 +381,11 @@ bool KWAutoFormat::doUpperCase( KWParag *parag, KWFormatContext *fc )
         {
             if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
                 delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
-    
+
             AutoformatInfo *info = new AutoformatInfo;
             info->c = QChar( parag->getKWString()->data()[ fc->getTextPos() ].c );
             info->type = AT_UpperCase;
-    
+
             parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
 
             parag->getKWString()->data()[ fc->getTextPos() ].c = parag->getKWString()->data()[ fc->getTextPos() ].c.upper();
@@ -386,11 +407,11 @@ bool KWAutoFormat::doUpperCase( KWParag *parag, KWFormatContext *fc )
         {
             if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
                 delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
-    
+
             AutoformatInfo *info = new AutoformatInfo;
             info->c = QChar( parag->getKWString()->data()[ fc->getTextPos() ].c );
             info->type = AT_UpperUpper;
-    
+
             parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
 
             parag->getKWString()->data()[ fc->getTextPos() ].c = parag->getKWString()->data()[ fc->getTextPos() ].c.lower();

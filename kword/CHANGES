@@ -1205,7 +1205,13 @@ Reggie, 18.5.1999:
 Reggie, 21.5.1999:
 ------------------
 - The whole document needs to be calcualted at the beginning
-  and when the pageformat changes 
+  and when the pageformat changes
   (although this may take a bit long for large docs)
 - Fixed loading templates and loading docs using the template dialog (Also stores and embedded parts
   are loaded in these cases correctly)
+
+Reggie, 24.5.1999:
+------------------
+- Advanced autocorrection starts working :-)
+  (It's now a bit more flexible). Only the
+  configuration dialog is missing...
