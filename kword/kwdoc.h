@@ -523,6 +523,9 @@ public:
     KWTextFrameSet* nextTextFrameSet(KWTextFrameSet *obj);
     void changeBackGroundSpellCheckTextFrameSet(KWTextFrameSet *fs);
 
+    void updateHeaderButton();
+    void updateFooterButton();
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void newContentsSize();

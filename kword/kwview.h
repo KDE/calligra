@@ -167,6 +167,10 @@ public:
 
     void initGUIButton();
 
+    void updateHeaderFooterButton();
+    void updateFooter();
+    void updateHeader();
+
 public slots:
     void fileStatistics();
     void editCut();

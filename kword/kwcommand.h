@@ -507,4 +507,29 @@ class KWChangeLinkVariable : public KNamedCommand
     KoLinkVariable *m_var;
 };
 
+class KWHideShowHeader : public KNamedCommand
+{
+ public:
+    KWHideShowHeader( const QString &name, KWDocument *_doc, bool _newValue);
+    ~KWHideShowHeader(){};
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    bool newValue;
+};
+
+class KWHideShowFooter : public KNamedCommand
+{
+ public:
+    KWHideShowFooter( const QString &name, KWDocument *_doc, bool _newValue);
+    ~KWHideShowFooter(){};
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    bool newValue;
+};
+
+
 #endif

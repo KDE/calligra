@@ -305,8 +305,7 @@ void KWView::initGUIButton()
     actionViewFormattingChars->setChecked( m_doc->viewFormattingChars() );
     actionShowDocStruct->setChecked(m_doc->showdocStruct());
 
-    actionViewHeader->setChecked(m_doc->isHeaderVisible());
-    actionViewFooter->setChecked(m_doc->isFooterVisible());
+    updateHeaderFooterButton();
     actionAllowAutoFormat->setChecked( m_doc->allowAutoFormat() );
 
     QString mode=m_gui->canvasWidget()->viewMode()->type();
@@ -2085,7 +2084,15 @@ void KWView::viewHeader()
 {
     bool state = actionViewHeader->isChecked();
     m_doc->setHeaderVisible( state );
+    KWHideShowHeader *cmd=new KWHideShowHeader( state ? i18n("Show Header"):i18n("Hide Header"), m_doc, state);
+    m_doc->addCommand(cmd);
+    updateHeader();
+}
+
+void KWView::updateHeader()
+{
     KWTextFrameSetEdit * edit = currentTextEdit();
+    bool state = actionViewHeader->isChecked();
     if(!state )
     {
         KWFrameSet *frameSet=0L;
@@ -2120,10 +2127,19 @@ void KWView::viewHeader()
     m_doc->updateResizeHandles( );
 }
 
+
 void KWView::viewFooter()
 {
     bool state=actionViewFooter->isChecked();
     m_doc->setFooterVisible( state );
+    KWHideShowFooter *cmd=new KWHideShowFooter( state ? i18n("Show Footer"):i18n("Hide Footer"), m_doc, state);
+    m_doc->addCommand(cmd);
+    updateFooter();
+}
+
+void KWView::updateFooter()
+{
+    bool state=actionViewFooter->isChecked();
     KWTextFrameSetEdit * edit = currentTextEdit();
     if(!state )
     {
@@ -2157,6 +2173,7 @@ void KWView::viewFooter()
         }
     }
     m_doc->updateResizeHandles( );
+
 }
 
 void KWView::viewFootNotes()
@@ -4552,6 +4569,11 @@ void KWView::slotAutoComplete()
         edit->autoCompletion();
 }
 
+void KWView::updateHeaderFooterButton()
+{
+    actionViewHeader->setChecked(m_doc->isHeaderVisible());
+    actionViewFooter->setChecked(m_doc->isFooterVisible());
+}
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

@@ -2647,6 +2647,27 @@ void KWDocument::setFooterVisible( bool f )
     repaintAllViews( true );
 }
 
+void KWDocument::updateHeaderButton()
+{
+    QPtrListIterator<KWView> it( m_lstViews );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->updateHeaderFooterButton();
+        it.current()->updateHeader();
+    }
+}
+
+void KWDocument::updateFooterButton()
+{
+    QPtrListIterator<KWView> it( m_lstViews );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->updateHeaderFooterButton();
+        it.current()->updateFooter();
+    }
+}
+
+
 bool KWDocument::isOnlyOneFrameSelected() {
     return getSelectedFrames().count()==1;
 }

@@ -1263,3 +1263,44 @@ void KWChangeLinkVariable::unexecute()
     m_var->setLink(oldLink,oldHref);
     m_doc->recalcVariables(VT_LINK);
 }
+
+KWHideShowHeader::KWHideShowHeader( const QString &name, KWDocument *_doc, bool _newValue):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue)
+{
+}
+
+
+void KWHideShowHeader::execute()
+{
+    m_doc->setHeaderVisible(newValue );
+    m_doc->updateHeaderButton();
+
+}
+
+void KWHideShowHeader::unexecute()
+{
+    m_doc->setHeaderVisible(!newValue );
+    m_doc->updateHeaderButton();
+}
+
+KWHideShowFooter::KWHideShowFooter( const QString &name, KWDocument *_doc, bool _newValue):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue)
+{
+}
+
+
+void KWHideShowFooter::execute()
+{
+    m_doc->setFooterVisible( newValue );
+    m_doc->updateFooterButton();
+}
+
+void KWHideShowFooter::unexecute()
+{
+    m_doc->setFooterVisible( !newValue );
+    m_doc->updateFooterButton();
+}
