@@ -54,9 +54,12 @@ public:
 	}
 
 	void setPrecision( unsigned int precision ) { m_precision = precision; };
+protected:
+    friend class KoUnitDoubleValidator;
+    QString getVisibleText( double value ) const;
+    double toDouble( const QString& str, bool* ok ) const;
 
 protected:
-	friend class KoUnitDoubleValidator;
 	KoUnitDoubleValidator	*m_validator;
 	KoUnit::Unit			m_unit;
 	unsigned int			m_precision;

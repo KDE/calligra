@@ -18,6 +18,7 @@
 */
 
 #include "koUnitWidgets.moc"
+#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <qpushbutton.h>
@@ -31,10 +32,11 @@ KoUnitDoubleValidator::KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *p
 QValidator::State
 KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 {
+
+        kdDebug(30004) << "KoUnitDoubleValidator::validate : " << s << " at " << pos << endl;
 	QValidator::State result = Valid;
 	bool ok = false;
-	QString s2 = s;
-	double value = s2.replace( ',', "." ).toDouble( &ok );
+	double value = m_base->toDouble( s, &ok );
 	double newVal = -1;
 	if( !ok )
 	{
@@ -71,10 +73,24 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 	if( newVal >= 0.0 )
 	{
 		m_base->changeValue( newVal );
-		s = QString( "%1%2").arg( KGlobal::locale()->formatNumber( newVal, m_base->m_precision ) ).arg( KoUnit::unitName( m_base->m_unit ) );
+		s = m_base->getVisibleText( newVal );
 	}
 	return result;
 }
+
+
+QString KoUnitDoubleBase::getVisibleText( double value ) const
+{
+    return QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) );
+}
+
+double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
+{
+    QString str2 ( str );
+    // ### TODO: 1000 separator, correct decimal separator, negative sign...
+    return str2.replace( ',', "." ).toDouble( ok );
+}
+
 
 KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit, unsigned int precision, const char *name )
 	: KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), KoUnitDoubleBase( unit, precision )
@@ -116,7 +132,7 @@ void
 KoUnitDoubleLineEdit::changeValue( double value )
 {
 	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
-	setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( m_value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
+	setText( getVisibleText( m_value ) );
 }
 
 void
@@ -135,7 +151,7 @@ KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 	if( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide )
 	{
 		bool ok;
-		double value = text().replace( ',', "." ).toDouble( &ok );
+		double value = toDouble( text(), &ok );
 		changeValue( value );
 		return false;
 	}
@@ -168,13 +184,13 @@ void
 KoUnitDoubleComboBox::updateValue( double value )
 {
 	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
-	lineEdit()->setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( m_value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
+	lineEdit()->setText( getVisibleText( m_value ) );
 }
 
 void
 KoUnitDoubleComboBox::insertItem( double value, int index )
 {
-	KComboBox::insertItem( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ), index );
+	KComboBox::insertItem( getVisibleText( value ), index );
 }
 
 void
@@ -182,7 +198,7 @@ KoUnitDoubleComboBox::slotActivated( int index )
 {
 	double oldvalue = m_value;
 	bool ok;
-	double value = text( index ).replace( ',', "." ).toDouble( &ok );
+	double value = toDouble( text( index ), &ok );
 	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
 	if( m_value != oldvalue )
 		emit valueChanged( m_value );
@@ -204,7 +220,7 @@ KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
 	if( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide )
 	{
 		bool ok;
-		double value = lineEdit()->text().replace( ',', "." ).toDouble( &ok );
+		double value = toDouble( lineEdit()->text(), &ok );
 		changeValue( value );
 		return false;
 	}
