@@ -66,6 +66,8 @@ public:
 protected:
   KSpreadView* m_pView;
   KIntNumInput  *nbPage;
+  QCheckBox *showVScrollBar;
+  QCheckBox *showHScrollBar;
   KConfig* config;
 } ;
 

@@ -138,7 +138,7 @@ bool KSpreadDoc::initDoc()
     if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
-        _page=config->readNumEntry( "NbPage" ) ;
+        _page=config->readNumEntry( "NbPage",1 ) ;
         }
 
     for(int i=0;i<_page;i++)

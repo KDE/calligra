@@ -120,6 +120,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_dcop = 0;
     m_bLoading =false;
+
+    m_bVerticalScrollBarShow=true;
+    m_bHorizontalScrollBarShow=true;
+
     // Vert. Scroll Bar
     m_pVertScrollBar = new QScrollBar( this, "ScrollBar_2" );
     m_pVertScrollBar->setRange( 0, 4096 );
@@ -433,6 +437,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
              this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
 
     QTimer::singleShot( 0, this, SLOT( initialPosition() ) );
+
+    initConfig();
 }
 
 KSpreadView::~KSpreadView()
@@ -449,6 +455,18 @@ KSpreadView::~KSpreadView()
     delete m_pPopupColumn;
     delete m_pPopupRow;
     delete m_pPopupMenu;
+}
+
+
+void KSpreadView::initConfig()
+{
+KConfig *config = KSpreadFactory::global()->config();
+if( config->hasGroup("Parameters" ))
+        {
+        config->setGroup( "Parameters" );
+        m_bHorizontalScrollBarShow=config->readBoolEntry("Horiz ScrollBar",true);
+        m_bVerticalScrollBarShow=config->readBoolEntry("Vert ScrollBar",true);
+        }
 }
 
 void KSpreadView::RecalcWorkBook(){
@@ -1831,7 +1849,7 @@ int KSpreadView::bottomBorder() const
     return m_pHorzScrollBar->height();
 }
 
-void KSpreadView::resizeEvent( QResizeEvent * )
+void KSpreadView::refreshView()
 {
     m_pToolWidget->show();
     // If this value (30) is changed then topBorder() needs to
@@ -1851,14 +1869,25 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pTabBar->show();
 
     // David's suggestion: move the scrollbars to KSpreadCanvas, but keep those resize statements
-    m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - 16, 16 );
-    m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);
-    m_pHorzScrollBar->show();
+    int widthScrollbarVertical=16;
+    if( m_bHorizontalScrollBarShow)
+        m_pHorzScrollBar->show();
+    else
+        m_pHorzScrollBar->hide();
+
     m_pVertScrollBar->setGeometry( width() - 16, top , 16, height() - 16 - top );
     m_pVertScrollBar->setSteps( 20 /*linestep*/, m_pVertScrollBar->height() /*pagestep*/);
-    m_pVertScrollBar->show();
+    if(m_bVerticalScrollBarShow)
+        m_pVertScrollBar->show();
+    else
+        {
+        widthScrollbarVertical=0;
+        m_pVertScrollBar->hide();
+        }
+    m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - widthScrollbarVertical/*16*/, 16 );
+    m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);
 
-    m_pFrame->setGeometry( 0, top, width() - 16, height() - 16 - top );
+    m_pFrame->setGeometry( 0, top, width()-widthScrollbarVertical /*- 16*/, height() - 16 - top );
     m_pFrame->show();
 
     m_pCanvas->setGeometry( YBORDER_WIDTH, XBORDER_HEIGHT,
@@ -1870,6 +1899,11 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pVBorderWidget->setGeometry( 0, XBORDER_HEIGHT, YBORDER_WIDTH,
                                    m_pFrame->height() - XBORDER_HEIGHT );
     m_pVBorderWidget->show();
+}
+
+void KSpreadView::resizeEvent( QResizeEvent * )
+{
+ refreshView();
 }
 
 void KSpreadView::popupChildMenu( KoChild* child, const QPoint& global_pos )

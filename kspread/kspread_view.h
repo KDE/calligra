@@ -158,6 +158,20 @@ public:
      */
     KoDocument *hitTest( const QPoint &pos );
 
+
+    void setShowVerticalScrollBar(bool _show) {   m_bVerticalScrollBarShow=_show;}
+    void setShowHorizontalScrollBar(bool _show) {   m_bHorizontalScrollBarShow=_show;}
+
+    bool getShowVerticalScrollBar() { return  m_bVerticalScrollBarShow;}
+    bool getShowHorizontalScrollBar() {  return  m_bHorizontalScrollBarShow;}
+
+    void initConfig();
+
+    /**
+    * refresh view when you hide/show vertical scrollbar
+    */
+    void refreshView();
+
 public slots:
     void initialPosition();
     /**
@@ -583,6 +597,12 @@ private:
      * Holds a guarded pointer to the transformation toolbox.
      */
     QGuardedPtr<KoTransformToolBox> m_transformToolBox;
+
+    /**
+    * bool which define if you can show scroolbar
+    */
+    bool m_bVerticalScrollBarShow;
+    bool m_bHorizontalScrollBarShow;
 };
 
 #endif

@@ -169,6 +169,9 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
  {
 
   m_pView = _view;
+  bool vertical=true;
+  bool horizontal=true;
+
   QVBoxLayout *box = new QVBoxLayout( this );
   box->setMargin( 5 );
   box->setSpacing( 10 );
@@ -183,13 +186,22 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
-        _page=config->readNumEntry( "NbPage" ) ;
+        _page=config->readNumEntry( "NbPage" ,1) ;
+        horizontal=config->readBoolEntry("Horiz ScrollBar",true);
+        vertical=config->readBoolEntry("Vert ScrollBar",true);
         }
 
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
   nbPage->setLabel(i18n("Number of page open at the beginning :"));
   lay1->addWidget(nbPage);
+
+  showVScrollBar=new QCheckBox(i18n("Show vertical scrollbar"),tmpQGroupBox);
+  lay1->addWidget(showVScrollBar);
+  showVScrollBar->setChecked(vertical);
+  showHScrollBar=new QCheckBox(i18n("Show horizontal scrollbar"),tmpQGroupBox);
+  lay1->addWidget(showHScrollBar);
+  showHScrollBar->setChecked(horizontal);
 
   box->addWidget( tmpQGroupBox);
 
@@ -199,5 +211,27 @@ void configure::apply()
 {
 config->setGroup( "Parameters" );
 config->writeEntry( "NbPage", nbPage->value());
+
+if( m_pView->horzScrollBar()->isVisible()!=showHScrollBar->isChecked())
+        {
+        config->writeEntry( "Horiz ScrollBar", showHScrollBar->isChecked());
+        if( showHScrollBar->isChecked())
+                m_pView->horzScrollBar()->show();
+        else
+                m_pView->horzScrollBar()->hide();
+        m_pView->setShowHorizontalScrollBar(showHScrollBar->isChecked());
+        }
+if( m_pView->vertScrollBar()->isVisible()!=showVScrollBar->isChecked())
+        {
+        config->writeEntry( "Vert ScrollBar", showVScrollBar->isChecked());
+        if( showVScrollBar->isChecked())
+                m_pView->vertScrollBar()->show();
+        else
+                m_pView->vertScrollBar()->hide();
+        m_pView->setShowVerticalScrollBar(showVScrollBar->isChecked());
+        m_pView->refreshView();
+        }
+
+
 }
 #include "kspread_dlg_preference.moc"
