@@ -117,7 +117,7 @@
   <Action name="oszi"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
-  <Action name="preference"/>
+  <Action name="preference" group="settings_configure"/>
  </Menu>
 </MenuBar>
 <ToolBar fullWidth="false" name="editAndColumnAndSortAndPartToolBar"><text>Edit</text>
