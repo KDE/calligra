@@ -58,6 +58,7 @@
 #include <kmessagebox.h>
 #include <kstdaction.h>
 #include <kapplication.h>
+#include <kspelldlg.h>
 #include <kio/netaccess.h>
 
 #include <kpresenter_view.h>
@@ -4112,10 +4113,10 @@ void KPresenterView::startKSpell()
 
     QObject::connect( m_spell.kspell, SIGNAL( death() ),
                       this, SLOT( spellCheckerFinished() ) );
-    QObject::connect( m_spell.kspell, SIGNAL( misspelling( QString, QStringList*, unsigned ) ),
-                      this, SLOT( spellCheckerMisspelling( QString, QStringList*, unsigned ) ) );
-    QObject::connect( m_spell.kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
-                      this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
+    QObject::connect( m_spell.kspell, SIGNAL( misspelling( const QString &, const QStringList &, unsigned int) ),
+                      this, SLOT( spellCheckerMisspelling( const QString &, const QStringList &, unsigned int) ) );
+    QObject::connect( m_spell.kspell, SIGNAL( corrected( const QString &, const QString &, unsigned int) ),
+                      this, SLOT( spellCheckerCorrected( const QString &, const QString &, unsigned int ) ) );
     QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
                       this, SLOT( spellCheckerDone( const QString & ) ) );
 }
@@ -4157,7 +4158,7 @@ void KPresenterView::spellCheckerReady()
         m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
 }
 
-void KPresenterView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
+void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
 {
     //kdDebug() << "KPresenterView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
     KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
@@ -4175,7 +4176,7 @@ void KPresenterView::spellCheckerMisspelling( QString old, QStringList* , unsign
     textobj->highlightPortion( p, pos, old.length(), m_canvas );
 }
 
-void KPresenterView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
+void KPresenterView::spellCheckerCorrected( const QString &old, const QString &corr, unsigned int pos )
 {
     //kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
 
