@@ -45,7 +45,7 @@
 	createDialog();
 }*/
 
-TEXGRAPHExportDia::TEXGRAPHExportDia(const KoStoreDevice* in, QWidget *parent, const char *name) :
+TEXGRAPHExportDia::TEXGRAPHExportDia(KoStoreDevice* in, QWidget *parent, const char *name) :
 			KDialogBase(parent, name, true,
 			i18n("Latex export filter parameters"), Ok|Cancel), _in(in)
 {

@@ -59,7 +59,7 @@ class TEXGRAPHExportDia : public KDialogBase
 
 	public:
 		TEXGRAPHExportDia(QWidget *parent=0L, const char *name=0L);	/* deprecated */
-		TEXGRAPHExportDia(const KoStoreDevice*, QWidget *parent=0L, const char *name=0L);
+		TEXGRAPHExportDia(KoStoreDevice*, QWidget *parent=0L, const char *name=0L);
 
 		virtual ~TEXGRAPHExportDia() {}
 		void createDialog();
