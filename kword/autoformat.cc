@@ -43,7 +43,8 @@ KWAutoFormatEntry::KWAutoFormatEntry()
 
 /*================================================================*/
 KWAutoFormat::KWAutoFormat(KWordDocument *_doc)
-  : typographicQuotes(), enabled(false), lastWasDotSpace(false), convertUpperCase(true)
+  : typographicQuotes(), enabled(false), lastWasDotSpace(false), 
+    convertUpperCase(true), lastWasUpper(false), convertUpperUpper(true)
 {
   doc = _doc;
   tmpBuffer = 0L;
@@ -56,6 +57,7 @@ void KWAutoFormat::startAutoFormat(KWParag *parag,KWFormatContext *fc)
     return;
 
   lastWasDotSpace = false;
+  lastWasUpper = false;
   
   tmpBuffer = new KWString(doc);
 }
@@ -111,12 +113,18 @@ bool KWAutoFormat::doUpperCase(KWParag *parag,KWFormatContext *fc)
     return false;
 
   bool converted = false;
-  
+
   if (lastWasDotSpace &&
       parag->getKWString()->data()[fc->getTextPos()].c != QChar('.') &&
       parag->getKWString()->data()[fc->getTextPos()].c != QChar(' '))
     {
       parag->getKWString()->data()[fc->getTextPos()].c.toUpper();
+      converted = true;
+    }
+  if (!lastWasDotSpace && lastWasUpper &&
+      isUpper(parag->getKWString()->data()[fc->getTextPos()].c))
+    {
+      parag->getKWString()->data()[fc->getTextPos()].c.toLower();
       converted = true;
     }
       
@@ -126,5 +134,22 @@ bool KWAutoFormat::doUpperCase(KWParag *parag,KWFormatContext *fc)
 	   parag->getKWString()->data()[fc->getTextPos()].c != QChar(' '))
     lastWasDotSpace = false;
 
+  if (isUpper(parag->getKWString()->data()[fc->getTextPos()].c))
+    lastWasUpper = true;
+  else
+    lastWasUpper = false;
+  
   return converted;
+}
+
+/*================================================================*/
+bool KWAutoFormat::isUpper(const QChar &c)
+{
+  QChar c2(c);
+  c2.toLower();
+ 
+  if (c2 != c)
+    return true;
+  else
+    return false;
 }

@@ -1113,3 +1113,8 @@ Reggie, 20.4.1999:
 - KWord saves and loads now in utf8
 - More work on autoformat (implemented that annoying automatical conversation
   to uppercase letters :-)
+
+Reggie, 23.4.1999:
+------------------
+- Implemented autoformat for Upper-Upper -> Upper-Lower
+  convert (e.g. convert HAllo to Hallo)
