@@ -23,15 +23,16 @@
 #define __main_h__
 
 #include <qapplication.h>
+#include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlistbox.h>
-#include <qcombobox.h>
 #include <qobject.h>
 #include <qregexp.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtabdialog.h>
+#include <qtabwidget.h>
 #include <qtextbrowser.h>
 #include <qwidget.h>
 #include <qvbox.h>
@@ -73,8 +74,6 @@ protected slots:
     void receivedWnStdout(KProcess *proc, char *result, int len);
     void receivedWnStderr(KProcess *proc, char *result, int len);
 
-    void slotHelp();
-
 protected:
     enum Mode {grep, other};
     void findTerm(const QString &term);
@@ -93,17 +92,18 @@ protected:
 
     Mode m_mode;
     
-    QTabDialog *m_tab;
+    KDialogBase *m_dialog;
+    QTabWidget *m_tab;
     QVBox *vbox;
     QVBox *vbox2;
     
-    // WordNet:
     KHistoryCombo *m_edit;
+
+    // WordNet:
     QTextBrowser *m_resultbox;
     QComboBox *m_combobox;
     
     // Thesaurus:
-    KHistoryCombo *m_thes_edit;
     QVBox *vbox_syn;
     QListBox *m_thes_syn;
     QVBox *vbox_hyper;

@@ -24,21 +24,20 @@
 
 /*
 FIXME:
--Filter the (p) / (a) at the end of some adjectives
--Fix "no mimesource" warning of QTextBrowser
 -See the fixme's in the source below
 
 TODO:
--If no match was found, use KSpell to offer alternative spellings
--Add back/forward buttons
--Don't start WordNet before its tab is activated?
--Move the edit field outside the tabs and make it work for both
--Also "Replace" with text selection in m_resultbox?
 -Make dialog non-modal???
+-Add back/forward buttons
+-If no match was found, use KSpell to offer alternative spellings?
+-Don't start WordNet before its tab is activated?
+-Also "Replace" with text selection in m_resultbox?
 -Be more verbose if the result is empty
--Better table layout (no empty space on top)
+-See the TODO's in the source below
+
 -Don't forget to insert comments for the translators if necessary
  (because WordNet is English language only)
+-Fix "no mimesource" warning of QTextBrowser? Seems really harmless.
 
 NOT TODO:
 -Add part of speech information -- I think this would blow up the 
@@ -64,27 +63,33 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     : KDataTool(parent, name)
 {
     
-    m_tab = new QTabDialog();
-    m_tab->setOkButton(i18n("Replace"));
-    m_tab->setCancelButton();
-    m_tab->resize(500, 350);
-    m_tab->setCaption(i18n("KWord Thesaurus & WordNet"));
+    m_dialog = new KDialogBase(KJanusWidget::Plain, i18n("KWord Thesaurus & WordNet"),
+        KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok);
+    m_dialog->setButtonOKText(i18n("Replace"));
+    m_dialog->setHelp(QString::null, "thesaurus");
+    m_dialog->resize(500, 350);
+    
+    QFrame *page = m_dialog->plainPage();
+    QVBoxLayout *topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
 
-    m_tab->setHelpButton();		// fixme: place to the left?!
-    connect(m_tab, SIGNAL(helpButtonPressed()), this, SLOT(slotHelp()));
+    m_edit = new KHistoryCombo(page);
+    topLayout->addWidget(m_edit);
+
+    m_tab = new QTabWidget(page);
+    topLayout->addWidget(m_tab);
 
     //
     // Thesaurus Tab
     //
-
-    vbox = new QVBox(m_tab);
-    vbox->setMargin(5);        // fixme: use global value?
-    vbox->setSpacing(5);
     
-    m_thes_edit = new KHistoryCombo(vbox);
+    vbox = new QVBox(m_tab);
+    m_tab->addTab(vbox, i18n("Thesaurus"));
+    vbox->setMargin(KDialog::marginHint());
+    vbox->setSpacing(KDialog::spacingHint());
     
     QHBox *hbox = new QHBox(vbox);
-    hbox->setSpacing(5);
+    hbox->setMargin(KDialog::marginHint());
+    hbox->setSpacing(KDialog::spacingHint());
 
     vbox_syn = new QVBox(hbox);
     (void) new QLabel(i18n("Synonyms"), vbox_syn);
@@ -106,27 +111,14 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     connect(m_thes_hypo, SIGNAL(selected(const QString &)),
         this, SLOT(slotFindTerm(const QString &)));
 
-    // we need to keep the "Replace" button unambiguous, so only select one item at one:
-    /* we currently use the m_thes_edit anyway to get the replacement
-    connect(m_thes_syn, SIGNAL(selectionChanged()), m_thes_hyper, SLOT(clearSelection()));
-    connect(m_thes_syn, SIGNAL(selectionChanged()), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_hyper, SIGNAL(selectionChanged()), m_thes_syn, SLOT(clearSelection()));
-    connect(m_thes_hyper, SIGNAL(selectionChanged()), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_hypo, SIGNAL(selectionChanged()), m_thes_syn, SLOT(clearSelection()));
-    connect(m_thes_hypo, SIGNAL(selectionChanged()), m_thes_hyper, SLOT(clearSelection()));
-    */
-    
-    m_tab->insertTab(vbox, i18n("Thesaurus"));
-
     //
     // WordNet Tab
     //
-    
+
     vbox2 = new QVBox(m_tab);
-    vbox2->setMargin(5);        // fixme: use global values?
-    vbox2->setSpacing(5);
-    
-    m_edit = new KHistoryCombo(vbox2);
+    m_tab->addTab(vbox2, i18n("WordNet"));
+    vbox2->setMargin(KDialog::marginHint());    
+    vbox2->setSpacing(KDialog::spacingHint());    
 
     m_combobox = new QComboBox(vbox2);
     m_combobox->setEditable(false);
@@ -134,34 +126,23 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
     m_resultbox = new QTextBrowser(vbox2);
     m_resultbox->setTextFormat(Qt::RichText);
-    // fixme?: m_resultbox->setMimeSourceFactory(...);
+    // TODO?: m_resultbox->setMimeSourceFactory(...); to avoid warning
     connect(m_resultbox, SIGNAL(linkClicked(const QString &)),
         this, SLOT(slotFindTerm(const QString &)));
 
-    m_tab->insertTab(vbox2, i18n("WordNet"));
-
     //
-    // Two history boxes. TODO: move out of tab, so we only need one.
+    // Connect for the history box
     //
-    // Do not use Return as default key...
-    m_thes_edit->setTrapReturnKey(true);
-    // ...but search term when return is pressed or old term is selected:
-    connect(m_thes_edit, SIGNAL(returnPressed(const QString&)), this, SLOT(slotFindTerm(const QString&)));
-    connect(m_thes_edit, SIGNAL(activated(const QString &)), this, SLOT(slotFindTerm(const QString &)));
-    // remember input:
-    connect(m_thes_edit, SIGNAL(returnPressed(const QString&)), m_edit, SLOT(addToHistory(const QString&)));
-    connect(m_thes_edit, SIGNAL(returnPressed(const QString&)), m_thes_edit, SLOT(addToHistory(const QString&)));
-
-    // same for the other combo box:
-    m_edit->setTrapReturnKey(true);
+    m_edit->setTrapReturnKey(true);        // Do not use Return as default key...
     connect(m_edit, SIGNAL(returnPressed(const QString&)), this, SLOT(slotFindTerm(const QString&)));
     connect(m_edit, SIGNAL(activated(const QString &)), this, SLOT(slotFindTerm(const QString &)));
     connect(m_edit, SIGNAL(returnPressed(const QString&)), m_edit, SLOT(addToHistory(const QString&)));
-    connect(m_edit, SIGNAL(returnPressed(const QString&)), m_thes_edit, SLOT(addToHistory(const QString&)));
 
     //
     // The external command stuff
     //
+    
+    // calling the 'wn' binary
     m_wnproc = new KProcess;
     connect(m_wnproc, SIGNAL(processExited(KProcess*)),
         this, SLOT(wnExited(KProcess*)));
@@ -170,6 +151,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     connect(m_wnproc, SIGNAL(receivedStderr(KProcess*,char*,int)),
         this, SLOT(receivedWnStderr(KProcess*, char*, int)));
 
+    // grep'ing the text file
     m_thesproc = new KProcess;
     connect(m_thesproc, SIGNAL(processExited(KProcess*)),
         this, SLOT(thesExited(KProcess*)));
@@ -183,8 +165,8 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
 Thesaurus::~Thesaurus()
 {
-    if( m_tab ) {
-        delete m_tab;
+    if( m_dialog ) {
+        delete m_dialog;
     }
     if( m_thesproc ) {
         delete m_thesproc;
@@ -192,7 +174,6 @@ Thesaurus::~Thesaurus()
     if( m_wnproc ) {
         delete m_wnproc;
     }
-    // TODO: can we ignore the others because they are children of m_tab etc?
 }
 
 
@@ -223,7 +204,6 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
     QRegExp re("[.,;!?\"'()\\[\\]]");
     buffer.replace(re, "");
     m_edit->insertItem(buffer, 0);
-    m_thes_edit->insertItem(buffer, 0);
 
     m_wnproc_stdout = "";
     m_wnproc_stderr = "";
@@ -233,7 +213,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
 
     slotFindTerm(buffer);
 
-    if( m_tab->exec() == QDialog::Accepted ) {    // Replace
+    if( m_dialog->exec() == QDialog::Accepted ) {    // Replace
         QString replace_text;
         replace_text = m_edit->currentText();
         *((QString*)data) = replace_text;
@@ -258,8 +238,6 @@ void Thesaurus::slotFindTerm(const QString &term)
     } else {
         m_edit->insertItem(term, 0);
         m_edit->setCurrentItem(0);
-        m_thes_edit->insertItem(term, 0);
-        m_thes_edit->setCurrentItem(0);
         findTerm(term);
     }
 }
@@ -291,7 +269,6 @@ void Thesaurus::findTermThesaurus(const QString &term)
 
     if( !m_thesproc->start(KProcess::NotifyOnExit, KProcess::AllOutput) ) {
         KMessageBox::error(0, i18n("<b>Error:</b> Failed to execute grep."));
-        m_thes_edit->setEnabled(false);
         QApplication::restoreOverrideCursor();
         return;
     }
@@ -307,7 +284,7 @@ void Thesaurus::thesExited(KProcess *)
         return;
     }
 
-    QString search_term = m_thes_edit->currentText().stripWhiteSpace();
+    QString search_term = m_edit->currentText().stripWhiteSpace();
     
     QStringList syn;
     QStringList hyper;
@@ -451,6 +428,8 @@ void Thesaurus::findTermWordnet(const QString &term)
 
     int current = m_combobox->currentItem();    // remember current position
     m_combobox->clear();
+    
+    // warning: order matters!
     // 0:    
     m_combobox->insertItem(i18n("Synonyms/Hypernyms - ordered by frequency"));
     m_combobox->insertItem(i18n("Synonyms - ordered by similariy of meaning (verbs only)"));
@@ -524,7 +503,7 @@ void Thesaurus::wnExited(KProcess *)
         // render in a table, each line one row:
         QStringList lines = lines.split(QRegExp("\n"), m_wnproc_stdout, false);
         QString result = "<qt><table>\n";
-        // TODO: try without the following line (it's necessary to ensure the
+        // TODO in Qt > 3.01: try without the following line (it's necessary to ensure the
         // first column is really always quite small):
         result += "<tr><td width=\"10%\"></td><td width=\"90%\"></td></tr>\n";
         uint ct = 0;
@@ -573,12 +552,6 @@ void Thesaurus::receivedWnStderr(KProcess *, char *result, int len)
     m_wnproc_stderr += QString::fromLocal8Bit( QCString(result, len+1) );
 }
 
-
-// Triggered when Help is pressed.
-void Thesaurus::slotHelp()
-{
-    kapp->invokeHelp(QString::null, "thesaurus");
-}
 
 //
 // Tools
@@ -660,23 +633,25 @@ QString Thesaurus::formatLine(QString l)
     return l;
 }
 
-/** Sort a list case insensitively. */
+/** Sort a list case insensitively.
+ * TODO: use ksortablevaluelist?
+ */
 QStringList Thesaurus::sortQStringList(QStringList list)
 {
-	// Sort list case-insensitive. This looks strange but using a QMap
-	// is even suggested by the Qt documentation.
-	QMap<QString,QString> map_list;
-	for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
-		QString str = *it;
-		map_list[str.lower()] = str;
-	}
-	list.clear();
-	QMap<QString,QString>::Iterator it;
-	// Qt doc: "the items are alphabetically sorted [by key] when iterating over the map":
-	for( it = map_list.begin(); it != map_list.end(); ++it ) {
-		list.append(it.data());
-	}
-	return list;
+    // Sort list case-insensitive. This looks strange but using a QMap
+    // is even suggested by the Qt documentation.
+    QMap<QString,QString> map_list;
+    for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
+        QString str = *it;
+        map_list[str.lower()] = str;
+    }
+    list.clear();
+    QMap<QString,QString>::Iterator it;
+    // Qt doc: "the items are alphabetically sorted [by key] when iterating over the map":
+    for( it = map_list.begin(); it != map_list.end(); ++it ) {
+        list.append(it.data());
+    }
+    return list;
 }
 
 #include "main.moc"
