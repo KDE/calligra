@@ -1,2 +1,4 @@
 # modules
-
+kchart: shlib-missing-in-control-file kchart usr/lib/kchart.so
+kchart: shlib-missing-in-control-file libkchartpart usr/lib/libkchartpart.so
+kchart: unused-shlib-entry-in-control-file libkochart

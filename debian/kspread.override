@@ -1,2 +1,6 @@
 # modules
+kspread: shlib-missing-in-control-file kspread usr/lib/kspread.so
+kspread: shlib-missing-in-control-file libkspreadpart usr/lib/libkspreadpart.so
+kspread: shlib-missing-in-control-file libkspreadcalc usr/lib/libkspreadcalc.so
+kspread: unused-shlib-entry-in-control-file libkochart
 

@@ -1,2 +1,9 @@
 # modules
+shlib-missing-in-control-file libkivioconnectortool usr/lib/libkivioconnectortool.so
+kivio: shlib-missing-in-control-file libstraight_connector usr/share/apps/kivio/autoloadStencils/libstraight_connector.ksp
+kivio: shlib-missing-in-control-file libkiviopart usr/lib/libkiviopart.so
+kivio: shlib-missing-in-control-file libkivioselecttool usr/lib/libkivioselecttool.so
+kivio: shlib-missing-in-control-file libkiviozoomtool usr/lib/libkiviozoomtool.so
+kivio: shlib-missing-in-control-file kivio usr/lib/kivio.so
+kivio: shlib-missing-in-control-file libkiviotexttool usr/lib/libkiviotexttool.so
 

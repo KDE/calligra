@@ -1,2 +1,4 @@
 # modules
+koshell: shlib-missing-in-control-file koshell usr/lib/koshell.so
+koshell: unused-shlib-entry-in-control-file libkochart
 
