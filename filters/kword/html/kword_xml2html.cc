@@ -1989,13 +1989,13 @@ void mainFunc( const char *data ) {
     int iSizeXmlFile;
     // tTextStruct sTextStruct;
     // int iMarginIncrease = 0;
-#ifdef SPARTAN
-    const char *Usage="Usage:  xml2html_sp file1 <file2...fileN> output file1\n"
-      "        <output file2...output fileN>\n";
-#else
-    const char *Usage="Usage:  xml2html file1 <file2...fileN> output file1\n"
-      "        <output file2...output fileN>\n";
-#endif
+    /*#ifdef SPARTAN
+        const char *Usage="Usage:  xml2html_sp file1 <file2...fileN> output file1\n"
+          "        <output file2...output fileN>\n";
+    #else
+        const char *Usage="Usage:  xml2html file1 <file2...fileN> output file1\n"
+          "        <output file2...output fileN>\n";
+      #endif*/
     const char *zXmlFile;
     FILE *OutputFile;
     HTMLTree *pHTMLTree;
