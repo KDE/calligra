@@ -215,7 +215,7 @@ void KChartConfigDialog::apply()
         //_backgroundpixpage->apply();
 
         // data in the params struct has changed; notify application
-        emit dataChanged();
+        //emit dataChanged();
 
         //     for( uint i = 0; i < NUMDATACOLORS; i++ )
         // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
