@@ -50,6 +50,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
       m_fileArray(fileArray),
       m_dialog(new DialogUI(this))
 {
+    setCaption( i18n( "Import" ) );
     kapp->restoreOverrideCursor();
 
     fillTable();
