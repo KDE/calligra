@@ -264,8 +264,6 @@ void KColor::HSVtoRGB(int h, int s, int v, int *r, int *g, int *b)
 {
   *r = *g = *b = v;
 
-  // TODO: handle achromatic case
-
   if (s != 0 && h != -1) // chromatic
 	{
 	  if (h >= 360) // angle > 360
