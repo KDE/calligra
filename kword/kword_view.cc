@@ -1670,18 +1670,14 @@ void KWordView::toolsKSpreadTable()
 	return;
     gui->getPaperWidget()->mmKSpreadTable();
 
-    QValueList<KoDocumentEntry> lst = KoDocumentEntry::query();
-
-    QValueList<KoDocumentEntry>::Iterator it = lst.begin();
-    for ( ; it != lst.end(); ++it ) {
-	if ( ( *it ).name() == "KSpread" ) {
-	    gui->getPaperWidget()->setPartEntry( *it );
-	    return;
-	}
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kspread" );
+    if (entry.isEmpty())
+    {
+      KMessageBox::sorry( 0, i18n( "Sorry, no table component registered" ) );
+      gui->getPaperWidget()->mmEdit();
     }
-
-    QMessageBox::critical( 0, i18n( "Error" ), i18n( "Sorry, no table component registered" ), i18n( "OK" ) );
-    gui->getPaperWidget()->mmEdit();
+    else
+        gui->getPaperWidget()->setPartEntry( entry );
 }
 
 /*===============================================================*/

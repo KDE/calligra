@@ -585,18 +585,14 @@ void KPresenterView::toolsDiagramm()
     page->deSelectAllObj();
     page->setToolEditMode( INS_DIAGRAMM, FALSE );
 
-    QValueList<KoDocumentEntry> lst = KoDocumentEntry::query();
-
-    QValueList<KoDocumentEntry>::Iterator it = lst.begin();
-    for ( ; it != lst.end(); ++it ) {
-	if ( ( *it ).name() == "KChart" ) {
-	    page->setPartEntry( *it );
-	    return;
-	}
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
+    if (entry.isEmpty())
+    {
+      KMessageBox::sorry( 0, i18n( "Sorry, no chart component registered" ) );
+      page->setToolEditMode( TEM_MOUSE );
     }
-
-    QMessageBox::critical( 0, i18n( "Error" ), i18n( "Sorry, no chart component registered" ), i18n( "OK" ) );
-    page->setToolEditMode( TEM_MOUSE );
+    else
+        page->setPartEntry( entry );
 }
 
 /*==============================================================*/
@@ -607,18 +603,14 @@ void KPresenterView::toolsTable()
     page->deSelectAllObj();
     page->setToolEditMode( INS_TABLE, FALSE );
 
-    QValueList<KoDocumentEntry> lst = KoDocumentEntry::query();
-
-    QValueList<KoDocumentEntry>::Iterator it = lst.begin();
-    for ( ; it != lst.end(); ++it ) {
-	if ( ( *it ).name() == "KSpread" ) {
-	    page->setPartEntry( *it );
-	    return;
-	}
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kspread" );
+    if (entry.isEmpty())
+    {
+      KMessageBox::sorry( 0, i18n( "Sorry, no table component registered" ) );
+      page->setToolEditMode( TEM_MOUSE );
     }
-
-    QMessageBox::critical( 0, i18n( "Error" ), i18n( "Sorry, no table component registered" ), i18n( "OK" ) );
-    page->setToolEditMode( TEM_MOUSE );
+    else
+        page->setPartEntry( entry );
 }
 
 /*==============================================================*/
@@ -629,18 +621,14 @@ void KPresenterView::toolsFormula()
     page->deSelectAllObj();
     page->setToolEditMode( INS_FORMULA, FALSE );
 
-    QValueList<KoDocumentEntry> lst = KoDocumentEntry::query();
-
-    QValueList<KoDocumentEntry>::Iterator it = lst.begin();
-    for ( ; it != lst.end(); ++it ) {
-	if ( ( *it ).name() == "KFormula" ) {
-	    page->setPartEntry( *it );
-	    return;
-	}
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kformula" );
+    if (entry.isEmpty())
+    {
+      KMessageBox::sorry( 0, i18n( "Sorry, no formula component registered" ) );
+      page->setToolEditMode( TEM_MOUSE );
     }
-
-    QMessageBox::critical( 0, i18n( "Error" ), i18n( "Sorry, no formula component registered" ), i18n( "OK" ) );
-    page->setToolEditMode( TEM_MOUSE );
+    else
+        page->setPartEntry( entry );
 }
 
 /*===================== insert a textobject =====================*/
