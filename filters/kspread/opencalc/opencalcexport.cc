@@ -104,7 +104,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
     return KoFilter::NotImplemented;
   }
 
-  if ( ( to != "application/x-opencalc") || (from != "application/x-kspread" ) )
+  if ( ( to != "application/vnd.sun.xml.calc") || (from != "application/x-kspread" ) )
   {
     kdWarning(30518) << "Invalid mimetypes " << to << " " << from << endl;
     return KoFilter::NotImplemented;
