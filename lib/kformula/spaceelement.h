@@ -38,7 +38,7 @@ class SpaceElement : public BasicElement {
     SpaceElement operator=( const SpaceElement& ) { return *this; }
 public:
 
-    SpaceElement( SpaceWidth space = THIN, BasicElement* parent = 0 );
+    SpaceElement( SpaceWidth space = THIN, bool tab=false, BasicElement* parent = 0 );
     SpaceElement( const SpaceElement& );
 
     virtual SpaceElement* clone() {
@@ -127,6 +127,11 @@ protected:
 private:
 
     SpaceWidth spaceWidth;
+
+    /**
+     * Whether this space behaves like a tab.
+     */
+    bool m_tab;
 };
 
 KFORMULA_NAMESPACE_END

@@ -33,7 +33,7 @@ ContextStyle::ContextStyle()
     : symbolFont( "Symbol" ),
       defaultColor(Qt::black), numberColor(Qt::blue),
       operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
-      emptyColor(Qt::blue),
+      emptyColor(Qt::blue), helpColor( Qt::gray ),
       m_sizeFactor( 0 )
 {
 //     kdDebug() << "ContextStyle::ContextStyle" << endl
@@ -108,6 +108,7 @@ void ContextStyle::readConfig( KConfig* config )
     operatorColor = config->readColorEntry( "operatorColor", &operatorColor );
     emptyColor    = config->readColorEntry( "emptyColor",    &emptyColor );
     errorColor    = config->readColorEntry( "errorColor",    &errorColor );
+    helpColor     = config->readColorEntry( "helpColor",     &helpColor );
     m_syntaxHighlighting = config->readBoolEntry( "syntaxHighlighting", true );
 }
 
@@ -157,6 +158,14 @@ QColor ContextStyle::getEmptyColor()    const
     return getDefaultColor();
 }
 
+QColor ContextStyle::getHelpColor()     const
+{
+    if ( edit() && syntaxHighlighting() ) {
+        return helpColor;
+    }
+    return getDefaultColor();
+}
+
 void ContextStyle::setDefaultColor( const QColor& color )
 {
     defaultColor = color;
@@ -176,6 +185,10 @@ void ContextStyle::setErrorColor( const QColor& color )
 void ContextStyle::setEmptyColor( const QColor& color )
 {
     emptyColor = color;
+}
+void ContextStyle::setHelpColor( const QColor& color )
+{
+    helpColor = color;
 }
 
 const QStringList& ContextStyle::requestedFonts() const

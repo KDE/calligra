@@ -262,10 +262,10 @@ void TextElement::writeDom(QDomElement element)
 
     switch ( charStyle ) {
     case anyChar: break;
-    case normalChar: element.setAttribute("STYLE", "NORMAL"); break;
-    case boldChar: element.setAttribute("STYLE", "BOLD"); break;
-    case italicChar: element.setAttribute("STYLE", "ITALIC"); break;
-    case boldItalicChar: element.setAttribute("STYLE", "BOLDITALIC"); break;
+    case normalChar: element.setAttribute("STYLE", "normal"); break;
+    case boldChar: element.setAttribute("STYLE", "bold"); break;
+    case italicChar: element.setAttribute("STYLE", "italic"); break;
+    case boldItalicChar: element.setAttribute("STYLE", "bolditalic"); break;
     }
 }
 
@@ -309,16 +309,16 @@ bool TextElement::readAttributesFromDom(QDomElement element)
     }
 
     QString styleStr = element.attribute("STYLE");
-    if ( styleStr == QString( "NORMAL" ) ) {
+    if ( styleStr == "normal" ) {
         charStyle = normalChar;
     }
-    else if ( styleStr == QString( "BOLD" ) ) {
+    else if ( styleStr == "bold" ) {
         charStyle = boldChar;
     }
-    else if ( styleStr == QString( "ITALIC" ) ) {
+    else if ( styleStr == "italic" ) {
         charStyle = italicChar;
     }
-    else if ( styleStr == QString( "BOLDITALIC" ) ) {
+    else if ( styleStr == "bolditalic" ) {
         charStyle = boldItalicChar;
     }
     else {

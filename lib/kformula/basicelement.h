@@ -298,6 +298,12 @@ public:
 
 
     /**
+     * Callback for the tabs among our children. Needed for alignment.
+     */
+    virtual void registerTab( BasicElement* /*tab*/ ) {}
+
+
+    /**
      * This is called by the container to get a command depending on
      * the current cursor position (this is how the element gets choosen)
      * and the request.
@@ -330,16 +336,14 @@ public:
     luPixel getWidth() const { return m_width; }
     luPixel getHeight() const { return m_height; }
 
-    /**
-     * Our position inside our parent.
-     */
-    //KoPoint getParentPosition() { return position; }
+    void setWidth( luPixel width )   { m_width = width; }
+    void setHeight( luPixel height ) { m_height = height; }
 
     luPixel getBaseline() const { return m_baseline; }
-    //luPixel getMidline() const { return m_axis; }
+    void setBaseline( luPixel line ) { m_baseline = line; }
+
     luPixel axis( const ContextStyle& style, ContextStyle::TextStyle tstyle ) const {
         return getBaseline() - style.axisHeight( tstyle ); }
-
 
     /**
      * @return a QDomElement that contain as DomChildren the
@@ -373,14 +377,6 @@ public:
     virtual void setElementType(ElementType* t) { elementType = t; }
 
 protected:
-
-    //KoPoint getSize() { return KoPoint( m_width, m_height ); }
-
-    void setWidth( luPixel width )   { m_width = width; }
-    void setHeight( luPixel height ) { m_height = height; }
-
-    void setBaseline( luPixel line ) { m_baseline = line; }
-    //void setMidline( luPixel axis ) { m_axis = axis; }
 
     //Save/load support
 

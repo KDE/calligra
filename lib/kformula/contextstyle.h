@@ -105,16 +105,19 @@ public:
     QColor getOperatorColorPlain() const { return operatorColor; }
     QColor getErrorColorPlain()    const { return errorColor; }
     QColor getEmptyColorPlain()    const { return emptyColor; }
+    QColor getHelpColorPlain()     const { return helpColor; }
     QColor getNumberColor()   const;
     QColor getOperatorColor() const;
     QColor getErrorColor()    const;
     QColor getEmptyColor()    const;
+    QColor getHelpColor()     const;
 
     void setDefaultColor( const QColor& );
     void setNumberColor( const QColor& );
     void setOperatorColor( const QColor& );
     void setErrorColor( const QColor& );
     void setEmptyColor( const QColor& );
+    void setHelpColor( const QColor& );
 
     QFont getDefaultFont()    const { return defaultFont; }
     QFont getNameFont()       const { return nameFont; }
@@ -242,6 +245,7 @@ private:
     QColor operatorColor;
     QColor errorColor;
     QColor emptyColor;
+    QColor helpColor;
 
     /**
      * The cursors movement style. You need to notify each cursor

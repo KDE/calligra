@@ -58,7 +58,7 @@ void save( QString filename, QDomDocument doc )
 }
 
 
-void load( KFormula::Container* formula, QString filename )
+void load( KFormula::Document* document, QString filename )
 {
     QFile f(filename);
     if (!f.open(IO_ReadOnly)) {
@@ -74,7 +74,7 @@ void load( KFormula::Container* formula, QString filename )
     if (!doc.setContent(content)) {
         return;
     }
-    if ( !formula->load( doc.documentElement() ) ) {
+    if ( !document->loadXML( doc ) ) {
         kdWarning( DEBUGID ) << "Failed." << endl;
     }
 }
@@ -154,7 +154,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
                         loadMathML( document, file );
                     }
                     else if ( fi.extension() == "xml" ) {
-                        load( document, file );
+                        load( document->document(), file );
                     }
                 }
                 return;
@@ -182,7 +182,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_K: document->document()->addMultiline(); return;
             case Qt::Key_L: document->document()->addGenericLowerIndex(); return;
             case Qt::Key_M: loadMathML( document, "test.mml" ); return;
-            case Qt::Key_O: load( document, "test.xml" ); return;
+            case Qt::Key_O: load( document->document(), "test.xml" ); return;
             case Qt::Key_Q: kapp->quit(); return;
             case Qt::Key_S: save( "test.xml", document->document()->saveXML() ); return;
             case Qt::Key_T: std::cout << document->texString().latin1() << std::endl; return;
@@ -287,7 +287,7 @@ int main(int argc, char** argv)
         if ( fi.extension() == "mml" )
             loadMathML( container2, args->url( i ).path() );
         else if ( fi.extension() == "xml" )
-            load( container2, args->url( i ).path() );
+            load( container2->document(), args->url( i ).path() );
     }
 
     int result = app.exec();

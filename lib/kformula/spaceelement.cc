@@ -30,8 +30,9 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-SpaceElement::SpaceElement( SpaceWidth space, BasicElement* parent )
-    : BasicElement( parent ), spaceWidth( space )
+
+SpaceElement::SpaceElement( SpaceWidth space, bool tab, BasicElement* parent )
+    : BasicElement( parent ), spaceWidth( space ), m_tab( tab )
 {
 }
 
@@ -59,6 +60,10 @@ void SpaceElement::calcSizes( const ContextStyle& style,
     setHeight( bound.height() );
     setBaseline( -bound.top() );
     //setMidline( getBaseline() - fm.strikeOutPos() );
+
+    if ( m_tab ) {
+        getParent()->registerTab( this );
+    }
 }
 
 void SpaceElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
@@ -89,17 +94,6 @@ void SpaceElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     }
 }
 
-QString SpaceElement::toLatex()
-{
-    switch ( spaceWidth ) {
-    case NEGTHIN: return "\\!";
-    case THIN:    return "\\,";
-    case MEDIUM:  return "\\>";
-    case THICK:   return "\\;";
-    case QUAD:    return "\\quad ";
-    }
-    return "";
-}
 
 void SpaceElement::writeDom(QDomElement element)
 {
@@ -120,6 +114,9 @@ void SpaceElement::writeDom(QDomElement element)
     case QUAD:
         element.setAttribute( "WIDTH", "quad" );
         break;
+    }
+    if ( m_tab ) {
+        element.setAttribute( "TAB", "true" );
     }
 }
 
@@ -149,6 +146,8 @@ bool SpaceElement::readAttributesFromDom( QDomElement element )
     else {
         return false;
     }
+    QString tabStr = element.attribute( "TAB" );
+    m_tab = !tabStr.isNull();
     return true;
 }
 
@@ -204,6 +203,18 @@ void SpaceElement::writeMathML( QDomDocument doc, QDomNode parent )
         return de;
     }*/
 
+}
+
+QString SpaceElement::toLatex()
+{
+    switch ( spaceWidth ) {
+    case NEGTHIN: return "\\!";
+    case THIN:    return "\\,";
+    case MEDIUM:  return "\\>";
+    case THICK:   return "\\;";
+    case QUAD:    return "\\quad ";
+    }
+    return "";
 }
 
 KFORMULA_NAMESPACE_END

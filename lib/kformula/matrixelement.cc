@@ -32,6 +32,8 @@
 #include "kformulacommand.h"
 #include "matrixelement.h"
 #include "sequenceelement.h"
+#include "spaceelement.h"
+
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -881,9 +883,6 @@ void MatrixElement::writeMathML( QDomDocument doc, QDomNode parent )
 //////////////////////////////////////////////////////////////////////////////
 
 
-class TabMarker;
-
-
 /**
  * The lines behaviour is (a little) different from that
  * of ordinary sequences.
@@ -909,6 +908,8 @@ public:
                             ContextStyle::TextStyle tstyle,
                             ContextStyle::IndexStyle istyle );
 
+    virtual void registerTab( BasicElement* tab );
+
     /**
      * This is called by the container to get a command depending on
      * the current cursor position (this is how the element gets choosen)
@@ -923,109 +924,102 @@ public:
 
     virtual KCommand* input( Container* container, QChar ch );
 
-
-    void addTabMarker( TabMarker* marker );
-
     uint tabCount() const { return tabs.count(); }
 
-    TabMarker* tab( uint i ) { return tabs.at( i ); }
+    BasicElement* tab( uint i ) { return tabs.at( i ); }
 
     void moveTabTo( uint i, luPixel pos );
 
     virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
-protected:
-
-    virtual BasicElement* createElement( QString type );
-
 private:
 
-    QPtrList<TabMarker> tabs;
+    QPtrList<BasicElement> tabs;
 };
 
 
 
-/**
- * An element that may only occur inside a MultilineSequenceElement.
- */
-class TabMarker : public BasicElement {
-public:
+// /**
+//  * An element that may only occur inside a MultilineSequenceElement.
+//  */
+// class TabMarker : public BasicElement {
+// public:
 
-    TabMarker( BasicElement* parent = 0 );
+//     TabMarker( BasicElement* parent = 0 );
 
-    virtual BasicElement* clone() {
-        return new TabMarker( *this );
-    }
+//     virtual BasicElement* clone() {
+//         return new TabMarker( *this );
+//     }
 
-    /**
-     * Calculates our width and height and
-     * our children's parentPosition.
-     */
-    virtual void calcSizes( const ContextStyle& context,
-                            ContextStyle::TextStyle tstyle,
-                            ContextStyle::IndexStyle istyle );
+//     /**
+//      * Calculates our width and height and
+//      * our children's parentPosition.
+//      */
+//     virtual void calcSizes( const ContextStyle& context,
+//                             ContextStyle::TextStyle tstyle,
+//                             ContextStyle::IndexStyle istyle );
 
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       const LuPixelPoint& parentOrigin );
+//     /**
+//      * Draws the whole element including its children.
+//      * The `parentOrigin' is the point this element's parent starts.
+//      * We can use our parentPosition to get our own origin then.
+//      */
+//     virtual void draw( QPainter& painter, const LuPixelRect& r,
+//                        const ContextStyle& context,
+//                        ContextStyle::TextStyle tstyle,
+//                        ContextStyle::IndexStyle istyle,
+//                        const LuPixelPoint& parentOrigin );
 
-    virtual void writeMathML( QDomDocument doc, QDomNode parent );
+//     virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
-protected:
+// protected:
 
-    virtual QString getTagName() const { return "TAB"; }
+//     virtual QString getTagName() const { return "TAB"; }
 
-    MultilineElement* multilineElement();
-};
-
-
-TabMarker::TabMarker( BasicElement* parent )
-    : BasicElement( parent )
-{
-}
+//     MultilineElement* multilineElement();
+// };
 
 
-void TabMarker::calcSizes( const ContextStyle& /*context*/,
-                           ContextStyle::TextStyle /*tstyle*/,
-                           ContextStyle::IndexStyle /*istyle*/ )
-{
-    setWidth( 0 );
-    setHeight( 0 );
-    static_cast<MultilineSequenceElement*>( getParent() )->addTabMarker( this );
-}
+// TabMarker::TabMarker( BasicElement* parent )
+//     : BasicElement( parent )
+// {
+// }
 
 
-void TabMarker::draw( QPainter& /*painter*/, const LuPixelRect& /*r*/,
-                      const ContextStyle& /*context*/,
-                      ContextStyle::TextStyle /*tstyle*/,
-                      ContextStyle::IndexStyle /*istyle*/,
-                      const LuPixelPoint& /*parentOrigin*/ )
-{
-}
+// void TabMarker::calcSizes( const ContextStyle& /*context*/,
+//                            ContextStyle::TextStyle /*tstyle*/,
+//                            ContextStyle::IndexStyle /*istyle*/ )
+// {
+//     setWidth( 0 );
+//     setHeight( 0 );
+//     static_cast<MultilineSequenceElement*>( getParent() )->addTabMarker( this );
+// }
 
 
-MultilineElement* TabMarker::multilineElement()
-{
-    return static_cast<MultilineElement*>( getParent()->getParent() );
-}
+// void TabMarker::draw( QPainter& /*painter*/, const LuPixelRect& /*r*/,
+//                       const ContextStyle& /*context*/,
+//                       ContextStyle::TextStyle /*tstyle*/,
+//                       ContextStyle::IndexStyle /*istyle*/,
+//                       const LuPixelPoint& /*parentOrigin*/ )
+// {
+// }
 
-void TabMarker::writeMathML( QDomDocument doc, QDomNode parent )
-{
-    /* There is no representation of a TabMarker in as a tag in
-       MathML, it marks the end of a cell (mtd) instead.
-       Thus, this method doesn't create MathML we will really write
-       to a file, but rather a tag that we will filter later
-       (MultilineSequenceElement::writeMathML). */
 
-    parent.appendChild( doc.createElement( "TAB" ) );
-}
+// MultilineElement* TabMarker::multilineElement()
+// {
+//     return static_cast<MultilineElement*>( getParent()->getParent() );
+// }
+
+// void TabMarker::writeMathML( QDomDocument doc, QDomNode parent )
+// {
+//     /* There is no representation of a TabMarker in as a tag in
+//        MathML, it marks the end of a cell (mtd) instead.
+//        Thus, this method doesn't create MathML we will really write
+//        to a file, but rather a tag that we will filter later
+//        (MultilineSequenceElement::writeMathML). */
+
+//     parent.appendChild( doc.createElement( "TAB" ) );
+// }
 
 
 // Split the line at position pos.
@@ -1170,6 +1164,12 @@ void MultilineSequenceElement::calcSizes( const ContextStyle& context,
 }
 
 
+void MultilineSequenceElement::registerTab( BasicElement* tab )
+{
+    tabs.append( tab );
+}
+
+
 KCommand* MultilineSequenceElement::buildCommand( Container* container, Request* request )
 {
     switch ( *request ) {
@@ -1184,7 +1184,7 @@ KCommand* MultilineSequenceElement::buildCommand( Container* container, Request*
     }
     case req_addTabMark: {
         KFCReplace* command = new KFCReplace( i18n("Add Tabmark"), container );
-        TabMarker* element = new TabMarker();
+        SpaceElement* element = new SpaceElement( THIN, true );
         command->addElement( element );
         return command;
     }
@@ -1225,18 +1225,13 @@ KCommand* MultilineSequenceElement::input( Container* container, QChar ch )
 }
 
 
-void MultilineSequenceElement::addTabMarker( TabMarker* marker )
-{
-    tabs.append( marker );
-}
-
-
 void MultilineSequenceElement::moveTabTo( uint i, luPixel pos )
 {
-    TabMarker* marker = tab( i );
+    BasicElement* marker = tab( i );
     luPixel diff = pos - marker->getX();
+    marker->setWidth( marker->getWidth() + diff );
 
-    for ( int p = childPos( marker ); p < countChildren(); ++p ) {
+    for ( int p = childPos( marker )+1; p < countChildren(); ++p ) {
         BasicElement* child = getChild( p );
         child->setX( child->getX() + diff );
     }
@@ -1244,14 +1239,6 @@ void MultilineSequenceElement::moveTabTo( uint i, luPixel pos )
     setWidth( getWidth()+diff );
 }
 
-
-BasicElement* MultilineSequenceElement::createElement( QString type )
-{
-    if ( type == "TAB" ) return new TabMarker();
-    else {
-        return inherited::createElement( type );
-    }
-}
 
 void MultilineSequenceElement::writeMathML( QDomDocument doc,
                                             QDomNode parent )
@@ -1544,12 +1531,12 @@ void MultilineElement::draw( QPainter& painter, const LuPixelRect& r,
 
     if ( context.edit() ) {
         uint tabCount = 0;
-        painter.setPen( context.getEmptyColor() );
+        painter.setPen( context.getHelpColor() );
         for ( uint i = 0; i < count; ++i ) {
             MultilineSequenceElement* line = content.at(i);
             if ( tabCount < line->tabCount() ) {
                 for ( uint t = tabCount; t < line->tabCount(); ++t ) {
-                    TabMarker* marker = line->tab( t );
+                    BasicElement* marker = line->tab( t );
                     painter.drawLine( context.layoutUnitToPixelX( myPos.x()+marker->getX() ),
                                       context.layoutUnitToPixelY( myPos.y() ),
                                       context.layoutUnitToPixelX( myPos.x()+marker->getX() ),
