@@ -93,7 +93,7 @@ KoComponentEntry::~KoComponentEntry()
  *
  *******************************************************************/
 
-static KoComponentEntry koParseComponentProperties( KTrader::ServicePtr service )
+static KoComponentEntry koParseComponentProperties( KService::Ptr service )
 {
   KoComponentEntry e;
 
@@ -227,7 +227,7 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const char *_constr, int /*_
  *
  *******************************************************************/
 
-static KoFilterEntry koParseFilterProperties( KTrader::ServicePtr service )
+static KoFilterEntry koParseFilterProperties( KService::Ptr service )
 {
   KoFilterEntry e( koParseComponentProperties( service ) );
 
