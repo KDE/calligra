@@ -59,6 +59,7 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koQueryTrader.h>
+#include <koAutoFormat.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -123,6 +124,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_zoomHandler = new KoZoomHandler;
 
     dcop = 0;
+    m_autoFormat = new KoAutoFormat(this);
     _clean = true;
     _objectList = new QPtrList<KPObject>;
     _objectList->setAutoDelete( false );
@@ -252,6 +254,7 @@ KPresenterDoc::~KPresenterDoc()
 
     delete m_commandHistory;
     delete m_zoomHandler;
+    delete m_autoFormat;
 }
 
 

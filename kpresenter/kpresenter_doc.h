@@ -27,6 +27,7 @@ class KCommand;
 class KMacroCommand;
 class KCommandHistory;
 class KoZoomHandler;
+class KoAutoFormat;
 //class KTextEditFormatCollection;
 
 #include <koDocument.h>
@@ -249,9 +250,7 @@ public:
     KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
     KPClipartCollection *getClipartCollection() { return &_clipartCollection; }
 
-#if 0
-    CommandHistory *commands() { return &_commands; }
-#endif
+    KoAutoFormat * getAutoFormat() { return m_autoFormat; }
 
     void alignObjsLeft();
     void alignObjsCenterH();
@@ -427,6 +426,7 @@ protected:
     KCommandHistory * m_commandHistory;
     KoZoomHandler* m_zoomHandler;
     QFont m_defaultFont;
+    KoAutoFormat * m_autoFormat;
 
 private:
     void pageTitleInsert( unsigned int pageNumber);

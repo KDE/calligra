@@ -100,6 +100,7 @@
 #include <koFontDia.h>
 #include <koCharSelectDia.h>
 #include <koInsertLink.h>
+#include <koAutoFormatDia.h>
 #define DEBUG
 
 static const char *pageup_xpm[] = {
@@ -2374,6 +2375,9 @@ void KPresenterView::setupActions()
     picResizeMenu->insertSeparator();
     picResizeMenu->insertItem( i18n( "Enter Custom Factor..." ), this, SLOT( picViewOrigFactor() ) );
 #endif
+    (void) new KAction( i18n( "&Autocorrection..." ), 0,
+                        this, SLOT( extraAutoFormat() ),
+                        actionCollection(), "extra_autocorrection" );
 
 }
 
@@ -3616,6 +3620,13 @@ void KPresenterView::slotSoftHyphen()
     KPTextView *edit=page->currentTextObjectView();
     if ( edit )
         edit->insertSoftHyphen();
+}
+
+void KPresenterView::extraAutoFormat()
+{
+    m_pKPresenterDoc->getAutoFormat()->readConfig();
+    KoAutoFormatDia dia( this, 0, m_pKPresenterDoc->getAutoFormat() );
+    dia.exec();
 }
 
 #include <kpresenter_view.moc>

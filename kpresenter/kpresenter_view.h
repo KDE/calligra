@@ -250,6 +250,8 @@ public slots:
 
     void slotSoftHyphen();
 
+    void extraAutoFormat();
+
 public:
     // create GUI
     virtual void createGUI();

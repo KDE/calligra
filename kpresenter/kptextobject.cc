@@ -46,6 +46,7 @@
 
 #include "kptextobject.moc"
 #include "page.h"
+#include <koAutoFormat.h>
 
 using namespace std;
 
@@ -677,9 +678,11 @@ void KPTextView::ensureCursorVisible()
     kdDebug()<<"KPTextView::ensureCursorVisible()\n";
 }
 
-void KPTextView::doAutoFormat( QTextCursor* /*cursor*/, KoTextParag */*parag*/, int /*index*/, QChar /*ch*/ )
+void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
 {
-    kdDebug()<<"doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )\n";
+    KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
+    if ( autoFormat )
+        autoFormat->doAutoFormat( cursor, parag, index, ch, textObject());
 }
 
 void KPTextView::startDrag()
