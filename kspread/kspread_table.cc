@@ -2546,7 +2546,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 
     // It may not happen that entire columns are selected.
     ASSERT( r.right() != 0x7fff );
-    
+
     // Are entire rows selected ?
     if ( r.right() == 0x7FFF )
     {
@@ -2624,12 +2624,12 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
 {
     ASSERT( mode == Increase || mode == Decrease );
-    
+
     QRect r( selectionRect() );
-    
+
     // It may not happen that entire rows are selected.
     ASSERT( r.right() != 0x7fff );
-    
+
     // Are entire columns selected ?
     if ( r.bottom() == 0x7FFF )
     {
@@ -4462,8 +4462,8 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
     page_list.setAutoDelete( TRUE );
 
     QRect rect;
-    rect.setCoords( 0, 0, (int)( MM_TO_POINT * m_pDoc->printableWidth() ),
-		    (int)( MM_TO_POINT * m_pDoc->printableHeight() ) );
+    rect.setCoords( 0, 0, (int)( MM_TO_POINT ( m_pDoc->printableWidth() )),
+		    (int)( MM_TO_POINT ( m_pDoc->printableHeight() )) );
 
     // Up to this row everything is already printed
     int bottom = 0;
@@ -4531,44 +4531,44 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	QFontMetrics fm = painter.fontMetrics();
 	int w = fm.width( m_pDoc->headLeft( pagenr, m_strName ) );
 	if ( w > 0 )
-	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
-			      (int)( MM_TO_POINT * 10.0 ), m_pDoc->headLeft( pagenr, m_strName ) );
+	    painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder() )),
+			      (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headLeft( pagenr, m_strName ) );
 	w = fm.width( m_pDoc->headMid( pagenr, m_strName ) );
 	if ( w > 0 )
-	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-				     ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
-			      (int)( MM_TO_POINT * 10.0 ), m_pDoc->headMid( pagenr, m_strName ) );
+	    painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder()) +
+				     ( MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ) / 2.0 ),
+			      (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headMid( pagenr, m_strName ) );
 	w = fm.width( m_pDoc->headRight( pagenr, m_strName ) );
 	if ( w > 0 )
-	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-				     MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
-			      (int)( MM_TO_POINT * 10.0 ), m_pDoc->headRight( pagenr, m_strName ) );
+	    painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder()) +
+				     MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ),
+			      (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headRight( pagenr, m_strName ) );
 
 	// print foot line
 	w = fm.width( m_pDoc->footLeft( pagenr, m_strName ) );
 	if ( w > 0 )
-	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
-			      (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+	    painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder() )),
+			      (int)( MM_TO_POINT ( m_pDoc->paperHeight() - 10.0 )),
 			      m_pDoc->footLeft( pagenr, m_strName ) );
 	w = fm.width( m_pDoc->footMid( pagenr, m_strName ) );
 	if ( w > 0 )
-	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-				     ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
-			      (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+	    painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder() )+
+				     ( MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ) / 2.0 ),
+			      (int)( MM_TO_POINT  ( m_pDoc->paperHeight() - 10.0 ) ),
 			      m_pDoc->footMid( pagenr, m_strName ) );
 	w = fm.width( m_pDoc->footRight( pagenr, m_strName ) );
 	if ( w > 0 )
-	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-				     MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
-			      (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+	    painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder()) +
+				     MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ),
+			      (int)( MM_TO_POINT ( m_pDoc->paperHeight() - 10.0 ) ),
 			      m_pDoc->footRight( pagenr, m_strName ) );
 	
-	painter.translate( MM_TO_POINT * m_pDoc->leftBorder(),
-			   MM_TO_POINT * m_pDoc->topBorder() );
+	painter.translate( MM_TO_POINT ( m_pDoc->leftBorder()),
+			   MM_TO_POINT ( m_pDoc->topBorder() ));
 	// Print the page
 	printPage( painter, p, gridPen );
-	painter.translate( - MM_TO_POINT * m_pDoc->leftBorder(),
-			   - MM_TO_POINT * m_pDoc->topBorder() );
+	painter.translate( - MM_TO_POINT ( m_pDoc->leftBorder()),
+			   - MM_TO_POINT ( m_pDoc->topBorder() ));
 
 	if ( pages < page_list.count() )
 	    _printer->newPage();
