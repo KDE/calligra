@@ -68,6 +68,32 @@ kpresenter_la_SOURCES = main.cc
 kpresenter_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kpresenter_la_LIBADD = $(LIB_KOFFICECORE)
 
+noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresenter_view.h \
+		backdia.h styledia.h \
+		global.h kprcommand.h kpresenter_sound_player.h \
+		pgconfdia.h effectdia.h kpresenter_utils.h effecthandler.h pageeffects.h\
+		confpiedia.h confrectdia.h  searchdia.h \
+		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
+		kpautoformobject.h kptextobject.h \
+		kppixmapobject.h kppieobject.h kppartobject.h kpgroupobject.h \
+		kpbackground.h kpgradient.h kpgradientcollection.h \
+		gotopage.h webpresentation.h mspresentation.h \
+		kpresenter_factory.h kpresenter_aboutdata.h \
+		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
+		KPresenterPageIface.h sidebar.h  kpresenter_dlg_config.h \
+		kprvariable.h kprdrag.h notebar.h kprtextdocument.h kppointobject.h kpfreehandobject.h \
+		kppolylineobject.h kpquadricbeziercurveobject.h kpcubicbeziercurveobject.h \
+		confpolygondia.h kppolygonobject.h KPTextViewIface.h KPTextObjectIface.h \
+		presdurationdia.h KPPieObjectIface.h KPPolygonObjectIface.h KPRectObjectIface.h KPPixmapObjectIface.h \
+		KPAutoFormObjectIface.h KPresenterObject2DIface.h \
+		KPLineObjectIface.h KPQuadricbezierCurveObjectIface.h \
+		KPCubicbeziercurveObjectIface.h textpreview.h \
+		rotationdialogimpl.h KPFreehandObjectIface.h kprstylemanager.h \
+		kprbgspellcheck.h kprhelplinedia.h confpicturedia.h \
+		KPPolyLineObjectIface.h kprduplicateobjdia.h kpclosedlineobject.h kprimportstyledia.h \
+		imageEffectDia.h kprloadinginfo.h customslideshowdia.h \
+		slidetransitiondia.h
+
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
