@@ -402,12 +402,6 @@ public:
     QTime valueTime() const {return m_Time;}
 
     /**
-     * When you insert a cell at bottom or right
-     * and the size is not the same so text offset
-     * will not good => recalc offset
-     */
-    void offsetAlign(int _col,int _row);
-    /**
      * return size of the text
      */
     int textWidth() {return m_iOutTextWidth; }
@@ -415,7 +409,6 @@ public:
     int richTextWidth() {return m_richWidth; }
     int richTextHeight() {return m_richHeight;}
 
-    void textSize(QPainter &_paint);
     /**
      * Like @ref updateDepending, but the cells content will be refreshed
      * on all views.
@@ -649,13 +642,13 @@ public:
 
     int getAngle(){return m_rotateAngle;}
 
-
     void setFormatNumber(formatNumber _format){m_eFormatNumber=_format;}
     formatNumber getFormatNumber(){return  m_eFormatNumber;}
 
     QString createFormat(double value);
     QString createFractionFormat(double value);
     void checkFormat(bool formular=false);
+    
     /**
      * Used for comparing cells (when sorting)
      */
@@ -664,6 +657,19 @@ public:
 
 protected:
 
+    /**
+     * When you insert a cell at bottom or right
+     * and the size is not the same so text offset
+     * will not good => recalc offset
+     */
+    void offsetAlign(int _col,int _row);
+
+    /**
+     * Called from @ref #makeLayout to determine the space
+     * needed for the text.
+     */
+    void textSize( QPainter &_paint );
+    
     /**
      * Cleans up formula stuff.
      * Call this before you store a new formula or to delete the

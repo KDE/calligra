@@ -599,1018 +599,955 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
-  m_leftBorderPen.setWidth( leftBorderWidth( _col, _row ) );
-  m_topBorderPen.setWidth( topBorderWidth( _col, _row ) );
-  m_fallDiagonalPen.setWidth( fallDiagonalWidth( _col, _row) );
-  m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );
-  m_nbLines=0;
-  /**
-   * RichText
-   */
-  if ( m_pQML )
-  {
-    // Calculate how many cells we could use in addition right hand
-    // Never use more then 10 cells.
-    int right = 0;
-    int max_width = width( _col );
-    bool ende = false;
-    int c;
-    m_pQML->setWidth( &_painter, max_width );
-    for( c = _col + 1; !ende && c <= _col + 10; ++c )
-    {
-      KSpreadCell *cell = m_pTable->cellAt( c, _row );
-      if ( cell && !cell->isEmpty() )
-	ende = true;
-      else
-      {
-	ColumnLayout *cl = m_pTable->columnLayout( c );
-	max_width += cl->width();
+    m_leftBorderPen.setWidth( leftBorderWidth( _col, _row ) );
+    m_topBorderPen.setWidth( topBorderWidth( _col, _row ) );
+    m_fallDiagonalPen.setWidth( fallDiagonalWidth( _col, _row) );
+    m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );
+    
+    m_nbLines = 0;
 
-	// Can we make use of extra cells ?
-	int h = m_pQML->height();
-	m_pQML->setWidth( &_painter, max_width );
-	if ( m_pQML->height() < h )
-	  ++right;
-	else
-	{
-	  max_width -= cl->width();
-	  m_pQML->setWidth( &_painter, max_width );
-	  ende = true;
-	}
-      }
-    }
-
-    // How may space do we need now ?
-    // m_pQML->setWidth( &_painter, max_width );
-    int h = m_pQML->height();
-    int w = m_pQML->width();
-    kdDebug(36001) << "QML w=" << w << " max=" << max_width << endl;
-
-    m_richWidth=w;
-    m_richHeight=h;
-    // Occupy the needed extra cells in horizontal direction
-    max_width = width( _col );
-    ende = ( max_width >= w );
-    for( c = _col + 1; !ende && c <= _col + right; ++c )
-    {
-      KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
-      cell->obscure( this, _col, _row );
-      ColumnLayout *cl = m_pTable->columnLayout( c );
-      max_width += cl->width();
-      if ( max_width >= w )
-	ende = true;
-    }
-    m_iExtraXCells = c - _col - 1;
-    m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
-
-    // Occupy the needed extra cells in vertical direction
-    int max_height = height( 0 );
-    int r = _row;
-    ende = ( max_height >= h );
-    for( r = _row + 1; !ende && r < _row + 500; ++r )
-    {
-      bool empty = true;
-      for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
-      {
-	KSpreadCell *cell = m_pTable->cellAt( c, r );
-	if ( cell && !cell->isEmpty() )
-	  empty = false;
-      }
-      if ( !empty )
-	ende = true;
-      else
-      {
-	// Occupy this row
-	for( c = _col; c <= _col + m_iExtraXCells; ++c )
-	{
-	  KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
-	  cell->obscure( this, _col, _row );
-	}
-	RowLayout *rl = m_pTable->rowLayout( r );
-	max_height += rl->height();
-	if ( max_height >= h )
-	  ende = true;
-      }
-    }
-    m_iExtraYCells = r - _row - 1;
-    m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
-
-    m_bLayoutDirtyFlag = false;
-    return;
-  }
-  /**
-   * A visual formula
-   */
-  else if ( m_pVisualFormula )
-  {
-    // Calculate how many cells we could use in addition right hand
-    // Never use more then 10 cells.
-    int right = 0;
-    int max_width = width( _col );
-    bool ende = false;
-    int c;
-
-    for( c = _col + 1; !ende && c <= _col + 10; ++c )
-    {
-      KSpreadCell *cell = m_pTable->cellAt( c, _row );
-      if ( cell && !cell->isEmpty() )
-	ende = true;
-      else
-      {
-	ColumnLayout *cl = m_pTable->columnLayout( c );
-	max_width += cl->width();
-	++right;
-      }
-    }
-
-    // How may space do we need now ?
-    // TODO: We have to initialize sizes here ....
-    _painter.save();
-    _painter.setPen( m_textPen.color() );
-    _painter.setFont( m_textFont );
-    m_pVisualFormula->setPos( -1000, -1000 );
-    m_pVisualFormula->redraw( _painter );
-    _painter.restore();
-    QSize size = m_pVisualFormula->size();
-    int h = size.height();
-    int w = size.width();
-    kdDebug(36001) << "Formula w=" << w << " h=" << h << endl;
-    m_richWidth=w;
-    m_richHeight=h;
-    // Occupy the needed extra cells in horizontal direction
-    max_width = width( _col );
-    ende = ( max_width >= w );
-    for( c = _col + 1; !ende && c <= _col + right; ++c )
-    {
-      KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
-      cell->obscure( this, _col, _row );
-      ColumnLayout *cl = m_pTable->columnLayout( c );
-      max_width += cl->width();
-      if ( max_width >= w )
-	ende = true;
-    }
-    m_iExtraXCells = c - _col - 1;
-    m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
-
-    // Occupy the needed extra cells in vertical direction
-    int max_height = height( 0 );
-    int r = _row;
-    ende = ( max_height >= h );
-    for( r = _row + 1; !ende && r < _row + 500; ++r )
-    {
-      bool empty = true;
-      for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
-      {
-	KSpreadCell *cell = m_pTable->cellAt( c, r );
-	if ( cell && !cell->isEmpty() )
-	  empty = false;
-      }
-      if ( !empty )
-	ende = true;
-      else
-      {
-	// Occupy this row
-	for( c = _col; c <= _col + m_iExtraXCells; ++c )
-	{
-	  KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
-	  cell->obscure( this, _col, _row );
-	}
-	RowLayout *rl = m_pTable->rowLayout( r );
-	max_height += rl->height();
-	if ( max_height >= h )
-	  ende = true;
-      }
-    }
-    m_iExtraYCells = r - _row - 1;
-    m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
-
-    m_bLayoutDirtyFlag = false;
-    return;
-  }
-
-  /**
-   * A usual numeric, boolean or string value.
-   */
-  QString ptext;
-  // If this is a select box, find out about the selected item
-  // in the KSpreadPrivate data struct
-  if ( m_style == ST_Select )
-  {
-    SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-    ptext = s->text();
-  }
-  else if ( isFormular()&& !m_pTable->getShowFormular() )
-    ptext = m_strFormularOut;
-  else
-    ptext = m_strText;
-
-  if ( ptext.isEmpty() )
-  {
-    m_strOutText = QString::null;
-    if ( isDefault() )
-      return;
-  }
-
-  m_textPen.setColor( textColor() );
-  if ( m_bBool )
-  {
-    if ( m_dValue == 0 )
-      m_strOutText = "False";
-    else
-      m_strOutText = "True";
-  }
-  else if( m_bDate)
-  {
-  if( m_eFormatNumber==ShortDate)
-        m_strOutText=KGlobal::locale()->formatDate(m_Date,true);
-  else if(m_eFormatNumber==TextDate)
-        m_strOutText=KGlobal::locale()->formatDate(m_Date,false);
-  }
-  else if( m_bTime)
-  {
-  if( m_eFormatNumber==Time)
-        m_strOutText=KGlobal::locale()->formatTime(m_Time,false);
-  else if(m_eFormatNumber==SecondeTime)
-        m_strOutText=KGlobal::locale()->formatTime(m_Time,true);
-  }
-  else if ( m_bValue &&!m_pTable->getShowFormular() )
-  {
-    // First get some locale information
-    if (!decimal_point)
-    { // (decimal_point is static)
-      decimal_point = KGlobal::locale()->decimalSymbol()[0];
-      kdDebug(36001) << "decimal_point is '" << decimal_point.latin1() << "'" << endl;
-      // HACK
-      if ( decimal_point.isNull() )
-	  decimal_point = '.';
-    }
-
-    QString f2;
-
-
-    double v = m_dValue * m_dFaktor;
-
-    if ( floatFormat() == KSpreadCell::AlwaysUnsigned && v < 0.0)
-      v *= -1.0;
-
-    //kdDebug(36001) << "LOCALIZED NUMBER is " << localizedNumber.local8Bit() << endl;
-    QString localizedNumber=createFormat(v);
-
-
-    // Remove trailing zeros and the decimal point if necessary
-    // unless the number has no decimal point
-
-    if ( m_iPrecision == -1 && localizedNumber.find(decimal_point) >= 0 )
-    {
-      int i = localizedNumber.length();
-      bool bFinished = FALSE;
-      while ( !bFinished && i > 0 )
-      {
-	QChar ch = localizedNumber[ i - 1 ];
-        if ( ch == '0' )
-	  localizedNumber.truncate( --i );
-	else
-        {
-	  bFinished = TRUE;
-          if ( ch == decimal_point )
-            localizedNumber.truncate( --i );
-        }
-      }
-    }
-
-    m_strOutText = "";
-    if ( prefix() != 0L )
-      m_strOutText += prefix();
-    m_strOutText += localizedNumber;
-
-    if ( postfix() != 0L )
-      m_strOutText += postfix();
-
-    verifyCondition();
-    if ( floatColor() == KSpreadCell::NegRed && v < 0.0 && !m_pTable->getShowFormular())
-      m_textPen.setColor( Qt::red );
-    else if(m_conditionIsTrue && !m_pTable->getShowFormular())
-    	{
-    	KSpreadConditional *tmpCondition=0;
-	switch(m_numberOfCond)
-		{
-		case 0:
-			tmpCondition=m_firstCondition;
-			break;
-		case 1:
-			tmpCondition=m_secondCondition;
-			break;
-		case 2:
-			tmpCondition=m_thirdCondition;
-			break;
-		}
-
-	m_textPen.setColor(tmpCondition->colorcond);
- 	}
-  }
-  else
-  {
-    m_strOutText = ptext;
-  }
-
-  _painter.setPen( m_textPen );
-  verifyCondition();
-  if(m_conditionIsTrue &&!m_pTable->getShowFormular())
-        {
-        KSpreadConditional *tmpCondition=0;
-        switch(m_numberOfCond)
-		{
-		case 0:
-			tmpCondition=m_firstCondition;
-			break;
-		case 1:
-			tmpCondition=m_secondCondition;
-			break;
-		case 2:
-			tmpCondition=m_thirdCondition;
-			break;
-		}
-        _painter.setFont( tmpCondition->fontcond );
-        }
-  else
-        _painter.setFont( m_textFont );
-
-  textSize(_painter);
-  QFontMetrics fm = _painter.fontMetrics();
-
-  // Calculate the size of the cell
-  RowLayout *rl = m_pTable->rowLayout( m_iRow );
-  ColumnLayout *cl = m_pTable->columnLayout( m_iColumn );
-
-  int w = cl->width();
-  int h = rl->height();
-
-  // Calculate the extraWidth and extraHeight if we are forced to.
-  if ( m_bForceExtraCells )
-  {
-    for ( int x = _col + 1; x <= _col + m_iExtraXCells; x++ )
-    {
-      ColumnLayout *cl = m_pTable->columnLayout( x );
-      w += cl->width() ;
-    }
-    for ( int y = _row + 1; y <= _row + m_iExtraYCells; y++ )
-    {
-      RowLayout *rl = m_pTable->rowLayout( y );
-      h += rl->height() ;
-    }
-  }
-  m_iExtraWidth = w;
-  m_iExtraHeight = h;
-
-  if ( m_style == ST_Select )
-    w -= 16;
-
-  int a = m_eAlign;
-  if ( a == KSpreadCell::Undefined )
-  {
-    if ( m_bValue  || m_bDate ||m_bTime)
-      a = KSpreadCell::Right;
-    else
-      a = KSpreadCell::Left;
-  }
-  if(m_pTable->getShowFormular())
-      a = KSpreadCell::Left;
-  // Offset for alignment
-  switch( a )
-  {
-  case KSpreadCell::Left:
-    m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
-    break;
-  case KSpreadCell::Right:
-    m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
-    break;
-  case KSpreadCell::Center:
-    m_iTextX = ( w - m_iOutTextWidth ) / 2;
-    break;
-  }
-
-  // Free all obscured cells if we are not forced to abscure them
-  if ( !m_bForceExtraCells )
-  {
+    //
+    // Free all obscured cells.
+    //
     for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
-    {
 	for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
-        {
 	    if ( x != m_iColumn || y != m_iRow )
 	    {
 		KSpreadCell *cell = m_pTable->cellAt( x, y );
 		cell->unobscure();
 	    }
-	}
-    }
 
     m_iExtraXCells = 0;
     m_iExtraYCells = 0;
-  }
 
-  // Do we need to break the line into multiple lines and are we allowed to
-  // do so?
-  int lines = 1;
-  if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-       rightBorderWidth( _col, _row ) && m_bMultiRow )
-  {
-  // copy of m_strOutText
-    QString o = m_strOutText;
-
-    if(o.find(' ')!=-1)
-        {
-
-        o+=' ';
-        int start=0;
-        int pos=0;
-        int pos1=0;
-        m_strOutText = "";
-        do
-          {
-          pos=o.find(' ',pos);
-          int width=fm.width(m_strOutText.mid(start,(pos1-start))+ o.mid(pos1,(pos-pos1)) );
-
-          if ( width <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-	     rightBorderWidth( _col, _row ) )
-             {
-             m_strOutText+=o.mid(pos1,(pos-pos1));
-             pos1=pos;
-             }
-          else
-             {
-             if(o.at(pos1)==' ')
-                pos1=pos1+1;
-             m_strOutText+="\n"+o.mid(pos1,(pos-pos1));
-             start=pos1;
-             pos1=pos;
-             lines++;
-             }
-          pos++;
-          }
-        while(o.find(' ',pos)!=-1);
-        }
-        m_iOutTextHeight *= lines;
-    if(lines!=1)
-        m_nbLines=lines-1;
-    else
-        m_nbLines=lines;
-    m_iTextX = 0;
-    // Calculate the maximum width
-    QString t;
-    int i;
-    int pos = 0;
-    m_iOutTextWidth = 0;
-    do
+    /**
+     * RichText
+     */
+    if ( m_pQML )
     {
-      i = m_strOutText.find( "\n", pos );
-      if ( i == -1 )
-	t = m_strOutText.mid( pos, m_strOutText.length() - pos );
-      else
-      {
-	t = m_strOutText.mid( pos, i - pos );
-	pos = i + 1;
-      }
-      int tw = fm.width( t );
-      if ( tw > m_iOutTextWidth )
-	m_iOutTextWidth = tw;
+	// Calculate how many cells we could use in addition right hand
+	// Never use more then 10 cells.
+	int right = 0;
+	int max_width = width( _col );
+	bool ende = false;
+	int c;
+	m_pQML->setWidth( &_painter, max_width );
+	for( c = _col + 1; !ende && c <= _col + 10; ++c )
+        {
+	    KSpreadCell *cell = m_pTable->cellAt( c, _row );
+	    if ( cell && !cell->isEmpty() )
+		ende = true;
+	    else
+	    {
+		ColumnLayout *cl = m_pTable->columnLayout( c );
+		max_width += cl->width();
+
+		// Can we make use of extra cells ?
+		int h = m_pQML->height();
+		m_pQML->setWidth( &_painter, max_width );
+		if ( m_pQML->height() < h )
+		    ++right;
+		else
+	        {
+		    max_width -= cl->width();
+		    m_pQML->setWidth( &_painter, max_width );
+		    ende = true;
+		}
+	    }
+	}
+
+	// How may space do we need now ?
+	// m_pQML->setWidth( &_painter, max_width );
+	int h = m_pQML->height();
+	int w = m_pQML->width();
+	kdDebug(36001) << "QML w=" << w << " max=" << max_width << endl;
+
+	m_richWidth = w;
+	m_richHeight = h;
+	
+	// Occupy the needed extra cells in horizontal direction
+	max_width = width( _col );
+	ende = ( max_width >= w );
+	for( c = _col + 1; !ende && c <= _col + right; ++c )
+        {
+	    KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
+	    cell->obscure( this, _col, _row );
+	    ColumnLayout *cl = m_pTable->columnLayout( c );
+	    max_width += cl->width();
+	    if ( max_width >= w )
+		ende = true;
+	}
+	m_iExtraXCells = c - _col - 1;
+	m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
+
+	// Occupy the needed extra cells in vertical direction
+	int max_height = height( 0 );
+	int r = _row;
+	ende = ( max_height >= h );
+	for( r = _row + 1; !ende && r < _row + 500; ++r )
+        {
+	    bool empty = true;
+	    for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
+	    {
+		KSpreadCell *cell = m_pTable->cellAt( c, r );
+		if ( cell && !cell->isEmpty() )
+		    empty = false;
+	    }
+	    if ( !empty )
+		ende = true;
+	    else
+	    {
+		// Occupy this row
+		for( c = _col; c <= _col + m_iExtraXCells; ++c )
+	        {
+		    KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
+		    cell->obscure( this, _col, _row );
+		}
+		RowLayout *rl = m_pTable->rowLayout( r );
+		max_height += rl->height();
+		if ( max_height >= h )
+		    ende = true;
+	    }
+	}
+	m_iExtraYCells = r - _row - 1;
+	m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
+
+	m_bLayoutDirtyFlag = false;
+	return;
     }
-    while ( i != -1 );
-  }
+    /**
+     * A visual formula
+     */
+    else if ( m_pVisualFormula )
+    {
+	// Calculate how many cells we could use in addition right hand
+	// Never use more then 10 cells.
+	int right = 0;
+	int max_width = width( _col );
+	bool ende = false;
+	int c;
 
-  offsetAlign(_col,_row);
+	for( c = _col + 1; !ende && c <= _col + 10; ++c )
+        {
+	    KSpreadCell *cell = m_pTable->cellAt( c, _row );
+	    if ( cell && !cell->isEmpty() )
+		ende = true;
+	    else
+	    {
+		ColumnLayout *cl = m_pTable->columnLayout( c );
+		max_width += cl->width();
+		++right;
+	    }
+	}
 
-  m_fmAscent=fm.ascent();
+	// How may space do we need now ?
+	// TODO: We have to initialize sizes here ....
+	_painter.save();
+	_painter.setPen( m_textPen.color() );
+	_painter.setFont( m_textFont );
+	m_pVisualFormula->setPos( -1000, -1000 );
+	m_pVisualFormula->redraw( _painter );
+	_painter.restore();
+	QSize size = m_pVisualFormula->size();
+	int h = size.height();
+	int w = size.width();
+	
+	kdDebug(36001) << "Formula w=" << w << " h=" << h << endl;
+	m_richWidth=w;
+	m_richHeight=h;
+	
+	// Occupy the needed extra cells in horizontal direction
+	max_width = width( _col );
+	ende = ( max_width >= w );
+	for( c = _col + 1; !ende && c <= _col + right; ++c )
+        {
+	    KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
+	    cell->obscure( this, _col, _row );
+	    ColumnLayout *cl = m_pTable->columnLayout( c );
+	    max_width += cl->width();
+	    if ( max_width >= w )
+		ende = true;
+	}
+	m_iExtraXCells = c - _col - 1;
+	m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
 
-  // Do we have to occupy additional cells right hand ?
-  if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-       rightBorderWidth( _col, _row ) )
-  {
-    // No chance. We can not obscure more/less cells.
+	// Occupy the needed extra cells in vertical direction
+	int max_height = height( 0 );
+	int r = _row;
+	ende = ( max_height >= h );
+	for( r = _row + 1; !ende && r < _row + 500; ++r )
+        {
+	    bool empty = true;
+	    for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
+	    {
+		KSpreadCell *cell = m_pTable->cellAt( c, r );
+		if ( cell && !cell->isEmpty() )
+		    empty = false;
+	    }
+	    if ( !empty )
+		ende = true;
+	    else
+	    {
+		// Occupy this row
+		for( c = _col; c <= _col + m_iExtraXCells; ++c )
+	        {
+		    KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
+		    cell->obscure( this, _col, _row );
+		}
+		RowLayout *rl = m_pTable->rowLayout( r );
+		max_height += rl->height();
+		if ( max_height >= h )
+		    ende = true;
+	    }
+	}
+	m_iExtraYCells = r - _row - 1;
+	m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
+
+	m_bLayoutDirtyFlag = false;
+	return;
+    }
+
+    /**
+     * A usual numeric, boolean, date, time or string value.
+     */
+
+    m_textPen.setColor( textColor() );
+    m_conditionIsTrue = false;
+    
+    //
+    // Turn the stored value in a string
+    //
+    
+    if ( isFormular() && m_pTable->getShowFormular() )
+    {
+	m_strOutText = m_strText;
+    }
+    else if ( m_style == ST_Select )
+    {
+	// If this is a select box, find out about the selected item
+	// in the KSpreadPrivate data struct
+	SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+	m_strOutText = s->text();
+    }
+    else if ( isBool() )
+    {
+	if ( m_dValue == 0 )
+	    m_strOutText = "False";
+	else
+	    m_strOutText = "True";
+    }
+    else if( isDate() )
+    {
+	if( m_eFormatNumber == ShortDate)
+	    m_strOutText = KGlobal::locale()->formatDate(m_Date,true);
+	else if( m_eFormatNumber == TextDate )
+	    m_strOutText=KGlobal::locale()->formatDate(m_Date,false);
+    }
+    else if( isTime() )
+    {
+	if( m_eFormatNumber == Time )
+	    m_strOutText = KGlobal::locale()->formatTime(m_Time,false);
+	else if(m_eFormatNumber == SecondeTime )
+	    m_strOutText = KGlobal::locale()->formatTime(m_Time,true);
+    }
+    else if ( isValue()  )
+    {
+	// First get some locale information
+	if (!decimal_point)
+        { // (decimal_point is static)
+	    decimal_point = KGlobal::locale()->decimalSymbol()[0];
+	    kdDebug(36001) << "decimal_point is '" << decimal_point.latin1() << "'" << endl;
+
+	    if ( decimal_point.isNull() )
+		decimal_point = '.';
+	}
+
+	// Scale the value as desired by the user.
+	double v = m_dValue * m_dFaktor;
+
+	// Always unsigned ?
+	if ( floatFormat() == KSpreadCell::AlwaysUnsigned && v < 0.0)
+	    v *= -1.0;
+
+	// Make a string out of it.
+	QString localizedNumber = createFormat( v );
+
+	// Remove trailing zeros and the decimal point if necessary
+	// unless the number has no decimal point
+	if ( m_iPrecision == -1 && localizedNumber.find(decimal_point) >= 0 )
+        {
+	    int i = localizedNumber.length();
+	    bool bFinished = FALSE;
+	    while ( !bFinished && i > 0 )
+	    {
+		QChar ch = localizedNumber[ i - 1 ];
+		if ( ch == '0' )
+		    localizedNumber.truncate( --i );
+		else
+	        {
+		    bFinished = TRUE;
+		    if ( ch == decimal_point )
+			localizedNumber.truncate( --i );
+		}
+	    }
+	}
+
+	// Start building the output string with prefix and postfix
+	m_strOutText = "";
+	if ( prefix() != 0L )
+	    m_strOutText += prefix();
+	
+	m_strOutText += localizedNumber;
+
+	if ( postfix() != 0L )
+	    m_strOutText += postfix();
+
+	verifyCondition();
+    
+	// Find the correct color which depends on the conditions
+	// and the sign of the value.
+	if ( floatColor() == KSpreadCell::NegRed && v < 0.0 )
+	    m_textPen.setColor( Qt::red );
+	else if( m_conditionIsTrue )
+    	{
+	    KSpreadConditional *tmpCondition=0;
+	    switch(m_numberOfCond)
+	    {
+	    case 0:
+		tmpCondition=m_firstCondition;
+		break;
+	    case 1:
+		tmpCondition=m_secondCondition;
+		break;
+	    case 2:
+		tmpCondition=m_thirdCondition;
+		break;
+	    }
+
+	    m_textPen.setColor(tmpCondition->colorcond);
+ 	}
+    }
+    else if ( isFormular() )
+    {
+	m_strOutText = m_strFormularOut;
+    }
+    else
+    {
+	m_strOutText = m_strText;
+    }
+
+    // Empty text?
+    if ( m_strOutText.isEmpty() )
+    {
+	m_strOutText = QString::null;
+	if ( isDefault() )
+	    return;
+    }
+
+    _painter.setPen( m_textPen );
+  
+    // verifyCondition();
+  
+    //
+    // Determine the correct font
+    //
+    if( m_conditionIsTrue && !m_pTable->getShowFormular() )
+    {
+        KSpreadConditional *tmpCondition=0;
+        switch(m_numberOfCond)
+        {
+	case 0:
+	    tmpCondition = m_firstCondition;
+	    break;
+	case 1:
+	    tmpCondition = m_secondCondition;
+	    break;
+	case 2:
+	    tmpCondition = m_thirdCondition;
+	    break;
+	}
+        _painter.setFont( tmpCondition->fontcond );
+    }
+    else
+        _painter.setFont( m_textFont );
+
+    // Calculate text dimensions
+    textSize(_painter);
+    
+    QFontMetrics fm = _painter.fontMetrics();
+
+    //
+    // Calculate the size of the cell
+    //
+    
+    RowLayout *rl = m_pTable->rowLayout( m_iRow );
+    ColumnLayout *cl = m_pTable->columnLayout( m_iColumn );
+
+    int w = cl->width();
+    int h = rl->height();
+
+    // Calculate the extraWidth and extraHeight if we are forced to.
     if ( m_bForceExtraCells )
     {
-	// The text does not fit in the cell
-	m_strOutText = "**";
+	for ( int x = _col + 1; x <= _col + m_iExtraXCells; x++ )
+        {
+	    ColumnLayout *cl = m_pTable->columnLayout( x );
+	    w += cl->width() ;
+	}
+	for ( int y = _row + 1; y <= _row + m_iExtraYCells; y++ )
+        {
+	    RowLayout *rl = m_pTable->rowLayout( y );
+	    h += rl->height() ;
+	}
     }
-    else
+    
+    m_iExtraWidth = w;
+    m_iExtraHeight = h;
+
+    // Some space for the little button of the combo box
+    if ( m_style == ST_Select )
+	w -= 16;
+
+    // Determine the alignment
+    /* int a = m_eAlign;
+    if ( a == KSpreadCell::Undefined )
     {
-      int c = m_iColumn;
-      int end = 0;
-      // Find free cells right hand to this one
-      while ( !end )
-      {
-	ColumnLayout *cl2 = m_pTable->columnLayout( c + 1 );
-	KSpreadCell *cell = m_pTable->cellAt( c + 1, m_iRow );
-	if ( cell->isEmpty() )
-	{
-	  w += cl2->width() - 1;
-	  c++;
-
-	  // Enough space ?
-	  if ( m_iOutTextWidth <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-	       rightBorderWidth( _col, _row ) )
-	    end = 1;
-	}
-	// Not enough space, but the next cell is not empty
+	if ( m_bValue  || m_bDate || m_bTime )
+	    a = KSpreadCell::Right;
 	else
-	  end = -1;
-      }
-
-      // Dont occupy additional space for right aligned or centered text or values.
-      if ( /* end == 1 && !isFormular() && */ ( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined ) )
-      {
-	m_iExtraWidth = w;
-	for( int i = m_iColumn + 1; i <= c; ++i )
-	{
-	  KSpreadCell *cell = m_pTable->nonDefaultCell( i, m_iRow );
-	  cell->obscure( this, m_iColumn, m_iRow );
-	}
-	m_iExtraXCells = c - m_iColumn + 1;
-      }
-      else
-      {
-	m_strOutText = "**";
-      }
+	    a = KSpreadCell::Left;
     }
-  }
+    
+    if( m_pTable->getShowFormular() )
+	a = KSpreadCell::Left;
+    
+    // Offset for alignment
+    switch( a )
+    {
+    case KSpreadCell::Left:
+	m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
+	break;
+    case KSpreadCell::Right:
+	m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
+	break;
+    case KSpreadCell::Center:
+	m_iTextX = ( w - m_iOutTextWidth ) / 2;
+	break;
+    }
+    */
+    
+    // Free all obscured cells if we are not forced to abscure them
+    /* if ( !m_bForceExtraCells )
+    {
+	for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
+	    for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
+		if ( x != m_iColumn || y != m_iRow )
+	        {
+		    KSpreadCell *cell = m_pTable->cellAt( x, y );
+		    cell->unobscure();
+		}
 
-    /* for ( int x = 0; x <= m_iExtraXCells; x++ )
-	for ( int y = 0; y <= m_iExtraYCells; y++ )
-	    if ( x != 0 || y != 0 )
+	m_iExtraXCells = 0;
+	m_iExtraYCells = 0;
+    }
+    */
+    
+    // Do we need to break the line into multiple lines and are we allowed to
+    // do so?
+    int lines = 1;
+    if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
+	 rightBorderWidth( _col, _row ) && m_bMultiRow )
+    {
+	// copy of m_strOutText
+	QString o = m_strOutText;
+
+	// No space ?
+	if( o.find(' ') != -1 )
+        {
+	    o += ' ';
+	    int start = 0;
+	    int pos = 0;
+	    int pos1 = 0;
+	    m_strOutText = "";
+	    do
+            {
+		pos = o.find(' ',pos );
+		int width = fm.width( m_strOutText.mid( start, (pos1-start) ) + o.mid( pos1, (pos-pos1) ) );
+
+		if ( width <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) - rightBorderWidth( _col, _row ) )
+	        {
+		    m_strOutText += o.mid(pos1,(pos-pos1));
+		    pos1 = pos;
+		}
+		else
+                {
+		    if(o.at(pos1)==' ')
+			pos1 = pos1 + 1;
+		    m_strOutText += "\n" + o.mid( pos1, ( pos - pos1 ) );
+		    start = pos1;
+		    pos1 = pos;
+		    lines++;
+		}
+		pos++;
+	    }
+	    while( o.find( ' ', pos ) != -1 );
+        }
+	
+        m_iOutTextHeight *= lines;
+	
+	if( lines != 1 )
+	    m_nbLines = lines - 1;
+	else
+	    m_nbLines = lines;
+	
+	m_iTextX = 0;
+	
+	// Calculate the maximum width
+	QString t;
+	int i;
+	int pos = 0;
+	m_iOutTextWidth = 0;
+	do
+        {
+	    i = m_strOutText.find( "\n", pos );
+	    if ( i == -1 )
+		t = m_strOutText.mid( pos, m_strOutText.length() - pos );
+	    else
 	    {
-		KSpreadCell *cell = m_pTable->nonDefaultCell( column + x, row + y );
-		cell->setKSpreadLayoutDirtyFlag();
-		cell->setDisplayDirtyFlag();
-	    }  */
+		t = m_strOutText.mid( pos, i - pos );
+		pos = i + 1;
+	    }
+	    int tw = fm.width( t );
+	    if ( tw > m_iOutTextWidth )
+		m_iOutTextWidth = tw;
+	}
+	while ( i != -1 );
+    }
 
-  m_bLayoutDirtyFlag = FALSE;
+    // Calculate m_iTextX and m_iTextY
+    offsetAlign(_col,_row);
+
+    m_fmAscent = fm.ascent();
+
+    // Do we have to occupy additional cells right hand ?
+    if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
+	 rightBorderWidth( _col, _row ) )
+    {
+	// No chance. We can not obscure more/less cells.
+	if ( m_bForceExtraCells )
+        {
+	    // The text does not fit in the cell
+	    m_strOutText = "**";
+	}
+	else
+        {
+	    int c = m_iColumn;
+	    int end = 0;
+	    // Find free cells right hand to this one
+	    while ( !end )
+            {
+		ColumnLayout *cl2 = m_pTable->columnLayout( c + 1 );
+		KSpreadCell *cell = m_pTable->cellAt( c + 1, m_iRow );
+		if ( cell->isEmpty() )
+	        {
+		    w += cl2->width() - 1;
+		    c++;
+
+		    // Enough space ?
+		    if ( m_iOutTextWidth <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
+			 rightBorderWidth( _col, _row ) )
+			end = 1;
+		}
+		// Not enough space, but the next cell is not empty
+		else
+		    end = -1;
+	    }
+
+	    // Dont occupy additional space for right aligned or centered text or values.
+	    // ##### Why ?
+	    if ( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined )
+	    {
+		m_iExtraWidth = w;
+		for( int i = m_iColumn + 1; i <= c; ++i )
+	        {
+		    KSpreadCell *cell = m_pTable->nonDefaultCell( i, m_iRow );
+		    cell->obscure( this, m_iColumn, m_iRow );
+		}
+		m_iExtraXCells = c - m_iColumn;
+	    }
+	    else
+	    {
+		m_strOutText = "**";
+	    }
+	}
+    }
+
+    m_bLayoutDirtyFlag = FALSE;
 }
 
 QString KSpreadCell::createFormat(double value)
 {
-// if precision is -1, ask for a huge number of decimals, we'll remove
-// the zeros later. Is 8 ok ?
-int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
-QString localizedNumber= KGlobal::locale()->formatNumber(value, p);
-int pos=0;
-switch( m_eFormatNumber)
+    // if precision is -1, ask for a huge number of decimals, we'll remove
+    // the zeros later. Is 8 ok ?
+    int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
+    QString localizedNumber= KGlobal::locale()->formatNumber( value, p );
+    int pos = 0;
+    
+    switch( m_eFormatNumber)
+    {
+    case Number :
+	localizedNumber = KGlobal::locale()->formatNumber(value, p);
+	if(floatFormat() == KSpreadCell::AlwaysSigned && value>=0)
         {
-        case Number :
-                localizedNumber = KGlobal::locale()->formatNumber(value, p);
-                if(floatFormat() == KSpreadCell::AlwaysSigned && value>=0)
-                        {
-                        if(KGlobal::locale()->positiveSign().isEmpty())
-                                localizedNumber='+'+localizedNumber;
-                        }
-                break;
-        case Percentage :
-                localizedNumber = KGlobal::locale()->formatNumber(value, p)+ " %";
-                break;
-        case Money :
-                localizedNumber = KGlobal::locale()->formatMoney(value,KGlobal::locale()->currencySymbol(),p );
-                if(floatFormat() == KSpreadCell::AlwaysSigned && value>=0)
-                        {
-                        if(KGlobal::locale()->positiveSign().isNull())
-                                localizedNumber='+'+localizedNumber;
-                        }
-                break;
-        case Scientific:
-                localizedNumber= QString::number(value, 'E', p);
-                if((pos=localizedNumber.find('.'))!=-1)
-                        localizedNumber=localizedNumber.replace(pos,1,decimal_point);
+	    if(KGlobal::locale()->positiveSign().isEmpty())
+		localizedNumber='+'+localizedNumber;
+	}
+	break;
+    case Percentage :
+	localizedNumber = KGlobal::locale()->formatNumber(value, p)+ " %";
+	break;
+    case Money :
+	localizedNumber = KGlobal::locale()->formatMoney(value,KGlobal::locale()->currencySymbol(),p );
+	if(floatFormat() == KSpreadCell::AlwaysSigned && value>=0)
+        {
+	    if(KGlobal::locale()->positiveSign().isNull())
+		localizedNumber='+'+localizedNumber;
+	}
+	break;
+    case Scientific:
+	localizedNumber= QString::number(value, 'E', p);
+	if((pos=localizedNumber.find('.'))!=-1)
+	    localizedNumber=localizedNumber.replace(pos,1,decimal_point);
 
-                break;
-        case ShortDate:
-        case TextDate :
-                break;
-        case fraction_half:
-        case fraction_quarter:
-        case fraction_eighth:
-        case fraction_sixteenth:
-        case fraction_tenth:
-        case fraction_hundredth:
-                localizedNumber=createFractionFormat(value);
-                break;
-        default :
-                kdDebug(36001)<<"Error in m_eFormatNumber\n";
-                break;
-        }
-//kdDebug(36001)<<"localizedNumber : "<<localizedNumber.ascii()<<endl;
-return localizedNumber;
+	break;
+    case ShortDate:
+    case TextDate :
+	break;
+    case fraction_half:
+    case fraction_quarter:
+    case fraction_eighth:
+    case fraction_sixteenth:
+    case fraction_tenth:
+    case fraction_hundredth:
+	localizedNumber=createFractionFormat(value);
+	break;
+    default :
+	kdDebug(36001)<<"Error in m_eFormatNumber\n";
+	break;
+    }
+
+    return localizedNumber;
 }
 
 QString KSpreadCell::createFractionFormat(double value)
 {
-double result=value-floor(value);
-int index=0;
-QString tmp;
-if(result==0)
-        {
-        tmp=tmp.setNum(value);
-        return  tmp;
-        }
-else
-        {
+    double result = value-floor(value);
+    int index = 0;
+    QString tmp;
+    if(result == 0 )
+    {
+        tmp = tmp.setNum( value );
+    }
+    else
+    {
         switch( m_eFormatNumber)
-                {
-                case fraction_half:
-                        index=2;
-                        break;
-                case fraction_quarter:
-                        index=4;
-                        break;
-                case fraction_eighth:
-                        index=8;
-                        break;
-                case fraction_sixteenth:
-                        index=16;
-                        break;
-                case fraction_tenth:
-                        index=10;
-                        break;
-                case fraction_hundredth:
-                        index=100;
-                        break;
-                default:
-                        kdDebug(36001)<<"Error in Fraction format\n";
-                        break;
-                }
-        double calc=0;
-        int index1=1;
-        double diff=result;
+        {
+	case fraction_half:
+	    index=2;
+	    break;
+	case fraction_quarter:
+	    index=4;
+	    break;
+	case fraction_eighth:
+	    index=8;
+	    break;
+	case fraction_sixteenth:
+	    index=16;
+	    break;
+	case fraction_tenth:
+	    index=10;
+	    break;
+	case fraction_hundredth:
+	    index=100;
+	    break;
+	default:
+	    kdDebug(36001)<<"Error in Fraction format\n";
+	    break;
+	}
+	
+        double calc = 0;
+        int index1 = 1;
+        double diff = result;
         for(int i=1;i<index;i++)
-                {
-                calc=i*1.0/index;
-                if(fabs(result-calc)<diff)
-                        {
-                        index1=i;
-                        diff=fabs(result-calc);
-                        }
-                }
-        tmp=tmp.setNum(floor(value))+" "+tmp.setNum(index1)+"/"+tmp.setNum(index);
-        return(tmp);
-        }
+        {
+	    calc = i*1.0 / index;
+	    if( fabs( result - calc ) < diff )
+	    {
+		index1=i;
+		diff = fabs(result-calc);
+	    }
+	}
+        tmp = tmp.setNum( floor(value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
+    }
+    
+    return tmp;
 }
 
 void KSpreadCell::verifyCondition()
 {
-m_numberOfCond=-1;
-double v = m_dValue * m_dFaktor;
-m_conditionIsTrue=false;
-KSpreadConditional *tmpCondition=0;
-if(m_bValue && !m_pTable->getShowFormular())
-{
-for(int i=0;i<3;i++)
-{
-switch(i)
-	{
-	case 0:
+    m_numberOfCond=-1;
+    double v = m_dValue * m_dFaktor;
+    m_conditionIsTrue = false;
+    KSpreadConditional *tmpCondition = 0;
+    
+    if(m_bValue && !m_pTable->getShowFormular())
+    {
+	for(int i=0;i<3;i++)
+        {
+	    switch(i)
+	    {
+	    case 0:
 		tmpCondition=m_firstCondition;
 		break;
-	case 1:
+	    case 1:
 		tmpCondition=m_secondCondition;
 		break;
-	case 2:
+	    case 2:
 		tmpCondition=m_thirdCondition;
 		break;
-	}
+	    }
 
-if(tmpCondition!=0 && tmpCondition->m_cond!=None && !m_pTable->getShowFormular())
-        {
+	    if( tmpCondition != 0 && tmpCondition->m_cond != None )
+            {
 
-        switch(tmpCondition->m_cond)
+		switch(tmpCondition->m_cond)
                 {
                 case Equal :
-                if(v==tmpCondition->val1)
-                        {
+		    if(v == tmpCondition->val1 )
+		    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-                        }
-                break;
+		    }
+		    break;
 
                 case Superior :
-                if(v>tmpCondition->val1)
-                        {
+		    if( v > tmpCondition->val1 )
+		    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-                        }
-                break;
+		    }
+		    break;
 
                 case Inferior :
-                if(v<tmpCondition->val1)
-                        {
+		    if(v < tmpCondition->val1 )
+		    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-                        }
-
-                break;
+		    }
+		    break;
 
                 case SuperiorEqual :
-                if(v>=tmpCondition->val1)
-                        {
+		    if( v >= tmpCondition->val1 )
+		    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-                        }
-
-                break;
+		    }
+		    break;
 
                 case InferiorEqual :
-                if(v<=tmpCondition->val1)
-                        {
+		    if(v <= tmpCondition->val1 )
+		    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-                        }
-
-                break;
+		    }
+		    break;
 
                 case Between :
-                if((v>QMIN(tmpCondition->val1,tmpCondition->val2))&&(v<QMAX(tmpCondition->val1,tmpCondition->val2)))
-                        {
+		    if( ( v > QMIN(tmpCondition->val1, tmpCondition->val2 ) ) && 
+			( v < QMAX(tmpCondition->val1, tmpCondition->val2 ) ) )
+		    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-                        }
-                break;
-
+		    }
+		    break;
+		    
                 case Different :
-                if((v<QMIN(tmpCondition->val1,tmpCondition->val2))||(v>QMAX(tmpCondition->val1,tmpCondition->val2)))
-                        {
+		    if( ( v < QMIN(tmpCondition->val1, tmpCondition->val2 ) ) ||
+			( v > QMAX(tmpCondition->val1, tmpCondition->val2) ) )
+		    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-                        }
-                break;
+		    }
+		    break;
 
                 default:
-		        kdDebug(36001) << "Pb in Conditional" << endl;
+		    kdDebug(36001) << "Pb in Conditional" << endl;
 
-                        m_conditionIsTrue=false;
-                        break;
-
+		    m_conditionIsTrue = false;
+		    break;
                 }
 
-        }
-  }
- }
-
+	    }
+	}
+    }
 }
 
-void KSpreadCell::offsetAlign(int _col,int _row)
+void KSpreadCell::offsetAlign( int _col,int _row )
 {
-int a = m_eAlign;
-RowLayout *rl = m_pTable->rowLayout( _row );
-ColumnLayout *cl = m_pTable->columnLayout( _col );
+    int a = m_eAlign;
+    RowLayout *rl = m_pTable->rowLayout( _row );
+    ColumnLayout *cl = m_pTable->columnLayout( _col );
 
-int w = cl->width();
-int h = rl->height();
+    int w = cl->width();
+    int h = rl->height();
 
-if ( m_iExtraXCells )
-    w = m_iExtraWidth;
-if ( m_iExtraYCells )
-    h = m_iExtraHeight;
+    if ( m_iExtraXCells )
+	w = m_iExtraWidth;
+    if ( m_iExtraYCells )
+	h = m_iExtraHeight;
 
-switch( m_eAlignY )
-{
-        case KSpreadCell::Top:
-                if(!m_rotateAngle)
-                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-                else
-                        {
-                        if(m_rotateAngle<0)
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-                        else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
-                        }
-                break;
-        case KSpreadCell::Bottom:
-                if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
-                        m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
-                else if(m_rotateAngle!=0)
-                        {
-                        if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
-                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
-                        else
-                                if(m_rotateAngle<0)
-                                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-                                else
-                                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
-                        }
-                else if(m_bMultiRow)
-                        {
-                        if((h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row ))>0)
-                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row );
-                        else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-                        }
-                else
-                        if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
-                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
-                        else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-                break;
-        case KSpreadCell::Middle:
-                if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
-                        m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
-                else if(m_rotateAngle!=0)
-                        if(( h - m_iOutTextHeight )>0)
-                                m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
-                        else
-                                if( m_rotateAngle<0)
-                                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-                                else
-                                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
-                else if(m_bMultiRow)
-                        if(( h - m_iOutTextHeight*m_nbLines )>0)
-                                m_iTextY = ( h - m_iOutTextHeight*m_nbLines ) / 2 +m_fmAscent;
-                        else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-                else
-                        if(( h - m_iOutTextHeight )>0)
-                                m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
-                        else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-                break;
-}
-
-if ( a == KSpreadCell::Undefined )
-  {
-    if ( m_bValue || m_bDate || m_bTime)
-      a = KSpreadCell::Right;
-    else
-      a = KSpreadCell::Left;
-  }
-if(m_pTable->getShowFormular())
-      a = KSpreadCell::Left;
-
-switch( a )
-  {
-  case KSpreadCell::Left:
-    m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
-    break;
-  case KSpreadCell::Right:
-    m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
-    break;
-  case KSpreadCell::Center:
-    m_iTextX = ( w - m_iOutTextWidth ) / 2;
-    break;
-  }
-}
-
-void KSpreadCell::textSize(QPainter &_paint)
-{
-QFontMetrics fm = _paint.fontMetrics();
-if(!m_bVerticalText && !m_rotateAngle)
+    switch( m_eAlignY )
+    {
+    case KSpreadCell::Top:
+	if(!m_rotateAngle)
+	    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+	else
         {
+	    if(m_rotateAngle<0)
+		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+	    else
+		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+	}
+	break;
+    case KSpreadCell::Bottom:
+	if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
+	    m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
+	else if(m_rotateAngle!=0)
+        {
+	    if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
+	    else
+		if( m_rotateAngle < 0 )
+		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+		else
+		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+	}
+	else if( m_bMultiRow )
+        {
+	    if((h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row ))>0)
+		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row );
+	    else
+		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+	}
+	else
+	    if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
+	    else
+		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+	break;
+    case KSpreadCell::Middle:
+	if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
+	    m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+	else if( m_rotateAngle != 0 )
+	    if( ( h - m_iOutTextHeight ) > 0 )
+		m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+	    else
+		if( m_rotateAngle < 0 )
+		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+		else
+		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                else if(m_bMultiRow)
+		    if(( h - m_iOutTextHeight*m_nbLines )>0)
+			m_iTextY = ( h - m_iOutTextHeight*m_nbLines ) / 2 +m_fmAscent;
+		    else
+			m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+	else
+	    if(( h - m_iOutTextHeight )>0)
+		m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+	    else
+		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+	break;
+    }
+
+    if ( a == KSpreadCell::Undefined )
+    {
+	if ( m_bValue || m_bDate || m_bTime)
+	    a = KSpreadCell::Right;
+	else
+	    a = KSpreadCell::Left;
+    }
+    if(m_pTable->getShowFormular())
+	a = KSpreadCell::Left;
+
+    switch( a )
+    {
+    case KSpreadCell::Left:
+	m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
+	break;
+    case KSpreadCell::Right:
+	m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
+	break;
+    case KSpreadCell::Center:
+	m_iTextX = ( w - m_iOutTextWidth ) / 2;
+	break;
+    }
+}
+
+void KSpreadCell::textSize( QPainter &_paint )
+{
+    QFontMetrics fm = _paint.fontMetrics();
+    // Horizontal text ?
+    if( !m_bVerticalText && !m_rotateAngle )
+    {
         m_iOutTextWidth = fm.width( m_strOutText );
         m_iOutTextHeight = fm.ascent() + fm.descent();
-        }
- else if(m_rotateAngle!=0)
-        {
+    }
+    // Rotated text ?
+    else if( m_rotateAngle != 0 )
+    {
         m_iOutTextHeight = static_cast<int>(std::cos(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())+abs((int)(fm.width( m_strOutText )*sin(m_rotateAngle*M_PI/180))));
         m_iOutTextWidth = static_cast<int>(std::abs((int)(sin(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())))+fm.width( m_strOutText )*cos(m_rotateAngle*M_PI/180));
         //kdDebug(36001)<<"m_iOutTextWidth"<<m_iOutTextWidth<<"m_iOutTextHeight"<<m_iOutTextHeight<<endl;
-        }
-  else
-        {
+    }
+    // Vertical text ?
+    else
+    {
         m_iOutTextWidth = fm.width( m_strOutText.at(0));
         m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length());
-        }
-m_fmAscent=fm.ascent();
-
+    }
+    
+    m_fmAscent=fm.ascent();
 }
 
 void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
 {
+    KSpreadConditional *tmpCondition = 0;
 
-KSpreadConditional *tmpCondition=0;
-
-
-if(m_conditionIsTrue && !m_pTable->getShowFormular())
-        {
+    if( m_conditionIsTrue && !m_pTable->getShowFormular() )
+    {
         switch(m_numberOfCond)
-		{
-		case 0:
-			tmpCondition=m_firstCondition;
-			break;
-		case 1:
-			tmpCondition=m_secondCondition;
-			break;
-		case 2:
-			tmpCondition=m_thirdCondition;
-			break;
-		}
+        {
+	case 0:
+	    tmpCondition=m_firstCondition;
+	    break;
+	case 1:
+	    tmpCondition=m_secondCondition;
+	    break;
+	case 2:
+	    tmpCondition=m_thirdCondition;
+	    break;
+	}
 	_paint.setFont( tmpCondition->fontcond );
-	}
-else
-	{
+    }
+    else
+    {
 	_paint.setFont( m_textFont );
-	}
-textSize(_paint);
+    }
+    
+    textSize(_paint);
 
-offsetAlign(_col,_row);
-
+    offsetAlign(_col,_row);
 }
-
-
-/*
-bool KSpreadCell::makeDepend( const char *_p, KSpreadDepend ** _dep, bool _second )
-{
-    KSpreadTable *dest_table;
-
-    // Test wethe we have a table name
-    int pos = 0;
-    while ( isalpha( _p[pos] ) || isdigit( _p[pos] ) )
-	pos++;
-
-    if ( _p[pos] == '!' )
-    {
-      QString n = _p;
-      n = n.left( pos );
-
-      _p += pos + 1;
-      KSpreadTable *t = m_pTable->map()->findTable( n );
-      if ( t == 0L )
-      {
-	kdError(36001) << "ERROR: Unknown table name " << n.data() << endl;
-	return FALSE;
-      }
-
-      if ( _second )
-      {
-	kdError(36001) << "ERROR: KSpreadTable name not allowed in 2nd corner of a A1:D5 construct." << endl;
-	return FALSE;
-      }
-
-      dest_table = t;
-    }
-    else
-      dest_table = m_pTable;
-
-    if ( *_p == '$' )
-      _p++;
-
-    pos = 0;
-    int col = 0;
-    while ( isupper( _p[ pos ] ) )
-    {
-	if ( pos >= 2 )
-	    return FALSE;
-	else if ( pos == 0 )
-	    col = _p[pos] - 'A' + 1;
-	else if ( pos == 1 )
-	    col += ( _p[pos] - 'A' + 1 ) * 26;
-	pos++;
-    }
-    if ( pos == 0 )
-	return FALSE;
-
-    _p += pos;
-
-    if ( *_p == '$' )
-	_p++;
-
-    pos = 0;
-    int row = atoi( _p );
-    while ( isdigit( _p[ pos ] ) )
-    {
-	if ( pos >= 5 )
-	    return FALSE;
-	pos++;
-    }
-    if ( pos == 0 )
-	return FALSE;
-
-    _p += pos;
-
-    if ( isalpha( *_p ) || *_p == '$' || *_p == '!' )
-	return FALSE;
-
-    KSpreadDepend *dep;
-
-    if ( _second )
-    {
-	dep = m_lstDepends.last();
-	if ( dep == 0L )
-	    return FALSE;
-    }
-    else
-    {
-	dep = new KSpreadDepend();
-	m_lstDepends.append( dep );
-	dep->m_iColumn2 = -1;
-	dep->m_pTable = dest_table;
-    }
-    *_dep = dep;
-
-    if ( _second )
-	dep->m_iColumn2 = col;
-    else
-	dep->m_iColumn = col;
-    if ( _second )
-	dep->m_iRow2 = row;
-    else
-	dep->m_iRow = row;
-
-    return TRUE;
-}
-*/
 
 bool KSpreadCell::makeFormular()
 {
@@ -3498,7 +3435,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
         comment.appendChild( doc.createCDATASection( m_strComment ) );
         cell.appendChild( comment );
     }
-    
+
     //
     // Save the text
     //
@@ -3518,7 +3455,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
         {
 	    QDomElement text = doc.createElement( "text" );
 	    text.appendChild( doc.createCDATASection( m_strText ) );
-	    cell.appendChild( text );	    
+	    cell.appendChild( text );	
 	}
 	else if( (getFormatNumber()==ShortDate || getFormatNumber()==TextDate)&& m_bDate )
         {
@@ -3550,7 +3487,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm, Operation op )
 {
     bool ok;
-    
+
     //
     // First of all determine in which row and column this
     // cell belongs.
@@ -3615,7 +3552,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	
 	if ( f.hasAttribute( "multirow" ) )
 	    setMultiRow( true );
-        
+
 	if ( f.hasAttribute( "verticaltext" ) )
 	    setVerticalText( true );
 	
@@ -3653,7 +3590,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         {
             forceExtraCells(m_iColumn,m_iRow,m_iExtraXCells,m_iExtraYCells);
         }
-        
+
 	if ( f.hasAttribute( "precision" ) )
         {
 	    int i = f.attribute("precision").toInt( &ok );
@@ -3874,7 +3811,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 		m_thirdCondition->fontcond=toFont(font) ;
 	}
     }
-    
+
     //
     // Load the comment
     //

@@ -1731,7 +1731,7 @@ void KSpreadTable::insertRightCell( const QPoint &_marker )
 	  key = list[ k ]->row() | ( list[ k ]->column() * 0x10000 );
 	
 	  m_dctCells.insert( key, list[ k ] );
-	  list[ k ]->offsetAlign(list[k]->column(),list[k]->row());
+	  // #### What kind of a hack ? list[ k ]->offsetAlign(list[k]->column(),list[k]->row());
 	}
       }
     }
@@ -1772,7 +1772,7 @@ void KSpreadTable::insertBottomCell(const QPoint &_marker)
 		
 	  key = list[ k ]->row() + ( list[ k ]->column() * 0x10000 );
 	  m_dctCells.insert( key, list[ k ] );
-	  list[ k ]->offsetAlign(list[k]->column(),list[k]->row());
+	  // ##### What kind of a hack ? list[ k ]->offsetAlign(list[k]->column(),list[k]->row());
 	}
       }
     }

@@ -1007,6 +1007,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     if ( m_strAnchor.isEmpty() && _ev->button() == LeftButton )
     {
 	m_eMouseAction = Mark;
+	printf("EXTRA x=%i y-=%i\n", cell->extraXCells(),cell->extraYCells() );
 	selection.setCoords( markerColumn(), markerRow(),
 			     markerColumn() + cell->extraXCells(),
 			     markerRow() + cell->extraYCells() );
@@ -2132,51 +2133,51 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 
 void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
-  KSpreadTable *table = m_pCanvas->activeTable();
-  assert( table );
-  if(!m_pView->koDocument()->isReadWrite())
-    return;
+    KSpreadTable *table = m_pCanvas->activeTable();
+    assert( table );
+    if( !m_pView->koDocument()->isReadWrite() )
+	return;
 
-  if ( m_bResize )
-  {
-    // Remove size indicator painted by paintSizeIndicator
-    QPainter painter;
-    painter.begin( m_pCanvas );
-    painter.setRasterOp( NotROP );
-    painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
-    painter.end();
-
-    int start=m_iResizedRow;
-    int end=m_iResizedRow;
-    QRect selection = m_pCanvas->activeTable()->selectionRect();
-    if(selection.left()!=0 && selection.right()==0x7FFF)
+    if ( m_bResize )
     {
-        if(selection.contains(QPoint(1,m_iResizedRow)))
-                {
+	// Remove size indicator painted by paintSizeIndicator
+	QPainter painter;
+	painter.begin( m_pCanvas );
+	painter.setRasterOp( NotROP );
+	painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
+	painter.end();
+
+	int start = m_iResizedRow;
+	int end = m_iResizedRow;
+	QRect selection = m_pCanvas->activeTable()->selectionRect();
+	if( selection.left() != 0 && selection.right() == 0x7FFF )
+        {
+	    if( selection.contains( QPoint( 1, m_iResizedRow ) ) )
+	    {
                 start=selection.top();
                 end=selection.bottom();
-                }
-    }
-    int height=0;
-    int y = table->rowPos( m_iResizedRow, m_pCanvas );
-    if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < (20.0* m_pCanvas->zoom()) )
-        height=(int)(20.0* m_pCanvas->zoom());
-    else
-        height= _ev->pos().y() - y;
+	    }
+	}
+	int height = 0;
+	int y = table->rowPos( m_iResizedRow, m_pCanvas );
+	if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < (20.0* m_pCanvas->zoom()) )
+	    height = (int)( 20.0 * m_pCanvas->zoom() );
+	else
+	    height = _ev->pos().y() - y;
 
-    for(int i=start;i<=end;i++)
+	for(int i = start; i <= end; i++ )
         {
-        RowLayout *rl = table->nonDefaultRowLayout( i );
-        rl->setHeight( height, m_pCanvas );
+	    RowLayout *rl = table->nonDefaultRowLayout( i );
+	    rl->setHeight( height, m_pCanvas );
         }
 
-    delete m_lSize;
-    m_lSize = 0;
-    m_pView->koDocument()->setModified(true);
-  }
+	delete m_lSize;
+	m_lSize = 0;
+	m_pView->koDocument()->setModified(true);
+    }
 
-  m_bSelection = FALSE;
-  m_bResize = FALSE;
+    m_bSelection = FALSE;
+    m_bResize = FALSE;
 }
 
 void KSpreadVBorder::adjustRow(int _row)
