@@ -328,14 +328,14 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 	// set up world matrix
 	double affine[6];
-	affine[0] = m_zoomFactor;//m_matrix.m11();
+	affine[0] = 1;//m_zoomFactor;//m_matrix.m11();
 	affine[1] = 0;//m_matrix.m12();
 	affine[2] = 0;//m_matrix.m21();
-	affine[3] = m_zoomFactor;//m_matrix.m22();
-	affine[4] = 0;//m_matrix.dx();
-	affine[5] = 0;//m_matrix.dy();
-	//ArtVpath *temp = art_vpath_affine_transform( vec, affine );
-	//vec = temp;
+	affine[3] = 1;//m_zoomFactor;//m_matrix.m22();
+	affine[4] = m_matrix.dx();
+	affine[5] = m_matrix.dy();
+	ArtVpath *temp = art_vpath_affine_transform( vec, affine );
+	vec = temp;
 
 	int r = 0;
 	int g = 0;

@@ -33,11 +33,15 @@ protected:
 
 	virtual void resizeEvent( QResizeEvent* event );
 
+private slots:
+	void slotContentsMoving( int , int );
+
 private:
 	KarbonPart* m_part;
 	KarbonView* m_view;
 
 	double m_zoomFactor;
+	bool m_bScrolling;
 };
 
 #endif
