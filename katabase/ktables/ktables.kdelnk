@@ -1,0 +1,11 @@
+# KDE Config File  
+[KDE Desktop Entry]
+Type=Application
+Exec=Ktables  
+Icon=Ktables.xpm
+DocPath=Ktables/index.html
+Comment=
+Comment[de]=
+Terminal=0
+Name=Ktables
+Name[de]=Ktables
