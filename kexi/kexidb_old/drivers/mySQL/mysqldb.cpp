@@ -241,8 +241,9 @@ KexiDBTable * MySqlDB::createTableDef(const QString& name) {
 
 	KexiDBTable *t=new KexiDBTable(name);
 
-	KexiDBField *f;
-        for(int i=0; f=result->fieldInfo(i);i++)
+	KexiDBField *f = 0;
+	int i = 0;
+    while ((f = result->fieldInfo(i++)) != 0)
 	{
 		t->addField(*f);
 //should we support other unique keys here too ?

@@ -403,7 +403,7 @@ MySqlRecord::updateCurrent()
 	kdDebug()<<"KexiDBUpdateRecord * MySqlRecord::updateCurrent() entered "<<endl;
 	if (readOnly()) return 0; //perhaps a kexidberror should be set here too
 	KexiDBUpdateRecord *rec=new KexiDBUpdateRecord(false);
-	for (int i=0;i<fieldCount();i++) {
+	for (uint i=0;i<fieldCount();i++) {
 		KexiDBField *f=fieldInfo(i);
 		rec->addField(f->name(),f->defaultValue());
 		if (f->primary_key()) {
@@ -425,7 +425,7 @@ MySqlRecord::update(QMap<QString,QVariant> fieldNameValueMap)
 	QString tableName=fieldInfo(0)->table();
 	QStringList primaryKeys=m_db->table(tableName)->primaryKeys();
 	KexiDBUpdateRecord *rec=new KexiDBUpdateRecord(false);
-	for (int i=0;i<fieldCount();i++) {
+	for (uint i=0;i<fieldCount();i++) {
 		KexiDBField *f=fieldInfo(i);
 		rec->addField(f->name(),f->defaultValue());
 		if (f->primary_key()) {
@@ -454,7 +454,7 @@ MySqlRecord::insert()
 	kdDebug()<<"KexiDBUpdateRecord * MySqlRecord::insert() entered "<<endl;
 	if (readOnly()) return 0; //perhaps a kexidberror should be set here too
 	KexiDBUpdateRecord *rec=new KexiDBUpdateRecord(true);
-	for (int i=0;i<fieldCount();i++) {
+	for (uint i=0;i<fieldCount();i++) {
 		KexiDBField *f=fieldInfo(i);
 		rec->addField(f->name(),f->defaultValue());
 	}
