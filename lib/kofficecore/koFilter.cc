@@ -39,6 +39,9 @@ KoFilter::~KoFilter()
 
 KoEmbeddingFilter::~KoEmbeddingFilter()
 {
+    if ( m_partStack.count() != 1 )
+        kdWarning() << "Someone messed with the part stack" << endl;
+    delete m_partStack.pop();
 }
 
 int KoEmbeddingFilter::lruPartIndex() const
