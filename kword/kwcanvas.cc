@@ -1722,7 +1722,6 @@ KWTableFrameSet *KWCanvas::getTable()
 bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
 {
     bool emitChanged = false;
-
     if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
     {
         KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
@@ -1744,7 +1743,6 @@ bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
         if(fs->type()==FT_TABLE || fs->type()==FT_TEXT)
         {
             m_currentFrameSetEdit = fs->createFrameSetEdit( this );
-            //kdDebug()<<"create m_currentFrameSetEdit :"<<m_currentFrameSetEdit<<endl;
             emitChanged = true;
         }
     }
@@ -1865,7 +1863,7 @@ void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
 
 void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
 {
-    if ( !m_imageDrag && m_currentFrameSetEdit )
+    if ( !m_imageDrag /*&& m_currentFrameSetEdit*/ )
     {
         QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
         KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
@@ -1878,7 +1876,6 @@ void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
             //kdDebug()<<"table :"<<table<<endl;
             emitChanged = checkCurrentTextEdit( table ? table : fs );
         }
-        //kdDebug()<<"m_currentFrameSetEdit :"<<m_currentFrameSetEdit<<endl;
         if ( m_currentFrameSetEdit )
         {
             m_currentFrameSetEdit->dragMoveEvent( e, normalPoint, docPoint );
@@ -2137,7 +2134,6 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 break;
         }
     }
-
     return QScrollView::eventFilter( o, e );
 }
 
