@@ -1712,7 +1712,8 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
     if ( isAHeader( doc->getFrameSet( i )->getFrameInfo() ) && !doc->hasHeader() ||
 	 isAFooter( doc->getFrameSet( i )->getFrameInfo() ) && !doc->hasFooter() ||
 	 isAWrongHeader( doc->getFrameSet( i )->getFrameInfo(), doc->getHeaderType() ) ||
-	 isAWrongFooter( doc->getFrameSet( i )->getFrameInfo(), doc->getFooterType() ) )
+	 isAWrongFooter( doc->getFrameSet( i )->getFrameInfo(), doc->getFooterType() ) ||
+	 !doc->getFrameSet( i )->isVisible() )
 	return;
 
     if ( doc->getFrameSet( i )->getFrameInfo() == FI_BODY ) {
@@ -2789,12 +2790,13 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
 	frameset = doc->getFrameSet( i );
-	if ( !frameset->isVisible() ) continue;
+	if ( !frameset->isVisible() ) 
+	    continue;
 
-	if ( isAHeader( doc->getFrameSet( i )->getFrameInfo() ) && !doc->hasHeader() ||
-	     isAFooter( doc->getFrameSet( i )->getFrameInfo() ) && !doc->hasFooter() ||
-	     isAWrongHeader( doc->getFrameSet( i )->getFrameInfo(), doc->getHeaderType() ) ||
-	     isAWrongFooter( doc->getFrameSet( i )->getFrameInfo(), doc->getFooterType() ) )
+	if ( isAHeader( frameset->getFrameInfo() ) && !doc->hasHeader() ||
+	     isAFooter( frameset->getFrameInfo() ) && !doc->hasFooter() ||
+	     isAWrongHeader( frameset->getFrameInfo(), doc->getHeaderType() ) ||
+	     isAWrongFooter( frameset->getFrameInfo(), doc->getFooterType() ) )
 	    continue;
 	for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
 	    tmp = frameset->getFrame( j );
