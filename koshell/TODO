@@ -8,3 +8,10 @@ KoKoolBarBox : widget containing the items
 
 KoKoolBar : holds a QSplitter and two instances of KoKoolBarBox instead of one.
 
+ It should have
+>an indicator which document is the current one, it should make keypresses
+>visible like QIconView does, it should allow renaming of documents and it
+>should allow Drag and Drop :)
+
+-> use QIconView
+
