@@ -515,6 +515,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     {
                         _resizeObj = false;
                         kpobject = m_view->kPresenterDoc()->stickyPage()->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
+                        if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
+                        {
+                            if((kpobject==m_view->kPresenterDoc()->header() && !m_view->kPresenterDoc()->hasHeader())||(kpobject==m_view->kPresenterDoc()->footer() && !m_view->kPresenterDoc()->hasFooter()))
+                                kpobject=0L;
+                        }
                         if( kpobject && _resizeObj ) {
                             oldBoundingRect = getOldBoundingRect( kpobject );
                             resizeObjNum = kpobject;
