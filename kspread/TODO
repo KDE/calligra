@@ -110,6 +110,8 @@ Others bugs not in BT system (Report by - taken by):
 - Clicking into canvas causes to much flickering if many items 
         (especially multirow cells) are in visible rect
 - MultiRow cells will only be drawn if obscuring is forced!
+- Far too much flickering: merge about 20 cells. Click in merged
+  area, click somewhere else and see what happens
 
 
 
@@ -119,7 +121,7 @@ Other things: (please add the things you are working on!)
 - inserting data from text files
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
         scrollbars, it works, but not very nice (not commited (Norbert))
-- AutoFormat
+- AutoFormat (already exists in a very limited way: Format -> table style)
 - Script, Script-Editor (like VBA in Excel)
 - Tools->Auditing:
 	Trace Precedents
