@@ -233,6 +233,10 @@
                 <title xml:lang="en_us">HTML</title>
                 <stat import="none" export="twostars"/>
             </filter>
+            <filter id="kspread_latex">
+                <title xml:lang="en_us">LaTeX</title>
+                <stat import="none" export="planned"/>
+            </filter>
             <filter id="kspread_quattro" webcvspath="koffice/filters/kspread/qpro">
                 <title xml:lang="en_us">Quattro Pro</title>
                 <stat import="twostars" export="none"/>
@@ -246,6 +250,11 @@
 
         <application id="kpresenter">
             <title xml:lang="en_us">KPresenter</title>
+            <filter id="kword_magicpoint">
+                <title xml:lang="en_us">Magicpoint</title>
+		<contact href="mailto:lukas@kde.org">Lukas Tinkl</contact>
+                <stat import="onestar" export="none"/>
+            </filter>
             <filter id="kword_ooimpress">
                 <title xml:lang="en_us">OpenOffice Impress</title>
                 <stat import="onestar" export="none"/>
