@@ -21,7 +21,7 @@ VCCmdPolygon::VCCmdPolygon( KarbonPart* part,
 	m_edges = edges < 3 ? 3 : edges;
 
 	// make sure the radius is positive:
-	m_radius = radius < 0 ? -radius : radius;
+	m_radius = radius < 0.0 ? -radius : radius;
 }
 
 void
@@ -33,7 +33,7 @@ VCCmdPolygon::execute()
 	{
 		m_object = new VPath();
 		// we start at 90 degrees:
-		m_object->moveTo( 0, m_radius );
+		m_object->moveTo( 0.0, m_radius );
 		for ( int i = 0; i < m_edges; ++i )
 		{
 			m_object->lineTo(

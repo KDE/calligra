@@ -22,7 +22,7 @@ VCCmdSpiral::VCCmdSpiral( KarbonPart* part,
 	m_segments = segments < 1 ? 1 : segments;
 
 	// make sure the radius is positive:
-	m_radius = radius < 0 ? -radius : radius;
+	m_radius = radius < 0.0 ? -radius : radius;
 
 	// fall back, when fade is out of range:
 	m_fade = ( fade <= 0.0 || fade >= 1.0 ) ? 0.5 : fade;
@@ -61,13 +61,12 @@ VCCmdSpiral::execute()
 				r
 			);
 
-			new_centerX += ( new_x - new_centerX ) * ( 1 - m_fade );
-			new_centerY += ( new_y - new_centerY ) * ( 1 - m_fade );
+			new_centerX += ( new_x - new_centerX ) * ( 1.0 - m_fade );
+			new_centerY += ( new_y - new_centerY ) * ( 1.0 - m_fade );
 			old_x = new_x;
 			old_y = new_y;
 			r *= m_fade;
 		}
-//		m_object->close();
 
 		// translate path to center:
 		VAffineMap aff_map;

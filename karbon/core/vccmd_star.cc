@@ -21,8 +21,8 @@ VCCmdStar::VCCmdStar( KarbonPart* part,
 	m_edges = edges < 3 ? 3 : edges;
 
 	// make sure, radii are positive:
-	m_outerR = outerR < 0 ? -outerR : outerR;
-	m_innerR = innerR < 0 ? -innerR : innerR;
+	m_outerR = outerR < 0.0 ? -outerR : outerR;
+	m_innerR = innerR < 0.0 ? -innerR : innerR;
 }
 
 void
@@ -34,15 +34,15 @@ VCCmdStar::execute()
 	{
 		m_object = new VPath();
 		// we start at 90 degrees:
-		m_object->moveTo( 0, m_outerR );
+		m_object->moveTo( 0.0, m_outerR );
 		for ( int i = 0; i < m_edges; ++i )
 		{
 			m_object->lineTo(
 				m_innerR * cos( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ),
 				m_innerR * sin( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ) );
 			m_object->lineTo(
-				m_outerR * cos( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ),
-				m_outerR * sin( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ) );
+				m_outerR * cos( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 ) ),
+				m_outerR * sin( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 ) ) );
 		}
 		m_object->close();
 

@@ -507,7 +507,7 @@ VPath::arcTo( const double x1, const double y1,
 	double num   = dx10*dy12 - dy10*dx12;
 	double denom = sqrt( dsq10*dsq12 ) - dx10*dx12 + dy10*dy12;
 
-	if ( denom == 0 )			// points are co-linear
+	if ( denom == 0.0 )			// points are co-linear
 		lineTo( x1, y1 );	// just add a line to first point
     else
     {
@@ -544,7 +544,7 @@ VPath::arcTo( const double x1, const double y1,
 		if ( distsq >= rsq * 1.0e8 ) // r is very small
 			fract = 0.0; // dist==r==0
 		else
-			fract = (4.0 / 3.0) / (1 + sqrt(1 + distsq / rsq));
+			fract = ( 4.0 / 3.0 ) / ( 1.0 + sqrt( 1.0 + distsq / rsq ) );
 
 		double bx1 = bx0 + (x1 - bx0) * fract;
 		double by1 = by0 + (y1 - by0) * fract;

@@ -13,7 +13,8 @@
 #include "karbon_view.h"
 
 // only for test-object:
-#include "vccmd_spiral.h"
+#include "vccmd_rectangle.h"
+#include "vccmd_sinus.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -25,10 +26,12 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_layers.append( new VLayer() );
 
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	VCCmdSpiral* cmd = new VCCmdSpiral( this, 150, 150, 100, 8, 0.6, true );
-	cmd->execute();
-	VCCmdSpiral* cmd2 = new VCCmdSpiral( this, 400, 300, 200, 15, 0.8, false );
+	VCCmdRectangle* cmd2 = new VCCmdRectangle( this, 100, 200, 300, 50 );
 	cmd2->execute();
+	VCCmdSinus* cmd = new VCCmdSinus( this, 100, 200, 300, 50, 2 );
+	cmd->execute();
+	VCCmdSinus* cmd3 = new VCCmdSinus( this, 50, 300, 700, 500 );
+	cmd3->execute();
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 
