@@ -1240,7 +1240,7 @@ void KPresenterView::sizeSelected()
 {
     tbFont.setPointSize( ( (KFontSizeAction*)actionTextFontSize )->fontSize() );
     page->setTextFont( &tbFont );
-    qDebug( "sizeSelected() %d", tbFont.pointSize() );
+    kdDebug() << "sizeSelected() " << tbFont.pointSize() << endl;
 }
 
 /*===============================================================*/
@@ -1248,7 +1248,7 @@ void KPresenterView::fontSelected()
 {
     tbFont.setFamily( ( (KFontAction*)actionTextFontFamily )->currentText() );
     page->setTextFont( &tbFont );
-    qDebug( "fontSelected() %s", tbFont.family().latin1() );
+    kdDebug() << "fontSelected() " << tbFont.family() << endl;
 }
 
 /*===============================================================*/

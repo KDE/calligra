@@ -89,6 +89,13 @@
 
 #include "KPresenterDocIface.h"
 
+#ifndef QT_NO_ASCII_CAST
+#define QT_NO_ASCII_CAST
+#endif
+#ifndef QT_NO_CAST_ASCII
+#define QT_NO_CAST_ASCII
+#endif
+
 /******************************************************************/
 /* class KPresenterChild					  */
 /******************************************************************/
@@ -334,7 +341,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
             if ( !isStoredExtern() )
               pictureName.prepend( url().url() + "/" );
 	    out << indent << "<KEY " << key << " name=\""
-		<< pictureName.latin1()
+		<< pictureName.utf8().data()
 		<< "\" />" << endl;
 	}
     }
@@ -352,7 +359,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
         if ( !isStoredExtern() )
           clipartName.prepend( url().url() + "/" );
 	out << indent << "<KEY " << key << " name=\""
-	    << clipartName.latin1()
+	    << clipartName.utf8().data()
 	    << "\" />" << endl;
     }
 
@@ -3332,7 +3339,7 @@ void KPresenterDoc::copyObjs( int diffx, int diffy )
     }
     out << etag << "</DOC>" << endl;
 
-    cb->setText( clip_str.c_str() );
+    cb->setText( QString::fromUtf8(clip_str.c_str()) );
 }
 
 /*=============================================================*/
@@ -3354,11 +3361,11 @@ void KPresenterDoc::pasteObjs( int diffx, int diffy, int currPage )
     pasting = true;
     pasteXOffset = diffx + 20;
     pasteYOffset = diffy + 20;
-    string clip_str = QApplication::clipboard()->text().ascii();
+    QCString clip_str = QApplication::clipboard()->text().utf8();
 
-    if ( clip_str.empty() ) return;
+    if ( clip_str.isEmpty() ) return;
 
-    istrstream in( clip_str.c_str() );
+    istrstream in( clip_str.data() );
     loadStream( in, currPage );
 
     pasting = false;

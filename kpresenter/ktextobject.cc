@@ -4052,7 +4052,7 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 
 	if ( drawSelection ) {
 	    if ( e->key() == Key_Return || e->key() == Key_Enter || e->key() == Key_Delete
-		 || e->key() == Key_Backspace || e->ascii() && e->ascii() > 31 ) {
+		 || e->key() == Key_Backspace || !e->text().isEmpty() ) {
 		int posAbs = QMIN( startCursor.positionAbs(), stopCursor.positionAbs() );
 		int parag = QMIN( startCursor.positionParagraph(), stopCursor.positionParagraph() );
 		int line = 0;

@@ -616,13 +616,13 @@ void KPTextObject::saveKTextObject( ostream& out )
 	<< ktextobject.enumListType().before.utf8().data() << "\" after=\""
 	<< ktextobject.enumListType().after.utf8().data()
 	<< "\" start=\"" << ktextobject.enumListType().start << "\" family=\""
-	<< ktextobject.enumListType().font.family().ascii() << "\" pointSize=\"" << ktextobject.enumListType().font.pointSize()
+	<< ktextobject.enumListType().font.family().utf8().data() << "\" pointSize=\"" << ktextobject.enumListType().font.pointSize()
 	<< "\" bold=\"" << ktextobject.enumListType().font.bold() << "\" italic=\"" << ktextobject.enumListType().font.italic()
 	<< "\" underline=\"" << ktextobject.enumListType().font.underline() << "\" red=\""
 	<< ktextobject.enumListType().color.red() << "\" green=\"" << ktextobject.enumListType().color.green()
 	<< "\" blue=\"" << ktextobject.enumListType().color.blue() << "\"/>" << endl;
     for ( i = 0; i < 16; i++ ) {
-	out << indent << "<UNSORTEDLISTTYPE family=\"" << ktextobject.unsortListType().font->at( i )->family().ascii() << "\" pointSize=\""
+	out << indent << "<UNSORTEDLISTTYPE family=\"" << ktextobject.unsortListType().font->at( i )->family().utf8().data() << "\" pointSize=\""
 	    << ktextobject.unsortListType().font->at( i )->pointSize()
 	    << "\" bold=\"" << ktextobject.unsortListType().font->at( i )->bold() << "\" italic=\""
 	    << ktextobject.unsortListType().font->at( i )->italic()
@@ -651,7 +651,7 @@ void KPTextObject::saveKTextObject( ostream& out )
 
 		out << otag << "<OBJ>" << endl;
 		out << indent << "<TYPE value=\"" << static_cast<int>( txtObj->type() ) << "\"/>" << endl;
-		out << indent << "<FONT family=\"" << font.family().ascii() << "\" pointSize=\""
+		out << indent << "<FONT family=\"" << font.family().utf8().data() << "\" pointSize=\""
 		    << font.pointSize() << "\" bold=\"" << font.bold() << "\" italic=\"" << font.italic()
 		    << "\" underline=\"" << font.underline() << "\"/>" << endl;
 		out << indent << "<COLOR red=\"" << txtObj->color().red() << "\" green=\""
@@ -863,31 +863,28 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 
 				// text
 				else if ( name == "TEXT" ) {
-				    QString tmp2;
+				    QCString tmputf8;
 				    string tmp;
 
 				    KOMLParser::parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
-				    QString v = QString::null;
 				    for( ; it != lst.end(); it++ ) {
 					if ( ( *it ).m_strName == "value" ) {
-					    tmp2 = ( *it ).m_strValue.c_str();
-					    v = tmp2;
+					    tmputf8 = ( *it ).m_strValue.c_str();
 					}
 				    }
 
 				    if ( parser.readText( tmp ) ) {
-					QString s = tmp.c_str();
-					if ( s.simplifyWhiteSpace().length() > 0 || utf8 || v.isEmpty() ) {
-					    tmp2 = tmp.c_str();
-					    if ( tmp2.isEmpty() && objPtr->type() == TxtObj::SEPARATOR )
-						tmp2 = " ";
+					QCString s = tmp.c_str();
+					if ( s.simplifyWhiteSpace().length() > 0 || utf8 || tmputf8.isEmpty() ) {
+					    tmputf8 = s;
+					    if ( tmputf8.isEmpty() && objPtr->type() == TxtObj::SEPARATOR )
+						tmputf8 = " ";
 					    utf8 = true;
 					}
 				    }
 
-				    tmp2 = QString::fromUtf8( tmp2.ascii() );
-				    objPtr->append( tmp2 );
+				    objPtr->append( QString::fromUtf8( tmputf8 ) );
 				}
 
 				else
