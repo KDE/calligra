@@ -386,7 +386,7 @@ PortableServer::Servant KoPluginManager::incarnate( const PortableServer::Object
   {
     QString tmp;
     ksprintf( &tmp, i18n("Could not activate plugin %s"), buffer );
-    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("Ok") );
+    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
   
@@ -395,7 +395,7 @@ PortableServer::Servant KoPluginManager::incarnate( const PortableServer::Object
   {
     QString tmp;
     ksprintf( &tmp, i18n("%s is not a plugin"), buffer );
-    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("Ok") );
+    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
   
@@ -408,7 +408,7 @@ PortableServer::Servant KoPluginManager::incarnate( const PortableServer::Object
   {    
     QString tmp;
     ksprintf( &tmp, i18n("Could not create plugin of type %s"), buffer );
-    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("Ok") );
+    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
   
