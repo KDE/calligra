@@ -35,7 +35,7 @@ KoSearchContext::KoSearchContext()
     m_family = "times";
     m_color = Qt::black;
     m_size = 12;
-    m_vertAlign = QTextFormat::AlignNormal;
+    m_vertAlign = KoTextFormat::AlignNormal;
     m_optionsMask = 0;
     m_options = KoFindDialog::FromCursor | KoReplaceDialog::PromptOnReplace;
 }
@@ -189,7 +189,7 @@ void KoSearchContextUI::setCtxOptions( long options )
         m_ctx->m_family = m_familyItem->currentText();
         m_ctx->m_size = m_sizeItem->cleanText().toInt();
         m_ctx->m_color = m_colorItem->color();
-        m_ctx->m_vertAlign = (QTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
+        m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
     }
     m_ctx->m_options = options;
 }
@@ -295,7 +295,7 @@ void KoFindReplace::proceed()
 {
     KoTextObject *firstTextObj=0;
     // Start point
-    Qt3::QTextParag * firstParag = 0;
+    KoTextParag * firstParag = 0;
     int firstIndex = 0;
 
     // 'From Cursor' option
@@ -313,11 +313,11 @@ void KoFindReplace::proceed()
         firstTextObj =edit->textObject();
         if ( !firstParag ) // not set by 'from cursor'
         {
-            QTextCursor c1 = firstTextObj->textDocument()->selectionStartCursor( KoTextDocument::Standard );
+            KoTextCursor c1 = firstTextObj->textDocument()->selectionStartCursor( KoTextDocument::Standard );
             firstParag = c1.parag();
             firstIndex = c1.index();
         }
-        QTextCursor c2 = firstTextObj->textDocument()->selectionEndCursor( KoTextDocument::Standard );
+        KoTextCursor c2 = firstTextObj->textDocument()->selectionEndCursor( KoTextDocument::Standard );
         // Find in the selection
         findInFrameSet( firstTextObj, firstParag, firstIndex, c2.parag(), c2.index() );
         //todo fix it
@@ -335,7 +335,7 @@ void KoFindReplace::proceed()
             KoTextObject * fs = fit.current();
             if ( fs /*&& fs->isVisible()*/ )
             {
-                Qt3::QTextParag * lastParag = fs->textDocument()->lastParag();
+                KoTextParag * lastParag = fs->textDocument()->lastParag();
                 bool ret = true;
                 if (!firstFrameSetFound && firstTextObj == fs && firstParag)  // first frameset
                 {
@@ -358,8 +358,8 @@ void KoFindReplace::proceed()
     kdDebug() << "KWFindReplace::findInFrameSet done" << endl;
 }
 
-bool KoFindReplace::findInFrameSet( KoTextObject * textObj, Qt3::QTextParag * firstParag, int firstIndex,
-                                    Qt3::QTextParag * lastParag, int lastIndex )
+bool KoFindReplace::findInFrameSet( KoTextObject * textObj, KoTextParag * firstParag, int firstIndex,
+                                    KoTextParag * lastParag, int lastIndex )
 {
     // TODO formatting options are not implemented !
     // We need to reimplement what KoFind::find does, and add that.
@@ -393,7 +393,7 @@ bool KoFindReplace::findInFrameSet( KoTextObject * textObj, Qt3::QTextParag * fi
 
         m_currentParag = forw ? firstParag->next() : lastParag->prev();
         m_offset = 0;
-        Qt3::QTextParag * endParag = forw ? lastParag : firstParag;
+        KoTextParag * endParag = forw ? lastParag : firstParag;
         while ( m_currentParag && m_currentParag != endParag )
         {
             QString str = m_currentParag->string()->toString();
@@ -442,7 +442,7 @@ void KoFindReplace::replace( const QString &, int matchingIndex,
     highlightPortion(m_currentParag, index,matchedLength , m_currentTextObj->textDocument());
 
     KoTextDocument * textdoc = m_currentTextObj->textDocument();
-    QTextCursor cursor( textdoc );
+    KoTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
 

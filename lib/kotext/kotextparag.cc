@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kotextparag.h"
-#include "kotextdocument.h"
+//#include "kotextparag.h"
+//#include "kotextdocument.h"
 #include "koparagcounter.h"
 #include "kozoomhandler.h"
 #include "kostyle.h"
@@ -28,31 +28,6 @@
 #include <kdebug.h>
 
 /////
-
-KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds)
-    : Qt3::QTextParag( d, pr, nx, updateIds )
-{
-    //kdDebug() << "KoTextParag::KoTextParag " << this << endl;
-    m_item = 0L;
-    setNewLinesAllowed(TRUE);
-}
-
-KoTextParag::~KoTextParag()
-{
-    if ( !textDocument()->isDestroying() )
-    {
-        // TODO let the text document emit a signal paragraphDeleted ?
-        // needed for background spellcheck
-        invalidateCounters();
-    }
-    //kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
-    delete m_item;
-}
-
-KoTextDocument * KoTextParag::textDocument() const
-{
-    return static_cast<KoTextDocument *>( document() );
-}
 
 // There is one QStyleSheetItems per paragraph, created on demand,
 // in order to set the DisplayMode for counters.
@@ -145,7 +120,7 @@ void KoTextParag::setCounter( const KoParagCounter & counter )
         m_layout.counter = new KoParagCounter( counter );
 
         checkItem( m_item, "m_item" );
-        // Set the display mode (in order for drawLabel to get called by QTextParag)
+        // Set the display mode (in order for drawLabel to get called by KoTextParag)
         m_item->setDisplayMode( QStyleSheetItem::DisplayListItem );
 
         // Invalidate the counters
@@ -160,12 +135,12 @@ void KoTextParag::invalidateCounters()
     invalidate( 0 );
     if ( m_layout.counter )
         m_layout.counter->invalidate();
-    KoTextParag *s = static_cast<KoTextParag *>( next() );
+    KoTextParag *s = next();
     while ( s ) {
         if ( s->m_layout.counter )
             s->m_layout.counter->invalidate();
         s->invalidate( 0 );
-        s = static_cast<KoTextParag *>( s->next() );
+        s = s->next();
     }
 }
 
@@ -177,8 +152,8 @@ int KoTextParag::counterWidth() const
     return m_layout.counter->width( this );
 }
 
-// Draw the counter/bullet for a paragraph
-// This is called by QTextParag::paint.
+// Draw the complete label (i.e. heading/list numbers/bullets) for this paragraph.
+// This is called by KoTextParag::paintDefault.
 void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int base, const QColorGroup& /*cg*/ )
 {
     if ( !m_layout.counter ) // shouldn't happen
@@ -194,7 +169,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     int size = m_layout.counter->width( this );
 
     // We use the formatting of the first char as the formatting of the counter
-    KoTextFormat *format = static_cast<KoTextFormat *>( at( 0 )->format() ); // paragFormat();
+    KoTextFormat *format = at( 0 )->format(); // paragFormat();
     p->save();
 
     //QColor textColor( format->color() );
@@ -337,7 +312,7 @@ int KoTextParag::lineSpacing( int line ) const
             kdError() << "KoTextParag::lineSpacing assert(line<lines) failed: line=" << line << " lines=" << that->lineStartList().count() << endl;
             return 0+shadow;
         }
-        QMap<int, QTextParagLineStart*>::ConstIterator it = that->lineStartList().begin();
+        QMap<int, KoTextParagLineStart*>::ConstIterator it = that->lineStartList().begin();
         while ( line-- > 0 )
             ++it;
         int height = ( *it )->h;
@@ -374,9 +349,9 @@ QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
     return rct;
 }
 
-// Reimplemented from QTextParag, called by KoTextDocument::drawParagWYSIWYG
+// Reimplemented from KoTextParag, called by KoTextDocument::drawParagWYSIWYG
 // (KoTextDocument::drawWithoutDoubleBuffer when printing)
-void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cursor, bool drawSelections,
+void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
                          int clipx, int clipy, int clipw, int cliph )
 {
     //kdDebug() << "KoTextParag::paint clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
@@ -390,7 +365,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
     setAlignmentDirect( Qt::AlignJustify );
 
     //qDebug("KoTextParag::paint %p", this);
-    QTextParag::paint( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
+    KoTextParag::paintDefault( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
 
     setAlignmentDirect( realAlignment );
 
@@ -423,13 +398,14 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
     }
 }
 
-// Reimplemented from QTextParag - and called by QTextParag::paint
+// Called by KoTextParag::paintDefault
+// Draw a set of characters with the same formattings.
+// Reimplemented here to convert coordinates first, and call @ref drawFormattingChars.
 void KoTextParag::drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
-                                   QTextFormat *_lastFormat, int i, const QMemArray<int> &selectionStarts,
+                                   KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
 {
-    KoTextFormat* lastFormat=static_cast<KoTextFormat *>(_lastFormat);
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     assert(zh);
 
@@ -463,7 +439,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
 
     drawParagStringInternal( painter, s, start, draw_len, draw_startX_pix,
                              lastY_pix, baseLine_pix,
-                             draw_bw, // Note that bw is already in pixels (see QTextParag::paint)
+                             draw_bw, // Note that bw is already in pixels (see KoTextParag::paint)
                              h_pix, drawSelections, lastFormat, i, selectionStarts,
                              selectionEnds, cg, rightToLeft, zh );
 
@@ -478,7 +454,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     }
 }
 
-// Copied from QTextParag
+// Copied from the original KoTextParag
 // (we have to copy it here, so that color & font changes don't require changing
 // a local copy of the text format)
 // And we have to keep it separate from drawParagString to avoid s/startX/startX_pix/ etc.
@@ -504,14 +480,14 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     //QFontInfo fi( font );
     //kdDebug() << "KoTextParag::drawParagString requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
 
-    // 3) Go (almost verbatim from QTextFormat::drawParagString)
+    // 3) Go (almost verbatim from the original KoTextFormat::drawParagString)
     QString str( s );
     if ( str[ (int)str.length() - 1 ].unicode() == 0xad )
 	str.remove( str.length() - 1, 1 );
     painter.setPen( QPen( textColor ) );
     painter.setFont( font );
 
-    Qt3::QTextDocument* doc = document();
+    KoTextDocument* doc = document();
 #if 0
     if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() && lastFormat->useLinkColor() ) {
         if ( doc->linkColor.isValid() )
@@ -556,7 +532,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
        len--;
 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
-	if ( lastFormat->vAlign() == QTextFormat::AlignNormal ) {
+	if ( lastFormat->vAlign() == KoTextFormat::AlignNormal ) {
 	    painter.drawText( startX, lastY + baseLine, str, start, len, dir );
 #ifdef BIDI_DEBUG
 	    painter.save();
@@ -572,9 +548,9 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    painter.drawLine( startX + w - 1, lastY + baseLine/2, startX + w - 1 - 10, lastY + baseLine/2 );
 	    painter.restore();
 #endif
-	} else if ( lastFormat->vAlign() == QTextFormat::AlignSuperScript ) {
+	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSuperScript ) {
 	    painter.drawText( startX, lastY + baseLine - ( h - painter.fontMetrics().height() ), str, start, len, dir );
-	} else if ( lastFormat->vAlign() == QTextFormat::AlignSubScript ) {
+	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSubScript ) {
 	    painter.drawText( startX, lastY + baseLine + ( painter.fontMetrics().height() / 6 ), str, start, len, dir );
 	}
     }
@@ -615,23 +591,22 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 #endif
 }
 
-// Reimplemented from QTextParag
-void KoTextParag::drawCursor( QPainter &painter, QTextCursor *cursor, int curx, int cury, int curh, const QColorGroup &cg )
+/** Draw the cursor mark. Reimplemented from KoTextParag to convert coordinates first. */
+void KoTextParag::drawCursor( QPainter &painter, KoTextCursor *cursor, int curx, int cury, int curh, const QColorGroup &cg )
 {
     if ( textDocument()->drawingShadow() )
         return; // No shadow of the cursor ;)
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int x = zh->layoutUnitToPixelX( curx ) + cursor->parag()->at( cursor->index() )->pixelxadj;
     //qDebug("  drawCursor: LU: [cur]x=%d, cury=%d -> PIX: x=%d, y=%d", curx, cury, x, zh->layoutUnitToPixelY( cury ) );
-    QTextParag::drawCursor( painter, cursor, x,
+    KoTextParag::drawCursorDefault( painter, cursor, x,
                             zh->layoutUnitToPixelY( cury ),
                             zh->layoutUnitToPixelY( cury, curh ), cg );
 }
 
-// Reimplemented from QTextParag
-void KoTextParag::copyParagData( QTextParag *_parag )
+// Reimplemented from KoTextParag
+void KoTextParag::copyParagData( KoTextParag *parag )
 {
-    KoTextParag * parag = static_cast<KoTextParag *>(_parag);
     // Style of the previous paragraph
     KoStyle * style = parag->style();
     // Obey "following style" setting
@@ -642,7 +617,7 @@ void KoTextParag::copyParagData( QTextParag *_parag )
         if ( newStyle && style != newStyle ) // if same style, keep paragraph-specific changes as usual
         {
             setParagLayout( newStyle->paragLayout() );
-            QTextFormat * format = &newStyle->format();
+            KoTextFormat * format = &newStyle->format();
             setFormat( format );
             format->addRef();
             string()->setFormat( 0, format, true ); // prepare format for text insertion
@@ -662,11 +637,11 @@ void KoTextParag::copyParagData( QTextParag *_parag )
         parag->m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakAfter;
         // set parag format to the format of the trailing space of the previous parag
         setFormat( parag->at( parag->length()-1 )->format() );
-        // QTextCursor::splitAndInsertEmptyParag takes care of setting the format
+        // KoTextCursor::splitAndInsertEmptyParag takes care of setting the format
         // for the chars in the new parag
     }
 
-    // Note: we don't call QTextParag::copyParagData on purpose.
+    // Note: we don't call the original KoTextParag::copyParagData on purpose.
     // We don't want setListStyle to get called - it ruins our stylesheetitems
     // And we don't care about copying the stylesheetitems directly,
     // applying the parag layout will create them
@@ -679,7 +654,7 @@ void KoTextParag::setTabList( const KoTabulatorList &tabList )
     if ( !tabList.isEmpty() )
     {
         KoZoomHandler* zh = textDocument()->formattingZoomHandler();
-        int * tabs = new int[ tabList.count() + 1 ]; // will be deleted by ~QTextParag
+        int * tabs = new int[ tabList.count() + 1 ]; // will be deleted by ~KoTextParag
         KoTabulatorList::Iterator it = lst.begin();
         unsigned int i = 0;
         for ( ; it != lst.end() ; ++it, ++i )
@@ -694,11 +669,12 @@ void KoTextParag::setTabList( const KoTabulatorList &tabList )
     invalidate( 0 );
 }
 
+/** "Reimplemented" from KoTextParag to implement non-left-aligned tabs */
 int KoTextParag::nextTab( int chnum, int x )
 {
     if ( !m_layout.tabList().isEmpty() )
     {
-        // Fetch the zoomed and sorted tab positions from QTextParag
+        // Fetch the zoomed and sorted tab positions from KoTextParag
         // We stored them there for faster access
         int * tArray = tabArray();
         int i = 0;
@@ -737,7 +713,7 @@ int KoTextParag::nextTab( int chnum, int x )
                             w += ch.customItem()->width;
                         else
                         {
-                            KoTextFormat *charFormat = static_cast<KoTextFormat *>( ch.format() );
+                            KoTextFormat *charFormat = ch.format();
                             int ww = charFormat->charWidth( textDocument()->formattingZoomHandler(), false, &ch, this, c );
                             ww = KoTextZoomHandler::ptToLayoutUnitPt( ww );
                             w += ww;
@@ -788,7 +764,7 @@ int KoTextParag::nextTab( int chnum, int x )
                             w += ch.customItem()->width;
                         else
                         {
-                            KoTextFormat *charFormat = static_cast<KoTextFormat *>( ch.format() );
+                            KoTextFormat *charFormat = ch.format();
                             int ww = charFormat->charWidth( textDocument()->formattingZoomHandler(), false, &ch, this, c );
                             ww = KoTextZoomHandler::ptToLayoutUnitPt( ww );
                             w += ww;
@@ -812,8 +788,8 @@ int KoTextParag::nextTab( int chnum, int x )
         // No more tabs
         return tArray[0];
     }
-    // No tab list, use tab-stop-width. QTextParag has the code :)
-    return QTextParag::nextTab( chnum, x );
+    // No tab list, use tab-stop-width. qrichtext.cpp has the code :)
+    return KoTextParag::nextTabDefault( chnum, x );
 }
 
 void KoTextParag::setShadow( double dist, short int direction, const QColor &col )
@@ -903,7 +879,7 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
         setStyle( layout.style );
 }
 
-void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, QTextFormat * currentFormat )
+void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, KoTextFormat * currentFormat )
 {
     kdDebug(32001) << "KoTextParag::setCustomItem " << index << "  " << (void*)custom
                    << "  currentFormat=" << (void*)currentFormat << endl;
@@ -919,9 +895,9 @@ void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, QTextForm
 void KoTextParag::removeCustomItem( int index )
 {
     Q_ASSERT( at( index )->isCustom() );
-    Qt3::QTextCustomItem * item = at( index )->customItem();
+    KoTextCustomItem * item = at( index )->customItem();
     at( index )->loseCustomItem();
-    QTextParag::removeCustomItem();
+    KoTextParag::removeCustomItem();
     document()->unregisterCustomItem( item, this );
 }
 
@@ -932,7 +908,7 @@ int KoTextParag::findCustomItem( const KoTextCustomItem * custom ) const
     for ( int i = 0; i < len; ++i )
     {
         KoTextStringChar & ch = string()->at(i);
-        if ( ch.isCustom() && static_cast<KoTextCustomItem *>(ch.customItem()) == custom )
+        if ( ch.isCustom() && ch.customItem() == custom )
             return i;
     }
     kdWarning() << "KoTextParag::findCustomItem custom item " << (void*)custom
@@ -1011,7 +987,7 @@ void KoTextParag::printRTDebug( int info )
                       << endl;
             if ( ch.isCustom() )
             {
-                Qt3::QTextCustomItem * item = ch.customItem();
+                KoTextCustomItem * item = ch.customItem();
                 kdDebug() << " - custom item " << item
                           << " ownline=" << item->ownLine()
                           << " size=" << item->width << "x" << item->height

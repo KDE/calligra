@@ -23,15 +23,17 @@
 #include <kdialogbase.h>
 #include <qstringlist.h>
 #include <qptrlist.h>
+#include <qstylesheet.h>
 #include <koRuler.h>
 #include <koUnit.h>
 #include <qdict.h>
 #include <qlineedit.h>
-#include "kotextparag.h"
-#include <koparagcounter.h>
+#include "koparaglayout.h"
+#include "koparagcounter.h"
 
 class KButtonBox;
 class KColorButton;
+class KoTextDocument;
 class KoBorderPreview;
 class KoStylePreview;
 class KPagePreview2;

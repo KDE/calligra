@@ -21,9 +21,6 @@
 #define kotextobject_h
 
 #include <qrichtext_p.h>
-using namespace Qt3;
-#include <kotextparag.h>
-#include <kotextdocument.h> // for CustomItemsMap
 #include <koChangeCaseDia.h>
 class KCommand;
 class KoTextFormat;
@@ -178,7 +175,7 @@ public:
      * @param commandName the name to give the undo/redo command if we haven't created it already
      * @param customItemsMap the map of custom items to include in the new text
      */
-    void insert( QTextCursor * cursor, KoTextFormat * currentFormat, const QString &text,
+    void insert( KoTextCursor * cursor, KoTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName,
                  CustomItemsMap customItemsMap = CustomItemsMap(),int selectionId=KoTextDocument::Standard );
     /**
@@ -187,21 +184,21 @@ public:
      * @param selectionId which selection to remove (usually Standard)
      * @param cmdName the name to give the undo/redo command, if we haven't created it already
      */
-    void removeSelectedText( QTextCursor * cursor, int selectionId = KoTextDocument::Standard,
+    void removeSelectedText( KoTextCursor * cursor, int selectionId = KoTextDocument::Standard,
                              const QString & cmdName = QString::null, bool createUndoRedo=true  );
 
-    KCommand * replaceSelectionCommand( QTextCursor * cursor, const QString & replacement,
+    KCommand * replaceSelectionCommand( KoTextCursor * cursor, const QString & replacement,
                                         int selectionId, const QString & cmdName );
-    KCommand * removeSelectedTextCommand( QTextCursor * cursor, int selectionId );
-    KCommand* insertParagraphCommand( QTextCursor * cursor );
+    KCommand * removeSelectedTextCommand( KoTextCursor * cursor, int selectionId );
+    KCommand* insertParagraphCommand( KoTextCursor * cursor );
 
-    void pasteText( QTextCursor * cursor, const QString & text, KoTextFormat * currentFormat, bool removeSelected );
+    void pasteText( KoTextCursor * cursor, const QString & text, KoTextFormat * currentFormat, bool removeSelected );
     void selectAll( bool select );
 
     /** Highlighting support (for search/replace, spellchecking etc.).
      * Don't forget to ensure the paragraph is visible.
      */
-    void highlightPortion( Qt3::QTextParag * parag, int index, int length );
+    void highlightPortion( KoTextParag * parag, int index, int length );
     void removeHighlight();
 
     /** Implementation of setFormatCommand from KoTextFormatInterface - apply change to the whole document */
@@ -209,7 +206,7 @@ public:
 
     /** Set format changes on selection or current cursor.
         Returns a command if the format was applied to a selection */
-    KCommand *setFormatCommand( QTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = KoTextDocument::Standard );
+    KCommand *setFormatCommand( KoTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = KoTextDocument::Standard );
 
     /** Selections ids */
     enum SelectionIds {
@@ -224,21 +221,21 @@ public:
     };
     /** Executes keyboard action @p action. This is normally called by
      * a key event handler. */
-    void doKeyboardAction( QTextCursor * cursor, KoTextFormat * & currentFormat, KeyboardAction action );
+    void doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & currentFormat, KeyboardAction action );
 
     // -- Paragraph settings --
-    KCommand * setCounterCommand( QTextCursor * cursor, const KoParagCounter & counter, int selectionId = KoTextDocument::Standard );
-    KCommand * setAlignCommand( QTextCursor * cursor, int align , int selectionId = KoTextDocument::Standard);
-    KCommand * setLineSpacingCommand( QTextCursor * cursor, double spacing, int selectionId = KoTextDocument::Standard );
-    KCommand * setBordersCommand( QTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int selectionId = KoTextDocument::Standard );
-    KCommand * setMarginCommand( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = KoTextDocument::Standard);
-    KCommand* setTabListCommand( QTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = KoTextDocument::Standard );
+    KCommand * setCounterCommand( KoTextCursor * cursor, const KoParagCounter & counter, int selectionId = KoTextDocument::Standard );
+    KCommand * setAlignCommand( KoTextCursor * cursor, int align , int selectionId = KoTextDocument::Standard);
+    KCommand * setLineSpacingCommand( KoTextCursor * cursor, double spacing, int selectionId = KoTextDocument::Standard );
+    KCommand * setBordersCommand( KoTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int selectionId = KoTextDocument::Standard );
+    KCommand * setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = KoTextDocument::Standard);
+    KCommand* setTabListCommand( KoTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = KoTextDocument::Standard );
 
-    KCommand * setShadowCommand( QTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= KoTextDocument::Standard  );
+    KCommand * setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= KoTextDocument::Standard  );
 
-    KCommand* applyStyle( QTextCursor * cursor, const KoStyle * style,
+    KCommand* applyStyle( KoTextCursor * cursor, const KoStyle * style,
                      int selectionId = KoTextDocument::Standard,
-                     int paragLayoutFlags = KoParagLayout::All, int formatFlags = QTextFormat::Format,
+                     int paragLayoutFlags = KoParagLayout::All, int formatFlags = KoTextFormat::Format,
                      bool createUndoRedo = true, bool interactive = true, bool emitCommand = true );
     /** Update the paragraph that use the given style, after this style was changed.
      *  The flags tell which changes should be applied.
@@ -248,7 +245,7 @@ public:
     void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
     /** Set format changes on selection or current cursor.
         Creates a command if the format was applied to a selection */
-    void setFormat( QTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont = false );
+    void setFormat( KoTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont = false );
 
 
     /**
@@ -269,7 +266,7 @@ public:
     virtual KCommand *setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1);
 
     // common for setParagLayoutFormatCommand above and KoTextView::setParagLayoutFormatCommand
-    KCommand *setParagLayoutFormatCommand( QTextCursor* cursor, int selectionId, KoParagLayout *newLayout, int flags, int marginIndex );
+    KCommand *setParagLayoutFormatCommand( KoTextCursor* cursor, int selectionId, KoParagLayout *newLayout, int flags, int marginIndex );
 
     /**
      * Support for changing the format in the whole textobject
@@ -277,15 +274,15 @@ public:
     virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont = false );
 
     /** Return the user-visible font size for this format (i.e. LU to pt conversion) */
-    int docFontSize( QTextFormat * format ) const;
+    int docFontSize( KoTextFormat * format ) const;
     /** Return the font size in LU, for this user-visible font size in pt */
     int zoomedFontSize( int docFontSize ) const;
 
     /** Set the bottom of the view - in LU */
     void setViewArea( QWidget* w, int maxY );
     /** Make sure that @p parag is formatted */
-    void ensureFormatted( Qt3::QTextParag * parag, bool emitAfterFormatting = true );
-    void setLastFormattedParag( Qt3::QTextParag *parag );
+    void ensureFormatted( KoTextParag * parag, bool emitAfterFormatting = true );
+    void setLastFormattedParag( KoTextParag *parag );
 
     static QChar customItemChar() { return QChar( s_customItemChar ); }
 
@@ -304,9 +301,9 @@ public:
 
     virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type);
 
-    KCommand *changeCaseOfText(QTextCursor *cursor, KoChangeCaseDia::TypeOfCase _type);
+    KCommand *changeCaseOfText(KoTextCursor *cursor, KoChangeCaseDia::TypeOfCase _type);
     QString textChangedCase(const QString& _text, KoChangeCaseDia::TypeOfCase _type);
-    KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag);
+    KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,KoTextCursor *cursor, KoTextParag *parag);
 
 #ifndef NDEBUG
     void printRTDebug(int);
@@ -320,7 +317,7 @@ signals:
     /** Emitted by formatMore() after formatting a bunch of paragraphs.
      * KWord uses this signal to check for things like 'I need to create a new page'
      */
-    void afterFormatting( int bottom, Qt3::QTextParag* m_lastFormatted, bool* abort );
+    void afterFormatting( int bottom, KoTextParag* m_lastFormatted, bool* abort );
 
     /** Emitted when a new command has been created and should be added to
      * the main list of commands (usually in the KoDocument).
@@ -334,7 +331,7 @@ signals:
     void hideCursor();
     void showCursor();
     /** Special hack for undo/redo - used by KoTextView */
-    void setCursor( QTextCursor * cursor );
+    void setCursor( KoTextCursor * cursor );
     /** Emitted when the formatting under the cursor may have changed.
      * The Edit object should re-read settings and update the UI. */
     void updateUI( bool updateFormat, bool force = false );
@@ -355,10 +352,10 @@ public: // made public for KWTextFrameSet...
     /** This prepares undoRedoInfo for a paragraph formatting change
      * If this does too much, we could pass an enum flag to it.
      * But the main point is to avoid too much duplicated code */
-    void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = KoTextDocument::Standard );
+    void storeParagUndoRedoInfo( KoTextCursor * cursor, int selectionId = KoTextDocument::Standard );
     /** Copies a formatted char, <parag, position>, into undoRedoInfo.text, at position <index>. */
-    void copyCharFormatting( Qt3::QTextParag *parag, int position, int index /*in text*/, bool moveCustomItems );
-    void readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParagLayouts = false, bool moveCustomItems = false );
+    void copyCharFormatting( KoTextParag *parag, int position, int index /*in text*/, bool moveCustomItems );
+    void readFormats( KoTextCursor &c1, KoTextCursor &c2, bool copyParagLayouts = false, bool moveCustomItems = false );
 
     /**
      * The undo-redo structure holds the _temporary_ information for the current
@@ -385,7 +382,7 @@ public: // made public for KWTextFrameSet...
         CustomItemsMap customItemsMap; // character position -> qtextcustomitem
         QValueList<KoParagLayout> oldParagLayouts;
         KoParagLayout newParagLayout;
-        QTextCursor *cursor; // basically a "mark" of the view that started this undo/redo info
+        KoTextCursor *cursor; // basically a "mark" of the view that started this undo/redo info
         // If the view changes, the next call to checkUndoRedoInfo will terminate the previous view's edition
         KMacroCommand *placeHolderCmd;
     };
@@ -396,7 +393,7 @@ public: // made public for KWTextFrameSet...
      * have an entry in the undo/redo history asap.
      */
     void newPlaceHolderCommand( const QString & name );
-    void checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type t );
+    void checkUndoRedoInfo( KoTextCursor * cursor, UndoRedoInfo::Type t );
 
     /** for KWTextFrameSet */
     UndoRedoInfo & undoRedoInfoStruct() { return undoRedoInfo; }
@@ -433,7 +430,7 @@ private:
     /** All paragraphs up to this one are guaranteed to be formatted.
         The idle-time formatting (formatMore()) pushes this forward.
         Any operation on a paragraph pushes this backward. */
-    Qt3::QTextParag *m_lastFormatted;
+    KoTextParag *m_lastFormatted;
     /** Idle-time formatting */
     QTimer *formatTimer, *changeIntervalTimer;
     int interval;

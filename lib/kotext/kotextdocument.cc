@@ -17,9 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kotextdocument.h"
+//#include "kotextdocument.h"
 #include "kozoomhandler.h"
-#include "kotextparag.h"
+//#include "kotextparag.h"
 #include "kotextformatter.h"
 #include <kdebug.h>
 #include <kcommand.h>
@@ -28,10 +28,17 @@
 
 KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollection *fc,
                                 KoTextFormatter *formatter, bool createInitialParag )
-    : QTextDocument( 0L /*we don't use parent documents */, fc ),
-      m_zoomHandler( zoomHandler ),
-      m_bDestroying( false )
+    : m_zoomHandler( zoomHandler ),
+      m_bDestroying( false ),
+      par( 0L /*we don't use parent documents */ ), parParag( 0 ),
+#ifdef QTEXTTABLE_AVAILABLE
+      tc( 0 ),
+#endif
+      tArray( 0 ), tStopWidth( 0 )
 {
+    fCollection = fc;
+    init();
+
     m_bDrawFormattingChars=false;
     m_bDrawingMissingSpellLine=false;
     setAddMargins( true );                 // top margin and bottom are added, not max'ed
@@ -43,29 +50,16 @@ KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollecti
     setY( 0 );
     setLeftMargin( 0 );
     setRightMargin( 0 );
-    ko_buf_pixmap = 0;
 
-    // Delete the QTextParag created by QTextDocument, and re-create a KoTextParag
-    // unless createInitialParag is false.
-    clear( createInitialParag );
-}
-
-KoTextDocument::~KoTextDocument()
-{
-    m_bDestroying = true;
-    delete ko_buf_pixmap;
-    clear( false );
-}
-
-Qt3::QTextParag * KoTextDocument::createParag( QTextDocument *d, Qt3::QTextParag *pr, Qt3::QTextParag *nx, bool updateIds )
-{
-    return new KoTextParag( static_cast<KoTextDocument *>(d), static_cast<KoTextParag *>(pr), static_cast<KoTextParag *>(nx), updateIds );
+    // Delete the KoTextParag created by KoTextDocument::init() if createInitialParag is false.
+    if ( !createInitialParag )
+        clear( false );
 }
 
 bool KoTextDocument::visitSelection( int selectionId, KoParagVisitor* visitor, bool forward )
 {
-    QTextCursor c1 = selectionStartCursor( selectionId );
-    QTextCursor c2 = selectionEndCursor( selectionId );
+    KoTextCursor c1 = selectionStartCursor( selectionId );
+    KoTextCursor c2 = selectionEndCursor( selectionId );
     if ( c1 == c2 )
         return true;
     return visitFromTo( c1.parag(), c1.index(), c2.parag(), c2.index(), visitor, forward );
@@ -76,7 +70,7 @@ bool KoTextDocument::visitDocument( KoParagVisitor *visitor, bool forward )
     return visitFromTo( firstParag(), 0, lastParag(), lastParag()->length()-1, visitor, forward );
 }
 
-bool KoTextDocument::visitFromTo( Qt3::QTextParag *firstParag, int firstIndex, Qt3::QTextParag* lastParag, int lastIndex, KoParagVisitor* visitor, bool forw )
+bool KoTextDocument::visitFromTo( KoTextParag *firstParag, int firstIndex, KoTextParag* lastParag, int lastIndex, KoParagVisitor* visitor, bool forw )
 {
     if ( firstParag == lastParag )
     {
@@ -97,8 +91,8 @@ bool KoTextDocument::visitFromTo( Qt3::QTextParag *firstParag, int firstIndex, Q
             if (!ret) return false;
         }
 
-        Qt3::QTextParag* currentParag = forw ? firstParag->next() : lastParag->prev();
-        Qt3::QTextParag * endParag = forw ? lastParag : firstParag;
+        KoTextParag* currentParag = forw ? firstParag->next() : lastParag->prev();
+        KoTextParag * endParag = forw ? lastParag : firstParag;
         while ( currentParag && currentParag != endParag )
         {
             ret = visitor->visit( currentParag, 0, currentParag->length() - 1 );
@@ -115,27 +109,10 @@ bool KoTextDocument::visitFromTo( Qt3::QTextParag *firstParag, int firstIndex, Q
     }
 }
 
-// SYNC start - from here until end mark, modified copies of QTextDocument methods
+// SYNC start - from here until end mark, modified copies of KoTextDocument methods
 static bool is_printer( QPainter *p )
 {
     return p && p->device() && p->device()->devType() == QInternal::Printer;
-}
-
-QPixmap *KoTextDocument::bufferPixmap( const QSize &s )
-{
-    if ( !ko_buf_pixmap ) {
-	int w = QABS( s.width() );
-	int h = QABS( s.height() );
-	ko_buf_pixmap = new QPixmap( w, h );
-    } else {
-	if ( ko_buf_pixmap->width() < s.width() ||
-	     ko_buf_pixmap->height() < s.height() ) {
-	    ko_buf_pixmap->resize( QMAX( s.width(), ko_buf_pixmap->width() ),
-				QMAX( s.height(), ko_buf_pixmap->height() ) );
-	}
-    }
-
-    return ko_buf_pixmap;
 }
 
 void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, const QColorGroup &cg,
@@ -150,12 +127,12 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 	p->fillRect( cr, *paper );
     }
 
-    Qt3::QTextParag *parag = firstParag();
+    KoTextParag *parag = firstParag();
     while ( parag ) {
 	if ( !parag->isValid() )
 	    parag->format();
 
-	QRect pr( static_cast<KoTextParag *>(parag)->pixelRect( zoomHandler ) );
+	QRect pr( parag->pixelRect( zoomHandler ) );
         pr.setLeft( 0 );
         pr.setWidth( QWIDGETSIZE_MAX );
 
@@ -175,7 +152,7 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
                                        QPixmap *&doubleBuffer, const QColorGroup &cg,
                                        KoZoomHandler* zoomHandler, bool drawCursor,
-                                       QTextCursor *cursor, bool resetChanged, bool drawingMissingSpellLine, bool drawFormattingChars )
+                                       KoTextCursor *cursor, bool resetChanged, bool drawingMissingSpellLine, bool drawFormattingChars )
 {
 #ifdef DEBUG_PAINTING
     kdDebug() << "drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
@@ -191,7 +168,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     QPainter *painter = 0;
     if ( resetChanged )
 	parag->setChanged( FALSE );
-    QRect rect = static_cast<KoTextParag *>(parag)->pixelRect( zoomHandler );
+    QRect rect = parag->pixelRect( zoomHandler );
     rect.rRight() += sx;
     rect.rBottom() += sy;
     QRect ir( rect );
@@ -259,7 +236,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 #endif
     //painter->setBrushOrigin( painter->brushOrigin() + rect.topLeft() - ir.topLeft() );
 
-    // The cliprect is checked in layout units, in QTextParag::paint
+    // The cliprect is checked in layout units, in KoTextParag::paint
     QRect crect_lu( zoomHandler->pixelToLayoutUnit( crect ) );
 #ifdef DEBUG_PAINTING
     kdDebug() << "KoTextDocument::drawParagWYSIWYG crect_lu=" << DEBUGRECT( crect_lu ) << endl;
@@ -314,9 +291,9 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     //parag->document()->nextDoubleBuffered = FALSE;
 }
 
-Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
+KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
                                               KoZoomHandler* zoomHandler, bool onlyChanged,
-                                              bool drawCursor, QTextCursor *cursor,
+                                              bool drawCursor, KoTextCursor *cursor,
                                               bool resetChanged, bool drawingMissingSpellLine,bool drawFormattingChars )
 {
     m_bDrawFormattingChars=drawFormattingChars;
@@ -341,8 +318,8 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
 	ch = height();
         }*/
 
-    Qt3::QTextParag *lastFormatted = 0;
-    KoTextParag *parag = static_cast<KoTextParag *>( firstParag() );
+    KoTextParag *lastFormatted = 0;
+    KoTextParag *parag = firstParag();
 
     QPixmap *doubleBuffer = 0;
     QPainter painter;
@@ -369,7 +346,7 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
         //kdDebug() << "KoTextDocument::drawWYSIWYG ir=" << DEBUGRECT(ir) << endl;
 	if ( isPageBreakEnabled() && parag->next() )
         {
-            int nexty = static_cast<KoTextParag *>(parag->next())->pixelRect(zoomHandler).y();
+            int nexty = parag->next()->pixelRect(zoomHandler).y();
 	    if ( ir.y() + ir.height() < nexty ) {
 		QRect r( 0, ir.y() + ir.height(),
 			 zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() ),
@@ -393,10 +370,10 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
                               zoomHandler, drawCursor, cursor, resetChanged, drawingMissingSpellLine, drawFormattingChars  );
         }
 
-	parag = static_cast<KoTextParag *>( parag->next() );
+	parag = parag->next();
     }
 
-    parag = static_cast<KoTextParag *>( lastParag() );
+    parag = lastParag();
 
 floating:
     pixelRect = parag->pixelRect(zoomHandler);
@@ -414,28 +391,27 @@ floating:
 	}
     }
 
-    if ( ko_buf_pixmap && ko_buf_pixmap->height() > 300 ) {
-	delete ko_buf_pixmap;
-	ko_buf_pixmap = 0;
+    if ( buf_pixmap && buf_pixmap->height() > 300 ) {
+	delete buf_pixmap;
+	buf_pixmap = 0;
     }
 
     //tmpCursor = 0;
     return lastFormatted;
 }
-// SYNC end - end of modified copies of QTextDocument methods
-
+// SYNC end - end of modified copies of KoTextDocument methods
 
 
 int KoTextCustomItem::index() const
 {
     Q_ASSERT( paragraph() );
-    KoTextParag * parag = static_cast<KoTextParag *>( paragraph() );
+    KoTextParag * parag = paragraph();
     return parag->findCustomItem( this );
 }
 
-QTextFormat * KoTextCustomItem::format() const
+KoTextFormat * KoTextCustomItem::format() const
 {
-    Qt3::QTextParag * parag = paragraph();
+    KoTextParag * parag = paragraph();
     //kdDebug() << "KoTextCustomItem::format index=" << index() << " format=" << parag->at( index() )->format() << endl;
     return parag->at( index() )->format();
 }
@@ -454,13 +430,13 @@ void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, 
     cw=zh->layoutUnitToPixelX(cw);
     //kdDebug()<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
-    KoTextFormat * fmt = static_cast<KoTextFormat *>( format() );
+    KoTextFormat * fmt = format();
 
     //bool forPrint = ( p->device()->devType() == QInternal::Printer );
     p->setFont( fmt->screenFont( zh ) );
 
     int offset=0;
-    if ( fmt->vAlign() == QTextFormat::AlignSuperScript )
+    if ( fmt->vAlign() == KoTextFormat::AlignSuperScript )
     {
         int h = zh->layoutUnitToPixelY( _y, height );
         offset =- ( h - p->fontMetrics().height() );
@@ -469,19 +445,19 @@ void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, 
     drawCustomItem(p, x, y, cx, cy, cw, ch, cg, selected, offset);
 }
 
-void CustomItemsMap::insertItems( const QTextCursor & startCursor, int size )
+void CustomItemsMap::insertItems( const KoTextCursor & startCursor, int size )
 {
     if ( isEmpty() )
         return;
 
-    QTextCursor cursor( startCursor );
+    KoTextCursor cursor( startCursor );
     for ( int i = 0; i < size; ++i )
     {
         CustomItemsMap::Iterator it = find( i );
         if ( it != end() )
         {
             kdDebug() << "CustomItemsMap::insertItems setting custom item " << it.data() << endl;
-            static_cast<KoTextParag *>(cursor.parag())->setCustomItem( cursor.index(), it.data(), 0 );
+            cursor.parag()->setCustomItem( cursor.index(), it.data(), 0 );
             it.data()->setDeleted( false );
         }
         cursor.gotoRight();

@@ -18,7 +18,8 @@
 */
 
 #include "koparagcounter.h"
-#include "kotextparag.h"
+//#include "kotextparag.h"
+#include "qrichtext_p.h" // for KoTextFormat
 #include <kdebug.h>
 #include <qdom.h>
 
@@ -130,7 +131,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
         return m_cache.number;
 
     // Go looking for another paragraph at the same level or higher level.
-    KoTextParag *otherParagraph = static_cast<KoTextParag *>( paragraph->prev() );
+    KoTextParag *otherParagraph = paragraph->prev();
     KoParagCounter *otherCounter;
 
     switch ( m_numbering )
@@ -162,7 +163,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
                 }
                 break;
             }
-            otherParagraph = static_cast<KoTextParag *>( otherParagraph->prev() );
+            otherParagraph = otherParagraph->prev();
         }
         break;
     case NUM_LIST:
@@ -202,7 +203,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
                 m_cache.number = m_startNumber;
                 break;
             }
-            otherParagraph = static_cast<KoTextParag *>( otherParagraph->prev() );
+            otherParagraph = otherParagraph->prev();
         }
         break;
     }
@@ -221,7 +222,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
     if ( m_cache.parent != INVALID_PARAG )
         return m_cache.parent;
 
-    KoTextParag *otherParagraph = static_cast<KoTextParag *>( paragraph->prev() );
+    KoTextParag *otherParagraph = paragraph->prev();
     KoParagCounter *otherCounter;
 
     switch ( m_numbering )
@@ -241,7 +242,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
             {
                 break;
             }
-            otherParagraph = static_cast<KoTextParag *>( otherParagraph->prev() );
+            otherParagraph = otherParagraph->prev();
         }
         break;
     case NUM_LIST:
@@ -263,7 +264,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
                     break;
                 }
             }
-            otherParagraph = static_cast<KoTextParag *>( otherParagraph->prev() );
+            otherParagraph = otherParagraph->prev();
         }
         break;
     }

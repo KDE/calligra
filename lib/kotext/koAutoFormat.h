@@ -34,11 +34,8 @@ class KoTextObject;
 class KoVariableCollection;
 class KoVariableFormatCollection;
 class KCompletion;
+class KoTextCursor;
 class KCommand;
-namespace Qt3 {
-    class QTextCursor;
-}
-using namespace Qt3;
 
 /******************************************************************/
 /* Class: KWAutoFormatEntry					  */
@@ -79,12 +76,12 @@ public:
      * Called by edit widget when a character (@p ch) has been inserted
      * into @p parag, at the given @p index.
      */
-    void doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch,KoTextObject *txtObj );
+    void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch,KoTextObject *txtObj );
 
     /**
      * Called by edit widget when a call a competion
      */
-    void doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj );
+    void doAutoCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj );
 
 
     bool doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch );
@@ -250,22 +247,22 @@ public:
 
 protected:
     //return a ref to index otherwise when we uperCase, index is bad !
-    KCommand *doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int & index, KoTextObject *txtObj );
-    KCommand * doUpperCase( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
-    void doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes );
+    KCommand *doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag *parag, int & index, KoTextObject *txtObj );
+    KCommand *doUpperCase( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
+    void doTypographicQuotes( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes );
     void buildMaxLen();
 
-    void doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
-    void doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
-    void doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
-    void doUseBulletStyle(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj, int& index );
+    void doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
+    void doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
+    void doAutoChangeFormat( KoTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
+    void doUseBulletStyle(KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj, int& index );
 
-    void doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
+    void doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
 
-    void doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index );
+    void doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index );
 
-    void doAutoIncludeUpperUpper(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
-    void doAutoIncludeAbbreviation(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
+    void doAutoIncludeUpperUpper(KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
+    void doAutoIncludeAbbreviation(KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
 private:
     void detectStartOfLink(const QString &word);
     void autoFormatIsActive();

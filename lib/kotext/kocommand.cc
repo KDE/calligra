@@ -37,20 +37,20 @@ KoTextDeleteCommand::KoTextDeleteCommand(
     KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
     const CustomItemsMap & customItemsMap,
     const QValueList<KoParagLayout> &oldParagLayouts )
-    : QTextDeleteCommand( d, i, idx, str,
+    : KoTextDocDeleteCommand( d, i, idx, str,
                           QValueList< QPtrVector<QStyleSheetItem> >(),
                           QValueList<QStyleSheetItem::ListStyle>(),
                           QMemArray<int>() ),
       m_oldParagLayouts( oldParagLayouts ),
       m_customItemsMap( customItemsMap )
 {
-    // Note that we don't pass aligns and liststyles to QTextDeleteCommand.
+    // Note that we don't pass aligns and liststyles to KoTextDeleteCommand.
     // We'll handle them here, as part of the rest, since they are in the paraglayouts
 }
 
-QTextCursor * KoTextDeleteCommand::execute( QTextCursor *c )
+KoTextCursor * KoTextDeleteCommand::execute( KoTextCursor *c )
 {
-    Qt3::QTextParag *s = doc ? doc->paragAt( id ) : parag;
+    KoTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
         qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
         return 0;
@@ -65,21 +65,21 @@ QTextCursor * KoTextDeleteCommand::execute( QTextCursor *c )
         KoTextStringChar * ch = cursor.parag()->at( cursor.index() );
         if ( ch->isCustom() )
         {
-            static_cast<KoTextCustomItem *>( ch->customItem() )->setDeleted( true );
-            static_cast<KoTextParag*>(cursor.parag())->removeCustomItem(cursor.index());
+            ch->customItem()->setDeleted( true );
+            cursor.parag()->removeCustomItem(cursor.index());
         }
         cursor.gotoRight();
     }
 
-    return QTextDeleteCommand::execute(c);
+    return KoTextDocDeleteCommand::execute(c);
 }
 
-QTextCursor * KoTextDeleteCommand::unexecute( QTextCursor *c )
+KoTextCursor * KoTextDeleteCommand::unexecute( KoTextCursor *c )
 {
     // Let QRichText re-create the text and formatting
-    QTextCursor * cr = QTextDeleteCommand::unexecute(c);
+    KoTextCursor * cr = KoTextDocDeleteCommand::unexecute(c);
 
-    Qt3::QTextParag *s = doc ? doc->paragAt( id ) : parag;
+    KoTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
         qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
         return 0;
@@ -93,12 +93,12 @@ QTextCursor * KoTextDeleteCommand::unexecute( QTextCursor *c )
     QValueList<KoParagLayout>::Iterator lit = m_oldParagLayouts.begin();
     kdDebug() << "KoTextDeleteCommand::unexecute " << m_oldParagLayouts.count() << " parag layouts. First parag=" << s->paragId() << endl;
     Q_ASSERT( id == s->paragId() );
-    Qt3::QTextParag *p = s;
+    KoTextParag *p = s;
     while ( p ) {
         if ( lit != m_oldParagLayouts.end() )
         {
             kdDebug() << "KoTextDeleteCommand::unexecute applying paraglayout to parag " << p->paragId() << endl;
-            static_cast<KoTextParag*>(p)->setParagLayout( *lit );
+            p->setParagLayout( *lit );
         }
         else
             break;
@@ -115,15 +115,15 @@ KoTextParagCommand::KoTextParagCommand( KoTextDocument *d, int fParag, int lPara
                                         KoParagLayout newParagLayout,
                                         int flags,
                                         QStyleSheetItem::Margin margin )
-    : QTextCommand( d ), firstParag( fParag ), lastParag( lParag ), m_oldParagLayouts( oldParagLayouts ),
+    : KoTextDocCommand( d ), firstParag( fParag ), lastParag( lParag ), m_oldParagLayouts( oldParagLayouts ),
       m_newParagLayout( newParagLayout ), m_flags( flags ), m_margin( margin )
 {
 }
 
-QTextCursor * KoTextParagCommand::execute( QTextCursor *c )
+KoTextCursor * KoTextParagCommand::execute( KoTextCursor *c )
 {
     //kdDebug() << "KoTextParagCommand::execute" << endl;
-    KoTextParag *p = static_cast<KoTextParag *>(doc->paragAt( firstParag ));
+    KoTextParag *p = doc->paragAt( firstParag );
     if ( !p )
     {
         kdWarning() << "KoTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
@@ -138,19 +138,19 @@ QTextCursor * KoTextParagCommand::execute( QTextCursor *c )
         }
         if ( p->paragId() == lastParag )
             break;
-        p = static_cast<KoTextParag *>(p->next());
+        p = p->next();
     }
     //kdDebug() << "KoTextParagCommand::execute done" << endl;
-    // Set cursor to end of selection. Like in QTextFormatCommand::[un]execute...
+    // Set cursor to end of selection. Like in KoTextFormatCommand::[un]execute...
     c->setParag( p );
     c->setIndex( p->length()-1 );
     return c;
 }
 
-QTextCursor * KoTextParagCommand::unexecute( QTextCursor *c )
+KoTextCursor * KoTextParagCommand::unexecute( KoTextCursor *c )
 {
     kdDebug() << "KoTextParagCommand::unexecute" << endl;
-    KoTextParag *p = static_cast<KoTextParag *>(doc->paragAt( firstParag ));
+    KoTextParag *p = doc->paragAt( firstParag );
     if ( !p )
     {
         kdDebug() << "KoTextParagCommand::unexecute paragraph " << firstParag << "not found" << endl;
@@ -171,10 +171,10 @@ QTextCursor * KoTextParagCommand::unexecute( QTextCursor *c )
         }
         if ( p->paragId() == lastParag )
             break;
-        p = static_cast<KoTextParag *>(p->next());
+        p = p->next();
         ++lit;
     }
-    // Set cursor to end of selection. Like in QTextFormatCommand::[un]execute...
+    // Set cursor to end of selection. Like in KoTextFormatCommand::[un]execute...
     c->setParag( p );
     c->setIndex( p->length()-1 );
     return c;
@@ -183,26 +183,26 @@ QTextCursor * KoTextParagCommand::unexecute( QTextCursor *c )
 //////////
 
 KoParagFormatCommand::KoParagFormatCommand( KoTextDocument *d, int fParag, int lParag,
-                                                          const QValueList<QTextFormat *> &oldFormats,
-                                                          QTextFormat * newFormat )
-    : QTextCommand( d ), firstParag( fParag ), lastParag( lParag ), m_oldFormats( oldFormats ),
+                                                          const QValueList<KoTextFormat *> &oldFormats,
+                                                          KoTextFormat * newFormat )
+    : KoTextDocCommand( d ), firstParag( fParag ), lastParag( lParag ), m_oldFormats( oldFormats ),
       m_newFormat( newFormat )
 {
-    QValueList<QTextFormat *>::Iterator lit = m_oldFormats.begin();
+    QValueList<KoTextFormat *>::Iterator lit = m_oldFormats.begin();
     for ( ; lit != m_oldFormats.end() ; ++lit )
         (*lit)->addRef();
 }
 
 KoParagFormatCommand::~KoParagFormatCommand()
 {
-    QValueList<QTextFormat *>::Iterator lit = m_oldFormats.begin();
+    QValueList<KoTextFormat *>::Iterator lit = m_oldFormats.begin();
     for ( ; lit != m_oldFormats.end() ; ++lit )
         (*lit)->removeRef();
 }
 
-QTextCursor * KoParagFormatCommand::execute( QTextCursor *c )
+KoTextCursor * KoParagFormatCommand::execute( KoTextCursor *c )
 {
-    KoTextParag *p = static_cast<KoTextParag *>(doc->paragAt( firstParag ));
+    KoTextParag *p = doc->paragAt( firstParag );
     if ( !p )
     {
         kdDebug() << "KoTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
@@ -213,21 +213,21 @@ QTextCursor * KoParagFormatCommand::execute( QTextCursor *c )
         p->invalidate(0);
         if ( p->paragId() == lastParag )
             break;
-        p = static_cast<KoTextParag *>(p->next());
+        p = p->next();
     }
     return c;
 }
 
-QTextCursor * KoParagFormatCommand::unexecute( QTextCursor *c )
+KoTextCursor * KoParagFormatCommand::unexecute( KoTextCursor *c )
 {
     kdDebug() << "KoParagFormatCommand::unexecute" << endl;
-    Qt3::QTextParag *p = doc->paragAt( firstParag );
+    KoTextParag *p = doc->paragAt( firstParag );
     if ( !p )
     {
         kdDebug() << "KoParagFormatCommand::unexecute paragraph " << firstParag << "not found" << endl;
         return c;
     }
-    QValueList<QTextFormat *>::Iterator lit = m_oldFormats.begin();
+    QValueList<KoTextFormat *>::Iterator lit = m_oldFormats.begin();
     while ( p ) {
         if ( lit == m_oldFormats.end() )
         {
@@ -243,8 +243,8 @@ QTextCursor * KoParagFormatCommand::unexecute( QTextCursor *c )
     return c;
 }
 
-KoTextFormatCommand::KoTextFormatCommand(KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, QTextFormat *f, int fl )
-    : QTextFormatCommand(d, sid, sidx, eid, eidx, old, f, fl)
+KoTextFormatCommand::KoTextFormatCommand(KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, KoTextFormat *f, int fl )
+    : KoTextDocFormatCommand(d, sid, sidx, eid, eidx, old, f, fl)
 {
 }
 
@@ -255,15 +255,15 @@ KoTextFormatCommand::~KoTextFormatCommand()
 
 void KoTextFormatCommand::resizeCustomItems()
 {
-    Qt3::QTextParag *sp = doc->paragAt( startId );
-    Qt3::QTextParag *ep = doc->paragAt( endId );
+    KoTextParag *sp = doc->paragAt( startId );
+    KoTextParag *ep = doc->paragAt( endId );
     if ( !sp || !ep )
         return;
 
-    QTextCursor start( doc );
+    KoTextCursor start( doc );
     start.setParag( sp );
     start.setIndex( startIndex );
-    QTextCursor end( doc );
+    KoTextCursor end( doc );
     end.setParag( ep );
     end.setIndex( endIndex );
 
@@ -279,7 +279,7 @@ void KoTextFormatCommand::resizeCustomItems()
         {
             if( start.parag()->at(i)->isCustom())
             {
-                static_cast<KoTextCustomItem *>( start.parag()->at(i)->customItem() )->resize();
+                start.parag()->at(i)->customItem()->resize();
             }
         }
     }
@@ -290,10 +290,10 @@ void KoTextFormatCommand::resizeCustomItems()
         for ( i = start.index(); i < start.parag()->length(); ++i )
             if( start.parag()->at(i)->isCustom())
             {
-                static_cast<KoTextCustomItem *>( start.parag()->at(i)->customItem() )->resize();
+                start.parag()->at(i)->customItem()->resize();
             }
 
-        Qt3::QTextParag *p = start.parag()->next();
+        KoTextParag *p = start.parag()->next();
         while ( p && p != end.parag() )
         {
             text = p->string()->toString().left( p->length() - 1 );
@@ -301,7 +301,7 @@ void KoTextFormatCommand::resizeCustomItems()
             {
                if( p->at(i)->isCustom())
                {
-                   static_cast<KoTextCustomItem *>(p->at(i)->customItem() )->resize();
+                   p->at(i)->customItem()->resize();
                }
             }
             p = p->next();
@@ -311,24 +311,24 @@ void KoTextFormatCommand::resizeCustomItems()
         {
             if( end.parag()->at(i)->isCustom())
             {
-                static_cast<KoTextCustomItem *>( end.parag()->at(i)->customItem() )->resize();
+                end.parag()->at(i)->customItem()->resize();
             }
         }
     }
 }
 
-QTextCursor *KoTextFormatCommand::execute( QTextCursor *c )
+KoTextCursor *KoTextFormatCommand::execute( KoTextCursor *c )
 {
-    c = QTextFormatCommand::execute( c );
+    c = KoTextDocFormatCommand::execute( c );
     resizeCustomItems();
     return c;
 }
 
-QTextCursor *KoTextFormatCommand::unexecute( QTextCursor *c )
+KoTextCursor *KoTextFormatCommand::unexecute( KoTextCursor *c )
 {
     kdDebug() << "KoTextFormatCommand::unexecute c:" << c << " index:" << c->index() << endl;
-    c = QTextFormatCommand::unexecute( c );
-    kdDebug() << "KoTextFormatCommand::unexecute after QTextFormatCommand c:" << c << " index:" << c->index() << endl;
+    c = KoTextDocFormatCommand::unexecute( c );
+    kdDebug() << "KoTextFormatCommand::unexecute after KoTextFormatCommand c:" << c << " index:" << c->index() << endl;
     resizeCustomItems();
     return c;
 }

@@ -21,7 +21,8 @@
 #include <qdom.h>
 #include <kdebug.h>
 #include "kozoomhandler.h"
-#include "kotextformat.h"
+//#include "kotextformat.h"
+#include "qrichtext_p.h" // for KoTextFormat
 
 KoBorder::KoBorder()
     : color(), style( SOLID ), ptWidth( 1 ) { }

@@ -43,7 +43,6 @@
 #include "qrect.h"
 
 #include <stdlib.h>
-using namespace Qt3;
 
 // -----------------------------------------------------
 
@@ -51,7 +50,7 @@ using namespace Qt3;
    Each line of text caches the embedding level at the start of the line for faster
    relayouting
 */
-QBidiContext::QBidiContext( uchar l, QChar::Direction e, QBidiContext *p, bool o )
+KoBidiContext::KoBidiContext( uchar l, QChar::Direction e, KoBidiContext *p, bool o )
     : level(l) , override(o), dir(e)
 {
     if ( p )
@@ -60,7 +59,7 @@ QBidiContext::QBidiContext( uchar l, QChar::Direction e, QBidiContext *p, bool o
     count = 0;
 }
 
-QBidiContext::~QBidiContext()
+KoBidiContext::~KoBidiContext()
 {
     if( parent && parent->deref() )
 	delete parent;
@@ -152,7 +151,7 @@ static inline bool nextVisualCharJoins( const QString &str, int pos)
 }
 
 
-QComplexText::Shape QComplexText::glyphVariant( const QString &str, int pos)
+KoComplexText::Shape KoComplexText::glyphVariant( const QString &str, int pos)
 {
     // ignores L1 - L3, done in the codec
     QChar::Joining joining = str[pos].joining();
@@ -197,7 +196,7 @@ static inline bool nextLogicalCharJoins( const QString &str, int pos)
 }
 
 
-QComplexText::Shape QComplexText::glyphVariantLogical( const QString &str, int pos)
+KoComplexText::Shape KoComplexText::glyphVariantLogical( const QString &str, int pos)
 {
     // ignores L1 - L3, ligatures are job of the codec
     QChar::Joining joining = str[pos].joining();
@@ -533,15 +532,15 @@ static inline int getShape( const QChar * /* base */, uchar cell, int shape,
     // we revert to the unshaped glyph in case the shaped version doesn't exist
     if ( fm && !fm->inFont( ch ) ) {
     switch( shape ) {
-    case QComplexText::XIsolated:
+    case KoComplexText::XIsolated:
     break; // try base form
-    case QComplexText::XFinal:
+    case KoComplexText::XFinal:
     ch -= 1; // try isolated form
     break;
-    case QComplexText::XInitial:
+    case KoComplexText::XInitial:
     ch += 1; // try medial form
     break;
-    case QComplexText::XMedial:
+    case KoComplexText::XMedial:
     ch -= 1; // try initial form
     break;
     }
@@ -552,7 +551,7 @@ static inline int getShape( const QChar * /* base */, uchar cell, int shape,
     return ch;
 }
 
-QString QComplexText::shapedString(const QString& uc, int from, int len, QPainter::TextDirection dir, const QFontMetrics *fm )
+QString KoComplexText::shapedString(const QString& uc, int from, int len, QPainter::TextDirection dir, const QFontMetrics *fm )
 {
     if( len < 0 )
 	len = uc.length() - from;
@@ -688,7 +687,7 @@ QString QComplexText::shapedString(const QString& uc, int from, int len, QPainte
     return QConstString( shapeBuffer, lenOut ).string();
 }
 
-QChar QComplexText::shapedCharacter( const QString &str, int pos, const QFontMetrics *fm )
+QChar KoComplexText::shapedCharacter( const QString &str, int pos, const QFontMetrics *fm )
 {
     const QChar *ch = str.unicode() + pos;
     if ( ch->row() != 0x06 )
@@ -729,7 +728,7 @@ QChar QComplexText::shapedCharacter( const QString &str, int pos, const QFontMet
 
 // Avoid using QFontPrivate, to which we don't have access. We don't use positionMarks() anyway
 #if 0
-QPointArray QComplexText::positionMarks( QFontPrivate *f, const QString &str,
+QPointArray KoComplexText::positionMarks( QFontPrivate *f, const QString &str,
 					 int pos, QRect *boundingRect )
 {
     int len = str.length();
@@ -740,7 +739,7 @@ QPointArray QComplexText::positionMarks( QFontPrivate *f, const QString &str,
     if ( !nmarks )
 	return QPointArray();
 
-    QChar baseChar = QComplexText::shapedCharacter( str, pos );
+    QChar baseChar = KoComplexText::shapedCharacter( str, pos );
     QRect baseRect = f->boundingRect( baseChar );
     int baseOffset = f->textWidth( str, pos, 1 );
 
@@ -890,31 +889,31 @@ static QChar::Direction basicDirection(const QString &str, int start = 0)
 }
 
 // transforms one line of the paragraph to visual order
-// the caller is responisble to delete the returned list of QTextRuns.
-QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QString &text, int start, int len,
+// the caller is responisble to delete the returned list of KoTextRuns.
+QPtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, const QString &text, int start, int len,
 						   QChar::Direction basicDir )
 {
     int last = start + len - 1;
     //printf("doing BiDi reordering from %d to %d!\n", start, last);
 
-    QPtrList<QTextRun> *runs = new QPtrList<QTextRun>;
+    QPtrList<KoTextRun> *runs = new QPtrList<KoTextRun>;
     runs->setAutoDelete(TRUE);
 
-    QBidiContext *context = control->context;
+    KoBidiContext *context = control->context;
     if ( !context ) {
 	// first line
 	if( start != 0 )
 	    qDebug( "bidiReorderLine::internal error");
 	if( basicDir == QChar::DirR || (basicDir == QChar::DirON && text.isRightToLeft() ) ) {
-	    context = new QBidiContext( 1, QChar::DirR );
+	    context = new KoBidiContext( 1, QChar::DirR );
 	    control->status.last = QChar::DirR;
 	} else {
-	    context = new QBidiContext( 0, QChar::DirL );
+	    context = new KoBidiContext( 0, QChar::DirL );
 	    control->status.last = QChar::DirL;
 	}
     }
 
-    QBidiStatus status = control->status;
+    KoBidiStatus status = control->status;
     QChar::Direction dir = QChar::DirON;
 
     int sor = start;
@@ -924,7 +923,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
     while(current <= last) {
 	QChar::Direction dirCurrent;
 	if(current == (int)text.length()) {
-	    QBidiContext *c = context;
+	    KoBidiContext *c = context;
 	    while ( c->parent )
 		c = c->parent;
 	    dirCurrent = c->dir;
@@ -949,9 +948,9 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		else
 		    level++;
 		if(level < 61) {
-		    runs->append( new QTextRun(sor, eor, context, dir) );
+		    runs->append( new KoTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
-		    context = new QBidiContext(level, QChar::DirR, context);
+		    context = new KoBidiContext(level, QChar::DirR, context);
 		    status.last = QChar::DirR;
 		    status.lastStrong = QChar::DirR;
 		}
@@ -965,9 +964,9 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		else
 		    level += 2;
 		if(level < 61) {
-		    runs->append( new QTextRun(sor, eor, context, dir) );
+		    runs->append( new KoTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
-		    context = new QBidiContext(level, QChar::DirL, context);
+		    context = new KoBidiContext(level, QChar::DirL, context);
 		    status.last = QChar::DirL;
 		    status.lastStrong = QChar::DirL;
 		}
@@ -981,9 +980,9 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		else
 		    level++;
 		if(level < 61) {
-		    runs->append( new QTextRun(sor, eor, context, dir) );
+		    runs->append( new KoTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
-		    context = new QBidiContext(level, QChar::DirR, context, TRUE);
+		    context = new KoBidiContext(level, QChar::DirR, context, TRUE);
 		    dir = QChar::DirR;
 		    status.last = QChar::DirR;
 		    status.lastStrong = QChar::DirR;
@@ -998,9 +997,9 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		else
 		    level += 2;
 		if(level < 61) {
-		    runs->append( new QTextRun(sor, eor, context, dir) );
+		    runs->append( new KoTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
-		    context = new QBidiContext(level, QChar::DirL, context, TRUE);
+		    context = new KoBidiContext(level, QChar::DirL, context, TRUE);
 		    dir = QChar::DirL;
 		    status.last = QChar::DirL;
 		    status.lastStrong = QChar::DirL;
@@ -1009,9 +1008,9 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 	    }
 	case QChar::DirPDF:
 	    {
-		QBidiContext *c = context->parent;
+		KoBidiContext *c = context->parent;
 		if(c) {
-		    runs->append( new QTextRun(sor, eor, context, dir) );
+		    runs->append( new KoTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 		    status.last = context->dir;
 		    if( context->deref() ) delete context;
@@ -1037,7 +1036,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		case QChar::DirAL:
 		case QChar::DirEN:
 		case QChar::DirAN:
-		    runs->append( new QTextRun(sor, eor, context, dir) );
+		    runs->append( new KoTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 		    break;
 		case QChar::DirES:
@@ -1053,17 +1052,17 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 			if( context->dir == QChar::DirR ) {
 			    if(status.eor != QChar::DirR) {
 				// AN or EN
-				runs->append( new QTextRun(sor, eor, context, dir) );
+				runs->append( new KoTextRun(sor, eor, context, dir) );
 				++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 				dir = QChar::DirR;
 			    }
 			    else
 				eor = current - 1;
-			    runs->append( new QTextRun(sor, eor, context, dir) );
+			    runs->append( new KoTextRun(sor, eor, context, dir) );
 			    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 			} else {
 			    if(status.eor != QChar::DirL) {
-				runs->append( new QTextRun(sor, eor, context, dir) );
+				runs->append( new KoTextRun(sor, eor, context, dir) );
 				++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 				dir = QChar::DirL;
 			    } else {
@@ -1089,7 +1088,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		case QChar::DirL:
 		case QChar::DirEN:
 		case QChar::DirAN:
-		    runs->append( new QTextRun(sor, eor, context, dir) );
+		    runs->append( new KoTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 		    break;
 		case QChar::DirES:
@@ -1103,13 +1102,13 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		    if( status.eor != QChar::DirR && status.eor != QChar::DirAL ) {
 			//last stuff takes embedding dir
 			if(context->dir == QChar::DirR || status.lastStrong == QChar::DirR) {
-			    runs->append( new QTextRun(sor, eor, context, dir) );
+			    runs->append( new KoTextRun(sor, eor, context, dir) );
 			    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 			    dir = QChar::DirR;
 			    eor = current;
 			} else {
 			    eor = current - 1;
-			    runs->append( new QTextRun(sor, eor, context, dir) );
+			    runs->append( new KoTextRun(sor, eor, context, dir) );
 			    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 			    dir = QChar::DirR;
 			}
@@ -1140,7 +1139,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		    {
 		    case QChar::DirET:
 			if ( status.lastStrong == QChar::DirR || status.lastStrong == QChar::DirAL ) {
-			    runs->append( new QTextRun(sor, eor, context, dir) );
+			    runs->append( new KoTextRun(sor, eor, context, dir) );
 			    ++eor; sor = eor; status.eor = QChar::DirON;
 			    dir = QChar::DirAN;
 			}
@@ -1153,7 +1152,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		    case QChar::DirR:
 		    case QChar::DirAL:
 		    case QChar::DirAN:
-			runs->append( new QTextRun(sor, eor, context, dir) );
+			runs->append( new KoTextRun(sor, eor, context, dir) );
 			++eor; sor = eor; status.eor = QChar::DirEN;
 			dir = QChar::DirAN; break;
 		    case QChar::DirES:
@@ -1169,7 +1168,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 			if(status.eor == QChar::DirR) {
 			    // neutrals go to R
 			    eor = current - 1;
-			    runs->append( new QTextRun(sor, eor, context, dir) );
+			    runs->append( new KoTextRun(sor, eor, context, dir) );
 			    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirEN;
 			    dir = QChar::DirAN;
 			}
@@ -1179,11 +1178,11 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 			} else {
 			    // numbers on both sides, neutrals get right to left direction
 			    if(dir != QChar::DirL) {
-				runs->append( new QTextRun(sor, eor, context, dir) );
+				runs->append( new KoTextRun(sor, eor, context, dir) );
 				++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 				eor = current - 1;
 				dir = QChar::DirR;
-				runs->append( new QTextRun(sor, eor, context, dir) );
+				runs->append( new KoTextRun(sor, eor, context, dir) );
 				++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 				dir = QChar::DirAN;
 			    } else {
@@ -1206,7 +1205,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		case QChar::DirR:
 		case QChar::DirAL:
 		case QChar::DirEN:
-		    runs->append( new QTextRun(sor, eor, context, dir) );
+		    runs->append( new KoTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 		    break;
 		case QChar::DirCS:
@@ -1223,7 +1222,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		    if(status.eor == QChar::DirR) {
 			// neutrals go to R
 			eor = current - 1;
-			runs->append( new QTextRun(sor, eor, context, dir) );
+			runs->append( new KoTextRun(sor, eor, context, dir) );
 			++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 			dir = QChar::DirAN;
 		    } else if( status.eor == QChar::DirL ||
@@ -1232,11 +1231,11 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		    } else {
 			// numbers on both sides, neutrals get right to left direction
 			if(dir != QChar::DirL) {
-			    runs->append( new QTextRun(sor, eor, context, dir) );
+			    runs->append( new KoTextRun(sor, eor, context, dir) );
 			    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 			    eor = current - 1;
 			    dir = QChar::DirR;
-			    runs->append( new QTextRun(sor, eor, context, dir) );
+			    runs->append( new KoTextRun(sor, eor, context, dir) );
 			    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 			    dir = QChar::DirAN;
 			} else {
@@ -1318,14 +1317,14 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
     eor = current - 1; // remove dummy char
 
     if ( sor <= eor )
-	runs->append( new QTextRun(sor, eor, context, dir) );
+	runs->append( new KoTextRun(sor, eor, context, dir) );
 
     // reorder line according to run structure...
 
     // first find highest and lowest levels
     uchar levelLow = 128;
     uchar levelHigh = 0;
-    QTextRun *r = runs->first();
+    KoTextRun *r = runs->first();
     while ( r ) {
 	//printf("level = %d\n", r->level);
 	if ( r->level > levelHigh )
@@ -1345,8 +1344,8 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 #if (BIDI_DEBUG >= 1)
     cout << "reorderLine: lineLow = " << (uint)levelLow << ", lineHigh = " << (uint)levelHigh << endl;
     cout << "logical order is:" << endl;
-    QPtrListIterator<QTextRun> it2(*runs);
-    QTextRun *r2;
+    QPtrListIterator<KoTextRun> it2(*runs);
+    KoTextRun *r2;
     for ( ; (r2 = it2.current()); ++it2 )
 	cout << "    " << r2 << "  start=" << r2->start << "  stop=" << r2->stop << "  level=" << (uint)r2->level << endl;
 #endif
@@ -1368,8 +1367,8 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		//cout << "reversing from " << start << " to " << end << endl;
 		for(int j = 0; j < (end-start+1)/2; j++)
 		{
-		    QTextRun *first = runs->take(start+j);
-		    QTextRun *last = runs->take(end-j-1);
+		    KoTextRun *first = runs->take(start+j);
+		    KoTextRun *last = runs->take(end-j-1);
 		    runs->insert(start+j, last);
 		    runs->insert(end-j, first);
 		}
@@ -1382,8 +1381,8 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 
 #if (BIDI_DEBUG >= 1)
     cout << "visual order is:" << endl;
-    QPtrListIterator<QTextRun> it3(*runs);
-    QTextRun *r3;
+    QPtrListIterator<KoTextRun> it3(*runs);
+    KoTextRun *r3;
     for ( ; (r3 = it3.current()); ++it3 )
     {
 	cout << "    " << r3 << endl;
@@ -1397,11 +1396,11 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 }
 
 
-QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*basicDir*/ )
+QString KoComplexText::bidiReorderString( const QString &str, QChar::Direction /*basicDir*/ )
 {
 
 // ### fix basic direction
-    QBidiControl control;
+    KoBidiControl control;
     int lineStart = 0;
     int lineEnd = 0;
     int len = str.length();
@@ -1416,10 +1415,10 @@ QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*
 	    lineEnd++;
 	}
 	lineEnd++;
-	QPtrList<QTextRun> *runs = bidiReorderLine( &control, str, lineStart, lineEnd - lineStart );
+	QPtrList<KoTextRun> *runs = bidiReorderLine( &control, str, lineStart, lineEnd - lineStart );
 
 	// reorder the content of the line, and output to visual
-	QTextRun *r = runs->first();
+	KoTextRun *r = runs->first();
 	while ( r ) {
 	    if(r->level %2) {
 		// odd level, need to reverse the string
@@ -1452,7 +1451,7 @@ QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*
     return visual;
 }
 
-QTextRun::QTextRun(int _start, int _stop, QBidiContext *context, QChar::Direction dir) {
+KoTextRun::KoTextRun(int _start, int _stop, KoBidiContext *context, QChar::Direction dir) {
     start = _start;
     stop = _stop;
     if(dir == QChar::DirON) dir = context->dir;

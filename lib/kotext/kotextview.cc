@@ -56,12 +56,12 @@ KoTextView::KoTextView( KoTextObject *textobj )
     dcop=0;
     connect( m_textobj, SIGNAL( hideCursor() ), this, SLOT( hideCursor() ) );
     connect( m_textobj, SIGNAL( showCursor() ), this, SLOT( showCursor() ) );
-    connect( m_textobj, SIGNAL( setCursor( QTextCursor * ) ), this, SLOT( setCursor( QTextCursor * ) ) );
+    connect( m_textobj, SIGNAL( setCursor( KoTextCursor * ) ), this, SLOT( setCursor( KoTextCursor * ) ) );
     connect( m_textobj, SIGNAL( updateUI(bool, bool) ), this, SLOT( updateUI(bool, bool) ) );
     connect( m_textobj, SIGNAL( showCurrentFormat() ), this, SLOT( showCurrentFormat() ) );
     connect( m_textobj, SIGNAL( ensureCursorVisible() ), this, SLOT( ensureCursorVisible() ) );
 
-    m_cursor = new QTextCursor( m_textobj->textDocument() );
+    m_cursor = new KoTextCursor( m_textobj->textDocument() );
 
     m_cursorVisible = false;
 
@@ -201,7 +201,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
         Q_ASSERT( m_cursor->parag()->prev() );
         if ( m_cursor->parag()->prev() )
-            doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()->prev()),
+            doAutoFormat( m_cursor, m_cursor->parag()->prev(),
                           m_cursor->parag()->prev()->length() - 1, '\n' );
         break;
     case Key_Delete:
@@ -222,7 +222,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         if ( !m_cursor->parag()->prev() &&
              m_cursor->atParagStart() )
         {
-            KoTextParag * parag = static_cast<KoTextParag *>(m_cursor->parag());
+            KoTextParag * parag = m_cursor->parag();
             if ( parag->counter() && parag->counter()->style() != KoParagCounter::STYLE_NONE)
                 textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
             break;
@@ -251,7 +251,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
                     // We don't have support for nested counters at the moment.
                     /*if ( m_cursor->index() == 0 && m_cursor->parag()->style() &&
                          m_cursor->parag()->style()->displayMode() == QStyleSheetItem::DisplayListItem ) {
-                        static_cast<KWTextParag * >(m_cursor->parag())->incDepth();
+                        m_cursor->parag()->incDepth();
                         emit hideCursor();
                         emit repaintChanged();
                         emit showCursor();
@@ -278,11 +278,11 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
 
                 if ( !text.isEmpty() )
                 {
-                    if( !doIgnoreDoubleSpace(static_cast<KoTextParag*>(m_cursor->parag()),m_cursor->index()-1 ,text[ text.length() - 1 ]))
+                    if( !doIgnoreDoubleSpace(m_cursor->parag(),m_cursor->index()-1 ,text[ text.length() - 1 ]))
                     {
                         insertText( text );
 
-                        doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
+                        doAutoFormat( m_cursor, m_cursor->parag(),
                                       m_cursor->index() - 1, text[ text.length() - 1 ] );
                     }
                 }
@@ -332,14 +332,14 @@ void KoTextView::handleKeyReleaseEvent( QKeyEvent * e )
         QString text = QChar( d->currentUnicodeNumber() );
         d->clearCurrentUnicodeNumber();
         insertText( text );
-        doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
+        doAutoFormat( m_cursor, m_cursor->parag(),
                       m_cursor->index() - 1, text[ text.length() - 1 ] );
     }
 }
 
 void KoTextView::autoCompletion()
 {
-    doAutoCompletion(m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
+    doAutoCompletion(m_cursor, m_cursor->parag(),
                      m_cursor->index() - 1);
 }
 
@@ -417,7 +417,7 @@ void KoTextView::moveCursor( CursorAction action )
             m_cursor->gotoEnd();
             break;
         case MoveParagUp: {
-            Qt3::QTextParag * parag = m_cursor->parag()->prev();
+            KoTextParag * parag = m_cursor->parag()->prev();
             if ( parag )
             {
                 m_cursor->setParag( parag );
@@ -425,7 +425,7 @@ void KoTextView::moveCursor( CursorAction action )
             }
         } break;
         case MoveParagDown: {
-            Qt3::QTextParag * parag = m_cursor->parag()->next();
+            KoTextParag * parag = m_cursor->parag()->next();
             if ( parag )
             {
                 m_cursor->setParag( parag );
@@ -437,10 +437,10 @@ void KoTextView::moveCursor( CursorAction action )
     updateUI( true );
 }
 
-QTextCursor KoTextView::selectWordUnderCursor()
+KoTextCursor KoTextView::selectWordUnderCursor()
 {
-    QTextCursor c1 = *m_cursor;
-    QTextCursor c2 = *m_cursor;
+    KoTextCursor c1 = *m_cursor;
+    KoTextCursor c2 = *m_cursor;
     if ( m_cursor->index() > 0 && !m_cursor->parag()->at( m_cursor->index()-1 )->c.isSpace() && !m_cursor->parag()->at( m_cursor->index()-1 )->isCustom())
         c1.gotoWordLeft();
     if ( !m_cursor->parag()->at( m_cursor->index() )->c.isSpace() && !m_cursor->atParagEnd() && !m_cursor->parag()->at( m_cursor->index() )->isCustom())
@@ -451,10 +451,10 @@ QTextCursor KoTextView::selectWordUnderCursor()
     return c2;
 }
 
-QTextCursor KoTextView::selectParagUnderCursor()
+KoTextCursor KoTextView::selectParagUnderCursor()
 {
-    QTextCursor c1 = *m_cursor;
-    QTextCursor c2 = *m_cursor;
+    KoTextCursor c1 = *m_cursor;
+    KoTextCursor c2 = *m_cursor;
     c1.setIndex(0);
     c2.setIndex(c1.parag()->string()->length() - 1);
     textDocument()->setSelectionStart( KoTextDocument::Standard, &c1 );
@@ -473,7 +473,7 @@ void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint )
         return;
     }
 
-    QTextCursor oldCursor = *m_cursor;
+    KoTextCursor oldCursor = *m_cursor;
     placeCursor( iPoint );
     ensureCursorVisible();
 
@@ -523,14 +523,14 @@ void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint )
 void KoTextView::handleMouseMoveEvent( QMouseEvent*, const QPoint& iPoint )
 {
     hideCursor();
-    QTextCursor oldCursor = *m_cursor;
+    KoTextCursor oldCursor = *m_cursor;
     placeCursor( iPoint );
 
     // Double click + mouse still down + moving the mouse selects full words.
     if ( inDoubleClick ) {
-        QTextCursor cl = *m_cursor;
+        KoTextCursor cl = *m_cursor;
         cl.gotoWordLeft();
-        QTextCursor cr = *m_cursor;
+        KoTextCursor cr = *m_cursor;
         cr.gotoWordRight();
 
         int diff = QABS( oldCursor.parag()->at( oldCursor.index() )->x - iPoint.x() );
@@ -654,7 +654,7 @@ bool KoTextView::maybeStartDrag( QMouseEvent* e )
 void KoTextView::placeCursor( const QPoint &pos )
 {
     m_cursor->restoreState();
-    Qt3::QTextParag *s = textDocument()->firstParag();
+    KoTextParag *s = textDocument()->firstParag();
     m_cursor->place( pos,  s,false,&variablePosition );
     updateUI( true );
 }
@@ -739,11 +739,12 @@ void KoTextView::updateUI( bool updateFormat, bool /*force*/ )
             kdDebug(32003) << "Setting currentFormat from format " << cursor()->parag()->at( i )->format()
                       << " ( character " << i << " in paragraph " << cursor()->parag()->paragId() << " )" << endl;
 #endif
-            setCurrentFormat( static_cast<KoTextFormat *>( textDocument()->formatCollection()->format( cursor()->parag()->at( i )->format() ) ) );
+            setCurrentFormat( textDocument()->formatCollection()->format( cursor()->parag()->at( i )->format() ) );
             if ( currentFormat()->isMisspelled() ) {
+                KoTextFormat fNoMisspelled( *currentFormat() );
+                fNoMisspelled.setMisspelled( false );
                 currentFormat()->removeRef();
-                // ## this forgets the background color, etc.
-                setCurrentFormat( static_cast<KoTextFormat *>( textDocument()->formatCollection()->format( currentFormat()->font(), currentFormat()->color() ) ) );
+                setCurrentFormat( textDocument()->formatCollection()->format( &fNoMisspelled ) );
             }
             showCurrentFormat();
         }
@@ -1004,7 +1005,7 @@ void KoTextView::insertSpecialChar(QChar _c, const QString& font)
 
 const KoParagLayout * KoTextView::currentParagLayoutFormat() const
 {
-    KoTextParag * parag = static_cast<KoTextParag *>(m_cursor->parag());
+    KoTextParag * parag = m_cursor->parag();
     return &(parag->paragLayout());
 }
 
@@ -1052,14 +1053,14 @@ KCommand *KoTextView::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _ty
         return 0L;
 }
 
-KCommand *KoTextView::dropEvent( KoTextObject *tmp, QTextCursor dropCursor, bool dropInSameObj)
+KCommand *KoTextView::dropEvent( KoTextObject *tmp, KoTextCursor dropCursor, bool dropInSameObj)
 {
     KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
     if ( tmp->textDocument()->hasSelection( KoTextDocument::Standard ) )
     {
         // Dropping into the selection itself ?
-        QTextCursor startSel = textDocument()->selectionStartCursor( KoTextDocument::Standard );
-        QTextCursor endSel = textDocument()->selectionEndCursor( KoTextDocument::Standard );
+        KoTextCursor startSel = textDocument()->selectionStartCursor( KoTextDocument::Standard );
+        KoTextCursor endSel = textDocument()->selectionEndCursor( KoTextDocument::Standard );
         bool inSelection = false;
         if ( startSel.parag() == endSel.parag() )
             inSelection = dropInSameObj/*(tmp ==textFrameSet())*/
@@ -1073,7 +1074,7 @@ KCommand *KoTextView::dropEvent( KoTextObject *tmp, QTextCursor dropCursor, bool
             if ( !inSelection )
             {
                 // Look at all other paragraphs except last one
-                Qt3::QTextParag *p = startSel.parag()->next();
+                KoTextParag *p = startSel.parag()->next();
                 while ( !inSelection && p && p != endSel.parag() )
                 {
                     inSelection = ( p == dropCursor.parag() );

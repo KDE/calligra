@@ -28,8 +28,7 @@ class KoTextObject;
 class KSpell;
 class KoDocument;
 class KSpellConfig;
-
-namespace Qt3 { class QTextParag; }
+class KoTextParag;
 
 class KoBgSpellCheck : public QObject
 {
@@ -76,7 +75,7 @@ protected:
         // user types something again"
         KoTextObject *currentTextObj;
         // The paragraph currently being checked
-        Qt3::QTextParag *currentParag;
+        KoTextParag *currentParag;
     };
     KoBGSpell m_bgSpell;
 

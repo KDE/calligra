@@ -27,7 +27,7 @@ class KoStyle;
 
 /**
  * This class holds the paragraph-specific formatting information
- * It's separated from KWTextParag so that it can be copied in
+ * It's separated from KoTextParag so that it can be copied in
  * the undo/redo history, and in KoStyle.
  */
 class KoParagLayout

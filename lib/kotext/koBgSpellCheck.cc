@@ -118,7 +118,7 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
         m_bgSpell.currentParag = 0L;
         return;
     }
-    Qt3::QTextParag* parag = m_bgSpell.currentParag;
+    KoTextParag* parag = m_bgSpell.currentParag;
     if ( parag && parag->next() )
         parag = parag->next();
     // Skip any unchanged parags
@@ -168,9 +168,9 @@ void KoBgSpellCheck::spellCheckNextParagraph()
     // First remove any misspelled format from the paragraph
     // - otherwise we'd never notice words being ok again :)
     KoTextStringChar *ch = m_bgSpell.currentParag->at( 0 );
-    KoTextFormat format( *static_cast<KoTextFormat *>(ch->format()) );
+    KoTextFormat format( *ch->format() );
     format.setMisspelled( false );
-    m_bgSpell.currentParag->setFormat( 0, m_bgSpell.currentParag->length()-1, &format, true, QTextFormat::Misspelled );
+    m_bgSpell.currentParag->setFormat( 0, m_bgSpell.currentParag->length()-1, &format, true, KoTextFormat::Misspelled );
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::spellCheckNextParagraph spell checking parag " << m_bgSpell.currentParag->paragId() << endl;
 #endif
@@ -188,15 +188,15 @@ void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, const QStringL
     KoTextObject * fs = m_bgSpell.currentTextObj;
     Q_ASSERT( fs );
     if ( !fs ) return;
-    Qt3::QTextParag* parag = m_bgSpell.currentParag;
+    KoTextParag* parag = m_bgSpell.currentParag;
     if ( !parag ) return;
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::spellCheckerMisspelling parag=" << parag << " (id=" << parag->paragId() << ", length=" << parag->length() << ") pos=" << pos << " length=" << old.length() << endl;
 #endif
     KoTextStringChar *ch = parag->at( pos );
-    KoTextFormat format( *static_cast<KoTextFormat *>(ch->format()) );
+    KoTextFormat format( *ch->format() );
     format.setMisspelled( true );
-    parag->setFormat( pos, old.length(), &format, true, QTextFormat::Misspelled );
+    parag->setFormat( pos, old.length(), &format, true, KoTextFormat::Misspelled );
     parag->setChanged( true );
     // TODO delay this, so that repaints are 'compressed'
     slotRepaintChanged( m_bgSpell.currentTextObj );

@@ -29,10 +29,10 @@
 #include <qcombobox.h>
 
 #include <klocale.h>
-#include <kotextdocument.h>
+//#include <kotextdocument.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include "kotextparag.h"
+//#include "kotextparag.h"
 #include "kozoomhandler.h"
 #include <koGlobal.h>
 /******************************************************************/
@@ -518,8 +518,8 @@ KoStyleFontTab::~KoStyleFontTab()
 
 void KoStyleFontTab::update()
 {
-    bool subScript = m_style->format().vAlign() == QTextFormat::AlignSubScript;
-    bool superScript = m_style->format().vAlign() == QTextFormat::AlignSuperScript;
+    bool subScript = m_style->format().vAlign() == KoTextFormat::AlignSubScript;
+    bool superScript = m_style->format().vAlign() == KoTextFormat::AlignSuperScript;
     QFont fn = m_style->format().font();
     fn.setPointSize( (int)m_zoomHandler->layoutUnitPtToPt( fn.pointSize() ) );
     m_chooser->setFont( fn, subScript, superScript );
@@ -535,11 +535,11 @@ void KoStyleFontTab::save()
     fn.setPointSize( m_zoomHandler->ptToLayoutUnitPt( fn.pointSize() ) );
     m_style->format().setFont( fn );
     if ( m_chooser->getSubScript() )
-        m_style->format().setVAlign( QTextFormat::AlignSubScript );
+        m_style->format().setVAlign( KoTextFormat::AlignSubScript );
     else if ( m_chooser->getSuperScript() )
-        m_style->format().setVAlign( QTextFormat::AlignSuperScript );
+        m_style->format().setVAlign( KoTextFormat::AlignSuperScript );
     else
-        m_style->format().setVAlign( QTextFormat::AlignNormal );
+        m_style->format().setVAlign( KoTextFormat::AlignNormal );
     m_style->format().setColor( m_chooser->color() );
     if(m_chooser->backGroundColor()!=QApplication::palette().color( QPalette::Active, QColorGroup::Base ))
         m_style->format().setTextBackgroundColor(m_chooser->backGroundColor());

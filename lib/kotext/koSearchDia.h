@@ -28,7 +28,6 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qrichtext_p.h>
-using namespace Qt3;
 
 class QPushButton;
 class QGridLayout;
@@ -36,7 +35,6 @@ class QCheckBox;
 class QComboBox;
 class QSpinBox;
 class KColorButton;
-//class KWTextFrameSet;
 class KMacroCommand;
 class KoTextView;
 class KoTextObject;
@@ -68,7 +66,7 @@ public:
     QString m_family;
     QColor m_color;
     int m_size;
-    QTextFormat::VerticalAlignment m_vertAlign;
+    KoTextFormat::VerticalAlignment m_vertAlign;
 
     QStringList m_strings; // history
     long m_optionsMask;
@@ -175,11 +173,11 @@ public:
     bool aborted() const { return m_destroying; }
 
     virtual void emitNewCommand(KCommand *)=0;
-    virtual void highlightPortion(Qt3::QTextParag * parag, int index, int length, KoTextDocument *textdoc)=0;
+    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc)=0;
     void changeListObject(const QPtrList<KoTextObject> & lstObject);
 protected:
-    bool findInFrameSet( KoTextObject * textObj, Qt3::QTextParag * firstParag, int firstIndex,
-                         Qt3::QTextParag * lastParag, int lastIndex );
+    bool findInFrameSet( KoTextObject * textObj, KoTextParag * firstParag, int firstIndex,
+                         KoTextParag * lastParag, int lastIndex );
     bool process( const QString &_text );
 
 protected slots:
@@ -197,7 +195,7 @@ private:
 
     int m_options;
     KoTextObject *m_currentTextObj;
-    Qt3::QTextParag *m_currentParag;
+    KoTextParag *m_currentParag;
     KMacroCommand *m_macroCmd;
     int m_offset;
     KoTextView *m_textView;

@@ -18,7 +18,7 @@
 */
 
 #include "koFontDia.h"
-#include <kotextformat.h>
+#include "qrichtext_p.h"
 
 #include <kcolordialog.h>
 #include <klocale.h>
@@ -103,15 +103,15 @@ void KoFontChooser::setBackGroundColor ( const QColor & col )
 void KoFontChooser::slotFontChanged(const QFont & f)
 {
     if ( f.weight() != m_newFont.weight() )
-        m_changedFlags |= QTextFormat::Bold;
+        m_changedFlags |= KoTextFormat::Bold;
     if ( f.italic() != m_newFont.italic() )
-        m_changedFlags |= QTextFormat::Italic;
+        m_changedFlags |= KoTextFormat::Italic;
     if ( f.underline() != m_newFont.underline() )
-        m_changedFlags |= QTextFormat::Underline;
+        m_changedFlags |= KoTextFormat::Underline;
     if ( f.family() != m_newFont.family() )
-        m_changedFlags |= QTextFormat::Family;
+        m_changedFlags |= KoTextFormat::Family;
     if ( f.pointSize() != m_newFont.pointSize() )
-        m_changedFlags |= QTextFormat::Size;
+        m_changedFlags |= KoTextFormat::Size;
     //kdDebug() << "KWFontChooser::slotFontChanged newcharset=" << f.charSet() << " oldcharset=" << m_newFont.charSet() << endl;
     // ######## Not needed in 3.0?
     //if ( f.charSet() != m_newFont.charSet() )
@@ -124,7 +124,7 @@ void KoFontChooser::slotUnderlineClicked()
 {
     m_newFont.setUnderline(m_underline->isChecked());
     m_chooseFont->setFont(m_newFont);
-    m_changedFlags |= QTextFormat::Underline;
+    m_changedFlags |= KoTextFormat::Underline;
 }
 
 void KoFontChooser::slotStrikeOutClicked()
@@ -138,14 +138,14 @@ void KoFontChooser::slotSubScriptClicked()
 {
     if(m_superScript->isChecked())
         m_superScript->setChecked(false);
-    m_changedFlags |= QTextFormat::VAlign;
+    m_changedFlags |= KoTextFormat::VAlign;
 }
 
 void KoFontChooser::slotSuperScriptClicked()
 {
     if(m_subScript->isChecked())
         m_subScript->setChecked(false);
-    m_changedFlags |= QTextFormat::VAlign;
+    m_changedFlags |= KoTextFormat::VAlign;
 }
 
 void KoFontChooser::slotChangeColor()
@@ -155,7 +155,7 @@ void KoFontChooser::slotChangeColor()
     {
         if ( color != m_chooseFont->color() )
         {
-            m_changedFlags |= QTextFormat::Color;
+            m_changedFlags |= KoTextFormat::Color;
             m_chooseFont->setColor( color );
         }
     }

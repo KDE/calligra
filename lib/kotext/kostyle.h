@@ -20,9 +20,9 @@
 #ifndef kostyle_h
 #define kostyle_h
 
-#include "kotextparag.h"
-#include "kotextformat.h"
+#include "qrichtext_p.h" // for KoTextFormat, KoParagLayout
 #include <qdom.h>
+#include <qptrlist.h>
 
 class KoStyle;
 
@@ -75,7 +75,7 @@ public:
     KoParagLayout & paragLayout()  { return m_paragLayout; }
 
     /** Return a format. Don't forget to use the format collection
-     * of your QTextDocument from the result of that method. */
+     * of your KoTextDocument from the result of that method. */
     const KoTextFormat & format() const { return m_format; }
     KoTextFormat & format() { return m_format; }
 

@@ -21,27 +21,26 @@
 #define kotextformatter_h
 
 #include "qrichtext_p.h"
-using namespace Qt3;
 class KoZoomHandler;
 
 /**
  * We implement our own text formatter to implement WYSIWYG:
- * It is heavily based on QTextFormatterBreakWords, but stores the x position
+ * It is heavily based on KoTextFormatterBaseBreakWords, but stores the x position
  * of characters (and their width) in pixels, whereas all the rest is in L.U.
  * Having our own text formatter will also enable implementing word-breaking later.
  */
-class KoTextFormatter : public QTextFormatter
+class KoTextFormatter : public KoTextFormatterBase
 {
 public:
     KoTextFormatter() {}
     virtual ~KoTextFormatter() {}
 
-    virtual int format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag, int start, const QMap<int, QTextParagLineStart*> &oldLineStarts );
+    virtual int format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts );
 
 protected:
-    QTextParagLineStart *formatLineKo(
+    KoTextParagLineStart *formatLineKo(
         KoZoomHandler *zh,
-        Qt3::QTextParag * /*parag*/, KoTextString *string, QTextParagLineStart *line,
+        KoTextParag * /*parag*/, KoTextString *string, KoTextParagLineStart *line,
         KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space );
 };
 

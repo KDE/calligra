@@ -40,7 +40,6 @@ class KoLinkVariable;
 class KoVariable;
 class KoTextViewIface;
 #include "qrichtext_p.h"
-using namespace Qt3;
 class KoBorder;
 class KoStyle;
 
@@ -67,7 +66,7 @@ public:
     void terminate(bool removeselection=true);
 
     KoTextObject * textObject() const { return m_textobj; }
-    QTextCursor * cursor() const { return m_cursor; }
+    KoTextCursor * cursor() const { return m_cursor; }
     KoTextDocument * textDocument() const;
 
     /** Return true if the view is allowed to modify the text object.
@@ -117,8 +116,8 @@ public:
     void handleMouseTripleClickEvent( QMouseEvent* e, const QPoint& /* Currently unused */ );
     bool maybeStartDrag( QMouseEvent* e );
 
-    QTextCursor selectWordUnderCursor();
-    QTextCursor selectParagUnderCursor();
+    KoTextCursor selectWordUnderCursor();
+    KoTextCursor selectParagUnderCursor();
 
     QPtrList<KAction> dataToolActionList(KInstance * instance);
 
@@ -134,7 +133,7 @@ public:
     KoVariable *variable();
 
 
-    KCommand *dropEvent( KoTextObject *tmp,QTextCursor dropCursor, bool dropInSameObj);
+    KCommand *dropEvent( KoTextObject *tmp,KoTextCursor dropCursor, bool dropInSameObj);
 
     void removeComment();
 
@@ -173,10 +172,10 @@ protected:
      * Called when a character (@p ch) has been inserted into @p parag, at the given @p index.
      * This is a virtual method rather than a signal for performance reasons.
      */
-    virtual void doAutoFormat( QTextCursor* /*cursor*/, KoTextParag * /*parag*/,
+    virtual void doAutoFormat( KoTextCursor* /*cursor*/, KoTextParag * /*parag*/,
                                int /*index*/, QChar /*ch*/ ) { }
 
-    virtual void doAutoCompletion( QTextCursor* /*textEditCursor*/, KoTextParag */*parag*/, int /*index*/ ) { }
+    virtual void doAutoCompletion( KoTextCursor* /*textEditCursor*/, KoTextParag */*parag*/, int /*index*/ ) { }
 
     //return true if we are a doubleSpace
     virtual bool doIgnoreDoubleSpace(KoTextParag * /*parag*/,
@@ -208,7 +207,7 @@ protected:
 
 private slots:
     void blinkCursor();
-    void setCursor( QTextCursor * _cursor ) { *m_cursor = *_cursor; }
+    void setCursor( KoTextCursor * _cursor ) { *m_cursor = *_cursor; }
     void tripleClickTimeout();
     void afterTripleClickTimeout();
 protected:
@@ -238,7 +237,7 @@ protected:
 
 private:
     KoTextObject *m_textobj;
-    QTextCursor *m_cursor;
+    KoTextCursor *m_cursor;
     KoTextFormat *m_currentFormat;
     QTimer *blinkTimer, *dragStartTimer;
     class KoTextViewPrivate;

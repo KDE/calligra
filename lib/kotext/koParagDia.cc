@@ -20,6 +20,7 @@
 #include "koParagDia.h"
 #include "koParagDia_p.h"
 #include "koDocument.h"
+#include "qrichtext_p.h"
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -33,7 +34,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include "kotextdocument.h"
+//#include "kotextdocument.h"
 #include <knumvalidator.h>
 #include <kozoomhandler.h>
 #include <koGlobal.h>
@@ -329,7 +330,7 @@ KoStylePreview::KoStylePreview( const QString& title, const QString& text, QWidg
     font.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( font.pointSize() ) );
     m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font ));
     //m_textdoc->setWidth( KoTextZoomHandler::ptToLayoutUnitPt( 1000 ) );
-    KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
+    KoTextParag * parag = m_textdoc->firstParag();
     parag->insert( 0, text );
 }
 
@@ -341,14 +342,14 @@ KoStylePreview::~KoStylePreview()
 
 void KoStylePreview::setCounter( const KoParagCounter & counter )
 {
-    KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
+    KoTextParag * parag = m_textdoc->firstParag();
     parag->setCounter( counter );
     repaint( true );
 }
 
 void KoStylePreview::setStyle( KoStyle * style )
 {
-    KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
+    KoTextParag * parag = m_textdoc->firstParag();
     parag->applyStyle( style );
     repaint(true);
 }
@@ -364,7 +365,7 @@ void KoStylePreview::drawContents( QPainter *painter )
     QColorGroup cg = QApplication::palette().active();
     painter->fillRect( whiteRect, cg.brush( QColorGroup::Base ) );
 
-    KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
+    KoTextParag * parag = m_textdoc->firstParag();
     int widthLU = m_zoomHandler->pixelToLayoutUnitX( whiteRect.width() - 2 ); // keep one pixel border horizontally
     if ( m_textdoc->width() != widthLU )
     {

@@ -2,7 +2,6 @@ INCLUDES= $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(all_includes)
 
 lib_LTLIBRARIES = libkotext.la
 libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp qrichtext_p.cpp \
-        mocstuff.cpp \
 	kozoomhandler.cc koborder.cc \
 	kotextformat.cc koparagcounter.cc kostyle.cc kocommand.cc \
 	kotextparag.cc kotextdocument.cc kotextformatter.cc koparaglayout.cc \
@@ -20,4 +19,4 @@ METASOURCES = AUTO
 
 # include_HEADERS = \
 #	kozoomhandler.h kotextformat.h koparagcounter.h kostyle.h \
-#	kotextparag.h kotextdocument.h koBgSpellCheck.h koCommentDia.h
+#	kotextdocument.h koBgSpellCheck.h koCommentDia.h

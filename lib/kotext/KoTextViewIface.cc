@@ -202,150 +202,150 @@ void KoTextViewIface::moveCursorLineStart(bool select)
 
 QColor KoTextViewIface::paragraphShadowColor() const
 {
-    return static_cast<KoTextParag *>(m_textView->cursor()->parag())->shadowColor();
+    return m_textView->cursor()->parag()->shadowColor();
 }
 
 bool KoTextViewIface::paragraphHasBorder() const
 {
-    return static_cast<KoTextParag *>(m_textView->cursor()->parag())->hasBorder();
+    return m_textView->cursor()->parag()->hasBorder();
 }
 
 double KoTextViewIface::lineSpacing() const
 {
-    return static_cast<KoTextParag *>(m_textView->cursor()->parag())->kwLineSpacing();
+    return m_textView->cursor()->parag()->kwLineSpacing();
 }
 
 double KoTextViewIface::leftMargin() const
 {
-    return static_cast<KoTextParag *>(m_textView->cursor()->parag())->margin( QStyleSheetItem::MarginLeft);
+    return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginLeft);
 }
 
 double KoTextViewIface::rightMargin() const
 {
-    return static_cast<KoTextParag *>(m_textView->cursor()->parag())->margin( QStyleSheetItem::MarginRight);
+    return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginRight);
 }
 
 double KoTextViewIface::spaceBeforeParag() const
 {
-    return static_cast<KoTextParag *>(m_textView->cursor()->parag())->margin( QStyleSheetItem::MarginTop);
+    return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginTop);
 }
 
 double KoTextViewIface::spaceAfterParag() const
 {
-    return static_cast<KoTextParag *>(m_textView->cursor()->parag())->margin( QStyleSheetItem::MarginBottom);
+    return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginBottom);
 }
 
 double KoTextViewIface::marginFirstLine() const
 {
-    return static_cast<KoTextParag *>(m_textView->cursor()->parag())->margin( QStyleSheetItem::MarginFirstLine);
+    return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginFirstLine);
 }
 
 
 
 void KoTextViewIface::setMarginFirstLine(double pt)
 {
-    static_cast<KoTextParag *>(m_textView->cursor()->parag())->setMargin( QStyleSheetItem::MarginFirstLine,pt);
+    m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginFirstLine,pt);
 }
 
 void KoTextViewIface::setLineSpacing(double pt)
 {
-    static_cast<KoTextParag *>(m_textView->cursor()->parag())->setLineSpacing(pt);
+    m_textView->cursor()->parag()->setLineSpacing(pt);
 }
 
 void KoTextViewIface::setLeftMargin(double pt)
 {
-    static_cast<KoTextParag *>(m_textView->cursor()->parag())->setMargin( QStyleSheetItem::MarginLeft,pt);
+    m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginLeft,pt);
 }
 
 void KoTextViewIface::setRightMargin(double pt)
 {
-    static_cast<KoTextParag *>(m_textView->cursor()->parag())->setMargin( QStyleSheetItem::MarginRight,pt);
+    m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginRight,pt);
 }
 
 void KoTextViewIface::setSpaceBeforeParag(double pt)
 {
-    static_cast<KoTextParag *>(m_textView->cursor()->parag())->setMargin( QStyleSheetItem::MarginTop,pt);
+    m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginTop,pt);
 }
 
 void KoTextViewIface::setSpaceAfterParag(double pt)
 {
-    static_cast<KoTextParag *>(m_textView->cursor()->parag())->setMargin( QStyleSheetItem::MarginBottom,pt);
+    m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginBottom,pt);
 }
 
 
 void KoTextViewIface::setLeftBorder( const QColor & c,double width )
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     parag->setLeftBorder(KoBorder( c, KoBorder::SOLID, width ));
 
 }
 
 void KoTextViewIface::setRightBorder( const QColor & c,double width )
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     parag->setRightBorder(KoBorder( c, KoBorder::SOLID, width ));
 }
 
 void KoTextViewIface::setTopBorder( const QColor & c,double width )
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     parag->setTopBorder(KoBorder( c, KoBorder::SOLID, width ));
 }
 
 void KoTextViewIface::setBottomBorder(const QColor & c,double width )
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     parag->setBottomBorder(KoBorder( c, KoBorder::SOLID, width ));
 }
 
 double KoTextViewIface::leftBorderWidth() const
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     return  parag->leftBorder().ptWidth;
 }
 
 double KoTextViewIface::rightBorderWidth() const
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     return parag->rightBorder().ptWidth;
 
 }
 double KoTextViewIface::topBorderWidth() const
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     return parag->topBorder().ptWidth;
 
 }
 
 double KoTextViewIface::bottomBorderWidth() const
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     return parag->bottomBorder().ptWidth;
 
 }
 
 QColor KoTextViewIface::leftBorderColor() const
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     return parag->leftBorder().color;
 }
 
 QColor KoTextViewIface::rightBorderColor() const
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     return parag->rightBorder().color;
 
 }
 
 QColor KoTextViewIface::topBorderColor() const
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     return parag->topBorder().color;
 }
 
 QColor KoTextViewIface::bottomBorderColor() const
 {
-    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    KoTextParag *parag= m_textView->cursor()->parag();
     return parag->bottomBorder().color;
 
 }

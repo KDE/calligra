@@ -20,7 +20,7 @@
 #include "koVariable.h"
 #include "koVariable.moc"
 #include <koDocumentInfo.h>
-#include <kotextparag.h>
+//#include <kotextparag.h>
 #include <kozoomhandler.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -225,7 +225,7 @@ void KoVariableCollection::recalcVariables(int type)
         {
             update = true;
             it.current()->recalc();
-            Qt3::QTextParag * parag = it.current()->paragraph();
+            KoTextParag * parag = it.current()->paragraph();
             if ( parag )
             {
                 //kdDebug() << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
@@ -277,7 +277,7 @@ void KoVariableCollection::recalcVariables(KoVariable *var)
     if( var )
     {
         var->recalc();
-        Qt3::QTextParag * parag = var->paragraph();
+        KoTextParag * parag = var->paragraph();
         if ( parag )
         {
             parag->invalidate( 0 );
@@ -417,7 +417,7 @@ void KoVariable::resize()
 {
     if ( m_deleted )
         return;
-    KoTextFormat *fmt = static_cast<KoTextFormat *>(format());
+    KoTextFormat *fmt = format();
     QString txt = text();
     width = 0;
     for ( int i = 0 ; i < (int)txt.length() ; ++i )
@@ -430,10 +430,10 @@ void KoVariable::resize()
 
 void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
 {
-    KoTextFormat * f = static_cast<KoTextFormat *>(format());
+    KoTextFormat * f = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int bl, _y;
-    KoTextParag * parag = static_cast<KoTextParag *>( paragraph() );
+    KoTextParag * parag = paragraph();
     //kdDebug() << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
     int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
 
@@ -1196,10 +1196,10 @@ QStringList KoLinkVariable::actionTexts()
 
 void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
 {
-    KoTextFormat * f = static_cast<KoTextFormat *>(format());
+    KoTextFormat * f = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int bl, _y;
-    KoTextParag * parag = static_cast<KoTextParag *>( paragraph() );
+    KoTextParag * parag = paragraph();
     //kdDebug() << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
     int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
 
@@ -1273,10 +1273,10 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
     if ( !m_varColl->variableSetting()->displayComment())
         return;
 
-    KoTextFormat * f = static_cast<KoTextFormat *>(format());
+    KoTextFormat * f = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int bl, _y;
-    KoTextParag * parag = static_cast<KoTextParag *>( paragraph() );
+    KoTextParag * parag = paragraph();
     //kdDebug() << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
     int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
 

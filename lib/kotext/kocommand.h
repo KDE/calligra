@@ -22,15 +22,13 @@
 
 #include <kcommand.h>
 #include <qrichtext_p.h>
-using namespace Qt3;
 class KoTextObject;
 class KoTextDocument;
 #include <koparaglayout.h>
-#include <kotextdocument.h> // for CustomItemsMap
 
 /**
- * Wraps a QTextCommand into a KCommand, for the UI
- * In fact the QTextCommand isn't even known from here.
+ * Wraps a KoTextDocCommand into a KCommand, for the UI
+ * In fact the KoTextDocCommand isn't even known from here.
  * When the UI orders execute or unexecute, we simply call undo/redo
  * on the KoTextObject. Since one KCommand is created for each
  * command there, the two simply map.
@@ -52,14 +50,14 @@ protected:
 /**
  * Command created when deleting some text
  */
-class KoTextDeleteCommand : public QTextDeleteCommand
+class KoTextDeleteCommand : public KoTextDocDeleteCommand
 {
 public:
     KoTextDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
                          const CustomItemsMap & customItemsMap,
                          const QValueList<KoParagLayout> & oldParagLayouts );
-    QTextCursor *execute( QTextCursor *c );
-    QTextCursor *unexecute( QTextCursor *c );
+    KoTextCursor *execute( KoTextCursor *c );
+    KoTextCursor *unexecute( KoTextCursor *c );
 protected:
     QValueList<KoParagLayout> m_oldParagLayouts;
     CustomItemsMap m_customItemsMap;
@@ -76,14 +74,14 @@ public:
                          const QValueList<KoParagLayout> &oldParagLayouts )
         : KoTextDeleteCommand( d, i, idx, str, customItemsMap, oldParagLayouts ) {}
     Commands type() const { return Insert; };
-    QTextCursor *execute( QTextCursor *c ) { return KoTextDeleteCommand::unexecute( c ); }
-    QTextCursor *unexecute( QTextCursor *c ) { return KoTextDeleteCommand::execute( c ); }
+    KoTextCursor *execute( KoTextCursor *c ) { return KoTextDeleteCommand::unexecute( c ); }
+    KoTextCursor *unexecute( KoTextCursor *c ) { return KoTextDeleteCommand::execute( c ); }
 };
 
 /**
  * Command created when changing paragraph attributes
  */
-class KoTextParagCommand : public QTextCommand
+class KoTextParagCommand : public KoTextDocCommand
 {
 public:
     KoTextParagCommand( KoTextDocument *d, int fParag, int lParag,
@@ -92,8 +90,8 @@ public:
                         int /*KoParagLayout::Flags*/ flags,
                         QStyleSheetItem::Margin margin = (QStyleSheetItem::Margin)-1 );
                         // margin is only meaningful if flags==Margins only. -1 means all.
-    QTextCursor *execute( QTextCursor *c );
-    QTextCursor *unexecute( QTextCursor *c );
+    KoTextCursor *execute( KoTextCursor *c );
+    KoTextCursor *unexecute( KoTextCursor *c );
 protected:
     int firstParag, lastParag;
     QValueList<KoParagLayout> m_oldParagLayouts;
@@ -105,34 +103,34 @@ protected:
 /**
  * Command created when changing the default format of paragraphs.
  * This is ONLY used for counters and bullet's formatting.
- * See QTextFormatCommand for the command used when changing the formatting of any set of characters.
+ * See KoTextFormatCommand for the command used when changing the formatting of any set of characters.
  */
-class KoParagFormatCommand : public QTextCommand
+class KoParagFormatCommand : public KoTextDocCommand
 {
 public:
     KoParagFormatCommand( KoTextDocument *d, int fParag, int lParag,
-                          const QValueList<QTextFormat *> &oldFormats,
-                          QTextFormat * newFormat );
+                          const QValueList<KoTextFormat *> &oldFormats,
+                          KoTextFormat * newFormat );
     ~KoParagFormatCommand();
-    QTextCursor *execute( QTextCursor *c );
-    QTextCursor *unexecute( QTextCursor *c );
+    KoTextCursor *execute( KoTextCursor *c );
+    KoTextCursor *unexecute( KoTextCursor *c );
 protected:
     int firstParag, lastParag;
-    QValueList<QTextFormat *> m_oldFormats;
-    QTextFormat * m_newFormat;
+    QValueList<KoTextFormat *> m_oldFormats;
+    KoTextFormat * m_newFormat;
 };
 
 /**
  * Command created when changing formatted text
  */
-class KoTextFormatCommand : public QTextFormatCommand
+class KoTextFormatCommand : public KoTextDocFormatCommand
 {
 public:
-    KoTextFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, QTextFormat *f, int fl );
+    KoTextFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, KoTextFormat *f, int fl );
     virtual ~KoTextFormatCommand();
 
-    QTextCursor *execute( QTextCursor *c );
-    QTextCursor *unexecute( QTextCursor *c );
+    KoTextCursor *execute( KoTextCursor *c );
+    KoTextCursor *unexecute( KoTextCursor *c );
     void resizeCustomItems();
 };
 

@@ -26,7 +26,6 @@
 #include "kostyle.h"
 #include <klocale.h>
 #include <kdebug.h>
-#include <kotextformat.h>
 
 //#define DEBUG_FORMATS
 //#define DEBUG_FORMAT_MORE
@@ -75,7 +74,7 @@ void KoTextObject::init()
 
     // Apply default style to initial paragraph
     if ( m_lastFormatted && m_defaultStyle )
-        static_cast<KoTextParag*>(m_lastFormatted)->applyStyle( m_defaultStyle );
+        m_lastFormatted->applyStyle( m_defaultStyle );
 }
 
 KoTextObject::~KoTextObject()
@@ -92,7 +91,7 @@ int KoTextObject::availableHeight() const
     return m_availableHeight;
 }
 
-int KoTextObject::docFontSize( QTextFormat * format ) const
+int KoTextObject::docFontSize( KoTextFormat * format ) const
 {
     Q_ASSERT( format );
     return static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt( format->font().pointSize() ) );
@@ -120,7 +119,7 @@ void KoTextObject::clearUndoRedoInfo()
 }
 
 
-void KoTextObject::checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type t )
+void KoTextObject::checkUndoRedoInfo( KoTextCursor * cursor, UndoRedoInfo::Type t )
 {
     if ( undoRedoInfo.valid() && ( t != undoRedoInfo.type || cursor != undoRedoInfo.cursor ) ) {
         undoRedoInfo.clear();
@@ -133,8 +132,8 @@ void KoTextObject::undo()
 {
     undoRedoInfo.clear();
     emit hideCursor();
-    QTextCursor *cursor = new QTextCursor( textDocument() ); // Kindof a dummy cursor
-    QTextCursor *c = textDocument()->undo( cursor );
+    KoTextCursor *cursor = new KoTextCursor( textDocument() ); // Kindof a dummy cursor
+    KoTextCursor *c = textDocument()->undo( cursor );
     if ( !c ) {
         delete cursor;
         emit showCursor();
@@ -153,8 +152,8 @@ void KoTextObject::redo()
 {
     undoRedoInfo.clear();
     emit hideCursor();
-    QTextCursor *cursor = new QTextCursor( textDocument() ); // Kindof a dummy cursor
-    QTextCursor *c = textDocument()->redo( cursor );
+    KoTextCursor *cursor = new KoTextCursor( textDocument() ); // Kindof a dummy cursor
+    KoTextCursor *c = textDocument()->redo( cursor );
     if ( !c ) {
         delete cursor;
         emit showCursor();
@@ -188,7 +187,7 @@ void KoTextObject::UndoRedoInfo::clear()
             case Insert:
             case Return:
             {
-                QTextCommand * cmd = new KoTextInsertCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
+                KoTextDocCommand * cmd = new KoTextInsertCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
                 textdoc->addCommand( cmd );
                 Q_ASSERT( placeHolderCmd );
                 // Inserting any custom items -> macro command, to let custom items add their command
@@ -212,7 +211,7 @@ void KoTextObject::UndoRedoInfo::clear()
             case Delete:
             case RemoveSelected:
             {
-                QTextCommand * cmd = new KoTextDeleteCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
+                KoTextDocCommand * cmd = new KoTextDeleteCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
                 textdoc->addCommand( cmd );
                 Q_ASSERT( placeHolderCmd );
                 placeHolderCmd->addCommand( new KoTextCommand( textobj, /*cmd, */QString::null ) );
@@ -235,7 +234,7 @@ void KoTextObject::UndoRedoInfo::clear()
     placeHolderCmd = 0L;
 }
 
-void KoTextObject::copyCharFormatting( Qt3::QTextParag *parag, int position, int index /*in text*/, bool moveCustomItems )
+void KoTextObject::copyCharFormatting( KoTextParag *parag, int position, int index /*in text*/, bool moveCustomItems )
 {
     KoTextStringChar * ch = parag->at( position );
     if ( ch->format() ) {
@@ -245,17 +244,17 @@ void KoTextObject::copyCharFormatting( Qt3::QTextParag *parag, int position, int
     if ( ch->isCustom() )
     {
         kdDebug(32001) << "KoTextObject::copyCharFormatting moving custom item " << ch->customItem() << " to text's " << index << " char"  << endl;
-        undoRedoInfo.customItemsMap.insert( index, static_cast<KoTextCustomItem *>( ch->customItem() ) );
+        undoRedoInfo.customItemsMap.insert( index, ch->customItem() );
         // We copy the custom item to customItemsMap in all cases (see setFormat)
         // We only remove from 'ch' if moveCustomItems was specified
         if ( moveCustomItems )
-            static_cast<KoTextParag*>(parag)->removeCustomItem(position);
+            parag->removeCustomItem(position);
         //ch->loseCustomItem();
     }
 }
 
 // Based on QTextView::readFormats - with all code duplication moved to copyCharFormatting
-void KoTextObject::readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParagLayouts, bool moveCustomItems )
+void KoTextObject::readFormats( KoTextCursor &c1, KoTextCursor &c2, bool copyParagLayouts, bool moveCustomItems )
 {
     //kdDebug() << "KoTextObject::readFormats moveCustomItems=" << moveCustomItems << endl;
     c2.restoreState();
@@ -274,7 +273,7 @@ void KoTextObject::readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParag
         for ( i = c1.index(); i < c1.parag()->length(); ++i, ++lastIndex )
             copyCharFormatting( c1.parag(), i, lastIndex, moveCustomItems );
         //++lastIndex; // skip the '\n'.
-        Qt3::QTextParag *p = c1.parag()->next();
+        KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             undoRedoInfo.text += p->string()->toString().left( p->length() - 1 ) + '\n';
             //kdDebug() << "KoTextObject::readFormats (mid) copying from 0 to "  << p->length()-1 << " into i+" << lastIndex << endl;
@@ -291,9 +290,9 @@ void KoTextObject::readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParag
     }
 
     if ( copyParagLayouts ) {
-        Qt3::QTextParag *p = c1.parag();
+        KoTextParag *p = c1.parag();
         while ( p ) {
-            undoRedoInfo.oldParagLayouts << static_cast<KoTextParag*>(p)->paragLayout();
+            undoRedoInfo.oldParagLayouts << p->paragLayout();
             if ( p == c2.parag() )
                 break;
             p = p->next();
@@ -308,7 +307,7 @@ void KoTextObject::newPlaceHolderCommand( const QString & name )
     emit newCommand( undoRedoInfo.placeHolderCmd );
 }
 
-void KoTextObject::storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId )
+void KoTextObject::storeParagUndoRedoInfo( KoTextCursor * cursor, int selectionId )
 {
     undoRedoInfo.clear();
     KoTextDocument * textdoc = textDocument();
@@ -316,27 +315,27 @@ void KoTextObject::storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId
     undoRedoInfo.text = " ";
     undoRedoInfo.index = 1;
     if ( !textdoc->hasSelection( selectionId ) ) {
-        Qt3::QTextParag * p = cursor->parag();
+        KoTextParag * p = cursor->parag();
         undoRedoInfo.id = p->paragId();
         undoRedoInfo.eid = p->paragId();
-        undoRedoInfo.oldParagLayouts << static_cast<KoTextParag*>(p)->paragLayout();
+        undoRedoInfo.oldParagLayouts << p->paragLayout();
     }
     else{
-        Qt3::QTextParag *start = textdoc->selectionStart( selectionId );
-        Qt3::QTextParag *end = textdoc->selectionEnd( selectionId );
+        KoTextParag *start = textdoc->selectionStart( selectionId );
+        KoTextParag *end = textdoc->selectionEnd( selectionId );
         undoRedoInfo.id = start->paragId();
         undoRedoInfo.eid = end->paragId();
         for ( ; start && start != end->next() ; start = start->next() )
         {
-            undoRedoInfo.oldParagLayouts << static_cast<KoTextParag*>(start)->paragLayout();
-            //kdDebug(32001) << "KoTextObject:storeParagUndoRedoInfo storing counter " << static_cast<KoTextParag*>(start)->paragLayout().counter.counterType << endl;
+            undoRedoInfo.oldParagLayouts << start->paragLayout();
+            //kdDebug(32001) << "KoTextObject:storeParagUndoRedoInfo storing counter " << start->paragLayout().counter.counterType << endl;
         }
     }
 }
 
-void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*currentFormat*/, KeyboardAction action )
+void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*currentFormat*/, KeyboardAction action )
 {
-    KoTextParag * parag = static_cast<KoTextParag *>(cursor->parag());
+    KoTextParag * parag = cursor->parag();
     setLastFormattedParag( parag );
     emit hideCursor();
     bool doUpdateCurrentFormat = true;
@@ -358,9 +357,9 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
         }
         KoParagLayout paragLayout;
         if ( parag->next() )
-            paragLayout = static_cast<KoTextParag *>( parag->next() )->paragLayout();
+            paragLayout = parag->next()->paragLayout();
 
-        Qt3::QTextParag *old = cursor->parag();
+        KoTextParag *old = cursor->parag();
         if ( cursor->remove() ) {
             if ( old != cursor->parag() && m_lastFormatted == old ) // 'old' has been deleted
                 m_lastFormatted = cursor->parag() ? cursor->parag()->prev() : 0;
@@ -394,7 +393,7 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
             undoRedoInfo.text.prepend( QString( ch->c ) );
             copyCharFormatting( cursor->parag(), cursor->index(), 0, true );
             undoRedoInfo.index = cursor->index();
-            KoParagLayout paragLayout = static_cast<KoTextParag *>( cursor->parag() )->paragLayout();
+            KoParagLayout paragLayout = cursor->parag()->paragLayout();
             if ( cursor->remove() ) {
                 undoRedoInfo.text.remove( 0, 1 );
                 undoRedoInfo.text.prepend( "\n" );
@@ -420,14 +419,14 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
             setLastFormattedParag( cursor->parag()->prev() );
 
         doUpdateCurrentFormat = false;
-        KoStyle * style = static_cast<KoTextParag *>( cursor->parag()->prev() )->style();
+        KoStyle * style = cursor->parag()->prev()->style();
         if ( style )
         {
             KoStyle * newStyle = style->followingStyle();
             if ( newStyle && style != newStyle ) // different "following style" applied
             {
                 doUpdateCurrentFormat = true;
-                //currentFormat = static_cast<KoTextFormat *>( textDocument()->formatCollection()->format( cursor->parag()->paragFormat() ) );
+                //currentFormat = textDocument()->formatCollection()->format( cursor->parag()->paragFormat() );
                 //kdDebug() << "KoTextFrameSet::doKeyboardAction currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
             }
         }
@@ -446,7 +445,7 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
             }
             if ( cursor->atParagEnd() ) {
                 // Get paraglayout from next parag (next can't be 0 here)
-                KoParagLayout paragLayout = static_cast<KoTextParag *>( parag->next() )->paragLayout();
+                KoParagLayout paragLayout = parag->next()->paragLayout();
                 if ( cursor->remove() )
                 {
                     m_lastFormatted = cursor->parag();
@@ -474,7 +473,7 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
     emit updateUI( doUpdateCurrentFormat );
 }
 
-void KoTextObject::insert( QTextCursor * cursor, KoTextFormat * currentFormat,
+void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
                              const QString &txt, bool checkNewLine,
                              bool removeSelected, const QString & commandName,
                              CustomItemsMap customItemsMap,int selectionId )
@@ -494,7 +493,7 @@ void KoTextObject::insert( QTextCursor * cursor, KoTextFormat * currentFormat,
             removeSelectedTextCommand( cursor,selectionId  );
         }
     }
-    QTextCursor c2 = *cursor;
+    KoTextCursor c2 = *cursor;
     if ( !customItemsMap.isEmpty() )
         clearUndoRedoInfo();
     checkUndoRedoInfo( cursor, UndoRedoInfo::Insert );
@@ -508,7 +507,7 @@ void KoTextObject::insert( QTextCursor * cursor, KoTextFormat * currentFormat,
     int oldLen = undoRedoInfo.text.length();
     setLastFormattedParag( checkNewLine && cursor->parag()->prev() ?
                            cursor->parag()->prev() : cursor->parag() );
-    QTextCursor oldCursor = *cursor;
+    KoTextCursor oldCursor = *cursor;
     cursor->insert( txt, checkNewLine );  // insert the text
 
     if ( !customItemsMap.isEmpty() ) {
@@ -519,12 +518,12 @@ void KoTextObject::insert( QTextCursor * cursor, KoTextFormat * currentFormat,
     textdoc->setSelectionStart( KoTextDocument::Temp, &oldCursor );
     textdoc->setSelectionEnd( KoTextDocument::Temp, cursor );
     //kdDebug() << "KoTextObject::insert setting format " << currentFormat << endl;
-    textdoc->setFormat( KoTextDocument::Temp, currentFormat, QTextFormat::Format );
+    textdoc->setFormat( KoTextDocument::Temp, currentFormat, KoTextFormat::Format );
     textdoc->removeSelection( KoTextDocument::Temp );
 
     // Speed optimization: if we only type a char, and it doesn't
     // invalidate the next parag, only format the current one
-    Qt3::QTextParag *parag = cursor->parag();
+    KoTextParag *parag = cursor->parag();
     if ( !checkNewLine && m_lastFormatted == parag && parag->next() && parag->next()->isValid() )
     {
         parag->format();
@@ -556,7 +555,7 @@ void KoTextObject::insert( QTextCursor * cursor, KoTextFormat * currentFormat,
         clearUndoRedoInfo();
 }
 
-void KoTextObject::pasteText( QTextCursor * cursor, const QString & text, KoTextFormat * currentFormat, bool removeSelected )
+void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTextFormat * currentFormat, bool removeSelected )
 {
     kdDebug(32001) << "KoTextObject::pasteText" << endl;
     QString t = text;
@@ -573,7 +572,7 @@ void KoTextObject::pasteText( QTextCursor * cursor, const QString & text, KoText
 }
 
 
-KCommand *KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newStyle,
+KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newStyle,
                                int selectionId,
                                int paragLayoutFlags, int formatFlags, bool createUndoRedo, bool interactive, bool emitCommand )
 {
@@ -596,18 +595,18 @@ KCommand *KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newSty
     if ( paragLayoutFlags != 0 )
     {
         if ( !textdoc->hasSelection( selectionId ) ) {
-            static_cast<KoTextParag*>(cursor->parag())->setParagLayout( newStyle->paragLayout(), paragLayoutFlags );
+            cursor->parag()->setParagLayout( newStyle->paragLayout(), paragLayoutFlags );
         } else {
-            Qt3::QTextParag *start = textdoc->selectionStart( selectionId );
-            Qt3::QTextParag *end = textdoc->selectionEnd( selectionId );
+            KoTextParag *start = textdoc->selectionStart( selectionId );
+            KoTextParag *end = textdoc->selectionEnd( selectionId );
             for ( ; start && start != end->next() ; start = start->next() )
-                static_cast<KoTextParag*>(start)->setParagLayout( newStyle->paragLayout(), paragLayoutFlags );
+                start->setParagLayout( newStyle->paragLayout(), paragLayoutFlags );
         }
 
         if ( createUndoRedo )
         {
             //kdDebug(32001) << "KoTextObject::applyStyle KoTextParagCommand" << endl;
-            QTextCommand * cmd = new KoTextParagCommand( textdoc, undoRedoInfo.id, undoRedoInfo.eid,
+            KoTextDocCommand * cmd = new KoTextParagCommand( textdoc, undoRedoInfo.id, undoRedoInfo.eid,
                                                          undoRedoInfo.oldParagLayouts,
                                                          newStyle->paragLayout(), paragLayoutFlags );
             textdoc->addCommand( cmd );
@@ -617,8 +616,8 @@ KCommand *KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newSty
 
     // 2
     //kdDebug(32001) << "KoTextObject::applyStyle gathering text and formatting" << endl;
-    Qt3::QTextParag * firstParag;
-    Qt3::QTextParag * lastParag;
+    KoTextParag * firstParag;
+    KoTextParag * lastParag;
     if ( !textdoc->hasSelection( selectionId ) ) {
         // No selection -> apply style formatting to the whole paragraph
         firstParag = cursor->parag();
@@ -632,28 +631,28 @@ KCommand *KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newSty
 
     if ( formatFlags != 0 )
     {
-        KoTextFormat * newFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( &newStyle->format() ) );
+        KoTextFormat * newFormat = textdoc->formatCollection()->format( &newStyle->format() );
 
         if ( createUndoRedo )
         {
-            QValueList<QTextFormat *> lstFormats;
+            QValueList<KoTextFormat *> lstFormats;
             //QString str;
-            for ( Qt3::QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
+            for ( KoTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
             {
                 //str += parag->string()->toString() + '\n';
                 lstFormats.append( parag->paragFormat() );
             }
-            QTextCursor c1( textdoc );
+            KoTextCursor c1( textdoc );
             c1.setParag( firstParag );
             c1.setIndex( 0 );
-            QTextCursor c2( textdoc );
+            KoTextCursor c2( textdoc );
             c2.setParag( lastParag );
             c2.setIndex( lastParag->string()->length() );
             undoRedoInfo.clear();
             undoRedoInfo.type = UndoRedoInfo::Invalid; // same trick
             readFormats( c1, c2 ); // gather char-format info but not paraglayouts nor customitems
 
-            QTextCommand * cmd = new KoTextFormatCommand( textdoc, firstParag->paragId(), 0,
+            KoTextDocCommand * cmd = new KoTextFormatCommand( textdoc, firstParag->paragId(), 0,
                                                          lastParag->paragId(), c2.index(),
                                                          undoRedoInfo.text.rawData(), newFormat,
                                                          formatFlags );
@@ -668,21 +667,21 @@ KCommand *KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newSty
         }
 
         // apply '2' and '3' (format)
-        for ( Qt3::QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
+        for ( KoTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
         {
             kdDebug(32001) << "KoTextObject::applyStyle parag:" << parag->paragId()
                            << ", from 0 to " << parag->string()->length() << ", format=" << newFormat << endl;
             parag->setFormat( 0, parag->string()->length(), newFormat, true, formatFlags );
             parag->setFormat( newFormat );
         }
-        //currentFormat = static_cast<KoTextFormat *>( textDocument()->formatCollection()->format( newFormat ) );
+        //currentFormat = textDocument()->formatCollection()->format( newFormat );
         //kdDebug() << "KoTextObject::applyStyle currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
     }
 
     //resize all variables after applying the style
-    QPtrListIterator<Qt3::QTextCustomItem> cit( textdoc->allCustomItems() );
+    QPtrListIterator<KoTextCustomItem> cit( textdoc->allCustomItems() );
     for ( ; cit.current() ; ++cit )
-        static_cast<KoTextCustomItem *>( cit.current() )->resize();
+        cit.current()->resize();
 
 
     if ( interactive )
@@ -713,7 +712,7 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
                      << endl;*/
 
     KoTextDocument * textdoc = textDocument();
-    KoTextParag *p = static_cast<KoTextParag *>(textdoc->firstParag());
+    KoTextParag *p = textdoc->firstParag();
     while ( p ) {
         if ( p->style() == changedStyle )
         {
@@ -725,7 +724,7 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
             else
             {
                 // Apply this style again, to get the changes
-                QTextCursor cursor( textdoc );
+                KoTextCursor cursor( textdoc );
                 cursor.setParag( p );
                 cursor.setIndex( 0 );
                 kdDebug() << "KoTextObject::applyStyleChange applying to paragraph " << p << " " << p->paragId() << endl;
@@ -770,7 +769,7 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
                             false, false ); // don't create undo/redo, not interactive
             }
         }
-        p = static_cast<KoTextParag *>(p->next());
+        p = p->next();
     }
     setLastFormattedParag( textdoc->firstParag() );
     formatMore();
@@ -787,7 +786,7 @@ KCommand *KoTextObject::setFormatCommand( KoTextFormat *format, int flags, bool 
     return cmd;
 }
 
-KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat ** pCurrentFormat, KoTextFormat *format, int flags, bool zoomFont, int selectionId )
+KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat ** pCurrentFormat, KoTextFormat *format, int flags, bool zoomFont, int selectionId )
 {
     KCommand *ret = 0;
     KoTextDocument * textdoc = textDocument();
@@ -809,10 +808,12 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat **
         if ( pCurrentFormat )
             (*pCurrentFormat)->removeRef();
         // Find format in collection
-        newFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( format ) );
+        newFormat = textdoc->formatCollection()->format( format );
         if ( newFormat->isMisspelled() ) {
             newFormat->removeRef();
-            newFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( newFormat->font(), newFormat->color() ) );
+            KoTextFormat fNoMisspelled( *newFormat );
+            fNoMisspelled.setMisspelled( false );
+            newFormat = textdoc->formatCollection()->format( &fNoMisspelled );
         }
         if ( pCurrentFormat )
             (*pCurrentFormat) = newFormat;
@@ -820,8 +821,8 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat **
 
     if ( textdoc->hasSelection( selectionId ) ) {
         emit hideCursor();
-        QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
-        QTextCursor c2 = textdoc->selectionEndCursor( selectionId );
+        KoTextCursor c1 = textdoc->selectionStartCursor( selectionId );
+        KoTextCursor c2 = textdoc->selectionEndCursor( selectionId );
         undoRedoInfo.clear();
         int id = c1.parag()->paragId();
         int index = c1.index();
@@ -866,7 +867,7 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat **
     return ret;
 }
 
-void KoTextObject::setFormat( QTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont )
+void KoTextObject::setFormat( KoTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont )
 {
     KCommand *cmd = setFormatCommand( cursor, currentFormat, format, flags, zoomFont );
     if (cmd)
@@ -879,12 +880,12 @@ void KoTextObject::emitNewCommand(KCommand *cmd)
         emit newCommand( cmd );
 }
 
-KCommand *KoTextObject::setCounterCommand( QTextCursor * cursor, const KoParagCounter & counter, int selectionId  )
+KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagCounter & counter, int selectionId  )
 {
     KoTextDocument * textdoc = textDocument();
     const KoParagCounter * curCounter = 0L;
     if(cursor)
-        curCounter=static_cast<KoTextParag*>(cursor->parag())->counter();
+        curCounter=cursor->parag()->counter();
     if ( !textdoc->hasSelection( selectionId ) &&
          curCounter && counter == *curCounter )
         return 0L;
@@ -892,11 +893,11 @@ KCommand *KoTextObject::setCounterCommand( QTextCursor * cursor, const KoParagCo
     if(cursor)
         storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId ) && cursor) {
-        static_cast<KoTextParag*>(cursor->parag())->setCounter( counter );
+        cursor->parag()->setCounter( counter );
         setLastFormattedParag( cursor->parag() );
     } else {
-        Qt3::QTextParag *start = textdoc->selectionStart( selectionId );
-        Qt3::QTextParag *end = textdoc->selectionEnd( selectionId );
+        KoTextParag *start = textdoc->selectionStart( selectionId );
+        KoTextParag *end = textdoc->selectionEnd( selectionId );
         // Special hack for BR25742, don't apply bullet to last empty parag of the selection
         if ( start != end && end->length() <= 1 )
         {
@@ -905,7 +906,7 @@ KCommand *KoTextObject::setCounterCommand( QTextCursor * cursor, const KoParagCo
         }
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
-            static_cast<KoTextParag*>(start)->setCounter( counter );
+            start->setCounter( counter );
     }
     formatMore();
     emit repaintChanged( this );
@@ -924,7 +925,7 @@ KCommand *KoTextObject::setCounterCommand( QTextCursor * cursor, const KoParagCo
     return new KoTextCommand( this, /*cmd, */i18n("Change list type") );
 }
 
-KCommand * KoTextObject::setAlignCommand( QTextCursor * cursor, int align , int selectionId )
+KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align , int selectionId )
 {
     KoTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( selectionId ) && cursor &&
@@ -935,16 +936,16 @@ KCommand * KoTextObject::setAlignCommand( QTextCursor * cursor, int align , int 
     if(cursor)
         storeParagUndoRedoInfo( cursor ,selectionId );
     if ( !textdoc->hasSelection( selectionId ) &&cursor ) {
-        static_cast<KoTextParag *>(cursor->parag())->setAlign(align);
+        cursor->parag()->setAlign(align);
         setLastFormattedParag( cursor->parag() );
     }
     else
     {
-        Qt3::QTextParag *start = textDocument()->selectionStart( selectionId );
-        Qt3::QTextParag *end = textDocument()->selectionEnd( selectionId  );
+        KoTextParag *start = textDocument()->selectionStart( selectionId );
+        KoTextParag *end = textDocument()->selectionEnd( selectionId  );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
-            static_cast<KoTextParag *>(start)->setAlign(align);
+            start->setAlign(align);
     }
     formatMore();
     emit repaintChanged( this );
@@ -960,28 +961,28 @@ KCommand * KoTextObject::setAlignCommand( QTextCursor * cursor, int align , int 
     return new KoTextCommand( this, /*cmd, */i18n("Change Alignment") );
 }
 
-KCommand * KoTextObject::setMarginCommand( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin , int selectionId ) {
+KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin , int selectionId ) {
     KoTextDocument * textdoc = textDocument();
     //kdDebug(32001) << "KoTextObject::setMargin " << m << " to value " << margin << endl;
-    //kdDebug(32001) << "Current margin is " << static_cast<KoTextParag *>(cursor->parag())->margin(m) << endl;
+    //kdDebug(32001) << "Current margin is " << cursor->parag()->margin(m) << endl;
     if ( !textdoc->hasSelection( selectionId ) && cursor &&
-         static_cast<KoTextParag *>(cursor->parag())->margin(m) == margin )
+         cursor->parag()->margin(m) == margin )
         return 0L; // No change needed.
 
     emit hideCursor();
     if( cursor)
         storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId )&&cursor ) {
-        static_cast<KoTextParag *>(cursor->parag())->setMargin(m, margin);
+        cursor->parag()->setMargin(m, margin);
         setLastFormattedParag( cursor->parag() );
     }
     else
     {
-        Qt3::QTextParag *start = textDocument()->selectionStart( selectionId );
-        Qt3::QTextParag *end = textDocument()->selectionEnd( selectionId );
+        KoTextParag *start = textDocument()->selectionStart( selectionId );
+        KoTextParag *end = textDocument()->selectionEnd( selectionId );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
-            static_cast<KoTextParag *>(start)->setMargin(m, margin);
+            start->setMargin(m, margin);
     }
     formatMore();
     emit repaintChanged( this );
@@ -1004,31 +1005,31 @@ KCommand * KoTextObject::setMarginCommand( QTextCursor * cursor, QStyleSheetItem
     return  new KoTextCommand( this, /*cmd, */name );
 }
 
-KCommand * KoTextObject::setLineSpacingCommand( QTextCursor * cursor, double spacing, int selectionId )
+KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double spacing, int selectionId )
 {
     KoTextDocument * textdoc = textDocument();
     //kdDebug(32001) << "KoTextObject::setLineSpacing to value " << spacing << endl;
-    //kdDebug(32001) << "Current spacing is " << static_cast<KoTextParag *>(cursor->parag())->kwLineSpacing() << endl;
-    //kdDebug(32001) << "Comparison says " << ( static_cast<KoTextParag *>(cursor->parag())->kwLineSpacing() == spacing ) << endl;
+    //kdDebug(32001) << "Current spacing is " << cursor->parag()->kwLineSpacing() << endl;
+    //kdDebug(32001) << "Comparison says " << ( cursor->parag()->kwLineSpacing() == spacing ) << endl;
     //kdDebug(32001) << "hasSelection " << textdoc->hasSelection( KoTextDocument::Standard ) << endl;
     if ( !textdoc->hasSelection( selectionId ) && cursor &&
-         static_cast<KoTextParag *>(cursor->parag())->kwLineSpacing() == spacing )
+         cursor->parag()->kwLineSpacing() == spacing )
         return 0L; // No change needed.
 
     emit hideCursor();
     if(cursor)
         storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId ) && cursor ) {
-        static_cast<KoTextParag *>(cursor->parag())->setLineSpacing(spacing);
+        cursor->parag()->setLineSpacing(spacing);
         setLastFormattedParag( cursor->parag() );
     }
     else
     {
-        Qt3::QTextParag *start = textDocument()->selectionStart( selectionId );
-        Qt3::QTextParag *end = textDocument()->selectionEnd( selectionId );
+        KoTextParag *start = textDocument()->selectionStart( selectionId );
+        KoTextParag *end = textDocument()->selectionEnd( selectionId );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
-            static_cast<KoTextParag *>(start)->setLineSpacing(spacing);
+            start->setLineSpacing(spacing);
     }
     formatMore();
     emit repaintChanged( this );
@@ -1045,43 +1046,43 @@ KCommand * KoTextObject::setLineSpacingCommand( QTextCursor * cursor, double spa
 }
 
 
-KCommand * KoTextObject::setBordersCommand( QTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder , int selectionId )
+KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder , int selectionId )
 {
   KoTextDocument * textdoc = textDocument();
   if ( !textdoc->hasSelection( selectionId ) && cursor &&
-       static_cast<KoTextParag *>(cursor->parag())->leftBorder() ==leftBorder &&
-       static_cast<KoTextParag *>(cursor->parag())->rightBorder() ==rightBorder &&
-       static_cast<KoTextParag *>(cursor->parag())->topBorder() ==topBorder &&
-       static_cast<KoTextParag *>(cursor->parag())->bottomBorder() ==bottomBorder )
+       cursor->parag()->leftBorder() ==leftBorder &&
+       cursor->parag()->rightBorder() ==rightBorder &&
+       cursor->parag()->topBorder() ==topBorder &&
+       cursor->parag()->bottomBorder() ==bottomBorder )
         return 0L; // No change needed.
 
     emit hideCursor();
     if(cursor)
         storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId ) ) {
-      static_cast<KoTextParag *>(cursor->parag())->setLeftBorder(leftBorder);
-      static_cast<KoTextParag *>(cursor->parag())->setRightBorder(rightBorder);
-      static_cast<KoTextParag *>(cursor->parag())->setBottomBorder(bottomBorder);
-      static_cast<KoTextParag *>(cursor->parag())->setTopBorder(topBorder);
+      cursor->parag()->setLeftBorder(leftBorder);
+      cursor->parag()->setRightBorder(rightBorder);
+      cursor->parag()->setBottomBorder(bottomBorder);
+      cursor->parag()->setTopBorder(topBorder);
       setLastFormattedParag( cursor->parag() );
     }
     else
     {
-        Qt3::QTextParag *start = textDocument()->selectionStart( selectionId );
-        Qt3::QTextParag *end = textDocument()->selectionEnd( selectionId );
+        KoTextParag *start = textDocument()->selectionStart( selectionId );
+        KoTextParag *end = textDocument()->selectionEnd( selectionId );
         setLastFormattedParag( start );
         KoBorder tmpBorder;
         tmpBorder.ptWidth=0;
         for ( ; start && start != end->next() ; start = start->next() )
           {
-            static_cast<KoTextParag *>(start)->setLeftBorder(leftBorder);
-            static_cast<KoTextParag *>(start)->setRightBorder(rightBorder);
+            start->setLeftBorder(leftBorder);
+            start->setRightBorder(rightBorder);
             //remove border
-            static_cast<KoTextParag *>(start)->setTopBorder(tmpBorder);
-            static_cast<KoTextParag *>(start)->setBottomBorder(tmpBorder);
+            start->setTopBorder(tmpBorder);
+            start->setBottomBorder(tmpBorder);
           }
-        static_cast<KoTextParag *>(end)->setBottomBorder(bottomBorder);
-        static_cast<KoTextParag *>(textDocument()->selectionStart( selectionId ))->setTopBorder(topBorder);
+        end->setBottomBorder(bottomBorder);
+        textDocument()->selectionStart( selectionId )->setTopBorder(topBorder);
     }
     formatMore();
     emit repaintChanged( this );
@@ -1103,11 +1104,11 @@ KCommand * KoTextObject::setBordersCommand( QTextCursor * cursor, const KoBorder
 }
 
 
-KCommand * KoTextObject::setTabListCommand( QTextCursor * cursor, const KoTabulatorList &tabList, int selectionId  )
+KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabulatorList &tabList, int selectionId  )
 {
     KoTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( selectionId ) && cursor &&
-         static_cast<KoTextParag *>(cursor->parag())->tabList() == tabList )
+         cursor->parag()->tabList() == tabList )
         return 0L; // No change needed.
 
     emit hideCursor();
@@ -1115,16 +1116,16 @@ KCommand * KoTextObject::setTabListCommand( QTextCursor * cursor, const KoTabula
         storeParagUndoRedoInfo( cursor, selectionId );
 
     if ( !textdoc->hasSelection( selectionId ) && cursor ) {
-        static_cast<KoTextParag *>(cursor->parag())->setTabList( tabList );
+        cursor->parag()->setTabList( tabList );
         setLastFormattedParag( cursor->parag() );
     }
     else
     {
-        Qt3::QTextParag *start = textDocument()->selectionStart( selectionId );
-        Qt3::QTextParag *end = textDocument()->selectionEnd( selectionId );
+        KoTextParag *start = textDocument()->selectionStart( selectionId );
+        KoTextParag *end = textDocument()->selectionEnd( selectionId );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
-            static_cast<KoTextParag *>(start)->setTabList( tabList );
+            start->setTabList( tabList );
     }
 
     formatMore();
@@ -1141,13 +1142,13 @@ KCommand * KoTextObject::setTabListCommand( QTextCursor * cursor, const KoTabula
     return new KoTextCommand( this, /*cmd, */i18n("Change Tabulator") );
 }
 
-KCommand * KoTextObject::setShadowCommand( QTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId )
+KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId )
 {
     KoTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( selectionId ) && cursor &&
-         static_cast<KoTextParag *>(cursor->parag())->shadowColor() == col &&
-         static_cast<KoTextParag *>(cursor->parag())->shadowDirection() == direction &&
-         static_cast<KoTextParag *>(cursor->parag())->shadowDistance() == dist )
+         cursor->parag()->shadowColor() == col &&
+         cursor->parag()->shadowDirection() == direction &&
+         cursor->parag()->shadowDistance() == dist )
         return 0L; // No change needed.
 
     emit hideCursor();
@@ -1155,16 +1156,16 @@ KCommand * KoTextObject::setShadowCommand( QTextCursor * cursor,double dist, sho
         storeParagUndoRedoInfo( cursor, selectionId );
 
     if ( !textdoc->hasSelection( selectionId ) && cursor ) {
-        static_cast<KoTextParag *>(cursor->parag())->setShadow( dist, direction, col );
+        cursor->parag()->setShadow( dist, direction, col );
         setLastFormattedParag( cursor->parag() );
     }
     else
     {
-        Qt3::QTextParag *start = textDocument()->selectionStart( selectionId );
-        Qt3::QTextParag *end = textDocument()->selectionEnd( selectionId );
+        KoTextParag *start = textDocument()->selectionStart( selectionId );
+        KoTextParag *end = textDocument()->selectionEnd( selectionId );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
-            static_cast<KoTextParag *>(start)->setShadow( dist, direction, col );
+            start->setShadow( dist, direction, col );
     }
 
     formatMore();
@@ -1184,7 +1185,7 @@ KCommand * KoTextObject::setShadowCommand( QTextCursor * cursor,double dist, sho
 }
 
 
-void KoTextObject::removeSelectedText( QTextCursor * cursor, int selectionId, const QString & cmdName, bool createUndoRedo )
+void KoTextObject::removeSelectedText( KoTextCursor * cursor, int selectionId, const QString & cmdName, bool createUndoRedo )
 {
     KoTextDocument * textdoc = textDocument();
     emit hideCursor();
@@ -1197,8 +1198,8 @@ void KoTextObject::removeSelectedText( QTextCursor * cursor, int selectionId, co
             newPlaceHolderCommand( cmdName.isNull() ? i18n("Remove Selected Text") : cmdName );
         }
     }
-    QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
-    QTextCursor c2 = textdoc->selectionEndCursor( selectionId );
+    KoTextCursor c1 = textdoc->selectionStartCursor( selectionId );
+    KoTextCursor c2 = textdoc->selectionEndCursor( selectionId );
     readFormats( c1, c2, true, true );
     kdDebug() << "KoTextObject::removeSelectedText text=" << undoRedoInfo.text.toString() << endl;
 
@@ -1216,20 +1217,20 @@ void KoTextObject::removeSelectedText( QTextCursor * cursor, int selectionId, co
         undoRedoInfo.clear();
 }
 
-KCommand * KoTextObject::removeSelectedTextCommand( QTextCursor * cursor, int selectionId )
+KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int selectionId )
 {
     undoRedoInfo.clear();
     textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
 
-    QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
-    QTextCursor c2 = textdoc->selectionEndCursor( selectionId );
+    KoTextCursor c1 = textdoc->selectionStartCursor( selectionId );
+    KoTextCursor c2 = textdoc->selectionEndCursor( selectionId );
     readFormats( c1, c2, true, true );
 
     textdoc->removeSelectedText( selectionId, cursor );
 
     KMacroCommand *macroCmd = new KMacroCommand( i18n("Remove Selected Text") );
 
-    QTextCommand *cmd = new KoTextDeleteCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
+    KoTextDocCommand *cmd = new KoTextDeleteCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
                                                  undoRedoInfo.text.rawData(),
                                                  undoRedoInfo.customItemsMap,
                                                  undoRedoInfo.oldParagLayouts );
@@ -1245,25 +1246,25 @@ KCommand * KoTextObject::removeSelectedTextCommand( QTextCursor * cursor, int se
     return macroCmd;
 }
 
-KCommand* KoTextObject::replaceSelectionCommand( QTextCursor * cursor, const QString & replacement,
+KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QString & replacement,
                                                    int selectionId, const QString & cmdName)
 {
     emit hideCursor();
     KMacroCommand * macroCmd = new KMacroCommand( cmdName );
 
     // Remember formatting
-    QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
-    QTextFormat * format = c1.parag()->at( c1.index() )->format();
+    KoTextCursor c1 = textdoc->selectionStartCursor( selectionId );
+    KoTextFormat * format = c1.parag()->at( c1.index() )->format();
     format->addRef();
 
     // Remove selected text
     macroCmd->addCommand( removeSelectedTextCommand( cursor, selectionId ) );
 
     // Insert replacement
-    insert( cursor, static_cast<KoTextFormat *>(format),
+    insert( cursor, format,
             replacement, true, false, QString::null /* no place holder command */ );
 
-    QTextCommand * cmd = new KoTextInsertCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
+    KoTextDocCommand * cmd = new KoTextInsertCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
                                                   undoRedoInfo.text.rawData(),
                                                   CustomItemsMap(), undoRedoInfo.oldParagLayouts );
     textdoc->addCommand( cmd );
@@ -1286,12 +1287,12 @@ KCommand* KoTextObject::replaceSelectionCommand( QTextCursor * cursor, const QSt
     return macroCmd;
 }
 
-KCommand * KoTextObject::insertParagraphCommand( QTextCursor *cursor )
+KCommand * KoTextObject::insertParagraphCommand( KoTextCursor *cursor )
 {
     return replaceSelectionCommand( cursor, "\n", KoTextDocument::Standard, QString::null );
 }
 
-void KoTextObject::highlightPortion( Qt3::QTextParag * parag, int index, int length )
+void KoTextObject::highlightPortion( KoTextParag * parag, int index, int length )
 {
     if ( !m_highlightSelectionAdded )
     {
@@ -1303,7 +1304,7 @@ void KoTextObject::highlightPortion( Qt3::QTextParag * parag, int index, int len
     }
 
     removeHighlight(); // remove previous highlighted selection
-    QTextCursor cursor( textdoc );
+    KoTextCursor cursor( textdoc );
     cursor.setParag( parag );
     cursor.setIndex( index );
     textdoc->setSelectionStart( HighlightSelection, &cursor );
@@ -1317,7 +1318,7 @@ void KoTextObject::removeHighlight()
 {
     if ( textdoc->hasSelection( HighlightSelection ) )
     {
-        Qt3::QTextParag * oldParag = textdoc->selectionStart( HighlightSelection );
+        KoTextParag * oldParag = textdoc->selectionStart( HighlightSelection );
         oldParag->setChanged( true );
         textdoc->removeSelection( HighlightSelection );
     }
@@ -1345,13 +1346,13 @@ void KoTextObject::setViewArea( QWidget* w, int maxY )
     m_mapViewAreas.replace( w, maxY );
 }
 
-void KoTextObject::setLastFormattedParag( Qt3::QTextParag *parag )
+void KoTextObject::setLastFormattedParag( KoTextParag *parag )
 {
     if ( !m_lastFormatted || !parag || m_lastFormatted->paragId() >= parag->paragId() )
         m_lastFormatted = parag;
 }
 
-void KoTextObject::ensureFormatted( Qt3::QTextParag * parag, bool emitAfterFormatting /* = true */ )
+void KoTextObject::ensureFormatted( KoTextParag * parag, bool emitAfterFormatting /* = true */ )
 {
     while ( !parag->isValid() )
     {
@@ -1405,7 +1406,7 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
               m_lastFormatted && bottom + m_lastFormatted->rect().height() <= m_availableHeight &&
                   ( i < to || bottom <= viewsBottom ) ; ++i )
         {
-            Qt3::QTextParag* parag = m_lastFormatted;
+            KoTextParag* parag = m_lastFormatted;
 #ifdef DEBUG_FORMAT_MORE
             kdDebug(32002) << "formatMore formatting id=" << parag->paragId() << endl;
 #endif
@@ -1493,20 +1494,20 @@ void KoTextObject::typingDone()
 }
 
 
-KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag)
+KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,KoTextCursor *cursor, KoTextParag *parag)
 {
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
-    KoTextFormat *curFormat = static_cast<KoTextParag *>(parag)->paragraphFormat();
+    KoTextFormat *curFormat = parag->paragraphFormat();
     QString text = parag->string()->toString().mid(cursorPosStart , cursorPosEnd - cursorPosStart );
     QString repl;
     int posStart=cursorPosStart;
     int posEnd=cursorPosStart;
-    QTextCursor c1( textDocument() );
-    QTextCursor c2( textDocument() );
+    KoTextCursor c1( textDocument() );
+    KoTextCursor c2( textDocument() );
     for ( int i = cursorPosStart; i < cursorPosEnd; ++i )
     {
         KoTextStringChar & ch = *(parag->at(i));
-        KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );
+        KoTextFormat * newFormat = ch.format();
         if( ch.isCustom())
         {
             posEnd=i;
@@ -1567,27 +1568,27 @@ KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosE
 
 }
 
-KCommand *KoTextObject::changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type)
+KCommand *KoTextObject::changeCaseOfText(KoTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type)
 {
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
 
-    QTextCursor start = textDocument()->selectionStartCursor( KoTextDocument::Standard );
-    QTextCursor end = textDocument()->selectionEndCursor( KoTextDocument::Standard );
+    KoTextCursor start = textDocument()->selectionStartCursor( KoTextDocument::Standard );
+    KoTextCursor end = textDocument()->selectionEndCursor( KoTextDocument::Standard );
 
     if ( start.parag() == end.parag() )
     {
-        macroCmd->addCommand(changeCaseOfTextParag(start.index(),end.index() , _type,cursor, static_cast<KoTextParag*>(start.parag()) ));
+        macroCmd->addCommand(changeCaseOfTextParag(start.index(),end.index() , _type,cursor, start.parag() ));
     }
     else
     {
-        macroCmd->addCommand(changeCaseOfTextParag(start.index(), start.parag()->length() - 1 - start.index(), _type,cursor, static_cast<KoTextParag*>(start.parag()) ));
-        Qt3::QTextParag *p = start.parag()->next();
+        macroCmd->addCommand(changeCaseOfTextParag(start.index(), start.parag()->length() - 1 - start.index(), _type,cursor, start.parag() ));
+        KoTextParag *p = start.parag()->next();
         while ( p && p != end.parag() )
         {
-            macroCmd->addCommand(changeCaseOfTextParag(0,p->length()-1 , _type,cursor, static_cast<KoTextParag*>(p) ));
+            macroCmd->addCommand(changeCaseOfTextParag(0,p->length()-1 , _type,cursor, p ));
             p = p->next();
         }
-        macroCmd->addCommand(changeCaseOfTextParag(0,end.index() , _type,cursor, static_cast<KoTextParag*>(end.parag()) ));
+        macroCmd->addCommand(changeCaseOfTextParag(0,end.index() , _type,cursor, end.parag() ));
     }
     return macroCmd;
 }
@@ -1641,12 +1642,12 @@ KoTextFormat * KoTextObject::currentFormat() const
     // We use the formatting of the very first character
     // Should we use a style instead, maybe ?
     KoTextStringChar *ch = textDocument()->firstParag()->at( 0 );
-    return static_cast<KoTextFormat *>(ch->format());
+    return ch->format();
 }
 
 const KoParagLayout * KoTextObject::currentParagLayoutFormat() const
 {
-    KoTextParag * parag=static_cast<KoTextParag *>(textDocument()->firstParag());
+    KoTextParag * parag = textDocument()->firstParag();
     return &(parag->paragLayout());
 }
 
@@ -1654,14 +1655,14 @@ KCommand *KoTextObject::setParagLayoutFormatCommand( KoParagLayout *newLayout,in
 {
     KoTextDocument *textdoc = textDocument();
     textdoc->selectAll( KoTextDocument::Temp );
-    QTextCursor *cursor = new QTextCursor( textDocument() );
+    KoTextCursor *cursor = new KoTextCursor( textDocument() );
     KCommand* cmd = setParagLayoutFormatCommand( cursor, KoTextDocument::Temp, newLayout, flags, marginIndex );
     textdoc->removeSelection( KoTextDocument::Temp );
     delete cursor;
     return cmd;
 }
 
-KCommand *KoTextObject::setParagLayoutFormatCommand( QTextCursor* cursor, int selectionId, KoParagLayout *newLayout, int flags, int marginIndex)
+KCommand *KoTextObject::setParagLayoutFormatCommand( KoTextCursor* cursor, int selectionId, KoParagLayout *newLayout, int flags, int marginIndex)
 {
     KCommand *cmd =0L;
     KoParagCounter c;
@@ -1707,7 +1708,7 @@ KCommand *KoTextObject::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _
 {
     KoTextDocument *textdoc = textDocument();
     textdoc->selectAll( KoTextDocument::Standard );
-    QTextCursor *cursor = new QTextCursor( textDocument() );
+    KoTextCursor *cursor = new KoTextCursor( textDocument() );
     KCommand* cmd = changeCaseOfText(cursor, _type);
     textdoc->removeSelection( KoTextDocument::Standard );
     delete cursor;
@@ -1719,10 +1720,9 @@ KCommand *KoTextObject::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _
 void KoTextObject::printRTDebug(int info)
 {
     KoTextDocument *textdoc = textDocument();
-    for (Qt3::QTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
+    for (KoTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
     {
-        KoTextParag * p = static_cast<KoTextParag *>(parag);
-        p->printRTDebug( info );
+        parag->printRTDebug( info );
     }
     if ( info == 1 )
         textdoc->formatCollection()->debug();
@@ -1816,21 +1816,21 @@ KCommand *KoTextFormatInterface::setBoldCommand(bool on)
 {
     KoTextFormat format( *currentFormat() );
     format.setBold( on );
-    return setFormatCommand( &format, QTextFormat::Bold );
+    return setFormatCommand( &format, KoTextFormat::Bold );
 }
 
 KCommand *KoTextFormatInterface::setItalicCommand( bool on)
 {
     KoTextFormat format( *currentFormat() );
     format.setItalic( on );
-    return setFormatCommand( &format, QTextFormat::Italic );
+    return setFormatCommand( &format, KoTextFormat::Italic );
 }
 
 KCommand *KoTextFormatInterface::setUnderlineCommand( bool on )
 {
     KoTextFormat format( *currentFormat() );
     format.setUnderline( on );
-    return setFormatCommand( &format, QTextFormat::Underline );
+    return setFormatCommand( &format, KoTextFormat::Underline );
 }
 
 KCommand *KoTextFormatInterface::setStrikeOutCommand( bool on )
@@ -1851,14 +1851,14 @@ KCommand *KoTextFormatInterface::setPointSizeCommand( int s )
 {
     KoTextFormat format( *currentFormat() );
     format.setPointSize( s );
-    return setFormatCommand( &format, QTextFormat::Size, true /* zoom the font size */ );
+    return setFormatCommand( &format, KoTextFormat::Size, true /* zoom the font size */ );
 }
 
 KCommand *KoTextFormatInterface::setFamilyCommand(const QString &font)
 {
     KoTextFormat format( *currentFormat() );
     format.setFamily( font );
-    return setFormatCommand( &format, QTextFormat::Family );
+    return setFormatCommand( &format, KoTextFormat::Family );
 }
 
 QColor KoTextFormatInterface::textBackgroundColor() const
@@ -1893,12 +1893,12 @@ KCommand *KoTextFormatInterface::setFontCommand( const QFont &font, bool _subscr
     if(!_subscript)
     {
         if(!_superscript)
-            format.setVAlign(QTextFormat::AlignNormal);
+            format.setVAlign(KoTextFormat::AlignNormal);
         else
-            format.setVAlign(QTextFormat::AlignSuperScript);
+            format.setVAlign(KoTextFormat::AlignSuperScript);
     }
     else
-        format.setVAlign(QTextFormat::AlignSubScript);
+        format.setVAlign(KoTextFormat::AlignSubScript);
 
     return setFormatCommand( &format, flags, true /* zoom the font size */);
 }
@@ -1907,37 +1907,37 @@ KCommand *KoTextFormatInterface::setTextColorCommand(const QColor &color)
 {
     KoTextFormat format( *currentFormat() );
     format.setColor( color );
-    return setFormatCommand( &format, QTextFormat::Color );
+    return setFormatCommand( &format, KoTextFormat::Color );
 }
 
 KCommand *KoTextFormatInterface::setTextSubScriptCommand(bool on)
 {
     KoTextFormat format( *currentFormat() );
     if(!on)
-        format.setVAlign(QTextFormat::AlignNormal);
+        format.setVAlign(KoTextFormat::AlignNormal);
     else
-        format.setVAlign(QTextFormat::AlignSubScript);
-    return setFormatCommand( &format, QTextFormat::VAlign );
+        format.setVAlign(KoTextFormat::AlignSubScript);
+    return setFormatCommand( &format, KoTextFormat::VAlign );
 }
 
 KCommand *KoTextFormatInterface::setTextSuperScriptCommand(bool on)
 {
     KoTextFormat format( *currentFormat() );
     if(!on)
-        format.setVAlign(QTextFormat::AlignNormal);
+        format.setVAlign(KoTextFormat::AlignNormal);
     else
-        format.setVAlign(QTextFormat::AlignSuperScript);
-    return setFormatCommand( &format, QTextFormat::VAlign );
+        format.setVAlign(KoTextFormat::AlignSuperScript);
+    return setFormatCommand( &format, KoTextFormat::VAlign );
 }
 
 KCommand *KoTextFormatInterface::setDefaultFormatCommand()
 {
-    Qt3::QTextFormatCollection * coll = currentFormat()->parent();
+    KoTextFormatCollection * coll = currentFormat()->parent();
     Q_ASSERT(coll);
     if(coll)
     {
-        KoTextFormat * format = static_cast<KoTextFormat *>(coll->defaultFormat());
-        return setFormatCommand( format, QTextFormat::Format );
+        KoTextFormat * format = coll->defaultFormat();
+        return setFormatCommand( format, KoTextFormat::Format );
     }
     return 0L;
 }

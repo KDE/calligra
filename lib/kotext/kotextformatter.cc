@@ -18,17 +18,17 @@
 */
 
 #include "kotextformatter.h"
-#include "kotextformat.h"
-#include "kotextdocument.h"
-#include "kotextparag.h"
+//#include "kotextformat.h"
+//#include "kotextdocument.h"
+//#include "kotextparag.h"
 #include "kozoomhandler.h"
 
 #include <kdebug.h>
 //#define DEBUG_FORMATTER
 
-// Heavily based on QTextFormatterBreakWords::format()
-int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
-                             int start, const QMap<int, QTextParagLineStart*> & )
+// Heavily based on KoTextFormatterBaseBreakWords::format()
+int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
+                             int start, const QMap<int, KoTextParagLineStart*> & )
 {
     KoTextStringChar *c = 0;
     start = 0;
@@ -55,7 +55,7 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
     int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), rm, 4 ) : 0;
     int w = dw - initialRMargin;
 #ifdef DEBUG_FORMATTER
-    qDebug( "QTextFormatterBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d w=%d", left, initialHeight, initialLMargin, initialRMargin, w );
+    qDebug( "KoTextFormatterBaseBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d w=%d", left, initialHeight, initialLMargin, initialRMargin, w );
 #endif
     bool fullWidth = TRUE;
     int marg = left + initialRMargin;
@@ -66,9 +66,9 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
 
     int i = start;
 #ifdef DEBUG_FORMATTER
-    qDebug( "Initial QTextParagLineStart at y=%d", y );
+    qDebug( "Initial KoTextParagLineStart at y=%d", y );
 #endif
-    QTextParagLineStart *lineStart = new QTextParagLineStart( y, 0, 0 );
+    KoTextParagLineStart *lineStart = new KoTextParagLineStart( y, 0, 0 );
     insertLineStart( parag, 0, lineStart );
     int lastBreak = -1;
     int tmpBaseLine = 0, tmph = 0;
@@ -81,12 +81,11 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
     int col = 0;
     int ww = 0; // width in layout units
 
-    KoTextDocument *textdoc = static_cast<KoTextDocument *>(doc);
-    KoZoomHandler *zh = textdoc->formattingZoomHandler();
+    KoZoomHandler *zh = doc->formattingZoomHandler();
     int pixelww = 0; // width in pixels
     int pixelx = zh->layoutUnitToPixelX( x );
 
-    static_cast<KoTextParag *>(parag)->tabCache().clear();
+    parag->tabCache().clear();
 
     QChar lastChr;
     for ( ; i < len; ++i, ++col ) {
@@ -110,7 +109,7 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
             // and calculate the LU size it is equivalent to. This gives better results
             // at most usual zoom resolutions.
 	    // ww = string->width( i );
-            KoTextFormat *charFormat = static_cast<KoTextFormat *>(c->format());
+            KoTextFormat *charFormat = c->format();
             if ( c->isCustom() )
                 ww = c->customItem()->width;
             else {
@@ -160,7 +159,7 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
 	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height(), left, 4 ) : left;
 	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height(), rm, 4 ) : 0 );
-	    QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
+	    KoTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
 	    c->customItem()->resize( parag->painter(), dw );
 	    if ( x != left || w != dw )
 		fullWidth = FALSE;
@@ -225,7 +224,7 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
 		    h = lineStart->baseLine + belowBaseLine;
 		    lineStart->h = h;
 		//}
-		QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
+		KoTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
 #ifdef DEBUG_FORMATTER
@@ -264,7 +263,7 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
 	    } else {
 		// Breakable char was found
 		i = lastBreak;
-		QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, parag->at( lastBreak ), align,
+		KoTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, parag->at( lastBreak ), align,
 		                                                w - string->at( i ).x - ( string->isRightToLeft() && lastChr == '\n'? (c - 1)->width: 0 ) );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
@@ -429,7 +428,7 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
 	// last line in a paragraph is not justified
 	if ( align == Qt::AlignJustify )
 	    align = Qt::AlignAuto;
-	QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c, align,
+	KoTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c, align,
 	                                                w - x + ( string->isRightToLeft()? c->width: 0 ) ); // don't calc the line break when having right to left text
 	h += doc ? parag->lineSpacing( linenr++ ) : 0;
 	lineStart->h = h;
@@ -461,9 +460,9 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
     return y;
 }
 
-QTextParagLineStart *KoTextFormatter::formatLineKo(
+KoTextParagLineStart *KoTextFormatter::formatLineKo(
     KoZoomHandler *zh,
-    Qt3::QTextParag *parag, KoTextString *string, QTextParagLineStart *line,
+    KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line,
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
     if( string->isBidi() )
@@ -513,5 +512,5 @@ QTextParagLineStart *KoTextFormatter::formatLineKo(
     else
 	line->w = 0;
 
-    return new QTextParagLineStart();
+    return new KoTextParagLineStart();
 }

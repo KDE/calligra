@@ -20,8 +20,7 @@
 #include <qstring.h>
 class KoTextParag;
 class QDomElement;
-namespace Qt3 { class QTextFormat; }
-using namespace Qt3;
+class KoTextFormat;
 
 #ifndef koparagcounter_h
 #define koparagcounter_h
@@ -144,7 +143,7 @@ private:
         QString text;
         int width;
         KoTextParag *parent;
-        QTextFormat * counterFormat;
+        KoTextFormat * counterFormat;
     } m_cache;
 };
 

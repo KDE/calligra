@@ -19,7 +19,7 @@
 */
 
 #include "koAutoFormat.h"
-#include "kotextdocument.h"
+//#include "kotextdocument.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -36,7 +36,7 @@
 #include "koVariable.h"
 #include "koparagcounter.h"
 #include <kcommand.h>
-#include <kotextformat.h>
+//#include <kotextformat.h>
 #include <kcompletion.h>
 #include <kcommand.h>
 
@@ -372,7 +372,7 @@ QString KoAutoFormat::getWordAfterSpace(KoTextParag *parag, int index)
 
 }
 
-void KoAutoFormat::doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
+void KoAutoFormat::doAutoCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
 {
     if( m_autoCompletion )
     {
@@ -382,7 +382,7 @@ void KoAutoFormat::doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *p
         {
             unsigned int length = lastWord.length();
             int start = index+1 - length;
-            QTextCursor cursor( parag->document() );
+            KoTextCursor cursor( parag->document() );
             cursor.setParag( parag );
             cursor.setIndex( start );
             KoTextDocument * textdoc = parag->textDocument();
@@ -419,7 +419,7 @@ void KoAutoFormat::autoFormatIsActive()
        m_entries.count()!=0;
 }
 
-void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag, int index, QChar ch,KoTextObject *txtObj )
+void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *parag, int index, QChar ch,KoTextObject *txtObj )
 {
     if ( !m_configRead )
         readConfig();
@@ -514,7 +514,7 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
     }
 }
 
-KCommand *KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int &index, KoTextObject *txtObj )
+KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag *parag, int &index, KoTextObject *txtObj )
 {
     if(!m_advancedAutoCorrect)
         return 0L;
@@ -551,7 +551,7 @@ KCommand *KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag 
         {
             unsigned int length = wordArray[i].length();
             int start = index - length;
-            QTextCursor cursor( parag->document() );
+            KoTextCursor cursor( parag->document() );
             cursor.setParag( parag );
             cursor.setIndex( start );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -574,11 +574,11 @@ KCommand *KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag 
     return 0L;
 }
 
-void KoAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes )
+void KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes )
 {
     //kdDebug() << "KoAutoFormat::doTypographicQuotes" << endl;
     KoTextDocument * textdoc = parag->textDocument();
-    QTextCursor cursor( parag->document() );
+    KoTextCursor cursor( parag->document() );
     cursor.setParag( parag );
     cursor.setIndex( index );
     textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -608,13 +608,13 @@ void KoAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag
                               i18n("Typographic quote") ));
 }
 
-KCommand * KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
+KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag *parag,
                                 int index, const QString & word, KoTextObject *txtObj )
 {
     KoTextDocument * textdoc = parag->textDocument();
     unsigned int length = word.length();
     int start = index - length;
-    QTextCursor backCursor( parag->document() );
+    KoTextCursor backCursor( parag->document() );
     backCursor.setParag( parag );
     backCursor.setIndex( start );
 
@@ -641,7 +641,7 @@ KCommand * KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *
         if ( beginningOfSentence )
         {
             QChar punct = backCursor.parag()->at( backCursor.index() )->c;
-            QString text = getLastWord( static_cast<KoTextParag*>( backCursor.parag() ), backCursor.index() )
+            QString text = getLastWord( backCursor.parag(), backCursor.index() )
                            + punct;
             // text has the word at the end of the 'sentence', including the termination. Example: "Mr."
             beginningOfSentence = (m_upperCaseExceptions.findIndex(text)==-1); // Ok if we can't find it
@@ -649,7 +649,7 @@ KCommand * KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *
 
         if ( beginningOfSentence )
         {
-            QTextCursor cursor( parag->document() );
+            KoTextCursor cursor( parag->document() );
             cursor.setParag( parag );
             cursor.setIndex( start );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -674,7 +674,7 @@ KCommand * KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *
             if ( isLower( thirdChar ) && (m_twoUpperLetterException.findIndex(word)==-1))
             {
                 // Ok, convert
-                QTextCursor cursor( parag->document() );
+                KoTextCursor cursor( parag->document() );
                 cursor.setParag( parag );
                 cursor.setIndex( start + 1 ); // After all the first letter's fine, so only change the second letter
                 textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -699,7 +699,7 @@ KCommand * KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *
     return cmd;
 }
 
-void KoAutoFormat::doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
+void KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
 {
     unsigned int length = word.length();
     if ( length != 3 )
@@ -708,7 +708,7 @@ void KoAutoFormat::doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag
     int start = index - length;
     if( word == QString("1/2") || word == QString("1/4") || word == QString("3/4") )
     {
-        QTextCursor cursor( parag->document() );
+        KoTextCursor cursor( parag->document() );
         cursor.setParag( parag );
         cursor.setIndex( start );
         textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -740,7 +740,7 @@ void KoAutoFormat::detectStartOfLink(const QString &word)
         m_ignoreUpperCase=true;
 }
 
-void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
+void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
 {
     if (word.find("http://")!=-1 || word.find("mailto:")!=-1
         || word.find("ftp://")!=-1 || word.find("file:")!=-1
@@ -748,7 +748,7 @@ void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *pa
     {
         unsigned int length = word.length();
         int start = index - length;
-        QTextCursor cursor( parag->document() );
+        KoTextCursor cursor( parag->document() );
         KoTextDocument * textdoc = parag->textDocument();
         cursor.setParag( parag );
         cursor.setIndex( start );
@@ -759,7 +759,7 @@ void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *pa
 
         CustomItemsMap customItemsMap;
         customItemsMap.insert( 0, var );
-        KoTextFormat * lastFormat = static_cast<KoTextFormat *>(parag->at( start )->format());
+        KoTextFormat * lastFormat = parag->at( start )->format();
         txtObj->insert( textEditCursor, lastFormat, KoTextObject::customItemChar(), false, true, i18n("Insert Variable"), customItemsMap,KoTextObject::HighlightSelection );
         txtObj->emitHideCursor();
         textEditCursor->gotoRight();
@@ -768,7 +768,7 @@ void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *pa
 
 }
 
-void KoAutoFormat::doAutoIncludeUpperUpper(QTextCursor* /*textEditCursor*/, KoTextParag *parag, KoTextObject* /*txtObj*/ )
+void KoAutoFormat::doAutoIncludeUpperUpper(KoTextCursor* /*textEditCursor*/, KoTextParag *parag, KoTextObject* /*txtObj*/ )
 {
     KoTextString *s = parag->string();
 
@@ -796,7 +796,7 @@ void KoAutoFormat::doAutoIncludeUpperUpper(QTextCursor* /*textEditCursor*/, KoTe
 }
 
 
-void KoAutoFormat::doAutoIncludeAbbreviation(QTextCursor* /*textEditCursor*/, KoTextParag *parag, KoTextObject* /*txtObj*/ )
+void KoAutoFormat::doAutoIncludeAbbreviation(KoTextCursor* /*textEditCursor*/, KoTextParag *parag, KoTextObject* /*txtObj*/ )
 {
     KoTextString *s = parag->string();
 
@@ -839,7 +839,7 @@ void KoAutoFormat::doAutoIncludeAbbreviation(QTextCursor* /*textEditCursor*/, Ko
 }
 
 
-void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
+void KoAutoFormat::doAutoChangeFormat( KoTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
 {
     bool underline = (word.at(0)=='_' && word.at(word.length()-1)=='_');
     bool bold = (word.at(0)=='*' && word.at(word.length()-1)=='*');
@@ -849,7 +849,7 @@ void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag 
         int start = index - word.length();
         KoTextDocument * textdoc = parag->textDocument();
         KMacroCommand *macro=new KMacroCommand(i18n("Autocorrection: change format."));
-        QTextCursor cursor( parag->document() );
+        KoTextCursor cursor( parag->document() );
 
         cursor.setParag( parag );
         cursor.setIndex( start );
@@ -860,7 +860,7 @@ void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag 
                                                            KoTextObject::HighlightSelection,
                                                            i18n("Autocorrect word") ));
 
-        KoTextFormat * lastFormat = static_cast<KoTextFormat *>(parag->at( start )->format());
+        KoTextFormat * lastFormat = parag->at( start )->format();
         KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
         cursor.setIndex( start );
         textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -870,12 +870,12 @@ void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag 
         if( bold)
         {
             newFormat->setBold(true);
-            macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, QTextFormat::Bold , false,KoTextObject::HighlightSelection  ));
+            macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::Bold , false,KoTextObject::HighlightSelection  ));
         }
         else if( underline )
         {
             newFormat->setUnderline(true);
-            macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, QTextFormat::Underline , false,KoTextObject::HighlightSelection  ));
+            macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::Underline , false,KoTextObject::HighlightSelection  ));
         }
         txtObj->emitNewCommand(macro);
         txtObj->emitHideCursor();
@@ -884,10 +884,10 @@ void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag 
     }
 }
 
-void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
+void KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
 {
     KoTextDocument * textdoc = parag->textDocument();
-    QTextCursor cursor( parag->document() );
+    KoTextCursor cursor( parag->document() );
     KoTextString *s = parag->string();
     QChar ch = s->at( 0 ).c;
 
@@ -936,7 +936,7 @@ void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextPara
         cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
         if( cmd)
             macroCmd->addCommand(cmd);
-        cursor.setParag( static_cast<KoTextParag*>(parag->next()) );
+        cursor.setParag( parag->next() );
         cursor.setIndex( 0 );
         textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
         cursor.setIndex( 0 );
@@ -949,10 +949,10 @@ void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextPara
 
 }
 
-void KoAutoFormat::doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
+void KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
 {
     KoTextDocument * textdoc = parag->textDocument();
-    QTextCursor cursor( parag->document() );
+    KoTextCursor cursor( parag->document() );
     KoTextString *s = parag->string();
     QString word;
     for ( int i = 0 ; i < s->length() - 1; i++ )
@@ -1000,7 +1000,7 @@ void KoAutoFormat::doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextPara
             if( cmd)
                 macroCmd->addCommand(cmd);
             // Apply counter to next paragraph too
-            cursor.setParag( static_cast<KoTextParag*>(parag->next()) );
+            cursor.setParag( parag->next() );
             cursor.setIndex( 0 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( 0 );
@@ -1014,12 +1014,12 @@ void KoAutoFormat::doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextPara
 }
 
 
-void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
+void KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
 {
     KoTextString *s = parag->string();
     bool refreshCursor=false;
     KoTextDocument * textdoc = parag->textDocument();
-    QTextCursor cursor( parag->document() );
+    KoTextCursor cursor( parag->document() );
 
     KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (remove start and end line space)"));
     for ( int i = parag->string()->length()-1; i >= 0; --i )

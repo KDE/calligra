@@ -27,6 +27,8 @@
 #include <qmap.h>
 #include <qobject.h>
 #include <kaction.h>
+#include "qrichtext_p.h"
+
 class QDomElement;
 // Always add new types at the _end_ of this list (but before VT_ALL of course).
 // (and update KWView::setupActions)
@@ -238,13 +240,10 @@ public:
 
 // ----------------------------------------------------------------------------------------------
 
-#include <kotextdocument.h>
 class KoDocument;
 class KoVariable;
 class QDomElement;
-namespace Qt3 {
-class QTextFormat;
-}
+class KoTextFormat;
 
 /**
  * A KoVariable is a custom item, i.e. considered as a single character.
@@ -258,7 +257,7 @@ public:
 
     virtual VariableType type() const = 0;
 
-    // QTextCustomItem stuff
+    // KoTextCustomItem stuff
     virtual Placement placement() const { return PlaceInline; }
     virtual void resize();
     virtual int widthHint() const { return width; }
