@@ -1548,8 +1548,6 @@ void KWView::print( KPrinter &prt )
         }
     }
 
-    painter.end();
-
     if ( pgLayout.format == PG_SCREEN )
         m_doc->setPageLayout( oldPGLayout, cl, hf, false );
 
@@ -1576,6 +1574,7 @@ void KWView::print( KPrinter &prt )
     else
         m_doc->getVariableCollection()->recalcVariables(VT_MAILMERGE);
 
+    painter.end(); /// this is what triggers the printing
 }
 
 void KWView::showFormat( const KoTextFormat &currentFormat )
