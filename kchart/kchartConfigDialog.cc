@@ -87,11 +87,11 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         addTab( _backgroundpixpage, i18n( "&Background" ) );
         _parameterLegend = new KChartLegendConfigPage(_params,this );
         addTab( _parameterLegend,i18n("Legend"));
-        if( _params->chartType() != KDChartParams::Pie )	{
+        if( _params->chartType() != KDChartParams::Pie && _params->chartType() != KDChartParams::Ring )	{
             _axespage = new KChartParameterConfigPage(_params,this );
             addTab( _axespage, i18n( "&Axes" ) );
 
-        } else {
+        } else if( _params->chartType() != KDChartParams::Ring ) {
             _parameterpiepage = new KChartParameterPieConfigPage(_params,this );
             addTab( _parameterpiepage, i18n( "&Axes" ) );
 
