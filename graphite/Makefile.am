@@ -45,4 +45,3 @@ rcdir = $(kde_datadir)/graphite
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc -o $(podir)/graphite.pot
-

@@ -25,11 +25,14 @@
 
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
-    : QScrollView(view, "GCanvas", WNorthWestGravity),
-      m_vertical(0L), m_horizontal(0L) {
+    : QScrollView(view, "GCanvas", Qt::WNorthWestGravity | Qt::WResizeNoErase | Qt::WRepaintNoErase),
+      m_doc(doc), m_view(view), m_vertical(0L), m_horizontal(0L), m_showMousePos(true) {
 
-    m_widget=new GCanvasWidget(this, view, doc);
-    addChild(m_widget);
+    viewport()->setFocusPolicy(QWidget::StrongFocus);
+    viewport()->setMouseTracking(true);
+    setMouseTracking(true);
+    setFocus();
+    viewport()->setBackgroundMode(QWidget::NoBackground);
 }
 
 void GCanvas::setRulers(KoRuler *vertical, KoRuler *horizontal) {
@@ -37,21 +40,12 @@ void GCanvas::setRulers(KoRuler *vertical, KoRuler *horizontal) {
     m_horizontal=horizontal;
 }
 
-void GCanvas::updateMousePos(QMouseEvent *e) {
-    m_vertical->setMousePos(e->x()-contentsX(), e->y()-contentsY());
-    m_horizontal->setMousePos(e->x()-contentsX(), e->y()-contentsY());
-}
+void GCanvas::showMousePos(bool pos) {
 
-void GCanvas::showMousePos(const bool &pos) {
-    m_vertical->showMousePos(pos);
-    m_horizontal->showMousePos(pos);
-}
-
-void GCanvas::resizeEvent(QResizeEvent *e) {
-    // for now
-    //kdDebug() << "GCanvas::resizeEvent(): width=" << e->size().width()
-    //        << " height=" << e->size().height() << endl;
-    m_widget->resize(e->size().width()-4, e->size().height()-4);
+    if(m_vertical)
+        m_vertical->showMousePos(pos);
+    if(m_horizontal)
+        m_horizontal->showMousePos(pos);
 }
 
 void GCanvas::viewportResizeEvent(QResizeEvent */*e*/) {
@@ -59,38 +53,27 @@ void GCanvas::viewportResizeEvent(QResizeEvent */*e*/) {
     //        << " height=" << e->size().height() << endl;
 }
 
+void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
 
-GCanvasWidget::GCanvasWidget(GCanvas *canvas, GraphiteView *view,
-                             GraphitePart *doc) :
-    QWidget(canvas->viewport(), 0L, WNorthWestGravity), m_view(view),
-    m_doc(doc), m_canvas(canvas), m_updateRulers(false) {
-
-    setFocusPolicy(QWidget::StrongFocus);
-    setMouseTracking(true);
-    setFocus();
-    setBackgroundMode(NoBackground);
-}
-
-void GCanvasWidget::mouseMoveEvent(QMouseEvent *e) {
-
-    if(m_updateRulers)
-        m_canvas->updateMousePos(e);
+    //kdDebug() << "GCanvas::contentsMouseMoveEvent: e->x(): " << e->x() << " e->y(): " << e->y() << endl;
+    if(m_showMousePos) {
+        if(m_vertical)
+            m_vertical->setMousePos(e->x(), e->y());
+        if(m_horizontal)
+            m_horizontal->setMousePos(e->x(), e->y());
+    }
     m_doc->mouseMoveEvent(e, m_view);
 }
 
-void GCanvasWidget::paintEvent(QPaintEvent */*e*/) {
+void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
 
     // TODO: 1 - define the region which has to be
-    //           repainted. (Don't forget to add the offset!)
-    //           call m_doc->preparePainting(zoom)!!!
-    //           Create a dbuffer and create a painter on this buffer.
-    //       2 - call m_doc->painContent(). This draws
-    //           the objects to the buffer. Note: don't
-    //           draw active or deleted objects to the buffer
-    //       3 - bitBlt the buffer
-    //       4 - let the active object draw itself (no problem
-    //           when embedded, since we don't have an active
-    //           object...
+    //           repainted and  call m_doc->preparePainting(zoom)!!!
+    //       2 - set the clipping region
+    //       3 - call m_doc->painContent(). This draws
+    //           the objects.
+    //       4 - then the ROP has to be changed and the
+    //           "selection" (i.e. cursors) have to be drawn
     // - m_doc->paintContent() is responsilbe to traverse
     //   the tree of gobject's and let them paint themselves.
     // - Each object decides if it has to repaint itself
@@ -114,15 +97,15 @@ void GCanvasWidget::paintEvent(QPaintEvent */*e*/) {
                    << " y-offet=" << contentsY() << endl;*/
 }
 
-void GCanvasWidget::leaveEvent(QEvent *) {
-    m_updateRulers=false;
-    m_canvas->showMousePos(false);
-    kdDebug(37001) << "leaving Canvas" << endl;
+// FIXME: Wir brauchen einen eventFilter auf dem viewport()!!!
+void GCanvas::leaveEvent(QEvent *) {
+    //kdDebug() << "GCanvas::leaveEvent" << endl;
+    m_showMousePos=false;
 }
 
-void GCanvasWidget::enterEvent(QEvent *) {
-    m_updateRulers=true;
-    m_canvas->showMousePos(true);
-    kdDebug(37001) << "entering Canvas" << endl;
+void GCanvas::enterEvent(QEvent *) {
+    //kdDebug() << "GCanvas::enterEvent" << endl;
+    m_showMousePos=true;
 }
+
 #include <gcanvas.moc>

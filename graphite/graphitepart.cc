@@ -130,4 +130,5 @@ void GraphitePart::setGlobalZoom(const double &zoom) {
     GraphiteGlobal::self()->setZoom(zoom);
     // nodeZero->recalculate();
 }
+
 #include <graphitepart.moc>

@@ -19,22 +19,24 @@
 
 // This file has to be included, or kimageeffect will fail to compile!?!
 #include <qimage.h>
+
 #include <qdom.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kstaticdeleter.h>
 
 #include <gobject.h>
 #include <graphiteglobal.h>
 
 
-const bool operator==(const Gradient &lhs, const Gradient &rhs) {
+bool operator==(const Gradient &lhs, const Gradient &rhs) {
 
     return lhs.ca==rhs.ca && lhs.cb==rhs.cb && lhs.type==rhs.type &&
            lhs.xfactor==rhs.xfactor && lhs.yfactor==rhs.yfactor;
 }
 
-const bool operator!=(const Gradient &lhs, const Gradient &rhs) {
+bool operator!=(const Gradient &lhs, const Gradient &rhs) {
     return !operator==(lhs, rhs);
 }
 
@@ -50,21 +52,27 @@ Gradient &Gradient::operator=(const Gradient &rhs) {
 
 GraphiteGlobal *GraphiteGlobal::m_self=0;
 
+// As this belongs to a part we can't ignore static objects, but we have
+// to clean up on unloading properly.
+namespace Graphite {
+static KStaticDeleter<GraphiteGlobal> gglobal;
+};
+
 GraphiteGlobal *GraphiteGlobal::self() {
 
     if(m_self==0L)
-        m_self=new GraphiteGlobal();
+        m_self=Graphite::gglobal.setObject(new GraphiteGlobal());
     return m_self;
 }
 
 void GraphiteGlobal::setHandleSize(const int &handleSize) {
     m_handleSize=handleSize;
-    m_offset=Graphite::double2Int(static_cast<double>(handleSize)*0.5);
+    m_handleOffset=Graphite::double2Int(static_cast<double>(handleSize)*0.5);
 }
 
 void GraphiteGlobal::setRotHandleSize(const int &rotHandleSize) {
     m_rotHandleSize=rotHandleSize;
-    m_offset=Graphite::double2Int(static_cast<double>(rotHandleSize)*0.5);
+    m_rotHandleOffset=Graphite::double2Int(static_cast<double>(rotHandleSize)*0.5);
 }
 
 void GraphiteGlobal::setUnit(const Unit &unit) {
@@ -163,8 +171,8 @@ QRect GraphiteGlobal::toRect(const QDomElement &element) const {
 
 GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
                                    m_rotHandleSize(4), m_thirdHandleTrigger(20),
-                                   m_offset(2), m_unit(MM), m_zoom(1.0),
-                                   m_resolution(2.8346457) {
+                                   m_handleOffset(2), m_rotHandleOffset(2),
+                                   m_unit(MM), m_zoom(1.0), m_resolution(2.8346457) {
     m_unitString=QString::fromLatin1("mm");
 }
 
@@ -186,11 +194,11 @@ FxValue &FxValue::operator=(const FxValue &rhs) {
     return *this;
 }
 
-const bool FxValue::operator==(const FxValue &rhs) {
+bool FxValue::operator==(const FxValue &rhs) {
     return m_pixel==rhs.pxValue();
 }
 
-const bool FxValue::operator!=(const FxValue &rhs) {
+bool FxValue::operator!=(const FxValue &rhs) {
     return m_pixel!=rhs.pxValue();
 }
 
@@ -206,15 +214,11 @@ void FxValue::setPxValue(const int &/*pixel*/) {
 const double FxValue::valueUnit() const {
 
     if(GraphiteGlobal::self()->unit()==GraphiteGlobal::MM)
-        return valueMM();
+        return value();
     else if(GraphiteGlobal::self()->unit()==GraphiteGlobal::Inch)
         return valueInch();
     else
         return valuePt();
-}
-
-const double FxValue::valueMM() const {
-    return 0.0;
 }
 
 const double FxValue::valueInch() const {

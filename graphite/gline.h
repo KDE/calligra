@@ -38,14 +38,14 @@ public:
 
     virtual QDomElement save(QDomDocument &doc) const; // save the line to xml
 
-    virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false);
+    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false);
     // Do we need this? Maybe even lines should have rectangular handles...
     virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
 
     virtual void recalculate();
 
     virtual const GLine *hit(const QPoint &p) const;
-    virtual const bool intersects(const QRect &r) const;
+    virtual bool intersects(const QRect &r) const;
     virtual const QRect &boundingRect() const;
 
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
@@ -83,13 +83,13 @@ public:
 
     virtual void draw(QPainter &p);
 
-    virtual const bool mouseMoveEvent(QMouseEvent *e, QRect &dirty);
-    virtual const bool mousePressEvent(QMouseEvent *e, QRect &dirty);
-    virtual const bool mouseReleaseEvent(QMouseEvent *e, QRect &dirty);
-    virtual const bool mouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool mouseMoveEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool mousePressEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool mouseReleaseEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool mouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
 
-    virtual const bool keyPressEvent(QKeyEvent *e, QRect &dirty);
-    virtual const bool keyReleaseEvent(QKeyEvent *e, QRect &dirty);
+    virtual bool keyPressEvent(QKeyEvent *e, QRect &dirty);
+    virtual bool keyReleaseEvent(QKeyEvent *e, QRect &dirty);
 
     virtual GObject *gobject() { return m_line; }
 

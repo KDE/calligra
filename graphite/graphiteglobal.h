@@ -28,6 +28,8 @@ class QPen;
 class QDomDocument;
 class QDomElement;
 
+// This struct holds all the necessary information needed to represent
+// a KDE gradient
 struct Gradient {
     QColor ca;
     QColor cb;
@@ -38,12 +40,13 @@ struct Gradient {
     Gradient &operator=(const Gradient &rhs);
 };
 
-const bool operator==(const Gradient &lhs, const Gradient &rhs);
-const bool operator!=(const Gradient &lhs, const Gradient &rhs);
+bool operator==(const Gradient &lhs, const Gradient &rhs);
+bool operator!=(const Gradient &lhs, const Gradient &rhs);
+
 
 // This class is used to access some configurable values.
 // We also use this class to save the rc file.
-// Note: Follows the singleton pattern!
+// Note: Follows the singleton pattern
 class GraphiteGlobal {
 
 public:
@@ -58,20 +61,25 @@ public:
     // size of the "handles"
     const int &handleSize() const { return m_handleSize; }
     void setHandleSize(const int &handleSize);
+    // the size of the handle / 2
+    const int &handleOffset() const { return m_handleOffset; }
 
     // size (diameter) of the "rot-handles"
     const int &rotHandleSize() const { return m_rotHandleSize; }
     void setRotHandleSize(const int &rotHandleSize);
+    // the size of the rot-handle / 2
+    const int &rotHandleOffset() const { return m_rotHandleOffset; }
 
+    // how much space do we allow between the two "corner" handles before
+    // we introduce a thrid one in the middle?
     const int &thirdHandleTrigger() const { return m_thirdHandleTrigger; }
     void setThirdHandleTrigger(const int &thirdHandleTrigger) { m_thirdHandleTrigger=thirdHandleTrigger; }
-
-    const int offset() const { return m_offset; }
 
     const Unit &unit() const { return m_unit; }
     void setUnit(const Unit &unit);
     QString unitString() const { return m_unitString; }
 
+    // current zoom factor (for the "active" view)
     const double &zoom() const { return m_zoom; }
     void setZoom(const double &zoom);
 
@@ -85,23 +93,23 @@ public:
 
     QDomElement createElement(const QString &tagName, const QRect &rect, QDomDocument &doc) const;
     QRect toRect(const QDomElement &element) const;
+
     // maybe I'll add a init(...) method which takes a KConfig file/pointer
     // and initializes all the "global" vars.
 
 private:
     GraphiteGlobal();
-    // don't try to copy or assing this object
+    // please don't try to copy or assing this object
     GraphiteGlobal(const GraphiteGlobal &rhs);
     GraphiteGlobal &operator=(const GraphiteGlobal &rhs);
-
-    ~GraphiteGlobal() {}
 
     static GraphiteGlobal *m_self;
     int m_fuzzyBorder;
     int m_handleSize;
     int m_rotHandleSize;
     int m_thirdHandleTrigger;
-    int m_offset;
+    int m_handleOffset;
+    int m_rotHandleOffset;
     Unit m_unit;
     QString m_unitString;
     double m_zoom;
@@ -109,6 +117,9 @@ private:
 };
 
 
+// FxValue is the base for all coordinate classes. It "knows" the
+// accurate (read: double) value and the pixel value for the
+// current zoom factor (cache).
 class FxValue {
 
 public:
@@ -117,10 +128,10 @@ public:
     FxValue(const FxValue &v);
     ~FxValue() {}
 
-    // compares the current pixel values!
     FxValue &operator=(const FxValue &rhs);
-    const bool operator==(const FxValue &rhs);
-    const bool operator!=(const FxValue &rhs);
+    // compares the current pixel values!
+    bool operator==(const FxValue &rhs);
+    bool operator!=(const FxValue &rhs);
 
     const double &value() const { return m_value; }
     void setValue(const double &value);
@@ -128,8 +139,9 @@ public:
     const int &pxValue() const { return m_pixel; }
     void setPxValue(const int &pixel);
 
-    const double valueUnit() const;  // value in the current unit
-    const double valueMM() const;
+    // value in the current unit (convenience method)
+    // Note: value() is always in MM (->missing here ;)
+    const double valueUnit() const;
     const double valueInch() const;
     const double valuePt() const;
 
@@ -139,7 +151,7 @@ public:
 
 private:
     double m_value;    // value in mm
-    int m_pixel;       // current pixel value (approximated)
+    int m_pixel;       // current pixel value (approximated, zoomed)
 };
 
 
@@ -151,10 +163,10 @@ public:
     FxPoint(const int &x, const int &y);
     ~FxPoint() {}
 
-    // compares the px values!
     FxPoint &operator=(const FxPoint &rhs);
-    const bool operator==(const FxPoint &rhs);
-    const bool operator!=(const FxPoint &rhs);
+    // compares the px values!
+    bool operator==(const FxPoint &rhs);
+    bool operator!=(const FxPoint &rhs);
 
     const FxValue &x() const { return m_x; }
     void setX(const FxValue &x);
@@ -162,10 +174,10 @@ public:
     const FxValue &y() const { return m_y; }
     void setY(const FxValue &y);
 
-    const int pxX() const { return m_x.pxValue(); }
+    const int &pxX() const { return m_x.pxValue(); }
     void setPxX(const int &x);
 
-    const int pxY() const { return m_y.pxValue(); }
+    const int &pxY() const { return m_y.pxValue(); }
     void setPxY(const int &y);
 
     void setPoint(const FxValue &x, const FxValue &y);
@@ -187,4 +199,5 @@ class FxPointArray {
 
 class FxRect {
 };
+
 #endif // GRAPHITE_GLOBAL_H

@@ -230,4 +230,5 @@ private:
     GObject *m_object;
     Gradient m_old, m_new;
 };
+
 #endif // gprimitivecmds_h

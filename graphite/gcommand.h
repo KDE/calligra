@@ -67,9 +67,9 @@ public:
     void undo();
     void redo();
 
-    const int undoLimit() { return m_undoLimit; }
+    const int &undoLimit() { return m_undoLimit; }
     void setUndoLimit(const int &limit);
-    const int redoLimit() { return m_redoLimit; }
+    const int &redoLimit() { return m_redoLimit; }
     void setRedoLimit(const int &limit);
 
 private:
@@ -82,4 +82,5 @@ private:
     int m_undoLimit, m_redoLimit;
     bool m_first;  // attention: it's the first command in the list!
 };
+
 #endif // gcommand_h

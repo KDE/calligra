@@ -94,13 +94,13 @@ public:
     virtual void draw(QPainter &p) = 0;
 
     // return false when you couldn't handle the event
-    virtual const bool mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual const bool mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual const bool mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual const bool mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
 
-    virtual const bool keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual const bool keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
 
     virtual GObject *gobject() = 0;
 
@@ -229,8 +229,8 @@ public:
 
     virtual ~GObject() {}
 
-    virtual const bool isOk() const { return m_ok; }
-    virtual void setOk(const bool &ok=true) { m_ok=ok; }
+    virtual bool isOk() const { return m_ok; }
+    virtual void setOk(bool ok=true) { m_ok=ok; }
 
     virtual GObject *clone() const = 0;           // exact copy of "this" (calls the Copy-CTOR)
     // create an object and initialize it with the given XML (calls the XML-CTOR)
@@ -241,8 +241,8 @@ public:
 
     // These two methods are only implemented for "complex" objetcs!
     // The child is inserted at GObject::Position
-    virtual const bool plugChild(GObject */*child*/, const Position &/*pos*/=Current) { return false; }
-    virtual const bool unplugChild(GObject */*child*/) { return false; }
+    virtual bool plugChild(GObject */*child*/, const Position &/*pos*/=Current) { return false; }
+    virtual bool unplugChild(GObject */*child*/) { return false; }
 
     // These methods are used to access the object's children
     // Implemented via QListIterator - Leaf classes don't override
@@ -257,10 +257,7 @@ public:
 
     // toPrinter is set when we print the document - this means we don't
     // have to paint "invisible" (normally they are colored gray) objects
-    // Whenever you paint an object, check if it is within the requested
-    // area (region). Add the area of "your" object (boundingRect) to the
-    // region to maintain a correct Z order!
-    virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false) = 0;
+    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) = 0;
     // Used to draw the handles/rot-handles when selected
     // All handles which are drawn are added to the list if the list
     // is != 0L. Use this list to check "mouseOver" stuff
@@ -271,7 +268,7 @@ public:
 
     // does the object contain this point? (Note: finds the most nested child which is hit!)
     virtual const GObject *hit(const QPoint &p) const = 0;
-    virtual const bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
+    virtual bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
     virtual const QRect &boundingRect() const = 0;            // the bounding rectangle of this object
 
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,

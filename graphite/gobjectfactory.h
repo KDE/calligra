@@ -43,9 +43,9 @@ public:
 
 private:
     GObjectFactory();
-    ~GObjectFactory() {}
 
     QDict<const GObject> m_registry;
     static GObjectFactory *m_self;
 };
+
 #endif // gobjectfactory_h

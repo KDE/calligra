@@ -81,4 +81,5 @@ KInstance *GraphiteFactory::global() {
     }
     return s_global;
 }
+
 #include <graphitefactory.moc>

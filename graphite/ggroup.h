@@ -34,14 +34,14 @@ public:
 
     virtual ~GGroup();
 
-    virtual const bool isOk() const;
-    virtual void setOk(const bool &ok=true);
+    virtual bool isOk() const;
+    virtual void setOk(bool ok=true);
 
     virtual GObject *clone() const;
     virtual GObject *instantiate(const QDomElement &element) const;
 
-    virtual const bool plugChild(GObject *child, const Position &pos=Current);
-    virtual const bool unplugChild(GObject *child);
+    virtual bool plugChild(GObject *child, const Position &pos=Current);
+    virtual bool unplugChild(GObject *child);
 
     virtual const GObject *firstChild() const;
     virtual const GObject *nextChild() const;
@@ -51,12 +51,12 @@ public:
 
     virtual QDomElement save(QDomDocument &doc) const;
 
-    virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false);
+    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false);
 
     virtual void recalculate();
 
     virtual const GObject *hit(const QPoint &p) const;
-    virtual const bool intersects(const QRect &r) const;
+    virtual bool intersects(const QRect &r) const;
     virtual const QRect &boundingRect() const;
 
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
@@ -98,13 +98,13 @@ public:
 
     virtual void draw(QPainter &p);
 
-    virtual const bool mouseMoveEvent(QMouseEvent *e, QRect &dirty);
-    virtual const bool mousePressEvent(QMouseEvent *e, QRect &dirty);
-    virtual const bool mouseReleaseEvent(QMouseEvent *e, QRect &dirty);
-    virtual const bool mouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool mouseMoveEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool mousePressEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool mouseReleaseEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool mouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
 
-    virtual const bool keyPressEvent(QKeyEvent *e, QRect &dirty);
-    virtual const bool keyReleaseEvent(QKeyEvent *e, QRect &dirty);
+    virtual bool keyPressEvent(QKeyEvent *e, QRect &dirty);
+    virtual bool keyReleaseEvent(QKeyEvent *e, QRect &dirty);
 
     virtual GObject *gobject() { return m_group; }
 
@@ -114,4 +114,5 @@ private:
 
     GGroup *m_group;
 };
+
 #endif // ggroup_h

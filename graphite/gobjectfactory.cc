@@ -18,6 +18,7 @@
 */
 
 #include <qdom.h>
+#include <kstaticdeleter.h>
 #include <gobjectfactory.h>
 
 // these includes are needed to create the prototypes in the CTOR :)
@@ -30,10 +31,16 @@
 
 GObjectFactory *GObjectFactory::m_self=0L;
 
+// As this belongs to a part we can't ignore static objects, but we have
+// to clean up on unloading properly.
+namespace Graphite {
+static KStaticDeleter<GObjectFactory> gobjfact;
+};
+
 GObjectFactory *GObjectFactory::self() {
 
     if(m_self==0)
-        m_self=new GObjectFactory();
+        m_self=Graphite::gobjfact.setObject(new GObjectFactory());
     return m_self;
 }
 
@@ -74,7 +81,7 @@ GObjectFactory::GObjectFactory() : m_registry(17, false) {
 
     // set up the dict with all the types we are aware of
     // TODO: Change the size of the Hash Table to fit the
-    // number of objects better
+    // number of objects
     m_registry.setAutoDelete(true);
 
     // primitives

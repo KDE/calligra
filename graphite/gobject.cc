@@ -570,14 +570,17 @@ void GObject::drawHandles(QPainter &p, QList<QRect> *handles) {
     // TODO: Test RasterOp Not???
 
     int size;
-    if(m_state==Handles)
+    int offset;
+    if(m_state==Handles) {
         size=GraphiteGlobal::self()->handleSize();
-    else if(m_state==Rot_Handles)
+        offset=GraphiteGlobal::self()->handleOffset();
+    }
+    else if(m_state==Rot_Handles) {
         size=GraphiteGlobal::self()->rotHandleSize();
+        offset=GraphiteGlobal::self()->rotHandleOffset();
+    }
     else
         return; // no need to draw handles - shouldn't happen
-
-    int offset=GraphiteGlobal::self()->offset();
 
     QRect *lt=new QRect(boundingRect().left()-offset,
                         boundingRect().top()-offset, size, size);

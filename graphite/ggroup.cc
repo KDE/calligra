@@ -89,7 +89,7 @@ GGroup::~GGroup() {
     m_iterator=0L;
 }
 
-const bool GGroup::isOk() const {
+bool GGroup::isOk() const {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L && it.current()->isOk(); ++it);
@@ -100,7 +100,7 @@ const bool GGroup::isOk() const {
         return false;
 }
 
-void GGroup::setOk(const bool &ok) {
+void GGroup::setOk(bool ok) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
@@ -115,7 +115,7 @@ GObject *GGroup::instantiate(const QDomElement &element) const {
     return new GGroup(element);
 }
 
-const bool GGroup::plugChild(GObject *child, const Position &pos) {
+bool GGroup::plugChild(GObject *child, const Position &pos) {
 
     if(child==0L)
         return false;
@@ -137,7 +137,7 @@ const bool GGroup::plugChild(GObject *child, const Position &pos) {
     return true;
 }
 
-const bool GGroup::unplugChild(GObject *child) {
+bool GGroup::unplugChild(GObject *child) {
 
     if(child==0L)
         return false;
@@ -186,11 +186,12 @@ QDomElement GGroup::save(QDomDocument &doc) const {
     return element;
 }
 
-void GGroup::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
+void GGroup::draw(QPainter &p, const QRect &rect, bool toPrinter) {
 
+    // first go and check the boundign rect!
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-        it.current()->draw(p, reg, toPrinter);
+        it.current()->draw(p, rect, toPrinter);
 }
 
 void GGroup::recalculate() {
@@ -214,7 +215,7 @@ const GObject *GGroup::hit(const QPoint &p) const {
     return 0L;
 }
 
-const bool GGroup::intersects(const QRect &r) const {
+bool GGroup::intersects(const QRect &r) const {
 
     if(r.intersects(boundingRect()))
         return true;
@@ -390,12 +391,12 @@ void GGroupM9r::draw(QPainter &p) {
     m_group->drawHandles(p, m_handles);
 }
 
-const bool GGroupM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
 
     // TODO
     // test
@@ -434,23 +435,24 @@ const bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     return false;
 }
 
-const bool GGroupM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GGroupM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GGroupM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GGroupM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
+
 #include <ggroup.moc>

@@ -1,3 +1,2 @@
 dnl Don't compile graphite...
 DO_NOT_COMPILE="$DO_NOT_COMPILE graphite"
-

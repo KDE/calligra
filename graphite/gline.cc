@@ -114,21 +114,18 @@ QDomElement GLine::save(QDomDocument &doc) const {
     return e;
 }
 
-void GLine::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
+void GLine::draw(QPainter &p, const QRect &rect, bool toPrinter) {
 
     if(m_state==GObject::Deleted || (toPrinter && m_state==GObject::Invisible))
         return;
 
-    if(!reg.contains(boundingRect()))
+    if(!rect.intersects(boundingRect()))
         return;
 
     p.save();
-    p.setPen(m_pen);
+    p.setPen(m_pen); // adjust the pen if it's invisible (light grey)
     p.drawLine(m_a, m_b);
     p.restore();
-
-    // resize the region
-    reg+=boundingRect();
 }
 
 void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
@@ -138,14 +135,17 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
     p.setBrush(Qt::black);
 
     int size;
-    if(m_state==Handles)
+    int offset;
+    if(m_state==Handles) {
         size=GraphiteGlobal::self()->handleSize();
-    else if(m_state==Rot_Handles)
+        offset=GraphiteGlobal::self()->handleOffset();
+    }
+    else if(m_state==Rot_Handles) {
         size=GraphiteGlobal::self()->rotHandleSize();
+        offset=GraphiteGlobal::self()->rotHandleOffset();
+    }
     else
         return; // no need to draw handles - shouldn't happen
-
-    int offset=GraphiteGlobal::self()->offset();
 
     QRect *r1=new QRect(m_a.x()-offset, m_a.y()-offset, size, size);
     QRect *r2=new QRect(m_b.x()-offset, m_b.y()-offset, size, size);
@@ -238,7 +238,7 @@ const GLine *GLine::hit(const QPoint &p) const {
     return 0L;
 }
 
-const bool GLine::intersects(const QRect &r) const {
+bool GLine::intersects(const QRect &r) const {
 
     if(r.contains(m_a) || r.contains(m_b))
         return true;
@@ -360,33 +360,34 @@ void GLineM9r::draw(QPainter &p) {
     m_line->drawHandles(p, m_handles);
 }
 
-const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // We don't need that one for lines... hmmm ...
     return false;
 }
+
 #include <gline.moc>

@@ -27,7 +27,6 @@
 
 class KoRuler;
 class GraphiteView;
-class GCanvasWidget;
 
 
 class GCanvas : public QScrollView {
@@ -38,48 +37,33 @@ public:
     virtual ~GCanvas() {}
 
     void setRulers(KoRuler *vertical, KoRuler *horizontal);
-    void updateMousePos(QMouseEvent *e);
-    void showMousePos(const bool &pos);
+    void showMousePos(bool pos);
 
 protected:
-    virtual void resizeEvent(QResizeEvent *e);
+    virtual void contentsMousePressEvent(QMouseEvent *e) { m_doc->mousePressEvent(e, m_view); }
+    virtual void contentsMouseReleaseEvent(QMouseEvent *e) { m_doc->mouseReleaseEvent(e, m_view); }
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent *e) { m_doc->mouseDoubleClickEvent(e, m_view); }
+    virtual void contentsMouseMoveEvent(QMouseEvent *e);
+
+    virtual void viewportPaintEvent(QPaintEvent *e);  // only drawContents()??
     virtual void viewportResizeEvent(QResizeEvent *e);
-
-private:
-    GCanvasWidget *m_widget;
-    KoRuler *m_vertical, *m_horizontal;
-};
-
-
-class GCanvasWidget : public QWidget {
-
-public:
-    GCanvasWidget(GCanvas *canvas, GraphiteView *view, GraphitePart *doc);
-    ~GCanvasWidget() {}
-
-protected:
-    virtual void mousePressEvent(QMouseEvent *e) { m_doc->mousePressEvent(e, m_view); }
-    virtual void mouseReleaseEvent(QMouseEvent *e) { m_doc->mouseReleaseEvent(e, m_view); }
-    virtual void mouseDoubleClickEvent(QMouseEvent *e) { m_doc->mouseDoubleClickEvent(e, m_view); }
-    virtual void mouseMoveEvent(QMouseEvent *e);
-    virtual void wheelEvent(QWheelEvent */*e*/) {}
 
     virtual void keyPressEvent(QKeyEvent *e) { m_doc->keyPressEvent(e, m_view); }
     virtual void keyReleaseEvent(QKeyEvent *e) { m_doc->keyReleaseEvent(e, m_view); }
-
     // Here we should tell the document not to draw the handles
     // when we don't have focus... (TODO)
     virtual void focusInEvent(QFocusEvent */*e*/) {}
     virtual void focusOutEvent(QFocusEvent */*e*/) {}
-
-    virtual void paintEvent(QPaintEvent *e);
     virtual void leaveEvent(QEvent *);
     virtual void enterEvent(QEvent *);
+    virtual void resizeEvent(QResizeEvent *e) { QScrollView::resizeEvent(e); }
+    virtual void paintEvent(QPaintEvent *e) { QScrollView::paintEvent(e); }
 
 private:
-    GraphiteView *m_view;
     GraphitePart *m_doc;
-    GCanvas *m_canvas;
-    bool m_updateRulers;
+    GraphiteView *m_view;
+    KoRuler *m_vertical, *m_horizontal;
+    bool m_showMousePos;
 };
+
 #endif // gcanvas_h
