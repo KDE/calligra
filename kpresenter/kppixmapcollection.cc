@@ -60,7 +60,7 @@ QImage *KPPixmapDataCollection::insertPixmapData( const Key &key, const QImage &
     int ref = 1;
     refs.insert( Key( key ), ref );
 
-    delete image;
+    return image;
     return &data[ key ];
 }
 
@@ -241,7 +241,7 @@ QPixmap *KPPixmapCollection::loadPixmap( const QImage &image, const Key &key, bo
         pixmaps.insert( Key( key ), *pixmap );
         int ref = 1;
         refs.insert( Key( key ), ref );
-	delete pixmap;
+	return pixmap;
 	return &pixmaps[ key ];
     }
 

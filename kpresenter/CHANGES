@@ -396,3 +396,4 @@ Reggie, 21.8.1999:
   bold, italic and underlined on and off in the textobj
   when editing it
 - A bit more work on the presentation structure viewer/editor
+- Another fix in the pixmap collection
