@@ -246,7 +246,7 @@ void KChartWizardSetupAxesPage::apply()
     }
     else
     leftparams.setAxisAreaMode(KDChartAxisParams::AxisAreaModeAutoSize);*/
-    leftparams.setAxisCalcMode(KDChartAxisParams::AxisCalcLogarithmic);
+    //leftparams.setAxisCalcMode(KDChartAxisParams::AxisCalcLogarithmic);
     _chart->params()->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
     // PENDING(kalle) Put back in
     //     _chart->params()->grid =grid->isChecked() ;
