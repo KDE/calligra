@@ -256,6 +256,11 @@ private:
     QValueList<int> pages(const QString &range);
     bool pagesHelper(const QString &chunk, QValueList<int> &list);
 
+    void moveObject( int x, int y, bool key );
+    void resizeObject();
+    bool mouseSelectedObject;
+    int objectPosX, objectPosY;
+
 public slots:
     void chPic();
     void chClip();
