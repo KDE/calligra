@@ -888,6 +888,7 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
 	    viewport()->setFocus();
 	    recalcCursor( FALSE );
 	    setMouseMode( MM_EDIT );
+	    editNum = -1;
 	    return;
 	}
     }
