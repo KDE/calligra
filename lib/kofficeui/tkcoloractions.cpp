@@ -142,6 +142,8 @@ void TKSelectColorAction::updatePixmap()
     }
     else if(w->inherits("QPopupMenu") ) {
         QPixmap pix =iconSet().pixmap(QIconSet::Automatic,QIconSet::Active);
+	if ( pix.isNull() )
+	    return;
         QPainter p(&pix);
         switch (m_type) {
             case TextColor:
