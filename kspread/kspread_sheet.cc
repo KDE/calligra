@@ -6337,6 +6337,8 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             }
         }
     }
+    
+    int rowIndex = 0;
     QDomNode rowNode = tableElement.firstChild();
     while( !rowNode.isNull() )
     {
@@ -6345,10 +6347,40 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         {
             if( rowElement.tagName() == "table:table-row" )
             {
-                bool b = loadCellsOasis( rowElement,oasisStyles );
-                // TODO load cells
+                rowIndex++;
+                int columnIndex = 0;            
+                QDomNode cellNode = rowNode.firstChild();
+                while( !cellNode.isNull() )
+                {
+                    QDomElement cellElement = cellNode.toElement();
+                    if( !cellElement.isNull() )
+                    {
+                        columnIndex++;
+                        if( cellElement.tagName() == "table:table-cell" )
+                        {
+                            KSpreadCell* cell = nonDefaultCell( columnIndex, rowIndex );
+                            cell->loadOasis( cellElement, oasisStyles );
+                            
+                            if( cellElement.hasAttribute( "table:number-columns-repeated" ) )
+                            {
+                                bool ok = false;
+                                int cols = cellElement.attribute( "table:number-columns-repeated" ).toInt( &ok );
+                                if( ok )
+                                    for( int i = 1; i < cols; i++ )
+                                    {
+                                        columnIndex++;
+                                        KSpreadCell* target = nonDefaultCell( columnIndex, rowIndex );
+                                        target->copyAll( cell );
+                                    }
+                             }
+                        }
+                    }
+                    
+                    cellNode = cellNode.nextSibling();
+                }    
             }
         }
+        
         rowNode = rowNode.nextSibling();
     }
 
@@ -6378,7 +6410,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
     return true;
 }
 
-bool KSpreadSheet::loadCellsOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )
+bool KSpreadSheet::loadCellsOasis( const QDomElement &rowElement, const KoOasisStyles& oasisStyles )
 {
     kdDebug()<<"bool KSpreadSheet::loadCellsOasis( const QDomElement &element )*****************\n";
 #if 0
@@ -6388,7 +6420,7 @@ bool KSpreadSheet::loadCellsOasis( const QDomElement &element, const KoOasisStyl
     else
         delete cell; // Allow error handling: just skip invalid cells
 #endif
-//todo parse cell
+
     return true;
 }
 
