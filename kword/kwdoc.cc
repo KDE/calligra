@@ -1928,7 +1928,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
     kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
     m_pages++;
 
-    emit pageNumChanged();
+
 
     recalcVariables( VT_PGNUM );
 
@@ -1990,6 +1990,9 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
     if ( isHeaderVisible() || isFooterVisible() )
         recalcFrames();  // Get headers and footers on the new page
     // setModified(TRUE); This is called by formatMore, possibly on loading -> don't set modified
+
+     emit pageNumChanged();
+
 }
 
 bool KWDocument::canRemovePage( int num, KWFrame *f )

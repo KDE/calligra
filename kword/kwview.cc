@@ -997,6 +997,7 @@ void KWView::setTool( MouseMode _mouseMode )
     actionTableSplitCells->setEnabled( FALSE );
     actionTableDelete->setEnabled( FALSE );
     actionTableUngroup->setEnabled( FALSE );
+    actionBackgroundColor->setEnabled(FALSE);
     KWTableFrameSet *table = gui->canvasWidget()->getTable();
 
     switch ( _mouseMode ) {
@@ -1007,7 +1008,6 @@ void KWView::setTool( MouseMode _mouseMode )
         actionTableDelCol->setEnabled( table );
         actionTableDelete->setEnabled( table );
         actionTableUngroup->setEnabled( table );
-        actionBackgroundColor->setEnabled(FALSE);
     } break;
     case MM_EDIT_FRAME: {
         frameSelectedChanged();
@@ -2629,6 +2629,7 @@ void KWView::updateButtons()
     actionInsertFormula->setEnabled(state);
     actionInsertContents->setEnabled(state);
     actionInsertVariable->setEnabled(state);
+    actionBackgroundColor->setEnabled(!state && gui->canvasWidget()->getMouseMode()==MM_EDIT_FRAME);
 
     KWTableFrameSet *table = gui->canvasWidget()->getTable();
     actionTableInsertRow->setEnabled( table );
