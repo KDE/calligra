@@ -228,13 +228,16 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	//VPainter *p = new VKoPainter( painter.device() );
 	p->begin();
 	p->setZoomFactor( zoomX );
-	//kdDebug() << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;
-	//kdDebug() << "rect.x() : "<< rect.x() << endl;
-	//kdDebug() << "rect.y() : "<< rect.y() << endl;
+	kdDebug() << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;
+	kdDebug() << "painter.worldMatrix().dy() : " << painter.worldMatrix().dy() << endl;
+	kdDebug() << "rect.x() : "<< rect.x() << endl;
+	kdDebug() << "rect.y() : "<< rect.y() << endl;
+	kdDebug() << "rect.width() : "<< rect.width() << endl;
+	kdDebug() << "rect.height() : "<< rect.height() << endl;
 	//p->setWorldMatrix( painter.worldMatrix() );
 	QWMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( painter.worldMatrix().dx(), ( painter.worldMatrix().dy() - rect.height() ) );
+	mat.translate( painter.worldMatrix().dx(), ( -painter.worldMatrix().dy() - rect.height() ) );
 	p->setWorldMatrix( mat );
 
 	m_doc.selection()->clear();
