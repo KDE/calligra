@@ -105,6 +105,9 @@ class KoZoomHandler;
 class KoTextFormatter;
 class KoParagVisitor;
 class KoTextDocCommand;
+class KoXmlWriter;
+class KoSavingContext;
+
 #include <qmemarray.h>
 #include "koparaglayout.h"
 #include "korichtext.h"
