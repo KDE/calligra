@@ -69,6 +69,11 @@ KexiDBForm::KexiDBForm(/*KexiFormPartItem &i,*/ KexiMainWindow *win, QWidget *pa
 	initForm();
 }
 
+KexiDBForm::~KexiDBForm()
+{
+	kdDebug() << "KexiDBForm::~KexiDBForm(): close" << endl;
+}
+
 KFormDesigner::Form*
 KexiDBForm::form() const
 {
@@ -358,9 +363,11 @@ KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 	p.end();
 }
 
-KexiDBForm::~KexiDBForm()
+QSize
+KexiDBForm::sizeHint() const
 {
-	kdDebug() << "KexiDBForm::~KexiDBForm(): close" << endl;
+	//todo: find better size (user configured?)
+	return QSize(400,300);
 }
 
 #include "kexidbform.moc"

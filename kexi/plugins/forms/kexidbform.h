@@ -65,6 +65,8 @@ class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 		void clearRect();
 		void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
 
+		virtual QSize sizeHint() const;
+
 	protected slots:
 		void managerPropertyChanged(KexiPropertyBuffer *b);
 		void slotDirty(KFormDesigner::Form *f);
