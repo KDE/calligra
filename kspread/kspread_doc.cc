@@ -1958,9 +1958,11 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
 void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
 {
     QDomNode validation = body.namedItem( "table:content-validations" );
+    kdDebug()<<"validation.isNull ? "<<validation.isNull()<<endl;
     if ( !validation.isNull() )
     {
         QDomElement element = validation.firstChild().toElement();
+        kdDebug()<<"element.isNull ??? :"<<element.isNull()<<endl;
         for ( ; !element.isNull() ; element = element.nextSibling().toElement() ) {
             if ( element.tagName() ==  "table:content-validation" ) {
                 d->m_loadingInfo->appendValidation(element.attribute("table:name" ), element );
