@@ -31,10 +31,8 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
     {
       mousePressed = false;
       modType = MT_NONE;
-      resizeObjNum =  0;
-      editNum = 0;
-      drawBack = true;
-      graphPtr = 0;
+      resizeObjNum = -1;
+      editNum = -1;
       setupMenus();
       setBackgroundColor(white);
       view = _view;
@@ -47,14 +45,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       _presFakt = 1.0;
       goingBack = false;
       drawMode = false;
-      picCache.setAutoDelete(true);
       fillBlack = true;
-      _page_obj_list_ = 0;
-      _append_undo_list_ = true;
-      _clear_undo_list_ = true;
-      _page_obj_ = 0;
-      _page_obj_new_ = 0;
-      _assign_page_obj_ = true;
     }
   else 
     {
@@ -94,19 +85,22 @@ void Page::draw(QRect _rect,QPainter *p)
 void Page::paintEvent(QPaintEvent* paintEvent)
 {
   QPainter painter;
-  QBrush brush(darkGray);
-  QPen pen(NoPen);
-
   QPixmap pix(width(),height());
 
   painter.begin(&pix);
+
+  if (editMode || !editMode && !fillBlack)
+    painter.fillRect(paintEvent->rect().x(),paintEvent->rect().y(),
+		     paintEvent->rect().width(),paintEvent->rect().height(),white);
+  else
+    painter.fillRect(paintEvent->rect().x(),paintEvent->rect().y(),
+		     paintEvent->rect().width(),paintEvent->rect().height(),black);
+
   painter.setClipping(true);
   painter.setClipRect(paintEvent->rect());
-  if (drawBack) paintBackground(&painter,paintEvent->rect());
-  if (!objList()->isEmpty()) paintObjects(&painter,paintEvent->rect());
-
-  if (!editMode)
-    view->presentParts(_presFakt,&painter,paintEvent->rect(),diffx(),diffy());
+  
+  drawBackground(&painter,paintEvent->rect());
+  drawObjects(&painter,paintEvent->rect());
 
   painter.end();
 
@@ -114,512 +108,41 @@ void Page::paintEvent(QPaintEvent* paintEvent)
 	 paintEvent->rect().x(),paintEvent->rect().y(),paintEvent->rect().width(),paintEvent->rect().height());
 }
 
-/*====================== paint background ========================*/
-void Page::paintBackground(QPainter *painter,QRect rect)
+/*======================= draw background ========================*/
+void Page::drawBackground(QPainter *painter,QRect rect)
 {
-  painter->setPen(NoPen);
-  if (editMode || !editMode && !fillBlack)
-    painter->setBrush(white);
-  else
-    painter->setBrush(black);
-  painter->drawRect(0,0,width(),20);
-  painter->drawRect(0,0,20,height());
-  QRect r = painter->viewport();
-  for (pagePtr=pageList()->first();pagePtr != 0;pagePtr=pageList()->next())
+  KPBackGround *kpbackground = 0;
+  
+  for (int i = 0;i < static_cast<int>(backgroundList()->count());i++)
     {
-      painter->setViewport(r);
-      painter->resetXForm();
-      r = painter->viewport();
-      if ((rect.intersects(QRect(getPageSize(pagePtr->pageNum,_presFakt))) && editMode) ||
-	  (!editMode && (int)currPresPage == pageList()->at()+1))
-	{
-	  switch (pagePtr->backType)
-	    {
-	    case BT_COLOR: /* background color */ 
-	      {
-		painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x(),getPageSize(pagePtr->pageNum,_presFakt).y(),
-				    *pagePtr->cPix);
-		pagePtr->pic->hide();
-	      } break;
-	    case BT_PIC:  /* background picture */
-	      {
-		if (pagePtr->backPicView == BV_CENTER)
-		  painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x(),getPageSize(pagePtr->pageNum,_presFakt).y(),
-				      *pagePtr->cPix);
-		pagePtr->pic->hide();
-		switch (pagePtr->backPicView)
-		  {
-		  case BV_ZOOM:
-		    {
-		      if (!pagePtr->backPix.isNull())
-			painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x(),getPageSize(pagePtr->pageNum,_presFakt).y(),
-					    pagePtr->backPix);
-		    } break;
-		  case BV_CENTER:
-		    {
-		      if (!pagePtr->backPix.isNull())
-			{
-			  if (pagePtr->backPix.width() > getPageSize(pagePtr->pageNum,_presFakt).width())
-			    pagePtr->backPix.resize(getPageSize(pagePtr->pageNum,_presFakt).width(),
-						    pagePtr->backPix.height());
-			  if (pagePtr->backPix.height() > getPageSize(pagePtr->pageNum,_presFakt).height())
-			    pagePtr->backPix.resize(pagePtr->backPix.width(),
-						    getPageSize(pagePtr->pageNum,_presFakt).height());
-			  painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x()+
-					      (getPageSize(pagePtr->pageNum,_presFakt).width()-
-										 pagePtr->backPix.width())/2,
-					      getPageSize(pagePtr->pageNum,_presFakt).y()+
-					      (getPageSize(pagePtr->pageNum,_presFakt).height()-
-					       pagePtr->backPix.height())/2,
-					      pagePtr->backPix);
-			}
-		    } break;
-		  case BV_TILED:
-		    {
-		      if (!pagePtr->backPix.isNull())
-			painter->drawTiledPixmap(getPageSize(pagePtr->pageNum,_presFakt),pagePtr->backPix);
-		    } break;
-		  }
-	      } break;
-	    case BT_CLIP: /* background clipart */ 
-	      {
-		painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x(),getPageSize(pagePtr->pageNum,_presFakt).y(),  
-				    *pagePtr->cPix);
-		r = painter->viewport();
-		painter->setViewport(getPageSize(pagePtr->pageNum,_presFakt).x(),
-				     getPageSize(pagePtr->pageNum,_presFakt).y(),
-				     getPageSize(pagePtr->pageNum,_presFakt).width(),
-				     getPageSize(pagePtr->pageNum,_presFakt).height());
-		QPicture *pic = pagePtr->pic->getPic();
-		pic->play(painter);
-		painter->setViewport(r);
-		painter->resetXForm();
-	      } break;
-	    }
-	  painter->setViewport(r);
-	  painter->resetXForm();
-	  r = painter->viewport();
-	}
-      painter->setPen(NoPen);
-      if (editMode || !editMode && !fillBlack)
-	painter->setBrush(white);
-      else
-	painter->setBrush(black);
-      painter->drawRect(0,getPageSize(pagePtr->pageNum,_presFakt).y()+getPageSize(pagePtr->pageNum,_presFakt).height(),
-			width(),20);
-      if (editMode)
-	{
-	  painter->setPen(QPen(red,1,SolidLine));
-	  painter->setBrush(NoBrush);
-	  painter->drawRect(getPageSize(pagePtr->pageNum,_presFakt));
-	}
-    }
-  if (pageList() && !pageList()->isEmpty())
-    {
-      unsigned int num = pageList()->count();
-      painter->setPen(NoPen);
-      if (editMode || !editMode && !fillBlack)
-	painter->setBrush(white);
-      else
-	painter->setBrush(black);
-      painter->drawRect(0,getPageSize(num,_presFakt).y()+getPageSize(num,_presFakt).height()+1,
-			width(),height());
-      painter->drawRect(getPageSize(num,_presFakt).x()+getPageSize(num,_presFakt).width(),0,
-			width(),height());
+      kpbackground = backgroundList()->at(i);
+      if ((rect.intersects(QRect(getPageSize(i,_presFakt))) && editMode) ||
+ 	  (!editMode && static_cast<int>(currPresPage) == i + 1))
+ 	kpbackground->draw(painter,QPoint(getPageSize(i,_presFakt).x(),getPageSize(i,_presFakt).y()),editMode);
     }
 }
 
-/*====================== paint objects ==========================*/
-void Page::paintObjects(QPainter *painter,QRect rect)
+/*========================= draw objects =========================*/
+void Page::drawObjects(QPainter *painter,QRect rect)
 {
-  QRect r = painter->viewport();
-  QRect r_orig = r;
-  objPtr = 0;
-  for (objPtr = objList()->first();objPtr != 0;objPtr=objList()->next())
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      painter->setViewport(r_orig);
-      painter->resetXForm();
-      r = painter->viewport();
-      /* draw the objects */
-      if ((rect.intersects(view->KPresenterDoc()->getRealBoundingRect(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
-				 objPtr->ow,objPtr->oh),objPtr->objNum - 1)) && editMode) ||
-	  (!editMode && getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage &&
-	   objPtr->presNum <= currPresStep))
-	{     
-	  switch (objPtr->objType)
+      kpobject = objectList()->at(i);
+      
+      if ((rect.intersects(kpobject->getBoundingRect(diffx(),diffy())) && editMode) ||
+	   (!editMode && getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) &&
+	    kpobject->getPresNum() <= static_cast<int>(currPresStep)))
+	{
+	  if (!editMode && static_cast<int>(currPresStep) == kpobject->getPresNum() && !goingBack)
 	    {
-	    case OT_PICTURE: /* pciture */
-	      {
-		if (objPtr->shadowDistance > 0)
-		  {
-		    painter->save();
-
-		    if (objPtr->angle == 0)
-		      {
-			int sx = objPtr->ox - diffx();
-			int sy = objPtr->oy - diffy();
-			view->KPresenterDoc()->getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
-
-			painter->setPen(QPen(objPtr->shadowColor));
-			painter->setBrush(objPtr->shadowColor);
-
-			QSize bs = objPtr->graphObj->getPix().size();
-
-			painter->drawRect(sx,sy,bs.width(),bs.height());
-		      }
-		    else
-		      {
-			r = painter->viewport();
-			painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
-					     r.width(),r.height());
-			
-			QRect br = objPtr->graphObj->getPix().rect();
-			int pw = br.width();
-			int ph = br.height();
-			QRect rr = br;
-			int pixYPos = -rr.y();
-			int pixXPos = -rr.x();
-			br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-			rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-			
-			QWMatrix m,mtx;
-			mtx.rotate(objPtr->angle);
-			m.translate(pw / 2,ph / 2);
-			m = mtx * m;
-			
-			painter->setWorldMatrix(m);
-			
-			painter->setPen(QPen(objPtr->shadowColor));
-			painter->setBrush(objPtr->shadowColor);
-
-			QSize bs = objPtr->graphObj->getPix().size();
-			int dx = 0,dy = 0;
-			view->KPresenterDoc()->getShadowCoords(dx,dy,objPtr->shadowDirection,objPtr->shadowDistance);
-			painter->drawRect(rr.left() + pixXPos + dx,rr.top() + pixYPos + dy,
-					  bs.width(),bs.height());
-			
-			painter->resetXForm();
-			painter->setViewport(r);
-		      }
-		    painter->restore();
-		  }
-		
-		if (objPtr->angle == 0)
-		  {
-		    painter->drawPixmap(objPtr->ox - diffx(),objPtr->oy - diffy(),
-					objPtr->graphObj->getPix());
-		    //0,0,objPtr->ow,objPtr->oh);
-		  }
-		else
-		  {
-		    painter->save();
-		    r = painter->viewport();
-		    painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
-					 r.width(),r.height());
-
-		    QRect br = objPtr->graphObj->getPix().rect();
-		    int pw = br.width();
-		    int ph = br.height();
-		    QRect rr = br;
-		    int pixYPos = -rr.y();
-		    int pixXPos = -rr.x();
-		    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-		    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-
-		    QWMatrix m,mtx;
-		    mtx.rotate(objPtr->angle);
-		    m.translate(pw / 2,ph / 2);
-		    m = mtx * m;
-
-		    painter->setWorldMatrix(m);
-		    
-		    painter->drawPixmap(rr.left() + pixXPos,rr.top() + pixYPos,
-					objPtr->graphObj->getPix());
-
-
-		    painter->resetXForm();
-		    painter->setViewport(r);
-		    painter->restore();
-		  }
-	      } break;
-	    case OT_TEXT: /* text */
-	      {
-		painter->save();
-		int _x,_y,_w,_h;
-		QRect cr = view->KPresenterDoc()->getRealBoundingRect(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
-									    objPtr->ow,objPtr->oh),objPtr->objNum - 1);
-		_x = cr.x(); _y = cr.y(); _w = cr.width(); _h = cr.height();
-
-		r = painter->viewport();
-
-		if (objPtr->shadowDistance > 0)
-		  {
-		    painter->save();
-		    objPtr->textObj->enableDrawAllInOneColor(objPtr->shadowColor);
-		    
-		    if (!editMode && currPresStep == objPtr->presNum && !goingBack)
-		      {
-			switch (objPtr->effect2)
-			  {
-			  case EF2T_PARA:
-			    objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,0,subPresStep,true);
-			    break;
-			  default:
-			    objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,-1,-1,true);
-			  }
-		      }
-		    else
-		      objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,-1,-1,true);
-		    
-		    objPtr->textObj->disableDrawAllInOneColor();
-
-		    if (objPtr->angle == 0)
-		      {
-			int sx = objPtr->ox - diffx();
-			int sy = objPtr->oy - diffy();
-			view->KPresenterDoc()->getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
-
-			painter->setViewport(sx,sy,r.width(),r.height());
-			
-			objPtr->objPic->play(painter);
-		      }
-		    else
-		      {
-			painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
-					     r.width(),r.height());
-
-			QRect br = objPtr->textObj->rect();
-			int pw = br.width();
-			int ph = br.height();
-			QRect rr = br;
-			int yPos = -rr.y();
-			int xPos = -rr.x();
-			br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-			rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-			
-			QWMatrix m,mtx;
-			mtx.rotate(objPtr->angle);
-			m.translate(pw / 2,ph / 2);
-			m = mtx * m;
-			
-			painter->setWorldMatrix(m);
-
-			int sx = 0;
-			int sy = 0;
-			view->KPresenterDoc()->getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
-
-			painter->translate(rr.left() + xPos + sx,rr.top() + yPos + sy);
-			
-			objPtr->objPic->play(painter);
-		      }
-		    painter->restore();
-		  }
-
-		if (!editMode && currPresStep == objPtr->presNum && !goingBack)
-		  {
-		    switch (objPtr->effect2)
-		      {
-		      case EF2T_PARA:
-			objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,0,subPresStep,true);
-			break;
-		      default:
-			objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,-1,-1,true);
-		      }
-		  }
-		else
-		  objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,-1,-1,true);
- 
-		painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
-				     r.width(),r.height());
-
-		if (objPtr->angle == 0)
-		  objPtr->objPic->play(painter);
-		else
-		  {
-		    QRect br = objPtr->textObj->rect();
-		    int pw = br.width();
-		    int ph = br.height();
-		    QRect rr = br;
-		    int yPos = -rr.y();
-		    int xPos = -rr.x();
-		    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-		    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-		    
-		    QWMatrix m,mtx;
-		    mtx.rotate(objPtr->angle);
-		    m.translate(pw / 2,ph / 2);
-		    m = mtx * m;
-
-		    painter->setWorldMatrix(m);
-		    painter->translate(rr.left() + xPos,rr.top() + yPos);
-
-		    objPtr->objPic->play(painter);
-		  }
-
-		painter->setViewport(r);
- 		painter->resetXForm();
-		painter->restore();
-	      } break;
-	    default:
-	      {
-		if (objPtr->shadowDistance > 0 && objPtr->objType != OT_CLIPART)
-		  {
-		    r = painter->viewport();
-		    painter->save();
-
-		    objPtr->graphObj->enableDrawAllInOneColor(objPtr->shadowColor);
-		    objPtr->objPic = objPtr->graphObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),objPtr->ow,objPtr->oh);
-		    objPtr->graphObj->disableDrawAllInOneColor();
-		    
-		    if (objPtr->angle == 0)
-		      {
-			int sx = objPtr->ox - diffx();
-			int sy = objPtr->oy - diffy();
-			view->KPresenterDoc()->getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
-			
-			painter->setViewport(sx,sy,r.width(),r.height());
-
-			objPtr->objPic->play(painter);
-		      }
-		    else
-		      {
-			painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
-					     r.width(),r.height());
-
-			QRect br = objPtr->graphObj->rect();
-			int pw = br.width();
-			int ph = br.height();
-			QRect rr = br;
-			int yPos = -rr.y();
-			int xPos = -rr.x();
-			br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-			rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-			
-			int sx = 0;
-			int sy = 0;
-			view->KPresenterDoc()->getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
-
-			QWMatrix m,mtx,m2;
-			mtx.rotate(objPtr->angle);
-			m.translate(pw / 2,ph / 2);
-			m2.translate(rr.left() + xPos + sx,rr.top() + yPos + sy);
-			m = m2 * mtx * m;
-			
-			painter->setWorldMatrix(m);
-			objPtr->graphObj->enableDrawAllInOneColor(objPtr->shadowColor);
-			objPtr->graphObj->drawInPainter(painter);
-			objPtr->graphObj->disableDrawAllInOneColor();
-		      }
-
-		    painter->restore();
-		    painter->setViewport(r);
-		  }
-
-		painter->save();
-		if (objPtr->objType != OT_CLIPART)
-		  {
-		    r = painter->viewport();
-		    painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
-					 r.width(),r.height());
-		  }
-	      
-		if (objPtr->objType == OT_CLIPART)
-		  {
-		    r = painter->viewport();
-		    painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
-					 objPtr->ow,objPtr->oh);
-		  }
-
-		objPtr->objPic = objPtr->graphObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),objPtr->ow,objPtr->oh);
-
-		if (objPtr->angle == 0)
-		  objPtr->objPic->play(painter);
-		else
-		  {
-		    QRect br = objPtr->graphObj->rect();
-		    int pw = br.width();
-		    int ph = br.height();
-		    QRect rr = br;
-		    int yPos = -rr.y();
-		    int xPos = -rr.x();
-		    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-		    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-		    
-		    if (objPtr->objType != OT_CLIPART)
-		      {
-			QWMatrix m,mtx,m2;
-			mtx.rotate(objPtr->angle);
-			m.translate(pw / 2,ph / 2);
-			m2.translate(rr.left() + xPos,rr.top() + yPos);
-			m = m2 * mtx * m;
-
-			painter->setWorldMatrix(m);
-			objPtr->graphObj->drawInPainter(painter);
-		      }
-		    else
-		      {
-			// this doesn't work well - has to be rewritten!!
-
-			QWMatrix m,mtx;
-			mtx.rotate(objPtr->angle);
-			m.translate(pw / 2,ph / 2);
-			m = mtx * m;
-
-			QPixmap pm(pw,ph);
-			pm.fill(white);
-			QPainter pnt;
-			pnt.begin(&pm);
-			objPtr->objPic->play(&pnt);
-			pnt.end();
-
- 			painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
- 					     r.width(),r.height());
-			painter->setWorldMatrix(m);
-		    
-			painter->drawPixmap(rr.left() + xPos,rr.top() + yPos,pm);
-		      }
-		  }
-
-		painter->setViewport(r);
-
-		painter->resetXForm();
-		painter->restore();
-	      } break;
+	      kpobject->setSubPresStep(subPresStep);
+	      kpobject->doSpecificEffects(true);
 	    }
-
-	  /* draw selection, if selected */
-	  if (objPtr->isSelected)
-	    {
-	      painter->setViewport(r_orig);
-	      RasterOp rastOp = painter->rasterOp();
-	      painter->setRasterOp(NotROP);
-	      painter->setBrush(black);
-	      painter->setPen(NoPen);
-	      painter->drawRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
-				6,6);
-	      painter->drawRect(objPtr->ox - diffx() + objPtr->ow - 6,objPtr->oy - diffy(),
-				6,6);
-	      painter->drawRect(objPtr->ox - diffx(),objPtr->oy - diffy() + objPtr->oh - 6,
-				6,6);
-	      painter->drawRect(objPtr->ox - diffx() + objPtr->ow - 6,objPtr->oy - diffy() + objPtr->oh - 6,
-				6,6);
-	      painter->drawRect(objPtr->ox - diffx() + objPtr->ow / 2 - 3,objPtr->oy - diffy(),
-				6,6);
-	      painter->drawRect(objPtr->ox - diffx() + objPtr->ow / 2 - 3,objPtr->oy - diffy() + objPtr->oh - 6,
-				6,6);
-	      painter->drawRect(objPtr->ox - diffx(),objPtr->oy - diffy() + objPtr->oh / 2 - 3,
-				6,6);
-	      painter->drawRect(objPtr->ox - diffx() + objPtr->ow - 6,objPtr->oy - diffy() + objPtr->oh / 2 - 3,
-				6,6);
-	      painter->setRasterOp(rastOp);
-	      //painter->setBrush(NoBrush);
-	      //if (mousePressed && (objPtr->objType == OT_PICTURE || objPtr->objType == OT_CLIPART))
-	      //painter->setPen(QPen(gray,1,DotLine));
-	      //else
-	      //painter->setPen(QPen(gray,1,DashLine));
-	      //painter->drawRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
-	      //objPtr->ow,objPtr->oh);
-	    }
+	  kpobject->draw(painter,diffx(),diffy());
+	  kpobject->setSubPresStep(0);
+	  kpobject->doSpecificEffects(false);
 	}
     }
 }
@@ -627,107 +150,105 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 /*==================== handle mouse pressed ======================*/
 void Page::mousePressEvent(QMouseEvent *e)
 {
-  int objNum;
-  QPoint pnt;
-  
-  oldMx = e->x()+diffx();
-  oldMy = e->y()+diffy();
-  
-  firstX = e->x();
-  firstY = e->y();
+  KPObject *kpobject = 0;
+
+  oldMx = e->x();
+  oldMy = e->y();
+
+  resizeObjNum = -1;
+
+  if (editNum != -1)
+    {
+      kpobject = objectList()->at(editNum);
+      editNum = -1;
+      if (kpobject->getType() == OT_TEXT)
+	{
+	  KPTextObject * kptextobject = dynamic_cast<KPTextObject*>(kpobject);
+	  kpobject->deactivate();
+	  kptextobject->getKTextObject()->clearFocus();
+	  disconnect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+	  disconnect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
+	  disconnect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
+		     this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
+	  kptextobject->getKTextObject()->setShowCursor(false);
+	  setFocusProxy(0);
+	  setFocusPolicy(QWidget::NoFocus);
+	}
+    }
 
   if (editMode)
     {
-      if (editNum > 0)
+      if (e->button() == LeftButton)
 	{
-	  objPtr = getObject(editNum);
-	  editNum = 0;
-	  if (objPtr->objType == OT_TEXT)
-	    {
-	      objPtr->textObj->recreate(0,0,QPoint(objPtr->ox - diffx(),objPtr->oy - diffy()),false);
-	      objPtr->textObj->clearFocus();
-	      objPtr->textObj->hide();
-	      disconnect(objPtr->textObj,SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
-	      disconnect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
-	      disconnect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
-	      objPtr->textObj->setShowCursor(false);
-	      setFocusProxy(0);
-	      setFocusPolicy(QWidget::NoFocus);
-	    }
-	  if (graphPtr)
-	    {
-	      objPtr->graphObj->hide();
-	      graphPtr = 0;
-	    }
-	}      
-      if ((e->button() == LeftButton || e->button() == RightButton) && (!mousePressed))
-	{
-	  modType = MT_NONE;
 	  mousePressed = true;
-	  objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
-	  if (objNum > 0)
+	  bool overObject = false;
+	  bool deSelAll = true;
+	  KPObject *kpobject = 0;
+
+	  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0 ;i--)
 	    {
-	      objPtr = getObject(objNum);
-	      if (!objPtr->isSelected)
+	      kpobject = objectList()->at(i);
+	      if (kpobject->contains(QPoint(e->x(),e->y()),diffx(),diffy()))
 		{
-		  if (((e->state() & ShiftButton) != 0) ||
-		      ((e->state() & ControlButton) != 0))
-		    selectObj(objNum);
-		  else
-		    {
-		      deSelectAllObj();
-		      objPtr = getObject(objNum);
-		      selectObj(objNum);
-		    }
+		  overObject = true;
+		  if (kpobject->isSelected() && modType == MT_MOVE) deSelAll = false;
+		  if (kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE)
+		    resizeObjNum = i;
+		  break;
 		}
+	    }
+
+	  if (deSelAll && !(e->state() & ShiftButton) && !(e->state() & ControlButton))
+ 	    deSelectAllObj();
+
+	  if (overObject)
+	    {
+	      selectObj(kpobject);
+	      modType = MT_NONE;
 	    }
 	  else
-	    {
-	      deSelectAllObj();
-	      objPtr = getObject(objNum);
-	    }
-	}  
+	    deSelectAllObj();
+
+	}
       if (e->button() == RightButton)
 	{
-	  objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
-	  if (objNum > 0)
+	  int num = getObjectAt(e->x(),e->y());
+	  if (num != -1)
 	    {
-	      objPtr = getObject(objNum);
-	      if (objPtr->objType == OT_PICTURE)
+	      kpobject = objectList()->at(num);
+	      if (kpobject->getType() == OT_PICTURE)
 		{
 		  mousePressed = false;
 		  deSelectAllObj();
-		  selectObj(objNum);
-		  pnt = QCursor::pos();
+		  selectObj(kpobject);
+		  QPoint pnt = QCursor::pos();
 		  picMenu->popup(pnt);
 		  modType = MT_NONE;
-		  resizeObjNum = 0;
 		}
-	      else if (objPtr->objType == OT_CLIPART)
+	      else if (kpobject->getType() == OT_CLIPART)
 		{
 		  mousePressed = false;
 		  deSelectAllObj();
-		  selectObj(objNum);
-		  pnt = QCursor::pos();
+		  selectObj(kpobject);
+		  QPoint pnt = QCursor::pos();
 		  clipMenu->popup(pnt);
 		  modType = MT_NONE;
-		  resizeObjNum = 0;
 		}
-	      else if (objPtr->objType == OT_TEXT)
+	      else if (kpobject->getType() == OT_TEXT)
 		{
-		  pnt = QCursor::pos();
+		  selectObj(kpobject);
+		  QPoint pnt = QCursor::pos();
 		  txtMenu->popup(pnt);
 		  mousePressed = false;
 		  modType = MT_NONE;
-		  resizeObjNum = 0;
 		}
 	      else
 		{
-		  pnt = QCursor::pos();
+		  selectObj(kpobject);
+		  QPoint pnt = QCursor::pos();
 		  graphMenu->popup(pnt);
 		  mousePressed = false;
 		  modType = MT_NONE;
-		  resizeObjNum = 0;
 		}
 	    }
 	}
@@ -756,258 +277,140 @@ void Page::mousePressEvent(QMouseEvent *e)
       else if (e->button() == RightButton)
 	{
 	  setCursor(arrowCursor);
-	  pnt = QCursor::pos();
+	  QPoint pnt = QCursor::pos();
 	  presMenu->popup(pnt);
 	} 
     }
+  
   mouseMoveEvent(e);
 }
 
 /*=================== handle mouse released ======================*/
 void Page::mouseReleaseEvent(QMouseEvent *e)
 {
-  if (firstX != e->x() || firstY != e->y())
-    {
-      if (modType == MT_MOVE)
-	{
-	  clearUndoListNew();
-	  for (int i = 0;i <= (int)objList()->count() - 1;i++)
-	    {
-	      if (objList()->at(i)->isSelected)
-		{
-		  objPtr = objList()->at(i);
-		  appendUndoListNew(objPtr);
-		}
-	    }
-	  
-	  UndoRedoPageObjectsList *l = new UndoRedoPageObjectsList(_page_obj_list_,_page_obj_list_new_,i18n("Move object(s)")); 
-	  
-	  view->KPresenterDoc()->addUndo(l);
-	  _append_undo_list_ = true;
-	  _clear_undo_list_ = true;
-	}
-      else if (modType != MT_NONE)
-	{
-	  _page_obj_new_ = getObject(resizeObjNum);
-	  _assign_page_obj_ = true;
-	  
-	  UndoRedoPageObjects *o = new UndoRedoPageObjects(_page_obj_,_page_obj_new_,i18n("Resize object"));
-	  view->KPresenterDoc()->addUndo(o);
-	}
-    }
-  else
-    {
-      if (modType == MT_MOVE)
-	{
-	  _page_obj_list_->clear();
-	  delete _page_obj_list_;
-	  _page_obj_list_ = 0;
-	  _append_undo_list_ = true;
-	  _clear_undo_list_ = true;
-	}
-      else if (modType != MT_NONE)
-	{
-	  delete _page_obj_;
-	  _page_obj_ = 0;
-	  _assign_page_obj_ = true;
-	}
-    }
-
   mousePressed = false;
   modType = MT_NONE;
-  resizeObjNum = 0;
+  resizeObjNum = -1;
   mouseMoveEvent(e);
-  drawBack = false;
-  //_repaint(false);
-  drawBack = true;
 }
 
 /*==================== handle mouse moved ========================*/
 void Page::mouseMoveEvent(QMouseEvent *e)
 {
-  int mx,my,oox,ooy,oow,ooh,ox,oy,ow,oh,objNum;
-  unsigned int i;
-  
-  if (!objList()->isEmpty() && editMode)
+  if (editMode)
     {
-      mx = e->x()+diffx(); my = e->y()+diffy();
-      if ((!mousePressed) || (modType == MT_NONE))
+      KPObject *kpobject;
+      
+      if (!mousePressed || modType == MT_NONE)
 	{
-	  objNum = getObjectAt(mx,my);
-	  if (objNum > 0)
+	  setCursor(arrowCursor);
+	  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
 	    {
-	      objPtr = getObject(objNum);
-	      if (objPtr->isSelected)
+	      kpobject = objectList()->at(i);
+	      if (kpobject->contains(QPoint(e->x(),e->y()),diffx(),diffy()))
 		{
-		  ox = objPtr->ox; oy = objPtr->oy;
-		  ow = objPtr->ow; oh = objPtr->oh;
-		  setCursor(sizeAllCursor);
-		  modType = MT_MOVE;
-		  if ((mx >= ox+6) && (my >= oy) && (mx <= ox+ow-6) && (my <= oy+6))
-		    {
-		      setCursor(sizeVerCursor);
-		      modType = MT_RESIZE_UP;
-		    }
-		  if ((mx >= ox) && (my >= oy) && (mx <= ox+6) && (my <= oy+6))
-		    {
-		      setCursor(sizeFDiagCursor);
-		      modType = MT_RESIZE_LU;
-		    }
-		  if ((mx >= ox+ow-6) && (my >= oy) && (mx <= ox+ow) && (my <= oy+6))
-		    {
-		      setCursor(sizeBDiagCursor);
-		      modType = MT_RESIZE_RU;
-		    }
-		  if ((mx >= ox) && (my >= oy+6) && (mx <= ox+6) && (my <= oy+oh-6))
-		    {
-		      setCursor(sizeHorCursor);
-		      modType = MT_RESIZE_LF;
-		    }
-		  if ((mx >= ox) && (my >= oy+oh-6) && (mx <= ox+6) && (my <= oy+oh))
-		    {
-		      setCursor(sizeBDiagCursor);
-		      modType = MT_RESIZE_LD;
-		    }
-		  if ((mx >= ox+ow-6) && (my >= oy+6) && (mx <= ox+ow) && (my <= oy+oh-6))
-		    {
-		      setCursor(sizeHorCursor);
-		      modType = MT_RESIZE_RT;
-		    }
-		  if ((mx >= ox+ow-6) && (my >= oy+oh-6) && (mx <= ox+ow) && (my <= oy+oh))
-		    {
-		      setCursor(sizeFDiagCursor);
-		      modType = MT_RESIZE_RD;
-		    }
-		  if ((mx >= ox+6) && (my >= oy+oh-6) && (mx <= ox+ow-6) && (my <= oy+oh))
-		    {
-		      setCursor(sizeVerCursor);
-		      modType = MT_RESIZE_DN;
-		    }
-		}
-	      else setCursor(arrowCursor);
-	    }
-	  else setCursor(arrowCursor);
-	}
-      if (mousePressed)
-	{
-	  if (modType == MT_MOVE) /* move object(s) */
-	    {
-	      if (_clear_undo_list_)
-	      clearUndoList();
-	      mx = (mx / rastX()) * rastX();
-	      my = (my / rastY()) * rastY();
-	      oldMx = (oldMx / rastX()) * rastX();
-	      oldMy = (oldMy / rastY()) * rastY();
-	      for (i = 0;i <= objList()->count() - 1;i++)
-		{
-		  if (objList()->at(i)->isSelected)
-		    {
-		      objPtr = objList()->at(i);
-		      if (_append_undo_list_)
-			appendUndoList(objPtr);
-		      oox = objPtr->ox; ooy = objPtr->oy;
-		      oow = objPtr->ow; ooh = objPtr->oh;
-		      objPtr->ox = objPtr->ox + (mx - oldMx);
-		      objPtr->oy = objPtr->oy + (my - oldMy);
-		      ox = objPtr->ox; oy = objPtr->oy;
-		      ow = objPtr->ow; oh = objPtr->oh;
-		      ox = ox - diffx();
-		      oy = oy - diffy();
-		      oox = oox - diffx();
-		      ooy = ooy - diffy();
-		      drawBack = true;
-		      _repaint(ox,oy,ow,oh,i,false);
- 		      if (ox > oox) _repaint(oox,oy,ox-oox,oh,i,false);
- 		      if (oy > ooy) _repaint(ox,ooy,ow,oy-ooy,i,false);
- 		      if (oox > ox) _repaint(ox+ow,oy,oox-ox,oh,i,false);
- 		      if (ooy > oy) _repaint(ox,oy+oh,ow,ooy-oy,i,false);
- 		      if ((ox > oox) && (oy > ooy)) _repaint(oox,ooy,ox-oox,oy-ooy,i,false);
- 		      if ((ox > oox) && (oy < ooy)) _repaint(oox,oy+oh,ox-oox,ooy-oy,i,false);
- 		      if ((ox < oox) && (oy > ooy)) _repaint(ox+ow,ooy,oox-ox,oy-ooy,i,false);
- 		      if ((ox < oox) && (oy < ooy)) _repaint(ox+ow,oy+oh,oox-ox,ooy-oy,i,false);
-		    }
-		}
-	      
-	      _append_undo_list_ = false;
-
-	    }
-	  else
-	    {	    
-	      if (resizeObjNum == 0)
-		{
-		  resizeObjNum = getObjectAt(mx,my);
-		  deSelectAllObj();
-		  selectObj(resizeObjNum);
-		}
-	      objNum = resizeObjNum;
-
-	      if (_assign_page_obj_ && getObject(objNum))
-		{
-		  _assign_page_obj_ = false;
-		  _page_obj_ = new PageObjects;
-		  *_page_obj_ = *getObject(objNum);
-		  
-		  if (getObject(objNum)->graphObj)
-		    {
-		      _page_obj_->graphObj = new GraphObj(0,"graphObj");
-		      *_page_obj_->graphObj = *getObject(objNum)->graphObj;
-		    }
-
-		  if (getObject(objNum)->textObj)
-		    {
-		      _page_obj_->textObj = new KTextObject(getObject(objNum)->textObj->getParent(),"txtObj",KTextObject::PLAIN);
-		      *_page_obj_->textObj = *getObject(objNum)->textObj;
-		    }
-		}
-
-	      mx = (mx / rastX()) * rastX();
-	      my = (my / rastY()) * rastY();
-	      oldMx = (oldMx / rastX()) * rastX();
-	      oldMy = (oldMy / rastY()) * rastY();
-	      if (objNum > 0)
-		{
-		  switch (modType)
-		    {
-		    case MT_RESIZE_UP: /* resize top */
-		      resizeObjTop(oldMy-my,getObject(objNum));
-		      break;
-		    case MT_RESIZE_LF: /* resize left */
-		      resizeObjLeft(oldMx-mx,getObject(objNum));
-		      break;
-		    case MT_RESIZE_RT: /* resize right */
-		      resizeObjRight(oldMx-mx,getObject(objNum));
-		      break;
-		    case MT_RESIZE_DN: /* resize bottom */
-		      resizeObjBot(oldMy-my,getObject(objNum));
-		      break;
-		    case MT_RESIZE_LU: /* resize left/top */
-		      {
-			resizeObjLeft(oldMx-mx,getObject(objNum));
-			resizeObjTop(oldMy-my,getObject(objNum));
-		      } break;
-		    case MT_RESIZE_LD: /* resize left/bottom */
-		      {
-			resizeObjLeft(oldMx-mx,getObject(objNum));
-			resizeObjBot(oldMy-my,getObject(objNum));
-		      } break;
-		    case MT_RESIZE_RU: /* resize right/top */
-		      {
-			resizeObjRight(oldMx-mx,getObject(objNum));
-			resizeObjTop(oldMy-my,getObject(objNum));
-		      } break;
-		    case MT_RESIZE_RD: /* resize right/bottom */
-		      {
-			resizeObjRight(oldMx-mx,getObject(objNum));
-			resizeObjBot(oldMy-my,getObject(objNum));
-		      } break;
-		    }
+		  if (kpobject->isSelected())
+		    setCursor(kpobject->getCursor(QPoint(e->x(),e->y()),diffx(),diffy(),modType));
+		  return;
 		}
 	    }
 	}
-      oldMx = e->x()+diffx();
-      oldMy = e->y()+diffy();
+      else
+	{
+	  int mx = e->x();
+	  int my = e->y();
+	  mx = (mx / rastX()) * rastX();
+	  my = (my / rastY()) * rastY();
+	  oldMx = (oldMx / rastX()) * rastX();
+	  oldMy = (oldMy / rastY()) * rastY();
+	  QRect oldRect;
+
+	  if (modType == MT_MOVE)
+	    {
+	      for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+		{
+		  kpobject = objectList()->at(i);
+		  if (kpobject->isSelected())
+		    {
+		      oldRect = kpobject->getBoundingRect(0,0);
+		      
+		      kpobject->moveBy(mx - oldMx,my - oldMy);
+		      _repaint(oldRect);
+		      _repaint(kpobject);
+		      
+		    }
+		}
+	    }
+	  else if (modType != MT_NONE && resizeObjNum != -1)
+	    {
+	      kpobject = objectList()->at(resizeObjNum);
+	      oldRect = kpobject->getBoundingRect(0,0);
+
+	      switch (modType)
+		{
+		case MT_RESIZE_LU:
+		  {
+		    kpobject->resizeBy(oldMx - mx,oldMy - my);
+		    kpobject->moveBy(oldRect.width() - kpobject->getBoundingRect(0,0).width(),
+				     oldRect.height() - kpobject->getBoundingRect(0,0).height());
+		    _repaint(oldRect);
+		    _repaint(kpobject);
+		  } break;
+		case MT_RESIZE_LF:
+		  {
+		    kpobject->resizeBy(oldMx - mx,0);
+		    kpobject->moveBy(oldRect.width() - kpobject->getBoundingRect(0,0).width(),0);
+		    _repaint(oldRect);
+		    _repaint(kpobject);
+		  } break;
+		case MT_RESIZE_LD:
+		  {
+		    kpobject->resizeBy(oldMx - mx,my - oldMy);
+		    kpobject->moveBy(oldRect.width() - kpobject->getBoundingRect(0,0).width(),0);
+		    _repaint(oldRect);
+		    _repaint(kpobject);
+		  } break;
+		case MT_RESIZE_RU:
+		  {
+		    kpobject->resizeBy(mx - oldMx,oldMy - my);
+		    kpobject->moveBy(0,oldRect.height() - kpobject->getBoundingRect(0,0).height());
+		    _repaint(oldRect);
+		    _repaint(kpobject);
+		  } break;
+		case MT_RESIZE_RT:
+		  {
+		    kpobject->resizeBy(mx - oldMx,0);
+		    _repaint(oldRect);
+		    _repaint(kpobject);
+		  } break;
+		case MT_RESIZE_RD:
+		  {
+		    kpobject->resizeBy(mx - oldMx,my - oldMy);
+		    _repaint(oldRect);
+		    _repaint(kpobject);
+		  } break;
+		case MT_RESIZE_UP:
+		  {
+		    kpobject->resizeBy(0,oldMy - my);
+		    kpobject->moveBy(0,oldRect.height() - kpobject->getBoundingRect(0,0).height());
+		    _repaint(oldRect);
+		    _repaint(kpobject);
+		  } break;
+		case MT_RESIZE_DN:
+		  {
+		    kpobject->resizeBy(0,my - oldMy);
+		    _repaint(oldRect);
+		    _repaint(kpobject);
+		  } break;
+		default: break;
+		}
+	    }
+
+	  oldMx = e->x();
+	  oldMy = e->y();
+	}
     }
-  if (!editMode && drawMode)
+  else if (!editMode && drawMode)
     {
       QPainter p;
       p.begin(this);
@@ -1024,51 +427,30 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 /*==================== mouse double click ========================*/
 void Page::mouseDoubleClickEvent(QMouseEvent *e)
 {
-  int objNum;
-
-  modType = MT_NONE;
-  mousePressed = false;
   deSelectAllObj();
-  if (editMode)
+  KPObject *kpobject = 0;
+
+  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
     {
-      objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
-      if (objNum > 0 && getObject(objNum)->objType == OT_TEXT)
+      kpobject = objectList()->at(i);
+      if (kpobject->contains(QPoint(e->x(),e->y()),diffx(),diffy()))
 	{
-	  objPtr = getObject(objNum);
-	  if (objPtr->textObj->parentWidget() == 0)
+	  if (kpobject->getType() == OT_TEXT)
 	    {
-	      editNum = objNum;
-	      objPtr->textObj->recreate(this,0,QPoint(objPtr->ox - diffx(),objPtr->oy - diffy()),false);
-	      //objPtr->textObj->move(objPtr->ox - diffx(),objPtr->oy - diffy());
-	      objPtr->textObj->resize(objPtr->ow,objPtr->oh);
-	      objPtr->textObj->setBackgroundColor(txtBackCol());
-	      //objPtr->textObj->setSelectionColor(txtSelCol());
-	      objPtr->textObj->show();
-	      setFocusProxy(objPtr->textObj);
+	      KPTextObject *kptextobject = dynamic_cast<KPTextObject*>(kpobject);
+	      
+	      kpobject->activate(this,diffx(),diffy());
+	      kptextobject->getKTextObject()->setBackgroundColor(txtBackCol());
+	      setFocusProxy(kptextobject->getKTextObject());
 	      setFocusPolicy(QWidget::StrongFocus);
-	      objPtr->textObj->setFocus();
-	      objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
-	      objPtr = getObject(objNum);
-	      objPtr->textObj->setShowCursor(true);
-	      connect(objPtr->textObj,SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
-	      connect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
-	      connect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
-	      //objPtr->textObj->initActive();
-	      objPtr->textObj->setCursor(ibeamCursor);
+	      kptextobject->getKTextObject()->setFocus();
+	      kptextobject->getKTextObject()->setShowCursor(true);
+	      connect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+	      connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
+	      connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
+		      this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));      
+	      editNum = i;
 	    }
-	}
-      if (objNum > 0 && getObject(objNum)->objType == OT_AUTOFORM)
-	{
-	  editNum = objNum;
-	  objPtr = getObject(objNum);
-	  objPtr->graphObj->move(objPtr->ox - diffx(),objPtr->oy - diffy());
-	  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-	  objPtr->graphObj->setBackgroundColor(txtBackCol());
-	  objPtr->graphObj->show();
-	  objPtr->graphObj->setFocus();
-	  graphPtr = objPtr->graphObj;
-	  _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
-		   objPtr->ow,objPtr->oh,objNum,true);
 	}
     }
 }
@@ -1101,202 +483,65 @@ void Page::resizeEvent(QResizeEvent *e)
 /*========================== get object ==========================*/
 int Page::getObjectAt(int x,int y)
 {
-  int ox,oy,ow,oh;
-  
-  if (!objList()->isEmpty())
-    {
-      for (objPtr=objList()->last();objList()->find(objPtr) >= 0;objPtr=objList()->prev())
-	{
-	  ox = objPtr->ox; oy = objPtr->oy;
-	  ow = objPtr->ow; oh = objPtr->oh;
-	  if ((x >= ox) && (y >= oy) && (x <= ox+ow) && (y <= oy+oh)) return objPtr->objNum;
-	}
-    }
-  return 0;
-}
+  KPObject *kpobject = 0;
 
-/*========================== get object ==========================*/
-PageObjects* Page::getObject(int num)
-{
-  if (!objList()->isEmpty())
+  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0 ;i--)
     {
-      for (objPtr=objList()->first();objPtr != 0;objPtr=objList()->next())
-	if ((int)objPtr->objNum == num) return objPtr;
+      kpobject = objectList()->at(i);
+      if (kpobject->contains(QPoint(x,y),diffx(),diffy()))
+	return i;
     }
-  return 0;
+  
+  return -1;
 }
 
 /*======================= select object ==========================*/
 void Page::selectObj(int num)
 {
-  if (!objList()->isEmpty())
-    {
-      for (unsigned int i=1;i<=objList()->count();i++)
-     	{
-	  objPtr = objList()->at(i-1);
-	  if (i == (unsigned int)num)
-	    {
-	      objPtr->isSelected = true;
-	      drawBack = true;
-	      _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
-		      objPtr->ow,objPtr->oh,num,false);
-	      return;
-	    }
-	}
-    }
-}
-
-/*====================== select all objects ======================*/
-void Page::selectAllObj()
-{
-  if (!objList()->isEmpty())
-    {
-      for (unsigned int i=1;i<=objList()->count();i++)
-	selectObj(i);
-      drawBack = true;
-    }
+  if (num < static_cast<int>(objectList()->count()))
+    selectObj(objectList()->at(num));
 }
 
 /*======================= deselect object ========================*/
 void Page::deSelectObj(int num)
 {
-  unsigned int i;
-
-  if (!objList()->isEmpty())
-    {
-      for (i=1;i<=objList()->count();i++)
-     	{
-	  objPtr = objList()->at(i-1);
-	  if (i == (unsigned int)num && objPtr->isSelected)
-	    {
-	      objPtr->isSelected = false;
-	      drawBack = true;
-	      _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
-		      objPtr->ow,objPtr->oh,num,false);
-	      return;
-	    }
-	}
-    }
+  if (num < static_cast<int>(objectList()->count()))
+    deSelectObj(objectList()->at(num));
 }
+
+/*======================= select object ==========================*/
+void Page::selectObj(KPObject *kpobject)
+{
+  kpobject->setSelected(true);
+  _repaint(kpobject);
+}
+
+/*======================= deselect object ========================*/
+void Page::deSelectObj(KPObject *kpobject)
+{
+  kpobject->setSelected(false);
+  _repaint(kpobject);
+}
+
+/*====================== select all objects ======================*/
+void Page::selectAllObj()
+{
+  for (int i = 0;i <= static_cast<int>(objectList()->count());i++)
+    selectObj(i);
+}
+
 
 /*==================== deselect all objects ======================*/
 void Page::deSelectAllObj()
 {
-  unsigned int i;
-
-  if (!objList()->isEmpty())
-    {
-      for (i=1;i<=objList()->count();i++)
-	deSelectObj(i);
-    }
-}
-
-/*===================== resize object top ========================*/
-void Page::resizeObjTop(int diff,PageObjects* obj)
-{
-  int ox,oy,ow,oh,ooy,ooh;
+  KPObject *kpobject;
   
-  if ((diff > 0) || (obj->oh > 2* (int)rastY()))
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      ooy = obj->oy; ooh = obj->oh;
-      obj->oy = obj->oy - diff;
-      obj->oh = obj->oh + diff;
-      if (obj->objType == OT_TEXT)
-	{
-	  //obj->textObj->breakLines(obj->ow);
-	  obj->textObj->resize(obj->ow,obj->oh);
-	}
-      else
-	obj->graphObj->resize(obj->ow,obj->oh);
-      ox = obj->ox; oy = obj->oy;
-      ow = obj->ow; oh = obj->oh;
-      ox = ox - diffx();
-      oy = oy - diffy();
-      ooy = ooy - diffy();
-      drawBack = true;
-      _repaint(ox,oy,ow,oh,obj,false);
-      if (oh < ooh) _repaint(ox,ooy,ow,ooh-oh,obj,false); 
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected()) deSelectObj(kpobject);
     }
-}
-
-/*==================== resize object left ========================*/
-void Page::resizeObjLeft(int diff,PageObjects* obj)
-{
-  int ox,oy,ow,oh,oox,oow;
   
-  if ((diff > 0) || (obj->ow > 2 * (int)rastX()))
-    {
-      oox = obj->ox; oow = obj->ow;
-      obj->ox = obj->ox - diff;
-      obj->ow = obj->ow + diff;
-      if (obj->objType == OT_TEXT)
-	{
-	  //obj->textObj->breakLines(obj->ow);
-	  obj->textObj->resize(obj->ow,obj->oh);
-	}
-      else
-	obj->graphObj->resize(obj->ow,obj->oh);
-      ox = obj->ox; oy = obj->oy;
-      ow = obj->ow; oh = obj->oh;
-      ox = ox - diffx();
-      oy = oy - diffy();
-      oox = oox - diffx();
-      drawBack = true;
-      _repaint(ox,oy,ow,oh,obj,false);
-      if (ow < oow) _repaint(oox,oy,oow-ow,oh,obj,false); 
-    }
-}
-
-/*================== resize object bottom ========================*/
-void Page::resizeObjBot(int diff,PageObjects* obj)
-{
-  int ox,oy,ow,oh,ooh;
-  
-  if ((diff < 0) || (obj->oh > 2* (int)rastY()))
-    {
-      ooh = obj->oh;
-      obj->oh = obj->oh - diff;
-      if (obj->objType == OT_TEXT)
-	{
-	  //obj->textObj->breakLines(obj->ow);
-	  obj->textObj->resize(obj->ow,obj->oh);
-	}
-      else
-	obj->graphObj->resize(obj->ow,obj->oh);
-      ox = obj->ox; oy = obj->oy;
-      ow = obj->ow; oh = obj->oh;
-      ox = ox - diffx();
-      oy = oy - diffy();
-      drawBack = true;
-      _repaint(ox,oy,ow,oh,obj,false);
-      if (oh < ooh) _repaint(ox,oy+oh,ow,ooh-oh,obj,false); 
-    }
-}
-
-/*================== resize object right =========================*/
-void Page::resizeObjRight(int diff,PageObjects* obj)
-{
-  int ox,oy,ow,oh,oow;
-  
-  if ((diff < 0) || (obj->ow > 2* (int)rastX()))
-    {
-      oow = obj->ow;
-      obj->ow = obj->ow - diff;
-      if (obj->objType == OT_TEXT)
-	{
-	  //obj->textObj->breakLines(obj->ow);
-	  obj->textObj->resize(obj->ow,obj->oh);
-	}
-      else
-	obj->graphObj->resize(obj->ow,obj->oh);
-      ox = obj->ox; oy = obj->oy;
-      ow = obj->ow; oh = obj->oh;
-      ox = ox - diffx();
-      oy = oy - diffy();
-      drawBack = true;
-      _repaint(ox,oy,ow,oh,obj,false);
-      if (ow < oow) _repaint(ox+ow,oy,oow-ow,oh,obj,false); 
-    }
 }
 
 /*======================== setup menus ===========================*/
@@ -1420,22 +665,25 @@ void Page::setupMenus()
 /*======================== clipboard cut =========================*/
 void Page::clipCut()
 {
-  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) getObject(editNum)->textObj->cutRegion();
-  else view->editCut();
+  if (editNum != -1 && objectList()->at(editNum)->getType() == OT_TEXT)
+    dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->cutRegion();
+  view->editCut();
 }
 
 /*======================== clipboard copy ========================*/
 void Page::clipCopy()
 {
-  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) getObject(editNum)->textObj->copyRegion();
-  else view->editCopy();
+  if (editNum != -1 && objectList()->at(editNum)->getType() == OT_TEXT)
+    dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->copyRegion();
+  view->editCopy();
 }
 
 /*====================== clipboard paste =========================*/
 void Page::clipPaste()
 {
-  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) getObject(editNum)->textObj->paste();
-  else view->editPaste();
+  if (editNum != -1 && objectList()->at(editNum)->getType() == OT_TEXT)
+    dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->paste();
+  view->editPaste();
 }
 
 /*======================= object properties  =====================*/
@@ -1447,18 +695,15 @@ void Page::objProperties()
 /*======================= change picture  ========================*/
 void Page::chPic()
 {
-  if (!objList()->isEmpty())
+  KPObject *kpobject = 0;
+
+  for (unsigned int i = 0;i < objectList()->count();i++)
     {
-      for (unsigned int i=0;i<=objList()->count()-1;i++)
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_PICTURE)
 	{
-	  objPtr = objList()->at(i);
-	  if (objPtr->isSelected && objPtr->objType == OT_PICTURE)
-	    {
-	      view->changePicture(i,(const char*)objPtr->graphObj->getFileName());
-	     
-	      // only the first selected picture can be changed!
-	      break;
-	    }
+	  view->changePicture(i,dynamic_cast<KPPixmapObject*>(kpobject)->getFileName());
+	  break;
 	}
     }
 }
@@ -1466,18 +711,15 @@ void Page::chPic()
 /*======================= change clipart  ========================*/
 void Page::chClip()
 {
-  if (!objList()->isEmpty())
+  KPObject *kpobject = 0;
+
+  for (unsigned int i = 0;i < objectList()->count();i++)
     {
-      for (unsigned int i=0;i<=objList()->count()-1;i++)
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_CLIPART)
 	{
-	  objPtr = objList()->at(i);
-	  if (objPtr->isSelected && objPtr->objType == OT_CLIPART)
-	    {
-	      view->changeClipart(i,(const char*)objPtr->graphObj->getFileName());
-	     
-	      // only the first selected clipart can be changed!
-	      break;
-	    }
+	  view->changeClipart(i,dynamic_cast<KPClipartObject*>(kpobject)->getFileName());
+	  break;
 	}
     }
 }
@@ -1485,125 +727,86 @@ void Page::chClip()
 /*======================= set text font ==========================*/
 void Page::setTextFont(QFont *font)
 {
-  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT)
+  if (editNum != -1 && objectList()->at(editNum)->getType() == OT_TEXT)
     {
-      getObject(editNum)->textObj->setFocus();
-      getObject(editNum)->textObj->setFont(*font);
+      dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setFocus();
+      dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setFont(*font);
     }
 }
 
 /*======================= set text color =========================*/
 void Page::setTextColor(QColor *color)
 {
-  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) 
+  if (editNum != -1 && objectList()->at(editNum)->getType() == OT_TEXT)
     {
-      getObject(editNum)->textObj->setFocus();
-      getObject(editNum)->textObj->setColor(*color);
+      dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setFocus();
+      dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setColor(*color);
     }
 }
 
 /*===================== set text alignment =======================*/
 void Page::setTextAlign(TxtParagraph::HorzAlign align)
 {
-  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT)
-    getObject(editNum)->textObj->setHorzAlign(align);
+  if (editNum != -1 && objectList()->at(editNum)->getType() == OT_TEXT)
+    dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject()->setHorzAlign(align);
 }
 
 /*====================== start screenpresentation ================*/
 void Page::startScreenPresentation(bool zoom)
 {
-  if (editNum > 0)
+  KPObject *kpobject = 0;
+
+  if (editNum != -1)
     {
-      objPtr = getObject(editNum);
-      editNum = 0;
-      if (objPtr->objType == OT_TEXT)
+      kpobject = objectList()->at(editNum);
+      editNum = -1;
+      if (kpobject->getType() == OT_TEXT)
 	{
-	  objPtr->textObj->recreate(0,0,QPoint(objPtr->ox - diffx(),objPtr->oy - diffy()),false);
-	  objPtr->textObj->clearFocus();
-	  objPtr->textObj->hide();
-	  disconnect(objPtr->textObj,SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
-	  disconnect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
-	  disconnect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
-	  objPtr->textObj->setShowCursor(false);
+	  KPTextObject * kptextobject = dynamic_cast<KPTextObject*>(kpobject);
+	  kpobject->deactivate();
+	  kptextobject->getKTextObject()->clearFocus();
+	  disconnect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+	  disconnect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
+	  disconnect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
+		     this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
+	  kptextobject->getKTextObject()->setShowCursor(false);
 	  setFocusProxy(0);
 	  setFocusPolicy(QWidget::NoFocus);
 	}
     }
 
-  unsigned int i,pgNum;
+  int i;
 
   if (zoom)
     {
-      float _presFaktW = (float)width() / (float)getPageSize(1).width() > 0.0 ? 
-	(float)width() / (float)getPageSize(0).width() : 1.0;
-      float _presFaktH = (float)height() / (float)getPageSize(1).height() > 0.0 ? 
-	(float)height() / (float)getPageSize(1).height() : 1.0;
+      float _presFaktW = static_cast<float>(width()) / static_cast<float>(getPageSize(0).width()) > 0.0 ? 
+	static_cast<float>(width()) / static_cast<float>(getPageSize(0).width()) : 1.0;
+      float _presFaktH = static_cast<float>(height()) / static_cast<float>(getPageSize(0).height()) > 0.0 ? 
+	static_cast<float>(height()) / static_cast<float>(getPageSize(0).height()) : 1.0;
       _presFakt = min(_presFaktW,_presFaktH);
     }
   else _presFakt = 1.0;
 
-  for (i = 0;i < pageList()->count();i++)
+  KPBackGround *kpbackground = 0;
+  
+  for (i = 0;i < static_cast<int>(backgroundList()->count());i++)
     {
-      pagePtr = pageList()->at(i);
-      if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_ZOOM)
-	{
-	  QWMatrix m;
- 	  m.scale((float)getPageSize(pagePtr->pageNum,_presFakt).width()/pagePtr->obackPix.width(),
- 		  (float)getPageSize(pagePtr->pageNum,_presFakt).height()/pagePtr->obackPix.height());
- 	  pagePtr->backPix = pagePtr->obackPix.xForm(m);
-	}
-      if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_CENTER)
-	{
-	  QWMatrix m;
- 	  m.scale(_presFakt,_presFakt);
- 	  pagePtr->backPix = pagePtr->obackPix.xForm(m);
-	}
-      restoreBackColor(i);
+      kpbackground = backgroundList()->at(i);
+      kpbackground->setSize(getPageSize(i,_presFakt).width(),getPageSize(i,_presFakt).height());
     }
-
-  for (i = 0;i < objList()->count();i++)
+  
+  for (i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      objPtr = objList()->at(i);
-      objPtr->oox = objPtr->ox;
-      objPtr->ooy = objPtr->oy;
-      objPtr->oow = objPtr->ow;
-      objPtr->ooh = objPtr->oh;
-      objPtr->ox = (int)((float)objPtr->ox * _presFakt);
-      objPtr->oy = (int)((float)objPtr->oy * _presFakt);
-      pgNum = getPageOfObj(objPtr->objNum,_presFakt);
-      objPtr = objList()->at(i);
-
-      objPtr->ow = (int)((float)objPtr->ow * _presFakt);
-      objPtr->oh = (int)((float)objPtr->oh * _presFakt);
-
-      pgNum = getPageOfObj(objPtr->objNum,_presFakt);
-      objPtr = objList()->at(i);
-      objPtr->oy = objPtr->ooy; 
-      objPtr->oy -= getPageSize(pgNum).y() + diffy();
-      objPtr->oy = (int)((float)objPtr->oy * _presFakt);
-      objPtr->oy += getPageSize(pgNum,_presFakt).y() + diffy();
-
-      // correct calculated zoom-values
-      if (objPtr->ox + objPtr->ow > getPageSize(1,_presFakt).x()+diffx() + getPageSize(1,_presFakt).width())
-	objPtr->ow -= ((objPtr->ox + objPtr->ow) - (getPageSize(1,_presFakt).x()+diffx() + getPageSize(1,_presFakt).width()));
-
-      // *************** TODO: correction of height ****************
-
-      if (objPtr->objType != OT_TEXT)
-	objPtr->graphObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
-      else
-	{
-	  objPtr->textObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
-	  objPtr->textObj->zoom(_presFakt);
-	}
+      kpobject = objectList()->at(i);
+      kpobject->zoom(_presFakt);
+      kpobject->drawSelection(false);
     }
 
   currPresPage = 1;
   editMode = false;
-  drawBack = true;
   drawMode = false;
   presStepList = view->KPresenterDoc()->reorderPage(1,diffx(),diffy(),_presFakt);
-  currPresStep = (int)presStepList.first();
+  currPresStep = (int)(presStepList.first());
   subPresStep = 0;
   repaint(true);
   setFocusPolicy(QWidget::StrongFocus);
@@ -1614,50 +817,30 @@ void Page::startScreenPresentation(bool zoom)
 /*====================== stop screenpresentation =================*/
 void Page::stopScreenPresentation()
 {
-  unsigned int i;
+  KPObject *kpobject = 0;
+  KPBackGround *kpbackground = 0;
+  int i;
 
-  for (i = 0;i < objList()->count();i++)
+  for (i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      objPtr = objList()->at(i);
-      objPtr->ox = objPtr->oox;
-      objPtr->oy = objPtr->ooy;
-      objPtr->ow = objPtr->oow;
-      objPtr->oh = objPtr->ooh;
-      if (objPtr->objType != OT_TEXT)
-	objPtr->graphObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
-      else
-	{
-	  objPtr->textObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
-	  objPtr->textObj->zoomOrig();
-	}
+      kpobject = objectList()->at(i);
+      kpobject->zoomOrig();
+      kpobject->drawSelection(true);
     }
 
   _presFakt = 1.0;
 
-  for (i = 0;i < pageList()->count();i++)
+  for (i = 0;i < static_cast<int>(backgroundList()->count());i++)
     {
-      pagePtr = pageList()->at(i);
-      if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_ZOOM)
-	{
-	  QWMatrix m;
- 	  m.scale((float)getPageSize(pagePtr->pageNum,_presFakt).width()/pagePtr->obackPix.width(),
- 		  (float)getPageSize(pagePtr->pageNum,_presFakt).height()/pagePtr->obackPix.height());
- 	  pagePtr->backPix = pagePtr->obackPix.xForm(m);
-	}
-      if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_CENTER)
-	pagePtr->backPix = pagePtr->obackPix;
-      pagePtr->cPix->resize(getPageSize(pagePtr->pageNum,_presFakt).width(),
-			    getPageSize(pagePtr->pageNum,_presFakt).height());
-      restoreBackColor(i);
+      kpbackground = backgroundList()->at(i);
+      kpbackground->setSize(getPageSize(i).width(),getPageSize(i).height());
     }
 
   goingBack = false;
   currPresPage = 1;
   editMode = true;
-  drawBack = true;
   repaint(true);
   setCursor(arrowCursor);
-  picCache.clear();
 }
 
 /*========================== next ================================*/
@@ -1667,19 +850,18 @@ bool Page::pNext(bool)
   bool clearSubPres = false;
 
   goingBack = false;
-
-  if ((int*)currPresStep < presStepList.last())
+  KPObject *kpobject = 0;
+  
+  if ((int*)(currPresStep) < presStepList.last())
     {
-
-      unsigned int i;
-      
-      for (i = 0;i < objList()->count();i++)
+      for (int i = 0;i < static_cast<int>(objectList()->count());i++)
 	{
-	  objPtr = objList()->at(i);
-	  if (getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage && objPtr->presNum == currPresStep
-	      && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
+	  kpobject = objectList()->at(i);
+	  if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) 
+	      && kpobject->getPresNum() == static_cast<int>(currPresStep)
+	    && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE)
 	    {
-	      if (subPresStep < objPtr->textObj->paragraphs()-1)
+	      if (static_cast<int>(subPresStep) < kpobject->getSubPresSteps())
 		addSubPres = true;
 	      else
 		clearSubPres = true;
@@ -1695,41 +877,33 @@ bool Page::pNext(bool)
       else if (clearSubPres)
 	subPresStep = 0;
       
-      presStepList.find((int*)currPresStep);
-      currPresStep = (int)presStepList.next();
+      presStepList.find((int*)(currPresStep));
+      currPresStep = (int)(presStepList.next());
     
       if (currPresStep == 0)
 	{
 	  QPainter p;
 	  p.begin(this);
-	  paintBackground(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
+	  drawBackground(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
 	  p.end();  
 	}
 
-      //if (currPresStep > 0)
-	doObjEffects();
-//       else
-// 	{
-// 	  drawBack = false;
-// 	  repaint(drawBack);
-// 	  drawBack = true;
-// 	  return false;
-// 	}
+      doObjEffects();
     }
   else
     {
       if (currPresPage+1 > pageNums())
 	{
-
-	  for (unsigned int i = 0;i < objList()->count();i++)
+	  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
 	    {
-	      objPtr = objList()->at(i);
-	      if (getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage && objPtr->presNum == currPresStep
-		  && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
+	      kpobject = objectList()->at(i);
+	      if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) 
+		  && kpobject->getPresNum() == static_cast<int>(currPresStep)
+		  && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE)
 		{
-		  if (subPresStep < objPtr->textObj->paragraphs()-1)
+		  if (static_cast<int>(subPresStep) < kpobject->getSubPresSteps())
 		    {
-		      if (subPresStep < objPtr->textObj->paragraphs()-1)
+		      if (static_cast<int>(subPresStep) < kpobject->getSubPresSteps())
 			addSubPres = true;
 		    }
 		}
@@ -1745,18 +919,19 @@ bool Page::pNext(bool)
 	  emit stopPres();
 
 	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
-	  currPresStep = (int)presStepList.last();
+	  currPresStep = (int)(presStepList.last());
 	  doObjEffects();
 	  return false;
 	}
 
-      for (unsigned int i = 0;i < objList()->count();i++)
+      for (int i = 0;i < static_cast<int>(objectList()->count());i++)
 	{
-	  objPtr = objList()->at(i);
-	  if (getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage && objPtr->presNum == currPresStep
-	      && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
+	  kpobject = objectList()->at(i);
+	  if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) 
+	      && kpobject->getPresNum() == static_cast<int>(currPresStep)
+	      && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE)
 	    {
-	      if (subPresStep < objPtr->textObj->paragraphs()-1)
+	      if (static_cast<int>(subPresStep) < kpobject->getSubPresSteps())
 		addSubPres = true;
 	      else
 		clearSubPres = true;
@@ -1777,14 +952,13 @@ bool Page::pNext(bool)
       
       currPresPage++;
       presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
-      currPresStep = (int)presStepList.first();
+      currPresStep = (int)(presStepList.first());
       
       QPixmap _pix2(QApplication::desktop()->width(),QApplication::desktop()->height());
-      drawPageInPix(_pix2,view->getDiffY() + view->KPresenterDoc()->getPageSize(1,0,0,_presFakt).height()+10);
+      drawPageInPix(_pix2,view->getDiffY() + view->KPresenterDoc()->getPageSize(0,0,0,_presFakt).height()+10);
       
-      changePages(_pix1,_pix2,pageList()->at(currPresPage-2)->pageEffect);
+      changePages(_pix1,_pix2,backgroundList()->at(currPresPage - 2)->getPageEffect());
       
-      drawBack = true;
       return true;
     }
   return false;
@@ -1796,13 +970,11 @@ bool Page::pPrev(bool manual)
   goingBack = true;
   subPresStep = 0;
 
-  if ((int*)currPresStep > presStepList.first())
+  if ((int*)(currPresStep) > presStepList.first())
     {
-      presStepList.find((int*)currPresStep);
-      currPresStep = (int)presStepList.prev();
-      drawBack = true;
-      repaint(drawBack);
-      drawBack = true;
+      presStepList.find((int*)(currPresStep));
+      currPresStep = (int)(presStepList.prev());
+      repaint(false);
       return false;
     }
   else
@@ -1810,240 +982,40 @@ bool Page::pPrev(bool manual)
       if (currPresPage-1 <= 0)
 	{
 	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
-	  currPresStep = (int)presStepList.first();
-	  drawBack = false;
-	  repaint(drawBack);
-	  drawBack = true;
+	  currPresStep = (int)(presStepList.first());
+	  repaint(false);
 	  return false;
 	}
       currPresPage--;
       presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
-      currPresStep = (int)presStepList.last();
-      drawBack = true;
+      currPresStep = (int)(presStepList.last());
       return true;
     }
+
+  return false;
 }
 
 /*======================== can we assign an effect ? =============*/
 bool Page::canAssignEffect(int &pgNum,int &objNum)
 {
   bool ret = false; 
-
   pgNum = -1; objNum = -1;
+  KPObject *kpobject;
 
-  for (unsigned int i = 0;i < objList()->count();i++)
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      objPtr = objList()->at(i);
-      if (objPtr->isSelected)
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
 	{
 	  if (ret) return false;
 	  ret = true;
-	  objNum = objPtr->objNum;
+	  objNum = i;
 	  pgNum = getPageOfObj(objNum);
 	}
     }
   return ret;
 }
 	    
-
-/*======================== draw back color =======================*/
-void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,
-			 QPainter* painter,QSize size)
-{
-  int ncols = 4;
-  int depth = QColor::numBitPlanes(),dx = 0,dy = 0;
-  if (view)
-    {
-      dx = diffy();
-      dy = diffy();
-    }
-
-  switch (bcType)
-    {
-    case BCT_PLAIN:
-      {
-  	painter->setPen(NoPen);
-  	painter->setBrush(cb);
-  	painter->drawRect(QRect(0,0,size.width(),size.height()));
-      } break;
-    case BCT_GHORZ: case BCT_GVERT:
-      {
-	if (ca == cb)
-	  {
-	    painter->setPen(NoPen);
-	    painter->setBrush(cb);
-	    painter->drawRect(QRect(0,0,size.width(),size.height()));
-	    break;
-	  }
-
-	QPixmap pmCrop;
-	QColor cRow;
-	int ySize;
-	int rca, gca, bca;
-	int rDiff, gDiff, bDiff;
-	float rat;
-	uint *p;
-	uint rgbRow;
-		
-	if (bcType == BCT_GHORZ)
-	  ySize = size.height();
-	else
-	  ySize = size.width();
-    
-	pmCrop.resize(30,ySize);
-	QImage image(30,ySize,32);
-    
-	rca = ca.red();
-	gca = ca.green();
-	bca = ca.blue();
-	rDiff = cb.red() - ca.red();
-	gDiff = cb.green() - ca.green();
-	bDiff = cb.blue() - ca.blue();
-    
-	for (int y = ySize - 1;y > 0;y--) 
-	  {
-	    p = (unsigned int*) image.scanLine(ySize - y - 1);
-	    rat = 1.0 * y / ySize;
-	    
-	    cRow.setRgb(rca + (int)(rDiff * rat),
-			gca + (int)(gDiff * rat), 
-			bca + (int)(bDiff * rat));
-	    
-	    rgbRow = cRow.rgb();
-	    
-	    for(int x = 0;x < 30;x++) 
-	      {
-		*p = rgbRow;
-		p++;
-	      }
-	  }
-	
-	if (depth <= 16)
-	  {
-	    if(depth == 16) ncols = 32;
-	    if (ncols < 2 || ncols > 256) ncols = 3;
-
-	    QColor *dPal = new QColor[ncols];
-	    for (int i = 0;i < ncols;i++) 
-	      {
-		dPal[i].setRgb(rca + rDiff * i / (ncols - 1),
-			       gca + gDiff * i / (ncols - 1),
-			       bca + bDiff * i / (ncols - 1));
-	      }
-
-	    kFSDither dither(dPal,ncols);
-	    QImage dImage = dither.dither(image);
-	    pmCrop.convertFromImage(dImage);
-	    
-	    delete [] dPal;	
-		
-	  } 
-	else 
-	  pmCrop.convertFromImage(image);
-	
-	int s;
-	int sSize = 20;
-	int sOffset = 5;
-	
-	if (bcType == BCT_GHORZ)
-	  s = size.width() / sSize + 1;
-	else
-	  s = size.height() / sSize + 1;
-	
-	if (bcType == BCT_GHORZ)	
-	  for(int i = 0;i < s;i++)
-	    painter->drawPixmap(sSize*i,0,pmCrop,sOffset,0,sSize,ySize);
-	else 
-	  {
- 	    QWMatrix matrix;
- 	    matrix.translate((float)size.width(),0.0);
- 	    matrix.rotate(90.0);
- 	    painter->setWorldMatrix(matrix);
-	    for(int i = 0;i < s;i++)
-	      painter->drawPixmap(sSize*i,0,pmCrop,sOffset,0,sSize,ySize);
- 	    matrix.rotate(-90.0);
- 	    matrix.translate(-(float)size.width(),0.0);
- 	    painter->setWorldMatrix(matrix);
-	  }
-      } break;
-    }
-}
-
-/*======================== restore back color ====================*/
-void Page::restoreBackColor(unsigned int pgNum)
-{
-  QPainter *p = new QPainter();
-  unsigned int i,sameBackNum = 0;
-  bool sameBack = false;
-  bool _delete = true;
-
-  for (i = 0;i < pgNum;i++)
-    {
-      if (pageList()->at(pgNum)->backColor1 == pageList()->at(i)->backColor1 &&
-	  pageList()->at(pgNum)->backColor2 == pageList()->at(i)->backColor2 &&
-	  pageList()->at(pgNum)->bcType == pageList()->at(i)->bcType)
-	{
-	  sameBack = true;
-	  sameBackNum = i;
-	  break;
-	}
-    }
-
-  if (_presFakt > 1.0 && !sameBack)
-    {
-      for (i = 0;i < pageList()->count();i++)
-	{
-	  if (i == pgNum) continue;
-	  _delete = pageList()->at(pgNum)->cPix != pageList()->at(i)->cPix;
-	  if (!_delete) break;
-	}
-
-      if (_delete)
-	delete pageList()->at(pgNum)->cPix;
-
-      pageList()->at(pgNum)->cPix = new QPixmap(getPageSize(pgNum+1,_presFakt).width(),
-						getPageSize(pgNum+1,_presFakt).height());
-
-      pageList()->at(pgNum)->hasSameCPix = false;
-    }
-  
-  if (!sameBack)
-    {
-      if (_presFakt == 1.0)
-	{
-	  for (i = 0;i < pageList()->count();i++)
-	    {
-	      if (i == pgNum) continue;
-	      _delete = pageList()->at(pgNum)->cPix != pageList()->at(i)->cPix;
-	      if (!_delete) break;
-	    }
-	  
-	  if (_delete)
-	    delete pageList()->at(pgNum)->cPix;
-	
-	  pageList()->at(pgNum)->cPix = new QPixmap(getPageSize(pgNum+1).width(),
-						    getPageSize(pgNum+1).height());
-	}
-
-      p->begin(pageList()->at(pgNum)->cPix);
-      drawBackColor(pageList()->at(pgNum)->backColor1,pageList()->at(pgNum)->backColor2,
-		    pageList()->at(pgNum)->bcType,
-		    p,QSize((int)((float)pageList()->at(pgNum)->cPix->width()),
-			    (int)((float)pageList()->at(pgNum)->cPix->height())));
-      p->end();
-      delete p;
-      pageList()->at(pgNum)->hasSameCPix = false;
-      return;
-    }
-
-  if (sameBack) 
-    {
-      pageList()->at(pgNum)->cPix = pageList()->at(sameBackNum)->cPix;
-      pageList()->at(sameBackNum)->hasSameCPix = true;
-      pageList()->at(pgNum)->hasSameCPix = true;
-    }
-}
-
 /*==================== draw a page in a pixmap ===================*/ 
 void Page::drawPageInPix(QPixmap &_pix,int __diffy)
 {
@@ -2053,8 +1025,8 @@ void Page::drawPageInPix(QPixmap &_pix,int __diffy)
   QPainter p;
   p.begin(&_pix);
 
-  paintBackground(&p,_pix.rect());
-  if (!objList()->isEmpty()) paintObjects(&p,_pix.rect());
+  drawBackground(&p,_pix.rect());
+  drawObjects(&p,_pix.rect());
   
   p.end();
 
@@ -2067,9 +1039,8 @@ void Page::drawPageInPainter(QPainter* painter,int __diffy,QRect _rect)
   int _yOffset = view->getDiffY();
   view->setDiffY(__diffy);
 
-  paintBackground(painter,_rect);
-  painter->resetXForm();
-  if (!objList()->isEmpty()) paintObjects(painter,_rect);
+  drawBackground(painter,_rect);
+  drawObjects(painter,_rect);
   
   view->setDiffY(_yOffset);
 }
@@ -2088,7 +1059,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_HORZ:
       {
-	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->height()));
 	_time.start();
 
 	for (;;)
@@ -2110,7 +1081,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_VERT:
       {
-	_steps = (int)(50000.0 / (float)kapp->desktop()->width());
+	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->width()));
 	_time.start();
 
 	for (;;)
@@ -2132,7 +1103,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_ALL:
       {
-	_steps = (int)(50000.0 / (float)kapp->desktop()->width());
+	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->width()));
 	_time.start();
 
 	for (;;)
@@ -2160,7 +1131,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_OPEN_HORZ:
       {
-	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->height()));
 	_time.start();
 
 	for (;;)
@@ -2183,7 +1154,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_OPEN_VERT:
       {
-	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->height()));
 	_time.start();
 
 	for (;;)
@@ -2206,7 +1177,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_OPEN_ALL:
       {
-	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->height()));
 	_time.start();
 
 	for (;;)
@@ -2234,7 +1205,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_INTERLOCKING_HORZ_1:
       {
-	_steps = (int)(50000.0 / (float)kapp->desktop()->width());
+	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->width()));
 	_time.start();
 
 	for (;;)
@@ -2259,7 +1230,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_INTERLOCKING_HORZ_2:
       {
-	_steps = (int)(50000.0 / (float)kapp->desktop()->width());
+	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->width()));
 	_time.start();
 
 	for (;;)
@@ -2283,7 +1254,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_INTERLOCKING_VERT_1:
       {
-	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->height()));
 	_time.start();
 
 	for (;;)
@@ -2308,7 +1279,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_INTERLOCKING_VERT_2:
       {
-	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_steps = static_cast<int>(50000.0 / static_cast<int>(kapp->desktop()->height()));
 	_time.start();
 
 	for (;;)
@@ -2337,8 +1308,8 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 void Page::doObjEffects()
 {
   QPixmap screen_orig(kapp->desktop()->width(),kapp->desktop()->height());
-  QList<PageObjects> _objList;
-  unsigned int i;
+  QList<KPObject> _objList;
+  int i;
   QTime _time;
   int _step = 0,_steps1 = 0,_steps2 = 0,x_pos1 = 0,y_pos1 = 0;
   int x_pos2 = kapp->desktop()->width(),y_pos2 = kapp->desktop()->height(),_step_width = 0,_step_height = 0;
@@ -2349,21 +1320,23 @@ void Page::doObjEffects()
   bitBlt(&screen_orig,0,0,this,0,0,kapp->desktop()->width(),kapp->desktop()->height());
   QPixmap *screen = new QPixmap(screen_orig);
 
-  for (i = 0;i < objList()->count();i++)
+  KPObject *kpobject = 0;
+  
+  for (i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      objPtr = objList()->at(i);
-      if (getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage && objPtr->presNum == currPresStep)
+      kpobject = objectList()->at(i);
+      if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) 
+	  && kpobject->getPresNum() == static_cast<int>(currPresStep))
 	{
-	  if (objPtr->effect != EF_NONE)
+	  if (kpobject->getEffect() != EF_NONE)
 	    {
-	      _objList.append(objPtr);
+	      _objList.append(kpobject);
 
 	      int x,y,w,h;
-	      QRect br = view->KPresenterDoc()->getRealBoundingRect(QRect(objPtr->ox,objPtr->oy,
-									  objPtr->ow,objPtr->oh),objPtr->objNum - 1);
+	      QRect br = kpobject->getBoundingRect(0,0);
 	      x = br.x(); y = br.y(); w = br.width(); h = br.height();
 
-	      switch (objPtr->effect)
+	      switch (kpobject->getEffect())
 		{
 		case EF_COME_LEFT:
 		  x_pos1 = max(x_pos1,x - diffx() + w);
@@ -2418,8 +1391,8 @@ void Page::doObjEffects()
   
   if (effects)
     {
-      _step_width = (int)(((float)20 * kapp->desktop()->width()) / 1000.0);
-      _step_height = (int)(((float)20 * kapp->desktop()->height()) / 1000.0);
+      _step_width = static_cast<int>((20.0 * static_cast<float>(kapp->desktop()->width())) / 1000.0);
+      _step_height = static_cast<int>((20.0 * static_cast<float>(kapp->desktop()->height())) / 1000.0);
       _steps1 = x_pos1 > y_pos1 ? x_pos1 / _step_width : y_pos1 / _step_height;
       _steps2 = kapp->desktop()->width() - x_pos2 > kapp->desktop()->height() - y_pos2 ?
 	(kapp->desktop()->width() - x_pos2) / _step_width : (kapp->desktop()->height() - y_pos2) / _step_height;
@@ -2435,141 +1408,146 @@ void Page::doObjEffects()
 	      nothingHappens = true;
 	      _step++;
 	      
-	      for (i = 0;i < _objList.count();i++)
+	      for (i = 0;i < static_cast<int>(_objList.count());i++)
 		{
-		  objPtr = _objList.at(i);
-		  int _w =  kapp->desktop()->width() - (objPtr->ox - diffx());
-		  int _h =  kapp->desktop()->height() - (objPtr->oy - diffy());
-		  
-		  switch (objPtr->effect)
+		  kpobject = _objList.at(i);
+		  int _w =  kapp->desktop()->width() - (kpobject->getOrig().x() - diffx());
+		  int _h =  kapp->desktop()->height() - (kpobject->getOrig().y() - diffy());
+		  int ox,oy,ow,oh;
+		  ox = kpobject->getOrig().x();
+		  oy = kpobject->getOrig().y();
+		  ow = kpobject->getSize().width();
+		  oh = kpobject->getSize().height();
+
+		  switch (kpobject->getEffect())
 		    {
 		    case EF_COME_LEFT:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
-			    x_pos1 = _step_width * _step < objPtr->ox - diffx() + objPtr->ow ? 
-			      objPtr->ox - diffx() + objPtr->ow - _step_width * _step : 0;
+			    x_pos1 = _step_width * _step < ox - diffx() + ow ? 
+			      ox - diffx() + ow - _step_width * _step : 0;
 			    y_pos1 = 0;
-			    drawObject(objPtr,screen,-x_pos1,y_pos1,0,0,0,0);
+			    drawObject(kpobject,screen,-x_pos1,y_pos1,0,0,0,0);
 			    if (x_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_COME_TOP:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
-			    y_pos1 = _step_height * _step < objPtr->oy - diffy() + objPtr->oh ?
-			      objPtr->oy - diffy() + objPtr->oh - _step_height * _step : 0;
+			    y_pos1 = _step_height * _step < oy - diffy() + oh ?
+			      oy - diffy() + oh - _step_height * _step : 0;
 			    x_pos1 = 0;
-			    drawObject(objPtr,screen,x_pos1,-y_pos1,0,0,0,0);
+			    drawObject(kpobject,screen,x_pos1,-y_pos1,0,0,0,0);
 			    if (y_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_COME_RIGHT:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
-			    x_pos2 = _w - (_step_width * _step) + (objPtr->ox - diffx()) > objPtr->ox - diffx() ?
+			    x_pos2 = _w - (_step_width * _step) + (ox - diffx()) > ox - diffx() ?
 			      _w - (_step_width * _step) : 0;
 			    y_pos2 = 0;
-			    drawObject(objPtr,screen,x_pos2,y_pos2,0,0,0,0);
+			    drawObject(kpobject,screen,x_pos2,y_pos2,0,0,0,0);
 			    if (x_pos2 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_COME_BOTTOM:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
-			    y_pos2 = _h - (_step_height * _step) + (objPtr->oy - diffy()) > objPtr->oy - diffy() ?
+			    y_pos2 = _h - (_step_height * _step) + (oy - diffy()) > oy - diffy() ?
 			      _h - (_step_height * _step) : 0;
 			    x_pos2 = 0;
-			    drawObject(objPtr,screen,x_pos2,y_pos2,0,0,0,0);
+			    drawObject(kpobject,screen,x_pos2,y_pos2,0,0,0,0);
 			    if (y_pos2 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_COME_LEFT_TOP:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
-			    x_pos1 = _step_width * _step < objPtr->ox - diffx() + objPtr->ow ? 
-			      objPtr->ox - diffx() + objPtr->ow - _step_width * _step : 0;
-			    y_pos1 = _step_height * _step < objPtr->oy - diffy() + objPtr->oh ?
-			      objPtr->oy - diffy() + objPtr->oh - _step_height * _step : 0;
-			    drawObject(objPtr,screen,-x_pos1,-y_pos1,0,0,0,0);
+			    x_pos1 = _step_width * _step < ox - diffx() + ow ? 
+			      ox - diffx() + ow - _step_width * _step : 0;
+			    y_pos1 = _step_height * _step < oy - diffy() + oh ?
+			      oy - diffy() + oh - _step_height * _step : 0;
+			    drawObject(kpobject,screen,-x_pos1,-y_pos1,0,0,0,0);
 			    if (x_pos1 != 0 || y_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_COME_LEFT_BOTTOM:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
-			    x_pos1 = _step_width * _step < objPtr->ox - diffx() + objPtr->ow ? 
-			      objPtr->ox - diffx() + objPtr->ow - _step_width * _step : 0;
-			    y_pos2 = _h - (_step_height * _step) + (objPtr->oy - diffy()) > objPtr->oy - diffy() ?
+			    x_pos1 = _step_width * _step < ox - diffx() + ow ? 
+			      ox - diffx() + ow - _step_width * _step : 0;
+			    y_pos2 = _h - (_step_height * _step) + (oy - diffy()) > oy - diffy() ?
 			      _h - (_step_height * _step) : 0;
-			    drawObject(objPtr,screen,-x_pos1,y_pos2,0,0,0,0);
+			    drawObject(kpobject,screen,-x_pos1,y_pos2,0,0,0,0);
 			    if (x_pos1 != 0 || y_pos2 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_COME_RIGHT_TOP:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
-			    x_pos2 = _w - (_step_width * _step) + (objPtr->ox - diffx()) > objPtr->ox - diffx() ?
+			    x_pos2 = _w - (_step_width * _step) + (ox - diffx()) > ox - diffx() ?
 			      _w - (_step_width * _step) : 0;
-			    y_pos1 = _step_height * _step < objPtr->oy - diffy() + objPtr->oh ?
-			      objPtr->oy - diffy() + objPtr->oh - _step_height * _step : 0;
-			    drawObject(objPtr,screen,x_pos2,-y_pos1,0,0,0,0);
+			    y_pos1 = _step_height * _step < oy - diffy() + oh ?
+			      oy - diffy() + oh - _step_height * _step : 0;
+			    drawObject(kpobject,screen,x_pos2,-y_pos1,0,0,0,0);
 			    if (x_pos2 != 0 || y_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_COME_RIGHT_BOTTOM:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
-			    x_pos2 = _w - (_step_width * _step) + (objPtr->ox - diffx()) > objPtr->ox - diffx() ?
+			    x_pos2 = _w - (_step_width * _step) + (ox - diffx()) > ox - diffx() ?
 			      _w - (_step_width * _step) : 0;
-			    y_pos2 = _h - (_step_height * _step) + (objPtr->oy - diffy()) > objPtr->oy - diffy() ?
+			    y_pos2 = _h - (_step_height * _step) + (oy - diffy()) > oy - diffy() ?
 			      _h - (_step_height * _step) : 0;
-			    drawObject(objPtr,screen,x_pos2,y_pos2,0,0,0,0);
+			    drawObject(kpobject,screen,x_pos2,y_pos2,0,0,0,0);
 			    if (x_pos2 != 0 || y_pos2 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_WIPE_LEFT:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
 			    w_pos1 = _step_width * (_steps1 - _step) > 0 ? _step_width * (_steps1 - _step) : 0;
-			    drawObject(objPtr,screen,0,0,w_pos1,0,0,0);
+			    drawObject(kpobject,screen,0,0,w_pos1,0,0,0);
  			    if (w_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_WIPE_RIGHT:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
 			    w_pos1 = _step_width * (_steps1 - _step) > 0 ? _step_width * (_steps1 - _step) : 0;
 			    x_pos1 = w_pos1;
-			    drawObject(objPtr,screen,0,0,w_pos1,0,x_pos1,0);
+			    drawObject(kpobject,screen,0,0,w_pos1,0,x_pos1,0);
  			    if (w_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_WIPE_TOP:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
 			    h_pos1 = _step_height * (_steps1 - _step) > 0 ? _step_height * (_steps1 - _step) : 0;
-			    drawObject(objPtr,screen,0,0,0,h_pos1,0,0);
+			    drawObject(kpobject,screen,0,0,0,h_pos1,0,0);
  			    if (h_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_WIPE_BOTTOM:
 		      {
-			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
 			  { 
 			    h_pos1 = _step_height * (_steps1 - _step) > 0 ? _step_height * (_steps1 - _step) : 0;
 			    y_pos1 = h_pos1;
-			    drawObject(objPtr,screen,0,0,0,h_pos1,0,y_pos1);
+			    drawObject(kpobject,screen,0,0,0,h_pos1,0,y_pos1);
  			    if (h_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
@@ -2591,16 +1569,14 @@ void Page::doObjEffects()
       QPainter p;
       p.begin(this);
       p.drawPixmap(0,0,screen_orig);
-      paintObjects(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
-      //view->presentParts(_presFakt,&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()),diffx(),diffy());
+      drawObjects(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
       p.end();  
     }
   else
     {
       QPainter p;
       p.begin(screen);
-      paintObjects(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
-      //view->presentParts(_presFakt,&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()),diffx(),diffy());
+      drawObjects(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
       p.end();
       bitBlt(this,0,0,screen);
     }
@@ -2609,439 +1585,35 @@ void Page::doObjEffects()
 }
 
 /*======================= draw object ============================*/
-void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,int _h,int _cx,int _cy)
+void Page::drawObject(KPObject *kpobject,QPixmap *screen,int _x,int _y,int _w,int _h,int _cx,int _cy)
 {
+  int ox,oy,ow,oh;
+  QRect br = kpobject->getBoundingRect(0,0);
+  ox = br.x(); oy = br.y(); ow = br.width(); oh = br.height();
+  bool ownClipping = true;
+
   QPainter p;
   p.begin(screen);
-  QRect r = p.viewport();
-  int num;
-  PicCache *pc;
-  bool _clip = !(_w != 0 || _h != 0);
-  int x,y,w,h;
-  QRect br = view->KPresenterDoc()->getRealBoundingRect(QRect(_objPtr->ox,_objPtr->oy,
-							      _objPtr->ow,_objPtr->oh),_objPtr->objNum - 1);
-  x = br.x(); y = br.y(); w = br.width(); h = br.height();
 
-  switch (_objPtr->objType)
+  if (_w != 0 || _h != 0)
     {
-    case OT_PICTURE:
-      {
-	if (_w != 0 || _h != 0)
-	  {
-	    p.setClipping(true);
-	    p.setClipRect(x - diffx() + _cx,y - diffy() + _cy,w - _w,h - _h);
-	  }
-	
-	if (_objPtr->shadowDistance > 0)
-	  {
-	    p.save();
-	    
-	    if (_objPtr->angle == 0)
-	      {
-		int sx = _objPtr->ox - diffx() + _x;
-		int sy = _objPtr->oy - diffy() + _y;
-		view->KPresenterDoc()->getShadowCoords(sx,sy,_objPtr->shadowDirection,_objPtr->shadowDistance);
-		
-		p.setPen(QPen(_objPtr->shadowColor));
-		p.setBrush(_objPtr->shadowColor);
-		
-		QSize bs = _objPtr->graphObj->getPix().size();
-		
-		p.drawRect(sx,sy,bs.width(),bs.height());
-	      }
-	    else
-	      {
-		r = p.viewport();
-		p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-				     r.width(),r.height());
-		
-		QRect br = _objPtr->graphObj->getPix().rect();
-		int pw = br.width();
-		int ph = br.height();
-		QRect rr = br;
-		int pixYPos = -rr.y();
-		int pixXPos = -rr.x();
-		br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-		rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-		
-		QWMatrix m,mtx;
-		mtx.rotate(_objPtr->angle);
-		m.translate(pw / 2,ph / 2);
-		m = mtx * m;
-		
-		p.setWorldMatrix(m);
-		
-		p.setPen(QPen(_objPtr->shadowColor));
-		p.setBrush(_objPtr->shadowColor);
-		
-		QSize bs = _objPtr->graphObj->getPix().size();
-		int dx = 0,dy = 0;
-		view->KPresenterDoc()->getShadowCoords(dx,dy,_objPtr->shadowDirection,_objPtr->shadowDistance);
-		p.drawRect(rr.left() + pixXPos + dx,rr.top() + pixYPos + dy,
-				  bs.width(),bs.height());
-		
-		p.resetXForm();
-		p.setViewport(r);
-	      }
-	    p.restore();
-	  }
-	
-	if (_objPtr->angle == 0)
-	  {
-	    p.drawPixmap(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-			 _objPtr->graphObj->getPix());
-	    //0,0,_objPtr->ow,_objPtr->oh);
-	  }
-	else
-	  {
-	    p.save();
-	    r = p.viewport();
-	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-			  r.width(),r.height());
-	    
-	    QRect br = _objPtr->graphObj->getPix().rect();
-	    int pw = br.width();
-	    int ph = br.height();
-	    QRect rr = br;
-	    int pixYPos = -rr.y();
-	    int pixXPos = -rr.x();
-	    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-	    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-	    
-	    QWMatrix m,mtx;
-	    mtx.rotate(_objPtr->angle);
-	    m.translate(pw / 2,ph / 2);
-	    m = mtx * m;
-	    
-	    p.setWorldMatrix(m);
-	    
-	    p.drawPixmap(rr.left() + pixXPos,rr.top() + pixYPos,
-				_objPtr->graphObj->getPix());
-	    
-	    p.resetXForm();
-	    p.setViewport(r);
-	    p.restore();
-	  }
-	
-	if (_w != 0 || _h != 0)
-	  p.setClipping(false);
-      } break;
-    case OT_TEXT:
-      {
-	p.save();
-	r = p.viewport();
-
-	if (_w != 0 || _h != 0)
-	  {
-	    p.setClipping(true);
-	    p.setClipRect(x - diffx() + _cx,y - diffy() + _cy,w - _w,h - _h);
-	  }
-
-	if (objPtr->shadowDistance > 0)
-	  {
-	    p.save();
-	    _objPtr->textObj->enableDrawAllInOneColor(objPtr->shadowColor);
-
-	    if (!editMode && currPresStep == _objPtr->presNum && !goingBack)
-	      {
-		switch (_objPtr->effect2)
-		  {
-		  case EF2T_PARA:
-		    _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),
-							       !editMode,subPresStep,subPresStep,_clip);
-
-		    break;
-		  default:
-		    
-		      _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),!editMode,
-								 -1,-1,_clip);
-		  }
-		}
-	    else
-	      _objPtr->objPic = _objPtr->textObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),
-							 _objPtr->ow,_objPtr->oh,!editMode,-1,-1,_clip);
-	    
-	    _objPtr->textObj->disableDrawAllInOneColor();
-	    
-	    if (_objPtr->angle == 0)
-	      {
-		int sx = _objPtr->ox - diffx() + _x;
-		int sy = _objPtr->oy - diffy() + _y;
-		view->KPresenterDoc()->getShadowCoords(sx,sy,_objPtr->shadowDirection,_objPtr->shadowDistance);
-		
-		p.setViewport(sx,sy,r.width(),r.height());
-		
-		_objPtr->objPic->play(&p);
-	      }
-	    else
-	      {
-		p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-			      r.width(),r.height());
-		
-		QRect br = _objPtr->textObj->rect();
-		int pw = br.width();
-		int ph = br.height();
-		QRect rr = br;
-		int yPos = -rr.y();
-		int xPos = -rr.x();
-		br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-		rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-		
-		QWMatrix m,mtx;
-		mtx.rotate(_objPtr->angle);
-		m.translate(pw / 2,ph / 2);
-		m = mtx * m;
-		
-		p.setWorldMatrix(m);
-		
-		int sx = 0;
-		int sy = 0;
-		view->KPresenterDoc()->getShadowCoords(sx,sy,_objPtr->shadowDirection,_objPtr->shadowDistance);
-		
-		p.translate(rr.left() + xPos + sx,rr.top() + yPos + sy);
-		
-		_objPtr->objPic->play(&p);
-	      }
-	    p.restore();
-	  }
-	
-	if (!editMode && currPresStep == _objPtr->presNum && !goingBack)
-	  {
-	    switch (_objPtr->effect2)
-	      {
-	      case EF2T_PARA:
-		{
-		  num = isInPicCache(_objPtr->objNum,subPresStep);
-		  if (num != -1)
-		    {
-		      _objPtr->objPic = &picCache.at(num)->pic;
-		      //debug("take from cache");
-		    }
-		  else
-		    {
-		      _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),
-								 !editMode,subPresStep,subPresStep,_clip);
-		      pc = new PicCache;
-		      pc->pic.setData(_objPtr->objPic->data(),_objPtr->objPic->size());
-		      pc->num = _objPtr->objNum;
-		      pc->subPresStep = subPresStep;
-		      picCache.append(pc);
-		    }
-		} break;
-	      default:
-		{
-		  num = isInPicCache(_objPtr->objNum,-1);
-		  if (num != -1)
-		    {
-		      _objPtr->objPic = &picCache.at(num)->pic;
-		      //debug("take from cache");
-		    }
-		  else
-		    {
-		      _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),!editMode,
-								 -1,-1,_clip);
-		      pc = new PicCache;
-		      pc->pic.setData(_objPtr->objPic->data(),_objPtr->objPic->size());
-		      pc->num = _objPtr->objNum;
-		      pc->subPresStep = -1;
-		      picCache.append(pc);
-		    }
-		}
-	      }
-	  }
-	else
-	  _objPtr->objPic = _objPtr->textObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),
-						   _objPtr->ow,_objPtr->oh,!editMode,-1,-1,_clip);
-
-	p.setViewport(objPtr->ox - diffx() + _x,objPtr->oy - diffy() + _y,
-		      r.width(),r.height());
-	
-	if (objPtr->angle == 0)
-	  objPtr->objPic->play(&p);
-	else
-	  {
-	    QRect br = objPtr->textObj->rect();
-	    int pw = br.width();
-	    int ph = br.height();
-	    QRect rr = br;
-	    int yPos = -rr.y();
-	    int xPos = -rr.x();
-	    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-	    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-	    
-	    QWMatrix m,mtx;
-	    mtx.rotate(objPtr->angle);
-	    m.translate(pw / 2,ph / 2);
-	    m = mtx * m;
-	    
-	    p.setWorldMatrix(m);
-	    p.translate(rr.left() + xPos,rr.top() + yPos);
-	    
-	    objPtr->objPic->play(&p);
-	  }
-	
-	p.setViewport(r);
-	p.resetXForm();
-	p.restore();
-	
-	if (_w != 0 || _h != 0)
-	  p.setClipping(false);
-      } break;
-    default:
-      {
-	if (_w != 0 || _h != 0)
-	  {
-	    p.setClipping(true);
-	    p.setClipRect(x - diffx() + _cx,y - diffy() + _cy,w - _w,h - _h);
-	  }
-
-	if (_objPtr->shadowDistance > 0 && _objPtr->objType != OT_CLIPART)
-	  {
-	    r = p.viewport();
-	    p.save();
-	    
-	    _objPtr->graphObj->enableDrawAllInOneColor(_objPtr->shadowColor);
-	    _objPtr->objPic = _objPtr->graphObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),_objPtr->ow,_objPtr->oh);
-	    _objPtr->graphObj->disableDrawAllInOneColor();
-	    
-	    if (_objPtr->angle == 0)
-	      {
-		int sx = _objPtr->ox - diffx() + _x;
-		int sy = _objPtr->oy - diffy() + _y;
-		view->KPresenterDoc()->getShadowCoords(sx,sy,_objPtr->shadowDirection,_objPtr->shadowDistance);
-		
-		p.setViewport(sx,sy,r.width(),r.height());
-		
-		_objPtr->objPic->play(&p);
-	      }
-	    else
-	      {
-		p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-			      r.width(),r.height());
-		
-		QRect br = _objPtr->graphObj->rect();
-		int pw = br.width();
-		int ph = br.height();
-		QRect rr = br;
-		int yPos = -rr.y();
-		int xPos = -rr.x();
-		br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-		rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-		
-		int sx = 0;
-		int sy = 0;
-		view->KPresenterDoc()->getShadowCoords(sx,sy,_objPtr->shadowDirection,_objPtr->shadowDistance);
-		
-		QWMatrix m,mtx,m2;
-		mtx.rotate(_objPtr->angle);
-		m.translate(pw / 2,ph / 2);
-		m2.translate(rr.left() + xPos + sx,rr.top() + yPos + sy);
-		m = m2 * mtx * m;
-		
-		p.setWorldMatrix(m);
-		_objPtr->graphObj->enableDrawAllInOneColor(_objPtr->shadowColor);
-		_objPtr->graphObj->drawInPainter(&p);
-		_objPtr->graphObj->disableDrawAllInOneColor();
-	      }
-	    
-	    p.restore();
-	    p.setViewport(r);
-	  }
-	
-	p.save();
-	if (_objPtr->objType != OT_CLIPART)
-	  {
-	    r = p.viewport();
-	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-			  r.width(),r.height());
-	  }
-	
-	if (_objPtr->objType == OT_CLIPART)
-	  {
-	    r = p.viewport();
-	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-			  _objPtr->ow,_objPtr->oh);
-	  }
-	
-	_objPtr->objPic = _objPtr->graphObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),_objPtr->ow,_objPtr->oh);
-	
-	if (_objPtr->angle == 0)
-	  _objPtr->objPic->play(&p);
-	else
-	  {
-	    QRect br = _objPtr->graphObj->rect();
-	    int pw = br.width();
-	    int ph = br.height();
-	    QRect rr = br;
-	    int yPos = -rr.y();
-	    int xPos = -rr.x();
-	    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-	    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
-	    
-	    if (_objPtr->objType != OT_CLIPART)
-	      {
-		QWMatrix m,mtx,m2;
-		mtx.rotate(_objPtr->angle);
-		m.translate(pw / 2,ph / 2);
-		m2.translate(rr.left() + xPos,rr.top() + yPos);
-		m = m2 * mtx * m;
-		
-		p.setWorldMatrix(m);
-		_objPtr->graphObj->drawInPainter(&p);
-	      }
-	    else
-	      {
-		// this doesn't work well - has to be rewritten!!
-		
-		QWMatrix m,mtx;
-		mtx.rotate(_objPtr->angle);
-		m.translate(pw / 2,ph / 2);
-		m = mtx * m;
-		
-		QPixmap pm(pw,ph);
-		pm.fill(white);
-		QPainter pnt;
-		pnt.begin(&pm);
-		_objPtr->objPic->play(&pnt);
-		pnt.end();
-		
-		p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-				     r.width(),r.height());
-		p.setWorldMatrix(m);
-		
-		p.drawPixmap(rr.left() + xPos,rr.top() + yPos,pm);
-	      }
-	  }
-	
-	p.setViewport(r);
-	
-	p.resetXForm();
-	p.restore();
-	
-	if (_w != 0 || _h != 0)
-	  p.setClipping(false);
-
-	p.setViewport(r);
-	
-	p.resetXForm();
-      } break;
+      p.setClipping(true);
+      p.setClipRect(ox - diffx() + _cx,oy - diffy() + _cy,ow - _w,oh - _h);
+      ownClipping = false;
     }
+  
+  if (!editMode && static_cast<int>(currPresStep) == kpobject->getPresNum() && !goingBack)
+    {
+      kpobject->setSubPresStep(subPresStep);
+      kpobject->doSpecificEffects(true);
+      kpobject->setOwnClipping(ownClipping);
+    }
+  kpobject->draw(&p,diffx() - _x,diffy() - _y);
+  kpobject->setSubPresStep(0);
+  kpobject->doSpecificEffects(false);
+  kpobject->setOwnClipping(true);
 
   p.end();
-}
-
-/*========== check, if QPicture is in pic-cache ==================*/
-int Page::isInPicCache(int num,int _subPresStep)
-{
-  PicCache *_p;
-
-  if (!picCache.isEmpty())
-    {
-      for (_p = picCache.first();_p != 0;_p = picCache.next())
-	if (_p->num == num && _p->subPresStep == _subPresStep) return picCache.at();
-    }
-
-  return -1;
 }
 
 /*======================== print =================================*/
@@ -3060,9 +1632,9 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   currPresStep = 1000;
   subPresStep = 1000;
 
-  view->setDiffX(-(view->KPresenterDoc()->pageLayout().left - 5 + left_margin) * (int)(MM_TO_POINT * 100) / 100);
+  view->setDiffX(-(view->KPresenterDoc()->pageLayout().left - 5 + left_margin) * static_cast<int>((MM_TO_POINT * 100) / 100));
   view->setDiffY(10);
-  view->setDiffY(diffy() - ((view->KPresenterDoc()->pageLayout().top - 5 + top_margin) * (int)(MM_TO_POINT * 100) / 100));
+  view->setDiffY(diffy() - ((view->KPresenterDoc()->pageLayout().top - 5 + top_margin) * static_cast<int>((MM_TO_POINT * 100) / 100)));
 
   QColor c = kapp->winStyleHighlightColor();
   kapp->setWinStyleHighlightColor(kapp->selectColor);
@@ -3088,16 +1660,16 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
       if (i > printer->fromPage()) printer->newPage();
 
       painter->resetXForm();
-      painter->fillRect(getPageSize(i),white);
+      painter->fillRect(getPageSize(i - 1),white);
 
-      drawPageInPainter(painter,view->getDiffY(),getPageSize(i));
+      drawPageInPainter(painter,view->getDiffY(),getPageSize(i - 1));
       kapp->processEvents();
 
       painter->resetXForm();
-      view->presentParts(1.0,painter,getPageSize(i),diffx(),diffy());
+      view->presentParts(1.0,painter,getPageSize(i - 1),diffx(),diffy());
       kapp->processEvents();
 
-      view->setDiffY(diffy() + getPageSize(i).height() + 10);
+      view->setDiffY(diffy() + getPageSize(i - 1).height() + 10);
     }
 
   setCursor(arrowCursor);
@@ -3116,66 +1688,3 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   repaint(false);
 }
 
-/*====================== clear undolist ==========================*/
-void Page::clearUndoList()
-{
-  if (_page_obj_list_)
-    {  
-      //_page_obj_list_->clear();
-      //delete _page_obj_list_;
-      _page_obj_list_ = 0;
-    }
-  _clear_undo_list_ = false;
-}
-
-/*====================== append undolist =========================*/
-void Page::appendUndoList(PageObjects *o)
-{
-  if (!_page_obj_list_)
-    {  
-      _page_obj_list_ = new QList<PageObjects>;
-      _page_obj_list_->setAutoDelete(true);
-    }
-
-  if (o)
-    {
-      PageObjects *p = new PageObjects;
-      *p = *o;
-      if (o->graphObj)
-	{
-	  p->graphObj = new GraphObj(0,"graphObj");
-	  *p->graphObj = *o->graphObj;
-	}
-
-      if (o->textObj)
-	{
-	  p->textObj = new KTextObject(o->textObj->getParent(),"txtObj",KTextObject::PLAIN);
-	  *p->textObj = *o->textObj;
-	}
-
-      _page_obj_list_->append(p);
-    }
-}
-
-/*====================== clear undolist new =====================*/
-void Page::clearUndoListNew()
-{
-  if (_page_obj_list_new_)
-    {  
-      //_page_obj_list_orig_->clear();
-      //delete _page_obj_list_orig_;
-      _page_obj_list_new_ = 0;
-    }
-}
-
-/*====================== append undolist new ====================*/
-void Page::appendUndoListNew(PageObjects *o)
-{
-  if (!_page_obj_list_new_)
-    {  
-      _page_obj_list_new_ = new QList<PageObjects>;
-      _page_obj_list_new_->setAutoDelete(false);
-    }
-
-  _page_obj_list_new_->append(o);
-}

@@ -13,27 +13,45 @@ LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
 bin_PROGRAMS = kpresenter.bin
 
 kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
-	kpresenter_view.cc kpresenter_shell.cc kpresenter.cc graphobj.cc \
+	kpresenter_view.cc kpresenter_shell.cc kpresenter.cc \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
 	jpeg.cc formats.cc qwmf.cc kenumlistdia.cc kcharselect.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
-	kpresenter_utils.cc undo_redo.cc rotatedia.cc ksearchdialogs.cc \
-	shadowdia.cc
+	kpresenter_utils.cc rotatedia.cc ksearchdialogs.cc \
+	shadowdia.cc \
+	\
+	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
+	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
+	kppixmapobject.cc \
+	kpbackground.cc kppixmap.cc kpclipart.cc kpgradient.cc\
+	kppixmapcollection.cc kpgradientcollection.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
-		kpresenter_shell.h kpresenter.h graphobj.h \
+		kpresenter_shell.h kpresenter.h \
 		backdia.h page.h ktextobject.h styledia.h \
 		jpeg.h formats.h qwmf.h global.h \
 		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h \
-		pgconfdia.h effectdia.h kpresenter_utils.h undo_redo.h \
-		rotatedia.h ksearchdialogs.h shadowdia.h
+		pgconfdia.h effectdia.h kpresenter_utils.h \
+		rotatedia.h ksearchdialogs.h shadowdia.h \
+		\
+		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
+		kpautoformobject.h kpclipartobject.h kptextobject.h \
+		kppixmapobject.h \
+		kpbackground.h kppixmap.h kpclipart.h kpgradient.h \
+		kppixmapcollection.h kpgradientcollection.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
-		kpresenter_shell.moc graphobj.moc moc \
+		kpresenter_shell.moc \
 		page.moc ktextobject.mocbackdia.moc styledia.moc \
 		kenumlistdia.moc kcharselect.moc kcharselectdia.moc \
-		optiondia.moc pgconfdia.moc effectdia.moc undo_redo.moc \
-		rotatedia.moc ksearchdialogs.moc shadowdia.moc
+		optiondia.moc pgconfdia.moc effectdia.moc \
+		rotatedia.moc ksearchdialogs.moc shadowdia.moc \
+		\
+		kpobject.moc kplineobject.moc kprectobject.moc kpellipseobject.moc \
+		kpautoformobject.moc kpclipartobject.moc kptextobject.h \
+		kppixmapobject.moc
+		kpbackground.moc kppixmap.moc kpclipart.moc kpgradient.moc\
+		kppixmapcollection.moc kpgradientcollection.moc
 
 idl_DATA =	kpresenter.idl
 idl_HEADERS =    kpresenter.h
@@ -69,7 +87,6 @@ kpresenter_doc.cc: kpresenter_doc.moc
 kpresenter_main.cc: kpresenter.h kpresenter_main.moc
 kpresenter_shell.cc: kpresenter.h kpresenter_shell.moc
 kpresenter_view.cc: kpresenter.h kpresenter_view.moc
-graphobj.cc: graphobj.moc
 backdia.cc: backdia.moc
 page.cc: page.moc kpresenter.h
 ktextobject.cc: ktextobject.moc
@@ -80,7 +97,22 @@ kcharselectdia.cc: kcharselectdia.moc
 optiondia.cc: optiondia.moc
 pgconfdia.cc: pgconfdia.moc
 effectdia.cc: effectdia.moc
-undo_redo.cc: undo_redo.moc
 rotatedia.cc: rotatedia.moc
 ksearchdialogs.cc: ksearchdialogs.moc
 shadowdia.cc: shadowdia.moc
+
+
+kpobject.cc: kpobject.moc
+kplineobject.cc: kplineobject.moc
+kprectobject.cc: kprectobject.moc
+kpellipseobject.cc: kpellipseobject.moc
+kpautoformobject.cc: kpautoformobject.moc
+kpclipartobject.cc: kpclipartobject.moc
+kptextobject.cc: kptextobject.moc
+kppixmapobject.cc: kppixmapobject.moc
+kpbackground.cc: kpbackground.moc
+kppixmap.cc: kppixmap.moc
+kpclipart.cc: kpclipart.moc
+kpgradient.cc: kpgradient.moc
+kppixmapcollection.cc: kppixmapcollection.moc
+kpgradientcollection.cc: kpgradientcollection.moc

@@ -18,39 +18,6 @@
 #include "page.h"
 
 /******************************************************************/
-/* class BackPic                                                  */
-/******************************************************************/
-
-/*======================= constructor ============================*/
-BackPic::BackPic(QWidget* parent=0,const char* name=0)
-  : QWidget(parent,name)
-{
-  pic = 0;
-  pic = new QPicture;
-}
-
-/*======================= destructor =============================*/
-BackPic::~BackPic()
-{
-  delete pic;
-}
-
-/*==================== set clipart ===============================*/
-void BackPic::setClipart(const char* fn)
-{
-  fileName = qstrdup(fn);
-  wmf.load(fileName);
-  wmf.paint(pic);
-  repaint();
-}
-
-/*======================= get pic ================================*/
-QPicture* BackPic::getPic()
-{
-  return pic;
-}
-
-/******************************************************************/
 /* class KPresenterChild                                          */
 /******************************************************************/
 
@@ -84,6 +51,7 @@ KPresenterChild::~KPresenterChild()
 
 /*====================== constructor =============================*/
 KPresenterDocument_impl::KPresenterDocument_impl()
+  : _pixmapCollection(), _gradientCollection()
 {
   ADD_INTERFACE("IDL:OPParts/Print:1.0")
   // Use CORBA mechanism for deleting views
@@ -94,10 +62,8 @@ KPresenterDocument_impl::KPresenterDocument_impl()
 
   // init
   _clean = true;
-  _pageList.setAutoDelete(true);
-  _objList.setAutoDelete(true);
-  _objNums = 0;
-  _pageNums = 0;
+  _objectList.setAutoDelete(true);
+  _backgroundList.setAutoDelete(true);
   _spInfinitLoop = false;
   _spManualSwitch = true;
   _rastX = 10;
@@ -118,15 +84,12 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   objStartY = 0;
   objStartNum = 0;
   setPageLayout(_pageLayout,0,0);
-  pixCache.setAutoDelete(true);
-  undo_redo = new UndoRedoAdmin(128);
-  QObject::connect(undo_redo,SIGNAL(undo_redo_change(QString,bool,QString,bool)),this,SLOT(undoRedoChange(QString,bool,QString,bool)));
   _presPen = QPen(red,3,SolidLine);
 }
 
 /*====================== constructor =============================*/
 KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData &_refdata)
-  : KPresenter::KPresenterDocument_skel(_refdata)
+  : KPresenter::KPresenterDocument_skel(_refdata), _pixmapCollection(), _gradientCollection()
 {
   ADD_INTERFACE("IDL:OPParts/Print:1.0")
   // Use CORBA mechanism for deleting views
@@ -136,10 +99,8 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   m_bModified = false;
 
   // init
-  _pageList.setAutoDelete(true);
-  _objList.setAutoDelete(true);
-  _objNums = 0;
-  _pageNums = 0;
+  _objectList.setAutoDelete(true);
+  _backgroundList.setAutoDelete(true);
   _spInfinitLoop = false;
   _spManualSwitch = true;
   _rastX = 20;
@@ -161,9 +122,6 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   objStartY = 0;
   objStartNum = 0;
   insertNewTemplate(0,0,true);
-  pixCache.setAutoDelete(true);
-  undo_redo = new UndoRedoAdmin(128);
-  QObject::connect(undo_redo,SIGNAL(undo_redo_change(QString,bool,QString,bool)),this,SLOT(undoRedoChange(QString,bool,QString,bool)));
   _presPen = QPen(red,3,SolidLine);
 }
 
@@ -171,31 +129,11 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
 KPresenterDocument_impl::~KPresenterDocument_impl()
 {
   sdeb("KPresenterDocument_impl::~KPresenterDocument_impl()\n");
-  for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
-    {
-      if (objPtr->graphObj)
-	delete objPtr->graphObj;
-      if (objPtr->textObj)
-	delete objPtr->textObj;
-    }
-  
-  for (pagePtr = _pageList.first();pagePtr != 0;pagePtr = _pageList.next())
-    {
-      if (pagePtr->backPic)
-	delete pagePtr->backPic;
-      if (pagePtr->backClip)
-	delete pagePtr->backClip;
-      if (pagePtr->pic)
-	delete pagePtr->pic;
-      if (pagePtr->cPix)
-	delete pagePtr->cPix;
-    }
 
-  _objList.clear();
-  _pageList.clear();
+  _objectList.clear();
+  _backgroundList.clear();
   cleanUp();
   edeb("...KPresenterDocument_impl::~KPresenterDocument_impl() %i\n",_refcnt());
-  delete undo_redo;
 }
 
 /*======================== draw contents as QPicture =============*/
@@ -232,72 +170,36 @@ void KPresenterDocument_impl::cleanUp()
 /*========================== save ===============================*/
 bool KPresenterDocument_impl::hasToWriteMultipart()
 {  
-  QListIterator<KPresenterChild> it( m_lstChildren );
-  for( ; it.current(); ++it )
-  {
-    if ( !it.current()->isStoredExtern() )
-      return true;    
-  }
+  QListIterator<KPresenterChild> it(m_lstChildren);
+  for(;it.current();++it)
+    {
+      if (!it.current()->isStoredExtern())
+	return true;    
+    }
   return false;
 }
 
 /*======================= make child list intern ================*/
-void KPresenterDocument_impl::makeChildListIntern( OPParts::Document_ptr _doc, const char *_path )
+void KPresenterDocument_impl::makeChildListIntern(OPParts::Document_ptr _doc,const char *_path)
 {
   int i = 0;
   
-  QListIterator<KPresenterChild> it( m_lstChildren );
-  for( ; it.current(); ++it )
-  {
-    QString tmp;
-    tmp.sprintf("/%i", i++ );
-    QString path( _path );
-    path += tmp.data();
-    
-    OPParts::Document_var doc = it.current()->document();    
-    doc->makeChildList( _doc, path );
-  }
-}
-
-/*
-bool KPresenterDocument_impl::save(const char *_url)
-{
-  KURL u(_url);
-  if (u.isMalformed())
-    {
-      cerr << "malformed URL" << endl;
-      return false;
-    }
-  
-  if (!u.isLocalFile())
-    {
-      QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),i18n("Can not save to remote URL\n"),i18n("OK"));
-      return false;
-    }
-
-  ofstream out(u.path());
-  if (!out)
+  QListIterator<KPresenterChild> it(m_lstChildren);
+  for(;it.current();++it)
     {
       QString tmp;
-      tmp.sprintf(i18n("Could not write to\n%s"),u.path());
-      cerr << tmp << endl;
-      return false;
+      tmp.sprintf("/%i",i++);
+      QString path(_path);
+      path += tmp.data();
+      
+      OPParts::Document_var doc = it.current()->document();    
+      doc->makeChildList(_doc,path);
     }
-
-  out << "<?xml version=\"1.0\"?>" << endl;
-  
-  save(out);
-  
-  m_strFileURL = _url;
-    
-  return true;
 }
-*/
 
 /*========================== save ===============================*/
 bool KPresenterDocument_impl::save(ostream& out)
 {
-  pixCache.clear();
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
   
@@ -307,14 +209,14 @@ bool KPresenterDocument_impl::save(ostream& out)
       << "\" bottom=\"" << pageLayout().bottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
   
-  out << otag << "<BACKGROUND pages=\"" << _pageList.count() << "\" rastX=\"" << _rastX << "\" rastY=\""
+  out << otag << "<BACKGROUND" << " rastX=\"" << _rastX << "\" rastY=\""
       << _rastY << "\" xRnd=\"" << _xRnd << "\" yRnd=\"" << _yRnd << "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\""
       << _txtBackCol.green() << "\" bblue=\"" << _txtBackCol.blue() << "\" sred=\"" << _txtSelCol.red() << "\" sgreen=\""
       << _txtSelCol.green() << "\" sblue=\"" << _txtSelCol.blue() << "\">" << endl;
   saveBackground(out);
   out << etag << "</BACKGROUND>" << endl;
 
-  out << otag << "<OBJECTS objects=\"" << _objList.count() << "\">" << endl;
+  out << otag << "<OBJECTS>" << endl;
   saveObjects(out);
   out << etag << "</OBJECTS>" << endl;
 
@@ -322,43 +224,27 @@ bool KPresenterDocument_impl::save(ostream& out)
   out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl; 
 
   // Write "OBJECT" tag for every child
-  QListIterator<KPresenterChild> chl( m_lstChildren );
-  for( ; chl.current(); ++chl )
+  QListIterator<KPresenterChild> chl(m_lstChildren);
+  for(;chl.current();++chl)
     chl.current()->save( out );
 
   out << etag << "</DOC>" << endl;
     
   setModified(false);
     
-  pixCache.clear();
   return true;
 }
 
 /*========================== save background ====================*/
 void KPresenterDocument_impl::saveBackground(ostream& out)
 {
-  for (pagePtr = _pageList.first();pagePtr != 0;pagePtr = _pageList.next())
+  KPBackGround *kpbackground = 0;
+  
+  for (int i = 0;i < static_cast<int>(_backgroundList.count());i++)
     {
+      kpbackground = _backgroundList.at(i);
       out << otag << "<PAGE>" << endl;
-      out << indent << "<BACKTYPE value=\"" << pagePtr->backType << "\"/>" << endl; 
-      out << indent << "<BACKVIEW value=\"" << pagePtr->backPicView << "\"/>" << endl; 
-      out << indent << "<BACKCOLOR1 red=\"" << pagePtr->backColor1.red() << "\" green=\"" 
-	  << pagePtr->backColor1.green() << "\" blue=\"" << pagePtr->backColor1.blue() << "\"/>" << endl; 
-      out << indent << "<BACKCOLOR2 red=\"" << pagePtr->backColor2.red() << "\" green=\"" 
-	  << pagePtr->backColor2.green() << "\" blue=\"" << pagePtr->backColor2.blue() << "\"/>" << endl; 
-      out << indent << "<BCTYPE value=\"" << pagePtr->bcType << "\"/>" << endl; 
-      if (pagePtr->backPic)
-	out << indent << "<BACKPIC  data=\"" << toPixString(pagePtr,pagePtr->backPic) << "\" value=\"" 
-	    << pagePtr->backPic << "\"/>" << endl;
-	  
-      if (pagePtr->backClip)
-	out << indent << "<BACKCLIP value=\"" << pagePtr->backClip << "\"/>" << endl; 
-
-      out << otag << "<TIMEPARTS>" << endl;
-      for (unsigned int i = 0;i < pagePtr->timeParts.count();i++)
-	  out << indent << "<PART time=\"" << (int)pagePtr->timeParts.at(i) << "\"/>" << endl;
-      out << etag << "</TIMEPARTS>" << endl;
-      out << indent << "<PGEFFECT value=\"" << pagePtr->pageEffect << "\"/>" << endl; 
+      kpbackground->save(out);
       out << etag << "</PAGE>" << endl;
     }
 }
@@ -366,111 +252,27 @@ void KPresenterDocument_impl::saveBackground(ostream& out)
 /*========================== save objects =======================*/
 void KPresenterDocument_impl::saveObjects(ostream& out)
 {
-  for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      out << otag << "<OBJECT>" << endl;
-      out << indent << "<OBJTYPE value=\"" << objPtr->objType << "\"/>" << endl; 
-      out << indent << "<ISSELECTED value=\"" << objPtr->isSelected << "\"/>" << endl; 
-      out << indent << "<OBJNUM value=\"" << objPtr->objNum << "\"/>" << endl; 
-      out << indent << "<COORDINATES x=\"" << objPtr->ox << "\" y=\"" << objPtr->oy
-	  << "\" w=\"" << objPtr->ow << "\" h=\"" << objPtr->oh << "\"/>" << endl; 
-      out << indent << "<PRESNUM value=\"" << objPtr->presNum << "\"/>" << endl; 
-      out << indent << "<EFFECT value=\"" << objPtr->effect << "\"/>" << endl; 
-      out << indent << "<EFFECT2 value=\"" << objPtr->effect2 << "\"/>" << endl; 
-      out << indent << "<ANGLE value=\"" << objPtr->angle << "\"/>" << endl; 
-      out << indent << "<SHADOW direction=\"" << (int)objPtr->shadowDirection << "\" distance=\""
-	  << objPtr->shadowDistance << "\" sred=\"" << objPtr->shadowColor.red() << "\" sgreen=\""
-	  << objPtr->shadowColor.green() << "\" sblue=\"" << objPtr->shadowColor.blue() << "\"/>" << endl;
-      
-      if (objPtr->objType == OT_TEXT)
-	saveTxtObj(out,objPtr->textObj);
-      else
-	{
-	  out << otag << "<GRAPHOBJ>" << endl;
-	  objPtr->graphObj->save(out);
-	  out << etag << "</GRAPHOBJ>" << endl;
-	}
- 
+      kpobject = objectList()->at(i);
+      out << otag << "<OBJECT type=\"" << static_cast<int>(kpobject->getType()) << "\">" << endl;
+      kpobject->save(out);
       out << etag << "</OBJECT>" << endl;
     }
-}
-
-/*========================== save textobject ====================*/
-void KPresenterDocument_impl::saveTxtObj(ostream& out,KTextObject *txtPtr)
-{
-  TxtObj *txtObj;
-  TxtLine *txtLine;
-  TxtParagraph *txtParagraph;
-  unsigned int i,j,k;
-  QFont font;
-
-  out << otag << "<TEXTOBJ objType=\"" << txtPtr->objType() << "\">" << endl;
-  out << indent << "<ENUMLISTTYPE type=\"" << txtPtr->enumListType().type << "\" before=\""
-      << txtPtr->enumListType().before << "\" after=\"" << txtPtr->enumListType().after
-      << "\" start=\"" << txtPtr->enumListType().start << "\" family=\"" 
-      << txtPtr->enumListType().font.family() << "\" pointSize=\"" << txtPtr->enumListType().font.pointSize()
-      << "\" bold=\"" << txtPtr->enumListType().font.bold() << "\" italic=\"" << txtPtr->enumListType().font.italic()
-      << "\" underline=\"" << txtPtr->enumListType().font.underline() << "\" red=\"" 
-      << txtPtr->enumListType().color.red() << "\" green=\"" << txtPtr->enumListType().color.green() 
-      << "\" blue=\"" << txtPtr->enumListType().color.blue() << "\"/>" << endl; 
-  out << indent << "<UNSORTEDLISTTYPE type=\"" << txtPtr->enumListType().type << "\" family=\"" 
-      << txtPtr->unsortListType().font.family() << "\" pointSize=\"" << txtPtr->unsortListType().font.pointSize()
-      << "\" bold=\"" << txtPtr->unsortListType().font.bold() << "\" italic=\"" << txtPtr->unsortListType().font.italic()
-      << "\" underline=" << txtPtr->unsortListType().font.underline() << " red=\"" 
-      << txtPtr->unsortListType().color.red() << "\" green=\"" << txtPtr->unsortListType().color.green() 
-      << "\" blue=\"" << txtPtr->unsortListType().color.blue() << "\" chr=\"" << txtPtr->unsortListType().chr
-      << "\"/>" << endl; 
-
-  for (i = 0;i < txtPtr->paragraphs();i++)
-    {
-      txtParagraph = txtPtr->paragraphAt(i);
-
-      out << otag << "<PARAGRAPH horzAlign=\"" << txtParagraph->horzAlign() << "\">" << endl; 
-
-      for (j = 0;j < txtParagraph->lines();j++)
-	{
-	  txtLine = txtParagraph->lineAt(j);
-
-	  out << otag << "<LINE>" << endl;
-
-	  for (k = 0;k < txtLine->items();k++)
-	    {
-	      txtObj = txtLine->itemAt(k);
-	      font = txtObj->font();
-	      
-	      out << otag << "<OBJ>" << endl;
-	      out << indent << "<TYPE value=\"" << txtObj->type() << "\"/>" << endl;
-	      out << indent << "<FONT family=\"" << font.family() << "\" pointSize=\""
-		  << font.pointSize() << "\" bold=\"" << font.bold() << "\" italic=\"" << font.italic()
-		  << "\" underline=\"" << font.underline() << "\"/>" << endl;
-	      out << indent << "<COLOR red=\"" << txtObj->color().red() << "\" green=\""
-		  << txtObj->color().green() << "\" blue=\"" << txtObj->color().blue() << "\"/>" << endl;
-	      out << indent << "<VERTALIGN value=\"" << txtObj->vertAlign() << "\"/>" << endl;
-	      out << indent << "<TEXT value=\"" << txtObj->text() << "\"/>" << endl;
-	      out << etag << "</OBJ>" << endl;
-	    }
-
-	  out << etag << "</LINE>" << endl;
-
-	}
-      
-      out << etag << "</PARAGRAPH>" << endl;
-
-    }
-
-  out << etag << "</TEXTOBJ>" << endl;
 }
 
 /*========================== load ===============================*/
 bool KPresenterDocument_impl::loadChildren( OPParts::MimeMultipartDict_ptr _dict )
 {
-  QListIterator<KPresenterChild> it( m_lstChildren );
-  for( ; it.current(); ++it )
-  {
-    if ( !it.current()->loadDocument( _dict ) )
-      return false;
-  }
-
+  QListIterator<KPresenterChild> it(m_lstChildren);
+  for(;it.current();++it)
+    {
+      if (!it.current()->loadDocument(_dict))
+	return false;
+    }
+  
   return true;
 }
 
@@ -510,20 +312,16 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
   vector<KOMLAttrib> lst;
   string name;
 
-  pixCache.clear();
-
   KoPageLayout __pgLayout;
   __pgLayout.unit = PG_MM;
   
   // clean
   if (_clean)
     {
-      if (!_pageList.isEmpty())
-	_pageList.clear();
-      if (!_objList.isEmpty())
-	_objList.clear();
-      _objNums = 0;
-      _pageNums = 0;
+      if (!_backgroundList.isEmpty())
+	_backgroundList.clear();
+      if (!_objectList.isEmpty())
+	_objectList.clear();
       _spInfinitLoop = false;
       _spManualSwitch = true;
       _rastX = 20;
@@ -543,7 +341,7 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
   
   KOMLParser::parseTag( tag.c_str(), name, lst );
   vector<KOMLAttrib>::const_iterator it = lst.begin();
-  for( ; it != lst.end(); it++ )
+  for(;it != lst.end();it++)
   {
     if ( (*it).m_strName == "mime" )
     {
@@ -699,9 +497,7 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	}
     }
 
-  pixCache.clear();
   setPageLayout(__pgLayout,0,0);
-  //repaint(true);
 
   return true;
 }
@@ -719,226 +515,9 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
       // page
       if (name == "PAGE")
 	{    
-	  insertNewPage(0,0);
-
-	  unsigned int _num = _pageList.count();
-	  pagePtr = _pageList.last();
-
-	  while (parser.open(0L,tag))
-	    {
-	      KOMLParser::parseTag(tag.c_str(),name,lst);
-	      
-	      // time parts
-	      if (name == "TIMEPARTS")
-		{
-		  pagePtr = _pageList.last();
-		  pagePtr->timeParts.clear();
-		  while (parser.open(0L,tag))
-		    {
-		      KOMLParser::parseTag(tag.c_str(),name,lst);
-		      
-		      // part
-		      if (name == "PART")
-			{
-			  pagePtr = _pageList.last();
-			  KOMLParser::parseTag(tag.c_str(),name,lst);
-			  vector<KOMLAttrib>::const_iterator it = lst.begin();
-			  for(;it != lst.end();it++)
-			    {
-			      if ((*it).m_strName == "time")
-				pagePtr->timeParts.append((int*)atoi((*it).m_strValue.c_str()));
-			    }
-			}
-
-		      if (!parser.close(tag))
-			{
-			  cerr << "ERR: Closing Child" << endl;
-			  return;
-			}
-		    }
-		}
- 
-	      // backtype
-	      else if (name == "BACKTYPE")
-		{
-		  pagePtr = _pageList.last();
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			setBackType(_num,(BackType)atoi((*it).m_strValue.c_str()));
-		    }
-		  
-		  // to avoid problems with older files
-		  setPageEffect(_num,PEF_NONE);
-		}
-
-	      // pageEffect
-	      else if (name == "PGEFFECT")
-		{
-		  pagePtr = _pageList.last();
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			setPageEffect(_num,(PageEffect)atoi((*it).m_strValue.c_str()));
-		    }
-		}
-	      
-	      // backview
-	      else if (name == "BACKVIEW")
-		{
-		  pagePtr = _pageList.last();
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			setBPicView(_num,(BackView)atoi((*it).m_strValue.c_str()));
-		    }
-		}
-	      
-	      // backcolor 1
-	      else if (name == "BACKCOLOR1")
-		{
-		  pagePtr = _pageList.last();
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      pagePtr = _pageList.last();
-		      if ((*it).m_strName == "red")
-			setBackColor(_num,QColor(atoi((*it).m_strValue.c_str()),
-						 pagePtr->backColor1.green(),pagePtr->backColor1.blue()),
-				     pagePtr->backColor2,pagePtr->bcType);
-		      if ((*it).m_strName == "green")
-			setBackColor(_num,QColor(pagePtr->backColor1.red(),
-						 atoi((*it).m_strValue.c_str()),pagePtr->backColor1.blue()),
-				     pagePtr->backColor2,pagePtr->bcType);
-		      
-		      if ((*it).m_strName == "blue")
-			setBackColor(_num,QColor(pagePtr->backColor1.red(),pagePtr->backColor1.green(),
-						 atoi((*it).m_strValue.c_str())),
-				     pagePtr->backColor2,pagePtr->bcType);
-		    }
-		}
-	      
-	      // backcolor 2
-	      else if (name == "BACKCOLOR2")
-		{
-		  pagePtr = _pageList.last();
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      pagePtr = _pageList.last();
-		      if ((*it).m_strName == "red")
-			setBackColor(_num,pagePtr->backColor1,QColor(atoi((*it).m_strValue.c_str()),
-								     pagePtr->backColor2.green(),pagePtr->backColor2.blue()),
-				     pagePtr->bcType);
-		      if ((*it).m_strName == "green")
-			setBackColor(_num,pagePtr->backColor1,QColor(pagePtr->backColor2.red(),
-								     atoi((*it).m_strValue.c_str()),pagePtr->backColor2.blue()),
-				     pagePtr->bcType);
-		      
-		      if ((*it).m_strName == "blue")
-			setBackColor(_num,pagePtr->backColor1,QColor(pagePtr->backColor2.red(),pagePtr->backColor2.green(),
-								     atoi((*it).m_strValue.c_str())),
-				     pagePtr->bcType);
-		    }
-		}
-	      
-	      // backColorType
-	      else if (name == "BCTYPE")
-		{
-		  pagePtr = _pageList.last();
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			setBackColor(_num,pagePtr->backColor1,pagePtr->backColor2,
-				     (BCType)atoi((*it).m_strValue.c_str()));
-		    }
-		}
-	      
-	      // backpic
-	      else if (name == "BACKPIC")
-		{
-		  pagePtr = _pageList.last();
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  
-		  bool openPic = true;
-		  QString _data,_fileName;
-
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "data")
-			{
-			  _data = (*it).m_strValue.c_str();
-			  if (_data.isEmpty())
-			    openPic = true;
-			  else
-			    openPic = false;
-			}
-		      else if ((*it).m_strName == "value")
-			{
-			  _fileName = (*it).m_strValue.c_str();
-			  if (!_fileName.isEmpty())
-			    {
-			      if (int _envVarB = _fileName.find('$') >= 0)
-				{
-				  int _envVarE = _fileName.find('/',_envVarB);
-				  QString path = (const char*)getenv((const char*)_fileName.mid(_envVarB,_envVarE-_envVarB));
-				  _fileName.replace(_envVarB-1,_envVarE-_envVarB+1,path);
-				}
-			    }
-			}
-		    }
-
-		  if (openPic)
-		    setBackPic(_num,(const char*)_fileName);
-		  else
-		    setBackPic(_num,(const char*)_fileName,_data);
-		}
-	      
-	      // backclip
-	      else if (name == "BACKCLIP")
-		{
-		  pagePtr = _pageList.last();
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			{
-			  QString _fileName = (*it).m_strValue.c_str();
-			  if (!_fileName.isEmpty())
-			    {
-			      if (int _envVarB = _fileName.find('$') >= 0)
-				{
-				  int _envVarE = _fileName.find('/',_envVarB);
-				  QString path = (const char*)getenv((const char*)_fileName.mid(_envVarB,_envVarE-_envVarB));
-				  _fileName.replace(_envVarB-1,_envVarE-_envVarB+1,path);
-				}
-			    }
-			  setBackClip(_num,(const char*)_fileName);
-			}
-		    }
-		}
-
-	      else
-		cerr << "Unknown tag '" << tag << "' in PAGE" << endl;    
-	      
-	      if (!parser.close(tag))
-		{
-		  cerr << "ERR: Closing Child" << endl;
-		  return;
-		}
-	    }
+	  insertNewPage(0,0,false);
+	  KPBackGround *kpbackground = _backgroundList.last();
+	  kpbackground->load(parser,lst);
 	}
       else
 	cerr << "Unknown tag '" << tag << "' in BACKGROUND" << endl;    
@@ -964,193 +543,61 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
       // object
       if (name == "OBJECT")
 	{    
-
-	  _objNums++;
-	  objPtr = new PageObjects;
-	  objPtr->isSelected = false;
-	  objPtr->objType = OT_LINE;
-	  objPtr->objNum = _objNums;
-	  _objList.append(objPtr);
-
-	  while (parser.open(0L,tag))
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
 	    {
-	      KOMLParser::parseTag(tag.c_str(),name,lst);
-	      
-	      // objType
-	      if (name == "OBJTYPE")
+	      if ((*it).m_strName == "type")
 		{
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
+		  ObjType t = (ObjType)atoi((*it).m_strValue.c_str());
+	  
+		  switch (t)
 		    {
-		      if ((*it).m_strName == "value")
-			objPtr->objType = (ObjType)atoi((*it).m_strValue.c_str());
+		    case OT_LINE:
+		      {
+			KPLineObject *kplineobject = new KPLineObject();
+			kplineobject->load(parser,lst);
+			_objectList.append(kplineobject);
+		      } break;
+		    case OT_RECT:
+		      {
+			KPRectObject *kprectobject = new KPRectObject();
+			kprectobject->load(parser,lst);
+			kprectobject->setRnds(_xRnd,_yRnd);
+			_objectList.append(kprectobject);
+		      } break;
+		    case OT_ELLIPSE:
+		      {
+			KPEllipseObject *kpellipseobject = new KPEllipseObject();
+			kpellipseobject->load(parser,lst);
+			_objectList.append(kpellipseobject);
+		      } break;
+		    case OT_AUTOFORM:
+		      {
+			KPAutoformObject *kpautoformobject = new KPAutoformObject();
+			kpautoformobject->load(parser,lst);
+			_objectList.append(kpautoformobject);
+		      } break;
+		    case OT_CLIPART:
+		      {
+			KPClipartObject *kpclipartobject = new KPClipartObject();
+			kpclipartobject->load(parser,lst);
+			_objectList.append(kpclipartobject);
+		      } break;
+		    case OT_TEXT:
+		      {
+			KPTextObject *kptextobject = new KPTextObject();
+			kptextobject->load(parser,lst);
+			_objectList.append(kptextobject);
+		      } break;
+		    case OT_PICTURE:
+		      {
+			KPPixmapObject *kppixmapobject = new KPPixmapObject(&_pixmapCollection);
+			kppixmapobject->load(parser,lst);
+			_objectList.append(kppixmapobject);
+		      } break;
+		    default: break;
 		    }
-		}
-
-	      // isSelected
-	      else if (name == "ISSELECTED")
-		{
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			objPtr->isSelected = (bool)atoi((*it).m_strValue.c_str());
-		    }
-		}
-	      
-	      // objNum
-	      else if (name == "OBJNUM")
-		{
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			objPtr->objNum = atoi((*it).m_strValue.c_str()) + objStartNum;
-		    }
-		}
-
-	      // presNum
-	      else if (name == "PRESNUM")
-		{
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			objPtr->presNum = atoi((*it).m_strValue.c_str());
-		    }
-		}
-
-	      // effect
-	      else if (name == "EFFECT")
-		{
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			{
-			  objPtr->effect = (Effect)atoi((*it).m_strValue.c_str());
-			  // just to avoid problems with older files
-			  objPtr->effect2 = EF2_NONE;
-			  objPtr->angle = 0.0;
-			  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
-			  objPtr->shadowDistance = 0;
-			  objPtr->shadowColor = gray;
-			}
-		    }
-		}
-
-	      // effect2
-	      else if (name == "EFFECT2")
-		{
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			objPtr->effect2 = (Effect2)atoi((*it).m_strValue.c_str());
-		    }
-		}
-
-	      // angle
-	      else if (name == "ANGLE")
-		{
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "value")
-			objPtr->angle = (Effect2)atof((*it).m_strValue.c_str());
-		    }
-		}
-
-	      // shadow
-	      else if (name == "SHADOW")
-		{
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  int sr = 0,sg = 0,sb = 0;
-
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "direction")
-			objPtr->shadowDirection = (ShadowDirection)atoi((*it).m_strValue.c_str());
-		      if ((*it).m_strName == "distance")
-			objPtr->shadowDistance = atoi((*it).m_strValue.c_str());
-		      if ((*it).m_strName == "sred")
-			sr = atoi((*it).m_strValue.c_str());
-		      if ((*it).m_strName == "sgreen")
-			sg = atoi((*it).m_strValue.c_str());
-		      if ((*it).m_strName == "sblue")
-			{
-			  sb = atoi((*it).m_strValue.c_str());
-			  objPtr->shadowColor = QColor(sr,sg,sb);
-			}
-		    }
-		}
-
-	      // coordinates
-	      else if (name == "COORDINATES")
-		{
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "x")
-			objPtr->ox = atoi((*it).m_strValue.c_str());
-		      if ((*it).m_strName == "y")
-			objPtr->oy = atoi((*it).m_strValue.c_str()) + objStartY;
-		      if ((*it).m_strName == "w")
-			objPtr->ow = atoi((*it).m_strValue.c_str());
-		      if ((*it).m_strName == "h")
-			objPtr->oh = atoi((*it).m_strValue.c_str());
-		    }
-		}
-	      
-	      // graphic object
- 	      else if (name == "GRAPHOBJ")
- 		{
- 		  objPtr->graphObj = new GraphObj(0,"graphObj",objPtr->objType);
- 		  objPtr->textObj = 0;
-		  objPtr->graphObj->load(parser,lst);
- 		  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-		  if (objPtr->objType == OT_PICTURE)
-		    objPtr->graphObj->loadPixmap();
-		  if (objPtr->objType == OT_CLIPART)
-		    objPtr->graphObj->loadClipart();
- 		}
-
-	      // text object
- 	      else if (name == "TEXTOBJ")
- 		{
- 		  objPtr->graphObj = 0;
-		  objPtr->textObj = new KTextObject(0,"textObj",KTextObject::PLAIN);
-		  objPtr->textObj->clear(false);
-		  KOMLParser::parseTag(tag.c_str(),name,lst);
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for(;it != lst.end();it++)
-		    {
-		      if ((*it).m_strName == "objType")
-			objPtr->textObj->setObjType((KTextObject::ObjType)atoi((*it).m_strValue.c_str()));
-		      else
-			cerr << "Unknown attrib TEXTOBJ:'" << (*it).m_strName << "'" << endl;
-		    }
- 		  loadTxtObj(parser,lst,objPtr->textObj);
- 		  objPtr->textObj->resize(objPtr->ow,objPtr->oh);
-		  objPtr->textObj->setShowCursor(false);
-		}
-
-	      else
-		cerr << "Unknown tag '" << tag << "' in OBJECT" << endl;    
-	      
-	      if (!parser.close(tag))
-		{
-		  cerr << "ERR: Closing Child" << endl;
-		  return;
 		}
 	    }
 	}
@@ -1165,259 +612,6 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
     }
 }
 
-/*========================= load textobject ======================*/
-void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& lst,KTextObject *txtPtr)
-{
-  string tag;
-  string name;
-
-  KTextObject::EnumListType elt;
-  KTextObject::UnsortListType ult;
-  QFont font;
-  QColor color;
-  int r = 0,g = 0,b = 0;
-  TxtParagraph *txtParagraph;
-  TxtObj *objPtr;
-  
-  while (parser.open(0L,tag))
-    {
-      KOMLParser::parseTag(tag.c_str(),name,lst);
-      
-      // enumListType
-      if (name == "ENUMLISTTYPE")
-	{
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for(;it != lst.end();it++)
-	    {
-	      if ((*it).m_strName == "type")
-		elt.type = atoi((*it).m_strValue.c_str());
-	      if ((*it).m_strName == "before")
-		elt.before = (*it).m_strValue.c_str();
-	      if ((*it).m_strName == "after")
-		elt.after = (*it).m_strValue.c_str();
-	      if ((*it).m_strName == "start")
-		elt.start = atoi((*it).m_strValue.c_str());
-	      if ((*it).m_strName == "family")
-		font.setFamily((*it).m_strValue.c_str());
-	      if ((*it).m_strName == "pointSize")
-		font.setPointSize(atoi((*it).m_strValue.c_str()));
-	      if ((*it).m_strName == "bold")
-		font.setBold((bool)atoi((*it).m_strValue.c_str()));
-	      if ((*it).m_strName == "italic")
-		font.setItalic((bool)atoi((*it).m_strValue.c_str()));
-	      if ((*it).m_strName == "underline")
-		font.setUnderline((bool)atoi((*it).m_strValue.c_str()));
-	      if ((*it).m_strName == "red")
-		r = atoi((*it).m_strValue.c_str());
-	      if ((*it).m_strName == "green")
-		g = atoi((*it).m_strValue.c_str());
-	      if ((*it).m_strName == "blue")
-		b = atoi((*it).m_strValue.c_str());
-	    }
-	  color.setRgb(r,g,b);
-	  elt.font = font;
-	  elt.color = color;
-	  txtPtr->setEnumListType(elt);
-	}
-      
-      // unsortListType
-      else if (name == "UNSORTEDLISTTYPE")
-	{
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for(;it != lst.end();it++)
-	    {
-	      if ((*it).m_strName == "chr")
-		ult.chr = atoi((*it).m_strValue.c_str());
-	      if ((*it).m_strName == "family")
-		font.setFamily((*it).m_strValue.c_str());
-	      if ((*it).m_strName == "pointSize")
-		font.setPointSize(atoi((*it).m_strValue.c_str()));
-	      if ((*it).m_strName == "bold")
-		font.setBold((bool)atoi((*it).m_strValue.c_str()));
-	      if ((*it).m_strName == "italic")
-		font.setItalic((bool)atoi((*it).m_strValue.c_str()));
-	      if ((*it).m_strName == "underline")
-		font.setUnderline((bool)atoi((*it).m_strValue.c_str()));
-	      if ((*it).m_strName == "red")
-		r = atoi((*it).m_strValue.c_str());
-	      if ((*it).m_strName == "green")
-		g = atoi((*it).m_strValue.c_str());
-	      if ((*it).m_strName == "blue")
-		b = atoi((*it).m_strValue.c_str());
-	    }
-	  color.setRgb(r,g,b);
-	  ult.font = font;
-	  ult.color = color;
-	  txtPtr->setUnsortListType(ult);
-	}
-
-      // paragraph
-      else if (name == "PARAGRAPH")
-	{
-	  txtParagraph = txtPtr->addParagraph();
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for(;it != lst.end();it++)
-	    {
-	      if ((*it).m_strName == "horzAlign")
-		txtParagraph->setHorzAlign((TxtParagraph::HorzAlign)atoi((*it).m_strValue.c_str()));
-	    }
-
-	  while (parser.open(0L,tag))
-	    {
-	      KOMLParser::parseTag(tag.c_str(),name,lst);
-	      
-	      // line
-	      if (name == "LINE")
-		{
-		  while (parser.open(0L,tag))
-		    {
-		      KOMLParser::parseTag(tag.c_str(),name,lst);
-		      
-		      // object
-		      if (name == "OBJ")
-			{
-			  objPtr = new TxtObj();
-
-			  while (parser.open(0L,tag))
-			    {
-			      KOMLParser::parseTag(tag.c_str(),name,lst);
-			      
-			      // type
-			      if (name == "TYPE")
-				{
-				  KOMLParser::parseTag(tag.c_str(),name,lst);
-				  vector<KOMLAttrib>::const_iterator it = lst.begin();
-				  for(;it != lst.end();it++)
-				    {
-				      if ((*it).m_strName == "value")
-					objPtr->setType((TxtObj::ObjType)atoi((*it).m_strValue.c_str()));
-				    }
-				}
-
-			      // font
-			      else if (name == "FONT")
-				{
-				  KOMLParser::parseTag(tag.c_str(),name,lst);
-				  vector<KOMLAttrib>::const_iterator it = lst.begin();
-				  for(;it != lst.end();it++)
-				    {
-				      if ((*it).m_strName == "family")
-					font.setFamily((*it).m_strValue.c_str());
-				      if ((*it).m_strName == "pointSize")
-					font.setPointSize(atoi((*it).m_strValue.c_str()));
-				      if ((*it).m_strName == "bold")
-					font.setBold((bool)atoi((*it).m_strValue.c_str()));
-				      if ((*it).m_strName == "italic")
-					font.setItalic((bool)atoi((*it).m_strValue.c_str()));
-				      if ((*it).m_strName == "underline")
-					font.setUnderline((bool)atoi((*it).m_strValue.c_str()));
-				    }
-				  objPtr->setFont(font);
-				}
-
-			      // color
-			      else if (name == "COLOR")
-				{
-				  KOMLParser::parseTag(tag.c_str(),name,lst);
-				  vector<KOMLAttrib>::const_iterator it = lst.begin();
-				  for(;it != lst.end();it++)
-				    {
-				      if ((*it).m_strName == "red")
-					r = atoi((*it).m_strValue.c_str());
-				      if ((*it).m_strName == "green")
-					g = atoi((*it).m_strValue.c_str());
-				      if ((*it).m_strName == "blue")
-					b = atoi((*it).m_strValue.c_str());
-				    }
-				  color.setRgb(r,g,b);
-				  objPtr->setColor(color);
-				}
-
-			      // vertical align
-			      else if (name == "VERTALIGN")
-				{
-				  KOMLParser::parseTag(tag.c_str(),name,lst);
-				  vector<KOMLAttrib>::const_iterator it = lst.begin();
-				  for(;it != lst.end();it++)
-				    {
-				      if ((*it).m_strName == "value")
-					objPtr->setVertAlign((TxtObj::VertAlign)atoi((*it).m_strValue.c_str()));
-				    }
-				}
-
-			      // text
-			      else if (name == "TEXT")
-				{
-				  KOMLParser::parseTag(tag.c_str(),name,lst);
-				  vector<KOMLAttrib>::const_iterator it = lst.begin();
-				  for(;it != lst.end();it++)
-				    {
-				      if ((*it).m_strName == "value")
-					objPtr->append((*it).m_strValue.c_str());
-				    }
-				}
-
-			      else
-				cerr << "Unknown tag '" << tag << "' in OBJ" << endl;    
-			      
-			      if (!parser.close(tag))
-				{
-				  cerr << "ERR: Closing Child" << endl;
-				  return;
-				}
-
-			    }
-			  txtParagraph->append(objPtr);
-			}
-		      
-		      else
-			cerr << "Unknown tag '" << tag << "' in LINE" << endl;    
-		      
-		      if (!parser.close(tag))
-			{
-			  cerr << "ERR: Closing Child" << endl;
-			  return;
-			}
-		    }
-		}
-
-	      else
-		cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;    
-	      
-	      if (!parser.close(tag))
-		{
-		  cerr << "ERR: Closing Child" << endl;
-		  return;
-		}
-	    }
-	}
-	  
-      else
-	cerr << "Unknown tag '" << tag << "' in TEXTOBJ" << endl;    
-      
-      if (!parser.close(tag))
-	{
-	  cerr << "ERR: Closing Child" << endl;
-	  return;
-	}
-    }
-}
-
-/*========================== open ================================*/
-/* CORBA::Boolean KPresenterDocument_impl::open(const char *_filename)
-{
-  return load(_filename);;
-} */
-
-/*========================== save as =============================*/
-/* CORBA::Boolean KPresenterDocument_impl::saveAs(const char *_filename,const char *_format)
-{
-  return save(_filename);
-} */
-  
 /*========================= create a view ========================*/
 OPParts::View_ptr KPresenterDocument_impl::createView()
 {
@@ -1483,7 +677,7 @@ void KPresenterDocument_impl::insertObject(const QRect& _rect, const char* _serv
 }
 
 /*========================= insert a child object =====================*/
-void KPresenterDocument_impl::insertChild( KPresenterChild *_child )
+void KPresenterDocument_impl::insertChild(KPresenterChild *_child)
 {
   m_lstChildren.append( _child );
   
@@ -1509,61 +703,33 @@ QListIterator<KPresenterChild> KPresenterDocument_impl::childIterator()
 void KPresenterDocument_impl::setPageLayout(KoPageLayout pgLayout,int diffx,int diffy)
 {
   _pageLayout = pgLayout;
-   
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
+  QRect r = getPageSize(0,diffx,diffy);
+
+  for (int i = 0;i < static_cast<int>(_backgroundList.count());i++)
     {
-       if ((!pagePtr->backPix.isNull()) && (pagePtr->backPicView == BV_ZOOM))
-	 {
-	  QWMatrix m;
- 	  m.scale((float)getPageSize(pagePtr->pageNum,diffx,diffy).width()/pagePtr->obackPix.width(),
- 		  (float)getPageSize(pagePtr->pageNum,diffx,diffy).height()/pagePtr->obackPix.height());
- 	  pagePtr->backPix = pagePtr->obackPix.xForm(m);
-	 }
-       if (pagePtr->backType == BT_CLIP)
-	 {
-	   pagePtr->pic->resize(getPageSize(pagePtr->pageNum,diffx,diffy).width(),
-				getPageSize(pagePtr->pageNum,diffx,diffy).height());
-	 }
-       pagePtr->cPix->resize(getPageSize(pagePtr->pageNum,diffx,diffy).width(),
-			     getPageSize(pagePtr->pageNum,diffx,diffy).height());
-       emit restoreBackColor(pagePtr->pageNum-1);
+      _backgroundList.at(i)->setSize(r.width(),r.height());
+      _backgroundList.at(i)->restore();
     }
 
-  repaint(true);
+  repaint(false);
 }
 
 /*==================== insert a new page =========================*/
-unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
+unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy,bool _restore=true)
 {
-  _pageNums++;
 
-  pagePtr = new Background;
-  _pageList.append(pagePtr);
-  pagePtr->pageNum = _pageNums;
-  pagePtr->backType = BT_COLOR;
-  pagePtr->backPicView = BV_CENTER;
-  pagePtr->backPic = 0;
-  pagePtr->backClip = 0;
-  pagePtr->pic = new BackPic(0);
-  pagePtr->pic->resize(getPageSize(pagePtr->pageNum,diffx,diffy).width(),
-		       getPageSize(pagePtr->pageNum,diffx,diffy).height());
-  pagePtr->pic->move(getPageSize(pagePtr->pageNum,diffx,diffy).x(),
- 		     getPageSize(pagePtr->pageNum,diffx,diffy).y());
-  pagePtr->pic->hide();
-  pagePtr->backColor1 = white;
-  pagePtr->backColor2 = white;
-  pagePtr->bcType = BCT_PLAIN;
-  pagePtr->cPix = new QPixmap(getPageSize(pagePtr->pageNum,diffx,diffy).width(),
-			      getPageSize(pagePtr->pageNum,diffx,diffy).height()); 
-  pagePtr->timeParts.setAutoDelete(false);
-  pagePtr->timeParts.append((int*)10);
-  pagePtr->hasSameCPix = false;
-  pagePtr->pix_data = "";
+  KPBackGround *kpbackground = new KPBackGround(&_pixmapCollection,&_gradientCollection);
+  _backgroundList.append(kpbackground);
 
-  emit restoreBackColor(_pageNums-1);
-  repaint(true);
+  if (_restore)
+    {
+      QRect r = getPageSize(0,diffx,diffy);
+      _backgroundList.last()->setSize(r.width(),r.height());
+      _backgroundList.last()->restore();
+      repaint(false);
+    }
 
-  return _pageNums;
+  return getPageNums();
 }
 
 /*==================== insert a new page with template ===========*/
@@ -1571,10 +737,10 @@ unsigned int KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool
 {
   QString templateDir = KApplication::kde_datadir();
 
-  QString file = KFilePreviewDialog::getOpenFileName(templateDir+"/kpresenter/templates/plain.kpt","*.kpt|KPresenter templates",0);
+  QString file = KFilePreviewDialog::getOpenFileName(templateDir + "/kpresenter/templates/plain.kpt","*.kpt|KPresenter templates",0);
   _clean = clean;
-  objStartY = getPageSize(_pageList.count(),0,0).y() + getPageSize(_pageList.count(),0,0).height();
-  objStartNum = _objList.count();
+  objStartY = getPageSize(_backgroundList.count() - 1,0,0).y() + getPageSize(_backgroundList.count() - 1,0,0).height();
+  objStartNum = _objectList.count();
   if (!file.isEmpty()) load_template(file);
   objStartNum = 0;
   objStartY = 0;
@@ -1586,722 +752,445 @@ unsigned int KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool
 /*==================== set background color ======================*/
 void KPresenterDocument_impl::setBackColor(unsigned int pageNum,QColor backColor1,QColor backColor2,BCType bcType)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
+  KPBackGround *kpbackground = 0;
+
+  if (pageNum < _backgroundList.count())
     {
-      if (pagePtr->pageNum == pageNum)
-	{
-	  pagePtr->backColor1 = backColor1;
-	  pagePtr->backColor2 = backColor2;
-	  pagePtr->bcType = bcType;
-	  //emit restoreBackColor(pageNum-1);
-	  return;
-	}
+      kpbackground = backgroundList()->at(pageNum);
+      kpbackground->setBackColor1(backColor1);
+      kpbackground->setBackColor2(backColor2);
+      kpbackground->setBackColorType(bcType);
     }
 }
 
 /*==================== set background picture ====================*/
-void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPic)
+void KPresenterDocument_impl::setBackPixFilename(unsigned int pageNum,QString backPix)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    {
-      if (pagePtr->pageNum == pageNum)
-	{
-	  unsigned int i;
-	  QString fn1(backPic);
-	  QString fn2(pagePtr->backPic);
-	  if (fn1 == fn2) return;
- 	  
-	  pagePtr->backPic = qstrdup(backPic);
-
-	  for (i = 1;i < pageNum;i++)
-	    {
-	      if (_pageList.at(i-1)->backPic == backPic &&
-		  _pageList.at(i-1)->backPicView == pagePtr->backPicView)
-		{
-		  pagePtr->backPix = _pageList.at(i-1)->backPix;
-		  pagePtr->obackPix = _pageList.at(i-1)->obackPix;
-		  break;
-		}
-	    }
-
-	  QPixmap pix;
-	  pix.load(pagePtr->backPic);
-
-	  QFileInfo fileInfo(backPic);
-
-	  if (fileInfo.extension().lower() != "xpm")
-	    {
-	      pix.save("/tmp/kpresenter_tmp.xpm","XPM");
-	      pagePtr->pix_data = qstrdup(load_pixmap_native_format("/tmp/kpresenter_tmp.xpm"));
-	    }
-	  else
-	      pagePtr->pix_data = qstrdup(load_pixmap_native_format(backPic));
-
-	  pagePtr->backPix.load(pagePtr->backPic);
-	  pagePtr->obackPix.load(pagePtr->backPic);
-
-	  //emit restoreBackColor(pageNum-1);
-	  return;
-	}
-    }
-}
-
-/*==================== set background picture ====================*/
-void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPic,QString pix_data)
-{
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    {
-      if (pagePtr->pageNum == pageNum)
-	{
-	  unsigned int i;
-	  QString fn1(backPic);
-	  QString fn2(pagePtr->backPic);
-	  if (fn1 == fn2) return;
-  
-	  pagePtr->backPic = qstrdup(backPic);
-
-	  for (i = 1;i < pageNum;i++)
-	    {
-	      if (_pageList.at(i-1)->backPic == backPic &&
-		  _pageList.at(i-1)->backPicView == pagePtr->backPicView)
-		{
-		  pagePtr->backPix = _pageList.at(i-1)->backPix;
-		  pagePtr->obackPix = _pageList.at(i-1)->obackPix;
-		  break;
-		}
-	    }
-	  
-	  pagePtr->pix_data = qstrdup(pix_data);
-
-	  pagePtr->backPix = string_to_pixmap(pix_data);
-	  pagePtr->obackPix = string_to_pixmap(pix_data);
-	  //emit restoreBackColor(pageNum-1);
-	  return;
-	}
-    }
+  if (pageNum < _backgroundList.count())
+    backgroundList()->at(pageNum)->setBackPixFilename(backPix);
 }
 
 /*==================== set background clipart ====================*/
-void KPresenterDocument_impl::setBackClip(unsigned int pageNum,const char* backClip)
+void KPresenterDocument_impl::setBackClipFilename(unsigned int pageNum,QString backClip)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    {
-      if (pagePtr->pageNum == pageNum)
-	{
-	  pagePtr->backClip = qstrdup(backClip);
-	  if (backClip)
-	    pagePtr->pic->setClipart(backClip);
-	  //emit restoreBackColor(pageNum-1);
-	  return;
-	}
-    }
+  if (pageNum < _backgroundList.count())
+    backgroundList()->at(pageNum)->setBackClipFilename(backClip);
 }
 
 /*================= set background pic view ======================*/
-void KPresenterDocument_impl::setBPicView(unsigned int pageNum,BackView picView)
+void KPresenterDocument_impl::setBackView(unsigned int pageNum,BackView backView)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    {
-      if (pagePtr->pageNum == pageNum)
-	{
-	  pagePtr->backPicView = picView;
-	  pagePtr->backPix = QPixmap(pagePtr->obackPix);
-	  if ((picView == BV_ZOOM) && (!pagePtr->backPix.isNull()))
-	    {
-	      QWMatrix m;
-	      m.scale((float)getPageSize(pagePtr->pageNum,0,0).width()/pagePtr->obackPix.width(),
-		      (float)getPageSize(pagePtr->pageNum,0,0).height()/pagePtr->obackPix.height());
-
-	      pagePtr->backPix = pagePtr->backPix.xForm(m);
-	    }
-	  //emit restoreBackColor(pageNum-1);
-	  return;
-	}
-    }
+  if (pageNum < _backgroundList.count())
+    backgroundList()->at(pageNum)->setBackView(backView);
 }
 
 /*==================== set background type =======================*/
 void KPresenterDocument_impl::setBackType(unsigned int pageNum,BackType backType)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    {
-      if (pagePtr->pageNum == pageNum)
-	{
-	  pagePtr->backType = backType;
-	  //emit restoreBackColor(pageNum-1);
-	  //repaint(true);
-	  return;
-	}
-    }
+  if (pageNum < _backgroundList.count())
+    backgroundList()->at(pageNum)->setBackType(backType);
 }
 
 /*========================== set page effect =====================*/
-void KPresenterDocument_impl::setPageEffect(unsigned int pageNum,PageEffect _pageEffect)
+void KPresenterDocument_impl::setPageEffect(unsigned int pageNum,PageEffect pageEffect)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    {
-      if (pagePtr->pageNum == pageNum)
-	{
-	  pagePtr->pageEffect = _pageEffect;
-	  return;
-	}
-    }
-}
-
-/*====================== get page effect =========================*/
-PageEffect KPresenterDocument_impl::getPageEffect(unsigned int pageNum)
-{
-  for (pagePtr = _pageList.first();pagePtr != 0;pagePtr = _pageList.next())
-    if (pagePtr->pageNum == pageNum) return pagePtr->pageEffect;
-  return PEF_NONE;
+  if (pageNum < _backgroundList.count())
+    backgroundList()->at(pageNum)->setPageEffect(pageEffect);
 }
 
 /*===================== set pen and brush ========================*/
 bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,int diffx,int diffy)
 {
+  KPObject *kpobject = 0;
   bool ret = false;
-  unsigned int i;
-
-  if (!_objList.isEmpty())
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      for (i = 0;i <= _objList.count()-1;i++)
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
 	{
-	  if (_objList.at(i)->isSelected)
+	  switch (kpobject->getType())
 	    {
-	      objPtr = _objList.at(i);
-	      if (objPtr->objType != OT_TEXT && objPtr->objType != OT_PICTURE
-		  && objPtr->objType != OT_CLIPART)
-		{
-		  objPtr->graphObj->setObjPen(pen);
-		  objPtr->graphObj->setObjBrush(brush);
-		  objPtr->graphObj->setLineBegin(lb);
-		  objPtr->graphObj->setLineEnd(le);
-		  repaint(objPtr->ox,objPtr->oy,
-			  objPtr->ow,objPtr->oh,i,false);
-		  ret = true;
-		}
-	    }      
+	    case OT_LINE:
+	      {
+		dynamic_cast<KPLineObject*>(kpobject)->setPen(pen);
+		dynamic_cast<KPLineObject*>(kpobject)->setLineBegin(lb);
+		dynamic_cast<KPLineObject*>(kpobject)->setLineEnd(le);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_RECT:
+	      {
+		dynamic_cast<KPRectObject*>(kpobject)->setPen(pen);
+		dynamic_cast<KPRectObject*>(kpobject)->setBrush(brush);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_ELLIPSE:
+	      {
+		dynamic_cast<KPEllipseObject*>(kpobject)->setPen(pen);
+		dynamic_cast<KPEllipseObject*>(kpobject)->setBrush(brush);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_AUTOFORM:
+	      {
+		dynamic_cast<KPAutoformObject*>(kpobject)->setPen(pen);
+		dynamic_cast<KPAutoformObject*>(kpobject)->setBrush(brush);
+		dynamic_cast<KPAutoformObject*>(kpobject)->setLineBegin(lb);
+		dynamic_cast<KPAutoformObject*>(kpobject)->setLineEnd(le);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    default: break;
+	    }
 	}
     }
+
   return ret;
 }
 
 /*=================== get background type ========================*/
 BackType KPresenterDocument_impl::getBackType(unsigned int pageNum)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    if (pagePtr->pageNum == pageNum) return pagePtr->backType;
+  if (pageNum < _backgroundList.count())
+    return backgroundList()->at(pageNum)->getBackType();
+ 
   return BT_COLOR;
 }
 
 /*=================== get background pic view ====================*/
-BackView KPresenterDocument_impl::getBPicView(unsigned int pageNum)
+BackView KPresenterDocument_impl::getBackView(unsigned int pageNum)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    if (pagePtr->pageNum == pageNum) return pagePtr->backPicView;
+  if (pageNum < _backgroundList.count())
+    return backgroundList()->at(pageNum)->getBackView();
+
   return BV_TILED;
 }
 
 /*=================== get background picture =====================*/
-const char* KPresenterDocument_impl::getBackPic(unsigned int pageNum)
+QString KPresenterDocument_impl::getBackPixFilename(unsigned int pageNum)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    if (pagePtr->pageNum == pageNum)
-      return pagePtr->backPic;
+  if (pageNum < _backgroundList.count())
+    return backgroundList()->at(pageNum)->getBackPixFilename();
+
   return 0;
 }
 
 /*=================== get background clipart =====================*/
-const char* KPresenterDocument_impl::getBackClip(unsigned int pageNum)
+QString KPresenterDocument_impl::getBackClipFilename(unsigned int pageNum)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    if (pagePtr->pageNum == pageNum) return pagePtr->backClip;
+  if (pageNum < _backgroundList.count())
+    return backgroundList()->at(pageNum)->getBackClipFilename();
+
   return 0;
 }
 
 /*=================== get background color 1 ======================*/
 QColor KPresenterDocument_impl::getBackColor1(unsigned int pageNum)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    if (pagePtr->pageNum == pageNum) return pagePtr->backColor1;
+  if (pageNum < _backgroundList.count())
+    return backgroundList()->at(pageNum)->getBackColor1();
+
   return white;
 }
 
 /*=================== get background color 2 ======================*/
 QColor KPresenterDocument_impl::getBackColor2(unsigned int pageNum)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    if (pagePtr->pageNum == pageNum) return pagePtr->backColor2;
+  if (pageNum < _backgroundList.count())
+    return backgroundList()->at(pageNum)->getBackColor2();
+
   return white;
 }
 
 /*=================== get background color type ==================*/
 BCType KPresenterDocument_impl::getBackColorType(unsigned int pageNum)
 {
-  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    if (pagePtr->pageNum == pageNum) return pagePtr->bcType;
+  if (pageNum < _backgroundList.count())
+    return backgroundList()->at(pageNum)->getBackColorType();
+
   return BCT_PLAIN;
+}
+
+/*====================== get page effect =========================*/
+PageEffect KPresenterDocument_impl::getPageEffect(unsigned int pageNum)
+{
+  if (pageNum < _backgroundList.count())
+    return backgroundList()->at(pageNum)->getPageEffect();
+
+  return PEF_NONE;
 }
 
 /*========================= get pen ==============================*/
 QPen KPresenterDocument_impl::getPen(QPen pen)
 {
-  if (!_objList.isEmpty())
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      for (unsigned int i = 0;i <= _objList.count()-1;i++)
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
 	{
-	  if (_objList.at(i)->isSelected)
+	  switch (kpobject->getType())
 	    {
-	      objPtr = _objList.at(i);
-	      if (objPtr->objType != OT_TEXT && objPtr->objType != OT_PICTURE
-		  && objPtr->objType != OT_CLIPART)
-		return objPtr->graphObj->getObjPen();
-	    }      
-	}
+	    case OT_LINE:
+	      return dynamic_cast<KPLineObject*>(kpobject)->getPen();
+	      break;
+	    case OT_RECT:
+	      return dynamic_cast<KPRectObject*>(kpobject)->getPen();
+	      break;
+	    case OT_ELLIPSE:
+	      return dynamic_cast<KPEllipseObject*>(kpobject)->getPen();
+	      break;
+	    case OT_AUTOFORM:
+	      return dynamic_cast<KPAutoformObject*>(kpobject)->getPen();
+	      break;
+	    default: break;
+	    }
+	}      
     }
+
   return pen;
 }
 
 /*========================= get line begin ========================*/
 LineEnd KPresenterDocument_impl::getLineBegin(LineEnd lb)
 {
-  if (!_objList.isEmpty())
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      for (unsigned int i = 0;i <= _objList.count()-1;i++)
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
 	{
-	  if (_objList.at(i)->isSelected)
+	  switch (kpobject->getType())
 	    {
-	      objPtr = _objList.at(i);
-	      if (objPtr->objType == OT_LINE || objPtr->objType == OT_AUTOFORM)
-		return objPtr->graphObj->getLineBegin();
-	    }      
-	}
+	    case OT_LINE:
+	      return dynamic_cast<KPLineObject*>(kpobject)->getLineBegin();
+	      break;
+	    case OT_AUTOFORM:
+	      return dynamic_cast<KPAutoformObject*>(kpobject)->getLineBegin();
+	      break;
+	    default: break;
+	    }
+	}      
     }
+
   return lb;
 }
 
 /*========================= get line end =========================*/
 LineEnd KPresenterDocument_impl::getLineEnd(LineEnd le)
 {
-  if (!_objList.isEmpty())
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      for (unsigned int i = 0;i <= _objList.count()-1;i++)
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
 	{
-	  if (_objList.at(i)->isSelected)
+	  switch (kpobject->getType())
 	    {
-	      objPtr = _objList.at(i);
-	      if (objPtr->objType == OT_LINE || objPtr->objType == OT_AUTOFORM)
-		return objPtr->graphObj->getLineEnd();
-	    }      
-	}
+	    case OT_LINE:
+	      return dynamic_cast<KPLineObject*>(kpobject)->getLineEnd();
+	      break;
+	    case OT_AUTOFORM:
+	      return dynamic_cast<KPAutoformObject*>(kpobject)->getLineEnd();
+	      break;
+	    default: break;
+	    }
+	}      
     }
+
   return le;
 }
 
 /*========================= get brush =============================*/
 QBrush KPresenterDocument_impl::getBrush(QBrush brush)
 {
-  if (!_objList.isEmpty())
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      for (unsigned int i = 0;i <= _objList.count()-1;i++)
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
 	{
-	  if (_objList.at(i)->isSelected)
+	  switch (kpobject->getType())
 	    {
-	      objPtr = _objList.at(i);
-	      if (objPtr->objType != OT_TEXT && objPtr->objType != OT_PICTURE
-		  && objPtr->objType != OT_CLIPART)
-		return objPtr->graphObj->getObjBrush();
-	    }      
-	}
-    }
-  return brush;
-}
-
-/*======================== raise objects =========================*/
-void KPresenterDocument_impl::raiseObjs(int diffx,int diffy)
-{
-  if (!_objList.isEmpty())
-    {
-      for (unsigned int i = 0;i <= _objList.count()-1;i++)
-	{
-	  objPtr = _objList.at(i);
-	  if (objPtr->isSelected)
-	    {
-	      _objList.take(i);
-	      _objList.append(objPtr);
-	      repaint(objPtr->ox,objPtr->oy,
-		      objPtr->ow,objPtr->oh,i,false);
-	    
+	    case OT_RECT:
+	      return dynamic_cast<KPRectObject*>(kpobject)->getBrush();
+	      break;
+	    case OT_ELLIPSE:
+	      return dynamic_cast<KPEllipseObject*>(kpobject)->getBrush();
+	      break;
+	    case OT_AUTOFORM:
+	      return dynamic_cast<KPAutoformObject*>(kpobject)->getBrush();
+	      break;
+	    default: break;
 	    }
 	}      
-      reArrangeObjs();
     }
+
+  return brush;
 }
 
 /*======================== lower objects =========================*/
 void KPresenterDocument_impl::lowerObjs(int diffx,int diffy)
 {
-  if (!_objList.isEmpty())
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      for (unsigned int i = 0;i <= _objList.count()-1;i++)
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
 	{
-	  objPtr = _objList.at(i);
-	  if (objPtr->isSelected)
-	    {
-	      _objList.take(i);
-	      _objList.insert(0,objPtr);
-	      repaint(objPtr->ox,objPtr->oy,
-		      objPtr->ow,objPtr->oh,i,false);
-	    }
-	}      
-      reArrangeObjs();
-    }
+	  _objectList.take(i);
+	  _objectList.insert(0,kpobject);
+	  repaint(kpobject);
+	}
+    }      
+}
+
+/*========================= raise object =========================*/
+void KPresenterDocument_impl::raiseObjs(int diffx,int diffy)
+{
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  _objectList.take(i);
+	  _objectList.append(kpobject);
+	  repaint(kpobject);
+	}
+    }      
 }
 
 /*=================== insert a picture ==========================*/
-void KPresenterDocument_impl::insertPicture(const char *filename,int diffx,int diffy)
+void KPresenterDocument_impl::insertPicture(QString filename,int diffx,int diffy)
 {
-  QApplication::setOverrideCursor(waitCursor);
-  
-  if (filename)
-    {
-      QPixmap pix(filename);
-      if (!pix.isNull())
-	{
-	  _objNums++;
-	  objPtr = new PageObjects;
-	  objPtr->isSelected = true;
-	  objPtr->objNum = _objNums;
-	  objPtr->objType = OT_PICTURE;
-	  objPtr->ox = diffx + 10;
-	  objPtr->oy = diffy + 10;
-	  objPtr->ow = pix.width();
-	  objPtr->oh = pix.height();
-	  objPtr->graphObj = new GraphObj(0,"graphObj",OT_PICTURE,QString(filename));
-	  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-	  objPtr->graphObj->loadPixmap();
-	  objPtr->textObj = 0;
-	  objPtr->presNum = 0;
-	  objPtr->effect = EF_NONE;
-	  objPtr->effect2 = EF2_NONE;
-	  objPtr->angle = 0.0;
- 	  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
- 	  objPtr->shadowDistance = 0;
- 	  objPtr->shadowColor = gray;
-	  _objList.append(objPtr);
+  KPPixmapObject *kppixmapobject = new KPPixmapObject(&_pixmapCollection,filename);
+  kppixmapobject->setOrig(diffx + 10,diffy + 10);
+  kppixmapobject->setSelected(true);
 
-	  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
-	  addUndo(uripo);
+  _objectList.append(kppixmapobject);
 
-	  repaint(objPtr->ox,objPtr->oy,
-		  objPtr->ow,objPtr->oh,_objNums,false);
-	}
-    }
-  QApplication::restoreOverrideCursor();
+  repaint(kppixmapobject);
 }
 
 /*=================== insert a clipart ==========================*/
-void KPresenterDocument_impl::insertClipart(const char *filename,int diffx,int diffy)
+void KPresenterDocument_impl::insertClipart(QString filename,int diffx,int diffy)
 {
-  QApplication::setOverrideCursor(waitCursor);
-  
-  if (filename)
-    {
-      _objNums++;
-      objPtr = new PageObjects;
-      objPtr->isSelected = true;
-      objPtr->objNum = _objNums;
-      objPtr->objType = OT_CLIPART;
-      objPtr->ox = diffx + 10;
-      objPtr->oy = diffy + 10;
-      objPtr->ow = 150;
-      objPtr->oh = 150;
-      objPtr->graphObj = new GraphObj(0,"graphObj",OT_CLIPART,QString(filename));
-      objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-      objPtr->graphObj->loadClipart();
-      objPtr->textObj = 0;
-      objPtr->presNum = 0;
-      objPtr->effect = EF_NONE;
-      objPtr->effect2 = EF2_NONE;
-      objPtr->angle = 0.0;
-      objPtr->shadowDirection = SD_RIGHT_BOTTOM;
-      objPtr->shadowDistance = 0;
-      objPtr->shadowColor = gray;
-      _objList.append(objPtr);
+  KPClipartObject *kpclipartobject = new KPClipartObject(filename);
+  kpclipartobject->setOrig(diffx + 10,diffy + 10);
+  kpclipartobject->setSize(150,150);
+  kpclipartobject->setSelected(true);
 
-      UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
-      addUndo(uripo);
+  _objectList.append(kpclipartobject);
 
-      repaint(objPtr->ox,objPtr->oy,
-	      objPtr->ow,objPtr->oh,_objNums,false);
-    }
-  QApplication::restoreOverrideCursor();
+  repaint(kpclipartobject);
 }
 
 /*======================= change picture ========================*/
-void KPresenterDocument_impl::changePicture(const char *filename,int diffx,int diffy)
+void KPresenterDocument_impl::changePicture(QString filename,int diffx,int diffy)
 {
-  QApplication::setOverrideCursor(waitCursor);
-
-  if (filename)
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      QPixmap pix(filename);
-      if (!_objList.isEmpty() && !pix.isNull())
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_PICTURE)
 	{
-	  for (unsigned int i = 0;i <= _objList.count()-1;i++)
-	    {
-	      if (_objList.at(i)->isSelected)
-		{
-		  objPtr = _objList.at(i);
-		  if (objPtr->objType == OT_PICTURE)
-		    {
-		      PageObjects *_page_obj_ = new PageObjects;
-		      *_page_obj_ = *objPtr;
-		  
-		      _page_obj_->graphObj = new GraphObj(0,"graphObj");
-		      *_page_obj_->graphObj = *objPtr->graphObj;
-
-		      objPtr->graphObj->setFileName(QString(filename));
-		      objPtr->graphObj->loadPixmap();
-		      objPtr->isSelected = false;
-		      objPtr->graphObj->resize(pix.size());
-		      repaint(objPtr->ox,objPtr->oy,
-			      objPtr->ow,objPtr->oh,i,false);
-		      objPtr = _objList.at(i);
-		      objPtr->ow = pix.width();
-		      objPtr->oh = pix.height();
-		      objPtr->isSelected = true;
-
-		      UndoRedoPageObjects *urpo = new UndoRedoPageObjects(_page_obj_,objPtr,i18n("Change picture"));
-		      addUndo(urpo);
-
-		      repaint(objPtr->ox,objPtr->oy,
-			      objPtr->ow,objPtr->oh,i,false);
-		      break;
-		    }
-		}      
-	    }
+	  dynamic_cast<KPPixmapObject*>(kpobject)->setFileName(filename);
+	  repaint(false);
+	  break;
 	}
     }
- 
-  QApplication::restoreOverrideCursor();
 }
 
 /*======================= change clipart ========================*/
-void KPresenterDocument_impl::changeClipart(const char *filename,int diffx,int diffy)
+void KPresenterDocument_impl::changeClipart(QString filename,int diffx,int diffy)
 {
-  QApplication::setOverrideCursor(waitCursor);
-
-  if (filename)
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      if (!_objList.isEmpty())
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_CLIPART)
 	{
-	  for (unsigned int i = 0;i <= _objList.count()-1;i++)
-	    {
-	      if (_objList.at(i)->isSelected)
-		{
-		  objPtr = _objList.at(i);
-		  if (objPtr->objType == OT_CLIPART)
-		    {
-		      PageObjects *_page_obj_ = new PageObjects;
-		      *_page_obj_ = *objPtr;
-		  
-		      _page_obj_->graphObj = new GraphObj(0,"graphObj");
-		      *_page_obj_->graphObj = *objPtr->graphObj;
-
-		      objPtr->graphObj->setFileName(QString(filename));
-		      objPtr->graphObj->loadClipart();
-		      objPtr->isSelected = false;
-		      repaint(objPtr->ox,objPtr->oy,
-			      objPtr->ow,objPtr->oh,i,false);
-		      objPtr = _objList.at(i);
-		      objPtr->isSelected = true;
-
-		      UndoRedoPageObjects *urpo = new UndoRedoPageObjects(_page_obj_,objPtr,i18n("Change clipart"));
-		      addUndo(urpo);
-
-		      repaint(objPtr->ox,objPtr->oy,
-			      objPtr->ow,objPtr->oh,i,false);
-		      break;
-		    }
-		}      
-	    }
+	  dynamic_cast<KPClipartObject*>(kpobject)->setFileName(filename);
+	  repaint(false);
+	  break;
 	}
     }
- 
-  QApplication::restoreOverrideCursor();
 }
 
 /*===================== insert a line ===========================*/
 void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType lt,int diffx,int diffy)
 {
-  _objNums++;
-  objPtr = new PageObjects;
-  objPtr->isSelected = true;
-  objPtr->objType = OT_LINE;
-  objPtr->objNum = _objNums;
-  objPtr->ox = diffx + 10;
-  objPtr->oy = diffy + 10;
-  objPtr->ow = 150;
-  objPtr->oh = 150;
-  objPtr->graphObj = new GraphObj(0,"graphObj",OT_LINE);
-  objPtr->graphObj->setObjPen(pen);
-  objPtr->graphObj->setLineType(lt);
-  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-  objPtr->graphObj->setLineBegin(lb);
-  objPtr->graphObj->setLineEnd(le);
-  objPtr->textObj = 0;
-  objPtr->presNum = 0;
-  objPtr->effect = EF_NONE;
-  objPtr->effect2 = EF2_NONE;
-  objPtr->angle = 0.0;
-  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
-  objPtr->shadowDistance = 0;
-  objPtr->shadowColor = gray;
-  _objList.append(objPtr);
+  KPLineObject *kplineobject = new KPLineObject(pen,lb,le,lt);
+  kplineobject->setOrig(diffx + 10,diffy + 10);
+  kplineobject->setSize(150,150);
+  kplineobject->setSelected(true);
 
-  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
-  addUndo(uripo);
+  _objectList.append(kplineobject);
 
-  repaint(objPtr->ox,objPtr->oy,
-	  objPtr->ow,objPtr->oh,_objNums,false);
+  repaint(kplineobject);
 }
 
 /*===================== insert a rectangle =======================*/
 void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,int diffx,int diffy)
 {
-  _objNums++;
-  objPtr = new PageObjects;
-  objPtr->isSelected = true;
-  objPtr->objType = OT_RECT;
-  objPtr->objNum = _objNums;
-  objPtr->ox = diffx + 10;
-  objPtr->oy = diffy + 10;
-  objPtr->ow = 150;
-  objPtr->oh = 150;
-  objPtr->graphObj = new GraphObj(0,"graphObj",OT_RECT);
-  objPtr->graphObj->setObjPen(pen);
-  objPtr->graphObj->setObjBrush(brush);
-  objPtr->graphObj->setRectType(rt);
-  objPtr->graphObj->setRnds(_xRnd,_yRnd);
-  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-  objPtr->textObj = 0;
-  objPtr->presNum = 0;
-  objPtr->effect = EF_NONE;
-  objPtr->effect2 = EF2_NONE;
-  objPtr->angle = 0.0;
-  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
-  objPtr->shadowDistance = 0;
-  objPtr->shadowColor = gray;
-  _objList.append(objPtr);
+  KPRectObject *kprectobject = new KPRectObject(pen,brush,rt,getRndX(),getRndY());
+  kprectobject->setOrig(diffx + 10,diffy + 10);
+  kprectobject->setSize(150,150);
+  kprectobject->setSelected(true);
 
-  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
-  addUndo(uripo);
+  _objectList.append(kprectobject);
 
-  repaint(objPtr->ox,objPtr->oy,
-	  objPtr->ow,objPtr->oh,_objNums,false);
+  repaint(kprectobject);
 }
 
 /*===================== insert a circle or ellipse ===============*/
 void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int diffx,int diffy)
 {
-  _objNums++;
-  objPtr = new PageObjects;
-  objPtr->isSelected = true;
-  objPtr->objType = OT_CIRCLE;
-  objPtr->objNum = _objNums;
-  objPtr->ox = diffx + 10;
-  objPtr->oy = diffy + 10;
-  objPtr->ow = 150;
-  objPtr->oh = 150;
-  objPtr->graphObj = new GraphObj(0,"graphObj",OT_CIRCLE);
-  objPtr->graphObj->setObjPen(pen);
-  objPtr->graphObj->setObjBrush(brush);
-  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-  objPtr->presNum = 0;
-  objPtr->textObj = 0;
-  objPtr->effect = EF_NONE;
-  objPtr->effect2 = EF2_NONE;
-  objPtr->angle = 0.0;
-  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
-  objPtr->shadowDistance = 0;
-  objPtr->shadowColor = gray;
-  _objList.append(objPtr);
+  KPEllipseObject *kpellipseobject = new KPEllipseObject(pen,brush);
+  kpellipseobject->setOrig(diffx + 10,diffy + 10);
+  kpellipseobject->setSize(150,150);
+  kpellipseobject->setSelected(true);
 
-  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
-  addUndo(uripo);
+  _objectList.append(kpellipseobject);
 
-  repaint(objPtr->ox,objPtr->oy,
-	  objPtr->ow,objPtr->oh,_objNums,false);
+  repaint(kpellipseobject);
 }
 
 /*===================== insert a textobject =====================*/
 void KPresenterDocument_impl::insertText(int diffx,int diffy)
 {
-  _objNums++;
-  objPtr = new PageObjects;
-  objPtr->isSelected = true;
-  objPtr->objNum = _objNums;
-  objPtr->objType = OT_TEXT;
-  objPtr->ox = diffx + 10;
-  objPtr->oy = diffy + 10;
-  objPtr->ow = 150;
-  objPtr->oh = 150;
-  objPtr->textObj = new KTextObject(0,"textObj",KTextObject::PLAIN);
-  objPtr->textObj->setBackgroundColor(_txtBackCol);
-  //objPtr->textObj->breakLines(objPtr->ow);
-  objPtr->textObj->resize(objPtr->ow,objPtr->oh);
-  objPtr->textObj->setShowCursor(false);
-  objPtr->graphObj = 0;
-  objPtr->presNum = 0;
-  objPtr->effect = EF_NONE;
-  objPtr->effect2 = EF2_NONE;
-  objPtr->angle = 0.0;
-  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
-  objPtr->shadowDistance = 0;
-  objPtr->shadowColor = gray;
-  _objList.append(objPtr);
+  KPTextObject *kptextobject = new KPTextObject();
+  kptextobject->setOrig(diffx + 10,diffy + 10);
+  kptextobject->setSize(170,150);
+  kptextobject->setSelected(true);
 
-  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
-  addUndo(uripo);
+  _objectList.append(kptextobject);
 
-  repaint(objPtr->ox,objPtr->oy,
-	  objPtr->ow,objPtr->oh,_objNums,false);
+  repaint(kptextobject);
 }
 
 /*======================= insert an autoform ====================*/
-void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,LineEnd le,const char *fileName,int diffx,int diffy)
+void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,LineEnd le,QString fileName,int diffx,int diffy)
 {
-  _objNums++;
-  objPtr = new PageObjects;
-  objPtr->objType = OT_AUTOFORM;
-  objPtr->isSelected = true;
-  objPtr->objNum = _objNums;
-  objPtr->ox = diffx + 10;
-  objPtr->oy = diffy + 10;
-  objPtr->ow = 150;
-  objPtr->oh = 150;
-  objPtr->graphObj = new GraphObj(0,"graphObj",OT_AUTOFORM,QString(fileName));
-  objPtr->graphObj->setObjPen(pen);
-  objPtr->graphObj->setObjBrush(brush);
-  objPtr->graphObj->setLineBegin(lb);
-  objPtr->graphObj->setLineEnd(le);
-  objPtr->textObj = 0;
-  objPtr->presNum = 0;
-  objPtr->effect = EF_NONE;
-  objPtr->effect2 = EF2_NONE;
-  objPtr->angle = 0.0;
-  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
-  objPtr->shadowDistance = 0;
-  objPtr->shadowColor = gray;
-  _objList.append(objPtr);
-  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+  KPAutoformObject *kpautoformobject = new KPAutoformObject(pen,brush,fileName,lb,le);
+  kpautoformobject->setOrig(diffx + 10,diffy + 10);
+  kpautoformobject->setSize(150,150);
+  kpautoformobject->setSelected(true);
 
-  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
-  addUndo(uripo);
+  _objectList.append(kpautoformobject);
 
-  repaint(objPtr->ox,objPtr->oy,
- 	  objPtr->ow,objPtr->oh,_objNums,false);
+  repaint(kpautoformobject);
 }
 
 /*=================== repaint all views =========================*/
@@ -2314,20 +1203,38 @@ void KPresenterDocument_impl::repaint(bool erase)
     }
 }
 
-/*=================== repaint all views =========================*/
-void KPresenterDocument_impl::repaint(unsigned int x,unsigned int y,unsigned int w,
-				      unsigned int h,int objnum,bool erase)
+/*===================== repaint =================================*/
+void KPresenterDocument_impl::repaint(QRect rect)
 {
-  QRect r = getRealBoundingRect(QRect(x,y,w,h),objnum);
-  x = r.x(); y = r.y(); w = r.width(); h = r.height();
-
   if (!m_lstViews.isEmpty())
     {
+      QRect r;
+
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	{
-	  //x -= viewPtr->getDiffX();
-	  //y -= viewPtr->getDiffY();
-	  viewPtr->repaint(x - viewPtr->getDiffX(),y - viewPtr->getDiffY(),w,h,erase);
+	  r = rect;
+	  r.setX(r.x() - viewPtr->getDiffX());
+	  r.setY(r.y() - viewPtr->getDiffY());
+					
+	  viewPtr->repaint(r,false);
+	}
+    }
+}
+
+/*===================== repaint =================================*/
+void KPresenterDocument_impl::repaint(KPObject *kpobject)
+{
+  if (!m_lstViews.isEmpty())
+    {
+      QRect r;
+
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	{
+	  r = kpobject->getBoundingRect(0,0);
+	  r.setX(r.x() - viewPtr->getDiffX());
+	  r.setY(r.y() - viewPtr->getDiffY());
+					
+	  viewPtr->repaint(r,false);
 	}
     }
 }
@@ -2338,58 +1245,57 @@ QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int d
   QList<int> orderList;
   bool inserted;
   
-  if (!_objList.isEmpty())
+  orderList.append((int*)(0));
+
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      orderList.append((int*)0);
-      for (unsigned int i = 0;i < _objList.count();i++)
+      kpobject = objectList()->at(i);
+      if (getPageOfObj(i,diffx,diffy,fakt) == static_cast<int>(num))
 	{
-	  objPtr = _objList.at(i);
-	  if (getPageOfObj(objPtr->objNum,diffx,diffy,fakt) == (int)num)
+	  if (orderList.find((int*)kpobject->getPresNum()) == -1)
 	    {
-	      objPtr = _objList.at(i);
-	      if (orderList.find((int*)objPtr->presNum) == -1)
+	      if (orderList.isEmpty())
+		orderList.append((int*)(kpobject->getPresNum()));
+	      else
 		{
-		  if (orderList.isEmpty())
-		    orderList.append((int*)objPtr->presNum);
-		  else
+		  inserted = false;
+		  for (int j = orderList.count()-1;j >= 0;j--)
 		    {
-		      inserted = false;
-		      for (int j = orderList.count()-1;j >= 0;j--)
+		      if ((int*)(kpobject->getPresNum()) > orderList.at(j))
 			{
-			  if ((int*)objPtr->presNum > orderList.at(j))
-			    {
-			      orderList.insert(j+1,(int*)objPtr->presNum);
-			      j = -1;
-			      inserted = true;
-			    }
+			  orderList.insert(j+1,(int*)(kpobject->getPresNum()));
+			  j = -1;
+			  inserted = true;
 			}
-		      if (!inserted) orderList.insert(0,(int*)objPtr->presNum);
 		    }
+		  if (!inserted) orderList.insert(0,(int*)(kpobject->getPresNum()));
 		}
 	    }
 	}
-    } 
-
+    }
+  
   return orderList;
 }
 
 /*====================== get page of object ======================*/
 int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy,float fakt = 1.0)
 {
-  int i,j;
   QRect rect;
 
-  for (i = 0;i < (int)_objList.count();i++)
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      objPtr = _objList.at(i);
-      if ((int)objPtr->objNum == objNum)
+      kpobject = objectList()->at(i);
+      if (i == objNum)
 	{
-	  for (j = 0;j < (int)_pageList.count();j++)
+	  for (int j = 0;j < static_cast<int>(_backgroundList.count());j++)
 	    {
-	      rect = getPageSize(j+1,diffx,diffy,fakt);
+	      rect = getPageSize(j,diffx,diffy,fakt);
 	      rect.setWidth(QApplication::desktop()->width());
-	      if (rect.intersects(getRealBoundingRect(QRect(objPtr->ox - diffx,objPtr->oy - diffy,
-							    objPtr->ow,objPtr->oh),objNum - 1)))	  
+	      if (rect.intersects(kpobject->getBoundingRect(diffx,diffy)))
 		return j+1;
 	    }
 	}
@@ -2404,42 +1310,24 @@ QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,
   if (_pageLayout.unit == PG_CM) fact = 10;
   if (_pageLayout.unit == PG_INCH) fact = 25.4;
 
-  int pw,ph,bl = (int)(_pageLayout.left * fact * 100)/100,br = (int)(_pageLayout.right * fact * 100)/100;
-  int bt = (int)(_pageLayout.top * fact * 100)/100,bb = (int)(_pageLayout.bottom * fact * 100)/100;
-  int wid = (int)(_pageLayout.width * fact * 100)/100,hei = (int)(_pageLayout.height * fact * 100)/100;
+  int pw,ph,bl = static_cast<int>(_pageLayout.left * fact * 100) / 100;
+  int br = static_cast<int>(_pageLayout.right * fact * 100) / 100;
+  int bt = static_cast<int>(_pageLayout.top * fact * 100) / 100;
+  int bb = static_cast<int>(_pageLayout.bottom * fact * 100) / 100;
+  int wid = static_cast<int>(_pageLayout.width * fact * 100) / 100;
+  int hei = static_cast<int>(_pageLayout.height * fact * 100) / 100;
   
-  pw = wid*(int)(MM_TO_POINT * 100) / 100 - 
-    (bl + br) * (int)(MM_TO_POINT * 100) / 100;
-  ph = hei*(int)(MM_TO_POINT * 100) / 100 -
-    (bt + bb) * (int)(MM_TO_POINT * 100) / 100;
+  pw = wid * static_cast<int>(MM_TO_POINT * 100) / 100 - 
+    (bl + br) * static_cast<int>(MM_TO_POINT * 100) / 100;
+  ph = hei * static_cast<int>(MM_TO_POINT * 100) / 100 -
+    (bt + bb) * static_cast<int>(MM_TO_POINT * 100) / 100;
 
-  pw = (int)((float)pw * fakt);
-  ph = (int)((float)ph * fakt);
+  pw = static_cast<int>(static_cast<float>(pw) * fakt);
+  ph = static_cast<int>(static_cast<float>(ph) * fakt);
 
-  QRect rect(10 - diffx,(10 + ph * (num - 1) +
-			 (num - 1) * 10) - diffy,pw,ph);
+  QRect rect(10 - diffx,(10 + ph * num +
+			 num * 10) - diffy,pw,ph);
   return rect;
-}
-
-/*========================= add undo =============================*/
-void KPresenterDocument_impl::addUndo(UndoRedoBaseClass* _class)
-{
-  undo_redo->add_undo_item(_class);
-  m_bModified = true;
-}
-
-/*=========================== do undo ============================*/
-void KPresenterDocument_impl::undo()
-{
-  m_bModified = true;
-  undo_redo->undo();
-}
-
-/*=========================== do redo ============================*/
-void KPresenterDocument_impl::redo()
-{
-  m_bModified = true;
-  undo_redo->redo();
 }
 
 /*================ return number of selected objs ================*/
@@ -2447,662 +1335,462 @@ int KPresenterDocument_impl::numSelected()
 {
   int num = 0;
 
-  if (!_objList.isEmpty())
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
-	{
-	  if (objPtr->isSelected) num++;
-	}
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected()) num++;
     }
 
   return num;
 }
 
 /*==================== return selected obj ======================*/
-PageObjects* KPresenterDocument_impl::getSelectedObj()
+KPObject* KPresenterDocument_impl::getSelectedObj()
 {
-  if (!_objList.isEmpty())
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
-	{
-	  if (objPtr->isSelected) return objPtr;
-	}
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected()) return kpobject;
     }
 
   return 0;
-}
-
-/*==================== rearrange objects =========================*/
-void KPresenterDocument_impl::reArrangeObjs()
-{
-  _objNums = 0;
-  if (!_objList.isEmpty())
-    {
-      for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
-	{
-	  _objNums++;
-	  objPtr->objNum = _objNums;
-	}
-    }
 }
 
 /*======================= delete objects =========================*/
 void KPresenterDocument_impl::deleteObjs()
 {
   bool changed = false;
-  QList<PageObjects> *_list = new QList<PageObjects>;
-  _list->setAutoDelete(false);
+  KPObject *kpobject = 0;
   
-  if (!_objList.isEmpty())
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      for (unsigned int i = 0;i < _objList.count();i++)
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
 	{
-	  objPtr = _objList.at(i);
-	  if (objPtr->isSelected)
-	    {
-	      _list->append(objPtr);
-	      _objList.take(i);
-	      i--;
-	      changed = true;
-	    }
+	  _objectList.remove(i--);
+	  changed = true;
 	}
-      if (changed) repaint(false);
-      reArrangeObjs();
-
-      if (!_list->isEmpty())
-	{
-	  UndoRedoDeletePageObjects *urdpo = new UndoRedoDeletePageObjects(&_objList,_list,i18n("Delete object(s)"));
-	  addUndo(urdpo);
-	}
-      else delete _list;
-    }      
+    }
+ 
+  if (changed) repaint(false);
 }
 
 /*========================== copy objects ========================*/
 void KPresenterDocument_impl::copyObjs(int diffx,int diffy)
 {
-  QClipboard *cb = QApplication::clipboard();
-  QString clipStr = "";
-  char str[255];
+//   QClipboard *cb = QApplication::clipboard();
+//   QString clipStr = "";
+//   char str[255];
   
-  clipStr += "[KPRESENTER-DATA]";
+//   clipStr += "[KPRESENTER-DATA]";
 
-  if (!_objList.isEmpty())
-    {
-      for (unsigned int i=0;i < _objList.count();i++)
-	{
-	  objPtr = _objList.at(i);
-	  if (objPtr->isSelected)
-	    {
-	      if (objPtr->objType == OT_TEXT)
-		debug("At the moment text can't be copied to the clipboard. SORRY!");
-	      else
-		{
-		  clipStr += "[NEW_OBJECT_START]";
+//   if (!_objList.isEmpty())
+//     {
+//       for (unsigned int i=0;i < _objList.count();i++)
+// 	{
+// 	  objPtr = _objList.at(i);
+// 	  if (objPtr->isSelected)
+// 	    {
+// 	      if (objPtr->objType == OT_TEXT)
+// 		debug("At the moment text can't be copied to the clipboard. SORRY!");
+// 	      else
+// 		{
+// 		  clipStr += "[NEW_OBJECT_START]";
 		  
-		  clipStr += "[OBJ_TYPE]{";
-		  sprintf(str,"%d",(int)objPtr->objType);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[OBJ_TYPE]{";
+// 		  sprintf(str,"%d",(int)objPtr->objType);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 		  
-		  clipStr += "[OBJ_X]{";
-		  sprintf(str,"%d",objPtr->ox - diffx);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[OBJ_X]{";
+// 		  sprintf(str,"%d",objPtr->ox - diffx);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 		  
-		  clipStr += "[OBJ_Y]{";
-		  sprintf(str,"%d",objPtr->oy - diffy);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[OBJ_Y]{";
+// 		  sprintf(str,"%d",objPtr->oy - diffy);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 		  
-		  clipStr += "[OBJ_W]{";
-		  sprintf(str,"%d",objPtr->ow);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[OBJ_W]{";
+// 		  sprintf(str,"%d",objPtr->ow);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 		  
-		  clipStr += "[OBJ_H]{";
-		  sprintf(str,"%d",objPtr->oh);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[OBJ_H]{";
+// 		  sprintf(str,"%d",objPtr->oh);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 		  
-		  clipStr += "[OBJ_PRESNUM]{";
-		  sprintf(str,"%d",objPtr->presNum);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[OBJ_PRESNUM]{";
+// 		  sprintf(str,"%d",objPtr->presNum);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 		  
-		  clipStr += "[OBJ_EFFECT]{";
-		  sprintf(str,"%d",(int)objPtr->effect);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[OBJ_EFFECT]{";
+// 		  sprintf(str,"%d",(int)objPtr->effect);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[OBJ_EFFECT2]{";
-		  sprintf(str,"%d",(int)objPtr->effect2);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[OBJ_EFFECT2]{";
+// 		  sprintf(str,"%d",(int)objPtr->effect2);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[GRAPHOBJ]";
+// 		  clipStr += "[GRAPHOBJ]";
 		  
-		  clipStr += "[LINE_BEGIN]{";
-		  sprintf(str,"%d",(int)objPtr->graphObj->getLineBegin());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[LINE_BEGIN]{";
+// 		  sprintf(str,"%d",(int)objPtr->graphObj->getLineBegin());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 		  
-		  clipStr += "[LINE_END]{";
-		  sprintf(str,"%d",(int)objPtr->graphObj->getLineEnd());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[LINE_END]{";
+// 		  sprintf(str,"%d",(int)objPtr->graphObj->getLineEnd());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[LINE_TYPE]{";
-		  sprintf(str,"%d",(int)objPtr->graphObj->getLineType());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[LINE_TYPE]{";
+// 		  sprintf(str,"%d",(int)objPtr->graphObj->getLineType());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[RECT_TYPE]{";
-		  sprintf(str,"%d",(int)objPtr->graphObj->getRectType());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[RECT_TYPE]{";
+// 		  sprintf(str,"%d",(int)objPtr->graphObj->getRectType());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[PEN_WIDTH]{";
-		  sprintf(str,"%d",(int)objPtr->graphObj->getObjPen().width());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[PEN_WIDTH]{";
+// 		  sprintf(str,"%d",(int)objPtr->graphObj->getObjPen().width());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[PEN_STYLE]{";
-		  sprintf(str,"%d",(int)objPtr->graphObj->getObjPen().style());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[PEN_STYLE]{";
+// 		  sprintf(str,"%d",(int)objPtr->graphObj->getObjPen().style());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[PEN_RED]{";
-		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().red());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[PEN_RED]{";
+// 		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().red());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[PEN_GREEN]{";
-		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().green());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[PEN_GREEN]{";
+// 		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().green());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[PEN_BLUE]{";
-		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().blue());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[PEN_BLUE]{";
+// 		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().blue());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[BRUSH_STYLE]{";
-		  sprintf(str,"%d",(int)objPtr->graphObj->getObjBrush().style());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[BRUSH_STYLE]{";
+// 		  sprintf(str,"%d",(int)objPtr->graphObj->getObjBrush().style());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[BRUSH_RED]{";
-		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().red());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[BRUSH_RED]{";
+// 		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().red());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[BRUSH_GREEN]{";
-		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().green());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[BRUSH_GREEN]{";
+// 		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().green());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[BRUSH_BLUE]{";
-		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().blue());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[BRUSH_BLUE]{";
+// 		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().blue());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[FILENAME]{";
-		  sprintf(str,"%s",(const char*)objPtr->graphObj->getFileName());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[FILENAME]{";
+// 		  sprintf(str,"%s",(const char*)objPtr->graphObj->getFileName());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[RND_X]{";
-		  sprintf(str,"%d",objPtr->graphObj->getRndX());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[RND_X]{";
+// 		  sprintf(str,"%d",objPtr->graphObj->getRndX());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[RND_Y]{";
-		  sprintf(str,"%d",objPtr->graphObj->getRndY());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[RND_Y]{";
+// 		  sprintf(str,"%d",objPtr->graphObj->getRndY());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[ANGLE]{";
-		  sprintf(str,"%f",objPtr->angle);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[ANGLE]{";
+// 		  sprintf(str,"%f",objPtr->angle);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[SHADOW_DIRECTION]{";
-		  sprintf(str,"%d",(int)objPtr->shadowDirection);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[SHADOW_DIRECTION]{";
+// 		  sprintf(str,"%d",(int)objPtr->shadowDirection);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[SHADOW_DISTANCE]{";
-		  sprintf(str,"%d",objPtr->shadowDistance);
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[SHADOW_DISTANCE]{";
+// 		  sprintf(str,"%d",objPtr->shadowDistance);
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[SHADOW_RED]{";
-		  sprintf(str,"%d",objPtr->shadowColor.red());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[SHADOW_RED]{";
+// 		  sprintf(str,"%d",objPtr->shadowColor.red());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[SHADOW_GREEN]{";
-		  sprintf(str,"%d",objPtr->shadowColor.green());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[SHADOW_GREEN]{";
+// 		  sprintf(str,"%d",objPtr->shadowColor.green());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[SHADOW_BLUE]{";
-		  sprintf(str,"%d",objPtr->shadowColor.blue());
-		  clipStr += str;
-		  clipStr += "}";
+// 		  clipStr += "[SHADOW_BLUE]{";
+// 		  sprintf(str,"%d",objPtr->shadowColor.blue());
+// 		  clipStr += str;
+// 		  clipStr += "}";
 
-		  clipStr += "[NEW_OBJECT_END]";
-		}
-	    }
-	}
-    }
+// 		  clipStr += "[NEW_OBJECT_END]";
+// 		}
+// 	    }
+// 	}
+//     }
   
-  cb->setText((const char*)clipStr);
+//   cb->setText((const char*)clipStr);
 
 }
 
 /*========================= paste objects ========================*/
 void KPresenterDocument_impl::pasteObjs(int diffx,int diffy)
 {
-  QClipboard *cb = QApplication::clipboard();
-  QString clipStr = cb->text(),tag,value;
-  bool tagStarted = false,valueStarted = false;
-  QPen pen;
-  QBrush brush;
-  QColor color;
+//   QClipboard *cb = QApplication::clipboard();
+//   QString clipStr = cb->text(),tag,value;
+//   bool tagStarted = false,valueStarted = false;
+//   QPen pen;
+//   QBrush brush;
+//   QColor color;
   
-  objPtr = 0;
+//   objPtr = 0;
 
 
-  if (!clipStr.isEmpty() && clipStr.left(strlen("[KPRESENTER-DATA]")) == "[KPRESENTER-DATA]")
-    {
-      for (unsigned int i = 0;i < clipStr.length();i++)
-	{
+//   if (!clipStr.isEmpty() && clipStr.left(strlen("[KPRESENTER-DATA]")) == "[KPRESENTER-DATA]")
+//     {
+//       for (unsigned int i = 0;i < clipStr.length();i++)
+// 	{
 	  
-	  // start tag
-	  if (clipStr.mid(i,1) == "[")
-	    {
-	      tagStarted = true;
-	      tag = "";
-	    }
+// 	  // start tag
+// 	  if (clipStr.mid(i,1) == "[")
+// 	    {
+// 	      tagStarted = true;
+// 	      tag = "";
+// 	    }
 
-	  // end tag
-	  else if (clipStr.mid(i,1) == "]")
-	    {
-	      if (tagStarted)
-		{
-		  tagStarted = false;
-		  if (tag == "NEW_OBJECT_START")
-		    {
-		      objPtr = new PageObjects;
-		      objPtr->isSelected = true;
-		      objPtr->textObj = 0;
-		    }
-		  else if (tag == "NEW_OBJECT_END")
-		    {
-		      _objNums++;
-		      objPtr->objNum = _objNums;
-		      objPtr->graphObj->hide();
-		      _objList.append(objPtr);
-		      repaint(objPtr->ox,objPtr->oy,
-			      objPtr->ow,objPtr->oh,_objNums,false);
-		      objPtr = 0;
-		    }
-		  else if (tag == "GRAPHOBJ")
-		    {
-		      objPtr->graphObj = new GraphObj(0,"graphObj",objPtr->objType,"");
-		      objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-		    }
-		}
-	    }
+// 	  // end tag
+// 	  else if (clipStr.mid(i,1) == "]")
+// 	    {
+// 	      if (tagStarted)
+// 		{
+// 		  tagStarted = false;
+// 		  if (tag == "NEW_OBJECT_START")
+// 		    {
+// 		      objPtr = new PageObjects;
+// 		      objPtr->isSelected = true;
+// 		      objPtr->textObj = 0;
+// 		    }
+// 		  else if (tag == "NEW_OBJECT_END")
+// 		    {
+// 		      //_objNums++;
+// 		      //objPtr->objNum = _objNums;
+// 		      objPtr->graphObj->hide();
+// 		      _objList.append(objPtr);
+// 		      //repaint(objPtr->ox,objPtr->oy,
+// 		      //      objPtr->ow,objPtr->oh,_objNums,false);
+// 		      objPtr = 0;
+// 		    }
+// 		  else if (tag == "GRAPHOBJ")
+// 		    {
+// 		      objPtr->graphObj = new GraphObj(0,"graphObj",objPtr->objType,"");
+// 		      objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+// 		    }
+// 		}
+// 	    }
 
-	  // start value
-	  else if (clipStr.mid(i,1) == "{")
-	    {
-	      valueStarted = true;
-	      value = "";
-	    }
+// 	  // start value
+// 	  else if (clipStr.mid(i,1) == "{")
+// 	    {
+// 	      valueStarted = true;
+// 	      value = "";
+// 	    }
 
-	  // end value
-	  else if (clipStr.mid(i,1) == "}")
-	    {
-	      if (valueStarted)
-		{
-		  valueStarted = false;
-		  if (tag == "OBJ_TYPE" && objPtr)
-		    objPtr->objType = (ObjType)atoi(value);
-		  else if (tag == "OBJ_X" && objPtr)
-		    objPtr->ox = atoi(value) + diffx;
-		  else if (tag == "ANGLE" && objPtr)
-		    objPtr->angle = atof(value);
-		  else if (tag == "SHADOW_DIRECTION" && objPtr)
-		    objPtr->shadowDirection = (ShadowDirection)atoi(value);
-		  else if (tag == "SHADOW_DISTANCE" && objPtr)
-		    objPtr->shadowDistance = atoi(value);
-		  else if (tag == "SHADOW_RED" && objPtr)
-		    {
-		      color = objPtr->shadowColor;
-		      color.setRgb(atoi(value),color.green(),color.blue());
-		      objPtr->shadowColor = color;
-		    }
-		  else if (tag == "SHADOW_GREEN" && objPtr)
-		    {
-		      color = objPtr->shadowColor;
-		      color.setRgb(color.red(),atoi(value),color.blue());
-		      objPtr->shadowColor = color;
-		    }
-		  else if (tag == "SHADOW_BLUE" && objPtr)
-		    {
-		      color = objPtr->shadowColor;
-		      color.setRgb(color.red(),color.green(),atoi(value));
-		      objPtr->shadowColor = color;
-		    }
-		  else if (tag == "OBJ_Y" && objPtr)
-		    objPtr->oy = atoi(value) + diffy;
-		  else if (tag == "OBJ_W" && objPtr)
-		    objPtr->ow = atoi(value);
-		  else if (tag == "OBJ_H" && objPtr)
-		    objPtr->oh = atoi(value);
-		  else if (tag == "OBJ_PRESNUM" && objPtr)
-		    objPtr->presNum = atoi(value);
-		  else if (tag == "OBJ_EFFECT" && objPtr)
-		    objPtr->effect = (Effect)atoi(value);
-		  else if (tag == "OBJ_EFFECT2" && objPtr)
-		    objPtr->effect2 = (Effect2)atoi(value);
-		  else if (tag == "LINE_TYPE" && objPtr && objPtr->graphObj)
-		    objPtr->graphObj->setLineType((LineType)atoi(value));
-		  else if (tag == "LINE_BEGIN" && objPtr && objPtr->graphObj)
-		    objPtr->graphObj->setLineBegin((LineEnd)atoi(value));
-		  else if (tag == "LINE_END" && objPtr && objPtr->graphObj)
-		    objPtr->graphObj->setLineEnd((LineEnd)atoi(value));
-		  else if (tag == "RECT_TYPE" && objPtr && objPtr->graphObj)
-		    objPtr->graphObj->setRectType((RectType)atoi(value));
-		  else if (tag == "PEN_WIDTH" && objPtr && objPtr->graphObj)
-		    {
-		      pen = objPtr->graphObj->getObjPen();
-		      pen.setWidth(atoi(value));
-		      objPtr->graphObj->setObjPen(pen);
-		    }
-		  else if (tag == "PEN_STYLE" && objPtr && objPtr->graphObj)
-		    {
-		      pen = objPtr->graphObj->getObjPen();
-		      pen.setStyle((PenStyle)atoi(value));
-		      objPtr->graphObj->setObjPen(pen);
-		    }
-		  else if (tag == "PEN_RED" && objPtr && objPtr->graphObj)
-		    {
-		      pen = objPtr->graphObj->getObjPen();
-		      color = pen.color();
-		      color.setRgb(atoi(value),color.green(),color.blue());
-		      pen.setColor(color);
-		      objPtr->graphObj->setObjPen(pen);
-		    }
-		  else if (tag == "PEN_GREEN" && objPtr && objPtr->graphObj)
-		    {
-		      pen = objPtr->graphObj->getObjPen();
-		      color = pen.color();
-		      color.setRgb(color.red(),atoi(value),color.blue());
-		      pen.setColor(color);
-		      objPtr->graphObj->setObjPen(pen);
-		    }
-		  else if (tag == "PEN_BLUE" && objPtr && objPtr->graphObj)
-		    {
-		      pen = objPtr->graphObj->getObjPen();
-		      color = pen.color();
-		      color.setRgb(color.red(),color.green(),atoi(value));
-		      pen.setColor(color);
-		      objPtr->graphObj->setObjPen(pen);
-		    }
-		  else if (tag == "BRUSH_STYLE" && objPtr && objPtr->graphObj)
-		    {
-		      brush = objPtr->graphObj->getObjBrush();
-		      brush.setStyle((BrushStyle)atoi(value));
-		      objPtr->graphObj->setObjBrush(brush);
-		    }
-		  else if (tag == "BRUSH_RED" && objPtr && objPtr->graphObj)
-		    {
-		      brush = objPtr->graphObj->getObjBrush();
-		      color = brush.color();
-		      color.setRgb(atoi(value),color.green(),color.blue());
-		      brush.setColor(color);
-		      objPtr->graphObj->setObjBrush(brush);
-		    }
-		  else if (tag == "BRUSH_GREEN" && objPtr && objPtr->graphObj)
-		    {
-		      brush = objPtr->graphObj->getObjBrush();
-		      color = brush.color();
-		      color.setRgb(color.red(),atoi(value),color.blue());
-		      brush.setColor(color);
-		      objPtr->graphObj->setObjBrush(brush);
-		    }
-		  else if (tag == "BRUSH_BLUE" && objPtr && objPtr->graphObj)
-		    {
-		      brush = objPtr->graphObj->getObjBrush();
-		      color = brush.color();
-		      color.setRgb(color.red(),color.green(),atoi(value));
-		      brush.setColor(color);
-		      objPtr->graphObj->setObjBrush(brush);
-		    }
-		  else if (tag == "FILENAME" && objPtr && objPtr->graphObj)
-		    objPtr->graphObj->setFileName(value);
-		  else if (tag == "RND_X" && objPtr && objPtr->graphObj)
-		    objPtr->graphObj->setRnds(atoi(value),objPtr->graphObj->getRndY());
-		  else if (tag == "RND_Y" && objPtr && objPtr->graphObj)
-		    objPtr->graphObj->setRnds(objPtr->graphObj->getRndX(),atoi(value));
-		}
-	    }
+// 	  // end value
+// 	  else if (clipStr.mid(i,1) == "}")
+// 	    {
+// 	      if (valueStarted)
+// 		{
+// 		  valueStarted = false;
+// 		  if (tag == "OBJ_TYPE" && objPtr)
+// 		    objPtr->objType = (ObjType)atoi(value);
+// 		  else if (tag == "OBJ_X" && objPtr)
+// 		    objPtr->ox = atoi(value) + diffx;
+// 		  else if (tag == "ANGLE" && objPtr)
+// 		    objPtr->angle = atof(value);
+// 		  else if (tag == "SHADOW_DIRECTION" && objPtr)
+// 		    objPtr->shadowDirection = (ShadowDirection)atoi(value);
+// 		  else if (tag == "SHADOW_DISTANCE" && objPtr)
+// 		    objPtr->shadowDistance = atoi(value);
+// 		  else if (tag == "SHADOW_RED" && objPtr)
+// 		    {
+// 		      color = objPtr->shadowColor;
+// 		      color.setRgb(atoi(value),color.green(),color.blue());
+// 		      objPtr->shadowColor = color;
+// 		    }
+// 		  else if (tag == "SHADOW_GREEN" && objPtr)
+// 		    {
+// 		      color = objPtr->shadowColor;
+// 		      color.setRgb(color.red(),atoi(value),color.blue());
+// 		      objPtr->shadowColor = color;
+// 		    }
+// 		  else if (tag == "SHADOW_BLUE" && objPtr)
+// 		    {
+// 		      color = objPtr->shadowColor;
+// 		      color.setRgb(color.red(),color.green(),atoi(value));
+// 		      objPtr->shadowColor = color;
+// 		    }
+// 		  else if (tag == "OBJ_Y" && objPtr)
+// 		    objPtr->oy = atoi(value) + diffy;
+// 		  else if (tag == "OBJ_W" && objPtr)
+// 		    objPtr->ow = atoi(value);
+// 		  else if (tag == "OBJ_H" && objPtr)
+// 		    objPtr->oh = atoi(value);
+// 		  else if (tag == "OBJ_PRESNUM" && objPtr)
+// 		    objPtr->presNum = atoi(value);
+// 		  else if (tag == "OBJ_EFFECT" && objPtr)
+// 		    objPtr->effect = (Effect)atoi(value);
+// 		  else if (tag == "OBJ_EFFECT2" && objPtr)
+// 		    objPtr->effect2 = (Effect2)atoi(value);
+// 		  else if (tag == "LINE_TYPE" && objPtr && objPtr->graphObj)
+// 		    objPtr->graphObj->setLineType((LineType)atoi(value));
+// 		  else if (tag == "LINE_BEGIN" && objPtr && objPtr->graphObj)
+// 		    objPtr->graphObj->setLineBegin((LineEnd)atoi(value));
+// 		  else if (tag == "LINE_END" && objPtr && objPtr->graphObj)
+// 		    objPtr->graphObj->setLineEnd((LineEnd)atoi(value));
+// 		  else if (tag == "RECT_TYPE" && objPtr && objPtr->graphObj)
+// 		    objPtr->graphObj->setRectType((RectType)atoi(value));
+// 		  else if (tag == "PEN_WIDTH" && objPtr && objPtr->graphObj)
+// 		    {
+// 		      pen = objPtr->graphObj->getObjPen();
+// 		      pen.setWidth(atoi(value));
+// 		      objPtr->graphObj->setObjPen(pen);
+// 		    }
+// 		  else if (tag == "PEN_STYLE" && objPtr && objPtr->graphObj)
+// 		    {
+// 		      pen = objPtr->graphObj->getObjPen();
+// 		      pen.setStyle((PenStyle)atoi(value));
+// 		      objPtr->graphObj->setObjPen(pen);
+// 		    }
+// 		  else if (tag == "PEN_RED" && objPtr && objPtr->graphObj)
+// 		    {
+// 		      pen = objPtr->graphObj->getObjPen();
+// 		      color = pen.color();
+// 		      color.setRgb(atoi(value),color.green(),color.blue());
+// 		      pen.setColor(color);
+// 		      objPtr->graphObj->setObjPen(pen);
+// 		    }
+// 		  else if (tag == "PEN_GREEN" && objPtr && objPtr->graphObj)
+// 		    {
+// 		      pen = objPtr->graphObj->getObjPen();
+// 		      color = pen.color();
+// 		      color.setRgb(color.red(),atoi(value),color.blue());
+// 		      pen.setColor(color);
+// 		      objPtr->graphObj->setObjPen(pen);
+// 		    }
+// 		  else if (tag == "PEN_BLUE" && objPtr && objPtr->graphObj)
+// 		    {
+// 		      pen = objPtr->graphObj->getObjPen();
+// 		      color = pen.color();
+// 		      color.setRgb(color.red(),color.green(),atoi(value));
+// 		      pen.setColor(color);
+// 		      objPtr->graphObj->setObjPen(pen);
+// 		    }
+// 		  else if (tag == "BRUSH_STYLE" && objPtr && objPtr->graphObj)
+// 		    {
+// 		      brush = objPtr->graphObj->getObjBrush();
+// 		      brush.setStyle((BrushStyle)atoi(value));
+// 		      objPtr->graphObj->setObjBrush(brush);
+// 		    }
+// 		  else if (tag == "BRUSH_RED" && objPtr && objPtr->graphObj)
+// 		    {
+// 		      brush = objPtr->graphObj->getObjBrush();
+// 		      color = brush.color();
+// 		      color.setRgb(atoi(value),color.green(),color.blue());
+// 		      brush.setColor(color);
+// 		      objPtr->graphObj->setObjBrush(brush);
+// 		    }
+// 		  else if (tag == "BRUSH_GREEN" && objPtr && objPtr->graphObj)
+// 		    {
+// 		      brush = objPtr->graphObj->getObjBrush();
+// 		      color = brush.color();
+// 		      color.setRgb(color.red(),atoi(value),color.blue());
+// 		      brush.setColor(color);
+// 		      objPtr->graphObj->setObjBrush(brush);
+// 		    }
+// 		  else if (tag == "BRUSH_BLUE" && objPtr && objPtr->graphObj)
+// 		    {
+// 		      brush = objPtr->graphObj->getObjBrush();
+// 		      color = brush.color();
+// 		      color.setRgb(color.red(),color.green(),atoi(value));
+// 		      brush.setColor(color);
+// 		      objPtr->graphObj->setObjBrush(brush);
+// 		    }
+// 		  else if (tag == "FILENAME" && objPtr && objPtr->graphObj)
+// 		    objPtr->graphObj->setFileName(value);
+// 		  else if (tag == "RND_X" && objPtr && objPtr->graphObj)
+// 		    objPtr->graphObj->setRnds(atoi(value),objPtr->graphObj->getRndY());
+// 		  else if (tag == "RND_Y" && objPtr && objPtr->graphObj)
+// 		    objPtr->graphObj->setRnds(objPtr->graphObj->getRndX(),atoi(value));
+// 		}
+// 	    }
 	  
-	  // get char
-	  else
-	    {
-	      if (valueStarted)
-		value += clipStr.mid(i,1);
-	      else if (tagStarted)
-		tag += clipStr.mid(i,1);
-	    }
-	}
-    }
-}
-
-/*======================= rotate objects =========================*/
-void KPresenterDocument_impl::rotateObjs()
-{
+// 	  // get char
+// 	  else
+// 	    {
+// 	      if (valueStarted)
+// 		value += clipStr.mid(i,1);
+// 	      else if (tagStarted)
+// 		tag += clipStr.mid(i,1);
+// 	    }
+// 	}
+//     }
 }
 
 /*====================== replace objects =========================*/
 void KPresenterDocument_impl::replaceObjs()
 {
-  for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
+  KPObject *kpobject = 0;
+  int ox,oy;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
-      objPtr->ox = (objPtr->ox / _rastX) * _rastX;
-      objPtr->oy = (objPtr->oy / _rastY) * _rastY;
-      if (objPtr->objType == OT_RECT && objPtr->graphObj->getRectType() == RT_ROUND)
-	objPtr->graphObj->setRnds(_xRnd,_yRnd);
+      kpobject = objectList()->at(i);
+      ox = kpobject->getOrig().x();
+      oy = kpobject->getOrig().y();
+
+      ox = (ox / _rastX) * _rastX;
+      oy = (oy / _rastY) * _rastY;
+      kpobject->setOrig(ox,oy);
+
+      if (kpobject->getType() == OT_RECT && dynamic_cast<KPRectObject*>(kpobject)->getRectType() == RT_ROUND)
+	dynamic_cast<KPRectObject*>(kpobject)->setRnds(_xRnd,_yRnd);
     }
 }
 
-/*==================== convert picture to string =================*/
-QString KPresenterDocument_impl::toPixString(Background *_page,QString _filename)
+/*========================= restore background ==================*/
+void KPresenterDocument_impl::restoreBackground(int pageNum)
 {
-  if (true) // if save pic in file
-    {
-      int ind = isInPixCache(_filename);
-      if (ind != -1)
-	return pixCache.at(ind)->pix_string;
-      else
-	{
-	  if (!_page->pix_data.isEmpty())
-	    {
-// 	      QString str = qstrdup(_page->pix_data);
-// 	      str.replace(QRegExp("\x22"),"\xfe");
-
-// 	      PixCache *pc = new PixCache;
-// 	      pc->filename = qstrdup(_filename);
-// 	      pc->pix_string = qstrdup(str);
-// 	      pixCache.append(pc);
-
-// 	      return str;
-	      return _page->pix_data;
-	    }
-
-	  QPixmap pix;
-	  pix.load(_filename);
-	  
-	  pix.save("/tmp/kpresenter_tmp.xpm","XPM");
-	  
-	  FILE *f = fopen("/tmp/kpresenter_tmp.xpm","r");
-	  if (f == 0L)
-	    {
-	      warning("Could not open pixmap\n");
-	      return QString();
-	    }
-	  
-	  char buffer[2048];
-	  
-	  QString str;
-	  str = "";
-	  QString str2;
-	  while(!feof(f))
-	    {
-	      int i = fread(buffer,1,2047,f);
-	      if (i > 0)
-		{
-		  buffer[i] = 0;
-		  str2 = buffer;
-		  str2 = str2.replace(QRegExp("\x22"),"\x1");
-		  str += str2;
-		}
-	    }
-	  
-	  fclose(f);
-    
-	  PixCache *pc = new PixCache;
-	  pc->filename = qstrdup(_filename);
-	  pc->pix_string = qstrdup(str);
-	  pixCache.append(pc);
-	  
-	  return str;
-	}
-    }
-  else
-    return QString();
+  if (pageNum < static_cast<int>(_backgroundList.count()))
+    backgroundList()->at(pageNum)->restore();
 }
-
-/*===================== search pix in pixcache ===================*/
-int KPresenterDocument_impl::isInPixCache(QString _filename)
-{
-  if (!pixCache.isEmpty())
-    {
-      PixCache *pc;
-      for (pc = pixCache.first();pc != 0;pc = pixCache.next())
-	if (pc->filename == _filename) return pixCache.at();
-
-      return -1;
-    }
-  else return -1;
-}
-
-/*====================== revert done =============================*/
-void KPresenterDocument_impl::undoRedoChange(QString _undo,bool _eundo,QString _redo,bool _eredo)
-{
-  if (!m_lstViews.isEmpty())
-    {
-      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
-	{
-	  viewPtr->changeUndo(_undo,_eundo);
-	  viewPtr->changeRedo(_redo,_eredo);
-	  viewPtr->repaint(false);
-	}
-    }
-
-  m_bModified = true;
-}
-/*======================== get real bounding rect ===============*/
-QRect KPresenterDocument_impl::getRealBoundingRect(QRect r,int objnum)
-{
-  if (objnum < (int)_objList.count())
-    {
-      objPtr = _objList.at(objnum);
-
-      if (objPtr->shadowDistance > 0)
-	{
-	  int sx = r.x(),sy = r.y();
-	  getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
-	  QRect r2(sx,sy,r.width(),r.height());
-	  r = r.unite(r2);
-	}
-
-      if (objPtr->angle == 0.0)
-	return r;
-      else
-	{
-	  QWMatrix mtx;
-	  mtx.rotate(objPtr->angle);
-	  QRect rr = mtx.map(r);
-
-	  int diffw = abs(rr.width() - r.width());
-	  int diffh = abs(rr.height() - r.height());
-
-	  return QRect(r.x() - diffw,r.y() - diffh,
-		       r.width() + diffw * 2,r.height() + diffh * 2);
-	}
-    }
-
-  return r;
-}
-
-/*========================= get shadow coordinates ==============*/
-void KPresenterDocument_impl::getShadowCoords(int& _x,int& _y,ShadowDirection shadowDirection,int shadowDistance)
-{
-  int sx = 0,sy = 0;
-
-  switch (shadowDirection)
-    {
-    case SD_LEFT_UP:
-      {
-	sx = _x - shadowDistance;
-	sy = _y - shadowDistance;
-      } break;
-    case SD_UP:
-      {
-	sx = _x;
-	sy = _y - shadowDistance;
-      } break;
-    case SD_RIGHT_UP:
-      {
-	sx = _x + shadowDistance;
-	sy = _y - shadowDistance;
-      } break;
-    case SD_RIGHT:
-      {
-	sx = _x + shadowDistance;
-	sy = _y;
-      } break;
-    case SD_RIGHT_BOTTOM:
-      {
-	sx = _x + shadowDistance;
-	sy = _y + shadowDistance;
-      } break;
-    case SD_BOTTOM:
-      {
-	sx = _x;
-	sy = _y + shadowDistance;
-      } break;
-    case SD_LEFT_BOTTOM:
-      {
-	sx = _x - shadowDistance;
-	sy = _y + shadowDistance;
-      } break;
-    case SD_LEFT:
-      {
-	sx = _x - shadowDistance;
-	sy = _y;
-      } break;
-    }
-
-  _x = sx; _y = sy;
-}
-
-
 

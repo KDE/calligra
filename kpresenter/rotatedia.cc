@@ -244,15 +244,15 @@ void RotateDia::degCustomclicked()
   custom->setEnabled(true);
 
   QString str = custom->text();
-  rPreview->setAngle(atof((const char*)str));
-  _angle = atof((const char*)str);
+  rPreview->setAngle(atof(str.data()));
+  _angle = atof(str.data());
 }
 
 /*======================= deg custom changed =====================*/
 void RotateDia::degCustomChanged(const char* t)
 {
-  rPreview->setAngle(atof((const char*)t));
-  _angle = atof((const char*)t);
+  rPreview->setAngle(atof(t));
+  _angle = atof(t);
 }
 
 

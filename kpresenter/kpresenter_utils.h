@@ -15,9 +15,6 @@
 #ifndef _kpresenter_utils_h__
 #define _kpresenter_utils_h__
 
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qregexp.h>
 #include <qpainter.h>
 #include <qpoint.h>
 #include <qpntarry.h>
@@ -26,9 +23,6 @@
 
 #include "global.h"
 
-QString load_pixmap(const char *_file);
-QString load_pixmap_native_format(const char *_file);
-QPixmap string_to_pixmap(const char *_pixmap);
 void drawFigure(LineEnd figure,QPainter* painter,QPoint coord,QColor color,int _w,float angle);
 QSize getBoundingSize(LineEnd figure,int _w);
 

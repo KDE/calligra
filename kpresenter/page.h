@@ -41,12 +41,12 @@
 #include <qdatetm.h>
 
 #include "ktextobject.h"
-#include "graphobj.h"
 #include "global.h"
 #include "qwmf.h"
-#include "undo_redo.h"
-
-#include <dither.h>
+#include "kpobject.h"
+#include "kpbackground.h"
+#include "kpclipartobject.h"
+#include "kppixmapobject.h"
 
 class KPresenterView_impl;
 class KPresenterDocument_impl;
@@ -77,15 +77,15 @@ public:
   void selectAllObj();
   void deSelectAllObj();
   void selectObj(int num);      
+  void selectObj(KPObject*);      
   void deSelectObj(int num);
+  void deSelectObj(KPObject*);
   void setTextFont(QFont*);
   void setTextColor(QColor*);
   void setTextAlign(TxtParagraph::HorzAlign);
   KTextObject* kTxtObj() 
-    {return ((editNum != 0 && getObject(editNum)->objType == OT_TEXT) ? getObject(editNum)->textObj : 0);}
-
-  static void _drawBackColor(QColor c1,QColor c2,BCType bct,QPainter* p,QSize s)
-    {Page *pg = new Page(0,"",0); pg->drawBackColor(c1,c2,bct,p,s); delete pg;}
+    { return ((editNum != -1 && objectList()->at(editNum)->getType() == OT_TEXT) ?
+	      dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject() : 0); }
 
   void startScreenPresentation(bool);
   void stopScreenPresentation();
@@ -111,7 +111,6 @@ public slots:
   void deleteObjs() {view->KPresenterDoc()->deleteObjs(); setCursor(arrowCursor);}
   void rotateObjs() {view->extraRotate(); setCursor(arrowCursor);}
   void shadowObjs() {view->extraShadow(); setCursor(arrowCursor);}
-  void restoreBackColor(unsigned int);
   
 protected:
   
@@ -125,18 +124,14 @@ protected:
   // functions for displaying
   void paintEvent(QPaintEvent*);    
   void paintBackground(QPainter*,QRect);
-  void paintObjects(QPainter*,QRect);   
+  void drawBackground(QPainter*,QRect);
+  void drawObjects(QPainter*,QRect);
   void mousePressEvent(QMouseEvent *e); 
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void mouseDoubleClickEvent(QMouseEvent *e);
   void resizeEvent(QResizeEvent *e);
   int getObjectAt(int x,int y); 
-  struct PageObjects* getObject(int num);
-  void resizeObjTop(int diff,PageObjects* obj);
-  void resizeObjLeft(int diff,PageObjects* obj);
-  void resizeObjBot(int diff,PageObjects* obj);
-  void resizeObjRight(int diff,PageObjects* obj);
   void focusInEvent(QFocusEvent*) {}
   void focusOutEvent(QFocusEvent*) {}
 
@@ -144,8 +139,8 @@ protected:
   void setupMenus();
 
   // get - set data
-  QList<Background> *pageList() {return view->KPresenterDoc()->pageList();}
-  QList<PageObjects> *objList() {return view->KPresenterDoc()->objList();}
+  QList<KPBackGround> *backgroundList() {return view->KPresenterDoc()->backgroundList();}
+  QList<KPObject> *objectList() {return view->KPresenterDoc()->objectList();}
   unsigned int objNums() {return view->KPresenterDoc()->objNums();}
   int diffx() {return view->getDiffX();}
   int diffy() {return view->getDiffY();}
@@ -160,47 +155,29 @@ protected:
   unsigned int pageNums() {return view->KPresenterDoc()->getPageNums();}
   int getPageOfObj(int i,float fakt = 1.0) {return view->KPresenterDoc()->getPageOfObj(i,diffx(),diffy(),fakt);}
 
-  void drawBackColor(QColor,QColor,BCType,QPainter*,QSize);
   void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(false);}
-  void _repaint(int _x,int _y,int _w,int _h,int o,bool erase=true)
-    {view->KPresenterDoc()->repaint(_x+diffx(),_y+diffy(),_w,_h,o,false);}
-  void _repaint(int _x,int _y,int _w,int _h,PageObjects *o,bool erase=true)
-    {view->KPresenterDoc()->repaint(_x+diffx(),_y+diffy(),_w,_h,o,false);}
+  void _repaint(QRect r) {view->KPresenterDoc()->repaint(r);}
+  void _repaint(KPObject *o) {view->KPresenterDoc()->repaint(o);}
 
   void drawPageInPix(QPixmap&,int);
   void drawPageInPainter(QPainter*,int,QRect);
   void changePages(QPixmap,QPixmap,PageEffect);
   void doObjEffects();
-  void drawObject(PageObjects*,QPixmap*,int,int,int,int,int,int);
-  int isInPicCache(int,int);
-
-  void clearUndoList();
-  void appendUndoList(PageObjects*);
-  void clearUndoListNew();
-  void appendUndoListNew(PageObjects*);
+  void drawObject(KPObject*,QPixmap*,int,int,int,int,int,int);
 
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
-  Background *pagePtr;            
-  PageObjects *objPtr,*_page_obj_,*_page_obj_new_;
-  QList<PageObjects> *_page_obj_list_,*_page_obj_list_new_;
-  unsigned int oldx,oldy;                             
   bool mousePressed;              
-  unsigned int modType;                    
+  ModifyType modType;                    
   unsigned int oldMx,oldMy;                
-  unsigned int resizeObjNum,editNum;
-  bool drawBack;                  
+  int resizeObjNum,editNum;
   bool fillBlack;
-  GraphObj *graphPtr;
   KPresenterView_impl *view;
   bool editMode,goingBack,drawMode;
   unsigned int currPresPage,currPresStep,subPresStep;
   float _presFakt;
   QList<int> presStepList;
-  QList<PicCache> picCache;
   int PM_DM,PM_SM;
-  bool _clear_undo_list_,_append_undo_list_,_assign_page_obj_;
-  int firstX,firstY;
 
 private slots:
 

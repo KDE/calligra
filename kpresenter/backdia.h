@@ -41,6 +41,8 @@
 #include "qwmf.h"
 #include "global.h"
 
+#include "kpgradient.h"
+
 #ifndef min
 #define min(a,b) ((a)<(b)?(a):(b))
 #endif
@@ -63,8 +65,8 @@ public:
   ~ClipPreview();
 
   // get - set clipart
-  void setClipart(const char*);
-  const char* getClipart() {return (const char*)fileName;}
+  void setClipart(QString);
+  QString getClipart() {return fileName;}
 
 protected:
 
@@ -94,7 +96,7 @@ public:
   BackDia(QWidget* parent=0,const char* name=0,    
 	  BackType backType=BT_COLOR,QColor backColor1=white,
 	  QColor backColor2=white,BCType _bcType=BCT_PLAIN,
-	  const char *backPic=0,const char *backClip=0,
+	  QString backPic=0,QString backClip=0,
 	  BackView backPicView=BV_TILED);
   ~BackDia();                                      
   
@@ -103,9 +105,9 @@ public:
   QColor getBackColor2() {return color2Choose->color();}     
   BCType getBackColorType() {return bcType;}
   BackType getBackType();
-  const char *getBackPic() {return chosenPic;}
-  const char *getBackClip() {return chosenClip;}
-  BackView getBPicView();
+  QString getBackPixFilename() {return chosenPic;}
+  QString getBackClipFilename() {return chosenClip;}
+  BackView getBackView();
 
 private:
 
@@ -120,8 +122,8 @@ private:
   KColorButton *color1Choose,*color2Choose;
 
   // values
-  char *chosenPic;
-  char *chosenClip;
+  QString chosenPic;
+  QString chosenClip;
   ClipPreview *clipPreview;
   BCType bcType;
   

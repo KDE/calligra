@@ -293,7 +293,7 @@ void StyleDia::setLineBegin(LineEnd lb)
 {
   lineBegin = lb;
   penPrev->setLineBegin(lineBegin);
-  clineBegin->setCurrentItem((int)lineBegin);
+  clineBegin->setCurrentItem(static_cast<int>(lineBegin));
 }
 
 /*======================== set line end ===========================*/
@@ -301,7 +301,7 @@ void StyleDia::setLineEnd(LineEnd le)
 {
   lineEnd = le;
   penPrev->setLineEnd(lineEnd);
-  clineEnd->setCurrentItem((int)lineEnd);
+  clineEnd->setCurrentItem(static_cast<int>(lineEnd));
 }
 
 /*====================== change pen-color =========================*/

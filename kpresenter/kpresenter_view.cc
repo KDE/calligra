@@ -171,13 +171,11 @@ CORBA::Boolean KPresenterView_impl::printDlg()
 /*========================== edit undo ==========================*/
 void KPresenterView_impl::editUndo()
 {
-  m_pKPresenterDoc->undo();
 }
 
 /*========================== edit redo ==========================*/
 void KPresenterView_impl::editRedo()
 {
-  m_pKPresenterDoc->redo();
 }
 
 /*========================== edit cut ===========================*/
@@ -299,7 +297,7 @@ void KPresenterView_impl::insertPicture()
 					      "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
 					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
 
-  if (!file.isEmpty()) m_pKPresenterDoc->insertPicture((const char*)file,xOffset,yOffset);
+  if (!file.isEmpty()) m_pKPresenterDoc->insertPicture(file.data(),xOffset,yOffset);
 
 //   QEvent ev(Event_Leave);
 //   QMouseEvent mev(Event_MouseButtonRelease,
@@ -313,7 +311,7 @@ void KPresenterView_impl::insertClipart()
 {
   page->deSelectAllObj();
   QString file = KFileDialog::getOpenFileName(0,i18n("*.WMF *.wmf|Windows Metafiles"),0);
-  if (!file.isEmpty()) m_pKPresenterDoc->insertClipart((const char*)file,xOffset,yOffset);
+  if (!file.isEmpty()) m_pKPresenterDoc->insertClipart(file.data(),xOffset,yOffset);
 
 //   QEvent ev(Event_Leave);
 //   QMouseEvent mev(Event_MouseButtonRelease,
@@ -389,7 +387,6 @@ void KPresenterView_impl::insertObject()
   if (!pe) return;
   
   m_pKPresenterDoc->insertObject(QRect(10,10,150,150),pe->name(),xOffset,yOffset);
-  //  startRectSelection(pe->name());
 }
 
 /*===================== extra pen and brush =====================*/
@@ -444,7 +441,7 @@ void KPresenterView_impl::extraRotate()
       rotateDia->setMinimumSize(rotateDia->width(),rotateDia->height());
       rotateDia->setCaption(i18n("KPresenter - Rotate"));
       QObject::connect(rotateDia,SIGNAL(rotateDiaOk()),this,SLOT(rotateOk()));
-      rotateDia->setAngle(m_pKPresenterDoc->getSelectedObj()->angle);
+      rotateDia->setAngle(m_pKPresenterDoc->getSelectedObj()->getAngle());
       rotateDia->show();
     }
 }
@@ -467,9 +464,9 @@ void KPresenterView_impl::extraShadow()
       shadowDia->setMinimumSize(shadowDia->width(),shadowDia->height());
       shadowDia->setCaption(i18n("KPresenter - Shadow"));
       QObject::connect(shadowDia,SIGNAL(shadowDiaOk()),this,SLOT(shadowOk()));
-      shadowDia->setShadowDirection(m_pKPresenterDoc->getSelectedObj()->shadowDirection);
-      shadowDia->setShadowDistance(m_pKPresenterDoc->getSelectedObj()->shadowDistance);
-      shadowDia->setShadowColor(m_pKPresenterDoc->getSelectedObj()->shadowColor);
+      shadowDia->setShadowDirection(m_pKPresenterDoc->getSelectedObj()->getShadowDirection());
+      shadowDia->setShadowDistance(m_pKPresenterDoc->getSelectedObj()->getShadowDistance());
+      shadowDia->setShadowColor(m_pKPresenterDoc->getSelectedObj()->getShadowColor());
       shadowDia->show();
     }
 }
@@ -484,16 +481,16 @@ void KPresenterView_impl::extraBackground()
       delete backDia;
       backDia = 0;
     }
-  backDia = new BackDia(0,"InfoDia",m_pKPresenterDoc->getBackType(getCurrPgNum()),
-			m_pKPresenterDoc->getBackColor1(getCurrPgNum()),
-			m_pKPresenterDoc->getBackColor2(getCurrPgNum()),
-			m_pKPresenterDoc->getBackColorType(getCurrPgNum()),
-			m_pKPresenterDoc->getBackPic(getCurrPgNum()),
-			m_pKPresenterDoc->getBackClip(getCurrPgNum()),
-			m_pKPresenterDoc->getBPicView(getCurrPgNum()));
+  backDia = new BackDia(0,"InfoDia",m_pKPresenterDoc->getBackType(getCurrPgNum() - 1),
+			m_pKPresenterDoc->getBackColor1(getCurrPgNum() - 1),
+			m_pKPresenterDoc->getBackColor2(getCurrPgNum() - 1),
+			m_pKPresenterDoc->getBackColorType(getCurrPgNum() - 1),
+			m_pKPresenterDoc->getBackPixFilename(getCurrPgNum() - 1),
+			m_pKPresenterDoc->getBackClipFilename(getCurrPgNum() - 1),
+			m_pKPresenterDoc->getBackView(getCurrPgNum() - 1));
   backDia->setMaximumSize(backDia->width(),backDia->height());
   backDia->setMinimumSize(backDia->width(),backDia->height());
-  backDia->setCaption(klocale->translate(i18n("KPresenter - Page Background")));
+  backDia->setCaption(i18n("KPresenter - Page Background"));
   QObject::connect(backDia,SIGNAL(backOk(bool)),this,SLOT(backOk(bool)));
   backDia->show();
 }
@@ -546,7 +543,7 @@ void KPresenterView_impl::screenConfigPages()
     }
   pgConfDia = new PgConfDia(0,"PageConfig",KPresenterDoc()->spInfinitLoop(),
 			    KPresenterDoc()->spManualSwitch(),getCurrPgNum(),
-			    KPresenterDoc()->pageList()->at(getCurrPgNum()-1)->pageEffect);
+			    KPresenterDoc()->backgroundList()->at(getCurrPgNum() - 1)->getPageEffect());
   pgConfDia->setMaximumSize(pgConfDia->width(),pgConfDia->height());
   pgConfDia->setMinimumSize(pgConfDia->width(),pgConfDia->height());
   pgConfDia->setCaption("KPresenter - Page Configuration for Screenpresentations");
@@ -611,10 +608,10 @@ void KPresenterView_impl::screenStart()
 	{
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 
-	  float _presFaktW = (float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() > 1.0 ? 
-	    (float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() : 1.0;
-	  float _presFaktH = (float)page->height() / (float)KPresenterDoc()->getPageSize(1,0,0).height() > 1.0 ? 
-	    (float)page->height() / (float)KPresenterDoc()->getPageSize(1,0,0).height() : 1.0;
+	  float _presFaktW = static_cast<float>(page->width()) / static_cast<float>(KPresenterDoc()->getPageSize(0,0,0).width()) > 1.0 ? 
+	    static_cast<float>(page->width()) / static_cast<float>(KPresenterDoc()->getPageSize(0,0,0).width()) : 1.0;
+	  float _presFaktH = static_cast<float>(page->height()) / static_cast<float>(KPresenterDoc()->getPageSize(0,0,0).height()) > 
+	    1.0 ? static_cast<float>(page->height()) / static_cast<float>(KPresenterDoc()->getPageSize(0,0,0).height()) : 1.0;
 	  float _presFakt = min(_presFaktW,_presFaktH);
 	  page->setPresFakt(_presFakt);
 	}
@@ -629,10 +626,10 @@ void KPresenterView_impl::screenStart()
       xOffset = 10;
       yOffset = 10;
 
-      if (page->width() > KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).width())
- 	xOffset -= (page->width() - KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).width()) / 2;
-      if (page->height() > KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height())
- 	yOffset -= (page->height() - KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()) / 2;
+      if (page->width() > KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).width())
+ 	xOffset -= (page->width() - KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).width()) / 2;
+      if (page->height() > KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height())
+ 	yOffset -= (page->height() - KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()) / 2;
 
       vert->setEnabled(false);
       horz->setEnabled(false);
@@ -728,7 +725,7 @@ void KPresenterView_impl::screenPrev()
     {
       if (page->pPrev(true))
 	{
-	  yOffset -= KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()+10; 
+	  yOffset -= KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()+10; 
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  page->repaint(false);
 	  page->setFocus();
@@ -743,7 +740,7 @@ void KPresenterView_impl::screenPrev()
       p.end();
     }
   else
-    vert->setValue(yOffset - KPresenterDoc()->getPageSize(1,0,0).height() - 10); 
+    vert->setValue(yOffset - KPresenterDoc()->getPageSize(0,0,0).height() - 10); 
 }
 
 /*========================== screen next ========================*/
@@ -753,7 +750,7 @@ void KPresenterView_impl::screenNext()
     {
       if (page->pNext(true))
 	{
-	  yOffset += KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()+10; 
+	  yOffset += KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()+10; 
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  //page->repaint(false);
 	  page->setFocus();
@@ -768,7 +765,7 @@ void KPresenterView_impl::screenNext()
       p.end();
     }
   else
-    vert->setValue(yOffset + KPresenterDoc()->getPageSize(1,0,0).height() + 10); 
+    vert->setValue(yOffset + KPresenterDoc()->getPageSize(0,0,0).height() + 10); 
 }
 
 /*========================== screen last ========================*/
@@ -1059,12 +1056,7 @@ void KPresenterView_impl::createGUI()
   m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,true);
  
   if (m_pKPresenterDoc && page)
-    {
-      QObject::connect(m_pKPresenterDoc,SIGNAL(restoreBackColor(unsigned int)),page,SLOT(restoreBackColor(unsigned int)));
-      for (unsigned int i = 0;i < KPresenterDoc()->pageList()->count();i++)
-	page->restoreBackColor(i);
-      QObject::connect(page,SIGNAL(stopPres()),this,SLOT(stopPres()));
-   }
+    QObject::connect(page,SIGNAL(stopPres()),this,SLOT(stopPres()));
 
   resizeEvent(0L);
 
@@ -1190,33 +1182,30 @@ void KPresenterView_impl::backOk(bool takeGlobal)
 
   if (!takeGlobal)
     {
-      m_pKPresenterDoc->setBackColor(getCurrPgNum(),backDia->getBackColor1(),
+      m_pKPresenterDoc->setBackColor(getCurrPgNum() - 1,backDia->getBackColor1(),
 				     backDia->getBackColor2(),
 				     backDia->getBackColorType());
-      m_pKPresenterDoc->setBackType(getCurrPgNum(),backDia->getBackType());
-      m_pKPresenterDoc->setBPicView(getCurrPgNum(),backDia->getBPicView());
-      m_pKPresenterDoc->setBackPic(getCurrPgNum(),backDia->getBackPic());
-      m_pKPresenterDoc->setBackClip(getCurrPgNum(),backDia->getBackClip());
-      m_pKPresenterDoc->setBPicView(getCurrPgNum(),backDia->getBPicView());
-      page->restoreBackColor(getCurrPgNum()-1);
+      m_pKPresenterDoc->setBackType(getCurrPgNum() - 1,backDia->getBackType());
+      m_pKPresenterDoc->setBackView(getCurrPgNum() - 1,backDia->getBackView());
+      m_pKPresenterDoc->setBackPixFilename(getCurrPgNum() - 1,backDia->getBackPixFilename());
+      m_pKPresenterDoc->setBackClipFilename(getCurrPgNum() - 1,backDia->getBackClipFilename());
+      m_pKPresenterDoc->restoreBackground(getCurrPgNum() - 1);
     }
   else
     {
-      for (i = 1;i <= m_pKPresenterDoc->getPageNums();i++)
+      for (i = 0;i < m_pKPresenterDoc->getPageNums();i++)
 	{
 	  m_pKPresenterDoc->setBackColor(i,backDia->getBackColor1(),
 					 backDia->getBackColor2(),
 					 backDia->getBackColorType());
-	  m_pKPresenterDoc->setBPicView(i,backDia->getBPicView());
+	  m_pKPresenterDoc->setBackView(i,backDia->getBackView());
 	  m_pKPresenterDoc->setBackType(i,backDia->getBackType());
-	  m_pKPresenterDoc->setBackPic(i,backDia->getBackPic());
-	  m_pKPresenterDoc->setBackClip(i,backDia->getBackClip());
-	  m_pKPresenterDoc->setBPicView(i,backDia->getBPicView());
+	  m_pKPresenterDoc->setBackPixFilename(i,backDia->getBackPixFilename());
+	  m_pKPresenterDoc->setBackClipFilename(i,backDia->getBackClipFilename());
 	}
 
       for (i = 0;i < m_pKPresenterDoc->getPageNums();i++)
-	page->restoreBackColor(i);
-
+	m_pKPresenterDoc->restoreBackground(i);
     }
 
   KPresenterDoc()->repaint(true);
@@ -1230,7 +1219,7 @@ void KPresenterView_impl::afChooseOk(const char* c)
   QString fileName(afDir + "/kpresenter/autoforms/" + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".atf");
   
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertAutoform(pen,brush,lineBegin,lineEnd,(const char*)fileName,xOffset,yOffset);
+  m_pKPresenterDoc->insertAutoform(pen,brush,lineBegin,lineEnd,fileName,xOffset,yOffset);
 }
 
 /*=========== take changes for style dialog =====================*/
@@ -1271,7 +1260,7 @@ void KPresenterView_impl::pgConfOk()
 {
   KPresenterDoc()->setManualSwitch(pgConfDia->getManualSwitch());
   KPresenterDoc()->setInfinitLoop(pgConfDia->getInfinitLoop());
-  KPresenterDoc()->setPageEffect(getCurrPgNum(),pgConfDia->getPageEffect());
+  KPresenterDoc()->setPageEffect(getCurrPgNum() - 1,pgConfDia->getPageEffect());
 }
 
 /*=================== effect dialog ok ===========================*/
@@ -1282,13 +1271,13 @@ void KPresenterView_impl::effectOk()
 /*=================== rotate dialog ok ===========================*/
 void KPresenterView_impl::rotateOk()
 {
-  PageObjects* objPtr;
-
-  for (int i = 0;i < (int)KPresenterDoc()->objList()->count();i++)
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(KPresenterDoc()->objectList()->count());i++)
     {
-      objPtr = KPresenterDoc()->objList()->at(i);
-      if (objPtr->isSelected)
-	objPtr->angle = rotateDia->getAngle();
+      kpobject = KPresenterDoc()->objectList()->at(i);
+      if (kpobject->isSelected())
+	kpobject->rotate(rotateDia->getAngle());
     }
 
   KPresenterDoc()->repaint(false);
@@ -1297,16 +1286,16 @@ void KPresenterView_impl::rotateOk()
 /*=================== shadow dialog ok ==========================*/
 void KPresenterView_impl::shadowOk()
 {
-  PageObjects* objPtr;
-
-  for (int i = 0;i < (int)KPresenterDoc()->objList()->count();i++)
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(KPresenterDoc()->objectList()->count());i++)
     {
-      objPtr = KPresenterDoc()->objList()->at(i);
-      if (objPtr->isSelected)
+      kpobject = KPresenterDoc()->objectList()->at(i);
+      if (kpobject->isSelected())
 	{
-	  objPtr->shadowDirection = shadowDia->getShadowDirection();
-	  objPtr->shadowDistance = shadowDia->getShadowDistance();
-	  objPtr->shadowColor = shadowDia->getShadowColor();
+	  kpobject->setShadowDirection(shadowDia->getShadowDirection());
+	  kpobject->setShadowDistance(shadowDia->getShadowDistance());
+	  kpobject->setShadowColor(shadowDia->getShadowColor());
 	}
     }
 
@@ -1974,6 +1963,13 @@ void KPresenterView_impl::repaint(unsigned int x,unsigned int y,unsigned int w,
   page->repaint(x,y,w,h,erase);
 }
 
+/*====================== paint event ============================*/
+void KPresenterView_impl::repaint(QRect r,bool erase)
+{
+  QWidget::repaint(r,erase);
+  page->repaint(r,erase);
+}
+
 /*====================== change pciture =========================*/
 void KPresenterView_impl::changePicture(unsigned int,const char* filename)
 {
@@ -1991,16 +1987,16 @@ void KPresenterView_impl::changePicture(unsigned int,const char* filename)
 					      "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
 					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
 
-  if (!file.isEmpty()) m_pKPresenterDoc->changePicture((const char*)file,xOffset,yOffset);
+  if (!file.isEmpty()) m_pKPresenterDoc->changePicture(file,xOffset,yOffset);
 }
 
 /*====================== change clipart =========================*/
-void KPresenterView_impl::changeClipart(unsigned int,const char* filename)
+void KPresenterView_impl::changeClipart(unsigned int,QString filename)
 {
   QFileInfo fileInfo(filename);
   QString file = KFileDialog::getOpenFileName(fileInfo.dirPath(false),i18n("*.WMF *.wmf|Windows Metafiles"),0);
 
-  if (!file.isEmpty()) m_pKPresenterDoc->changeClipart((const char*)file,xOffset,yOffset);
+  if (!file.isEmpty()) m_pKPresenterDoc->changeClipart(file,xOffset,yOffset);
 }
 
 /*====================== resize event ===========================*/
@@ -2066,20 +2062,20 @@ void KPresenterView_impl::presentParts(float _presFakt,QPainter* _painter,QRect 
 
   for(;chl.current();++chl)
     {
-      child_geometry.setLeft((int)((float)chl.current()->_geometry().left() * _presFakt));
-      child_geometry.setTop((int)((float)chl.current()->_geometry().top() * _presFakt));
+      child_geometry.setLeft(static_cast<int>(static_cast<float>(chl.current()->_geometry().left()) * _presFakt));
+      child_geometry.setTop(static_cast<int>(static_cast<float>(chl.current()->_geometry().top()) * _presFakt));
 
       child_geometry.setRight(chl.current()->_geometry().right());
       child_geometry.setBottom(chl.current()->_geometry().bottom());
 
-      scale_w = (float)chl.current()->_geometry().width() * _presFakt / 
-	(float)chl.current()->_geometry().width();
+      scale_w = static_cast<float>(chl.current()->_geometry().width()) * _presFakt / 
+	static_cast<float>(chl.current()->_geometry().width());
 
-      scale_h = (float)chl.current()->_geometry().height() * _presFakt / 
-	(float)chl.current()->_geometry().height();
+      scale_h = static_cast<float>(chl.current()->_geometry().height()) * _presFakt / 
+	static_cast<float>(chl.current()->_geometry().height());
 
-      _painter->translate((float)child_geometry.left() - (float)_diffx,
-			  (float)child_geometry.top() - (float)_diffy);
+      _painter->translate(static_cast<float>(child_geometry.left()) - static_cast<float>(_diffx),
+			  static_cast<float>(child_geometry.top()) - static_cast<float>(_diffy));
       _painter->scale(scale_w,scale_h);
 
       QPicture* pic;
@@ -2104,23 +2100,11 @@ void KPresenterView_impl::showParts()
 /*========================= change undo =========================*/
 void KPresenterView_impl::changeUndo(QString _text,bool _enable)
 {
-  if (!_text.isEmpty())
-    {
-      // changeItem needed in OpenParts! TORBEN!!!!!
-    }
-
-  m_rMenuBar->setItemEnabled(m_idMenuEdit_Undo,_enable);
 }
 
 /*========================= change redo =========================*/
 void KPresenterView_impl::changeRedo(QString _text,bool _enable)
 {
-  if (!_text.isEmpty())
-    {
-      // changeItem needed in OpenParts! TORBEN!!!!!
-    }
-
-  m_rMenuBar->setItemEnabled(m_idMenuEdit_Redo,_enable);
 }
 
 /*================ color of pres-pen changed ====================*/
@@ -2960,13 +2944,13 @@ void KPresenterView_impl::setRanges()
     {
       int range;
       
-      vert->setSteps(10,m_pKPresenterDoc->getPageSize(1,xOffset,yOffset).height()+20);
-      range = (m_pKPresenterDoc->getPageSize(1,xOffset,yOffset).height()+10)*m_pKPresenterDoc->getPageNums()-page->height()+26 < 0 ? 0 :
-	(m_pKPresenterDoc->getPageSize(1,xOffset,yOffset).height()+10)*m_pKPresenterDoc->getPageNums()-page->height()+26;
+      vert->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height()+20);
+      range = (m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height()+10)*m_pKPresenterDoc->getPageNums()-page->height()+26 < 0 ? 0 :
+	(m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height()+10)*m_pKPresenterDoc->getPageNums()-page->height()+26;
       vert->setRange(0,range);
-      horz->setSteps(10,m_pKPresenterDoc->getPageSize(1,xOffset,yOffset).width()+36-page->width());
-      range = m_pKPresenterDoc->getPageSize(1,xOffset,yOffset).width()+36-page->width() < 0 ? 0 :
-	m_pKPresenterDoc->getPageSize(1,xOffset,yOffset).width()+36-page->width();
+      horz->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width()+36-page->width());
+      range = m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width()+36-page->width() < 0 ? 0 :
+	m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width()+36-page->width();
       horz->setRange(0,range);
     }
 }
@@ -3062,91 +3046,6 @@ void KPresenterView_impl::getFonts()
   }
   
   XFreeFontNames(fontNames_copy);
-}
-
-/*========================== start rect selection ================*/
-void KPresenterView_impl::startRectSelection(const char *_part_name)
-{
-  m_strNewPart = _part_name;
-  m_bRectSelection = true;
-}
-
-/*========================== cancel rect selection ===============*/
-void KPresenterView_impl::cancelRectSelection()
-{
-  m_bRectSelection = false;
-  update();
-}
- 
-/*========================== paint rect selection ================*/
-void KPresenterView_impl::paintRectSelection()
-{
-  printf("paintRect\n");
-  QPainter painter;
-  painter.begin(page);
-  
-  painter.setRasterOp(NotROP);
-  painter.drawRect(m_rctRectSelection);
-  painter.end();
-}
-
-/*======================== mouse press event =====================*/
-void KPresenterView_impl::mousePressEvent(QMouseEvent *_ev)
-{
-  cout << "Mouse pressed" << endl;
-  
-  if ( !m_bRectSelection )
-    return;
-
-  m_rctRectSelection.setTop(_ev->pos().y());
-  m_rctRectSelection.setLeft(_ev->pos().x());
-  m_rctRectSelection.setBottom(_ev->pos().y());
-  m_rctRectSelection.setRight(_ev->pos().x());
-
-  paintRectSelection();
-}
-
-/*========================= mouse move event =====================*/
-void KPresenterView_impl::mouseMoveEvent(QMouseEvent *_ev)
-{
-  if (!m_bRectSelection)
-    return;
-  
-  paintRectSelection();
-
-  if (_ev->pos().y() < m_rctRectSelection.top())
-    m_rctRectSelection.setBottom(m_rctRectSelection.top());
-  else
-    m_rctRectSelection.setBottom(_ev->pos().y());
-
-  if (_ev->pos().x() < m_rctRectSelection.left())
-    m_rctRectSelection.setRight(m_rctRectSelection.left());
-  else
-    m_rctRectSelection.setRight(_ev->pos().x());
-
-  paintRectSelection();
-}
-
-/*======================= mouse release event ====================*/
-void KPresenterView_impl::mouseReleaseEvent(QMouseEvent *_ev)
-{
-  if (!m_bRectSelection)
-    return;
-
-  paintRectSelection();
-  
-  if (_ev->pos().y() < m_rctRectSelection.top())
-    m_rctRectSelection.setBottom(m_rctRectSelection.top());
-  else
-    m_rctRectSelection.setBottom(_ev->pos().y());
-
-  if (_ev->pos().x() < m_rctRectSelection.left())
-    m_rctRectSelection.setRight(m_rctRectSelection.left());
-  else
-    m_rctRectSelection.setRight(_ev->pos().x());
-  
-  m_bRectSelection = false;
-  m_pKPresenterDoc->insertObject(m_rctRectSelection,m_strNewPart,xOffset,yOffset);
 }
 
 /*======================== set mode ==============================*/

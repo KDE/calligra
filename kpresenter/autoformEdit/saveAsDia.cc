@@ -118,7 +118,7 @@ void SaveAsDia::saveAs()
   if (groups->currentItem() != -1 && !fileName.isEmpty())
     { 
       grpName = groups->text(groups->currentItem());
-      emit saveATFAs((const char*)grpName,(const char*)fileName);
+      emit saveATFAs(grpName.data(),fileName.data());
     }
 }
 
@@ -145,12 +145,12 @@ void SaveAsDia::addGroup()
 	  str2 = groupList.at(i);
 	  str2 = str2.stripWhiteSpace();
 	  str2 += "\n";
-	  afInf.writeBlock((const char*)str2,str2.length());
+	  afInf.writeBlock(str2.data(),str2.length());
 	}
       afInf.close();
       afDir += str;
       QString cmd = "mkdir -p " + afDir;
-      system((const char*)cmd);
+      system(cmd.data());
       grpEdit->setText("");
     }
 }

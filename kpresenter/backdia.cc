@@ -39,7 +39,7 @@ ClipPreview::~ClipPreview()
 }
 
 /*==================== set clipart ===============================*/
-void ClipPreview::setClipart(const char* fn)
+void ClipPreview::setClipart(QString fn)
 {
   fileName = qstrdup(fn);
   wmf.load(fileName);
@@ -64,7 +64,7 @@ void ClipPreview::paintEvent(QPaintEvent*)
 /*==================== constructor ===============================*/
 BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR,
 		 QColor backColor1=white,QColor backColor2=white,BCType _bcType=BCT_PLAIN,
-		 const char *backPic=0,const char *backClip=0,
+		 QString backPic=0,QString backClip=0,
 		 BackView backPicView=BV_TILED)
   :QDialog(parent,name,true)
 {
@@ -114,7 +114,6 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   colorPreview->move(10,cType->y()+cType->height()+20);
   
   cType->setCurrentItem(bcType);
-  selectCType(bcType);
 
   color1Choose->resize(cType->width(),color1Choose->height());
   color2Choose->resize(cType->width(),color2Choose->height());
@@ -125,7 +124,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   radioPic = new QRadioButton(i18n("Picture (Pixel-Graphic)"),this,"radioPic");
   radioPic->move(grp1->x()+grp1->width()+20,radioColor->y());
   radioPic->resize(radioPic->sizeHint());
-  if (backType == BT_PIC) radioPic->setChecked(true);
+  if (backType == BT_PICTURE) radioPic->setChecked(true);
   buttGrp->insert(radioPic);
 
   grp2 = new QGroupBox(this);
@@ -174,7 +173,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   radioClip = new QRadioButton(i18n("Clipart (Vector-Graphic)"),this,"radioClip");
   radioClip->move(grp2->x()+grp2->width()+20,radioColor->y());
   radioClip->resize(radioClip->sizeHint());
-  if (backType == BT_CLIP) radioClip->setChecked(true);
+  if (backType == BT_CLIPART) radioClip->setChecked(true);
   buttGrp->insert(radioClip);
 
   grp3 = new QGroupBox(this);
@@ -240,6 +239,10 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   connect(okBut,SIGNAL(clicked()),this,SLOT(accept()));
 
   resize(grp3->x()+grp3->width()+20,row2+butH+10);
+  selectCType(bcType);
+  if (backType == BT_PICTURE) radioPic->setChecked(true);
+  if (backType == BT_COLOR) radioColor->setChecked(true);
+  if (backType == BT_CLIPART) radioClip->setChecked(true);
 }
 
 /*===================== destructor ===============================*/
@@ -251,13 +254,13 @@ BackDia::~BackDia()
 BackType BackDia::getBackType()
 {
   if (radioColor->isChecked()) return BT_COLOR;
-  if (radioPic->isChecked()) return BT_PIC;
-  if (radioClip->isChecked()) return BT_CLIP;
+  if (radioPic->isChecked()) return BT_PICTURE;
+  if (radioClip->isChecked()) return BT_CLIPART;
   return BT_COLOR;
 }
 
 /*===================== get background pic view ==================*/
-BackView BackDia::getBPicView()
+BackView BackDia::getBackView()
 {
   if (vTiled->isChecked()) return BV_TILED;
   if (vCenter->isChecked()) return BV_CENTER;
@@ -268,17 +271,15 @@ BackView BackDia::getBPicView()
 /*==================== select color type =========================*/
 void BackDia::selectCType(int i)
 {
+  radioPic->setChecked(false);
+  radioColor->setChecked(true);
+  radioClip->setChecked(false);
+
   bcType = (BCType)i;
 
-  QPainter p;
-  QPixmap pm(colorPreview->size());
-  
-  p.begin(&pm);
-  Page::_drawBackColor(color1Choose->color(),color2Choose->color(),bcType,
-		       &p,QSize(colorPreview->width(),colorPreview->height()));
-  p.end();
+  KPGradient gradient(color1Choose->color(),color2Choose->color(),bcType,colorPreview->size());
 
-  colorPreview->setPixmap(pm);
+  colorPreview->setPixmap(*gradient.getGradient());
 }
 
 /*=================== choose a picture ===========================*/
@@ -300,7 +301,7 @@ void BackDia::selectPic()
 					      "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
 					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
   
-  if (!file.isEmpty()) openPic((const char*)file);
+  if (!file.isEmpty()) openPic(file.data());
 }
 
 /*=================== choose a clipart ===========================*/
@@ -311,7 +312,7 @@ void BackDia::selectClip()
   radioPic->setChecked(false);
 
   QString file = KFileDialog::getOpenFileName(0,i18n("*.WMF *.wmf|Windows Metafiles"),0);
-  if (!file.isEmpty()) openClip((const char*)file);
+  if (!file.isEmpty()) openClip(file.data());
 }
 
 /*==================== open a picture ============================*/
@@ -325,8 +326,8 @@ void BackDia::openPic(const char *picName)
 
   if (!pix.isNull())
     {
-      m.scale((float)picPreview->width()/pix.width(),
-	      (float)picPreview->height()/pix.height());
+      m.scale(static_cast<float>(picPreview->width()) / pix.width(),
+	      static_cast<float>(picPreview->height()) / pix.height());
       picPreview->setPixmap(pix.xForm(m));
       if (lPicName) lPicName->setText(chosenPic);
     }

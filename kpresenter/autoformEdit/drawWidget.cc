@@ -82,10 +82,10 @@ void DrawWidget::createPixmap(const char *fileName)
       if (atrLs.at(i)->pwDiv > 0)
 	{
 	  pw = pwOrig / atrLs.at(i)->pwDiv;
-	  if (px < (unsigned int)aWidth / 2) px += pw;
-	  if (py < (unsigned int)aHeight / 2) py += pw;
-	  if (px > (unsigned int)aWidth / 2) px -= pw;
-	  if (py > (unsigned int)aHeight / 2) py -= pw;
+	  if (px < static_cast<unsigned int>(aWidth) / 2) px += pw;
+	  if (py < static_cast<unsigned int>(aHeight) / 2) py += pw;
+	  if (px > static_cast<unsigned int>(aWidth) / 2) px -= pw;
+	  if (py > static_cast<unsigned int>(aHeight) / 2) py -= pw;
 	}
       pntArray2.setPoint(i,px,py);
     }
@@ -140,10 +140,10 @@ void DrawWidget::paintEvent(QPaintEvent*)
       if (atrLs.at(i)->pwDiv > 0)
 	{
 	  pw = pwOrig / atrLs.at(i)->pwDiv;
-	  if (px < (unsigned int)aWidth / 2) px += pw;
-	  if (py < (unsigned int)aHeight / 2) py += pw;
-	  if (px > (unsigned int)aWidth / 2) px -= pw;
-	  if (py > (unsigned int)aHeight / 2) py -= pw;
+	  if (px < static_cast<unsigned int>(aWidth) / 2) px += pw;
+	  if (py < static_cast<unsigned int>(aHeight) / 2) py += pw;
+	  if (px > static_cast<unsigned int>(aWidth) / 2) px -= pw;
+	  if (py > static_cast<unsigned int>(aHeight) / 2) py -= pw;
 	}
       pntArray2.setPoint(i,px,py);
     }

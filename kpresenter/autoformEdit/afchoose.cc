@@ -130,7 +130,7 @@ void AFChoose::chosen()
       for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
 	{
 	  if (grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty()) 
-	    emit formChosen((const char*)QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent()));
+	    emit formChosen(static_cast<const char*>(QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent())));
 	}
     }
 }

@@ -165,7 +165,7 @@ bool QWinMetaFile::load(const QString aFileName)
 
     if (mSingleStep)
     {
-      debug("WMF Placeable Header (%d):", (int)sizeof(pheader));
+      debug("WMF Placeable Header (%d):", static_cast<int>(sizeof(pheader)));
       debug("  key=%x", pheader.key);
       debug("  hmf=%x", pheader.hmf);
       debug("  bbox=(%d;%d;%d;%d)", pheader.bbox.left, pheader.bbox.top,
@@ -428,15 +428,16 @@ unsigned int QWinMetaFile::toDWord(short* parm)
   unsigned int l;
 
 #if !defined(WORDS_BIGENDIAN)
-  l = *(unsigned int*)parm;
+  l = *(unsigned int*)(parm);
 #else
-  char *bytes;                                                                    char swap[4];  
+  char *bytes;
+  char swap[4];  
   bytes = (char*)parm;
   swap[0] = bytes[2];
   swap[1] = bytes[3];
   swap[2] = bytes[0];
   swap[3] = bytes[1];
-  l = *(unsigned int*)swap;
+  l = *(unsigned int*)(swap);
 #endif
 
   return l;

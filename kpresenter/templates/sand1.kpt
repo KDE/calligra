@@ -2,14 +2,14 @@
  <PAPER format="5" width="240" height="180" orientation="0">
   <PAPERBORDERS left="0" top="0" right="0" bottom="0"/>
  </PAPER>
- <BACKGROUND pages="1" rastX="10" rastY="10" xRnd="20" yRnd="20" bred="128" bgreen="128" bblue="0" sred="192" sgreen="192" sblue="192">
+ <BACKGROUND rastX="10" rastY="10" xRnd="20" yRnd="20" bred="255" bgreen="255" bblue="255" sred="192" sgreen="192" sblue="192">
   <PAGE>
    <BACKTYPE value="1"/>
    <BACKVIEW value="2"/>
    <BACKCOLOR1 red="255" green="255" blue="255"/>
    <BACKCOLOR2 red="255" green="255" blue="255"/>
    <BCTYPE value="0"/>
-   <BACKPIC  data="/* XPM */
+   <BACKPIX filename="/usr/local/kde/share/wallpapers/sandman.jpg" data="/* XPM */
 static char*kpresenter_tmp[]={
 128 128 250 2,
 .M c #000000,
@@ -390,66 +390,17 @@ static char*kpresenter_tmp[]={
 .m.H.Y.f.f.6.z#0.m.d#u.l#uaq.o.g.##u#u.nau.f#WaD.f.o.f.oaDav#k.obH.C.faI.V.GaV#d.J.n.M.I.H.Hbj#..9#3.W#b.M.W#9.M.z.W.1#G#z#F.V.W.k.W.G.W.W.x#F.W.k.W.c.z.I.x#J.0#J.naN#c.BaI#4.L#t.A#7#f#e#n.B.v#F#G#t.k.C.Aaw.A.V.W.B#9.G.K.5.3ai.P.M#g.X#F.HaV.J.A#h.B.x#4#Y#U,
 .I.l.8aq#o.Zb#bjaDbj#V.d#maD.g#lagaC#T.o#T#m.e.o#U.q#T.eau.d#s#t.e.5.I.W.e#U#d.W.H.O.k.R.La##H.ya..W.Q#a.4#L.W#5.W.I.W#F.J.Y#F.U.P#b.P.K.P#Fbd.W.N.6#a.Y.N.raN.J#e.K.kas.J.Z.Y.B#fbl.Y.w#6.V.5af.Y#q.5QtaN#bbt.Y#h#.#Y#Y.W.J.3.2#g.M.G.5.O.P.P.V.y.G#t#eaNag.u.n,
 .EaqbH#l#Vaeby#I.o.d#la0.ga2.h.eaea7aS.o.a.f.d.a#Sa3.o#XaKacav#laq#u.e.5.C#k.Z.C#U.A#c.F.7#0.P.2#a.M#a#3.Y.T#J.T.U.W.k.J.V#F.H.Y.L#..7bd#.#.a#aX#J.W.Y.W.4.J.A.x.0.J.k#x.B#haI.x.W.4#Obn.VaN#7.I.nbp.V#4.P.c.W.7.0.J.k.4.8#F.U.A#w.W#E.O.E.H.Cbw#U.zaA#n.c.pavaI};
-" value="/usr/local/kde/share/wallpapers/sandman.jpg"/>
-   <TIMEPARTS>
-    <PART time="10"/>
-   </TIMEPARTS>
+"/>
    <PGEFFECT value="0"/>
   </PAGE>
  </BACKGROUND>
- <OBJECTS objects="4">
-  <OBJECT>
-   <OBJTYPE value="1"/>
-   <ISSELECTED value="0"/>
-   <OBJNUM value="1"/>
-   <COORDINATES x="10" y="20" w="680" h="30"/>
+ <OBJECTS>
+  <OBJECT type="4">
+   <ORIG x="10" y="10"/>
+   <SIZE width="680" height="60"/>
+   <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
+   <EFFECTS effect="0" effect2="0"/>
    <PRESNUM value="0"/>
-   <EFFECT value="0"/>
-   <EFFECT2 value="0"/>
-   <ANGLE value="0"/>
-   <GRAPHOBJ>
-    <LINETYPE value="0"/>
-    <RECTTYPE value="0"/>
-    <PEN red="0" green="255" blue="255" width="2" style="1"/>
-    <BRUSH red="0" green="0" blue="0" style="0"/>
-    <XRND value="20"/>
-    <YRND value="20"/>
-    <FILENAME value="(null)"/>
-   </GRAPHOBJ>
-  </OBJECT>
-  <OBJECT>
-   <OBJTYPE value="4"/>
-   <ISSELECTED value="0"/>
-   <OBJNUM value="2"/>
-   <COORDINATES x="10" y="10" w="680" h="30"/>
-   <PRESNUM value="0"/>
-   <EFFECT value="0"/>
-   <EFFECT2 value="0"/>
-   <ANGLE value="0"/>
-   <TEXTOBJ objType="0">
-    <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE type="1" family="symbol" pointSize="20" bold="0" italic="0" underline=0 red="255" green="0" blue="0" chr="45"/>
-    <PARAGRAPH horzAlign="0">
-     <LINE>
-      <OBJ>
-       <TYPE value="1"/>
-       <FONT family="utopia" pointSize="20" bold="1" italic="1" underline="0"/>
-       <COLOR red="255" green="255" blue="0"/>
-       <VERTALIGN value="1"/>
-       <TEXT value=" "/>
-      </OBJ>
-     </LINE>
-    </PARAGRAPH>
-   </TEXTOBJ>
-  </OBJECT>
-  <OBJECT>
-   <OBJTYPE value="4"/>
-   <ISSELECTED value="0"/>
-   <OBJNUM value="3"/>
-   <COORDINATES x="10" y="70" w="680" h="70"/>
-   <PRESNUM value="0"/>
-   <EFFECT value="0"/>
-   <EFFECT2 value="0"/>
    <ANGLE value="0"/>
    <TEXTOBJ objType="0">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
@@ -458,8 +409,8 @@ static char*kpresenter_tmp[]={
      <LINE>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="50" bold="1" italic="0" underline="0"/>
-       <COLOR red="0" green="255" blue="0"/>
+       <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
+       <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
       </OBJ>
@@ -467,30 +418,17 @@ static char*kpresenter_tmp[]={
     </PARAGRAPH>
    </TEXTOBJ>
   </OBJECT>
-  <OBJECT>
-   <OBJTYPE value="4"/>
-   <ISSELECTED value="0"/>
-   <OBJNUM value="4"/>
-   <COORDINATES x="30" y="160" w="640" h="340"/>
+  <OBJECT type="1">
+   <ORIG x="10" y="60"/>
+   <SIZE width="680" height="30"/>
+   <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
+   <EFFECTS effect="0" effect2="0"/>
+   <PEN red="255" green="255" blue="255" width="2" style="1"/>
+   <LINETYPE value="0"/>
+   <LINEBEGIN value="0"/>
+   <LINEEND value="0"/>
    <PRESNUM value="0"/>
-   <EFFECT value="0"/>
-   <EFFECT2 value="0"/>
    <ANGLE value="0"/>
-   <TEXTOBJ objType="2">
-    <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE type="1" family="symbol" pointSize="20" bold="0" italic="0" underline=0 red="255" green="0" blue="0" chr="222"/>
-    <PARAGRAPH horzAlign="0">
-     <LINE>
-      <OBJ>
-       <TYPE value="1"/>
-       <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
-       <COLOR red="255" green="255" blue="255"/>
-       <VERTALIGN value="1"/>
-       <TEXT value=" "/>
-      </OBJ>
-     </LINE>
-    </PARAGRAPH>
-   </TEXTOBJ>
   </OBJECT>
  </OBJECTS>
  <INFINITLOOP value="0"/>

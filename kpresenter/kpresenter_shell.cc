@@ -68,6 +68,8 @@ bool KPresenterShell_impl::openDocument(const char *_filename)
   m_rMenuBar->setItemEnabled(m_idMenuFile_SaveAs,true);
   m_rMenuBar->setItemEnabled(m_idMenuFile_Save,true);
   m_rToolBarFile->setItemEnabled(m_idButtonFile_Print,true);
+  m_rToolBarFile->setItemEnabled(m_idButtonFile_Save,true);
+  m_rToolBarFile->setFullWidth(false);
 
   filename = qstrdup(_filename);
 
@@ -121,6 +123,8 @@ void KPresenterShell_impl::fileNew()
   m_rMenuBar->setItemEnabled(m_idMenuFile_SaveAs,true);
   m_rMenuBar->setItemEnabled(m_idMenuFile_Save,true);
   m_rToolBarFile->setItemEnabled(m_idButtonFile_Print,true);
+  m_rToolBarFile->setItemEnabled(m_idButtonFile_Save,true);
+  m_rToolBarFile->setFullWidth(false);
 }
 
 /*======================== clean up ==============================*/

@@ -13,25 +13,20 @@
 /* Module: global definitions (header)                            */
 /******************************************************************/
 
-#include <qpixmap.h>
-#include <qpicture.h>
-#include <qlist.h>
-
-class BackPic;
-class GraphObj;
-class KTextObject;
-
 #ifndef GLOBAL_H
 #define GLOBAL_H
+
+#include <qsize.h>
 
 // factors
 #define MM_TO_POINT 2.83465
 #define POINT_TO_MM 0.3527772388    
 
 // types
-enum BackType {BT_COLOR,BT_PIC,BT_CLIP};
+enum BackType {BT_COLOR,BT_PICTURE,BT_CLIPART};
 enum BackView {BV_ZOOM,BV_CENTER,BV_TILED};
-enum ObjType {OT_PICTURE,OT_LINE,OT_RECT,OT_CIRCLE,OT_TEXT,OT_AUTOFORM,OT_CLIPART};
+enum BCType {BCT_PLAIN = 0,BCT_GHORZ = 1,BCT_GVERT = 2};
+enum ObjType {OT_PICTURE,OT_LINE,OT_RECT,OT_ELLIPSE,OT_TEXT,OT_AUTOFORM,OT_CLIPART,OT_UNDEFINED};
 enum LineType {LT_HORZ,LT_VERT,LT_LU_RD,LT_LD_RU};
 enum RectType {RT_NORM,RT_ROUND};
 enum ModifyType {MT_NONE,MT_MOVE,MT_RESIZE_UP,MT_RESIZE_DN,MT_RESIZE_LF,MT_RESIZE_RT,MT_RESIZE_LU,MT_RESIZE_LD,MT_RESIZE_RU,MT_RESIZE_RD};
@@ -49,47 +44,8 @@ enum ShadowDirection {SD_LEFT_UP = 1,SD_UP = 2,SD_RIGHT_UP = 3,SD_RIGHT = 4,SD_R
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
 
-// page background
-enum BCType {BCT_PLAIN = 0,BCT_GHORZ = 1,BCT_GVERT = 2};
+const QSize orig_size(-1,-1);
 
-struct Background
-{
-  unsigned int pageNum;  
-  BackType backType; 
-  BackView backPicView; 
-  QColor backColor1;
-  QColor backColor2;
-  BCType bcType;
-  const char *backPic;
-  const char *backClip; 
-  QPixmap backPix;
-  QPixmap obackPix;
-  BackPic *pic;
-  QPixmap *cPix;
-  QList<int> timeParts;
-  bool hasSameCPix;
-  PageEffect pageEffect;
-  QString pix_data;
-};
-
-// page object
-struct PageObjects
-{
-  ObjType objType;
-  bool isSelected;
-  unsigned int objNum;
-  int ox,oy,ow,oh;
-  int oox,ooy,oow,ooh;
-  KTextObject *textObj;
-  GraphObj* graphObj;
-  QPicture *objPic;
-  unsigned int presNum;
-  Effect effect;
-  Effect2 effect2;
-  double angle;
-  ShadowDirection shadowDirection;
-  int shadowDistance;
-  QColor shadowColor;
-};
+#undef SHOW_INFO
 
 #endif //GLOBAL_H

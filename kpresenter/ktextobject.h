@@ -1741,6 +1741,13 @@ public:
   void disableDrawAllInOneColor(bool _repaint=false) 
     { allInOneColor = false; if (_repaint) repaint(false); }
 
+  /**
+   * Enable or disable autofocus. Autofocus means, that the KTextObject automatically gets the focus,
+   * if the mouse is over it.
+   */
+  void setAutoFocus(bool _auto)
+    { autoFocus = _auto; }
+
 signals:
 
   /**
@@ -1794,6 +1801,7 @@ protected:
   void focusInEvent(QFocusEvent*);
   void focusOutEvent(QFocusEvent*);
   void leaveEvent(QEvent*);
+  void enterEvent(QEvent*);
   
   int cellWidth(int);
   int cellHeight(int);
@@ -1860,6 +1868,7 @@ protected:
   TxtCursor searchIndexFrom,searchIndexTo;
   bool sCursor;
   bool drawSelection;
+  bool autoFocus;
 
   ObjType obType;
 

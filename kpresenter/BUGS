@@ -6,7 +6,7 @@ what there is todo when I'll do the bugfix.
 
 1. FIXED. (was picture bug). But I want to do it with KImage one time.
 
-2. When moving/resizing a clipart => clipart looses lines (make clipping rect one pixel larger, or objsize smaller)
+2. FIXED. (was bug with moving cliparts and loosing some stuff)
 
 3. FIXED. (was bug with repaint of multiple views)
 

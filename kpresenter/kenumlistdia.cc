@@ -101,7 +101,7 @@ KEnumListDia::KEnumListDia(QWidget* parent,const char* name,int __type,QFont __f
   eBefore = new QLineEdit(this);
   eBefore->resize(lBefore->width(),eBefore->sizeHint().height());
   eBefore->setMaxLength(4);
-  eBefore->setText((const char*)_before);
+  eBefore->setText(_before.data());
   grid->addWidget(eBefore,5,0);
   connect(eBefore,SIGNAL(textChanged(const char*)),this,SLOT(beforeChanged(const char*)));
   
@@ -112,7 +112,7 @@ KEnumListDia::KEnumListDia(QWidget* parent,const char* name,int __type,QFont __f
   eAfter = new QLineEdit(this);
   eAfter->resize(lAfter->width(),eAfter->sizeHint().height());
   eAfter->setMaxLength(4);
-  eAfter->setText((const char*)_after);
+  eAfter->setText(_after.data());
   grid->addWidget(eAfter,5,1);
   connect(eAfter,SIGNAL(textChanged(const char*)),this,SLOT(afterChanged(const char*)));
 

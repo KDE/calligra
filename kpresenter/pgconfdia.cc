@@ -69,7 +69,7 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   effectCombo->insertItem(i18n("Interlocking vertical 1"));
   effectCombo->insertItem(i18n("Interlocking vertical 2"));
   effectCombo->resize(effectCombo->sizeHint());
-  effectCombo->setCurrentItem((int)pageEffect);
+  effectCombo->setCurrentItem(static_cast<int>(pageEffect));
   
   page->resize(label2->width()+20,effectCombo->y()+effectCombo->height()+10);
   general->resize(manualSwitch->x()+manualSwitch->width()+20,manualSwitch->y()+manualSwitch->height()+10);

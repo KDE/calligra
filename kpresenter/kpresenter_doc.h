@@ -50,18 +50,24 @@ class KPresenterView_impl;
 
 #include <kurl.h>
 
+#include "kpobject.h"
+#include "kplineobject.h"
+#include "kprectobject.h"
+#include "kpellipseobject.h"
+#include "kpautoformobject.h"
+#include "kpclipartobject.h"
+#include "kptextobject.h"
+#include "kppixmapobject.h"
 #include "kpresenter_view.h"
 #include "global.h"
-#include "qwmf.h"
-#include "graphobj.h"
-#include "ktextobject.h"
+#include "kpbackground.h"
+
+#include "kppixmapcollection.h"
+#include "kpgradientcollection.h"
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
-
-#include "kpresenter_utils.h"
-#include "undo_redo.h"
 
 #include <iostream.h>
 #include <fstream.h>
@@ -70,34 +76,6 @@ class KPresenterView_impl;
 
 #define MIME_TYPE "application/x-kpresenter"
 #define EDITOR "IDL:KPresenter/KPresenterDocument:1.0"
-
-/******************************************************************/
-/* class BackPic                                                  */
-/******************************************************************/
-
-class BackPic : public QWidget
-{
-  Q_OBJECT
-
-public:
-
-  // constructor - destructor
-  BackPic(QWidget* parent=0,const char* name=0);
-  ~BackPic();
-
-  // get pictures
-  void setClipart(const char*);
-  const char* getClipart() {return (const char*)fileName;}
-  QPicture* getPic();
-
-private:
-
-  // datas
-  QPicture *pic;
-  QString fileName;
-  QWinMetaFile wmf;
-
-};
 
 /******************************************************************/
 /* class KPresenterChild                                          */
@@ -196,26 +174,25 @@ public:
   KoPageLayout pageLayout() {return _pageLayout;}
 
   // insert a page
-  unsigned int insertNewPage(int,int); 
+  unsigned int insertNewPage(int,int,bool _restore=true); 
   unsigned int insertNewTemplate(int,int,bool clean=false);
 
   // get number of pages nad objects
-  unsigned int getPageNums() {return _pageNums;}
-  unsigned int objNums() {return _objNums;}
+  unsigned int getPageNums() {return _backgroundList.count();}
+  unsigned int objNums() {return _objectList.count();}
 
   // background
   void setBackColor(unsigned int,QColor,QColor,BCType);
-  void setBackPic(unsigned int,const char*);
-  void setBackPic(unsigned int,const char*,QString);
-  void setBackClip(unsigned int,const char*);
-  void setBPicView(unsigned int,BackView);
+  void setBackPixFilename(unsigned int,QString);
+  void setBackClipFilename(unsigned int,QString);
+  void setBackView(unsigned int,BackView);
   void setBackType(unsigned int,BackType);
   bool setPenBrush(QPen,QBrush,LineEnd,LineEnd,int,int);
   void setPageEffect(unsigned int,PageEffect);
   BackType getBackType(unsigned int);
-  BackView getBPicView(unsigned int);
-  const char* getBackPic(unsigned int);
-  const char* getBackClip(unsigned int);
+  BackView getBackView(unsigned int);
+  QString getBackPixFilename(unsigned int);
+  QString getBackClipFilename(unsigned int);
   QColor getBackColor1(unsigned int);
   QColor getBackColor2(unsigned int);
   BCType getBackColorType(unsigned int);
@@ -230,19 +207,19 @@ public:
   void lowerObjs(int,int);
 
   // insert/change objects
-  void insertPicture(const char*,int,int);
-  void insertClipart(const char*,int,int);
-  void changePicture(const char*,int,int);
-  void changeClipart(const char*,int,int);
+  void insertPicture(QString,int,int);
+  void insertClipart(QString,int,int);
+  void changePicture(QString,int,int);
+  void changeClipart(QString,int,int);
   void insertLine(QPen,LineEnd,LineEnd,LineType,int,int);
   void insertRectangle(QPen,QBrush,RectType,int,int);
   void insertCircleOrEllipse(QPen,QBrush,int,int);
   void insertText(int,int);
-  void insertAutoform(QPen,QBrush,LineEnd,LineEnd,const char*,int,int);
+  void insertAutoform(QPen,QBrush,LineEnd,LineEnd,QString,int,int);
   
   // get list of pages and objects
-  QList<Background> *pageList() {return &_pageList;}
-  QList<PageObjects> *objList() {return &_objList;}
+  QList<KPBackGround> *backgroundList() {return &_backgroundList;}
+  QList<KPObject> *objectList() {return &_objectList;}
 
   // get - set raster
   unsigned int rastX() {return _rastX;}
@@ -275,35 +252,33 @@ public:
   // size of page
   QRect getPageSize(unsigned int,int,int,float fakt=1.0);
 
-  // delete/rotate/rearrange/reorder obejcts
+  // delete/reorder obejcts
   void deleteObjs();
   void copyObjs(int,int);
   void pasteObjs(int,int);
-  void rotateObjs();
-  void reArrangeObjs();
 
   // repaint all views
   void repaint(bool);
-  void repaint(unsigned int _x,unsigned int _y,unsigned int _w,unsigned int _h,PageObjects *o,bool _erase)
-    {repaint(_x,_y,_w,_h,o->objNum - 1,_erase);}
-  void repaint(unsigned int,unsigned int,unsigned int,unsigned int,int,bool);
+
+  void repaint(QRect);
+  void repaint(KPObject*);
 
   // stuff for screen-presentations
   QList<int> reorderPage(unsigned int,int,int,float fakt = 1.0);
   int getPageOfObj(int,int,int,float fakt = 1.0);
 
-  void addUndo(UndoRedoBaseClass*);
-  void undo();
-  void redo();
-
   QPen presPen() {return _presPen;}
   void setPresPen(QPen p) {_presPen = p;}
 
   int numSelected();
-  PageObjects* getSelectedObj();
+  KPObject* getSelectedObj();
 
-  QRect getRealBoundingRect(QRect,int);
-  void getShadowCoords(int&,int&,ShadowDirection,int);
+  void restoreBackground(int);
+
+  KPPixmapCollection *getPixmapCollection()
+    { return &_pixmapCollection; }
+  KPGradientCollection *getGradientCollection()
+    { return &_gradientCollection; }
 
 signals:
 
@@ -316,12 +291,6 @@ signals:
 
   // update child geometry
   void sig_updateChildGeometry(KPresenterChild *_child);
-
-  // restore back color
-  void restoreBackColor(unsigned int);
-
-protected slots:
-  void undoRedoChange(QString,bool,QString,bool);
 
 protected:
 
@@ -346,13 +315,9 @@ protected:
 
   void saveBackground(ostream&);
   void saveObjects(ostream&);
-  void saveTxtObj(ostream&,KTextObject*);
   void loadBackground(KOMLParser&,vector<KOMLAttrib>&);
   void loadObjects(KOMLParser&,vector<KOMLAttrib>&);
-  void loadTxtObj(KOMLParser&,vector<KOMLAttrib>&,KTextObject*);
   void replaceObjs();
-  QString toPixString(Background *_page,QString _filename);
-  int isInPixCache(QString _filename);
 
   // ************ variables ************
 
@@ -366,21 +331,16 @@ protected:
   QList<KPresenterView_impl> m_lstViews;
   QList<KPresenterChild> m_lstChildren;
   KPresenterView_impl *viewPtr;
-  QList<PixCache> pixCache;
 
   // modified?
   bool m_bModified;
 
   // page layout and background
   KoPageLayout _pageLayout;
-  QList<Background> _pageList; 
+  QList<KPBackGround> _backgroundList;
 
   // list of objects
-  QList<PageObjects> _objList;     
-
-  // number of pages and objects
-  unsigned int _pageNums;
-  unsigned int _objNums;
+  QList<KPObject> _objectList;
 
   // screenpresentations
   bool _spInfinitLoop,_spManualSwitch;
@@ -393,19 +353,16 @@ protected:
   QColor _txtBackCol;
   QColor _txtSelCol;
 
-  // pointers
-  PageObjects *objPtr;
-  Background *pagePtr;
-  
   // url
   QString m_strFileURL;
 
   bool _clean;
   int objStartY,objStartNum;
 
-  UndoRedoAdmin *undo_redo;
-
   QPen _presPen;
+
+  KPPixmapCollection _pixmapCollection;
+  KPGradientCollection _gradientCollection;
 
 };
 

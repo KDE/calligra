@@ -237,7 +237,7 @@ public:
   void setDiffY(int _y) {yOffset = _y;}
 
   // get current pagenum
-  unsigned int getCurrPgNum() {return((int)(vert->value()+this->height()/2) / vert->pageStep() + 1);}
+  unsigned int getCurrPgNum() {return(static_cast<int>(vert->value()+this->height()/2) / vert->pageStep() + 1);}
 
   // return pointer to document
   class KPresenterDocument_impl *KPresenterDoc() {return m_pKPresenterDoc;}
@@ -245,10 +245,11 @@ public:
   // repaint page
   void repaint(bool);
   void repaint(unsigned int,unsigned int,unsigned int,unsigned int,bool);
+  void repaint(QRect,bool);
 
   // properties
   void changePicture(unsigned int,const char*);
-  void changeClipart(unsigned int,const char*);
+  void changeClipart(unsigned int,QString);
 
   QPen getPen() {return pen;} 
   void presentParts(float,QPainter*,QRect,int,int);
@@ -348,12 +349,6 @@ protected:
   // get fonts
   void getFonts();
 
-  void startRectSelection(const char*);
-  void cancelRectSelection();
-  void paintRectSelection();
-  void mousePressEvent(QMouseEvent*);
-  void mouseReleaseEvent(QMouseEvent*);
-  void mouseMoveEvent(QMouseEvent*);
   void keyPressEvent(QKeyEvent*);
 
   void doAutomaticScreenPres();
