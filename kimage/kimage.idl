@@ -33,6 +33,7 @@ module KImage
 		slot void importImage();
 		slot void exportImage();
 		slot void pageLayout();
+		slot void preferences();
 
 		// View
 		slot void fitToView();
@@ -47,10 +48,22 @@ module KImage
 		slot void rotateLeft();
 		slot void flipVertical();
 		slot void flipHorizontal();
+		slot void zoomFactor();
+		slot void zoomIn10();
+		slot void zoomOut10();
+		slot void zoomDouble();
+		slot void zoomHalf();
+		slot void zoomMax();
+		slot void zoomMaxAspect();
 
 		// Filter
 
 		// Plug-Ins
+
+		// Extras
+		slot void runGimp();
+		slot void runXV();
+		slot void runCommand();
 	};
 
 	interface Document : KOffice::Document, KOffice::Print

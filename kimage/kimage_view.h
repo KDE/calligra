@@ -63,6 +63,17 @@ public:
     void flipVertical();
     void flipHorizontal();
     void backgroundColor();
+    void zoomFactor();
+    void zoomIn10();
+    void zoomOut10();
+    void zoomDouble();
+    void zoomHalf();
+    void zoomMax();
+    void zoomMaxAspect();
+    void preferences();
+    void runGimp();
+    void runXV();
+    void runCommand();
 
     virtual void cleanUp();
 
@@ -102,6 +113,7 @@ protected:
   CORBA::Long m_idMenuEdit_Import;
   CORBA::Long m_idMenuEdit_Export;
   CORBA::Long m_idMenuEdit_Page;
+  CORBA::Long m_idMenuEdit_Preferences;
 
   // view menu
   OpenPartsUI::Menu_var m_vMenuView;
@@ -131,6 +143,12 @@ protected:
 
   // plugins menu
   OpenPartsUI::Menu_var m_vMenuPlugIns;
+
+  // extras menu
+  OpenPartsUI::Menu_var m_vMenuExtras;
+  CORBA::Long m_idMenuExtras_RunGimp;
+  CORBA::Long m_idMenuExtras_RunXV;
+  CORBA::Long m_idMenuExtras_RunCommand;
 
   // help menu
   OpenPartsUI::Menu_var m_vMenuHelp;

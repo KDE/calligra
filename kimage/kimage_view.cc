@@ -28,6 +28,7 @@
 #include <qprndlg.h>
 #include <qwmatrix.h>
 #include <kfiledialog.h>
+#include <kcolordlg.h>
 
 #include <opUIUtils.h>
 #include <opMainWindow.h>
@@ -204,29 +205,29 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
   tmp += "/kimage/pics/areaselect.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "editImage", true,
-							i18n( "Edit image" ), -1 );
+							this, "selectArea", true,
+							i18n( "Select Area" ), -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kimage/pics/airbrush.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "editImage", true,
-							i18n( "Edit image" ), -1 );
+							this, "airbrush", true,
+							i18n( "Airbrush" ), -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kimage/pics/circle.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "editImage", true,
-							i18n( "Edit image" ), -1 );
+							this, "circle", true,
+							i18n( "Circle" ), -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kimage/pics/eraser.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
-							this, "editImage", true,
-							i18n( "Edit image" ), -1 );
+							this, "eraser", true,
+							i18n( "Eraser" ), -1 );
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
@@ -250,22 +251,37 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_vMenuTransform = 0L;
     m_vMenuFilter = 0L;
     m_vMenuPlugIns = 0L;
+    m_vMenuExtras = 0L;
     return true;
   }
 
   // Edit
   _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
-  QString path = kapp->kde_icondir().copy();
-  path += "/mini/unknown.xpm";
+  QString path = kapp->kde_datadir().copy();
+  path += "/kimage/pics/undo.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( path );
+  m_idMenuEdit_Edit = m_vMenuEdit->insertItem6( pix, i18n("&Undo"), this, "undo", CTRL + Key_E, -1, -1 );
+
+  path = kapp->kde_datadir().copy();
+  path += "/kimage/pics/redo.xpm";
+  pix = OPUIUtils::loadPixmap( path );
+  m_idMenuEdit_Edit = m_vMenuEdit->insertItem6( pix, i18n("&Redo"), this, "redo", CTRL + Key_E, -1, -1 );
+
+  path = kapp->kde_icondir().copy();
+  path += "/mini/unknown.xpm";
+  pix = OPUIUtils::loadPixmap( path );
   m_idMenuEdit_Edit = m_vMenuEdit->insertItem6( pix, i18n("&Edit image"), this, "editImage", CTRL + Key_E, -1, -1 );
+
+  m_vMenuEdit->insertSeparator( -1 );
+
   m_idMenuEdit_Import = m_vMenuEdit->insertItem( i18n("&Import image"), this, "importImage", CTRL + Key_I );
   m_idMenuEdit_Export = m_vMenuEdit->insertItem( i18n("E&xport image"), this, "exportImage", CTRL + Key_X );
 
   m_vMenuEdit->insertSeparator( -1 );
 
   m_idMenuEdit_Page = m_vMenuEdit->insertItem( i18n("&Page Layout"), this, "pageLayout", CTRL + Key_L );
+  m_idMenuEdit_Preferences = m_vMenuEdit->insertItem( i18n("P&references..."), this, "preferences", CTRL + Key_L );
 
   // View
   _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
@@ -292,6 +308,7 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuView->insertSeparator( -1 );
 
   m_idMenuView_Center = m_vMenuView->insertItem( i18n("&Centered"), this, "centered", CTRL + Key_C );
+  m_idMenuView_Info = m_vMenuView->insertItem( i18n("&Scrollbars"), this, "scrollbars", CTRL + Key_N );
   m_idMenuView_Info = m_vMenuView->insertItem( i18n("I&nfomations"), this, "infoImage", CTRL + Key_N );
   m_idMenuView_BackgroundColor = m_vMenuView->insertItem( i18n("Background color"), this, "backgroundColor", CTRL + Key_N );
 
@@ -318,6 +335,13 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   // PlugIns
   _menubar->insertMenu( i18n( "&Plug-Ins" ), m_vMenuPlugIns, -1, -1 );
+
+  // Extras
+  _menubar->insertMenu( i18n( "&Extras" ), m_vMenuExtras, -1, -1 );
+
+  m_idMenuExtras_RunGimp = m_vMenuExtras->insertItem( i18n("Run &Gimp"), this, "runGimp", CTRL + Key_N );
+  m_idMenuExtras_RunXV = m_vMenuExtras->insertItem( i18n("Run &xv"), this, "runXV", CTRL + Key_N );
+  m_idMenuExtras_RunCommand = m_vMenuExtras->insertItem( i18n("Run &Command..."), this, "runCommand", CTRL + Key_N );
 
   return true;
 }
@@ -466,7 +490,6 @@ void KImageView::infoImage()
 {
   if ( m_pDoc->isEmpty() )
   {
-    QString tmp;
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nNo information available."), i18n( "OK" ) );
     return;
   }
@@ -476,8 +499,7 @@ void KImageView::centered()
 {
   if ( m_pDoc->isEmpty() )
   {
-    QString tmp;
-    QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nNo information available."), i18n( "OK" ) );
+    QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
     return;
   }
 
@@ -486,6 +508,9 @@ void KImageView::centered()
   slotUpdateView();
 }
 
+/**
+ ** Rotates the image clockwise
+ */
 void KImageView::rotateRight()
 {
   if ( m_pDoc->isEmpty() )
@@ -500,6 +525,9 @@ void KImageView::rotateRight()
   slotUpdateView();
 }
 
+/**
+ ** Rotates the image anti-clockwise
+ */
 void KImageView::rotateLeft()
 {
   if ( m_pDoc->isEmpty() )
@@ -514,6 +542,9 @@ void KImageView::rotateLeft()
   slotUpdateView();
 }
 
+/**
+ ** Flips the image vertical
+ */
 void KImageView::flipVertical()
 {
   if ( m_pDoc->isEmpty() )
@@ -529,6 +560,9 @@ void KImageView::flipVertical()
   slotUpdateView();
 }
 
+/**
+ ** Flips the image horizontal
+ */
 void KImageView::flipHorizontal()
 {
   if ( m_pDoc->isEmpty() )
@@ -545,8 +579,150 @@ void KImageView::flipHorizontal()
   slotUpdateView();
 }
 
+/**
+ ** Sets the background color of the viewer
+ */
 void KImageView::backgroundColor()
 {
+  KColorDialog dlg;
+  QColor color;
+
+  dlg.getColor( color );  
+  setBackgroundColor( color );
+
+  QWidget::update();
+}
+
+void KImageView::zoomFactor()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "Zoom Factor" );
+
+  QWMatrix matrix;
+/*
+  KNumDialog num;
+  int factor = (int)(matrix.m11() * 100 );
+  
+  if ( !num.getNum( factor, i18n("Enter Zoom factor (100 = 1x):" ) ) )
+    return;
+*/
+  int factor = 2;
+      
+  if ( factor <= 0 )
+    return;
+    
+  double val = (double)factor/100;
+  matrix.scale( val, val );
+  
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::zoomIn10()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "Zoom In 10" );
+
+  QWMatrix matrix;
+  matrix.scale( 1.1, 1.1 );
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::zoomOut10()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "Zoom Out 10" );
+
+  QWMatrix matrix;
+  matrix.scale( 0.9, 0.9 );
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::zoomDouble()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "Zoom Double" );
+
+  QWMatrix matrix;
+  matrix.scale( 2.0, 2.0 );
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::zoomHalf()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "Zoom Half" );
+
+  QWMatrix matrix;
+  matrix.scale( 0.5, 0.5 );
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::zoomMax()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "Zoom Max" );
+
+  QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::zoomMaxAspect()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "Zoom Max Aspect" );
+
+  QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::preferences()
+{
+}
+
+void KImageView::runGimp()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+}
+
+void KImageView::runXV()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+}
+
+void KImageView::runCommand()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
 }
 
 void KImageView::resizeEvent( QResizeEvent *_ev )
