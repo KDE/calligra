@@ -117,6 +117,7 @@ public:
     void insertSoftHyphen();
     void insertSpecialChar(QChar _c);
     void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
+    void referenceLink(QString & href);
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
@@ -133,7 +134,7 @@ public slots:
     /** This is a slot so that it's accessible from DCOP */
     void insertText( const QString &text );
 
-    QString refLink() {return m_refLink;}
+    QString refLink()const {return m_refLink;}
 
     void openLink();
 
@@ -225,6 +226,8 @@ private:
     bool m_singleWord;
     QString m_wordUnderCursor;
     QString m_refLink;
+    //store variable link position.
+    int varLinkPosition;
 };
 
 #endif

@@ -318,12 +318,6 @@ public: // made public for KWTextFrameSet...
     void copyCharFormatting( Qt3::QTextParag *parag, int position, int index /*in text*/, bool moveCustomItems );
     void readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParagLayouts = false, bool moveCustomItems = false );
 
-    /*
-     * Text if selected text is a link
-     * return reference of link
-     */
-    bool textSelectedIsAnLink(QString & href);
-
     /**
      * The undo-redo structure holds the _temporary_ information for the current
      * undo/redo command. For instance, when typing "a" and then "b", we don't

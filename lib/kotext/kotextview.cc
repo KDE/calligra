@@ -29,7 +29,7 @@
 #include <kdatatool.h>
 #include <krun.h>
 #include <kmessagebox.h>
-
+#include <koVariable.h>
 class KoTextView::KoTextViewPrivate
 {
 public:
@@ -80,6 +80,7 @@ KoTextView::KoTextView( KoTextObject *textobj )
     possibleTripleClick = FALSE;
     afterTripleClick = FALSE;
     m_currentFormat = 0;
+    varLinkPosition =-1;
     //updateUI( true, true );
 }
 
@@ -631,7 +632,7 @@ void KoTextView::placeCursor( const QPoint &pos )
 {
     m_cursor->restoreState();
     Qt3::QTextParag *s = textDocument()->firstParag();
-    m_cursor->place( pos,  s );
+    m_cursor->place( pos,  s,false,&varLinkPosition );
     updateUI( true );
 }
 
@@ -761,11 +762,25 @@ KoTextDocument * KoTextView::textDocument() const
     return textObject()->textDocument();
 }
 
+void KoTextView::referenceLink(QString & href)
+{
+     KoTextStringChar * ch = m_cursor->parag()->at( varLinkPosition );
+     ch = m_cursor->parag()->at( varLinkPosition );
+     if(ch->isCustom())
+     {
+         KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(ch->customItem());
+         if(var)
+             href=var->url();
+     }
+}
+
 QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
 {
     m_singleWord = false;
     m_wordUnderCursor = QString::null;
     m_refLink= QString::null;
+    if(varLinkPosition!=-1)
+        referenceLink(m_refLink);
     QString text;
     if ( textObject()->hasSelection() )
     {
@@ -773,7 +788,6 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
         if ( text.find(' ') == -1 && text.find('\t') == -1 && text.find(KoTextObject::customItemChar()) == -1 )
         {
             m_singleWord = true;
-            textObject()->textSelectedIsAnLink(m_refLink);
         }
         else
          {
@@ -789,16 +803,12 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
         text = textObject()->selectedText();
         if(text.find(KoTextObject::customItemChar()) == -1)
         {
-            textObject()->textSelectedIsAnLink(m_refLink);
             textDocument()->removeSelection( KoTextDocument::Standard );
             m_singleWord = true;
             m_wordUnderCursor = text;
         }
         else
-        {
             text = QString::null;
-            m_refLink=QString::null;
-        }
     }
 
 #if 0
