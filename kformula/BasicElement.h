@@ -2,24 +2,22 @@
 #define _BASIC_ELEMENT_H_
 
 /*
- BasicElement.h 
+ BasicElement.h
  Project KOffice/KFormula
 
- 
+
  Author: Andrea Rizzi <rizzi@kde.org>
  License:GPL
 */
 // #include <koStream.h>
 
-#include <qpoint.h>
-#include <qstring.h>
 #include <qpainter.h>
-#include <qcolor.h>
-#include <qrect.h> 
-#include <qfont.h>
-#include "formuladef.h"
+
 #include <typeinfo>
 #include <iostream>
+
+#include "formuladef.h"
+#include <qdom.h>
 
 class BasicElement;
 struct PosType
@@ -35,7 +33,7 @@ struct PosType
  */
 class KFormulaContainer;
 
-class BasicElement 
+class BasicElement
 {
  public:
     /*
@@ -51,11 +49,11 @@ class BasicElement
      * Link Next & Prev removing itself
      */
     virtual   ~BasicElement();
-  
+
     /*
      * each derived class must implement its own Draw()
      * "prev" is responsable for x,y
-     * 
+     *
      */
     virtual void draw(QPoint drawPoint,int resolution = 72);
   
@@ -69,7 +67,7 @@ class BasicElement
      * each derived class must implement its own CheckSize()
      * void because autostore size in Data
      */ 
-    virtual void checkSize(); 
+    virtual void checkSize();
   
     /*
      * Check if needed children exists.
@@ -77,19 +75,19 @@ class BasicElement
      */
     virtual void check();
      
-     
+
     /*
      * Must be called by draw() 
      * RootElement may need to rewrite it.
      */ 
     virtual void checkIndexesSize();
-  
+
   
     /*
      * Scale Font size
      */
     void scaleNumericFont(int level); 
-  
+
     /*
      * Set Font size
      */
@@ -99,7 +97,7 @@ class BasicElement
      * Change pointer of next element
      */
     void setNext(BasicElement *newNext);
-  
+
     /*  
      * Change poniter of previous element
      */
@@ -143,7 +141,7 @@ class BasicElement
      * Return index
      */
     BasicElement * getIndex(int ind) const { return index[ind]; }
-  
+
     /*
      * Return child
      */
@@ -159,9 +157,9 @@ class BasicElement
      * Various Set-GetFunction
      */  
     void setContent(QString a) {content=a.copy();}  
-    QString getContent() { return content;}  
+    QString getContent() { return content;}
     void setIndex(BasicElement *e,int i) {index[i]=e; }    
-    void setChild(BasicElement *e,int i) {child[i]=e; }    
+    void setChild(BasicElement *e,int i) {child[i]=e; }
     void setColor(QColor *c) {defaultColor=c; }       
     void setRelation(int r) {relation=r; }       
     
@@ -187,15 +185,16 @@ class BasicElement
     /*
      * delete this element, its children & index 
      */
-    void deleteElement();    
+    void deleteElement();
   
     /*
      *  At the moment they do nothing.
      *  
      */
-    virtual void save(ostream& out);
+    //    virtual void save(ostream& out);
+    QDomElement save( QDomDocument& doc ) const;
     virtual void load(istream& in);
-  
+
  protected:
     /*
      * I know nothing about the future of this member
@@ -209,13 +208,13 @@ class BasicElement
      * 4..n=child[n-4] 
      */
     int relation;
-  
+
     /*
      * Next & previous Elements
      */
     BasicElement *next;
     BasicElement *prev;
-  
+
     /*
      * Index printed near the corners of element 
      * Those aren't integral or Sum limits 
@@ -251,7 +250,7 @@ class BasicElement
     /*
      * Size of (family+next) & next elements
      */
-    QRect globalSize;   //y=0  base line 
+    QRect globalSize;   //y=0  base line
   
     /*
      * Size of family & indexes
@@ -269,7 +268,7 @@ class BasicElement
      * localSize+drawPoint
      */
     QRect myArea;    
-  
+
     /*
      * Font
      *
@@ -297,7 +296,7 @@ class BasicElement
     * Cursor Internal position
     * In TextElement it is the position of the cursor into the contentstring
     * pos==0  Before element
-    * pos!=0  After.  
+    * pos!=0  After.
     */
 
 };

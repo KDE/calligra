@@ -1,9 +1,9 @@
-<!DOCTYPE QConfig ><QConfig>
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KFormula" version="1">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
   <Action name="addtext"/>
-  <Action name="typeright"/>
  </Menu>
  <Menu name="Element"><text>Element</text>
   <Menu name="Add"><text>Add...</text>
@@ -108,5 +108,4 @@
   <Action name="matrixremcol"/>
  </ToolBar>
 
-
-</QConfig>
+</kpartgui>

@@ -1,15 +1,13 @@
 #ifndef _kformula_container_h
 #define _kformula_container_h
 
-#include <qobject.h>
 #include <qlist.h>
 #include <qfont.h>
 #include <qcolor.h>
-
 struct PosType;
 class BasicElement;
 
-class KFormulaContainer //: public QObject 
+class KFormulaContainer //: public QObject
 {
 //    Q_OBJECT
 	

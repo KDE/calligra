@@ -2,19 +2,16 @@
 #define  _MATRIX_ELEMENT_H_
 
 /*
- MatrixElement.h 
+ MatrixElement.h
  Project KOffice/KFormula
- 
+
  Author: Andrea Rizzi <rizzi@kde.org>
  License:GPL
 */
 
-#include <qpoint.h>
-#include <qstring.h>
+
 #include <qpainter.h>
-#include <qcolor.h>
-#include <qrect.h> 
-#include <qfont.h>
+
 #include "BasicElement.h"
 
 class MatrixElement : public BasicElement

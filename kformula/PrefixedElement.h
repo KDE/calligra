@@ -9,13 +9,9 @@
  License:GPL
 */
 
-#include <qpoint.h>
-#include <qstring.h>
 #include <qpainter.h>
-#include <qcolor.h>
-#include <qrect.h> 
-#include <qfont.h>
-#include "BasicElement.h"
+
+class BasicElement;
 
 class PrefixedElement : public BasicElement
 {

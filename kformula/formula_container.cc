@@ -10,8 +10,8 @@ void KFormulaContainer::setFirstElement(BasicElement* c)
 {
     if (c)
 	theFirstElement = c;
-    else
-	warning("Try to set first element to 0L");
+    /*else
+	//warning("Try to set first element to 0L");*/
 }
 
 void KFormulaContainer::addElement(BasicElement *e, int pos)

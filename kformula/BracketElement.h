@@ -9,12 +9,8 @@
  License:GPL
 */
 
-#include <qpoint.h>
-#include <qstring.h>
 #include <qpainter.h>
-#include <qcolor.h>
-#include <qrect.h> 
-#include <qfont.h>
+
 #include "BasicElement.h"
 
 class BracketElement : public BasicElement
@@ -63,9 +59,10 @@ class BracketElement : public BasicElement
      * return cursor position (-1 if no cursor is need)
      */
 
-    virtual void save(ostream& out);
+    //virtual void save(ostream& out);
+    
     virtual void load(istream& in);
-
+    QDomElement save( QDomDocument& doc ) const;
 //    virtual int takeActionFromKeyb(int action);
     /*
      * do nothing

@@ -31,6 +31,7 @@ FractionElement::FractionElement(KFormulaContainer *Formula,
     child.resize(childrenNumber);
     child[0]=0L;
     child[1]=0L;
+    relation=Relation;
 
 }
 
@@ -47,8 +48,9 @@ void FractionElement::draw(QPoint drawPoint,int resolution)
     int x,y;
     x=drawPoint.x();
     y=drawPoint.y();
-    int space=atoi(content.right(content.length()-3));
-    warning("Sapce %i",space);
+    //int space=atoi(content.right(content.length()-3);
+    int space=content.right(content.length()-3).toInt();
+    //warning("Sapce %i",space);
     space+=numericFont/24;
 
 
@@ -57,7 +59,7 @@ void FractionElement::draw(QPoint drawPoint,int resolution)
 
 
     int ofs=(numericFont/24);
-    warning("Array");
+    //warning("Array");
 
     if (content[0]=='F') {
 	QPointArray points(5);
@@ -109,8 +111,9 @@ void FractionElement::checkSize()
 	}
     child[0]->checkSize();
     child[1]->checkSize();
-    int space=atoi(content.right(content.length()-3));
-    warning("Space %i",space);
+    //int space=atoi(content.right(content.length()-3));
+    int space=content.right(content.length()-3).toInt();
+    //warning("Space %i",space);
     space+=numericFont/24;
     QRect child0Size=child[0]->getSize();
     QRect child1Size=child[1]->getSize();
@@ -126,8 +129,9 @@ void FractionElement::checkSize()
     if(content[2]=='C')
 	offsetX/=2;
     if(content[2]=='R')
-	warning("R");
-
+        {
+	//warning("R");
+        }
     child0Size.moveBy(0,-space/2-child0Size.bottom());
     child1Size.moveBy(0,space/2-child1Size.top());
     familySize=child0Size.unite(child1Size);

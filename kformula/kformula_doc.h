@@ -1,22 +1,18 @@
 #ifndef KFORMULA_PART_H
 #define KFORMULA_PART_H
-#include "formula_container.h"
-#include <koDocument.h>
-#include "BasicElement.h"
 
 class KFormulaDoc;
+class BasicElement;
+
 
 #include "formuladef.h"
-#include "BasicElement.h"
-#include <iostream>
 #include "kformula_view.h"
+#include "formula_container.h"
+
 #include <qlist.h>
-#include <qobject.h>
-#include <qrect.h>
-#include <qpoint.h>
-#include <qfont.h>
-#include <qstring.h>
 #include <qpainter.h>
+
+#include <koDocument.h>
 
 #define MIME_TYPE "application/x-kformula"
 
@@ -27,7 +23,7 @@ class KFormulaDoc :    virtual public KoDocument,public KFormulaContainer
 {
     Q_OBJECT
 public:
-    KFormulaDoc( KoDocument* parent = 0, const char* name = 0 );
+    KFormulaDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KFormulaDoc();
 
     virtual KoMainWindow* createShell();
@@ -35,6 +31,9 @@ public:
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
     virtual bool initDoc();
+
+    virtual bool loadXML( QIODevice *, const QDomDocument& doc );
+    virtual QDomDocument saveXML();
 
     virtual QCString mimeType() const;
 
@@ -65,9 +64,6 @@ public:
     virtual void cleanUp();
 
  public:
-
-    virtual bool save( ostream& out, const char* _format );
-
     KFormulaView* createFormulaView( QWidget* _parent = 0 );
 
 //    virtual void addView( KFormulaView *_view );
@@ -104,6 +100,16 @@ public:
     void sig_changeText( const char * );
     void sig_changeType(const BasicElement* );
 
+public slots:
+    void enlarge();
+    void reduce();
+    void enlargeRecur();
+    void reduceRecur();
+    void enlargeAll();
+    void reduceAll();
+    void pro();
+    void dele();
+
  protected:
     QList<KFormulaView> m_lstViews;
 
@@ -113,14 +119,9 @@ public:
     // QTimer *cursorTimer;
     bool showIt;
 
-
     BasicElement *theActiveElement;
 
     QRect theCursor;
-
-
-
-
 };
 
 #endif

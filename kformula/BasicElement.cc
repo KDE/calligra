@@ -7,8 +7,11 @@
 */
 
 //#define RECT
-
 #include <qrect.h>
+
+
+#include <kdebug.h>
+
 #include "BasicElement.h"
 #include "formuladef.h"
 #include "formula_container.h"
@@ -24,11 +27,14 @@ BasicElement::BasicElement(KFormulaContainer *Formula,
     relation=Relation;
     next=Next;
     content=Content;
-    if(prev!=NULL) {
-	numericFont=prev->getNumericFont();
-	//warning("Font OK");
-    } else
-	numericFont=24;
+    if(prev!=NULL)
+        {
+	  numericFont=prev->getNumericFont();
+	  kdDebug(39001) <<"Font OK\n";
+        }
+    else
+      numericFont=24;
+
     childrenNumber=0;
     minChildren=0;
     index[0]=0L;
@@ -49,31 +55,34 @@ BasicElement::~BasicElement()
 BasicElement *BasicElement::isInside(QPoint point)
 {
     int i;
-    if(myArea.contains(point)) {
+    if(myArea.contains(point))
+        {
 
-	BasicElement *aValue=0L;
-	if(next!=0)
-	    if((aValue=next->isInside(point))!=0L)
-		return aValue;
-	
-	for(i=0;i<4;i++)
-	    if(index[i]!=0)
-		if((aValue=index[i]->isInside(point))!=0L)
-		    return aValue;
-	
-	for(i=0;i<childrenNumber;i++)
+	  BasicElement *aValue=0L;
+	  if(next!=0)
 	    {
-		if(child[i]!=0)
-		    {
-			warning("Child %i",i);
-			if((aValue=child[i]->isInside(point))!=0L)
-			    return aValue;
-		    }
+	      if((aValue=next->isInside(point))!=0L)
+		return aValue;
 	    }
-	return this;
+	  for(i=0;i<4;i++)
+	    if(index[i]!=0)
+	      if((aValue=index[i]->isInside(point))!=0L)
+		return aValue;
 
-    } else
-	return 0L;
+	  for(i=0;i<childrenNumber;i++)
+	    {
+	      if(child[i]!=0)
+		{
+		  //kdDebug(39001) << "Child "<<i<<endl;
+		  if((aValue=child[i]->isInside(point))!=0L)
+		    return aValue;
+		}
+	    }
+	  return this;
+
+        }
+    else
+      return 0L;
 }
 
 void BasicElement::draw(QPoint drawPoint,int resolution)
@@ -83,21 +92,22 @@ void BasicElement::draw(QPoint drawPoint,int resolution)
     int x = drawPoint.x();
     int y = drawPoint.y();
     if( beActive )
-	pen->setPen(Qt::red);
+      pen->setPen(Qt::red);
     pen->setBrush(Qt::NoBrush);
     pen->drawRect(x+familySize.x(),y-5,10,10);
-
+    
     myArea=globalSize;
     myArea.moveBy(x,y);
 #ifdef RECT
     pen->drawRect(myArea);
 #endif
     if(beActive)
-	pen->setPen(Qt::blue);
+      pen->setPen(Qt::blue);
     drawIndexes(pen,resolution);
     if(beActive)
-	pen->setPen(Qt::black);
-    if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
+      pen->setPen(Qt::black);
+    if(next!=0L)
+        next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
 
 }
 
@@ -127,13 +137,14 @@ void BasicElement::drawIndexes(QPainter *,int resolution)
 void BasicElement::checkSize()
 {
     //warning("%p",this);
+    //kdDebug(39001) <<"%p"<<this<<endl;
     QRect nextDimension;
 
     if (next!=0L)
-	{
-	    next->checkSize();
-	    nextDimension=next->getSize();
-	}
+      {
+	next->checkSize();
+	nextDimension=next->getSize();
+      }
     localSize=QRect(0,-5,10,10);
     familySize=localSize;
     checkIndexesSize();  //This will change localSize adding Indexes Size
@@ -147,12 +158,15 @@ void BasicElement::checkSize()
 
 void BasicElement::check()
 {
-    int i=0; 
-    for(i=0;i<childrenNumber;i++)
-	if (child[i]==0L)
-	    if (i<minChildren)
-		child[i]=new BasicElement(formula,this,i+4);
-
+  int i=0;
+  for(i=0;i<childrenNumber;i++)
+    {
+      if (child[i]==0L)
+	{
+	  if (i<minChildren)
+	    child[i]=new BasicElement(formula,this,i+4);
+	}
+    }
 }
 void BasicElement::checkIndexesSize()
 {
@@ -160,7 +174,11 @@ void BasicElement::checkIndexesSize()
     QPoint vectorT;
     int i;
     for(i=0;i<4;i++)
-	if (index[i]!=0L) index[i]->checkSize();
+        {
+        if (index[i]!=0L)
+                index[i]->checkSize();
+        }
+
     if(index[0]!=0L)
 	{
 	    indexDimension=index[0]->getSize();
@@ -194,27 +212,31 @@ void BasicElement::checkIndexesSize()
 
 void BasicElement::scaleNumericFont(int level)
 {
-    if((level & FN_ELEMENT)>0) {
+    if((level & FN_ELEMENT)>0) 
+      {
 	if ((level & FN_REDUCE)>0)
-	    {
-		if((level & FN_BYNUM)>0)
-		    setNumericFont(numericFont-(level & 255));
-		else  {
-		    int den=(level & 15);
-		    int num=((level>>4) & 15);
-		    setNumericFont((numericFont*num)/den);
-		}
-	    } else {
-		if((level & FN_BYNUM)>0)
-		    setNumericFont(numericFont+(level & 255));
-		else
-		    {
-			int num=(level & 15);
-			int den=((level>>4) & 15);
-			setNumericFont((numericFont*num)/den);
-		    }
-	    }
-    }
+	  {
+	    if((level & FN_BYNUM)>0)
+	      setNumericFont(numericFont-(level & 255));
+	    else  
+	      {
+		int den=(level & 15);
+		int num=((level>>4) & 15);
+		setNumericFont((numericFont*num)/den);
+	      }
+	  } 
+	else 
+	  {
+	    if((level & FN_BYNUM)>0)
+	      setNumericFont(numericFont+(level & 255));
+	    else
+	      {
+		int num=(level & 15);
+		int den=((level>>4) & 15);
+		setNumericFont((numericFont*num)/den);
+	      }
+	  }
+      }
     int ps;
     if(level & FN_INDEXES)
 	for(ps=0;ps<4;ps++)
@@ -254,10 +276,12 @@ void  BasicElement::substituteElement(BasicElement *clone)
     clone->setContent(content);
     clone->setNext(next);
     clone->setPrev(prev);
-    for(i=0;i<4;i++) {
+    for(i=0;i<4;i++) 
+      {
 	clone->setIndex(index[i],i);
-	if(index[i]!=0L) index[i]->setPrev(clone);
-    }
+	if(index[i]!=0L) 
+	  index[i]->setPrev(clone);
+      }
     clone->setNumericFont(numericFont);
     clone->setColor(defaultColor);
     clone->setRelation(relation);
@@ -275,7 +299,7 @@ void  BasicElement::substituteElement(BasicElement *clone)
 	}
     else //I'm the first element!!
 	formula->setFirstElement(clone);
-    warning("Substituted %p with %p,  waiting to be deleted",this,clone);
+    //kdDebug(39001) <<"Substituted "<<this<<"  waiting to be deleted"<<clone<<endl;
 }
 
 
@@ -307,56 +331,92 @@ void  BasicElement::insertElement(BasicElement *element)
 
 void  BasicElement::deleteElement()
 {
-    warning("deleteElement of -> %p   prev %p    next %p",this,prev,next);
-    if(next!=0L)
+  kdDebug(39001) <<"deleteElement of -> "<<this<<"   prev "<<prev<<"    next "<<next<<endl;
+  if(next!=0L)
+    {
+      next->setPrev(prev);
+      next->setRelation(relation);
+    }
+  if(prev!=0L)
+    {
+      if(relation<4)
 	{
-	    next->setPrev(prev);
-	    next->setRelation(relation);
+	  if(relation>=0)
+                        {
+	        prev->setIndex(next,relation);
+                        }
+	  else
+                        {
+	        prev->setNext(next);
+                        }
 	}
-    if(prev!=0L)
-     	{
-	    if(relation<4)
-		{
-		    if(relation>=0)
-			prev->setIndex(next,relation);
-		    else
-			prev->setNext(next);
-		}
-	    else
-		prev->setChild(next,relation-4);
-	}
-    
-    else //I'm the first element.
-	if(next!=0L)
-	    formula->setFirstElement(next);    
-	else
-	    formula->setFirstElement(new BasicElement(formula));    
+      else
+                {
+                  prev->setChild(next,relation-4);
+                }
+    }
 
-      
-    int nc=0;     
+  else //I'm the first element.
+    {
+    if(next!=0L)
+      formula->setFirstElement(next);
+    else
+      formula->setFirstElement(new BasicElement(formula));
+    }
+    int nc=0;
     while (nc<childrenNumber)
-	{ 
+	{
 	    if (child[nc]!=0L)
 		{
-		    warning("I'm %p, I delete my child[%d]=%p i.e. %d of %d",this,nc,child[nc],nc+1,childrenNumber);    
+		    //warning("I'm %p, I delete my child[%d]=%p i.e. %d of %d",this,nc,child[nc],nc+1,childrenNumber);
 		    child[nc]->deleteElement();
 		}
-	    else 
+	    else
 		nc++;
 	}
     while (nc<4)
-	{ 
+	{
 	    if (index[nc]!=0L)
 		index[nc]->deleteElement();
-	    else 
+	    else
 		nc++;
 	}
     delete this;  // It is a good call ?
- 
+
 
 }
 
-void  BasicElement::save(ostream& out)
+QDomElement BasicElement::save( QDomDocument& doc ) const
+{
+  QDomElement format2 = doc.createElement( "format2" );
+  format2.setAttribute("type",childrenNumber);
+  return format2;
+  /*    out << "TYPE=" << -1 << " "
+	<< "CONTENT=" << content.utf8().data() << " "
+	<< "NUMERICFONT=" << numericFont << " "
+	<< " >" << endl;
+
+    for(int i=0;i<4;i++)
+	if(index[i]!=0L)
+	    {
+		out << " <ELEM INDEX=" << i << " ";
+		index[i]->save(out);
+	    }
+
+    for(int i=0;i<childrenNumber;i++)
+	if(child[i]!=0L)
+	    {
+		out << " <ELEM CHILD=" << i << " ";
+		child[i]->save(out);
+	    }
+    if(next!=0)
+	{
+	    out << " <ELEM NEXT ";
+	    next->save(out);
+	}
+	out << "</ELEM>" << endl;*/
+}
+/*void  BasicElement::save(ostream& out)
 {
     out << "TYPE=" << -1 << " "
 	<< "CONTENT=" << content.utf8().data() << " "
@@ -367,28 +427,28 @@ void  BasicElement::save(ostream& out)
 	if(index[i]!=0L)
 	    {
 		out << " <ELEM INDEX=" << i << " ";
-		index[i]->save(out);     
-	    } 
-    
+		index[i]->save(out);
+	    }
+
     for(int i=0;i<childrenNumber;i++)
 	if(child[i]!=0L)
 	    {
 		out << " <ELEM CHILD=" << i << " ";
-		child[i]->save(out);     
-	    } 
+		child[i]->save(out);
+	    }
     if(next!=0)
 	{
 	    out << " <ELEM NEXT ";
-	    next->save(out);     
-	}         
+	    next->save(out);
+	}
     out << "</ELEM>" << endl;
-}
+    }*/
 
 void  BasicElement::load(istream& )
 {
 }
 
-void BasicElement::makeList(bool active) 
+void BasicElement::makeList(bool active)
 {
 //    warning("make list %p " ,this);
     bool basic;
@@ -396,15 +456,16 @@ void BasicElement::makeList(bool active)
     if(!basic)
 	formula->addElement(this, 0);
 //    warning("append");
+    kdDebug(39001) <<"append\n";
 
     beActive=0;
 
     for(int i=0;i<2;i++)
 	if(index[i]!=0) {
-	//    warning("call for index%d %p",i,index[i]);
+            kdDebug(39001) <<"call for index%d"<<i<<" %p"<<index[i]<<endl;
 	    index[i]->makeList(active);
 	}
-//    warning("index OK");
+    kdDebug(39001) <<"index OK\n";
 
     for(int i=0;i<childrenNumber;i++)
 	if(child[i]!=0)
@@ -415,7 +476,7 @@ void BasicElement::makeList(bool active)
     if(basic) 
 	formula->addElement(this);
 
-//    warning("children done");
+    kdDebug(39001) <<"children done\n";
 
     for(int i=2;i<4;i++)
 	if(index[i]!=0) {

@@ -3,26 +3,14 @@
 
 class KFormulaView;
 class KFormulaDoc;
-/*
-#include <koFrame.h>
-#include <opMenu.h>
-#include <opToolBar.h>
-#include <koFrame.h>
-#include <openparts_ui.h>
-*/
+
+
 #include <koView.h>
 
 #include "kformula.h"
-#include <kaction.h>
-#include <qwidget.h>
 #include <qlist.h>
-#include <qkeycode.h>
 
 class BasicElement;
-
-
-
-//#include <container.h>
 
 class KAction;
 class QPaintEvent;
@@ -31,16 +19,12 @@ class QPaintEvent;
 class KFormulaView : public KoView
 {
     Q_OBJECT
-//public:
-//    KFormulaView( KFormulaDoc* part, QWidget* parent = 0, const char* name = 0 );
 
  public:
     // C++
     KFormulaView( KFormulaDoc * _doc,QWidget *_parent=0, const char *_name=0);
     virtual ~KFormulaView();
 
-    // IDL
-//    virtual void newView();
     virtual bool printDlg();
 public slots:
     // Document signals
@@ -48,37 +32,25 @@ public slots:
     void createMatrix(QString str);
     void slotModified();
     void slotTypeChanged( const BasicElement *elm);
+    void undo();
+    void redo();
 
 protected:
     // C++
     virtual void init();
-    // IDL
-//    virtual bool event( const QCString & _event, const CORBA::Any& _value );
-    // C++
-//    virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
-//    virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
-
     virtual void cleanUp();
 
-    /*long addToolButton( OpenPartsUI::ToolBar_ptr toolbar,
-			       const char* pictname,
-			       const QString &tooltip,
-			       const char* func,
-			       CORBA::Long id );
-*/
     void mousePressEvent(QMouseEvent *a);
     void paintEvent( QPaintEvent *_ev );
     void resizeEvent( QResizeEvent *_ev );
     void keyPressEvent( QKeyEvent *k );
-    virtual void updateReadWrite( bool /*readwrite*/ ) { };
+    virtual void updateReadWrite( bool );
     KFormulaDoc *m_pDoc;
 
     QPopupMenu *mn_indexList;
 
-
-   //Actions!!
-
     KAction *actionEditUndo;
+    KAction *actionEditRedo;
     KAction *m_idButtonFormula_0;
     KAction *actionView_NewView;
     KAction *actionView_FontToolbar;
@@ -143,50 +115,6 @@ protected:
     KAction *actionFormula_Font;
 //    KAction *actionHelp_Using;
 
-/*    CORBA::Long m_idButtonFormula_0;
-    CORBA::Long m_idButtonFormula_1;
-    CORBA::Long m_idButtonFormula_2;
-    CORBA::Long m_idButtonFormula_3;
-    CORBA::Long m_idButtonFormula_4;
-    CORBA::Long m_idButtonFormula_5;
-    CORBA::Long m_idButtonFormula_6;
-    CORBA::Long m_idButtonFormula_7;
-    CORBA::Long m_idButtonFont_Bold;
-    CORBA::Long m_idButtonFont_Underl;
-    CORBA::Long m_idButtonFont_Italic;
-    CORBA::Long m_idButtonFont_0;
-    CORBA::Long m_idButtonFont_1;
-    CORBA::Long m_idButtonFont_2;
-    CORBA::Long m_idButtonFont_3;
-    CORBA::Long m_idButtonFont_4;
-    CORBA::Long m_idButtonFont_5;
-    CORBA::Long m_idComboFont_FontSize;
-    CORBA::Long m_idComboFont_FontFamily;
-    CORBA::Long m_idComboFont_ScaleMode;
-    CORBA::Long m_idButtonType_Spl;
-    CORBA::Long m_idButtonType_RIn;
-    CORBA::Long m_idButtonType_Del;
-    CORBA::Long m_idComboType_DelLeft;
-    CORBA::Long m_idComboType_DelRight;
-    CORBA::Long m_idButtonType_UAl;
-    CORBA::Long m_idButtonType_MAl;
-    CORBA::Long m_idButtonType_DAl;
-    CORBA::Long m_idButtonType_LAl;
-    CORBA::Long m_idButtonType_CAl;
-    CORBA::Long m_idButtonType_RAl;
-    CORBA::Long m_idButtonType_Mor;
-    CORBA::Long m_idButtonType_Les;
-    CORBA::Long m_idButtonType_Mid;
-    CORBA::Long m_idButtonType_AddH;
-    CORBA::Long m_idButtonType_AddL;
-    CORBA::Long m_idButtonType_SetM;
-    CORBA::Long m_idButtonType_InR;
-    CORBA::Long m_idButtonType_InC;
-    CORBA::Long m_idButtonType_ReR;
-    CORBA::Long m_idButtonType_ReC;
-    CORBA::Long m_idButtonType_Pix;
-    // IDL
-*/
 public slots:
      void addText();
      void addRoot();
@@ -213,8 +141,11 @@ public slots:
      void addTopRightIndex();
      void addBottomRightIndex();
      void indexList();
-     void sizeSelected();
-     void fontSelected();
+     void sizeSelected(int);
+     void fontSelected(const QString& );
+     void bold(bool);
+     void underline(bool);
+     void italic(bool);
      void modeSelected(char*);
      void textFont();
      void textSplit();

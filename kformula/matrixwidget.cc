@@ -10,178 +10,205 @@
  * bilibao@ouverture.it
  */
 
-#include <qlabel.h>
-#include <qspinbox.h>
+
+
 #include <kapp.h>
-#include <ktabctl.h>
+
+#include <kdebug.h>
+
 #include <stdlib.h>
-#include "matrixwidget.h"
+
 #include <qcombobox.h>
 #include <qbuttongroup.h>
+#include <qspinbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+
+#include "matrixwidget.h"
 
 /*
 Matrix Setup Dialog
 */
 
-MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,
-	const char* name): QDialog( parent, name, TRUE )
+MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,const char* name)
+        :KDialogBase(KDialogBase::Tabbed, i18n("KFormula - Matrix Element Setup"), Ok|Cancel, Ok, parent, name)
 {
-    setMinimumSize(380,360);
-    setMaximumSize(380,360);
 
-    KTabCtl *tab = new KTabCtl( this, "ktab" );
-    setCaption( i18n("KFormula - Matrix Element Setup " ));
-    tab->setGeometry(5,10,340,300);
-    QWidget *w = new QWidget( tab, "page one" );
+    QFrame *page1 = addPage(i18n("General"));
+    QVBoxLayout *lay1 = new QVBoxLayout( page1 );
+    lay1->setMargin( 5 );
+    lay1->setSpacing( 10 );
+
+
     QButtonGroup* tmpQButtonGroup;
-    tmpQButtonGroup = new QButtonGroup( w, "ButtonGroup_1" );
-    tmpQButtonGroup->setGeometry( 10, 10, 320, 100 );	
+    tmpQButtonGroup = new QButtonGroup( page1, "ButtonGroup_1" );
     tmpQButtonGroup->setFrameStyle( 49 );
     tmpQButtonGroup->setTitle( i18n("Size & Space:") );
+    QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup,2,4,15,7);
+
     QLabel* tmpQLabel;
-    tmpQLabel = new QLabel( w, "Label_1" );
-    tmpQLabel->setGeometry( 20, 25, 90, 30 );
+    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_1" );
     tmpQLabel->setText(i18n("Columns:" ));
-    spb[1] = new QSpinBox( 1, 999, 1, w, "SpinX" );
-    spb[1]->setGeometry( 110, 25, 60, 30 );
-    tmpQLabel = new QLabel( w, "Label_2" );
-    tmpQLabel->setGeometry( 180, 25, 90, 30 );
+    grid1->addWidget(tmpQLabel,0,0);
+
+    spb[1] = new QSpinBox( 1, 999, 1, tmpQButtonGroup, "SpinX" );
+    grid1->addWidget(spb[1],0,1);
+
+    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_2" );
     tmpQLabel->setText(i18n("Rows" ));
-    spb[2] = new QSpinBox( 1, 999, 1, w, "SpinY" );
-    spb[2]->setGeometry( 260, 25, 60, 30 );
+    grid1->addWidget(tmpQLabel,0,2);
+
+
+    spb[2] = new QSpinBox( 1, 999, 1, tmpQButtonGroup, "SpinY" );
+    grid1->addWidget(spb[2],0,3);
+
     connect(spb[2],SIGNAL(valueChanged(int)),this, SLOT(valueChanged(int)));
-    tmpQLabel = new QLabel( w, "Label_2" );
-    tmpQLabel->setGeometry( 20, 70,100, 30 );
+
+    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_2" );
     tmpQLabel->setText(i18n("Space:" ));
-    spb[3] = new QSpinBox( 1, 999, 1, w, "SpinSpace" );
-    spb[3]->setGeometry( 110, 70, 60, 30 );
-    tmpQButtonGroup = new QButtonGroup( w, "ButtonGroup_2" );
-    tmpQButtonGroup->setGeometry( 10, 110, 320, 150 );	
+    grid1->addWidget(tmpQLabel,1,0);
+
+    spb[3] = new QSpinBox( 1, 999, 1, tmpQButtonGroup, "SpinSpace" );
+    grid1->addWidget(spb[3],1,1);
+    lay1->addWidget(tmpQButtonGroup);
+
+
+
+    tmpQButtonGroup = new QButtonGroup( page1, "ButtonGroup_2" );
+    grid1 = new QGridLayout(tmpQButtonGroup,6,2,15,7);
+
     tmpQButtonGroup->setFrameStyle( 49 );
     tmpQButtonGroup->setTitle( i18n("Borders:") );
-    co[0] = new QComboBox(w,"Combo1");
-    co[0]->setGeometry( 200,130,100,20);
+
+    co[0] = new QComboBox(tmpQButtonGroup,"Combo1");
     co[0]->insertItem(i18n("No-border"));
-    co[0]->insertItem(i18n("Single Line"));		
-    co[0]->insertItem(i18n("Double Line"));		
+    co[0]->insertItem(i18n("Single Line"));
+    co[0]->insertItem(i18n("Double Line"));
+    grid1->addWidget(co[0],0,1);
 
-    co[1] = new QComboBox(w,"Combo2");
-    co[1]->setGeometry( 200,150,100,20);
+    co[1] = new QComboBox(tmpQButtonGroup,"Combo2");
     co[1]->insertItem(i18n("No-border"));
-    co[1]->insertItem(i18n("Single Line"));		
-    co[1]->insertItem(i18n("Double Line"));		
+    co[1]->insertItem(i18n("Single Line"));
+    co[1]->insertItem(i18n("Double Line"));
+    grid1->addWidget(co[1],1,1);
 
-    co[2] = new QComboBox(w,"Combo3");
-    co[2]->setGeometry( 200,170,100,20);
+    co[2] = new QComboBox(tmpQButtonGroup,"Combo3");
     co[2]->insertItem(i18n("No-border"));
-    co[2]->insertItem(i18n("Single Line"));		
-    co[2]->insertItem(i18n("Double Line"));		
+    co[2]->insertItem(i18n("Single Line"));
+    co[2]->insertItem(i18n("Double Line"));
+    grid1->addWidget(co[2],2,1);
 
-    co[3] = new QComboBox(w,"Combo4");
-    co[3]->setGeometry( 200,190,100,20);
+    co[3] = new QComboBox(tmpQButtonGroup,"Combo4");
     co[3]->insertItem(i18n("No-border"));
-    co[3]->insertItem(i18n("Single Line"));		
-    co[3]->insertItem(i18n("Double Line"));		
+    co[3]->insertItem(i18n("Single Line"));
+    co[3]->insertItem(i18n("Double Line"));
+    grid1->addWidget(co[3],3,1);
 
-    co[4] = new QComboBox(w,"Combo5");
-    co[4]->setGeometry( 200,210,100,20);
+    co[4] = new QComboBox(tmpQButtonGroup,"Combo5");
     co[4]->insertItem(i18n("No-border"));
-    co[4]->insertItem(i18n("Single Line"));		
-    co[4]->insertItem(i18n("Double Line"));		
+    co[4]->insertItem(i18n("Single Line"));
+    co[4]->insertItem(i18n("Double Line"));
+    grid1->addWidget(co[4],4,1);
 
-    co[5] = new QComboBox(w,"Combo6");
-    co[5]->setGeometry( 200,230,100,20);
+    co[5] = new QComboBox(tmpQButtonGroup,"Combo6");
     co[5]->insertItem(i18n("No-border"));
-    co[5]->insertItem(i18n("Single Line"));		
-    co[5]->insertItem(i18n("Double Line"));		
+    co[5]->insertItem(i18n("Single Line"));
+    co[5]->insertItem(i18n("Double Line"));
+    grid1->addWidget(co[5],5,1);
 
-    tmpQLabel = new QLabel( w, "Label_8" );
-    tmpQLabel->setGeometry(20, 130, 170, 20 );
+    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_8" );
+    grid1->addWidget(tmpQLabel,0,0);
     tmpQLabel->setText(i18n("Internal Horizontal" ));
-    tmpQLabel = new QLabel( w, "Label_3" );
-    tmpQLabel->setGeometry(20, 150, 170, 20 );
+
+    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_3" );
+    grid1->addWidget(tmpQLabel,1,0);
     tmpQLabel->setText(i18n("Internal Vertical" ));
-    tmpQLabel = new QLabel( w, "Label_4" );
-    tmpQLabel->setGeometry(20, 170, 170, 20 );
+
+    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_4" );
+    grid1->addWidget(tmpQLabel,2,0);
     tmpQLabel->setText(i18n("Top" ));
-    tmpQLabel = new QLabel( w, "Label_5" );
-    tmpQLabel->setGeometry(20, 190, 170, 20 );
+
+    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_5" );
+    grid1->addWidget(tmpQLabel,3,0);
     tmpQLabel->setText(i18n("Bottom" ));
-    tmpQLabel = new QLabel( w, "Label_6" );
-    tmpQLabel->setGeometry(20, 210, 170, 20 );
+
+    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_6" );
+    grid1->addWidget(tmpQLabel,4,0);
     tmpQLabel->setText(i18n("Left" ));
-    tmpQLabel = new QLabel( w, "Label_7" );
-    tmpQLabel->setGeometry(20, 230, 170, 20 );
-    tmpQLabel->setText(i18n("Rigth" ));
+
+    tmpQLabel = new QLabel( tmpQButtonGroup, "Label_7" );
+    grid1->addWidget(tmpQLabel,5,0);
+    tmpQLabel->setText(i18n("Right" ));
+
+    lay1->addWidget(tmpQButtonGroup);
 
 
-    w->resize( 350, 300 );
-    tab->addTab( w, i18n("General"));
-    w = new QWidget( tab, "page two" );
-    tmpQButtonGroup = new QButtonGroup( w, "ButtonGroup_3" );
-    tmpQButtonGroup->setGeometry( 10, 10, 320, 170 );	
+    QFrame *page2 = addPage(i18n("Align"));
+
+    lay1 = new QVBoxLayout( page2 );
+    lay1->setMargin( 5 );
+    lay1->setSpacing( 10 );
+
+    tmpQButtonGroup = new QButtonGroup( page2, "ButtonGroup_3" );
+
+    grid1 = new QGridLayout(tmpQButtonGroup,1,2,15,7);
     tmpQButtonGroup->setFrameStyle( 49 );
     tmpQButtonGroup->setTitle( i18n("Vertical:") );
-    cb[0] = new QRadioButton( w, "RadioButton_1" );
-    cb[0]->setGeometry( 15, 25, 120, 30 );
+
+    QButtonGroup *tmpQButtonGroup1 = new QButtonGroup( tmpQButtonGroup, "ButtonGroup_31" );
+    tmpQButtonGroup1->setFrameStyle( 0 );
+    QGridLayout *grid2 = new QGridLayout(tmpQButtonGroup1,2,2,15,7);
+    cb[0] = new QRadioButton( tmpQButtonGroup1, "RadioButton_1" );
     cb[0]->setText( i18n("Fixed Row") );
-    spb[0] = new QSpinBox( w, "FixRow" );
-    spb[0]->setGeometry( 130, 25, 40, 30 );	
-    cb[1] = new QRadioButton( w, "RadioButton_2" );
-    cb[1]->setGeometry( 15, 120, 120, 30 );
+    grid2->addWidget(cb[0],0,0);
+
+    spb[0] = new QSpinBox( tmpQButtonGroup1, "FixRow" );
+    grid2->addWidget(spb[0],0,1);
+
+    cb[1] = new QRadioButton( tmpQButtonGroup1, "RadioButton_2" );
+    grid2->addWidget(cb[1],1,0);
     cb[1]->setText( i18n("Half Matrix") );
-    tmpQButtonGroup->insert( cb[0] );
-    tmpQButtonGroup->insert( cb[1] );
-    tmpQButtonGroup->setExclusive( TRUE );
+    tmpQButtonGroup1->setRadioButtonExclusive( TRUE );
+    grid1->addWidget(tmpQButtonGroup1,0,0);
 
-    tmpQButtonGroup = new QButtonGroup( w, "ButtonGroup_5" );
-    tmpQButtonGroup->setGeometry( 1, 1, 0, 0 );	
-    tmpQButtonGroup->setFrameStyle( 0 );
-    cb[2] = new QRadioButton( w, "RadioButton_1" );
-    cb[2]->setGeometry( 190, 25, 120, 30 );
+
+    QButtonGroup *tmpQButtonGroup2 = new QButtonGroup( tmpQButtonGroup, "ButtonGroup_31" );
+    tmpQButtonGroup2->setFrameStyle( 0 );
+    grid2 = new QGridLayout(tmpQButtonGroup2,3,1,15,7);
+    cb[2] = new QRadioButton( tmpQButtonGroup2, "RadioButton_1" );
     cb[2]->setText( i18n("Row Midline") );
-    cb[3] = new QRadioButton( w, "RadioButton_1" );
-    cb[3]->setGeometry( 190, 55, 120, 30 );
+    grid2->addWidget(cb[2],0,0);
+    cb[3] = new QRadioButton( tmpQButtonGroup2, "RadioButton_1" );
     cb[3]->setText( i18n("Over the row" ));
-    cb[4] = new QRadioButton( w, "RadioButton_2" );
-    cb[4]->setGeometry( 190, 85, 120, 30 );
+    grid2->addWidget(cb[3],1,0);
+    cb[4] = new QRadioButton( tmpQButtonGroup2, "RadioButton_2" );
     cb[4]->setText( i18n("Under the row" ));
+    grid2->addWidget(cb[4],2,0);
+    grid1->addWidget(tmpQButtonGroup2,0,1);
+    tmpQButtonGroup2->setRadioButtonExclusive( TRUE );
 
-	tmpQButtonGroup->insert( cb[2] );
-	tmpQButtonGroup->insert( cb[3] );
-	tmpQButtonGroup->insert( cb[4] );
-	tmpQButtonGroup->setExclusive( TRUE );
-	
-    tmpQButtonGroup = new QButtonGroup( w, "ButtonGroup_4" );
-    tmpQButtonGroup->setGeometry( 10, 180, 320, 70 );	
+    lay1->addWidget(tmpQButtonGroup);
+
+    tmpQButtonGroup = new QButtonGroup( page2, "ButtonGroup_4" );
+    grid1 = new QGridLayout(tmpQButtonGroup,1,1,15,7);
+
     tmpQButtonGroup->setFrameStyle( 49 );
     tmpQButtonGroup->setTitle( i18n("Horizontal:") );
-    co[6] = new QComboBox(w,"Combo6");
-    co[6]->setGeometry( 70,200,170,30);
+    co[6] = new QComboBox(tmpQButtonGroup,"Combo6");
+    grid1->addWidget(co[6],0,0);
     co[6]->insertItem(i18n("Center "));
-    co[6]->insertItem(i18n("Left side"));		
-    co[6]->insertItem(i18n("Right side"));		
-		
-    w->resize( 350, 300 );
-    tab->addTab( w, i18n("Align"));
+    co[6]->insertItem(i18n("Left side"));
+    co[6]->insertItem(i18n("Right side"));
+    lay1->addWidget(tmpQButtonGroup);
 
-    QPushButton* tmpQPushButton;
-    tmpQPushButton = new QPushButton( this,"pushButton_1" );
-    tmpQPushButton->setGeometry( 260, 320, 80, 30 );
-    connect( tmpQPushButton, SIGNAL(clicked()), SLOT(OkPressed()) );
-    tmpQPushButton->setText( i18n("&OK" ));
-    tmpQPushButton = new QPushButton( this,"pushButton_2" );
-    tmpQPushButton->setGeometry( 20, 320, 80, 30 );
-    connect( tmpQPushButton, SIGNAL(clicked()), SLOT(CancelPressed()) );
-    tmpQPushButton->setText( i18n("&Cancel" ));
-	
+    connect( this, SIGNAL(okClicked()), SLOT(OkPressed()) );
+
 }
 
 
 MatrixSetupWidget::~MatrixSetupWidget()
 {
 }
-
 
 void MatrixSetupWidget::OkPressed()
 {
@@ -193,7 +220,7 @@ if ( cb[1]->isChecked() )
 
 if ( cb[0]->isChecked() )
   {
-    warning("CB1 checked");
+    kdDebug(39001) <<"CB1 checked\n";
      if (cb[2]->isChecked())
       vch='M';
      if (cb[3]->isChecked())
@@ -216,15 +243,8 @@ for (int k=0;k<6;k++)
   if(co[6]->currentItem()==2) ret[2]='R';
 
 
-warning(ret);
-emit returnString(ret);
-close();
-}
-
-void MatrixSetupWidget::CancelPressed()
-{
-close();
-delete this;
+  kdDebug(39001) <<ret<<endl;
+  emit returnString(ret);
 }
 
 void MatrixSetupWidget::valueChanged(int)
@@ -237,10 +257,11 @@ if(spb[0]->value()>x)
 
 void MatrixSetupWidget::setString(QString str)
 {
-spb[2]->setValue(atoi(str.mid(3,3)));
-spb[1]->setValue(atoi(str.mid(6,3)));
-spb[0]->setValue(atoi(str.mid(9,3))+1);
-spb[3]->setValue(atoi(str.mid(12,3)));
+spb[2]->setValue(str.mid(3,3).toInt());
+spb[1]->setValue(str.mid(6,3).toInt());
+spb[0]->setValue(str.mid(9,3).toInt()+1);
+spb[3]->setValue(str.mid(12,3).toInt());
+
 spb[0]->setRange(1,spb[2]->value());
 cb[0]->setChecked((str[1]=='M') || (str[1]=='D') || (str[1]=='U'));
 cb[1]->setChecked((str[1]=='C'));
@@ -261,7 +282,8 @@ for (int k=0;k<6;k++)
 
 if(!cb[0]->isChecked())
     cb[2]->setChecked(TRUE);
-warning(str);
+
+kdDebug(39001) <<str<<endl;
 }
 
 

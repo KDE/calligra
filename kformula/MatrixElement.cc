@@ -52,9 +52,8 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
     int x,y;
     x=drawPoint.x()+familySize.x();
     y=drawPoint.y();
-    int rows=atoi(content.mid(3,3));
-    int cols=atoi(content.mid(6,3));
-   
+    int rows=content.mid(3,3).toInt();
+    int cols=content.mid(6,3).toInt();
     if( beActive )
 	pen->setPen(Qt::red);
     /*
@@ -76,7 +75,7 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
               if(r<rows-1) {
       	       if(content[15]=='L')
                 {
-	         int vspace=atoi(content.mid(12,3))+ofs;
+                 int vspace=content.mid(12,3).toInt()+ofs;
 		QPointArray points(4);
 	        points.setPoint(0,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2-ofs+ofs/2);
 		points.setPoint(1,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs/2);
@@ -86,11 +85,11 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2-ofs+ofs/2);
 		pen->setBrush(pen->pen().color());
 		pen->drawPolygon(points,FALSE,0,4);
-		
+
 		}
 	       if(content[15]=='D')
                 {
-	         int vspace=atoi(content.mid(12,3));
+                 int vspace=content.mid(12,3).toInt();
 		QPointArray points(4);
 	        points.setPoint(0,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2-1);
 		points.setPoint(1,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs-1);
@@ -100,7 +99,7 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs-1);
 		pen->setBrush(pen->pen().color());
 		pen->drawPolygon(points,FALSE,0,4);
-		
+
 	        points.setPoint(0,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+1+2*ofs);
 		points.setPoint(1,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+3*ofs+1);
 		points.setPoint(2,x+familySize.width(),
@@ -110,17 +109,17 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 		pen->setBrush(pen->pen().color());
 		pen->drawPolygon(points,FALSE,0,4);
 		}
-	
+
 	       }
 	    }
 
 	 if(c>0) {
           if(content[16]=='L')
  	   {
-	    int hspace=atoi(content.mid(12,3))+ofs;
+            int hspace=content.mid(12,3).toInt()+ofs;
 	    QPointArray points(4);
 	    points.setPoint(0,minX+x+3-hspace/2-ofs+ofs/2,y+familySize.y());
-	    points.setPoint(1,minX+x+3-hspace/2-ofs+ofs/2,y+familySize.bottom());	
+	    points.setPoint(1,minX+x+3-hspace/2-ofs+ofs/2,y+familySize.bottom());
 	    points.setPoint(2,minX+x+3-hspace/2+ofs/2,y+familySize.bottom());
 	    points.setPoint(3,minX+x+3-hspace/2+ofs/2,y+familySize.y());
 	    pen->setBrush(pen->pen().color());
@@ -128,16 +127,16 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 	  }
 	  if(content[16]=='D')
  	   {
-	    int hspace=atoi(content.mid(12,3));
+            int hspace=content.mid(12,3).toInt();
 	    QPointArray points(4);
 	    points.setPoint(0,minX+x+3-hspace/2-ofs+1,y+familySize.y());
-	    points.setPoint(1,minX+x+3-hspace/2-ofs+1,y+familySize.bottom());	
+	    points.setPoint(1,minX+x+3-hspace/2-ofs+1,y+familySize.bottom());
 	    points.setPoint(2,minX+x+3-hspace/2+1,y+familySize.bottom());
 	    points.setPoint(3,minX+x+3-hspace/2+1,y+familySize.y());
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolygon(points,FALSE,0,4);
 	    points.setPoint(0,minX+x+3-hspace/2-3*ofs-1,y+familySize.y());
-	    points.setPoint(1,minX+x+3-hspace/2-3*ofs-1,y+familySize.bottom());	
+	    points.setPoint(1,minX+x+3-hspace/2-3*ofs-1,y+familySize.bottom());
 	    points.setPoint(2,minX+x+3-hspace/2-2*ofs-1,y+familySize.bottom());
 	    points.setPoint(3,minX+x+3-hspace/2-2*ofs-1,y+familySize.y());
 	    pen->setBrush(pen->pen().color());
@@ -171,10 +170,10 @@ void MatrixElement::checkSize()
 {
     //warning("M %p",this);
     QRect nextDimension;
-    int rows=atoi(content.mid(3,3)); //Number of rows
-    int cols=atoi(content.mid(6,3)); //Number of columns
-    int midr=atoi(content.mid(9,3)); //Mid row
-    int space=atoi(content.mid(12,3)); //Space between elments
+    int rows=content.mid(3,3).toInt(); //Number of rows
+    int cols=content.mid(6,3).toInt(); //Number of columns
+    int midr=content.mid(9,3).toInt(); //Mid row
+    int space=content.mid(12,3).toInt(); //Space between elments
 //    warning("Rows:%i Cols:%i MidR:%i Space:%i",rows,cols,midr,space);
 
     if (next!=0L)
@@ -189,11 +188,16 @@ void MatrixElement::checkSize()
     int vspace = space, hspace=space;               //real spaces (change if there are borders)
     int ofs=numericFont/24;
     if (ofs<1) ofs=1;
-    if(content[1]=='C') midr=0;
-    if(content[16]=='L') hspace+=ofs;
-    if(content[15]=='L') vspace+=ofs;
-    if(content[16]=='D') hspace+=3*ofs;
-    if(content[15]=='D') vspace+=3*ofs;
+    if(content[1]=='C')
+        midr=0;
+    if(content[16]=='L')
+        hspace+=ofs;
+    if(content[15]=='L')
+        vspace+=ofs;
+    if(content[16]=='D')
+        hspace+=3*ofs;
+    if(content[15]=='D')
+        vspace+=3*ofs;
 
     int correction=0;
     QRect sizeC;

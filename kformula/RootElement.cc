@@ -28,6 +28,7 @@ RootElement::RootElement(KFormulaContainer *Formula,
     minChildren=1;
     child.resize(childrenNumber);
     child[0]=0L;
+    relation=Relation;
 }
 
 RootElement::~RootElement()

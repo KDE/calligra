@@ -9,13 +9,9 @@
  License:GPL
 */
 
-#include <qpoint.h>
-#include <qstring.h>
 #include <qpainter.h>
-#include <qcolor.h>
-#include <qrect.h> 
-#include <qfont.h>
-#include "BasicElement.h"
+
+class BasicElement;
 
 class DecorationElement : public BasicElement
 {
@@ -48,7 +44,7 @@ class DecorationElement : public BasicElement
     /*
      * Change font size
      */
-    virtual void setNumericFont(int newValue); 
+    virtual void setNumericFont(int newValue);
       
     /*
      * usually call by keyPressEvent()
@@ -94,7 +90,7 @@ class DecorationElement : public BasicElement
    RECT    =  Rectangle 
    HRUP    =   |_____|
    HRDW    =    V-Flip the prevoius ;)
-  
+
    .......
    
  */  
