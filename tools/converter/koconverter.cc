@@ -56,7 +56,7 @@ bool convert( const KURL & uIn, const QString & /*inputFormat*/, const KURL & uO
     return status == KoFilter::OK;
 }
 
-void ProgressObject::slotProgress(int progress)
+void ProgressObject::slotProgress(int /* progress */ )
 {
     // Well, we could have a nifty "=====> " progress bar, but with all the
     // debug output, it would be badly messed up :)
