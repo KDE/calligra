@@ -23,8 +23,15 @@ pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement,
 	Cursor(conn,statement, options)
 {
 my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
-m_fieldCount = 0;
-m_at = 0;
+m_options = Buffered;
+}
+
+//==================================================================================
+//
+pqxxSqlCursor::pqxxSqlCursor(Connection* conn, QuerySchema& query, uint options )
+	: Cursor( conn, query, options )
+{
+my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
 m_options = Buffered;
 }
 
@@ -197,14 +204,15 @@ QVariant pqxxSqlCursor::value(int pos) const
 
 	kdDebug() << "IS: " << (*m_res)[at()][pos].c_str() << endl;
 
-	return QVariant(QString::fromUtf8((*m_res)[m_at-1][pos].c_str()));
+	return QVariant(QString::fromUtf8((*m_res)[at()][pos].c_str()));
 }
 
 //==================================================================================
-//I giess we return a char** full of the record data
+//Return the current record as a char**
 const char** pqxxSqlCursor::recordData() const
 {
-kdDebug() << "pqxxSqlCursor::recordData" << endl;
+	kdDebug() << "pqxxSqlCursor::recordData" << endl;
+	return NULL;
 }
 
 //==================================================================================
@@ -232,30 +240,34 @@ void pqxxSqlCursor::drv_clearServerResult()
 }
 
 //==================================================================================
-//
+//Add the current record to the internal buffer
+//Implementation required but no need in this driver
+//Result set is a buffer so dont need another
 void pqxxSqlCursor::drv_appendCurrentRecordToBuffer()
 {
 
 }
 
 //==================================================================================
-//
+//Move internal pointer to internal buffer +1
+//Implementation required but no need in this driver
 void pqxxSqlCursor::drv_bufferMovePointerNext()
 {
 
 }
 
 //==================================================================================
-//
+//Move internal pointer to internal buffer -1
+//Implementation required but no need in this driver
 void pqxxSqlCursor::drv_bufferMovePointerPrev()
 {
 
 }
 
 //==================================================================================
-//
+//Move internal pointer to internal buffer to N
+//Implementation required but no need in this driver
 void pqxxSqlCursor::drv_bufferMovePointerTo(Q_LLONG to)
 {
 
 }
-	
