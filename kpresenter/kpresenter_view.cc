@@ -5751,9 +5751,9 @@ void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
 
 void KPresenterView::addHelpline(const QPoint & pos, bool _horizontal)
 {
-    if ( _horizontal && (pos.y()+m_canvas->diffy()-16) >= 16 )
+    if ( _horizontal && (pos.y()+m_canvas->diffy()-16) > 0 )
         m_pKPresenterDoc->addHorizHelpline( zoomHandler()->unzoomItY(pos.y()+m_canvas->diffy()-16));
-    else if ( !_horizontal && (pos.x()+m_canvas->diffx()-16) >= 16 )
+    else if ( !_horizontal && (pos.x()+m_canvas->diffx()-16) > 0 )
         m_pKPresenterDoc->addVertHelpline( zoomHandler()->unzoomItX(pos.x()+m_canvas->diffx()-16));
     m_canvas->setTmpHelpLinePosX( -1.0 );
     m_canvas->setTmpHelpLinePosY( -1.0 );
