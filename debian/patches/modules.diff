@@ -1,6 +1,6 @@
 --- koffice/karbon/Makefile.am	2002/08/05 19:52:14	1.44
 +++ koffice/karbon/Makefile.am	2002/09/08 00:33:29
-@@ -54,7 +54,7 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEU
+@@ -46,7 +46,7 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEU
  libkarbonpart_la_METASOURCES = AUTO
  
  karbon_la_SOURCES = main.cc
@@ -44,7 +44,7 @@
  ## The executable
 --- koffice/kivio/kiviopart/Makefile.am	2002/07/14 12:31:28	1.24
 +++ koffice/kivio/kiviopart/Makefile.am	2002/09/08 00:33:31
-@@ -105,7 +105,7 @@ EXTRA_DIST = \
+@@ -98,7 +98,7 @@ EXTRA_DIST = \
  
  lib_LTLIBRARIES = kivio.la
  kivio_la_SOURCES = main.cpp
@@ -102,11 +102,11 @@
 @@ -6,7 +6,7 @@ INCLUDES = -I$(srcdir)/../lib $(KOFFICE_
  ## The kdeinit loadable module
  lib_LTLIBRARIES = libkudesignercore.la kudesigner.la
- libkudesignercore_la_SOURCES = canvbox.cpp creportitem.cpp ccalcfield.cpp cspecialfield.cpp mycanvas.cpp cfield.cpp cv.cpp clabel.cpp cline.cpp property.cpp propertyeditor.cpp propertywidgets.cpp kudesigner_view.cpp kudesigner_factory.cpp kudesigner_doc.cpp plugin.cpp kudesigner_command.cpp canvsection.cpp canvband.cpp canvkutemplate.cpp canvreportheader.cpp canvreportfooter.cpp canvpageheader.cpp canvpagefooter.cpp canvdetail.cpp canvdetailheader.cpp canvdetailfooter.cpp canvdefs.cpp
--libkudesignercore_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -avoid-version
-+libkudesignercore_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module
- libkudesignercore_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
- 
+ libkudesignercore_la_SOURCES = kudesigner_view.cpp kudesigner_factory.cpp kudesigner_doc.cpp
+-libkudesignercore_la_LDFLAGS = -avoid-version -module $(all_libraries) $(KDE_RPATH)
++libkudesignercore_la_LDFLAGS = -module $(all_libraries) $(KDE_RPATH)
+ libkudesignercore_la_LIBADD = ../kudesigner_lib/libkudesignercommon.la $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
+
  ## The part
 @@ -17,7 +17,7 @@ libkudesignerpart_la_LIBADD = libkudesig
  
