@@ -3104,6 +3104,8 @@ void QTextParag::join( QTextParag *s )
     else if ( doc )
 	doc->setLastParag( this );
 
+  if ( s->length() > 1 )
+  {
     int start = str->length();
     if ( length() > 0 && at( length() - 1 )->c == ' ' ) {
 	remove( length() - 1, 1 );
@@ -3121,6 +3123,7 @@ void QTextParag::join( QTextParag *s )
 	    s->str->at( i ).loseCustomItem();
 	}
     }
+  }
     if ( !extraData() && s->extraData() ) {
 	setExtraData( s->extraData() );
 	s->setExtraData( 0 );
