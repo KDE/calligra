@@ -30,6 +30,7 @@ KisLayer::KisLayer(const QString& name, cMode cm, uchar bd)
 {
   m_visible = true;
   m_linked = false;
+  m_current = 0;
 
   calcNumChannels();
   
@@ -50,6 +51,21 @@ KisLayer::~KisLayer()
 {
   for (uchar i = 0; i < m_channels; i++)
 	delete m_ch[i];
+}
+
+KisChannel* KisLayer::firstChannel()
+{
+  m_current = 0;
+  return m_ch[0];
+}
+
+KisChannel* KisLayer::nextChannel()
+{
+  m_current++;
+  if (m_current < m_channels)
+	return m_ch[m_current];
+  else
+	return 0;
 }
 
 void KisLayer::calcNumChannels()

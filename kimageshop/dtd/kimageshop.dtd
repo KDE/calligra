@@ -45,8 +45,8 @@
         width:      The channel's width in pixels.
         height:     The channel's height in pixels.
         opacity:    The channel's opactiy. A value betwenn 0 and 255.
-        isVisible   Is the channel visible? (yes or no)
-        isLinked    Is the channel linked? (yes or no)
+        visible   Is the channel visible? (yes or no)
+        linked    Is the channel linked? (yes or no)
         bitDepth:   The bit depth. == The number of bits a pixel uses _per channel_!.
         cMode:      The image's color mode. "RGBA" for example. See kis_global.h.
 -->
@@ -57,8 +57,8 @@
                 width     CDATA #REQUIRED
                 height    CDATA #REQUIRED
                 opacity   CDATA #REQUIRED
-                isVisible CDATA #REQUIRED
-                isLinked  CDATA #REQUIRED
+                visible CDATA #REQUIRED
+                linked  CDATA #REQUIRED
                 bitDepth  CDATA #REQUIRED
                 cMode     CDATA #REQUIRED>
 

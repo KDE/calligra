@@ -51,6 +51,8 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
   , m_cMode (cm)
   , m_bitDepth (bd)
 {
+  m_author = "unknown";
+  m_email = "unknown";
   viewportRect = QRect(0,0,w,h);
 
   QRect tileExtents = KisUtil::findTileExtents( viewportRect );

@@ -37,11 +37,15 @@
 #include <kglobal.h>
 #include <kmimetype.h>
 
+#include <koStore.h>
+#include <koStoreStream.h>
+
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_shell.h"
 #include "kis_factory.h"
 #include "kis_dlg_new.h"
+#include "kis_channel.h"
 
 #define KIS_DEBUG(AREA, CMD)
 
@@ -83,7 +87,11 @@ bool KisDoc::save( ostream& out, const char* )
 {
   cout << " --- KisDoc::save --- " << endl;
   KisImage *img = m_pCurrent;
-  if (!img)
+  if (!img)	return false;
+
+  // FIXME: implement saving of non-RGB modes.
+  if (img->colorMode() != cm_RGB
+	  && img->colorMode() != cm_RGBA)
 	return false;
 
   QDomDocument doc( "image" );
@@ -91,14 +99,14 @@ bool KisDoc::save( ostream& out, const char* )
 
   // image element
   QDomElement image = doc.createElement( "image" );
-  image.setAttribute( "author", "Matthias Elter" ); // FIXME
-  image.setAttribute( "email", "elter@kde.org" ); // FIXME
+  image.setAttribute( "author", img->author() );
+  image.setAttribute( "email", img->email() );
   image.setAttribute( "editor", "KImageShop" );
   image.setAttribute( "mime", "application/x-kimageshop" );
   image.setAttribute( "width", img->width() );
   image.setAttribute( "height", img->height() );
-  image.setAttribute( "bitDepth", "8" ); // FIXME
-  image.setAttribute( "cMode", "3" ); // FIXME
+  image.setAttribute( "bitDepth", static_cast<int>(img->bitDepth()) );
+  image.setAttribute( "cMode", static_cast<int>(img->colorMode()) );
   doc.appendChild( image );
 
   // layer elements
@@ -114,30 +122,28 @@ bool KisDoc::save( ostream& out, const char* )
 	  layer.setAttribute( "opacity", static_cast<int>(lay->opacity()) );
 
 	  if (lay->visible())
-		layer.setAttribute( "isVisible", "true" );
+		layer.setAttribute( "visible", "true" );
 	  else
-		layer.setAttribute( "isVisible", "false" );
+		layer.setAttribute( "visible", "false" );
 
 	  if (lay->linked())
-		layer.setAttribute( "isLinked", "true" );
+		layer.setAttribute( "linked", "true" );
 	  else
-		layer.setAttribute( "isLinked", "false" );
+		layer.setAttribute( "linked", "false" );
+
+	  layer.setAttribute( "bitDepth", static_cast<int>(lay->bitDepth()) );
+	  layer.setAttribute( "cMode", static_cast<int>(lay->colorMode()) );
 
 	  image.appendChild( layer );
 
-	  // channel elements // FIXME
-	  QDomElement c1 = doc.createElement( "channel" );
-	  c1.setAttribute( "id", "R" );
-	  layer.appendChild( c1 );
-	  QDomElement c2 = doc.createElement( "channel" );
-	  c2.setAttribute( "id", "G" );
-	  layer.appendChild( c2 );
-	  QDomElement c3 = doc.createElement( "channel" );
-	  c3.setAttribute( "id", "B" );
-	  layer.appendChild( c3 );
-	  QDomElement c4 = doc.createElement( "channel" );
-	  c4.setAttribute( "id", "A" );
-	  layer.appendChild( c4 );
+	  // channel elements
+	  for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
+		{
+		  QDomElement channel = doc.createElement( "channel" );
+		  channel.setAttribute( "cId", static_cast<int>(ch->channelId()) );
+		  channel.setAttribute( "bitDepth", static_cast<int>(ch->bitDepth()) );
+		  layer.appendChild( channel );
+		} 
 	}
 
   // Save to buffer
@@ -154,9 +160,30 @@ bool KisDoc::save( ostream& out, const char* )
   return true;
 }
 
-bool KisDoc::completeSaving( KoStore* )
+bool KisDoc::completeSaving( KoStore* store )
 {
-  // TODO: Store binary image data.
+  if ( !store ) return false;
+  if (!m_pCurrent)	return false;
+
+  QList<KisLayer> layers = m_pCurrent->layerList();
+  
+  for (KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
+	{
+	  for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
+		{
+		  QString url = QString( "layers/%1/channel_%2.bin" ).arg( lay->name() )
+			.arg( static_cast<int>(ch->channelId()) );
+		  QCString mime ( "binary/kis_channel" );
+
+		  if ( store->open( url, mime.lower() ) )
+			{
+			  ostorestream out( store );
+			  ch->writeToStore( &out );
+			  out.flush();
+			  store->close();
+		  }
+		}
+	}
   return true;
 }
 

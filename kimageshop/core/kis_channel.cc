@@ -202,3 +202,15 @@ void KisChannel::allocateRect(QRect newRect)
 			memset(m_tiles[(y * m_xTiles) + x], 255, TILE_SIZE * TILE_SIZE);
       }
 }
+
+
+bool KisChannel::writeToStore( ostorestream *out)
+{
+  for(uint ty = 0; ty < m_yTiles; ty++)
+	for(uint tx = 0; tx < m_xTiles; tx++)
+	  for(int y = 0; y < TILE_SIZE; y++)
+		for(int x = 0; x < TILE_SIZE; x++)
+		  *out << *(m_tiles[(ty * m_xTiles) + tx] + y * TILE_SIZE + x);
+
+  return true;
+}

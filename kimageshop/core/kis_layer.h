@@ -78,6 +78,9 @@ class KisLayer : public QObject
 
 	void    clear(const KisColor& c, bool transparent);
 
+	KisChannel* firstChannel();
+	KisChannel* nextChannel();
+
  signals:
 	void layerPropertiesChanged();
 
@@ -87,6 +90,7 @@ class KisLayer : public QObject
  protected:
 	uchar    m_opacity;
 	uchar    m_channels;
+	uchar    m_current;
 	QString  m_name;
 	bool     m_visible, m_linked;
 	cMode    m_cMode;
