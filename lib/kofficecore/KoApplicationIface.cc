@@ -34,7 +34,7 @@ KoApplicationIface::~KoApplicationIface()
 {
 }
 
-void KoApplicationIface::createDocument( const QString &nativeFormat )
+DCOPRef KoApplicationIface::createDocument( const QString &nativeFormat )
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( nativeFormat );
     if ( entry.isEmpty() )
@@ -42,6 +42,8 @@ void KoApplicationIface::createDocument( const QString &nativeFormat )
         kdError(30003) << "Unknown KOffice MimeType " << nativeFormat << ". Check your installation !" << endl;
         ::exit(1);
     }
+    KoDocument* doc = entry.createDoc( 0 );
+    return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );
 }
 
 QValueList<DCOPRef> KoApplicationIface::getDocuments()

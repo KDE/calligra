@@ -40,7 +40,7 @@ k_dcop:
    * Creates a new document for the given native mimetype
    * Use it to create a shell and to load an existing file, if any
    */
-  void createDocument( const QString &nativeFormat );
+  DCOPRef createDocument( const QString &nativeFormat );
 
   /**
    * @return a list of references to all the documents
