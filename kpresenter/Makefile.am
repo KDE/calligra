@@ -81,6 +81,9 @@ SUBDIRS = autoformEdit autoforms pics toolbar templates dtd
 install-exec-local:
 	$(INSTALL_SCRIPT) $(srcdir)/kpresenter $(bindir)/kpresenter
 
+uninstall-local:
+	-rm -f $(bindir)/kpresenter
+
 messages:
 	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po ../po/kpresenter.pot
 

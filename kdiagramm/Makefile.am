@@ -53,13 +53,10 @@ noinst_HEADERS = kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
 	         kdiagramm.h kdiagramm_view.h chart.h \
 		 sheet.h table.h parser.h sheetdlg.h
 
-#METASOURCES = kdiagramm_main.moc kdiagramm_shell.moc kdiagramm_doc.moc \
-#	kdiagramm_view.moc koDiagramm.moc table.moc sheet.moc sheetdlg.moc
-
 idl_DATA = kdiagramm.idl
 idl_HEADERS = kdiagramm.h
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES) chart.h chart.cc
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) chart.h chart.cc
 
 kdelnk_DATA = kdiagramm_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
@@ -73,6 +70,9 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/koffi
 install-exec-local:
 	$(INSTALL_SCRIPT) $(srcdir)/kdiagramm $(bindir)/kdiagramm
 
+uninstall-local:
+	-rm -f $(bindir)/kdiagramm
+
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kdiagramm.pot
 
@@ -82,24 +82,5 @@ kdiagramm.h: kdiagramm.idl
 chart.h: $(interfacedir)/chart.idl
 	$(IDL) $(IDL_FLAGS) $(interfacedir)/chart.idl
 
-chart.cc: chart.h
-table.cc: table.h 
-sheet.cc: sheet.h 
-sheetdlg.cc: sheetdlg.h 
-parser.cc: parser.h
-kdiagramm.cc: kdiagramm.h
-kdiagramm_doc.cc: kdiagramm.h kdiagramm_doc.moc
-kdiagramm_main.cc: kdiagramm.h kdiagramm_main.moc
-kdiagramm_shell.cc: kdiagramm.h kdiagramm_shell.moc
-kdiagramm_view.cc: kdiagramm.h kdiagramm_view.moc
-koDiagramm.cc: koDiagramm.h koDiagramm.moc
-KoDiagrammBarConfigDialog.cpp: KoDiagrammBarConfigDialog.h KoDiagrammBarConfigDialog.moc
-KoDiagrammColorConfigPage.cpp: KoDiagrammColorConfigPage.h KoDiagrammColorConfigPage.moc
-KoDiagrammAreaConfigDialog.cpp: KoDiagrammAreaConfigDialog.h KoDiagrammAreaConfigDialog.moc
-KoDiagrammPieConfigDialog.cpp: KoDiagrammPieConfigDialog.h KoDiagrammPieConfigDialog.moc
-KoDiagrammLinesConfigDialog.cpp: KoDiagrammLinesConfigDialog.h KoDiagrammLinesConfigDialog.moc
-KoDiagrammLinesPointsConfigDialog.cpp: KoDiagrammLinesPointsConfigDialog.h KoDiagrammLinesPointsConfigDialog.moc
-KoDiagrammPointsConfigDialog.cpp: KoDiagrammPointsConfigDialog.h KoDiagrammPointsConfigDialog.moc
-KoDiagrammConfigDialog.cpp: KoDiagrammConfigDialog.h KoDiagrammConfigDialog.moc
-KoDiagrammBarConfigPage.cpp: KoDiagrammBarConfigPage.h KoDiagrammBarConfigPage.moc
-KoDiagrammGeometryConfigPage.cpp: KoDiagrammGeometryConfigPage.h KoDiagrammGeometryConfigPage.moc
+BUILT_SOURCES = kdiagramm.h chart.h
+

@@ -33,6 +33,9 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/koffi
 install-exec-local:
 	$(INSTALL_SCRIPT) $(srcdir)/kimage $(bindir)/kimage
 
+uninstall-local:
+	-rm -f $(bindir)/kimage
+
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kimage.pot
 

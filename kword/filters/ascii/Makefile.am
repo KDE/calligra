@@ -24,12 +24,7 @@ kdelnkdir = $(kde_datadir)/koffice/filterlnk
 
 datasdir = $(kde_datadir)/koffice/filter
 
-####### Implicit rules
-
-####### Build rules
-
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kword_ascii $(bindir)/kword_ascii
+bin_SCRIPTS = kword_ascii
 
 messages:
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../kspread_filter.pot

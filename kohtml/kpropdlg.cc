@@ -31,6 +31,8 @@
 #include "kapp.h"
 #include "kpanner.h"
 #include <klocale.h>
+#include <stdio.h>
+#include <kconfig.h>
 
 #define QT_14
 

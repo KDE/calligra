@@ -38,6 +38,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include "version.h"
+#include <kconfig.h>
 
 OvalTool::OvalTool (CommandHistory *history) : Tool (history) {
   oval = NULL;

@@ -34,8 +34,7 @@ parser:
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths -I./ -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
 
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kotrader $(bindir)/kotrader
+bin_SCRIPTS = kotrader
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kotrader.pot

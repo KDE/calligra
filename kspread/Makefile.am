@@ -60,6 +60,9 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/koffi
 install-exec-local:
 	$(INSTALL_SCRIPT) $(srcdir)/kspread $(bindir)/kspread
 
+uninstall-local:
+	-rm -f $(bindir)/kspread
+	
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kspread.pot
 

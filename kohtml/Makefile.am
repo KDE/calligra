@@ -1,7 +1,7 @@
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ../lib/kofficeui/libkofficeui.la 
+LDADD = ../lib/kofficeui/libkofficeui.la $(LIB_KHTML) $(LIB_KFM)
 
 ####### Files
 
@@ -45,6 +45,9 @@ SUBDIRS = toolbar
 install-exec-local:
 	$(INSTALL_SCRIPT) $(srcdir)/kohtml $(bindir)/kohtml
 
+uninstall-local:
+	-rm -f $(bindir)/kohtml
+
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kohtml.pot
 
@@ -52,24 +55,5 @@ kohtml.h: kohtml.idl
 	rm -f kohtml.h
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kohtml.idl
 
-kkohtml.cc: kohtml.h
-kohtml_view.cc: kohtml.h settingsdlg.h
-kohtml_shell.cc: kohtml.h openurldlg.h
-kohtml_doc.cc: kohtml.h kfileio.h
-kohtml_main.cc:  kohtml.h
-kfileio.cc: kfileio.h
-htmview.cc: htmview.h htmwidget.h 
-htmwidget.cc: htmwidget.h 
-kpropcheck.cc: kpropcheck.h
-kpropcolor.cc: kpropcolor.h
-kpropcombo.cc: kpropcombo.h
-kpropdlg.cc: kpropdlg.h
-kpropfont.cc: kpropfont.h 
-kpropgroup.cc: kpropgroup.h 
-kpropradio.cc: kpropradio.h 
-kpropspin.cc: kpropspin.h 
-kproptext.cc: kproptext.h 
-settingsdlg.cc: settingsdlg.h 
-edithtmldlg.cc: edithtmldlg.h 
-kohtmljob.cc: kohtmljob.h 
-openurldlg.cc: openurldlg.h
+BUILT_SOURCES = kohtml.h
+

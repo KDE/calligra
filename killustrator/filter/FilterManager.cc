@@ -35,6 +35,8 @@
 #include "filter/KilluImport.h"
 #include "filter/XfigImport.h"
 
+#include <qstrlist.h>
+
 FilterManager* FilterManager::managerInstance = 0L;
 
 FilterManager::FilterManager () {

@@ -28,7 +28,7 @@ METASOURCES =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragd
 		searchdia.moc tabledia.moc insdia.moc deldia.moc docstruct.moc kword_undo.moc \
 		clipbrd_dnd.moc footnotedia.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) 
 
 idl_DATA = kword.idl
 idl_HEADERS =  kword.h
@@ -48,6 +48,9 @@ SUBDIRS = toolbar templates filters
 install-exec-local:
 	$(INSTALL_SCRIPT) $(srcdir)/kword $(bindir)/kword
 
+uninstall-local:
+	-rm -f $(bindir)/kword
+
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kword.pot
 
@@ -55,17 +58,13 @@ kword.h: kword.idl
 	rm -f kword.h
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kword.idl
 
-kword.cc: kword.h
-$(srcdir)/kword_view.h: kword.h
-$(srcdir)/kword_shell.h: kword.h
-kword_main.cc: kword_view.h kword.h
-$(srcdir)/char.cc: char.h kword.h
+BUILT_SOURCES = kword.h
 fc.cc: fc.h
 font.cc: font.h
 format.cc: format.h
 kword_page.cc: kword_page.h
 parag.cc: parag.h
-paraglayout.cc: paraglayout.h kword.h kword_view.h
+paraglayout.cc: paraglayout.h kword_view.h
 formatcollection.cc: formatcollection.h
 imagecollection.cc: imagecollection.h
 image.cc: image.h

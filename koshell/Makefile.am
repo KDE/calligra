@@ -30,6 +30,9 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/koffi
 install-exec-local:
 	$(INSTALL_SCRIPT) $(srcdir)/koshell $(bindir)/koshell
 
+uninstall-local:
+	-rm -f $(bindir)/koshell
+
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/koshell.pot
 
