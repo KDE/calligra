@@ -294,26 +294,26 @@ void KWImportFrameTableStyleDia::slotOk()
         if ( !m_listStyleName->isSelected( i ))
         {
             QString name = m_listStyleName->text(i );
-            if ( m_typeStyle ==frameStyle )
+            if ( m_typeStyle ==frameStyle ) // frame styles
             {
                 //remove this style from list
                 QPtrListIterator<KWFrameStyle> styleIt( m_frameStyleList );
                 for ( ; styleIt.current(); ++styleIt )
                 {
-                    if ( styleIt.current()->name() == name )
+                    if ( styleIt.current()->displayName() == name )
                     {
                         m_frameStyleList.remove(styleIt.current());
                         break;
                     }
                 }
             }
-            else
+            else // then it will have to be table styles
             {
                 //remove this style from list
                 QPtrListIterator<KWTableStyle> styleIt( m_tableStyleList );
                 for ( ; styleIt.current(); ++styleIt )
                 {
-                    if ( styleIt.current()->name() == name )
+                    if ( styleIt.current()->displayName() == name )
                     {
                         m_tableStyleList.remove(styleIt.current());
                         break;
