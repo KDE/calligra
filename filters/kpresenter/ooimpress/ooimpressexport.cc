@@ -399,6 +399,7 @@ void OoImpressExport::createDocumentContent( QDomDocument & doccontent )
     content.setAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML" );
     content.setAttribute( "xmlns:form", "http://openoffice.org/2000/form" );
     content.setAttribute( "xmlns:script", "http://openoffice.org/2000/script" );
+    content.setAttribute( "xmlns:presentation", "http://openoffice.org/2000/presentation" );
     content.setAttribute( "office:class", "presentation" );
     content.setAttribute( "office:version", "1.0" );
 
