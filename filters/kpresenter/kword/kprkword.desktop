@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KPresenter->KWord Filter
+Import=application/x-kpresenter
+Export=application/x-kword
+Implemented=file
+X-KDE-Library=libkprkword
+ServiceTypes=KOfficeFilter
