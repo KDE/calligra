@@ -8,7 +8,7 @@ Kudesigner:
     |                    
 - print and print preview
 - open x-kugarmixed files ???
-- do not allow to move report items out of their section
+- do not allow to move report items out of their section (Works, except when moved/resized with the property editor or during placing of new items)
 - make a grid for element placing
 - implement "smart" moving of elements (stick to borders)
 - automatic resize of property editor

@@ -32,7 +32,7 @@ class CanvasReportFooter;
 class CanvasPageHeader;
 class CanvasPageFooter;
 
-const int HolderSize = 5;
+const int HolderSize = 6;
 
 class CanvasBox: public QCanvasRectangle{
 public:
@@ -54,14 +54,7 @@ public:
 
     virtual void updateGeomProps(){;}
 
-    /**
-      DEPRECATED: properties format
-      map<key_name, pair<key_value, key_description> >
-      key_description << key_hint -- to display helpful tips
-                      << key_type (string, int, int_from_list, color, font)
-                         -- to organize appropriate input
-		      << probably_key_value << ... -- values
-    */
+  
 //    std::map<QString, std::pair<QString, QStringList> > props;
     /**
       NEW property format
