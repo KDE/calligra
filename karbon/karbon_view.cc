@@ -136,7 +136,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
 	}
 
-	setNumberOfRecentFiles( part()->maxRecentFiles() );
+	unsigned int max = part()->maxRecentFiles();
+	setNumberOfRecentFiles( max );
 
 	reorganizeGUI();
 
@@ -957,7 +958,7 @@ KarbonView::reorganizeGUI()
 }
 
 void
-KarbonView::setNumberOfRecentFiles( int number )
+KarbonView::setNumberOfRecentFiles( unsigned int number )
 {
 	if( shell() )	// 0L when embedded into konq !
 		shell()->setMaxRecentItems( number );

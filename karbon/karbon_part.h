@@ -44,7 +44,6 @@ class VCommandHistory;
 class KarbonPart : public KarbonPartBase
 {
 	Q_OBJECT
-	Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
 public:
 	KarbonPart( QWidget* parentWidget = 0L, const char* widgetName = 0L,
 				QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false );
@@ -94,7 +93,7 @@ public:
 	void setUndoRedoLimit( int undos );
 
 	void initConfig();
-	int maxRecentFiles() const { return m_maxRecentFiles; }
+	unsigned int maxRecentFiles() const { return m_maxRecentFiles; }
 
 	QString unitName() const { return KoUnit::unitName( m_doc.unit() ); }
 	KoUnit::Unit unit() const { return m_doc.unit(); }
@@ -122,7 +121,7 @@ private:
 
 	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)
 	bool m_merge;
-	int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
+	unsigned int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
 	DCOPObject *dcop;
 };
 

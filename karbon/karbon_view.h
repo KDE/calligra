@@ -90,7 +90,7 @@ public:
 	KoContextHelpAction* contextHelpAction() const { return m_contextHelpAction; }
 
 	void reorganizeGUI();
-	void setNumberOfRecentFiles( int number );
+	void setNumberOfRecentFiles( unsigned int number );
 	void setLineWidth( double val );
 
 	QLabel* statusMessage() const { return m_status; }
