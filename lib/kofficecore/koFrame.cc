@@ -139,28 +139,28 @@ void KoFrame::viewChangedState( bool is_marked, bool has_focus )
     showGUI( false );
 }
 
-CORBA::ULong KoFrame::leftGUISize()
+unsigned long int KoFrame::leftGUISize()
 {
   assert( !CORBA::is_nil( m_vView ) );
   
   return m_vView->leftGUISize();
 }
 
-CORBA::ULong KoFrame::rightGUISize()
+unsigned long int KoFrame::rightGUISize()
 {
   assert( !CORBA::is_nil( m_vView ) );
 
   return m_vView->rightGUISize();
 }
 
-CORBA::ULong KoFrame::topGUISize()
+unsigned long int KoFrame::topGUISize()
 {
   assert( !CORBA::is_nil( m_vView ) );
 
   return m_vView->topGUISize();
 }
 
-CORBA::ULong KoFrame::bottomGUISize()
+unsigned long int KoFrame::bottomGUISize()
 {
   assert( !CORBA::is_nil( m_vView ) );
 

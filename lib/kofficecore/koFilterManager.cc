@@ -299,7 +299,7 @@ void KoFilterManager::export_( const QString & _tmpFile, const QString & _url, c
     
     /*
     data.length( size );
-    for( CORBA::ULong l = 0; l < size; l++ ) 
+    for( unsigned long int l = 0; l < size; l++ ) 
     {
         // HACK....
         if ( p[ l ] == 0 )
