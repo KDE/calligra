@@ -1683,19 +1683,9 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
 void CellLayoutPageBorder::loadIcon( QString _pix,KSpreadBorderButton *_button)
 {
-    QPixmap *pix = new QPixmap( BarIcon(_pix) ); 
-    //QPixmap pix = UserIcon(_pix, KSpreadFactory::global() );
-    /*if ( pix->isNull() )
-    {
-	QString str( i18n( "Could not load image %1" ) );
-	str = str.arg( _pix );
-	KMessageBox::error( this, str );
-	return;
-    }*/
+    QPixmap *pix = new QPixmap( KSBarIcon(_pix) ); 
     _button->setPixmap( *pix );
 }
-
-
 
 void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _bottom )
 {

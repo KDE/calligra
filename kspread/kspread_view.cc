@@ -981,7 +981,7 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
 
   QPixmap *pixmap = 0L;
 
-  pixmap = new QPixmap( BarIcon(_file) );
+  pixmap = new QPixmap( KSBarIcon(_file) );
 
   QButton *pb;
   if ( !_kbutton )
