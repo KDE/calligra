@@ -159,17 +159,19 @@ class ParaData;
 class TableCell
 {
    public:
-      TableCell (): col( 0 ), row( 0 ), paraList( 0 ) {}
+      TableCell (): col( 0 ), row( 0 ), m_rows( 1 ), m_cols( 1 ), paraList( 0 ) {}
 
       TableCell ( int                   c,
                   int                   r,
                   QValueList<ParaData> *p,
-                  FrameData &frameData  ) : col (c), row (r), paraList (p), frame (frameData) {}
+                  FrameData &frameData  ) : col (c), row (r), m_rows( 1 ), m_cols( 1 ), paraList (p), frame (frameData) {}
 
       ~TableCell ();
 
       int                   col;
       int                   row;
+      int m_rows; ///< \todo
+      int m_cols; ///< \todo
       QValueList<ParaData> *paraList;
       FrameData   frame;
 };
