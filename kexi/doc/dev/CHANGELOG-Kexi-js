@@ -297,6 +297,13 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
+
+=== BETA 3 HOT TODO ===
+- add an option switch to enable forms
+- make SQL GUI designer reasonable working
+- make SQL text designer working again
+- implement query storage
+
 CC_MAIL: dkite@shaw.ca
 
 2004-04-06..08
