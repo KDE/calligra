@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+ /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -301,10 +301,10 @@ void KWView::setupActions()
     actionViewHeader = new KToggleAction( i18n( "&Header" ), 0,
                                           this, SLOT( viewHeader() ),
                                           actionCollection(), "view_header" );
-    actionViewFooter = new KToggleAction( i18n( "&Footer" ), 0,
+    actionViewFooter = new KToggleAction( i18n( "Foo&ter" ), 0,
                                           this, SLOT( viewFooter() ),
                                           actionCollection(), "view_footer" );
-    actionViewFootNotes = new KToggleAction( i18n( "&Footnotes" ), 0,
+    actionViewFootNotes = new KToggleAction( i18n( "Foot&notes" ), 0,
                                              this, SLOT( viewFootNotes() ),
                                           actionCollection(), "view_footnotes" );
     actionViewFootNotes->setExclusiveGroup( "notes" );
@@ -340,7 +340,7 @@ void KWView::setupActions()
                         this, SLOT( insertPicture() ),
                         actionCollection(), "insert_picture" );
 
-    actionInsertSpecialChar = new KAction( i18n( "&Special Character..." ), "char",
+    actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
                         ALT + SHIFT + Key_C,
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
@@ -576,13 +576,13 @@ void KWView::setupActions()
     actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "insert_table_row", 0,
                                this, SLOT( tableInsertRow() ),
                                actionCollection(), "table_insrow" );
-    actionTableInsertCol = new KAction( i18n( "&Insert Column..." ), "insert_table_col", 0,
+    actionTableInsertCol = new KAction( i18n( "I&nsert Column..." ), "insert_table_col", 0,
                                this, SLOT( tableInsertCol() ),
                                actionCollection(), "table_inscol" );
     actionTableDelRow = new KAction( i18n( "&Delete Row..." ), "delete_table_row", 0,
                                      this, SLOT( tableDeleteRow() ),
                                      actionCollection(), "table_delrow" );
-    actionTableDelCol = new KAction( i18n( "&Delete Column..." ), "delete_table_col", 0,
+    actionTableDelCol = new KAction( i18n( "D&elete Column..." ), "delete_table_col", 0,
                                      this, SLOT( tableDeleteCol() ),
                                      actionCollection(), "table_delcol" );
     actionTableJoinCells = new KAction( i18n( "&Join Cells" ), 0,
@@ -594,7 +594,7 @@ void KWView::setupActions()
     actionTableUngroup = new KAction( i18n( "&Ungroup Table" ), 0,
                                       this, SLOT( tableUngroupTable() ),
                                       actionCollection(), "table_ungroup" );
-    actionTableDelete = new KAction( i18n( "&Delete Table" ), 0,
+    actionTableDelete = new KAction( i18n( "Delete &Table" ), 0,
                                      this, SLOT( tableDelete() ),
                                      actionCollection(), "table_delete" );
 
@@ -1074,8 +1074,9 @@ void KWView::updateStyleList()
     QString currentStyle = actionFormatStyle->currentText();
     QStringList lst;
     QListIterator<KWStyle> styleIt( doc->styleList() );
-    for (; styleIt.current(); ++styleIt )
-        lst << i18n("KWord Style", styleIt.current()->name().local8Bit()); // try to translate the name, if standard
+    for (; styleIt.current(); ++styleIt ) {
+        lst << i18n("KWord style", styleIt.current()->name().utf8()); // try to translate the name, if standard
+    }
     actionFormatStyle->setItems( lst );
     showStyle( currentStyle );
 }
