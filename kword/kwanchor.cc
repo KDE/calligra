@@ -23,9 +23,6 @@
 #include "kwviewmode.h"
 #include <kdebug.h>
 #include <kdeversion.h>
-#if ! KDE_IS_VERSION(3,1,90)
-#include <kdebugclasses.h>
-#endif
 
 //#define DEBUG_DRAWING
 
