@@ -4,10 +4,6 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 
-// defines from koRuler.h
-#define cPOINT_TO_MM(px) ((float)px/2.83465)
-#define cPOINT_TO_INCH(px) ((float)px/72.0)
-
 struct myBORDER {
     unsigned char red, green, blue;
     unsigned char style, width;
@@ -209,7 +205,7 @@ public:
     PStyle(const PStyle &rhs);
     ~PStyle();
 
-    const QString layout();  // return the <LAYOUT> or <STYLE>
+    const QString layout(const QString &cformat);  // return the <LAYOUT> or <STYLE>
 
     const unsigned short styleID() const { return _styleID; }
     void styleID(const unsigned short &styleID) { _styleID=styleID; }
@@ -267,6 +263,9 @@ public:
 
 private:
     const PStyle &operator=(const PStyle &);     // don't assign PStyles :)
+    const QString unit(const unsigned short &u);
+    const QString border(const myBORDER &b);
+    const QString tab(const myTAB &t);
 
     unsigned short _styleID;
     unsigned short _cstyleID;   // which <FORMAT> belongs to me (index in QList)?

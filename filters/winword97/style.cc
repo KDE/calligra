@@ -518,3 +518,106 @@ PStyle::PStyle(const PStyle &rhs) {
 PStyle::~PStyle() {
     _tabList.clear();
 }
+
+const QString PStyle::layout(const QString &cformat) {
+
+    QString layout;
+
+    if(_layoutTag)
+        layout="<LAYOUT>\n<NAME value=\"";
+    else
+        layout="<STYLE>\n<NAME value=\"";
+
+    layout+=_name;
+    layout+="\"/>\n<FOLLOWING name=\"";
+    layout+=_following;
+    layout+="\"/>\n<FLOW value=\"";
+    layout+=QString::number(static_cast<long>(_flow));
+    layout+="\"/>\n<OHEAD ";
+    layout+=unit(_ohead_pt);
+    layout+="/>\n<OFOOT ";
+    layout+=unit(_ofoot_pt);
+    layout+="/>\n<IFIRST ";
+    layout+=unit(_ifirst_pt);
+    layout+="/>\n<ILEFT ";
+    layout+=unit(_ileft_pt);
+    layout+="/>\n<LINESPACE ";
+    layout+=unit(_linespace_pt);
+    layout+="/>\n<COUNTER type=\"";
+    layout+=QString::number(static_cast<long>(counter.type));
+    layout+="\" depth=\"";
+    layout+=QString::number(static_cast<long>(counter.depth));
+    layout+="\" bullet=\"";
+    layout+=QString::number(static_cast<long>(counter.bullet));
+    layout+="\" start=\"";
+    layout+=QString::number(static_cast<long>(counter.start));
+    layout+="\" numberingtype=\"";
+    layout+=QString::number(static_cast<long>(counter.nmbType));
+    layout+="\" lefttext=\"";
+    layout+=counter.lefttext;
+    layout+="\" righttext=\"";
+    layout+=counter.righttext;
+    layout+="\" bulletfont=\"";
+    layout+=counter.bulletfont;
+    layout+="\"/>\n<LEFTBORDER ";
+    layout+=border(_left);
+    layout+="/>\n<RIGHTBORDER ";
+    layout+=border(_right);
+    layout+="/>\n<TOPBORDER ";
+    layout+=border(_top);
+    layout+="/>\n<BOTTOMBORDER ";
+    layout+=border(_bottom);
+    layout+="/>\n";
+
+    layout+=cformat;
+
+    unsigned int count=_tabList.count();
+    for(unsigned int i=0; i<count; ++i)
+        layout+=tab(_tabList[i]);
+
+    if(_layoutTag)
+        layout+="</LAYOUT>";
+    else
+        layout+="</STYLE>";
+    return layout;
+}
+
+const QString PStyle::unit(const unsigned short &u) {
+
+    QString ret="pt=\"";
+    ret+=QString::number(static_cast<long>(u));
+    ret+="\" mm=\"";
+    ret+=QString::number(static_cast<float>(u/2.83465));
+    ret+="\" inch=\"";
+    ret+=QString::number(static_cast<float>(u/72.0));
+    ret+="\"";
+    return ret;
+}
+
+const QString PStyle::border(const myBORDER &b) {
+
+    QString ret="red=\"";
+    ret+=QString::number(static_cast<long>(b.red));
+    ret+="\" green=\"";
+    ret+=QString::number(static_cast<long>(b.green));
+    ret+="\" blue=\"";
+    ret+=QString::number(static_cast<long>(b.blue));
+    ret+="\" style=\"";
+    ret+=QString::number(static_cast<long>(b.style));
+    ret+="\" width=\"";
+    ret+=QString::number(static_cast<long>(b.width));
+    ret+="\"";
+    return ret;
+}
+
+const QString PStyle::tab(const myTAB &t) {
+
+    QString ret="<TABULATOR mmpos=\"";
+    ret+=QString::number(static_cast<float>(t.pos_pt/2.83465));
+    ret+="\" ptpos=\"";
+    ret+=QString::number(static_cast<long>(t.pos_pt));
+    ret+="\" inchpos=\"";
+    ret+=QString::number(static_cast<float>(t.pos_pt/72.0));
+    ret+="\"/>\n";
+    return ret;
+}

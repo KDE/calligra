@@ -7,19 +7,11 @@
 
 #lib_LTLIBRARIES = libwinword97.la
 
-#libwinword97_la_SOURCES = wordfilter.cc winworddoc.cc \
-#kworddoc.cc filterbase.cc
+#libwinword97_la_SOURCES = wordfilter.cc winworddoc.cc
 
-#noinst_HEADERS = winworddoc.h kworddoc.h anld.h anlv.h asumy.h \
-#asumyi.h atrd.h bkd.h bkf.h bkl.h brc.h brc10.h bte.h chp.h \
-#chpx.h chpx_fkp.h dcs.h dogrid.h doptypography.h dttm.h ffn.h \
-#fib.h fld.h frd.h fspa.h ftxbxs.h lfo.h lfolvl.h lspd.h lstf.h \
-#lvlf.h myfile.h numrm.h olst.h pap.h papx.h papx_fkp.h pcd.h \
-#pgd.h phe.h picf.h plcf.h prm.h rr.h rs.h sed.h sep.h sepx.h \
-#shd.h tap.h tbd.h tc.h tlp.h wkb.h wordfilter.h filterbase.h
+#noinst_HEADERS = winworddoc.h kworddoc.h anld.h anlv.h asumy.h
 
-#METASOURCES = wordfilter.moc winworddoc.moc kworddoc.moc \
-#filterbase.moc
+#METASOURCES = wordfilter.moc winworddoc.moc kworddoc.moc
 
 service_DATA = ole_powerpoint97_import.desktop
 servicedir = $(kde_servicesdir)
