@@ -240,7 +240,8 @@ k_dcop:
 
     void setRefreshSideBar( bool _b );
     bool refreshSideBar()const;
-
+    bool displayFiedCode()const;
+    void setDisplayFiedCode( bool b);
 
 private:
     KPresenterDoc *doc;

@@ -483,6 +483,11 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
     grid->addWidget(m_displayComment,5,0);
 
+    m_displayFieldCode=new QCheckBox(i18n("Display Field Code"),tmpQGroupBox);
+    m_displayFieldCode->setChecked(doc->getVariableCollection()->variableSetting()->displayFiedCode());
+    grid->addWidget(m_displayFieldCode,6,0);
+
+
     tmpQGroupBox = new QGroupBox( box, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Grid"));
 
@@ -576,6 +581,19 @@ KCommand * ConfigureMiscPage::apply()
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
+
+    b=m_displayFieldCode->isChecked();
+    if(doc->getVariableCollection()->variableSetting()->displayFiedCode()!=b)
+    {
+        if(!macroCmd)
+        {
+            macroCmd=new KMacroCommand(i18n("Change Display Field Code Command"));
+        }
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change Display Field Code Command"), doc, doc->getVariableCollection()->variableSetting()->displayComment() ,b, KPrChangeVariableSettingsCommand::VS_DISPLAYFIELDCODE);
+        cmd->execute();
+        macroCmd->addCommand(cmd);
+    }
+
 
     doc->setGridValue( KoUnit::ptFromUnit( resolutionX->value(), doc->getUnit() ), KoUnit::ptFromUnit( resolutionY->value(), doc->getUnit() ), true);
     doc->repaint( false );

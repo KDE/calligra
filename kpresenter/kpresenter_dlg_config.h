@@ -96,7 +96,7 @@ private:
     KConfig* config;
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
-    QCheckBox* m_displayLink, *m_displayComment, *m_underlineLink;
+    QCheckBox* m_displayLink, *m_displayComment, *m_underlineLink, *m_displayFieldCode;
     KDoubleNumInput * resolutionY, * resolutionX;
     KDoubleNumInput *m_rotation;
     QCheckBox *cbSideBarRefresh;

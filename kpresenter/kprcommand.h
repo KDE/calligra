@@ -825,7 +825,7 @@ protected:
 class KPrChangeVariableSettingsCommand : public KNamedCommand
 {
 public:
-    enum VariableProperties { VS_DISPLAYLINK, VS_UNDERLINELINK, VS_DISPLAYCOMMENT};
+    enum VariableProperties { VS_DISPLAYLINK, VS_UNDERLINELINK, VS_DISPLAYCOMMENT, VS_DISPLAYFIELDCODE};
     KPrChangeVariableSettingsCommand( const QString &name, KPresenterDoc *_doc, bool _oldValue, bool _newValue, VariableProperties _type);
     ~KPrChangeVariableSettingsCommand(){}
 
