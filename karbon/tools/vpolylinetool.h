@@ -102,11 +102,6 @@ class VPolylineTool : public VTool
 		KoPoint m_lastVectorEnd;
 
 		/**
-		 * Indicates if ctrl is pressed.
-		 */
-		bool m_ctrlPressed;
-
-		/**
 		 * Indicates if the polyline is to close.
 		 */
 		bool m_close;

@@ -221,8 +221,6 @@ VPolylineTool::mouseMove()
 void
 VPolylineTool::mouseButtonPress()
 {
-	m_ctrlPressed = false;
-
 	if( m_bezierPoints.count() != 0 )
 	{
 		draw();
@@ -283,7 +281,7 @@ VPolylineTool::mouseButtonRelease()
 			m_bezierPoints.append( new KoPoint( *p ) );
 			m_lastVectorStart = m_lastVectorEnd = *p;
 		}
-		else if( m_ctrlPressed )
+		else if( ctrlPressed() )
 		{
 			m_bezierPoints.removeLast();
 			m_lastVectorStart = *m_bezierPoints.last();
@@ -355,7 +353,7 @@ VPolylineTool::mouseDrag()
 			m_bezierPoints.append( new KoPoint( *p ) );
 			m_lastVectorStart = m_lastVectorEnd = *p;
 		}
-		else if( m_ctrlPressed )
+		else if( ctrlPressed() )
 		{
 			m_bezierPoints.removeLast();
 			m_lastVectorStart = *m_bezierPoints.last();
@@ -397,8 +395,6 @@ VPolylineTool::mouseDragCtrlPressed()
 	KoPoint p = *m_bezierPoints.at( m_bezierPoints.count() - 4) - *m_bezierPoints.at( m_bezierPoints.count() - 3 );
 
 	view()->canvasWidget()->setPos( p );
-
-	m_ctrlPressed = true;
 }
 
 void
@@ -412,8 +408,6 @@ VPolylineTool::mouseDragCtrlReleased()
 	KoPoint p = *m_bezierPoints.at( m_bezierPoints.count() - 3) - *m_bezierPoints.at( m_bezierPoints.count() - 4 );
 
 	view()->canvasWidget()->setPos( p );
-
-	m_ctrlPressed = false;
 }
 
 void

@@ -184,6 +184,8 @@ protected:
 
 	bool shiftPressed() const { return m_shiftPressed; }
 
+	bool ctrlPressed() const { return m_ctrlPressed; }
+
 private:
 	/**
 	 * The view the tool acts upon.
@@ -214,6 +216,11 @@ private:
 	 * Indicates if shift is pressed.
 	 */
 	bool m_shiftPressed;
+
+	/**
+	 * Indicates if ctrl is pressed.
+	 */
+	bool m_ctrlPressed;
 };
 
 #endif

@@ -33,9 +33,10 @@
 
 VTool::VTool( KarbonView *view, const char* ) : m_view( view )
 {
-	m_mouseButtonIsDown = false;
-	m_isDragging = false;
-	m_shiftPressed = false;
+	m_mouseButtonIsDown	= false;
+	m_isDragging		= false;
+	m_shiftPressed		= false;
+	m_ctrlPressed		= false;
 }
 
 VTool::~VTool()
@@ -176,11 +177,15 @@ VTool::keyEvent( QEvent* event )
 		}
 
 		// If Ctrl is pressed, some tools create a "centered" object while dragging:
-		if( keyEvent->key() == Qt::Key_Control && m_isDragging )
+		if( keyEvent->key() == Qt::Key_Control )
 		{
-			mouseDragCtrlPressed();
+			m_ctrlPressed = true;
+			if( m_isDragging )
+			{
+				mouseDragCtrlPressed();
 
-			return true;
+				return true;
+			}
 		}
 	}
 
@@ -201,11 +206,15 @@ VTool::keyEvent( QEvent* event )
 			}
 		}
 
-		if( key == Qt::Key_Control && m_isDragging )
+		if( key == Qt::Key_Control )
 		{
-			mouseDragCtrlReleased();
+			m_ctrlPressed = false;
+			if( m_isDragging )
+			{
+				mouseDragCtrlReleased();
 
-			return true;
+				return true;
+			}
 		}
 
 		if( key == Qt::Key_Left || key == Qt::Key_Right || key == Qt::Key_Up || key == Qt::Key_Down )
