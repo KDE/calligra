@@ -86,6 +86,7 @@
 #include <KWordViewIface.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
+#include <koNoteDia.h>
 
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -469,6 +470,14 @@ void KWView::setupActions()
                                         actionCollection(), "insert_link" );
     actionInsertLink->setToolTip( i18n( "Insert a web address, email address or hyperlink to a file." ) );
     actionInsertLink->setWhatsThis( i18n( "Insert a web address, email address or hyperlink to a file." ) );
+
+    actionInsertNote = new KAction( i18n( "Note" ), 0,
+                                    this, SLOT( insertNote() ),
+                                    actionCollection(), "insert_note" );
+    actionEditNote = new KAction( i18n("Edit Note"), 0,
+                                  this,SLOT(editNote()),
+                                  actionCollection(), "edit_note");
+
 
     // TODO
     /*actionInsertFootEndNote = new KAction( i18n( "&Footnote or Endnote..." ), 0,
@@ -2413,6 +2422,20 @@ void KWView::insertLink()
             edit->insertLink(link, ref);
     }
 }
+
+void KWView::insertNote()
+{
+    KWTextFrameSetEdit *edit=currentTextEdit();
+    if ( !edit )
+        return;
+    KoNoteDia *noteDia = new KoNoteDia( this );
+    if( noteDia->exec() )
+    {
+        edit->insertNote(noteDia->noteText());
+    }
+    delete noteDia;
+}
+
 
 void KWView::insertVariable()
 {
@@ -4846,4 +4869,24 @@ bool KWStatisticsDialog::docHasSelection()
     }
     return false;
 }
+
+void KWView::editNote()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        KoVariable * tmpVar=edit->variable();
+        KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(tmpVar);
+        if(var)
+        {
+            KoNoteDia *noteDia = new KoNoteDia( this, var->note() );
+            if( noteDia->exec() )
+            {
+                var->setNote( noteDia->noteText());
+            }
+            delete noteDia;
+        }
+    }
+}
+
 #include "kwview.moc"

@@ -198,6 +198,7 @@ public slots:
     void insertFootNoteEndNote();
     void insertContents();
     void insertLink();
+    void insertNote();
 
     void formatFont();
     void formatParagraph();
@@ -305,6 +306,7 @@ public slots:
     void lowerFrame();
     void openLink();
     void changeLink();
+    void editNote();
     void showDocStructure();
 
     void slotSoftHyphen();
@@ -394,6 +396,8 @@ private:
     KAction *actionInsertFootEndNote;
     KAction *actionInsertContents;
     KAction *actionInsertLink;
+    KAction *actionInsertNote;
+    KAction *actionEditNote;
 
     KActionMenu *actionInsertVariable;
     struct VariableDef {

@@ -313,6 +313,7 @@ public:
     void insertVariable( KoVariable *var);
 
     void insertLink(const QString &_linkName, const QString & hrefName);
+    void insertNote(const QString &_note);
 
     void insertExpression(const QString &_c);
     void insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName );

@@ -2628,6 +2628,15 @@ void KWTextFrameSetEdit::insertLink(const QString &_linkName, const QString & hr
     insertVariable( var);
 }
 
+void KWTextFrameSetEdit::insertNote(const QString &_note)
+{
+    KoVariable * var = 0L;
+    KWDocument * doc = frameSet()->kWordDocument();
+    var = new KoNoteVariable( textFrameSet()->textDocument(),_note, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
+    insertVariable( var);
+}
+
+
 void KWTextFrameSetEdit::insertCustomVariable( const QString &name)
 {
      KoVariable * var = 0L;
@@ -2792,8 +2801,13 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
         kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
         if(refLink().isNull())
         {
+            QPopupMenu * popup;
             view->plugActionList( "datatools", actionList );
-            QPopupMenu * popup = view->popupMenu("text_popup");
+            KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(variable());
+            if( var )
+                popup = view->popupMenu("note_popup");
+            else
+                popup = view->popupMenu("text_popup");
             Q_ASSERT(popup);
             if (popup)
                 popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
