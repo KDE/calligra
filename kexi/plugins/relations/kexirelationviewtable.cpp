@@ -18,6 +18,10 @@
 */
 
 #include <qheader.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qcursor.h>
 
 #include <kdebug.h>
 
@@ -25,12 +29,101 @@
 
 #include <kexidragobjects.h>
 
-KexiRelationViewTable::KexiRelationViewTable(KexiRelationView *parent, QString table, QStringList fields, const char *name)
+KexiRelationViewTableContainer::KexiRelationViewTableContainer(QWidget *parent, QString table, QStringList fields)
+ : QFrame(parent,"tv", QFrame::Panel | QFrame::Raised)
+{
+//	setFixedSize(100, 150);
+	resize(100, 150);
+	setMouseTracking(true);
+	m_mousePressed = false;
+
+	QGridLayout *g = new QGridLayout(this);
+	g->setMargin(3);
+
+	QLabel *l = new QLabel(table, this);
+	l->setPaletteBackgroundColor(colorGroup().highlight());
+	g->addWidget(l, 0, 0);
+	
+	QPushButton *btnClose = new QPushButton("x", this, "x");
+	btnClose->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	btnClose->setFixedSize(15, 15);
+//	btnClose->setFlat(true);
+
+	KexiRelationViewTable *t = new KexiRelationViewTable(this, table, fields, "tbl-list");
+
+	g->addWidget(btnClose, 0, 1);
+	g->addMultiCellWidget(t, 1, 1, 0, 1);
+
+	m_tbHeight = l->height();
+
+
+	setFrameStyle(QFrame::WinPanel | QFrame::Raised);
+}
+
+void
+KexiRelationViewTableContainer::mousePressEvent(QMouseEvent *ev)
+{
+	m_mousePressed = true;
+	m_bX = ev->x();
+	m_bY = ev->y();
+	
+	QFrame::mousePressEvent(ev);
+}
+
+void
+KexiRelationViewTableContainer::mouseMoveEvent(QMouseEvent *ev)
+{
+	if(m_mousePressed)
+	{
+//		move(ev->x() - m_bX, ev->y() - m_bY);
+		if(m_bY < m_tbHeight)
+		{
+			QPoint movePoint(ev->x() - m_bX, ev->y() - m_bY);
+			move(mapToParent(movePoint));
+		}
+		else if(ev-x() >= width() - 3)
+		{
+			if(ev->y() >= height() - 6)
+				resize(ev->x(), ev->y());
+			else
+				resize(ev->x(), height());
+		}
+	}
+	else
+	{
+		if(ev->x() >= width() - 3)
+		{
+			if(ev->y() >= height() - 3)
+				setCursor(QCursor(SizeFDiagCursor));
+			else
+				setCursor(QCursor(SizeHorCursor));
+		}
+		else
+		{
+			setCursor(QCursor(ArrowCursor));
+		}
+	}
+
+	QFrame::mouseMoveEvent(ev);
+}
+
+void
+KexiRelationViewTableContainer::mouseReleaseEvent(QMouseEvent *ev)
+{
+	m_mousePressed = false;
+	QFrame::mouseMoveEvent(ev);
+}
+
+KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
+{
+}
+
+KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, QString table, QStringList fields, const char *name)
  : KListView(parent)
 {
 	m_fieldList = fields;
 	m_table = table;
-	m_parent = parent;
+//	m_parent = parent;
 
 	setAcceptDrops(true);
 	viewport()->setAcceptDrops(true);
@@ -125,7 +218,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 		s.srcField = srcField;
 		s.rcvField = rcvField;
 
-		m_parent->addConnection(s);
+//		m_parent->addConnection(s);
 
 		kdDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " << m_table << ":" << rcvField << endl;
 		ev->accept();

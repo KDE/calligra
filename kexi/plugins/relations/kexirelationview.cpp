@@ -35,12 +35,12 @@
 #include "kexirelation.h"
 
 KexiRelationView::KexiRelationView(QWidget *parent, const char *name,KexiRelation *relation)
- : QScrollView(parent, name)
+ : QWorkspace(parent, name)
 {
 	m_relation=relation;
 	m_relation->incUsageCount();
 	m_readOnly=false;
-	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+//	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 
 	m_tableCount = 0;
 
@@ -48,7 +48,11 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name,KexiRelatio
 	m_grabOffsetX = 0;
 	m_grabOffsetY = 0;
 
-	viewport()->setPaletteBackgroundColor(colorGroup().mid());
+//	viewport()->setPaletteBackgroundColor(colorGroup().mid());
+	
+//	c->resize(250,250);
+//	c->show(); 
+//	addChild(c, 100,100);
 }
 
 void
@@ -73,7 +77,11 @@ KexiRelationView::addTable(const QString &table, QStringList columns)
 
 	s.geometry = QRect(widest + 20, 5, 100, 150);
 
-	KexiRelationViewTable *tableView = new KexiRelationViewTable(this, table, columns, "someTable");
+	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, table, columns);
+	c->show(); 
+//	addChild(c, 100,100);
+	
+/*	KexiRelationViewTable *tableView = new KexiRelationViewTable(this, table, columns, "someTable");
 	tableView->setReadOnly(m_readOnly);
 	s.columnView = tableView;
 
@@ -86,11 +94,13 @@ KexiRelationView::addTable(const QString &table, QStringList columns)
 	m_tables.insert(table, s);
 	
 	connect(tableView, SIGNAL(tableScrolling(QString)), this, SLOT(slotTableScrolling(QString)));
+*/
 }
 
 void
 KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
+/*
 	QRect clip(cx, cy, cw, ch);
 	for(TableList::Iterator it=m_tables.begin(); it != m_tables.end(); it++)
 	{
@@ -108,11 +118,13 @@ KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 		if(clip.intersects(c->geometry))
 			drawConnection(p, c, true);
 	}
+*/
 }
 
 void
 KexiRelationView::drawSource(QPainter *p, RelationSource src)
 {
+/*
 	kapp->style().drawPrimitive(QStyle::PE_PanelPopup, p, src.geometry, colorGroup());
 	p->setBrush(QBrush(colorGroup().background()));
 	p->setBrush(QBrush(colorGroup().highlight()));
@@ -120,11 +132,13 @@ KexiRelationView::drawSource(QPainter *p, RelationSource src)
 	p->drawRect(src.geometry.x() + 2, src.geometry.y() + 2, src.geometry.width() - 3, 15);
 	p->setPen(QPen(colorGroup().highlightedText()));
 	p->drawText(src.geometry.x() + 3, src.geometry.y() + 3, src.geometry.width() - 4, 14, AlignLeft | SingleLine | AlignVCenter, src.table);
+*/
 }
 
 void
 KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint)
 {
+/*
 	KexiRelationViewTable *tSrc = m_tables[(*conn).srcTable].columnView;
 	if(!tSrc)
 		return;
@@ -143,7 +157,8 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 	int rcvW = m_tables[(*conn).rcvTable].geometry.width();
 
 	if(paint)
-		p->setPen(QColor(KApplication::random() % 255, KApplication::random() % 255, KApplication::random() % 255));
+		p->setPen(black);
+//		p->setPen(QColor(KApplication::random() % 255, KApplication::random() % 255, KApplication::random() % 255));
 
 	if(srcX < rcvX)
 	{
@@ -196,7 +211,7 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 	}
 
 //	kdDebug() << "KexiRelationView::drawConnection(): geometry: " << (*conn).geometry.x() << ":" << (*conn).geometry.width() << endl;
-
+*/
 }
 
 void
@@ -230,16 +245,16 @@ KexiRelationView::contentsMouseMoveEvent(QMouseEvent *ev)
 
 		(*m_floatingSource).geometry = QRect(realX, realY, (*m_floatingSource).geometry.width(), (*m_floatingSource).geometry.height());
 
-		moveChild((*m_floatingSource).columnView, realX + 2, realY + 16);
-		updateContents(old);
-		updateContents((*m_floatingSource).geometry);
+//		moveChild((*m_floatingSource).columnView, realX + 2, realY + 16);
+//		updateContents(old);
+//		updateContents((*m_floatingSource).geometry);
 
 		for(RelationList::Iterator itC=m_connections.begin(); itC != m_connections.end(); itC++)
 		{
 			if((*itC).srcTable == (*m_floatingSource).table || (*itC).rcvTable == (*m_floatingSource).table)
 			{
-				updateContents((*itC).geometry);
-				updateContents(recalculateConnectionRect(&(*itC)));
+//				updateContents((*itC).geometry);
+//				updateContents(recalculateConnectionRect(&(*itC)));
 			}
 		}
 
@@ -264,8 +279,8 @@ KexiRelationView::slotTableScrolling(QString table)
 	{
 		if((*itC).srcTable == table || (*itC).rcvTable == table)
 		{
-			updateContents((*itC).geometry);
-			updateContents(recalculateConnectionRect(&(*itC)));
+//			updateContents((*itC).geometry);
+//			updateContents(recalculateConnectionRect(&(*itC)));
 		}
 	}
 }
@@ -297,7 +312,7 @@ KexiRelationView::addConnection(SourceConnection connection, bool interactive)
 	if (add) m_connections.append((*conn));
 	if (interactive) m_relation->updateRelationList(this,m_connections);
 
-	updateContents((*conn).geometry);
+//	updateContents((*conn).geometry);
 	kdDebug() << "KexiRelationView::addConnection(): rect: " << (*conn).geometry.x() << ", " << (*conn).geometry.y() << endl;
 }
 

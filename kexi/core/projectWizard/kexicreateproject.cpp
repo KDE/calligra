@@ -27,10 +27,10 @@
 #include "kexicreateprojectpagedb.h"
 #include "kexicreateprojectpagefile.h"
 
-#include "kexitabbrowser.h"
-#include "kexicreateproject.h"
-#include "kexiview.h"
-#include "kexiproject.h"
+//#include "kexitabbrowser.h"
+//#include "kexicreateproject.h"
+//#include "kexiview.h"
+//#include "kexiproject.h"
 
 KexiCreateProject::KexiCreateProject(KexiProject *project,const char* name) : KWizard(0,name,true)
 {

@@ -1,10 +1,8 @@
 lib_LTLIBRARIES = libkexicore.la
 libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kmultitabbar.cpp kexitabbrowser.cpp \
-	kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceMDI.cpp kexicreateprojectpage.cpp \
-	kexicreateproject.cpp kexibrowser.cpp kexiview.cpp \
-	kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp \
-	kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp \
+	kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceMDI.cpp \
+	kexibrowser.cpp kexiview.cpp \
 	KexiViewIface.skel KexiViewIface.cpp KexiProjectIface.skel \
 	kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp \
 	kexiprojecthandlerproxy.cpp kexiprojecthandleritem.cpp \
@@ -16,7 +14,7 @@ libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 libkexicore_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexicore_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  ../kexiDB/libkexidb.la
 
-SUBDIRS = .
+SUBDIRS = . projectWizard
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
@@ -42,6 +40,6 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE
-INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi $(all_includes)
+INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/projectWizard $(all_includes)
 
 METASOURCES = AUTO

@@ -21,6 +21,7 @@
 #define KEXIRELATIONVIEWTABLE_H
 
 #include <qobject.h>
+#include <qframe.h>
 
 #include <klistview.h>
 
@@ -29,12 +30,35 @@
 
 class KexiRelationView;
 
+class KexiRelationViewTableContainer : public QFrame
+{
+	Q_OBJECT
+	
+	public:
+		KexiRelationViewTableContainer(QWidget *parent, QString table, QStringList fields);
+		~KexiRelationViewTableContainer();
+
+	protected:
+		void	mouseMoveEvent(QMouseEvent *ev);
+		void	mousePressEvent(QMouseEvent *ev);
+		void	mouseReleaseEvent(QMouseEvent *ev);
+
+		bool	m_mousePressed;
+		int	m_bX;
+		int	m_bY;
+		int	m_grabX;
+		int	m_grabY;
+
+		int	m_tbHeight;
+};
+
+
 class KexiRelationViewTable : public KListView
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationViewTable(KexiRelationView *parent, QString table, QStringList fields, const char *name=0);
+		KexiRelationViewTable(QWidget *parent, QString table, QStringList fields, const char *name=0);
 		~KexiRelationViewTable();
 
 		QString			table() const { return m_table; };
