@@ -42,7 +42,7 @@ class KexiQueryDesigner : public KexiDialogBase
 		~KexiQueryDesigner();
 
 	public slots:
-		void	query();
+		void	sqlQuery();
 		void	fastQuery();
 
 	protected:

@@ -38,7 +38,7 @@ KexiQueryPart::~KexiQueryPart()
 }
 
 KexiDialogBase*
-KexiQueryPart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool design)
+KexiQueryPart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool)
 {
 	KexiQueryDesigner *d = new KexiQueryDesigner(win, item);
 	return d;
@@ -50,7 +50,7 @@ KexiQueryPart::instanceName() const
 	return i18n("Query");
 }*/
 
-bool KexiQueryPart::remove(KexiMainWindow *win, const KexiPart::Item &item)
+bool KexiQueryPart::remove(KexiMainWindow *, const KexiPart::Item &)
 {
 	//TODO
 	return false;

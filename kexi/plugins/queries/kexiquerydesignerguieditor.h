@@ -26,6 +26,12 @@ class KexiMainWindow;
 class KexiTableViewData;
 class KexiTableView;
 
+namespace KexiDB
+{
+	class QuerySchema;
+	class Connection;
+};
+
 class KexiQueryDesignerGuiEditor : public QWidget
 {
 	Q_OBJECT
@@ -33,6 +39,8 @@ class KexiQueryDesignerGuiEditor : public QWidget
 	public:
 		KexiQueryDesignerGuiEditor(QWidget *parent, KexiMainWindow *win);
 		~KexiQueryDesignerGuiEditor();
+
+		KexiDB::QuerySchema	*schema();
 
 	protected:
 		void			initTable();
@@ -44,6 +52,7 @@ class KexiQueryDesignerGuiEditor : public QWidget
 	private:
 		KexiTableViewData	*m_data;
 		KexiTableView		*m_table;
+		KexiDB::Connection	*m_conn;
 };
 
 #endif

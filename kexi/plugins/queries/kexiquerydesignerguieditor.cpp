@@ -24,7 +24,10 @@
 #include <klocale.h>
 
 #include <kexidb/field.h>
+#include <kexidb/queryschema.h>
+#include <kexidb/connection.h>
 
+#include <kexiproject.h>
 #include <keximainwindow.h>
 #include <kexirelationpart.h>
 #include <kexitableview.h>
@@ -37,6 +40,8 @@
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiMainWindow *win)
  : QWidget(parent)
 {
+	m_conn = win->project()->dbConnection();
+
 	QSplitter *s = new QSplitter(Vertical, this);
 	KexiRelationPart *p = win->relationPart();
 	if(p)
@@ -52,7 +57,6 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiMain
 
 	connect(m_table, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
 	m_table->setNavigatorEnabled(false);
-	addRow("", "");
 }
 
 void
@@ -104,7 +108,26 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 	KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
 	addRow(srcTable, srcField);
 }
-	
+
+KexiDB::QuerySchema *
+KexiQueryDesignerGuiEditor::schema()
+{
+	KexiDB::QuerySchema *s = new KexiDB::QuerySchema();
+	for(KexiTableItem *it = m_data->first(); it; it = m_data->next())
+	{
+		if(it->at(0).toString().isEmpty() || it->at(1).toString().isEmpty())
+			continue;
+
+		KexiDB::Field *f = new KexiDB::Field();
+		f->setName(it->at(1).toString());
+		f->setTable(m_conn->tableSchema(it->at(0).toString()));
+
+		s->addField(f);
+	}
+
+	return s;
+}
+
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 {
 }

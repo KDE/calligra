@@ -99,7 +99,7 @@ KexiQueryDesigner::mainWidget()
 }
 
 void
-KexiQueryDesigner::query()
+KexiQueryDesigner::sqlQuery()
 {
 	kdDebug() << "KexiQueryDesigner::query()" << endl;
 //	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(m_statement);
@@ -162,10 +162,16 @@ KexiQueryDesigner::viewChanged(QWidget *w)
 	//this is really ugly, however we might switch back to toolbar stuff anyway...
 	if(m_tab->indexOf(w) == 2)
 	{
+		if(m_currentView == 0)
+		{
+			KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*m_editor->schema());
+			if(rec)
+				m_queryView->setData(rec);
+		}
 		if(m_currentView == 1)
 		{
 			m_statement = m_sql->getQuery();
-			query();
+			sqlQuery();
 		}
 	}
 	m_currentView = m_tab->indexOf(w);
@@ -177,7 +183,7 @@ KexiQueryDesigner::fastQuery()
 	kdDebug() << "KexiQueryDesigner::fastQuery()" << endl;
 	m_statement = m_sql->getQuery();
 	m_tab->setCurrentPage(2);
-	query();
+	sqlQuery();
 }
 
 KexiQueryDesigner::~KexiQueryDesigner()
@@ -185,3 +191,4 @@ KexiQueryDesigner::~KexiQueryDesigner()
 }
 
 #include "kexiquerydesigner.moc"
+
