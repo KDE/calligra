@@ -1257,8 +1257,6 @@ void KPresenterView::screenPresStructView()
     presStructView->setCaption( i18n( "KPresenter - Presentation Structure Viewer" ) );
     QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
     presStructView->exec();
-
-    QObject::disconnect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
     delete presStructView;
     presStructView = 0;
 }
@@ -3653,7 +3651,6 @@ void KPresenterView::restartPresStructView()
     QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
     presStructView->exec();
 
-    QObject::disconnect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
     delete presStructView;
     presStructView = 0;
 }
