@@ -1,5 +1,0 @@
-application/x-kchart; kchart;test=test "$DISPLAY" != ""; priority=7
-application/x-killustrator; killustrator;test=test "$DISPLAY" != ""; priority=7
-application/x-kpresenter; kpresenter;test=test "$DISPLAY" != ""; priority=7
-application/x-kspread; kspread;test=test "$DISPLAY" != ""; priority=7
-application/x-kword; kword;test=test "$DISPLAY" != ""; priority=7

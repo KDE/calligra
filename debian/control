@@ -1,5 +1,5 @@
 Source: koffice
-Build-Depends: autoconf, automake, libtool, debhelper, gettext, kdelibs-dev (>= 4:2.1.0-0)
+Build-Depends: autoconf, automake, libtool, debhelper, gettext, kdelibs-dev (>= 4:2.1.1)
 Section: x11
 Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>

@@ -1,8 +1,8 @@
-koffice (2.1-cvs20010314-1) unstable; urgency=low
+koffice (2.1-cvs20010323-1) unstable; urgency=low
  
   * New upstream CVS pull
  
- -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 14 Mar 2001 00:30:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 23 Mar 2001 02:30:00 -0700
 
 koffice (2.1-cvs20010308-1) unstable; urgency=low
  
