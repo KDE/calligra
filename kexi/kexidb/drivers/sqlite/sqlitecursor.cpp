@@ -145,8 +145,11 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 				case Field::Time:
 					//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
 					return Kexi::stringToHackedQTime(GET_sqlite3_column_text);
-				case Field::DateTime:
-					return QDateTime::fromString( GET_sqlite3_column_text, Qt::ISODate );
+				case Field::DateTime: {
+					QString tmp( GET_sqlite3_column_text );
+					tmp[10] = 'T'; //for ISODate compatibility
+					return QDateTime::fromString( tmp, Qt::ISODate );
+				}
 				case Field::Boolean:
 					return QVariant(sqliteStringToBool(GET_sqlite3_column_text), 1);
 				default:
@@ -472,9 +475,12 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 				//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
 				data[i] = Kexi::stringToHackedQTime(QString::fromLatin1(*col));
 				break;
-			case Field::DateTime:
-				data[i] = QDateTime::fromString( QString::fromLatin1(*col), Qt::ISODate );
+			case Field::DateTime: {
+				QString tmp( QString::fromLatin1(*col) );
+				tmp[10] = 'T';
+				data[i] = QDateTime::fromString( tmp, Qt::ISODate );
 				break;
+			}
 			default:
 				data[i] = QVariant( *col );
 			}

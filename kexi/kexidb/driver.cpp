@@ -231,8 +231,13 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 			return QString("\'")+v.toTime().toString(Qt::ISODate)+"\'";
 		case Field::Date:
 			return QString("\'")+v.toDate().toString(Qt::ISODate)+"\'";
-		case Field::DateTime:
-			return QString("\'")+v.toDateTime().toString(Qt::ISODate)+"\'";
+		case Field::DateTime: {
+/*! @todo not compatible with all drivers - move to driver impl.
+    Compatible with SQLite: http://www.sqlite.org/cvstrac/wiki?p=DateAndTimeFunctions */
+			const QDateTime dt( v.toDateTime() );
+			return QString("\'")+dt.date().toString(Qt::ISODate)+" "+dt.time().toString(Qt::ISODate)+"\'";
+//			return QString("\'")+v.toDateTime().toString(Qt::ISODate)+"\'";
+		}
 		case Field::Text:
 		case Field::LongText: {
 			QString s = v.toString();
