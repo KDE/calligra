@@ -2,9 +2,9 @@
 
 #include <qlabel.h>
 #include <qdir.h>
-#include <qfileinf.h>
+#include <qfileinfo.h>
 #include <unistd.h>
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kstddirs.h>

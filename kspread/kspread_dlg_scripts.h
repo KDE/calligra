@@ -3,9 +3,9 @@
 
 #include <qdialog.h>
 #include <qstringlist.h>
-#include <qlined.h>
+#include <qlineedit.h>
 #include <qlistbox.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 
 class KSpreadScriptsData
 {

@@ -19,7 +19,7 @@
 
 #include <qprinter.h>
 #include <qdom.h>
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 
 #include "kspread_map.h"
 #include "kspread_doc.h"

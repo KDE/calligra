@@ -34,10 +34,10 @@
 #include "KSpreadDocIface.h"
 
 #include <unistd.h>
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <kurl.h>
 #include <kapp.h>
-#include <qdatetm.h>
+#include <qdatetime.h>
 #include <klocale.h>
 #include <sys/types.h>
 #include <dirent.h>

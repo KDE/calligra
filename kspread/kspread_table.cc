@@ -22,9 +22,9 @@
 #include <ctype.h>
 #include <math.h>
 
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <qpainter.h>
-#include <qdrawutl.h>
+#include <qdrawutil.h>
 #include <qkeycode.h>
 #include <qregexp.h>
 #include <qpoint.h>
@@ -32,8 +32,8 @@
 #include <qcursor.h>
 #include <qstack.h>
 #include <qbuffer.h>
-#include <qmsgbox.h>
-#include <qclipbrd.h>
+#include <qmessagebox.h>
+#include <qclipboard.h>
 #include <qpicture.h>
 #include <qdom.h>
 #include <qtextstream.h>

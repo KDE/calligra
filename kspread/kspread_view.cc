@@ -23,10 +23,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include <qpushbt.h>
-#include <qmsgbox.h>
-#include <qprndlg.h>
-#include <qobjcoll.h>
+#include <qpushbutton.h>
+#include <qmessagebox.h>
+#include <qprintdialog.h>
+#include <qcollection.h>
 #include <qkeycode.h>
 #include <qaction.h>
 #include <qmime.h>

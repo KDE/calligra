@@ -18,7 +18,7 @@
 */
 
 #include <qmessagebox.h>
-#include <qpntarry.h>
+#include <qpointarray.h>
 #include <qstring.h>
 
 #include <stdio.h>

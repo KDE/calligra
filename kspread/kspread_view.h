@@ -51,7 +51,7 @@ class KFontSizeAction;
 class KToggleAction;
 
 #include <qlist.h>
-#include <qscrbar.h>
+#include <qscrollbar.h>
 #include <qlabel.h>
 #include <qbutton.h>
 #include <qpoint.h>
