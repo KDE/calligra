@@ -463,10 +463,16 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         //drawCharacter(painter, style, myX, myY, mySize, '\\');
         break;
     case LeftCornerBracket:
-        drawCharacter(painter, style, myX, myY, mySize, leftAngleBracketChar);
+        if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else drawCharacter(painter, style, myX, myY, mySize, leftAngleBracketChar);
         break;
     case RightCornerBracket:
-        drawCharacter(painter, style, myX, myY, mySize, rightAngleBracketChar);
+        if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else drawCharacter(painter, style, myX, myY, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
         if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
