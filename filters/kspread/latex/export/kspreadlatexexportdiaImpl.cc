@@ -87,6 +87,68 @@ KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* paren
 		kapp->dcopClient()->registerAs("FilterConfigDia");
 		kapp->dcopClient()->setDefaultObject(_iface->objId());
 	}
+	
+	/* All these items inserted must not be translated so they are inserted here 
+	 * without i18n() method. */
+	/*qualityComboBox->insertItem("final");
+  qualityComboBox->insertItem("draft");*/
+
+	classComboBox->insertItem("article");
+  classComboBox->insertItem("book");
+  classComboBox->insertItem("letter");
+  classComboBox->insertItem("report");
+  classComboBox->insertItem("slides");
+
+	encodingComboBox->insertItem("unicode");
+  encodingComboBox->insertItem("ansinew");
+  encodingComboBox->insertItem("applemac");
+  encodingComboBox->insertItem("ascii");
+  encodingComboBox->insertItem("latin1");
+  encodingComboBox->insertItem("latin2");
+  encodingComboBox->insertItem("latin3");
+  encodingComboBox->insertItem("latin5");
+  encodingComboBox->insertItem("cp437");
+  encodingComboBox->insertItem("cp437de");
+  encodingComboBox->insertItem("cp850");
+  encodingComboBox->insertItem("cp852");
+  encodingComboBox->insertItem("cp865");
+  encodingComboBox->insertItem("cp1250");
+  encodingComboBox->insertItem("cp1252");
+  encodingComboBox->insertItem("decmulti");
+  encodingComboBox->insertItem("next");
+
+	languagesList->insertItem("american");
+	languagesList->insertItem("austrian");
+	languagesList->insertItem("bahasa");
+	languagesList->insertItem("brazil");
+	languagesList->insertItem("breton");
+	languagesList->insertItem("catalan");
+	languagesList->insertItem("croatian");
+	languagesList->insertItem("czech");
+	languagesList->insertItem("danish");
+	languagesList->insertItem("dutch");
+	languagesList->insertItem("english");
+	languagesList->insertItem("esperanto");
+	languagesList->insertItem("finnish");
+	languagesList->insertItem("francais");
+	languagesList->insertItem("french");
+	languagesList->insertItem("galician");
+	languagesList->insertItem("german");
+	languagesList->insertItem("germanb");
+	languagesList->insertItem("hungarian");
+	languagesList->insertItem("magyar");
+	languagesList->insertItem("italian");
+	languagesList->insertItem("norsk");
+	languagesList->insertItem("nynorsk");
+	languagesList->insertItem("polish");
+	languagesList->insertItem("portuges");
+	languagesList->insertItem("romanian");
+	languagesList->insertItem("russian");
+	languagesList->insertItem("spanish");
+	languagesList->insertItem("slovak" );
+	languagesList->insertItem("slovene");
+	languagesList->insertItem("swedish");
+	languagesList->insertItem("turkish");
 }
 
 /*
@@ -126,8 +188,13 @@ void KSpreadLatexExportDiaImpl::accept()
 		config->useKwordStyle();
 	else
 		config-> useLatexStyle();
+	/* class names are not translated */
 	config->setClass(classComboBox->currentText());
-	config->setQuality(qualityComboBox->currentText());
+
+	if(qualityComboBox->currentItem() == 0)
+		config->setQuality("final");
+	else
+		config->setQuality("draft");
 	config->setDefaultFontSize(defaultFontSize->value());
 	
 	/* Pictures tab */

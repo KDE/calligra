@@ -186,8 +186,8 @@
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>30</x>
-                            <y>170</y>
+                            <x>38</x>
+                            <y>174</y>
                             <width>187</width>
                             <height>18</height>
                         </rect>
@@ -228,15 +228,28 @@
                         <string>Default font size:</string>
                     </property>
                 </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>classComboBox</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>240</x>
+                            <y>168</y>
+                            <width>125</width>
+                            <height>27</height>
+                        </rect>
+                    </property>
+                </widget>
                 <widget class="KComboBox">
                     <item>
                         <property name="text">
-                            <string>Final</string>
+                            <string>final</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Draft</string>
+                            <string>draft</string>
                         </property>
                     </item>
                     <property name="name">
@@ -248,44 +261,6 @@
                             <y>201</y>
                             <width>125</width>
                             <height>28</height>
-                        </rect>
-                    </property>
-                </widget>
-                <widget class="QComboBox">
-                    <item>
-                        <property name="text">
-                            <string>Article</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Book</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Letter</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Report</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Slides</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>classComboBox</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>240</x>
-                            <y>168</y>
-                            <width>125</width>
-                            <height>27</height>
                         </rect>
                     </property>
                 </widget>
@@ -372,91 +347,6 @@
                         <string>Encoding</string>
                     </property>
                     <widget class="KComboBox">
-                        <item>
-                            <property name="text">
-                                <string>unicode</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>ansinew</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>applemac</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>ascii</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>latin1</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>latin2</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>latin3</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>latin5</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>cp437</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>cp437de</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>cp850</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>cp852</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>cp865</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>cp1250</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>cp1252</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>decmulti</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>next</string>
-                            </property>
-                        </item>
                         <property name="name">
                             <cstring>encodingComboBox</cstring>
                         </property>
@@ -534,166 +424,6 @@
                         </property>
                     </widget>
                     <widget class="KListBox">
-                        <item>
-                            <property name="text">
-                                <string>american</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>austrian</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>bahasa</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>brazil</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>breton</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>catalan</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>croatian</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>czech</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>danish</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>dutch</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>english</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>esperanto</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>finnish</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>francais</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>french</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>galician</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>german</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>germanb</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>hungarian</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>magyar</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>italian</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>norsk</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>nynorsk</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>polish</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>portuges</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>romanian</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>russian</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>spanish</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>slovak</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>slovene</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>swedish</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>turkish</string>
-                            </property>
-                        </item>
                         <property name="name">
                             <cstring>languagesList</cstring>
                         </property>
