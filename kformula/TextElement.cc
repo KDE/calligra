@@ -23,8 +23,8 @@ TextElement::TextElement(KFormulaDoc *Formula,
 {
     // warning("A new text is born.. ");
     font=0L;
-    position=content.length();
-    warning("creation %i",position);
+    //position=content.length();
+    //warning("creation %i",position);
 
 }
 
@@ -56,13 +56,7 @@ void TextElement::draw(QPoint drawPoint,int resolution)
 	    }
 	pen->setFont(formulaFont);
 	pen->drawText(x+familySize.x(),y+offsetY,content);
-	if( beActive ) {
-	    QFontMetrics fm(formulaFont);
-	    formula->setCursor(QRect(x+familySize.x()+fm.width(content,position),
-				     y+familySize.top()-1,
-				     5,familySize.height()+2));
-	}
-	
+
     }
     if(beActive)
 	pen->setPen(Qt::blue);
@@ -136,50 +130,6 @@ void TextElement::checkSize()
     //warning("End");
 }
 
-int TextElement::takeAsciiFromKeyb(char ch)
-{
-//    warning("...pos:%i",position);
-    content.insert(position,ch);
-    position++;
-//    warning("ins %i",position);
-    return 1;
-}
-
-int TextElement::takeActionFromKeyb(int action)
-{
-    if(action==Qt::Key_Backspace)
-	{
-	if(content!="")	{
-	    if(position > 0) {
-		position--;
-		content.remove(position,1);
-	    }
-	   }
-	    else return FCOM_DELETEME;
-	}
-    else
-     if(action==Qt::Key_Delete)
-
-         content.remove(position,1);   //Change this....
-	 
-      else
-       if(action==Qt::Key_Left)
-            position--;	
-       if(action==Qt::Key_Right)
-            position++;	
-
-
-
-    if(position > content.length())
-	position = content.length();
-    if(position < 0 )
-      {
-      	position = content.length();
-        return -1;
-      }
-    return position;
-}
-
 void TextElement::changeFontFamily(QString family)
 {
 
@@ -218,6 +168,81 @@ void TextElement::split(int pos)
  position=content.length();
 
 }
-void TextElement::setPosition(int pos)
+
+QRect TextElement::getCursor(int atPos) 
 {
+    QPoint dp = myArea.topLeft()-globalSize.topLeft();
+    
+    if(atPos>0)
+    {
+     atPos--;
+	QFont formulaFont;
+	if(font!=0L)
+	    formulaFont=(*font);
+	else
+	    {
+		formulaFont=formula->generalFont();
+		formulaFont.setPointSize(numericFont);
+	    }
+
+	    QFontMetrics fm(formulaFont);
+	    return (QRect(dp.x()+familySize.x()+fm.width(content,atPos),
+				     dp.y()+familySize.top()-1,
+				     5,familySize.height()+2));
+
+     } 
+      else 
+     {
+      if(atPos==0)
+        return (QRect(dp.x()+familySize.x()-3,dp.y()-7,5,14));
+       else
+        return (QRect(dp.x()+localSize.width()+2,dp.y()-8,5,16));	
+     }
+ 
+
+return QRect(0,0,0,0);
 }
+
+void TextElement::makeList(bool active=0) 
+{
+PosType *p;
+p = new PosType;
+p->element=this;
+p->pos=0;
+formula->eList.append(p);
+
+
+warning("append");
+beActive=0;
+
+for(int i=0;i<2;i++)
+ if(index[i]!=0) {
+  warning("call for index%d %p",i,index[i]);
+ index[i]->makeList(active);
+  }
+warning("index OK");
+
+for(unsigned int i=1;i<=content.length()+1;i++)
+  {
+   p = new PosType; 
+   p->element=this;
+   p->pos=i;
+   formula->eList.append(p);
+  }
+
+
+for(int i=2;i<4;i++)
+ if(index[i]!=0) {
+  warning("call for index%d %p",i,index[i]);
+ index[i]->makeList(active);
+  }
+
+/*p = new PosType;
+p->element=this;
+p->pos=-1;
+formula->eList.append(p);
+*/if(next!=0)
+ next->makeList(active);
+
+}
+

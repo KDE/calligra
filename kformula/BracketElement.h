@@ -67,7 +67,7 @@ class BracketElement : public BasicElement
     /*
      * do nothing
      */
-    virtual int takeAsciiFromKeyb(int action);
+//    virtual int takeAsciiFromKeyb(int action);
    
     /*
      * Again, in  the future....

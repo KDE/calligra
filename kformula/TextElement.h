@@ -68,18 +68,13 @@ class TextElement : public BasicElement
     * Change font size
     */
    virtual void setNumericFont(int newValue); 
-      
-   /*
-    * Need when cloning.
-    */
-   //    virtual void setContent(QString c) {content=c;position=c.length();}   
-   
+   virtual void makeList(bool active=0);   
    
    /*
     *
     *
     */
-    virtual void setPosition(int pos);    
+    virtual QRect getCursor(int atPos);    
    
    /*  
     * Change "font"     
@@ -87,20 +82,6 @@ class TextElement : public BasicElement
     */
    void changeFontFamily(QString family);
    
-   /*
-    * usually call by keyPressedEvent() 
-    * if input is ASCII
-    * 1=add a character
-    */
-   virtual int takeAsciiFromKeyb(char ch);      
-
-   /*
-    * usually call by keyPressEvent()
-    * if input is delete,backspace,arrows,home,end....
-    * return cursor position (-1 if no cursor is need)
-    */
-   
-   virtual int takeActionFromKeyb(int action);
  
    /*
     * Again, in  the future....

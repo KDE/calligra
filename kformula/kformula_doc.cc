@@ -178,13 +178,9 @@ void KFormulaDoc::emitModified()
 void KFormulaDoc::addRootElement()
 {
     BasicElement *newElement;
-//    if(theActiveElement==0L)
-//	setActiveElement(theFirstElement);
      if(eList.current()->element==0L)
      setActiveElement(theFirstElement);
-    //     eList.first();
 
-    //If current Element is a Basic, change it into a Root
     if (typeid(*eList.current()->element) == typeid(BasicElement)) {
 	warning("substitueted");
 	newElement = new RootElement(this);
@@ -446,44 +442,8 @@ void KFormulaDoc::mousePressEvent( QMouseEvent *a,QWidget *wid)
 void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 {
 cerr << " key received , " << k->ascii() << endl;
-    /*
-      if(k->key()==Key_Left) {
-      if((type==0)&&(pos>0)) pos--;
-      else
-      if(prev!=-1)setCurrent(prev);
-      }
-      if(k->key()==Key_Right) {
-      if((type==0)&&(pos<len)) pos++;
-      else
-      if(next!=-1)  setCurrent(next);
-      else
-      if(c1!=-1)    setCurrent(c1);
-      else
-      if(c2!=-1)    setCurrent(c2);
-      }			
-      if(k->key()==Key_Up) {
-      if(c1!=-1)    setCurrent(c1);
-      else
-      if(prev!=-1)  setCurrent(prev);						
-      }
+warning("Key pressed %i, ascii:%i",k->key(),k->ascii());
 
-      if(k->key()==Key_Down) {
-      if(c2!=-1)    setCurrent(c2);
-      else
-      if(prev!=-1)  setCurrent(prev);						
-      }
-
-      if(k->key()==Key_Backspace) {
-      if(pos>0) { pos--;
-      Blocks[c]->getcont().remove(pos,1);
-      }
-      }
-      else
-      if(k->key()==Key_Delete) {
-      if(type==0) Blocks[c]->getcont().remove(pos,1); else deleteIt(Blocks[c]);
-      }    else
-    */
-    warning("Key pressed %i, ascii:%i",k->key(),k->ascii());
     int elReturn=0;
 
     if((k->ascii()>=32)&&(k->ascii()<127))
@@ -513,21 +473,110 @@ cerr << " key received , " << k->ascii() << endl;
               break;	      
 	     default:
 	     {
-	    if (eList.current()->element!=0L)
-		elReturn=eList.current()->element->takeAsciiFromKeyb(k->ascii());
-              }
-	      
-	    }
-	}
+
+	       if (eList.current()->element!=0L)
+	         {
+	          int po=eList.current()->pos;
+	           if (po>0)
+	           {
+		    QString text;
+		    po--;
+		    warning("Internal Text Position %d",po);
+		    text=eList.current()->element->getContent().copy();
+		    text.insert(po,k->ascii());
+		    eList.current()->element->setContent(text);
+		    thePosition=eList.at();
+	    	    warning("thePosition %d  int:%d",thePosition,eList.current()->pos);
+		    eList.clear();
+            	    theFirstElement->makeList();
+		    thePosition++;              
+		    eList.at(thePosition);		
+	    	    warning("the New Position %d int:%d",thePosition,eList.current()->pos);
+	           }
+		   else
+		    elReturn=FCOM_ADDTEXT;
+	         }
+	     } //default
+	}  //Switch
+      }	 //if
     else   //Not ascii
 	{
-    	    if (eList.current()->element!=0L)
-              elReturn=eList.current()->element->takeActionFromKeyb(k->key());
+	    int action=k->key();
+	       if (eList.current()->element!=0L)
+	         {
+	          int po=eList.current()->pos;
+	           if (po>0)
+	           {
+        
+
+	    	   }
+		  }
+
+if(action==Qt::Key_BackSpace)
+{
+ if(eList.prev()->element!=0)
+  action=Qt::Key_Delete;
+ else
+   eList.next(); 
+}  
+
+if(action==Qt::Key_Delete)
+ {
+    warning("Key Delete");
+   if(eList.current()->pos>=0)
+    {
+    QString text;
+    text=eList.current()->element->getContent().copy();
+    text.remove(eList.current()->pos-1,1);
+    eList.current()->element->setContent(text);
+    thePosition=eList.at();
+    eList.clear();
+    theFirstElement->makeList();
+    eList.at(thePosition);		
+   }
+
+    
+    else {
+    if(eList.current()->pos==0)
+     elReturn=FCOM_DELETEME;
+    else 
+     if(eList.next()->element!=0)
+      elReturn=FCOM_DELETEME;       	    
+    else
+    eList.prev();
+   } 
+ }
+
+
+if(action==Qt::Key_Left)
+ {
+
+/*   if(eList.current()->pos==0) 
+   {
+    if(eList.prev()->pos==-1)
+       eList.prev();
+   }
+    else*/
+       eList.prev();
+
+ }
+if(action==Qt::Key_Right)
+ {/*
+   if(eList.current()->pos==-1) 
+   {
+    if(eList.next()->pos==0)
+       eList.next();
+  
+   }
+    else
+    */   eList.next();
+
+  }
+
+
+
 	    warning("Not Ascii return %d",elReturn);
-	    //int pos=eList.at();
-	    //setActiveElement(eList.current()->element);
-  	    thePosition=eList.at();
-	    //eList.at(pos);
+	    thePosition=eList.at();
 	}	
         
 	if (elReturn==FCOM_ADDTEXT) 
@@ -538,10 +587,27 @@ cerr << " key received , " << k->ascii() << endl;
 	         eList.current()->element->insertElement(newElement=new TextElement(this));
 	          
 		  setActiveElement(newElement); 
-	      } else
-	      addTextElement();
+	      } else  addTextElement();
+	     
 	     if((k->ascii()>32)&&(k->ascii()<127))
- 		eList.current()->element->takeAsciiFromKeyb(k->ascii());
+	    {
+	       QString text;
+		    int po=0;
+	       
+	       warning("Internal Text Position %d",po);
+		    text=eList.current()->element->getContent().copy();
+		    text.insert(po,k->ascii());
+		    eList.current()->element->setContent(text);
+		    thePosition=eList.at();
+	    	    warning("thePosition %d  int:%d",thePosition,eList.current()->pos);
+		    eList.clear();
+            	    theFirstElement->makeList();  
+            	    //thePosition++;      
+		    eList.at(thePosition);		
+	    	    warning("the New Position %d int:%d",thePosition,eList.current()->pos);
+	           
+	    }
+
 	    }
 	if (elReturn==FCOM_DELETEME)
 	    {
@@ -557,9 +623,6 @@ cerr << " key received , " << k->ascii() << endl;
 
 	    }
 
-    //ChText(Blocks[getCurrent()]->getcont());
-    //ChType(Blocks[getCurrent()]->gettype());
-    //update();
     emitModified();
 }
 
@@ -575,6 +638,8 @@ void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
     thePainter->begin(paintGround);
     thePainter->setPen( black );
     theFirstElement->checkSize();
+    if(eList.current()->element!=0L)
+      eList.current()->element->setActive(true);
     theFirstElement->draw(QPoint(5,5)-theFirstElement->getSize().topLeft());
 //    if(eList.current()->element && typeid(*eList.current()->element) == typeid(TextElement))
 //	{

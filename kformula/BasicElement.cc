@@ -40,9 +40,10 @@ BasicElement::BasicElement(KFormulaDoc *Formula,
 
 BasicElement::~BasicElement()
 {
-    /*ToDo:
+    /* See deleteElement to
      * Link prev with next & remove itself
      */
+
 }
 
 BasicElement *BasicElement::isInside(QPoint point)
@@ -247,48 +248,6 @@ void BasicElement::setNumericFont(int value)
     numericFont=value;
 }
 
-int BasicElement::takeActionFromKeyb(int action)
-{
-if(action==Qt::Key_Delete)
- {
-    warning("Key Delete");
-    return  FCOM_DELETEME;
- }
-if(action==Qt::Key_BackSpace)
-  if(prev!=0)
-    {
-     formula->setActiveElement(prev);
-     return  FCOM_DELETEME;    
-    }
-if(action==Qt::Key_Left)
- {
-   formula->eList.prev(); 
- }
-/*    {
-	int p=position-1;
-	while((!isValidPosition(p))&&(p>0))
-	            p--;
-	      
-       	setPosition(p);
-    }*/
-    
-if(action==Qt::Key_Right)
- {
-   formula->eList.next(); 
-  }
-
-/*{
-	int p=position+1;
-	while((!isValidPosition(p)))
-		   p++;
-       	setPosition(p);
-    }*/
-
-
-
- return 0;
-}
-
 void  BasicElement::substituteElement(BasicElement *clone)
 {
     int i;
@@ -299,10 +258,6 @@ void  BasicElement::substituteElement(BasicElement *clone)
 	clone->setIndex(index[i],i);
 	if(index[i]!=0L) index[i]->setPrev(clone);
     }
-    /*  clone->setIndex(index[1],1);
-	clone->setIndex(index[2],2);
-	clone->setIndex(index[3],3);
-    */
     clone->setNumericFont(numericFont);
     clone->setColor(defaultColor);
     clone->setRelation(relation);
@@ -323,10 +278,6 @@ void  BasicElement::substituteElement(BasicElement *clone)
     warning("Substituted %p with %p,  waiting to be deleted",this,clone);
 }
 
-int BasicElement::takeAsciiFromKeyb(char ch)
-{
-  return FCOM_ADDTEXT;    
-}
 
 
 void  BasicElement::insertElement(BasicElement *element)
@@ -354,10 +305,9 @@ void  BasicElement::insertElement(BasicElement *element)
     relation=-1;
 }
 
-void  BasicElement::deleteElement(bool deleteme=true)
+void  BasicElement::deleteElement()
 {
     warning("deleteElement of -> %p   prev %p    next %p",this,prev,next);
-//    bool deleteme=true;
     if(next!=0L)
      {
      next->setPrev(prev);
@@ -381,7 +331,7 @@ void  BasicElement::deleteElement(bool deleteme=true)
       formula->setFirstElement(next);    
      else
       formula->setFirstElement(new BasicElement(formula));    
-//      deleteme=false;
+
       
    int nc=0;     
    while (nc<childrenNumber)
@@ -401,9 +351,8 @@ void  BasicElement::deleteElement(bool deleteme=true)
         else 
 	 nc++;
       }
-//if(deleteme)
- delete this;  // It is a good call ?
-//else
+  delete this;  // It is a good call ?
+ 
 
 }
 
@@ -443,18 +392,20 @@ void  BasicElement::load(int)
 void BasicElement::makeList(bool active=0) 
 {
 warning("make list %p " ,this);
-PosType *p = new PosType;
-p->element=this;
-p->pos=0;
-formula->eList.append(p);
-warning("append");
-if (beActive && active )
- {
- warning("active");
-  formula->thePosition=formula->eList.at();
-  warning("position set to %d",formula->eList.at());
+bool basic;
+PosType *p; 
+basic=(typeid(*this) == typeid(BasicElement));
+if(!basic) {
+    p = new PosType;
+    p->element=this;
+    p->pos=0;
+    formula->eList.append(p);
 }
-for(int i=0;i<4;i++)
+warning("append");
+
+beActive=0;
+
+for(int i=0;i<2;i++)
  if(index[i]!=0) {
   warning("call for index%d %p",i,index[i]);
  index[i]->makeList(active);
@@ -467,29 +418,47 @@ for(int i=0;i<childrenNumber;i++)
    warning("call for child%d %p",i,child[i]);
    child[i]->makeList(active);
   }
+if(basic) 
+  {
+      p = new PosType;
+      p->element=this;
+      p->pos=-1;
+      formula->eList.append(p);
+  }
+  
+
 warning("children done");
-p = new PosType;
-p->element=this;
-p->pos=-1;
-formula->eList.append(p);
+
+for(int i=2;i<4;i++)
+ if(index[i]!=0) {
+  warning("call for index%d %p",i,index[i]);
+ index[i]->makeList(active);
+  }
+
 if(next!=0)
  next->makeList(active);
-
+else if(!basic)
+{
+  p = new PosType;
+  p->element=this;
+  p->pos=-1;
+  formula->eList.append(p);
+ }
 }
 
 QRect BasicElement::getCursor(int atPos) 
 {
     QPoint dp = myArea.topLeft()-globalSize.topLeft();
-    if(atPos==0)
-    return (QRect(dp.x()+familySize.x()-3,dp.y()-7,5,14));
-    else
-    {//formula->setCursor
-    if (typeid(*this) == typeid(BasicElement))
-     return (QRect(dp.x()+familySize.x()+2,dp.y()-8,5,16));	
-    else
-     return (QRect(dp.x()+globalSize.width()+2,dp.y()-8,5,16));	
+ if (typeid(*this) == typeid(BasicElement))
+     return (QRect(dp.x()+familySize.x()+3,dp.y()-8,5,16));	
+    else 
+    {
+      if(atPos==0)
+        return (QRect(dp.x()+localSize.x(),dp.y()-7,5,14));
+     else
+       return (QRect(dp.x()+localSize.right(),dp.y()-8,5,16));	
     }
 
 
-return cursor;
+return QRect(0,0,0,0);
 }

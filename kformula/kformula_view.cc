@@ -721,7 +721,7 @@ void KFormulaView::createMatrix(QString str)
 void KFormulaView::modifyMatrix(QString str)
 {
  int x,y,old;
- BasicElement *el=m_pDoc->activeElement();
+ BasicElement *el=m_pDoc->eList.current()->element;
   if (el==0)
    return;
  MatrixElement *elm = dynamic_cast<MatrixElement*>(el);
@@ -759,7 +759,7 @@ void KFormulaView::addSymbol()
 
 void KFormulaView::reduce()
 {
-    if(m_pDoc->activeElement()==0) return;
+    if(m_pDoc->eList.current()->element==0) return;
     int level;
     level= FN_REDUCE | FN_P43;
     if(m_vToolBarFont->isButtonOn(m_idButtonFont_2)) level=level | FN_ELEMENT;
@@ -767,14 +767,14 @@ void KFormulaView::reduce()
     if(m_vToolBarFont->isButtonOn(m_idButtonFont_4)) level=level | FN_CHILDREN;
     if(m_vToolBarFont->isButtonOn(m_idButtonFont_5)) level=level | FN_NEXT;
 
-    m_pDoc->activeElement()->scaleNumericFont(level);
+    m_pDoc->eList.current()->element->scaleNumericFont(level);
 
     update();
 }
 
 void KFormulaView::enlarge()
 {
-    if(m_pDoc->activeElement()==0) return;
+    if(m_pDoc->eList.current()->element==0) return;
     int level;
     level= FN_ENLARGE | FN_P43;
 
@@ -784,16 +784,16 @@ void KFormulaView::enlarge()
     if(m_vToolBarFont->isButtonOn(m_idButtonFont_4)) level=level | FN_CHILDREN;
     if(m_vToolBarFont->isButtonOn(m_idButtonFont_5)) level=level | FN_NEXT;
 
-    m_pDoc->activeElement()->scaleNumericFont(level);
+    m_pDoc->eList.current()->element->scaleNumericFont(level);
     update();
 }
 
 
 void KFormulaView::fractionAlignM()
 {
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     content[1]='M';
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     m_vToolBarType->setButton(m_idButtonType_MAl,true);
     m_vToolBarType->setButton(m_idButtonType_DAl,false);
     m_vToolBarType->setButton(m_idButtonType_UAl,false);
@@ -802,9 +802,9 @@ void KFormulaView::fractionAlignM()
 void KFormulaView::fractionAlignU()
 {
 
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     content[1]='U';
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     m_vToolBarType->setButton(m_idButtonType_MAl,false);
     m_vToolBarType->setButton(m_idButtonType_DAl,false);
     m_vToolBarType->setButton(m_idButtonType_UAl,true);
@@ -814,9 +814,9 @@ void KFormulaView::fractionAlignU()
 void KFormulaView::fractionAlignD()
 {
 
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     content[1]='D';
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     m_vToolBarType->setButton(m_idButtonType_MAl,false);
     m_vToolBarType->setButton(m_idButtonType_DAl,true);
     m_vToolBarType->setButton(m_idButtonType_UAl,false);
@@ -825,9 +825,9 @@ void KFormulaView::fractionAlignD()
 void KFormulaView::fractionAlignL()
 {
 
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     content[2]='L';
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     m_vToolBarType->setButton(m_idButtonType_CAl,false);
     m_vToolBarType->setButton(m_idButtonType_RAl,false);
     m_vToolBarType->setButton(m_idButtonType_LAl,true);
@@ -836,9 +836,9 @@ void KFormulaView::fractionAlignL()
 void KFormulaView::fractionAlignR()
 {
 
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     content[2]='R';
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     m_vToolBarType->setButton(m_idButtonType_CAl,false);
     m_vToolBarType->setButton(m_idButtonType_RAl,true);
     m_vToolBarType->setButton(m_idButtonType_LAl,false);
@@ -847,9 +847,9 @@ void KFormulaView::fractionAlignR()
 void KFormulaView::fractionAlignC()
 {
 
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     content[2]='C';
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     m_vToolBarType->setButton(m_idButtonType_CAl,true);
     m_vToolBarType->setButton(m_idButtonType_RAl,false);
     m_vToolBarType->setButton(m_idButtonType_LAl,false);
@@ -863,20 +863,20 @@ void KFormulaView::fractionDist()
 
 void KFormulaView::fractionDistMore()
 {
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     content.sprintf("%s%i",(const char*)content.left(3),(atoi(content.right(content.length()-3))+1));
     warning(content);
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     update();
 }
 void KFormulaView::fractionDistLess()
 {
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     int space=(atoi(content.right(content.length()-3))-1);
     if (space<1) space =1;
     content.sprintf("%s%i",(const char*)content.left(3),space);
     warning(content);
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     update();
 }
 
@@ -928,7 +928,7 @@ void KFormulaView::insertIndex(int i)
 void KFormulaView::sizeSelected(const char *size)
 {
 
-    BasicElement *el=m_pDoc->activeElement();
+    BasicElement *el=m_pDoc->eList.current()->element;
     if (el==0) return;
     el->setNumericFont(atoi(size));
     warning(size);
@@ -936,7 +936,7 @@ void KFormulaView::sizeSelected(const char *size)
 }
 void KFormulaView::fontSelected(const char *font)
 {
-    BasicElement *el=m_pDoc->activeElement();
+    BasicElement *el=m_pDoc->eList.current()->element;
 
     if (el==0)
 	return;
@@ -966,7 +966,7 @@ void KFormulaView::textSplit()
 {
     warning("Slot textSplit");
 
-    BasicElement *el=m_pDoc->activeElement();
+    BasicElement *el=m_pDoc->eList.current()->element;
 
     if (el==0)
 	return;
@@ -1001,7 +1001,7 @@ void KFormulaView::bracketType()
 void KFormulaView::matrixSet()
 {
     MatrixSetupWidget *ms=new MatrixSetupWidget();
-    ms->setString(m_pDoc->activeElement()->getContent());
+    ms->setString(m_pDoc->eList.current()->element->getContent());
         QObject::connect(ms,SIGNAL(returnString(QString)),this,SLOT(modifyMatrix(QString)));
     ms->show();
 
@@ -1030,9 +1030,9 @@ void KFormulaView::toggleMidline()
 {
 
     warning("Slot toggleMidline");
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     if (content[0]=='F') content[0]='V'; else content[0]='F';
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     update();
 }
 void KFormulaView::symbolType()
@@ -1061,21 +1061,21 @@ void KFormulaView::generalFont()
 }
 void KFormulaView::delimiterLeft(const char *left)
 {
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     warning(content);
     content[0]=left[0];
     warning(content);
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     update();
 }
 
 void KFormulaView::delimiterRight(const char *right)
 {
-    QString content=m_pDoc->activeElement()->getContent();
+    QString content=m_pDoc->eList.current()->element->getContent();
     warning(content);
     content[1]=right[0];
     warning(content);
-    m_pDoc->activeElement()->setContent(content);
+    m_pDoc->eList.current()->element->setContent(content);
     update();
 }
 

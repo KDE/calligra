@@ -231,10 +231,10 @@ void BracketElement::checkSize()
   //warning("end");
 }
 
-int BracketElement::takeAsciiFromKeyb(int)
+/*int BracketElement::takeAsciiFromKeyb(int)
 {
   return 2;
-}
+}*/
 /*int BracketElement::takeActionFromKeyb(int)
 {
   return -1;

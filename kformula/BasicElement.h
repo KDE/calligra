@@ -108,22 +108,6 @@ class BasicElement
      */
     virtual BasicElement *isInside(QPoint point);
   
-    /*
-     * usually call by keyPressedEvent() 
-     * if input is ASCII
-     * 1=add a character
-     */
-    virtual int takeAsciiFromKeyb(char ch);      
-  
-    /*
-     * usually call by keyPressEvent()
-     * if input is delete,backspace,arrows,home,end....
-     * return cursor position (-1 if no cursor is need)
-     */
-    
-    virtual int takeActionFromKeyb(int action);
-
-
 
     virtual QRect getCursor(int atPos);
   
@@ -137,12 +121,7 @@ class BasicElement
      * Return globalsize (see globalSize)
      */
     QRect getSize() const { return globalSize; }
-    
-    /*
-     * Return globalsize (see globalSize)
-     */
-//    int getPosition() const { return position; }
-    
+
     /*
      * Return next
      */
@@ -169,20 +148,19 @@ class BasicElement
   
     QString getContent() const {return content;}  
     /*
-     * Various SetFunction
+     * Various Set-GetFunction
      */  
     void setContent(QString a) {content=a.copy();}  
+    QString getContent() { return content;}  
     void setIndex(BasicElement *e,int i) {index[i]=e; }    
     void setChild(BasicElement *e,int i) {child[i]=e; }    
     void setColor(QColor *c) {defaultColor=c; }       
     void setRelation(int r) {relation=r; }       
     
     /*
-     * This function sets the value of "position"
-     * & also set the Active element if necessary.
+     * Update the eList of kformuladoc
+     * 
      */
-//    virtual void setPosition(int pos);    
-//    virtual bool isValidPosition(int pos);
       virtual void makeList(bool active=0);
 
     /*
@@ -201,7 +179,7 @@ class BasicElement
     /*
      * delete this element, its children & index 
      */
-    void deleteElement(bool deleteme=true);    
+    void deleteElement();    
   
     /*
      *  At the moment they do nothing.
@@ -246,8 +224,6 @@ class BasicElement
      *	BasicElement *child[n]
      */
     QArray<BasicElement *> child;
-
-    //  BasicElement *child[1]; //I'm sorry it is unused but I need it
     
     /*
      * The number of children.
@@ -315,8 +291,7 @@ class BasicElement
     * pos==0  Before element
     * pos!=0  After.  
     */
-//    int position;   
-     QRect cursor; 
+
 };
 
 #endif
