@@ -350,6 +350,9 @@ void Page::mousePressEvent(QMouseEvent *e)
   oldMx = e->x()+diffx();
   oldMy = e->y()+diffy();
   
+  firstX = e->x();
+  firstY = e->y();
+
   if (editMode)
     {
       if (editNum > 0)
@@ -480,31 +483,51 @@ void Page::mousePressEvent(QMouseEvent *e)
 /*=================== handle mouse released ======================*/
 void Page::mouseReleaseEvent(QMouseEvent *e)
 {
-  if (modType == MT_MOVE)
+  if (firstX != e->x() || firstY != e->y())
     {
-      clearUndoListNew();
-      for (int i = 0;i <= (int)objList()->count() - 1;i++)
+      if (modType == MT_MOVE)
 	{
-	  if (objList()->at(i)->isSelected)
+	  clearUndoListNew();
+	  for (int i = 0;i <= (int)objList()->count() - 1;i++)
 	    {
-	      objPtr = objList()->at(i);
-	      appendUndoListNew(objPtr);
+	      if (objList()->at(i)->isSelected)
+		{
+		  objPtr = objList()->at(i);
+		  appendUndoListNew(objPtr);
+		}
 	    }
+	  
+	  UndoRedoPageObjectsList *l = new UndoRedoPageObjectsList(_page_obj_list_,_page_obj_list_new_,i18n("Move object(s)")); 
+	  
+	  view->KPresenterDoc()->addUndo(l);
+	  _append_undo_list_ = true;
+	  _clear_undo_list_ = true;
 	}
-      
-      UndoRedoPageObjectsList *l = new UndoRedoPageObjectsList(_page_obj_list_,_page_obj_list_new_,i18n("Move object(s)")); 
-
-      view->KPresenterDoc()->addUndo(l);
-      _append_undo_list_ = true;
-      _clear_undo_list_ = true;
+      else if (modType != MT_NONE)
+	{
+	  _page_obj_new_ = getObject(resizeObjNum);
+	  _assign_page_obj_ = true;
+	  
+	  UndoRedoPageObjects *o = new UndoRedoPageObjects(_page_obj_,_page_obj_new_,i18n("Resize object"));
+	  view->KPresenterDoc()->addUndo(o);
+	}
     }
-  else if (modType != MT_NONE)
+  else
     {
-      _page_obj_new_ = getObject(resizeObjNum);
-      _assign_page_obj_ = true;
-
-      UndoRedoPageObjects *o = new UndoRedoPageObjects(_page_obj_,_page_obj_new_,i18n("Resize object"));
-      view->KPresenterDoc()->addUndo(o);
+      if (modType == MT_MOVE)
+	{
+	  _page_obj_list_->clear();
+	  delete _page_obj_list_;
+	  _page_obj_list_ = 0;
+	  _append_undo_list_ = true;
+	  _clear_undo_list_ = true;
+	}
+      else if (modType != MT_NONE)
+	{
+	  delete _page_obj_;
+	  _page_obj_ = 0;
+	  _assign_page_obj_ = true;
+	}
     }
 
   mousePressed = false;

@@ -1945,6 +1945,10 @@ void KPresenterDocument_impl::insertPicture(const char *filename,int diffx,int d
 	  objPtr->effect2 = EF2_NONE;
 	  objPtr->angle = 0.0;
 	  _objList.append(objPtr);
+
+	  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
+	  addUndo(uripo);
+
 	  repaint(objPtr->ox,objPtr->oy,
 		  objPtr->ow,objPtr->oh,false);
 	}
@@ -1977,6 +1981,10 @@ void KPresenterDocument_impl::insertClipart(const char *filename,int diffx,int d
       objPtr->effect2 = EF2_NONE;
       objPtr->angle = 0.0;
       _objList.append(objPtr);
+
+      UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
+      addUndo(uripo);
+
       repaint(objPtr->ox,objPtr->oy,
 	      objPtr->ow,objPtr->oh,false);
     }
@@ -2081,6 +2089,10 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType
   objPtr->effect2 = EF2_NONE;
   objPtr->angle = 0.0;
   _objList.append(objPtr);
+
+  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
+  addUndo(uripo);
+
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
 }
@@ -2109,6 +2121,10 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   objPtr->effect2 = EF2_NONE;
   objPtr->angle = 0.0;
   _objList.append(objPtr);
+
+  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
+  addUndo(uripo);
+
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
 }
@@ -2135,6 +2151,10 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   objPtr->effect2 = EF2_NONE;
   objPtr->angle = 0.0;
   _objList.append(objPtr);
+
+  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
+  addUndo(uripo);
+
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
 }
@@ -2162,6 +2182,10 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   objPtr->effect2 = EF2_NONE;
   objPtr->angle = 0.0;
   _objList.append(objPtr);
+
+  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
+  addUndo(uripo);
+
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
 }
@@ -2190,6 +2214,10 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,Li
   objPtr->angle = 0.0;
   _objList.append(objPtr);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+
+  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
+  addUndo(uripo);
+
   repaint(objPtr->ox,objPtr->oy,
  	  objPtr->ow,objPtr->oh,false);
 }

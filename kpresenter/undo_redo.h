@@ -29,6 +29,8 @@
 class UndoRedoBaseClass
 {
 public:
+  enum Action{UNDO,REDO};
+
   UndoRedoBaseClass();
   UndoRedoBaseClass(QString _description_);
   virtual ~UndoRedoBaseClass();
@@ -39,7 +41,7 @@ public:
   /**
    * This methode does the undo/redo. So this methode <b>must</b> be reimplemented.
    */
-  virtual void revert();
+  virtual void revert(Action);
 
 protected:
   QString description;
@@ -106,7 +108,7 @@ public:
   void set_new(PageObjects* _ptr_new_);
   PageObjects* get_new();
 
-  virtual void revert();
+  virtual void revert(Action);
 
 protected:
   PageObjects *ptr_old,*ptr_new;
@@ -130,13 +132,35 @@ public:
   void set_new(QList<PageObjects>* _ptr_new_);
   QList<PageObjects>* get_new();
 
-  virtual void revert();
+  virtual void revert(Action);
 
 protected:
   QList<PageObjects> *ptr_old,*ptr_new;
   PageObjects tmp_obj;
   GraphObj tmp_graph;
   KTextObject tmp_txt;
+
+};
+
+/******************************************************************/
+/* Class: UndoRedoInsertPageObject                                */
+/******************************************************************/
+class UndoRedoInsertPageObject : public UndoRedoBaseClass
+{
+public:
+  UndoRedoInsertPageObject(QList<PageObjects> *_ptr_list_,PageObjects *_ptr_obj_,QString _description_);
+  virtual ~UndoRedoInsertPageObject();
+
+  void set_list(QList<PageObjects>* _ptr_list_);
+  QList<PageObjects>* get_list();
+  void set_obj(PageObjects* _ptr_obj_);
+  PageObjects* get_obj();
+
+  virtual void revert(Action);
+
+protected:
+  QList<PageObjects> *ptr_list;
+  PageObjects *ptr_obj;
 
 };
 

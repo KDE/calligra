@@ -804,6 +804,11 @@ public:
    */
   void setRegExpList(QList<RegExpMode> *l) {regExpList = l;}
 
+  /**
+   * Delete region between <i>_start</i> and <i>_stop</i>.
+   */
+  void deleteRegion(int _start,int _stop);
+
 protected:
 
   unsigned int widthToNextSep(unsigned int);
@@ -891,6 +896,15 @@ public:
   };
 
   /**
+   * structure for automatical replacing characters
+   */
+  struct AutoReplace
+  {
+    char c;
+    QString replace;
+  };
+
+  /**
    * Type of the KTextObject. Default is PLAIN.
    */
   enum ObjType {PLAIN,ENUM_LIST,UNSORT_LIST,TABLE};
@@ -905,7 +919,7 @@ public:
    * <i>_width</i>: Linebreak width. (< 1 means dynamically linebreak, >= 1 means max. _width chars in a line)<br>
    */
   KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,unsigned int c=0,unsigned int r=0,int __width=0);
-  ~KTextObject() {paragraphList.clear(); cellWidths.clear(); cellHeights.clear(); delete txtCursor; regExpList.clear();}
+  ~KTextObject();
 
   /**
    * Set the object type of the KTextObject.
@@ -1191,7 +1205,15 @@ public:
    * syntax highliting. That means, if a part of the text string matches to a regexp of the list, this part
    * is drawn in the attributes of this list item.<br>
    * <b>IMPORTANT</b>: The first item of the list has to store the attributes of the default text. So the
-   * regular expression of the first list-item is ignored!
+   * regular expression of the first list-item is ignored!<br>
+   * The structure TxtParagraph::RegExpMode looks like that:
+   * <pre>struct RegExpMode
+   * {
+   * &nbsp;&nbsp;QRegExp regexp;
+   * &nbsp;&nbsp;QFont font;
+   * &nbsp;&nbsp;QColor color;
+   * };
+   * </pre>
    */
   void enableRegExpMode(QList<TxtParagraph::RegExpMode>);
 
@@ -1199,6 +1221,19 @@ public:
    * Disable RegExpMode.
    */
   void disableRegExpMode() {regexpMode = false;}
+
+  /**
+   * Set a replacement list. Here you can give a list of characters, which should be automatically converted to another
+   * string, if the char is entered.<br>
+   * The type AutoReplace looks like that:
+   * <pre>struct AutoReplace
+   * {
+   * &nbsp;&nbsp;char c;
+   * &nbsp;&nbsp;QString replace;
+   * };
+   * </pre>
+   */
+  void setAutoReplacement(QList<AutoReplace>);
 
   /**
    * Returns a part of the text.
@@ -1399,7 +1434,7 @@ public:
   /**
    * Delete the paragraph <i>para</i>.
    */
-  void deleteParagraph(int para);
+  void deleteParagraph(int para,bool _update = true);
 
   /**
    * Delete the region between <i>_startCursor</i> and <i>_stopCursor</i>.
@@ -1783,6 +1818,8 @@ protected:
 
   QList<TxtParagraph::RegExpMode> regExpList;
   bool regexpMode;
+
+  QList<AutoReplace> autoReplace;
 
   int CB_CUT,CB_COPY,CB_PASTE;
 

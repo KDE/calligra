@@ -198,6 +198,7 @@ protected:
   int PM_DM,PM_SM;
   QPen presPen;
   bool _clear_undo_list_,_append_undo_list_,_assign_page_obj_;
+  int firstX,firstY;
 
 private slots:
 

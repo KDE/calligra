@@ -48,7 +48,7 @@ QString UndoRedoBaseClass::get_description()
 }
 
 /*==================== revert (do undo) ==========================*/
-void UndoRedoBaseClass::revert()
+void UndoRedoBaseClass::revert(Action)
 {
 }
 
@@ -134,7 +134,7 @@ void UndoRedoAdmin::undo()
   if (!_item_) warning("Couldn't do undo!");
   else
     {
-      _item_->revert();
+      _item_->revert(UndoRedoBaseClass::UNDO);
       redo_stack.push(_item_);
     }
 
@@ -152,7 +152,7 @@ void UndoRedoAdmin::redo()
   if (!_item_) warning("Couldn't do redo!");
   else
     {
-      _item_->revert();
+      _item_->revert(UndoRedoBaseClass::REDO);
       undo_stack.push(_item_);
     }
 
@@ -207,7 +207,7 @@ PageObjects* UndoRedoPageObjects::get_new()
 }
 
 /*========================== do revert ===========================*/
-void UndoRedoPageObjects::revert()
+void UndoRedoPageObjects::revert(Action a)
 {
   if (ptr_new->graphObj)
     tmp_graph = *ptr_new->graphObj;
@@ -227,7 +227,7 @@ void UndoRedoPageObjects::revert()
   if (ptr_new->graphObj)
     *ptr_old->graphObj = tmp_graph;
 
-  UndoRedoBaseClass::revert();
+  UndoRedoBaseClass::revert(a);
 }
 
 /******************************************************************/
@@ -285,7 +285,7 @@ QList<PageObjects>* UndoRedoPageObjectsList::get_new()
 }
 
 /*========================== do revert ===========================*/
-void UndoRedoPageObjectsList::revert()
+void UndoRedoPageObjectsList::revert(Action a)
 {
   PageObjects *objPtr_new,*objPtr_old;
 
@@ -311,7 +311,84 @@ void UndoRedoPageObjectsList::revert()
 	*objPtr_old->graphObj = tmp_graph;
     }
 
-  UndoRedoBaseClass::revert();
+  UndoRedoBaseClass::revert(a);
+}
+
+/******************************************************************/
+/* Class: UndoRedoInsertPageObject                                */
+/******************************************************************/
+
+/*=================== constructor ================================*/
+UndoRedoInsertPageObject::UndoRedoInsertPageObject(QList<PageObjects> *_ptr_list_,PageObjects *_ptr_obj_,QString _description_)
+  : UndoRedoBaseClass(_description_)
+{
+  ptr_list = _ptr_list_;
+  ptr_obj = _ptr_obj_;
+}
+
+/*===================== destructor ===============================*/
+UndoRedoInsertPageObject::~UndoRedoInsertPageObject()
+{
+  if (ptr_list && ptr_obj)
+    {
+      if (ptr_list->findRef(ptr_obj) == -1)
+	{
+	  if (ptr_obj->textObj)
+	    delete ptr_obj->textObj;
+	  if (ptr_obj->graphObj)
+	    delete ptr_obj->graphObj;
+	  delete ptr_obj;
+	}
+    }
+}
+
+/*======================== set list ==============================*/
+void UndoRedoInsertPageObject::set_list(QList<PageObjects>* _ptr_list_)
+{
+  ptr_list = _ptr_list_;
+}
+
+/*========================== get list ============================*/
+QList<PageObjects>* UndoRedoInsertPageObject::get_list()
+{
+  return ptr_list;
+}
+
+/*========================== set obj =============================*/
+void UndoRedoInsertPageObject::set_obj(PageObjects* _ptr_obj_)
+{
+  ptr_obj = _ptr_obj_;
+}
+
+/*========================== get obj =============================*/
+PageObjects* UndoRedoInsertPageObject::get_obj()
+{
+  return ptr_obj;
+}
+
+/*======================== revert ================================*/
+void UndoRedoInsertPageObject::revert(Action a)
+{
+  switch (a)
+    {
+    case UNDO:
+      {
+	if (ptr_list && ptr_obj && !ptr_list->isEmpty())
+	  {
+	    int index = ptr_list->findRef(ptr_obj);
+	    if (index != -1)
+	      ptr_list->take(index);
+	      
+	  }
+      } break;
+    case REDO:
+      {
+	if (ptr_list && ptr_obj)
+	  ptr_list->append(ptr_obj);
+      } break;
+    }
+
+  UndoRedoBaseClass::revert(a);
 }
 
 

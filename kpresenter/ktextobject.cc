@@ -933,7 +933,7 @@ QRect TxtParagraph::breakLines(unsigned int wid,bool regExpMode=false,bool compo
   linePtr = toOneLine();
   //debug(" concat lines end");
 
-  if (regExpMode && regExpList) doRegExpMode(regExpList,!composerMode);
+  if (regExpMode && regExpList && !composerMode) doRegExpMode(regExpList,!composerMode);
 
   line = new TxtLine();
   unsigned int i,j,w = 0;
@@ -1000,7 +1000,7 @@ void TxtParagraph::break_Lines(unsigned int wid,bool regExpMode=false,bool compo
 {
   linePtr = toOneLine();
 
-  if (regExpMode && regExpList) doRegExpMode(regExpList,!composerMode);
+  if (regExpMode && regExpList && !composerMode) doRegExpMode(regExpList,!composerMode);
 
   line = new TxtLine();
   unsigned int i,j,w = 0;
@@ -1300,6 +1300,87 @@ QString TxtParagraph::wordAt(unsigned int pos,int &ind)
   return QString("");
 }
 
+/*====================== delete Region ===========================*/
+void TxtParagraph::deleteRegion(int _start,int _stop)
+{
+  if (_stop == -1) _stop = paragraphLength() - 1;
+
+  linePtr = toOneLine();
+
+  enum CurPos {C_IN,C_BEFORE,C_AFTER};
+  int start_pos = 0,start_cpos = C_IN,i;
+  int stop_pos = 0,stop_cpos = C_IN,objnum,start,stop;
+
+  objnum = linePtr->getInObj(_start);
+  if (objnum == -1)
+    {
+      objnum = linePtr->getBeforeObj(_start);
+      if (objnum == -1)
+	{
+	  objnum = linePtr->getAfterObj(_start);
+	  if (objnum == -1)
+	    // something wrong here - let's exit!
+	    return;
+	  else start_cpos = C_AFTER;
+	}
+      else start_cpos = C_BEFORE;
+      
+    }
+  else start_cpos = C_IN;
+  
+  start_pos = objnum;
+  
+  objnum = linePtr->getInObj(_stop);
+  if (objnum == -1)
+    {
+      objnum = linePtr->getBeforeObj(_stop);
+      if (objnum == -1)
+	{
+	  objnum = linePtr->getAfterObj(_stop);
+	  if (objnum == -1)
+	    // something wrong here - let's exit!
+	    return;
+	  else stop_cpos = C_AFTER;
+	}
+      else stop_cpos = C_BEFORE;
+      
+    }
+  else stop_cpos = C_IN;
+  
+  stop_pos = objnum;
+  
+  if (stop_cpos == C_AFTER) stop_pos++;
+  
+  if (start_cpos == C_IN)
+    {
+      linePtr->splitObj(_start);
+      start_pos++;
+      start_cpos = C_BEFORE;
+      stop_pos++;
+    }
+  
+  if (stop_cpos == C_IN)
+    {
+      linePtr->splitObj(_stop);
+      //stop_cpos = C_BEFORE;
+    }
+  
+  if (start_cpos == C_AFTER) start = start_pos + 1;
+  else start = start_pos;
+  
+  if (stop_cpos == C_AFTER) stop = stop_pos + 1;
+  else if (stop_cpos == C_BEFORE) stop = stop_pos - 1;
+  else stop = stop_pos;
+
+  for (i = stop;i >= start;i--)
+    {
+      if (i < (int)linePtr->items())
+	linePtr->deleteItem((unsigned int)i);
+    }
+
+  append(linePtr);
+} 
+
 /*============= with from an obj to next separator ===============*/
 unsigned int TxtParagraph::widthToNextSep(unsigned int pos)
 {
@@ -1409,6 +1490,19 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
 
   regexpMode = false;
   regExpList.setAutoDelete(true);
+  
+  autoReplace.setAutoDelete(true);
+}
+
+/*======================== destructor ============================*/
+KTextObject::~KTextObject()
+{
+  clear(false);
+  cellWidths.clear();
+  cellHeights.clear();
+  delete txtCursor;
+  regExpList.clear();
+  autoReplace.clear();
 }
 
 /*===================== set objecttype ===========================*/
@@ -2308,14 +2402,24 @@ void KTextObject::enableComposerMode(QColor quoted_color,QFont quoted_font,QColo
 /*======================= enable regexp mode =====================*/
 void KTextObject::enableRegExpMode(QList<TxtParagraph::RegExpMode> regList)
 {
-//   if (!regExpList.isEmpty())
-//     regExpList.clear();
+  if (!regExpList.isEmpty())
+    regExpList.clear();
 
   regexpMode = true;
   regExpList = regList;
-  //regExpList.setAutoDelete(true);
+  regExpList.setAutoDelete(true);
   recalc(true);
   repaint(false);
+}
+
+/*====================== set auto replacement ====================*/
+void KTextObject::setAutoReplacement(QList<AutoReplace> aReplace)
+{
+  if (!autoReplace.isEmpty())
+    autoReplace.clear();
+
+  autoReplace = aReplace;
+  autoReplace.setAutoDelete(true);
 }
 
 /*===================== get part of text =========================*/
@@ -2868,7 +2972,7 @@ void KTextObject::deleteLine(int line,int para)
 }
 
 /*====================== delete paragraph ========================*/
-void KTextObject::deleteParagraph(int para)
+void KTextObject::deleteParagraph(int para,bool _update = true)
 {
   if (para < (int)paragraphs())
     {
@@ -2879,34 +2983,103 @@ void KTextObject::deleteParagraph(int para)
       setAutoUpdate(false);
       setNumRows(numRows() - 1);
       setAutoUpdate(true);
-      recalc(false);
-      repaint(false);
+      if (_update)
+	{
+	  recalc(false);
+	  repaint(false);
+	}
     }  
 }
 
 /*====================== delete region ===========================*/
 void KTextObject::deleteRegion(TxtCursor *_startCursor,TxtCursor *_stopCursor)
 {
-  // this methode is _VERY_ unefficient and has to be rewritten
+  // if we have only to delete some objs in one paragraph
+  if (_startCursor->positionParagraph() == _stopCursor->positionParagraph())
+    {
+      if (_startCursor->positionLine() == 0 && _startCursor->positionInLine() == 0 &&
+	  _stopCursor->positionLine() == paragraphAt(_startCursor->positionParagraph())->lines() - 1 &&
+	  _stopCursor->positionInLine() ==
+	  paragraphAt(_startCursor->positionParagraph())->lineAt(_stopCursor->positionLine())->lineLength() - 1)
+	{
+	  deleteParagraph(_startCursor->positionParagraph(),false);
+	  if (paragraphs() == 0) clear();
+	  return;
+	}
 
-  changedParagraphs.clear();
+      int pos = 0;
+      for (int i = 0; i < (int)_startCursor->positionParagraph();i++)
+	pos += paragraphAt(i)->paragraphLength();
 
-  TxtCursor *_cursor = txtCursor;
-  txtCursor = 0;
-  int diff = _stopCursor->positionAbs() - _startCursor->positionAbs();
+      paragraphAt(_startCursor->positionParagraph())->
+	deleteRegion(_startCursor->positionAbs() - pos,_stopCursor->positionAbs() - pos);
 
-  txtCursor = _startCursor;
-  for (int i = 0;i < diff - 1;i++)
-    kdelete(false);
-
-  txtCursor = _cursor;
-  txtCursor->setPositionAbs(txtCursor->positionAbs() - diff);
-  txtCursor->setMaxPosition(textLength());
+      recalc();
+    }
   
-  recalc(true);
-  repaint(false);
+  // if we have to delete objs in more paragraphs
+  else
+    {
+      bool join = false;
+      int start = _startCursor->positionParagraph();
+      int stop = _stopCursor->positionParagraph();
 
-  changedParagraphs.clear();
+      if (_stopCursor->positionLine() == paragraphAt(_stopCursor->positionParagraph())->lines() - 1 &&
+	  _stopCursor->positionInLine() ==
+	  paragraphAt(_stopCursor->positionParagraph())->lineAt(_stopCursor->positionLine())->lineLength() - 1)
+	{
+	  deleteParagraph(_stopCursor->positionParagraph(),false);
+	  join = false;
+	}
+      else
+	{
+	  int pos = 0;
+	  for (int i = 0; i < (int)_stopCursor->positionParagraph();i++)
+	    pos += paragraphAt(i)->paragraphLength();
+	  
+	  paragraphAt(_stopCursor->positionParagraph())->
+	    deleteRegion(0,_stopCursor->positionAbs() - pos);
+
+	  join = true;
+	}
+
+      recalc();
+
+      if (stop - start > 1)
+	{
+	  for (int i = stop - 1;i > (int)start;i--)
+	    deleteParagraph(i,false);
+	  recalc();
+	}
+
+      if (_startCursor->positionLine() == 0 && _startCursor->positionInLine() == 0)
+	{
+	  deleteParagraph(_startCursor->positionParagraph(),false);
+	  join = false;
+	}
+      else
+	{
+	  int pos = 0;
+	  for (int i = 0; i < (int)_startCursor->positionParagraph();i++)
+	    pos += paragraphAt(i)->paragraphLength();
+	  
+	  paragraphAt(_startCursor->positionParagraph())->
+	    deleteRegion(_startCursor->positionAbs() - pos,-1);
+	}
+
+      recalc();
+
+      if (join) joinParagraphs(start,start + 1);
+
+      if (paragraphs() == 0) clear();
+    }
+
+  txtCursor->setMaxPosition(textLength());
+  txtCursor->setPositionAbs(_startCursor->positionAbs());
+
+  recalc();
+
+  repaint(false);
 }
 
 /*===================== insert text ==============================*/
@@ -3966,6 +4139,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
       bool drawAbove = false;
       changedParagraphs.clear();
       bool drawFullPara = false;
+      bool doDelete = true;
 
       if (drawSelection)
 	{
@@ -3974,6 +4148,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	    {
 	      cutRegion();
 	      _modified = true;
+	      doDelete = false;
 	    }
 	  if (e->key() != Key_Shift && e->key() != Key_Control && e->key() != Key_Alt &&
 	      !(e->key() == Key_Right && e->state() & ShiftButton) &&
@@ -4054,25 +4229,31 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	  } break;
 	case Key_Backspace:
 	  {
-	    _modified = true;
-	    if (kbackspace())
-	      drawBelow = true;
-	    else
+	    if (doDelete)
 	      {
-		drawBelow = false;
-		drawFullPara = true;
+		_modified = true;
+		if (kbackspace())
+		  drawBelow = true;
+		else
+		  {
+		    drawBelow = false;
+		    drawFullPara = true;
+		  }
 	      }
 	    cursorChanged = true;
 	  } break;
 	case Key_Delete:
 	  {
-	    _modified = true;
-	    if (kdelete())
-	      drawBelow = true;
-	    else
+	    if (doDelete)
 	      {
-		drawBelow = false;
-		drawFullPara = true;
+		_modified = true;
+		if (kdelete())
+		  drawBelow = true;
+		else
+		  {
+		    drawBelow = false;
+		    drawFullPara = true;
+		  }
 	      }
 	    cursorChanged = true;
 	  } break;
@@ -4683,7 +4864,26 @@ bool KTextObject::insertChar(char c)
   unsigned int para = txtCursor->positionParagraph();
   QString str;
   str = "";
-  str.insert(0,c);
+  bool insertC = true;
+  int cursorPlus = 0;
+ 
+  if (!autoReplace.isEmpty())
+    {
+      AutoReplace *ar;
+      for (ar = autoReplace.first();ar != 0;ar = autoReplace.next())
+	{
+	  if (ar->c == c)
+	    {
+	      str.insert(0,ar->replace);
+	      insertC = false;
+	      cursorPlus = ar->replace.length() - 1;
+	      break;
+	    }
+	}
+    }
+  
+  if (insertC)
+    str.insert(0,c);
 
   int _h = cellHeight(para);
 
@@ -4758,6 +4958,9 @@ bool KTextObject::insertChar(char c)
 
   txtCursor->setMaxPosition(textLength());
   txtCursor->charForward();
+
+  if (cursorPlus > 0)
+    txtCursor->setPositionAbs(txtCursor->positionAbs() + cursorPlus);
 
   // recalculate everything
   recalc(false);
