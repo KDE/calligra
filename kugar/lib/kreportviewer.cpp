@@ -29,14 +29,38 @@ void KReportViewer::printReport(){
   }
 
   // Set the printer dialog
-	printer = new KPrinter();
-  printer->setPageSize((KPrinter::PageSize)report->pageSize());
-  printer->setOrientation((KPrinter::Orientation)report->pageOrientation());
-	printer->setMinMax(1, cnt);
-	printer->setFromTo(1, cnt);
-  printer->setFullPage(true);
+	KPrinter printer;
 
-  if (printer->setup(this)) {
+  setupPrinter(printer);
+  if (printer.setup(this)) printReport(printer);
+}
+
+void KReportViewer::setupPrinter(KPrinter &printer)
+{
+	int cnt = report->pageCount();
+
+  printer.setPageSize((KPrinter::PageSize)report->pageSize());
+  printer.setOrientation((KPrinter::Orientation)report->pageOrientation());
+	printer.setMinMax(1, cnt);
+	printer.setFromTo(1, cnt);
+  printer.setFullPage(true);
+}
+
+void KReportViewer::printReport(KPrinter &printer)
+{
+  // Check for a report
+        if(report == 0) return;
+
+        // Get the page count
+        int cnt = report->pageCount();
+
+        // Check if there is a report or any pages to print
+        if(cnt == 0) {
+	    KMessageBox::error(this, i18n("There are no pages in the\nreport to print."));
+	    return;
+	  }
+
+
 		QPicture* page;
   	QPainter painter;
 		bool printRev;
@@ -45,21 +69,21 @@ void KReportViewer::printReport(){
 		int viewIdx = report->getCurrentIndex();
 
 		// Check the order we are printing the pages
-		if (printer->pageOrder() == QPrinter::FirstPageFirst)
+		if (printer.pageOrder() == QPrinter::FirstPageFirst)
 			printRev = false;
 		else
     	printRev = true;
 
 		// Get the count of pages and copies to print
-		int printFrom = printer->fromPage() - 1;
-		int printTo = printer->toPage();
+		int printFrom = printer.fromPage() - 1;
+		int printTo = printer.toPage();
 		int printCnt = (printTo - printFrom);
-		int printCopies = printer->numCopies();
+		int printCopies = printer.numCopies();
 		int totalSteps = printCnt * printCopies;
 		int currentStep = 1;
 
 		// Set copies to 1, KPrinter copies does not appear to work ...
-		printer->setNumCopies(1);
+		printer.setNumCopies(1);
 
 		// Setup the progress dialog
 		QProgressDialog progress( i18n("Printing report..."),
@@ -71,13 +95,13 @@ void KReportViewer::printReport(){
 		qApp->processEvents();
 
 		// Start the printer
-   	painter.begin(printer);
+   	painter.begin(&printer);
 
 		// Print each copy
 		for(int j = 0; j < printCopies; j++){
       // Print each page in the collection
       for(int i = printFrom ; i < printTo; i++, currentStep++){
-  			if(!printer->aborted()){
+  			if(!printer.aborted()){
   				progress.setProgress(currentStep);
   				qApp->processEvents();
 
@@ -89,7 +113,7 @@ void KReportViewer::printReport(){
         	page = report->getCurrentPage();
         	page->play(&painter);
         	if(i < printCnt - 1)
-          	printer->newPage();
+          	printer.newPage();
   			}
   			else{
 					j = printCopies;
@@ -97,15 +121,13 @@ void KReportViewer::printReport(){
 				}
       }
 			if(j < printCopies - 1)
-				printer->newPage();
+				printer.newPage();
 		}
 
 		// Cleanup printing
 		setCursor(arrowCursor);
     painter.end();
     report->setCurrentPage(viewIdx);
-  }
-	delete printer;
 }
 
 #include "kreportviewer.moc"

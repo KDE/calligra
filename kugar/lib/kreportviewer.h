@@ -26,9 +26,9 @@ public:
 		MReportViewer(parent, name) {}
 
 	void printReport();
-
+	void printReport(KPrinter &printer);
+	void setupPrinter(KPrinter &printer);
 private:
-	KPrinter *printer;
 };
 
 #endif

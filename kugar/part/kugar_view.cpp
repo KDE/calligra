@@ -36,7 +36,7 @@ KugarView::KugarView(KugarPart *part,QWidget *parent,const char *name)
 	setInstance(KugarFactory::global());
 
 	(new QVBoxLayout(this))->setAutoAdd(true);
-	view = new MReportViewer(this);
+	view = new KReportViewer(this);
 
 	connect(view,SIGNAL(preferedTemplate(const QString &)),
 		     SLOT(slotPreferedTemplate(const QString &)));
@@ -66,6 +66,19 @@ KugarView::KugarView(KugarPart *part,QWidget *parent,const char *name)
 KugarView::~KugarView()
 {
 }
+
+void KugarView::setupPrinter( KPrinter &printer )
+{
+	view->setupPrinter(printer);
+}
+
+void KugarView::print( KPrinter &printer )
+{
+	view->printReport(printer);
+}
+
+
+
 
 #if 0
 // Open a data file.

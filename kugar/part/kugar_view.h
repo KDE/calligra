@@ -32,6 +32,12 @@ public:
 		return view -> setReportTemplate(data);
 	}
 
+
+	virtual void setupPrinter( KPrinter &printer );
+	virtual void print( KPrinter &printer );
+
+
+
 //protected:
 //	virtual bool openFile();
 //	virtual bool closeURL();
@@ -40,7 +46,7 @@ private slots:
 	void slotPreferedTemplate(const QString &);
 
 private:
-	MReportViewer *view;
+	KReportViewer *view;
 	QString m_forcedUserTemplate;
 };
 
