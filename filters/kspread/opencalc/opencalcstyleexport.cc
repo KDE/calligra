@@ -483,7 +483,7 @@ void CellStyle::loadData( CellStyle & cs, KSpreadCell const * const cell )
 
   if ( cell->hasProperty( KSpreadFormat::PDontPrintText )
        || !cell->hasNoFallBackProperties( KSpreadFormat::PDontPrintText ) )
-    cs.print = cell->getDontprintText( col, row );
+    cs.print = !cell->getDontprintText( col, row );
 
   if ( cell->hasProperty( KSpreadFormat::PLeftBorder ) || !cell->hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
     cs.left  = cell->leftBorderPen( col, row );
