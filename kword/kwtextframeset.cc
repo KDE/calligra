@@ -49,6 +49,7 @@
 #include <koChangeCaseDia.h>
 #include "KWordTextFrameSetIface.h"
 #include "KWordTextFrameSetEditIface.h"
+#include "KWordFootNoteFrameSetIface.h"
 #include "KWordFrameSetIface.h"
 #include <kdebug.h>
 #include <kdebugclasses.h>
@@ -3415,5 +3416,14 @@ void KWFootNoteFrameSet::setCounterText( const QString& text )
         parag->setCounter( counter );
     }
 }
+
+KWordFrameSetIface* KWFootNoteFrameSet::dcopObject()
+{
+    if ( !m_dcop )
+        m_dcop = new KWFootNoteFrameSetIface( this );
+
+    return m_dcop;
+}
+
 
 #include "kwtextframeset.moc"

@@ -407,6 +407,8 @@ public:
     KWFootNoteFrameSet( KWDocument *doc, const QString & name )
         : KWTextFrameSet( doc, name ) {}
 
+    virtual KWordFrameSetIface* dcopObject();
+
     void setFootNoteVariable( KWFootNoteVariable* var ) { m_footNoteVar = var; }
     KWFootNoteVariable* footNoteVariable() const { return m_footNoteVar; }
 
