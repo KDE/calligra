@@ -163,7 +163,7 @@ void KoStyleManager::addGeneralTab() {
     tabLayout->setSpacing( 6 );
     tabLayout->setMargin( 11 );
 
-    preview = new KoStylePreview( i18n( "Preview" ), i18n( "KWord, KOffice's Word Processor" ), tab, "stylepreview" );
+    preview = new KoStylePreview( i18n( "Preview" ), i18n( "The quick brown fox jumps over the lazy dog" ), tab, "stylepreview" );
 
     tabLayout->addMultiCellWidget( preview, 3, 3, 0, 1 );
 
