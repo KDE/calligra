@@ -348,6 +348,12 @@ public:
   void setKSpellConfig(KSpellConfig _kspell);
   KSpellConfig * getKSpellConfig() {return m_pKSpellConfig;}
 
+  /**
+   * show/hide status bar
+   */ 
+  void setShowStatusBar(bool _statusBar) { m_bShowStatusBar=_statusBar;}
+  bool getShowStatusBar() { return  m_bShowStatusBar;}
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -592,6 +598,8 @@ protected:
 
   bool m_bShowCommentIndicator;
   bool m_bShowFormularBar;
+  bool m_bShowStatusBar;
+
   KSpellConfig *m_pKSpellConfig;
 };
 

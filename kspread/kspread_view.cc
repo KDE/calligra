@@ -527,6 +527,7 @@ if( config->hasGroup("Parameters" ))
 	m_pDoc->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
 
 	m_pDoc->setShowFormularBar(config->readBoolEntry("Formula bar",true));
+        m_pDoc->setShowStatusBar(config->readBoolEntry("Status bar",true));
 	}
 
  if(  config->hasGroup("KSpread Color" ) )
@@ -2153,6 +2154,13 @@ void KSpreadView::refreshView()
         m_pHBorderWidget->hide();
         }
 
+    if(statusBar())
+        {
+            if(m_pDoc->getShowStatusBar())
+                statusBar()->show();
+            else
+                statusBar()->hide();
+        }
 
     m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - widthScrollbarVertical, 16 );
     m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);

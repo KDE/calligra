@@ -19,6 +19,10 @@
 
 #include <qprinter.h>
 #include <qgroupbox.h>
+#include <qgrid.h>
+#include <qvbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
 
 #include "kspread_dlg_preference.h"
 #include "kspread_view.h"
@@ -26,17 +30,14 @@
 #include "kspread_doc.h"
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
-#include <qlayout.h>
+
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <kdialogbase.h>
-#include <qvbox.h>
-#include <qlabel.h>
 #include <kconfig.h>
 #include <kcolorbutton.h>
-#include <qgrid.h>
-
+#include <kstatusbar.h>
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,
@@ -208,12 +209,15 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
  :QWidget ( parent,name)
  {
   m_pView = _view;
+
   bool vertical=true;
   bool horizontal=true;
   bool rowHeader=true;
   bool colHeader=true;
   bool tabbar=true;
   bool formulaBar=true;
+  bool statusBar=true;
+
   QVBoxLayout *box = new QVBoxLayout( this );
   box->setMargin( 5 );
   box->setSpacing( 10 );
@@ -235,6 +239,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
         rowHeader=config->readBoolEntry("Row Header",true);
 	tabbar=config->readBoolEntry("Tabbar",true);
 	formulaBar=config->readBoolEntry("Formula bar",true);
+        statusBar=config->readBoolEntry("Status bar",true);
         }
 
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
@@ -264,6 +269,12 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   showFormulaBar =new QCheckBox(i18n("Show formula bar"),tmpQGroupBox);
   lay1->addWidget(showFormulaBar);
   showFormulaBar->setChecked(formulaBar);
+
+  showStatusBar =new QCheckBox(i18n("Show status bar"),tmpQGroupBox);
+  lay1->addWidget(showStatusBar);
+  showStatusBar->setChecked(statusBar);
+
+
   box->addWidget( tmpQGroupBox);
 
 }
@@ -277,77 +288,91 @@ void configure::slotDefault()
   showColHeader->setChecked(true);
   showTabBar->setChecked(true);
   showFormulaBar->setChecked(true);
+  showStatusBar->setChecked(true);
   nbPage->setValue(1);
 }
 
 
 void configure::apply()
 {
-config->setGroup( "Parameters" );
-config->writeEntry( "NbPage", nbPage->value());
-
-if( m_pView->horzScrollBar()->isVisible()!=showHScrollBar->isChecked())
-        {
-        config->writeEntry( "Horiz ScrollBar", showHScrollBar->isChecked());
-        if( showHScrollBar->isChecked())
-                m_pView->horzScrollBar()->show();
+    config->setGroup( "Parameters" );
+    config->writeEntry( "NbPage", nbPage->value());
+    bool active=true;
+    active=showHScrollBar->isChecked();
+    if( m_pView->horzScrollBar()->isVisible()!=active)
+    {
+        config->writeEntry( "Horiz ScrollBar",active);
+        if( active)
+            m_pView->horzScrollBar()->show();
         else
-                m_pView->horzScrollBar()->hide();
-        m_pView->doc()->setShowHorizontalScrollBar(showHScrollBar->isChecked());
-        }
-if( m_pView->vertScrollBar()->isVisible()!=showVScrollBar->isChecked())
-        {
-        config->writeEntry( "Vert ScrollBar", showVScrollBar->isChecked());
-        if( showVScrollBar->isChecked())
-                m_pView->vertScrollBar()->show();
+            m_pView->horzScrollBar()->hide();
+        m_pView->doc()->setShowHorizontalScrollBar(active);
+    }
+    active=showVScrollBar->isChecked();
+    if( m_pView->vertScrollBar()->isVisible()!=active)
+    {
+        config->writeEntry( "Vert ScrollBar", active);
+        if(active)
+            m_pView->vertScrollBar()->show();
         else
-                m_pView->vertScrollBar()->hide();
-        m_pView->doc()->setShowVerticalScrollBar(showVScrollBar->isChecked());
+            m_pView->vertScrollBar()->hide();
+        m_pView->doc()->setShowVerticalScrollBar(active);
 
-        }
-
-if( m_pView->hBorderWidget()->isVisible()!=showColHeader->isChecked())
-        {
-        config->writeEntry( "Column Header", showColHeader->isChecked());
-        if( showColHeader->isChecked())
-                m_pView->hBorderWidget()->show();
+    }
+    active=showColHeader->isChecked();
+    if( m_pView->hBorderWidget()->isVisible()!=active)
+    {
+        config->writeEntry( "Column Header", active);
+        if( active)
+            m_pView->hBorderWidget()->show();
         else
-                m_pView->hBorderWidget()->hide();
-        m_pView->doc()->setShowColHeader(showColHeader->isChecked());
-        }
+            m_pView->hBorderWidget()->hide();
+        m_pView->doc()->setShowColHeader(active);
+    }
 
-if( m_pView->vBorderWidget()->isVisible()!=showRowHeader->isChecked())
-        {
-        config->writeEntry( "Row Header", showRowHeader->isChecked());
-        if( showRowHeader->isChecked())
-                m_pView->vBorderWidget()->show();
+    active=showRowHeader->isChecked();
+    if( m_pView->vBorderWidget()->isVisible()!=active)
+    {
+        config->writeEntry( "Row Header", active);
+        if( active)
+            m_pView->vBorderWidget()->show();
         else
-                m_pView->vBorderWidget()->hide();
-        m_pView->doc()->setShowRowHeader(showRowHeader->isChecked());
-        }
+            m_pView->vBorderWidget()->hide();
+        m_pView->doc()->setShowRowHeader(active);
+    }
 
- if(m_pView->tabBar()->isVisible()!=showTabBar->isChecked())
-   {
-     config->writeEntry( "Tabbar", showTabBar->isChecked());
-     if(showTabBar->isChecked())
-       m_pView->tabBar()->show();
-     else
-       m_pView->tabBar()->hide();
-     m_pView->doc()->setShowTabBar(showTabBar->isChecked());
-   }
+    active=showTabBar->isChecked();
+    if(m_pView->tabBar()->isVisible()!=active)
+    {
+        config->writeEntry( "Tabbar", active);
+        if(active)
+            m_pView->tabBar()->show();
+        else
+            m_pView->tabBar()->hide();
+        m_pView->doc()->setShowTabBar(active);
+    }
 
-if(m_pView->posWidget()->isVisible()!=showFormulaBar->isChecked())
-   {
-     config->writeEntry( "Formula bar",showFormulaBar ->isChecked());
-     bool active=showFormulaBar->isChecked();
-     m_pView->editWidget()->showEditWidget(active);
-     if(active)
-       m_pView->posWidget()->show();
-     else
-       m_pView->posWidget()->hide();
-     m_pView->doc()->setShowFormularBar(showFormulaBar->isChecked());
-   }
-
+    active=showFormulaBar->isChecked();
+    if(m_pView->posWidget()->isVisible()!=active)
+    {
+        config->writeEntry( "Formula bar",active);
+        m_pView->editWidget()->showEditWidget(active);
+        if(active)
+            m_pView->posWidget()->show();
+        else
+            m_pView->posWidget()->hide();
+        m_pView->doc()->setShowFormularBar(active);
+    }
+    active=showStatusBar->isChecked();
+    if(m_pView->statusBar() && m_pView->statusBar()->isVisible()!=active)
+    {
+        config->writeEntry( "Status bar",active);
+        if(active)
+            m_pView->statusBar()->show();
+        else
+            m_pView->statusBar()->hide();
+        m_pView->doc()->setShowStatusBar(active);
+    }
 }
 
 
@@ -529,101 +554,104 @@ void miscParameters::slotDefault()
 
 void miscParameters::apply()
 {
-config->setGroup( "Parameters" );
-KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
+    config->setGroup( "Parameters" );
+    KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
 
-switch(typeCompletion->currentItem())
-        {
+    switch(typeCompletion->currentItem())
+    {
         case 0:
-                tmpCompletion=KGlobalSettings::CompletionNone;
-                break;
+            tmpCompletion=KGlobalSettings::CompletionNone;
+            break;
         case 1:
-                tmpCompletion=KGlobalSettings::CompletionShell;
-                break;
+            tmpCompletion=KGlobalSettings::CompletionShell;
+            break;
         case 2:
-                tmpCompletion=KGlobalSettings::CompletionPopup;
-                break;
+            tmpCompletion=KGlobalSettings::CompletionPopup;
+            break;
         case 3:
-                tmpCompletion=KGlobalSettings::CompletionAuto;
-                break;
+            tmpCompletion=KGlobalSettings::CompletionAuto;
+            break;
         case 4:
-                tmpCompletion=KGlobalSettings::CompletionMan;
-                break;
-        }
+            tmpCompletion=KGlobalSettings::CompletionMan;
+            break;
+    }
 
 
-if(comboChanged)
-        {
+    if(comboChanged)
+    {
         m_pView->doc()->setCompletionMode(tmpCompletion);
         config->writeEntry( "Completion Mode", (int)tmpCompletion);
-        }
+    }
 
-MoveTo tmpMoveTo=Bottom;
-switch(typeOfMove->currentItem())
-        {
+    MoveTo tmpMoveTo=Bottom;
+    switch(typeOfMove->currentItem())
+    {
         case 0:
-                tmpMoveTo=Bottom;
-                break;
+            tmpMoveTo=Bottom;
+            break;
         case 1:
-                tmpMoveTo=Top;
-                break;
+            tmpMoveTo=Top;
+            break;
         case 2:
-                tmpMoveTo=Right;
-                break;
+            tmpMoveTo=Right;
+            break;
         case 3:
-                tmpMoveTo=Left;
-                break;
-        }
-if(tmpMoveTo!=m_pView->doc()->getMoveToValue())
-        {
+            tmpMoveTo=Left;
+            break;
+    }
+    if(tmpMoveTo!=m_pView->doc()->getMoveToValue())
+    {
         m_pView->doc()->setMoveToValue(tmpMoveTo);
         config->writeEntry( "Move", (int)tmpMoveTo);
-        }
+    }
 
-MethodOfCalc tmpMethodCalc=Sum;
-switch(typeCalc->currentItem())
-        {
+    MethodOfCalc tmpMethodCalc=Sum;
+    switch(typeCalc->currentItem())
+    {
         case 0:
-	  tmpMethodCalc =Sum;
-	  break;
+            tmpMethodCalc =Sum;
+            break;
         case 1:
-	  tmpMethodCalc=Min;
-	  break;
+            tmpMethodCalc=Min;
+            break;
         case 2:
-	  tmpMethodCalc=Max;
-	  break;
+            tmpMethodCalc=Max;
+            break;
         case 3:
-	  tmpMethodCalc=Average;
-	  break;
+            tmpMethodCalc=Average;
+            break;
 	case 4:
-	  tmpMethodCalc=Count;
-	  break;
-        }
-if(tmpMethodCalc!=m_pView->doc()->getTypeOfCalc())
-        {
+            tmpMethodCalc=Count;
+            break;
+    }
+    if(tmpMethodCalc!=m_pView->doc()->getTypeOfCalc())
+    {
         m_pView->doc()->setTypeOfCalc(tmpMethodCalc);
         config->writeEntry( "Method of Calc", (int)tmpMethodCalc);
 	m_pView->resultOfCalc();
         m_pView->initCalcMenu();
-        }
+    }
 
+    double val=valIndent->value();
+    if(val!=m_pView->doc()->getIndentValue())
+    {
+        m_pView->doc()->setIndentValue( val);
+        config->writeEntry( "Indent", val);
+    }
 
-if(valIndent->value()!=m_pView->doc()->getIndentValue())
-        {
-        m_pView->doc()->setIndentValue( valIndent->value());
-        config->writeEntry( "Indent", valIndent->value());
-        }
+    bool active=msgError->isChecked();
+    if(active!=m_pView->doc()->getShowMessageError())
+    {
+        m_pView->doc()->setShowMessageError( active);
+        config->writeEntry( "Msg error" ,(int)active);
+    }
 
-if(msgError->isChecked()!=m_pView->doc()->getShowMessageError())
-        {
-        m_pView->doc()->setShowMessageError( msgError->isChecked());
-        config->writeEntry( "Msg error" ,(int)msgError->isChecked()) ;
-        }
- if(commentIndicator->isChecked()!=m_pView->doc()->getShowCommentIndicator())
-   {
-     m_pView->doc()->setShowCommentIndicator( commentIndicator->isChecked());
-     config->writeEntry( "Comment Indicator" ,(int)commentIndicator->isChecked()) ;
-   }
+    active=commentIndicator->isChecked();
+    if(active!=m_pView->doc()->getShowCommentIndicator())
+    {
+        m_pView->doc()->setShowCommentIndicator( active);
+        config->writeEntry( "Comment Indicator" ,(int)active);
+    }
 }
 
 
