@@ -32,18 +32,6 @@ VPathBounding::intersects( const QRect& rect, const double zoomFactor, const VSe
 	if( !m_pa.boundingRect().intersects( rect ) )
 		return false;
 
-kdDebug() << "boundingbox" << endl;
-kdDebug() << rect.left() << endl;
-kdDebug() << rect.top() << endl;
-kdDebug() << rect.right() << endl;
-kdDebug() << rect.bottom() << endl;
-QRect dummy = m_pa.boundingRect();
-kdDebug() << "dummy boundingbox" << endl;
-kdDebug() << dummy.left() << endl;
-kdDebug() << dummy.top() << endl;
-kdDebug() << dummy.right() << endl;
-kdDebug() << dummy.bottom() << endl;
-
 	// check for line intersections:
 	for( uint i = 1; i < m_pa.count(); ++i )
 	{
@@ -73,7 +61,12 @@ kdDebug() << dummy.bottom() << endl;
 				return true;
 	}
 
-	// TODO: check if rect is completely inside m_pa:
+	// check if rect is completely inside m_pa:
+	for( uint i = 0; i < m_pa.count(); ++i )
+	{
+		if( rect.contains( m_pa.point( i ) ) )
+			return true;
+	}
 
 	return false;
 }
