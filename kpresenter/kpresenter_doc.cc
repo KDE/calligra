@@ -1265,6 +1265,18 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
     }
 }
 
+void KPresenterDoc::loadOasisPresentationSettings( QDomNode &settingsDoc )
+{
+    kdDebug()<<"presentation:settings ********************************************* \n";
+    QDomElement settings( settingsDoc.toElement() );
+    kdDebug()<<"settings.attribute(presentation:endless) :"<<settings.attribute("presentation:endless")<<endl;
+    if (settings.attribute("presentation:endless")=="true")
+        _spInfiniteLoop = true;
+
+    if (settings.attribute("presentation:force-manual")=="true")
+        _spManualSwitch = true;
+}
+
 void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter )
 {
     //todo don't save when is not value by default (check with oo)
@@ -1422,16 +1434,10 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
        return false;
     }
 	//load settings
-    QDomElement settings = body.namedItem("presentation:settings").toElement();
-    if (!settings.isNull() && !_clean /*don't load settings when we copy/paste a page*/)
-    {
-        //kdDebug()<<"presentation:settings ********************************************* \n";
-        if (settings.attribute("presentation:endless")=="true")
-            _spInfiniteLoop = true;
-
-        if (settings.attribute("presentation:force-manual")=="true")
-            _spManualSwitch = true;
-    }
+    QDomNode settings = body.namedItem("presentation:settings");
+    kdDebug()<<"settings :"<<settings.isNull()<<endl;
+    if (!settings.isNull() && _clean /*don't load settings when we copy/paste a page*/)
+        loadOasisPresentationSettings( settings );
 
 // it seems that ooimpress has different paper-settings for every slide.
     // we take the settings of the first slide for the whole document.

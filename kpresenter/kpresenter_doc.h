@@ -571,6 +571,7 @@ protected:
     int createPresentationAnimation(const QDomElement& element, int order = 0 ,bool increaseOrder = true);
 
     void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
+    void loadOasisPresentationSettings( QDomNode &settingsDoc );
     void saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpWriter );
     void saveOasisHeaderFooter( KoXmlWriter &stickyTmpWriter , KoSavingContext& context );
     void loadOasisHeaderFooter( QDomNode & drawPage, KoOasisContext & context);
