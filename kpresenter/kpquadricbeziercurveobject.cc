@@ -64,6 +64,7 @@ bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles&
 {
     kdDebug()<<"bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
     //todo
+    //call saveOasisStrokeElement( KoGenStyle &styleobjectauto );
     return true;
 }
 

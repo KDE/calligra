@@ -70,7 +70,8 @@ bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, i
     //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
     //save object name and other generic attribute
     //KPObject::saveOasis( xmlWriter );
-
+//save style
+    //call saveOasisStrokeElement( KoGenStyle &styleobjectauto );
 
     float x1 = orig.x();
     float y1 = orig.y();

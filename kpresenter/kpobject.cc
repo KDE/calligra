@@ -1267,6 +1267,39 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
+void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto )
+{
+    if ( pen!=defaultPen() )
+    {
+        switch(  pen.style() )
+        {
+        case Qt::NoPen:
+            styleobjectauto.addAttribute( "draw:stroke" , "none" );
+            break;
+        case Qt::SolidLine:
+            styleobjectauto.addAttribute( "draw:stroke" , "solid" );
+            break;
+        case Qt::DashLine:
+        case Qt::DotLine:
+        case Qt::DashDotLine:
+        case Qt::DashDotDotLine:
+            styleobjectauto.addAttribute( "draw:stroke" , "dash" );
+            //TODO FIXME
+            styleobjectauto.addAttribute( "draw:stroke-dash", saveOasisStrokeStyle( mainStyles ) );
+            break;
+        }
+        styleobjectauto.addAttribute( "svg:stroke-color", pen.color().name() );
+        styleobjectauto.addAttributePt( "svg:stroke-width", ( int )pen.width() );
+    }
+}
+
+QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles )
+{
+    //todo
+    return "";
+}
+
+
 void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
     kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
@@ -1280,6 +1313,9 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
             pen.setStyle(static_cast<Qt::PenStyle>( 1 ) );
         else if ( styleStack.attribute( "draw:stroke" ) == "dash" )
         {
+            //FIXME !!!!!!!!!!!!!!!! we use name from oo which is not good
+            //we muse use style defined into office style
+
             QString style = styleStack.attribute( "draw:stroke-dash" );
             if ( style == "Ultrafine Dashed" || style == "Fine Dashed" ||
                  style == "Fine Dashed (var)" || style == "Dashed (var)" )
@@ -1457,6 +1493,9 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
         break;
     }
     saveOasisObjectStyle( styleobjectauto );
+
+    saveOasisStrokeElement( mainStyles, styleobjectauto );
+
     return mainStyles.lookup( styleobjectauto, "gr" );
 }
 

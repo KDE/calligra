@@ -364,6 +364,9 @@ public:
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );
+    void saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto );
+    QString saveOasisStrokeStyle( KoGenStyles& mainStyles );
+
 protected:
     /**
      * @ref save() only saves if the pen is different from the default pen.

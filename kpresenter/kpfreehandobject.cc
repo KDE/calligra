@@ -60,6 +60,7 @@ bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyle
     xmlWriter.startElement( "draw:path" );
     //FIXME !!!!!!!!!!!!!!!!!!!!!
 //xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles ) );
+//call saveOasisStrokeElement( KoGenStyle &styleobjectauto );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
     //save path I don't know how to do.
