@@ -287,7 +287,9 @@ void KoIconChooser::paintCell(QPainter *p, int row, int col)
     else
     {
       p->setPen(gray);
-      p->drawRect(0, 0, cw+1, ch+1);
+      //p->drawRect(0, 0, cw, ch);
+      p->drawLine(cw-1, 0, cw-1, ch-1);
+      p->drawLine(0, ch-1, cw-1, ch-1);
     }
   }
   else
