@@ -29,7 +29,6 @@
 #include <qstring.h>
 
 #include <kcommand.h>
-#include <koprinter.h>
 
 #include "kformuladefs.h"
 
@@ -38,6 +37,7 @@ class QKeyEvent;
 class QPainter;
 
 class KCommand;
+class KPrinter;
 
 KFORMULA_NAMESPACE_BEGIN
 

@@ -37,7 +37,7 @@
 #include <qmessagebox.h>
 #include <qfileinfo.h>
 #include <qsplitter.h>
-#include <koprinter.h>
+#include <kprinter.h>
 #include <qobjectlist.h>
 
 #include <kstdaction.h>

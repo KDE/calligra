@@ -20,7 +20,7 @@
 #include <koGlobal.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <koprinter.h>
+#include <kprinter.h>
 
 
 int KoPageFormat::printerPageSize( KoFormat format )

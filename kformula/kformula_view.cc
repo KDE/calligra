@@ -18,8 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-// has to be included first
-#include <koprinter.h>
+class KPrinter;
 
 #include <qpainter.h>
 #include <qpopupmenu.h>

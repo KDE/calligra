@@ -1,9 +1,9 @@
 /***************************************************************************
               mreportengine.h  -  Kugar report engine
               -------------------
-    begin     : Sun Aug 15 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
+    begin     : Sun Aug 15 1999
+    copyright : (C) 1999 by Mutiny Bay Software
+    email     : info@mutinybaysoftware.com
  ***************************************************************************/
 
 #ifndef MREPORTENGINE_H
@@ -11,7 +11,6 @@
 
 #include <qobject.h>
 #include <qpicture.h>
-#include <koprinter.h>
 #include <qpaintdevicemetrics.h>
 #include <qsize.h>
 #include <qarray.h>
@@ -59,7 +58,7 @@ public slots:
 	void slotCancelRendering();
 
 signals:
-	void signalRenderStatus(int);	
+	void signalRenderStatus(int);
 	void preferedTemplate(const QString &);
 
 private:

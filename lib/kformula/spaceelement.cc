@@ -22,7 +22,7 @@
 #include <qpainter.h>
 
 #include <kdebug.h>
-#include <koprinter.h>
+#include <kprinter.h>
 
 #include "contextstyle.h"
 #include "spaceelement.h"

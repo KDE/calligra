@@ -20,7 +20,7 @@
 #ifndef KWCANVAS_H
 #define KWCANVAS_H
 
-#include <koprinter.h>
+#include <kprinter.h>
 #include <koRect.h>
 #include <qscrollview.h>
 #include <qstylesheet.h>
@@ -141,7 +141,7 @@ public:
 
     unsigned int splitCellRows(){return m_tableSplit.nbRows;}
     unsigned int splitCellCols(){return m_tableSplit.nbCols;}
-    
+
     void setSplitCellRows(unsigned int _nb){ m_tableSplit.nbRows=_nb;}
     void setSplitCellCols(unsigned int _nb){ m_tableSplit.nbCols=_nb;}
 
@@ -284,9 +284,9 @@ private:
     struct
     {
 	unsigned int nbCols;
-        unsigned int nbRows;	
+        unsigned int nbRows;
     }m_tableSplit;
-    
+
 };
 
 #endif

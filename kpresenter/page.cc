@@ -3076,7 +3076,6 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     QColor c = kapp->winStyleHighlightColor();
     kapp->setWinStyleHighlightColor( colorGroup().highlight() );
 
-#ifndef HAVE_KDEPRINT
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               printer->toPage() - printer->fromPage() + 2, this );
 
@@ -3120,53 +3119,6 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     QPtrListIterator<KPObject> oIt( *objectList() );
     for (; oIt.current(); ++oIt )
         oIt.current()->drawSelection( true );
-#else
-    QValueList<int> pages_(pages(printer->option("kde-range")));
-    // okay, if it's empty we simply print everything...
-    if(pages_.isEmpty()) {
-        for(int k=printer->fromPage(); k<=printer->toPage(); ++k)
-            pages_.append(k);
-    }
-    QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
-                              pages_.count() + 2, this );
-
-    int j = 0;
-    progress.setProgress( 0 );
-
-    QValueList<int>::ConstIterator it;
-    for ( it=pages_.begin() ; it!=pages_.end(); ++it )
-    {
-        progress.setProgress( ++j );
-        kapp->processEvents();
-
-        if ( progress.wasCancelled() )
-            break;
-
-        currPresPage = *it;
-        if (j!=1) printer->newPage();
-
-        painter->resetXForm();
-        painter->fillRect( getPageRect( 0 ), white );
-
-        view->setDiffY( (*it-1) * ( getPageRect( 1, 1.0, false ).height() ) - qRound(MM_TO_POINT( top_margin )) );
-        drawPageInPainter( painter, diffy(), getPageRect( *it - 1 ) );
-        kapp->processEvents();
-
-        painter->resetXForm();
-        kapp->processEvents();
-    }
-
-    setToolEditMode( toolEditMode );
-    view->setDiffX( _xOffset );
-    view->setDiffY( _yOffset );
-
-    progress.setProgress( pages_.count() );
-    kapp->setWinStyleHighlightColor( c );
-
-    QPtrListIterator<KPObject> oIt( *objectList() );
-    for (; oIt.current(); ++oIt )
-        oIt.current()->drawSelection( true );
-#endif
 
     currPresPage = 1;
     currPresStep = 0;
@@ -3848,7 +3800,7 @@ void Page::picViewOrigHelper(int x, int y)
   QSize presSize( x, y );
   if ( origSize == QSize( -1, -1 ) || !obj )
     return;
-  
+
   scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
 }
 

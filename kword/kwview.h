@@ -20,7 +20,7 @@
 #ifndef kwview_h
 #define kwview_h
 
-#include <koprinter.h>
+#include <kprinter.h>
 #include <qbrush.h>
 
 #include "koborder.h"

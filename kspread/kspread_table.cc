@@ -27,7 +27,7 @@
 #include <qkeycode.h>
 #include <qregexp.h>
 #include <qpoint.h>
-#include <koprinter.h>
+#include <kprinter.h>
 #include <qcursor.h>
 #include <qptrstack.h>
 #include <qbuffer.h>

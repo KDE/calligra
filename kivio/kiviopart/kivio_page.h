@@ -36,7 +36,6 @@ class KivioGuideLines;
 
 #include <koDocument.h>
 
-#include <koprinter.h>
 #include <qpen.h>
 #include <qptrlist.h>
 #include <qintdict.h>
@@ -49,6 +48,7 @@ class KivioGuideLines;
 #include "kivio_stencil.h"
 
 class KivioPainter;
+class KPrinter;
 
 #define BORDER_SPACE 1
 
@@ -122,7 +122,7 @@ public:
 
   KivioRect getRectForAllSelectedStencils();
   KivioRect getRectForAllStencils();
-  
+
   int generateStencilIds( int );
 
 

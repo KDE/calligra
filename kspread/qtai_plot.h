@@ -26,7 +26,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpainter.h>
-#include <koprinter.h>
+#include <kprinter.h>
 #include <qpushbt.h>
 #include <qradiobt.h>
 #include <qbttngrp.h>
@@ -146,18 +146,18 @@ protected:
     virtual void   mouseReleaseEvent( QMouseEvent *e );
     virtual void   mouseMoveEvent( QMouseEvent *e );
     virtual QSizePolicy sizePolicy() const;
-    
+
     virtual void   drawGrid( QPainter *p );
     virtual void   drawScale( QPainter *p,int direction,int w,int h);
     virtual void   drawLabel( QPainter *p,int direction,int w,int rw,int h,int rh);
 
     bool           calced[8];
     int            x_axis_display_type;
-	
+
 private:
     void         paintEvent( QPaintEvent *p );
 	void         resizeEvent(QResizeEvent *e);
-	
+
     QPixmap      *bg_buf;
     QPointArray  *qa[8];        // Main Array
     KPrinter     *printer;      // Printer

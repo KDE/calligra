@@ -151,7 +151,6 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
     KWViewMode *viewMode = new KWViewModePrint( m_doc );
 
     QValueList<int> pageList;
-#ifndef HAVE_KDEPRINT
     int from = printer->fromPage();
     int to = printer->toPage();
     kdDebug(32001) << "KWCanvas::print from=" << from << " to=" << to << endl;
@@ -162,9 +161,6 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
     }
     for ( int i = from; i <= to; i++ )
         pageList.append( i );
-#else
-    pageList = printer->pageList();
-#endif
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               pageList.count() + 1, this );
     int j = 0;

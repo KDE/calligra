@@ -18,7 +18,6 @@
 */
 
 #include <qcolor.h>
-#include <koprinter.h>
 #include <qevent.h>
 #include <qregion.h>
 #include <kmessagebox.h>

@@ -22,7 +22,7 @@
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
-#include <koprinter.h>
+#include <kprinter.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>

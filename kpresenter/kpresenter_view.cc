@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koprinter.h>
+#include <kprinter.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
 #include <qpopupmenu.h>
@@ -2617,7 +2617,7 @@ void KPresenterView::fontChanged( const QFont &font )
     tbFont.setItalic( font.italic() );
     tbFont.setUnderline( font.underline() );
     tbFont.setPointSize( font.pointSize() );
-    
+
     ( (KToggleAction*) actionTextFontFamily )->blockSignals( true );
     ( (KFontAction*) actionTextFontFamily )->setFont( tbFont.family() );
     ( (KToggleAction*) actionTextFontFamily )->blockSignals( false );

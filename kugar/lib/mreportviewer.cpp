@@ -1,13 +1,14 @@
 /***************************************************************************
               mreportviewer.cpp  -  Kugar report viewer widget
               -------------------
-    begin     : Fri Aug 13 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
+    begin     : Fri Aug 13 1999
+    copyright : (C) 1999 by Mutiny Bay Software
+    email     : info@mutinybaysoftware.com
  ***************************************************************************/
 
 #include <qapplication.h>
 #include <kmessagebox.h>
+#include <kprinter.h>
 #include <klocale.h>
 
 #include "mreportviewer.h"
@@ -56,7 +57,7 @@ MReportViewer::~MReportViewer(){
 }
 
 /** Report viewer's paint event */
-void MReportViewer::paintEvent(QPaintEvent* event) {		
+void MReportViewer::paintEvent(QPaintEvent* event) {
 }
 
 /** Report viewer's resize event */
@@ -171,7 +172,7 @@ void MReportViewer::printReport(){
 
 		// Get the count of pages and copies to print
 		int printFrom = printer->fromPage() - 1;
-		int printTo = printer->toPage();		
+		int printTo = printer->toPage();
 		int printCnt = (printTo - printFrom);
 		int printCopies = printer->numCopies();
 		int totalSteps = printCnt * printCopies;
@@ -186,7 +187,7 @@ void MReportViewer::printReport(){
 		          		totalSteps, this, "progress", true );
 		progress.setMinimumDuration(M_PROGRESS_DELAY);
 		QObject::connect(&progress, SIGNAL(cancelled()), this, SLOT(slotCancelPrinting()));
-		progress.setProgress(0);	
+		progress.setProgress(0);
 		qApp->processEvents();
 
 		// Start the printer
@@ -298,7 +299,7 @@ void MReportViewer::slotRenderProgress(int p){
 		totalSteps = rptEngine->getRenderSteps();
 		progress = new QProgressDialog( i18n("Creating report..."), i18n("Cancel"),
                                     totalSteps, this, "progress", true );
-		progress->setMinimumDuration(M_PROGRESS_DELAY);	
+		progress->setMinimumDuration(M_PROGRESS_DELAY);
 	}
 
 	// Update the dialog

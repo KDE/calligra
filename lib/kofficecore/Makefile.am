@@ -35,8 +35,7 @@ include_HEADERS = koFilter.h \
 	koView.h koFrame.h handler.h koDocumentChild.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h \
-	koImage.h koImageCollection.h koClipart.h koClipartCollection.h \
-	koprinter.h
+	koImage.h koImageCollection.h koClipart.h koClipartCollection.h
 
 noinst_HEADERS = koDocument_p.h
 

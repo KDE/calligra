@@ -1,12 +1,13 @@
 /***************************************************************************
               mreportengine.cpp  -  Kugar report engine
               -------------------
-    begin     : Sun Aug 15 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
+    begin     : Sun Aug 15 1999
+    copyright : (C) 1999 by Mutiny Bay Software
+    email     : info@mutinybaysoftware.com
  ***************************************************************************/
 
 #include <qfile.h>
+#include <kprinter.h>
 
 #include "mreportengine.h"
 #include "mutil.h"

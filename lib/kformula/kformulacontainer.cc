@@ -29,7 +29,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <koprinter.h>
+#include <kprinter.h>
 
 #include "MatrixDialog.h"
 #include "bracketelement.h"

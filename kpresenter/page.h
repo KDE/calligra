@@ -28,7 +28,7 @@
 #include <qpixmap.h>
 
 #include <koQueryTrader.h>
-#include <koprinter.h>
+#include <kprinter.h>
 
 #include <global.h>
 

@@ -1,9 +1,9 @@
 /***************************************************************************
               mreportviewer.h  -  Kugar report viewer widget
               -------------------
-    begin     : Fri Aug 13 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
+    begin     : Fri Aug 13 1999
+    copyright : (C) 1999 by Mutiny Bay Software
+    email     : info@mutinybaysoftware.com
  ***************************************************************************/
 
 #ifndef MREPORTVIEWER_H
@@ -15,7 +15,6 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
-#include <koprinter.h>
 #include <qprogressdialog.h>
 
 #include "mreportengine.h"
@@ -23,6 +22,8 @@
 #include "mpagedisplay.h"
 
 #define M_PROGRESS_DELAY 500			// Number of ms to delay progress dialog display
+
+class KPrinter;
 
 /** Application reference, required for event processing */
 extern QApplication *mAppRef;

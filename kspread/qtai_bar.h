@@ -16,7 +16,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpainter.h>
-#include <koprinter.h>
+#include <kprinter.h>
 #include <qpushbt.h>
 #include <qradiobt.h>
 #include <qbttngrp.h>
