@@ -31,7 +31,6 @@
 #include <qscrollview.h>
 
 #include <kdebug.h>
-#include <koRect.h>
 
 /**
  * This class implements the actual widget that shows the image.

@@ -17,15 +17,12 @@
 */
 
 #include <kcoloractions.h>
-#include <kcolordlg.h>
+#include <kcolordialog.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <ktoolbar.h>
-#include <qcstring.h>
 #include <qdrawutil.h>
 #include <qpainter.h>
-#include <qtoolbar.h>
-#include <qtoolbutton.h>
 
 KColorAction::KColorAction( const QString& text, int accel,
 			    QObject* parent, const char* name )

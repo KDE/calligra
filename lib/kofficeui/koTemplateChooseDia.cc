@@ -22,23 +22,16 @@
 
 /******************************************************************/
 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qlabel.h>
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qtabwidget.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
 
-#include <kdesktopfile.h>
 #include <klocale.h>
-#include <kbuttonbox.h>
-#include <kurl.h>
 #include <kfiledialog.h>
 #include <kinstance.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <koFilterManager.h>
 #include <koTemplates.h>
 #include <kseparator.h>

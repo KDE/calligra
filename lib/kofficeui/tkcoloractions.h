@@ -4,13 +4,9 @@
 #include "tkaction.h"
 
 #include <kpopupmenu.h>
-
-#include <qlayout.h>
-#include <qcolor.h>
 #include <qdict.h>
 
-#include <qdom.h>
-
+class QGridLayout;
 class TKColorPanel;
 class TKSelectColorActionPrivate;
 

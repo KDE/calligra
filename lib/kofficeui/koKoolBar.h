@@ -21,11 +21,11 @@
 #ifndef __ko_koolbar_h__
 #define __ko_koolbar_h__
 
-#include <qwidget.h>
 #include <qframe.h>
-#include <qpushbutton.h>
+#include <qpixmap.h>
 #include <qintdict.h>
 
+class QPushButton;
 class QPixmap;
 class KoKoolBar;
 class KoKoolBarGroup;
@@ -68,7 +68,7 @@ class KoKoolBarGroup : public QObject
   Q_OBJECT
 public:
   KoKoolBarGroup( KoKoolBar *_bar, const QString& _text );
-  ~KoKoolBarGroup() { delete m_pButton; }
+  ~KoKoolBarGroup();
 
   void append( KoKoolBarItem *_i ) { m_mapItems.insert( _i->id(), _i ); }
   void remove( int _id );

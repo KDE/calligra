@@ -21,12 +21,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kapp.h>
-#include <qpainter.h>
-#include <qpixmap.h>
 #include <qlistview.h>
-#include <qobjectlist.h>
-#include <qpushbutton.h>
 
 /****************************************************
  *

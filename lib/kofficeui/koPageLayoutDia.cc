@@ -25,20 +25,13 @@
 
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qgroupbox.h>
 #include <qlayout.h>
 #include <qpainter.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qpixmap.h>
 #include <qlineedit.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
-#include <qvalidator.h>
 #include <knumvalidator.h>
 #include <qspinbox.h>
-#include <qtl.h>
 
 #include <klocale.h>
 

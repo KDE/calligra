@@ -20,10 +20,8 @@
 #ifndef __kofontdia_h__
 #define __kofontdia_h__
 
-#include <qdialog.h>
-#include <kfontdialog.h>
 #include <qcheckbox.h>
-#include <qfont.h>
+#include <kfontdialog.h>
 
 // The embeddable font chooser widget
 class KoFontChooser : public QWidget

@@ -19,20 +19,14 @@
 
 #include <koTemplates.h>
 
-#include <qstringlist.h>
-#include <qfile.h>
-#include <qtextstream.h>
 #include <qdir.h>
-#include <qfileinfo.h>
 #include <qimage.h>
 
 #include <kdesktopfile.h>
 #include <ksimpleconfig.h>
 #include <kdebug.h>
 #include <kinstance.h>
-#include <kstddirs.h>
-#include <kmessagebox.h>
-#include <klocale.h>
+#include <kstandarddirs.h>
 #include <kio/netaccess.h>
 
 #include <stdlib.h>

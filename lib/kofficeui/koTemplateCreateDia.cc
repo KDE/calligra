@@ -27,17 +27,15 @@
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qheader.h>
-#include <qpopupmenu.h>
 
 #include <klineedit.h>
 #include <klistview.h>
 #include <klocale.h>
 #include <koTemplates.h>
 #include <kfiledialog.h>
-#include <kurl.h>
 #include <kmessagebox.h>
 #include <kimageio.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 

@@ -19,15 +19,13 @@
 */
 
 #include <qcheckbox.h>
-#include <qgrid.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlineedit.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <klocale.h>

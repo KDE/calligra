@@ -23,7 +23,6 @@
 #include <kwin.h>
 
 #include <qlayout.h>
-#include <qpainter.h>
 #include <qspinbox.h>
 #include <qobjectlist.h>
 

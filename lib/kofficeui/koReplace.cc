@@ -21,7 +21,7 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qregexp.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <klocale.h>

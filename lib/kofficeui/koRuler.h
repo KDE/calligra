@@ -27,8 +27,6 @@
 #include <koPageLayoutDia.h>
 
 #include <qframe.h>
-#include <qwidget.h>
-#include <qstring.h>
 #include <qpixmap.h>
 
 #include <koGlobal.h>

@@ -22,7 +22,6 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qpopupmenu.h>
 
 #include <ktoolbar.h>
 #include <kiconloader.h>

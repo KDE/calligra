@@ -23,7 +23,6 @@
 
 #include <qpixmap.h>
 #include <qbutton.h>
-#include <qfont.h>
 #include <kglobal.h>
 
 class KToolBar;
@@ -203,7 +202,7 @@ protected:
 	int y = pos.y();
 	return (x > width() - 12 && x <= width() && y > 0 && y < height());
   }
-	
+
 private:
   QPixmap defaultPixmap;
   QPixmap activePixmap;

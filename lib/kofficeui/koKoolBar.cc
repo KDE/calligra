@@ -21,8 +21,7 @@
 #include <kiconloader.h>
 
 #include <qpainter.h>
-#include <qcolor.h>
-#include <qscrollbar.h>
+#include <qpushbutton.h>
 
 static int g_koKoolBarId = 0;
 
@@ -420,6 +419,11 @@ KoKoolBarGroup::KoKoolBarGroup( KoKoolBar *_bar, const QString& _text ) :
   m_id = g_koKoolBarId++;
 }
 
+KoKoolBarGroup::~KoKoolBarGroup()
+{
+  delete m_pButton;
+}
+
 void KoKoolBarGroup::remove( int _id )
 {
   m_mapItems.remove( _id );
@@ -455,7 +459,6 @@ void KoKoolBarItem::press()
 }
 
 /*
-#include <kapp.h>
 
 int main( int argc, char **argv )
 {

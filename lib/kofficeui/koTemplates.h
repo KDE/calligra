@@ -22,7 +22,6 @@
 #define koTemplates_h
 
 #include <qptrlist.h>
-#include <qstring.h>
 #include <qstringlist.h>
 #include <qpixmap.h>
 

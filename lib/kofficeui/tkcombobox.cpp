@@ -20,11 +20,10 @@
 
 #include <qlistbox.h>
 #include <qpainter.h>
-#include <qdrawutil.h>
 #include <qstyle.h>
+#include <qdrawutil.h>
 
-#include <kapp.h>
-#include <kstyle.h>
+#include <kapplication.h>
 
 TKComboBox::TKComboBox(QWidget* parent, const char* name)
 : QComboBox(false,parent,name)
@@ -87,17 +86,8 @@ void TKComboBox::paintEvent(QPaintEvent*)
   QPixmap pixmap(arrow_down);
 
 
-  if (kapp->kstyle()) {
-    QFont ref_font;
-    kapp->kstyle()->drawKToolBarButton(&p, bx, by, bw, bh,
-        isEnabled()? colorGroup() : palette().disabled(), false,
-        true, isEnabled(), false, KStyle::Icon, QString::null,
-        &pixmap, &ref_font, this);
-  } else {
-    style().drawControl( QStyle::CE_PushButton, &p, this, QRect( bx, by, bw, bh ), colorGroup() );
-    style().drawItem( &p, QRect( bx, by, bw, bh), AlignCenter, colorGroup(), isEnabled(), &pixmap, QString::null );
-  }
-
+  style().drawControl( QStyle::CE_PushButton, &p, this, QRect( bx, by, bw, bh ), colorGroup() );
+  style().drawItem( &p, QRect( bx, by, bw, bh), AlignCenter, colorGroup(), isEnabled(), &pixmap, QString::null );
 
   if ( hasFocus()) {
     style().drawPrimitive( QStyle::PE_FocusRect, &p, fr, g );

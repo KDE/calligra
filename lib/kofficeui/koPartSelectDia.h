@@ -22,7 +22,6 @@
 
 #include <kdialogbase.h>
 #include <koQueryTrader.h>
-#include <qvaluelist.h>
 
 class QListView;
 class QListViewItem;

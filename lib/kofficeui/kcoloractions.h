@@ -20,7 +20,6 @@
 #define kcoloractions_h
 
 #include <kaction.h>
-#include <qvaluelist.h>
 #include <qwidget.h>
 
 class QMouseEvent;
@@ -119,10 +118,10 @@ public:
     KColorBar( const QValueList<QColor> &cols, QWidget *parent, const char *name );
 
     Orientation orientation() const { return orient; }
-    
+
 public slots:
     void orientationChanged( Orientation o );
-    
+
 protected:
     void mousePressEvent( QMouseEvent *e );
     void paintEvent( QPaintEvent *e );
@@ -130,7 +129,7 @@ protected:
 private:
     QValueList<QColor> colors;
     Orientation orient;
-    
+
 signals:
     /**
      *  This signal gets emitted when the left mouse button is clicked on a color button.

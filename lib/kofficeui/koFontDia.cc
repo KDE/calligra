@@ -20,16 +20,10 @@
 #include "koFontDia.h"
 #include <kotextformat.h>
 
-#include <kapp.h>
 #include <kcolordialog.h>
-#include <kfontdialog.h>
-#include <kbuttonbox.h>
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qlayout.h>
-#include <qdialog.h>
-#include <qvbox.h>
 #include <qgroupbox.h>
 #include <qpushbutton.h>
 

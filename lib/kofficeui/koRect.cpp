@@ -1,5 +1,4 @@
 #include "koRect.h"
-#include "qglobal.h"
 
 KoRect KoRect::normalize() const
 {

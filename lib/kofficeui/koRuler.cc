@@ -23,16 +23,10 @@
 
 #include "koRuler.h"
 #include <klocale.h>
-#include <kglobal.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpen.h>
-#include <qbrush.h>
 #include <qpainter.h>
 #include <qpopupmenu.h>
-#include <qtl.h>
 
 class KoRulerPrivate {
 public:
