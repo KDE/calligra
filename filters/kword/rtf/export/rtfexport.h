@@ -70,6 +70,20 @@ class FontTable
    FontType fontType;  // roman, swiss, etc
    };
 
+/***********************************************************************/
+class ColorTable
+   {
+   public:
+
+   ColorTable()  {}
+   ColorTable ( int r,
+                   int g,
+                   int b ) : red(r), green(g), blue(b) {}
+   int red;
+   int green;
+   int blue;
+   };
+
 /************************************************************************/
 
 QString fontMarkup(QString fontName, QValueList< FontTable > &fontTable,
@@ -80,9 +94,10 @@ QString fontTableMarkup(QString fontName, QValueList< FontTable > &fontTable,
 
 QString listStart( QString font, int fontSize, QString listMarker);
 
-QString listMarkup( int firstIndent, int listType, int startNumber, int depth,
+QString listMarkup( int firstIndent,int listType, int startNumber, int depth,
                     int fontSize, QString font,
-                    QString preceedingText, QString followingText);
+                    QString preceedingText, QString followingText,
+                    bool section, bool multiLevel);
 
 QString escapeRTFsymbols( QString text);
 
@@ -98,5 +113,12 @@ QString encodeSevenBit( QString text);
 QValueList<FormatData>  combineFormatData(  QValueList<FormatData> &paraFormatData,
                    QValueList<FormatData> &paraFormatDataFormats );
 
+QString ProcessTabData( QValueList < TabularData > &tabData );
+
+QString colorMarkup(int red, int blue, int green,
+                 QValueList< ColorTable > &colorTable,
+                 QString &colorHeader);
+
+QString borderMarkup (QString borderId, BorderStyle *border );
 
 #endif // RTFEXPORT_H
