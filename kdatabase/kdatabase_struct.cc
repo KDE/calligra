@@ -119,12 +119,27 @@ QPtrList<TableStructureRow> KDBTable::getColumns(QString *tableName, QString *re
      const QString* columnAllowsNull = new QString(myElement.attribute("allownull"));
 
      myRow.primary_key = columnIsInKey;
-     myRow.name = columnName;
-     myRow.type = columnType;
-     myRow.size = columnSize;
-     myRow.Default = columnDefault;
+     myRow.name = columnName->latin1();
+//     myRow.type = columnType;
+     if(columnType = "int") {
+		myRow.type = t_int;
+       }
+     elseif(columnType = "char") {
+		myRow.type = t_char;
+       }
+     elseif(columnType = "varchar") {
+		myRow.type = t_vchar;
+       }
+     elseif(columnType = "float") {
+		myRow.type = t_float;
+       }
+     else {
+		myRow.type = t_boolen;
+       }
+     myRow.size = columnSize->toInt();
+     myRow.Default = columnDefault->latin1();
      myRow.allow_null = columnAllowsNull;
-     columnList.append(myRow);
+     columnList.append(<const TableStructureRow*>myRow);
 
     while(!myTableWalker.isNull()) {
       myElement = myTableWalker.toElement();
