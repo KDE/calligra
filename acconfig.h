@@ -21,3 +21,6 @@
 
 #undef HAVE_LIBPNG
 
+/* Define if compiled symbols have a leading underscore */
+#undef WITH_SYMBOL_UNDERSCORE
+
