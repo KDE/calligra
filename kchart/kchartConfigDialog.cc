@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Copyright 1999-2000 by Kalle Dalheimer, released under Artistic License.
  */
 
@@ -11,6 +9,7 @@
 #include "kchartAreaSubTypeChartPage.h"
 #include "kchartBackgroundPixmapConfigPage.h"
 #include "kchartBarSubTypeChartPage.h"
+#include "kchartLineSubTypeChartPage.h"
 #include "kchartColorConfigPage.h"
 #include "kchartParameterPieConfigPage.h"
 #include "kchartFontConfigPage.h"
@@ -74,6 +73,10 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
         break;
     case KDChartParams::Area:
         _subTypePage = new KChartAreaSubTypeChartPage( _params, this );
+        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+        break;
+    case KDChartParams::Line:
+        _subTypePage = new KChartLineSubTypeChartPage( _params, this );
         addTab( _subTypePage, i18n( "Chart &Subtype" ) );
         break;
     default:
