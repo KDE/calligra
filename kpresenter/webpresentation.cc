@@ -280,7 +280,12 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
         srcurl.setPath( locate( "slideshow", filename, KPresenterFactory::global() ) );
         desturl = path;
         desturl.addPath( "/pics/" + filename );
-        KIO::NetAccess::file_move( srcurl, desturl, -1, true /*overwrite*/);
+#if KDE_IS_VERSION(3,1,90 )
+       KIO::NetAccess::file_move( srcurl, desturl, -1, true /*overwrite*/);
+#else
+       KIO::NetAccess::del( desturl ); // Copy does not remove existing destination file
+       KIO::NetAccess::copy( srcurl, desturl );
+#endif
         p = progressBar->progress();
         progressBar->setProgress( ++p );
         kapp->processEvents();
@@ -298,12 +303,13 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
         int pgNum = slideInfos[i].pageNumber;
         view->getCanvas()->drawPageInPix( pix, pgNum, zoom, true /*force real variable value*/ );
         filename = QString( "%1/pics/slide_%2.png" ).arg( path ).arg( i + 1 );
-
+#if KDE_IS_VERSION(3,1,90)
         KTempFile tmp;
         pix.save( tmp.name(), "PNG" );
-
         KIO::NetAccess::file_move( tmp.name(), filename, -1, true /*overwrite*/);
-
+#else
+        pix.save( filename, "PNG" );
+#endif
         p = progressBar->progress();
         progressBar->setProgress( ++p );
         kapp->processEvents();
@@ -372,11 +378,16 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
 
         unsigned int pgNum = i + 1;
+#if KDE_IS_VERSION(3,1,90)
         KTempFile tmp;
         QString dest= QString( "%1/html/slide_%2.html" ).arg( path ).arg( pgNum );
 
         QFile file( tmp.name() );
         file.open( IO_WriteOnly );
+#else
+        QFile file( QString( "%1/html/slide_%2.html" ).arg( path ).arg( pgNum ) );
+        file.open( IO_WriteOnly );
+#endif
         QTextStream streamOut( &file );
         streamOut.setCodec( codec );
 
@@ -485,9 +496,9 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         streamOut << "</body>\n</html>\n";
 
         file.close();
-
+#if KDE_IS_VERSION(3,1,90)
         KIO::NetAccess::file_move( tmp.name(), dest, -1, true /*overwrite*/);
-
+#endif
         int p = progressBar->progress();
         progressBar->setProgress( ++p );
         kapp->processEvents();
@@ -497,12 +508,16 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 void KPWebPresentation::createMainPage( KProgress *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
-
+#if KDE_IS_VERSION(3,1,90)
     KTempFile tmp;
     QString dest = QString( "%1/index.html" ).arg( path );
     QFile file( tmp.name() );
 
     file.open( IO_WriteOnly );
+#else
+    QFile file( QString( "%1/index.html" ).arg( path ) );
+    file.open( IO_WriteOnly );
+#endif
     QTextStream streamOut( &file );
     streamOut.setCodec( codec );
 
@@ -534,9 +549,9 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 
     streamOut << "</body>\n</html>\n";
     file.close();
-
+#if KDE_IS_VERSION(3,1,90)
     KIO::NetAccess::file_move( tmp.name(), dest, -1, true /*overwrite*/);
-
+#endif
 
     progressBar->setProgress( progressBar->totalSteps() );
     kapp->processEvents();
