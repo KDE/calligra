@@ -44,7 +44,6 @@
 #include <kmimetype.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <kdebugclasses.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #if ! KDE_IS_VERSION(3,1,90)
@@ -1140,29 +1139,32 @@ bool KoDocument::openFile()
     u.setPath( m_file );
     QString typeName = KMimeType::findByURL( u, 0, true )->name();
 
-    // Special case for flat XML files (e.g. using directory store)
-    if ( u.fileName() == "maindoc.xml" || typeName == "inode/directory" )
-    {
-        typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
-        d->m_specialOutputFlag = SaveAsDirectoryStore;
-        kdDebug(30003) << "KoDocument::openFile loading maindoc.xml, using directory store for " << m_file << endl;
-    }
     // Allow to open backup files, don't keep the mimetype application/x-trash.
-    else if ( typeName == "application/x-trash" )
+    if ( typeName == "application/x-trash" )
     {
         QString path = u.path();
         QStringList patterns = KMimeType::mimeType( typeName )->patterns();
         // Find the extension that makes it a backup file, and remove it
         for( QStringList::Iterator it = patterns.begin(); it != patterns.end(); ++it ) {
             QString ext = *it;
-            if ( ext[0] == '*' )
+            if ( !ext.isEmpty() && ext[0] == '*' )
             {
                 ext.remove(0, 1);
-                if ( path.endsWith( ext ) )
+                if ( path.endsWith( ext ) ) {
                     path.truncate( path.length() - ext.length() );
+                    break;
+                }
             }
         }
         typeName = KMimeType::findByPath( path, 0, true )->name();
+    }
+
+    // Special case for flat XML files (e.g. using directory store)
+    if ( u.fileName() == "maindoc.xml" || typeName == "inode/directory" )
+    {
+        typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
+        d->m_specialOutputFlag = SaveAsDirectoryStore;
+        kdDebug(30003) << "KoDocument::openFile loading maindoc.xml, using directory store for " << m_file << endl;
     }
     kdDebug(30003) << "KoDocument::openFile " << m_file << " type:" << typeName << endl;
 
