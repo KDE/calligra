@@ -311,7 +311,7 @@ VKoPainter::restore()
 }
 
 void
-VKoPainter::setRasterOp( Qt::RasterOp r )
+VKoPainter::setRasterOp( Qt::RasterOp  )
 {
 }
 
@@ -331,7 +331,7 @@ VKoPainter::clear( unsigned int color )
 }
 
 void
-VKoPainter::clampToViewport( const ArtSVP &svp, double &x0, double &y0, double &x1, double &y1 )
+VKoPainter::clampToViewport( const ArtSVP &svp, int &x0, int &y0, int &x1, int &y1 )
 {
 	// get SVP bbox
 	ArtDRect bbox;
@@ -340,22 +340,21 @@ VKoPainter::clampToViewport( const ArtSVP &svp, double &x0, double &y0, double &
 	// clamp to viewport
 	x0 = int( bbox.x0 );
 	x0 = QMAX( x0, 0 );
-	x0 = QMIN( x0, m_width );
+	x0 = QMIN( x0, int( m_width ) );
 	y0 = int( bbox.y0 );
 	y0 = QMAX( y0, 0 );
-	y0 = QMIN( y0, m_height );
+	y0 = QMIN( y0, int ( m_height ) );
 	x1 = int( bbox.x1 ) + 1;
 	x1 = QMAX( x1, 0 );
-	x1 = QMIN( x1, m_width );
+	x1 = QMIN( x1, int( m_width ) );
 	y1 = int( bbox.y1 ) + 1;
 	y1 = QMAX( y1, 0 );
-	y1 = QMIN( y1, m_height );
+	y1 = QMIN( y1, int( m_height ) );
 }
 
 void
 VKoPainter::drawVPath( ArtVpath *vec )
 {
-	QColor color;
 	ArtSVP *strokeSvp = 0L;
 	ArtSVP *fillSvp = 0L;
 
@@ -374,7 +373,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	int g = 0;
 	int b = 0;
 	int a = 0;
-	art_u32 fillColor;
+	art_u32 fillColor = 0;
     // filling
 	if( m_fill && ( m_fill->type() == fill_fill || m_fill->type() == fill_gradient ) )
 	{
@@ -397,12 +396,12 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		art_svp_free( temp );
 	}
 
-	art_u32 strokeColor;
+	art_u32 strokeColor = 0;
 	// stroke
 	if( m_stroke )
 	{
-		ArtPathStrokeCapType capStyle;
-		ArtPathStrokeJoinType joinStyle;
+		ArtPathStrokeCapType capStyle = ART_PATH_STROKE_CAP_BUTT;
+		ArtPathStrokeJoinType joinStyle = ART_PATH_STROKE_JOIN_MITER;
 		// TODO : non rgb support ?
 
 		m_stroke->color().pseudoValues( r, g, b );
@@ -429,17 +428,13 @@ VKoPainter::drawVPath( ArtVpath *vec )
 			delete [] dashes;
 		}
 		// caps translation karbon -> art
-		if( m_stroke->lineCap() == cap_butt )
-			capStyle = ART_PATH_STROKE_CAP_BUTT;
-		else if( m_stroke->lineCap() == cap_round )
+		if( m_stroke->lineCap() == cap_round )
 			capStyle = ART_PATH_STROKE_CAP_ROUND;
 		else if( m_stroke->lineCap() == cap_square )
 			capStyle = ART_PATH_STROKE_CAP_SQUARE;
 
 		// join translation karbon -> art
-		if( m_stroke->lineJoin() == join_miter )
-			joinStyle = ART_PATH_STROKE_JOIN_MITER;
-		else if( m_stroke->lineJoin() == join_round )
+		if( m_stroke->lineJoin() == join_round )
 			joinStyle = ART_PATH_STROKE_JOIN_ROUND;
 		else if( m_stroke->lineJoin() == join_bevel )
 			joinStyle = ART_PATH_STROKE_JOIN_BEVEL;
@@ -448,7 +443,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		strokeSvp = art_svp_vpath_stroke( vec, ART_PATH_STROKE_JOIN_ROUND/*joinStyle*/, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
 	}
 
-	double x0, y0, x1, y1;
+	int x0, y0, x1, y1;
 
 	// render the svp to the buffer
 	if( strokeSvp )
@@ -459,7 +454,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		{
 			clampToViewport( *strokeSvp, x0, y0, x1, y1 );
 			if( x0 != y0 && x1 != y1 )
-				art_rgb_svp_alpha( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + int(x0) * 4 + int(y0) * m_width * 4, m_width * 4, 0 );
+				art_rgb_svp_alpha( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
 			art_svp_free( strokeSvp );
 		}
 	}
@@ -472,7 +467,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		{
 			clampToViewport( *fillSvp, x0, y0, x1, y1 );
 			if( x0 != x1 && y0 != y1 )
-				art_rgb_svp_alpha( fillSvp, x0, y0, x1, y1, fillColor, a, m_buffer + int(x0) * 4 + int(y0) * m_width * 4, m_width * 4, 0 );
+				art_rgb_svp_alpha( fillSvp, x0, y0, x1, y1, fillColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
 			art_svp_free( fillSvp );
 		}
 	}
@@ -488,7 +483,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 void
 VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 {
-	double x0, y0, x1, y1;
+	int x0, y0, x1, y1;
 	clampToViewport( *svp, x0, y0, x1, y1 );
 
 	ArtRender *render = 0L;
@@ -570,7 +565,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		if( x0 != x1 && y0 != y1 )
 		{
-			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
+			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
 			art_render_svp( render, svp );
 			art_render_gradient_radial( render, radial, ART_FILTER_HYPER );
 		}
@@ -594,17 +589,19 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 		(*stopArray)[ offset ].offset = colorStops[ offset ].rampPoint;
 
 		QColor qStopColor = colorStops[ offset ].color.toQColor();
-		art_u32 stopColor = (qRed(qStopColor.rgb()) << 24) | (qGreen(qStopColor.rgb()) << 16) | (qBlue(qStopColor.rgb()) << 8) | 0xFF;
+		art_u32 stopColor = (qRed(qStopColor.rgb()) << 24) | (qGreen(qStopColor.rgb()) << 16) |
+							(qBlue(qStopColor.rgb()) << 8) | qAlpha(qStopColor.rgb());
 
-		ArtPixMaxDepth color[ 3 ];
+		ArtPixMaxDepth color[ 4 ];
 		color[ 0 ] = ART_PIX_MAX_FROM_8( (stopColor >> 24) & 0xff );
 		color[ 1 ] = ART_PIX_MAX_FROM_8( (stopColor >> 16) & 0xff );
 		color[ 2 ] = ART_PIX_MAX_FROM_8( (stopColor >> 8) & 0xff );
+		color[ 3 ] = ART_PIX_MAX_FROM_8( (stopColor) & 0xff );
 
 		(*stopArray)[ offset ].color[ 0 ] = color[ 0 ];
 		(*stopArray)[ offset ].color[ 1 ] = color[ 1 ];
 		(*stopArray)[ offset ].color[ 2 ] = color[ 2 ];
-		(*stopArray)[ offset ].color[ 3 ] = 0xFFFF; // TODO : take into account stop-opacity
+		(*stopArray)[ offset ].color[ 3 ] = color[ 3 ];
 	}
 
 	return stopArray->data();

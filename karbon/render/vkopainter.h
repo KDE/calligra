@@ -68,7 +68,7 @@ private:
 	void drawVPath( struct _ArtVpath * );
 	void applyGradient( _ArtSVP *, bool );
 	_ArtGradientStop *buildStopArray( VGradient &gradient, int & );
-	void clampToViewport( const _ArtSVP &, double &, double &, double &, double & );
+	void clampToViewport( const _ArtSVP &, int &, int &, int &, int & );
 
 private:
 	struct _ArtBpath *m_path;
