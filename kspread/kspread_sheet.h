@@ -1254,6 +1254,10 @@ private:
     void checkContentDirection( QString const & name );
     
     SheetPrivate* d;
+    
+    // don't allow copy or assignment
+    KSpreadSheet( const KSpreadSheet& );
+    KSpreadSheet& operator=( const KSpreadSheet& );
 };
 
 // for compatibility only, remove in the future
