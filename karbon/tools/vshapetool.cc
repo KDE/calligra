@@ -3,7 +3,9 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qcursor.h>
 #include <qevent.h>
+#include <qlabel.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"

@@ -3,8 +3,6 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qcursor.h>
-#include <qlabel.h>
 
 #include <klocale.h>
 

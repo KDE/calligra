@@ -420,6 +420,13 @@ VPath::combineSegmentList( const VSegmentList& segmentList )
 			list->revert();
 		}
 	}
+	else
+	{
+		if( !list->counterClockwise() )
+		{
+			list->revert();
+		}
+	}
 
 	m_segmentLists.append( list );
 }
