@@ -183,13 +183,13 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		//Create Dockers
 		m_ColorManager = new VColorDocker( part(), this );
 		m_strokeDocker = new VStrokeDocker( part(), this );
-	}
 
-	m_TransformDlg = new VTransformDlg( part(), this );
+		m_TransformDlg = new VTransformDlg( part(), this );
 	
-	//create toolbars
-	m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
-	mainWindow()->addToolBar( m_selectToolBar );
+		//create toolbars
+		m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
+		mainWindow()->addToolBar( m_selectToolBar );
+	}
 
 	setNumberOfRecentFiles( part()->maxRecentFiles() );
 
