@@ -28,6 +28,7 @@ class KoStore;
 class KoDocument;
 class KoDocumentChildPrivate;
 class KoDocumentEntry;
+class KoXmlWriter;
 
 /**
  * Holds an embedded object.
@@ -94,6 +95,13 @@ public:
    */
   virtual QDomElement save( QDomDocument& doc, bool uppercase=false );
 
+    /**
+     * Write default parameter for embedded object
+     *
+     */
+    virtual void KoDocumentChild::saveOasis(  KoXmlWriter &xmlWriter );
+
+
   /**
    *  Parses the "object" tag. This does NOT mean creating the child documents.
    *  AFTER the 'parser' has finished parsing, you must use @ref #loadDocument
@@ -105,6 +113,8 @@ public:
    *  of these methods.
    */
   virtual bool load( const QDomElement& element, bool uppercase=false );
+
+    virtual void loadOasis( const QDomElement &element );
 
   /**
    *  Actually loads the document from the disk/net or from the store,

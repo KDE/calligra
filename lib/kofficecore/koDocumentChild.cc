@@ -25,6 +25,7 @@
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <koxmlwriter.h>
 
 #include <qapplication.h>
 
@@ -110,6 +111,19 @@ KoDocument *KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
 
   return document()->hitTest( p, m );
 }
+
+void KoDocumentChild::loadOasis( const QDomElement &element )
+{
+    int x, y, w, h;
+    x=y=w=h=0;
+    x = KoUnit::parseValue( element.attribute( "svg:x" ) );
+    y = KoUnit::parseValue( element.attribute( "svg:y" ) );
+    w = KoUnit::parseValue( element.attribute( "svg:with" ) );
+    h = KoUnit::parseValue( element.attribute( "svg:height" ) );
+    m_tmpGeometry = QRect(x, y, w, h);
+    setGeometry(m_tmpGeometry);
+}
+
 
 bool KoDocumentChild::load( const QDomElement& element, bool uppercase )
 {
@@ -296,6 +310,20 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL )
         return false;
     d->m_doc->setProperty( "mimetype", m_tmpMimeType );
     return true;
+}
+
+void KoDocumentChild::saveOasis(  KoXmlWriter &xmlWriter )
+{
+    //<draw:object draw:style-name="standard" draw:id="1" draw:layer="layout" svg:width="14.973cm" svg:height="4.478cm" svg:x="11.641cm" svg:y="14.613cm" xlink:href="#./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+    xmlWriter.addAttribute( "xlink:type", "simple" );
+    xmlWriter.addAttribute( "xlink:show", "embed" );
+    xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
+
+    xmlWriter.addAttributePt( "svg:width",  geometry().width() );
+    xmlWriter.addAttributePt( "svg:height",  geometry().height() );
+    xmlWriter.addAttributePt( "svg:x",  geometry().left() );
+    xmlWriter.addAttributePt( "svg:y",  geometry().top() );
+
 }
 
 QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
