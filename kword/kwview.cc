@@ -946,9 +946,6 @@ void KWView::setupActions()
     actionChangePicture->setToolTip( i18n( "Change the picture in the currently selected frame." ) );
     actionChangePicture->setWhatsThis( i18n( "You can specify a different picture in the current frame.<br><br>KWord automatically resizes the new picture to fit within the old frame." ) );
 
-    actionChangeClipart=new KAction( i18n( "Change Clipart..." ), "frame_image",0,
-                                     this, SLOT( changeClipart() ),
-                                     actionCollection(), "change_clipart" );
     actionConfigureHeaderFooter=new KAction( i18n( "Configure Header/Footer..." ), 0,
                                      this, SLOT( configureHeaderFooter() ),
                                      actionCollection(), "configure_headerfooter" );
@@ -4598,7 +4595,9 @@ QPopupMenu * KWView::popupMenu( const QString& name )
 
 void KWView::openPopupMenuInsideFrame( KWFrame* frame, const QPoint & _point )
 {
+    kdDebug() << "Entering KWView::openPopupMenuInsideFrame" << endl;
     KWFrameSetEdit *fse = m_gui->canvasWidget()->currentFrameSetEdit();
+    kdDebug() << (void*) fse << " in KWView::openPopupMenuInsideFrame" << endl;
     if (fse)
         fse->showPopup(frame,this,_point);
     else
@@ -4630,18 +4629,11 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
         {
             KWFrame *frame=m_doc->getFirstSelectedFrame();
             KWFrameSet *frameSet=frame->frameSet();
-            if(frameSet->typeAsKOffice1Dot1()==FT_PICTURE)
+            if(frameSet->type()==FT_PICTURE)
             {
                 actionList.append(separator);
                 actionList.append(actionChangePicture);
                 actionList.append(actionSavePicture);
-            }
-            else if(frameSet->typeAsKOffice1Dot1()==FT_CLIPART)
-            {
-                actionList.append(separator);
-                actionList.append(actionChangeClipart);
-                actionList.append(actionSaveClipart);
-
             }
             else if(frameSet->isHeaderOrFooter())
             {
@@ -5168,37 +5160,17 @@ void KWView::changePicture()
     if (!QDir(url.directory()).exists())
         oldFile = url.fileName();
 
-    if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectImage , oldFile ) )
+    // ### TODO: do we need to do something if a image becomes a clipart or vice-versa?
+    if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectImage + KWInsertPicDia::SelectClipart, oldFile ) )
     {
-         KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change Picture"), FrameIndex(frame), oldFile, file, true ) ;
-
-        frameset->loadPicture( file, m_doc->zoomRect( *frame ).size() );
-        m_doc->frameChanged( frame );
-        m_doc->addCommand(cmd);
-    }
-}
-
-void KWView::changeClipart()
-{
-    QString file,oldFile;
-    KWFrame * frame = m_doc->getFirstSelectedFrame();
-
-    KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-    oldFile=frameset->key().filename();
-    KURL url(oldFile);
-    if (!QDir(url.directory()).exists())
-        oldFile = url.fileName();
-
-    if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectClipart, oldFile ) )
-    {
-
-        KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change Clipart"), FrameIndex( frame ), oldFile, file, false ) ;
+        KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change Picture"), FrameIndex(frame), oldFile, file, true ) ;
 
         frameset->loadPicture( file );
         m_doc->frameChanged( frame );
         m_doc->addCommand(cmd);
     }
 }
+
 void KWView::savePicture()
 {
     KWFrame * frame = m_doc->getFirstSelectedFrame();

@@ -314,7 +314,6 @@ public slots:
     void refreshCustomMenu();
 
     void changePicture();
-    void changeClipart();
 
     void configureHeaderFooter();
 
@@ -570,10 +569,8 @@ private:
 
 
     KAction *actionChangePicture;
-    KAction *actionChangeClipart;
 
     KAction *actionSavePicture;
-    KAction *actionSaveClipart;
 
     KAction *actionConfigureHeaderFooter;
     KToggleAction *actionInlineFrame;
