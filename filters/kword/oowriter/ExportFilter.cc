@@ -791,7 +791,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }
 
-#undef ALLOW_TABLE
+#define ALLOW_TABLE
 
 QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const
 {
