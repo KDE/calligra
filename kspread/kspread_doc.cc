@@ -109,17 +109,17 @@ public:
   int syntaxVersion;
   bool verticalScrollBar;
   bool horizontalScrollBar;
-  KGlobalSettings::Completion completionMode;
   bool columnHeader;
   bool rowHeader;
   double indentValue;
-  KSpread::MoveTo moveTo;
-  bool showError;
-  MethodOfCalc calcMethod;
+  bool showStatusBar;
   bool showTabBar;
   bool showCommentIndicator;
   bool showFormulaBar;
-  bool showStatusBar;
+  bool showError;
+  KGlobalSettings::Completion completionMode;
+  KSpread::MoveTo moveTo;
+  MethodOfCalc calcMethod;
   bool delayCalculation;
   KSpellConfig *spellConfig;
   bool dontCheckUpperWord;
@@ -848,14 +848,64 @@ void KSpreadDoc::setCompletionMode( KGlobalSettings::Completion complMode)
   d->completionMode= complMode;
 }
 
-double KSpreadDoc::getIndentValue()const 
+double KSpreadDoc::indentValue() const 
 { 
   return d->indentValue; 
 }
 
-void KSpreadDoc::setIndentValue( double _val )
+void KSpreadDoc::setIndentValue( double val )
 { 
-  d->indentValue = _val; 
+  d->indentValue = val; 
+}
+
+void KSpreadDoc::setShowStatusBar(bool _statusBar)
+{ 
+  d->showStatusBar=_statusBar;
+}
+
+bool KSpreadDoc::showStatusBar() const
+{ 
+  return  d->showStatusBar;
+}
+
+void KSpreadDoc::setShowTabBar(bool _tabbar)
+{  
+  d->showTabBar=_tabbar;
+}
+
+bool KSpreadDoc::showTabBar()const
+{ 
+  return  d->showTabBar;
+}
+
+void KSpreadDoc::setShowCommentIndicator(bool _indic) 
+{  
+  d->showCommentIndicator=_indic;
+}
+
+bool KSpreadDoc::showCommentIndicator() const
+{ 
+  return  d->showCommentIndicator;
+}
+
+void KSpreadDoc::setShowFormulaBar(bool _formulaBar)
+{  
+  d->showFormulaBar=_formulaBar;
+}
+
+bool KSpreadDoc::showFormulaBar() const
+{ 
+  return  d->showFormulaBar;
+}
+
+void KSpreadDoc::setShowMessageError(bool _show)
+{   
+  d->showError=_show;
+}
+
+bool KSpreadDoc::showMessageError() const 
+{ 
+  return  d->showError;
 }
 
 KSpread::MoveTo KSpreadDoc::getMoveToValue() const
@@ -868,22 +918,6 @@ void KSpreadDoc::setMoveToValue(KSpread::MoveTo _moveTo)
   d->moveTo = _moveTo;
 }
 
-  /**
-  * Show or not error message
-  */
-void KSpreadDoc::setShowMessageError(bool _show)
-{   
-  d->showError=_show;
-}
-
-bool KSpreadDoc::getShowMessageError() const 
-{ 
-  return  d->showError;
-}
-
-  /**
-  * Method of calc
-  */
 void KSpreadDoc::setTypeOfCalc( MethodOfCalc _calc)
 { 
   d->calcMethod=_calc;
@@ -892,49 +926,6 @@ void KSpreadDoc::setTypeOfCalc( MethodOfCalc _calc)
 MethodOfCalc KSpreadDoc::getTypeOfCalc() const
 { 
   return d->calcMethod;
-}
-
-void KSpreadDoc::setShowTabBar(bool _tabbar)
-{  
-  d->showTabBar=_tabbar;
-}
-
-bool KSpreadDoc::getShowTabBar()const
-{ 
-  return  d->showTabBar;
-}
-
-void KSpreadDoc::setShowCommentIndicator(bool _indic) 
-{  
-  d->showCommentIndicator=_indic;
-}
-
-bool KSpreadDoc::getShowCommentIndicator() const
-{ 
-  return  d->showCommentIndicator;
-}
-
-void KSpreadDoc::setShowFormulaBar(bool _formulaBar)
-{  
-  d->showFormulaBar=_formulaBar;
-}
-
-bool KSpreadDoc::getShowFormulaBar() const
-{ 
-  return  d->showFormulaBar;
-}
-
-  /**
-   * show/hide status bar
-   */
-void KSpreadDoc::setShowStatusBar(bool _statusBar)
-{ 
-  d->showStatusBar=_statusBar;
-}
-
-bool KSpreadDoc::getShowStatusBar() const
-{ 
-  return  d->showStatusBar;
 }
 
 void KSpreadDoc::setKSpellConfig(KSpellConfig _kspell)

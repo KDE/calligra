@@ -87,10 +87,13 @@ class KSpreadDoc : public KoDocument, public KoZoomHandler
   Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase)
   
   Q_PROPERTY( int syntaxVersion READ syntaxVersion )
-  Q_PROPERTY( bool showVerticalToolBar READ showVerticalToolBar WRITE setShowVerticalToolBar )
-  Q_PROPERTY( bool showHorizontalToolBar READ showHorizontalToolBar WRITE setShowHorizontalToolBar )
+  Q_PROPERTY( bool showVerticalScrollBar READ showVerticalScrollBar WRITE setShowVerticalScrollBar )
+  Q_PROPERTY( bool showHorizontalScrollBar READ showHorizontalScrollBar WRITE setShowHorizontalScrollBar )
   Q_PROPERTY( bool showColumnHeader READ showColumnHeader WRITE setShowColumnHeader )
   Q_PROPERTY( bool showRowHeader READ showRowHeader WRITE setShowRowHeader )
+  Q_PROPERTY( bool showStatusBar READ showStatusBar WRITE setShowStatusBar )
+  Q_PROPERTY( bool showFormulaBar READ showFormulaBar WRITE setShowFormulaBar )
+  Q_PROPERTY( bool showTabBar READ showTabBar WRITE setShowTabBar )
   
 public:
 
@@ -249,6 +252,143 @@ public:
    */  
   bool getShowRowHeader() const { return showRowHeader(); } 
   
+  /**
+   * Sets the indentation value.
+   */  
+  void setIndentValue( double val );
+  
+  /**
+   * Returns the indentation value.
+   */  
+  double indentValue() const;
+
+  /**
+   * Same as indentValue().
+   * This function is obsolete and will be removed in future version.
+   */  
+  double getIndentValue() const { return indentValue(); }
+
+  /**
+   * If b is true, status bar is visible, otherwise
+   * it will be hidden.
+   */
+  void setShowStatusBar( bool b );
+  
+  /**
+   * Returns true if status bar is visible.
+   */
+  bool showStatusBar() const;
+
+  /**
+   * Same as showStatusBar().
+   * This function is obsolete and will be removed in future version.
+   */  
+  bool getShowStatusBar() const { return showStatusBar(); }
+  
+  /**
+   * If b is true, tab bar is visible, otherwise
+   * it will be hidden.
+   */  
+  void setShowTabBar( bool b );
+  
+  /**
+   * Returns true if tab bar is visible.
+   */
+  bool showTabBar() const;
+  
+  /**
+   * Same as showTabBar().
+   * This function is obsolete and will be removed in future version.
+   */  
+  bool getShowTabBar() const { return showTabBar(); }
+
+  /**
+   * If b is true, formula bar is visible, otherwise
+   * it will be hidden.
+   */  
+  void setShowFormulaBar( bool b );
+  
+  /**
+   * Returns true if formula bar is visible.
+   */
+  bool showFormulaBar() const;
+  
+  /**
+   * Same as showFormulaBar().
+   * This function is obsolete and will be removed in future version.
+   */  
+  bool getShowFormulaBar() const { return showFormulaBar(); }
+
+  /**
+   * If b is true, comment indicator is visible, otherwise
+   * it will be hidden.
+   */  
+  void setShowCommentIndicator( bool b );
+  
+  /**
+   * Returns true if comment indicator is visible.
+   */
+  bool showCommentIndicator() const;  
+  
+  /**
+   * Same as showCommentIndicator().
+   * This function is obsolete and will be removed in future version.
+   */  
+  bool getShowCommentIndicator() const { return showCommentIndicator(); }  
+
+  /**
+   * If b is true, an error message will pop up whenever error occurs.
+   */  
+  void setShowMessageError( bool b );
+  
+  /**
+   * Returns true if error message should pop up whenever error occurs.
+   */
+  bool showMessageError() const;
+
+  /**
+   * Same as showMessageError().
+   * This function is obsolete and will be removed in future version.
+   */     
+  bool getShowMessageError() const{ return showMessageError(); }
+  
+  /**
+  * completion mode
+  */
+
+  KGlobalSettings::Completion completionMode( )const ;
+  void setCompletionMode( KGlobalSettings::Completion _complMode);
+
+  KSpread::MoveTo getMoveToValue()const;
+  void setMoveToValue(KSpread::MoveTo _moveTo) ;
+
+  /**
+  * Method of calc
+  */
+  void setTypeOfCalc( MethodOfCalc _calc);
+  MethodOfCalc getTypeOfCalc() const;
+
+
+  /**
+   * get custom kspell config
+   */
+  void setKSpellConfig(KSpellConfig _kspell);
+  KSpellConfig * getKSpellConfig() const;
+
+  bool dontCheckUpperWord() const;
+  void setDontCheckUpperWord(bool _b);
+
+  bool dontCheckTitleCase() const;
+  void setDontCheckTitleCase(bool _b);
+
+  
+    
+  void changeDefaultGridPenColor( const QColor &_col);
+
+  QColor pageBorderColor() const;
+  void changePageBorderColor( const QColor  & _color);
+  
+    
   virtual QDomDocument saveXML();
 
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
@@ -377,75 +517,6 @@ public:
 
 
   QRect getRectArea(const QString &  _tableName);
-
-  /**
-  * completion mode
-  */
-
-  KGlobalSettings::Completion completionMode( )const ;
-  void setCompletionMode( KGlobalSettings::Completion _complMode);
-
-  /**
-  * value of indent
-  */
-  double getIndentValue()const;
-  void setIndentValue( double _val );
-
-  KSpread::MoveTo getMoveToValue()const;
-  void setMoveToValue(KSpread::MoveTo _moveTo) ;
-
-  /**
-  * Show or not error message
-  */
-  void setShowMessageError(bool _show);
-  bool getShowMessageError()const;
-
-  /**
-  * Method of calc
-  */
-  void setTypeOfCalc( MethodOfCalc _calc);
-  MethodOfCalc getTypeOfCalc() const;
-
-  /**
-   * show/hide tabbar
-   */
-  void setShowTabBar(bool _tabbar);
-  bool getShowTabBar()const;
-
-  void changeDefaultGridPenColor( const QColor &_col);
-
-  QColor pageBorderColor() const;
-  void changePageBorderColor( const QColor  & _color);
-
-  /**
-   * show/hide comment indicator
-   */
-  void setShowCommentIndicator(bool _indic);
-  bool getShowCommentIndicator()const;
-
-  /**
-   * show/hide formula bar
-   */
-  void setShowFormulaBar(bool _formulaBar);
-  bool getShowFormulaBar()const;
-
-  /**
-   * show/hide status bar
-   */
-  void setShowStatusBar(bool _statusBar);
-  bool getShowStatusBar()const;
-
-  /**
-   * get custom kspell config
-   */
-  void setKSpellConfig(KSpellConfig _kspell);
-  KSpellConfig * getKSpellConfig() const;
-
-  bool dontCheckUpperWord() const;
-  void setDontCheckUpperWord(bool _b);
-
-  bool dontCheckTitleCase() const;
-  void setDontCheckTitleCase(bool _b);
 
   void insertChild( KoDocumentChild * child ) { KoDocument::insertChild( child ); }
 
