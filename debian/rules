@@ -16,8 +16,7 @@ $(BUILDDIR)/build-stamp:
 	cd $(BUILDDIR) ;\
 	CFLAGS="-O2 -g -Wall" \
 	 CXXFLAGS="-O2 -g -Wall" \
-	../configure --enable-debug --with-install-root=`pwd`/../debian/tmp \
-	--disable-rpath
+	../configure --enable-debug --disable-rpath
 	make -C $(BUILDDIR)
 	touch $(BUILDDIR)/build-stamp
 
@@ -42,9 +41,8 @@ binary-arch: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	make -C $(BUILDDIR) install 
-	chmod a+x admin/debianrules
-	admin/debianrules
+	make -C $(BUILDDIR) install DESTDIR=`pwd`/debian/tmp
+	perl -w admin/debianrules
 	dh_movefiles
 	dh_undocumented 
 	dh_installdocs
@@ -55,10 +53,10 @@ binary-arch: build
 	dh_fixperms
 	dh_suidregister
 	dh_installdeb
-	perl -w admin/debianrules update
 	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums
+	perl -w admin/debianrules update
 	dh_builddeb       	
 
 # Below here is fairly generic really
