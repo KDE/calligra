@@ -49,7 +49,7 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 {
 //	m_relation=relation;
 //	m_relation->incUsageCount();
-//	m_selectedConnection = 0;
+	m_selectedConnection = 0;
 	m_readOnly=false;
 	m_focusedTableView = 0;
 	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
