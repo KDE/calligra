@@ -12,6 +12,7 @@ class KWordDocument_impl;
 #include <qlist.h>
 #include <qwidget.h>
 #include <qstring.h>
+#include <qfontmetrics.h>
 
 class KWUserFont
 {
@@ -20,6 +21,11 @@ class KWUserFont
     ~KWUserFont();
     
     const char *getFontName() {	return fontName.data(); }
+
+    bool operator==(KWUserFont &_font)
+    { return _font.getFontName() == fontName; }
+    bool operator!=(KWUserFont &_font)
+    { return _font.getFontName() != fontName; }
     
 protected:
     QString fontName;
@@ -30,7 +36,7 @@ protected:
 class KWDisplayFont : public QFont
 {
 public:
-    KWDisplayFont( KWordDocument_impl *_doc, QPainter& _painter, KWUserFont *_font, unsigned int _size,
+    KWDisplayFont( KWordDocument_impl *_doc, KWUserFont *_font, unsigned int _size,
 		   int _weight, bool _italic );
     ~KWDisplayFont();
     
@@ -41,24 +47,21 @@ public:
     KWUserFont* getUserFont() { return userFont; }
     unsigned int getPTSize() { return ptSize; }
 
-    unsigned int getPTAscender() { return ptAscender; }
-    unsigned int getPTDescender() { return ptDescender; }
+    unsigned int getPTAscender() { return fm.ascent(); }
+    unsigned int getPTDescender() { return fm.descent() + 2; }
 
     unsigned int getPTWidth( const char *_text );
+    unsigned int getPTWidth( char &_c );
     
-    unsigned int* ptWidth;
+    void setPTSize(int _size);
+    void setWeight(int _weight);
+    void setItalic(bool _italic);
 
 protected:
+    QFontMetrics fm;
+
     unsigned int ptSize;
-    /**
-     * The unzoomed ascender points
-     */
-    unsigned int ptAscender;
-    /**
-     * The unzoomed descender in points
-     */
-    unsigned int ptDescender;
-    
+
     /**
      * Pointer to the user font family this font belongs to.
      */
@@ -68,7 +71,6 @@ protected:
      */
     KWordDocument_impl *document;
 
-    unsigned int ptWidthBuffer[256]; 
 };
 
 #endif

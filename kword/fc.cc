@@ -4,8 +4,13 @@
 #include "fc.h"
 #include "kword_doc.h"
 
+#ifndef max
+#define max(a,b) ((a)>(b)?(a):(b))
+#endif
+
 KWFormatContext::KWFormatContext( KWordDocument_impl *_doc ) : KWFormat()
 {
+  displayFont = 0;
   setDefaults( _doc );
   
   document = _doc;
@@ -435,13 +440,13 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 	    float dx = floor( sp );
 	    spacingError = sp - dx;
 	    
-	    ptPos += (unsigned int)dx + displayFont->ptWidth[ text[pos].c ];
+	    ptPos += (unsigned int)dx + displayFont->getPTWidth( text[pos].c );
 
 	    pos++;
 	  }
 	  else
 	  {
-	    ptPos += displayFont->ptWidth[ text[ pos ].c ];
+	    ptPos += displayFont->getPTWidth( text[ pos ].c );
 	    pos++;   
 	  }
 	}
@@ -537,7 +542,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     {
 	KWFormat counterfm( *this );
 	counterfm.apply( parag->getParagLayout()->getCounterFormat() );
-	_painter.setFont( *(counterfm.loadFont( document, _painter )) );
+	_painter.setFont( *(counterfm.loadFont( document )) );
 	_painter.setPen( counterfm.getColor() );
 	
 	// Is the counter fixed to the left side ?
@@ -583,9 +588,10 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     
     // Get the correct font
     tmpFormat.apply( *this );
-    KWDisplayFont *font = tmpFormat.loadFont( document, _painter );
+    KWDisplayFont *font = tmpFormat.loadFont( document );
     displayFont = font;
     
+
     // Get ascender/descender of the font we are starting with
     tmpPTAscender = font->getPTAscender();
     tmpPTDescender = font->getPTDescender();
@@ -638,9 +644,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	else // A usual character ...
 	{ 
 	    // Go right ...
-	    ptPos += font->ptWidth[ c ];
+	    ptPos += font->getPTWidth( c );
 	    // Increase the lines width
-	    tmpPTWidth += font->ptWidth[ c ];
+	    tmpPTWidth += font->getPTWidth( c );
 	    // One more character
 	    textPos++;
 	}
@@ -700,7 +706,7 @@ void KWFormatContext::makeCounterLayout( QPainter &_painter )
 {
     KWFormat format( parag->getParagLayout()->getFormat() );
     format.apply( parag->getParagLayout()->getCounterFormat() );
-    KWDisplayFont *font = loadFont( document, _painter );    
+    KWDisplayFont *font = loadFont( document );    
 
     parag->makeCounterText( counterText );
     
@@ -708,5 +714,32 @@ void KWFormatContext::makeCounterLayout( QPainter &_painter )
     ptCounterAscender = font->getPTAscender();
     ptCounterDescender = font->getPTDescender();
 }
+
+
+void KWFormatContext::apply( KWFormat &_format )
+{
+  KWFormat::apply(_format);
+  if (displayFont)
+    {
+      if (_format.getPTFontSize() != -1)
+	displayFont->setPTSize(_format.getPTFontSize());
+      if (_format.getWeight() != -1)
+	displayFont->setWeight(_format.getWeight());
+      if (_format.getItalic() != -1)
+	displayFont->setItalic(_format.getItalic());
+      ptAscender = displayFont->getPTAscender();
+      ptDescender = displayFont->getPTDescender();
+      ptMaxAscender = max(ptAscender,ptMaxAscender);
+      ptMaxDescender = max(ptDescender,ptMaxDescender);
+    }
+}
+
+
+
+
+
+
+
+
 
 

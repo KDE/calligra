@@ -39,9 +39,11 @@ class KWPaintWindow;
 #include <qfont.h>
 
 #include <kruler.h>
+#include <kcolordlg.h>
 
 #include "kword.h"
 #include "kword_page.h"
+#include "format.h"
 
 #include <koPageLayoutDia.h>
 
@@ -85,6 +87,18 @@ public:
   // IDL  
   virtual void newView();
 
+  virtual void textSizeSelected(const char *size);
+  virtual void textFontSelected(const char *font);
+  virtual void textBold();
+  virtual void textItalic();
+  virtual void textUnderline();
+  virtual void textColor();
+  virtual void textAlignLeft();
+  virtual void textAlignCenter();
+  virtual void textAlignRight();
+  virtual void textEnumList();
+  virtual void textUnsortList();
+
   virtual void extraLayout();
 
   virtual void setMode(OPParts::Part::Mode _mode);
@@ -95,6 +109,7 @@ public:
 
   virtual void createGUI();
   virtual void construct();
+  virtual void setFormat(KWFormat &_format,bool _check = true);
 
   KWordGUI *getGUI() { return gui; }
 
@@ -208,6 +223,8 @@ protected:
 
   KWordGUI *gui;
   bool m_bShowGUI;
+
+  KWFormat format;
 
 };
 

@@ -55,7 +55,7 @@ KWordFrame::KWordFrame(KWordView_impl* _view,KWordChild* _child)
 
 /*================================================================*/
 KWordView_impl::KWordView_impl(QWidget *_parent = 0L,const char *_name = 0L) 
-  : QWidget(_parent,_name), View_impl(), KWord::KWordView_skel()
+  : QWidget(_parent,_name), View_impl(), KWord::KWordView_skel(), format()
 {
   setWidget(this);
 
@@ -116,6 +116,10 @@ void KWordView_impl::setDocument(KWordDocument_impl *_doc)
   QObject::connect(m_pKWordDoc,SIGNAL(sig_updateChildGeometry(KWordChild*)),
 		   this,SLOT(slotUpdateChildGeometry(KWordChild*)));
   if (gui) gui->setDocument(m_pKWordDoc);
+
+  format.setDefaults(m_pKWordDoc);
+  if (gui) gui->getPaperWidget()->formatChanged(format);
+
 }
   
 /*================================================================*/
@@ -131,6 +135,31 @@ void KWordView_impl::construct()
   QListIterator<KWordChild> it = m_pKWordDoc->childIterator();
   for(;it.current();++it)
     slotInsertObject(it.current());
+}
+
+/*================================================================*/
+void KWordView_impl::setFormat(KWFormat &_format,bool _check = true)
+{
+  if (_check && format == _format) return;
+
+  format = _format;
+
+  fontList.find(_format.getUserFont()->getFontName());
+  m_rToolBarText->setCurrentComboItem(m_idComboText_FontList,fontList.at());
+  m_rToolBarText->setCurrentComboItem(m_idComboText_FontSize,_format.getPTFontSize() - 4);
+  
+  if (_format.getWeight() != -1)
+    m_rToolBarText->setButton(m_idButtonText_Bold,_format.getWeight() == QFont::Bold);
+  if (_format.getItalic() != -1)
+    m_rToolBarText->setButton(m_idButtonText_Italic,_format.getItalic() == 1);
+
+  m_rToolBarText->setButtonPixmap(m_idButtonText_Color,CORBA::string_dup(colorToPixString(_format.getColor())));
+
+  // we have no underlined ????
+  //   if (_format.getItalic() != -1)
+  //   m_rToolBarText->setButton(m_idButtonText_Underline,tbFont.underline());
+
+  gui->getPaperWidget()->formatChanged(format);
 }
 
 /*================================================================*/
@@ -156,7 +185,10 @@ void KWordView_impl::createGUI()
   gui->setGeometry(0,0,width(),height());
   gui->show();
 
+  gui->getPaperWidget()->formatChanged(format);
   widget()->setFocusProxy(gui);
+
+  setFormat(format,false);
 }
 
 /*================================================================*/
@@ -172,6 +204,79 @@ void KWordView_impl::newView()
   shell->setDocument(m_pKWordDoc);
   
   CORBA::release(shell);
+}
+
+/*======================= text size selected  ===================*/
+void KWordView_impl::textSizeSelected(const char *size)
+{
+  tbFont.setPointSize(atoi(size));
+  format.setPTFontSize(atoi(size));
+  gui->getPaperWidget()->formatChanged(format);
+}
+
+/*======================= text font selected  ===================*/
+void KWordView_impl::textFontSelected(const char *font)
+{
+  tbFont.setFamily(font);
+  format.setUserFont(new KWUserFont(m_pKWordDoc,font));
+  gui->getPaperWidget()->formatChanged(format);
+}
+
+/*========================= text bold ===========================*/
+void KWordView_impl::textBold()
+{
+  tbFont.setBold(!tbFont.bold());
+  format.setWeight(tbFont.bold() ? QFont::Bold : QFont::Normal);
+  gui->getPaperWidget()->formatChanged(format);
+}
+
+/*========================== text italic ========================*/
+void KWordView_impl::textItalic()
+{
+  tbFont.setItalic(!tbFont.italic());
+  format.setItalic(tbFont.italic() ? 1 : 0);
+  gui->getPaperWidget()->formatChanged(format);
+}
+
+/*======================== text underline =======================*/
+void KWordView_impl::textUnderline()
+{
+}
+
+/*=========================== text color ========================*/
+void KWordView_impl::textColor()
+{
+  if (KColorDialog::getColor(tbColor))
+    {
+      m_rToolBarText->setButtonPixmap(m_idButtonText_Color,CORBA::string_dup(colorToPixString(tbColor)));
+      format.setColor(tbColor);
+      gui->getPaperWidget()->formatChanged(format);
+    }
+}
+
+/*======================= text align left =======================*/
+void KWordView_impl::textAlignLeft()
+{
+}
+
+/*======================= text align center =====================*/
+void KWordView_impl::textAlignCenter()
+{
+}
+
+/*======================= text align right ======================*/
+void KWordView_impl::textAlignRight()
+{
+}
+
+/*====================== enumerated list ========================*/
+void KWordView_impl::textEnumList()
+{
+}
+
+/*====================== unsorted list ==========================*/
+void KWordView_impl::textUnsortList()
+{
 }
 
 /*===============================================================*/
@@ -426,20 +531,20 @@ void KWordView_impl::setupTextToolbar()
 
       // size combobox
       m_idComboText_FontSize = m_rToolBarText->insertCombo(true,CORBA::string_dup(i18n("Font Size")),60,
-							   this,CORBA::string_dup("sizeSelected"));
+							   this,CORBA::string_dup("textSizeSelected"));
       for(unsigned int i = 4;i <= 100;i++)
 	{
 	  char buffer[10];
 	  sprintf(buffer,"%i",i);
 	  m_rToolBarText->insertComboItem(m_idComboText_FontSize,CORBA::string_dup(buffer),-1);
 	}
-      m_rToolBarText->setCurrentComboItem(m_idComboText_FontSize,16);
-      tbFont.setPointSize(20);
+      m_rToolBarText->setCurrentComboItem(m_idComboText_FontSize,8);
+      tbFont.setPointSize(12);
 
       // fonts combobox
       getFonts();
       m_idComboText_FontList = m_rToolBarText->insertCombo(true,CORBA::string_dup(i18n("Font List")),200,
-							   this,CORBA::string_dup("fontSelected"));
+							   this,CORBA::string_dup("textFontSelected"));
       for(unsigned int i = 0;i <= fontList.count()-1;i++)
  	m_rToolBarText->insertComboItem(m_idComboText_FontList,CORBA::string_dup(fontList.at(i)),-1);
       m_rToolBarText->setCurrentComboItem(m_idComboText_FontList,1);

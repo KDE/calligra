@@ -9,6 +9,18 @@ module KWord
     {
       slot void newView();
 
+      slot void textSizeSelected(in string size);
+      slot void textFontSelected(in string font);
+      slot void textBold();
+      slot void textItalic();
+      slot void textUnderline();
+      slot void textColor();
+      slot void textAlignLeft();
+      slot void textAlignCenter();
+      slot void textAlignRight();
+      slot void textEnumList();
+      slot void textUnsortList();
+      
       slot void extraLayout();
     };
 

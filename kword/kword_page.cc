@@ -24,7 +24,7 @@
 
 /*================================================================*/
 KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
-  : QWidget(parent,""), buffer(width(),height())
+  : QWidget(parent,""), buffer(width(),height()), format()
 { 
   setBackgroundColor(white);
   buffer.fill(white);
@@ -160,23 +160,35 @@ void KWPage::keyPressEvent(QKeyEvent *e)
   switch(e->key())
     {
     case Key_Home:
-      fc->cursorGotoLineStart(painter);
-      break;
+      {
+	fc->cursorGotoLineStart(painter);
+	gui->getView()->setFormat(*((KWFormat*)fc));
+      } break;
     case Key_End:
-      fc->cursorGotoLineEnd(painter);
-      break;
+      {
+	fc->cursorGotoLineEnd(painter);
+	gui->getView()->setFormat(*((KWFormat*)fc));
+      } break;
     case Key_Right:
-      fc->cursorGotoRight(painter);
-      break;
+      {
+	fc->cursorGotoRight(painter);
+	gui->getView()->setFormat(*((KWFormat*)fc));
+      } break;
     case Key_Left:
-      fc->cursorGotoLeft(painter);
-      break;
+      {
+	fc->cursorGotoLeft(painter);
+	gui->getView()->setFormat(*((KWFormat*)fc));
+      } break;
     case Key_Up:
-      fc->cursorGotoUp(painter);
-      break;
+      {
+	fc->cursorGotoUp(painter);
+	gui->getView()->setFormat(*((KWFormat*)fc));
+      } break;
     case Key_Down:
-      fc->cursorGotoDown(painter);
-      break;
+      {
+	fc->cursorGotoDown(painter);
+	gui->getView()->setFormat(*((KWFormat*)fc));
+      } break;
     case Key_Shift: case Key_Control: case Key_Alt: case Key_Meta:
       // these keys do nothing at the moment
       break;
@@ -189,16 +201,18 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	tmpString[0] = (char)e->ascii();
 	unsigned int tmpTextPos = fc->getTextPos();
 	fc->getParag()->insertText(fc->getTextPos(),tmpString); 
+	fc->getParag()->setFormat(fc->getTextPos(),format); 
 	fc->makeLineLayout(painter);
 	KWFormatContext paintfc(doc);
 	paintfc = *fc;
 	bool bend = false;
+	
 	while (!bend)
 	  {
 	    painter.fillRect(paintfc.getPTLeft() - xOffset,
 			     paintfc.getPTY() - yOffset,
 			     paintfc.getPTWidth(),
-			     paintfc.getPTAscender() + paintfc.getPTDescender(),
+			     paintfc.getPTMaxAscender() + paintfc.getPTMaxDescender(),
 			     QBrush(white));
 	    doc->printLine(paintfc,painter,xOffset,yOffset);
 	    bend = !paintfc.makeNextLineLayout(painter);
@@ -209,7 +223,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	if (tmpTextPos + 1 <= fc->getLineEndPos())
 	  fc->cursorGotoPos(tmpTextPos + 1,painter);
 	else 
-	  fc->cursorGotoNextLine(painter);
+	  {
+	    fc->cursorGotoNextLine(painter);
+	    fc->cursorGotoPos(tmpTextPos + 1,painter);
+	  }
 
 	doc->updateAllViews(gui->getView());
       }  break;
@@ -347,6 +364,39 @@ void KWPage::scroll(int dx,int dy)
 
   paint_directly = false;
   has_to_copy = true;
+}
+
+/*================================================================*/
+void KWPage::formatChanged(KWFormat &_format)
+{
+//   if (format.getColor() == _format.getColor())
+//     format.setColor(QColor());
+//   else
+//     format.setColor(_format.getColor());
+
+//   if (format.getUserFont() && _format.getUserFont() && *format.getUserFont() == *_format.getUserFont())
+//     format.setUserFont(0L);
+//   else
+//     format.setUserFont(_format.getUserFont());
+      
+//   if (format.getWeight() == _format.getWeight())
+//     format.setWeight(-1);
+//   else
+//     format.setWeight(_format.getWeight());
+
+//   if (format.getItalic() == _format.getItalic())
+//     format.setItalic(-1);
+//   else
+//     format.setItalic(_format.getItalic());
+
+//   if (format.getPTFontSize() == _format.getPTFontSize())
+//     format.setPTFontSize(-1);
+//   else
+//     format.setPTFontSize(_format.getPTFontSize());
+
+  // Reggie: This is not nice. I'll make a better implementation
+
+  format = _format;
 }
 
 /*================================================================*/

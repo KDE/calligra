@@ -47,6 +47,24 @@ KWFormat& KWFormat::operator=( const KWFormat& _format )
     return *this;
 }
 
+bool KWFormat::operator==(const KWFormat & _format)
+{
+  return (*userFont == *_format.getUserFont() &&
+	  ptFontSize == _format.getPTFontSize() &&
+	  weight == _format.getWeight() &&
+	  italic == _format.getItalic() &&
+	  color == _format.getColor());
+}
+
+bool KWFormat::operator!=(const KWFormat & _format)
+{
+  return (*userFont != *_format.getUserFont() ||
+	  ptFontSize != _format.getPTFontSize() ||
+	  weight != _format.getWeight() ||
+	  italic != _format.getItalic() ||
+	  color != _format.getColor());
+}
+
 void KWFormat::setDefaults( KWordDocument_impl *_doc )
 {
     userFont = _doc->getDefaultUserFont();
@@ -58,7 +76,7 @@ void KWFormat::setDefaults( KWordDocument_impl *_doc )
     direct = -1;
 }
 
-KWDisplayFont* KWFormat::loadFont( KWordDocument_impl *_doc, QPainter &_painter )
+KWDisplayFont* KWFormat::loadFont( KWordDocument_impl *_doc )
 {
     KWDisplayFont *font = _doc->findDisplayFont( userFont, ptFontSize, weight, italic );
     if ( font )
@@ -69,7 +87,7 @@ KWDisplayFont* KWFormat::loadFont( KWordDocument_impl *_doc, QPainter &_painter 
       uf = _doc->getDefaultUserFont(); 
     assert( uf );
     
-    font = new KWDisplayFont( _doc, _painter, uf, ptFontSize, weight, italic );
+    font = new KWDisplayFont( _doc, uf, ptFontSize, weight, italic );
     return font;
 }
 

@@ -19,6 +19,7 @@
 
 #include "defs.h"
 #include "fc.h"
+#include "format.h"
 
 #include <qevent.h>
 #include <math.h>
@@ -74,6 +75,8 @@ public:
     { yOffset = _y; calcVisiblePages(); }
 
   void scroll(int dx,int dy);
+
+  void formatChanged(KWFormat &_format);
 
 protected:
   unsigned int ptLeftBorder();
@@ -134,8 +137,8 @@ protected:
   KWFormatContext *fc;
 
   KWordGUI *gui;
-
   QPixmap buffer;
+  KWFormat format;
 
 };
 

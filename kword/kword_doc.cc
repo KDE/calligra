@@ -84,9 +84,10 @@ CORBA::Boolean KWordDocument_impl::init()
   pageLayout.bottom = DEFAULT_BOTTOM_BORDER;  
   pageLayout.unit = PG_MM;
 
-  defaultUserFont = new KWUserFont(this,"Times");
+  defaultUserFont = new KWUserFont(this,"times");
   defaultParagLayout = new KWParagLayout(this);
   defaultParagLayout->setName("Standard");
+  defaultParagLayout->setCounterNr(-1);
     
   pages = 1;
 
@@ -95,12 +96,16 @@ CORBA::Boolean KWordDocument_impl::init()
 
   calcColumnWidth();
 
-  KWParag *p = new KWParag( this, 0L, 0L, defaultParagLayout );
-  parags->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-  KWFormat f1( green );
-  p->setFormat( 7, f1 );
-  KWFormat f2( black );
-  p->setFormat( 12, f2 );
+  KWParag *p = new KWParag( this,0L,0L,defaultParagLayout);
+  parags->insertText(0," ");
+  KWFormat f;
+  f.setDefaults(this);
+  p->setFormat(0,f);
+//   parags->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
+//   KWFormat f1( green );
+//   p->setFormat( 7, f1 );
+//   KWFormat f2( black );
+//   p->setFormat( 12, f2 );
   /* p = new KWParag( this, parags, 0L, defaultParagLayout );
   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
   p = new KWParag( this, p, 0L, defaultParagLayout );
@@ -477,7 +482,7 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
   {
     KWFormat counterfm( _fc );
     counterfm.apply( lay->getCounterFormat() );
-    _painter.setFont( *( counterfm.loadFont( this,_painter ) ) );
+    _painter.setFont( *( counterfm.loadFont( this ) ) );
     _painter.setPen( counterfm.getColor() );
 
     _painter.drawText( _fc.getPTCounterPos() - xOffset, 
@@ -488,10 +493,10 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
   _fc.cursorGotoLineStart( _painter );
 
   // Init font and style
-  _painter.setFont( *_fc.loadFont( this, _painter ) );
+  _painter.setFont( *_fc.loadFont( this ) );
   _painter.setPen( _fc.getColor() );
 
-  cerr << "Starting with color " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
+  //cerr << "Starting with color " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
   
   char buffer[200];
   int i = 0;
@@ -503,10 +508,10 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
     {
       // Change the painter
       tmpPTPos = _fc.getPTPos();
-      _painter.setFont( *_fc.loadFont( this, _painter ) );
+      _painter.setFont( *_fc.loadFont( this ) );
       _painter.setPen( _fc.getColor() );
 
-      cerr << "Switch1 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
+      //cerr << "Switch1 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
     }
 
     buffer[i] = text[ _fc.getTextPos() ].c;
@@ -524,9 +529,9 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
 	_fc.apply( f->format );
 	// Change the painter
-	_painter.setFont( *_fc.loadFont( this, _painter ) );
+	_painter.setFont( *_fc.loadFont( this ) );
 	_painter.setPen( _fc.getColor() );
-	cerr << "Switch 2 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
+	//cerr << "Switch 2 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
       }
             
       // Test next character.
@@ -537,7 +542,7 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	// what we have so far
 	buffer[i] = '\0';
 	_painter.drawText( tmpPTPos - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, buffer );
-	cerr << "#'" << buffer << "'" << endl;
+	//cerr << "#'" << buffer << "'" << endl;
 	i = 0;
 	// Blanks are not printed at all
 	if ( text[_fc.getTextPos()].c == ' ' )

@@ -4,6 +4,7 @@ char s_FONT_CCId[]="$Id$";
 #include "kword_doc.h"
 
 #include <qpainter.h>
+#include <qfontmetrics.h>
 
 KWUserFont::KWUserFont( KWordDocument_impl *_doc, const char *_name )
 {
@@ -19,51 +20,60 @@ KWUserFont::~KWUserFont()
     document->userFontList.removeRef( this );
 }
 
-KWDisplayFont::KWDisplayFont( KWordDocument_impl *_doc, QPainter& _painter, KWUserFont *_font, unsigned int _size,
+KWDisplayFont::KWDisplayFont( KWordDocument_impl *_doc, KWUserFont *_font, unsigned int _size,
 			      int _weight, bool _italic ) :
-    QFont( _font->getFontName(), ZOOM(_size), _weight, _italic )
+    QFont( _font->getFontName(), ZOOM(_size), _weight, _italic ), fm(*this)
 {
-    document = _doc;
-    document->displayFontList.append( this );
+  document = _doc;
+  document->displayFontList.append( this );
 
-    userFont = _font;
+  userFont = _font;
     
-    _painter.setFont( *this );
-    QFontMetrics fm( _painter.fontMetrics() );
+  fm = QFontMetrics(*this);
     
-    for ( int c = -128; c <= 127; c++ )
-    {
-	// ptWidth[i] = fm.width( (char)i );
-	ptWidthBuffer[ 128 + c ] = fm.width( c );
-    }
-    ptWidth = ptWidthBuffer + 128;
-    
-    ptAscender = fm.ascent();
-    ptDescender = fm.descent();
-    
-    ptSize = _size;
+  ptSize = _size;
 
-    if ( ZOOM(100) != 100 )
-	scaleFont();
+  if ( ZOOM(100) != 100 )
+    scaleFont();
+}
+
+void KWDisplayFont::setPTSize(int _size)
+{
+  ptSize = _size;
+  setPointSize(_size);
+  fm = QFontMetrics(*this);
+}
+
+void KWDisplayFont::setWeight(int _weight)
+{
+  QFont::setWeight(_weight);
+  fm = QFontMetrics(*this);
+}
+
+void KWDisplayFont::setItalic(bool _italic)
+{
+  QFont::setItalic(_italic);
+  fm = QFontMetrics(*this);
 }
 
 void KWDisplayFont::scaleFont()
 {
-    setPointSize( ZOOM( ptSize ) );
+  setPointSize( ZOOM( ptSize ) );
+  fm = QFontMetrics(*this);
 }
 
 unsigned int KWDisplayFont::getPTWidth( const char *_text )
 {
-    unsigned int w = 0;
-    const char *p = _text;
-    while ( *p )
-	w += ptWidth[ *p++ ];
-	
-    return w;
+  return fm.width(_text);
+}
+
+unsigned int KWDisplayFont::getPTWidth( char &_c )
+{
+  return fm.width(_c);
 }
 
 KWDisplayFont::~KWDisplayFont()
 {
-    document->displayFontList.removeRef( this );
+  document->displayFontList.removeRef( this );
 }
     

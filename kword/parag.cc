@@ -100,3 +100,7 @@ void KWParag::setFormat( unsigned int _pos, const KWFormat &_format )
   freeChar( text.data[ _pos ] );
   text.data[ _pos ].attrib = &(f->type);
 }
+
+
+
+

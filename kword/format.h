@@ -49,6 +49,9 @@ public:
 
     KWFormat& operator=( const KWFormat& _format );
   
+    bool operator==(const KWFormat & _format);
+    bool operator!=(const KWFormat & _format);
+  
     void apply( KWFormat &_format );
 
     /**
@@ -62,7 +65,7 @@ public:
      */
     KWUserFont* getUserFont() const { return userFont; }
 
-    KWDisplayFont* loadFont( KWordDocument_impl *_doc, QPainter &_painter );
+    KWDisplayFont* loadFont( KWordDocument_impl *_doc );
     
     /**
      * @return The font size to use in points. The return value may be -1 if the size should not change.

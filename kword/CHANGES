@@ -1,0 +1,19 @@
+Reggie, 9.9.1998:
+-----------------
+- Attributes for writing text can be set with the
+  toolbar now. So it's possible to write with defferent
+  attributes now.
+  I only miss the attribute 'underlined' in KWFormat! 
+  I'll implement that.
+- The attributes, which are shown in the toolbar, are
+  automatically updated when moving the cursor.
+- There were lots of bugs with calculating the correct font
+  width/height when typing characters and moving the cursor.
+  I fixed lots of problems here, but I'm sure there are still
+  some more. Especially with KWFormatContext::apply() the
+  displayFont and the (max)Ascents/(max)Descents were not
+  updated. I fixed that.
+- I also fixed a bug when breaking lines, so that the cursor
+  is placed correctly if it jumps to the next line.
+- Fixed a redraw bug.
+- Fixed a problem in KWDisplayFont.
