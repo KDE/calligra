@@ -395,6 +395,7 @@ public:
     virtual bool isNested() const { return FALSE; }
     virtual int minimumWidth() const { return 0; }
     virtual int widthHint() const { return 0; }
+    virtual int ascent() const { return height; }
 
     virtual QString richText() const { return QString::null; }
 
@@ -2427,7 +2428,7 @@ inline int QTextStringChar::height() const
 
 inline int QTextStringChar::ascent() const
 {
-    return !isCustom() ? format()->ascent() : ( customItem()->placement() == QTextCustomItem::PlaceInline ? customItem()->height : 0 );
+    return !isCustom() ? format()->ascent() : ( customItem()->placement() == QTextCustomItem::PlaceInline ? customItem()->ascent() : 0 );
 }
 
 inline int QTextStringChar::descent() const
