@@ -30,7 +30,7 @@ KPTextViewIface::KPTextViewIface( KPTextView *_textview )
 }
 
 
-void KPTextViewIface::insertVariable( int type, int subtype = 0 )
+void KPTextViewIface::insertVariable( int type, int subtype )
 {
     m_textview->insertVariable(type,subtype);
 }
