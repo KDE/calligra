@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,16 +51,16 @@ enum StackItemElementType{
 };
 
 // Tags that we do not care of:
-//  <abiword> (or <awml>), <data>, <styles>, <ignorewords>, <lists>
+//  <abiword> (or <awml>), <data>, <styles>, <ignorewords>, <lists>, <metadata>
 //
 // Tags that we do not support (however KWord could):
-//  <bookmark>, <l>
+//  <bookmark>, <l>, <m>, <table>, <cell>
 //
 // Tags that we cannot support (lack of support in KWord):
 //  N/A
 //
 // Properties that we do not or cannot support:
-//  page-margin-footer, page-margin-header, lang, font-stretch, keep-with-next
+//  page-margin-footer, page-margin-header, lang, font-stretch, keep-with-next...
 
 
 class StackItem
