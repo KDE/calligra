@@ -43,6 +43,7 @@ KoVariableSettings::KoVariableSettings()
     m_displayLink = true;
     m_displayComment = true;
     m_underlineLink = true;
+    m_displayFieldCode = false;
 }
 
 void KoVariableSettings::save( QDomElement &parentElem )
@@ -56,6 +57,7 @@ void KoVariableSettings::save( QDomElement &parentElem )
     elem.setAttribute("displaylink",(int)m_displayLink);
     elem.setAttribute("underlinelink",(int)m_underlineLink);
     elem.setAttribute("displaycomment",(int)m_displayComment);
+    elem.setAttribute("displayfieldcode", (int)m_displayFieldCode);
 }
 
 void KoVariableSettings::load( QDomElement &elem )
@@ -71,6 +73,8 @@ void KoVariableSettings::load( QDomElement &elem )
             m_underlineLink=(bool)e.attribute("underlinelink").toInt();
         if(e.hasAttribute("displaycomment"))
             m_displayComment=(bool)e.attribute("displaycomment").toInt();
+        if (e.hasAttribute("displayfieldcode"))
+            m_displayFieldCode=(bool)e.attribute("displayfieldcode").toInt();
     }
 }
 
@@ -456,9 +460,17 @@ void KoVariable::resize()
     //kdDebug() << "Before KoVariable::resize text=" << txt << " width=" << width << endl;
 }
 
+QString KoVariable::fieldCode()
+{
+    return i18n("Variable");
+}
+
 QString KoVariable::text()
 {
-    return m_varFormat->convert( m_varValue );
+    if (m_varColl->variableSetting()->displayFiedCode())
+        return fieldCode();
+    else
+        return m_varFormat->convert( m_varValue );
 }
 
 void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
@@ -621,6 +633,11 @@ KoDateVariable::KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariable
 {
 }
 
+QString KoDateVariable::fieldCode()
+{
+    return i18n("Date");
+}
+
 void KoDateVariable::recalc()
 {
     if ( m_subtype == VST_DATE_CURRENT )
@@ -779,6 +796,12 @@ KoTimeVariable::KoTimeVariable( KoTextDocument *textdoc, int subtype, KoVariable
 {
 }
 
+QString KoTimeVariable::fieldCode()
+{
+    return i18n("Date");
+}
+
+
 void KoTimeVariable::recalc()
 {
     if ( m_subtype == VST_TIME_CURRENT )
@@ -931,6 +954,12 @@ KoCustomVariable::KoCustomVariable( KoTextDocument *textdoc, const QString &name
     m_varValue = QVariant( name );
 }
 
+QString KoCustomVariable::fieldCode()
+{
+    return i18n("Custom Variable");
+}
+
+
 void KoCustomVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement elem = parentElem.ownerDocument().createElement( "CUSTOM" );
@@ -979,6 +1008,12 @@ KoMailMergeVariable::KoMailMergeVariable( KoTextDocument *textdoc, const QString
     m_varValue = QVariant ( name );
 }
 
+QString KoMailMergeVariable::fieldCode()
+{
+    return i18n("Mail Merge");
+}
+
+
 void KoMailMergeVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement elem = parentElem.ownerDocument().createElement( "MAILMERGE" );
@@ -1020,6 +1055,12 @@ KoPgNumVariable::KoPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariab
         : KoVariable( textdoc, varFormat, _varColl ), m_subtype( subtype )
 {
 }
+
+QString KoPgNumVariable::fieldCode()
+{
+    return i18n("Page Num");
+}
+
 
 void KoPgNumVariable::saveVariable( QDomElement& parentElem )
 {
@@ -1072,6 +1113,12 @@ KoFieldVariable::KoFieldVariable( KoTextDocument *textdoc, int subtype, KoVariab
     : KoVariable( textdoc, varFormat,_varColl ), m_subtype( subtype ), m_doc(_doc)
 {
 }
+
+QString KoFieldVariable::fieldCode()
+{
+    return i18n("Field");
+}
+
 
 void KoFieldVariable::saveVariable( QDomElement& parentElem )
 {
@@ -1276,6 +1323,12 @@ KoLinkVariable::KoLinkVariable( KoTextDocument *textdoc, const QString & _linkNa
     m_varValue = QVariant( _linkName );
 }
 
+QString KoLinkVariable::fieldCode()
+{
+    return i18n("Link");
+}
+
+
 void KoLinkVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement linkElem = parentElem.ownerDocument().createElement( "LINK" );
@@ -1328,6 +1381,11 @@ KoNoteVariable::KoNoteVariable( KoTextDocument *textdoc, const QString & _note,K
     : KoVariable( textdoc, varFormat,_varColl )
 {
     m_varValue = QVariant( _note );
+}
+
+QString KoNoteVariable::fieldCode()
+{
+    return i18n("Note");
 }
 
 void KoNoteVariable::saveVariable( QDomElement& parentElem )

@@ -62,6 +62,10 @@ class KoVariableSettings
     bool underlineLink()const {return m_underlineLink;}
     void setUnderlineLink( bool b){ m_underlineLink=b;}
 
+    bool displayFiedCode()const {return m_displayFieldCode;}
+    void setDisplayFiedCode( bool b){ m_displayFieldCode=b;}
+
+
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
@@ -70,7 +74,7 @@ class KoVariableSettings
     bool m_displayLink;
     bool m_displayComment;
     bool m_underlineLink;
-
+    bool m_displayFieldCode;
     class Private;
     Private *d;
 };
@@ -296,6 +300,8 @@ public:
      */
     virtual QString text();
 
+    virtual QString fieldCode();
+
     /** Return the variable value, as a QVariant, before format conversion */
     QVariant varValue() const { return m_varValue; }
 
@@ -364,6 +370,7 @@ public:
     static QStringList actionTexts();
 
     virtual void recalc();
+    virtual QString fieldCode();
 
     void setDate( const QDate & _date ) { m_varValue = QVariant(_date); }
 
@@ -396,6 +403,7 @@ public:
     static QStringList actionTexts();
 
     virtual void recalc();
+    virtual QString fieldCode();
 
     void setTime( const QTime & _time ) { m_varValue = QVariant(_time); }
 
@@ -433,6 +441,8 @@ public:
 
     QString name() const { return m_varValue.toString(); }
     virtual void recalc();
+    virtual QString fieldCode();
+
     virtual QString text() { return value(); } // use a format when they are customizable
     QString value() const;
     void setValue( const QString &v );
@@ -467,6 +477,7 @@ public:
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+    virtual QString fieldCode();
 
     virtual void recalc();
     virtual QString text() { return value(); } // use a format when they are customizable
@@ -499,6 +510,7 @@ public:
     virtual VariableType type() const
     { return VT_MAILMERGE; }
     static QStringList actionTexts();
+    virtual QString fieldCode();
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
@@ -526,6 +538,7 @@ public:
 
     enum { VST_PGNUM_CURRENT = 0, VST_PGNUM_TOTAL = 1, VST_CURRENT_SECTION = 2 };
     static QStringList actionTexts();
+    virtual QString fieldCode();
 
     virtual QStringList subTypeText();
 
@@ -557,6 +570,7 @@ public:
     { return VT_LINK; }
 
     static QStringList actionTexts();
+    virtual QString fieldCode();
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
@@ -588,6 +602,7 @@ public:
     { return VT_NOTE; }
 
     static QStringList actionTexts();
+    virtual QString fieldCode();
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
