@@ -31,6 +31,8 @@ KWordDocIface::KWordDocIface( KWDocument *doc_ )
 
 DCOPRef KWordDocIface::textFrameSet( int num )
 {
+    if( num>= doc->getNumFrameSets())
+        return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->textFrameSet( num)->dcopObject()->objId() );
 }
