@@ -53,7 +53,7 @@ messages:
 
 kword.h: kword.idl
 	rm -f kword.h
-	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) kword.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I$(idldir) kword.idl
 
 kword.cc: kword.h
 kword_view.h: kword.h
