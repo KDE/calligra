@@ -599,3 +599,12 @@ and style of penStyle
 -Now "Find and replace" works. I add two options :
 "case sensitive"
 "Find Whole Words only"
+
+2000-06-04 -David Faure <faure@kde.org>
+-----------------------------------------------------
+-Rewrote sorting algorithm. Much faster ('MinMax' instead of ugly BubbleSort)
+-Implemented operators < and > for cells, to give real sorting :
+Numbers are sorted as numbers, and are always smaller than texts (as Excel does)
+-Re-enabled empty cells in sorting, creating nonDefaultCells when necessary.
+-Got rid of "onlyRow" and "onlyColumn" hacks
+-Fixed the sort dialog for those cases

@@ -3,13 +3,14 @@
 
 #include <kscript.h>
 
-#include "kspread_cell.h"
+#include "kspread_global.h"
 
 class KSParseNode;
 class KSContext;
 
 class KSpreadDoc;
 class KSpreadTable;
+class KSpreadDepend;
 
 class KSpreadInterpreter : public KSInterpreter
 {
@@ -27,7 +28,7 @@ public:
 
   KSpreadDoc* document() { return m_doc; }
   KSpreadTable* table() { return m_table; }
-    
+
 private:
   KSpreadDoc* m_doc;
   KSpreadTable* m_table;

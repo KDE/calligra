@@ -378,9 +378,9 @@ public:
     void setSelectionSize( const QPoint &_marker,int _size );
 
     /**
-    *change string to upper case if _type equals 1
-    * or change string to lower if _type equals -1
-    */
+     *change string to upper case if _type equals 1
+     * or change string to lower if _type equals -1
+     */
     void setSelectionUpperLower( const QPoint &_marker,int _type );
 
     void setSelectionfirstLetterUpper( const QPoint &_marker);
@@ -403,12 +403,9 @@ public:
 
     bool replace( const QPoint &_marker,QString _find,QString _replace,bool b_sensitive, bool b_whole );
     QString replaceText( QString cellText,QString _find,QString _replace,bool b_sensitive, bool b_whole );
-    void onlyRow( SortingOrder = Increase );
-    void onlyColumn( SortingOrder = Increase );
     void sortByRow( int ref_row, SortingOrder = Increase );
     void sortByColumn( int ref_column, SortingOrder = Increase );
-    bool isSorting() { return m_sort; }
-    void setSort( bool sort ) { m_sort=sort; }
+    void swapCells( int x1, int y1, int x2, int y2 );
     void setSeries( const QPoint &_marker,int start,int end,int step,Series mode,Series type );
     /**
      * Insert or remove =>move cells
@@ -769,11 +766,6 @@ protected:
      */
     int m_iMaxColumn;
     bool m_bScrollbarUpdates;
-
-    /**
-     * Set to TRUE while sorting.
-     */
-    bool m_sort;
 
     DCOPObject* m_dcop;
     bool m_bTableHide;

@@ -1268,24 +1268,24 @@ void KSpreadView::italic( bool b )
 
 void KSpreadView::sortInc()
 {
-QRect r( activeTable()-> selectionRect() );
-if ( r.left() == 0 || r.top() == 0 ||
+  QRect r( activeTable()-> selectionRect() );
+  if ( r.left() == 0 || r.top() == 0 ||
        r.right() == 0 || r.bottom() == 0 )
-  	{
-  	KMessageBox::error( this, i18n("One cell was selected!") );
-	}
-else if( r.right() ==0x7FFF)
-	{
-	 KMessageBox::error( this, i18n("Area too large!") );
-	}
-else if(r.bottom()==0x7FFF)
-	{
-	 KMessageBox::error( this, i18n("Area too large!") );
-	}
-else
-	{
-	activeTable()->sortByColumn( r.left());
-	}
+  {
+    KMessageBox::error( this, i18n("One cell was selected!") );
+  }
+  else if( r.right() ==0x7FFF)
+  {
+    KMessageBox::error( this, i18n("Area too large!") );
+  }
+  else if(r.bottom()==0x7FFF)
+  {
+    KMessageBox::error( this, i18n("Area too large!") );
+  }
+  else
+  {
+    activeTable()->sortByColumn( r.left());
+  }
 }
 
 

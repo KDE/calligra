@@ -204,7 +204,7 @@ public:
     /**
      * @return TRUE if this cell is the default cell.
      */
-    virtual bool isDefault() { return ( m_iColumn == 0 ); }
+    virtual bool isDefault() const { return ( m_iColumn == 0 ); }
 
     /**
      * Tells whether this cell has any content.
@@ -212,17 +212,17 @@ public:
      *
      * @return TRUE if there is no content.
      */
-    virtual bool isEmpty();
+    virtual bool isEmpty() const;
 
     /**
      * Tells whether the cell contains, text, a formula, richtext or a visual formula.
      */
-    Content content() { return m_content; }
+    Content content() const { return m_content; }
 
     /**
      * @return the text the user entered.
      */
-    QString text() { return m_strText; }
+    QString text() const { return m_strText; }
 
     /**
      * Increases the precison of the
@@ -630,6 +630,13 @@ public:
     	}
     	
     void conditionAlign(QPainter &painter,int _col,int _row);
+
+    /**
+     * Used for comparing cells (when sorting)
+     */
+    bool operator > ( const KSpreadCell & ) const;
+    bool operator < ( const KSpreadCell & ) const;
+
 protected:
 
     /**

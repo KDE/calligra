@@ -71,46 +71,35 @@ KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
 
 void KSpreadsort::init()
 {
- r=QRect( m_pView->activeTable()-> selectionRect() );
+  r=QRect( m_pView->activeTable()-> selectionRect() );
 
- if(r.top()==r.bottom())
-        {
-        for(int i=r.left();i<=r.right();i++)
-                {
-                list_column+=i18n("Column ")+util_columnLabel(i);
-                }
-        rb_row->setEnabled(false);
-        combo->insertStringList(list_column);
-        rb_column->setChecked(true);
-        _sort=ONLY_COLUMN;
-        }
- else if(r.left()==r.right())
-        {
-        QString toto;
-        for(int i=r.top();i<=r.bottom();i++)
-                {
-                list_row+=i18n("Row ")+toto.setNum(i);
-                }
-        rb_column->setEnabled(false);
-        combo->insertStringList(list_row);
-        rb_row->setChecked(true);
-        _sort=ONLY_ROW;
-        }
- else
-        {
-        for(int i=r.left();i<=r.right();i++)
- 		{
-        	list_column+=i18n("Column ")+util_columnLabel(i);
-        	}
-        QString toto;
-        for(int i=r.top();i<=r.bottom();i++)
-        	{
-        	list_row+=i18n("Row ")+toto.setNum(i);
-        	}
-        combo->insertStringList(list_column);
-  	rb_column->setChecked(true);
-  	_sort=ALL;
-        }
+  // Selection is only one row
+  if(r.top()==r.bottom())
+  {
+    rb_column->setEnabled(false);
+    rb_row->setChecked(true);
+  }
+  // only one column
+  else if(r.left()==r.right())
+  {
+    rb_row->setEnabled(false);
+    rb_column->setChecked(true);
+  }
+  else
+  {
+    rb_column->setChecked(true);
+  }
+
+  for(int i=r.left();i<=r.right();i++)
+    list_column += i18n("Column %1").arg(util_columnLabel(i));
+
+  for(int i=r.top();i<=r.bottom();i++)
+    list_row += i18n("Row %1").arg(i);
+
+  if ( rb_row->isChecked() )
+    slotpress(0);
+  else
+    slotpress(1);
 }
 
 void KSpreadsort::slotpress(int id)
@@ -134,64 +123,35 @@ switch(id)
 
 void KSpreadsort::slotOk()
 {
-switch(_sort)
-	{
-	case ONLY :
-		break;
-	case ONLY_COLUMN :
-		if(!decrease->isChecked())
-			{
-			m_pView->activeTable()->onlyRow();
-			}
-		else
-			{
-			m_pView->activeTable()->onlyRow(KSpreadTable::Decrease);
-			}
-		break;
-	case ONLY_ROW :
-		if(!decrease->isChecked())
-			{
-			m_pView->activeTable()->onlyColumn();
-			}
-		else
-			{
-			m_pView->activeTable()->onlyColumn(KSpreadTable::Decrease);
-			}
-		break;
-	case ALL :
-		if( rb_row->isChecked())
-			{
-			if(!decrease->isChecked())
-				{
-				m_pView->activeTable()->sortByRow(combo->currentItem()+r.top());
-				}
-			else
-				{
-				 m_pView->activeTable()->sortByRow(combo->currentItem()+r.top(),KSpreadTable::Decrease);
-				}
+  if( rb_row->isChecked())
+  {
+    if(!decrease->isChecked())
+    {
+      m_pView->activeTable()->sortByRow(combo->currentItem()+r.top());
+    }
+    else
+    {
+      m_pView->activeTable()->sortByRow(combo->currentItem()+r.top(),KSpreadTable::Decrease);
+    }
 
-			}
-		else if(rb_column->isChecked())
-			{
-			if(!decrease->isChecked())
-				{
-				m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left());
-				}
-			else
-				{
-				m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left(),KSpreadTable::Decrease);
-				}
-			}
-		else
-			{
-			        kdDebug(36001) << "Err in radiobutton" << endl;
-			}
-		break;
-	default :
-	        kdDebug(36001) << "ERR in _sort" << endl;
-		break;
-	}
- accept();
+  }
+  else if(rb_column->isChecked())
+  {
+    if(!decrease->isChecked())
+    {
+      m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left());
+    }
+    else
+    {
+      m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left(),KSpreadTable::Decrease);
+    }
+  }
+  else
+  {
+    kdDebug(36001) << "Err in radiobutton" << endl;
+  }
+
+  accept();
 }
 
 

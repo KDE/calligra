@@ -226,7 +226,6 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_iMaxColumn = 256;
   m_iMaxRow = 256;
   m_bScrollbarUpdates = true;
-  m_sort = FALSE;
 
   setHidden(false);
   m_bShowGrid=true;
@@ -2521,225 +2520,118 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
 }
 
 
-void KSpreadTable::onlyRow(SortingOrder mode)
-{
-    QRect r( selectionRect() );
-    setSort(true);
-    KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
-    for ( int d = r.left();  d<= r.right(); d++ )
-    {
-	KSpreadCell *cell1 = cellAt( d,r.top() );
-	if(!cell1->isEmpty())
-	{
-	    for ( int y = r.left(); y <= r.right(); y++ )
-	    {
-		KSpreadCell *cell2 = cellAt( y,r.top());
-		if(!cell2->isEmpty())
-		{
-		    if(mode==Increase)
-		    {
-			if(strcmp(cell2->text(), cell1->text())>0)
-		        {
-			    tmp->copyAll(cell1);
-			    cell1->copyAll(cell2);
-			    cell2->copyAll(tmp);
-			}
-		    }
-		    else if(mode==Decrease)
-		    {
-			if(strcmp(cell2->text(), cell1->text())<0)
-		        {
-			    tmp->copyAll(cell1);
-			    cell1->copyAll(cell2);
-			    cell2->copyAll(tmp);
-			}
-		    }
-		    else
-		    {
-			kdDebug(36001) << "Err in SortingOrder" << endl;
-		    }
-		}
-	    }
-	}
-    }
-    setSort(false);
-    emit sig_updateView( this, r );
-}
-
-void KSpreadTable::onlyColumn(SortingOrder mode)
-{
-    setSort(true);
-    QRect r( selectionRect() );
-    KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
-    for ( int d = r.top();  d<= r.bottom(); d++ )
-    {
-	KSpreadCell *cell1 = cellAt( r.right(), d );
-	if(!cell1->isEmpty())
-	{
-	    for ( int y = r.top(); y <= r.bottom(); y++ )
-	    {
-		KSpreadCell *cell2 = cellAt( r.right(), y );
-		if(!cell2->isEmpty())
-		{
-		    if(mode==Increase)
-		    {
-			if(strcmp(cell2->text(), cell1->text())>0)
-		        {
-			    tmp->copyAll(cell1);
-			    cell1->copyAll(cell2);
-			    cell2->copyAll(tmp);
-			}
-		    }
-		    else if(mode==Decrease)
-		    {
-			if(strcmp(cell2->text(), cell1->text())<0)
-		        {
-			    tmp->copyAll(cell1);
-			    cell1->copyAll(cell2);
-			    cell2->copyAll(tmp);
-			}
-		    }
-		    else
-		    {
-			kdDebug(36001) << "Err in SortingOrder" << endl;
-		    }
-		}
-	    }
-	}
-    }
-    setSort(false);
-    emit sig_updateView( this, r );
-}
-
 void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 {
     QRect r( selectionRect() );
-    setSort(true);
+    ASSERT( mode == Increase || mode == Decrease );
 
-    KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
+    // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
+    // For each row, we look for all columns under it and we find the one to swap with it.
+    // Much faster than the awful bubbleSort...
     for ( int d = r.left();  d<= r.right(); d++ )
     {
 	KSpreadCell *cell1 = cellAt( d,ref_row  );
-	if(!cell1->isEmpty())
-	{
-	    for ( int y = r.left(); y <= r.right(); y++ )
-	    {
-		KSpreadCell *cell2 = cellAt( y,ref_row );
-		if(!cell2->isEmpty())
-	        {
-		    if( mode == Increase )
-		    {
-			if(strcmp(cell2->text(), cell1->text())>0)
-			{
-			    for(int x=r.top();x<=r.bottom();x++)
-			    {
-				KSpreadCell *ref1 = cellAt( d,x );
-				KSpreadCell *ref2 = cellAt( y,x );
-				if(!ref1->isEmpty()&&!ref2->isEmpty())
-				{
-				    tmp->copyAll(ref1);
-				    ref1->copyAll(ref2);
-				    ref2->copyAll(tmp);
-				}
-			    }
-			}
-		    }
-		    else if ( mode == Decrease )
-		    {
-			if(strcmp(cell2->text(), cell1->text())<0)
-			{
-			    for(int x=r.top();x<=r.bottom();x++)
-			    {
-				KSpreadCell *ref1 = cellAt( d,x );
-				KSpreadCell *ref2 = cellAt( y,x );
-				if(!ref1->isEmpty()&&!ref2->isEmpty())
-				{
-				    tmp->copyAll(ref1);
-				    ref1->copyAll(ref2);
-				    ref2->copyAll(tmp);
-				}
-			    }
-			}
-		    }
-		    else
-			ASSERT( 0 );
-		}
-	    }
-	}
+        // Look for which column we want to swap with the one number d
+        KSpreadCell * bestCell = cell1;
+        int bestX = d;
+
+        for ( int x = d + 1 ; x <= r.right(); x++ )
+        {
+          KSpreadCell *cell2 = cellAt( x,ref_row );
+
+          // Here we use the operators < and > for cells, which do it all.
+          if ( (mode==Increase && *cell2 < *bestCell) ||
+               (mode==Decrease && *cell2 > *bestCell) )
+          {
+            bestCell = cell2;
+            bestX = x;
+          }
+        }
+
+        // Swap columns cell1 and bestCell (i.e. d and bestX)
+        if ( d != bestX )
+        {
+          for(int y=r.top();y<=r.bottom();y++)
+            swapCells( d,y,bestX,y );
+        }
+
     }
-
-    delete tmp;
-
-    setSort(false);
 
     emit sig_updateView( this, r );
 }
 
 void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
 {
+    //kdDebug() << "KSpreadTable::sortByColumn Ref_column=" << ref_column << endl;
+    ASSERT( mode == Increase || mode == Decrease );
     QRect r( selectionRect() );
-    setSort(true);
 
-    KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
-    for ( int d = r.top();  d<= r.bottom(); d++ )
+    // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
+    // For each row, we look for all rows under it and we find the one to swap with it.
+    // Much faster than the awful bubbleSort...
+    for ( int d = r.top(); d <= r.bottom(); d++ )
     {
+        // Look for which row we want to swap with the one number d
 	KSpreadCell *cell1 = cellAt( ref_column, d );
-	if(!cell1->isEmpty())
-	{
-	    for ( int y = r.top(); y <= r.bottom(); y++ )
-	    {
-		KSpreadCell *cell2 = cellAt( ref_column, y );
-		if(!cell2->isEmpty())
-		{
-		    if(mode==Increase)
-		    {
-			if(strcmp(cell2->text(), cell1->text())>0)
-			{
-			    for(int x=r.left();x<=r.right();x++)
-			    {
-				KSpreadCell *ref1 = cellAt( x, d );
-				KSpreadCell *ref2 = cellAt( x, y );
-				if( !ref1->isEmpty() && !ref2->isEmpty() )
-				{
-				    tmp->copyAll(ref1);
-				    ref1->copyAll(ref2);
-				    ref2->copyAll(tmp);
-				}
-			    }
-			}
-		    }
-		    else if( mode == Decrease )
-		    {
-			if(strcmp(cell2->text(), cell1->text())<0)
-			{
-			    for(int x=r.left();x<=r.right();x++)
-			    {
-				KSpreadCell *ref1 = cellAt( x, d );
-				KSpreadCell *ref2 = cellAt( x, y );
-				if( !ref1->isEmpty() && !ref2->isEmpty() )
-				{
-				    tmp->copyAll(ref1);
-				    ref1->copyAll(ref2);
-				    ref2->copyAll(tmp);
-				}
-			    }
-			}
-		    }
-		    else
-			ASSERT( 0 );
-		}
-	    }
-	}
+        //kdDebug() << "New ref row " << d << endl;
+
+        KSpreadCell * bestCell = cell1;
+        int bestY = d;
+
+        for ( int y = d + 1 ; y <= r.bottom(); y++ )
+        {
+          KSpreadCell *cell2 = cellAt( ref_column, y );
+
+          // Here we use the operators < and > for cells, which do it all.
+          if ( (mode==Increase && *cell2 < *bestCell) ||
+               (mode==Decrease && *cell2 > *bestCell) )
+          {
+            bestCell = cell2;
+            bestY = y;
+            //kdDebug() << "Best y now " << bestY << endl;
+          }
+        }
+
+        // Swap rows cell1 and bestCell (i.e. d and bestY)
+        if ( d != bestY )
+        {
+          //kdDebug() << "Swapping rows " << d << " and " << bestY << endl;
+          for(int x=r.left();x<=r.right();x++)
+            swapCells( x, d, x, bestY );
+        }
     }
-
-    delete tmp;
-
-    setSort(false);
 
     emit sig_updateView( this, r );
 }
 
+void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
+{
+  KSpreadCell *ref1 = cellAt( x1, y1 );
+  KSpreadCell *ref2 = cellAt( x2, y2 );
+  if ( ref1->isDefault() )
+  {
+    if ( !ref2->isDefault() )
+    {
+      ref1 = nonDefaultCell( x1, y1 );
+      // TODO : make ref2 default instead of copying a default cell into it
+    }
+    else
+      return; // nothing to do
+  }
+  else
+    if ( ref2->isDefault() )
+    {
+      ref2 = nonDefaultCell( x2, y2 );
+      // TODO : make ref1 default instead of copying a default cell into it
+    }
 
+  // Dummy cell used for swapping cells
+  KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
+  tmp->copyAll(ref1);
+  ref1->copyAll(ref2);
+  ref2->copyAll(tmp);
+  delete tmp;
+}
 
 void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
 {

@@ -178,6 +178,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
 
 void KSpreadCell::copyAll( KSpreadCell *cell )
 {
+    ASSERT( !isDefault() ); // trouble ahead...
     copyLayout( cell );
     setCellText( cell->text() );
     setAction(cell->action() );
@@ -292,7 +293,7 @@ void KSpreadCell::setLayoutDirtyFlag()
     }
 }
 
-bool KSpreadCell::isEmpty()
+bool KSpreadCell::isEmpty() const
 {
   if ( isDefault() )
 	return TRUE;
@@ -3651,6 +3652,28 @@ KSpreadCell::~KSpreadCell()
         if ( cell /*&& cell != this*/ )
             cell->unobscure();
     }
+}
+
+bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
+{
+  if ( isValue() )
+    if ( cell.isValue() )
+      return valueDouble() > cell.valueDouble();
+    else
+      return false; // numbers are always < than texts
+  else
+    return valueString().compare(cell.valueString()) > 0;
+}
+
+bool KSpreadCell::operator < ( const KSpreadCell & cell ) const
+{
+  if ( isValue() )
+    if ( cell.isValue() )
+      return valueDouble() < cell.valueDouble();
+    else
+      return true; // numbers are always < than texts
+  else
+    return valueString().compare(cell.valueString()) < 0;
 }
 
 /***************************************************
