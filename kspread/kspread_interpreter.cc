@@ -1904,8 +1904,6 @@ static bool kspreadfunc_select( KSContext& context )
 
 static bool kspreadfunc_app( KSContext& context )
 {
-    KSpreadDoc* doc = ((KSpreadInterpreter*)context.interpreter())->document();
-
     context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), KSpreadFactory::dcopObject()->objId() ) ) );
 
     return TRUE;

@@ -1,4 +1,5 @@
 #include "KSpreadDocIface.h"
+#include <KoDocumentIface.h>
 
 #include "kspread_doc.h"
 #include "kspread_map.h"
@@ -7,24 +8,14 @@
 #include <dcopclient.h>
 
 KSpreadDocIface::KSpreadDocIface( KSpreadDoc* doc )
-    : DCOPObject( doc )
+    : KoDocumentIface( doc )
 {
-    m_doc = doc;
 }
 
 DCOPRef KSpreadDocIface::map()
 {
-    return DCOPRef( kapp->dcopClient()->appId(), m_doc->map()->dcopObject()->objId() );
-}
-
-QString KSpreadDocIface::url()
-{
-    return m_doc->url().url();
-}
-
-bool KSpreadDocIface::isModified()
-{
-    return m_doc->isModified();
+    return DCOPRef( kapp->dcopClient()->appId(),
+                    static_cast<KSpreadDoc*>(m_pDoc)->map()->dcopObject()->objId() );
 }
 
 bool KSpreadDocIface::save()
@@ -33,7 +24,7 @@ bool KSpreadDocIface::save()
   return false;
 }
 
-bool KSpreadDocIface::saveAs( const QString& url )
+bool KSpreadDocIface::saveAs( const QString& )
 {
     // TODO
   return false;
