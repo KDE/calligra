@@ -82,7 +82,7 @@ public:
      * of some cell.
      */
     virtual KSpreadCellPrivate* copy( KSpreadCell* cell ) = 0;
-    
+
 protected:
     KSpreadCell* m_pCell;
 };
@@ -95,7 +95,7 @@ public:
     virtual ~SelectPrivate() { }
 
     KSpreadCellPrivate* copy( KSpreadCell* cell );
-    
+
     QString text() const;
 
     void parse( const QString& _text );
@@ -134,7 +134,7 @@ public:
      * and all remaining cells are in an inconsistent state now.
      */
     void tableDies();
-    
+
     virtual QDomElement saveRightMostBorder( QDomDocument& doc, int _x_offset, int _y_offset );
     virtual QDomElement saveBottomMostBorder( QDomDocument& doc, int _x_offset, int _y_offset );
     virtual QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0 );
@@ -158,7 +158,7 @@ public:
 
     /**
      * Copies the layout and the content. It does not copy the @ref #m_row and @ref #m_column attributes.
-     * Besides that all persistent attributes are copied. @ref #setText is called to set the real
+     * Besides that all persistent attributes are copied. @ref #setCellText is called to set the real
      * content.
      *
      * @see #copyLayout
@@ -256,9 +256,11 @@ public:
 
     /**
      * When we are in the progress of loading, then this function will only store the
-     * text. Call @ref #initAfterLoading afterwards to complete this functions job.
+     * text. KSpreadDoc::completeLoading takes care of updating dependencies etc.
+     * For this, we call it with updateDepends=false.
+     * Most of the time, call this with updateDepends=true so that dependencies are updated.
      */
-    void setText( const QString& _text );
+    void setCellText( const QString& _text, bool updateDepends = true );
     void setAlign( Align _align ) { m_eAlign = _align; m_bLayoutDirtyFlag = TRUE; }
     void setAlignY( AlignY _alignY ) { m_eAlignY = _alignY; m_bLayoutDirtyFlag = TRUE; }
     void setFaktor( double _d ) { m_dFaktor = _d; m_bLayoutDirtyFlag = TRUE; }
@@ -425,11 +427,11 @@ public:
 
     /**
      * Starts calculating.
-     * If a table is ok and you change this cell only, then you dont need to
-     * calculate all cells this one depends on. If you dont know whether all cells
-     * are caculated properly right now, you must set '_makedepend' to TRUE.
+     * If a table is ok and you change this cell only, then you don't need to
+     * calculate all cells this one depends on. If you don't know whether all cells
+     * are calculated properly right now, you must set '_makedepend' to TRUE.
      * If cell c1 changed you can call 'c1->calc(FALSE)', but all cells depending
-     * on c1 muts be called with dep_on_c1->calc(TRUE) because the table is not ok
+     * on c1 must be called with dep_on_c1->calc(TRUE) because the table is not ok
      * any more.
      *
      * @param _makedepend tells whether all other cells are calculated properly or not.
@@ -694,7 +696,7 @@ protected:
      * Result of "fm.ascent()" in makeLayout.
      * used in offsetAlign.
      */
-    int m_fmAscent; 
+    int m_fmAscent;
 
     double m_dValue;
     bool m_bValue;
@@ -728,18 +730,18 @@ protected:
     /**
      * Tells whether this cell it currently under calculation.
      * If a cell thats 'progressFlag' is set is told to calculate we
-     * have detected a circel reference and we must stop calulating.
+     * have detected a circular reference and we must stop calulating.
      */
     bool m_bProgressFlag;
 
     /**
      * If this flag is set, then it is known that this cell has to be updated
      * on the display. This means that somewhere in the calling stack there is a
-     * function which will call @ref KSpreadTable::emit_updateCell once it retaines
+     * function which will call @ref KSpreadTable::updateCell once it retains
      * the control. If a function changes the contents/layout of this cell and this
      * flag is not set, then the function must set it at once. After the changes are
-     * done the function must call <tt>m_pTable->emit_updateCell(...).
-     * The flag is cleared by the function m_pTable->emit_updateCell.
+     * done the function must call <tt>m_pTable->updateCell(...).
+     * The flag is cleared by the function m_pTable->updateCell.
      */
     bool m_bDisplayDirtyFlag;
 
@@ -814,7 +816,7 @@ protected:
      * Tells which kind of content the cell holds.
      *
      * @see #content
-     * @see #setText
+     * @see #setCellText
      */
     Content m_content;
 
@@ -871,7 +873,7 @@ protected:
     /**
      * Pointer to the third condition. May be 0.
      *
-     * @persistent     
+     * @persistent
      */
     KSpreadConditional *m_thirdCondition;
     /**

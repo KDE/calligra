@@ -145,7 +145,7 @@ void KSpreadUndoDeleteColumn::undo()
 	cell->copyAll( o );
 	m_pTable->insertCell( cell );
     }
-    
+
     if ( m_pColumnLayout )
 	m_pTable->insertColumnLayout( m_pColumnLayout );
 
@@ -305,9 +305,9 @@ void KSpreadUndoSetText::undo()
     KSpreadCell *cell = m_pTable->nonDefaultCell( m_iColumn, m_iRow );
     m_strRedoText = cell->text();
     if ( m_strText.isNull() )
-	cell->setText( "" );
+	cell->setCellText( "" );
     else
-	cell->setText( m_strText );
+	cell->setCellText( m_strText );
 
     m_pDoc->undoBuffer()->unlock();
 }
@@ -319,9 +319,9 @@ void KSpreadUndoSetText::redo()
     KSpreadCell *cell = m_pTable->nonDefaultCell( m_iColumn, m_iRow );
     m_strText = cell->text();
     if ( m_strRedoText.isNull() )
-	cell->setText( "" );
+	cell->setCellText( "" );
     else
-	cell->setText( m_strRedoText );
+	cell->setCellText( m_strRedoText );
 
     m_pDoc->undoBuffer()->unlock();
 }
@@ -348,7 +348,7 @@ void KSpreadUndoSetTableName::undo()
     m_pDoc->undoBuffer()->lock();
 
     m_redoName = m_pTable->tableName();
-    
+
     m_pTable->setTableName( m_name );
 
     m_pDoc->undoBuffer()->unlock();
@@ -412,10 +412,10 @@ void KSpreadUndoCellLayout::undo()
 	    cell->copy( *l );
 	    cell->setLayoutDirtyFlag();
 	    cell->setDisplayDirtyFlag();
-	    m_pTable->emit_updateCell( cell, x, y );	    
+	    m_pTable->updateCell( cell, x, y );	
 	    l = m_lstLayouts.next();
 	}
-     
+
     // TODO
     /*
     if ( m_pTable->gui() )
@@ -439,7 +439,7 @@ void KSpreadUndoCellLayout::redo()
 	    cell->copy( *l );
 	    cell->setLayoutDirtyFlag();
 	    cell->setDisplayDirtyFlag();
-	    m_pTable->emit_updateCell( cell, x, y );
+	    m_pTable->updateCell( cell, x, y );
 	    l = m_lstRedoLayouts.next();
 	}
 

@@ -22,7 +22,7 @@ QString KSpreadCellIface::text() const
 void KSpreadCellIface::setText( const QString& text )
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setText( text );
+    cell->setCellText( text );
 }
 
 void KSpreadCellIface::setValue( int value )

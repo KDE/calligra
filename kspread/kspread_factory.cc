@@ -20,13 +20,14 @@ extern "C"
 };
 
 KInstance* KSpreadFactory::s_global = 0;
+DCOPObject* KSpreadFactory::s_dcopObject = 0;
 
 KSpreadFactory::KSpreadFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
     kdDebug(36001) << "KSpreadFactory::KSpreadFactory()" << endl;
     (void)global();
-    (void)new KSpreadAppIface;
+    (void)dcopObject();
 }
 
 KSpreadFactory::~KSpreadFactory()
@@ -86,6 +87,13 @@ KInstance* KSpreadFactory::global()
       s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "kspread/scripts/");
     }
     return s_global;
+}
+
+DCOPObject* KSpreadFactory::dcopObject()
+{
+    if ( !s_dcopObject )
+        s_dcopObject = new KSpreadAppIface;
+    return s_dcopObject;
 }
 
 #include "kspread_factory.moc"

@@ -76,7 +76,7 @@ inside so you can add text in this cell.
 -Bug fix : Now when you insert or remove column or row,there is recalculing
 -Add new button on formula toolbar (SUM and Product)
 -bugfix
--Now you can copy a function with "
+-Now you can copy a function with
 
 1999-09-23 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
@@ -427,15 +427,15 @@ and atan2
 -Now init toggle button in initialPosition() because used QTimer::singleShot
 => all is init before change state of button.
 -Add caption to kspread_dlg_format
--Add modal for all dialogbox (bug reported by jp.martin" <jpmartin@iroise.com>)
+-Add modal for all dialogbox (bug reported by jp.martin <jpmartin@iroise.com>)
 
 2000-05-01 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
--Add modal for all MessageBox (bug reported by jp.martin" <jpmartin@iroise.com>)
+-Add modal for all MessageBox (bug reported by jp.martin <jpmartin@iroise.com>)
 -Now when you change boder color in toolbar all borders into area selected
-changed (idea of jp.martin" <jpmartin@iroise.com>)
+changed (idea of jp.martin <jpmartin@iroise.com>)
 =>thanks to jp.martin
--Now undoLayout works 
+-Now undoLayout works
 -Bug Fix
 
 2000-05-03 -Montel laurent <montell@club-internet.fr>
@@ -462,7 +462,7 @@ thanks
 -----------------------------------------------------
 -Now you can show area selected example A1:B5
 (idea given by jp.martin <jpmartin@iroise.com> thanks )
--Now there is LC mode => you can show area selected 
+-Now there is LC mode => you can show area selected
 as 3Lx5C, L1C1 (A1)
 -bug fix
 -Now you can resize differents row or column
@@ -486,7 +486,7 @@ Replace all QMessageBox by KMessageBox
 2000-05-08 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -Now you can show column number
-=>replace A B C ... by 1 2 3 ... 
+=>replace A B C ... by 1 2 3 ...
 -Add function equalize row and equalize column
 =>used width ou height max
 
@@ -497,7 +497,7 @@ Replace all QMessageBox by KMessageBox
 
 2000-05-12 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
--Now I created a new dialog box "Preference" 
+-Now I created a new dialog box "Preference"
 move "show grid","show formular","LC mode","Column number" into
 this dialog box
 -Bug fix
@@ -527,3 +527,27 @@ This is an optional function.
 As kedittoolbar doesn't work for this moment, add this line to your
 personal kspread.rc file
 <Action name="verticaltext"/>
+
+(Note from David: if it didn't appear, delete the local kspread.rc file...)
+
+2000-05-21 -David Faure <faure@kde.org>
+---------------------------------------
+-Small speedup in KSpreadTable::recalc.
+-Major speedup in changeNameCellRef, which changes texts but doesn't update
+dependencies - no need for that since we recalc the tables first.
+In my big document, it took _forever_ when inserting a row.
+-KSpreadCell::setText is now KSpreadCell::setCellText to help grepping :),
+and added bool updateDepends for the above
+
+-Removed duplicate call to map->update in load, since completeLoading does it
+-Fixed kspreadfunc_app by adding KSpreadFactory::dcopObject
+-Removed some unused stuff (sig_updateCell etc.)
+-KSpreadTable::emit_updateCell() is now KSpreadTable::updateCell() (doesn't emit)
+-Some other renamings to help finding things (e.g. popup-menu slots).
+-New kdebug area: 36002, for the cell dependency stuff, very verbose output.
+Laurent, use kdebugdialog to turn it off so that it won't annoy you :)
+-Added some missing m_pDoc->setModified( true ) (for insert/remove row/column)
+
+-I get some strange "QPainter: Internal error; no available GC" when inserting a row...
+They come from the regionInvalidated stuff and I got 507 levels of recursive calls in
+the backtrace :(

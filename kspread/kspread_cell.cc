@@ -49,8 +49,8 @@
 #include <kscript_parsenode.h>
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
-#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
-#define DO_UPDATE m_pTable->emit_updateCell( this, m_iColumn, m_iRow )
+#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->updateCell( this, m_iColumn, m_iRow );
+#define DO_UPDATE m_pTable->updateCell( this, m_iColumn, m_iRow )
 
 char KSpreadCell::decimal_point = '\0';
 
@@ -178,7 +178,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
 void KSpreadCell::copyAll( KSpreadCell *cell )
 {
     copyLayout( cell );
-    setText( cell->text() );
+    setCellText( cell->text() );
     setAction(cell->action() );
 
     if ( m_pPrivate )
@@ -831,7 +831,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // the zeros later. Is 8 ok ?
     int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
     QString localizedNumber = KGlobal::locale()->formatNumber(v, p);
-    kdDebug(36001) << "LOCALIZED NUMBER is " << localizedNumber.local8Bit() << endl;
+    //kdDebug(36001) << "LOCALIZED NUMBER is " << localizedNumber.local8Bit() << endl;
 
 
 
@@ -1576,7 +1576,7 @@ bool KSpreadCell::calc( bool _makedepend )
 {
   if ( m_bProgressFlag )
   {
-    kdError(36001) << "ERROR: Circle" << endl;
+    kdError(36002) << "ERROR: Circle" << endl;
     m_bError = true;
     m_bValue = false;
     m_bBool = false;
@@ -1597,17 +1597,16 @@ bool KSpreadCell::calc( bool _makedepend )
   if ( !m_bCalcDirtyFlag )
     return true;
 
-  kdDebug(36001) << "CALC r=" << m_iRow << " c=" << m_iColumn << endl;
   m_bLayoutDirtyFlag= true;
   m_bProgressFlag = true;
   m_bCalcDirtyFlag = false;
   if ( _makedepend )
   {
+    kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " calc() Looking into dependencies..." << endl;
     KSpreadDepend *dep;
     for ( dep = m_lstDepends.first(); dep != 0L; dep = m_lstDepends.next() )
     {
-      bool ok;
-
+      // Dependency to a rectangular area
       if ( dep->m_iColumn2 != -1 )
       {
 	int left = dep->m_iColumn < dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
@@ -1620,8 +1619,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	    KSpreadCell *cell = dep->m_pTable->cellAt( x, y );
 	    if ( cell == 0L )
 	      return false;
-	    ok = cell->calc( _makedepend );
-	    if ( !ok )
+	    if ( cell->calc( _makedepend ) )
 	    {
 	      m_strFormularOut = "####";
 	      m_bValue = false;
@@ -1638,13 +1636,12 @@ bool KSpreadCell::calc( bool _makedepend )
 	    }
 	  }
       }
-      else
+      else // Dependency to a single cell
       {
 	KSpreadCell *cell = dep->m_pTable->cellAt( dep->m_iColumn, dep->m_iRow );
 	if ( cell == 0L )
 	  return false;
-	ok = cell->calc( _makedepend );
-	if ( !ok )
+	if ( !cell->calc( _makedepend ) )
 	{
 	  m_bError = true;
 	  m_strFormularOut = "####";
@@ -1663,6 +1660,7 @@ bool KSpreadCell::calc( bool _makedepend )
       }
     }
   }
+  kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " calc() Now calculating." << endl;
 
   KSContext& context = m_pTable->doc()->context();
   if ( !m_pCode || !m_pTable->doc()->interpreter()->evaluate( context, m_pCode, m_pTable ) )
@@ -1715,7 +1713,8 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bValue = false;
     m_bBool = true;
     m_dValue = context.value()->boolValue() ? 1.0 : 0.0;
-    m_strFormularOut = context.value()->boolValue() ? "True" : "False";
+    // (David): i18n'ed True and False - hope it's ok
+    m_strFormularOut = context.value()->boolValue() ? i18n("True") : i18n("False");
   }
   else
   {
@@ -2662,21 +2661,13 @@ void KSpreadCell::setPostfix( const char * _postfix )
   m_bLayoutDirtyFlag= TRUE;
 }
 
-/*
-void KSpreadCell::initAfterLoading()
-{
-    if ( text.isNull() )
-	return;
-    setText( text.data() );
-}
-*/
-
-void KSpreadCell::setText( const QString& _text )
+void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 {
   m_bError = false;
   m_strText = _text;
 
-  m_lstDepends.clear();
+  if (updateDepends)
+    m_lstDepends.clear();
 
   // Free all content data
   if ( m_pQML )
@@ -2699,7 +2690,7 @@ void KSpreadCell::setText( const QString& _text )
 
     if ( !m_pTable->isLoading() )
 	if ( !makeFormular() )
-	    kdError(36001) << "ERROR: Syntax ERROR" << endl;
+	    kdError(36002) << "ERROR: Syntax ERROR" << endl;
     // A Hack!!!! For testing only
     // QString ret = encodeFormular( column, row );
     // decodeFormular( ret, column, row );
@@ -2760,9 +2751,7 @@ void KSpreadCell::setText( const QString& _text )
       // m_bLayoutDirtyFlag = true;
   }
 
-  // Do not update formulas and stuff here
-  // if we are still loading
-  if ( !m_pTable->isLoading() )
+  if ( updateDepends )
       update();
 }
 
@@ -2796,11 +2785,12 @@ void KSpreadCell::setValue( double _d )
 
 void KSpreadCell::update()
 {
+    kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
     if ( m_pObscuringCell )
     {
 	m_pObscuringCell->setLayoutDirtyFlag();
 	m_pObscuringCell->setDisplayDirtyFlag();
-	m_pTable->emit_updateCell( m_pObscuringCell, m_pObscuringCell->column(), m_pObscuringCell->row() );
+	m_pTable->updateCell( m_pObscuringCell, m_pObscuringCell->column(), m_pObscuringCell->row() );
     }
 
     bool b_update_begin = m_bDisplayDirtyFlag;
@@ -2809,11 +2799,12 @@ void KSpreadCell::update()
     updateDepending();
 
     if ( !b_update_begin && m_bDisplayDirtyFlag )
-	m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
+	m_pTable->updateCell( this, m_iColumn, m_iRow );
 }
 
 void KSpreadCell::updateDepending()
 {
+    kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending" << endl;
     // Every cell that references us must set its calc dirty flag
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
@@ -2832,6 +2823,7 @@ void KSpreadCell::updateDepending()
 	for ( ; it4.current(); ++it4 )
 	    it4.current()->calc( TRUE );
     }
+    kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending done" << endl;
 
     // Update a chart for example if it depends on this cell.
     if ( m_iRow != 0 && m_iColumn != 0 )
@@ -3213,7 +3205,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Validation
 	    if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
 	    {
-		kdDebug(36001) << "Value of of range Cell::align=" << (unsigned int)a << endl;
+		kdDebug(36001) << "Value out of range Cell::align=" << (unsigned int)a << endl;
 		return false;
 	    }
 	    // Assignment
@@ -3227,7 +3219,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Validation
 	    if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
 	    {
-		kdDebug(36001) << "Value of of range Cell::alignY=" << (unsigned int)a << endl;
+		kdDebug(36001) << "Value out of range Cell::alignY=" << (unsigned int)a << endl;
 		return false;
 	    }
 	    // Assignment
@@ -3283,7 +3275,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    if ( !ok ) return false;
 	    if ( (unsigned int)a < 1 || (unsigned int)a > 3 )
 	    {
-		kdDebug(36001) << "Value of of range Cell::float=" << (unsigned int)a << endl;
+		kdDebug(36001) << "Value out of range Cell::float=" << (unsigned int)a << endl;
 		return false;
 	    }
 	    // Assignment
@@ -3295,7 +3287,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    if ( !ok ) return false;
 	    if ( (unsigned int)a < 1 || (unsigned int)a > 2 )
 	    {
-		kdDebug(36001) << "Value of of range Cell::floatcolor=" << (unsigned int)a << endl;
+		kdDebug(36001) << "Value out of range Cell::floatcolor=" << (unsigned int)a << endl;
 		return false;
 	    }
 	    // Assignment
@@ -3482,7 +3474,8 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	if ( t[0] == '=' )
 	    t = decodeFormular( t, m_iColumn, m_iRow );
 
-        setText( pasteOperation( t, m_strText, op ) );
+        // Set the cell's text, and don't calc dependencies yet (see comment for setCellText)
+        setCellText( pasteOperation( t, m_strText, op ), false );
     }
 
     if ( !f.isNull() && f.hasAttribute( "style" ) )
@@ -3662,7 +3655,7 @@ void SelectPrivate::slotItemSelected( int _id )
     m_pCell->checkValue();
     m_pCell->update();
 
-    m_pCell->table()->emit_updateCell( m_pCell, m_pCell->column(), m_pCell->row() );
+    m_pCell->table()->updateCell( m_pCell, m_pCell->column(), m_pCell->row() );
 }
 
 QString SelectPrivate::text() const

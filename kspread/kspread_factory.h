@@ -5,6 +5,7 @@
 
 class KInstance;
 class KAboutData;
+class DCOPObject;
 
 class KSpreadFactory : public KoFactory
 {
@@ -20,8 +21,11 @@ public:
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
 
+    static DCOPObject* dcopObject();
+
 private:
     static KInstance* s_global;
+    static DCOPObject* s_dcopObject;
 };
 
 #endif

@@ -233,7 +233,7 @@ void KSpreadTabBar::slotAdd()
 {
     m_pView->insertTable();
     m_pView->editWidget()->setText("");
-    m_pView->activeTable()->setHide(false);
+    m_pView->activeTable()->setHidden(false);
 }
 
 void KSpreadTabBar::paintEvent( QPaintEvent* )
@@ -600,7 +600,7 @@ void KSpreadTabBar::hideTable()
     else
     {
 	KSpreadTable* table = m_pView->activeTable();
-	m_pView->activeTable()->setHide(true);
+	m_pView->activeTable()->setHidden(true);
 	QString activeName = table->tableName();
 	removeTab( activeName );
 	tablehide.append( activeName );
@@ -615,7 +615,7 @@ void KSpreadTabBar::showTable(const QString& text)
     tablehide.remove( text );
     addTab( text );
 
-    m_pView->activeTable()->setHide( false );
+    m_pView->activeTable()->setHidden( false );
 }
 
 void KSpreadTabBar::addHiddenTab(const QString & text)

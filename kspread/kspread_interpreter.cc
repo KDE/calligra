@@ -70,22 +70,21 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
     if ( node->getType() == t_cell )
     {
       KSParseNodeExtraPoint* extra = new KSParseNodeExtraPoint( node->getStringLiteral(), m, t );
-      kdDebug(36001) << "--------------------- Got dep " << extra->point()->pos.x() << "|"
-		     << extra->point()->pos.y() << endl;
+      kdDebug(36002) << "-------- Got dep " << util_cellName( extra->point()->pos.x(), extra->point()->pos.y() ) << endl;
       KSpreadDepend* d = new KSpreadDepend;
       d->m_iColumn = extra->point()->pos.x();
       d->m_iRow = extra->point()->pos.y();
       d->m_iColumn2 = -1;
       d->m_iRow2 = -1;
       d->m_pTable = extra->point()->table;
-	  if (!d->m_pTable)
-	  {
+      if (!d->m_pTable)
+      {
         QString tmp( "The expression %1 is not valid" );
         tmp = tmp.arg( node->getStringLiteral() );
         context.setException( new KSException( "InvalidTableExpression", tmp ) );
         return;
-	  }
-	  depends.append( d );
+      }
+      depends.append( d );
       node->setExtra( extra );
     }
     else if ( node->getType() == t_range )
@@ -97,13 +96,13 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
       d->m_iColumn2 = extra->range()->range.right();
       d->m_iRow2 = extra->range()->range.bottom();
       d->m_pTable = extra->range()->table;
-	  if (!d->m_pTable)
-	  {
+      if (!d->m_pTable)
+      {
         QString tmp( "The expression %1 is not valid" );
         tmp = tmp.arg( node->getStringLiteral() );
         context.setException( new KSException( "InvalidTableExpression", tmp ) );
         return;
-	  }
+      }
       depends.append( d );
       node->setExtra( extra );
     }
@@ -453,7 +452,7 @@ static bool kspreadfunc_sum_helper( KSContext& context, QValueList<KSValue::Ptr>
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
       if ( !kspreadfunc_sum_helper( context, (*it)->listValue(), result ) )
-	return false;
+        return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       {
@@ -489,17 +488,17 @@ static bool kspreadfunc_max_helper( KSContext& context, QValueList<KSValue::Ptr>
     {
 
       if ( !kspreadfunc_max_helper( context, (*it)->listValue(), result,inter ) )
-	return false;
+        return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       {
       if(inter == 0)
-      	{
-      	result=(*it)->doubleValue();
-      	inter=1;
-      	}
+      {
+        result=(*it)->doubleValue();
+        inter=1;
+      }
       if(result <  (*it)->doubleValue())
-      	result =(*it)->doubleValue();
+        result =(*it)->doubleValue();
     }
     else
       return false;
@@ -534,17 +533,17 @@ static bool kspreadfunc_min_helper( KSContext& context, QValueList<KSValue::Ptr>
     {
 
       if ( !kspreadfunc_min_helper( context, (*it)->listValue(), result,inter ) )
-	return false;
+        return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       {
       if(inter == 0)
-      	{
-      	result=(*it)->doubleValue();
-      	inter=1;
-      	}
+      {
+        result=(*it)->doubleValue();
+        inter=1;
+      }
       if(result >  (*it)->doubleValue())
-      	result =(*it)->doubleValue();
+        result =(*it)->doubleValue();
     }
     else
       return false;
@@ -578,8 +577,7 @@ static bool kspreadfunc_average_helper( KSContext& context, QValueList<KSValue::
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
       if ( !kspreadfunc_average_helper( context, (*it)->listValue(), result ,number) )
-	return false;
-	
+        return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       {
@@ -587,7 +585,7 @@ static bool kspreadfunc_average_helper( KSContext& context, QValueList<KSValue::
       number++;
       }
     else
-    	return false;
+      return false;
   }
 
   return true;
@@ -617,15 +615,14 @@ static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue:
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
       if ( !kspreadfunc_variance_helper( context, (*it)->listValue(), result ,avera) )
-	return false;
-	
+        return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       {
       result += (((*it)->doubleValue()-avera)*((*it)->doubleValue()-avera));
       }
     else
-    	return false;
+      return false;
   }
 
   return true;
@@ -639,13 +636,13 @@ static bool kspreadfunc_variance( KSContext& context )
   bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
 
   if ( b )
-  	{
-  	avera=result/number;
-  	result=0.0;
-  	bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result,avera );
-    	if(b)
-    		context.setValue( new KSValue(result/number ) );
-      	}
+  {
+    avera=result/number;
+    result=0.0;
+    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result,avera );
+    if(b)
+      context.setValue( new KSValue(result/number ) );
+  }
 
   return b;
 }
@@ -660,15 +657,15 @@ static bool kspreadfunc_stddev_helper( KSContext& context, QValueList<KSValue::P
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
       if ( !kspreadfunc_stddev_helper( context, (*it)->listValue(), result ,avera) )
-	return false;
+        return false;
 
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
+    {
       result += (((*it)->doubleValue()-avera)*((*it)->doubleValue()-avera));
-      }
+    }
     else
-    	return false;
+      return false;
   }
 
   return true;
@@ -682,13 +679,13 @@ static bool kspreadfunc_stddev( KSContext& context )
   bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
 
   if ( b )
-  	{
-  	avera=result/number;
-  	result=0.0;
-  	bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result,avera );
-    	if(b)
-    		context.setValue( new KSValue(sqrt(result/number )) );
-      	}
+  {
+    avera=result/number;
+    result=0.0;
+    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result,avera );
+    if(b)
+      context.setValue( new KSValue(sqrt(result/number )) );
+  }
 
   return b;
 }
@@ -703,7 +700,7 @@ static bool kspreadfunc_mult_helper( KSContext& context, QValueList<KSValue::Ptr
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
       if ( !kspreadfunc_mult_helper( context, (*it)->listValue(), result ) )
-	return false;
+        return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       result *= (*it)->doubleValue();
@@ -736,12 +733,12 @@ static bool kspreadfunc_join_helper( KSContext& context, QValueList<KSValue::Ptr
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
       if ( !kspreadfunc_join_helper( context, (*it)->listValue(), tmp ) )
-	return false;
+        return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
-    	tmp+= (*it)->stringValue();
+      tmp+= (*it)->stringValue();
     else if( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      	tmp+= tmp2.setNum((*it)->doubleValue());
+      tmp+= tmp2.setNum((*it)->doubleValue());
     else
       return false;
   }
@@ -785,7 +782,7 @@ static bool kspreadfunc_or_helper( KSContext& context, QValueList<KSValue::Ptr>&
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
       if ( !kspreadfunc_or_helper( context, (*it)->listValue(), first ) )
-	return false;
+        return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
       first = (first || (*it)->boolValue());
@@ -829,7 +826,7 @@ static bool kspreadfunc_and_helper( KSContext& context, QValueList<KSValue::Ptr>
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
       if ( !kspreadfunc_and_helper( context, (*it)->listValue(), first ) )
-	return false;
+        return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
       first = first && (*it)->boolValue();
@@ -868,15 +865,15 @@ static bool kspreadfunc_if( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context, 3, "if", true ) )
-	return false;
+      return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
-	return false;
+      return false;
 
     if (  args[0]->boolValue() == true )
-	context.setValue( new KSValue( *(args[1]) ) );
+      context.setValue( new KSValue( *(args[1]) ) );
     else
-	context.setValue( new KSValue( *(args[2]) ) );
+      context.setValue( new KSValue( *(args[2]) ) );
 
     return true;
 }
@@ -886,20 +883,20 @@ static bool kspreadfunc_left( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context, 2, "left", true ) )
-	return false;
+      return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-	return false;
+      return false;
     int nb;
     if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
-	nb = (int) args[1]->doubleValue();
+      nb = (int) args[1]->doubleValue();
     else if( KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-	nb = args[1]->intValue();
+      nb = args[1]->intValue();
     else
-	return false;
+      return false;
 
     QString tmp = args[0]->stringValue().left(nb);
-    context.setValue( new KSValue( tmp ) ); 	
+    context.setValue( new KSValue( tmp ) );
     return true;
 }
 
@@ -908,20 +905,20 @@ static bool kspreadfunc_right( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context, 2, "right", true ) )
-	return false;
+      return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-	return false;
+      return false;
     int nb;
     if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
-	nb = (int) args[1]->doubleValue();
+      nb = (int) args[1]->doubleValue();
     else if( KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-	nb = args[1]->intValue();
+      nb = args[1]->intValue();
     else
-	return false;
+      return false;
 
     QString tmp = args[0]->stringValue().right(nb);
-    context.setValue( new KSValue(tmp)); 	
+    context.setValue( new KSValue(tmp));
     return true;
 }
 
@@ -930,13 +927,13 @@ static bool kspreadfunc_upper( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context, 1, "upper", true ) )
-	return false;
+      return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-	return false;
+      return false;
 
     QString tmp = args[0]->stringValue().upper();
-    context.setValue( new KSValue( tmp ) ); 	
+    context.setValue( new KSValue( tmp ) );
     return true;
 }
 
@@ -945,13 +942,13 @@ static bool kspreadfunc_lower( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context, 1, "lower", true ) )
-	return false;
+      return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-	return false;
+      return false;
 
     QString tmp = args[0]->stringValue().lower();
-    context.setValue( new KSValue( tmp ) ); 	
+    context.setValue( new KSValue( tmp ) );
     return true;
 }
 
@@ -960,17 +957,17 @@ static bool kspreadfunc_find( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context, 2, "find", true ) )
-	return false;
+      return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-	return false;
+      return false;
 
     if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-	return false;
+      return false;
 
     QString string_find = args[0]->stringValue();
     QString string = args[1]->stringValue();
-    context.setValue( new KSValue( string.find(string_find) ) ); 	
+    context.setValue( new KSValue( string.find(string_find) ) );
     return true;
 }
 
@@ -983,28 +980,28 @@ static bool kspreadfunc_mid( KSContext& context )
     uint len = 0xffffffff;
     if ( KSUtil::checkArgumentsCount( context, 3, "mid", false ) )
     {
-	if( KSUtil::checkType( context, args[2], KSValue::DoubleType, false ) )
-	    len = (uint) args[2]->doubleValue();
-	else if( KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-	    len = (uint) args[2]->intValue();
-	else
-	    return false;
+      if( KSUtil::checkType( context, args[2], KSValue::DoubleType, false ) )
+        len = (uint) args[2]->doubleValue();
+      else if( KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+        len = (uint) args[2]->intValue();
+      else
+        return false;
     }
     else if ( !KSUtil::checkArgumentsCount( context, 2, "mid", true ) )
-	return false;
+      return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-	return false;
+      return false;
     int pos;
     if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
-	pos = (int) args[1]->doubleValue();
+      pos = (int) args[1]->doubleValue();
     else if( KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-	pos = args[1]->intValue();
+      pos = args[1]->intValue();
     else
-	return false;
+      return false;
 
     QString tmp = args[0]->stringValue().mid( pos, len );
-    context.setValue( new KSValue(tmp)); 	
+    context.setValue( new KSValue(tmp));
     return true;
 }
 
@@ -1034,12 +1031,8 @@ static bool kspreadfunc_EXACT( KSContext& context )
     return false;
   if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
     return false;
-  bool toto=true;
-  if(args[1]->stringValue()==args[0]->stringValue())
-  	toto=true;
-  else
-  	toto=false;
-  context.setValue( new KSValue(toto)); 	
+  bool exact = args[1]->stringValue() == args[0]->stringValue();
+  context.setValue( new KSValue(exact) );
   return true;
 }
 
@@ -1060,7 +1053,7 @@ static bool kspreadfunc_STXT( KSContext& context )
   QString tmp;
   tmp=args[0]->stringValue().right(args[0]->stringValue().length()-(int)args[1]->doubleValue());
   tmp=tmp.left(  (int)args[2]->doubleValue());
-  context.setValue( new KSValue(tmp)); 	
+  context.setValue( new KSValue(tmp));
   return true;
 }
 
@@ -1073,7 +1066,7 @@ static bool kspreadfunc_ENT( KSContext& context )
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
 
-  context.setValue( new KSValue((int)args[0]->doubleValue())); 	
+  context.setValue( new KSValue((int)args[0]->doubleValue()));
   return true;
 }
 
@@ -1082,7 +1075,7 @@ static bool kspreadfunc_PI( KSContext& context )
     // QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context, 0, "PI", true ) )
-	return false;
+      return false;
 
     context.setValue( new KSValue(M_PI));
     return true;
@@ -1104,8 +1097,8 @@ static bool kspreadfunc_REPT( KSContext& context )
   QString tmp=args[0]->stringValue();
   QString tmp1;
   for (int i=0 ;i<nb;i++)
-  	tmp1+=tmp;
-  context.setValue( new KSValue(tmp1)); 	
+    tmp1+=tmp;
+  context.setValue( new KSValue(tmp1));
   return true;
 }
 
@@ -1116,13 +1109,7 @@ static bool kspreadfunc_islogic( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "ISLOGIC", true ) )
     return false;
 
-  bool logic;
-  if ( KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
-  	logic=true;
-  else
-  	logic=false;
- 	
-
+  bool logic = KSUtil::checkType( context, args[0], KSValue::BoolType, true );
   context.setValue( new KSValue(logic));
   return true;
 }
@@ -1134,13 +1121,7 @@ static bool kspreadfunc_istext( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "ISTEXT", true ) )
     return false;
 
-  bool logic;
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-  	logic=true;
-  else
-  	logic=false;
-
-
+  bool logic = KSUtil::checkType( context, args[0], KSValue::StringType, true );
   context.setValue( new KSValue(logic));
   return true;
 }
@@ -1152,13 +1133,7 @@ static bool kspreadfunc_isnum( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "ISNUM", true ) )
     return false;
 
-  bool logic;
-  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-  	logic=true;
-  else
-  	logic=false;
- 	
-
+  bool logic = KSUtil::checkType( context, args[0], KSValue::DoubleType, true );
   context.setValue( new KSValue(logic));
   return true;
 }
@@ -1222,7 +1197,7 @@ static bool kspreadfunc_date( KSContext& context )
   QDate _date;
   if( _date.setYMD(args[0]->intValue(), args[1]->intValue(), args[2]->intValue()) )
     context.setValue( new KSValue(KGlobal::locale()->formatDate(_date)));
-  else  
+  else
     context.setValue( new KSValue(QString("Err")) );
 
   return true;
@@ -1285,8 +1260,9 @@ static bool kspreadfunc_time( KSContext& context )
   if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
     return false;
 
-  context.setValue( new KSValue(KGlobal::locale()->formatTime(QTime(args[0]->intValue(),
-  			args[1]->intValue(),args[2]->intValue()),true )));
+  context.setValue( new KSValue(KGlobal::locale()->formatTime(
+    QTime(args[0]->intValue(),
+          args[1]->intValue(),args[2]->intValue()),true )));
 
   return true;
 }
@@ -1296,7 +1272,7 @@ static bool kspreadfunc_currentDate( KSContext& context )
     // QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context,0, "currentDate",true ) )
-	return false;
+      return false;
 
     context.setValue( new KSValue(KGlobal::locale()->formatDate(QDate::currentDate())));
 
@@ -1308,7 +1284,7 @@ static bool kspreadfunc_currentTime( KSContext& context )
     // QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context,0, "currentTime",true ) )
-	return false;
+      return false;
 
     context.setValue( new KSValue(KGlobal::locale()->formatTime(QTime::currentTime())));
 
@@ -1320,7 +1296,7 @@ static bool kspreadfunc_currentDateTime( KSContext& context )
     // QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context,0, "currentDateTime",true ) )
-	return false;
+      return false;
 
     context.setValue( new KSValue(KGlobal::locale()->formatDateTime(QDateTime::currentDateTime())));
 
@@ -1344,7 +1320,7 @@ static bool kspreadfunc_dayOfYear( KSContext& context )
     return false;
 
   context.setValue( new KSValue(QDate(args[0]->intValue(),
-  			args[1]->intValue(),args[2]->intValue()).dayOfYear() ));
+                                      args[1]->intValue(),args[2]->intValue()).dayOfYear() ));
 
   return true;
 }
@@ -1481,31 +1457,31 @@ static bool kspreadfunc_bino( KSContext& context )
 
   tmp="Err";
   if(args[0]->doubleValue()<args[1]->doubleValue())
-          context.setValue( new KSValue(tmp ));
+    context.setValue( new KSValue(tmp ));
 
   else if(args[1]->doubleValue()<0)
-          context.setValue( new KSValue(tmp ));
+    context.setValue( new KSValue(tmp ));
 
   // 0<proba<1
   else if((args[2]->doubleValue()<0)||(args[2]->doubleValue()>1))
-  	  context.setValue( new KSValue(tmp ));
+    context.setValue( new KSValue(tmp ));
   else
-        {
-        result=(fact(args[0]->doubleValue(),
-        (args[0]->doubleValue()-args[1]->doubleValue()))
-        /fact(args[1]->doubleValue(),0));
-        //In fact function val must be positive
+  {
+    result=(fact(args[0]->doubleValue(),
+                 (args[0]->doubleValue()-args[1]->doubleValue()))
+            /fact(args[1]->doubleValue(),0));
+    //In fact function val must be positive
 
-        if(result==-1)
-                context.setValue( new KSValue(tmp));
-        else
-                {
-              result=result*pow(args[2]->doubleValue(),(int)args[1]->doubleValue())*
-               	pow((1-args[2]->doubleValue()),((int)args[0]->doubleValue()-
-                ((int)args[1]->doubleValue())));
-                context.setValue( new KSValue(result ));
-                }
-        }
+    if(result==-1)
+      context.setValue( new KSValue(tmp));
+    else
+    {
+      result=result*pow(args[2]->doubleValue(),(int)args[1]->doubleValue())*
+        pow((1-args[2]->doubleValue()),((int)args[0]->doubleValue()-
+                                        ((int)args[1]->doubleValue())));
+      context.setValue( new KSValue(result ));
+    }
+  }
   return true;
 
 
@@ -1539,24 +1515,24 @@ static bool kspreadfunc_bino_inv( KSContext& context )
 
   // 0<proba<1
   else if((args[2]->doubleValue()<0)||(args[2]->doubleValue()>1))
-  	  context.setValue( new KSValue(tmp ));
+    context.setValue( new KSValue(tmp ));
   else
-        {
+  {
         result=(fact(args[0]->doubleValue(),
         (args[0]->doubleValue()-args[1]->doubleValue()))
         /fact(args[1]->doubleValue(),0));
         //In fact function val must be positive
 
         if(result==-1)
-                context.setValue( new KSValue(tmp));
+          context.setValue( new KSValue(tmp));
         else
-                {
+        {
           result=result*pow((1-args[2]->doubleValue()),((int)args[0]->doubleValue()-
-              (int)args[1]->doubleValue()))*pow(args[2]->doubleValue(),(
-                (int)args[1]->doubleValue()));
-                context.setValue( new KSValue(result ));
-                }
+                                                        (int)args[1]->doubleValue()))*pow(args[2]->doubleValue(),(
+                                                          (int)args[1]->doubleValue()));
+          context.setValue( new KSValue(result ));
         }
+  }
   return true;
 
 
@@ -1786,7 +1762,7 @@ static bool kspreadfunc_sign( KSContext& context )
 {
   int value=0;
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 1, "sign", true ) )
     return false;
 
@@ -1794,11 +1770,11 @@ static bool kspreadfunc_sign( KSContext& context )
     return false;
 
   if(args[0]->doubleValue()>0)
-  	value=1;
+    value=1;
   else if(args[0]->doubleValue()<0)
-  	value=-1;
+    value=-1;
   else if(args[0]->doubleValue()==0)
-  	value=0;
+    value=0;
   	
   context.setValue( new KSValue( value ) );
 
@@ -1843,22 +1819,22 @@ static bool kspreadfunc_cell( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context, 3, "cell", true ) )
-	return false;
+      return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
-	return false;
+      return false;
     if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-	return false;
+      return false;
     if ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
-	return false;
+      return false;
 
     const QValueList<KSValue::Ptr>& lines = args[0]->listValue();
     if ( lines.count() < 2 )
-	return FALSE;
+      return FALSE;
 
     QValueList<KSValue::Ptr>::ConstIterator it = lines.begin();
     if ( !KSUtil::checkType( context, (*it), KSValue::ListType, true ) )
-	return false;
+      return false;
     const QValueList<KSValue::Ptr>& line = (*it)->listValue();
     QValueList<KSValue::Ptr>::ConstIterator it2 = line.begin();
     int x = 1;
@@ -1866,26 +1842,26 @@ static bool kspreadfunc_cell( KSContext& context )
     ++it2;
     for( ; it2 != line.end(); ++it2 )
     {
-	if ( !KSUtil::checkType( context, (*it2), KSValue::StringType, true ) )
-	    return false;
-	if ( (*it2)->stringValue() == args[1]->stringValue() )
-	    break;
-	++x;
+      if ( !KSUtil::checkType( context, (*it2), KSValue::StringType, true ) )
+        return false;
+      if ( (*it2)->stringValue() == args[1]->stringValue() )
+        break;
+      ++x;
     }
     if ( it2 == line.end() )
-	 return FALSE;
+      return FALSE;
 
     qDebug("x=%i",x);
     for( ; it != lines.end(); ++it )
     {
-	const QValueList<KSValue::Ptr>& l = (*it)->listValue();
-	if ( x >= (int)l.count() )
-	    return FALSE;
-	if ( l[0]->stringValue() == args[2]->stringValue() )
-        {
-	    context.setValue( new KSValue( *(l[x]) ) );
-	    return TRUE;
-	}
+      const QValueList<KSValue::Ptr>& l = (*it)->listValue();
+      if ( x >= (int)l.count() )
+        return FALSE;
+      if ( l[0]->stringValue() == args[2]->stringValue() )
+      {
+        context.setValue( new KSValue( *(l[x]) ) );
+        return TRUE;
+      }
     }
 
     context.setValue( new KSValue( 0.0 ) );
@@ -1899,17 +1875,17 @@ static bool kspreadfunc_select_helper( KSContext& context, QValueList<KSValue::P
 
     for( ; it != end; ++it )
     {
-	if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-        {
-	    if ( !kspreadfunc_select_helper( context, (*it)->listValue(), result ) )
-		return false;
-	}
-	else if ( !(*it)->toString( context ).isEmpty() )
-        {
-	    if ( !result.isEmpty() )
-		result += "\\";
-	    result += (*it)->toString( context );
-	}
+      if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+      {
+        if ( !kspreadfunc_select_helper( context, (*it)->listValue(), result ) )
+          return false;
+      }
+      else if ( !(*it)->toString( context ).isEmpty() )
+      {
+        if ( !result.isEmpty() )
+          result += "\\";
+        result += (*it)->toString( context );
+      }
     }
 
     return true;
@@ -1930,8 +1906,7 @@ static bool kspreadfunc_app( KSContext& context )
 {
     KSpreadDoc* doc = ((KSpreadInterpreter*)context.interpreter())->document();
 
-    // ############## Dont return the document here, but we have no app iface currently
-    context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), doc->dcopObject()->objId() ) ) );
+    context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), KSpreadFactory::dcopObject()->objId() ) ) );
 
     return TRUE;
 }
@@ -1995,9 +1970,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "variance", new KSValue( new KSBuiltinFunction( module, "variance", kspreadfunc_variance) ) );
   module->addObject( "multiply", new KSValue( new KSBuiltinFunction( module, "multiply", kspreadfunc_mult) ) );
   module->addObject( "OR", new KSValue( new KSBuiltinFunction( module, "OR", kspreadfunc_or) ) );
-    module->addObject( "AND", new KSValue( new KSBuiltinFunction( module, "AND", kspreadfunc_and) ) );
+  module->addObject( "AND", new KSValue( new KSBuiltinFunction( module, "AND", kspreadfunc_and) ) );
   module->addObject( "NOR", new KSValue( new KSBuiltinFunction( module, "NOR", kspreadfunc_nor) ) );
-    module->addObject( "NAND", new KSValue( new KSBuiltinFunction( module, "NAND", kspreadfunc_nand) ) );
+  module->addObject( "NAND", new KSValue( new KSBuiltinFunction( module, "NAND", kspreadfunc_nand) ) );
 
   module->addObject( "stddev", new KSValue( new KSBuiltinFunction( module, "stderr", kspreadfunc_stddev) ) );
   module->addObject( "join", new KSValue( new KSBuiltinFunction( module, "join", kspreadfunc_join) ) );
@@ -2060,7 +2035,7 @@ module,"sign",kspreadfunc_sign) ) );
   module->addObject( "atan2", new KSValue( new KSBuiltinFunction(
 module,"atan2",kspreadfunc_atan2) ) );
   module->addObject( "INV", new KSValue( new KSBuiltinFunction(
-module,"INV",kspreadfunc_inv) ) );  
+module,"INV",kspreadfunc_inv) ) );
   return module;
 }
 

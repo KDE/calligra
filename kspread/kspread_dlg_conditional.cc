@@ -282,7 +282,7 @@ switch(  choose->currentItem())
                 result=Different;
                 break;
          default:
-	        kdDebug(36001) << "Erreur in list" << endl;
+	        kdDebug(36001) << "Error in list" << endl;
                 break;
         }
 
@@ -381,7 +381,7 @@ for ( int x = marker.left(); x <= marker.right(); x++ )
                         }
                 else
                         bSecondCond=false;
-                        
+
 		if((obj2->getThirdCondition(0)!=0)&& bThirdCond)
                         {
                         if((obj2->getThirdCondition(0)->val1==tmpCondition3->val1)&&

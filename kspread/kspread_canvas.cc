@@ -273,8 +273,8 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 
 void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select )
 {
-  kdDebug(36001) << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
-    " table=" << table << " make_select=" << (make_select ? "true" : "false" ) << endl;
+  //kdDebug(36001) << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
+  //  " table=" << table << " make_select=" << (make_select ? "true" : "false" ) << endl;
   if ( table )
     m_pView->setActiveTable( table );
   else
@@ -1849,8 +1849,8 @@ if(selected)
 		size=QMAX(m_pView->activeTable()->rowLayout(i)->height(this),size);
 	for(int i=selection.top()+1;i<=selection.bottom();i++)
 		m_pView->vBorderWidget()->resizeRow(size,i );
-	}  
-  
+	}
+
 }
 
 void KSpreadCanvas::equalizeColumn()
@@ -1867,7 +1867,7 @@ if(selected)
 		size=QMAX(m_pView->activeTable()->columnLayout(i)->width(this),size);
 	for(int i=selection.left()+1;i<=selection.right();i++)
 		m_pView->hBorderWidget()->resizeColumn(size,i );
-	}  
+	}
 
 }
 /****************************************************************
@@ -1934,7 +1934,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     tmpSize+=tmp2.setNum(m_iResizePos-y);
     painter.begin(this);
     int len = painter.fontMetrics().width(tmpSize );
-    int hei =painter.fontMetrics().height( );    
+    int hei =painter.fontMetrics().height( );
     painter.end();
     size->setGeometry(3,y+3,len+2, hei+2 ) ;
     size->setAlignment(Qt::AlignVCenter);
@@ -2266,7 +2266,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     int tmp;
     m_iResizeAnchor = table->leftColumn( _ev->pos().x() - 3, tmp, m_pCanvas );
     m_iResizePos = _ev->pos().x();
-    
+
     int x = table->columnPos( m_iResizeAnchor, m_pCanvas );
 
     QString tmpSize,tmp2;
@@ -2276,13 +2276,13 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     size->show();
     painter.begin(this);
     int len = painter.fontMetrics().width( tmpSize);
-    int hei =painter.fontMetrics().height( );    
+    int hei =painter.fontMetrics().height( );
     painter.end();
     size->setGeometry(x+3,3,len+2, hei+2 ) ;
     size->setBackgroundColor( yellow );
     size->setAlignment(Qt::AlignVCenter);
     size->setText(tmpSize);
-    
+
   }
   else
   {
@@ -2453,7 +2453,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     tmpSize+=tmp2.setNum(m_iResizePos-x);
     painter.begin(this);
     int len = painter.fontMetrics().width(tmpSize );
-    int hei =painter.fontMetrics().height( );    
+    int hei =painter.fontMetrics().height( );
     painter.end();
     if(!size)
     	{
@@ -2465,7 +2465,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     	size->show();
     	}
     else
-    	{ 
+    	{
 	size->setGeometry(x+3,3,len+2, hei+2 ) ;
 	//size->setAlignment(Qt::AlignVCenter);
 	size->setText(tmpSize);

@@ -228,7 +228,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_bScrollbarUpdates = true;
   m_sort = FALSE;
 
-  setHide(false);
+  setHidden(false);
   m_bShowGrid=true;
   m_bShowFormular=false;
   m_bLcMode=false;
@@ -497,7 +497,7 @@ void KSpreadTable::setText( int _row, int _column, const QString& _text )
     }
 
     // The cell will force a display refresh itself, so we dont have to care here.
-    cell->setText( _text );
+    cell->setCellText( _text, true );
 }
 
 void KSpreadTable::setLayoutDirtyFlag()
@@ -517,12 +517,15 @@ void KSpreadTable::setCalcDirtyFlag()
 
 void KSpreadTable::recalc(bool m_depend)
 {
+    kdDebug(36001) << "KSpreadTable::recalc(" << m_depend << ") STARTING" << endl;
+    // First set all cells as dirty
+    setCalcDirtyFlag();
+    // Now recalc cells - it is important to do it AFTER, so that when
+    // calculating one cell calculates many others, those are not done again.
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it )
-    {
-	it.current()->setCalcDirtyFlag();
 	it.current()->calc(m_depend);
-    }
+    kdDebug(36001) << "KSpreadTable::recalc(" << m_depend << ") DONE" << endl;
 }
 
 void KSpreadTable::setChooseRect( const QRect &_sel )
@@ -784,9 +787,9 @@ void KSpreadTable::setSelectionUpperLower( const QPoint &_marker,int _type )
 	  	{
 	  	it.current()->setDisplayDirtyFlag();
 	  	if(_type==-1)
-	  		it.current()->setText( (it.current()->text().lower()));
+                  it.current()->setCellText( (it.current()->text().lower()));
 	  	else if(_type==1)
-	  		it.current()->setText( (it.current()->text().upper()));
+                  it.current()->setCellText( (it.current()->text().upper()));
 	  	it.current()->clearDisplayDirtyFlag();
 	  	}
 	}
@@ -809,9 +812,9 @@ void KSpreadTable::setSelectionUpperLower( const QPoint &_marker,int _type )
 		{
 	  	it.current()->setDisplayDirtyFlag();
 	  	if(_type==-1)
-	  		it.current()->setText( (it.current()->text().lower()));
+	  		it.current()->setCellText( (it.current()->text().lower()));
 	  	else if(_type==1)
-	  		it.current()->setText( (it.current()->text().upper()));
+	  		it.current()->setCellText( (it.current()->text().upper()));
 	  	it.current()->clearDisplayDirtyFlag();
 	  	}
 	}
@@ -835,9 +838,9 @@ void KSpreadTable::setSelectionUpperLower( const QPoint &_marker,int _type )
 
 	      	cell->setDisplayDirtyFlag();
 	      	if(_type==-1)
-	  		cell->setText( (cell->text().lower()));
+	  		cell->setCellText( (cell->text().lower()));
 	  	else if(_type==1)
-	  		cell->setText( (cell->text().upper()));
+	  		cell->setCellText( (cell->text().upper()));
 	      	cell->clearDisplayDirtyFlag();
 	       	}
 	    }
@@ -867,7 +870,7 @@ void KSpreadTable::setSelectionfirstLetterUpper( const QPoint &_marker)
 	  	it.current()->setDisplayDirtyFlag();
                 QString tmp=it.current()->text();
                 int len=tmp.length();
-                it.current()->setText( (tmp.at(0).upper()+tmp.right(len-1)));
+                it.current()->setCellText( (tmp.at(0).upper()+tmp.right(len-1)));
 	  	it.current()->clearDisplayDirtyFlag();
 	  	}
 	}
@@ -891,7 +894,7 @@ void KSpreadTable::setSelectionfirstLetterUpper( const QPoint &_marker)
 	  	it.current()->setDisplayDirtyFlag();
                 QString tmp=it.current()->text();
                 int len=tmp.length();
-                it.current()->setText( (tmp.at(0).upper()+tmp.right(len-1)));
+                it.current()->setCellText( (tmp.at(0).upper()+tmp.right(len-1)));
 	  	it.current()->clearDisplayDirtyFlag();
 	  	}
 	}
@@ -916,7 +919,7 @@ void KSpreadTable::setSelectionfirstLetterUpper( const QPoint &_marker)
 	      	cell->setDisplayDirtyFlag();
                 QString tmp=cell->text();
                 int len=tmp.length();
-                cell->setText( (tmp.at(0).upper()+tmp.right(len-1)));
+                cell->setCellText( (tmp.at(0).upper()+tmp.right(len-1)));
 	      	cell->clearDisplayDirtyFlag();
 	       	}
 	    }
@@ -1294,7 +1297,7 @@ for ( int incr=start;incr<=end; )
 		m_dctCells.insert( key, cell );
 		}
 	QString tmp;
-	cell->setText(tmp.setNum(incr));
+	cell->setCellText(tmp.setNum(incr));
 
 	if(mode==Column)
 	    posy++;
@@ -1458,7 +1461,7 @@ void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
                     int pos= tmp.find(old_name+"!");
                     tmp.replace(pos,len,new_name+"!");
                 }
-                it.current()->setText(tmp);
+                it.current()->setCellText(tmp);
             }
         }
     }
@@ -1503,6 +1506,7 @@ void KSpreadTable::insertRightCell( const QPoint &_marker )
 
     m_dctCells.setAutoDelete( TRUE );
 
+    m_pDoc->setModified( true );
     emit sig_updateView( this );
 }
 
@@ -1824,7 +1828,7 @@ void KSpreadTable::changeNameCellRef(int pos,ChangeRef ref,QString tabname)
           }	
         }
       }
-      it.current()->setText(erg);
+      it.current()->setCellText(erg, false /* no recalc deps for each, done independently */ );
     }
   }
 }
@@ -1994,7 +1998,7 @@ void KSpreadTable::changeNameCellRef2(const QPoint & pos, ChangeRef ref,QString 
           }	
         }
       }
-      it.current()->setText(erg);
+      it.current()->setCellText(erg, false /* no recalc deps for each, done independently */ );
     }
 	
   }
@@ -2036,7 +2040,7 @@ bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace
 				stmp=stmp.left(index)+_replace+stmp.right(len-index-lenfind);
 				}
 			while( stmp.find(_find,index+lenreplace) >=0);
-			it.current()->setText(stmp);
+			it.current()->setCellText(stmp);
 			it.current()->clearDisplayDirtyFlag();
 			}
 		}
@@ -2075,7 +2079,7 @@ bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace
 				stmp=stmp.left(index)+_replace+stmp.right(len-index-lenfind);
 				}
 			while( stmp.find(_find,index+lenreplace) >=0);
-			it.current()->setText(stmp);
+			it.current()->setCellText(stmp);
 			it.current()->clearDisplayDirtyFlag();
 			}
 		}
@@ -2129,7 +2133,7 @@ bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace
 				
 				}
 			while( stmp.find(_find,index+lenreplace) >=0);
-			cell->setText(stmp);
+			cell->setCellText(stmp);
 			cell->clearDisplayDirtyFlag();
 			}
 		}
@@ -3151,7 +3155,7 @@ void KSpreadTable::clearSelection( const QPoint &_marker )
 	int row = l & 0xFFFF;
 	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	{
-	  it.current()->setText("");
+	  it.current()->setCellText("");
 	}
       }
 
@@ -3168,7 +3172,7 @@ void KSpreadTable::clearSelection( const QPoint &_marker )
 	int col = l >> 16;
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
-	  it.current()->setText("");
+	  it.current()->setCellText("");
 	}
       }
 
@@ -3194,8 +3198,8 @@ void KSpreadTable::clearSelection( const QPoint &_marker )
 		    m_dctCells.insert( key, cell );
 		}
 
-		cell->setText("");
-	    	}
+		cell->setCellText("");
+            }
 
 	emit sig_updateView( this, r );
     }
@@ -3352,6 +3356,7 @@ void KSpreadTable::insertRow( unsigned long int _row )
 	}
       }
     }
+    m_pDoc->setModified( true );
 
     // Reset to normal behaviour
     m_dctCells.setAutoDelete( TRUE );
@@ -3472,6 +3477,8 @@ void KSpreadTable::deleteRow( unsigned long int _row )
       }
     }
 
+    m_pDoc->setModified( true );
+
     m_dctCells.setAutoDelete( true );
     m_dctRows.setAutoDelete( true );
 
@@ -3552,6 +3559,8 @@ void KSpreadTable::insertColumn( unsigned long int _column )
 	}
       }
     }
+
+    m_pDoc->setModified( true );
 
     m_dctCells.setAutoDelete( TRUE );
     m_dctColumns.setAutoDelete( TRUE );
@@ -3668,6 +3677,8 @@ void KSpreadTable::deleteColumn( unsigned long int _column )
 	}
       }
     }
+
+    m_pDoc->setModified( true );
 
     m_dctCells.setAutoDelete( TRUE );
     m_dctColumns.setAutoDelete( TRUE );
@@ -4544,6 +4555,7 @@ bool KSpreadTable::loadXML( const QDomElement& table )
 
 void KSpreadTable::update()
 {
+  kdDebug(36001) << "KSpreadTable::update()" << endl;
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )
   {
@@ -4687,7 +4699,7 @@ void KSpreadTable::insertRowLayout( RowLayout *_l )
   m_dctRows.replace( _l->row(), _l );
 }
 
-void KSpreadTable::emit_updateCell( KSpreadCell *cell, int _column, int _row )
+void KSpreadTable::updateCell( KSpreadCell *cell, int _column, int _row )
 {
     if ( doc()->isLoading() )
 	return;
@@ -4719,7 +4731,6 @@ void KSpreadTable::emit_updateCell( KSpreadCell *cell, int _column, int _row )
 
     emit sig_polygonInvalidated( arr );
 
-    // emit sig_updateCell( this, _cell, _col, _row );
     cell->clearDisplayDirtyFlag();
 }
 
@@ -4764,31 +4775,15 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 
    kdDebug(36001) << "NOW FETCHING INTERFACE" << endl;
 
-   doc->initDoc();
+   if ( !doc->initDoc() )
+     return;
 
-   // #### TODO: Make shure that it really knows the KChart interface
-   /* CORBA::Object_var obj = doc->getInterface( "IDL:Chart/SimpleChart:1.0" );
-  if ( CORBA::is_nil( obj ) )
-  {
-    QString tmp;
-    tmp.sprintf( i18n( "The server %s does not support the required interface" ), _e.name.data() );
-    KMessageBox::error( (QWidget*)0L, tmp );
-    return;
-  }
-  Chart::SimpleChart_var chart = Chart::SimpleChart::_narrow( obj );
-  if ( CORBA::is_nil( chart ) )
-  {
-    KMessageBox::error( (QWidget*)0L,
-			   i18n("The chart application seems to have an internal error" ) );
-    return;
-    } */
+   ChartChild* ch = new ChartChild( m_pDoc, this, doc, _rect );
+   ch->setDataArea( _data );
+   ch->update();
 
-  ChartChild* ch = new ChartChild( m_pDoc, this, doc, _rect );
-  ch->setDataArea( _data );
-  ch->update();
-
-  m_pDoc->insertChild( ch );
-  insertChild( ch );
+   m_pDoc->insertChild( ch );
+   insertChild( ch );
 }
 
 void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )

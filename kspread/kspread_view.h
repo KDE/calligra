@@ -241,10 +241,6 @@ public slots:
     void tableFormat();
     void oszilloscope();
     void autoSum();
-    void slotInsertRow();
-    void slotRemoveRow();
-    void slotInsertColumn();
-    void slotRemoveColumn();
     void resizeRow();
     void resizeColumn();
     void increaseFontSize();
@@ -264,7 +260,6 @@ public slots:
     void changeTable( const QString& _name );
 
 protected slots:
-    // C++
     /**
      * Popup menu
      */
@@ -275,10 +270,14 @@ protected slots:
     /**
      * Border popup menu
      */
-    void slotResizeColumn();
-    void slotResizeRow();
-    void slotAdjustColumn();
-    void slotAdjustRow();
+    void slotPopupResizeColumn();
+    void slotPopupResizeRow();
+    void slotPopupAdjustColumn();
+    void slotPopupAdjustRow();
+    void slotPopupInsertRow();
+    void slotPopupRemoveRow();
+    void slotPopupInsertColumn();
+    void slotPopupRemoveColumn();
 
     /**
      * Scroll @ref #tabBar.
@@ -308,7 +307,6 @@ public slots:
     void slotUnselect( KSpreadTable *_table, const QRect& _old );
     void slotUpdateView( KSpreadTable *_table );
     void slotUpdateView( KSpreadTable *_table, const QRect& );
-    void slotUpdateCell( KSpreadTable *_table, KSpreadCell* _cell, int _col, int _row );
     void slotUpdateHBorder( KSpreadTable *_table );
     void slotUpdateVBorder( KSpreadTable *_table );
     void slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
@@ -519,7 +517,7 @@ private:
 
    static KSpreadScripts *m_pGlobalScriptsDialog;
    //used to allow to refresh menubar
-   //otherwise kspread crash when I try to refresh menubar 
+   //otherwise kspread crash when I try to refresh menubar
    //when I start kspread
    bool m_bLoading;
 };

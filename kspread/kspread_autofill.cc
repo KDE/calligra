@@ -301,7 +301,7 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
     if ( sequence.first() != 0L && sequence.first()->getType() == AutoFillSequenceItem::FORMULAR )
     {
 	QString f = dest->decodeFormular( sequence.first()->getString() ).data();
-	dest->setText( f.data() );
+	dest->setCellText( f.data(), true );
 	dest->copyLayout( src );
 	return;
     }
@@ -311,7 +311,7 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
     for ( item = sequence.first(); item != 0L; item = sequence.next() )
 	erg += item->getSuccessor( _block, delta->getItemDelta( i++ ) );
 
-    dest->setText( erg.data() );
+    dest->setCellText( erg.data(), true );
     dest->copyLayout( src );
 }
 
@@ -376,12 +376,12 @@ void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell
     // then the interval has the length 1 and the delta list is [2].
     // 2 200 3 300 4 400
     // Here the interval has length 2 and the delta list is [1,100]
-    
-    
+
+
     // How big is the interval. It is in the range from [2...n/2].
     // The case of an interval of length n is handled below.
     //
-    // We try to find the shortest interval. 
+    // We try to find the shortest interval.
     for ( unsigned int step = 1; step <= _seqList.count() / 2; step++ )
     {
 	// If the interval is of length 'step' then the _seqList size must
@@ -463,13 +463,13 @@ void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell
 	    if ( _srcList.at( s )->isFormular() )
 	    {
 		QString d = _srcList.at( s )->encodeFormular();
-		cell->setText( cell->decodeFormular( d.data() ).data() );
+		cell->setCellText( cell->decodeFormular( d.data() ).data(), true );
 	    }
 	    else
-		cell->setText( _srcList.at( s )->text() );
+		cell->setCellText( _srcList.at( s )->text(), true );
 	}
 	else
-	    cell->setText( "" );
+	    cell->setCellText( "", true );
 	cell->copyLayout( _srcList.at( s ) );
 	cell = _destList.next();
 	s++;

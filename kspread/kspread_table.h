@@ -370,8 +370,8 @@ public:
     void setSelectionPrecision( const QPoint &_marker, int _delta );
     void setSelectionPercent( const QPoint &_marker, bool b );
     void setSelectionMultiRow( const QPoint &_marker, bool enable );
-    
-    /** 
+
+    /**
     * setSelectionSize increase or decrease font size
     */
     void setSelectionSize( const QPoint &_marker,int _size );
@@ -460,13 +460,15 @@ public:
      */
     void changeNameCellRef2(const QPoint & pos,ChangeRef ref,QString tabname);
 
-    // ############ Naming error
-    bool isHide(){return m_bTableHide;}
-
     /**
-     * change m_tableHide
+     * @return true if this table is hidden
      */
-    void setHide(bool _tableHide){m_bTableHide=_tableHide;}
+    bool isHidden() { return m_bTableHide; }
+    /**
+     * Hides or shows this tables
+     */
+    void setHidden(bool hidden) { m_bTableHide=hidden; }
+
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */
@@ -624,16 +626,19 @@ public:
     static KSpreadTable* find( int _id );
 
     /**
-     * Emits the signal @ref #sig_updateCell and sets the cells @ref KSpreadCell::m_bDisplayDirtyFlag to false.
+     * Calculates the cell if necessary, makes its layout if necessary,
+     * and force redraw.
+     * Then it sets the cell's @ref KSpreadCell::m_bDisplayDirtyFlag to false.
      */
-    void emit_updateCell( KSpreadCell* _cell, int _col, int _row );
+    void updateCell( KSpreadCell* _cell, int _col, int _row );
+
+
     void emit_updateRow( RowLayout *_layout, int _row );
     void emit_updateColumn( ColumnLayout *_layout, int _column );
 
 signals:
     void sig_updateView( KSpreadTable *_table );
     void sig_updateView( KSpreadTable *_table, const QRect& );
-    void sig_updateCell( KSpreadTable *_table, KSpreadCell* _cell, int _col, int _row );
     void sig_unselect( KSpreadTable *_table, const QRect& );
     void sig_updateHBorder( KSpreadTable *_table );
     void sig_updateVBorder( KSpreadTable *_table );
