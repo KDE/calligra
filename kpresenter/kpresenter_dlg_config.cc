@@ -363,7 +363,7 @@ void ConfigureSpellPage::slotDefault()
     _spellConfig->setClient (KS_CLIENT_ISPELL);
     _dontCheckUpperWord->setChecked(false);
     _dontCheckTilteCase->setChecked(false);
-
+    cbBackgroundSpellCheck->setChecked(false);
 }
 
 ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *name )

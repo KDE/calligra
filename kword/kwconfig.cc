@@ -197,7 +197,7 @@ void ConfigureSpellPage::slotDefault()
     _spellConfig->setClient (KS_CLIENT_ISPELL);
     _dontCheckUpperWord->setChecked(false);
     _dontCheckTitleCase->setChecked(false);
-
+    cbBackgroundSpellCheck->setChecked(false);
 }
 
 ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char *name )
