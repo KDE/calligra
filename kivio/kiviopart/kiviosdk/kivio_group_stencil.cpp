@@ -19,6 +19,7 @@
 #include "kivio_group_stencil.h"
 #include "kivio_intra_stencil_data.h"
 #include "kivio_layer.h"
+#include <kdebug.h>
 
 KivioGroupStencil::KivioGroupStencil()
     : KivioStencil(),
@@ -153,7 +154,7 @@ void KivioGroupStencil::addToGroup( KivioStencil *pStencil )
     top = pStencil->y();
     bottom = pStencil->y() + pStencil->h();
 
-    qDebug("--- OLD: %f %f %f %f",m_x,m_y,m_w,m_h);
+    kdDebug() << "--- OLD: " << m_x << " " << m_y << " " << m_w << " " << m_h << endl;
 
     // Adjust the borders
     if( left < m_x )
@@ -175,7 +176,7 @@ void KivioGroupStencil::addToGroup( KivioStencil *pStencil )
         m_h = bottom - m_y;
     }
 
-    qDebug("NEWGEO: %f %f %f %f", m_x, m_y, m_w, m_h);
+    kdDebug() << "NEWGEO: " << m_x << " " << m_y << " " << m_w << " " << m_h << endl;
 }
 
 KivioStencil *KivioGroupStencil::duplicate()
@@ -201,7 +202,7 @@ bool KivioGroupStencil::loadXML( const QDomElement &e, KivioLayer *pLayer )
     QDomNode node;
     KivioStencil *pStencil;
 
-    qDebug("------ LOAD GROUP");
+    kdDebug() << "------ LOAD GROUP" << endl;
     node = e.firstChild();
     while( !node.isNull() )
     {
@@ -216,7 +217,7 @@ bool KivioGroupStencil::loadXML( const QDomElement &e, KivioLayer *pLayer )
             }
             else
             {
-                qDebug("------ LOADING ERROR GROUP");
+                kdDebug() << "------ LOADING ERROR GROUP" << endl;
             }
         }
         else if( name == "KivioSMLStencil" )
@@ -228,7 +229,7 @@ bool KivioGroupStencil::loadXML( const QDomElement &e, KivioLayer *pLayer )
             }
             else
             {
-                qDebug("------ LOADING ERROR GROUPSTENCIL");
+                kdDebug() << "------ LOADING ERROR GROUPSTENCIL" << endl;
             }
         }
 
@@ -242,7 +243,7 @@ QDomElement KivioGroupStencil::saveXML( QDomDocument &doc )
 {
     QDomElement e = doc.createElement("KivioGroupStencil");
 
-    qDebug("++++++++++ SAVING A GROUP");
+    kdDebug() << "++++++++++ SAVING A GROUP" << endl;
     QDomElement stencilE;
     KivioStencil *pStencil = m_pGroupList->first();
     while( pStencil )
@@ -358,14 +359,14 @@ void KivioGroupStencil::setDimensions( float newW, float newH )
 int KivioGroupStencil::generateIds( int next )
 {
     KivioStencil *pStencil = m_pGroupList->first();
-    
+
     while( pStencil )
     {
         next = pStencil->generateIds( next );
-    
+
         pStencil = m_pGroupList->next();
     }
-    
+
     return next;
 }
 
@@ -380,10 +381,10 @@ KivioConnectorTarget *KivioGroupStencil::connectToTarget( KivioConnectorPoint *p
         pTarget = pStencil->connectToTarget( p, thresh );
         if( pTarget )
             return pTarget;
-        
+
         pStencil = m_pGroupList->next();
     }
-    
+
     return NULL;
 }
 
@@ -397,10 +398,10 @@ KivioConnectorTarget *KivioGroupStencil::connectToTarget( KivioConnectorPoint *p
         pTarget = pStencil->connectToTarget( p, id );
         if( pTarget )
             return pTarget;
-        
+
         pStencil = m_pGroupList->next();
     }
-    
+
     return NULL;
 }
 
@@ -410,7 +411,7 @@ void KivioGroupStencil::searchForConnections( KivioPage *p )
     while( pStencil )
     {
         pStencil->searchForConnections( p );
-        
+
         pStencil = m_pGroupList->next();
     }
 }
@@ -440,10 +441,10 @@ void KivioGroupStencil::setText( const QString &text )
 QString KivioGroupStencil::text()
 {
     KivioStencil *pStencil = m_pGroupList->first();
-    
+
     if( !pStencil )
         return QString("");
-        
+
     return pStencil->text();
 }
 
@@ -461,10 +462,10 @@ void KivioGroupStencil::setHTextAlign( int a )
 int KivioGroupStencil::hTextAlign()
 {
     KivioStencil *pStencil = m_pGroupList->first();
-    
+
     if( !pStencil )
         return Qt::AlignHCenter;
-        
+
     return pStencil->hTextAlign();
 }
 
@@ -482,10 +483,10 @@ void KivioGroupStencil::setVTextAlign( int a )
 int KivioGroupStencil::vTextAlign()
 {
     KivioStencil *pStencil = m_pGroupList->first();
-    
+
     if( !pStencil )
         return Qt::AlignVCenter;
-        
+
     return pStencil->vTextAlign();
 }
 
@@ -503,10 +504,10 @@ void KivioGroupStencil::setTextFont( const QFont &f )
 QFont KivioGroupStencil::textFont()
 {
     KivioStencil *pStencil = m_pGroupList->first();
-    
+
     if( !pStencil )
         return QFont("Times");
-        
+
     return pStencil->textFont();
 }
 

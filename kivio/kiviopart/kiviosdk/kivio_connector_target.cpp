@@ -23,6 +23,8 @@
 #include "kivio_stencil.h"
 #include "kivio_intra_stencil_data.h"
 
+#include <kdebug.h>
+
 KivioConnectorTarget::KivioConnectorTarget()
     : m_pConnectors(NULL)
 {
@@ -37,7 +39,7 @@ KivioConnectorTarget::KivioConnectorTarget(float x, float y)
     m_position.set( x, y );
     m_pConnectors = new QList<KivioConnectorPoint>;
     m_pConnectors->setAutoDelete(false);
-    
+
     m_id = -1;
 }
 
@@ -66,17 +68,17 @@ KivioConnectorTarget::~KivioConnectorTarget()
 {
     // Iterate through all connectors diconnecting them from this
     KivioConnectorPoint *point;
-    
+
     if( m_pConnectors )
     {
         point = m_pConnectors->first();
         point = m_pConnectors->take();
-        
+
         while( point )
         {
-            qDebug("KivioConnectorTarget:: -> diconnecting");
-        
-            // Disconnect the point.  But tell the point to not call 
+            kdDebug() << "KivioConnectorTarget:: -> diconnecting" << endl;
+
+            // Disconnect the point.  But tell the point to not call
             // KivioConnectorTarget::removeConnectorFromList() because it will cause our
             // position in the list to be screwed up.
             point->disconnect( false );
@@ -97,7 +99,7 @@ bool KivioConnectorTarget::loadXML( const QDomElement &e )
 {
     if( e.tagName().compare( "KivioConnectorTarget" ) != 0 )
     {
-        qDebug("Attempted to load KivioConnectorTarget from non-KivioConnectorTarget element");
+        kdDebug() << "Attempted to load KivioConnectorTarget from non-KivioConnectorTarget element" << endl;
         return false;
     }
 
@@ -118,13 +120,13 @@ QDomElement KivioConnectorTarget::saveXML( QDomDocument &doc )
     QDomElement e;
 
     e = doc.createElement("KivioConnectorTarget");
-    
+
     XmlWriteFloat( e, "x", m_position.x() );
     XmlWriteFloat( e, "y", m_position.y() );
 
     if( m_id != -1 )
         XmlWriteInt( e, "id", m_id );
-        
+
     return e;
 }
 
@@ -152,7 +154,7 @@ bool KivioConnectorTarget::removeConnectorPointFromList( KivioConnectorPoint *p 
     if( !p )
         return false;
 
-        
+
     return m_pConnectors->remove(p);
 }
 
@@ -237,10 +239,10 @@ void KivioConnectorTarget::paintOutline( KivioIntraStencilData *pData )
 bool KivioConnectorTarget::hasConnections()
 {
     KivioConnectorPoint *pPoint = m_pConnectors->first();
-    
+
     if( pPoint )
         return true;
-        
+
     return false;
 }
 
@@ -256,7 +258,7 @@ void KivioConnectorTarget::setId( int i )
     while( pPoint )
     {
         pPoint->setTargetId( i );
-    
+
         pPoint = m_pConnectors->next();
     }
 }

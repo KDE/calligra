@@ -19,6 +19,7 @@
 #include "kivio_common.h"
 
 #include <qstringlist.h>
+#include <kdebug.h>
 
 /**
  * Read a floating point value from a @ref QDomElement.
@@ -35,19 +36,19 @@ float XmlReadFloat( const QDomElement &e, const QString &att, const float &def)
     // Check if this value exists, if not, return the default
     if( e.hasAttribute( att )==false )
         return def;
-    
+
     // Read the attribute
     QString val = e.attribute( att );
     bool ok=false;
-    
+
     // Make sure it is a floating point value.  If not, return the default
     float fVal = val.toFloat( &ok );
     if( !ok )
     {
-        qDebug("Invalid XML-value read for %s, expected float", att.ascii());
+        kdDebug() << "Invalid XML-value read for " << att << ", expected float" << endl;
         return 1.0;
     }
-    
+
     // Return the value
     return fVal;
 }
@@ -92,7 +93,7 @@ int XmlReadInt( const QDomElement &e, const QString &att, const int &def)
     int iVal = val.toInt( &ok );
     if( !ok )
     {
-        qDebug("Invalid XML-value read for %s, expected int", att.ascii());
+        kdDebug() << "Invalid XML-value read for " << att << ", expected int" << endl;
         return 1;
     }
 
@@ -140,7 +141,7 @@ uint XmlReadUInt( const QDomElement &e, const QString &att, const uint &def)
     uint iVal = val.toUInt( &ok );
     if( !ok )
     {
-        qDebug("Invalid XML-value read for %s, expected uint", att.ascii());
+        kdDebug() << "Invalid XML-value read for " << att << ", expected uint" << endl;
         return 1;
     }
 
@@ -231,7 +232,7 @@ QColor XmlReadColor( const QDomElement &e, const QString &att, const QColor &def
     uint iVal = val.toUInt( &ok );
     if( !ok )
     {
-        qDebug("Invalid XML-value read for %s, expected QColor", att.ascii());
+        kdDebug() << "Invalid XML-value read for " << att << ", expected QColor" << endl;
         return 1;
     }
 
@@ -280,7 +281,7 @@ double XmlReadDouble( const QDomElement &e, const QString &att, const double &de
     double dVal = val.toDouble( &ok );
     if( !ok )
     {
-        qDebug("Invalid XML-value read for %s, expected double", att.ascii());
+        kdDebug() << "Invalid XML-value read for " << att << ", expected double" << endl;
         return 1.0;
     }
 
@@ -305,10 +306,10 @@ void XmlWriteDouble( QDomElement &e, const QString &att, const double &val )
 
 
 #define WHICH_QUAD( vertex, hitPos ) \
-	( (vertex.x() > hitPos->x()) ? ((vertex.y() > hitPos->y()) ? 1 : 4 ) : ((vertex.y() > hitPos->y())?2:3))
+        ( (vertex.x() > hitPos->x()) ? ((vertex.y() > hitPos->y()) ? 1 : 4 ) : ((vertex.y() > hitPos->y())?2:3))
 
 #define X_INTERCEPT( point1, point2, hitY ) \
-	(point2.x() - (((point2.y()-hitY)*(point1.x()-point2.x()))/(point1.y()-point2.y())))
+        (point2.x() - (((point2.y()-hitY)*(point1.x()-point2.x()))/(point1.y()-point2.y())))
 
 /**
  * Determines if a point is inside a given polygon
@@ -332,52 +333,52 @@ void XmlWriteDouble( QDomElement &e, const QString &att, const double &val )
  */
 bool PointInPoly( KivioPoint *points, int numPoints, KivioPoint *hitPos )
 {
-	int edge,  next;
-	int quad, next_quad, delta, total;
-	
-	edge = 0;
+        int edge,  next;
+        int quad, next_quad, delta, total;
 
-	quad = WHICH_QUAD( points[ edge ], hitPos );
-	total = 0; // count of absolute sectors crossed
+        edge = 0;
 
-	// Loop through all the vertices
-	do {
-		next = (edge + 1) % numPoints;
-		next_quad = WHICH_QUAD( points[ next ], hitPos );
+        quad = WHICH_QUAD( points[ edge ], hitPos );
+        total = 0; // count of absolute sectors crossed
 
-		// Calculate how many quads have been crossed
-		delta = next_quad - quad;
+        // Loop through all the vertices
+        do {
+                next = (edge + 1) % numPoints;
+                next_quad = WHICH_QUAD( points[ next ], hitPos );
 
-		// Special case to handle crossings of more than one quad
-		switch( delta )
-		{
-			case 2:		// If we crossed the middle, figure out if it was clockwise or counter clockwise
-			case -2:	// Use the X-position at the hit point to determine which way around
-				if( X_INTERCEPT( points[edge], points[next], hitPos->y() ) > hitPos->x() )
-					delta = -delta;
-				break;
+                // Calculate how many quads have been crossed
+                delta = next_quad - quad;
 
-			case 3:		// Moving 3 quads is like moving back 1
-				delta = -1;
-				break;
+                // Special case to handle crossings of more than one quad
+                switch( delta )
+                {
+                        case 2:         // If we crossed the middle, figure out if it was clockwise or counter clockwise
+                        case -2:        // Use the X-position at the hit point to determine which way around
+                                if( X_INTERCEPT( points[edge], points[next], hitPos->y() ) > hitPos->x() )
+                                        delta = -delta;
+                                break;
 
-			case -3:	// Moving back 3 is like moving forward 1
-				delta = 1;
-				break;
-		}
+                        case 3:         // Moving 3 quads is like moving back 1
+                                delta = -1;
+                                break;
 
-		// Add in the delta
-		total += delta;
-		quad = next_quad;
-		edge = next;
-	} while( edge != 0 );
-	
+                        case -3:        // Moving back 3 is like moving forward 1
+                                delta = 1;
+                                break;
+                }
 
-	// After everything, if the total is 4, then we are inside
-	if((total==4) || (total==-4))
-		return true;
-	else
-		return false;
+                // Add in the delta
+                total += delta;
+                quad = next_quad;
+                edge = next;
+        } while( edge != 0 );
+
+
+        // After everything, if the total is 4, then we are inside
+        if((total==4) || (total==-4))
+                return true;
+        else
+                return false;
 }
 
 KivioRect XmlReadRect( const QDomElement &e, const QString &att, const KivioRect &def )

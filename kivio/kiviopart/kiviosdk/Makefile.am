@@ -7,9 +7,8 @@ noinst_LTLIBRARIES =libkiviosdk.la
 
 
 
-INCLUDES = $(all_includes)\
-		-I$(top_srcdir)/kivio/kiviopart\
-		-I$(top_srcdir)/kivio/kiviopart/tklib
+INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+	-I$(top_srcdir)/kivio/kiviopart/tklib $(all_includes)
 libkiviosdk_la_METASOURCES = AUTO
 libkiviosdk_la_SOURCES = \
 		kivio_common.cpp\

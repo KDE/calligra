@@ -19,6 +19,7 @@
 #include "kivio_common.h"
 #include "kivio_fill_style.h"
 #include "kivio_gradient.h"
+#include <kdebug.h>
 
 /**
  * Default constructor
@@ -71,7 +72,7 @@ KivioFillStyle::KivioFillStyle( const KivioFillStyle &source )
     m_colorStyle = source.m_colorStyle;
     m_color = source.m_color;
     m_brushStyle = m_brushStyle;
-    
+
     m_pGradient = new KivioGradient( *(source.m_pGradient) );
 }
 
@@ -129,7 +130,7 @@ bool KivioFillStyle::loadXML( const QDomElement &e )
  */
 QDomElement KivioFillStyle::saveXML( QDomDocument &doc )
 {
-    qDebug("+SAVE KivioFillStyle");
+    kdDebug() << "+SAVE KivioFillStyle" << endl;
     // FIXME: make this complete.  It's incomplete because
     // kivio does not yet support gradients
 
@@ -137,7 +138,7 @@ QDomElement KivioFillStyle::saveXML( QDomDocument &doc )
 
     XmlWriteColor( e, "color", m_color );
 
-    qDebug("************+++++++++++ Writing colorstyle %d", (int)m_colorStyle );
+    kdDebug() << "************+++++++++++ Writing colorstyle " << (int)m_colorStyle << endl;
     XmlWriteInt( e, "colorStyle", (int)m_colorStyle );
 
     return e;

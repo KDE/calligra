@@ -34,7 +34,7 @@ KivioStencilSpawnerInfo::~KivioStencilSpawnerInfo()
 {
 }
 
-KivioStencilSpawnerInfo::KivioStencilSpawnerInfo( const QString &auth, const QString &tit, const QString &des, const QString &ver, const QString &wb, 
+KivioStencilSpawnerInfo::KivioStencilSpawnerInfo( const QString &auth, const QString &tit, const QString &des, const QString &ver, const QString &wb,
                                             const QString &em, const QString &au )
 {
     m_author = auth;
@@ -51,14 +51,14 @@ bool KivioStencilSpawnerInfo::loadXML( const QDomElement &e )
     QDomNode node;
     QDomElement nodeElement;
     QString nodeName;
-    
+
     node = e.firstChild();
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-        
+
         nodeElement = node.toElement();
-        
+
         if( nodeName.compare("Author")==0 )
         {
             m_author = nodeElement.attribute("data");
@@ -90,9 +90,9 @@ bool KivioStencilSpawnerInfo::loadXML( const QDomElement &e )
         else
         {
         }
-    
+
         node = node.nextSibling();
     }
-    
+
     return true;
 }
