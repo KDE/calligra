@@ -2515,8 +2515,6 @@ void KWView::styleManagerOk()
 /*================================================================*/
 void KWView::newPageLayout( KoPageLayout _layout )
 {
-    if(!doc->isReadWrite())
-        return;
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
@@ -2536,8 +2534,6 @@ void KWView::newPageLayout( KoPageLayout _layout )
 /*================================================================*/
 void KWView::newFirstIndent( double _firstIndent )
 {
-    if(!doc->isReadWrite())
-        return;
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if (!edit) return;
     KWUnit u;
@@ -2549,8 +2545,6 @@ void KWView::newFirstIndent( double _firstIndent )
 /*================================================================*/
 void KWView::newLeftIndent( double _leftIndent)
 {
-    if(!doc->isReadWrite())
-        return;
     KWUnit u;
     u.setPT( _leftIndent );
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
@@ -2761,9 +2755,10 @@ KWGUI::KWGUI( QWidget *parent, bool, KWDocument *_doc, KWView *_view )
 
     r_horz = new KoRuler( left, canvas->viewport(), Qt::Horizontal, layout,
                           KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
+    r_horz->setReadWrite(doc->isReadWrite());
     r_vert = new KoRuler( left, canvas->viewport(), Qt::Vertical, layout, 0 );
     connect( r_horz, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
-
+    r_vert->setReadWrite(doc->isReadWrite());
     connect( r_horz, SIGNAL( newLeftIndent( double ) ), view, SLOT( newLeftIndent( double ) ) );
     connect( r_horz, SIGNAL( newFirstIndent( double ) ), view, SLOT( newFirstIndent( double ) ) );
 

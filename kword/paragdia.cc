@@ -975,7 +975,6 @@ void KWParagDia::delClicked()
 {
     if(lTabs->currentItem()!=-1)
     {
-        double value=lTabs->currentText().toDouble();
         lTabs->removeItem(lTabs->currentItem());
         m_bListTabulatorChanged=true;
         _tabList.remove(lTabs->currentItem());
