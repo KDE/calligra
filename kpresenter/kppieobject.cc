@@ -148,8 +148,8 @@ void KPPieObject::save( ostream& out )
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
 	<< "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
 	<< gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
-	<< static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor 
-	<< "\" xfactor=\"" << yfactor << "\"/>" << endl;
+	<< static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor
+	<< "\" yfactor=\"" << yfactor << "\"/>" << endl;
     out << indent << "<LINEBEGIN value=\"" << static_cast<int>( lineBegin ) << "\"/>" << endl;
     out << indent << "<LINEEND value=\"" << static_cast<int>( lineEnd ) << "\"/>" << endl;
     out << indent << "<PIEANGLE value=\"" << p_angle << "\"/>" << endl;
@@ -357,6 +357,9 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    setGColor1( gColor1 );
 	    setGColor2( gColor2 );
 	    setGType( gType );
+	    setGUnbalanced( unbalanced );
+	    setGXFactor( xfactor );
+	    setGYFactor( yfactor );
 	}
 
 	// lineBegin

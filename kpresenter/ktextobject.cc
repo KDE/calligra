@@ -1425,6 +1425,12 @@ void TxtParagraph::deleteRegion( int _start, int _stop )
 	    linePtr->deleteItem( static_cast<unsigned int>( i ) );
     }
 
+    if ( linePtr->items() > 0 ) {
+	if ( linePtr->itemAt( linePtr->items() - 1 )->type() != TxtObj::SEPARATOR )
+	    linePtr->append( " ", linePtr->itemAt( linePtr->items() - 1 )->font(), 
+			     linePtr->itemAt( linePtr->items() - 1 )->color(), TxtObj::NORMAL, TxtObj::SEPARATOR );
+    }
+    
     append( linePtr );
 }
 
@@ -1664,7 +1670,7 @@ QPicture* KTextObject::getPic( int _x, int _y, int _w, int _h, bool presMode, in
     to = max(from,to);
 
     if ( paragraphList.count() == 1 && paragraphAt( 0 )->lines() == 1 &&
-	 paragraphAt( 0 )->lineAt( 0 )->items() == 1 && 
+	 paragraphAt( 0 )->lineAt( 0 )->items() == 1 &&
 	 !presMode ) {
 	QFont _font( "helvetica", 12 );
 	_font.setBold( true );
@@ -1702,7 +1708,7 @@ void KTextObject::draw( QPainter &p, int _x, int _y, int _w, int _h, bool presMo
     to = max(from,to);
 
      if ( paragraphList.count() == 1 && paragraphAt( 0 )->lines() == 1 &&
-	  paragraphAt( 0 )->lineAt( 0 )->items() == 1 && 
+	  paragraphAt( 0 )->lineAt( 0 )->items() == 1 &&
 	 !presMode && _drawempty ) {
 	QFont _font( "helvetica", 12 );
 	_font.setBold( true );

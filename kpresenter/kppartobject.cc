@@ -257,8 +257,8 @@ void KPPartObject::save( ostream& out )
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
 	<< "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
 	<< gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
-	<< static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor 
-	<< "\" xfactor=\"" << yfactor << "\"/>" << endl;
+	<< static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor
+	<< "\" yfactor=\"" << yfactor << "\"/>" << endl;
     out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
 	<< "\" num=\"" << disappearNum << "\"/>" << endl;
 }
@@ -411,6 +411,9 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    setGColor1( gColor1 );
 	    setGColor2( gColor2 );
 	    setGType( gType );
+	    setGUnbalanced( unbalanced );
+	    setGXFactor( xfactor );
+	    setGYFactor( yfactor );
 	}
 
 	else

@@ -114,7 +114,7 @@ void KPTextObject::save( ostream& out )
 	<< "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
 	<< gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
 	<< static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor
-	<< "\" xfactor=\"" << yfactor << "\"/>" << endl;
+	<< "\" yfactor=\"" << yfactor << "\"/>" << endl;
     out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
 	<< "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
 	<< "\" style=\"" << static_cast<int>( pen.style() ) << "\"/>" << endl;
@@ -342,6 +342,9 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    setGColor1( gColor1 );
 	    setGColor2( gColor2 );
 	    setGType( gType );
+	    setGUnbalanced( unbalanced );
+	    setGXFactor( xfactor );
+	    setGYFactor( yfactor );
 	}
 
 	else

@@ -288,7 +288,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		if ( ( *it ).m_strName == "xfactor" )
 		    setBackXFactor( atoi( ( *it ).m_strValue.c_str() ) );
 		if ( ( *it ).m_strName == "yfactor" )
-		    setBackXFactor( atoi( ( *it ).m_strValue.c_str() ) );
+		    setBackYFactor( atoi( ( *it ).m_strValue.c_str() ) );
 	    }
 	}
 

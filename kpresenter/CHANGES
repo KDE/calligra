@@ -378,3 +378,5 @@ Reggie, 16.8.1999:
 Reggie, 17.8.1999:
 ------------------
 - Fixed cut/copy/paste for textobjs
+- Fixed deleting regions in the textobject
+- Fixed saving/loading gradients (esp. unbalanced)
