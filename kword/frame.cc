@@ -1545,6 +1545,16 @@ void KWGroupManager::insertCol(unsigned int _idx)
 }
 
 /*================================================================*/
+void KWGroupManager::deleteRow(unsigned int _idx,QPainter &_painter)
+{
+}
+
+/*================================================================*/
+void KWGroupManager::deleteCol(unsigned int _idx)
+{
+}
+
+/*================================================================*/
 bool isAHeader(FrameInfo fi) 
 { 
   return (fi == FI_FIRST_HEADER || fi == FI_EVEN_HEADER || fi == FI_ODD_HEADER); 

@@ -27,6 +27,7 @@ module KWord
       slot void insertPicture();
       slot void insertClipart();
       slot void insertSpecialChar();
+      slot void insertFrameBreak();
       
       slot void formatFont();
       slot void formatColor();

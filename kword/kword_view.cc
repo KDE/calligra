@@ -745,6 +745,15 @@ void KWordView::insertSpecialChar()
 }
 
 /*===============================================================*/
+void KWordView::insertFrameBreak()
+{
+  if (gui->getPaperWidget()->getTable()) return;
+
+  QKeyEvent e(Event_KeyPress,Key_Return,0,ControlButton);
+  gui->getPaperWidget()->keyPressEvent(&e);
+}
+
+/*===============================================================*/
 void KWordView::formatFont()
 {
 }
@@ -1460,6 +1469,8 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::convertPixmap(ICON("char.xpm"));
   m_idMenuInsert_SpecialChar = m_vMenuInsert->insertItem6( pix, i18n("&Special Character..."), this, 
 							   "insertSpecialChar", ALT + Key_C, -1, -1 );
+  m_vMenuInsert->insertSeparator( -1 );
+  m_idMenuInsert_FrameBreak = m_vMenuInsert->insertItem4(i18n("&Hard frame break"),this,"insertFrameBreak", 0, -1, -1 );
 
   // tools menu
   _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );

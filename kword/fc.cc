@@ -1064,8 +1064,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     apply(*((KWFormat*)this));
     compare_formats = true;
 
-    // Does this line still fit on this frame ?
-    if (!document->isPTYInFrame(frameSet - 1,frame - 1,ptY + getLineHeight()))
+    // Does this line still fit in this frame or do we have to make a hard break?
+    if (!document->isPTYInFrame(frameSet - 1,frame - 1,ptY + getLineHeight()) || 
+	(parag->hasHardBreak() && isCursorInFirstLine()) && parag->getPrev() && parag->getPrev()->getEndPage() == page)
       {
 	// Are we a header or footer?
 	if (isAHeader(document->getFrameSet(frameSet - 1)->getFrameInfo()) || isAFooter(document->getFrameSet(frameSet - 1)->getFrameInfo()))

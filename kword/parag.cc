@@ -34,6 +34,8 @@ KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, 
   ptYStart = 0;
   ptYEnd = 0;
 
+  hardBreak = false;
+
   counterText = "";
 }
 

@@ -1437,6 +1437,52 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 {
   if (mouseMode != MM_EDIT) return;
 
+  // if we are in a table and CTRL-Return was pressed 
+  if ((e->key() == Key_Return || e->key() == Key_Return) && (e->state() & ControlButton) &&
+      doc->getFrameSet(fc->getFrameSet() - 1)->getGroupManager())
+    {
+      KWGroupManager *grpMgr = doc->getFrameSet(fc->getFrameSet() - 1)->getGroupManager();
+      unsigned int row,col;
+      grpMgr->getFrameSet(doc->getFrameSet(fc->getFrameSet() - 1),row,col);
+
+      QPainter p;
+      p.begin(this);
+      grpMgr->insertRow(row + 1,p);
+      p.end();
+			
+      doc->recalcFrames();
+      doc->updateAllFrames();
+
+      fc->setFrameSet(doc->getFrameSetNum(grpMgr->getFrameSet(row + 1,col)) + 1);
+      p.begin(this);
+      doc->drawMarker(*fc,&p,xOffset,yOffset);
+      fc->init(dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(fc->getFrameSet() - 1))->getFirstParag(),p,true,true);
+      fc->gotoStartOfParag(p);
+      fc->cursorGotoLineStart(p);
+      p.end();
+
+      scrollToCursor(*fc);
+      
+      gui->getVertRuler()->setOffset(0,-getVertRulerPos());
+      gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
+      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+      gui->getView()->setFormat(*((KWFormat*)fc));
+      gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+      gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+				      fc->getParag()->getParagLayout()->getRightBorder(),
+				      fc->getParag()->getParagLayout()->getTopBorder(),
+				      fc->getParag()->getParagLayout()->getBottomBorder());
+      gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
+      gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
+      
+      if (doc->getProcessingType() == KWordDocument::DTP)
+	setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
+
+      doc->updateAllViews(0L);
+      return;
+    }
+
   inKeyEvent = true;
   unsigned int oldPage = fc->getPage();
   unsigned int oldFrame = fc->getFrame();
@@ -1698,7 +1744,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    frameSet->insertParag(fc->getParag(),I_AFTER);
 	    fc->setTextPos(0);
 	    recalcPage(0L);
-	    fc->init(fc->getParag()->getNext(),painter,false,false);
+	    if (e->state() & ControlButton) fc->getParag()->getNext()->setHardBreak(true);
+	    fc->init(fc->getParag()->getNext(),painter,false,e->state() & ControlButton);
 	  }
 	else if (fc->isCursorAtParagStart())
 	  {
@@ -1706,7 +1753,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    frameSet->insertParag(fc->getParag(),I_BEFORE);
 	    fc->setTextPos(0);
 	    recalcPage(0L);
-	    fc->init(fc->getParag(),painter,false,oldFirst != frameSet->getFirstParag());
+	    if (e->state() & ControlButton) fc->getParag()->setHardBreak(true);
+	    fc->init(fc->getParag(),painter,false,oldFirst != frameSet->getFirstParag() || e->state() & ControlButton);
 	  }
 	else 
 	  {
@@ -1714,13 +1762,15 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    frameSet->splitParag(fc->getParag(),tmpTextPos);
 	    fc->setTextPos(0);
 	    recalcPage(0L);
-	    fc->init(fc->getParag()->getNext(),painter,false,false);
+	    if ((e->state() & ControlButton) && !_insert) fc->getParag()->getNext()->setHardBreak(true);
+	    fc->init(fc->getParag()->getNext(),painter,false,(e->state() & ControlButton) && !_insert);
 	    if (_insert)
 	      {
 		frameSet->insertParag(fc->getParag(),I_BEFORE);
 		fc->setTextPos(0);
 		recalcPage(0L);
-		fc->init(fc->getParag(),painter,false,false);
+		if (e->state() & ControlButton) fc->getParag()->setHardBreak(true);
+		fc->init(fc->getParag(),painter,false,e->state() & ControlButton);
 	      }
 	  }
 

@@ -150,6 +150,9 @@ public:
     int findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false);
     void replace(int _pos,int _len,QString _text,KWFormat &_format);
 
+    void setHardBreak(bool hb) { hardBreak = hb; }
+    bool hasHardBreak() { return hardBreak; }
+
 protected:
     /**
      * Pointer to the previous paragraph or 0L if this is the first one.
@@ -215,6 +218,7 @@ protected:
     int counterData[16];
     QString counterText;
     QString counterWidth;
+    bool hardBreak;
 
 };
 

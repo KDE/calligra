@@ -386,6 +386,9 @@ public:
   void insertRow(unsigned int _idx,QPainter &_painter);
   void insertCol(unsigned int _idx);
 
+  void deleteRow(unsigned int _idx,QPainter &_painter);
+  void deleteCol(unsigned int _idx);
+
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;

@@ -123,6 +123,7 @@ public:
   virtual void insertPicture();
   virtual void insertClipart();
   virtual void insertSpecialChar();
+  virtual void insertFrameBreak();
 
   virtual void formatFont();
   virtual void formatColor();
@@ -281,6 +282,7 @@ protected:
   CORBA::Long m_idMenuInsert_Picture;
   CORBA::Long m_idMenuInsert_Clipart;
   CORBA::Long m_idMenuInsert_SpecialChar;
+  CORBA::Long m_idMenuInsert_FrameBreak;
  
   // format menu
   OpenPartsUI::Menu_var m_vMenuFormat;
