@@ -15,37 +15,60 @@ class VAffineMap;
 class VPoint;
 
 
-// VSegment is the abstract base class for VLine and VBezier. Segments are a
-// help-class for VPath (see below). Segments share exactly one point: the
-// lastPoint of the previos segment.
+// VSegment is the abstract base class for VLine and VBezier. It is basically
+// a help-class for VPath (see below). Segments share exactly one point: the
+// lastPoint of the previous segment.
 
-// TODO: - make VSegment _really_ abstract.
 class VSegment
 {
+protected:
+	VSegment();
+	VSegment( const double lp_x, const double lp_y );
+
 public:
-	VSegment( const double lp_x = 0.0, const double lp_y = 0.0 );
+	virtual const VPoint* firstCtrlPoint( const VSegment& prevSeg ) const {};
+	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const {};
+	const VPoint* lastPoint() const
+		{ return &m_lastPoint; }
+
+	// revert the segment:
+	virtual const VSegment* revert( const VSegment& prevSeg ) {};
+
+	// apply a affine map:
+	virtual void transform( const VAffineMap& affmap ) {};
 
 	// Beziers need the previous segment's lastpoint to calculate all their QPoints
 	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
-		const double& zoomFactor ) const { return QPointArray(); }
+		const double zoomFactor ) const {};
+
+protected:
+	VPoint m_lastPoint;
+
+	mutable bool m_isDirty;
+	mutable QPointArray m_QPointArray;
+};
+
+// VFirstPoint is a bit ugly per se, but necessary. we simply need a first point
+// in a path.
+
+class VFirstPoint : public VSegment
+{
+public:
+	VFirstPoint( const double lp_x = 0.0, const double lp_y = 0.0 );
 
 	virtual const VPoint* firstCtrlPoint( const VSegment& prevSeg ) const
 		{ return 0L; }
- 	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
+	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
 		{ return 0L; }
- 	const VPoint* lastPoint() const { return &m_lastPoint; }
 
-/* gxpath2.c */
-	virtual const VSegment revert( const VSegment& prevSeg ) {};
+	virtual const VSegment* revert( const VSegment& prevSeg )
+		{ return 0L; }
 
+	// apply a affine map:
 	virtual void transform( const VAffineMap& affmap );
 
-protected:
-	// m_firstPoint is a waste, that's why we skip it
-	VPoint m_lastPoint;
-
-	mutable bool m_isDirty;				// need to recreate QPointArray?
-	mutable QPointArray m_QPointArray;	// for painting
+	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
+		const double zoomFactor ) const;
 };
 
 
@@ -54,10 +77,17 @@ class VLine : public VSegment
 public:
 	VLine( const double lp_x = 0.0, const double lp_y = 0.0 );
 
-	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
-		const double& zoomFactor ) const;
+	virtual const VPoint* firstCtrlPoint( const VSegment& prevSeg ) const
+		{ return 0L; }
+	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
+		{ return 0L; }
 
-	virtual const VSegment revert( const VSegment& prevSeg );
+	virtual const VSegment* revert( const VSegment& prevSeg );
+
+	virtual void transform( const VAffineMap& affmap );
+
+	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
+		const double zoomFactor ) const;
 };
 
 
@@ -73,17 +103,17 @@ public:
 		const double lcp_x = 0.0, const double lcp_y = 0.0,
 		const double lp_x = 0.0, const double lp_y = 0.0 );
 
-	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
-		const double& zoomFactor ) const {};
-
 	virtual const VPoint* firstCtrlPoint( const VSegment& prevSeg ) const
 		{ return &m_firstCtrlPoint; }
- 	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
+	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
 		{ return &m_lastCtrlPoint; }
 
-	virtual const VSegment revert( const VSegment& prevSeg );
+	virtual const VSegment* revert( const VSegment& prevSeg );
 
 	virtual void transform( const VAffineMap& affmap );
+
+	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
+		const double zoomFactor ) const;
 
 private:
 	VPoint m_firstCtrlPoint;
@@ -100,17 +130,17 @@ public:
 		const double lcp_x = 0.0, const double lcp_y = 0.0,
 		const double lp_x = 0.0, const double lp_y = 0.0 );
 
-	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
-		const double& zoomFactor ) const {};
-
 	virtual const VPoint* firstCtrlPoint( const VSegment& prevSeg ) const
 		{ return prevSeg.lastPoint(); }
- 	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
+	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
 		{ return &m_lastCtrlPoint; }
 
-	virtual const VSegment revert( const VSegment& prevSeg );
+	virtual const VSegment* revert( const VSegment& prevSeg );
 
 	virtual void transform( const VAffineMap& affmap );
+
+	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
+		const double zoomFactor ) const;
 
 private:
 	VPoint m_lastCtrlPoint;
@@ -126,17 +156,17 @@ public:
 		const double fcp_x = 0.0, const double fcp_y = 0.0,
 		const double lp_x = 0.0, const double lp_y = 0.0 );
 
-	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
-		const double& zoomFactor ) const {};
-
 	virtual const VPoint* firstCtrlPoint( const VSegment& prevSeg ) const
 		{ return &m_firstCtrlPoint; }
- 	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
+	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
 		{ return &m_lastPoint; }
 
-	virtual const VSegment revert( const VSegment& prevSeg );
+	virtual const VSegment* revert( const VSegment& prevSeg );
 
 	virtual void transform( const VAffineMap& affmap );
+
+	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
+		const double zoomFactor ) const;
 
 private:
 	VPoint m_firstCtrlPoint;

@@ -11,18 +11,49 @@
 #include "vpath.h"
 #include "vpoint.h"
 
-// TODO: make sure that lastpoint==currenpoint doesnt get removed
+// TODO:
+// - make sure that lastpoint==currenpoint doesnt get removed
+// - set m_isDirty everywhere
+// - add "zoomFactor != oldZoomFactor"
+// - can we remove m_isDirty-checking on VPoint-level?
 
-VSegment::VSegment( const double lp_x, const double lp_y )
+
+VSegment:: VSegment()
+	: m_isDirty( true )
+{
+}
+
+VSegment:: VSegment( const double lp_x, const double lp_y )
 	: m_lastPoint( lp_x, lp_y ), m_isDirty( true )
 {
 }
 
+// -----------------------------------
+
+VFirstPoint::VFirstPoint( const double lp_x, const double lp_y )
+	: VSegment( lp_x, lp_y )
+{
+}
 
 void
-VSegment::transform( const VAffineMap& affmap )
+VFirstPoint::transform( const VAffineMap& affmap )
 {
 	m_lastPoint = affmap.map( m_lastPoint );
+
+	m_isDirty = true;
+}
+
+const QPointArray&
+VFirstPoint::getQPointArray( const VSegment& prevSeg, const double zoomFactor )
+ const
+{
+	if ( m_isDirty )
+	{
+		m_QPointArray.setPoint( 0, m_lastPoint.getQPoint( zoomFactor ) );
+
+		m_isDirty = false;
+	}
+	return m_QPointArray;
 }
 
 // -----------------------------------
@@ -32,26 +63,32 @@ VLine::VLine( const double lp_x, const double lp_y )
 {
 }
 
+const VSegment*
+VLine::revert( const VSegment& prevSeg )
+{
+	return new VLine(
+		prevSeg.lastPoint()->x(),
+		prevSeg.lastPoint()->y() );
+}
+
+void
+VLine::transform( const VAffineMap& affmap )
+{
+	m_lastPoint = affmap.map( m_lastPoint );
+
+	m_isDirty = true;
+}
 
 const QPointArray&
-VLine::getQPointArray( const VSegment& prevSeg,
-	const double& zoomFactor ) const
+VLine::getQPointArray( const VSegment& prevSeg, const double zoomFactor ) const
 {
 	if ( m_isDirty )
 	{
-// xxxxxx
+		m_QPointArray.setPoint( 0, m_lastPoint.getQPoint( zoomFactor ) );
+
 		m_isDirty = false;
 	}
-
 	return m_QPointArray;
-}
-
-const VSegment
-VLine::revert( const VSegment& prevSeg )
-{
-	return VLine(
-		prevSeg.lastPoint()->x(),
-		prevSeg.lastPoint()->y() );
 }
 
 // -----------------------------------
@@ -66,10 +103,13 @@ VCurve::VCurve(
 {
 }
 
-const VSegment
+const VSegment*
 VCurve::revert( const VSegment& prevSeg )
 {
-	return VCurve();
+	return new VCurve(
+		m_lastCtrlPoint.x(), m_lastCtrlPoint.y(),
+		m_firstCtrlPoint.x(), m_firstCtrlPoint.y(),
+		prevSeg.lastPoint()->x(), prevSeg.lastPoint()->y() );
 }
 
 void
@@ -78,23 +118,43 @@ VCurve::transform( const VAffineMap& affmap )
 	m_firstCtrlPoint	= affmap.map( m_firstCtrlPoint );
 	m_lastCtrlPoint		= affmap.map( m_lastCtrlPoint );
 	m_lastPoint			= affmap.map( m_lastPoint );
+
+	m_isDirty = true;
+}
+
+const QPointArray&
+VCurve::getQPointArray( const VSegment& prevSeg,
+	const double zoomFactor ) const
+{
+	if ( m_isDirty )
+	{
+/*		QPointArray pa(4);
+		pa.setPoint( 0, prevPoint->getQPoint( zoomFactor ) );
+		pa.setPoint( 1, segment->p1->getQPoint( zoomFactor ) );
+		pa.setPoint( 2, segment->p2->getQPoint( zoomFactor ) );
+		pa.setPoint( 3, segment->p3->getQPoint( zoomFactor ) );
+
+		pa = pa.quadBezier(); // is this a memory leak ?
+*/
+		m_QPointArray.setPoint( 0, m_lastPoint.getQPoint( zoomFactor ) );
+
+		m_isDirty = false;
+	}
+	return m_QPointArray;
 }
 
 // -----------------------------------
 
-
 VCurve1::VCurve1(
-		const double lcp_x, const double lcp_y,
-		const double lp_x, const double lp_y )
-	: VSegment( lp_x, lp_y ),
-	  m_lastCtrlPoint( lcp_x, lcp_y )
+		const double lcp_x, const double lcp_y, const double lp_x, const double lp_y )
+	: VSegment( lp_x, lp_y ), m_lastCtrlPoint( lcp_x, lcp_y )
 {
 }
 
-const VSegment
+const VSegment*
 VCurve1::revert( const VSegment& prevSeg )
 {
-	return VCurve1();
+	return new VCurve1();
 }
 
 void
@@ -102,23 +162,33 @@ VCurve1::transform( const VAffineMap& affmap )
 {
 	m_lastCtrlPoint		= affmap.map( m_lastCtrlPoint );
 	m_lastPoint			= affmap.map( m_lastPoint );
+
+	m_isDirty = true;
+}
+
+const QPointArray&
+VCurve1::getQPointArray( const VSegment& prevSeg,
+	const double zoomFactor ) const
+{
+	if ( m_isDirty )
+	{
+		m_isDirty = false;
+	}
+	return m_QPointArray;
 }
 
 // -----------------------------------
 
-
 VCurve2::VCurve2(
-		const double fcp_x, const double fcp_y,
-		const double lp_x, const double lp_y )
-	: VSegment( lp_x, lp_y ),
-	  m_firstCtrlPoint( fcp_x, fcp_y )
+		const double fcp_x, const double fcp_y, const double lp_x, const double lp_y )
+	: VSegment( lp_x, lp_y ), m_firstCtrlPoint( fcp_x, fcp_y )
 {
 }
 
-const VSegment
+const VSegment*
 VCurve2::revert( const VSegment& prevSeg )
 {
-	return VCurve2();
+	return new VCurve2();
 }
 
 void
@@ -126,15 +196,29 @@ VCurve2::transform( const VAffineMap& affmap )
 {
 	m_firstCtrlPoint	= affmap.map( m_firstCtrlPoint );
 	m_lastPoint			= affmap.map( m_lastPoint );
+
+	m_isDirty = true;
 }
 
+const QPointArray&
+VCurve2::getQPointArray( const VSegment& prevSeg,
+	const double zoomFactor ) const
+{
+	if ( m_isDirty )
+	{
+		m_isDirty = false;
+	}
+	return m_QPointArray;
+}
+
+// -----------------------------------
 // -----------------------------------
 
 VPath::VPath()
 	: VObject(), m_isClosed( false )
 {
-	// create a current point [0.0,0.0], we abuse a line for this:
-	m_segments.append( new VLine );
+	// create a first (current) point [0.0,0.0]:
+	m_segments.append( new VFirstPoint );
 }
 
 VPath::VPath( const VPath& path )
