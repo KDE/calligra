@@ -238,13 +238,11 @@ bool StarWriterImport::parseNodes(QByteArray n)
 
         switch (c) {
             case 'T':
-                if ((s[0x0A] == 0x01) && (s[0x0B] == 0x00) && (s[0x0C] == 0xFF))
-                {
-                  if(!parseGraphics(s)) return false;
+                if ((s[0x0A] == 0x01) && (s[0x0B] == 0x00) && (s[0x0C] == 0xFF)) {
+                    if (!parseGraphics(s)) return false;
                 }
-                else
-                {
-                  if(!parseText(s)) return false;
+                else {
+                    if (!parseText(s)) return false;
                 }
                 break;
             case 'E':
@@ -285,12 +283,11 @@ bool StarWriterImport::parseText(QByteArray n)
 
 bool StarWriterImport::parseTable(QByteArray n)
 {
-    /*
     QByteArray s;
     Q_UINT32 len, p, p2;
     QString text;
     QString tableCell, tableText, tableName;
-    Q_UINT8 row, column, columns;   // no need to have 'rows'
+    Q_UINT8 row, column;
 
     // Preliminary check
     if (n[0x00] != 'E') return false;
@@ -309,6 +306,8 @@ bool StarWriterImport::parseTable(QByteArray n)
 
     // Read rows
     while (n[p] == 'L') {
+        column = 0;
+
         // Find the first 't'
         while (n[p] != 't') p++;
 
@@ -328,22 +327,24 @@ bool StarWriterImport::parseTable(QByteArray n)
                 s[k] = n[0x0B+k];
             text = convertToKWordString(s);
 
-            // FIXME: add stuff for cell frame
+            // FIXME: check this stuff
+            tableText.append(QString(" <FRAMESET name=\"%1 Cell %2,%3\" frameType=\"1\" frameInfo=\"0\" removable=\"0\" visible=\"1\" grpMgr=\"%1\" row=\"%2\" col=\"%3\" rows=\"1\" cols=\"1\" protectSize=\"0\">\n").arg(tableName).arg(row).arg(column));
+            tableText.append(" <FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\" runaroundSide=\"biggest\" autoCreateNewFrame=\"0\" />\n");
+            tableText.append("  <PARAGRAPH>\n");
+            tableText.append("   <TEXT xml:space=\"preserve\">" + text + "</TEXT>\n");
+            tableText.append("  </PARAGRAPH>\n");
+            tableText.append(" </FRAMESET>\n");
 
             // Skip other sections or bytes
             p = p2;
 
             // Increase column pointers
             column++;
-            columns = max(columns, column);
         }
 
         // Increase row pointer
         row++;
     }
-
-    // Add proper stuff for table frame
-    // FIXME
 
     // Add everything to tablesStuff
     tableStuff.append(tableText);
@@ -357,7 +358,6 @@ bool StarWriterImport::parseTable(QByteArray n)
     bodyStuff.append("    </FORMAT>\n");
     bodyStuff.append("   </FORMATS>\n");
     bodyStuff.append("  </PARAGRAPH>\n");
-    */
 
     return (n[0x00] == 'E');
 };
