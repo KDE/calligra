@@ -85,6 +85,7 @@ VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, Karbon
 
 VClipartWidget::~VClipartWidget()
 {
+	delete m_clipartItem;
 }
 
 VClipartIconItem* VClipartWidget::selectedClipart()
