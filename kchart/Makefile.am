@@ -2,14 +2,14 @@
 
 SUBDIRS = core ui pics
 
-INCLUDES  = $(MICO_INCLUDES)  -I./core  -I../lib/koml \
+INCLUDES  = $(MICO_INCLUDES)  -I./ui -I./core  -I../lib/koml \
 	-I../lib/kofficecore -I../lib/kofficeui $(all_includes) -I$(idldir)
 LDFLAGS =   $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD =  ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la \
 	./core/libkchartcore.la ./ui/libkchartui.la \
 	../lib/koml/libkoml.la -lkfile -lkfm -lkom -lop -lkdeui -lkdecore \
-	-lqt $(LIBMICO) -lXext -lX11 $(LIBSOCKET) -ldl
+	-lqt $(LIBMICO) -lXext -lX11 $(LIBSOCKET)
 
 ####### Files
 

@@ -3,7 +3,7 @@
 INCLUDES= -I../koml -I$(idldir) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
 LIBADD  = -lkom -lkfile -lkdeui -lkdecore -lqt -lkdecore \
-	$(LIBMICO) -lXext -lX11 -ldl 
+	$(LIBMICO) -lXext -lX11
 
 ####### Files
 

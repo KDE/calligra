@@ -6,7 +6,7 @@ LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
 	../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
 	-lop -lkfile -lkfm -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
-	-lkom  -ljpeg $(LIBSOCKET) -ldl
+	-lkom  -ljpeg $(LIBSOCKET) 
 
 ####### Files
 

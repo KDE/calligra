@@ -6,7 +6,7 @@ LDFLAGS =  $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD =  ../../lib/kofficeui/libkofficeui.la \
 	../../lib/kofficecore/libkofficecore.la ../../lib/koml/libkoml.la \
 	-lop -lkom -lkfile -lkfm -lkdecore -lkdeui -lqt -lm -lXext -lX11 \
-	$(LIBMICO) $(LIBSOCKET) -ldl
+	$(LIBMICO) $(LIBSOCKET) 
 
 bin_PROGRAMS = kautoformEdit
 
