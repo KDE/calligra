@@ -153,6 +153,8 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     connect(m_regExpItem, SIGNAL(pressed()), this, SLOT(showPatterns()));
     connect(m_backRefItem, SIGNAL(pressed()), this, SLOT(showPlaceholders()));
 
+    connect(m_find, SIGNAL(textChanged ( const QString & )),this, SLOT(textSearchChanged( const QString & )));
+
     // tab order
     setTabOrder(m_find, m_regExp);
     setTabOrder(m_regExp, m_regExpItem);
@@ -177,6 +179,12 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     }
     setFindHistory(findStrings);
     m_find->setFocus();
+    enableButtonOK( !pattern().isEmpty() );
+}
+
+void KoFindDialog::textSearchChanged( const QString & text)
+{
+    enableButtonOK( !text.isEmpty() );
 }
 
 long KoFindDialog::options() const

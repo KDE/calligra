@@ -165,7 +165,7 @@ protected slots:
     void slotSelectedTextToggled(bool);
     void showPatterns();
     void showPlaceholders();
-
+    void textSearchChanged( const QString &);
 private:
 
     QGroupBox *m_findGrp;
