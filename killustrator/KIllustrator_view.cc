@@ -1265,6 +1265,8 @@ void KIllustratorView::slotViewZoom (const QString& s)
    z = z.replace (QRegExp ("%"), "");
    z = z.simplifyWhiteSpace ();
    float zoom = z.toFloat () / 100.0;
+   if(zoom <0.05)
+       return;
    //if (zoom != canvas->getZoomFactor ())
    canvas->setZoomFactor (zoom);
 }
