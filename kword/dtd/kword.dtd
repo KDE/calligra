@@ -676,11 +676,15 @@ don't put a </?xml...> at the end of the file!).
         FLOW is a paragraph and style tag, that determines the alignment of the text.
         align's value is one of: 'left', 'right', 'center', 'justify'
         It can also be 'auto' for styles, meaning right for RTL text, left otherwise.
+
+        dir: Indicates the direction of the paragraph. 'L' or 'R' for Left and Right.
+        Left by default.
 -->
 <!ELEMENT FLOW
     EMPTY>
 <!ATTLIST FLOW
-    align (left|right|center|justify|auto) #REQUIRED>
+    align (left|right|center|justify|auto) #REQUIRED
+    dir (L|R) #IMPLIED>
 
 <!-- INDENTS
         first: indent (pt) from the left border (of the frame) of the first line of a paragraph
