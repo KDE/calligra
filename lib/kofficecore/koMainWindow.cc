@@ -50,6 +50,7 @@
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
+#include <kdebug.h>
 
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
