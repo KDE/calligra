@@ -134,6 +134,8 @@ public:
     KoVariable *variable();
 
 
+    KCommand *dropEvent( KoTextObject *tmp,QTextCursor dropCursor, bool dropInSameObj);
+
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
      * The default implementation handles m_currentFormat and calls showCurrentFormat().
