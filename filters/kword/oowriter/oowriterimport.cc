@@ -40,6 +40,7 @@ K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriteri
 OoWriterImport::OoWriterImport( KoFilter *, const char *, const QStringList & )
   : KoFilter()
 {
+    m_styles.setAutoDelete( true );
 }
 
 OoWriterImport::~OoWriterImport()
@@ -206,6 +207,7 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
     styles.setContent( totalString );
     totalString = "";
     store->close();
+    kdDebug()<<" styles.toCString() :"<<styles.toCString()<<endl;
     kdDebug() << "file containing styles loaded" << endl;
   }
   else
@@ -253,6 +255,9 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
 
   emit sigProgress( 10 );
 
+  if ( !createStyleMap( styles ) )
+      return KoFilter::UserCancelled;
+
   return KoFilter::OK;
 }
 
@@ -298,6 +303,168 @@ void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
 
     kdDebug()<<" meta-info :"<<m_meta.toCString()<<endl;
 }
+
+bool OoWriterImport::createStyleMap( const QDomDocument & styles )
+{
+  QDomElement content  = styles.documentElement();
+  QDomNode docStyles   = content.namedItem( "office:document-styles" );
+
+  if ( content.hasAttribute( "office:version" ) )
+  {
+    bool ok = true;
+    double d = content.attribute( "office:version" ).toDouble( &ok );
+
+    if ( ok )
+    {
+      kdDebug() << "OpenCalc version: " << d << endl;
+      if ( d > 1.0 )
+      {
+        QString message( i18n("This document was created with the OpenOffice version '%1'. This filter was written for version for 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?") );
+        message.arg( content.attribute( "office:version" ) );
+        if ( KMessageBox::warningYesNo( 0, message, i18n( "Unsupported document version" ) ) == KMessageBox::No )
+          return false;
+      }
+    }
+  }
+
+  QDomNode fontStyles = content.namedItem( "office:font-decls" );
+
+  if ( !fontStyles.isNull() )
+  {
+    kdDebug() << "Starting reading in font-decl..." << endl;
+
+    insertStyles( fontStyles.toElement() );
+  }
+  else
+    kdDebug() << "No items found" << endl;
+
+  kdDebug() << "Starting reading in auto:styles" << endl;
+
+  QDomNode autoStyles = content.namedItem( "office:automatic-styles" );
+  if ( !autoStyles.isNull() )
+  {
+      insertStyles( autoStyles.toElement() );
+  }
+  else
+    kdDebug() << "No items found" << endl;
+
+
+  kdDebug() << "Reading in master styles" << endl;
+
+  QDomNode masterStyles = content.namedItem( "office:master-styles" );
+
+  if ( masterStyles.isNull() )
+  {
+    kdDebug() << "Nothing found " << endl;
+  }
+
+  QDomElement master = masterStyles.namedItem( "style:master-page").toElement();
+  if ( !master.isNull() )
+  {
+    QString name( "pm" );
+    name += master.attribute( "style:name" );
+    kdDebug() << "Master style: '" << name << "' loaded " << endl;
+    m_styles.insert( name, new QDomElement( master ) );
+
+    master = master.nextSibling().toElement();
+  }
+
+
+  kdDebug() << "Starting reading in office:styles" << endl;
+
+  QDomNode fixedStyles = content.namedItem( "office:styles" );
+
+  kdDebug() << "Reading in default styles" << endl;
+
+  QDomNode def = fixedStyles.namedItem( "style:default-style" );
+  while ( !def.isNull() )
+  {
+    QDomElement e = def.toElement();
+    kdDebug() << "Style found " << e.nodeName() << ", tag: " << e.tagName() << endl;
+
+    if ( e.nodeName() != "style:default-style" )
+    {
+      def = def.nextSibling();
+      continue;
+    }
+
+    if ( !e.isNull() )
+    {
+      kdDebug() << "Default style " << e.attribute( "style:family" ) << "default" << " loaded " << endl;
+
+      //m_defaultStyles.insert( e.attribute( "style:family" ) + "default", layout );
+    }
+    def = def.nextSibling();
+  }
+
+  QDomElement defs = fixedStyles.namedItem( "style:style" ).toElement();
+  while ( !defs.isNull() )
+  {
+    if ( defs.nodeName() != "style:style" )
+      break; // done
+
+    if ( !defs.hasAttribute( "style:name" ) )
+    {
+      // ups...
+      defs = defs.nextSibling().toElement();
+      continue;
+    }
+
+    //m_defaultStyles.insert( defs.attribute( "style:name" ), layout );
+
+    defs = defs.nextSibling().toElement();
+  }
+
+  if ( !fixedStyles.isNull() )
+    insertStyles( fixedStyles.toElement() );
+
+  kdDebug() << "Starting reading in automatic styles" << endl;
+
+  content = m_content.documentElement();
+  autoStyles = content.namedItem( "office:automatic-styles" );
+
+  if ( !autoStyles.isNull() )
+  {
+      insertStyles( autoStyles.toElement() );
+  }
+
+  fontStyles = content.namedItem( "office:font-decls" );
+
+  if ( !fontStyles.isNull() )
+  {
+    kdDebug() << "Starting reading in special font decl" << endl;
+    insertStyles( fontStyles.toElement() );
+  }
+
+  kdDebug() << "Styles read in." << endl;
+
+  return true;
+}
+
+void OoWriterImport::insertStyles( const QDomElement& element )
+{
+  if ( element.isNull() )
+    return;
+
+  QDomNode n = element.firstChild();
+
+  while( !n.isNull() )
+  {
+    QDomElement e = n.toElement();
+    if ( e.isNull() || !e.hasAttribute( "style:name" ) )
+    {
+      n = n.nextSibling();
+      continue;
+    }
+
+    QString name = e.attribute( "style:name" );
+    kdDebug() << "Style: '" << name << "' loaded " << endl;
+    m_styles.insert( name, new QDomElement( e ) );
+
+    n = n.nextSibling();
+  }
+}
+
 
 #include <oowriterimport.moc>
 

@@ -40,10 +40,13 @@ private:
     void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter );
     void createDocumentInfo( QDomDocument &docinfo );
     KoFilter::ConversionStatus openFile();
-
+    bool createStyleMap( const QDomDocument & styles );
+    void insertStyles( const QDomElement& element );
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
+
+    QDict<QDomElement>   m_styles;
 
 };
 
