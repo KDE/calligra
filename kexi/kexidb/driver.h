@@ -47,6 +47,14 @@ class DriverPrivate;
 class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 {
 	public:
+		/*! Helpful for retrieving info about driver from using 
+		 KexiDB::DriverManager::driversInfo() without loading driver libraries. */
+		typedef struct Info {
+			QString name, caption, comment, fileDBMimeType;
+			bool fileBased;
+		};
+		typedef QMap<QString,Info> InfoMap;
+		
 		/*! Features supported by driver (sum of few Features enum items). */
 		enum Features {
 			NoFeatures = 0,
@@ -73,17 +81,13 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 //		typedef QPtrList<Connection> ConnectionsList;
 
 		/*! Creates connection using \a conn_data as parameters. 
-		 \return 0 and sets error message on error. */
+		 \return 0 and sets error message on error.
+		 driverName member of \a conn_data will be updated with this driver name.
+		 */
 		Connection *createConnection( ConnectionData &conn_data );
 
 		/*! \return list of created connections. */
 		const QPtrList<Connection> connectionsList();
-
-		/*! \return connection \a conn , do not deletes it nor affect.
-		 Returns 0 if \a conn is not owned by this driver.
-		 After this, you are owner of \a conn object, so you should
-		 eventually delete it. Better use Connection destructor. */
-		Connection* removeConnection( Connection *conn );
 
 //		/*! \return a name equal to the service name (X-Kexi-DriverName) 
 //		 stored in given service .desktop file. */
@@ -159,8 +163,13 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 */
 		Driver( QObject *parent, const char *name, const QStringList &args = QStringList() );
 
+		/*! \return connection \a conn , do not deletes it nor affect.
+		 Returns 0 if \a conn is not owned by this driver.
+		 After this, you are owner of \a conn object, so you should
+		 eventually delete it. Better use Connection destructor. */
+		Connection* removeConnection( Connection *conn );
+
 		QPtrDict<KexiDB::Connection> m_connections;
-		DriverManager *m_manager;
 
 //(js)now QObject::name() is reused:
 //		/*! The name equal to the service name (X-Kexi-DriverName) 

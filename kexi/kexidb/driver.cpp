@@ -57,7 +57,7 @@ Driver::Driver( QObject *parent, const char *name, const QStringList & )
 	, d(0) //because unsused
 {
 	m_connections.setAutoDelete(false);
-	//reasonable size
+	//TODO: reasonable size
 	m_connections.resize(101);
 	m_typeNames.resize(Field::LastType + 1);
 }
@@ -112,6 +112,7 @@ Connection *Driver::createConnection( ConnectionData &conn_data )
 	}
 //	Connection *conn = new Connection( this, conn_data );
 	Connection *conn = drv_createConnection( conn_data );
+	conn_data.driverName = name();
 	m_connections.insert( conn, conn );
 	return conn;
 }

@@ -28,14 +28,13 @@
 #include <klibloader.h>
 #include <kservice.h>
 
-#include <kexidb/object.h>
+#include <kexidb/driver.h>
 
 namespace KexiDB {
 
 class DriverManagerInternal;
 class Connection;
 class ConnectionData;
-class Driver;
 /*!
 
 */
@@ -56,8 +55,17 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 			That drivers can be loaded by first use of driver() method. */
 		const QStringList driverNames();
 
-		/*! \return service information about driver's named with \a name.
+		/*! returns information list of available drivers. 
+			That drivers can be loaded by first use of driver() method. */
+		const KexiDB::Driver::InfoMap driversInfo();
+
+		/*! \return information about driver's named with \a name.
 			The name is case insensitive. */
+		KexiDB::Driver::Info driverInfo(const QString &name);
+
+		/*! \return service information about driver's named with \a name.
+			The name is case insensitive. 
+			In most cases you can use driverInfo() instead. */
 		KService::Ptr serviceInfo(const QString &name);
 
 		/*! \return a map structure of the services. Not necessary for everyday use. */
