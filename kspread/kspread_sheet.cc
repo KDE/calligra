@@ -6353,8 +6353,12 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             }
             rowNode = rowNode.nextSibling();
             loadRowFormat( rowElement, styleStack, rowIndex, oasisStyles, rowNode.isNull() );
-
-            if( rowElement.tagName() == "table:table-row" )
+            if ( rowElement.tagName()=="table:table-column" )
+            {
+                kdDebug ()<<" table-column found \n";
+                loadColumnFormat( rowElement );
+            }
+            else if( rowElement.tagName() == "table:table-row" )
             {
                 rowIndex++;
                 int columnIndex = 0;
@@ -6428,6 +6432,12 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
     }
     return true;
 }
+
+bool KSpreadSheet::loadColumnFormat(const QDomElement& row )
+{
+    return true;
+}
+
 
 bool KSpreadSheet::loadRowFormat( const QDomElement& row, KoStyleStack & styleStack, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )
 {

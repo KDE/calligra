@@ -1169,6 +1169,7 @@ protected:
 
     bool loadCellsOasis( const QDomElement &element, const KoOasisStyles& oasisStyles );
     bool loadRowFormat( const QDomElement& row, KoStyleStack & styleStack, int &rowIndex, const KoOasisStyles& oasisStyles, bool isLast );
+    bool loadColumnFormat(const QDomElement& row );
 
     void insertChild( KSpreadChild *_child );
 
