@@ -159,7 +159,7 @@ public:
 	 * @param dialogType the type of the dialog
 	 * @param templateType the template type of your application (see kword or
 	 *        kpresenter for details)
-     *
+	 *
 	 * @return The return type (see above)
 	 */
 	KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
@@ -175,13 +175,15 @@ public:
 	 * dialog.
 	 * @param global the KInstance of your app
 	 * @param file this is the filename which is returned to your app
+	 * More precisely, it's a url (to give to KURL) if ReturnType is File
+	 * and it's a path (to open directly) if ReturnType is Template
+	 *
 	 * @param format is the mimetype of the app (e.g. application/x-kspread)
 	 * @param nativeName is the name of your app (e.g KSpread)
 	 * @param nativePattern is the native pattern (e.g. *.ksp)
 	 * @param dialogType the type of the dialog
 	 * @param templateType the template type of your application (see kword or
 	 *        kpresenter for details)
-     *
 	 * @return The return type (see above)
 	 */
 	static ReturnType choose(KInstance* global, QString &file,

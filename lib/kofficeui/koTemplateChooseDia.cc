@@ -93,9 +93,9 @@ class MyFileDialog : public KFileDialog
 
         virtual void reject() {
 		KFileDialog::reject();
-		emit cancelClicked();		
+		emit cancelClicked();
         }
-	
+
 };
 
 /*================================================================*/
@@ -279,7 +279,6 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
                         KURL url(value);
                         KFileItem *item = new KFileItem( KFileItem::Unknown, KFileItem::Unknown, url );
                         d->m_recent->insertItem(item);
-                        //kdDebug()<<value<<endl;
                 }
                 i++;
         } while ( !value.isEmpty() || i<=10 );
@@ -620,6 +619,7 @@ bool KoTemplateChooseDia::collectInfo()
 	// a file is chosen
 	if (d->m_dialogType == Everything && d->tabWidget->currentPage() == d->recentTab)
 	{
+		// Recent file
 		KFileItem * item = d->m_recent->currentFileItem();
 		if (! item)
 			return false;
@@ -629,13 +629,14 @@ bool KoTemplateChooseDia::collectInfo()
 			KMessageBox::error( this, i18n( "The file %1 doesn't exist." ).arg( url.path() ) );
 			return false;
 		}
-		d->m_fullTemplateName = url.isLocalFile() ? url.path() : url.url();
+		d->m_fullTemplateName = url.url();
 		d->m_returnType = File;
 	}
 	else
 	{
+		// Existing file from file dialog
 		KURL url = d->m_filedialog->currentURL();
-		d->m_fullTemplateName = url.isLocalFile() ? url.path() : url.url();
+		d->m_fullTemplateName = url.url();
 		d->m_returnType = File;
                 return d->m_filedialog->checkURL();
 	}
