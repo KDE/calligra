@@ -1,3 +1,6 @@
+-	optimize boundingbox: cache in vsegmentlist (+ vsegment ?) and apply affine
+	trafos (dont recalculate in that case) to them too
+-	reintroduce whirl
 -	why do we pass "VObjectList" to MCmds? We could use part->selection().
 -	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
