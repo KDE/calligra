@@ -51,7 +51,7 @@ KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection, const KPIma
 {
     imageCollection = _imageCollection;
 
-    ext = QSize(); // invalid size means unset
+    ext = KoSize(); // invalid size means unset
     brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
 
@@ -79,10 +79,12 @@ void KPPixmapObject::setSize( double _width, double _height )
 void KPPixmapObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
+#if 0
     if ( ext == orig_size )
         ext = KoSize::fromQSize(image.size());
 
     image = image.scale( ext.toQSize() );
+#endif
 
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize().toQSize() );
@@ -92,12 +94,12 @@ void KPPixmapObject::resizeBy( double _dx, double _dy )
 void KPPixmapObject::setPixmap( const KPImageKey & key, const KoSize &/*_size*/ )
 {
     image = imageCollection->findImage( key );
-
+#if 0
     if ( ext == orig_size )
         ext = KoSize::fromQSize(image.size());
 
     image = image.scale( ext.toQSize() );
-
+#endif
 }
 
 /*========================= save =================================*/
@@ -154,11 +156,12 @@ int KPPixmapObject::load(const QDomElement &element)
                 KPImageKey key( _fileName, dateTime );
                 image = imageCollection->loadXPMImage( key, _data );
             }
-
+#if 0
             if ( ext == orig_size )
                 ext = KoSize::fromQSize(image.size());
 
             image = image.scale( ext.toQSize() );
+#endif
         }
     }
     return offset;
