@@ -458,7 +458,7 @@ public:
     void load( const QDomElement &element );
 
     void saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto );
-    QString saveOasisMarkerStyle( KoGenStyles &mainStyles );
+    QString saveOasisMarkerStyle( KoGenStyles &mainStyles, bool _start );
 protected:
     //duplicate from kpobject
     QDomElement createValueElement(const QString &tag, int value, QDomDocument &doc);

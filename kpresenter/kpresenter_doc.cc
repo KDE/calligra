@@ -1057,6 +1057,18 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
         (*it).style->writeStyle( &stylesWriter, mainStyles, "draw:gradient", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
     }
 
+    styles = mainStyles.styles( STYLE_STROKE );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "draw:stroke-dash", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
+    }
+
+    styles = mainStyles.styles( STYLE_MARKER );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "draw:marker", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
+    }
+
     stylesWriter.endElement(); // office:styles
 //todo add other style
 

@@ -121,20 +121,23 @@ void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyl
     //FIXME
     if ( lineBegin != L_NORMAL )
     {
-        styleobjectauto.addAttribute( "draw:marker-start", saveOasisMarkerStyle( mainStyles ) );
+        styleobjectauto.addProperty( "draw:marker-start", saveOasisMarkerStyle( mainStyles,true ) );
         //mainStyles.addAttributePt( "draw:marker-start-width", ???? );
     }
     if ( lineEnd != L_NORMAL )
     {
-        styleobjectauto.addAttribute( "draw:marker-end", saveOasisMarkerStyle( mainStyles ) );
+        styleobjectauto.addProperty( "draw:marker-end", saveOasisMarkerStyle( mainStyles,false ) );
         //mainStyles.addAttributePt( "draw:marker-end-width", ???? );
     }
 }
 
-QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles )
+QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, bool _start )
 {
-    //todo
-    return "";
+    KoGenStyle marker( KPresenterDoc::STYLE_MARKER /*, "graphic"*/ /*no name*/ );
+    //FIXME !!!!
+    marker.addAttribute( "svg:viewBox", "...." );
+    marker.addAttribute( "svg:d", "...." );
+    return mainStyles.lookup( marker, "marker" );
 }
 
 KPObject::KPObject()
@@ -1336,31 +1339,34 @@ void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles,  KoGenStyl
         switch(  pen.style() )
         {
         case Qt::NoPen:
-            styleobjectauto.addAttribute( "draw:stroke" , "none" );
+            styleobjectauto.addProperty( "draw:stroke" , "none" );
             break;
         case Qt::SolidLine:
-            styleobjectauto.addAttribute( "draw:stroke" , "solid" );
+            styleobjectauto.addProperty( "draw:stroke" , "solid" );
             break;
         case Qt::DashLine:
         case Qt::DotLine:
         case Qt::DashDotLine:
         case Qt::DashDotDotLine:
-            styleobjectauto.addAttribute( "draw:stroke" , "dash" );
+            styleobjectauto.addProperty( "draw:stroke" , "dash" );
             //TODO FIXME
-            styleobjectauto.addAttribute( "draw:stroke-dash", saveOasisStrokeStyle( mainStyles ) );
+            styleobjectauto.addProperty( "draw:stroke-dash", saveOasisStrokeStyle( mainStyles ) );
             break;
         }
-        styleobjectauto.addAttribute( "svg:stroke-color", pen.color().name() );
-        styleobjectauto.addAttributePt( "svg:stroke-width", ( int )pen.width() );
+        styleobjectauto.addProperty( "svg:stroke-color", pen.color().name() );
+        styleobjectauto.addPropertyPt( "svg:stroke-width", ( int )pen.width() );
     }
 }
 
 QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles )
 {
-    //todo
+    KoGenStyle stroke( KPresenterDoc::STYLE_STROKE /*, "graphic"*/ /*no name*/ );
+    //FIXME !!!!
+    stroke.addAttribute( "draw:style", "...." );
+    stroke.addAttribute( "draw:dots1", "...." );
+    stroke.addAttribute( "draw:distance", "...." );
+    return mainStyles.lookup( stroke, "stroke" );
     //    <draw:stroke-dash draw:name="Fine Dotted" draw:style="rect" draw:dots1="1" draw:distance="0.457cm"/>
-
-    return "";
 }
 
 void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
