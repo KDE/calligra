@@ -1882,6 +1882,24 @@ KCommand * KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd l
                 }
             }
             break;
+            case OT_POLYGON:
+            {
+                KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( kpobject );
+                if(obj)
+                {
+                    ptmp->pen = QPen( obj->getPen() );
+                    btmp->brush = obj->getBrush();
+                    btmp->fillType = obj->getFillType();
+                    btmp->gColor1 = obj->getGColor1();
+                    btmp->gColor2 = obj->getGColor2();
+                    btmp->gType = obj->getGType();
+                    btmp->unbalanced = obj->getGUnbalanced();
+                    btmp->xfactor = obj->getGXFactor();
+                    btmp->yfactor = obj->getGYFactor();
+                 }
+             }
+             break;
+
             case OT_GROUP:
             {
                 KPGroupObject *obj=dynamic_cast<KPGroupObject*>( kpobject );
