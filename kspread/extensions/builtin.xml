@@ -1170,6 +1170,25 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>SQRTn</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The SQRTn() function returns the non-negative square n of x.</Text>
+	<Syntax>SQRTn( x,n )</Syntax>
+	<Example>SQRTn(9;2) equals 3</Example>
+      </Help>
+    </Function>
+
+
 
     <Function>
       <Name>log</Name>
