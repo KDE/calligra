@@ -20,18 +20,19 @@
 #ifndef __kspread_dlg_cons__
 #define __kspread_dlg_cons__
 
-#include <qdialog.h>
 #include <qstringlist.h>
-#include <qlistbox.h>
+#include <kdialogbase.h>
 
-class KSpreadView;
-class KSpreadTable;
 class QLineEdit;
 class QPushButton;
 class QComboBox;
 class QCheckBox;
+class QListBox;
 
-class KSpreadConsolidate : public QDialog
+class KSpreadView;
+class KSpreadTable;
+
+class KSpreadConsolidate : public KDialogBase
 {
   Q_OBJECT
 public:
@@ -40,8 +41,8 @@ public:
   QStringList refs();
   
 public slots:
-  void slotOk();
-  void slotCancel();
+  virtual void slotOk();
+  virtual void slotCancel();
   void slotAdd();
   void slotRemove();
 
@@ -55,8 +56,6 @@ protected:
   QLineEdit* m_pRef;
   QListBox* m_pRefs;
   QComboBox* m_pFunction;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   QPushButton* m_pAdd;
   QPushButton* m_pRemove;
   QCheckBox* m_pRow;

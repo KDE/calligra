@@ -17,41 +17,45 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <assert.h>
 
-#include "kspread_dlg_cons.h"
-#include "kspread_canvas.h"
-#include "kspread_doc.h"
-#include "kspread_util.h"
-#include "kspread_table.h"
-#include "kspread_global.h"
-#include "kspread_interpreter.h"
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpushbutton.h>
+
+#include <kdebug.h>
+#include <kdialogbase.h>
+#include <kmessagebox.h>
 
 #include <koscript.h>
 
-#include <kmessagebox.h>
-#include <qlayout.h>
-#include <assert.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <kdebug.h>
-#include <qpushbutton.h>
+#include <kspread_dlg_cons.h>
+#include <kspread_canvas.h>
+#include <kspread_doc.h>
+#include <kspread_global.h>
+#include <kspread_interpreter.h>
+#include <kspread_table.h>
+#include <kspread_util.h>
+
 
 KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
-	: QDialog( parent, name )
+	: KDialogBase( parent, name, false, i18n("Consolidate"), Ok|Cancel )
 {
   m_pView = parent;
 
-  setCaption( i18n("Consolidate") );
+  QWidget* page = new QWidget( this );
+  setMainWidget( page );
 
-  QGridLayout *grid1 = new QGridLayout(this,12,2,15,7);
+  QGridLayout *grid1 = new QGridLayout( page, 12, 2, marginHint(), spacingHint() );
 
   QLabel* tmpQLabel;
-  tmpQLabel = new QLabel( this, "Label_1" );
+  tmpQLabel = new QLabel( page, "Label_1" );
   grid1->addWidget(tmpQLabel,0,0);
   tmpQLabel->setText( i18n("&Function:") );  
   
-  m_pFunction = new QComboBox( this );
+  m_pFunction = new QComboBox( page );
   grid1->addWidget(m_pFunction,1,0);
   tmpQLabel->setBuddy(m_pFunction);
 
@@ -64,43 +68,35 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pFunction->insertItem( i18n("Standard Deviation"), StdDev );
   m_pFunction->insertItem( i18n("Variance"), Var );
 
-  tmpQLabel = new QLabel( this, "Label_1" );
+  tmpQLabel = new QLabel( page, "Label_1" );
   tmpQLabel->setText( i18n("Re&ference:") );
   grid1->addWidget(tmpQLabel,2,0);
 
-  m_pRef = new QLineEdit( this );
+  m_pRef = new QLineEdit( page );
   grid1->addWidget(m_pRef,3,0);
   tmpQLabel->setBuddy(m_pRef);
   
-  tmpQLabel = new QLabel( this, "Label_1" );
+  tmpQLabel = new QLabel( page, "Label_1" );
   grid1->addWidget(tmpQLabel,4,0);
   tmpQLabel->setText( i18n("&Entered references:") );
 
-  m_pRefs = new QListBox( this );
+  m_pRefs = new QListBox( page );
   grid1->addMultiCellWidget( m_pRefs,5,8,0,0);
   tmpQLabel->setBuddy(m_pRefs);
   
-  m_pRow = new QCheckBox( i18n("&Description in row"), this );
+  m_pRow = new QCheckBox( i18n("&Description in row"), page );
   grid1->addWidget( m_pRow,9,0);
-  m_pCol = new QCheckBox( i18n("De&scription in column"), this );
+  m_pCol = new QCheckBox( i18n("De&scription in column"), page );
   grid1->addWidget(m_pCol,10,0);
-  m_pCopy = new QCheckBox( i18n("Co&py data"), this );
+  m_pCopy = new QCheckBox( i18n("Co&py data"), page );
   grid1->addWidget(m_pCopy,11,0);
 
-  m_pOk = new QPushButton( i18n("&OK"), this );
-  grid1->addWidget(m_pOk,0,1);
-  m_pOk->setEnabled( false );
-  m_pCancel= new QPushButton( i18n("&Cancel"), this );
-  grid1->addWidget(m_pCancel,1,1);
-
-  m_pAdd = new QPushButton( i18n("&Add"), this );
+  m_pAdd = new QPushButton( i18n("&Add"), page );
   grid1->addWidget(m_pAdd,2,1);
-  m_pRemove = new QPushButton( i18n("&Remove"), this );
+  m_pRemove = new QPushButton( i18n("&Remove"), page );
   grid1->addWidget(m_pRemove,3,1);
 
 
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pRef, SIGNAL( returnPressed() ), this, SLOT( slotReturnPressed() ) );
@@ -586,7 +582,7 @@ void KSpreadConsolidate::slotRemove()
   m_pRefs->removeItem( i );
 
   if ( m_pRefs->count() == 0 )
-    m_pOk->setEnabled( false );
+    actionButton( Ok )->setEnabled( false );
 }
 
 QStringList KSpreadConsolidate::refs()
@@ -628,7 +624,7 @@ void KSpreadConsolidate::slotReturnPressed()
   if ( !txt.isEmpty() )
   {
     m_pRefs->insertItem( txt );
-    m_pOk->setEnabled( true );
+    actionButton( Ok )->setEnabled( true );
   }
 }
 
