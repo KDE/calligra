@@ -122,6 +122,7 @@ public:
     void setStartFrame( unsigned int _frame ) { startFrame = _frame; }    
     void setEndFrame( unsigned int _frame ) { endFrame = _frame; }    
     void setPTYStart( unsigned int _y ) { ptYStart = _y; }
+    void setPTYEnd( unsigned int _y ) { ptYEnd = _y; }
 
     void insertText( unsigned int _pos, const char *_text);
     void insertPictureAsChar(unsigned int _pos,QString _filename);

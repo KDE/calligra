@@ -15,7 +15,7 @@ KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, 
 {
     prev = _prev;
     next = _next;
-    paragLayout = new KWParagLayout(_doc);
+    paragLayout = new KWParagLayout(_doc,false);
     *paragLayout = *_paragLayout;
     document = _doc;
     frameSet = _frameSet;

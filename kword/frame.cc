@@ -289,15 +289,11 @@ void KWFrameSet::save(ostream &out)
 /*================================================================*/
 void KWTextFrameSet::init()
 {
-  defaultParagLayout = new KWParagLayout(doc);
-  defaultParagLayout->setName("Standard");
-  defaultParagLayout->setCounterNr(-1);
-
   parags = 0L;
 
   autoCreateNewFrame = true;
 
-  parags = new KWParag(this,doc,0L,0L,defaultParagLayout);
+  parags = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
   parags->insertText(0," ");
   KWFormat *format = new KWFormat(doc);
   format->setDefaults(doc);
@@ -305,7 +301,7 @@ void KWTextFrameSet::init()
 
 //   for (int i = 0;i < 500;i++)
 //     {
-//       p = new KWParag( this,doc, p, 0L, defaultParagLayout );
+//       p = new KWParag( this,doc, p, 0L, doc->getDefaultParagLayout());
 //       p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen.");
 //       KWFormat *format = new KWFormat(doc);
 //       format->setDefaults(doc);
@@ -508,7 +504,7 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  if (!last)
 	    {
 	      delete parags;
-	      parags = new KWParag(this,doc,0L,0L,defaultParagLayout);
+	      parags = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
 	      if (doc->getNumFrameSets() == 0)
 		{
 		  parags->insertText(0," ");
@@ -521,7 +517,7 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	  else
 	    {
-	      last = new KWParag(this,doc,last,0L,defaultParagLayout);
+	      last = new KWParag(this,doc,last,0L,doc->getDefaultParagLayout());
 	      last->load(parser,lst);
 	    }
 	}

@@ -172,6 +172,8 @@ public:
    */
   KWUserFont* getDefaultUserFont() 
     { return defaultUserFont; }
+  KWParagLayout *getDefaultParagLayout() 
+    { return defaultParagLayout; }
     
   /**
    * List of all available user fonts

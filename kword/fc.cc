@@ -94,6 +94,7 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     // Set the context to the given paragraph
     if ( parag != 0L )
     {
+      parag->setPTYEnd( ptY + getLineHeight() );
       if (isCursorInLastLine() && getParag() && getParag()->getParagLayout()->getPTParagFootOffset() != 0)
 	ptY += getParag()->getParagLayout()->getPTParagFootOffset(); 
       parag = parag->getNext();
@@ -564,6 +565,12 @@ void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPaint
       cursorGotoLineStart(_painter);
       return;
     }
+
+  KWParag *_p = document->getFirstParag(frameSet - 1);
+  while (_p->getPTYEnd() < my && _p->getNext())
+    _p = _p->getNext();
+
+  init(_p,_painter,false,false);
 
   while (makeNextLineLayout(_painter))
     {

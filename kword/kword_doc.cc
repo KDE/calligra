@@ -195,7 +195,7 @@ void KWordDocument::recalcFrames()
   ptColumnWidth = (getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder() - getPTColumnSpacing() * (pageColumns.columns - 1)) 
     / pageColumns.columns;
  
-  for (unsigned int j = 0;j < (frms / pageColumns.columns) + 1;j++)
+  for (unsigned int j = 0;j < static_cast<unsigned int>(ceil(static_cast<double>(frms) / static_cast<double>(pageColumns.columns)));j++)
     {
       for (int i = 0;i < pageColumns.columns;i++)
 	{
@@ -214,7 +214,7 @@ void KWordDocument::recalcFrames()
 	}
     }
 
-  pages = (frms / pageColumns.columns) + 1;
+  pages = static_cast<int>(ceil(static_cast<double>(frms) / static_cast<double>(pageColumns.columns)));
   recalcWholeText();
   updateAllRanges();
 }
@@ -443,7 +443,6 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     }
 
   setPageLayout(__pgLayout,__columns);
-  pages = 2;
 
   return true;
 }

@@ -48,6 +48,7 @@ class KWPaintWindow;
 #include "format.h"
 #include "paraglayout.h"
 #include "paragdia.h"
+#include "stylist.h"
 
 #include <koPageLayoutDia.h>
 
@@ -310,6 +311,7 @@ protected:
   KWParagLayout::Border left,right,top,bottom,tmpBrd;
 
   KWParagDia *paragDia;
+  KWStyleManager *styleManager;
 
   static const int ID_TOOL_EDIT = 2;
   static const int ID_TOOL_EDIT_FRAME = 3;

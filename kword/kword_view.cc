@@ -67,6 +67,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   gui = 0;
   flow = KWParagLayout::LEFT;
   paragDia = 0;
+  styleManager = 0;
   vertAlign = KWFormat::VA_NORMAL;
   left.color = white;
   left.style = KWParagLayout::SOLID;
@@ -622,6 +623,15 @@ void KWordView::extraSpelling()
 /*===============================================================*/
 void KWordView::extraStylist()
 {
+  if (styleManager)
+    {
+      styleManager->close();
+      delete styleManager;
+      styleManager = 0;
+    }
+  styleManager = new KWStyleManager(0,m_pKWordDoc);
+  styleManager->setCaption(i18n("KWord - Stylist"));
+  styleManager->show();
 }
 
 /*===============================================================*/
@@ -1801,7 +1811,7 @@ void KWordGUI::setRanges()
       int wid = doc->getPTPaperWidth();
       int hei = doc->getPTPaperHeight();
       int range;
-      
+
       s_vert->setSteps(10,hei);
       range = (hei * doc->getPages() - paperWidget->height());
       s_vert->setRange(0,range);

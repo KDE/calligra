@@ -189,7 +189,6 @@ protected:
 
   // pointer to the first parag of the list of parags
   KWParag *parags;
-  KWParagLayout* defaultParagLayout;
   bool autoCreateNewFrame;
 
 };

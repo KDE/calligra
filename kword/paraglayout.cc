@@ -7,7 +7,7 @@
 #include <fstream>
 #include <unistd.h>
 
-KWParagLayout::KWParagLayout( KWordDocument *_doc )
+KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add = true )
   : format(_doc), counterFormat(_doc)
 {
     flow = LEFT;
@@ -41,7 +41,8 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc )
     format.setDefaults( _doc );
     
     document = _doc;
-    document->paragLayoutList.append( this );
+    if (_add)
+      document->paragLayoutList.append( this );
     document->paragLayoutList.setAutoDelete(true);
 }
 

@@ -37,7 +37,7 @@ public:
       }
     };
 
-    KWParagLayout( KWordDocument *_doc );
+    KWParagLayout( KWordDocument *_doc, bool _add = true );
     ~KWParagLayout();
     
     KWParagLayout& operator=(KWParagLayout &_layout);

@@ -339,3 +339,10 @@ Reggie, 7.11.1998:
 Reggie, 12.11.1998:
 -------------------
 - Scrolling is faster now (esp. for long documents)
+
+Reggie, 14.11.1998:
+-------------------
+- ptYEnd is set correctly for each paragraph now
+- setting the text cursor with the mouse and selecting text with the mouse is faster for long textes now
+- started implementing style templates
+- the number of pages is calculated correctly now
