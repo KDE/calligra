@@ -152,7 +152,7 @@ void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeH
         // Anchor this frame, after the previous one
         KWAnchor * anchor = createAnchor( m_anchorTextFs->textDocument(), 0 );
         if ( !placeHolderExists )
-            parag->insert( index, QChar(' ') );
+            parag->insert( index, KWTextFrameSet::customItemChar() );
         parag->setCustomItem( index, anchor, 0 );
         kdDebug() << "KWTableFrameSet::createAnchors setting anchor" << endl;
     }

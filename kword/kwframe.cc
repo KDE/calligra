@@ -405,7 +405,7 @@ void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolder
             // Anchor this frame, after the previous one
             KWAnchor * anchor = createAnchor( m_anchorTextFs->textDocument(), getFrameFromPtr( frameIt.current() ) );
             if ( !placeHolderExists )
-                parag->insert( index, QChar(' ') );
+                parag->insert( index, KWTextFrameSet::customItemChar() );
             parag->setCustomItem( index, anchor, 0 );
         }
     }

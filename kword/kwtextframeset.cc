@@ -3438,7 +3438,7 @@ void KWTextFrameSetEdit::insertPicture( const QString & file )
     KWTextImage * custom = new KWTextImage( textDocument(), file );
     CustomItemsMap customItemsMap;
     customItemsMap.insert( 0, custom );
-    textFrameSet()->insert( cursor, m_currentFormat, QChar(' '),
+    textFrameSet()->insert( cursor, m_currentFormat, KWTextFrameSet::customItemChar(),
                             false, false, i18n("Insert Inline Picture"),
                             customItemsMap );
 }
@@ -3462,7 +3462,7 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
             index++;
             ownline = true;
         }
-        placeHolders += QChar(' ');
+        placeHolders += KWTextFrameSet::customItemChar();
         customItemsMap.insert( index, anchor );
     }
     fs->setAnchored( textFrameSet() );
@@ -3501,7 +3501,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
 #ifdef DEBUG_FORMATS
         kdDebug() << "KWTextFrameSetEdit::insertVariable m_currentFormat=" << m_currentFormat << endl;
 #endif
-        textFrameSet()->insert( cursor, m_currentFormat, QChar(' '),
+        textFrameSet()->insert( cursor, m_currentFormat, KWTextFrameSet::customItemChar(),
                                 false, false, i18n("Insert Variable"),
                                 customItemsMap );
         var->recalc();

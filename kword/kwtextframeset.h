@@ -211,6 +211,8 @@ public:
     // through QRT's drawing methods. Used by e.g. KWPgNumVariable.
     //KWFrame * currentDrawnFrame() const { return m_currentDrawnFrame; }
 
+    static QChar customItemChar() { return QChar( s_customItemChar ); }
+
     void emitHideCursor() { emit hideCursor(); }
     void emitShowCursor() { emit showCursor(); }
 
@@ -288,7 +290,9 @@ private:
     QMap<QWidget *, int> m_mapViewAreas;       // Store the "needs" of each view
     QPtrDict<int> m_origFontSizes; // Format -> doc font size.    Maybe a key->fontsize dict would be better.
     KWViewMode * m_currentViewMode;            // The one while drawing. For KWAnchor. Don't use.
-    //KWFrame * m_currentDrawnFrame;             // The frame currently being drawn.
+    //KWFrame * m_currentDrawnFrame;           // The frame currently being drawn.
+
+    static const char s_customItemChar = '#'; // Has to be transparent to kspell but still be saved (not space)
 };
 
 /**
