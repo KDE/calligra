@@ -914,8 +914,9 @@ void KexiMainWindowImpl::initPropertyEditor()
 		// if the current screen width is > 1300, +1 point is added to every 100 points greater than 1300
 		// maximum size is the base size
 		size = QMAX( 6 + QMAX(0, KGlobalSettings::desktopGeometry(this).width() - 1100) / 100 , f.pointSize()*2/3 );
-		f.setPointSize( QMIN( size, f.pointSize() ) );
+		size = QMIN( size, f.pointSize() );
 	}
+	f.setPointSize( size );
 	d->propEditor->setFont(f);
 
 	if (mdiMode()==KMdi::ChildframeMode) {
