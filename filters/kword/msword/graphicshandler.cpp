@@ -28,22 +28,19 @@
 
 using namespace wvWare;
 
-KWordGraphicsHandler::KWordGraphicsHandler( Document* doc ) : QObject(), m_doc(doc)
+KWordPictureHandler::KWordPictureHandler( Document* doc ) : QObject(), m_doc(doc)
 {
 }
 
-void KWordGraphicsHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Word97::PICF> /*picf*/ )
+void KWordPictureHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Word97::PICF> /*picf*/ )
 {
     kdDebug(30513) << "Bitmap data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size() << endl;
 
 }
 
-void KWordGraphicsHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf,
-                                    const GraphicsHandler::WMFDimensions& dimensions )
+void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf )
 {
     kdDebug(30513) << "wmf data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size() << endl;
-    // No idea if that's dimension thingy is needed at all. The docu doesn't really help
-    Q_ASSERT( dimensions.left == 0 && dimensions.top == 0 && dimensions.width == 0 && dimensions.height == 0 );
 
     // We have two things to do here
     // 1 - Create the frameset and its frame
@@ -71,7 +68,7 @@ void KWordGraphicsHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word
     dev->close();
 }
 
-void KWordGraphicsHandler::tiffData( const UString& /*name*/, SharedPtr<const Word97::PICF> /*picf*/ )
+void KWordPictureHandler::tiffData( const UString& /*name*/, SharedPtr<const Word97::PICF> /*picf*/ )
 {
 }
 

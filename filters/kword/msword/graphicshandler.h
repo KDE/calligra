@@ -26,21 +26,22 @@
 #include <qobject.h>
 #include "document.h"
 
-class KWordGraphicsHandler : public QObject, public wvWare::GraphicsHandler
+class KWordPictureHandler : public QObject, public wvWare::PictureHandler
 {
     Q_OBJECT
 public:
-    KWordGraphicsHandler( Document* doc );
+    KWordPictureHandler( Document* doc );
 
-    //////// GraphicsHandler interface
+    //////// PictureHandler interface
     virtual void bitmapData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
-    virtual void wmfData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
-                          const wvWare::GraphicsHandler::WMFDimensions& dimensions );
+    virtual void wmfData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
     virtual void tiffData( const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
 
 private:
     Document* m_doc;
 
 };
+
+// KWordDrawingHandler yet to come (Werner)
 
 #endif // GRAPHICSHANDLER_H

@@ -46,7 +46,7 @@ class KoRect;
 class KoFilterChain;
 class KWordReplacementHandler;
 class KWordTableHandler;
-class KWordGraphicsHandler;
+class KWordPictureHandler;
 class KWordTextHandler;
 
 class Document : public QObject, public wvWare::SubDocumentHandler
@@ -86,7 +86,7 @@ public:
         QString extraName;
     };
 
-    // Called by GraphicsHandler
+    // Called by PictureHandler
     KoStoreDevice* createPictureFrameSet( const KoSize& size );
 
 protected slots:
@@ -120,7 +120,7 @@ private:
     QDomElement& m_framesetsElement;
     KWordReplacementHandler* m_replacementHandler;
     KWordTableHandler* m_tableHandler;
-    KWordGraphicsHandler* m_graphicsHandler;
+    KWordPictureHandler* m_pictureHandler;
     KWordTextHandler* m_textHandler;
     KoFilterChain* m_chain;
     wvWare::SharedPtr<wvWare::Parser> m_parser;

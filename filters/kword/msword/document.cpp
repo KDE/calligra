@@ -42,7 +42,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
     : m_mainDocument( mainDocument ), m_documentInfo ( documentInfo ),
       m_framesetsElement( framesetsElement ),
       m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
-      m_graphicsHandler( new KWordGraphicsHandler( this ) ), m_textHandler( 0 ),
+      m_pictureHandler( new KWordPictureHandler( this ) ), m_textHandler( 0 ),
       m_chain( chain ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) ), m_headerFooters( 0 ), m_bodyFound( false ),
       m_footNoteNumber( 0 ), m_endNoteNumber( 0 )
@@ -59,7 +59,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setTableHandler( m_tableHandler );
-        m_parser->setGraphicsHandler( m_graphicsHandler );
+        m_parser->setPictureHandler( m_pictureHandler );
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         processStyles();
         processAssociatedStrings();
@@ -73,7 +73,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
 Document::~Document()
 {
     delete m_textHandler;
-    delete m_graphicsHandler;
+    delete m_pictureHandler;
     delete m_tableHandler;
     delete m_replacementHandler;
 }
@@ -490,6 +490,7 @@ KoStoreDevice* Document::createPictureFrameSet( const KoSize& size )
 
     // The position doesn't matter as long as the picture is inline
     // FIXME for non-inline pics ####
+    // To determine the size, look at OOo's filter (WW8PicDesc in ww8graf2.cxx, version 1.50, line 406)
     createInitialFrame( framesetElement, 0, size.width(), 0, size.height(), false, NoFollowup );
 
     QDomElement pictureElem = m_mainDocument.createElement("PICTURE");
