@@ -57,7 +57,9 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
         return preStatus;
 
     QDomImplementation impl;
-    QDomDocument meta( impl.createDocumentType( "office:document-meta", "-//OpenOffice.org//DTD OfficeDokument 1.0//EN", "office.dtd" ) );
+    QDomDocument meta( impl.createDocumentType( "office:document-meta",
+                                                "-//OpenOffice.org//DTD OfficeDocument 1.0//EN",
+                                                "office.dtd" ) );
 
     createDocumentMeta( meta );
 
@@ -82,7 +84,9 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     store->write( metaString , metaString.length() );
     store->close();
 
-    QDomDocument content( impl.createDocumentType( "office:document-content", "-//OpenOffice.org//DTD OfficeDocument 1.0//EN", "office.dtd" ) );
+    QDomDocument content( impl.createDocumentType( "office:document-content",
+                                                   "-//OpenOffice.org//DTD OfficeDocument 1.0//EN",
+                                                   "office.dtd" ) );
 
     createDocumentContent( content );
 
@@ -102,7 +106,9 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     store->write( contentString , contentString.length() );
     store->close();
 
-    QDomDocument styles( impl.createDocumentType( "office:document-styles", "-//OpenOffice.org//DTD OfficeDocument 1.0//EN", "office.dtd" ) );
+    QDomDocument styles( impl.createDocumentType( "office:document-styles",
+                                                  "-//OpenOffice.org//DTD OfficeDocument 1.0//EN",
+                                                  "office.dtd" ) );
 
     createDocumentStyles( styles );
 
@@ -119,7 +125,9 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     store->write( stylesString , stylesString.length() );
     store->close();
 
-    QDomDocument manifest( impl.createDocumentType( "manifest:manifest", "-//OpenOffice.org//DTD Manifest 1.0//EN", "Manifest.dtd" ) );
+    QDomDocument manifest( impl.createDocumentType( "manifest:manifest",
+                                                    "-//OpenOffice.org//DTD Manifest 1.0//EN",
+                                                    "Manifest.dtd" ) );
 
     createDocumentManifest( manifest );
 
@@ -191,7 +199,7 @@ void OoImpressExport::createDocumentMeta( QDomDocument & docmeta )
     QDomNode meta = docmeta.createElement( "office:meta" );
 
     QDomElement generator = docmeta.createElement( "meta:generator" );
-    generator.appendChild( docmeta.createTextNode( "KPresenter 1.2" ) );
+    generator.appendChild( docmeta.createTextNode( "KPresenter 1.3" ) );
     meta.appendChild( generator );
 
     QDomNode i = m_documentinfo.namedItem( "document-info" );
@@ -417,7 +425,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
                 break;
             case 12: // polyline
                 break;
-            case 16: // polygon
+            case 15: // polygon
                 break;
             }
         }

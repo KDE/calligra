@@ -1466,7 +1466,6 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
             }
         }
 
-        //lukas: doesn't work correctly in KPresenter ATM!
         bool wordByWord = (m_styleStack.hasAttribute("fo:score-spaces"))
                           && (m_styleStack.attribute("fo:score-spaces") == "false");
 
