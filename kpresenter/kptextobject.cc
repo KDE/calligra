@@ -688,6 +688,25 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
         layout.counter = new KoParagCounter;
         layout.counter->load( element );
     }
+
+    KoTabulatorList tabList;
+    element = parentElem.firstChild().toElement();
+    for ( ; !element.isNull() ; element = element.nextSibling().toElement() )
+    {
+        if ( element.tagName() == "TABULATOR" )
+        {
+            KoTabulator tab;
+            tab.type=T_LEFT;
+            if(element.hasAttribute("type"))
+                tab.type = static_cast<KoTabulators>( element.attribute("type").toInt());
+            tab.ptPos=0.0;
+            if(element.hasAttribute("ptpos"))
+                tab.ptPos=element.attribute("ptpos").toDouble();
+            tabList.append( tab );
+        }
+    }
+    layout.setTabList( tabList );
+
     return layout;
 }
 
@@ -764,6 +783,16 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
         parentElem.appendChild( element );
         if (layout.counter )
             layout.counter->save( element );
+    }
+
+    KoTabulatorList tabList = layout.tabList();
+    KoTabulatorList::Iterator it = tabList.begin();
+    for ( ; it != tabList.end() ; it++ )
+    {
+        element = doc.createElement( "TABULATOR" );
+        parentElem.appendChild( element );
+        element.setAttribute( "type", (*it).type );
+        element.setAttribute( "ptpos", (*it).ptPos );
     }
 }
 
