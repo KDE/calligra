@@ -363,10 +363,6 @@
             </filter>
         </application>
 
-        <application id="krita" released="no">
-            <title xml:lang="en_us">Krita</title>
-        </application>
-
 <!--
         <application id="kivio">
             <title xml:lang="en_us">Kivio</title>
