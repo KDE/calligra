@@ -1091,7 +1091,7 @@ void KPrPage::alignObjsLeft()
     QPtrList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int _x =  m_doc->zoomHandler()->zoomRect(getPageRect()).x();
+    int _x =  getPageRect().x();
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -1126,8 +1126,8 @@ void KPrPage::alignObjsCenterH()
     QPtrList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int _x =  m_doc->zoomHandler()->zoomRect(getPageRect()).x();
-    int _w = m_doc->zoomHandler()->zoomRect( getPageRect(  )).width();
+    int _x =  getPageRect().x();
+    int _w = getPageRect( ).width();
 
 
     QPtrListIterator<KPObject> it( m_objectList );
@@ -1163,8 +1163,7 @@ void KPrPage::alignObjsRight()
     QPtrList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int _w = m_doc->zoomHandler()->zoomRect(getPageRect()).x() + m_doc->zoomHandler()->zoomRect( getPageRect( )).width();
-
+    int _w = getPageRect().x() + getPageRect( ).width();
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
@@ -1204,7 +1203,7 @@ void KPrPage::alignObjsTop()
     {
         if(it.current()->isSelected())
         {
-            _y = m_doc->zoomHandler()->zoomRect(getPageRect( )).y();
+            _y = getPageRect( ).y();
             _objects.append( it.current() );
             if(!newPosition && (_y != it.current()->getOrig().y()))
                 newPosition=true;
@@ -1241,8 +1240,8 @@ void KPrPage::alignObjsCenterV()
     {
         if(it.current()->isSelected())
         {
-            _y = m_doc->zoomHandler()->zoomRect(getPageRect( )).y();
-            _h = m_doc->zoomHandler()->zoomRect(getPageRect( )).height();
+            _y = getPageRect( ).y();
+            _h = getPageRect( ).height();
             _objects.append( it.current() );
             if(!newPosition &&(( _h - it.current()->getSize().height() ) / 2 - it.current()->getOrig().y() + _y )!=0)
                 newPosition=true;
@@ -1277,7 +1276,7 @@ void KPrPage::alignObjsBottom()
     {
         if(it.current()->isSelected())
         {
-            _h = m_doc->zoomHandler()->zoomRect(getPageRect( )).y() + m_doc->zoomHandler()->zoomRect(getPageRect()).height();
+            _h = getPageRect( ).y() + getPageRect().height();
             _objects.append( it.current() );
             if(!newPosition && _h != (it.current()->getSize().height() + it.current()->getOrig().y()))
                 newPosition=true;
