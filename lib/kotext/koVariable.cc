@@ -645,6 +645,9 @@ void KoFieldVariable::recalc()
         case VST_DIRECTORYNAME:
             m_value = m_doc->url().directory();
             break;
+	case VST_PATHFILENAME:
+	 m_value = m_doc->url().path();
+	 break;
         case VST_AUTHORNAME:
         case VST_EMAIL:
         case VST_COMPANYNAME:
@@ -695,7 +698,7 @@ QStringList KoFieldVariable::actionTexts()
     lst << i18n( "Author Name" ); // is "Name" necessary ?
     lst << i18n( "Email" );
     lst << i18n( "Company Name" ); // is "Name" necessary ?
-    lst << QString::null; //5
+    lst << i18n( "Path and File Name" );
     lst << QString::null; //6
     lst << QString::null; //7
     lst << QString::null; //8

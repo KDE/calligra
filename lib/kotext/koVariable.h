@@ -156,11 +156,11 @@ public:
     void registerVariable( KoVariable *var );
     void unregisterVariable( KoVariable *var );
     void recalcVariables(int type);
-    
+
     // For custom variables
     void setVariableValue( const QString &name, const QString &value );
     QString getVariableValue( const QString &name ) const;
-    
+
     const QPtrList<KoVariable>& getVariables() const {
         return variables;
     }
@@ -331,6 +331,7 @@ public:
     enum FieldSubType { VST_NONE = -1,
                         VST_FILENAME = 0, VST_DIRECTORYNAME = 1,
                         VST_AUTHORNAME = 2, VST_EMAIL = 3, VST_COMPANYNAME = 4,
+			VST_PATHFILENAME = 5,
                         // room for more 'author' page info fields if asked for
                         VST_TITLE = 10, VST_ABSTRACT = 11 };
 
