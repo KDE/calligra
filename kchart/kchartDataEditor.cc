@@ -1,6 +1,6 @@
 #include "kchartDataEditor.h"
 #include "kchartDataEditor.moc"
-#include "klocale.h"
+#include <klocale.h>
 #include <kdebug.h>
 
 #include "kdchart/KDChartAxisParams.h"
