@@ -167,12 +167,18 @@ bool FontReader::parseLine( QString line )
             nameRead = true;
             QFont f( fontName );
             QStringList fields = QStringList::split( '-', f.rawName() );
-            if ( ( fields.size() != 13 )||( fields[1].upper() != fontName.upper() ) ) {
+            //if ( ( ( fields.size() == 13 ) && ( fields[1].upper() == fontName.upper() ) ) ||
+            //     ( ( fields.size() == 3 ) && ( fields[0].upper() == fontName.upper() ) ) ) {
+            if ( ( fields.size() > 1 ) &&
+                 ( ( fields[1].upper() == fontName.upper() ) ||
+                   ( fields[0].upper() == fontName.upper() ) ) ) {
+                index = fontTable->size();
+                fontTable->push_back( f );
+            }
+            else {
                 kdDebug( DEBUGID ) << "Font '" << fontName << "' not found but '" << f.rawName() << "'." << endl;
                 return false;
             }
-            index = fontTable->size();
-            fontTable->push_back( f );
         }
     }
     else {
