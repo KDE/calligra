@@ -855,11 +855,11 @@ void KFormulaPartView::generalFont()
     kdDebug(39001) <<"Slot generalFont\n";
 }
 
-void KFormulaView::setupPrinter(KPrinter&)
+void KFormulaPartView::setupPrinter(KPrinter&)
 {
 }
 
-void KFormulaView::print(KPrinter& printer)
+void KFormulaPartView::print(KPrinter& printer)
 {
     m_pDoc->getFormula()->print(printer);
 }
