@@ -189,6 +189,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_lastStyle = 0L;
     m_pixmapMap = 0L;
+    m_clipartMap = 0L;
 
     slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;
@@ -895,9 +896,12 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     kdDebug(32001) << "KWDocument::loadXML" << endl;
     delete m_pixmapMap;
     m_pixmapMap = 0L;
+    delete m_clipartMap;
+    m_clipartMap = 0L;
     m_imageRequests.clear();
     m_imageRequests2.clear();
     m_anchorRequests.clear();
+    m_clipartRequests.clear();
 
     m_pageLayout.unit = PG_MM;
 
@@ -1063,12 +1067,19 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(85);
 
+    QDateTime defaultDateTime = QDateTime::currentDateTime();
     // <PIXMAPS>
     QDomElement pixmapsElem = word.namedItem( "PIXMAPS" ).toElement();
     if ( !pixmapsElem.isNull() )
     {
-        QDateTime defaultDateTime = QDateTime::currentDateTime();
         m_pixmapMap = new QMap<KoImageKey, QString>( m_imageCollection.readXML( pixmapsElem, defaultDateTime ) );
+    }
+
+    // <CLIPARTS>
+    QDomElement clipartsElem = word.namedItem( "CLIPARTS" ).toElement();
+    if ( !clipartsElem.isNull() )
+    {
+        m_clipartMap = new QMap<KoClipartKey, QString>( m_clipartCollection.readXML( clipartsElem, defaultDateTime ) );
     }
 
     emit sigProgress(90);
@@ -1496,12 +1507,18 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
 
 bool KWDocument::completeLoading( KoStore *_store )
 {
-    if ( _store && m_pixmapMap ) {
+    if ( _store ) {
         QString prefix = urlIntern.isEmpty() ? url().path() : urlIntern;
         prefix += '/';
-        m_imageCollection.readFromStore( _store, *m_pixmapMap, prefix );
-        delete m_pixmapMap;
-        m_pixmapMap = 0L;
+        if ( m_pixmapMap ) {
+            m_imageCollection.readFromStore( _store, *m_pixmapMap, prefix );
+            delete m_pixmapMap;
+            m_pixmapMap = 0L;
+        } else if ( m_clipartMap ) {
+            m_clipartCollection.readFromStore( _store, *m_clipartMap, prefix );
+            delete m_clipartMap;
+            m_clipartMap = 0L;
+        }
     }
 
     processImageRequests();
@@ -1542,6 +1559,11 @@ void KWDocument::processImageRequests()
     for ( ; it3 != m_imageRequests2.end(); ++it3 )
         it3.data()->setImage( m_imageCollection.findImage( it3.key() ) );
     m_imageRequests2.clear();
+
+    QMapIterator<KoClipartKey,KWClipartFrameSet *> it4 = m_clipartRequests.begin();
+    for ( ; it4 != m_clipartRequests.end(); ++it4 )
+        it4.data()->setClipart( m_clipartCollection.findClipart( it4.key() ) );
+    m_clipartRequests.clear();
 }
 
 QDomDocument KWDocument::saveXML()
@@ -1593,6 +1615,7 @@ QDomDocument KWDocument::saveXML()
     kwdoc.appendChild( framesets );
 
     QValueList<KoImageKey> saveImages;
+    QValueList<KoClipartKey> saveCliparts;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -1608,6 +1631,12 @@ QDomDocument KWDocument::saveXML()
             if ( !saveImages.contains( key ) )
                 saveImages.append( key );
         }
+        if ( !frameSet->isDeleted() && frameSet->type() == FT_CLIPART )
+        {
+            KoClipartKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
+            if ( !saveCliparts.contains( key ) )
+                saveCliparts.append( key );
+        }
     }
 
     QDomElement styles = doc.createElement( "STYLES" );
@@ -1619,6 +1648,8 @@ QDomDocument KWDocument::saveXML()
     QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
     QDomElement pixmaps = m_imageCollection.saveXML( doc, saveImages, prefix );
     kwdoc.appendChild( pixmaps );
+    QDomElement cliparts = m_clipartCollection.saveXML( doc, saveCliparts, prefix );
+    kwdoc.appendChild( cliparts );
 
     // Not needed anymore
 #if 0
@@ -1675,9 +1706,8 @@ bool KWDocument::completeSaving( KoStore *_store )
 
     QString u = KURL( url() ).path();
 
-    //KWImageCollection::ConstIterator it = m_imageCollection.begin();
-    //KWImageCollection::ConstIterator end = m_imageCollection.end();
     QValueList<KoImageKey> saveImages;
+    QValueList<KoClipartKey> saveCliparts;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -1689,9 +1719,16 @@ bool KWDocument::completeSaving( KoStore *_store )
             if ( !saveImages.contains( key ) )
                 saveImages.append( key );
         }
+        if ( !frameSet->isDeleted() && frameSet->type() == FT_CLIPART )
+        {
+            KoClipartKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
+            if ( !saveCliparts.contains( key ) )
+                saveCliparts.append( key );
+        }
     }
-    m_imageCollection.saveToStore( _store, saveImages,
-                                   isStoredExtern() ? QString::null : url().url() + "/" );
+    QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
+    m_imageCollection.saveToStore( _store, saveImages, prefix );
+    m_clipartCollection.saveToStore( _store, saveCliparts, prefix );
     return TRUE;
 }
 
@@ -2254,6 +2291,11 @@ void KWDocument::addImageRequest( const KoImageKey &key, KWPictureFrameSet *fs )
 void KWDocument::addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos )
 {
     m_anchorRequests.insert( framesetName, anchorPos );
+}
+
+void KWDocument::addClipartRequest( const KoClipartKey & key, KWClipartFrameSet *fs )
+{
+    m_clipartRequests.insert( key, fs );
 }
 
 KWVariableFormat * KWDocument::variableFormat( int type )

@@ -1209,7 +1209,7 @@ void KWPictureFrameSet::loadImage( const QString & fileName, const QSize &_imgSi
     m_image = m_image.scale( _imgSize );
 }
 
-void KWPictureFrameSet::setSize( QSize _imgSize )
+void KWPictureFrameSet::setSize( const QSize & _imgSize )
 {
     m_image = m_image.scale( _imgSize );
 }
@@ -1272,6 +1272,74 @@ void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
     if ( s != m_image.image().size() )
         m_image = m_image.scale( s );
     painter->drawPixmap( 0, 0, m_image.pixmap() );
+}
+
+/******************************************************************/
+/* Class: KWClipartFrameSet                                       */
+/******************************************************************/
+KWClipartFrameSet::KWClipartFrameSet( KWDocument *_doc, const QString & name )
+    : KWFrameSet( _doc )
+{
+    if ( name.isEmpty() )
+        m_name = _doc->generateFramesetName( i18n( "Clipart %1" ) );
+    else
+        m_name = name;
+}
+
+void KWClipartFrameSet::loadClipart( const QString & fileName )
+{
+    KoClipartCollection *collection = m_doc->clipartCollection();
+    m_clipart = collection->loadClipart( fileName );
+}
+
+void KWClipartFrameSet::save( QDomElement & parentElem, bool saveFrames )
+{
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
+    QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
+    parentElem.appendChild( framesetElem );
+
+    KWFrameSet::save( framesetElem, saveFrames );
+
+    QDomElement imageElem = parentElem.ownerDocument().createElement( "CLIPART" );
+    framesetElem.appendChild( imageElem );
+    QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
+    imageElem.appendChild( elem );
+    m_clipart.key().saveAttributes( elem );
+}
+
+void KWClipartFrameSet::load( QDomElement &attributes, bool loadFrames )
+{
+    KWFrameSet::load( attributes, loadFrames );
+
+    // <CLIPART>
+    QDomElement image = attributes.namedItem( "CLIPART" ).toElement();
+    if ( !image.isNull() ) {
+        // <KEY>
+        QDomElement keyElement = image.namedItem( "KEY" ).toElement();
+        if ( !keyElement.isNull() )
+        {
+            KoClipartKey key;
+            key.loadAttributes( keyElement, QDate(), QTime() );
+            m_doc->addClipartRequest( key, this );
+        }
+        else
+            kdError(32001) << "Missing KEY tag in CLIPART" << endl;
+    } else
+        kdError(32001) << "Missing CLIPART tag in FRAMESET" << endl;
+}
+
+void KWClipartFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &,
+                                   QColorGroup &, bool, bool, KWFrameSetEdit * )
+{
+    if ( m_clipart.isNull() )
+        return;
+    QSize s ( kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ) );
+    painter->save();
+    QRect vp( 0, 0, s.width(), s.height() );
+    painter->setViewport( painter->worldMatrix().map( vp ) ); // stolen from killu
+    painter->drawPicture( *m_clipart.picture() );
+    painter->restore();
 }
 
 /******************************************************************/

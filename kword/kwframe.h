@@ -22,6 +22,7 @@
 
 #include "defs.h"
 #include "kwimage.h"
+#include <koClipart.h>
 
 #include <koRect.h>
 #include <qbrush.h>
@@ -547,7 +548,6 @@ protected:
 /******************************************************************/
 /* Class: KWPictureFrameSet                                       */
 /******************************************************************/
-
 class KWPictureFrameSet : public KWFrameSet
 {
 public:
@@ -562,7 +562,7 @@ public:
     KoImageKey key() const { return m_image.key(); }
 
     void loadImage( const QString &fileName, const QSize &_imgSize );
-    void setSize( QSize _imgSize );
+    void setSize( const QSize & _imgSize );
 
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
@@ -573,6 +573,36 @@ public:
 
 protected:
     KWImage m_image;
+};
+
+/******************************************************************/
+/* Class: KWClipartFrameSet                                       */
+/******************************************************************/
+class KWClipartFrameSet : public KWFrameSet
+{
+public:
+    KWClipartFrameSet( KWDocument *_doc, const QString & name );
+    virtual ~KWClipartFrameSet() {}
+
+    virtual FrameSetType type() { return FT_CLIPART; }
+
+    void setClipart( const KoClipart &clipart ) { m_clipart = clipart; }
+    KoClipart clipart() const { return m_clipart; }
+
+    KoClipartKey key() const { return m_clipart.key(); }
+
+    void loadClipart( const QString &fileName );
+    //void setSize( const QSize & _imgSize );
+
+    virtual void save( QDomElement &parentElem, bool saveFrames = true );
+    virtual void load( QDomElement &attributes, bool loadFrames = true );
+
+    virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect & crect,
+                            QColorGroup &, bool onlyChanged, bool resetChanged,
+                            KWFrameSetEdit *edit = 0L );
+
+protected:
+    KoClipart m_clipart;
 };
 
 /******************************************************************/

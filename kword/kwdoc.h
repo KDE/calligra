@@ -24,6 +24,7 @@ class KWDocument;
 class KPrinter;
 class KWTextImage;
 class KWPictureFrameSet;
+class KWClipartFrameSet;
 class KWSerialLetterDataBase;
 class KWFrameSet;
 class KWTableFrameSet;
@@ -54,7 +55,7 @@ namespace KFormula {
 #include <koGlobal.h>
 #include <koRect.h>
 #include <koDocumentChild.h>
-
+#include <koClipartCollection.h>
 #include "kwimage.h"
 #include "kwanchorpos.h"
 #include "kwunit.h"
@@ -243,6 +244,7 @@ public:
     //void setPages( int _pages ) { m_pages = _pages;  }
 
     KWImageCollection *imageCollection() { return &m_imageCollection; }
+    KoClipartCollection *clipartCollection() { return &m_clipartCollection; }
 
     QList <KWView> getAllViews() { return m_lstViews; }
 
@@ -307,6 +309,8 @@ public:
     void addImageRequest( const KoImageKey &key, KWTextImage *img );
     // For KWPictureFrameSet
     void addImageRequest( const KoImageKey &key, KWPictureFrameSet *fs );
+    // For KWClipartFrameSet
+    void addClipartRequest( const KoClipartKey &key, KWClipartFrameSet *fs );
     // For KWTextParag
     void addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos );
 
@@ -545,6 +549,7 @@ private:
     unsigned int m_ptColumnWidth;
 
     KWImageCollection m_imageCollection;
+    KoClipartCollection m_clipartCollection;
     QList<KWFrameSet> frames;
     QList<KWStyle> m_styleList;
     QList<KWStyle> m_deletedStyles;
@@ -572,10 +577,12 @@ private:
     QString urlIntern;
 
     QMap<KoImageKey, QString> * m_pixmapMap;
+    QMap<KoClipartKey, QString> * m_clipartMap;
 
     QMap<KoImageKey, KWTextImage *> m_imageRequests;
     QMap<KoImageKey, KWPictureFrameSet *> m_imageRequests2;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
+    QMap<KoClipartKey, KWClipartFrameSet *> m_clipartRequests;
 
     QMap<int, KWVariableFormat*> m_mapVariableFormats;
     QList<KWVariable> variables;

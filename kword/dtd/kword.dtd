@@ -221,6 +221,7 @@ don't put a </?xml...> at the end of the file!).
                             2...Picture frame (contains an IMAGE tag)
                             3...Part frame (defined in EMBEDDED at the doc level)
                             4...Formula frame (contains a FORMULA tag)
+                            5...Clipart frame (contains a CLIPART tag)
 
             frameInfo:      0...normal text
                             1...header for first page
@@ -263,7 +264,7 @@ don't put a </?xml...> at the end of the file!).
 
 -->
 <!ELEMENT FRAMESET
-    (FRAME|PARAGRAPH|IMAGE|FORMULA)*>  <!-- missing: defining FORMULA -->
+    (FRAME|PARAGRAPH|IMAGE|CLIPART|FORMULA)*>  <!-- missing: defining FORMULA -->
 <!ATTLIST FRAMESET
     name CDATA
     frameType CDATA #REQUIRED
@@ -679,21 +680,14 @@ don't put a </?xml...> at the end of the file!).
     type CDATA #REQUIRED
     instance CDATA #REQUIRED>
 
-<!--    Definition of an image
+<!--    Definition of an image - contains only one element, the key to the image.
 -->
 <!ELEMENT IMAGE
-    (FILENAME)>
-<!--    Key of the image - not really the filename, but a way to identify the
-        image in the image collection. #### To be renamed 'KEY' ######
-        The images are defined in the PIXMAPS element and saved in the tar file.
-
-        Attributes:
-            value:              Key identifying the image
+    (KEY)>
+<!--    Definition of a clipart - contains only one element, the key to the clipart.
 -->
-<!ELEMENT FILENAME
-    EMPTY>
-<!ATTLIST FILENAME
-    value CDATA #REQUIRED>
+<!ELEMENT CLIPART
+    (KEY)>
 
 <!--    Variable
 -->
