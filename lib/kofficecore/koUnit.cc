@@ -29,7 +29,7 @@ QString KoUnit::unitDescription( Unit _unit )
     case KoUnit::U_MM:
         return i18n("Millimeters (mm)");
     case KoUnit::U_INCH:
-        return i18n("Inches (inch)");
+        return i18n("Inches (in)");
     case KoUnit::U_PT:
         return i18n("Points (pt)" );
     default:
