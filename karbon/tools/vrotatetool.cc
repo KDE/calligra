@@ -56,7 +56,6 @@ VRotateTool::draw()
 
 	painter->setZoomFactor( 1.0 );
 
-	view()->painterFactory()->painter()->end();
 
 
 
@@ -156,6 +155,7 @@ VRotateTool::setCursor( const KoPoint& /*current*/ ) const
 void
 VRotateTool::mouseButtonPress( const KoPoint& /*current*/ )
 {
+	view()->painterFactory()->painter()->end();
 //	m_activeNode = view()->part()->document().selection()->handleNode( current ) );
 	recalc();
 
