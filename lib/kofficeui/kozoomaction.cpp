@@ -43,8 +43,8 @@ KoZoomAction::KoZoomAction( const QString& text, const QString& pix,
 void KoZoomAction::setZoom( const QString& text )
 {
   bool ok = false;
-  
-  int zoom = text.toInt( &ok );
+  QString t = text;
+  int zoom = t.remove( '%' ).toInt( &ok );
   
   // where we'll store sorted new zoom values
   QValueList<int> list;
@@ -72,7 +72,7 @@ void KoZoomAction::setZoom( const QString& text )
     values.append( i18n("%1%").arg(*it) );
   setItems( values );
   
-  QString zoomStr = QString("%1%").arg( zoom );
+  QString zoomStr = i18n("%1%").arg( zoom );
   setCurrentItem( values.findIndex( zoomStr ) );
 }
 
@@ -106,7 +106,7 @@ void KoZoomAction::init()
   values << i18n("%1%").arg("500");
   setItems( values );
   
-  setCurrentItem( values.findIndex( QString("%1%").arg( 100 ) ) );
+  setCurrentItem( values.findIndex( i18n("%1%").arg( 100 ) ) );
   
   connect( this, SIGNAL( activated( const QString& ) ), 
     SLOT( activated( const QString& ) ) );
