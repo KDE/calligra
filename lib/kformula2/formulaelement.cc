@@ -29,7 +29,7 @@
 FormulaElement::FormulaElement(KFormulaContainer* container)
     : document(container)
 {
-    size = 20;
+    size = 18;
 }
 
 /**

@@ -48,15 +48,18 @@ ostream& TextElement::output(ostream& stream)
  */
 void TextElement::calcSizes(ContextStyle& context, int parentSize)
 {
-    int mySize = QMAX(parentSize + getRelativeSize(), 10);
+    int mySize = QMAX(parentSize + getRelativeSize(), 8);
     //QFontMetrics fm = context.fontMetrics();
     QFont font = getFont(context);
     font.setPointSize(mySize);
+
     QFontMetrics fm(font);
     setWidth(fm.width(character));
     setHeight(fm.height());
     setMidline(getHeight() / 2);
     baseline = fm.ascent();
+
+    
 }
 
 /**

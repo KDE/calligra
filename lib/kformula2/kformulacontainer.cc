@@ -434,8 +434,9 @@ void KFormulaContainer::load(QString file)
     rootElement.buildFromDom(&fe);
     dirty = true;
     testDirty();
-    
-    
+    cleanRedoStack();    
+    cleanUndoStack();    
+
     f.close();
     
 //emit something to say the cursor we are new!

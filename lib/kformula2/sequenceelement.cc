@@ -31,6 +31,7 @@
 #include "rootelement.h"
 #include "operatorelement.h"
 #include "numberelement.h"
+#include "bracketelement.h"
 
 SequenceElement::SequenceElement(BasicElement* parent)
     : BasicElement(parent)
@@ -607,6 +608,9 @@ void SequenceElement::buildFromDom(QDomElement *elem)
 	     else
 	     if(tag=="ROOT")
 	         child=new RootElement(this);
+	     else
+	     if(tag=="BRACKET")
+	         child=new BracketElement('(',')',this);
 	     else
 	     if(tag=="MATRIX")
 	         child=new MatrixElement(e.attribute("ROWS").toInt(),

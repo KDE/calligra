@@ -186,6 +186,10 @@ private:
      * Clean redo stack because of a modify.
      */
      void cleanRedoStack() {redoStack.clear();}
+    /**
+     * Clean undo stack because of a modify.
+     */
+     void cleanUndoStack() {undoStack.clear();}
      
 
     /**
