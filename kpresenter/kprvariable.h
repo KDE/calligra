@@ -38,7 +38,7 @@ public:
     KPrVariableCollection(KoVariableSettings *_setting, KoVariableFormatCollection* coll);
     virtual KoVariable *createVariable( int type, short int subtype, KoVariableFormatCollection * coll,
                                         KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc,
-                                        int _correct, bool _forceDefaultFormat=false );
+                                        int _correct, bool _forceDefaultFormat=false , bool loadFootNote= true);
 };
 
 /**

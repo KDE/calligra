@@ -595,7 +595,7 @@ void KoVariableCollection::slotChangeFormat()
     }
 }
 
-KoVariable * KoVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct, bool _forceDefaultFormat )
+KoVariable * KoVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct, bool _forceDefaultFormat, bool /*loadFootNote*/ )
 {
     Q_ASSERT( coll == m_formatCollection ); // why do we need a parameter ?!?
     QCString string;

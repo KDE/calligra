@@ -292,7 +292,7 @@ public:
 
     bool customVariableExist(const QString &varname)const ;
 
-    virtual KoVariable *createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct , bool _forceDefaultFormat=false );
+    virtual KoVariable *createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct , bool _forceDefaultFormat=false, bool loadFootNote= true );
 
     /// Load variable from OASIS file format (called "field" in the OASIS format)
     virtual KoVariable* loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context );

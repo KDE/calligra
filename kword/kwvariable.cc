@@ -82,6 +82,7 @@ KWVariableCollection::KWVariableCollection(KWVariableSettings *_setting, KoVaria
 KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context )
 {
     const QString tagName( tag.tagName() );
+    kdDebug()<<" tagName :"<<tagName<<endl;
     if ( tagName == "text:note" )
     {
         QString key = "STRING";
@@ -94,6 +95,7 @@ KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const
 
 KoVariable *KWVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct,bool _forceDefaultFormat, bool loadFootNote )
 {
+    kdDebug()<<" KoVariable *KWVariableCollection::createVariable****************\n";
     KWDocument *m_doc = static_cast<KWDocument *>(doc);
     KoVariable * var = 0L;
     switch(type) {

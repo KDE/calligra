@@ -33,7 +33,7 @@ KPrVariableCollection::KPrVariableCollection(KoVariableSettings *_setting, KoVar
 
 KoVariable *KPrVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll,
                                                    KoVariableFormat *varFormat,KoTextDocument *textdoc,
-                                                   KoDocument * doc,  int _correct, bool _forceDefaultFormat )
+                                                   KoDocument * doc,  int _correct, bool _forceDefaultFormat, bool /*loadFootNote*/ )
 {
     KPresenterDoc*m_doc=static_cast<KPresenterDoc*>(doc);
     KoVariable * var = 0L;
