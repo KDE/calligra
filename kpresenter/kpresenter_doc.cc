@@ -924,7 +924,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         _rastY = 20;
         _xRnd = 20;
         _yRnd = 20;
-        _txtBackCol = white;
+        //_txtBackCol = white;
         urlIntern = url().path();
     }
 
