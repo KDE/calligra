@@ -553,7 +553,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     if ( lastFormat->attributeFont() == KoTextFormat::ATT_SMALL_CAPS && s[start].upper() != s[start] )
     {
         QFontMetrics fm( font );
-        double pointSize = font.pointSize() * ((double)fm.boundingRect("x").height()/(double)fm.ascent());
+        double pointSize = font.pointSize() * ((double)fm.boundingRect("x").height()/(double)fm.boundingRect("X").height());
         font.setPointSizeFloat( pointSize );
         //kdDebug() << "drawParagStringInternal: drawing small caps for '" << s << "'" << " with pointSize=" << pointSize << endl;
     }

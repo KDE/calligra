@@ -289,7 +289,7 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
         {
             QFont font = applyZoom ? screenFont( zh ) : refFont();
             QFontMetrics fm = refFontMetrics(); // only used for proportions, so applyZoom doesn't matter
-            double pointSize = font.pointSize() * ((double)fm.boundingRect("x").height()/(double)fm.ascent());
+            double pointSize = font.pointSize() * ((double)fm.boundingRect("x").height()/(double)fm.boundingRect("X").height());
             font.setPointSizeFloat( pointSize );
             pixelww = QFontMetrics( font ).width( displayedChar( c->c ) );
         }
@@ -319,7 +319,7 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
         KoTextFormat tmpFormat( *this );  // make a copy
         double factor = 1.0;
         if ( attributeFont() == KoTextFormat::ATT_SMALL_CAPS && c->c.upper() != c->c )
-            factor = ((double)fm.boundingRect("x").height()/(double)fm.ascent());
+            factor = ((double)fm.boundingRect("x").height()/(double)fm.boundingRect("X").height());
 
         tmpFormat.setPointSizeFloat( factor * ( applyZoom ? screenPointSize( zh ) : refPointSize() ) );
         // complex text. We need some hacks to get the right metric here
