@@ -39,6 +39,7 @@
 #include <kprinter.h>
 
 #include <kio/netaccess.h>
+#include <kio/job.h>
 #include <kparts/partmanager.h>
 #include <klocale.h>
 #include <kmimetype.h>
@@ -244,6 +245,10 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
     m_pageLayout.ptBottom = 0;
     m_pageLayout.ptLeft = 0;
     m_pageLayout.ptRight = 0;
+
+    // A way to 'fix' the job's window, since we have no widget known to KParts
+    if ( !singleViewMode )
+        connect( this, SIGNAL( started( KIO::Job* ) ), SLOT( slotStarted( KIO::Job* ) ) );
 }
 
 KoDocument::~KoDocument()
@@ -366,7 +371,7 @@ bool KoDocument::saveFile()
     if ( backupFile() ) {
         KIO::UDSEntry entry;
 #if KDE_IS_VERSION(3,1,90)
-        if ( KIO::NetAccess::stat( url(), entry, 0 ) ) { // this file exists => backup
+        if ( KIO::NetAccess::stat( url(), entry, shells().current() ) ) { // this file exists => backup
 #else
         if ( KIO::NetAccess::stat( url(), entry ) ) { // this file exists => backup
 #endif
@@ -378,7 +383,7 @@ bool KoDocument::saveFile()
                 backup = d->m_backupPath +"/"+url().fileName();
             backup.setPath( backup.path() + QString::fromLatin1("~") );
 #if KDE_IS_VERSION(3,1,90)
-            KIO::NetAccess::file_copy( url(), backup, -1, true /*overwrite*/ );
+            KIO::NetAccess::file_copy( url(), backup, -1, true /*overwrite*/, false /*resume*/, shells().current() );
 #else
             KFileItem item( entry, url() );
             Q_ASSERT( item.name() == url().fileName() );
@@ -407,8 +412,12 @@ bool KoDocument::saveFile()
         // Native format => normal save
         ret = saveNativeFormat( m_file );
 
-    if ( ret )
+    if ( ret ) {
         removeAutoSaveFiles();
+        // Restart the autosave timer
+        // (we don't want to autosave again 2 seconds after a real save)
+        setAutoSave( d->m_autoSaveDelay );
+    }
 
     QApplication::restoreOverrideCursor();
     if ( !ret )
@@ -1974,6 +1983,14 @@ KoDocument::InitDocFlags KoDocument::initDocFlags() const
 void KoDocument::setInitDocFlags( InitDocFlags flags )
 {
     d->m_initDocFlags = flags;
+}
+
+void KoDocument::slotStarted( KIO::Job* job )
+{
+    if ( job )
+    {
+        job->setWindow( d->m_shells.current() );
+    }
 }
 
 #include "koDocument_p.moc"

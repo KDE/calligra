@@ -829,6 +829,7 @@ private slots:
     void slotChildChanged( KoChild *c );
     void slotChildDestroyed();
     void slotAutoSave();
+    void slotStarted( KIO::Job* );
 
 private:
     void savePreview( KoStore* store );

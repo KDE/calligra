@@ -396,7 +396,9 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_rootViews.current()->setPartManager( d->m_manager );
 
     d->m_rootViews.current()->show();
-    d->m_rootDoc->addShell( this );
+    // The addShell has been done already if using openURL
+    if ( !d->m_rootDoc->shells().contains( this ) )
+        d->m_rootDoc->addShell( this );
     d->m_removeView->setEnabled(false);
     d->m_orientation->setEnabled(false);
   }
@@ -561,6 +563,7 @@ bool KoMainWindow::openDocument( KoDocument *newdoc, const KURL & url )
     return openDocumentInternal( url, newdoc );
 }
 
+// ## If you modify anything here, please check KoShellWindow::openDocumentInternal
 bool KoMainWindow::openDocumentInternal( const KURL & url, KoDocument *newdoc )
 {
     //kdDebug(30003) << "KoMainWindow::openDocument " << url.url() << endl;
@@ -572,6 +575,7 @@ bool KoMainWindow::openDocumentInternal( const KURL & url, KoDocument *newdoc )
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
+    newdoc->addShell( this ); // used by openURL
     bool openRet = (!isImporting ()) ? newdoc->openURL(url) : newdoc->import(url);
     if(!newdoc || !openRet)
     {
