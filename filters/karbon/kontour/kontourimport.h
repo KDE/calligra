@@ -22,12 +22,7 @@
 
 #include <koFilter.h>
 #include <qdom.h>
-#include <shapes/vellipse.h>
-#include <shapes/vrectangle.h>
-#include <shapes/vpolygon.h>
-#include <core/vpath.h>
 #include <core/vdocument.h>
-
 
 class KontourImport : public KoFilter
 {
@@ -38,6 +33,7 @@ public:
 	virtual ~KontourImport();
 
 	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+
 protected:
 	QDomDocument inpdoc;
 	QDomDocument outdoc;

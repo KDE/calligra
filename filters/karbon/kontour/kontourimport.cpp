@@ -23,6 +23,10 @@
 #include <kdebug.h>
 #include <koUnit.h>
 #include <koGlobal.h>
+#include <shapes/vellipse.h>
+#include <shapes/vrectangle.h>
+#include <shapes/vpolygon.h>
+#include <core/vpath.h>
 #include <qcolor.h>
 
 typedef KGenericFactory<KontourImport, KoFilter> KontourImportFactory;
