@@ -410,6 +410,8 @@ TableView
 SQL Parser
 - added Date/DateTime/Time types support to ConstExpr 
   (parser does not operate on these constants yet)
+Query Designer
+- added support for Date/DateTime/Time criterias
 
 2004-11-02
 Main

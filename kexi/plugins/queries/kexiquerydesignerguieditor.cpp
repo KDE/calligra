@@ -848,13 +848,40 @@ KexiDB::BaseExpr* KexiQueryDesignerGuiEditor::parseCriteriaString(
 		return 0;
 
 	KexiDB::BaseExpr *valueExpr = 0;
-	if (str.left(1)=="\"") {
-		if (str.right(1)!="\"")
+	QRegExp re;
+	if (str.left(1)=="\"" || str.left(1)=="'") {
+		if (str.length()<2 
+			|| (str.left(1)=="\"" && str.right(1)!="\"")
+			|| (str.left(1)=="'" && str.right(1)!="'"))
+		{
 			return 0;
+		}
 		valueExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, str.mid(1,str.length()-2));
 	}
-	else if (QRegExp("\\d\\d\\d\\d-\\d\\d-\\d\\d").exactMatch( str )) {
-			valueExpr = new KexiDB::ConstExpr(DATE_CONST, QDate::fromString(str, Qt::ISODate));
+	else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch( str ))
+	{
+			valueExpr = new KexiDB::ConstExpr(DATE_CONST, QDate::fromString(
+				re.cap(1).rightJustify(4, '0')+"-"+re.cap(2).rightJustify(2, '0')
+				+"-"+re.cap(3).rightJustify(2, '0'), Qt::ISODate));
+	}
+	else if ((re = QRegExp("(\\d{1,2}):(\\d{1,2})")).exactMatch( str )
+	      || (re = QRegExp("(\\d{1,2}):(\\d{1,2}):(\\d{1,2})")).exactMatch( str ))
+	{
+		QString res = re.cap(1).rightJustify(2, '0')+":"+re.cap(2).rightJustify(2, '0')
+			+":"+re.cap(3).rightJustify(2, '0');
+//		kexipluginsdbg << res << endl;
+		valueExpr = new KexiDB::ConstExpr(TIME_CONST, QTime::fromString(res, Qt::ISODate));
+	}
+	else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2})")).exactMatch( str )
+	      || (re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2}):(\\d{1,2})")).exactMatch( str ))
+	{
+		QString res = re.cap(1).rightJustify(4, '0')+"-"+re.cap(2).rightJustify(2, '0')
+			+"-"+re.cap(3).rightJustify(2, '0')
+			+"T"+re.cap(4).rightJustify(2, '0')+":"+re.cap(5).rightJustify(2, '0')
+			+":"+re.cap(6).rightJustify(2, '0');
+//		kexipluginsdbg << res << endl;
+		valueExpr = new KexiDB::ConstExpr(DATETIME_CONST,
+			QDateTime::fromString(res, Qt::ISODate));
 	}
 	else if (str[0]>='0' && str[0]<='9' || str[0]=='-' || str[0]=='+') {
 		//number
