@@ -251,7 +251,7 @@ public slots:
    */
    void paperLayoutDlg();
 
-   void newView();
+  //void newView(); obsloete (Werner)
 
 signals:
   // Document signals
@@ -444,7 +444,7 @@ protected:
    */
   KSContext m_context;
 
-  KAction* m_newView;
+  //KAction* m_newView; obsolete - done in the libs (Werner)
 
   static QList<KSpreadDoc>* s_docs;
   static int s_docId;

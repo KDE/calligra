@@ -786,7 +786,7 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_showTable->setEnabled( true );
   m_hideTable->setEnabled( true );
   //  m_newView->setEnabled( true );
-  m_pDoc->KXMLGUIClient::action( "newView" )->setEnabled( true );
+  //m_pDoc->KXMLGUIClient::action( "newView" )->setEnabled( true ); // obsolete (Werner)
   m_oszi->setEnabled( true );
 }
 

@@ -115,7 +115,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   if ( name )
       dcopObject();
 
-  m_newView = new KAction( i18n("New View"), 0, this, SLOT( newView() ), actionCollection(), "newView" );
+  //m_newView = new KAction( i18n("New View"), 0, this, SLOT( newView() ), actionCollection(), "newView" );
 }
 
 bool KSpreadDoc::initDoc()
@@ -886,6 +886,9 @@ KSpreadDoc::~KSpreadDoc()
     delete m_pUndoBuffer;
 
   delete m_dcop;
+  s_docs->removeRef(this);
+  kdDebug() << "alive 1" << endl;
+  delete m_pMap;
 }
 
 DCOPObject* KSpreadDoc::dcopObject()
@@ -928,11 +931,12 @@ void KSpreadDoc::changeAreaTableName(QString oldName,QString tableName)
         }
 }
 
+/* obsolete - done in the libs now (Werner)
 void KSpreadDoc::newView()
 {
     KoMainWindow* shell = createShell();
     shell->setRootDocument( this );
     shell->show();
 }
-
+*/
 #include "kspread_doc.moc"
