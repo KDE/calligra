@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>1146</width>
-            <height>876</height>
+            <width>598</width>
+            <height>207</height>
         </rect>
     </property>
     <property name="caption">
@@ -137,6 +137,12 @@
                                 </column>
                                 <property name="name">
                                     <cstring>m_appList</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>0</width>
+                                        <height>50</height>
+                                    </size>
                                 </property>
                             </widget>
                         </grid>
