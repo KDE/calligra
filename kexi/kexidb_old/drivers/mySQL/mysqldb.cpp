@@ -20,12 +20,15 @@ Boston, MA 02111-1307, USA.
 
 #include <mysql/mysql.h>
 
+#include <qvariant.h>
+
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
 #include "../../kexiDB/kexidbresult.h"
 
 #include "mysqldb.h"
+#include "mysqlresult.h"
 
 K_EXPORT_COMPONENT_FACTORY(keximysqlinterface, KGenericFactory<MySqlDB>( "mysqlinterface" ));
 
@@ -35,7 +38,8 @@ MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &args) : K
 	
 	m_mysql = 0;
 	m_mysql = mysql_init(m_mysql);
-	m_connected = 0;
+	m_connected = false;
+	m_connectedDB = false;
 	
 }
 
@@ -84,33 +88,120 @@ MySqlDB::connect(QString host, QString user, QString password, QString db)
 }
 
 QStringList
-MySqlDB::databases() const
+MySqlDB::databases()
 {
-	return QStringList();
+/*	if(!m_connected)
+		return QStringList();
+		
+	kdDebug() << "MySqlDB::databases()" << endl;
+	MYSQL_RES *res = mysql_list_dbs(m_mysql, "%");
+	if(!res)
+		return s;
+
+	MySqlResult *result = new MySqlResult(res, this);
+	if(!result)
+		return s;
+
+	kdDebug() << "MySqlDB::databases(): fetched result" << endl;
+	while(result->next())
+	{
+		kdDebug() << "MySqlDB::databases(): reached get-loop" << endl;
+		s.append(QString::fromLatin1(result->value(0).toString()));
+		kdDebug() << "MySqlDB::databases() found databases: " << result->value(0).toString() << endl;
+	}
+//	delete result;
+	return s;
+*/
+	QStringList s;
+	
+	query("show databases");
+//	query("select current_time() as time");
+//	kdDebug() << "MySqlDB::databases(): query produced error: " << mysql_errno(m_mysql) << endl;
+	KexiDBResult *result = storeResult();
+
+	if(!result)
+		return s;
+
+	kdDebug() << "MysqlDB::databases(): using " << result << endl;
+	while(result->next())
+	{
+		kdDebug() << "MySqlDB::databases(): found: " << result->value(0).toString() << endl;
+		s.append(result->value(0).toString());
+//		kdDebug() << "MySqlDB::databases(): result loop" << endl;
+	}
+
+	return s;
 }
 
 QStringList
-MySqlDB::tables() const
+MySqlDB::tables()
 {
-	return QStringList();
+	if(!m_connectedDB)
+		return QStringList();
+
+	kdDebug() << "MySqlDB::tables()" << endl;
+	QStringList s;
+	MYSQL_RES *res = mysql_list_tables(m_mysql, "%");
+	if(!res)
+		return s;
+
+	MySqlResult *result = new MySqlResult(res, this);
+	if(!result)
+		return s;
+
+	while(result->next())
+	{
+		kdDebug() << "MySqlDB::tables() inner loop" << endl;
+		s.append(QString::fromLatin1(result->value(0).toString()));
+		kdDebug() << "MySqlDB::tables() found table: " << result->value(0).toString() << endl;
+	}
+//	delete result;
+	return s;
 }
 
 int
-MySqlDB::query(QString)
+MySqlDB::query(QString statement)
 {
-	return -1;
+	const char *query = statement.latin1();
+	if(mysql_real_query(m_mysql, query, strlen(query)) == 0)
+		return 0;
 }
 
 KexiDBResult*
 MySqlDB::storeResult()
 {
-	return new KexiDBResult();
+	kdDebug() << "MySqlDB::storeResult(): error: " << mysql_error(m_mysql) << endl;
+	MYSQL_RES *res = mysql_store_result(m_mysql);
+	if(res)
+	{
+		kdDebug() << "MySqlDB::storeResult(): wow, got a result!!!" << endl;
+		return new MySqlResult(res, this);
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 KexiDBResult*
 MySqlDB::useResult()
 {
-	return new KexiDBResult();
+	kdDebug() << "MySqlDB::useResult(): error: " << mysql_error(m_mysql) << endl;
+	kdDebug() << "MySqlDB::useResult(): info: " << mysql_info(m_mysql) << endl;
+	MYSQL_RES *res = mysql_use_result(m_mysql);
+	kdDebug() << "MySqlDB::useResult(): d1" << endl;
+	if(res)
+	{
+		kdDebug() << "MySqlDB::useResult(): d2" << endl;
+		MySqlResult *result = new MySqlResult(res, this);
+		kdDebug() << "MySqlDB::useResulg(): d3" << endl;
+		return result;
+	}
+	else
+	{
+		kdDebug() << "MySqlDB::useResult(): not enough data" << endl;
+		return 0;
+	}
 }
 
 unsigned long

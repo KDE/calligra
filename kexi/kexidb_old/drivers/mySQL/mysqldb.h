@@ -51,8 +51,8 @@ class MySqlDB : public KexiDB
 		bool		connect(QString host, QString user, QString password);
 		bool		connect(QString host, QString user, QString password, QString db);
 
-		QStringList	databases() const;
-		QStringList	tables() const;
+		QStringList	databases();
+		QStringList	tables();
 		
 		/*!
 		 *  get the last error
@@ -86,6 +86,7 @@ class MySqlDB : public KexiDB
 		
 		MYSQL		*m_mysql;
 		bool		m_connected;
+		bool		m_connectedDB;
 		const char	*m_host;
 		const char	*m_user;
 		const char	*m_passwd;
