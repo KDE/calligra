@@ -430,6 +430,7 @@ bool KSValue::cast( Type _typ )
 	typ = _typ;
 	return true;
       }
+      return false;
       break;
     case DoubleType:
       if ( _typ == IntType )
