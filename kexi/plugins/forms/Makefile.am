@@ -8,7 +8,7 @@ kexihandler_form_la_LIBADD = ../../core/libkexicore.la ../../tableview/libkexida
 
 kexidbwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) -module
 kexidbwidgets_la_SOURCES =  kexidbfactory.cpp
-kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la kexihandler_form.la
+kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la
 
 servicesdir=$(kde_servicesdir)/kformdesigner
 services_DATA = kexidbfactory.desktop
