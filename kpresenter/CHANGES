@@ -601,3 +601,4 @@ Reggie 12.12.1999:
 Reggie, 21.12.1999:
 ---------------
 - When deleting a page recalc page numbers in textobjs correctly
+- When creating a template only save really used pixmaps

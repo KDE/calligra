@@ -3785,15 +3785,27 @@ void KPresenterDoc::makeUsedPixmapList()
     usedPixmaps.clear();
 
     KPObject *kpobject = 0L;
-    for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
-	if ( kpobject->getType() == OT_PICTURE )
+    int i = 0;
+    for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next(), ++i ) {
+	if ( kpobject->getType() == OT_PICTURE ) {
+	    if ( saveOnlyPage != -1 ) {
+		int pg = getPageOfObj( i, 0, 0 ) - 1;
+		if ( saveOnlyPage != pg )
+		    continue;
+	    }
 	    usedPixmaps.append( dynamic_cast<KPPixmapObject*>( kpobject )->getKey() );
-
+	}
+    }
+    
     KPBackGround *kpbackground = 0;
-    for ( kpbackground = _backgroundList.first(); kpbackground; kpbackground = _backgroundList.next() )
-	if ( kpbackground->getBackType() == BT_PICTURE )
+    i = 0;
+    for ( kpbackground = _backgroundList.first(); kpbackground; kpbackground = _backgroundList.next(), ++i ) {
+	if ( kpbackground->getBackType() == BT_PICTURE ) {
+	    if ( saveOnlyPage != -1 && i != saveOnlyPage )
+		continue;
 	    usedPixmaps.append( kpbackground->getKey() );
-
+	}
+    }
 }
 
 /*================================================================*/
