@@ -607,7 +607,8 @@ void KWTextParag::loadLayout( QDomElement & attributes )
     }
     else
     {
-        kdError(32001) << "Missing LAYOUT tag" << endl;
+        // Even the simplest import filter should do <LAYOUT><NAME value="Standard"/></LAYOUT>
+        kdWarning(32001) << "No LAYOUT tag in PARAGRAPH, dunno what layout to apply" << endl;
     }
 }
 
