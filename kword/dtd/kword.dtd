@@ -120,8 +120,8 @@ don't put a </?xml...> at the end of the file!).
             hType:          header style:
 
                                 0...same on all pages
-                                1...different on first and other pages
-                                2...different on even and odd pages
+                                2...different on first and other pages
+                                3...different on even and odd pages
 
             fType:          footer style:
 
