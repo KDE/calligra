@@ -37,7 +37,7 @@
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 {
 	public:
-		typedef QDict<KexiPropertyEditorItem> Dict;
+		typedef QAsciiDict<KexiPropertyEditorItem> Dict;
 
 		/*! Creates a KexiPropertyEditorItem child of \a parent, associated to \a property.
 		 Within property editor, items are created in KexiPropertyEditor::fill(), 

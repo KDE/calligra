@@ -101,10 +101,10 @@ void KexiViewBase::propertyBufferSwitched()
 		m_mainWin->propertyBufferSwitched( parentDialog(), false );
 }
 
-void KexiViewBase::propertyBufferReloaded()
+void KexiViewBase::propertyBufferReloaded(bool preservePrevSelection)
 {
 	if (parentDialog())
-		m_mainWin->propertyBufferSwitched( parentDialog(), true );
+		m_mainWin->propertyBufferSwitched( parentDialog(), true, preservePrevSelection );
 }
 
 void KexiViewBase::setDirty(bool set)

@@ -302,8 +302,10 @@ QVariant::Type KexiProperty::type() const
 void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOldValue)
 {
 //	kdDebug() << m_name << ": setValue('" << v.toString() << "' type=" << v.typeName() << ")" << endl;
-	if (m_value.type() != v.type() && !m_value.isNull() && !v.isNull()) {
-		kdWarning() << "INCOMPATIBLE TYPES! " <<m_value.typeName() <<" and " << v.typeName() << endl;
+	if (m_value.type() != v.type() && !m_value.isNull() && !v.isNull()
+		 && !((m_value.type()==QVariant::Int && v.type()==QVariant::UInt) || (m_value.type()==QVariant::UInt && v.type()==QVariant::Int))) 
+	{
+		kdWarning() << "KexiProperty::setValue(): INCOMPATIBLE TYPES! " <<m_value.typeName() <<" and " << v.typeName() << endl;
 	}
 
 	//1. Check if the value should be changed

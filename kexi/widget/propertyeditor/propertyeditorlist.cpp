@@ -187,7 +187,7 @@ PropertyEditorList::setValue(const QVariant &value)
 		m_combo->setCurrentItem(idx);
 	}
 	else {
-		kdDebug() << "PropertyEditorList::setValue(): NO SUCH KEY! '" << value.toString() << "'" << endl;
+		kdWarning() << "PropertyEditorList::setValue(): NO SUCH KEY! '" << value.toString() << "'" << endl;
 		m_combo->setCurrentText(QString::null);
 	}
 	emit changed(this);

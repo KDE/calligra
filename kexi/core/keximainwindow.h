@@ -72,8 +72,11 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		/*! Received information from active view that \a dlg has switched 
 		its property buffer, so property editor contents should be reloaded. 
 		 If \a force is true, property editor's data is reloaded even 
-		 if the currently pointed buffer is the same as before. */
-		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false) = 0;
+		 if the currently pointed buffer is the same as before.
+		 If \a preservePrevSelection is true and there was a buffer 
+		 set before call, previously selected item will be preselected 
+		 in the editor (if found). */
+		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false, bool preservePrevSelection = false) = 0;
 
 		/*! Saves dialog's \a dlg data. It dialog's data is never saved,
 		 User is asked for name and caption, before saving.

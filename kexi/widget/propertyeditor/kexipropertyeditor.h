@@ -80,11 +80,15 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		/*! Reset the list, ie clears all items in the list.
 		   if \a editorOnly is true, then only the current editor will be cleared, not the whole list.
 		*/
-		void	reset(bool editorOnly = false);
-		/*! Sets \a b as Property Editor's buffer. The list will be automatically filled with a list item for each KexiProperty
-		   in the buffer.
+		void reset(bool editorOnly = false);
+
+		/*! Sets \a b as Property Editor's buffer. 
+		 The list will be automatically filled with a list item for each KexiProperty
+		 in the buffer. If \a preservePrevSelection is true and there was a buffer 
+		 set before call, previously selected item will be preselected (if found).
 		*/
-		void	setBuffer(KexiPropertyBuffer *b);
+		void setBuffer(KexiPropertyBuffer *b, bool preservePrevSelection = false);
+
 		virtual QSize sizeHint() const;
 
 		//! \return editor item named with \a name or null if such item not found
@@ -143,6 +147,10 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 
 		/*! Called when current buffer is about to be destroyed. */
 		void slotBufferDestroying();
+
+		void slotPropertyReset(KexiPropertyBuffer &buf,KexiProperty &prop);
+		void setBufferLater();
+
 	protected:
 		/*! Creates an editor for the list item \a i in the rect \a geometry, and displays revert button 
 		    if property is modified (ie KexiPropertyEditorItem::modified() == true).
@@ -156,10 +164,6 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 
 		int baseRowHeight() const { return m_baseRowHeight; }
 
-	protected slots:
-		void slotPropertyReset(KexiPropertyBuffer &buf,KexiProperty &prop);
-
-	private:
 		QGuardedPtr<KexiPropertySubEditor> m_currentEditor;
 		KexiPropertyEditorItem *m_editItem;
 		KexiPropertyEditorItem *m_topItem; //The top item is used to control the drawing of every branches.
@@ -169,6 +173,11 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		int m_baseRowHeight;
 		bool m_sync : 1;
 		bool slotValueChanged_enabled : 1;
+		bool insideSlotValueChanged : 1;
+		//! Helpers for setBufferLater()
+		bool setBufferLater_set : 1;
+		bool preservePrevSelection_preservePrevSelection : 1;
+		KexiPropertyBuffer* setBufferLater_buffer;
 
 	friend class KexiPropertyEditorItem;
 };

@@ -60,6 +60,7 @@ class KEXICORE_EXPORT KexiStartupData
 		bool m_forcedDesignMode : 1;
 		bool m_createDB : 1;
 		bool m_dropDB : 1;
+		bool m_alsoOpenDB : 1;
 };
 
 #endif

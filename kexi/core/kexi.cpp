@@ -168,8 +168,8 @@ KexiValidator::Result IdentifierValidator::internalCheck(
 {
 	if (Kexi::isIdentifier(v.toString()))
 		return KexiValidator::Ok;
-	message = i18n("Value of \"%1\" column must be an identifier.\n"
-		"\"%2\" is not a valid identifier.").arg(valueName).arg(v.toString());
+	message = "<p>"+i18n("Value of \"%1\" column must be an identifier.").arg(valueName)
+		+"</p><p>"+i18n("\"%1\" is not a valid identifier.").arg(v.toString())+"</p>";
 	return KexiValidator::Error;
 }
 

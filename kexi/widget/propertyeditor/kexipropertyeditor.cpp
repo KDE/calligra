@@ -24,6 +24,9 @@
 #include <qheader.h>
 #include <qevent.h>
 #include <qfontmetrics.h>
+#include <qtimer.h>
+#include <qapplication.h>
+#include <qeventloop.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -39,7 +42,7 @@
 
 KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const char *name)
  : KListView(parent, name)
- , m_items(101)
+ , m_items(101, false)
 {
 	m_items.setAutoDelete(false);
 
@@ -51,6 +54,10 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	m_editItem = 0;
 	m_sync = autoSync;
 	slotValueChanged_enabled = true;
+	insideSlotValueChanged = false;
+	setBufferLater_set = false;
+	preservePrevSelection_preservePrevSelection = false;
+	setBufferLater_buffer = 0;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 	connect(this, SIGNAL(expanded(QListViewItem *)), this, SLOT(slotExpanded(QListViewItem *)));
@@ -249,6 +256,7 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor * /*editor*/)
 {
 	if (!slotValueChanged_enabled)
 		return;
+	insideSlotValueChanged = true;
 	if(m_currentEditor)
 	{
 		QVariant value = m_currentEditor->value();
@@ -281,10 +289,13 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor * /*editor*/)
 //js: TODO				parent->getComposedValue();
 			}
 		}
+		if (!m_editItem)
+			return;
 		m_editItem->updateValue();
 		showDefaultsButton( m_editItem->property()->changed() );
 		emit valueChanged(m_editItem->name(), value);
 	}
+	insideSlotValueChanged = false;
 }
 
 void
@@ -386,7 +397,8 @@ KexiPropertyEditor::slotColumnSizeChanged(int section)
 void
 KexiPropertyEditor::reset(bool editorOnly)
 {
-	delete m_currentEditor;
+//	delete m_currentEditor;
+	m_currentEditor->deleteLater();
 	m_currentEditor = 0;
 	if(m_defaults->isVisible())
 		m_defaults->hide();
@@ -394,6 +406,7 @@ KexiPropertyEditor::reset(bool editorOnly)
 	if(!editorOnly)
 	{
 		clear();
+		m_editItem = 0;
 		m_topItem = 0;
 	}
 }
@@ -408,9 +421,28 @@ QSize KexiPropertyEditor::sizeHint() const
 }
 
 void
-KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b)
+KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b, bool preservePrevSelection)
 {
+	if (insideSlotValueChanged) {
+		//setBuffer() called from inside of slotValueChanged()
+		//this is dangerous, because there can be pending events, 
+		//especially for the GUI stuff, so let's do delayed work
+		bool shot = !setBufferLater_set;
+		setBufferLater_buffer = b;
+		preservePrevSelection_preservePrevSelection = preservePrevSelection;
+		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
+		if (!setBufferLater_set) {
+			setBufferLater_set = true;
+			QTimer::singleShot(10, this, SLOT(setBufferLater()));
+		}
+		return;
+	}
+	QCString selectedPropertyName;
 	if (m_buffer) {
+		slotEditorAccept(m_currentEditor);
+		if (preservePrevSelection && m_editItem) {
+			selectedPropertyName = m_editItem->name();
+		}
 		m_buffer->disconnect(this);
 	}
 	m_buffer = b;
@@ -423,6 +455,26 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b)
 		connect(m_buffer,SIGNAL(destroying()), this, SLOT(slotBufferDestroying()));
 	}
 	fill();
+	if (!selectedPropertyName.isEmpty()) {
+		//select prev. selecteed item
+		KexiPropertyEditorItem * item = m_items[selectedPropertyName];
+		if (item) {
+			setSelected(item, true);
+			ensureItemVisible(item);
+		}
+	}
+}
+
+//! @internal
+void KexiPropertyEditor::setBufferLater()
+{
+	setBufferLater_set = false;
+	if (!setBufferLater_buffer)
+		return;
+	bool b = insideSlotValueChanged;
+	insideSlotValueChanged = false;
+  setBuffer(setBufferLater_buffer, preservePrevSelection_preservePrevSelection);
+	insideSlotValueChanged = b;
 }
 
 void KexiPropertyEditor::slotPropertyReset(KexiPropertyBuffer & /*buf*/,KexiProperty & /*prop*/)
@@ -484,7 +536,9 @@ KexiPropertyEditor::resetItem()
 //		}
 
 //		m_editItem->property()->setValue( m_editItem->property()->oldValue(), false );
+		slotValueChanged_enabled = false;
 		m_editItem->property()->resetValue();
+		slotValueChanged_enabled = true;
 /*
 		if (!m_currentEditor) {
 			m_editItem->updateValue();
@@ -535,6 +589,8 @@ KexiPropertyEditor::resizeEvent(QResizeEvent *ev)
 void
 KexiPropertyEditor::slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &prop)
 {
+//	if (!slotValueChanged_enabled) //js
+	//	return;
 	if (static_cast<KexiPropertyBuffer*>(m_buffer)!=&buf)
 		return;
 	KexiPropertyEditorItem* item = m_items[prop.name()];

@@ -149,8 +149,11 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 		/*! Call this in your view's implementation whenever current property buffer 
 		 is changed that few properties are now visible and/or few other are invisible,
-		 so property editor operating on this buffer should be completely reloaded. */
-		void propertyBufferReloaded();
+		 so property editor operating on this buffer should be completely reloaded. 
+		 If \a preservePrevSelection is true and there was a buffer 
+		 set before call, previously selected item will be preselected 
+		 in the editor (if found). */
+		void propertyBufferReloaded(bool preservePrevSelection = false);
 
 		/*! Tells this dialog to create and store data of the new object
 		 pointed by \a sdata on the backend. 
