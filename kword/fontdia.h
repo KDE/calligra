@@ -41,6 +41,8 @@ public:
     QFont getNewFont() const { return m_newFont; }
     QColor color() const { return m_color; }
 
+    int changedFlags() const { return m_changedFlags; }
+
 protected slots:
     void slotSuperScriptClicked();
     void slotSubScriptClicked();
@@ -58,6 +60,7 @@ private:
     QPushButton *m_colorButton;
     QFont m_newFont;
     QColor m_color;
+    int m_changedFlags;
 };
 
 class KWFontDia : public KDialogBase
@@ -65,11 +68,15 @@ class KWFontDia : public KDialogBase
     Q_OBJECT
 public:
     KWFontDia( QWidget* parent, const char* name, const QFont &_font,
-               bool _subscript, bool _superscript, bool _withSubSuperScript=true );
+               bool _subscript, bool _superscript, const QColor & color,
+               bool _withSubSuperScript=true );
 
     bool getSuperScript() const { return m_chooser->getSuperScript(); }
     bool getSubScript() const { return m_chooser->getSubScript(); }
     QFont getNewFont() const { return m_chooser->getNewFont(); }
+    QColor color() const { return m_chooser->color(); }
+    int changedFlags() const { return m_chooser->changedFlags(); }
+
 private:
     KWFontChooser * m_chooser;
 };

@@ -31,6 +31,8 @@
 #include <qdialog.h>
 #include <qvbox.h>
 #include <klocale.h>
+#include <kdebug.h>
+#include <kwformat.h>
 
 KWFontChooser::KWFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript )
     : QWidget( parent, name )
@@ -43,7 +45,7 @@ KWFontChooser::KWFontChooser( QWidget* parent, const char* name, bool _withSubSu
     lay1->addWidget(grp);
     QGridLayout *grid = new QGridLayout( grp, 2, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
-    m_underline = new QCheckBox(i18n("Underline"),grp);
+    m_underline = new QCheckBox(i18n("&Underline"),grp);
     grid->addWidget(m_underline,0,1);
 
     m_superScript = new QCheckBox(i18n("SuperScript"),grp);
@@ -57,10 +59,10 @@ KWFontChooser::KWFontChooser( QWidget* parent, const char* name, bool _withSubSu
         m_subScript->setEnabled(false);
         m_superScript->setEnabled(false);
     }
-    m_strikeOut = new QCheckBox(i18n("Strike Out"),grp);
+    m_strikeOut = new QCheckBox(i18n("Strike &Out"),grp);
     grid->addWidget(m_strikeOut,1,1);
 
-    m_colorButton = new QPushButton( i18n( "Change Color" ), grp );
+    m_colorButton = new QPushButton( i18n( "Change &Color..." ), grp );
     grid->addWidget(m_colorButton,0,2);
 
     connect( m_underline, SIGNAL(clicked()), this, SLOT( slotUnderlineClicked() ) );
@@ -71,16 +73,19 @@ KWFontChooser::KWFontChooser( QWidget* parent, const char* name, bool _withSubSu
 
     connect( m_chooseFont, SIGNAL( fontSelected( const QFont & )),
              this, SLOT( slotFontChanged(const QFont &) ) );
+
+    m_changedFlags = 0;
 }
 
 void KWFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscript )
 {
     m_newFont = _font;
-    m_chooseFont->setFont(m_newFont);
+    m_chooseFont->setFont( m_newFont );
     m_underline->setChecked( _font.underline() );
     m_strikeOut->setChecked( _font.strikeOut() );
     m_subScript->setChecked( _subscript );
     m_superScript->setChecked( _superscript );
+    m_changedFlags = 0;
 }
 
 void KWFontChooser::setColor( const QColor & col )
@@ -91,10 +96,22 @@ void KWFontChooser::setColor( const QColor & col )
 #if 0
     m_chooseFont->setColor( col );
 #endif
+    m_changedFlags = 0;
 }
 
 void KWFontChooser::slotFontChanged(const QFont & f)
 {
+    if ( f.weight() != m_newFont.weight() )
+        m_changedFlags |= QTextFormat::Bold;
+    if ( f.italic() != m_newFont.italic() )
+        m_changedFlags |= QTextFormat::Italic;
+    if ( f.underline() != m_newFont.underline() )
+        m_changedFlags |= QTextFormat::Underline;
+    if ( f.family() != m_newFont.family() )
+        m_changedFlags |= QTextFormat::Family;
+    if ( f.pointSize() != m_newFont.pointSize() )
+        m_changedFlags |= QTextFormat::Size;
+    kdDebug() << "KWFontChooser::slotFontChanged m_changedFlags=" << m_changedFlags << endl;
     m_newFont = f;
 }
 
@@ -102,24 +119,28 @@ void KWFontChooser::slotUnderlineClicked()
 {
     m_newFont.setUnderline(m_underline->isChecked());
     m_chooseFont->setFont(m_newFont);
+    m_changedFlags |= QTextFormat::Underline;
 }
 
 void KWFontChooser::slotStrikeOutClicked()
 {
     m_newFont.setStrikeOut(m_strikeOut->isChecked());
     m_chooseFont->setFont(m_newFont);
+    m_changedFlags |= KWTextFormat::StrikeOut;
 }
 
 void KWFontChooser::slotSubScriptClicked()
 {
     if(m_superScript->isChecked())
         m_superScript->setChecked(false);
+    m_changedFlags |= QTextFormat::VAlign;
 }
 
 void KWFontChooser::slotSuperScriptClicked()
 {
     if(m_subScript->isChecked())
         m_subScript->setChecked(false);
+    m_changedFlags |= QTextFormat::VAlign;
 }
 
 void KWFontChooser::slotChangeColor()
@@ -127,23 +148,29 @@ void KWFontChooser::slotChangeColor()
     QColor color = m_color;
     if ( KColorDialog::getColor( color ) )
     {
-        m_color = color;
+        if ( color != m_color )
+        {
+            m_changedFlags |= QTextFormat::Color;
+            m_color = color;
 //#if KDE_VERSION > 220 ?
 #if 0
-        m_chooseFont->setColor( color );
+            m_chooseFont->setColor( color );
 #endif
+        }
     }
 }
 
 
 KWFontDia::KWFontDia( QWidget* parent, const char* name, const QFont &_font,
-                      bool _subscript, bool _superscript, bool _withSubSuperScript )
+                      bool _subscript, bool _superscript, const QColor & color,
+                      bool _withSubSuperScript )
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel, Ok )
 {
     m_chooser = new KWFontChooser( this, "kwfontchooser", _withSubSuperScript );
     setMainWidget( m_chooser );
     m_chooser->setFont( _font, _subscript, _superscript );
+    m_chooser->setColor( color );
 }
 
 #include "fontdia.moc"

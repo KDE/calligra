@@ -1457,9 +1457,21 @@ void KWView::formatFont()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
-        KWFontDia *fontDia = new KWFontDia( this, "",edit->textFont(),actionFormatSub->isChecked(), actionFormatSuper->isChecked());
+        KWFontDia *fontDia = new KWFontDia( this, "", edit->textFont(),
+                                            actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
+                                            edit->textColor() );
         fontDia->show();
-        edit->setFont(fontDia->getNewFont(),fontDia->getSubScript(),fontDia->getSuperScript());
+        int flags = fontDia->changedFlags();
+        kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
+        if ( flags )
+        {
+            // The "change all the format" call
+            edit->setFont(fontDia->getNewFont(),
+                          fontDia->getSubScript(), fontDia->getSuperScript(),
+                          fontDia->color(),
+                          flags);
+        }
+
         delete fontDia;
     }
     gui->canvasWidget()->setFocus();

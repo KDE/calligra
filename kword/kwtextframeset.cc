@@ -3048,20 +3048,23 @@ void KWTextFrameSetEdit::setFamily(const QString &font){
     textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Family );
 }
 
-void KWTextFrameSetEdit::setFont(const QFont &font,bool _subscript,bool _superscript){
+void KWTextFrameSetEdit::setFont( const QFont &font, bool _subscript, bool _superscript, const QColor &col, int flags )
+{
     KWTextFormat format( *m_currentFormat );
     format.setFont( font );
+    format.setColor( col );
 
     if(!_subscript)
-        {
-            if(!_superscript)
-                format.setVAlign(QTextFormat::AlignNormal);
-            else
-                format.setVAlign(QTextFormat::AlignSuperScript);
-        }
+    {
+        if(!_superscript)
+            format.setVAlign(QTextFormat::AlignNormal);
+        else
+            format.setVAlign(QTextFormat::AlignSuperScript);
+    }
     else
         format.setVAlign(QTextFormat::AlignSubScript);
-    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Format,true /* zoom the font size */);
+
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, flags, true /* zoom the font size */);
 }
 
 void KWTextFrameSetEdit::setTextColor(const QColor &color) {

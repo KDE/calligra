@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="13">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="14">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -53,7 +53,7 @@
  </Menu>
  <Menu name="format"><text>F&amp;ormat</text>
   <Action name="format_font"/>
-  <Action name="format_color"/>
+  <!--<Action name="format_color"/> part of format_font now-->
   <Action name="format_paragraph"/>
   <Action name="format_frameset"/>
   <Action name="format_page"/>
@@ -198,7 +198,7 @@
  <Action name="format_paragraph"/>
  <Separator/>
  <Action name="format_font"/>
- <Action name="format_color"/>
+  <!--<Action name="format_color"/> part of format_font now-->
  <Separator/>
  <Action name="edit_cut"/>
  <Action name="edit_copy"/>

@@ -42,7 +42,9 @@ QTextFormat * KWTextFormatCollection::format( const QFont &f, const QColor &c )
 
     QString key = QTextFormat::getKey( f, c, FALSE, QString::null, QString::null, QTextFormat::AlignNormal );
     //kdDebug() << "format() textformat=" << this << " pointsizefloat=" << f.pointSizeFloat() << endl;
-    key += QString::number( (int)(f.pointSizeFloat() * 10) ); // SYNC with generateKey
+     // SYNC any changes with generateKey below
+    key += QString::number( (int)f.strikeOut() );
+    key += QString::number( (int)(f.pointSizeFloat() * 10) );
     m_cachedFormat = static_cast<KWTextFormat *>( dict().find( key ) );
     m_cfont = f;
     m_ccol = c;
@@ -72,6 +74,8 @@ void KWTextFormat::copyFormat( const QTextFormat & nf, int flags )
     QTextFormat::copyFormat( nf, flags );
     if ( flags & QTextFormat::Size )
         fn.setPointSizeFloat( nf.font().pointSizeFloat() );
+    if ( flags & KWTextFormat::StrikeOut )
+        fn.setStrikeOut( nf.font().strikeOut() );
     update();
 }
 
@@ -83,19 +87,21 @@ void KWTextFormat::setPointSizeFloat( float size )
     update();
 }
 
-void KWTextFormat::generateKey()
-{
-    QTextFormat::generateKey();
-    QString k = key();
-    setKey( k + QString::number( (int)(fn.pointSizeFloat() * 10) ) ); // SYNC with ::format above
-    //kdDebug() << "generateKey textformat=" << this << " k=" << k << " pointsizefloat=" << fn.pointSizeFloat() << endl;
-}
-
-
 void KWTextFormat::setStrikeOut(bool b)
 {
   if ( fn.strikeOut() == b )
         return;
     fn.setStrikeOut( b );
     update();
+}
+
+void KWTextFormat::generateKey()
+{
+    QTextFormat::generateKey();
+    QString k = key();
+    // SYNC any changes to the key format with ::format above
+    k += QString::number( (int)fn.strikeOut() );
+    k += QString::number( (int)(fn.pointSizeFloat() * 10) );
+    setKey( k );
+    //kdDebug() << "generateKey textformat=" << this << " k=" << k << " pointsizefloat=" << fn.pointSizeFloat() << endl;
 }

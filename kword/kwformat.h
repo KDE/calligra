@@ -40,6 +40,9 @@ public:
 
     virtual void copyFormat( const QTextFormat & nf, int flags );
 
+    // Extending QTextFormat's enum
+    enum { StrikeOut = 256 };
+
     void setPointSizeFloat( float );
     float pointSizeFloat() const { return fn.pointSizeFloat(); }
     void setStrikeOut(bool );
