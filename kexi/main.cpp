@@ -77,7 +77,7 @@ bool startupActions(KexiProjectData * &projectData)
 	QString drivername = Kexi::driverManager.lookupByMime(mimename);
 	kdDebug() << "KexiProject::open(): driver name: " << drivername << endl;
 	if(drivername.isEmpty()) {
-		KMessageBox::detailedSorry(0, QString( I18N_NOOP("<qt>File <b>%1</b> is not recognised as supported by Kexi.</qt>") ).arg(fname),
+		KMessageBox::detailedSorry(0, QString( I18N_NOOP("<qt>File <b>%1</b> is not recognized as supported by Kexi.</qt>") ).arg(fname),
 			QString( I18N_NOOP("Database driver for this file not found.<br>Detected MIME type: %1") ).arg(mimename));
 		return false;
 	}
