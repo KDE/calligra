@@ -1278,11 +1278,13 @@ void KPresenterDoc::loadOasisPresentationSettings( QDomNode &settingsDoc )
 
 void KPresenterDoc::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )
 {
+    //kdDebug()<<"void KPresenterDoc::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )**********\n";
     for ( QDomNode element = settingsDoc.firstChild(); !element.isNull(); element = element.nextSibling() )
     {
         QDomElement e = element.toElement();
 	QCString tagName = e.tagName().latin1();
-        if ( tagName == "presentation:show" )
+        //kdDebug()<<" tagName :"<<tagName<<endl;
+        if ( tagName == "show" && e.namespaceURI() == KoXmlNS::presentation)
         {
             //kdDebug()<<" e.attribute(presentation:name) :"<<e.attributeNS( KoXmlNS::presentation, "name", QString::null)<< " e.attribute(presentation:pages) :"<<e.attributeNS( KoXmlNS::presentation, "pages", QString::null)<<endl;
             QStringList tmp = QStringList::split( ",", e.attributeNS( KoXmlNS::presentation, "pages", QString::null) );
@@ -1454,7 +1456,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
        return false;
     }
 	//load settings
-    QDomNode settings  = KoDom::namedItemNS( content, KoXmlNS::presentation, "settings" );
+    QDomNode settings  = KoDom::namedItemNS( body, KoXmlNS::presentation, "settings" );
     kdDebug()<<"settings :"<<settings.isNull()<<endl;
     if (!settings.isNull() && _clean /*don't load settings when we copy/paste a page*/)
         loadOasisPresentationSettings( settings );
