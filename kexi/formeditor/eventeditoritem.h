@@ -29,17 +29,17 @@ class EventEditor;
 class EventEditorItem : public PropertyEditorItem
 {
 	public:
-		EventEditorItem(EventEditor *parent, QObject *sender, const char *event, QString classR, QString handler,
+		EventEditorItem(EventEditor *parent, QObject *sender, char *event, const QString &classR, const QString &handler,
 		 QObject *rec);
 		~EventEditorItem();
 
-		QObject	*sender() { return m_sender; }
-		char *event() { return m_event; }
-		QString	senderName() { return m_classR; }
-		QString	handler() { return m_handler; }
-		QObject	*receiver() { return m_receiver; }
+		QObject	*sender()const { return m_sender; }
+		char *event()const { return m_event; }
+		QString	senderName()const { return m_classR; }
+		QString	handler()const { return m_handler; }
+		QObject	*receiver()const { return m_receiver; }
 
-		EventEditor *parent() { return m_parent; }
+		EventEditor *parent()const { return m_parent; }
 
 	private:
 		QObject	*m_sender;

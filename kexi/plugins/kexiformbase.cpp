@@ -376,7 +376,7 @@ void KexiFormBase::slotDBPrev()
 
 void KexiFormBase::slotWidgetInserted(QObject *o)
 {
-	char *n = o->name();
+	const char *n = o->name();
 	m_item->widgetWatcher()->insert(n, o);
 	KexiProjectHandler *sh = m_project->handlerForMime("kexi/script");
 	if(sh)

@@ -315,7 +315,7 @@ WidgetWatcher::setUpWidget(WidgetContainer *p, WidgetProvider *w, const QDomElem
 		}
 	}
 
-	char *iname = item->name();
+	const char *iname = item->name();
 	insert(iname, item);
 }
 

@@ -20,7 +20,7 @@
 #include "eventeditor.h"
 #include "eventeditoritem.h"
 
-EventEditorItem::EventEditorItem(EventEditor *parent, QObject *sender, const char *event, QString classR, QString handler,
+EventEditorItem::EventEditorItem(EventEditor *parent, QObject *sender, char *event, const QString &classR, const QString &handler,
  QObject *rec)
  : PropertyEditorItem(parent, event, QVariant::BitArray, QVariant(classR + "." + handler))
 {
