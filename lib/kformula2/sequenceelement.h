@@ -35,7 +35,7 @@
 class SequenceElement : public BasicElement {
 public:
 
-    SequenceElement(BasicElement* parent);
+    SequenceElement(BasicElement* parent = 0);
     ~SequenceElement();
     
     /**
@@ -131,15 +131,13 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, QList<BasicElement>*, Direction);
+    virtual void insert(FormulaCursor*, QList<BasicElement>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
-     *
-     * The ownership of the list is passed to the caller.
      */
-    virtual QList<BasicElement>* remove(FormulaCursor*, Direction);
+    virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction);
 
     /**
      * If an element is not needed anymore it requests to be
@@ -153,7 +151,7 @@ private:
     /**
      * Removes the children at pos and appends it to the list.
      */
-    void removeChild(QList<BasicElement>* removedChildren, int pos);
+    void removeChild(QList<BasicElement>& removedChildren, int pos);
 
     
     /**

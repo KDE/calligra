@@ -21,11 +21,11 @@
 #include "formulaelement.h"
 
 FormulaElement::FormulaElement(KFormulaContainer* container)
-    : SequenceElement(0), document(container)
+    : document(container)
 {
 }
 
-void FormulaElement::elementRemoval(BasicElement* child, int pos)
+void FormulaElement::elementRemoval(BasicElement* child)
 {
 }
 

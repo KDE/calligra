@@ -18,12 +18,19 @@
    Boston, MA 02111-1307, USA.
 */
 
+// Debug
+#include <iostream>
+
+#include <qfontmetrics.h>
+#include <qpainter.h>
+
 #include "basicelement.h"
 #include "textelement.h"
+#include "contextstyle.h"
 
 
-TextElement::TextElement(SequenceElement* parent, QChar ch)
-    : BasicElement(parent)
+TextElement::TextElement(QChar ch, BasicElement* parent)
+    : BasicElement(parent), character(ch)
 {
 }
 
@@ -34,10 +41,11 @@ TextElement::TextElement(SequenceElement* parent, QChar ch)
  */
 void TextElement::calcSizes(ContextStyle& context, int parentSize)
 {
-    QFontMetrics fm = context.fontMetrics();
-    setWidth(fm.width(ch));
+    //QFontMetrics fm = context.fontMetrics();
+    QFontMetrics fm(context.getDefaultFont());
+    setWidth(fm.width(character));
     setHeight(fm.height());
-    setMidline(height() / 2);
+    setMidline(getHeight() / 2);
     baseline = fm.ascent();
 }
 
@@ -49,8 +57,11 @@ void TextElement::calcSizes(ContextStyle& context, int parentSize)
 void TextElement::draw(QPainter& painter, ContextStyle& context,
                        int parentSize, const QPoint& parentOrigin)
 {
-    context.setupPainter(painter);
-    painter.drawText(parentOrigin.x()+getX(), parentOrigin.y()+getY()+baseline, ch);
+    //context.setupPainter(painter);
+    //cerr << "TextElement::draw: " << parentOrigin.x()+getX() << " " << parentOrigin.y()+getY()+baseline << " " << character << "\n";
+    painter.setPen(context.getDefaultColor());
+    painter.drawText(parentOrigin.x()+getX(),
+                     parentOrigin.y()+getY()+baseline, character);
 }
 
     

@@ -36,7 +36,7 @@ public:
     // each index has its own number.
     enum { contentPos, upperLeftPos, lowerLeftPos, upperRightPos, lowerRightPos };
     
-    IndexElement(SequenceElement* parent);
+    IndexElement(BasicElement* parent = 0);
     ~IndexElement();
     
     /**
@@ -132,7 +132,7 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, QList<BasicElement>*, Direction);
+    virtual void insert(FormulaCursor*, QList<BasicElement>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
@@ -145,7 +145,7 @@ public:
      *
      * The ownership of the list is passed to the caller.
      */
-    virtual QList<BasicElement>* remove(FormulaCursor*, Direction);
+    virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction);
 
     /**
      * Moves the cursor to a normal place where new elements
@@ -175,14 +175,10 @@ public:
     
     // If we want to create an index we need a cursor that points there.
     
-    void setToUpperLeft(FormulaCursor* cursor)
-        { cursor->setTo(this, upperLeftPos); }
-    void setToUpperRight(FormulaCursor* cursor)
-        { cursor->setTo(this, upperRightPos); }
-    void setToLowerLeft(FormulaCursor* cursor)
-        { cursor->setTo(this, lowerLeftPos); }
-    void setToLowerRight(FormulaCursor* cursor)
-        { cursor->setTo(this, lowerRightPos); }
+    void setToUpperLeft(FormulaCursor* cursor);
+    void setToUpperRight(FormulaCursor* cursor);
+    void setToLowerLeft(FormulaCursor* cursor);
+    void setToLowerRight(FormulaCursor* cursor);
 
     // If the index is there we need a way to move into it.
 

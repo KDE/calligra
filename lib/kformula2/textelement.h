@@ -21,7 +21,7 @@
 #ifndef __TEXTELEMENT_H
 #define __TEXTELEMENT_H
 
-#include <qchar.h>
+#include <qstring.h>
 
 #include "basicelement.h"
 
@@ -32,7 +32,7 @@
 class TextElement : public BasicElement {
 public:
 
-    TextElement(SequenceElement* parent, QChar ch);
+    TextElement(QChar ch, BasicElement* parent = 0);
 
     
     // drawing
@@ -77,21 +77,6 @@ public:
      * this element or to the right of it.
      */
     virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
-
-    /**
-     * Enters this element while moving up starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or above it.
-     */
-    virtual void moveUp(FormulaCursor* cursor, BasicElement* from);
-
-    /**
-     * Enters this element while moving down starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or below it.
-     */
-    virtual void moveDown(FormulaCursor* cursor, BasicElement* from);
-
 
 private:
 

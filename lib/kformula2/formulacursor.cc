@@ -18,8 +18,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qpainter.h>
+
 #include "formulacursor.h"
 #include "formulaelement.h"
+#include "indexelement.h"
 #include "sequenceelement.h"
 
 
@@ -30,7 +33,7 @@ FormulaCursor::FormulaCursor(FormulaElement* element)
     setTo(element, 0);
 }
 
-void FormulaCursor::setTo(SequenceElement* element, int cursor, int mark=-1)
+void FormulaCursor::setTo(BasicElement* element, int cursor, int mark=-1)
 {
     current = element;
     cursorPos = cursor;
@@ -59,6 +62,33 @@ void FormulaCursor::setMark(int mark)
 {
 }
 
+void FormulaCursor::draw(QPainter& painter)
+{
+    /*
+    BasicElement* currentChild = getElement()->getChild(this);
+    QPoint point = currentChild->widgetPos();
+    int height = currentChild->getHeight();
+        
+    if (isSelection()) {
+        QPoint markPoint = getElement()->widgetPos(getMark());
+
+        int x = QMIN(point.x(), markPoint.x());
+        int width = abs(point.x() - markPoint.x());
+        painter.setRasterOp(Qt::XorROP);
+        //#painter.setRasterOp(Qt.OrROP)
+        painter.fillRect(x, point.y(), width, height, Qt::white);
+        //#painter.drawLine(point.x(), point.y()-2,
+        //#                 point.x(), point.y()+height+2)
+        painter.setRasterOp(Qt::CopyROP);
+    }
+    else {
+        painter.setPen(Qt::blue);
+        painter.drawLine(point.x(), point.y()-2,
+                         point.x(), point.y()+height+2);
+    }
+    */
+}
+
 
 /**
  * Moves the cursor to a normal position. That is somewhere
@@ -66,7 +96,7 @@ void FormulaCursor::setMark(int mark)
  * You need to call this after each removal because the cursor
  * might point to some non existing place.
  */
-void FormulaCursor::normalize(Direction direction)
+void FormulaCursor::normalize(BasicElement::Direction direction)
 {
     BasicElement* element = getElement();
     element->normalize(this, direction);
@@ -86,23 +116,23 @@ void FormulaCursor::normalize(Direction direction)
  * Inserts the child at the current position.
  * Ignores the selection.
  */
-void FormulaCursor::insert(BasicElement* child, Direction direction)
+void FormulaCursor::insert(BasicElement* child, BasicElement::Direction direction)
 {
     QList<BasicElement> list;
     list.append(child);
-    insert(&list, direction);
+    insert(list, direction);
 }
 
-void FormulaCursor::insert(QList<BasicElement>* children, Direction direction)
+void FormulaCursor::insert(QList<BasicElement>& children, BasicElement::Direction direction)
+{
+    BasicElement* element = getElement();
+    element->insert(this, children, direction);
+}
+
+void FormulaCursor::remove(QList<BasicElement>& children, BasicElement::Direction direction)
 {
     BasicElement* element = getElement();
     element->remove(this, children, direction);
-}
-
-QList<BasicElement>* FormulaCursor::remove(Direction direction)
-{
-    BasicElement* element = getElement();
-    return element->remove(this, direction);
 }
 
 
@@ -115,7 +145,7 @@ QList<BasicElement>* FormulaCursor::remove(Direction direction)
  */
 BasicElement* FormulaCursor::getAktiveChild(BasicElement::Direction direction)
 {
-    return getElement()->getChild(cursor, direction);
+    return getElement()->getChild(this, direction);
 }
 
 

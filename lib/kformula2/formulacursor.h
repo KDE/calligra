@@ -21,7 +21,10 @@
 #ifndef __FORMULACURSOR_H
 #define __FORMULACURSOR_H
 
+#include "basicelement.h"
+
 class FormulaElement;
+class IndexElement;
 
 
 /**
@@ -56,23 +59,29 @@ public:
 
 
     /**
+     * Draws the cursor at its current position.
+     */
+    void draw(QPainter&);
+
+    /**
      * Inserts the child at the current position.
      * Ignores the selection.
      */
-    void insert(BasicElement*, Direction = BasicElement::beforeCursor);
+    void insert(BasicElement*, BasicElement::Direction = BasicElement::beforeCursor);
         
     /**
      * Inserts the listed children at the current position.
      * Ignores the selection.
-     * The list will be emptied but stays the property of the caller.
+     * The list will be emptied.
      */
-    void insert(QList<BasicElement>*, Direction = BasicElement::beforeCursor);
+    void insert(QList<BasicElement>&,
+                BasicElement::Direction = BasicElement::beforeCursor);
 
     /**
      * Removes the current selected children and returns them.
-     * The ownership of the list is passed to the caller.
      */
-    QList<BasicElement>* remove(Direction = BasicElement::beforeCursor);
+    void remove(QList<BasicElement>&,
+                BasicElement::Direction = BasicElement::beforeCursor);
 
 
     // The range that is selected. Makes no sense if there is
@@ -115,7 +124,7 @@ public:
      * You need to call this after each removal because the cursor
      * might point to some non existing place.
      */
-    void normalize(Direction direction);
+    void normalize(BasicElement::Direction direction = BasicElement::beforeCursor);
 
     
     /**

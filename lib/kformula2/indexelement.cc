@@ -24,7 +24,7 @@
 #include "sequenceelement.h"
 
 
-IndexElement::IndexElement(SequenceElement* parent)
+IndexElement::IndexElement(BasicElement* parent)
     : BasicElement(parent)
 {
     content = new SequenceElement(this);
@@ -489,13 +489,13 @@ void IndexElement::setMainChild(SequenceElement* child)
  * The list will be emptied but stays the property of the caller.
  */
 void IndexElement::insert(FormulaCursor* cursor,
-                          QList<BasicElement>* newChildren,
+                          QList<BasicElement>& newChildren,
                           Direction direction)
 {
-    SequenceElement* index = static_cast<SequenceElement*>(newChildren->take(0));
+    SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
     index->setParent(this);
     
-    switch (cursor->pos()) {
+    switch (cursor->getPos()) {
     case upperLeftPos:
         upperLeft = index;
         break;
@@ -534,48 +534,46 @@ void IndexElement::insert(FormulaCursor* cursor,
  *
  * The ownership of the list is passed to the caller.
  */
-QList<BasicElement>* IndexElement::remove(FormulaCursor* cursor,
-                                          Direction direction)
+void IndexElement::remove(FormulaCursor* cursor,
+                          QList<BasicElement>& removedChildren,
+                          Direction direction)
 {
-    QList<BasicElement>* removedIndex = new QList<BasicElement>;
-
     BasicElement* index = cursor->getElement();
     if (index == upperLeft) {
-        removedIndex->append(upperLeft);
+        removedChildren.append(upperLeft);
         formula()->elementRemoval(upperLeft);
         upperLeft = 0;
         setToUpperLeft(cursor);
     }
     else if (index == lowerLeft) {
-        removedIndex->append(lowerLeft);
+        removedChildren.append(lowerLeft);
         formula()->elementRemoval(lowerLeft);
         lowerLeft = 0;
         setToLowerLeft(cursor);
     }
     else if (index == upperRight) {
-        removedIndex->append(upperRight);
+        removedChildren.append(upperRight);
         formula()->elementRemoval(upperRight);
         upperRight = 0;
         setToUpperRight(cursor);
     }
     else if (index == lowerRight) {
-        removedIndex->append(lowerRight);
+        removedChildren.append(lowerRight);
         formula()->elementRemoval(lowerRight);
         lowerRight = 0;
         setToLowerRight(cursor);
     }
 
     formula()->changed();
-    return removedIndex;
 }
 
 /**
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void normalize(FormulaCursor* cursor, Direction direction)
+void IndexElement::normalize(FormulaCursor* cursor, BasicElement::Direction direction)
 {
-    if (direction == beforeCursor) {
+    if (direction == BasicElement::beforeCursor) {
         content->moveLeft(cursor, this);
     }
     else {
@@ -626,6 +624,26 @@ bool IndexElement::isSenseless()
 //     }
 //     return lowerRight;
 // }
+
+void IndexElement::setToUpperLeft(FormulaCursor* cursor)
+{
+    cursor->setTo(this, upperLeftPos);
+}
+
+void IndexElement::setToUpperRight(FormulaCursor* cursor)
+{
+    cursor->setTo(this, upperRightPos);
+}
+
+void IndexElement::setToLowerLeft(FormulaCursor* cursor)
+{
+    cursor->setTo(this, lowerLeftPos);
+}
+
+void IndexElement::setToLowerRight(FormulaCursor* cursor)
+{
+    cursor->setTo(this, lowerRightPos);
+}
 
 void IndexElement::moveToUpperLeft(FormulaCursor* cursor, Direction direction)
 {

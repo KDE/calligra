@@ -19,46 +19,9 @@
 */
 
 
-#include "basicelement.h"
-#include "sequenceelement.h"
+#include "contextstyle.h"
 
-
-BasicElement::BasicElement(BasicElement* p)
-    : parent(p)
+ContextStyle::ContextStyle()
+    : defaultFont("helvetica"), defaultColor(Qt::black)
 {
 }
-
-BasicElement::~BasicElement()
-{
-}
-
-/**
- * Returns the element the point is in.
- */
-BasicElement* BasicElement::isInside(const QPoint& point,
-                                     const QPoint& parentOrigin)
-{
-    int x = point.x() - (parentOrigin.x() + getX());
-    if ((x >= 0) && (x < getWidth())) {
-        int y = point.y() - (parentOrigin.y() + getY());
-        if ((y >= 0) && (y < getHeight())) {
-            return this;
-        }
-    }
-    return 0;
-}
-
-/**
- * Returns our position inside the widget.
- */
-QPoint BasicElement::widgetPos()
-{
-    int x = 0;
-    int y = 0;
-    for (BasicElement* element = this; element != 0; element = element->parent) {
-        x += element->getX();
-        y += element->getY();
-    }
-    return QPoint(x, y);
-}
-

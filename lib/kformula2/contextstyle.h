@@ -30,7 +30,6 @@
 
 //Formula include
 
-enum DrawMode {CharSize,FixedHeight,FixedWidth};
 
 /**
  * Contains info on fonts etc..
@@ -39,31 +38,34 @@ enum DrawMode {CharSize,FixedHeight,FixedWidth};
 class ContextStyle
 {
 public:  
+    enum DrawMode {CharSize,FixedHeight,FixedWidth};
 
-/**
- * Build a default context style
- */
-  ContextStyle();
+    /**
+     * Build a default context style
+     */
+    ContextStyle();
 
-/**
- * Build a context style reading settings from config
- */
+    /**
+     * Build a context style reading settings from config
+     */
     //ContextStyle(KConfig *config);
 
-/**
- * return defalt color
- */
+    
+    /**
+     * return default color
+     */
+    QColor getDefaultColor() { return defaultColor; }
 
-QColor getDefaultColor();
-
-
+    QFont getDefaultFont() { return defaultFont; }
+    
 private:
- QFont defaultFont;
- QColor defaultColor;
+    
+    QFont defaultFont;
+    QColor defaultColor;
 
  
- DrawMode mode;
- bool editing;
+    DrawMode mode;
+    bool editing;
  
 };
 

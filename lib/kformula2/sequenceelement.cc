@@ -115,12 +115,13 @@ void SequenceElement::draw(QPainter& painter, ContextStyle& context,
             child->draw(painter, context, mySize, myPos);
 
             // Debug
-            //painter.setPen(Qt::green)
-            //painter.drawRect(x, y, self.width(), self.height())
+            painter.setPen(Qt::green);
+            painter.drawRect(parentOrigin.x() + getX(), parentOrigin.y() + getY(),
+                             getWidth(), getHeight());
         }
     }
     else {
-        //painter.setPen(Qt::blue);
+        painter.setPen(Qt::blue);
         painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
     }
 }
@@ -148,12 +149,12 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
 
     // We already owned the cursor. Ask next child then.
     else if (from == this) {
-        if (cursor->pos() > 0) {
+        if (cursor->getPos() > 0) {
             if (cursor->isSelection()) {
-                cursor->setTo(this, cursor->pos()-1);
+                cursor->setTo(this, cursor->getPos()-1);
             }
             else {
-                children.at(cursor->pos()-1)->moveLeft(cursor, this);
+                children.at(cursor->getPos()-1)->moveLeft(cursor, this);
             }
         }
         else {
@@ -191,12 +192,12 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
 
     // We already owned the cursor. Ask next child then.
     else if (from == this) {
-        if (cursor->pos() < children.count()) {
+        if (cursor->getPos() < children.count()) {
             if (cursor->isSelection()) {
-                cursor->setTo(this, cursor->pos()+1);
+                cursor->setTo(this, cursor->getPos()+1);
             }
             else {
-                children.at(cursor->pos())->moveRight(cursor, this);
+                children.at(cursor->getPos())->moveRight(cursor, this);
             }
         }
         else {
@@ -322,15 +323,15 @@ void SequenceElement::moveEnd(FormulaCursor* cursor)
  * The list will be emptied but stays the property of the caller.
  */
 void SequenceElement::insert(FormulaCursor* cursor,
-                             QList<BasicElement>* newChildren,
+                             QList<BasicElement>& newChildren,
                              Direction direction)
 {
     int pos = cursor->getPos();
-    uint count = newChildren->count();
+    uint count = newChildren.count();
     for (uint i = 0; i < count; i++) {
-        BasicElement* child = newChildren->take(i);
+        BasicElement* child = newChildren.take(0);
         child->setParent(this);
-        children->insert(pos+i, child);
+        children.insert(pos+i, child);
     }
     if (direction == beforeCursor) {
         cursor->setTo(this, pos+count);
@@ -345,19 +346,19 @@ void SequenceElement::insert(FormulaCursor* cursor,
  *
  * The ownership of the list is passed to the caller.
  */
-QList<BasicElement>* SequenceElement::remove(FormulaCursor* cursor,
-                                             Direction direction)
+void SequenceElement::remove(FormulaCursor* cursor,
+                             QList<BasicElement>& removedChildren,
+                             Direction direction)
 {
     // If there is no child to remove the sequence
     // itself is asked to vanish.
     if (children.count() == 0) {
         if (getParent() != 0) {
-            return getParent()->remove(cursor, direction);
+            getParent()->remove(cursor, removedChildren, direction);
+            return;
         }
     }
     
-    QList<BasicElement>* removedChildren = new QList<BasicElement>;
-
     if (cursor->isSelection()) {
         int from = cursor->getSelectionStart();
         int to = cursor->getSelectionEnd();
@@ -382,19 +383,18 @@ QList<BasicElement>* SequenceElement::remove(FormulaCursor* cursor,
             }
         }
     }
-    return removedChildren;
 }
 
 
 /**
  * Removes the children at pos and appends it to the list.
  */
-void SequenceElement::removeChild(QList<BasicElement>* removedChildren, int pos)
+void SequenceElement::removeChild(QList<BasicElement>& removedChildren, int pos)
 {
     BasicElement* child = children.at(pos);
     formula()->elementRemoval(child);
     children.remove(pos);
-    removedChildren->append(child);
+    removedChildren.append(child);
     formula()->changed();
 }
 

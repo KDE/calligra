@@ -22,6 +22,7 @@
 #define __BASICELEMENT_H
 
 // Qt Include
+#include <qlist.h>
 #include <qpoint.h>
 #include <qsize.h>
 
@@ -48,7 +49,7 @@ class BasicElement
 {
 public:  
 
-    BasicElement();
+    BasicElement(BasicElement* parent = 0);
     virtual ~BasicElement();
 
     /**
@@ -163,16 +164,13 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, QList<BasicElement>*, Direction) {}
+    virtual void insert(FormulaCursor*, QList<BasicElement>&, Direction) {}
 
     /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
-     *
-     * The ownership of the list is passed to the caller.
      */
-    virtual QList<BasicElement>* remove(FormulaCursor*, Direction)
-        { return new QList<BasicElement>; }
+    virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction) {}
 
     /**
      * Moves the cursor to a normal place where new elements
@@ -191,8 +189,9 @@ public:
     /**
      * Returns the child at the cursor.
      */
-    virtual BasicElement* getChild(FormulaCursor*, Direction) { return 0; }
-    
+    virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor) { return 0; }
+
+
     /**
      * Sets the cursor to select the child. The mark is placed before,
      * the position behind it.
@@ -205,6 +204,7 @@ public:
     virtual void moveToMainChild(FormulaCursor*) {}
 
     virtual void selectMainChildContent(FormulaCursor*) {}
+
     
     // basic support
     
