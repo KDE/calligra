@@ -54,6 +54,25 @@ k_dcop:
     void addSum();
     void addMatrix();
 
+
+    void addLowerLeftIndex();
+    void addUpperLeftIndex();
+    void addLowerRightIndex();
+    void addUpperRightIndex();
+    void addGenericLowerIndex();
+    void addGenericUpperIndex();
+    void removeEnclosing();
+    void makeGreek();
+    void insertSymbol();
+
+    void appendColumn();
+    void insertColumn();
+    void removeColumn();
+    void appendRow();
+    void insertRow();
+    void removeRow();
+
+
 private:
     KWFormulaFrameSetEdit *m_framesetedit;
 

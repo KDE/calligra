@@ -123,3 +123,78 @@ void KWordFormulaFrameSetEditIface::addMatrix()
     m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addMatrix();
 }
 
+void KWordFormulaFrameSetEditIface::addLowerLeftIndex()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addLowerLeftIndex();
+}
+
+void KWordFormulaFrameSetEditIface::addUpperLeftIndex()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addUpperLeftIndex();
+}
+
+void KWordFormulaFrameSetEditIface::addLowerRightIndex()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addLowerRightIndex();
+}
+
+void KWordFormulaFrameSetEditIface::addUpperRightIndex()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addUpperRightIndex();
+}
+
+void KWordFormulaFrameSetEditIface::addGenericLowerIndex()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addGenericLowerIndex();
+}
+
+void KWordFormulaFrameSetEditIface::addGenericUpperIndex()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addGenericUpperIndex();
+}
+
+void KWordFormulaFrameSetEditIface::removeEnclosing()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->removeEnclosing();
+}
+
+void KWordFormulaFrameSetEditIface::makeGreek()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->makeGreek();
+}
+
+void KWordFormulaFrameSetEditIface::insertSymbol()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->insertSymbol();
+}
+
+void KWordFormulaFrameSetEditIface::appendColumn()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->appendColumn();
+}
+
+void KWordFormulaFrameSetEditIface::insertColumn()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->insertColumn();
+}
+
+void KWordFormulaFrameSetEditIface::removeColumn()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->removeColumn();
+}
+
+void KWordFormulaFrameSetEditIface::appendRow()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->appendRow();
+}
+
+void KWordFormulaFrameSetEditIface::insertRow()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->insertRow();
+}
+
+void KWordFormulaFrameSetEditIface::removeRow()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->removeRow();
+}
+
