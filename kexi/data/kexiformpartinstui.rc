@@ -1,0 +1,16 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexiformpartinst" version="1">
+
+<ToolBar name="widgets" fullWidth="false">
+ <text>Widgets</text>
+   <Action name="library_widget_QButtonGroup"/>
+   <Action name="library_widget_QTabWidget"/>
+   <Action name="library_widget_QLabel"/>
+   <Action name="library_widget_KLineEdit"/>
+   <Action name="library_widget_QPushButton"/>
+   <Action name="library_widget_Spacer"/>
+ <ActionList name="library_widgets" />
+</ToolBar>
+
+</kpartgui>
+
