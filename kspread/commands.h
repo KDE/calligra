@@ -107,6 +107,7 @@ protected:
   int rowSpan;
   int oldColSpan;
   int oldRowSpan;
+  QString rangeName;
 };
 
 

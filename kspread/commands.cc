@@ -24,6 +24,7 @@
 #include <kspread_map.h>
 #include <kspread_sheet.h>
 #include <kspread_undo.h>
+#include <kspread_util.h>
 
 // ----- UndoWrapperCommand -----
 
@@ -58,6 +59,11 @@ MergeCellCommand::MergeCellCommand( KSpreadCell* c, int cs, int rs )
   rowSpan = rs;
   oldColSpan = cell->extraXCells();
   oldRowSpan = cell->extraYCells();
+  if( cell )
+  {
+    QRect area( cell->column(), cell->row(), cs+1, rs+1 );
+    rangeName = util_rangeName( area );
+  }
 }
   
 QString MergeCellCommand::name() const
