@@ -17,22 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koFilterManager.h"
-#include "koQueryTypes.h"
-#include "koFilter.h"
-#include "koFilterDialog.h"
-
-#include <klocale.h>
-#include <kmimetype.h>
-#include <kdebug.h>
-
-#include <qmessagebox.h>
-#include <qstringlist.h>
-
-#include <assert.h>
-#include <unistd.h>
-
-#include <ktempfile.h>
+#include <koFilterManager.h>
+#include <koFilterManager.moc>
 
 KoFilterManager* KoFilterManager::s_pSelf = 0;
 
@@ -45,7 +31,6 @@ KoFilterManager* KoFilterManager::self()
     }
     return s_pSelf;
 }
-
 
 const QString KoFilterManager::fileSelectorList( const Direction &direction, const char *_format,
                                            const char *_native_pattern,
@@ -135,12 +120,163 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
     return ret;
 }
 
+const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
+                                 const Direction &direction,
+                                 const char *_format,
+                                 const char *_native_pattern,
+                                 const char *_native_name,
+                                 const bool allfiles ) {
+
+    unsigned i, j;
+    QString service;
+    if ( direction == Import )
+        service = "Export == '";
+    else
+        service = "Import == '";
+    service += _format;
+    service += "'";
+
+    QValueList<KoFilterEntry> vec = KoFilterEntry::query( service );
+
+    QString filters;
+
+    if ( _native_pattern && _native_name )
+    {
 #ifndef USE_QFD
-const bool KoFilterManager::addDialogs(const KFileDialog *) { // dialog) {
-  // more to come here :)
-  return false;
-}
+        filters += _native_pattern;
+        filters += "|";
 #endif
+        filters += _native_name;
+        filters += " (";
+        filters += _native_pattern;
+        filters += ")";
+    }
+
+    for( i = 0; i < vec.count(); ++i )
+    {
+        KMimeType::Ptr t;
+        QString mime;
+        if ( direction == Import )
+            mime = vec[i].import;
+        else
+            mime = vec[i].export_;
+
+        t = KMimeType::mimeType( mime );
+        // Did we get exact this mime type ?
+        if ( t && mime == t->mimeType() )
+        {
+            QStringList patterns = t->patterns();
+            const char* s;
+            for( j = 0; j < patterns.count(); ++j )
+            {
+                s = patterns[j];
+                if ( !filters.isEmpty() )
+                    filters += "\n";
+#ifndef USE_QFD
+                filters += s;
+                filters += "|";
+#endif
+                if ( direction == Import )
+                    filters += vec[i].importDescription;
+                else
+                    filters += vec[i].exportDescription;
+                filters += " (";
+                filters += s;
+                filters += ")";
+            }
+        }
+        else
+        {
+            if ( !filters.isEmpty() )
+                filters += "\n";
+#ifndef USE_QFD
+            filters += "*.*|";
+#endif
+            if ( direction == Import )
+                filters += vec[i].importDescription;
+            else
+                filters += vec[i].exportDescription;
+            filters += " (*.*)";
+        }
+    }
+    if( allfiles )
+    {
+        if ( !filters.isEmpty() )
+            filters += "\n";
+#ifndef USE_QFD
+        filters += "*.*|";
+#endif
+        filters += i18n( "All files (*.*)" );
+    }
+
+    dialog->setFilter(filters);
+
+    QValueList<KoFilterDialogEntry> vec1 = KoFilterDialogEntry::query( service );
+
+    ps=new PreviewStack(0L, "preview stack", this);
+    QWidget *d=new QWidget(ps, "default preview");
+    QString tmp=i18n("Sorry, no preview available.");
+    QLabel *l=new QLabel(i18n(tmp), d);
+    l->setMinimumSize(l->sizeHint());
+    l->move(10, 5);
+    d->setMinimumWidth(l->sizeHint().width()+20);
+    ps->addWidget(d, 0);  // default Widget
+
+    //QMap<QString, long> dialogMap;    // QString==pattern, long==id in Widgetstack
+    unsigned long id;                 // id for the next widget
+
+    for(i=0, id=1; i<vec1.count(); ++i) {
+        KMimeType::Ptr t;
+        QString mime;
+        if ( direction == Import )
+            mime = vec1[i].import;
+        else
+            mime = vec1[i].export_;
+
+        t = KMimeType::mimeType( mime );
+        // Did we get exactly this mime type ?
+        if ( t && mime == t->mimeType() )
+        {
+            KoFilterDialog *filterdia=vec1[i].createFilterDialog();
+            ASSERT(filterdia);
+
+            QStringList patterns = t->patterns();
+            QString tmp;
+            unsigned short k;
+            for(j=0; j<patterns.count(); ++j) {
+                tmp=patterns[j];
+                k=0;
+
+                while(tmp[tmp.length()-k]!=QChar('.')) {
+                    ++k;
+                }
+                kdebug(KDEBUG_INFO, 31000, "Extension:");
+                kdebug(KDEBUG_INFO, 31000, tmp.right(k));
+                dialogMap.insert(tmp.right(k), id);
+            }
+            ps->addWidget(filterdia, id);
+            ++id;
+        }
+    }
+    if(!dialogMap.isEmpty())
+        dialog->setPreviewWidget(ps);
+
+    return true;
+}
+
+void KoFilterManager::cleanUp() {
+}
+
+long KoFilterManager::findWidget(const QString &ext) {
+
+    QMap<QString, long>::Iterator it;
+    it=dialogMap.find(ext);
+
+    if(it!=dialogMap.end())
+        return it.data();
+    else
+        return 0;  // default Widget
+}
 
 const QString KoFilterManager::import( const QString & _url, const char *_native_format )
 {
@@ -260,4 +396,31 @@ const bool KoFilterManager::export_() {
     // Done, remove temporary file
     unlink( tmpFile.ascii() );
     return true;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+// PreviewStack
+
+PreviewStack::PreviewStack(QWidget *parent, const char *name,
+                           KoFilterManager *m) : QWidgetStack(parent, name),
+                           mgr(m) {
+}
+
+PreviewStack::~PreviewStack() {
+}
+
+void PreviewStack::showPreview(const KURL &url) {
+
+    QString tmp=url.url();
+    QString extension;
+    unsigned short k=0;
+
+    while(tmp[tmp.length()-k]!=QChar('.')) {
+        ++k;
+    }
+    extension=tmp.right(k);
+    kdebug(KDEBUG_INFO, 31000, extension);
+
+    raiseWidget(mgr->findWidget(extension));
 }

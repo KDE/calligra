@@ -1216,18 +1216,18 @@ void KWordView::viewEndNotes()
 void KWordView::insertPicture()
 {
     QString file;
-#ifdef USE_QFD
-    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
-    fd.setPreviewMode( FALSE, TRUE );
-    fd.setContentsPreviewWidget( new Preview( &fd ) );
-    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+//#ifdef USE_QFD
+    KFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    //fd.setPreviewMode( FALSE, TRUE );
+    fd.setPreviewWidget( new Preview( &fd ) );
+    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
-#else    
+/*#else
    file  = KFilePreviewDialog::getOpenFileName( QString::null,
 						KImageIO::pattern(KImageIO::Reading),
 						0 );
-#endif
+#endif*/
 
     if ( !file.isEmpty() ) m_pKWordDoc->insertPicture( file, gui->getPaperWidget() );
 }
@@ -1235,7 +1235,7 @@ void KWordView::insertPicture()
 /*===============================================================*/
 void KWordView::insertClipart()
 {
-    QMessageBox::information( this, i18n( "Not implemented" ), 
+    QMessageBox::information( this, i18n( "Not implemented" ),
 			      i18n( "Inserting cliparts is currently not implemented!" ),
 			      i18n( "OK" ) );
 }
@@ -1514,18 +1514,18 @@ void KWordView::toolsCreatePix()
     gui->getPaperWidget()->mmEdit();
 
     QString file;
-#ifdef USE_QFD
-    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
-    fd.setPreviewMode( FALSE, TRUE );
-    fd.setContentsPreviewWidget( new Preview( &fd ) );
-    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+//#ifdef USE_QFD
+    KFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    //fd.setPreviewMode( FALSE, TRUE );
+    fd.setPreviewWidget( new Preview( &fd ) );
+    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
-#else    
+/*#else
    file  = KFilePreviewDialog::getOpenFileName( QString::null,
 						KImageIO::pattern(KImageIO::Reading),
 						0 );
-#endif
+#endif*/
 
     if ( !file.isEmpty() ) {
 	gui->getPaperWidget()->mmCreatePix();

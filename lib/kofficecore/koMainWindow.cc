@@ -146,20 +146,30 @@ bool KoMainWindow::saveDocument( bool saveas )
     KURL url = pDoc->url();
     QCString _native_format ( KOAPP->nativeFormatMimeType() );
     QCString outputMimeType ( _native_format );
+    KFileDialog *dialog=new KFileDialog(QString::null, QString::null, this, "file dialog", true);
 
     if ( !url.hasPath() || saveas )
     {
-	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
-								    _native_format, nativeFormatPattern(),
-                                                                    nativeFormatName(), TRUE );
+	//QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
+	//							    _native_format, nativeFormatPattern(),
+    //                                                                nativeFormatName(), TRUE );
+    KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Export,
+                                           _native_format, nativeFormatPattern(),
+                                           nativeFormatName(), true);
 	QString file;
+    int returned;
 
 	bool bOk = true;
 	do {
 #ifdef USE_QFD
 	    file = QFileDialog::getSaveFileName( QString::null, filter );
-#else	
-	    file = KFileDialog::getSaveFileName( QString::null, filter );
+#else
+	    returned=dialog->exec();
+        if(returned==QDialog::Accepted)
+            file=dialog->selectedFile();
+
+        KoFilterManager::self()->cleanUp();
+        delete dialog;
 #endif
 	    if ( file.isNull() )
 		return false;
@@ -286,20 +296,31 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-								KOAPP->nativeFormatMimeType(), nativeFormatPattern(),
-								nativeFormatName(), TRUE );
+    //QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+	//							KOAPP->nativeFormatMimeType(), nativeFormatPattern(),
+	//							nativeFormatName(), TRUE );
+    KFileDialog *dialog=new KFileDialog(QString::null, QString::null, this, "file dialog", true);
+    KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
+                                           KOAPP->nativeFormatMimeType(), nativeFormatPattern(),
+                                           nativeFormatName(), true);
 
-    QString file;
+    KURL file;
+    int returned;
 #ifdef USE_QFD
     file = QFileDialog::getOpenFileName( QString::null, filter );
 #else
-    file = KFileDialog::getOpenFileName( QString::null, filter );
+    //file = KFileDialog::getOpenFileName( QString::null, filter );
+    returned=dialog->exec();
+    if(returned==QDialog::Accepted)
+        file=dialog->selectedURL();
+
+    KoFilterManager::self()->cleanUp();
+    delete dialog;
 #endif
-    if ( file.isNull() )
+    if ( file.url().isNull() )
 	return;
 
-    (void) openDocument( KURL(file) );
+    (void) openDocument(file);
 }
 
 void KoMainWindow::slotFileSave()

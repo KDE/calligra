@@ -24,7 +24,7 @@
 #include <qvbox.h>
 
 #include <qstring.h>
-#include <qurl.h>
+#include <kurl.h>
 
 class KFileInfo;
 
@@ -42,9 +42,9 @@ class Preview : public QVBox
 
 public:
     Preview( QWidget *parent );
-    
+
 public slots:
-    void showPreview( const QUrl &u );
+    void showPreview( const KURL &u );
 
 private:
     PixmapView *pixmap;

@@ -388,18 +388,18 @@ int BackDia::getBackYFactor()
 void BackDia::selectPic()
 {
     QString file;
-#ifdef USE_QFD
-    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
-    fd.setPreviewMode( FALSE, TRUE );
-    fd.setContentsPreviewWidget( new Preview( &fd ) );
-    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+//#ifdef USE_QFD
+    KFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    //fd.setPreviewMode( FALSE, TRUE );
+    fd.setPreviewWidget( new Preview( &fd ) );
+    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
-#else    
+/*#else
    file  = KFilePreviewDialog::getOpenFileName( QString::null,
 						KImageIO::pattern(KImageIO::Reading),
 						0 );
-#endif
+#endif*/
 
     if ( !file.isEmpty() ) {
 	chosenPic = file;
@@ -415,16 +415,16 @@ void BackDia::selectPic()
 void BackDia::selectClip()
 {
     QString file;
-#ifdef USE_QFD
-    QFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
-    fd.setPreviewMode( FALSE, TRUE );
-    fd.setContentsPreviewWidget( new Preview( &fd ) );
-    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+//#ifdef USE_QFD
+    KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
+    //fd.setPreviewMode( FALSE, TRUE );
+    fd.setPreviewWidget( new Preview( &fd ) );
+    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
-#else    
+	    file = fd.selectedFile();
+/*#else
     file = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
-#endif
+#endif*/
     
     if ( !file.isEmpty() ) {
 	chosenClip = file;

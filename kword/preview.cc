@@ -21,13 +21,14 @@
 #include "preview.h"
 #include "preview.moc"
 #include <qscrollview.h>
+#include <qfileinfo.h>
 //#include "qwmf.h"
 
-#ifndef USE_QFD
-/**
+/*#ifndef USE_QFD
+*
  * A preview handler for the KFilePreviewDialag that shows
  * a WMF object.
- */
+
 bool wmfPreviewHandler( const KFileInfo*, const QString, QString&, QPixmap& )
 {
     bool res = false;
@@ -63,10 +64,9 @@ bool wmfPreviewHandler( const KFileInfo*, const QString, QString&, QPixmap& )
     return res;
 }
 
-/**
  * A preview handler for the KFilePreviewDialag that shows
  * a Pixmap object.
- */
+
 bool pixmapPreviewHandler( const KFileInfo* fInfo, const QString fileName, QString&, QPixmap& pixmap )
 {
     if ( fInfo->isFile() ) {
@@ -75,7 +75,7 @@ bool pixmapPreviewHandler( const KFileInfo* fInfo, const QString fileName, QStri
     }
     return false;
 }
-#endif
+#endif*/
 
 class PixmapView : public QScrollView
 {
@@ -89,7 +89,7 @@ public:
 	viewport()->repaint( FALSE );
     }
 
-    void setClipart( const QString &s ) {
+    void setClipart( const QString & ) {
 // 	QWinMetaFile wmf;
 
 // 	if ( wmf.load( s ) ) {
@@ -114,26 +114,26 @@ public:
 // 	    viewport()->repaint( FALSE );
 // 	}
     }
-    
+
     void drawContents( QPainter *p, int, int, int, int ) {
 	p->drawPixmap( 0, 0, pixmap );
     }
 
 private:
     QPixmap pixmap;
-    
+
 };
 
 Preview::Preview( QWidget *parent )
-    : QVBox( parent ) 
+    : QVBox( parent )
 {
     pixmap = new PixmapView( this );
 }
 
-void Preview::showPreview( const QUrl &u ) 
+void Preview::showPreview( const KURL &u )
 {
     if ( u.isLocalFile() ) {
-	QString path = u.path();
+	QString path = u.url();
 	    QFileInfo fi( path );
 	    if ( fi.extension().lower() == "wmf" )
 		pixmap->setClipart( path );

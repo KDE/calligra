@@ -21,9 +21,28 @@
 #define __koffice_filter_manager_h__
 
 #include <qstring.h>
-#ifndef USE_QFD
+#include <qmessagebox.h>
+#include <qstringlist.h>
+#include <qmap.h>
+#include <qwidgetstack.h>
+#include <qwidget.h>
+#include <qlabel.h>
+
 #include <kfiledialog.h>
-#endif
+#include <kurl.h>
+#include <koQueryTypes.h>
+#include <koFilter.h>
+#include <koFilterDialog.h>
+#include <klocale.h>
+#include <kmimetype.h>
+#include <kdebug.h>
+#include <ktempfile.h>
+
+#include <assert.h>
+#include <unistd.h>
+
+
+class PreviewStack;
 
 /**
  *  This class manages all filters for a KOffice application.
@@ -64,12 +83,43 @@ public:
                               const bool allfiles ) const;
 
     /**
-     * Add the needed filter dialogs to the file dialog
-     * @return if the operation was sucessful
+     * Prepares the KFileDialog. This means it adds the available
+     * filters and dialogs.
+     *
+     * @param dialog The dialog you want to prepare
+     * @param direction Whether the dialog is for opening or for
+     * saving. Is either KoFilterManager::Import or
+     * KoFilterManager::Export.
+     * @param _format is the mimetype that has to be exported/imported,
+     *                for example "application/x-kspread".
+     * @param _native_pattern is the filename pattern for the native format
+     *                        of your application, for example "*.ksp".
+     *                        This variable may be 0L, then no native format
+     *                        is added.
+     * @param _native_name is the name for the native format
+     *                        of your application, for example "KSpread".
+     *                        This variable may be 0L, then no native format
+     *                        is added.
+     * @param allfiles Whether a wildcard that matches all files should be added to the list.
+     * @return Sucess?
      */
-#ifndef USE_QFD
-    const bool addDialogs(const KFileDialog *dialog);
-#endif
+    const bool prepareDialog( KFileDialog *dialog,
+                                 const Direction &direction,
+                                 const char *_format,
+                                 const char *_native_pattern,
+                                 const char *_native_name,
+                                 const bool allfiles );
+
+    /**
+     * Cleans up the KFileDialog (deletes all the stuff)
+     * and saves the dialog config. Please don't forget to call it!
+     */
+    void cleanUp();
+
+    
+    // Get the ID of the QWidget in the Stack which matches this
+    // extension. (internal)
+    long findWidget(const QString &ext);
 
     /**
      * Import a file by applying a filter
@@ -105,5 +155,23 @@ private:
     QString exportFile;
     QString native_format;
     bool prepare;
+    PreviewStack *ps;
+    QMap<QString, long> dialogMap;
+};
+
+
+class PreviewStack : public QWidgetStack {
+
+    Q_OBJECT
+
+public:
+    PreviewStack(QWidget *parent, const char *name, KoFilterManager *m);
+    virtual ~PreviewStack();
+
+public slots:
+    void showPreview(const KURL &url);
+
+private:
+    KoFilterManager *mgr;
 };
 #endif

@@ -651,9 +651,9 @@ void KPWebPresentationWizard::slotChoosePath()
 #ifdef USE_QFD
     url = QFileDialog::getExistingDirectory( url );
 #else
-    url = KFileDialog::getDirectory( url );
+    url = KFileDialog::getExistingDirectory( url );
 #endif
-    
+
     if ( QFileInfo( url ).exists() && QFileInfo( url ).isDir() )
 	path->setText( url );
 }
