@@ -1,5 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003 Norbert Andres <nandres@web.de>
+   Copyright (C) 2002 Laurent Montel <montel@kde.org>
+   Copyright (C) 1999 David Faure <faure@kde.org>
+   Copyright (C) 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
+   Copyright (C) 1998-2000 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
