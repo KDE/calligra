@@ -2909,7 +2909,7 @@ void KPrPage::makeUsedPixmapList()
    {
        if( it.current()->getType()==OT_PICTURE || it.current()->getType()==OT_CLIPART)
        {
-            m_doc->insertPixmapKey(dynamic_cast<KPPixmapObject*>( it.current() )->getKey() );
+            m_doc->insertPixmapKey(static_cast<KPPixmapObject*>( it.current() )->getKey() );
        }
        else if ( it.current()->getType() == OT_GROUP )
            makeUsedPixmapListForGroupObject( it.current() );
@@ -2928,7 +2928,7 @@ void KPrPage::makeUsedPixmapListForGroupObject( KPObject *_obj )
         for ( ; it.current(); ++it ) {
             if ( ( it.current()->getType() == OT_PICTURE )
                 || ( it.current()->getType() == OT_CLIPART ) )
-                m_doc->insertPixmapKey( dynamic_cast<KPPixmapObject*>( it.current() )->getKey() );
+                m_doc->insertPixmapKey(static_cast<KPPixmapObject*>( it.current() )->getKey() );
             else if ( it.current()->getType() == OT_GROUP )
                 makeUsedPixmapListForGroupObject( it.current() );  // recursion
         }
@@ -3413,19 +3413,6 @@ KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bo
     return 0L;
 }
 
-KPObject * KPrPage::getEditObj(const KoPoint & pos) const
-{
-    QPtrListIterator<KPObject> it( m_objectList );
-    KPObject *o = it.toLast();
-    while ( o ) {
-        if ( o->contains( pos, m_doc->zoomHandler() ) )
-            return o;
-        o = --it;
-    }
-    return 0L;
-}
-
-// ### identical to getEditObj() ! (Harri)
 KPObject* KPrPage::getObjectAt( const KoPoint&pos ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );

@@ -257,7 +257,6 @@ public:
     KPObject * getCursor(const KoPoint &pos );
 
     KPObject * getObjectResized(const KoPoint &pos, ModifyType modType, bool &desel, bool &_over, bool &_resize );
-    KPObject * getEditObj(const KoPoint & pos) const;
     KPObject* getObjectAt( const KoPoint&pos ) const;
     KPPixmapObject * picViewOrigHelper() const;
     void applyStyleChange( KoStyle *changedStyle, int paragLayoutChanged, int formatChanged );

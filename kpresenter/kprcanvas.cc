@@ -777,11 +777,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     firstY = contentsPoint.y();
 
 		    // find object on active page
-		    kpobject = m_activePage->getEditObj( docPoint );
+		    kpobject = m_activePage->getObjectAt( docPoint );
 
 		    // find object on sticky page (ignore header/footer)
 		    if ( !kpobject ) {
-			kpobject = stickyPage()->getEditObj( docPoint );
+			kpobject = stickyPage()->getObjectAt( docPoint );
                         if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
                             if(objectIsAHeaderFooterHidden(kpobject))
                                 kpobject=0L;
@@ -2041,10 +2041,10 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 
     deSelectAllObj();
     KPObject *kpobject = 0;
-    kpobject=m_activePage->getEditObj(docPoint);
+    kpobject=m_activePage->getObjectAt(docPoint);
     if( !kpobject)
     {
-        kpobject=stickyPage()->getEditObj(docPoint );
+        kpobject=stickyPage()->getObjectAt(docPoint );
         if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
         {
             if( objectIsAHeaderFooterHidden(kpobject))
