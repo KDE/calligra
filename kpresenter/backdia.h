@@ -40,6 +40,7 @@ class QResizeEvent;
 class QPainter;
 class QRadioButton;
 class QCheckBox;
+class QShowEvent;
 
 /*******************************************************************
  *
@@ -93,6 +94,9 @@ public:
     int getBackXFactor();
     int getBackYFactor();
 
+protected:
+    void showEvent( QShowEvent *e );
+    
 private:
     QLabel *lPicName, *picPreview, *lClipName;
     QCheckBox *unbalanced;

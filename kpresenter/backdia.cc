@@ -267,6 +267,14 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
 }
 
 /*=============================================================*/
+void BackDia::showEvent( QShowEvent *e )
+{
+    QDialog::showEvent( e );
+    lockUpdate = FALSE;
+    updateConfiguration();
+}
+
+/*=============================================================*/
 void BackDia::updateConfiguration()
 {
     if ( lockUpdate )
