@@ -39,6 +39,7 @@
 #include <kglobalsettings.h>
 #include <kcharsets.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <qstringlist.h>
 #include <qfont.h>

@@ -31,6 +31,7 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qradiobutton.h>
+#include <qclipboard.h>
 
 #include "backdia.h"
 #include "autoformEdit/afchoose.h"
@@ -74,6 +75,7 @@
 #include <kimageio.h>
 #include <kparts/event.h>
 #include <kdebug.h>
+#include <ktempfile.h>
 
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
@@ -349,7 +351,16 @@ void KPresenterView::editPaste()
     if ( !page->kTxtObj() ) {
 	page->setToolEditMode( TEM_MOUSE );
 	page->deSelectAllObj();
-	m_pKPresenterDoc->pasteObjs( xOffset, yOffset, currPg );
+        QMimeSource *data = QApplication::clipboard()->data();
+        if ( data->provides( "text/uri-list" ) )
+        {
+            m_pKPresenterDoc->pastePage( data, currPg );
+        }
+        else if ( data->provides( "application/x-kpresenter-selection" ) )
+        {
+            m_pKPresenterDoc->pasteObjs( data->encodedData("application/x-kpresenter-selection"),
+                                         xOffset, yOffset, currPg );
+        }
     } else {
 	page->kTxtObj()->paste();
     }
@@ -371,6 +382,12 @@ void KPresenterView::editSelectAll()
     } else {
 	page->kTxtObj()->selectAll( TRUE );
     }
+}
+
+/*===============================================================*/
+void KPresenterView::editCopyPage()
+{
+    m_pKPresenterDoc->copyPageToClipboard( currPg );
 }
 
 /*===============================================================*/
@@ -871,13 +888,12 @@ void KPresenterView::extraCreateTemplate()
     m.scale( 60.0 / (float)pix.width(), 45.0 / (float)pix.height() );
     pix = pix.xForm( m );
 
-    // FIXME(Werner)
-    QString file = "/tmp/kpt.kpt";
-    m_pKPresenterDoc->savePage( file, i );
+    KTempFile tempFile( QString::null, ".kpt" );
+    tempFile.setAutoDelete( true );
+    m_pKPresenterDoc->savePage( tempFile.name(), i );
 
     KoTemplateCreateDia::createTemplate( "kpresenter_template", KPresenterFactory::global(),
-					 file, pix, this);
-    system( QString( "rm %1" ).arg( file ).latin1() );
+					 tempFile.name(), pix, this);
     KPresenterFactory::global()->dirs()->addResourceType("kpresenter_template",
 							 KStandardDirs::kde_default( "data" ) +
 							 "kpresenter/templates/");
@@ -1697,17 +1713,24 @@ void KPresenterView::setupActions()
     actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
     actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
     actionEditPaste = KStdAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
+    connect( m_pKPresenterDoc, SIGNAL( enablePaste( bool ) ),
+             actionEditPaste, SLOT( setEnabled( bool ) ) );
+    m_pKPresenterDoc->clipboardDataChanged(); // set paste's initial state
+
     actionEditDelete = new KAction( i18n( "&Delete" ), "editdelete", CTRL + Key_Delete,
 				    this, SLOT( editDelete() ),
 				    actionCollection(), "edit_delete" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
+    /*actionEditCopyPage = */new KAction( i18n( "Copy Page" ), "editcopy",
+                                          0, this, SLOT( editCopyPage() ),
+                                          actionCollection(), "edit_copypage" );
     actionEditDuplicatePage = new KAction( i18n( "Duplicate Page" ), "newslide",
 					   0, this, SLOT( editDuplicatePage() ),
 					   actionCollection(), "edit_duplicatepage" );
-
     actionEditDelPage = new KAction( i18n( "Delete &Page..." ), "delslide", 0,
 				     this, SLOT( editDelPage() ),
 				     actionCollection(), "edit_delpage" );
+
     actionEditFind = KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
     actionEditHeaderFooter = new KAction( i18n( "&Header/Footer..." ), 0,
 					  this, SLOT( editHeaderFooter() ),

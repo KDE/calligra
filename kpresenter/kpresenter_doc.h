@@ -27,9 +27,7 @@ class KTextEditFormatCollection;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
-#include <koQueryTrader.h>
 
-#include <qapplication.h>
 #include <qlist.h>
 #include <qobject.h>
 #include <qstring.h>
@@ -39,7 +37,6 @@ class KTextEditFormatCollection;
 #include <koPageLayoutDia.h>
 
 #include "kpobject.h"
-#include "kpresenter_view.h"
 #include "global.h"
 #include "kpbackground.h"
 
@@ -50,10 +47,9 @@ class KTextEditFormatCollection;
 
 #include <komlParser.h>
 #include <komlWriter.h>
-#include <ktempfile.h>
 
-#include <qtextstream.h>
-
+class KoDocumentEntry;
+class QTextStream;
 class KPFooterHeaderEditor;
 class KPTextObject;
 class StyleDia;
@@ -223,11 +219,16 @@ public:
     // size of page
     QRect getPageRect( unsigned int num, int diffx, int diffy, float fakt=1.0, bool decBorders = true );
 
-    // delete/reorder obejcts
+    // delete/reorder objects
     void deleteObjs( bool _add = true );
     void copyObjs( int, int );
-    void pasteObjs( int, int, int );
+    void pasteObjs( const QByteArray & data, int, int, int );
+
     void savePage( const QString &file, int pgnum );
+    void pastePage( const QMimeSource * data, int pgnum );
+    void deletePage( int _page );
+    int insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile );
+    void copyPageToClipboard( int pgnum );
 
     // repaint all views
     void repaint( bool );
@@ -272,9 +273,6 @@ public:
     int getTopBorder();
     int getBottomBorder();
 
-    void deletePage( int _page );
-    int insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile );
-
     void setObjectList( QList<KPObject> *_list ) {
         _objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false );
     }
@@ -318,9 +316,11 @@ public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
     void selectPage( int pgNum, bool select );
+    void clipboardDataChanged();
 
 signals:
 
+    void enablePaste( bool );
     // document modified
     //void sig_KPresenterModified();
 
@@ -333,8 +333,6 @@ signals:
 
 protected slots:
     void slotUndoRedoChanged( QString, QString );
-
-    void slotDocumentLoaded();
 
 protected:
     KoView* createViewInstance( QWidget* parent, const char* name );
@@ -415,6 +413,7 @@ protected:
     DCOPObject *dcop;
 
     int saveOnlyPage;
+    QString m_tempFileInClipboard;
     KTextEditFormatCollection *fCollection;
     QValueList<bool> m_selectedSlides;
     bool ignoreSticky;

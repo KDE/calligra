@@ -1,5 +1,6 @@
 #include "sidebar.h"
 #include "kpresenter_doc.h"
+#include "kpresenter_view.h"
 #include <qheader.h>
 #include <qtimer.h>
 #include <kdebug.h>

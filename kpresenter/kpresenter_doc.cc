@@ -66,9 +66,11 @@
 #include <qimage.h>
 #include <qpicture.h>
 #include <qbuffer.h>
+#include <qtextstream.h>
 
 #include <kurl.h>
-
+#include <kurldrag.h>
+#include <ktempfile.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -81,6 +83,7 @@
 #include <koFilterManager.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
+#include <koQueryTrader.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -269,9 +272,11 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     saveOnlyPage = -1;
 
-    QWidget::connect( &_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
+    connect( &_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
 		      this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
 
+    connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
+             this, SLOT( clipboardDataChanged() ) );
 
     if ( name )
 	dcopObject();
@@ -3530,13 +3535,11 @@ void KPresenterDoc::copyObjs( int diffx, int diffy )
 {
     if ( !numSelected() )
 	return;
-    QClipboard *cb = QApplication::clipboard();
     QString clip_str;
     QTextStream out( &clip_str, IO_WriteOnly );
     KPObject *kpobject = 0;
 
-    out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org"
-	<< "\" editor=\"" << "KPresenter"
+    out << otag << "<DOC editor=\"" << "KPresenter"
 	<< "\" mime=\"" << "application/x-kpresenter-selection" << "\">" << endl;
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
@@ -3550,7 +3553,10 @@ void KPresenterDoc::copyObjs( int diffx, int diffy )
     }
     out << etag << "</DOC>" << endl;
 
-    cb->setText( clip_str );
+    QStoredDrag * drag = new QStoredDrag( "application/x-kpresenter-selection" );
+    drag->setEncodedData( clip_str.utf8() );
+    QApplication::clipboard()->setData( drag );
+    //QApplication::clipboard()->setText( clip_str );
 }
 
 /*=============================================================*/
@@ -3562,14 +3568,14 @@ void KPresenterDoc::savePage( const QString &file, int pgnum )
 }
 
 /*========================= paste objects ========================*/
-void KPresenterDoc::pasteObjs( int diffx, int diffy, int currPage )
+void KPresenterDoc::pasteObjs( const QByteArray & data, int diffx, int diffy, int currPage )
 {
     deSelectAllObj();
 
     pasting = true;
     pasteXOffset = diffx + 20;
     pasteYOffset = diffy + 20;
-    QString clip_str = QApplication::clipboard()->text();
+    QString clip_str = QString::fromUtf8( data );
 
     if ( clip_str.isEmpty() ) return;
 
@@ -3829,11 +3835,6 @@ void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 }
 
 /*==============================================================*/
-void KPresenterDoc::slotDocumentLoaded()
-{
-}
-
-/*==============================================================*/
 int KPresenterDoc::getPenBrushFlags()
 {
     int flags = 0;
@@ -4051,6 +4052,47 @@ void KPresenterDoc::copyPage( int from, int to )
     savePage( tempFile.name(), from );
     insertPage( to, IP_BEFORE, FALSE, tempFile.name() );
     selectPage( to, wasSelected );
+}
+
+void KPresenterDoc::copyPageToClipboard( int pgnum )
+{
+    // We save the page to a temp file and set the URL of the file in the clipboard
+    // Yes it's a hack but at least we don't hit the clipboard size limit :)
+    // (and we don't have to implement copy-tar-structure-to-clipboard)
+    // In fact it even allows copying a [1-page] kpr in konq and pasting it in kpresenter :))
+    kdDebug() << "KPresenterDoc::copyPageToClipboard pgnum=" << pgnum << endl;
+    KTempFile tempFile( QString::null, ".kpr" );
+    savePage( tempFile.name(), pgnum );
+    KURL url; url.setPath( tempFile.name() );
+    KURL::List lst;
+    lst.append( url );
+    QApplication::clipboard()->setData( KURLDrag::newDrag( lst ) );
+    m_tempFileInClipboard = tempFile.name(); // do this last, the above calls clipboardDataChanged
+}
+
+void KPresenterDoc::pastePage( const QMimeSource * data, int pgnum )
+{
+    KURL::List lst;
+    if ( KURLDrag::decode( data, lst ) && !lst.isEmpty() )
+    {
+        insertPage( pgnum, IP_BEFORE, FALSE, lst.first().path() );
+        selectPage( pgnum, true /* should be part of the file ? */ );
+    }
+}
+
+void KPresenterDoc::clipboardDataChanged()
+{
+    if ( !m_tempFileInClipboard.isEmpty() )
+    {
+        kdDebug() << "KPresenterDoc::clipboardDataChanged, deleting temp file " << m_tempFileInClipboard << endl;
+        unlink( QFile::encodeName( m_tempFileInClipboard ) );
+        m_tempFileInClipboard = QString::null;
+    }
+    // TODO enable paste as well, when a txtobject is activated
+    // and there is plain text in the clipboard. Then enable this code.
+    //QMimeSource *data = QApplication::clipboard()->data();
+    //bool canPaste = data->provides( "text/uri-list" ) || data->provides( "application/x-kpresenter-selection" );
+    // emit enablePaste( canPaste );
 }
 
 void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )

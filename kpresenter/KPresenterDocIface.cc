@@ -20,6 +20,7 @@
 #include "KPresenterDocIface.h"
 
 #include "kpresenter_doc.h"
+#include "kpresenter_view.h"
 
 #include <kapp.h>
 #include <dcopclient.h>

@@ -122,6 +122,7 @@ public slots:
     void editPaste();
     void editDelete();
     void editSelectAll();
+    void editCopyPage();
     void editDuplicatePage();
     void editDelPage();
     void editFind();
