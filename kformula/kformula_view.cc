@@ -34,7 +34,8 @@ KFormulaView::KFormulaView( QWidget *_parent, const char *_name, KFormulaDoc* _d
     QWidget( _parent, _name ), KoViewIf( _doc ), OPViewIf( _doc ), KFormula::View_skel()
 {
     setWidget( this );
-
+    widget()->setFocusPolicy( QWidget::StrongFocus );
+    
     OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
 
     setBackgroundColor( white );
