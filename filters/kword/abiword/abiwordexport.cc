@@ -273,6 +273,12 @@ class FormatData
                           // of Abiword's "<c>"	tag
 };
 
+class ValueListFormatData : public QValueList<FormatData>
+{
+public:
+    ValueListFormatData (void) { }
+    virtual ~ValueListFormatData (void) { }
+};
 
 static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &)
 {
@@ -331,7 +337,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & strDummy
 {
     // To use in <FORMATS> elements
 
-    QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
+    ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
     FormatData formatData (-1,-1);
 
@@ -362,7 +368,7 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
 
 static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText )
 {
-    QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
+    ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
     AllowNoAttributes (myNode);
 
@@ -408,9 +414,9 @@ static void ProcessHardBreakTag ( QDomNode myNode, void *tagData, QString &)
     *hardBreak=(1==frameBreak);
 }
 
-static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &paraFormatDataList)
+static void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList)
 {
-    QValueList<FormatData>::Iterator  paraFormatDataIt;
+    ValueListFormatData::Iterator  paraFormatDataIt;
     int lastPos=0; // last position
 
     paraFormatDataIt = paraFormatDataList.begin ();
@@ -437,7 +443,7 @@ static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &p
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
 
-static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText )
+static void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText )
 {
     const QString strAmp ("&amp;");
     const QString strLt  ("&lt;");
@@ -455,7 +461,7 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
     {
         CreateMissingFormatData(paraText,paraFormatDataList);
 
-        QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
+        ValueListFormatData::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
 
         QString partialText;
 
@@ -509,7 +515,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     AllowNoAttributes (myNode);
 
     QString paraText;
-    QValueList<FormatData> paraFormatDataList;
+    ValueListFormatData paraFormatDataList;
     LayoutData paraLayout;
     QValueList<TagProcessing> tagProcessingList;
     bool hardbreak=false; // Have we an hard break?
@@ -525,8 +531,6 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         // Add an AbiWord page break
         outputText+="<pbr/>\n";
     }
-
-    //Note: AbiWord at the state of version 0.7.13 has no style dialog but can use styles!
 
     QString style; // Style attribute for <p> element
     QString props; // Props attribute for <p> element
@@ -658,11 +662,13 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
 {
     int format=-1;
     int orientation=-1;
+    double width=-1.0;
+    double height=-1.0;
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList.append ( AttrProcessing ( "format",          "int", (void*) &format ) );
-    attrProcessingList.append ( AttrProcessing ( "width",           "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "height",          "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "width",           "double", (void*) &width ) );
+    attrProcessingList.append ( AttrProcessing ( "height",          "double", (void*) &height ) );
     attrProcessingList.append ( AttrProcessing ( "orientation",     "int", (void*) &orientation ) );
     attrProcessingList.append ( AttrProcessing ( "columns",         "", NULL ) );
     attrProcessingList.append ( AttrProcessing ( "columnspacing",   "", NULL ) );
@@ -713,15 +719,30 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
         }
         case 8: // US Executive (does not exists in AbiWord!)
         {
+            // FIXME/TODO: AbiWord (CVS 2001-04-25) seems not to like custom formats, so avoid them for now!
+#if 0
             outputText += "pagetype=\"Custom\" width=\"7.5\" height=\"10.0\" units=\"inch\" ";
+#else
+            // As replacement, use the slightly bigger "letter" format.
+            outputText += "pagetype=\"Letter\" width=\"8.5\" height=\"11.0\" units=\"inch\" ";
+#endif
             break;
         }
         // Other!
         case 5: // Screen
         case 6: // Custom
         default:
-        { // TODO: do a right implemntation!
-            outputText += "pagetype=\"Custom\" width=\"21.0\" height=\"29.7\" units=\"cm\" "; // FIXME: Provisory!
+        {
+             // FIXME/TODO: AbiWord (CVS 2001-04-25) seems not to like custom formats, so avoid them for now!
+            if ((width<=1.0) || (height<=1.0) || true)
+            {
+                // Height or width is ridiculous,, so assume A4 format
+                outputText += "pagetype=\"A4\" width=\"21.0\" height=\"29.7\" units=\"cm\" ";
+            }
+            else
+            {   // We prefer to use inches, as to limit rounding errors (page size is in points!)
+                outputText += QString("pagetype=\"Custom\" width=\"%1\" height=\"%2\" units=\"inch\" ").arg(width/72.0).arg(height/72.0);
+            }
             break;
         }
     }
@@ -737,7 +758,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
     }
     outputText += "\" ";
 
-    outputText += "page-scale=\"1.0\"/>\n"; // TODO: What is this exactly? Zoom?
+    outputText += "page-scale=\"1.0\"/>\n"; // KWord has no page scale, so assume 100%
 }
 
 static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
