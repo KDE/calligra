@@ -1838,7 +1838,6 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
 
     QValueList<QDomElement> listParagraphs;
     QDomElement paragElem = elem.firstChild().toElement();
-    bool first = true;
     for ( ; !paragElem.isNull() ; paragElem = paragElem.nextSibling().toElement() )
     {
         if ( paragElem.tagName() == "P" )
@@ -1850,17 +1849,13 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
                 n = n.nextSibling().toElement();
             }
             listParagraphs.append( paragElem );
-            if ( !first )
-                text += '\n';
-            else
-                first = false;
+            text += '\n';
         }
     }
     kdDebug(33001) << "KPrPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
     KPrTextDocument * textdoc = static_cast<KPrTextDocument *>(c->parag()->document());
 
     cursor.insert( text, true );
-
     // Move cursor to the end
     c->setParag( firstParag );
     c->setIndex( m_idx );
