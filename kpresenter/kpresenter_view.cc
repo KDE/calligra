@@ -3503,12 +3503,12 @@ void KPresenterView::setRanges()
         int xOffset = m_canvas->diffx();
         int yOffset = m_canvas->diffy();
 	vert->setSteps( 10, m_canvas->height() );
-	vert->setRange( 0, QMAX( 0, m_pKPresenterDoc->getPageRect( 0, xOffset, yOffset, 1.0, false ).height()  - m_canvas->height() ) );
-	horz->setSteps( 10, m_pKPresenterDoc->getPageRect( 0, xOffset, yOffset, 1.0, false ).width() +
+	vert->setRange( 0, QMAX( 0, m_canvas->activePage()->getZoomPageRect().height()  - m_canvas->height() ) );
+	horz->setSteps( 10, m_canvas->activePage()->getZoomPageRect().width() +
 			16 - m_canvas->width() );
-	int range = m_pKPresenterDoc->getPageRect( 0, xOffset, yOffset, 1.0, false ).width() +
+	int range = m_canvas->activePage()->getZoomPageRect().width() +
 		16 - m_canvas->width() < 0 ? 0 :
-	    m_pKPresenterDoc->getPageRect( 0, xOffset, yOffset, 1.0, false ).width() + 16 - m_canvas->width();
+	    m_canvas->activePage()->getZoomPageRect().width() + 16 - m_canvas->width();
 	horz->setRange( 0, range );
     }
 }
