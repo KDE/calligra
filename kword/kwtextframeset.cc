@@ -3688,9 +3688,13 @@ void KWTextFrameSetEdit::blinkCursor()
 
 void KWTextFrameSetEdit::drawCursor( bool visible )
 {
-    if ( !cursor->parag() ||
-         !cursor->parag()->isValid() )
+    cursorVisible = visible;
+    if ( !cursor->parag() )
         return;
+
+    if ( !cursor->parag()->isValid() )
+        textFrameSet()->ensureFormatted( cursor->parag() );
+
     if ( !frameSet()->kWordDocument()->isReadWrite() )
         return;
     if ( !m_currentFrame )
@@ -3702,7 +3706,6 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
 
     //QRect crect( m_canvas->contentsX(), m_canvas->contentsY(), m_canvas->visibleWidth(), m_canvas->visibleHeight() );
     textFrameSet()->drawCursor( &p, cursor, visible, m_canvas, m_currentFrame );
-    cursorVisible = visible;
 }
 
 
