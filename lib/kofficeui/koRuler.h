@@ -242,7 +242,7 @@ protected slots:
     void rbPT() { setUnit( QString::fromLatin1("pt") ); emit unitChanged( unit ); }
     void rbMM() { setUnit( QString::fromLatin1("mm") ); emit unitChanged( unit ); }
     void rbINCH() { setUnit( QString::fromLatin1("inch") ); emit unitChanged( unit ); }
-    void pageLayoutDia() { emit openPageLayoutDia(); }
+    void pageLayoutDia() { emit doubleClicked()/*openPageLayoutDia()*/; }
     void rbRemoveTab();
 
 };
