@@ -76,20 +76,20 @@ KChartPieConfigPage::KChartPieConfigPage(KChartParameters* params,QWidget* paren
 
    initList();
    dist->setEnabled(false);
-   
+
    connect(column,SIGNAL(valueChanged(int)),this,SLOT(changeValue(int)));
-   
+
   connect( list, SIGNAL( selectionChanged(QListViewItem *) ), this, SLOT( slotselected(QListViewItem *) ) );
-  
+
 }
 
 void KChartPieConfigPage::initList()
 {
 int indice;
-for ( QStringList::Iterator it = _params->legend.begin(); it != _params->legend.end(); ++it ) 
+for ( QStringList::Iterator it = _params->legend.begin(); it != _params->legend.end(); ++it )
   	{
 	(void)new QCheckListItem( list, (*it),QCheckListItem::CheckBox ) ;
-  	
+
   	}
 QListViewItemIterator it( list );
 //Select or not CheckBox
@@ -114,7 +114,7 @@ if(pos==-1)
 	dist->setEnabled(true);
 else
 	value[pos]=dist->value();
-	
+
 pos=_params->legend.count()*col+indice;
 dist->setValue(value[pos]);
 }
@@ -154,8 +154,8 @@ for ( ; it.current(); ++it )
 
 if(_params->threeD())
    	{
-   	depth->setValue(_params->_3d_depth);
-   	angle->setValue(_params->_3d_angle);
+            depth->setValue(static_cast<int>(_params->_3d_depth));   // #### FIXME
+            angle->setValue(_params->_3d_angle);
    	}
 value.duplicate(_params->explode);
 if(pos!=-1)

@@ -36,7 +36,7 @@
 
 #include <unistd.h>
 
-void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QString & tmpFile )
+void KoPrintPreview::preview(QWidget* /*parent*/, const char* /*name*/, const QString & tmpFile )
 {
     // ### While kghostview is busted, let's not use it
 #if 0

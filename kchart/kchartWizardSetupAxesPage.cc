@@ -82,7 +82,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   tmpLabel->setText(i18n("Depth 3D : "));
   grid2->addWidget(tmpLabel,1,0);
   depth = new QSpinBox(1, 20, 1, tmpQGroupBox);
-  depth->setValue(_chart->params()->_3d_depth);
+  depth->setValue(static_cast<int>(_chart->params()->_3d_depth));  // #### FIXME
   grid2->addWidget(depth,1,1);
 
   tmpLabel=new QLabel(tmpQGroupBox);

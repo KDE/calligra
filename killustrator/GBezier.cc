@@ -631,7 +631,7 @@ int GBezier::createPolyline (int index, int pidx) {
   double y3 = points.at (index+3)->y();
 
   if (ppoints.size () - pidx < ((points.count ())/ DELTA / 3))
-    ppoints.resize ((static_cast<int>(points.count ()) /DELTA / 3) + pidx);
+    ppoints.resize ((static_cast<int>(points.count () /DELTA / 3)) + pidx);
 
   for (t = 0; t < 1.01; t += DELTA) {
     t2 = t * t;

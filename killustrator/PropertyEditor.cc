@@ -558,7 +558,7 @@ void PropertyEditor::readProperties ()
 cerr<<"4"<<endl;
          if (haveRectangleObjects)
          {
-            roundnessSlider->setValue (oInfo.roundness);
+            roundnessSlider->setValue (static_cast<int>(oInfo.roundness)); // #### FIXME
          };
 cerr<<"5"<<endl;
          if (haveEllipseObjects)

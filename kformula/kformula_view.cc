@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -50,7 +50,7 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 
     setInstance(KFormulaFactory::global());
     setXMLFile("kformula.rc");
-    
+
     scrollview = new QScrollView(this, "scrollview");
     formulaWidget = new KFormulaWidget(_doc->getFormula(), scrollview->viewport(), "formulaWidget");
     scrollview->addChild(formulaWidget);
@@ -61,7 +61,7 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 
     //KFormulaContainer* formula = m_pDoc->getFormula();
     KFormulaDocument* document = m_pDoc->getDocument();
-    
+
     // copy&paste
     cutAction   = KStdAction::cut(document, SLOT(cut()), actionCollection());
     copyAction  = KStdAction::copy(document, SLOT(copy()), actionCollection());
@@ -97,19 +97,19 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     mn_indexList->setCheckable(false);
 
     (void) KStdAction::selectAll(formulaWidget, SLOT(slotSelectAll()), actionCollection());
-    
+
 //     actionElement_AddElement_T = new KAction(i18n( "Add/change to simple text" ),
 //                                              "mini-xy",
 //                                              CTRL + Key_1 ,
 //                                              this,SLOT(addText()),
 //                                              actionCollection(),"addtext");
-    
+
 //     actionElement_AddElement_V = new KAction(i18n( "Add/change to vertical space" ),
 //                                              "mini-vspace",
 //                                              CTRL + Key_4 ,
 //                                              this,SLOT(addVertSpace()),
 //                                              actionCollection(),"addvspace");
-    
+
 //     actionElement_AddElement_L = new KAction(i18n( "Add index at pos..." ),
 //                                              "index",
 //                                              CTRL + Key_9 ,
@@ -149,7 +149,7 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 //                                                     CTRL + ALT + Key_E,
 //                                                     this,SLOT(fontSwitch()),
 //                                                     actionCollection(),"fontelement");
-    
+
 //     //actionElement_Font_Element->setEnabled(false);
 
 //     actionElement_Font_Child = new KToggleAction(i18n( "Resize children" ),
@@ -157,7 +157,7 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 //                                                  CTRL + ALT + Key_C,
 //                                                  this,SLOT(fontSwitch()),
 //                                                  actionCollection(),"fontchild");
-    
+
 //     actionElement_Font_Index = new KToggleAction(i18n( "Resize index" ),
 //                                                  "indexsw",
 //                                                  CTRL + ALT + Key_I,
@@ -231,14 +231,14 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 //                                                     actionCollection(),"fracleft");
 
 //     // ((KToggleAction *)actionElement_Fraction_HA_L)->setExclusiveGroup("FractionHa");
-    
+
 //     actionElement_Fraction_HA_R = new KToggleAction(i18n( "Right align" ),
 //                                                     "rightalign",
 //                                                     0,
 //                                                     this,SLOT(fractionAlignR()),
 //                                                     actionCollection(),"fracright");
 
-    
+
 //     // ((KToggleAction *)actionElement_Fraction_HA_R)->setExclusiveGroup("FractionHa");
 
 //     actionElement_Fraction_MidLine = new KToggleAction(i18n( "Draw midline" ),
@@ -483,17 +483,17 @@ void KFormulaPartView::modifyMatrix(QString str)
 
 void KFormulaPartView::reduce()
 {
-//     if(m_pDoc->currentElement()==0) 
+//     if(m_pDoc->currentElement()==0)
 //       return;
 //     int level;
 //     level= FN_REDUCE | FN_P43;
-//     if(((KToggleAction*)actionElement_Font_Element)->isChecked()) 
+//     if(((KToggleAction*)actionElement_Font_Element)->isChecked())
 //       level=level | FN_ELEMENT;
-//     if(((KToggleAction*)actionElement_Font_Index)->isChecked())  
+//     if(((KToggleAction*)actionElement_Font_Index)->isChecked())
 //       level=level | FN_INDEXES;
-//     if(((KToggleAction*)actionElement_Font_Child)->isChecked()) 
+//     if(((KToggleAction*)actionElement_Font_Child)->isChecked())
 //       level=level | FN_CHILDREN;
-//     if(((KToggleAction*)actionElement_Font_Next)->isChecked())  
+//     if(((KToggleAction*)actionElement_Font_Next)->isChecked())
 //       level=level | FN_NEXT;
 
 //     m_pDoc->currentElement()->scaleNumericFont(level);
@@ -503,22 +503,22 @@ void KFormulaPartView::reduce()
 
 void KFormulaPartView::enlarge()
 {
-//     if(m_pDoc->currentElement()==0) 
+//     if(m_pDoc->currentElement()==0)
 //       return;
 //     int level;
 //     level= FN_ENLARGE | FN_P43;
 
 //     //kdDebug(39001) <<m_vToolBarFont->comboItem(m_idComboFont_ScaleMode)<<endl;
-//     if(((KToggleAction*)actionElement_Font_Element)->isChecked()) 
+//     if(((KToggleAction*)actionElement_Font_Element)->isChecked())
 //       level=level | FN_ELEMENT;
-    
-//     if(((KToggleAction*)actionElement_Font_Index)->isChecked())  
+
+//     if(((KToggleAction*)actionElement_Font_Index)->isChecked())
 //       level=level | FN_INDEXES;
-    
-//     if(((KToggleAction*)actionElement_Font_Child)->isChecked()) 
+
+//     if(((KToggleAction*)actionElement_Font_Child)->isChecked())
 //       level=level | FN_CHILDREN;
-    
-//     if(((KToggleAction*)actionElement_Font_Next)->isChecked())  
+
+//     if(((KToggleAction*)actionElement_Font_Next)->isChecked())
 //       level=level | FN_NEXT;
 
 //     m_pDoc->currentElement()->scaleNumericFont(level);
@@ -537,7 +537,7 @@ void KFormulaPartView::fractionAlignM()
 //     QString content=m_pDoc->currentElement()->getContent();
 //     content[1]='M';
 //     m_pDoc->currentElement()->setContent(content);
-    
+
 //     ((KToggleAction *)actionElement_Fraction_VA_M)->setChecked(true);
 //     ((KToggleAction *)actionElement_Fraction_VA_D)->setChecked(false);
 //     ((KToggleAction *)actionElement_Fraction_VA_U)->setChecked(false);
@@ -558,7 +558,7 @@ void KFormulaPartView::fractionAlignU()
 //     ((KToggleAction *)actionElement_Fraction_VA_U)->setChecked(true);
 //     ((KToggleAction *)actionElement_Fraction_VA_D)->setChecked(false);
 //     ((KToggleAction *)actionElement_Fraction_VA_M)->setChecked(false);
-    
+
 //     update();
 }
 
@@ -620,11 +620,11 @@ void KFormulaPartView::fractionDist()
 void KFormulaPartView::fractionDistMore()
 {
 //     QString content=m_pDoc->currentElement()->getContent();
- 
+
 //     QString tmpContent=content;
 //     content=tmpContent.left(3);
 //     content+=QString::number(tmpContent.right(tmpContent.length()-3).toInt()+1);
-    
+
 //     kdDebug(39001) <<content<<endl;
 //     m_pDoc->currentElement()->setContent(content);
 //     update();
@@ -636,7 +636,7 @@ void KFormulaPartView::fractionDistLess()
 //     int space=content.right(content.length()-3).toInt()-1;
 //     if (space<1)
 //         space =1;
-   
+
 //     content=content.left(3);
 //     content+=QString::number(space);
 
@@ -653,7 +653,7 @@ void KFormulaPartView::fontSwitch()
 //    if(m_vToolBarFont->isButtonOn(m_idButtonFont_5)) warning("next");
 }
 
-void KFormulaPartView::bold(bool b)
+void KFormulaPartView::bold(bool /*b*/)
 {
 //     BasicElement *el=m_pDoc->currentElement();
 //     if (el==0)
@@ -667,7 +667,7 @@ void KFormulaPartView::bold(bool b)
 //     update();
 }
 
-void KFormulaPartView::italic(bool b)
+void KFormulaPartView::italic(bool /*b*/)
 {
 //     BasicElement *el=m_pDoc->currentElement();
 //     if (el==0)
@@ -681,7 +681,7 @@ void KFormulaPartView::italic(bool b)
 //     update();
 }
 
-void KFormulaPartView::underline(bool b)
+void KFormulaPartView::underline(bool /*b*/)
 {
 //    BasicElement *el=m_pDoc->currentElement();
 //     if (el==0)
@@ -702,7 +702,7 @@ void KFormulaPartView::indexList()
 //     mn_indexList->popup(pnt);
 }
 
-void KFormulaPartView::sizeSelected(int size)
+void KFormulaPartView::sizeSelected(int /*size*/)
 {
 //     BasicElement *el=m_pDoc->currentElement();
 //     if (el==0)
@@ -712,7 +712,7 @@ void KFormulaPartView::sizeSelected(int size)
 //     update();
 }
 
-void KFormulaPartView::fontSelected( const QString& font)
+void KFormulaPartView::fontSelected( const QString& /*font*/)
 {
 
 //     BasicElement *el=m_pDoc->currentElement();

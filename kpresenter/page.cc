@@ -218,9 +218,9 @@ void Page::drawBackground( QPainter *painter, QRect rect )
                           << endl;
                 */
 		it.current()->draw( painter, QPoint( pgRect.x() +
-						     view->kPresenterDoc()->getLeftBorder() * _presFakt,
+						     qRound(view->kPresenterDoc()->getLeftBorder() * _presFakt),
 						     pgRect.y() +
-						     view->kPresenterDoc()->getTopBorder() * _presFakt ),
+						     qRound(view->kPresenterDoc()->getTopBorder() * _presFakt) ),
 				    editMode );
 	    }
 	}
@@ -3267,7 +3267,7 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
         painter->resetXForm();
         painter->fillRect( getPageRect( 0 ), white );
 
-        view->setDiffY( (*it-1) * ( getPageRect( 1, 1.0, false ).height() ) - MM_TO_POINT( top_margin ) );
+        view->setDiffY( (*it-1) * ( getPageRect( 1, 1.0, false ).height() ) - qRound(MM_TO_POINT( top_margin )) );
         drawPageInPainter( painter, view->getDiffY(), getPageRect( *it - 1 ) );
         kapp->processEvents();
 

@@ -39,7 +39,7 @@
 /******************************************************************/
 
 /*================================================================*/
-PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
+PgConfDia::PgConfDia( QWidget* parent, const char* name,
                       bool infLoop, bool swMan, int pgNum, PageEffect pageEffect,
                       PresSpeed presSpeed )
     : QDialog( parent, name, true )

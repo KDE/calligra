@@ -322,7 +322,9 @@ QDomDocumentFragment KPPartObject::save( QDomDocument& doc )
     fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
     fragment.appendChild(KPObject::createBrushElement("BRUSH", brush, doc));
     fragment.appendChild(KPObject::createValueElement("PRESNUM", presNum, doc));
-    fragment.appendChild(KPObject::createValueElement("ANGLE", angle, doc));
+    elem=doc.createElement("ANGLE");
+    elem.setAttribute("value", angle);
+    fragment.appendChild(elem);
     fragment.appendChild(KPObject::createValueElement("FILLTYPE", static_cast<int>(fillType), doc));
     fragment.appendChild(KPObject::createGradientElement("GRADIENT", gColor1, gColor2, static_cast<int>(gType),
                                                          unbalanced, xfactor, yfactor, doc));

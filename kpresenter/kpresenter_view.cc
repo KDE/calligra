@@ -963,7 +963,7 @@ void KPresenterView::screenConfigPages()
 	delete pgConfDia;
 	pgConfDia = 0;
     }
-    pgConfDia = new PgConfDia( this, kPresenterDoc(), "PageConfig", kPresenterDoc()->spInfinitLoop(),
+    pgConfDia = new PgConfDia( this, "PageConfig", kPresenterDoc()->spInfinitLoop(),
 			       kPresenterDoc()->spManualSwitch(), getCurrPgNum(),
 			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageEffect(),
 			       kPresenterDoc()->getPresSpeed() );

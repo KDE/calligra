@@ -47,7 +47,7 @@ class PgConfDia : public QDialog
 public:
 
     // constructor - destructor
-    PgConfDia( QWidget* parent, KPresenterDoc *doc, const char* name,
+    PgConfDia( QWidget* parent, const char* name,
                bool infLoop, bool swMan, int pgNum,
                PageEffect pageEffect, PresSpeed presSpeed );
     bool getInfinitLoop();
