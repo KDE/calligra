@@ -52,7 +52,7 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAr
       brd_right( Qt::white, Border::SOLID, 0 ),
       brd_top( Qt::white, Border::SOLID, 0 ),
       brd_bottom( Qt::white, Border::SOLID, 0 ),
-      backgroundColor( QBrush( Qt::white ) ),
+      backgroundColor( Qt::white ),
       bleft( 0 ),
       bright( 0 ),
       btop( 0 ),
@@ -316,7 +316,7 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
 
     frames.append( _frame );
     _frame->setFrameSet(this);
-    if(recalc) 
+    if(recalc)
         updateFrames();
 }
 
@@ -401,15 +401,14 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
         width = frame->getRightBorder().ptWidth;
         if ( width > 0 )
         {
-            pen = Border::borderPen( frame->getRightBorder() );
-            w = QMAX( 1, (int)m_doc->zoomItX( width + 0.5 ) );
+            w = QMAX( 1, (int)(m_doc->zoomItX( width ) + 0.5) );
+            pen = Border::borderPen( frame->getRightBorder(), w );
         }
         else
         {
-            pen = viewSetting;
             w = 1;
+            pen = viewSetting;
         }
-        pen.setWidth( w );
         painter->setPen( pen );
         w = QMAX( w / 2, 1 );
         painter->drawLine( frameRect.right() + w, frameRect.y(),
@@ -419,15 +418,14 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
         width = frame->getBottomBorder().ptWidth;
         if ( width > 0 )
         {
-            pen = Border::borderPen( frame->getBottomBorder() );
-            w = QMAX( 1, (int)m_doc->zoomItY( width + 0.5 ) );
+            w = QMAX( 1, (int)(m_doc->zoomItY( width ) + 0.5) );
+            pen = Border::borderPen( frame->getBottomBorder(), w );
         }
         else
         {
-            pen = viewSetting;
             w = 1;
+            pen = viewSetting;
         }
-        pen.setWidth( w );
         painter->setPen( pen );
         w = QMAX( w / 2, 1 );
         painter->drawLine( frameRect.x(),     frameRect.bottom() + w,
@@ -437,15 +435,14 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
         width = frame->getLeftBorder().ptWidth;
         if ( width > 0 )
         {
-            pen = Border::borderPen( frame->getLeftBorder() );
-            w = QMAX( 1, (int)m_doc->zoomItX( width + 0.5 ) );
+            w = QMAX( 1, (int)(m_doc->zoomItX( width ) + 0.5) );
+            pen = Border::borderPen( frame->getLeftBorder(), w );
         }
         else
         {
-            pen = viewSetting;
             w = 1;
+            pen = viewSetting;
         }
-        pen.setWidth( w );
         painter->setPen( pen );
         w = QMAX( w / 2, 1 );
         painter->drawLine( frameRect.x() - w, frameRect.y(),
@@ -455,15 +452,14 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
         width = frame->getTopBorder().ptWidth;
         if ( width > 0 )
         {
-            pen = Border::borderPen( frame->getTopBorder() );
-            w = QMAX( 1, (int)m_doc->zoomItY( width + 0.5 ) );
+            w = QMAX( 1, (int)(m_doc->zoomItY( width ) + 0.5) );
+            pen = Border::borderPen( frame->getTopBorder(), w );
         }
         else
         {
-            pen = viewSetting;
             w = 1;
+            pen = viewSetting;
         }
-        pen.setWidth( w );
         painter->setPen( pen );
         w = QMAX( w / 2, 1 );
         painter->drawLine( frameRect.x(),     frameRect.y() - w,

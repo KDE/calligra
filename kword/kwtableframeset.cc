@@ -85,7 +85,7 @@ void KWTableFrameSet::updateFrames()
     {
         m_cells.at(i)->updateFrames();
     } */
-    KWFrameSet::updateFrames(); 
+    KWFrameSet::updateFrames();
 }
 
 /*================================================================*/
@@ -1290,15 +1290,14 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
         width = frame->getRightBorder().ptWidth;
         if ( width > 0 )
         {
-            pen = Border::borderPen( frame->getRightBorder() );
-            w = QMAX( 1, (int)m_doc->zoomItX( width + 0.5 ) );
+            w = QMAX( 1, (int)(m_doc->zoomItX( width ) + 0.5) );
+            pen = Border::borderPen( frame->getRightBorder(), w );
         }
         else
         {
-            pen = viewSetting;
             w = 1;
+            pen = viewSetting;
         }
-        pen.setWidth( w );
         painter->setPen( pen );
         w = QMAX( w / 2, 1 );
         painter->drawLine( frameRect.right() + w, frameRect.y(),
@@ -1308,15 +1307,14 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
         width = frame->getBottomBorder().ptWidth;
         if ( width > 0 )
         {
-            pen = Border::borderPen( frame->getBottomBorder() );
-            w = QMAX( 1, (int)m_doc->zoomItY( width + 0.5 ) );
+            w = QMAX( 1, (int)(m_doc->zoomItY( width ) + 0.5) );
+            pen = Border::borderPen( frame->getBottomBorder(), w );
         }
         else
         {
-            pen = viewSetting;
             w = 1;
+            pen = viewSetting;
         }
-        pen.setWidth( w );
         painter->setPen( pen );
         w = QMAX( w / 2, 1 );
         painter->drawLine( frameRect.x(),     frameRect.bottom() + w,
@@ -1328,15 +1326,14 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
             width = frame->getLeftBorder().ptWidth;
             if ( width > 0 )
             {
-                pen = Border::borderPen( frame->getLeftBorder() );
-                w = QMAX( 1, (int)m_doc->zoomItX( width + 0.5 ) );
+                w = QMAX( 1, (int)(m_doc->zoomItX( width ) + 0.5) );
+                pen = Border::borderPen( frame->getLeftBorder(), w );
             }
             else
             {
-                pen = viewSetting;
                 w = 1;
+                pen = viewSetting;
             }
-            pen.setWidth( w );
             painter->setPen( pen );
             w = QMAX( w / 2, 1 );
             painter->drawLine( frameRect.x() - w, frameRect.y(),
@@ -1348,15 +1345,14 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
             width = frame->getTopBorder().ptWidth;
             if ( width > 0 )
             {
-                pen = Border::borderPen( frame->getTopBorder() );
-                w = QMAX( 1, (int)m_doc->zoomItY( width + 0.5 ) );
+                w = QMAX( 1, (int)(m_doc->zoomItY( width ) + 0.5) );
+                pen = Border::borderPen( frame->getTopBorder(), w );
             }
             else
             {
-                pen = viewSetting;
                 w = 1;
+                pen = viewSetting;
             }
-            pen.setWidth( w );
             painter->setPen( pen );
             w = QMAX( w / 2, 1 );
             painter->drawLine( frameRect.x(),     frameRect.y() - w,
@@ -1435,8 +1431,8 @@ bool KWTableFrameSet::Cell::isAboveOrLeftOf( unsigned row, unsigned col )
     return ( m_row < row ) || ( ( m_row == row ) && ( m_col < col ) );
 }
 
-void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) { 
-    getGroupManager()->addFrame(_frame, recalc); 
+void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
+    getGroupManager()->addFrame(_frame, recalc);
     KWTextFrameSet::addFrame(_frame, recalc);
 }
 

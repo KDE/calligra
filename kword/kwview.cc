@@ -377,7 +377,7 @@ void KWView::setupActions()
     actionFormatColor = new KColorAction( i18n( "&Color..." ), KColorAction::TextColor, ALT + CTRL + Key_C,
                                      this, SLOT( textColor() ),
                                      actionCollection(), "format_color" );
-    actionFormatParag = new KAction( i18n( "&Paragraph..." ), 0,
+    actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
     actionFormatFrameSet = new KAction( i18n( "&Frame/Frameset..." ), 0,
@@ -387,7 +387,7 @@ void KWView::setupActions()
                                      this, SLOT( formatPage() ),
                                     actionCollection(), "format_page" );
 
-    actionFormatStylist = new KAction( i18n( "&Stylist..." ), 0,
+    actionFormatStylist = new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
                                       this, SLOT( extraStylist() ),
                                       actionCollection(), "format_stylist" );
 

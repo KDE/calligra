@@ -24,7 +24,7 @@
 Border::Border()
     : color( Qt::black ), style( SOLID ), ptWidth( 1 ) { }
 
-Border::Border( const QColor & c, BorderStyle s, unsigned int width )
+Border::Border( const QColor & c, BorderStyle s, double width )
     : color( c ), style( s ), ptWidth( width ) { }
 
 bool Border::operator==( const Border _brd ) const {
@@ -36,9 +36,9 @@ bool Border::operator!=( const Border _brd ) const {
 }
 
 /*================================================================*/
-QPen Border::borderPen( const Border & _brd )
+QPen Border::borderPen( const Border & _brd, int width )
 {
-    QPen pen( _brd.color, _brd.ptWidth );
+    QPen pen( _brd.color, width );
     switch ( _brd.style ) {
     case Border::SOLID:
         pen.setStyle( SolidLine );

@@ -307,13 +307,15 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
                          int clipx, int clipy, int clipw, int cliph )
 {
     //qDebug("KWTextParag::paint %p", this);
-        QTextParag::paint( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
+    QTextParag::paint( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
 
     if ( m_layout.topBorder.ptWidth > 0
          || m_layout.bottomBorder.ptWidth > 0
          || m_layout.leftBorder.ptWidth > 0
          || m_layout.rightBorder.ptWidth > 0 )
     {
+        KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+        KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
         int leftX = 0;
         int rightX = documentWidth()-1;
         int topY = lineY( 0 ); // Maybe this is always 0. Not sure.
@@ -321,22 +323,26 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         //kdDebug() << "KWTextParag::paint bottomY=" << bottomY << endl;
         if ( m_layout.topBorder.ptWidth > 0 )
         {
-            painter.setPen( Border::borderPen( m_layout.topBorder ) ); // ### in theory we should zoomIt(ptWidth)
+            int width = QMAX( 1, (int)(doc->zoomItY( m_layout.topBorder.ptWidth ) + 0.5) );
+            painter.setPen( Border::borderPen( m_layout.topBorder, width ) );
             painter.drawLine( leftX, topY, rightX, topY );
         }
         if ( m_layout.bottomBorder.ptWidth > 0 )
         {
-            painter.setPen( Border::borderPen( m_layout.bottomBorder ) );
+            int width = QMAX( 1, (int)(doc->zoomItY( m_layout.bottomBorder.ptWidth ) + 0.5) );
+            painter.setPen( Border::borderPen( m_layout.bottomBorder, width ) );
             painter.drawLine( leftX, bottomY, rightX, bottomY );
         }
         if ( m_layout.leftBorder.ptWidth > 0 )
         {
-            painter.setPen( Border::borderPen( m_layout.leftBorder ) );
+            int width = QMAX( 1, (int)(doc->zoomItX( m_layout.leftBorder.ptWidth ) + 0.5) );
+            painter.setPen( Border::borderPen( m_layout.leftBorder, width ) );
             painter.drawLine( leftX, topY, leftX, bottomY );
         }
         if ( m_layout.rightBorder.ptWidth > 0 )
         {
-            painter.setPen( Border::borderPen( m_layout.rightBorder ) );
+            int width = QMAX( 1, (int)(doc->zoomItX( m_layout.rightBorder.ptWidth ) + 0.5) );
+            painter.setPen( Border::borderPen( m_layout.rightBorder, width ) );
             painter.drawLine( rightX, topY, rightX, bottomY );
         }
     }

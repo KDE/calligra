@@ -24,12 +24,15 @@
 #include <qpen.h>
 class QDomElement;
 
-class Border : public Qt {
-
+/**
+ * This class represents a border - for anything, like paragraph, or frame
+ */
+class Border : public Qt
+{
 public:
     enum BorderStyle {SOLID = 0, DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
     Border();
-    Border( const QColor & c, BorderStyle s, unsigned int width );
+    Border( const QColor & c, BorderStyle s, double width );
     QColor color;
     BorderStyle style;
     double ptWidth;
@@ -37,9 +40,16 @@ public:
     bool operator==( const Border _brd ) const;
     bool operator!=( const Border _brd ) const;
 
+    // Load from XML
     static Border loadBorder( const QDomElement & elem );
+    // Save to XML
     void save( QDomElement & elem );
-    static QPen borderPen( const Border & _brd );
+
+    // Get a ready-to-use QPen for this border.
+    // width is usually QMAX(doc->zoomIt[XY]( brd.ptWidth ), 1)
+    static QPen borderPen( const Border & brd, int width );
+
+    // String to style enum, and vice versa, for UI.
     static BorderStyle getStyle( const QString &style );
     static QString getStyle( const BorderStyle &style );
 };
