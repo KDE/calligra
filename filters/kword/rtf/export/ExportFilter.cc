@@ -145,7 +145,6 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
 
     m_textBody += "{\\pict";
     m_textBody += strTag;
-    // ### TODO: height/width original/scaled
 
     // load the image, this isn't necessary for converted image
     if( !image.size() )
@@ -155,12 +154,28 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
             return true;
         }
 
-    const int width  = int(anchor.right  - anchor.left) * 20;
-    const int height = int(anchor.bottom - anchor.top)  * 20;
+  
+    // find displayed width and height (in twips)
+    const long width  = long((anchor.right  - anchor.left) * 20);
+    const long height = long((anchor.bottom - anchor.top)  * 20);
+
+    // find original image width and height (in twips)
+    long origWidth  = width;
+    long origHeight = height;
+    QImage img( image );
+    if( !img.isNull() )
+    {
+        // 1 pt = 2834.65, 1 twip = 20 pt 
+        origWidth =  long(img.width() * 2834.65 * 20 / img.dotsPerMeterX());
+        origHeight = long(img.height() * 2834.65 * 20 / img.dotsPerMeterY());
+    }
+
+    kdDebug(30503) << " original size: " << origWidth << " x " << origHeight << endl;
+
     m_textBody += "\\picwgoal";
-    m_textBody += QString::number(width, 10);
+    m_textBody += QString::number(origWidth, 10);
     m_textBody += "\\pichgoal";
-    m_textBody += QString::number(height, 10);
+    m_textBody += QString::number(origHeight, 10);
 
     m_textBody+=" ";
     const char hex[] = "0123456789abcdef";
