@@ -18,72 +18,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qtextstream.h>
-#include <qxml.h>
-
 #include <htmlimport.h>
 #include <htmlimport.moc>
 #include <kdebug.h>
 
-#include "htmlimportwell.h"
-#include "htmlimportsax.h"
 #include "ImportListener.h"
 
 HTMLImport::HTMLImport(KoFilter *parent, const char*name) :
                      KoFilter(parent, name) {
 }
-
-static bool checkXMLDeclaration(const QString &fileIn)
-{
-    QFile in(fileIn);
-    if(!in.open(IO_ReadOnly)) {
-        kdError(30503) << "Unable to open input file!" << endl;
-        return false;
-    }
-
-    QTextStream inStream(&in);
-    inStream.setEncoding( QTextStream::UnicodeUTF8 );
-
-    inStream.skipWhiteSpace(); // skip white space that may be before the XML declaration
-
-    QString strToCompare="<?xml";
-    QString strRead;
-    QChar ch;
-
-    for (int i=0; i<5; i++)
-    {
-        inStream >> ch; // read one char
-        strRead+=ch;
-    }
-
-    return (strRead==strToCompare);
-}
-
-static bool TwoPassFilter(const QString &fileIn, const QString &fileOut)
-{
-    kdDebug(30503) << "Calling first pass (HTML to XHTML)" << endl;
-    QFile in(fileIn);
-    if(!in.open(IO_ReadOnly)) {
-        kdError(30503) << "Unable to open input file!" << endl;
-        return false;
-    }
-    QTextStream inStream(&in);
-    QString strXHTML;
-    QTextStream streamXHTML(&strXHTML,IO_WriteOnly);
-    if (!WellFilter(inStream,streamXHTML))
-    {
-        kdDebug(30503) << "First pass failed! Aborting!" << endl;
-        return false;
-    }
-#if 1
-    kdDebug(30503) << strXHTML;
-#endif
-    kdDebug(30503) << "Calling second pass (HTML to XHTML)" << endl;
-    QXmlInputSource source;
-    source.setData(strXHTML);
-    return saxfilter(source,fileOut);
-}
-
 
 bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
                         const QString& from, const QString& to,
@@ -92,24 +35,6 @@ bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
     if(to!="application/x-kword" || from!="text/html")
         return false;
 
-    bool result=false;
-    if (checkXMLDeclaration(fileIn)) // Do we have a XML file?
-    { // We have a XML file, so we can use the new XHTML filter!
-        kdDebug(30503) << "Calling XHTML filter" << endl;
-        result=saxfilter(fileIn,fileOut);
-    }
-#if 1
-    else
-    {
-        kdDebug(30503) << "Calling HTML filter" << endl;
-        result=HtmlFilter(fileIn,fileOut);
-    }
-#else
-    else
-    { // We have not a XML file, so we must make two passes
-        kdDebug(30503) << "Calling two pass filter" << endl;
-        result=TwoPassFilter(fileIn,fileOut);
-    }
-#endif
-    return result;
+    kdDebug(30503) << "Calling HTML filter" << endl;
+    return HtmlFilter(fileIn,fileOut);
 }

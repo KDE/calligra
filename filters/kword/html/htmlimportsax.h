@@ -22,11 +22,7 @@
 #ifndef HTMLIMPORTSAX_H
 #define HTMLIMPORTSAX_H
 
-#include<qxml.h>
 #include<qdom.h>
-
-bool saxfilter(QXmlInputSource& source, const QString &fileOut);
-bool saxfilter(const QString &fileIn, const QString &fileOut);
 
 class CSS2Styles
 {
