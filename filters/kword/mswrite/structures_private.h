@@ -98,6 +98,16 @@ namespace MSWrite
 
 	class SectionDescriptor : public SectionDescriptorGenerated
 	{
+	public:
+		SectionDescriptor &operator= (const SectionDescriptor &rhs)
+		{
+			if (this == &rhs)
+				return *this;
+
+			SectionDescriptorGenerated::operator= (rhs);
+
+			return *this;
+		}
 	};
 
 
@@ -136,6 +146,17 @@ namespace MSWrite
 		friend class PageTable;
 			bool readFromDevice (void);
 			bool writeToDevice (void);
+
+	public:
+		PagePointer &operator= (const PagePointer &rhs)
+		{
+			if (this == &rhs)
+				return *this;
+
+			PagePointerGenerated::operator= (rhs);
+
+			return *this;
+		}
 	};
 
 	
@@ -220,6 +241,19 @@ namespace MSWrite
 	public:
 		FormatPointer ();
 		~FormatPointer ();
+
+		FormatPointer &operator= (const FormatPointer &rhs)
+		{
+			if (this == &rhs)
+				return *this;
+
+			FormatPointerGenerated::operator= (rhs);
+
+			m_afterEndCharByte = rhs.m_afterEndCharByte;
+			m_formatProperty = rhs.m_formatProperty;
+
+			return *this;
+		}
 
 		DWord getAfterEndCharByte (void) const	{	return m_afterEndCharByte;	}
 		void setAfterEndCharByte (const DWord val)	{	m_afterEndCharByte = val;	}

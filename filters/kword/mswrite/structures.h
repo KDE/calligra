@@ -337,6 +337,16 @@ namespace MSWrite
 		FormatParaPropertyTabulator ();
 		~FormatParaPropertyTabulator ();
 
+		FormatParaPropertyTabulator &operator= (const FormatParaPropertyTabulator &rhs)
+		{
+			if (this == &rhs)
+				return *this;
+
+			FormatParaPropertyTabulatorGenerated::operator= (rhs);
+
+			return *this;
+		}
+		
 		// you can use getType()/setType() if you really want to...
 		bool getIsNormal (void) const	{	return m_type == 0;	}
 		void setIsNormal (const bool yes = true)	{	m_type = (yes ? 0 : 3);	}
