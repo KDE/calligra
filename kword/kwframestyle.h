@@ -57,7 +57,8 @@ private:
     QPtrList<KWFrameStyle> m_styleList;
     QPtrList<KWFrameStyle> m_deletedStyles;
     static int styleNumber;
-    KWFrameStyle *m_lastStyle;
+    KWFrameStyle *m_lastStyle; ///< Last style that was searched
+    QString m_lastStyleName; ///< The translated name of m_lastStyle
 };
 
 /******************************************************************/

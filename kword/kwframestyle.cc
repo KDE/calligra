@@ -57,6 +57,7 @@ KWFrameStyle* KWFrameStyleCollection::findStyleShortCut( const QString & _shortC
     {
         if ( styleIt.current()->shortCutName() == _shortCut ) {
             m_lastStyle = styleIt.current();
+            m_lastStyleName == styleIt.current()->displayName();
             return m_lastStyle;
         }
     }
@@ -67,19 +68,21 @@ KWFrameStyle* KWFrameStyleCollection::findStyleShortCut( const QString & _shortC
 KWFrameStyle* KWFrameStyleCollection::findFrameStyle( const QString & _name )
 {
     // Caching, to speed things up
-    if ( m_lastStyle && m_lastStyle->name() == _name )
+    if ( m_lastStyle && m_lastStyleName == _name )
         return m_lastStyle;
 
     QPtrListIterator<KWFrameStyle> styleIt( m_styleList );
     for ( ; styleIt.current(); ++styleIt )
     {
-        if ( styleIt.current()->name() == _name ) {
+        if ( styleIt.current()->displayName() == _name ) {
             m_lastStyle = styleIt.current();
+            m_lastStyleName == _name;
             return m_lastStyle;
         }
     }
 
-    if(_name == "Plain") return m_styleList.at(0); // fallback..
+    if( ( _name == "Plain" ) || ( _name == i18n( "Style name", "Plain" ) ) )
+        return m_styleList.at(0); // fallback..
 
     return 0L;
 }
@@ -221,6 +224,7 @@ void KWFrameStyle::operator=( const KWFrameStyle &rhs )
 
 QString KWFrameStyle::displayName() const
 {
+    kdDebug() << "KWFrameStyle::displayName() " << name() << " => " << i18n( "Style name", name().utf8() ) << endl;
     return i18n( "Style name", name().utf8() );
 }
 
