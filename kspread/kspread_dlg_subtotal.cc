@@ -60,7 +60,7 @@ void KSpreadSubtotalDlg::slotOk()
   bool empty = true;
   int left = m_selection.left();
   for ( QListViewItem * item = m_dialog->m_columnList->firstChild(); item; item = item->nextSibling() )
-  {    
+  {
     if ( ((QCheckListItem * ) item)->isOn() )
     {
       columns[n] = left + n;
@@ -124,7 +124,7 @@ void KSpreadSubtotalDlg::slotOk()
               ++saveY;
               ++bottom;
             }
-                        
+
             addRow = false;
           }
         }
@@ -134,7 +134,7 @@ void KSpreadSubtotalDlg::slotOk()
       oldText = newText;
       ++y;
     }
-    
+
     addRow = true;
     for ( int x = 0; x < numOfCols; ++x )
     {
@@ -161,10 +161,10 @@ void KSpreadSubtotalDlg::slotOk()
       }
     }
   }
-  
+
   accept();
 }
- 
+
 void KSpreadSubtotalDlg::slotCancel()
 {
   reject();
@@ -204,7 +204,7 @@ void KSpreadSubtotalDlg::removeSubtotalLines()
         break;
       }
     }
-    
+
     if ( containsSubtotal )
     {
       kdDebug() << "Line " << y << " contains a subtotal " << endl;
@@ -238,9 +238,9 @@ void KSpreadSubtotalDlg::fillColumnBoxes()
       text = col.arg( util_encodeColumnLabelText( i ) );
     }
 
-    m_dialog->m_columnBox->insertItem( text ); 
+    m_dialog->m_columnBox->insertItem( text );
 
-    item = new QCheckListItem( m_dialog->m_columnList, 
+    item = new QCheckListItem( m_dialog->m_columnList,
                                text,
                                QCheckListItem::CheckBox );
     item->setOn(false);
@@ -250,23 +250,25 @@ void KSpreadSubtotalDlg::fillColumnBoxes()
 
 void KSpreadSubtotalDlg::fillFunctionBox()
 {
-  m_dialog->m_functionBox->insertItem( i18n( "Average" ) );
-  m_dialog->m_functionBox->insertItem( i18n( "Count" ) );
-  m_dialog->m_functionBox->insertItem( i18n( "CountA" ) );
-  m_dialog->m_functionBox->insertItem( i18n( "Max" ) );
-  m_dialog->m_functionBox->insertItem( i18n( "Min" ) );
-  m_dialog->m_functionBox->insertItem( i18n( "Product" ) );
-  m_dialog->m_functionBox->insertItem( i18n( "StDev" ) );
-  m_dialog->m_functionBox->insertItem( i18n( "StDevP" ) );
-  m_dialog->m_functionBox->insertItem( i18n( "Sum" ) );
-  m_dialog->m_functionBox->insertItem( i18n( "Var" ) );
-  m_dialog->m_functionBox->insertItem( i18n( "VarP" ) );
+    QStringList lst;
+    lst <<i18n( "Average" );
+    lst <<i18n( "Count" );
+    lst <<i18n( "CountA" );
+    lst <<i18n( "Max" );
+    lst << i18n( "Min" );
+    lst << i18n( "Product" );
+    lst << i18n( "StDev" );
+    lst << i18n( "StDevP" );
+    lst <<i18n( "Sum" );
+    lst << i18n( "Var" );
+    lst << i18n( "VarP" );
+    m_dialog->m_functionBox->insertStringList(lst);
 }
 
-bool KSpreadSubtotalDlg::addSubtotal( int mainCol, int column, int row, int topRow, 
+bool KSpreadSubtotalDlg::addSubtotal( int mainCol, int column, int row, int topRow,
                                       bool addRow, QString const & text )
 {
-  kdDebug() << "Adding subtotal: " << mainCol << ", " << column << ", Rows: " << row << ", " << topRow 
+  kdDebug() << "Adding subtotal: " << mainCol << ", " << column << ", Rows: " << row << ", " << topRow
             << ": addRow: " << addRow << ", Text: " << text << endl;
   if ( addRow )
   {
