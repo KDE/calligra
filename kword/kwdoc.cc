@@ -1333,7 +1333,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 
     if ( !_even_header ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Header" ) );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Header" ) );
+        // Yes, this is correct. Even internally (0-based), means odd for the user (1-based)
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
                                      ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
@@ -1344,7 +1345,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 
     if ( !_odd_header ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Header" ) );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Header" ) );
+        // Yes, this is correct. Odd internally (0-based), means even for the user (1-based)
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
                                      ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
@@ -1367,7 +1369,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 
     if ( !_even_footer ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Footer" ) );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Footer" ) );
+        // Yes, this is correct. Even internally (0-based), means odd for the user (1-based)
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
                                      ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
@@ -1379,7 +1382,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 
     if ( !_odd_footer ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Footer" ) );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Footer" ) );
+        // Yes, this is correct. Odd internally (0-based), means even for the user (1-based)
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
                                      ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
