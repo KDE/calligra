@@ -60,6 +60,7 @@
 	 <Menu name="settings"><text>&amp;Settings</text>
 		<Separator/>
   		<Action name="configure" group="settings_configure"/>
+		<Action name="page_layout"/>
 	</Menu>
 	</MenuBar>
 	<ToolBar name="edit_toolbar" fullWidth="false">

@@ -80,6 +80,14 @@ DCOPObject* KarbonPart::dcopObject()
 	return dcop;
 }
 
+void
+KarbonPart::setPageLayout( KoPageLayout& layout, KoUnit::Unit _unit )
+{
+	m_pageLayout = layout;
+	m_doc.setUnit( _unit );
+	m_doc.setWidth( m_pageLayout.ptWidth );
+	m_doc.setHeight( m_pageLayout.ptHeight );
+}
 
 bool
 KarbonPart::initDoc()

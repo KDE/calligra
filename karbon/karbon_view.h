@@ -140,6 +140,8 @@ public slots:
 
 	void configure();
 
+	void pageLayout();
+
 	void setLineWidth();
 	void selectionChanged();
 

@@ -35,6 +35,7 @@
 #include <kstdaction.h>
 #include <kocontexthelp.h>
 #include <koUnitWidgets.h>
+#include <koPageLayoutDia.h>
 
 // Commands.
 #include "vcleanupcmd.h"
@@ -296,6 +297,7 @@ KarbonView::setupPrinter( KPrinter& /*printer*/ )
 void
 KarbonView::print( KPrinter &printer )
 {
+	kdDebug() << "KarbonView::print" << endl;
 	VQPainter p( ( QPaintDevice * ) & printer, width(), height() );
 	p.begin();
 	p.setZoomFactor( 1.0 );
@@ -795,6 +797,7 @@ KarbonView::initActions()
 							i18n( "Configure Karbon..." ), "configure", 0, this,
 							SLOT( configure() ), actionCollection(), "configure" );
 
+	new KAction( i18n( "Page &Layout..." ), 0, this, SLOT( pageLayout() ), actionCollection(), "page_layout" );
 	m_contextHelpAction = new KoContextHelpAction( actionCollection(), this );
 }
 
@@ -847,6 +850,20 @@ KarbonView::configure()
 {
 	VConfigureDlg dialog( this );
 	dialog.exec();
+}
+
+void
+KarbonView::pageLayout()
+{
+	KoHeadFoot hf;
+	KoPageLayout layout = part()->pageLayout();
+	KoUnit::Unit unit = part()->unit();
+	if( KoPageLayoutDia::pageLayout( layout, hf, FORMAT_AND_BORDERS, unit ) )
+	{
+		part()->setPageLayout( layout, unit );
+		part()->repaintAllViews();
+	}
+
 }
 
 void

@@ -96,23 +96,14 @@ public:
 	void setUndoRedoLimit( int undos );
 
 	void initConfig();
-	int maxRecentFiles() const
-	{
-		return m_maxRecentFiles;
-	}
+	int maxRecentFiles() const { return m_maxRecentFiles; }
 
-	QString unitName() const
-	{
-		return KoUnit::unitName( m_doc.unit() );
-	}
-
-	KoUnit::Unit unit() const
-	{
-		return m_doc.unit();
-	}
-
+	QString unitName() const { return KoUnit::unitName( m_doc.unit() ); }
+	KoUnit::Unit unit() const { return m_doc.unit(); }
 	void setUnit( KoUnit::Unit _unit );
 	void initUnit();
+
+	void setPageLayout( KoPageLayout& layout, KoUnit::Unit _unit );
 
 public slots:
 	/// repaint all views attached to this koDocument
