@@ -22,7 +22,6 @@
 */
 
 #include "configdlg.h"
-#include "fontdlg.h"
 #include "version.h"
 #include <klocale.h>
 #include <knotifyclient.h>
@@ -78,8 +77,8 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
   readSettings();
 
-  QFont buttonfont( "-misc-fixed-medium-*-semicondensed-*-13-*-*-*-*-*-*-*" );
-  buttonfont.setRawMode( true );
+  QFont buttonfont( "Helvetica", 12, QFont::Normal );
+  buttonfont.setStyleStrategy( QFont::PreferAntialias );
 
   // Set the window caption/title
 
@@ -107,7 +106,7 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
                              myymargin , displaywidth ,displayheight );
   calc_display->setFocus();
   calc_display->setFocusPolicy( QWidget::StrongFocus );
-
+  calc_display->setFont( QFont( "Helvetica", 16, QFont::Bold ) );
 
   connect(calc_display,SIGNAL(clicked()),this,SLOT(display_selected()));
 
@@ -678,7 +677,6 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
 
     set_colors();
-    set_display_font();
     set_precision();
     set_style();
 
@@ -1577,7 +1575,6 @@ void QtCalculator::configclicked(){
   DefStruct newdefstruct;
   newdefstruct.forecolor  = kcalcdefaults.forecolor;
   newdefstruct.backcolor  = kcalcdefaults.backcolor;
-  newdefstruct.font       = kcalcdefaults.font;
   newdefstruct.precision  = kcalcdefaults.precision;
   newdefstruct.fixedprecision  = kcalcdefaults.fixedprecision;
   newdefstruct.fixed  = kcalcdefaults.fixed;
@@ -1587,11 +1584,7 @@ void QtCalculator::configclicked(){
   ConfigDlg *configdlg;
   configdlg = new ConfigDlg(tabdialog,"configdlg",&newdefstruct);
 
-  FontDlg* fontdlg;
-  fontdlg = new FontDlg(tabdialog,"fontdlg",&newdefstruct);
-
   tabdialog->addTab(configdlg,i18n("Defaults"));
-  tabdialog->addTab(fontdlg,i18n("Display Font"));
   tabdialog->addTab(about,i18n("About"));
 
 
@@ -1600,7 +1593,6 @@ void QtCalculator::configclicked(){
 
     kcalcdefaults.forecolor  = newdefstruct.forecolor;
     kcalcdefaults.backcolor  = newdefstruct.backcolor;
-    kcalcdefaults.font       = newdefstruct.font;
     kcalcdefaults.precision  = newdefstruct.precision;
     kcalcdefaults.fixedprecision  = newdefstruct.fixedprecision;
     kcalcdefaults.fixed  = newdefstruct.fixed;
@@ -1609,7 +1601,6 @@ void QtCalculator::configclicked(){
 
     set_colors();
     set_precision();
-    set_display_font();
     set_style();
   }
 
@@ -1654,7 +1645,6 @@ void QtCalculator::set_style(){
 
 void QtCalculator::readSettings()
 {
-    kcalcdefaults.font = QFont("helvetica",16,QFont::Bold);
     QColor tmpC(189, 255, 222);
     QColor blackC(0,0,0);
     kcalcdefaults.forecolor = blackC;
@@ -1670,61 +1660,6 @@ void QtCalculator::readSettings()
     kcalcdefaults.fixed = FALSE;
     kcalcdefaults.style = 2;
     kcalcdefaults.beep = 1;
-
-    /*
-  QString str;
-
-  KConfig *config = kapp->config();
-  config->setGroup( "Font" );
-
-  kcalcdefaults.font = config->readFontEntry("Font",
-        new QFont("helvetica",16,QFont::Bold));
-
-  config->setGroup("Colors");
-  QColor tmpC(189, 255, 222);
-  QColor blackC(0,0,0);
-
-  kcalcdefaults.forecolor = config->readColorEntry("ForeColor",&blackC);
-  kcalcdefaults.backcolor = config->readColorEntry("BackColor",&tmpC);
-
-  config->setGroup("Precision");
-
-#ifdef HAVE_LONG_DOUBLE
-  kcalcdefaults.precision =  config->readNumEntry("precision",(int)14);
-#else
-  kcalcdefaults.precision =  config->readNumEntry("precision",(int)10);
-#endif
-
-  kcalcdefaults.fixedprecision =  config->readNumEntry("fixedprecision",(int)2);
-  kcalcdefaults.fixed = (bool) config->readNumEntry("fixed",(int)0);
-
-  config->setGroup("General");
-  kcalcdefaults.style          = config->readNumEntry("style",(int)2);
-  kcalcdefaults.beep          = config->readNumEntry("beep",(int)1);
-    */
-}
-
-void QtCalculator::writeSettings()
-{
-    /*
-  KConfig *config = kapp->config();
-
-  config->setGroup( "Font" );
-  config->writeEntry("Font",kcalcdefaults.font);
-
-  config->setGroup("Colors");
-  config->writeEntry("ForeColor",kcalcdefaults.forecolor);
-  config->writeEntry("BackColor",kcalcdefaults.backcolor);
-
-  config->setGroup("Precision");
-  config->writeEntry("precision",  kcalcdefaults.precision);
-  config->writeEntry("fixedprecision",  kcalcdefaults.fixedprecision);
-  config->writeEntry("fixed",  (int)kcalcdefaults.fixed);
-
-  config->setGroup("General");
-  config->writeEntry("style",(int)kcalcdefaults.style);
-  config->writeEntry("beep",(int)kcalcdefaults.beep);
-  config->sync(); */
 
 }
 
@@ -1811,13 +1746,6 @@ void QtCalculator::closeEvent( QCloseEvent*e )
     e->accept();
 }
 
-void QtCalculator::quitCalc(){
-
-    writeSettings();
-    /* qApp->quit(); */
-
-}
-
 void QtCalculator::set_colors(){
 
 
@@ -1844,12 +1772,6 @@ void QtCalculator::set_colors(){
 void QtCalculator::set_precision(){
 
   UpdateDisplay();
-}
-
-void QtCalculator::set_display_font(){
-
-  calc_display->setFont(kcalcdefaults.font);
-
 }
 
 void QtCalculator::temp_stack_next(){

@@ -4,7 +4,6 @@ kde_module_LTLIBRARIES = libkspreadcalc.la
 
 libkspreadcalc_la_SOURCES = configdlg.cpp \
 			dlabel.cpp \
-			fontdlg.cpp \
 			kcalc.cpp \
 			kcalc_core.cpp \
 			main.cpp \

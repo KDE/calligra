@@ -187,7 +187,6 @@ typedef struct _DefStruct{
   int style;
   bool fixed;
   bool beep;
-  QFont   font;
 }DefStruct;
 
 class Calculator;
@@ -203,11 +202,9 @@ public:
 
     void keyPressEvent( QKeyEvent *e );
     void keyReleaseEvent( QKeyEvent *e );
-    void  closeEvent( QCloseEvent *e );
-    void writeSettings();
+    void closeEvent( QCloseEvent *e );
     void readSettings();
     void set_precision();
-    void set_display_font();
     void set_style();
     void temp_stack_next();
     void temp_stack_prev();
@@ -233,7 +230,6 @@ public slots:
     void set_colors();
     void display_selected();
     void invertColors();
-    void quitCalc();
     void selection_timed_out();
     void clear_buttons();
     void clear_status_label();
