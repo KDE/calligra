@@ -177,9 +177,9 @@ void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHand
             getShadowCoords( sx, sy, _zoomHandler );
 
             QWMatrix m;
-            m.translate( pw / 2, ph / 2 );
+            m.translate( _zoomHandler->zoomItX(pw / 2), _zoomHandler->zoomItY(ph / 2) );
             m.rotate( angle );
-            m.translate( rr.left() + xPos + _zoomHandler->zoomItX(sx), rr.top() + yPos + _zoomHandler->zoomItY(sy) );
+            m.translate( _zoomHandler->zoomItX(rr.left() + xPos + sx), _zoomHandler->zoomItX(rr.top() + yPos + sy) );
 
             _painter->setWorldMatrix( m, true );
             paint( _painter,_zoomHandler, true );
@@ -196,18 +196,18 @@ void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHand
     if ( angle == 0 )
         paint( _painter,_zoomHandler, false );
     else {
-        QRect br = QRect( 0, 0, ow, oh );
-        int pw = br.width();
-        int ph = br.height();
-        QRect rr = br;
-        int yPos = -rr.y();
-        int xPos = -rr.x();
-        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        KoRect br = KoRect( 0, 0, ow, oh );
+        double pw = br.width();
+        double ph = br.height();
+        KoRect rr = br;
+        double yPos = -rr.y();
+        double xPos = -rr.x();
+        rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m;
-        m.translate( pw / 2, ph / 2 );
+        m.translate( _zoomHandler->zoomItX(pw / 2), _zoomHandler->zoomItY(ph / 2 ));
         m.rotate( angle );
-        m.translate( rr.left() + xPos, rr.top() + yPos );
+        m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
 
         _painter->setWorldMatrix( m, true );
         paint( _painter,_zoomHandler, false );

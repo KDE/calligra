@@ -2060,7 +2060,6 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
             *it = (*it)+1;
             debugstr += QString::number(*it) + ',';
         }
-        kdDebug(33001) << "selectedSlides : " << debugstr << endl;
     }
     Q_ASSERT( slideList.count() );
 
