@@ -1812,7 +1812,9 @@ void KWCanvas::insertPart( const KoDocumentEntry &entry )
 
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
 {
-    if ( QImageDrag::canDecode( e ) )
+    bool providesImage, providesKWord;
+    KWView::checkClipboard( e, providesImage, providesKWord );
+    if ( providesImage )
     {
         m_imageDrag = true;
         e->acceptAction();
