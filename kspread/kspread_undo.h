@@ -267,6 +267,67 @@ protected:
     QString m_tableName;
 };
 
+class KSpreadUndoInsertCellCol : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _row );
+    virtual ~KSpreadUndoInsertCellCol();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+    int m_iRow;
+    int m_iColumn;
+};
+
+class KSpreadUndoInsertCellRow : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _row );
+    virtual ~KSpreadUndoInsertCellRow();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+    int m_iRow;
+    int m_iColumn;
+};
+
+class KSpreadUndoRemoveCellCol : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _row );
+    virtual ~KSpreadUndoRemoveCellCol();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+    int m_iRow;
+    int m_iColumn;
+    QCString m_data;
+};
+
+class KSpreadUndoRemoveCellRow : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _row );
+    virtual ~KSpreadUndoRemoveCellRow();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+    int m_iRow;
+    int m_iColumn;
+    QCString m_data;
+};
 
 class KSpreadUndo
 {

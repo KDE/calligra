@@ -2300,6 +2300,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
       m_pView->popupRowMenu( p );
       m_bSelection=FALSE;
     }
+    m_pView->updateEditWidget();
   }
 
 }
@@ -2732,6 +2733,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
       m_pView->popupColumnMenu( p );
       m_bSelection=FALSE;
     }
+    m_pView->updateEditWidget();
   }
 }
 

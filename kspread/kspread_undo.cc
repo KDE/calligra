@@ -961,3 +961,180 @@ void KSpreadUndoAutofill::redo()
 
     doc()->undoBuffer()->unlock();
 }
+
+
+KSpreadUndoInsertCellRow::KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
+    KSpreadUndoAction( _doc )
+{
+    m_tableName = _table->tableName();
+    m_iRow = _row;
+    m_iColumn = _col;
+}
+
+KSpreadUndoInsertCellRow::~KSpreadUndoInsertCellRow()
+{
+}
+
+void KSpreadUndoInsertCellRow::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->unshiftRow( QPoint(m_iColumn,m_iRow) );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoInsertCellRow::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->shiftRow( QPoint(m_iColumn,m_iRow) );
+    doc()->undoBuffer()->unlock();
+}
+
+
+KSpreadUndoInsertCellCol::KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
+    KSpreadUndoAction( _doc )
+{
+    m_tableName = _table->tableName();
+    m_iRow = _row;
+    m_iColumn = _col;
+}
+
+KSpreadUndoInsertCellCol::~KSpreadUndoInsertCellCol()
+{
+}
+
+void KSpreadUndoInsertCellCol::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->unshiftColumn( QPoint(m_iColumn,m_iRow) );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoInsertCellCol::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->shiftColumn( QPoint(m_iColumn,m_iRow) );
+    doc()->undoBuffer()->unlock();
+}
+
+
+KSpreadUndoRemoveCellRow::KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
+    KSpreadUndoAction( _doc )
+{
+    m_tableName = _table->tableName();
+    m_iRow = _row;
+    m_iColumn = _col;
+    QRect rect;
+    rect.setCoords( _col, _row, _col, _row );
+    QDomDocument doc = _table->saveCellRect( rect );
+    // Save to buffer
+    QString buffer;
+    QTextStream str( &buffer, IO_WriteOnly );
+    str << doc;
+
+    // This is a terrible hack to store unicode
+    // data in a QCString in a way that
+    // QCString::length() == QCString().size().
+    // This allows us to treat the QCString like a QByteArray later on.
+    m_data = buffer.utf8();
+    int len = m_data.length();
+    char tmp = m_data[ len - 1 ];
+    m_data.resize( len );
+    *( m_data.data() + len - 1 ) = tmp;
+}
+
+KSpreadUndoRemoveCellRow::~KSpreadUndoRemoveCellRow()
+{
+}
+
+void KSpreadUndoRemoveCellRow::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->shiftRow( QPoint(m_iColumn,m_iRow) );
+    table->paste( m_data, QPoint(m_iColumn,m_iRow) );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoRemoveCellRow::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->unshiftRow( QPoint(m_iColumn,m_iRow) );
+    doc()->undoBuffer()->unlock();
+}
+
+
+KSpreadUndoRemoveCellCol::KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
+    KSpreadUndoAction( _doc )
+{
+    m_tableName = _table->tableName();
+    m_iRow = _row;
+    m_iColumn = _col;
+    QRect rect;
+    rect.setCoords( _col, _row, _col, _row );
+    QDomDocument doc = _table->saveCellRect( rect );
+    // Save to buffer
+    QString buffer;
+    QTextStream str( &buffer, IO_WriteOnly );
+    str << doc;
+
+    // This is a terrible hack to store unicode
+    // data in a QCString in a way that
+    // QCString::length() == QCString().size().
+    // This allows us to treat the QCString like a QByteArray later on.
+    m_data = buffer.utf8();
+    int len = m_data.length();
+    char tmp = m_data[ len - 1 ];
+    m_data.resize( len );
+    *( m_data.data() + len - 1 ) = tmp;
+}
+
+KSpreadUndoRemoveCellCol::~KSpreadUndoRemoveCellCol()
+{
+}
+
+void KSpreadUndoRemoveCellCol::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->shiftColumn( QPoint(m_iColumn,m_iRow) );
+    table->paste( m_data, QPoint(m_iColumn,m_iRow) );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoRemoveCellCol::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->unshiftColumn( QPoint(m_iColumn,m_iRow) );
+    doc()->undoBuffer()->unlock();
+}
+

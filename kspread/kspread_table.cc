@@ -1873,6 +1873,11 @@ void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
 bool KSpreadTable::shiftRow( const QPoint &_marker )
 {
     m_pDoc->setModified( true );
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+            KSpreadUndoInsertCellRow *undo = new KSpreadUndoInsertCellRow( m_pDoc, this,_marker.y(), _marker.x() );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+    }
 
     bool res = m_cells.shiftRow( _marker );
 
@@ -1889,6 +1894,11 @@ bool KSpreadTable::shiftRow( const QPoint &_marker )
 bool KSpreadTable::shiftColumn( const QPoint& marker )
 {
     m_pDoc->setModified( true );
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+            KSpreadUndoInsertCellCol *undo = new KSpreadUndoInsertCellCol( m_pDoc, this,marker.y(), marker.x() );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+    }
 
     bool res = m_cells.shiftColumn( marker );
 
@@ -1905,6 +1915,12 @@ bool KSpreadTable::shiftColumn( const QPoint& marker )
 void KSpreadTable::unshiftColumn( const QPoint& marker )
 {
     m_pDoc->setModified( true );
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+            KSpreadUndoRemoveCellCol *undo = new KSpreadUndoRemoveCellCol( m_pDoc, this,marker.y(), marker.x() );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
     m_cells.remove(marker.x(),marker.y());
     m_cells.unshiftColumn( marker );
 
@@ -1919,6 +1935,12 @@ void KSpreadTable::unshiftColumn( const QPoint& marker )
 void KSpreadTable::unshiftRow( const QPoint& marker )
 {
     m_pDoc->setModified( true );
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+            KSpreadUndoRemoveCellRow *undo = new KSpreadUndoRemoveCellRow( m_pDoc, this,marker.y(), marker.x() );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
     m_cells.remove(marker.x(),marker.y());
     m_cells.unshiftRow( marker );
 

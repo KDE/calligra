@@ -2334,7 +2334,6 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         // if ( m_pObscuringCell )
         // bg = m_pObscuringCell->bgColor( m_pObscuringCell->column(),
         // m_pObscuringCell->row() );
-
         if ( bg.isValid() )
             _painter.setBackgroundColor( bg );
         else
