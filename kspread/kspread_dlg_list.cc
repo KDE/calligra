@@ -67,6 +67,9 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   m_pNew=new QPushButton(i18n("New"),this);
   grid1->addWidget(m_pNew,2,2);
 
+  m_pModify=new QPushButton(i18n("Modify"),this);
+  grid1->addWidget(m_pModify,4,2);
+
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
@@ -83,9 +86,11 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
   connect( m_pNew, SIGNAL( clicked() ), this, SLOT( slotNew() ) );
+  connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   init();
-
+  entryList->setEnabled(false);
+  m_pModify->setEnabled(false);
   resize( 600, 250 );
 
 }
@@ -122,7 +127,8 @@ void KSpreadList::slotDoubleClicked(QListBoxItem *)
       entryList->insertLine((*it),index);
       index++;
     }
-  
+  entryList->setEnabled(true);
+  m_pModify->setEnabled(true);
 }
 
 void KSpreadList::slotAdd()
@@ -143,7 +149,8 @@ void KSpreadList::slotAdd()
   list->insertItem(tmp,list->count());
 
   entryList->setText("");
-  
+  entryList->setEnabled(false);
+  entryList->setFocus();
 }
 
 void KSpreadList::slotNew()
@@ -151,6 +158,7 @@ void KSpreadList::slotNew()
   m_pAdd->setEnabled(true);
   list->setEnabled(false);
   entryList->setText(""); 
+  entryList->setEnabled(true);
 }
 
 void KSpreadList::slotRemove()
@@ -175,6 +183,34 @@ void KSpreadList::slotOk()
   /*delete(AutoFillSequenceItem::other);
     AutoFillSequenceItem::other=0L;*/
   accept();
+}
+
+void KSpreadList::slotModify()
+{
+  
+  if(list->currentItem ()!=-1 && !entryList->text().isEmpty())
+    {
+      QString tmp;
+      for(int i=0;i<entryList->numLines();i++)
+	{
+	  if(!entryList->textLine(i).isEmpty())
+	    {
+	      if(tmp.isEmpty())
+		tmp=entryList->textLine(i);
+	      else
+		tmp+=", "+entryList->textLine(i);
+	    }
+	}
+      list->insertItem(tmp,list->currentItem());
+      list->removeItem(list->currentItem());
+
+
+      entryList->setText("");
+      
+    }
+  entryList->setEnabled(false);
+  m_pModify->setEnabled(false);
+  
 }
 
 void KSpreadList::slotClose()
