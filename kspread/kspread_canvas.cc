@@ -2644,7 +2644,7 @@ void KSpreadCanvas::drawChooseMarker( const QRect& selection )
   int ypos;
   int w, h;
 
-  if ( selection.left() == 0 || selection.right() == 0x7fff || selection.bottom() == 0x7fff )
+  if ( selection.left() == 0 || activeTable()->isRowSelected( selection ) || activeTable()->isColumnSelected( selection ) )
   {
     xpos = activeTable()->columnPos( chooseMarkerColumn(), this );
     ypos = activeTable()->rowPos( chooseMarkerRow(), this );
@@ -2713,7 +2713,7 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
         }
   }
   // Columns selected
-  if( selection.left() != 0 && selection.bottom() == 0x7FFF )
+  if( activeTable()->isColumnSelected() )
   {
     for (int x=selection.left(); x <= selection.right(); x++ )
     {
@@ -2721,7 +2721,7 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
     }
   }
   // Rows selected
-  else if(selection.left() != 0 && selection.right() == 0x7FFF )
+  else if( activeTable()->isRowSelected() )
   {
     for(int y = selection.top(); y <= selection.bottom(); y++ )
     {
@@ -2895,7 +2895,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
         QRect selection = m_pCanvas->activeTable()->selectionRect();
         QRect rect;
         rect.setCoords( 1,m_iResizedRow,0x7FFF,m_iResizedRow);
-        if( selection.left() != 0 && selection.right() == 0x7FFF )
+        if( m_pCanvas->activeTable()->isRowSelected() )
         {
             if( selection.contains( QPoint( 1, m_iResizedRow ) ) )
             {
@@ -3379,7 +3379,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         QRect selection = m_pCanvas->activeTable()->selectionRect();
         QRect rect;
         rect.setCoords(m_iResizedColumn,1,m_iResizedColumn,0x7FFF);
-        if(selection.left()!=0 && selection.bottom()==0x7FFF)
+        if( m_pCanvas->activeTable()->isColumnSelected() )
         {
             if(selection.contains(QPoint(m_iResizedColumn,1)))
             {
@@ -3714,7 +3714,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   for ( int x = left_col; x <= right_col; x++ )
   {
     bool highlighted = ( area && x >= selection.left() && x <= selection.right());
-    bool selected = ( highlighted && selection.bottom() == 0x7FFF && selection.top()==1 && (selection.right()!=0x7FFF) );
+    bool selected = ( highlighted && table->isColumnSelected() && (selection.right()!=0x7FFF) );
 
     ColumnLayout *col_lay = table->columnLayout( x );
 

@@ -66,7 +66,7 @@ void KSpreadSortDlg::init()
     QRect r = m_pView->activeTable()-> selectionRect();
 
     // Entire columns selected ?
-    if ( r.bottom() == 0x7fff )
+    if ( m_pView->activeTable()->isColumnSelected() )
     {
 	rb_row->setEnabled(false);
 	rb_column->setChecked(true);
@@ -75,7 +75,7 @@ void KSpreadSortDlg::init()
 	    list_column += i18n("Column %1").arg(util_encodeColumnLabelText(i));
     }
     // Entire rows selected ?
-    else if ( r.right() == 0x7fff )
+    else if ( m_pView->activeTable()->isRowSelected() )
     {
 	rb_column->setEnabled(false);
 	rb_row->setChecked(true);
