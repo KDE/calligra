@@ -830,7 +830,6 @@ void KWParagDia::setupTab5()
     bAdd = bbTabs->addButton( i18n( "Add" ), false );
     bDel = bbTabs->addButton( i18n( "Delete" ), false );
     bModify = bbTabs->addButton( i18n( "Modify" ), false );
-    bModify->setEnabled(false);
     grid->addWidget( bbTabs, 2, 0 );
 
     lTabs = new QListBox( tab );
@@ -894,7 +893,7 @@ void KWParagDia::addClicked()
       m_bListTabulatorChanged=true;
       lTabs->insertItem(eTabPos->text());
       bDel->setEnabled(true);
-      //bModify->setEnabled(true);
+      bModify->setEnabled(true);
 
       KoTabulator *tab=new KoTabulator;
       if(rtLeft->isChecked())
@@ -961,9 +960,9 @@ void KWParagDia::modifyClicked()
   if(!eTabPos->text().isEmpty() && lTabs->currentItem()!=-1)
     {
       int pos=lTabs->currentItem();
+       _tabList.remove(lTabs->currentItem());
       lTabs->removeItem(lTabs->currentItem());
-      lTabs->insertItem(eTabPos->text(),pos);
-      lTabs->setCurrentItem(pos);
+      addClicked();
       eTabPos->setText("");
       m_bListTabulatorChanged=true;
     }
@@ -1073,7 +1072,7 @@ void KWParagDia::slotDoubleClicked( QListBoxItem * )
       eTabPos->setText(lTabs->currentText());
       double value=lTabs->currentText().toDouble();
       bDel->setEnabled(true);
-      //bModify->setEnabled(true);
+      bModify->setEnabled(true);
       setActifItem(value);
     }
 }
