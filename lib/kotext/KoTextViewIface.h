@@ -155,7 +155,7 @@ k_dcop:
 
     void setSpellCheckingLanguage(const QString & _lang);
     QString spellCheckingLanguage() const;
-
+    void addBookmarks(const QString &url);
 
 private:
     KoTextView *m_textView;

@@ -648,3 +648,8 @@ QString KoTextViewIface::strikeOutLineStyle()const
     return strLineType;
 
 }
+
+void KoTextViewIface::addBookmarks(const QString &url)
+{
+    m_textView->addBookmarks(url);
+}
