@@ -1876,6 +1876,8 @@ void KWDocument::loadDefaultFrameStyleTemplates()
     // ### FIXME: why is this not working for $KDE_LANG != "en_US" (#61007)
     const QString fsfileName( locate("appdata", "framestyles.xml") );
 
+    kdDebug(30003) << "Data directory: " << KGlobal::dirs()->resourceDirs( "data" ) << endl;
+    kdDebug(30003) << "Directory searched: " << KGlobal::dirs()->resourceDirs( "appdata" ) << endl;
     kdDebug(30003) << "File framestyles.xml searched at: " << fsfileName << endl;
 
     if ( ! QFile::exists( fsfileName ) )
