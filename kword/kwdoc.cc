@@ -3770,15 +3770,20 @@ void KWDocument::setGridX(double _gridx) {
 QPtrList<KoTextObject> KWDocument::frameTextObject(KWViewMode *viewmode) const
 {
     QPtrList<KoTextObject>lst;
+    QPtrList<KWTextFrameSet> textFramesets;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *> (fit.current());
-        if ( fs && fs->isVisible(viewmode) && !fs->textObject()->protectContent())
+    for ( ; fit.current() ; ++fit ) {
+        fit.current()->addTextFrameSets(textFramesets);
+    }
+
+    KWTextFrameSet *frm;
+    for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
+        if ( frm && frm->isVisible(viewmode) && !frm->textObject()->protectContent())
         {
-            lst.append(fs->textObject());
+            lst.append(frm->textObject());
         }
     }
+
     return lst;
 }
 
