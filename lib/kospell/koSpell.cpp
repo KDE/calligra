@@ -97,17 +97,20 @@ int KOSpell::modalCheck( QString& text, KOSpellConfig * _ksc )
 }
 
 
-KOSpell::KOSpell(QWidget *_parent, const QString &caption,KOSpellConfig *kcs,
+KOSpell::KOSpell(QWidget *_parent, const QString &_caption,KOSpellConfig *kcs,
             bool modal, bool _autocorrect )
 {
+    ksdlg = 0L;
     parent=_parent;
     modaldlg=modal;
     autocorrect = _autocorrect;
+    caption = _caption;
     initSpell( kcs );
 }
 
 KOSpell::KOSpell( KOSpellConfig *_ksc )
 {
+    ksdlg = 0L;
     parent= 0L;
     modaldlg=false;
     autocorrect = false;
