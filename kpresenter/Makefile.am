@@ -27,11 +27,11 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
-	textdialog.cc sidebar.cc \
+	textdialog.cc sidebar.cc koStream.cc \
 	insertpagedia.ui generalconfig.ui
 
 libkpresenterpart_la_LDFLAGS = -avoid-version -module -no-undefined
-libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la
+libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la ../lib/koml/libkoml.la
 libkpresenterpart_la_METASOURCES = AUTO
 
 kpresenter_la_SOURCES = main.cc
@@ -63,7 +63,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		grpobjcmd.h commandhistory.h preview.h gotopage.h webpresentation.h \
 		footer_header.h kpresenter_factory.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
-		KPresenterBackgroundIface.h textdialog.h sidebar.h textcmd.h
+		KPresenterBackgroundIface.h textdialog.h sidebar.h textcmd.h koStream.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office
