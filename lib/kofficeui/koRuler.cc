@@ -60,10 +60,6 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     hasToDelete = FALSE;
     whileMovingBorderLeft = whileMovingBorderRight = whileMovingBorderTop = whileMovingBorderBottom = FALSE;
 
-    // Ugly hack - remove me (Werner)
-    KInstance *i=KGlobal::instance();
-    i->iconLoader()->addAppDir(QString::fromLatin1("koffice"));
-    
     pmFirst = UserIcon( "koRulerFirst" );
     pmLeft = UserIcon( "koRulerLeft" );
     currTab = -1;

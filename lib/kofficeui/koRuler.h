@@ -84,7 +84,7 @@ public:
     static const int F_TABS = 1;
     static const int F_INDENTS = 2;
 
-    KoRuler( QWidget *_parent,	QWidget *_canvas, Orientation _orientation, 
+    KoRuler( QWidget *_parent,	QWidget *_canvas, Orientation _orientation,
 	     KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser = 0L );
     ~KoRuler();
 
@@ -119,7 +119,7 @@ signals:
     void unitChanged( QString );
 
 protected:
-    enum Action {A_NONE, A_BR_LEFT, A_BR_RIGHT, A_BR_TOP, A_BR_BOTTOM, 
+    enum Action {A_NONE, A_BR_LEFT, A_BR_RIGHT, A_BR_TOP, A_BR_BOTTOM,
 		 A_LEFT_INDENT, A_FIRST_INDENT, A_TAB};
 
     void drawContents( QPainter *_painter )
@@ -167,9 +167,9 @@ protected:
     QString unit;
 
 protected slots:
-    void rbPT() { setUnit( "pt" ); emit unitChanged( "pt" ); }
-    void rbMM() { setUnit( "mm" ); emit unitChanged( "mm" ); }
-    void rbINCH() { setUnit( "inch" ); emit unitChanged( "inch" ); }
+    void rbPT() { setUnit( QString::fromLatin1("pt") ); emit unitChanged( QString::fromLatin1("pt") ); }
+    void rbMM() { setUnit( QString::fromLatin1("mm") ); emit unitChanged( QString::fromLatin1("mm") ); }
+    void rbINCH() { setUnit( QString::fromLatin1("inch") ); emit unitChanged( QString::fromLatin1("inch") ); }
 
 };
 
