@@ -1546,13 +1546,13 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
             const KoPageLayout& p = m_doc->pageLayout();
             double pageBottom = p.ptHeight - p.ptBottom;
             double newBottom = QMIN( wantedPosition, pageBottom ); // don't grow bigger than the page
-            newBottom = QMAX( newBottom, getRect().top() ); // avoid negative heights
+            newBottom = QMAX( newBottom, getOrig().y() ); // avoid negative heights
             //kdDebug(33001) << k_funcinfo << " current bottom=" << getRect().bottom() << " newBottom=" << newBottom << endl;
             if ( getRect().bottom() != newBottom )
             {
                 // We resize the text object, but skipping the KPTextObject::setSize code
                 // (which invalidates everything etc.)
-                KPObject::setSize( getRect().width(), newBottom - getRect().top() );
+                KPObject::setSize( getSize().width(), newBottom - getOrig().y() );
                 // Do recalculate the new available height though
                 slotAvailableHeightNeeded();
                 m_doc->updateRuler();
@@ -1656,12 +1656,12 @@ KoRect KPTextObject::innerRect() const
 
 double KPTextObject::innerWidth() const
 {
-    return getRect().width() - bLeft() - bRight();
+    return getSize().width() - bLeft() - bRight();
 }
 
 double KPTextObject::innerHeight() const
 {
-    return getRect().height() - bTop() - bBottom();
+    return getSize().height() - bTop() - bBottom();
 }
 
 void KPTextObject::setVerticalAligment( VerticalAlignmentType _type)
@@ -1672,14 +1672,15 @@ void KPTextObject::setVerticalAligment( VerticalAlignmentType _type)
 
 void KPTextObject::recalcVerticalAlignment()
 {
-    double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( textDocument()->height() ) + btop + bbottom;
-    double diffy = getRect().height() - txtHeight;
+    double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( textDocument()->height() ) ) + btop + bbottom;
+    double diffy = getSize().height() - txtHeight;
 
-    //kdDebug(33001) << k_funcinfo << "txtHeight: " << txtHeight << endl;
-    //kdDebug(33001) << k_funcinfo << "diffy: " << diffy << endl;
+    //kdDebug(33001) << k_funcinfo << "txtHeight: " << txtHeight << " rectHeight:" << getSize().height() << " -> diffy=" << diffy << endl;
 
-    if ( diffy <= 0.0 )
+    if ( diffy <= 0.0 ) {
+        alignVertical = 0.0;
         return;
+    }
     switch( m_textVertAlign )
     {
     case KP_CENTER:
@@ -1854,7 +1855,7 @@ void KPTextView::ensureCursorVisible()
     y += parag->rect().y() + cursor()->offsetY();
     int w = 1;
     KPresenterDoc *doc= m_kptextobj->kPresenterDocument();
-    KoPoint pt= kpTextObject()->getRect().topLeft();
+    KoPoint pt= kpTextObject()->getOrig();
     pt.setX( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelXToPt( x) ) +pt.x());
     pt.setY( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelYToPt( y ))+pt.y() );
 
