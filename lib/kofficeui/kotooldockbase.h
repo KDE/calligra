@@ -54,7 +54,7 @@ public:
     KoToolDockBaseBorder( Position, KoToolDockBase* parent, const char* name = 0 );
     ~KoToolDockBaseBorder();
 
-    Position position() { return pos; }
+    Position position() const { return pos; }
 
 signals:
     void resizeStart();
@@ -175,7 +175,7 @@ public:
 
     void setView( KoToolDockPosition );
     KoToolDockBaseCaption* captionWidget( KoToolDockPosition );
-    int captionHeight();
+    int captionHeight() const;
 
 signals:
     void doClose();
@@ -271,10 +271,10 @@ protected slots:
     void fixSize(int& x, int& y, int& w, int& h);
 
     void slotStick(bool);
-    bool isStick() { return stick; }
+    bool isStick() const { return stick; }
 
     void slotLock( bool );
-    bool isLocked() { return lock; }
+    bool isLocked() const { return lock; }
 
 protected:
 

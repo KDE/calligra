@@ -161,7 +161,7 @@ KoToolDockBaseCaptionManager::KoToolDockBaseCaptionManager( KoToolDockBase* pare
     m_pBottom -> hide();
 }
 
-int KoToolDockBaseCaptionManager::captionHeight()
+int KoToolDockBaseCaptionManager::captionHeight() const
 {
     return m_pTop -> height();
 }
