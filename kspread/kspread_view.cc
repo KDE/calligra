@@ -387,7 +387,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     (void) new KAction( i18n("&Hyperlink..."), 0, this, SLOT( insertHyperlink() ), actionCollection(), "insertHyperlink" );
     m_insertPart=new KoPartSelectAction( i18n("&Object..."), "frame_query", this, SLOT( insertObject() ),
                         actionCollection(), "insertPart");
-    (void) new KAction( i18n("&Chart"), "frame_chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
+    m_insertChartFrame=new KAction( i18n("&Chart"), "frame_chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
 
     m_autoSum = new KAction( i18n("AutoSum"), "black_sum", 0, this, SLOT( autoSum() ),
                              actionCollection(), "autoSum" );
@@ -601,6 +601,7 @@ void KSpreadView::initialPosition()
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
     m_tableFormat->setEnabled(false);
     m_mergeCell->setEnabled(false);
+    m_insertChartFrame->setEnabled(false);
     /*recalc all dependent after loading*/
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
@@ -2833,11 +2834,13 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     {
         m_tableFormat->setEnabled( FALSE );
         m_mergeCell->setEnabled(false);
+        m_insertChartFrame->setEnabled(false);
     }
     else
     {
         m_tableFormat->setEnabled( TRUE );
         m_mergeCell->setEnabled(true);
+        m_insertChartFrame->setEnabled(true);
     }
 
     if( n.top()!=0 &&n.bottom()==0x7FFF)
@@ -3082,6 +3085,7 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
     // with mutiple cells.
     m_tableFormat->setEnabled( FALSE );
     m_mergeCell->setEnabled(false);
+    m_insertChartFrame->setEnabled(false);
 
     m_pCanvas->updateSelection( _old, _table->marker() );
     m_pVBorderWidget->update();

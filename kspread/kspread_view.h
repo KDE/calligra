@@ -516,6 +516,8 @@ private:
     KAction* m_increaseIndent;
     KAction* m_decreaseIndent;
     KAction* m_sortList;
+
+    KAction* m_insertChartFrame;
     
     KToggleAction* m_menuCalcMin;
     KToggleAction* m_menuCalcMax;
