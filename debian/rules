@@ -5,38 +5,36 @@
 
 BUILDDIR = ./build
 
-build: $(BUILDDIR)/build-stamp
+build: build-stamp
 
 -include debian/debiandirs
 
 debian/debiandirs: admin/debianrules
 	perl -w admin/debianrules echodirs > debian/debiandirs
 
-$(BUILDDIR)/build-stamp:
+build-stamp:
 	dh_testdir
 	if test ! -f configure; then \
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi 
-	test -d $(BUILDDIR) || mkdir $(BUILDDIR) ;\
-	cd $(BUILDDIR) ;\
-	$$PWD/../configure $(configkde) \
+	./configure $(configkde) \
 	--libdir=$(kde_libdir) --includedir=$(kde_includedir)
 
-	make -C $(BUILDDIR)
+	make
 
-	touch $(BUILDDIR)/build-stamp
+	touch build-stamp
 
 clean: debian-clean
-	-rm -rf $(BUILDDIR)
 	-rm -f debian/debiandirs
 	dh_clean
 
 debian-clean:
 	dh_testdir
-	-rm -f $(BUILDDIR)/build-stamp
+	-rm -f build-stamp
 	if test -d CVS; then \
 	  make -f admin/Makefile.common cvs-clean ;\
 	fi
+	-make distclean
 
 install: build
 	dh_testroot
@@ -44,7 +42,7 @@ install: build
 	dh_clean
 	-rm -f debian/undocumented
 	mkdir -p debian/tmp/etc/kde2
-	make -C $(BUILDDIR) install DESTDIR=`pwd`/debian/tmp/
+	make install DESTDIR=`pwd`/debian/tmp/
 	perl -w admin/debianrules cleanup
 	
 binary-indep: build install

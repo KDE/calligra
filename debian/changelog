@@ -1,3 +1,17 @@
+koffice (2.0-20001006-0) unstable; urgency=low
+ 
+  * More upstream fixes
+  * Compiling against new libqt
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 06 Oct 2000 04:00:00 -0700
+                                                                                
+koffice (2.0-20001005-0) unstable; urgency=low
+ 
+  * More upstream fixes
+  * Compiling against non-versioned kdelibs once again
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 05 Oct 2000 15:30:00 -0700
+                                                                                
 koffice (2.0-20001002-0) unstable; urgency=low
  
   * KDE 2.0 RC1
