@@ -8,7 +8,6 @@ REAL BUGS:
 
 TODO:
 -	unify vselecttool and vselectnodestool
-
 -	get tools right (unfiy this nasty code duplication)
 -	scratch your head about how to do undo/redo of path operations best like
 	removing nodes, inserting nodes...
@@ -26,13 +25,18 @@ TODO:
 
 WISHLIST:
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
+-	krita export filter (with layers)
 
 OPTIMIZATION:
+-	in VShapeTool and all manipulation tools: store temporary objects so one doesnt
+	have to recalcuate/regenerate those for second draw() (erasing old shape)
 -	make fill/stroke shared so copying for undo/redo is more efficient
 -	transform() bbox too and dont recalculate it
 -	check places we use sqrt() if these are really necessary (lenny)
 
 MAKE IT NICE:
+-	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
+-	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent
 -	introduce centerOfMass() for vsegmentlist. problem: CM for beziers?
 -	investigate whether we can use a KToolBar with an appropriate layout to replace

@@ -10,47 +10,89 @@
 
 class KarbonView;
 class QEvent;
-class VCommand;
-class QMouseEvent;
+class VPainter;
+
 
 class VTool
 {
 public:
 	VTool( KarbonView* view );
 
+	/**
+	 * Activate the tool. The tools is supposed to set a mouse cursor and/or
+	 * the statusbar properly here.
+	 */
 	virtual void activate() {}
+
+	/**
+	 * Deactivate the tool.
+	 */
 	virtual void deactivate() {}
 
-	virtual bool eventFilter( QEvent* event );
+	/**
+	 * This function processes every important mouse or keyboard event.
+	 * It then calls suiting functions like mouseMoved() so deriving tools
+	 * don't need to directly deal with events themselves.
+	 */
+	bool eventFilter( QEvent* event );
+
+protected:
+	virtual void draw(/* VPainter* painter*/ ) {}
+
+	virtual void setCursor( const KoPoint& /*current*/ ) const {}
+
+	virtual void mouseButtonPress( const KoPoint& /*current*/ ) {}
+	virtual void mouseButtonRelease( const KoPoint& /*current*/ ) {}
+	virtual void mouseMove( const KoPoint& /*current*/ ) {}
+	virtual void mouseDrag( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragRelease( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragShiftPressed( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragCtrlPressed( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragShiftReleased( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragCtrlReleased( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragAltPressed( const KoPoint& /*current*/ ) {}
+
+	/**
+	 * Cancels all tool operations. This event is invoked when ESC is pressed.
+	 */
+	virtual void cancel() {}
+
+	// Make VTool "abstract":
+	virtual ~VTool() {}
 
 	KarbonView* view() const { return m_view; }
 
-protected:
-	virtual void setCursor( const QPoint & ) const {}
-	virtual void mousePressed( QMouseEvent * ) {}
-	virtual void mouseMoved( QMouseEvent * );
-	virtual void dragShiftPressed() {}
-	virtual void dragCtrlPressed() {}
-	virtual void dragShiftReleased() {}
-	virtual void dragCtrlReleased() {}
-	virtual void dragAltPressed() {}
-	virtual void mouseReleased( QMouseEvent * ) {}
-	virtual void cancel(); // ESC pressed
-
-	virtual void drawTemporaryObject() = 0;
-
-	// make vtool "abstract":
-	virtual ~VTool() {}
-
-	bool m_isDragging;
-
-	// input (mouse coordinates):
-	KoPoint m_lp;
-	KoPoint m_fp;
+	/**
+	 * Most tools need to know the first mouse coordinate.
+	 */
+	const KoPoint& first() const { return m_firstPoint; }
+	const KoPoint& last() const { return m_lastPoint; }
 
 private:
-	// that's our view:
+	/**
+	 * The view the tool acts upon.
+	 */
 	KarbonView* m_view;
+
+	/**
+	 * First input mouse coordinate.
+	 */
+	KoPoint m_firstPoint;
+
+	/**
+	 * Last input mouse coordinate.
+	 */
+	KoPoint m_lastPoint;
+
+	/**
+	 * A tool state.
+	 */
+	bool m_mouseButtonIsDown;
+
+	/**
+	 * A tool state.
+	 */
+	bool m_isDragging;
 };
 
 #endif

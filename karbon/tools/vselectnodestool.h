@@ -6,7 +6,7 @@
 #define __VSELECTNODESTOOL_H__
 
 #include "vtool.h"
-#include "vselection.h"
+
 
 class VSelectNodesTool : public VTool
 {
@@ -16,13 +16,11 @@ public:
 
 	virtual void activate();
 
-	// draw the object while it is edited:
-	void drawTemporaryObject();
-
 protected:
-	virtual void setCursor( const KoPoint & ) const;
-	virtual void mousePressed( QMouseEvent * );
-	virtual void mouseReleased( QMouseEvent * );
+	virtual void draw();
+
+	virtual void setCursor( const KoPoint& current ) const;
+	virtual void mouseDragRelease( const KoPoint& current );
 
 private:
 	enum { normal, dragging, moving } m_state;

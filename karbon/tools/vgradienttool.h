@@ -20,13 +20,13 @@ public:
 
 	virtual void activate();
 
-	// draw the object while it is edited:
-	void drawTemporaryObject();
-
 	virtual void showDialog() const;
+
 protected:
-	virtual void mousePressed( QMouseEvent * );
-	virtual void mouseReleased( QMouseEvent * );
+	virtual void draw();
+
+	virtual void mouseButtonRelease( const KoPoint& current );
+	virtual void mouseDragRelease( const KoPoint& current );
 
 private:
 	VGradientDlg* m_dialog;

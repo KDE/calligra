@@ -18,13 +18,12 @@ public:
 
 	virtual void activate();
 
-	// draw the object while it is edited:
-	void drawTemporaryObject();
-
 protected:
-	virtual void setCursor( const QPoint & ) const;
-	virtual void mousePressed( QMouseEvent * );
-	virtual void mouseReleased( QMouseEvent * );
+	virtual void draw();
+
+	virtual void setCursor( const KoPoint& current ) const;
+	virtual void mouseButtonPress( const KoPoint& current );
+	virtual void mouseDragRelease( const KoPoint& current );
 
 private:
 	double m_s1, m_s2;

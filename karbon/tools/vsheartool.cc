@@ -29,37 +29,6 @@ VShearTool::~VShearTool()
 }
 
 void
-VShearTool::mouseReleased( QMouseEvent * )
-{
-	if( !m_isDragging ) return;
-
-	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
-
-	view()->part()->addCommand(
-		new VShearCmd( &view()->part()->document(), fp * (1.0 / view()->zoom() ), m_s1, m_s2 ),
-		true );
-
-	m_isDragging = false;
-}
-
-void
-VShearTool::mousePressed( QMouseEvent *mouse_event )
-{
-	view()->painterFactory()->painter()->end();
-
-	m_fp.setX( mouse_event->pos().x() );
-	m_fp.setY( mouse_event->pos().y() );
-	m_lp.setX( mouse_event->pos().x() );
-	m_lp.setY( mouse_event->pos().y() );
-
-	m_activeNode = view()->part()->document().selection()->handleNode( mouse_event->pos() );
-
-	// draw initial object:
-	drawTemporaryObject();
-	m_isDragging = true;
-}
-
-void
 VShearTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Shear" ) );
@@ -67,39 +36,9 @@ VShearTool::activate()
 }
 
 void
-VShearTool::setCursor( const QPoint &p ) const
+VShearTool::draw()
 {
-	switch( view()->part()->document().selection()->handleNode( p ) )
-	{
-		case node_lt:
-		case node_rb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeFDiagCursor ) );
-			break;
-		case node_rt:
-		case node_lb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeBDiagCursor ) );
-			break;
-		case node_lm:
-		case node_rm:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeHorCursor ) );
-			break;
-		case node_mt:
-		case node_mb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeVerCursor ) );
-			break;
-		default:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::arrowCursor ) );
-	}
-}
-
-void
-VShearTool::drawTemporaryObject()
-{
+/*
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
@@ -165,7 +104,54 @@ VShearTool::drawTemporaryObject()
 		}
 		painter->setZoomFactor( 1.0 );
 	}
-	else
-		m_isDragging = false;
+
+	view()->painterFactory()->painter()->end();
+*/
 }
 
+void
+VShearTool::setCursor( const KoPoint& current ) const
+{
+/*
+	switch( view()->part()->document().selection()->handleNode( p ) )
+	{
+		case node_lt:
+		case node_rb:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeFDiagCursor ) );
+			break;
+		case node_rt:
+		case node_lb:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeBDiagCursor ) );
+			break;
+		case node_lm:
+		case node_rm:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeHorCursor ) );
+			break;
+		case node_mt:
+		case node_mb:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeVerCursor ) );
+			break;
+		default:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::arrowCursor ) );
+	}
+*/
+}
+
+void
+VShearTool::mouseButtonPress( const KoPoint& current )
+{
+//	m_activeNode = view()->part()->document().selection()->handleNode( mouse_event->pos() );
+}
+
+void
+VShearTool::mouseDragRelease( const KoPoint& current )
+{
+	view()->part()->addCommand(
+		new VShearCmd( &view()->part()->document(), current, m_s1, m_s2 ),
+		true );
+}

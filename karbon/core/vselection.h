@@ -18,7 +18,6 @@ class QPainter;
 class QPoint;
 class QRect;
 
-
 typedef QPtrList<VObject> VObjectList;
 typedef QPtrListIterator<VObject> VObjectListIterator;
 

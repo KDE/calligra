@@ -3,108 +3,176 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vtool.h"
-#include "karbon_view.h"
-
 #include <qevent.h>
 
+#include "karbon_view.h"
+#include "vtool.h"
+
+
 VTool::VTool( KarbonView* view )
-	: m_isDragging( false ), m_view( view )
+	: m_view( view )
 {
-}
-
-void
-VTool::mouseMoved( QMouseEvent *mouse_event )
-{
-	if( m_isDragging )
-	{
-		// erase old object:
-		drawTemporaryObject();
-
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-
-		// paint new object:
-		drawTemporaryObject();
-	}
-}
-
-void
-VTool::cancel()
-{
+	m_mouseButtonIsDown = false;
 	m_isDragging = false;
-
-	// erase old object:
-	drawTemporaryObject();
 }
 
 bool
 VTool::eventFilter( QEvent* event )
 {
-	QMouseEvent* mouse_event = static_cast<QMouseEvent *>( event );
-	setCursor( view()->canvasWidget()->viewportToContents( mouse_event->pos() ) );
+	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
+	setCursor( view()->canvasWidget()->viewportToContents( mouseEvent->pos() ) );
+
+	// Mouse events:
+	if( event->type() == QEvent::MouseButtonPress )
+	{
+		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
+			mouseEvent->pos() );
+
+		m_firstPoint.setX( canvasCoordinate.x() * view()->zoom() );
+		m_firstPoint.setY( canvasCoordinate.y() * view()->zoom() );
+
+		mouseButtonPress( m_firstPoint );
+
+		// Draw new object:
+		draw();
+
+		m_mouseButtonIsDown = true;
+
+		return true;
+	}
+
 	if( event->type() == QEvent::MouseMove )
 	{
-		mouseMoved( static_cast<QMouseEvent *> ( event ) );
+		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
+			mouseEvent->pos() );
+
+		// Erase old object:
+		draw();
+
+		m_lastPoint.setX( canvasCoordinate.x() * view()->zoom() );
+		m_lastPoint.setY( canvasCoordinate.y() * view()->zoom() );
+
+		if( m_mouseButtonIsDown )
+		{
+			mouseDrag( m_lastPoint );
+
+			m_isDragging = true;
+		}
+		else
+			mouseMove( m_lastPoint );
+
+		// Draw new object:
+		draw();
+
 		return true;
 	}
 
 	if( event->type() == QEvent::MouseButtonRelease )
 	{
-		mouseReleased( static_cast<QMouseEvent *> ( event ) );
+		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
+			mouseEvent->pos() );
+
+		// Erase old object:
+		draw();
+
+		m_lastPoint.setX( canvasCoordinate.x() * view()->zoom() );
+		m_lastPoint.setY( canvasCoordinate.y() * view()->zoom() );
+
+		if( m_isDragging )
+		{
+			mouseDragRelease( m_lastPoint );
+
+			m_isDragging = false;
+		}
+		else if( m_mouseButtonIsDown )	// False if canceled.
+			mouseButtonRelease( m_lastPoint );
+
+		// Draw new object:
+		draw();
+
+		m_mouseButtonIsDown = false;
+
 		return true;
 	}
 
-	// handle pressing of keys:
+	// Key press events:
 	if( event->type() == QEvent::KeyPress )
 	{
-		QKeyEvent* key_event = static_cast<QKeyEvent*> ( event );
+		QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
 
-		// cancel dragging with ESC-key:
-		if( key_event->key() == Qt::Key_Escape && m_isDragging )
+		// Cancel dragging with ESC-key:
+		if( keyEvent->key() == Qt::Key_Escape && m_isDragging )
 		{
 			cancel();
+
+			m_isDragging = false;
+			m_mouseButtonIsDown = true;
+
+			// Erase old object:
+			draw();
+
 			return true;
 		}
 
-		// if SHIFT is pressed, we want a square:
-		if( key_event->key() == Qt::Key_Shift && m_isDragging )
+		// If SHIFT is pressed, some tools create a "square" object while dragging:
+		if( keyEvent->key() == Qt::Key_Shift && m_isDragging )
 		{
-			dragShiftPressed();
+			// Erase old object:
+			draw();
+
+			mouseDragShiftPressed( m_lastPoint );
+
+			// Draw new object:
+			draw();
+
 			return true;
 		}
 
-		// if Ctrl is pressed, we want a centered path:
-		if ( key_event->key() == Qt::Key_Control && m_isDragging )
+		// If Ctrl is pressed, some tools create a "centered" object while dragging:
+		if ( keyEvent->key() == Qt::Key_Control && m_isDragging )
 		{
-			dragCtrlPressed();
+			// Erase old object:
+			draw();
+
+			mouseDragCtrlPressed( m_lastPoint );
+
+			// Draw new object:
+			draw();
+
 			return true;
 		}
 	}
 
-	// handle releasing of keys:
+	// Key release events:
 	if( event->type() == QEvent::KeyRelease )
 	{
-		QKeyEvent* key_event = static_cast<QKeyEvent*> ( event );
+		QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
 
-		if( key_event->key() == Qt::Key_Shift && m_isDragging )
+		if( keyEvent->key() == Qt::Key_Shift && m_isDragging )
 		{
-			dragShiftReleased();
+			// Erase old object:
+			draw();
+
+			mouseDragShiftReleased( m_lastPoint );
+
+			// Draw new object:
+			draw();
+
 			return true;
 		}
 
-		if( key_event->key() == Qt::Key_Control && m_isDragging )
+		if( keyEvent->key() == Qt::Key_Control && m_isDragging )
 		{
-			dragCtrlReleased();
+			// Erase old object:
+			draw();
+
+			mouseDragCtrlReleased( m_lastPoint );
+
+			// Draw new object:
+			draw();
+
 			return true;
 		}
-	}
-
-	// the whole story starts with this event:
-	if( event->type() == QEvent::MouseButtonPress )
-	{
-		mousePressed( static_cast<QMouseEvent *> ( event ) );
-		return true;
 	}
 
 	return false;

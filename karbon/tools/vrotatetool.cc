@@ -34,41 +34,6 @@ VRotateTool::~VRotateTool()
 }
 
 void
-VRotateTool::mouseReleased( QMouseEvent * )
-{
-	if( !m_isDragging ) return;
-
-
-	if( m_lp.x() != m_fp.x() || m_lp.y() != m_fp.y() )
-		view()->part()->addCommand(
-			new VRotateCmd( &view()->part()->document(), m_sp, m_angle / VGlobal::pi_180 ),
-			true );
-	else
-		drawTemporaryObject();
-
-	m_isDragging = false;
-}
-
-void
-VRotateTool::mousePressed( QMouseEvent *mouse_event )
-{
-	view()->painterFactory()->painter()->end();
-
-	m_fp.setX( mouse_event->pos().x() );
-	m_fp.setY( mouse_event->pos().y() );
-	m_lp.setX( mouse_event->pos().x() );
-	m_lp.setY( mouse_event->pos().y() );
-
-	m_activeNode = view()->part()->document().selection()->handleNode( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
-	//view()->part()->document().selection()->setState( VObject::edit );
-	//view()->part()->repaintAllViews();
-
-	// draw initial object:
-	drawTemporaryObject();
-	m_isDragging = true;
-}
-
-void
 VRotateTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Rotate" ) );
@@ -76,75 +41,45 @@ VRotateTool::activate()
 }
 
 void
-VRotateTool::setCursor( const QPoint &p ) const
+VRotateTool::draw()
 {
-	switch( view()->part()->document().selection()->handleNode( p ) )
-	{
-		case node_lt:
-		case node_rb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeFDiagCursor ) );
-			break;
-		case node_rt:
-		case node_lb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeBDiagCursor ) );
-			break;
-		case node_lm:
-		case node_rm:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeHorCursor ) );
-			break;
-		case node_mt:
-		case node_mb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeVerCursor ) );
-			break;
-		default:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::arrowCursor ) );
-	}
-}
-
-void
-VRotateTool::drawTemporaryObject()
-{
+// TODO: put the calculation stuff into recalc()
+/*
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( view()->part()->document().selection()->objects().count() > 0 && m_activeNode != node_mm )
+	if(
+		view()->part()->document().selection()->objects().count() > 0 &&
+		m_activeNode != node_mm )
 	{
-		KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 		KoRect rect = view()->part()->document().selection()->boundingBox();
 
-		m_sp = KoPoint( int( rect.left() + rect.width() / 2 ), int( rect.top() + rect.height() / 2 ) );
-		KoPoint sp(
-			m_sp.x() - view()->canvasWidget()->contentsX(),
-			m_sp.y() - view()->canvasWidget()->contentsY() );
+		m_center = rect.center();
 
-		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
+		m_angle = atan2( lp.y() - m_center.y(), lp.x() - m_center.x() );
 		if( m_activeNode == node_lt )
-			m_angle -= atan2( rect.top() - m_sp.y(), rect.left() - m_sp.x() );
+			m_angle -= atan2( rect.top() - m_center.y(), rect.left() - m_center.x() );
 		else if( m_activeNode == node_mt )
 			m_angle += M_PI / 2;
 		else if( m_activeNode == node_rt )
-			m_angle -= atan2( rect.top() - m_sp.y(), rect.right() - m_sp.x() );
+			m_angle -= atan2( rect.top() - m_center.y(), rect.right() - m_center.x() );
 		else if( m_activeNode == node_rm)
 		{
 		}
 		else if( m_activeNode == node_rb )
-			m_angle -= atan2( rect.bottom() - m_sp.y(), rect.right() - m_sp.x() );
+			m_angle -= atan2( rect.bottom() - m_center.y(), rect.right() - m_center.x() );
 		else if( m_activeNode == node_mb )
 			m_angle -= M_PI / 2;
 		else if( m_activeNode == node_lb )
-			m_angle -= atan2( rect.bottom() - m_sp.y(), rect.left() - m_sp.x() );
+			m_angle -= atan2( rect.bottom() - m_center.y(), rect.left() - m_center.x() );
 		else if( m_activeNode == node_lm )
 		{
 		}
+
 		// rotate operation
 		QWMatrix mat;
-		mat.translate( sp.x(), sp.y() );
+		mat.translate( m_center );
 		mat.rotate( m_angle / VGlobal::pi_180 );
 		mat.translate(	- ( sp.x() + view()->canvasWidget()->contentsX() ),
 						- ( sp.y() + view()->canvasWidget()->contentsY() ) );
@@ -173,7 +108,68 @@ VRotateTool::drawTemporaryObject()
 		}
 		painter->setZoomFactor( 1.0 );
 	}
-	else
-		m_isDragging = false;
+
+	view()->painterFactory()->painter()->end();
+*/
+}
+
+void
+VRotateTool::setCursor( const KoPoint& /*current*/ ) const
+{
+/*
+	switch( view()->part()->document().selection()->handleNode( current ) )
+	{
+		case node_lt:
+		case node_rb:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeFDiagCursor ) );
+			break;
+		case node_rt:
+		case node_lb:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeBDiagCursor ) );
+			break;
+		case node_lm:
+		case node_rm:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeHorCursor ) );
+			break;
+		case node_mt:
+		case node_mb:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeVerCursor ) );
+			break;
+		default:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::arrowCursor ) );
+	}
+*/
+}
+
+void
+VRotateTool::mouseButtonPress( const KoPoint& current )
+{
+//	m_activeNode = view()->part()->document().selection()->handleNode( current ) );
+}
+
+void
+VRotateTool::mouseDrag( const KoPoint& current )
+{
+	recalc();
+}
+
+void
+VRotateTool::mouseDragRelease( const KoPoint& current )
+{
+	recalc();
+
+	view()->part()->addCommand(
+		new VRotateCmd( &view()->part()->document(), m_center, m_angle / VGlobal::pi_180 ),
+		true );
+}
+
+void
+VRotateTool::recalc()
+{
 }
 

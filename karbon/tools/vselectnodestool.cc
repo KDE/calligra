@@ -33,78 +33,6 @@ VSelectNodesTool::~VSelectNodesTool()
 }
 
 void
-VSelectNodesTool::mouseReleased( QMouseEvent *mouse_event )
-{
-	if( !m_isDragging ) return;
-
-	m_lp.setX( mouse_event->pos().x() );
-	m_lp.setY( mouse_event->pos().y() );
-
-	// adjust to real viewport contents instead of raw mouse coords:
-	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
-	KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
-
-	if( m_state == moving )
-	{
-		m_state = normal;
-
-		VTranslateCmd *cmd = new VTranslateCmd(
-				&view()->part()->document(),
-				qRound( ( lp.x() - fp.x() ) * ( 1.0 / view()->zoom() ) ),
-				qRound( ( lp.y() - fp.y() ) * ( 1.0 / view()->zoom() ) ) );
-		view()->part()->addCommand( cmd, true );
-
-//			view()->part()->repaintAllViews();
-	}
-	else
-	{
-		fp.setX( fp.x() / view()->zoom() );
-		fp.setY( fp.y() / view()->zoom() );
-		lp.setX( lp.x() / view()->zoom() );
-		lp.setY( lp.y() / view()->zoom() );
-
-		if ( (fabs(lp.x()-fp.x()) + fabs(lp.y()-fp.y())) < 3.0 )
-		{
-			// AK - should take the middle point here
-			fp = lp - KoPoint(8.0, 8.0);
-			lp = lp + KoPoint(8.0, 8.0);
-		}
-
-		// erase old object:
-		drawTemporaryObject();
-
-		view()->part()->document().selection()->clear();
-		view()->part()->document().selection()->append(
-			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(),
-			false );
-
-		view()->selectionChanged();
-		view()->part()->repaintAllViews();
-		m_state = normal;
-	}
-
-	m_isDragging = false;
-}
-
-void
-VSelectNodesTool::mousePressed( QMouseEvent *mouse_event )
-{
-	view()->painterFactory()->painter()->end();
-
-	m_fp.setX( mouse_event->pos().x() );
-	m_fp.setY( mouse_event->pos().y() );
-	m_lp.setX( mouse_event->pos().x() );
-	m_lp.setY( mouse_event->pos().y() );
-
-	//m_activeNode = view()->part()->document().selection()->node( lp );
-	//view()->part()->document().selection()->clearNodes();
-
-	// draw initial object:
-	drawTemporaryObject();
-	m_isDragging = true;
-}
-
-void
 VSelectNodesTool::activate()
 {
 	//if( m_state == normal )
@@ -116,29 +44,9 @@ VSelectNodesTool::activate()
 }
 
 void
-VSelectNodesTool::setCursor( const KoPoint &p ) const
+VSelectNodesTool::draw()
 {
-	if( !m_isDragging ) return;
-
-	KoPoint lpp = KoPoint( p.x() / view()->zoom(), p.y() / view()->zoom() );
-	double tolerance = 1.0 / view()->zoom();
-
-	if( view()->part()->document().selection()->pathNode(
-		KoRect(
-			lpp.x() - tolerance,
-			lpp.y() - tolerance,
-			2 * tolerance + 1,
-			2 * tolerance * 1 ) ) )
-	{
-		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::CrossCursor ) );
-	}
-	else
-		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
-}
-
-void
-VSelectNodesTool::drawTemporaryObject()
-{
+/*
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
@@ -212,5 +120,75 @@ VSelectNodesTool::drawTemporaryObject()
 
 		m_state = dragging;
 	}
+
+	view()->painterFactory()->painter()->end();
+*/
 }
 
+void
+VSelectNodesTool::setCursor( const KoPoint& current ) const
+{
+/*
+	if( !m_isDragging ) return;
+
+	KoPoint lpp = KoPoint( p.x() / view()->zoom(), p.y() / view()->zoom() );
+	double tolerance = 1.0 / view()->zoom();
+
+	if( view()->part()->document().selection()->pathNode(
+		KoRect(
+			lpp.x() - tolerance,
+			lpp.y() - tolerance,
+			2 * tolerance + 1,
+			2 * tolerance * 1 ) ) )
+	{
+		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::CrossCursor ) );
+	}
+	else
+		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+*/
+}
+
+void
+VSelectNodesTool::mouseDragRelease( const KoPoint& current )
+{
+/*
+	if( m_state == moving )
+	{
+		m_state = normal;
+
+		VTranslateCmd *cmd = new VTranslateCmd(
+				&view()->part()->document(),
+				qRound( ( lp.x() - fp.x() ) * ( 1.0 / view()->zoom() ) ),
+				qRound( ( lp.y() - fp.y() ) * ( 1.0 / view()->zoom() ) ) );
+		view()->part()->addCommand( cmd, true );
+
+//			view()->part()->repaintAllViews();
+	}
+	else
+	{
+		fp.setX( fp.x() / view()->zoom() );
+		fp.setY( fp.y() / view()->zoom() );
+		lp.setX( lp.x() / view()->zoom() );
+		lp.setY( lp.y() / view()->zoom() );
+
+		if ( (fabs(lp.x()-fp.x()) + fabs(lp.y()-fp.y())) < 3.0 )
+		{
+			// AK - should take the middle point here
+			fp = lp - KoPoint(8.0, 8.0);
+			lp = lp + KoPoint(8.0, 8.0);
+		}
+
+		// erase old object:
+		drawTemporaryObject();
+
+		view()->part()->document().selection()->clear();
+		view()->part()->document().selection()->append(
+			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(),
+			false );
+
+		view()->selectionChanged();
+		view()->part()->repaintAllViews();
+		m_state = normal;
+	}
+*/
+}

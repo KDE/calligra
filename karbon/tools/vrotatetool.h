@@ -6,8 +6,9 @@
 #ifndef __VROTATETOOL_H__
 #define __VROTATETOOL_H__
 
-#include "vtool.h"
 #include "vselection.h"
+#include "vtool.h"
+
 
 class VRotateTool : public VTool
 {
@@ -17,17 +18,18 @@ public:
 
 	virtual void activate();
 
-	// draw the object while it is edited:
-	void drawTemporaryObject();
-
 protected:
-	virtual void setCursor( const QPoint & ) const;
-	virtual void mousePressed( QMouseEvent * );
-	virtual void mouseReleased( QMouseEvent * );
+	virtual void draw();
+
+	virtual void setCursor( const KoPoint& current ) const;
+	virtual void mouseButtonPress( const KoPoint& current );
+	virtual void mouseDrag( const KoPoint& current );
+	virtual void mouseDragRelease( const KoPoint& current );
 
 private:
-	KoPoint m_sp;
+	void recalc();
 
+	KoPoint m_center;
 	double m_angle;
 
 	VHandleNode m_activeNode;

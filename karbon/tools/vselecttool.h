@@ -17,16 +17,16 @@ public:
 
 	virtual void activate();
 
-	// draw the object while it is edited:
-	void drawTemporaryObject();
-
 protected:
-	virtual void setCursor( const QPoint & ) const;
-	virtual void mousePressed( QMouseEvent * );
-	virtual void mouseMoved( QMouseEvent * );
-	virtual void mouseReleased( QMouseEvent * );
-	virtual void dragCtrlPressed();
-	virtual void dragCtrlReleased();
+	virtual void draw();
+
+	virtual void setCursor( const KoPoint& current ) const;
+
+	virtual void mouseButtonPress( const KoPoint& current );
+	virtual void mouseDrag( const KoPoint& current );
+	virtual void mouseDragRelease( const KoPoint& current );
+	virtual void mouseDragCtrlPressed( const KoPoint& current );
+	virtual void mouseDragCtrlReleased( const KoPoint& current );
 
 private:
 	enum { normal, moving, scaling, rotating } m_state;

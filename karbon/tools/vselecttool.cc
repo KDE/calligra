@@ -34,58 +34,6 @@ VSelectTool::~VSelectTool()
 }
 
 void
-VSelectTool::dragCtrlPressed()
-{
-	m_lock = lockx;
-}
-
-void
-VSelectTool::dragCtrlReleased()
-{
-	m_lock = none;
-}
-
-void
-VSelectTool::mouseMoved( QMouseEvent *mouse_event )
-{
-    if( m_isDragging )
-	{
-        // erase old object:
-		drawTemporaryObject();
-
-		if( m_lock == lockx )
-			m_lp.setX( m_fp.x() );
-		else
-			m_lp.setX( mouse_event->pos().x() );
-
-		m_lp.setY( mouse_event->pos().y() );
-
-		// paint new object:
-		drawTemporaryObject();
-	}
-}
-
-void
-VSelectTool::mousePressed( QMouseEvent *mouse_event )
-{
-	view()->painterFactory()->painter()->end();
-
-	m_fp.setX( mouse_event->pos().x() );
-	m_fp.setY( mouse_event->pos().y() );
-	m_lp.setX( mouse_event->pos().x() );
-	m_lp.setY( mouse_event->pos().y() );
-
-	QPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
-	m_activeNode = view()->part()->document().selection()->handleNode( lp );
-	view()->part()->document().selection()->setState( VObject::edit );
-	view()->part()->repaintAllViews( true );
-
-	// draw initial object:
-	drawTemporaryObject();
-	m_isDragging = true;
-}
-
-void
 VSelectTool::activate()
 {
 	//if( m_state == normal )
@@ -98,39 +46,9 @@ VSelectTool::activate()
 }
 
 void
-VSelectTool::setCursor( const QPoint &p ) const
+VSelectTool::draw()
 {
-	switch( view()->part()->document().selection()->handleNode( p ) )
-	{
-		case node_lt:
-		case node_rb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeFDiagCursor ) );
-			break;
-		case node_rt:
-		case node_lb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeBDiagCursor ) );
-			break;
-		case node_lm:
-		case node_rm:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeHorCursor ) );
-			break;
-		case node_mt:
-		case node_mb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeVerCursor ) );
-			break;
-		default:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::arrowCursor ) );
-	}
-}
-
-void
-VSelectTool::drawTemporaryObject()
-{
+/*
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
@@ -243,17 +161,77 @@ VSelectTool::drawTemporaryObject()
 
 		m_state = normal;
 	}
+
+	view()->painterFactory()->painter()->end();
+*/
 }
 
 void
-VSelectTool::mouseReleased( QMouseEvent *mouse_event )
+VSelectTool::setCursor( const KoPoint& current ) const
 {
-	if( !m_isDragging ) return;
+/*
+	switch( view()->part()->document().selection()->handleNode( p ) )
+	{
+		case node_lt:
+		case node_rb:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeFDiagCursor ) );
+			break;
+		case node_rt:
+		case node_lb:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeBDiagCursor ) );
+			break;
+		case node_lm:
+		case node_rm:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeHorCursor ) );
+			break;
+		case node_mt:
+		case node_mb:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeVerCursor ) );
+			break;
+		default:
+			view()->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::arrowCursor ) );
+	}
+*/
+}
 
-	// adjust to real viewport contents instead of raw mouse coords:
-	KoPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
-	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
+void
+VSelectTool::mouseButtonPress( const KoPoint& current )
+{
+/*
+	m_fp.setX( mouse_event->pos().x() );
+	m_fp.setY( mouse_event->pos().y() );
+	m_lp.setX( mouse_event->pos().x() );
+	m_lp.setY( mouse_event->pos().y() );
 
+	QPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
+	m_activeNode = view()->part()->document().selection()->handleNode( lp );
+	view()->part()->document().selection()->setState( VObject::edit );
+	view()->part()->repaintAllViews( true );
+*/
+}
+
+void
+VSelectTool::mouseDrag( const KoPoint& current )
+{
+/*
+	if( m_lock == lockx )
+		m_lp.setX( m_fp.x() );
+	else
+		m_lp.setX( mouse_event->pos().x() );
+
+	m_lp.setY( mouse_event->pos().y() );
+*/
+}
+
+void
+VSelectTool::mouseDragRelease( const KoPoint& current )
+{
+/*
 	view()->part()->document().selection()->setState( VObject::selected );
 
 	if( m_state == moving )
@@ -301,7 +279,18 @@ VSelectTool::mouseReleased( QMouseEvent *mouse_event )
 		view()->selectionChanged();
 		view()->part()->repaintAllViews( true );
 	}
+*/
+}
 
-	m_isDragging = false;
+void
+VSelectTool::mouseDragCtrlPressed( const KoPoint& current )
+{
+	m_lock = lockx;
+}
+
+void
+VSelectTool::mouseDragCtrlReleased( const KoPoint& current )
+{
+	m_lock = none;
 }
 
