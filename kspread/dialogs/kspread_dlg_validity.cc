@@ -293,6 +293,9 @@ void KSpreadDlgValidity::changeIndexType(int _index)
     displayHelp->setEnabled(true);
     messageHelp->setEnabled( true);
     titleHelp->setEnabled(true);
+    message->setEnabled(true);
+    title->setEnabled(true);
+    chooseAction->setEnabled( true );
     break;
    case 4:
     edit1->setText(i18n("Date:"));
