@@ -13,7 +13,9 @@
 
 #include <qvbox.h>
 
+namespace Qt3 { 
 class QTextView;
+}
 class QPushButton;
 
 class MyRichText : public QVBox
@@ -24,7 +26,7 @@ public:
     MyRichText( QWidget *parent = 0, const char *name = 0 );
 
 protected:
-    QTextView *view;
+    Qt3::QTextView *view;
     QPushButton *bClose, *bNext, *bPrev;
     int num;
 

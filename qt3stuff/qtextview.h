@@ -47,28 +47,30 @@
 #endif // QT_H
 
 class QPainter;
-class QTextDocument;
-class QTextCursor;
 class QKeyEvent;
 class QResizeEvent;
 class QMouseEvent;
 class QTimer;
-class QTextString;
-class QTextCommand;
-class QTextParag;
-class QTextFormat;
 class QFont;
 class QColor;
-class QTextEdit;
-class QTextBrowser;
-class QTextString;
-struct QUndoRedoInfoPrivate;
 class QPopupMenu;
-class QTextViewPrivate;
+class QTextEdit;
+
+namespace Qt3 {
+
+    class QTextString;
+    class QTextCommand;
+    class QTextParag;
+    class QTextFormat;
+    class QTextDocument;
+    class QTextCursor;
+    class QTextViewPrivate;
+    class QTextBrowser;
+    struct QUndoRedoInfoPrivate;
 
 class Q_EXPORT QTextView : public QScrollView
 {
-    friend class QTextEdit;
+    friend class ::QTextEdit;
     friend class QTextBrowser;
 
     Q_OBJECT
@@ -124,7 +126,7 @@ public:
     int lineOfChar( int parag, int chr );
     int length() const;
 
-    QStyleSheet* styleSheet() const;
+    Qt3::QStyleSheet* styleSheet() const;
     QMimeSourceFactory* mimeSourceFactory() const;
 
     QBrush paper() const;
@@ -150,7 +152,7 @@ public:
 public slots:
     void setEnabled( bool );
     virtual void setMimeSourceFactory( QMimeSourceFactory* factory );
-    virtual void setStyleSheet( QStyleSheet* styleSheet );
+    virtual void setStyleSheet( Qt3::QStyleSheet* styleSheet );
     virtual void scrollToAnchor( const QString& name );
     virtual void setPaper( const QBrush& pap );
     virtual void setLinkUnderline( bool );
@@ -218,7 +220,7 @@ private slots:
 private:
     struct Q_EXPORT UndoRedoInfo {
 	enum Type { Invalid, Insert, Delete, Backspace, Return, RemoveSelected, Format, Alignment, ParagType };
-	
+
 	UndoRedoInfo( QTextDocument *dc );
 	~UndoRedoInfo();
 	void clear();
@@ -236,9 +238,9 @@ private:
 	QArray<int> oldAligns;
 	int newAlign;
 	bool list;
-	QStyleSheetItem::ListStyle listStyle;
-	QValueList< QVector<QStyleSheetItem> > oldStyles;
-	QValueList<QStyleSheetItem::ListStyle> oldListStyles;
+	Qt3::QStyleSheetItem::ListStyle listStyle;
+	QValueList< QVector<Qt3::QStyleSheetItem> > oldStyles;
+	QValueList<Qt3::QStyleSheetItem::ListStyle> oldListStyles;
     };
 
     enum KeyboardActionPrivate { // keep in sync with QTextEdit
@@ -371,5 +373,7 @@ inline QTextDocument *QTextView::document() const
 {
     return doc;
 }
+
+}; // namespace
 
 #endif

@@ -49,10 +49,12 @@
 
 #ifndef QT_NO_RICHTEXT
 
-class QStyleSheet;
-class QTextDocument;
 template<class Key, class T> class QMap;
 
+namespace Qt3 {
+
+class QStyleSheet;
+class QTextDocument;
 
 class Q_EXPORT QStyleSheetItem : public Qt
 {
@@ -205,6 +207,8 @@ private:
     QDict<QStyleSheetItem> styles;
     QStyleSheetItem* nullstyle;
 };
+
+} // namespace
 
 #endif // QT_NO_RICHTEXT
 

@@ -59,6 +59,8 @@
 
 #include <stdlib.h>
 
+using namespace Qt3;
+
 //#define PARSER_DEBUG
 //#define DEBUG_COLLECTION// ---> also in qrichtext_p.h
 //#define DEBUG_TABLE_RENDERING

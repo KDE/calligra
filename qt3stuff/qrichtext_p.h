@@ -78,6 +78,9 @@
 #include "qapplication.h"
 #endif // QT_H
 
+// We need this to avoid clashes
+namespace Qt3 {
+
 //#define DEBUG_COLLECTION
 
 class QTextDocument;
@@ -111,7 +114,7 @@ public:
     uint hasCursor : 1;
     uint canBreak : 1;
     Type type : 3;
-	
+
     int x;
     int height() const;
     int ascent() const;
@@ -127,20 +130,20 @@ public:
 	QTextFormat *format;
 	QTextCustomItem *custom;
     };
-	
+
     struct MarkData
     {
 	QTextFormat *format;
 	short xoff; // x offset for painting the Mark
 	short yoff; // y offset for painting the Mark
     };
-	
+
     struct ShapedData
     {
 	QTextFormat *format;
 	QChar shapedGlyph;
     };
-	
+
     struct LigatureData
     {
 	QTextFormat *format;
@@ -156,7 +159,7 @@ public:
 	LigatureData *ligature;
     } d;
 
-private:	
+private:
     QTextStringChar &operator=( const QTextStringChar & ) {
 	//abort();
 	return *this;
@@ -1033,7 +1036,7 @@ public:
     ushort y, baseLine, h;
     QBidiStatus status;
     int w;
-	
+
 private:
     QBidiContext *bidicontext;
 
@@ -2048,7 +2051,7 @@ inline QString QTextString::toString( const QArray<QTextStringChar> &data )
 	uc++;
 	c++;
     }
-	
+
     return s;
 }
 
@@ -2069,7 +2072,7 @@ inline QString QTextString::toReverseString() const
 	uc++;
 	c--;
     }
-	
+
     return s;
 }
 
@@ -2560,5 +2563,7 @@ inline int QTextStringChar::descent() const
 {
     return !isCustom() ? format()->descent() : 0;
 }
+
+}; // namespace
 
 #endif

@@ -47,7 +47,10 @@
 
 #ifndef QT_NO_TEXTEDIT
 
-class Q_EXPORT QTextEdit : public QTextView
+// This class is out of the Qt3 namespace on purpose : it will make code
+// more easy to port to Qt 3. The other classes are inside Qt3 because otherwise
+// they would conflict with Qt 2.
+class Q_EXPORT QTextEdit : public Qt3::QTextView
 {
     Q_OBJECT
     Q_PROPERTY( int undoDepth READ undoDepth WRITE setUndoDepth )
@@ -90,7 +93,7 @@ public slots:
     virtual void setColor( const QColor &c );
     virtual void setFont( const QFont &f );
     virtual void setAlignment( int a );
-    virtual void setParagType( QStyleSheetItem::DisplayMode dm, QStyleSheetItem::ListStyle listStyle );
+    virtual void setParagType( Qt3::QStyleSheetItem::DisplayMode dm, Qt3::QStyleSheetItem::ListStyle listStyle );
     virtual void setCursorPosition( int parag, int index );
     virtual void setSelection( int parag_from, int index_from, int parag_to, int index_to );
     virtual void setModified( bool m );
@@ -105,7 +108,7 @@ signals:
     void currentFontChanged( const QFont &f );
     void currentColorChanged( const QColor &c );
     void currentAlignmentChanged( int a );
-    void cursorPositionChanged( QTextCursor *c );
+    void cursorPositionChanged( Qt3::QTextCursor *c );
     void returnPressed();
     void modificationChanged( bool m );
 
@@ -128,13 +131,13 @@ protected:
 	MovePgDown
     };
 
-    void setFormat( QTextFormat *f, int flags );
+    void setFormat( Qt3::QTextFormat *f, int flags );
     void ensureCursorVisible();
-    void placeCursor( const QPoint &pos, QTextCursor *c = 0 );
+    void placeCursor( const QPoint &pos, Qt3::QTextCursor *c = 0 );
     void moveCursor( MoveDirection direction, bool shift, bool control );
     void moveCursor( MoveDirection direction, bool control );
     void doKeyboardAction( KeyboardAction action );
-    QTextCursor *textCursor() const;
+    Qt3::QTextCursor *textCursor() const;
 
 private:
     bool isReadOnly() const { return FALSE; }
@@ -143,7 +146,7 @@ private:
     void emitCurrentFontChanged( const QFont &f ) { emit currentFontChanged( f ); }
     void emitCurrentColorChanged( const QColor &c ) { emit currentColorChanged( c ); }
     void emitCurrentAlignmentChanged( int a ) { emit currentAlignmentChanged( a ); }
-    void emitCursorPositionChanged( QTextCursor *c ) { emit cursorPositionChanged( c ); }
+    void emitCursorPositionChanged( Qt3::QTextCursor *c ) { emit cursorPositionChanged( c ); }
     void emitReturnPressed() { emit returnPressed(); }
     void emitModificationChanged( bool m ) { emit modificationChanged( m ); }
 
@@ -156,232 +159,232 @@ private:	// Disabled copy constructor and operator=
 
 inline void QTextEdit::getCursorPosition( int &parag, int &index ) const
 {
-    QTextView::getCursorPosition( parag, index );
+    Qt3::QTextView::getCursorPosition( parag, index );
 }
 
 inline bool QTextEdit::isModified() const
 {
-    return QTextView::isModified();
+    return Qt3::QTextView::isModified();
 }
 
 inline bool QTextEdit::italic() const
 {
-    return QTextView::italic();
+    return Qt3::QTextView::italic();
 }
 
 inline bool QTextEdit::bold() const
 {
-    return QTextView::bold();
+    return Qt3::QTextView::bold();
 }
 
 inline bool QTextEdit::underline() const
 {
-    return QTextView::underline();
+    return Qt3::QTextView::underline();
 }
 
 inline QString QTextEdit::family() const
 {
-    return QTextView::family();
+    return Qt3::QTextView::family();
 }
 
 inline int QTextEdit::pointSize() const
 {
-    return QTextView::pointSize();
+    return Qt3::QTextView::pointSize();
 }
 
 inline QColor QTextEdit::color() const
 {
-    return QTextView::color();
+    return Qt3::QTextView::color();
 }
 
 inline QFont QTextEdit::font() const
 {
-    return QTextView::font();
+    return Qt3::QTextView::font();
 }
 
 inline int QTextEdit::alignment() const
 {
-    return QTextView::alignment();
+    return Qt3::QTextView::alignment();
 }
 
 inline bool QTextEdit::isOverwriteMode() const
 {
-    return QTextView::isOverwriteMode();
+    return Qt3::QTextView::isOverwriteMode();
 }
 
 inline int QTextEdit::undoDepth() const
 {
-    return QTextView::undoDepth();
+    return Qt3::QTextView::undoDepth();
 }
 
 inline void QTextEdit::insert( const QString &text, bool indent, bool checkNewLine, bool removeSelected )
 {
-    QTextView::insert( text, indent, checkNewLine, removeSelected );
+    Qt3::QTextView::insert( text, indent, checkNewLine, removeSelected );
 }
 
 inline void QTextEdit::setOverwriteMode( bool b )
 {
-    QTextView::setOverwriteMode( b );
+    Qt3::QTextView::setOverwriteMode( b );
 }
 
 inline void QTextEdit::undo()
 {
-    QTextView::undo();
+    Qt3::QTextView::undo();
 }
 
 inline void QTextEdit::redo()
 {
-    QTextView::redo();
+    Qt3::QTextView::redo();
 }
 
 inline void QTextEdit::cut()
 {
-    QTextView::cut();
+    Qt3::QTextView::cut();
 }
 
 inline void QTextEdit::paste()
 {
-    QTextView::paste();
+    Qt3::QTextView::paste();
 }
 
 inline void QTextEdit::pasteSubType( const QCString &subtype )
 {
-    QTextView::pasteSubType( subtype );
+    Qt3::QTextView::pasteSubType( subtype );
 }
 
 inline void QTextEdit::clear()
 {
-    QTextView::clear();
+    Qt3::QTextView::clear();
 }
 
 inline void QTextEdit::del()
 {
-    QTextView::del();
+    Qt3::QTextView::del();
 }
 
 inline void QTextEdit::indent()
 {
-    QTextView::indent();
+    Qt3::QTextView::indent();
 }
 
 inline void QTextEdit::setItalic( bool b )
 {
-    QTextView::setItalic( b );
+    Qt3::QTextView::setItalic( b );
 }
 
 inline void QTextEdit::setBold( bool b )
 {
-    QTextView::setBold( b );
+    Qt3::QTextView::setBold( b );
 }
 
 inline void QTextEdit::setUnderline( bool b )
 {
-    QTextView::setUnderline( b );
+    Qt3::QTextView::setUnderline( b );
 }
 
 inline void QTextEdit::setFamily( const QString &f )
 {
-    QTextView::setFamily( f );
+    Qt3::QTextView::setFamily( f );
 }
 
 inline void QTextEdit::setPointSize( int s )
 {
-    QTextView::setPointSize( s );
+    Qt3::QTextView::setPointSize( s );
 }
 
 inline void QTextEdit::setColor( const QColor &c )
 {
-    QTextView::setColor( c );
+    Qt3::QTextView::setColor( c );
 }
 
 inline void QTextEdit::setFont( const QFont &f )
 {
-    QTextView::setFontInternal( f );
+    Qt3::QTextView::setFontInternal( f );
 }
 
 inline void QTextEdit::setAlignment( int a )
 {
-    QTextView::setAlignment( a );
+    Qt3::QTextView::setAlignment( a );
 }
 
-inline void QTextEdit::setParagType( QStyleSheetItem::DisplayMode dm, QStyleSheetItem::ListStyle listStyle )
+inline void QTextEdit::setParagType( Qt3::QStyleSheetItem::DisplayMode dm, Qt3::QStyleSheetItem::ListStyle listStyle )
 {
-    QTextView::setParagType( dm, listStyle );
+    Qt3::QTextView::setParagType( dm, listStyle );
 }
 
 inline void QTextEdit::setCursorPosition( int parag, int index )
 {
-    QTextView::setCursorPosition( parag, index );
+    Qt3::QTextView::setCursorPosition( parag, index );
 }
 
 inline void QTextEdit::setSelection( int parag_from, int index_from, int parag_to, int index_to )
 {
-    QTextView::setSelection( parag_from, index_from, parag_to, index_to );
+    Qt3::QTextView::setSelection( parag_from, index_from, parag_to, index_to );
 }
 
 inline void QTextEdit::setModified( bool m )
 {
-    QTextView::setModified( m );
+    Qt3::QTextView::setModified( m );
 }
 
 inline void QTextEdit::resetFormat()
 {
-    QTextView::resetFormat();
+    Qt3::QTextView::resetFormat();
 }
 
 inline void QTextEdit::setUndoDepth( int d )
 {
-    QTextView::setUndoDepth( d );
+    Qt3::QTextView::setUndoDepth( d );
 }
 
 inline void QTextEdit::save( const QString &fn )
 {
-    QTextView::save( fn );
+    Qt3::QTextView::save( fn );
 }
 
-inline void QTextEdit::setFormat( QTextFormat *f, int flags )
+inline void QTextEdit::setFormat( Qt3::QTextFormat *f, int flags )
 {
-    QTextView::setFormat( f, flags );
+    Qt3::QTextView::setFormat( f, flags );
 }
 
 inline void QTextEdit::ensureCursorVisible()
 {
-    QTextView::ensureCursorVisible();
+    Qt3::QTextView::ensureCursorVisible();
 }
 
-inline void QTextEdit::placeCursor( const QPoint &pos, QTextCursor *c )
+inline void QTextEdit::placeCursor( const QPoint &pos, Qt3::QTextCursor *c )
 {
-    QTextView::placeCursor( pos, c );
+    Qt3::QTextView::placeCursor( pos, c );
 }
 
 inline void QTextEdit::moveCursor( MoveDirection direction, bool shift, bool control )
 {
-    QTextView::moveCursor( (MoveDirectionPrivate)direction, shift, control );
+    Qt3::QTextView::moveCursor( (MoveDirectionPrivate)direction, shift, control );
 }
 
 inline void QTextEdit::moveCursor( MoveDirection direction, bool control )
 {
-    QTextView::moveCursor( (MoveDirectionPrivate)direction, control );
+    Qt3::QTextView::moveCursor( (MoveDirectionPrivate)direction, control );
 }
 
 inline void QTextEdit::removeSelectedText()
 {
-    QTextView::removeSelectedText();
+    Qt3::QTextView::removeSelectedText();
 }
 
 inline void QTextEdit::doKeyboardAction( KeyboardAction action )
 {
-    QTextView::doKeyboardAction( (KeyboardActionPrivate)action );
+    Qt3::QTextView::doKeyboardAction( (KeyboardActionPrivate)action );
 }
 
-inline QTextCursor *QTextEdit::textCursor() const
+inline Qt3::QTextCursor *QTextEdit::textCursor() const
 {
     return cursor;
 }
 
 inline bool QTextEdit::getFormat( int parag, int index, QFont &font, QColor &color )
 {
-    return QTextView::getFormat( parag, index, font, color );
+    return Qt3::QTextView::getFormat( parag, index, font, color );
 }
 
 #endif // QT_NO_TEXTEDIT

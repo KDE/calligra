@@ -46,6 +46,8 @@
 
 #include <stdio.h>
 
+using namespace Qt3;
+
 class QStyleSheetItem::Data
 {
 public:

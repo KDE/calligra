@@ -17,6 +17,8 @@
 #include <qbrush.h>
 #include <qapplication.h>
 
+using namespace Qt3;
+
 static const char* sayings[] = {
     "<b>Saying 1:</b><br>"
     "<hr><br><br>"

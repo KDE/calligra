@@ -60,12 +60,14 @@
 #include "qregexp.h"
 #include "qpopupmenu.h"
 
-struct QUndoRedoInfoPrivate
+using namespace Qt3;
+
+struct Qt3::QUndoRedoInfoPrivate
 {
     QTextString text;
 };
 
-class QTextViewPrivate
+class Qt3::QTextViewPrivate
 {
 public:
     int id[ 7 ];

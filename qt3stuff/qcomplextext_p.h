@@ -10,6 +10,8 @@
 #include <qshared.h>
 #endif // QT_H
 
+namespace Qt3 {
+
 class QFontPrivate;
 
 // bidi helper classes. Internal to Qt
@@ -97,5 +99,6 @@ public:
     static QString bidiReorderString( const QString &str, QChar::Direction basicDir = QChar::DirON );
 };
 
+}; // namespace
 
 #endif
