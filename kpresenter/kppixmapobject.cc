@@ -240,23 +240,8 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
     _painter->restore();
     _painter->save();
 
-    // get pixmaps to draw
-    QPixmap drawImage;
-    QSize origImageSize = image.originalSize();
-    QSize imageSize = image.size();
-    QSize realImageSize = image.size();
-    bool scaleImage = _painter->device()->isExtDev()
-                      && ( imageSize.width()<origImageSize.width()
-                           || imageSize.height()<origImageSize.height() );
-
-    if( scaleImage ) {
-        // use full resolution version for printer
-        drawImage = image.scale( origImageSize ).pixmap();
-        imageSize = origImageSize;
-    } else
-	drawImage = image.pixmap();
-
     if ( angle == 0 ) {
+        // Draw background
         _painter->setPen( Qt::NoPen );
         _painter->setBrush( brush );
         if ( fillType == FT_BRUSH || !gradient )
@@ -264,18 +249,12 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
         else
             _painter->drawPixmap( _zoomHandler->zoomItX(ox + penw), _zoomHandler->zoomItY(oy + penw), *gradient->getGradient(),
                                   0, 0, _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
+        // Draw pixmap
+        image.draw( *_painter,
+                    _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy),
+                     _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
 
-        if( scaleImage ) {
-            // draw high resolution image
-            QWMatrix oldMapping = _painter->worldMatrix();
-            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-            _painter->scale( ((double)realImageSize.width())/imageSize.width(),
-                             ((double)realImageSize.height())/imageSize.height() );
-            _painter->drawPixmap( 0, 0, drawImage );
-            _painter->setWorldMatrix( oldMapping );
-        } else
-            _painter->drawPixmap( ox, oy, drawImage );
-
+        // Draw border - TODO port to KoBorder::drawBorders() (after writing a simplified version of it, that takes the same border on each size)
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( _zoomHandler->zoomItX(ox + penw), _zoomHandler->zoomItY(oy + penw), _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
@@ -308,13 +287,10 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
             _painter->drawPixmap( _zoomHandler->zoomItX(rr.left() + pixXPos + penw), _zoomHandler->zoomItY(rr.top() + pixYPos + penw),
                                   *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
 
-        // create mapping to image space
-       	QWMatrix oldMapping = _painter->worldMatrix();
-       	_painter->translate( _zoomHandler->zoomItX(rr.left() + pixXPos), _zoomHandler->zoomItX(rr.top() + pixYPos) );
-       	_painter->scale( ((double)realImageSize.width())/imageSize.width(),
-                         ((double)realImageSize.height())/imageSize.height() );
-        _painter->drawPixmap( 0, 0, drawImage );
-        _painter->setWorldMatrix( oldMapping );
+        // Draw pixmap
+        image.draw( *_painter,
+                    _zoomHandler->zoomItX(rr.left() + pixXPos), _zoomHandler->zoomItX(rr.top() + pixYPos),
+                     _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
 
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );

@@ -56,6 +56,9 @@ public:
     KPImageKey getKey() const
     { return image.key(); }
 
+    QSize originalSize() const
+    { return image.originalSize(); }
+
     void setPixmap( const KPImageKey & key, const KoSize &_size = orig_size );
 
     void reload()

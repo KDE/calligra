@@ -342,7 +342,7 @@ public:
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
 
 protected:
-    virtual void paint( QPainter */*_painter*/,KoZoomHandler*_zoomHandler  ) {}
+    virtual void paint( QPainter */*_painter*/,KoZoomHandler* /*_zoomHandler*/  ) {}
 
     QPen pen;
     QBrush brush;

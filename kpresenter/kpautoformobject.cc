@@ -287,11 +287,11 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
 
                     QRegion clipregion( pntArray3 );
 
+                    // Intersect with current clipregion (whereas setupClipRegion unites)
                     if ( _painter->hasClipping() )
-                        clipregion = _painter->clipRegion().intersect( clipregion );
+                        clipregion = _painter->clipRegion(QPainter::CoordPainter).intersect( clipregion );
 
-                    _painter->setClipRegion( clipregion );
-                    setupClipRegion( _painter, clipregion );
+                    _painter->setClipRegion( clipregion, QPainter::CoordPainter );
 
                     _painter->drawPixmap( 0, 0, *gradient->getGradient() );
 

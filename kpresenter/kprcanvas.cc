@@ -336,15 +336,7 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect )
 void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush )
 {
     painter->save();
-    // Translate emptySpaceRegion in device coordinates
-    // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
-    QRegion devReg;
-    QMemArray<QRect>rs = emptySpaceRegion.rects();
-    rs.detach();
-    for ( uint i = 0 ; i < rs.size() ; ++i )
-        rs[i] = painter->xForm( rs[i] );
-    devReg.setRects( rs.data(), rs.size() );
-    painter->setClipRegion( devReg );
+    painter->setClipRegion( emptySpaceRegion, QPainter::CoordPainter );
     painter->setPen( Qt::NoPen );
 
     //kdDebug(33001) << "KWDocument::eraseEmptySpace emptySpaceRegion: " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
@@ -3589,7 +3581,8 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
 
     int ox, oy, ow, oh;
     KoRect br = kpobject->getBoundingRect(  );
-    ox = br.x(); oy = br.y(); ow = br.width(); oh = br.height();
+    QRect brpix = m_view->zoomHandler()->zoomRect( br );
+    ox = brpix.x(); oy = brpix.y(); ow = brpix.width(); oh = brpix.height();
     bool ownClipping = true;
 
     QPainter p;
@@ -3598,7 +3591,7 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
     if ( _w != 0 || _h != 0 )
     {
         p.setClipping( true );
-        p.setClipRect( ox - diffx() + _cx, oy - diffy() + _cy, ow - _w, oh - _h );
+        p.setClipRect( ox + _cx, oy + _cy, ow - _w, oh - _h, QPainter::CoordPainter );
         ownClipping = false;
     }
 
@@ -4543,7 +4536,11 @@ void KPrCanvas::exitEditMode()
 /*================================================================*/
 bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, QSize *origSize, QSize *currentSize )
 {
-#if 0  //FIXME
+    *origSize = obj->originalSize();
+    *currentSize = m_view->zoomHandler()->zoomSize( obj->getSize() );
+    return true;
+    // Why was the old code so complex ? ;)
+#if 0
     obj = 0;
     KPObject *kpobject = 0;
     for ( int i = 0; i < static_cast<int>( objectList().count() ); i++ ) {
@@ -4570,10 +4567,10 @@ bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, QSize *origSi
             }
         }
     }
-#endif
     *origSize = QSize( -1, -1 );
     *currentSize = QSize( -1, -1 );
     return false;
+#endif
 }
 
 /*================================================================*/
