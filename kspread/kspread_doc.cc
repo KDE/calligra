@@ -114,7 +114,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_bHorizontalScrollBarShow=true;
   m_bShowColHeader=true;
   m_bShowRowHeader=true;
-  m_iIndentValue=10;
+  m_dIndentValue = 10.0;
   m_EMoveTo=KSpread::Bottom;
   m_bShowError=false;
   m_EMethodOfCalc=SumOfNumber;

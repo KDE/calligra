@@ -946,7 +946,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int a = defineAlignX();
     //apply indent if text is align to left not when text is at right or middle
     if( a == KSpreadCell::Left && !isEmpty() )
-        indent = m_pTable->doc()->unzoomItX( getIndent( column(), row() ) );
+        indent = getIndent( column(), row() );
 
     if( verticalText( column(), row() ) || getAngle( column(), row() ) != 0 )
     {
@@ -2471,13 +2471,13 @@ void KSpreadCell::paintText( QPainter& painter,
     m_strOutText = "";
   }
 
-  double indent = 0;
+  double indent = 0.0;
   double offsetCellTooShort = 0.0;
   int a = defineAlignX();
   //apply indent if text is align to left not when text is at right or middle
   if(  a == KSpreadCell::Left && !isEmpty() )
   {
-    indent = m_pTable->doc()->unzoomItX( getIndent( column(), row() ) );
+    indent = getIndent( column(), row() );
   }
 
   //made an offset, otherwise ### is under red triangle
@@ -2992,7 +2992,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
     }
 
     QString tmp;
-    int tmpIndent = 0;
+    double tmpIndent = 0.0;
     if( !isEmpty() )
       tmpIndent = getIndent( column(), row() );
     for( int i = m_strOutText.length(); i != 0; i-- )
@@ -3029,7 +3029,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
   else if( verticalText( column(), row() ) )
   {
     RowLayout *rl = m_pTable->rowLayout( row() );
-    int tmpIndent = 0;
+    double tmpIndent = 0.0;
     //not enough space but align to left
     double len = 0.0;
     for( int i = column(); i <= column() + m_iExtraXCells; i++ )

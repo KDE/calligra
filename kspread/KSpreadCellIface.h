@@ -116,8 +116,8 @@ k_dcop:
     virtual QString goUpDiagonalColor() const;
     virtual QString goUpDiagonalStyle() const;
     //indent
-    virtual void setIndent(int indent);
-    virtual int getIndent() const ;
+    virtual void setIndent(double indent);
+    virtual double getIndent() const ;
     //don't print text
     virtual void setDontPrintText ( bool _b);
     virtual bool getDontprintText() const ;

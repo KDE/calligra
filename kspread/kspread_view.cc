@@ -1273,7 +1273,7 @@ void KSpreadView::initConfig()
         m_pDoc->setShowRowHeader(config->readBoolEntry("Row Header",true));
         m_pDoc->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
         m_pDoc->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(KSpread::Bottom)));
-        m_pDoc->setIndentValue(config->readNumEntry( "Indent",10 ) );
+        m_pDoc->setIndentValue( config->readNumEntry( "Indent", 10.0 ) );
         m_pDoc->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(SumOfNumber)));
 	m_pDoc->setShowTabBar(config->readBoolEntry("Tabbar",true));
 
@@ -1868,7 +1868,7 @@ void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
 
     m_removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
 
-    m_decreaseIndent->setEnabled(cell->getIndent(column,row)>0);
+    m_decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
 
     m_toolbarLock = FALSE;
 
@@ -3190,7 +3190,7 @@ void KSpreadView::decreaseIndent()
   m_pTable->decreaseIndent( m_selectionInfo );
   KSpreadCell* cell = m_pTable->cellAt( column, row );
   if(cell)
-      m_decreaseIndent->setEnabled(cell->getIndent(column,row)>0);
+      m_decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
 
   m_pDoc->emitEndOperation();
 }

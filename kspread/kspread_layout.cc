@@ -78,7 +78,7 @@ KSpreadLayout::KSpreadLayout( KSpreadSheet *_table )
     m_eFormatType=KSpreadLayout::Number;
     m_rotateAngle=0;
     m_strComment="";
-    m_indent=0;
+    m_dIndent=0.0;
 
     QFont font = KoGlobal::defaultFont();
     // ######## Not needed anymore in 3.0?
@@ -153,7 +153,7 @@ void KSpreadLayout::copy( const KSpreadLayout &_l )
     m_rotateAngle = _l.m_rotateAngle;
     m_strComment = _l.m_strComment;
     m_strFormat  = _l.m_strFormat;
-    m_indent=_l.m_indent;
+    m_dIndent=_l.m_dIndent;
 }
 
 void KSpreadLayout::clearFlag( LayoutFlags flag )
@@ -471,7 +471,7 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc, bool force ) const
     if ( hasProperty( PAngle ) || hasNoFallBackProperties( PAngle ) || force )
 	format.setAttribute( "angle", m_rotateAngle );
     if ( hasProperty( PIndent ) || hasNoFallBackProperties( PIndent ) || force )
-	format.setAttribute( "indent", m_indent );
+	format.setAttribute( "indent", m_dIndent );
     if( ( hasProperty( PDontPrintText )
           || hasNoFallBackProperties( PDontPrintText )
           || force )
@@ -638,7 +638,7 @@ bool KSpreadLayout::loadLayout( const QDomElement& f, PasteMode pm )
     }
     if ( f.hasAttribute( "indent" ) )
     {
-        setIndent(f.attribute( "indent").toInt( &ok ));
+        setIndent(f.attribute( "indent" ).toDouble( &ok ));
         if ( !ok )
             return false;
     }
@@ -1311,9 +1311,9 @@ void KSpreadLayout::setAngle(int _angle)
     layoutChanged();
 }
 
-void KSpreadLayout::setIndent( int _indent )
+void KSpreadLayout::setIndent( double _indent )
 {
-    if ( _indent==0 )
+    if ( _indent == 0.0 )
         {
         clearProperty( PIndent );
         setNoFallBackProperties( PIndent );
@@ -1324,7 +1324,7 @@ void KSpreadLayout::setIndent( int _indent )
         clearNoFallBackProperties( PIndent );
         }
 
-    m_indent=_indent;
+    m_dIndent=_indent;
     layoutChanged();
 }
 
@@ -1797,16 +1797,16 @@ QString KSpreadLayout::comment( int col, int row ) const
     return m_strComment;
 }
 
-int KSpreadLayout::getIndent( int col, int row ) const
+double KSpreadLayout::getIndent( int col, int row ) const
 {
-    if ( !hasProperty( PIndent ) && !hasNoFallBackProperties(  PIndent ))
+    if ( !hasProperty( PIndent ) && !hasNoFallBackProperties( PIndent ) )
     {
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
 	    return l->getIndent( col, row );
     }
 
-    return m_indent;
+    return m_dIndent;
 }
 
 bool KSpreadLayout::getDontprintText( int col, int row ) const

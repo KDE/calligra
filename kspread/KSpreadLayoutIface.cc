@@ -401,12 +401,12 @@ void KSpreadLayoutIface::setGoUpDiagonalWidth( int _size )
 }
 
 
-void KSpreadLayoutIface::setIndent(int indent)
+void KSpreadLayoutIface::setIndent( double indent )
 {
-    if(indent>=0)
-        layout->setIndent(indent);
+    if( indent >= 0.0 )
+        layout->setIndent( indent );
     else
-        layout->setIndent(0);
+        layout->setIndent( 0.0 );
 }
 
 

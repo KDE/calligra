@@ -87,7 +87,7 @@ k_dcop:
     virtual void setGoUpDiagonalColor(int r,int g,int b);
     virtual void setGoUpDiagonalWidth( int _size );
     //indent
-    virtual void setIndent(int indent);
+    virtual void setIndent( double indent );
     //don't print text
     virtual void setDontPrintText ( bool _b);
 private:

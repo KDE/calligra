@@ -4109,9 +4109,9 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
     ref1->setDontPrintText( ref2->getDontprintText( ref2->column(), ref2->row() ) );
     ref2->setDontPrintText(print);
 
-    int ind = ref1->getIndent( ref1->column(), ref1->row() );
+    double ind = ref1->getIndent( ref1->column(), ref1->row() );
     ref1->setIndent( ref2->getIndent( ref2->column(), ref2->row() ) );
-    ref2->setIndent(ind);
+    ref2->setIndent( ind );
 
     QValueList<KSpreadConditional> conditionList = ref1->conditionList();
     ref1->setConditionList(ref2->conditionList());
@@ -4442,8 +4442,8 @@ void KSpreadSheet::setSelectionMoneyFormat( KSpreadSelection* selectionInfo,
 
 
 struct IncreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
-    int tmpIndent, valIndent;
-    IncreaseIndentWorker( int _tmpIndent, int _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
+    double tmpIndent, valIndent;
+    IncreaseIndentWorker( double _tmpIndent, double _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
     QString getUndoTitle() { return i18n("Increase Indent"); }
     bool testCondition( RowLayout* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PIndent ) );
@@ -4470,7 +4470,7 @@ struct IncreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
 	    if(cell->align(x,y)!=KSpreadCell::Left)
 	    {
 		cell->setAlign(KSpreadCell::Left);
-		cell->setIndent(0);
+		cell->setIndent( 0.0 );
 	    }
 	    cell->setDisplayDirtyFlag();
 	    cell->setIndent( /* ### ??? --> */ cell->getIndent(x,y) /* <-- */ +valIndent );
@@ -4485,10 +4485,10 @@ struct IncreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
 
 void KSpreadSheet::increaseIndent(KSpreadSelection* selectionInfo)
 {
-    int valIndent = doc()->getIndentValue();
+    double valIndent = doc()->getIndentValue();
     QPoint marker(selectionInfo->marker());
     KSpreadCell* c = cellAt( marker );
-    int tmpIndent = c->getIndent( marker.x(), marker.y() );
+    double tmpIndent = c->getIndent( marker.x(), marker.y() );
 
     IncreaseIndentWorker w( tmpIndent, valIndent );
     workOnCells( selectionInfo, w );
@@ -4496,17 +4496,17 @@ void KSpreadSheet::increaseIndent(KSpreadSelection* selectionInfo)
 
 
 struct DecreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
-    int tmpIndent, valIndent;
-    DecreaseIndentWorker( int _tmpIndent, int _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
+    double tmpIndent, valIndent;
+    DecreaseIndentWorker( double _tmpIndent, double _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
     QString getUndoTitle() { return i18n("Decrease Indent"); }
     bool testCondition( RowLayout* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PIndent ) );
     }
     void doWork( RowLayout* rw ) {
-        rw->setIndent( QMAX(0, tmpIndent - valIndent) );
+        rw->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
     }
     void doWork( ColumnLayout* cl ) {
-        cl->setIndent( QMAX(0, tmpIndent - valIndent) );
+        cl->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
     }
     void prepareCell( KSpreadCell* c ) {
 	c->clearProperty( KSpreadCell::PIndent );
@@ -4518,10 +4518,10 @@ struct DecreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
     void doWork( KSpreadCell* cell, bool cellRegion, int x, int y ) {
 	if ( cellRegion ) {
 	    cell->setDisplayDirtyFlag();
-	    cell->setIndent( QMAX(0, cell->getIndent(x,y) - valIndent) );
+	    cell->setIndent( QMAX( 0.0, cell->getIndent( x, y ) - valIndent ) );
 	    cell->clearDisplayDirtyFlag();
 	} else {
-	    cell->setIndent( QMAX(0, tmpIndent - valIndent) );
+	    cell->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
 	}
     }
 };
@@ -4529,10 +4529,10 @@ struct DecreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
 
 void KSpreadSheet::decreaseIndent( KSpreadSelection* selectionInfo )
 {
-    int valIndent = doc()->getIndentValue();
+    double valIndent = doc()->getIndentValue();
     QPoint marker(selectionInfo->marker());
     KSpreadCell* c = cellAt( marker );
-    int tmpIndent = c->getIndent( marker.x(), marker.y() );
+    double tmpIndent = c->getIndent( marker.x(), marker.y() );
 
     DecreaseIndentWorker w( tmpIndent, valIndent );
     workOnCells( selectionInfo, w );
@@ -4541,11 +4541,11 @@ void KSpreadSheet::decreaseIndent( KSpreadSelection* selectionInfo )
 
 int KSpreadSheet::adjustColumnHelper( KSpreadCell * c, int _col, int _row )
 {
-    int long_max = 0;
+    double long_max = 0.0;
     c->calculateTextParameters( painter(), _col, _row );
     if ( c->textWidth() > long_max )
     {
-        int indent = 0;
+        double indent = 0.0;
         int a = c->align( c->column(), c->row() );
         if ( a == KSpreadCell::Undefined )
         {
@@ -4557,17 +4557,17 @@ int KSpreadSheet::adjustColumnHelper( KSpreadCell * c, int _col, int _row )
 
         if ( a == KSpreadCell::Left )
             indent = c->getIndent( c->column(), c->row() );
-        long_max = indent + (int)c->textWidth()
+        long_max = indent + c->textWidth()
                    + c->leftBorderWidth( c->column(), c->row() )
                    + c->rightBorderWidth( c->column(), c->row() );
     }
-    return long_max;
+    return (int)long_max;
 }
 
 int KSpreadSheet::adjustColumn( KSpreadSelection* selectionInfo, int _col )
 {
   QRect selection(selectionInfo->selection());
-  int long_max = 0;
+  double long_max = 0.0;
   if ( _col == -1 )
   {
     if ( util_isColumnSelected(selection) )
@@ -4579,7 +4579,7 @@ int KSpreadSheet::adjustColumn( KSpreadSelection* selectionInfo, int _col )
         {
           if ( !c->isEmpty() && !c->isObscured() )
           {
-              long_max = QMAX( adjustColumnHelper( c,col, c->row() ), long_max);
+              long_max = QMAX( adjustColumnHelper( c, col, c->row() ), long_max );
           } // if !isEmpty...
           c = getNextCellDown( col, c->row() );
         }
@@ -4597,7 +4597,7 @@ int KSpreadSheet::adjustColumn( KSpreadSelection* selectionInfo, int _col )
         {
           if ( !c->isEmpty() && !c->isObscured())
           {
-              long_max = QMAX( adjustColumnHelper( c,col, c->row() ), long_max);
+              long_max = QMAX( adjustColumnHelper( c, col, c->row() ), long_max );
           }
           c = getNextCellDown( col, c->row() );
         } // end while
@@ -4613,7 +4613,7 @@ int KSpreadSheet::adjustColumn( KSpreadSelection* selectionInfo, int _col )
         if ( cell != m_pDefaultCell && !cell->isEmpty()
              && !cell->isObscured() )
         {
-            long_max = QMAX( adjustColumnHelper( cell, x, y ), long_max);
+            long_max = QMAX( adjustColumnHelper( cell, x, y ), long_max );
         }
       } // for top...bottom
     } // not column selected
@@ -4624,13 +4624,13 @@ int KSpreadSheet::adjustColumn( KSpreadSelection* selectionInfo, int _col )
   if( long_max == 0 )
     return -1;
   else
-    return ( long_max + 4 );
+    return ( (int)long_max + 4 );
 }
 
 int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
 {
   QRect selection(selectionInfo->selection());
-  int long_max = 0;
+  double long_max = 0.0;
   if( _row == -1 ) //No special row is defined, so use selected rows
   {
     if ( util_isRowSelected(selection) )
@@ -4644,7 +4644,7 @@ int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
           {
             c->calculateTextParameters( painter(), c->column(), row );
             if( c->textHeight() > long_max )
-              long_max = (int)c->textHeight()
+              long_max = c->textHeight()
                 + c->topBorderWidth( c->column(), c->row() )
                 + c->bottomBorderWidth( c->column(), c->row() );
           }
@@ -4666,7 +4666,7 @@ int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
           {
             c->calculateTextParameters( painter(), c->column(), row );
             if ( c->textHeight() > long_max )
-              long_max = (int)c->textHeight()
+              long_max = c->textHeight()
                 + c->topBorderWidth( c->column(), c->row() )
                 + c->bottomBorderWidth( c->column(), c->row() );
           }
@@ -4686,7 +4686,7 @@ int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
         {
           cell->calculateTextParameters( painter(), x, y );
           if ( cell->textHeight() > long_max )
-            long_max = (int)cell->textHeight()
+            long_max = cell->textHeight()
               + cell->topBorderWidth( cell->column(), cell->row() )
               + cell->bottomBorderWidth( cell->column(), cell->row() );
         }
@@ -4695,10 +4695,10 @@ int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
   }
   //add 4 because long_max is the long of the text
   //but row has borders
-  if( long_max == 0 )
+  if( long_max == 0.0 )
     return -1;
   else
-    return ( long_max + 4 );
+    return ( (int)long_max + 4 );
 }
 
 struct ClearTextSelectionWorker : public KSpreadSheet::CellWorker {

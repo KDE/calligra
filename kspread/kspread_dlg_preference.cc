@@ -454,13 +454,13 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
 
   config = KSpreadFactory::global()->config();
-  int _indent=10;
+  double _indent = 10.0;
   bool m_bMsgError=false;
   bool m_bCommentIndicator=true;
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
-        _indent=config->readNumEntry( "Indent" ,10) ;
+        _indent = config->readNumEntry( "Indent" , 10.0 ) ;
         m_bMsgError=config->readBoolEntry( "Msg error" ,false) ;
 	m_bCommentIndicator=config->readBoolEntry( "Comment Indicator",true);
         }
@@ -480,10 +480,14 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   comboChanged=false;
   connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
 
-  valIndent=new KIntNumInput(_indent, tmpQGroupBox , 10);
-  valIndent->setRange(1, 100, 1);
+//   valIndent = new KDoubleNumInput( _indent, tmpQGroupBox , 10.0 );
+  valIndent = new KDoubleNumInput( tmpQGroupBox );
+  valIndent->setRange( KoUnit::ptToUnit( 0.0, _view->doc()->getUnit() ),
+                       KoUnit::ptToUnit( 400.0, _view->doc()->getUnit() ),
+                       KoUnit::ptToUnit( 10.0, _view->doc()->getUnit()) );
+  valIndent->setRange( 0.0, 100.0, 10.0 );
+  valIndent->setValue ( KoUnit::ptToUnit( _indent, _view->doc()->getUnit() ) );
   valIndent->setLabel(i18n("&Value of indent:"));
-  valIndent->setSuffix(i18n("pt"));
 
   label=new QLabel(i18n("&Press enter to move selection to:"), tmpQGroupBox);
   typeOfMove=new QComboBox( tmpQGroupBox);
@@ -600,7 +604,7 @@ switch( m_pView->doc()->getTypeOfCalc())
 
 void miscParameters::slotDefault()
 {
-  valIndent->setValue(10);
+  valIndent->setValue( 10.0 );
   typeCompletion->setCurrentItem(3);
   typeOfMove->setCurrentItem(0);
   msgError->setChecked(false);
@@ -693,11 +697,11 @@ void miscParameters::apply()
         m_pView->initCalcMenu();
     }
 
-    int val=valIndent->value();
-    if(val!=m_pView->doc()->getIndentValue())
+    double val = valIndent->value();
+    if( val != m_pView->doc()->getIndentValue() )
     {
-        m_pView->doc()->setIndentValue( val);
-        config->writeEntry( "Indent", val);
+        m_pView->doc()->setIndentValue( val );
+        config->writeEntry( "Indent", val );
     }
 
     bool active=msgError->isChecked();

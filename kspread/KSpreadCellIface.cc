@@ -955,20 +955,20 @@ QString KSpreadCellIface::goUpDiagonalStyle() const
     return tmp;
 }
 
-void KSpreadCellIface::setIndent(int indent)
+void KSpreadCellIface::setIndent(double indent)
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    if(indent>=0)
-        cell->setIndent(indent);
+    if( indent >= 0.0 )
+        cell->setIndent( indent );
     else
-        cell->setIndent(0);
+        cell->setIndent( 0.0 );
     m_table->setRegionPaintDirty(cell->cellRect());
 }
 
-int  KSpreadCellIface::getIndent() const
+double KSpreadCellIface::getIndent() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->getIndent(m_point.x(), m_point.y());
+    return cell->getIndent( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setDontPrintText ( bool _print)

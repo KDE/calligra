@@ -298,7 +298,7 @@ protected:
     QCheckBox *defaultHeight;
     QCheckBox *mergeCell;
     KIntNumInput *angleRotation;
-    KIntNumInput *indent;
+    KDoubleNumInput *indent;
     bool m_bOptionText;
 };
 
@@ -567,7 +567,7 @@ public:
     double heigthSize;
     double widthSize;
 
-    int indent;
+    double indent;
 
     QPixmap* formatOnlyNegSignedPixmap;
     QPixmap* formatRedOnlyNegSignedPixmap;

@@ -69,7 +69,7 @@ class KSpreadDoc : public KoDocument, public KoZoomHandler
   Q_OBJECT
   Q_PROPERTY( bool getShowRowHeader READ getShowRowHeader )
   Q_PROPERTY( bool getShowColHeader READ getShowColHeader )
-  Q_PROPERTY( int getIndentValue READ getIndentValue WRITE setIndentValue )
+  Q_PROPERTY( double getIndentValue READ getIndentValue WRITE setIndentValue )
   Q_PROPERTY( bool getShowMessageError READ getShowMessageError WRITE setShowMessageError)
   Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord)
   Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase)
@@ -247,8 +247,8 @@ public:
   /**
   * value of indent
   */
-  int getIndentValue()const {return m_iIndentValue;}
-  void setIndentValue(int _val) {m_iIndentValue=_val;}
+  double getIndentValue()const { return m_dIndentValue; }
+  void setIndentValue( double _val ) { m_dIndentValue = _val; }
 
   KSpread::MoveTo getMoveToValue()const {return m_EMoveTo;}
   void setMoveToValue(KSpread::MoveTo _moveTo) {m_EMoveTo=_moveTo;}
@@ -506,7 +506,7 @@ protected:
   bool m_bShowColHeader;
   bool m_bShowRowHeader;
 
-  int m_iIndentValue;
+  double m_dIndentValue;
 
   KSpread::MoveTo m_EMoveTo;
 

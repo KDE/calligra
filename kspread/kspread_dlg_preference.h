@@ -112,7 +112,7 @@ public slots:
 
 protected:
   KSpreadView* m_pView;
-  KIntNumInput  *valIndent;
+  KDoubleNumInput  *valIndent;
   KConfig* config;
   QComboBox *typeCompletion;
   QComboBox *typeCalc;

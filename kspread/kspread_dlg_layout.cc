@@ -2573,9 +2573,12 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
 
     grp = new QButtonGroup( i18n("Indent"),this);
     grid2 = new QGridLayout(grp,1,1,15,7);
-    indent=new KIntNumInput(dlg->indent, grp, 10);
-    indent->setRange(0, 400, 10);
-    indent->setSuffix(i18n(" pt"));
+
+    indent = new KDoubleNumInput( grp );
+    indent->setRange( KoUnit::ptToUnit( 0.0, dlg->getTable()->doc()->getUnit() ),
+                      KoUnit::ptToUnit( 400.0, dlg->getTable()->doc()->getUnit() ),
+                      KoUnit::ptToUnit( 10.0, dlg->getTable()->doc()->getUnit()) );
+    indent->setValue ( KoUnit::ptToUnit( dlg->indent, dlg->getTable()->doc()->getUnit() ) );
     grid2->addWidget(indent,0,0);
     grid3->addWidget(grp,2,1);
 
@@ -2587,7 +2590,9 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2->addWidget(tmpLabel,0,0);
 
     width = new KDoubleNumInput( grp );
-    width->setRange( KoUnit::ptToUnit( 2.0, dlg->getTable()->doc()->getUnit()), KoUnit::ptToUnit( 400.0, dlg->getTable()->doc()->getUnit()), KoUnit::ptToUnit( 1.0, dlg->getTable()->doc()->getUnit()) );
+    width->setRange( KoUnit::ptToUnit( 2.0, dlg->getTable()->doc()->getUnit() ),
+                     KoUnit::ptToUnit( 400.0, dlg->getTable()->doc()->getUnit() ),
+                     KoUnit::ptToUnit( 1.0, dlg->getTable()->doc()->getUnit() ) );
     width->setPrecision ( 2 );
     width->setValue ( KoUnit::ptToUnit( dlg->widthSize, dlg->getTable()->doc()->getUnit() ) );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
@@ -2608,7 +2613,9 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2->addWidget(tmpLabel,0,2);
 
     height=new KDoubleNumInput( grp );
-    height->setRange( KoUnit::ptToUnit( 2.0, dlg->getTable()->doc()->getUnit()), KoUnit::ptToUnit( 400.0, dlg->getTable()->doc()->getUnit()), KoUnit::ptToUnit( 1.0, dlg->getTable()->doc()->getUnit()) );
+    height->setRange( KoUnit::ptToUnit( 2.0, dlg->getTable()->doc()->getUnit() ),
+                      KoUnit::ptToUnit( 400.0, dlg->getTable()->doc()->getUnit() ),
+                      KoUnit::ptToUnit( 1.0, dlg->getTable()->doc()->getUnit() ) );
     height->setPrecision( 2 );
     height->setValue( KoUnit::ptToUnit( dlg->heigthSize, dlg->getTable()->doc()->getUnit() ) );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)

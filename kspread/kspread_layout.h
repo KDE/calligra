@@ -226,7 +226,7 @@ public:
 
     virtual void setComment( const QString& c );
 
-    virtual void setIndent( int _indent );
+    virtual void setIndent( double _indent );
 
     virtual void setDontPrintText ( bool _b);
 
@@ -332,7 +332,7 @@ public:
 
     virtual QString comment(int col, int row) const;
 
-    virtual int getIndent(int col, int row) const;
+    virtual double getIndent(int col, int row) const;
 
     virtual bool getDontprintText( int col, int row) const;
 
@@ -500,7 +500,7 @@ protected:
     /**
     * Give indent
     */
-    int m_indent;
+    double m_dIndent;
 
     /**
      * Currency information:
