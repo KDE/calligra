@@ -16,11 +16,12 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#define __KEXIDB__
 
 #include <kexidb/connection.h>
 #include <kexidb/drivermanager.h>
 #include <kexidb/connection.h>
-
+#include <kexidb/driver_p.h>
 #include "pqxxdriver.h"
 #include "pqxxconnection.h"
 
@@ -39,22 +40,24 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 {
 	m_driverName = "pqxxSql";
 	m_isFileDriver = false;
-	m_features = Transactions | CursorForward | CursorBackward;
+	m_features = SingleTransactions | CursorForward | CursorBackward;
+
+	beh->UNSIGNED_TYPE_KEYWORD = "";
 
 	m_typeNames.resize(Field::LastType + 1);
-	m_typeNames[Field::Byte]="Byte";
-	m_typeNames[Field::ShortInteger]="ShortInteger";
-	m_typeNames[Field::Integer]="Integer";
-	m_typeNames[Field::BigInteger]="BigInteger";
-	m_typeNames[Field::Boolean]="Boolean";
-	m_typeNames[Field::Date]="Date";
-	m_typeNames[Field::DateTime]="DateTime";
-	m_typeNames[Field::Time]="Time";
-	m_typeNames[Field::Float]="Float";
-	m_typeNames[Field::Double]="Double";
-	m_typeNames[Field::Text]="Text";
-	m_typeNames[Field::LongText]="Text";
-	m_typeNames[Field::BLOB]="BLOB";
+	m_typeNames[Field::Byte]="CHAR";
+	m_typeNames[Field::ShortInteger]="SMALLINT";
+	m_typeNames[Field::Integer]="INTEGER";
+	m_typeNames[Field::BigInteger]="BIGINT";
+	m_typeNames[Field::Boolean]="BOOLEAN";
+	m_typeNames[Field::Date]="DATE";
+	m_typeNames[Field::DateTime]="DATETIME";
+	m_typeNames[Field::Time]="TIME";
+	m_typeNames[Field::Float]="FLOAT";
+	m_typeNames[Field::Double]="DOUBLE";
+	m_typeNames[Field::Text]="VARCHAR";
+	m_typeNames[Field::LongText]="TEXT";
+	m_typeNames[Field::BLOB]="BYTEA";
 }
 
 pqxxSqlDriver::~pqxxSqlDriver()

@@ -124,7 +124,7 @@ bool pqxxSqlCursor::drv_getPrevRecord()
 
 //==================================================================================
 //
-QVariant pqxxSqlCursor::value(int pos)
+QVariant pqxxSqlCursor::value(int pos) const
 {
 	if (!&m_res)
 		return QVariant();
@@ -140,7 +140,14 @@ QVariant pqxxSqlCursor::value(int pos)
 
 //==================================================================================
 //
-const char** pqxxSqlCursor::recordData()
+const char** pqxxSqlCursor::recordData() const
+{
+
+}
+
+//==================================================================================
+//
+void pqxxSqlCursor::storeCurrentRecord(RecordData &data) const
 {
 
 }

@@ -28,8 +28,10 @@ public:
         virtual bool drv_moveFirst();
         virtual bool drv_getNextRecord();
         virtual bool drv_getPrevRecord();
-	virtual QVariant value(int);
-	virtual const char** recordData();
+	virtual QVariant value(int) const;
+	virtual const char** recordData() const;
+	virtual void storeCurrentRecord(RecordData &data) const;
+
 private:
 	pqxx::result m_res;
 	pqxx::transaction<pqxx::serializable>* m_tran;
