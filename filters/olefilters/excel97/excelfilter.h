@@ -27,7 +27,7 @@
 
 const int MAX_RECORD_SIZE = 0x2024;
 
-class ExcelFilter:public FilterBase 
+class ExcelFilter:public FilterBase
 {
 public:
     ExcelFilter(const myFile &mainStream);
@@ -39,6 +39,7 @@ public:
 private:
     QDataStream *s;
     XMLTree *tree;
+    double length;
 };
 
-#endif 
+#endif

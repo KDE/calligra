@@ -49,7 +49,6 @@ public:
   bool _condfmt(Q_UINT16, QDataStream&);
   bool _codepage(Q_UINT16, QDataStream&);
   bool _colinfo(Q_UINT16 size, QDataStream& body);
-  bool _cont(Q_UINT16, QDataStream&);
   bool _country(Q_UINT16, QDataStream&);
   bool _crn(Q_UINT16, QDataStream&);
   bool _dbcell(Q_UINT16, QDataStream&);
@@ -160,8 +159,8 @@ private:
   QIntDict<format_rec> formats;
 
   QQueue<QDomElement> tables;
-  
-  QDomElement doc, paper, map, *table;
+
+  QDomElement doc, paper, map, borders, *table;
 
   // To avoid static variables:
   int fontCount, footerCount, headerCount, xfCount;

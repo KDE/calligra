@@ -23,83 +23,136 @@
 #include <records.h>
 #include <excelfilter.h>
 
-ExcelFilter::ExcelFilter(const myFile &mainStream):FilterBase()
+ExcelFilter::ExcelFilter(const myFile &mainStream):FilterBase(), length(mainStream.length)
 {
-  QByteArray a;
-  a.setRawData((char*) mainStream.data, (int) mainStream.length);
+    length *= .85; // we reduce to 85% so that the progress-bar reachs 100%
+    QByteArray a;
+    a.setRawData((char*) mainStream.data, (int) mainStream.length);
 
-  s = new QDataStream(a, IO_ReadOnly);
-  s->setByteOrder(QDataStream::LittleEndian);
+    s = new QDataStream(a, IO_ReadOnly);
+    s->setByteOrder(QDataStream::LittleEndian);
 
-  tree = new XMLTree();
+    tree = new XMLTree();
 }
 
 ExcelFilter::~ExcelFilter()
 {
-  delete s;
-  s=0L;
-  delete tree;
-  tree=0L;
+    delete s;
+    s=0L;
+    delete tree;
+    tree=0L;
 }
 
 const bool ExcelFilter::filter()
 {
-  int i;
-  char *buffer = new char[MAX_RECORD_SIZE];
+    unsigned int i, cont = 0;
+    double count = 0;
 
-  QByteArray rec;
-  Q_UINT16 opcode, size;
+    Q_UINT8 byte;
+    Q_UINT16 opcode, size, readAhead;
+    Q_UINT32 contSize = 0;
 
-  while (!s->eof() && m_success == true) {
+    QByteArray record(MAX_RECORD_SIZE);
+    QDataStream *body;
+
     *s >> opcode;
-    if (opcode == 0) break;
-     *s >> size;
-    if (size > MAX_RECORD_SIZE)
-      kdError(30511) << "Record larger than MAX_RECORD_SIZE!" << endl;
-    s->readRawBytes(buffer, size);
-    rec.setRawData(buffer,size);
+    *s >> size;
+    count += size;
 
-    QDataStream *body = new QDataStream(rec, IO_ReadOnly);
-    body->setByteOrder(QDataStream::LittleEndian);
+    s->readRawBytes(record.data(), size);
+    *s >> readAhead;
 
-    for (i = 0; biff[i].opcode != opcode && biff[i].opcode != 0; i++);
+    while (!s->atEnd() && m_success == true)
+    {
+        if (readAhead != 0x003c) // any other record, lets handle the current
+        {
+            body = new QDataStream(record, IO_ReadOnly);
+            body->setByteOrder(QDataStream::LittleEndian);
 
-    if (biff[i].opcode == opcode) {
-      m_success = (tree->*(biff[i].func))(size, *body);
+            for (i = 0; biff[i].opcode != opcode && biff[i].opcode != 0; i++);
+
+            if (biff[i].opcode == opcode)
+            {
+                if (cont)
+                    m_success = (tree->*(biff[i].func))(contSize, *body);
+                else
+                    m_success = (tree->*(biff[i].func))(size, *body);
+            }
+            delete body;
+
+            opcode = readAhead;
+            *s >> size;
+            count += size;
+
+            if (size > MAX_RECORD_SIZE)
+                kdError(30511) << "Record larger than MAX_RECORD_SIZE!" << endl;
+
+            s->readRawBytes(record.data(), size);
+
+            if (cont)
+            {
+                cont = 0;
+                contSize = 0;
+            }
+        }
+        else // a CONTINUE record, lets add it
+        {
+            cont = 1;
+            *s >> size;
+            *s >> byte; // we do a look-ahead
+            record.resize(contSize + size);
+
+            if (byte == 0) // skip the zero
+            {
+                --size;
+                s->readRawBytes(record.data() + contSize, size);
+            }
+            else
+            {
+                *(record.data() + contSize) = byte;
+                s->readRawBytes(record.data() + contSize + 1, size - 1);
+            }
+        }
+        count += size;
+        *s >> readAhead;
+
+        if (readAhead == 0x003c)
+            contSize += size;
+        if (readAhead == 0) break; // we are at the end of the file
+
+        emit sigProgress(count/length*100);
     }
-    delete body;
-    rec.resetRawData(buffer, size);
-  }
-  m_ready = true;
+    m_ready = true;
 
-  delete [] buffer;
-  return m_success;
+    return m_success;
 }
 
 const QDomDocument* const ExcelFilter::part()
 {
 
-  if(m_ready && m_success) {
-    return tree->part();
-  }
-  else {
-    m_part=QDomDocument("spreadsheet");
-    m_part.setContent(QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE spreadsheet > \n"
-      "<spreadsheet author=\"Torben Weis\" email=\"weis@kde.org\" editor=\"KSpread\" mime=\"application/x-kspread\" >\n"
-      "<paper format=\"A4\" orientation=\"Portrait\">\n"
-      "<borders left=\"20\" top=\"20\" right=\"20\" bottom=\"20\"/>\n"
-      "<head left=\"\" center=\"\" right=\"\"/>\n"
-      "<foot left=\"\" center=\"\" right=\"\"/>\n"
-      "</paper>\n"
-      "<map>\n"
-      "<table name=\"Table1\">\n"
-      "<cell row=\"1\" column=\"1\">\n"
-      "<format align=\"4\" precision=\"-1\" float=\"3\" floatcolor=\"2\" faktor=\"1\"/>\n"
-      "Sorry :(\n"
-      "</cell>\n"
-      "</table>\n"
-      "</map>\n"
-      "</spreadsheet>"));
-    return &m_part;
-  }
+    if(m_ready && m_success)
+    {
+        return tree->part();
+    }
+    else
+    {
+        m_part=QDomDocument("spreadsheet");
+        m_part.setContent(QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE spreadsheet > \n"
+                                  "<spreadsheet author=\"Torben Weis\" email=\"weis@kde.org\" editor=\"KSpread\" mime=\"application/x-kspread\" >\n"
+                                  "<paper format=\"A4\" orientation=\"Portrait\">\n"
+                                  "<borders left=\"20\" top=\"20\" right=\"20\" bottom=\"20\"/>\n"
+                                  "<head left=\"\" center=\"\" right=\"\"/>\n"
+                                  "<foot left=\"\" center=\"\" right=\"\"/>\n"
+                                  "</paper>\n"
+                                  "<map>\n"
+                                  "<table name=\"Table1\">\n"
+                                  "<cell row=\"1\" column=\"1\">\n"
+                                  "<format align=\"4\" precision=\"-1\" float=\"3\" floatcolor=\"2\" faktor=\"1\"/>\n"
+                                  "Sorry :(\n"
+                                  "</cell>\n"
+                                  "</table>\n"
+                                  "</map>\n"
+                                  "</spreadsheet>"));
+        return &m_part;
+    }
 }
