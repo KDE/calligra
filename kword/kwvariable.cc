@@ -160,7 +160,7 @@ void KWPgNumVariable::recalc()
 
     if ( m_subtype == VST_PGNUM_TOTAL )
     {
-        m_varValue = QVariant(m_doc->getPages()+m_varColl->variableSetting()->startingPage()-1);
+        m_varValue = QVariant(m_doc->numPages()+m_varColl->variableSetting()->startingPage()-1);
         resize();
     }
     // The other cases are handled by the more dynamic code in KWTextFrameSet::drawFrame()
@@ -512,7 +512,7 @@ void KWFootNoteVariable::setDeleted( bool del )
 int KWFootNoteVariable::pageNum() const
 {
     int page = static_cast<int>(varY() / m_doc->ptPaperHeight());
-    Q_ASSERT( page <= m_doc->getPages()-1 );
+    Q_ASSERT( page <= m_doc->numPages()-1 );
     return page;
 }
 

@@ -403,7 +403,7 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
         return QPoint();
     //kdDebug() << "KWTextFrameSet::moveToPage currentPgNum=" << currentPgNum << " direction=" << direction << endl;
     int num = currentPgNum + direction;
-    int pages = m_doc->getPages();
+    int pages = m_doc->numPages();
     for ( ; num >= 0 && num < pages ; num += direction )
     {
         //kdDebug() << "KWTextFrameSet::moveToPage num=" << num << " pages=" << pages << endl;
@@ -442,7 +442,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
         if ( m_doc->footNoteSeparatorLineWidth() ==0.0)
             return;
 
-        int pages = m_doc->getPages();
+        int pages = m_doc->numPages();
         double left = m_doc->ptLeftBorder();
         double factor = 100.0/m_doc->footNoteSeparatorLineLength();
         double pageWidth = m_doc->ptPaperWidth() - m_doc->ptRightBorder() - left ;
@@ -453,8 +453,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
             //if ( viewMode->isPageVisible( pageNum ) )
             {
                 uint frameNum = pageNum * numColumns /*+ col  0 here*/;
-                Q_ASSERT ( frameNum < getNumFrames() );
-                if ( frameNum < getNumFrames() )
+                if ( frameNum < getNumFrames() ) // not true on the "endnotes-only" page
                 {
                     KWFrame* frame = this->frame( frameNum ); // ## or use framesInPage ?
                     //kdDebug() << " Footnote line: page " << pageNum << " found frame " << frameNum << " drawFootNoteLine=" << frame->drawFootNoteLine() << endl;
@@ -505,8 +504,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
                             p->restore();
                         }
                     }
-                } else
-                    kdWarning(32001) << "Frameset:" << getName() << " frameNum=" << frameNum << " getNumFrames()=" << getNumFrames() << endl;
+                }
             }
         }
     }
@@ -1886,7 +1884,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 KWFrame *theFrame = settingsFrame( frames.last() );
 
                 // Footers and footnotes go up
-                if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() )
+                if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootNote() )
                 {
                     // The Y position doesn't matter much, recalcFrames will reposition the frame
                     // But the point of this code is set the correct height for the frame.
@@ -1926,7 +1924,10 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 }
 
                 newPosition = QMAX( newPosition, theFrame->top() ); // avoid negative heights
-                bool resized = theFrame->bottom() != newPosition;
+                bool resized = QABS( theFrame->bottom() - newPosition ) > 1E-10;
+#ifdef DEBUG_FORMAT_MORE
+                kdDebug() << "  bottom=" << theFrame->bottom() << " new position:" << newPosition << " wantedPosition=" << wantedPosition << "  resized=" << resized << endl;
+#endif
 
                 if ( resized )
                 {
@@ -1937,27 +1938,33 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                         theFrame->setMinFrameHeight(newPosition - theFrame->top());
                     } else {
 #ifdef DEBUG_FORMAT_MORE
-                        kdDebug(32002) << "slotAfterFormatting setting bottom to " << newPosition << endl;
+                        kdDebug(32002) << "slotAfterFormatting changing bottom from " << theFrame->bottom() << " to " << newPosition << endl;
 #endif
                         theFrame->setBottom(newPosition);
+                        frameResized( theFrame, false );
                     }
                 }
 
-                if(newPosition < wantedPosition && (theFrame->newFrameBehavior() == KWFrame::NoFollowup)) {
-                    if ( resized )
-                        frameResized( theFrame, false );
+                if(newPosition < wantedPosition &&
+                   (theFrame->newFrameBehavior() == KWFrame::Reconnect
+                    && !theFrame->frameSet()->isEndNote())) // end notes are handled by KWFrameLayout
+                {
+                    wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug(32002) << "Not enough room in this page -> creating new one, with a reconnect frame" << endl;
+#endif
+
+                    // fall through to AutoCreateNewFrame
+                }
+                else if(newPosition < wantedPosition && (theFrame->newFrameBehavior() == KWFrame::NoFollowup)) {
+                    if ( theFrame->frameSet()->isEndNote() ) // we'll need a new page
+                        m_doc->delayedRecalcFrames( theFrame->pageNum() );
+
                     m_textobj->setLastFormattedParag( 0 );
                     break;
-                }
-                if(newPosition < wantedPosition && theFrame->newFrameBehavior() == KWFrame::Reconnect) {
-                    wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
-                    // fall through to AutoCreateNewFrame
                 } else {
-                    if ( resized )
-                    {
-                        frameResized( theFrame, true );
+                    if ( resized ) // not sure why we have this test....
                         *abort = false;
-                    }
                     break;
                 }
             }
@@ -1969,12 +1976,13 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
             kdDebug(32002) << "slotAfterFormatting creating new frame in frameset " << getName() << endl;
 //#endif
             uint oldCount = frames.count();
-            kdDebug() << " last frame=" << frames.last() << " pagenum=" << frames.last()->pageNum() << " getpages-1=" << m_doc->getPages()-1 << "   frames count=" << oldCount << endl;
+            kdDebug() << " last frame=" << frames.last() << " pagenum=" << frames.last()->pageNum() << " getpages-1=" << m_doc->numPages()-1 << "   frames count=" << oldCount << endl;
 
             // First create a new page for it if necessary
-            if ( frames.last()->pageNum() == m_doc->getPages() - 1 )
+            if ( frames.last()->pageNum() == m_doc->numPages() - 1 )
             {
-                m_doc->appendPage();
+                int num = m_doc->appendPage();
+                m_doc->afterAppendPage( num );
                 kdDebug() << "now frames count=" << frames.count() << endl;
             }
 
@@ -1991,7 +1999,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 addFrame( frm );
             }
 
-            if (wantedPosition > 0)
+            if (wantedPosition > 0 && !frames.last()->frameSet()->isEndNote())
                 frames.last()->setBottom( wantedPosition );
 
             updateFrames();
@@ -2031,27 +2039,11 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
 #ifdef DEBUG_FORMAT_MORE
         kdDebug(32002) << "slotAfterFormatting too much space (bottom=" << bottom << ", availHeight=" << availHeight << ") , trying to remove last frame" << endl;
 #endif
-        int lastPage = m_doc->getPages() - 1;
         if(frames.last()->frameBehavior() == KWFrame::AutoExtendFrame) {
             delFrame(frames.last(), true);
             m_doc->frameChanged( 0L );
         }
-        bool removed = false;
-        // Last frame is empty -> try removing last page, and more if necessary
-        while ( lastPage > 0 && m_doc->canRemovePage( lastPage ) )
-        {
-            m_doc->removePage( lastPage );
-            if ( lastPage <= m_doc->getPages() - 1 )
-            {
-                kdWarning() << "Didn't manage to remove page " << lastPage << " (still having " << m_doc->getPages() << " pages ). Aborting" << endl;
-                break;
-            }
-            removed = true;
-            lastPage = m_doc->getPages()-1;
-        }
-        // Do all the recalc in one go. Speeds up deleting many pages.
-        if ( removed )
-            m_doc->afterRemovePages();
+        m_doc->tryRemovingPages();
     }
     // Handle the case where the last frame is in AutoExtendFrame mode
     // and there is less text than space
@@ -2181,23 +2173,28 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
 {
     kdDebug(32002) << "KWTextFrameSet::frameResized " << theFrame << " " << *theFrame << " invalidateLayout=" << invalidateLayout << endl;
 
-    theFrame->frameSet()->updateFrames(); // update e.g. available height
+    KWFrameSet * fs = theFrame->frameSet();
+    Q_ASSERT( fs == this );
+    fs->updateFrames(); // update e.g. available height
     m_doc->updateFramesOnTopOrBelow( theFrame->pageNum() );
 
-    KWTableFrameSet *table = theFrame->frameSet()->getGroupManager();
+    KWTableFrameSet *table = fs->getGroupManager();
     if ( table )
     {
-        KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)this;
+        KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)fs;
         table->recalcCols(cell->m_col,cell->m_row);
         table->recalcRows(cell->m_col,cell->m_row);
     }
     theFrame->updateRulerHandles();
 
     // Do a full KWFrameLayout if this will have influence on other frames, i.e.:
-    // * if we resized a header or footer
     // * if we resized the last main text frame (the one before the first endnote)
-    if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY
-         || theFrame->frameSet()->isMainFrameset() )
+    // * if we resized an endnote
+    // Delay it though, to get the full height first.
+    if ( fs->isMainFrameset() || fs->isEndNote() )
+        m_doc->delayedRecalcFrames( theFrame->pageNum() );
+    // * if we resized a header, footer, or footnote
+    else if ( fs->frameSetInfo() != KWFrameSet::FI_BODY )
         m_doc->recalcFrames( theFrame->pageNum(), -1 ); // warning this can delete theFrame!
 
     // m_doc->frameChanged( theFrame );
@@ -2881,7 +2878,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     y += parag->rect().y() + cursor()->offsetY();
     //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible y=" << y << endl;
     // make sure one char is visible before, and one after
-    KoTextStringChar *chrLeft = index > 0 ? chr-1 : chr;
+    KoTextStringChar *chrLeft = idx > 0 ? chr-1 : chr;
     // which char is on the left and which one is on the right depends on chr->rightToLeft
     int areaLeft = chr->rightToLeft ? chr->width : chrLeft->width;
     int areaRight = chr->rightToLeft ? chrLeft->width : chr->width;

@@ -1024,7 +1024,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         // is single frame dia. Fill position strings and checkboxes now.
 
         // Can't use frame->pageNum() here since frameset might be 0
-        int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
+        int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->numPages()-1 );
 
         sx->setValue( KoUnit::ptToUnit( frame->x(), doc->getUnit() ) );
         sy->setValue( KoUnit::ptToUnit( frame->y() - (pageNum * doc->ptPaperHeight()), doc->getUnit() ) );
@@ -1786,7 +1786,7 @@ bool KWFrameDia::applyChanges()
     double uRight = 0.0;
     if(tab4 && frame) { // TAB Geometry
         px = QMAX(0,KoUnit::ptFromUnit( sx->value(), doc->getUnit() ));
-        int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
+        int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->numPages()-1 );
         py = QMAX(0, KoUnit::ptFromUnit(sy->value(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
         pw = QMAX(KoUnit::ptFromUnit( sw->value(), doc->getUnit() ),0);
         ph = QMAX(KoUnit::ptFromUnit(sh->value(), doc->getUnit() ),0);

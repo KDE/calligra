@@ -939,10 +939,10 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         p.setY( 1 );
         m_boundingRect.moveTopLeft( p );
     }
-    else if ( m_boundingRect.bottom() > m_doc->getPages() * m_doc->ptPaperHeight() - 1 )
+    else if ( m_boundingRect.bottom() > m_doc->numPages() * m_doc->ptPaperHeight() - 1 )
     {
         //kdDebug() << "KWCanvas::mmEditFrameMove limiting to last page" << endl;
-        p.setY( m_doc->getPages() * m_doc->ptPaperHeight() - m_boundingRect.height() - 2 );
+        p.setY( m_doc->numPages() * m_doc->ptPaperHeight() - m_boundingRect.height() - 2 );
         m_boundingRect.moveTopLeft( p );
     }
     // Another annoying case is if the top and bottom points are not in the same page....

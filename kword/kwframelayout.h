@@ -94,7 +94,7 @@ public:
             }
 
         void debug();
-        void deleteFramesAfterLast( int lastPage );
+        bool deleteFramesAfterLast( int lastPage );
     };
 
     /**
@@ -132,6 +132,7 @@ private:
     QPtrList<HeaderFooterFrameset>& m_footnotes;
     QPtrList<HeaderFooterFrameset>& m_endnotes;
     KWDocument* m_doc;
+    int m_lastMainFramePage;
 };
 
 #endif

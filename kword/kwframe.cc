@@ -139,10 +139,12 @@ int KWFrame::pageNum( KWDocument* doc ) const
 {
     if ( y() < 0.1 )
         return 0;
+    // ### This kind of calculation will break the day we introduce sections
+    // (with different page sizes and orientation).
     int page = static_cast<int>(y() / doc->ptPaperHeight());
     return page;
     // Circular dependency. KWDoc uses pageNum to calculate the number of pages!
-    //return QMIN( page, doc->getPages()-1 );
+    //return QMIN( page, doc->numPages()-1 );
 }
 
 QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor defaultCursor )
@@ -480,7 +482,7 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "sheetSide", static_cast<int>( sheetSide()) );
 }
 
-void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersion )
+void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVersion )
 {
     m_runAround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", RA_NO ) );
     QString str = frameElem.attribute( "runaroundSide" );
@@ -496,10 +498,12 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     m_sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
     m_frameBehavior = static_cast<FrameBehavior>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
     // Old documents had no "NewFrameBehavior" for footers/headers -> default to Copy.
-    NewFrameBehavior defaultValue = headerOrFooter ? Copy : Reconnect;
-    // for old document we used the American spelling of newFrameBehavior, so this is for backwards compatibility.
+    NewFrameBehavior defaultValue = frameSet->isHeaderOrFooter() ? Copy : Reconnect;
+    // for old document we used the British spelling (newFrameBehaviour), so this is for backwards compatibility.
     defaultValue = static_cast<NewFrameBehavior>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", defaultValue ) );
     m_newFrameBehavior = static_cast<NewFrameBehavior>( KWDocument::getAttribute( frameElem, "newFrameBehavior", defaultValue ) );
+    if (frameSet->isEndNote())
+        m_newFrameBehavior = NoFollowup; // KWFrameLayout does it
 
     KoBorder l, r, t, b;
     l.setPenWidth( KWDocument::getAttribute( frameElem, "lWidth", 0.0 ));
@@ -562,7 +566,7 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     bright = frameElem.attribute( "brightpt" ).toDouble();
     btop = frameElem.attribute( "btoppt" ).toDouble();
     bbottom = frameElem.attribute( "bbottompt" ).toDouble();
-    m_bCopy = KWDocument::getAttribute( frameElem, "copy", headerOrFooter /* default to true for h/f */ );
+    m_bCopy = KWDocument::getAttribute( frameElem, "copy", frameSet->isHeaderOrFooter() /* default to true for h/f */ );
 }
 
 
@@ -1466,7 +1470,7 @@ void KWFrameSet::load( QDomElement &framesetElem, bool loadFrames )
                 rect.setRight( KWDocument::getAttribute( frameElem, "right", 0.0 ) );
                 rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) );
                 KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height() );
-                frame->load( frameElem, isHeaderOrFooter(), m_doc->syntaxVersion() );
+                frame->load( frameElem, this, m_doc->syntaxVersion() );
                 addFrame( frame, false );
                 m_doc->progressItemLoaded();
             }

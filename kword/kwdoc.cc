@@ -60,6 +60,7 @@
 #include <X11/Xlib.h>
 #include <kglobalsettings.h>
 #include "kocommandhistory.h"
+
 //#define DEBUG_PAGES
 //#define DEBUG_SPEED
 
@@ -696,9 +697,9 @@ private:
 /* append headers and footers if needed, and create enough pages for all the existing frames */
 void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 {
-    //kdDebug(32002) << "KWDocument::recalcFrames" << endl;
     if ( m_lstFrameSet.isEmpty() )
         return;
+    kdDebug(32002) << "KWDocument::recalcFrames from=" << fromPage << " to=" << toPage << endl;
 
     KWFrameSet *frameset = m_lstFrameSet.getFirst();
 
@@ -951,7 +952,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
         for (int m = getNumFrameSets() - 1; m > 0; m-- )
         {
             KWFrameSet *fs=frameSet(m);
-            if ( fs->isVisible() && !fs->isAHeader() && !fs->isAFooter() && !fs->isFloating())
+            if ( fs->isVisible() && !fs->isAHeader() && !fs->isAFooter() && !fs->isFloating() && !fs->isFootEndNote() )
             {
                 for (int n = fs->getNumFrames()-1; n >= 0 ; n--) {
                     //if ( n == fs->getNumFrames()-1 )
@@ -974,6 +975,8 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 
         if ( toPage == -1 )
             toPage = m_pages - 1;
+        if ( fromPage > toPage ) // this can happen with "endnotes only" pages :)
+            fromPage = toPage; // ie. start at the last real page
         KWFrameLayout frameLayout( this, headerFooterList, footnotesHFList, endnotesHFList );
         frameLayout.layout( frameset, m_pageColumns.columns, fromPage, toPage );
 
@@ -2120,7 +2123,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
                 rect.setRight( KWDocument::getAttribute( frameElem, "right", 0.0 ) + offs );
                 rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) + offs );
                 KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
-                frame->load( frameElem, fs->isHeaderOrFooter(), KWDocument::CURRENT_SYNTAX_VERSION );
+                frame->load( frameElem, fs, KWDocument::CURRENT_SYNTAX_VERSION );
                 frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 +nb ); // make sure it's on top
                 nb++;
                 fs->addFrame( frame, false );
@@ -2718,6 +2721,7 @@ void KWDocument::slotRepaintAllViews() {
 }
 
 void KWDocument::delayedRecalcFrames( int fromPage ) {
+    kdDebug() << k_funcinfo << fromPage << endl;
     if ( m_recalcFramesPending == -1 || fromPage < m_recalcFramesPending )
     {
         m_recalcFramesPending = fromPage;
@@ -2727,6 +2731,7 @@ void KWDocument::delayedRecalcFrames( int fromPage ) {
 
 void KWDocument::slotRecalcFrames() {
     int from = m_recalcFramesPending;
+    kdDebug() << k_funcinfo << "from=" << from << endl;
     m_recalcFramesPending = -1;
     if ( from != -1 )
         recalcFrames( from );
@@ -2797,7 +2802,7 @@ void KWDocument::repaintAllViews( bool erase )
         viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
 }
 
-void KWDocument::appendPage( /*unsigned int _page*/ )
+int KWDocument::appendPage( /*unsigned int _page*/ )
 {
     int thisPageNum = m_pages-1;
 #ifdef DEBUG_PAGES
@@ -2853,10 +2858,16 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
             //kdDebug(32002) << "   => created frame " << frm << endl;
         }
     }
+    return m_pages - 1;
+}
+
+void KWDocument::afterAppendPage( int pageNum )
+{
     emit newContentsSize();
 
     if ( isHeaderVisible() || isFooterVisible() || hasEndNotes() )
-        recalcFrames( thisPageNum );  // Get headers and footers on the new page
+        recalcFrames( pageNum );  // Get headers and footers on the new page
+    // else: is there a call to updateAllFrames missing?
 
     recalcVariables( VT_PGNUM );
     emit pageNumChanged();
@@ -2868,7 +2879,7 @@ bool KWDocument::canRemovePage( int num )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
-        if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY ) // if header/footer/footnote
+        if ( frameSet->isHeaderOrFooter() ) // don't look at headers/footers, but look at footnotes/endnotes
             continue;
         if ( frameSet->isVisible() && !frameSet->canRemovePage( num ) )
             return false;
@@ -2916,6 +2927,28 @@ void KWDocument::afterRemovePages()
     recalcVariables( VT_PGNUM );
     emit newContentsSize();
 }
+
+void KWDocument::tryRemovingPages()
+{
+    int lastPage = numPages() - 1;
+    bool removed = false;
+    // Last frame is empty -> try removing last page, and more if necessary
+    while ( lastPage > 0 && canRemovePage( lastPage ) )
+    {
+        removePage( lastPage ); // this modifies m_pages
+        if ( lastPage <= m_pages - 1 )
+        {
+            kdWarning() << "Didn't manage to remove page " << lastPage << " (still having " << m_pages << " pages ). Aborting" << endl;
+            break;
+        }
+        removed = true;
+        lastPage = m_pages - 1;
+    }
+    // Do all the recalc in one go. Speeds up deleting many pages.
+    if ( removed )
+        afterRemovePages();
+}
+
 
 KWFrameSet * KWDocument::frameSetByName( const QString & name )
 {
@@ -3164,7 +3197,7 @@ QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
 
 void KWDocument::fixZOrders() {
     bool fixed_something = false;
-    for (int pgnum=0;pgnum<getPages();pgnum++) {
+    for (int pgnum = 0 ; pgnum < m_pages ; pgnum++) {
         QPtrList<KWFrame> frames= framesInPage(pgnum,false);
         // scan this page to see if we need to fixup.
         bool need_fixup=true;

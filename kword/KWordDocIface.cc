@@ -51,7 +51,7 @@ DCOPRef KWordDocIface::frameSet( int num )
 
 int KWordDocIface::numPages()const
 {
-    return doc->getPages();
+    return doc->numPages();
 }
 
 int KWordDocIface::numFrameSets()const

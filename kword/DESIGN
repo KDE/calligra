@@ -38,12 +38,36 @@ cell, we contain the cells in their own KWTextFrameset.
 is defined by m_zOrder in KWFrame. This number is relative to the other
 frames *on the same page*.
 
-Frame layout
-============
+Frame layout and pages
+======================
 Generally, the user is free to position frames where he/she wants to.
-However, some frames are special: main text frameset (which might include
-columns), headers, footers, and footnotes. All of those are laid out by
-the KWFrameLayout class, which is triggered by KWDocument::recalcFrames.
+
+KWTextFrameSet::slotAfterFormatting() takes care of triggering frame
+resizing (AutoExtend frames), creating a new page (AutoCreateNewFrame), etc.
+
+However, in Word Processing mode, some frames are special: main text frameset
+(which might include columns), headers, footers, and footnotes. All of those
+are laid out by the KWFrameLayout class, which is triggered by
+KWDocument::recalcFrames.
+
+When creating a new page, KWDocument::appendPage takes care of creating the
+followup frames for all frames with newFrameBehavior=Reconnect.
+
+The newFrameBehavior called "Copy" means "exact copy of the contents of
+the frame". This is used for headers/footers (but the user can also use
+it for logos and stuff). In such a case we don't copy anything, we simply
+paint the same contents in many pages.
+
+Removing pages is done by KWDocument::tryRemovingPages().
+
+In DTP mode pages should be completely user-controlled (as opposed to
+frame-controlled). TODO: UI to let the user add/remove pages, for DTP only.
+
+The difficulty with frame layout is that in most cases the frame size and
+number depends on the text inside, and the text layout depends on the frames
+(frame width, frames on top, etc.). This is why text layout (formatMore())
+and frame layout (e.g. KWFrameLayout) often call each other, resulting in
+infinite loops when some code goes wrong.
 
 Editing
 =======

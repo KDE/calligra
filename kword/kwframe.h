@@ -286,7 +286,7 @@ public:
     void save( QDomElement &frameElem );
     /** read attributes from XML. @p headerOrFooter if true some defaults are different
      */
-    void load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersion );
+    void load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVersion );
 
     void setMinFrameHeight(double h) {m_minFrameHeight=h;}
     double minFrameHeight(void)const {return m_minFrameHeight;}

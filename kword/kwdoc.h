@@ -100,8 +100,8 @@ public:
     virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
 
     virtual bool isDeleted();
-    
-    
+
+
 protected:
     KWDocument *m_pKWordDoc;
     KWPartFrameSet *m_partFrameSet;
@@ -356,16 +356,37 @@ public:
 
     QFont defaultFont() const { return m_defaultFont; }
 
-    int getPages() const { return m_pages; }
+    int numPages() const { return m_pages; }
 
     KoPictureCollection *pictureCollection() { return &m_pictureCollection; }
     KoVariableFormatCollection *variableFormatCollection()const { return m_varFormatCollection; }
 
     QPtrList <KWView> getAllViews() { return m_lstViews; }
 
-    void appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage = TRUE*/ );
+    /**
+     * Append a new page, creating followup frames (but not headers/footers),
+     * and return the page number.
+     */
+    int appendPage();
+    /**
+     * Call this after appendPage, to get headers/footers on the new page,
+     * and all the caches properly updated. This is separate from appendPage
+     * so that KWFrameLayout can call appendPage() only.
+     */
+    void afterAppendPage( int num );
+    /**
+     * Remove a page. Call afterRemovePages() after removing one or more pages.
+     */
     void removePage( int num );
+    /**
+     * Update things after removing one or more pages.
+     */
     void afterRemovePages();
+
+    /**
+     * Check if we can remove empty page(s) from the end
+     */
+    void tryRemovingPages();
 
     ProcessingType processingType()const { return m_processingType;  }
 

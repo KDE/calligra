@@ -1422,12 +1422,12 @@ void KWView::updatePageInfo()
 
         // ### TODO what's the current page when we have no edit object (e.g. frames are selected) ?
         // To avoid bugs, apply max page number in case a page was removed.
-        m_currentPage = QMIN( m_currentPage, m_doc->getPages()-1 );
+        m_currentPage = QMIN( m_currentPage, m_doc->numPages()-1 );
 
         QString oldText = m_sbPageLabel->text();
         QString newText;
 
-        newText= (m_gui->canvasWidget()->viewMode()->type()!="ModeText")? QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->getPages())+' ' : QString::null;
+        newText= (m_gui->canvasWidget()->viewMode()->type()!="ModeText")? QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->numPages())+' ' : QString::null;
         if ( newText != oldText )
         {
             m_sbPageLabel->setText( newText );
@@ -1543,7 +1543,7 @@ void KWView::setupPrinter( KPrinter &prt )
     m_doc->recalcVariables(  VT_DATE );
     prt.setPageSelection( KPrinter::ApplicationSide );
     prt.setCurrentPage( currentPage() + 1 );
-    prt.setMinMax( 1, m_doc->getPages() );
+    prt.setMinMax( 1, m_doc->numPages() );
 
     KoPageLayout pgLayout = m_doc->pageLayout();
 

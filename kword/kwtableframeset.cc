@@ -529,7 +529,10 @@ kdDebug() << "j--";
             pageNumber++;
             pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
             //kdDebug(32004) << "pageBottom; " << pageBottom << endl;
-            if((int)pageNumber > m_doc->getPages()) m_doc->appendPage();
+            if((int)pageNumber > m_doc->numPages()) {
+                int num = m_doc->appendPage();
+                m_doc->afterAppendPage( num );
+            }
         }
         //if(diff > 0)  kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
         if(diff > 0)
