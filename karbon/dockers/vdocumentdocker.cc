@@ -166,8 +166,6 @@ void VDocumentPreview::paintEvent( QPaintEvent* )
 	{
 		QPainter p( &pixmap );
 		p.setWorldMatrix( QWMatrix( scaleFactor, 0, 0, -scaleFactor, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
-		VColor c( Qt::red );
-		VStroke stroke( c, 0L, 1.0 / scaleFactor );
 		p.setPen( Qt::red );
 		double dx = ( m_lastPoint.x() - m_firstPoint.x() ) * m_view->zoom();
 		double dy = ( m_lastPoint.y() - m_firstPoint.y() ) * m_view->zoom();
