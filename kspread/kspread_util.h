@@ -119,7 +119,7 @@ int util_decodeColumnLabelText( QString _col );
 * Call this function to encode an integer to the text of the column label
 * i.e. 27->AA
 */
-QString util_encodeColumnText( int column );
+QString util_encodeColumnLabelText( int column );
 
 QString util_dateFormat( KLocale* locale, QDate _date, KSpreadCell::FormatType fmtType);
 
