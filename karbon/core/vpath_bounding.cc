@@ -1,18 +1,19 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, The Karbon Developers
+   Copyright (C) 2002, The Karbon Developers
 */
 
 #include <koRect.h>
 
-#include "vboundingbox.h"
+#include "vpath_bounding.h"
 
-VBoundingBox::VBoundingBox()
+VPathBounding::VPathBounding()
 	: VSegmentListTraverser()
 {
 }
 
 void
-VBoundingBox::calculate( KoRect& rect, const VSegmentList& list  )
+VPathBounding::calculate( KoRect& rect, const VSegmentList& list  )
 {
 	m_rect = &rect;
 
@@ -20,7 +21,7 @@ VBoundingBox::calculate( KoRect& rect, const VSegmentList& list  )
 }
 
 bool
-VBoundingBox::begin( const KoPoint& p )
+VPathBounding::begin( const KoPoint& p )
 {
 	m_rect->setCoords( p.x(), p.y(), p.x(), p.y() );
 
@@ -30,7 +31,7 @@ VBoundingBox::begin( const KoPoint& p )
 }
 
 bool
-VBoundingBox::curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+VPathBounding::curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
 	if( p1.x() < m_rect->left() )
 		m_rect->setLeft( p1.x() );
@@ -65,7 +66,7 @@ VBoundingBox::curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 
 }
 
 bool
-VBoundingBox::lineTo( const KoPoint& p )
+VPathBounding::lineTo( const KoPoint& p )
 {
 	if( p.x() < m_rect->left() )
 		m_rect->setLeft( p.x() );

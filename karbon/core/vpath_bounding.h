@@ -1,18 +1,19 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, The Karbon Developers
+   Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VBOUNDINGBOX_H__
-#define __VBOUNDINGBOX_H__
+#ifndef __VPATHBOUNDING_H__
+#define __VPATHBOUNDING_H__
 
 #include "vsegment.h"
 
 class KoRect;
 
-class VBoundingBox : public VSegmentListTraverser
+class VPathBounding : public VSegmentListTraverser
 {
 public:
-	VBoundingBox();
+	VPathBounding();
 
 	void calculate( KoRect& rect, const VSegmentList& list  );
 

@@ -1,19 +1,17 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, The Karbon Developers
+   Copyright (C) 2002, The Karbon Developers
 */
 
 #include <math.h>
 #include <koPoint.h>
 #include <koRect.h>
-#include <qmap.h>
 #include <qpainter.h>
-#include <qptrvector.h>
-#include <qvaluelist.h>
 #include <qwmatrix.h>
 
-#include "vboundingbox.h"
 #include "vglobal.h"
 #include "vpath.h"
+#include "vpath_bounding.h"
 
 #include <kdebug.h>
 
@@ -42,7 +40,6 @@ VPath::VPath( const VPath& path )
 	{
 		m_segments.append( new VSegment( *( itr.current() ) ) );
 	}
-
 
 	// holes:
 	m_holes.setAutoDelete( true );
@@ -87,7 +84,7 @@ VPath::draw( QPainter& painter, const QRect& rect,
 	{
 		// paint fill:
 		m_fill.begin_draw( painter, zoomFactor );
-		// "outer shape":
+		// contour:
 		m_fill.draw( m_segments );
 		// holes:
 		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
@@ -410,7 +407,7 @@ KoRect
 VPath::boundingBox() const
 {
 	KoRect rect;
-	VBoundingBox bb;
+	VPathBounding bb;
 
 	bb.calculate( rect, m_segments );
 // TODO: swap coords to optimize normalize() away
