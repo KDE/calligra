@@ -127,7 +127,7 @@ void VMDlgStroke::slotUpdateFromRGBSpinBoxes( int newVal )
 	mSelector->blockSignals( true );
     mColorSelector->setValues( h, s );
 	slotHSChanged( h, s );
-	mSelector->setValue( ( float( mValue->value() ) / 255.0 ) * 99.0 );
+	mSelector->setValue( static_cast<int>(( float( mValue->value() ) / 255.0 ) * 99.0) );
 	mSelector->blockSignals( false );
 
 	mHue->blockSignals( false );
@@ -144,7 +144,7 @@ void VMDlgStroke::slotUpdateFromHSVSpinBoxes( int newVal )
 
 	// update gradient selector
 	mSelector->blockSignals( true );
-	mSelector->setValue( ( float( mValue->value() ) / 255.0 ) * 99.0 );
+	mSelector->setValue( static_cast<int>(( float( mValue->value() ) / 255.0 ) * 99.0) );
 	mSelector->blockSignals( false );
 
 	// set RGB
@@ -193,7 +193,7 @@ void VMDlgStroke::slotHSChanged( int h, int s )
 void VMDlgStroke::slotVChanged( int newVal )
 {
 	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
-	mValue->setValue( float( newVal ) / 99.0 * 255.0 );
+	mValue->setValue( static_cast<int>(float( newVal ) / 99.0 * 255.0) );
 }
 
 #include "vmdlg_stroke.moc"
