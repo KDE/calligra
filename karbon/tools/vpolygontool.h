@@ -41,6 +41,8 @@ public:
 
 	void refreshUnit();
 
+	virtual void arrowKeyReleased( Qt::Key );
+
 private:
 	class VPolygonOptionsWidget : public QGroupBox
 	{

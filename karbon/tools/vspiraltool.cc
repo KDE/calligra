@@ -117,6 +117,25 @@ VSpiralTool::VSpiralTool( KarbonView* view )
 	m_optionsWidget->setClockwise( true );
 }
 
+void
+VSpiralTool::arrowKeyReleased( Qt::Key key )
+{
+	int change = 0;
+	if( key == Qt::Key_Up )
+		change = 1;
+	else if( key == Qt::Key_Down )
+		change = -1;
+
+	if( change != 0 )
+	{
+		draw();
+
+		m_optionsWidget->setSegments( m_optionsWidget->segments() + change );
+
+		draw();
+	}
+}
+
 VSpiralTool::~VSpiralTool()
 {
 	delete( m_optionsWidget );

@@ -47,6 +47,8 @@ public:
 
 	void refreshUnit();
 
+	virtual void arrowKeyReleased( Qt::Key );
+
 private:
 	class VSpiralOptionsWidget : public QGroupBox
 	{

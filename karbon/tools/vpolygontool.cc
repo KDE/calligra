@@ -91,6 +91,25 @@ VPolygonTool::refreshUnit()
 	m_optionsWidget->refreshUnit();
 }
 
+void
+VPolygonTool::arrowKeyReleased( Qt::Key key )
+{
+	int change = 0;
+	if( key == Qt::Key_Up )
+		change = 1;
+	else if( key == Qt::Key_Down )
+		change = -1;
+
+	if( change != 0 )
+	{
+		draw();
+
+		m_optionsWidget->setEdges( m_optionsWidget->edges() + change );
+
+		draw();
+	}
+}
+
 VComposite*
 VPolygonTool::shape( bool interactive ) const
 {
