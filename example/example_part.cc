@@ -63,6 +63,18 @@ QDomDocument ExamplePart::saveXML()
     return QDomDocument();
 }
 
+bool ExamplePart::loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles,
+		const QDomDocument & settings, KoStore* store )
+{
+    // TODO load the document from the QDomDocument
+    return true;
+}
+
+bool ExamplePart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+{
+    // TODO save the document to the KoStore;
+    return true;
+}
 
 void ExamplePart::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/,
                                 double /*zoomX*/, double /*zoomY*/ )

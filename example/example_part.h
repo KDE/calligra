@@ -35,6 +35,10 @@ public:
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     virtual QDomDocument saveXML();
 
+    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles,
+                            const QDomDocument & settings, KoStore* store );
+    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 };
