@@ -1094,7 +1094,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
                 KWTextImage * custom = new KWTextImage( textdoc, QString::null );
                 kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
-                insertCustomItem( index, custom );
+                insertCustomItem( index, custom, paragFormat() );
                 // <IMAGE>
                 QDomElement image = formatElem.namedItem( "IMAGE" ).toElement();
                 if ( !image.isNull() ) {
