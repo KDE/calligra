@@ -88,12 +88,15 @@ public:
   /** Returns the number of pages in the page collection */
   int pageCount();
 
+  void addRef();
+  void removeRef();
+
 private:
   /** Copies member data from one object to another.
     * Used by the copy constructor and assignment operator
     */
   void copy(const MPageCollection* mPageCollection);
-
+  int m_ref;
 };
 
 #endif

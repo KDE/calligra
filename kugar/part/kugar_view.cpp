@@ -36,10 +36,7 @@ KugarView::KugarView(KugarPart *part,QWidget *parent,const char *name)
 	setInstance(KugarFactory::global());
 
 	(new QVBoxLayout(this))->setAutoAdd(true);
-	view = new KReportViewer(this);
-
-	connect(view,SIGNAL(preferedTemplate(const QString &)),
-		     SLOT(slotPreferedTemplate(const QString &)));
+	view = new KReportViewer(part->reportEngine(),this);
 
 	view -> setFocusPolicy(QWidget::ClickFocus);
 	view -> show();
@@ -124,60 +121,12 @@ void KugarPart::print()
 	view -> printReport();
 }
 
-#endif 0
+#endif
 
-// Handle a prefered template in the data.  This is actually the only way to
-// set the template when used as a browser extension.
 
-void KugarView::slotPreferedTemplate(const QString &tpl)
+bool KugarView::renderReport()
 {
-	KURL url(m_forcedUserTemplate.isEmpty()?tpl:m_forcedUserTemplate);
-	QString localtpl;
-	bool isTemp = false;
-
-	if (url.isMalformed())
-	{
-		if (tpl.find('/') >= 0)
-			localtpl = tpl;
-		else
-			localtpl = kapp -> dirs() -> findResource("data","kugar/templates/" + tpl);
-	}
-	else
-	{
-		if (KIO::NetAccess::download(url,localtpl))
-			isTemp = true;
-		else
-			KMessageBox::sorry(this,i18n("Unable to download template file: %1").arg(url.prettyURL()));
-	}
-
-	if (!localtpl.isNull())
-	{
-		QFile f(localtpl);
-
-		if (f.open(IO_ReadOnly))
-		{
-			if (!view -> setReportTemplate(&f))
-				KMessageBox::sorry(this,i18n("Invalid template file: %1").arg(localtpl));
-
-			f.close();
-		}
-		else
-			KMessageBox::sorry(this,i18n("Unable to open template file: %1").arg(localtpl));
-
-		if (isTemp)
-			KIO::NetAccess::removeTempFile(localtpl);
-	}
-}
-
-bool KugarView::renderReport(const QString& data)
-{
-	bool ok=false;
-        if (view -> setReportData(data))
-        {
-        	if (view -> renderReport())
-                	ok = true;
-        }
-	return ok;
+       	return (view -> renderReport());
 }
 
 

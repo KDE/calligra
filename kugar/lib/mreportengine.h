@@ -17,6 +17,7 @@
 #include <qsize.h>
 #include <qmemarray.h>
 #include <qdom.h>
+#include <qguardedptr.h>
 
 #include "mlineobject.h"
 #include "mlabelobject.h"
@@ -51,11 +52,14 @@ public:
 
 	bool setReportData(const QString &);
 	bool setReportData(QIODevice *);
+	bool setReportData(const QDomDocument&);
 	bool setReportTemplate(const QString &);
 	bool setReportTemplate(QIODevice *);
 	int getRenderSteps() {return records.length() / 2;}
 	MPageCollection* renderReport();
 
+	void addRef();
+	void removeRef();
 public slots:
 	void slotCancelRendering();
 
@@ -64,6 +68,9 @@ signals:
 	void preferedTemplate(const QString &);
 
 private:
+
+  QGuardedPtr<MPageCollection> m_pageCollection;
+  bool m_needRegeneration;
   /** Report data document */
   QDomDocument rd;
   /** Report template document */
@@ -119,7 +126,7 @@ private:
 
 	/** Cancel rendering flag */
 	bool cancelRender;
-
+  int m_refCount;
 private:
   // The set of records being rendered.
   QDomNodeList records;

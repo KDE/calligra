@@ -25,7 +25,7 @@ public:
 	
 	void updateReadWrite(bool) {;}
 
-	bool renderReport(const QString& data);
+	bool renderReport();
 	
 	bool setReportTemplate(const QString &data)
 	{
@@ -42,8 +42,6 @@ public:
 //	virtual bool openFile();
 //	virtual bool closeURL();
 
-private slots:
-	void slotPreferedTemplate(const QString &);
 
 private:
 	KReportViewer *view;

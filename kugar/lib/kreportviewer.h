@@ -24,6 +24,8 @@ class KReportViewer : public MReportViewer
 public:
 	KReportViewer(QWidget *parent=0, const char *name=0):
 		MReportViewer(parent, name) {}
+        KReportViewer(MReportEngine* engine, QWidget *parent=0, const char *name=0):
+		MReportViewer(engine,parent,name) {}
 
 	void printReport();
 	void printReport(KPrinter &printer);

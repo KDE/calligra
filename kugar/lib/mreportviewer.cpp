@@ -17,12 +17,22 @@
 
 
 /** Constructor */
+MReportViewer::MReportViewer(MReportEngine *engine,QWidget *parent, const char *name) : QWidget(parent,name),progress(0) {
+	rptEngine=engine;
+	rptEngine->addRef();
+	init();
+}
+
 MReportViewer::MReportViewer(QWidget *parent, const char *name ) : QWidget(parent,name),progress(0) {
 	// Create the scrollview
+  rptEngine = new MReportEngine();
+  init();
+}
+
+void MReportViewer::init() {
   scroller = new QScrollView(this);
 
   // Create the report engine
-  rptEngine = new MReportEngine();
   report = 0;
 
 	// Connect the rendering update signal and slot
@@ -55,7 +65,8 @@ MReportViewer::MReportViewer(QWidget *parent, const char *name ) : QWidget(paren
 /** Destructor */
 MReportViewer::~MReportViewer(){
   clearReport();
-  delete rptEngine;
+  //delete rptEngine;
+  rptEngine->removeRef();
 }
 
 /** Report viewer's paint event */
@@ -106,7 +117,8 @@ bool MReportViewer::renderReport()
   // Check if a previous report exists and
   // if so de-allocated it
   if(report != 0)
-    delete report;
+  	report->removeRef();
+//    delete report;
 
   // Render the report
   report = rptEngine->renderReport();
@@ -131,7 +143,8 @@ void MReportViewer::clearReport(){
   // De-Allocate any report
   if (report)
   {
-  	delete report;
+	report->removeRef();
+  	//delete report;
   	report = 0;
   }
 }

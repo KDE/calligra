@@ -31,14 +31,19 @@ public:
 
 	virtual void paintContent( QPainter& painter, const QRect& rect,
 		bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 ){;}
+
+	MReportEngine *reportEngine(){return m_reportEngine;}
 private:
 	QString m_reportData;
-
+	MReportEngine *m_reportEngine;
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
-
+	
 public slots:
 	void setForcedUserTemplate(const QString &name){;}
+
+private slots:
+        void slotPreferedTemplate(const QString &);
 
 };
 

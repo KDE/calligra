@@ -19,6 +19,7 @@ MPageCollection::MPageCollection() : QObject(){
   orientation = MReportEngine::Portrait;
   dimensions.setWidth(0);
   dimensions.setHeight(0);
+  m_ref=1;
 }
 
 /** Copy constructor */
@@ -42,6 +43,7 @@ MPageCollection MPageCollection::operator=(const MPageCollection& mPageCollectio
 /** Destructor */
 MPageCollection::~MPageCollection(){
   pages.clear();
+  qDebug("MPage Collection::~MPageCollection<<<<<");
 }
 
 /** Clears the page collection */
@@ -144,8 +146,14 @@ void MPageCollection::copy(const MPageCollection* mPageCollection){
   dimensions = mPageCollection->dimensions;
   size = mPageCollection->size;
   orientation = mPageCollection->orientation;
+  m_ref=1;
 }
 
+void MPageCollection::addRef() {m_ref++;}
+void MPageCollection::removeRef() {
+	m_ref--;
+	if (!m_ref) deleteLater();
+}
 
 
 

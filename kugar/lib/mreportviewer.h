@@ -40,6 +40,7 @@ class MReportViewer : public QWidget
 
 public:
 	MReportViewer(QWidget *parent=0, const char *name=0);
+	MReportViewer(MReportEngine* engine, QWidget *parent=0, const char *name=0);
 	virtual ~MReportViewer();
 
 	bool setReportData(const QString &);
@@ -78,6 +79,7 @@ protected:
 private:
         QProgressDialog* progress;
         int totalSteps;
+	void init();
 };
 
 #endif

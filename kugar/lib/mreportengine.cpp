@@ -18,6 +18,9 @@
 /** Constructor */
 MReportEngine::MReportEngine() : QObject(){
   // Set page params
+  m_pageCollection=0;
+  m_needRegeneration=true;
+  m_refCount=1;
   pageSize = MReportEngine::Letter;
   pageOrientation = MReportEngine::Portrait;
   topMargin = 0;
@@ -68,6 +71,17 @@ MReportEngine MReportEngine::operator=(const MReportEngine& mReportEngine){
 MReportEngine::~MReportEngine(){
 	// Clear the grand total data
   grandTotal.clear();
+  if (m_pageCollection) m_pageCollection->removeRef();
+  qDebug("MReportEngine::~MReportEngine()");
+}
+
+void MReportEngine::addRef() {
+	m_refCount++;
+}
+
+void MReportEngine::removeRef() {
+	m_refCount--;
+	if (!m_refCount) deleteLater();
 }
 
 /** Clears report formatting */
@@ -84,17 +98,27 @@ void MReportEngine::clearFormatting(){
 }
 
 
+//Set the report data from an existing QDomDocument
+bool MReportEngine::setReportData(const QDomDocument &data)
+{
+	rd=data.cloneNode(true).toDocument();
+	initData();
+
+	return true;
+}
+
+
 // Set the report's data from an inline string.  Return true if it was valid
 // data.
 
 bool MReportEngine::setReportData(const QString &data)
 {
+	
 	if (!rd.setContent(data))
 	{
 		qWarning("Unable to parse report data");
 		return false;
 	}
-
 	initData();
 
 	return true;
@@ -110,7 +134,6 @@ bool MReportEngine::setReportData(QIODevice *dev)
 		qWarning("Unable to parse report data");
 		return false;
 	}
-
 	initData();
 
 	return true;
@@ -121,6 +144,7 @@ bool MReportEngine::setReportData(QIODevice *dev)
 
 void MReportEngine::initData()
 {
+	m_needRegeneration=true;
 	// Get the record set (we assume there is only one).
 
 	for (QDomNode n = rd.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -228,9 +252,12 @@ MReportSection *MReportEngine::findDetailFooter(int level)
   * collection
   */
 MPageCollection* MReportEngine::renderReport(){
+
+	if (!m_needRegeneration) return m_pageCollection;
+	if (m_pageCollection) m_pageCollection->removeRef();
 	unsigned int j;
 	unsigned int i;
-
+	
 	// Set cancel flag
 	cancelRender = false;
 
@@ -371,7 +398,8 @@ MPageCollection* MReportEngine::renderReport(){
 
 	// Send final status
 	emit signalRenderStatus(rowCount / 2);
-
+	m_needRegeneration=false;
+	m_pageCollection=pages;
 	return pages;
 }
 
@@ -506,6 +534,7 @@ void MReportEngine::initTemplate(){
   QDomNode report;
   QDomNode child;
 
+  m_needRegeneration=true;
 	// Get the report - assume there is only one.
 
 	for (report = rt.firstChild(); !report.isNull(); report = report.nextSibling())
@@ -763,6 +792,7 @@ void MReportEngine::setCalculatedFieldAttributes(MCalcObject* field, QDomNamedNo
   Used by the copy constructor and assignment operator */
 void MReportEngine::copy(const MReportEngine* mReportEngine){
   // Copy document data
+  m_refCount=1;
   rd = mReportEngine->rd;
   rt = mReportEngine->rt;
 
@@ -775,7 +805,7 @@ void MReportEngine::copy(const MReportEngine* mReportEngine){
   rightMargin = mReportEngine->rightMargin;
   pageWidth = mReportEngine->pageWidth;
   pageHeight = mReportEngine->pageHeight;
-
+  
   // Copy the report header
   rHeader = mReportEngine->rHeader;
   // Copy the page header
@@ -804,5 +834,8 @@ void MReportEngine::copy(const MReportEngine* mReportEngine){
 
 	// Copy grand totals list
 	grandTotal = mReportEngine->grandTotal;
+  m_pageCollection=mReportEngine->m_pageCollection;
+  m_needRegeneration=mReportEngine->m_needRegeneration;
+  if (m_pageCollection) m_pageCollection->addRef();
 }
 #include "mreportengine.moc"
