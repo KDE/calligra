@@ -27,6 +27,7 @@
 #include <qwmatrix.h>
 #include <qdom.h>
 #include <kdebug.h>
+#include <koUnit.h>
 #include <kozoomhandler.h>
 #include <math.h>
 
@@ -71,6 +72,35 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
     if (lineEnd!=L_NORMAL)
         fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
     return fragment;
+}
+
+void KPLineObject::loadOasis(const QDomElement &element)
+{
+    KPShadowObject::loadOasis(element);
+    double x1 = KoUnit::parseValue( element.attribute( "svg:x1" ) );
+    double y1 = KoUnit::parseValue( element.attribute( "svg:y1" ) );
+    double x2 = KoUnit::parseValue( element.attribute( "svg:x2" ) );
+    double y2 = KoUnit::parseValue( element.attribute( "svg:y2" ) );
+
+    double x = QMIN( x1, x2 );
+    double y = QMIN( y1, y2 );
+
+    orig.setX( x );
+    orig.setY( y );
+
+    ext.setWidth( fabs( x1 - x2 ) );
+    ext.setHeight( fabs( y1 - y2 ) );
+
+#if 0
+    QDomElement linetype = doc.createElement( "LINETYPE" );
+    if ( ( x1 < x2 && y1 < y2 ) || ( x1 > x2 && y1 > y2 ) )
+        linetype.setAttribute( "value", 2 );
+    else
+        linetype.setAttribute( "value", 3 );
+
+    e.appendChild( linetype );
+    //todo line type
+#endif
 }
 
 double KPLineObject::load(const QDomElement &element)
@@ -265,7 +295,7 @@ KoSize KPLineObject::getRealSize() const {
     if ( angle != 0.0 ) {
         float angInRad = angle * M_PI / 180;
         switch (lineType ) {
-        case LT_HORZ: 
+        case LT_HORZ:
             size.setWidth( ext.width() * cos( angInRad ) + pen.width() * sin( angInRad ) );
             size.setHeight( ext.width() * sin( angInRad ) + pen.width() * cos( angInRad ) );
             break;
@@ -274,10 +304,10 @@ KoSize KPLineObject::getRealSize() const {
             size.setHeight( pen.width() * sin( angInRad ) + ext.height() * cos( angInRad ) );
             break;
         case LT_LU_RD:
-        case LT_LD_RU: 
+        case LT_LD_RU:
             {
                 KoPointArray points(2);
-                if ( lineType == LT_LU_RD ) {  
+                if ( lineType == LT_LU_RD ) {
                     points.setPoint( 0, 0, 0 );
                     points.setPoint( 1, ext.width(), ext.height() );
                 }
@@ -296,14 +326,14 @@ KoSize KPLineObject::getRealSize() const {
     else if ( lineType == LT_VERT ) {
         size.setWidth( pen.width() );
     }
-      
+
     return size;
 }
 
 KoPoint KPLineObject::getRealOrig() const {
     KoPoint realOrig( orig );
-    
-    if ( angle != 0.0 ) { 
+
+    if ( angle != 0.0 ) {
         KoPointArray points(2);
         switch ( lineType ) {
             case LT_HORZ:
@@ -318,7 +348,7 @@ KoPoint KPLineObject::getRealOrig() const {
                 points.setPoint( 0, 0, 0 );
                 points.setPoint( 1, ext.width(), ext.height() );
                 break;
-            case LT_LD_RU: 
+            case LT_LD_RU:
                 points.setPoint( 0, 0, ext.height() );
                 points.setPoint( 1, ext.width(), 0 );
                 break;

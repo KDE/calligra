@@ -80,6 +80,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void flip(bool horizontal );
+    virtual void loadOasis(const QDomElement &element);
 
     virtual KoSize getRealSize() const;
     virtual KoPoint getRealOrig() const;

@@ -989,16 +989,26 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             kdDebug()<<"load Object \n";
             QDomElement o = object.toElement();
             QString name = o.tagName();
+            int offset = dp.attribute( "draw:id" ).toInt();
+            kdDebug()<<" object offset :"<<offset<<endl;
             if ( name == "draw:text-box" ) // textbox
             {
             }
             else if ( name == "draw:rect" ) // rectangle
             {
+                kdDebug()<<" loadRect :"<<endl;
+                KPRectObject *kprectobject = new KPRectObject();
+                kprectobject->loadOasis(o);
+                newpage->appendObject(kprectobject);
             }
             else if ( name == "draw:circle" || name == "draw:ellipse" )
             {
                 if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
                 {
+                    KPPieObject *kppieobject = new KPPieObject();
+                    kppieobject->loadOasis(o);
+                    newpage->appendObject(kppieobject);
+                    //move to pieobject
                     QString kind = o.attribute( "draw:kind" );
                     if ( kind == "section" )
                     {
@@ -1016,6 +1026,9 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             }
             else if ( name == "draw:line" ) // line
             {
+                KPLineObject *kplineobject = new KPLineObject();
+                kplineobject->loadOasis(o);
+                newpage->appendObject(kplineobject);
             }
             else if (name=="draw:polyline") { // polyline
             }

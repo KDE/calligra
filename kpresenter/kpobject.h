@@ -121,6 +121,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
+    virtual void loadOasis(const QDomElement &element);
 
     virtual void flip(bool horizontal );
 
@@ -346,7 +347,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-
+    virtual void loadOasis(const QDomElement &element);
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );
 protected:
@@ -414,6 +415,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
+    virtual void loadOasis(const QDomElement &element);
 
     virtual void flip(bool horizontal );
 

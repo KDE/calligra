@@ -1,4 +1,3 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -80,6 +79,11 @@ QDomDocumentFragment KPPieObject::save( QDomDocument& doc, double offset )
     if (pieType!=PT_PIE)
         fragment.appendChild(KPObject::createValueElement("PIETYPE", static_cast<int>(pieType), doc));
     return fragment;
+}
+
+void KPPieObject::loadOasis(const QDomElement &element)
+{
+    KP2DObject::loadOasis(element);
 }
 
 double KPPieObject::load(const QDomElement &element)
@@ -177,16 +181,16 @@ void KPPieObject::flip( bool horizontal )
     while ( p_angle < 0 ) {
         p_angle += 360*16;
     }
-    
+
 }
 
 
-void KPPieObject::setMinMax( double &min_x, double &min_y, 
-                             double &max_x, double &max_y, KoPoint point ) const 
+void KPPieObject::setMinMax( double &min_x, double &min_y,
+                             double &max_x, double &max_y, KoPoint point ) const
 {
     double tmp_x = point.x();
     double tmp_y = point.y();
-    
+
     if ( tmp_x < min_x ) {
         min_x = tmp_x;
     }
@@ -200,14 +204,14 @@ void KPPieObject::setMinMax( double &min_x, double &min_y,
     else if ( tmp_y > max_y ) {
         max_y = tmp_y;
     }
-    
+
     kdDebug(33001) << "setMinMax min(x,y) max(x,y) min(" << min_x << "," << min_y << ") max(" << max_x << "," << max_y << ")" << endl;
 }
 
 
 /*
  * The calculation of the real size and origin for a pie object is a little more
- * complicated. It took me quite a whlie to get it right. 
+ * complicated. It took me quite a whlie to get it right.
  * Here is how it works:
  * 1. calculate the position of the end points
  * 2. calculate the 4 maximal points, the points with max x or y position, of the
@@ -219,22 +223,22 @@ void KPPieObject::setMinMax( double &min_x, double &min_y,
 void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
     // the angles of the object
     int angles[] = { p_angle, ( p_angle + p_len ) % ( 16 * 360 ) };
-    double anglesInRad[] = { p_angle / 16.0 * M_PI / 180, ( angles[1] ) / 16.0 * M_PI / 180 };  
+    double anglesInRad[] = { p_angle / 16.0 * M_PI / 180, ( angles[1] ) / 16.0 * M_PI / 180 };
 
     double radius1 = size.width() / 2.0;
     double radius2 = size.height() / 2.0;
 
     double prop = radius2 / radius1;
-    
+
     // the rotation angle
     double angInRad = angle * M_PI / 180;
-    
+
     // 1. calulate position of end points
     KoPointArray points(2);
     for ( int i = 0; i < 2; i++ ) {
         double x = 0;
         double y = 0;
-        
+
         // be carefull
         if ( angles[i] == 90 * 16 ) {
             y = radius2;
@@ -251,7 +255,7 @@ void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
               x = -x;
             y = tanalpha * x;
         }
-        
+
         // rotate point
         if ( angle != 0 ) {
             double sinus = sin( angInRad );
@@ -259,7 +263,7 @@ void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
 
             double tmp_x = x;
             double tmp_y = y;
-            
+
             x = tmp_x * cosinus + tmp_y * sinus;
             y = - tmp_x * sinus + tmp_y * cosinus;
         }
@@ -268,7 +272,7 @@ void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
 
     KoPoint firstPoint( points.point(0) );
     KoPoint secondPoint( points.point(1) );
-    
+
     // 2. calulate maximal points
     KoPointArray maxPoints(4);
     if ( angle == 0 ) {
@@ -280,12 +284,12 @@ void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
     else {
         double sinus = sin( angInRad );
         double cosinus = cos( angInRad );
-        
+
         double x = sqrt( pow( radius1 * cosinus , 2 ) + pow(radius2 * sinus, 2));
         double y = ( pow( radius2, 2 ) - pow( radius1, 2) ) * sinus * cosinus / x;
         maxPoints.setPoint( 0, x, y );
         maxPoints.setPoint( 1, -x, -y );
-        
+
         y = sqrt( pow( radius1 * sinus , 2 ) + pow(radius2 * cosinus, 2));
         x = ( pow( radius1, 2 ) - pow( radius2, 2) ) * sinus * cosinus / y;
         maxPoints.setPoint( 2, x, y);
@@ -303,23 +307,23 @@ void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
         setMinMax( min_x, min_y, max_x, max_y, zero );
     }
     setMinMax( min_x, min_y, max_x, max_y, secondPoint );
-    
-    /* 4. check if maximal points lie on the arc. 
-     * There are three posibilities how many sections have to 
+
+    /* 4. check if maximal points lie on the arc.
+     * There are three posibilities how many sections have to
      * been checked.
      * 1. the arc is only once on one side of the x axis
      * 2. the arc is on both sides of the x axis
      * 3. the arc is twice on one one side of the x axis
      *
-     * 1)                 2)              3)  
+     * 1)                 2)              3)
      *      y                  y               y
-     *    ex|xx              xx|xs           s |            
-     *      |  x            x  |            x  |  e         
-     *      |   s          x   |           x   |   x        
-     *  ----+----  x       ----+----  x    ----+----  x     
-     *      |              x   |           x   |   x        
-     *      |               x  |            x  |  x         
-     *      |                e |             xx|xx          
+     *    ex|xx              xx|xs           s |
+     *      |  x            x  |            x  |  e
+     *      |   s          x   |           x   |   x
+     *  ----+----  x       ----+----  x    ----+----  x
+     *      |              x   |           x   |   x
+     *      |               x  |            x  |  x
+     *      |                e |             xx|xx
      *
      */
     if ( firstPoint.y() >= 0 ) {
@@ -330,7 +334,7 @@ void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
                 KoPointArray::ConstIterator it( maxPoints.begin() );
                 for ( ; it != maxPoints.end(); ++it ) {
                     if ( (*it).y() >= 0 &&
-                         (*it).x() <= firstPoint.x() && (*it).x() >= secondPoint.x() ) 
+                         (*it).x() <= firstPoint.x() && (*it).x() >= secondPoint.x() )
                     {
                         setMinMax( min_x, min_y, max_x, max_y, *it );
                     }
@@ -340,7 +344,7 @@ void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
                 // 3 sections
                 // x <= f.x() && y >= 0
                 // y < 0
-                // x >= s.x() && y >= 0 
+                // x >= s.x() && y >= 0
                 KoPointArray::ConstIterator it( maxPoints.begin() );
                 for ( ; it != maxPoints.end(); ++it ) {
                     if ( (*it).y() >= 0 ) {
@@ -399,7 +403,7 @@ void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
                 KoPointArray::ConstIterator it( maxPoints.begin() );
                 for ( ; it != maxPoints.end(); ++it ) {
                     if ( (*it).y() < 0 &&
-                         (*it).x() >= firstPoint.x() && (*it).x() <= secondPoint.x() ) 
+                         (*it).x() >= firstPoint.x() && (*it).x() <= secondPoint.x() )
                     {
                         setMinMax( min_x, min_y, max_x, max_y, *it );
                     }
@@ -409,7 +413,7 @@ void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
                 // 3 sections
                 // x >= f.x() && y < 0
                 // y >= 0
-                // x <= s.x() && y < 0 
+                // x <= s.x() && y < 0
                 KoPointArray::ConstIterator it( maxPoints.begin() );
                 for ( ; it != maxPoints.end(); ++it ) {
                     if ( (*it).y() < 0 ) {

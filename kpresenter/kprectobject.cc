@@ -71,6 +71,12 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+void KPRectObject::loadOasis(const QDomElement &element)
+{
+    kdDebug()<<"void KPRectObject::loadOasis(const QDomElement &element)******************\n";
+    KP2DObject::loadOasis(element);
+}
+
 double KPRectObject::load(const QDomElement &element)
 {
     double offset=KP2DObject::load(element);

@@ -186,6 +186,15 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+void KPObject::loadOasis(const QDomElement &element)
+{
+    orig.setX( KoUnit::parseValue( element.attribute( "svg:x" ) ) );
+    orig.setY( KoUnit::parseValue( element.attribute( "svg:y" ) ) );
+    ext.setWidth(KoUnit::parseValue( element.attribute( "svg:width" )) );
+    ext.setHeight(KoUnit::parseValue( element.attribute( "svg:height" ) ) );
+    kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
+}
+
 double KPObject::load(const QDomElement &element) {
 
     double offset=-1.0;
@@ -860,6 +869,13 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
+void KPShadowObject::loadOasis(const QDomElement &element)
+{
+    kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
+    KPObject::loadOasis(element);
+    //todo load brush/etc.
+}
+
 double KPShadowObject::load(const QDomElement &element)
 {
     double offset=KPObject::load(element);
@@ -980,6 +996,13 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
         fragment.appendChild(KPObject::createGradientElement(tagGRADIENT, gColor1, gColor2, static_cast<int>(gType),
                                                              unbalanced, xfactor, yfactor, doc));
     return fragment;
+}
+
+void KP2DObject::loadOasis(const QDomElement &element)
+{
+    kdDebug()<<"void KP2DObject::loadOasis(const QDomElement &element)\n";
+
+    KPShadowObject::loadOasis(element);
 }
 
 double KP2DObject::load(const QDomElement &element)
