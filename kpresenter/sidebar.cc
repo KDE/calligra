@@ -916,13 +916,13 @@ void Outline::renamePageTitle()
     if ( ok ) { // User pushed an OK button.
         if ( (newTitle.stripWhiteSpace()).isEmpty() ) { // Title is empty.
             KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Page title cannot be empty."), i18n("Rename Page") );
+            KMessageBox::information( this, i18n("Slide title cannot be empty."), i18n("Rename Slide") );
             // Recursion
             renamePageTitle();
         }
         else if ( newTitle != activeTitle ) { // Title changed.
             KPresenterDoc *doc=view->kPresenterDoc();
-            KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Page"),doc, activeTitle, newTitle, page  );
+            KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Slide"),doc, activeTitle, newTitle, page  );
             cmd->execute();
             doc->addCommand(cmd);
         }

@@ -2481,7 +2481,7 @@ void KPrCanvas::setupMenus()
     PM_SM = presMenu->insertItem( i18n( "&Switching Mode" ), this, SLOT( switchingMode() ) );
     PM_DM = presMenu->insertItem( i18n( "&Drawing Mode" ), this, SLOT( drawingMode() ) );
     presMenu->insertSeparator();
-    presMenu->insertItem( SmallIcon("goto"), i18n( "&Goto Page..." ), this, SLOT( slotGotoPage() ) );
+    presMenu->insertItem( SmallIcon("goto"), i18n( "&Goto Slide..." ), this, SLOT( slotGotoPage() ) );
     presMenu->insertSeparator();
     presMenu->insertItem( i18n( "&End Slide Show" ), this, SLOT( slotExitPres() ) );
     presMenu->setItemChecked( PM_SM, true );
