@@ -837,6 +837,11 @@ VSegment::splitAt( double t )
 
 	return segment;
 }
+bool
+VSegment::intersects( const KoPoint& a0, const KoPoint& a1 ) const
+{
+	return linesIntersect( a0, a1, point( 0 ), next() ? next()->point( 0 ) : knot() );
+}
 
 bool
 VSegment::linesIntersect(

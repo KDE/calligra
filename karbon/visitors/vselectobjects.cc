@@ -40,19 +40,13 @@ VSelectObjects::visitVComposite( VComposite& composite )
 				{
 					VPathIterator jtr( *( itr.current() ) );
 					bool found = false;
-					KoPoint p1, p2;
 					KoPoint r1 = m_rect.topLeft(), r2 = m_rect.topRight(), r3 = m_rect.bottomRight(), r4 = m_rect.bottomLeft();
 					while( jtr.current() && !found )
 					{
-						p1 = jtr.current()->point( 0 );
-						if( jtr.current()->next() )
-						{
-							p2 = jtr.current()->next()->point( 0 );
-							found |= jtr.current()->linesIntersect( r1, r2, p1, p2 );
-							found |= jtr.current()->linesIntersect( r2, r3, p1, p2 );
-							found |= jtr.current()->linesIntersect( r3, r4, p1, p2 );
-							found |= jtr.current()->linesIntersect( r4, r1, p1, p2 );
-						}
+						found |= jtr.current()->intersects( r1, r2 );
+						found |= jtr.current()->intersects( r2, r3 );
+						found |= jtr.current()->intersects( r3, r4 );
+						found |= jtr.current()->intersects( r4, r1 );
 						++jtr;
 					}
 					// One more chance, if bbox totally contained in selection

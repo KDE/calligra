@@ -322,7 +322,7 @@ public:
 
 
 	/**
-	 * Calculates wether lines A0A1 and B0B1 intersect.
+	 * Calculates whether lines A0A1 and B0B1 intersect.
 	 */
 	static bool linesIntersect(
 		const KoPoint& a0,
@@ -330,6 +330,10 @@ public:
 		const KoPoint& b0,
 		const KoPoint& b1 );
 
+	/**
+	 * Tests whether this segment and the line A0A1 intersect.
+	 */
+	bool intersects( const KoPoint& a0, const KoPoint& a1 ) const;
 
 	/**
 	 * Calculates the bounding box.
