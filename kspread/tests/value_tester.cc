@@ -25,6 +25,7 @@
 #include <kspread_value.h>
 
 #define CHECK(x,y)  check(__FILE__,__LINE__,#x,x,y)
+#define CHECK_DATE(d,x) check(__FILE__,__LINE__,d->asDate().toString().latin1(),d->asFloat(),x)
 
 using namespace KSpread;
 
@@ -148,8 +149,23 @@ void ValueTester::run()
   CHECK( v1->asString(), QString("spreadsheet" ) );
   delete v1;
 
-  // TODO date value
-
+  // check all (valid) dates from 1900 to 2050
+  // note: bail on first error immediately
+  QDate refDate( 1899, 12, 31 );
+  v1 = new KSpreadValue();
+  bool date_error = 0;
+  for( unsigned y = 1900; !date_error && y < 2050; y++ )
+  for( unsigned m = 1; !date_error && m <= 12; m++ )
+  for( unsigned d = 1; !date_error && d <= 31; d++ )
+  {
+    QDate dv1 = QDate( y, m, d );
+    if( !dv1.isValid() ) continue;
+    double serialNo = -dv1.daysTo( refDate ) + 1.0;
+    v1->setValue( dv1 );
+    CHECK_DATE(v1,serialNo);
+    date_error = v1->asFloat() != serialNo;
+  } 
+  
   // time value
   v1 = new KSpreadValue();
   v1->setValue( QTime( 0, 0, 0 ) );
