@@ -551,19 +551,23 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
                 row += _row;
             // Skip '#' or '$'
             ++pos;
-            if ( row <= 0 || col <= 0 )
+            if ( row <= 0 || col <= 0 || row > 0x7FFF || col > 26*26 )
             {
-                kdError(36001) << "ERROR: out of range" << endl;
+                kdError(36001) << "KSpreadCell::decodeFormula: row or column out of range" << endl;
                 return _text;
             }
             if ( fix1 )
                 erg += "$";
+/* Replaced by existing function - Philipp
             if ( col > 26 )
                 erg += (char)('A' + ( (col-1) / 26 ) - 1);
             if( col % 26 )
                 erg += (char)('A' + ( col % 26 ) - 1);
             else
                 erg += 'Z';
+*/
+	    erg += util_columnLabel(col); //Get column text
+
             if ( fix2 )
                 erg += "$";
             erg += QString::number( row );
