@@ -522,8 +522,6 @@ don't put a </?xml...> at the end of the file!).
 <!-- 
         A paragraph and a style can have counter data.
         The document will do the counting of the paragraphs that use this.
-        When used on a paragraph (versus a style) only start can be specified.
-
 
         type:   0 = None
                 1 = Numeral
@@ -531,25 +529,31 @@ don't put a </?xml...> at the end of the file!).
                 3 = Alphabetical uppercase
                 4 = Roman numbering
                 5 = Roman numbering uppercase
-                6 = bullet
+                6 = Custom bullet (one char, set by the 'bullet' attribute)
+                7 = Custom (complex string, see kword's dialog)
+                8 = Circle bullet
+                9 = Square bullet
+                10 = Disc bullet
 
         depth   The level of the numbering. 
                 Depth of 0 means the major numbering. (1, 2, 3...)
                 Depth of 1 is 1.1, 1.2, 1.3 etc.
 
-        bullet  The character code (in UTF-8) that is 'the bullet' for an unnummered list
-        start   The first used number in the numbering.
+        start   The first used number in the numbering (usually 1).
         numberingtype
-                List or chapter numbering.
+                0 = list numbering, 1 = chapter numbering.
                 List numbering starts at <start> everytime another list is used (everytime a 
                 non numbering paragraph has been used)
-                Chapter numbering is used throughout the whole document. (in future throughout books)
+                Chapter numbering is used throughout the whole document (in future throughout books)
         lefttext
                 The text that is printed left of the first numeral
         righttext
                 The text that is printed right of the last numeral
+
+        bullet  The character code (in UTF-8) that is the custom bullet (for type=6)
         bulletfont
-                The font the bullet can be found in. (use "symbol" if in doubt)
+                The font to use for the custom bullet can be found in (use "symbol" if in doubt)
+
 -->
 <!ELEMENT COUNTER
     EMPTY>
