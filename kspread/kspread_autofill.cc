@@ -26,10 +26,10 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <math.h>
-
+#include <kconfig.h>
 QStringList *AutoFillSequenceItem::month = 0L;
 QStringList *AutoFillSequenceItem::day = 0L;
-
+QStringList *AutoFillSequenceItem::other = 0L;
 /**********************************************************************************
  *
  * AutoFillDeltaSequence
@@ -149,7 +149,13 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         day->append( i18n("Saturday") );
         day->append( i18n("Sunday") );
     }
-
+    if( other==0L)
+      {
+	//	other=new QStringList();
+	KConfig *config = KSpreadFactory::global()->config(); 
+	config->setGroup( "Parameters" );
+	other=new QStringList(config->readListEntry("Other list"));
+      }
     if ( month->find( _str ) != month->end() )
     {
         type = MONTH;
@@ -157,10 +163,40 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
     }
 
     if ( day->find( _str ) != day->end() )
-    {
-        type = DAY;
-        return;
+    {    
+      type = DAY;
+      return;
     }
+    
+    if( other->find(_str)!=other->end())
+      {
+	type = OTHER;
+	otherBegin=0;
+	otherEnd=other->count();
+	int index= other->findIndex(_str);
+	//find end and begin of qstringlist of other.
+	for ( QStringList::Iterator it = other->find(_str); it != other->end();++it ) 
+	  {
+	    if((*it)=="\\")
+	      {
+	      otherEnd=index;
+	      break;
+	      }
+	    index++;
+	  }
+	index= other->findIndex(_str);
+	otherBegin=0;
+	for ( QStringList::Iterator it = other->find(_str); it != other->begin();--it ) 
+	  {
+	    if((*it)=="\\")
+	      {
+	      otherBegin=index;
+	      break;
+	      }
+	    index--;
+	  }
+	return;
+      }
 
     if ( string[0] == '=' )
         type = FORMULAR;
@@ -214,6 +250,21 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
                 _delta = ( double )( k - i );
             return TRUE;
         }
+    case OTHER:
+      {
+	if( otherEnd!= seq->getIOtherEnd() || otherBegin!= seq->getIOtherBegin())
+	  return false;
+	int i = other->findIndex( string );
+	int j = other->findIndex( seq->getString() );
+	int k = j;
+	if ( j < i )
+	  k += (otherEnd - otherBegin);
+	if ( j + 1 == i )
+	  _delta = -1.0;
+	else
+	  _delta = ( double )( k - i );
+	return TRUE;
+      }
     default:
         return FALSE;
     }
@@ -222,7 +273,6 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
 QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
 {
     QString erg;
-
     switch( type )
     {
     case INTEGER:
@@ -250,6 +300,14 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
             int k = j % day->count();
             erg = (*day->at( k ));
         }
+	break;
+    case OTHER:
+      {
+	 int i = other->findIndex( string )-(otherBegin+1);
+	 int j = i + _no * (int) _delta;
+	 int k = j % (otherEnd - otherBegin-1);
+	 erg = (*other->at( (k+otherBegin+1) ));
+      }
     }
 
     return QString( erg );

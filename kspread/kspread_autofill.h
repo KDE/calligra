@@ -34,7 +34,7 @@ class KSpreadCell;
 class AutoFillSequenceItem
 {
 public:
-    enum Type { INTEGER, FLOAT, STRING, DAY, MONTH, FORMULAR };
+    enum Type { INTEGER, FLOAT, STRING, DAY, MONTH, FORMULAR, OTHER };
 
     AutoFillSequenceItem( int _i );
     AutoFillSequenceItem( double _d );
@@ -48,16 +48,22 @@ public:
     int getIValue() { return ivalue; }
     double getDValue() { return dvalue; }
     QString getString() { return string; }
+    int getIOtherEnd() {return otherEnd; }
+    int getIOtherBegin() {return otherBegin; }
 
 protected:
     int ivalue;
     double dvalue;
+    int otherBegin;
+    int otherEnd;
+
     QString string;
 
     Type type;
 
     static QStringList *month;
     static QStringList *day;
+    static QStringList *other;
 };
 
 class AutoFillSequence

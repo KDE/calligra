@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1999, 2000 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 1999, 2000, 2001 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -613,7 +613,6 @@ colorParameters::colorParameters( KSpreadView* _view,QWidget *parent , char *nam
 void colorParameters::apply()
 {
     QColor _col=gridColor->color();
-   
     if(m_pView->doc()->defaultGridPen().color()!=_col)
         {
 	 m_pView->doc()->changeDefaultGridPenColor( _col);

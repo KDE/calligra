@@ -94,6 +94,7 @@
 #include "kspread_dlg_validity.h"
 #include "kspread_dlg_pasteinsert.h"
 #include "kspread_dlg_showColRow.h"
+#include "kspread_dlg_list.h"
 #include "kspread_undo.h"
 
 #include "handler.h"
@@ -307,6 +308,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
 
     m_preview = new KAction( i18n("Preview..."), 0, this, SLOT( printPreview() ), actionCollection(), "printpreview" );
+    
+    m_sortList = new KAction( i18n("Sort list..."), 0, this, SLOT( sortList() ), actionCollection(), "sortlist" );
+
 
     m_insertTable = new KAction( i18n("Insert Table"),"inserttable", 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
     m_removeTable = new KAction( i18n("Remove Table"), "delete_table",0,this, SLOT( removeTable() ), actionCollection(), "removeTable" );
@@ -1549,10 +1553,17 @@ void KSpreadView::consolidate()
     dlg->show();
 }
 
+void KSpreadView::sortList()
+{
+  KSpreadList dlg(this,"List selection");
+  dlg.exec();
+}
+
 void KSpreadView::gotoCell()
 {
-    KSpreadGotoDlg dlg( this, "GotoCell" );
-    dlg.exec();
+  
+  KSpreadGotoDlg dlg( this, "GotoCell" );
+  dlg.exec();
 }
 
 void KSpreadView::replace()

@@ -33,6 +33,8 @@
   <Action name="validity"/>
   <Action name="editCell"/>
   <Separator/>
+  <Action name="sortlist"/>
+  <Separator/>
   <Action name="transform"/>
  </Menu>
  <Menu name="Format"><text>Fo&amp;rmat</text>
