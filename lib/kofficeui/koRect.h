@@ -106,4 +106,8 @@ KoRect operator&(const KoRect &lhs, const KoRect &rhs);
 bool operator==(const KoRect &lhs, const KoRect &rhs);
 bool operator!=(const KoRect &lhs, const KoRect &rhs);
 
+#define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
+#define DEBUGREGION(reg) { QArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
+                           kdDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
+
 #endif
