@@ -180,14 +180,14 @@ void KuDesignerApp::initActions()
   fileNew->setToolTip(i18n("Creates a new document"));
   fileOpen->setToolTip(i18n("Opens an existing document"));
   fileOpenRecent->setToolTip(i18n("Opens a recently used file"));
-  fileSave->setToolTip(i18n("Saves the actual document"));
-  fileSaveAs->setToolTip(i18n("Saves the actual document as..."));
-  fileClose->setToolTip(i18n("Closes the actual document"));
-  filePrint ->setToolTip(i18n("Prints out the actual document"));
+  fileSave->setToolTip(i18n("Saves the current document"));
+  fileSaveAs->setToolTip(i18n("Saves the current document as..."));
+  fileClose->setToolTip(i18n("Closes the current document"));
+  filePrint ->setToolTip(i18n("Prints the current document"));
   fileQuit->setToolTip(i18n("Quits the application"));
-  editCut->setToolTip(i18n("Cuts the selected section and puts it to the clipboard"));
+  editCut->setToolTip(i18n("Cuts the selected section and puts it in the clipboard"));
   editCopy->setToolTip(i18n("Copies the selected section to the clipboard"));
-  editPaste->setToolTip(i18n("Pastes the clipboard contents to actual position"));
+  editPaste->setToolTip(i18n("Pastes the clipboard contents to the current cursor position"));
   viewToolBar->setToolTip(i18n("Enables/disables the toolbar"));
   viewStatusBar->setToolTip(i18n("Enables/disables the statusbar"));
 

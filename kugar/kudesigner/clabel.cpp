@@ -30,13 +30,13 @@ CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(x);
-    propValues.second << i18n("X coordinate concerning to section");
+    propValues.second << i18n("X coordinate corresponding to section");
     propValues.second << "int";
     props["X"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(y);
-    propValues.second << i18n("Y coordinate concerning to section");
+    propValues.second << i18n("Y coordinate corresponding to section");
     propValues.second << "int";
     props["Y"] = propValues;
     propValues.second.clear();
