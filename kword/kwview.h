@@ -268,6 +268,7 @@ public slots:
 
     void slotSpecialChar(QChar , const QString &);
     void updateButtons();
+    void updateMouseMode(MouseMode newMouseMode);
 protected:
 
     KWTextFrameSetEdit *currentTextEdit();

@@ -145,6 +145,10 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     connect( gui->canvasWidget(), SIGNAL(currentFrameSetEditChanged()),
              this, SLOT(updateButtons()) );
+
+    connect( gui->canvasWidget(), SIGNAL(currentMouseModeChanged(MouseMode)),
+             this, SLOT(updateMouseMode(MouseMode)));
+
     // Cut and copy are directly connected to the selectionChanged signal
     connect( gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionEditCut, SLOT(setEnabled(bool)) );
@@ -216,8 +220,6 @@ void KWView::initGui()
     //setNoteType(doc->getNoteType(), false);
 
     actionFormatColor->setColor( Qt::black );
-    //actionBorderColor->setColor( Qt::black );
-    //actionBackgroundColor->setColor( Qt::white );
 
     //refresh zoom combobox
     QStringList list=actionViewZoom->items();
@@ -1043,11 +1045,13 @@ void KWView::setTool( MouseMode _mouseMode )
         actionTableSplitCells->setEnabled( TRUE );
         actionTableDelete->setEnabled( TRUE );
         actionTableUngroup->setEnabled( TRUE );
+        actionBackgroundColor->setEnabled(FALSE);
     } break;
     case MM_EDIT_FRAME: {
         actionTableJoinCells->setEnabled( TRUE );
         actionTableSplitCells->setEnabled( TRUE );
         actionTableUngroup->setEnabled( TRUE );
+        actionBackgroundColor->setEnabled(TRUE);
     } break;
     default: break;
     }
@@ -2867,6 +2871,12 @@ KWTextFrameSetEdit *KWView::currentTextEdit()
     if ( edit )
         return dynamic_cast<KWTextFrameSetEdit *>(edit->currentTextEdit());
     return 0L;
+}
+
+/*================================================================*/
+void KWView::updateMouseMode(MouseMode newMouseMode)
+{
+    setTool( newMouseMode );
 }
 
 /*================================================================*/

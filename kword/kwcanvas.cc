@@ -1614,7 +1614,8 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
 
     m_mouseMode = newMouseMode;
     //mmUncheckAll();
-    m_gui->getView()->setTool( m_mouseMode );
+    //m_gui->getView()->setTool( m_mouseMode );
+    emit currentMouseModeChanged(m_mouseMode);
 
     switch ( m_mouseMode ) {
         case MM_EDIT: {

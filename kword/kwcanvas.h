@@ -176,6 +176,8 @@ signals:
     void currentFrameSetEditChanged();
     // Emitted by the current frameset edit when its selection changes
     void selectionChanged( bool hasSelection );
+    //Emitted when Mouse Mode changed
+    void currentMouseModeChanged(MouseMode newMouseMode);
 
 private slots:
     void slotContentsMoving( int, int );
