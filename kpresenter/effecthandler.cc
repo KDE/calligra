@@ -36,7 +36,7 @@ EffectHandler::EffectHandler( PresStep step, bool back, QPaintDevice *dst, QPixm
                               const QPtrList<KPObject> &objects, KPresenterView *view, int _presSpeed )
 : m_effectStep(0), m_step(step), m_back(back), m_dst(dst),
   m_paint(*src), m_objects(objects), m_view(view), m_soundEffect(QString::null),
-  m_objectTimer(0)
+  m_objectTimer(1)
 {
     m_src = new QPixmap( *src );
 
@@ -92,7 +92,7 @@ bool EffectHandler::doEffect()
 {
     if ( m_effectStep == 0 )
     {
-        if ( !m_view->kPresenterDoc()->spManualSwitch() && m_objectTimer > 0 )
+        if ( !m_view->kPresenterDoc()->spManualSwitch() )
         {
             m_view->stopAutoPresTimer();
         }
@@ -204,7 +204,7 @@ bool EffectHandler::doEffect()
     }
     bool retval = ( m_appearEffectObjects.isEmpty() && m_disappearEffectObjects.isEmpty() );
 
-    if ( retval && !m_view->kPresenterDoc()->spManualSwitch() && m_objectTimer > 0 )
+    if ( retval && !m_view->kPresenterDoc()->spManualSwitch() )
     {
         m_view->setAutoPresTimer( m_objectTimer );
     }

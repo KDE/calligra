@@ -12,6 +12,7 @@ Fixes:
 - Fixed copy and paste when one pic is in the copied objects
 - Fixed crash in history of group/ungroup commands
 - Ignore sticky objects when duplicating a page
+- Fixed Object Effects are not correctly done (#64384)
 
 Changes:
 - Flip now works as in Gimp. Horizontal flip flips on y-axis
