@@ -84,6 +84,7 @@
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <koPartSelectAction.h>
+#include <kozoomhandler.h>
 
 #include <stdlib.h>
 #include <signal.h>
@@ -216,6 +217,8 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     automaticScreenPresFirstTimer = true;
 
     m_pKPresenterDoc = _doc;
+    // Currently unused (formatting needs a zoom handler, so we use the one in KPresenterDocument)
+    m_zoomHandler = new KoZoomHandler();
 
     createGUI();
 
@@ -252,6 +255,7 @@ KPresenterView::~KPresenterView()
     delete rb_lend;
     delete dcop;
     delete page; // it's a child widget, but it emits a signal on destruction
+    delete m_zoomHandler;
 }
 
 /*=========================== file print =======================*/

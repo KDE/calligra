@@ -220,7 +220,7 @@ QRect KPObject::getBoundingRect( int _diffx, int _diffy ) const
     if ( shadowDistance > 0 )
     {
         int sx = r.x(), sy = r.y();
-        getShadowCoords( sx, sy, shadowDirection, shadowDistance );
+        getShadowCoords( sx, sy );
         QRect r2( sx, sy, r.width(), r.height() );
         r = r.unite( r2 );
     }
@@ -416,7 +416,7 @@ void KPObject::draw( QPainter *_painter, int _diffx, int _diffy )
 }
 
 /*====================== get shadow coordinates ==================*/
-void KPObject::getShadowCoords( int& _x, int& _y, ShadowDirection /*_direction*/, int /*_distance*/ ) const
+void KPObject::getShadowCoords( int& _x, int& _y ) const
 {
     int sx = 0, sy = 0;
 
@@ -780,7 +780,7 @@ void KP2DObject::draw( QPainter *_painter, int _diffx, int _diffy )
         {
             int sx = ox;
             int sy = oy;
-            getShadowCoords( sx, sy, shadowDirection, shadowDistance );
+            getShadowCoords( sx, sy );
 
             _painter->translate( sx, sy );
             paint( _painter );
@@ -799,7 +799,7 @@ void KP2DObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
             int sx = 0;
             int sy = 0;
-            getShadowCoords( sx, sy, shadowDirection, shadowDistance );
+            getShadowCoords( sx, sy );
 
             QWMatrix m;
             m.translate( pw / 2, ph / 2 );

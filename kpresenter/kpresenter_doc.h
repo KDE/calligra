@@ -26,6 +26,7 @@ class DCOPObject;
 class KCommand;
 class KMacroCommand;
 class KCommandHistory;
+class KoZoomHandler;
 //class KTextEditFormatCollection;
 
 #include <koDocument.h>
@@ -310,6 +311,8 @@ public:
 
     void addCommand( KCommand * cmd );
 
+    KoZoomHandler* zoomHandler() const { return m_zoomHandler; }
+    QFont defaultFont() const { return m_defaultFont; }
 
 public slots:
     void movePage( int from, int to );
@@ -420,7 +423,8 @@ protected:
     KoStyle *m_standardStyle;
 
     KCommandHistory * m_commandHistory;
-
+    KoZoomHandler* m_zoomHandler;
+    QFont m_defaultFont;
 
 private:
     void pageTitleInsert( unsigned int pageNumber);

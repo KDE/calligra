@@ -197,7 +197,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
         {
             int sx = ox;
             int sy = oy;
-            getShadowCoords( sx, sy, shadowDirection, shadowDistance );
+            getShadowCoords( sx, sy );
 
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
@@ -230,7 +230,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->setBrush( shadowColor );
 
             int dx = 0, dy = 0;
-            getShadowCoords( dx, dy, shadowDirection, shadowDistance );
+            getShadowCoords( dx, dy );
             _painter->drawRect( rr.left() + pixXPos + dx, rr.top() + pixYPos + dy,
                                 bs.width(), bs.height() );
         }

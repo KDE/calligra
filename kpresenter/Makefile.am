@@ -1,5 +1,5 @@
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(KOTEXT_INCLUDES)
+INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 
 bin_SCRIPTS = kprconverter.pl
 

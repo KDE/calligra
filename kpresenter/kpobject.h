@@ -163,7 +163,10 @@ public:
     static void setupClipRegion( QPainter *painter, const QRegion &clipRegion );
 
 protected:
-    void getShadowCoords( int& _x, int& _y, ShadowDirection _direction, int _distance ) const;
+    /**
+     * Modifies x and y to add the shadow offsets
+     */
+    void getShadowCoords( int& _x, int& _y ) const;
     virtual void paintSelection( QPainter *_painter );
     virtual void doDelete();
 
@@ -193,24 +196,22 @@ protected:
     Effect2 effect2;
     Effect3 effect3;
     int presNum, disappearNum;
-    bool disappear:1;
 
+    bool disappear:1;
     bool selected:1;
     bool dSelection:1;
     bool zoomed:1;
+    bool specEffects:1;
+    bool onlyCurrStep:1;
+    bool ownClipping:1;
+    bool inObjList:1;
+    bool move:1;
+    bool sticky:1;
 
     float presFakt;
     QPoint oldOrig;
     QSize oldExt;
     int subPresStep;
-
-    bool specEffects:1;
-    bool onlyCurrStep:1;
-    bool ownClipping:1;
-
-    bool inObjList:1;
-    bool move:1;
-    bool sticky:1;
     int cmds;
 
     DCOPObject *dcop;

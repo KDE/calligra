@@ -43,6 +43,7 @@
 
 #include <kurl.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
 #include <kapp.h>
 #include <kurldrag.h>
 #include <ktempfile.h>
@@ -67,6 +68,7 @@
 
 #include <qrichtext_p.h>
 #include <kotextobject.h>
+#include <kozoomhandler.h>
 #include <kostyle.h>
 #include <kcommand.h>
 #include <KPresenterDocIface.h>
@@ -113,7 +115,12 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     //fCollection = new KTextEditFormatCollection;
     setInstance( KPresenterFactory::global() );
 
-    m_standardStyle=new KoStyle( "Standard" );
+    m_standardStyle = new KoStyle( "Standard" );
+
+    m_defaultFont = KGlobalSettings::generalFont();
+    // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
+    m_defaultFont.setPointSize( KoTextZoomHandler::ptToLayoutUnit( QFontInfo(m_defaultFont).pointSize() ) );
+    m_zoomHandler = new KoZoomHandler;
 
     dcop = 0;
     _clean = true;
@@ -244,6 +251,7 @@ KPresenterDoc::~KPresenterDoc()
     //delete fCollection;
 
     delete m_commandHistory;
+    delete m_zoomHandler;
 }
 
 

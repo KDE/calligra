@@ -3734,7 +3734,7 @@ void Page::exitEditMode()
         KPObject *kpobject = objectList()->at( editNum );
         editNum = -1;
         if ( kpobject->getType() == OT_TEXT ) {
-            KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+            //KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
             m_currentTextObjectView=0L;
             //kptextobject->deactivate( view->kPresenterDoc() );
             //kptextobject->textObjectView()->clearFocus();

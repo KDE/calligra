@@ -92,6 +92,8 @@ public:
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
 
+    KoZoomHandler* zoomHandler() const { return m_zoomHandler; }
+
 signals:
     void currentPageChanged( int );
 
@@ -227,8 +229,8 @@ public slots:
 
     void chPic();
 
-    void textSubScript();	
-    void textSuperScript(); 
+    void textSubScript();
+    void textSuperScript();
 
 public:
     // create GUI
@@ -418,10 +420,14 @@ protected:
 
     virtual void updateReadWrite( bool readwrite );
 
+private:
 // ********** variables **********
 
     // document
     KPresenterDoc *m_pKPresenterDoc;
+
+    // zoom handler
+    KoZoomHandler* m_zoomHandler;
 
     // flags
     bool continuePres, exitPres;
@@ -605,7 +611,6 @@ protected:
     KToggleAction *actionFormatSuper;
     KToggleAction *actionFormatSub;
 
-private:
     QTimer automaticScreenPresSpeed;
     QTime automaticScreenPresTime;
     int automaticScreenPresWaitTime;

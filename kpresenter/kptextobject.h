@@ -45,7 +45,7 @@ class KPTextObject :  public QObject, public KP2DObject
     Q_OBJECT
 public:
     KPTextObject( KPresenterDoc *doc );
-    virtual ~KPTextObject() {}
+    virtual ~KPTextObject();
 
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
@@ -98,6 +98,8 @@ protected:
                            unsigned int tmpUnderline, QDomDocument &doc);
 
     virtual void loadKTextObject( const QDomElement &e, int type );
+    void drawTextObject( QPainter* _painter );
+    void drawText( QPainter* _painter );
     void drawParags( QPainter *p, int from, int to );
 
     bool drawEditRect, drawEmpty;
@@ -133,9 +135,9 @@ public:
     KoTextView * textView() { return this; }
 
     void keyPressEvent( QKeyEvent * );
-    void mousePressEvent( QMouseEvent *);	
+    void mousePressEvent( QMouseEvent *);
 
-    void mouseMoveEvent( QMouseEvent *, const QPoint & ); 
+    void mouseMoveEvent( QMouseEvent *, const QPoint & );
     void mouseReleaseEvent( QMouseEvent *, const QPoint & );
     void mouseDoubleClickEvent( QMouseEvent *, const QPoint &);
     void dragEnterEvent( QDragEnterEvent * );

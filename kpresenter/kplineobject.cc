@@ -124,7 +124,7 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
         {
             int sx = ox;
             int sy = oy;
-            getShadowCoords( sx, sy, shadowDirection, shadowDistance );
+            getShadowCoords( sx, sy );
 
             _painter->translate( sx, sy );
             paint( _painter );
@@ -143,7 +143,7 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
             int sx = 0;
             int sy = 0;
-            getShadowCoords( sx, sy, shadowDirection, shadowDistance );
+            getShadowCoords( sx, sy );
 
             QWMatrix m;
             m.translate( pw / 2, ph / 2 );
