@@ -551,10 +551,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         drawRubber = true;
                         rubber = QRect( e->x(), e->y(), 0, 0 );
                     }
-                    m_boundingRect = KoRect();
-
-                    m_boundingRect=m_activePage->getBoundingRect(m_boundingRect, m_view->zoomHandler());
-                    m_boundingRect=m_view->kPresenterDoc()->stickyPage()->getBoundingRect(m_boundingRect, m_view->zoomHandler());
+		    calcBoundingRect();
 
                     m_hotSpot = docPoint - m_boundingRect.topLeft();
                 } break;
@@ -750,6 +747,16 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         }
     }
 }
+
+void KPrCanvas::calcBoundingRect()
+{
+  m_boundingRect = KoRect();
+  
+  m_boundingRect=m_activePage->getBoundingRect(m_boundingRect, m_view->zoomHandler());
+  m_boundingRect=m_view->kPresenterDoc()->stickyPage()->getBoundingRect(m_boundingRect, m_view->zoomHandler());
+
+}
+
 
 /*=================== handle mouse released ======================*/
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
@@ -1070,11 +1077,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     mouseMoveEvent( e );
     ratio = 0.0;
     keepRatio = false;
-    m_boundingRect = KoRect();
-
-    m_boundingRect=m_activePage->getBoundingRect(m_boundingRect, m_view->zoomHandler());
-    m_boundingRect=m_view->kPresenterDoc()->stickyPage()->getBoundingRect(m_boundingRect, m_view->zoomHandler());
-
+    calcBoundingRect();
 }
 
 /*==================== handle mouse moved ========================*/

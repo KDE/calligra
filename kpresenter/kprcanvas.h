@@ -350,6 +350,9 @@ private:
 
     QPoint limitOfPoint(const QPoint& _point);
 
+    void calcBoundingRect();
+
+
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }

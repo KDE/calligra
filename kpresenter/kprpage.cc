@@ -275,7 +275,6 @@ void KPrPage::ungroupObjects()
 /*=============================================================*/
 QPen KPrPage::getPen( const QPen &pen )
 {
-    KPObject *kpobject = 0;
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
@@ -284,100 +283,100 @@ QPen KPrPage::getPen( const QPen &pen )
 	    switch ( it.current()->getType() ) {
 	    case OT_LINE:
             {
-                kpobject=dynamic_cast<KPLineObject*>( it.current() );
+                KPLineObject*kpobject=dynamic_cast<KPLineObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPLineObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
 	    case OT_RECT:
             {
-                kpobject=dynamic_cast<KPRectObject*>( it.current() );
+                KPRectObject*kpobject=dynamic_cast<KPRectObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPRectObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
 	    case OT_ELLIPSE:
             {
-                kpobject=dynamic_cast<KPEllipseObject*>( it.current() );
+                KPEllipseObject*kpobject=dynamic_cast<KPEllipseObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPEllipseObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
 	    case OT_PIE:
             {
-                kpobject=dynamic_cast<KPPieObject*>( it.current() );
+                KPPieObject*kpobject=dynamic_cast<KPPieObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPPieObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
 	    case OT_AUTOFORM:
             {
-                kpobject=dynamic_cast<KPAutoformObject*>( it.current() );
+                KPAutoformObject*kpobject=dynamic_cast<KPAutoformObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPAutoformObject*>( kpobject )->getPen();
+                    return  kpobject->getPen();
             }
             break;
 	    case OT_PART:
             {
-                kpobject=dynamic_cast<KPPartObject*>( it.current() );
+                KPPartObject*kpobject=dynamic_cast<KPPartObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPPartObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
 	    case OT_PICTURE:
             {
-                kpobject=dynamic_cast<KPPixmapObject*>( it.current() );
+                KPPixmapObject*kpobject=dynamic_cast<KPPixmapObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPPixmapObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
 	    case OT_CLIPART:
             {
-                kpobject=dynamic_cast<KPClipartObject*>( it.current() );
+                KPClipartObject*kpobject=dynamic_cast<KPClipartObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPClipartObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
 	    case OT_TEXT:
             {
-                kpobject=dynamic_cast<KPTextObject*>( it.current() );
+                KPTextObject*kpobject=dynamic_cast<KPTextObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPTextObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
             case OT_FREEHAND:
             {
-                kpobject=dynamic_cast<KPFreehandObject*>( it.current() );
+                KPFreehandObject*kpobject=dynamic_cast<KPFreehandObject*>( it.current() );
                 if(kpobject)
                     return dynamic_cast<KPFreehandObject*>( kpobject )->getPen();
             }
             break;
             case OT_POLYLINE:
             {
-                kpobject=dynamic_cast<KPPolylineObject*>( it.current() );
+                KPPolylineObject*kpobject=dynamic_cast<KPPolylineObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPPolylineObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
             case OT_QUADRICBEZIERCURVE:
             {
-                kpobject=dynamic_cast<KPQuadricBezierCurveObject*>( it.current() );
+                KPQuadricBezierCurveObject*kpobject=dynamic_cast<KPQuadricBezierCurveObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
             case OT_CUBICBEZIERCURVE:
             {
-                kpobject=dynamic_cast<KPCubicBezierCurveObject*>( it.current() );
+                KPCubicBezierCurveObject*kpobject=dynamic_cast<KPCubicBezierCurveObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
             case OT_POLYGON:
             {
-                kpobject=dynamic_cast<KPPolygonObject*>( it.current() );
+                KPPolygonObject*kpobject=dynamic_cast<KPPolygonObject*>( it.current() );
                 if(kpobject)
-                    return dynamic_cast<KPPolygonObject*>( kpobject )->getPen();
+                    return kpobject->getPen();
             }
             break;
 	    default: break;
@@ -391,131 +390,226 @@ QPen KPrPage::getPen( const QPen &pen )
 /*========================= get line begin ========================*/
 LineEnd KPrPage::getLineBegin( LineEnd lb )
 {
-    KPObject *kpobject = 0;
 
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
+  QPtrListIterator<KPObject> it( m_objectList );
+  for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected())
+      if(it.current()->isSelected())
         {
-            kpobject=it.current();
-    	    switch ( kpobject->getType() )
+	  switch ( it.current()->getType() )
 	    {
 	    case OT_LINE:
-		return dynamic_cast<KPLineObject*>( kpobject )->getLineBegin();
-		break;
+	      {
+		KPLineObject*obj=dynamic_cast<KPLineObject*>( it.current() );
+		if(obj)
+		  return obj->getLineBegin();
+	      }
+	      break;
 	    case OT_AUTOFORM:
-		return dynamic_cast<KPAutoformObject*>( kpobject )->getLineBegin();
-		break;
+	      {
+		KPAutoformObject*obj=dynamic_cast<KPAutoformObject*>( it.current() );
+		if(obj)
+		  return obj->getLineBegin();
+	      }
+	      break;
 	    case OT_PIE:
-		return dynamic_cast<KPPieObject*>( kpobject )->getLineBegin();
-		break;
+	      {
+		KPPieObject*obj=dynamic_cast<KPPieObject*>( it.current() );
+		if(obj)
+		  return obj->getLineBegin();
+	      }
+	      break;
             case OT_FREEHAND:
-		return dynamic_cast<KPFreehandObject*>( kpobject )->getLineBegin();
-		break;
+	      {
+		KPFreehandObject*obj=dynamic_cast<KPFreehandObject*>( it.current() );
+		if(obj)
+		  return obj->getLineBegin();
+	      }
+	      break;
             case OT_POLYLINE:
-		return dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
-		break;
+	      {
+		KPPolylineObject*obj=dynamic_cast<KPPolylineObject*>( it.current() );
+		if(obj)
+		  return obj->getLineBegin();
+	      }
+	      break;
             case OT_QUADRICBEZIERCURVE:
-		return dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
-		break;
+	      {
+		KPQuadricBezierCurveObject*obj=dynamic_cast<KPQuadricBezierCurveObject*>( it.current() );
+		if(obj)
+		  return obj->getLineBegin();
+	      }
+
+	      break;
             case OT_CUBICBEZIERCURVE:
-		return dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
-		break;
+	      {
+		KPCubicBezierCurveObject*obj=dynamic_cast<KPCubicBezierCurveObject*>( it.current() );
+		if(obj)
+		  return obj->getLineBegin();
+	      }
+	      break;
 	    default: break;
 	    }
 	}
     }
 
-    return lb;
+  return lb;
 }
 
 /*========================= get line end =========================*/
 LineEnd KPrPage::getLineEnd( LineEnd le )
 {
-    KPObject *kpobject = 0;
 
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
+  QPtrListIterator<KPObject> it( m_objectList );
+  for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected())
+      if(it.current()->isSelected())
         {
-            kpobject=it.current();
-	    switch ( kpobject->getType() ) {
-	    case OT_LINE:
-		return dynamic_cast<KPLineObject*>( kpobject )->getLineEnd();
-		break;
-	    case OT_AUTOFORM:
-		return dynamic_cast<KPAutoformObject*>( kpobject )->getLineEnd();
-		break;
-	    case OT_PIE:
-		return dynamic_cast<KPPieObject*>( kpobject )->getLineEnd();
-		break;
-            case OT_FREEHAND:
-		return dynamic_cast<KPFreehandObject*>( kpobject )->getLineEnd();
-		break;
-            case OT_POLYLINE:
-		return dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
-		break;
-            case OT_QUADRICBEZIERCURVE:
-		return dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
-		break;
-            case OT_CUBICBEZIERCURVE:
-		return dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
-		break;
-	    default: break;
+	  switch ( it.current()->getType() ) {
+	  case OT_LINE:
+	    {
+	      KPLineObject* obj=dynamic_cast<KPLineObject*>( it.current() );
+	      if(obj)
+		return obj->getLineEnd();
 	    }
+	    break;
+	  case OT_AUTOFORM:
+	    {
+	      KPAutoformObject*obj=dynamic_cast<KPAutoformObject*>( it.current() );
+	      if(obj)
+		return obj->getLineEnd();
+	    }
+
+	    break;
+	  case OT_PIE:
+	    {
+	      KPPieObject*obj=dynamic_cast<KPPieObject*>( it.current() );
+	      if(obj)
+		return obj->getLineEnd();
+	    }
+	    break;
+	  case OT_FREEHAND:
+	    {
+	      KPFreehandObject*obj=dynamic_cast<KPFreehandObject*>( it.current() );
+	      if(obj)
+		return obj->getLineEnd();
+	    }
+	    break;
+	  case OT_POLYLINE:
+	    {
+	      KPPolylineObject*obj=dynamic_cast<KPPolylineObject*>( it.current() );
+	      if(obj)
+		return obj->getLineEnd();
+	    }
+	    break;
+	  case OT_QUADRICBEZIERCURVE:
+	    {
+	      KPQuadricBezierCurveObject*obj=dynamic_cast<KPQuadricBezierCurveObject*>( it.current() );
+	      if(obj)
+		return obj->getLineEnd();
+	    }
+	    break;
+	  case OT_CUBICBEZIERCURVE:
+	    {
+	      KPCubicBezierCurveObject*obj=dynamic_cast<KPCubicBezierCurveObject*>( it.current() );
+	      if(obj)
+		return obj->getLineEnd();
+	    }
+	    break;
+	  default: break;
+	  }
 	}
     }
 
-    return le;
+  return le;
 }
 
 /*========================= get brush =============================*/
 QBrush KPrPage::getBrush( const QBrush &brush )const
 {
-    KPObject *kpobject = 0;
 
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
+  QPtrListIterator<KPObject> it( m_objectList );
+  for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected())
+      if(it.current()->isSelected())
         {
-            kpobject=it.current();
-	    switch ( kpobject->getType() ) {
-	    case OT_RECT:
-		return dynamic_cast<KPRectObject*>( kpobject )->getBrush();
-		break;
-	    case OT_ELLIPSE:
-		return dynamic_cast<KPEllipseObject*>( kpobject )->getBrush();
-		break;
-	    case OT_AUTOFORM:
-		return dynamic_cast<KPAutoformObject*>( kpobject )->getBrush();
-		break;
-	    case OT_PIE:
-		return dynamic_cast<KPPieObject*>( kpobject )->getBrush();
-		break;
-	    case OT_PART:
-		return dynamic_cast<KPPartObject*>( kpobject )->getBrush();
-		break;
-	    case OT_PICTURE:
-		return dynamic_cast<KPPixmapObject*>( kpobject )->getBrush();
-		break;
-	    case OT_CLIPART:
-		return dynamic_cast<KPClipartObject*>( kpobject )->getBrush();
-		break;
-	    case OT_TEXT:
-		return dynamic_cast<KPTextObject*>( kpobject )->getBrush();
-		break;
-            case OT_POLYGON:
-                return dynamic_cast<KPPolygonObject*>( kpobject )->getBrush();
-                break;
-	    default: break;
+	  switch ( it.current()->getType() ) {
+	  case OT_RECT:
+	    {
+	      KPRectObject*obj=dynamic_cast<KPRectObject*>( it.current() );
+	      if(obj)
+		return obj->getBrush();
 	    }
+	    break;
+	  case OT_ELLIPSE:
+	    {
+	      KPEllipseObject*obj=dynamic_cast<KPEllipseObject*>( it.current() );
+	      if(obj)
+		return obj->getBrush();
+	    }
+
+	    break;
+	  case OT_AUTOFORM:
+	    {
+	      KPAutoformObject*obj=dynamic_cast<KPAutoformObject*>( it.current() );
+	      if(obj)
+		return obj->getBrush();
+	    }
+
+	    break;
+	  case OT_PIE:
+	    {
+	      KPPieObject*obj=dynamic_cast<KPPieObject*>( it.current() );
+	      if(obj)
+		return obj->getBrush();
+	    }
+
+	    break;
+	  case OT_PART:
+	    {
+	      KPPartObject*obj=dynamic_cast<KPPartObject*>( it.current() );
+	      if(obj)
+		return obj->getBrush();
+	    }
+
+	    break;
+	  case OT_PICTURE:
+	    {
+	      KPPixmapObject*obj=dynamic_cast<KPPixmapObject*>( it.current() );
+	      if(obj)
+		return obj->getBrush();
+	    }
+
+	    break;
+	  case OT_CLIPART:
+	    {
+	      KPClipartObject*obj=dynamic_cast<KPClipartObject*>( it.current() );
+	      if(obj)
+		return obj->getBrush();
+	    }
+	    break;
+	  case OT_TEXT:
+	    {
+	      KPTextObject*obj=dynamic_cast<KPTextObject*>( it.current() );
+	      if(obj)
+		return obj->getBrush();
+	    }
+
+	    break;
+	  case OT_POLYGON:
+	    {
+	      KPPolygonObject*obj=dynamic_cast<KPPolygonObject*>( it.current() );
+	      if(obj)
+		return obj->getBrush();
+	    }
+
+	    break;
+	  default: break;
+	  }
 	}
     }
 
-    return brush;
+  return brush;
 }
 
 /*================================================================*/
@@ -3104,8 +3198,12 @@ bool KPrPage::chPic( KPresenterView *_view)
     {
         if ( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
         {
-            _view->changePicture( dynamic_cast<KPPixmapObject*>( it.current() )->getFileName() );
-            return true;
+	  KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
+	  if( obj)
+	    {
+	      _view->changePicture( obj->getFileName() );
+	      return true;
+	    }
         }
     }
     return false;
@@ -3118,8 +3216,12 @@ bool KPrPage::chClip(KPresenterView *_view)
     {
         if ( it.current()->isSelected() && it.current()->getType() == OT_CLIPART )
         {
-            _view->changeClipart( dynamic_cast<KPClipartObject*>( it.current() )->getFileName() );
-            return true;
+	  KPClipartObject* obj=dynamic_cast<KPClipartObject*>( it.current() );
+	  if(obj)
+	    {
+	      _view->changeClipart( obj->getFileName() );
+	      return true;
+	    }
         }
     }
     return false;
@@ -3319,7 +3421,13 @@ QPtrList<KoTextObject> KPrPage::objectText()
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType() == OT_TEXT)
-            lst.append(dynamic_cast<KPTextObject*>(it.current())->textObject());
+	  {
+	    KPTextObject* obj=dynamic_cast<KPTextObject*>(it.current());
+	    if(obj)
+	      {
+		lst.append(obj->textObject());
+	      }
+	  }
     }
     return lst;
 }
