@@ -1,6 +1,5 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
-* Handle tab stops (maybe in ObjectTreeView)
 * Create an event editor and manage signals/slots (EventBuffer ?)
 	HOWEVER, SIGNAL/SLOT ISSUES (js):
 	1. signals/slots mechanism is hard to use for average folks
@@ -15,7 +14,6 @@
 * Create db-aware widget factory
 
 ****** Bugfixes/Changes : *****
-* Make ObjectTreeView handle multiple widgets
 * Add a grouping ability to Widget
 * Make actions toggable (with KRadioAction)
 
@@ -53,3 +51,5 @@
 * Allow to select multiple widgets by drawing a rectangle on form (4/22/04)
 * Add a "Lay out Vertcally / horizontally " menu item when multiple widgets are selected (4/22/04)
 * Select all widgets when pasted (8/05/04)
+* Handle tab stops (8/05/04)
+* Make ObjectTreeView handle multiple widgets (11/05/04)

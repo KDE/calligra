@@ -83,12 +83,13 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		void slotColumnSizeChanged(int);
 		/*! Sets the widget \a w as selected item, so it will be written bold. */
 		void setSelWidget(QWidget *w);
+		void  addSelWidget(QWidget *w);
 		/*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
 		void addItem(ObjectTreeItem *item);
 		/*! Removess the ObjectTreeItem \a item from the list. */
 		void removeItem(ObjectTreeItem *item);
 		/*! The selected list item has changed, so we emit a signal to update the Form. */
-		void emitSelChanged(QListViewItem *item);
+		void emitSelChanged();
 		/*! Just renames the list item from \a oldname to \a newname. */
 		void renameItem(const QString &oldname, const QString &newname);
 		void displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p);

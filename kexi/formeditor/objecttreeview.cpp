@@ -157,7 +157,8 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
 	connect((QObject*)header(), SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotColumnSizeChanged(int)));
 	if(!tabStop)
 	{
-		connect(this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(emitSelChanged(QListViewItem*)));
+		setSelectionModeExt(Extended);
+		connect(this, SIGNAL(selectionChanged()), this, SLOT(emitSelChanged()));
 		connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(KListView*, QListViewItem*, const QPoint&)));
 	}
 
@@ -223,22 +224,45 @@ ObjectTreeView::setSelWidget(QWidget *w)
 {
 	if(!w)
 		return;
-	QString name = w->name();
 
-	ObjectTreeViewItem *objIt = static_cast<ObjectTreeViewItem*>(selectedItem());
-	if(!objIt) return;
-	if((name == objIt->name()) || (name == QString::null))
-		return;
+	clearSelection();
 
-	setCurrentItem((QListViewItem*) findItem(name));
-	setSelected((QListViewItem*) findItem(name), true);
+	QListViewItem *item = (QListViewItem*) findItem(w->name());
+	blockSignals(true);
+	setCurrentItem(item);
+	setSelectionAnchor(item);
+	setSelected(item, true);
+	blockSignals(false);
 }
 
 void
-ObjectTreeView::emitSelChanged(QListViewItem *item)
+ObjectTreeView::addSelWidget(QWidget *w)
 {
-	ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);
-	emit selectionChanged(it->objectTree()->widget());
+	if(!w)
+		return;
+
+	QListViewItem *item = (QListViewItem*) findItem(w->name());
+	setSelected(item, true);
+}
+
+void
+ObjectTreeView::emitSelChanged()
+{
+	QPtrList<QListViewItem> list = selectedItems();
+	if(list.count() == 1)
+	{
+		ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(list.first());
+		emit selectionChanged(it->objectTree()->widget());
+		return;
+	}
+
+	for(QListViewItem *item = list.first(); item; item = list.next())
+	{
+		ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);
+		QWidget *w = it->objectTree()->widget();
+		if(w && (m_form->selectedWidgets()->findRef(w) == -1))
+			m_form->parentContainer(w)->setSelectedWidget(w, true);
+	}
 }
 
 void
@@ -280,10 +304,15 @@ ObjectTreeView::setForm(Form *form)
 	//	return;
 	m_form = form;
 	clear();
-	m_topItem = new ObjectTreeViewItem(this); // Creates the hidden top Item
+
+	// Creates the hidden top Item
+	m_topItem = new ObjectTreeViewItem(this);
+	m_topItem->setSelectable(false);
+	m_topItem->setOpen(true);
+
 	ObjectTree *tree = m_form->objectTree();
 	loadTree(tree, m_topItem);
-	m_topItem->setOpen(true);
+
 	if(!form->selectedWidgets()->isEmpty())
 		setSelWidget(form->selectedWidgets()->last());
 	else
@@ -302,9 +331,8 @@ ObjectTreeView::loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent)
 	while(last->nextSibling())
 		last = last->nextSibling();
 	treeItem->moveItem(last);
-	parent->insertItem(treeItem);
-	ObjectTreeC *list = item->children();
 
+	ObjectTreeC *list = item->children();
 	for(ObjectTreeItem *it = list->first(); it; it = list->next())
 		loadTree(it, treeItem);
 
