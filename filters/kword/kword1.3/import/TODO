@@ -4,7 +4,7 @@ KFormula (frameType==4)
 Generate Manifest file
 Automatic styles for pictures
 Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?...)
-Tables
+Tables (cell borders...)
 <COUNTER>, <FOOTNOTESETTINGS>. <ENDNOTESETTINGS>
 Variables/fields
 Footnote line (section 2.3 esp. 2.3.6)

@@ -969,7 +969,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         delayedAutomaticStyles += "  </style:style>\n";
 
         // ### TODO: find a way how to use table:number-columns-repeated > 1
-        *m_streamOut << "<table:column table:style-name=\""
+        *m_streamOut << "<table:table-column table:style-name=\""
             << escapeOOText( automaticColumnStyle )
             << "\" table:number-columns-repeated=\"1\"/>\n";
     }
