@@ -319,11 +319,6 @@ public:
 	void setFooter( bool b );
 	KPFooterHeaderEditor *getHeaderFooterEdit() { return headerFooterEdit; }
 
-	void setDrawSelectionRect( bool b )
-	{ drawSelectionRect = b; }
-	bool getDrawSelectionRect()
-	{ return drawSelectionRect; }
-	
 signals:
 
 	// document modified
@@ -418,7 +413,6 @@ protected:
 	KPTextObject *_header, *_footer;
 	bool _hasHeader, _hasFooter;
 	KPFooterHeaderEditor *headerFooterEdit;
-	bool drawSelectionRect;
 	
 };
 

@@ -57,7 +57,6 @@ KPObject::KPObject()
 	inObjList = true;
 	cmds = 0;
 	move = false;
-	drawSelectionRect = true;
 }
 
 /*======================= get bounding rect ======================*/
@@ -88,26 +87,70 @@ KRect KPObject::getBoundingRect( int _diffx, int _diffy )
 		return KRect( r.x() - diffw, r.y() - diffh,
 					  r.width() + diffw * 2, r.height() + diffh * 2 );
     }
-
-	return r;
 }
 
 /*======================== contain point ? =======================*/
 bool KPObject::contains( KPoint _point, int _diffx, int _diffy )
 {
-	KRect r( orig.x() - _diffx, orig.y() - _diffy,
-			 ext.width(), ext.height() );
+	if ( angle == 0.0 )
+	{
+		KRect r( orig.x() - _diffx, orig.y() - _diffy,
+				 ext.width(), ext.height() );
+		return r.contains( _point );
+	}
+	else
+	{
+		KRect br = KRect( 0, 0, ext.width(), ext.height() );
+		int pw = br.width();
+		int ph = br.height();
+		KRect rr = br;
+		int yPos = -rr.y();
+		int xPos = -rr.x();
+		rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-	return r.contains( _point );
+		QWMatrix m, mtx, m2;
+		mtx.rotate( angle );
+		m.translate( pw / 2, ph / 2 );
+		m2.translate( rr.left() + xPos, rr.top() + yPos );
+		m = m2 * mtx * m;
+		
+		KRect r = m.map( br );
+		r.moveBy( orig.x() - _diffx, orig.y() - _diffy );
+		
+		return r.contains( _point );
+	}
 }
 
 /*================================================================*/
 bool KPObject::intersects( KRect _rect, int _diffx, int _diffy )
 {
-	KRect r( orig.x() - _diffx, orig.y() - _diffy,
-			 ext.width(), ext.height() );
+	if ( angle == 0.0 )
+	{
+		KRect r( orig.x() - _diffx, orig.y() - _diffy,
+				 ext.width(), ext.height() );
+		return r.intersects( _rect );
+	}
+	else
+	{
+		KRect br = KRect( 0, 0, ext.width(), ext.height() );
+		int pw = br.width();
+		int ph = br.height();
+		KRect rr = br;
+		int yPos = -rr.y();
+		int xPos = -rr.x();
+		rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-	return r.intersects( _rect );
+		QWMatrix m, mtx, m2;
+		mtx.rotate( angle );
+		m.translate( pw / 2, ph / 2 );
+		m2.translate( rr.left() + xPos, rr.top() + yPos );
+		m = m2 * mtx * m;
+		
+		KRect r = m.map( br );
+		r.moveBy( orig.x() - _diffx, orig.y() - _diffy );
+		
+		return r.intersects( _rect );
+	}
 }
 
 /*======================== get cursor ============================*/
@@ -315,13 +358,6 @@ void KPObject::paintSelection( QPainter *_painter )
 		_painter->restore();
     }
 
-// 	if ( angle != 0 && drawSelectionRect )
-// 	{
-// 		_painter->setPen( QPen( Qt::black, 1, Qt::DotLine ) );
-// 		_painter->setBrush( Qt::NoBrush );
-// 		_painter->drawRect( 0, 0, ext.width(), ext.height() );
-// 	}
-	
 	_painter->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
 	_painter->setBrush( Qt::black );
 

@@ -137,7 +137,6 @@ public:
 
 	// view menu
 	virtual void newView();
-	virtual void viewSelectionRect();
 
 	// insert menu
 	virtual void insertPage();
@@ -466,7 +465,6 @@ protected:
 	// view menu
 	OpenPartsUI::Menu_var m_vMenuView;
 	CORBA::Long m_idMenuView_NewView;
-	CORBA::Long m_idMenuView_SelectionRect;
 
 	// insert menu
 	OpenPartsUI::Menu_var m_vMenuInsert;

@@ -211,4 +211,5 @@ Reggie, 16.5.1999:
 - Fixed bug reported by David:
    Insert a picture (F2), then change it on the hard disk, remove the picture from
    kpresenter, and try to insert it again : it gets cached, and the old one gets inserted.
-
+- Removed some uselsess stuff
+- Updated TODO file

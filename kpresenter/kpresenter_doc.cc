@@ -104,7 +104,7 @@ KPresenterChild::~KPresenterChild()
 /*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc()
 	: _pixmapCollection(), _gradientCollection(), _commands(), _hasHeader( false ), 
-	  _hasFooter( false ), drawSelectionRect( true )
+	  _hasFooter( false )
 {
 	ADD_INTERFACE( "IDL:KOffice/Print:1.0" )
 		// Use CORBA mechanism for deleting views

@@ -74,8 +74,6 @@ public:
     { effect2 = _effect2; }
 	virtual void setPresNum( int _presNum )
     { presNum = _presNum; }
-	virtual void setDrawSelectionRect( bool b )
-	{ drawSelectionRect = b; }
 	
 	virtual void save( ostream& out )
     {; }
@@ -107,8 +105,6 @@ public:
     { return presNum; }
 	virtual int getSubPresSteps()
     { return 0; }
-	virtual bool getDrawSelectionRect()
-	{ return drawSelectionRect; }
 	
 	virtual void drawSelection( bool _dSelection )
     { dSelection = _dSelection; }
@@ -173,7 +169,6 @@ protected:
 	bool inObjList;
 	int cmds;
 	bool move;
-	bool drawSelectionRect;
 	
 };
 

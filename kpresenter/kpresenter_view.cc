@@ -498,14 +498,6 @@ void KPresenterView::newView()
 	sendFocusEvent();
 }
 
-/*==============================================================*/
-void KPresenterView::viewSelectionRect()
-{
-	m_vMenuView->setItemChecked( m_idMenuView_SelectionRect, m_vMenuView->isItemChecked( m_idMenuView_SelectionRect ) );
-	m_pKPresenterDoc->setDrawSelectionRect( m_vMenuView->isItemChecked( m_idMenuView_SelectionRect ) );
-	repaint( false );
-}
-
 /*====================== insert a new page ======================*/
 void KPresenterView::insertPage()
 {
@@ -3100,12 +3092,6 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 	text = Q2C( i18n( "&New View" ) );
 	m_idMenuView_NewView = m_vMenuView->insertItem( text, this, "newView", 0 );
 
-// 	m_vMenuView->insertSeparator( -1 );
-	
-// 	text = Q2C( i18n( "View Selection &Rectangle of rotated Objects" ) );
-// 	m_idMenuView_SelectionRect = m_vMenuView->insertItem( text, this, "viewSelectionRect", 0 );
-
-// 	m_vMenuView->setCheckable( true );
 
 	// MENU Insert
 	text = Q2C( i18n( "&Insert" ) );
@@ -3427,7 +3413,6 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 	// Torben: Reggie, Check/uncheck all checked menu items to their actual value in this function
 	m_vMenuText_TAlign->setItemChecked( m_idMenuText_TAlign_Left, true );
 	m_vMenuScreen_PenWidth->setItemChecked( m_idMenuScreen_PenW3, true );
-// 	m_vMenuView->setItemChecked( m_idMenuView_SelectionRect, true );
 
 //   setupAccelerators();
 

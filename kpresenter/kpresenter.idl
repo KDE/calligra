@@ -22,7 +22,6 @@ module KPresenter
       slot void editHeaderFooter();
 
       slot void newView();
-	  slot void viewSelectionRect();
 	  
       slot void insertPage();
       slot void insertPicture();
