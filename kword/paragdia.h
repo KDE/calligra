@@ -104,7 +104,7 @@ protected:
 /* class KWBorderPreview                                          */
 /******************************************************************/
 
-class KWBorderPreview : public QGroupBox
+class KWBorderPreview : public QFrame/*QGroupBox*/
 {
     Q_OBJECT
 
@@ -122,10 +122,13 @@ public:
     void setBottomBorder( Border _bottomBorder ) { bottomBorder = _bottomBorder; repaint( true ); }
 
 protected:
+    virtual void mousePressEvent( QMouseEvent* _ev );
     void drawContents( QPainter* );
     QPen setBorderPen( Border _brd );
 
     Border leftBorder, rightBorder, topBorder, bottomBorder;
+signals:
+    void choosearea(QMouseEvent * _ev);
 
 };
 
@@ -279,6 +282,7 @@ protected:
     bool m_bListTabulatorChanged;
 
 protected slots:
+    void slotPressEvent(QMouseEvent *_ev);
     void leftChanged( const QString & );
     void rightChanged( const QString & );
     void firstChanged( const QString & );

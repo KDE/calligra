@@ -204,11 +204,19 @@ void KWPagePreview2::drawContents( QPainter* p )
 /* class KWBorderPreview                                          */
 /******************************************************************/
 
+
 /*================================================================*/
 KWBorderPreview::KWBorderPreview( QWidget* parent, const char* name )
-    : QGroupBox( i18n( "Preview" ), parent, name )
+    :QFrame(parent,name)
 {
 }
+
+/*================================================================*/
+void KWBorderPreview::mousePressEvent( QMouseEvent *_ev )
+{
+    emit choosearea(_ev);
+}
+
 
 /*================================================================*/
 void KWBorderPreview::drawContents( QPainter* painter )
@@ -638,15 +646,90 @@ void KWParagDia::setupTab3()
     connect( bTop, SIGNAL( toggled( bool ) ), this, SLOT( brdTopToggled( bool ) ) );
     connect( bBottom, SIGNAL( toggled( bool ) ), this, SLOT( brdBottomToggled( bool ) ) );
 
-
     prev3 = new KWBorderPreview( tab );
     grid->addMultiCellWidget( prev3, 0, 7, 1, 1 );
+
+    connect( prev3 ,SIGNAL( choosearea(QMouseEvent * )),
+           this,SLOT( slotPressEvent(QMouseEvent *)));
 
     grid->setRowStretch( 7, 1 );
     grid->setColStretch( 1, 1 );
 
     m_bAfterInitBorder=false;
 }
+
+#define OFFSETX 15
+#define OFFSETY 7
+#define SPACE 30
+void KWParagDia::slotPressEvent(QMouseEvent *_ev)
+{
+    QRect r = prev3->contentsRect();
+    QRect rect(r.x()+OFFSETX,r.y()+OFFSETY,r.width()-OFFSETX,r.y()+OFFSETY+SPACE);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+        {
+            if( (  ((int)m_topBorder.ptWidth != cWidth->currentText().toInt()) ||(m_topBorder.color != bColor->color() )
+                   ||(m_topBorder.style!=Border::getStyle(cStyle->currentText()) )) && bTop->isOn() )
+                {
+                    m_topBorder.ptWidth = cWidth->currentText().toInt();
+                    m_topBorder.color = QColor( bColor->color() );
+                    m_topBorder.style=Border::getStyle(cStyle->currentText());
+                    prev3->setTopBorder( m_topBorder );
+                }
+            else
+                bTop->setOn(!bTop->isOn());
+        }
+    rect.setCoords(r.x()+OFFSETX,r.height()-OFFSETY-SPACE,r.width()-OFFSETX,r.height()-OFFSETY);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+        {
+            if( (  ((int)m_bottomBorder.ptWidth != cWidth->currentText().toInt()) ||(m_bottomBorder.color != bColor->color() )
+                   ||(m_bottomBorder.style!=Border::getStyle(cStyle->currentText()) )) && bBottom->isOn() )
+                {
+                    m_bottomBorder.ptWidth = cWidth->currentText().toInt();
+                    m_bottomBorder.color = QColor( bColor->color() );
+                    m_bottomBorder.style=Border::getStyle(cStyle->currentText());
+                    prev3->setBottomBorder( m_bottomBorder );
+                }
+            else
+                bBottom->setOn(!bBottom->isOn());
+        }
+
+    rect.setCoords(r.x()+OFFSETX,r.y()+OFFSETY,r.x()+SPACE+OFFSETX,r.height()-OFFSETY);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+        {
+
+            if( (  ((int)m_leftBorder.ptWidth != cWidth->currentText().toInt()) ||(m_leftBorder.color != bColor->color() )
+                   ||(m_leftBorder.style!=Border::getStyle(cStyle->currentText()) )) && bLeft->isOn() )
+                {
+                    m_leftBorder.ptWidth = cWidth->currentText().toInt();
+                    m_leftBorder.color = QColor( bColor->color() );
+                    m_leftBorder.style=Border::getStyle(cStyle->currentText());
+                    prev3->setLeftBorder( m_leftBorder );
+                }
+            else
+                bLeft->setOn(!bLeft->isOn());
+        }
+    rect.setCoords(r.width()-OFFSETX-SPACE,r.y()+OFFSETY,r.width()-OFFSETX,r.height()-OFFSETY);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+        {
+
+            if( (  ((int)m_rightBorder.ptWidth != cWidth->currentText().toInt()) ||(m_rightBorder.color != bColor->color() )
+                   ||(m_rightBorder.style!=Border::getStyle(cStyle->currentText()) )) && bRight->isOn() )
+                {
+                    m_rightBorder.ptWidth = cWidth->currentText().toInt();
+                    m_rightBorder.color = QColor( bColor->color() );
+                    m_rightBorder.style=Border::getStyle(cStyle->currentText());
+                    prev3->setRightBorder( m_rightBorder );
+                }
+            else
+                bRight->setOn(!bRight->isOn());
+        }
+
+
+}
+
+#undef OFFSETX
+#undef OFFSETY
+#undef SPACE
 
 /*================================================================*/
 void KWParagDia::setupTab4()
