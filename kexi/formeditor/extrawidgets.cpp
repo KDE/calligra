@@ -803,7 +803,7 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 
 	m_textLabel = new QLabel(details);
 	m_textLabel->setAlignment(AlignLeft | AlignTop);
-	setStatusOk();
+	//setStatusOk();
 
 	// And the KexiTableView ////////
 	m_data = new KexiTableViewData();
@@ -845,6 +845,12 @@ void
 ConnectionDialog::initTable()
 {
 	QValueList<QVariant> empty_list;
+
+	KexiTableViewColumn *col0 = new KexiTableViewColumn(QString::null, KexiDB::Field::Text);
+	col0->field()->setSubType("KIcon");
+	col0->setReadOnly(true);
+	m_data->addColumn(col0);
+
 	KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Sender"), KexiDB::Field::Enum);
 	m_widgetsColumnData = new KexiTableViewData( empty_list, empty_list,
 		KexiDB::Field::Text, KexiDB::Field::Text);
@@ -868,8 +874,10 @@ ConnectionDialog::initTable()
 	m_data->addColumn(col4);
 
 	QValueList<int> c;
-	c << 1 << 3;
+	c << 2 << 4;
 	m_table->maximizeColumnsWidth(c);
+	m_table->setColumnStretchEnabled( true, 4 );
+	m_table->setColumnWidth(0, IconSize( KIcon::Small ) + 10);
 
 	connect(m_data, SIGNAL(aboutToChangeCell(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*)),
 	      this,SLOT(slotCellChanged(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*)));
@@ -896,10 +904,10 @@ ConnectionDialog::slotOk()
 		KexiTableItem *item = m_table->itemAt(i);
 		Connection *c = m_buffer->at(i);
 
-		c->setSender( (*item)[0].toString() );
-		c->setSignal( (*item)[1].toString() );
-		c->setReceiver( (*item)[2].toString() );
-		c->setSlot( (*item)[3].toString() );
+		c->setSender( (*item)[1].toString() );
+		c->setSignal( (*item)[2].toString() );
+		c->setReceiver( (*item)[3].toString() );
+		c->setSlot( (*item)[4].toString() );
 	}
 
 	// then me make it replace form's current one
@@ -926,11 +934,11 @@ ConnectionDialog::updateTableData()
 	// Then we fill the columns with the form connections
 	for(Connection *c = m_form->connectionBuffer()->first(); c ; c = m_form->connectionBuffer()->next())
 	{
-		KexiTableItem *item = new KexiTableItem(4);
-		(*item)[0] = c->sender();
-		(*item)[1] = c->signal();
-		(*item)[2] = c->receiver();
-		(*item)[3] = c->slot();
+		KexiTableItem *item = new KexiTableItem(5);
+		(*item)[1] = c->sender();
+		(*item)[2] = c->signal();
+		(*item)[3] = c->receiver();
+		(*item)[4] = c->slot();
 		m_table->insertItem(item, m_table->rows());
 	}
 
@@ -942,6 +950,9 @@ ConnectionDialog::setStatusOk()
 {
 	m_pixmapLabel->setPixmap( DesktopIcon("button_ok") );
 	m_textLabel->setText("<qt><h2>The connection is OK.</h2></qt>");
+
+	KexiTableItem *item = m_table->selectedItem();
+	(*item)[0] = "button_ok";
 }
 
 void
@@ -949,6 +960,9 @@ ConnectionDialog::setStatusError(const QString &msg)
 {
 	m_pixmapLabel->setPixmap( DesktopIcon("button_cancel") );
 	m_textLabel->setText("<qt><h2>The connection is invalid.</h2></qt>" + msg);
+
+	KexiTableItem *item = m_table->selectedItem();
+	(*item)[0] = "button_cancel";
 }
 
 void
@@ -957,7 +971,7 @@ ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant value, 
 	switch(col)
 	{
 		// sender changed, we update the signals list
-		case 0:
+		case 1:
 		{
 			ObjectTreeItem *tree = m_form->objectTree()->lookup(value.toString());
 			if(!tree || !tree->widget())
@@ -974,19 +988,19 @@ ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant value, 
 				m_signalsColumnData->append(item);
 			}
 			// and we reset the signal value
-			(*item)[1] = QString("");
+			(*item)[2] = QString("");
 			break;
 		}
 		// the signal was changed, update slot list
-		case 1:
+		case 2:
 		{
-			updateSlotList(item, value.toString(), (*item)[2].toString());
+			updateSlotList(item, value.toString(), (*item)[3].toString());
 			break;
 		}
 		// receiver changed, we update the slots list
-		case 2:
+		case 3:
 		{
-			updateSlotList(item, (*item)[1].toString(), value.toString());
+			updateSlotList(item, (*item)[2].toString(), value.toString());
 			break;
 		}
 		default:
@@ -1025,14 +1039,14 @@ ConnectionDialog::updateSlotList(KexiTableItem *item, const QString &signal, con
 		m_slotsColumnData->append(item);
 	}
 	// and we reset the slot value
-	(*item)[3] = QString("");
+	(*item)[4] = QString("");
 }
 
 void
 ConnectionDialog::checkConnection(KexiTableItem *item)
 {
 	// First we check if one column is empty
-	for(int i = 0; i < 4; i++)
+	for(int i = 1; i < 5; i++)
 	{
 		if( (*item)[i].toString().isEmpty())
 		{
@@ -1042,9 +1056,9 @@ ConnectionDialog::checkConnection(KexiTableItem *item)
 	}
 
 	// Then we check if signal/slot args are compatible
-	QString signal = (*item)[1].toString();
+	QString signal = (*item)[2].toString();
 	signal = signal.remove( QRegExp(".*[(]|[)]") ); // just keep the args list
-	QString slot = (*item)[3].toString();
+	QString slot = (*item)[4].toString();
 	slot = slot.remove( QRegExp(".*[(]|[)]") );
 
 	if(!signal.startsWith(slot, true))
@@ -1060,7 +1074,7 @@ void
 ConnectionDialog::newItem()
 {
 	int idx = m_table->rows() ? m_table->rows() : -1;
-	m_table->insertItem(new KexiTableItem(4), idx);
+	m_table->insertItem(new KexiTableItem(5), idx);
 	m_buffer->append(new Connection());
 }
 
@@ -1083,11 +1097,11 @@ ConnectionDialog::slotConnectionCreated(Form *form, Connection &connection)
 		return;
 
 	Connection *c = new Connection(connection);
-	KexiTableItem *item = new KexiTableItem(4);
-	(*item)[0] = c->sender();
-	(*item)[1] = c->signal();
-	(*item)[2] = c->receiver();
-	(*item)[3] = c->slot();
+	KexiTableItem *item = new KexiTableItem(5);
+	(*item)[1] = c->sender();
+	(*item)[2] = c->signal();
+	(*item)[3] = c->receiver();
+	(*item)[4] = c->slot();
 	m_table->insertItem(item, m_table->rows());
 	m_buffer->append(c);
 }

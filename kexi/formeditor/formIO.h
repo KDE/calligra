@@ -23,6 +23,7 @@
 #include <qobject.h>
 #include <qdict.h>
 #include <qstring.h>
+#include <qwidget.h>
 
 class QString;
 class QDomElement;
@@ -31,6 +32,20 @@ class QDomDocument;
 class QDomText;
 class QVariant;
 class QLabel;
+
+class KFORMEDITOR_EXPORT CustomWidget : public QWidget
+{
+	Q_OBJECT
+
+	public:
+		CustomWidget(const QString &className, QWidget *parent, const char *name);
+		~CustomWidget() {;}
+
+		virtual void paintEvent(QPaintEvent *ev);
+
+	private:
+		QString   m_className;
+};
 
 namespace KFormDesigner {
 

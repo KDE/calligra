@@ -46,7 +46,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, const char *name)
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 
 	setFocusPolicy(WheelFocus);
-	setResizePolicy(Default);
+	setResizePolicy(Manual);
 
 	viewport()->setMouseTracking(true);
 	m_resizing = false;
@@ -63,10 +63,28 @@ KexiFormScrollView::setWidget(QWidget *w)
 	m_widget = w;
 }
 
+
+void
+KexiFormScrollView::refreshContentsSize()
+{
+	// Ensure there is always space to resize Form
+	if(m_widget->width() + 200 > contentsWidth())
+		resizeContents(m_widget->width() + 300, contentsHeight());
+	if(m_widget->height() + 200 > contentsHeight())
+		resizeContents(contentsWidth(), m_widget->height() + 300);
+}
+
 void
 KexiFormScrollView::contentsMousePressEvent(QMouseEvent *ev)
 {
-	if(!m_widget || !m_enableResizing)
+	if(!m_widget)
+		return;
+
+	QRect r3(0, 0, m_widget->width() + 4, m_widget->height() + 4);
+	if(!r3.contains(ev->pos())) // clicked outside form
+		m_form->resetSelection();
+
+	if(!m_enableResizing)
 		return;
 
 	QRect r(m_widget->width(),  0, 4, m_widget->height() + 4);
@@ -96,34 +114,40 @@ KexiFormScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 
 	if(m_resizing) // resize widget
 	{
+		int tmpx = ev->x(), tmpy = ev->y();
+		QObjectList *list = m_widget->queryList("QWidget", 0, true, false /* not recursive*/);
+		for(QObject *o = list->first(); o; o = list->next())
+		{
+			QWidget *w = (QWidget*)o;
+			tmpx = QMAX(tmpx, (w->geometry().right() + 10));
+			tmpy = QMAX(tmpy, (w->geometry().bottom() + 10));
+		}
+		delete list;
+
 		if(cursor().shape() == QCursor::SizeHorCursor)
 		{
 			if(m_snapToGrid)
-				m_widget->resize( int( float(ev->x()) / float(m_gridX) + 0.5 ) * m_gridX, m_widget->height());
+				m_widget->resize( int( float(tmpx) / float(m_gridX) + 0.5 ) * m_gridX, m_widget->height());
 			else
-				m_widget->resize(ev->x(), m_widget->height());
+				m_widget->resize(tmpx, m_widget->height());
 		}
 		else if(cursor().shape() == QCursor::SizeVerCursor)
 		{
 			if(m_snapToGrid)
-				m_widget->resize(m_widget->width(), int( float(ev->y()) / float(m_gridY) + 0.5 ) * m_gridY);
+				m_widget->resize(m_widget->width(), int( float(tmpy) / float(m_gridY) + 0.5 ) * m_gridY);
 			else
-				m_widget->resize(m_widget->width(), ev->y());
+				m_widget->resize(m_widget->width(), tmpy);
 		}
 		else if(cursor().shape() == QCursor::SizeFDiagCursor)
 		{
 			if(m_snapToGrid)
-				m_widget->resize(int( float(ev->x()) / float(m_gridX) + 0.5 ) * m_gridX,
-				   int( float(ev->y()) / float(m_gridY) + 0.5 ) * m_gridY);
+				m_widget->resize(int( float(tmpx) / float(m_gridX) + 0.5 ) * m_gridX,
+				   int( float(tmpy) / float(m_gridY) + 0.5 ) * m_gridY);
 			else
-				m_widget->resize(ev->x(), ev->y());
+				m_widget->resize(tmpx, tmpy);
 		}
 
-		// Ensure there is always space to resize Form
-		if(m_widget->width() + 200 > contentsWidth())
-			resizeContents(contentsWidth() + 300, contentsHeight());
-		if(m_widget->height() + 200 > contentsHeight())
-			resizeContents(contentsWidth(), contentsHeight() + 300);
+		refreshContentsSize();
 	}
 	else // update mouse cursor
 	{
@@ -266,6 +290,7 @@ KexiFormView::initForm()
 
 	formPart()->manager()->importForm(form(), m_preview);
 	m_scrollView->setForm(form());
+	m_scrollView->refreshContentsSize();
 }
 
 void

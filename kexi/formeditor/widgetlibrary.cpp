@@ -178,7 +178,7 @@ WidgetLibrary::displayName(const QString &classname)
 	if(m_widgets.find(classname))
 		return m_widgets[classname]->name();
 	else
-		return i18n("Form");
+		return classname;
 }
 
 QString
@@ -214,8 +214,8 @@ WidgetLibrary::checkAlternateName(const QString &classname)
 		kdDebug() << "WidgetLibrary::alternateName() : The name " << classname << " will be replaced with " << m_alternates[classname] << endl;
 		return m_alternates[classname];
 	}
-	else
-		return classname;
+	else // widget not supported
+		return QString("CustomWidget");
 }
 
 QString

@@ -30,6 +30,7 @@
 #include <qobjectlist.h>
 #include <qdatetime.h>
 #include <qlabel.h>
+#include <qpainter.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -46,6 +47,25 @@
 #include "events.h"
 
 #include "formIO.h"
+
+/// A blank widget when the class name is not supported
+CustomWidget::CustomWidget(const QString &className, QWidget *parent, const char *name)
+: QWidget(parent, name), m_className(className)
+{
+	setBackgroundMode(Qt::PaletteDark);
+
+	QFont f = font();
+	f.setBold(true);
+	f.setPointSize(f.pointSize() + 2);
+	setFont(f);
+}
+
+void
+CustomWidget::paintEvent(QPaintEvent *)
+{
+	QPainter p(this);
+	p.drawText(10, height() / 2, m_className);
+}
 
 namespace KFormDesigner {
 
@@ -230,7 +250,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 
 	QDomElement ui = inBuf.namedItem("UI").toElement();
 	// Load the pixmap collection
-	m_savePixmapsInline = ui.namedItem("pixmapinproject").isNull();
+	m_savePixmapsInline = ( (ui.namedItem("pixmapinproject").isNull()) || (!ui.namedItem("images").isNull()) );
 	form->pixmapCollection()->load(ui.namedItem("collection"));
 
 	QDomElement element = ui.namedItem("widget").toElement();
@@ -788,7 +808,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	// For compatibility, HBox, VBox and Grid are saved as "QLayoutWidget"
 	if((item->widget()->isA("HBox")) || (item->widget()->isA("VBox")) || (item->widget()->isA("Grid")))
 		tclass.setAttribute("class", "QLayoutWidget");
-	else// Normal widgets
+	else if(item->widget()->className() == QString("CustomWidget"))
+		tclass.setAttribute("class", item->className());
+	else // Normal widgets
 		tclass.setAttribute("class", item->widget()->className());
 	prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
 
@@ -910,7 +932,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	}
 
 	QWidget *w;
-	QString classname;
+	QString classname, alternate;
 
 	// We translate some name (for compatibility)
 	if(el.tagName() == "spacer")
@@ -931,13 +953,23 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		}
 	}
 	else
-	// We check if this classnale is an alternate one, and replace it if necessary
-		classname = lib->checkAlternateName(el.attribute("class"));
+	// We check if this classname is an alternate one, and replace it if necessary
+	{
+		classname = el.attribute("class");
+		alternate = lib->checkAlternateName(classname);
+	}
 
-	if(!parent)
-		w = lib->createWidget(classname, container->widget(), wname.latin1(), container);
+	if(alternate == "CustomWidget")
+		w = new CustomWidget(classname, container->widget(), wname.latin1());
 	else
-		w = lib->createWidget(classname, parent, wname.latin1(), container);
+	{
+		if(!alternate.isNull())
+			classname = alternate;
+		if(!parent)
+			w = lib->createWidget(classname, container->widget(), wname.latin1(), container);
+		else
+			w = lib->createWidget(classname, parent, wname.latin1(), container);
+	}
 
 	if(!w)  return;
 	w->setStyle(&(container->widget()->style()));

@@ -104,6 +104,22 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 {
 	m_classes.setAutoDelete(true);
 
+	KFormDesigner::Widget *wFormWidget = new KFormDesigner::Widget(this);
+	wFormWidget->setPixmap("form");
+	wFormWidget->setClassName("FormWidgetBase");
+	wFormWidget->setName(i18n("Form"));
+	wFormWidget->setNamePrefix(i18n("Form"));
+	wFormWidget->setDescription(i18n("A simple form widget"));
+	m_classes.append(wFormWidget);
+
+	KFormDesigner::Widget *wCustomWidget = new KFormDesigner::Widget(this);
+	wCustomWidget->setPixmap("custom_widget");
+	wCustomWidget->setClassName("CustomWidget");
+	wCustomWidget->setName(i18n("Custom Widget"));
+	wCustomWidget->setNamePrefix(i18n("CustomWidget"));
+	wCustomWidget->setDescription(i18n("A custom or non supported widget"));
+	m_classes.append(wCustomWidget);
+
 	KFormDesigner::Widget *wLabel = new KFormDesigner::Widget(this);
 	wLabel->setPixmap("label");
 	wLabel->setClassName("QLabel");
@@ -298,7 +314,7 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 
 	if(c == "QLabel")
 		w = new QLabel(/*i18n("Label")*/text, p, n);
-	if(c == "MyPicLabel")
+	else if(c == "MyPicLabel")
 		w = new MyPicLabel(DesktopIcon("image"), p, n);
 
 	else if(c == "KLineEdit")
@@ -720,7 +736,15 @@ StdWidgetFactory::readListItem(QDomElement &node, QListViewItem *parent, KListVi
 bool
 StdWidgetFactory::showProperty(const QString &classname, QWidget *, const QString &property, bool multiple)
 {
-	if(classname == "Spring")
+	if(classname == "FormWidgetBase")
+	{
+		if(property == "iconText")
+			return false;
+	}
+	else if (classname == "CustomWidget")
+	{
+	}
+	else if(classname == "Spring")
 	{
 		return Spring::showProperty(property);
 	}

@@ -41,8 +41,9 @@ class KexiFormScrollView : public QScrollView
 
 		void  setWidget(QWidget *w);
 		void  setResizingEnabled(bool enabled) { m_enableResizing = enabled; }
-		//void  setSnapFormToGrid(bool enable, int gridX, int gridY);
+
 		void  setForm(Form *form) { m_form = form; }
+		void  refreshContentsSize();
 
 	protected:
 		virtual void contentsMousePressEvent(QMouseEvent * ev);
