@@ -484,6 +484,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                         // MS Word do not know possesive months
                         key.replace("PPP","MMM");
                         key.replace("PPPP","MMMM");
+                        key.replace("zzz","000"); // replace microseconds by 000
                         kdDebug(30515) << "New format:  " << key << endl;
                         str += "\\@ \"";
                         str += key;
