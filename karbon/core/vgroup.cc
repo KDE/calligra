@@ -13,17 +13,20 @@
 
 #include <kdebug.h>
 
-VGroup::VGroup() : VShape()
+VGroup::VGroup( VObject* parent )
+	: VShape( parent )
 {
 }
 
-VGroup::VGroup( const VObjectList &objects ) : VShape(), m_objects( objects )
+VGroup::VGroup( const VObjectList& objects, VObject* parent )
+	: VShape( parent ), m_objects( objects )
 {
 	m_fill.setType( fill_unknown );
 	//stroke().setType( stroke_unknown );
 }
 
-VGroup::VGroup( const VGroup& other ) : VShape()
+VGroup::VGroup( const VGroup& other )
+	: VShape( other )
 {
 	// copy objects
 	VObjectListIterator itr = other.m_objects;
@@ -84,20 +87,6 @@ VGroup::setState( const VState state )
 const KoRect&
 VGroup::boundingBox() const
 {
-    // check bbox-validity of subobjects:
-	if( !m_boundingBoxIsInvalid )
-	{
-		VObjectListIterator itr = m_objects;
-		for( ; itr.current(); ++itr )
-		{
-			if( itr.current()->boundingBoxIsInvalid() )
-			{
-				m_boundingBoxIsInvalid = true;
-				break;
-			}
-		}
-	}
-
 	if( m_boundingBoxIsInvalid )
 	{
 		// clear:

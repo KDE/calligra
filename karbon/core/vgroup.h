@@ -15,8 +15,8 @@ class QDomElement;
 class VGroup : public VShape
 {
 public:
-	VGroup();
-	VGroup( const VObjectList & );
+	VGroup( VObject* parent = 0L );
+	VGroup( const VObjectList &, VObject* parent = 0L );
 	VGroup( const VGroup & );
 	~VGroup();
 

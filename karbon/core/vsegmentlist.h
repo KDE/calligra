@@ -86,10 +86,6 @@ private:
 	uint m_number;
 
 	VSegmentListIteratorList* m_iteratorList;
-
-	/// Bounding box.
-	mutable KoRect m_boundingBox;
-	mutable bool m_boundingBoxIsInvalid;
 };
 
 

@@ -16,7 +16,9 @@
 class VSegmentListIteratorList
 {
 public:
-	VSegmentListIteratorList() : m_list( 0L ), m_iterator( 0L ) {}
+	VSegmentListIteratorList()
+		: m_list( 0L ), m_iterator( 0L ) {}
+
 	~VSegmentListIteratorList()
 	{
 		notifyClear( true );
@@ -113,8 +115,6 @@ VSegmentList::VSegmentList( VObject* parent )
 	m_currentIndex = -1;
 	m_iteratorList = 0L;
 
-	m_boundingBoxIsInvalid = true;
-
 	// add an initial ("begin") segment:
 	append( new VSegment() );
 }
@@ -128,8 +128,6 @@ VSegmentList::VSegmentList( const VSegmentList& list )
 	m_number = 0;
 	m_currentIndex = -1;
 	m_iteratorList = 0L;
-
-	m_boundingBoxIsInvalid = true;
 
 	VSegment* segment = list.m_first;
 	while( segment )
@@ -323,10 +321,11 @@ VSegmentList::boundingBox() const
 		m_boundingBox = KoRect();
 
 		VSegment* segment = m_first;
-		while( segment )
+
+		// ommit "begin" segment:
+		while( segment = segment->m_next )
 		{
 			m_boundingBox |= segment->boundingBox();
-			segment = segment->m_next;
 		}
 
 		m_boundingBoxIsInvalid = false;
