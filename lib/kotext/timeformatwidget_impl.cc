@@ -37,10 +37,10 @@ TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags f
     combo2->insertItem( i18n( "AM/PM" ) );
     combo2->setCurrentItem( 0 );
 
-    ComboBox3->insertStringList(listTimeFormat);
+    combo1->insertStringList(listTimeFormat);
 
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
-    connect( ComboBox3, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
+    connect( combo1, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
     slotPersonalizeChanged(false);
 }
 
@@ -63,9 +63,8 @@ void TimeFormatWidget::slotDefaultValueChanged(const QString & )
 void TimeFormatWidget::slotPersonalizeChanged(bool b)
 {
     combo2->setEnabled(b);
+    combo1->setEditable(b);
     TextLabel1->setEnabled(b);
-    combo1->setEnabled(b);
-    ComboBox3->setEnabled(!b);
     updateLabel();
 
 }
@@ -99,28 +98,15 @@ void TimeFormatWidget::comboActivated()
 void TimeFormatWidget::updateLabel()
 {
     QTime ct=QTime::currentTime();
-    if(CheckBox1->isChecked())
-    {
-        if(combo1->currentText().lower()==i18n("Locale").lower())
-        {
-            label->setText(KGlobal::locale()->formatTime( ct ));
-            return;
-        }
-        label->setText(ct.toString(combo1->currentText()));
-    }
-    else
-    {
-
-        if(ComboBox3->currentText().lower()==i18n("Locale").lower())
-        {
-            label->setText(KGlobal::locale()->formatTime( ct ));
-            return;
-        }
-        label->setText(ct.toString(ComboBox3->currentText()));
-    }
+    if(combo1->currentText().lower()==i18n("Locale").lower())
+      {
+	label->setText(KGlobal::locale()->formatTime( ct ));
+	return;
+      }
+    label->setText(ct.toString(combo1->currentText()));
 }
 
 QString TimeFormatWidget::resultString()
 {
-    return (CheckBox1->isChecked() ? combo1->currentText():ComboBox3->currentText());
+    return combo1->currentText();
 }

@@ -47,10 +47,10 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
     combo2->insertItem( i18n( "The year as four digits" ) );
     combo2->setCurrentItem( 0 );
 
-    ComboBox3->insertStringList(listDateFormat);
+    combo1->insertStringList(listDateFormat);
 
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
-    connect( ComboBox3, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
+    connect( combo1, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
     slotPersonalizeChanged(false);
 }
 
@@ -74,8 +74,7 @@ void DateFormatWidget::slotPersonalizeChanged(bool b)
 {
     combo2->setEnabled(b);
     TextLabel1->setEnabled(b);
-    combo1->setEnabled(b);
-    ComboBox3->setEnabled(!b);
+    combo1->setEditable(b);
     updateLabel();
 
 }
@@ -115,28 +114,15 @@ void DateFormatWidget::comboActivated()
 void DateFormatWidget::updateLabel()
 {
     QDate ct=QDate::currentDate();
-    if(CheckBox1->isChecked())
-    {
-        if(combo1->currentText().lower()==i18n("Locale").lower())
-        {
-            label->setText(KGlobal::locale()->formatDate( ct ));
-            return;
-        }
-        label->setText(ct.toString(combo1->currentText()));
-    }
-    else
-    {
-
-        if(ComboBox3->currentText().lower()==i18n("Locale").lower())
-        {
-            label->setText(KGlobal::locale()->formatDate( ct ));
-            return;
-        }
-        label->setText(ct.toString(ComboBox3->currentText()));
-    }
+    if(combo1->currentText().lower()==i18n("Locale").lower())
+      {
+	label->setText(KGlobal::locale()->formatDate( ct ));
+	return;
+      }
+    label->setText(ct.toString(combo1->currentText()));
 }
 
 QString DateFormatWidget::resultString()
 {
-    return (CheckBox1->isChecked() ? combo1->currentText():ComboBox3->currentText());
+    return combo1->currentText();
 }

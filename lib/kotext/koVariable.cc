@@ -342,7 +342,6 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
     KDialogBase* dialog;
     QWidget* widget;
     QStringList stringList;
-    QStringList pstringList;
     KAboutData* kad=new KAboutData("koffice", "KOffice Library", "");
     KConfig * config;
     KInstance* instance;
@@ -383,27 +382,15 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
                         count++;
                     }
                 }
-                dynamic_cast<DateFormatWidget*>(widget)->combo1->insertStringList(stringList);
-                nope=config->readNumEntry("Number Of Persistent Entries", 5);
-                for(int i=0;i<nope;i++)
-                {
-                    QString num, tmpString;
-                    num.setNum(i);
-                    tmpString=config->readEntry("Persistent"+num);
-                    if(!tmpString.isEmpty())
-                        pstringList.append(tmpString);
-                }
+		
             }
             if(!stringList.isEmpty())
+	      {
                 dynamic_cast<DateFormatWidget*>(widget)->combo1->insertItem("---");
-            if(pstringList.count())
-            {
-                dynamic_cast<DateFormatWidget*>(widget)->combo1->insertStringList(pstringList);
-            }
-            else
-            {
-                dynamic_cast<DateFormatWidget*>(widget)->combo1->insertItem(i18n("Locale"));
-            }
+		dynamic_cast<DateFormatWidget*>(widget)->combo1->insertStringList(stringList);
+	      }
+            
+	    
             if(selectLast) {
                 QComboBox *combo= dynamic_cast<DateFormatWidget*>(widget)->combo1;
                 combo->setCurrentItem(combo->count() -1);
@@ -463,27 +450,12 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
                         count++;
                     }
                 }
-                dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertStringList(stringList);
-                nope=config->readNumEntry("Number Of Persistent Entries", 5);
-                for(int i=0;i<nope;i++)
-                {
-                    QString num, tmpString;
-                    num.setNum(i);
-                    tmpString=config->readEntry("Persistent"+num);
-                    if(!tmpString.isEmpty())
-                        pstringList.append(tmpString);
-                }
             }
             if(!stringList.isEmpty())
+	      {
                 dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertItem("---");
-            if(pstringList.count())
-            {
-                dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertStringList(pstringList);
-            }
-            else
-            {
-                dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertItem(i18n("Locale"));
-            }
+                dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertStringList(stringList);
+	      }
             if(selectLast) {
                 QComboBox *combo= dynamic_cast<TimeFormatWidget*>(widget)->combo1;
                 combo->setCurrentItem(combo->count() -1);
