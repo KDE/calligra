@@ -18,7 +18,7 @@ Until beta2:
 - just one "copy" instead of "copy" and "copy as text"
 - insertion of series supports now doubles and decreasing series
 - support for inserting data from SQL databases
-
+- implemented "Goal Seek"
 
 Until beta1:
 ------------

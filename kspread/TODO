@@ -32,9 +32,6 @@ Other things: (please add the things you are working on!)
 	Trace Dependants
 	Trace Error
 	Remove all arrows
-- GoalSeek
-        (You can have an algorithm from me,
-        if you are interested in implementing this -  Norbert)
 - Printing:
         - expand selection to page
         - fit selection to page
@@ -90,6 +87,7 @@ Norbert
                                                                   than expected )
 - implement more Excel shortcuts like CTRL+Shift+!, *, ^, ...   (Norbert - almost done)
   (see Todo-list below)
+- GoalSeek                                                      ( done )
 
 Ariya
 =====

@@ -96,6 +96,7 @@
   <Action name="insertCell"/>
   <Action name="removeCell"/>
   <Separator/>
+  <Action name="goalSeek"/>
   <Action name="consolidate"/>
   <Action name="oszi"/>
  </Menu>

@@ -1453,7 +1453,7 @@ bool KSpreadCell::calc(bool delay)
 	{
 	  return false;
 	}
-	if ( !cell->calc() )
+	if ( !cell->calc( delay ) )
         {
 	  m_strFormulaOut = "####";
 	  setFlag(Flag_Error);

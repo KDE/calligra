@@ -49,6 +49,7 @@
 #include "kspread_dlg_scripts.h"
 #include "kspread_dlg_cons.h"
 #include "kspread_dlg_database.h"
+#include "kspread_dlg_goalseek.h"
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
 #include "kspread_dlg_formula.h"
@@ -578,6 +579,10 @@ void KSpreadView::initializeAreaOperationActions()
   m_sortInc = new KAction( i18n("Sort Increasing"), "sort_incr", 0, this,
                            SLOT( sortInc() ), actionCollection(), "sortInc" );
   m_sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order."));
+
+  m_goalSeek = new KAction( i18n("Goal Seek"), 0, this,
+                            SLOT( goalSeek() ), actionCollection(), "goalSeek" );
+  m_goalSeek->setToolTip( i18n("Repeating calculation to find a specific value") );
 
   m_consolidate = new KAction( i18n("Consolidate..."), 0, this,
                                SLOT( consolidate() ), actionCollection(),
@@ -2732,6 +2737,18 @@ void KSpreadView::decreaseIndent()
   KSpreadCell* cell = m_pTable->cellAt( column, row );
   if(cell)
       m_decreaseIndent->setEnabled(cell->getIndent(column,row)>0);
+}
+
+void KSpreadView::goalSeek()
+{
+  if ( m_pCanvas->editor() )
+  {
+    m_pCanvas->deleteEditor( true ); // save changes
+  }  
+
+  KSpreadGoalSeekDlg dlg( this, QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),
+                          "KSpreadGoalSeekDlg" );
+  dlg.exec();
 }
 
 void KSpreadView::consolidate()

@@ -225,6 +225,7 @@ public slots:
     void insertSeries();
     void sort();
     void insertHyperlink();
+    void goalSeek();
     void consolidate();
     void insertTable();
     void removeTable();
@@ -489,6 +490,7 @@ private:
     KAction* m_conditional;
     KAction* m_validity;
     KAction* m_sort;
+    KAction* m_goalSeek;
     KAction* m_consolidate;
     KAction* m_help;
     KAction* m_insertCellCopy;
@@ -676,7 +678,6 @@ private:
     QStringList m_replaceStrings;
 
     KStatusBarLabel* m_sbCalcLabel;
-
 
   /* helper functions */
     void initializeCalcActions();
