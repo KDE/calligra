@@ -37,13 +37,28 @@ Counter::Counter()
 {
     m_numbering = NUM_NONE;
     m_style = STYLE_NONE;
-    counterDepth = 0;
+    m_depth = 0;
     m_startNumber = 1;
-    counterLeftText = QString::null;
-    counterRightText = '.';
-    counterBullet = QChar('-');
-    bulletFont = QString::null;
+    m_prefix = QString::null;
+    m_suffix = '.';
+    m_customBullet.character = QChar('-');
+    m_customBullet.font = QString::null;
     invalidate();
+}
+
+
+bool Counter::operator==( const Counter & c2 ) const
+{
+    return (m_numbering==c2.m_numbering &&
+            m_style==c2.m_style &&
+            m_depth==c2.m_depth &&
+            m_startNumber==c2.m_startNumber &&
+            m_prefix==c2.m_prefix &&
+            m_suffix==c2.m_suffix &&
+            m_customBullet.character==c2.m_customBullet.character &&
+            m_customBullet.font==c2.m_customBullet.font &&
+            m_custom==c2.m_custom);
+
 }
 
 void Counter::invalidate()
@@ -78,9 +93,9 @@ int Counter::number( const KWTextParag *paragraph )
             otherCounter = otherParagraph->counter();
             if ( otherCounter &&                                        // ...numbered paragraphs.
                 ( otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
-                ( otherCounter->counterDepth <= counterDepth ) )        // ...same or higher level.
+                ( otherCounter->m_depth <= m_depth ) )        // ...same or higher level.
             {
-                if ( otherCounter->counterDepth == counterDepth )
+                if ( otherCounter->m_depth == m_depth )
                 {
                     // Found a preceeding paragraph of exactly our type!
                     m_cache.number = otherCounter->number( otherParagraph ) + 1;
@@ -104,9 +119,9 @@ int Counter::number( const KWTextParag *paragraph )
             if ( otherCounter )                                         // ...numbered paragraphs.
             {
                 if ( ( otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
-                    ( otherCounter->counterDepth <= counterDepth ) )    // ...same or higher level.
+                    ( otherCounter->m_depth <= m_depth ) )    // ...same or higher level.
                 {
-                    if ( otherCounter->counterDepth == counterDepth )
+                    if ( otherCounter->m_depth == m_depth )
                     {
                         // Found a preceeding paragraph of exactly our type!
                         m_cache.number = otherCounter->number( otherParagraph ) + 1;
@@ -136,7 +151,7 @@ int Counter::number( const KWTextParag *paragraph )
 KWTextParag *Counter::parent( const KWTextParag *paragraph )
 {
     // Return cached value if possible.
-    if ( m_cache.parent != (KWTextParag *)-1 )
+    if ( m_cache.parent && ( m_cache.parent != (KWTextParag *)-1 ) )
         return m_cache.parent;
 
     KWTextParag *otherParagraph = static_cast<KWTextParag *>( paragraph->prev() );
@@ -155,7 +170,7 @@ KWTextParag *Counter::parent( const KWTextParag *paragraph )
             otherCounter = otherParagraph->counter();
             if ( otherCounter &&                                        // ...numbered paragraphs.
                 ( otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
-                ( otherCounter->counterDepth < counterDepth ) )         // ...higher level.
+                ( otherCounter->m_depth < m_depth ) )         // ...higher level.
             {
                 break;
             }
@@ -170,7 +185,7 @@ KWTextParag *Counter::parent( const KWTextParag *paragraph )
             if ( otherCounter )                                         // ...numbered paragraphs.
             {
                 if ( ( otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
-                    ( otherCounter->counterDepth < counterDepth ) )     // ...higher level.
+                    ( otherCounter->m_depth < m_depth ) )     // ...higher level.
                 {
                     break;
                 }
@@ -192,31 +207,31 @@ KWTextParag *Counter::parent( const KWTextParag *paragraph )
 void Counter::load( QDomElement & element )
 {
     m_style = static_cast<Counter::Style>( element.attribute("type").toInt() );
-    counterDepth = element.attribute("depth").toInt();
-    counterBullet = QChar( element.attribute("bullet").toInt() );
-    counterLeftText = correctQString( element.attribute("lefttext") );
-    counterRightText = correctQString( element.attribute("righttext") );
+    m_depth = element.attribute("depth").toInt();
+    m_customBullet.character = QChar( element.attribute("bullet").toInt() );
+    m_prefix = correctQString( element.attribute("lefttext") );
+    m_suffix = correctQString( element.attribute("righttext") );
     QString s = element.attribute("start");
     if ( s[0].isDigit() )
         m_startNumber = s.toInt();
     else // support for very-old files
         m_startNumber = s.lower()[0].latin1() - 'a' + 1;
     m_numbering = static_cast<Numbering>( element.attribute("numberingtype").toInt() );
-    bulletFont = correctQString( element.attribute("bulletfont") );
-    customCounterDef = correctQString( element.attribute("customdef") );
+    m_customBullet.font = correctQString( element.attribute("m_customBullet.font") );
+    m_custom = correctQString( element.attribute("customdef") );
 }
 
 void Counter::save( QDomElement & element )
 {
     element.setAttribute( "type", static_cast<int>( m_style ) );
-    element.setAttribute( "depth", counterDepth );
-    element.setAttribute( "bullet", counterBullet.unicode() );
-    element.setAttribute( "lefttext", counterLeftText );
-    element.setAttribute( "righttext", counterRightText );
+    element.setAttribute( "depth", m_depth );
+    element.setAttribute( "bullet", m_customBullet.character.unicode() );
+    element.setAttribute( "lefttext", m_prefix );
+    element.setAttribute( "righttext", m_suffix );
     element.setAttribute( "start", m_startNumber );
     element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
-    element.setAttribute( "bulletfont", bulletFont );
-    element.setAttribute( "customdef", customCounterDef );
+    element.setAttribute( "m_customBullet.font", m_customBullet.font );
+    element.setAttribute( "customdef", m_custom );
 }
 
 QString Counter::text( const KWTextParag *paragraph )
@@ -225,10 +240,18 @@ QString Counter::text( const KWTextParag *paragraph )
     if ( m_cache.text != QString::null )
         return m_cache.text;
 
+    // Recurse to find the text of the preceeding bullet.
+    parent( paragraph );
+    if ( m_cache.parent && ( m_cache.parent != (KWTextParag *)-1 ) )
+    {
+        m_cache.text = m_cache.parent->counter()->text( m_cache.parent );
+    }
+
     // Ensure paragraph number is valid.
     number( paragraph );
 
     // Now convert to text.
+    QString tmp;
     int n;
     char bottomDigit;
     switch ( m_style )
@@ -236,7 +259,7 @@ QString Counter::text( const KWTextParag *paragraph )
     case STYLE_NONE:
         break;
     case STYLE_NUM:
-        m_cache.text.setNum( m_cache.number );
+        tmp.setNum( m_cache.number );
         break;
     case STYLE_ALPHAB_L:
         n = m_cache.number;
@@ -244,9 +267,9 @@ QString Counter::text( const KWTextParag *paragraph )
         {
             bottomDigit = n % 26;
             n = n / 26;
-            m_cache.text.prepend( QChar( 'a' + bottomDigit - 1 ) );
+            tmp.prepend( QChar( 'a' + bottomDigit - 1 ) );
         }
-        m_cache.text.prepend( QChar( 'a' + n - 1 ) );
+        tmp.prepend( QChar( 'a' + n - 1 ) );
         break;
     case STYLE_ALPHAB_U:
         n = m_cache.number;
@@ -254,48 +277,49 @@ QString Counter::text( const KWTextParag *paragraph )
         {
             bottomDigit = n % 26;
             n = n / 26;
-            m_cache.text.prepend( QChar( 'A' + bottomDigit - 1 ) );
+            tmp.prepend( QChar( 'A' + bottomDigit - 1 ) );
         }
-        m_cache.text.prepend( QChar( 'A' + n - 1 ) );
+        tmp.prepend( QChar( 'A' + n - 1 ) );
         break;
     case STYLE_ROM_NUM_L:
-        m_cache.text = makeRomanNumber( m_cache.number ).lower();
+        tmp = makeRomanNumber( m_cache.number ).lower();
         break;
     case STYLE_ROM_NUM_U:
-        m_cache.text = makeRomanNumber( m_cache.number ).upper();
+        tmp = makeRomanNumber( m_cache.number ).upper();
         break;
     case STYLE_CUSTOM:
         ////// TODO
-        m_cache.text.setNum( m_cache.number );
+        tmp.setNum( m_cache.number );
         break;
     case Counter::STYLE_DISCBULLET:
     case Counter::STYLE_SQUAREBULLET:
     case Counter::STYLE_CIRCLEBULLET:
     case Counter::STYLE_CUSTOMBULLET:
         // Allow space for bullet!
-        m_cache.text = " ";
+        tmp = " ";
         break;
     }
-    m_cache.text.prepend( counterLeftText );
-    m_cache.text.append( counterRightText );
+    tmp.prepend( m_prefix );
+    tmp.append( m_suffix );
 
     // Find the number of missing parents, and add dummy text for them.
     int missingParents;
     parent( paragraph );
-    if ( m_cache.parent )
+    if ( m_cache.parent && ( m_cache.parent != (KWTextParag *)-1 ) )
     {
-        missingParents = counterDepth - m_cache.parent->counter()->counterDepth - 1;
+        missingParents = m_depth - m_cache.parent->counter()->m_depth - 1;
     }
     else
     {
-        missingParents = counterDepth;
+        missingParents = m_depth;
     }
     while ( missingParents )
     {
         // Each missing level adds a "0." prefix.
-        m_cache.text.prepend( "0." );
+        tmp.prepend( "0." );
         missingParents--;
     }
+    m_cache.text.append( tmp );
     return m_cache.text;
 }
 
@@ -443,21 +467,12 @@ void KWTextParag::invalidateCounters()
     }
 }
 
-int KWTextParag::widthLabel() const
+int KWTextParag::counterWidth() const
 {
     if ( !m_counter )
         return 0;
 
-    int size = 0;
-    KWTextParag *parent = m_counter->parent( this );
-
-    // Recurse to find the width of the preceeding bullet.
-    if ( parent )
-    {
-        size += parent->widthLabel();
-    }
-    size += m_counter->width( this );
-    return size;
+    return m_counter->width( this );
 }
 
 // Draw the counter/bullet for a paragraph
@@ -467,15 +482,8 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int w, int h, int base, 
         return;
 
     int size = m_counter->width( this );
-    KWTextParag *parent = m_counter->parent( this );
 
-    // Recurse to draw the preceeding bullet.
-    if ( parent )
-    {
-        parent->drawLabel( p, x - size, y, w, h, base, cg );
-    }
-
-    // Draw the prefix, number and suffix strings.
+    // Draw the complete label.
     QTextFormat *format = paragFormat();
     QFont oldFont = p->font();
     QFont newFont = format->font();
@@ -491,8 +499,8 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int w, int h, int base, 
          ( m_counter->m_style == Counter::STYLE_CUSTOMBULLET ) )
     {
         // Modify x offset.
-        for ( unsigned int i = 0; i < m_counter->counterRightText.length(); i++ )
-            x -= format->width( m_counter->counterRightText, i );
+        for ( unsigned int i = 0; i < m_counter->m_suffix.length(); i++ )
+            x -= format->width( m_counter->m_suffix, i );
         int width = format->width( ' ' );
         int height = format->height();
         QRect er( x - width, y - h + height / 2 - width / 2, width, width );
@@ -514,12 +522,12 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int w, int h, int base, 
             case Counter::STYLE_CUSTOMBULLET:
                 // The user has selected a symbol from a special font. Override the paragraph
                 // font with the given family. This conserves the right size etc.
-                if ( !m_counter->bulletFont.isEmpty() )
+                if ( !m_counter->m_customBullet.font.isEmpty() )
                 {
-                    newFont.setFamily( m_counter->bulletFont );
+                    newFont.setFamily( m_counter->m_customBullet.font );
                     p->setFont( newFont );
                 }
-                p->drawText( x - width, y - h + base, m_counter->counterBullet );
+                p->drawText( x - width, y - h + base, m_counter->m_customBullet.character );
                 break;
             default:
                 break;
@@ -544,7 +552,7 @@ int KWTextParag::leftMargin() const
 {
     return static_cast<int>(m_margins[ QStyleSheetItem::MarginLeft ].pt()
                             + (int)m_leftBorder.ptWidth
-                            + ( m_counter ? widthLabel() : 0 ));
+                            + counterWidth());
 }
 
 int KWTextParag::rightMargin() const

@@ -40,27 +40,28 @@ class Counter
 public:
     Counter();
 
-    // Invalidate and return the current value of the counter either as
-    // a number or text.
+    // Invalidate the internal cache. Use it whenever the number associated with this
+    // counter may have changed.
     void invalidate();
+
+    // Return the current value of the counter either as a number or text.
     int number( const KWTextParag *paragraph );
     QString text( const KWTextParag *paragraph );
 
-    // Work out the width of the margin required for this counter.
+    // Work out the width of the text required for this counter.
     int width( const KWTextParag *paragraph );
-
-    // Return our parent paragraph, if there is such a thing.
-    KWTextParag *parent( const KWTextParag *paragraph );
 
     // XML support.
     void load( QDomElement & element );
     void save( QDomElement & element );
 
+    bool operator==( const Counter & c2 ) const;
+
     enum Numbering
     {
         NUM_NONE = 2,       // Unnumbered. Equivalent to there being
-        // no Counter structure associated with a
-        // paragraph.
+                            // no Counter structure associated with a
+                            // paragraph.
         NUM_LIST = 0,       // Numbered as a list item.
         NUM_CHAPTER = 1     // Numbered as a heading.
     };
@@ -79,36 +80,30 @@ public:
     // The level of the numbering.
     // Depth of 0 means the major numbering. (1, 2, 3...)
     // Depth of 1 is 1.1, 1.2, 1.3 etc.
-    unsigned int counterDepth;
+    unsigned int m_depth;
 
     // Starting number.
     int m_startNumber;
 
-    QString counterLeftText;
-    QString counterRightText;
+    // Prefix and suffix strings.
+    QString m_prefix;
+    QString m_suffix;
 
     // The character and font for STYLE_CUSTOMBULLET.
-    QChar counterBullet;
-    QString bulletFont;
-
-    // For STYLE_CUSTOM.
-    QString customCounterDef;
-
-    bool operator== ( const Counter & c2 ) const
+    struct
     {
-        return (m_style==c2.m_style &&
-                counterLeftText==c2.counterLeftText &&
-                counterRightText==c2.counterRightText &&
-                m_startNumber==c2.m_startNumber &&
-                m_numbering==c2.m_numbering &&
-                bulletFont==c2.bulletFont &&
-                counterDepth==c2.counterDepth &&
-                counterBullet==c2.counterBullet &&
-                customCounterDef==c2.customCounterDef);
+        QChar character;
+        QString font;
+    } m_customBullet;
 
-    }
+    // The string STYLE_CUSTOM.
+    QString m_custom;
 
 private:
+
+    // Return our parent paragraph, if there is such a thing. For a paragraph "1.1.",
+    // the parent is the paragraph numbered "1.".
+    KWTextParag *parent( const KWTextParag *paragraph );
 
     // The cached, calculated values for this counter:
     //
@@ -185,31 +180,15 @@ public:
     void setTopBorder( const Border & _brd );
     void setBottomBorder( const Border & _brd );
 
-    // Counters and bullets
-/*
-    Counter::Style counterStyle() const { return m_counter.m_style; }
-    QChar counterBullet() const { return m_counter.counterBullet; }
-    unsigned int counterDepth() const { return m_counter.counterDepth; }
-    int startCounter() const { return m_counter.startCounter; }
-    Counter::Numbering counterNumbering() const { return m_counter.m_numbering; }
-    QString bulletFont() const { return m_counter.bulletFont; }
-    QString customCounterDef() { return m_counter.customCounterDef; }
-*/
-    Counter *counter();
-    int widthLabel() const;
-/*
-    void setCounterLeftText( const QString& _t ) { m_counter.counterLeftText = _t; setCounter( m_counter ); }
-    void setCounterRightText( const QString& _t ) { m_counter.counterRightText = _t; setCounter( m_counter ); }
-    void setCounterStyle( Counter::Style _t ) { m_counter.m_style = _t; setCounter( m_counter ); }
-    void setCounterBullet( QChar _b ) { m_counter.counterBullet = _b; setCounter( m_counter ); }
-    void setCounterDepth( unsigned int _d ) { m_counter.counterDepth = _d; setCounter( m_counter ); }
-    void setStartCounter( int _c ) { m_counter.startCounter = _c; setCounter( m_counter ); }
-    void setCounterNumbering( Counter::Numbering _t ) { m_counter.m_numbering = _t; setCounter( m_counter ); }
-    void setBulletFont( const QString& _f ) { m_counter.bulletFont = _f; setCounter( m_counter ); }
-    void setCustomCounterDef( const QString& d_ ) { m_counter.customCounterDef = d_; setCounter( m_counter ); }
-*/
-    void setNoCounter();
+    // Counters are used to implement list and heading numbering/bullets.
     void setCounter( const Counter & counter );
+    Counter *counter();
+    void setNoCounter();
+
+    // The space required to draw the complete counter label (i.e. the Counter for this
+    // paragraph, as well as the Counters for any paragraphs above us in the numbering
+    // hierarchy). See also drawLabel().
+    int counterWidth() const;
 
     // Style
     QString styleName() const { return m_styleName; }
@@ -239,6 +218,7 @@ protected:
     virtual void paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cusror = 0, bool drawSelections = FALSE,
 			int clipx = -1, int clipy = -1, int clipw = -1, int cliph = -1 );
 
+    // Draw the complete label (i.e. heading/list numbers/bullets) for this paragrpah.
     virtual void drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg );
     virtual void copyParagData( QTextParag *_parag );
     void invalidateCounters();

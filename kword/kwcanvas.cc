@@ -1656,7 +1656,7 @@ void KWCanvas::printRTDebug()
         kdDebug() << "  Text: " << parag->richText() << endl;
         KWTextParag * p = static_cast<KWTextParag *>(parag);
         if ( p->counter() )
-            kdDebug() << "  Counter style=" << p->counter()->m_style << " depth=" << p->counter()->counterDepth << endl;
+            kdDebug() << "  Counter style=" << p->counter()->m_style << " depth=" << p->counter()->m_depth << endl;
 
 /*        kdDebug() << "  Paragraph format=" << p->paragFormat() << endl;
         QTextString * s = parag->string();
