@@ -175,6 +175,7 @@ void RectangularSelectTool::drawRect( const QPoint& start, const QPoint& end )
 
     p.begin( m_canvas );
     p.setRasterOp( Qt::NotROP );
+    p.setPen( QPen( Qt::DotLine ) );
 
     float zF = m_view->zoomFactor();
     

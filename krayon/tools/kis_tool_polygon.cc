@@ -51,14 +51,6 @@ PolyGonTool::PolyGonTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
     useRegions = s.fillInteriorRegions;
     checkPolygon = s.polygon;
     checkConcavePolygon = s.concavePolygon;
-
-    KisPainter *p = m_pView->kisPainter();
-    
-    p->setLineThickness( lineThickness );
-    p->setLineOpacity( lineOpacity );
-    p->setPatternFill( usePattern );
-    p->setGradientFill( useGradient );
-    p->setFilledPolygon( useRegions );
         
     mStart  = QPoint(-1, -1);
     mFinish = QPoint(-1, -1);     

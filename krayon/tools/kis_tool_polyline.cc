@@ -43,13 +43,6 @@ PolyLineTool::PolyLineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
     usePattern = s.useCurrentPattern;
     useGradient = s.fillWithGradient;
     useRegions = s.fillInteriorRegions;
-
-    KisPainter *p = m_pView->kisPainter();
-    
-    p->setLineThickness( lineThickness );
-    p->setLineOpacity( lineOpacity );
-    p->setPatternFill( usePattern );
-    p->setGradientFill( useGradient );
         
     mStart  = QPoint(-1, -1);
     mFinish = QPoint(-1, -1);     
@@ -103,13 +96,13 @@ void PolyLineTool::mousePress( QMouseEvent* event )
     else
     {   
         m_dragging = false;
-        finish(event->pos());
+
         m_dragEnd = event->pos();
  
         // draw final line into layer
         KisPainter *p = m_pView->kisPainter();
-        p->drawLine( zoomed(m_dragStart.x()), zoomed(m_dragStart.y()),
-                     zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
+        p->drawLine( zoomed( m_dragStart.x() ), zoomed( m_dragStart.y() ),
+                     zoomed( m_dragEnd.x() ), zoomed( m_dragEnd.y() ) );
     }    
 }
 

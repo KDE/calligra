@@ -86,6 +86,8 @@ protected:
           
 private:
 
+    QPointArray getBundedPointArray( QPointArray & points, QPoint & topLeft );
+
     /* the document, image and layer for the selection
     Note that a selection can be attached to a specific
     layer and left in place in that layer, or it can be 

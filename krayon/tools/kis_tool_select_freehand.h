@@ -1,7 +1,7 @@
 /*
- *  selecttool.h - part of Krayon
+ *  kis_tool_select_freehand.h - part of Krayon
  *
- *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2001 Toshitaka Fujioka <fujioka@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __selecttoolpolygonal_h__
-#define __selecttoolpolygonal_h__
+#ifndef __selecttoolfreehand_h__
+#define __selecttoolfreehand_h__
 
 #include <qpoint.h>
 #include <qpointarray.h>
@@ -32,15 +32,15 @@ class KisDoc;
 class KisCanvas;
 class KisView;
 
-class PolygonalSelectTool : public KisTool
+class FreehandSelectTool : public KisTool
 {
 
 public:
 
-    PolygonalSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-    ~PolygonalSelectTool();
+    FreehandSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
+    ~FreehandSelectTool();
 
-    virtual QString toolName() { return QString("Polygonal Select Tool"); }
+    virtual QString toolName() { return QString( "Freehand Select Tool" ); }
 
     virtual void mousePress( QMouseEvent *_event );
     virtual void mouseMove( QMouseEvent *_event );
@@ -48,8 +48,8 @@ public:
 
     virtual void clearOld();
 
-    void start(QPoint p);
-    void finish(QPoint p); 
+    void start( QPoint p );
+    void finish( QPoint p ); 
 
 protected:
 
@@ -74,7 +74,7 @@ private:
 
     QRect       m_selectRect;
     QPointArray m_pointArray;
-    int         m_index;
+    uint        m_index;
 };
 
-#endif //__selecttoolpolygonal_h__
+#endif //__selecttoolfreehand_h__

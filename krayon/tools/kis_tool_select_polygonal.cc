@@ -43,6 +43,8 @@ PolygonalSelectTool::PolygonalSelectTool( KisDoc* _doc,
     mFinish = QPoint(-1, -1);     
       
     m_Cursor = KisCursor::selectCursor();
+
+    m_index = 0;
 }
 
 PolygonalSelectTool::~PolygonalSelectTool()
@@ -109,6 +111,7 @@ void PolygonalSelectTool::mousePress( QMouseEvent* event )
         }
         else
         {
+            clearOld();
             start(event->pos());
             // todo: add the start point to the point array
         }
@@ -116,6 +119,9 @@ void PolygonalSelectTool::mousePress( QMouseEvent* event )
         m_dragging = true;
         m_dragStart = event->pos();
         m_dragEnd = event->pos();
+
+        m_pointArray.putPoints( m_index, 1, m_dragStart.x(),m_dragStart.y() );
+        ++m_index;
     }
     // stop drawing on right or middle click
     else
@@ -123,12 +129,29 @@ void PolygonalSelectTool::mousePress( QMouseEvent* event )
         m_dragging = false;
         finish(event->pos());
 
+        m_pointArray.putPoints( m_index, 1, mFinish.x(), mFinish.y() );
+        QRect rect = getDrawRect( m_pointArray );
+        QPointArray points = zoomPointArray( m_pointArray );
+
         // need to connect start and end positions to close the
         // polyline 
         
         // we need a bounding rectangle and a point array of 
         // points in the polyline
         // m_pDoc->getSelection()->setBounds(m_selectRect);        
+
+        m_pDoc->getSelection()->setPolygonalSelection( rect, points, m_pDoc->current()->getCurrentLayer());
+
+        kdDebug(0) << "selectRect" 
+            << " left: "   << rect.left() 
+            << " top: "    << rect.top()
+            << " right: "  << rect.right() 
+            << " bottom: " << rect.bottom()
+            << endl;
+
+        // Initialize
+        m_index = 0;
+        m_pointArray.resize( 0 );
     }    
 }
 
@@ -154,15 +177,11 @@ void PolygonalSelectTool::mouseRelease( QMouseEvent * /* event */ )
 
 void PolygonalSelectTool::drawLine( const QPoint& start, const QPoint& end )
 {
-    int lineThickness = 1;
-    
     QPainter p;
-    QPen pen;
-    pen.setWidth(lineThickness);
     
     p.begin( m_canvas );
-    p.setPen(pen);
     p.setRasterOp( Qt::NotROP );
+    p.setPen( QPen( Qt::DotLine ) );
     float zF = m_pView->zoomFactor();
 
     p.drawLine( QPoint( start.x() + m_pView->xPaintOffset() 
@@ -177,4 +196,58 @@ void PolygonalSelectTool::drawLine( const QPoint& start, const QPoint& end )
     p.end();
 }
 
+// get QRect for draw polygon in layer.
+QRect PolygonalSelectTool::getDrawRect( QPointArray & points )
+{
+    int maxX = 0, maxY = 0;
+    int minX = 0, minY = 0;
+    int tmpX = 0, tmpY = 0;
+    bool first = true;
+
+    QPointArray::Iterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        QPoint point = (*it);
+        tmpX = point.x();
+        tmpY = point.y();
+
+        if ( first ) {
+            maxX = tmpX;
+            maxY = tmpY;
+            minX = tmpX;
+            minY = tmpY;
+
+            first = false;
+        }
+
+        if ( maxX < tmpX )
+            maxX = tmpX;
+        if ( maxY < tmpY )
+            maxY = tmpY;
+        if ( minX > tmpX )
+            minX = tmpX;
+        if ( minY > tmpY )
+            minY = minY;
+    }
+
+    QPoint topLeft = QPoint( minX, minY );
+    QPoint bottomRight = QPoint( maxX, maxY );
+    QRect rect = QRect( zoomed( topLeft ), zoomed( bottomRight ) );
+
+    return rect;
+}
+
+// get QPointArray for draw polygon in layer.
+QPointArray PolygonalSelectTool::zoomPointArray( QPointArray & points )
+{
+    QPointArray m_points( points.size() );
+
+    int count = 0;
+    QPointArray::Iterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        m_points.setPoint( count, zoomed( *it ) );
+        ++count;
+    }
+
+    return m_points;
+}
 

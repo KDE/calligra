@@ -396,45 +396,48 @@ void KisSelection::setEllipticalSelection(QRect & re, KisLayer *lay)
 
 
 
-void KisSelection::setPolygonalSelection(QRect & re,
-    QPointArray & /* a */, KisLayer *lay)
+void KisSelection::setPolygonalSelection( QRect & re, QPointArray & pointsArray, KisLayer *lay )
 {
     // set the bounding selection rectangle
-    setBounds(re);
+    setBounds( re );
 
     // construct a solid white pixmap same size as the selection
-    QPixmap pix(rectangle.width(), rectangle.height());
+    QPixmap pix( rectangle.width(), rectangle.height() );
     pix.fill();
 
-    // draw the filled ellipse onto that pixmap in black
-    QPainter p(&pix);
+    // draw the filled polygon onto that pixmap in black
+    QPainter p( &pix );
 
     /* constructs a pen.  color is always black - it is
     changed by krayon to the actual colors of each pixel
     in the ellipse in the layer below */
-    QPen pen(Qt::black);
-    p.setPen(pen);
+    QPen pen( Qt::black );
+    p.setPen( pen );
 
-    // constructs a solid brush - we want to fill the ellipse
-    QBrush brush(Qt::black);
-    p.setBrush(brush);
+    // constructs a solid brush - we want to fill the polygon
+    QBrush brush( Qt::black );
+    p.setBrush( brush );
 
-    // draw a filled ellipse bounded by rectangle
-    QRect ellipseR(0, 0, pix.width(), pix.height());
-    p.drawEllipse(ellipseR);
+    // draw filled polygons bounded by rectangle
+    QPoint topLeft = rectangle.topLeft();
+    QPointArray points = getBundedPointArray( pointsArray, topLeft );
+    p.drawPolygon( points );
 
     // convert the pixmap to an image so we can access scanlines
+    // always 32 bit with alpha channel
     QImage pixImage = pix.convertToImage();
+    pixImage.convertDepth( 32 );
+    pixImage.setAlphaBuffer( true );
 
     // now, get the colors of each pixel from the layer if the
     // pixels lie within the selection ellipse, and transfer those
     // to the image and the mark selected pixels in the array
     QRect clipRect = rectangle;
 
-    if (!clipRect.intersects(lay->imageExtents()))
+    if ( !clipRect.intersects( lay->imageExtents() ) )
         return;
 
-    clipRect = clipRect.intersect(lay->imageExtents());
+    clipRect = clipRect.intersect( lay->imageExtents() );
 
     int sx = clipRect.left();
     int sy = clipRect.top();
@@ -442,35 +445,82 @@ void KisSelection::setPolygonalSelection(QRect & re,
     int ey = clipRect.bottom();
 
     uchar r, g, b;
+    uchar a = 255;
 
-    bool alpha = (pDoc->current()->colorMode() == cm_RGBA);
+    bool layerAlpha = ( pDoc->current()->colorMode() == cm_RGBA );
 
-    for (int y = sy; y <= ey; y++)
-    {
-        for (int x = sx; x <= ex; x++)
-	    {
-            // for a rectangular selection, all pixels
-            // in the rectangle bounding it are selected
-            array[(y - sy) * (ex - sx) + x - sx] = 1;
+    for ( int y = sy; y <= ey; ++y ) {
+        for ( int x = sx; x <= ex; ++x ) {
+            // pixel value in scanline at x offset to right
+            // in terms of the image - accounting for offset into
+            // layer, image offset is always 0,0
+            uint *p = (uint *)pixImage.scanLine( y - sy ) + ( x - sx );
 
             // destination binary values by channel
-	        r = lay->pixel(0, x,  y);
-	        g = lay->pixel(1, x,  y);
-	        b = lay->pixel(2, x,  y);
+            r = lay->pixel( 0, x, y );
+            g = lay->pixel( 1, x, y );
+            b = lay->pixel( 2, x, y );
 
-            if(alpha)
-            {
-	            uchar a = lay->pixel(3, x, y);
-	            image.setPixel(x - sx, y - sy, qRgba(r, g, b, a));
+            /* if pixel has the white background filler color,
+            set the alpha channel value in the image to 0,
+            indicating that this pixel is transparent */
+            if( QColor( *p ) != Qt::black ) {
+                /* mark pixel as unselected in the array
+                The position in array is number of lines times
+                width of a line plus offset into current line */
+                array[ (y - sy) * (ex - sx) + x - sx ] = 0;
+
+                // this pixel is transparent
+                a = 0;
+
+                // set image colors to layer colors
+                image.setPixel( x - sx, y - sy, qRgba( r, g, b, a ) );
             }
-            else
-            {
-	            image.setPixel(x - sx, y - sy, qRgb(r, g, b));
+            /* the pixel in the mask image is black, so it's in
+            the selection. Still, if the alpha value of the layer
+            pixel is 0, the image pixel is still painted transparent
+            and technically is not in the selection unless the array
+            is used as a mask when pasting.  This can't be used
+            reliably with the global kapp->clipboard() without adding
+            a custom data type which makes images from other apps
+            unusable. At the worst this results in transparent pixels
+            from the image not getting painted, which is the whole
+            reason to use the alpha channel here, so everything is ok */
+            else {
+                // mark pixel as selected in the array
+                array[ (y - sy) * (ex - sx) + x - sx ] = 1;
+
+                // get alpha value from layer
+                if( layerAlpha ) a = lay->pixel( 3, x, y );
+
+                // set image colors to layer color values
+                image.setPixel(x - sx, y - sy, qRgba(r, g, b, a));
             }
-	    }
+        }
     }
 }
 
+// Pixmap size of top left point is (0, 0). But original size of
+// top left is rectangle.topLeft(). Therefore we do point.x()-topLeft.x(),
+// point.y()-topLeft.y().
+QPointArray KisSelection::getBundedPointArray( QPointArray & points, QPoint & topLeft )
+{
+    QPointArray m_points( points.size() );
+    int count = 0;
+
+    QPointArray::Iterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        QPoint point = *it;
+        int x = point.x() - topLeft.x();
+        int y = point.y() - topLeft.y();
+
+        m_points.setPoint( count, QPoint( x, y ) );
+
+        ++count;
+    }
+
+    return m_points;
+}
 
 void KisSelection::setContiguousSelection(QRect & re, KisLayer *lay)
 {

@@ -44,13 +44,6 @@ LineTool::LineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
     usePattern = s.useCurrentPattern;
     useGradient = s.fillWithGradient;
     useRegions = s.fillInteriorRegions;
-
-    KisPainter *p = m_pView->kisPainter();
-    
-    p->setLineThickness( lineThickness );
-    p->setLineOpacity( lineOpacity );
-    p->setPatternFill( usePattern );
-    p->setGradientFill( useGradient );
 }
 
 

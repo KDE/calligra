@@ -47,7 +47,6 @@ StampTool::StampTool(KisDoc *doc, KisView *view,
     KisDoc::StampToolSettings s = m_pDoc->getStampToolSettings();  
     opacity = s.opacity;
     useGradient = s.blendWithCurrentGradient;
-    useBlend = false;
 
     setPattern(pattern);
 }

@@ -15,6 +15,7 @@
   <Action name="tool_zoom"/>
   <Action name="tool_colorpicker"/>  
   
+  <Action name="tool_select_freehand"/>
   <Action name="tool_select_rectangular"/>
   <Action name="tool_select_elliptical"/>  
   <Action name="tool_select_polygonal"/>
@@ -198,6 +199,7 @@
 </ToolBar>
 
 <ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
+  <Action name="tool_select_freehand"/>
   <Action name="tool_select_rectangular"/>
   <Action name="tool_select_elliptical"/>  
   <Action name="tool_select_polygonal"/>

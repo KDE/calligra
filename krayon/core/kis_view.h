@@ -49,6 +49,7 @@ class KisChannelView;
 class QScrollBar;
 class KRuler;
 
+class FreehandSelectTool;
 class RectangularSelectTool;
 class PolygonalSelectTool;
 class EllipticalSelectTool;
@@ -210,6 +211,7 @@ class KisView : public KoView
     // tool action slots
     void tool_properties();
 
+    void tool_select_freehand();
     void tool_select_rectangular();
     void tool_select_polygonal();
     void tool_select_elliptical();
@@ -298,7 +300,7 @@ class KisView : public KoView
     KToggleAction *m_toggle_paint_offset;
     
     // tool actions (main toolbar & menu)
-    KToggleAction *m_tool_select_rectangular, *m_tool_select_polygonal,
+    KToggleAction *m_tool_select_freehand, *m_tool_select_rectangular, *m_tool_select_polygonal,
     *m_tool_select_elliptical, *m_tool_select_contiguous,
     *m_tool_move, *m_tool_zoom, 
     *m_tool_brush, *m_tool_draw, *m_tool_pen, 
@@ -312,6 +314,7 @@ class KisView : public KoView
     KisTool               *m_pTool; // current active tool
 
     // tools    
+    FreehandSelectTool     *m_pFreehandSelectTool;
     RectangularSelectTool  *m_pRectangularSelectTool;
     PolygonalSelectTool    *m_pPolygonalSelectTool;
     EllipticalSelectTool   *m_pEllipticalSelectTool;

@@ -78,6 +78,7 @@
 #include "kis_dlg_new_layer.h"
 
 // tools
+#include "kis_tool_select_freehand.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_elliptical.h"
@@ -440,6 +441,8 @@ void KisView::setupTools()
     m_pMoveTool = new MoveTool(m_pDoc, this);
 
     // selection tools
+    m_pFreehandSelectTool 
+        = new FreehandSelectTool( m_pDoc, this, m_pCanvas );
     m_pRectangularSelectTool 
         = new RectangularSelectTool( m_pDoc, this, m_pCanvas );
     m_pPolygonalSelectTool 
@@ -577,6 +580,13 @@ void KisView::setupActions()
         actionCollection(), "dialog_gradient");
 
     // tool actions - lots of them
+
+    m_tool_select_freehand 
+        = new KToggleAction(i18n("&Freehand select"),
+        "freehand", 0, this,  SLOT( tool_select_freehand()),
+        actionCollection(), "tool_select_freehand" );
+
+    m_tool_select_freehand->setExclusiveGroup("tools");
 
     m_tool_select_rectangular 
         = new KToggleAction(i18n("&Rectangular select"),
@@ -1625,6 +1635,15 @@ void KisView::tool_properties()
 }
 
 /*
+    tool_select_freehand - select a freehand
+    area with the mouse.
+*/
+void KisView::tool_select_freehand()
+{
+    activateTool(m_pFreehandSelectTool);
+}
+
+/*
     tool_select_rectangular - select a rectangular
     area with the mouse or by entering coordinates
     and size of the rectangle       
@@ -1757,6 +1776,15 @@ void KisView::tool_colorchanger()
 */
 void KisView::tool_line()
 {
+    // set line tool settings
+    KisDoc::LineToolSettings s = m_pDoc->getLineToolSettings();
+    KisPainter *p = kisPainter();
+    
+    p->setLineThickness( s.thickness );
+    p->setLineOpacity( s.opacity );
+    p->setPatternFill( s.useCurrentPattern );
+    p->setGradientFill( s.fillWithGradient );
+
     activateTool( m_pLineTool );
 }
 
@@ -1765,6 +1793,15 @@ void KisView::tool_line()
 */
 void KisView::tool_polyline()
 {
+    // set polyline tool settings
+    KisDoc::PolylineToolSettings s = m_pDoc->getPolyLineToolSettings();
+    KisPainter *p = kisPainter();
+    
+    p->setLineThickness( s.thickness );
+    p->setLineOpacity( s.opacity );
+    p->setPatternFill( s.useCurrentPattern );
+    p->setGradientFill( s.fillWithGradient );
+
     activateTool( m_pPolyLineTool );
 }
 
@@ -1773,6 +1810,16 @@ void KisView::tool_polyline()
 */
 void KisView::tool_polygon()
 {
+    // set polygon tool settings
+    KisDoc::PolygonToolSettings s = m_pDoc->getPolyGonToolSettings();
+    KisPainter *p = kisPainter();
+    
+    p->setLineThickness( s.thickness );
+    p->setLineOpacity( s.opacity );
+    p->setPatternFill( s.useCurrentPattern );
+    p->setGradientFill( s.fillWithGradient );
+    p->setFilledPolygon( s.fillInteriorRegions );
+
     activateTool( m_pPolyGonTool );
 }
 
@@ -1782,6 +1829,16 @@ void KisView::tool_polygon()
 
 void KisView::tool_rectangle()
 {
+    // set rectangle tool settings
+    KisDoc::RectangleToolSettings s = m_pDoc->getRectangleToolSettings();
+    KisPainter *p = kisPainter();
+    
+    p->setLineThickness( s.thickness );
+    p->setLineOpacity( s.opacity );
+    p->setFilledRectangle( s.fillInteriorRegions );
+    p->setGradientFill( s.useCurrentPattern );
+    p->setPatternFill( s.useCurrentPattern );
+
     activateTool( m_pRectangleTool );
 }
 
@@ -1790,6 +1847,16 @@ void KisView::tool_rectangle()
 */
 void KisView::tool_ellipse()
 {
+    // set ellipse tool settings
+    KisDoc::EllipseToolSettings s = m_pDoc->getEllipseToolSettings();
+    KisPainter *p = kisPainter();
+    
+    p->setLineThickness( s.thickness );
+    p->setLineOpacity( s.opacity );
+    p->setFilledEllipse( s.useCurrentPattern );
+    p->setGradientFill( s.fillWithGradient );
+    p->setPatternFill( s.fillInteriorRegions );
+
     activateTool( m_pEllipseTool );
 }
 
