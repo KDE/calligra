@@ -237,8 +237,10 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
             format += e.text();
         } else if ( localName == "suffix" ) {
             suffix = e.text();
+            kdDebug()<<" suffix :"<<suffix<<endl;
         } else if ( localName == "prefix" ) {
             prefix = e.text();
+            kdDebug()<<" prefix :"<<prefix<<endl;
         } else if ( localName == "currency-symbol" ) {
             format += e.text();
             //TODO
@@ -397,7 +399,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
     numeric.formatStr=format;
     numeric.prefix=prefix;
     numeric.suffix=suffix;
-
+    kdDebug()<<" finish insert format :"<<format<<" prefix :"<<prefix<<" suffix :"<<suffix<<endl;
     m_dataFormats.insert( styleName, numeric );
 }
 
@@ -950,13 +952,14 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
     elementWriter.addAttribute( "number:min-denominator-digits",denominator );
     if ( denominatorValue != 0 )
         elementWriter.addAttribute( "number:denominator-value",denominatorValue );
+    elementWriter.endElement();
+
     text= _prefix;
     addTextNumber(text, elementWriter );
     addKofficeNumericStyleExtension( elementWriter, _suffix, _prefix );
 
     text=_suffix;
     addTextNumber(text, elementWriter );
-    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentStyle.addChildElement( "number", elementContents );
@@ -998,14 +1001,14 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     elementWriter.startElement( "number:number" );
     elementWriter.addAttribute( "number:decimal-places", decimalplaces );
     elementWriter.addAttribute( "number:min-integer-digits", integerdigits );
+    elementWriter.endElement();
+
     addTextNumber(QString( "%" ), elementWriter );
     text= _prefix ;
     addTextNumber(text, elementWriter );
     text =_suffix ;
     addTextNumber(text, elementWriter );
     addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
-
-    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentStyle.addChildElement( "number", elementContents );
@@ -1073,13 +1076,13 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     elementWriter.addAttribute( "number:decimal-places", decimalplace );
     elementWriter.addAttribute( "number:min-integer-digits",integerdigits );
     elementWriter.addAttribute( "number:min-exponent-digits",exponentdigits );
+    elementWriter.endElement();
+
     text =  _prefix ;
     addTextNumber(text, elementWriter );
     text = _suffix;
     addTextNumber(text, elementWriter );
     addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
-
-    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentStyle.addChildElement( "number", elementContents );
