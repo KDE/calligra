@@ -2537,11 +2537,12 @@ static bool kspreadfunc_roundup( KSContext& context )
                 return false;
         digits=args[1]->intValue();
         }
-
-  if (floor(args[0]->doubleValue()) == args[0]->doubleValue())
+  // This is not correct solution for problem with floating point numbers and probably
+  // will fail in platforms where float and double lenghts are same.
+  if (floor((float)(args[0]->doubleValue()*pow(10,digits))) == (float)(args[0]->doubleValue()*pow(10,digits)))
       result = args[0]->doubleValue();
   else
-      result=floor(args[0]->doubleValue()*pow(10,digits))/pow(10,digits);
+      result=floor(args[0]->doubleValue()*pow(10,digits)+1)/pow(10,digits);
   context.setValue( new KSValue( result) );
 
   return true;
