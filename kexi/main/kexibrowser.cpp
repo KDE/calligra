@@ -304,6 +304,8 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 		//override delete action
 		if (ke->key()==Key_Delete && ke->state()==NoButton) {
 			slotRemove();
+			ke->accept();
+			return true;
 		}
 	}
 	return false;
