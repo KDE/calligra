@@ -24,10 +24,10 @@
 #include "kwtablestyle.h"
 
 #include <kdialogbase.h>
+#include <qgroupbox.h>
 #include <qptrlist.h>
 
 
-class QGroupBox;
 class QGridLayout;
 class QLineEdit;
 class QListBox;

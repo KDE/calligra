@@ -381,7 +381,10 @@ protected:
 };
 
 ///////////////////////////////layout command///////////////////////////
-struct pageLayout {
+struct KWPageLayoutStruct {
+    KWPageLayoutStruct( const KoPageLayout& pgLayout, const KoColumns& cl, const KoKWHeaderFooter& hf )
+        : _pgLayout(pgLayout), _cl(cl), _hf(hf) {
+    }
     KoPageLayout _pgLayout;
     KoColumns _cl;
     KoKWHeaderFooter _hf;
@@ -393,15 +396,15 @@ struct pageLayout {
 class KWPageLayoutCommand : public KNamedCommand
 {
 public:
-    KWPageLayoutCommand( const QString &name, KWDocument *_doc, pageLayout &_oldLayout, pageLayout &_newLayout);
+    KWPageLayoutCommand( const QString &name, KWDocument *_doc, KWPageLayoutStruct &_oldLayout, KWPageLayoutStruct &_newLayout);
     ~KWPageLayoutCommand() {}
 
     void execute();
     void unexecute();
 protected:
     KWDocument *m_pDoc;
-    pageLayout m_OldLayout;
-    pageLayout m_NewLayout;
+    KWPageLayoutStruct m_oldLayout;
+    KWPageLayoutStruct m_newLayout;
 };
 
 

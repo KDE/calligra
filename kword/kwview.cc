@@ -1685,7 +1685,6 @@ void KWView::print( KPrinter &prt )
         //top_margin = 15.0;
         pgLayout.ptLeft += 25.8;         // Not sure why we need this....
         pgLayout.ptRight += 15.0;
-        // TODO the other units. Well, better get rid of the multiple-unit thing.
         m_doc->setPageLayout( pgLayout, cl, hf, false );
     }
 
@@ -3652,10 +3651,7 @@ void KWView::formatPage()
     KoKWHeaderFooter kwhf;
     m_doc->getPageLayout( pgLayout, cl, kwhf );
 
-    pageLayout tmpOldLayout;
-    tmpOldLayout._pgLayout=pgLayout;
-    tmpOldLayout._cl=cl;
-    tmpOldLayout._hf=kwhf;
+    KWPageLayoutStruct oldLayout( pgLayout, cl, kwhf );
 
     KoHeadFoot hf;
     int flags = FORMAT_AND_BORDERS | DISABLE_UNIT;
@@ -3667,31 +3663,25 @@ void KWView::formatPage()
     KoUnit::Unit unit = m_doc->getUnit();
     KoUnit::Unit oldUnit = unit;
 
-    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit ) ) {
-        if( !(tmpOldLayout._pgLayout==pgLayout)||
-            tmpOldLayout._cl.columns!=cl.columns ||
-            tmpOldLayout._cl.ptColumnSpacing!=cl.ptColumnSpacing||
-            tmpOldLayout._hf.header!=kwhf.header||
-            tmpOldLayout._hf.footer!=kwhf.footer||
-            tmpOldLayout._hf.ptHeaderBodySpacing != kwhf.ptHeaderBodySpacing ||
-            tmpOldLayout._hf.ptFooterBodySpacing != kwhf.ptFooterBodySpacing ||
-            tmpOldLayout._hf.ptFootNoteBodySpacing != kwhf.ptFootNoteBodySpacing)
+    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit ) )
+    {
+        if( !(oldLayout._pgLayout==pgLayout) ||
+            oldLayout._cl != cl ||
+            oldLayout._hf != kwhf )
         {
-            pageLayout tmpNewLayout;
-            tmpNewLayout._pgLayout=pgLayout;
-            tmpNewLayout._cl=cl;
-            tmpNewLayout._hf=kwhf;
+            KWPageLayoutStruct newLayout( pgLayout, cl, kwhf );
 
             KWTextFrameSetEdit *edit = currentTextEdit();
             if (edit)
                 edit->textFrameSet()->clearUndoRedoInfo();
-            KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),m_doc,tmpOldLayout,tmpNewLayout ) ;
+            KCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),
+                                                    m_doc, oldLayout, newLayout );
             m_doc->addCommand(cmd);
 
             m_doc->setPageLayout( pgLayout, cl, kwhf );
         }
         if ( unit != oldUnit )
-            m_doc->setUnit( unit ); // needs undo/redo support
+            m_doc->setUnit( unit ); // ##### needs undo/redo support
     }
 }
 
@@ -3878,7 +3868,7 @@ int KWView::tableSelectCell(const QString &tableName, uint row, uint col)
     if(!m_doc || !m_gui)
         return -1;
     KWFrameSet *fs = m_doc->frameSetByName(tableName);
-    if(!fs) 
+    if(!fs)
         return -1;
     KWTableFrameSet *table = dynamic_cast<KWTableFrameSet*>(fs);
     if(!table)
@@ -3887,12 +3877,12 @@ int KWView::tableSelectCell(const QString &tableName, uint row, uint col)
         return -1;
 
     KWTableFrameSet::Cell *cell = table->getCell(row, col);
-        
+
     KWCanvas *canvas = m_gui->canvasWidget();
     if(!canvas)
         return -1;
-    canvas->tableSelectCell(table, cell);   
-    return 0; 
+    canvas->tableSelectCell(table, cell);
+    return 0;
 }
 
 int KWView::tableDeleteRow(const QValueList<uint>& rows, KWTableFrameSet *table )
@@ -5207,22 +5197,16 @@ void KWView::newPageLayout( KoPageLayout _layout )
     if(_layout==pgLayout)
         return;
 
-    pageLayout tmpOldLayout;
-    tmpOldLayout._pgLayout=pgLayout;
-    tmpOldLayout._cl=cl;
-    tmpOldLayout._hf=hf;
+    KWPageLayoutStruct oldLayout( pgLayout, cl, hf );
 
     m_doc->setPageLayout( _layout, cl, hf );
 
-    pageLayout tmpNewLayout;
-    tmpNewLayout._pgLayout=_layout;
-    tmpNewLayout._cl=cl;
-    tmpNewLayout._hf=hf;
+    KWPageLayoutStruct newLayout( _layout, cl, hf );
 
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
         edit->textFrameSet()->clearUndoRedoInfo();
-    KWPageLayoutCommand *cmd = new KWPageLayoutCommand( i18n("Change Layout"),m_doc,tmpOldLayout,tmpNewLayout ) ;
+    KCommand *cmd = new KWPageLayoutCommand( i18n("Change Layout"), m_doc, oldLayout, newLayout );
     m_doc->addCommand(cmd);
 }
 
@@ -6009,10 +5993,7 @@ void KWView::configureHeaderFooter()
     KoKWHeaderFooter kwhf;
     m_doc->getPageLayout( pgLayout, cl, kwhf );
 
-    pageLayout tmpOldLayout;
-    tmpOldLayout._pgLayout=pgLayout;
-    tmpOldLayout._cl=cl;
-    tmpOldLayout._hf=kwhf;
+    KWPageLayoutStruct oldLayout( pgLayout, cl, kwhf );
 
     KoHeadFoot hf;
     int flags = KW_HEADER_AND_FOOTER;
@@ -6020,18 +6001,12 @@ void KWView::configureHeaderFooter()
     KoUnit::Unit oldUnit = unit;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit ) ) {
-        if( tmpOldLayout._hf.header!=kwhf.header||
-            tmpOldLayout._hf.footer!=kwhf.footer||
-            tmpOldLayout._hf.ptHeaderBodySpacing != kwhf.ptHeaderBodySpacing ||
-            tmpOldLayout._hf.ptFooterBodySpacing != kwhf.ptFooterBodySpacing ||
-            tmpOldLayout._hf.ptFootNoteBodySpacing != kwhf.ptFootNoteBodySpacing)
+        if( oldLayout._hf != kwhf )
         {
-            pageLayout tmpNewLayout;
-            tmpNewLayout._pgLayout=pgLayout;
-            tmpNewLayout._cl=cl;
-            tmpNewLayout._hf=kwhf;
+            KWPageLayoutStruct newLayout( pgLayout, cl, kwhf );
 
-            KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),m_doc,tmpOldLayout,tmpNewLayout ) ;
+            KCommand *cmd = new KWPageLayoutCommand( i18n("Change Layout"), m_doc,
+                                                     oldLayout, newLayout );
             m_doc->addCommand(cmd);
 
             m_doc->setPageLayout( pgLayout, cl, kwhf );

@@ -37,6 +37,7 @@ class QWidget;
 class QCheckBox;
 class QButtonGroup;
 class QComboBox;
+class QSpinBox;
 
 /******************************************************************/
 /* Class: KWTablePreview                                          */

@@ -24,6 +24,7 @@
 #include "defs.h" // for NoteType
 #include "kwvariable.h"
 class QRadioButton;
+class QLineEdit;
 class KWDocument;
 /******************************************************************/
 /* Class: KWFootNoteDia                                           */

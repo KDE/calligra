@@ -1025,22 +1025,22 @@ void KWFrameSetPropertyCommand::unexecute()
     setValue( m_oldValue );
 }
 
-KWPageLayoutCommand::KWPageLayoutCommand( const QString &name,KWDocument *_doc,pageLayout &_oldLayout, pageLayout &_newLayout  ) :
+KWPageLayoutCommand::KWPageLayoutCommand( const QString &name,KWDocument *_doc,KWPageLayoutStruct &_oldLayout, KWPageLayoutStruct &_newLayout  ) :
     KNamedCommand(name),
     m_pDoc(_doc),
-    m_OldLayout(_oldLayout),
-    m_NewLayout(_newLayout)
+    m_oldLayout(_oldLayout),
+    m_newLayout(_newLayout)
 {
 }
 
 void KWPageLayoutCommand::execute()
 {
-    m_pDoc->setPageLayout( m_NewLayout._pgLayout,m_NewLayout._cl, m_NewLayout._hf );
+    m_pDoc->setPageLayout( m_newLayout._pgLayout, m_newLayout._cl, m_newLayout._hf );
 }
 
 void KWPageLayoutCommand::unexecute()
 {
-    m_pDoc->setPageLayout( m_OldLayout._pgLayout,m_OldLayout._cl, m_OldLayout._hf);
+    m_pDoc->setPageLayout( m_oldLayout._pgLayout, m_oldLayout._cl, m_oldLayout._hf);
 }
 
 
