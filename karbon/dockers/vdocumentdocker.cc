@@ -557,6 +557,9 @@ void VHistoryTab::commandExecuted( VCommand* command )
 
 void VHistoryTab::commandAdded( VCommand* command )
 {
+	if ( !command )
+		return;
+
 	QListViewItem* last = m_history->firstChild();
 	while ( last && last->nextSibling() )
 		last = last->nextSibling();
