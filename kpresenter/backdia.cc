@@ -74,7 +74,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
                   int _xfactor, int _yfactor, KPrPage *m_page )
     : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|
                    KDialogBase::User1|KDialogBase::User2 ),
-      m_picture(backPic),m_oldpicture(backPic)
+      m_picture(backPic),m_oldpicture(backPic), m_useMasterBackground( 0 )
 {
     lockUpdate = true;
 
@@ -98,12 +98,14 @@ BackDia::BackDia( QWidget* parent, const char* name,
     QVBoxLayout *vbox = new QVBoxLayout( hbox );
     vbox->setSpacing( KDialog::spacingHint() );
 
-    m_useMasterBackground = new QCheckBox( i18n( "Use slide master background" ), page );
-    connect( m_useMasterBackground, SIGNAL( clicked() ),
-             this, SLOT( updateConfiguration() ) );
-    m_useMasterBackground->setChecked( m_page->useMasterBackground() );
-    vbox->addWidget( m_useMasterBackground );
-
+    if ( !m_page->isMasterPage() )
+    {
+        m_useMasterBackground = new QCheckBox( i18n( "Use slide master background" ), page );
+        connect( m_useMasterBackground, SIGNAL( clicked() ),
+                 this, SLOT( updateConfiguration() ) );
+        m_useMasterBackground->setChecked( m_page->useMasterBackground() );
+        vbox->addWidget( m_useMasterBackground );
+    }
     vbox->addWidget( new QLabel( i18n( "Background type:" ), page ) );
 
     backCombo = new QComboBox( false, page );
@@ -228,7 +230,8 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
 void BackDia::slotReset()
 {
-    m_useMasterBackground->setChecked( oldUseMasterBackground );
+    if ( m_useMasterBackground )
+        m_useMasterBackground->setChecked( oldUseMasterBackground );
     backCombo->setCurrentItem( (int)oldBackType );
     color1Choose->setColor( oldBackColor1 );
     color2Choose->setColor( oldBackColor2 );
@@ -267,9 +270,16 @@ void BackDia::updateConfiguration()
     if ( lockUpdate )
         return;
 
-    tabWidget->setEnabled( !m_useMasterBackground->isChecked() );
-    backCombo->setEnabled( !m_useMasterBackground->isChecked() );
-
+    if ( m_useMasterBackground )
+    {
+        tabWidget->setEnabled( !m_useMasterBackground->isChecked() );
+        backCombo->setEnabled( !m_useMasterBackground->isChecked() );
+    }
+    else
+    {
+        tabWidget->setEnabled( true );
+        backCombo->setEnabled( true );
+    }
     if ( getBackColorType() == BCT_PLAIN )
     {
         unbalanced->setEnabled( false );
@@ -370,7 +380,7 @@ KPBackGround::Settings BackDia::getBackGround() const
 
 bool BackDia::useMasterBackground() const
 {
-    return m_useMasterBackground->isChecked();
+    return m_useMasterBackground ? m_useMasterBackground->isChecked():false;
 }
 
 void BackDia::selectPic()

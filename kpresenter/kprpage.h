@@ -80,6 +80,9 @@ public:
      */
     KPrPage * masterPage() const { return m_masterPage; }
 
+
+    bool isMasterPage() const;
+
     /**
      * @return the object of the page
      */

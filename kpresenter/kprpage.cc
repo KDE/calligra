@@ -3379,3 +3379,8 @@ bool KPrPage::useMasterBackground() const
 {
     return m_useMasterBackground;
 }
+
+bool KPrPage::isMasterPage() const
+{
+    return ( m_masterPage==0 );
+}
