@@ -288,6 +288,7 @@ bool StarWriterImport::parseText(QByteArray n)
 
 bool StarWriterImport::parseTable(QByteArray n)
 {
+/*
     QByteArray s;
     Q_UINT32 len, len2;
     Q_UINT16 len3;
@@ -365,6 +366,7 @@ bool StarWriterImport::parseTable(QByteArray n)
     bodyStuff.append("   </FORMATS>\n");
     bodyStuff.append("  </PARAGRAPH>\n");
 
+*/
     return true;
 };
 
