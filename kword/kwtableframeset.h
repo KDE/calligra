@@ -203,6 +203,7 @@ protected:
     bool m_active;
     bool m_isRendered;
     QList<Cell> m_cells;
+    QValueList<int> m_pageBoundaries;
     void addCell( Cell *cell );
 };
 

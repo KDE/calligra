@@ -418,6 +418,8 @@ void KWTableFrameSet::recalcRows()
     // do positioning of frames
     unsigned int y,nextY = getCell( 0, 0 )->getFrame( 0 )->y();
     unsigned int doingPage = getCell(0,0)->getPageOfFrame(0);
+    m_pageBoundaries.clear();
+    m_pageBoundaries.append(0);
     for ( unsigned int j = 0; j < m_rows; j++ ) {
         y=nextY;
         unsigned int i = 0;
@@ -462,11 +464,14 @@ void KWTableFrameSet::recalcRows()
                 m_hasTmpHeaders = true;
                 insertRow( j, false, true );
             }
-            for(i = 0; i < m_cols; i++) {
-                Cell *cell = getCell (j,i);
+            for(i = 0; i < m_cells.count(); i++) {
+                Cell *cell = m_cells.at(i);
+                if(cell->m_row==j+1) cell->getFrame(0)->updateResizeHandles(); // reposition resize handles.
+                if(cell->m_row!=j) continue; //  wrong row
+                if(cell->m_col == 1) m_pageBoundaries.append(i); // new page boundary
                 if ( m_showHeaderOnAllPages ) {
                     KWTextFrameSet *newFrameSet = dynamic_cast<KWTextFrameSet*>( cell );
-                    KWTextFrameSet *baseFrameSet = dynamic_cast<KWTextFrameSet*>( getCell( 0, i ) );
+                    KWTextFrameSet *baseFrameSet = dynamic_cast<KWTextFrameSet*>( getCell( 0, cell->m_col ) );
                     //newFrameSet->assign( baseFrameSet );
 
                     newFrameSet->getFrame(0)->setBackgroundColor( baseFrameSet->getFrame( 0 )->getBackgroundColor() );
@@ -486,7 +491,6 @@ void KWTableFrameSet::recalcRows()
                 if(cell->m_row + cell->m_rows -1 == j) {
                     nextY=cell->getFrame(0) -> bottom() + tableCellSpacing;
                 }
-                cell->getFrame(0)->updateResizeHandles();
             }
         }
     }
@@ -1199,7 +1203,19 @@ void KWTableFrameSet::validate()
 }
 
 bool KWTableFrameSet::contains( unsigned int mx, unsigned int my ) {
-    return getBoundingRect().contains(mx,my);
+
+    QRect rect;
+    KWFrame *first, *last;
+    for (unsigned int i=1 ; i < m_pageBoundaries.count(); i++) {
+        first = m_cells.at(m_pageBoundaries[i-1])->getFrame( 0 );
+        last = m_cells.at(m_pageBoundaries[i])->getFrame( 0 );
+
+        rect.setCoords(first->x(), first->y(), last->right(), last->bottom());
+
+        if(rect.contains(mx,my)) return true;
+    }
+
+    return false;
 }
 
 void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
